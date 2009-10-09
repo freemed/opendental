@@ -212,7 +212,7 @@ namespace OpenDental{
 		private void butAdd_Click(object sender, System.EventArgs e) {
 			Deposit deposit=new Deposit();
 			deposit.DateDeposit=DateTime.Today;
-			deposit.BankAccountInfo=PrefC.GetString("PracticeBankNumber");
+			deposit.BankAccountInfo=PrefC.GetString(PrefName.PracticeBankNumber);
 			FormDepositEdit FormD=new FormDepositEdit(deposit);
 			FormD.IsNew=true;
 			FormD.ShowDialog();

@@ -554,7 +554,7 @@ namespace OpenDental{
 				panelZoom.Visible=true;
 				PrintReport(true);
 				labelTotPages.Text="/ "+totalPages.ToString();
-				if(PrefC.GetBool("FuchsOptionsOn")) {
+				if(PrefC.GetBool(PrefName.FuchsOptionsOn)) {
 					butFullPage.Visible = true;
 					butZoomIn.Visible = false;
 					printPreviewControl2.Zoom = 1;
@@ -628,7 +628,7 @@ namespace OpenDental{
 					report.Summary[i]="TOTAL :"+;
 				}*/
 				report.Title=textTitle.Text;
-				report.SubTitle.Add(((Pref)PrefC.HList["PracticeTitle"]).ValueString);
+				report.SubTitle.Add(PrefC.GetString(PrefName.PracticeTitle));
 				for(int iCol=0;iCol<report.TableQ.Columns.Count;iCol++){
 					report.ColCaption[iCol]=report.TableQ.Columns[iCol].Caption;//myGridTS.GridColumnStyles[iCol].HeaderText;
 					//again, I don't know why this would fail, so here's a check:
@@ -1369,16 +1369,16 @@ namespace OpenDental{
 				else
 					saveFileDialog2.FileName=UserQueryCur.FileName;
 			}
-			if(!Directory.Exists( ((Pref)PrefC.HList["ExportPath"]).ValueString )){
+			if(!Directory.Exists(PrefC.GetString(PrefName.ExportPath) )){
 				try{
-					Directory.CreateDirectory( ((Pref)PrefC.HList["ExportPath"]).ValueString );
-					saveFileDialog2.InitialDirectory=((Pref)PrefC.HList["ExportPath"]).ValueString;
+					Directory.CreateDirectory(PrefC.GetString(PrefName.ExportPath) );
+					saveFileDialog2.InitialDirectory=PrefC.GetString(PrefName.ExportPath);
 				}
 				catch{
 					//initialDirectory will be blank
 				}
 			}
-			else saveFileDialog2.InitialDirectory=((Pref)PrefC.HList["ExportPath"]).ValueString;
+			else saveFileDialog2.InitialDirectory=PrefC.GetString(PrefName.ExportPath);
 			//saveFileDialog2.DefaultExt="txt";
 			saveFileDialog2.Filter="Text files(*.txt)|*.txt|Excel Files(*.xls)|*.xls|All files(*.*)|*.*";
       saveFileDialog2.FilterIndex=0;

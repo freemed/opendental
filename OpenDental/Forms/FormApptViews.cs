@@ -249,7 +249,7 @@ namespace OpenDental{
 
 		private void FormApptViews_Load(object sender, System.EventArgs e) {
 			FillViewList();
-			if(PrefC.GetInt("AppointmentTimeIncrement")==10){
+			if(PrefC.GetLong(PrefName.AppointmentTimeIncrement)==10){
 				radioTen.Checked=true;
 			}
 			else{
@@ -350,16 +350,16 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
-			if(PrefC.GetInt("AppointmentTimeIncrement")==15
+			if(PrefC.GetLong(PrefName.AppointmentTimeIncrement)==15
 				&& radioTen.Checked)
 			{
-				Prefs.UpdateInt("AppointmentTimeIncrement",10);
+				Prefs.UpdateLong(PrefName.AppointmentTimeIncrement,10);
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}
-			if(PrefC.GetInt("AppointmentTimeIncrement")==10
+			if(PrefC.GetLong(PrefName.AppointmentTimeIncrement)==10
 				&& radioFifteen.Checked)
 			{
-				Prefs.UpdateInt("AppointmentTimeIncrement",15);
+				Prefs.UpdateLong(PrefName.AppointmentTimeIncrement,15);
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}
 			DialogResult=DialogResult.OK;

@@ -246,7 +246,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormTerminalManager_Load(object sender,EventArgs e) {
-			textPassword.Text=PrefC.GetString("TerminalClosePassword");
+			textPassword.Text=PrefC.GetString(PrefName.TerminalClosePassword);
 			FillGrid();
 		}
 
@@ -466,7 +466,7 @@ namespace OpenDental{
 		}
 
 		private void butSave_Click(object sender,EventArgs e) {
-			if(Prefs.UpdateString("TerminalClosePassword",textPassword.Text)){
+			if(Prefs.UpdateString(PrefName.TerminalClosePassword,textPassword.Text)){
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}
 			MsgBox.Show(this,"Done.");

@@ -78,7 +78,7 @@ namespace OpenDental{
 
 		///<summary>A simpler version which does not require as much data.</summary>
 		public static string GetMainTitle(string nameLF,long patNum,string chartNumber,long siteNum) {
-			string retVal=PrefC.GetString("MainWindowTitle");
+			string retVal=PrefC.GetString(PrefName.MainWindowTitle);
 			if(Security.CurUser!=null){
 				retVal+=" {"+Security.CurUser.UserName+"}";
 			}
@@ -86,10 +86,10 @@ namespace OpenDental{
 				return retVal;
 			}
 			retVal+=" - "+nameLF;
-			if(PrefC.GetInt("ShowIDinTitleBar")==1) {
+			if(PrefC.GetLong(PrefName.ShowIDinTitleBar)==1) {
 				retVal+=" - "+patNum.ToString();
 			}
-			else if(PrefC.GetInt("ShowIDinTitleBar")==2) {
+			else if(PrefC.GetLong(PrefName.ShowIDinTitleBar)==2) {
 				retVal+=" - "+chartNumber;
 			}
 			if(siteNum!=0){

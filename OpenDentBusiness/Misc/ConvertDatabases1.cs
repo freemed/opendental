@@ -2954,7 +2954,7 @@ namespace OpenDentBusiness{
 			if(FromVersion < new Version("4.3.3.0")) {
 				string command="INSERT INTO preference VALUES ('ReportFolderName','Reports')";
 				Db.NonQ32(command);
-				string imagePath=PrefC.GetString("DocPath");
+				string imagePath=PrefC.GetString(PrefName.DocPath);
 				string reportDir=ODFileUtils.CombinePaths(imagePath,"Reports");
 				if(!Directory.Exists(reportDir)) {
 					if(Directory.Exists(imagePath)) {
@@ -3144,14 +3144,14 @@ namespace OpenDentBusiness{
 					) DEFAULT CHARSET=utf8";
 				Db.NonQ32(command);
 				//We never change previous conversion scripts to support new features.  This code gets skipped on Linux.
-				if(!Directory.Exists(PrefC.GetString("DocPath")+"EmailAttachments")) {
-					if(Directory.Exists(PrefC.GetString("DocPath"))) {
-						Directory.CreateDirectory(PrefC.GetString("DocPath")+"EmailAttachments");
+				if(!Directory.Exists(PrefC.GetString(PrefName.DocPath)+"EmailAttachments")) {
+					if(Directory.Exists(PrefC.GetString(PrefName.DocPath))) {
+						Directory.CreateDirectory(PrefC.GetString(PrefName.DocPath)+"EmailAttachments");
 					}
 				}
-				if(!Directory.Exists(PrefC.GetString("DocPath")+"Forms")) {
-					if(Directory.Exists(PrefC.GetString("DocPath"))) {
-						Directory.CreateDirectory(PrefC.GetString("DocPath")+"Forms");
+				if(!Directory.Exists(PrefC.GetString(PrefName.DocPath)+"Forms")) {
+					if(Directory.Exists(PrefC.GetString(PrefName.DocPath))) {
+						Directory.CreateDirectory(PrefC.GetString(PrefName.DocPath)+"Forms");
 					}
 				}
 				commands=new string[]
@@ -4031,7 +4031,7 @@ namespace OpenDentBusiness{
 		private static void To4_8_1() {
 			if(FromVersion<new Version("4.8.1.0")) {
 				string command="";
-				int practiceDefaultProv=PrefC.GetInt32("PracticeDefaultProv");
+				int practiceDefaultProv=PrefC.GetInt(PrefName.PracticeDefaultProv);
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					//Turn all hardcoded clearinghouse fields into dynamic fields------------------------------------------------------
 					command="ALTER TABLE clearinghouse ADD ISA05 varchar(255) AFTER Eformat";
@@ -4071,10 +4071,10 @@ namespace OpenDentBusiness{
 					string AOSnumber=Db.GetTable(command).Rows[0][0].ToString();
 					command="UPDATE clearinghouse SET SenderName='"+POut.PString(AOSnumber)+"' WHERE ISA08='AOS'";
 					Db.NonQ32(command);
-					command="UPDATE clearinghouse SET SenderName='"+POut.PString(PrefC.GetString("PracticeTitle"))+"' "
+					command="UPDATE clearinghouse SET SenderName='"+POut.PString(PrefC.GetString(PrefName.PracticeTitle))+"' "
 						+"WHERE ISA08='660610220' OR ISA08='113504607'";//Inmediata or Tesia
 					Db.NonQ32(command);
-					command="UPDATE clearinghouse SET SenderTelephone='"+POut.PString(PrefC.GetString("PracticePhone"))+"' "
+					command="UPDATE clearinghouse SET SenderTelephone='"+POut.PString(PrefC.GetString(PrefName.PracticePhone))+"' "
 						+"WHERE ISA08='660610220' OR ISA08='113504607' OR ISA08='AOS'";//Inmediata or Tesia or AOS
 					Db.NonQ32(command);
 					command="UPDATE clearinghouse SET GS03=ISA08";
@@ -4769,7 +4769,7 @@ namespace OpenDentBusiness{
 					command="INSERT INTO preference VALUES('ScheduleProvUnassigned','1')";
 					Db.NonQ32(command);
 					//this next one is hard to run manually and can be skipped by developers:
-					command="UPDATE preference Set ValueString= '"+PrefC.GetInt("PracticeDefaultProv").ToString()
+					command="UPDATE preference Set ValueString= '"+PrefC.GetLong(PrefName.PracticeDefaultProv).ToString()
 						+"' WHERE PrefName='ScheduleProvUnassigned'";
 					Db.NonQ32(command);
 					//added after r292
@@ -5102,7 +5102,7 @@ namespace OpenDentBusiness{
 					command="INSERT INTO preference VALUES('ScheduleProvUnassigned','1')";
 					Db.NonQ32(command);
 					//this next one is hard to run manually and can be skipped by developers:
-					command="UPDATE preference Set ValueString= '"+PrefC.GetInt("PracticeDefaultProv").ToString()
+					command="UPDATE preference Set ValueString= '"+PrefC.GetLong(PrefName.PracticeDefaultProv).ToString()
 						+"' WHERE PrefName='ScheduleProvUnassigned'";
 					Db.NonQ32(command);
 					//added after r292
@@ -5314,7 +5314,7 @@ namespace OpenDentBusiness{
 					Db.NonQ32(command);
 					command="INSERT INTO preference VALUES('RecallFMXPanoYrInterval','5')";
 					Db.NonQ32(command);
-					if((((Pref)PrefC.HList["RecallBW"]).ValueString)=="") {
+					if(PrefC.GetRaw("RecallBW")=="") {
 						command="INSERT INTO preference VALUES('RecallDisableAutoFilms','1')";
 					} else {
 						command="INSERT INTO preference VALUES('RecallDisableAutoFilms','0')";
@@ -5447,7 +5447,7 @@ namespace OpenDentBusiness{
 					Db.NonQ32(command);
 					command="INSERT INTO preference VALUES('RecallFMXPanoYrInterval','5')";
 					Db.NonQ32(command);
-					if((((Pref)PrefC.HList["RecallBW"]).ValueString)=="") {
+					if(PrefC.GetRaw("RecallBW")=="") {
 						command="INSERT INTO preference VALUES('RecallDisableAutoFilms','1')";
 					} else {
 						command="INSERT INTO preference VALUES('RecallDisableAutoFilms','0')";

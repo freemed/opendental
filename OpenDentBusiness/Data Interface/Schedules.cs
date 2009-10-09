@@ -368,7 +368,7 @@ namespace OpenDentBusiness{
 					}
 					else {//op has no provider set
 						//so use the provider that's set for unassigned ops
-						if(listForPeriod[i].ProvNum==PrefC.GetInt("ScheduleProvUnassigned")){
+						if(listForPeriod[i].ProvNum==PrefC.GetLong(PrefName.ScheduleProvUnassigned)){
 							retVal.Add(listForPeriod[i].Copy());
 						}
 					}

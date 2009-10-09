@@ -140,7 +140,7 @@ namespace OpenDentBusiness{
 			if(tooth_id==null || tooth_id==""){
 				return ""; // CWI: We should fix the source of these
 			}
-			int nomenclature = PrefC.GetInt32("UseInternationalToothNumbers");
+			int nomenclature = PrefC.GetInt(PrefName.UseInternationalToothNumbers);
 			if(nomenclature == 0){
 				return tooth_id; // Universal
 			}
@@ -165,7 +165,7 @@ namespace OpenDentBusiness{
 			if(tooth_id==null || tooth_id==""){
 				return ""; // CWI: We should fix the source of these
 			}
-			int nomenclature = PrefC.GetInt32("UseInternationalToothNumbers");
+			int nomenclature = PrefC.GetInt(PrefName.UseInternationalToothNumbers);
 			if(nomenclature == 0){
 				return tooth_id; // Universal
 			}
@@ -187,7 +187,7 @@ namespace OpenDentBusiness{
 
 		///<summary>MUST be validated by IsValidEntry before coming here.  All user entered toothnumbers are run through this method which automatically checks to see if using international toothnumbers.  So the procedurelog class will always contain the american toothnum.</summary>
 		public static string GetToothId(string tooth_label){
-			int nomenclature = PrefC.GetInt32("UseInternationalToothNumbers");
+			int nomenclature = PrefC.GetInt(PrefName.UseInternationalToothNumbers);
 			if (nomenclature == 0){
 				return tooth_label; // Universal
 			}
@@ -321,7 +321,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Used every time user enters toothNum in procedure box. Must be followed with FromInternat. These are the *ONLY* methods that are designed to accept user input.  Can also handle international toothnum</summary>
 		public static bool IsValidEntry(string toothNum){
-			int nomenclature = PrefC.GetInt32("UseInternationalToothNumbers");
+			int nomenclature = PrefC.GetInt(PrefName.UseInternationalToothNumbers);
 			if(nomenclature==0){//Universal,american
 				//tooth numbers validated the same as they are in db.
 				return IsValidDB(toothNum);

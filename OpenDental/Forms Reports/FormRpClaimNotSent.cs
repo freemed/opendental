@@ -219,7 +219,7 @@ namespace OpenDental{
       }
 			FormQuery2.ResetGrid();//this is a method in FormQuery2;	
 			report.Title="Claims Not Sent";
-			report.SubTitle.Add(((Pref)PrefC.HList["PracticeTitle"]).ValueString);
+			report.SubTitle.Add(PrefC.GetString(PrefName.PracticeTitle));
 			if(radioRange.Checked==true){
 				report.SubTitle.Add(date1.SelectionStart.ToString("d")+" - "+date2.SelectionStart.ToString("d"));
 			}

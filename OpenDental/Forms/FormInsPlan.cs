@@ -217,7 +217,7 @@ namespace OpenDental{
 			}
 			panelPat.BackColor=DefC.Long[(int)DefCat.MiscColors][0].ItemColor;
 			//labelViewRequestDocument.Text="         ";
-			//if(!PrefC.GetBool("CustomizedForPracticeWeb")) {
+			//if(!PrefC.GetBool(PrefName.CustomizedForPracticeWeb")) {
 			//	butEligibility.Visible=false;
 			//	labelViewRequestDocument.Visible=false;
 			//}
@@ -1584,26 +1584,26 @@ namespace OpenDental{
 #else
 				textPlanNum.Visible=false;
 #endif
-			if(((Pref)PrefC.HList["EasyHideCapitation"]).ValueString=="1") {
+			if(PrefC.GetBool(PrefName.EasyHideCapitation)) {
 				//groupCoPay.Visible=false;
 				//comboCopay.Visible=false;
 			}
-			if(((Pref)PrefC.HList["EasyHideMedicaid"]).ValueString=="1") {
+			if(PrefC.GetBool(PrefName.EasyHideMedicaid)) {
 				checkAlternateCode.Visible=false;
 			}
-			if(((Pref)PrefC.HList["EasyHideAdvancedIns"]).ValueString=="1") {
+			if(PrefC.GetBool(PrefName.EasyHideAdvancedIns)) {
 				//textOrthoMax.Visible=false;
 				//labelOrthoMax.Visible=false;
 				//panelAdvancedIns.Visible=false;
 				//panelSynch.Visible=false;
 			}
-			if(PrefC.GetBool("InsurancePlansShared")) {
+			if(PrefC.GetBool(PrefName.InsurancePlansShared)) {
 				checkApplyAll.Checked=true;
 			}
 			if(IsNewPlan) {
 				checkApplyAll.Checked=false;
 				checkApplyAll.Visible=false;//because it wouldn't make sense to apply anything to "all"
-				if(PrefC.GetBool("InsDefaultPPOpercent")) {
+				if(PrefC.GetBool(PrefName.InsDefaultPPOpercent)) {
 					PlanCur.PlanType="p";
 				}
 			}
@@ -1691,7 +1691,7 @@ namespace OpenDental{
 			comboPlanType.Items.Add(Lan.g(this,"Medicaid or Flat Co-pay"));
 			if(PlanCur.PlanType=="f")
 				comboPlanType.SelectedIndex=2;
-			if(!PrefC.GetBool("EasyHideCapitation")) {
+			if(!PrefC.GetBool(PrefName.EasyHideCapitation)) {
 				comboPlanType.Items.Add(Lan.g(this,"Capitation"));
 				if(PlanCur.PlanType=="c")
 					comboPlanType.SelectedIndex=3;
@@ -1736,7 +1736,7 @@ namespace OpenDental{
 			}
 			if(comboClaimForm.Items.Count>0 && comboClaimForm.SelectedIndex==-1) {
 				for(int i=0;i<ClaimForms.ListShort.Length;i++) {
-					if(ClaimForms.ListShort[i].ClaimFormNum==PrefC.GetInt("DefaultClaimForm")) {
+					if(ClaimForms.ListShort[i].ClaimFormNum==PrefC.GetLong(PrefName.DefaultClaimForm)) {
 						comboClaimForm.SelectedIndex=i;
 					}
 				}
@@ -3293,7 +3293,7 @@ namespace OpenDental{
 		}
 
 		private void butGetElectronic_Click(object sender,EventArgs e) {
-			if(PrefC.GetBool("CustomizedForPracticeWeb")) {
+			if(PrefC.GetBool(PrefName.CustomizedForPracticeWeb)) {
 				EligibilityCheckDentalXchange();
 				return;
 			}
@@ -3499,20 +3499,20 @@ namespace OpenDental{
 			XmlNode InfoState = doc.CreateNode(XmlNodeType.Element,"State","");
 			XmlNode InfoZip = doc.CreateNode(XmlNodeType.Element,"Zip","");
 			//  Populate Practioner demographic from hash table
-			practiceAddress1 = ((Pref)PrefC.HList["PracticeAddress"]).ValueString;
-			practiceAddress2 = ((Pref)PrefC.HList["PracticeAddress2"]).ValueString;
+			practiceAddress1 = PrefC.GetString(PrefName.PracticeAddress);
+			practiceAddress2 = PrefC.GetString(PrefName.PracticeAddress2);
 			// Format Phone
-			if(((Pref)PrefC.HList["PracticePhone"]).ValueString.Length == 10) {
-				practicePhone = ((Pref)PrefC.HList["PracticePhone"]).ValueString.Substring(0,3)
-                                    + "-" + ((Pref)PrefC.HList["PracticePhone"]).ValueString.Substring(3,3)
-                                    + "-" + ((Pref)PrefC.HList["PracticePhone"]).ValueString.Substring(6);
+			if(PrefC.GetString(PrefName.PracticePhone).Length == 10) {
+				practicePhone = PrefC.GetString(PrefName.PracticePhone).Substring(0,3)
+                                    + "-" + PrefC.GetString(PrefName.PracticePhone).Substring(3,3)
+                                    + "-" + PrefC.GetString(PrefName.PracticePhone).Substring(6);
 			}
 			else {
-				practicePhone = ((Pref)PrefC.HList["PracticePhone"]).ValueString;
+				practicePhone = PrefC.GetString(PrefName.PracticePhone);
 			}
-			practiceCity = ((Pref)PrefC.HList["PracticeCity"]).ValueString;
-			practiceState = ((Pref)PrefC.HList["PracticeST"]).ValueString;
-			practiceZip = ((Pref)PrefC.HList["PracticeZip"]).ValueString;
+			practiceCity = PrefC.GetString(PrefName.PracticeCity);
+			practiceState = PrefC.GetString(PrefName.PracticeST);
+			practiceZip = PrefC.GetString(PrefName.PracticeZip);
 			InfoAddressLine1.InnerText = practiceAddress1;
 			InfoAddressLine2.InnerText = practiceAddress2;
 			InfoPhone.InnerText = practicePhone;
@@ -3822,7 +3822,7 @@ namespace OpenDental{
 			if(comboAllowedFeeSched.SelectedIndex==0){
 				if(IsNewPlan
 					&& PlanCur.PlanType==""//percentage
-					&& PrefC.GetBool("AllowedFeeSchedsAutomate"))
+					&& PrefC.GetBool(PrefName.AllowedFeeSchedsAutomate))
 				{
 					//add a fee schedule if needed
 					FeeSched sched=FeeScheds.GetByExactName(CarrierCur.CarrierName,FeeScheduleType.Allowed);

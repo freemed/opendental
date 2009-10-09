@@ -61,8 +61,8 @@ namespace OpenDentBusiness.HL7 {
 				}
 				//this line does not work if isStandalone, so moved to end
 				//pat.Guarantor=patNum;
-				pat.PriProv=PrefC.GetInt("PracticeDefaultProv");
-				pat.BillingType=PrefC.GetInt("PracticeDefaultBillType");
+				pat.PriProv=PrefC.GetLong(PrefName.PracticeDefaultProv);
+				pat.BillingType=PrefC.GetLong(PrefName.PracticeDefaultBillType);
 			}
 			else{
 				patOld=pat.Copy();

@@ -875,7 +875,7 @@ namespace OpenDentBusiness {
 					) {
 					retVal+=claimProcs[i].WriteOff;
 				}
-				if(!PrefC.GetBool("BalancesDontSubtractIns")//this is the typical situation
+				if(!PrefC.GetBool(PrefName.BalancesDontSubtractIns)//this is the typical situation
 					&& claimProcs[i].Status==ClaimProcStatus.NotReceived) {
 					//so, if user IS using "balances don't subtract ins", and a proc as been sent but not received,
 					//then we do not subtract the writeoff because it's considered part of the estimate.
@@ -1513,7 +1513,7 @@ namespace OpenDentBusiness {
 			ProcedureCode procCode;
 			Procedure oldProc;
 			//int siteNum=0;
-			//if(!PrefC.GetBool("EasyHidePublicHealth")){
+			//if(!PrefC.GetBool(PrefName.EasyHidePublicHealth")){
 			//	siteNum=Patients.GetPat(apt.PatNum).SiteNum;
 			//}
 			for(int i=0;i<ProcList.Count;i++) {
@@ -1542,7 +1542,7 @@ namespace OpenDentBusiness {
 				if(oldProc.ProcStatus!=ProcStat.C) {
 					ProcList[i].DateEntryC=DateTime.Now;//this triggers it to set to server time NOW().
 				}
-				ProcList[i].PlaceService=(PlaceOfService)PrefC.GetInt("DefaultProcedurePlaceService");
+				ProcList[i].PlaceService=(PlaceOfService)PrefC.GetLong(PrefName.DefaultProcedurePlaceService);
 				ProcList[i].ClinicNum=apt.ClinicNum;
 				ProcList[i].SiteNum=siteNum;
 				ProcList[i].PlaceService=Clinics.GetPlaceService(apt.ClinicNum);

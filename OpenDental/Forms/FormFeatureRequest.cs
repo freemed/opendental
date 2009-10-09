@@ -248,7 +248,7 @@ namespace OpenDental{
 			using(XmlWriter writer=XmlWriter.Create(strbuild,settings)){
 				writer.WriteStartElement("FeatureRequestGetList");
 				writer.WriteStartElement("RegistrationKey");
-				writer.WriteString(PrefC.GetString("RegistrationKey"));
+				writer.WriteString(PrefC.GetString(PrefName.RegistrationKey));
 				writer.WriteEndElement();
 				writer.WriteStartElement("SearchString");
 				writer.WriteString(textSearch.Text);
@@ -259,7 +259,7 @@ namespace OpenDental{
 				OpenDental.localhost.Service1 updateService=new OpenDental.localhost.Service1();
 			#else
 				OpenDental.customerUpdates.Service1 updateService=new OpenDental.customerUpdates.Service1();
-				updateService.Url=PrefC.GetString("UpdateServerAddress");
+				updateService.Url=PrefC.GetString(PrefName.UpdateServerAddress");
 			#endif
 			//Send the message and get the result-------------------------------------------------------------------------------------
 			string result="";
@@ -287,14 +287,14 @@ namespace OpenDental{
 			node=doc.SelectSingleNode("//KeyDisabled");
 			if(node==null) {
 				//no error, and no disabled message
-				if(Prefs.UpdateBool("RegistrationKeyIsDisabled",false)) {//this is one of two places in the program where this happens.
+				if(Prefs.UpdateBool(PrefName.RegistrationKeyIsDisabled,false)) {//this is one of two places in the program where this happens.
 					DataValid.SetInvalid(InvalidType.Prefs);
 				}
 			}
 			else {
 				//textConnectionMessage.Text=node.InnerText;
 				MessageBox.Show(node.InnerText);
-				if(Prefs.UpdateBool("RegistrationKeyIsDisabled",true)) {//this is one of two places in the program where this happens.
+				if(Prefs.UpdateBool(PrefName.RegistrationKeyIsDisabled,true)) {//this is one of two places in the program where this happens.
 					DataValid.SetInvalid(InvalidType.Prefs);
 				}
 				return;

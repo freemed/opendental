@@ -2847,7 +2847,7 @@ namespace OpenDental{
 		///<summary>Does a hit test to determine if over an appointment.  Fills the bubble with data and then positions it.</summary>
 		private void InfoBubbleDraw(Point p){
 			//remember where to draw for hover effect
-			if(PrefC.GetBool("AppointmentBubblesDisabled")){
+			if(PrefC.GetBool(PrefName.AppointmentBubblesDisabled)){
 				infoBubble.Visible=false;
 				timerInfoBubble.Enabled=false;
 				return;
@@ -3012,7 +3012,7 @@ namespace OpenDental{
 			until mouse had hovered for at least 0.28 seconds(arbitrary #)
 			the timer fires at 0.30 seconds, so the difference was introduced because
 			of what seemed to be inconsistencies in the timer function */
-			if (DateTime.Now.AddMilliseconds(-280) > bubbleTime | !PrefC.GetBool("ApptBubbleDelay")){
+			if (DateTime.Now.AddMilliseconds(-280) > bubbleTime | !PrefC.GetBool(PrefName.ApptBubbleDelay)){
 				infoBubble.Visible=true;
 			}
 			else{
@@ -3079,7 +3079,7 @@ namespace OpenDental{
 					apt.IsNewPatient=true;
 					apt.Pattern="/X/";
 					if(PatCur.PriProv==0){
-						apt.ProvNum=PrefC.GetInt("PracticeDefaultProv");
+						apt.ProvNum=PrefC.GetLong(PrefName.PracticeDefaultProv);
 					}
 					else{			
 						apt.ProvNum=PatCur.PriProv;
@@ -3666,7 +3666,7 @@ namespace OpenDental{
 		}
 
 		private void OnBreak_Click(){
-			if(!PrefC.GetBool("BrokenApptCommLogNotAdjustment") && PrefC.GetInt("BrokenAppointmentAdjustmentType")==0){
+			if(!PrefC.GetBool(PrefName.BrokenApptCommLogNotAdjustment) && PrefC.GetLong(PrefName.BrokenAppointmentAdjustmentType)==0){
 				MsgBox.Show(this,"Broken appointment adjustment type is not setup yet.  Please go to Setup | Modules to fix this.");
 				return;
 			}
@@ -3684,7 +3684,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Only appointments may be broken, not notes.");
 				return;
 			}
-			if(PrefC.GetBool("BrokenApptCommLogNotAdjustment")){
+			if(PrefC.GetBool(PrefName.BrokenApptCommLogNotAdjustment)){
 				if(!MsgBox.Show(this,true,"Break appointment?")){
 					return;
 				}
@@ -3698,7 +3698,7 @@ namespace OpenDental{
 			long provNum=PIn.PLong(ContrApptSingle3[thisI].DataRoww["ProvNum"].ToString());//remember before ModuleSelected
 			ModuleSelected(pat.PatNum);
 			SetInvalid();		
-			if(PrefC.GetBool("BrokenApptCommLogNotAdjustment")){
+			if(PrefC.GetBool(PrefName.BrokenApptCommLogNotAdjustment)){
 				Commlog CommlogCur=new Commlog();
 				CommlogCur.PatNum=pat.PatNum;
 				CommlogCur.CommDateTime=DateTime.Now;
@@ -3717,7 +3717,7 @@ namespace OpenDental{
 				AdjustmentCur.ProcDate=DateTime.Today;
 				AdjustmentCur.ProvNum=provNum;
 				AdjustmentCur.PatNum=pat.PatNum;
-				AdjustmentCur.AdjType=PrefC.GetInt("BrokenAppointmentAdjustmentType");
+				AdjustmentCur.AdjType=PrefC.GetLong(PrefName.BrokenAppointmentAdjustmentType);
 				FormAdjust FormA=new FormAdjust(pat,AdjustmentCur);
 				FormA.IsNew=true;
 				FormA.ShowDialog();
@@ -4269,7 +4269,7 @@ namespace OpenDental{
 					startDate=AppointmentL.DateSelected;
 					endDate=AppointmentL.DateSelected;
 				}
-				if(PrefC.GetBool("ApptModuleRefreshesEveryMinute")){
+				if(PrefC.GetBool(PrefName.ApptModuleRefreshesEveryMinute)){
 					RefreshPeriod();
 				}
 				else{
@@ -4298,16 +4298,16 @@ namespace OpenDental{
 		private void pd2_PrintApptCard(object sender, PrintPageEventArgs ev){
 			Graphics g=ev.Graphics;
 			//Return Address--------------------------------------------------------------------------
-			string str=PrefC.GetString("PracticeTitle")+"\r\n";
+			string str=PrefC.GetString(PrefName.PracticeTitle)+"\r\n";
 			g.DrawString(str,new Font(FontFamily.GenericSansSerif,9,FontStyle.Bold),Brushes.Black,60,60);
-			str=PrefC.GetString("PracticeAddress")+"\r\n";
-			if(PrefC.GetString("PracticeAddress2")!=""){
-				str+=PrefC.GetString("PracticeAddress2")+"\r\n";
+			str=PrefC.GetString(PrefName.PracticeAddress)+"\r\n";
+			if(PrefC.GetString(PrefName.PracticeAddress2)!=""){
+				str+=PrefC.GetString(PrefName.PracticeAddress2)+"\r\n";
 			}
-			str+=PrefC.GetString("PracticeCity")+"  "
-				+PrefC.GetString("PracticeST")+"  "
-				+PrefC.GetString("PracticeZip")+"\r\n";
-			string phone=PrefC.GetString("PracticePhone");
+			str+=PrefC.GetString(PrefName.PracticeCity)+"  "
+				+PrefC.GetString(PrefName.PracticeST)+"  "
+				+PrefC.GetString(PrefName.PracticeZip)+"\r\n";
+			string phone=PrefC.GetString(PrefName.PracticePhone);
 			if(CultureInfo.CurrentCulture.Name=="en-US"
 				&& phone.Length==10)
 			{

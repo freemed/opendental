@@ -636,7 +636,7 @@ namespace OpenDental{
 					butPay.Enabled=false;
 				}
 			}
-			if(PrefC.GetBool("EasyNoClinics")){
+			if(PrefC.GetBool(PrefName.EasyNoClinics)){
 				comboClinic.Visible=false;
 				labelClinic.Visible=false;
 			}
@@ -823,12 +823,12 @@ namespace OpenDental{
 			for(int i=0;i<tableBalances.Rows.Count;i++) {
 				famafterins+=PIn.PDouble(tableBalances.Rows[i]["AfterIns"].ToString());
 			}
-			if(!PrefC.GetBool("BalancesDontSubtractIns")){
+			if(!PrefC.GetBool(PrefName.BalancesDontSubtractIns)){
 				textFamAfterIns.Text=famafterins.ToString("N");
 			}
 			//compute ending balances-----------------------------------------------------------------------------
 			for(int i=0;i<tableBalances.Rows.Count;i++){
-				if(PrefC.GetBool("BalancesDontSubtractIns")){
+				if(PrefC.GetBool(PrefName.BalancesDontSubtractIns)){
 					tableBalances.Rows[i]["EndBal"]=tableBalances.Rows[i]["StartBal"].ToString();
 				}
 				else{
@@ -862,7 +862,7 @@ namespace OpenDental{
 			gridBal.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TablePaymentBal","Start"),60,HorizontalAlignment.Right);
 			gridBal.Columns.Add(col);
-			if(PrefC.GetBool("BalancesDontSubtractIns")){
+			if(PrefC.GetBool(PrefName.BalancesDontSubtractIns)){
 				col=new ODGridColumn("",60);
 			}
 			else{
@@ -883,7 +883,7 @@ namespace OpenDental{
 					row.Cells.Add("'"+tableBalances.Rows[i]["Preferred"].ToString()+"'");
 				}
 				row.Cells.Add(PIn.PDouble(tableBalances.Rows[i]["StartBal"].ToString()).ToString("N"));
-				if(PrefC.GetBool("BalancesDontSubtractIns")){
+				if(PrefC.GetBool(PrefName.BalancesDontSubtractIns)){
 					row.Cells.Add("");
 				}
 				else{
@@ -935,7 +935,7 @@ namespace OpenDental{
 			double amt;
 			PaySplit split;
 			for(int i=0;i<gridBal.SelectedIndices.Length;i++){
-				if(PrefC.GetBool("BalancesDontSubtractIns")){
+				if(PrefC.GetBool(PrefName.BalancesDontSubtractIns)){
 					amt=PIn.PDouble(tableBalances.Rows[gridBal.SelectedIndices[i]]["StartBal"].ToString());
 				}
 				else{

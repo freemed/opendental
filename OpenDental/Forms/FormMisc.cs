@@ -437,19 +437,19 @@ namespace OpenDental{
 		#endregion
 
 		private void FormMisc_Load(object sender, System.EventArgs e) {
-			if(PrefC.GetInt("ProcessSigsIntervalInSecs")==0){
+			if(PrefC.GetLong(PrefName.ProcessSigsIntervalInSecs)==0){
 				textSigInterval.Text="";
 			}
 			else{
-				textSigInterval.Text=PrefC.GetInt("ProcessSigsIntervalInSecs").ToString();
+				textSigInterval.Text=PrefC.GetLong(PrefName.ProcessSigsIntervalInSecs).ToString();
 			}
-			textMainWindowTitle.Text=PrefC.GetString("MainWindowTitle");
+			textMainWindowTitle.Text=PrefC.GetString(PrefName.MainWindowTitle);
 			comboShowID.Items.Add(Lan.g(this,"None"));
 			comboShowID.Items.Add(Lan.g(this,"PatNum"));
 			comboShowID.Items.Add(Lan.g(this,"ChartNumber"));
-			comboShowID.SelectedIndex=PrefC.GetInt32("ShowIDinTitleBar");
-			checkTasksCheckOnStartup.Checked=PrefC.GetBool("TasksCheckOnStartup");
-			checkTaskListAlwaysShow.Checked=PrefC.GetBool("TaskListAlwaysShowsAtBottom");
+			comboShowID.SelectedIndex=PrefC.GetInt(PrefName.ShowIDinTitleBar);
+			checkTasksCheckOnStartup.Checked=PrefC.GetBool(PrefName.TasksCheckOnStartup);
+			checkTaskListAlwaysShow.Checked=PrefC.GetBool(PrefName.TaskListAlwaysShowsAtBottom);
 			if(checkTaskListAlwaysShow.Checked) {
 				groupBoxTaskDefaults.Enabled=true;
 			}
@@ -466,8 +466,8 @@ namespace OpenDental{
 			}
 			validNumX.Text=computerPref.TaskX.ToString();
 			validNumY.Text=computerPref.TaskY.ToString();
-			checkTitleBarShowSite.Checked=PrefC.GetBool("TitleBarShowSite");
-			textWebServiceServerName.Text=PrefC.GetString("WebServiceServerName");
+			checkTitleBarShowSite.Checked=PrefC.GetBool(PrefName.TitleBarShowSite);
+			textWebServiceServerName.Text=PrefC.GetString(PrefName.WebServiceServerName);
 		}
 
 		private void butLanguages_Click(object sender,EventArgs e) {
@@ -514,12 +514,12 @@ namespace OpenDental{
 				return;
 			}
 			bool changed=false;
-			if( Prefs.UpdateString("MainWindowTitle",textMainWindowTitle.Text)
-				| Prefs.UpdateInt("ShowIDinTitleBar",comboShowID.SelectedIndex)
-				| Prefs.UpdateBool("TaskListAlwaysShowsAtBottom", checkTaskListAlwaysShow.Checked)
-				| Prefs.UpdateBool("TasksCheckOnStartup", checkTasksCheckOnStartup.Checked)
-				| Prefs.UpdateBool("TitleBarShowSite", checkTitleBarShowSite.Checked)
-				| Prefs.UpdateString("WebServiceServerName",textWebServiceServerName.Text)
+			if( Prefs.UpdateString(PrefName.MainWindowTitle,textMainWindowTitle.Text)
+				| Prefs.UpdateLong(PrefName.ShowIDinTitleBar,comboShowID.SelectedIndex)
+				| Prefs.UpdateBool(PrefName.TaskListAlwaysShowsAtBottom, checkTaskListAlwaysShow.Checked)
+				| Prefs.UpdateBool(PrefName.TasksCheckOnStartup, checkTasksCheckOnStartup.Checked)
+				| Prefs.UpdateBool(PrefName.TitleBarShowSite, checkTitleBarShowSite.Checked)
+				| Prefs.UpdateString(PrefName.WebServiceServerName,textWebServiceServerName.Text)
 				)
 			{
 				changed=true;
@@ -547,12 +547,12 @@ namespace OpenDental{
 			}
 			//end of tasklist section-----------------------------------------------------------------------------
 			if(textSigInterval.Text==""){
-				if(Prefs.UpdateInt("ProcessSigsIntervalInSecs",0)){
+				if(Prefs.UpdateLong(PrefName.ProcessSigsIntervalInSecs,0)){
 					changed=true;
 				}
 			}
 			else{
-				if(Prefs.UpdateInt("ProcessSigsIntervalInSecs",PIn.PLong(textSigInterval.Text))){
+				if(Prefs.UpdateLong(PrefName.ProcessSigsIntervalInSecs,PIn.PLong(textSigInterval.Text))){
 					changed=true;
 				}
 			}

@@ -2143,8 +2143,8 @@ namespace OpenDental{
 					MountItems.Insert(mountItem);
 					FillDocList(false);
 					SelectTreeNode(GetNodeById(MakeIdentifier("0",mount.MountNum.ToString())));
-					brightnessContrastSlider.MinVal=PrefC.GetInt32("ImageWindowingMin");
-					brightnessContrastSlider.MaxVal=PrefC.GetInt32("ImageWindowingMax");
+					brightnessContrastSlider.MinVal=PrefC.GetInt(PrefName.ImageWindowingMin);
+					brightnessContrastSlider.MaxVal=PrefC.GetInt(PrefName.ImageWindowingMax);
 				}else {//A mount is currently selected. We must allow the user to insert new images into partially complete mounts.
 					//Clear the visible selection so that the user will know when the device is ready for xray exposure.
 					ImageHelper.RenderMountFrames(renderImage,selectionMountItems,-1);

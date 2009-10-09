@@ -1640,8 +1640,8 @@ namespace OpenDental{
 			textEmployer.Text=Employers.GetName(PatCur.EmployerNum);
 			//textEmploymentNote.Text=PatCur.EmploymentNote;
 			languageList=new List<CultureInfo>();
-			if(PrefC.GetString("LanguagesUsedByPatients")!=""){
-				string[] lanstring=PrefC.GetString("LanguagesUsedByPatients").Split(',');
+			if(PrefC.GetString(PrefName.LanguagesUsedByPatients)!=""){
+				string[] lanstring=PrefC.GetString(PrefName.LanguagesUsedByPatients).Split(',');
 				for(int i=0;i<lanstring.Length;i++) {
 					languageList.Add(CultureInfo.GetCultureInfo(lanstring[i]));
 				}
@@ -1665,7 +1665,7 @@ namespace OpenDental{
 					comboPriProv.SelectedIndex=i;
 			}
 			if(comboPriProv.SelectedIndex==-1){
-				int defaultindex=Providers.GetIndex(PrefC.GetInt("PracticeDefaultProv"));
+				int defaultindex=Providers.GetIndex(PrefC.GetLong(PrefName.PracticeDefaultProv));
 				if(defaultindex==-1) {//default provider hidden
 					comboPriProv.SelectedIndex=0;
 				}
@@ -1722,15 +1722,15 @@ namespace OpenDental{
 			}
 			textSchool.Text=PatCur.SchoolName;
 			textAddrNotes.Text=PatCur.AddrNote;
-			if(PrefC.GetBool("EasyHidePublicHealth")){
+			if(PrefC.GetBool(PrefName.EasyHidePublicHealth)){
 				groupPH.Visible=false;
 			}
-			if(PrefC.GetBool("EasyHideMedicaid")){
+			if(PrefC.GetBool(PrefName.EasyHideMedicaid)){
 				label31.Visible=false;
 				label37.Visible=false;
 				textMedicaidID.Visible=false;
 			}
-			if(PrefC.GetBool("EasyNoClinics")){
+			if(PrefC.GetBool(PrefName.EasyNoClinics)){
 				comboClinic.Visible=false;
 				labelClinic.Visible=false;
 			}
@@ -1761,7 +1761,7 @@ namespace OpenDental{
 				labelTrophyFolder.Visible=false;
 				textTrophyFolder.Visible=false;
 			}
-			if(PrefC.GetBool("EasyHideHospitals")){
+			if(PrefC.GetBool(PrefName.EasyHideHospitals)){
 				textWard.Visible=false;
 				labelWard.Visible=false;
 				textAdmitDate.Visible=false;

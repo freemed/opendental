@@ -178,7 +178,7 @@ WHERE patient.patnum=rxpat.patnum && provider.provnum=rxpat.provnum
 			FormQuery2.IsReport=true;
 			FormQuery2.SubmitReportQuery();			
 			report.Title="Prescriptions";
-			report.SubTitle.Add(((Pref)PrefC.HList["PracticeTitle"]).ValueString);
+			report.SubTitle.Add(PrefC.GetString(PrefName.PracticeTitle));
 			if(radioPatient.Checked==true){
 				report.SubTitle.Add("By Patient");
 			}

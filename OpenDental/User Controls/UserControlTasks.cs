@@ -89,13 +89,13 @@ namespace OpenDental {
 			if(this.DesignMode){
 				return;
 			}
-			if(!PrefC.GetBool("TaskAncestorsAllSetInVersion55")) {
+			if(!PrefC.GetBool(PrefName.TaskAncestorsAllSetInVersion55)) {
 				if(!MsgBox.Show(this,true,"A one-time routine needs to be run.  It will take a few minutes.  Do you have time right now?")){
 					return;
 				}
 				Cursor=Cursors.WaitCursor;
 				TaskAncestors.SynchAll();
-				Prefs.UpdateBool("TaskAncestorsAllSetInVersion55",true);
+				Prefs.UpdateBool(PrefName.TaskAncestorsAllSetInVersion55,true);
 				DataValid.SetInvalid(InvalidType.Prefs);
 				Cursor=Cursors.Default;
 			}

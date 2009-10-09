@@ -775,7 +775,7 @@ namespace OpenDental{
 			//ClaimForm ClaimFormCur=ClaimForms.ListLong[listClaimForms.SelectedIndex];
 			SaveFileDialog saveDlg=new SaveFileDialog();
 			string filename="ProcCodes.xml";
-			saveDlg.InitialDirectory=PrefC.GetString("ExportPath");
+			saveDlg.InitialDirectory=PrefC.GetString(PrefName.ExportPath);
 			saveDlg.FileName=filename;
 			if(saveDlg.ShowDialog()!=DialogResult.OK) {
 				return;
@@ -790,7 +790,7 @@ namespace OpenDental{
 
 		private void butImport_Click(object sender,EventArgs e) {
 			OpenFileDialog openDlg=new OpenFileDialog();
-			openDlg.InitialDirectory=PrefC.GetString("ExportPath");
+			openDlg.InitialDirectory=PrefC.GetString(PrefName.ExportPath);
 			if(openDlg.ShowDialog()!=DialogResult.OK) {
 				return;
 			}

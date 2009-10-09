@@ -653,7 +653,7 @@ namespace OpenDental{
 			for(int i=0;i<DefC.Short[(int)DefCat.BillingTypes].Length;i++){
 				comboBillingType.Items.Add(DefC.Short[(int)DefCat.BillingTypes][i].ItemName);
 			}
-			if(PrefC.GetBool("EasyHidePublicHealth")){
+			if(PrefC.GetBool(PrefName.EasyHidePublicHealth)){
 				comboSite.Visible=false;
 				labelSite.Visible=false;
 			}
@@ -695,7 +695,7 @@ namespace OpenDental{
 		}
 
 		private void FillSearchOption(){
-			if(PrefC.GetBool("PatientSelectUsesSearchButton")){
+			if(PrefC.GetBool(PrefName.PatientSelectUsesSearchButton)){
 				checkRefresh.Checked=false;
 			}
 			else{
@@ -920,7 +920,7 @@ namespace OpenDental{
 		}
 
 		private void checkRefresh_Click(object sender,EventArgs e) {
-			Prefs.UpdateBool("PatientSelectUsesSearchButton",!checkRefresh.Checked);
+			Prefs.UpdateBool(PrefName.PatientSelectUsesSearchButton,!checkRefresh.Checked);
 			Cache.Refresh(InvalidType.Prefs);
 			//simply not important enough to send an update to the other computers.
 			FillSearchOption();
@@ -949,7 +949,7 @@ namespace OpenDental{
 				billingType=DefC.Short[(int)DefCat.BillingTypes][comboBillingType.SelectedIndex-1].DefNum;
 			}
 			long siteNum=0;
-			if(!PrefC.GetBool("EasyHidePublicHealth") && comboSite.SelectedIndex!=0) {
+			if(!PrefC.GetBool(PrefName.EasyHidePublicHealth) && comboSite.SelectedIndex!=0) {
 				siteNum=SiteC.List[comboSite.SelectedIndex-1].SiteNum;
 			}
 			DateTime birthdate=PIn.PDate(textBirthdate.Text);//this will frequently be minval.
@@ -1065,7 +1065,7 @@ namespace OpenDental{
 				PatCur.FName=textFName.Text.Substring(0,1).ToUpper()+textFName.Text.Substring(1);
 			}
 			PatCur.PatStatus=PatientStatus.Patient;
-			PatCur.BillingType=PrefC.GetInt("PracticeDefaultBillType");
+			PatCur.BillingType=PrefC.GetLong(PrefName.PracticeDefaultBillType);
 			Patients.Insert(PatCur,false);
 			Patient PatOld=PatCur.Copy();
 			PatCur.Guarantor=PatCur.PatNum;

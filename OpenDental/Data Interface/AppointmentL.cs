@@ -148,8 +148,8 @@ namespace OpenDental{
 		}
 
 		private static int GetProvBarIndex(DateTime time){
-			return (int)(((double)time.Hour*(double)60/(double)PrefC.GetInt("AppointmentTimeIncrement")//aptTimeIncr=minutesPerIncr
-				+(double)time.Minute/(double)PrefC.GetInt("AppointmentTimeIncrement"))
+			return (int)(((double)time.Hour*(double)60/(double)PrefC.GetLong(PrefName.AppointmentTimeIncrement)//aptTimeIncr=minutesPerIncr
+				+(double)time.Minute/(double)PrefC.GetLong(PrefName.AppointmentTimeIncrement))
 				*(double)ContrApptSheet.Lh*ContrApptSheet.RowsPerIncr)
 				/ContrApptSheet.Lh;//rounds down
 		}
@@ -173,7 +173,7 @@ namespace OpenDental{
 			AptCur.PatNum=patCur.PatNum;
 			AptCur.AptStatus=ApptStatus.Scheduled;
 			if(patCur.PriProv==0){
-				AptCur.ProvNum=PrefC.GetInt("PracticeDefaultProv");
+				AptCur.ProvNum=PrefC.GetLong(PrefName.PracticeDefaultProv);
 			}
 			else{
 				AptCur.ProvNum=patCur.PriProv;
@@ -205,12 +205,12 @@ namespace OpenDental{
 			for(int i=0;i<recallPattern.Length;i++){
 				savePattern.Append(recallPattern.Substring(i,1));
 				savePattern.Append(recallPattern.Substring(i,1));
-				if(PrefC.GetInt("AppointmentTimeIncrement")==15){
+				if(PrefC.GetLong(PrefName.AppointmentTimeIncrement)==15){
 				savePattern.Append(recallPattern.Substring(i,1));
 				}
 			}
 			if(savePattern.ToString()==""){
-				if(PrefC.GetInt("AppointmentTimeIncrement")==15){
+				if(PrefC.GetLong(PrefName.AppointmentTimeIncrement)==15){
 					savePattern.Append("///XXX///");
 				}
 				else{
@@ -309,9 +309,9 @@ namespace OpenDental{
 			}
 			//compute the starting row of this appt
 			int convertToY=(int)(((double)apt.AptDateTime.Hour*(double)60
-				/(double)PrefC.GetInt("AppointmentTimeIncrement")
+				/(double)PrefC.GetLong(PrefName.AppointmentTimeIncrement)
 				+(double)apt.AptDateTime.Minute
-				/(double)PrefC.GetInt("AppointmentTimeIncrement")
+				/(double)PrefC.GetLong(PrefName.AppointmentTimeIncrement)
 				)*(double)ContrApptSheet.Lh*ContrApptSheet.RowsPerIncr);
 			int startIndex=convertToY/ContrApptSheet.Lh;//rounds down
 			string pattern=ContrApptSingle.GetPatternShowing(apt.Pattern);
@@ -348,9 +348,9 @@ namespace OpenDental{
 				//calculate starting row
 				//this math is copied from another section of the program, so it's sloppy. Safer than trying to rewrite it:
 				convertToY=(int)(((double)aptDateTime.Hour*(double)60
-					/(double)PrefC.GetInt("AppointmentTimeIncrement")
+					/(double)PrefC.GetLong(PrefName.AppointmentTimeIncrement)
 					+(double)aptDateTime.Minute
-					/(double)PrefC.GetInt("AppointmentTimeIncrement")
+					/(double)PrefC.GetLong(PrefName.AppointmentTimeIncrement)
 					)*(double)ContrApptSheet.Lh*ContrApptSheet.RowsPerIncr);
 				startIndex=convertToY/ContrApptSheet.Lh;//rounds down
 				pattern=ContrApptSingle.GetPatternShowing(dayTable.Rows[i]["Pattern"].ToString());

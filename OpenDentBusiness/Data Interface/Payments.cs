@@ -243,7 +243,7 @@ namespace OpenDentBusiness{
 			if(table.Rows.Count>0){
 				estBal=PIn.PDouble(table.Rows[0][0].ToString());
 			}
-			if(!PrefC.GetBool("BalancesDontSubtractIns")){
+			if(!PrefC.GetBool(PrefName.BalancesDontSubtractIns)){
 				command=@"SELECT SUM(InsPayEst)+SUM(Writeoff) 
 					FROM claimproc
 					WHERE PatNum="+POut.PLong(patNum)+" "
@@ -288,7 +288,7 @@ namespace OpenDentBusiness{
 					pat=new Patient();
 					pat.PatNum    = PIn.PLong(table.Rows[i][0].ToString());
 					pat.EstBalance= PIn.PDouble(table.Rows[i][1].ToString());
-					if(!PrefC.GetBool("BalancesDontSubtractIns")){
+					if(!PrefC.GetBool(PrefName.BalancesDontSubtractIns)){
 						pat.EstBalance-=PIn.PDouble(table.Rows[i]["_insEst"].ToString());
 					}
 					pat.PriProv   = PIn.PLong(table.Rows[i][2].ToString());
@@ -303,7 +303,7 @@ namespace OpenDentBusiness{
 				pat=new Patient();
 				pat.PatNum    = PIn.PLong   (table.Rows[i][0].ToString());
 				pat.EstBalance= PIn.PDouble(table.Rows[i][1].ToString());
-				if(!PrefC.GetBool("BalancesDontSubtractIns")){
+				if(!PrefC.GetBool(PrefName.BalancesDontSubtractIns)){
 					pat.EstBalance-=PIn.PDouble(table.Rows[i]["_insEst"].ToString());
 				}
 				pat.PriProv   = PIn.PLong   (table.Rows[i][2].ToString());
@@ -464,12 +464,12 @@ namespace OpenDentBusiness{
 					je.CreditAmt=absNew;
 				}
 				je.Memo=Lans.g("Payments","Payment -")+" "+patName;
-				je.Splits=AccountC.GetDescript(PrefC.GetInt("AccountingCashIncomeAccount"));
+				je.Splits=AccountC.GetDescript(PrefC.GetLong(PrefName.AccountingCashIncomeAccount));
 				je.TransactionNum=trans.TransactionNum;
 				JournalEntries.Insert(je);
 				//then, the income entry
 				je=new JournalEntry();
-				je.AccountNum=PrefC.GetInt("AccountingCashIncomeAccount");
+				je.AccountNum=PrefC.GetLong(PrefName.AccountingCashIncomeAccount);
 				//je.CheckNumber=;
 				je.DateDisplayed=payDate;//it would be nice to add security here.
 				if(absNew==newAmt) {//amount is positive

@@ -237,7 +237,7 @@ namespace OpenDental{
 		private void FormRpStatement_Load(object sender, System.EventArgs e) {
 			//this only happens during debugging
 			labelTotPages.Text="1 / "+totalPages.ToString();
-			if(PrefC.GetBool("FuchsOptionsOn")) {
+			if(PrefC.GetBool(PrefName.FuchsOptionsOn)) {
 				butFullPage.Visible = true;
 				butZoomIn.Visible = false;
 				printPreviewControl2.Zoom = 1;
@@ -394,7 +394,7 @@ namespace OpenDental{
 			par.AddLineBreak();
 			par.AddFormattedText(text,font);
 			text=Lan.g(this,"Account Number")+" ";
-			if(PrefC.GetBool("StatementAccountsUseChartNumber")) {
+			if(PrefC.GetBool(PrefName.StatementAccountsUseChartNumber)) {
 				text+=PatGuar.ChartNumber;
 			}
 			else {
@@ -406,7 +406,7 @@ namespace OpenDental{
 			#endregion
 			//Practice Address----------------------------------------------------------------------
 			#region Practice Address
-			if(PrefC.GetBool("StatementShowReturnAddress")) {
+			if(PrefC.GetBool(PrefName.StatementShowReturnAddress)) {
 				font=MigraDocHelper.CreateFont(10);
 				frame=section.AddTextFrame();
 				frame.RelativeVertical=RelativeVertical.Page;
@@ -416,7 +416,7 @@ namespace OpenDental{
 				frame.Top=TopPosition.Parse("0.5 in");
 				frame.Left=LeftPosition.Parse("0.3 in");
 				frame.Width=Unit.FromInch(3);
-				if(!PrefC.GetBool("EasyNoClinics") && Clinics.List.Length>0 //if using clinics
+				if(!PrefC.GetBool(PrefName.EasyNoClinics) && Clinics.List.Length>0 //if using clinics
 						&& Clinics.GetClinic(PatGuar.ClinicNum)!=null)//and this patient assigned to a clinic
 					{
 					Clinic clinic=Clinics.GetClinic(PatGuar.ClinicNum);
@@ -447,27 +447,27 @@ namespace OpenDental{
 				else {
 					par=frame.AddParagraph();
 					par.Format.Font=font;
-					par.AddText(PrefC.GetString("PracticeTitle"));
+					par.AddText(PrefC.GetString(PrefName.PracticeTitle));
 					par.AddLineBreak();
 					if(CultureInfo.CurrentCulture.Name=="en-AU"){//English (Australia)
-						Provider defaultProv=Providers.GetProv(PrefC.GetInt("PracticeDefaultProv"));
+						Provider defaultProv=Providers.GetProv(PrefC.GetLong(PrefName.PracticeDefaultProv));
 						par.AddText("ABN: "+defaultProv.NationalProvID);
 						par.AddLineBreak();
 					}
-					par.AddText(PrefC.GetString("PracticeAddress"));
+					par.AddText(PrefC.GetString(PrefName.PracticeAddress));
 					par.AddLineBreak();
-					if(PrefC.GetString("PracticeAddress2")!="") {
-						par.AddText(PrefC.GetString("PracticeAddress2"));
+					if(PrefC.GetString(PrefName.PracticeAddress2)!="") {
+						par.AddText(PrefC.GetString(PrefName.PracticeAddress2));
 						par.AddLineBreak();
 					}
 					if(CultureInfo.CurrentCulture.Name.EndsWith("CH")) {//CH is for switzerland. eg de-CH
-						par.AddText(PrefC.GetString("PracticeZip")+" "+PrefC.GetString("PracticeCity"));
+						par.AddText(PrefC.GetString(PrefName.PracticeZip)+" "+PrefC.GetString(PrefName.PracticeCity));
 					}
 					else {
-						par.AddText(PrefC.GetString("PracticeCity")+", "+PrefC.GetString("PracticeST")+" "+PrefC.GetString("PracticeZip"));
+						par.AddText(PrefC.GetString(PrefName.PracticeCity)+", "+PrefC.GetString(PrefName.PracticeST)+" "+PrefC.GetString(PrefName.PracticeZip));
 					}
 					par.AddLineBreak();
-					text=PrefC.GetString("PracticePhone");
+					text=PrefC.GetString(PrefName.PracticePhone);
 					if(text.Length==10){
 						text="("+text.Substring(0,3)+")"+text.Substring(3,3)+"-"+text.Substring(6);
 					}
@@ -511,7 +511,7 @@ namespace OpenDental{
 				row.Borders.Right.Color=Colors.Gray;
 				font=MigraDocHelper.CreateFont(9);
 				double balTotal=PatGuar.BalTotal;
-				if(!PrefC.GetBool("BalancesDontSubtractIns")) {//this is typical
+				if(!PrefC.GetBool(PrefName.BalancesDontSubtractIns)) {//this is typical
 					balTotal-=PatGuar.InsEst;
 				}
 				for(int m=0;m<tableMisc.Rows.Count;m++){
@@ -524,11 +524,11 @@ namespace OpenDental{
 				cell=row.Cells[0];
 				par=cell.AddParagraph();
 				par.AddFormattedText(text,font);
-				if(PrefC.GetInt("StatementsCalcDueDate")==-1) {
+				if(PrefC.GetLong(PrefName.StatementsCalcDueDate)==-1) {
 					text=Lan.g(this,"Upon Receipt");
 				}
 				else {
-					text=DateTime.Today.AddDays(PrefC.GetInt("StatementsCalcDueDate")).ToShortDateString();
+					text=DateTime.Today.AddDays(PrefC.GetLong(PrefName.StatementsCalcDueDate)).ToShortDateString();
 				}
 				cell=row.Cells[1];
 				par=cell.AddParagraph();
@@ -538,7 +538,7 @@ namespace OpenDental{
 			//Credit Card Info--------------------------------------------------------------------------------------------------------
 			#region Credit Card Info
 			if(!Stmt.HidePayment) {
-				if(PrefC.GetBool("StatementShowCreditCard")) {
+				if(PrefC.GetBool(PrefName.StatementShowCreditCard)) {
 					float yPos=60;
 					font=MigraDocHelper.CreateFont(7,true);
 					text=Lan.g(this,"CREDIT CARD TYPE");
@@ -719,7 +719,7 @@ namespace OpenDental{
 				gridAging.Columns.Add(gcol);
 				gcol=new ODGridColumn(Lan.g(this,"over 90"),70,HorizontalAlignment.Center);
 				gridAging.Columns.Add(gcol);
-				if(PrefC.GetBool("BalancesDontSubtractIns")) {//less common
+				if(PrefC.GetBool(PrefName.BalancesDontSubtractIns")) {//less common
 					gcol=new ODGridColumn(Lan.g(this,"Balance"),70,HorizontalAlignment.Center);
 					gridAging.Columns.Add(gcol);
 					gcol=new ODGridColumn(Lan.g(this,"InsPending"),70,HorizontalAlignment.Center);
@@ -761,7 +761,7 @@ namespace OpenDental{
 			par.Format = parformat;
 			font = MigraDocHelper.CreateFont(10,false);
 			MigraDoc.DocumentObjectModel.Font fontBold=MigraDocHelper.CreateFont(10, true);
-			if(PrefC.GetBool("BalancesDontSubtractIns")){
+			if(PrefC.GetBool(PrefName.BalancesDontSubtractIns)){
 				text = Lan.g(this, "Balance:");
 				par.AddFormattedText(text, fontBold);
 				//par.AddLineBreak();
@@ -773,7 +773,7 @@ namespace OpenDental{
 				//par.AddLineBreak();
 			}
 			else{//this is more common
-				if (PrefC.GetBool("FuchsOptionsOn")) {
+				if (PrefC.GetBool(PrefName.FuchsOptionsOn)) {
 					text = Lan.g(this, "Balance:");
 					par.AddFormattedText(text, font);
 					par.AddLineBreak();
@@ -804,7 +804,7 @@ namespace OpenDental{
 			par.Format = parformat;
 			font = MigraDocHelper.CreateFont(10,false);
 			//numbers:
-			if(PrefC.GetBool("BalancesDontSubtractIns")){
+			if(PrefC.GetBool(PrefName.BalancesDontSubtractIns)){
 				text = PatGuar.BalTotal.ToString("c");
 				par.AddFormattedText(text, fontBold);
 				//par.AddLineBreak();
@@ -1065,7 +1065,7 @@ namespace OpenDental{
 				//Bank Address---------------------------------------------------------
 				HeaderFooter footer=section.Footers.Primary;
 				footer.Format.Borders.Color=Colors.Black;
-				//footer.AddParagraph(PrefC.GetString("BankAddress"));
+				//footer.AddParagraph(PrefC.GetString(PrefName.BankAddress"));
 				frame=footer.AddTextFrame();
 				frame.RelativeVertical=RelativeVertical.Line;
 				frame.RelativeHorizontal=RelativeHorizontal.Page;
@@ -1076,19 +1076,19 @@ namespace OpenDental{
 				frame.Width=Unit.FromInch(8.3);
 				frame.Height=300;
 				//RectangleF=new RectangleF(0,0,
-				MigraDocHelper.DrawString(frame,PrefC.GetString("BankAddress"),swfont,30,30);
-				MigraDocHelper.DrawString(frame,PrefC.GetString("BankAddress"),swfont,246,30);
+				MigraDocHelper.DrawString(frame,PrefC.GetString(PrefName.BankAddress),swfont,30,30);
+				MigraDocHelper.DrawString(frame,PrefC.GetString(PrefName.BankAddress),swfont,246,30);
 				//Office Name and Address----------------------------------------------
-				text=PrefC.GetString("PracticeTitle")+"\r\n"
-					+PrefC.GetString("PracticeAddress")+"\r\n";
-				if(PrefC.GetString("PracticeAddress2")!="") {
-					text+=PrefC.GetString("PracticeAddress2")+"\r\n";
+				text=PrefC.GetString(PrefName.PracticeTitle)+"\r\n"
+					+PrefC.GetString(PrefName.PracticeAddress)+"\r\n";
+				if(PrefC.GetString(PrefName.PracticeAddress2)!="") {
+					text+=PrefC.GetString(PrefName.PracticeAddress2)+"\r\n";
 				}
-				text+=PrefC.GetString("PracticeZip")+" "+PrefC.GetString("PracticeCity");
+				text+=PrefC.GetString(PrefName.PracticeZip)+" "+PrefC.GetString(PrefName.PracticeCity);
 				MigraDocHelper.DrawString(frame,text,swfont,30,89);
 				MigraDocHelper.DrawString(frame,text,swfont,246,89);
 				//Bank account number--------------------------------------------------
-				string origBankNum=PrefC.GetString("PracticeBankNumber");//must be exactly 9 digits. 2+6+1.
+				string origBankNum=PrefC.GetString(PrefName.PracticeBankNumber);//must be exactly 9 digits. 2+6+1.
 				//the 6 digit portion might have 2 leading 0's which would not go into the dashed bank num.
 				string dashedBankNum="?";
 				//examples: 01-200027-2
@@ -1127,7 +1127,7 @@ namespace OpenDental{
 				//First 6 numbers are what we are calling the BankRouting number.
 				//Next 20 numbers represent the invoice #.
 				//27th number is the checksum
-				string referenceNum=PrefC.GetString("BankRouting");//6 digits
+				string referenceNum=PrefC.GetString(PrefName.BankRouting);//6 digits
 				if(referenceNum.Length!=6) {
 					referenceNum="000000";
 				}

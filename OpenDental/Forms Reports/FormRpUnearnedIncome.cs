@@ -157,7 +157,7 @@ namespace OpenDental{
 				FormQuery2.IsReport=true;
 				FormQuery2.SubmitReportQuery();
 				report.Title="Unearned Income Activity";
-				report.SubTitle.Add(((Pref)PrefC.HList["PracticeTitle"]).ValueString);
+				report.SubTitle.Add(PrefC.GetString(PrefName.PracticeTitle));
 				report.SetColumn(this,0,"Date",100);
 				report.SetColumn(this,1,"Patient",140);
 				report.SetColumn(this,2,"Amount",80,HorizontalAlignment.Right);
@@ -171,7 +171,7 @@ namespace OpenDental{
 				FormQuery2.IsReport=true;
 				FormQuery2.SubmitReportQuery();
 				report.Title="Unearned Income Liabilities";
-				report.SubTitle.Add(((Pref)PrefC.HList["PracticeTitle"]).ValueString);
+				report.SubTitle.Add(PrefC.GetString(PrefName.PracticeTitle));
 				report.SetColumn(this,0,"Patient",140);
 				report.SetColumn(this,1,"Amount",80,HorizontalAlignment.Right);
 			}

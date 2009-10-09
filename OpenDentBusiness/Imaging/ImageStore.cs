@@ -29,7 +29,7 @@ namespace OpenDentBusiness {
 				return LocalAtoZpath;
 			}
 			//use this to handle possible multiple paths separated by semicolons.
-			return GetValidPathFromString(PrefC.GetString("DocPath"));
+			return GetValidPathFromString(PrefC.GetString(PrefName.DocPath));
 		}
 
 		public static string GetValidPathFromString(string documentPaths) {
@@ -277,7 +277,7 @@ namespace OpenDentBusiness {
 			}
 			else {//Assume document
 				//Possible values 0-100?
-				qualityL=(long)Convert.ToInt32(((Pref)PrefC.HList["ScannerCompression"]).ValueString);
+				qualityL=PrefC.GetLong(PrefName.ScannerCompression);
 			}
 			ImageCodecInfo myImageCodecInfo;
 			ImageCodecInfo[] encoders;
@@ -337,8 +337,8 @@ namespace OpenDentBusiness {
 			doc.DateCreated = DateTime.Today;
 			doc.PatNum = pat.PatNum;
 			doc.DocCategory = docCategory;
-			doc.WindowingMin = PrefC.GetInt32("ImageWindowingMin");
-			doc.WindowingMax = PrefC.GetInt32("ImageWindowingMax");
+			doc.WindowingMin = PrefC.GetInt(PrefName.ImageWindowingMin);
+			doc.WindowingMax = PrefC.GetInt(PrefName.ImageWindowingMax);
 			Documents.Insert(doc,pat);//creates filename and saves to db
 			doc=Documents.GetByNum(doc.DocNum);
 			try {

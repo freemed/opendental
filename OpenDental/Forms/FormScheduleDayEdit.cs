@@ -323,7 +323,7 @@ namespace OpenDental{
       FillGrid();
 			for(int i=0;i<ProviderC.List.Length;i++) {
 				comboProv.Items.Add(ProviderC.List[i].Abbr);
-				if(ProviderC.List[i].ProvNum==PrefC.GetInt("ScheduleProvUnassigned")) {
+				if(ProviderC.List[i].ProvNum==PrefC.GetLong(PrefName.ScheduleProvUnassigned)) {
 					comboProv.SelectedIndex=i;
 				}
 			}
@@ -562,7 +562,7 @@ namespace OpenDental{
 		private void butOK_Click(object sender,EventArgs e) {
 			Schedules.SetForDay(SchedList,SchedCurDate);
 			if(comboProv.SelectedIndex!=-1
-				&& Prefs.UpdateInt("ScheduleProvUnassigned",ProviderC.List[comboProv.SelectedIndex].ProvNum))
+				&& Prefs.UpdateLong(PrefName.ScheduleProvUnassigned,ProviderC.List[comboProv.SelectedIndex].ProvNum))
 			{
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}

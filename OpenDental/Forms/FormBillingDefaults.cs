@@ -15,13 +15,13 @@ namespace OpenDental {
 		}
 
 		private void FormBillingDefaults_Load(object sender,EventArgs e) {
-			textDays.Text=PrefC.GetInt("BillingDefaultsLastDays").ToString();
-			checkIntermingled.Checked=PrefC.GetBool("BillingDefaultsIntermingle");
-			textNote.Text=PrefC.GetString("BillingDefaultsNote");
-			checkUseElectronic.Checked=PrefC.GetBool("BillingUseElectronic");
-			textVendorId.Text=PrefC.GetString("BillingElectVendorId");
-			textVendorPMScode.Text=PrefC.GetString("BillingElectVendorPMSCode");
-			string cc=PrefC.GetString("BillingElectCreditCardChoices");
+			textDays.Text=PrefC.GetLong(PrefName.BillingDefaultsLastDays).ToString();
+			checkIntermingled.Checked=PrefC.GetBool(PrefName.BillingDefaultsIntermingle);
+			textNote.Text=PrefC.GetString(PrefName.BillingDefaultsNote);
+			checkUseElectronic.Checked=PrefC.GetBool(PrefName.BillingUseElectronic);
+			textVendorId.Text=PrefC.GetString(PrefName.BillingElectVendorId);
+			textVendorPMScode.Text=PrefC.GetString(PrefName.BillingElectVendorPMSCode);
+			string cc=PrefC.GetString(PrefName.BillingElectCreditCardChoices);
 			if(cc.Contains("MC")) {
 				checkMC.Checked=true;
 			}
@@ -34,9 +34,9 @@ namespace OpenDental {
 			if(cc.Contains("A")) {
 				checkAmEx.Checked=true;
 			}
-			textClientAcctNumber.Text=PrefC.GetString("BillingElectClientAcctNumber");
-			textUserName.Text=PrefC.GetString("BillingElectUserName");
-			textPassword.Text=PrefC.GetString("BillingElectPassword");
+			textClientAcctNumber.Text=PrefC.GetString(PrefName.BillingElectClientAcctNumber);
+			textUserName.Text=PrefC.GetString(PrefName.BillingElectUserName);
+			textPassword.Text=PrefC.GetString(PrefName.BillingElectPassword);
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
@@ -66,16 +66,16 @@ namespace OpenDental {
 				}
 				cc+="A";
 			}
-			if(Prefs.UpdateInt("BillingDefaultsLastDays",PIn.PLong(textDays.Text))
-				| Prefs.UpdateBool("BillingDefaultsIntermingle",checkIntermingled.Checked)
-				| Prefs.UpdateString("BillingDefaultsNote",textNote.Text)
-				| Prefs.UpdateBool("BillingUseElectronic",checkUseElectronic.Checked)
-				| Prefs.UpdateString("BillingElectVendorId",textVendorId.Text)
-				| Prefs.UpdateString("BillingElectVendorPMSCode",textVendorPMScode.Text)
-				| Prefs.UpdateString("BillingElectCreditCardChoices",cc)
-				| Prefs.UpdateString("BillingElectClientAcctNumber",textClientAcctNumber.Text)
-				| Prefs.UpdateString("BillingElectUserName",textUserName.Text)
-				| Prefs.UpdateString("BillingElectPassword",textPassword.Text))
+			if(Prefs.UpdateLong(PrefName.BillingDefaultsLastDays,PIn.PLong(textDays.Text))
+				| Prefs.UpdateBool(PrefName.BillingDefaultsIntermingle,checkIntermingled.Checked)
+				| Prefs.UpdateString(PrefName.BillingDefaultsNote,textNote.Text)
+				| Prefs.UpdateBool(PrefName.BillingUseElectronic,checkUseElectronic.Checked)
+				| Prefs.UpdateString(PrefName.BillingElectVendorId,textVendorId.Text)
+				| Prefs.UpdateString(PrefName.BillingElectVendorPMSCode,textVendorPMScode.Text)
+				| Prefs.UpdateString(PrefName.BillingElectCreditCardChoices,cc)
+				| Prefs.UpdateString(PrefName.BillingElectClientAcctNumber,textClientAcctNumber.Text)
+				| Prefs.UpdateString(PrefName.BillingElectUserName,textUserName.Text)
+				| Prefs.UpdateString(PrefName.BillingElectPassword,textPassword.Text))
 			{
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}

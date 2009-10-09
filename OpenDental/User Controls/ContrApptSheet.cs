@@ -438,7 +438,7 @@ namespace OpenDental{
 							+(schedForType[i].StopTime-schedForType[i].StartTime).Minutes*Lh/MinPerRow);
 					}
 					//paint either solid block or outline
-					if(PrefC.GetBool("SolidBlockouts")){
+					if(PrefC.GetBool(PrefName.SolidBlockouts)){
 						g.FillRectangle(blockBrush,rect);
 						g.DrawLine(blockOutlinePen,rect.X,rect.Y+1,rect.Right-1,rect.Y+1);
 					}
@@ -653,7 +653,7 @@ namespace OpenDental{
 						ColWidth=(totalWidth-TimeWidth*2-ProvWidth*ProvCount)/ColCount;
 					}
 				}
-				MinPerIncr=PrefC.GetInt32("AppointmentTimeIncrement");
+				MinPerIncr=PrefC.GetInt(PrefName.AppointmentTimeIncrement);
 				MinPerRow=(float)MinPerIncr/(float)RowsPerIncr;
 				RowsPerHr=60/MinPerIncr*RowsPerIncr;
 				//if(TwoRowsPerIncrement){

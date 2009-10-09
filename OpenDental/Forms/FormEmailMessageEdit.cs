@@ -474,7 +474,7 @@ namespace OpenDental{
 			textBodyText.Text=MessageCur.BodyText;
 			FillAttachments();
 			FillList();
-			if(PrefC.GetBool("FuchsOptionsOn")){
+			if(PrefC.GetBool(PrefName.FuchsOptionsOn)){
 				buttonFuchsMailDMF.Visible=true;
 				buttonFuchsMailDSF.Visible=true;
 			}
@@ -750,7 +750,7 @@ namespace OpenDental{
 				MessageBox.Show("Addresses not allowed to be blank.");
 				return;
 			}
-			if(PrefC.GetString("EmailSMTPserver")==""){
+			if(PrefC.GetString(PrefName.EmailSMTPserver)==""){
 				MsgBox.Show(this,"You need to enter an SMTP server name in e-mail setup before you can send e-mail.");
 				return;
 			}
@@ -772,12 +772,12 @@ namespace OpenDental{
 		}
 
 		public static void SendEmail(EmailMessage emailMessage){
-			SmtpClient client=new SmtpClient(PrefC.GetString("EmailSMTPserver"),PrefC.GetInt32("EmailPort"));
+			SmtpClient client=new SmtpClient(PrefC.GetString(PrefName.EmailSMTPserver),PrefC.GetInt(PrefName.EmailPort));
 			//The default credentials are not used by default, according to: 
 			//http://msdn2.microsoft.com/en-us/library/system.net.mail.smtpclient.usedefaultcredentials.aspx
-			client.Credentials=new NetworkCredential(PrefC.GetString("EmailUsername"),PrefC.GetString("EmailPassword"));
+			client.Credentials=new NetworkCredential(PrefC.GetString(PrefName.EmailUsername),PrefC.GetString(PrefName.EmailPassword));
 			client.DeliveryMethod=SmtpDeliveryMethod.Network;
-			client.EnableSsl=PrefC.GetBool("EmailUseSSL");
+			client.EnableSsl=PrefC.GetBool(PrefName.EmailUseSSL);
 			MailMessage message=new MailMessage();
 			Attachment attach;
 			//try{

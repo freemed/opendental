@@ -231,7 +231,7 @@ namespace OpenDentBusiness{
 					return List[i].DefaultPlaceService;
 				}
 			}
-			return (PlaceOfService)PrefC.GetInt("DefaultProcedurePlaceService");
+			return (PlaceOfService)PrefC.GetLong(PrefName.DefaultProcedurePlaceService);
 			//return PlaceOfService.Office;
 		}
 

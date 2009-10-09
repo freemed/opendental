@@ -670,13 +670,13 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command="UPDATE appointment SET Confirmed="+POut.PLong(newStatus);
-			if(PrefC.GetInt("AppointmentTimeArrivedTrigger")==newStatus){
+			if(PrefC.GetLong(PrefName.AppointmentTimeArrivedTrigger)==newStatus){
 				command+=",DateTimeArrived=NOW()";
 			}
-			else if(PrefC.GetInt("AppointmentTimeSeatedTrigger")==newStatus){
+			else if(PrefC.GetLong(PrefName.AppointmentTimeSeatedTrigger)==newStatus){
 				command+=",DateTimeSeated=NOW()";
 			}
-			else if(PrefC.GetInt("AppointmentTimeDismissedTrigger")==newStatus){
+			else if(PrefC.GetLong(PrefName.AppointmentTimeDismissedTrigger)==newStatus){
 				command+=",DateTimeDismissed=NOW()";
 			}
 			command+=" WHERE AptNum="+POut.PLong(aptNum);
@@ -917,7 +917,7 @@ namespace OpenDentBusiness{
 				rawProc=dcon.GetTable(command);
 			}
 			DataTable rawInsProc=null;
-			if(PrefC.GetBool("ApptExclamationShowForUnsentIns")){
+			if(PrefC.GetBool(PrefName.ApptExclamationShowForUnsentIns)){
 				//procs for flag, InsNotSent
 				command ="SELECT patient.PatNum, patient.Guarantor "
 					+"FROM patient,procedurecode,procedurelog,claimproc "
@@ -1411,7 +1411,7 @@ namespace OpenDentBusiness{
 			row["value"]=balance.ToString("F");
 			table.Rows.Add(row);
 			//Site----------------------------------------------------------------------------------
-			if(!PrefC.GetBool("EasyHidePublicHealth")){
+			if(!PrefC.GetBool(PrefName.EasyHidePublicHealth)){
 				row=table.NewRow();
 				row["field"]=Lans.g("FormApptEdit","Site");
 				row["value"]=Sites.GetDescription(PIn.PLong(rawPat.Rows[0]["SiteNum"].ToString()));

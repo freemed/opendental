@@ -465,8 +465,8 @@ namespace OpenDental{
 		private void butExport_Click(object sender,EventArgs e) {
 			Cursor=Cursors.WaitCursor;
 			SaveFileDialog Dlg=new SaveFileDialog();
-			if(Directory.Exists(PrefC.GetString("ExportPath"))){
-				Dlg.InitialDirectory=PrefC.GetString("ExportPath");
+			if(Directory.Exists(PrefC.GetString(PrefName.ExportPath))){
+				Dlg.InitialDirectory=PrefC.GetString(PrefName.ExportPath);
 			}else if(Directory.Exists("C:\\")){
 				Dlg.InitialDirectory="C:\\";
 			}
@@ -501,8 +501,8 @@ namespace OpenDental{
 			}
 			Cursor=Cursors.WaitCursor;
 			OpenFileDialog Dlg=new OpenFileDialog();
-			if(Directory.Exists(PrefC.GetString("ExportPath"))) {
-				Dlg.InitialDirectory=PrefC.GetString("ExportPath");
+			if(Directory.Exists(PrefC.GetString(PrefName.ExportPath))) {
+				Dlg.InitialDirectory=PrefC.GetString(PrefName.ExportPath);
 			}
 			else if(Directory.Exists("C:\\")) {
 				Dlg.InitialDirectory="C:\\";

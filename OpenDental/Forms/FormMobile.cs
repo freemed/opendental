@@ -17,13 +17,13 @@ namespace OpenDental {
 		}
 
 		private void FormMobile_Load(object sender,EventArgs e) {
-			textPath.Text=PrefC.GetString("MobileSyncPath");
+			textPath.Text=PrefC.GetString(PrefName.MobileSyncPath);
 			//textDateStart.Text=DateTime.Today.AddDays(-14).ToShortDateString();
 			//textDateEnd.Text=DateTime.Today.AddDays(14).ToShortDateString();
 			#if DEBUG
 			textDateBefore.Text=DateTime.Today.AddDays(-14).ToShortDateString();
 			#endif
-			DateTime dt=PrefC.GetDateT("MobileSyncDateTimeLastRun");
+			DateTime dt=PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun);
 			if(dt.Year>1880){
 				textDateTimeLastRun.Text=dt.ToShortDateString()+" "+dt.ToShortTimeString();
 			}
@@ -43,7 +43,7 @@ namespace OpenDental {
 		}
 
 		private void butSync_Click(object sender,EventArgs e) {
-			if(PrefC.GetDateT("MobileSyncDateTimeLastRun").Year<1880){
+			if(PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun).Year<1880){
 				MsgBox.Show(this,"Sync has never been run.  You must do a full sync first.");
 				return;
 			}
@@ -91,7 +91,7 @@ namespace OpenDental {
 				dateTimeLastSync=DateTime.MinValue;
 			}
 			else{
-				dateTimeLastSync=PrefC.GetDateT("MobileSyncDateTimeLastRun");
+				dateTimeLastSync=PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun);
 			}
 			List<Patient> patientsToSynch=Patients.GetUAppoint(dateTimeLastSync);
 			int objCount=patientsToSynch.Count;
@@ -159,13 +159,13 @@ namespace OpenDental {
 			writer.WriteEndDocument();
 			writer.Close();
 			if(objCount>0){
-				int fileNumber=PrefC.GetInt32("MobileSyncLastFileNumber")+1;
+				int fileNumber=PrefC.GetInt(PrefName.MobileSyncLastFileNumber)+1;
 				string filePath=Path.Combine(path,"in"+fileNumber+".xml");
 				File.WriteAllText(filePath,strBuild.ToString(),Encoding.UTF8);
-				Prefs.UpdateInt("MobileSyncLastFileNumber",fileNumber);
+				Prefs.UpdateLong(PrefName.MobileSyncLastFileNumber,fileNumber);
 			}
 			DateTime now=MiscData.GetNowDateTime();//server time
-			Prefs.UpdateDateT("MobileSyncDateTimeLastRun",now);
+			Prefs.UpdateDateT(PrefName.MobileSyncDateTimeLastRun,now);
 			textDateTimeLastRun.Text=now.ToShortDateString()+" "+now.ToShortTimeString();
 			//we will not trigger a refresh on other computers because this is the only one doing the sync.
 			Cursor=Cursors.Default;
@@ -182,9 +182,9 @@ namespace OpenDental {
 		}
 
 		private void FormMobile_FormClosing(object sender,FormClosingEventArgs e) {
-			if(textPath.Text!=PrefC.GetString("MobileSyncPath")){
+			if(textPath.Text!=PrefC.GetString(PrefName.MobileSyncPath)){
 				if(MsgBox.Show(this,true,"Save changes to path?")){
-					Prefs.UpdateString("MobileSyncPath",textPath.Text);
+					Prefs.UpdateString(PrefName.MobileSyncPath,textPath.Text);
 					DataValid.SetInvalid(InvalidType.Prefs);
 				}
 			}

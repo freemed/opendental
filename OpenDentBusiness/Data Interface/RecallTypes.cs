@@ -36,19 +36,19 @@ namespace OpenDentBusiness{
 			//reorder rows for better usability
 			RecallTypeC.Listt=new List<RecallType>();
 			for(int i=0;i<list.Count;i++){
-				if(list[i].RecallTypeNum==PrefC.GetInt("RecallTypeSpecialProphy")){
+				if(list[i].RecallTypeNum==PrefC.GetLong(PrefName.RecallTypeSpecialProphy)){
 					RecallTypeC.Listt.Add(list[i]);
 					break;
 				}
 			}
 			for(int i=0;i<list.Count;i++){
-				if(list[i].RecallTypeNum==PrefC.GetInt("RecallTypeSpecialChildProphy")){
+				if(list[i].RecallTypeNum==PrefC.GetLong(PrefName.RecallTypeSpecialChildProphy)){
 					RecallTypeC.Listt.Add(list[i]);
 					break;
 				}
 			}
 			for(int i=0;i<list.Count;i++){
-				if(list[i].RecallTypeNum==PrefC.GetInt("RecallTypeSpecialPerio")){
+				if(list[i].RecallTypeNum==PrefC.GetLong(PrefName.RecallTypeSpecialPerio)){
 					RecallTypeC.Listt.Add(list[i]);
 					break;
 				}
@@ -180,13 +180,13 @@ namespace OpenDentBusiness{
 
 		public static string GetSpecialTypeStr(long recallTypeNum) {
 			//No need to check RemotingRole; no call to db.
-			if(recallTypeNum==PrefC.GetInt("RecallTypeSpecialProphy")){
+			if(recallTypeNum==PrefC.GetLong(PrefName.RecallTypeSpecialProphy)){
 				return Lans.g("FormRecallTypeEdit","Prophy");
 			}
-			if(recallTypeNum==PrefC.GetInt("RecallTypeSpecialChildProphy")){
+			if(recallTypeNum==PrefC.GetLong(PrefName.RecallTypeSpecialChildProphy)){
 				return Lans.g("FormRecallTypeEdit","ChildProphy");
 			}
-			if(recallTypeNum==PrefC.GetInt("RecallTypeSpecialPerio")){
+			if(recallTypeNum==PrefC.GetLong(PrefName.RecallTypeSpecialPerio)){
 				return Lans.g("FormRecallTypeEdit","Perio");
 			}
 			return "";
@@ -194,13 +194,13 @@ namespace OpenDentBusiness{
 
 		public static bool IsSpecialRecallType(long recallTypeNum) {
 			//No need to check RemotingRole; no call to db.
-			if(recallTypeNum==PrefC.GetInt("RecallTypeSpecialProphy")) {
+			if(recallTypeNum==PrefC.GetLong(PrefName.RecallTypeSpecialProphy)) {
 				return true;
 			}
-			if(recallTypeNum==PrefC.GetInt("RecallTypeSpecialChildProphy")) {
+			if(recallTypeNum==PrefC.GetLong(PrefName.RecallTypeSpecialChildProphy)) {
 				return true;
 			}
-			if(recallTypeNum==PrefC.GetInt("RecallTypeSpecialPerio")) {
+			if(recallTypeNum==PrefC.GetLong(PrefName.RecallTypeSpecialPerio)) {
 				return true;
 			}
 			return false;
@@ -239,7 +239,7 @@ namespace OpenDentBusiness{
 		public static long ProphyType{
 			//No need to check RemotingRole; no call to db.
 			get{
-				return PrefC.GetInt("RecallTypeSpecialProphy");
+				return PrefC.GetLong(PrefName.RecallTypeSpecialProphy);
 			}
 		}
 
@@ -247,7 +247,7 @@ namespace OpenDentBusiness{
 		public static long PerioType{
 			//No need to check RemotingRole; no call to db.
 			get{
-				return PrefC.GetInt("RecallTypeSpecialPerio");
+				return PrefC.GetLong(PrefName.RecallTypeSpecialPerio);
 			}
 		}
 
@@ -255,7 +255,7 @@ namespace OpenDentBusiness{
 		public static long ChildProphyType{
 			//No need to check RemotingRole; no call to db.
 			get{
-				return PrefC.GetInt("RecallTypeSpecialChildProphy");
+				return PrefC.GetLong(PrefName.RecallTypeSpecialChildProphy);
 			}
 		}
 

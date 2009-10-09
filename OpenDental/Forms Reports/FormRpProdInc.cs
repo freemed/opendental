@@ -398,7 +398,7 @@ namespace OpenDental{
 				listProv.Items.Add(ProviderC.List[i].GetLongDesc());
 			}
 			listProv.SetSelected(0,true);
-			//if(PrefC.GetBool("EasyNoClinics")){
+			//if(PrefC.GetBool(PrefName.EasyNoClinics")){
 				listClinic.Visible=false;
 				labelClinic.Visible=false;
 			/*}
@@ -769,7 +769,7 @@ namespace OpenDental{
 			FormQuery2.IsReport=true;
 			FormQuery2.SubmitReportQuery();			
 			report.Title="Daily Production and Income";
-			report.SubTitle.Add(((Pref)PrefC.HList["PracticeTitle"]).ValueString);
+			report.SubTitle.Add(PrefC.GetString(PrefName.PracticeTitle));
 			report.SubTitle.Add(dateFrom.ToString("d")+" - "+dateTo.ToString("d"));	
 			report.SetColumnPos(this,0,"Date",80);
 			report.SetColumnPos(this,1,"Patient Name",210);
@@ -1148,7 +1148,7 @@ ORDER BY adjdate DESC
 			FormQuery2.IsReport=true;
 			FormQuery2.ResetGrid();//necessary won't work without
 			report.Title="Production and Income";
-			report.SubTitle.Add(((Pref)PrefC.HList["PracticeTitle"]).ValueString);
+			report.SubTitle.Add(PrefC.GetString(PrefName.PracticeTitle));
 			report.SubTitle.Add(textDateFrom.Text+" - "+textDateTo.Text);
 			if(listProv.SelectedIndices[0]==0){//allProv){
 				report.SubTitle.Add(Lan.g(this,"All Providers"));
@@ -1451,7 +1451,7 @@ ORDER BY adjdate DESC
 			FormQuery2.IsReport=true;
 			FormQuery2.ResetGrid();//necessary won't work without
 			report.Title="Annual Production and Income";
-			report.SubTitle.Add(((Pref)PrefC.HList["PracticeTitle"]).ValueString);
+			report.SubTitle.Add(PrefC.GetString(PrefName.PracticeTitle));
 			report.SubTitle.Add(textDateFrom.Text+" - "+textDateTo.Text);
 			if(listProv.SelectedIndices[0]==0){//allProv){
 				report.SubTitle.Add(Lan.g(this,"All Providers"));
@@ -1522,7 +1522,7 @@ ORDER BY adjdate DESC
 				MsgBox.Show(this,"You cannot select 'all' providers as well as specific providers.");
 				return;
 			}
-			//if(!PrefC.GetBool("EasyNoClinics") && listClinic.SelectedIndices.Count==0) {
+			//if(!PrefC.GetBool(PrefName.EasyNoClinics") && listClinic.SelectedIndices.Count==0) {
 			//	MessageBox.Show(Lan.g(this,"You must select at least one clinic."));
 			//	return;
 			//}

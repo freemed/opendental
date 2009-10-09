@@ -248,7 +248,7 @@ namespace OpenDentBusiness{
 			sheet.IsLandscape=true;
 			int rowH=19;
 			int yPos=15;
-			//if(PrefC.GetBool("FuchsOptionsOn")) yPos = 50;
+			//if(PrefC.GetBool(PrefName.FuchsOptionsOn")) yPos = 50;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("nameFL",sheet.FontSize,sheet.FontName,false,25,yPos,300,rowH));
 			yPos+=rowH;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Your appointment is scheduled for:",sheet.FontSize,sheet.FontName,false,25,yPos,300,rowH));

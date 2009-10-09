@@ -1083,12 +1083,12 @@ namespace OpenDental{
 			butColorPus.BackColor=DefC.Short[(int)DefCat.MiscColors][2].ItemColor;
 			butColorPlaque.BackColor=DefC.Short[(int)DefCat.MiscColors][4].ItemColor;
 			butColorCalculus.BackColor=DefC.Short[(int)DefCat.MiscColors][5].ItemColor;
-			textRedProb.Text=((Pref)PrefC.HList["PerioRedProb"]).ValueString;
-			textRedMGJ.Text =((Pref)PrefC.HList["PerioRedMGJ"] ).ValueString;
-			textRedGing.Text=((Pref)PrefC.HList["PerioRedGing"]).ValueString;
-			textRedCAL.Text =((Pref)PrefC.HList["PerioRedCAL"] ).ValueString;
-			textRedFurc.Text=((Pref)PrefC.HList["PerioRedFurc"]).ValueString;
-			textRedMob.Text =((Pref)PrefC.HList["PerioRedMob"] ).ValueString;
+			textRedProb.Text=PrefC.GetString(PrefName.PerioRedProb);
+			textRedMGJ.Text =PrefC.GetString(PrefName.PerioRedMGJ);
+			textRedGing.Text=PrefC.GetString(PrefName.PerioRedGing);
+			textRedCAL.Text =PrefC.GetString(PrefName.PerioRedCAL);
+			textRedFurc.Text=PrefC.GetString(PrefName.PerioRedFurc);
+			textRedMob.Text =PrefC.GetString(PrefName.PerioRedMob);
 			//Procedure[] procList=Procedures.Refresh(PatCur.PatNum);
 			List<ToothInitial> initialList=ToothInitials.Refresh(PatCur.PatNum);
 			MissingTeeth=ToothInitials.GetMissingOrHiddenTeeth(initialList);
@@ -1391,22 +1391,22 @@ namespace OpenDental{
 			Pref pref=null;
 			int currentValue=0;
 			if(sender==updownProb){
-				currentValue=PrefC.GetInt32("PerioRedProb");
+				currentValue=PrefC.GetInt(PrefName.PerioRedProb);
 			}
 			else if(sender==updownMGJ) {
-				currentValue=PrefC.GetInt32("PerioRedMGJ");
+				currentValue=PrefC.GetInt(PrefName.PerioRedMGJ);
 			}
 			else if(sender==updownGing) {
-				currentValue=PrefC.GetInt32("PerioRedGing");
+				currentValue=PrefC.GetInt(PrefName.PerioRedGing);
 			}
 			else if(sender==updownCAL) {
-				currentValue=PrefC.GetInt32("PerioRedCAL");
+				currentValue=PrefC.GetInt(PrefName.PerioRedCAL);
 			}
 			else if(sender==updownFurc) {
-				currentValue=PrefC.GetInt32("PerioRedFurc");
+				currentValue=PrefC.GetInt(PrefName.PerioRedFurc);
 			}
 			else if(sender==updownMob) {
-				currentValue=PrefC.GetInt32("PerioRedMob");
+				currentValue=PrefC.GetInt(PrefName.PerioRedMob);
 			}
 			if(e.Y<8){//up
 				currentValue++;
@@ -1511,7 +1511,7 @@ namespace OpenDental{
 			grfx.DrawString("Periodontal Charting",new Font("Arial",15),Brushes.Black,
 				new RectangleF(xPos,yPos,650,25),format);			
 			yPos+=25;
-			grfx.DrawString(PrefC.GetString("PracticeTitle"),new Font("Arial",11),Brushes.Black
+			grfx.DrawString(PrefC.GetString(PrefName.PracticeTitle),new Font("Arial",11),Brushes.Black
 				,new RectangleF(xPos,yPos,650,25),format);
 			yPos+=20;
 			grfx.DrawString(PatCur.GetNameFL(),new Font("Arial",11),Brushes.Black

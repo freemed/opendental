@@ -211,7 +211,7 @@ namespace OpenDental{
 				//It starts out accepting input. It will be set to 0 if a sig is already present.  It will be set back to 1 if note changes or if user clicks Clear.
 				CodeBase.TopazWrapper.SetTopazState(sigBoxTopaz,1);
 			}
-			if(!PrefC.GetBool("ShowFeatureMedicalInsurance")) {
+			if(!PrefC.GetBool(PrefName.ShowFeatureMedicalInsurance)) {
 				groupMedical.Visible=false;
 			}
 		}
@@ -1798,20 +1798,20 @@ namespace OpenDental{
 			//richTextBox1.Select(22,9);
 			//richTextBox1.SelectionFont=new Font(FontFamily.GenericMonospace,8,FontStyle.Underline);
 			textDateEntry.Text=ProcCur.DateEntryC.ToShortDateString();
-			if(PrefC.GetBool("EasyHidePublicHealth")){
+			if(PrefC.GetBool(PrefName.EasyHidePublicHealth)){
 				labelPlaceService.Visible=false;
 				comboPlaceService.Visible=false;
 				labelSite.Visible=false;
 				textSite.Visible=false;
 				butPickSite.Visible=false;
 			}
-			if(PrefC.GetInt("UseInternationalToothNumbers")==1){
+			if(PrefC.GetLong(PrefName.UseInternationalToothNumbers)==1){
 				listBoxTeeth.Items.Clear();
 				listBoxTeeth.Items.AddRange(new string[] {"18","17","16","15","14","13","12","11","21","22","23","24","25","26","27","28"});
 				listBoxTeeth2.Items.Clear();
 				listBoxTeeth2.Items.AddRange(new string[] {"48","47","46","45","44","43","42","41","31","32","33","34","35","36","37","38"});
 			}
-			if(PrefC.GetInt("UseInternationalToothNumbers")==3){
+			if(PrefC.GetLong(PrefName.UseInternationalToothNumbers)==3){
 				listBoxTeeth.Items.Clear();
 				listBoxTeeth.Items.AddRange(new string[] {"8","7","6","5","4","3","2","1","1","2","3","4","5","6","7","8"});
 				listBoxTeeth2.Items.Clear();
@@ -1857,15 +1857,15 @@ namespace OpenDental{
 				labelClaim.Visible=true;
 				butSetComplete.Enabled=false;
 			}
-			if(PrefC.GetBool("EasyHideClinical")){
+			if(PrefC.GetBool(PrefName.EasyHideClinical)){
 				labelDx.Visible=false;
 				comboDx.Visible=false;
 			}
-			if(PrefC.GetBool("EasyNoClinics")){
+			if(PrefC.GetBool(PrefName.EasyNoClinics)){
 				comboClinic.Visible=false;
 				labelClinic.Visible=false;
 			}
-			if(PrefC.GetBool("EasyHideMedicaid")) {
+			if(PrefC.GetBool(PrefName.EasyHideMedicaid)) {
 				comboBillingTypeOne.Visible=false;
 				labelBillingTypeOne.Visible=false;
 				comboBillingTypeTwo.Visible=false;
@@ -1895,7 +1895,7 @@ namespace OpenDental{
 			listProcStatus.Items.Clear();
 			listProcStatus.Items.Add(Lan.g(this,"Treatment Planned"));
 			listProcStatus.Items.Add(Lan.g(this,"Complete"));
-			if(!PrefC.GetBool("EasyHideClinical")) {
+			if(!PrefC.GetBool(PrefName.EasyHideClinical)) {
 				listProcStatus.Items.Add(Lan.g(this,"Existing-Current Prov"));
 				listProcStatus.Items.Add(Lan.g(this,"Existing-Other Prov"));
 				listProcStatus.Items.Add(Lan.g(this,"Referred Out"));
@@ -1908,7 +1908,7 @@ namespace OpenDental{
 			if(ProcCur.ProcStatus==ProcStat.C) {
 				listProcStatus.SelectedIndex=1;
 			}
-			if(PrefC.GetBool("EasyHideClinical")) {
+			if(PrefC.GetBool(PrefName.EasyHideClinical)) {
 				if(ProcCur.ProcStatus==ProcStat.D) {
 					listProcStatus.SelectedIndex=2;
 				}
@@ -2579,7 +2579,7 @@ namespace OpenDental{
 					if(ProcCur.ProcStatus==ProcStat.TP) {
 						listProcStatus.SelectedIndex=0;
 					}
-					else if(PrefC.GetBool("EasyHideClinical")) {
+					else if(PrefC.GetBool(PrefName.EasyHideClinical)) {
 						if(ProcCur.ProcStatus==ProcStat.D) {
 							listProcStatus.SelectedIndex=2;
 						}
@@ -2610,7 +2610,7 @@ namespace OpenDental{
 				ProcCur.ProcStatus=ProcStat.C;
 			}
 			if(listProcStatus.SelectedIndex==2) {
-				if(PrefC.GetBool("EasyHideClinical")){
+				if(PrefC.GetBool(PrefName.EasyHideClinical)){
 					ProcCur.ProcStatus=ProcStat.D;
 				}
 				else{
@@ -2657,7 +2657,7 @@ namespace OpenDental{
 			//radioStatusC.Checked=true;
 			ProcCur.ProcStatus=ProcStat.C;
 			ProcCur.SiteNum=PatCur.SiteNum;
-			comboPlaceService.SelectedIndex=PrefC.GetInt32("DefaultProcedurePlaceService");
+			comboPlaceService.SelectedIndex=PrefC.GetInt(PrefName.DefaultProcedurePlaceService);
 			if(EntriesAreValid()){
 				SaveAndClose();
 			}

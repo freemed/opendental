@@ -218,7 +218,7 @@ namespace OpenDental {
 				listProv.Items.Add(ProviderC.List[i].GetLongDesc());
 			}
 			listProv.SetSelected(0,true);
-			//if(PrefC.GetBool("EasyNoClinics")){
+			//if(PrefC.GetBool(PrefName.EasyNoClinics")){
 			listClinic.Visible = false;
 			labClinic.Visible = false;
 			/*}
@@ -549,7 +549,7 @@ namespace OpenDental {
 					FormQuery2.IsReport = true;
 					FormQuery2.ResetGrid();
 					report.Title = "Receivables Breakdown Report";
-					report.SubTitle.Add(((Pref)PrefC.HList["PracticeTitle"]).ValueString);
+					report.SubTitle.Add(PrefC.GetString(PrefName.PracticeTitle));
 					whereProv = "Report for: Practice";
 					whereProvx = "";
 					if(listProv.SelectedIndices[0] != 0) {

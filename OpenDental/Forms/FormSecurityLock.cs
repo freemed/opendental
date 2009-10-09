@@ -150,10 +150,10 @@ namespace OpenDental{
 		#endregion
 
 		private void FormSecurityLock_Load(object sender,EventArgs e) {
-			if(PrefC.GetDate("SecurityLockDate").Year>1880){
-				textDate.Text=PrefC.GetDate("SecurityLockDate").ToShortDateString();
+			if(PrefC.GetDate(PrefName.SecurityLockDate).Year>1880){
+				textDate.Text=PrefC.GetDate(PrefName.SecurityLockDate).ToShortDateString();
 			}
-			checkAdmin.Checked=PrefC.GetBool("SecurityLockIncludesAdmin");
+			checkAdmin.Checked=PrefC.GetBool(PrefName.SecurityLockIncludesAdmin);
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
@@ -161,8 +161,8 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please fix error first.");
 				return;
 			}
-			if(Prefs.UpdateString("SecurityLockDate",POut.PDate(PIn.PDate(textDate.Text),false))
-				|| Prefs.UpdateBool("SecurityLockIncludesAdmin",checkAdmin.Checked)  )
+			if(Prefs.UpdateString(PrefName.SecurityLockDate,POut.PDate(PIn.PDate(textDate.Text),false))
+				|| Prefs.UpdateBool(PrefName.SecurityLockIncludesAdmin,checkAdmin.Checked)  )
 			{
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}

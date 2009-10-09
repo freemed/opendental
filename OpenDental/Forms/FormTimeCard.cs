@@ -397,8 +397,8 @@ namespace OpenDental{
 			//Check to see if the employee currently logged in can edit this time-card.
 			bool cannotEdit=Security.CurUser!=null &&
 				Security.CurUser.EmployeeNum==EmployeeCur.EmployeeNum &&
-				PrefC.GetBool("TimecardSecurityEnabled") &&
-				PrefC.GetBool("TimecardUsersDontEditOwnCard");
+				PrefC.GetBool(PrefName.TimecardSecurityEnabled) &&
+				PrefC.GetBool(PrefName.TimecardUsersDontEditOwnCard);
 			if(cannotEdit) {
 				DisableAllSubControls(this);
 				butClose.Enabled=true;

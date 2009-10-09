@@ -30,7 +30,7 @@ namespace OpenDental{
 		public bool Convert(string fromVersion){
 			FromVersion=new Version(fromVersion);
 			ToVersion=new Version(Application.ProductVersion);
-			if(FromVersion>=new Version("3.4.0") && PrefC.GetBool("CorruptedDatabase")){
+			if(FromVersion>=new Version("3.4.0") && PrefC.GetBool(PrefName.CorruptedDatabase)){
 				MsgBox.Show(this,"Your database is corrupted because a conversion failed.  Please contact us.  This database is unusable and you will need to restore from a backup.");
 				return false;//shuts program down.
 			}
@@ -110,7 +110,7 @@ namespace OpenDental{
 			try{
 #endif
 			if(FromVersion>=new Version("3.4.0")){
-					Prefs.UpdateBool("CorruptedDatabase",true);
+					Prefs.UpdateBool(PrefName.CorruptedDatabase,true);
 				}
 			ConvertDatabases.FromVersion=FromVersion;
 			ConvertDatabases.To2_8_2();//begins going through the chain of conversion steps
@@ -118,7 +118,7 @@ namespace OpenDental{
 			MsgBox.Show(this,"Conversion successful");
 			if(FromVersion>=new Version("3.4.0")){
 				//CacheL.Refresh(InvalidType.Prefs);//or it won't know it has to update in the next line.
-				Prefs.UpdateBool("CorruptedDatabase",false,true);//more forceful refresh in order to properly change flag
+				Prefs.UpdateBool(PrefName.CorruptedDatabase,false,true);//more forceful refresh in order to properly change flag
 			}
 			Cache.Refresh(InvalidType.Prefs);
 			return true;
@@ -127,7 +127,7 @@ namespace OpenDental{
 			catch(System.IO.FileNotFoundException e){
 				MessageBox.Show(e.FileName+" "+Lan.g(this,"could not be found. Your database has not been altered and is still usable if you uninstall this version, then reinstall the previous version."));
 				if(FromVersion>=new Version("3.4.0")){
-					Prefs.UpdateBool("CorruptedDatabase",false);
+					Prefs.UpdateBool(PrefName.CorruptedDatabase",false);
 				}
 				//Prefs.Refresh();
 				return false;
@@ -135,7 +135,7 @@ namespace OpenDental{
 			catch(System.IO.DirectoryNotFoundException){
 				MessageBox.Show(Lan.g(this,"ConversionFiles folder could not be found. Your database has not been altered and is still usable if you uninstall this version, then reinstall the previous version."));
 				if(FromVersion>=new Version("3.4.0")){
-					Prefs.UpdateBool("CorruptedDatabase",false);
+					Prefs.UpdateBool(PrefName.CorruptedDatabase",false);
 				}
 				//Prefs.Refresh();
 				return false;

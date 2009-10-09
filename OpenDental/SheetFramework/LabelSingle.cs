@@ -21,11 +21,11 @@ namespace OpenDental{
 		///<summary></summary>
 		public static void PrintPat(long patNum) {
 			SheetDef sheetDef;
-			if(PrefC.GetInt("LabelPatientDefaultSheetDefNum")==0){
+			if(PrefC.GetLong(PrefName.LabelPatientDefaultSheetDefNum)==0){
 				sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.LabelPatientMail);
 			}
 			else{
-				sheetDef=SheetDefs.GetSheetDef(PrefC.GetInt("LabelPatientDefaultSheetDefNum"));
+				sheetDef=SheetDefs.GetSheetDef(PrefC.GetLong(PrefName.LabelPatientDefaultSheetDefNum));
 			}
 			Sheet sheet=SheetUtil.CreateSheet(sheetDef);
 			SheetParameter.SetParameter(sheet,"PatNum",patNum);

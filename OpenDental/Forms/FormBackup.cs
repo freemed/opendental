@@ -45,7 +45,7 @@ namespace OpenDental{
 		private double curVal;
 		private GroupBox groupBox2;
 		private CheckBox checkExcludeImages;
-		private bool usesInternalImages;
+		//private bool usesInternalImages;
 
 		///<summary></summary>
 		public FormBackup()
@@ -410,19 +410,20 @@ namespace OpenDental{
 
 		private void FormBackup_Load(object sender, System.EventArgs e) {
 			//already include the \
-			checkExcludeImages.Checked=PrefC.GetBool("BackupExcludeImageFolder");
-			textBackupFromPath.Text=PrefC.GetString("BackupFromPath");
-			textBackupToPath.Text=PrefC.GetString("BackupToPath");
-			textBackupRestoreFromPath.Text=PrefC.GetString("BackupRestoreFromPath");
-			textBackupRestoreToPath.Text=PrefC.GetString("BackupRestoreToPath");
-			textBackupRestoreAtoZToPath.Text=PrefC.GetString("BackupRestoreAtoZToPath");
-			usesInternalImages=(PrefC.GetString("ImageStore")=="OpenDental.Imaging.SqlStore");
+			checkExcludeImages.Checked=PrefC.GetBool(PrefName.BackupExcludeImageFolder);
+			textBackupFromPath.Text=PrefC.GetString(PrefName.BackupFromPath);
+			textBackupToPath.Text=PrefC.GetString(PrefName.BackupToPath);
+			textBackupRestoreFromPath.Text=PrefC.GetString(PrefName.BackupRestoreFromPath);
+			textBackupRestoreToPath.Text=PrefC.GetString(PrefName.BackupRestoreToPath);
+			textBackupRestoreAtoZToPath.Text=PrefC.GetString(PrefName.BackupRestoreAtoZToPath);
+			//usesInternalImages=(PrefC.GetString(PrefName.ImageStore)=="OpenDental.Imaging.SqlStore");
 			textBackupRestoreAtoZToPath.Enabled=ShouldUseAtoZFolder();
 			butBrowseRestoreAtoZTo.Enabled=ShouldUseAtoZFolder();
 		}
 
 		private bool ShouldUseAtoZFolder(){
-			return (PrefC.UsingAtoZfolder && !usesInternalImages && !checkExcludeImages.Checked);
+			return (PrefC.UsingAtoZfolder //&& !usesInternalImages 
+				&& !checkExcludeImages.Checked);
 		}
 
 		private void butBrowseFrom_Click(object sender, System.EventArgs e) {
@@ -499,18 +500,18 @@ namespace OpenDental{
 				return;
 			}
 			//test saving defaults
-			if(textBackupFromPath.Text!=PrefC.GetString("BackupFromPath")
-				|| textBackupToPath.Text!=PrefC.GetString("BackupToPath")
-				|| textBackupRestoreFromPath.Text!=PrefC.GetString("BackupRestoreFromPath")
-				|| textBackupRestoreToPath.Text!=PrefC.GetString("BackupRestoreToPath")
-				|| textBackupRestoreAtoZToPath.Text!=PrefC.GetString("BackupRestoreAtoZToPath"))
+			if(textBackupFromPath.Text!=PrefC.GetString(PrefName.BackupFromPath)
+				|| textBackupToPath.Text!=PrefC.GetString(PrefName.BackupToPath)
+				|| textBackupRestoreFromPath.Text!=PrefC.GetString(PrefName.BackupRestoreFromPath)
+				|| textBackupRestoreToPath.Text!=PrefC.GetString(PrefName.BackupRestoreToPath)
+				|| textBackupRestoreAtoZToPath.Text!=PrefC.GetString(PrefName.BackupRestoreAtoZToPath))
 			{
 				if(MsgBox.Show(this,true,"Set as default?")){
-					Prefs.UpdateString("BackupFromPath",textBackupFromPath.Text);
-					Prefs.UpdateString("BackupToPath",textBackupToPath.Text);
-					Prefs.UpdateString("BackupRestoreFromPath",textBackupRestoreFromPath.Text);
-					Prefs.UpdateString("BackupRestoreToPath",textBackupRestoreToPath.Text);
-					Prefs.UpdateString("BackupRestoreAtoZToPath",textBackupRestoreAtoZToPath.Text);
+					Prefs.UpdateString(PrefName.BackupFromPath,textBackupFromPath.Text);
+					Prefs.UpdateString(PrefName.BackupToPath,textBackupToPath.Text);
+					Prefs.UpdateString(PrefName.BackupRestoreFromPath,textBackupRestoreFromPath.Text);
+					Prefs.UpdateString(PrefName.BackupRestoreToPath,textBackupRestoreToPath.Text);
+					Prefs.UpdateString(PrefName.BackupRestoreAtoZToPath,textBackupRestoreAtoZToPath.Text);
 					DataValid.SetInvalid(InvalidType.Prefs);
 				}
 			}
@@ -866,19 +867,19 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Paths must end with ")+Path.DirectorySeparatorChar+".");
 				return;
 			}
-			if(textBackupFromPath.Text!=PrefC.GetString("BackupFromPath")
-				|| textBackupToPath.Text!=PrefC.GetString("BackupToPath")
-				|| textBackupRestoreFromPath.Text!=PrefC.GetString("BackupRestoreFromPath")
-				|| textBackupRestoreToPath.Text!=PrefC.GetString("BackupRestoreToPath")
-				|| textBackupRestoreAtoZToPath.Text!=PrefC.GetString("BackupRestoreAtoZToPath")
-				|| checkExcludeImages.Checked!=PrefC.GetBool("BackupExcludeImageFolder"))
+			if(textBackupFromPath.Text!=PrefC.GetString(PrefName.BackupFromPath)
+				|| textBackupToPath.Text!=PrefC.GetString(PrefName.BackupToPath)
+				|| textBackupRestoreFromPath.Text!=PrefC.GetString(PrefName.BackupRestoreFromPath)
+				|| textBackupRestoreToPath.Text!=PrefC.GetString(PrefName.BackupRestoreToPath)
+				|| textBackupRestoreAtoZToPath.Text!=PrefC.GetString(PrefName.BackupRestoreAtoZToPath)
+				|| checkExcludeImages.Checked!=PrefC.GetBool(PrefName.BackupExcludeImageFolder))
 			{
-				Prefs.UpdateString("BackupFromPath",textBackupFromPath.Text);
-				Prefs.UpdateString("BackupToPath",textBackupToPath.Text);
-				Prefs.UpdateString("BackupRestoreFromPath",textBackupRestoreFromPath.Text);
-				Prefs.UpdateString("BackupRestoreToPath",textBackupRestoreToPath.Text);
-				Prefs.UpdateString("BackupRestoreAtoZToPath",textBackupRestoreAtoZToPath.Text);
-				Prefs.UpdateBool("BackupExcludeImageFolder",checkExcludeImages.Checked);
+				Prefs.UpdateString(PrefName.BackupFromPath,textBackupFromPath.Text);
+				Prefs.UpdateString(PrefName.BackupToPath,textBackupToPath.Text);
+				Prefs.UpdateString(PrefName.BackupRestoreFromPath,textBackupRestoreFromPath.Text);
+				Prefs.UpdateString(PrefName.BackupRestoreToPath,textBackupRestoreToPath.Text);
+				Prefs.UpdateString(PrefName.BackupRestoreAtoZToPath,textBackupRestoreAtoZToPath.Text);
+				Prefs.UpdateBool(PrefName.BackupExcludeImageFolder,checkExcludeImages.Checked);
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}
 		}

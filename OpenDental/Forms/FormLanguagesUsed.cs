@@ -246,11 +246,11 @@ namespace OpenDental{
 			for(int i=0;i<AllCultures.Length;i++){
 				listAvailable.Items.Add(AllCultures[i].DisplayName);
 			}
-			if(PrefC.GetString("LanguagesUsedByPatients")==""){
+			if(PrefC.GetString(PrefName.LanguagesUsedByPatients)==""){
 				LangsUsed=new List<string>();
 			}
 			else{
-				LangsUsed=new List<string>(PrefC.GetString("LanguagesUsedByPatients").Split(','));
+				LangsUsed=new List<string>(PrefC.GetString(PrefName.LanguagesUsedByPatients).Split(','));
 			}
 			FillListUsed();
 		}
@@ -321,7 +321,7 @@ namespace OpenDental{
 				}
 				str+=LangsUsed[i];
 			}
-			Prefs.UpdateString("LanguagesUsedByPatients",str);
+			Prefs.UpdateString(PrefName.LanguagesUsedByPatients,str);
 			//prefs refresh handled by the calling form.
 			DialogResult=DialogResult.OK;
 		}

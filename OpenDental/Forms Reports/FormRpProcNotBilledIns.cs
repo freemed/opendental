@@ -158,7 +158,7 @@ namespace OpenDental{
 			FormQuery2.IsReport=true;
 			FormQuery2.SubmitReportQuery();
 			report.Title="Procedures Not Billed to Insurance";
-			report.SubTitle.Add(((Pref)PrefC.HList["PracticeTitle"]).ValueString);
+			report.SubTitle.Add(PrefC.GetString(PrefName.PracticeTitle));
 			report.SubTitle.Add(date1.SelectionStart.ToString("d")+" - "+date2.SelectionStart.ToString("d"));
 			report.SetColumn(this,0,"Patient Name",185);
 			report.SetColumn(this,1,"Procedure Date",185);

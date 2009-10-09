@@ -1159,7 +1159,7 @@ namespace OpenDental{
 			}
 			ReportLikeCrystal report=new ReportLikeCrystal();
 			report.AddTitle("Payment Plan Terms");
-			report.AddSubTitle(PrefC.GetString("PracticeTitle"));
+			report.AddSubTitle(PrefC.GetString(PrefName.PracticeTitle));
 			report.AddSubTitle(DateTime.Today.ToShortDateString());
 			string sectName="Report Header";
 			Section section=report.Sections["Report Header"];

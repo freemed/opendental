@@ -928,7 +928,7 @@ namespace OpenDentBusiness {
 			}
 			double retVal=Fees.GetAmount(ProcedureCodes.GetCodeNum(myCode),plan.CopayFeeSched);
 			if(retVal==-1) {//blank co-pay
-				if(PrefC.GetBool("CoPay_FeeSchedule_BlankLikeZero")) {
+				if(PrefC.GetBool(PrefName.CoPay_FeeSchedule_BlankLikeZero)) {
 					return -1;//will act like zero.  No patient co-pay.
 				} 
 				else {
@@ -948,7 +948,7 @@ namespace OpenDentBusiness {
 			}
 			double retVal=Fees.GetAmount(codeNum,copayFeeSched);
 			if(retVal==-1) {//blank co-pay
-				if(PrefC.GetBool("CoPay_FeeSchedule_BlankLikeZero")) {
+				if(PrefC.GetBool(PrefName.CoPay_FeeSchedule_BlankLikeZero)) {
 					return -1;//will act like zero.  No patient co-pay.
 				}
 				else {

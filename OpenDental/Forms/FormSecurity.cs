@@ -339,7 +339,7 @@ namespace OpenDental{
 			comboUsers.Items.Add(Lan.g(this,"Employees"));
 			comboUsers.Items.Add(Lan.g(this,"Other"));
 			comboUsers.SelectedIndex=0;
-			if(PrefC.GetBool("EasyHideDentalSchools")){
+			if(PrefC.GetBool(PrefName.EasyHideDentalSchools)){
 				comboSchoolClass.Visible=false;
 				labelSchoolClass.Visible=false;
 			}
@@ -353,11 +353,11 @@ namespace OpenDental{
 			FillTreePermissionsInitial();
 			FillUsers();
 			FillTreePerm();
-			checkTimecardSecurityEnabled.Checked=PrefC.GetBool("TimecardSecurityEnabled");
-			checkCannotEditOwn.Checked=PrefC.GetBool("TimecardUsersDontEditOwnCard");
+			checkTimecardSecurityEnabled.Checked=PrefC.GetBool(PrefName.TimecardSecurityEnabled);
+			checkCannotEditOwn.Checked=PrefC.GetBool(PrefName.TimecardUsersDontEditOwnCard);
 			checkCannotEditOwn.Enabled=checkTimecardSecurityEnabled.Checked;
-			if(PrefC.GetDate("SecurityLockDate").Year>1880){
-				textDate.Text=PrefC.GetDate("SecurityLockDate").ToShortDateString();
+			if(PrefC.GetDate(PrefName.SecurityLockDate).Year>1880){
+				textDate.Text=PrefC.GetDate(PrefName.SecurityLockDate).ToShortDateString();
 			}
 		}
 
@@ -758,8 +758,8 @@ namespace OpenDental{
 		private void butChange_Click(object sender,EventArgs e) {
 			FormSecurityLock FormS=new FormSecurityLock();
 			FormS.ShowDialog();//prefs are set invalid within that form if needed.
-			if(PrefC.GetDate("SecurityLockDate").Year>1880){
-				textDate.Text=PrefC.GetDate("SecurityLockDate").ToShortDateString();
+			if(PrefC.GetDate(PrefName.SecurityLockDate).Year>1880){
+				textDate.Text=PrefC.GetDate(PrefName.SecurityLockDate).ToShortDateString();
 			}
 			else{
 				textDate.Text="";
@@ -770,8 +770,8 @@ namespace OpenDental{
 			if(changed){
 				DataValid.SetInvalid(InvalidType.Security);
 			}
-			if(	Prefs.UpdateBool("TimecardSecurityEnabled",checkTimecardSecurityEnabled.Checked) ||
-					Prefs.UpdateBool("TimecardUsersDontEditOwnCard",checkCannotEditOwn.Checked))
+			if(	Prefs.UpdateBool(PrefName.TimecardSecurityEnabled,checkTimecardSecurityEnabled.Checked) ||
+					Prefs.UpdateBool(PrefName.TimecardUsersDontEditOwnCard,checkCannotEditOwn.Checked))
 			{
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}

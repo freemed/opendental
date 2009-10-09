@@ -264,7 +264,7 @@ namespace OpenDental{
 			FormQuery2.IsReport=true;
 			FormQuery2.SubmitReportQuery();			
 			report.Title="Daily Adjustments";
-			report.SubTitle.Add(((Pref)PrefC.HList["PracticeTitle"]).ValueString);
+			report.SubTitle.Add(PrefC.GetString(PrefName.PracticeTitle));
 			report.SubTitle.Add(date1.SelectionStart.ToString("d")+" - "+date2.SelectionStart.ToString("d"));
 			report.SetColumnPos(this,0,"Date",100);
 			report.SetColumnPos(this,1,"Patient Name",250);

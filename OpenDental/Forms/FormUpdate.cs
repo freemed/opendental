@@ -568,11 +568,11 @@ namespace OpenDental{
 			//keeps the trailing year up to date
 			this.label10.Text=Lan.g(this, "This program Copyright 2003-")+DateTime.Now.ToString("yyyy")+Lan.g(this,", Jordan S. Sparks, D.M.D., Frederik Carlier, and others.");
 			this.label8.Text=Lan.g(this, "MySQL - Copyright 1995-")+DateTime.Now.ToString("yyyy")+Lan.g(this,", www.mysql.com");
-			if(PrefC.GetBool("UpdateWindowShowsClassicView")){
+			if(PrefC.GetBool(PrefName.UpdateWindowShowsClassicView)){
 				panelClassic.Visible=true;
 				panelClassic.Location=new Point(67,29);
-				textUpdateCode.Text=PrefC.GetString("UpdateCode");
-				textWebsitePath.Text=PrefC.GetString("UpdateWebsitePath");//should include trailing /
+				textUpdateCode.Text=PrefC.GetString(PrefName.UpdateCode);
+				textWebsitePath.Text=PrefC.GetString(PrefName.UpdateWebsitePath);//should include trailing /
 				butDownload.Enabled=false;
 				if(!Security.IsAuthorized(Permissions.Setup)){//gives a message box if no permission
 					butCheck.Enabled=false;
@@ -589,7 +589,7 @@ namespace OpenDental{
 		}
 
 		private void menuItemSetup_Click(object sender,EventArgs e) {
-			if(PrefC.GetBool("UpdateWindowShowsClassicView")){
+			if(PrefC.GetBool(PrefName.UpdateWindowShowsClassicView)){
 				return;
 			}
 			FormUpdateSetup FormU=new FormUpdateSetup();
@@ -601,10 +601,10 @@ namespace OpenDental{
 				MsgBox.Show(this,"Updates are only allowed from the web server");
 				return;
 			}
-			if(PrefC.GetString("WebServiceServerName")!="" //using web service
-				&&PrefC.GetString("WebServiceServerName").ToLower()!=Environment.MachineName.ToLower())//and not on web server 
+			if(PrefC.GetString(PrefName.WebServiceServerName)!="" //using web service
+				&&PrefC.GetString(PrefName.WebServiceServerName).ToLower()!=Environment.MachineName.ToLower())//and not on web server 
 			{
-				MessageBox.Show(Lan.g(this,"Updates are only allowed from the web server: ")+PrefC.GetString("WebServiceServerName"));
+				MessageBox.Show(Lan.g(this,"Updates are only allowed from the web server: ")+PrefC.GetString(PrefName.WebServiceServerName));
 				return;
 			}
 			Cursor=Cursors.WaitCursor;
@@ -667,14 +667,14 @@ namespace OpenDental{
 			node=doc.SelectSingleNode("//KeyDisabled");
 			if(node==null) {
 				//no error, and no disabled message
-				if(Prefs.UpdateBool("RegistrationKeyIsDisabled",false)) {//this is one of two places in the program where this happens.
+				if(Prefs.UpdateBool(PrefName.RegistrationKeyIsDisabled,false)) {//this is one of two places in the program where this happens.
 					DataValid.SetInvalid(InvalidType.Prefs);
 				}
 			}
 			else {
 				//textConnectionMessage.Text=node.InnerText;
 				//MessageBox.Show(node.InnerText);
-				if(Prefs.UpdateBool("RegistrationKeyIsDisabled",true)) {//this is one of two places in the program where this happens.
+				if(Prefs.UpdateBool(PrefName.RegistrationKeyIsDisabled,true)) {//this is one of two places in the program where this happens.
 					DataValid.SetInvalid(InvalidType.Prefs);
 				}
 				throw new Exception(node.InnerText);
@@ -745,16 +745,16 @@ namespace OpenDental{
 			using(XmlWriter writer=XmlWriter.Create(strbuild,settings)){
 				writer.WriteStartElement("UpdateRequest");
 				writer.WriteStartElement("RegistrationKey");
-				writer.WriteString(PrefC.GetString("RegistrationKey"));
+				writer.WriteString(PrefC.GetString(PrefName.RegistrationKey));
 				writer.WriteEndElement();
 				writer.WriteStartElement("PracticeTitle");
-				writer.WriteString(PrefC.GetString("PracticeTitle"));
+				writer.WriteString(PrefC.GetString(PrefName.PracticeTitle));
 				writer.WriteEndElement();
 				writer.WriteStartElement("PracticePhone");
-				writer.WriteString(PrefC.GetString("PracticePhone"));
+				writer.WriteString(PrefC.GetString(PrefName.PracticePhone));
 				writer.WriteEndElement();
 				writer.WriteStartElement("ProgramVersion");
-				writer.WriteString(PrefC.GetString("ProgramVersion"));
+				writer.WriteString(PrefC.GetString(PrefName.ProgramVersion));
 				writer.WriteEndElement();
 				writer.WriteEndElement();
 			}
@@ -762,11 +762,11 @@ namespace OpenDental{
 				OpenDental.localhost.Service1 updateService=new OpenDental.localhost.Service1();
 			#else
 				OpenDental.customerUpdates.Service1 updateService=new OpenDental.customerUpdates.Service1();
-				updateService.Url=PrefC.GetString("UpdateServerAddress");
+				updateService.Url=PrefC.GetString(PrefName.UpdateServerAddress");
 			#endif
-			if(PrefC.GetString("UpdateWebProxyAddress") !="") {
-				IWebProxy proxy = new WebProxy(PrefC.GetString("UpdateWebProxyAddress"));
-				ICredentials cred=new NetworkCredential(PrefC.GetString("UpdateWebProxyUserName"),PrefC.GetString("UpdateWebProxyPassword"));
+			if(PrefC.GetString(PrefName.UpdateWebProxyAddress) !="") {
+				IWebProxy proxy = new WebProxy(PrefC.GetString(PrefName.UpdateWebProxyAddress));
+				ICredentials cred=new NetworkCredential(PrefC.GetString(PrefName.UpdateWebProxyUserName),PrefC.GetString(PrefName.UpdateWebProxyPassword));
 				proxy.Credentials=cred;
 				updateService.Proxy=proxy;
 			}
@@ -811,7 +811,7 @@ namespace OpenDental{
 			if(destDir==null) {//Not using A to Z folders?
 				destDir=Path.GetTempPath();
 			}
-			DownloadInstallPatchFromURI(PrefC.GetString("UpdateWebsitePath")+buildAvailableCode+"/"+patchName,//Source URI
+			DownloadInstallPatchFromURI(PrefC.GetString(PrefName.UpdateWebsitePath)+buildAvailableCode+"/"+patchName,//Source URI
 				ODFileUtils.CombinePaths(destDir,patchName),true,true);//Local destination file.
 		}
 
@@ -821,7 +821,7 @@ namespace OpenDental{
 			if(destDir==null) {//Not using A to Z folders?
 				destDir=Path.GetTempPath();
 			}
-			DownloadInstallPatchFromURI(PrefC.GetString("UpdateWebsitePath")+stableAvailableCode+"/"+patchName,//Source URI
+			DownloadInstallPatchFromURI(PrefC.GetString(PrefName.UpdateWebsitePath)+stableAvailableCode+"/"+patchName,//Source URI
 				ODFileUtils.CombinePaths(destDir,patchName),true,true);//Local destination file.
 		}
 
@@ -831,7 +831,7 @@ namespace OpenDental{
 			if(destDir==null) {//Not using A to Z folders?
 				destDir=Path.GetTempPath();
 			}
-			DownloadInstallPatchFromURI(PrefC.GetString("UpdateWebsitePath")+betaAvailableCode+"/"+patchName,//Source URI
+			DownloadInstallPatchFromURI(PrefC.GetString(PrefName.UpdateWebsitePath)+betaAvailableCode+"/"+patchName,//Source URI
 				ODFileUtils.CombinePaths(destDir,patchName),true,true);//Local destination file.
 		}
 
@@ -927,7 +927,7 @@ namespace OpenDental{
 		}
 
 		public static void DownloadInstallPatchFromURI(string downloadUri,string destinationPath,bool runSetupAfterDownload,bool showShutdownWindow){
-			string[] dblist=PrefC.GetString("UpdateMultipleDatabases").Split(new string[] {","},StringSplitOptions.RemoveEmptyEntries);
+			string[] dblist=PrefC.GetString(PrefName.UpdateMultipleDatabases).Split(new string[] {","},StringSplitOptions.RemoveEmptyEntries);
 			if(showShutdownWindow) {
 				//Even if updating multiple databases, extra shutdown signals are not needed.
 				FormShutdown FormSD=new FormShutdown();
@@ -944,7 +944,7 @@ namespace OpenDental{
 				}
 				//continue on even if user clicked cancel
 				//no other workstation will be able to start up until this value is reset.
-				Prefs.UpdateString("UpdateInProgressOnComputerName",Environment.MachineName);
+				Prefs.UpdateString(PrefName.UpdateInProgressOnComputerName,Environment.MachineName);
 			}
 			MiscData.LockWorkstationsForDbs(dblist);//lock workstations for other db's.
 			File.Delete(destinationPath);
@@ -965,7 +965,7 @@ namespace OpenDental{
 			FormP.ShowDialog();
 			if(FormP.DialogResult==DialogResult.Cancel) {
 				workerThread.Abort();
-				Prefs.UpdateString("UpdateInProgressOnComputerName","");//unlock workstations, since nothing was actually done.
+				Prefs.UpdateString(PrefName.UpdateInProgressOnComputerName,"");//unlock workstations, since nothing was actually done.
 				return;
 			}
 			//copy the Setup.exe to the AtoZ folders for the other db's.
@@ -986,7 +986,7 @@ namespace OpenDental{
 			}
 			if(MessageBox.Show(msg,"",MessageBoxButtons.OKCancel) !=DialogResult.OK){
 				//Clicking cancel gives the user a chance to avoid running the setup program,
-				Prefs.UpdateString("UpdateInProgressOnComputerName","");//unlock workstations, since nothing was actually done.
+				Prefs.UpdateString(PrefName.UpdateInProgressOnComputerName,"");//unlock workstations, since nothing was actually done.
 				return;
 			}
 			try{
@@ -994,7 +994,7 @@ namespace OpenDental{
 				Application.Exit();
 			}
 			catch{
-				Prefs.UpdateString("UpdateInProgressOnComputerName","");//unlock workstations, since nothing was actually done.
+				Prefs.UpdateString(PrefName.UpdateInProgressOnComputerName,"");//unlock workstations, since nothing was actually done.
 				MsgBox.Show(FormP,"Could not launch setup");
 			}
 		}
@@ -1035,10 +1035,10 @@ namespace OpenDental{
 
 		private void SavePrefs(){
 			bool changed=false;
-			if(Prefs.UpdateString("UpdateCode",textUpdateCode.Text)){
+			if(Prefs.UpdateString(PrefName.UpdateCode,textUpdateCode.Text)){
 				changed=true;
 			}
-			if(Prefs.UpdateString("UpdateWebsitePath",textWebsitePath.Text)){
+			if(Prefs.UpdateString(PrefName.UpdateWebsitePath,textWebsitePath.Text)){
 				changed=true;
 			}
 			if(changed){
@@ -1057,7 +1057,7 @@ namespace OpenDental{
 
 		private void FormUpdate_FormClosing(object sender,FormClosingEventArgs e) {
 			if(Security.IsAuthorized(Permissions.Setup,DateTime.Now,true)
-				&& PrefC.GetBool("UpdateWindowShowsClassicView"))			
+				&& PrefC.GetBool(PrefName.UpdateWindowShowsClassicView))			
 			{
 				SavePrefs();
 			}

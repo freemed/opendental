@@ -411,8 +411,8 @@ namespace OpenDental{
 				}
 			}
 			if(IsNew){
-				textDateStart.Text=PIn.PDate(PrefC.GetString("DateDepositsStarted")).ToShortDateString();
-				if(PrefC.GetBool("EasyNoClinics")){
+				textDateStart.Text=PIn.PDate(PrefC.GetString(PrefName.DateDepositsStarted)).ToShortDateString();
+				if(PrefC.GetBool(PrefName.EasyNoClinics)){
 					comboClinic.Visible=false;
 					labelClinic.Visible=false;
 				}
@@ -591,12 +591,12 @@ namespace OpenDental{
 			gridIns.SetSelected(true);
 			ComputeAmt();
 			if(comboClinic.SelectedIndex==0){
-				textBankAccountInfo.Text=PrefC.GetString("PracticeBankNumber");
+				textBankAccountInfo.Text=PrefC.GetString(PrefName.PracticeBankNumber);
 			}
 			else{
 				textBankAccountInfo.Text=Clinics.List[comboClinic.SelectedIndex-1].BankNumber;
 			}
-			if(Prefs.UpdateString("DateDepositsStarted",POut.PDate(PIn.PDate(textDateStart.Text),false))){
+			if(Prefs.UpdateString(PrefName.DateDepositsStarted,POut.PDate(PIn.PDate(textDateStart.Text),false))){
 				changed=true;
 			}
 		}
@@ -694,7 +694,7 @@ namespace OpenDental{
 			FormQuery2.IsReport=true;
 			FormQuery2.ResetGrid();//necessary won't work without
 			report.Title="Deposit Slip";
-			report.SubTitle.Add(((Pref)PrefC.HList["PracticeTitle"]).ValueString);
+			report.SubTitle.Add(PrefC.GetString(PrefName.PracticeTitle));
 			report.SubTitle.Add(DepositCur.DateDeposit.ToShortDateString());
 			report.Summary.Add(DepositCur.BankAccountInfo);
 			if(DepositCur.BankAccountInfo.StartsWith("A")){
@@ -753,12 +753,12 @@ namespace OpenDental{
 					je.DateDisplayed=DepositCur.DateDeposit;//it would be nice to add security here.
 					je.DebitAmt=DepositCur.Amount;
 					je.Memo=Lan.g(this,"Deposit");
-					je.Splits=AccountC.GetDescript(PrefC.GetInt("AccountingIncomeAccount"));
+					je.Splits=AccountC.GetDescript(PrefC.GetLong(PrefName.AccountingIncomeAccount));
 					je.TransactionNum=trans.TransactionNum;
 					JournalEntries.Insert(je);
 					//then, the income entry
 					je=new JournalEntry();
-					je.AccountNum=PrefC.GetInt("AccountingIncomeAccount");
+					je.AccountNum=PrefC.GetLong(PrefName.AccountingIncomeAccount);
 					//je.CheckNumber=;
 					je.DateDisplayed=DepositCur.DateDeposit;//it would be nice to add security here.
 					je.CreditAmt=DepositCur.Amount;

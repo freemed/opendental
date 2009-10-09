@@ -70,8 +70,8 @@ namespace OpenDentBusiness {
 			payPlanDue=0;
 			balanceForward=0;
 			//Gets 3 tables: account(or account###,account###,etc), patient, payplan.
-			GetAccount(patNum,fromDate,toDate,intermingled,singlePatient,true,PrefC.GetBool("StatementShowProcBreakdown"),
-				PrefC.GetBool("StatementShowNotes"));
+			GetAccount(patNum,fromDate,toDate,intermingled,singlePatient,true,PrefC.GetBool(PrefName.StatementShowProcBreakdown),
+				PrefC.GetBool(PrefName.StatementShowNotes));
 			//GetPayPlans(patNum,fromDate,toDate,isFamily);
 			GetApptTable(fam,singlePatient,patNum);//table= appts
 			GetMisc(fam,patNum);
@@ -463,8 +463,8 @@ namespace OpenDentBusiness {
 			DataConnection dcon=new DataConnection();
 			DataTable table=new DataTable("account");
 			//run aging.-------------------------------------------------------
-			if(PrefC.GetBool("AgingCalculatedMonthlyInsteadOfDaily")){
-				Ledgers.ComputeAging(pat.Guarantor,PIn.PDate(PrefC.GetString("DateLastAging")),false);
+			if(PrefC.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily)){
+				Ledgers.ComputeAging(pat.Guarantor,PIn.PDate(PrefC.GetString(PrefName.DateLastAging)),false);
 			}
 			else{
 				Ledgers.ComputeAging(pat.Guarantor,DateTime.Today,false);
@@ -903,7 +903,7 @@ namespace OpenDentBusiness {
 				amtpaid=PIn.PDouble(rawClaim.Rows[i]["InsPayAmt"].ToString());
 				writeoff=PIn.PDouble(rawClaim.Rows[i]["WriteOff"].ToString());
 				deductible=PIn.PDouble(rawClaim.Rows[i]["DedApplied"].ToString());
-				if(!PrefC.GetBool("BalancesDontSubtractIns") &&	(claimStatus=="W" || claimStatus=="S")){
+				if(!PrefC.GetBool(PrefName.BalancesDontSubtractIns) &&	(claimStatus=="W" || claimStatus=="S")){
 					if (amtpaid != 0 && ((insest - amtpaid) >= 0)) {//show additional info on resubmits
 						row["description"] += "\r\n" + Lans.g("ContrAccount", "Remaining Est. Payment Pending:") + " " + (insest - amtpaid).ToString("c");
 					}
@@ -923,7 +923,7 @@ namespace OpenDentBusiness {
 				if(deductible!=0){
 					row["description"]+="\r\n"+Lans.g("ContrAccount","Deductible Applied:")+" "+deductible.ToString("c");
 				}
-				if(!PrefC.GetBool("BalancesDontSubtractIns") &&	(claimStatus=="W" || claimStatus=="S")){
+				if(!PrefC.GetBool(PrefName.BalancesDontSubtractIns) &&	(claimStatus=="W" || claimStatus=="S")){
 					patport=procAmt-insest-writeoff;
 					if(patport<0){
 						patport=0;
@@ -1409,7 +1409,7 @@ namespace OpenDentBusiness {
 				rawAmort=GetPayPlanAmortTable(payPlanNum);
 				//remove future entries, going backwards
 				for(int d=rawAmort.Rows.Count-1;d>=0;d--) {
-					if((DateTime)rawAmort.Rows[d]["DateTime"]>toDate.AddDays(PrefC.GetInt("PayPlansBillInAdvanceDays"))) {
+					if((DateTime)rawAmort.Rows[d]["DateTime"]>toDate.AddDays(PrefC.GetLong(PrefName.PayPlansBillInAdvanceDays))) {
 						rawAmort.Rows.RemoveAt(d);
 					}
 				}

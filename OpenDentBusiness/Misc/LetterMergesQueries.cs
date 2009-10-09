@@ -90,8 +90,8 @@ namespace OpenDentBusiness {
 				+"LEFT JOIN treatplan ON patient.PatNum=treatplan.PatNum AND DateTP=@maxTpDate "
 				+"LEFT JOIN patient patResp ON treatplan.ResponsParty=patResp.PatNum "
 				+"LEFT JOIN recall ON recall.PatNum=patient.PatNum "
-					+"AND (recall.RecallTypeNum="+POut.PLong(PrefC.GetInt("RecallTypeSpecialProphy"))
-					+" OR recall.RecallTypeNum="+POut.PLong(PrefC.GetInt("RecallTypeSpecialPerio"))+") "
+					+"AND (recall.RecallTypeNum="+POut.PLong(PrefC.GetLong(PrefName.RecallTypeSpecialProphy))
+					+" OR recall.RecallTypeNum="+POut.PLong(PrefC.GetLong(PrefName.RecallTypeSpecialPerio))+") "
 				+"LEFT JOIN patplan ON patplan.PatNum=patient.PatNum AND Ordinal=1 "
 				+"LEFT JOIN insplan ON patplan.PlanNum=insplan.PlanNum "
 				+"LEFT JOIN carrier ON carrier.CarrierNum=insplan.CarrierNum "

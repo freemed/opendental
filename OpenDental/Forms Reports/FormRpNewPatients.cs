@@ -398,7 +398,7 @@ CONCAT(referral.LName,IF(referral.FName='','',','),referral.FName) refname,SUM(p
 			FormQuery2.IsReport=true;
 			FormQuery2.SubmitReportQuery();			
 			report.Title="New Patients";
-			report.SubTitle.Add(((Pref)PrefC.HList["PracticeTitle"]).ValueString);
+			report.SubTitle.Add(PrefC.GetString(PrefName.PracticeTitle));
 			if(listProv.SelectedIndices[0]==0){
 				report.SubTitle.Add(Lan.g(this,"All Providers"));
 				report.SubTitle.Add(dateFrom.ToString("d")+" - "+dateTo.ToString("d"));

@@ -15,7 +15,7 @@ namespace OpenDental {
 		///<summary>This ONLY runs when first opening the program.  It returns true if either no conversion is necessary, or if conversion was successful.  False for other situations like corrupt db, trying to convert to older version, etc.</summary>
 		public static bool ConvertDB() {
 			ClassConvertDatabase ClassConvertDatabase2=new ClassConvertDatabase();
-			string pref=PrefC.GetString("DataBaseVersion");
+			string pref=PrefC.GetString(PrefName.DataBaseVersion);
 				//(Pref)PrefC.HList["DataBaseVersion"];
 			//Debug.WriteLine(pref.PrefName+","+pref.ValueString);
 			if(ClassConvertDatabase2.Convert(pref)){
@@ -30,7 +30,7 @@ namespace OpenDental {
 
 		///<summary>Called in two places.  Once from RefreshLocalData, and also from FormBackups after a restore.</summary>
 		public static bool CheckProgramVersion() {
-			Version storedVersion=new Version(PrefC.GetString("ProgramVersion"));
+			Version storedVersion=new Version(PrefC.GetString(PrefName.ProgramVersion));
 			Version currentVersion=new Version(Application.ProductVersion);
 			string database="";
 			//string command="";
@@ -39,10 +39,10 @@ namespace OpenDental {
 			}
 			if(storedVersion<currentVersion) {
 				//There are two different situations where this might happen.
-				if(PrefC.GetString("UpdateInProgressOnComputerName")==""){//1. Just performed an update from this workstation on another database.
+				if(PrefC.GetString(PrefName.UpdateInProgressOnComputerName)==""){//1. Just performed an update from this workstation on another database.
 					//This is very common for admins when viewing slighly older databases.
 					//There should be no annoying behavior here.  So do nothing.
-					Prefs.UpdateString("ProgramVersion",currentVersion.ToString());
+					Prefs.UpdateString(PrefName.ProgramVersion,currentVersion.ToString());
 					Cache.Refresh(InvalidType.Prefs);
 					return true;
 				}
@@ -80,8 +80,8 @@ namespace OpenDental {
 					//Create a simple manifest file so that we know what version the files are for.
 					File.WriteAllText(ODFileUtils.CombinePaths(folderUpdate,"Manifest.txt"),currentVersion.ToString(3));
 				}//else if not used AtoZ, then no place to stash the files.
-				Prefs.UpdateString("ProgramVersion",currentVersion.ToString());
-				Prefs.UpdateString("UpdateInProgressOnComputerName","");//now, other workstations will be allowed to update.
+				Prefs.UpdateString(PrefName.ProgramVersion,currentVersion.ToString());
+				Prefs.UpdateString(PrefName.UpdateInProgressOnComputerName,"");//now, other workstations will be allowed to update.
 				Cache.Refresh(InvalidType.Prefs);
 			}
 			if(storedVersion>currentVersion) {
@@ -150,8 +150,8 @@ namespace OpenDental {
 		///<summary>If AtoZ.manifest was wrong, or if user is not using AtoZ, then just download again.  Will use dir selected by user.  If an appropriate download is not available, it will fail and inform user.</summary>
 		private static void DownloadAndRunSetup(Version storedVersion,Version currentVersion) {
 			string patchName="Setup.exe";
-			string updateUri=PrefC.GetString("UpdateWebsitePath");
-			string updateCode=PrefC.GetString("UpdateCode");
+			string updateUri=PrefC.GetString(PrefName.UpdateWebsitePath);
+			string updateCode=PrefC.GetString(PrefName.UpdateCode);
 			string updateInfoMajor="";
 			string updateInfoMinor="";
 			if(!FormUpdate.ShouldDownloadUpdate(updateUri,updateCode,out updateInfoMajor,out updateInfoMinor)){
@@ -189,7 +189,7 @@ namespace OpenDental {
 				|| thisVersion.Substring(0,3)=="5.0"
 				|| thisVersion.Substring(0,3)=="5.1")
 			{
-				if(PrefC.HList.ContainsKey("DatabaseConvertedForMySql41"))
+				if(PrefC.ContainsKey("DatabaseConvertedForMySql41"))
 				//&& GetBool("DatabaseConvertedForMySql41"))
 				{
 					return true;//already converted

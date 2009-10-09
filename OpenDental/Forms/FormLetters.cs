@@ -30,13 +30,10 @@ namespace OpenDental{
 		//private bool localChanged;
 		private System.Drawing.Printing.PrintDocument pd2;
 		//private bool bodyChanged;
-		private OpenDental.UI.Button butPrint;
 		private OpenDental.ODtextBox textBody;
 		private int pagesPrinted=0;
 		private Patient PatCur;
 		private Letter LetterCur;
-		private OpenDental.UI.Button buttonTYREF;
-		private OpenDental.UI.Button buttonTYDMF;
 		///<summary>If this is not null, then this letter will be addressed to the referral rather than the patient.</summary>
 		public Referral ReferralCur;
 		///<summary>Only used if FuchsOptionsOn</summary>
@@ -80,10 +77,7 @@ namespace OpenDental{
 			this.label2 = new System.Windows.Forms.Label();
 			this.butDelete = new OpenDental.UI.Button();
 			this.pd2 = new System.Drawing.Printing.PrintDocument();
-			this.butPrint = new OpenDental.UI.Button();
 			this.textBody = new OpenDental.ODtextBox();
-			this.buttonTYREF = new OpenDental.UI.Button();
-			this.buttonTYDMF = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -175,24 +169,6 @@ namespace OpenDental{
 			this.butDelete.Text = "&Delete";
 			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
 			// 
-			// butPrint
-			// 
-			this.butPrint.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butPrint.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butPrint.Autosize = true;
-			this.butPrint.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butPrint.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butPrint.CornerRadius = 4F;
-			this.butPrint.Image = global::OpenDental.Properties.Resources.butPrintSmall;
-			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPrint.Location = new System.Drawing.Point(654,633);
-			this.butPrint.Name = "butPrint";
-			this.butPrint.Size = new System.Drawing.Size(79,26);
-			this.butPrint.TabIndex = 17;
-			this.butPrint.Text = "&Print";
-			this.butPrint.Visible = false;
-			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
-			// 
 			// textBody
 			// 
 			this.textBody.AcceptsReturn = true;
@@ -204,51 +180,12 @@ namespace OpenDental{
 			this.textBody.Size = new System.Drawing.Size(630,486);
 			this.textBody.TabIndex = 18;
 			// 
-			// buttonTYREF
-			// 
-			this.buttonTYREF.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.buttonTYREF.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.buttonTYREF.Autosize = true;
-			this.buttonTYREF.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.buttonTYREF.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.buttonTYREF.CornerRadius = 4F;
-			this.buttonTYREF.Image = ((System.Drawing.Image)(resources.GetObject("buttonTYREF.Image")));
-			this.buttonTYREF.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.buttonTYREF.Location = new System.Drawing.Point(307,633);
-			this.buttonTYREF.Name = "buttonTYREF";
-			this.buttonTYREF.Size = new System.Drawing.Size(119,26);
-			this.buttonTYREF.TabIndex = 21;
-			this.buttonTYREF.Text = "REF Thank You";
-			this.buttonTYREF.Visible = false;
-			this.buttonTYREF.Click += new System.EventHandler(this.buttonTYREF_Click);
-			// 
-			// buttonTYDMF
-			// 
-			this.buttonTYDMF.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.buttonTYDMF.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.buttonTYDMF.Autosize = true;
-			this.buttonTYDMF.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.buttonTYDMF.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.buttonTYDMF.CornerRadius = 4F;
-			this.buttonTYDMF.Image = ((System.Drawing.Image)(resources.GetObject("buttonTYDMF.Image")));
-			this.buttonTYDMF.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.buttonTYDMF.Location = new System.Drawing.Point(449,633);
-			this.buttonTYDMF.Name = "buttonTYDMF";
-			this.buttonTYDMF.Size = new System.Drawing.Size(121,26);
-			this.buttonTYDMF.TabIndex = 22;
-			this.buttonTYDMF.Text = "DMF Thank You";
-			this.buttonTYDMF.Visible = false;
-			this.buttonTYDMF.Click += new System.EventHandler(this.buttonTYDMF_Click);
-			// 
 			// FormLetters
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(858,674);
-			this.Controls.Add(this.buttonTYDMF);
-			this.Controls.Add(this.buttonTYREF);
 			this.Controls.Add(this.textBody);
-			this.Controls.Add(this.butPrint);
 			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.butEdit);
@@ -272,10 +209,10 @@ namespace OpenDental{
 		#endregion
 
 		private void FormLetterSetup_Load(object sender, System.EventArgs e) {
-			//if(PrefC.GetBool("LettersIncludeReturnAddress")){
+			//if(PrefC.GetBool(PrefName.LettersIncludeReturnAddress")){
 			//	checkIncludeRet.Checked=true;
 			//}
-			//if(PrefC.GetBool("FuchsOptionsOn")) {
+			//if(PrefC.GetBool(PrefName.FuchsOptionsOn")) {
 				//buttonTYDMF.Visible = true;
 				//buttonTYREF.Visible = true;
 			//}
@@ -301,13 +238,13 @@ namespace OpenDental{
 			StringBuilder str = new StringBuilder();
 			//return address
 			//if (checkIncludeRet.Checked) {
-				str.Append(PrefC.GetString("PracticeTitle") + "\r\n");
-				str.Append(PrefC.GetString("PracticeAddress") + "\r\n");
-				if (PrefC.GetString("PracticeAddress2") != "")
-					str.Append(PrefC.GetString("PracticeAddress2") + "\r\n");
-				str.Append(PrefC.GetString("PracticeCity") + ", ");
-				str.Append(PrefC.GetString("PracticeST") + "  ");
-				str.Append(PrefC.GetString("PracticeZip") + "\r\n");
+				str.Append(PrefC.GetString(PrefName.PracticeTitle) + "\r\n");
+				str.Append(PrefC.GetString(PrefName.PracticeAddress) + "\r\n");
+				if (PrefC.GetString(PrefName.PracticeAddress2) != "")
+					str.Append(PrefC.GetString(PrefName.PracticeAddress2) + "\r\n");
+				str.Append(PrefC.GetString(PrefName.PracticeCity) + ", ");
+				str.Append(PrefC.GetString(PrefName.PracticeST) + "  ");
+				str.Append(PrefC.GetString(PrefName.PracticeZip) + "\r\n");
 			//}
 			//else {
 			//	str.Append("\r\n\r\n\r\n\r\n");
@@ -373,11 +310,11 @@ namespace OpenDental{
 			else {
 				str.Append("\r\n\r\n" + Lan.g(this, "Sincerely,") + "\r\n\r\n\r\n\r\n");
 			}
-			if (PrefC.GetBool("FuchsOptionsOn")) {
+			if (PrefC.GetBool(PrefName.FuchsOptionsOn)) {
 				str.Append("Dr. Fuchs");
 			}
 			else {
-				str.Append(PrefC.GetString("PracticeTitle"));
+				str.Append(PrefC.GetString(PrefName.PracticeTitle));
 			}
 			textBody.Text = str.ToString();
 			//bodyChanged = false;
@@ -420,7 +357,7 @@ namespace OpenDental{
 		}
 
 		//private void checkIncludeRet_Click(object sender, System.EventArgs e) {	
-		//	Prefs.UpdateBool("LettersIncludeReturnAddress",checkIncludeRet.Checked);
+		//	Prefs.UpdateBool(PrefName.LettersIncludeReturnAddress",checkIncludeRet.Checked);
 		//	localChanged=true;
 		//	CacheL.Refresh(InvalidType.Prefs);
 		//}
@@ -439,248 +376,6 @@ namespace OpenDental{
 
 		private void textBody_TextChanged(object sender, System.EventArgs e) {
 			//bodyChanged=true;
-		}
-
-		private void butPrint_Click(object sender, System.EventArgs e) {
-			ExtraImageToPrint = "";
-			if(textBody.Text=="") {
-				MsgBox.Show(this,"Letter not allowed to be blank.");
-				return;
-			}
-			pd2=new PrintDocument();
-			pd2.PrintPage+=new PrintPageEventHandler(this.pd2_PrintPage);
-			pd2.OriginAtMargins=true;
-			if(!PrinterL.SetPrinter(pd2,PrintSituation.Default)){
-				return;
-			}
-			try{
-				pd2.Print();
-			}
-			catch{
-				MessageBox.Show(Lan.g(this,"Printer not available"));
-			}
-			Commlog CommlogCur=new Commlog();
-			CommlogCur.CommDateTime=DateTime.Now;
-			CommlogCur.CommType=Commlogs.GetTypeAuto(CommItemTypeAuto.MISC);
-			CommlogCur.PatNum=PatCur.PatNum;
-			CommlogCur.Note=Lan.g(this,"Letter sent");
-			CommlogCur.UserNum=Security.CurUser.UserNum;
-			if(LetterCur!=null) {
-				CommlogCur.Note+=": "+LetterCur.Description+". ";
-			}
-			FormCommItem FormCI=new FormCommItem(CommlogCur);
-			FormCI.IsNew=true;
-			FormCI.ShowDialog();
-			//this window now closes regardless of whether the user saved the comm item.
-			DialogResult=DialogResult.OK;
-		}
-
-		private void pd2_PrintPage(object sender, PrintPageEventArgs ev) {//raised for each page to be printed.
-			Graphics grfx = ev.Graphics;
-			if (PrefC.GetString("StationaryImage") == "") {//no stationary image specified
-				ev.PageSettings.Margins = new Margins(100, 100, 80, 80);
-				grfx.DrawString(textBody.Text, new Font(FontFamily.GenericSansSerif, 11), Brushes.Black
-					, new RectangleF(0, 0, ev.MarginBounds.Width, ev.MarginBounds.Height));
-				pagesPrinted++;
-				ev.HasMorePages = false;
-			}
-			else {
-				ev.PageSettings.Margins = new Margins(80, 80, 0, 0);
-				//Letterhead image
-				string fileName;
-				if(PrefC.GetString("StationaryImage") != "") {
-					fileName = ODFileUtils.CombinePaths(ImageStore.GetPreferredImagePath(),PrefC.GetString("StationaryImage"));
-					if(!File.Exists(fileName)){
-						MessageBox.Show(Lan.g(this,"The letter background image was not found")+": "+fileName);
-						ev.Cancel=true;
-						return;//Cancel the print job.
-					}
-					Image thisImage = Image.FromFile(fileName);
-					grfx.DrawImage(thisImage
-						, -100
-						, -100
-						, (int)(thisImage.Width / thisImage.HorizontalResolution * 62)
-						, (int)(thisImage.Height / thisImage.VerticalResolution * 65));
-				}
-				if(ExtraImageToPrint != "") {
-					//handwritten image saved to print
-					fileName =ODFileUtils.CombinePaths(ImageStore.GetPreferredImagePath(),ExtraImageToPrint);
-					Image thisImage2 = Image.FromFile(fileName);
-					grfx.DrawImage(thisImage2
-						, 080
-						, 300
-						, (int)(thisImage2.Width / thisImage2.HorizontalResolution * 100)//62
-						, (int)(thisImage2.Height / thisImage2.VerticalResolution * 100));//65
-				}
-				// grfx.DrawString(textBody.Text,new Font(FontFamily.GenericSansSerif,11),Brushes.Black
-				//	,new RectangleF(0,0,ev.MarginBounds.Width,ev.MarginBounds.Height));
-				grfx.DrawString(textBody.Text, new Font(FontFamily.GenericSerif, 11), Brushes.Black
-					, new RectangleF(100, 80, ev.MarginBounds.Width, ev.MarginBounds.Height));
-				pagesPrinted++;
-				ev.HasMorePages = false;
-			}
-		}
-
-		///<summary>this prints a "handwritten" thank you letter image for DrTech's office (pref:'FuchsOptionsOn') for it to work</summary>
-		private void buttonTYDMF_Click(object sender,EventArgs e) {
-			textBody.Text = "";
-			StringBuilder str = new StringBuilder();
-			//return address
-			//if(checkIncludeRet.Checked) {
-				str.Append(PrefC.GetString("PracticeTitle") + "\r\n");
-				str.Append(PrefC.GetString("PracticeAddress") + "\r\n");
-				if(PrefC.GetString("PracticeAddress2") != "")
-					str.Append(PrefC.GetString("PracticeAddress2") + "\r\n");
-				str.Append(PrefC.GetString("PracticeCity") + ", ");
-				str.Append(PrefC.GetString("PracticeST") + "  ");
-				str.Append(PrefC.GetString("PracticeZip") + "\r\n");
-			//}
-			//else {
-			//	str.Append("\r\n\r\n\r\n");
-			//}
-			str.Append("\r\n");
-			//address
-			str.Append(PatCur.FName + " " + PatCur.MiddleI + " " + PatCur.LName + "\r\n");
-			str.Append(PatCur.Address + "\r\n");
-			if(PatCur.Address2 != "")
-				str.Append(PatCur.Address2 + "\r\n");
-			str.Append(PatCur.City + ", " + PatCur.State + "  " + PatCur.Zip);
-			str.Append("\r\n\r\n\r\n\r\n");
-			//date
-			str.Append(DateTime.Today.ToLongDateString() + "\r\n\r\n");
-			//greeting
-			str.Append("Dear ");
-			if(CultureInfo.CurrentCulture.Name == "en-GB") {
-				if(PatCur.Salutation != "")
-					str.Append(PatCur.Salutation);
-				else {
-					if(PatCur.Gender == PatientGender.Female) {
-						str.Append("Ms. " + PatCur.LName);
-					}
-					else {
-						str.Append("Mr. " + PatCur.LName);
-					}
-				}
-			}
-			else {
-				if(PatCur.Salutation != "")
-					str.Append(PatCur.Salutation);
-				else if(PatCur.Preferred != "")
-					str.Append(PatCur.Preferred);
-				else
-					str.Append(PatCur.FName);
-			}
-			str.Append(",\r\n\r\n");
-			textBody.Text = str.ToString();
-			//bodyChanged = false;
-			ExtraImageToPrint = "dmfthankyou.jpg";
-			pd2 = new PrintDocument();
-			pd2.PrintPage += new PrintPageEventHandler(this.pd2_PrintPage);
-			pd2.OriginAtMargins = true;
-			if(!PrinterL.SetPrinter(pd2,PrintSituation.Default)) {
-				return;
-			}
-			try {
-				pd2.Print();
-
-			}
-			catch {
-				MessageBox.Show(Lan.g(this,"Error in finding files or printer not available"));
-			}
-			Commlog CommlogCur = new Commlog();
-			CommlogCur.CommDateTime = DateTime.Now;
-			CommlogCur.CommType = Commlogs.GetTypeAuto(CommItemTypeAuto.MISC);
-			CommlogCur.Mode_ = CommItemMode.Mail;
-			CommlogCur.SentOrReceived = CommSentOrReceived.Sent;
-			CommlogCur.PatNum = PatCur.PatNum;
-			CommlogCur.Note = "'Hand Written' Generic Thank You letter from DMF sent by: ";
-			CommlogCur.UserNum=Security.CurUser.UserNum;
-			FormCommItem FormCI = new FormCommItem(CommlogCur);
-			FormCI.IsNew = true;
-			FormCI.ShowDialog();
-			//this window now closes regardless of whether the user saved the comm item.
-			DialogResult = DialogResult.OK;
-		}
-
-		//this prints a "handwritten" thank you letter image for DrTech's office (pref:'FuchsOptionsOn') for it to work
-		private void buttonTYREF_Click(object sender,EventArgs e) {
-			textBody.Text = "";
-			StringBuilder str = new StringBuilder();
-			//return address
-			//if(checkIncludeRet.Checked) {
-				str.Append(PrefC.GetString("PracticeTitle") + "\r\n");
-				str.Append(PrefC.GetString("PracticeAddress") + "\r\n");
-				if(PrefC.GetString("PracticeAddress2") != "")
-					str.Append(PrefC.GetString("PracticeAddress2") + "\r\n");
-				str.Append(PrefC.GetString("PracticeCity") + ", ");
-				str.Append(PrefC.GetString("PracticeST") + "  ");
-				str.Append(PrefC.GetString("PracticeZip") + "\r\n");
-			//}
-			//else {
-			//	str.Append("\r\n\r\n\r\n");
-			//}
-			str.Append("\r\n");
-			//address
-			str.Append(PatCur.FName + " " + PatCur.MiddleI + " " + PatCur.LName + "\r\n");
-			str.Append(PatCur.Address + "\r\n");
-			if(PatCur.Address2 != "")
-				str.Append(PatCur.Address2 + "\r\n");
-			str.Append(PatCur.City + ", " + PatCur.State + "  " + PatCur.Zip);
-			str.Append("\r\n\r\n\r\n\r\n");
-			//date
-			str.Append(DateTime.Today.ToLongDateString() + "\r\n\r\n");
-			//greeting
-			str.Append("Dear ");
-			if(CultureInfo.CurrentCulture.Name == "en-GB") {
-				if(PatCur.Salutation != "")
-					str.Append(PatCur.Salutation);
-				else {
-					if(PatCur.Gender == PatientGender.Female) {
-						str.Append("Ms. " + PatCur.LName);
-					}
-					else {
-						str.Append("Mr. " + PatCur.LName);
-					}
-				}
-			}
-			else {
-				if(PatCur.Salutation != "")
-					str.Append(PatCur.Salutation);
-				else if(PatCur.Preferred != "")
-					str.Append(PatCur.Preferred);
-				else
-					str.Append(PatCur.FName);
-			}
-			str.Append(",\r\n\r\n");
-			textBody.Text = str.ToString();
-			//bodyChanged = false;
-			ExtraImageToPrint = "refthankyou.jpg";
-			pd2 = new PrintDocument();
-			pd2.PrintPage += new PrintPageEventHandler(this.pd2_PrintPage);
-			pd2.OriginAtMargins = true;
-			if(!PrinterL.SetPrinter(pd2,PrintSituation.Default)) {
-				return;
-			}
-			try {
-				pd2.Print();
-
-			}
-			catch {
-				MessageBox.Show(Lan.g(this,"Images or printer not available"));
-			}
-			Commlog CommlogCur = new Commlog();
-			CommlogCur.CommDateTime = DateTime.Now;
-			CommlogCur.CommType = Commlogs.GetTypeAuto(CommItemTypeAuto.MISC);
-			CommlogCur.Mode_ = CommItemMode.Mail;
-			CommlogCur.SentOrReceived = CommSentOrReceived.Sent;
-			CommlogCur.PatNum = PatCur.PatNum;
-			CommlogCur.Note = "'Hand Written' Generic Thank You letter from REF sent by: ";
-			CommlogCur.UserNum=Security.CurUser.UserNum;
-			FormCommItem FormCI = new FormCommItem(CommlogCur);
-			FormCI.IsNew = true;
-			FormCI.ShowDialog();
-			//this window now closes regardless of whether the user saved the comm item.
-			DialogResult = DialogResult.OK;
 		}
 
 		private void butCancel_Click(object sender, System.EventArgs e) {

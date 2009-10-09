@@ -496,7 +496,7 @@ namespace OpenDental {
 				message=new EmailMessage();
 				message.PatNum=SheetCur.PatNum;
 				message.ToAddress=FormS.EmailPatAddress;
-				message.FromAddress=PrefC.GetString("EmailSenderAddress");
+				message.FromAddress=PrefC.GetString(PrefName.EmailSenderAddress);
 				message.Subject=SheetCur.SheetType.ToString();//this could be improved
 				EmailAttach attach=new EmailAttach();
 				attach.DisplayedFileName=SheetCur.SheetType.ToString()+".pdf";
@@ -518,7 +518,7 @@ namespace OpenDental {
 				message=new EmailMessage();
 				message.PatNum=SheetCur.PatNum;
 				message.ToAddress=FormS.Email2Address;
-				message.FromAddress=PrefC.GetString("EmailSenderAddress");
+				message.FromAddress=PrefC.GetString(PrefName.EmailSenderAddress);
 				message.Subject=SheetCur.SheetType.ToString()+" to "+Referrals.GetNameFL(referral.ReferralNum);//this could be improved
 				EmailAttach attach=new EmailAttach();
 				attach.DisplayedFileName=SheetCur.SheetType.ToString()+".pdf";

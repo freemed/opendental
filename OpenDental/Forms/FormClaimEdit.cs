@@ -2706,7 +2706,7 @@ namespace OpenDental{
 				butPaySupp.Visible=false;
 				butSplit.Visible=false;
       }
-			if(PrefC.GetBool("EasyNoClinics")){
+			if(PrefC.GetBool(PrefName.EasyNoClinics)){
 				labelClinic.Visible=false;
 				comboClinic.Visible=false;
 			}
@@ -3622,7 +3622,7 @@ namespace OpenDental{
 			string text=PatCur.GetNameFL();
 			Font font=new Font("Microsoft Sans Serif",12,FontStyle.Bold);
 			g.DrawString(text,font,Brushes.Black,595/2-g.MeasureString(text,font).Width/2,5);
-			text=PrefC.GetString("PracticeTitle");
+			text=PrefC.GetString(PrefName.PracticeTitle);
 			font=new Font("Microsoft Sans Serif",9,FontStyle.Bold);
 			g.DrawString(text,font,Brushes.Black,595/2-g.MeasureString(text,font).Width/2,28);
 			g.DrawImage(bitmap,0,50);
@@ -3646,7 +3646,7 @@ namespace OpenDental{
 		}
 
 		private void butExport_Click(object sender,EventArgs e) {
-			string exportPath=PrefC.GetString("ClaimAttachExportPath");
+			string exportPath=PrefC.GetString(PrefName.ClaimAttachExportPath);
 			if(!Directory.Exists(exportPath)){
 				MessageBox.Show("The claim export path no longer exists at: "+exportPath);
 				return;
@@ -3962,7 +3962,7 @@ namespace OpenDental{
 				//}
 			}
 			if(listClaimStatus.SelectedIndex==5){//Received
-				if(PrefC.GetBool("ProviderIncomeTransferShows")){
+				if(PrefC.GetBool(PrefName.ProviderIncomeTransferShows)){
 					Payment PaymentCur=new Payment();
 					PaymentCur.PayDate=DateTime.Today;
 					PaymentCur.PatNum=PatCur.PatNum;
@@ -4020,7 +4020,7 @@ namespace OpenDental{
 					return false;
 				}
 			}
-			if(PrefC.GetBool("ClaimsValidateACN")) {
+			if(PrefC.GetBool(PrefName.ClaimsValidateACN)) {
 				InsPlan plan=InsPlans.GetPlan(ClaimCur.PlanNum,PlanList);
 				if(plan!=null && plan.GroupName.Contains("ADDP")) {
 					if(!Regex.IsMatch(textNote.Text,"ACN[0-9]{5,}")) {//ACN with at least 5 digits following

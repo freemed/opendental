@@ -125,7 +125,7 @@ namespace OpenDental.Bridges {
 		private static void ShowPendingDeletionReportForPatients(FormPrintReport fpr){
 			//Print the header on the report.
 			Font font=new Font(FontFamily.GenericMonospace,12);
-			string text=PrefC.GetString("PracticeTitle");
+			string text=PrefC.GetString(PrefName.PracticeTitle);
 			SizeF size=fpr.Graph.MeasureString(text,font);
 			float y=20;
 			fpr.Graph.DrawString(text,font,Brushes.Black,fpr.GraphWidth/2-size.Width/2,y);
@@ -224,7 +224,7 @@ namespace OpenDental.Bridges {
 		private static void ShowPendingDeletionReportForTrojan(FormPrintReport fpr) {
 			//Print the header on the report.
 			Font font=new Font(FontFamily.GenericMonospace,12);
-			string text=PrefC.GetString("PracticeTitle");
+			string text=PrefC.GetString(PrefName.PracticeTitle);
 			SizeF size=fpr.Graph.MeasureString(text,font);
 			float y=20;
 			fpr.Graph.DrawString(text,font,Brushes.Black,fpr.GraphWidth/2-size.Width/2,y);

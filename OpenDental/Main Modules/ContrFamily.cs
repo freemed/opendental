@@ -231,7 +231,7 @@ namespace OpenDental{
 				ToolBarMain.Buttons["Delete"].Enabled=true;
 				ToolBarMain.Buttons["Guarantor"].Enabled=true;
 				ToolBarMain.Buttons["Move"].Enabled=true;
-				if(!PrefC.GetBool("EasyHideInsurance")){
+				if(!PrefC.GetBool(PrefName.EasyHideInsurance)){
 					ToolBarMain.Buttons["Ins"].Enabled=true;
 				}
 				ToolBarMain.Invalidate();
@@ -242,13 +242,13 @@ namespace OpenDental{
 				ToolBarMain.Buttons["Delete"].Enabled=false;
 				ToolBarMain.Buttons["Guarantor"].Enabled=false;
 				ToolBarMain.Buttons["Move"].Enabled=false;
-				if(!PrefC.GetBool("EasyHideInsurance")){
+				if(!PrefC.GetBool(PrefName.EasyHideInsurance)){
 					ToolBarMain.Buttons["Ins"].Enabled=false;
 				}
 				ToolBarMain.Invalidate();
 				//Patients.Cur=new Patient();
 			}
-			if(PrefC.GetBool("EasyHideInsurance")){
+			if(PrefC.GetBool(PrefName.EasyHideInsurance)){
 				gridIns.Visible=false;
 			}
 			else{
@@ -310,7 +310,7 @@ namespace OpenDental{
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Delete"),3,Lan.g(this,"Delete Family Member"),"Delete"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Set Guarantor"),4,Lan.g(this,"Set as Guarantor"),"Guarantor"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Move"),5,Lan.g(this,"Move to Another Family"),"Move"));
-			if(!PrefC.GetBool("EasyHideInsurance")){
+			if(!PrefC.GetBool(PrefName.EasyHideInsurance)){
 				ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
 				button=new ODToolBarButton(Lan.g(this,"Add Insurance"),6,"","Ins");
 				button.Style=ODToolBarButtonStyle.DropDownButton;
@@ -770,8 +770,8 @@ namespace OpenDental{
 				recallDate=DateTime.MinValue;
 				for(int j=0;j<RecallList.Count;j++){
 					if(RecallList[j].PatNum==FamCur.ListPats[i].PatNum
-						&& (RecallList[j].RecallTypeNum==PrefC.GetInt("RecallTypeSpecialProphy")
-						|| RecallList[j].RecallTypeNum==PrefC.GetInt("RecallTypeSpecialPerio")))
+						&& (RecallList[j].RecallTypeNum==PrefC.GetLong(PrefName.RecallTypeSpecialProphy)
+						|| RecallList[j].RecallTypeNum==PrefC.GetLong(PrefName.RecallTypeSpecialPerio)))
 					{
 						recallDate=RecallList[j].DateDue;
 					}
@@ -1178,7 +1178,7 @@ namespace OpenDental{
 				}
 				plan.ReleaseInfo=true;
 				plan.AssignBen=true;
-				//plan.DedBeforePerc=PrefC.GetBool("DeductibleBeforePercentAsDefault");
+				//plan.DedBeforePerc=PrefC.GetBool(PrefName.DeductibleBeforePercentAsDefault");
 				plan.PlanType="";
 				InsPlans.Insert(plan);
 				Benefit ben;

@@ -369,7 +369,7 @@ namespace OpenDentBusiness{
 			}
 			if(useClinic){
 				if(clinicInsBillingProv==0) {//default=0
-					return PrefC.GetInt("PracticeDefaultProv");
+					return PrefC.GetLong(PrefName.PracticeDefaultProv);
 				}
 				else if(clinicInsBillingProv==-1) {//treat=-1
 					return treatProv;
@@ -379,14 +379,14 @@ namespace OpenDentBusiness{
 				}
 			}
 			else{
-				if(PrefC.GetInt("InsBillingProv")==0) {//default=0
-					return PrefC.GetInt("PracticeDefaultProv");
+				if(PrefC.GetLong(PrefName.InsBillingProv)==0) {//default=0
+					return PrefC.GetLong(PrefName.PracticeDefaultProv);
 				}
-				else if(PrefC.GetInt("InsBillingProv")==-1) {//treat=-1
+				else if(PrefC.GetLong(PrefName.InsBillingProv)==-1) {//treat=-1
 					return treatProv;
 				}
 				else {
-					return PrefC.GetInt("InsBillingProv");
+					return PrefC.GetLong(PrefName.InsBillingProv);
 				}
 			}
 		}
@@ -432,7 +432,7 @@ namespace OpenDentBusiness{
 			}
 			string command=@"SELECT FName,LName,Suffix,StateLicense
 				FROM provider
-        WHERE provnum="+PrefC.GetString("PracticeDefaultProv");
+        WHERE provnum="+PrefC.GetString(PrefName.PracticeDefaultProv);
 			return Db.GetTable(command);
 		}
 
@@ -445,7 +445,8 @@ namespace OpenDentBusiness{
 			}
 			string command=@"SELECT FName,LName,Specialty "+
 				"FROM provider WHERE provnum="+
-				Convert.ToInt32(((Pref)PrefC.HList["PracticeDefaultProv"]).ValueString);
+				POut.PLong(PrefC.GetLong(PrefName.PracticeDefaultProv));
+				//Convert.ToInt32(((Pref)PrefC.HList["PracticeDefaultProv"]).ValueString);
 			return Db.GetTable(command);
 		}
 
@@ -458,7 +459,7 @@ namespace OpenDentBusiness{
 			}
 			string command=@"SELECT NationalProvID "+
 				"FROM provider WHERE provnum="+
-				Convert.ToInt32(((Pref)PrefC.HList["PracticeDefaultProv"]).ValueString);
+				POut.PLong(PrefC.GetLong(PrefName.PracticeDefaultProv));
 			return Db.GetTable(command);
 		}
 

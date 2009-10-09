@@ -334,7 +334,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormAccountingSetup_Load(object sender,EventArgs e) {
-			string depStr=PrefC.GetString("AccountingDepositAccounts");
+			string depStr=PrefC.GetString(PrefName.AccountingDepositAccounts);
 			string[] depStrArray=depStr.Split(new char[] {','});
 			depAL=new ArrayList();
 			for(int i=0;i<depStrArray.Length;i++){
@@ -344,12 +344,12 @@ namespace OpenDental{
 				depAL.Add(PIn.PLong(depStrArray[i]));
 			}
 			FillDepList();
-			PickedDepAccountNum=PrefC.GetInt("AccountingIncomeAccount");
+			PickedDepAccountNum=PrefC.GetLong(PrefName.AccountingIncomeAccount);
 			textAccountInc.Text=AccountC.GetDescript(PickedDepAccountNum);
 			//pay----------------------------------------------------------
 			payAL=AccountingAutoPayC.AList;//Count might be 0
 			FillPayGrid();
-			PickedPayAccountNum=PrefC.GetInt("AccountingCashIncomeAccount");
+			PickedPayAccountNum=PrefC.GetLong(PrefName.AccountingCashIncomeAccount);
 			textAccountCashInc.Text=AccountC.GetDescript(PickedPayAccountNum);
 		}
 
@@ -447,16 +447,16 @@ namespace OpenDental{
 				}
 				depStr+=depAL[i].ToString();
 			}
-			if(Prefs.UpdateString("AccountingDepositAccounts",depStr)){
+			if(Prefs.UpdateString(PrefName.AccountingDepositAccounts,depStr)){
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}
-			if(Prefs.UpdateInt("AccountingIncomeAccount",PickedDepAccountNum)) {
+			if(Prefs.UpdateLong(PrefName.AccountingIncomeAccount,PickedDepAccountNum)) {
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}
 			//pay------------------------------------------------------------------------------------------
 			AccountingAutoPays.SaveList(payAL);//just deletes them all and starts over
 			DataValid.SetInvalid(InvalidType.AccountingAutoPays);
-			if(Prefs.UpdateInt("AccountingCashIncomeAccount",PickedPayAccountNum)) {
+			if(Prefs.UpdateLong(PrefName.AccountingCashIncomeAccount,PickedPayAccountNum)) {
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}
 			DialogResult=DialogResult.OK;

@@ -224,7 +224,7 @@ namespace OpenDental.Eclaims
 
 		public static string Benefits270(Clearinghouse clearhouse,string x12message) {
 			com.dentalxchange.webservices.Credentials cred = new com.dentalxchange.webservices.Credentials();
-			if(PrefC.GetBool("CustomizedForPracticeWeb")) {//even though they currently use code from a different part of the program.
+			if(PrefC.GetBool(PrefName.CustomizedForPracticeWeb)) {//even though they currently use code from a different part of the program.
 				cred.client="Practice-Web";
 				cred.serviceID="DCI Web Service ID: 001513";
 			}

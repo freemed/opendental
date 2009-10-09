@@ -138,7 +138,7 @@ Order By patient.lname,patient.fname
 			FormQuery2.IsReport=true;
 			FormQuery2.SubmitReportQuery();			
 			report.Title="Insurance Plan List";
-			report.SubTitle.Add(((Pref)PrefC.HList["PracticeTitle"]).ValueString);
+			report.SubTitle.Add(PrefC.GetString(PrefName.PracticeTitle));
 			report.SetColumn(this,0,"Carrier Name",230);
 			report.SetColumn(this,1,"Subscriber Name",175);
 			report.SetColumn(this,2,"Carrier Phone#",175);

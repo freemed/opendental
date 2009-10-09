@@ -136,7 +136,7 @@ namespace OpenDental {
 				comboPriProv5.Items.Add(ProviderC.List[i].GetLongDesc());
 				comboSecProv5.Items.Add(ProviderC.List[i].GetLongDesc());
 			}
-			int defaultindex=Providers.GetIndex(PrefC.GetInt("PracticeDefaultProv"));
+			int defaultindex=Providers.GetIndex(PrefC.GetLong(PrefName.PracticeDefaultProv));
 			if(defaultindex==-1) {//default provider hidden
 				defaultindex=0;
 			}
@@ -1296,7 +1296,7 @@ namespace OpenDental {
 				guar.Position=PatientPosition.Married;
 			}
 			guar.Birthdate=PIn.PDate(textBirthdate1.Text);
-			guar.BillingType=PrefC.GetInt("PracticeDefaultBillType");
+			guar.BillingType=PrefC.GetLong(PrefName.PracticeDefaultBillType);
 			guar.PatStatus=PatientStatus.Patient;
 			guar.PriProv=ProviderC.List[comboPriProv1.SelectedIndex].ProvNum;
 			if(comboSecProv1.SelectedIndex>0){
@@ -1356,7 +1356,7 @@ namespace OpenDental {
 					pat2.Position=PatientPosition.Married;
 				}
 				pat2.Birthdate=PIn.PDate(textBirthdate2.Text);
-				pat2.BillingType=PrefC.GetInt("PracticeDefaultBillType");
+				pat2.BillingType=PrefC.GetLong(PrefName.PracticeDefaultBillType);
 				pat2.PatStatus=PatientStatus.Patient;
 				pat2.PriProv=ProviderC.List[comboPriProv2.SelectedIndex].ProvNum;
 				if(comboSecProv2.SelectedIndex>0){
@@ -1395,7 +1395,7 @@ namespace OpenDental {
 				}
 				pat3.Position=PatientPosition.Child;
 				pat3.Birthdate=PIn.PDate(textBirthdate3.Text);
-				pat3.BillingType=PrefC.GetInt("PracticeDefaultBillType");
+				pat3.BillingType=PrefC.GetLong(PrefName.PracticeDefaultBillType);
 				pat3.PatStatus=PatientStatus.Patient;
 				pat3.PriProv=ProviderC.List[comboPriProv3.SelectedIndex].ProvNum;
 				if(comboSecProv3.SelectedIndex>0){
@@ -1434,7 +1434,7 @@ namespace OpenDental {
 				}
 				pat4.Position=PatientPosition.Child;
 				pat4.Birthdate=PIn.PDate(textBirthdate4.Text);
-				pat4.BillingType=PrefC.GetInt("PracticeDefaultBillType");
+				pat4.BillingType=PrefC.GetLong(PrefName.PracticeDefaultBillType);
 				pat4.PatStatus=PatientStatus.Patient;
 				pat4.PriProv=ProviderC.List[comboPriProv4.SelectedIndex].ProvNum;
 				if(comboSecProv4.SelectedIndex>0){
@@ -1473,7 +1473,7 @@ namespace OpenDental {
 				}
 				pat5.Position=PatientPosition.Child;
 				pat5.Birthdate=PIn.PDate(textBirthdate5.Text);
-				pat5.BillingType=PrefC.GetInt("PracticeDefaultBillType");
+				pat5.BillingType=PrefC.GetLong(PrefName.PracticeDefaultBillType);
 				pat5.PatStatus=PatientStatus.Patient;
 				pat5.PriProv=ProviderC.List[comboPriProv5.SelectedIndex].ProvNum;
 				if(comboSecProv5.SelectedIndex>0){
@@ -1548,7 +1548,7 @@ namespace OpenDental {
 					selectedPlan1.GroupNum=textGroupNum1.Text;
 					selectedPlan1.ReleaseInfo=true;
 					selectedPlan1.AssignBen=true;
-					//selectedPlan1.DedBeforePerc=PrefC.GetBool("DeductibleBeforePercentAsDefault");
+					//selectedPlan1.DedBeforePerc=PrefC.GetBool(PrefName.DeductibleBeforePercentAsDefault");
 					selectedPlan1.PlanType="";
 					InsPlans.Insert(selectedPlan1);
 					Benefit ben;
@@ -1606,7 +1606,7 @@ namespace OpenDental {
 					selectedPlan2.GroupNum=textGroupNum2.Text;
 					selectedPlan2.ReleaseInfo=true;
 					selectedPlan2.AssignBen=true;
-					//selectedPlan2.DedBeforePerc=PrefC.GetBool("DeductibleBeforePercentAsDefault");
+					//selectedPlan2.DedBeforePerc=PrefC.GetBool(PrefName.DeductibleBeforePercentAsDefault");
 					selectedPlan2.PlanType="";
 					InsPlans.Insert(selectedPlan2);
 					Benefit ben;

@@ -25,10 +25,10 @@ namespace OpenDental.Bridges {
 		public static void GenerateOneStatement(XmlWriter writer,Statement stmt,Patient pat,Family fam,DataSet dataSet){
 			Patient guar=fam.ListPats[0];
 			writer.WriteStartElement("Statement");
-			//writer.WriteAttributeString("CreditCardChoice",PrefC.GetString("BillingElectCreditCardChoices"));
+			//writer.WriteAttributeString("CreditCardChoice",PrefC.GetString(PrefName.BillingElectCreditCardChoices"));
 			//remit address----------------------------------------------------------
 			writer.WriteStartElement("RemitAddress");
-			if(!PrefC.GetBool("EasyNoClinics") && Clinics.List.Length>0 //if using clinics
+			if(!PrefC.GetBool(PrefName.EasyNoClinics) && Clinics.List.Length>0 //if using clinics
 				&& Clinics.GetClinic(guar.ClinicNum)!=null)//and this guar is assigned to a clinic
 			{
 				Clinic clinic=Clinics.GetClinic(guar.ClinicNum);
@@ -45,13 +45,13 @@ namespace OpenDental.Bridges {
 				writer.WriteElementString("Phone",phone);
 			}
 			else{//not using clinics
-				writer.WriteElementString("Name",PrefC.GetString("PracticeTitle"));
-				writer.WriteElementString("Address",PrefC.GetString("PracticeAddress"));
-				writer.WriteElementString("Address2",PrefC.GetString("PracticeAddress2"));
-				writer.WriteElementString("City",PrefC.GetString("PracticeCity"));
-				writer.WriteElementString("State",PrefC.GetString("PracticeST"));
-				writer.WriteElementString("Zip",PrefC.GetString("PracticeZip"));
-				writer.WriteElementString("Phone",PrefC.GetString("PracticePhone"));
+				writer.WriteElementString("Name",PrefC.GetString(PrefName.PracticeTitle));
+				writer.WriteElementString("Address",PrefC.GetString(PrefName.PracticeAddress));
+				writer.WriteElementString("Address2",PrefC.GetString(PrefName.PracticeAddress2));
+				writer.WriteElementString("City",PrefC.GetString(PrefName.PracticeCity));
+				writer.WriteElementString("State",PrefC.GetString(PrefName.PracticeST));
+				writer.WriteElementString("Zip",PrefC.GetString(PrefName.PracticeZip));
+				writer.WriteElementString("Phone",PrefC.GetString(PrefName.PracticePhone));
 			}
 			writer.WriteEndElement();//RemitAddress
 			//Patient-------------------------------------------------------------------------------
@@ -66,11 +66,11 @@ namespace OpenDental.Bridges {
 			writer.WriteEndElement();//Patient
 			//Account summary-----------------------------------------------------------------------
 			writer.WriteStartElement("AccountSummary");
-			if(PrefC.GetInt("StatementsCalcDueDate")==-1){
+			if(PrefC.GetLong(PrefName.StatementsCalcDueDate)==-1){
 				writer.WriteElementString("DueDate",Lan.g("FormRpStatement","Upon Receipt"));
 			}
 			else{
-				DateTime dueDate=DateTime.Today.AddDays(PrefC.GetInt("StatementsCalcDueDate"));
+				DateTime dueDate=DateTime.Today.AddDays(PrefC.GetLong(PrefName.StatementsCalcDueDate));
 				writer.WriteElementString("DueDate",dueDate.ToString("MM/dd/yyyy"));
 			}
 			writer.WriteElementString("StatementDate",stmt.DateSent.ToString("MM/dd/yyyy"));
@@ -91,7 +91,7 @@ namespace OpenDental.Bridges {
 					amountDue+=PIn.PDouble(dataSet.Tables["misc"].Rows[m]["value"].ToString());
 				}
 			}
-			if(PrefC.GetBool("BalancesDontSubtractIns")) {
+			if(PrefC.GetBool(PrefName.BalancesDontSubtractIns)) {
 				writer.WriteElementString("EstInsPayments","");
 				writer.WriteElementString("AmountDue",amountDue.ToString("F2"));
 			}

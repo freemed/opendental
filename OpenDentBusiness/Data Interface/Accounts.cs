@@ -181,11 +181,11 @@ namespace OpenDentBusiness{
 		///<summary>Checks the loaded prefs to see if user has setup deposit linking.  Returns true if so.</summary>
 		public static bool DepositsLinked(){
 			//No need to check RemotingRole; no call to db.
-			string depAccounts=PrefC.GetString("AccountingDepositAccounts");
+			string depAccounts=PrefC.GetString(PrefName.AccountingDepositAccounts);
 			if(depAccounts==""){
 				return false;
 			}
-			if(PrefC.GetInt("AccountingIncomeAccount")==0){
+			if(PrefC.GetLong(PrefName.AccountingIncomeAccount)==0){
 				return false;
 			}
 			//might add a few more checks later.
@@ -198,7 +198,7 @@ namespace OpenDentBusiness{
 			if(AccountingAutoPayC.AList.Count==0){
 				return false;
 			}
-			if(PrefC.GetInt("AccountingIncomeAccount")==0) {
+			if(PrefC.GetLong(PrefName.AccountingIncomeAccount)==0) {
 				return false;
 			}
 			//might add a few more checks later.
@@ -208,7 +208,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static int[] GetDepositAccounts(){
 			//No need to check RemotingRole; no call to db.
-			string depStr=PrefC.GetString("AccountingDepositAccounts");
+			string depStr=PrefC.GetString(PrefName.AccountingDepositAccounts);
 			string[] depStrArray=depStr.Split(new char[] { ',' });
 			ArrayList depAL=new ArrayList();
 			for(int i=0;i<depStrArray.Length;i++) {

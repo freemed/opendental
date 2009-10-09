@@ -436,16 +436,16 @@ namespace OpenDental{
 						field.FieldValue=prov.GetFormalName();
 						break;
 					case "prov.address":
-						field.FieldValue=PrefC.GetString("PracticeAddress");
-						if(PrefC.GetString("PracticeAddress2")!=""){
-							field.FieldValue+="\r\n"+PrefC.GetString("PracticeAddress2");
+						field.FieldValue=PrefC.GetString(PrefName.PracticeAddress);
+						if(PrefC.GetString(PrefName.PracticeAddress2)!=""){
+							field.FieldValue+="\r\n"+PrefC.GetString(PrefName.PracticeAddress2);
 						}
 						break;
 					case "prov.cityStateZip":
-						field.FieldValue=PrefC.GetString("PracticeCity")+", "+PrefC.GetString("PracticeST")+" "+PrefC.GetString("PracticeZip");;
+						field.FieldValue=PrefC.GetString(PrefName.PracticeCity)+", "+PrefC.GetString(PrefName.PracticeST)+" "+PrefC.GetString(PrefName.PracticeZip);;
 						break;
 					case "prov.phone":
-						text=PrefC.GetString("PracticePhone");
+						text=PrefC.GetString(PrefName.PracticePhone);
 						field.FieldValue=text;
 						if(text.Length==10) {
 							field.FieldValue="("+text.Substring(0,3)+")"+text.Substring(3,3)+"-"+text.Substring(6);
@@ -522,18 +522,18 @@ namespace OpenDental{
 			foreach(SheetField field in sheet.SheetFields) {
 				switch(field.FieldName) {
 					case "PracticeTitle":
-						field.FieldValue=PrefC.GetString("PracticeTitle");
+						field.FieldValue=PrefC.GetString(PrefName.PracticeTitle);
 						break;
 					case "PracticeAddress":
-						field.FieldValue=PrefC.GetString("PracticeAddress");
-						if(PrefC.GetString("PracticeAddress2") != ""){
-							field.FieldValue+="\r\n"+PrefC.GetString("PracticeAddress2");
+						field.FieldValue=PrefC.GetString(PrefName.PracticeAddress);
+						if(PrefC.GetString(PrefName.PracticeAddress2) != ""){
+							field.FieldValue+="\r\n"+PrefC.GetString(PrefName.PracticeAddress2);
 						}
 						break;
 					case "practiceCityStateZip":
-						field.FieldValue=PrefC.GetString("PracticeCity")+", "
-							+PrefC.GetString("PracticeST")+"  "
-							+PrefC.GetString("PracticeZip");
+						field.FieldValue=PrefC.GetString(PrefName.PracticeCity)+", "
+							+PrefC.GetString(PrefName.PracticeST)+"  "
+							+PrefC.GetString(PrefName.PracticeZip);
 						break;
 					case "patient.nameFL":
 						field.FieldValue=pat.GetNameFLFormal();
@@ -564,18 +564,18 @@ namespace OpenDental{
 			foreach(SheetField field in sheet.SheetFields) {
 				switch(field.FieldName) {
 					case "PracticeTitle":
-						field.FieldValue=PrefC.GetString("PracticeTitle");
+						field.FieldValue=PrefC.GetString(PrefName.PracticeTitle);
 						break;
 					case "PracticeAddress":
-						field.FieldValue=PrefC.GetString("PracticeAddress");
-						if(PrefC.GetString("PracticeAddress2") != ""){
-							field.FieldValue+="\r\n"+PrefC.GetString("PracticeAddress2");
+						field.FieldValue=PrefC.GetString(PrefName.PracticeAddress);
+						if(PrefC.GetString(PrefName.PracticeAddress2) != ""){
+							field.FieldValue+="\r\n"+PrefC.GetString(PrefName.PracticeAddress2);
 						}
 						break;
 					case "practiceCityStateZip":
-						field.FieldValue=PrefC.GetString("PracticeCity")+", "
-							+PrefC.GetString("PracticeST")+"  "
-							+PrefC.GetString("PracticeZip");
+						field.FieldValue=PrefC.GetString(PrefName.PracticeCity)+", "
+							+PrefC.GetString(PrefName.PracticeST)+"  "
+							+PrefC.GetString(PrefName.PracticeZip);
 						break;
 					case "referral.nameFL":
 						field.FieldValue=Referrals.GetNameFL(refer.ReferralNum);

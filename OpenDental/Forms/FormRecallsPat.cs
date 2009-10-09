@@ -63,7 +63,7 @@ namespace OpenDental {
 			butPerio.Text=Lan.g(this,"Set Perio");
 			string cellStr;
 			for(int i=0;i<RecallList.Count;i++){
-				if(PrefC.GetInt("RecallTypeSpecialPerio")==RecallList[i].RecallTypeNum){
+				if(PrefC.GetLong(PrefName.RecallTypeSpecialPerio)==RecallList[i].RecallTypeNum){
 					IsPerio=true;
 					butPerio.Text=Lan.g(this,"Set Prophy");
 				}
@@ -139,9 +139,9 @@ namespace OpenDental {
 			if(IsPerio){
 				//change the perio types to prophy
 				for(int i=0;i<RecallList.Count;i++){
-					if(PrefC.GetInt("RecallTypeSpecialPerio")==RecallList[i].RecallTypeNum){
-						RecallList[i].RecallTypeNum=PrefC.GetInt("RecallTypeSpecialProphy");
-						RecallList[i].RecallInterval=RecallTypes.GetInterval(PrefC.GetInt("RecallTypeSpecialProphy"));
+					if(PrefC.GetLong(PrefName.RecallTypeSpecialPerio)==RecallList[i].RecallTypeNum){
+						RecallList[i].RecallTypeNum=PrefC.GetLong(PrefName.RecallTypeSpecialProphy);
+						RecallList[i].RecallInterval=RecallTypes.GetInterval(PrefC.GetLong(PrefName.RecallTypeSpecialProphy));
 						//previous date will be reset below in synch, but probably won't change since similar triggers.
 						Recalls.Update(RecallList[i]);
 						break;
@@ -152,9 +152,9 @@ namespace OpenDental {
 				bool found=false;
 				//change any prophy types to perio
 				for(int i=0;i<RecallList.Count;i++){
-					if(PrefC.GetInt("RecallTypeSpecialProphy")==RecallList[i].RecallTypeNum){
-						RecallList[i].RecallTypeNum=PrefC.GetInt("RecallTypeSpecialPerio");
-						RecallList[i].RecallInterval=RecallTypes.GetInterval(PrefC.GetInt("RecallTypeSpecialPerio"));
+					if(PrefC.GetLong(PrefName.RecallTypeSpecialProphy)==RecallList[i].RecallTypeNum){
+						RecallList[i].RecallTypeNum=PrefC.GetLong(PrefName.RecallTypeSpecialPerio);
+						RecallList[i].RecallInterval=RecallTypes.GetInterval(PrefC.GetLong(PrefName.RecallTypeSpecialPerio));
 						//previous date will be reset below in synch, but probably won't change since similar triggers.
 						Recalls.Update(RecallList[i]);
 						found=true;
@@ -165,8 +165,8 @@ namespace OpenDental {
 				if(!found){
 					Recall recall=new Recall();
 					recall.PatNum=PatNum;
-					recall.RecallInterval=RecallTypes.GetInterval(PrefC.GetInt("RecallTypeSpecialPerio"));
-					recall.RecallTypeNum=PrefC.GetInt("RecallTypeSpecialPerio");
+					recall.RecallInterval=RecallTypes.GetInterval(PrefC.GetLong(PrefName.RecallTypeSpecialPerio));
+					recall.RecallTypeNum=PrefC.GetLong(PrefName.RecallTypeSpecialPerio);
 					Recalls.Insert(recall);
 				}
 			}

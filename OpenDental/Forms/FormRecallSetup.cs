@@ -452,37 +452,37 @@ namespace OpenDental{
 		#endregion
 
 		private void FormRecallSetup_Load(object sender, System.EventArgs e) {
-			checkGroupFamilies.Checked = PrefC.GetBool("RecallGroupByFamily");
-			textPostcardsPerSheet.Text=PrefC.GetInt("RecallPostcardsPerSheet").ToString();
-			checkReturnAdd.Checked=PrefC.GetBool("RecallCardsShowReturnAdd");
-			checkGroupFamilies.Checked=PrefC.GetBool("RecallGroupByFamily");
-			if(PrefC.GetInt("RecallDaysPast")==-1) {
+			checkGroupFamilies.Checked = PrefC.GetBool(PrefName.RecallGroupByFamily);
+			textPostcardsPerSheet.Text=PrefC.GetLong(PrefName.RecallPostcardsPerSheet).ToString();
+			checkReturnAdd.Checked=PrefC.GetBool(PrefName.RecallCardsShowReturnAdd);
+			checkGroupFamilies.Checked=PrefC.GetBool(PrefName.RecallGroupByFamily);
+			if(PrefC.GetLong(PrefName.RecallDaysPast)==-1) {
 				textDaysPast.Text="";
 			}
 			else {
-				textDaysPast.Text=PrefC.GetInt("RecallDaysPast").ToString();
+				textDaysPast.Text=PrefC.GetLong(PrefName.RecallDaysPast).ToString();
 			}
-			if(PrefC.GetInt("RecallDaysFuture")==-1) {
+			if(PrefC.GetLong(PrefName.RecallDaysFuture)==-1) {
 				textDaysFuture.Text="";
 			}
 			else {
-				textDaysFuture.Text=PrefC.GetInt("RecallDaysFuture").ToString();
+				textDaysFuture.Text=PrefC.GetLong(PrefName.RecallDaysFuture).ToString();
 			}
-			textRight.Text=PrefC.GetDouble("RecallAdjustRight").ToString();
-			textDown.Text=PrefC.GetDouble("RecallAdjustDown").ToString();
+			textRight.Text=PrefC.GetDouble(PrefName.RecallAdjustRight).ToString();
+			textDown.Text=PrefC.GetDouble(PrefName.RecallAdjustDown).ToString();
 			//comboStatusMailedRecall.Items.Clear();
 			for(int i=0;i<DefC.Short[(int)DefCat.RecallUnschedStatus].Length;i++){
 				comboStatusMailedRecall.Items.Add(DefC.Short[(int)DefCat.RecallUnschedStatus][i].ItemName);
 				comboStatusEmailedRecall.Items.Add(DefC.Short[(int)DefCat.RecallUnschedStatus][i].ItemName);
-				if(DefC.Short[(int)DefCat.RecallUnschedStatus][i].DefNum==PrefC.GetInt("RecallStatusMailed")){
+				if(DefC.Short[(int)DefCat.RecallUnschedStatus][i].DefNum==PrefC.GetLong(PrefName.RecallStatusMailed)){
 					comboStatusMailedRecall.SelectedIndex=i;
 				}
-				if(DefC.Short[(int)DefCat.RecallUnschedStatus][i].DefNum==PrefC.GetInt("RecallStatusEmailed")){
+				if(DefC.Short[(int)DefCat.RecallUnschedStatus][i].DefNum==PrefC.GetLong(PrefName.RecallStatusEmailed)){
 					comboStatusEmailedRecall.SelectedIndex=i;
 				}
 			}
 			List<long> recalltypes=new List<long>();
-			string[] typearray=PrefC.GetString("RecallTypesShowingInList").Split(',');
+			string[] typearray=PrefC.GetString(PrefName.RecallTypesShowingInList).Split(',');
 			if(typearray.Length>0){
 				for(int i=0;i<typearray.Length;i++){
 					recalltypes.Add(PIn.PLong(typearray[i]));
@@ -494,23 +494,23 @@ namespace OpenDental{
 					listTypes.SetSelected(i,true);
 				}
 			}
-			if(PrefC.GetInt("RecallShowIfDaysFirstReminder")==-1) {
+			if(PrefC.GetLong(PrefName.RecallShowIfDaysFirstReminder)==-1) {
 				textDaysFirstReminder.Text="";
 			}
 			else {
-				textDaysFirstReminder.Text=PrefC.GetInt("RecallShowIfDaysFirstReminder").ToString();
+				textDaysFirstReminder.Text=PrefC.GetLong(PrefName.RecallShowIfDaysFirstReminder).ToString();
 			}
-			if(PrefC.GetInt("RecallShowIfDaysSecondReminder")==-1) {
+			if(PrefC.GetLong(PrefName.RecallShowIfDaysSecondReminder)==-1) {
 				textDaysSecondReminder.Text="";
 			}
 			else {
-				textDaysSecondReminder.Text=PrefC.GetInt("RecallShowIfDaysSecondReminder").ToString();
+				textDaysSecondReminder.Text=PrefC.GetLong(PrefName.RecallShowIfDaysSecondReminder).ToString();
 			}
-			if(PrefC.GetInt("RecallMaxNumberReminders")==-1) {
+			if(PrefC.GetLong(PrefName.RecallMaxNumberReminders)==-1) {
 				textMaxReminders.Text="";
 			}
 			else {
-				textMaxReminders.Text=PrefC.GetInt("RecallMaxNumberReminders").ToString();
+				textMaxReminders.Text=PrefC.GetLong(PrefName.RecallMaxNumberReminders).ToString();
 			}
 			FillGrid();
 		}
@@ -534,7 +534,7 @@ namespace OpenDental{
 			row.Cells.Add("1");
 			row.Cells.Add(Lan.g(this,"E-mail"));
 			row.Cells.Add(Lan.g(this,"Subject line"));
-			row.Cells.Add(PrefC.GetString("RecallEmailSubject"));//old
+			row.Cells.Add(PrefC.GetString(PrefName.RecallEmailSubject));//old
 			row.Tag="RecallEmailSubject";
 			gridMain.Rows.Add(row);
 			//
@@ -542,7 +542,7 @@ namespace OpenDental{
 			row.Cells.Add("1");
 			row.Cells.Add(Lan.g(this,"E-mail"));
 			row.Cells.Add(Lan.g(this,"Available variables: [DueDate], [NameFL], [NameF]."));
-			row.Cells.Add(PrefC.GetString("RecallEmailMessage"));
+			row.Cells.Add(PrefC.GetString(PrefName.RecallEmailMessage));
 			row.Tag="RecallEmailMessage";
 			gridMain.Rows.Add(row);
 			//
@@ -550,7 +550,7 @@ namespace OpenDental{
 			row.Cells.Add("1");
 			row.Cells.Add(Lan.g(this,"E-mail"));
 			row.Cells.Add(Lan.g(this,"For multiple patients in one family.  Use [FamilyList] where the list of family members should show."));
-			row.Cells.Add(PrefC.GetString("RecallEmailFamMsg"));
+			row.Cells.Add(PrefC.GetString(PrefName.RecallEmailFamMsg));
 			row.Tag="RecallEmailFamMsg";
 			gridMain.Rows.Add(row);
 			//
@@ -558,7 +558,7 @@ namespace OpenDental{
 			row.Cells.Add("1");
 			row.Cells.Add(Lan.g(this,"Postcard"));
 			row.Cells.Add(Lan.g(this,"Use [DueDate] wherever you want the due date to be inserted."));
-			row.Cells.Add(PrefC.GetString("RecallPostcardMessage"));//old
+			row.Cells.Add(PrefC.GetString(PrefName.RecallPostcardMessage));//old
 			row.Tag="RecallPostcardMessage";
 			gridMain.Rows.Add(row);
 			//
@@ -566,7 +566,7 @@ namespace OpenDental{
 			row.Cells.Add("1");
 			row.Cells.Add(Lan.g(this,"Postcard"));
 			row.Cells.Add(Lan.g(this,"For multiple patients in one family.  Use [FamilyList] where the list of family members should show."));
-			row.Cells.Add(PrefC.GetString("RecallPostcardFamMsg"));//old
+			row.Cells.Add(PrefC.GetString(PrefName.RecallPostcardFamMsg));//old
 			row.Tag="RecallPostcardFamMsg";
 			gridMain.Rows.Add(row);
 			//2---------------------------------------------------------------------------------------------
@@ -575,7 +575,7 @@ namespace OpenDental{
 			row.Cells.Add("2");
 			row.Cells.Add(Lan.g(this,"E-mail"));
 			row.Cells.Add(Lan.g(this,"Subject line"));
-			row.Cells.Add(PrefC.GetString("RecallEmailSubject2"));
+			row.Cells.Add(PrefC.GetString(PrefName.RecallEmailSubject2));
 			row.Tag="RecallEmailSubject2";
 			gridMain.Rows.Add(row);
 			//
@@ -583,7 +583,7 @@ namespace OpenDental{
 			row.Cells.Add("2");
 			row.Cells.Add(Lan.g(this,"E-mail"));
 			row.Cells.Add(Lan.g(this,"Available variables: [DueDate], [NameFL], [NameF]."));
-			row.Cells.Add(PrefC.GetString("RecallEmailMessage2"));
+			row.Cells.Add(PrefC.GetString(PrefName.RecallEmailMessage2));
 			row.Tag="RecallEmailMessage2";
 			gridMain.Rows.Add(row);
 			//
@@ -591,7 +591,7 @@ namespace OpenDental{
 			row.Cells.Add("2");
 			row.Cells.Add(Lan.g(this,"E-mail"));
 			row.Cells.Add(Lan.g(this,"For multiple patients in one family.  Use [FamilyList]."));
-			row.Cells.Add(PrefC.GetString("RecallEmailFamMsg2"));
+			row.Cells.Add(PrefC.GetString(PrefName.RecallEmailFamMsg2));
 			row.Tag="RecallEmailFamMsg2";
 			gridMain.Rows.Add(row);
 			//
@@ -599,7 +599,7 @@ namespace OpenDental{
 			row.Cells.Add("2");
 			row.Cells.Add(Lan.g(this,"Postcard"));
 			row.Cells.Add(Lan.g(this,"Use [DueDate]."));
-			row.Cells.Add(PrefC.GetString("RecallPostcardMessage2"));
+			row.Cells.Add(PrefC.GetString(PrefName.RecallPostcardMessage2));
 			row.Tag="RecallPostcardMessage2";
 			gridMain.Rows.Add(row);
 			//
@@ -607,7 +607,7 @@ namespace OpenDental{
 			row.Cells.Add("2");
 			row.Cells.Add(Lan.g(this,"Postcard"));
 			row.Cells.Add(Lan.g(this,"For multiple patients in one family.  Use [FamilyList]."));
-			row.Cells.Add(PrefC.GetString("RecallPostcardFamMsg2"));
+			row.Cells.Add(PrefC.GetString(PrefName.RecallPostcardFamMsg2));
 			row.Tag="RecallPostcardFamMsg2";
 			gridMain.Rows.Add(row);
 			//3---------------------------------------------------------------------------------------------
@@ -616,7 +616,7 @@ namespace OpenDental{
 			row.Cells.Add("3");
 			row.Cells.Add(Lan.g(this,"E-mail"));
 			row.Cells.Add(Lan.g(this,"Subject line"));
-			row.Cells.Add(PrefC.GetString("RecallEmailSubject3"));
+			row.Cells.Add(PrefC.GetString(PrefName.RecallEmailSubject3));
 			row.Tag="RecallEmailSubject3";
 			gridMain.Rows.Add(row);
 			//
@@ -624,7 +624,7 @@ namespace OpenDental{
 			row.Cells.Add("3");
 			row.Cells.Add(Lan.g(this,"E-mail"));
 			row.Cells.Add(Lan.g(this,"Available variables: [DueDate], [NameFL], [NameF]."));
-			row.Cells.Add(PrefC.GetString("RecallEmailMessage3"));
+			row.Cells.Add(PrefC.GetString(PrefName.RecallEmailMessage3));
 			row.Tag="RecallEmailMessage3";
 			gridMain.Rows.Add(row);
 			//
@@ -632,7 +632,7 @@ namespace OpenDental{
 			row.Cells.Add("3");
 			row.Cells.Add(Lan.g(this,"E-mail"));
 			row.Cells.Add(Lan.g(this,"For multiple patients in one family.  Use [FamilyList]."));
-			row.Cells.Add(PrefC.GetString("RecallEmailFamMsg3"));
+			row.Cells.Add(PrefC.GetString(PrefName.RecallEmailFamMsg3));
 			row.Tag="RecallEmailFamMsg3";
 			gridMain.Rows.Add(row);
 			//
@@ -640,7 +640,7 @@ namespace OpenDental{
 			row.Cells.Add("3");
 			row.Cells.Add(Lan.g(this,"Postcard"));
 			row.Cells.Add(Lan.g(this,"Use [DueDate]."));
-			row.Cells.Add(PrefC.GetString("RecallPostcardMessage3"));
+			row.Cells.Add(PrefC.GetString(PrefName.RecallPostcardMessage3));
 			row.Tag="RecallPostcardMessage3";
 			gridMain.Rows.Add(row);
 			//
@@ -648,7 +648,7 @@ namespace OpenDental{
 			row.Cells.Add("3");
 			row.Cells.Add(Lan.g(this,"Postcard"));
 			row.Cells.Add(Lan.g(this,"For multiple patients in one family.  Use [FamilyList]."));
-			row.Cells.Add(PrefC.GetString("RecallPostcardFamMsg3"));
+			row.Cells.Add(PrefC.GetString(PrefName.RecallPostcardFamMsg3));
 			row.Tag="RecallPostcardFamMsg3";
 			gridMain.Rows.Add(row);
 			//Confirmation---------------------------------------------------------------------------------------------
@@ -656,14 +656,14 @@ namespace OpenDental{
 			row.Cells.Add("");
 			row.Cells.Add(Lan.g(this,"Postcard"));
 			row.Cells.Add(Lan.g(this,"Confirmation message.  Use [date]  and [time] where you want those values to be inserted"));
-			row.Cells.Add(PrefC.GetString("ConfirmPostcardMessage"));//old
+			row.Cells.Add(PrefC.GetString(PrefName.ConfirmPostcardMessage));//old
 			row.Tag="ConfirmPostcardMessage";
 			gridMain.Rows.Add(row);
 			gridMain.EndUpdate();
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			string prefName=gridMain.Rows[e.Row].Tag.ToString();
+			PrefName prefName=(PrefName)Enum.Parse(typeof(PrefName),gridMain.Rows[e.Row].Tag.ToString());
 			FormRecallMessageEdit FormR=new FormRecallMessageEdit();
 			FormR.MessageVal=PrefC.GetString(prefName);
 			FormR.ShowDialog();
@@ -702,34 +702,34 @@ namespace OpenDental{
 			if(textPostcardsPerSheet.Text=="1"){
 				MsgBox.Show(this,"If using 1 postcard per sheet, you must adjust the position, and also the preview will not work");
 			}
-			Prefs.UpdateString("RecallPostcardsPerSheet",textPostcardsPerSheet.Text);
-			Prefs.UpdateBool("RecallCardsShowReturnAdd",checkReturnAdd.Checked);
-			Prefs.UpdateBool("RecallGroupByFamily",checkGroupFamilies.Checked);
+			Prefs.UpdateString(PrefName.RecallPostcardsPerSheet,textPostcardsPerSheet.Text);
+			Prefs.UpdateBool(PrefName.RecallCardsShowReturnAdd,checkReturnAdd.Checked);
+			Prefs.UpdateBool(PrefName.RecallGroupByFamily,checkGroupFamilies.Checked);
 			if(textDaysPast.Text=="") {
-				Prefs.UpdateInt("RecallDaysPast",-1);
+				Prefs.UpdateLong(PrefName.RecallDaysPast,-1);
 			}
 			else {
-				Prefs.UpdateInt("RecallDaysPast",PIn.PLong(textDaysPast.Text));
+				Prefs.UpdateLong(PrefName.RecallDaysPast,PIn.PLong(textDaysPast.Text));
 			}
 			if(textDaysFuture.Text=="") {
-				Prefs.UpdateInt("RecallDaysFuture",-1);
+				Prefs.UpdateLong(PrefName.RecallDaysFuture,-1);
 			}
 			else {
-				Prefs.UpdateInt("RecallDaysFuture",PIn.PLong(textDaysFuture.Text));
+				Prefs.UpdateLong(PrefName.RecallDaysFuture,PIn.PLong(textDaysFuture.Text));
 			}
-			Prefs.UpdateDouble("RecallAdjustRight",PIn.PDouble(textRight.Text));
-			Prefs.UpdateDouble("RecallAdjustDown",PIn.PDouble(textDown.Text));
+			Prefs.UpdateDouble(PrefName.RecallAdjustRight,PIn.PDouble(textRight.Text));
+			Prefs.UpdateDouble(PrefName.RecallAdjustDown,PIn.PDouble(textDown.Text));
 			if(comboStatusEmailedRecall.SelectedIndex==-1){
-				Prefs.UpdateInt("RecallStatusEmailed",0);
+				Prefs.UpdateLong(PrefName.RecallStatusEmailed,0);
 			}
 			else{
-				Prefs.UpdateInt("RecallStatusEmailed",DefC.Short[(int)DefCat.RecallUnschedStatus][comboStatusEmailedRecall.SelectedIndex].DefNum);
+				Prefs.UpdateLong(PrefName.RecallStatusEmailed,DefC.Short[(int)DefCat.RecallUnschedStatus][comboStatusEmailedRecall.SelectedIndex].DefNum);
 			}
 			if(comboStatusMailedRecall.SelectedIndex==-1){
-				Prefs.UpdateInt("RecallStatusMailed",0);
+				Prefs.UpdateLong(PrefName.RecallStatusMailed,0);
 			}
 			else{
-				Prefs.UpdateInt("RecallStatusMailed",DefC.Short[(int)DefCat.RecallUnschedStatus][comboStatusMailedRecall.SelectedIndex].DefNum);
+				Prefs.UpdateLong(PrefName.RecallStatusMailed,DefC.Short[(int)DefCat.RecallUnschedStatus][comboStatusMailedRecall.SelectedIndex].DefNum);
 			}
 			string recalltypes="";
 			for(int i=0;i<listTypes.SelectedIndices.Count;i++){
@@ -738,24 +738,24 @@ namespace OpenDental{
 				}
 				recalltypes+=RecallTypeC.Listt[listTypes.SelectedIndices[i]].RecallTypeNum.ToString();
 			}
-			Prefs.UpdateString("RecallTypesShowingInList",recalltypes);
+			Prefs.UpdateString(PrefName.RecallTypesShowingInList,recalltypes);
 			if(textDaysFirstReminder.Text=="") {
-				Prefs.UpdateInt("RecallShowIfDaysFirstReminder",-1);
+				Prefs.UpdateLong(PrefName.RecallShowIfDaysFirstReminder,-1);
 			}
 			else {
-				Prefs.UpdateInt("RecallShowIfDaysFirstReminder",PIn.PLong(textDaysFirstReminder.Text));
+				Prefs.UpdateLong(PrefName.RecallShowIfDaysFirstReminder,PIn.PLong(textDaysFirstReminder.Text));
 			}
 			if(textDaysSecondReminder.Text=="") {
-				Prefs.UpdateInt("RecallShowIfDaysSecondReminder",-1);
+				Prefs.UpdateLong(PrefName.RecallShowIfDaysSecondReminder,-1);
 			}
 			else {
-				Prefs.UpdateInt("RecallShowIfDaysSecondReminder",PIn.PLong(textDaysSecondReminder.Text));
+				Prefs.UpdateLong(PrefName.RecallShowIfDaysSecondReminder,PIn.PLong(textDaysSecondReminder.Text));
 			}
 			if(textMaxReminders.Text=="") {
-				Prefs.UpdateInt("RecallMaxNumberReminders",-1);
+				Prefs.UpdateLong(PrefName.RecallMaxNumberReminders,-1);
 			}
 			else {
-				Prefs.UpdateInt("RecallMaxNumberReminders",PIn.PLong(textMaxReminders.Text));
+				Prefs.UpdateLong(PrefName.RecallMaxNumberReminders,PIn.PLong(textMaxReminders.Text));
 			}
 			changed=true;
 			DialogResult=DialogResult.OK;

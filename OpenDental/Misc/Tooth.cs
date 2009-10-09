@@ -216,7 +216,7 @@ namespace OpenDental{
 		///<summary>Used every time user enters toothNum in procedure box. Must be followed with FromInternat. These are the *ONLY* methods that are designed to accept user input.  Can also handle international toothnum</summary>
 		public static bool IsValidEntry(string toothNum){
 			//international
-			if(PrefC.GetBool("UseInternationalToothNumbers")){
+			if(PrefC.GetBool(PrefName.UseInternationalToothNumbers")){
 				if(toothNum==null || toothNum=="")
 					return false;
 				Regex regex=new Regex("^[1-4][1-8]$");//perm teeth: matches firt digit 1-4 and second digit 1-8,9 would be supernumerary?

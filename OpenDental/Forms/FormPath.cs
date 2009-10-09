@@ -315,12 +315,12 @@ namespace OpenDental{
 		#endregion
 
 		private void FormPath_Load(object sender, System.EventArgs e){
-			textDocPath.Text=PrefC.GetString("DocPath");
+			textDocPath.Text=PrefC.GetString(PrefName.DocPath);
 			//ComputerPref compPref=ComputerPrefs.GetForLocalComputer();
 			textLocalPath.Text=ImageStore.LocalAtoZpath;//This was set on startup.  //compPref.AtoZpath;
-			textExportPath.Text=PrefC.GetString("ExportPath");
-			textLetterMergePath.Text=PrefC.GetString("LetterMergePath");
-			if(PrefC.GetBool("AtoZfolderNotRequired")) {
+			textExportPath.Text=PrefC.GetString(PrefName.ExportPath);
+			textLetterMergePath.Text=PrefC.GetString(PrefName.LetterMergePath);
+			if(PrefC.GetBool(PrefName.AtoZfolderNotRequired)) {
 				radioAtoZfolderNotRequired.Checked = true;
 			}  
 			else {
@@ -420,7 +420,7 @@ namespace OpenDental{
 		/*
 		///<summary>Returns true if the given path is part of the image paths stored in the database list, false otherwise.</summary>
 		public static bool IsImagePath(string path){
-			string imagePaths=PrefC.GetString("DocPath");
+			string imagePaths=PrefC.GetString(PrefName.DocPath");
 			return IsImagePath(path,imagePaths);
 		}*/
 
@@ -434,10 +434,10 @@ namespace OpenDental{
 				return;
     	}
 			if(
-				Prefs.UpdateBool("AtoZfolderNotRequired",radioAtoZfolderNotRequired.Checked)
-				| Prefs.UpdateString("DocPath",textDocPath.Text)
-				| Prefs.UpdateString("ExportPath",textExportPath.Text)
-				| Prefs.UpdateString("LetterMergePath",textLetterMergePath.Text))
+				Prefs.UpdateBool(PrefName.AtoZfolderNotRequired,radioAtoZfolderNotRequired.Checked)
+				| Prefs.UpdateString(PrefName.DocPath,textDocPath.Text)
+				| Prefs.UpdateString(PrefName.ExportPath,textExportPath.Text)
+				| Prefs.UpdateString(PrefName.LetterMergePath,textLetterMergePath.Text))
 			{
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}

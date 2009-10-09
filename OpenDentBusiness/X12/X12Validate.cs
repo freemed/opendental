@@ -121,32 +121,32 @@ namespace OpenDentBusiness {
 		}
 
 		public static void PracticeAddress(StringBuilder strb) {
-			if(PrefC.GetString("PracticePhone").Length!=10) {
+			if(PrefC.GetString(PrefName.PracticePhone).Length!=10) {
 				//10 digit phone is required by WebMD and is universally assumed 
 				if(strb.Length!=0) {
 					strb.Append(",");
 				}
 				strb.Append("Practice Phone");
 			}
-			if(PrefC.GetString("PracticeAddress")=="") {
+			if(PrefC.GetString(PrefName.PracticeAddress)=="") {
 				if(strb.Length!=0) {
 					strb.Append(",");
 				}
 				strb.Append("Practice Address");
 			}
-			if(PrefC.GetString("PracticeCity").Length<2) {
+			if(PrefC.GetString(PrefName.PracticeCity).Length<2) {
 				if(strb.Length!=0) {
 					strb.Append(",");
 				}
 				strb.Append("Practice City");
 			}
-			if(PrefC.GetString("PracticeST").Length!=2) {
+			if(PrefC.GetString(PrefName.PracticeST).Length!=2) {
 				if(strb.Length!=0) {
 					strb.Append(",");
 				}
 				strb.Append("Practice State(2 char)");
 			}
-			if(PrefC.GetString("PracticeZip").Length<3) {
+			if(PrefC.GetString(PrefName.PracticeZip).Length<3) {
 				if(strb.Length!=0) {
 					strb.Append(",");
 				}

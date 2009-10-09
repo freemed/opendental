@@ -519,7 +519,7 @@ namespace OpenDental{
 				row.Cells.Add(table.Rows[i]["lastStatement"].ToString());
 				row.Cells.Add(table.Rows[i]["balTotal"].ToString());
 				row.Cells.Add(table.Rows[i]["insEst"].ToString());
-				if(PrefC.GetBool("BalancesDontSubtractIns")) {
+				if(PrefC.GetBool(PrefName.BalancesDontSubtractIns)) {
 					row.Cells.Add("");
 				}
 				else {
@@ -753,7 +753,7 @@ namespace OpenDental{
 				patFolder=ImageStore.GetPatientFolder(pat);
 				dataSet=AccountModules.GetStatement(stmt.PatNum,stmt.SinglePatient,stmt.DateRangeFrom,stmt.DateRangeTo,stmt.Intermingled);
 				if(stmt.Mode_==StatementMode.Email){
-					if(PrefC.GetString("EmailSMTPserver")==""){
+					if(PrefC.GetString(PrefName.EmailSMTPserver)==""){
 						MsgBox.Show(this,"You need to enter an SMTP server name in e-mail setup before you can send e-mail.");
 						Cursor=Cursors.Default;
 						isPrinting=false;
@@ -800,7 +800,7 @@ namespace OpenDental{
 					message=new EmailMessage();
 					message.PatNum=pat.PatNum;
 					message.ToAddress=pat.Email;
-					message.FromAddress=PrefC.GetString("EmailSenderAddress");
+					message.FromAddress=PrefC.GetString(PrefName.EmailSenderAddress);
 					message.Subject=Lan.g(this,"Statement");
 					message.BodyText=Lan.g(this,"Statement");
 					attach=new EmailAttach();

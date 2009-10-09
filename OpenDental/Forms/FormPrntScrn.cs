@@ -361,7 +361,7 @@ namespace OpenDental{
 			saveFileDialog2=new SaveFileDialog();
       saveFileDialog2.AddExtension=true;
 			saveFileDialog2.Title=Lan.g(this,"Select Folder to Save Image To");
-      saveFileDialog2.InitialDirectory=((Pref)PrefC.HList["ExportPath"]).ValueString; 
+      saveFileDialog2.InitialDirectory=PrefC.GetString(PrefName.ExportPath); 
 			saveFileDialog2.DefaultExt="jpg";
 			saveFileDialog2.Filter="jpg files(*.jpg)|*.jpg|gif files(*.gif)|*.gif|All files(*.*)|*.*";
       saveFileDialog2.FilterIndex=1;

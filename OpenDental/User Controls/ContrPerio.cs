@@ -621,22 +621,22 @@ namespace OpenDental
 				//test for red
 				switch(RowTypes[GetSection(row)][GetSectionRow(row)]){
 					case PerioSequenceType.Probing:
-						redThresh=PrefC.GetInt32("PerioRedProb");
+						redThresh=PrefC.GetInt(PrefName.PerioRedProb);
 						break;
 					case PerioSequenceType.MGJ:
-						redThresh=PrefC.GetInt32("PerioRedMGJ");
+						redThresh=PrefC.GetInt(PrefName.PerioRedMGJ);
 						break;
 					case PerioSequenceType.GingMargin:
-						redThresh=PrefC.GetInt32("PerioRedGing");
+						redThresh=PrefC.GetInt(PrefName.PerioRedGing);
 						break;
 					case PerioSequenceType.CAL:
-						redThresh=PrefC.GetInt32("PerioRedCAL");
+						redThresh=PrefC.GetInt(PrefName.PerioRedCAL);
 						break;
 					case PerioSequenceType.Furcation:
-						redThresh=PrefC.GetInt32("PerioRedFurc");
+						redThresh=PrefC.GetInt(PrefName.PerioRedFurc);
 						break;
 					case PerioSequenceType.Mobility:
-						redThresh=PrefC.GetInt32("PerioRedMob");
+						redThresh=PrefC.GetInt(PrefName.PerioRedMob);
 						break;
 				}
 				if((RowTypes[GetSection(row)][GetSectionRow(row)]
@@ -1762,22 +1762,22 @@ namespace OpenDental
 			int prefVal=0;
 			switch(seqType){
 				case PerioSequenceType.Probing:
-					prefVal=PrefC.GetInt32("PerioRedProb");
+					prefVal=PrefC.GetInt(PrefName.PerioRedProb);
 					break;
 				case PerioSequenceType.MGJ:
-					prefVal=PrefC.GetInt32("PerioRedMGJ");
+					prefVal=PrefC.GetInt(PrefName.PerioRedMGJ);
 					break;
 				case PerioSequenceType.GingMargin:
-					prefVal=PrefC.GetInt32("PerioRedGing");
+					prefVal=PrefC.GetInt(PrefName.PerioRedGing);
 					break;
 				case PerioSequenceType.CAL:
-					prefVal=PrefC.GetInt32("PerioRedCAL");
+					prefVal=PrefC.GetInt(PrefName.PerioRedCAL);
 					break;
 				case PerioSequenceType.Furcation:
-					prefVal=PrefC.GetInt32("PerioRedFurc");
+					prefVal=PrefC.GetInt(PrefName.PerioRedFurc);
 					break;
 				case PerioSequenceType.Mobility:
-					prefVal=PrefC.GetInt32("PerioRedMob");
+					prefVal=PrefC.GetInt(PrefName.PerioRedMob);
 					break;
 			}
 			ArrayList retList=new ArrayList();

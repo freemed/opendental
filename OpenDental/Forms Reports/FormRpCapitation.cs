@@ -126,7 +126,7 @@ namespace OpenDental{
 			ReportLikeCrystal report=new ReportLikeCrystal();
 			report.IsLandscape=true;
 			report.AddTitle("CAPITATION UTILIZATION");
-			report.AddSubTitle(((Pref)PrefC.HList["PracticeTitle"]).ValueString);
+			report.AddSubTitle(PrefC.GetString(PrefName.PracticeTitle));
 //incomplete: Need more flexible default values, eg based on current date instead of fixed date:
 			DateTime DateTimeFirst=new DateTime(DateTime.Today.Year,DateTime.Today.Month,1);
 			report.AddParameter("carrier",FieldValueType.String,""

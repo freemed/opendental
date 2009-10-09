@@ -311,6 +311,7 @@ namespace OpenDental{
 			this.butEmail.Size = new System.Drawing.Size(91,24);
 			this.butEmail.TabIndex = 61;
 			this.butEmail.Text = "E-Mail";
+			this.butEmail.Visible = false;
 			this.butEmail.Click += new System.EventHandler(this.butEmail_Click);
 			// 
 			// FormConfirmList
@@ -351,7 +352,7 @@ namespace OpenDental{
 			for(int i=0;i<ProviderC.List.Length;i++) {
 				comboProv.Items.Add(ProviderC.List[i].GetLongDesc());
 			}
-			//textPostcardMessage.Text=PrefC.GetString("ConfirmPostcardMessage");
+			//textPostcardMessage.Text=PrefC.GetString(PrefName.ConfirmPostcardMessage");
 			comboStatus.Items.Clear();
 			for(int i=0;i<DefC.Short[(int)DefCat.ApptConfirmed].Length;i++){
 				comboStatus.Items.Add(DefC.Short[(int)DefCat.ApptConfirmed][i].ItemName);
@@ -598,11 +599,11 @@ namespace OpenDental{
 			pd.PrintPage+=new PrintPageEventHandler(this.pdCards_PrintPage);
 			pd.OriginAtMargins=true;
 			pd.DefaultPageSettings.Margins=new Margins(0,0,0,0);
-			if(PrefC.GetInt("RecallPostcardsPerSheet")==1){
+			if(PrefC.GetLong(PrefName.RecallPostcardsPerSheet)==1){
 				pd.DefaultPageSettings.PaperSize=new PaperSize("Postcard",400,600);
 				pd.DefaultPageSettings.Landscape=true;
 			}
-			else if(PrefC.GetInt("RecallPostcardsPerSheet")==3){
+			else if(PrefC.GetLong(PrefName.RecallPostcardsPerSheet)==3){
 				pd.DefaultPageSettings.PaperSize=new PaperSize("Postcard",850,1100);
 			}
 			else{//4
@@ -610,7 +611,7 @@ namespace OpenDental{
 				pd.DefaultPageSettings.Landscape=true;
 			}
 			printPreview=new OpenDental.UI.PrintPreview(PrintSituation.Postcard,pd,
-				(int)Math.Ceiling((double)AddrTable.Rows.Count/(double)PrefC.GetInt("RecallPostcardsPerSheet")));
+				(int)Math.Ceiling((double)AddrTable.Rows.Count/(double)PrefC.GetLong(PrefName.RecallPostcardsPerSheet)));
 			printPreview.ShowDialog();
 		}
 
@@ -654,24 +655,24 @@ namespace OpenDental{
 
 		///<summary>raised for each page to be printed.</summary>
 		private void pdCards_PrintPage(object sender, PrintPageEventArgs ev){
-			int totalPages=(int)Math.Ceiling((double)AddrTable.Rows.Count/(double)PrefC.GetInt("RecallPostcardsPerSheet"));
+			int totalPages=(int)Math.Ceiling((double)AddrTable.Rows.Count/(double)PrefC.GetLong(PrefName.RecallPostcardsPerSheet));
 			Graphics g=ev.Graphics;
-			int yAdj=(int)(PrefC.GetDouble("RecallAdjustDown")*100);
-			int xAdj=(int)(PrefC.GetDouble("RecallAdjustRight")*100);
+			int yAdj=(int)(PrefC.GetDouble(PrefName.RecallAdjustDown)*100);
+			int xAdj=(int)(PrefC.GetDouble(PrefName.RecallAdjustRight)*100);
 			float yPos=0+yAdj;//these refer to the upper left origin of each postcard
 			float xPos=0+xAdj;
 			string str;
 			while(yPos<ev.PageBounds.Height-100 && patientsPrinted<AddrTable.Rows.Count){
 				//Return Address--------------------------------------------------------------------------
-				if(PrefC.GetBool("RecallCardsShowReturnAdd")){
-					str=PrefC.GetString("PracticeTitle")+"\r\n";
+				if(PrefC.GetBool(PrefName.RecallCardsShowReturnAdd)){
+					str=PrefC.GetString(PrefName.PracticeTitle)+"\r\n";
 					g.DrawString(str,new Font(FontFamily.GenericSansSerif,9,FontStyle.Bold),Brushes.Black,xPos+45,yPos+60);
-					str=PrefC.GetString("PracticeAddress")+"\r\n";
-					if(PrefC.GetString("PracticeAddress2")!=""){
-						str+=PrefC.GetString("PracticeAddress2")+"\r\n";
+					str=PrefC.GetString(PrefName.PracticeAddress)+"\r\n";
+					if(PrefC.GetString(PrefName.PracticeAddress2)!=""){
+						str+=PrefC.GetString(PrefName.PracticeAddress2)+"\r\n";
 					}
-					str+=PrefC.GetString("PracticeCity")+",  "+PrefC.GetString("PracticeST")+"  "+PrefC.GetString("PracticeZip")+"\r\n";
-					string phone=PrefC.GetString("PracticePhone");
+					str+=PrefC.GetString(PrefName.PracticeCity)+",  "+PrefC.GetString(PrefName.PracticeST)+"  "+PrefC.GetString(PrefName.PracticeZip)+"\r\n";
+					string phone=PrefC.GetString(PrefName.PracticePhone);
 					if(CultureInfo.CurrentCulture.Name=="en-US"&& phone.Length==10){
 						str+="("+phone.Substring(0,3)+")"+phone.Substring(3,3)+"-"+phone.Substring(6);
 					}
@@ -681,7 +682,7 @@ namespace OpenDental{
 					g.DrawString(str,new Font(FontFamily.GenericSansSerif,8),Brushes.Black,xPos+45,yPos+75);
 				}
 				//Body text-------------------------------------------------------------------------------
-				str=PrefC.GetString("ConfirmPostcardMessage");
+				str=PrefC.GetString(PrefName.ConfirmPostcardMessage);
 					//textPostcardMessage.Text;
 				str=str.Replace("[date]",PIn.PDate(AddrTable.Rows[patientsPrinted]["AptDateTime"].ToString()).ToShortDateString());
 				str=str.Replace("[time]",PIn.PDate(AddrTable.Rows[patientsPrinted]["AptDateTime"].ToString()).ToShortTimeString());
@@ -698,10 +699,10 @@ namespace OpenDental{
 						+AddrTable.Rows[patientsPrinted]["State"].ToString()+"   "
 						+AddrTable.Rows[patientsPrinted]["Zip"].ToString()+"\r\n";
 				g.DrawString(str,new Font(FontFamily.GenericSansSerif,11),Brushes.Black,xPos+320,yPos+240);
-				if(PrefC.GetInt("RecallPostcardsPerSheet")==1){
+				if(PrefC.GetLong(PrefName.RecallPostcardsPerSheet)==1){
 					yPos+=400;
 				}
-				else if(PrefC.GetInt("RecallPostcardsPerSheet")==3){
+				else if(PrefC.GetLong(PrefName.RecallPostcardsPerSheet)==3){
 					yPos+=366;
 				}
 				else{//4
@@ -751,16 +752,16 @@ namespace OpenDental{
 		}
 
 		private void butEmail_Click(object sender,EventArgs e) {
-			/*
-			if(gridMain.Rows.Count < 1) {
-				MessageBox.Show(Lan.g(this,"There are no Patients in the Recall table.  Must have at least one."));
+			if(grid.Rows.Count==0) {
+				MsgBox.Show(this,"There are no Patients in the table.  Must have at least one.");
 				return;
 			}
-			if(PrefC.GetString("EmailSMTPserver")=="") {
+			if(PrefC.GetString(PrefName.EmailSMTPserver)=="") {
 				MsgBox.Show(this,"You need to enter an SMTP server name in e-mail setup before you can send e-mail.");
 				return;
 			}
-			if(PrefC.GetInt("RecallStatusEmailed")==0) {
+			/*
+			if(PrefC.GetLong(PrefName.RecallStatusEmailed")==0) {
 				MsgBox.Show(this,"You need to set a status first in the Recall Setup window.");
 				return;
 			}
@@ -815,39 +816,39 @@ namespace OpenDental{
 				message=new EmailMessage();
 				message.PatNum=PIn.PInt(AddrTable.Rows[i]["emailPatNum"].ToString());
 				message.ToAddress=PIn.PString(AddrTable.Rows[i]["email"].ToString());//might be guarantor email
-				message.FromAddress=PrefC.GetString("EmailSenderAddress");
+				message.FromAddress=PrefC.GetString(PrefName.EmailSenderAddress");
 				if(AddrTable.Rows[i]["numberOfReminders"].ToString()=="0") {
-					message.Subject=PrefC.GetString("RecallEmailSubject");
+					message.Subject=PrefC.GetString(PrefName.RecallEmailSubject");
 				}
 				else if(AddrTable.Rows[i]["numberOfReminders"].ToString()=="1") {
-					message.Subject=PrefC.GetString("RecallEmailSubject2");
+					message.Subject=PrefC.GetString(PrefName.RecallEmailSubject2");
 				}
 				else {
-					message.Subject=PrefC.GetString("RecallEmailSubject3");
+					message.Subject=PrefC.GetString(PrefName.RecallEmailSubject3");
 				}
 				//family
 				if(checkGroupFamilies.Checked	&& AddrTable.Rows[i]["famList"].ToString()!="") {
 					if(AddrTable.Rows[i]["numberOfReminders"].ToString()=="0") {
-						str=PrefC.GetString("RecallEmailFamMsg");
+						str=PrefC.GetString(PrefName.RecallEmailFamMsg");
 					}
 					else if(AddrTable.Rows[i]["numberOfReminders"].ToString()=="1") {
-						str=PrefC.GetString("RecallEmailFamMsg2");
+						str=PrefC.GetString(PrefName.RecallEmailFamMsg2");
 					}
 					else {
-						str=PrefC.GetString("RecallEmailFamMsg3");
+						str=PrefC.GetString(PrefName.RecallEmailFamMsg3");
 					}
 					str=str.Replace("[FamilyList]",AddrTable.Rows[i]["famList"].ToString());
 				}
 				//single
 				else {
 					if(AddrTable.Rows[i]["numberOfReminders"].ToString()=="0") {
-						str=PrefC.GetString("RecallEmailMessage");
+						str=PrefC.GetString(PrefName.RecallEmailMessage");
 					}
 					else if(AddrTable.Rows[i]["numberOfReminders"].ToString()=="1") {
-						str=PrefC.GetString("RecallEmailMessage2");
+						str=PrefC.GetString(PrefName.RecallEmailMessage2");
 					}
 					else {
-						str=PrefC.GetString("RecallEmailMessage3");
+						str=PrefC.GetString(PrefName.RecallEmailMessage3");
 					}
 					str=str.Replace("[DueDate]",PIn.PDate(AddrTable.Rows[i]["dateDue"].ToString()).ToShortDateString());
 					str=str.Replace("[NameF]",AddrTable.Rows[i]["patientNameF"].ToString());
@@ -869,7 +870,7 @@ namespace OpenDental{
 				patNumArray=AddrTable.Rows[i]["patNums"].ToString().Split(',');
 				for(int r=0;r<recallNumArray.Length;r++) {
 					Commlogs.InsertForRecall(PIn.PInt(patNumArray[r]),CommItemMode.Email,PIn.PInt(AddrTable.Rows[i]["numberOfReminders"].ToString()));
-					Recalls.UpdateStatus(PIn.PInt(recallNumArray[r]),PrefC.GetInt("RecallStatusEmailed"));
+					Recalls.UpdateStatus(PIn.PInt(recallNumArray[r]),PrefC.GetLong(PrefName.RecallStatusEmailed"));
 				}
 			}
 			FillMain();

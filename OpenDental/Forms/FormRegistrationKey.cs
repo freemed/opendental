@@ -208,7 +208,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormRegistrationKey_Load(object sender,EventArgs e) {
-			string key=PrefC.GetString("RegistrationKey");
+			string key=PrefC.GetString(PrefName.RegistrationKey);
 			if(key!=null && key.Length==16){
 				textKey1.Text=key.Substring(0,4);
 				textKey2.Text=key.Substring(4,4);
@@ -228,7 +228,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Invalid registration key.");
 				return;
 			}
-			Prefs.UpdateString("RegistrationKey",keyattempt);
+			Prefs.UpdateString(PrefName.RegistrationKey,keyattempt);
 			//prefs refresh automatically in the calling class anyway.
 			DialogResult=DialogResult.OK;
 		}

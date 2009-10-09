@@ -1340,7 +1340,7 @@ namespace OpenDentBusiness{
 			if(excludeInactive){
 				command+="(patstatus != '2') AND ";
 			}
-			if(PrefC.GetBool("BalancesDontSubtractIns")) {
+			if(PrefC.GetBool(PrefName.BalancesDontSubtractIns)) {
 				command+="(BalTotal";
 			}
 			else {
@@ -1349,7 +1349,7 @@ namespace OpenDentBusiness{
 			command+=" > '"+(excludeLessThan+.005).ToString()+"'"//add half a penny for rounding error
 				+" OR PayPlanDue > 0";
 			if(!excludeNeg){
-				if(PrefC.GetBool("BalancesDontSubtractIns")) {
+				if(PrefC.GetBool(PrefName.BalancesDontSubtractIns)) {
 					command+=" OR BalTotal < '0')";
 				}
 				else {
@@ -1590,11 +1590,11 @@ namespace OpenDentBusiness{
 			}
 			if(pat.PriProv!=0)
 				return pat.PriProv;
-			if(PrefC.GetInt("PracticeDefaultProv")==0) {
+			if(PrefC.GetLong(PrefName.PracticeDefaultProv)==0) {
 				MessageBox.Show(Lans.g("Patients","Please set a default provider in the practice setup window."));
 				return ProviderC.List[0].ProvNum;
 			}
-			return PrefC.GetInt("PracticeDefaultProv");
+			return PrefC.GetLong(PrefName.PracticeDefaultProv);
 		}
 
 		///<summary>Gets the list of all valid patient primary keys. Used when checking for missing ADA procedure codes after a user has begun entering them manually. This function is necessary because not all patient numbers are necessarily consecutive (say if the database was created due to a conversion from another program and the customer wanted to keep their old patient ids after the conversion).</summary>

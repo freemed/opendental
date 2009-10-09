@@ -694,7 +694,7 @@ namespace OpenDental{
 			}
 			AptCur.Pattern="/X/";
 			if(PatCur.PriProv==0) {
-				AptCur.ProvNum=PIn.PLong(((Pref)PrefC.HList["PracticeDefaultProv"]).ValueString);
+				AptCur.ProvNum=PrefC.GetLong(PrefName.PracticeDefaultProv);
 			}
 			else {
 				AptCur.ProvNum=PatCur.PriProv;
@@ -753,7 +753,7 @@ namespace OpenDental{
 			}
 			AptCur.Pattern="/X/";
 			if(PatCur.PriProv==0){
-				AptCur.ProvNum=PIn.PLong(((Pref)PrefC.HList["PracticeDefaultProv"]).ValueString);
+				AptCur.ProvNum=PrefC.GetLong(PrefName.PracticeDefaultProv);
 			}
 			else{			
 				AptCur.ProvNum=PatCur.PriProv;

@@ -1228,47 +1228,47 @@ namespace OpenDental{
 						displayStrings[i]=P.FName+" "+P.MI+" "+P.LName+" "+P.Suffix;
 						break;
 					case "BillingDentistAddress":
-						if(PrefC.GetBool("UseBillingAddressOnClaims")){
-							displayStrings[i]=PrefC.GetString("PracticeBillingAddress");
+						if(PrefC.GetBool(PrefName.UseBillingAddressOnClaims)){
+							displayStrings[i]=PrefC.GetString(PrefName.PracticeBillingAddress);
 						}
 						else if(clinic==null)
-							displayStrings[i]=PrefC.GetString("PracticeAddress");
+							displayStrings[i]=PrefC.GetString(PrefName.PracticeAddress);
 						else
 							displayStrings[i]=clinic.Address;
 						break;
 					case "BillingDentistAddress2":
-						if(PrefC.GetBool("UseBillingAddressOnClaims")) {
-							displayStrings[i]=PrefC.GetString("PracticeBillingAddress2");
+						if(PrefC.GetBool(PrefName.UseBillingAddressOnClaims)) {
+							displayStrings[i]=PrefC.GetString(PrefName.PracticeBillingAddress2);
 						}
 						else if(clinic==null)
-							displayStrings[i]=((Pref)PrefC.HList["PracticeAddress2"]).ValueString;
+							displayStrings[i]=PrefC.GetString(PrefName.PracticeAddress2);
 						else
 							displayStrings[i]=clinic.Address2;
 						break;
 					case "BillingDentistCity":
-						if(PrefC.GetBool("UseBillingAddressOnClaims")) {
-							displayStrings[i]=PrefC.GetString("PracticeBillingCity");
+						if(PrefC.GetBool(PrefName.UseBillingAddressOnClaims)) {
+							displayStrings[i]=PrefC.GetString(PrefName.PracticeBillingCity);
 						}
 						else if(clinic==null)
-							displayStrings[i]=((Pref)PrefC.HList["PracticeCity"]).ValueString;
+							displayStrings[i]=PrefC.GetString(PrefName.PracticeCity);
 						else
 							displayStrings[i]=clinic.City;
 						break;
 					case "BillingDentistST":
-						if(PrefC.GetBool("UseBillingAddressOnClaims")) {
-							displayStrings[i]=PrefC.GetString("PracticeBillingST");
+						if(PrefC.GetBool(PrefName.UseBillingAddressOnClaims)) {
+							displayStrings[i]=PrefC.GetString(PrefName.PracticeBillingST);
 						}
 						else if(clinic==null)
-							displayStrings[i]=((Pref)PrefC.HList["PracticeST"]).ValueString;
+							displayStrings[i]=PrefC.GetString(PrefName.PracticeST);
 						else
 							displayStrings[i]=clinic.State;
 						break;
 					case "BillingDentistZip":
-						if(PrefC.GetBool("UseBillingAddressOnClaims")) {
-							displayStrings[i]=PrefC.GetString("PracticeBillingZip");
+						if(PrefC.GetBool(PrefName.UseBillingAddressOnClaims)) {
+							displayStrings[i]=PrefC.GetString(PrefName.PracticeBillingZip);
 						}
 						else if(clinic==null)
-							displayStrings[i]=((Pref)PrefC.HList["PracticeZip"]).ValueString;
+							displayStrings[i]=PrefC.GetString(PrefName.PracticeZip);
 						else
 							displayStrings[i]=clinic.Zip;
 						break;
@@ -1300,8 +1300,8 @@ namespace OpenDental{
 						break;
 					case "BillingDentistPh123":
 						if(clinic==null){
-							if(((Pref)PrefC.HList["PracticePhone"]).ValueString.Length==10){
-								displayStrings[i]=((Pref)PrefC.HList["PracticePhone"]).ValueString.Substring(0,3);
+							if(PrefC.GetString(PrefName.PracticePhone).Length==10){
+								displayStrings[i]=PrefC.GetString(PrefName.PracticePhone).Substring(0,3);
 							}
 						}
 						else{
@@ -1312,8 +1312,8 @@ namespace OpenDental{
 						break;
 					case "BillingDentistPh456":
 						if(clinic==null){
-							if(((Pref)PrefC.HList["PracticePhone"]).ValueString.Length==10){
-								displayStrings[i]=((Pref)PrefC.HList["PracticePhone"]).ValueString.Substring(3,3);
+							if(PrefC.GetString(PrefName.PracticePhone).Length==10){
+								displayStrings[i]=PrefC.GetString(PrefName.PracticePhone).Substring(3,3);
 							}
 						}
 						else{
@@ -1324,8 +1324,8 @@ namespace OpenDental{
 						break;
 					case "BillingDentistPh78910":
 						if(clinic==null){
-							if(((Pref)PrefC.HList["PracticePhone"]).ValueString.Length==10){
-								displayStrings[i]=((Pref)PrefC.HList["PracticePhone"]).ValueString.Substring(6);
+							if(PrefC.GetString(PrefName.PracticePhone).Length==10){
+								displayStrings[i]=PrefC.GetString(PrefName.PracticePhone).Substring(6);
 							}
 						}
 						else{
@@ -1336,10 +1336,10 @@ namespace OpenDental{
 						break;
 					case "BillingDentistPhoneFormatted":
 						if(clinic==null){
-							if(((Pref)PrefC.HList["PracticePhone"]).ValueString.Length==10){
-								displayStrings[i]="("+((Pref)PrefC.HList["PracticePhone"]).ValueString.Substring(0,3)
-									+")"+((Pref)PrefC.HList["PracticePhone"]).ValueString.Substring(3,3)
-									+"-"+((Pref)PrefC.HList["PracticePhone"]).ValueString.Substring(6);
+							if(PrefC.GetString(PrefName.PracticePhone).Length==10){
+								displayStrings[i]="("+PrefC.GetString(PrefName.PracticePhone).Substring(0,3)
+									+")"+PrefC.GetString(PrefName.PracticePhone).Substring(3,3)
+									+"-"+PrefC.GetString(PrefName.PracticePhone).Substring(6);
 							}
 						}
 						else{
@@ -1352,7 +1352,7 @@ namespace OpenDental{
 						break;
 					case "BillingDentistPhoneRaw":
 						if(clinic==null)
-							displayStrings[i]=((Pref)PrefC.HList["PracticePhone"]).ValueString;
+							displayStrings[i]=PrefC.GetString(PrefName.PracticePhone);
 						else
 							displayStrings[i]=clinic.Phone;
 						break;
@@ -1364,7 +1364,7 @@ namespace OpenDental{
 						break;
 					case "TreatingDentistSignature":
 						if(treatDent.SigOnFile){
-							if(PrefC.GetBool("ClaimFormTreatDentSaysSigOnFile")){
+							if(PrefC.GetBool(PrefName.ClaimFormTreatDentSaysSigOnFile)){
 								displayStrings[i]="Signature on File";
 							}
 							else{
@@ -1398,32 +1398,32 @@ namespace OpenDental{
 						break;
 					case "TreatingDentistAddress":
 						if(clinic==null)
-							displayStrings[i]=((Pref)PrefC.HList["PracticeAddress"]).ValueString;
+							displayStrings[i]=PrefC.GetString(PrefName.PracticeAddress);
 						else
 							displayStrings[i]=clinic.Address;
 						break;
 					case "TreatingDentistCity":
 						if(clinic==null)
-							displayStrings[i]=((Pref)PrefC.HList["PracticeCity"]).ValueString;
+							displayStrings[i]=PrefC.GetString(PrefName.PracticeCity);
 						else
 							displayStrings[i]=clinic.City;
 						break;
 					case "TreatingDentistST":
 						if(clinic==null)
-							displayStrings[i]=((Pref)PrefC.HList["PracticeST"]).ValueString;
+							displayStrings[i]=PrefC.GetString(PrefName.PracticeST);
 						else
 							displayStrings[i]=clinic.State;
 						break;
 					case "TreatingDentistZip":
 						if(clinic==null)
-							displayStrings[i]=((Pref)PrefC.HList["PracticeZip"]).ValueString;
+							displayStrings[i]=PrefC.GetString(PrefName.PracticeZip);
 						else
 							displayStrings[i]=clinic.Zip;
 						break;
 					case "TreatingDentistPh123":
 						if(clinic==null){
-							if(((Pref)PrefC.HList["PracticePhone"]).ValueString.Length==10){
-								displayStrings[i]=((Pref)PrefC.HList["PracticePhone"]).ValueString.Substring(0,3);
+							if(PrefC.GetString(PrefName.PracticePhone).Length==10){
+								displayStrings[i]=PrefC.GetString(PrefName.PracticePhone).Substring(0,3);
 							}
 						}
 						else{
@@ -1434,8 +1434,8 @@ namespace OpenDental{
 						break;
 					case "TreatingDentistPh456":
 						if(clinic==null){
-							if(((Pref)PrefC.HList["PracticePhone"]).ValueString.Length==10){
-								displayStrings[i]=((Pref)PrefC.HList["PracticePhone"]).ValueString.Substring(3,3);
+							if(PrefC.GetString(PrefName.PracticePhone).Length==10){
+								displayStrings[i]=PrefC.GetString(PrefName.PracticePhone).Substring(3,3);
 							}
 						}
 						else{
@@ -1446,8 +1446,8 @@ namespace OpenDental{
 						break;
 					case "TreatingDentistPh78910":
 						if(clinic==null){
-							if(((Pref)PrefC.HList["PracticePhone"]).ValueString.Length==10){
-								displayStrings[i]=((Pref)PrefC.HList["PracticePhone"]).ValueString.Substring(6);
+							if(PrefC.GetString(PrefName.PracticePhone).Length==10){
+								displayStrings[i]=PrefC.GetString(PrefName.PracticePhone).Substring(6);
 							}
 						}
 						else{

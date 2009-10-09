@@ -227,7 +227,7 @@ namespace OpenDental{
 			for(int i=0;i<ProviderC.List.Length;i++) {
 				comboProv.Items.Add(ProviderC.List[i].GetLongDesc());
 			}
-			if(PrefC.GetBool("EasyHidePublicHealth")){
+			if(PrefC.GetBool(PrefName.EasyHidePublicHealth)){
 				comboSite.Visible=false;
 				labelSite.Visible=false;
 			}
@@ -260,7 +260,7 @@ namespace OpenDental{
 				provNum=ProviderC.List[comboProv.SelectedIndex-1].ProvNum;
 			}
 			long siteNum=0;
-			if(!PrefC.GetBool("EasyHidePublicHealth") && comboSite.SelectedIndex!=0) {
+			if(!PrefC.GetBool(PrefName.EasyHidePublicHealth) && comboSite.SelectedIndex!=0) {
 				siteNum=SiteC.List[comboSite.SelectedIndex-1].SiteNum;
 			}
 			ListUn=Appointments.RefreshUnsched(order,provNum,siteNum);

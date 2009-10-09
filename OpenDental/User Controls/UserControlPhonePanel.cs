@@ -344,7 +344,7 @@ namespace OpenDental {
 			//verify that employee is logged in as user
 			int extension=PIn.PInt(tablePhone.Rows[rowI]["Extension"].ToString());
 			long employeeNum=PIn.PLong(tablePhone.Rows[rowI]["EmployeeNum"].ToString());
-			if(PrefC.GetBool("TimecardSecurityEnabled")){
+			if(PrefC.GetBool(PrefName.TimecardSecurityEnabled)){
 				if(Security.CurUser.EmployeeNum!=employeeNum){
 					if(!Security.IsAuthorized(Permissions.TimecardsEditAll)){
 						MsgBox.Show(this,"Not authorized.");
@@ -373,7 +373,7 @@ namespace OpenDental {
 			//verify that employee is logged in as user
 			int extension=PIn.PInt(tablePhone.Rows[rowI]["Extension"].ToString());
 			long employeeNum=PIn.PLong(tablePhone.Rows[rowI]["EmployeeNum"].ToString());
-			if(PrefC.GetBool("TimecardSecurityEnabled")){
+			if(PrefC.GetBool(PrefName.TimecardSecurityEnabled)){
 				if(Security.CurUser.EmployeeNum!=employeeNum){
 					if(!Security.IsAuthorized(Permissions.TimecardsEditAll)){
 						MsgBox.Show(this,"Not authorized.");
@@ -402,7 +402,7 @@ namespace OpenDental {
 			//verify that employee is logged in as user
 			int extension=PIn.PInt(tablePhone.Rows[rowI]["Extension"].ToString());
 			long employeeNum=PIn.PLong(tablePhone.Rows[rowI]["EmployeeNum"].ToString());
-			if(PrefC.GetBool("TimecardSecurityEnabled")){
+			if(PrefC.GetBool(PrefName.TimecardSecurityEnabled)){
 				if(Security.CurUser.EmployeeNum!=employeeNum){
 					if(!Security.IsAuthorized(Permissions.TimecardsEditAll)){
 						MsgBox.Show(this,"Not authorized.");
@@ -433,7 +433,7 @@ namespace OpenDental {
 			if(ClockEvents.IsClockedIn(employeeNum)){
 				return true;//if employee is already clocked in, then return
 			}
-			if(PrefC.GetBool("TimecardSecurityEnabled")){
+			if(PrefC.GetBool(PrefName.TimecardSecurityEnabled)){
 				if(Security.CurUser.EmployeeNum!=employeeNum){
 					if(!Security.IsAuthorized(Permissions.TimecardsEditAll)){
 						MsgBox.Show(this,"Not authorized.");

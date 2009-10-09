@@ -15,13 +15,13 @@ namespace OpenDentBusiness{
 		///<summary>This runs aging for all patients.  If using monthly aging, it always just runs the aging as of the last date again.  If using daily aging, it runs it as of today.  This logic used to be in FormAging, but is now centralized.</summary>
 		public static void RunAging() {
 			//No need to check RemotingRole; no call to db.
-			if(PrefC.GetBool("AgingCalculatedMonthlyInsteadOfDaily")) {
-				ComputeAging(0,PrefC.GetDate("DateLastAging"),false);
+			if(PrefC.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily)) {
+				ComputeAging(0,PrefC.GetDate(PrefName.DateLastAging),false);
 			}
 			else {
 				ComputeAging(0,DateTime.Today,false);
-				if(PrefC.GetDate("DateLastAging") != DateTime.Today) {
-					Prefs.UpdateString("DateLastAging",POut.PDate(DateTime.Today,false));
+				if(PrefC.GetDate(PrefName.DateLastAging) != DateTime.Today) {
+					Prefs.UpdateString(PrefName.DateLastAging,POut.PDate(DateTime.Today,false));
 					//Since this is always called from UI, the above line works fine to keep the prefs cache current.
 				}
 			}
@@ -61,9 +61,9 @@ namespace OpenDentBusiness{
 				AsOfDate=DateTime.Today;
 			}
 			string asOfDate=POut.PDate(AsOfDate);
-			string billInAdvanceDate=POut.PDate(AsOfDate.AddDays(PrefC.GetInt("PayPlansBillInAdvanceDays")));
+			string billInAdvanceDate=POut.PDate(AsOfDate.AddDays(PrefC.GetLong(PrefName.PayPlansBillInAdvanceDays)));
 			if(historic){
-				billInAdvanceDate=POut.PDate(DateTime.Today.AddDays(PrefC.GetInt("PayPlansBillInAdvanceDays")));
+				billInAdvanceDate=POut.PDate(DateTime.Today.AddDays(PrefC.GetLong(PrefName.PayPlansBillInAdvanceDays)));
 			}
 			string thirtyDaysAgo=POut.PDate(AsOfDate.AddDays(-30));
 			string sixtyDaysAgo=POut.PDate(AsOfDate.AddDays(-60));

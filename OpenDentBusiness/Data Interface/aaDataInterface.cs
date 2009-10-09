@@ -6,7 +6,7 @@
 or 2. Something similar to one of these examples:
 
 if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-	return Meth.GetInt(MethodBase.GetCurrentMethod(),patNum,dateStart);
+	return Meth.GetLong(MethodBase.GetCurrentMethod(),patNum,dateStart);
 }
 or
 if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {

@@ -19,7 +19,7 @@ namespace OpenDental {
 		}
 
 		private void FormReplicationSetup_Load(object sender,EventArgs e) {
-			checkRandomPrimaryKeys.Checked=PrefC.GetBool("RandomPrimaryKeys");
+			checkRandomPrimaryKeys.Checked=PrefC.GetBool(PrefName.RandomPrimaryKeys);
 			if(checkRandomPrimaryKeys.Checked) {
 				//not allowed to uncheck it
 				checkRandomPrimaryKeys.Enabled=false;
@@ -69,13 +69,13 @@ namespace OpenDental {
 					return;
 				}
 				//immediately make the change
-				Prefs.UpdateBool("RandomPrimaryKeys",true);
+				Prefs.UpdateBool(PrefName.RandomPrimaryKeys,true);
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}
 			else{//user just unchecked the box
 				//this would only happen if the user had just enabled and then changed their mind
 				//usually, the checkbox is disabled to prevent changing back
-				Prefs.UpdateBool("RandomPrimaryKeys",false);
+				Prefs.UpdateBool(PrefName.RandomPrimaryKeys,false);
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}
 		}

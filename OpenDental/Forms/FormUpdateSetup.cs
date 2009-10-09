@@ -305,19 +305,19 @@ namespace OpenDental{
 		#endregion
 
 		private void FormUpdateSetup_Load(object sender,EventArgs e) {
-			textUpdateServerAddress.Text=PrefC.GetString("UpdateServerAddress");
-			textWebsitePath.Text=PrefC.GetString("UpdateWebsitePath");
-			textWebProxyAddress.Text=PrefC.GetString("UpdateWebProxyAddress");
-			textWebProxyUserName.Text=PrefC.GetString("UpdateWebProxyUserName");
-			textWebProxyPassword.Text=PrefC.GetString("UpdateWebProxyPassword");
-			string regkey=PrefC.GetString("RegistrationKey");
+			textUpdateServerAddress.Text=PrefC.GetString(PrefName.UpdateServerAddress);
+			textWebsitePath.Text=PrefC.GetString(PrefName.UpdateWebsitePath);
+			textWebProxyAddress.Text=PrefC.GetString(PrefName.UpdateWebProxyAddress);
+			textWebProxyUserName.Text=PrefC.GetString(PrefName.UpdateWebProxyUserName);
+			textWebProxyPassword.Text=PrefC.GetString(PrefName.UpdateWebProxyPassword);
+			string regkey=PrefC.GetString(PrefName.RegistrationKey);
 			if(regkey.Length==16){
 				textRegKey.Text=regkey.Substring(0,4)+"-"+regkey.Substring(4,4)+"-"+regkey.Substring(8,4)+"-"+regkey.Substring(12,4);
 			}
 			else{
 				textRegKey.Text=regkey;
 			}
-			textMultiple.Text=PrefC.GetString("UpdateMultipleDatabases");
+			textMultiple.Text=PrefC.GetString(PrefName.UpdateMultipleDatabases);
 		}
 
 		private void textRegKey_KeyUp(object sender,KeyEventArgs e) {
@@ -365,13 +365,13 @@ namespace OpenDental{
 			else if(Regex.IsMatch(textRegKey.Text,@"^[A-Z0-9]{16}$")){
 				regkey=textRegKey.Text;
 			}
-			if( Prefs.UpdateString("UpdateServerAddress",textUpdateServerAddress.Text)
-				| Prefs.UpdateString("UpdateWebsitePath",textWebsitePath.Text)
-				| Prefs.UpdateString("UpdateWebProxyAddress",textWebProxyAddress.Text)
-				| Prefs.UpdateString("UpdateWebProxyUserName",textWebProxyUserName.Text)
-				| Prefs.UpdateString("UpdateWebProxyPassword",textWebProxyPassword.Text)
-				| Prefs.UpdateString("RegistrationKey",regkey)
-				| Prefs.UpdateString("UpdateMultipleDatabases",textMultiple.Text))
+			if( Prefs.UpdateString(PrefName.UpdateServerAddress,textUpdateServerAddress.Text)
+				| Prefs.UpdateString(PrefName.UpdateWebsitePath,textWebsitePath.Text)
+				| Prefs.UpdateString(PrefName.UpdateWebProxyAddress,textWebProxyAddress.Text)
+				| Prefs.UpdateString(PrefName.UpdateWebProxyUserName,textWebProxyUserName.Text)
+				| Prefs.UpdateString(PrefName.UpdateWebProxyPassword,textWebProxyPassword.Text)
+				| Prefs.UpdateString(PrefName.RegistrationKey,regkey)
+				| Prefs.UpdateString(PrefName.UpdateMultipleDatabases,textMultiple.Text))
 			{
 				Cursor=Cursors.WaitCursor;
 				DataValid.SetInvalid(InvalidType.Prefs);

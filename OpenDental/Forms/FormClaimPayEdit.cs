@@ -343,7 +343,7 @@ namespace OpenDental{
 			if(IsNew){
 				checkShowUn.Checked=true;
 			}
-			if(PrefC.GetBool("EasyNoClinics")){
+			if(PrefC.GetBool(PrefName.EasyNoClinics)){
 				comboClinic.Visible=false;
 				labelClinic.Visible=false;
 			}

@@ -271,7 +271,7 @@ namespace OpenDental{
 			report.InitializeColumns();
 			FormQuery2.ResetGrid();//this is a method in FormQuery;
 			report.Title="OUTSTANDING INSURANCE CLAIMS";
-			report.SubTitle.Add(((Pref)PrefC.HList["PracticeTitle"]).ValueString);
+			report.SubTitle.Add(PrefC.GetString(PrefName.PracticeTitle));
 			report.SubTitle.Add("Days Outstanding: " + daysOld);			
 			report.ColPos[0]=20;
 			report.ColPos[1]=210;

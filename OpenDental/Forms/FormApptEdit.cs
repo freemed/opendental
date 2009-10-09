@@ -951,11 +951,11 @@ namespace OpenDental{
 			fam=Patients.GetFamily(AptCur.PatNum);
 			pat=fam.GetPatient(AptCur.PatNum);
 			PlanList=InsPlans.Refresh(fam);
-			if(PrefC.GetBool("EasyHideDentalSchools")) {
+			if(PrefC.GetBool(PrefName.EasyHideDentalSchools)) {
 				butRequirement.Visible=false;
 				textRequirement.Visible=false;
 			}
-			if(PrefC.GetBool("EasyNoClinics")) {
+			if(PrefC.GetBool(PrefName.EasyNoClinics)) {
 				labelClinic.Visible=false;
 				comboClinic.Visible=false;
 			}
@@ -1008,10 +1008,10 @@ namespace OpenDental{
 			strBTime=new StringBuilder();
 			for(int i=0;i<AptCur.Pattern.Length;i++) {
 				strBTime.Append(AptCur.Pattern.Substring(i,1));
-				if(PrefC.GetInt("AppointmentTimeIncrement")==10) {
+				if(PrefC.GetLong(PrefName.AppointmentTimeIncrement)==10) {
 					i++;
 				}
-				if(PrefC.GetInt("AppointmentTimeIncrement")==15) {
+				if(PrefC.GetLong(PrefName.AppointmentTimeIncrement)==15) {
 					i++;
 					i++;
 				}
@@ -1522,7 +1522,7 @@ namespace OpenDental{
 			if(checkTimeLocked.Checked){
 				return;
 			}
-			//int adjTimeU=PIn.PInt(textAddTime.Text)/PrefC.GetInt("AppointmentTimeIncrement");
+			//int adjTimeU=PIn.PInt(textAddTime.Text)/PrefC.GetLong(PrefName.AppointmentTimeIncrement");
 			strBTime=new StringBuilder("");
 			string procTime="";
 			long codeNum;
@@ -1872,7 +1872,7 @@ namespace OpenDental{
 			for(int i=0;i<strBTime.Length;i++) {
 				savePattern.Append(strBTime[i]);
 				savePattern.Append(strBTime[i]);
-				if(PrefC.GetInt("AppointmentTimeIncrement")==15) {
+				if(PrefC.GetLong(PrefName.AppointmentTimeIncrement)==15) {
 					savePattern.Append(strBTime[i]);
 				}
 			}

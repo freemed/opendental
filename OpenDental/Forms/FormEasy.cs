@@ -274,44 +274,44 @@ namespace OpenDental{
 		#endregion
 
 		private void FormEasy_Load(object sender, System.EventArgs e) {
-			checkCapitation.Checked=((Pref)PrefC.HList["EasyHideCapitation"]).ValueString=="0";
-			checkMedicaid.Checked=((Pref)PrefC.HList["EasyHideMedicaid"]).ValueString=="0";
-			checkPublicHealth.Checked=((Pref)PrefC.HList["EasyHidePublicHealth"]).ValueString=="0";
-			checkDentalSchools.Checked=!PrefC.GetBool("EasyHideDentalSchools");
-			checkHospitals.Checked=!PrefC.GetBool("EasyHideHospitals");
-			checkAdvancedIns.Checked=((Pref)PrefC.HList["EasyHideAdvancedIns"]).ValueString=="0";
-			checkInsurance.Checked=!PrefC.GetBool("EasyHideInsurance");
-			checkClinical.Checked=((Pref)PrefC.HList["EasyHideClinical"]).ValueString=="0";
-			checkBasicModules.Checked=((Pref)PrefC.HList["EasyBasicModules"]).ValueString=="1";
-			checkNoClinics.Checked=!PrefC.GetBool("EasyNoClinics");
-			checkRepeatCharges.Checked=!PrefC.GetBool("EasyHideRepeatCharges");
-			checkMedicalIns.Checked=PrefC.GetBool("ShowFeatureMedicalInsurance");
+			checkCapitation.Checked=!PrefC.GetBool(PrefName.EasyHideCapitation);
+			checkMedicaid.Checked=!PrefC.GetBool(PrefName.EasyHideMedicaid);
+			checkPublicHealth.Checked=!PrefC.GetBool(PrefName.EasyHidePublicHealth);
+			checkDentalSchools.Checked=!PrefC.GetBool(PrefName.EasyHideDentalSchools);
+			checkHospitals.Checked=!PrefC.GetBool(PrefName.EasyHideHospitals);
+			checkAdvancedIns.Checked=!PrefC.GetBool(PrefName.EasyHideAdvancedIns);
+			checkInsurance.Checked=!PrefC.GetBool(PrefName.EasyHideInsurance);
+			checkClinical.Checked=!PrefC.GetBool(PrefName.EasyHideClinical);
+			checkBasicModules.Checked=PrefC.GetBool(PrefName.EasyBasicModules);
+			checkNoClinics.Checked=!PrefC.GetBool(PrefName.EasyNoClinics);
+			checkRepeatCharges.Checked=!PrefC.GetBool(PrefName.EasyHideRepeatCharges);
+			checkMedicalIns.Checked=PrefC.GetBool(PrefName.ShowFeatureMedicalInsurance);
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
-			Prefs.UpdateBool("EasyHideCapitation",!checkCapitation.Checked);
+			Prefs.UpdateBool(PrefName.EasyHideCapitation,!checkCapitation.Checked);
 			
-			Prefs.UpdateBool("EasyHideMedicaid",!checkMedicaid.Checked);
+			Prefs.UpdateBool(PrefName.EasyHideMedicaid,!checkMedicaid.Checked);
 			
-			Prefs.UpdateBool("EasyHidePublicHealth",!checkPublicHealth.Checked);
+			Prefs.UpdateBool(PrefName.EasyHidePublicHealth,!checkPublicHealth.Checked);
 
-			Prefs.UpdateBool("EasyHideDentalSchools",!checkDentalSchools.Checked);
+			Prefs.UpdateBool(PrefName.EasyHideDentalSchools,!checkDentalSchools.Checked);
 
-			Prefs.UpdateBool("EasyHideHospitals",!checkHospitals.Checked);
+			Prefs.UpdateBool(PrefName.EasyHideHospitals,!checkHospitals.Checked);
 
-			Prefs.UpdateBool("EasyHideAdvancedIns",!checkAdvancedIns.Checked);
+			Prefs.UpdateBool(PrefName.EasyHideAdvancedIns,!checkAdvancedIns.Checked);
 
-			Prefs.UpdateBool("EasyHideInsurance",!checkInsurance.Checked);
+			Prefs.UpdateBool(PrefName.EasyHideInsurance,!checkInsurance.Checked);
 			
-			Prefs.UpdateBool("EasyHideClinical",!checkClinical.Checked);
+			Prefs.UpdateBool(PrefName.EasyHideClinical,!checkClinical.Checked);
 			
-			Prefs.UpdateBool("EasyBasicModules",checkBasicModules.Checked);
+			Prefs.UpdateBool(PrefName.EasyBasicModules,checkBasicModules.Checked);
 
-			Prefs.UpdateBool("EasyNoClinics",!checkNoClinics.Checked);
+			Prefs.UpdateBool(PrefName.EasyNoClinics,!checkNoClinics.Checked);
 
-			Prefs.UpdateBool("EasyHideRepeatCharges",!checkRepeatCharges.Checked);
+			Prefs.UpdateBool(PrefName.EasyHideRepeatCharges,!checkRepeatCharges.Checked);
 
-			Prefs.UpdateBool("ShowFeatureMedicalInsurance",checkMedicalIns.Checked);
+			Prefs.UpdateBool(PrefName.ShowFeatureMedicalInsurance,checkMedicalIns.Checked);
 
 			DataValid.SetInvalid(InvalidType.Prefs);
 			DialogResult=DialogResult.OK;

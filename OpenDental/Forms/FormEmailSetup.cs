@@ -278,26 +278,26 @@ namespace OpenDental{
 			if(!Security.IsAuthorized(Permissions.SecurityAdmin,true)){
 				textPassword.PasswordChar='*';
 			}
-			textSMTPserver.Text=((Pref)PrefC.HList["EmailSMTPserver"]).ValueString;
-			textUsername.Text=PrefC.GetString("EmailUsername");
-			textPassword.Text=PrefC.GetString("EmailPassword");
-			textPort.Text=PrefC.GetString("EmailPort");
-			checkSSL.Checked=PrefC.GetBool("EmailUseSSL");
-			textSender.Text=((Pref)PrefC.HList["EmailSenderAddress"]).ValueString;
+			textSMTPserver.Text=PrefC.GetString(PrefName.EmailSMTPserver);
+			textUsername.Text=PrefC.GetString(PrefName.EmailUsername);
+			textPassword.Text=PrefC.GetString(PrefName.EmailPassword);
+			textPort.Text=PrefC.GetString(PrefName.EmailPort);
+			checkSSL.Checked=PrefC.GetBool(PrefName.EmailUseSSL);
+			textSender.Text=PrefC.GetString(PrefName.EmailSenderAddress);
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
-			Prefs.UpdateString("EmailSMTPserver",textSMTPserver.Text);
-			Prefs.UpdateString("EmailUsername",textUsername.Text);
-			Prefs.UpdateString("EmailPassword",textPassword.Text);
+			Prefs.UpdateString(PrefName.EmailSMTPserver,textSMTPserver.Text);
+			Prefs.UpdateString(PrefName.EmailUsername,textUsername.Text);
+			Prefs.UpdateString(PrefName.EmailPassword,textPassword.Text);
 			try{
-				Prefs.UpdateInt("EmailPort",PIn.PLong(textPort.Text));
+				Prefs.UpdateLong(PrefName.EmailPort,PIn.PLong(textPort.Text));
 			}
 			catch{
 				MsgBox.Show(this,"invalid port number.");
 			}
-			Prefs.UpdateBool("EmailUseSSL",checkSSL.Checked);
-			Prefs.UpdateString("EmailSenderAddress",textSender.Text);
+			Prefs.UpdateBool(PrefName.EmailUseSSL,checkSSL.Checked);
+			Prefs.UpdateString(PrefName.EmailSenderAddress,textSender.Text);
 			DataValid.SetInvalid(InvalidType.Prefs);
 			DialogResult=DialogResult.OK;
 		}

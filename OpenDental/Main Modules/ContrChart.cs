@@ -3031,8 +3031,8 @@ namespace OpenDental{
 
 		///<summary>Called every time prefs are changed from any workstation.</summary>
 		public void InitializeLocalData(){
-			butAddKey.Visible=PrefC.GetBool("DistributorKey");
-			butForeignKey.Visible=PrefC.GetBool("DistributorKey");
+			butAddKey.Visible=PrefC.GetBool(PrefName.DistributorKey);
+			butForeignKey.Visible=PrefC.GetBool(PrefName.DistributorKey);
 			ComputerPref computerPref=ComputerPrefs.GetForLocalComputer();
 			toothChart.UseHardware=computerPref.GraphicsUseHardware;
 			toothChart.PreferredPixelFormatNumber=computerPref.PreferredPixelFormatNum;
@@ -3044,7 +3044,7 @@ namespace OpenDental{
 			if(PatCur!=null){
 				FillToothChart(true);
 			}
-			if(PrefC.GetBoolSilent("ChartQuickAddHideAmalgam",true)){
+			if(PrefC.GetBoolSilent(PrefName.ChartQuickAddHideAmalgam,true)){
 				panelQuickPasteAmalgam.Visible=false;
 			}
 			else{
@@ -3177,7 +3177,7 @@ namespace OpenDental{
 				butAddKey.Enabled=true;
 				butForeignKey.Enabled=true;
 				if(PrevPtNum != PatCur.PatNum) {//reset to TP status on every new patient selected
-					if(PrefC.GetBool("AutoResetTPEntryStatus")) {
+					if(PrefC.GetBool(PrefName.AutoResetTPEntryStatus)) {
 						radioEntryTP.Select();
 					}
 					PrevPtNum = PatCur.PatNum;
@@ -3193,7 +3193,7 @@ namespace OpenDental{
 		}
 
 		private void EasyHideClinicalData(){
-			if(((Pref)PrefC.HList["EasyHideClinical"]).ValueString=="1"){
+			if(PrefC.GetBool(PrefName.EasyHideClinical)){
 				gridPtInfo.Visible=false;
 				checkShowE.Visible=false;
 				checkShowR.Visible=false;
@@ -3546,7 +3546,7 @@ namespace OpenDental{
 			row.Tag=null;
 			gridPtInfo.Rows.Add(row);
 			//Registration keys-------------------------------------------------------------------------------------------
-			if(PrefC.GetBool("DistributorKey")){
+			if(PrefC.GetBool(PrefName.DistributorKey)){
 				RegistrationKey[] keys=RegistrationKeys.GetForPatient(PatCur.PatNum);
 				for(int i=0;i<keys.Length;i++) {
 					row=new ODGridRow();
@@ -6317,7 +6317,7 @@ namespace OpenDental{
 
 		private void gridProg_MouseUp(object sender,MouseEventArgs e) {
 			if(e.Button==MouseButtons.Right) {
-				if(PrefC.GetBool("EasyHideHospitals")){
+				if(PrefC.GetBool(PrefName.EasyHideHospitals)){
 					menuItemPrintDay.Visible=false;
 				}
 				else{
@@ -6436,7 +6436,7 @@ namespace OpenDental{
 				return;
 			}
 			//Multiple procedures------------------------------------------------------------------------------------------------------
-			if(!PrefC.GetBool("AllowSettingProcsComplete")){
+			if(!PrefC.GetBool(PrefName.AllowSettingProcsComplete)){
 				MsgBox.Show(this,"Only single appointments may be set complete.  If you want to be able to set procedures complete, you must turn on that option in Setup Modules.");
 				return;
 			}
@@ -6503,7 +6503,7 @@ namespace OpenDental{
 				}
 				else {
 					procCur.ProcDate=PIn.PDate(textDate.Text);
-					procCur.PlaceService=(PlaceOfService)PrefC.GetInt("DefaultProcedurePlaceService");
+					procCur.PlaceService=(PlaceOfService)PrefC.GetLong(PrefName.DefaultProcedurePlaceService);
 				}
 				procCur.SiteNum=PatCur.SiteNum;
 				Procedures.SetDateFirstVisit(procCur.ProcDate,2,PatCur);

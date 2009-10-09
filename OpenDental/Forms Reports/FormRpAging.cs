@@ -307,11 +307,11 @@ namespace OpenDental{
 		#endregion
 
 		private void FormAging_Load(object sender, System.EventArgs e) {
-			DateTime lastAgingDate=PrefC.GetDate("DateLastAging");
+			DateTime lastAgingDate=PrefC.GetDate(PrefName.DateLastAging);
 			if(lastAgingDate.Year<1880) {
 				textDate.Text="";
 			}
-			else if(PrefC.GetBool("AgingCalculatedMonthlyInsteadOfDaily")){
+			else if(PrefC.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily)){
 				textDate.Text=lastAgingDate.ToShortDateString();
 			}
 			else{
@@ -449,11 +449,11 @@ namespace OpenDental{
 			//Recompute aging in a non-historical way, so that the numbers are returned to the way they
 			//are normally used in other parts of the program.
 			Ledgers.RunAging();
-			//if(Prefs.UpdateString("DateLastAging",POut.PDate(asOfDate,false))) {
+			//if(Prefs.UpdateString(PrefName.DateLastAging",POut.PDate(asOfDate,false))) {
 			//	DataValid.SetInvalid(InvalidType.Prefs);
 			//}
 			report.Title="AGING REPORT";
-			report.SubTitle.Add(((Pref)PrefC.HList["PracticeTitle"]).ValueString);
+			report.SubTitle.Add(PrefC.GetString(PrefName.PracticeTitle));
 			report.SubTitle.Add("As of "+textDate.Text);
 			if(radioAny.Checked){
 				report.SubTitle.Add("Any Balance");

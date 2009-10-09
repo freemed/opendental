@@ -100,31 +100,31 @@ namespace OpenDentBusiness
 			strb.AppendLine(Sout(billProv.SSN,30)+"~");//REF02: ID 
 			//2100B N3: Information Receiver Address
 			seg++;
-			if(PrefC.GetBool("UseBillingAddressOnClaims")) {
-				strb.Append("N3*"+Sout(PrefC.GetString("PracticeBillingAddress"),55));//N301: Address
+			if(PrefC.GetBool(PrefName.UseBillingAddressOnClaims)) {
+				strb.Append("N3*"+Sout(PrefC.GetString(PrefName.PracticeBillingAddress),55));//N301: Address
 			}
 			else if(clinic==null) {
-				strb.Append("N3*"+Sout(PrefC.GetString("PracticeAddress"),55));//N301: Address
+				strb.Append("N3*"+Sout(PrefC.GetString(PrefName.PracticeAddress),55));//N301: Address
 			}
 			else {
 				strb.Append("N3*"+Sout(clinic.Address,55));//N301: Address
 			}
-			if(PrefC.GetBool("UseBillingAddressOnClaims")) {
-				if(PrefC.GetString("PracticeBillingAddress2")=="") {
+			if(PrefC.GetBool(PrefName.UseBillingAddressOnClaims)) {
+				if(PrefC.GetString(PrefName.PracticeBillingAddress2)=="") {
 					strb.AppendLine("~");
 				}
 				else {
 					//N302: Address2. Optional.
-					strb.AppendLine("*"+Sout(PrefC.GetString("PracticeBillingAddress2"),55)+"~");
+					strb.AppendLine("*"+Sout(PrefC.GetString(PrefName.PracticeBillingAddress2),55)+"~");
 				}
 			}
 			else if(clinic==null) {
-				if(PrefC.GetString("PracticeAddress2")=="") {
+				if(PrefC.GetString(PrefName.PracticeAddress2)=="") {
 					strb.AppendLine("~");
 				}
 				else {
 					//N302: Address2. Optional.
-					strb.AppendLine("*"+Sout(PrefC.GetString("PracticeAddress2"),55)+"~");
+					strb.AppendLine("*"+Sout(PrefC.GetString(PrefName.PracticeAddress2),55)+"~");
 				}
 			}
 			else {
@@ -138,15 +138,15 @@ namespace OpenDentBusiness
 			}
 			//2100B N4: Information Receiver City/State/Zip
 			seg++;
-			if(PrefC.GetBool("UseBillingAddressOnClaims")) {
-				strb.AppendLine("N4*"+Sout(PrefC.GetString("PracticeBillingCity"),30)+"*"//N401: City
-					+Sout(PrefC.GetString("PracticeBillingST"),2)+"*"//N402: State
-					+Sout(PrefC.GetString("PracticeBillingZip").Replace("-",""),15)+"~");//N403: Zip
+			if(PrefC.GetBool(PrefName.UseBillingAddressOnClaims)) {
+				strb.AppendLine("N4*"+Sout(PrefC.GetString(PrefName.PracticeBillingCity),30)+"*"//N401: City
+					+Sout(PrefC.GetString(PrefName.PracticeBillingST),2)+"*"//N402: State
+					+Sout(PrefC.GetString(PrefName.PracticeBillingZip).Replace("-",""),15)+"~");//N403: Zip
 			}
 			else if(clinic==null) {
-				strb.AppendLine("N4*"+Sout(PrefC.GetString("PracticeCity"),30)+"*"//N401: City
-					+Sout(PrefC.GetString("PracticeST"),2)+"*"//N402: State
-					+Sout(PrefC.GetString("PracticeZip").Replace("-",""),15)+"~");//N403: Zip
+				strb.AppendLine("N4*"+Sout(PrefC.GetString(PrefName.PracticeCity),30)+"*"//N401: City
+					+Sout(PrefC.GetString(PrefName.PracticeST),2)+"*"//N402: State
+					+Sout(PrefC.GetString(PrefName.PracticeZip).Replace("-",""),15)+"~");//N403: Zip
 			}
 			else {
 				strb.AppendLine("N4*"+Sout(clinic.City,30)+"*"//N401: City

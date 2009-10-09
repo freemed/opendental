@@ -54,7 +54,7 @@ namespace OpenDentHL7 {
 				throw new ApplicationException("Connection to database failed.");
 			}
 			//check db version
-			string dbVersion=PrefC.GetString("ProgramVersion");
+			string dbVersion=PrefC.GetString(PrefName.ProgramVersion);
 			if(Application.ProductVersion.ToString() != dbVersion) {
 				throw new ApplicationException("Versions do not match.  Db version:"+dbVersion+".  Application version:"+Application.ProductVersion.ToString());
 			}

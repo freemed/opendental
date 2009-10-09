@@ -151,14 +151,14 @@ namespace OpenDental{
 		#endregion
 
 		private void FormAging_Load(object sender, System.EventArgs e) {
-			DateTime dateLastAging=PIn.PDate(PrefC.GetString("DateLastAging"));
+			DateTime dateLastAging=PIn.PDate(PrefC.GetString(PrefName.DateLastAging));
 			if(dateLastAging.Year<1880){
 				textDateLast.Text="";
 			}
 			else{
 				textDateLast.Text=dateLastAging.ToShortDateString();
 			}
-			if(PrefC.GetBool("AgingCalculatedMonthlyInsteadOfDaily")){
+			if(PrefC.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily)){
 				if(dateLastAging < DateTime.Today.AddDays(-15)) {
 					textDateCalc.Text=dateLastAging.AddMonths(1).ToShortDateString();
 				}
@@ -179,7 +179,7 @@ namespace OpenDental{
 			}
 			Cursor=Cursors.WaitCursor;
 			Ledgers.ComputeAging(0,PIn.PDate(textDateCalc.Text),false);
-			if(Prefs.UpdateString("DateLastAging",POut.PDate(PIn.PDate(textDateCalc.Text),false))){
+			if(Prefs.UpdateString(PrefName.DateLastAging,POut.PDate(PIn.PDate(textDateCalc.Text),false))){
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}
 			Cursor=Cursors.Default;

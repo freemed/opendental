@@ -118,14 +118,17 @@ namespace OpenDentBusiness {
 		}
 
 		#region old
+		///<summary>Always throws exception.</summary>
 		public static DataTable GetTableOld(string command) {
 			throw new ApplicationException("No queries allowed in the UI layer.");
 		}
 
+		///<summary>Always throws exception.</summary>
 		public static int NonQOld(string[] commands) {
 			throw new ApplicationException("No queries allowed in the UI layer.");
 		}
 
+		///<summary>Always throws exception.</summary>
 		public static int NonQOld(string command) {
 			throw new ApplicationException("No queries allowed in the UI layer.");
 		}

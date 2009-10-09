@@ -778,7 +778,7 @@ namespace OpenDentBusiness {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
 			string log="";
-			command="UPDATE claimproc SET ProvNum="+PrefC.GetString("PracticeDefaultProv")+" WHERE ProvNum=0";
+			command="UPDATE claimproc SET ProvNum="+PrefC.GetString(PrefName.PracticeDefaultProv)+" WHERE ProvNum=0";
 			int numberFixed=Db.NonQ32(command);
 			if(numberFixed>0 || verbose) {
 				log+=Lans.g("FormDatabaseMaintenance","ClaimProcs with missing provnums fixed: ")+numberFixed.ToString()+"\r\n";
@@ -952,7 +952,7 @@ namespace OpenDentBusiness {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
 			string log="";
-			command="UPDATE insplan SET ClaimFormNum="+POut.PLong(PrefC.GetInt("DefaultClaimForm"))
+			command="UPDATE insplan SET ClaimFormNum="+POut.PLong(PrefC.GetLong(PrefName.DefaultClaimForm))
 				+" WHERE ClaimFormNum=0";
 			int numberFixed=Db.NonQ32(command);
 			if(numberFixed>0 || verbose) {
@@ -1000,7 +1000,7 @@ namespace OpenDentBusiness {
 			string log="";
 			//previous versions of the program just dealt gracefully with missing provnum.
 			//From now on, we can assum priprov is not missing, making coding easier.
-			command=@"UPDATE patient SET PriProv="+PrefC.GetString("PracticeDefaultProv")+" WHERE PriProv=0";
+			command=@"UPDATE patient SET PriProv="+PrefC.GetString(PrefName.PracticeDefaultProv)+" WHERE PriProv=0";
 			int numberFixed=Db.NonQ32(command);
 			if(numberFixed>0 || verbose) {
 				log+=Lans.g("FormDatabaseMaintenance","Patient pri provs fixed: ")+numberFixed.ToString()+"\r\n";
@@ -1083,7 +1083,7 @@ namespace OpenDentBusiness {
 			}
 			string log="";
 			//I would rather set the provnum to that of the patient, but it's more complex.
-			command="UPDATE payplancharge SET ProvNum="+POut.PLong(PrefC.GetInt("PracticeDefaultProv"))
+			command="UPDATE payplancharge SET ProvNum="+POut.PLong(PrefC.GetLong(PrefName.PracticeDefaultProv))
 				+" WHERE ProvNum=0";
 			int numberFixed=Db.NonQ32(command);
 			if(numberFixed>0 || verbose) {
@@ -1147,7 +1147,7 @@ namespace OpenDentBusiness {
 			}
 			string log="";
 			//If the program locks up when trying to create a deposit slip, it's because someone removed the start date from the deposit edit window. Run this query to get back in.
-			DateTime date=PrefC.GetDate("DateDepositsStarted");
+			DateTime date=PrefC.GetDate(PrefName.DateDepositsStarted);
 			if(date<DateTime.Now.AddMonths(-1)) {
 				command="UPDATE preference SET ValueString="+POut.PDate(DateTime.Today.AddDays(-21))
 					+" WHERE PrefName='DateDepositsStarted'";
@@ -1287,7 +1287,7 @@ namespace OpenDentBusiness {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
 			string log="";
-			command="UPDATE procedurelog SET ProvNum="+PrefC.GetString("PracticeDefaultProv")+" WHERE ProvNum=0";
+			command="UPDATE procedurelog SET ProvNum="+PrefC.GetString(PrefName.PracticeDefaultProv)+" WHERE ProvNum=0";
 			int numberFixed=Db.NonQ32(command);
 			if(numberFixed>0 || verbose) {
 				log+=Lans.g("FormDatabaseMaintenance","Procedures with missing provnums fixed: ")+numberFixed.ToString()+"\r\n";

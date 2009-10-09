@@ -26,49 +26,49 @@ namespace OpenDental.Bridges {
 		public static void GeneratePracticeInfo(XmlWriter writer) {
 			writer.WriteProcessingInstruction("xml","version = \"1.0\" standalone=\"yes\"");
 			writer.WriteStartElement("EISStatementFile");
-			writer.WriteAttributeString("VendorID",PrefC.GetString("BillingElectVendorId"));
+			writer.WriteAttributeString("VendorID",PrefC.GetString(PrefName.BillingElectVendorId));
 			writer.WriteAttributeString("OutputFormat","StmOut_Blue6Col");
 			writer.WriteAttributeString("Version","2");
 			writer.WriteElementString("SubmitDate",DateTime.Today.ToString("yyyy-MM-dd"));
-			writer.WriteElementString("PrimarySubmitter",PrefC.GetString("BillingElectVendorPMSCode"));
+			writer.WriteElementString("PrimarySubmitter",PrefC.GetString(PrefName.BillingElectVendorPMSCode));
 			writer.WriteElementString("Transmitter","EHG");
 			writer.WriteStartElement("Practice");
-			writer.WriteAttributeString("AccountNumber",PrefC.GetString("BillingElectClientAcctNumber"));
+			writer.WriteAttributeString("AccountNumber",PrefC.GetString(PrefName.BillingElectClientAcctNumber));
 			//sender address----------------------------------------------------------
 			writer.WriteStartElement("SenderAddress");
-			writer.WriteElementString("Name",PrefC.GetString("PracticeTitle"));
-			writer.WriteElementString("Address1",PrefC.GetString("PracticeAddress"));
-			writer.WriteElementString("Address2",PrefC.GetString("PracticeAddress2"));
-			writer.WriteElementString("City",PrefC.GetString("PracticeCity"));
-			writer.WriteElementString("State",PrefC.GetString("PracticeST"));
-			writer.WriteElementString("Zip",PrefC.GetString("PracticeZip"));
-			writer.WriteElementString("Phone",PrefC.GetString("PracticePhone"));//enforced to be 10 digit fairly rigidly by the UI
+			writer.WriteElementString("Name",PrefC.GetString(PrefName.PracticeTitle));
+			writer.WriteElementString("Address1",PrefC.GetString(PrefName.PracticeAddress));
+			writer.WriteElementString("Address2",PrefC.GetString(PrefName.PracticeAddress2));
+			writer.WriteElementString("City",PrefC.GetString(PrefName.PracticeCity));
+			writer.WriteElementString("State",PrefC.GetString(PrefName.PracticeST));
+			writer.WriteElementString("Zip",PrefC.GetString(PrefName.PracticeZip));
+			writer.WriteElementString("Phone",PrefC.GetString(PrefName.PracticePhone));//enforced to be 10 digit fairly rigidly by the UI
 			writer.WriteEndElement();//senderAddress
 			//remit address----------------------------------------------------------
 			writer.WriteStartElement("RemitAddress");
-			writer.WriteElementString("Name",PrefC.GetString("PracticeTitle"));
-			if(PrefC.GetString("PracticeBillingAddress")=="") {//same as sender address
-				writer.WriteElementString("Address1",PrefC.GetString("PracticeAddress"));
-				writer.WriteElementString("Address2",PrefC.GetString("PracticeAddress2"));
-				writer.WriteElementString("City",PrefC.GetString("PracticeCity"));
-				writer.WriteElementString("State",PrefC.GetString("PracticeST"));
-				writer.WriteElementString("Zip",PrefC.GetString("PracticeZip"));
+			writer.WriteElementString("Name",PrefC.GetString(PrefName.PracticeTitle));
+			if(PrefC.GetString(PrefName.PracticeBillingAddress)=="") {//same as sender address
+				writer.WriteElementString("Address1",PrefC.GetString(PrefName.PracticeAddress));
+				writer.WriteElementString("Address2",PrefC.GetString(PrefName.PracticeAddress2));
+				writer.WriteElementString("City",PrefC.GetString(PrefName.PracticeCity));
+				writer.WriteElementString("State",PrefC.GetString(PrefName.PracticeST));
+				writer.WriteElementString("Zip",PrefC.GetString(PrefName.PracticeZip));
 			}
 			else {
-				writer.WriteElementString("Address1",PrefC.GetString("PracticeBillingAddress"));
-				writer.WriteElementString("Address2",PrefC.GetString("PracticeBillingAddress2"));
-				writer.WriteElementString("City",PrefC.GetString("PracticeBillingCity"));
-				writer.WriteElementString("State",PrefC.GetString("PracticeBillingST"));
-				writer.WriteElementString("Zip",PrefC.GetString("PracticeBillingZip"));				
+				writer.WriteElementString("Address1",PrefC.GetString(PrefName.PracticeBillingAddress));
+				writer.WriteElementString("Address2",PrefC.GetString(PrefName.PracticeBillingAddress2));
+				writer.WriteElementString("City",PrefC.GetString(PrefName.PracticeBillingCity));
+				writer.WriteElementString("State",PrefC.GetString(PrefName.PracticeBillingST));
+				writer.WriteElementString("Zip",PrefC.GetString(PrefName.PracticeBillingZip));				
 			}
-			writer.WriteElementString("Phone",PrefC.GetString("PracticePhone"));//phone is same in either case
+			writer.WriteElementString("Phone",PrefC.GetString(PrefName.PracticePhone));//phone is same in either case
 			writer.WriteEndElement();//remitAddress
 			//Rendering provider------------------------------------------------------
-			Provider prov=Providers.GetProv(PrefC.GetInt("PracticeDefaultProv"));
+			Provider prov=Providers.GetProv(PrefC.GetLong(PrefName.PracticeDefaultProv));
 			writer.WriteStartElement("RenderingProvider");
 			writer.WriteElementString("Name",prov.GetFormalName());
 			writer.WriteElementString("LicenseNumber",prov.StateLicense);
-			writer.WriteElementString("State",PrefC.GetString("PracticeST"));
+			writer.WriteElementString("State",PrefC.GetString(PrefName.PracticeST));
 			writer.WriteEndElement();//Rendering provider
 		}
 
@@ -76,7 +76,7 @@ namespace OpenDental.Bridges {
 		public static void GenerateOneStatement(XmlWriter writer,Statement stmt,Patient pat,Family fam,DataSet dataSet){
 			writer.WriteStartElement("EisStatement");
 			writer.WriteAttributeString("OutputFormat","StmOut_Blue6Col");
-			writer.WriteAttributeString("CreditCardChoice",PrefC.GetString("BillingElectCreditCardChoices"));
+			writer.WriteAttributeString("CreditCardChoice",PrefC.GetString(PrefName.BillingElectCreditCardChoices));
 			writer.WriteStartElement("Patient");
 			Patient guar=fam.ListPats[0];
 			writer.WriteElementString("Name",guar.GetNameFLFormal());
@@ -96,11 +96,11 @@ namespace OpenDental.Bridges {
 				writer.WriteElementString("PriorStatementDate",stmt.DateRangeFrom.AddDays(-1).ToString("MM/dd/yyyy"));
 			}
 			DateTime dueDate;
-			if(PrefC.GetInt("StatementsCalcDueDate")==-1){
+			if(PrefC.GetLong(PrefName.StatementsCalcDueDate)==-1){
 				dueDate=DateTime.Today.AddDays(10);
 			}
 			else{
-				dueDate=DateTime.Today.AddDays(PrefC.GetInt("StatementsCalcDueDate"));
+				dueDate=DateTime.Today.AddDays(PrefC.GetLong(PrefName.StatementsCalcDueDate));
 			}
 			writer.WriteElementString("DueDate",dueDate.ToString("MM/dd/yyyy"));
 			writer.WriteElementString("StatementDate",stmt.DateSent.ToString("MM/dd/yyyy"));
@@ -139,7 +139,7 @@ namespace OpenDental.Bridges {
 					amountDue+=PIn.PDouble(dataSet.Tables["misc"].Rows[m]["value"].ToString());
 				}
 			}
-			if(PrefC.GetBool("BalancesDontSubtractIns")) {
+			if(PrefC.GetBool(PrefName.BalancesDontSubtractIns)) {
 				writer.WriteElementString("EstInsPayments","");//optional.
 				writer.WriteElementString("PatientShare",amountDue.ToString("F2"));
 				//this is ambiguous.  It seems to be AmountDue, but it could possibly be 0-30 days aging
@@ -301,8 +301,8 @@ namespace OpenDental.Bridges {
 				+"&Source=STM"//CONSTANT; file format
 				+"&UploaderName=OpenDental"//CONSTANT
 				+"&UploaderVersion="+myVersion.Major.ToString()+"."+myVersion.Minor.ToString()//eg 3.4
-				+"&Username="+PrefC.GetString("BillingElectUserName")
-				+"&Password="+PrefC.GetString("BillingElectPassword");
+				+"&Username="+PrefC.GetString(PrefName.BillingElectUserName)
+				+"&Password="+PrefC.GetString(PrefName.BillingElectPassword);
 			webReq.KeepAlive=false;
 			webReq.Method="POST";
 			webReq.ContentType="application/x-www-form-urlencoded";

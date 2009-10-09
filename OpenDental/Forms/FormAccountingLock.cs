@@ -126,8 +126,8 @@ namespace OpenDental{
 		#endregion
 
 		private void FormAccountingLock_Load(object sender,EventArgs e) {
-			if(PrefC.GetDate("AccountingLockDate").Year>1880){
-				textDate.Text=PrefC.GetDate("AccountingLockDate").ToShortDateString();
+			if(PrefC.GetDate(PrefName.AccountingLockDate).Year>1880){
+				textDate.Text=PrefC.GetDate(PrefName.AccountingLockDate).ToShortDateString();
 			}
 		}
 
@@ -136,7 +136,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please fix error first.");
 				return;
 			}
-			if(Prefs.UpdateString("AccountingLockDate",POut.PDate(PIn.PDate(textDate.Text),false))){
+			if(Prefs.UpdateString(PrefName.AccountingLockDate,POut.PDate(PIn.PDate(textDate.Text),false))){
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}
 			DialogResult=DialogResult.OK;

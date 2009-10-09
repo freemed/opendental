@@ -112,7 +112,7 @@ namespace OpenDental {
 			using(XmlWriter writer=XmlWriter.Create(strbuild,settings)){
 				writer.WriteStartElement("FeatureRequestGetOne");
 				writer.WriteStartElement("RegistrationKey");
-				writer.WriteString(PrefC.GetString("RegistrationKey"));
+				writer.WriteString(PrefC.GetString(PrefName.RegistrationKey));
 				writer.WriteEndElement();
 				writer.WriteStartElement("RequestId");
 				writer.WriteString(RequestId.ToString());
@@ -123,7 +123,7 @@ namespace OpenDental {
 				OpenDental.localhost.Service1 updateService=new OpenDental.localhost.Service1();
 			#else
 				OpenDental.customerUpdates.Service1 updateService=new OpenDental.customerUpdates.Service1();
-				updateService.Url=PrefC.GetString("UpdateServerAddress");
+				updateService.Url=PrefC.GetString(PrefName.UpdateServerAddress");
 			#endif
 			//Send the message and get the result-------------------------------------------------------------------------------------
 			string result="";
@@ -311,7 +311,7 @@ namespace OpenDental {
 			using(XmlWriter writer=XmlWriter.Create(strbuild,settings)){
 				writer.WriteStartElement("FeatureRequestDiscussGetList");
 				writer.WriteStartElement("RegistrationKey");
-				writer.WriteString(PrefC.GetString("RegistrationKey"));
+				writer.WriteString(PrefC.GetString(PrefName.RegistrationKey));
 				writer.WriteEndElement();
 				writer.WriteStartElement("RequestId");
 				writer.WriteString(RequestId.ToString());
@@ -322,7 +322,7 @@ namespace OpenDental {
 				OpenDental.localhost.Service1 updateService=new OpenDental.localhost.Service1();
 			#else
 				OpenDental.customerUpdates.Service1 updateService=new OpenDental.customerUpdates.Service1();
-				updateService.Url=PrefC.GetString("UpdateServerAddress");
+				updateService.Url=PrefC.GetString(PrefName.UpdateServerAddress");
 			#endif
 			//Send the message and get the result-------------------------------------------------------------------------------------
 			string result="";
@@ -378,7 +378,7 @@ namespace OpenDental {
 				writer.WriteStartElement("FeatureRequestDiscussSubmit");
 				//regkey
 				writer.WriteStartElement("RegistrationKey");
-				writer.WriteString(PrefC.GetString("RegistrationKey"));
+				writer.WriteString(PrefC.GetString(PrefName.RegistrationKey));
 				writer.WriteEndElement();
 				//DiscussId
 				//writer.WriteStartElement("DiscussId");
@@ -406,7 +406,7 @@ namespace OpenDental {
 				OpenDental.localhost.Service1 updateService=new OpenDental.localhost.Service1();
 			#else
 				OpenDental.customerUpdates.Service1 updateService=new OpenDental.customerUpdates.Service1();
-				updateService.Url=PrefC.GetString("UpdateServerAddress");
+				updateService.Url=PrefC.GetString(PrefName.UpdateServerAddress");
 			#endif
 			//Send the message and get the result-------------------------------------------------------------------------------------
 			string result="";
@@ -557,7 +557,7 @@ namespace OpenDental {
 				writer.WriteStartElement("FeatureRequestSubmitChanges");
 				//regkey
 				writer.WriteStartElement("RegistrationKey");
-				writer.WriteString(PrefC.GetString("RegistrationKey"));
+				writer.WriteString(PrefC.GetString(PrefName.RegistrationKey));
 				writer.WriteEndElement();
 				//requestId
 				writer.WriteStartElement("RequestId");
@@ -620,7 +620,7 @@ namespace OpenDental {
 				OpenDental.localhost.Service1 updateService=new OpenDental.localhost.Service1();
 			#else
 				OpenDental.customerUpdates.Service1 updateService=new OpenDental.customerUpdates.Service1();
-				updateService.Url=PrefC.GetString("UpdateServerAddress");
+				updateService.Url=PrefC.GetString(PrefName.UpdateServerAddress");
 			#endif
 			//Send the message and get the result-------------------------------------------------------------------------------------
 			string result="";

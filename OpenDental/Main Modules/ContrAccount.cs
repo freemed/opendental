@@ -1322,7 +1322,7 @@ namespace OpenDental {
 				panelSplitter.Top=300;//start the splitter higher for recall window.
 			}
 			LayoutPanels();
-			checkShowFamilyComm.Checked=PrefC.GetBoolSilent("ShowAccountFamilyCommEntries",true);
+			checkShowFamilyComm.Checked=PrefC.GetBoolSilent(PrefName.ShowAccountFamilyCommEntries,true);
 			Plugins.HookAddCode(this,"ContrAccount.InitializeOnStartup_end");
 		}
 
@@ -1345,7 +1345,7 @@ namespace OpenDental {
 			ToolBarMain.Buttons.Add(button);
 			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Payment Plan"),-1,"","PayPlan"));
-			if(!PrefC.GetBool("EasyHideRepeatCharges")) {
+			if(!PrefC.GetBool(PrefName.EasyHideRepeatCharges)) {
 				button=new ODToolBarButton(Lan.g(this,"Repeating Charge"),-1,"","RepeatCharge");
 				button.Style=ODToolBarButtonStyle.DropDownButton;
 				button.DropDownMenu=contextMenuRepeat;
@@ -1370,7 +1370,7 @@ namespace OpenDental {
 		}
 
 		private void ContrAccount_Resize(object sender,EventArgs e) {
-			if(PrefC.HList==null){
+			if(PrefC.HListIsNull()){
 				return;//helps on startup.
 			}
 			LayoutPanels();
@@ -1394,7 +1394,7 @@ namespace OpenDental {
 			panelInsInfoDetail.Top = panelBoldBalance.Top + panelBoldBalance.Height;
 			panelInsInfoDetail.Left = panelBoldBalance.Left + panelBoldBalance.Width - panelInsInfoDetail.Width;*/
 			int left=textUrgFinNote.Left;//769;
-			if(PrefC.GetBoolSilent("StoreCCnumbers",false)){
+			if(PrefC.GetBoolSilent(PrefName.StoreCCnumbers,false)){
 				panelCC.Visible=true;
 				panelCC.Location=new Point(left,textUrgFinNote.Bottom);
 				gridAcctPat.Location=new Point(left,panelCC.Bottom);
@@ -1485,7 +1485,7 @@ namespace OpenDental {
 				}
 			}
 			bool viewingInRecall=ViewingInRecall;
-			if(PrefC.GetBool("FuchsOptionsOn")) {
+			if(PrefC.GetBool(PrefName.FuchsOptionsOn)) {
 				panelTotalOwes.Top=-38;
 				viewingInRecall=true;
 			}
@@ -1530,10 +1530,10 @@ namespace OpenDental {
 			FillPaymentPlans();//2.
 			FillMain();//3.
 			LayoutPanels();
-			if(ViewingInRecall || PrefC.GetBoolSilent("FuchsOptionsOn",false)) {
+			if(ViewingInRecall || PrefC.GetBoolSilent(PrefName.FuchsOptionsOn,false)) {
 				panelProgNotes.Visible = true;
 				FillProgNotes();
-				if(PrefC.GetBool("FuchsOptionsOn") && PatCur!=null){//show prog note options
+				if(PrefC.GetBool(PrefName.FuchsOptionsOn) && PatCur!=null){//show prog note options
 					groupBox6.Visible = true;
 					groupBox7.Visible = true;
 					butShowAll.Visible = true;
@@ -1611,7 +1611,7 @@ namespace OpenDental {
 				textFinNotes.ScrollToCaret();
 				textUrgFinNote.SelectionStart=0;
 				textUrgFinNote.ScrollToCaret();
-				if(PrefC.GetBool("StoreCCnumbers")) {
+				if(PrefC.GetBool(PrefName.StoreCCnumbers)) {
 					string cc=PatientNoteCur.CCNumber;
 					if(Regex.IsMatch(cc,@"^\d{16}$")){
 						textCC.Text=cc.Substring(0,4)+"-"+cc.Substring(4,4)+"-"+cc.Substring(8,4)+"-"+cc.Substring(12,4);
@@ -1675,7 +1675,7 @@ namespace OpenDental {
 				//In the new way of doing it, they are all visible and calculated identically,
 				//but the emphasis simply changes by slight renaming of labels
 				//and by font size changes.
-				if(PrefC.GetBool("BalancesDontSubtractIns")){
+				if(PrefC.GetBool(PrefName.BalancesDontSubtractIns)){
 					labelTotal.Text=Lan.g(this,"Balance");
 					labelTotalAmt.Font=fontBold;
 					labelTotalAmt.ForeColor=Color.Firebrick;
@@ -1694,7 +1694,7 @@ namespace OpenDental {
 					labelBalance.Text=Lan.g(this,"=Est Bal");
 					labelBalanceAmt.Font=fontBold;
 					labelBalanceAmt.ForeColor=Color.Firebrick;
-					if(PrefC.GetBool("FuchsOptionsOn")){
+					if(PrefC.GetBool(PrefName.FuchsOptionsOn)){
 						labelTotal.Text=Lan.g(this,"Balance");
 						labelBalance.Text=Lan.g(this,"=Owed Now");
 						labelTotalAmt.Font = fontBold;
@@ -1836,7 +1836,7 @@ namespace OpenDental {
 				PPDueTotal += (Convert.ToDouble((table.Rows[i]["due"]).ToString()));
 			}
 			gridPayPlan.EndUpdate();
-			if(PrefC.GetBool("FuchsOptionsOn")) {
+			if(PrefC.GetBool(PrefName.FuchsOptionsOn)) {
 				panelTotalOwes.Top=1;
 				labelTotalPtOwes.Text=(PPBalanceTotal + FamCur.ListPats[0].BalTotal -FamCur.ListPats[0].InsEst).ToString("F");
 			}
@@ -2706,10 +2706,10 @@ namespace OpenDental {
 			stmt.SinglePatient=false;
 			stmt.Intermingled=false;
 			stmt.DateRangeFrom=DateTime.MinValue;
-			if (PrefC.GetBool("IntermingleFamilyDefault")){
+			if (PrefC.GetBool(PrefName.IntermingleFamilyDefault)){
 				stmt.Intermingled = true;
 			}
-			if (PrefC.GetBool("FuchsOptionsOn")){
+			if (PrefC.GetBool(PrefName.FuchsOptionsOn)){
 				stmt.DateRangeFrom = PIn.PDate(DateTime.Today.AddDays(-45).ToShortDateString());
 				stmt.DateRangeTo = PIn.PDate(DateTime.Today.ToShortDateString());
 			} 
@@ -2741,7 +2741,7 @@ namespace OpenDental {
 			stmt.HidePayment=true;
 			stmt.SinglePatient=true;
 			stmt.Intermingled=false;
-			if(PrefC.GetBool("IntermingleFamilyDefault")) {
+			if(PrefC.GetBool(PrefName.IntermingleFamilyDefault)) {
 				stmt.Intermingled = true;
 				stmt.SinglePatient=false;
 			}
@@ -2762,7 +2762,7 @@ namespace OpenDental {
 			stmt.HidePayment=false;
 			stmt.SinglePatient=false;
 			stmt.Intermingled = false;
-			if (PrefC.GetBool("IntermingleFamilyDefault"))
+			if (PrefC.GetBool(PrefName.IntermingleFamilyDefault))
 			{
 				stmt.Intermingled=true;
 			}
@@ -2792,7 +2792,7 @@ namespace OpenDental {
 			stmt.Mode_=StatementMode.InPerson;
 			stmt.HidePayment=false;
 			stmt.SinglePatient=false;
-			if(PrefC.GetBool("IntermingleFamilyDefault")) {
+			if(PrefC.GetBool(PrefName.IntermingleFamilyDefault)) {
 				stmt.Intermingled=true;
 			}
 			else {
@@ -2805,7 +2805,7 @@ namespace OpenDental {
 					stmt.DateRangeFrom=PIn.PDate(textDateStart.Text);
 				}
 			}
-			if(PrefC.GetBool("FuchsOptionsOn")) {
+			if(PrefC.GetBool(PrefName.FuchsOptionsOn)) {
 				stmt.DateRangeFrom=DateTime.Today.AddDays(-90);
 			}
 			stmt.DateRangeTo=DateTime.Today;//Needed for payplan accuracy.//new DateTime(2200,1,1);
@@ -2846,7 +2846,7 @@ namespace OpenDental {
 				EmailMessage message=new EmailMessage();
 				message.PatNum=guar.PatNum;
 				message.ToAddress=guar.Email;
-				message.FromAddress=PrefC.GetString("EmailSenderAddress");
+				message.FromAddress=PrefC.GetString(PrefName.EmailSenderAddress);
 				message.Subject=Lan.g(this,"Statement");
 				//message.BodyText=Lan.g(this,"");
 				EmailAttach attach=new EmailAttach();

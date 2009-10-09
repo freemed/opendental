@@ -546,7 +546,7 @@ namespace OpenDentBusiness{
 					retVal-=List[i].WriteOff;
 				}
 				else if(List[i].Status==ClaimProcStatus.NotReceived) {
-					if(!PrefC.GetBool("BalancesDontSubtractIns")) {//this typically happens
+					if(!PrefC.GetBool(PrefName.BalancesDontSubtractIns")) {//this typically happens
 						retVal-=List[i].InsPayEst;
 						retVal-=List[i].WriteOff;
 					}

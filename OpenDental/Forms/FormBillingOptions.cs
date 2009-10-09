@@ -593,12 +593,12 @@ namespace OpenDental{
 
 		private void FormBillingOptions_Load(object sender, System.EventArgs e) {
 			textLastStatement.Text=DateTime.Today.AddMonths(-1).ToShortDateString();
-			checkIncludeChanged.Checked=PrefC.GetBool("BillingIncludeChanged");
+			checkIncludeChanged.Checked=PrefC.GetBool(PrefName.BillingIncludeChanged);
 			comboAge.Items.Add(Lan.g(this,"Any Balance"));
 			comboAge.Items.Add(Lan.g(this,"Over 30 Days"));
 			comboAge.Items.Add(Lan.g(this,"Over 60 Days"));
 			comboAge.Items.Add(Lan.g(this,"Over 90 Days"));
-			switch(PrefC.GetString("BillingAgeOfAccount")){
+			switch(PrefC.GetString(PrefName.BillingAgeOfAccount)){
 				default:
 					comboAge.SelectedIndex=0;
 					break;
@@ -612,18 +612,18 @@ namespace OpenDental{
 					comboAge.SelectedIndex=3;
 					break;
 			}
-			checkBadAddress.Checked=PrefC.GetBool("BillingExcludeBadAddresses");
-			checkExcludeInactive.Checked=PrefC.GetBool("BillingExcludeInactive");
-			checkExcludeNegative.Checked=PrefC.GetBool("BillingExcludeNegative");
-			checkExcludeInsPending.Checked=PrefC.GetBool("BillingExcludeInsPending");
-			checkExcludeIfProcs.Checked=PrefC.GetBool("BillingExcludeIfUnsentProcs");
-			textExcludeLessThan.Text=PrefC.GetString("BillingExcludeLessThan");
-			checkIgnoreInPerson.Checked=PrefC.GetBool("BillingIgnoreInPerson");
+			checkBadAddress.Checked=PrefC.GetBool(PrefName.BillingExcludeBadAddresses);
+			checkExcludeInactive.Checked=PrefC.GetBool(PrefName.BillingExcludeInactive);
+			checkExcludeNegative.Checked=PrefC.GetBool(PrefName.BillingExcludeNegative);
+			checkExcludeInsPending.Checked=PrefC.GetBool(PrefName.BillingExcludeInsPending);
+			checkExcludeIfProcs.Checked=PrefC.GetBool(PrefName.BillingExcludeIfUnsentProcs);
+			textExcludeLessThan.Text=PrefC.GetString(PrefName.BillingExcludeLessThan);
+			checkIgnoreInPerson.Checked=PrefC.GetBool(PrefName.BillingIgnoreInPerson);
 			listBillType.Items.Add(Lan.g(this,"(all)"));
 			for(int i=0;i<DefC.Short[(int)DefCat.BillingTypes].Length;i++){
 				listBillType.Items.Add(DefC.Short[(int)DefCat.BillingTypes][i].ItemName);
 			}
-			string[] selectedBillTypes=PrefC.GetString("BillingSelectBillingTypes").Split(',');//might be blank
+			string[] selectedBillTypes=PrefC.GetString(PrefName.BillingSelectBillingTypes).Split(',');//might be blank
 			for(int i=0;i<selectedBillTypes.Length;i++){
 				try{
 					int order=DefC.GetOrder(DefCat.BillingTypes,Convert.ToInt32(selectedBillTypes[i]));
@@ -684,16 +684,16 @@ namespace OpenDental{
 			else if(comboAge.SelectedIndex==3){
 				ageOfAccount="90";
 			}
-			if(Prefs.UpdateBool("BillingIncludeChanged",checkIncludeChanged.Checked)
-				| Prefs.UpdateString("BillingSelectBillingTypes",selectedBillingTypes)
-				| Prefs.UpdateString("BillingAgeOfAccount",ageOfAccount)
-				| Prefs.UpdateBool("BillingExcludeBadAddresses",checkBadAddress.Checked)
-				| Prefs.UpdateBool("BillingExcludeInactive",checkExcludeInactive.Checked)
-				| Prefs.UpdateBool("BillingExcludeNegative",checkExcludeNegative.Checked)
-				| Prefs.UpdateBool("BillingExcludeInsPending",checkExcludeInsPending.Checked)
-				| Prefs.UpdateBool("BillingExcludeIfUnsentProcs",checkExcludeIfProcs.Checked)
-				| Prefs.UpdateString("BillingExcludeLessThan",textExcludeLessThan.Text)
-				| Prefs.UpdateBool("BillingIgnoreInPerson",checkIgnoreInPerson.Checked))
+			if(Prefs.UpdateBool(PrefName.BillingIncludeChanged,checkIncludeChanged.Checked)
+				| Prefs.UpdateString(PrefName.BillingSelectBillingTypes,selectedBillingTypes)
+				| Prefs.UpdateString(PrefName.BillingAgeOfAccount,ageOfAccount)
+				| Prefs.UpdateBool(PrefName.BillingExcludeBadAddresses,checkBadAddress.Checked)
+				| Prefs.UpdateBool(PrefName.BillingExcludeInactive,checkExcludeInactive.Checked)
+				| Prefs.UpdateBool(PrefName.BillingExcludeNegative,checkExcludeNegative.Checked)
+				| Prefs.UpdateBool(PrefName.BillingExcludeInsPending,checkExcludeInsPending.Checked)
+				| Prefs.UpdateBool(PrefName.BillingExcludeIfUnsentProcs,checkExcludeIfProcs.Checked)
+				| Prefs.UpdateString(PrefName.BillingExcludeLessThan,textExcludeLessThan.Text)
+				| Prefs.UpdateBool(PrefName.BillingIgnoreInPerson,checkIgnoreInPerson.Checked))
 			{
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}
@@ -776,10 +776,10 @@ namespace OpenDental{
 		}
 
 		private void SetDefaults(){
-			textDateStart.Text=DateTime.Today.AddDays(-PrefC.GetInt("BillingDefaultsLastDays")).ToShortDateString();
+			textDateStart.Text=DateTime.Today.AddDays(-PrefC.GetLong(PrefName.BillingDefaultsLastDays)).ToShortDateString();
 			textDateEnd.Text=DateTime.Today.ToShortDateString();
-			checkIntermingled.Checked=PrefC.GetBool("BillingDefaultsIntermingle");
-			textNote.Text=PrefC.GetString("BillingDefaultsNote");
+			checkIntermingled.Checked=PrefC.GetBool(PrefName.BillingDefaultsIntermingle);
+			textNote.Text=PrefC.GetString(PrefName.BillingDefaultsNote);
 		}
 
 		private void but30days_Click(object sender,EventArgs e) {
@@ -818,7 +818,7 @@ namespace OpenDental{
 				return;
 			}
 			Ledgers.RunAging();
-			if(PrefC.GetBool("AgingCalculatedMonthlyInsteadOfDaily") && PrefC.GetDate("DateLastAging") < DateTime.Today.AddDays(-15)) {
+			if(PrefC.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily) && PrefC.GetDate(PrefName.DateLastAging) < DateTime.Today.AddDays(-15)) {
 				MsgBox.Show(this,"Last aging date seems old, so you will now be given a chance to update it.  The billing process will continue whether or not aging gets updated.");
 				FormAging FormA=new FormAging();
 				FormA.ShowDialog();
@@ -869,7 +869,7 @@ namespace OpenDental{
 				stmt.HidePayment=false;
 				stmt.Intermingled=checkIntermingled.Checked;
 				stmt.IsSent=false;
-				if(PrefC.GetBool("BillingUseElectronic")) {
+				if(PrefC.GetBool(PrefName.BillingUseElectronic)) {
 					stmt.Mode_=StatementMode.Electronic;
 					stmt.Intermingled=true;
 				}

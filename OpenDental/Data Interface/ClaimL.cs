@@ -73,7 +73,7 @@ namespace OpenDental{
 				if(plan.ClaimsUseUCR) {//use UCR for the provider of the procedure
 					long provNum=ProcCur.ProvNum;
 					if(provNum==0) {//if no prov set, then use practice default.
-						provNum=PrefC.GetInt("PracticeDefaultProv");
+						provNum=PrefC.GetLong(PrefName.PracticeDefaultProv);
 					}
 					//get the fee based on code and prov fee sched
 					double feebilled=Fees.GetAmount0(ProcCur.CodeNum,ProviderC.ListLong[Providers.GetIndexLong(provNum)].FeeSched);

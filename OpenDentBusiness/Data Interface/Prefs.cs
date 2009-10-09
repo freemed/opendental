@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Reflection;
@@ -19,15 +20,17 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static void FillCache(DataTable table){
 			//No need to check RemotingRole; no call to db.
-			PrefC.HList=new Hashtable();
+			PrefC.Dict=new Dictionary<string,Pref>();
 			Pref pref;
+			//PrefName enumpn;
 			for(int i=0;i<table.Rows.Count;i++) {
 				pref=new Pref();
 				pref.PrefName=PIn.PString(table.Rows[i][0].ToString());
+				//enumpn=
 				pref.ValueString=PIn.PString(table.Rows[i][1].ToString());
 				//no need to load up the comments.  Especially since this will fail when user first runs version 5.8.
 					//pref.Comments=PIn.PString(table.Rows[i][2].ToString());
-				PrefC.HList.Add(pref.PrefName,pref);
+				PrefC.Dict.Add(pref.PrefName,pref);
 			}
 		}
 
@@ -45,17 +48,17 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Updates a pref of type int or long.  Returns true if a change was required, or false if no change needed.</summary>
-		public static bool UpdateInt(string prefName,long newValue) {
+		public static bool UpdateLong(PrefName prefName,long newValue) {
 			//Very unusual.  Involves cache, so Meth is used further down instead of here at the top.
-			if(!PrefC.HList.ContainsKey(prefName)) {
+			if(!PrefC.Dict.ContainsKey(prefName.ToString())) {
 				throw new ApplicationException(prefName+" is an invalid pref name.");
 			}
-			if(PrefC.GetInt(prefName)==newValue) {
+			if(PrefC.GetLong(prefName)==newValue) {
 				return false;//no change needed
 			}
 			string command= "UPDATE preference SET "
 				+"ValueString = '"+POut.PLong(newValue)+"' "
-				+"WHERE PrefName = '"+POut.PString(prefName)+"'";
+				+"WHERE PrefName = '"+POut.PString(prefName.ToString())+"'";
 			bool retVal=true;
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				retVal=Meth.GetBool(MethodBase.GetCurrentMethod(),prefName,newValue);
@@ -64,16 +67,16 @@ namespace OpenDentBusiness{
 				Db.NonQ(command);
 			}
 			Pref pref=new Pref();
-			pref.PrefName=prefName;
+			pref.PrefName=prefName.ToString();
 			pref.ValueString=newValue.ToString();
-			PrefC.HList[prefName]=pref;//in some cases, we just want to change the pref in local memory instead of doing a refresh afterwards.
+			PrefC.Dict[prefName.ToString()]=pref;//in some cases, we just want to change the pref in local memory instead of doing a refresh afterwards.
 			return retVal;
 		}
 
 		///<summary>Updates a pref of type double.  Returns true if a change was required, or false if no change needed.</summary>
-		public static bool UpdateDouble(string prefName,double newValue) {
+		public static bool UpdateDouble(PrefName prefName,double newValue) {
 			//Very unusual.  Involves cache, so Meth is used further down instead of here at the top.
-			if(!PrefC.HList.ContainsKey(prefName)) {
+			if(!PrefC.Dict.ContainsKey(prefName.ToString())) {
 				throw new ApplicationException(prefName+" is an invalid pref name.");
 			}
 			if(PrefC.GetDouble(prefName)==newValue) {
@@ -81,7 +84,7 @@ namespace OpenDentBusiness{
 			}
 			string command = "UPDATE preference SET "
 				+"ValueString = '"+POut.PDouble(newValue)+"' "
-				+"WHERE PrefName = '"+POut.PString(prefName)+"'";
+				+"WHERE PrefName = '"+POut.PString(prefName.ToString())+"'";
 			bool retVal=true;
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				retVal=Meth.GetBool(MethodBase.GetCurrentMethod(),prefName,newValue);
@@ -93,15 +96,15 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Returns true if a change was required, or false if no change needed.</summary>
-		public static bool UpdateBool(string prefName,bool newValue) {
+		public static bool UpdateBool(PrefName prefName,bool newValue) {
 			//No need to check RemotingRole; no call to db.
 			return UpdateBool(prefName,newValue,false);
 		}
 
 		///<summary>Returns true if a change was required, or false if no change needed.</summary>
-		public static bool UpdateBool(string prefName,bool newValue,bool isForced) {
+		public static bool UpdateBool(PrefName prefName,bool newValue,bool isForced) {
 			//Very unusual.  Involves cache, so Meth is used further down instead of here at the top.
-			if(!PrefC.HList.ContainsKey(prefName)) {
+			if(!PrefC.Dict.ContainsKey(prefName.ToString())) {
 				throw new ApplicationException(prefName+" is an invalid pref name.");
 			}
 			if(!isForced && PrefC.GetBool(prefName)==newValue) {
@@ -109,7 +112,7 @@ namespace OpenDentBusiness{
 			}
 			string command="UPDATE preference SET "
 				+"ValueString = '"+POut.PBool(newValue)+"' "
-				+"WHERE PrefName = '"+POut.PString(prefName)+"'";
+				+"WHERE PrefName = '"+POut.PString(prefName.ToString())+"'";
 			bool retVal=true;
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				retVal=Meth.GetBool(MethodBase.GetCurrentMethod(),prefName,newValue,isForced);
@@ -121,12 +124,38 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Returns true if a change was required, or false if no change needed.</summary>
-		public static bool UpdateString(string prefName,string newValue) {
+		public static bool UpdateString(PrefName prefName,string newValue) {
 			//Very unusual.  Involves cache, so Meth is used further down instead of here at the top.
-			if(!PrefC.HList.ContainsKey(prefName)) {
+			if(!PrefC.Dict.ContainsKey(prefName.ToString())) {
 				throw new ApplicationException(prefName+" is an invalid pref name.");
 			}
 			if(PrefC.GetString(prefName)==newValue) {
+				return false;//no change needed
+			}
+			string command = "UPDATE preference SET "
+				+"ValueString = '"+POut.PString(newValue)+"' "
+				+"WHERE PrefName = '"+POut.PString(prefName.ToString())+"'";
+			bool retVal=true;
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				retVal=Meth.GetBool(MethodBase.GetCurrentMethod(),prefName,newValue);
+			}
+			else {
+				Db.NonQ(command);
+			}
+			Pref pref=new Pref();
+			pref.PrefName=prefName.ToString();
+			pref.ValueString=newValue;
+			PrefC.Dict[prefName.ToString()]=pref;
+			return retVal;
+		}
+
+		///<summary>Used for prefs that are non-standard.  Especially by outside programmers. Returns true if a change was required, or false if no change needed.</summary>
+		public static bool UpdateRaw(string prefName,string newValue) {
+			//Very unusual.  Involves cache, so Meth is used further down instead of here at the top.
+			if(!PrefC.Dict.ContainsKey(prefName)) {
+				throw new ApplicationException(prefName+" is an invalid pref name.");
+			}
+			if(PrefC.GetRaw(prefName)==newValue) {
 				return false;//no change needed
 			}
 			string command = "UPDATE preference SET "
@@ -142,14 +171,14 @@ namespace OpenDentBusiness{
 			Pref pref=new Pref();
 			pref.PrefName=prefName;
 			pref.ValueString=newValue;
-			PrefC.HList[prefName]=pref;
+			PrefC.Dict[prefName]=pref;
 			return retVal;
 		}
 
 		///<summary>Returns true if a change was required, or false if no change needed.</summary>
-		public static bool UpdateDateT(string prefName,DateTime newValue) {
+		public static bool UpdateDateT(PrefName prefName,DateTime newValue) {
 			//Very unusual.  Involves cache, so Meth is used further down instead of here at the top.
-			if(!PrefC.HList.ContainsKey(prefName)) {
+			if(!PrefC.Dict.ContainsKey(prefName.ToString())) {
 				throw new ApplicationException(prefName+" is an invalid pref name.");
 			}
 			if(PrefC.GetDateT(prefName)==newValue) {
@@ -157,7 +186,7 @@ namespace OpenDentBusiness{
 			}
 			string command = "UPDATE preference SET "
 				+"ValueString = '"+POut.PDateT(newValue,false)+"' "
-				+"WHERE PrefName = '"+POut.PString(prefName)+"'";
+				+"WHERE PrefName = '"+POut.PString(prefName.ToString())+"'";
 			bool retVal=true;
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				retVal=Meth.GetBool(MethodBase.GetCurrentMethod(),prefName,newValue);
@@ -166,9 +195,9 @@ namespace OpenDentBusiness{
 				Db.NonQ(command);
 			}
 			Pref pref=new Pref();
-			pref.PrefName=prefName;
+			pref.PrefName=prefName.ToString();
 			pref.ValueString=POut.PDateT(newValue,false);
-			PrefC.HList[prefName]=pref;//in some cases, we just want to change the pref in local memory instead of doing a refresh afterwards.
+			PrefC.Dict[prefName.ToString()]=pref;//in some cases, we just want to change the pref in local memory instead of doing a refresh afterwards.
 			return retVal;
 		}
 

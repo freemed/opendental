@@ -779,7 +779,7 @@ namespace OpenDental{
 			}
 			//ok signifies that a database was restored
 			OnPatientSelected(0,"",false,"");
-			//ParentForm.Text=PrefC.GetString("MainWindowTitle");
+			//ParentForm.Text=PrefC.GetString(PrefName.MainWindowTitle");
 			DataValid.SetInvalid(true);
 			ModuleSelected(PatCurNum);
 		}
@@ -890,7 +890,7 @@ namespace OpenDental{
 		}
 
 		private void gridEmp_CellClick(object sender, OpenDental.UI.ODGridClickEventArgs e) {
-			if(PrefC.GetBool("TimecardSecurityEnabled")){
+			if(PrefC.GetBool(PrefName.TimecardSecurityEnabled)){
 				if(Security.CurUser.EmployeeNum!=Employees.ListShort[e.Row].EmployeeNum){
 					if(!Security.IsAuthorized(Permissions.TimecardsEditAll)){
 						SelectEmpI(-1);
@@ -916,7 +916,7 @@ namespace OpenDental{
 			EmployeeCur.ClockStatus=Lan.g(this,"Working");;
 			Employees.Update(EmployeeCur);
 			ModuleSelected(PatCurNum);
-			if(PrefC.GetBool("DockPhonePanelShow")){
+			if(PrefC.GetBool(PrefName.DockPhonePanelShow)){
 				Employees.SetPhoneClockStatus(EmployeeCur.EmployeeNum,"Available");
 			}
 		}
@@ -936,7 +936,7 @@ namespace OpenDental{
 			EmployeeCur.ClockStatus=Lan.g("enumTimeClockStatus",ce.ClockStatus.ToString());
 			Employees.Update(EmployeeCur);
 			ModuleSelected(PatCurNum);
-			if(PrefC.GetBool("DockPhonePanelShow")){
+			if(PrefC.GetBool(PrefName.DockPhonePanelShow)){
 				Employees.SetPhoneClockStatus(EmployeeCur.EmployeeNum,ce.ClockStatus.ToString());
 			}
 		}

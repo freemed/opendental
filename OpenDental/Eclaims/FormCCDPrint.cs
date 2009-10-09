@@ -1877,7 +1877,7 @@ namespace OpenDental.Eclaims {
 		}
 
 		private SizeF PrintDentistPhone(Graphics g,float X,float Y){
-			text=PrefC.GetString("PracticePhone");
+			text=PrefC.GetString(PrefName.PracticePhone);
 			if(text.Length==10) {//May need to format for nice appearance.
 				text=text.Substring(0,3)+"-"+text.Substring(3,3)+"-"+text.Substring(6,4);
 			}
@@ -1886,8 +1886,8 @@ namespace OpenDental.Eclaims {
 
 		private SizeF PrintDentistAddress(Graphics g,float X,float Y){
 			SizeF size1=doc.DrawString(g,isFrench?"ADRESSE: ":"ADDRESS: ",X,Y);
-			SizeF size2=PrintAddress(g,X+size1.Width,Y,PrefC.GetString("PracticeAddress"),PrefC.GetString("PracticeAddress2"),
-				PrefC.GetString("PracticeCity")+", "+PrefC.GetString("PracticeST")+" "+PrefC.GetString("PracticeZip"));
+			SizeF size2=PrintAddress(g,X+size1.Width,Y,PrefC.GetString(PrefName.PracticeAddress),PrefC.GetString(PrefName.PracticeAddress2),
+				PrefC.GetString(PrefName.PracticeCity)+", "+PrefC.GetString(PrefName.PracticeST)+" "+PrefC.GetString(PrefName.PracticeZip));
 			return new SizeF(size1.Width+size2.Width,Math.Max(size1.Height,size2.Height));
 		}
 

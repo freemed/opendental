@@ -308,7 +308,7 @@ namespace OpenDental
 			report.IsLandscape=true;
 			report.ReportName="Appointments";
 			report.AddTitle("Appointments");
-			report.AddSubTitle(((Pref)PrefC.HList["PracticeTitle"]).ValueString);
+			report.AddSubTitle(PrefC.GetString(PrefName.PracticeTitle));
 			report.AddSubTitle(dateFrom.ToShortDateString()+" - "+dateTo.ToShortDateString());
 			//setup query
 			report.Query=@"SELECT appointment.AptDateTime, 

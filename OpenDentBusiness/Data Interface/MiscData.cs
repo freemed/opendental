@@ -116,7 +116,7 @@ namespace OpenDentBusiness {
 			List<string> retval=new List<string>();
 			DataConnection dcon=null;
 			string atozName;
-			string atozThisDb=PrefC.GetString("DocPath");
+			string atozThisDb=PrefC.GetString(PrefName.DocPath);
 			for(int i=0;i<dbNames.Length;i++) {
 				try {
 					dcon=new DataConnection(dbNames[i]);

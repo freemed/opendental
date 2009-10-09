@@ -152,8 +152,8 @@ namespace OpenDental{
 		#endregion
 
 		private void FormTrojanCollectSetup_Load(object sender,EventArgs e) {
-			textExportFolder.Text=PrefC.GetString("TrojanExpressCollectPath");
-			long billtype=PrefC.GetInt("TrojanExpressCollectBillingType");
+			textExportFolder.Text=PrefC.GetString(PrefName.TrojanExpressCollectPath);
+			long billtype=PrefC.GetLong(PrefName.TrojanExpressCollectBillingType);
 			for(int i=0;i<DefC.Short[(int)DefCat.BillingTypes].Length;i++){
 				comboBillType.Items.Add(DefC.Short[(int)DefCat.BillingTypes][i].ItemName);
 				if(DefC.Short[(int)DefCat.BillingTypes][i].DefNum==billtype){
@@ -175,8 +175,8 @@ namespace OpenDental{
 				return;
 			}
 			long billtype=DefC.Short[(int)DefCat.BillingTypes][comboBillType.SelectedIndex].DefNum;
-			if( Prefs.UpdateString("TrojanExpressCollectPath",textExportFolder.Text)
-				| Prefs.UpdateInt   ("TrojanExpressCollectBillingType",billtype))
+			if( Prefs.UpdateString(PrefName.TrojanExpressCollectPath,textExportFolder.Text)
+				| Prefs.UpdateLong(PrefName.TrojanExpressCollectBillingType,billtype))
 			{
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}

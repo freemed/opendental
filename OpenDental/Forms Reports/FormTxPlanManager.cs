@@ -393,7 +393,7 @@ namespace OpenDental
 			{
                 listBillType.Items.Add(DefC.Short[(int)DefCat.BillingTypes][i].ItemName);
 			}
-			string[] selectedBillTypes=((Pref)PrefC.HList["BillingSelectBillingTypes"]).ValueString.Split(',');
+			string[] selectedBillTypes=PrefC.GetString(PrefName.BillingSelectBillingTypes).Split(',');
 			for(int i=0;i<selectedBillTypes.Length;i++)
 			{
 				try

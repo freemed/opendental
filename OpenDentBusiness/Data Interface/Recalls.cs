@@ -194,7 +194,7 @@ namespace OpenDentBusiness{
 				+"AND recall.DateDue <= "+POut.PDate(toDate)+" "
 				+"AND recall.IsDisabled = 0 ";
 			List<long> recalltypes=new List<long>();
-			string[] typearray=PrefC.GetString("RecallTypesShowingInList").Split(',');
+			string[] typearray=PrefC.GetString(PrefName.RecallTypesShowingInList).Split(',');
 			if(typearray.Length>0){
 				for(int i=0;i<typearray.Length;i++){
 					recalltypes.Add(PIn.PLong(typearray[i]));
@@ -218,7 +218,7 @@ namespace OpenDentBusiness{
 			Patient pat;
 			ContactMethod contmeth;
 			int numberOfReminders;
-			int maxNumberReminders=(int)PrefC.GetInt("RecallMaxNumberReminders");
+			int maxNumberReminders=(int)PrefC.GetLong(PrefName.RecallMaxNumberReminders);
 			long patNum;
 			DateTime disableUntilDate;
 			double disableUntilBalance;
@@ -232,18 +232,18 @@ namespace OpenDentBusiness{
 					//always show
 				}
 				else if(numberOfReminders==1) {
-					if(PrefC.GetInt("RecallShowIfDaysFirstReminder")==-1) {
+					if(PrefC.GetLong(PrefName.RecallShowIfDaysFirstReminder)==-1) {
 						continue;
 					}
-					if(dateRemind.AddDays(PrefC.GetInt("RecallShowIfDaysFirstReminder")) > DateTime.Today) {
+					if(dateRemind.AddDays(PrefC.GetLong(PrefName.RecallShowIfDaysFirstReminder)) > DateTime.Today) {
 						continue;
 					}
 				}
 				else{//2 or more reminders
-					if(PrefC.GetInt("RecallShowIfDaysSecondReminder")==-1) {
+					if(PrefC.GetLong(PrefName.RecallShowIfDaysSecondReminder)==-1) {
 						continue;
 					}
-					if(dateRemind.AddDays(PrefC.GetInt("RecallShowIfDaysSecondReminder")) > DateTime.Today) {
+					if(dateRemind.AddDays(PrefC.GetLong(PrefName.RecallShowIfDaysSecondReminder)) > DateTime.Today) {
 						continue;
 					}
 				}
@@ -295,7 +295,7 @@ namespace OpenDentBusiness{
 				disableUntilBalance=PIn.PDouble(rawtable.Rows[i]["DisableUntilBalance"].ToString());
 				if(disableUntilBalance>0) {
 					familyBalance=PIn.PDouble(rawtable.Rows[i]["BalTotal"].ToString());
-					if(!PrefC.GetBool("BalancesDontSubtractIns")) {//typical
+					if(!PrefC.GetBool(PrefName.BalancesDontSubtractIns)) {//typical
 						familyBalance-=PIn.PDouble(rawtable.Rows[i]["InsEst"].ToString());
 					}
 					if(familyBalance > disableUntilBalance) {
@@ -552,7 +552,7 @@ namespace OpenDentBusiness{
 			//determine if this patient is a perio patient.
 			bool isPerio=false;
 			for(int i=0;i<recallList.Count;i++){
-				if(PrefC.GetInt("RecallTypeSpecialPerio")==recallList[i].RecallTypeNum){
+				if(PrefC.GetLong(PrefName.RecallTypeSpecialPerio)==recallList[i].RecallTypeNum){
 					isPerio=true;
 					break;
 				}
@@ -560,13 +560,13 @@ namespace OpenDentBusiness{
 			//remove types from the list which do not apply to this patient.
 			for(int i=0;i<typeList.Count;i++){
 				if(isPerio){
-					if(PrefC.GetInt("RecallTypeSpecialProphy")==typeList[i].RecallTypeNum){
+					if(PrefC.GetLong(PrefName.RecallTypeSpecialProphy)==typeList[i].RecallTypeNum){
 						typeList.RemoveAt(i);
 						break;
 					}
 				}
 				else{
-					if(PrefC.GetInt("RecallTypeSpecialPerio")==typeList[i].RecallTypeNum){
+					if(PrefC.GetLong(PrefName.RecallTypeSpecialPerio)==typeList[i].RecallTypeNum){
 						typeList.RemoveAt(i);
 						break;
 					}
@@ -604,8 +604,8 @@ namespace OpenDentBusiness{
 			DateTime prevDateProphy=DateTime.MinValue;
 			DateTime dateProphyTesting;
 			for(int i=0;i<typeListActive.Count;i++) {
-				if(PrefC.GetInt("RecallTypeSpecialProphy")!=typeListActive[i].RecallTypeNum
-					&& PrefC.GetInt("RecallTypeSpecialPerio")!=typeListActive[i].RecallTypeNum) 
+				if(PrefC.GetLong(PrefName.RecallTypeSpecialProphy)!=typeListActive[i].RecallTypeNum
+					&& PrefC.GetLong(PrefName.RecallTypeSpecialPerio)!=typeListActive[i].RecallTypeNum) 
 				{
 					//we are only working with prophy and perio in this loop.
 					continue;
@@ -628,8 +628,8 @@ namespace OpenDentBusiness{
 					continue;
 				}
 				//set prevDate:
-				if(PrefC.GetInt("RecallTypeSpecialProphy")==typeList[i].RecallTypeNum
-					|| PrefC.GetInt("RecallTypeSpecialPerio")==typeList[i].RecallTypeNum) 
+				if(PrefC.GetLong(PrefName.RecallTypeSpecialProphy)==typeList[i].RecallTypeNum
+					|| PrefC.GetLong(PrefName.RecallTypeSpecialPerio)==typeList[i].RecallTypeNum) 
 				{
 					prevDate=prevDateProphy;
 				}
@@ -649,8 +649,8 @@ namespace OpenDentBusiness{
 					}
 				}
 				if(matchingRecall==null){//if there is no existing recall,
-					if(PrefC.GetInt("RecallTypeSpecialProphy")==typeList[i].RecallTypeNum
-						|| PrefC.GetInt("RecallTypeSpecialPerio")==typeList[i].RecallTypeNum
+					if(PrefC.GetLong(PrefName.RecallTypeSpecialProphy)==typeList[i].RecallTypeNum
+						|| PrefC.GetLong(PrefName.RecallTypeSpecialPerio)==typeList[i].RecallTypeNum
 						|| prevDate.Year>1880)//for other types, if date is not minVal, then add a recall
 					{
 						//add a recall

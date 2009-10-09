@@ -151,7 +151,7 @@ namespace OpenDentBusiness{
 		/*
 		private static long GetNumComputers() {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetInt(MethodBase.GetCurrentMethod());
+				return Meth.GetLong(MethodBase.GetCurrentMethod());
 			}
 			string command="SELECT COUNT(*) FROM computer";
 			DataTable table=Db.GetTable(command);
@@ -160,7 +160,7 @@ namespace OpenDentBusiness{
 
 		private static long GetComputerNumForName(string computerName) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetInt(MethodBase.GetCurrentMethod(),computerName);
+				return Meth.GetLong(MethodBase.GetCurrentMethod(),computerName);
 			}
 			string command="SELECT COUNT(*) FROM computer "+
 				"WHERE ComputerNum <=(SELECT ComputerNum FROM computer AS temp WHERE CompName "+

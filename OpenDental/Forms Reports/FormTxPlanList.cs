@@ -652,7 +652,7 @@ namespace OpenDental {
 			FormQuery2.IsReport = true;
 			FormQuery2.ResetGrid();//this is a method in FormQuery2;
 			report.Title = "Treatment Plans Analyzer Report";
-			report.SubTitle.Add(((Pref)PrefC.HList["PracticeTitle"]).ValueString);
+			report.SubTitle.Add(PrefC.GetString(PrefName.PracticeTitle));
 			report.SubTitle.Add("(by Name and Unused Benefits)");
 			report.ColPos[0] = 00;
 			report.ColPos[1] = 40;
@@ -699,22 +699,22 @@ namespace OpenDental {
 		}
 		///<summary>raised for each page to be printed.</summary>
 		private void pdCards_PrintPage(object sender,PrintPageEventArgs ev) {
-			int totalPages = (int)Math.Ceiling((double)AddrTable.Rows.Count / (double)PrefC.GetInt("RecallPostcardsPerSheet"));
+			int totalPages = (int)Math.Ceiling((double)AddrTable.Rows.Count / (double)PrefC.GetLong(PrefName.RecallPostcardsPerSheet));
 			Graphics g = ev.Graphics;
 			float yPos = 0;//these refer to the upper left origin of each postcard
 			float xPos = 0;
 			string str = "";
 			while(yPos < ev.PageBounds.Height - 100 && patientsPrinted < AddrTable.Rows.Count) {
 				//Return Address--------------------------------------------------------------------------
-				if(PrefC.GetBool("RecallCardsShowReturnAdd")) {
-					str = PrefC.GetString("PracticeTitle") + "\r\n";
+				if(PrefC.GetBool(PrefName.RecallCardsShowReturnAdd)) {
+					str = PrefC.GetString(PrefName.PracticeTitle) + "\r\n";
 					g.DrawString(str,new Font(FontFamily.GenericSansSerif,9,FontStyle.Bold),Brushes.Black,xPos + 45,yPos + 60);
-					str = PrefC.GetString("PracticeAddress") + "\r\n";
-					if(PrefC.GetString("PracticeAddress2") != "") {
-						str += PrefC.GetString("PracticeAddress2") + "\r\n";
+					str = PrefC.GetString(PrefName.PracticeAddress) + "\r\n";
+					if(PrefC.GetString(PrefName.PracticeAddress2) != "") {
+						str += PrefC.GetString(PrefName.PracticeAddress2) + "\r\n";
 					}
-					str += PrefC.GetString("PracticeCity") + ",  " + PrefC.GetString("PracticeST") + "  " + PrefC.GetString("PracticeZip") + "\r\n";
-					string phone = PrefC.GetString("PracticePhone");
+					str += PrefC.GetString(PrefName.PracticeCity) + ",  " + PrefC.GetString(PrefName.PracticeST) + "  " + PrefC.GetString(PrefName.PracticeZip) + "\r\n";
+					string phone = PrefC.GetString(PrefName.PracticePhone);
 					if(CultureInfo.CurrentCulture.Name == "en-US" && phone.Length == 10) {
 						str += "(" + phone.Substring(0,3) + ")" + phone.Substring(3,3) + "-" + phone.Substring(6);
 					}
@@ -738,10 +738,10 @@ namespace OpenDental {
                     + AddrTable.Rows[patientsPrinted]["State"].ToString() + "   "
                     + AddrTable.Rows[patientsPrinted]["Zip"].ToString() + "\r\n";
 				g.DrawString(str,new Font(FontFamily.GenericSansSerif,11),Brushes.Black,xPos + 320,yPos + 240);
-				if(PrefC.GetInt("RecallPostcardsPerSheet") == 1) {
+				if(PrefC.GetLong(PrefName.RecallPostcardsPerSheet) == 1) {
 					yPos += 400;
 				}
-				else if(PrefC.GetInt("RecallPostcardsPerSheet") == 3) {
+				else if(PrefC.GetLong(PrefName.RecallPostcardsPerSheet) == 3) {
 					yPos += 366;
 				}
 				else {//4
@@ -776,11 +776,11 @@ namespace OpenDental {
 				pd.PrintPage += new PrintPageEventHandler(this.pdCards_PrintPage);
 				pd.OriginAtMargins = true;
 				pd.DefaultPageSettings.Margins = new Margins(0,0,0,0);
-				if(PrefC.GetInt("RecallPostcardsPerSheet") == 1) {
+				if(PrefC.GetLong(PrefName.RecallPostcardsPerSheet) == 1) {
 					pd.DefaultPageSettings.PaperSize = new PaperSize("Postcard",400,600);
 					pd.DefaultPageSettings.Landscape = true;
 				}
-				else if(PrefC.GetInt("RecallPostcardsPerSheet") == 3) {
+				else if(PrefC.GetLong(PrefName.RecallPostcardsPerSheet) == 3) {
 					pd.DefaultPageSettings.PaperSize = new PaperSize("Postcard",850,1100);
 				}
 				else {//4
@@ -788,7 +788,7 @@ namespace OpenDental {
 					pd.DefaultPageSettings.Landscape = true;
 				}
 				printPreview = new OpenDental.UI.PrintPreview(PrintSituation.Postcard,pd,
-						(int)Math.Ceiling((double)gridTxPlanList.Rows.Count / (double)PrefC.GetInt("RecallPostcardsPerSheet")));
+						(int)Math.Ceiling((double)gridTxPlanList.Rows.Count / (double)PrefC.GetLong(PrefName.RecallPostcardsPerSheet)));
 				printPreview.ShowDialog();
 			}
 		}

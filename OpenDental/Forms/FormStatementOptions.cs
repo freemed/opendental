@@ -569,7 +569,7 @@ namespace OpenDental{
 				if(StmtCur.DateRangeTo.Year<2100){
 					textDateEnd.Text=StmtCur.DateRangeTo.ToShortDateString();
 				}
-				if(PrefC.GetBool("FuchsOptionsOn")) {
+				if(PrefC.GetBool(PrefName.FuchsOptionsOn)) {
 					textDateStart.Text=DateTime.Today.AddDays(-90).ToShortDateString();
 					textDateEnd.Text=DateTime.Today.ToShortDateString();
 					listMode.SelectedIndex=0;
@@ -873,7 +873,7 @@ namespace OpenDental{
 			EmailMessage message=new EmailMessage();
 			message.PatNum=pat.PatNum;
 			message.ToAddress=pat.Email;
-			message.FromAddress=PrefC.GetString("EmailSenderAddress");
+			message.FromAddress=PrefC.GetString(PrefName.EmailSenderAddress);
 			message.Subject=Lan.g(this,"Statement");
 			//message.BodyText=Lan.g(this,"");
 			EmailAttach attach=new EmailAttach();

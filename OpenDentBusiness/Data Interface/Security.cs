@@ -78,7 +78,7 @@ namespace OpenDentBusiness{
 				return false;
 			}
 			if(perm==Permissions.AccountingCreate || perm==Permissions.AccountingEdit){
-				if(date <= PrefC.GetDate("AccountingLockDate")){
+				if(date <= PrefC.GetDate(PrefName.AccountingLockDate)){
 					if(!suppressMessage) {
 						throw new Exception(Lans.g("Security","Locked by Administrator."));
 					}
@@ -97,13 +97,13 @@ namespace OpenDentBusiness{
 			{
 				//SecurityLockIncludesAdmin
 				if(date.Year>1//if a valid date was passed in
-					&& date <= PrefC.GetDate("SecurityLockDate"))//and that date is earlier than the lock
+					&& date <= PrefC.GetDate(PrefName.SecurityLockDate))//and that date is earlier than the lock
 				{
-					if(PrefC.GetBool("SecurityLockIncludesAdmin")//if admins are locked out too
+					if(PrefC.GetBool(PrefName.SecurityLockIncludesAdmin)//if admins are locked out too
 						|| !GroupPermissions.HasPermission(userGroupNum,Permissions.SecurityAdmin))//or is not an admin
 					{
 						if(!suppressMessage) {
-							throw new Exception(Lans.g("Security","Locked by Administrator before ")+PrefC.GetDate("SecurityLockDate").ToShortDateString());
+							throw new Exception(Lans.g("Security","Locked by Administrator before ")+PrefC.GetDate(PrefName.SecurityLockDate).ToShortDateString());
 						}
 						return false;	
 					}

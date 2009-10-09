@@ -267,7 +267,7 @@ namespace OpenDental{
 		private void ExecuteIndividual(){
 			ReportLikeCrystal report=new ReportLikeCrystal();
 			report.AddTitle(Lan.g(this,"PPO WRITEOFFS"));
-			report.AddSubTitle(PrefC.GetString("PracticeTitle"));
+			report.AddSubTitle(PrefC.GetString(PrefName.PracticeTitle));
 			report.AddSubTitle(date1.SelectionStart.ToShortDateString()+" - "+date2.SelectionStart.ToShortDateString());
 			report.AddSubTitle(Lan.g(this,"Individual Claims"));
 			if(textCarrier.Text!=""){
@@ -338,7 +338,7 @@ namespace OpenDental{
 		private void ExecuteGroup() {
 			ReportLikeCrystal report=new ReportLikeCrystal();
 			report.AddTitle(Lan.g(this,"PPO WRITEOFFS"));
-			report.AddSubTitle(PrefC.GetString("PracticeTitle"));
+			report.AddSubTitle(PrefC.GetString(PrefName.PracticeTitle));
 			report.AddSubTitle(date1.SelectionStart.ToShortDateString()+" - "+date2.SelectionStart.ToShortDateString());
 			report.AddSubTitle(Lan.g(this,"Grouped by Carrier"));
 			if(textCarrier.Text!="") {

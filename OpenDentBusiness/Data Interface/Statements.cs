@@ -123,7 +123,7 @@ namespace OpenDentBusiness{
 				+"LEFT JOIN patient ON statement.PatNum=patient.PatNum "
 				+"LEFT JOIN statement s2 ON s2.PatNum=patient.PatNum "
 				+"AND s2.IsSent=1 ";
-			if(PrefC.GetBool("BillingIgnoreInPerson")) {
+			if(PrefC.GetBool(PrefName.BillingIgnoreInPerson)) {
 				command+="AND s2.Mode_ !=1 ";
 			}
 			if(orderBy==0){//BillingType

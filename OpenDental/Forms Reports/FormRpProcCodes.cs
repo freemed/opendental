@@ -173,7 +173,7 @@ namespace OpenDental{
       if (radioCode.Checked==true)  {
 			  FormQuery2.SubmitReportQuery();			      
 				report.Title="Procedure Codes";
-				report.SubTitle.Add(((Pref)PrefC.HList["PracticeTitle"]).ValueString);
+				report.SubTitle.Add(PrefC.GetString(PrefName.PracticeTitle));
 				report.SubTitle.Add(FeeScheds.GetDescription(feeSched));
 				report.SetColumn(this,0,"Code",70);
 				report.SetColumn(this,1,"Fee Amount",70,HorizontalAlignment.Right);
@@ -218,7 +218,7 @@ namespace OpenDental{
 				}
 				FormQuery2.ResetGrid();//this is a method in FormQuery2;
 				report.Title="Procedure Codes";
-				report.SubTitle.Add(((Pref)PrefC.HList["PracticeTitle"]).ValueString);
+				report.SubTitle.Add(PrefC.GetString(PrefName.PracticeTitle));
 				report.SubTitle.Add(FeeScheds.GetDescription(feeSched));
 				report.ColPos[0]=20;
 				report.ColPos[1]=120;

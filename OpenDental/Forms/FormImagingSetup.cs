@@ -378,9 +378,9 @@ namespace OpenDental{
 		private void FormImagingSetup_Load(object sender, System.EventArgs e) {
 			comboType.Items.Add("B");
 			comboType.Items.Add("D");
-			textDoc.Text=PrefC.GetInt("ScannerCompression").ToString();
-			slider.MinVal=PrefC.GetInt32("ImageWindowingMin");
-			slider.MaxVal=PrefC.GetInt32("ImageWindowingMax");
+			textDoc.Text=PrefC.GetLong(PrefName.ScannerCompression).ToString();
+			slider.MinVal=PrefC.GetInt(PrefName.ImageWindowingMin);
+			slider.MaxVal=PrefC.GetInt(PrefName.ImageWindowingMax);
 			computerPrefs=ComputerPrefs.GetForLocalComputer();
 			upDownPort.Value=computerPrefs.SensorPort;
 			comboType.Text=computerPrefs.SensorType;
@@ -397,9 +397,9 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Please fix data entry errors first."));
 				return;
 			}
-			Prefs.UpdateInt("ScannerCompression",PIn.PLong(textDoc.Text));
-			Prefs.UpdateInt("ImageWindowingMin",slider.MinVal);
-			Prefs.UpdateInt("ImageWindowingMax",slider.MaxVal);
+			Prefs.UpdateLong(PrefName.ScannerCompression,PIn.PLong(textDoc.Text));
+			Prefs.UpdateLong(PrefName.ImageWindowingMin,slider.MinVal);
+			Prefs.UpdateLong(PrefName.ImageWindowingMax,slider.MaxVal);
 			computerPrefs.SensorType=comboType.Text;
 			computerPrefs.SensorPort=(int)upDownPort.Value;
 			computerPrefs.SensorExposure=(int)upDownExposure.Value;
