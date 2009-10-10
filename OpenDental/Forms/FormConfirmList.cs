@@ -311,7 +311,6 @@ namespace OpenDental{
 			this.butEmail.Size = new System.Drawing.Size(91,24);
 			this.butEmail.TabIndex = 61;
 			this.butEmail.Text = "E-Mail";
-			this.butEmail.Visible = false;
 			this.butEmail.Click += new System.EventHandler(this.butEmail_Click);
 			// 
 			// FormConfirmList
@@ -760,34 +759,33 @@ namespace OpenDental{
 				MsgBox.Show(this,"You need to enter an SMTP server name in e-mail setup before you can send e-mail.");
 				return;
 			}
-			/*
-			if(PrefC.GetLong(PrefName.RecallStatusEmailed")==0) {
-				MsgBox.Show(this,"You need to set a status first in the Recall Setup window.");
+			if(PrefC.GetLong(PrefName.ConfirmStatusEmailed)==0) {
+				MsgBox.Show(this,"You need to set a status first for confirmation e-mails in the Recall Setup window.");
 				return;
 			}
-			if(gridMain.SelectedIndices.Length==0) {
+			if(grid.SelectedIndices.Length==0) {
 				ContactMethod cmeth;
 				for(int i=0;i<table.Rows.Count;i++) {
-					cmeth=(ContactMethod)PIn.PInt(table.Rows[i]["PreferRecallMethod"].ToString());
+					cmeth=(ContactMethod)PIn.PInt(table.Rows[i]["PreferConfirmMethod"].ToString());
 					if(cmeth!=ContactMethod.Email) {
 						continue;
 					}
-					gridMain.SetSelected(i,true);
+					grid.SetSelected(i,true);
 				}
-				if(gridMain.SelectedIndices.Length==0) {
+				if(grid.SelectedIndices.Length==0) {
 					MsgBox.Show(this,"No patients of email type.");
 					return;
 				}
 			}
 			else {//deselect the ones that do not have email addresses specified
 				int skipped=0;
-				for(int i=gridMain.SelectedIndices.Length-1;i>=0;i--) {
-					if(table.Rows[gridMain.SelectedIndices[i]]["Email"].ToString()=="") {
+				for(int i=grid.SelectedIndices.Length-1;i>=0;i--) {
+					if(table.Rows[grid.SelectedIndices[i]]["email"].ToString()=="") {
 						skipped++;
-						gridMain.SetSelected(gridMain.SelectedIndices[i],false);
+						grid.SetSelected(grid.SelectedIndices[i],false);
 					}
 				}
-				if(gridMain.SelectedIndices.Length==0) {
+				if(grid.SelectedIndices.Length==0) {
 					MsgBox.Show(this,"None of the selected patients had email addresses entered.");
 					return;
 				}
@@ -799,82 +797,36 @@ namespace OpenDental{
 				return;
 			}
 			Cursor=Cursors.WaitCursor;
-			List<int> recallNums=new List<int>();
-			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
-				recallNums.Add(PIn.PInt(table.Rows[gridMain.SelectedIndices[i]]["RecallNum"].ToString()));
-			}
-			bool sortAlph=false;
-			if(comboSort.SelectedIndex==1) {
-				sortAlph=true;
-			}
-			AddrTable=Recalls.GetAddrTable(recallNums,checkGroupFamilies.Checked,sortAlph);
 			EmailMessage message;
 			string str="";
-			string[] recallNumArray;
-			string[] patNumArray;
-			for(int i=0;i<AddrTable.Rows.Count;i++) {
+			//Appointment apt;
+			for(int i=0;i<grid.SelectedIndices.Length;i++){
 				message=new EmailMessage();
-				message.PatNum=PIn.PInt(AddrTable.Rows[i]["emailPatNum"].ToString());
-				message.ToAddress=PIn.PString(AddrTable.Rows[i]["email"].ToString());//might be guarantor email
-				message.FromAddress=PrefC.GetString(PrefName.EmailSenderAddress");
-				if(AddrTable.Rows[i]["numberOfReminders"].ToString()=="0") {
-					message.Subject=PrefC.GetString(PrefName.RecallEmailSubject");
-				}
-				else if(AddrTable.Rows[i]["numberOfReminders"].ToString()=="1") {
-					message.Subject=PrefC.GetString(PrefName.RecallEmailSubject2");
-				}
-				else {
-					message.Subject=PrefC.GetString(PrefName.RecallEmailSubject3");
-				}
-				//family
-				if(checkGroupFamilies.Checked	&& AddrTable.Rows[i]["famList"].ToString()!="") {
-					if(AddrTable.Rows[i]["numberOfReminders"].ToString()=="0") {
-						str=PrefC.GetString(PrefName.RecallEmailFamMsg");
-					}
-					else if(AddrTable.Rows[i]["numberOfReminders"].ToString()=="1") {
-						str=PrefC.GetString(PrefName.RecallEmailFamMsg2");
-					}
-					else {
-						str=PrefC.GetString(PrefName.RecallEmailFamMsg3");
-					}
-					str=str.Replace("[FamilyList]",AddrTable.Rows[i]["famList"].ToString());
-				}
-				//single
-				else {
-					if(AddrTable.Rows[i]["numberOfReminders"].ToString()=="0") {
-						str=PrefC.GetString(PrefName.RecallEmailMessage");
-					}
-					else if(AddrTable.Rows[i]["numberOfReminders"].ToString()=="1") {
-						str=PrefC.GetString(PrefName.RecallEmailMessage2");
-					}
-					else {
-						str=PrefC.GetString(PrefName.RecallEmailMessage3");
-					}
-					str=str.Replace("[DueDate]",PIn.PDate(AddrTable.Rows[i]["dateDue"].ToString()).ToShortDateString());
-					str=str.Replace("[NameF]",AddrTable.Rows[i]["patientNameF"].ToString());
-					str=str.Replace("[NameFL]",AddrTable.Rows[i]["patientNameFL"].ToString());
-				}
+				message.PatNum=PIn.PLong(table.Rows[grid.SelectedIndices[i]]["PatNum"].ToString());
+				message.ToAddress=table.Rows[grid.SelectedIndices[i]]["email"].ToString();//Could be guarantor email.
+				message.FromAddress=PrefC.GetString(PrefName.EmailSenderAddress);
+				message.Subject=PrefC.GetString(PrefName.ConfirmEmailSubject);
+				str=PrefC.GetString(PrefName.ConfirmEmailMessage);
+				str=str.Replace("[NameF]",table.Rows[grid.SelectedIndices[i]]["nameF"].ToString());
+				str=str.Replace("[NameFL]",table.Rows[grid.SelectedIndices[i]]["nameFL"].ToString());
+				str=str.Replace("[date]",((DateTime)table.Rows[grid.SelectedIndices[i]]["AptDateTime"]).ToShortDateString());
+				str=str.Replace("[time]",((DateTime)table.Rows[grid.SelectedIndices[i]]["AptDateTime"]).ToShortTimeString());
 				message.BodyText=str;
 				try {
 					FormEmailMessageEdit.SendEmail(message);
 				}
 				catch(Exception ex) {
 					Cursor=Cursors.Default;
-					MessageBox.Show(ex.Message+"\r\nPatient:"+AddrTable.Rows[i]["patientNameFL"].ToString());
+					MessageBox.Show(ex.Message+"\r\nPatient:"+table.Rows[grid.SelectedIndices[i]]["nameFL"].ToString());
 					break;
 				}
 				message.MsgDateTime=DateTime.Now;
 				message.SentOrReceived=CommSentOrReceived.Sent;
 				EmailMessages.Insert(message);
-				recallNumArray=AddrTable.Rows[i]["recallNums"].ToString().Split(',');
-				patNumArray=AddrTable.Rows[i]["patNums"].ToString().Split(',');
-				for(int r=0;r<recallNumArray.Length;r++) {
-					Commlogs.InsertForRecall(PIn.PInt(patNumArray[r]),CommItemMode.Email,PIn.PInt(AddrTable.Rows[i]["numberOfReminders"].ToString()));
-					Recalls.UpdateStatus(PIn.PInt(recallNumArray[r]),PrefC.GetLong(PrefName.RecallStatusEmailed"));
-				}
+				Appointments.SetConfirmed(PIn.PLong(table.Rows[grid.SelectedIndices[i]]["AptNum"].ToString()),PrefC.GetLong(PrefName.ConfirmStatusEmailed));
 			}
 			FillMain();
-			Cursor=Cursors.Default;*/
+			Cursor=Cursors.Default;
 		}
 
 		private void butSave_Click(object sender, System.EventArgs e) {

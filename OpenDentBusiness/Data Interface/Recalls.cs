@@ -837,6 +837,7 @@ namespace OpenDentBusiness{
 			List<DataRow> rows=new List<DataRow>();
 			int maxNumReminders=0;
 			int maxRemindersThisPat;
+			Patient pat;
 			for(int i=0;i<rawRows.Count;i++) {
 				if(!groupByFamily) {
 					row=table.NewRow();
@@ -854,15 +855,12 @@ namespace OpenDentBusiness{
 					row["famList"]="";
 					row["guarLName"]=rawRows[i]["guarLName"].ToString();//even though we won't use it.
 					row["numberOfReminders"]=PIn.PLong(rawRows[i]["numberOfReminders"].ToString()).ToString();
-					if(rawRows[i]["Preferred"].ToString()=="") {
-						row["patientNameF"]=rawRows[i]["FName"].ToString();
-					}
-					else {
-						row["patientNameF"]=rawRows[i]["Preferred"].ToString();
-					}
-					row["patientNameFL"]=rawRows[i]["FName"].ToString()+" "
-						+rawRows[i]["MiddleI"].ToString()+" "
-						+rawRows[i]["LName"].ToString();
+					pat=new Patient();
+					pat.LName=rawRows[i]["LName"].ToString();
+					pat.FName=rawRows[i]["FName"].ToString();
+					pat.Preferred=rawRows[i]["Preferred"].ToString();
+					row["patientNameF"]=pat.GetNameFirstOrPreferred();
+					row["patientNameFL"]=pat.GetNameFirstOrPrefL();
 					row["patNums"]=rawRows[i]["PatNum"].ToString();
 					row["recallNums"]=rawRows[i]["RecallNum"].ToString();
 					rows.Add(row);

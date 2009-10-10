@@ -1711,6 +1711,19 @@ DROP TABLE IF EXISTS etAck";
 				//command = "DELETE FROM preference WHERE PrefName='EnableAnesthMod'";
 				command="DELETE FROM preference WHERE PrefName='ImageStore'";//this option is no longer supported.
 				Db.NonQ(command);
+				command="SELECT MAX(ItemOrder) FROM definition WHERE Category=2";
+				int itemOrder=PIn.PInt(Db.GetScalar(command))+1;//eg 7+1
+				//this should end up with an acceptable autoincrement even if using random primary keys.
+				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemValue) VALUES (2,"+POut.PInt(itemOrder)+",'E-mailed','E-mailed')";
+				Db.NonQ(command);
+				command="SELECT DefNum FROM definition WHERE Category=2 AND ItemOrder="+POut.PInt(itemOrder);
+				string defNumStr=Db.GetScalar(command);
+				command="INSERT INTO preference (PrefName,ValueString) VALUES ('ConfirmStatusEmailed','"+defNumStr+"')";
+				Db.NonQ(command);
+				command="INSERT INTO preference (PrefName,ValueString) VALUES ('ConfirmEmailSubject','Appointment Confirmation')";
+				Db.NonQ(command);
+				command="INSERT INTO preference (PrefName,ValueString) VALUES ('ConfirmEmailMessage','[NameF], We would like to confirm your appointment on [date] at [time]')";
+				Db.NonQ(command);
 				
 
 

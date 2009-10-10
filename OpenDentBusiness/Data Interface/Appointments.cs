@@ -553,24 +553,31 @@ namespace OpenDentBusiness{
 			table.Columns.Add("AddrNote");
 			table.Columns.Add("AptNum");
 			table.Columns.Add("age");
+			table.Columns.Add("AptDateTime",typeof(DateTime));
 			table.Columns.Add("aptDateTime");
 			table.Columns.Add("confirmed");
 			table.Columns.Add("contactMethod");
+			table.Columns.Add("email");//could be patient or guarantor email.
 			table.Columns.Add("Guarantor");
 			table.Columns.Add("medNotes");
+			table.Columns.Add("nameF");//or preferred.
+			table.Columns.Add("nameFL");
 			table.Columns.Add("Note");
 			table.Columns.Add("patientName");
 			table.Columns.Add("PatNum");
+			table.Columns.Add("PreferConfirmMethod");
 			table.Columns.Add("ProcDescript");
 			List<DataRow> rows=new List<DataRow>();
-			string command="SELECT patient.PatNum,"//0
-				+"patient.LName,"//1-LName
-				+"patient.FName,patient.Preferred,patient.LName, "//2-patientName
-				+"Guarantor,AptDateTime,Birthdate,HmPhone,"//3-6
-				+"WkPhone,WirelessPhone,ProcDescript,Confirmed,Note,"//7-11
-				+"AddrNote,AptNum,MedUrgNote,PreferConfirmMethod,Email,Premed "//12-14
-				+"FROM patient,appointment "
+			string command="SELECT patient.PatNum,"
+				+"patient.LName,"
+				+"patient.FName,patient.Preferred,patient.LName, "
+				+"patient.Guarantor,AptDateTime,patient.Birthdate,patient.HmPhone,"
+				+"patient.WkPhone,patient.WirelessPhone,ProcDescript,Confirmed,Note,"
+				+"patient.AddrNote,AptNum,patient.MedUrgNote,patient.PreferConfirmMethod,"
+				+"guar.Email guarEmail,patient.Email,patient.Premed "
+				+"FROM patient,appointment,patient guar "
 				+"WHERE patient.PatNum=appointment.PatNum "
+				+"AND patient.Guarantor=guar.PatNum "
 				+"AND AptDateTime > "+POut.PDate(dateFrom)+" "
 				+"AND AptDateTime < "+POut.PDate(dateTo.AddDays(1))+" "
 				+"AND (AptStatus=1 "//scheduled
@@ -589,9 +596,10 @@ namespace OpenDentBusiness{
 				row["AptNum"]=rawtable.Rows[i]["AptNum"].ToString();
 				row["age"]=Patients.DateToAge(PIn.PDate(rawtable.Rows[i]["Birthdate"].ToString())).ToString();//we don't care about m/y.
 				dateT=PIn.PDateT(rawtable.Rows[i]["AptDateTime"].ToString());
+				row["AptDateTime"]=dateT;
 				row["aptDateTime"]=dateT.ToShortDateString()+"\r\n"+dateT.ToShortTimeString();
 				row["confirmed"]=DefC.GetName(DefCat.ApptConfirmed,PIn.PLong(rawtable.Rows[i]["Confirmed"].ToString()));
-				contmeth=(ContactMethod)PIn.PLong(rawtable.Rows[i]["PreferConfirmMethod"].ToString());
+				contmeth=(ContactMethod)PIn.PInt(rawtable.Rows[i]["PreferConfirmMethod"].ToString());
 				if(contmeth==ContactMethod.None || contmeth==ContactMethod.HmPhone) {
 					row["contactMethod"]=Lans.g("FormConfirmList","Hm:")+rawtable.Rows[i]["HmPhone"].ToString();
 				}
@@ -607,6 +615,12 @@ namespace OpenDentBusiness{
 				if(contmeth==ContactMethod.DoNotCall || contmeth==ContactMethod.SeeNotes) {
 					row["contactMethod"]=Lans.g("enumContactMethod",contmeth.ToString());
 				}
+				if(rawtable.Rows[i]["Email"].ToString()=="" && rawtable.Rows[i]["guarEmail"].ToString()!="") {
+					row["email"]=rawtable.Rows[i]["guarEmail"].ToString();
+				}
+				else {
+					row["email"]=rawtable.Rows[i]["Email"].ToString();
+				}
 				row["Guarantor"]=rawtable.Rows[i]["Guarantor"].ToString();
 				row["medNotes"]="";
 				if(rawtable.Rows[i]["Premed"].ToString()=="1"){
@@ -618,20 +632,22 @@ namespace OpenDentBusiness{
 					}
 					row["medNotes"]+=rawtable.Rows[i]["MedUrgNote"].ToString();
 				}
-				row["Note"]=rawtable.Rows[i]["Note"].ToString();
 				pat=new Patient();
 				pat.LName=rawtable.Rows[i]["LName"].ToString();
 				pat.FName=rawtable.Rows[i]["FName"].ToString();
 				pat.Preferred=rawtable.Rows[i]["Preferred"].ToString();
-				row["patientName"]=pat.LName+"\r\n";
+				row["nameF"]=pat.GetNameFirstOrPreferred();
+				row["nameFL"]=pat.GetNameFirstOrPrefL();
+				row["Note"]=rawtable.Rows[i]["Note"].ToString();
+				row["patientName"]=	pat.LName+"\r\n";
 				if(pat.Preferred!=""){
 					row["patientName"]+="'"+pat.Preferred+"'";
 				}
 				else{
 					row["patientName"]+=pat.FName;
 				}
-					//pat.GetNameLF();
 				row["PatNum"]=rawtable.Rows[i]["PatNum"].ToString();
+				row["PreferConfirmMethod"]=rawtable.Rows[i]["PreferConfirmMethod"].ToString();
 				row["ProcDescript"]=rawtable.Rows[i]["ProcDescript"].ToString();
 				rows.Add(row);
 			}
@@ -663,7 +679,7 @@ namespace OpenDentBusiness{
 			return Db.GetTable(command);
 		}
 
-		///<summary>The newStatus will be a DefNum or 0.  Only called from one place.</summary>
+		///<summary>The newStatus will be a DefNum or 0.</summary>
 		public static void SetConfirmed(long aptNum,long newStatus) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),aptNum,newStatus);

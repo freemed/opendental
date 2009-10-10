@@ -83,7 +83,11 @@ namespace OpenDentBusiness {
 		ClaimAttachExportPath,
 		ClaimFormTreatDentSaysSigOnFile,
 		ClaimsValidateACN,
+		ConfirmEmailMessage,
+		ConfirmEmailSubject,
 		ConfirmPostcardMessage,
+		///<summary>FK to definition.DefNum.  Initially 0.</summary>
+		ConfirmStatusEmailed,
 		CoPay_FeeSchedule_BlankLikeZero,
 		CorruptedDatabase,
 		CropDelta,

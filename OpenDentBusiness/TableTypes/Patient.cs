@@ -914,13 +914,21 @@ namespace OpenDentBusiness{
 			return retVal;
 		}
 
-		///<summary></summary>
+		///<summary>Includes preferred.</summary>
 		public string GetNameFirst() {
 			string retVal=FName;
 			if(Preferred!="") {
 				retVal+=" '"+Preferred+"'";
 			}
 			return retVal;
+		}
+
+		///<summary></summary>
+		public string GetNameFirstOrPreferred() {
+			if(Preferred!="") {
+				return Preferred;
+			}
+			return FName;
 		}
 
 		///<summary>Dear __.  Does not include the "Dear" or the comma.</summary>
