@@ -1233,7 +1233,7 @@ namespace OpenDental{
 			if(CommandLineArgs.Length==0) {
 				Splash.Show();
 			}
-			if(!PrefsStartup()){
+			if(!PrefsStartup()){//looks for the AtoZ folder here, but would like to eventually move that down to after login
 				Cursor=Cursors.Default;
 				Splash.Dispose();
 				return;
@@ -1278,17 +1278,9 @@ namespace OpenDental{
 			if(!File.Exists("Help.chm")){
 				menuItemHelpWindows.Visible=false;
 			}
-			//if(!File.Exists("remoteclient.exe")){
-			//	menuItemRemote.Visible=false;
-			//}
-			//menuItemClaimForms.Visible=PrefC.UsingAtoZfolder;
 			if(Environment.OSVersion.Platform==PlatformID.Unix){//Create A to Z unsupported on Unix for now.
 				menuItemCreateAtoZFolders.Visible=false;
 			}
-			//#if !DEBUG
-				//only visible in debug mode.  It's only usefulness is after a conversion, so no need for user to see it.
-			//	menuItemReallocate.Visible=false;
-			//#endif
 			if(!PrefC.GetBool(PrefName.ADAdescriptionsReset)) {
 				ProcedureCodes.ResetADAdescriptions();
 				Prefs.UpdateBool(PrefName.ADAdescriptionsReset,true);
@@ -1375,11 +1367,16 @@ namespace OpenDental{
 			if(!PrefL.ConvertDB()){
 				return false;
 			}
-			if(PrefC.UsingAtoZfolder && ImageStore.GetPreferredImagePath()==null) {//AtoZ folder not found
+			//if(PrefC.UsingAtoZfolder && ImageStore.GetPreferredImagePath()==null) {//AtoZ folder not found
+			string prefImagePath=ImageStore.GetPreferredImagePath();
+			if(prefImagePath!=null && !Directory.Exists(prefImagePath)) {//AtoZ folder not found
 				Cache.Refresh(InvalidType.Security);
 				FormPath FormP=new FormPath();
+				FormP.IsStartingUp=true;
 				FormP.ShowDialog();
 				if(FormP.DialogResult!=DialogResult.OK){
+					MsgBox.Show(this,"Invalid A to Z path.  Closing program.");
+					Application.Exit();
 					return false;
 				}
 				//bool usingAtoZ=FormPath.UsingImagePath();
@@ -3039,9 +3036,7 @@ namespace OpenDental{
 		}
 
 		private void menuItemDataPath_Click(object sender, System.EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.Setup)){
-				return;
-			}
+			//security is handled from within the form.
 			FormPath FormP=new FormPath();
 			FormP.ShowDialog();
 			ContrDocs2.Enabled=PrefC.UsingAtoZfolder;

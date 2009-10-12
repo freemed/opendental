@@ -37,7 +37,7 @@ namespace OpenDental{
 			// checkRandomPrimaryKeys
 			// 
 			this.checkRandomPrimaryKeys.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkRandomPrimaryKeys.Location = new System.Drawing.Point(23,15);
+			this.checkRandomPrimaryKeys.Location = new System.Drawing.Point(17,15);
 			this.checkRandomPrimaryKeys.Name = "checkRandomPrimaryKeys";
 			this.checkRandomPrimaryKeys.Size = new System.Drawing.Size(346,17);
 			this.checkRandomPrimaryKeys.TabIndex = 56;
@@ -46,7 +46,7 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(119,494);
+			this.label1.Location = new System.Drawing.Point(113,506);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(451,45);
 			this.label1.TabIndex = 61;
@@ -55,7 +55,7 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(119,554);
+			this.label2.Location = new System.Drawing.Point(113,563);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(451,45);
 			this.label2.TabIndex = 63;
@@ -71,7 +71,7 @@ namespace OpenDental{
 			this.butTest.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butTest.CornerRadius = 4F;
 			this.butTest.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butTest.Location = new System.Drawing.Point(23,563);
+			this.butTest.Location = new System.Drawing.Point(17,572);
 			this.butTest.Name = "butTest";
 			this.butTest.Size = new System.Drawing.Size(90,24);
 			this.butTest.TabIndex = 62;
@@ -86,7 +86,7 @@ namespace OpenDental{
 			this.butSetRanges.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butSetRanges.CornerRadius = 4F;
 			this.butSetRanges.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butSetRanges.Location = new System.Drawing.Point(23,504);
+			this.butSetRanges.Location = new System.Drawing.Point(17,516);
 			this.butSetRanges.Name = "butSetRanges";
 			this.butSetRanges.Size = new System.Drawing.Size(90,24);
 			this.butSetRanges.TabIndex = 59;
@@ -103,7 +103,7 @@ namespace OpenDental{
 			this.butAdd.CornerRadius = 4F;
 			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(623,457);
+			this.butAdd.Location = new System.Drawing.Point(798,470);
 			this.butAdd.Name = "butAdd";
 			this.butAdd.Size = new System.Drawing.Size(75,24);
 			this.butAdd.TabIndex = 58;
@@ -115,10 +115,10 @@ namespace OpenDental{
 			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(23,42);
+			this.gridMain.Location = new System.Drawing.Point(17,42);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(547,439);
+			this.gridMain.Size = new System.Drawing.Size(764,452);
 			this.gridMain.TabIndex = 57;
 			this.gridMain.Title = "Servers";
 			this.gridMain.TranslationName = "FormReplicationSetup";
@@ -132,7 +132,7 @@ namespace OpenDental{
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(623,575);
+			this.butClose.Location = new System.Drawing.Point(798,576);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75,24);
 			this.butClose.TabIndex = 2;
@@ -142,7 +142,7 @@ namespace OpenDental{
 			// FormReplicationSetup
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(723,626);
+			this.ClientSize = new System.Drawing.Size(885,614);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.butTest);
 			this.Controls.Add(this.label1);

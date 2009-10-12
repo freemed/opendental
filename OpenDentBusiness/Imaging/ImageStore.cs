@@ -17,13 +17,17 @@ namespace OpenDentBusiness {
 		///<summary>Remembers the computerpref.AtoZpath.  Set to empty string on startup.  If set to something else, this path will override all other paths.</summary>
 		public static string LocalAtoZpath=null;
 
-		///<summary>Only makes a call to the database on startup.  After that, just uses cached data.</summary>
+		///<summary>Only makes a call to the database on startup.  After that, just uses cached data.  Does not validate that the path exists except if the main one is used.</summary>
 		public static string GetPreferredImagePath() {
 			if(!PrefC.UsingAtoZfolder) {
 				return null;
 			}
 			if(LocalAtoZpath==null) {//on startup
 				LocalAtoZpath=ComputerPrefs.GetForLocalComputer().AtoZpath;
+			}
+			string replicationAtoZ=ReplicationServers.GetAtoZpath();
+			if(replicationAtoZ!=""){
+				return replicationAtoZ;
 			}
 			if(LocalAtoZpath!="") {
 				return LocalAtoZpath;

@@ -1724,6 +1724,10 @@ DROP TABLE IF EXISTS etAck";
 				Db.NonQ(command);
 				command="INSERT INTO preference (PrefName,ValueString) VALUES ('ConfirmEmailMessage','[NameF], We would like to confirm your appointment on [date] at [time]')";
 				Db.NonQ(command);
+				command="ALTER TABLE replicationserver ADD AtoZpath varchar(255) NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE replicationserver ADD UpdateBlocked tinyint NOT NULL";
+				Db.NonQ(command);
 				
 
 

@@ -15,6 +15,7 @@ namespace OpenDentBusiness{
 		///<summary>This value is only retrieved once upon startup.</summary>
 		private static int server_id=-1;
 
+		/// <summary>The first time this is accessed, the value is obtained using a query.  Will be 0 unless a server id was set in my.ini.</summary>
 		public static int Server_id {
 			get{
 				if(server_id==-1) {
@@ -50,11 +51,13 @@ namespace OpenDentBusiness{
 			for(int i=0;i<table.Rows.Count;i++){
 				serv=new ReplicationServer();
 				serv.IsNew=false;
-				serv.ReplicationServerNum= PIn.PLong   (table.Rows[i][0].ToString());
+				serv.ReplicationServerNum= PIn.PLong  (table.Rows[i][0].ToString());
 				serv.Descript            = PIn.PString(table.Rows[i][1].ToString());
-				serv.ServerId            = PIn.PInt (table.Rows[i][2].ToString());
-				serv.RangeStart          = PIn.PLong   (table.Rows[i][3].ToString());
-				serv.RangeEnd            = PIn.PLong   (table.Rows[i][4].ToString());
+				serv.ServerId            = PIn.PInt   (table.Rows[i][2].ToString());
+				serv.RangeStart          = PIn.PLong  (table.Rows[i][3].ToString());
+				serv.RangeEnd            = PIn.PLong  (table.Rows[i][4].ToString());
+				serv.AtoZpath            = PIn.PString(table.Rows[i][5].ToString());
+				serv.UpdateBlocked       = PIn.PBool  (table.Rows[i][6].ToString());
 				listt.Add(serv);
 			}
 		}
@@ -122,7 +125,7 @@ namespace OpenDentBusiness{
 			if(Server_id!=0) {//if it IS 0, then there is no server_id set.
 				ReplicationServer thisServer=null;
 				for(int i=0;i<Listt.Count;i++) {
-					if(Listt[i].ServerId==server_id) {
+					if(Listt[i].ServerId==Server_id) {
 						thisServer=Listt[i];
 						break;
 					}
@@ -179,7 +182,34 @@ namespace OpenDentBusiness{
 			}
 			return true;//already in use
 		}
-	
+
+		///<summary>If this server id is 0, or if no AtoZ entered for this server, then returns empty string.</summary>
+		public static string GetAtoZpath() {
+			//No need to check RemotingRole; no call to db.
+			if(Server_id==0) {
+				return "";
+			}
+			for(int i=0;i<Listt.Count;i++) {
+				if(Listt[i].ServerId==Server_id) {
+					return Listt[i].AtoZpath;//could be empty string.
+				}
+			}
+			return "";
+		}
+
+		///<summary>If this server id is 0, this returns null.  Or if there is no ReplicationServer object for this server id, then this returns null.</summary
+		public static ReplicationServer GetForLocalComputer() {
+			//No need to check RemotingRole; no call to db.
+			if(Server_id==0) {
+				return null;
+			}
+			for(int i=0;i<Listt.Count;i++) {
+				if(Listt[i].ServerId==Server_id) {
+					return Listt[i];
+				}
+			}
+			return null;
+		}
 		
 
 	}

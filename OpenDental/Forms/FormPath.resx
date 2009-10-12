@@ -123,17 +123,14 @@
   <data name="label1.Text" xml:space="preserve">
     <value>Export Path (Optional): for exporting tables.  If you use a network path (like \\SERVER\OpenDentalExport\ ), the data will be exported to one central computer.   But it is usually easier to use a local path (like C:\OpenDentalExport\ ), and the data will be stored on the local hard drive of the computer you export on.  The folder will be created later if it does not exist.</value>
   </data>
-  <data name="label2.Text" xml:space="preserve">
+  <data name="labelPathSameForAll.Text" xml:space="preserve">
     <value>This path is the same for every computer.  If you have only one computer, then the folder can be local (like C:\OpenDentImages ), otherwise it should be a folder shared on the network (like \\SERVER\OpenDentImages ).  A path is valid if it contains the A - Z folders.</value>
   </data>
   <data name="label3.Text" xml:space="preserve">
     <value>Letter Merge Path (Optional): The location where your letter templates are stored.   Letters are usually stored in one central location, so use a network path (like \\server\OpenDentalLetters\ ).   Don't forget to share the folder so all the computers can access it.  However, if you only have one computer with no network, then use a local path (like C:\OpenDentalLetters\ ). </value>
   </data>
   <data name="checkMultiplePaths.Text" xml:space="preserve">
-    <value>Use multiple paths. Not recommended for most users.  Typically only used for Linux.  Separate different paths with a semicolon and no spaces.  When starting the program, the first valid path that is found will be used.  This can also be used to run backups as long as you are careful.</value>
-  </data>
-  <data name="label4.Text" xml:space="preserve">
-    <value>Path for this computer.  Usually leave blank.  You can use this feature if you have Linux workstations or if you have one virtual database that covers multiple physical locations and you want to use a different images folder at each location.</value>
+    <value>Use multiple paths. Not recommended for most users.  Separate different paths with a semicolon and no spaces.  When starting the program, the first valid path that is found will be used.  This can be used to run backups as long as you are careful.</value>
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">

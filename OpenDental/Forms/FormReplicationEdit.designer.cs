@@ -35,6 +35,9 @@ namespace OpenDental{
 			this.textServerId = new OpenDental.ValidNum();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.textAtoZpath = new System.Windows.Forms.TextBox();
+			this.label6 = new System.Windows.Forms.Label();
+			this.checkUpdateBlocked = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -117,7 +120,7 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(33,207);
+			this.butDelete.Location = new System.Drawing.Point(33,262);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(86,24);
 			this.butDelete.TabIndex = 70;
@@ -141,7 +144,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(478,207);
+			this.butOK.Location = new System.Drawing.Point(478,262);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 3;
@@ -156,17 +159,48 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(579,207);
+			this.butCancel.Location = new System.Drawing.Point(579,262);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 2;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// textAtoZpath
+			// 
+			this.textAtoZpath.Location = new System.Drawing.Point(238,168);
+			this.textAtoZpath.Name = "textAtoZpath";
+			this.textAtoZpath.Size = new System.Drawing.Size(388,20);
+			this.textAtoZpath.TabIndex = 72;
+			this.textAtoZpath.WordWrap = false;
+			// 
+			// label6
+			// 
+			this.label6.Location = new System.Drawing.Point(10,168);
+			this.label6.Name = "label6";
+			this.label6.Size = new System.Drawing.Size(226,18);
+			this.label6.TabIndex = 71;
+			this.label6.Text = "A to Z images folder";
+			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// checkUpdateBlocked
+			// 
+			this.checkUpdateBlocked.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkUpdateBlocked.Location = new System.Drawing.Point(16,200);
+			this.checkUpdateBlocked.Name = "checkUpdateBlocked";
+			this.checkUpdateBlocked.Size = new System.Drawing.Size(236,18);
+			this.checkUpdateBlocked.TabIndex = 99;
+			this.checkUpdateBlocked.Text = "Update Blocked";
+			this.checkUpdateBlocked.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkUpdateBlocked.UseVisualStyleBackColor = true;
+			// 
 			// FormReplicationEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(678,254);
+			this.ClientSize = new System.Drawing.Size(678,309);
+			this.Controls.Add(this.checkUpdateBlocked);
+			this.Controls.Add(this.textAtoZpath);
+			this.Controls.Add(this.label6);
 			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.textRangeEnd);
 			this.Controls.Add(this.textRangeStart);
@@ -202,5 +236,8 @@ namespace OpenDental{
 		private System.Windows.Forms.TextBox textRangeStart;
 		private System.Windows.Forms.TextBox textRangeEnd;
 		private OpenDental.UI.Button butDelete;
+		private System.Windows.Forms.TextBox textAtoZpath;
+		private System.Windows.Forms.Label label6;
+		private System.Windows.Forms.CheckBox checkUpdateBlocked;
 	}
 }

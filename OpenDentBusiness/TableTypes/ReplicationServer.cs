@@ -66,6 +66,30 @@ namespace OpenDentBusiness{
 			get{return rangeEndChanged;}
 		}
 
+		[DataField("AtoZpath")]
+		private string atoZpath;
+		private bool atoZpathChanged;
+		///<summary>The AtoZpath for this server. Optional.</summary>
+		public string AtoZpath {
+			get { return atoZpath; }
+			set { if(atoZpath!=value) { atoZpath=value; MarkDirty(); atoZpathChanged=true; } }
+		}
+		public bool AtoZpathChanged {
+			get { return atoZpathChanged; }
+		}
+
+		[DataField("UpdateBlocked")]
+		private bool updateBlocked;
+		private bool updateBlockedChanged;
+		///<summary>If true, then this server cannot initiate an update.  Typical for satellite servers.</summary>
+		public bool UpdateBlocked {
+			get { return updateBlocked; }
+			set { if(updateBlocked!=value) { updateBlocked=value; MarkDirty(); updateBlockedChanged=true; } }
+		}
+		public bool UpdateBlockedChanged {
+			get { return updateBlockedChanged; }
+		}
+
 		public ReplicationServer Copy() {
 			return (ReplicationServer)Clone();
 		}	

@@ -25,6 +25,8 @@ namespace OpenDental {
 			if(RepServ.RangeEnd!=0) {
 				textRangeEnd.Text=RepServ.RangeEnd.ToString();
 			}
+			textAtoZpath.Text=RepServ.AtoZpath;
+			checkUpdateBlocked.Checked=RepServ.UpdateBlocked;
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
@@ -76,6 +78,8 @@ namespace OpenDental {
 			RepServ.ServerId=serverid;//will be valid and greater than 0.
 			RepServ.RangeStart=rangeStart;
 			RepServ.RangeEnd=rangeEnd;
+			RepServ.AtoZpath=textAtoZpath.Text;
+			RepServ.UpdateBlocked=checkUpdateBlocked.Checked;
 			ReplicationServers.WriteObject(RepServ);
 			DialogResult=DialogResult.OK;
 		}

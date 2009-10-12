@@ -31,14 +31,19 @@ namespace OpenDental {
 			ReplicationServers.RefreshCache();
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g("FormReplicationSetup","Description"),110);
+			ODGridColumn col=new ODGridColumn(Lan.g("FormReplicationSetup","Description"),100);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("FormReplicationSetup","server_id"),80);
+			col=new ODGridColumn(Lan.g("FormReplicationSetup","server_id"),65);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("FormReplicationSetup","Key Range Start"),160);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("FormReplicationSetup","Key Range End"),160);
 			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("FormReplicationSetup","AtoZ Path"),160);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("FormReplicationSetup","UpdateBlocked"),100);
+			gridMain.Columns.Add(col);
+
 			gridMain.Rows.Clear();
 			ODGridRow row;
 			for(int i=0;i<ReplicationServers.Listt.Count;i++){
@@ -47,6 +52,8 @@ namespace OpenDental {
 				row.Cells.Add(ReplicationServers.Listt[i].ServerId.ToString());
 				row.Cells.Add(ReplicationServers.Listt[i].RangeStart.ToString("n0"));
 				row.Cells.Add(ReplicationServers.Listt[i].RangeEnd.ToString("n0"));
+				row.Cells.Add(ReplicationServers.Listt[i].AtoZpath);
+				row.Cells.Add(ReplicationServers.Listt[i].UpdateBlocked ? "X" : "");
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
