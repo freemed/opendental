@@ -37,8 +37,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceManager", "ServiceMa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateFileCopier", "UpdateFileCopier\UpdateFileCopier.csproj", "{814E9B5F-DBFA-4506-BAF2-B47112F3FC81}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "TestProject1", "TestProject1\TestProject1.vbproj", "{B91952E5-B76F-4762-AA7E-B628862B13EE}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -125,12 +123,6 @@ Global
 		{814E9B5F-DBFA-4506-BAF2-B47112F3FC81}.LinuxRelease|Any CPU.Build.0 = Release|Any CPU
 		{814E9B5F-DBFA-4506-BAF2-B47112F3FC81}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{814E9B5F-DBFA-4506-BAF2-B47112F3FC81}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B91952E5-B76F-4762-AA7E-B628862B13EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B91952E5-B76F-4762-AA7E-B628862B13EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B91952E5-B76F-4762-AA7E-B628862B13EE}.LinuxRelease|Any CPU.ActiveCfg = Release|Any CPU
-		{B91952E5-B76F-4762-AA7E-B628862B13EE}.LinuxRelease|Any CPU.Build.0 = Release|Any CPU
-		{B91952E5-B76F-4762-AA7E-B628862B13EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B91952E5-B76F-4762-AA7E-B628862B13EE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -23,7 +23,7 @@ namespace OpenDentBusiness {
 	//The other file was simply getting too big.  It was bogging down VS speed.
 	///<summary></summary>
 	public partial class ConvertDatabases {
-		public static System.Version LatestVersion=new Version("6.8.0.0");//This value must be changed when a new conversion is to be triggered.
+		public static System.Version LatestVersion=new Version("6.9.0.0");//This value must be changed when a new conversion is to be triggered.
 
 		private static void To6_2_9() {
 			if(FromVersion<new Version("6.2.9.0")) {
@@ -805,11 +805,11 @@ DROP TABLE IF EXISTS etAck";
 				command="UPDATE preference SET ValueString = '6.7.22.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
-			To6_8_0();
+			To6_8_1();
 		}
 
-		private static void To6_8_0() {
-			if(FromVersion<new Version("6.8.0.0")) {
+		private static void To6_8_1() {
+			if(FromVersion<new Version("6.8.1.0")) {
 				string command;
 				//add TreatPlanEdit,ReportProdInc,TimecardDeleteEntry permissions to all groups------------------------------------------------------
 				command="SELECT UserGroupNum FROM usergroup";
@@ -1733,15 +1733,27 @@ DROP TABLE IF EXISTS etAck";
 					Db.NonQ(command);
 				}
 				catch { }
+				command="UPDATE preference SET ValueString = '6.8.1.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ32(command);
+			}
+			To6_9_0();
+		}
+
+		private static void To6_9_0() {
+			if(FromVersion<new Version("6.9.0.0")) {
+				string command;
 
 
 
-				
-				command="UPDATE preference SET ValueString = '6.8.0.0' WHERE PrefName = 'DataBaseVersion'";
+
+
+				command="UPDATE preference SET ValueString = '6.9.0.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ32(command);
 			}
 			//To6_7_1();
 		}
+
+
 
 	}
 }
