@@ -1473,8 +1473,7 @@ namespace OpenDentBusiness{
 				command+="PlannedAptNum="+aptNum;
 			}
 			else{
-				command+="(AptNum="+aptNum
-					+" AND (AptNum=0 OR AptNum="+aptNum+"))";//exclude procs attached to other appts.
+				command+="AptNum="+aptNum;//exclude procs attached to other appts.
 			}
 			//3. All unattached completed procs with same date as appt.
 			//but only if one of these types
@@ -1496,8 +1495,15 @@ namespace OpenDentBusiness{
 				}
 				row["CodeNum"]=rawProc.Rows[i]["CodeNum"].ToString();
 				row["descript"]="";
-				if(rawProc.Rows[i]["AptNum"].ToString()!="0" && rawProc.Rows[i]["AptNum"].ToString()!=aptNum) {
-					row["descript"]=Lans.g("FormApptEdit","(other appt)");
+				if(apptStatus=="6") {//planned
+					if(rawProc.Rows[i]["PlannedAptNum"].ToString()!="0" && rawProc.Rows[i]["PlannedAptNum"].ToString()!=aptNum) {
+						row["descript"]=Lans.g("FormApptEdit","(other appt)");
+					}
+				}
+				else {
+					if(rawProc.Rows[i]["AptNum"].ToString()!="0" && rawProc.Rows[i]["AptNum"].ToString()!=aptNum) {
+						row["descript"]=Lans.g("FormApptEdit","(other appt)");
+					}
 				}
 				if(rawProc.Rows[i]["LaymanTerm"].ToString()==""){
 					row["descript"]+=rawProc.Rows[i]["Descript"].ToString();
