@@ -45,7 +45,7 @@ namespace OpenDental{
 		private GroupBox groupBox2;
 		private RadioButton radioBreaks;
 		private RadioButton radioTimeCard;
-		private OpenDental.UI.PrintPreview printPreview;
+		//private OpenDental.UI.PrintPreview printPreview;
 		///<summary>An array list of ojects representing the rows in the table. Can be either clockEvents or timeAdjusts.</summary>
 		private ArrayList mergedAL;
 		///<summary>The running weekly total, whether it gets displayed or not.</summary>

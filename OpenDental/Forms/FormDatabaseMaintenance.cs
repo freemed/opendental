@@ -334,10 +334,10 @@ namespace OpenDental {
 			try {
 				File.AppendAllText(path,textLog.Text);
 			}
-			catch(SecurityException se) {
+			catch(SecurityException) {
 				MsgBox.Show(this,"Log not saved to Repairlog.txt because user does not have permission to access that file.");
 			}
-			catch(UnauthorizedAccessException ua) {
+			catch(UnauthorizedAccessException) {
 				MsgBox.Show(this,"Log not saved to Repairlog.txt because user does not have permission to access that file.");
 			}
 			catch(Exception ex) {

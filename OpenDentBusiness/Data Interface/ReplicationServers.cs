@@ -197,7 +197,7 @@ namespace OpenDentBusiness{
 			return "";
 		}
 
-		///<summary>If this server id is 0, this returns null.  Or if there is no ReplicationServer object for this server id, then this returns null.</summary
+		///<summary>If this server id is 0, this returns null.  Or if there is no ReplicationServer object for this server id, then this returns null.</summary>
 		public static ReplicationServer GetForLocalComputer() {
 			//No need to check RemotingRole; no call to db.
 			if(Server_id==0) {

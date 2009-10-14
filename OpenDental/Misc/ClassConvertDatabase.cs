@@ -130,7 +130,7 @@ namespace OpenDental{
 			catch(System.IO.FileNotFoundException e){
 				MessageBox.Show(e.FileName+" "+Lan.g(this,"could not be found. Your database has not been altered and is still usable if you uninstall this version, then reinstall the previous version."));
 				if(FromVersion>=new Version("3.4.0")){
-					Prefs.UpdateBool(PrefName.CorruptedDatabase",false);
+					Prefs.UpdateBool(PrefName.CorruptedDatabase,false);
 				}
 				//Prefs.Refresh();
 				return false;
@@ -138,7 +138,7 @@ namespace OpenDental{
 			catch(System.IO.DirectoryNotFoundException){
 				MessageBox.Show(Lan.g(this,"ConversionFiles folder could not be found. Your database has not been altered and is still usable if you uninstall this version, then reinstall the previous version."));
 				if(FromVersion>=new Version("3.4.0")){
-					Prefs.UpdateBool(PrefName.CorruptedDatabase",false);
+					Prefs.UpdateBool(PrefName.CorruptedDatabase,false);
 				}
 				//Prefs.Refresh();
 				return false;

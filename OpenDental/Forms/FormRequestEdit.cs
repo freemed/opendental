@@ -123,7 +123,7 @@ namespace OpenDental {
 				OpenDental.localhost.Service1 updateService=new OpenDental.localhost.Service1();
 			#else
 				OpenDental.customerUpdates.Service1 updateService=new OpenDental.customerUpdates.Service1();
-				updateService.Url=PrefC.GetString(PrefName.UpdateServerAddress");
+				updateService.Url=PrefC.GetString(PrefName.UpdateServerAddress);
 			#endif
 			//Send the message and get the result-------------------------------------------------------------------------------------
 			string result="";
@@ -322,7 +322,7 @@ namespace OpenDental {
 				OpenDental.localhost.Service1 updateService=new OpenDental.localhost.Service1();
 			#else
 				OpenDental.customerUpdates.Service1 updateService=new OpenDental.customerUpdates.Service1();
-				updateService.Url=PrefC.GetString(PrefName.UpdateServerAddress");
+				updateService.Url=PrefC.GetString(PrefName.UpdateServerAddress);
 			#endif
 			//Send the message and get the result-------------------------------------------------------------------------------------
 			string result="";
@@ -406,7 +406,7 @@ namespace OpenDental {
 				OpenDental.localhost.Service1 updateService=new OpenDental.localhost.Service1();
 			#else
 				OpenDental.customerUpdates.Service1 updateService=new OpenDental.customerUpdates.Service1();
-				updateService.Url=PrefC.GetString(PrefName.UpdateServerAddress");
+				updateService.Url=PrefC.GetString(PrefName.UpdateServerAddress);
 			#endif
 			//Send the message and get the result-------------------------------------------------------------------------------------
 			string result="";
@@ -620,7 +620,7 @@ namespace OpenDental {
 				OpenDental.localhost.Service1 updateService=new OpenDental.localhost.Service1();
 			#else
 				OpenDental.customerUpdates.Service1 updateService=new OpenDental.customerUpdates.Service1();
-				updateService.Url=PrefC.GetString(PrefName.UpdateServerAddress");
+				updateService.Url=PrefC.GetString(PrefName.UpdateServerAddress);
 			#endif
 			//Send the message and get the result-------------------------------------------------------------------------------------
 			string result="";

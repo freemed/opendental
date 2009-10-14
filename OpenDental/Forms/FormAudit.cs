@@ -35,7 +35,7 @@ namespace OpenDental{
 		public long CurPatNum;
 		private PrintDocument pd;
 		private int linesPrinted;
-		private OpenDental.UI.PrintPreview printPreview;
+		//private OpenDental.UI.PrintPreview printPreview;
 		///<summary>This alphabetizes the permissions, except for "none", which is always first.  If using a foreign language, the order will be according to the English version, not the foreign translated text.</summary>
 		private List<string> permissionsAlphabetic;
 

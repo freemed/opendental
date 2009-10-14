@@ -2243,7 +2243,7 @@ namespace OpenDental{
 			checkNoBillIns.CheckState=CheckState.Unchecked;
 			bool allNoBillIns=true;
 			InsPlan plan;
-			ODGridCell cell;
+			//ODGridCell cell;
 			for(int i=0;i<ClaimProcsForProc.Count;i++) {
 				if(ClaimProcsForProc[i].NoBillIns){
 					checkNoBillIns.CheckState=CheckState.Indeterminate;

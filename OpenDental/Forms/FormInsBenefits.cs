@@ -1630,7 +1630,7 @@ namespace OpenDental{
 			gridBenefits.Columns.Add(col);
 			gridBenefits.Rows.Clear();
 			ODGridRow row;
-			bool isCalendarYear=true;
+			//bool isCalendarYear=true;
 			for(int i=0;i<benefitList.Count;i++) {
 				row=new ODGridRow();
 				if(benefitList[i].PatPlanNum==0) {//attached to plan

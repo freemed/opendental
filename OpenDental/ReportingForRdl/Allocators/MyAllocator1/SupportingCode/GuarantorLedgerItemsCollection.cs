@@ -796,7 +796,7 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1 {
 							//    dtTest.Rows.Add(drkk);
 							//}
 							#endregion
-							bool MarkedAllocated;
+							//bool MarkedAllocated;
 #if DEBUG
 							decimal sum = 0; // don't need the sum just checking things out.
 							MarkedAllocated = true;  // can be used to make sure there is not a miss recorrded IsAllocated.
@@ -826,8 +826,8 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1 {
 
 
 							}
-							else
-								MarkedAllocated = false; // no splits to match against payment item (should be a new payment)
+							//else
+							//	MarkedAllocated = false; // no splits to match against payment item (should be a new payment)
 
 							//if (fullyAllocated)
 							//    LI.ALLOCATED_AMMOUNT = sum; // if Allocated_ammount = amount the fully allocated = true (property of LI)

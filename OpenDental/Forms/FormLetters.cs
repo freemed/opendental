@@ -31,13 +31,13 @@ namespace OpenDental{
 		private System.Drawing.Printing.PrintDocument pd2;
 		//private bool bodyChanged;
 		private OpenDental.ODtextBox textBody;
-		private int pagesPrinted=0;
+		//private int pagesPrinted=0;
 		private Patient PatCur;
 		private Letter LetterCur;
 		///<summary>If this is not null, then this letter will be addressed to the referral rather than the patient.</summary>
 		public Referral ReferralCur;
-		///<summary>Only used if FuchsOptionsOn</summary>
-		private string ExtraImageToPrint;
+		//<summary>Only used if FuchsOptionsOn</summary>
+		//private string ExtraImageToPrint;
 
 		///<summary></summary>
 		public FormLetters(){

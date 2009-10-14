@@ -132,6 +132,10 @@ namespace OpenDentBusiness{
 			return Status.ToString()+ProcDate.ToShortDateString()+" est:"+InsEstTotal.ToString()+" ded:"+DedEst.ToString();
 		}
 
+		public override int GetHashCode() {
+			return base.GetHashCode();
+		}
+
 
 
 
