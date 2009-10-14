@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
 using CodeBase;
@@ -399,6 +400,9 @@ namespace OpenDental{
 			this.textDateEnd.Name = "textDateEnd";
 			this.textDateEnd.Size = new System.Drawing.Size(77,20);
 			this.textDateEnd.TabIndex = 246;
+			this.textDateEnd.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textDateEnd_KeyDown);
+			this.textDateEnd.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textDateEnd_KeyPress);
+			this.textDateEnd.Validating += new System.ComponentModel.CancelEventHandler(this.textDateEnd_Validating);
 			// 
 			// textDateStart
 			// 
@@ -406,6 +410,9 @@ namespace OpenDental{
 			this.textDateStart.Name = "textDateStart";
 			this.textDateStart.Size = new System.Drawing.Size(77,20);
 			this.textDateStart.TabIndex = 245;
+			this.textDateStart.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textDateStart_KeyDown);
+			this.textDateStart.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textDateStart_KeyPress);
+			this.textDateStart.Validating += new System.ComponentModel.CancelEventHandler(this.textDateStart_Validating);
 			// 
 			// label4
 			// 
@@ -502,6 +509,9 @@ namespace OpenDental{
 			this.textDate.Name = "textDate";
 			this.textDate.Size = new System.Drawing.Size(77,20);
 			this.textDate.TabIndex = 244;
+			this.textDate.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textDate_KeyDown);
+			this.textDate.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textDate_KeyPress);
+			this.textDate.Validating += new System.ComponentModel.CancelEventHandler(this.textDate_Validating);
 			// 
 			// FormStatementOptions
 			// 
@@ -918,6 +928,237 @@ namespace OpenDental{
 			}
 		}
 
+		private void textDate_KeyPress(object sender,KeyPressEventArgs e) {
+			if(CultureInfo.CurrentCulture.Name=="fr-CA" || CultureInfo.CurrentCulture.Name=="en-CA") {
+				return;//because they use - in their regular dates which interferes with this feature.
+			}
+			if(e.KeyChar!='+' && e.KeyChar!='-') {
+				return;
+			}
+			DateTime dateDisplayed;
+			try {
+				dateDisplayed=DateTime.Parse(textDate.Text);
+			}
+			catch {
+				return;
+			}
+			int caret=textDate.SelectionStart;
+			if(e.KeyChar=='+') {
+				dateDisplayed=dateDisplayed.AddDays(1);
+			}
+			if(e.KeyChar=='-') {
+				dateDisplayed=dateDisplayed.AddDays(-1);
+			}
+			textDate.Text=dateDisplayed.ToShortDateString();
+			textDate.SelectionStart=caret;
+			e.Handled=true;
+		}
+
+		private void textDate_KeyDown(object sender,KeyEventArgs e) {
+			if(e.KeyCode!=Keys.Up && e.KeyCode!=Keys.Down) {
+				return;
+			}
+			DateTime dateDisplayed;
+			try {
+				dateDisplayed=DateTime.Parse(textDate.Text);
+			}
+			catch {
+				return;
+			}
+			int caret=textDate.SelectionStart;
+			if(e.KeyCode==Keys.Up) {
+				dateDisplayed=dateDisplayed.AddDays(1);
+			}
+			if(e.KeyCode==Keys.Down) {
+				dateDisplayed=dateDisplayed.AddDays(-1);
+			}
+			textDate.Text=dateDisplayed.ToShortDateString();
+			textDate.SelectionStart=caret;
+			e.Handled=true;
+		}
+
+		private void textDateStart_KeyPress(object sender,KeyPressEventArgs e) {
+			if(CultureInfo.CurrentCulture.Name=="fr-CA" || CultureInfo.CurrentCulture.Name=="en-CA") {
+				return;//because they use - in their regular dates which interferes with this feature.
+			}
+			if(e.KeyChar!='+' && e.KeyChar!='-') {
+				return;
+			}
+			DateTime dateDisplayed;
+			try {
+				dateDisplayed=DateTime.Parse(textDateStart.Text);
+			}
+			catch {
+				return;
+			}
+			int caret=textDateStart.SelectionStart;
+			if(e.KeyChar=='+') {
+				dateDisplayed=dateDisplayed.AddDays(1);
+			}
+			if(e.KeyChar=='-') {
+				dateDisplayed=dateDisplayed.AddDays(-1);
+			}
+			textDateStart.Text=dateDisplayed.ToShortDateString();
+			textDateStart.SelectionStart=caret;
+			e.Handled=true;
+		}
+
+		private void textDateStart_KeyDown(object sender,KeyEventArgs e) {
+			if(e.KeyCode!=Keys.Up && e.KeyCode!=Keys.Down) {
+				return;
+			}
+			DateTime dateDisplayed;
+			try {
+				dateDisplayed=DateTime.Parse(textDateStart.Text);
+			}
+			catch {
+				return;
+			}
+			int caret=textDateStart.SelectionStart;
+			if(e.KeyCode==Keys.Up) {
+				dateDisplayed=dateDisplayed.AddDays(1);
+			}
+			if(e.KeyCode==Keys.Down) {
+				dateDisplayed=dateDisplayed.AddDays(-1);
+			}
+			textDateStart.Text=dateDisplayed.ToShortDateString();
+			textDateStart.SelectionStart=caret;
+			e.Handled=true;
+		}
+
+		private void textDateEnd_KeyPress(object sender,KeyPressEventArgs e) {
+			if(CultureInfo.CurrentCulture.Name=="fr-CA" || CultureInfo.CurrentCulture.Name=="en-CA") {
+				return;//because they use - in their regular dates which interferes with this feature.
+			}
+			if(e.KeyChar!='+' && e.KeyChar!='-') {
+				return;
+			}
+			DateTime dateDisplayed;
+			try {
+				dateDisplayed=DateTime.Parse(textDateEnd.Text);
+			}
+			catch {
+				return;
+			}
+			int caret=textDateEnd.SelectionStart;
+			if(e.KeyChar=='+') {
+				dateDisplayed=dateDisplayed.AddDays(1);
+			}
+			if(e.KeyChar=='-') {
+				dateDisplayed=dateDisplayed.AddDays(-1);
+			}
+			textDateEnd.Text=dateDisplayed.ToShortDateString();
+			textDateEnd.SelectionStart=caret;
+			e.Handled=true;
+		}
+
+		private void textDateEnd_KeyDown(object sender,KeyEventArgs e) {
+			if(e.KeyCode!=Keys.Up && e.KeyCode!=Keys.Down) {
+				return;
+			}
+			DateTime dateDisplayed;
+			try {
+				dateDisplayed=DateTime.Parse(textDateEnd.Text);
+			}
+			catch {
+				return;
+			}
+			int caret=textDateEnd.SelectionStart;
+			if(e.KeyCode==Keys.Up) {
+				dateDisplayed=dateDisplayed.AddDays(1);
+			}
+			if(e.KeyCode==Keys.Down) {
+				dateDisplayed=dateDisplayed.AddDays(-1);
+			}
+			textDateEnd.Text=dateDisplayed.ToShortDateString();
+			textDateEnd.SelectionStart=caret;
+			e.Handled=true;
+		}
+
+		private void textDate_Validating(object sender,CancelEventArgs e) {
+			try {
+				if(textDate.Text=="") {
+					return;
+				}
+				bool allNums=true;
+				for(int i=0;i<textDate.Text.Length;i++) {
+					if(!Char.IsNumber(textDate.Text,i)) {
+						allNums=false;
+					}
+				}
+				if(CultureInfo.CurrentCulture.TwoLetterISOLanguageName=="en") {
+					if(allNums) {
+						if(textDate.Text.Length==6) {
+							textDate.Text=textDate.Text.Substring(0,2)+"/"+textDate.Text.Substring(2,2)+"/"+textDate.Text.Substring(4,2);
+						}
+						else if(Text.Length==8) {
+							textDate.Text=textDate.Text.Substring(0,2)+"/"+textDate.Text.Substring(2,2)+"/"+textDate.Text.Substring(4,4);
+						}
+					}
+				}
+				if(DateTime.Parse(Text).Year>1880) {
+					textDate.Text=DateTime.Parse(textDate.Text).ToString("d");
+				}
+			}
+			catch { }
+		}
+
+		private void textDateStart_Validating(object sender,CancelEventArgs e) {
+			try {
+				if(textDateStart.Text=="") {
+					return;
+				}
+				bool allNums=true;
+				for(int i=0;i<textDateStart.Text.Length;i++) {
+					if(!Char.IsNumber(textDateStart.Text,i)) {
+						allNums=false;
+					}
+				}
+				if(CultureInfo.CurrentCulture.TwoLetterISOLanguageName=="en") {
+					if(allNums) {
+						if(textDateStart.Text.Length==6) {
+							textDateStart.Text=textDateStart.Text.Substring(0,2)+"/"+textDateStart.Text.Substring(2,2)+"/"+textDateStart.Text.Substring(4,2);
+						}
+						else if(Text.Length==8) {
+							textDateStart.Text=textDateStart.Text.Substring(0,2)+"/"+textDateStart.Text.Substring(2,2)+"/"+textDateStart.Text.Substring(4,4);
+						}
+					}
+				}
+				if(DateTime.Parse(Text).Year>1880) {
+					textDateStart.Text=DateTime.Parse(textDateStart.Text).ToString("d");
+				}
+			}
+			catch { }
+		}
+
+		private void textDateEnd_Validating(object sender,CancelEventArgs e) {
+			try {
+				if(textDateEnd.Text=="") {
+					return;
+				}
+				bool allNums=true;
+				for(int i=0;i<textDateEnd.Text.Length;i++) {
+					if(!Char.IsNumber(textDateEnd.Text,i)) {
+						allNums=false;
+					}
+				}
+				if(CultureInfo.CurrentCulture.TwoLetterISOLanguageName=="en") {
+					if(allNums) {
+						if(textDateEnd.Text.Length==6) {
+							textDateEnd.Text=textDateEnd.Text.Substring(0,2)+"/"+textDateEnd.Text.Substring(2,2)+"/"+textDateEnd.Text.Substring(4,2);
+						}
+						else if(Text.Length==8) {
+							textDateEnd.Text=textDateEnd.Text.Substring(0,2)+"/"+textDateEnd.Text.Substring(2,2)+"/"+textDateEnd.Text.Substring(4,4);
+						}
+					}
+				}
+				if(DateTime.Parse(Text).Year>1880) {
+					textDateEnd.Text=DateTime.Parse(textDateEnd.Text).ToString("d");
+				}
+			}
+			catch { }
+		}
+
 		private void butDelete_Click(object sender,EventArgs e) {
 			if(StmtList==null && StmtCur.IsNew){
 				DialogResult=DialogResult.Cancel;
@@ -1102,6 +1343,10 @@ namespace OpenDental{
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
+
+		
 
 		
 
