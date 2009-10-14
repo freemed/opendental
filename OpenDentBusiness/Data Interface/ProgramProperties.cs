@@ -52,7 +52,7 @@ namespace OpenDentBusiness {
 		///<summary>This can only be called from ClassConversions. Users not allowed to add properties so there is no user interface.</summary>
 		public static long Insert(ProgramProperty Cur){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Cur.ProgramPropertyNum=Meth.GetInt(MethodBase.GetCurrentMethod(),Cur);
+				Cur.ProgramPropertyNum=Meth.GetLong(MethodBase.GetCurrentMethod(),Cur);
 				return Cur.ProgramPropertyNum;
 			}
 			if(PrefC.RandomKeys) {

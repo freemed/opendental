@@ -58,7 +58,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static long Insert(PerioExam Cur) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Cur.PerioExamNum=Meth.GetInt(MethodBase.GetCurrentMethod(),Cur);
+				Cur.PerioExamNum=Meth.GetLong(MethodBase.GetCurrentMethod(),Cur);
 				return Cur.PerioExamNum;
 			}
 			if(PrefC.RandomKeys){

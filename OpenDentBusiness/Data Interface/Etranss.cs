@@ -157,7 +157,7 @@ namespace OpenDentBusiness{
 		///<summary>DateTimeTrans can be handled automatically here.  No need to set it in advance, but it's allowed to do so.</summary>
 		public static long Insert(Etrans etrans) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				etrans.EtransNum=Meth.GetInt(MethodBase.GetCurrentMethod(),etrans);
+				etrans.EtransNum=Meth.GetLong(MethodBase.GetCurrentMethod(),etrans);
 				return etrans.EtransNum;
 			}
 			if(PrefC.RandomKeys) {

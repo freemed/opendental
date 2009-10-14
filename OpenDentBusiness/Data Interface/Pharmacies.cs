@@ -60,7 +60,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static long WriteObject(Pharmacy Pharmacy){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Pharmacy.PharmacyNum=Meth.GetInt(MethodBase.GetCurrentMethod(),Pharmacy);
+				Pharmacy.PharmacyNum=Meth.GetLong(MethodBase.GetCurrentMethod(),Pharmacy);
 				return Pharmacy.PharmacyNum;
 			}
 			DataObjectFactory<Pharmacy>.WriteObject(Pharmacy);

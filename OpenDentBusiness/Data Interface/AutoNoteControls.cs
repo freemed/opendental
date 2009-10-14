@@ -38,7 +38,7 @@ namespace OpenDentBusiness {
 
 		public static long Insert(AutoNoteControl autonotecontrol) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				autonotecontrol.AutoNoteControlNum=Meth.GetInt(MethodBase.GetCurrentMethod(),autonotecontrol);
+				autonotecontrol.AutoNoteControlNum=Meth.GetLong(MethodBase.GetCurrentMethod(),autonotecontrol);
 				return autonotecontrol.AutoNoteControlNum;
 			}
 			if(PrefC.RandomKeys) {

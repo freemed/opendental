@@ -43,7 +43,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static long WriteObject(SheetField sheetField) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				sheetField.SheetFieldNum=Meth.GetInt(MethodBase.GetCurrentMethod(),sheetField);
+				sheetField.SheetFieldNum=Meth.GetLong(MethodBase.GetCurrentMethod(),sheetField);
 				return sheetField.SheetFieldNum;
 			}
 			DataObjectFactory<SheetField>.WriteObject(sheetField);

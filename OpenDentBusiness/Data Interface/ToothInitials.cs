@@ -38,7 +38,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static long Insert(ToothInitial init) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				init.ToothInitialNum=Meth.GetInt(MethodBase.GetCurrentMethod(),init);
+				init.ToothInitialNum=Meth.GetLong(MethodBase.GetCurrentMethod(),init);
 				return init.ToothInitialNum;
 			}
 			if(PrefC.RandomKeys) {

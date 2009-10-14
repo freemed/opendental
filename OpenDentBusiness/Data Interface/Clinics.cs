@@ -55,7 +55,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static long Insert(Clinic clinic){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				clinic.ClinicNum=Meth.GetInt(MethodBase.GetCurrentMethod(),clinic);
+				clinic.ClinicNum=Meth.GetLong(MethodBase.GetCurrentMethod(),clinic);
 				return clinic.ClinicNum;
 			}
 			if(PrefC.RandomKeys) {

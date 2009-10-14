@@ -72,22 +72,24 @@ namespace OpenDental{
 				MsgBox.Show(this,"Cannot convert this database version which was only for development purposes.");
 				return false;
 			}
-			if(FromVersion < ConvertDatabases.LatestVersion){
-				if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-					MsgBox.Show(this,"Web client cannot convert database.  Must be using a direct connection.");
-					return false;
-				}
-				if(MessageBox.Show(Lan.g(this,"Your database will now be converted")+"\r"
-					+Lan.g(this,"from version")+" "+FromVersion.ToString()+"\r"
-					+Lan.g(this,"to version")+" "+ToVersion.ToString()+"\r"
-					+Lan.g(this,"The conversion works best if you are on the server.  Depending on the speed of your computer, it can be as fast as a few seconds, or it can take as long as 10 minutes.")
-					,"",MessageBoxButtons.OKCancel)!=DialogResult.OK)
-				{
-					return false;//If user clicks cancel, then close the program
-				}
-			}
-			else{
+			if(FromVersion >= ConvertDatabases.LatestVersion){
 				return true;//no conversion necessary
+			}
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				MsgBox.Show(this,"Web client cannot convert database.  Must be using a direct connection.");
+				return false;
+			}
+			if(ReplicationServers.ServerIsBlocked()) {
+				MsgBox.Show(this,"This replication server is blocked from performing updates.");
+				return false;
+			}
+			if(MessageBox.Show(Lan.g(this,"Your database will now be converted")+"\r"
+				+Lan.g(this,"from version")+" "+FromVersion.ToString()+"\r"
+				+Lan.g(this,"to version")+" "+ToVersion.ToString()+"\r"
+				+Lan.g(this,"The conversion works best if you are on the server.  Depending on the speed of your computer, it can be as fast as a few seconds, or it can take as long as 10 minutes.")
+				,"",MessageBoxButtons.OKCancel)!=DialogResult.OK)
+			{
+				return false;//If user clicks cancel, then close the program
 			}
 #if !DEBUG
 			if(DataConnection.DBtype!=DatabaseType.MySql
@@ -110,8 +112,8 @@ namespace OpenDental{
 			try{
 #endif
 			if(FromVersion>=new Version("3.4.0")){
-					Prefs.UpdateBool(PrefName.CorruptedDatabase,true);
-				}
+				Prefs.UpdateBool(PrefName.CorruptedDatabase,true);
+			}
 			ConvertDatabases.FromVersion=FromVersion;
 			ConvertDatabases.To2_8_2();//begins going through the chain of conversion steps
 				//To2_8_2();

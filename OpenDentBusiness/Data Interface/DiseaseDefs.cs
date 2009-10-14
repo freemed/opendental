@@ -83,7 +83,7 @@ namespace OpenDentBusiness {
 		///<summary></summary>
 		public static long Insert(DiseaseDef def) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				def.DiseaseDefNum=Meth.GetInt(MethodBase.GetCurrentMethod(),def);
+				def.DiseaseDefNum=Meth.GetLong(MethodBase.GetCurrentMethod(),def);
 				return def.DiseaseDefNum;
 			}
 			if(PrefC.RandomKeys) {

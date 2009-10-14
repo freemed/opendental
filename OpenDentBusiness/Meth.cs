@@ -65,16 +65,37 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary></summary>
-		public static long GetInt(MethodBase methodBase,params object[] parameters) {
+		public static long GetLong(MethodBase methodBase,params object[] parameters) {
 			if(RemotingClient.RemotingRole!=RemotingRole.ClientWeb) {
-				throw new ApplicationException("Meth.GetInt may only be used when RemotingRole is ClientWeb.");
+				throw new ApplicationException("Meth.GetLong may only be used when RemotingRole is ClientWeb.");
 			}
 			#if DEBUG
 				//Verify that it returns an int
 				MethodInfo methodInfo=methodBase.ReflectedType.GetMethod(methodBase.Name);
 				if(methodInfo.ReturnType != typeof(long)) {
-					throw new ApplicationException("Meth.GetInt calling class must return long.");
+					throw new ApplicationException("Meth.GetLong calling class must return long.");
 				}
+			#endif
+			DtoGetLong dto=new DtoGetLong();
+			dto.MethodName=methodBase.DeclaringType.Name+"."+methodBase.Name;
+			dto.Params=DtoObject.ConstructArray(parameters);
+			dto.Credentials=new Credentials();
+			dto.Credentials.Username=Security.CurUser.UserName;
+			dto.Credentials.PassHash=Security.CurUser.Password;
+			return RemotingClient.ProcessGetLong(dto);
+		}
+
+		///<summary></summary>
+		public static int GetInt(MethodBase methodBase,params object[] parameters) {
+			if(RemotingClient.RemotingRole!=RemotingRole.ClientWeb) {
+				throw new ApplicationException("Meth.GetInt may only be used when RemotingRole is ClientWeb.");
+			}
+			#if DEBUG
+			//Verify that it returns an int
+			MethodInfo methodInfo=methodBase.ReflectedType.GetMethod(methodBase.Name);
+			if(methodInfo.ReturnType != typeof(int)) {
+				throw new ApplicationException("Meth.GetInt calling class must return int.");
+			}
 			#endif
 			DtoGetInt dto=new DtoGetInt();
 			dto.MethodName=methodBase.DeclaringType.Name+"."+methodBase.Name;
@@ -83,27 +104,6 @@ namespace OpenDentBusiness {
 			dto.Credentials.Username=Security.CurUser.UserName;
 			dto.Credentials.PassHash=Security.CurUser.Password;
 			return RemotingClient.ProcessGetInt(dto);
-		}
-
-		///<summary></summary>
-		public static int GetInt32(MethodBase methodBase,params object[] parameters) {
-			if(RemotingClient.RemotingRole!=RemotingRole.ClientWeb) {
-				throw new ApplicationException("Meth.GetInt32 may only be used when RemotingRole is ClientWeb.");
-			}
-			#if DEBUG
-			//Verify that it returns an int
-			MethodInfo methodInfo=methodBase.ReflectedType.GetMethod(methodBase.Name);
-			if(methodInfo.ReturnType != typeof(int)) {
-				throw new ApplicationException("Meth.GetInt32 calling class must return int.");
-			}
-			#endif
-			DtoGetInt32 dto=new DtoGetInt32();
-			dto.MethodName=methodBase.DeclaringType.Name+"."+methodBase.Name;
-			dto.Params=DtoObject.ConstructArray(parameters);
-			dto.Credentials=new Credentials();
-			dto.Credentials.Username=Security.CurUser.UserName;
-			dto.Credentials.PassHash=Security.CurUser.Password;
-			return RemotingClient.ProcessGetInt32(dto);
 		}
 
 		///<summary></summary>

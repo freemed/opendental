@@ -35,7 +35,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static long Insert(AccountingAutoPay pay) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				pay.AccountingAutoPayNum=Meth.GetInt(MethodBase.GetCurrentMethod(),pay);
+				pay.AccountingAutoPayNum=Meth.GetLong(MethodBase.GetCurrentMethod(),pay);
 				return pay.AccountingAutoPayNum;
 			}
 			if(PrefC.RandomKeys) {

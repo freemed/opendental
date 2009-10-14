@@ -98,7 +98,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static long Insert(Referral refer) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				refer.ReferralNum=Meth.GetInt(MethodBase.GetCurrentMethod(),refer);
+				refer.ReferralNum=Meth.GetLong(MethodBase.GetCurrentMethod(),refer);
 				return refer.ReferralNum;
 			}
 			if(PrefC.RandomKeys) {

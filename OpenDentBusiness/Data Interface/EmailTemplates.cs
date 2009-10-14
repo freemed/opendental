@@ -48,7 +48,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static long Insert(EmailTemplate template) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				template.EmailTemplateNum=Meth.GetInt(MethodBase.GetCurrentMethod(),template);
+				template.EmailTemplateNum=Meth.GetLong(MethodBase.GetCurrentMethod(),template);
 				return template.EmailTemplateNum;
 			}
 			if(PrefC.RandomKeys){

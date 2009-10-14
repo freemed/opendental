@@ -42,7 +42,7 @@ namespace OpenDentBusiness {
 			//referred to (all handled with MySQL), this function will always be referred to the server from
 			//client machines.
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetInt(MethodBase.GetCurrentMethod());
+				return Meth.GetLong(MethodBase.GetCurrentMethod());
 			}
 			//only used in two places: upgrading version, and upgrading mysql version.
 			//Both places check first to make sure user is using mysql.

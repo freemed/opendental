@@ -32,7 +32,7 @@ namespace OpenDentBusiness {
 		///<summary>returns int32</summary>
 		public static int GetUniqueFileNum(){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetInt32(MethodBase.GetCurrentMethod());
+				return Meth.GetInt(MethodBase.GetCurrentMethod());
 			}
 			string command="SELECT ValueString FROM preference WHERE PrefName='TrojanExpressCollectPreviousFileNumber'";
 			DataTable table=Db.GetTable(command);
@@ -128,7 +128,7 @@ namespace OpenDentBusiness {
 		///<summary></summary>
 		public static int GetPlanNums(InsPlan plan,ArrayList benefitList) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetInt32(MethodBase.GetCurrentMethod(),plan);
+				return Meth.GetInt(MethodBase.GetCurrentMethod(),plan);
 			}
 			string command="SELECT PlanNum FROM insplan WHERE TrojanID='"+POut.PString(plan.TrojanID)+"'"; 
 			DataTable table=Db.GetTable(command);

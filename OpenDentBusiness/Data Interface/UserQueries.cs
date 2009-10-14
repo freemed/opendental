@@ -55,7 +55,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static long Insert(UserQuery Cur){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Cur.QueryNum=Meth.GetInt(MethodBase.GetCurrentMethod(),Cur);
+				Cur.QueryNum=Meth.GetLong(MethodBase.GetCurrentMethod(),Cur);
 				return Cur.QueryNum;
 			}
 			if(PrefC.RandomKeys) {

@@ -77,7 +77,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static long Insert(JournalEntry je) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				je.JournalEntryNum=Meth.GetInt(MethodBase.GetCurrentMethod(),je);
+				je.JournalEntryNum=Meth.GetLong(MethodBase.GetCurrentMethod(),je);
 				return je.JournalEntryNum;
 			}
 			if(je.DebitAmt<0 || je.CreditAmt<0){

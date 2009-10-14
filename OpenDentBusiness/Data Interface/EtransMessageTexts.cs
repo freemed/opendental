@@ -13,7 +13,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static long Insert(EtransMessageText etransMessageText) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				etransMessageText.EtransMessageTextNum=Meth.GetInt(MethodBase.GetCurrentMethod(),etransMessageText);
+				etransMessageText.EtransMessageTextNum=Meth.GetLong(MethodBase.GetCurrentMethod(),etransMessageText);
 				return etransMessageText.EtransMessageTextNum;
 			}
 			if(PrefC.RandomKeys) {

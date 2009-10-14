@@ -49,7 +49,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static long Insert(QuickPasteCat cat) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				cat.QuickPasteCatNum=Meth.GetInt(MethodBase.GetCurrentMethod(),cat);
+				cat.QuickPasteCatNum=Meth.GetLong(MethodBase.GetCurrentMethod(),cat);
 				return cat.QuickPasteCatNum;
 			}
 			if(PrefC.RandomKeys){

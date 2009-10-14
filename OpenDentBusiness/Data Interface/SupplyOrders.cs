@@ -24,7 +24,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static long WriteObject(SupplyOrder order) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				order.SupplyOrderNum=Meth.GetInt(MethodBase.GetCurrentMethod(),order);
+				order.SupplyOrderNum=Meth.GetLong(MethodBase.GetCurrentMethod(),order);
 				return order.SupplyOrderNum;
 			}
 			DataObjectFactory<SupplyOrder>.WriteObject(order);

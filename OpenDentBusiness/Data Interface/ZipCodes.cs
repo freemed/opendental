@@ -70,7 +70,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static long Insert(ZipCode Cur){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Cur.ZipCodeNum=Meth.GetInt(MethodBase.GetCurrentMethod(),Cur);
+				Cur.ZipCodeNum=Meth.GetLong(MethodBase.GetCurrentMethod(),Cur);
 				return Cur.ZipCodeNum;
 			}
 			if(PrefC.RandomKeys){

@@ -223,7 +223,7 @@ namespace OpenDentBusiness{
 		///<summary>Surround with try/catch if possibly adding a Canadian carrier.</summary>
 		public static long Insert(Carrier Cur){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Cur.CarrierNum=Meth.GetInt(MethodBase.GetCurrentMethod(),Cur);
+				Cur.CarrierNum=Meth.GetLong(MethodBase.GetCurrentMethod(),Cur);
 				return Cur.CarrierNum;
 			}
 			string command;

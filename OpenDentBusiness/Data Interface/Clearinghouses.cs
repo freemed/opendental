@@ -74,7 +74,7 @@ namespace OpenDentBusiness{
 		///<summary>Inserts this clearinghouse into database.</summary>
 		public static long Insert(Clearinghouse clearhouse){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				clearhouse.ClearinghouseNum=Meth.GetInt(MethodBase.GetCurrentMethod(),clearhouse);
+				clearhouse.ClearinghouseNum=Meth.GetLong(MethodBase.GetCurrentMethod(),clearhouse);
 				return clearhouse.ClearinghouseNum;
 			}
 			if(PrefC.RandomKeys) {
@@ -165,7 +165,7 @@ namespace OpenDentBusiness{
 		///<summary>Gets the last batch number for this clearinghouse and increments it by one.  Saves the new value, then returns it.  So even if the new value is not used for some reason, it will have already been incremented. Remember that LastBatchNumber is never accurate with local data in memory.</summary>
 		public static int GetNextBatchNumber(Clearinghouse clearhouse){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetInt32(MethodBase.GetCurrentMethod(),clearhouse);
+				return Meth.GetInt(MethodBase.GetCurrentMethod(),clearhouse);
 			}
 			//get last batch number
 			string command="SELECT LastBatchNumber FROM clearinghouse "

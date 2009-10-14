@@ -53,7 +53,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static long WriteObject(FeeSched feeSched) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				feeSched.FeeSchedNum=Meth.GetInt(MethodBase.GetCurrentMethod(),feeSched);
+				feeSched.FeeSchedNum=Meth.GetLong(MethodBase.GetCurrentMethod(),feeSched);
 				return feeSched.FeeSchedNum;
 			}
 			DataObjectFactory<FeeSched>.WriteObject(feeSched);

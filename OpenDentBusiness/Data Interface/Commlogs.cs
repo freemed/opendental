@@ -55,7 +55,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static long Insert(Commlog comm) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				comm.CommlogNum=Meth.GetInt(MethodBase.GetCurrentMethod(),comm);
+				comm.CommlogNum=Meth.GetLong(MethodBase.GetCurrentMethod(),comm);
 				return comm.CommlogNum;
 			}
 			if(PrefC.RandomKeys) {

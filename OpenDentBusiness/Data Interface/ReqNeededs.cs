@@ -50,7 +50,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static long Insert(ReqNeeded req) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				req.ReqNeededNum=Meth.GetInt(MethodBase.GetCurrentMethod(),req);
+				req.ReqNeededNum=Meth.GetLong(MethodBase.GetCurrentMethod(),req);
 				return req.ReqNeededNum;
 			}
 			if(PrefC.RandomKeys) {

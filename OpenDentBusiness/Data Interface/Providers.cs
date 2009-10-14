@@ -110,7 +110,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static long Insert(Provider prov){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				prov.ProvNum=Meth.GetInt(MethodBase.GetCurrentMethod(),prov);
+				prov.ProvNum=Meth.GetLong(MethodBase.GetCurrentMethod(),prov);
 				return prov.ProvNum;
 			}
 			if(PrefC.RandomKeys) {
@@ -394,7 +394,7 @@ namespace OpenDentBusiness{
 		///<summary>Used when adding a provider to get the next available itemOrder.</summary>
 		public static int GetNextItemOrder(){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetInt32(MethodBase.GetCurrentMethod());
+				return Meth.GetInt(MethodBase.GetCurrentMethod());
 			}
 			//Is this valid in Oracle??
 			string command="SELECT MAX(ItemOrder) FROM provider";

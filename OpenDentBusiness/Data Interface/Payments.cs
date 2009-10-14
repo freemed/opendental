@@ -168,7 +168,7 @@ namespace OpenDentBusiness{
 		///<summary>There's only one place in the program where this is called from.  Date is today, so no need to validate the date.</summary>
 		public static long Insert(Payment pay){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				pay.PayNum=Meth.GetInt(MethodBase.GetCurrentMethod(),pay);
+				pay.PayNum=Meth.GetLong(MethodBase.GetCurrentMethod(),pay);
 				return pay.PayNum;
 			}
 			if(PrefC.RandomKeys){

@@ -9,7 +9,7 @@ namespace OpenDentBusiness{
 
 		public static long Insert(EmailAttach attach) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				attach.EmailAttachNum=Meth.GetInt(MethodBase.GetCurrentMethod(),attach);
+				attach.EmailAttachNum=Meth.GetLong(MethodBase.GetCurrentMethod(),attach);
 				return attach.EmailAttachNum;
 			}
 			if(PrefC.RandomKeys) {

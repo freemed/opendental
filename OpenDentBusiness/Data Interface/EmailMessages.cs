@@ -70,7 +70,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static long Insert(EmailMessage message) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				message.EmailMessageNum=Meth.GetInt(MethodBase.GetCurrentMethod(),message);
+				message.EmailMessageNum=Meth.GetLong(MethodBase.GetCurrentMethod(),message);
 				return message.EmailMessageNum;
 			}
 			if(PrefC.RandomKeys) {

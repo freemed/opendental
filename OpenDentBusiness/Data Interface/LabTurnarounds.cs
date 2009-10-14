@@ -46,7 +46,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static long Insert(LabTurnaround lab) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				lab.LabTurnaroundNum=Meth.GetInt(MethodBase.GetCurrentMethod(),lab);
+				lab.LabTurnaroundNum=Meth.GetLong(MethodBase.GetCurrentMethod(),lab);
 				return lab.LabTurnaroundNum;
 			}
 			if(PrefC.RandomKeys) {

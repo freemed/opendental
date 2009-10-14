@@ -31,7 +31,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static long Insert(Dunning dun) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				dun.DunningNum=Meth.GetInt(MethodBase.GetCurrentMethod(),dun);
+				dun.DunningNum=Meth.GetLong(MethodBase.GetCurrentMethod(),dun);
 				return dun.DunningNum;
 			}
 			if(PrefC.RandomKeys) {

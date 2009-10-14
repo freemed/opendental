@@ -43,7 +43,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static long Insert(SecurityLog log){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				log.SecurityLogNum=Meth.GetInt(MethodBase.GetCurrentMethod(),log);
+				log.SecurityLogNum=Meth.GetLong(MethodBase.GetCurrentMethod(),log);
 				return log.SecurityLogNum;
 			}
 			if(PrefC.RandomKeys){

@@ -42,7 +42,7 @@ namespace OpenDentBusiness {
 		///<summary></summary>
 		public static long Insert(PatField pf) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				pf.PatFieldNum=Meth.GetInt(MethodBase.GetCurrentMethod(),pf);
+				pf.PatFieldNum=Meth.GetLong(MethodBase.GetCurrentMethod(),pf);
 				return pf.PatFieldNum;
 			}
 			if(PrefC.RandomKeys) {

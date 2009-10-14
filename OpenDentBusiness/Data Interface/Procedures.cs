@@ -10,7 +10,7 @@ namespace OpenDentBusiness {
 		///<summary></summary>
 		public static long Insert(Procedure proc) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				proc.ProcNum=Meth.GetInt(MethodBase.GetCurrentMethod(),proc);
+				proc.ProcNum=Meth.GetLong(MethodBase.GetCurrentMethod(),proc);
 				return proc.ProcNum;
 			}
 			if(PrefC.RandomKeys) {
@@ -89,7 +89,7 @@ namespace OpenDentBusiness {
 		///<summary>Updates only the changed columns.</summary>
 		public static long Update(Procedure proc,Procedure oldProc) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetInt(MethodBase.GetCurrentMethod(),proc,oldProc);
+				return Meth.GetLong(MethodBase.GetCurrentMethod(),proc,oldProc);
 			}
 			bool comma=false;
 			string c = "UPDATE procedurelog SET ";
@@ -1161,7 +1161,7 @@ namespace OpenDentBusiness {
 		///<summary>Only fees, not estimates.  Returns number of fees changed.</summary>
 		public static long GlobalUpdateFees() {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetInt(MethodBase.GetCurrentMethod());
+				return Meth.GetLong(MethodBase.GetCurrentMethod());
 			}
 			string command=@"SELECT procedurecode.CodeNum,ProcNum,patient.PatNum,procedurelog.PatNum,
 				insplan.FeeSched AS PlanFeeSched,patient.FeeSched AS PatFeeSched,patient.PriProv,

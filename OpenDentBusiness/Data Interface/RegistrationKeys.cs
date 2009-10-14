@@ -68,7 +68,7 @@ namespace OpenDentBusiness {
 		///<summary>Inserts a new and unique registration key into the database.</summary>
 		public static long Insert(RegistrationKey registrationKey){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				registrationKey.RegistrationKeyNum=Meth.GetInt(MethodBase.GetCurrentMethod(),registrationKey);
+				registrationKey.RegistrationKeyNum=Meth.GetLong(MethodBase.GetCurrentMethod(),registrationKey);
 				return registrationKey.RegistrationKeyNum;
 			}
 			do{

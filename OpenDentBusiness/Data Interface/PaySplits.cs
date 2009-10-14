@@ -79,7 +79,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static long Insert(PaySplit split) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				split.SplitNum=Meth.GetInt(MethodBase.GetCurrentMethod(),split);
+				split.SplitNum=Meth.GetLong(MethodBase.GetCurrentMethod(),split);
 				return split.SplitNum;
 			}
 			if(PrefC.RandomKeys){

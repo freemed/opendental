@@ -48,7 +48,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static long Insert(RxDef def) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				def.RxDefNum=Meth.GetInt(MethodBase.GetCurrentMethod(),def);
+				def.RxDefNum=Meth.GetLong(MethodBase.GetCurrentMethod(),def);
 				return def.RxDefNum;
 			}
 			if(PrefC.RandomKeys) {

@@ -1728,7 +1728,12 @@ DROP TABLE IF EXISTS etAck";
 				Db.NonQ(command);
 				command="ALTER TABLE replicationserver ADD UpdateBlocked tinyint NOT NULL";
 				Db.NonQ(command);
-				
+				try {
+					command="ALTER TABLE task ADD INDEX (KeyNum)";
+					Db.NonQ(command);
+				}
+				catch { }
+
 
 
 				

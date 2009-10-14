@@ -50,7 +50,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static long WriteObject(HL7Msg hL7Msg) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				hL7Msg.HL7MsgNum=Meth.GetInt(MethodBase.GetCurrentMethod(),hL7Msg);
+				hL7Msg.HL7MsgNum=Meth.GetLong(MethodBase.GetCurrentMethod(),hL7Msg);
 				return hL7Msg.HL7MsgNum;
 			}
 			DataObjectFactory<HL7Msg>.WriteObject(hL7Msg);

@@ -40,7 +40,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static long WriteObject(Supply supp){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				supp.SupplyNum=Meth.GetInt(MethodBase.GetCurrentMethod(),supp);
+				supp.SupplyNum=Meth.GetLong(MethodBase.GetCurrentMethod(),supp);
 				return supp.SupplyNum;
 			}
 			DataObjectFactory<Supply>.WriteObject(supp);
@@ -86,7 +86,7 @@ namespace OpenDentBusiness{
 		///<Summary>Gets from the database the last itemOrder for the specified category.  Used to send un unhidden supply to the end of the list.</Summary>
 		public static int GetLastItemOrder(long supplierNum,long catNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetInt32(MethodBase.GetCurrentMethod(),supplierNum,catNum);
+				return Meth.GetInt(MethodBase.GetCurrentMethod(),supplierNum,catNum);
 			}
 			string command="SELECT MAX(ItemOrder) FROM supply WHERE SupplierNum="+POut.PLong(supplierNum)
 				+" AND Category="+POut.PLong(catNum)+" AND IsHidden=0";

@@ -231,7 +231,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		private static long Insert(TaskList tlist) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				tlist.TaskListNum=Meth.GetInt(MethodBase.GetCurrentMethod(),tlist);
+				tlist.TaskListNum=Meth.GetLong(MethodBase.GetCurrentMethod(),tlist);
 				return tlist.TaskListNum;
 			}
 			if(PrefC.RandomKeys){

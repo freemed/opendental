@@ -38,7 +38,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static long Insert(ClaimFormItem item) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				item.ClaimFormItemNum=Meth.GetInt(MethodBase.GetCurrentMethod(),item);
+				item.ClaimFormItemNum=Meth.GetLong(MethodBase.GetCurrentMethod(),item);
 				return item.ClaimFormItemNum;
 			}
 			if(PrefC.RandomKeys) {

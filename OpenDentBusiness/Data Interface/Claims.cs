@@ -155,7 +155,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static long Insert(Claim Cur) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Cur.ClaimNum=Meth.GetInt(MethodBase.GetCurrentMethod(),Cur);
+				Cur.ClaimNum=Meth.GetLong(MethodBase.GetCurrentMethod(),Cur);
 				return Cur.ClaimNum;
 			}
 			if(PrefC.RandomKeys){

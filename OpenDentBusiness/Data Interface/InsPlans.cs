@@ -12,7 +12,7 @@ namespace OpenDentBusiness {
 		///<summary>Also fills PlanNum from db.</summary>
 		public static long Insert(InsPlan plan) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				plan.PlanNum=Meth.GetInt(MethodBase.GetCurrentMethod(),plan);
+				plan.PlanNum=Meth.GetLong(MethodBase.GetCurrentMethod(),plan);
 				return plan.PlanNum;
 			}
 			if(PrefC.RandomKeys) {
@@ -777,7 +777,7 @@ namespace OpenDentBusiness {
 			FeeScheduleType feeSchedType)
 		{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetInt(MethodBase.GetCurrentMethod(),employerNum,carrierName,groupNum,groupName,feeSchedNum,feeSchedType);
+				return Meth.GetLong(MethodBase.GetCurrentMethod(),employerNum,carrierName,groupNum,groupName,feeSchedNum,feeSchedType);
 			}
 			//FIXME:UPDATE-MULTIPLE-TABLES
 			/*string command="UPDATE insplan,carrier SET insplan.FeeSched="+POut.PInt(feeSchedNum)
@@ -826,7 +826,7 @@ namespace OpenDentBusiness {
 		///<summary>Returns number of rows affected.</summary>
 		public static long ConvertToNewClaimform(long oldClaimFormNum,long newClaimFormNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetInt(MethodBase.GetCurrentMethod(),oldClaimFormNum,newClaimFormNum);
+				return Meth.GetLong(MethodBase.GetCurrentMethod(),oldClaimFormNum,newClaimFormNum);
 			}
 			string command="UPDATE insplan SET ClaimFormNum="+POut.PLong(newClaimFormNum)
 				+" WHERE ClaimFormNum="+POut.PLong(oldClaimFormNum);
@@ -836,7 +836,7 @@ namespace OpenDentBusiness {
 		///<summary>Returns the number of fee schedules added.  It doesn't inform the user of how many plans were affected, but there will obviously be a certain number of plans for every new fee schedule.</summary>
 		public static long GenerateAllowedFeeSchedules() {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetInt(MethodBase.GetCurrentMethod());
+				return Meth.GetLong(MethodBase.GetCurrentMethod());
 			}
 			//get carrier names for all plans without an allowed fee schedule.
 			string command="SELECT carrier.CarrierName "
@@ -894,7 +894,7 @@ namespace OpenDentBusiness {
 
 		public static int UnusedGetCount() {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetInt32(MethodBase.GetCurrentMethod());
+				return Meth.GetInt(MethodBase.GetCurrentMethod());
 			}
 			string command="SELECT COUNT(*) FROM insplan WHERE IsHidden=0 "
 				+"AND NOT EXISTS (SELECT * FROM patplan WHERE patplan.PlanNum=insplan.PlanNum)";

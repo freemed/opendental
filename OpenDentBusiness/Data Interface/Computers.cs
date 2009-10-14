@@ -63,7 +63,7 @@ namespace OpenDentBusiness{
 		///<summary>ONLY use this if compname is not already present</summary>
 		public static long Insert(Computer comp) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				comp.ComputerNum=Meth.GetInt(MethodBase.GetCurrentMethod(),comp);
+				comp.ComputerNum=Meth.GetLong(MethodBase.GetCurrentMethod(),comp);
 				return comp.ComputerNum;
 			}
 			if(PrefC.RandomKeys){

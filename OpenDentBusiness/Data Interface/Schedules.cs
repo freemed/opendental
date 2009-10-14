@@ -190,7 +190,7 @@ namespace OpenDentBusiness{
 		///<summary>This should not be used from outside this class unless proper validation is written similar to InsertOrUpdate.  It's currently used a lot for copy/paste situations, where most of the validation is not needed.</summary>
 		public static long Insert(Schedule sched){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				sched.ScheduleNum=Meth.GetInt(MethodBase.GetCurrentMethod(),sched);
+				sched.ScheduleNum=Meth.GetLong(MethodBase.GetCurrentMethod(),sched);
 				return sched.ScheduleNum;
 			}
 			if(PrefC.RandomKeys){

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using System.Xml;
 using System.Xml.Schema;
@@ -110,21 +111,41 @@ namespace OpenDentBusiness {
 
 		public static object[] GenerateObjects(DtoObject[] parameters) {
 			object[] retVal=new object[parameters.Length];
-			//Type type;
 			for(int i=0;i<parameters.Length;i++) {
-				//The type should already have been handled in deserialization
-				/*
-				if(parameters[i].TypeName.StartsWith("List<")) {
-					Type typeGen=Type.GetType(parameters[i].TypeName.Substring(5,parameters[i].TypeName.Length-6));
-					Type typeList=typeof(List<>);
-					type=typeList.MakeGenericType(typeGen);
-				}
-				else {
-					type=Type.GetType(parameters[i].TypeName);
-				}*/
 				retVal[i]=parameters[i].Obj;
 			}
 			return retVal;
+		}
+
+		public static Type[] GenerateTypes(DtoObject[] parameters,string assemb) {
+			Type[] retVal=new Type[parameters.Length];
+			for(int i=0;i<parameters.Length;i++) {
+				retVal[i]=ConvertNameToType(parameters[i].TypeName,assemb);
+			}
+			return retVal;
+		}
+
+		private static Type ConvertNameToType(string FullName,string assemb) {
+			Type typeObj=null;
+			if(FullName.StartsWith("List<")) {
+				string strTypeGenName=FullName.Substring(5,FullName.Length-6);//strips off the List<>
+				Type typeGen=null;
+				if(strTypeGenName.StartsWith("OpenDentBusiness")) {
+					typeGen=Type.GetType(strTypeGenName+","+assemb);
+				}
+				else {//system types
+					typeGen=Type.GetType(strTypeGenName);
+				}
+				Type typeList=typeof(List<>);
+				typeObj=typeList.MakeGenericType(typeGen);
+			}
+			else if(FullName.StartsWith("OpenDentBusiness")) {
+				typeObj=Type.GetType(FullName+","+assemb);
+			}
+			else {//system types
+				typeObj=Type.GetType(FullName);
+			}
+			return typeObj;
 		}
 
 	}

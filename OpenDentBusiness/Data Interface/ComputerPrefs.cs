@@ -79,7 +79,7 @@ namespace OpenDentBusiness {
 		///<summary>Inserts the given preference and ensures that the primary key is properly set.</summary>
 		public static long Insert(ComputerPref computerPref) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				computerPref.ComputerPrefNum=Meth.GetInt(MethodBase.GetCurrentMethod(),computerPref);
+				computerPref.ComputerPrefNum=Meth.GetLong(MethodBase.GetCurrentMethod(),computerPref);
 				return computerPref.ComputerPrefNum;
 			}
 			if(PrefC.RandomKeys) {
@@ -119,7 +119,7 @@ namespace OpenDentBusiness {
 
 		public static long Update(ComputerPref computerPref) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetInt(MethodBase.GetCurrentMethod(),computerPref);
+				return Meth.GetLong(MethodBase.GetCurrentMethod(),computerPref);
 			}
 			string command="UPDATE computerpref SET "
 				+"ComputerName='"+POut.PString(computerPref.ComputerName)+"',"

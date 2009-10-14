@@ -85,7 +85,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		private static long Insert(ProcTP proc){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				proc.ProcTPNum=Meth.GetInt(MethodBase.GetCurrentMethod(),proc);
+				proc.ProcTPNum=Meth.GetLong(MethodBase.GetCurrentMethod(),proc);
 				return proc.ProcTPNum;
 			}
 			if(PrefC.RandomKeys){

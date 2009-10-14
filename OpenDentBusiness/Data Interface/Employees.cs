@@ -112,7 +112,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static long Insert(Employee Cur){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Cur.EmployeeNum=Meth.GetInt(MethodBase.GetCurrentMethod(),Cur);
+				Cur.EmployeeNum=Meth.GetLong(MethodBase.GetCurrentMethod(),Cur);
 				return Cur.EmployeeNum;
 			}
 			if(Cur.LName=="" && Cur.FName=="") {

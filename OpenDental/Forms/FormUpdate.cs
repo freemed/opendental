@@ -607,6 +607,10 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Updates are only allowed from the web server: ")+PrefC.GetString(PrefName.WebServiceServerName));
 				return;
 			}
+			if(ReplicationServers.ServerIsBlocked()){
+				MsgBox.Show(this,"Updates are not allowed on this replication server");
+				return;
+			}
 			Cursor=Cursors.WaitCursor;
 			groupBuild.Visible=false;
 			groupStable.Visible=false;

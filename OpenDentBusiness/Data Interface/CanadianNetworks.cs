@@ -42,7 +42,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static long Insert(CanadianNetwork network) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				network.CanadianNetworkNum=Meth.GetInt(MethodBase.GetCurrentMethod(),network);
+				network.CanadianNetworkNum=Meth.GetLong(MethodBase.GetCurrentMethod(),network);
 				return network.CanadianNetworkNum;
 			}
 			if(PrefC.RandomKeys) {

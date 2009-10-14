@@ -126,7 +126,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static long Insert(Signal sig) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				sig.SignalNum=Meth.GetInt(MethodBase.GetCurrentMethod(),sig);
+				sig.SignalNum=Meth.GetLong(MethodBase.GetCurrentMethod(),sig);
 				return sig.SignalNum;
 			}
 			//we need to explicitly get the server time in advance rather than using NOW(),

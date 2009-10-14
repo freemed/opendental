@@ -9,7 +9,7 @@ namespace OpenDentBusiness {
 	public class ProcNotes{
 		public static long Insert(ProcNote procNote){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				procNote.ProcNoteNum=Meth.GetInt(MethodBase.GetCurrentMethod(),procNote);
+				procNote.ProcNoteNum=Meth.GetLong(MethodBase.GetCurrentMethod(),procNote);
 				return procNote.ProcNoteNum;
 			}
 			if(PrefC.RandomKeys) {

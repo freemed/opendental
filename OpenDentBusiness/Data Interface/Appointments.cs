@@ -310,7 +310,7 @@ namespace OpenDentBusiness{
 		///<summary>Set includeAptNum to true only in rare situations.  Like when we are inserting for eCW.</summary>
 		public static long Insert(Appointment appt,bool includeAptNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				appt.AptNum=Meth.GetInt(MethodBase.GetCurrentMethod(),appt,includeAptNum);
+				appt.AptNum=Meth.GetLong(MethodBase.GetCurrentMethod(),appt,includeAptNum);
 				return appt.AptNum;
 			}
 			//make sure all fields are properly filled:
@@ -376,7 +376,7 @@ namespace OpenDentBusiness{
 		///<summary>Updates only the changed columns and returns the number of rows affected.  Supply an oldApt for comparison.</summary>
 		public static long Update(Appointment appt,Appointment oldApt) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetInt(MethodBase.GetCurrentMethod(),appt,oldApt);
+				return Meth.GetLong(MethodBase.GetCurrentMethod(),appt,oldApt);
 			}
 			bool comma=false;
 			string c = "UPDATE appointment SET ";

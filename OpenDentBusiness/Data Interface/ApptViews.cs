@@ -33,7 +33,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static long Insert(ApptView Cur) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Cur.ApptViewNum=Meth.GetInt(MethodBase.GetCurrentMethod(),Cur);
+				Cur.ApptViewNum=Meth.GetLong(MethodBase.GetCurrentMethod(),Cur);
 				return Cur.ApptViewNum;
 			}
 			if(PrefC.RandomKeys) {

@@ -55,7 +55,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary></summary>
-		public static long ProcessGetInt(DtoGetInt dto) {
+		public static long ProcessGetLong(DtoGetLong dto) {
 			string result=SendAndReceive(dto);//this might throw an exception if server unavailable
 			try {
 				return PIn.PLong(result);
@@ -67,7 +67,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary></summary>
-		public static int ProcessGetInt32(DtoGetInt32 dto) {
+		public static int ProcessGetInt(DtoGetInt dto) {
 			string result=SendAndReceive(dto);//this might throw an exception if server unavailable
 			try {
 				return PIn.PInt(result);

@@ -66,7 +66,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static long Insert(ProcCodeNote note) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				note.ProcCodeNoteNum=Meth.GetInt(MethodBase.GetCurrentMethod(),note);
+				note.ProcCodeNoteNum=Meth.GetLong(MethodBase.GetCurrentMethod(),note);
 				return note.ProcCodeNoteNum;
 			}
 			if(PrefC.RandomKeys) {

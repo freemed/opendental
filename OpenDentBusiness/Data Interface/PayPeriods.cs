@@ -47,7 +47,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static long Insert(PayPeriod pp) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				pp.PayPeriodNum=Meth.GetInt(MethodBase.GetCurrentMethod(),pp);
+				pp.PayPeriodNum=Meth.GetLong(MethodBase.GetCurrentMethod(),pp);
 				return pp.PayPeriodNum;
 			}
 			if(PrefC.RandomKeys) {

@@ -38,6 +38,7 @@ namespace OpenDental{
 			this.textAtoZpath = new System.Windows.Forms.TextBox();
 			this.label6 = new System.Windows.Forms.Label();
 			this.checkUpdateBlocked = new System.Windows.Forms.CheckBox();
+			this.label7 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -194,10 +195,21 @@ namespace OpenDental{
 			this.checkUpdateBlocked.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkUpdateBlocked.UseVisualStyleBackColor = true;
 			// 
+			// label7
+			// 
+			this.label7.Location = new System.Drawing.Point(258,200);
+			this.label7.Name = "label7";
+			this.label7.Size = new System.Drawing.Size(396,48);
+			this.label7.TabIndex = 100;
+			this.label7.Text = "Use this option carefully. It really will block the ability of the server to upda" +
+    "te database versions, and it\'s possible that this could prevent startup of the p" +
+    "rogram in certain situations.";
+			// 
 			// FormReplicationEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(678,309);
+			this.Controls.Add(this.label7);
 			this.Controls.Add(this.checkUpdateBlocked);
 			this.Controls.Add(this.textAtoZpath);
 			this.Controls.Add(this.label6);
@@ -239,5 +251,6 @@ namespace OpenDental{
 		private System.Windows.Forms.TextBox textAtoZpath;
 		private System.Windows.Forms.Label label6;
 		private System.Windows.Forms.CheckBox checkUpdateBlocked;
+		private System.Windows.Forms.Label label7;
 	}
 }

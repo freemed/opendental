@@ -55,7 +55,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static long Insert(PhoneOverride phoneCur){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				phoneCur.PhoneOverrideNum=Meth.GetInt(MethodBase.GetCurrentMethod(),phoneCur);
+				phoneCur.PhoneOverrideNum=Meth.GetLong(MethodBase.GetCurrentMethod(),phoneCur);
 				return phoneCur.PhoneOverrideNum;
 			}
 			if(PrefC.RandomKeys) {

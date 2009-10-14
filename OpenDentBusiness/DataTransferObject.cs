@@ -73,12 +73,12 @@ namespace OpenDentBusiness {
 	}
 
 	///<summary>Gets a long.</summary>
-	public class DtoGetInt:DataTransferObject{
+	public class DtoGetLong:DataTransferObject{
 		
 	}
 
 	///<summary>Gets an int.</summary>
-	public class DtoGetInt32:DataTransferObject {
+	public class DtoGetInt:DataTransferObject {
 
 	}
 

@@ -140,7 +140,7 @@ namespace OpenDentBusiness{
 		///<summary>ONLY for new patients. Set includePatNum to true for use the patnum from the import function.  Otherwise, uses InsertID to fill PatNum.</summary>
 		public static long Insert(Patient pat,bool includePatNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				pat.PatNum=Meth.GetInt(MethodBase.GetCurrentMethod(),pat,includePatNum);
+				pat.PatNum=Meth.GetLong(MethodBase.GetCurrentMethod(),pat,includePatNum);
 				return pat.PatNum;
 			}
 			if(!includePatNum && PrefC.RandomKeys) {
@@ -244,7 +244,7 @@ namespace OpenDentBusiness{
 		///<summary>Updates only the changed columns and returns the number of rows affected.  Supply the old Patient object to compare for changes.</summary>
 		public static long Update(Patient pat,Patient CurOld) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetInt(MethodBase.GetCurrentMethod(),pat,CurOld);
+				return Meth.GetLong(MethodBase.GetCurrentMethod(),pat,CurOld);
 			}
 			bool comma=false;
 			string c = "UPDATE patient SET ";
@@ -1535,7 +1535,7 @@ namespace OpenDentBusiness{
 		///<summary>Used in the patient select window to determine if a trial version user is over their limit.</summary>
 		public static int GetNumberPatients(){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetInt32(MethodBase.GetCurrentMethod());
+				return Meth.GetInt(MethodBase.GetCurrentMethod());
 			}
 			string command="SELECT Count(*) FROM patient";
 			DataTable table=Db.GetTable(command);
@@ -1586,7 +1586,7 @@ namespace OpenDentBusiness{
 		///<summary>Gets the provider for this patient.  If provNum==0, then it gets the practice default prov.</summary>
 		public static long GetProvNum(Patient pat) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetInt(MethodBase.GetCurrentMethod(),pat);
+				return Meth.GetLong(MethodBase.GetCurrentMethod(),pat);
 			}
 			if(pat.PriProv!=0)
 				return pat.PriProv;
@@ -1713,7 +1713,7 @@ namespace OpenDentBusiness{
 		///<summary>Will return 0 if can't find exact matching pat.</summary>
 		public static long GetPatNumByNameAndBirthday(string lName,string fName,DateTime birthdate) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetInt(MethodBase.GetCurrentMethod(),lName,fName,birthdate);
+				return Meth.GetLong(MethodBase.GetCurrentMethod(),lName,fName,birthdate);
 			}
 			string command="SELECT PatNum FROM patient WHERE "
 				+"LName='"+POut.PString(lName)+"' "

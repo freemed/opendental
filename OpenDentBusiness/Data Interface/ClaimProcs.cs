@@ -120,7 +120,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static long Insert(ClaimProc cp) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				cp.ClaimProcNum=Meth.GetInt(MethodBase.GetCurrentMethod(),cp);
+				cp.ClaimProcNum=Meth.GetLong(MethodBase.GetCurrentMethod(),cp);
 				return cp.ClaimProcNum;
 			}
 			if(PrefC.RandomKeys) {

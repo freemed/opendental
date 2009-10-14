@@ -57,7 +57,7 @@ namespace OpenDentBusiness {
 		///<summary></summary>
 		public static long Insert(CovCat covcat) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				covcat.CovCatNum=Meth.GetInt(MethodBase.GetCurrentMethod(),covcat);
+				covcat.CovCatNum=Meth.GetLong(MethodBase.GetCurrentMethod(),covcat);
 				return covcat.CovCatNum;
 			}
 			if(PrefC.RandomKeys) {

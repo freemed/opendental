@@ -33,7 +33,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static long WriteObject(Statement statement) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				statement.StatementNum=Meth.GetInt(MethodBase.GetCurrentMethod(),statement);
+				statement.StatementNum=Meth.GetLong(MethodBase.GetCurrentMethod(),statement);
 				return statement.StatementNum;
 			}
 			DataObjectFactory<Statement>.WriteObject(statement);

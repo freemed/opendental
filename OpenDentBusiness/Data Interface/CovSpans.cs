@@ -50,7 +50,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static long Insert(CovSpan span) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				span.CovSpanNum=Meth.GetInt(MethodBase.GetCurrentMethod(),span);
+				span.CovSpanNum=Meth.GetLong(MethodBase.GetCurrentMethod(),span);
 				return span.CovSpanNum;
 			}
 			Validate(span);

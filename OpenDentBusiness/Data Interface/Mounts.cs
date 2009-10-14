@@ -10,7 +10,7 @@ namespace OpenDentBusiness {
 
 		public static long Insert(Mount mount){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				mount.MountNum=Meth.GetInt(MethodBase.GetCurrentMethod(),mount);
+				mount.MountNum=Meth.GetLong(MethodBase.GetCurrentMethod(),mount);
 				return mount.MountNum;
 			}
 			if(PrefC.RandomKeys) {
@@ -45,7 +45,7 @@ namespace OpenDentBusiness {
 
 		public static long Update(Mount mount){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetInt(MethodBase.GetCurrentMethod(),mount);
+				return Meth.GetLong(MethodBase.GetCurrentMethod(),mount);
 			}
 			string command="UPDATE mount SET "
 				+"PatNum='"+POut.PLong(mount.PatNum)+"',"

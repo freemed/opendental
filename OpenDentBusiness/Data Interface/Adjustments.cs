@@ -31,7 +31,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static long Insert(Adjustment adj) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				adj.AdjNum=Meth.GetInt(MethodBase.GetCurrentMethod(),adj);
+				adj.AdjNum=Meth.GetLong(MethodBase.GetCurrentMethod(),adj);
 				return adj.AdjNum;
 			}
 			if(PrefC.RandomKeys){
@@ -175,7 +175,7 @@ namespace OpenDentBusiness{
 		///<summary>Returns the number of finance charges deleted.</summary>
 		public static long UndoFinanceCharges(DateTime dateUndo) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetInt(MethodBase.GetCurrentMethod(),dateUndo);
+				return Meth.GetLong(MethodBase.GetCurrentMethod(),dateUndo);
 			}
 			string command;
 			long numAdj;
@@ -191,7 +191,7 @@ namespace OpenDentBusiness{
 		///<summary>Returns the number of billing charges deleted.</summary>
 		public static long UndoBillingCharges(DateTime dateUndo) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetInt(MethodBase.GetCurrentMethod(),dateUndo);
+				return Meth.GetLong(MethodBase.GetCurrentMethod(),dateUndo);
 			}
 			string command;
 			long numAdj;

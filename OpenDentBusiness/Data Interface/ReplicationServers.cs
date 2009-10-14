@@ -71,7 +71,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static long WriteObject(ReplicationServer serv) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				serv.ReplicationServerNum=Meth.GetInt(MethodBase.GetCurrentMethod(),serv);
+				serv.ReplicationServerNum=Meth.GetLong(MethodBase.GetCurrentMethod(),serv);
 				return serv.ReplicationServerNum;
 			}
 			DataObjectFactory<ReplicationServer>.WriteObject(serv);
@@ -108,7 +108,7 @@ namespace OpenDentBusiness{
 
 		private static int GetServer_id() {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetInt32(MethodBase.GetCurrentMethod());
+				return Meth.GetInt(MethodBase.GetCurrentMethod());
 			}
 			string command="SHOW VARIABLES LIKE 'server_id'";
 			DataTable table=Db.GetTable(command);
@@ -209,6 +209,27 @@ namespace OpenDentBusiness{
 				}
 			}
 			return null;
+		}
+
+		///<summary>Used during database maint and from update window. We cannot use objects.</summary>
+		public static bool ServerIsBlocked() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				//even though we are supposed to be guaranteed to not be a web client
+				return true;
+			}
+			string command="SELECT COUNT(*) FROM replicationserver WHERE ServerId="+POut.PInt(Server_id)//does trigger another query if during startup
+				+" AND UpdateBlocked=1";
+			try {
+				if(Db.GetScalar(command)=="0") {
+					return false;
+				}
+				else {
+					return true;
+				}
+			}
+			catch {
+				return false;
+			}
 		}
 		
 

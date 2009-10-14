@@ -185,7 +185,7 @@ namespace OpenDentBusiness {
 		///<summary></summary>
 		public static long Insert(Benefit ben) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				ben.BenefitNum=Meth.GetInt(MethodBase.GetCurrentMethod(),ben);
+				ben.BenefitNum=Meth.GetLong(MethodBase.GetCurrentMethod(),ben);
 				return ben.BenefitNum;
 			}
 			if(PrefC.RandomKeys) {

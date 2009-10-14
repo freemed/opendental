@@ -13,7 +13,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static long WriteObject(TaskAncestor ancestor) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				ancestor.TaskAncestorNum=Meth.GetInt(MethodBase.GetCurrentMethod(),ancestor);
+				ancestor.TaskAncestorNum=Meth.GetLong(MethodBase.GetCurrentMethod(),ancestor);
 				return ancestor.TaskAncestorNum;
 			}
 			DataObjectFactory<TaskAncestor>.WriteObject(ancestor);

@@ -9,7 +9,7 @@ namespace OpenDentBusiness{
 
 		public static long Insert(ClaimAttach attach) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				attach.ClaimAttachNum=Meth.GetInt(MethodBase.GetCurrentMethod(),attach);
+				attach.ClaimAttachNum=Meth.GetLong(MethodBase.GetCurrentMethod(),attach);
 				return attach.ClaimAttachNum;
 			}
 			if(PrefC.RandomKeys) {

@@ -46,7 +46,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static long WriteObject(PhoneNumber phoneNumber) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				phoneNumber.PhoneNumberNum=Meth.GetInt(MethodBase.GetCurrentMethod(),phoneNumber);
+				phoneNumber.PhoneNumberNum=Meth.GetLong(MethodBase.GetCurrentMethod(),phoneNumber);
 				return phoneNumber.PhoneNumberNum;
 			}
 			DataObjectFactory<PhoneNumber>.WriteObject(phoneNumber);

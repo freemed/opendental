@@ -12,7 +12,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static long Insert(FormPat Cur) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Cur.FormPatNum=Meth.GetInt(MethodBase.GetCurrentMethod(),Cur);
+				Cur.FormPatNum=Meth.GetLong(MethodBase.GetCurrentMethod(),Cur);
 				return Cur.FormPatNum;
 			}
 			if(PrefC.RandomKeys) {

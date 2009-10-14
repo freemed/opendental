@@ -75,7 +75,7 @@ namespace OpenDentBusiness{
 		///<summary>Inserts this lettermerge into database.</summary>
 		public static long Insert(LetterMerge merge) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				merge.LetterMergeNum=Meth.GetInt(MethodBase.GetCurrentMethod(),merge);
+				merge.LetterMergeNum=Meth.GetLong(MethodBase.GetCurrentMethod(),merge);
 				return merge.LetterMergeNum;
 			}
 			if(PrefC.RandomKeys){

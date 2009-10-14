@@ -49,7 +49,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static long WriteObject(InsFilingCode insFilingCode) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				insFilingCode.InsFilingCodeNum=Meth.GetInt(MethodBase.GetCurrentMethod(),insFilingCode);
+				insFilingCode.InsFilingCodeNum=Meth.GetLong(MethodBase.GetCurrentMethod(),insFilingCode);
 				return insFilingCode.InsFilingCodeNum;
 			}
 			DataObjectFactory<InsFilingCode>.WriteObject(insFilingCode);

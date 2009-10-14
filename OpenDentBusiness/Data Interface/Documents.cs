@@ -90,7 +90,7 @@ namespace OpenDentBusiness {
 		///<summary>Inserts a new document into db, creates a filename based on Cur.DocNum, and then updates the db with this filename.  Should always refresh the document after calling this method in order to get the correct filename for RemotingRole.ClientWeb.</summary>
 		public static long Insert(Document doc,Patient pat) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				doc.DocNum=Meth.GetInt(MethodBase.GetCurrentMethod(),doc,pat);
+				doc.DocNum=Meth.GetLong(MethodBase.GetCurrentMethod(),doc,pat);
 				return doc.DocNum;
 			}
 			if(PrefC.RandomKeys) {
@@ -386,7 +386,7 @@ namespace OpenDentBusiness {
 		///<summary>Any filenames mentioned in the fileList which are not attached to the given patient are properly attached to that patient. Returns the total number of documents that were newly attached to the patient.</summary>
 		public static int InsertMissing(Patient patient,List<string> fileList) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetInt32(MethodBase.GetCurrentMethod(),patient,fileList);
+				return Meth.GetInt(MethodBase.GetCurrentMethod(),patient,fileList);
 			}
 			int countAdded=0;
 			string command="SELECT FileName FROM document WHERE PatNum='"+patient.PatNum+"' ORDER BY FileName";

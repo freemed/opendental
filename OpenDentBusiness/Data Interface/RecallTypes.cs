@@ -74,7 +74,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static long WriteObject(RecallType recallType) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				recallType.RecallTypeNum=Meth.GetInt(MethodBase.GetCurrentMethod(),recallType);
+				recallType.RecallTypeNum=Meth.GetLong(MethodBase.GetCurrentMethod(),recallType);
 				return recallType.RecallTypeNum;
 			}
 			DataObjectFactory<RecallType>.WriteObject(recallType);

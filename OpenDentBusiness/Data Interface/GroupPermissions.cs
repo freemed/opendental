@@ -48,7 +48,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		private static long Insert(GroupPermission gp){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				gp.GroupPermNum=Meth.GetInt(MethodBase.GetCurrentMethod(),gp);
+				gp.GroupPermNum=Meth.GetLong(MethodBase.GetCurrentMethod(),gp);
 				return gp.GroupPermNum;
 			}
 			if(PrefC.RandomKeys) {

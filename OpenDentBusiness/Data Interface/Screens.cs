@@ -49,7 +49,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static long Insert(OpenDentBusiness.Screen Cur) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Cur.ScreenNum=Meth.GetInt(MethodBase.GetCurrentMethod(),Cur);
+				Cur.ScreenNum=Meth.GetLong(MethodBase.GetCurrentMethod(),Cur);
 				return Cur.ScreenNum;
 			}
 			if(PrefC.RandomKeys){

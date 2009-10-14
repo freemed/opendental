@@ -52,7 +52,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static long Insert(ProviderIdent pi){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				pi.ProviderIdentNum=Meth.GetInt(MethodBase.GetCurrentMethod(),pi);
+				pi.ProviderIdentNum=Meth.GetLong(MethodBase.GetCurrentMethod(),pi);
 				return pi.ProviderIdentNum;
 			}
 			if(PrefC.RandomKeys) {

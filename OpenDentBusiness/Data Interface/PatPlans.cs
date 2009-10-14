@@ -57,7 +57,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static long Insert(PatPlan p) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				p.PatPlanNum=Meth.GetInt(MethodBase.GetCurrentMethod(),p);
+				p.PatPlanNum=Meth.GetLong(MethodBase.GetCurrentMethod(),p);
 				return p.PatPlanNum;
 			}
 			if(PrefC.RandomKeys){
@@ -212,7 +212,7 @@ namespace OpenDentBusiness{
 		///<summary>Gets one patPlanNum directly from database.  Only used once in FormClaimProc.</summary>
 		public static long GetPatPlanNum(long patNum,long planNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetInt(MethodBase.GetCurrentMethod(),patNum,planNum);
+				return Meth.GetLong(MethodBase.GetCurrentMethod(),patNum,planNum);
 			}
 			string command="SELECT PatPlanNum FROM patplan WHERE PatNum="+POut.PLong(patNum)+" AND PlanNum="+POut.PLong(planNum);
 			return PIn.PLong(Db.GetScalar(command));

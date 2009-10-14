@@ -345,7 +345,7 @@ namespace OpenDentBusiness {
 		///<summary></summary>
 		private static long Insert(Userod user){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				user.UserNum=Meth.GetInt(MethodBase.GetCurrentMethod(),user);
+				user.UserNum=Meth.GetLong(MethodBase.GetCurrentMethod(),user);
 				return user.UserNum;
 			}
 			if(PrefC.RandomKeys) {

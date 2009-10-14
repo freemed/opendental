@@ -79,7 +79,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static long Insert(ProcedureCode code) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				code.CodeNum=Meth.GetInt(MethodBase.GetCurrentMethod(),code);
+				code.CodeNum=Meth.GetLong(MethodBase.GetCurrentMethod(),code);
 				return code.CodeNum;
 			}
 			//must have already checked procCode for nonduplicate.

@@ -46,7 +46,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static long Insert(Reconcile reconcile) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				reconcile.ReconcileNum=Meth.GetInt(MethodBase.GetCurrentMethod(),reconcile);
+				reconcile.ReconcileNum=Meth.GetLong(MethodBase.GetCurrentMethod(),reconcile);
 				return reconcile.ReconcileNum;
 			}
 			if(PrefC.RandomKeys) {

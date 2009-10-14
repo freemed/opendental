@@ -48,7 +48,7 @@ namespace OpenDentBusiness{
 		///<summary>Must have already checked procCode for nonduplicate.</summary>
 		public static long Insert(ProcButtonItem item) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				item.ProcButtonItemNum=Meth.GetInt(MethodBase.GetCurrentMethod(),item);
+				item.ProcButtonItemNum=Meth.GetLong(MethodBase.GetCurrentMethod(),item);
 				return item.ProcButtonItemNum;
 			}
 			if(PrefC.RandomKeys) {

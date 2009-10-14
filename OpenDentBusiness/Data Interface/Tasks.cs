@@ -215,7 +215,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static long Insert(Task task) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				task.TaskNum=Meth.GetInt(MethodBase.GetCurrentMethod(),task);
+				task.TaskNum=Meth.GetLong(MethodBase.GetCurrentMethod(),task);
 				return task.TaskNum;
 			}
 			if(task.IsRepeating && task.DateTask.Year>1880) {
@@ -302,7 +302,7 @@ namespace OpenDentBusiness{
 		///<summary>Gets a count of New tasks to notify user when first logging in.</summary>
 		public static int UserTasksCount(long userNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetInt32(MethodBase.GetCurrentMethod(),userNum);
+				return Meth.GetInt(MethodBase.GetCurrentMethod(),userNum);
 			}
 			string command="SELECT COUNT(*) FROM taskancestor,task,tasklist,tasksubscription "
 				+"WHERE taskancestor.TaskListNum=tasklist.TaskListNum "

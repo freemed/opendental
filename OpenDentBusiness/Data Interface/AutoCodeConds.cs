@@ -32,7 +32,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static long Insert(AutoCodeCond Cur){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Cur.AutoCodeCondNum=Meth.GetInt(MethodBase.GetCurrentMethod(),Cur);
+				Cur.AutoCodeCondNum=Meth.GetLong(MethodBase.GetCurrentMethod(),Cur);
 				return Cur.AutoCodeCondNum;
 			}
 			if(PrefC.RandomKeys) {

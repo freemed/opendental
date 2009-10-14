@@ -78,7 +78,7 @@ namespace OpenDentBusiness{
 		///<summary>Inserts this claimform into database and retrieves the new primary key.</summary>
 		public static long Insert(ClaimForm cf) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				cf.ClaimFormNum=Meth.GetInt(MethodBase.GetCurrentMethod(),cf);
+				cf.ClaimFormNum=Meth.GetLong(MethodBase.GetCurrentMethod(),cf);
 				return cf.ClaimFormNum;
 			}
 			if(PrefC.RandomKeys) {
@@ -213,7 +213,7 @@ namespace OpenDentBusiness{
 		///<summary>Returns number of insplans affected.</summary>
 		public static long Reassign(long oldClaimFormNum,long newClaimFormNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetInt(MethodBase.GetCurrentMethod(),oldClaimFormNum,newClaimFormNum);
+				return Meth.GetLong(MethodBase.GetCurrentMethod(),oldClaimFormNum,newClaimFormNum);
 			}
 			string command="UPDATE insplan SET ClaimFormNum="+POut.PLong(newClaimFormNum)
 				+" WHERE ClaimFormNum="+POut.PLong(oldClaimFormNum);

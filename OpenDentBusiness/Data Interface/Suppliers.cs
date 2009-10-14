@@ -22,7 +22,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static long WriteObject(Supplier supp) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				supp.SupplierNum=Meth.GetInt(MethodBase.GetCurrentMethod(),supp);
+				supp.SupplierNum=Meth.GetLong(MethodBase.GetCurrentMethod(),supp);
 				return supp.SupplierNum;
 			}
 			DataObjectFactory<Supplier>.WriteObject(supp);

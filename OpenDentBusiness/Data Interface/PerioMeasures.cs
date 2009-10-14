@@ -35,7 +35,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static long Insert(PerioMeasure Cur) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Cur.PerioMeasureNum=Meth.GetInt(MethodBase.GetCurrentMethod(),Cur);
+				Cur.PerioMeasureNum=Meth.GetLong(MethodBase.GetCurrentMethod(),Cur);
 				return Cur.PerioMeasureNum;
 			}
 			if(PrefC.RandomKeys){

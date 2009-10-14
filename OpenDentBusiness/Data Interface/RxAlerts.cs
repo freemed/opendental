@@ -42,7 +42,7 @@ namespace OpenDentBusiness {
 		///<summary></summary>
 		public static long Insert(RxAlert alert) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				alert.RxAlertNum=Meth.GetInt(MethodBase.GetCurrentMethod(),alert);
+				alert.RxAlertNum=Meth.GetLong(MethodBase.GetCurrentMethod(),alert);
 				return alert.RxAlertNum;
 			}
 			if(PrefC.RandomKeys) {

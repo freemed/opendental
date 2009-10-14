@@ -451,7 +451,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static long Insert(Recall recall) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				recall.RecallNum=Meth.GetInt(MethodBase.GetCurrentMethod(),recall);
+				recall.RecallNum=Meth.GetLong(MethodBase.GetCurrentMethod(),recall);
 				return recall.RecallNum;
 			}
 			if(PrefC.RandomKeys) {

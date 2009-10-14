@@ -53,7 +53,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static long Insert(RefAttach attach) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				attach.RefAttachNum=Meth.GetInt(MethodBase.GetCurrentMethod(),attach);
+				attach.RefAttachNum=Meth.GetLong(MethodBase.GetCurrentMethod(),attach);
 				return attach.RefAttachNum;
 			}
 			if(PrefC.RandomKeys){
