@@ -849,7 +849,7 @@ namespace OpenDental{
 			pd.DefaultPageSettings.Margins=new Margins(0,0,0,0);
 			pd.OriginAtMargins=true;
 			#if DEBUG
-			printPreview=new PrintPreview(PrintSituation.Default,pd,1);
+			PrintPreview printPreview=new PrintPreview(PrintSituation.Default,pd,1);
 			printPreview.ShowDialog();
 			#else
 				try {

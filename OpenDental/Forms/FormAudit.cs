@@ -419,7 +419,7 @@ namespace OpenDental{
 				pd.DefaultPageSettings.PaperSize=new PaperSize("default",850,1100);
 			}
 			#if DEBUG
-			printPreview=new PrintPreview(PrintSituation.Default,pd,1);
+			PrintPreview printPreview=new PrintPreview(PrintSituation.Default,pd,1);
 			printPreview.ShowDialog();
 			#else
 				try {
