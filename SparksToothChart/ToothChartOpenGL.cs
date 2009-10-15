@@ -769,13 +769,13 @@ namespace SparksToothChart {
 				Gl.glLineWidth((float)Width/225f);
 				Gl.glPointSize((float)Width/275f);//point is slightly smaller since no antialiasing
 				RotateAndTranslateUser(toothGraphic);
-				float[,] line=toothGraphic.GetSealantLine();
-				//dim 1= points. dim 2 is coordinates, always 3
+				Line line=toothGraphic.GetSealantLine();
 				Gl.glBegin(Gl.GL_LINE_STRIP);
-				for(int j=0;j<line.GetLength(0);j++) {//loop through each vertex
-					Gl.glVertex3f(line[j,0],line[j,1],line[j,2]);
+				for(int j=0;j<line.Vertices.Count;j++) {//loop through each vertex
+					Gl.glVertex3f(line.Vertices[j].X,line.Vertices[j].Y,line.Vertices[j].Z);
 				}
 				Gl.glEnd();
+				//The next 30 or so lines are all a stupid OpenGL workaround to hide the line intersections with big dots.
 				Gl.glPopMatrix();
 				//now, draw a point at each intersection to hide the unsightly transitions
 				Gl.glPushMatrix();
@@ -796,12 +796,12 @@ namespace SparksToothChart {
 				RotateAndTranslateUser(toothGraphic);
 				Gl.glDisable(Gl.GL_BLEND);
 				Gl.glBegin(Gl.GL_POINTS);
-				for(int j=0;j<line.GetLength(0);j++) {//loop through each vertex
+				for(int j=0;j<line.Vertices.Count;j++) {//loop through each vertex
 					//but ignore the first and last.  We are only concerned with where lines meet.
-					if(j==0 || j==line.GetLength(0)-1) {
+					if(j==0 || j==line.Vertices.Count-1) {
 						continue;
 					}
-					Gl.glVertex3f(line[j,0],line[j,1],line[j,2]);
+					Gl.glVertex3f(line.Vertices[j].X,line.Vertices[j].Y,line.Vertices[j].Z);
 				}
 				Gl.glEnd();
 				Gl.glPopMatrix();

@@ -1026,33 +1026,33 @@ namespace SparksToothChart {
 			return retVal;
 		}
 
-		///<summary>dim 1=points, dim 2 is coordinates, always 3</summary>
-		public float[,] GetSealantLine() {
+		///<summary></summary>
+		public Line GetSealantLine() {
 			if(IsMaxillary(toothID)){
-				return new float[,] {
-				{ 1.5f,-4f,1.5f }, 
-				{ .75f,-4f,2.25f }, 
-				{ -.75f,-4f,2.25f }, 
-				{ -1.5f,-4f,1.5f }, 
-				{ -1.5f,-4f,.75f }, 
-				{ 1.5f,-4f,-.75f }, 
-				{ 1.5f,-4f,-1.5f }, 
-				{ .75f,-4f,-2.25f }, 
-				{ -.75f,-4f,-2.25f }, 
-				{ -1.5f,-4f,-1.5f } };
+				return new Line(
+					1.5f,-4f,1.5f,
+					.75f,-4f,2.25f,
+					-.75f,-4f,2.25f,
+					-1.5f,-4f,1.5f,
+					-1.5f,-4f,.75f,
+					1.5f,-4f,-.75f,
+					1.5f,-4f,-1.5f,
+					.75f,-4f,-2.25f,
+					-.75f,-4f,-2.25f,
+					-1.5f,-4f,-1.5f);
 			}
 			else{
-				return new float[,] {
-				{ -1.5f,4f,1.5f }, 
-				{ -.75f,4f,2.25f }, 
-				{ .75f,4f,2.25f }, 
-				{ 1.5f,4f,1.5f }, 
-				{ 1.5f,4f,.75f }, 
-				{ -1.5f,4f,-.75f }, 
-				{ -1.5f,4f,-1.5f }, 
-				{ -.75f,4f,-2.25f }, 
-				{ .75f,4f,-2.25f }, 
-				{ 1.5f,4f,-1.5f } };
+				return new Line(
+					-1.5f,4f,1.5f,
+					-.75f,4f,2.25f,
+					.75f,4f,2.25f,
+					1.5f,4f,1.5f,
+					1.5f,4f,.75f,
+					-1.5f,4f,-.75f,
+					-1.5f,4f,-1.5f,
+					-.75f,4f,-2.25f,
+					.75f,4f,-2.25f,
+					1.5f,4f,-1.5f);
 			}
 		}
 
