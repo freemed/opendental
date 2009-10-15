@@ -18,5 +18,13 @@ namespace SparksToothChart {
 			Y=y;
 			Z=z;
 		}
+
+		public float[] GetFloatArray() {
+			float[] retVal=new float[3];
+			retVal[0]=X;
+			retVal[1]=Y;
+			retVal[2]=Z;
+			return retVal;
+		}
 	}
 }

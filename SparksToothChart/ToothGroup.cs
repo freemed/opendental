@@ -13,13 +13,12 @@ namespace SparksToothChart {
 		///<summary></summary>
 		public ToothGroupType GroupType;
 		///<summary>dim 1=the face. dim 2=the vertex. dim 3 always has length=2, with 1st vertex, and 2nd normal.</summary>
-		public int[][][] Faces;
-		//public List<Face> Faces;
+		//public int[][][] Faces;
+		public List<Face> Faces;
 
-		//public ToothGroup(ToothGroupType groupType) {
-		//	GroupType=groupType;
-			//Faces=new List<Face>();
-		//}
+		public ToothGroup() {
+			Faces=new List<Face>();
+		}
 
 
 	}

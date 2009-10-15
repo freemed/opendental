@@ -6,6 +6,6 @@ namespace SparksToothChart {
 	///<summary>Contains one vertex (xyz) and one normal.</summary>
 	public class VertexNormal {
 		public Vertex3f Vertex;
-		//public 
+		public Vertex3f Normal;
 	}
 }

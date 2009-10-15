@@ -6,14 +6,14 @@ using System.Drawing;
 //using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-//using Microsoft.DirectX;
-//using Microsoft.DirectX.Direct3D;
+using Microsoft.DirectX;
+using Microsoft.DirectX.Direct3D;
 
 namespace SparksToothChart {
 
 	public partial class ToothChartDirectX:Control {
 
-		//private Device device=null;
+		private Device device=null;
 
 		public ToothChartDirectX() {
 			InitializeComponent();
@@ -21,7 +21,6 @@ namespace SparksToothChart {
 		}
 
 		public virtual void InitializeGraphics(){
-			/*
 			PresentParameters pp=new PresentParameters();
 			pp.Windowed=true;
 			pp.SwapEffect=SwapEffect.Discard;
@@ -30,12 +29,12 @@ namespace SparksToothChart {
 			pp.DeviceWindowHandle=this.Handle;
 			device=new Device(0,DeviceType.Hardware,this,CreateFlags.HardwareVertexProcessing,pp);
 			device.DeviceReset+=new EventHandler(this.OnDeviceReset);
-			OnDeviceReset(device,null);*/
+			OnDeviceReset(device,null);
 		}
 
 		///<summary>TODO: Handle the situation when there are suboptimal graphics cards.</summary>
 		public virtual void OnDeviceReset(object sender,EventArgs e){
-			//device=sender as Device;
+			device=sender as Device;
 		}
 
 		protected void Render(){
@@ -43,7 +42,6 @@ namespace SparksToothChart {
 		}
 
 		protected override void OnPaint(PaintEventArgs pe) {
-			/*
 			if(device==null){
 				//When no rendering context has been set, simply display the control
 				//as a black rectangle. This will make the control draw as a blank
@@ -55,7 +53,7 @@ namespace SparksToothChart {
 			device.BeginScene();
 			Render();
 			device.EndScene();
-			device.Present();*/
+			device.Present();
 		}
 
 		protected override void OnPaintBackground(PaintEventArgs e) {
