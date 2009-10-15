@@ -69,26 +69,30 @@ namespace SparksToothChart {
 
 		///<summary></summary>
 		protected override void OnInsert(int index,Object value) {
-			if(value.GetType()!=typeof(ToothGraphic))
+			if(value.GetType()!=typeof(ToothGraphic)) {
 				throw new ArgumentException("value must be of type ToothGraphic.","value");
+			}
 		}
 
 		///<summary></summary>
 		protected override void OnRemove(int index,Object value) {
-			if(value.GetType()!=typeof(ToothGraphic))
+			if(value.GetType()!=typeof(ToothGraphic)) {
 				throw new ArgumentException("value must be of type ToothGraphic.","value");
+			}
 		}
 
 		///<summary></summary>
 		protected override void OnSet(int index,Object oldValue,Object newValue) {
-			if(newValue.GetType()!=typeof(ToothGraphic))
+			if(newValue.GetType()!=typeof(ToothGraphic)) {
 				throw new ArgumentException("newValue must be of type ToothGraphic.","newValue");
+			}
 		}
 
 		///<summary></summary>
 		protected override void OnValidate(Object value) {
-			if(value.GetType()!=typeof(ToothGraphic))
+			if(value.GetType()!=typeof(ToothGraphic)) {
 				throw new ArgumentException("value must be of type ToothGraphic.");
+			}
 		}
 
 

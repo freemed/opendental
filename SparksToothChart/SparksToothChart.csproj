@@ -79,26 +79,26 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GraphicalToothChart.cs">
+    <Compile Include="ToothChartWrapper.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="GraphicalToothChart.Designer.cs">
-      <DependentUpon>GraphicalToothChart.cs</DependentUpon>
+    <Compile Include="ToothChartWrapper.Designer.cs">
+      <DependentUpon>ToothChartWrapper.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="GraphicalToothChart.resx">
+    <EmbeddedResource Include="ToothChartWrapper.resx">
       <SubType>Designer</SubType>
-      <DependentUpon>GraphicalToothChart.cs</DependentUpon>
+      <DependentUpon>ToothChartWrapper.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="GraphicalToothChartControl.resx">
+    <EmbeddedResource Include="ToothChartOpenGL.resx">
       <SubType>Designer</SubType>
-      <DependentUpon>GraphicalToothChartControl.cs</DependentUpon>
+      <DependentUpon>ToothChartOpenGL.cs</DependentUpon>
     </EmbeddedResource>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -139,11 +139,11 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="GraphicalToothChartControl.cs">
+    <Compile Include="ToothChartOpenGL.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="GraphicalToothChartControl.Designer.cs">
-      <DependentUpon>GraphicalToothChartControl.cs</DependentUpon>
+    <Compile Include="ToothChartOpenGL.Designer.cs">
+      <DependentUpon>ToothChartOpenGL.cs</DependentUpon>
     </Compile>
     <Compile Include="ToothGraphic.cs" />
     <Compile Include="ToothGraphicCollection.cs" />

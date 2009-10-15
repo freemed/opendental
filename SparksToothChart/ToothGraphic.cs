@@ -10,6 +10,7 @@ using System.Text.RegularExpressions;
 using OpenDentBusiness;
 
 namespace SparksToothChart {
+	///<summary>A tooth graphic holds all the data for one tooth to be drawn.</summary>
 	public class ToothGraphic {
 		private string toothID;
 		///<summary>second dim is always 3.</summary>
@@ -17,7 +18,7 @@ namespace SparksToothChart {
 		///<summary>second dim is always 3.</summary>
 		public float[][] Normals;
 		///<summary>Collection of type ToothGroup.</summary>
-		public ArrayList Groups;
+		public List<ToothGroup> Groups;
 		private bool visible;
 		private static float[] DefaultOrthoXpos;
 		///<summary>The rotation about the Y axis in degrees. Performed before any other rotation or translation.  Positive numbers are clockwise as viewed from occlusal.</summary>
@@ -61,7 +62,7 @@ namespace SparksToothChart {
 		///<summary>If sealant, then this will contain the color.</summary>
 		public Color colorSealant;
 
-		///<summary>Only called from GraphicalToothChart.ResetTeeth or from GraphicalToothChartControl.ResetTeeth when program first loads.  Constructor requires passing in the toothID.  Exception will be thrown if not one of the following: 1-32 or A-T.  Always loads graphics data from local resources even if in simplemode.</summary>
+		///<summary>Only called from ToothChartWrapper.ResetTeeth or from ToothChartOpenGL.ResetTeeth when program first loads.  Constructor requires passing in the toothID.  Exception will be thrown if not one of the following: 1-32 or A-T.  Always loads graphics data from local resources even if in simplemode.</summary>
 		public ToothGraphic(string tooth_id) {
 			if(tooth_id!="implant" && !IsValidToothID(tooth_id)) {
 				///<summary>This will only happen if bugs in program</summary>
@@ -553,7 +554,7 @@ namespace SparksToothChart {
 			}
 			ArrayList ALv=new ArrayList();//vertices
 			ArrayList ALvn=new ArrayList();//vertex normals
-			Groups=new ArrayList();//type=ToothGroup
+			Groups=new List<ToothGroup>();
 			ArrayList ALf=new ArrayList();//faces always part of a group
 			MemoryStream stream=new MemoryStream(buffer);
 			using(StreamReader sr = new StreamReader(stream)){
@@ -620,44 +621,7 @@ namespace SparksToothChart {
 						switch(line) {
 							case "g cube1_Cementum":
 								group.GroupType=ToothGroupType.Cementum;
-								//group.PaintColor=Color.FromArgb(255,255,240,170);//ARGB
 								break;
-							/*default:
-								if(toothID=="30"){
-									group.GroupType=ToothGroupType.Enamel;
-									group.PaintColor=Color.FromArgb(204,182,84);
-								}
-								else {
-									group.GroupType=ToothGroupType.Enamel;
-									group.PaintColor=Color.FromArgb(255,255,253,209);
-								}
-								break;
-							case "g cube1_M":
-							case "g cube1_O":
-							case "g cube1_D":
-								if(toothID=="3" || toothID=="14") {
-									group.GroupType=ToothGroupType.Filling;
-									group.PaintColor=Color.DarkRed;
-								}
-								else if(toothID=="30"){
-									group.GroupType=ToothGroupType.Enamel;
-									group.PaintColor=Color.FromArgb(204,182,84);
-								}
-								else {
-									group.GroupType=ToothGroupType.Enamel;
-									group.PaintColor=Color.FromArgb(255,255,253,209);
-								}
-								break;*/
-							/*case "g cube1_V":
-								if(toothID=="6"){
-									group.GroupType=ToothGroupType.Filling;
-									group.PaintColor=Color.MediumBlue;
-								}
-								else{
-									group.GroupType=ToothGroupType.Enamel;
-									group.PaintColor=Color.FromArgb(255,255,253,209);
-								}
-								break;*/
 							case "g cube1_Enamel2":
 								group.GroupType=ToothGroupType.Enamel;
 								//group.PaintColor=Color.FromArgb(255,255,253,209);

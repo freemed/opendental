@@ -1,5 +1,5 @@
 namespace SparksToothChart {
-	partial class GraphicalToothChart {
+	partial class ToothChartWrapper {
 		/// <summary> 
 		/// Required designer variable.
 		/// </summary>
@@ -23,7 +23,7 @@ namespace SparksToothChart {
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GraphicalToothChart));
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ToothChartWrapper));
 			this.pictBox = new System.Windows.Forms.PictureBox();
 			((System.ComponentModel.ISupportInitialize)(this.pictBox)).BeginInit();
 			this.SuspendLayout();
@@ -37,7 +37,7 @@ namespace SparksToothChart {
 			this.pictBox.TabIndex = 0;
 			this.pictBox.TabStop = false;
 			// 
-			// GraphicalToothChart
+			// ToothChartWrapper
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;

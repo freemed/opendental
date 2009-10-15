@@ -10,20 +10,20 @@ using System.Windows.Forms;
 using OpenDentBusiness;
 
 namespace SparksToothChart {
-	public partial class GraphicalToothChart:UserControl {
+	public partial class ToothChartWrapper:UserControl {
 		private string[] selectedTeeth;
 		private Color colorBackground;
 		private Color colorBackSimple=Color.FromArgb(150,145,153);//constant
 		private bool simpleMode=true;
 		///<summary>True for hardware graphics, false for software graphics.</summary>
 		private bool hardwareMode=false;
-		private GraphicalToothChartControl toothChart;
+		private ToothChartOpenGL toothChart;
 		private Color colorText;
 		private Color colorTextHighlight;
 		private Color colorBackHighlight;
 		///<summary>Never visible.  Just used to store the bitmap.</summary>
 		private System.Windows.Forms.PictureBox pictBox;
-		///<summary>Only used if in simple mode.  Analogous to GraphicalToothChartControl.ListToothGraphics, but with less detail.</summary>
+		///<summary>Only used if in simple mode.  Analogous to ToothChartOpenGL.ListToothGraphics, but with less detail.</summary>
 		private ToothGraphicCollection ListToothGraphics;
 		///<summary>valid values are 1 to 32 (int). Only used in simple mode.</summary>
 		private ArrayList ALSelectedTeeth;
@@ -46,7 +46,7 @@ namespace SparksToothChart {
 		///<summary>When the drawing feature was originally added, this was the size of the tooth chart.  This number must forever be preserved and drawings scaled to account for it.</summary>
 		private Size originalDrawingSize=new Size(410,307);
 
-		public GraphicalToothChart() {
+		public ToothChartWrapper() {
 			InitializeComponent();
 			WidthProjection=130;
 			ListToothGraphics=new ToothGraphicCollection();
@@ -219,7 +219,7 @@ namespace SparksToothChart {
 			}
 			else{
 				//pictBox.Visible=false;
-				toothChart=new GraphicalToothChartControl(hardwareMode,preferredPixelFormatNum);
+				toothChart=new ToothChartOpenGL(hardwareMode,preferredPixelFormatNum);
 				preferredPixelFormatNum=toothChart.SelectedPixelFormatNumber;
 				toothChart.ColorText=colorText;
 				toothChart.ColorBackground = colorBackground;

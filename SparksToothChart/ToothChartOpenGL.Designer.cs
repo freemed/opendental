@@ -1,5 +1,5 @@
 namespace SparksToothChart {
-	partial class GraphicalToothChartControl {
+	partial class ToothChartOpenGL {
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -25,7 +25,7 @@ namespace SparksToothChart {
 		private void InitializeComponent() {
 			this.SuspendLayout();
 			// 
-			// GraphicalToothChart
+			// ToothChartWrapper
 			// 
 			this.Name = "GraphicalToothChart";
 			this.Size = new System.Drawing.Size(544,351);

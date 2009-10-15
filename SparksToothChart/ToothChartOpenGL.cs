@@ -30,7 +30,7 @@ using Tao.Platform.Windows;
 using OpenDentBusiness;
 
 namespace SparksToothChart {
-	public partial class GraphicalToothChartControl:CodeBase.OpenGLWinFormsControl{//.SimpleOpenGlControl {
+	public partial class ToothChartOpenGL:CodeBase.OpenGLWinFormsControl{//.SimpleOpenGlControl {
 		///<summary>A strongly typed collection of ToothGraphics.  This includes all 32 perm and all 20 primary teeth, whether they will be drawn or not.  If a tooth is missing, it gets marked as visible false.  If it's set to primary, then the permanent tooth gets repositioned under the primary, and a primary gets set to visible true.  If a tooth is impacted, it gets repositioned.  Supernumerary graphics are not yet supported, but they might be handled by adding to this list.  "implant" is also stored as another tooth in this collection.  It is just used to store the graphics for any implant.</summary>
 		private ToothGraphicCollection ListToothGraphics;
 		float[] specular_color_normal;//white
@@ -73,7 +73,7 @@ namespace SparksToothChart {
 
 
 		///<summary>Specify the hardware mode to create the tooth chart with. Set hardwareMode=true to try for hardware accelerated graphics, and set hardwareMode=false to try and get software graphics.</summary>
-		public GraphicalToothChartControl(bool hardwareMode,int preferredPixelFormatNum) {
+		public ToothChartOpenGL(bool hardwareMode,int preferredPixelFormatNum) {
 			usehardware=hardwareMode;
 			InitializeComponent();
 			this.TaoSetupContext += new System.EventHandler(ToothChart_TaoSetupContext);
