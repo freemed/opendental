@@ -7,5 +7,9 @@ namespace SparksToothChart {
 	public class VertexNormal {
 		public Vertex3f Vertex;
 		public Vertex3f Normal;
+
+		public override string ToString() {
+			return "v:"+Vertex.ToString()+" n:"+Normal.ToString();
+		}
 	}
 }

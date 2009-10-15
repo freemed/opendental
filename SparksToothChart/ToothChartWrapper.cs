@@ -17,7 +17,8 @@ namespace SparksToothChart {
 		private bool simpleMode=true;
 		///<summary>True for hardware graphics, false for software graphics.</summary>
 		private bool hardwareMode=false;
-		private ToothChartOpenGL toothChart;
+		private ToothChartOpenGL toothChartOpenGL;
+		private ToothChartDirectX toothChartDirectX;
 		private Color colorText;
 		private Color colorTextHighlight;
 		private Color colorBackHighlight;
@@ -45,6 +46,7 @@ namespace SparksToothChart {
 		private Color drawingColor;
 		///<summary>When the drawing feature was originally added, this was the size of the tooth chart.  This number must forever be preserved and drawings scaled to account for it.</summary>
 		private Size originalDrawingSize=new Size(410,307);
+		private bool isDirectX=true;//this is where to toggle it
 
 		public ToothChartWrapper() {
 			InitializeComponent();
@@ -67,7 +69,7 @@ namespace SparksToothChart {
 					return selectedTeeth;
 				}
 				else{
-					return toothChart.SelectedTeeth;
+					return toothChartOpenGL.SelectedTeeth;
 				}
 			}
 		}
@@ -83,7 +85,7 @@ namespace SparksToothChart {
 					//has no effect 
 				}
 				else{
-					toothChart.ColorBackground=value;
+					toothChartOpenGL.ColorBackground=value;
 				}
 			}
 		}
@@ -96,7 +98,7 @@ namespace SparksToothChart {
 					//
 				}
 				else {
-					toothChart.ColorText=value;
+					toothChartOpenGL.ColorText=value;
 				}
 			}
 		}
@@ -109,7 +111,7 @@ namespace SparksToothChart {
 					//
 				}
 				else {
-					toothChart.ColorTextHighlight=value;
+					toothChartOpenGL.ColorTextHighlight=value;
 				}
 			}
 		}
@@ -122,7 +124,7 @@ namespace SparksToothChart {
 					//
 				}
 				else {
-					toothChart.ColorBackHighlight=value;
+					toothChartOpenGL.ColorBackHighlight=value;
 				}
 			}
 		}
@@ -156,11 +158,11 @@ namespace SparksToothChart {
 				if(simpleMode){
 					return false;
 				}
-				return toothChart.autoFinish;
+				return toothChartOpenGL.autoFinish;
 			}
 			set{
 				if(!simpleMode){
-					toothChart.autoFinish=value;
+					toothChartOpenGL.autoFinish=value;
 				}
 			}
 		}
@@ -193,7 +195,7 @@ namespace SparksToothChart {
 					this.Cursor=new Cursor(GetType(),"ColorChanger.cur");
 				}
 				if(!simpleMode){
-					toothChart.CursorTool=value;
+					toothChartOpenGL.CursorTool=value;
 				}
 			}
 		}
@@ -205,7 +207,7 @@ namespace SparksToothChart {
 			set{
 				drawingColor=value;
 				if(!simpleMode){
-					toothChart.DrawingColor=value;
+					toothChartOpenGL.DrawingColor=value;
 				}
 			}
 		}
@@ -218,18 +220,30 @@ namespace SparksToothChart {
 				this.Invalidate();
 			}
 			else{
-				//pictBox.Visible=false;
-				toothChart=new ToothChartOpenGL(hardwareMode,preferredPixelFormatNum);
-				preferredPixelFormatNum=toothChart.SelectedPixelFormatNumber;
-				toothChart.ColorText=colorText;
-				toothChart.ColorBackground = colorBackground;
-				toothChart.Dock = System.Windows.Forms.DockStyle.Fill;
-				toothChart.Location = new System.Drawing.Point(0,0);
-				toothChart.Name = "toothChart";
-				toothChart.Size = new System.Drawing.Size(719,564);//unnecessary?
-				toothChart.SegmentDrawn+=new ToothChartDrawEventHandler(toothChart_SegmentDrawn);
-				//this.toothChart.TabIndex = 0;
-				this.Controls.Add(toothChart);
+				if(isDirectX) {
+					toothChartDirectX=new ToothChartDirectX();//(hardwareMode,preferredPixelFormatNum);
+					//preferredPixelFormatNum=toothChart.SelectedPixelFormatNumber;
+					//toothChartDirectX.ColorText=colorText;
+					//toothChartDirectX.ColorBackground = colorBackground;
+					toothChartDirectX.Dock = System.Windows.Forms.DockStyle.Fill;
+					toothChartDirectX.Location = new System.Drawing.Point(0,0);
+					toothChartDirectX.Name = "toothChart";
+					toothChartDirectX.Size = new System.Drawing.Size(719,564);//unnecessary?
+					//toothChartDirectX.SegmentDrawn+=new ToothChartDrawEventHandler(toothChart_SegmentDrawn);
+					this.Controls.Add(toothChartDirectX);
+				}
+				else {
+					toothChartOpenGL=new ToothChartOpenGL(hardwareMode,preferredPixelFormatNum);
+					preferredPixelFormatNum=toothChartOpenGL.SelectedPixelFormatNumber;
+					toothChartOpenGL.ColorText=colorText;
+					toothChartOpenGL.ColorBackground = colorBackground;
+					toothChartOpenGL.Dock = System.Windows.Forms.DockStyle.Fill;
+					toothChartOpenGL.Location = new System.Drawing.Point(0,0);
+					toothChartOpenGL.Name = "toothChart";
+					toothChartOpenGL.Size = new System.Drawing.Size(719,564);//unnecessary?
+					toothChartOpenGL.SegmentDrawn+=new ToothChartDrawEventHandler(toothChart_SegmentDrawn);
+					this.Controls.Add(toothChartOpenGL);
+				}
 			}
 		}
 
@@ -266,7 +280,12 @@ namespace SparksToothChart {
 				this.Invalidate();
 			}
 			else{
-				toothChart.ResetTeeth();
+				if(isDirectX) {
+		//toothChartDirectX.ResetTeeth();
+				}
+				else {
+					toothChartOpenGL.ResetTeeth();
+				}
 			}
 		}
 
@@ -276,7 +295,7 @@ namespace SparksToothChart {
 				//do nothing
 			}
 			else {
-				toothChart.MoveTooth(toothID,rotate,tipM,tipB,shiftM,shiftO,shiftB);
+				//toothChartOpenGL.MoveTooth(toothID,rotate,tipM,tipB,shiftM,shiftO,shiftB);
 			}
 		}
 
@@ -300,7 +319,7 @@ namespace SparksToothChart {
 
 			}
 			else {
-				toothChart.SetToPrimary(toothID);
+				//toothChartOpenGL.SetToPrimary(toothID);
 			}
 		}
 
@@ -319,7 +338,7 @@ namespace SparksToothChart {
 				this.Invalidate();
 			}
 			else {
-				toothChart.SetCrown(toothID,color);
+				//toothChartOpenGL.SetCrown(toothID,color);
 			}
 		}
 
@@ -333,7 +352,7 @@ namespace SparksToothChart {
 				this.Invalidate();
 			}
 			else {
-				toothChart.SetSurfaceColors(toothID,surfaces,color);
+				//toothChartOpenGL.SetSurfaceColors(toothID,surfaces,color);
 			}
 		}
 
@@ -347,7 +366,7 @@ namespace SparksToothChart {
 				this.Invalidate();
 			}
 			else {
-				toothChart.SetInvisible(toothID);
+				//toothChartOpenGL.SetInvisible(toothID);
 			}
 		}
 
@@ -362,7 +381,7 @@ namespace SparksToothChart {
 				this.Invalidate();
 			}
 			else {
-				toothChart.HideTooth(toothID);
+				//toothChartOpenGL.HideTooth(toothID);
 			}
 		}
 
@@ -380,7 +399,7 @@ namespace SparksToothChart {
 				ListToothGraphics[toothID].SetGroupColor(ToothGroupType.Enamel,color);
 			}
 			else {
-				toothChart.SetPontic(toothID,color);
+				//toothChartOpenGL.SetPontic(toothID,color);
 			}
 		}
 
@@ -394,7 +413,12 @@ namespace SparksToothChart {
 				ListToothGraphics[toothID].colorRCT=color;
 			}
 			else {
-				toothChart.SetRCT(toothID,color);
+				if(isDirectX) {
+
+				}
+				else {
+					toothChartOpenGL.SetRCT(toothID,color);
+				}
 			}
 		}
 
@@ -408,7 +432,7 @@ namespace SparksToothChart {
 				ListToothGraphics[toothID].colorX=color;
 			}
 			else {
-				toothChart.SetBigX(toothID,color);
+				//toothChartOpenGL.SetBigX(toothID,color);
 			}
 		}
 
@@ -422,7 +446,12 @@ namespace SparksToothChart {
 				ListToothGraphics[toothID].colorBU=color;
 			}
 			else {
-				toothChart.SetBU(toothID,color);
+				if(isDirectX) {
+
+				}
+				else {
+					toothChartOpenGL.SetBU(toothID,color);
+				}
 			}
 		}
 
@@ -436,7 +465,7 @@ namespace SparksToothChart {
 				ListToothGraphics[toothID].colorImplant=color;
 			}
 			else {
-				toothChart.SetImplant(toothID,color);
+				//toothChartOpenGL.SetImplant(toothID,color);
 			}
 		}
 
@@ -450,7 +479,7 @@ namespace SparksToothChart {
 				ListToothGraphics[toothID].colorSealant=color;
 			}
 			else {
-				toothChart.SetSealant(toothID,color);
+				//toothChartOpenGL.SetSealant(toothID,color);
 			}
 		}
 
@@ -469,12 +498,13 @@ namespace SparksToothChart {
 				}
 			}
 			else {
-				toothChart.AddDrawingSegment(drawingSegment);
+				//toothChartOpenGL.AddDrawingSegment(drawingSegment);
 			}
 		}
 
 		///<summary>Returns a bitmap of what is showing in the control.  Used for printing.</summary>
 		public Bitmap GetBitmap() {
+			/*
 			Bitmap dummy=new Bitmap(this.Width,this.Height);
 			Graphics g=Graphics.FromImage(dummy);
 			PaintEventArgs e=new PaintEventArgs(g,new Rectangle(0,0,dummy.Width,dummy.Height));
@@ -482,10 +512,11 @@ namespace SparksToothChart {
 				OnPaint(e);
 				return dummy;
 			}
-			toothChart.Render(e);
-			Bitmap result=toothChart.ReadFrontBuffer();
+			toothChartOpenGL.Render(e);
+			Bitmap result=toothChartOpenGL.ReadFrontBuffer();
 			g.Dispose();
-			return result;
+			return result;*/
+			return null;
 		}
 
 		#endregion
@@ -1094,7 +1125,7 @@ namespace SparksToothChart {
 				g.Dispose();
 			}
 			else {
-				toothChart.SetSelected(intTooth,setValue);
+				//toothChartOpenGL.SetSelected(intTooth,setValue);
 			}
 		}
 

@@ -13,5 +13,16 @@ namespace SparksToothChart {
 			//VertexNormals=new List<VertexNormal>();
 			IndexList=new List<int>();
 		}
+
+		public override string ToString() {
+			string retVal="";
+			for(int i=0;i<IndexList.Count;i++) {
+				if(i>0) {
+					retVal+=",";
+				}
+				retVal+=IndexList[i].ToString();
+			}
+			return retVal;
+		}
 	}
 }

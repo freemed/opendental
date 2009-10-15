@@ -20,6 +20,10 @@ namespace SparksToothChart {
 			Faces=new List<Face>();
 		}
 
+		public override string ToString() {
+			return GroupType.ToString()+". Faces:"+Faces.Count.ToString();
+		}
+
 
 	}
 

@@ -26,5 +26,9 @@ namespace SparksToothChart {
 			retVal[2]=Z;
 			return retVal;
 		}
+
+		public override string ToString() {
+			return X.ToString()+","+Y.ToString()+","+Z.ToString();
+		}
 	}
 }
