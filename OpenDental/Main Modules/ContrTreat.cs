@@ -109,7 +109,7 @@ namespace OpenDental{
 		///<summary>Only used for printing graphical chart.</summary>
 		private List<ToothInitial> ToothInitialList;
 		///<summary>Only used for printing graphical chart.</summary>
-		private GraphicalToothChart toothChart;
+		private ToothChartWrapper toothChart;
 		private CheckBox checkShowSubtotals;
 		private CheckBox checkShowMaxDed;
 		///<summary>Only used for printing graphical chart.</summary>
@@ -1686,7 +1686,7 @@ namespace OpenDental{
 				//panelHide.BackColor=this.BackColor;
 				//panelHide.SendToBack();
 				//this.Controls.Add(panelHide);
-				toothChart=new GraphicalToothChart();
+				toothChart=new ToothChartWrapper();
 				toothChart.ColorBackground=DefC.Long[(int)DefCat.ChartGraphicColors][14].ItemColor;
 				toothChart.ColorText=DefC.Long[(int)DefCat.ChartGraphicColors][15].ItemColor;
 				//toothChart.TaoRenderEnabled=true;

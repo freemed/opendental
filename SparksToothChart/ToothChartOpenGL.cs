@@ -628,30 +628,31 @@ namespace SparksToothChart {
 				Gl.glLineWidth((float)Width/225f);
 				Gl.glPointSize((float)Width/275f);//point is slightly smaller since no antialiasing
 				RotateAndTranslateUser(toothGraphic);
-				float[][,] lines=toothGraphic.GetRctLines();
-				//dim 1=lines. dim 2 is points, always two. dim 3 is coordinates, always 3
-				for(int i=0;i<lines.GetLength(0);i++){//loop through each of the lines
+				List<RctLine> lines=toothGraphic.GetRctLines();
+				for(int i=0;i<lines.Count;i++){
 					Gl.glBegin(Gl.GL_LINE_STRIP);
-					for(int j=0;j<lines[i].GetLength(0);j++){//loop through each vertex
-						Gl.glVertex3f(lines[i][j,0],lines[i][j,1],lines[i][j,2]);
+					for(int j=0;j<lines[i].RctPoints.Count;j++){
+						Gl.glVertex3f(lines[i].RctPoints[j].X,lines[i].RctPoints[j].Y,lines[i].RctPoints[j].Z);
 					}
 					Gl.glEnd();
 				}
 				Gl.glPopMatrix();
-				//now, draw a point at each intersection to hide the unsightly transitions
+				//This section is a necessary workaround for OpenGL.
+				//It draws a point at each intersection to hide the unsightly transitions between line segments.
 				Gl.glPushMatrix();
 				Gl.glTranslatef(0,0,10.5f);//move forward 10.5mm so it will cover the lines
 				Gl.glTranslatef(GetTransX(toothGraphic.ToothID),GetTransYfacial(toothGraphic.ToothID),0);
 				RotateAndTranslateUser(toothGraphic);
 				Gl.glDisable(Gl.GL_BLEND);
-				for(int i=0;i<lines.GetLength(0);i++) {//loop through each of the lines
+				for(int i=0;i<lines.Count;i++){
 					Gl.glBegin(Gl.GL_POINTS);
-					for(int j=0;j<lines[i].GetLength(0);j++) {//loop through each vertex
+					for(int j=0;j<lines[i].RctPoints.Count;j++) {//lines[i].GetLength(0);j++) {
 						//but ignore the first and last.  We are only concerned with where lines meet.
-						if(j==0 || j==lines[i].GetLength(0)-1){
+						if(j==0 || j==lines[i].RctPoints.Count-1) {
 							continue;
 						}
-						Gl.glVertex3f(lines[i][j,0],lines[i][j,1],lines[i][j,2]);
+						Gl.glVertex3f(lines[i].RctPoints[j].X,lines[i].RctPoints[j].Y,lines[i].RctPoints[j].Z);
+							//lines[i][j,0],lines[i][j,1],lines[i][j,2]);
 					}
 					Gl.glEnd();
 				}

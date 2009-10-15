@@ -710,318 +710,320 @@ namespace SparksToothChart {
 		}
 
 		///<summary>dim 1=lines. dim 2 is points, (was always two). dim 3 is coordinates, always 3</summary>
-		public float[][,] GetRctLines() {
+		public List<RctLine> GetRctLines(){//[][,] GetRctLines() {
+			List<RctLine> retVal=new List<RctLine>();
+			RctLine line;
 			if(toothID=="1") {
-				return new float[][,] {
-					new float[,] { 
-					{ -.7f,9.6f,1.6f }, 
-					{ .6f,8,1.6f },
-					{ 1.2f,5.8f,1.6f },
-					{ .8f,0,.9f } },
-					new float[,] { 
-					{ -1.8f,9.5f,1.6f }, 
-					{ -1.6f,8,1.6f },
-					{ -1.6f,5.8f,1.6f },
-					{ -.9f,0,.9f } }
-				};
+				line=new RctLine(
+					-.7f,9.6f,1.6f, 
+					.6f,8,1.6f ,
+					1.2f,5.8f,1.6f ,
+					.8f,0,.9f);
+				retVal.Add(line);
+				line=new RctLine(
+					-1.8f,9.5f,1.6f,
+					-1.6f,8,1.6f,
+					-1.6f,5.8f,1.6f,
+					-.9f,0,.9f);
+				retVal.Add(line);
 			}
 			if(toothID=="16") {
-				return new float[][,] {
-					new float[,] { 
-					{ .7f,9.6f,1.6f }, 
-					{ -.6f,8,1.6f },
-					{ -1.2f,5.8f,1.6f },
-					{ -.8f,0,.9f } },
-					new float[,] { 
-					{ 1.8f,9.5f,1.6f }, 
-					{ 1.6f,8,1.6f },
-					{ 1.6f,5.8f,1.6f },
-					{ .9f,0,.9f } }
-				};
+				line=new RctLine(
+					.7f,9.6f,1.6f, 
+					-.6f,8,1.6f,
+					-1.2f,5.8f,1.6f,
+					-.8f,0,.9f);
+				retVal.Add(line);
+				line=new RctLine(
+					1.8f,9.5f,1.6f , 
+					1.6f,8,1.6f ,
+					1.6f,5.8f,1.6f ,
+					.9f,0,.9f );
+				retVal.Add(line);
 			}
 			if(toothID=="2") {
-				return new float[][,] {
-					new float[,] { 
-					{ .3f,10.6f,3.4f }, 
-					{ 1.4f,8,3.2f },
-					{ 1.7f,5,1.9f },
-					{ .9f,0,1f } },
-					new float[,] { 
-					{ -1.8f,10.5f,3.4f }, 
-					{ -2,7,3.2f },
-					{ -1.7f,4,1.9f },
-					{ -1,0,1.1f } },
-					new float[,] { 
-					{ -2,11.5f,-3.7f }, 
-					{ -.6f,6.3f,-4 },
-					{ 0,0,-2.3f } } 
-				};
+				line=new RctLine(
+					.3f,10.6f,3.4f , 
+					1.4f,8,3.2f ,
+					1.7f,5,1.9f ,
+					.9f,0,1f);
+				retVal.Add(line);
+				line=new RctLine(
+					-1.8f,10.5f,3.4f , 
+					-2,7,3.2f ,
+					-1.7f,4,1.9f ,
+					-1,0,1.1f );
+				retVal.Add(line);
+				line=new RctLine(
+					-2,11.5f,-3.7f , 
+					-.6f,6.3f,-4 ,
+					0,0,-2.3f);
+				retVal.Add(line);
 			}
 			if(toothID=="15") {
-				return new float[][,] {
-					new float[,] { 
-					{ -.3f,10.6f,3.4f }, 
-					{ -1.4f,8,3.2f },
-					{ -1.7f,5,1.9f },
-					{ -.9f,0,1f } },
-					new float[,] { 
-					{ 1.8f,10.5f,3.4f }, 
-					{ 2,7,3.2f },
-					{ 1.7f,4,1.9f },
-					{ 1,0,1.1f } },
-					new float[,] { 
-					{ 2,11.5f,-3.7f }, 
-					{ .6f,6.3f,-4 },
-					{ 0,0,-2.3f } } 
-				};
+				line=new RctLine(
+					-.3f,10.6f,3.4f , 
+					-1.4f,8,3.2f ,
+					-1.7f,5,1.9f ,
+					-.9f,0,1f );
+				retVal.Add(line);
+				line=new RctLine(
+					1.8f,10.5f,3.4f , 
+					2,7,3.2f ,
+					1.7f,4,1.9f ,
+					1,0,1.1f);
+				retVal.Add(line);
+				line=new RctLine(
+					2,11.5f,-3.7f , 
+					.6f,6.3f,-4 ,
+					0,0,-2.3f );
+				retVal.Add(line);
 			}
 			if(toothID=="3") {
-				return new float[][,] {
-					new float[,] { 
-					{ 1.4f,11.5f,3.4f }, 
-					{ 2.2f,9.4f,3.2f },
-					{ 2.4f,6.7f,3.2f },
-					{ 1.2f,0,1.1f } },
-					new float[,] { 
-					{ -2.7f,11.5f,3.4f }, 
-					{ -2.9f,9,3.2f },
-					{ -2.6f,5,3.2f },
-					{ -1.2f,0,1.1f } },
-					new float[,] { 
-					{ 0,12.5f,-4.3f }, 
-					{ 0,9.4f,-4.3f },
-					{ 0,0,-2.2f } } 
-				};
+				line=new RctLine(
+					1.4f,11.5f,3.4f , 
+					2.2f,9.4f,3.2f ,
+					2.4f,6.7f,3.2f ,
+					1.2f,0,1.1f);
+				retVal.Add(line);
+				line=new RctLine(
+					-2.7f,11.5f,3.4f , 
+					-2.9f,9,3.2f ,
+					-2.6f,5,3.2f ,
+					-1.2f,0,1.1f );
+				retVal.Add(line);
+				line=new RctLine(
+					0,12.5f,-4.3f, 
+					0,9.4f,-4.3f ,
+					0,0,-2.2f );
+				retVal.Add(line);
 			}
 			if(toothID=="14") {
-				return new float[][,] {
-					new float[,] { 
-					{ -1.4f,11.5f,3.4f }, 
-					{ -2.2f,9.4f,3.2f },
-					{ -2.4f,6.7f,3.2f },
-					{ -1.2f,0,1.1f } },
-					new float[,] { 
-					{ 2.7f,11.5f,3.4f }, 
-					{ 2.9f,9,3.2f },
-					{ 2.6f,5,3.2f },
-					{ 1.2f,0,1.1f } },
-					new float[,] { 
-					{ 0,12.5f,-4.3f }, 
-					{ 0,9.4f,-4.3f },
-					{ 0,0,-2.2f } }  
-				};
+				line=new RctLine(
+					-1.4f,11.5f,3.4f, 
+					-2.2f,9.4f,3.2f ,
+					-2.4f,6.7f,3.2f ,
+					-1.2f,0,1.1f);
+				retVal.Add(line);
+				line=new RctLine(
+					2.7f,11.5f,3.4f , 
+					2.9f,9,3.2f ,
+					2.6f,5,3.2f ,
+					1.2f,0,1.1f );
+				retVal.Add(line);
+				line=new RctLine(
+					0,12.5f,-4.3f , 
+					0,9.4f,-4.3f ,
+					0,0,-2.2f );
+				retVal.Add(line);
 			}
 			if(toothID=="4") {
-				return new float[][,] {
-					new float[,] { 
-					{ 0,13.5f,1.2f }, 
-					{ -.2f,10,.6f },
-					{ 0,0,0 } } 
-				};
+				line=new RctLine(
+					0,13.5f,1.2f , 
+					-.2f,10,.6f ,
+					0,0,0 );
+				retVal.Add(line);
 			}
 			if(toothID=="13") {
-				return new float[][,] {
-					new float[,] { 
-					{ 0,13.5f,1.2f }, 
-					{ .2f,10,.6f },
-					{ 0,0,0 } } 
-				};
+				line=new RctLine(
+					0,13.5f,1.2f , 
+					.2f,10,.6f ,
+					0,0,0 );
+				retVal.Add(line);
 			}
 			if(toothID=="5") {
-				return new float[][,] {
-					new float[,] { 
-					{ -1.1f,13.5f,1.6f }, 
-					{ 0,6,1.6f },
-					{ 0,0,1 } } 
-				};
+				line=new RctLine(
+					-1.1f,13.5f,1.6f , 
+					0,6,1.6f ,
+					0,0,1 );
+				retVal.Add(line);
 			}
 			if(toothID=="12") {
-				return new float[][,] {
-					new float[,] { 
-					{ 1.1f,13.5f,1.6f }, 
-					{ 0,6,1.6f },
-					{ 0,0,1 } } 
-				};
+				line=new RctLine(
+					1.1f,13.5f,1.6f , 
+					0,6,1.6f ,
+					0,0,1);
+				retVal.Add(line);
 			}
 			if(toothID=="6") {
-				return new float[][,] {
-					new float[,] { 
-					{ -.4f,16.5f,0 }, 
-					{ 0,11,0 },
-					{ 0,0,0 } } };
+				line=new RctLine(
+					-.4f,16.5f,0 , 
+					0,11,0 ,
+					0,0,0);
+				retVal.Add(line);
 			}
 			if(toothID=="11") {
-				return new float[][,] {
-					new float[,] { 
-					{ .4f,16.5f,0 }, 
-					{ 0,11,0 },
-					{ 0,0,0 } } };
+				line=new RctLine(
+					.4f,16.5f,0 , 
+					0,11,0,
+					0,0,0);
+				retVal.Add(line);
 			}
 			if(toothID=="7") {
-				return new float[][,] {
-					new float[,] { 
-					{ -.8f,12.5f,.6f }, 
-					{ -.3f,10,0 },
-					{ 0,0,0 } } };
+				line=new RctLine(
+					-.8f,12.5f,.6f , 
+					-.3f,10,0 ,
+					0,0,0);
+				retVal.Add(line);
 			}
 			if(toothID=="10") {
-				return new float[][,] {
-					new float[,] { 
-					{ .8f,12.5f,.6f }, 
-					{ .3f,10,0 },
-					{ 0,0,0 } } };
+				line=new RctLine(
+					.8f,12.5f,.6f , 
+					.3f,10,0 ,
+					0,0,0);
+				retVal.Add(line);
 			}
 			if(toothID=="8"){
-				return new float[][,] {
-					new float[,] { 
-					{ 0,12.6f,0 }, 
-					{ 0,0,0 } } };
+				line=new RctLine(
+					0,12.6f,0 , 
+					0,0,0 );
+				retVal.Add(line);
 			}
 			if(toothID=="9") {
-				return new float[][,] {
-					new float[,] { 
-					{ 0,12.6f,0 }, 
-					{ 0,0,0 } } };
+				line=new RctLine( 
+					0,12.6f,0 , 
+					0,0,0 );
+				retVal.Add(line);
 			}
 			if(toothID=="25" || toothID=="26") {
-				return new float[][,] {
-					new float[,] { 
-					{ -.5f,-12,0 },
-					{ -.2f,-9,0 },
-					{ 0,0,0 } } };
+				line=new RctLine(
+					-.5f,-12,0 ,
+					-.2f,-9,0 ,
+					0,0,0 );
+				retVal.Add(line);
 			}
 			if(toothID=="24" || toothID=="23") {
-				return new float[][,] {
-					new float[,] { 
-					{ .5f,-12,0 }, 
-					{ .2f,-9,0 },
-					{ 0,0,0 } } };
+				line=new RctLine(
+					.5f,-12,0 , 
+					.2f,-9,0 ,
+					0,0,0 );
+				retVal.Add(line);
 			}
 			if(toothID=="27") {
-				return new float[][,] {
-					new float[,] { 
-					{ -.5f,-15.5f,0 },
-					{ -.1f,-13,0 },
-					{ 0,0,0 } } };
+				line=new RctLine(
+					-.5f,-15.5f,0,
+					-.1f,-13,0 ,
+					0,0,0 );
+				retVal.Add(line);
 			}
 			if(toothID=="22") {
-				return new float[][,] {
-					new float[,] { 
-					{ .5f,-15.5f,0 },
-					{ .1f,-13,0 },
-					{ 0,0,0 } } };
+				line=new RctLine(
+					.5f,-15.5f,0 ,
+					.1f,-13,0 ,
+					0,0,0 );
+				retVal.Add(line);
 			}
 			if(toothID=="28") {
-				return new float[][,] {
-					new float[,] { 
-					{ -.2f,-13.5f,0 },
-					{ 0,0,0 } } };
+				line=new RctLine(
+					-.2f,-13.5f,0 ,
+					0,0,0 );
+				retVal.Add(line);
 			}
 			if(toothID=="21") {
-				return new float[][,] {
-					new float[,] { 
-					{ .2f,-13.5f,0 },
-					{ 0,0,0 } } };
+				line=new RctLine(
+					.2f,-13.5f,0 ,
+					0,0,0 );
+				retVal.Add(line);
 			}
 			if(toothID=="29") {
-				return new float[][,] {
-					new float[,] { 
-					{ -.3f,-14,0 },
-					{ 0,-12,0 },
-					{ 0,0,0 } } };
+				line=new RctLine(
+					-.3f,-14,0 ,
+					0,-12,0 ,
+					0,0,0 );
+				retVal.Add(line);
 			}
 			if(toothID=="20") {
-				return new float[][,] {
-					new float[,] { 
-					{ .3f,-14,0 },
-					{ 0,-12,0 },
-					{ 0,0,0 } } };
+				line=new RctLine(
+					.3f,-14,0 ,
+					0,-12,0 ,
+					0,0,0 );
+				retVal.Add(line);
 			}
 			if(toothID=="30") {
-				return new float[][,] {
-					new float[,] { 
-					{ .9f,-13.5f,0 }, 
-					{ 2.2f,-10,0 },
-					{ 2.6f,-7,0 },
-					{ 1.7f,0,0 } },
-					new float[,] { 
-					{ -4.3f,-13.5f,0 }, 
-					{ -4f,-9,0 },
-					{ -3.3f,-5,0 },
-					{ -1.7f,0,0 } } 
-				};
+				line=new RctLine(
+					.9f,-13.5f,0 , 
+					2.2f,-10,0 ,
+					2.6f,-7,0 ,
+					1.7f,0,0);
+				retVal.Add(line);
+				line=new RctLine(
+					-4.3f,-13.5f,0 , 
+					-4f,-9,0 ,
+					-3.3f,-5,0 ,
+					-1.7f,0,0 );
+				retVal.Add(line);
 			}
 			if(toothID=="19") {
-				return new float[][,] {
-					new float[,] { 
-					{ -.9f,-13.5f,0 }, 
-					{ -2.2f,-10,0 },
-					{ -2.6f,-7,0 },
-					{ -1.7f,0,0 } },
-					new float[,] { 
-					{ 4.3f,-13.5f,0 }, 
-					{ 4f,-9,0 },
-					{ 3.3f,-5,0 },
-					{ 1.7f,0,0 } } 
-				};
+				line=new RctLine(
+					-.9f,-13.5f,0 , 
+					-2.2f,-10,0 ,
+					-2.6f,-7,0 ,
+					-1.7f,0,0 );
+				retVal.Add(line);
+				line=new RctLine(
+					4.3f,-13.5f,0 , 
+					4f,-9,0 ,
+					3.3f,-5,0 ,
+					1.7f,0,0  );
+				retVal.Add(line);
 			}
 			if(toothID=="31") {
-				return new float[][,] {
-					new float[,] { 
-					{ 0,-12.5f,0 }, 
-					{ 1.8f,-7.5f,0 },
-					{ 2.2f,-4,0 },
-					{ 1.7f,0,0 } },
-					new float[,] { 
-					{ -3.4f,-12.5f,0 }, 
-					{ -3.4f,-8,0 },
-					{ -3f,-5,0 },
-					{ -1.7f,0,0 } } 
-				};
+				line=new RctLine(
+					0,-12.5f,0 , 
+					1.8f,-7.5f,0 ,
+					2.2f,-4,0 ,
+					1.7f,0,0);
+				retVal.Add(line);
+				line=new RctLine(
+					-3.4f,-12.5f,0 , 
+					-3.4f,-8,0 ,
+					-3f,-5,0 ,
+					-1.7f,0,0);
+				retVal.Add(line);
 			}
 			if(toothID=="18") {
-				return new float[][,] {
-					new float[,] { 
-					{ 0,-12.5f,0 }, 
-					{ -1.8f,-7.5f,0 },
-					{ -2.2f,-4,0 },
-					{ -1.7f,0,0 } },
-					new float[,] { 
-					{ 3.4f,-12.5f,0 }, 
-					{ 3.4f,-8,0 },
-					{ 3f,-5,0 },
-					{ 1.7f,0,0 } } 
-				};
+				line=new RctLine(
+					0,-12.5f,0 , 
+					-1.8f,-7.5f,0 ,
+					-2.2f,-4,0 ,
+					-1.7f,0,0 );
+				retVal.Add(line);
+				line=new RctLine(
+					3.4f,-12.5f,0 , 
+					3.4f,-8,0 ,
+					3f,-5,0 ,
+					1.7f,0,0 );
+				retVal.Add(line);
 			}
 			if(toothID=="32") {
-				return new float[][,] {
-					new float[,] { 
-					{ -.7f,-10.5f,0 }, 
-					{ .8f,-7.5f,0 },
-					{ 1.7f,-4,0 },
-					{ 1.6f,0,0 } },
-					new float[,] { 
-					{ -3.2f,-10.5f,0 }, 
-					{ -3.4f,-8,0 },
-					{ -3f,-5,0 },
-					{ -1.7f,0,0 } } 
-				};
+				line=new RctLine(
+					-.7f,-10.5f,0 , 
+					.8f,-7.5f,0 ,
+					1.7f,-4,0 ,
+					1.6f,0,0 );
+				retVal.Add(line);
+				line=new RctLine(
+					-3.2f,-10.5f,0 , 
+					-3.4f,-8,0 ,
+					-3f,-5,0 ,
+					-1.7f,0,0 );
+				retVal.Add(line);
 			}
 			if(toothID=="17") {
-				return new float[][,] {
-					new float[,] { 
-					{ .7f,-10.5f,0 }, 
-					{ -.8f,-7.5f,0 },
-					{ -1.7f,-4,0 },
-					{ -1.6f,0,0 } },
-					new float[,] { 
-					{ 3.2f,-10.5f,0 }, 
-					{ 3.4f,-8,0 },
-					{ 3f,-5,0 },
-					{ 1.7f,0,0 } } 
-				};
+				line=new RctLine(
+					.7f,-10.5f,0 , 
+					-.8f,-7.5f,0 ,
+					-1.7f,-4,0 ,
+					-1.6f,0,0);
+				retVal.Add(line);
+				line=new RctLine(
+					3.2f,-10.5f,0 , 
+					3.4f,-8,0 ,
+					3f,-5,0 ,
+					1.7f,0,0);
+				retVal.Add(line);
 			}
-			return new float[0][,];
+			return retVal;
 		}
 
 		///<summary>dim 1=points, dim 2 is coordinates, always 3</summary>

@@ -20,7 +20,7 @@ namespace OpenDental{
 		private System.ComponentModel.Container components = null;
 		private bool ShowBySelectedTeeth;
 		private List<ToothInitial> ToothInitialList;
-		private GraphicalToothChart toothChart;
+		private ToothChartWrapper toothChart;
 		private List<DataRow> ProcList;
 
 		///<summary></summary>
@@ -58,7 +58,7 @@ namespace OpenDental{
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.toothChart = new SparksToothChart.GraphicalToothChart();
+			this.toothChart = new SparksToothChart.ToothChartWrapper();
 			this.SuspendLayout();
 			// 
 			// toothChart

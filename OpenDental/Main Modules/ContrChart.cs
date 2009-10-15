@@ -179,7 +179,7 @@ namespace OpenDental{
 		private MenuItem menuItemLabFee;
 		private MenuItem menuItemLabFeeDetach;
 		private MenuItem menuItemDelete;
-		private GraphicalToothChart toothChart;
+		private ToothChartWrapper toothChart;
 		private Panel panelQuickButtons;
 		private OpenDental.UI.Button buttonCSeal;
 		private OpenDental.UI.Button buttonCMO;
@@ -470,7 +470,7 @@ namespace OpenDental{
 			this.radioPen = new System.Windows.Forms.RadioButton();
 			this.radioPointer = new System.Windows.Forms.RadioButton();
 			this.menuConsent = new System.Windows.Forms.ContextMenu();
-			this.toothChart = new SparksToothChart.GraphicalToothChart();
+			this.toothChart = new SparksToothChart.ToothChartWrapper();
 			this.panelEcw = new System.Windows.Forms.Panel();
 			this.labelECWerror = new System.Windows.Forms.Label();
 			this.webBrowserEcw = new System.Windows.Forms.WebBrowser();

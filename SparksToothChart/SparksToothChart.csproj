@@ -79,6 +79,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="RctLine.cs" />
+    <Compile Include="RctPoint.cs" />
     <Compile Include="ToothChartWrapper.cs">
       <SubType>UserControl</SubType>
     </Compile>
