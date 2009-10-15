@@ -97,75 +97,13 @@ namespace SparksToothChart {
 			ResetTeeth();
 		}
 
-		//protected override void OnLoad(EventArgs e) {
-		//	base.OnLoad(e);
-		//	//Initialize();
-		//}
-
 		protected override void OnResize(EventArgs e) {
 			base.OnResize(e);
-			//Initialize();
-	//the line above used to reset the teeth.  We'll try this:
-			//ResetTeeth();
 		}
-
-		/*protected override void OnVisibleChanged(EventArgs e) {
-			base.OnVisibleChanged(e);
-			if(Visible){
-				Initialize();
-			}
-			else{
-				this.DestroyContexts();
-			}
-		}*/
-
-		
 
 		private void ToothChart_TaoSetupContext(object sender, System.EventArgs e){//event from base class when context needs to be setup.
-		
 			MakeRasterFont();
-			//TaoInitializeContexts();//initializes the device context for the control.
-			//Color backColor=ClearColor;
-			//Color.FromArgb(95,95,130);
-			//set clearing color. Only needs to be set once.
-			/*Gl.glClearColor((float)ColorBackground.R/255f,(float)ColorBackground.G/255f,(float)ColorBackground.B/255f,0f);
-			Gl.glClearAccum(0f,0f,0f,0f);
-			//Lighting
-			float ambI=.2f;
-			float difI=.6f;
-			float specI=1f;
-			float[] light_ambient = new float[] { ambI,ambI,ambI,1f };//RGB,A=1 for no transparency. Default 0001
-			float[] light_diffuse = new float[] { difI,difI,difI,1f };//RGBA. Default 1111. 'typical' 
-			float[] light_specular = new float[] { specI,specI,specI,1f };//RGBA. Default 1111
-			float[] light_position = new float[] { -0.5f,0.1f,1f,0f };//xyz(direction, not position), w=0 for infinite
-			Gl.glLightfv(Gl.GL_LIGHT0,Gl.GL_AMBIENT,light_ambient);
-			Gl.glLightfv(Gl.GL_LIGHT0,Gl.GL_DIFFUSE,light_diffuse);
-			Gl.glLightfv(Gl.GL_LIGHT0,Gl.GL_SPECULAR,light_specular);
-			Gl.glLightfv(Gl.GL_LIGHT0,Gl.GL_POSITION,light_position);
-			//float[] light_position = new float[] { 1.0f, 1.0f, 1.0f, 0.0f };
-			//glClearColor (0.0, 0.0, 0.0, 0.0);
-			//Materials
-			Gl.glShadeModel(Gl.GL_SMOOTH);
-			//OK to just set these three once.
-			specular_color_normal = new float[] { 1.0f,1.0f,1.0f,1.0f };//1111 for white. RGBA
-			specular_color_cementum = new float[] { 0.1f,0.1f,0.1f,1.0f };//gray
-			shininess = new float[] { 90f };//0 to 128. Size of specular reflection. 128 smallest
-			//float[] enamel_ambient=new float[] {.2f,.2f,.2f,1f};//RGBA
-			//float[] enamel_diffuse=new float[] {.8f,.8f,.8f,1f};//RGBA
-			//Gl.glMaterialfv(Gl.GL_FRONT_AND_BACK,Gl.GL_AMBIENT,enamel_ambient);
-			//Gl.glMaterialfv(Gl.GL_FRONT_AND_BACK,Gl.GL_DIFFUSE,enamel_diffuse);
-			Gl.glEnable(Gl.GL_LIGHTING);
-			Gl.glEnable(Gl.GL_LIGHT0);*/
-			//Gl.glEnable(Gl.GL_DEPTH_TEST);
-			//this.Invalidate();
 		}
-		
-
-		//private void Initialize(){
-			//all moved to TaoSetupContext
-		//}
-
-		#region Properties
 
 		///<summary>Valid values are 1-32 and A-Z.</summary>
 		public string[] SelectedTeeth{
@@ -191,8 +129,6 @@ namespace SparksToothChart {
 						return selectedPixelFormat;
 				}
 		}
-
-		#endregion Properties
 
 		#region Public Methods
 
@@ -341,7 +277,6 @@ namespace SparksToothChart {
 			}
 			ListToothGraphics[toothID].IsPontic=true;
 			if(!ListToothGraphics[toothID].Visible){//tooth not visible, so set root invisible.
-				//ListToothGraphics[toothID].Visible=true;//leave Visible=false
 				ListToothGraphics[toothID].SetGroupVisibility(ToothGroupType.Cementum,false);
 			}
 			ListToothGraphics[toothID].SetSurfaceColors("MODBLFIV",color);
@@ -353,10 +288,6 @@ namespace SparksToothChart {
 			if(!ToothGraphic.IsValidToothID(toothID)) {
 				return;
 			}
-			//ListToothGraphics[toothID].SetGroupVisibility(ToothGroupType.Canals,true);
-			//ListToothGraphics[toothID].SetGroupColor(ToothGroupType.Canals,color);
-			//set transparency to 75:
-			//ListToothGraphics[toothID].SetGroupColor(ToothGroupType.Cementum,Color.FromArgb(75,230,214,143));
 			ListToothGraphics[toothID].IsRCT=true;
 			ListToothGraphics[toothID].colorRCT=color;
 		}
@@ -416,17 +347,8 @@ namespace SparksToothChart {
 			Gl.glFlush();
 			Bitmap bitmap=new Bitmap(this.Width,this.Height);
 			Graphics g=Graphics.FromImage(bitmap);
-			//base.DrawToBitmap(bmap,new Rectangle(0,0,Width,Height));
-			//return bmap;
-			//Gl.glReadPixels()
-			//Graphics g=this.CreateGraphics();
 			Point screenLoc=PointToScreen(Location);
 			g.CopyFromScreen(screenLoc.X,screenLoc.Y,0,0,new Size(Width,Height));
-			//BitmapData bitmapData=bitmap.LockBits(new Rectangle(0,0,bitmap.Width,bitmap.Height),
-			//	ImageLockMode.WriteOnly,PixelFormat.Format24bppRgb);
-			//Gl.glReadPixels(0,0,bitmap.Width,bitmap.Height,Gl.GL_BGR_EXT,Gl.GL_UNSIGNED_BYTE,bitmapData.Scan0);
-			//bitmap.UnlockBits(bitmapData);
-			//bitmap.RotateFlip(RotateFlipType.RotateNoneFlipY);
 			g.Dispose();
 			return bitmap;
 		}
@@ -436,16 +358,12 @@ namespace SparksToothChart {
 		#region Painting
 		protected override void OnPaint(PaintEventArgs e) {
 			base.OnPaint(e);
-			//if(!this.DesignMode) {
-			//	DrawTextAndLines(e.Graphics);
-			//}
 		}
 
 		private void ToothChart_TaoRenderScene(object sender, System.EventArgs e){
 			if(suspendRendering){
 				return;
 			}
-			//Debug.WriteLine(DateTime.Now.ToString());
 			//This first part was originally in setup context
 			Gl.glClearColor((float)ColorBackground.R/255f,(float)ColorBackground.G/255f,(float)ColorBackground.B/255f,0f);
 			Gl.glClearAccum(0f,0f,0f,0f);
@@ -461,18 +379,12 @@ namespace SparksToothChart {
 			Gl.glLightfv(Gl.GL_LIGHT0,Gl.GL_DIFFUSE,light_diffuse);
 			Gl.glLightfv(Gl.GL_LIGHT0,Gl.GL_SPECULAR,light_specular);
 			Gl.glLightfv(Gl.GL_LIGHT0,Gl.GL_POSITION,light_position);
-			//float[] light_position = new float[] { 1.0f, 1.0f, 1.0f, 0.0f };
-			//glClearColor (0.0, 0.0, 0.0, 0.0);
 			//Materials
 			Gl.glShadeModel(Gl.GL_SMOOTH);
 			//OK to just set these three once.
 			specular_color_normal = new float[] { 1.0f,1.0f,1.0f,1.0f };//1111 for white. RGBA
 			specular_color_cementum = new float[] { 0.1f,0.1f,0.1f,1.0f };//gray
 			shininess = new float[] { 90f };//0 to 128. Size of specular reflection. 128 smallest
-			//float[] enamel_ambient=new float[] {.2f,.2f,.2f,1f};//RGBA
-			//float[] enamel_diffuse=new float[] {.8f,.8f,.8f,1f};//RGBA
-			//Gl.glMaterialfv(Gl.GL_FRONT_AND_BACK,Gl.GL_AMBIENT,enamel_ambient);
-			//Gl.glMaterialfv(Gl.GL_FRONT_AND_BACK,Gl.GL_DIFFUSE,enamel_diffuse);
 			Gl.glEnable(Gl.GL_LIGHTING);
 			Gl.glEnable(Gl.GL_LIGHT0);
 			//Render Scene starts here----------------------------------------------------------------------------------
@@ -481,12 +393,6 @@ namespace SparksToothChart {
 			//default was Z=1, looking towards the origin
 			Gl.glMatrixMode(Gl.GL_MODELVIEW);
 			Gl.glLoadIdentity();//clears the matrix
-			//Gl.glTranslatef(0,0,-10f);//move camera away from object.  Only useful when we later use perspective
-			//modeling transformations:
-			//Gl.glRotatef(45f,0,1f,0.2f);//rotate angle about line from origin to x,y,z
-			//Gl.glRotatef(90f,1f,0,0);//rotate angle about line from origin to x,y,z
-			//projection transformation:
-			//Gl.glLoadIdentity();
 			Gl.glMatrixMode(Gl.GL_PROJECTION);//only the projection matrix will be affected.
 			Gl.glLoadIdentity();
 			double HeightProjection=WidthProjection*this.Height/this.Width;
@@ -500,47 +406,10 @@ namespace SparksToothChart {
 			Gl.glHint(Gl.GL_LINE_SMOOTH_HINT,Gl.GL_DONT_CARE);
 			DrawScene();
 			//jitter code for antialias starts here, but I can't get it to work:
-			/*
-			System.Random rnd=new Random();
-			Gl.glEnable(Gl.GL_BLEND);
-			Gl.glEnable(Gl.GL_DEPTH_TEST);
-			int[] viewport=new int[4];
-			Gl.glGetIntegerv(Gl.GL_VIEWPORT,viewport);//Fills viewport with size of window. eg: 0,0,700,70
-			Gl.glClear(Gl.GL_ACCUM_BUFFER_BIT);//clear the accumulation buffer
-			int accumSize=4;
-			for(int jitter=0;jitter < accumSize;jitter++) {
-				Gl.glClear(Gl.GL_COLOR_BUFFER_BIT | Gl.GL_DEPTH_BUFFER_BIT);
-				Gl.glPushMatrix();
-				// Note that 4.5 is the distance in world space between
-				// left and right and bottom and top.
-				// This formula converts fractional pixel movement to
-				// world coordinates.
-				//
-				Gl.glTranslatef(//j8[jitter].x*4.5/viewport[2],j8[jitter].y*4.5/viewport[3],0.0);
-					(float)(rnd.NextDouble()*WidthProjection/(float)viewport[2]),
-					(float)(rnd.NextDouble()*WidthProjection/(float)viewport[3]),0f);
-					//(float)rnd.NextDouble()*10,(float)rnd.NextDouble()*10,0f);
-					//1f,//1f/(float)accumSize*(float)WidthProjection/(float)viewport[2],
-					//1f,//1f/(float)accumSize*(float)WidthProjection/(float)viewport[3],
-					//0f);
-				DrawScene();
-				Gl.glPopMatrix();
-				Gl.glAccum(Gl.GL_ACCUM,1f/(float)accumSize);
-			}
-			Gl.glAccum(Gl.GL_RETURN,1f);*/
 			//Gl.glFlush();//handled for me in base class
-			
 		}
 
 		private void DrawScene() {
-			//this is how it was supposed to work, but blending not working.
-			//first pass includes everything except cementum on teeth with RCT
-			//second pass only draws cementum on teeth with RCT.  It gets drawn transparently
-			//Gl.glEnable(Gl.GL_BLEND);
-			//Gl.glBlendFunc(Gl.GL_SRC_ALPHA_SATURATE,Gl.GL_ONE);
-			//Gl.glBlendFunc(Gl.GL_SRC_ALPHA,Gl.GL_ONE_MINUS_SRC_ALPHA);
-			//Gl.glBlendFunc(Gl.GL_ONE,Gl.GL_ZERO);
-			//So, instead, first loop will draw everything.
 			for(int t=0;t<ListToothGraphics.Count;t++) {//loop through each tooth
 				if(ListToothGraphics[t].ToothID=="implant") {//this is not an actual tooth.
 					continue;
@@ -548,20 +417,6 @@ namespace SparksToothChart {
 				DrawFacialView(ListToothGraphics[t]);
 				DrawOcclusalView(ListToothGraphics[t]);
 			}
-			//Gl.glBlendFunc(Gl.GL_SRC_ALPHA,Gl.GL_ONE_MINUS_SRC_ALPHA);
-			/*for(int t=0;t<ListToothGraphics.Count;t++) {//loop through each tooth
-				if(!ListToothGraphics[t].Visible) {
-					continue;
-				}
-				DrawFacialView(ListToothGraphics[t],2);
-				DrawOcclusalView(ListToothGraphics[t],2);
-			}*/
-			
-			//if(!this.DesignMode) {
-			//	Graphics g=this.CreateGraphics();
-			//	DrawTextAndLines(g);
-			//	g.Dispose();
-			//}
 			DrawTextAndLines();
 			DrawDrawingSegments();
 			Gl.glFlush();
@@ -668,10 +523,10 @@ namespace SparksToothChart {
 					(float)toothGraphic.colorBU.G/255f,
 					(float)toothGraphic.colorBU.B/255f);
 				RotateAndTranslateUser(toothGraphic);
-				float[,] poly=toothGraphic.GetBUpoly();
+				Polygon poly=toothGraphic.GetBUpoly();
 				Gl.glBegin(Gl.GL_POLYGON);
-				for(int i=0;i<poly.GetLength(0);i++) {//loop through each vertex	
-					Gl.glVertex3f(poly[i,0],poly[i,1],poly[i,2]);
+				for(int i=0;i<poly.Vertices.Count;i++) {
+					Gl.glVertex3f(poly.Vertices[i].X,poly.Vertices[i].Y,poly.Vertices[i].Z);
 				}
 				Gl.glEnd();
 				Gl.glPopMatrix();
@@ -698,14 +553,8 @@ namespace SparksToothChart {
 				};//RGBA
 				Gl.glMaterialfv(Gl.GL_FRONT,Gl.GL_SPECULAR,specular_color_normal);
 				Gl.glMaterialfv(Gl.GL_FRONT,Gl.GL_SHININESS,shininess);
-				//Gl.glMaterialfv(Gl.GL_FRONT_AND_BACK,Gl.GL_AMBIENT_AND_DIFFUSE,material_color);
 				Gl.glMaterialfv(Gl.GL_FRONT,Gl.GL_AMBIENT_AND_DIFFUSE,material_color);
-				//Gl.glEnable(Gl.GL_POLYGON_SMOOTH);//  .GL_LINE_SMOOTH);
-				//Gl.glEnable(Gl.GL_BLEND);
 				Gl.glBlendFunc(Gl.GL_ONE,Gl.GL_ZERO);
-				//Gl.glBlendFunc(Gl.GL_SRC_ALPHA_SATURATE,Gl.GL_ONE);
-				//Gl.glBlendFunc(Gl.GL_SRC_ALPHA,Gl.GL_ONE_MINUS_SRC_ALPHA);
-				//Gl.glBlendFunc(Gl.GL_SRC_ALPHA_SATURATE,Gl.GL_ONE);
 				Gl.glHint(Gl.GL_POLYGON_SMOOTH_HINT,Gl.GL_NICEST);
 				for(int i=0;i<group.Faces.GetLength(0);i++) {//loop through each face
 					Gl.glBegin(Gl.GL_POLYGON);
@@ -817,7 +666,6 @@ namespace SparksToothChart {
 				(float)Color.White.R/255f,
 				(float)Color.White.G/255f,
 				(float)Color.White.B/255f);
-			//Gl.glBlendFunc(Gl.GL_SRC_ALPHA,Gl.GL_ONE_MINUS_SRC_ALPHA);
 			Gl.glLineWidth((float)Width/400f);//about 1
 			Gl.glBegin(Gl.GL_LINE_STRIP);
 				Gl.glVertex3f(-(float)WidthProjection/2f,0,0);
@@ -840,8 +688,6 @@ namespace SparksToothChart {
 			Gl.glEnable(Gl.GL_BLEND);
 			Gl.glBlendFunc(Gl.GL_SRC_ALPHA,Gl.GL_ONE_MINUS_SRC_ALPHA);
 			Gl.glDisable(Gl.GL_DEPTH_TEST);
-			//Gl.glTranslatef(0,0,6f);//move forward 6mm so it will be visible.
-			//Gl.glBlendFunc(Gl.GL_SRC_ALPHA,Gl.GL_ONE_MINUS_SRC_ALPHA);
 			float lWidth=(float)Width/300f;//about 1.5
 			Gl.glLineWidth(lWidth);
 			Gl.glPointSize((float)Width/350f);//slightly smaller
@@ -949,17 +795,7 @@ namespace SparksToothChart {
 				return;//skip
 			}
 			string displayNum=OpenDentBusiness.Tooth.GetToothLabelGraphic(tooth_id);
-			/*float strWidth=MeasureStringMm(displayNum);
-			xPos-=strWidth/2f;
-			//only use the ShiftM portion of the user translation
-			if(ToothGraphic.IsRight(tooth_id)) {
-				xPos+=ListToothGraphics[tooth_id].ShiftM;
-			}
-			else {
-				xPos-=ListToothGraphics[tooth_id].ShiftM;
-			}*/
 			float toMm=(float)WidthProjection/(float)Width;//mm/pix
-			//RectangleF recMm=new RectangleF(xPos-2f*toMm,yPos-2f*toMm,strWidth+3f*toMm,12f*toMm);//this rec has origin at LL
 			RectangleF recMm=GetNumberRecMm(tooth_id);
 			Rectangle recPix=ConvertRecToPix(recMm);
 			if(isSelected){
@@ -1002,11 +838,6 @@ namespace SparksToothChart {
 					PrintString(displayNum);
 				}
 			}
-			
-			//Graphics g=this.CreateGraphics();
-			//g.DrawRectangle(Pens.Red,recPix);
-			//g.Dispose();
-			//Invalidate(recPix);
 			Gl.glPopMatrix();
 			Gl.glFlush();
 		}
@@ -1088,10 +919,6 @@ namespace SparksToothChart {
 		}
 
 		private void PrintString(string text) {
-			//Gl.glPushAttrib(Gl.GL_ALL_ATTRIB_BITS); 
-			//Gl.glPushAttrib(Gl.GL_LIST_BIT);
-			//Gl.glPushAttrib(Gl.GL_CURRENT_BIT);//includes the rastor position and the color
-			//Gl.glPushMatrix();
 			Gl.glListBase(fontOffset);
 			byte[] textbytes = new byte[text.Length];
 			for(int i = 0;i < text.Length;i++){
@@ -1103,9 +930,6 @@ namespace SparksToothChart {
 			catch{
 				//Do nothing
 			}
-			//Gl.glPopMatrix();
-			//Gl.glPopAttrib();
-			//Gl.glPopAttrib();
 		}
 
 		///<summary>Performs the rotations and translations entered by user for this tooth.  Usually, all numbers are just 0, resulting in no movement here.</summary>
@@ -1145,7 +969,7 @@ namespace SparksToothChart {
 			}
 		}
 
-		///<summary>The way it was supposed to work: first pass includes everything except cementum on teeth with RCT. Second pass only draws cementum on teeth with RCT.  It gets drawn transparently</summary>
+		///<summary></summary>
 		private void DrawTooth(ToothGraphic toothGraphic) {
 			Gl.glEnable(Gl.GL_LIGHTING);
 			Gl.glEnable(Gl.GL_BLEND);
@@ -1157,14 +981,6 @@ namespace SparksToothChart {
 				if(!group.Visible) {
 					continue;
 				}
-				//if(pass==1 && toothGraphic.IsRCT && group.GroupType==ToothGroupType.Cementum) {
-				//	continue;
-				//}
-				//if(pass==2 && (!toothGraphic.IsRCT || group.GroupType!=ToothGroupType.Cementum)){
-				//if(pass==2 && group.GroupType!=ToothGroupType.Canals) {
-				//	continue;
-				//}
-				//ListToothGraphics[toothID].SetGroupColor(ToothGroupType.Cementum,Color.FromArgb(75,230,214,143));
 				//group.PaintColor=Color.FromArgb(255,255,253,209);//temp only for testing
 				if(toothGraphic.ShiftO<-10){//if unerupted
 					material_color=new float[] {
@@ -1172,7 +988,7 @@ namespace SparksToothChart {
 						(float)group.PaintColor.G/255f/2f,
 						(float)group.PaintColor.B/255f/2f,
 						(float)group.PaintColor.A/255f/2f
-					};//RGBA
+					};
 				}
 				else{
 					material_color=new float[] {
@@ -1180,7 +996,7 @@ namespace SparksToothChart {
 						(float)group.PaintColor.G/255f,
 						(float)group.PaintColor.B/255f,
 						(float)group.PaintColor.A/255f
-					};//RGBA
+					};
 				}
 				if(group.GroupType==ToothGroupType.Cementum) {
 					Gl.glMaterialfv(Gl.GL_FRONT,Gl.GL_SPECULAR,specular_color_cementum);
@@ -1189,14 +1005,8 @@ namespace SparksToothChart {
 					Gl.glMaterialfv(Gl.GL_FRONT,Gl.GL_SPECULAR,specular_color_normal);
 				}
 				Gl.glMaterialfv(Gl.GL_FRONT,Gl.GL_SHININESS,shininess);
-				//Gl.glMaterialfv(Gl.GL_FRONT_AND_BACK,Gl.GL_AMBIENT_AND_DIFFUSE,material_color);
 				Gl.glMaterialfv(Gl.GL_FRONT,Gl.GL_AMBIENT_AND_DIFFUSE,material_color);
-				//Gl.glEnable(Gl.GL_POLYGON_SMOOTH);//  .GL_LINE_SMOOTH);
-				//Gl.glEnable(Gl.GL_BLEND);
 				Gl.glBlendFunc(Gl.GL_ONE,Gl.GL_ZERO);
-				//Gl.glBlendFunc(Gl.GL_SRC_ALPHA_SATURATE,Gl.GL_ONE);
-				//Gl.glBlendFunc(Gl.GL_SRC_ALPHA,Gl.GL_ONE_MINUS_SRC_ALPHA);
-				//Gl.glBlendFunc(Gl.GL_SRC_ALPHA_SATURATE,Gl.GL_ONE);
 				Gl.glHint(Gl.GL_POLYGON_SMOOTH_HINT,Gl.GL_NICEST);
 				Gl.glListBase(displayListOffset);
 				//draw the group
@@ -1221,7 +1031,7 @@ namespace SparksToothChart {
 					toothGraphic=ListToothGraphics[t.ToString()];
 				}
 				for(int g=0;g<10;g++){//groups 0-9
-					group=toothGraphic.GetGroupForDisplayList(g);
+					group=toothGraphic.GetGroupForDisplayList((ToothGroupType)g);
 					Gl.glNewList(displayListOffset+(t*10)+g,Gl.GL_COMPILE);
 						//ToothGraphic.GetDisplayListNum(i.ToString())
 					if(group!=null){
@@ -1237,22 +1047,6 @@ namespace SparksToothChart {
 					Gl.glEndList();
 				}
 			}
-
-			/*
-			ToothGraphic tooth;
-			for(int i=1;i<=32;i++) {
-				tooth=new ToothGraphic(i.ToString());
-				tooth.Visible=true;
-				ListToothGraphics.Add(tooth);
-				//primary
-				if(ToothGraphic.PermToPri(i.ToString())!="") {
-					tooth=new ToothGraphic(ToothGraphic.PermToPri(i.ToString()));
-					tooth.Visible=false;
-					ListToothGraphics.Add(tooth);
-				}
-			}
-			tooth=new ToothGraphic("implant");
-			ListToothGraphics.Add(tooth);*/
 		}
 
 		///<summary>Pri or perm tooth numbers are valid.  Only locations of perm teeth are stored.</summary>
@@ -1336,13 +1130,10 @@ namespace SparksToothChart {
 					}
 					toothPos=ToothGraphic.GetDefaultOrthoXpos(i);//in mm.
 					if(ToothGraphic.IsRight(i.ToString())) {
-						//float shiftM=ListToothGraphics[i.ToString()].ShiftM;
 						toothPos+=(int)ListToothGraphics[i.ToString()].ShiftM;
-							//(int)(ListToothGraphics[i.ToString()].ShiftM*(float)Width/WidthProjection);
 					}
 					else {
 						toothPos-=(int)ListToothGraphics[i.ToString()].ShiftM;
-							//(int)(ListToothGraphics[i.ToString()].ShiftM*(float)Width/WidthProjection);
 					}
 					if(xPos>toothPos) {
 						delta=xPos-toothPos;
@@ -1361,8 +1152,6 @@ namespace SparksToothChart {
 
 		protected override void OnMouseClick(MouseEventArgs e) {
 			base.OnMouseClick(e);
-			//int clicked=GetToothAtPoint(e.X,e.Y);
-
 		}
 
 		protected override void OnMouseDown(MouseEventArgs e) {
@@ -1393,7 +1182,6 @@ namespace SparksToothChart {
 				float y;
 				float dist;//the distance between the point being tested and the center of the eraser circle.
 				float radius=2f;//by trial and error to achieve best feel.
-				//PointF eraserPt=new PointF(e.X+8.49f,e.Y+8.49f);
 				for(int i=0;i<DrawingSegmentList.Count;i++){
 					pointStr=DrawingSegmentList[i].DrawingSegment.Split(';');
 					for(int p=0;p<pointStr.Length;p++){

@@ -79,7 +79,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Face.cs" />
+    <Compile Include="Polygon.cs" />
     <Compile Include="Line.cs" />
+    <Compile Include="ToothChartDirectX.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ToothChartDirectX.Designer.cs">
+      <DependentUpon>ToothChartDirectX.cs</DependentUpon>
+    </Compile>
     <Compile Include="Vertex3f.cs" />
     <Compile Include="ToothChartWrapper.cs">
       <SubType>UserControl</SubType>
@@ -150,6 +158,7 @@
     <Compile Include="ToothGraphic.cs" />
     <Compile Include="ToothGraphicCollection.cs" />
     <Compile Include="ToothGroup.cs" />
+    <Compile Include="VertexNormal.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">

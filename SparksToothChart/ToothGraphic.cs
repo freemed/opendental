@@ -77,8 +77,7 @@ namespace SparksToothChart {
 
 		#region properties
 
-		///<summary>ToothID is set when creating a tooth object. It can never be changed.
-		///Valid values are 1-32 or A-T.</summary>
+		///<summary>ToothID is set when creating a tooth object. It can never be changed.  Valid values are 1-32 or A-T.</summary>
 		public string ToothID {
 			get {
 				return toothID;
@@ -168,10 +167,10 @@ namespace SparksToothChart {
 
 		public void SetGroupColor(ToothGroupType groupType,Color paintColor){
 			for(int i=0;i<Groups.Count;i++){
-				if(((ToothGroup)Groups[i]).GroupType!=groupType){
+				if(Groups[i].GroupType!=groupType){
 					continue;
 				}
-				((ToothGroup)Groups[i]).PaintColor=paintColor;
+				Groups[i].PaintColor=paintColor;
 			}
 			//if type not found, then no action is taken
 		}
@@ -179,38 +178,37 @@ namespace SparksToothChart {
 		///<summary>Used in constructor and also in Reset.  Also sets visibility of all groups to true except RCT visible false.</summary>
 		private void SetDefaultColors(){
 			for(int i=0;i<Groups.Count;i++){
-				if(((ToothGroup)Groups[i]).GroupType==ToothGroupType.Cementum) {
-					((ToothGroup)Groups[i]).PaintColor=Color.FromArgb(255,255,250,230);//243,234,176);//230,214,143);
+				if(Groups[i].GroupType==ToothGroupType.Cementum) {
+					Groups[i].PaintColor=Color.FromArgb(255,255,250,230);//243,234,176);//230,214,143);
 				}
 				else {//enamel
-					((ToothGroup)Groups[i]).PaintColor=Color.FromArgb(255,255,255,245);//255,255,253,209);
+					Groups[i].PaintColor=Color.FromArgb(255,255,255,245);//255,255,253,209);
 				}
-				if(((ToothGroup)Groups[i]).GroupType==ToothGroupType.Canals
-					|| ((ToothGroup)Groups[i]).GroupType==ToothGroupType.Buildup)
+				if(Groups[i].GroupType==ToothGroupType.Canals
+					|| Groups[i].GroupType==ToothGroupType.Buildup)
 				{
-					((ToothGroup)Groups[i]).Visible=false;
+					Groups[i].Visible=false;
 				}
 				else{
-					((ToothGroup)Groups[i]).Visible=true;
+					Groups[i].Visible=true;
 				}
 			}
 		}
 
 		public void SetGroupVisibility(ToothGroupType groupType,bool setVisible) {
 			for(int i=0;i<Groups.Count;i++) {
-				if(((ToothGroup)Groups[i]).GroupType!=groupType) {
+				if(Groups[i].GroupType!=groupType) {
 					continue;
 				}
-				((ToothGroup)Groups[i]).Visible=setVisible;
+				Groups[i].Visible=setVisible;
 			}
 		}
 
 		///<summary>This is only used once for the initial fill of display lists.</summary>
-		public ToothGroup GetGroupForDisplayList(int index){
-			ToothGroupType groupType=(ToothGroupType)index;//this can be enhanced later, but this is simple for now.
+		public ToothGroup GetGroupForDisplayList(ToothGroupType groupType){
 			for(int i=0;i<Groups.Count;i++) {
-				if(((ToothGroup)Groups[i]).GroupType==groupType) {
-					return (ToothGroup)Groups[i];
+				if(Groups[i].GroupType==groupType) {
+					return Groups[i];
 				}
 			}
 			return null;
@@ -1056,61 +1054,55 @@ namespace SparksToothChart {
 			}
 		}
 
-		///<summary>dim 1=vertices. dim 2 is coordinates, always 3</summary>
-		public float[,] GetBUpoly() {
+		///<summary></summary>
+		public Polygon GetBUpoly() {
 			if(toothID=="1") {
-				return new float[,] { 
-					{ -1.5f,0,0 }, 
-					{ -1.5f,2.3f,0 },
-					{ 0,1.5f,0},
-					{ 1.4f,2.3f,0 },
-					{ 1.4f,0,0 } 
-				};
+				return new Polygon(
+					-1.5f,0,0 , 
+					-1.5f,2.3f,0 ,
+					0,1.5f,0,
+					1.4f,2.3f,0 ,
+					1.4f,0,0);
 			}
 			if(toothID=="16") {
-				return new float[,] { 
-					{ 1.5f,0,0 }, 
-					{ 1.5f,2.3f,0 },
-					{ 0,1.5f,0},
-					{ -1.4f,2.3f,0 },
-					{ -1.4f,0,0 } 
-				};
+				return new Polygon(
+					1.5f,0,0 , 
+					1.5f,2.3f,0 ,
+					0,1.5f,0,
+					-1.4f,2.3f,0 ,
+					-1.4f,0,0 );
 			}
 			if(toothID=="2") {
-				return new float[,] { 
-					{ -1.8f,0,0 }, 
-					{ -1.8f,2.3f,0 },
-					{ 0,1.5f,0},
-					{ 1.6f,2.3f,0 },
-					{ 1.6f,0,0 } 
-				};
+				return new Polygon(
+					-1.8f,0,0 , 
+					-1.8f,2.3f,0 ,
+					0,1.5f,0,
+					1.6f,2.3f,0 ,
+					1.6f,0,0 );
 			}
 			if(toothID=="15") {
-				return new float[,] { 
-					{ 1.8f,0,0 }, 
-					{ 1.8f,2.3f,0 },
-					{ 0,1.5f,0},
-					{ -1.6f,2.3f,0 },
-					{ -1.6f,0,0 } 
-				};
+				return new Polygon(
+					1.8f,0,0 , 
+					1.8f,2.3f,0 ,
+					0,1.5f,0,
+					-1.6f,2.3f,0 ,
+					-1.6f,0,0);
 			}
 			if(toothID=="3") {
-				return new float[,] { 
-					{ -2.3f,0,0 }, 
-					{ -2.3f,2.6f,0 },
-					{ 0,1.7f,0},
-					{ 2.1f,2.6f,0 },
-					{ 2.1f,0,0 } 
-				};
+				return new Polygon(
+					-2.3f,0,0 , 
+					-2.3f,2.6f,0 ,
+					0,1.7f,0,
+					2.1f,2.6f,0 ,
+					2.1f,0,0 );
 			}
 			if(toothID=="14") {
-				return new float[,] { 
-					{ 2.3f,0,0 }, 
-					{ 2.3f,2.6f,0 },
-					{ 0,1.7f,0},
-					{ -2.1f,2.6f,0 },
-					{ -2.1f,0,0 } 
-				};
+				return new Polygon( 
+					2.3f,0,0 , 
+					2.3f,2.6f,0 ,
+					0,1.7f,0,
+					-2.1f,2.6f,0 ,
+					-2.1f,0,0 );
 			}
 			if(toothID=="4"
 				|| toothID=="5"
@@ -1123,24 +1115,22 @@ namespace SparksToothChart {
 				|| toothID=="12"
 				|| toothID=="13"
 				) {
-				return new float[,] { 
-					{ -.8f,0,0 }, 
-					{ -.8f,3.5f,0 },
-					{ .8f,3.5f,0 },
-					{ .8f,0,0 } 
-				};
+				return new Polygon(
+					-.8f,0,0 , 
+					-.8f,3.5f,0 ,
+					.8f,3.5f,0 ,
+					.8f,0,0 );
 			}
 			if(toothID=="23"
 				|| toothID=="24"
 				|| toothID=="25"
 				|| toothID=="26"
 				) {
-				return new float[,] { 
-					{ -.7f,0,0 }, 
-					{ -.7f,-3.5f,0 },
-					{ .7f,-3.5f,0 },
-					{ .7f,0,0 } 
-				};
+				return new Polygon(
+					-.7f,0,0 , 
+					-.7f,-3.5f,0 ,
+					.7f,-3.5f,0 ,
+					.7f,0,0);
 			}
 			if(toothID=="20"
 				|| toothID=="21"
@@ -1149,68 +1139,61 @@ namespace SparksToothChart {
 				|| toothID=="28"
 				|| toothID=="29"
 				) {
-				return new float[,] { 
-					{ -.8f,0,0 }, 
-					{ -.8f,-3.5f,0 },
-					{ .8f,-3.5f,0 },
-					{ .8f,0,0 } 
-				};
+				return new Polygon(
+					-.8f,0,0 , 
+					-.8f,-3.5f,0 ,
+					.8f,-3.5f,0 ,
+					.8f,0,0 );
 			}
 			if(toothID=="30") {
-				return new float[,] { 
-					{ -2.8f,0,0 }, 
-					{ -2.8f,-2.4f,0 },
-					{ 0,-1.5f,0},
-					{ 2.3f,-2.4f,0 },
-					{ 2.3f,0,0 } 
-				};
+				return new Polygon(
+					-2.8f,0,0 , 
+					-2.8f,-2.4f,0 ,
+					0,-1.5f,0,
+					2.3f,-2.4f,0 ,
+					2.3f,0,0 );
 			}
 			if(toothID=="19") {
-				return new float[,] { 
-					{ 2.8f,0,0 }, 
-					{ 2.8f,-2.4f,0 },
-					{ 0,-1.5f,0},
-					{ -2.3f,-2.4f,0 },
-					{ -2.3f,0,0 } 
-				};
+				return new Polygon(
+					2.8f,0,0 , 
+					2.8f,-2.4f,0 ,
+					0,-1.5f,0,
+					-2.3f,-2.4f,0 ,
+					-2.3f,0,0 );
 			}
 			if(toothID=="31") {
-				return new float[,] { 
-					{ -2.6f,0,0 }, 
-					{ -2.6f,-2.1f,0 },
-					{ 0,-1.5f,0},
-					{ 2.3f,-2.1f,0 },
-					{ 2.3f,0.5f,0 } 
-				};
+				return new Polygon( 
+					-2.6f,0,0 , 
+					-2.6f,-2.1f,0 ,
+					0,-1.5f,0,
+					2.3f,-2.1f,0 ,
+					2.3f,0.5f,0 );
 			}
 			if(toothID=="18") {
-				return new float[,] { 
-					{ 2.6f,0,0 }, 
-					{ 2.6f,-2.1f,0 },
-					{ 0,-1.5f,0},
-					{ -2.3f,-2.1f,0 },
-					{ -2.3f,0.5f,0 } 
-				};
+				return new Polygon(
+					2.6f,0,0 , 
+					2.6f,-2.1f,0 ,
+					0,-1.5f,0,
+					-2.3f,-2.1f,0 ,
+					-2.3f,0.5f,0 );
 			}
 			if(toothID=="32") {
-				return new float[,] { 
-					{ -2.6f,0,0 }, 
-					{ -2.6f,-2.1f,0 },
-					{ 0,-1.5f,0},
-					{ 2.1f,-2.1f,0 },
-					{ 2.1f,0,0 } 
-				};
+				return new Polygon(
+					-2.6f,0,0 , 
+					-2.6f,-2.1f,0 ,
+					0,-1.5f,0,
+					2.1f,-2.1f,0 ,
+					2.1f,0,0 );
 			}
 			if(toothID=="17") {
-				return new float[,] { 
-					{ 2.6f,0,0 }, 
-					{ 2.6f,-2.1f,0 },
-					{ 0,-1.5f,0},
-					{ -2.1f,-2.1f,0 },
-					{ -2.1f,0,0 } 
-				};
+				return new Polygon(
+					2.6f,0,0 , 
+					2.6f,-2.1f,0 ,
+					0,-1.5f,0,
+					-2.1f,-2.1f,0 ,
+					-2.1f,0,0 );
 			}
-			return new float[0,0];
+			return new Polygon();
 		}
 
 	}
