@@ -628,11 +628,11 @@ namespace SparksToothChart {
 				Gl.glLineWidth((float)Width/225f);
 				Gl.glPointSize((float)Width/275f);//point is slightly smaller since no antialiasing
 				RotateAndTranslateUser(toothGraphic);
-				List<RctLine> lines=toothGraphic.GetRctLines();
+				List<Line> lines=toothGraphic.GetRctLines();
 				for(int i=0;i<lines.Count;i++){
 					Gl.glBegin(Gl.GL_LINE_STRIP);
-					for(int j=0;j<lines[i].RctPoints.Count;j++){
-						Gl.glVertex3f(lines[i].RctPoints[j].X,lines[i].RctPoints[j].Y,lines[i].RctPoints[j].Z);
+					for(int j=0;j<lines[i].Vertices.Count;j++){
+						Gl.glVertex3f(lines[i].Vertices[j].X,lines[i].Vertices[j].Y,lines[i].Vertices[j].Z);
 					}
 					Gl.glEnd();
 				}
@@ -646,13 +646,12 @@ namespace SparksToothChart {
 				Gl.glDisable(Gl.GL_BLEND);
 				for(int i=0;i<lines.Count;i++){
 					Gl.glBegin(Gl.GL_POINTS);
-					for(int j=0;j<lines[i].RctPoints.Count;j++) {//lines[i].GetLength(0);j++) {
+					for(int j=0;j<lines[i].Vertices.Count;j++) {
 						//but ignore the first and last.  We are only concerned with where lines meet.
-						if(j==0 || j==lines[i].RctPoints.Count-1) {
+						if(j==0 || j==lines[i].Vertices.Count-1) {
 							continue;
 						}
-						Gl.glVertex3f(lines[i].RctPoints[j].X,lines[i].RctPoints[j].Y,lines[i].RctPoints[j].Z);
-							//lines[i][j,0],lines[i][j,1],lines[i][j,2]);
+						Gl.glVertex3f(lines[i].Vertices[j].X,lines[i].Vertices[j].Y,lines[i].Vertices[j].Z);
 					}
 					Gl.glEnd();
 				}

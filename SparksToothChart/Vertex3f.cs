@@ -4,16 +4,16 @@ using System.Text;
 
 namespace SparksToothChart {
 	///<summary></summary>
-	public class RctPoint {
+	public class Vertex3f {
 		public float X;
 		public float Y;
 		public float Z;
 
-		public RctPoint() {
+		public Vertex3f() {
 
 		}
 
-		public RctPoint(float x,float y,float z) {
+		public Vertex3f(float x,float y,float z) {
 			X=x;
 			Y=y;
 			Z=z;

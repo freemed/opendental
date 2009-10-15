@@ -709,18 +709,18 @@ namespace SparksToothChart {
 			//MessageBox.Show(Vertices[2,2].ToString());
 		}
 
-		///<summary>dim 1=lines. dim 2 is points, (was always two). dim 3 is coordinates, always 3</summary>
-		public List<RctLine> GetRctLines(){//[][,] GetRctLines() {
-			List<RctLine> retVal=new List<RctLine>();
-			RctLine line;
+		///<summary>For any given tooth, there may only be one line in the returned list, or some teeth might have a few lines representing the root canals.</summary>
+		public List<Line> GetRctLines(){
+			List<Line> retVal=new List<Line>();
+			Line line;
 			if(toothID=="1") {
-				line=new RctLine(
+				line=new Line(
 					-.7f,9.6f,1.6f, 
 					.6f,8,1.6f ,
 					1.2f,5.8f,1.6f ,
 					.8f,0,.9f);
 				retVal.Add(line);
-				line=new RctLine(
+				line=new Line(
 					-1.8f,9.5f,1.6f,
 					-1.6f,8,1.6f,
 					-1.6f,5.8f,1.6f,
@@ -728,13 +728,13 @@ namespace SparksToothChart {
 				retVal.Add(line);
 			}
 			if(toothID=="16") {
-				line=new RctLine(
+				line=new Line(
 					.7f,9.6f,1.6f, 
 					-.6f,8,1.6f,
 					-1.2f,5.8f,1.6f,
 					-.8f,0,.9f);
 				retVal.Add(line);
-				line=new RctLine(
+				line=new Line(
 					1.8f,9.5f,1.6f , 
 					1.6f,8,1.6f ,
 					1.6f,5.8f,1.6f ,
@@ -742,211 +742,211 @@ namespace SparksToothChart {
 				retVal.Add(line);
 			}
 			if(toothID=="2") {
-				line=new RctLine(
+				line=new Line(
 					.3f,10.6f,3.4f , 
 					1.4f,8,3.2f ,
 					1.7f,5,1.9f ,
 					.9f,0,1f);
 				retVal.Add(line);
-				line=new RctLine(
+				line=new Line(
 					-1.8f,10.5f,3.4f , 
 					-2,7,3.2f ,
 					-1.7f,4,1.9f ,
 					-1,0,1.1f );
 				retVal.Add(line);
-				line=new RctLine(
+				line=new Line(
 					-2,11.5f,-3.7f , 
 					-.6f,6.3f,-4 ,
 					0,0,-2.3f);
 				retVal.Add(line);
 			}
 			if(toothID=="15") {
-				line=new RctLine(
+				line=new Line(
 					-.3f,10.6f,3.4f , 
 					-1.4f,8,3.2f ,
 					-1.7f,5,1.9f ,
 					-.9f,0,1f );
 				retVal.Add(line);
-				line=new RctLine(
+				line=new Line(
 					1.8f,10.5f,3.4f , 
 					2,7,3.2f ,
 					1.7f,4,1.9f ,
 					1,0,1.1f);
 				retVal.Add(line);
-				line=new RctLine(
+				line=new Line(
 					2,11.5f,-3.7f , 
 					.6f,6.3f,-4 ,
 					0,0,-2.3f );
 				retVal.Add(line);
 			}
 			if(toothID=="3") {
-				line=new RctLine(
+				line=new Line(
 					1.4f,11.5f,3.4f , 
 					2.2f,9.4f,3.2f ,
 					2.4f,6.7f,3.2f ,
 					1.2f,0,1.1f);
 				retVal.Add(line);
-				line=new RctLine(
+				line=new Line(
 					-2.7f,11.5f,3.4f , 
 					-2.9f,9,3.2f ,
 					-2.6f,5,3.2f ,
 					-1.2f,0,1.1f );
 				retVal.Add(line);
-				line=new RctLine(
+				line=new Line(
 					0,12.5f,-4.3f, 
 					0,9.4f,-4.3f ,
 					0,0,-2.2f );
 				retVal.Add(line);
 			}
 			if(toothID=="14") {
-				line=new RctLine(
+				line=new Line(
 					-1.4f,11.5f,3.4f, 
 					-2.2f,9.4f,3.2f ,
 					-2.4f,6.7f,3.2f ,
 					-1.2f,0,1.1f);
 				retVal.Add(line);
-				line=new RctLine(
+				line=new Line(
 					2.7f,11.5f,3.4f , 
 					2.9f,9,3.2f ,
 					2.6f,5,3.2f ,
 					1.2f,0,1.1f );
 				retVal.Add(line);
-				line=new RctLine(
+				line=new Line(
 					0,12.5f,-4.3f , 
 					0,9.4f,-4.3f ,
 					0,0,-2.2f );
 				retVal.Add(line);
 			}
 			if(toothID=="4") {
-				line=new RctLine(
+				line=new Line(
 					0,13.5f,1.2f , 
 					-.2f,10,.6f ,
 					0,0,0 );
 				retVal.Add(line);
 			}
 			if(toothID=="13") {
-				line=new RctLine(
+				line=new Line(
 					0,13.5f,1.2f , 
 					.2f,10,.6f ,
 					0,0,0 );
 				retVal.Add(line);
 			}
 			if(toothID=="5") {
-				line=new RctLine(
+				line=new Line(
 					-1.1f,13.5f,1.6f , 
 					0,6,1.6f ,
 					0,0,1 );
 				retVal.Add(line);
 			}
 			if(toothID=="12") {
-				line=new RctLine(
+				line=new Line(
 					1.1f,13.5f,1.6f , 
 					0,6,1.6f ,
 					0,0,1);
 				retVal.Add(line);
 			}
 			if(toothID=="6") {
-				line=new RctLine(
+				line=new Line(
 					-.4f,16.5f,0 , 
 					0,11,0 ,
 					0,0,0);
 				retVal.Add(line);
 			}
 			if(toothID=="11") {
-				line=new RctLine(
+				line=new Line(
 					.4f,16.5f,0 , 
 					0,11,0,
 					0,0,0);
 				retVal.Add(line);
 			}
 			if(toothID=="7") {
-				line=new RctLine(
+				line=new Line(
 					-.8f,12.5f,.6f , 
 					-.3f,10,0 ,
 					0,0,0);
 				retVal.Add(line);
 			}
 			if(toothID=="10") {
-				line=new RctLine(
+				line=new Line(
 					.8f,12.5f,.6f , 
 					.3f,10,0 ,
 					0,0,0);
 				retVal.Add(line);
 			}
 			if(toothID=="8"){
-				line=new RctLine(
+				line=new Line(
 					0,12.6f,0 , 
 					0,0,0 );
 				retVal.Add(line);
 			}
 			if(toothID=="9") {
-				line=new RctLine( 
+				line=new Line( 
 					0,12.6f,0 , 
 					0,0,0 );
 				retVal.Add(line);
 			}
 			if(toothID=="25" || toothID=="26") {
-				line=new RctLine(
+				line=new Line(
 					-.5f,-12,0 ,
 					-.2f,-9,0 ,
 					0,0,0 );
 				retVal.Add(line);
 			}
 			if(toothID=="24" || toothID=="23") {
-				line=new RctLine(
+				line=new Line(
 					.5f,-12,0 , 
 					.2f,-9,0 ,
 					0,0,0 );
 				retVal.Add(line);
 			}
 			if(toothID=="27") {
-				line=new RctLine(
+				line=new Line(
 					-.5f,-15.5f,0,
 					-.1f,-13,0 ,
 					0,0,0 );
 				retVal.Add(line);
 			}
 			if(toothID=="22") {
-				line=new RctLine(
+				line=new Line(
 					.5f,-15.5f,0 ,
 					.1f,-13,0 ,
 					0,0,0 );
 				retVal.Add(line);
 			}
 			if(toothID=="28") {
-				line=new RctLine(
+				line=new Line(
 					-.2f,-13.5f,0 ,
 					0,0,0 );
 				retVal.Add(line);
 			}
 			if(toothID=="21") {
-				line=new RctLine(
+				line=new Line(
 					.2f,-13.5f,0 ,
 					0,0,0 );
 				retVal.Add(line);
 			}
 			if(toothID=="29") {
-				line=new RctLine(
+				line=new Line(
 					-.3f,-14,0 ,
 					0,-12,0 ,
 					0,0,0 );
 				retVal.Add(line);
 			}
 			if(toothID=="20") {
-				line=new RctLine(
+				line=new Line(
 					.3f,-14,0 ,
 					0,-12,0 ,
 					0,0,0 );
 				retVal.Add(line);
 			}
 			if(toothID=="30") {
-				line=new RctLine(
+				line=new Line(
 					.9f,-13.5f,0 , 
 					2.2f,-10,0 ,
 					2.6f,-7,0 ,
 					1.7f,0,0);
 				retVal.Add(line);
-				line=new RctLine(
+				line=new Line(
 					-4.3f,-13.5f,0 , 
 					-4f,-9,0 ,
 					-3.3f,-5,0 ,
@@ -954,13 +954,13 @@ namespace SparksToothChart {
 				retVal.Add(line);
 			}
 			if(toothID=="19") {
-				line=new RctLine(
+				line=new Line(
 					-.9f,-13.5f,0 , 
 					-2.2f,-10,0 ,
 					-2.6f,-7,0 ,
 					-1.7f,0,0 );
 				retVal.Add(line);
-				line=new RctLine(
+				line=new Line(
 					4.3f,-13.5f,0 , 
 					4f,-9,0 ,
 					3.3f,-5,0 ,
@@ -968,13 +968,13 @@ namespace SparksToothChart {
 				retVal.Add(line);
 			}
 			if(toothID=="31") {
-				line=new RctLine(
+				line=new Line(
 					0,-12.5f,0 , 
 					1.8f,-7.5f,0 ,
 					2.2f,-4,0 ,
 					1.7f,0,0);
 				retVal.Add(line);
-				line=new RctLine(
+				line=new Line(
 					-3.4f,-12.5f,0 , 
 					-3.4f,-8,0 ,
 					-3f,-5,0 ,
@@ -982,13 +982,13 @@ namespace SparksToothChart {
 				retVal.Add(line);
 			}
 			if(toothID=="18") {
-				line=new RctLine(
+				line=new Line(
 					0,-12.5f,0 , 
 					-1.8f,-7.5f,0 ,
 					-2.2f,-4,0 ,
 					-1.7f,0,0 );
 				retVal.Add(line);
-				line=new RctLine(
+				line=new Line(
 					3.4f,-12.5f,0 , 
 					3.4f,-8,0 ,
 					3f,-5,0 ,
@@ -996,13 +996,13 @@ namespace SparksToothChart {
 				retVal.Add(line);
 			}
 			if(toothID=="32") {
-				line=new RctLine(
+				line=new Line(
 					-.7f,-10.5f,0 , 
 					.8f,-7.5f,0 ,
 					1.7f,-4,0 ,
 					1.6f,0,0 );
 				retVal.Add(line);
-				line=new RctLine(
+				line=new Line(
 					-3.2f,-10.5f,0 , 
 					-3.4f,-8,0 ,
 					-3f,-5,0 ,
@@ -1010,13 +1010,13 @@ namespace SparksToothChart {
 				retVal.Add(line);
 			}
 			if(toothID=="17") {
-				line=new RctLine(
+				line=new Line(
 					.7f,-10.5f,0 , 
 					-.8f,-7.5f,0 ,
 					-1.7f,-4,0 ,
 					-1.6f,0,0);
 				retVal.Add(line);
-				line=new RctLine(
+				line=new Line(
 					3.2f,-10.5f,0 , 
 					3.4f,-8,0 ,
 					3f,-5,0 ,
