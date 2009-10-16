@@ -70,7 +70,8 @@ namespace SparksToothChart {
 					return selectedTeeth;
 				}
 				else{
-					return toothChartOpenGL.SelectedTeeth;
+					return new string[0];
+					//return toothChartOpenGL.SelectedTeeth;
 				}
 			}
 		}
@@ -86,7 +87,7 @@ namespace SparksToothChart {
 					//has no effect 
 				}
 				else{
-					toothChartOpenGL.ColorBackground=value;
+					//toothChartOpenGL.ColorBackground=value;
 				}
 			}
 		}
@@ -99,7 +100,7 @@ namespace SparksToothChart {
 					//
 				}
 				else {
-					toothChartOpenGL.ColorText=value;
+					//toothChartOpenGL.ColorText=value;
 				}
 			}
 		}
@@ -112,7 +113,7 @@ namespace SparksToothChart {
 					//
 				}
 				else {
-					toothChartOpenGL.ColorTextHighlight=value;
+					//toothChartOpenGL.ColorTextHighlight=value;
 				}
 			}
 		}
@@ -125,7 +126,7 @@ namespace SparksToothChart {
 					//
 				}
 				else {
-					toothChartOpenGL.ColorBackHighlight=value;
+					//toothChartOpenGL.ColorBackHighlight=value;
 				}
 			}
 		}
@@ -223,16 +224,7 @@ namespace SparksToothChart {
 			else{
 				if(isDirectX) {
 					if(ToothChartWrapper.canLoadDirectX){
-						toothChartDirectX=new ToothChartDirectX();//(hardwareMode,preferredPixelFormatNum);
-						//preferredPixelFormatNum=toothChart.SelectedPixelFormatNumber;
-						//toothChartDirectX.ColorText=colorText;
-						//toothChartDirectX.ColorBackground = colorBackground;
-						toothChartDirectX.Dock = System.Windows.Forms.DockStyle.Fill;
-						toothChartDirectX.Location = new System.Drawing.Point(0,0);
-						toothChartDirectX.Name = "toothChart";
-						toothChartDirectX.Size = new System.Drawing.Size(719,564);//unnecessary?
-						//toothChartDirectX.SegmentDrawn+=new ToothChartDrawEventHandler(toothChart_SegmentDrawn);
-						this.Controls.Add(toothChartDirectX);
+						//unfortunately, this never gets encountered.
 					}
 				}
 				else {
@@ -248,6 +240,31 @@ namespace SparksToothChart {
 					this.Controls.Add(toothChartOpenGL);
 				}
 			}
+		}
+
+		protected override void OnLoad(EventArgs e) {
+			base.OnLoad(e);
+			if(isDirectX) {
+				if(ToothChartWrapper.canLoadDirectX) {
+					//but still fails.
+					
+				}
+			}
+		}
+
+		///<summary>This is called from a button placed directly on the Chart module.  So you can control when it happens.</summary>
+		public void LoadDirectX() {
+			//But it fails, too.  So now you can track down what that error means.
+			toothChartDirectX=new ToothChartDirectX();//(hardwareMode,preferredPixelFormatNum);
+			//preferredPixelFormatNum=toothChart.SelectedPixelFormatNumber;
+			//toothChartDirectX.ColorText=colorText;
+			//toothChartDirectX.ColorBackground = colorBackground;
+			toothChartDirectX.Dock = System.Windows.Forms.DockStyle.Fill;
+			toothChartDirectX.Location = new System.Drawing.Point(0,0);
+			toothChartDirectX.Name = "toothChart";
+			toothChartDirectX.Size = new System.Drawing.Size(719,564);//unnecessary?
+			//toothChartDirectX.SegmentDrawn+=new ToothChartDrawEventHandler(toothChart_SegmentDrawn);
+			this.Controls.Add(toothChartDirectX);
 		}
 
 		#region Public Methods
