@@ -47,6 +47,7 @@ namespace SparksToothChart {
 		///<summary>When the drawing feature was originally added, this was the size of the tooth chart.  This number must forever be preserved and drawings scaled to account for it.</summary>
 		private Size originalDrawingSize=new Size(410,307);
 		private bool isDirectX=true;//this is where to toggle it
+		public static bool canLoadDirectX=false;//Set at a point in the application when the DirectX tooth chart control can be loaded.
 
 		public ToothChartWrapper() {
 			InitializeComponent();
@@ -221,16 +222,18 @@ namespace SparksToothChart {
 			}
 			else{
 				if(isDirectX) {
-					toothChartDirectX=new ToothChartDirectX();//(hardwareMode,preferredPixelFormatNum);
-					//preferredPixelFormatNum=toothChart.SelectedPixelFormatNumber;
-					//toothChartDirectX.ColorText=colorText;
-					//toothChartDirectX.ColorBackground = colorBackground;
-					toothChartDirectX.Dock = System.Windows.Forms.DockStyle.Fill;
-					toothChartDirectX.Location = new System.Drawing.Point(0,0);
-					toothChartDirectX.Name = "toothChart";
-					toothChartDirectX.Size = new System.Drawing.Size(719,564);//unnecessary?
-					//toothChartDirectX.SegmentDrawn+=new ToothChartDrawEventHandler(toothChart_SegmentDrawn);
-					this.Controls.Add(toothChartDirectX);
+					if(ToothChartWrapper.canLoadDirectX){
+						toothChartDirectX=new ToothChartDirectX();//(hardwareMode,preferredPixelFormatNum);
+						//preferredPixelFormatNum=toothChart.SelectedPixelFormatNumber;
+						//toothChartDirectX.ColorText=colorText;
+						//toothChartDirectX.ColorBackground = colorBackground;
+						toothChartDirectX.Dock = System.Windows.Forms.DockStyle.Fill;
+						toothChartDirectX.Location = new System.Drawing.Point(0,0);
+						toothChartDirectX.Name = "toothChart";
+						toothChartDirectX.Size = new System.Drawing.Size(719,564);//unnecessary?
+						//toothChartDirectX.SegmentDrawn+=new ToothChartDrawEventHandler(toothChart_SegmentDrawn);
+						this.Controls.Add(toothChartDirectX);
+					}
 				}
 				else {
 					toothChartOpenGL=new ToothChartOpenGL(hardwareMode,preferredPixelFormatNum);

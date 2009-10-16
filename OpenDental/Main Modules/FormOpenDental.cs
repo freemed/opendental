@@ -1349,6 +1349,11 @@ namespace OpenDental{
 				Computers.UpdateHeartBeat(Environment.MachineName);
 			}
 			catch { }
+			//We cannot allow the Direct X component of the tooth chart wrapper to be created until this late in the program
+			//or else the program will crash internally (Because you can't create the ToothChartDirectX control inside of
+			//any initalization functions, including anywhere inside of ContrChar2, because ContrChart2 is created inside
+			//of the initialization function of FormOpenDental).
+			ToothChartWrapper.canLoadDirectX=true;
 		}
 
 		///<summary>Returns false if it can't complete a conversion, find datapath, or validate registration key.</summary>
