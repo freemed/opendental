@@ -17,23 +17,23 @@ namespace SparksToothChart {
 
 		public ToothChartDirectX() {
 			InitializeComponent();
-			InitializeGraphics();
 		}
 
-		public virtual void InitializeGraphics(){
+		///<summary>Must be called after the ToothChartDirectX control has been added to a form and should be called before it is drawn the first time.</summary>
+		public void InitializeGraphics(){
 			PresentParameters pp=new PresentParameters();
 			pp.Windowed=true;
 			pp.SwapEffect=SwapEffect.Discard;
 			pp.EnableAutoDepthStencil=true;
-			pp.AutoDepthStencilFormat=DepthFormat.D16;
+			pp.AutoDepthStencilFormat=DepthFormat.D16;//Z-buffer depth of 16 bits.
 			pp.DeviceWindowHandle=this.Handle;
-			device=new Device(0,DeviceType.Hardware,this,CreateFlags.HardwareVertexProcessing,pp);
+			device=new Device(0,DeviceType.Hardware,this,CreateFlags.SoftwareVertexProcessing,pp);
 			device.DeviceReset+=new EventHandler(this.OnDeviceReset);
 			OnDeviceReset(device,null);
 		}
 
 		///<summary>TODO: Handle the situation when there are suboptimal graphics cards.</summary>
-		public virtual void OnDeviceReset(object sender,EventArgs e){
+		public void OnDeviceReset(object sender,EventArgs e){
 			device=sender as Device;
 		}
 

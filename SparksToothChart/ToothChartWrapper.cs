@@ -265,6 +265,7 @@ namespace SparksToothChart {
 			toothChartDirectX.Size = new System.Drawing.Size(719,564);//unnecessary?
 			//toothChartDirectX.SegmentDrawn+=new ToothChartDrawEventHandler(toothChart_SegmentDrawn);
 			this.Controls.Add(toothChartDirectX);
+			toothChartDirectX.InitializeGraphics();
 		}
 
 		#region Public Methods
