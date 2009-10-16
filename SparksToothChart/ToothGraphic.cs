@@ -82,16 +82,17 @@ namespace SparksToothChart {
 		}
 
 		private struct VertNormX {
-			public float x,y,z;
-			public float nx,ny,nz;
+			public float x,y,z;//position
+			public float nx,ny,nz;//normal
+			public int color;
 		}
 
 		public void PrepareForDirextX(Device device){
 			if(VertexBuffer!=null){
 				return;
 			}
-			VertexBuffer=new VertexBuffer(typeof(CustomVertex.PositionNormal),CustomVertex.PositionNormal.StrideSize*VertexNormals.Count,
-				device,Usage.WriteOnly,CustomVertex.PositionNormal.Format,Pool.Managed);
+			VertexBuffer=new VertexBuffer(typeof(CustomVertex.PositionNormalColored),CustomVertex.PositionNormalColored.StrideSize*VertexNormals.Count,
+				device,Usage.WriteOnly,CustomVertex.PositionNormalColored.Format,Pool.Managed);
 			//The VertexNormals have to be broken down into a structure which doesn't have substructures, because internally C# adds
 			//padding and flag bytes which make the data unpure. Here we convert each vertex into a structure without any substructures.
 			//If you skip this step and instead use VertexNormals.ToArray(), the program crashes on the VertexBuffer.SetData() line below.
@@ -103,6 +104,7 @@ namespace SparksToothChart {
 				verts[i].nx=VertexNormals[i].Normal.X;
 				verts[i].ny=VertexNormals[i].Normal.Y;
 				verts[i].nz=VertexNormals[i].Normal.Z;
+				verts[i].color=Color.White.ToArgb();
 			}
 			VertexBuffer.SetData(verts,0,LockFlags.None);
 		}

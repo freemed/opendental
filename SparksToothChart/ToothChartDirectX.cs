@@ -52,29 +52,6 @@ namespace SparksToothChart {
 			pp.DeviceWindowHandle=this.Handle;
 			device=new Device(0,DeviceType.Hardware,this,CreateFlags.SoftwareVertexProcessing,pp);
 			device.DeviceReset+=new EventHandler(this.OnDeviceReset);
-			device.RenderState.CullMode=Cull.CounterClockwise;
-			device.RenderState.ZBufferEnable=true;
-			device.RenderState.ZBufferFunction=Microsoft.DirectX.Direct3D.Compare.Less;
-			device.RenderState.Lighting=false;
-			device.RenderState.SpecularEnable=false;
-			device.Lights[0].Type=LightType.Directional;
-			device.Lights[0].Position=new Vector3(0,100,0);
-			device.Lights[0].Range=10000.0f;
-			//device.Lights[0].Attenuation0=0.01f;
-			//device.Lights[0].Attenuation1=0.1f;
-			device.Lights[0].Attenuation2=0.01f;
-			device.Lights[0].Ambient=System.Drawing.Color.Red;
-			device.Lights[0].Diffuse=System.Drawing.Color.Green;
-			device.Lights[0].Specular=System.Drawing.Color.Blue;
-			device.Lights[0].Direction=new Vector3(1,-1,1);
-			device.Lights[0].Enabled=true;
-			device.RenderState.Ambient=System.Drawing.Color.FromArgb(0x808080);
-			device.RenderState.AlphaTestEnable=false;
-			//device.RenderState.AlphaFunction=Microsoft.DirectX.Direct3D.Compare.Always;
-			//device.RenderState.SourceBlend=Microsoft.DirectX.Direct3D.Blend.SourceAlpha;
-			//device.RenderState.DestinationBlend=Microsoft.DirectX.Direct3D.Blend.DestinationAlpha;
-			//device.RenderState.AlphaBlendEnable=false;
-			//device.RenderState.AlphaBlendOperation=Microsoft.DirectX.Direct3D.BlendOperation.Add;
 			OnDeviceReset(device,null);
 			for(int i=0;i<ListToothGraphics.Count;i++) {
 				ToothGraphic tooth=ListToothGraphics[i];
@@ -92,28 +69,66 @@ namespace SparksToothChart {
 		}
 
 		protected void Render(){
-			Vector3 cameraPos=new Vector3(0,0,-200);
+			Vector3 cameraPos=new Vector3(0,0,-150);
+			//Set the view and projection matricies for the camera.
+			device.Transform.Projection=Matrix.PerspectiveFovLH((float)Math.PI/3,1.0f,1.0f,10000.0f);
 			device.Transform.View=Matrix.LookAtLH(cameraPos,new Vector3(cameraPos.X,cameraPos.Y,cameraPos.Z+1),new Vector3(0.0f,1.0f,0.0f));
-			device.Transform.Projection=Matrix.PerspectiveFovLH((float)Math.PI/4,1.0f,1.0f,10000.0f);
-			device.VertexFormat=CustomVertex.PositionNormal.Format;
+			device.Transform.World=Matrix.Identity;
+			device.RenderState.CullMode=Cull.None;
+			device.RenderState.ZBufferEnable=true;
+			device.RenderState.ZBufferFunction=Compare.Less;
+			device.RenderState.Lighting=true;
+			device.RenderState.SpecularEnable=false;
+			//Set properties for light 0.
+			device.Lights[0].Type=LightType.Directional;
+			device.Lights[0].Ambient=Color.Gray;
+			device.Lights[0].Diffuse=Color.White;
+			device.Lights[0].Direction=new Vector3(0,0,1);
+			device.Lights[0].Enabled=true;
+			//Blend mode settings.
+			device.RenderState.AlphaTestEnable=false;
+			//device.RenderState.AlphaFunction=Microsoft.DirectX.Direct3D.Compare.Always;
+			//device.RenderState.SourceBlend=Microsoft.DirectX.Direct3D.Blend.SourceAlpha;
+			//device.RenderState.DestinationBlend=Microsoft.DirectX.Direct3D.Blend.DestinationAlpha;
+			//device.RenderState.AlphaBlendEnable=false;
+			//device.RenderState.AlphaBlendOperation=Microsoft.DirectX.Direct3D.BlendOperation.Add;
+			device.VertexFormat=CustomVertex.PositionNormalColored.Format;
 			for(int i=0;i<ListToothGraphics.Count;i++){
 				ToothGraphic tooth=ListToothGraphics[i];
 				device.SetStreamSource(0,tooth.VertexBuffer,0);
-				Matrix toothOrient=Matrix.Identity;
 				int toothNum=ToothGraphic.IdToInt(tooth.ToothID);
-				Vector3 toothTrans;
 				const float toothSpaceWidth=10;
+				List <Matrix> toothOrientations=new List<Matrix> ();
 				if(toothNum<17){//Upper
-					toothTrans=new Vector3((toothNum-8.5f)*toothSpaceWidth,12,0);
+					//Orientation for upper teeth un-rotated.
+					Matrix toothOrient=Matrix.Identity;
+					toothOrient.Translate(new Vector3((toothNum-8.5f)*toothSpaceWidth,40,0));
+					toothOrientations.Add(toothOrient);
+					//Orientation for rotated upper teeth.
+					Matrix rotMat=Matrix.Identity;
+					rotMat.RotateX(-225);
+					toothOrient=Matrix.Identity;
+					toothOrient.Translate(new Vector3((toothNum-8.5f)*toothSpaceWidth,12,0));
+					toothOrientations.Add(rotMat*toothOrient);
 				}else{//Lower
-					toothTrans=new Vector3((24.5f-toothNum)*toothSpaceWidth,-12,0);
+					//Orientation for lower teeth un-rotated.
+					Matrix toothOrient=Matrix.Identity;
+					toothOrient.Translate(new Vector3((24.5f-toothNum)*toothSpaceWidth,-40,0));
+					toothOrientations.Add(toothOrient);
+					//Orientation for rotated lower teeth.
+					Matrix rotMat=Matrix.Identity;
+					rotMat.RotateX(225);
+					toothOrient=Matrix.Identity;
+					toothOrient.Translate(new Vector3((24.5f-toothNum)*toothSpaceWidth,-12,0));
+					toothOrientations.Add(rotMat*toothOrient);
 				}
-				toothOrient.Translate(toothTrans);
-				device.Transform.World=toothOrient;
-				for(int j=0;j<tooth.Groups.Count;j++){
-					ToothGroup group=tooth.Groups[j];
-					device.Indices=group.facesDirectX;
-					device.DrawIndexedPrimitives(PrimitiveType.TriangleList,0,0,tooth.VertexNormals.Count,0,group.NumIndicies/3);
+				for(int k=0;k<toothOrientations.Count;k++){
+					device.Transform.World=toothOrientations[k];
+					for(int j=0;j<tooth.Groups.Count;j++){
+						ToothGroup group=tooth.Groups[j];
+						device.Indices=group.facesDirectX;
+						device.DrawIndexedPrimitives(PrimitiveType.TriangleList,0,0,tooth.VertexNormals.Count,0,group.NumIndicies/3);
+					}
 				}
 			}
 		}
