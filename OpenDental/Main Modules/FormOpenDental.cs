@@ -1353,6 +1353,7 @@ namespace OpenDental{
 			//or else the program will crash internally (Because you can't create the ToothChartDirectX control inside of
 			//any initalization functions, including anywhere inside of ContrChar2, because ContrChart2 is created inside
 			//of the initialization function of FormOpenDental).
+			//js-Yes, this will work just fine temporarily.
 			ToothChartWrapper.canLoadDirectX=true;
 		}
 

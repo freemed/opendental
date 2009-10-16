@@ -2667,7 +2667,6 @@ namespace OpenDental{
 			this.toothChart.Location = new System.Drawing.Point(0,26);
 			this.toothChart.Name = "toothChart";
 			this.toothChart.PreferredPixelFormatNumber = 0;
-			this.toothChart.SimpleMode = true;
 			this.toothChart.Size = new System.Drawing.Size(410,307);
 			this.toothChart.TabIndex = 194;
 			this.toothChart.UseHardware = false;
