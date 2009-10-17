@@ -55,10 +55,10 @@ namespace SparksToothChart {
 			OnDeviceReset(device,null);
 			for(int i=0;i<ListToothGraphics.Count;i++) {
 				ToothGraphic tooth=ListToothGraphics[i];
-				tooth.PrepareForDirextX(device);
 				for(int j=0;j<tooth.Groups.Count;j++) {
 					ToothGroup group=tooth.Groups[j];
-					group.PrepareForDirectX(device);
+					//group.PaintColor=Color.FromArgb(50+j*10,50+j*10,50+j*10);//TODO: This line is for debugging only!
+					group.PrepareForDirectX(device,tooth.VertexNormals);
 				}
 			}
 		}
@@ -95,7 +95,6 @@ namespace SparksToothChart {
 			device.VertexFormat=CustomVertex.PositionNormalColored.Format;
 			for(int i=0;i<ListToothGraphics.Count;i++){
 				ToothGraphic tooth=ListToothGraphics[i];
-				device.SetStreamSource(0,tooth.VertexBuffer,0);
 				int toothNum=ToothGraphic.IdToInt(tooth.ToothID);
 				const float toothSpaceWidth=10;
 				List <Matrix> toothOrientations=new List<Matrix> ();
@@ -126,6 +125,7 @@ namespace SparksToothChart {
 					device.Transform.World=toothOrientations[k];
 					for(int j=0;j<tooth.Groups.Count;j++){
 						ToothGroup group=tooth.Groups[j];
+						device.SetStreamSource(0,group.VertexBuffer,0);
 						device.Indices=group.facesDirectX;
 						device.DrawIndexedPrimitives(PrimitiveType.TriangleList,0,0,tooth.VertexNormals.Count,0,group.NumIndicies/3);
 					}

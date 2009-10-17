@@ -22,27 +22,66 @@ namespace SparksToothChart {
 		///<summary>Corresponds to the number of indicies referenced by the facesDirectX IndexBuffer. This relates to triangles,
 		///not to Polygons as in the Faces list. Must be a multiple of 3.</summary>
 		public int NumIndicies=0;
+		///<summary>Corresponds to VertexNormal list, but only for the vertifies in this group and is stored in DirectX native vertex format.</summary>
+		public VertexBuffer VertexBuffer;
 
 		public ToothGroup() {
 			Faces=new List<Face>();
 		}
 
-		public void PrepareForDirectX(Device device){
-			if(facesDirectX!=null){
-				return;
+		private struct VertNormX {
+			public float x,y,z;//position
+			public float nx,ny,nz;//normal
+			public int color;
+		}
+
+		public void PrepareForDirectX(Device device,List <VertexNormal> VertexNormals){
+			//Figure out which verticies this group uses.
+			bool[] usedVerts=new bool[VertexNormals.Count];
+			for(int i=0;i<Faces.Count;i++){
+				for(int j=0;j<Faces[i].IndexList.Count;j++){
+					usedVerts[Faces[i].IndexList[j]]=true;
+				}
 			}
+			int[] indexMap=new int[usedVerts.Length];
+			int numVerts=0;
+			for(int i=0,v=0;i<usedVerts.Length;i++){
+				if(usedVerts[i]){
+					indexMap[i]=v++;
+					numVerts++;
+				}else{
+					indexMap[i]=-1;
+				}
+			}
+			//Prepare the verticies into a vertex buffer.
+			VertNormX[] verts=new VertNormX[numVerts];
+			for(int i=0;i<indexMap.Length;i++){
+				if(indexMap[i]>=0){
+					verts[indexMap[i]].x=VertexNormals[i].Vertex.X;
+					verts[indexMap[i]].y=VertexNormals[i].Vertex.Y;
+					verts[indexMap[i]].z=VertexNormals[i].Vertex.Z;
+					verts[indexMap[i]].nx=VertexNormals[i].Normal.X;
+					verts[indexMap[i]].ny=VertexNormals[i].Normal.Y;
+					verts[indexMap[i]].nz=VertexNormals[i].Normal.Z;
+					verts[indexMap[i]].color=PaintColor.ToArgb();
+				}
+			}
+			VertexBuffer=new VertexBuffer(typeof(CustomVertex.PositionNormalColored),CustomVertex.PositionNormalColored.StrideSize*numVerts,
+				device,Usage.WriteOnly,CustomVertex.PositionNormalColored.Format,Pool.Managed);
+			VertexBuffer.SetData(verts,0,LockFlags.None);			
+			//Prepare the indicies into an index buffer.
 			//When drawing with a single index buffer inside of DirectX, all primitives must be the same type.
 			//Furthermore, there are no polygons inside of DirectX, only triangles. Therefore, at this point
 			//we break down all faces from polygons into triangles inside of the index buffer so all faces
 			//can be drawn using triangles only. This will also allow us to optimize face order later to
-			//make the faces display more quickly using caching techniques.
-			List <int> indexList=new List <int> ();
-			for(int i=0;i<Faces.Count;i++){
-				for(int j=1;j<Faces[i].IndexList.Count-1;j++){
+			//make the faces display more quickly using caching techniques as well.
+			List<int> indexList=new List<int>();
+			for(int i=0;i<Faces.Count;i++) {
+				for(int j=1;j<Faces[i].IndexList.Count-1;j++) {
 					//We create a triangle fan out of the indcies here for simplicity.
-					indexList.Add(Faces[i].IndexList[0]);
-					indexList.Add(Faces[i].IndexList[j]);
-					indexList.Add(Faces[i].IndexList[j+1]);
+					indexList.Add(indexMap[Faces[i].IndexList[0]]);
+					indexList.Add(indexMap[Faces[i].IndexList[j]]);
+					indexList.Add(indexMap[Faces[i].IndexList[j+1]]);
 				}
 			}
 			int[] indicies=indexList.ToArray();
