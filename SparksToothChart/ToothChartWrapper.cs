@@ -22,8 +22,6 @@ namespace SparksToothChart {
 		private Color colorText;
 		private Color colorTextHighlight;
 		private Color colorBackHighlight;
-		///<summary>Never visible.  Just used to store the bitmap.</summary>
-		private System.Windows.Forms.PictureBox pictBox;
 		///<summary>Only used if in simple mode.  Analogous to ToothChartOpenGL.ListToothGraphics, but with less detail.</summary>
 		private ToothGraphicCollection ListToothGraphics;
 		///<summary>valid values are 1 to 32 (int). Only used in simple mode.</summary>
@@ -46,9 +44,8 @@ namespace SparksToothChart {
 		private Color drawingColor;
 		///<summary>When the drawing feature was originally added, this was the size of the tooth chart.  This number must forever be preserved and drawings scaled to account for it.</summary>
 		private Size originalDrawingSize=new Size(410,307);
-		private bool isDirectX=true;//this is where to toggle it
-		public static bool canLoadDirectX=false;//Set at a point in the application when the DirectX tooth chart control can be loaded.
-
+		public bool isDirectX;
+		
 		public ToothChartWrapper() {
 			InitializeComponent();
 			WidthProjection=130;
@@ -217,21 +214,30 @@ namespace SparksToothChart {
 
 		private void ResetControls(){
 			selectedTeeth=new string[0];
-			this.Controls.Clear();
+			
 			if(simpleMode){
 				this.Invalidate();
 			}
 			else{
+				this.Controls.Clear();
 				if(isDirectX) {
-					if(ToothChartWrapper.canLoadDirectX){
-						//unfortunately, this never gets encountered.
-					}
+					toothChartDirectX=new ToothChartDirectX();//(hardwareMode,preferredPixelFormatNum);
+					//preferredPixelFormatNum=toothChart.SelectedPixelFormatNumber;
+					//toothChartDirectX.ColorText=colorText;
+					//toothChartDirectX.ColorBackground = colorBackground;
+					toothChartDirectX.Dock = System.Windows.Forms.DockStyle.Fill;
+					toothChartDirectX.Location = new System.Drawing.Point(0,0);
+					toothChartDirectX.Name = "toothChart";
+					toothChartDirectX.Size = new System.Drawing.Size(719,564);//unnecessary?
+					//toothChartDirectX.SegmentDrawn+=new ToothChartDrawEventHandler(toothChart_SegmentDrawn);
+					this.Controls.Add(toothChartDirectX);
+					toothChartDirectX.InitializeGraphics();
 				}
 				else {
 					toothChartOpenGL=new ToothChartOpenGL(hardwareMode,preferredPixelFormatNum);
 					preferredPixelFormatNum=toothChartOpenGL.SelectedPixelFormatNumber;
 					toothChartOpenGL.ColorText=colorText;
-					toothChartOpenGL.ColorBackground = colorBackground;
+					//toothChartOpenGL.ColorBackground = colorBackground;
 					toothChartOpenGL.Dock = System.Windows.Forms.DockStyle.Fill;
 					toothChartOpenGL.Location = new System.Drawing.Point(0,0);
 					toothChartOpenGL.Name = "toothChart";
@@ -240,32 +246,6 @@ namespace SparksToothChart {
 					this.Controls.Add(toothChartOpenGL);
 				}
 			}
-		}
-
-		protected override void OnLoad(EventArgs e) {
-			base.OnLoad(e);
-			if(isDirectX) {
-				if(ToothChartWrapper.canLoadDirectX) {
-					//but still fails.
-					
-				}
-			}
-		}
-
-		///<summary>This is called from a button placed directly on the Chart module.  So you can control when it happens.</summary>
-		public void LoadDirectX() {
-			//But it fails, too.  So now you can track down what that error means.
-			toothChartDirectX=new ToothChartDirectX();//(hardwareMode,preferredPixelFormatNum);
-			//preferredPixelFormatNum=toothChart.SelectedPixelFormatNumber;
-			//toothChartDirectX.ColorText=colorText;
-			//toothChartDirectX.ColorBackground = colorBackground;
-			toothChartDirectX.Dock = System.Windows.Forms.DockStyle.Fill;
-			toothChartDirectX.Location = new System.Drawing.Point(0,0);
-			toothChartDirectX.Name = "toothChart";
-			toothChartDirectX.Size = new System.Drawing.Size(719,564);//unnecessary?
-			//toothChartDirectX.SegmentDrawn+=new ToothChartDrawEventHandler(toothChart_SegmentDrawn);
-			this.Controls.Add(toothChartDirectX);
-			toothChartDirectX.InitializeGraphics();
 		}
 
 		#region Public Methods
@@ -553,6 +533,7 @@ namespace SparksToothChart {
 			if(!simpleMode){
 				return;
 			}
+			/*
 			Graphics g=e.Graphics;
 			g.DrawImage(pictBox.Image,new Rectangle(0,0,this.Width,this.Height));
 			g.SmoothingMode=SmoothingMode.HighQuality;
@@ -565,7 +546,7 @@ namespace SparksToothChart {
 			}
 			DrawNumbers(g);
 			DrawDrawingSegments(g);
-			g.Dispose();
+			g.Dispose();*/
 		}
 
 		///<summary>Only called when in simple graphical mode.</summary>

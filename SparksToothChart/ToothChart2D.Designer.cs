@@ -1,5 +1,5 @@
-namespace SparksToothChart {
-	partial class ToothChartWrapper {
+﻿namespace SparksToothChart {
+	partial class ToothChart2D {
 		/// <summary> 
 		/// Required designer variable.
 		/// </summary>
@@ -23,32 +23,34 @@ namespace SparksToothChart {
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			this.toothChart2D1 = new SparksToothChart.ToothChart2D();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ToothChart2D));
+			this.pictBox = new System.Windows.Forms.PictureBox();
+			((System.ComponentModel.ISupportInitialize)(this.pictBox)).BeginInit();
 			this.SuspendLayout();
 			// 
-			// toothChart2D1
+			// pictBox
 			// 
-			this.toothChart2D1.Location = new System.Drawing.Point(0,0);
-			this.toothChart2D1.Name = "toothChart2D1";
-			this.toothChart2D1.Size = new System.Drawing.Size(410,307);
-			this.toothChart2D1.TabIndex = 0;
+			this.pictBox.Image = ((System.Drawing.Image)(resources.GetObject("pictBox.Image")));
+			this.pictBox.Location = new System.Drawing.Point(0,0);
+			this.pictBox.Name = "pictBox";
+			this.pictBox.Size = new System.Drawing.Size(410,307);
+			this.pictBox.TabIndex = 1;
+			this.pictBox.TabStop = false;
 			// 
-			// ToothChartWrapper
+			// ToothChart2D
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.Controls.Add(this.toothChart2D1);
-			this.Name = "ToothChartWrapper";
-			this.Size = new System.Drawing.Size(544,351);
+			this.Controls.Add(this.pictBox);
+			this.Name = "ToothChart2D";
+			this.Size = new System.Drawing.Size(410,307);
+			((System.ComponentModel.ISupportInitialize)(this.pictBox)).EndInit();
 			this.ResumeLayout(false);
 
 		}
 
 		#endregion
 
-		private ToothChart2D toothChart2D1;
-
-		
-
+		private System.Windows.Forms.PictureBox pictBox;
 	}
 }

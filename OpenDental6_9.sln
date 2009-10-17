@@ -37,6 +37,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceManager", "ServiceMa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateFileCopier", "UpdateFileCopier\UpdateFileCopier.csproj", "{814E9B5F-DBFA-4506-BAF2-B47112F3FC81}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestToothChart", "TestToothChart\TestToothChart.csproj", "{F9D78F18-2BEA-439B-8FA4-DF655F297A7F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -123,6 +125,12 @@ Global
 		{814E9B5F-DBFA-4506-BAF2-B47112F3FC81}.LinuxRelease|Any CPU.Build.0 = Release|Any CPU
 		{814E9B5F-DBFA-4506-BAF2-B47112F3FC81}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{814E9B5F-DBFA-4506-BAF2-B47112F3FC81}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9D78F18-2BEA-439B-8FA4-DF655F297A7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9D78F18-2BEA-439B-8FA4-DF655F297A7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9D78F18-2BEA-439B-8FA4-DF655F297A7F}.LinuxRelease|Any CPU.ActiveCfg = Release|Any CPU
+		{F9D78F18-2BEA-439B-8FA4-DF655F297A7F}.LinuxRelease|Any CPU.Build.0 = Release|Any CPU
+		{F9D78F18-2BEA-439B-8FA4-DF655F297A7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9D78F18-2BEA-439B-8FA4-DF655F297A7F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

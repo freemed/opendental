@@ -42,7 +42,7 @@ namespace SparksToothChart {
 		private string[] selectedTeeth;
 		///<summary>valid values are 1 to 32 (int)</summary>
 		private ArrayList ALSelectedTeeth;
-		private Color colorBackground;
+		private Color colorBackground=Color.FromArgb(150,145,152);
 		///<summary></summary>
 		public Color ColorText;
 		///<summary></summary>
@@ -117,11 +117,11 @@ namespace SparksToothChart {
 			get {
 				return colorBackground;
 			}
-			set {
-				colorBackground=value;
-				Gl.glClearColor((float)ColorBackground.R/255f,(float)ColorBackground.G/255f,(float)ColorBackground.B/255f,0f);
-				Invalidate();
-			}
+			//set {
+			//	colorBackground=value;
+			//	Gl.glClearColor((float)ColorBackground.R/255f,(float)ColorBackground.G/255f,(float)ColorBackground.B/255f,0f);
+			//	Invalidate();
+			//}
 		}
 
 		public int SelectedPixelFormatNumber {
@@ -747,7 +747,9 @@ namespace SparksToothChart {
 				yPos-=3.8f;
 			}
 			xPos+=GetTransX(tooth_id);
-			string displayNum=OpenDentBusiness.Tooth.GetToothLabelGraphic(tooth_id);
+//fix this.
+//string displayNum=OpenDentBusiness.Tooth.GetToothLabelGraphic(tooth_id);
+			string displayNum=tooth_id;
 			float strWidth=MeasureStringMm(displayNum);
 			xPos-=strWidth/2f;
 			//only use the ShiftM portion of the user translation
@@ -795,7 +797,9 @@ namespace SparksToothChart {
 			if(isFullRedraw && ListToothGraphics[tooth_id].HideNumber){//if redrawing all numbers, and this is a "hidden" number
 				return;//skip
 			}
-			string displayNum=OpenDentBusiness.Tooth.GetToothLabelGraphic(tooth_id);
+//fix this.  No calls to OpenDentBusiness.
+//string displayNum=OpenDentBusiness.Tooth.GetToothLabelGraphic(tooth_id);
+			string displayNum=tooth_id;
 			float toMm=(float)WidthProjection/(float)Width;//mm/pix
 			RectangleF recMm=GetNumberRecMm(tooth_id);
 			Rectangle recPix=ConvertRecToPix(recMm);

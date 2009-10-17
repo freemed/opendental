@@ -84,6 +84,12 @@
     <Compile Include="Face.cs" />
     <Compile Include="Polygon.cs" />
     <Compile Include="Line.cs" />
+    <Compile Include="ToothChart2D.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ToothChart2D.Designer.cs">
+      <DependentUpon>ToothChart2D.cs</DependentUpon>
+    </Compile>
     <Compile Include="ToothChartDirectX.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -197,6 +203,10 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ColorChanger.cur" />
+    <EmbeddedResource Include="ToothChart2D.resx">
+      <DependentUpon>ToothChart2D.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -134,14 +134,15 @@ namespace SparksToothChart {
 		}
 
 		protected override void OnPaint(PaintEventArgs pe) {
+			Color backColor=Color.FromArgb(150,145,152);
 			if(device==null){
 				//When no rendering context has been set, simply display the control
 				//as a black rectangle. This will make the control draw as a blank
 				//rectangle when in the designer. 
-				pe.Graphics.FillRectangle(Brushes.Black,new Rectangle(0,0,Width,Height));
+				pe.Graphics.FillRectangle(new SolidBrush(backColor),new Rectangle(0,0,Width,Height));
 				return;
 			}
-			device.Clear(ClearFlags.Target | ClearFlags.ZBuffer,Color.Black,1.0f,0);
+			device.Clear(ClearFlags.Target | ClearFlags.ZBuffer,backColor,1.0f,0);
 			device.BeginScene();
 			Render();
 			device.EndScene();

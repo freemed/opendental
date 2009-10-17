@@ -263,7 +263,6 @@ namespace OpenDental{
 		private ContextMenu menuToothChart;
 		private MenuItem menuItemChartBig;
 		private MenuItem menuItemChartSave;
-		private OpenDental.UI.Button butLoadDirectX;
 		private bool InitializedOnStartup;
 	
 		///<summary></summary>
@@ -487,7 +486,6 @@ namespace OpenDental{
 			this.menuToothChart = new System.Windows.Forms.ContextMenu();
 			this.menuItemChartBig = new System.Windows.Forms.MenuItem();
 			this.menuItemChartSave = new System.Windows.Forms.MenuItem();
-			this.butLoadDirectX = new OpenDental.UI.Button();
 			this.groupBox2.SuspendLayout();
 			this.tabControlImages.SuspendLayout();
 			this.panelImages.SuspendLayout();
@@ -2862,25 +2860,8 @@ namespace OpenDental{
 			this.menuItemChartSave.Text = "Save to Images";
 			this.menuItemChartSave.Click += new System.EventHandler(this.menuItemChartSave_Click);
 			// 
-			// butLoadDirectX
-			// 
-			this.butLoadDirectX.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butLoadDirectX.Autosize = true;
-			this.butLoadDirectX.BackColor = System.Drawing.SystemColors.Control;
-			this.butLoadDirectX.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butLoadDirectX.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butLoadDirectX.CornerRadius = 4F;
-			this.butLoadDirectX.Location = new System.Drawing.Point(253,332);
-			this.butLoadDirectX.Name = "butLoadDirectX";
-			this.butLoadDirectX.Size = new System.Drawing.Size(89,23);
-			this.butLoadDirectX.TabIndex = 198;
-			this.butLoadDirectX.Text = "Load DirectX";
-			this.butLoadDirectX.UseVisualStyleBackColor = false;
-			this.butLoadDirectX.Click += new System.EventHandler(this.butLoadDirectX_Click);
-			// 
 			// ContrChart
 			// 
-			this.Controls.Add(this.butLoadDirectX);
 			this.Controls.Add(this.panelEcw);
 			this.Controls.Add(this.butForeignKey);
 			this.Controls.Add(this.butAddKey);
@@ -7077,7 +7058,7 @@ namespace OpenDental{
 		}
 
 		private void butLoadDirectX_Click(object sender,EventArgs e) {
-			toothChart.LoadDirectX();
+			//toothChart.LoadDirectX();
 		}
 
 		
