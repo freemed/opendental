@@ -14,7 +14,7 @@ namespace SparksToothChart {
 		private string[] selectedTeeth;
 		private Color colorBackground;
 		private Color colorBackSimple=Color.FromArgb(150,145,153);//constant
-		private bool simpleMode=true;
+		//private bool simpleMode=true;
 		///<summary>True for hardware graphics, false for software graphics.</summary>
 		private bool hardwareMode=false;
 		private ToothChartOpenGL toothChartOpenGL;
@@ -44,9 +44,12 @@ namespace SparksToothChart {
 		private Color drawingColor;
 		///<summary>When the drawing feature was originally added, this was the size of the tooth chart.  This number must forever be preserved and drawings scaled to account for it.</summary>
 		private Size originalDrawingSize=new Size(410,307);
-		public bool isDirectX;
+		private DrawingMode drawMode;
+		///<summary>This data object will hold nearly all information about what to draw.  It is not exposed publicly, but is instead acted on by methods.</summary>
+		private ToothChartData TcData;
 		
 		public ToothChartWrapper() {
+			TcData=new ToothChartData();
 			InitializeComponent();
 			WidthProjection=130;
 			ListToothGraphics=new ToothGraphicCollection();
@@ -56,17 +59,31 @@ namespace SparksToothChart {
 			PointList=new List<Point>();
 			DrawingSegmentList=new List<ToothInitial>();
 			drawingColor=Color.Black;
+			//TcData.ColorBackground=
 		}
 
 		#region Properties
 
+		public DrawingMode DrawMode{
+			get{
+				return drawMode;
+			}
+			set{
+				if(Environment.OSVersion.Platform==PlatformID.Unix) {
+					return;//disallow changing simpleMode if platform is Unix
+				}
+				drawMode=value;
+				ResetControls();
+			}
+		}
+
 		///<summary>Valid values are 1-32 and A-Z.</summary>
 		public string[] SelectedTeeth {
 			get {
-				if(simpleMode){
+				if(drawMode==DrawingMode.Simple2D) {
 					return selectedTeeth;
 				}
-				else{
+				else {
 					return new string[0];
 					//return toothChartOpenGL.SelectedTeeth;
 				}
@@ -80,7 +97,7 @@ namespace SparksToothChart {
 			}
 			set {
 				colorBackground=value;
-				if(simpleMode){
+				if(drawMode==DrawingMode.Simple2D) {
 					//has no effect 
 				}
 				else{
@@ -93,7 +110,7 @@ namespace SparksToothChart {
 		public Color ColorText{
 			set {
 				colorText=value;
-				if(simpleMode) {
+				if(drawMode==DrawingMode.Simple2D) {
 					//
 				}
 				else {
@@ -106,7 +123,7 @@ namespace SparksToothChart {
 		public Color ColorTextHighlight {
 			set {
 				colorTextHighlight=value;
-				if(simpleMode) {
+				if(drawMode==DrawingMode.Simple2D) {
 					//
 				}
 				else {
@@ -119,7 +136,7 @@ namespace SparksToothChart {
 		public Color ColorBackHighlight {
 			set {
 				colorBackHighlight=value;
-				if(simpleMode) {
+				if(drawMode==DrawingMode.Simple2D) {
 					//
 				}
 				else {
@@ -128,6 +145,7 @@ namespace SparksToothChart {
 			}
 		}
 
+		/*
 		///<summary>Default is true.  In simpleMode, OpenGL does not even get loaded.</summary>
 		public bool SimpleMode {
 			get {
@@ -140,7 +158,7 @@ namespace SparksToothChart {
 				simpleMode=value;
 				ResetControls();
 			}
-		}
+		}*/
 
 		///<summary>Set to true when using hardware rendering in OpenGL, and false otherwise. This will have no effect when in simple 2D graphics mode.</summary>
 		public bool UseHardware{
@@ -154,13 +172,13 @@ namespace SparksToothChart {
 
 		public bool AutoFinish{
 			get{
-				if(simpleMode){
+				if(drawMode==DrawingMode.Simple2D) {
 					return false;
 				}
 				return toothChartOpenGL.autoFinish;
 			}
 			set{
-				if(!simpleMode){
+				if(drawMode!=DrawingMode.Simple2D) {
 					toothChartOpenGL.autoFinish=value;
 				}
 			}
@@ -193,7 +211,7 @@ namespace SparksToothChart {
 				if(cursorTool==CursorTool.ColorChanger){
 					this.Cursor=new Cursor(GetType(),"ColorChanger.cur");
 				}
-				if(!simpleMode){
+				if(drawMode!=DrawingMode.Simple2D) {
 					toothChartOpenGL.CursorTool=value;
 				}
 			}
@@ -205,7 +223,7 @@ namespace SparksToothChart {
 			//}
 			set{
 				drawingColor=value;
-				if(!simpleMode){
+				if(drawMode!=DrawingMode.Simple2D) {
 					toothChartOpenGL.DrawingColor=value;
 				}
 			}
@@ -214,37 +232,37 @@ namespace SparksToothChart {
 
 		private void ResetControls(){
 			selectedTeeth=new string[0];
-			
-			if(simpleMode){
+			if(drawMode==DrawingMode.Simple2D){
 				this.Invalidate();
 			}
-			else{
+			else if(drawMode==DrawingMode.DirectX){
 				this.Controls.Clear();
-				if(isDirectX) {
-					toothChartDirectX=new ToothChartDirectX();//(hardwareMode,preferredPixelFormatNum);
-					//preferredPixelFormatNum=toothChart.SelectedPixelFormatNumber;
-					//toothChartDirectX.ColorText=colorText;
-					//toothChartDirectX.ColorBackground = colorBackground;
-					toothChartDirectX.Dock = System.Windows.Forms.DockStyle.Fill;
-					toothChartDirectX.Location = new System.Drawing.Point(0,0);
-					toothChartDirectX.Name = "toothChart";
-					toothChartDirectX.Size = new System.Drawing.Size(719,564);//unnecessary?
-					//toothChartDirectX.SegmentDrawn+=new ToothChartDrawEventHandler(toothChart_SegmentDrawn);
-					this.Controls.Add(toothChartDirectX);
-					toothChartDirectX.InitializeGraphics();
-				}
-				else {
-					toothChartOpenGL=new ToothChartOpenGL(hardwareMode,preferredPixelFormatNum);
-					preferredPixelFormatNum=toothChartOpenGL.SelectedPixelFormatNumber;
-					toothChartOpenGL.ColorText=colorText;
-					//toothChartOpenGL.ColorBackground = colorBackground;
-					toothChartOpenGL.Dock = System.Windows.Forms.DockStyle.Fill;
-					toothChartOpenGL.Location = new System.Drawing.Point(0,0);
-					toothChartOpenGL.Name = "toothChart";
-					toothChartOpenGL.Size = new System.Drawing.Size(719,564);//unnecessary?
-					toothChartOpenGL.SegmentDrawn+=new ToothChartDrawEventHandler(toothChart_SegmentDrawn);
-					this.Controls.Add(toothChartOpenGL);
-				}
+				toothChartDirectX=new ToothChartDirectX();//(hardwareMode,preferredPixelFormatNum);
+				//preferredPixelFormatNum=toothChart.SelectedPixelFormatNumber;
+				//toothChartDirectX.ColorText=colorText;
+				//toothChartDirectX.ColorBackground = colorBackground;
+				toothChartDirectX.Dock = System.Windows.Forms.DockStyle.Fill;
+				toothChartDirectX.Location = new System.Drawing.Point(0,0);
+				toothChartDirectX.Name = "toothChart";
+				toothChartDirectX.Size = new System.Drawing.Size(719,564);//unnecessary?
+				//toothChartDirectX.SegmentDrawn+=new ToothChartDrawEventHandler(toothChart_SegmentDrawn);
+				toothChartDirectX.TcData=TcData;
+				this.Controls.Add(toothChartDirectX);
+				toothChartDirectX.InitializeGraphics();
+			}
+			else {//OpenGl
+				this.Controls.Clear();
+				toothChartOpenGL=new ToothChartOpenGL(hardwareMode,preferredPixelFormatNum);
+				preferredPixelFormatNum=toothChartOpenGL.SelectedPixelFormatNumber;
+				toothChartOpenGL.ColorText=colorText;
+				//toothChartOpenGL.ColorBackground = colorBackground;
+				toothChartOpenGL.Dock = System.Windows.Forms.DockStyle.Fill;
+				toothChartOpenGL.Location = new System.Drawing.Point(0,0);
+				toothChartOpenGL.Name = "toothChart";
+				toothChartOpenGL.Size = new System.Drawing.Size(719,564);//unnecessary?
+				toothChartOpenGL.TcData=TcData;
+				toothChartOpenGL.SegmentDrawn+=new ToothChartDrawEventHandler(toothChart_SegmentDrawn);
+				this.Controls.Add(toothChartOpenGL);
 			}
 		}
 
@@ -253,7 +271,7 @@ namespace SparksToothChart {
 		///<summary>If ListToothGraphics is empty, then this fills it, including the complex process of loading all drawing points from local resources.  Or if not empty, then this resets all 32+20 teeth to default postitions, no restorations, etc. Primary teeth set to visible false.  Also clears selected.  Should surround with SuspendLayout / ResumeLayout.</summary>
 		public void ResetTeeth() {
 			selectedTeeth=new string[0];
-			if(simpleMode){
+			if(drawMode==DrawingMode.Simple2D){
 				if(ListToothGraphics.Count==0) {//so this will only happen once when program first loads.
 					ListToothGraphics.Clear();
 					ToothGraphic tooth;
@@ -280,19 +298,17 @@ namespace SparksToothChart {
 				PointList=new List<Point>();
 				this.Invalidate();
 			}
-			else{
-				if(isDirectX) {
+			else if(drawMode==DrawingMode.DirectX) {
 		//toothChartDirectX.ResetTeeth();
-				}
-				else {
-					toothChartOpenGL.ResetTeeth();
-				}
+			}
+			else {
+				toothChartOpenGL.ResetTeeth();
 			}
 		}
 
 		///<summary>Moves position of tooth.  Rotations first in order listed, then translations.  Tooth doesn't get moved immediately, just when painting.  All changes are cumulative and are in addition to any previous translations and rotations.  So, for instance, if tooth has already been shifted as part of SetToPrimary, then this will move it more.</summary>
 		public void MoveTooth(string toothID,float rotate,float tipM,float tipB,float shiftM,float shiftO,float shiftB) {
-			if(simpleMode) {
+			if(drawMode==DrawingMode.Simple2D) {
 				//do nothing
 			}
 			else {
@@ -302,7 +318,7 @@ namespace SparksToothChart {
 
 		///<summary>Sets the specified permanent tooth to primary as follows: Sets ShowPrimary to true for the perm tooth.  Makes pri tooth visible=true, repositions perm tooth by translating -Y.  Moves primary tooth slightly to M or D sometimes for better alignment.  And if 2nd primary molar, then because of the larger size, it must move all perm molars to distal.  Ignores if invalid perm tooth.</summary>
 		public void SetToPrimary(string toothID) {
-			if(simpleMode) {
+			if(drawMode==DrawingMode.Simple2D) {
 				if(!ToothGraphic.IsValidToothID(toothID)) {
 					return;
 				}
@@ -326,7 +342,7 @@ namespace SparksToothChart {
 
 		///<summary>This is used for crowns and for retainers.  Crowns will be visible on missing teeth with implants.  Crowns are visible on F and O views, unlike ponics which are only visible on F view.  If the tooth is not visible, that should be set before this call, because then, this will set the root invisible.</summary>
 		public void SetCrown(string toothID,Color color) {
-			if(simpleMode) {
+			if(drawMode==DrawingMode.Simple2D) {
 				if(!ToothGraphic.IsValidToothID(toothID)) {
 					return;
 				}
@@ -345,7 +361,7 @@ namespace SparksToothChart {
 
 		///<summary></summary>
 		public void SetSurfaceColors(string toothID,string surfaces,Color color) {
-			if(simpleMode) {
+			if(drawMode==DrawingMode.Simple2D) {
 				if(!ToothGraphic.IsValidToothID(toothID)) {
 					return;
 				}
@@ -359,7 +375,7 @@ namespace SparksToothChart {
 
 		///<summary>Used for missing teeth.  This should always be done before setting restorations, because a pontic will cause the tooth to become visible again except for the root.  So if setInvisible after a pontic, then the pontic can't show.</summary>
 		public void SetInvisible(string toothID) {
-			if(simpleMode) {
+			if(drawMode==DrawingMode.Simple2D) {
 				if(!ToothGraphic.IsValidToothID(toothID)) {
 					return;
 				}
@@ -373,7 +389,7 @@ namespace SparksToothChart {
 
 		///<summary>This is just the same as SetInvisible, except that it also hides the number from showing.  This is used, for example, if premolars are missing, and ortho has completely closed the space.  User will not be able to select this tooth because the number is hidden.</summary>
 		public void HideTooth(string toothID) {
-			if(simpleMode) {
+			if(drawMode==DrawingMode.Simple2D) {
 				if(!ToothGraphic.IsValidToothID(toothID)) {
 					return;
 				}
@@ -388,7 +404,7 @@ namespace SparksToothChart {
 
 		///<summary>This is used for any pontic, including bridges, full dentures, and partials.  It is usually used on a tooth that has already been set invisible.  This routine sets the tooth to visible again, but makes the root invisible.  Then, it sets the entire crown to the specified color.  If the tooth was not initially invisible, then it does not set the root invisible.  Any connector bars for bridges are set separately.</summary>
 		public void SetPontic(string toothID,Color color) {
-			if(simpleMode) {
+			if(drawMode==DrawingMode.Simple2D) {
 				if(!ToothGraphic.IsValidToothID(toothID)) {
 					return;
 				}
@@ -406,7 +422,7 @@ namespace SparksToothChart {
 
 		///<summary>Root canals are initially not visible.  This routine sets the canals visible, changes the color to the one specified, and also sets the cementum for the tooth to be semitransparent so that the canals can be seen.  Also sets the IsRCT flag for the tooth to true.</summary>
 		public void SetRCT(string toothID,Color color) {
-			if(simpleMode) {
+			if(drawMode==DrawingMode.Simple2D) {
 				if(!ToothGraphic.IsValidToothID(toothID)) {
 					return;
 				}
@@ -414,7 +430,7 @@ namespace SparksToothChart {
 				ListToothGraphics[toothID].colorRCT=color;
 			}
 			else {
-				if(isDirectX) {
+				if(drawMode==DrawingMode.DirectX) {
 
 				}
 				else {
@@ -425,7 +441,7 @@ namespace SparksToothChart {
 
 		///<summary>This draws a big red extraction X right on top of the tooth.  It's up to the calling application to figure out when it's appropriate to do this.  Even if the tooth has been marked invisible, there's a good chance that this will still get drawn because a tooth can be set visible again for the drawing the pontic.  So the calling application needs to figure out when it's appropriate to draw the X, and not set this otherwise.</summary>
 		public void SetBigX(string toothID,Color color) {
-			if(simpleMode) {
+			if(drawMode==DrawingMode.Simple2D) {
 				if(!ToothGraphic.IsValidToothID(toothID)) {
 					return;
 				}
@@ -439,26 +455,24 @@ namespace SparksToothChart {
 
 		///<summary>Set this tooth to show a BU or post.</summary>
 		public void SetBU(string toothID,Color color) {
-			if(simpleMode) {
+			if(drawMode==DrawingMode.Simple2D) {
 				if(!ToothGraphic.IsValidToothID(toothID)) {
 					return;
 				}
 				ListToothGraphics[toothID].IsBU=true;
 				ListToothGraphics[toothID].colorBU=color;
 			}
-			else {
-				if(isDirectX) {
+			else if(drawMode==DrawingMode.DirectX){
 
-				}
-				else {
-					toothChartOpenGL.SetBU(toothID,color);
-				}
+			}
+			else {
+				toothChartOpenGL.SetBU(toothID,color);
 			}
 		}
 
 		///<summary>Set this tooth to show an implant</summary>
 		public void SetImplant(string toothID,Color color) {
-			if(simpleMode) {
+			if(drawMode==DrawingMode.Simple2D) {
 				if(!ToothGraphic.IsValidToothID(toothID)) {
 					return;
 				}
@@ -472,7 +486,7 @@ namespace SparksToothChart {
 
 		///<summary>Set this tooth to show a sealant</summary>
 		public void SetSealant(string toothID,Color color) {
-			if(simpleMode) {
+			if(drawMode==DrawingMode.Simple2D) {
 				if(!ToothGraphic.IsValidToothID(toothID)) {
 					return;
 				}
@@ -486,7 +500,7 @@ namespace SparksToothChart {
 
 		///<summary></summary>
 		public void AddDrawingSegment(ToothInitial drawingSegment) {
-			if(simpleMode) {
+			if(drawMode==DrawingMode.Simple2D) {
 				bool alreadyAdded=false;
 				for(int i=0;i<DrawingSegmentList.Count;i++){
 					if(DrawingSegmentList[i].DrawingSegment==drawingSegment.DrawingSegment){
@@ -530,9 +544,9 @@ namespace SparksToothChart {
 
 		protected override void OnPaint(PaintEventArgs e) {
 			base.OnPaint(e);
-			if(!simpleMode){
-				return;
-			}
+			//if(!simpleMode){
+			//	return;
+			//}
 			/*
 			Graphics g=e.Graphics;
 			g.DrawImage(pictBox.Image,new Rectangle(0,0,this.Width,this.Height));
@@ -938,7 +952,7 @@ namespace SparksToothChart {
 				return;
 			}
 			if(cursorTool==CursorTool.Pointer){
-				if(simpleMode){
+				if(drawMode==DrawingMode.Simple2D) {
 					int toothClicked=GetToothAtPoint(e.X,e.Y);
 					if(ALSelectedTeeth.Contains(toothClicked)) {
 						SetSelected(toothClicked,false);
@@ -990,7 +1004,7 @@ namespace SparksToothChart {
 				return;
 			}
 			if(cursorTool==CursorTool.Pointer){
-				if(simpleMode) {
+				if(drawMode==DrawingMode.Simple2D) {
 					hotTooth=GetToothAtPoint(e.X,e.Y);
 					if(hotTooth==hotToothOld) {//mouse has not moved to another tooth
 						return;
@@ -1094,7 +1108,7 @@ namespace SparksToothChart {
 
 		///<summary>Used by mousedown and mouse move to set teeth selected or unselected.  Also used externally to set teeth selected.  Draws the changes also.</summary>
 		public void SetSelected(int intTooth,bool setValue) {
-			if(simpleMode) {
+			if(drawMode==DrawingMode.Simple2D) {
 				Graphics g=this.CreateGraphics();
 				if(setValue) {
 					ALSelectedTeeth.Add(intTooth);
@@ -1169,5 +1183,11 @@ namespace SparksToothChart {
 				return isInsert;
 			}
 		}*/
+	}
+
+	public enum DrawingMode{
+		Simple2D,
+		OpenGL,
+		DirectX
 	}
 }

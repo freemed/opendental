@@ -37,7 +37,6 @@
 			this.toothChart2D.Location = new System.Drawing.Point(3,3);
 			this.toothChart2D.Name = "toothChart2D";
 			this.toothChart2D.PreferredPixelFormatNumber = 0;
-			this.toothChart2D.SimpleMode = true;
 			this.toothChart2D.Size = new System.Drawing.Size(410,307);
 			this.toothChart2D.TabIndex = 195;
 			this.toothChart2D.UseHardware = false;
@@ -51,7 +50,6 @@
 			this.toothChartOpenGL.Location = new System.Drawing.Point(419,3);
 			this.toothChartOpenGL.Name = "toothChartOpenGL";
 			this.toothChartOpenGL.PreferredPixelFormatNumber = 0;
-			this.toothChartOpenGL.SimpleMode = true;
 			this.toothChartOpenGL.Size = new System.Drawing.Size(410,307);
 			this.toothChartOpenGL.TabIndex = 196;
 			this.toothChartOpenGL.UseHardware = false;
@@ -65,7 +63,6 @@
 			this.toothChartDirectX.Location = new System.Drawing.Point(835,3);
 			this.toothChartDirectX.Name = "toothChartDirectX";
 			this.toothChartDirectX.PreferredPixelFormatNumber = 0;
-			this.toothChartDirectX.SimpleMode = true;
 			this.toothChartDirectX.Size = new System.Drawing.Size(410,307);
 			this.toothChartDirectX.TabIndex = 197;
 			this.toothChartDirectX.UseHardware = false;

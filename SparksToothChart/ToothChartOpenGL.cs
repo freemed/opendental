@@ -42,7 +42,7 @@ namespace SparksToothChart {
 		private string[] selectedTeeth;
 		///<summary>valid values are 1 to 32 (int)</summary>
 		private ArrayList ALSelectedTeeth;
-		private Color colorBackground=Color.FromArgb(150,145,152);
+		//private Color colorBackground=Color.FromArgb(150,145,152);
 		///<summary></summary>
 		public Color ColorText;
 		///<summary></summary>
@@ -70,6 +70,8 @@ namespace SparksToothChart {
 		public Color DrawingColor;
 		///<summary>When the drawing feature was originally added, this was the size of the tooth chart.  This number must forever be preserved and drawings scaled to account for it.</summary>
 		private Size originalDrawingSize=new Size(410,307);
+		///<summary>This is a reference to the TcData object that's at the wrapper level.</summary>
+		public ToothChartData TcData;
 
 
 		///<summary>Specify the hardware mode to create the tooth chart with. Set hardwareMode=true to try for hardware accelerated graphics, and set hardwareMode=false to try and get software graphics.</summary>
@@ -87,7 +89,7 @@ namespace SparksToothChart {
 			DrawingColor=Color.Black;
 			PointList=new List<Point>();
 			//set default colors
-			colorBackground=Color.FromArgb(150,145,153);//95,95,130);
+			//colorBackground=Color.FromArgb(150,145,153);//95,95,130);
 			ColorText=Color.White;
 			ColorTextHighlight=Color.Black;//.Purple;
 			ColorBackHighlight=Color.White;//.Orange;
@@ -112,6 +114,7 @@ namespace SparksToothChart {
 			}
 		}
 
+		/*
 		///<summary></summary>
 		public Color ColorBackground {
 			get {
@@ -122,7 +125,7 @@ namespace SparksToothChart {
 			//	Gl.glClearColor((float)ColorBackground.R/255f,(float)ColorBackground.G/255f,(float)ColorBackground.B/255f,0f);
 			//	Invalidate();
 			//}
-		}
+		}*/
 
 		public int SelectedPixelFormatNumber {
 				get{
@@ -364,7 +367,7 @@ namespace SparksToothChart {
 				return;
 			}
 			//This first part was originally in setup context
-			Gl.glClearColor((float)ColorBackground.R/255f,(float)ColorBackground.G/255f,(float)ColorBackground.B/255f,0f);
+			Gl.glClearColor((float)TcData.ColorBackground.R/255f,(float)TcData.ColorBackground.G/255f,(float)TcData.ColorBackground.B/255f,0f);
 			Gl.glClearAccum(0f,0f,0f,0f);
 			//Lighting
 			float ambI=.2f;
@@ -825,9 +828,9 @@ namespace SparksToothChart {
 			} 
 			else{
 				Gl.glColor3f(
-					(float)ColorBackground.R/255f,
-					(float)ColorBackground.G/255f,
-					(float)ColorBackground.B/255f);
+					(float)TcData.ColorBackground.R/255f,
+					(float)TcData.ColorBackground.G/255f,
+					(float)TcData.ColorBackground.B/255f);
 				Gl.glBegin(Gl.GL_QUADS);
 					Gl.glVertex3f(recMm.X,recMm.Y,14);//LL
 					Gl.glVertex3f(recMm.X,recMm.Y+recMm.Height,14);//UL

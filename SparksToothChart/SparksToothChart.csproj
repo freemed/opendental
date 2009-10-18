@@ -90,6 +90,7 @@
     <Compile Include="ToothChart2D.Designer.cs">
       <DependentUpon>ToothChart2D.cs</DependentUpon>
     </Compile>
+    <Compile Include="ToothChartData.cs" />
     <Compile Include="ToothChartDirectX.cs">
       <SubType>Component</SubType>
     </Compile>

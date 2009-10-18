@@ -90,9 +90,13 @@ namespace OpenDental{
 			ComputerPref computerPref=ComputerPrefs.GetForLocalComputer();
 			toothChart.UseHardware=computerPref.GraphicsUseHardware;
 			toothChart.PreferredPixelFormatNumber=computerPref.PreferredPixelFormatNum;
-			toothChart.SimpleMode=computerPref.GraphicsSimple;//Must be last preference set, last so that all
-																												//settings are caried through in the reinitialization
-																												//this line triggers.
+			//Must be last preference set, last so that all settings are caried through in the reinitialization this line triggers.
+			if(computerPref.GraphicsSimple){
+				toothChart.DrawMode=DrawingMode.Simple2D;
+			}
+			else{
+				toothChart.DrawMode=DrawingMode.OpenGL;
+			}
 			//The preferred pixel format number changes to the selected pixel format number after a context is chosen.
 			computerPref.PreferredPixelFormatNum=toothChart.PreferredPixelFormatNumber;
 			ComputerPrefs.Update(computerPref);

@@ -8,6 +8,9 @@ using System.Windows.Forms;
 
 namespace SparksToothChart {
 	public partial class ToothChart2D:UserControl {
+		///<summary>This is a reference to the TcData object that's at the wrapper level.</summary>
+		public ToothChartData TcData;
+
 		public ToothChart2D() {
 			InitializeComponent();
 		}
