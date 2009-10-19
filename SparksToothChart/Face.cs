@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace SparksToothChart {
-	///<summary>A face is a single polygon, usually a rectangle.</summary>
+	///<summary>A face is a single polygon, usually a rectangle.  Will soon be only triangles.</summary>
 	public class Face {
 		//public List<VertexNormal> VertexNormals;
 		///<summary>A list of indices to the VertexNormal list contained in the ToothGraphic object.</summary>
