@@ -1,4 +1,4 @@
-﻿/*using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -12,4 +12,4 @@ namespace SparksToothChart {
 			return "v:"+Vertex.ToString()+" n:"+Normal.ToString();
 		}
 	}
-}*/
+}

@@ -15,9 +15,7 @@ namespace SparksToothChart {
 	///<summary>A tooth graphic holds all the data for one tooth to be drawn.</summary>
 	public class ToothGraphic {
 		private string toothID;
-		//public List<VertexNormal> VertexNormals;
-		public List<Vertex3f> Vertices;
-		public List<Vertex3f> Normals;
+		public List<VertexNormal> VertexNormals;
 		//<summary>second dim is always 3.</summary>
 		//public float[][] Vertices;
 		//<summary>second dim is always 3.</summary>
@@ -74,7 +72,7 @@ namespace SparksToothChart {
 				throw new ApplicationException("Invalid tooth ID");
 			}
 			toothID=tooth_id;
-			//VertexNormals=new List<VertexNormal>();
+			VertexNormals=new List<VertexNormal>();
 			//if(!simplemode){
 				ImportObj();
 			//}
@@ -559,25 +557,21 @@ namespace SparksToothChart {
 			//ArrayList ALv=new ArrayList();//vertices
 			//ArrayList ALvn=new ArrayList();//vertex normals
 			//There will not necessarily be the same number of vertices as normals.
-			//Vertices=new List<Vertex3f>();
-			//Normals=new List<Vertex3f>();
-			List<Vertex3f> listV=new List<Vertex3f>();
-			List<Vertex3f> listN=new List<Vertex3f>();
+			//But as they get paired up later, we will create a 1:1 relationship.
+			List<Vertex3f> verts=new List<Vertex3f>();
+			List<Vertex3f> norms=new List<Vertex3f>();
 			Groups=new List<ToothGroup>();
 			//ArrayList ALf=new ArrayList();//faces always part of a group
-			List<Face> listFaces=new List<Face>();
-			//List<Face> faces=new List<Face>();
+			List<Face> faces=new List<Face>();
 			MemoryStream stream=new MemoryStream(buffer);
 			using(StreamReader sr = new StreamReader(stream)){
 				String line;
 				//float[] vertex;
 				Vertex3f vertex;
-				//Vertex3f normal;
 				string[] items;
 				string[] subitems;
 				//int[][] face;//dim 1=the vertex. dim 2 has length=2, with 1st vertex, and 2nd normal.
 				Face face;
-				//Face face;
 				ToothGroup group=null;
 				while((line = sr.ReadLine()) != null) {
 					if(line.StartsWith("#")//comment
@@ -597,8 +591,8 @@ namespace SparksToothChart {
 						}
 						vertex.Y=Convert.ToSingle(items[2],CultureInfo.InvariantCulture);
 						vertex.Z=Convert.ToSingle(items[3],CultureInfo.InvariantCulture);
-						listV.Add(vertex);
-						//Vertices.Add(vertex);
+						//ALv.Add(vertex);
+						verts.Add(vertex);
 						continue;
 					}
 					if(line.StartsWith("vn")) {//vertex normal
@@ -612,36 +606,30 @@ namespace SparksToothChart {
 						}
 						vertex.Y=Convert.ToSingle(items[2],CultureInfo.InvariantCulture);
 						vertex.Z=Convert.ToSingle(items[3],CultureInfo.InvariantCulture);
-						listN.Add(vertex);
-						//Normals.Add(normal);
+						//ALvn.Add(vertex);
+						norms.Add(vertex);
 						continue;
 					}
 					if(line.StartsWith("g")) {//group
 						if(group != null) {
 							//move all faces into the existing group
-							//group.Faces=new List<Face>(faces);
-							//group.Faces=new int[ALf.Count][][];
-							group.Faces=new List<Face>();  //new int[listFaces.Count][][];
-							for(int i=0;i<listFaces.Count;i++){//group.Faces.GetLength(0);i++) {
-								//group.Faces[i]=new int[listFaces[i].IndexListVertices.Count][];//int[((int[][])ALf[i]).Length][];
-								face=new Face();
-								for(int j=0;j<listFaces[i].IndexListVertices.Count;j++){//group.Faces[i].Length;j++) {//loop through vertices for the face
-									//group.Faces[i][j]=new int[2];
-									//group.Faces[i][j][0]=listFaces[i].IndexListVertices[j];//((int[][])ALf[i])[j][0];//vertex
-									//group.Faces[i][j][1]=listFaces[i].IndexListNormals[j];//((int[][])ALf[i])[j][1];//normal
-									face.IndexListVertices.Add(listFaces[i].IndexListVertices[j]);
-									face.IndexListNormals.Add(listFaces[i].IndexListNormals[j]);
+							group.Faces=new List<Face>(faces);
+								//new int[ALf.Count][][];
+							/*for(int i=0;i<group.Faces.GetLength(0);i++) {
+								group.Faces[i]=new int[((int[][])ALf[i]).Length][];
+								for(int j=0;j<group.Faces[i].Length;j++) {//loop through vertices for the face
+									group.Faces[i][j]=new int[2];
+									group.Faces[i][j][0]=((int[][])ALf[i])[j][0];//vertex
+									group.Faces[i][j][1]=((int[][])ALf[i])[j][1];//normal
 								}
-								group.Faces.Add(face);
-							}
+							}*/
 							//move the existing group into the AL
 							Groups.Add(group);
 						}
 						//start a new group to which all subsequent faces will be attached.
 						group=new ToothGroup();
 						//ALf=new ArrayList();//reset faces
-						listFaces=new List<Face>();
-						//faces=new List<Face>();
+						faces=new List<Face>();
 						//group.PaintColor=Color.FromArgb(255,255,253,209);//default to enamel
 						switch(line) {
 							case "g cube1_Cementum":
@@ -697,73 +685,55 @@ namespace SparksToothChart {
 					}
 					if(line.StartsWith("f")) {//face. Usually 4 vertices, but not always.
 						items=line.Split(new char[] { ' ' });
-						//face=new Face();
-						//VertexNormal vertnorm;
-						//int vertIdx;
-						//int normIdx;
-						//face=new int[items.Length-1][];
 						face=new Face();
-						//Todo: Load some of these backwards for flipping, so they'll still be counterclockwise.
-						//Todo: convert to triangles
-						for(int i=0;i<items.Length-1;i++){//face.GetLength(0);i++) {
-							subitems=items[i+1].Split(new char[] { '/' });// eg: 9//9  this is an index to a given vertex/normal.
-							//vertnorm=new VertexNormal();//unlike the old way of just storing idxs, we will actually store vertices.
-							//vertIdx=Convert.ToInt32(subitems[0])-1;
-							//normIdx=Convert.ToInt32(subitems[2])-1;
-							//vertnorm.Vertex=verts[vertIdx];
-							//vertnorm.Normal=norms[normIdx];
+						VertexNormal vertnorm;
+						int vertIdx;
+						int normIdx;
+							//int[items.Length-1][];
+						//do we need to load these backwards for flipping, so they'll still be counterclockwise?
+						//It seems to work anyway, but it's something to keep in mind for later.
+						for(int i=1;i<items.Length;i++){//face.GetLength(0);i++) {
+							subitems=items[i].Split(new char[] { '/' });// eg: 9//9  this is an index to a given vertex/normal.
+							vertnorm=new VertexNormal();//unlike the old way of just storing idxs, we will actually store vertices.
+							vertIdx=Convert.ToInt32(subitems[0])-1;
+							normIdx=Convert.ToInt32(subitems[2])-1;
+							vertnorm.Vertex=verts[vertIdx];
+							vertnorm.Normal=norms[normIdx];
 							//face[i]=new int[2];
 							//face[i][0]=Convert.ToInt32(subitems[0])-1;//vertex
 							//face[i][1]=Convert.ToInt32(subitems[2])-1;//normal
-							//face.IndexListVertices.Add(vertIdx);//GetIndexForVertNorm(vertnorm));
-							//face.IndexListNormals.Add(normIdx);
-							face.IndexListVertices.Add(Convert.ToInt32(subitems[0])-1);
-							face.IndexListNormals.Add(Convert.ToInt32(subitems[2])-1);
+							face.IndexList.Add(GetIndexForVertNorm(vertnorm));
 						}
-						listFaces.Add(face);
 						//ALf.Add(face);
-						//faces.Add(face);
+						faces.Add(face);
 						continue;
 					}
 				}//while readline
 				//For the very last group, move all faces into the group
-				group.Faces=new List<Face>();//int[listFaces.Count][][];//List<Face>(faces);//new int[ALf.Count][][];
-				for(int i=0;i<listFaces.Count;i++){//group.Faces.Count;i++){//.GetLength(0);i++) {
-					//group.Faces[i]=new int[listFaces[i].IndexListVertices.Count][];//((int[][])ALf[i]).Length][];
-					face=new Face();
-					for(int j=0;j<listFaces[i].IndexListVertices.Count;j++){//group.Faces[i].Length;j++) {//loop through vertices for the face
-						//group.Faces[i][j]=new int[2];
-						//group.Faces[i][j][0]=listFaces[i].IndexListVertices[j];//((int[][])ALf[i])[j][0];//vertex
-						//group.Faces[i][j][1]=listFaces[i].IndexListNormals[j];//((int[][])ALf[i])[j][1];//normal
-						face.IndexListVertices.Add(listFaces[i].IndexListVertices[j]);
-						face.IndexListNormals.Add(listFaces[i].IndexListNormals[j]);
-					}
-					group.Faces.Add(face);
-				}
+				group.Faces=new List<Face>(faces);//new int[ALf.Count][][];
+				//for(int i=0;i<group.Faces.GetLength(0);i++) {
+				//	group.Faces[i]=new int[((int[][])ALf[i]).Length][];
+				//	for(int j=0;j<group.Faces[i].Length;j++) {//loop through vertices for the face
+				//		group.Faces[i][j]=new int[2];
+				//		group.Faces[i][j][0]=((int[][])ALf[i])[j][0];//vertex
+				//		group.Faces[i][j][1]=((int[][])ALf[i])[j][1];//normal
+				//	}
+				//}
 				//move the last group into the AL
 				Groups.Add(group);
 			}
-			Vertices=new List<Vertex3f>();
-			for(int i=0;i<listV.Count;i++) {
-				Vertices.Add(listV[i]);
-			}
-			Normals=new List<Vertex3f>();
-			for(int i=0;i<listN.Count;i++) {
-				Normals.Add(listN[i]);
-			}
 			/*
-			Vertices=new float[listV.Count][];//float[verts.Count][];//ALv.Count][];
+			Vertices=new float[verts.Count][];//ALv.Count][];
 			for(int i=0;i<Vertices.GetLength(0);i++) {
-				Vertices[i]=listV[i].GetFloatArray();//(float[])ALv[i];
+				Vertices[i]=(float[])ALv[i];
 			}
-			Normals=new float[listN.Count][];//float[ALvn.Count][];
+			Normals=new float[ALvn.Count][];
 			for(int i=0;i<Normals.GetLength(0);i++) {
-				Normals[i]=listN[i].GetFloatArray();//(float[])ALvn[i];
+				Normals[i]=(float[])ALvn[i];
 			}*/
 			//MessageBox.Show(Vertices[2,2].ToString());
 		}
 
-		/*
 		///<summary>Tries to find an existing VertexNormal in the list for this tooth.  If it can, then it returns that index.  If it can't then it adds this VertexNormal to the list and returns the last index.</summary>
 		private int GetIndexForVertNorm(VertexNormal vertnorm) {
 			//if(VertexNormals
@@ -779,7 +749,7 @@ namespace SparksToothChart {
 			//couldn't find
 			VertexNormals.Add(vertnorm);
 			return VertexNormals.Count-1;
-		}*/
+		}
 
 		///<summary>For any given tooth, there may only be one line in the returned list, or some teeth might have a few lines representing the root canals.</summary>
 		public List<Line> GetRctLines() {

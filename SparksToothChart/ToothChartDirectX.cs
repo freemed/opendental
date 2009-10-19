@@ -37,8 +37,7 @@ namespace SparksToothChart {
 				}
 				//tooth=new ToothGraphic("implant");
 				//ListToothGraphics.Add(tooth);
-			} 
-			else {//list was already initially filled, but now user needs to reset it.
+			} else {//list was already initially filled, but now user needs to reset it.
 				for(int i=0;i<ListToothGraphics.Count;i++) {//loop through all perm and pri teeth.
 					ListToothGraphics[i].Reset();
 				}
@@ -61,7 +60,7 @@ namespace SparksToothChart {
 				for(int j=0;j<tooth.Groups.Count;j++) {
 					ToothGroup group=tooth.Groups[j];
 					//group.PaintColor=Color.FromArgb(50+j*10,50+j*10,50+j*10);//TODO: This line is for debugging only!
-					group.PrepareForDirectX(device);//,tooth.VertexNormals);
+					group.PrepareForDirectX(device,tooth.VertexNormals);
 				}
 			}
 		}
@@ -112,8 +111,7 @@ namespace SparksToothChart {
 					toothOrient=Matrix.Identity;
 					toothOrient.Translate(new Vector3((toothNum-8.5f)*toothSpaceWidth,12,0));
 					toothOrientations.Add(rotMat*toothOrient);
-				}
-				else{//Lower
+				}else{//Lower
 					//Orientation for lower teeth un-rotated.
 					Matrix toothOrient=Matrix.Identity;
 					toothOrient.Translate(new Vector3((24.5f-toothNum)*toothSpaceWidth,-40,0));
@@ -131,8 +129,7 @@ namespace SparksToothChart {
 						ToothGroup group=tooth.Groups[j];
 						device.SetStreamSource(0,group.VertexBuffer,0);
 						device.Indices=group.facesDirectX;
-//Need to fix this too.
-//device.DrawIndexedPrimitives(PrimitiveType.TriangleList,0,0,tooth.VertexNormals.Count,0,group.NumIndicies/3);
+						device.DrawIndexedPrimitives(PrimitiveType.TriangleList,0,0,tooth.VertexNormals.Count,0,group.NumIndicies/3);
 					}
 				}
 			}
