@@ -145,21 +145,6 @@ namespace SparksToothChart {
 			}
 		}
 
-		/*
-		///<summary>Default is true.  In simpleMode, OpenGL does not even get loaded.</summary>
-		public bool SimpleMode {
-			get {
-				return simpleMode;
-			}
-			set {
-				if(Environment.OSVersion.Platform==PlatformID.Unix){
-					return;//disallow changing simpleMode if platform is Unix
-				}
-				simpleMode=value;
-				ResetControls();
-			}
-		}*/
-
 		///<summary>Set to true when using hardware rendering in OpenGL, and false otherwise. This will have no effect when in simple 2D graphics mode.</summary>
 		public bool UseHardware{
 			get{

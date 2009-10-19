@@ -560,11 +560,11 @@ namespace SparksToothChart {
 				Gl.glHint(Gl.GL_POLYGON_SMOOTH_HINT,Gl.GL_NICEST);
 				for(int i=0;i<group.Faces.Count;i++){//  .GetLength(0);i++) {//loop through each face
 					Gl.glBegin(Gl.GL_POLYGON);
-					for(int j=0;j<group.Faces[i].IndexList.Count;j++){//.Length;j++) {//loop through each vertex
-						//The index for both will always be the same because we enforce a 1:1 relationship.
-						//We show grabbing a float[3], but we could just as easily use the index itself.
-						Gl.glVertex3fv(ListToothGraphics["implant"].VertexNormals[group.Faces[i].IndexList[j]].Vertex.GetFloatArray());//Vertices[group.Faces[i][j][0]]);
-						Gl.glNormal3fv(ListToothGraphics["implant"].VertexNormals[group.Faces[i].IndexList[j]].Normal.GetFloatArray()); //.Normals[group.Faces[i][j][1]]);
+					for(int j=0;j<group.Faces[i].IndexListVertices.Count;j++){//.Length;j++) {//loop through each vertex
+						Gl.glVertex3fv(ListToothGraphics["implant"].Vertices[group.Faces[i].IndexListVertices[j]].GetFloatArray());
+						//Gl.glVertex3fv(ListToothGraphics["implant"].VertexNormals[group.Faces[i].IndexList[j]].Vertex.GetFloatArray());//Vertices[group.Faces[i][j][0]]);
+						Gl.glNormal3fv(ListToothGraphics["implant"].Normals[group.Faces[i].IndexListVertices[j]].GetFloatArray());
+						//Gl.glNormal3fv(ListToothGraphics["implant"].VertexNormals[group.Faces[i].IndexList[j]].Normal.GetFloatArray()); //.Normals[group.Faces[i][j][1]]);
 					}
 					Gl.glEnd();
 				}
@@ -1045,11 +1045,11 @@ namespace SparksToothChart {
 					if(group!=null){
 						for(int f=0;f<group.Faces.Count;f++){//.GetLength(0);f++) {//loop through each face
 							Gl.glBegin(Gl.GL_POLYGON);
-							for(int j=0;j<group.Faces[f].IndexList.Count;j++) {//.Length;j++) {//loop through each vertex
-								//The index for both will always be the same because we enforce a 1:1 relationship.
-								//We show grabbing a float[3], but we could just as easily use the index itself.
-								Gl.glVertex3fv(toothGraphic.VertexNormals[group.Faces[f].IndexList[j]].Vertex.GetFloatArray());
-								Gl.glNormal3fv(toothGraphic.VertexNormals[group.Faces[f].IndexList[j]].Normal.GetFloatArray()); 
+							for(int j=0;j<group.Faces[f].IndexListVertices.Count;j++) {//.Length;j++) {//loop through each vertex
+								Gl.glVertex3fv(toothGraphic.Vertices[group.Faces[f].IndexListVertices[j]].GetFloatArray());
+								//Gl.glVertex3fv(toothGraphic.VertexNormals[group.Faces[f].IndexList[j]].Vertex.GetFloatArray());
+								Gl.glNormal3fv(toothGraphic.Normals[group.Faces[f].IndexListNormals[j]].GetFloatArray()); 
+								//Gl.glNormal3fv(toothGraphic.VertexNormals[group.Faces[f].IndexList[j]].Normal.GetFloatArray()); 
 							}
 							//for(int v=0;v<group.Faces[f].VertexNormals.Count;v++){//  .Length;v++) {//loop through each vertex
 							//	Gl.glNormal3fv(toothGraphic.Normals[group.Faces[f][v][1]]);

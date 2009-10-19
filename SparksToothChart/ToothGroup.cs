@@ -14,13 +14,10 @@ namespace SparksToothChart {
 		public Color PaintColor;
 		///<summary></summary>
 		public ToothGroupType GroupType;
-		///<summary>dim 1=the face. dim 2=the vertex. dim 3 always has length=2, with 1st vertex, and 2nd normal.</summary>
-		//public int[][][] Faces;
 		public List<Face> Faces;
 		///<summary>Corresponds to the Faces list.</summary>
 		public IndexBuffer facesDirectX;
-		///<summary>Corresponds to the number of indicies referenced by the facesDirectX IndexBuffer. This relates to triangles,
-		///not to Polygons as in the Faces list. Must be a multiple of 3.</summary>
+		///<summary>Corresponds to the number of indicies referenced by the facesDirectX IndexBuffer. This relates to triangles, not to Polygons as in the Faces list. Must be a multiple of 3.</summary>
 		public int NumIndicies=0;
 		///<summary>Corresponds to VertexNormal list, but only for the vertifies in this group and is stored in DirectX native vertex format.</summary>
 		public VertexBuffer VertexBuffer;
@@ -35,8 +32,9 @@ namespace SparksToothChart {
 			public int color;
 		}
 
-		public void PrepareForDirectX(Device device,List <VertexNormal> VertexNormals){
-			//Figure out which verticies this group uses.
+		public void PrepareForDirectX(Device device){//,List <VertexNormal> VertexNormals){
+			/*I broke this.  Didn't have time to fix it.
+			//Figure out which vertices this group uses.
 			bool[] usedVerts=new bool[VertexNormals.Count];
 			for(int i=0;i<Faces.Count;i++){
 				for(int j=0;j<Faces[i].IndexList.Count;j++){
@@ -49,11 +47,12 @@ namespace SparksToothChart {
 				if(usedVerts[i]){
 					indexMap[i]=v++;
 					numVerts++;
-				}else{
+				}
+				else{
 					indexMap[i]=-1;
 				}
 			}
-			//Prepare the verticies into a vertex buffer.
+			//Prepare the vertices into a vertex buffer.
 			VertNormX[] verts=new VertNormX[numVerts];
 			for(int i=0;i<indexMap.Length;i++){
 				if(indexMap[i]>=0){
@@ -69,7 +68,7 @@ namespace SparksToothChart {
 			VertexBuffer=new VertexBuffer(typeof(CustomVertex.PositionNormalColored),CustomVertex.PositionNormalColored.StrideSize*numVerts,
 				device,Usage.WriteOnly,CustomVertex.PositionNormalColored.Format,Pool.Managed);
 			VertexBuffer.SetData(verts,0,LockFlags.None);			
-			//Prepare the indicies into an index buffer.
+			//Prepare the indices into an index buffer.
 			//When drawing with a single index buffer inside of DirectX, all primitives must be the same type.
 			//Furthermore, there are no polygons inside of DirectX, only triangles. Therefore, at this point
 			//we break down all faces from polygons into triangles inside of the index buffer so all faces
@@ -88,6 +87,7 @@ namespace SparksToothChart {
 			facesDirectX=new IndexBuffer(typeof(int),indicies.Length,device,Usage.None,Pool.Managed);
 			facesDirectX.SetData(indicies,0,LockFlags.None);
 			NumIndicies=indicies.Length;
+			*/
 		}
 
 		public override string ToString() {

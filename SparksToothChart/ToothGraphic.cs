@@ -15,7 +15,9 @@ namespace SparksToothChart {
 	///<summary>A tooth graphic holds all the data for one tooth to be drawn.</summary>
 	public class ToothGraphic {
 		private string toothID;
-		public List<VertexNormal> VertexNormals;
+		//public List<VertexNormal> VertexNormals;
+		public List<Vertex3f> Vertices;
+		public List<Vertex3f> Normals;
 		//<summary>second dim is always 3.</summary>
 		//public float[][] Vertices;
 		//<summary>second dim is always 3.</summary>
@@ -72,7 +74,7 @@ namespace SparksToothChart {
 				throw new ApplicationException("Invalid tooth ID");
 			}
 			toothID=tooth_id;
-			VertexNormals=new List<VertexNormal>();
+			//VertexNormals=new List<VertexNormal>();
 			//if(!simplemode){
 				ImportObj();
 			//}
@@ -557,9 +559,8 @@ namespace SparksToothChart {
 			//ArrayList ALv=new ArrayList();//vertices
 			//ArrayList ALvn=new ArrayList();//vertex normals
 			//There will not necessarily be the same number of vertices as normals.
-			//But as they get paired up later, we will create a 1:1 relationship.
-			List<Vertex3f> verts=new List<Vertex3f>();
-			List<Vertex3f> norms=new List<Vertex3f>();
+			Vertices=new List<Vertex3f>();
+			Normals=new List<Vertex3f>();
 			Groups=new List<ToothGroup>();
 			//ArrayList ALf=new ArrayList();//faces always part of a group
 			List<Face> faces=new List<Face>();
@@ -592,7 +593,7 @@ namespace SparksToothChart {
 						vertex.Y=Convert.ToSingle(items[2],CultureInfo.InvariantCulture);
 						vertex.Z=Convert.ToSingle(items[3],CultureInfo.InvariantCulture);
 						//ALv.Add(vertex);
-						verts.Add(vertex);
+						Vertices.Add(vertex);
 						continue;
 					}
 					if(line.StartsWith("vn")) {//vertex normal
@@ -607,7 +608,7 @@ namespace SparksToothChart {
 						vertex.Y=Convert.ToSingle(items[2],CultureInfo.InvariantCulture);
 						vertex.Z=Convert.ToSingle(items[3],CultureInfo.InvariantCulture);
 						//ALvn.Add(vertex);
-						norms.Add(vertex);
+						Normals.Add(vertex);
 						continue;
 					}
 					if(line.StartsWith("g")) {//group
@@ -686,23 +687,24 @@ namespace SparksToothChart {
 					if(line.StartsWith("f")) {//face. Usually 4 vertices, but not always.
 						items=line.Split(new char[] { ' ' });
 						face=new Face();
-						VertexNormal vertnorm;
+						//VertexNormal vertnorm;
 						int vertIdx;
 						int normIdx;
 							//int[items.Length-1][];
-						//do we need to load these backwards for flipping, so they'll still be counterclockwise?
-						//It seems to work anyway, but it's something to keep in mind for later.
-						for(int i=1;i<items.Length;i++){//face.GetLength(0);i++) {
-							subitems=items[i].Split(new char[] { '/' });// eg: 9//9  this is an index to a given vertex/normal.
-							vertnorm=new VertexNormal();//unlike the old way of just storing idxs, we will actually store vertices.
+						//Todo: Load some of these backwards for flipping, so they'll still be counterclockwise.
+						//Todo: convert to triangles
+						for(int i=0;i<items.Length-1;i++){//face.GetLength(0);i++) {
+							subitems=items[i+1].Split(new char[] { '/' });// eg: 9//9  this is an index to a given vertex/normal.
+							//vertnorm=new VertexNormal();//unlike the old way of just storing idxs, we will actually store vertices.
 							vertIdx=Convert.ToInt32(subitems[0])-1;
 							normIdx=Convert.ToInt32(subitems[2])-1;
-							vertnorm.Vertex=verts[vertIdx];
-							vertnorm.Normal=norms[normIdx];
+							//vertnorm.Vertex=verts[vertIdx];
+							//vertnorm.Normal=norms[normIdx];
 							//face[i]=new int[2];
 							//face[i][0]=Convert.ToInt32(subitems[0])-1;//vertex
 							//face[i][1]=Convert.ToInt32(subitems[2])-1;//normal
-							face.IndexList.Add(GetIndexForVertNorm(vertnorm));
+							face.IndexListVertices.Add(vertIdx);//GetIndexForVertNorm(vertnorm));
+							face.IndexListNormals.Add(normIdx);
 						}
 						//ALf.Add(face);
 						faces.Add(face);
@@ -734,6 +736,7 @@ namespace SparksToothChart {
 			//MessageBox.Show(Vertices[2,2].ToString());
 		}
 
+		/*
 		///<summary>Tries to find an existing VertexNormal in the list for this tooth.  If it can, then it returns that index.  If it can't then it adds this VertexNormal to the list and returns the last index.</summary>
 		private int GetIndexForVertNorm(VertexNormal vertnorm) {
 			//if(VertexNormals
@@ -749,7 +752,7 @@ namespace SparksToothChart {
 			//couldn't find
 			VertexNormals.Add(vertnorm);
 			return VertexNormals.Count-1;
-		}
+		}*/
 
 		///<summary>For any given tooth, there may only be one line in the returned list, or some teeth might have a few lines representing the root canals.</summary>
 		public List<Line> GetRctLines() {
