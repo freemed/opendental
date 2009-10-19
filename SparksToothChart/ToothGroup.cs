@@ -14,6 +14,8 @@ namespace SparksToothChart {
 		public Color PaintColor;
 		///<summary></summary>
 		public ToothGroupType GroupType;
+		//<summary>dim 1=the face. dim 2=the vertex. dim 3 always has length=2, with 1st vertex, and 2nd normal.</summary>
+		//public int[][][] Faces;
 		public List<Face> Faces;
 		///<summary>Corresponds to the Faces list.</summary>
 		public IndexBuffer facesDirectX;
@@ -90,9 +92,10 @@ namespace SparksToothChart {
 			*/
 		}
 
+		/*
 		public override string ToString() {
 			return GroupType.ToString()+". Faces:"+Faces.Count.ToString();
-		}
+		}*/
 
 
 	}
