@@ -1160,20 +1160,19 @@ namespace OpenDental{
 			PerioExamCur.ExamDate=DateTime.Today;
 			PerioExamCur.ProvNum=PatCur.PriProv;
 			PerioExams.Insert(PerioExamCur);
-			ArrayList skippedTeeth=new ArrayList();//int 1-32
+			List<int> skippedTeeth=new List<int>();//int 1-32
 			if(PerioExams.ListExams.Count==0){
 				for(int i=0;i<MissingTeeth.Count;i++){
 					if(((string)MissingTeeth[i]).CompareTo("A")<0//if a number
 						|| ((string)MissingTeeth[i]).CompareTo("Z")>0)
 					{
-						skippedTeeth.Add(PIn.PLong((string)MissingTeeth[i]));
+						skippedTeeth.Add(PIn.PInt((string)MissingTeeth[i]));
 					}
 				}
 			}
 			else{
 				//set skipped teeth based on the last exam in the list: 
-				skippedTeeth=PerioMeasures.GetSkipped
-					(PerioExams.ListExams[PerioExams.ListExams.Count-1].PerioExamNum);
+				skippedTeeth=PerioMeasures.GetSkipped(PerioExams.ListExams[PerioExams.ListExams.Count-1].PerioExamNum);
 			}
 			PerioMeasures.SetSkipped(PerioExamCur.PerioExamNum,skippedTeeth);
 			RefreshListExams();

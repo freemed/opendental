@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -77,7 +78,7 @@ namespace OpenDental
 		///<summary>Valid values 1-32 int. User can highlight teeth to mark them as skip tooth. The highighting is done completely separately from the normal highlighting functionality because multiple teeth can be highlighted.</summary>
 		private ArrayList selectedTeeth;
 		///<summary>Valid values 1-32 int. Applies only to the current exam. Loaded from the db durring LoadData().</summary>
-		private ArrayList skippedTeeth;
+		private List<int> skippedTeeth;
 		///<summary></summary>
 		[Category("Property Changed"),Description("Occurs when the control needs to change the auto advance direction to right.")]
 		public event EventHandler DirectionChangedRight = null;
@@ -769,7 +770,7 @@ namespace OpenDental
 		public void LoadData(){
 			ClearDataArray();
 			selectedTeeth=new ArrayList();
-			skippedTeeth=new ArrayList();
+			skippedTeeth=new List<int>();
 			//reset all HasChanged values to false
 			HasChanged=new bool[PerioMeasures.List.GetLength(1),33]; 
 			if(selectedExam==-1){
@@ -1706,11 +1707,11 @@ namespace OpenDental
 				return;
 			}
 			for(int i=0;i<selectedTeeth.Count;i++){
-				if(skippedTeeth.Contains(selectedTeeth[i])){//if the tooth was already marked skipped
-					skippedTeeth.Remove(selectedTeeth[i]);
+				if(skippedTeeth.Contains((int)selectedTeeth[i])){//if the tooth was already marked skipped
+					skippedTeeth.Remove((int)selectedTeeth[i]);
 				}
 				else{//tooth was not already marked skipped
-					skippedTeeth.Add(selectedTeeth[i]);
+					skippedTeeth.Add((int)selectedTeeth[i]);
 				}
 			}
 			PerioMeasures.SetSkipped(perioExamNum,skippedTeeth);

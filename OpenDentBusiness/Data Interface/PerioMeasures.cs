@@ -83,7 +83,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>For the current exam, clears existing skipped teeth and resets them to the specified skipped teeth. The ArrayList valid values are 1-32 int.</summary>
-		public static void SetSkipped(long perioExamNum,ArrayList skippedTeeth) {
+		public static void SetSkipped(long perioExamNum,List<int> skippedTeeth) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),perioExamNum,skippedTeeth);
 				return;
@@ -102,7 +102,7 @@ namespace OpenDentBusiness{
 				Cur=new PerioMeasure();
 				Cur.PerioExamNum=perioExamNum;
 				Cur.SequenceType=PerioSequenceType.SkipTooth;
-				Cur.IntTooth=(int)skippedTeeth[i];
+				Cur.IntTooth=skippedTeeth[i];
 				Cur.ToothValue=1;
 				Cur.MBvalue=-1;
 				Cur.Bvalue=-1;
@@ -115,20 +115,20 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Used in FormPerio.Add_Click. For the specified exam, gets a list of all skipped teeth. The ArrayList valid values are 1-32 int.</summary>
-		public static ArrayList GetSkipped(long perioExamNum) {
+		public static List<int> GetSkipped(long perioExamNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<ArrayList>(MethodBase.GetCurrentMethod(),perioExamNum);
+				return Meth.GetObject<List<int>>(MethodBase.GetCurrentMethod(),perioExamNum);
 			}
 			string command = "SELECT IntTooth FROM periomeasure WHERE "
 				+"SequenceType = '"+POut.PInt((int)PerioSequenceType.SkipTooth)+"' "
 				+"AND PerioExamNum = '"+perioExamNum.ToString()+"' "
 				+"AND ToothValue = '1'";
 			DataTable table=Db.GetTable(command);
-			ArrayList retList=new ArrayList();
+			List<int> retVal=new List<int>();
 			for(int i=0;i<table.Rows.Count;i++){
-				retList.Add(PIn.PInt(table.Rows[i][0].ToString()));
+				retVal.Add(PIn.PInt(table.Rows[i][0].ToString()));
 			}
-			return retList;
+			return retVal;
 		}
 
 		///<summary>Gets all measurements for the current patient, then organizes them by exam and sequence.</summary>
