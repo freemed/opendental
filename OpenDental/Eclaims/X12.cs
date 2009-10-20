@@ -250,7 +250,7 @@ namespace OpenDental.Eclaims
 					//So providers shouldn't move between clinics.  We will use the clinic of the first claim, which is arbitrary.
 					//An improvement would be to generate another loop if provider changes address for different claims.  Complicated.
 					if(!PrefC.GetBool(PrefName.EasyNoClinics)){//if using clinics
-						Claim clm=Claims.GetClaim((int)claimAr[4,i]);
+						Claim clm=Claims.GetClaim((long)claimAr[4,i]);
 						long clinicNum=clm.ClinicNum;
 						clinic=Clinics.GetClinic(clinicNum);
 					}
@@ -260,7 +260,7 @@ namespace OpenDental.Eclaims
 						+"*"//HL02: No parent. Not used
 						+"20*"//HL03: Heirarchical level code. 20=Information source
 						+"1~");//HL04: Heirarchical child code. 1=child HL present
-					Provider billProv=ProviderC.ListLong[Providers.GetIndexLong((int)claimAr[1,i])];
+					Provider billProv=ProviderC.ListLong[Providers.GetIndexLong((long)claimAr[1,i])];
 					if(isMedical){
 						//2000A PRV: Provider Specialty Information
 						seg++;
@@ -396,7 +396,7 @@ namespace OpenDental.Eclaims
 					HLcount++;
 				}
 				#endregion Billing Provider
-				claim=Claims.GetClaim((int)claimAr[4,i]);				
+				claim=Claims.GetClaim((long)claimAr[4,i]);				
 				insPlan=InsPlans.GetPlan(claim.PlanNum,new List <InsPlan> ());
 				//insPlan could be null if db corruption. No error checking for that
 				if(claim.PlanNum2>0){
