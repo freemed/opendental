@@ -54,6 +54,7 @@ namespace SparksToothChart {
 			pp.EnableAutoDepthStencil=true;
 			pp.AutoDepthStencilFormat=DepthFormat.D16;//Z-buffer depth of 16 bits.
 			pp.DeviceWindowHandle=this.Handle;
+			pp.MultiSample=MultiSampleType.FourSamples;//Anti-alias settings.
 			device=new Device(0,DeviceType.Hardware,this,CreateFlags.SoftwareVertexProcessing,pp);
 			device.DeviceReset+=new EventHandler(this.OnDeviceReset);
 			OnDeviceReset(device,null);
@@ -97,16 +98,18 @@ namespace SparksToothChart {
 		}
 
 		protected void Render() {
-			Vector3 cameraPos=new Vector3(0,0,0);
 			//Set the view and projection matricies for the camera.
 			float HeightProjection=WidthProjection*this.Height/this.Width;
 			device.Transform.Projection=Matrix.OrthoLH(WidthProjection,HeightProjection,-WidthProjection/2,WidthProjection/2);
 			//viewport transformation not used. Default is to fill entire control.
-			device.RenderState.CullMode=Cull.None;
+			device.RenderState.CullMode=Cull.None;//Do not cull triangles. Our triangles are too small for this feature to work reliably.
 			device.RenderState.ZBufferEnable=true;
 			device.RenderState.ZBufferFunction=Compare.Less;
 			device.RenderState.Lighting=true;
 			device.RenderState.SpecularEnable=true;
+			//Blend mode settings.
+			device.RenderState.AlphaTestEnable=false;//No blending.
+			device.RenderState.AntiAliasedLineEnable=true;
 			//Set properties for light 0.
 			device.Lights[0].Type=LightType.Directional;
 			device.Lights[0].Ambient=Color.FromArgb(255,51,51,51);
@@ -114,8 +117,7 @@ namespace SparksToothChart {
 			device.Lights[0].Specular=Color.FromArgb(255,255,255,255);
 			device.Lights[0].Direction=new Vector3(-0.5f,0.1f,1f);
 			device.Lights[0].Enabled=true;
-			//Blend mode settings.
-			device.RenderState.AlphaTestEnable=false;
+			//Draw
 			DrawScene();
 		}
 
