@@ -120,13 +120,13 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<ArrayList>(MethodBase.GetCurrentMethod(),perioExamNum);
 			}
 			string command = "SELECT IntTooth FROM periomeasure WHERE "
-				+"SequenceType = '"+POut.PLong((int)PerioSequenceType.SkipTooth)+"' "
+				+"SequenceType = '"+POut.PInt((int)PerioSequenceType.SkipTooth)+"' "
 				+"AND PerioExamNum = '"+perioExamNum.ToString()+"' "
 				+"AND ToothValue = '1'";
 			DataTable table=Db.GetTable(command);
 			ArrayList retList=new ArrayList();
 			for(int i=0;i<table.Rows.Count;i++){
-				retList.Add(PIn.PLong(table.Rows[i][0].ToString()));
+				retList.Add(PIn.PInt(table.Rows[i][0].ToString()));
 			}
 			return retList;
 		}
