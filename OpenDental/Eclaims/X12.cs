@@ -1659,7 +1659,7 @@ namespace OpenDental.Eclaims
 				strb.Append("Clearinghouse GS03");
 			}
 			object[,] claimAr=Claims.GetX12TransactionInfo(((ClaimSendQueueItem)queueItem).ClaimNum);//just to get prov. Needs work.
-			Provider billProv=ProviderC.ListLong[Providers.GetIndexLong((int)claimAr[1,0])];
+			Provider billProv=ProviderC.ListLong[Providers.GetIndexLong((long)claimAr[1,0])];
 			Provider treatProv=ProviderC.ListLong[Providers.GetIndexLong(claim.ProvTreat)];
 			InsPlan insPlan=InsPlans.GetPlan(claim.PlanNum,new List <InsPlan> ());
 			if(insPlan.IsMedical && !PrefC.GetBool(PrefName.MedicalEclaimsEnabled)) {
