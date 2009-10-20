@@ -244,6 +244,7 @@ namespace OpenDental{
 			for(int i=0;i<6;i++){//add columns
 				report.TableQ.Columns.Add(new System.Data.DataColumn());//blank columns
 			}
+			report.InitializeColumns();
 			for(int i=0;i<tableTemp.Rows.Count;i++){//loop through data rows
 				DataRow row = report.TableQ.NewRow();//create new row called 'row' based on structure of TableQ
 				//start filling 'row'. First column is carrier:
@@ -268,7 +269,6 @@ namespace OpenDental{
 				report.ColTotal[5]+=PIn.PDouble(tableTemp.Rows[i][6].ToString());
 				report.TableQ.Rows.Add(row);
       }
-			report.InitializeColumns();
 			FormQuery2.ResetGrid();//this is a method in FormQuery;
 			report.Title="OUTSTANDING INSURANCE CLAIMS";
 			report.SubTitle.Add(PrefC.GetString(PrefName.PracticeTitle));
