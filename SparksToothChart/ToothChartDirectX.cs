@@ -17,6 +17,7 @@ namespace SparksToothChart {
 		private static List <ToothGraphic> ListToothGraphics=null;
 		///<summary>This is a reference to the TcData object that's at the wrapper level.</summary>
 		public ToothChartData TcData;
+		private float WidthProjection;
 
 		public ToothChartDirectX() {
 			InitializeComponent();
@@ -42,6 +43,7 @@ namespace SparksToothChart {
 					ListToothGraphics[i].Reset();
 				}
 			}
+			WidthProjection=130;
 		}
 
 		///<summary>Must be called after the ToothChartDirectX control has been added to a form and should be called before it is drawn the first time.</summary>
@@ -70,74 +72,17 @@ namespace SparksToothChart {
 			device=sender as Device;
 		}
 
-		protected void Render(){
-			Vector3 cameraPos=new Vector3(0,0,-150);
-			//Set the view and projection matricies for the camera.
-			device.Transform.Projection=Matrix.PerspectiveFovLH((float)Math.PI/3,1.0f,1.0f,10000.0f);
-			device.Transform.View=Matrix.LookAtLH(cameraPos,new Vector3(cameraPos.X,cameraPos.Y,cameraPos.Z+1),new Vector3(0.0f,1.0f,0.0f));
-			device.Transform.World=Matrix.Identity;
-			device.RenderState.CullMode=Cull.None;
-			device.RenderState.ZBufferEnable=true;
-			device.RenderState.ZBufferFunction=Compare.Less;
-			device.RenderState.Lighting=true;
-			device.RenderState.SpecularEnable=false;
-			//Set properties for light 0.
-			device.Lights[0].Type=LightType.Directional;
-			device.Lights[0].Ambient=Color.Gray;
-			device.Lights[0].Diffuse=Color.White;
-			device.Lights[0].Direction=new Vector3(0,0,1);
-			device.Lights[0].Enabled=true;
-			//Blend mode settings.
-			device.RenderState.AlphaTestEnable=false;
-			//device.RenderState.AlphaFunction=Microsoft.DirectX.Direct3D.Compare.Always;
-			//device.RenderState.SourceBlend=Microsoft.DirectX.Direct3D.Blend.SourceAlpha;
-			//device.RenderState.DestinationBlend=Microsoft.DirectX.Direct3D.Blend.DestinationAlpha;
-			//device.RenderState.AlphaBlendEnable=false;
-			//device.RenderState.AlphaBlendOperation=Microsoft.DirectX.Direct3D.BlendOperation.Add;
-			device.VertexFormat=CustomVertex.PositionNormalColored.Format;
-			for(int i=0;i<ListToothGraphics.Count;i++){
-				ToothGraphic tooth=ListToothGraphics[i];
-				int toothNum=ToothGraphic.IdToInt(tooth.ToothID);
-				const float toothSpaceWidth=10;
-				List <Matrix> toothOrientations=new List<Matrix> ();
-				if(toothNum<17){//Upper
-					//Orientation for upper teeth un-rotated.
-					Matrix toothOrient=Matrix.Identity;
-					toothOrient.Translate(new Vector3((toothNum-8.5f)*toothSpaceWidth,40,0));
-					toothOrientations.Add(toothOrient);
-					//Orientation for rotated upper teeth.
-					Matrix rotMat=Matrix.Identity;
-					rotMat.RotateX(-225);
-					toothOrient=Matrix.Identity;
-					toothOrient.Translate(new Vector3((toothNum-8.5f)*toothSpaceWidth,12,0));
-					toothOrientations.Add(rotMat*toothOrient);
-				}else{//Lower
-					//Orientation for lower teeth un-rotated.
-					Matrix toothOrient=Matrix.Identity;
-					toothOrient.Translate(new Vector3((24.5f-toothNum)*toothSpaceWidth,-40,0));
-					toothOrientations.Add(toothOrient);
-					//Orientation for rotated lower teeth.
-					Matrix rotMat=Matrix.Identity;
-					rotMat.RotateX(225);
-					toothOrient=Matrix.Identity;
-					toothOrient.Translate(new Vector3((24.5f-toothNum)*toothSpaceWidth,-12,0));
-					toothOrientations.Add(rotMat*toothOrient);
-				}
-				for(int k=0;k<toothOrientations.Count;k++){
-					device.Transform.World=toothOrientations[k];
-					for(int j=0;j<tooth.Groups.Count;j++){
-						ToothGroup group=tooth.Groups[j];
-						device.SetStreamSource(0,group.VertexBuffer,0);
-						device.Indices=group.facesDirectX;
-						device.DrawIndexedPrimitives(PrimitiveType.TriangleList,0,0,tooth.VertexNormals.Count,0,group.NumIndicies/3);
-					}
-				}
-			}
+		protected override void OnPaintBackground(PaintEventArgs e) {
+			//Do nothing to eliminate flicker. 
+		}
+
+		protected override void OnSizeChanged(EventArgs e) {
+			Invalidate();//Force the control to redraw. 
 		}
 
 		protected override void OnPaint(PaintEventArgs pe) {
 			//Color backColor=Color.FromArgb(150,145,152);
-			if(device==null){
+			if(device==null) {
 				//When no rendering context has been set, simply display the control
 				//as a black rectangle. This will make the control draw as a blank
 				//rectangle when in the designer. 
@@ -151,12 +96,383 @@ namespace SparksToothChart {
 			device.Present();
 		}
 
-		protected override void OnPaintBackground(PaintEventArgs e) {
-			//Do nothing to eliminate flicker. 
+		protected void Render() {
+			Vector3 cameraPos=new Vector3(0,0,0);
+			//Set the view and projection matricies for the camera.
+			float HeightProjection=WidthProjection*this.Height/this.Width;
+			device.Transform.Projection=Matrix.OrthoLH(WidthProjection,HeightProjection,-WidthProjection/2,WidthProjection/2);
+			//viewport transformation not used. Default is to fill entire control.
+			device.RenderState.CullMode=Cull.None;
+			device.RenderState.ZBufferEnable=true;
+			device.RenderState.ZBufferFunction=Compare.Less;
+			device.RenderState.Lighting=true;
+			device.RenderState.SpecularEnable=true;
+			//Set properties for light 0.
+			device.Lights[0].Type=LightType.Directional;
+			device.Lights[0].Ambient=Color.FromArgb(255,51,51,51);
+			device.Lights[0].Diffuse=Color.FromArgb(255,153,153,153);
+			device.Lights[0].Specular=Color.FromArgb(255,255,255,255);
+			device.Lights[0].Direction=new Vector3(-0.5f,0.1f,1f);
+			device.Lights[0].Enabled=true;
+			//Blend mode settings.
+			device.RenderState.AlphaTestEnable=false;
+			DrawScene();
 		}
 
-		protected override void OnSizeChanged(EventArgs e) {
-			Invalidate();//Force the control to redraw. 
+		private void DrawScene() {
+			//The Z values between OpenGL and DirectX are negated (the axis runs in the opposite direction).
+			//We reflect that difference here by negating the z values for all coordinates.
+			Matrix defOrient=Matrix.Identity;
+			defOrient.Scale(1,1,-1);
+			for(int t=0;t<ListToothGraphics.Count;t++) {//loop through each tooth
+				if(ListToothGraphics[t].ToothID=="implant") {//this is not an actual tooth.
+					continue;
+				}
+				DrawFacialView(ListToothGraphics[t],defOrient);
+				DrawOcclusalView(ListToothGraphics[t],defOrient);
+			}
+			//DrawTextAndLines();
+			//DrawDrawingSegments();
+			//Gl.glFlush();
+		}
+
+		private void DrawFacialView(ToothGraphic toothGraphic,Matrix defOrient) {
+			Matrix toothTrans=Matrix.Identity;//Start with world transform defined by calling function.
+			toothTrans.Translate(GetTransX(toothGraphic.ToothID),
+				GetTransYfacial(toothGraphic.ToothID),
+				0);
+			Matrix rotAndTranUser=RotateAndTranslateUser(toothGraphic);
+			device.Transform.World=rotAndTranUser*toothTrans*defOrient;
+			if(toothGraphic.Visible
+				||(toothGraphic.IsCrown&&toothGraphic.IsImplant)
+				||toothGraphic.IsPontic) {
+				DrawTooth(toothGraphic);
+			}
+			//Gl.glDisable(Gl.GL_DEPTH_TEST);
+			//if(toothGraphic.DrawBigX) {
+			//  Gl.glDisable(Gl.GL_LIGHTING);
+			//  Gl.glEnable(Gl.GL_BLEND);
+			//  //move the bigX 6mm to the Facial so it will paint in front of the tooth
+			//  Gl.glTranslatef(0,0,6f);
+			//  Gl.glBlendFunc(Gl.GL_SRC_ALPHA,Gl.GL_ONE_MINUS_SRC_ALPHA);
+			//  Gl.glLineWidth((float)Width/275f);//1.5f);//thickness of line depends on size of window
+			//  Gl.glColor3f(
+			//    (float)toothGraphic.colorX.R/255f,
+			//    (float)toothGraphic.colorX.G/255f,
+			//    (float)toothGraphic.colorX.B/255f);
+			//  if(ToothGraphic.IsMaxillary(toothGraphic.ToothID)) {
+			//    Gl.glBegin(Gl.GL_LINES);
+			//    Gl.glVertex2f(-2f,12f);
+			//    Gl.glVertex2f(2f,-6f);
+			//    Gl.glEnd();
+			//    Gl.glBegin(Gl.GL_LINES);
+			//    Gl.glVertex2f(2f,12f);
+			//    Gl.glVertex2f(-2f,-6f);
+			//    Gl.glEnd();
+			//  } else {
+			//    Gl.glBegin(Gl.GL_LINES);
+			//    Gl.glVertex2f(-2f,6f);
+			//    Gl.glVertex2f(2f,-12f);
+			//    Gl.glEnd();
+			//    Gl.glBegin(Gl.GL_LINES);
+			//    Gl.glVertex2f(2f,6f);
+			//    Gl.glVertex2f(-2f,-12f);
+			//    Gl.glEnd();
+			//  }
+			//}
+			//Gl.glPopMatrix();//reset to origin
+			//if(toothGraphic.Visible&&toothGraphic.IsRCT) {//draw RCT
+			//  Gl.glPushMatrix();
+			//  Gl.glTranslatef(0,0,10f);//move RCT forward 10mm so it will be visible.
+			//  Gl.glTranslatef(GetTransX(toothGraphic.ToothID),GetTransYfacial(toothGraphic.ToothID),0);
+			//  Gl.glDisable(Gl.GL_LIGHTING);
+			//  Gl.glEnable(Gl.GL_BLEND);
+			//  Gl.glColor3f(
+			//    (float)toothGraphic.colorRCT.R/255f,
+			//    (float)toothGraphic.colorRCT.G/255f,
+			//    (float)toothGraphic.colorRCT.B/255f);
+			//  //.5f);//only 1/2 darkness
+			//  Gl.glBlendFunc(Gl.GL_SRC_ALPHA,Gl.GL_ONE_MINUS_SRC_ALPHA);
+			//  Gl.glLineWidth((float)Width/225f);
+			//  Gl.glPointSize((float)Width/275f);//point is slightly smaller since no antialiasing
+			//  RotateAndTranslateUser(toothGraphic);
+			//  List<Line> lines=toothGraphic.GetRctLines();
+			//  for(int i=0;i<lines.Count;i++) {
+			//    Gl.glBegin(Gl.GL_LINE_STRIP);
+			//    for(int j=0;j<lines[i].Vertices.Count;j++) {
+			//      Gl.glVertex3f(lines[i].Vertices[j].X,lines[i].Vertices[j].Y,lines[i].Vertices[j].Z);
+			//    }
+			//    Gl.glEnd();
+			//  }
+			//  Gl.glPopMatrix();
+			//  //This section is a necessary workaround for OpenGL.
+			//  //It draws a point at each intersection to hide the unsightly transitions between line segments.
+			//  Gl.glPushMatrix();
+			//  Gl.glTranslatef(0,0,10.5f);//move forward 10.5mm so it will cover the lines
+			//  Gl.glTranslatef(GetTransX(toothGraphic.ToothID),GetTransYfacial(toothGraphic.ToothID),0);
+			//  RotateAndTranslateUser(toothGraphic);
+			//  Gl.glDisable(Gl.GL_BLEND);
+			//  for(int i=0;i<lines.Count;i++) {
+			//    Gl.glBegin(Gl.GL_POINTS);
+			//    for(int j=0;j<lines[i].Vertices.Count;j++) {
+			//      //but ignore the first and last.  We are only concerned with where lines meet.
+			//      if(j==0||j==lines[i].Vertices.Count-1) {
+			//        continue;
+			//      }
+			//      Gl.glVertex3f(lines[i].Vertices[j].X,lines[i].Vertices[j].Y,lines[i].Vertices[j].Z);
+			//    }
+			//    Gl.glEnd();
+			//  }
+			//  Gl.glPopMatrix();
+			//}
+			//if(toothGraphic.Visible&&toothGraphic.IsBU) {//BU or Post
+			//  Gl.glPushMatrix();
+			//  Gl.glTranslatef(0,0,13f);//move BU forward 13mm so it will be visible.
+			//  Gl.glTranslatef(GetTransX(toothGraphic.ToothID),GetTransYfacial(toothGraphic.ToothID),0);
+			//  Gl.glDisable(Gl.GL_LIGHTING);
+			//  Gl.glDisable(Gl.GL_BLEND);
+			//  Gl.glColor3f(
+			//    (float)toothGraphic.colorBU.R/255f,
+			//    (float)toothGraphic.colorBU.G/255f,
+			//    (float)toothGraphic.colorBU.B/255f);
+			//  RotateAndTranslateUser(toothGraphic);
+			//  Polygon poly=toothGraphic.GetBUpoly();
+			//  Gl.glBegin(Gl.GL_POLYGON);
+			//  for(int i=0;i<poly.Vertices.Count;i++) {
+			//    Gl.glVertex3f(poly.Vertices[i].X,poly.Vertices[i].Y,poly.Vertices[i].Z);
+			//  }
+			//  Gl.glEnd();
+			//  Gl.glPopMatrix();
+			//}
+			//if(toothGraphic.IsImplant) {
+			//  Gl.glPushMatrix();
+			//  Gl.glTranslatef(GetTransX(toothGraphic.ToothID),//Move the tooth to the correct position for facial view
+			//    GetTransYfacial(toothGraphic.ToothID),
+			//    0);
+			//  RotateAndTranslateUser(toothGraphic);
+			//  if(ToothGraphic.IsMaxillary(toothGraphic.ToothID)) {
+			//    //flip the implant upside down
+			//    Gl.glRotatef(180f,0,0,1f);
+			//  }
+			//  Gl.glEnable(Gl.GL_LIGHTING);
+			//  Gl.glEnable(Gl.GL_BLEND);
+			//  Gl.glEnable(Gl.GL_DEPTH_TEST);
+			//  ToothGroup group=(ToothGroup)ListToothGraphics["implant"].Groups[0];
+			//  float[] material_color=new float[] {
+			//    (float)toothGraphic.colorImplant.R/255f,
+			//    (float)toothGraphic.colorImplant.G/255f,
+			//    (float)toothGraphic.colorImplant.B/255f,
+			//    (float)toothGraphic.colorImplant.A/255f
+			//  };//RGBA
+			//  Gl.glMaterialfv(Gl.GL_FRONT,Gl.GL_SPECULAR,specular_color_normal);
+			//  Gl.glMaterialfv(Gl.GL_FRONT,Gl.GL_SHININESS,shininess);
+			//  Gl.glMaterialfv(Gl.GL_FRONT,Gl.GL_AMBIENT_AND_DIFFUSE,material_color);
+			//  Gl.glBlendFunc(Gl.GL_ONE,Gl.GL_ZERO);
+			//  Gl.glHint(Gl.GL_POLYGON_SMOOTH_HINT,Gl.GL_NICEST);
+			//  for(int i=0;i<group.Faces.Count;i++) {//  .GetLength(0);i++) {//loop through each face
+			//    Gl.glBegin(Gl.GL_POLYGON);
+			//    for(int j=0;j<group.Faces[i].IndexList.Count;j++) {//.Length;j++) {//loop through each vertex
+			//      //The index for both will always be the same because we enforce a 1:1 relationship.
+			//      //We show grabbing a float[3], but we could just as easily use the index itself.
+			//      Gl.glVertex3fv(ListToothGraphics["implant"].VertexNormals[group.Faces[i].IndexList[j]].Vertex.GetFloatArray());//Vertices[group.Faces[i][j][0]]);
+			//      Gl.glNormal3fv(ListToothGraphics["implant"].VertexNormals[group.Faces[i].IndexList[j]].Normal.GetFloatArray()); //.Normals[group.Faces[i][j][1]]);
+			//    }
+			//    Gl.glEnd();
+			//  }
+			//  Gl.glPopMatrix();
+			//}
+		}
+
+		private void DrawOcclusalView(ToothGraphic toothGraphic,Matrix defOrient) {
+			//now the occlusal surface. Notice that it's relative to origin again
+			Matrix toothTrans=Matrix.Identity;//Start with world transform defined by calling function.
+			toothTrans.Translate(GetTransX(toothGraphic.ToothID),
+				GetTransYocclusal(toothGraphic.ToothID),
+				0);
+			Matrix toothRot=Matrix.Identity;
+			if(ToothGraphic.IsMaxillary(toothGraphic.ToothID)) {
+				toothRot.RotateX((float)((-110f*Math.PI)/180f));//rotate angle about line from origin to x,y,z
+			} else {//mandibular
+				if(ToothGraphic.IsAnterior(toothGraphic.ToothID)) {
+					toothRot.RotateX((float)((110f*Math.PI)/180f));
+				} else {
+					toothRot.RotateX((float)((120f*Math.PI)/180f));
+				}
+			}
+			Matrix rotAndTranUser=RotateAndTranslateUser(toothGraphic);
+			device.Transform.World=rotAndTranUser*toothRot*toothTrans*defOrient;
+			if(toothGraphic.Visible//might not be visible if an implant
+				||(toothGraphic.IsCrown&&toothGraphic.IsImplant))//a crown on an implant will paint
+			//pontics won't paint, because tooth is invisible
+			{
+				DrawTooth(toothGraphic);
+			}
+			//Gl.glPopMatrix();//reset to origin
+			//if(toothGraphic.Visible&&
+			//  toothGraphic.IsSealant) {//draw sealant
+			//  Gl.glPushMatrix();
+			//  Gl.glTranslatef(0,0,6f);//move forward 6mm so it will be visible.
+			//  Gl.glTranslatef(GetTransX(toothGraphic.ToothID),GetTransYocclusal(toothGraphic.ToothID),0);
+			//  if(ToothGraphic.IsMaxillary(toothGraphic.ToothID)) {
+			//    Gl.glRotatef(-110f,1f,0,0);//rotate angle about line from origin to x,y,z
+			//  } else {//mandibular
+			//    if(ToothGraphic.IsAnterior(toothGraphic.ToothID)) {
+			//      Gl.glRotatef(110f,1f,0,0);
+			//    } else {
+			//      Gl.glRotatef(120f,1f,0,0);
+			//    }
+			//  }
+			//  Gl.glDisable(Gl.GL_LIGHTING);
+			//  Gl.glEnable(Gl.GL_BLEND);
+			//  Gl.glColor3f(
+			//    (float)toothGraphic.colorSealant.R/255f,
+			//    (float)toothGraphic.colorSealant.G/255f,
+			//    (float)toothGraphic.colorSealant.B/255f);
+			//  //.5f);//only 1/2 darkness
+			//  Gl.glBlendFunc(Gl.GL_SRC_ALPHA,Gl.GL_ONE_MINUS_SRC_ALPHA);
+			//  Gl.glLineWidth((float)Width/225f);
+			//  Gl.glPointSize((float)Width/275f);//point is slightly smaller since no antialiasing
+			//  RotateAndTranslateUser(toothGraphic);
+			//  Line line=toothGraphic.GetSealantLine();
+			//  Gl.glBegin(Gl.GL_LINE_STRIP);
+			//  for(int j=0;j<line.Vertices.Count;j++) {//loop through each vertex
+			//    Gl.glVertex3f(line.Vertices[j].X,line.Vertices[j].Y,line.Vertices[j].Z);
+			//  }
+			//  Gl.glEnd();
+			//  //The next 30 or so lines are all a stupid OpenGL workaround to hide the line intersections with big dots.
+			//  Gl.glPopMatrix();
+			//  //now, draw a point at each intersection to hide the unsightly transitions
+			//  Gl.glPushMatrix();
+			//  //move foward so it will cover the lines
+			//  Gl.glTranslatef(0,0,6.5f);
+			//  Gl.glTranslatef(GetTransX(toothGraphic.ToothID),GetTransYocclusal(toothGraphic.ToothID),0);
+			//  if(ToothGraphic.IsMaxillary(toothGraphic.ToothID)) {
+			//    Gl.glRotatef(-110f,1f,0,0);//rotate angle about line from origin to x,y,z
+			//  } else {//mandibular
+			//    if(ToothGraphic.IsAnterior(toothGraphic.ToothID)) {
+			//      Gl.glRotatef(110f,1f,0,0);
+			//    } else {
+			//      Gl.glRotatef(120f,1f,0,0);
+			//    }
+			//  }
+			//  RotateAndTranslateUser(toothGraphic);
+			//  Gl.glDisable(Gl.GL_BLEND);
+			//  Gl.glBegin(Gl.GL_POINTS);
+			//  for(int j=0;j<line.Vertices.Count;j++) {//loop through each vertex
+			//    //but ignore the first and last.  We are only concerned with where lines meet.
+			//    if(j==0||j==line.Vertices.Count-1) {
+			//      continue;
+			//    }
+			//    Gl.glVertex3f(line.Vertices[j].X,line.Vertices[j].Y,line.Vertices[j].Z);
+			//  }
+			//  Gl.glEnd();
+			//  Gl.glPopMatrix();
+			//}
+		}
+
+		private void DrawTooth(ToothGraphic toothGraphic) {
+			ToothGroup group;
+			Color materialColor;
+			device.VertexFormat=CustomVertex.PositionNormalColored.Format;
+			for(int g=0;g<toothGraphic.Groups.Count;g++) {
+				group=(ToothGroup)toothGraphic.Groups[g];
+				if(!group.Visible) {
+					continue;
+				}
+				if(toothGraphic.ShiftO<-10) {//if unerupted
+					materialColor=Color.FromArgb(group.PaintColor.A/2,group.PaintColor.R/2,group.PaintColor.G/2,group.PaintColor.B/2);
+				} else {
+					materialColor=group.PaintColor;
+				}
+				if(group.GroupType==ToothGroupType.Cementum) {
+					//Gl.glMaterialfv(Gl.GL_FRONT,Gl.GL_SPECULAR,specular_color_cementum);
+				} else {
+					//Gl.glMaterialfv(Gl.GL_FRONT,Gl.GL_SPECULAR,specular_color_normal);
+				}
+				//Gl.glMaterialfv(Gl.GL_FRONT,Gl.GL_SHININESS,shininess);
+				//Gl.glMaterialfv(Gl.GL_FRONT,Gl.GL_AMBIENT_AND_DIFFUSE,material_color);
+				//Gl.glBlendFunc(Gl.GL_ONE,Gl.GL_ZERO);
+				//Gl.glHint(Gl.GL_POLYGON_SMOOTH_HINT,Gl.GL_NICEST);
+				//Gl.glListBase(displayListOffset);
+				//draw the group
+				device.SetStreamSource(0,group.VertexBuffer,0);
+			  device.Indices=group.facesDirectX;
+				device.DrawIndexedPrimitives(PrimitiveType.TriangleList,0,0,toothGraphic.VertexNormals.Count,0,group.NumIndicies/3);				
+			}
+		}
+
+		///<summary>Performs the rotations and translations entered by user for this tooth.  Usually, all numbers are just 0, resulting in no movement here. Returns the result as a Matrix that will need to be applied to any other movement and rotation matricies being applied to the tooth.</summary>
+		private Matrix RotateAndTranslateUser(ToothGraphic toothGraphic) {
+			//remembering that they actually show in the opposite order, so:
+			//1: translate
+			//2: tipM last
+			//3: tipB second
+			//4: rotate first
+			Matrix tran=Matrix.Identity;
+			Matrix rotM=Matrix.Identity;
+			Matrix rotB=Matrix.Identity;
+			Matrix rot=Matrix.Identity;
+			if(ToothGraphic.IsRight(toothGraphic.ToothID)) {
+				if(ToothGraphic.IsMaxillary(toothGraphic.ToothID)) {//UR
+					tran.Translate(toothGraphic.ShiftM,-toothGraphic.ShiftO,toothGraphic.ShiftB);					
+					rotM.RotateZ(((float)(toothGraphic.TipM*Math.PI)/180));//Converts angle to radians as required.
+					rotB.RotateX(((float)(-toothGraphic.TipB*Math.PI)/180));//Converts angle to radians as required.
+					rot.RotateY(((float)(toothGraphic.Rotate*Math.PI)/180));//Converts angle to radians as required.
+				} else {//LR
+					tran.Translate(toothGraphic.ShiftM,toothGraphic.ShiftO,toothGraphic.ShiftB);
+					rotM.RotateZ(((float)(-toothGraphic.TipM*Math.PI)/180));//Converts angle to radians as required.
+					rotB.RotateX(((float)(toothGraphic.TipB*Math.PI)/180));//Converts angle to radians as required.
+					rot.RotateY(((float)(-toothGraphic.Rotate*Math.PI)/180));//Converts angle to radians as required.
+				}
+			} else {
+				if(ToothGraphic.IsMaxillary(toothGraphic.ToothID)) {//UL
+					tran.Translate(-toothGraphic.ShiftM,-toothGraphic.ShiftO,toothGraphic.ShiftB);
+					rotM.RotateZ(((float)(-toothGraphic.TipM*Math.PI)/180));//Converts angle to radians as required.
+					rotB.RotateX(((float)(-toothGraphic.TipB*Math.PI)/180));//Converts angle to radians as required.
+					rot.RotateY(((float)(toothGraphic.Rotate*Math.PI)/180));//Converts angle to radians as required.
+				} else {//LL
+					tran.Translate(-toothGraphic.ShiftM,toothGraphic.ShiftO,toothGraphic.ShiftB);
+					rotM.RotateZ(((float)(toothGraphic.TipM*Math.PI)/180));//Converts angle to radians as required.
+					rotB.RotateX(((float)(toothGraphic.TipB*Math.PI)/180));//Converts angle to radians as required.
+					rot.RotateY(((float)(-toothGraphic.Rotate*Math.PI)/180));//Converts angle to radians as required.
+				}
+			}
+			return rot*rotB*rotM*tran;
+		}
+
+		///<summary>Pri or perm tooth numbers are valid.  Only locations of perm teeth are stored.</summary>
+		private float GetTransX(string tooth_id) {
+			int toothInt=ToothGraphic.IdToInt(tooth_id);
+			if(toothInt==-1) {
+				throw new ApplicationException("Invalid tooth number: "+tooth_id);//only for debugging
+			}
+			return ToothGraphic.GetDefaultOrthoXpos(toothInt);
+		}
+
+		private float GetTransYfacial(string tooth_id) {
+			float basic=29f;
+			if(tooth_id=="6"||tooth_id=="11") {
+				return basic+1f;
+			}
+			if(tooth_id=="7"||tooth_id=="10") {
+				return basic+1f;
+			} else if(tooth_id=="8"||tooth_id=="9") {
+				return basic+2f;
+			} else if(tooth_id=="22"||tooth_id=="27") {
+				return -basic-2f;
+			} else if(tooth_id=="23"||tooth_id=="24"||tooth_id=="25"||tooth_id=="26") {
+				return -basic-2f;
+			} else if(ToothGraphic.IsMaxillary(tooth_id)) {
+				return basic;
+			}
+			return -basic;
+		}
+
+		private float GetTransYocclusal(string tooth_id) {
+			if(ToothGraphic.IsMaxillary(tooth_id)) {
+				return 13f;
+			}
+			return -13f;
 		}
 
 	}
