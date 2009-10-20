@@ -47,7 +47,7 @@ namespace OpenDental{
 		private bool changed;
 		private TextBox textDepositAccount;
 		///<summary>Only used if linking to accounts</summary>
-		private int[] DepositAccounts;
+		private long[] DepositAccounts;
 
 		///<summary></summary>
 		public FormDepositEdit(Deposit depositCur)

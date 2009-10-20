@@ -206,7 +206,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int[] GetDepositAccounts(){
+		public static long[] GetDepositAccounts(){
 			//No need to check RemotingRole; no call to db.
 			string depStr=PrefC.GetString(PrefName.AccountingDepositAccounts);
 			string[] depStrArray=depStr.Split(new char[] { ',' });
@@ -217,7 +217,7 @@ namespace OpenDentBusiness{
 				}
 				depAL.Add(PIn.PLong(depStrArray[i]));
 			}
-			int[] retVal=new int[depAL.Count];
+			long[] retVal=new long[depAL.Count];
 			depAL.CopyTo(retVal);
 			return retVal;
 		}
