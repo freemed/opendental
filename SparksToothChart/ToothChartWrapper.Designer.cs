@@ -23,21 +23,21 @@ namespace SparksToothChart {
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			this.toothChart2D1 = new SparksToothChart.ToothChart2D();
+			this.toothChart2D = new SparksToothChart.ToothChart2D();
 			this.SuspendLayout();
 			// 
-			// toothChart2D1
+			// toothChart2D
 			// 
-			this.toothChart2D1.Location = new System.Drawing.Point(0,0);
-			this.toothChart2D1.Name = "toothChart2D1";
-			this.toothChart2D1.Size = new System.Drawing.Size(410,307);
-			this.toothChart2D1.TabIndex = 0;
+			this.toothChart2D.Location = new System.Drawing.Point(0,0);
+			this.toothChart2D.Name = "toothChart2D";
+			this.toothChart2D.Size = new System.Drawing.Size(410,307);
+			this.toothChart2D.TabIndex = 0;
 			// 
 			// ToothChartWrapper
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.Controls.Add(this.toothChart2D1);
+			this.Controls.Add(this.toothChart2D);
 			this.Name = "ToothChartWrapper";
 			this.Size = new System.Drawing.Size(544,351);
 			this.ResumeLayout(false);
@@ -46,7 +46,7 @@ namespace SparksToothChart {
 
 		#endregion
 
-		private ToothChart2D toothChart2D1;
+		private ToothChart2D toothChart2D;
 
 		
 
