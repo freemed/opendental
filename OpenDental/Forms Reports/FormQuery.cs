@@ -1054,6 +1054,8 @@ namespace OpenDental{
 				//grid2.CaptionText=UserQueries.Cur.Description;
 				textTitle.Text=FormQF.UserQueryCur.Description;
 				UserQueryCur=FormQF.UserQueryCur;
+				report=new ReportSimpleGrid();
+				report.Query=textQuery.Text;
 				SubmitQuery();
 				//this.butSaveChanges.Enabled=true;
 			}
