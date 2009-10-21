@@ -18,6 +18,9 @@ namespace SparksToothChart {
 		///<summary>This is a reference to the TcData object that's at the wrapper level.</summary>
 		public ToothChartData TcData;
 		private float WidthProjection;
+		private Color specular_color_normal;
+		private Color specular_color_cementum;
+		private float shininess;
 
 		public ToothChartDirectX() {
 			InitializeComponent();
@@ -105,17 +108,27 @@ namespace SparksToothChart {
 			device.RenderState.CullMode=Cull.None;//Do not cull triangles. Our triangles are too small for this feature to work reliably.
 			device.RenderState.ZBufferEnable=true;
 			device.RenderState.ZBufferFunction=Compare.Less;
+			//Blend mode settings.
+			device.RenderState.AlphaBlendEnable=false;//Disabled
+			//device.RenderState.AlphaFunction=Compare.Always;
+			//device.RenderState.AlphaTestEnable=true;
+			//device.RenderState.SourceBlend=Blend.SourceAlpha;
+			//device.RenderState.DestinationBlend=Blend.InvSourceAlpha;
+			//device.RenderState.AlphaBlendOperation=BlendOperation.Add;
+			//Anti-alias settings.
+			device.RenderState.AntiAliasedLineEnable=true;
+			//Lighting settings
 			device.RenderState.Lighting=true;
 			device.RenderState.SpecularEnable=true;
-			//Blend mode settings.
-			device.RenderState.AlphaTestEnable=false;//No blending.
-			device.RenderState.AntiAliasedLineEnable=true;
+			specular_color_normal=Color.FromArgb(255,255,255,255);
+			specular_color_cementum=Color.FromArgb(26,26,26,26);
+			shininess=10f;//Not the same as in OpenGL. No maximum value. Smaller number means light is more spread out.
 			//Set properties for light 0.
 			device.Lights[0].Type=LightType.Directional;
-			device.Lights[0].Ambient=Color.FromArgb(255,51,51,51);
+			device.Lights[0].Ambient=Color.FromArgb(255,95,95,95);
 			device.Lights[0].Diffuse=Color.FromArgb(255,153,153,153);
-			device.Lights[0].Specular=Color.FromArgb(255,255,255,255);
-			device.Lights[0].Direction=new Vector3(-0.5f,0.1f,1f);
+			device.Lights[0].Specular=Color.FromArgb(255,26,26,26);
+			device.Lights[0].Direction=new Vector3(0.5f,0.1f,1f);
 			device.Lights[0].Enabled=true;
 			//Draw
 			DrawScene();
@@ -374,28 +387,29 @@ namespace SparksToothChart {
 
 		private void DrawTooth(ToothGraphic toothGraphic) {
 			ToothGroup group;
-			Color materialColor;
 			device.VertexFormat=CustomVertex.PositionNormalColored.Format;
 			for(int g=0;g<toothGraphic.Groups.Count;g++) {
 				group=(ToothGroup)toothGraphic.Groups[g];
 				if(!group.Visible) {
 					continue;
 				}
+				Material material=new Material();
+				Color materialColor;
 				if(toothGraphic.ShiftO<-10) {//if unerupted
 					materialColor=Color.FromArgb(group.PaintColor.A/2,group.PaintColor.R/2,group.PaintColor.G/2,group.PaintColor.B/2);
 				} else {
 					materialColor=group.PaintColor;
 				}
+				material.Ambient=materialColor;
+				material.Diffuse=materialColor;
 				if(group.GroupType==ToothGroupType.Cementum) {
-					//Gl.glMaterialfv(Gl.GL_FRONT,Gl.GL_SPECULAR,specular_color_cementum);
+					material.Specular=specular_color_cementum;
 				} else {
-					//Gl.glMaterialfv(Gl.GL_FRONT,Gl.GL_SPECULAR,specular_color_normal);
-				}
-				//Gl.glMaterialfv(Gl.GL_FRONT,Gl.GL_SHININESS,shininess);
-				//Gl.glMaterialfv(Gl.GL_FRONT,Gl.GL_AMBIENT_AND_DIFFUSE,material_color);
+					material.Specular=specular_color_normal;
+				}				
+				material.SpecularSharpness=shininess;
+				device.Material=material;
 				//Gl.glBlendFunc(Gl.GL_ONE,Gl.GL_ZERO);
-				//Gl.glHint(Gl.GL_POLYGON_SMOOTH_HINT,Gl.GL_NICEST);
-				//Gl.glListBase(displayListOffset);
 				//draw the group
 				device.SetStreamSource(0,group.VertexBuffer,0);
 			  device.Indices=group.facesDirectX;

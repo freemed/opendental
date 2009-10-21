@@ -63,7 +63,7 @@ namespace SparksToothChart {
 					verts[indexMap[i]].nx=VertexNormals[i].Normal.X;
 					verts[indexMap[i]].ny=VertexNormals[i].Normal.Y;
 					verts[indexMap[i]].nz=VertexNormals[i].Normal.Z;
-					verts[indexMap[i]].color=PaintColor.ToArgb();
+					verts[indexMap[i]].color=Color.FromArgb(255,PaintColor.R,PaintColor.G,PaintColor.B).ToArgb();
 				}
 			}
 			VertexBuffer=new VertexBuffer(typeof(CustomVertex.PositionNormalColored),CustomVertex.PositionNormalColored.StrideSize*numVerts,
