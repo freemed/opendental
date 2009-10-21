@@ -156,7 +156,7 @@ namespace OpenDentBusiness{
 				if(i==0//if this is the first row
 					|| table.Rows[i][1].ToString() != table.Rows[i-1][1].ToString())//or examNum has changed
 				{
-					curExamI=PerioExams.GetExamIndex(listPerioExams,PIn.PInt(table.Rows[i][1].ToString()));
+					curExamI=PerioExams.GetExamIndex(listPerioExams,PIn.PLong(table.Rows[i][1].ToString()));
 				}
 				List[curExamI,(int)Cur.SequenceType,Cur.IntTooth]=Cur;
 			}

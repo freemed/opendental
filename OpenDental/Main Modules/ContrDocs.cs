@@ -1615,7 +1615,7 @@ namespace OpenDental{
 				return;
 			}
 			DataRow obj=(DataRow)TreeDocuments.SelectedNode.Tag;
-			int docNum=Convert.ToInt32(obj["DocNum"].ToString());
+			long docNum=Convert.ToInt64(obj["DocNum"].ToString());
 			if(docNum!=0){//Only applied to document nodes.
 				if(!paintTools.Enabled){
 					EraseCurrentImages();

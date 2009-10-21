@@ -303,7 +303,7 @@ namespace OpenDental{
 			report.SetColumnPos(this,4,"Description",620);
 			report.SetColumnPos(this,5,"Provider",660);
 			report.SetColumnPos(this,6,"Fee",750,HorizontalAlignment.Right);
-			report.SetColumnPos(this,7," ",800);
+			//report.SetColumnPos(this,7," ",800);
 			FormQuery2.ShowDialog();
 			DialogResult=DialogResult.OK;
 		}
