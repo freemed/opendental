@@ -12,17 +12,10 @@ using OpenDentBusiness;
 namespace SparksToothChart {
 	public partial class ToothChartWrapper:UserControl {
 		private string[] selectedTeeth;
-		private Color colorBackSimple=Color.FromArgb(150,145,153);//constant
-		//private bool simpleMode=true;
 		///<summary>True for hardware graphics, false for software graphics.</summary>
 		private bool hardwareMode=false;
 		private ToothChartOpenGL toothChartOpenGL;
 		private ToothChartDirectX toothChartDirectX;
-		private Color colorText;
-		private Color colorTextHighlight;
-		private Color colorBackHighlight;
-		//<summary>Only used if in simple mode.  Analogous to ToothChartOpenGL.ListToothGraphics, but with less detail.</summary>
-		//private ToothGraphicCollection ListToothGraphics;
 		///<summary>valid values are 1 to 32 (int). Only used in simple mode.</summary>
 		private ArrayList ALSelectedTeeth;
 		///<summary>width of entire set of teeth, in mm.</summary>
@@ -100,58 +93,32 @@ namespace SparksToothChart {
 		}
 
 		///<summary></summary>
+		[Browsable(false)]
 		public Color ColorText{
 			set {
-				colorText=value;
-				if(drawMode==DrawingMode.Simple2D) {
-					//
-				}
-				else {
-					//toothChartOpenGL.ColorText=value;
-				}
+				TcData.ColorText=value;
+				Invalidate();
 			}
 		}
 
 		///<summary></summary>
+		[Browsable(false)]
 		public Color ColorTextHighlight {
 			set {
-				colorTextHighlight=value;
-				if(drawMode==DrawingMode.Simple2D) {
-					//
-				}
-				else {
-					//toothChartOpenGL.ColorTextHighlight=value;
-				}
+				TcData.ColorTextHighlight=value;
+				Invalidate();
 			}
 		}
 
 		///<summary></summary>
+		[Browsable(false)]
 		public Color ColorBackHighlight {
+			
 			set {
-				colorBackHighlight=value;
-				if(drawMode==DrawingMode.Simple2D) {
-					//
-				}
-				else {
-					//toothChartOpenGL.ColorBackHighlight=value;
-				}
+				TcData.ColorBackHighlight=value;
+				Invalidate();
 			}
 		}
-
-		/*
-		///<summary>Default is true.  In simpleMode, OpenGL does not even get loaded.</summary>
-		public bool SimpleMode {
-			get {
-				return simpleMode;
-			}
-			set {
-				if(Environment.OSVersion.Platform==PlatformID.Unix){
-					return;//disallow changing simpleMode if platform is Unix
-				}
-				simpleMode=value;
-				ResetControls();
-			}
-		}*/
 
 		///<summary>Set to true when using hardware rendering in OpenGL, and false otherwise. This will have no effect when in simple 2D graphics mode.</summary>
 		public bool UseHardware{
@@ -210,6 +177,7 @@ namespace SparksToothChart {
 			}
 		}
 
+		///<summary>For the freehand drawing tool.</summary>
 		public Color DrawingColor{
 			//get{
 			//	return drawingColor;
@@ -651,10 +619,10 @@ namespace SparksToothChart {
 			}
 			if(!ToothGraphic.IsPrimary(toothGraphic.ToothID) && (!toothGraphic.Visible || toothGraphic.IsPontic)){
 				if(ToothGraphic.IsMaxillary(toothGraphic.ToothID)){
-					g.FillRectangle(new SolidBrush(colorBackSimple),x-w/2f,0,w,Height/2f-20);
+	//g.FillRectangle(new SolidBrush(colorBackSimple),x-w/2f,0,w,Height/2f-20);
 				}
 				else{
-					g.FillRectangle(new SolidBrush(colorBackSimple),x-w/2f,Height/2f+20,w,Height/2f-20);
+	//g.FillRectangle(new SolidBrush(colorBackSimple),x-w/2f,Height/2f+20,w,Height/2f-20);
 				}
 			}
 			if(toothGraphic.DrawBigX) {

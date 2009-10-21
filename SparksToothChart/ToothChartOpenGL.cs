@@ -41,13 +41,7 @@ namespace SparksToothChart {
 		///<summary>valid values are "1" to "32", and "A" to "Z"</summary>
 		private string[] selectedTeeth;
 		///<summary>valid values are 1 to 32 (int)</summary>
-		private ArrayList ALSelectedTeeth;
-		///<summary></summary>
-		public Color ColorText;
-		///<summary></summary>
-		public Color ColorTextHighlight;
-		///<summary></summary>
-		public Color ColorBackHighlight;		
+		private ArrayList ALSelectedTeeth;		
 		private bool MouseIsDown;
 		///<summary>Mouse move causes this variable to be updated with the current tooth that the mouse is hovering over.</summary>
 		private int hotTooth;
@@ -89,9 +83,6 @@ namespace SparksToothChart {
 			PointList=new List<Point>();
 			//set default colors
 			//colorBackground=Color.FromArgb(150,145,153);//95,95,130);
-			ColorText=Color.White;
-			ColorTextHighlight=Color.Black;//.Purple;
-			ColorBackHighlight=Color.White;//.Orange;
 			Gl.glDisable(Gl.GL_TEXTURE);//Disable texturing, since we don't use it.
 																	//This should prevent a glCopyPixels() problem in
 																	//Gdi.SwapBuffersFast() on ATI graphics cards.
@@ -671,15 +662,14 @@ namespace SparksToothChart {
 			Gl.glDisable(Gl.GL_BLEND);
 			Gl.glDisable(Gl.GL_DEPTH_TEST);
 			Gl.glColor3f(
-				(float)Color.White.R/255f,
-				(float)Color.White.G/255f,
-				(float)Color.White.B/255f);
+				(float)TcData.ColorText.R/255f,
+				(float)TcData.ColorText.G/255f,
+				(float)TcData.ColorText.B/255f);
 			Gl.glLineWidth((float)Width/400f);//about 1
 			Gl.glBegin(Gl.GL_LINE_STRIP);
 				Gl.glVertex3f(-(float)WidthProjection/2f,0,0);
 				Gl.glVertex3f((float)WidthProjection/2f,0,0);
 			Gl.glEnd();
-			/*
 			for(int i=1;i<=32;i++){
 				if(ALSelectedTeeth.Contains(i)) {
 					DrawNumber(i,true,true);
@@ -687,7 +677,7 @@ namespace SparksToothChart {
 				else {
 					DrawNumber(i,false,true);
 				}
-			}*/
+			}
 			Gl.glPopMatrix();
 		}
 
@@ -813,9 +803,9 @@ namespace SparksToothChart {
 			Rectangle recPix=ConvertRecToPix(recMm);
 			if(isSelected){
 				Gl.glColor3f(
-					(float)ColorBackHighlight.R/255f,
-					(float)ColorBackHighlight.G/255f,
-					(float)ColorBackHighlight.B/255f);
+					(float)TcData.ColorBackHighlight.R/255f,
+					(float)TcData.ColorBackHighlight.G/255f,
+					(float)TcData.ColorBackHighlight.B/255f);
 				Gl.glBegin(Gl.GL_QUADS);
 					Gl.glVertex3f(recMm.X,recMm.Y,14);//LL
 					Gl.glVertex3f(recMm.X,recMm.Y+recMm.Height,14);//UL
@@ -823,9 +813,9 @@ namespace SparksToothChart {
 					Gl.glVertex3f(recMm.X+recMm.Width,recMm.Y,14);//LR
 				Gl.glEnd();
 				Gl.glColor3f(
-					(float)ColorTextHighlight.R/255f,
-					(float)ColorTextHighlight.G/255f,
-					(float)ColorTextHighlight.B/255f);
+					(float)TcData.ColorTextHighlight.R/255f,
+					(float)TcData.ColorTextHighlight.G/255f,
+					(float)TcData.ColorTextHighlight.B/255f);
 				Gl.glRasterPos3f(recMm.X+2f*toMm,recMm.Y+2f*toMm,15f);
 				if(!TcData.ListToothGraphics[tooth_id].HideNumber) {//Only draw if number is not hidden.
 					PrintString(displayNum);
@@ -843,9 +833,9 @@ namespace SparksToothChart {
 					Gl.glVertex3f(recMm.X+recMm.Width,recMm.Y,14);//LR
 				Gl.glEnd();
 				Gl.glColor3f(
-					(float)ColorText.R/255f,
-					(float)ColorText.G/255f,
-					(float)ColorText.B/255f);
+					(float)TcData.ColorText.R/255f,
+					(float)TcData.ColorText.G/255f,
+					(float)TcData.ColorText.B/255f);
 				Gl.glRasterPos3f(recMm.X+2f*toMm,recMm.Y+2f*toMm,15f);
 				if(!TcData.ListToothGraphics[tooth_id].HideNumber) {//Only draw if number is not hidden.
 					PrintString(displayNum);
