@@ -36,7 +36,6 @@
 			// toothChart2D
 			// 
 			this.toothChart2D.AutoFinish = false;
-			this.toothChart2D.ColorBackground = System.Drawing.Color.Empty;
 			this.toothChart2D.Cursor = System.Windows.Forms.Cursors.Default;
 			this.toothChart2D.CursorTool = SparksToothChart.CursorTool.Pointer;
 			this.toothChart2D.DrawMode = SparksToothChart.DrawingMode.Simple2D;
@@ -50,7 +49,6 @@
 			// toothChartOpenGL
 			// 
 			this.toothChartOpenGL.AutoFinish = false;
-			this.toothChartOpenGL.ColorBackground = System.Drawing.Color.Empty;
 			this.toothChartOpenGL.Cursor = System.Windows.Forms.Cursors.Default;
 			this.toothChartOpenGL.CursorTool = SparksToothChart.CursorTool.Pointer;
 			this.toothChartOpenGL.DrawMode = SparksToothChart.DrawingMode.Simple2D;
@@ -64,7 +62,6 @@
 			// toothChartDirectX
 			// 
 			this.toothChartDirectX.AutoFinish = false;
-			this.toothChartDirectX.ColorBackground = System.Drawing.Color.Empty;
 			this.toothChartDirectX.Cursor = System.Windows.Forms.Cursors.Default;
 			this.toothChartDirectX.CursorTool = SparksToothChart.CursorTool.Pointer;
 			this.toothChartDirectX.DrawMode = SparksToothChart.DrawingMode.Simple2D;

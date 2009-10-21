@@ -12,7 +12,6 @@ using OpenDentBusiness;
 namespace SparksToothChart {
 	public partial class ToothChartWrapper:UserControl {
 		private string[] selectedTeeth;
-		private Color colorBackground;
 		private Color colorBackSimple=Color.FromArgb(150,145,153);//constant
 		//private bool simpleMode=true;
 		///<summary>True for hardware graphics, false for software graphics.</summary>
@@ -68,7 +67,7 @@ namespace SparksToothChart {
 			}
 			set{
 				if(Environment.OSVersion.Platform==PlatformID.Unix) {
-					return;//disallow changing simpleMode if platform is Unix
+					return;//disallow changing from simpleMode if platform is Unix
 				}
 				drawMode=value;
 				ResetControls();
@@ -89,18 +88,14 @@ namespace SparksToothChart {
 		}
 
 		///<summary></summary>
+		[Browsable(false)]
 		public Color ColorBackground {
 			get {
-				return colorBackground;
+				return TcData.ColorBackground;
 			}
 			set {
-				colorBackground=value;
-				if(drawMode==DrawingMode.Simple2D) {
-					//has no effect 
-				}
-				else{
-					//toothChartOpenGL.ColorBackground=value;
-				}
+				TcData.ColorBackground=value;
+				Invalidate();
 			}
 		}
 
@@ -228,6 +223,33 @@ namespace SparksToothChart {
 		}
 		#endregion Properties
 
+		protected override void OnInvalidated(InvalidateEventArgs e) {
+			base.OnInvalidated(e);
+			if(drawMode==DrawingMode.Simple2D) {
+				toothChart2D.Invalidate();
+			}
+			else if(drawMode==DrawingMode.DirectX) {
+				toothChartDirectX.Invalidate();
+			}
+			else if(drawMode==DrawingMode.OpenGL) {
+				toothChartOpenGL.Invalidate();
+				//toothChartOpenGL.TaoDraw();
+			}
+		}
+
+		/*This should actually happen automatically when we invalidate the wrapper.
+		private void InvalidateForDrawMode() {
+			if(drawMode==DrawingMode.Simple2D) {
+				toothChart2D.Invalidate();
+			}
+			else if(drawMode==DrawingMode.DirectX) {
+				toothChartDirectX.Invalidate();
+			}
+			else if(drawMode==DrawingMode.OpenGL) {
+				toothChartOpenGL.Invalidate();
+			}
+		}*/
+
 		private void ResetControls(){
 			selectedTeeth=new string[0];
 			this.Controls.Clear();
@@ -312,28 +334,24 @@ namespace SparksToothChart {
 			selectedTeeth=new string[0];
 			DrawingSegmentList=new List<ToothInitial>();
 			PointList=new List<Point>();
-			if(drawMode==DrawingMode.Simple2D){
-				toothChart2D.Invalidate();
-			}
-			else if(drawMode==DrawingMode.DirectX) {
-				toothChartDirectX.Invalidate();
-			}
-			else if(drawMode==DrawingMode.OpenGL) {
-				toothChartOpenGL.Invalidate();
-			}
+			Invalidate();
 		}
 
-		///<summary>Moves position of tooth.  Rotations first in order listed, then translations.  Tooth doesn't get moved immediately, just when painting.  All changes are cumulative and are in addition to any previous translations and rotations.  So, for instance, if tooth has already been shifted as part of SetToPrimary, then this will move it more.</summary>
+		///<summary>Moves position of tooth.  Rotations first in order listed, then translations.  Tooth doesn't get moved immediately, just when painting.  All changes are cumulative and are in addition to any previous translations and rotations.</summary>
 		public void MoveTooth(string toothID,float rotate,float tipM,float tipB,float shiftM,float shiftO,float shiftB) {
-			if(drawMode==DrawingMode.Simple2D) {
-				//do nothing
+			if(!ToothGraphic.IsValidToothID(toothID)) {
+				return;
 			}
-			else {
-				//toothChartOpenGL.MoveTooth(toothID,rotate,tipM,tipB,shiftM,shiftO,shiftB);
-			}
+			TcData.ListToothGraphics[toothID].ShiftM+=shiftM;
+			TcData.ListToothGraphics[toothID].ShiftO+=shiftO;
+			TcData.ListToothGraphics[toothID].ShiftB+=shiftB;
+			TcData.ListToothGraphics[toothID].Rotate+=rotate;
+			TcData.ListToothGraphics[toothID].TipM+=tipM;
+			TcData.ListToothGraphics[toothID].TipB+=tipB;
+			Invalidate();
 		}
 
-		///<summary>Sets the specified permanent tooth to primary as follows: Sets ShowPrimary to true for the perm tooth.  Makes pri tooth visible=true, repositions perm tooth by translating -Y.  Moves primary tooth slightly to M or D sometimes for better alignment.  And if 2nd primary molar, then because of the larger size, it must move all perm molars to distal.  Ignores if invalid perm tooth.</summary>
+		///<summary>Sets the specified permanent tooth to primary. Works as follows: Sets ShowPrimaryLetter to true for the perm tooth.  Makes pri tooth visible=true.  If this is performed on a perm molar, it has no visible effect.  Also repositions perm tooth by translating -Y.  Moves primary tooth slightly to M or D sometimes for better alignment.  And if 2nd primary molar, then because of the larger size, it must move all perm molars to distal.
 		public void SetToPrimary(string toothID) {
 			if(!ToothGraphic.IsValidToothID(toothID)) {
 				return;
@@ -341,23 +359,45 @@ namespace SparksToothChart {
 			if(ToothGraphic.IsPrimary(toothID)) {
 				return;
 			}
-			TcData.ListToothGraphics[toothID].ShowPrimary=true;
-			//ListToothGraphics[toothID].ShiftO-=12;
-			TcData.ListToothGraphics[toothID].Visible=false;//instead of shiftO
-			if(ToothGraphic.IsValidToothID(ToothGraphic.PermToPri(toothID))) {
-				TcData.ListToothGraphics[ToothGraphic.PermToPri(toothID)].Visible=true;
+			TcData.ListToothGraphics[toothID].ShiftO-=12;
+			if(ToothGraphic.IsValidToothID(ToothGraphic.PermToPri(toothID))) {//if there's a primary tooth at this location
+				TcData.ListToothGraphics[ToothGraphic.PermToPri(toothID)].Visible=true;//show the primary.
+				TcData.ListToothGraphics[toothID].ShowPrimaryLetter=true;
+			}		
+			//first pri mand molars, shift slightly to M
+			if(toothID=="21") {
+				TcData.ListToothGraphics["J"].ShiftM+=0.5f;
 			}
-			if(drawMode==DrawingMode.Simple2D) {
-				toothChart2D.Invalidate();
+			if(toothID=="28") {
+				TcData.ListToothGraphics["S"].ShiftM+=0.5f;
 			}
-			else if(drawMode==DrawingMode.OpenGL) {
-				//toothChartOpenGL.SetToPrimary(toothID);
-				toothChartOpenGL.Invalidate();
+			//second pri molars are huge, so shift distally for space
+			//and move all the perm molars distally too
+			if(toothID=="4") {
+				TcData.ListToothGraphics["A"].ShiftM-=0.5f;
+				TcData.ListToothGraphics["1"].ShiftM-=1;
+				TcData.ListToothGraphics["2"].ShiftM-=1;
+				TcData.ListToothGraphics["3"].ShiftM-=1;
 			}
-			else if(drawMode==DrawingMode.DirectX) {
-				//toothChartOpenGL.SetToPrimary(toothID);
-				toothChartDirectX.Invalidate();
+			if(toothID=="13") {
+				TcData.ListToothGraphics["J"].ShiftM-=0.5f;
+				TcData.ListToothGraphics["14"].ShiftM-=1;
+				TcData.ListToothGraphics["15"].ShiftM-=1;
+				TcData.ListToothGraphics["16"].ShiftM-=1;
 			}
+			if(toothID=="20") {
+				TcData.ListToothGraphics["K"].ShiftM-=1.2f;
+				TcData.ListToothGraphics["17"].ShiftM-=2.3f;
+				TcData.ListToothGraphics["18"].ShiftM-=2.3f;
+				TcData.ListToothGraphics["19"].ShiftM-=2.3f;
+			}
+			if(toothID=="29") {
+				TcData.ListToothGraphics["T"].ShiftM-=1.2f;
+				TcData.ListToothGraphics["30"].ShiftM-=2.3f;
+				TcData.ListToothGraphics["31"].ShiftM-=2.3f;
+				TcData.ListToothGraphics["32"].ShiftM-=2.3f;
+			}
+			Invalidate();
 		}
 
 		///<summary>This is used for crowns and for retainers.  Crowns will be visible on missing teeth with implants.  Crowns are visible on F and O views, unlike ponics which are only visible on F view.  If the tooth is not visible, that should be set before this call, because then, this will set the root invisible.</summary>

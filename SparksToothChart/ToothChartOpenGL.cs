@@ -42,7 +42,6 @@ namespace SparksToothChart {
 		private string[] selectedTeeth;
 		///<summary>valid values are 1 to 32 (int)</summary>
 		private ArrayList ALSelectedTeeth;
-		//private Color colorBackground=Color.FromArgb(150,145,152);
 		///<summary></summary>
 		public Color ColorText;
 		///<summary></summary>
@@ -167,21 +166,21 @@ namespace SparksToothChart {
 			DrawingSegmentList=new List<ToothInitial>();
 			this.Invalidate();
 		}*/
-
+/*
 		///<summary>Moves position of tooth.  Rotations first in order listed, then translations.  Tooth doesn't get moved immediately, just when painting.  All changes are cumulative and are in addition to any previous translations and rotations.  So, for instance, if tooth has already been shifted as part of SetToPrimary, then this will move it more.</summary>
 		public void MoveTooth(string toothID,float rotate,float tipM,float tipB,float shiftM,float shiftO,float shiftB) {
 			if(!ToothGraphic.IsValidToothID(toothID)) {
 				return;
 			}
-			/*
+			
 			ListToothGraphics[toothID].ShiftM+=shiftM;
 			ListToothGraphics[toothID].ShiftO+=shiftO;
 			ListToothGraphics[toothID].ShiftB+=shiftB;
 			ListToothGraphics[toothID].Rotate+=rotate;
 			ListToothGraphics[toothID].TipM+=tipM;
 			ListToothGraphics[toothID].TipB+=tipB;
-			this.Invalidate();*/
-		}
+			this.Invalidate();
+		}*/
 
 		///<summary>Sets the specified permanent tooth to primary as follows: Sets ShowPrimary to true for the perm tooth.  Makes pri tooth visible=true, repositions perm tooth by translating -Y.  Moves primary tooth slightly to M or D sometimes for better alignment.  And if 2nd primary molar, then because of the larger size, it must move all perm molars to distal.  Ignores if invalid perm tooth.</summary>
 		public void SetToPrimary(string toothID) {
@@ -1358,7 +1357,7 @@ namespace SparksToothChart {
 				selectedTeeth=new string[ALSelectedTeeth.Count];
 				for(int i=0;i<ALSelectedTeeth.Count;i++) {
 					if(ToothGraphic.IsValidToothID(ToothGraphic.PermToPri(ALSelectedTeeth[i].ToString()))//pri is valid
-						&& TcData.ListToothGraphics[ALSelectedTeeth[i].ToString()].ShowPrimary)//and set to show pri
+						&& TcData.ListToothGraphics[ALSelectedTeeth[i].ToString()].ShowPrimaryLetter)//and set to show pri
 					{
 						selectedTeeth[i]=ToothGraphic.PermToPri(ALSelectedTeeth[i].ToString());
 					}

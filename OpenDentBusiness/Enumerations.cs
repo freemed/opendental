@@ -1178,9 +1178,9 @@ namespace OpenDentBusiness{
 	public enum ToothInitialType{
 		///<summary>0</summary>
 		Missing,
-		///<summary>1</summary>
+		///<summary>1 - Also hides the number.  This is meaningless and not allowed for primary teeth because it would be the same as not setting them to primary.</summary>
 		Hidden,
-		///<summary>2</summary>
+		///<summary>2 - Only used with 1-32.  "sets" this tooth as a primary tooth.  The result is that the primary tooth shows in addition to the perm, and that the letter shows in addition to the number.  It also does a Shift0 -12 and some other handy movements.  Even if this is set to true, there can be a separate entry for a missing primary tooth; this would be almost equivalent to not even setting the tooth as primary, but would also allow user to select the letter.</summary>
 		Primary,
 		///<summary>3</summary>
 		ShiftM,

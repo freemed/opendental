@@ -42,8 +42,8 @@ namespace SparksToothChart {
 		public Color colorX;
 		///<summary>If RCT, then this will contain the color.</summary>
 		public Color colorRCT;
-		///<summary>True if this tooth is set to primary.  This can only be true for the 32 perm teeth.  A primary tooth would never have this value set.</summary>
-		public bool ShowPrimary;
+		///<summary>True if this tooth is set to show the primary letter in addition to the perm number.  This can only be true for 20 of the 32 perm teeth.  A primary tooth would never have this value set.  It does not affect tooth visibility at all.</summary>
+		public bool ShowPrimaryLetter;
 		///<summary>This gets set to true if tooth has a BU or a post.</summary>
 		public bool IsBU;
 		///<summary>If BU, then this will contain the color.</summary>
@@ -128,7 +128,7 @@ namespace SparksToothChart {
 			IsRCT=false;
 			hideNumber=false;
 			DrawBigX=false;
-			ShowPrimary=false;
+			ShowPrimaryLetter=false;
 			IsBU=false;
 			IsImplant=false;
 			IsCrown=false;
