@@ -29,12 +29,6 @@ namespace SparksToothChart {
 			Faces=new List<Face>();
 		}
 
-		private struct VertNormX {
-			public float x,y,z;//position
-			public float nx,ny,nz;//normal
-			public int color;
-		}
-
 		public void PrepareForDirectX(Device device,List <VertexNormal> VertexNormals){
 			//Figure out which verticies this group uses.
 			bool[] usedVerts=new bool[VertexNormals.Count];
@@ -54,16 +48,16 @@ namespace SparksToothChart {
 				}
 			}
 			//Prepare the verticies into a vertex buffer.
-			VertNormX[] verts=new VertNormX[numVerts];
+			CustomVertex.PositionNormalColored[] verts=new CustomVertex.PositionNormalColored[numVerts];
 			for(int i=0;i<indexMap.Length;i++){
 				if(indexMap[i]>=0){
-					verts[indexMap[i]].x=VertexNormals[i].Vertex.X;
-					verts[indexMap[i]].y=VertexNormals[i].Vertex.Y;
-					verts[indexMap[i]].z=VertexNormals[i].Vertex.Z;
-					verts[indexMap[i]].nx=VertexNormals[i].Normal.X;
-					verts[indexMap[i]].ny=VertexNormals[i].Normal.Y;
-					verts[indexMap[i]].nz=VertexNormals[i].Normal.Z;
-					verts[indexMap[i]].color=Color.FromArgb(255,PaintColor.R,PaintColor.G,PaintColor.B).ToArgb();
+					verts[indexMap[i]].X=VertexNormals[i].Vertex.X;
+					verts[indexMap[i]].Y=VertexNormals[i].Vertex.Y;
+					verts[indexMap[i]].Z=VertexNormals[i].Vertex.Z;
+					verts[indexMap[i]].Nx=VertexNormals[i].Normal.X;
+					verts[indexMap[i]].Ny=VertexNormals[i].Normal.Y;
+					verts[indexMap[i]].Nz=VertexNormals[i].Normal.Z;
+					verts[indexMap[i]].Color=Color.FromArgb(255,PaintColor.R,PaintColor.G,PaintColor.B).ToArgb();
 				}
 			}
 			VertexBuffer=new VertexBuffer(typeof(CustomVertex.PositionNormalColored),CustomVertex.PositionNormalColored.StrideSize*numVerts,

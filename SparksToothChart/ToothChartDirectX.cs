@@ -146,9 +146,8 @@ namespace SparksToothChart {
 				DrawFacialView(ListToothGraphics[t],defOrient);
 				DrawOcclusalView(ListToothGraphics[t],defOrient);
 			}
-			//DrawTextAndLines();
+			DrawTextAndLines();
 			//DrawDrawingSegments();
-			//Gl.glFlush();
 		}
 
 		private void DrawFacialView(ToothGraphic toothGraphic,Matrix defOrient) {
@@ -489,6 +488,78 @@ namespace SparksToothChart {
 				return 13f;
 			}
 			return -13f;
+		}
+
+		private void DrawTextAndLines() {
+			device.RenderState.Lighting=false;
+			device.Lights[0].Enabled=false;
+		
+			//Draw the horizontal line accross the tooth chart.
+			device.Transform.World=Matrix.Identity;
+			CustomVertex.PositionColored[] linePoints=new CustomVertex.PositionColored[2];
+			linePoints[0].X=-(float)WidthProjection/2f;
+			linePoints[0].Color=Color.Red.ToArgb();
+			linePoints[1].X=(float)WidthProjection/2f;
+			linePoints[1].Color=Color.Blue.ToArgb();
+			VertexBuffer vb=new VertexBuffer(typeof(CustomVertex.PositionColored),CustomVertex.PositionColored.StrideSize*linePoints.Length,
+				device,Usage.WriteOnly,CustomVertex.PositionColored.Format,Pool.Managed);
+			vb.SetData(linePoints,0,LockFlags.None);
+			device.SetStreamSource(0,vb,0);
+			int[] indicies=new int[] { 0,1 };
+			IndexBuffer ib=new IndexBuffer(typeof(int),indicies.Length,device,Usage.None,Pool.Managed);
+			ib.SetData(indicies,0,LockFlags.None);
+			device.Indices=ib;
+			device.DrawIndexedPrimitives(PrimitiveType.LineList,0,0,linePoints.Length,0,linePoints.Length-1);
+			vb.Dispose();
+			ib.Dispose();
+
+			//Microsoft.DirectX.Direct3D.Line a;//This class is supposed to exist but does not! Maybe out Line class is blocking it? No idea...
+
+
+			////Draw the horizontal line accross the tooth chart.
+			//Matrix offset=Matrix.Identity;
+			//offset.Translate(-0.5f,0,0);
+			//device.Transform.World=offset;
+			//float lineWidth=(float)(Width/400f)/6f;
+			//CustomVertex.PositionColored[] linePoints=new CustomVertex.PositionColored[4];
+			////0
+			//linePoints[0].X=-(float)WidthProjection/2f;
+			//linePoints[0].Y=-lineWidth/2;
+			//linePoints[0].Color=Color.White.ToArgb();
+			////1
+			//linePoints[1].X=-(float)WidthProjection/2f;
+			//linePoints[1].Y=lineWidth/2;
+			//linePoints[1].Color=Color.White.ToArgb();
+			////2
+			//linePoints[2].X=(float)WidthProjection/2f;
+			//linePoints[2].Y=lineWidth/2;
+			//linePoints[2].Color=Color.White.ToArgb();
+			////3
+			//linePoints[3].X=(float)WidthProjection/2f;
+			//linePoints[3].Y=-lineWidth/2;
+			//linePoints[3].Color=Color.White.ToArgb();
+			////
+			//VertexBuffer vb=new VertexBuffer(typeof(CustomVertex.PositionColored),CustomVertex.PositionColored.StrideSize*linePoints.Length,
+			//  device,Usage.WriteOnly,CustomVertex.PositionColored.Format,Pool.Managed);
+			//vb.SetData(linePoints,0,LockFlags.None);
+			//device.SetStreamSource(0,vb,0);
+			//int[] indicies=new int[] { 0,2,1,0,3,2 };
+			//IndexBuffer ib=new IndexBuffer(typeof(int),indicies.Length,device,Usage.None,Pool.Managed);
+			//ib.SetData(indicies,0,LockFlags.None);
+			//device.Indices=ib;
+			//device.DrawIndexedPrimitives(PrimitiveType.TriangleList,0,0,linePoints.Length,0,indicies.Length/3);
+			//vb.Dispose();
+			//ib.Dispose();
+
+
+			//Gl.glColor3f(
+			//  (float)Color.White.R/255f,
+			//  (float)Color.White.G/255f,
+			//  (float)Color.White.B/255f);
+			//Gl.glLineWidth((float)Width/400f);//about 1
+			
+			//Gl.glVertex3f(-(float)WidthProjection/2f,0,0);
+			//Gl.glVertex3f((float)WidthProjection/2f,0,0);
 		}
 
 	}
