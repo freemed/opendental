@@ -30,7 +30,7 @@ namespace OpenDental{
 					break;
 				case SheetTypeEnum.ReferralSlip:
 					pat=Patients.GetPat((long)GetParamByName(sheet,"PatNum").ParamValue);
-					refer=Referrals.GetReferral((int)GetParamByName(sheet,"ReferralNum").ParamValue);
+					refer=Referrals.GetReferral((long)GetParamByName(sheet,"ReferralNum").ParamValue);
 					FillFieldsForReferralSlip(sheet,pat,refer);
 					break;
 				case SheetTypeEnum.LabelAppointment:

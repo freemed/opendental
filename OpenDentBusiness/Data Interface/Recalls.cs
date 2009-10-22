@@ -764,7 +764,7 @@ namespace OpenDentBusiness{
 			//get maxDateDue for each family.
 			string command=@"DROP TABLE IF EXISTS temprecallmaxdate;
 				CREATE table temprecallmaxdate(
-					Guarantor int NOT NULL,
+					Guarantor bigint NOT NULL,
 					MaxDateDue date NOT NULL,
 					PRIMARY KEY (Guarantor)
 				);

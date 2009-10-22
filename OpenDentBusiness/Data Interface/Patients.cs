@@ -968,8 +968,8 @@ namespace OpenDentBusiness{
 				DROP TABLE IF EXISTS tempfambal;
 				CREATE TABLE tempfambal( 
 					FamBalNum int NOT NULL auto_increment,
-					PatNum int NOT NULL,
-					ProvNum int NOT NULL,
+					PatNum bigint NOT NULL,
+					ProvNum bigint NOT NULL,
 					AmtBal double NOT NULL,
 					InsEst double NOT NULL,
 					PRIMARY KEY (FamBalNum));
@@ -1252,7 +1252,7 @@ namespace OpenDentBusiness{
 			if(includeChanged){
 				command+=@"DROP TABLE IF EXISTS templastproc;
 					CREATE TABLE templastproc(
-					Guarantor int unsigned NOT NULL,
+					Guarantor bigint unsigned NOT NULL,
 					LastProc date NOT NULL,
 					PRIMARY KEY (Guarantor));
 					INSERT INTO templastproc
@@ -1265,7 +1265,7 @@ namespace OpenDentBusiness{
 					
 					DROP TABLE IF EXISTS templastpay;
 					CREATE TABLE templastpay(
-					Guarantor int unsigned NOT NULL,
+					Guarantor bigint unsigned NOT NULL,
 					LastPay date NOT NULL,
 					PRIMARY KEY (Guarantor));
 					INSERT INTO templastpay
@@ -1278,7 +1278,7 @@ namespace OpenDentBusiness{
 			if(excludeInsPending) {
 				command+=@"DROP TABLE IF EXISTS tempclaimspending;
 					CREATE TABLE tempclaimspending(
-					Guarantor int unsigned NOT NULL,
+					Guarantor bigint unsigned NOT NULL,
 					PendingClaimCount int NOT NULL,
 					PRIMARY KEY (Guarantor));
 					INSERT INTO tempclaimspending
@@ -1292,7 +1292,7 @@ namespace OpenDentBusiness{
 			if(excludeIfUnsentProcs) {
 				command+=@"DROP TABLE IF EXISTS tempunsentprocs;
 					CREATE TABLE tempunsentprocs(
-					Guarantor int unsigned NOT NULL,
+					Guarantor bigint unsigned NOT NULL,
 					UnsentProcCount int NOT NULL,
 					PRIMARY KEY (Guarantor));
 					INSERT INTO tempunsentprocs

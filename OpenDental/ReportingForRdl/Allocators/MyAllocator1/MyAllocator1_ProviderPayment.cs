@@ -125,10 +125,10 @@ namespace OpenDental.Reporting.Allocators {
 				command = "CREATE TABLE " + TABLENAME + " ("
 			   + @"AllocNum INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 					AllocType TINYINT,
-					Guarantor INT NOT NULL,
-					ProvNum int DEFAULT 0,
+					Guarantor BIGINT NOT NULL,
+					ProvNum bigint DEFAULT 0,
 					PayTableSource TINYINT,
-					PaySourceNum int,
+					PaySourceNum bigint,
 					AllocToTableSource TINYINT,
 					AllocToSourceNum int,
 					Amount DECIMAL (10,2) NOT NULL,
@@ -178,7 +178,7 @@ namespace OpenDental.Reporting.Allocators {
 			if(type1 == OpenDentBusiness.DatabaseType.MySql) {
 				command = "CREATE TABLE " + TABLENAME + "_temp \n(\n"
 					+ "   tempIndex INT NOT NULL AUTO_INCREMENT PRIMARY KEY, \n"
-					+ "   Guarantor int NOT NULL, \n"
+					+ "   Guarantor bigint NOT NULL, \n"
 					+ "   AllocStatus TINYINT\n)\n"
 					+ "DEFAULT CHARSET=utf8";
 			}

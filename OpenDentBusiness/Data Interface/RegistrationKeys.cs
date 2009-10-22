@@ -161,7 +161,7 @@ namespace OpenDentBusiness {
 				DROP TABLE IF EXISTS tempRegKeys;
 				CREATE TABLE tempRegKeys(
 					tempRegKeyId int auto_increment NOT NULL,
-					PatNum int NOT NULL,
+					PatNum bigint NOT NULL,
 					RegKey VARCHAR(255) NOT NULL,
 					IsMissing tinyint NOT NULL,
 					Date_ DATE NOT NULL DEFAULT '0001-01-01',

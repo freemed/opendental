@@ -127,17 +127,17 @@ DROP TABLE IF EXISTS tempplanned;
 DROP TABLE IF EXISTS tempannualmax;
 
 CREATE TABLE tempused(
-PatPlanNum mediumint unsigned NOT NULL,
+PatPlanNum bigint unsigned NOT NULL,
 AmtUsed double NOT NULL,
 PRIMARY KEY (PatPlanNum));
 
 CREATE TABLE tempplanned(
-PatNum mediumint unsigned NOT NULL,
+PatNum bigint unsigned NOT NULL,
 AmtPlanned double NOT NULL,
 PRIMARY KEY (PatNum));
 
 CREATE TABLE tempannualmax(
-PlanNum mediumint unsigned NOT NULL,
+PlanNum bigint unsigned NOT NULL,
 AnnualMax double NOT NULL,
 PRIMARY KEY (PlanNum));
 
