@@ -16,23 +16,13 @@ namespace SparksToothChart {
 		private bool hardwareMode=false;
 		private ToothChartOpenGL toothChartOpenGL;
 		private ToothChartDirectX toothChartDirectX;
-		///<summary>valid values are 1 to 32 (int). Only used in simple mode.</summary>
-		private ArrayList ALSelectedTeeth;
-		///<summary>width of entire set of teeth, in mm.</summary>
-		private float WidthProjection;
-		private bool MouseIsDown;
-		///<summary>Mouse move causes this variable to be updated with the current tooth that the mouse is hovering over.</summary>
-		private int hotTooth;
-		///<summary>The previous hotTooth.  If this is different than hotTooth, then mouse has just now moved to a new tooth.  Can be 0 to represent no previous.</summary>
-		private int hotToothOld;
 		private int preferredPixelFormatNum;
 		private CursorTool cursorTool;
-		///<summary>A list of points for a line currently being drawn.  Once the mouse is raised, this list gets cleared.</summary>
-		private List<Point> PointList;
+		
 		///<summary></summary>
 		[Category("Action"),Description("Occurs when the mouse goes up ending a drawing segment.")]
 		public event ToothChartDrawEventHandler SegmentDrawn=null;
-		private List<ToothInitial> DrawingSegmentList;
+		
 		private Color drawingColor;
 		///<summary>When the drawing feature was originally added, this was the size of the tooth chart.  This number must forever be preserved and drawings scaled to account for it.</summary>
 		private Size originalDrawingSize=new Size(410,307);
@@ -43,12 +33,9 @@ namespace SparksToothChart {
 		public ToothChartWrapper() {
 			TcData=new ToothChartData();
 			InitializeComponent();
-			WidthProjection=130;
-			ALSelectedTeeth=new ArrayList();
 			ResetControls();
 			cursorTool=CursorTool.Pointer;
-			PointList=new List<Point>();
-			DrawingSegmentList=new List<ToothInitial>();
+		
 			drawingColor=Color.Black;
 		}
 
@@ -254,7 +241,7 @@ namespace SparksToothChart {
 
 		///<summary>If ListToothGraphics is empty, then this fills it, including the complex process of loading all drawing points from local resources.  Or if not empty, then this resets all 32+20 teeth to default postitions, no restorations, etc. Primary teeth set to visible false.  Also clears selected.  Should surround with SuspendLayout / ResumeLayout.</summary>
 		public void ResetTeeth() {
-			selectedTeeth=new string[0];
+			//selectedTeeth=new string[0];
 			//this will only happen once when program first loads.  Unfortunately, there is no way to tell what the drawMode is going to be when loading the graphics from the file.  So any other initialization must happen in resetControls.
 			if(TcData.ListToothGraphics.Count==0) {
 				TcData.ListToothGraphics.Clear();
@@ -278,10 +265,10 @@ namespace SparksToothChart {
 					TcData.ListToothGraphics[i].Reset();
 				}
 			}
-			ALSelectedTeeth.Clear();
-			selectedTeeth=new string[0];
-			DrawingSegmentList=new List<ToothInitial>();
-			PointList=new List<Point>();
+			TcData.SelectedTeeth.Clear();
+			//selectedTeeth=new string[0];
+			//DrawingSegmentList=new List<ToothInitial>();
+			//PointList=new List<Point>();
 			Invalidate();
 		}
 
@@ -556,567 +543,20 @@ namespace SparksToothChart {
 
 		#endregion
 
-		#region Painting
 
-		protected override void OnPaintBackground(PaintEventArgs e) {
-			//base.OnPaintBackground(e);//don't draw background
-		}
-
-		protected override void OnPaint(PaintEventArgs e) {
-			base.OnPaint(e);
-			//if(!simpleMode){
-			//	return;
-			//}
-			/*
-			Graphics g=e.Graphics;
-			g.DrawImage(pictBox.Image,new Rectangle(0,0,this.Width,this.Height));
-			g.SmoothingMode=SmoothingMode.HighQuality;
-			for(int t=0;t<ListToothGraphics.Count;t++) {//loop through each tooth
-				if(ListToothGraphics[t].ToothID=="implant") {//this is not an actual tooth.
-					continue;
-				}
-				DrawFacialView(ListToothGraphics[t],g);
-				DrawOcclusalView(ListToothGraphics[t],g);
-			}
-			DrawNumbers(g);
-			DrawDrawingSegments(g);
-			g.Dispose();*/
-		}
-
-		///<summary>Only called when in simple graphical mode.</summary>
-		private void DrawFacialView(ToothGraphic toothGraphic,Graphics g) {
-			float x,y;
-			x=GetTransX(toothGraphic.ToothID);
-			y=GetTransYfacial(toothGraphic.ToothID);
-			if(toothGraphic.Visible
-				|| (toothGraphic.IsCrown && toothGraphic.IsImplant)
-				|| toothGraphic.IsPontic) {
-				//DrawTooth(toothGraphic,g);
-			}
-			float w=0;
-			if(!ToothGraphic.IsPrimary(toothGraphic.ToothID)){
-				w=ToothGraphic.GetWidth(toothGraphic.ToothID)/WidthProjection*(float)Width;
-			}
-			if(!ToothGraphic.IsPrimary(toothGraphic.ToothID) && (!toothGraphic.Visible || toothGraphic.IsPontic)){
-				if(ToothGraphic.IsMaxillary(toothGraphic.ToothID)){
-	//g.FillRectangle(new SolidBrush(colorBackSimple),x-w/2f,0,w,Height/2f-20);
-				}
-				else{
-	//g.FillRectangle(new SolidBrush(colorBackSimple),x-w/2f,Height/2f+20,w,Height/2f-20);
-				}
-			}
-			if(toothGraphic.DrawBigX) {
-				float halfxwidth=6;
-				float xheight=58;
-				float offsetofx=73;
-				//toothGraphic.colorX
-				if(ToothGraphic.IsMaxillary(toothGraphic.ToothID)) {					
-					g.DrawLine(new Pen(toothGraphic.colorX),x-halfxwidth,Height/2f-offsetofx-xheight,x+halfxwidth,Height/2f-offsetofx);
-					g.DrawLine(new Pen(toothGraphic.colorX),x+halfxwidth,Height/2f-offsetofx-xheight,x-halfxwidth,Height/2f-offsetofx);
-				}
-				else {//Mandible
-					g.DrawLine(new Pen(toothGraphic.colorX),x-halfxwidth,Height/2f+offsetofx+xheight,x+halfxwidth,Height/2f+offsetofx);
-					g.DrawLine(new Pen(toothGraphic.colorX),x+halfxwidth,Height/2f+offsetofx+xheight,x-halfxwidth,Height/2f+offsetofx);
-				}
-			}
-			if(toothGraphic.Visible && toothGraphic.IsRCT) {//draw RCT
-				//x=,y= etc
-				//toothGraphic.colorRCT
-				//?
-			}
-			if(toothGraphic.Visible && toothGraphic.IsBU) {//BU or Post
-				//?
-			}
-			if(toothGraphic.IsImplant) {
-				//?
-			}
-		}
-
-		private void DrawOcclusalView(ToothGraphic toothGraphic,Graphics g) {
-			//now the occlusal surface. Absolute pixels instead of mm relative to center.
-			float x,y;
-			x=GetTransX(toothGraphic.ToothID);
-			y=GetTransYocclusal(toothGraphic.ToothID);
-			if(toothGraphic.Visible//might not be visible if an implant
-				|| (toothGraphic.IsCrown && toothGraphic.IsImplant)//a crown on an implant will paint
-			//pontics won't paint, because tooth is invisible
-				//but, unlike the regular toothchart, we do want pontics to paint here
-				|| toothGraphic.IsPontic)
-			{
-				DrawToothOcclusal(toothGraphic,g);
-			}
-			if(toothGraphic.Visible && 
-				toothGraphic.IsSealant) {//draw sealant
-				//?
-			}
-		}
-
-		private void DrawNumbers(Graphics g) {
-			for(int i=1;i<=32;i++) {
-				if(ALSelectedTeeth.Contains(i)) {
-					DrawNumber(i,true,true,g);
-				}
-				else {
-					DrawNumber(i,false,true,g);
-				}
-			}
-		}
-
-		private void DrawDrawingSegments(Graphics g){
-			string[] pointStr;
-			List<Point> points;
-			Point point;
-			string[] xy;
-			Pen pen;
-			for(int s=0;s<DrawingSegmentList.Count;s++){
-				pen=new Pen(DrawingSegmentList[s].ColorDraw,2f);
-				pointStr=DrawingSegmentList[s].DrawingSegment.Split(';');
-				points=new List<Point>();
-				for(int p=0;p<pointStr.Length;p++){
-					xy=pointStr[p].Split(',');
-					if(xy.Length==2){
-						point=new Point(int.Parse(xy[0]),int.Parse(xy[1]));
-						points.Add(point);
-					}
-				}
-				for(int i=1;i<points.Count;i++){
-					//if we set 0,0 to center, then this is where we would convert it back.
-					g.DrawLine(pen,points[i-1].X,
-						points[i-1].Y,
-						points[i].X,
-						points[i].Y);
-				}
-			}
-		}
-
-		///<summary>Gets the rectangle in pixels surrounding a tooth number.  Used to draw the box and to invalidate the area.</summary>
-		private RectangleF GetNumberRec(string tooth_id,Graphics g) {
-			float xPos=GetTransX(tooth_id);
-			float yPos=Height/2f;
-			if(ToothGraphic.IsMaxillary(tooth_id)) {
-				yPos-=14;
+		public void SetSelected(string tooth_id,bool setValue) {
+			if(setValue) {
+				//todo: should we check first to see if the tooth is already in SelectedTeeth?
+				TcData.SelectedTeeth.Add(tooth_id);
+				//DrawNumber(tooth_id,true,false);
 			}
 			else {
-				yPos+=3;
+				TcData.SelectedTeeth.Remove(tooth_id);
+				//DrawNumber(tooth_id,false,false);
 			}
-			string displayNum ="";
-			try{
-				displayNum =OpenDentBusiness.Tooth.GetToothLabel(tooth_id);
-			}
-			catch{
-				displayNum ="";//helps with design-time error
-			}
-			float strWidth=g.MeasureString(displayNum,Font).Width;
-			xPos-=strWidth/2f;
-			RectangleF rec=new RectangleF(xPos-1,yPos-1,strWidth,12);//this rec has origin at UL
-			return rec;
-		}
-
-		///<summary>Draws the number and the rectangle behind it.  Draws in the appropriate color</summary>
-		private void DrawNumber(int intTooth, bool isSelected, bool isFullRedraw,Graphics g) {
-			/*
-			string tooth_id=intTooth.ToString();
-			string displayNum=intTooth.ToString();
-			bool hideNumber=false;
-			string pri=ToothGraphic.PermToPri(tooth_id);
-			try{
-				if(ToothGraphic.IsValidToothID(pri)//pri is valid
-					&& ListToothGraphics[pri].Visible)//and pri visible
-				{
-					tooth_id=pri;
-				}
-				if(isFullRedraw && ListToothGraphics[tooth_id].HideNumber){//if redrawing all numbers, and this is a "hidden" number
-					return;//skip
-				}
-				displayNum = OpenDentBusiness.Tooth.GetToothLabel(tooth_id);
-				hideNumber=ListToothGraphics[tooth_id].HideNumber;
-			}
-			catch{
-				//must be design mode.
-			}
-			RectangleF rec=GetNumberRec(tooth_id,g);
-			if(isSelected){
-				g.FillRectangle(new SolidBrush(colorBackHighlight),rec);
-				if(!hideNumber){//Only draw if number is not hidden.
-					g.DrawString(displayNum,Font,new SolidBrush(colorTextHighlight),rec.X,rec.Y);
-				}
-			} 
-			else{
-				g.FillRectangle(new SolidBrush(colorBackground),rec);
-				if(!hideNumber) {//Only draw if number is not hidden.
-					g.DrawString(displayNum,Font,new SolidBrush(colorText),rec.X,rec.Y);
-				}
-			}*/
-		}
-
-		///<summary></summary>
-		private void DrawToothOcclusal(ToothGraphic toothGraphic,Graphics g) {
-			ToothGroup group;
-			float x,y;
-			Pen outline=new Pen(Color.Gray);
-			for(int i=0;i<toothGraphic.Groups.Count;i++) {
-				group=(ToothGroup)toothGraphic.Groups[i];
-				if(!group.Visible) {
-					continue;
-				}
-				x=GetTransX(toothGraphic.ToothID);
-				y=GetTransYocclusal(toothGraphic.ToothID);
-				float sqB=4;//half the size of the central sqare. B for Big.
-				float cirB=9.5f;//radius of outer circle
-				float sqS=3;//S for small
-				float cirS=8f;
-				GraphicsPath path;
-				SolidBrush brush=new SolidBrush(group.PaintColor);
-				string dir;
-				switch(group.GroupType){
-					case ToothGroupType.O:
-						g.FillRectangle(brush,x-sqB,y-sqB,2f*sqB,2f*sqB);
-						g.DrawRectangle(outline,x-sqB,y-sqB,2f*sqB,2f*sqB);
-						break;
-					case ToothGroupType.I:
-						g.FillRectangle(brush,x-sqS,y-sqS,2f*sqS,2f*sqS);
-						g.DrawRectangle(outline,x-sqS,y-sqS,2f*sqS,2f*sqS);
-						break;
-					case ToothGroupType.B:
-						if(ToothGraphic.IsMaxillary(toothGraphic.ToothID)){
-							path=GetPath("U",x,y,sqB,cirB);
-						}
-						else{
-							path=GetPath("D",x,y,sqB,cirB);
-						}
-						g.FillPath(brush,path);
-						g.DrawPath(outline,path);
-						break;
-					case ToothGroupType.F:
-						if(ToothGraphic.IsMaxillary(toothGraphic.ToothID)) {
-							path=GetPath("U",x,y,sqS,cirS);
-						}
-						else {
-							path=GetPath("D",x,y,sqS,cirS);
-						}
-						g.FillPath(brush,path);
-						g.DrawPath(outline,path);
-						break;
-					case ToothGroupType.L:
-						if(ToothGraphic.IsMaxillary(toothGraphic.ToothID)) {
-							dir="D";
-						}
-						else {
-							dir="U";
-						}
-						if(ToothGraphic.IsAnterior(toothGraphic.ToothID)) {
-							path=GetPath(dir,x,y,sqS,cirS);
-						}
-						else {
-							path=GetPath(dir,x,y,sqB,cirB);
-						}
-						g.FillPath(brush,path);
-						g.DrawPath(outline,path);
-						break;
-					case ToothGroupType.M:
-						if(ToothGraphic.IsRight(toothGraphic.ToothID)){
-							dir="R";
-						}
-						else{
-							dir="L";
-						}
-						if(ToothGraphic.IsAnterior(toothGraphic.ToothID)) {
-							path=GetPath(dir,x,y,sqS,cirS);
-						}
-						else {
-							path=GetPath(dir,x,y,sqB,cirB);
-						}
-						g.FillPath(brush,path);
-						g.DrawPath(outline,path);
-						break;
-					case ToothGroupType.D:
-						if(ToothGraphic.IsRight(toothGraphic.ToothID)) {
-							dir="L";
-						}
-						else {
-							dir="R";
-						}
-						if(ToothGraphic.IsAnterior(toothGraphic.ToothID)) {
-							path=GetPath(dir,x,y,sqS,cirS);
-						}
-						else {
-							path=GetPath(dir,x,y,sqB,cirB);
-						}
-						g.FillPath(brush,path);
-						g.DrawPath(outline,path);
-						break;
-				}
-				//group.PaintColor
-				//Gl.glCallList(displayListOffset+toothGraphic.GetIndexForDisplayList(group));
-			}
-		}
-
-		///<summary>Gets a path for the pie shape that represents a tooth surface.  sq and cir refer to the radius of those two elements.</summary>
-		private GraphicsPath GetPath(string UDLR,float x,float y,float sq,float cir){
-			GraphicsPath path=new GraphicsPath();
-			float pt=cir*0.7071f;//the x or y dist to the point where the circle is at 45 degrees.
-			switch(UDLR){
-				case "U":
-					path.AddLine(x-sq,y-sq,x+sq,y-sq);
-					path.AddLine(x+sq,y-sq,x+pt,y-pt);
-					path.AddArc(x-cir,y-cir,cir*2f,cir*2f,360-45,-90);
-					path.AddLine(x-pt,y-pt,x-sq,y-sq);
-					break;
-				case "D":
-					path.AddLine(x+sq,y+sq,x-sq,y+sq);
-					path.AddLine(x-sq,y+sq,x-pt,y+pt);
-					path.AddArc(x-cir,y-cir,cir*2f,cir*2f,90+45,-90);
-					path.AddLine(x+pt,y+pt,x+sq,y+sq);
-					break;
-				case "L":
-					path.AddLine(x-sq,y+sq,x-sq,y-sq);
-					path.AddLine(x-sq,y-sq,x-pt,y-pt);
-					path.AddArc(x-cir,y-cir,cir*2f,cir*2f,180+45,-90);
-					path.AddLine(x-pt,y+pt,x-sq,y+sq);
-					break;
-				case "R":
-					path.AddLine(x+sq,y-sq,x+sq,y+sq);
-					path.AddLine(x+sq,y+sq,x+pt,y+pt);
-					path.AddArc(x-cir,y-cir,cir*2f,cir*2f,45,-90);
-					path.AddLine(x+pt,y-pt,x+sq,y-sq);
-					break;
-			}
-			return path;
-		}
-
-		///<summary>Pri or perm tooth numbers are valid.  Only locations of perm teeth are stored.  This also converts mm to screen pixels.</summary>
-		private float GetTransX(string tooth_id) {
-			int toothInt=ToothGraphic.IdToInt(tooth_id);
-			if(toothInt==-1) {
-				throw new ApplicationException("Invalid tooth number: "+tooth_id);//only for debugging
-			}
-			float xmm=ToothGraphic.GetDefaultOrthoXpos(toothInt);//in +/- mm from center
-			return (WidthProjection/2f+xmm)*Width/WidthProjection;
-		}
-
-		///<summary>In control coords rather than mm.</summary>
-		private float GetTransYfacial(string tooth_id) {
-			float basic=30;
-			if(ToothGraphic.IsMaxillary(tooth_id)) {
-				return Height/2-basic;
-			}
-			return Height/2+basic;
-		}
-
-		private float GetTransYocclusal(string tooth_id) {
-			if(ToothGraphic.IsMaxillary(tooth_id)) {
-				return Height/2-48f;
-			}
-			return Height/2+48f;
-		}
-		#endregion
-
-		#region Mouse And Selections
-
-		///<summary>Always returns a number between 1 and 32.  This isn't perfect, since it only operates on perm teeth, and assumes that any primary tooth will be at the same x pos as its perm tooth.</summary>
-		private int GetToothAtPoint(int x,int y) {
-			/*
-			float closestDelta=(float)(Width*2);//start it off really big
-			int closestTooth=1;
-			float toothPos=0;
-			float delta=0;
-			//float xPos=(float)((float)(x-Width/2)*WidthProjection/(float)Width);//in mm instead of screen coordinates
-			if(y<Height/2) {//max
-				for(int i=1;i<=16;i++) {
-					if(ListToothGraphics[i.ToString()].HideNumber) {
-						continue;
-					}
-					toothPos=GetTransX(i.ToString());//ToothGraphic.GetDefaultOrthoXpos(i);
-					if(x>toothPos) {//xPos>toothPos) {
-						delta=x-toothPos;
-					}
-					else {
-						delta=toothPos-x;
-					}
-					if(delta<closestDelta) {
-						closestDelta=delta;
-						closestTooth=i;
-					}
-				}
-				return closestTooth;
-			}
-			else {//mand
-				for(int i=17;i<=32;i++) {
-					if(ListToothGraphics[i.ToString()].HideNumber) {
-						continue;
-					}
-					toothPos=GetTransX(i.ToString());//ToothGraphic.GetDefaultOrthoXpos(i);//in mm.
-					if(x>toothPos) {
-						delta=x-toothPos;
-					}
-					else {
-						delta=toothPos-x;
-					}
-					if(delta<closestDelta) {
-						closestDelta=delta;
-						closestTooth=i;
-					}
-				}
-				return closestTooth;
-			}*/
-			return 1;
-		}
-
-		protected override void OnMouseClick(MouseEventArgs e) {
-			base.OnMouseClick(e);
-			//int clicked=GetToothAtPoint(e.X,e.Y);
-
-		}
-
-		protected override void OnMouseDown(MouseEventArgs e) {
-			/*
-			base.OnMouseDown(e);
-			MouseIsDown=true;
-			if(ListToothGraphics.Count==0){//still starting up?
-				return;
-			}
-			if(cursorTool==CursorTool.Pointer){
-				if(drawMode==DrawingMode.Simple2D) {
-					int toothClicked=GetToothAtPoint(e.X,e.Y);
-					if(ALSelectedTeeth.Contains(toothClicked)) {
-						SetSelected(toothClicked,false);
-					}
-					else {
-						SetSelected(toothClicked,true);
-					}
-				}
-			}
-			else if(cursorTool==CursorTool.Pen){
-				PointList.Add(new Point(e.X,e.Y));
-			}
-			else if(cursorTool==CursorTool.Eraser){
-				//do nothing
-			}
-			else if(cursorTool==CursorTool.ColorChanger){
-				//look for any lines near the "wand".
-				//since the line segments are so short, it's sufficient to check end points.
-				string[] xy;
-				string[] pointStr;
-				float x;
-				float y;
-				float dist;//the distance between the point being tested and the center of the eraser circle.
-				float radius=2f;//by trial and error to achieve best feel.
-				//PointF eraserPt=new PointF(e.X+8.49f,e.Y+8.49f);
-				for(int i=0;i<DrawingSegmentList.Count;i++){
-					pointStr=DrawingSegmentList[i].DrawingSegment.Split(';');
-					for(int p=0;p<pointStr.Length;p++){
-						xy=pointStr[p].Split(',');
-						if(xy.Length==2){
-							x=float.Parse(xy[0]);
-							y=float.Parse(xy[1]);
-							dist=(float)Math.Sqrt(Math.Pow(Math.Abs(x-e.X),2)+Math.Pow(Math.Abs(y-e.Y),2));
-							if(dist<=radius){//testing circle intersection here
-								OnSegmentDrawn(DrawingSegmentList[i].DrawingSegment);
-								DrawingSegmentList[i].ColorDraw=drawingColor;
-								Invalidate();
-								return;;
-							}
-						}
-					}
-				}	
-			}*/
-		}
-
-		protected override void OnMouseMove(MouseEventArgs e) {
-			/*
-			base.OnMouseMove(e);
-			if(ListToothGraphics.Count==0) {
-				return;
-			}
-			if(cursorTool==CursorTool.Pointer){
-				if(drawMode==DrawingMode.Simple2D) {
-					hotTooth=GetToothAtPoint(e.X,e.Y);
-					if(hotTooth==hotToothOld) {//mouse has not moved to another tooth
-						return;
-					}
-					hotToothOld=hotTooth;
-					if(MouseIsDown) {//drag action
-						if(ALSelectedTeeth.Contains(hotTooth)) {
-							SetSelected(hotTooth,false);
-						}
-						else {
-							SetSelected(hotTooth,true);
-						}
-					}
-				}
-			}
-			else if(cursorTool==CursorTool.Pen){
-				if(!MouseIsDown){
-					return;
-				}
-				PointList.Add(new Point(e.X,e.Y));
-				//just add the last line segment instead of redrawing the whole thing.
-				Graphics g=this.CreateGraphics();
-				g.SmoothingMode=SmoothingMode.HighQuality;
-				Pen pen=new Pen(drawingColor,2f);
-				int i=PointList.Count-1;
-				g.DrawLine(pen,PointList[i-1].X,PointList[i-1].Y,PointList[i].X,PointList[i].Y);
-				g.Dispose();
-				//Invalidate();
-			}
-			else if(cursorTool==CursorTool.Eraser){
-				if(!MouseIsDown){
-					return;
-				}
-				//look for any lines that intersect the "eraser".
-				//since the line segments are so short, it's sufficient to check end points.
-				string[] xy;
-				string[] pointStr;
-				float x;
-				float y;
-				float dist;//the distance between the point being tested and the center of the eraser circle.
-				float radius=8f;//by trial and error to achieve best feel.
-				PointF eraserPt=new PointF(e.X+8.49f,e.Y+8.49f);
-				for(int i=0;i<DrawingSegmentList.Count;i++){
-					pointStr=DrawingSegmentList[i].DrawingSegment.Split(';');
-					for(int p=0;p<pointStr.Length;p++){
-						xy=pointStr[p].Split(',');
-						if(xy.Length==2){
-							x=float.Parse(xy[0]);
-							y=float.Parse(xy[1]);
-							dist=(float)Math.Sqrt(Math.Pow(Math.Abs(x-eraserPt.X),2)+Math.Pow(Math.Abs(y-eraserPt.Y),2));
-							if(dist<=radius){//testing circle intersection here
-								OnSegmentDrawn(DrawingSegmentList[i].DrawingSegment);//triggers a deletion from db.
-								DrawingSegmentList.RemoveAt(i);
-								Invalidate();
-								return;;
-							}
-						}
-					}
-				}	
-			}
-			else if(cursorTool==CursorTool.ColorChanger){
-				//do nothing
-			}*/
-		}
-
-		protected override void OnMouseUp(MouseEventArgs e) {
-			base.OnMouseUp(e);
-			MouseIsDown=false;
-			if(cursorTool==CursorTool.Pen){
-				string drawingSegment="";
-				for(int i=0;i<PointList.Count;i++){
-					if(i>0){
-						drawingSegment+=";";
-					}
-					//I could compensate to center point here:
-					drawingSegment+=PointList[i].X+","+PointList[i].Y;
-				}
-				OnSegmentDrawn(drawingSegment);
-				PointList=new List<Point>();
-				//Invalidate();//?
-			}
-			else if(cursorTool==CursorTool.Eraser){
-				//do nothing
-			}
-			else if(cursorTool==CursorTool.ColorChanger){
-				//do nothing
-			}
+			//RectangleF recMm=TcData.GetNumberRecMm(tooth_id,);
+			//Rectangle rec=TcData.ConvertRecToPix(recMm);
+			Invalidate();
 		}
 
 		///<summary></summary>
@@ -1131,47 +571,7 @@ namespace SparksToothChart {
 			OnSegmentDrawn(e.DrawingSegement);
 		}
 
-		///<summary>Used by mousedown and mouse move to set teeth selected or unselected.  Also used externally to set teeth selected.  Draws the changes also.</summary>
-		public void SetSelected(string tooth_id,bool setValue) {
-			/*
-			if(drawMode==DrawingMode.Simple2D) {
-				Graphics g=this.CreateGraphics();
-				if(setValue) {
-					ALSelectedTeeth.Add(intTooth);
-					DrawNumber(intTooth,true,false,g);
-				}
-				else {
-					ALSelectedTeeth.Remove(intTooth);
-					DrawNumber(intTooth,false,false,g);
-				}
-				RectangleF recF=GetNumberRec(intTooth.ToString(),g);
-				Rectangle rec=new Rectangle((int)recF.X,(int)recF.Y,(int)recF.Width,(int)recF.Height);
-				Invalidate(rec);
-				Application.DoEvents();
-				if(ALSelectedTeeth.Count==0) {
-					selectedTeeth=new string[0];
-				}
-				else {
-					selectedTeeth=new string[ALSelectedTeeth.Count];
-					for(int i=0;i<ALSelectedTeeth.Count;i++) {
-						if(ToothGraphic.IsValidToothID(ToothGraphic.PermToPri(ALSelectedTeeth[i].ToString()))//pri is valid
-						&& ListToothGraphics[ALSelectedTeeth[i].ToString()].ShowPrimary)//and set to show pri
-					{
-							selectedTeeth[i]=ToothGraphic.PermToPri(ALSelectedTeeth[i].ToString());
-						}
-						else {
-							selectedTeeth[i]=((int)ALSelectedTeeth[i]).ToString();
-						}
-					}
-				}
-				g.Dispose();
-			}
-			else {
-				toothChartOpenGL.SetSelected(intTooth,setValue);
-			}*/
-		}
-
-		#endregion Mouse And Selections
+		
 
 	}
 

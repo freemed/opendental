@@ -61,8 +61,6 @@ namespace SparksToothChart {
 		[Category("Action"),Description("Occurs when the mouse goes up ending a drawing segment.")]
 		public event ToothChartDrawEventHandler SegmentDrawn=null;
 		public Color DrawingColor;
-		///<summary>When the drawing feature was originally added, this was the size of the tooth chart.  This number must forever be preserved and drawings scaled to account for it.</summary>
-		private Size originalDrawingSize=new Size(410,307);
 		///<summary>This is a reference to the TcData object that's at the wrapper level.</summary>
 		public ToothChartData TcData;
 
@@ -405,15 +403,15 @@ namespace SparksToothChart {
 				DrawFacialView(TcData.ListToothGraphics[t]);
 				DrawOcclusalView(TcData.ListToothGraphics[t]);
 			}
-			DrawTextAndLines();
+			DrawNumbersAndLines();
 			DrawDrawingSegments();
 			Gl.glFlush();
 		}
 
 		private void DrawFacialView(ToothGraphic toothGraphic) {
 			Gl.glPushMatrix();//remember position of origin
-			Gl.glTranslatef(GetTransX(toothGraphic.ToothID),//Move the tooth to the correct position for facial view
-				GetTransYfacial(toothGraphic.ToothID),
+			Gl.glTranslatef(TcData.GetTransX(toothGraphic.ToothID),//Move the tooth to the correct position for facial view
+				TcData.GetTransYfacial(toothGraphic.ToothID),
 				0);
 			RotateAndTranslateUser(toothGraphic);
 			if(toothGraphic.Visible
@@ -459,7 +457,7 @@ namespace SparksToothChart {
 			if(toothGraphic.Visible && toothGraphic.IsRCT) {//draw RCT
 				Gl.glPushMatrix();
 				Gl.glTranslatef(0,0,10f);//move RCT forward 10mm so it will be visible.
-				Gl.glTranslatef(GetTransX(toothGraphic.ToothID),GetTransYfacial(toothGraphic.ToothID),0);
+				Gl.glTranslatef(TcData.GetTransX(toothGraphic.ToothID),TcData.GetTransYfacial(toothGraphic.ToothID),0);
 				Gl.glDisable(Gl.GL_LIGHTING);
 				Gl.glEnable(Gl.GL_BLEND);
 				Gl.glColor3f(
@@ -471,7 +469,7 @@ namespace SparksToothChart {
 				Gl.glLineWidth((float)Width/225f);
 				Gl.glPointSize((float)Width/275f);//point is slightly smaller since no antialiasing
 				RotateAndTranslateUser(toothGraphic);
-				List<Line> lines=toothGraphic.GetRctLines();
+				List<LineSimple> lines=toothGraphic.GetRctLines();
 				for(int i=0;i<lines.Count;i++){
 					Gl.glBegin(Gl.GL_LINE_STRIP);
 					for(int j=0;j<lines[i].Vertices.Count;j++){
@@ -484,7 +482,7 @@ namespace SparksToothChart {
 				//It draws a point at each intersection to hide the unsightly transitions between line segments.
 				Gl.glPushMatrix();
 				Gl.glTranslatef(0,0,10.5f);//move forward 10.5mm so it will cover the lines
-				Gl.glTranslatef(GetTransX(toothGraphic.ToothID),GetTransYfacial(toothGraphic.ToothID),0);
+				Gl.glTranslatef(TcData.GetTransX(toothGraphic.ToothID),TcData.GetTransYfacial(toothGraphic.ToothID),0);
 				RotateAndTranslateUser(toothGraphic);
 				Gl.glDisable(Gl.GL_BLEND);
 				for(int i=0;i<lines.Count;i++){
@@ -503,7 +501,7 @@ namespace SparksToothChart {
 			if(toothGraphic.Visible && toothGraphic.IsBU) {//BU or Post
 				Gl.glPushMatrix();
 				Gl.glTranslatef(0,0,13f);//move BU forward 13mm so it will be visible.
-				Gl.glTranslatef(GetTransX(toothGraphic.ToothID),GetTransYfacial(toothGraphic.ToothID),0);
+				Gl.glTranslatef(TcData.GetTransX(toothGraphic.ToothID),TcData.GetTransYfacial(toothGraphic.ToothID),0);
 				Gl.glDisable(Gl.GL_LIGHTING);
 				Gl.glDisable(Gl.GL_BLEND);
 				Gl.glColor3f(
@@ -521,8 +519,8 @@ namespace SparksToothChart {
 			}
 			if(toothGraphic.IsImplant){
 				Gl.glPushMatrix();
-				Gl.glTranslatef(GetTransX(toothGraphic.ToothID),//Move the tooth to the correct position for facial view
-					GetTransYfacial(toothGraphic.ToothID),
+				Gl.glTranslatef(TcData.GetTransX(toothGraphic.ToothID),//Move the tooth to the correct position for facial view
+					TcData.GetTransYfacial(toothGraphic.ToothID),
 					0);
 				RotateAndTranslateUser(toothGraphic);
 				if(ToothGraphic.IsMaxillary(toothGraphic.ToothID)) {
@@ -561,7 +559,7 @@ namespace SparksToothChart {
 		private void DrawOcclusalView(ToothGraphic toothGraphic) {
 			//now the occlusal surface. Notice that it's relative to origin again
 			Gl.glPushMatrix();//remember position of origin
-			Gl.glTranslatef(GetTransX(toothGraphic.ToothID),GetTransYocclusal(toothGraphic.ToothID),0);
+			Gl.glTranslatef(TcData.GetTransX(toothGraphic.ToothID),TcData.GetTransYocclusal(toothGraphic.ToothID),0);
 			if(ToothGraphic.IsMaxillary(toothGraphic.ToothID)) {
 				Gl.glRotatef(-110f,1f,0,0);//rotate angle about line from origin to x,y,z
 			}
@@ -591,7 +589,7 @@ namespace SparksToothChart {
 				toothGraphic.IsSealant){//draw sealant
 				Gl.glPushMatrix();
 				Gl.glTranslatef(0,0,6f);//move forward 6mm so it will be visible.
-				Gl.glTranslatef(GetTransX(toothGraphic.ToothID),GetTransYocclusal(toothGraphic.ToothID),0);
+				Gl.glTranslatef(TcData.GetTransX(toothGraphic.ToothID),TcData.GetTransYocclusal(toothGraphic.ToothID),0);
 				if(ToothGraphic.IsMaxillary(toothGraphic.ToothID)) {
 					Gl.glRotatef(-110f,1f,0,0);//rotate angle about line from origin to x,y,z
 				}
@@ -614,7 +612,7 @@ namespace SparksToothChart {
 				Gl.glLineWidth((float)Width/225f);
 				Gl.glPointSize((float)Width/275f);//point is slightly smaller since no antialiasing
 				RotateAndTranslateUser(toothGraphic);
-				Line line=toothGraphic.GetSealantLine();
+				LineSimple line=toothGraphic.GetSealantLine();
 				Gl.glBegin(Gl.GL_LINE_STRIP);
 				for(int j=0;j<line.Vertices.Count;j++) {//loop through each vertex
 					Gl.glVertex3f(line.Vertices[j].X,line.Vertices[j].Y,line.Vertices[j].Z);
@@ -626,7 +624,7 @@ namespace SparksToothChart {
 				Gl.glPushMatrix();
 				//move foward so it will cover the lines
 				Gl.glTranslatef(0,0,6.5f);
-				Gl.glTranslatef(GetTransX(toothGraphic.ToothID),GetTransYocclusal(toothGraphic.ToothID),0);
+				Gl.glTranslatef(TcData.GetTransX(toothGraphic.ToothID),TcData.GetTransYocclusal(toothGraphic.ToothID),0);
 				if(ToothGraphic.IsMaxillary(toothGraphic.ToothID)) {
 					Gl.glRotatef(-110f,1f,0,0);//rotate angle about line from origin to x,y,z
 				}
@@ -653,7 +651,7 @@ namespace SparksToothChart {
 			}
 		}
 
-		private void DrawTextAndLines() {
+		private void DrawNumbersAndLines() {
 			Gl.glPushMatrix();
 			Gl.glDisable(Gl.GL_LIGHTING);
 			Gl.glDisable(Gl.GL_BLEND);
@@ -695,7 +693,7 @@ namespace SparksToothChart {
 			string[] xy;
 			PointF pointMm;
 			Color color;
-			float scaleDrawing=(float)Width/(float)originalDrawingSize.Width;
+			float scaleDrawing=(float)Width/(float)TcData.OriginalDrawingSize.Width;
 			for(int s=0;s<DrawingSegmentList.Count;s++){
 				color=DrawingSegmentList[s].ColorDraw;
 				Gl.glColor3f(
@@ -714,7 +712,7 @@ namespace SparksToothChart {
 				Gl.glBegin(Gl.GL_LINE_STRIP);
 				for(int i=0;i<points.Count;i++){
 					//if we set 0,0 to center, then this is where we would convert it back.
-					pointMm=PixToMm(new Point(points[i].X,points[i].Y));
+					pointMm=TcData.PixToMm(new Point(points[i].X,points[i].Y),Width,Height);
 					Gl.glVertex3f(pointMm.X,pointMm.Y,0);
 				}
 				Gl.glEnd();
@@ -725,68 +723,12 @@ namespace SparksToothChart {
 					if(i==0 || i==points.Count-1){
 						continue;
 					}
-					pointMm=PixToMm(new Point(points[i].X,points[i].Y));
+					pointMm=TcData.PixToMm(new Point(points[i].X,points[i].Y),Width,Height);
 					Gl.glVertex3f(pointMm.X,pointMm.Y,0);
 				}
 				Gl.glEnd();
 			}
 			Gl.glPopMatrix();
-		}
-
-		///<summary>Gets the rectangle surrounding a tooth number.  Used to draw the box and to invalidate the area.</summary>
-		private RectangleF GetNumberRecMm(string tooth_id){
-			float xPos=0;
-			float yPos=0;
-			if(ToothGraphic.IsMaxillary(tooth_id)) {
-				if(Tooth.IsPrimary(tooth_id)) {
-					yPos+=5.1f;
-				}
-				else {
-					yPos+=1.3f;
-				}
-			}
-			else {
-				if(Tooth.IsPrimary(tooth_id)) {
-					yPos-=7.6f;
-				}
-				else {
-					yPos-=3.8f;
-				}
-			}
-			xPos+=GetTransX(tooth_id);
-//fix this.
-//string displayNum=OpenDentBusiness.Tooth.GetToothLabelGraphic(tooth_id);
-			string displayNum=tooth_id;
-			float strWidth=MeasureStringMm(displayNum);
-			xPos-=strWidth/2f;
-			//only use the ShiftM portion of the user translation
-			if(ToothGraphic.IsRight(tooth_id)) {
-				xPos+=TcData.ListToothGraphics[tooth_id].ShiftM;
-			}
-			else {
-				xPos-=TcData.ListToothGraphics[tooth_id].ShiftM;
-			}
-			float toMm=(float)WidthProjection/(float)Width;//mm/pix
-			RectangleF recMm=new RectangleF(xPos-2f*toMm,yPos-2f*toMm,strWidth+3f*toMm,12f*toMm);//this rec has origin at LL
-			return recMm;
-		}
-
-		///<summary>First, use GetNumberRecMm to get the rectangle surrounding a tooth num.  The, use this to convert it to control coords.</summary>
-		private Rectangle ConvertRecToPix(RectangleF recMm){
-			float toMm=(float)WidthProjection/(float)Width;//mm/pix
-			Rectangle recPix=new Rectangle((int)(Width/2+recMm.X/toMm),(int)(Height/2-recMm.Y/toMm-recMm.Height/toMm),
-				(int)(recMm.Width/toMm),(int)(recMm.Height/toMm));
-			return recPix;
-		}
-
-		///<summary>This also adjusts the result up or down along the Y axis to account for a control that is not the same proportion as the original.</summary>
-		private PointF PixToMm(Point pixPoint){
-			float toMmRatio=(float)WidthProjection/(float)Width;//mm/pix
-			float mmX=(((float)pixPoint.X)*toMmRatio)-((float)WidthProjection)/2f;
-			float idealHeightProjection=(float)WidthProjection*(float)originalDrawingSize.Height/(float)originalDrawingSize.Width;
-			float actualHeightProjection=(float)WidthProjection*(float)this.Height/(float)this.Width;
-			float mmY=(idealHeightProjection)/2f-(((float)pixPoint.Y)*toMmRatio);
-			return new PointF(mmX,mmY);
 		}
 
 		///<summary>Draws the number and the small rectangle behind it.  Draws in the appropriate color.  isFullRedraw means that all of the toothnumbers are being redrawn.  This helps with a few optimizations and with not painting blank rectangles when not needed.</summary>
@@ -819,9 +761,10 @@ namespace SparksToothChart {
 //fix this.  No calls to OpenDentBusiness that require database.
 //string displayNum=OpenDentBusiness.Tooth.GetToothLabelGraphic(tooth_id);
 			string displayNum=tooth_id;
-			float toMm=(float)WidthProjection/(float)Width;//mm/pix
-			RectangleF recMm=GetNumberRecMm(tooth_id);
-			Rectangle recPix=ConvertRecToPix(recMm);
+			float toMm=(float)WidthProjection/(float)Width;//mm/pix, a ratio that is used for conversions below. Fix this.
+			float strWidthMm=MeasureStringMm(displayNum);
+			RectangleF recMm=TcData.GetNumberRecMm(tooth_id,displayNum,strWidthMm,Width);
+			Rectangle recPix=TcData.ConvertRecToPix(recMm,Width,Height);
 			if(isSelected){
 				Gl.glColor3f(
 					(float)TcData.ColorBackHighlight.R/255f,
@@ -1084,117 +1027,13 @@ namespace SparksToothChart {
 			}
 		}
 
-		///<summary>Pri or perm tooth numbers are valid.  Only locations of perm teeth are stored.</summary>
-		private float GetTransX(string tooth_id) {
-			int toothInt=ToothGraphic.IdToInt(tooth_id);
-			if(toothInt==-1) {
-				throw new ApplicationException("Invalid tooth number: "+tooth_id);//only for debugging
-			}
-			return ToothGraphic.GetDefaultOrthoXpos(toothInt);
-		}
-
-		private float GetTransYfacial(string tooth_id) {
-			float basic=29f;
-			if(tooth_id=="6" || tooth_id=="11") {
-				return basic+1f;
-			}
-			if(tooth_id=="7" || tooth_id=="10") {
-				return basic+1f;
-			}
-			else if(tooth_id=="8" || tooth_id=="9") {
-				return basic+2f;
-			}
-			else if(tooth_id=="22" || tooth_id=="27") {
-				return -basic-2f;
-			}
-			else if(tooth_id=="23" || tooth_id=="24" || tooth_id=="25" || tooth_id=="26") {
-				return -basic-2f;
-			}
-			else if(ToothGraphic.IsMaxillary(tooth_id)) {
-				return basic;
-			}
-			return -basic;
-		}
-
-		private float GetTransYocclusal(string tooth_id) {
-			if(ToothGraphic.IsMaxillary(tooth_id)) {
-				return 13f;
-			}
-			return -13f;
-		}
-
 		#region Mouse And Selections
-
-		///<summary>Always returns a string, 1 through 32 or A through T.  Primary letters are only returned if that tooth is set as primary.</summary>
-		private string GetToothAtPoint(int x,int y) {
-			/*
-			float closestDelta=(float)(WidthProjection*2);//start it off really big
-			int closestTooth=1;
-			float toothPos=0;
-			float delta=0;
-			float xPos=(float)((float)(x-Width/2)*WidthProjection/(float)Width);//in mm instead of screen coordinates
-			if(y<Height/2) {//max
-				for(int i=1;i<=16;i++) {
-					if(TcData.ListToothGraphics[i.ToString()].HideNumber) {
-						continue;
-					}
-					toothPos=ToothGraphic.GetDefaultOrthoXpos(i);
-					if(ToothGraphic.IsRight(i.ToString())) {
-						toothPos+=(int)TcData.ListToothGraphics[i.ToString()].ShiftM;//*(float)Width/WidthProjection);
-					}
-					else {
-						toothPos-=(int)TcData.ListToothGraphics[i.ToString()].ShiftM;//*(float)Width/WidthProjection);
-					}
-					if(xPos>toothPos) {
-						delta=xPos-toothPos;
-					}
-					else {
-						delta=toothPos-xPos;
-					}
-					if(delta<closestDelta) {
-						closestDelta=delta;
-						closestTooth=i;
-					}
-				}
-				return closestTooth;
-			}
-			else {//mand
-				for(int i=17;i<=32;i++) {
-					if(TcData.ListToothGraphics[i.ToString()].HideNumber) {
-						continue;
-					}
-					toothPos=ToothGraphic.GetDefaultOrthoXpos(i);//in mm.
-					if(ToothGraphic.IsRight(i.ToString())) {
-						toothPos+=(int)TcData.ListToothGraphics[i.ToString()].ShiftM;
-					}
-					else {
-						toothPos-=(int)TcData.ListToothGraphics[i.ToString()].ShiftM;
-					}
-					if(xPos>toothPos) {
-						delta=xPos-toothPos;
-					}
-					else {
-						delta=toothPos-xPos;
-					}
-					if(delta<closestDelta) {
-						closestDelta=delta;
-						closestTooth=i;
-					}
-				}
-				return closestTooth;
-			}*/
-			return "1";
-		}
-
-		protected override void OnMouseClick(MouseEventArgs e) {
-			base.OnMouseClick(e);
-		}
 
 		protected override void OnMouseDown(MouseEventArgs e) {
 			base.OnMouseDown(e);
 			MouseIsDown=true;
 			if(CursorTool==CursorTool.Pointer){
-				string toothClicked=GetToothAtPoint(e.X,e.Y);
+				string toothClicked=TcData.GetToothAtPoint(e.X,e.Y);
 				//MessageBox.Show(toothClicked.ToString());
 				if(TcData.SelectedTeeth.Contains(toothClicked)) {
 					SetSelected(toothClicked,false);
@@ -1241,7 +1080,7 @@ namespace SparksToothChart {
 		protected override void OnMouseMove(MouseEventArgs e) {
 			base.OnMouseMove(e);
 			if(CursorTool==CursorTool.Pointer){
-				hotTooth=GetToothAtPoint(e.X,e.Y);
+				hotTooth=TcData.GetToothAtPoint(e.X,e.Y);
 				if(hotTooth==hotToothOld) {//mouse has not moved to another tooth
 					return;
 				}
@@ -1274,9 +1113,9 @@ namespace SparksToothChart {
 				int i=PointList.Count-1;
 				Gl.glBegin(Gl.GL_LINE_STRIP);
 				//if we set 0,0 to center, then this is where we would convert it back.
-				PointF pointMm=PixToMm(PointList[i-1]);
+				PointF pointMm=TcData.PixToMm(PointList[i-1],Width,Height);
 				Gl.glVertex3f(pointMm.X,pointMm.Y,0);
-				pointMm=PixToMm(PointList[i]);
+				pointMm=TcData.PixToMm(PointList[i],Width,Height);
 				Gl.glVertex3f(pointMm.X,pointMm.Y,0);
 				Gl.glEnd();
 				Gl.glPopMatrix();
@@ -1350,7 +1189,7 @@ namespace SparksToothChart {
 			}
 		}
 
-		///<summary>Used by mousedown and mouse move to set teeth selected or unselected.  Also used externally to set teeth selected.  Draws the changes also.</summary>
+		///<summary>Used by mousedown and mouse move to set teeth selected or unselected.  A similar method is used externally in the wrapper to set teeth selected.  This private method might be faster since it only draws the changes.</summary>
 		private void SetSelected(string tooth_id,bool setValue) {
 			suspendRendering=true;
 			if(setValue) {
@@ -1362,9 +1201,9 @@ namespace SparksToothChart {
 				TcData.SelectedTeeth.Remove(tooth_id);
 				DrawNumber(tooth_id,false,false);
 			}
-			RectangleF recMm=GetNumberRecMm(tooth_id);
-			Rectangle rec=ConvertRecToPix(recMm);
-			Invalidate(rec);//but it invalidates the whole thing anyway.  Oh, well.
+			//RectangleF recMm=TcData.GetNumberRecMm(tooth_id,);
+			//Rectangle rec=TcData.ConvertRecToPix(recMm);
+			Invalidate();//rec);//but it invalidates the whole thing anyway.  Oh, well.
 			Application.DoEvents();
 			suspendRendering=false;
 			//if(TcData.SelectedTeeth.Count==0) {
@@ -1385,8 +1224,6 @@ namespace SparksToothChart {
 				}*/
 			//}
 		}
-
-		
 
 		#endregion Mouse And Selections
 

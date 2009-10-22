@@ -4,11 +4,11 @@ using System.Text;
 
 namespace SparksToothChart {
 	///<summary>A series of vertices that are all connected into one continuous simple line.</summary>
-	public class Line {
+	public class LineSimple {
 		public List<Vertex3f> Vertices;
 
 		///<summary>Specify a line as a series of points.  It's implied that they are grouped by threes.</summary>
-		public Line(params float[] coords) {
+		public LineSimple(params float[] coords) {
 			Vertices=new List<Vertex3f>();
 			Vertex3f vertex=new Vertex3f();
 			for(int i=0;i<coords.Length;i++) {
