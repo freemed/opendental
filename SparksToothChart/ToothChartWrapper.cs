@@ -251,8 +251,8 @@ namespace SparksToothChart {
 					tooth.Visible=true;
 					TcData.ListToothGraphics.Add(tooth);
 					//primary
-					if(ToothGraphic.PermToPri(i.ToString())!="") {
-						tooth=new ToothGraphic(ToothGraphic.PermToPri(i.ToString()));
+					if(Tooth.PermToPri(i.ToString())!="") {
+						tooth=new ToothGraphic(Tooth.PermToPri(i.ToString()));
 						tooth.Visible=false;
 						TcData.ListToothGraphics.Add(tooth);
 					}
@@ -291,12 +291,12 @@ namespace SparksToothChart {
 			if(!ToothGraphic.IsValidToothID(toothID)) {
 				return;
 			}
-			if(ToothGraphic.IsPrimary(toothID)) {
+			if(Tooth.IsPrimary(toothID)) {
 				return;
 			}
 			TcData.ListToothGraphics[toothID].ShiftO-=12;
-			if(ToothGraphic.IsValidToothID(ToothGraphic.PermToPri(toothID))) {//if there's a primary tooth at this location
-				TcData.ListToothGraphics[ToothGraphic.PermToPri(toothID)].Visible=true;//show the primary.
+			if(ToothGraphic.IsValidToothID(Tooth.PermToPri(toothID))) {//if there's a primary tooth at this location
+				TcData.ListToothGraphics[Tooth.PermToPri(toothID)].Visible=true;//show the primary.
 				TcData.ListToothGraphics[toothID].ShowPrimaryLetter=true;
 			}		
 			//first pri mand molars, shift slightly to M

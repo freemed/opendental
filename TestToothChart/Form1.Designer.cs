@@ -30,6 +30,7 @@
 			this.butAllPrimary = new System.Windows.Forms.Button();
 			this.butMixed = new System.Windows.Forms.Button();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.panelColorBackgroundLtGray = new System.Windows.Forms.Panel();
 			this.panelColorBackgroundBlue = new System.Windows.Forms.Panel();
 			this.panelColorBackgroundWhite = new System.Windows.Forms.Panel();
 			this.panelColorBackgroundBlack = new System.Windows.Forms.Panel();
@@ -51,11 +52,15 @@
 			this.panelColorBackHighlightWhite = new System.Windows.Forms.Panel();
 			this.panelColorBackHighlightBlack = new System.Windows.Forms.Panel();
 			this.panelColorBackHighlightGray = new System.Windows.Forms.Panel();
-			this.panelColorBackgroundLtGray = new System.Windows.Forms.Panel();
+			this.groupBox5 = new System.Windows.Forms.GroupBox();
+			this.butSizeTall = new System.Windows.Forms.Button();
+			this.butSizeNormal = new System.Windows.Forms.Button();
+			this.butSizeWide = new System.Windows.Forms.Button();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupBox3.SuspendLayout();
 			this.groupBox4.SuspendLayout();
+			this.groupBox5.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -128,6 +133,15 @@
 			this.groupBox1.TabIndex = 204;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "ColorBackground";
+			// 
+			// panelColorBackgroundLtGray
+			// 
+			this.panelColorBackgroundLtGray.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))),((int)(((byte)(224)))),((int)(((byte)(224)))));
+			this.panelColorBackgroundLtGray.Location = new System.Drawing.Point(38,18);
+			this.panelColorBackgroundLtGray.Name = "panelColorBackgroundLtGray";
+			this.panelColorBackgroundLtGray.Size = new System.Drawing.Size(23,21);
+			this.panelColorBackgroundLtGray.TabIndex = 209;
+			this.panelColorBackgroundLtGray.Click += new System.EventHandler(this.panelColorBackgroundLtGray_Click);
 			// 
 			// panelColorBackgroundBlue
 			// 
@@ -346,20 +360,54 @@
 			this.panelColorBackHighlightGray.TabIndex = 205;
 			this.panelColorBackHighlightGray.Click += new System.EventHandler(this.panelColorBackHighlightGray_Click);
 			// 
-			// panelColorBackgroundLtGray
+			// groupBox5
 			// 
-			this.panelColorBackgroundLtGray.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))),((int)(((byte)(224)))),((int)(((byte)(224)))));
-			this.panelColorBackgroundLtGray.Location = new System.Drawing.Point(38,18);
-			this.panelColorBackgroundLtGray.Name = "panelColorBackgroundLtGray";
-			this.panelColorBackgroundLtGray.Size = new System.Drawing.Size(23,21);
-			this.panelColorBackgroundLtGray.TabIndex = 209;
-			this.panelColorBackgroundLtGray.Click += new System.EventHandler(this.panelColorBackgroundLtGray_Click);
+			this.groupBox5.Controls.Add(this.butSizeWide);
+			this.groupBox5.Controls.Add(this.butSizeTall);
+			this.groupBox5.Controls.Add(this.butSizeNormal);
+			this.groupBox5.Location = new System.Drawing.Point(399,361);
+			this.groupBox5.Name = "groupBox5";
+			this.groupBox5.Size = new System.Drawing.Size(113,99);
+			this.groupBox5.TabIndex = 212;
+			this.groupBox5.TabStop = false;
+			this.groupBox5.Text = "Resize and Scale";
+			// 
+			// butSizeTall
+			// 
+			this.butSizeTall.Location = new System.Drawing.Point(9,43);
+			this.butSizeTall.Name = "butSizeTall";
+			this.butSizeTall.Size = new System.Drawing.Size(75,23);
+			this.butSizeTall.TabIndex = 205;
+			this.butSizeTall.Text = "Tall";
+			this.butSizeTall.UseVisualStyleBackColor = true;
+			this.butSizeTall.Click += new System.EventHandler(this.butSizeTall_Click);
+			// 
+			// butSizeNormal
+			// 
+			this.butSizeNormal.Location = new System.Drawing.Point(9,18);
+			this.butSizeNormal.Name = "butSizeNormal";
+			this.butSizeNormal.Size = new System.Drawing.Size(75,23);
+			this.butSizeNormal.TabIndex = 204;
+			this.butSizeNormal.Text = "Normal";
+			this.butSizeNormal.UseVisualStyleBackColor = true;
+			this.butSizeNormal.Click += new System.EventHandler(this.butSizeNormal_Click);
+			// 
+			// butSizeWide
+			// 
+			this.butSizeWide.Location = new System.Drawing.Point(9,68);
+			this.butSizeWide.Name = "butSizeWide";
+			this.butSizeWide.Size = new System.Drawing.Size(75,23);
+			this.butSizeWide.TabIndex = 206;
+			this.butSizeWide.Text = "Wide";
+			this.butSizeWide.UseVisualStyleBackColor = true;
+			this.butSizeWide.Click += new System.EventHandler(this.butSizeWide_Click);
 			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(1258,738);
+			this.Controls.Add(this.groupBox5);
 			this.Controls.Add(this.groupBox4);
 			this.Controls.Add(this.groupBox3);
 			this.Controls.Add(this.groupBox2);
@@ -380,6 +428,7 @@
 			this.groupBox2.ResumeLayout(false);
 			this.groupBox3.ResumeLayout(false);
 			this.groupBox4.ResumeLayout(false);
+			this.groupBox5.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -415,6 +464,10 @@
 		private System.Windows.Forms.Panel panelColorBackHighlightBlack;
 		private System.Windows.Forms.Panel panelColorBackHighlightGray;
 		private System.Windows.Forms.Panel panelColorBackgroundLtGray;
+		private System.Windows.Forms.GroupBox groupBox5;
+		private System.Windows.Forms.Button butSizeWide;
+		private System.Windows.Forms.Button butSizeTall;
+		private System.Windows.Forms.Button butSizeNormal;
 	}
 }
 

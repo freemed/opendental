@@ -5771,8 +5771,8 @@ namespace OpenDental{
 				return;
 			}
 			for(int i=0;i<toothChart.SelectedTeeth.Count;i++) {
-				if(ToothGraphic.IsPrimary(toothChart.SelectedTeeth[i])){
-					ToothInitials.ClearValue(PatCur.PatNum,ToothGraphic.PriToPerm(toothChart.SelectedTeeth[i])
+				if(Tooth.IsPrimary(toothChart.SelectedTeeth[i])){
+					ToothInitials.ClearValue(PatCur.PatNum,Tooth.PriToPerm(toothChart.SelectedTeeth[i])
 						,ToothInitialType.Primary);
 				}
 				else{

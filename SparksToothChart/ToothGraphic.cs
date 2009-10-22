@@ -112,7 +112,7 @@ namespace SparksToothChart {
 		#region Public Methods
 		///<summary>Resets this tooth graphic to original location, visiblity, and no restorations.  If primary tooth, then Visible=false.  </summary>
 		public void Reset() {
-			if(IsPrimary(ToothID)) {
+			if(Tooth.IsPrimary(ToothID)) {
 				visible=false;
 			}
 			else {
@@ -223,25 +223,19 @@ namespace SparksToothChart {
 
 		#endregion Public Methods
 
-		#region static functions (need to delete these)
+		#region static functions
+		//The reason these are all here instead of just using the Tooth class is that the graphical chart does not support supernumerary teeth,
+		//so these methods handle that properly.
 
 		///<summary>Strict validator for toothID. Will not handle any international tooth nums since all internal toothID's are in US format.  True if 1-32 or A-T.  Since supernumerary not currently handled, 51-82 and AS-TS return false.  Any invalid values also return false.</summary>
 		public static bool IsValidToothID(string tooth_id) {
-			if(tooth_id==null || tooth_id=="")
-				return false;
-			if(Regex.IsMatch(tooth_id,"^[A-T]$"))
-				return true;
-			//if(Regex.IsMatch(tooth_id,"^[A-T]S$"))//supernumerary
-			//	return true;
-			if(!Regex.IsMatch(tooth_id,@"^[1-9]\d?$")) {//matches 1 or 2 digits, leading 0 not allowed
+			if(!Tooth.IsValidDB(tooth_id)) {
 				return false;
 			}
-			int intToothId=Convert.ToInt32(tooth_id);
-			if(intToothId<=32 && intToothId>=1)
-				return true;
-			//if(intToothId>=51 && intToothId<=82)//supernumerary
-			//	return true;
-			return false;
+			if(Tooth.IsSuperNum(tooth_id)){
+				return false;
+			}
+			return true;
 		}
 
 		///<summary>The tooth_id should be validated before coming here, but it won't crash if invalid.  Primary or perm are ok.  Empty and null are also ok.  Result is always 1-32 or -1 if invalid tooth_id.  Supernumerary not allowed</summary>
@@ -249,85 +243,10 @@ namespace SparksToothChart {
 			if(!IsValidToothID(tooth_id)) {
 				return -1;
 			}
-			try {
-				if(IsPrimary(tooth_id)) {
-					return Convert.ToInt32(PriToPerm(tooth_id));
-				}
-				else {
-					return Convert.ToInt32(tooth_id);
-				}
-			}
-			catch {
-				return -1;
-			}
+			return Tooth.ToInt(tooth_id);
 		}
 
-		///<summary></summary>
-		public static string PermToPri(string tooth_id) {
-			switch(tooth_id) {
-				default: return "";
-				case "4": return "A";
-				case "5": return "B";
-				case "6": return "C";
-				case "7": return "D";
-				case "8": return "E";
-				case "9": return "F";
-				case "10": return "G";
-				case "11": return "H";
-				case "12": return "I";
-				case "13": return "J";
-				case "20": return "K";
-				case "21": return "L";
-				case "22": return "M";
-				case "23": return "N";
-				case "24": return "O";
-				case "25": return "P";
-				case "26": return "Q";
-				case "27": return "R";
-				case "28": return "S";
-				case "29": return "T";
-			}
-		}
-
-		///<summary></summary>
-		public static string PriToPerm(string tooth_id) {
-			switch(tooth_id) {
-				default: return "";
-				case "A": return "4";
-				case "B": return "5";
-				case "C": return "6";
-				case "D": return "7";
-				case "E": return "8";
-				case "F": return "9";
-				case "G": return "10";
-				case "H": return "11";
-				case "I": return "12";
-				case "J": return "13";
-				case "K": return "20";
-				case "L": return "21";
-				case "M": return "22";
-				case "N": return "23";
-				case "O": return "24";
-				case "P": return "25";
-				case "Q": return "26";
-				case "R": return "27";
-				case "S": return "28";
-				case "T": return "29";
-			}
-		}
-
-		///<summary>Returns true if A-T or AS-TS.  Otherwise, returns false.</summary>
-		public static bool IsPrimary(string tooth_id) {
-			if(Regex.IsMatch(tooth_id,"^[A-T]$")) {
-				return true;
-			}
-			if(Regex.IsMatch(tooth_id,"^[A-T]S$")) {
-				return true;
-			}
-			return false;
-		}
-
-		///<summary>The actual specific width of the tooth in mm.  Used to lay out the teeth on the screen.  Value taken from Wheelers Dental Anatomy.  Used in the orthographic projection.  Also used when building the teeth in the first place.  The perspective projection will need to adjust these numbers because of the curvature of the arch.  Only the widths of permanent teeth are used for layout.  The primary teeth widths are informational only.</summary>
+		///<summary>The actual specific width of the tooth in mm.  Used to lay out the teeth on the screen.  Value taken from Wheelers Dental Anatomy.  Used in the orthographic projection.  Also used when building the teeth in the first place.  The perspective projection will need to adjust these numbers because of the curvature of the arch.  Only the widths of permanent teeth are used for layout.  If a primary tooth is passed in, it will give an error.</summary>
 		public static float GetWidth(string tooth_id) {
 			switch(tooth_id) {
 				case "1":
@@ -388,7 +307,7 @@ namespace SparksToothChart {
 		}
 
 		///<summary>The x position of the center of the given tooth, with midline being 0.  Calculated once, then used to quickly calculate mouse positions and tooth positions.  All values are in mm.</summary>
-		public static float GetDefaultOrthoXpos(int tooth_num) {
+		public static float GetDefaultOrthoXpos(int intTooth) {
 			if(DefaultOrthoXpos==null) {
 				DefaultOrthoXpos=new float[33];//0-32, 0 not used
 				float spacing=0;//the distance between each adjacent tooth.
@@ -425,43 +344,40 @@ namespace SparksToothChart {
 				DefaultOrthoXpos[31]=-DefaultOrthoXpos[18];
 				DefaultOrthoXpos[32]=-DefaultOrthoXpos[17];
 			}
-			if(tooth_num<1 || tooth_num>32) {
-				throw new ApplicationException("Invalid tooth_num: "+tooth_num.ToString());//just for debugging
+			if(intTooth<1 || intTooth>32) {
+				throw new ApplicationException("Invalid tooth_num: "+intTooth.ToString());//just for debugging
 			}
-			return DefaultOrthoXpos[tooth_num];
+			return DefaultOrthoXpos[intTooth];
 		}
 
 		///<summary></summary>
 		public static bool IsMaxillary(string tooth_id) {
-			if(!IsValidToothID(tooth_id))
+			if(!IsValidToothID(tooth_id)) {
 				return false;
-			int intTooth=IdToInt(tooth_id);
-			if(intTooth>=1 && intTooth<=16)
-				return true;
-			return false;
+			}
+			return Tooth.IsMaxillary(tooth_id);
 		}
 
 		///<summary></summary>
 		public static bool IsAnterior(string tooth_id) {
-			if(!IsValidToothID(tooth_id))
+			if(!IsValidToothID(tooth_id)) {
 				return false;
-			int intTooth=IdToInt(tooth_id);
-			if(intTooth>=6 && intTooth<=11)
-				return true;
-			if(intTooth>=22 && intTooth<=27)
-				return true;
-			return false;
+			}
+			return Tooth.IsAnterior(tooth_id);
 		}
 
-		///<summary></summary>
+		///<summary>True if on the right side of the mouth.</summary>
 		public static bool IsRight(string tooth_id) {
-			if(!IsValidToothID(tooth_id))
+			if(!IsValidToothID(tooth_id)) {
 				return false;
+			}
 			int intTooth=IdToInt(tooth_id);
-			if(intTooth>=1 && intTooth<=8)
+			if(intTooth>=1 && intTooth<=8) {
 				return true;
-			if(intTooth>=25 && intTooth<=32)
+			}
+			if(intTooth>=25 && intTooth<=32) {
 				return true;
+			}
 			return false;
 		}
 

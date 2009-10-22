@@ -278,6 +278,24 @@ namespace TestToothChart {
 
 		}
 
+		private void butSizeNormal_Click(object sender,EventArgs e) {
+			toothChart2D.Size=new Size(410,307);
+			toothChartOpenGL.Size=new Size(410,307);
+			toothChartDirectX.Size=new Size(410,307);
+		}
+
+		private void butSizeTall_Click(object sender,EventArgs e) {
+			toothChart2D.Size=new Size(250,307);
+			toothChartOpenGL.Size=new Size(250,307);
+			toothChartDirectX.Size=new Size(250,307);
+		}
+
+		private void butSizeWide_Click(object sender,EventArgs e) {
+			toothChart2D.Size=new Size(410,190);
+			toothChartOpenGL.Size=new Size(410,190);
+			toothChartDirectX.Size=new Size(410,190);
+		}
+
 		
 
 

@@ -44,14 +44,17 @@ namespace OpenDentBusiness{
 			"E","D","C","B","A","A","B","C","D","E"};
 
 		///<summary></summary>
-		public static bool IsAnterior(string toothNum){
-			if(!IsValidDB(toothNum))
+		public static bool IsAnterior(string tooth_id) {
+			if(!IsValidDB(tooth_id)) {
 				return false;
-			int intTooth=ToInt(toothNum);
-			if(intTooth>=6 && intTooth<=11)
+			}
+			int intTooth=ToInt(tooth_id);
+			if(intTooth>=6 && intTooth<=11) {
 				return true;
-			if(intTooth>=22 && intTooth<=27)
+			}
+			if(intTooth>=22 && intTooth<=27) {
 				return true;
+			}
 			return false;
 		}
 
@@ -425,7 +428,7 @@ namespace OpenDentBusiness{
 			return retStr;
 		}
 
-		///<summary></summary>
+		///<summary>Returns true if A-T or AS-TS.  Otherwise, returns false.</summary>
 		public static bool IsPrimary(string tooth_id){
 			if(Regex.IsMatch(tooth_id,"^[A-T]$")) {
 				return true;
@@ -437,8 +440,8 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static string PermToPri(string toothNum){
-			switch(toothNum){
+		public static string PermToPri(string tooth_id) {
+			switch(tooth_id) {
 				default: return "";
 				case "4": return "A";
 				case "5": return "B";
@@ -465,13 +468,13 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static string PermToPri(int intTooth){
-			string toothNum=FromInt(intTooth);
-			return PermToPri(toothNum);
+			string tooth_id=FromInt(intTooth);
+			return PermToPri(tooth_id);
 		}
 
 		///<summary></summary>
-		public static string PriToPerm(string toothNum){
-			switch(toothNum){
+		public static string PriToPerm(string tooth_id) {
+			switch(tooth_id) {
 				default: return "";
 				case "A": return "4";
 				case "B": return "5";
@@ -550,12 +553,14 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static bool IsMaxillary(string toothNum){
-			if(!IsValidDB(toothNum))
+		public static bool IsMaxillary(string tooth_id) {
+			if(!IsValidDB(tooth_id)) {
 				return false;
-			int intTooth=ToInt(toothNum);
-			if(intTooth>=1 && intTooth<=16)
+			}
+			int intTooth=ToInt(tooth_id);
+			if(intTooth>=1 && intTooth<=16) {
 				return true;
+			}
 			return false;
 		}
 

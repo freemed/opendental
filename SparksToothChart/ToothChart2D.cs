@@ -59,10 +59,10 @@ namespace SparksToothChart {
 				//DrawTooth(toothGraphic,g);
 			}
 			float w=0;
-			if(!ToothGraphic.IsPrimary(toothGraphic.ToothID)) {
+			if(!Tooth.IsPrimary(toothGraphic.ToothID)) {
 				w=ToothGraphic.GetWidth(toothGraphic.ToothID)/TcData.WidthProjection*(float)Width;
 			}
-			if(!ToothGraphic.IsPrimary(toothGraphic.ToothID) && (!toothGraphic.Visible || toothGraphic.IsPontic)) {
+			if(!Tooth.IsPrimary(toothGraphic.ToothID) && (!toothGraphic.Visible || toothGraphic.IsPontic)) {
 				if(ToothGraphic.IsMaxillary(toothGraphic.ToothID)) {
 					//g.FillRectangle(new SolidBrush(colorBackSimple),x-w/2f,0,w,Height/2f-20);
 				}
