@@ -30,10 +30,10 @@
 			this.butAllPrimary = new System.Windows.Forms.Button();
 			this.butMixed = new System.Windows.Forms.Button();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.panelColorBackgroundGray = new System.Windows.Forms.Panel();
-			this.panelColorBackgroundBlack = new System.Windows.Forms.Panel();
-			this.panelColorBackgroundWhite = new System.Windows.Forms.Panel();
 			this.panelColorBackgroundBlue = new System.Windows.Forms.Panel();
+			this.panelColorBackgroundWhite = new System.Windows.Forms.Panel();
+			this.panelColorBackgroundBlack = new System.Windows.Forms.Panel();
+			this.panelColorBackgroundGray = new System.Windows.Forms.Panel();
 			this.toothChartDirectX = new SparksToothChart.ToothChartWrapper();
 			this.toothChartOpenGL = new SparksToothChart.ToothChartWrapper();
 			this.toothChart2D = new SparksToothChart.ToothChartWrapper();
@@ -51,6 +51,7 @@
 			this.panelColorBackHighlightWhite = new System.Windows.Forms.Panel();
 			this.panelColorBackHighlightBlack = new System.Windows.Forms.Panel();
 			this.panelColorBackHighlightGray = new System.Windows.Forms.Panel();
+			this.panelColorBackgroundLtGray = new System.Windows.Forms.Panel();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupBox3.SuspendLayout();
@@ -116,16 +117,44 @@
 			// 
 			// groupBox1
 			// 
+			this.groupBox1.Controls.Add(this.panelColorBackgroundLtGray);
 			this.groupBox1.Controls.Add(this.panelColorBackgroundBlue);
 			this.groupBox1.Controls.Add(this.panelColorBackgroundWhite);
 			this.groupBox1.Controls.Add(this.panelColorBackgroundBlack);
 			this.groupBox1.Controls.Add(this.panelColorBackgroundGray);
 			this.groupBox1.Location = new System.Drawing.Point(170,357);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(129,47);
+			this.groupBox1.Size = new System.Drawing.Size(174,47);
 			this.groupBox1.TabIndex = 204;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "ColorBackground";
+			// 
+			// panelColorBackgroundBlue
+			// 
+			this.panelColorBackgroundBlue.BackColor = System.Drawing.Color.CornflowerBlue;
+			this.panelColorBackgroundBlue.Location = new System.Drawing.Point(125,18);
+			this.panelColorBackgroundBlue.Name = "panelColorBackgroundBlue";
+			this.panelColorBackgroundBlue.Size = new System.Drawing.Size(23,21);
+			this.panelColorBackgroundBlue.TabIndex = 208;
+			this.panelColorBackgroundBlue.Click += new System.EventHandler(this.panelColorBackgroundBlue_Click);
+			// 
+			// panelColorBackgroundWhite
+			// 
+			this.panelColorBackgroundWhite.BackColor = System.Drawing.Color.White;
+			this.panelColorBackgroundWhite.Location = new System.Drawing.Point(96,18);
+			this.panelColorBackgroundWhite.Name = "panelColorBackgroundWhite";
+			this.panelColorBackgroundWhite.Size = new System.Drawing.Size(23,21);
+			this.panelColorBackgroundWhite.TabIndex = 207;
+			this.panelColorBackgroundWhite.Click += new System.EventHandler(this.panelColorBackgroundWhite_Click);
+			// 
+			// panelColorBackgroundBlack
+			// 
+			this.panelColorBackgroundBlack.BackColor = System.Drawing.Color.Black;
+			this.panelColorBackgroundBlack.Location = new System.Drawing.Point(67,18);
+			this.panelColorBackgroundBlack.Name = "panelColorBackgroundBlack";
+			this.panelColorBackgroundBlack.Size = new System.Drawing.Size(23,21);
+			this.panelColorBackgroundBlack.TabIndex = 206;
+			this.panelColorBackgroundBlack.Click += new System.EventHandler(this.panelColorBackgroundBlack_Click);
 			// 
 			// panelColorBackgroundGray
 			// 
@@ -135,33 +164,6 @@
 			this.panelColorBackgroundGray.Size = new System.Drawing.Size(23,21);
 			this.panelColorBackgroundGray.TabIndex = 205;
 			this.panelColorBackgroundGray.Click += new System.EventHandler(this.panelColorBackgroundGray_Click);
-			// 
-			// panelColorBackgroundBlack
-			// 
-			this.panelColorBackgroundBlack.BackColor = System.Drawing.Color.Black;
-			this.panelColorBackgroundBlack.Location = new System.Drawing.Point(38,18);
-			this.panelColorBackgroundBlack.Name = "panelColorBackgroundBlack";
-			this.panelColorBackgroundBlack.Size = new System.Drawing.Size(23,21);
-			this.panelColorBackgroundBlack.TabIndex = 206;
-			this.panelColorBackgroundBlack.Click += new System.EventHandler(this.panelColorBackgroundBlack_Click);
-			// 
-			// panelColorBackgroundWhite
-			// 
-			this.panelColorBackgroundWhite.BackColor = System.Drawing.Color.White;
-			this.panelColorBackgroundWhite.Location = new System.Drawing.Point(67,18);
-			this.panelColorBackgroundWhite.Name = "panelColorBackgroundWhite";
-			this.panelColorBackgroundWhite.Size = new System.Drawing.Size(23,21);
-			this.panelColorBackgroundWhite.TabIndex = 207;
-			this.panelColorBackgroundWhite.Click += new System.EventHandler(this.panelColorBackgroundWhite_Click);
-			// 
-			// panelColorBackgroundBlue
-			// 
-			this.panelColorBackgroundBlue.BackColor = System.Drawing.Color.CornflowerBlue;
-			this.panelColorBackgroundBlue.Location = new System.Drawing.Point(96,18);
-			this.panelColorBackgroundBlue.Name = "panelColorBackgroundBlue";
-			this.panelColorBackgroundBlue.Size = new System.Drawing.Size(23,21);
-			this.panelColorBackgroundBlue.TabIndex = 208;
-			this.panelColorBackgroundBlue.Click += new System.EventHandler(this.panelColorBackgroundBlue_Click);
 			// 
 			// toothChartDirectX
 			// 
@@ -344,6 +346,15 @@
 			this.panelColorBackHighlightGray.TabIndex = 205;
 			this.panelColorBackHighlightGray.Click += new System.EventHandler(this.panelColorBackHighlightGray_Click);
 			// 
+			// panelColorBackgroundLtGray
+			// 
+			this.panelColorBackgroundLtGray.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))),((int)(((byte)(224)))),((int)(((byte)(224)))));
+			this.panelColorBackgroundLtGray.Location = new System.Drawing.Point(38,18);
+			this.panelColorBackgroundLtGray.Name = "panelColorBackgroundLtGray";
+			this.panelColorBackgroundLtGray.Size = new System.Drawing.Size(23,21);
+			this.panelColorBackgroundLtGray.TabIndex = 209;
+			this.panelColorBackgroundLtGray.Click += new System.EventHandler(this.panelColorBackgroundLtGray_Click);
+			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
@@ -403,6 +414,7 @@
 		private System.Windows.Forms.Panel panelColorBackHighlightWhite;
 		private System.Windows.Forms.Panel panelColorBackHighlightBlack;
 		private System.Windows.Forms.Panel panelColorBackHighlightGray;
+		private System.Windows.Forms.Panel panelColorBackgroundLtGray;
 	}
 }
 

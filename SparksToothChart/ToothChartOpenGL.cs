@@ -38,15 +38,15 @@ namespace SparksToothChart {
 		float[] shininess;
 		///<summary>The width that the scene covers.  This is in mm in terms of the scene itself.  This is the only number required in order for this control to be any size.  The height of the viewport is calculated in terms of the same ratio as the width, with the resulting image being centered vertically, so no distortion.</summary>
 		private double WidthProjection;
-		///<summary>valid values are "1" to "32", and "A" to "Z"</summary>
-		private string[] selectedTeeth;
-		///<summary>valid values are 1 to 32 (int)</summary>
-		private ArrayList ALSelectedTeeth;		
+		//<summary>valid values are "1" to "32", and "A" to "Z"</summary>
+		//private List<string> selectedTeeth;
+		//<summary>valid values are 1 to 32 (int)</summary>
+		//private ArrayList ALSelectedTeeth;		
 		private bool MouseIsDown;
 		///<summary>Mouse move causes this variable to be updated with the current tooth that the mouse is hovering over.</summary>
-		private int hotTooth;
+		private string hotTooth;
 		///<summary>The previous hotTooth.  If this is different than hotTooth, then mouse has just now moved to a new tooth.  Can be 0 to represent no previous.</summary>
-		private int hotToothOld;
+		private string hotToothOld;
 		private int fontOffset;
 		private int displayListOffset;
 		private string[][] fontsymbols;
@@ -76,8 +76,6 @@ namespace SparksToothChart {
 			selectedPixelFormat=TaoInitializeContexts(preferredPixelFormatNum);
 			TaoRenderEnabled=true;
 			WidthProjection=130;
-			//ListToothGraphics=new ToothGraphicCollection();
-			ALSelectedTeeth=new ArrayList();
 			DrawingSegmentList=new List<ToothInitial>();
 			DrawingColor=Color.Black;
 			PointList=new List<Point>();
@@ -95,13 +93,6 @@ namespace SparksToothChart {
 
 		private void ToothChart_TaoSetupContext(object sender, System.EventArgs e){//event from base class when context needs to be setup.
 			MakeRasterFont();
-		}
-
-		///<summary>Valid values are 1-32 and A-Z.</summary>
-		public string[] SelectedTeeth{
-			get{
-				return selectedTeeth;
-			}
 		}
 
 		/*
@@ -583,7 +574,13 @@ namespace SparksToothChart {
 				}
 			}
 			RotateAndTranslateUser(toothGraphic);
-			if(toothGraphic.Visible//might not be visible if an implant
+			if(!Tooth.IsPrimary(toothGraphic.ToothID)//if perm tooth
+				&& Tooth.IsValidDB(Tooth.PermToPri(toothGraphic.ToothID))
+				&& TcData.ListToothGraphics[Tooth.PermToPri(toothGraphic.ToothID)].Visible)//and the primary tooth is visible
+			{
+				//do not paint
+			}
+			else if(toothGraphic.Visible//might not be visible if an implant
 				|| (toothGraphic.IsCrown && toothGraphic.IsImplant))//a crown on an implant will paint
 				//pontics won't paint, because tooth is invisible
 			{
@@ -670,12 +667,14 @@ namespace SparksToothChart {
 				Gl.glVertex3f(-(float)WidthProjection/2f,0,0);
 				Gl.glVertex3f((float)WidthProjection/2f,0,0);
 			Gl.glEnd();
-			for(int i=1;i<=32;i++){
-				if(ALSelectedTeeth.Contains(i)) {
-					DrawNumber(i,true,true);
+			string tooth_id;
+			for(int i=1;i<=52;i++){
+				tooth_id=Tooth.FromOrdinal(i);
+				if(TcData.SelectedTeeth.Contains(tooth_id)) {
+					DrawNumber(tooth_id,true,true);
 				}
 				else {
-					DrawNumber(i,false,true);
+					DrawNumber(tooth_id,false,true);
 				}
 			}
 			Gl.glPopMatrix();
@@ -739,10 +738,20 @@ namespace SparksToothChart {
 			float xPos=0;
 			float yPos=0;
 			if(ToothGraphic.IsMaxillary(tooth_id)) {
-				yPos+=1.3f;
+				if(Tooth.IsPrimary(tooth_id)) {
+					yPos+=5.1f;
+				}
+				else {
+					yPos+=1.3f;
+				}
 			}
 			else {
-				yPos-=3.8f;
+				if(Tooth.IsPrimary(tooth_id)) {
+					yPos-=7.6f;
+				}
+				else {
+					yPos-=3.8f;
+				}
 			}
 			xPos+=GetTransX(tooth_id);
 //fix this.
@@ -780,22 +789,34 @@ namespace SparksToothChart {
 			return new PointF(mmX,mmY);
 		}
 
-		///<summary>Draws the number and the rectangle behind it.  Draws in the appropriate color</summary>
-		private void DrawNumber(int intTooth, bool isSelected, bool isFullRedraw) {
+		///<summary>Draws the number and the small rectangle behind it.  Draws in the appropriate color.  isFullRedraw means that all of the toothnumbers are being redrawn.  This helps with a few optimizations and with not painting blank rectangles when not needed.</summary>
+		private void DrawNumber(string tooth_id, bool isSelected, bool isFullRedraw) {
+			if(!Tooth.IsValidDB(tooth_id)) {
+				return;
+			}
 			Gl.glPushMatrix();
 			Gl.glDisable(Gl.GL_LIGHTING);
 			Gl.glDisable(Gl.GL_BLEND);
 			Gl.glDisable(Gl.GL_DEPTH_TEST);
-			string tooth_id=intTooth.ToString();
-			if(ToothGraphic.IsValidToothID(ToothGraphic.PermToPri(intTooth.ToString()))//pri is valid
-				&& TcData.ListToothGraphics[ToothGraphic.PermToPri(intTooth.ToString())].Visible)//and pri visible
-			{
-				tooth_id=ToothGraphic.PermToPri(intTooth.ToString());
+			//string tooth_id=intTooth.ToString();
+			//if(ToothGraphic.IsValidToothID(ToothGraphic.PermToPri(intTooth.ToString()))//pri is valid
+			//	&& TcData.ListToothGraphics[ToothGraphic.PermToPri(intTooth.ToString())].Visible)//and pri visible
+			//{
+			//	tooth_id=ToothGraphic.PermToPri(intTooth.ToString());
+			//}
+			if(isFullRedraw){//if redrawing all numbers
+				if(TcData.ListToothGraphics[tooth_id].HideNumber) {//and this is a "hidden" number
+					Gl.glPopMatrix();
+					return;//skip
+				}
+				if(Tooth.IsPrimary(tooth_id)
+					&& !TcData.ListToothGraphics[Tooth.PriToPerm(tooth_id)].ShowPrimaryLetter)//but not set to show primary letters
+				{
+					Gl.glPopMatrix();
+					return;
+				}
 			}
-			if(isFullRedraw && TcData.ListToothGraphics[tooth_id].HideNumber) {//if redrawing all numbers, and this is a "hidden" number
-				return;//skip
-			}
-//fix this.  No calls to OpenDentBusiness.
+//fix this.  No calls to OpenDentBusiness that require database.
 //string displayNum=OpenDentBusiness.Tooth.GetToothLabelGraphic(tooth_id);
 			string displayNum=tooth_id;
 			float toMm=(float)WidthProjection/(float)Width;//mm/pix
@@ -817,9 +838,6 @@ namespace SparksToothChart {
 					(float)TcData.ColorTextHighlight.G/255f,
 					(float)TcData.ColorTextHighlight.B/255f);
 				Gl.glRasterPos3f(recMm.X+2f*toMm,recMm.Y+2f*toMm,15f);
-				if(!TcData.ListToothGraphics[tooth_id].HideNumber) {//Only draw if number is not hidden.
-					PrintString(displayNum);
-				}
 			} 
 			else{
 				Gl.glColor3f(
@@ -837,9 +855,17 @@ namespace SparksToothChart {
 					(float)TcData.ColorText.G/255f,
 					(float)TcData.ColorText.B/255f);
 				Gl.glRasterPos3f(recMm.X+2f*toMm,recMm.Y+2f*toMm,15f);
-				if(!TcData.ListToothGraphics[tooth_id].HideNumber) {//Only draw if number is not hidden.
-					PrintString(displayNum);
-				}
+			}
+			if(TcData.ListToothGraphics[tooth_id].HideNumber){//If number is hidden.
+				//do not print string
+			}
+			else if(Tooth.IsPrimary(tooth_id)
+				&& !TcData.ListToothGraphics[Tooth.PriToPerm(tooth_id)].ShowPrimaryLetter) 
+			{
+				//do not print string
+			}
+			else{
+				PrintString(displayNum);
 			}
 			Gl.glPopMatrix();
 			Gl.glFlush();
@@ -1099,8 +1125,8 @@ namespace SparksToothChart {
 
 		#region Mouse And Selections
 
-		///<summary>Always returns a number between 1 and 32.  This isn't perfect, since it only operates on perm teeth, and assumes that any primary tooth will be at the same x pos as its perm tooth.</summary>
-		private int GetToothAtPoint(int x,int y) {
+		///<summary>Always returns a string, 1 through 32 or A through T.  Primary letters are only returned if that tooth is set as primary.</summary>
+		private string GetToothAtPoint(int x,int y) {
 			/*
 			float closestDelta=(float)(WidthProjection*2);//start it off really big
 			int closestTooth=1;
@@ -1157,7 +1183,7 @@ namespace SparksToothChart {
 				}
 				return closestTooth;
 			}*/
-			return 1;
+			return "1";
 		}
 
 		protected override void OnMouseClick(MouseEventArgs e) {
@@ -1168,9 +1194,9 @@ namespace SparksToothChart {
 			base.OnMouseDown(e);
 			MouseIsDown=true;
 			if(CursorTool==CursorTool.Pointer){
-				int toothClicked=GetToothAtPoint(e.X,e.Y);
+				string toothClicked=GetToothAtPoint(e.X,e.Y);
 				//MessageBox.Show(toothClicked.ToString());
-				if(ALSelectedTeeth.Contains(toothClicked)) {
+				if(TcData.SelectedTeeth.Contains(toothClicked)) {
 					SetSelected(toothClicked,false);
 				}
 				else {
@@ -1221,7 +1247,7 @@ namespace SparksToothChart {
 				}
 				hotToothOld=hotTooth;
 				if(MouseIsDown) {//drag action
-					if(ALSelectedTeeth.Contains(hotTooth)) {
+					if(TcData.SelectedTeeth.Contains(hotTooth)) {
 						SetSelected(hotTooth,false);
 					}
 					else {
@@ -1325,26 +1351,28 @@ namespace SparksToothChart {
 		}
 
 		///<summary>Used by mousedown and mouse move to set teeth selected or unselected.  Also used externally to set teeth selected.  Draws the changes also.</summary>
-		public void SetSelected(int intTooth,bool setValue) {
+		private void SetSelected(string tooth_id,bool setValue) {
 			suspendRendering=true;
 			if(setValue) {
-				ALSelectedTeeth.Add(intTooth);
-				DrawNumber(intTooth,true,false);
+				//todo: should we check first to see if the tooth is already in SelectedTeeth?
+				TcData.SelectedTeeth.Add(tooth_id);
+				DrawNumber(tooth_id,true,false);
 			}
 			else {
-				ALSelectedTeeth.Remove(intTooth);
-				DrawNumber(intTooth,false,false);
+				TcData.SelectedTeeth.Remove(tooth_id);
+				DrawNumber(tooth_id,false,false);
 			}
-			RectangleF recMm=GetNumberRecMm(intTooth.ToString());
+			RectangleF recMm=GetNumberRecMm(tooth_id);
 			Rectangle rec=ConvertRecToPix(recMm);
 			Invalidate(rec);//but it invalidates the whole thing anyway.  Oh, well.
 			Application.DoEvents();
 			suspendRendering=false;
-			if(ALSelectedTeeth.Count==0) {
-				selectedTeeth=new string[0];
-			}
-			else {
-				selectedTeeth=new string[ALSelectedTeeth.Count];
+			//if(TcData.SelectedTeeth.Count==0) {
+			//	TcData.SelectedTeeth=new List<string>();
+			//}
+			//else {
+				//selectedTeeth=new string[ALSelectedTeeth.Count];
+				/*
 				for(int i=0;i<ALSelectedTeeth.Count;i++) {
 					if(ToothGraphic.IsValidToothID(ToothGraphic.PermToPri(ALSelectedTeeth[i].ToString()))//pri is valid
 						&& TcData.ListToothGraphics[ALSelectedTeeth[i].ToString()].ShowPrimaryLetter)//and set to show pri
@@ -1354,8 +1382,8 @@ namespace SparksToothChart {
 					else{
 						selectedTeeth[i]=((int)ALSelectedTeeth[i]).ToString();
 					}
-				}
-			}
+				}*/
+			//}
 		}
 
 		

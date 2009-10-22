@@ -68,15 +68,9 @@ namespace SparksToothChart {
 		}
 
 		///<summary>Valid values are 1-32 and A-Z.</summary>
-		public string[] SelectedTeeth {
+		public List<string> SelectedTeeth {
 			get {
-				if(drawMode==DrawingMode.Simple2D) {
-					return selectedTeeth;
-				}
-				else {
-					return new string[0];
-					//return toothChartOpenGL.SelectedTeeth;
-				}
+				return TcData.SelectedTeeth;
 			}
 		}
 
@@ -113,7 +107,6 @@ namespace SparksToothChart {
 		///<summary></summary>
 		[Browsable(false)]
 		public Color ColorBackHighlight {
-			
 			set {
 				TcData.ColorBackHighlight=value;
 				Invalidate();
@@ -204,19 +197,6 @@ namespace SparksToothChart {
 				//toothChartOpenGL.TaoDraw();
 			}
 		}
-
-		/*This should actually happen automatically when we invalidate the wrapper.
-		private void InvalidateForDrawMode() {
-			if(drawMode==DrawingMode.Simple2D) {
-				toothChart2D.Invalidate();
-			}
-			else if(drawMode==DrawingMode.DirectX) {
-				toothChartDirectX.Invalidate();
-			}
-			else if(drawMode==DrawingMode.OpenGL) {
-				toothChartOpenGL.Invalidate();
-			}
-		}*/
 
 		private void ResetControls(){
 			selectedTeeth=new string[0];
@@ -1152,7 +1132,7 @@ namespace SparksToothChart {
 		}
 
 		///<summary>Used by mousedown and mouse move to set teeth selected or unselected.  Also used externally to set teeth selected.  Draws the changes also.</summary>
-		public void SetSelected(int intTooth,bool setValue) {
+		public void SetSelected(string tooth_id,bool setValue) {
 			/*
 			if(drawMode==DrawingMode.Simple2D) {
 				Graphics g=this.CreateGraphics();

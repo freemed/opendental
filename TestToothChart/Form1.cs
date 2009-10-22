@@ -206,6 +206,11 @@ namespace TestToothChart {
 			toothChartDirectX.ColorBackground=panelColorBackgroundGray.BackColor;
 		}
 
+		private void panelColorBackgroundLtGray_Click(object sender,EventArgs e) {
+			toothChartOpenGL.ColorBackground=panelColorBackgroundLtGray.BackColor;
+			toothChartDirectX.ColorBackground=panelColorBackgroundLtGray.BackColor;
+		}
+
 		private void panelColorBackgroundBlack_Click(object sender,EventArgs e) {
 			toothChartOpenGL.ColorBackground=panelColorBackgroundBlack.BackColor;
 			toothChartDirectX.ColorBackground=panelColorBackgroundBlack.BackColor;
@@ -272,6 +277,8 @@ namespace TestToothChart {
 		private void panelColorBackHighlightBlue_Click(object sender,EventArgs e) {
 
 		}
+
+		
 
 
 

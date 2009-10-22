@@ -3714,17 +3714,17 @@ namespace OpenDental{
 			}
 			if(checkShowTeeth.Checked) {
 				bool showProc = false;
-				ArrayList selectedTeeth = new ArrayList();//integers 1-32
-				for(int i = 0;i < toothChart.SelectedTeeth.Length;i++) {
-					selectedTeeth.Add(Tooth.ToInt(toothChart.SelectedTeeth[i]));
-				}
+				//ArrayList selectedTeeth = new ArrayList();//integers 1-32
+				//for(int i = 0;i < toothChart.SelectedTeeth.Count;i++) {
+				//	selectedTeeth.Add(Tooth.ToInt(toothChart.SelectedTeeth[i]));
+				//}
 				switch(ProcedureCodes.GetProcCode(row["ProcCode"].ToString()).TreatArea) {
 					case TreatmentArea.Arch:
-						for(int s = 0;s < selectedTeeth.Count;s++) {
-							if(row["Surf"].ToString() == "U" && (int)selectedTeeth[s] < 17) {
+						for(int s=0;s<toothChart.SelectedTeeth.Count;s++) {
+							if(row["Surf"].ToString() == "U" && Tooth.IsMaxillary(toothChart.SelectedTeeth[s]) ) {
 								showProc = true;
 							}
-							else if(row["Surf"].ToString() == "L" && (int)selectedTeeth[s] > 16) {
+							else if(row["Surf"].ToString() == "L" && !Tooth.IsMaxillary(toothChart.SelectedTeeth[s])) {
 								showProc = true;
 							}
 						}
@@ -3735,34 +3735,34 @@ namespace OpenDental{
 						showProc = false;
 						break;
 					case TreatmentArea.Quad:
-						for(int s = 0;s < selectedTeeth.Count;s++) {
-							if(row["Surf"].ToString() == "UR" && (int)selectedTeeth[s] <= 8) {
+						for(int s = 0;s < toothChart.SelectedTeeth.Count;s++) {
+							if(row["Surf"].ToString()=="UR" && Tooth.ToInt(toothChart.SelectedTeeth[s]) >= 1 && Tooth.ToInt(toothChart.SelectedTeeth[s]) <= 8) {
 								showProc = true;
 							}
-							else if(row["Surf"].ToString() == "UL" && (int)selectedTeeth[s] >= 9 && (int)selectedTeeth[s] <= 16) {
+							else if(row["Surf"].ToString()=="UL" && Tooth.ToInt(toothChart.SelectedTeeth[s]) >= 9 && Tooth.ToInt(toothChart.SelectedTeeth[s]) <= 16) {
 								showProc = true;
 							}
-							else if(row["Surf"].ToString() == "LL" && (int)selectedTeeth[s] >= 17 && (int)selectedTeeth[s] <= 24) {
+							else if(row["Surf"].ToString()=="LL" && Tooth.ToInt(toothChart.SelectedTeeth[s]) >= 17 && Tooth.ToInt(toothChart.SelectedTeeth[s]) <= 24) {
 								showProc = true;
 							}
-							else if(row["Surf"].ToString() == "LR" && (int)selectedTeeth[s] >= 25 && (int)selectedTeeth[s] <= 32) {
+							else if(row["Surf"].ToString()=="LR" && Tooth.ToInt(toothChart.SelectedTeeth[s]) >= 25 && Tooth.ToInt(toothChart.SelectedTeeth[s]) <= 32) {
 								showProc = true;
 							}
 						}
 						break;
 					case TreatmentArea.Surf:
 					case TreatmentArea.Tooth:
-						for(int s = 0;s < selectedTeeth.Count;s++) {
-							if(Tooth.ToInt(row["ToothNum"].ToString()) == (int)selectedTeeth[s]) {
+						for(int s=0;s<toothChart.SelectedTeeth.Count;s++) {
+							if(row["ToothNum"].ToString()==toothChart.SelectedTeeth[s]) {
 								showProc = true;
 							}
 						}
 						break;
 					case TreatmentArea.ToothRange:
 						string[] range = row["ToothRange"].ToString().Split(',');
-						for(int s = 0;s < selectedTeeth.Count;s++) {
+						for(int s = 0;s <toothChart.SelectedTeeth.Count;s++) {
 							for(int r = 0;r < range.Length;r++) {
-								if(Tooth.ToInt(range[r]) == (int)selectedTeeth[s]) {
+								if(range[r] == toothChart.SelectedTeeth[s]) {
 									showProc = true;
 								}
 							}
@@ -3854,10 +3854,11 @@ namespace OpenDental{
 		}
 
 		private void FillProgNotes(){
-			ArrayList selectedTeeth=new ArrayList();//integers 1-32
-			for(int i=0;i<toothChart.SelectedTeeth.Length;i++) {
-				selectedTeeth.Add(Tooth.ToInt(toothChart.SelectedTeeth[i]));
-			}
+			//ArrayList selectedTeeth=new ArrayList();//integers 1-32
+			//for(int i=0;i<toothChart.SelectedTeeth.Count;i++) {
+			//	selectedTeeth.Add(Tooth.ToInt(toothChart.SelectedTeeth[i]));
+			//}
+			//List<string> selectedTeeth=new List<string>(toothChart.SelectedTeeth);
 			DataSetMain=null;
 			if(PatCur!=null){
 				DataSetMain=ChartModules.GetAll(PatCur.PatNum,checkAudit.Checked);
@@ -4048,10 +4049,11 @@ namespace OpenDental{
 			toothChart.ColorTextHighlight=DefC.Long[(int)DefCat.ChartGraphicColors][12].ItemColor;
 			toothChart.ColorBackHighlight=DefC.Long[(int)DefCat.ChartGraphicColors][13].ItemColor;
 			//remember which teeth were selected
-			ArrayList selectedTeeth=new ArrayList();//integers 1-32
-			for(int i=0;i<toothChart.SelectedTeeth.Length;i++) {
-				selectedTeeth.Add(Tooth.ToInt(toothChart.SelectedTeeth[i]));
-			}
+			//ArrayList selectedTeeth=new ArrayList();//integers 1-32
+			//for(int i=0;i<toothChart.SelectedTeeth.Length;i++) {
+			//	selectedTeeth.Add(Tooth.ToInt(toothChart.SelectedTeeth[i]));
+			//}
+			List<string> selectedTeeth=new List<string>(toothChart.SelectedTeeth);
 			toothChart.ResetTeeth();
 			if(PatCur==null) {
 				toothChart.ResumeLayout();
@@ -4068,7 +4070,7 @@ namespace OpenDental{
 			}
 			if(checkShowTeeth.Checked || retainSelection) {
 				for(int i=0;i<selectedTeeth.Count;i++) {
-					toothChart.SetSelected((int)selectedTeeth[i],true);
+					toothChart.SetSelected(selectedTeeth[i],true);
 				}
 			}
 			for(int i=0;i<ToothInitialList.Count;i++){
@@ -4415,7 +4417,7 @@ namespace OpenDental{
 
 		private void UpdateSurf (){
 			textSurf.Text="";
-			if(toothChart.SelectedTeeth.Length==0){
+			if(toothChart.SelectedTeeth.Count==0){
 				return;
 			}
 			if(butM.BackColor==Color.White){
@@ -4887,7 +4889,7 @@ namespace OpenDental{
 			Procedures.SetDateFirstVisit(DateTime.Today,1,PatCur);
 			Procedure ProcCur;
 			
-			for(int n=0;n==0 || n<toothChart.SelectedTeeth.Length;n++){
+			for(int n=0;n==0 || n<toothChart.SelectedTeeth.Count;n++){
 				isValid=true;
 				ProcCur=new Procedure();//going to be an insert, so no need to set Procedures.CurOld
 				//Procedure
@@ -4916,22 +4918,28 @@ namespace OpenDental{
 					AddProcedure(ProcCur);
 				}
 				else if(tArea==TreatmentArea.Surf){
-					if(textSurf.Text=="")
+					if(textSurf.Text=="") {
 						isValid=false;
-					else
+					}
+					else {
 						ProcCur.Surf=textSurf.Text;
-					if(toothChart.SelectedTeeth.Length==0)
+					}
+					if(toothChart.SelectedTeeth.Count==0) {
 						isValid=false;
-					else
+					}
+					else {
 						ProcCur.ToothNum=toothChart.SelectedTeeth[n];
-					//Procedures.Cur=ProcCur;
-					if(isValid)
+						//Procedures.Cur=ProcCur;
+					}
+					if(isValid) {
 						AddQuick(ProcCur);
-					else
+					}
+					else {
 						AddProcedure(ProcCur);
+					}
 				}
 				else if(tArea==TreatmentArea.Tooth){
-					if(toothChart.SelectedTeeth.Length==0){
+					if(toothChart.SelectedTeeth.Count==0){
 						//Procedures.Cur=ProcCur;
 						AddProcedure(ProcCur);
 					}
@@ -4942,13 +4950,13 @@ namespace OpenDental{
 					}
 				}
 				else if(tArea==TreatmentArea.ToothRange){
-					if(toothChart.SelectedTeeth.Length==0){
+					if(toothChart.SelectedTeeth.Count==0){
 						//Procedures.Cur=ProcCur;
 						AddProcedure(ProcCur);
 					}
 					else{
 						ProcCur.ToothRange="";
-						for(int b=0;b<toothChart.SelectedTeeth.Length;b++){
+						for(int b=0;b<toothChart.SelectedTeeth.Count;b++) {
 							if(b!=0) ProcCur.ToothRange+=",";
 							ProcCur.ToothRange+=toothChart.SelectedTeeth[b];
 						}
@@ -4957,7 +4965,7 @@ namespace OpenDental{
 					}
 				}
 				else if(tArea==TreatmentArea.Arch){
-					if(toothChart.SelectedTeeth.Length==0){
+					if(toothChart.SelectedTeeth.Count==0) {
 						//Procedures.Cur=ProcCur;
 						AddProcedure(ProcCur);
 						continue;
@@ -5117,7 +5125,7 @@ namespace OpenDental{
 			Procedure ProcCur;
 			for(int i=0;i<codeList.Length;i++){
 				//needs to loop at least once, regardless of whether any teeth are selected.	
-				for(int n=0;n==0 || n<toothChart.SelectedTeeth.Length;n++){
+				for(int n=0;n==0 || n<toothChart.SelectedTeeth.Count;n++) {
 					isValid=true;
 					ProcCur=new Procedure();//insert, so no need to set CurOld
 					ProcCur.CodeNum=ProcedureCodes.GetProcCode(codeList[i]).CodeNum;
@@ -5146,7 +5154,7 @@ namespace OpenDental{
 							isValid=false;
 						else
 							ProcCur.Surf=textSurf.Text;
-						if(toothChart.SelectedTeeth.Length==0)
+						if(toothChart.SelectedTeeth.Count==0)
 							isValid=false;
 						else
 							ProcCur.ToothNum=toothChart.SelectedTeeth[n];
@@ -5156,7 +5164,7 @@ namespace OpenDental{
 							AddProcedure(ProcCur);
 					}
 					else if(tArea==TreatmentArea.Tooth){
-						if(toothChart.SelectedTeeth.Length==0){
+						if(toothChart.SelectedTeeth.Count==0) {
 							AddProcedure(ProcCur);
 						}
 						else{
@@ -5165,12 +5173,12 @@ namespace OpenDental{
 						}
 					}
 					else if(tArea==TreatmentArea.ToothRange){
-						if(toothChart.SelectedTeeth.Length==0){
+						if(toothChart.SelectedTeeth.Count==0) {
 							AddProcedure(ProcCur);
 						}
 						else{
 							ProcCur.ToothRange="";
-							for(int b=0;b<toothChart.SelectedTeeth.Length;b++){
+							for(int b=0;b<toothChart.SelectedTeeth.Count;b++) {
 								if(b!=0) ProcCur.ToothRange+=",";
 								ProcCur.ToothRange+=toothChart.SelectedTeeth[b];
 							}
@@ -5178,7 +5186,7 @@ namespace OpenDental{
 						}
 					}
 					else if(tArea==TreatmentArea.Arch){
-						if(toothChart.SelectedTeeth.Length==0){
+						if(toothChart.SelectedTeeth.Count==0) {
 							AddProcedure(ProcCur);
 							continue;
 						}
@@ -5202,9 +5210,9 @@ namespace OpenDental{
 			string surf;
 			bool isAdditional;
 			for(int i=0;i<autoCodeList.Length;i++){
-				for(int n=0;n==0 || n<toothChart.SelectedTeeth.Length;n++){
+				for(int n=0;n==0 || n<toothChart.SelectedTeeth.Count;n++) {
 					isValid=true;
-					if(toothChart.SelectedTeeth.Length!=0)
+					if(toothChart.SelectedTeeth.Count!=0)
 						toothNum=toothChart.SelectedTeeth[n];
 					else
 						toothNum="";
@@ -5237,7 +5245,7 @@ namespace OpenDental{
 							isValid=false;
 						else
 							ProcCur.Surf=textSurf.Text;
-						if(toothChart.SelectedTeeth.Length==0)
+						if(toothChart.SelectedTeeth.Count==0)
 							isValid=false;
 						else
 							ProcCur.ToothNum=toothChart.SelectedTeeth[n];
@@ -5247,7 +5255,7 @@ namespace OpenDental{
 							AddProcedure(ProcCur);
 					}
 					else if(tArea==TreatmentArea.Tooth){
-						if(toothChart.SelectedTeeth.Length==0){
+						if(toothChart.SelectedTeeth.Count==0) {
 							AddProcedure(ProcCur);
 						}
 						else{
@@ -5256,12 +5264,12 @@ namespace OpenDental{
 						}
 					}
 					else if(tArea==TreatmentArea.ToothRange){
-						if(toothChart.SelectedTeeth.Length==0){
+						if(toothChart.SelectedTeeth.Count==0) {
 							AddProcedure(ProcCur);
 						}
 						else{
 							ProcCur.ToothRange="";
-							for(int b=0;b<toothChart.SelectedTeeth.Length;b++){
+							for(int b=0;b<toothChart.SelectedTeeth.Count;b++) {
 								if(b!=0) ProcCur.ToothRange+=",";
 								ProcCur.ToothRange+=toothChart.SelectedTeeth[b];
 							}
@@ -5269,7 +5277,7 @@ namespace OpenDental{
 						}
 					}
 					else if(tArea==TreatmentArea.Arch){
-						if(toothChart.SelectedTeeth.Length==0){
+						if(toothChart.SelectedTeeth.Count==0) {
 							AddProcedure(ProcCur);
 							continue;
 						}
@@ -5342,7 +5350,7 @@ namespace OpenDental{
 			TreatmentArea tArea;
 			Procedure ProcCur;
 			int quadCount=0;//automates quadrant codes.
-			for(int n=0;n==0 || n<toothChart.SelectedTeeth.Length;n++) {//always loops at least once.
+			for(int n=0;n==0 || n<toothChart.SelectedTeeth.Count;n++) {//always loops at least once.
 				ProcCur=new Procedure();//this will be an insert, so no need to set CurOld
 				ProcCur.CodeNum=ProcedureCodes.GetCodeNum(textProcCode.Text);
 				bool isValid=true;
@@ -5371,7 +5379,7 @@ namespace OpenDental{
 						isValid=false;
 					else
 						ProcCur.Surf=textSurf.Text;
-					if(toothChart.SelectedTeeth.Length==0)
+					if(toothChart.SelectedTeeth.Count==0)
 						isValid=false;
 					else
 						ProcCur.ToothNum=toothChart.SelectedTeeth[n];
@@ -5381,7 +5389,7 @@ namespace OpenDental{
 						AddProcedure(ProcCur);
 				}
 				else if(tArea==TreatmentArea.Tooth) {
-					if(toothChart.SelectedTeeth.Length==0) {
+					if(toothChart.SelectedTeeth.Count==0) {
 						AddProcedure(ProcCur);
 					}
 					else {
@@ -5390,12 +5398,12 @@ namespace OpenDental{
 					}
 				}
 				else if(tArea==TreatmentArea.ToothRange) {
-					if(toothChart.SelectedTeeth.Length==0) {
+					if(toothChart.SelectedTeeth.Count==0) {
 						AddProcedure(ProcCur);
 					}
 					else {
 						ProcCur.ToothRange="";
-						for(int b=0;b<toothChart.SelectedTeeth.Length;b++) {
+						for(int b=0;b<toothChart.SelectedTeeth.Count;b++) {
 							if(b!=0) ProcCur.ToothRange+=",";
 							ProcCur.ToothRange+=toothChart.SelectedTeeth[b];
 						}
@@ -5403,7 +5411,7 @@ namespace OpenDental{
 					}
 				}
 				else if(tArea==TreatmentArea.Arch) {
-					if(toothChart.SelectedTeeth.Length==0) {
+					if(toothChart.SelectedTeeth.Count==0) {
 						AddProcedure(ProcCur);
 						continue;
 					}
@@ -5435,11 +5443,11 @@ namespace OpenDental{
 
 		#region MissingTeeth
 		private void butMissing_Click(object sender,EventArgs e) {
-			if(toothChart.SelectedTeeth.Length==0){
+			if(toothChart.SelectedTeeth.Count==0) {
 				MsgBox.Show(this,"Please select teeth first.");
 				return;
 			}
-			for(int i=0;i<toothChart.SelectedTeeth.Length;i++){
+			for(int i=0;i<toothChart.SelectedTeeth.Count;i++) {
 				ToothInitials.SetValue(PatCur.PatNum,toothChart.SelectedTeeth[i],ToothInitialType.Missing);
 			}
 			ToothInitialList=ToothInitials.Refresh(PatCur.PatNum);
@@ -5447,11 +5455,11 @@ namespace OpenDental{
 		}
 
 		private void butNotMissing_Click(object sender,EventArgs e) {
-			if(toothChart.SelectedTeeth.Length==0) {
+			if(toothChart.SelectedTeeth.Count==0) {
 				MsgBox.Show(this,"Please select teeth first.");
 				return;
 			}
-			for(int i=0;i<toothChart.SelectedTeeth.Length;i++) {
+			for(int i=0;i<toothChart.SelectedTeeth.Count;i++) {
 				ToothInitials.ClearValue(PatCur.PatNum,toothChart.SelectedTeeth[i],ToothInitialType.Missing);
 			}
 			ToothInitialList=ToothInitials.Refresh(PatCur.PatNum);
@@ -5468,11 +5476,11 @@ namespace OpenDental{
 		}
 
 		private void butHidden_Click(object sender,EventArgs e) {
-			if(toothChart.SelectedTeeth.Length==0) {
+			if(toothChart.SelectedTeeth.Count==0) {
 				MsgBox.Show(this,"Please select teeth first.");
 				return;
 			}
-			for(int i=0;i<toothChart.SelectedTeeth.Length;i++) {
+			for(int i=0;i<toothChart.SelectedTeeth.Count;i++) {
 				ToothInitials.SetValue(PatCur.PatNum,toothChart.SelectedTeeth[i],ToothInitialType.Hidden);
 			}
 			ToothInitialList=ToothInitials.Refresh(PatCur.PatNum);
@@ -5497,7 +5505,7 @@ namespace OpenDental{
 			}
 			if(tabProc.SelectedIndex==2)//movements tab
 			{
-				if(toothChart.SelectedTeeth.Length==0) {
+				if(toothChart.SelectedTeeth.Count==0) {
 					textShiftM.Text="";
 					textShiftO.Text="";
 					textShiftB.Text="";
@@ -5522,7 +5530,7 @@ namespace OpenDental{
 				//As we go through this loop, none of the values will change.
 				//The only thing that will happen is that some of them will become blank.
 				string move;
-				for(int i=1;i<toothChart.SelectedTeeth.Length;i++){
+				for(int i=1;i<toothChart.SelectedTeeth.Count;i++) {
 					move=ToothInitials.GetMovement(ToothInitialList,toothChart.SelectedTeeth[i],ToothInitialType.ShiftM).ToString();
 					if(textShiftM.Text != move){
 						textShiftM.Text="";
@@ -5559,11 +5567,11 @@ namespace OpenDental{
 		}
 
 		private void butShiftMminus_Click(object sender,EventArgs e) {
-			if(toothChart.SelectedTeeth.Length==0) {
+			if(toothChart.SelectedTeeth.Count==0) {
 				MsgBox.Show(this,"Please select teeth first.");
 				return;
 			}
-			for(int i=0;i<toothChart.SelectedTeeth.Length;i++) {
+			for(int i=0;i<toothChart.SelectedTeeth.Count;i++) {
 				ToothInitials.AddMovement(ToothInitialList,PatCur.PatNum,toothChart.SelectedTeeth[i],ToothInitialType.ShiftM,-2);
 			}
 			ToothInitialList=ToothInitials.Refresh(PatCur.PatNum);
@@ -5571,11 +5579,11 @@ namespace OpenDental{
 		}
 
 		private void butShiftMplus_Click(object sender,EventArgs e) {
-			if(toothChart.SelectedTeeth.Length==0) {
+			if(toothChart.SelectedTeeth.Count==0) {
 				MsgBox.Show(this,"Please select teeth first.");
 				return;
 			}
-			for(int i=0;i<toothChart.SelectedTeeth.Length;i++) {
+			for(int i=0;i<toothChart.SelectedTeeth.Count;i++) {
 				ToothInitials.AddMovement(ToothInitialList,PatCur.PatNum,toothChart.SelectedTeeth[i],ToothInitialType.ShiftM,2);
 			}
 			ToothInitialList=ToothInitials.Refresh(PatCur.PatNum);
@@ -5583,11 +5591,11 @@ namespace OpenDental{
 		}
 
 		private void butShiftOminus_Click(object sender,EventArgs e) {
-			if(toothChart.SelectedTeeth.Length==0) {
+			if(toothChart.SelectedTeeth.Count==0) {
 				MsgBox.Show(this,"Please select teeth first.");
 				return;
 			}
-			for(int i=0;i<toothChart.SelectedTeeth.Length;i++) {
+			for(int i=0;i<toothChart.SelectedTeeth.Count;i++) {
 				ToothInitials.AddMovement(ToothInitialList,PatCur.PatNum,toothChart.SelectedTeeth[i],ToothInitialType.ShiftO,-2);
 			}
 			ToothInitialList=ToothInitials.Refresh(PatCur.PatNum);
@@ -5595,11 +5603,11 @@ namespace OpenDental{
 		}
 
 		private void butShiftOplus_Click(object sender,EventArgs e) {
-			if(toothChart.SelectedTeeth.Length==0) {
+			if(toothChart.SelectedTeeth.Count==0) {
 				MsgBox.Show(this,"Please select teeth first.");
 				return;
 			}
-			for(int i=0;i<toothChart.SelectedTeeth.Length;i++) {
+			for(int i=0;i<toothChart.SelectedTeeth.Count;i++) {
 				ToothInitials.AddMovement(ToothInitialList,PatCur.PatNum,toothChart.SelectedTeeth[i],ToothInitialType.ShiftO,2);
 			}
 			ToothInitialList=ToothInitials.Refresh(PatCur.PatNum);
@@ -5607,11 +5615,11 @@ namespace OpenDental{
 		}
 
 		private void butShiftBminus_Click(object sender,EventArgs e) {
-			if(toothChart.SelectedTeeth.Length==0) {
+			if(toothChart.SelectedTeeth.Count==0) {
 				MsgBox.Show(this,"Please select teeth first.");
 				return;
 			}
-			for(int i=0;i<toothChart.SelectedTeeth.Length;i++) {
+			for(int i=0;i<toothChart.SelectedTeeth.Count;i++) {
 				ToothInitials.AddMovement(ToothInitialList,PatCur.PatNum,toothChart.SelectedTeeth[i],ToothInitialType.ShiftB,-2);
 			}
 			ToothInitialList=ToothInitials.Refresh(PatCur.PatNum);
@@ -5619,11 +5627,11 @@ namespace OpenDental{
 		}
 
 		private void butShiftBplus_Click(object sender,EventArgs e) {
-			if(toothChart.SelectedTeeth.Length==0) {
+			if(toothChart.SelectedTeeth.Count==0) {
 				MsgBox.Show(this,"Please select teeth first.");
 				return;
 			}
-			for(int i=0;i<toothChart.SelectedTeeth.Length;i++) {
+			for(int i=0;i<toothChart.SelectedTeeth.Count;i++) {
 				ToothInitials.AddMovement(ToothInitialList,PatCur.PatNum,toothChart.SelectedTeeth[i],ToothInitialType.ShiftB,2);
 			}
 			ToothInitialList=ToothInitials.Refresh(PatCur.PatNum);
@@ -5631,11 +5639,11 @@ namespace OpenDental{
 		}
 
 		private void butRotateMinus_Click(object sender,EventArgs e) {
-			if(toothChart.SelectedTeeth.Length==0) {
+			if(toothChart.SelectedTeeth.Count==0) {
 				MsgBox.Show(this,"Please select teeth first.");
 				return;
 			}
-			for(int i=0;i<toothChart.SelectedTeeth.Length;i++) {
+			for(int i=0;i<toothChart.SelectedTeeth.Count;i++) {
 				ToothInitials.AddMovement(ToothInitialList,PatCur.PatNum,toothChart.SelectedTeeth[i],ToothInitialType.Rotate,-20);
 			}
 			ToothInitialList=ToothInitials.Refresh(PatCur.PatNum);
@@ -5643,11 +5651,11 @@ namespace OpenDental{
 		}
 
 		private void butRotatePlus_Click(object sender,EventArgs e) {
-			if(toothChart.SelectedTeeth.Length==0) {
+			if(toothChart.SelectedTeeth.Count==0) {
 				MsgBox.Show(this,"Please select teeth first.");
 				return;
 			}
-			for(int i=0;i<toothChart.SelectedTeeth.Length;i++) {
+			for(int i=0;i<toothChart.SelectedTeeth.Count;i++) {
 				ToothInitials.AddMovement(ToothInitialList,PatCur.PatNum,toothChart.SelectedTeeth[i],ToothInitialType.Rotate,20);
 			}
 			ToothInitialList=ToothInitials.Refresh(PatCur.PatNum);
@@ -5655,11 +5663,11 @@ namespace OpenDental{
 		}
 
 		private void butTipMminus_Click(object sender,EventArgs e) {
-			if(toothChart.SelectedTeeth.Length==0) {
+			if(toothChart.SelectedTeeth.Count==0) {
 				MsgBox.Show(this,"Please select teeth first.");
 				return;
 			}
-			for(int i=0;i<toothChart.SelectedTeeth.Length;i++) {
+			for(int i=0;i<toothChart.SelectedTeeth.Count;i++) {
 				ToothInitials.AddMovement(ToothInitialList,PatCur.PatNum,toothChart.SelectedTeeth[i],ToothInitialType.TipM,-10);
 			}
 			ToothInitialList=ToothInitials.Refresh(PatCur.PatNum);
@@ -5667,11 +5675,11 @@ namespace OpenDental{
 		}
 
 		private void butTipMplus_Click(object sender,EventArgs e) {
-			if(toothChart.SelectedTeeth.Length==0) {
+			if(toothChart.SelectedTeeth.Count==0) {
 				MsgBox.Show(this,"Please select teeth first.");
 				return;
 			}
-			for(int i=0;i<toothChart.SelectedTeeth.Length;i++) {
+			for(int i=0;i<toothChart.SelectedTeeth.Count;i++) {
 				ToothInitials.AddMovement(ToothInitialList,PatCur.PatNum,toothChart.SelectedTeeth[i],ToothInitialType.TipM,10);
 			}
 			ToothInitialList=ToothInitials.Refresh(PatCur.PatNum);
@@ -5679,11 +5687,11 @@ namespace OpenDental{
 		}
 
 		private void butTipBminus_Click(object sender,EventArgs e) {
-			if(toothChart.SelectedTeeth.Length==0) {
+			if(toothChart.SelectedTeeth.Count==0) {
 				MsgBox.Show(this,"Please select teeth first.");
 				return;
 			}
-			for(int i=0;i<toothChart.SelectedTeeth.Length;i++) {
+			for(int i=0;i<toothChart.SelectedTeeth.Count;i++) {
 				ToothInitials.AddMovement(ToothInitialList,PatCur.PatNum,toothChart.SelectedTeeth[i],ToothInitialType.TipB,-10);
 			}
 			ToothInitialList=ToothInitials.Refresh(PatCur.PatNum);
@@ -5691,11 +5699,11 @@ namespace OpenDental{
 		}
 
 		private void butTipBplus_Click(object sender,EventArgs e) {
-			if(toothChart.SelectedTeeth.Length==0) {
+			if(toothChart.SelectedTeeth.Count==0) {
 				MsgBox.Show(this,"Please select teeth first.");
 				return;
 			}
-			for(int i=0;i<toothChart.SelectedTeeth.Length;i++) {
+			for(int i=0;i<toothChart.SelectedTeeth.Count;i++) {
 				ToothInitials.AddMovement(ToothInitialList,PatCur.PatNum,toothChart.SelectedTeeth[i],ToothInitialType.TipB,10);
 			}
 			ToothInitialList=ToothInitials.Refresh(PatCur.PatNum);
@@ -5713,7 +5721,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please fix errors first.");
 				return;
 			}
-			for(int i=0;i<toothChart.SelectedTeeth.Length;i++){
+			for(int i=0;i<toothChart.SelectedTeeth.Count;i++) {
 				if(textShiftM.Text!=""){
 					ToothInitials.SetValue(PatCur.PatNum,toothChart.SelectedTeeth[i],
 						ToothInitialType.ShiftM,PIn.PFloat(textShiftM.Text));
@@ -5746,11 +5754,11 @@ namespace OpenDental{
 
 		#region Primary
 		private void butPrimary_Click(object sender,EventArgs e) {
-			if(toothChart.SelectedTeeth.Length==0) {
+			if(toothChart.SelectedTeeth.Count==0) {
 				MsgBox.Show(this,"Please select teeth first.");
 				return;
 			}
-			for(int i=0;i<toothChart.SelectedTeeth.Length;i++) {
+			for(int i=0;i<toothChart.SelectedTeeth.Count;i++) {
 				ToothInitials.SetValue(PatCur.PatNum,toothChart.SelectedTeeth[i],ToothInitialType.Primary);
 			}
 			ToothInitialList=ToothInitials.Refresh(PatCur.PatNum);
@@ -5758,11 +5766,11 @@ namespace OpenDental{
 		}
 
 		private void butPerm_Click(object sender,EventArgs e) {
-			if(toothChart.SelectedTeeth.Length==0) {
+			if(toothChart.SelectedTeeth.Count==0) {
 				MsgBox.Show(this,"Please select teeth first.");
 				return;
 			}
-			for(int i=0;i<toothChart.SelectedTeeth.Length;i++) {
+			for(int i=0;i<toothChart.SelectedTeeth.Count;i++) {
 				if(ToothGraphic.IsPrimary(toothChart.SelectedTeeth[i])){
 					ToothInitials.ClearValue(PatCur.PatNum,ToothGraphic.PriToPerm(toothChart.SelectedTeeth[i])
 						,ToothInitialType.Primary);

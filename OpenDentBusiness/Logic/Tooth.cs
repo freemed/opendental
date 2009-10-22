@@ -400,16 +400,16 @@ namespace OpenDentBusiness{
 			return false;
 		}
 
-		///<summary>The toothNum should be validated before coming here, but it won't crash if invalid.  Primary or perm are ok.  Empty and null are also ok.</summary>
-		public static int ToInt(string toothNum){
-			if(toothNum==null || toothNum=="")
+		///<summary>Returns 1-32, or -1.  The toothNum should be validated before coming here, but it won't crash if invalid.  Primary or perm are ok.  Empty and null are also ok.</summary>
+		public static int ToInt(string tooth_id){
+			if(tooth_id==null || tooth_id=="")
 				return -1;
 			try{
-				if(IsPrimary(toothNum)){
-					return Convert.ToInt32(PriToPerm(toothNum));
+				if(IsPrimary(tooth_id)) {
+					return Convert.ToInt32(PriToPerm(tooth_id));
 				}
 				else{
-					return Convert.ToInt32(toothNum);
+					return Convert.ToInt32(tooth_id);
 				}
 			}
 			catch{
@@ -426,11 +426,11 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static bool IsPrimary(string toothNum){
-			if(Regex.IsMatch(toothNum,"^[A-T]$")){
+		public static bool IsPrimary(string tooth_id){
+			if(Regex.IsMatch(tooth_id,"^[A-T]$")) {
 				return true;
 			}
-			if(Regex.IsMatch(toothNum,"^[A-T]S$")){
+			if(Regex.IsMatch(tooth_id,"^[A-T]S$")) {
 				return true;
 			}
 			return false;

@@ -16,6 +16,8 @@ namespace SparksToothChart {
 		public Color ColorTextHighlight;
 		///<summary>The color of the background highlight rectangle around a selected tooth number.</summary>
 		public Color ColorBackHighlight;
+		///<summary>Valid values are 1-32 and A-Z.</summary>
+		public List<string> SelectedTeeth;
 
 
 		public ToothChartData() {
@@ -24,6 +26,7 @@ namespace SparksToothChart {
 			ColorText=Color.White;
 			ColorTextHighlight=Color.Red;
 			ColorBackHighlight=Color.White;
+			SelectedTeeth=new List<string>();
 		}
 		
 	}

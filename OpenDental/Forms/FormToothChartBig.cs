@@ -118,10 +118,11 @@ namespace OpenDental{
 			toothChart.ColorTextHighlight=DefC.Long[(int)DefCat.ChartGraphicColors][12].ItemColor;
 			toothChart.ColorBackHighlight=DefC.Long[(int)DefCat.ChartGraphicColors][13].ItemColor;
 			//remember which teeth were selected
-			ArrayList selectedTeeth=new ArrayList();//integers 1-32
-			for(int i=0;i<toothChart.SelectedTeeth.Length;i++) {
-				selectedTeeth.Add(Tooth.ToInt(toothChart.SelectedTeeth[i]));
-			}
+			List<string> selectedTeeth=new List<string>(toothChart.SelectedTeeth);
+			//ArrayList selectedTeeth=new ArrayList();//integers 1-32
+			//for(int i=0;i<toothChart.SelectedTeeth.Length;i++) {
+			//	selectedTeeth.Add(Tooth.ToInt(toothChart.SelectedTeeth[i]));
+			//}
 			toothChart.ResetTeeth();
 			/*if(PatCur==null) {
 				toothChart.ResumeLayout();
@@ -131,7 +132,7 @@ namespace OpenDental{
 			}*/
 			if(ShowBySelectedTeeth) {
 				for(int i=0;i<selectedTeeth.Count;i++) {
-					toothChart.SetSelected((int)selectedTeeth[i],true);
+					toothChart.SetSelected(selectedTeeth[i],true);
 				}
 			}
 			//first, primary.  That way, you can still set a primary tooth missing afterwards.
