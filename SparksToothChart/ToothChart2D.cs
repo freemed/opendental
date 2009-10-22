@@ -52,7 +52,7 @@ namespace SparksToothChart {
 		private void DrawFacialView(ToothGraphic toothGraphic,Graphics g) {
 			float x,y;
 			x=TcData.GetTransXpix(toothGraphic.ToothID,Width);
-			y=TcData.GetTransYfacialPix(toothGraphic.ToothID,Height);
+			y=TcData.GetTransYfacialPix(toothGraphic.ToothID);
 			if(toothGraphic.Visible
 				|| (toothGraphic.IsCrown && toothGraphic.IsImplant)
 				|| toothGraphic.IsPontic) {
@@ -60,7 +60,8 @@ namespace SparksToothChart {
 			}
 			float w=0;
 			if(!Tooth.IsPrimary(toothGraphic.ToothID)) {
-				w=ToothGraphic.GetWidth(toothGraphic.ToothID)/TcData.WidthProjection*(float)Width;
+				w=ToothGraphic.GetWidth(toothGraphic.ToothID)/TcData.ScaleMmToPix;
+					// /TcData.WidthProjection*(float)Width;
 			}
 			if(!Tooth.IsPrimary(toothGraphic.ToothID) && (!toothGraphic.Visible || toothGraphic.IsPontic)) {
 				if(ToothGraphic.IsMaxillary(toothGraphic.ToothID)) {

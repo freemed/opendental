@@ -36,8 +36,8 @@ namespace SparksToothChart {
 		float[] specular_color_normal;//white
 		float[] specular_color_cementum;//gray
 		float[] shininess;
-		///<summary>The width that the scene covers.  This is in mm in terms of the scene itself.  This is the only number required in order for this control to be any size.  The height of the viewport is calculated in terms of the same ratio as the width, with the resulting image being centered vertically, so no distortion.</summary>
-		private double WidthProjection;
+		//<summary>The width that the scene covers.  This is in mm in terms of the scene itself.  This is the only number required in order for this control to be any size.  The height of the viewport is calculated in terms of the same ratio as the width, with the resulting image being centered vertically, so no distortion.</summary>
+		//private double WidthProjection;
 		//<summary>valid values are "1" to "32", and "A" to "Z"</summary>
 		//private List<string> selectedTeeth;
 		//<summary>valid values are 1 to 32 (int)</summary>
@@ -73,7 +73,7 @@ namespace SparksToothChart {
 			this.TaoRenderScene += new System.EventHandler(ToothChart_TaoRenderScene);
 			selectedPixelFormat=TaoInitializeContexts(preferredPixelFormatNum);
 			TaoRenderEnabled=true;
-			WidthProjection=130;
+			//WidthProjection=130;
 			DrawingSegmentList=new List<ToothInitial>();
 			DrawingColor=Color.Black;
 			PointList=new List<Point>();
@@ -381,10 +381,23 @@ namespace SparksToothChart {
 			Gl.glLoadIdentity();//clears the matrix
 			Gl.glMatrixMode(Gl.GL_PROJECTION);//only the projection matrix will be affected.
 			Gl.glLoadIdentity();
-			double HeightProjection=WidthProjection*this.Height/this.Width;
-			Gl.glOrtho(-WidthProjection/2,WidthProjection/2,//orthographic projection. L,R
-				-HeightProjection/2,HeightProjection/2,//Bot,Top
-				-WidthProjection/2,WidthProjection/2);//Near,Far
+			//double HeightProjection=WidthProjection*this.Height/this.Width;
+			//Gl.glOrtho(-WidthProjection/2,WidthProjection/2,//orthographic projection. L,R
+			//	-HeightProjection/2,HeightProjection/2,//Bot,Top
+			//	-WidthProjection/2,WidthProjection/2);//Near,Far
+			//double widthProj=(double)TcData.OriginalProjectionSize.Width;
+			//double heightProj=widthProj*Height/Width;
+			double heightProj=(double)TcData.OriginalProjectionSize.Height;
+			double widthProj=(double)TcData.OriginalProjectionSize.Width;
+			if(TcData.IsWide) {
+				widthProj=heightProj*Width/Height;
+			}
+			else {//tall
+				heightProj=widthProj*Height/Width;
+			}
+			Gl.glOrtho(-widthProj/2,widthProj/2,//orthographic projection. L,R
+				-heightProj/2,heightProj/2,//Bot,Top
+				-widthProj/2,widthProj/2);//Near,Far
 			Gl.glMatrixMode(Gl.GL_MODELVIEW);
 			//viewport transformation not used. Default is to fill entire control.
 			Gl.glEnable(Gl.GL_BLEND);
@@ -662,8 +675,10 @@ namespace SparksToothChart {
 				(float)TcData.ColorText.B/255f);
 			Gl.glLineWidth((float)Width/400f);//about 1
 			Gl.glBegin(Gl.GL_LINE_STRIP);
-				Gl.glVertex3f(-(float)WidthProjection/2f,0,0);
-				Gl.glVertex3f((float)WidthProjection/2f,0,0);
+				//Gl.glVertex3f(-(float)WidthProjection/2f,0,0);
+				//Gl.glVertex3f((float)WidthProjection/2f,0,0);
+				Gl.glVertex3f(-TcData.OriginalProjectionSize.Width/2f,0,0);
+				Gl.glVertex3f(TcData.OriginalProjectionSize.Width/2f,0,0);
 			Gl.glEnd();
 			string tooth_id;
 			for(int i=1;i<=52;i++){
@@ -693,7 +708,7 @@ namespace SparksToothChart {
 			string[] xy;
 			PointF pointMm;
 			Color color;
-			float scaleDrawing=(float)Width/(float)TcData.OriginalDrawingSize.Width;
+			//float scaleDrawing=(float)Width/(float)TcData.OriginalDrawingSize.Width;
 			for(int s=0;s<DrawingSegmentList.Count;s++){
 				color=DrawingSegmentList[s].ColorDraw;
 				Gl.glColor3f(
@@ -705,7 +720,7 @@ namespace SparksToothChart {
 				for(int p=0;p<pointStr.Length;p++){
 					xy=pointStr[p].Split(',');
 					if(xy.Length==2){
-						point=new Point((int)(float.Parse(xy[0])*scaleDrawing),(int)(float.Parse(xy[1])*scaleDrawing));
+						point=new Point((int)(float.Parse(xy[0])*TcData.ScaleMmToPix),(int)(float.Parse(xy[1])*TcData.ScaleMmToPix));
 						points.Add(point);
 					}
 				}
@@ -761,10 +776,11 @@ namespace SparksToothChart {
 //fix this.  No calls to OpenDentBusiness that require database.
 //string displayNum=OpenDentBusiness.Tooth.GetToothLabelGraphic(tooth_id);
 			string displayNum=tooth_id;
-			float toMm=(float)WidthProjection/(float)Width;//mm/pix, a ratio that is used for conversions below. Fix this.
+			float toMm=1f/TcData.ScaleMmToPix;
+			//float toMm=(float)WidthProjection/(float)Width;//mm/pix, a ratio that is used for conversions below. Fix this.
 			float strWidthMm=MeasureStringMm(displayNum);
-			RectangleF recMm=TcData.GetNumberRecMm(tooth_id,displayNum,strWidthMm,Width);
-			Rectangle recPix=TcData.ConvertRecToPix(recMm,Width,Height);
+			RectangleF recMm=TcData.GetNumberRecMm(tooth_id,displayNum,strWidthMm);
+			Rectangle recPix=TcData.ConvertRecToPix(recMm);
 			if(isSelected){
 				Gl.glColor3f(
 					(float)TcData.ColorBackHighlight.R/255f,
@@ -824,7 +840,9 @@ namespace SparksToothChart {
 		}
 
 		private float MeasureStringMm(string text){
-			return MeasureStringPix(text)/(float)Width*(float)WidthProjection;
+			//return MeasureStringPix(text)/(float)Width*(float)WidthProjection;
+			return MeasureStringPix(text)*TcData.ScaleMmToPix;
+
 		} 
 
 		private void MakeRasterFont() {

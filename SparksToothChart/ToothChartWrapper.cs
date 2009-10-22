@@ -24,8 +24,8 @@ namespace SparksToothChart {
 		public event ToothChartDrawEventHandler SegmentDrawn=null;
 		
 		private Color drawingColor;
-		///<summary>When the drawing feature was originally added, this was the size of the tooth chart.  This number must forever be preserved and drawings scaled to account for it.</summary>
-		private Size originalDrawingSize=new Size(410,307);
+		//<summary>When the drawing feature was originally added, this was the size of the tooth chart.  This number must forever be preserved and drawings scaled to account for it.</summary>
+		//private Size originalDrawingSize=new Size(410,307);
 		private DrawingMode drawMode;
 		///<summary>This data object will hold nearly all information about what to draw.  It is not exposed publicly, but is instead acted on by methods.</summary>
 		private ToothChartData TcData;
@@ -543,6 +543,11 @@ namespace SparksToothChart {
 
 		#endregion
 
+		protected override void OnResize(EventArgs e) {
+			base.OnResize(e);
+			TcData.DrawingSize=this.Size;
+			Invalidate();
+		}
 
 		public void SetSelected(string tooth_id,bool setValue) {
 			if(setValue) {
