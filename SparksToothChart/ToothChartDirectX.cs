@@ -17,39 +17,14 @@ namespace SparksToothChart {
 		private Device device=null;
 		///<summary>GDI+ handle to this control. Used for line drawing at least.</summary>
 		private Graphics graph=null;
-		private static List <ToothGraphic> ListToothGraphics=null;
 		///<summary>This is a reference to the TcData object that's at the wrapper level.</summary>
 		public ToothChartData TcData;
-		private float WidthProjection;
 		private Color specular_color_normal;
 		private Color specular_color_cementum;
 		private float shininess;
 
 		public ToothChartDirectX() {
 			InitializeComponent();
-			//Initialize the tooth models only once, so that loading can happen more quickly if it is foreced again.
-			if(ListToothGraphics==null) {
-				ListToothGraphics=new List<ToothGraphic> ();
-				ToothGraphic tooth;
-				for(int i=1;i<=32;i++) {
-					tooth=new ToothGraphic(i.ToString());
-					tooth.Visible=true;
-					ListToothGraphics.Add(tooth);
-					//primary
-					//if(ToothGraphic.PermToPri(i.ToString())!="") {
-					//  tooth=new ToothGraphic(ToothGraphic.PermToPri(i.ToString()));
-					//  tooth.Visible=false;
-					//  ListToothGraphics.Add(tooth);
-					//}
-				}
-				//tooth=new ToothGraphic("implant");
-				//ListToothGraphics.Add(tooth);
-			} else {//list was already initially filled, but now user needs to reset it.
-				for(int i=0;i<ListToothGraphics.Count;i++) {//loop through all perm and pri teeth.
-					ListToothGraphics[i].Reset();
-				}
-			}
-			WidthProjection=130;
 		}
 
 		///<summary>Must be called after the ToothChartDirectX control has been added to a form and should be called before it is drawn the first time.</summary>
@@ -64,11 +39,10 @@ namespace SparksToothChart {
 			device=new Device(0,DeviceType.Hardware,this,CreateFlags.SoftwareVertexProcessing,pp);
 			device.DeviceReset+=new EventHandler(this.OnDeviceReset);
 			OnDeviceReset(device,null);
-			for(int i=0;i<ListToothGraphics.Count;i++) {
-				ToothGraphic tooth=ListToothGraphics[i];
+			for(int i=0;i<TcData.ListToothGraphics.Count;i++) {
+				ToothGraphic tooth=TcData.ListToothGraphics[i];
 				for(int j=0;j<tooth.Groups.Count;j++) {
 					ToothGroup group=tooth.Groups[j];
-					//group.PaintColor=Color.FromArgb(50+j*10,50+j*10,50+j*10);//TODO: This line is for debugging only!
 					group.PrepareForDirectX(device,tooth.VertexNormals);
 				}
 			}
@@ -102,8 +76,8 @@ namespace SparksToothChart {
 
 		protected void Render() {
 			//Set the view and projection matricies for the camera.
-			float HeightProjection=WidthProjection*this.Height/this.Width;
-			device.Transform.Projection=Matrix.OrthoLH(WidthProjection,HeightProjection,-WidthProjection/2,WidthProjection/2);
+			device.Transform.Projection=Matrix.OrthoLH(TcData.OriginalProjectionSize.Width,TcData.OriginalProjectionSize.Height,
+				-TcData.OriginalProjectionSize.Width/2,TcData.OriginalProjectionSize.Width/2);
 			//viewport transformation not used. Default is to fill entire control.
 			device.RenderState.CullMode=Cull.None;//Do not cull triangles. Our triangles are too small for this feature to work reliably.
 			device.RenderState.ZBufferEnable=true;
@@ -141,12 +115,12 @@ namespace SparksToothChart {
 			//We reflect that difference here by negating the z values for all coordinates.
 			Matrix defOrient=Matrix.Identity;
 			defOrient.Scale(1,1,-1);
-			for(int t=0;t<ListToothGraphics.Count;t++) {//loop through each tooth
-				if(ListToothGraphics[t].ToothID=="implant") {//this is not an actual tooth.
+			for(int t=0;t<TcData.ListToothGraphics.Count;t++) {//loop through each tooth
+				if(TcData.ListToothGraphics[t].ToothID=="implant") {//this is not an actual tooth.
 					continue;
 				}
-				DrawFacialView(ListToothGraphics[t],defOrient);
-				DrawOcclusalView(ListToothGraphics[t],defOrient);
+				DrawFacialView(TcData.ListToothGraphics[t],defOrient);
+				DrawOcclusalView(TcData.ListToothGraphics[t],defOrient);
 			}
 			device.EndScene();
 			device.Present();
