@@ -94,16 +94,22 @@ namespace SparksToothChart {
 			//Lighting settings
 			device.RenderState.Lighting=true;
 			device.RenderState.SpecularEnable=true;
-			specular_color_normal=Color.FromArgb(255,255,255,255);
-			specular_color_cementum=Color.FromArgb(255,26,26,26);
-			shininess=10f;//Not the same as in OpenGL. No maximum value. Smaller number means light is more spread out.
 			//Set properties for light 0.
 			device.Lights[0].Type=LightType.Directional;
-			device.Lights[0].Ambient=Color.FromArgb(255,95,95,95);
-			device.Lights[0].Diffuse=Color.FromArgb(255,150,150,150);
-			device.Lights[0].Specular=Color.FromArgb(255,50,50,50);
+			float ambI=.2f;
+			float difI=.6f;
+			float specI=1f;
+			device.Lights[0].Ambient=Color.FromArgb(255,(int)(255*ambI),(int)(255*ambI),(int)(255*ambI));
+			device.Lights[0].Diffuse=Color.FromArgb(255,(int)(255*difI),(int)(255*difI),(int)(255*difI));
+			device.Lights[0].Specular=Color.FromArgb(255,(int)(255*specI),(int)(255*specI),(int)(255*specI));
 			device.Lights[0].Direction=new Vector3(0.5f,0.1f,1f);
 			device.Lights[0].Enabled=true;
+			//Material settings
+			float specNorm=1f;
+			float specCem=0.1f;
+			specular_color_normal=Color.FromArgb(255,(int)(255*specNorm),(int)(255*specNorm),(int)(255*specNorm));
+			specular_color_cementum=Color.FromArgb(255,(int)(255*specCem),(int)(255*specCem),(int)(255*specCem));
+			shininess=100f;//Not the same as in OpenGL. No maximum value. Smaller number means light is more spread out.
 			//Draw
 			DrawScene();
 		}
