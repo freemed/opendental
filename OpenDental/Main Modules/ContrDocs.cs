@@ -990,8 +990,8 @@ namespace OpenDental{
 			}
 			EnableAllTreeItemTools(false);
 			DataRow obj=(DataRow)TreeDocuments.SelectedNode.Tag;
-			int mountNum=Convert.ToInt32(obj["MountNum"].ToString());
-			int docNum=Convert.ToInt32(obj["DocNum"].ToString());
+			long mountNum=Convert.ToInt64(obj["MountNum"].ToString());
+			long docNum=Convert.ToInt64(obj["DocNum"].ToString());
 			Document[] docs;
 			bool refreshTree=true;
 			if(mountNum!=0){//This is a mount object.
@@ -1300,8 +1300,8 @@ namespace OpenDental{
 			}
 			this.Cursor=Cursors.WaitCursor;
 			DataRow obj=(DataRow)TreeDocuments.SelectedNode.Tag;
-			int mountNum=Convert.ToInt32(obj["MountNum"]);
-			int docNum=Convert.ToInt32(obj["DocNum"]);
+			long mountNum=Convert.ToInt64(obj["MountNum"]);
+			long docNum=Convert.ToInt64(obj["DocNum"]);
 			Bitmap copyImage;
 			if(mountNum!=0){//The current selection is a mount?
 				if(hotDocument>=0 && mountDocs[hotDocument]!=null){//A mount item is currently selected.
@@ -1328,12 +1328,12 @@ namespace OpenDental{
 			}
 			Bitmap pasteImage=(Bitmap)clipboard.GetData(DataFormats.Bitmap);
 			Document doc;
-			int mountNum=0;
-			int docNum=0;
+			long mountNum=0;
+			long docNum=0;
 			if(TreeDocuments.SelectedNode!=null&&TreeDocuments.SelectedNode.Tag!=null) {
 				DataRow obj=(DataRow)TreeDocuments.SelectedNode.Tag;
-				mountNum=Convert.ToInt32(obj["MountNum"]);
-				docNum=Convert.ToInt32(obj["DocNum"]);
+				mountNum=Convert.ToInt64(obj["MountNum"]);
+				docNum=Convert.ToInt64(obj["DocNum"]);
 			}
 			this.Cursor=Cursors.WaitCursor;
 			if(mountNum!=0&&hotDocument>=0) {//Pasting into the mount item of the currently selected mount.
@@ -1416,8 +1416,8 @@ namespace OpenDental{
 				return;
 			}
 			DataRow obj=(DataRow)TreeDocuments.SelectedNode.Tag;
-			int mountNum=Convert.ToInt32(obj["MountNum"]);
-			int docNum=Convert.ToInt32(obj["DocNum"]);
+			long mountNum=Convert.ToInt64(obj["MountNum"]);
+			long docNum=Convert.ToInt64(obj["DocNum"]);
 			Bitmap printImage;
 			if(mountNum!=0){//Is this a mount object?
 				if(hotDocument>=0 && mountDocs[hotDocument]!=null) {//A mount item is currently selected.
@@ -1563,8 +1563,8 @@ namespace OpenDental{
 				}
 				//Update the object's document category in the database.
 				DataRow obj=(DataRow)sourceNode.Tag;
-				int mountNum=Convert.ToInt32(obj["MountNum"].ToString());
-				int docNum=Convert.ToInt32(obj["DocNum"].ToString());
+				long mountNum=Convert.ToInt64(obj["MountNum"].ToString());
+				long docNum=Convert.ToInt64(obj["DocNum"].ToString());
 				string id;
 				if(mountNum!=0) {//Mount object.
 					Mount mount=Mounts.GetByNum(mountNum);
@@ -1787,8 +1787,8 @@ namespace OpenDental{
 				return;
 			}
 			DataRow obj=(DataRow)clickedNode.Tag;
-			int mountNum=Convert.ToInt32(obj["MountNum"].ToString());
-			int docNum=Convert.ToInt32(obj["DocNum"].ToString());
+			long mountNum=Convert.ToInt64(obj["MountNum"].ToString());
+			long docNum=Convert.ToInt64(obj["DocNum"].ToString());
 			if(mountNum!=0){//Is this object a mount object?
 				FormMountEdit fme=new FormMountEdit(selectionMount);
 				fme.ShowDialog();//Edits the selectionMount object directly and updates and changes to the database as well.
@@ -1817,8 +1817,8 @@ namespace OpenDental{
 				return;
 			}
 			DataRow obj=(DataRow)TreeDocuments.SelectedNode.Tag;
-			int mountNum=Convert.ToInt32(obj["MountNum"].ToString());
-			int docNum=Convert.ToInt32(obj["DocNum"].ToString());
+			long mountNum=Convert.ToInt64(obj["MountNum"].ToString());
+			long docNum=Convert.ToInt64(obj["DocNum"].ToString());
 			if(mountNum!=0) {//The current selection is a mount.
 				FormMountEdit fme=new FormMountEdit(selectionMount);
 				fme.ShowDialog();//Edits the selectionMount object directly and updates and changes to the database as well.
@@ -1976,7 +1976,7 @@ namespace OpenDental{
 					return;
 				}
 				DataRow obj=(DataRow)TreeDocuments.SelectedNode.Tag;
-				int mountNum=Convert.ToInt32(obj["MountNum"].ToString());
+				long mountNum=Convert.ToInt64(obj["MountNum"].ToString());
 				if(mountNum!=0){//The user may be trying to select an individual image within the current mount.
 					hotDocument=GetDocumentAtMountLocation(MouseDownOrigin);
 					//Assume no item will be selected and enable tools again if an item was actually selected.
@@ -2006,8 +2006,8 @@ namespace OpenDental{
 					return;
 				}
 				DataRow obj=(DataRow)TreeDocuments.SelectedNode.Tag;
-				int mountNum=Convert.ToInt32(obj["MountNum"].ToString());
-				int docNum=Convert.ToInt32(obj["DocNum"].ToString());
+				long mountNum=Convert.ToInt64(obj["MountNum"].ToString());
+				long docNum=Convert.ToInt64(obj["DocNum"].ToString());
 				float cropZoom=imageZoom*zoomFactor;
 				PointF cropTrans=imageTranslation;
 				PointF cropPoint1=ScreenPointToUnalteredDocumentPoint(cropTangle.Location,selectionDoc,
@@ -2102,10 +2102,10 @@ namespace OpenDental{
 		///<summary>Handles a change in selection of the xRay capture button.</summary>
 		private void OnCapture_Click() {
 			if(ToolBarMain.Buttons["Capture"].Pushed) {
-				int mountNum=0;
+				long mountNum=0;
 				if(GetNodeIdentifier(TreeDocuments.SelectedNode)!=""){//A document or mount is currently selected.
 					DataRow obj=(DataRow)TreeDocuments.SelectedNode.Tag;
-					mountNum=Convert.ToInt32(obj["MountNum"].ToString());					
+					mountNum=Convert.ToInt64(obj["MountNum"].ToString());					
 				}
 				ComputerPref computerPrefs=ComputerPrefs.GetForLocalComputer();
 				xRayImageController.SensorType=computerPrefs.SensorType;
@@ -2420,10 +2420,10 @@ namespace OpenDental{
 		}
 
 		private void MountMenu_Opening(object sender,CancelEventArgs e) {
-			int mountNum=0;
+			long mountNum=0;
 			if(GetNodeIdentifier(TreeDocuments.SelectedNode)!="") {//A document or mount is currently selected.
 				DataRow obj=(DataRow)TreeDocuments.SelectedNode.Tag;
-				mountNum=Convert.ToInt32(obj["MountNum"].ToString());
+				mountNum=Convert.ToInt64(obj["MountNum"].ToString());
 			}
 			if(mountNum==0) {
 				e.Cancel=true;

@@ -110,6 +110,10 @@ namespace OpenDental {
 		}
 
 		private void butSetRanges_Click(object sender,EventArgs e) {
+			if(ReplicationServers.Listt.Count==0) {
+				MessageBox.Show(Lan.g(this,"Please add at least one replication server to the list first"));
+				return;
+			}
 			//long serverCount=ReplicationServers.Listt.Count;
 			long offset=10000;
 			long span=(long.MaxValue-offset) / (long)ReplicationServers.Listt.Count;//rounds down
