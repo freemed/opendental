@@ -76,8 +76,8 @@ namespace SparksToothChart {
 
 		protected void Render() {
 			//Set the view and projection matricies for the camera.
-			device.Transform.Projection=Matrix.OrthoLH(TcData.OriginalProjectionSize.Width,TcData.OriginalProjectionSize.Height,
-				-TcData.OriginalProjectionSize.Width/2,TcData.OriginalProjectionSize.Width/2);
+			device.Transform.Projection=Matrix.OrthoLH(TcData.OriginalProjectionSize.Width,TcData.OriginalProjectionSize.Height,0,1000.0f);
+			device.Transform.World=Matrix.Identity;
 			//viewport transformation not used. Default is to fill entire control.
 			device.RenderState.CullMode=Cull.None;//Do not cull triangles. Our triangles are too small for this feature to work reliably.
 			device.RenderState.ZBufferEnable=true;
@@ -89,16 +89,15 @@ namespace SparksToothChart {
 			//device.RenderState.SourceBlend=Blend.SourceAlpha;
 			//device.RenderState.DestinationBlend=Blend.InvSourceAlpha;
 			//device.RenderState.AlphaBlendOperation=BlendOperation.Add;
-			//Anti-alias settings.
-			device.RenderState.AntiAliasedLineEnable=true;
 			//Lighting settings
 			device.RenderState.Lighting=true;
 			device.RenderState.SpecularEnable=true;
-			//Set properties for light 0.
-			device.Lights[0].Type=LightType.Directional;
-			float ambI=.2f;
+			device.RenderState.SpecularMaterialSource=ColorSource.Material;
+			float ambI=.4f;
 			float difI=.6f;
-			float specI=1f;
+			float specI=.5f;
+			//Set properties for light 0. Diffuse light.
+			device.Lights[0].Type=LightType.Directional;
 			device.Lights[0].Ambient=Color.FromArgb(255,(int)(255*ambI),(int)(255*ambI),(int)(255*ambI));
 			device.Lights[0].Diffuse=Color.FromArgb(255,(int)(255*difI),(int)(255*difI),(int)(255*difI));
 			device.Lights[0].Specular=Color.FromArgb(255,(int)(255*specI),(int)(255*specI),(int)(255*specI));
@@ -106,10 +105,10 @@ namespace SparksToothChart {
 			device.Lights[0].Enabled=true;
 			//Material settings
 			float specNorm=1f;
-			float specCem=0.1f;
+			float specCem=.1f;
 			specular_color_normal=Color.FromArgb(255,(int)(255*specNorm),(int)(255*specNorm),(int)(255*specNorm));
 			specular_color_cementum=Color.FromArgb(255,(int)(255*specCem),(int)(255*specCem),(int)(255*specCem));
-			shininess=100f;//Not the same as in OpenGL. No maximum value. Smaller number means light is more spread out.
+			shininess=70f;//Not the same as in OpenGL. No maximum value. Smaller number means light is more spread out.
 			//Draw
 			DrawScene();
 		}
@@ -120,7 +119,13 @@ namespace SparksToothChart {
 			//The Z values between OpenGL and DirectX are negated (the axis runs in the opposite direction).
 			//We reflect that difference here by negating the z values for all coordinates.
 			Matrix defOrient=Matrix.Identity;
-			defOrient.Scale(1,1,-1);
+			defOrient.Scale(1f,1f,-1f);
+			//We make sure to move all teeth forward a large step so that specular lighting will calculate properly.
+			//This step does not affect the tooth locations on the screen because changes in z position for a tooth
+			//does not affect position in orthographic projections.
+			Matrix trans=Matrix.Identity;
+			trans.Translate(0f,0f,400f);
+			defOrient=defOrient*trans;
 			for(int t=0;t<TcData.ListToothGraphics.Count;t++) {//loop through each tooth
 				if(TcData.ListToothGraphics[t].ToothID=="implant") {//this is not an actual tooth.
 					continue;
@@ -381,7 +386,7 @@ namespace SparksToothChart {
 				Material material=new Material();
 				Color materialColor;
 				if(toothGraphic.ShiftO<-10) {//if unerupted
-					materialColor=Color.FromArgb(group.PaintColor.A/2,group.PaintColor.R/2,group.PaintColor.G/2,group.PaintColor.B/2);
+					materialColor=Color.FromArgb(group.PaintColor.A/16,group.PaintColor.R/16,group.PaintColor.G/16,group.PaintColor.B/16);
 				} else {
 					materialColor=group.PaintColor;
 				}
@@ -394,7 +399,6 @@ namespace SparksToothChart {
 				}				
 				material.SpecularSharpness=shininess;
 				device.Material=material;
-				//Gl.glBlendFunc(Gl.GL_ONE,Gl.GL_ZERO);
 				//draw the group
 				device.SetStreamSource(0,group.VertexBuffer,0);
 			  device.Indices=group.facesDirectX;
