@@ -93,11 +93,7 @@ namespace SparksToothChart {
 				pe.Graphics.FillRectangle(new SolidBrush(TcData.ColorBackground),new Rectangle(0,0,Width,Height));
 				return;
 			}
-			device.Clear(ClearFlags.Target|ClearFlags.ZBuffer,TcData.ColorBackground,1.0f,0);
-			device.BeginScene();
 			Render();
-			device.EndScene();
-			device.Present();
 		}
 
 		protected void Render() {
@@ -121,20 +117,23 @@ namespace SparksToothChart {
 			device.RenderState.Lighting=true;
 			device.RenderState.SpecularEnable=true;
 			specular_color_normal=Color.FromArgb(255,255,255,255);
-			specular_color_cementum=Color.FromArgb(26,26,26,26);
-			shininess=10f;//Not the same as in OpenGL. No maximum value. Smaller number means light is more spread out.
+			specular_color_cementum=Color.FromArgb(255,0,0,0);
+			shininess=100f;//Not the same as in OpenGL. No maximum value. Smaller number means light is more spread out.
 			//Set properties for light 0.
 			device.Lights[0].Type=LightType.Directional;
-			device.Lights[0].Ambient=Color.FromArgb(255,95,95,95);
-			device.Lights[0].Diffuse=Color.FromArgb(255,153,153,153);
-			device.Lights[0].Specular=Color.FromArgb(255,26,26,26);
-			device.Lights[0].Direction=new Vector3(0.5f,0.1f,1f);
+			device.Lights[0].Ambient=Color.FromArgb(255,40,40,40);
+			device.Lights[0].Diffuse=Color.FromArgb(255,200,200,200);
+			device.Lights[0].Specular=Color.FromArgb(255,255,255,255);
+			device.Lights[0].Direction=new Vector3(0f,0.1f,1f);
 			device.Lights[0].Enabled=true;
 			//Draw
 			DrawScene();
 		}
 
 		private void DrawScene() {
+			device.Clear(ClearFlags.Target|ClearFlags.ZBuffer,TcData.ColorBackground,1.0f,0);
+			device.PresentationParameters.MultiSample=MultiSampleType.FourSamples;
+			device.BeginScene();
 			//The Z values between OpenGL and DirectX are negated (the axis runs in the opposite direction).
 			//We reflect that difference here by negating the z values for all coordinates.
 			Matrix defOrient=Matrix.Identity;
@@ -146,8 +145,14 @@ namespace SparksToothChart {
 				DrawFacialView(ListToothGraphics[t],defOrient);
 				DrawOcclusalView(ListToothGraphics[t],defOrient);
 			}
+			device.EndScene();
+			device.Present();
+			device.PresentationParameters.MultiSample=MultiSampleType.None;
+			device.BeginScene();
 			DrawTextAndLines();
 			//DrawDrawingSegments();
+			device.EndScene();
+			device.Present();
 		}
 
 		private void DrawFacialView(ToothGraphic toothGraphic,Matrix defOrient) {
@@ -399,11 +404,14 @@ namespace SparksToothChart {
 				} else {
 					materialColor=group.PaintColor;
 				}
-				material.Ambient=materialColor;
-				material.Diffuse=materialColor;
 				if(group.GroupType==ToothGroupType.Cementum) {
-					material.Specular=specular_color_cementum;
+					//No specular highlighs for 
+					material.Ambient=Color.Black;
+					material.Diffuse=Color.Black;
+					material.Specular=Color.Black;
 				} else {
+					material.Ambient=materialColor;
+					material.Diffuse=materialColor;
 					material.Specular=specular_color_normal;
 				}				
 				material.SpecularSharpness=shininess;
