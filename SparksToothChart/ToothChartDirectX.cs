@@ -121,14 +121,14 @@ namespace SparksToothChart {
 			device.RenderState.Lighting=true;
 			device.RenderState.SpecularEnable=true;
 			specular_color_normal=Color.FromArgb(255,255,255,255);
-			specular_color_cementum=Color.FromArgb(255,0,0,0);
-			shininess=100f;//Not the same as in OpenGL. No maximum value. Smaller number means light is more spread out.
+			specular_color_cementum=Color.FromArgb(255,26,26,26);
+			shininess=10f;//Not the same as in OpenGL. No maximum value. Smaller number means light is more spread out.
 			//Set properties for light 0.
 			device.Lights[0].Type=LightType.Directional;
-			device.Lights[0].Ambient=Color.FromArgb(255,40,40,40);
-			device.Lights[0].Diffuse=Color.FromArgb(255,200,200,200);
-			device.Lights[0].Specular=Color.FromArgb(255,255,255,255);
-			device.Lights[0].Direction=new Vector3(0f,0.1f,1f);
+			device.Lights[0].Ambient=Color.FromArgb(255,95,95,95);
+			device.Lights[0].Diffuse=Color.FromArgb(255,150,150,150);
+			device.Lights[0].Specular=Color.FromArgb(255,50,50,50);
+			device.Lights[0].Direction=new Vector3(0.5f,0.1f,1f);
 			device.Lights[0].Enabled=true;
 			//Draw
 			DrawScene();
@@ -405,14 +405,11 @@ namespace SparksToothChart {
 				} else {
 					materialColor=group.PaintColor;
 				}
+				material.Ambient=materialColor;
+				material.Diffuse=materialColor;
 				if(group.GroupType==ToothGroupType.Cementum) {
-					//No specular highlighs for 
-					material.Ambient=Color.Black;
-					material.Diffuse=Color.Black;
-					material.Specular=Color.Black;
+					material.Specular=specular_color_cementum;
 				} else {
-					material.Ambient=materialColor;
-					material.Diffuse=materialColor;
 					material.Specular=specular_color_normal;
 				}				
 				material.SpecularSharpness=shininess;
