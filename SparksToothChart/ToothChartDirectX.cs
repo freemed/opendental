@@ -13,7 +13,10 @@ namespace SparksToothChart {
 
 	public partial class ToothChartDirectX:Control {
 
+		///<summary>DirectX handle to this control.</summary>
 		private Device device=null;
+		///<summary>GDI+ handle to this control. Used for line drawing at least.</summary>
+		private Graphics graph=null;
 		private static List <ToothGraphic> ListToothGraphics=null;
 		///<summary>This is a reference to the TcData object that's at the wrapper level.</summary>
 		public ToothChartData TcData;
@@ -69,6 +72,7 @@ namespace SparksToothChart {
 					group.PrepareForDirectX(device,tooth.VertexNormals);
 				}
 			}
+			graph=Graphics.FromHwnd(this.Handle);
 		}
 
 		///<summary>TODO: Handle the situation when there are suboptimal graphics cards.</summary>
@@ -132,7 +136,6 @@ namespace SparksToothChart {
 
 		private void DrawScene() {
 			device.Clear(ClearFlags.Target|ClearFlags.ZBuffer,TcData.ColorBackground,1.0f,0);
-			device.PresentationParameters.MultiSample=MultiSampleType.FourSamples;
 			device.BeginScene();
 			//The Z values between OpenGL and DirectX are negated (the axis runs in the opposite direction).
 			//We reflect that difference here by negating the z values for all coordinates.
@@ -147,12 +150,10 @@ namespace SparksToothChart {
 			}
 			device.EndScene();
 			device.Present();
-			device.PresentationParameters.MultiSample=MultiSampleType.None;
-			device.BeginScene();
+			//All DirectX drawing is finished for this frame.
+			//Now draw all lines using GDI+.
 			DrawTextAndLines();
 			//DrawDrawingSegments();
-			device.EndScene();
-			device.Present();
 		}
 
 		private void DrawFacialView(ToothGraphic toothGraphic,Matrix defOrient) {
@@ -499,27 +500,31 @@ namespace SparksToothChart {
 		}
 
 		private void DrawTextAndLines() {
-			device.RenderState.Lighting=false;
-			device.Lights[0].Enabled=false;
+
+			graph.DrawLine(new Pen(Brushes.White),0,this.Height/2,this.Width,this.Height/2);
+
+
+			//device.RenderState.Lighting=false;
+			//device.Lights[0].Enabled=false;
 		
-			//Draw the horizontal line accross the tooth chart.
-			device.Transform.World=Matrix.Identity;
-			CustomVertex.PositionColored[] linePoints=new CustomVertex.PositionColored[2];
-			linePoints[0].X=-(float)WidthProjection/2f;
-			linePoints[0].Color=Color.Red.ToArgb();
-			linePoints[1].X=(float)WidthProjection/2f;
-			linePoints[1].Color=Color.Blue.ToArgb();
-			VertexBuffer vb=new VertexBuffer(typeof(CustomVertex.PositionColored),CustomVertex.PositionColored.StrideSize*linePoints.Length,
-				device,Usage.WriteOnly,CustomVertex.PositionColored.Format,Pool.Managed);
-			vb.SetData(linePoints,0,LockFlags.None);
-			device.SetStreamSource(0,vb,0);
-			int[] indicies=new int[] { 0,1 };
-			IndexBuffer ib=new IndexBuffer(typeof(int),indicies.Length,device,Usage.None,Pool.Managed);
-			ib.SetData(indicies,0,LockFlags.None);
-			device.Indices=ib;
-			device.DrawIndexedPrimitives(PrimitiveType.LineList,0,0,linePoints.Length,0,linePoints.Length-1);
-			vb.Dispose();
-			ib.Dispose();
+			////Draw the horizontal line accross the tooth chart.
+			//device.Transform.World=Matrix.Identity;
+			//CustomVertex.PositionColored[] linePoints=new CustomVertex.PositionColored[2];
+			//linePoints[0].X=-(float)WidthProjection/2f;
+			//linePoints[0].Color=Color.Red.ToArgb();
+			//linePoints[1].X=(float)WidthProjection/2f;
+			//linePoints[1].Color=Color.Blue.ToArgb();
+			//VertexBuffer vb=new VertexBuffer(typeof(CustomVertex.PositionColored),CustomVertex.PositionColored.StrideSize*linePoints.Length,
+			//  device,Usage.WriteOnly,CustomVertex.PositionColored.Format,Pool.Managed);
+			//vb.SetData(linePoints,0,LockFlags.None);
+			//device.SetStreamSource(0,vb,0);
+			//int[] indicies=new int[] { 0,1 };
+			//IndexBuffer ib=new IndexBuffer(typeof(int),indicies.Length,device,Usage.None,Pool.Managed);
+			//ib.SetData(indicies,0,LockFlags.None);
+			//device.Indices=ib;
+			//device.DrawIndexedPrimitives(PrimitiveType.LineList,0,0,linePoints.Length,0,linePoints.Length-1);
+			//vb.Dispose();
+			//ib.Dispose();
 
 			//Microsoft.DirectX.Direct3D.Line a;//This class is supposed to exist but does not! Maybe out Line class is blocking it? No idea...
 
