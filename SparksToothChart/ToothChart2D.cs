@@ -35,7 +35,8 @@ namespace SparksToothChart {
 				e.Graphics.DrawImage(pictBox.Image,new Rectangle(0,0,this.Width,this.Height));
 				return;
 			}
-			Bitmap bitmap=new Bitmap(pictBox.Image);//use a copy of the background image
+			//our strategy here will be to draw the whole thing at the background bitmap resolution, and then scale it.
+			Bitmap bitmap=new Bitmap(pictBox.Image);//Create a copy of the background
 			Graphics g=Graphics.FromImage(bitmap);
 			g.SmoothingMode=SmoothingMode.HighQuality;
 			g.TextRenderingHint=TextRenderingHint.ClearTypeGridFit;
@@ -48,6 +49,9 @@ namespace SparksToothChart {
 			}
 			DrawNumbers(g);
 			DrawDrawingSegments(g);
+			e.Graphics.Clear(TcData.ColorBackground);
+			//do some math to figure out where to place the image
+
 			e.Graphics.DrawImage(bitmap,new Rectangle(0,0,this.Width,this.Height));
 			g.Dispose();
 		}

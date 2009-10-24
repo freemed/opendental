@@ -179,10 +179,10 @@ namespace SparksToothChart {
 		private void SetDefaultColors(){
 			for(int i=0;i<Groups.Count;i++){
 				if(Groups[i].GroupType==ToothGroupType.Cementum) {
-					Groups[i].PaintColor=Color.FromArgb(255,255,250,230);//243,234,176);//230,214,143);
+					Groups[i].PaintColor=Color.FromArgb(255,250,245,223);//255,250,230);
 				}
 				else {//enamel
-					Groups[i].PaintColor=Color.FromArgb(255,255,255,245);//255,255,253,209);
+					Groups[i].PaintColor=Color.FromArgb(255,250,250,240);//255,255,245);
 				}
 				if(Groups[i].GroupType==ToothGroupType.Canals
 					|| Groups[i].GroupType==ToothGroupType.Buildup)
