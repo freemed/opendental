@@ -16,7 +16,7 @@ namespace SparksToothChart {
 		///<summary>DirectX handle to this control.</summary>
 		private Device device=null;
 		///<summary>GDI+ handle to this control. Used for line drawing at least.</summary>
-		private Graphics graph=null;
+		private Graphics g=null;
 		///<summary>This is a reference to the TcData object that's at the wrapper level.</summary>
 		public ToothChartData TcData;
 		private Color specular_color_normal;
@@ -46,7 +46,7 @@ namespace SparksToothChart {
 					group.PrepareForDirectX(device,tooth.VertexNormals);
 				}
 			}
-			graph=Graphics.FromHwnd(this.Handle);
+			g=Graphics.FromHwnd(this.Handle);
 		}
 
 		///<summary>TODO: Handle the situation when there are suboptimal graphics cards.</summary>
@@ -483,7 +483,7 @@ namespace SparksToothChart {
 
 		private void DrawTextAndLines() {
 
-			graph.DrawLine(new Pen(Brushes.White),0,this.Height/2,this.Width,this.Height/2);
+			g.DrawLine(new Pen(Brushes.White),0,this.Height/2,this.Width,this.Height/2);
 
 
 			//device.RenderState.Lighting=false;

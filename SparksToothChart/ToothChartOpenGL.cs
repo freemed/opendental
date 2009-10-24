@@ -354,8 +354,8 @@ namespace SparksToothChart {
 			Gl.glClearColor((float)TcData.ColorBackground.R/255f,(float)TcData.ColorBackground.G/255f,(float)TcData.ColorBackground.B/255f,0f);
 			Gl.glClearAccum(0f,0f,0f,0f);
 			//Lighting
-			float ambI=.2f;//.1f;//
-			float difI=.6f;//.3f;//
+			float ambI=.2f;//.1f;//Darker for testing
+			float difI=.6f;//.3f;//Darker for testing
 			float specI=1f;
 			float[] light_ambient = new float[] { ambI,ambI,ambI,1f };//RGB,A=1 for no transparency. Default 0001
 			float[] light_diffuse = new float[] { difI,difI,difI,1f };//RGBA. Default 1111. 'typical' 
