@@ -32,15 +32,19 @@ namespace SparksToothChart {
 			Graphics g=e.Graphics;
 			g.DrawImage(pictBox.Image,new Rectangle(0,0,this.Width,this.Height));
 			g.SmoothingMode=SmoothingMode.HighQuality;
-			for(int t=0;t<TcData.ListToothGraphics.Count;t++) {//loop through each tooth
-				if(TcData.ListToothGraphics[t].ToothID=="implant") {//this is not an actual tooth.
-					continue;
+			if(!DesignMode) {
+				for(int t=0;t<TcData.ListToothGraphics.Count;t++) {//loop through each tooth
+					if(TcData.ListToothGraphics[t].ToothID=="implant") {//this is not an actual tooth.
+						continue;
+					}
+					DrawFacialView(TcData.ListToothGraphics[t],g);
+					DrawOcclusalView(TcData.ListToothGraphics[t],g);
 				}
-				DrawFacialView(TcData.ListToothGraphics[t],g);
-				DrawOcclusalView(TcData.ListToothGraphics[t],g);
 			}
 			DrawNumbers(g);
-			DrawDrawingSegments(g);
+			if(!DesignMode) {
+				DrawDrawingSegments(g);
+			}
 			g.Dispose();
 		}
 
@@ -255,7 +259,10 @@ namespace SparksToothChart {
 			string tooth_id;
 			for(int i=1;i<=52;i++) {
 				tooth_id=Tooth.FromOrdinal(i);
-				if(TcData.SelectedTeeth.Contains(tooth_id)) {
+				if(DesignMode) {
+					DrawNumber(tooth_id,false,true,g);
+				}
+				else if(TcData.SelectedTeeth.Contains(tooth_id)) {
 					DrawNumber(tooth_id,true,true,g);
 				}
 				else {

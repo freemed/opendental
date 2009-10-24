@@ -193,7 +193,7 @@ namespace SparksToothChart {
 				toothChart2D=new ToothChart2D();
 				toothChart2D.Dock = System.Windows.Forms.DockStyle.Fill;
 				toothChart2D.Location = new System.Drawing.Point(0,0);
-				toothChart2D.Name = "toothChart";
+				toothChart2D.Name = "toothChart2D";
 				//toothChart2D.Size = new System.Drawing.Size(719,564);//unnecessary?
 				//toothChart2D.SegmentDrawn+=new ToothChartDrawEventHandler(toothChart_SegmentDrawn);
 				toothChart2D.TcData=TcData;
@@ -209,7 +209,7 @@ namespace SparksToothChart {
 				//toothChartDirectX.ColorText=colorText;
 				toothChartDirectX.Dock = System.Windows.Forms.DockStyle.Fill;
 				toothChartDirectX.Location = new System.Drawing.Point(0,0);
-				toothChartDirectX.Name = "toothChart";
+				toothChartDirectX.Name = "toothChartDirectX";
 				//toothChartDirectX.Size = new System.Drawing.Size(719,564);//unnecessary?
 				//toothChartDirectX.SegmentDrawn+=new ToothChartDrawEventHandler(toothChart_SegmentDrawn);
 				toothChartDirectX.TcData=TcData;
@@ -225,7 +225,7 @@ namespace SparksToothChart {
 				//toothChartOpenGL.ColorText=colorText;
 				toothChartOpenGL.Dock = System.Windows.Forms.DockStyle.Fill;
 				toothChartOpenGL.Location = new System.Drawing.Point(0,0);
-				toothChartOpenGL.Name = "toothChart";
+				toothChartOpenGL.Name = "toothChartOpenGL";
 				//toothChartOpenGL.Size = new System.Drawing.Size(719,564);//unnecessary?
 				toothChartOpenGL.TcData=TcData;
 				//toothChartOpenGL.SegmentDrawn+=new ToothChartDrawEventHandler(toothChart_SegmentDrawn);

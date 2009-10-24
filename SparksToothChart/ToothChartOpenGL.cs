@@ -681,8 +681,7 @@ namespace SparksToothChart {
 				Gl.glVertex3f(TcData.OriginalProjectionSize.Width/2f,0,0);
 			Gl.glEnd();
 			string tooth_id;
-			//for(int i=1;i<=52;i++){
-			int i=8;
+			for(int i=1;i<=52;i++){
 				tooth_id=Tooth.FromOrdinal(i);
 				if(TcData.SelectedTeeth.Contains(tooth_id)) {
 					DrawNumber(tooth_id,true,true);
@@ -690,7 +689,7 @@ namespace SparksToothChart {
 				else {
 					DrawNumber(tooth_id,false,true);
 				}
-			//}
+			}
 			Gl.glPopMatrix();
 		}
 
@@ -782,7 +781,6 @@ namespace SparksToothChart {
 			float strWidthMm=MeasureStringMm(displayNum);
 			RectangleF recMm=TcData.GetNumberRecMm(tooth_id,displayNum,strWidthMm);
 			//Rectangle recPix=TcData.ConvertRecToPix(recMm);
-			/*
 			if(isSelected){
 				Gl.glColor3f(
 					(float)TcData.ColorBackHighlight.R/255f,
@@ -816,7 +814,7 @@ namespace SparksToothChart {
 					(float)TcData.ColorText.G/255f,
 					(float)TcData.ColorText.B/255f);
 				Gl.glRasterPos3f(recMm.X+2f*toMm,recMm.Y+2f*toMm,15f);
-			}*/
+			}
 			if(TcData.ListToothGraphics[tooth_id].HideNumber){//If number is hidden.
 				//do not print string
 			}
@@ -833,7 +831,7 @@ namespace SparksToothChart {
 			Gl.glFlush();
 		}
 
-		///<summary>Return value is in tooth coordinates, not pixels.</summary>
+		///<summary>Return value is in tooth coordinates, not pixels.  I left this in OpenGL rather than moving it to ToothChartData because the measurement strategy is very specific to the raster font defined here.</summary>
 		private float MeasureStringPix(string text){
 			float retVal=0;
 			for(int i=0;i<text.Length;i++){
@@ -842,9 +840,10 @@ namespace SparksToothChart {
 			return retVal;
 		}
 
+		/// <summary>  I left this in OpenGL rather than moving it to ToothChartData because the measurement strategy is very specific to the raster font defined here.</summary>
 		private float MeasureStringMm(string text){
 			//return MeasureStringPix(text)/(float)Width*(float)WidthProjection;
-			return MeasureStringPix(text)*TcData.ScaleMmToPix;
+			return MeasureStringPix(text)/TcData.ScaleMmToPix;
 
 		} 
 
