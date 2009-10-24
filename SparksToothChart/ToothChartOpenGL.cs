@@ -354,8 +354,8 @@ namespace SparksToothChart {
 			Gl.glClearColor((float)TcData.ColorBackground.R/255f,(float)TcData.ColorBackground.G/255f,(float)TcData.ColorBackground.B/255f,0f);
 			Gl.glClearAccum(0f,0f,0f,0f);
 			//Lighting
-			float ambI=.2f;
-			float difI=.6f;
+			float ambI=.2f;//.1f;//
+			float difI=.6f;//.3f;//
 			float specI=1f;
 			float[] light_ambient = new float[] { ambI,ambI,ambI,1f };//RGB,A=1 for no transparency. Default 0001
 			float[] light_diffuse = new float[] { difI,difI,difI,1f };//RGBA. Default 1111. 'typical' 
@@ -681,7 +681,8 @@ namespace SparksToothChart {
 				Gl.glVertex3f(TcData.OriginalProjectionSize.Width/2f,0,0);
 			Gl.glEnd();
 			string tooth_id;
-			for(int i=1;i<=52;i++){
+			//for(int i=1;i<=52;i++){
+			int i=8;
 				tooth_id=Tooth.FromOrdinal(i);
 				if(TcData.SelectedTeeth.Contains(tooth_id)) {
 					DrawNumber(tooth_id,true,true);
@@ -689,7 +690,7 @@ namespace SparksToothChart {
 				else {
 					DrawNumber(tooth_id,false,true);
 				}
-			}
+			//}
 			Gl.glPopMatrix();
 		}
 
@@ -780,7 +781,8 @@ namespace SparksToothChart {
 			//float toMm=(float)WidthProjection/(float)Width;//mm/pix, a ratio that is used for conversions below. Fix this.
 			float strWidthMm=MeasureStringMm(displayNum);
 			RectangleF recMm=TcData.GetNumberRecMm(tooth_id,displayNum,strWidthMm);
-			Rectangle recPix=TcData.ConvertRecToPix(recMm);
+			//Rectangle recPix=TcData.ConvertRecToPix(recMm);
+			/*
 			if(isSelected){
 				Gl.glColor3f(
 					(float)TcData.ColorBackHighlight.R/255f,
@@ -814,7 +816,7 @@ namespace SparksToothChart {
 					(float)TcData.ColorText.G/255f,
 					(float)TcData.ColorText.B/255f);
 				Gl.glRasterPos3f(recMm.X+2f*toMm,recMm.Y+2f*toMm,15f);
-			}
+			}*/
 			if(TcData.ListToothGraphics[tooth_id].HideNumber){//If number is hidden.
 				//do not print string
 			}
@@ -824,6 +826,7 @@ namespace SparksToothChart {
 				//do not print string
 			}
 			else{
+				Gl.glRasterPos3f(recMm.X+2f*toMm,recMm.Y+2f*toMm,15f);
 				PrintString(displayNum);
 			}
 			Gl.glPopMatrix();
