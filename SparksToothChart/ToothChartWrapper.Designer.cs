@@ -28,10 +28,9 @@ namespace SparksToothChart {
 			// 
 			// toothChart2D
 			// 
-			this.toothChart2D.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.toothChart2D.Location = new System.Drawing.Point(0,0);
 			this.toothChart2D.Name = "toothChart2D";
-			this.toothChart2D.Size = new System.Drawing.Size(544,351);
+			this.toothChart2D.Size = new System.Drawing.Size(410,307);
 			this.toothChart2D.TabIndex = 0;
 			// 
 			// ToothChartWrapper

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Drawing.Text;
 using System.Data;
 using System.Text;
 using System.Windows.Forms;
@@ -24,27 +25,30 @@ namespace SparksToothChart {
 		public ToothChart2D() {
 			InitializeComponent();
 			PointList=new List<Point>();
-			
 		}
 
 		protected override void OnPaint(PaintEventArgs e) {
 			base.OnPaint(e);
-			Graphics g=e.Graphics;
-			g.DrawImage(pictBox.Image,new Rectangle(0,0,this.Width,this.Height));
+			//Graphics g=e.Graphics;
+			//g.DrawImage(pictBox.Image,new Rectangle(0,0,this.Width,this.Height));
+			if(DesignMode) {
+				e.Graphics.DrawImage(pictBox.Image,new Rectangle(0,0,this.Width,this.Height));
+				return;
+			}
+			Bitmap bitmap=new Bitmap(pictBox.Image);//use a copy of the background image
+			Graphics g=Graphics.FromImage(bitmap);
 			g.SmoothingMode=SmoothingMode.HighQuality;
-			if(!DesignMode) {
-				for(int t=0;t<TcData.ListToothGraphics.Count;t++) {//loop through each tooth
-					if(TcData.ListToothGraphics[t].ToothID=="implant") {//this is not an actual tooth.
-						continue;
-					}
-					DrawFacialView(TcData.ListToothGraphics[t],g);
-					DrawOcclusalView(TcData.ListToothGraphics[t],g);
+			g.TextRenderingHint=TextRenderingHint.ClearTypeGridFit;
+			for(int t=0;t<TcData.ListToothGraphics.Count;t++) {//loop through each tooth
+				if(TcData.ListToothGraphics[t].ToothID=="implant") {//this is not an actual tooth.
+					continue;
 				}
+				DrawFacialView(TcData.ListToothGraphics[t],g);
+				DrawOcclusalView(TcData.ListToothGraphics[t],g);
 			}
 			DrawNumbers(g);
-			if(!DesignMode) {
-				DrawDrawingSegments(g);
-			}
+			DrawDrawingSegments(g);
+			e.Graphics.DrawImage(bitmap,new Rectangle(0,0,this.Width,this.Height));
 			g.Dispose();
 		}
 
@@ -259,10 +263,7 @@ namespace SparksToothChart {
 			string tooth_id;
 			for(int i=1;i<=52;i++) {
 				tooth_id=Tooth.FromOrdinal(i);
-				if(DesignMode) {
-					DrawNumber(tooth_id,false,true,g);
-				}
-				else if(TcData.SelectedTeeth.Contains(tooth_id)) {
+				if(TcData.SelectedTeeth.Contains(tooth_id)) {
 					DrawNumber(tooth_id,true,true,g);
 				}
 				else {
@@ -273,12 +274,53 @@ namespace SparksToothChart {
 
 		///<summary>Draws the number and the rectangle behind it.  Draws in the appropriate color</summary>
 		private void DrawNumber(string tooth_id,bool isSelected,bool isFullRedraw,Graphics g) {
+			if(!Tooth.IsValidDB(tooth_id)) {
+				return;
+			}
+			if(isFullRedraw) {//if redrawing all numbers
+				if(TcData.ListToothGraphics[tooth_id].HideNumber) {//and this is a "hidden" number
+					return;//skip
+				}
+				if(Tooth.IsPrimary(tooth_id)
+					&& !TcData.ListToothGraphics[Tooth.PriToPerm(tooth_id)].ShowPrimaryLetter)//but not set to show primary letters
+				{
+					return;
+				}
+			}
+	//fix this.  No calls to OpenDentBusiness that require database.
+			//string displayNum=OpenDentBusiness.Tooth.GetToothLabelGraphic(tooth_id);
+			string displayNum=tooth_id;
+			float toMm=1f/TcData.ScaleMmToPix;
+			//float toMm=(float)WidthProjection/(float)Width;//mm/pix, a ratio that is used for conversions below. Fix this.
+			//float strWidthMm= MeasureStringMm(displayNum);
+			RectangleF rec=TcData.GetNumberRec(tooth_id,g,Width,Height,Font);
+			//Rectangle recPix=TcData.ConvertRecToPix(recMm);
+			if(isSelected) {
+				g.FillRectangle(new SolidBrush(TcData.ColorBackHighlight),rec);
+			}
+			else {
+				g.FillRectangle(new SolidBrush(TcData.ColorBackground),rec);
+			}
+			if(TcData.ListToothGraphics[tooth_id].HideNumber) {//If number is hidden.
+				//do not print string
+			}
+			else if(Tooth.IsPrimary(tooth_id)
+				&& !TcData.ListToothGraphics[Tooth.PriToPerm(tooth_id)].ShowPrimaryLetter) {
+				//do not print string
+			}
+			else if(isSelected) {
+				g.DrawString(displayNum,Font,new SolidBrush(TcData.ColorTextHighlight),rec.X,rec.Y);
+			}
+			else {
+				g.DrawString(displayNum,Font,new SolidBrush(TcData.ColorText),rec.X,rec.Y);
+			}
+
+
 			/*
-			string tooth_id=intTooth.ToString();
-			string displayNum=intTooth.ToString();
+			string displayNum=tooth_id;
 			bool hideNumber=false;
 			string pri=ToothGraphic.PermToPri(tooth_id);
-			try{
+			if(!DesignMode){
 				if(ToothGraphic.IsValidToothID(pri)//pri is valid
 					&& ListToothGraphics[pri].Visible)//and pri visible
 				{
@@ -289,9 +331,6 @@ namespace SparksToothChart {
 				}
 				displayNum = OpenDentBusiness.Tooth.GetToothLabel(tooth_id);
 				hideNumber=ListToothGraphics[tooth_id].HideNumber;
-			}
-			catch{
-				//must be design mode.
 			}
 			RectangleF rec=GetNumberRec(tooth_id,g);
 			if(isSelected){

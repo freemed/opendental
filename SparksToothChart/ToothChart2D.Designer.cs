@@ -36,6 +36,7 @@
 			this.pictBox.Size = new System.Drawing.Size(410,307);
 			this.pictBox.TabIndex = 1;
 			this.pictBox.TabStop = false;
+			this.pictBox.Visible = false;
 			// 
 			// ToothChart2D
 			// 
