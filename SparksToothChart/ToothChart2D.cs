@@ -29,15 +29,16 @@ namespace SparksToothChart {
 
 		protected override void OnPaint(PaintEventArgs e) {
 			base.OnPaint(e);
-			//Graphics g=e.Graphics;
-			//g.DrawImage(pictBox.Image,new Rectangle(0,0,this.Width,this.Height));
 			if(DesignMode) {
 				e.Graphics.DrawImage(pictBox.Image,new Rectangle(0,0,this.Width,this.Height));
 				return;
 			}
-			//our strategy here will be to draw the whole thing at the background bitmap resolution, and then scale it.
-			Bitmap bitmap=new Bitmap(pictBox.Image);//Create a copy of the background
+			//our strategy here will be to draw on a new bitmap.
+			Bitmap bitmap=new Bitmap(Width,Height);
 			Graphics g=Graphics.FromImage(bitmap);
+			g.Clear(TcData.ColorBackground);
+			//draw a copy of the tooth chart background
+			g.DrawImage(pictBox.Image,TcData.RectTarget);
 			g.SmoothingMode=SmoothingMode.HighQuality;
 			g.TextRenderingHint=TextRenderingHint.ClearTypeGridFit;
 			for(int t=0;t<TcData.ListToothGraphics.Count;t++) {//loop through each tooth
@@ -49,10 +50,7 @@ namespace SparksToothChart {
 			}
 			DrawNumbers(g);
 			DrawDrawingSegments(g);
-			e.Graphics.Clear(TcData.ColorBackground);
-			//do some math to figure out where to place the image
-
-			e.Graphics.DrawImage(bitmap,new Rectangle(0,0,this.Width,this.Height));
+			e.Graphics.DrawImage(bitmap,0,0);
 			g.Dispose();
 		}
 
@@ -297,7 +295,7 @@ namespace SparksToothChart {
 			float toMm=1f/TcData.ScaleMmToPix;
 			//float toMm=(float)WidthProjection/(float)Width;//mm/pix, a ratio that is used for conversions below. Fix this.
 			//float strWidthMm= MeasureStringMm(displayNum);
-			RectangleF rec=TcData.GetNumberRec(tooth_id,g,Width,Height,Font);
+			RectangleF rec=TcData.GetNumberRecPix(tooth_id,g,Width,Height,Font);
 			//Rectangle recPix=TcData.ConvertRecToPix(recMm);
 			if(isSelected) {
 				g.FillRectangle(new SolidBrush(TcData.ColorBackHighlight),rec);
@@ -336,7 +334,7 @@ namespace SparksToothChart {
 				displayNum = OpenDentBusiness.Tooth.GetToothLabel(tooth_id);
 				hideNumber=ListToothGraphics[tooth_id].HideNumber;
 			}
-			RectangleF rec=GetNumberRec(tooth_id,g);
+			RectangleF rec=GetNumberRecPix(tooth_id,g);
 			if(isSelected){
 				g.FillRectangle(new SolidBrush(colorBackHighlight),rec);
 				if(!hideNumber){//Only draw if number is not hidden.
@@ -556,7 +554,7 @@ namespace SparksToothChart {
 				TcData.SelectedTeeth.Remove(tooth_id);
 				DrawNumber(tooth_id,false,false,g);
 			}
-			RectangleF recF=TcData.GetNumberRec(tooth_id,g,Width,Height,Font);
+			RectangleF recF=TcData.GetNumberRecPix(tooth_id,g,Width,Height,Font);
 			Rectangle rec=new Rectangle((int)recF.X,(int)recF.Y,(int)recF.Width,(int)recF.Height);
 			Invalidate(rec);
 			Application.DoEvents();

@@ -545,7 +545,7 @@ namespace SparksToothChart {
 
 		protected override void OnResize(EventArgs e) {
 			base.OnResize(e);
-			TcData.DrawingSize=this.Size;
+			TcData.SizeControl=this.Size;
 			Invalidate();
 		}
 

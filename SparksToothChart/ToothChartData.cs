@@ -21,13 +21,17 @@ namespace SparksToothChart {
 		public List<string> SelectedTeeth;
 		public List<ToothInitial> DrawingSegmentList;
 		///<summary>This is the size of the control in screen pixels.</summary>
-		private Size drawingSize;
+		private Size sizeControl;
 		/// <summary>In tooth mm, exactly how much of the projection to show.</summary>
-		public SizeF OriginalProjectionSize=new SizeF(130f,97.34f);
-		///<summary>Ratio of pix/mm.  Gets recalculated every time DrawingSize changes due to wrapper resize.  Multiply this ratio times a tooth mm measurement to get a pixel equivalent. If starting with a pixel coordinate, then divide it by this ratio to get mm.</summary>
+		public SizeF SizeOriginalProjection=new SizeF(130f,97.34f);
+		///<summary>Ratio of pix/mm.  Gets recalculated every time SizeControl changes due to wrapper resize.  Multiply this ratio times a tooth mm measurement to get a pixel equivalent. If starting with a pixel coordinate, then divide it by this ratio to get mm.</summary>
 		public float ScaleMmToPix;
 		///<summary>Whenever the control is resized, this value is set.  If the control ratio is wider than the 3D chart ratio, then this is true.  There would be extra background space on the sides.  If the ratio is taller than the 3D chart, then extra background on the top and bottom.  Default is (barely) false.</summary>
 		public bool IsWide;
+		///<summary>This defines a rectangle within the control where the tooth chart it to be drawn.  It will be different than the SizeControl if the control is wider or taller than the projection ratio.  This is set every time the control is resized.  It's in pixels.</summary>
+		public Rectangle RectTarget;
+		/// <summary>When the drawing feature was originally added, this was the size of the tooth chart. This number must forever be preserved and drawings scaled to account for it.</summary>
+		public Size SizeOriginalDrawing=new Size(410,307);//NEVER CHANGE
 
 		public ToothChartData() {
 			ListToothGraphics=new ToothGraphicCollection();
@@ -36,31 +40,39 @@ namespace SparksToothChart {
 			ColorTextHighlight=Color.Red;
 			ColorBackHighlight=Color.White;
 			SelectedTeeth=new List<string>();
-			drawingSize=new Size(410,307);//When the drawing feature was originally added, this was the size of the tooth chart. This number must forever be preserved and drawings scaled to account for it.
+			sizeControl=SizeOriginalDrawing;
 			DrawingSegmentList=new List<ToothInitial>();
 		}
 
-		///<summary>This gets set whenever the wrapper resizes.</summary>
-		public Size DrawingSize {
+		///<summary>This gets set whenever the wrapper resizes.  It's the size of the control in screen pixels.</summary>
+		public Size SizeControl {
 			get {
-				return drawingSize;
+				return sizeControl;
 			}
 			set {
-				drawingSize=value;
+				sizeControl=value;
 				//compute scaleMmToPix
-				if(OriginalProjectionSize.Width/(float)drawingSize.Width < OriginalProjectionSize.Height/(float)drawingSize.Height) { 
+				if(SizeOriginalProjection.Width/(float)sizeControl.Width < SizeOriginalProjection.Height/(float)sizeControl.Height) { 
 					//if wide, use control h.  The default settings will just barely make this false.
 					IsWide=true;
-					ScaleMmToPix=(float)drawingSize.Height/OriginalProjectionSize.Height;
+					ScaleMmToPix=(float)sizeControl.Height/SizeOriginalProjection.Height;
+					RectTarget.Height=sizeControl.Height;
+					RectTarget.Y=0;
+					RectTarget.Width=(int)(((float)SizeOriginalDrawing.Width/SizeOriginalDrawing.Height)*RectTarget.Height);
+					RectTarget.X=(sizeControl.Width-RectTarget.Width)/2;
 				}
 				else {//otherwise, use control w
 					IsWide=false;
-					ScaleMmToPix=(float)drawingSize.Width/OriginalProjectionSize.Width;
+					ScaleMmToPix=(float)sizeControl.Width/SizeOriginalProjection.Width;
+					RectTarget.Width=sizeControl.Width;
+					RectTarget.X=0;
+					RectTarget.Height=(int)(((float)SizeOriginalDrawing.Height/SizeOriginalDrawing.Width)*RectTarget.Width);
+					RectTarget.Y=(sizeControl.Height-RectTarget.Height)/2;
 				}
 			}
 		}
 
-		///<summary>Gets the rectangle surrounding a tooth number.  Used to draw the box and to invalidate the area.</summary>
+		///<summary>Gets the rectangle surrounding a tooth number.  Used to draw the box and the number inside it.</summary>
 		public RectangleF GetNumberRecMm(string tooth_id,string displayNum,float strWidthMm) {
 			float xPos=0;
 			float yPos=0;
@@ -99,8 +111,8 @@ namespace SparksToothChart {
 			return recMm;
 		}
 
-		///<summary>Used by 2D tooth chart to get the rectangle in pixels surrounding a tooth number.  Used to draw the box and to invalidate the area.</summary>
-		public RectangleF GetNumberRec(string tooth_id,Graphics g,int widthControl,int heightControl,Font font) {
+		///<summary>Used by 2D tooth chart to get the rectangle in pixels surrounding a tooth number.  Used to draw the box and the number inside it.</summary>
+		public RectangleF GetNumberRecPix(string tooth_id,Graphics g,int widthControl,int heightControl,Font font) {
 			float xPos=GetTransXpix(tooth_id,widthControl);
 			float yPos=heightControl/2f;
 			if(ToothGraphic.IsMaxillary(tooth_id)) {
@@ -117,25 +129,27 @@ namespace SparksToothChart {
 			return rec;
 		}
 
-		///<summary>Pri or perm tooth numbers are valid.  Only locations of perm teeth are stored.  This also converts mm to screen pixels.</summary>
+		///<summary>Pri or perm tooth numbers are valid.  Only locations of perm teeth are stored.  This also converts mm to screen pixels.  This is currently only used in 2D mode, but it might be useful later in the others.</summary>
 		public float GetTransXpix(string tooth_id,int widthControl) {
 			int toothInt=ToothGraphic.IdToInt(tooth_id);
 			if(toothInt==-1) {
 				throw new ApplicationException("Invalid tooth number: "+tooth_id);//only for debugging
 			}
 			float xmm=ToothGraphic.GetDefaultOrthoXpos(toothInt);//in +/- mm from center
-			return (OriginalProjectionSize.Width/2f+xmm)*ScaleMmToPix;//*widthControl/WidthProjection;
+			return (sizeControl.Width/2)+(xmm*ScaleMmToPix);
+				//( SizeOriginalProjection.Width/2f+xmm)*ScaleMmToPix;//*widthControl/WidthProjection;
 		}
 
-		///<summary>In control coords rather than mm.</summary>
+		///<summary>In control coords rather than mm.  This is not really meaninful except in 2D mode.  It calculates the location of the facial view in order to draw the big red X.</summary>
 		public float GetTransYfacialPix(string tooth_id) {
 			float basic=30;
 			if(ToothGraphic.IsMaxillary(tooth_id)) {
-				return drawingSize.Height/2-basic;
+				return sizeControl.Height/2-basic;
 			}
-			return drawingSize.Height/2+basic;
+			return sizeControl.Height/2+basic;
 		}
 
+		///<summary>In control coords rather than mm.  This is not really meaninful except in 2D mode.  It calculates the location of the occlusal surface in order to draw the bullseye.</summary>
 		public float GetTransYocclusalPix(string tooth_id,int heightControl) {
 			if(ToothGraphic.IsMaxillary(tooth_id)) {
 				return heightControl/2-48f;
@@ -187,7 +201,7 @@ namespace SparksToothChart {
 			/*
 			float toMmRatio=(float)WidthProjection/(float)widthControl;//mm/pix
 			float mmX=(((float)pixPoint.X)*toMmRatio)-((float)WidthProjection)/2f;
-			float idealHeightProjection=(float)WidthProjection*(float)OriginalDrawingSize.Height/(float)OriginalDrawingSize.Width;
+			float idealHeightProjection=(float)WidthProjection*(float)SizeOriginalDrawing.Height/(float)SizeOriginalDrawing.Width;
 			float actualHeightProjection=(float)WidthProjection*(float)heightControl/(float)widthControl;
 			float mmY=(idealHeightProjection)/2f-(((float)pixPoint.Y)*toMmRatio);
 			return new PointF(mmX,mmY);*/
@@ -201,8 +215,8 @@ namespace SparksToothChart {
 			//Rectangle recPix=new Rectangle((int)(widthControl/2+recMm.X/toMm),(int)(heightControl/2-recMm.Y/toMm-recMm.Height/toMm),
 			//	(int)(recMm.Width/toMm),(int)(recMm.Height/toMm));
 			Rectangle recPix=new Rectangle(
-				(int)(drawingSize.Width/2+recMm.X*ScaleMmToPix),
-				(int)(drawingSize.Height/2-recMm.Y*ScaleMmToPix-recMm.Height*ScaleMmToPix),
+				(int)(sizeControl.Width/2+recMm.X*ScaleMmToPix),
+				(int)(sizeControl.Height/2-recMm.Y*ScaleMmToPix-recMm.Height*ScaleMmToPix),
 				(int)(recMm.Width*ScaleMmToPix),
 				(int)(recMm.Height*ScaleMmToPix)
 				);

@@ -385,10 +385,10 @@ namespace SparksToothChart {
 			//Gl.glOrtho(-WidthProjection/2,WidthProjection/2,//orthographic projection. L,R
 			//	-HeightProjection/2,HeightProjection/2,//Bot,Top
 			//	-WidthProjection/2,WidthProjection/2);//Near,Far
-			//double widthProj=(double)TcData.OriginalProjectionSize.Width;
+			//double widthProj=(double)TcData.SizeOriginalProjection.Width;
 			//double heightProj=widthProj*Height/Width;
-			double heightProj=(double)TcData.OriginalProjectionSize.Height;
-			double widthProj=(double)TcData.OriginalProjectionSize.Width;
+			double heightProj=(double)TcData.SizeOriginalProjection.Height;
+			double widthProj=(double)TcData.SizeOriginalProjection.Width;
 			if(TcData.IsWide) {
 				widthProj=heightProj*Width/Height;
 			}
@@ -677,8 +677,8 @@ namespace SparksToothChart {
 			Gl.glBegin(Gl.GL_LINE_STRIP);
 				//Gl.glVertex3f(-(float)WidthProjection/2f,0,0);
 				//Gl.glVertex3f((float)WidthProjection/2f,0,0);
-				Gl.glVertex3f(-TcData.OriginalProjectionSize.Width/2f,0,0);
-				Gl.glVertex3f(TcData.OriginalProjectionSize.Width/2f,0,0);
+				Gl.glVertex3f(-TcData.SizeOriginalProjection.Width/2f,0,0);
+				Gl.glVertex3f(TcData.SizeOriginalProjection.Width/2f,0,0);
 			Gl.glEnd();
 			string tooth_id;
 			for(int i=1;i<=52;i++){
@@ -708,7 +708,7 @@ namespace SparksToothChart {
 			string[] xy;
 			PointF pointMm;
 			Color color;
-			//float scaleDrawing=(float)Width/(float)TcData.OriginalDrawingSize.Width;
+			//float scaleDrawing=(float)Width/(float)TcData.SizeOriginalDrawing.Width;
 			for(int s=0;s<DrawingSegmentList.Count;s++){
 				color=DrawingSegmentList[s].ColorDraw;
 				Gl.glColor3f(
