@@ -35,9 +35,6 @@
 			this.panelColorBackgroundWhite = new System.Windows.Forms.Panel();
 			this.panelColorBackgroundBlack = new System.Windows.Forms.Panel();
 			this.panelColorBackgroundGray = new System.Windows.Forms.Panel();
-			this.toothChartDirectX = new SparksToothChart.ToothChartWrapper();
-			this.toothChartOpenGL = new SparksToothChart.ToothChartWrapper();
-			this.toothChart2D = new SparksToothChart.ToothChartWrapper();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.panelColorTextWhite = new System.Windows.Forms.Panel();
 			this.panelColorTextBlack = new System.Windows.Forms.Panel();
@@ -53,9 +50,13 @@
 			this.panelColorBackHighlightBlack = new System.Windows.Forms.Panel();
 			this.panelColorBackHighlightGray = new System.Windows.Forms.Panel();
 			this.groupBox5 = new System.Windows.Forms.GroupBox();
+			this.butSizeWide = new System.Windows.Forms.Button();
 			this.butSizeTall = new System.Windows.Forms.Button();
 			this.butSizeNormal = new System.Windows.Forms.Button();
-			this.butSizeWide = new System.Windows.Forms.Button();
+			this.toothChartDirectX = new SparksToothChart.ToothChartWrapper();
+			this.toothChartOpenGL = new SparksToothChart.ToothChartWrapper();
+			this.toothChart2D = new SparksToothChart.ToothChartWrapper();
+			this.butMissing = new System.Windows.Forms.Button();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupBox3.SuspendLayout();
@@ -179,48 +180,6 @@
 			this.panelColorBackgroundGray.TabIndex = 205;
 			this.panelColorBackgroundGray.Click += new System.EventHandler(this.panelColorBackgroundGray_Click);
 			// 
-			// toothChartDirectX
-			// 
-			this.toothChartDirectX.AutoFinish = false;
-			this.toothChartDirectX.ColorBackground = System.Drawing.Color.FromArgb(((int)(((byte)(150)))),((int)(((byte)(145)))),((int)(((byte)(152)))));
-			this.toothChartDirectX.Cursor = System.Windows.Forms.Cursors.Default;
-			this.toothChartDirectX.CursorTool = SparksToothChart.CursorTool.Pointer;
-			this.toothChartDirectX.DrawMode = SparksToothChart.DrawingMode.Simple2D;
-			this.toothChartDirectX.Location = new System.Drawing.Point(840,28);
-			this.toothChartDirectX.Name = "toothChartDirectX";
-			this.toothChartDirectX.PreferredPixelFormatNumber = 0;
-			this.toothChartDirectX.Size = new System.Drawing.Size(410,307);
-			this.toothChartDirectX.TabIndex = 197;
-			this.toothChartDirectX.UseHardware = false;
-			// 
-			// toothChartOpenGL
-			// 
-			this.toothChartOpenGL.AutoFinish = false;
-			this.toothChartOpenGL.ColorBackground = System.Drawing.Color.FromArgb(((int)(((byte)(150)))),((int)(((byte)(145)))),((int)(((byte)(152)))));
-			this.toothChartOpenGL.Cursor = System.Windows.Forms.Cursors.Default;
-			this.toothChartOpenGL.CursorTool = SparksToothChart.CursorTool.Pointer;
-			this.toothChartOpenGL.DrawMode = SparksToothChart.DrawingMode.Simple2D;
-			this.toothChartOpenGL.Location = new System.Drawing.Point(424,28);
-			this.toothChartOpenGL.Name = "toothChartOpenGL";
-			this.toothChartOpenGL.PreferredPixelFormatNumber = 0;
-			this.toothChartOpenGL.Size = new System.Drawing.Size(410,307);
-			this.toothChartOpenGL.TabIndex = 196;
-			this.toothChartOpenGL.UseHardware = false;
-			// 
-			// toothChart2D
-			// 
-			this.toothChart2D.AutoFinish = false;
-			this.toothChart2D.ColorBackground = System.Drawing.Color.FromArgb(((int)(((byte)(150)))),((int)(((byte)(145)))),((int)(((byte)(152)))));
-			this.toothChart2D.Cursor = System.Windows.Forms.Cursors.Default;
-			this.toothChart2D.CursorTool = SparksToothChart.CursorTool.Pointer;
-			this.toothChart2D.DrawMode = SparksToothChart.DrawingMode.Simple2D;
-			this.toothChart2D.Location = new System.Drawing.Point(8,28);
-			this.toothChart2D.Name = "toothChart2D";
-			this.toothChart2D.PreferredPixelFormatNumber = 0;
-			this.toothChart2D.Size = new System.Drawing.Size(410,307);
-			this.toothChart2D.TabIndex = 195;
-			this.toothChart2D.UseHardware = false;
-			// 
 			// groupBox2
 			// 
 			this.groupBox2.Controls.Add(this.panelColorTextWhite);
@@ -272,7 +231,6 @@
 			this.groupBox3.TabIndex = 210;
 			this.groupBox3.TabStop = false;
 			this.groupBox3.Text = "ColorTextHighlight";
-			this.groupBox3.Visible = false;
 			// 
 			// panelColorTextHighlightRed
 			// 
@@ -322,7 +280,6 @@
 			this.groupBox4.TabIndex = 211;
 			this.groupBox4.TabStop = false;
 			this.groupBox4.Text = "ColorBackHighlight";
-			this.groupBox4.Visible = false;
 			// 
 			// panelColorBackHighlightBlue
 			// 
@@ -372,6 +329,16 @@
 			this.groupBox5.TabStop = false;
 			this.groupBox5.Text = "Resize and Scale";
 			// 
+			// butSizeWide
+			// 
+			this.butSizeWide.Location = new System.Drawing.Point(9,68);
+			this.butSizeWide.Name = "butSizeWide";
+			this.butSizeWide.Size = new System.Drawing.Size(75,23);
+			this.butSizeWide.TabIndex = 206;
+			this.butSizeWide.Text = "Wide";
+			this.butSizeWide.UseVisualStyleBackColor = true;
+			this.butSizeWide.Click += new System.EventHandler(this.butSizeWide_Click);
+			// 
 			// butSizeTall
 			// 
 			this.butSizeTall.Location = new System.Drawing.Point(9,43);
@@ -392,21 +359,64 @@
 			this.butSizeNormal.UseVisualStyleBackColor = true;
 			this.butSizeNormal.Click += new System.EventHandler(this.butSizeNormal_Click);
 			// 
-			// butSizeWide
+			// toothChartDirectX
 			// 
-			this.butSizeWide.Location = new System.Drawing.Point(9,68);
-			this.butSizeWide.Name = "butSizeWide";
-			this.butSizeWide.Size = new System.Drawing.Size(75,23);
-			this.butSizeWide.TabIndex = 206;
-			this.butSizeWide.Text = "Wide";
-			this.butSizeWide.UseVisualStyleBackColor = true;
-			this.butSizeWide.Click += new System.EventHandler(this.butSizeWide_Click);
+			this.toothChartDirectX.AutoFinish = false;
+			this.toothChartDirectX.ColorBackground = System.Drawing.Color.FromArgb(((int)(((byte)(150)))),((int)(((byte)(145)))),((int)(((byte)(152)))));
+			this.toothChartDirectX.Cursor = System.Windows.Forms.Cursors.Default;
+			this.toothChartDirectX.CursorTool = SparksToothChart.CursorTool.Pointer;
+			this.toothChartDirectX.DrawMode = SparksToothChart.DrawingMode.Simple2D;
+			this.toothChartDirectX.Location = new System.Drawing.Point(840,28);
+			this.toothChartDirectX.Name = "toothChartDirectX";
+			this.toothChartDirectX.PreferredPixelFormatNumber = 0;
+			this.toothChartDirectX.Size = new System.Drawing.Size(410,307);
+			this.toothChartDirectX.TabIndex = 197;
+			this.toothChartDirectX.UseHardware = false;
+			// 
+			// toothChartOpenGL
+			// 
+			this.toothChartOpenGL.AutoFinish = false;
+			this.toothChartOpenGL.ColorBackground = System.Drawing.Color.FromArgb(((int)(((byte)(150)))),((int)(((byte)(145)))),((int)(((byte)(152)))));
+			this.toothChartOpenGL.Cursor = System.Windows.Forms.Cursors.Default;
+			this.toothChartOpenGL.CursorTool = SparksToothChart.CursorTool.Pointer;
+			this.toothChartOpenGL.DrawMode = SparksToothChart.DrawingMode.Simple2D;
+			this.toothChartOpenGL.Location = new System.Drawing.Point(424,28);
+			this.toothChartOpenGL.Name = "toothChartOpenGL";
+			this.toothChartOpenGL.PreferredPixelFormatNumber = 0;
+			this.toothChartOpenGL.Size = new System.Drawing.Size(410,307);
+			this.toothChartOpenGL.TabIndex = 196;
+			this.toothChartOpenGL.UseHardware = false;
+			// 
+			// toothChart2D
+			// 
+			this.toothChart2D.AutoFinish = false;
+			this.toothChart2D.ColorBackground = System.Drawing.Color.FromArgb(((int)(((byte)(150)))),((int)(((byte)(145)))),((int)(((byte)(152)))));
+			this.toothChart2D.Cursor = System.Windows.Forms.Cursors.Default;
+			this.toothChart2D.CursorTool = SparksToothChart.CursorTool.Pointer;
+			this.toothChart2D.DrawMode = SparksToothChart.DrawingMode.Simple2D;
+			this.toothChart2D.Location = new System.Drawing.Point(8,28);
+			this.toothChart2D.Name = "toothChart2D";
+			this.toothChart2D.PreferredPixelFormatNumber = 0;
+			this.toothChart2D.Size = new System.Drawing.Size(410,307);
+			this.toothChart2D.TabIndex = 195;
+			this.toothChart2D.UseHardware = false;
+			// 
+			// butMissing
+			// 
+			this.butMissing.Location = new System.Drawing.Point(551,361);
+			this.butMissing.Name = "butMissing";
+			this.butMissing.Size = new System.Drawing.Size(75,23);
+			this.butMissing.TabIndex = 207;
+			this.butMissing.Text = "Missing";
+			this.butMissing.UseVisualStyleBackColor = true;
+			this.butMissing.Click += new System.EventHandler(this.butMissing_Click);
 			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(1258,738);
+			this.Controls.Add(this.butMissing);
 			this.Controls.Add(this.groupBox5);
 			this.Controls.Add(this.groupBox4);
 			this.Controls.Add(this.groupBox3);
@@ -468,6 +478,7 @@
 		private System.Windows.Forms.Button butSizeWide;
 		private System.Windows.Forms.Button butSizeTall;
 		private System.Windows.Forms.Button butSizeNormal;
+		private System.Windows.Forms.Button butMissing;
 	}
 }
 

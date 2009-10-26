@@ -245,37 +245,51 @@ namespace TestToothChart {
 		}
 
 		private void panelColorTextHighlightGray_Click(object sender,EventArgs e) {
-			//toothChart2D.ColorText=panelColorTextGray.BackColor;
-			//toothChartOpenGL.ColorText=panelColorTextGray.BackColor;
-			//toothChartDirectX.ColorText=panelColorTextGray.BackColor;
+			toothChart2D.ColorTextHighlight=panelColorTextHighlightGray.BackColor;
+			toothChartOpenGL.ColorTextHighlight=panelColorTextHighlightGray.BackColor;
+			toothChartDirectX.ColorTextHighlight=panelColorTextHighlightGray.BackColor;
 		}
 
 		private void panelColorTextHighlightBlack_Click(object sender,EventArgs e) {
-
+			toothChart2D.ColorTextHighlight=panelColorTextHighlightBlack.BackColor;
+			toothChartOpenGL.ColorTextHighlight=panelColorTextHighlightBlack.BackColor;
+			toothChartDirectX.ColorTextHighlight=panelColorTextHighlightBlack.BackColor;
 		}
 
 		private void panelColorTextHighlightWhite_Click(object sender,EventArgs e) {
-
+			toothChart2D.ColorTextHighlight=panelColorTextHighlightWhite.BackColor;
+			toothChartOpenGL.ColorTextHighlight=panelColorTextHighlightWhite.BackColor;
+			toothChartDirectX.ColorTextHighlight=panelColorTextHighlightWhite.BackColor;
 		}
 
 		private void panelColorTextHighlightRed_Click(object sender,EventArgs e) {
-
+			toothChart2D.ColorTextHighlight=panelColorTextHighlightRed.BackColor;
+			toothChartOpenGL.ColorTextHighlight=panelColorTextHighlightRed.BackColor;
+			toothChartDirectX.ColorTextHighlight=panelColorTextHighlightRed.BackColor;
 		}
 
 		private void panelColorBackHighlightGray_Click(object sender,EventArgs e) {
-
+			toothChart2D.ColorBackHighlight=panelColorBackHighlightGray.BackColor;
+			toothChartOpenGL.ColorBackHighlight=panelColorBackHighlightGray.BackColor;
+			toothChartDirectX.ColorBackHighlight=panelColorBackHighlightGray.BackColor;
 		}
 
 		private void panelColorBackHighlightBlack_Click(object sender,EventArgs e) {
-
+			toothChart2D.ColorBackHighlight=panelColorBackHighlightBlack.BackColor;
+			toothChartOpenGL.ColorBackHighlight=panelColorBackHighlightBlack.BackColor;
+			toothChartDirectX.ColorBackHighlight=panelColorBackHighlightBlack.BackColor;
 		}
 
 		private void panelColorBackHighlightWhite_Click(object sender,EventArgs e) {
-
+			toothChart2D.ColorBackHighlight=panelColorBackHighlightWhite.BackColor;
+			toothChartOpenGL.ColorBackHighlight=panelColorBackHighlightWhite.BackColor;
+			toothChartDirectX.ColorBackHighlight=panelColorBackHighlightWhite.BackColor;
 		}
 
 		private void panelColorBackHighlightBlue_Click(object sender,EventArgs e) {
-
+			toothChart2D.ColorBackHighlight=panelColorBackHighlightBlue.BackColor;
+			toothChartOpenGL.ColorBackHighlight=panelColorBackHighlightBlue.BackColor;
+			toothChartDirectX.ColorBackHighlight=panelColorBackHighlightBlue.BackColor;
 		}
 
 		private void butSizeNormal_Click(object sender,EventArgs e) {
@@ -294,6 +308,43 @@ namespace TestToothChart {
 			toothChart2D.Size=new Size(410,190);
 			toothChartOpenGL.Size=new Size(410,190);
 			toothChartDirectX.Size=new Size(410,190);
+		}
+
+		private void butMissing_Click(object sender,EventArgs e) {
+			//toothChart2D.  pointless
+			toothChartOpenGL.SetInvisible("1");
+			toothChartOpenGL.SetInvisible("3");
+			toothChartOpenGL.SetInvisible("5");
+			toothChartOpenGL.SetInvisible("7");
+			toothChartOpenGL.SetInvisible("9");
+			toothChartOpenGL.SetInvisible("11");
+			toothChartOpenGL.SetInvisible("13");
+			toothChartOpenGL.SetInvisible("15");
+			toothChartOpenGL.SetInvisible("17");
+			toothChartOpenGL.SetInvisible("19");
+			toothChartOpenGL.SetInvisible("21");
+			toothChartOpenGL.SetInvisible("23");
+			toothChartOpenGL.SetInvisible("25");
+			toothChartOpenGL.SetInvisible("27");
+			toothChartOpenGL.SetInvisible("29");
+			toothChartOpenGL.SetInvisible("31");
+			//
+			toothChartDirectX.SetInvisible("1");
+			toothChartDirectX.SetInvisible("3");
+			toothChartDirectX.SetInvisible("5");
+			toothChartDirectX.SetInvisible("7");
+			toothChartDirectX.SetInvisible("9");
+			toothChartDirectX.SetInvisible("11");
+			toothChartDirectX.SetInvisible("13");
+			toothChartDirectX.SetInvisible("15");
+			toothChartDirectX.SetInvisible("17");
+			toothChartDirectX.SetInvisible("19");
+			toothChartDirectX.SetInvisible("21");
+			toothChartDirectX.SetInvisible("23");
+			toothChartDirectX.SetInvisible("25");
+			toothChartDirectX.SetInvisible("27");
+			toothChartDirectX.SetInvisible("29");
+			toothChartDirectX.SetInvisible("31");
 		}
 
 		

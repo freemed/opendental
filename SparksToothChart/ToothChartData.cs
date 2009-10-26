@@ -72,7 +72,7 @@ namespace SparksToothChart {
 			}
 		}
 
-		///<summary>Gets the rectangle surrounding a tooth number.  Used to draw the box and the number inside it.</summary>
+		///<summary>Gets the rectangle surrounding a tooth number.  Used to draw the box and the number inside it.  Includes any mesial shifts.</summary>
 		public RectangleF GetNumberRecMm(string tooth_id,string displayNum,float strWidthMm) {
 			float xPos=0;
 			float yPos=0;
@@ -139,7 +139,7 @@ namespace SparksToothChart {
 			return rec;
 		}
 
-		///<summary>Pri or perm tooth numbers are valid.  Only locations of perm teeth are stored.  This also converts mm to screen pixels.  This is currently only used in 2D mode, but it might be useful later in the others.</summary>
+		///<summary>Pri or perm tooth numbers are valid.  Only locations of perm teeth are stored.  This also converts mm to screen pixels.  This is currently only used in 2D mode.</summary>
 		public float GetTransXpix(string tooth_id,int widthControl) {
 			int toothInt=ToothGraphic.IdToInt(tooth_id);
 			if(toothInt==-1) {

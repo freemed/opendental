@@ -383,6 +383,8 @@ namespace SparksToothChart {
 			else {
 				toothChartOpenGL.SetInvisible(toothID);
 			}*/
+			TcData.ListToothGraphics[toothID].Visible=false;
+			Invalidate();
 		}
 
 		///<summary>This is just the same as SetInvisible, except that it also hides the number from showing.  This is used, for example, if premolars are missing, and ortho has completely closed the space.  User will not be able to select this tooth because the number is hidden.</summary>
