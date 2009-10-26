@@ -112,14 +112,24 @@ namespace SparksToothChart {
 		}
 
 		///<summary>Used by 2D tooth chart to get the rectangle in pixels surrounding a tooth number.  Used to draw the box and the number inside it.</summary>
-		public RectangleF GetNumberRecPix(string tooth_id,Graphics g,int widthControl,int heightControl,Font font) {
-			float xPos=GetTransXpix(tooth_id,widthControl);
-			float yPos=heightControl/2f;
+		public RectangleF GetNumberRecPix(string tooth_id,Graphics g,Font font) {
+			float xPos=GetTransXpix(tooth_id,sizeControl.Width);
+			float yPos=sizeControl.Height/2f;
 			if(ToothGraphic.IsMaxillary(tooth_id)) {
-				yPos-=14;
+				if(Tooth.IsPrimary(tooth_id)) {
+					yPos-=25;
+				}
+				else {
+					yPos-=14;
+				}
 			}
 			else {
-				yPos+=3;
+				if(Tooth.IsPrimary(tooth_id)) {
+					yPos+=14;
+				}
+				else {
+					yPos+=3;
+				}
 			}
 			string displayNum =tooth_id;
 			//displayNum =OpenDentBusiness.Tooth.GetToothLabel(tooth_id);

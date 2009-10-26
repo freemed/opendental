@@ -293,9 +293,7 @@ namespace SparksToothChart {
 			//string displayNum=OpenDentBusiness.Tooth.GetToothLabelGraphic(tooth_id);
 			string displayNum=tooth_id;
 			float toMm=1f/TcData.ScaleMmToPix;
-			//float toMm=(float)WidthProjection/(float)Width;//mm/pix, a ratio that is used for conversions below. Fix this.
-			//float strWidthMm= MeasureStringMm(displayNum);
-			RectangleF rec=TcData.GetNumberRecPix(tooth_id,g,Width,Height,Font);
+			RectangleF rec=TcData.GetNumberRecPix(tooth_id,g,Font);
 			//Rectangle recPix=TcData.ConvertRecToPix(recMm);
 			if(isSelected) {
 				g.FillRectangle(new SolidBrush(TcData.ColorBackHighlight),rec);
@@ -316,37 +314,6 @@ namespace SparksToothChart {
 			else {
 				g.DrawString(displayNum,Font,new SolidBrush(TcData.ColorText),rec.X,rec.Y);
 			}
-
-
-			/*
-			string displayNum=tooth_id;
-			bool hideNumber=false;
-			string pri=ToothGraphic.PermToPri(tooth_id);
-			if(!DesignMode){
-				if(ToothGraphic.IsValidToothID(pri)//pri is valid
-					&& ListToothGraphics[pri].Visible)//and pri visible
-				{
-					tooth_id=pri;
-				}
-				if(isFullRedraw && ListToothGraphics[tooth_id].HideNumber){//if redrawing all numbers, and this is a "hidden" number
-					return;//skip
-				}
-				displayNum = OpenDentBusiness.Tooth.GetToothLabel(tooth_id);
-				hideNumber=ListToothGraphics[tooth_id].HideNumber;
-			}
-			RectangleF rec=GetNumberRecPix(tooth_id,g);
-			if(isSelected){
-				g.FillRectangle(new SolidBrush(colorBackHighlight),rec);
-				if(!hideNumber){//Only draw if number is not hidden.
-					g.DrawString(displayNum,Font,new SolidBrush(colorTextHighlight),rec.X,rec.Y);
-				}
-			} 
-			else{
-				g.FillRectangle(new SolidBrush(colorBackground),rec);
-				if(!hideNumber) {//Only draw if number is not hidden.
-					g.DrawString(displayNum,Font,new SolidBrush(colorText),rec.X,rec.Y);
-				}
-			}*/
 		}
 
 		private void DrawDrawingSegments(Graphics g) {
@@ -554,7 +521,7 @@ namespace SparksToothChart {
 				TcData.SelectedTeeth.Remove(tooth_id);
 				DrawNumber(tooth_id,false,false,g);
 			}
-			RectangleF recF=TcData.GetNumberRecPix(tooth_id,g,Width,Height,Font);
+			RectangleF recF=TcData.GetNumberRecPix(tooth_id,g,Font);
 			Rectangle rec=new Rectangle((int)recF.X,(int)recF.Y,(int)recF.Width,(int)recF.Height);
 			Invalidate(rec);
 			Application.DoEvents();
