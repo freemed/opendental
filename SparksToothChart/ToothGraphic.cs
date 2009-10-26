@@ -165,8 +165,8 @@ namespace SparksToothChart {
 			}
 		}
 
-		///<summary>Used from the method above.</summary>
-		private void SetGroupColor(ToothGroupType groupType,Color paintColor){
+		///<summary>Used to set enamel and cementum colors externally.</summary>
+		public void SetGroupColor(ToothGroupType groupType,Color paintColor){
 			for(int i=0;i<Groups.Count;i++){
 				if(Groups[i].GroupType!=groupType){
 					continue;
@@ -196,7 +196,7 @@ namespace SparksToothChart {
 			}
 		}
 
-		/*
+		///<summary>Used to set the root invisible.</summary>
 		public void SetGroupVisibility(ToothGroupType groupType,bool setVisible) {
 			for(int i=0;i<Groups.Count;i++) {
 				if(Groups[i].GroupType!=groupType) {
@@ -204,7 +204,7 @@ namespace SparksToothChart {
 				}
 				Groups[i].Visible=setVisible;
 			}
-		}*/
+		}
 
 		///<summary>This is only used once for the initial fill of display lists.</summary>
 		public ToothGroup GetGroupForDisplayList(ToothGroupType groupType){

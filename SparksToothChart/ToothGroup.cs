@@ -93,7 +93,7 @@ namespace SparksToothChart {
 
 	///<summary></summary>
 	public enum ToothGroupType{
-		///<summary>0</summary>
+		///<summary>0- This is areas of the tooth that are not included in any fillings at all.</summary>
 		Enamel,
 		///<summary>1</summary>
 		Cementum,

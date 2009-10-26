@@ -498,6 +498,13 @@ namespace TestToothChart {
 			toothChart2D.SetSurfaceColors("J","O",Color.DarkRed);//should not show
 			toothChart2D.SetHidden("14");
 			toothChart2D.SetSurfaceColors("14","MOD",Color.DarkRed);//should not show
+			toothChart2D.SetCrown("15",Color.DarkRed);
+			toothChart2D.SetCrown("17",Color.DarkBlue);
+			toothChart2D.SetCrown("18",Color.DarkBlue);
+			toothChart2D.SetCrown("19",Color.DarkBlue);
+			toothChart2D.SetCrown("20",Color.LightBlue);
+			toothChart2D.SetCrown("21",Color.LightBlue);
+			toothChart2D.SetCrown("22",Color.LightBlue);
 			//
 			toothChartOpenGL.SetSurfaceColors("3","MOD",Color.DarkRed);
 			toothChartOpenGL.SetSurfaceColors("4","V",Color.Green);
@@ -511,6 +518,13 @@ namespace TestToothChart {
 			toothChartOpenGL.SetSurfaceColors("J","O",Color.DarkRed);//should not show
 			toothChartOpenGL.SetHidden("14");
 			toothChartOpenGL.SetSurfaceColors("14","MOD",Color.DarkRed);//should not show
+			toothChartOpenGL.SetCrown("15",Color.DarkRed);
+			toothChartOpenGL.SetCrown("17",Color.DarkBlue);
+			toothChartOpenGL.SetCrown("18",Color.DarkBlue);
+			toothChartOpenGL.SetCrown("19",Color.DarkBlue);
+			toothChartOpenGL.SetCrown("20",Color.LightBlue);
+			toothChartOpenGL.SetCrown("21",Color.LightBlue);
+			toothChartOpenGL.SetCrown("22",Color.LightBlue);
 			//
 			toothChartDirectX.SetSurfaceColors("3","MOD",Color.DarkRed);
 			toothChartDirectX.SetSurfaceColors("4","V",Color.Green);
@@ -524,13 +538,49 @@ namespace TestToothChart {
 			toothChartDirectX.SetSurfaceColors("J","O",Color.DarkRed);//should not show
 			toothChartDirectX.SetHidden("14");
 			toothChartDirectX.SetSurfaceColors("14","MOD",Color.DarkRed);//should not show
+			toothChartDirectX.SetCrown("15",Color.DarkRed);
+			toothChartDirectX.SetCrown("17",Color.DarkBlue);
+			toothChartDirectX.SetCrown("18",Color.DarkBlue);
+			toothChartDirectX.SetCrown("19",Color.DarkBlue);
+			toothChartDirectX.SetCrown("20",Color.LightBlue);
+			toothChartDirectX.SetCrown("21",Color.LightBlue);
+			toothChartDirectX.SetCrown("22",Color.LightBlue);
 		}
 
 		private void butMouse_Click(object sender,EventArgs e) {
 			//toothChartOpenGL.
 		}
 
-		
+		private void butRCT_Click(object sender,EventArgs e) {
+			toothChart2D.ResetTeeth();
+			toothChartOpenGL.ResetTeeth();
+			toothChartDirectX.ResetTeeth();
+			string tooth_id;
+			for(int i=1;i<=32;i++) {
+				tooth_id=i.ToString();
+				toothChart2D.SetRCT(tooth_id,Color.DarkRed);
+				toothChart2D.SetBU(tooth_id,Color.DarkRed);
+				toothChartOpenGL.SetRCT(tooth_id,Color.DarkRed);
+				toothChartOpenGL.SetBU(tooth_id,Color.DarkRed);
+				toothChartDirectX.SetRCT(tooth_id,Color.DarkRed);
+				toothChartDirectX.SetBU(tooth_id,Color.DarkRed);
+			}
+		}
+
+		private void butBigX_Click(object sender,EventArgs e) {
+			toothChart2D.ResetTeeth();
+			toothChartOpenGL.ResetTeeth();
+			toothChartDirectX.ResetTeeth();
+			string tooth_id;
+			for(int i=1;i<=32;i++) {
+				tooth_id=i.ToString();
+				toothChart2D.SetBigX(tooth_id,Color.DarkRed);
+				toothChartOpenGL.SetBigX(tooth_id,Color.DarkRed);
+				toothChartDirectX.SetBigX(tooth_id,Color.DarkRed);
+			}
+		}
+
+
 
 
 

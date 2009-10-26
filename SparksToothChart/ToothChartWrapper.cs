@@ -337,22 +337,13 @@ namespace SparksToothChart {
 
 		///<summary>This is used for crowns and for retainers.  Crowns will be visible on missing teeth with implants.  Crowns are visible on F and O views, unlike ponics which are only visible on F view.  If the tooth is not visible, that should be set before this call, because then, this will set the root invisible.</summary>
 		public void SetCrown(string toothID,Color color) {
-			/*
-			if(drawMode==DrawingMode.Simple2D) {
-				if(!ToothGraphic.IsValidToothID(toothID)) {
-					return;
-				}
-				ListToothGraphics[toothID].IsCrown=true;
-				if(!ListToothGraphics[toothID].Visible) {//tooth not visible, so set root invisible.
-					ListToothGraphics[toothID].SetGroupVisibility(ToothGroupType.Cementum,false);
-				}
-				ListToothGraphics[toothID].SetSurfaceColors("MODBLFIV",color);
-				ListToothGraphics[toothID].SetGroupColor(ToothGroupType.Enamel,color);
-				this.Invalidate();
+			TcData.ListToothGraphics[toothID].IsCrown=true;
+			if(!TcData.ListToothGraphics[toothID].Visible) {//tooth not visible, so set root invisible.
+				TcData.ListToothGraphics[toothID].SetGroupVisibility(ToothGroupType.Cementum,false);
 			}
-			else {
-				//toothChartOpenGL.SetCrown(toothID,color);
-			}*/
+			TcData.ListToothGraphics[toothID].SetSurfaceColors("MODBLFIV",color);
+			TcData.ListToothGraphics[toothID].SetGroupColor(ToothGroupType.Enamel,color);
+			this.Invalidate();
 		}
 
 		///<summary>A series of color settings will result in the last ones entered overriding earlier entries.</summary>
@@ -374,76 +365,37 @@ namespace SparksToothChart {
 			Invalidate();
 		}
 
-		///<summary>This is used for any pontic, including bridges, full dentures, and partials.  It is usually used on a tooth that has already been set invisible.  This routine sets the tooth to visible again, but makes the root invisible.  Then, it sets the entire crown to the specified color.  If the tooth was not initially invisible, then it does not set the root invisible.  Any connector bars for bridges are set separately.</summary>
+		///<summary>This is used for any pontic, including bridges, full dentures, and partials.  It is usually used on a tooth that has already been set invisible.  This routine cuases the tooth to show again, but the root needs to be invisible.  Then, it sets the entire crown to the specified color.  If the tooth is already visible, then it does not set the root invisible.</summary>
 		public void SetPontic(string toothID,Color color) {
-			/*
-			if(drawMode==DrawingMode.Simple2D) {
-				if(!ToothGraphic.IsValidToothID(toothID)) {
-					return;
-				}
-				ListToothGraphics[toothID].IsPontic=true;
-				if(!ListToothGraphics[toothID].Visible) {//tooth not visible, so set root invisible.
-					ListToothGraphics[toothID].SetGroupVisibility(ToothGroupType.Cementum,false);
-				}
-				ListToothGraphics[toothID].SetSurfaceColors("MODBLFIV",color);
-				ListToothGraphics[toothID].SetGroupColor(ToothGroupType.Enamel,color);
+			TcData.ListToothGraphics[toothID].IsPontic=true;
+			if(!TcData.ListToothGraphics[toothID].Visible) {
+				//tooth not visible, but since IsPontic changes the visibility behavior of the tooth, we need to set the root invisible.
+				TcData.ListToothGraphics[toothID].SetGroupVisibility(ToothGroupType.Cementum,false);
 			}
-			else {
-				toothChartOpenGL.SetPontic(toothID,color);
-			}*/
+			TcData.ListToothGraphics[toothID].SetSurfaceColors("MODBLFIV",color);
+			TcData.ListToothGraphics[toothID].SetGroupColor(ToothGroupType.Enamel,color);
+			Invalidate();
 		}
 
 		///<summary>Root canals are initially not visible.  This routine sets the canals visible, changes the color to the one specified, and also sets the cementum for the tooth to be semitransparent so that the canals can be seen.  Also sets the IsRCT flag for the tooth to true.</summary>
 		public void SetRCT(string toothID,Color color) {
-			/*
-			if(drawMode==DrawingMode.Simple2D) {
-				if(!ToothGraphic.IsValidToothID(toothID)) {
-					return;
-				}
-				ListToothGraphics[toothID].IsRCT=true;
-				ListToothGraphics[toothID].colorRCT=color;
-			}
-			else {
-				if(drawMode==DrawingMode.DirectX) {
-
-				}
-				else {
-					toothChartOpenGL.SetRCT(toothID,color);
-				}
-			}*/
+			TcData.ListToothGraphics[toothID].IsRCT=true;
+			TcData.ListToothGraphics[toothID].colorRCT=color;
+			Invalidate();
 		}
 
 		///<summary>This draws a big red extraction X right on top of the tooth.  It's up to the calling application to figure out when it's appropriate to do this.  Even if the tooth has been marked invisible, there's a good chance that this will still get drawn because a tooth can be set visible again for the drawing the pontic.  So the calling application needs to figure out when it's appropriate to draw the X, and not set this otherwise.</summary>
 		public void SetBigX(string toothID,Color color) {
-			/*
-			if(drawMode==DrawingMode.Simple2D) {
-				if(!ToothGraphic.IsValidToothID(toothID)) {
-					return;
-				}
-				ListToothGraphics[toothID].DrawBigX=true;
-				ListToothGraphics[toothID].colorX=color;
-			}
-			else {
-				toothChartOpenGL.SetBigX(toothID,color);
-			}*/
+			TcData.ListToothGraphics[toothID].DrawBigX=true;
+			TcData.ListToothGraphics[toothID].colorX=color;
+			Invalidate();
 		}
 
 		///<summary>Set this tooth to show a BU or post.</summary>
 		public void SetBU(string toothID,Color color) {
-			/*
-			if(drawMode==DrawingMode.Simple2D) {
-				if(!ToothGraphic.IsValidToothID(toothID)) {
-					return;
-				}
-				ListToothGraphics[toothID].IsBU=true;
-				ListToothGraphics[toothID].colorBU=color;
-			}
-			else if(drawMode==DrawingMode.DirectX){
-
-			}
-			else {
-				toothChartOpenGL.SetBU(toothID,color);
-			}*/
+			TcData.ListToothGraphics[toothID].IsBU=true;
+			TcData.ListToothGraphics[toothID].colorBU=color;
+			Invalidate();
 		}
 
 		///<summary>Set this tooth to show an implant</summary>

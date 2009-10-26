@@ -60,11 +60,13 @@
 			this.groupBox6 = new System.Windows.Forms.GroupBox();
 			this.groupBox7 = new System.Windows.Forms.GroupBox();
 			this.butFillings = new System.Windows.Forms.Button();
+			this.label4 = new System.Windows.Forms.Label();
+			this.groupBox8 = new System.Windows.Forms.GroupBox();
+			this.butRCT = new System.Windows.Forms.Button();
 			this.toothChartDirectX = new SparksToothChart.ToothChartWrapper();
 			this.toothChartOpenGL = new SparksToothChart.ToothChartWrapper();
 			this.toothChart2D = new SparksToothChart.ToothChartWrapper();
-			this.label4 = new System.Windows.Forms.Label();
-			this.groupBox8 = new System.Windows.Forms.GroupBox();
+			this.butBigX = new System.Windows.Forms.Button();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupBox3.SuspendLayout();
@@ -414,6 +416,8 @@
 			// 
 			// groupBox7
 			// 
+			this.groupBox7.Controls.Add(this.butBigX);
+			this.groupBox7.Controls.Add(this.butRCT);
 			this.groupBox7.Controls.Add(this.butFillings);
 			this.groupBox7.Location = new System.Drawing.Point(680,361);
 			this.groupBox7.Name = "groupBox7";
@@ -426,11 +430,39 @@
 			// 
 			this.butFillings.Location = new System.Drawing.Point(10,18);
 			this.butFillings.Name = "butFillings";
-			this.butFillings.Size = new System.Drawing.Size(75,23);
+			this.butFillings.Size = new System.Drawing.Size(88,23);
 			this.butFillings.TabIndex = 207;
-			this.butFillings.Text = "Fillings";
+			this.butFillings.Text = "Fillings/Crns";
 			this.butFillings.UseVisualStyleBackColor = true;
 			this.butFillings.Click += new System.EventHandler(this.butFillings_Click);
+			// 
+			// label4
+			// 
+			this.label4.Location = new System.Drawing.Point(8,17);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(199,100);
+			this.label4.TabIndex = 217;
+			this.label4.Text = resources.GetString("label4.Text");
+			// 
+			// groupBox8
+			// 
+			this.groupBox8.Controls.Add(this.label4);
+			this.groupBox8.Location = new System.Drawing.Point(840,361);
+			this.groupBox8.Name = "groupBox8";
+			this.groupBox8.Size = new System.Drawing.Size(222,120);
+			this.groupBox8.TabIndex = 218;
+			this.groupBox8.TabStop = false;
+			this.groupBox8.Text = "Mouse clicks";
+			// 
+			// butRCT
+			// 
+			this.butRCT.Location = new System.Drawing.Point(10,43);
+			this.butRCT.Name = "butRCT";
+			this.butRCT.Size = new System.Drawing.Size(88,23);
+			this.butRCT.TabIndex = 208;
+			this.butRCT.Text = "RCT/BU";
+			this.butRCT.UseVisualStyleBackColor = true;
+			this.butRCT.Click += new System.EventHandler(this.butRCT_Click);
 			// 
 			// toothChartDirectX
 			// 
@@ -474,23 +506,15 @@
 			this.toothChart2D.TabIndex = 195;
 			this.toothChart2D.UseHardware = false;
 			// 
-			// label4
+			// butBigX
 			// 
-			this.label4.Location = new System.Drawing.Point(8,17);
-			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(199,100);
-			this.label4.TabIndex = 217;
-			this.label4.Text = resources.GetString("label4.Text");
-			// 
-			// groupBox8
-			// 
-			this.groupBox8.Controls.Add(this.label4);
-			this.groupBox8.Location = new System.Drawing.Point(840,361);
-			this.groupBox8.Name = "groupBox8";
-			this.groupBox8.Size = new System.Drawing.Size(222,120);
-			this.groupBox8.TabIndex = 218;
-			this.groupBox8.TabStop = false;
-			this.groupBox8.Text = "Mouse clicks";
+			this.butBigX.Location = new System.Drawing.Point(10,68);
+			this.butBigX.Name = "butBigX";
+			this.butBigX.Size = new System.Drawing.Size(88,23);
+			this.butBigX.TabIndex = 209;
+			this.butBigX.Text = "Big X";
+			this.butBigX.UseVisualStyleBackColor = true;
+			this.butBigX.Click += new System.EventHandler(this.butBigX_Click);
 			// 
 			// Form1
 			// 
@@ -572,6 +596,8 @@
 		private System.Windows.Forms.Button butFillings;
 		private System.Windows.Forms.Label label4;
 		private System.Windows.Forms.GroupBox groupBox8;
+		private System.Windows.Forms.Button butRCT;
+		private System.Windows.Forms.Button butBigX;
 	}
 }
 
