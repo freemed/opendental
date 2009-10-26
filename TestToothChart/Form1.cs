@@ -311,6 +311,9 @@ namespace TestToothChart {
 		}
 
 		private void butMissing_Click(object sender,EventArgs e) {
+			toothChart2D.ResetTeeth();
+			toothChartOpenGL.ResetTeeth();
+			toothChartDirectX.ResetTeeth();
 			//toothChart2D.  pointless
 			toothChartOpenGL.SetInvisible("1");
 			toothChartOpenGL.SetInvisible("3");
@@ -345,6 +348,47 @@ namespace TestToothChart {
 			toothChartDirectX.SetInvisible("27");
 			toothChartDirectX.SetInvisible("29");
 			toothChartDirectX.SetInvisible("31");
+		}
+
+		private void butHidden_Click(object sender,EventArgs e) {
+			toothChart2D.ResetTeeth();
+			toothChartOpenGL.ResetTeeth();
+			toothChartDirectX.ResetTeeth();
+			//
+			toothChart2D.SetHidden("4");
+			toothChart2D.SetHidden("5");
+			toothChart2D.SetHidden("12");
+			toothChart2D.SetHidden("13");
+			toothChart2D.SetHidden("20");
+			toothChart2D.SetHidden("21");
+			toothChart2D.SetHidden("28");
+			toothChart2D.SetHidden("29");
+			//
+			toothChartOpenGL.SetHidden("4");
+			toothChartOpenGL.SetHidden("5");
+			toothChartOpenGL.SetHidden("12");
+			toothChartOpenGL.SetHidden("13");
+			toothChartOpenGL.SetHidden("20");
+			toothChartOpenGL.SetHidden("21");
+			toothChartOpenGL.SetHidden("28");
+			toothChartOpenGL.SetHidden("29");
+			//
+			toothChartDirectX.SetHidden("4");
+			toothChartDirectX.SetHidden("5");
+			toothChartDirectX.SetHidden("12");
+			toothChartDirectX.SetHidden("13");
+			toothChartDirectX.SetHidden("20");
+			toothChartDirectX.SetHidden("21");
+			toothChartDirectX.SetHidden("28");
+			toothChartDirectX.SetHidden("29");
+		}
+
+		private void butMissingHiddenComplex_Click(object sender,EventArgs e) {
+			toothChart2D.ResetTeeth();
+			toothChartOpenGL.ResetTeeth();
+			toothChartDirectX.ResetTeeth();
+			//
+			//toothChartOpenGL.setpri
 		}
 
 		

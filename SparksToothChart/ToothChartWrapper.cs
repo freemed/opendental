@@ -372,23 +372,12 @@ namespace SparksToothChart {
 
 		///<summary>Used for missing teeth.  This should always be done before setting restorations, because a pontic will cause the tooth to become visible again except for the root.  So if setInvisible after a pontic, then the pontic can't show.</summary>
 		public void SetInvisible(string toothID) {
-			/*
-			if(drawMode==DrawingMode.Simple2D) {
-				if(!ToothGraphic.IsValidToothID(toothID)) {
-					return;
-				}
-				ListToothGraphics[toothID].Visible=false;
-				this.Invalidate();
-			}
-			else {
-				toothChartOpenGL.SetInvisible(toothID);
-			}*/
 			TcData.ListToothGraphics[toothID].Visible=false;
 			Invalidate();
 		}
 
 		///<summary>This is just the same as SetInvisible, except that it also hides the number from showing.  This is used, for example, if premolars are missing, and ortho has completely closed the space.  User will not be able to select this tooth because the number is hidden.</summary>
-		public void HideTooth(string toothID) {
+		public void SetHidden(string toothID) {
 			/*
 			if(drawMode==DrawingMode.Simple2D) {
 				if(!ToothGraphic.IsValidToothID(toothID)) {
@@ -399,8 +388,11 @@ namespace SparksToothChart {
 				this.Invalidate();
 			}
 			else {
-				toothChartOpenGL.HideTooth(toothID);
+				toothChartOpenGL.SetHidden(toothID);
 			}*/
+			TcData.ListToothGraphics[toothID].Visible=false;
+			TcData.ListToothGraphics[toothID].HideNumber=true;
+			Invalidate();
 		}
 
 		///<summary>This is used for any pontic, including bridges, full dentures, and partials.  It is usually used on a tooth that has already been set invisible.  This routine sets the tooth to visible again, but makes the root invisible.  Then, it sets the entire crown to the specified color.  If the tooth was not initially invisible, then it does not set the root invisible.  Any connector bars for bridges are set separately.</summary>

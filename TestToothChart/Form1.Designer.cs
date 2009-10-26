@@ -53,15 +53,19 @@
 			this.butSizeWide = new System.Windows.Forms.Button();
 			this.butSizeTall = new System.Windows.Forms.Button();
 			this.butSizeNormal = new System.Windows.Forms.Button();
+			this.butMissing = new System.Windows.Forms.Button();
 			this.toothChartDirectX = new SparksToothChart.ToothChartWrapper();
 			this.toothChartOpenGL = new SparksToothChart.ToothChartWrapper();
 			this.toothChart2D = new SparksToothChart.ToothChartWrapper();
-			this.butMissing = new System.Windows.Forms.Button();
+			this.butHidden = new System.Windows.Forms.Button();
+			this.butMissingHiddenComplex = new System.Windows.Forms.Button();
+			this.groupBox6 = new System.Windows.Forms.GroupBox();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupBox3.SuspendLayout();
 			this.groupBox4.SuspendLayout();
 			this.groupBox5.SuspendLayout();
+			this.groupBox6.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -359,6 +363,16 @@
 			this.butSizeNormal.UseVisualStyleBackColor = true;
 			this.butSizeNormal.Click += new System.EventHandler(this.butSizeNormal_Click);
 			// 
+			// butMissing
+			// 
+			this.butMissing.Location = new System.Drawing.Point(10,18);
+			this.butMissing.Name = "butMissing";
+			this.butMissing.Size = new System.Drawing.Size(75,23);
+			this.butMissing.TabIndex = 207;
+			this.butMissing.Text = "Missing";
+			this.butMissing.UseVisualStyleBackColor = true;
+			this.butMissing.Click += new System.EventHandler(this.butMissing_Click);
+			// 
 			// toothChartDirectX
 			// 
 			this.toothChartDirectX.AutoFinish = false;
@@ -401,22 +415,44 @@
 			this.toothChart2D.TabIndex = 195;
 			this.toothChart2D.UseHardware = false;
 			// 
-			// butMissing
+			// butHidden
 			// 
-			this.butMissing.Location = new System.Drawing.Point(551,361);
-			this.butMissing.Name = "butMissing";
-			this.butMissing.Size = new System.Drawing.Size(75,23);
-			this.butMissing.TabIndex = 207;
-			this.butMissing.Text = "Missing";
-			this.butMissing.UseVisualStyleBackColor = true;
-			this.butMissing.Click += new System.EventHandler(this.butMissing_Click);
+			this.butHidden.Location = new System.Drawing.Point(10,43);
+			this.butHidden.Name = "butHidden";
+			this.butHidden.Size = new System.Drawing.Size(75,23);
+			this.butHidden.TabIndex = 213;
+			this.butHidden.Text = "Hidden";
+			this.butHidden.UseVisualStyleBackColor = true;
+			this.butHidden.Click += new System.EventHandler(this.butHidden_Click);
+			// 
+			// butMissingHiddenComplex
+			// 
+			this.butMissingHiddenComplex.Location = new System.Drawing.Point(10,68);
+			this.butMissingHiddenComplex.Name = "butMissingHiddenComplex";
+			this.butMissingHiddenComplex.Size = new System.Drawing.Size(75,23);
+			this.butMissingHiddenComplex.TabIndex = 214;
+			this.butMissingHiddenComplex.Text = "Complex";
+			this.butMissingHiddenComplex.UseVisualStyleBackColor = true;
+			this.butMissingHiddenComplex.Click += new System.EventHandler(this.butMissingHiddenComplex_Click);
+			// 
+			// groupBox6
+			// 
+			this.groupBox6.Controls.Add(this.butHidden);
+			this.groupBox6.Controls.Add(this.butMissingHiddenComplex);
+			this.groupBox6.Controls.Add(this.butMissing);
+			this.groupBox6.Location = new System.Drawing.Point(536,361);
+			this.groupBox6.Name = "groupBox6";
+			this.groupBox6.Size = new System.Drawing.Size(118,99);
+			this.groupBox6.TabIndex = 215;
+			this.groupBox6.TabStop = false;
+			this.groupBox6.Text = "Missing and Hidden";
 			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(1258,738);
-			this.Controls.Add(this.butMissing);
+			this.Controls.Add(this.groupBox6);
 			this.Controls.Add(this.groupBox5);
 			this.Controls.Add(this.groupBox4);
 			this.Controls.Add(this.groupBox3);
@@ -439,6 +475,7 @@
 			this.groupBox3.ResumeLayout(false);
 			this.groupBox4.ResumeLayout(false);
 			this.groupBox5.ResumeLayout(false);
+			this.groupBox6.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -479,6 +516,9 @@
 		private System.Windows.Forms.Button butSizeTall;
 		private System.Windows.Forms.Button butSizeNormal;
 		private System.Windows.Forms.Button butMissing;
+		private System.Windows.Forms.Button butHidden;
+		private System.Windows.Forms.Button butMissingHiddenComplex;
+		private System.Windows.Forms.GroupBox groupBox6;
 	}
 }
 

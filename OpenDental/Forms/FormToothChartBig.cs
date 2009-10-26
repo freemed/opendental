@@ -147,7 +147,7 @@ namespace OpenDental{
 						toothChart.SetInvisible(ToothInitialList[i].ToothNum);
 						break;
 					case ToothInitialType.Hidden:
-						toothChart.HideTooth(ToothInitialList[i].ToothNum);
+						toothChart.SetHidden(ToothInitialList[i].ToothNum);
 						break;
 					//case ToothInitialType.Primary:
 					//	break;
