@@ -355,19 +355,10 @@ namespace SparksToothChart {
 			}*/
 		}
 
-		///<summary></summary>
+		///<summary>A series of color settings will result in the last ones entered overriding earlier entries.</summary>
 		public void SetSurfaceColors(string toothID,string surfaces,Color color) {
-			/*
-			if(drawMode==DrawingMode.Simple2D) {
-				if(!ToothGraphic.IsValidToothID(toothID)) {
-					return;
-				}
-				ListToothGraphics[toothID].SetSurfaceColors(surfaces,color);
-				this.Invalidate();
-			}
-			else {
-				toothChartOpenGL.SetSurfaceColors(toothID,surfaces,color);
-			}*/
+			TcData.ListToothGraphics[toothID].SetSurfaceColors(surfaces,color);
+			Invalidate();
 		}
 
 		///<summary>Used for missing teeth.  This should always be done before setting restorations, because a pontic will cause the tooth to become visible again except for the root.  So if setMissing after a pontic, then the pontic can't show.</summary>
@@ -558,6 +549,9 @@ namespace SparksToothChart {
 			OnSegmentDrawn(e.DrawingSegement);
 		}
 
+		//public void SimulateMouseDown(MouseEventArgs e) {
+
+		//}
 		
 
 	}

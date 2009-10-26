@@ -23,6 +23,7 @@
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
 			this.label1 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
 			this.label3 = new System.Windows.Forms.Label();
@@ -54,18 +55,24 @@
 			this.butSizeTall = new System.Windows.Forms.Button();
 			this.butSizeNormal = new System.Windows.Forms.Button();
 			this.butMissing = new System.Windows.Forms.Button();
-			this.toothChartDirectX = new SparksToothChart.ToothChartWrapper();
-			this.toothChartOpenGL = new SparksToothChart.ToothChartWrapper();
-			this.toothChart2D = new SparksToothChart.ToothChartWrapper();
 			this.butHidden = new System.Windows.Forms.Button();
 			this.butMissingHiddenComplex = new System.Windows.Forms.Button();
 			this.groupBox6 = new System.Windows.Forms.GroupBox();
+			this.groupBox7 = new System.Windows.Forms.GroupBox();
+			this.butFillings = new System.Windows.Forms.Button();
+			this.toothChartDirectX = new SparksToothChart.ToothChartWrapper();
+			this.toothChartOpenGL = new SparksToothChart.ToothChartWrapper();
+			this.toothChart2D = new SparksToothChart.ToothChartWrapper();
+			this.label4 = new System.Windows.Forms.Label();
+			this.groupBox8 = new System.Windows.Forms.GroupBox();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupBox3.SuspendLayout();
 			this.groupBox4.SuspendLayout();
 			this.groupBox5.SuspendLayout();
 			this.groupBox6.SuspendLayout();
+			this.groupBox7.SuspendLayout();
+			this.groupBox8.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -373,6 +380,58 @@
 			this.butMissing.UseVisualStyleBackColor = true;
 			this.butMissing.Click += new System.EventHandler(this.butMissing_Click);
 			// 
+			// butHidden
+			// 
+			this.butHidden.Location = new System.Drawing.Point(10,43);
+			this.butHidden.Name = "butHidden";
+			this.butHidden.Size = new System.Drawing.Size(75,23);
+			this.butHidden.TabIndex = 213;
+			this.butHidden.Text = "Hidden";
+			this.butHidden.UseVisualStyleBackColor = true;
+			this.butHidden.Click += new System.EventHandler(this.butHidden_Click);
+			// 
+			// butMissingHiddenComplex
+			// 
+			this.butMissingHiddenComplex.Location = new System.Drawing.Point(10,68);
+			this.butMissingHiddenComplex.Name = "butMissingHiddenComplex";
+			this.butMissingHiddenComplex.Size = new System.Drawing.Size(75,23);
+			this.butMissingHiddenComplex.TabIndex = 214;
+			this.butMissingHiddenComplex.Text = "Complex";
+			this.butMissingHiddenComplex.UseVisualStyleBackColor = true;
+			this.butMissingHiddenComplex.Click += new System.EventHandler(this.butMissingHiddenComplex_Click);
+			// 
+			// groupBox6
+			// 
+			this.groupBox6.Controls.Add(this.butHidden);
+			this.groupBox6.Controls.Add(this.butMissingHiddenComplex);
+			this.groupBox6.Controls.Add(this.butMissing);
+			this.groupBox6.Location = new System.Drawing.Point(536,361);
+			this.groupBox6.Name = "groupBox6";
+			this.groupBox6.Size = new System.Drawing.Size(118,99);
+			this.groupBox6.TabIndex = 215;
+			this.groupBox6.TabStop = false;
+			this.groupBox6.Text = "Missing and Hidden";
+			// 
+			// groupBox7
+			// 
+			this.groupBox7.Controls.Add(this.butFillings);
+			this.groupBox7.Location = new System.Drawing.Point(680,361);
+			this.groupBox7.Name = "groupBox7";
+			this.groupBox7.Size = new System.Drawing.Size(118,99);
+			this.groupBox7.TabIndex = 216;
+			this.groupBox7.TabStop = false;
+			this.groupBox7.Text = "Restorations";
+			// 
+			// butFillings
+			// 
+			this.butFillings.Location = new System.Drawing.Point(10,18);
+			this.butFillings.Name = "butFillings";
+			this.butFillings.Size = new System.Drawing.Size(75,23);
+			this.butFillings.TabIndex = 207;
+			this.butFillings.Text = "Fillings";
+			this.butFillings.UseVisualStyleBackColor = true;
+			this.butFillings.Click += new System.EventHandler(this.butFillings_Click);
+			// 
 			// toothChartDirectX
 			// 
 			this.toothChartDirectX.AutoFinish = false;
@@ -415,43 +474,31 @@
 			this.toothChart2D.TabIndex = 195;
 			this.toothChart2D.UseHardware = false;
 			// 
-			// butHidden
+			// label4
 			// 
-			this.butHidden.Location = new System.Drawing.Point(10,43);
-			this.butHidden.Name = "butHidden";
-			this.butHidden.Size = new System.Drawing.Size(75,23);
-			this.butHidden.TabIndex = 213;
-			this.butHidden.Text = "Hidden";
-			this.butHidden.UseVisualStyleBackColor = true;
-			this.butHidden.Click += new System.EventHandler(this.butHidden_Click);
+			this.label4.Location = new System.Drawing.Point(8,17);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(199,100);
+			this.label4.TabIndex = 217;
+			this.label4.Text = resources.GetString("label4.Text");
 			// 
-			// butMissingHiddenComplex
+			// groupBox8
 			// 
-			this.butMissingHiddenComplex.Location = new System.Drawing.Point(10,68);
-			this.butMissingHiddenComplex.Name = "butMissingHiddenComplex";
-			this.butMissingHiddenComplex.Size = new System.Drawing.Size(75,23);
-			this.butMissingHiddenComplex.TabIndex = 214;
-			this.butMissingHiddenComplex.Text = "Complex";
-			this.butMissingHiddenComplex.UseVisualStyleBackColor = true;
-			this.butMissingHiddenComplex.Click += new System.EventHandler(this.butMissingHiddenComplex_Click);
-			// 
-			// groupBox6
-			// 
-			this.groupBox6.Controls.Add(this.butHidden);
-			this.groupBox6.Controls.Add(this.butMissingHiddenComplex);
-			this.groupBox6.Controls.Add(this.butMissing);
-			this.groupBox6.Location = new System.Drawing.Point(536,361);
-			this.groupBox6.Name = "groupBox6";
-			this.groupBox6.Size = new System.Drawing.Size(118,99);
-			this.groupBox6.TabIndex = 215;
-			this.groupBox6.TabStop = false;
-			this.groupBox6.Text = "Missing and Hidden";
+			this.groupBox8.Controls.Add(this.label4);
+			this.groupBox8.Location = new System.Drawing.Point(840,361);
+			this.groupBox8.Name = "groupBox8";
+			this.groupBox8.Size = new System.Drawing.Size(222,120);
+			this.groupBox8.TabIndex = 218;
+			this.groupBox8.TabStop = false;
+			this.groupBox8.Text = "Mouse clicks";
 			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(1258,738);
+			this.Controls.Add(this.groupBox8);
+			this.Controls.Add(this.groupBox7);
 			this.Controls.Add(this.groupBox6);
 			this.Controls.Add(this.groupBox5);
 			this.Controls.Add(this.groupBox4);
@@ -476,6 +523,8 @@
 			this.groupBox4.ResumeLayout(false);
 			this.groupBox5.ResumeLayout(false);
 			this.groupBox6.ResumeLayout(false);
+			this.groupBox7.ResumeLayout(false);
+			this.groupBox8.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -519,6 +568,10 @@
 		private System.Windows.Forms.Button butHidden;
 		private System.Windows.Forms.Button butMissingHiddenComplex;
 		private System.Windows.Forms.GroupBox groupBox6;
+		private System.Windows.Forms.GroupBox groupBox7;
+		private System.Windows.Forms.Button butFillings;
+		private System.Windows.Forms.Label label4;
+		private System.Windows.Forms.GroupBox groupBox8;
 	}
 }
 
