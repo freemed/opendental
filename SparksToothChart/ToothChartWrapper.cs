@@ -286,8 +286,8 @@ namespace SparksToothChart {
 			Invalidate();
 		}
 
-		///<summary>Sets the specified permanent tooth to primary. Works as follows: Sets ShowPrimaryLetter to true for the perm tooth.  Makes pri tooth visible=true.  If this is performed on a perm molar, it has no visible effect.  Also repositions perm tooth by translating -Y.  Moves primary tooth slightly to M or D sometimes for better alignment.  And if 2nd primary molar, then because of the larger size, it must move all perm molars to distal.
-		public void SetToPrimary(string toothID) {
+		///<summary>Sets the specified permanent tooth to primary. Works as follows: Sets ShowPrimaryLetter to true for the perm tooth.  Makes pri tooth visible=true.  Also repositions perm tooth by translating -Y.  Moves primary tooth slightly to M or D sometimes for better alignment.  And if 2nd primary molar, then because of the larger size, it must move all perm molars to distal.</summary>
+		public void SetPrimary(string toothID) {
 			if(!ToothGraphic.IsValidToothID(toothID)) {
 				return;
 			}
@@ -370,26 +370,14 @@ namespace SparksToothChart {
 			}*/
 		}
 
-		///<summary>Used for missing teeth.  This should always be done before setting restorations, because a pontic will cause the tooth to become visible again except for the root.  So if setInvisible after a pontic, then the pontic can't show.</summary>
-		public void SetInvisible(string toothID) {
+		///<summary>Used for missing teeth.  This should always be done before setting restorations, because a pontic will cause the tooth to become visible again except for the root.  So if setMissing after a pontic, then the pontic can't show.</summary>
+		public void SetMissing(string toothID) {
 			TcData.ListToothGraphics[toothID].Visible=false;
 			Invalidate();
 		}
 
-		///<summary>This is just the same as SetInvisible, except that it also hides the number from showing.  This is used, for example, if premolars are missing, and ortho has completely closed the space.  User will not be able to select this tooth because the number is hidden.</summary>
+		///<summary>This is just the same as SetMissing, except that it also hides the number from showing.  This is used, for example, if premolars are missing, and ortho has completely closed the space.  User will not be able to select this tooth because the number is hidden.</summary>
 		public void SetHidden(string toothID) {
-			/*
-			if(drawMode==DrawingMode.Simple2D) {
-				if(!ToothGraphic.IsValidToothID(toothID)) {
-					return;
-				}
-				ListToothGraphics[toothID].Visible=false;
-				ListToothGraphics[toothID].HideNumber=true;
-				this.Invalidate();
-			}
-			else {
-				toothChartOpenGL.SetHidden(toothID);
-			}*/
 			TcData.ListToothGraphics[toothID].Visible=false;
 			TcData.ListToothGraphics[toothID].HideNumber=true;
 			Invalidate();

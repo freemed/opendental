@@ -1716,13 +1716,13 @@ namespace OpenDental{
 				//first, primary.  That way, you can still set a primary tooth missing afterwards.
 				for(int i=0;i<ToothInitialList.Count;i++) {
 					if(ToothInitialList[i].InitialType==ToothInitialType.Primary) {
-						toothChart.SetToPrimary(ToothInitialList[i].ToothNum);
+						toothChart.SetPrimary(ToothInitialList[i].ToothNum);
 					}
 				}
 				for(int i=0;i<ToothInitialList.Count;i++) {
 					switch(ToothInitialList[i].InitialType) {
 						case ToothInitialType.Missing:
-							toothChart.SetInvisible(ToothInitialList[i].ToothNum);
+							toothChart.SetMissing(ToothInitialList[i].ToothNum);
 							break;
 						case ToothInitialType.Hidden:
 							toothChart.SetHidden(ToothInitialList[i].ToothNum);

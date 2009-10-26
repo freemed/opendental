@@ -4065,7 +4065,7 @@ namespace OpenDental{
 			//primary teeth also need to be set before initial list so that we can set a primary tooth missing.
 			for(int i=0;i<ToothInitialList.Count;i++) {
 				if(ToothInitialList[i].InitialType==ToothInitialType.Primary) {
-					toothChart.SetToPrimary(ToothInitialList[i].ToothNum);
+					toothChart.SetPrimary(ToothInitialList[i].ToothNum);
 				}
 			}
 			if(checkShowTeeth.Checked || retainSelection) {
@@ -4076,7 +4076,7 @@ namespace OpenDental{
 			for(int i=0;i<ToothInitialList.Count;i++){
 				switch(ToothInitialList[i].InitialType){
 					case ToothInitialType.Missing:
-						toothChart.SetInvisible(ToothInitialList[i].ToothNum);
+						toothChart.SetMissing(ToothInitialList[i].ToothNum);
 						break;
 					case ToothInitialType.Hidden:
 						toothChart.SetHidden(ToothInitialList[i].ToothNum);
