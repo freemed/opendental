@@ -63,10 +63,10 @@
 			this.label4 = new System.Windows.Forms.Label();
 			this.groupBox8 = new System.Windows.Forms.GroupBox();
 			this.butRCT = new System.Windows.Forms.Button();
+			this.butBigX = new System.Windows.Forms.Button();
 			this.toothChartDirectX = new SparksToothChart.ToothChartWrapper();
 			this.toothChartOpenGL = new SparksToothChart.ToothChartWrapper();
 			this.toothChart2D = new SparksToothChart.ToothChartWrapper();
-			this.butBigX = new System.Windows.Forms.Button();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupBox3.SuspendLayout();
@@ -464,6 +464,16 @@
 			this.butRCT.UseVisualStyleBackColor = true;
 			this.butRCT.Click += new System.EventHandler(this.butRCT_Click);
 			// 
+			// butBigX
+			// 
+			this.butBigX.Location = new System.Drawing.Point(10,68);
+			this.butBigX.Name = "butBigX";
+			this.butBigX.Size = new System.Drawing.Size(88,23);
+			this.butBigX.TabIndex = 209;
+			this.butBigX.Text = "Big X";
+			this.butBigX.UseVisualStyleBackColor = true;
+			this.butBigX.Click += new System.EventHandler(this.butBigX_Click);
+			// 
 			// toothChartDirectX
 			// 
 			this.toothChartDirectX.AutoFinish = false;
@@ -505,16 +515,6 @@
 			this.toothChart2D.Size = new System.Drawing.Size(410,307);
 			this.toothChart2D.TabIndex = 195;
 			this.toothChart2D.UseHardware = false;
-			// 
-			// butBigX
-			// 
-			this.butBigX.Location = new System.Drawing.Point(10,68);
-			this.butBigX.Name = "butBigX";
-			this.butBigX.Size = new System.Drawing.Size(88,23);
-			this.butBigX.TabIndex = 209;
-			this.butBigX.Text = "Big X";
-			this.butBigX.UseVisualStyleBackColor = true;
-			this.butBigX.Click += new System.EventHandler(this.butBigX_Click);
 			// 
 			// Form1
 			// 

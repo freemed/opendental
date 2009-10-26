@@ -17,8 +17,7 @@ namespace SparksToothChart {
 		public Color ColorTextHighlight;
 		///<summary>The color of the background highlight rectangle around a selected tooth number.</summary>
 		public Color ColorBackHighlight;
-		///<summary>Valid values are 1-32 and A-Z.</summary>
-		public List<string> SelectedTeeth;
+		private List<string> selectedTeeth;
 		public List<ToothInitial> DrawingSegmentList;
 		///<summary>This is the size of the control in screen pixels.</summary>
 		private Size sizeControl;
@@ -32,6 +31,10 @@ namespace SparksToothChart {
 		public Rectangle RectTarget;
 		/// <summary>When the drawing feature was originally added, this was the size of the tooth chart. This number must forever be preserved and drawings scaled to account for it.</summary>
 		public Size SizeOriginalDrawing=new Size(410,307);//NEVER CHANGE
+		///<summary>An enum that indicates which kind of cursor is currently being used.</summary>
+		public CursorTool CursorTool;
+		///<summary>The color being used for freehand drawing.</summary>
+		public Color ColorDrawing;
 
 		public ToothChartData() {
 			ListToothGraphics=new ToothGraphicCollection();
@@ -39,9 +42,11 @@ namespace SparksToothChart {
 			ColorText=Color.White;
 			ColorTextHighlight=Color.Red;
 			ColorBackHighlight=Color.White;
-			SelectedTeeth=new List<string>();
+			selectedTeeth=new List<string>();
 			sizeControl=SizeOriginalDrawing;
 			DrawingSegmentList=new List<ToothInitial>();
+			CursorTool=CursorTool.Pointer;
+			ColorDrawing=Color.Black;
 		}
 
 		///<summary>This gets set whenever the wrapper resizes.  It's the size of the control in screen pixels.</summary>
@@ -69,6 +74,13 @@ namespace SparksToothChart {
 					RectTarget.Height=(int)(((float)SizeOriginalDrawing.Height/SizeOriginalDrawing.Width)*RectTarget.Width);
 					RectTarget.Y=(sizeControl.Height-RectTarget.Height)/2;
 				}
+			}
+		}
+
+		///<summary>Valid values are 1-32 and A-Z.  To set which teeth are selected, use SetSelected().</summary>
+		public List<string> SelectedTeeth {
+			get {
+				return selectedTeeth;
 			}
 		}
 
@@ -206,8 +218,8 @@ namespace SparksToothChart {
 			return -13f;
 		}
 
-		///<summary>This also adjusts the result up or down along the Y axis to account for a control that is not the same proportion as the original.</summary>
-		public PointF PixToMm(Point pixPoint,int widthControl,int heightControl) {
+		///<summary>This also adjusts the result to account for a control that is not the same proportion as the original.  Result could be outside the projection area.</summary>
+		public PointF PixToMm(Point pixPoint) {
 			/*
 			float toMmRatio=(float)WidthProjection/(float)widthControl;//mm/pix
 			float mmX=(((float)pixPoint.X)*toMmRatio)-((float)WidthProjection)/2f;
@@ -215,22 +227,34 @@ namespace SparksToothChart {
 			float actualHeightProjection=(float)WidthProjection*(float)heightControl/(float)widthControl;
 			float mmY=(idealHeightProjection)/2f-(((float)pixPoint.Y)*toMmRatio);
 			return new PointF(mmX,mmY);*/
-			return new PointF(0,0);
+			float toMmRatio=1f/ScaleMmToPix;
+			float mmX=(((float)(pixPoint.X-RectTarget.X))*toMmRatio)-((float)SizeOriginalProjection.Width)/2f;
+			//float idealHeightProjection=(float)WidthProjection*(float)SizeOriginalDrawing.Height/(float)SizeOriginalDrawing.Width;
+			//float actualHeightProjection=(float)WidthProjection*(float)heightControl/(float)widthControl;
+			float mmY=(SizeOriginalProjection.Height)/2f-(((float)(pixPoint.Y-RectTarget.Y))*toMmRatio);
+			return new PointF(mmX,mmY);
 		}
 
-		///<summary>First, use GetNumberRecMm to get the rectangle surrounding a tooth num.  The, use this to convert it to control coords.</summary>
+		///<summary>Needs an overhaul. First, use GetNumberRecMm to get the rectangle surrounding a tooth num.  The, use this to convert it to control coords.</summary>
 		public Rectangle ConvertRecToPix(RectangleF recMm) {
 			//float toMm=(float)WidthProjection/(float)widthControl;//mm/pix
 			//this.ScaleMmToPix
 			//Rectangle recPix=new Rectangle((int)(widthControl/2+recMm.X/toMm),(int)(heightControl/2-recMm.Y/toMm-recMm.Height/toMm),
 			//	(int)(recMm.Width/toMm),(int)(recMm.Height/toMm));
+			/*
 			Rectangle recPix=new Rectangle(
 				(int)(sizeControl.Width/2+recMm.X*ScaleMmToPix),
 				(int)(sizeControl.Height/2-recMm.Y*ScaleMmToPix-recMm.Height*ScaleMmToPix),
 				(int)(recMm.Width*ScaleMmToPix),
 				(int)(recMm.Height*ScaleMmToPix)
 				);
-			return recPix;
+			Rectangle recPix=new Rectangle(
+				(int)(RectTarget.X   sizeControl.Width/2+recMm.X*ScaleMmToPix),
+				(int)(sizeControl.Height/2-recMm.Y*ScaleMmToPix-recMm.Height*ScaleMmToPix),
+				(int)(recMm.Width*ScaleMmToPix),
+				(int)(recMm.Height*ScaleMmToPix)
+				);*/
+			return new Rectangle();//recPix;
 		}
 
 		/*
@@ -286,24 +310,28 @@ namespace SparksToothChart {
 
 
 		///<summary>Input is pixel coordinates of control.  Always returns a string, 1 through 32 or A through T.  Primary letters are only returned if that tooth is set as primary.</summary>
-		public string GetToothAtPoint(int x,int y) {
-			//This version was originally in OpenGL
-			/*float closestDelta=(float)(WidthProjection*2);//start it off really big
-			int closestTooth=1;
+		public string GetToothAtPoint(Point point) {
+			//This version was originally in OpenGL.
+			float closestDelta=(float)(SizeOriginalProjection.Width*2);//start it off really big
+			string closestTooth="1";
 			float toothPos=0;
 			float delta=0;
-			float xPos=(float)((float)(x-Width/2)*WidthProjection/(float)Width);//in mm instead of screen coordinates
-			if(y<Height/2) {//max
+			//convert x and y to mm.  Use those measurements to match the closest tooth.
+			//float xPos=(float)((float)(x-Width/2)*WidthProjection/(float)Width);//in mm instead of screen coordinates
+			float xPos=PixToMm(point).X;
+			float yPos=PixToMm(point).Y;
+			//Since chart is always centered vertically, we can just use controlH.
+			if(yPos>0) {//maxillary
 				for(int i=1;i<=16;i++) {
-					if(TcData.ListToothGraphics[i.ToString()].HideNumber) {
+					if(ListToothGraphics[i.ToString()].HideNumber) {
 						continue;
 					}
 					toothPos=ToothGraphic.GetDefaultOrthoXpos(i);
 					if(ToothGraphic.IsRight(i.ToString())) {
-						toothPos+=(int)TcData.ListToothGraphics[i.ToString()].ShiftM;//*(float)Width/WidthProjection);
+						toothPos+=(int)ListToothGraphics[i.ToString()].ShiftM;//*(float)Width/WidthProjection);
 					}
 					else {
-						toothPos-=(int)TcData.ListToothGraphics[i.ToString()].ShiftM;//*(float)Width/WidthProjection);
+						toothPos-=(int)ListToothGraphics[i.ToString()].ShiftM;//*(float)Width/WidthProjection);
 					}
 					if(xPos>toothPos) {
 						delta=xPos-toothPos;
@@ -313,22 +341,22 @@ namespace SparksToothChart {
 					}
 					if(delta<closestDelta) {
 						closestDelta=delta;
-						closestTooth=i;
+						closestTooth=i.ToString();
 					}
 				}
 				return closestTooth;
 			}
-			else {//mand
+			else {//mandibular
 				for(int i=17;i<=32;i++) {
-					if(TcData.ListToothGraphics[i.ToString()].HideNumber) {
+					if(ListToothGraphics[i.ToString()].HideNumber) {
 						continue;
 					}
 					toothPos=ToothGraphic.GetDefaultOrthoXpos(i);//in mm.
 					if(ToothGraphic.IsRight(i.ToString())) {
-						toothPos+=(int)TcData.ListToothGraphics[i.ToString()].ShiftM;
+						toothPos+=(int)ListToothGraphics[i.ToString()].ShiftM;
 					}
 					else {
-						toothPos-=(int)TcData.ListToothGraphics[i.ToString()].ShiftM;
+						toothPos-=(int)ListToothGraphics[i.ToString()].ShiftM;
 					}
 					if(xPos>toothPos) {
 						delta=xPos-toothPos;
@@ -338,12 +366,29 @@ namespace SparksToothChart {
 					}
 					if(delta<closestDelta) {
 						closestDelta=delta;
-						closestTooth=i;
+						closestTooth=i.ToString();
 					}
 				}
 				return closestTooth;
-			}*/
-			return "1";
+			}
+		}
+
+		///<summary>When this is used from within a toothchart in response to mouse activity, it is typically followed by explicit drawing instructions that efficiently show the user which teeth are selected.  When this is used from the wrapper, it's typically followed by an Invalidate().</summary>
+		public void SetSelected(string tooth_id,bool setValue) {
+			if(setValue) {
+				if(!SelectedTeeth.Contains(tooth_id)) {
+					SelectedTeeth.Add(tooth_id);
+				}
+				//DrawNumber(tooth_id,true,false);
+			}
+			else {
+				if(SelectedTeeth.Contains(tooth_id)) {
+					SelectedTeeth.Remove(tooth_id);
+				}
+				//DrawNumber(tooth_id,false,false);
+			}
+			//RectangleF recMm=TcData.GetNumberRecMm(tooth_id,);
+			//Rectangle rec=TcData.ConvertRecToPix(recMm);
 		}
 
 	}

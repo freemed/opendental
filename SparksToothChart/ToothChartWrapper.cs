@@ -17,15 +17,10 @@ namespace SparksToothChart {
 		private ToothChartOpenGL toothChartOpenGL;
 		private ToothChartDirectX toothChartDirectX;
 		private int preferredPixelFormatNum;
-		private CursorTool cursorTool;
 		
 		///<summary></summary>
 		[Category("Action"),Description("Occurs when the mouse goes up ending a drawing segment.")]
 		public event ToothChartDrawEventHandler SegmentDrawn=null;
-		
-		private Color drawingColor;
-		//<summary>When the drawing feature was originally added, this was the size of the tooth chart.  This number must forever be preserved and drawings scaled to account for it.</summary>
-		//private Size originalDrawingSize=new Size(410,307);
 		private DrawingMode drawMode;
 		///<summary>This data object will hold nearly all information about what to draw.  It is not exposed publicly, but is instead acted on by methods.</summary>
 		private ToothChartData TcData;
@@ -34,9 +29,6 @@ namespace SparksToothChart {
 			TcData=new ToothChartData();
 			InitializeComponent();
 			ResetControls();
-			cursorTool=CursorTool.Pointer;
-		
-			drawingColor=Color.Black;
 		}
 
 		#region Properties
@@ -135,25 +127,25 @@ namespace SparksToothChart {
 
 		public CursorTool CursorTool{
 			get{
-				return cursorTool;
+				return TcData.CursorTool;
 			}
 			set{
-				cursorTool=value;
-				if(cursorTool==CursorTool.Pointer){
+				TcData.CursorTool=value;
+				if(TcData.CursorTool==CursorTool.Pointer) {
 					this.Cursor=Cursors.Default;
 				}
-				if(cursorTool==CursorTool.Pen){
+				if(TcData.CursorTool==CursorTool.Pen) {
 					this.Cursor=new Cursor(GetType(),"Pen.cur");
 				}
-				if(cursorTool==CursorTool.Eraser){
+				if(TcData.CursorTool==CursorTool.Eraser) {
 					this.Cursor=new Cursor(GetType(),"EraseCircle.cur");
 				}
-				if(cursorTool==CursorTool.ColorChanger){
+				if(TcData.CursorTool==CursorTool.ColorChanger) {
 					this.Cursor=new Cursor(GetType(),"ColorChanger.cur");
 				}
-				if(drawMode!=DrawingMode.Simple2D) {
-					toothChartOpenGL.CursorTool=value;
-				}
+				//if(drawMode!=DrawingMode.Simple2D) {
+				//	toothChartOpenGL.CursorTool=value;
+				//}
 			}
 		}
 
@@ -163,10 +155,10 @@ namespace SparksToothChart {
 			//	return drawingColor;
 			//}
 			set{
-				drawingColor=value;
-				if(drawMode!=DrawingMode.Simple2D) {
-					toothChartOpenGL.DrawingColor=value;
-				}
+				TcData.ColorDrawing=value;
+				//if(drawMode!=DrawingMode.Simple2D) {
+				//	toothChartOpenGL.DrawingColor=value;
+				//}
 			}
 		}
 		#endregion Properties
@@ -475,18 +467,8 @@ namespace SparksToothChart {
 		}
 
 		public void SetSelected(string tooth_id,bool setValue) {
-			if(setValue) {
-				//todo: should we check first to see if the tooth is already in SelectedTeeth?
-				TcData.SelectedTeeth.Add(tooth_id);
-				//DrawNumber(tooth_id,true,false);
-			}
-			else {
-				TcData.SelectedTeeth.Remove(tooth_id);
-				//DrawNumber(tooth_id,false,false);
-			}
-			//RectangleF recMm=TcData.GetNumberRecMm(tooth_id,);
-			//Rectangle rec=TcData.ConvertRecToPix(recMm);
-			Invalidate();
+			TcData.SetSelected(tooth_id,setValue);
+			//Invalidate();//Invalidation will happen internally.
 		}
 
 		///<summary></summary>

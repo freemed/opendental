@@ -15,12 +15,11 @@ namespace SparksToothChart {
 		public ToothChartData TcData;
 		private bool MouseIsDown;
 		///<summary>Mouse move causes this variable to be updated with the current tooth that the mouse is hovering over.</summary>
-		private int hotTooth;
+		private string hotTooth;
 		///<summary>The previous hotTooth.  If this is different than hotTooth, then mouse has just now moved to a new tooth.  Can be 0 to represent no previous.</summary>
-		private int hotToothOld;
+		private string hotToothOld;
 		///<summary>A list of points for a line currently being drawn.  Once the mouse is raised, this list gets cleared.</summary>
 		private List<Point> PointList;
-		
 
 		public ToothChart2D() {
 			InitializeComponent();
@@ -346,30 +345,27 @@ namespace SparksToothChart {
 		#region Mouse And Selections
 
 		protected override void OnMouseDown(MouseEventArgs e) {
-			/*
 			base.OnMouseDown(e);
 			MouseIsDown=true;
-			if(ListToothGraphics.Count==0){//still starting up?
+			if(TcData.ListToothGraphics.Count==0){//still starting up?
 				return;
 			}
-			if(cursorTool==CursorTool.Pointer){
-				if(drawMode==DrawingMode.Simple2D) {
-					int toothClicked=GetToothAtPoint(e.X,e.Y);
-					if(ALSelectedTeeth.Contains(toothClicked)) {
-						SetSelected(toothClicked,false);
-					}
-					else {
-						SetSelected(toothClicked,true);
-					}
+			if(TcData.CursorTool==CursorTool.Pointer){
+				string toothClicked=TcData.GetToothAtPoint(e.Location);
+				if(TcData.SelectedTeeth.Contains(toothClicked)) {
+					SetSelected(toothClicked,false);
+				}
+				else {
+					SetSelected(toothClicked,true);
 				}
 			}
-			else if(cursorTool==CursorTool.Pen){
+			else if(TcData.CursorTool==CursorTool.Pen) {
 				PointList.Add(new Point(e.X,e.Y));
 			}
-			else if(cursorTool==CursorTool.Eraser){
+			else if(TcData.CursorTool==CursorTool.Eraser) {
 				//do nothing
 			}
-			else if(cursorTool==CursorTool.ColorChanger){
+			else if(TcData.CursorTool==CursorTool.ColorChanger) {
 				//look for any lines near the "wand".
 				//since the line segments are so short, it's sufficient to check end points.
 				string[] xy;
@@ -379,8 +375,8 @@ namespace SparksToothChart {
 				float dist;//the distance between the point being tested and the center of the eraser circle.
 				float radius=2f;//by trial and error to achieve best feel.
 				//PointF eraserPt=new PointF(e.X+8.49f,e.Y+8.49f);
-				for(int i=0;i<DrawingSegmentList.Count;i++){
-					pointStr=DrawingSegmentList[i].DrawingSegment.Split(';');
+				for(int i=0;i<TcData.DrawingSegmentList.Count;i++) {
+					pointStr=TcData.DrawingSegmentList[i].DrawingSegment.Split(';');
 					for(int p=0;p<pointStr.Length;p++){
 						xy=pointStr[p].Split(',');
 						if(xy.Length==2){
@@ -388,41 +384,40 @@ namespace SparksToothChart {
 							y=float.Parse(xy[1]);
 							dist=(float)Math.Sqrt(Math.Pow(Math.Abs(x-e.X),2)+Math.Pow(Math.Abs(y-e.Y),2));
 							if(dist<=radius){//testing circle intersection here
-								OnSegmentDrawn(DrawingSegmentList[i].DrawingSegment);
-								DrawingSegmentList[i].ColorDraw=drawingColor;
+								OnSegmentDrawn(TcData.DrawingSegmentList[i].DrawingSegment);
+								TcData.DrawingSegmentList[i].ColorDraw=TcData.ColorDrawing;
 								Invalidate();
 								return;;
 							}
 						}
 					}
 				}	
-			}*/
+			}
 		}
 
 		protected override void OnMouseMove(MouseEventArgs e) {
-			/*
 			base.OnMouseMove(e);
-			if(ListToothGraphics.Count==0) {
+			if(TcData.ListToothGraphics.Count==0) {
 				return;
 			}
-			if(cursorTool==CursorTool.Pointer){
-				if(drawMode==DrawingMode.Simple2D) {
-					hotTooth=GetToothAtPoint(e.X,e.Y);
-					if(hotTooth==hotToothOld) {//mouse has not moved to another tooth
-						return;
+			if(TcData.CursorTool==CursorTool.Pointer) {
+				//if(drawMode==DrawingMode.Simple2D) {
+				hotTooth=TcData.GetToothAtPoint(e.Location);
+				if(hotTooth==hotToothOld) {//mouse has not moved to another tooth
+					return;
+				}
+				hotToothOld=hotTooth;
+				if(MouseIsDown) {//drag action
+					if(TcData.SelectedTeeth.Contains(hotTooth)) {
+						SetSelected(hotTooth,false);
 					}
-					hotToothOld=hotTooth;
-					if(MouseIsDown) {//drag action
-						if(ALSelectedTeeth.Contains(hotTooth)) {
-							SetSelected(hotTooth,false);
-						}
-						else {
-							SetSelected(hotTooth,true);
-						}
+					else {
+						SetSelected(hotTooth,true);
 					}
 				}
+				//}
 			}
-			else if(cursorTool==CursorTool.Pen){
+			else if(TcData.CursorTool==CursorTool.Pen) {
 				if(!MouseIsDown){
 					return;
 				}
@@ -430,13 +425,13 @@ namespace SparksToothChart {
 				//just add the last line segment instead of redrawing the whole thing.
 				Graphics g=this.CreateGraphics();
 				g.SmoothingMode=SmoothingMode.HighQuality;
-				Pen pen=new Pen(drawingColor,2f);
+				Pen pen=new Pen(TcData.ColorDrawing,2f);
 				int i=PointList.Count-1;
 				g.DrawLine(pen,PointList[i-1].X,PointList[i-1].Y,PointList[i].X,PointList[i].Y);
 				g.Dispose();
 				//Invalidate();
 			}
-			else if(cursorTool==CursorTool.Eraser){
+			else if(TcData.CursorTool==CursorTool.Eraser) {
 				if(!MouseIsDown){
 					return;
 				}
@@ -449,8 +444,8 @@ namespace SparksToothChart {
 				float dist;//the distance between the point being tested and the center of the eraser circle.
 				float radius=8f;//by trial and error to achieve best feel.
 				PointF eraserPt=new PointF(e.X+8.49f,e.Y+8.49f);
-				for(int i=0;i<DrawingSegmentList.Count;i++){
-					pointStr=DrawingSegmentList[i].DrawingSegment.Split(';');
+				for(int i=0;i<TcData.DrawingSegmentList.Count;i++) {
+					pointStr=TcData.DrawingSegmentList[i].DrawingSegment.Split(';');
 					for(int p=0;p<pointStr.Length;p++){
 						xy=pointStr[p].Split(',');
 						if(xy.Length==2){
@@ -458,8 +453,8 @@ namespace SparksToothChart {
 							y=float.Parse(xy[1]);
 							dist=(float)Math.Sqrt(Math.Pow(Math.Abs(x-eraserPt.X),2)+Math.Pow(Math.Abs(y-eraserPt.Y),2));
 							if(dist<=radius){//testing circle intersection here
-								OnSegmentDrawn(DrawingSegmentList[i].DrawingSegment);//triggers a deletion from db.
-								DrawingSegmentList.RemoveAt(i);
+								OnSegmentDrawn(TcData.DrawingSegmentList[i].DrawingSegment);//triggers a deletion from db.
+								TcData.DrawingSegmentList.RemoveAt(i);
 								Invalidate();
 								return;;
 							}
@@ -467,16 +462,15 @@ namespace SparksToothChart {
 					}
 				}	
 			}
-			else if(cursorTool==CursorTool.ColorChanger){
+			else if(TcData.CursorTool==CursorTool.ColorChanger) {
 				//do nothing
-			}*/
+			}
 		}
 
 		protected override void OnMouseUp(MouseEventArgs e) {
 			base.OnMouseUp(e);
-			/*
 			MouseIsDown=false;
-			if(cursorTool==CursorTool.Pen) {
+			if(TcData.CursorTool==CursorTool.Pen) {
 				string drawingSegment="";
 				for(int i=0;i<PointList.Count;i++) {
 					if(i>0) {
@@ -489,12 +483,12 @@ namespace SparksToothChart {
 				PointList=new List<Point>();
 				//Invalidate();//?
 			}
-			else if(cursorTool==CursorTool.Eraser) {
+			else if(TcData.CursorTool==CursorTool.Eraser) {
 				//do nothing
 			}
-			else if(cursorTool==CursorTool.ColorChanger) {
+			else if(TcData.CursorTool==CursorTool.ColorChanger) {
 				//do nothing
-			}*/
+			}
 		}
 
 		///<summary></summary>

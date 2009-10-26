@@ -54,7 +54,6 @@ namespace SparksToothChart {
 		private bool suspendRendering;
 		private int selectedPixelFormat;
 		private List<ToothInitial> DrawingSegmentList;
-		public CursorTool CursorTool;
 		///<summary>A list of points for a line currently being drawn.  Once the mouse is raised, this list gets cleared.</summary>
 		private List<Point> PointList;
 		///<summary></summary>
@@ -727,7 +726,7 @@ namespace SparksToothChart {
 				Gl.glBegin(Gl.GL_LINE_STRIP);
 				for(int i=0;i<points.Count;i++){
 					//if we set 0,0 to center, then this is where we would convert it back.
-					pointMm=TcData.PixToMm(new Point(points[i].X,points[i].Y),Width,Height);
+					pointMm=TcData.PixToMm(new Point(points[i].X,points[i].Y));
 					Gl.glVertex3f(pointMm.X,pointMm.Y,0);
 				}
 				Gl.glEnd();
@@ -738,7 +737,7 @@ namespace SparksToothChart {
 					if(i==0 || i==points.Count-1){
 						continue;
 					}
-					pointMm=TcData.PixToMm(new Point(points[i].X,points[i].Y),Width,Height);
+					pointMm=TcData.PixToMm(new Point(points[i].X,points[i].Y));
 					Gl.glVertex3f(pointMm.X,pointMm.Y,0);
 				}
 				Gl.glEnd();
@@ -1052,8 +1051,8 @@ namespace SparksToothChart {
 		protected override void OnMouseDown(MouseEventArgs e) {
 			base.OnMouseDown(e);
 			MouseIsDown=true;
-			if(CursorTool==CursorTool.Pointer){
-				string toothClicked=TcData.GetToothAtPoint(e.X,e.Y);
+			if(TcData.CursorTool==CursorTool.Pointer) {
+				string toothClicked=TcData.GetToothAtPoint(e.Location);
 				//MessageBox.Show(toothClicked.ToString());
 				if(TcData.SelectedTeeth.Contains(toothClicked)) {
 					SetSelected(toothClicked,false);
@@ -1062,13 +1061,13 @@ namespace SparksToothChart {
 					SetSelected(toothClicked,true);
 				}
 			}
-			else if(CursorTool==CursorTool.Pen){
+			else if(TcData.CursorTool==CursorTool.Pen) {
 				PointList.Add(new Point(e.X,e.Y));
 			}
-			else if(CursorTool==CursorTool.Eraser){
+			else if(TcData.CursorTool==CursorTool.Eraser) {
 				//do nothing
 			}
-			else if(CursorTool==CursorTool.ColorChanger){
+			else if(TcData.CursorTool==CursorTool.ColorChanger) {
 				//look for any lines near the "wand".
 				//since the line segments are so short, it's sufficient to check end points.
 				string[] xy;
@@ -1099,8 +1098,8 @@ namespace SparksToothChart {
 
 		protected override void OnMouseMove(MouseEventArgs e) {
 			base.OnMouseMove(e);
-			if(CursorTool==CursorTool.Pointer){
-				hotTooth=TcData.GetToothAtPoint(e.X,e.Y);
+			if(TcData.CursorTool==CursorTool.Pointer) {
+				hotTooth=TcData.GetToothAtPoint(e.Location);
 				if(hotTooth==hotToothOld) {//mouse has not moved to another tooth
 					return;
 				}
@@ -1114,7 +1113,7 @@ namespace SparksToothChart {
 					}
 				}
 			}
-			else if(CursorTool==CursorTool.Pen){
+			else if(TcData.CursorTool==CursorTool.Pen) {
 				if(!MouseIsDown){
 					return;
 				}
@@ -1133,15 +1132,15 @@ namespace SparksToothChart {
 				int i=PointList.Count-1;
 				Gl.glBegin(Gl.GL_LINE_STRIP);
 				//if we set 0,0 to center, then this is where we would convert it back.
-				PointF pointMm=TcData.PixToMm(PointList[i-1],Width,Height);
+				PointF pointMm=TcData.PixToMm(PointList[i-1]);
 				Gl.glVertex3f(pointMm.X,pointMm.Y,0);
-				pointMm=TcData.PixToMm(PointList[i],Width,Height);
+				pointMm=TcData.PixToMm(PointList[i]);
 				Gl.glVertex3f(pointMm.X,pointMm.Y,0);
 				Gl.glEnd();
 				Gl.glPopMatrix();
 				Gl.glFlush();
 			}
-			else if(CursorTool==CursorTool.Eraser){
+			else if(TcData.CursorTool==CursorTool.Eraser) {
 				if(!MouseIsDown){
 					return;
 				}
@@ -1172,7 +1171,7 @@ namespace SparksToothChart {
 					}
 				}	
 			}
-			else if(CursorTool==CursorTool.ColorChanger){
+			else if(TcData.CursorTool==CursorTool.ColorChanger) {
 				//do nothing	
 			}
 		}
@@ -1180,7 +1179,7 @@ namespace SparksToothChart {
 		protected override void OnMouseUp(MouseEventArgs e) {
 			base.OnMouseUp(e);
 			MouseIsDown=false;
-			if(CursorTool==CursorTool.Pen){
+			if(TcData.CursorTool==CursorTool.Pen) {
 				string drawingSegment="";
 				for(int i=0;i<PointList.Count;i++){
 					if(i>0){
@@ -1193,10 +1192,10 @@ namespace SparksToothChart {
 				PointList=new List<Point>();
 				//Invalidate();//?
 			}
-			else if(CursorTool==CursorTool.Eraser){
+			else if(TcData.CursorTool==CursorTool.Eraser) {
 				//do nothing
 			}
-			else if(CursorTool==CursorTool.ColorChanger){
+			else if(TcData.CursorTool==CursorTool.ColorChanger) {
 				//do nothing
 			}
 		}
