@@ -802,7 +802,7 @@ namespace SparksToothChart {
 					(float)TcData.ColorTextHighlight.R/255f,
 					(float)TcData.ColorTextHighlight.G/255f,
 					(float)TcData.ColorTextHighlight.B/255f);
-				Gl.glRasterPos3f(recMm.X+2f*toMm,recMm.Y+2f*toMm,15f);
+				//Gl.glRasterPos3f(recMm.X+2f*toMm,recMm.Y+2f*toMm,15f);
 			} 
 			else{
 				Gl.glColor3f(
@@ -819,7 +819,7 @@ namespace SparksToothChart {
 					(float)TcData.ColorText.R/255f,
 					(float)TcData.ColorText.G/255f,
 					(float)TcData.ColorText.B/255f);
-				Gl.glRasterPos3f(recMm.X+2f*toMm,recMm.Y+2f*toMm,15f);
+				//Gl.glRasterPos3f(recMm.X+2f*toMm,recMm.Y+2f*toMm,15f);
 			}
 			if(TcData.ListToothGraphics[tooth_id].HideNumber){//If number is hidden.
 				//do not print string

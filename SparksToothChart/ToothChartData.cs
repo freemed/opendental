@@ -123,12 +123,14 @@ namespace SparksToothChart {
 			}
 			//float toMm=(float)WidthProjection/(float)widthControl;//mm/pix
 			float toMm=1f/ScaleMmToPix;
-			RectangleF recMm=new RectangleF(xPos-2f*toMm,yPos-2f*toMm,strWidthMm+3f*toMm,12f*toMm);//this rec has origin at LL
+			RectangleF recMm=new RectangleF(xPos-0f*toMm,yPos-2f*toMm,strWidthMm-1f*toMm,12f*toMm);//this rec has origin at LL
 			return recMm;
 		}
 
 		///<summary>Used by 2D tooth chart to get the rectangle in pixels surrounding a tooth number.  Used to draw the box and the number inside it.</summary>
-		public RectangleF GetNumberRecPix(string tooth_id,Graphics g) {
+		public Rectangle GetNumberRecPix(string tooth_id,Graphics g) {
+			return ConvertRecToPix(GetNumberRecMm(tooth_id,g));
+			/*
 			float xPos=GetTransXpix(tooth_id);
 			float yPos=sizeControl.Height/2f;
 			if(ToothGraphic.IsMaxillary(tooth_id)) {
@@ -152,7 +154,7 @@ namespace SparksToothChart {
 			float strWidth=g.MeasureString(displayNum,Font).Width;
 			xPos-=strWidth/2f;
 			RectangleF rec=new RectangleF(xPos-1,yPos-1,strWidth,12);//this rec has origin at UL
-			return rec;
+			return rec;*/
 		}
 
 		///<summary>Pri or perm tooth numbers are valid.  Only locations of perm teeth are stored.  This also converts mm to screen pixels.  This is currently only used in 2D mode.</summary>
@@ -239,26 +241,24 @@ namespace SparksToothChart {
 			return new PointF(mmX,mmY);
 		}
 
-		///<summary>Needs an overhaul. First, use GetNumberRecMm to get the rectangle surrounding a tooth num.  The, use this to convert it to control coords.</summary>
-		public Rectangle ConvertRecToPix(RectangleF recMm) {
-			//float toMm=(float)WidthProjection/(float)widthControl;//mm/pix
-			//this.ScaleMmToPix
-			//Rectangle recPix=new Rectangle((int)(widthControl/2+recMm.X/toMm),(int)(heightControl/2-recMm.Y/toMm-recMm.Height/toMm),
-			//	(int)(recMm.Width/toMm),(int)(recMm.Height/toMm));
-			/*
-			Rectangle recPix=new Rectangle(
-				(int)(sizeControl.Width/2+recMm.X*ScaleMmToPix),
-				(int)(sizeControl.Height/2-recMm.Y*ScaleMmToPix-recMm.Height*ScaleMmToPix),
-				(int)(recMm.Width*ScaleMmToPix),
-				(int)(recMm.Height*ScaleMmToPix)
-				);
-			Rectangle recPix=new Rectangle(
-				(int)(RectTarget.X   sizeControl.Width/2+recMm.X*ScaleMmToPix),
-				(int)(sizeControl.Height/2-recMm.Y*ScaleMmToPix-recMm.Height*ScaleMmToPix),
-				(int)(recMm.Width*ScaleMmToPix),
-				(int)(recMm.Height*ScaleMmToPix)
-				);*/
-			return new Rectangle();//recPix;
+		/*
+		///<summary>The recPix has origin at UL.  The result has origin at LL.</summary>
+		private RectangleF ConvertRecToMm(RectangleF recPix) {
+			float w=recPix.Width/ScaleMmToPix;
+			float h=recPix.Height/ScaleMmToPix;
+			float x=(recPix.X-(float)(sizeControl.Width/2))/ScaleMmToPix;
+			float y=(recPix.Bottom-(float)(sizeControl.Height/2))/ScaleMmToPix;
+			return new RectangleF(x,y,w,h);			
+		}*/
+
+
+		///<summary>The recMm has origin at LL.  The result has origin at UL and is in control coords.</summary>
+		private Rectangle ConvertRecToPix(RectangleF recMm) {
+			int w=(int)(recMm.Width*ScaleMmToPix)+1;
+			int h=(int)(recMm.Height*ScaleMmToPix);
+			int x=(int)(recMm.X*ScaleMmToPix+sizeControl.Width/2);
+			int y=(int)((sizeControl.Height/2-recMm.Y*ScaleMmToPix)-h);
+			return new Rectangle(x,y,w,h);		
 		}
 
 		/*

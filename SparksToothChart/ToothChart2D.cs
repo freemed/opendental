@@ -292,7 +292,7 @@ namespace SparksToothChart {
 			//string displayNum=OpenDentBusiness.Tooth.GetToothLabelGraphic(tooth_id);
 			string displayNum=tooth_id;
 			float toMm=1f/TcData.ScaleMmToPix;
-			RectangleF rec=TcData.GetNumberRecPix(tooth_id,g);
+			Rectangle rec=TcData.GetNumberRecPix(tooth_id,g);
 			//Rectangle recPix=TcData.ConvertRecToPix(recMm);
 			if(isSelected) {
 				g.FillRectangle(new SolidBrush(TcData.ColorBackHighlight),rec);
