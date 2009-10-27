@@ -12,9 +12,9 @@ namespace SparksToothChart {
 		protected override void Dispose(bool disposing) {
 			if(disposing&&(components!=null)) {
 				components.Dispose();
-				if(g!=null) {
-					g.Dispose();
-				}
+			}
+			if(g!=null) {
+				g.Dispose();
 			}
 			base.Dispose(disposing);
 		}

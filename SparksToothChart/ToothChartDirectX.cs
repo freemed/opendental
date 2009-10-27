@@ -46,7 +46,7 @@ namespace SparksToothChart {
 					group.PrepareForDirectX(device,tooth.VertexNormals);
 				}
 			}
-			g=Graphics.FromHwnd(this.Handle);
+			g=this.CreateGraphics();// Graphics.FromHwnd(this.Handle);
 		}
 
 		///<summary>TODO: Handle the situation when there are suboptimal graphics cards.</summary>

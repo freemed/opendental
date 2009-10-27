@@ -62,6 +62,8 @@ namespace SparksToothChart {
 		public Color DrawingColor;
 		///<summary>This is a reference to the TcData object that's at the wrapper level.</summary>
 		public ToothChartData TcData;
+		///<summary>GDI+ handle to this control. Used for line drawing and font measurement.</summary>
+		private Graphics g=null;
 
 
 		///<summary>Specify the hardware mode to create the tooth chart with. Set hardwareMode=true to try for hardware accelerated graphics, and set hardwareMode=false to try and get software graphics.</summary>
@@ -82,6 +84,11 @@ namespace SparksToothChart {
 																	//This should prevent a glCopyPixels() problem in
 																	//Gdi.SwapBuffersFast() on ATI graphics cards.
 			//ResetTeeth();
+		}
+
+		public void InitializeGraphics() {
+			MakeDisplayLists();
+			g=this.CreateGraphics();
 		}
 
 		protected override void OnResize(EventArgs e) {
@@ -777,8 +784,8 @@ namespace SparksToothChart {
 			string displayNum=tooth_id;
 			float toMm=1f/TcData.ScaleMmToPix;
 			//float toMm=(float)WidthProjection/(float)Width;//mm/pix, a ratio that is used for conversions below. Fix this.
-			float strWidthMm=MeasureStringMm(displayNum);
-			RectangleF recMm=TcData.GetNumberRecMm(tooth_id,displayNum,strWidthMm);
+			//float strWidthMm=MeasureStringMm(displayNum);
+			RectangleF recMm=TcData.GetNumberRecMm(tooth_id,g);//strWidthMm);
 			//Rectangle recPix=TcData.ConvertRecToPix(recMm);
 			if(isSelected){
 				Gl.glColor3f(
@@ -830,6 +837,7 @@ namespace SparksToothChart {
 			Gl.glFlush();
 		}
 
+		/*
 		///<summary>Return value is in tooth coordinates, not pixels.  I left this in OpenGL rather than moving it to ToothChartData because the measurement strategy is very specific to the raster font defined here.</summary>
 		private float MeasureStringPix(string text){
 			float retVal=0;
@@ -839,12 +847,13 @@ namespace SparksToothChart {
 			return retVal;
 		}
 
+		
 		/// <summary>  I left this in OpenGL rather than moving it to ToothChartData because the measurement strategy is very specific to the raster font defined here.</summary>
 		private float MeasureStringMm(string text){
 			//return MeasureStringPix(text)/(float)Width*(float)WidthProjection;
 			return MeasureStringPix(text)/TcData.ScaleMmToPix;
 
-		} 
+		}*/ 
 
 		private void MakeRasterFont() {
 			fontsymbols = new string[255][];

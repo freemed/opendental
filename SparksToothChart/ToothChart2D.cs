@@ -60,7 +60,7 @@ namespace SparksToothChart {
 		///<summary>Only called when in simple graphical mode.</summary>
 		private void DrawFacialView(ToothGraphic toothGraphic,Graphics g) {
 			float x,y;
-			x=TcData.GetTransXpix(toothGraphic.ToothID,Width);
+			x=TcData.GetTransXpix(toothGraphic.ToothID);
 			y=TcData.GetTransYfacialPix(toothGraphic.ToothID);
 			if(toothGraphic.Visible
 				|| (toothGraphic.IsCrown && toothGraphic.IsImplant)
@@ -110,7 +110,7 @@ namespace SparksToothChart {
 		private void DrawOcclusalView(ToothGraphic toothGraphic,Graphics g) {
 			//now the occlusal surface. Absolute pixels instead of mm relative to center.
 			float x,y;
-			x=TcData.GetTransXpix(toothGraphic.ToothID,Width);
+			x=TcData.GetTransXpix(toothGraphic.ToothID);
 			y=TcData.GetTransYocclusalPix(toothGraphic.ToothID,Height);
 			if(toothGraphic.Visible//might not be visible if an implant
 				|| (toothGraphic.IsCrown && toothGraphic.IsImplant)//a crown on an implant will paint
@@ -135,7 +135,7 @@ namespace SparksToothChart {
 				if(!group.Visible) {
 					continue;
 				}
-				x=TcData.GetTransXpix(toothGraphic.ToothID,Width);
+				x=TcData.GetTransXpix(toothGraphic.ToothID);
 				y=TcData.GetTransYocclusalPix(toothGraphic.ToothID,Height);
 				float sqB=4;//half the size of the central sqare. B for Big.
 				float cirB=9.5f;//radius of outer circle
@@ -292,7 +292,7 @@ namespace SparksToothChart {
 			//string displayNum=OpenDentBusiness.Tooth.GetToothLabelGraphic(tooth_id);
 			string displayNum=tooth_id;
 			float toMm=1f/TcData.ScaleMmToPix;
-			RectangleF rec=TcData.GetNumberRecPix(tooth_id,g,Font);
+			RectangleF rec=TcData.GetNumberRecPix(tooth_id,g);
 			//Rectangle recPix=TcData.ConvertRecToPix(recMm);
 			if(isSelected) {
 				g.FillRectangle(new SolidBrush(TcData.ColorBackHighlight),rec);
@@ -515,7 +515,7 @@ namespace SparksToothChart {
 				TcData.SelectedTeeth.Remove(tooth_id);
 				DrawNumber(tooth_id,false,false,g);
 			}
-			RectangleF recF=TcData.GetNumberRecPix(tooth_id,g,Font);
+			RectangleF recF=TcData.GetNumberRecPix(tooth_id,g);
 			Rectangle rec=new Rectangle((int)recF.X,(int)recF.Y,(int)recF.Width,(int)recF.Height);
 			Invalidate(rec);
 			Application.DoEvents();

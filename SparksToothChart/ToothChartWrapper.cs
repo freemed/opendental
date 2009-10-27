@@ -224,7 +224,7 @@ namespace SparksToothChart {
 				toothChartOpenGL.SuspendLayout();
 				this.Controls.Add(toothChartOpenGL);
 				ResetTeeth();
-				toothChartOpenGL.MakeDisplayLists();
+				toothChartOpenGL.InitializeGraphics();//MakeDisplayLists();
 				toothChartOpenGL.ResumeLayout();
 			}
 		}

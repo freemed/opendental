@@ -35,6 +35,7 @@ namespace SparksToothChart {
 		public CursorTool CursorTool;
 		///<summary>The color being used for freehand drawing.</summary>
 		public Color ColorDrawing;
+		public Font Font;
 
 		public ToothChartData() {
 			ListToothGraphics=new ToothGraphicCollection();
@@ -47,6 +48,7 @@ namespace SparksToothChart {
 			DrawingSegmentList=new List<ToothInitial>();
 			CursorTool=CursorTool.Pointer;
 			ColorDrawing=Color.Black;
+			Font=new Font(FontFamily.GenericSansSerif,8.25f);
 		}
 
 		///<summary>This gets set whenever the wrapper resizes.  It's the size of the control in screen pixels.</summary>
@@ -85,7 +87,7 @@ namespace SparksToothChart {
 		}
 
 		///<summary>Gets the rectangle surrounding a tooth number.  Used to draw the box and the number inside it.  Includes any mesial shifts.</summary>
-		public RectangleF GetNumberRecMm(string tooth_id,string displayNum,float strWidthMm) {
+		public RectangleF GetNumberRecMm(string tooth_id,Graphics g){
 			float xPos=0;
 			float yPos=0;
 			if(ToothGraphic.IsMaxillary(tooth_id)) {
@@ -109,6 +111,8 @@ namespace SparksToothChart {
 			//string displayNum=OpenDentBusiness.Tooth.GetToothLabelGraphic(tooth_id);
 			//string displayNum=tooth_id;
 			//float strWidth=MeasureStringMm(displayNum);
+			string displayNum=tooth_id;
+			float strWidthMm=g.MeasureString(displayNum,Font).Width/ScaleMmToPix;
 			xPos-=strWidthMm/2f;
 			//only use the ShiftM portion of the user translation
 			if(ToothGraphic.IsRight(tooth_id)) {
@@ -124,8 +128,8 @@ namespace SparksToothChart {
 		}
 
 		///<summary>Used by 2D tooth chart to get the rectangle in pixels surrounding a tooth number.  Used to draw the box and the number inside it.</summary>
-		public RectangleF GetNumberRecPix(string tooth_id,Graphics g,Font font) {
-			float xPos=GetTransXpix(tooth_id,sizeControl.Width);
+		public RectangleF GetNumberRecPix(string tooth_id,Graphics g) {
+			float xPos=GetTransXpix(tooth_id);
 			float yPos=sizeControl.Height/2f;
 			if(ToothGraphic.IsMaxillary(tooth_id)) {
 				if(Tooth.IsPrimary(tooth_id)) {
@@ -145,14 +149,14 @@ namespace SparksToothChart {
 			}
 			string displayNum =tooth_id;
 			//displayNum =OpenDentBusiness.Tooth.GetToothLabel(tooth_id);
-			float strWidth=g.MeasureString(displayNum,font).Width;
+			float strWidth=g.MeasureString(displayNum,Font).Width;
 			xPos-=strWidth/2f;
 			RectangleF rec=new RectangleF(xPos-1,yPos-1,strWidth,12);//this rec has origin at UL
 			return rec;
 		}
 
 		///<summary>Pri or perm tooth numbers are valid.  Only locations of perm teeth are stored.  This also converts mm to screen pixels.  This is currently only used in 2D mode.</summary>
-		public float GetTransXpix(string tooth_id,int widthControl) {
+		public float GetTransXpix(string tooth_id) {
 			int toothInt=ToothGraphic.IdToInt(tooth_id);
 			if(toothInt==-1) {
 				throw new ApplicationException("Invalid tooth number: "+tooth_id);//only for debugging
@@ -320,18 +324,68 @@ namespace SparksToothChart {
 			//float xPos=(float)((float)(x-Width/2)*WidthProjection/(float)Width);//in mm instead of screen coordinates
 			float xPos=PixToMm(point).X;
 			float yPos=PixToMm(point).Y;
-			//Since chart is always centered vertically, we can just use controlH.
+			string perm_id;
+			bool isPriArea;//this point is where a primary letter might sometimes show
+			bool priShowing;
+			bool permShowing;
+			bool usePri;//otherwise, use perm
+			string tooth_id;
 			if(yPos>0) {//maxillary
 				for(int i=1;i<=16;i++) {
-					if(ListToothGraphics[i.ToString()].HideNumber) {
+					perm_id=i.ToString();
+					if(i>=4 && i<=13){
+						if(yPos>5.1f){
+							isPriArea=true;
+						}
+						else{
+							isPriArea=false;
+						}
+					}
+					else{
+						isPriArea=false;
+					}
+					//Determine which numbers are showing
+					priShowing=false;
+					if(ListToothGraphics[perm_id].ShowPrimaryLetter
+						&& !ListToothGraphics[Tooth.PermToPri(perm_id)].HideNumber)
+					{
+						priShowing=true;
+					}
+					permShowing=true;
+					if(ListToothGraphics[perm_id].HideNumber) {
+						permShowing=false;
+					}
+					if(!priShowing && !permShowing) {//if neither # showing
 						continue;
 					}
-					toothPos=ToothGraphic.GetDefaultOrthoXpos(i);
-					if(ToothGraphic.IsRight(i.ToString())) {
-						toothPos+=(int)ListToothGraphics[i.ToString()].ShiftM;//*(float)Width/WidthProjection);
+					if(priShowing) {
+						if(permShowing) {//both showing
+							if(isPriArea) {
+								usePri=true;
+							}
+							else {
+								usePri=false;
+							}
+						}
+						else {
+							usePri=true;
+						}
+					}
+					else {//only perm showing
+						usePri=false;
+					}
+					if(usePri) {
+						tooth_id=Tooth.PermToPri(perm_id);
 					}
 					else {
-						toothPos-=(int)ListToothGraphics[i.ToString()].ShiftM;//*(float)Width/WidthProjection);
+						tooth_id=perm_id;
+					}
+					toothPos=ToothGraphic.GetDefaultOrthoXpos(i);
+					if(ToothGraphic.IsRight(perm_id)) {
+						toothPos+=(int)ListToothGraphics[tooth_id].ShiftM;
+					}
+					else {
+						toothPos-=(int)ListToothGraphics[tooth_id].ShiftM;
 					}
 					if(xPos>toothPos) {
 						delta=xPos-toothPos;
@@ -341,22 +395,66 @@ namespace SparksToothChart {
 					}
 					if(delta<closestDelta) {
 						closestDelta=delta;
-						closestTooth=i.ToString();
+						closestTooth=tooth_id;
 					}
 				}
 				return closestTooth;
 			}
 			else {//mandibular
 				for(int i=17;i<=32;i++) {
-					if(ListToothGraphics[i.ToString()].HideNumber) {
-						continue;
-					}
-					toothPos=ToothGraphic.GetDefaultOrthoXpos(i);//in mm.
-					if(ToothGraphic.IsRight(i.ToString())) {
-						toothPos+=(int)ListToothGraphics[i.ToString()].ShiftM;
+					perm_id=i.ToString();
+					if(i>=20 && i<=29) {
+						if(yPos<-4.4f) {
+							isPriArea=true;
+						}
+						else {
+							isPriArea=false;
+						}
 					}
 					else {
-						toothPos-=(int)ListToothGraphics[i.ToString()].ShiftM;
+						isPriArea=false;
+					}
+					//Determine which numbers are showing
+					priShowing=false;
+					if(ListToothGraphics[perm_id].ShowPrimaryLetter
+						&& !ListToothGraphics[Tooth.PermToPri(perm_id)].HideNumber) {
+						priShowing=true;
+					}
+					permShowing=true;
+					if(ListToothGraphics[perm_id].HideNumber) {
+						permShowing=false;
+					}
+					if(!priShowing && !permShowing) {//if neither # showing
+						continue;
+					}
+					if(priShowing) {
+						if(permShowing) {//both showing
+							if(isPriArea) {
+								usePri=true;
+							}
+							else {
+								usePri=false;
+							}
+						}
+						else {
+							usePri=true;
+						}
+					}
+					else {//only perm showing
+						usePri=false;
+					}
+					if(usePri) {
+						tooth_id=Tooth.PermToPri(perm_id);
+					}
+					else {
+						tooth_id=perm_id;
+					}
+					toothPos=ToothGraphic.GetDefaultOrthoXpos(i);
+					if(ToothGraphic.IsRight(perm_id)) {
+						toothPos+=(int)ListToothGraphics[tooth_id].ShiftM;
+					}
+					else {
+						toothPos-=(int)ListToothGraphics[tooth_id].ShiftM;
 					}
 					if(xPos>toothPos) {
 						delta=xPos-toothPos;
@@ -366,7 +464,7 @@ namespace SparksToothChart {
 					}
 					if(delta<closestDelta) {
 						closestDelta=delta;
-						closestTooth=i.ToString();
+						closestTooth=tooth_id;
 					}
 				}
 				return closestTooth;

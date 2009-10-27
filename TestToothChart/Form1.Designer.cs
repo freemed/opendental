@@ -59,14 +59,15 @@
 			this.butMissingHiddenComplex = new System.Windows.Forms.Button();
 			this.groupBox6 = new System.Windows.Forms.GroupBox();
 			this.groupBox7 = new System.Windows.Forms.GroupBox();
+			this.butBigX = new System.Windows.Forms.Button();
+			this.butRCT = new System.Windows.Forms.Button();
 			this.butFillings = new System.Windows.Forms.Button();
 			this.label4 = new System.Windows.Forms.Label();
 			this.groupBox8 = new System.Windows.Forms.GroupBox();
-			this.butRCT = new System.Windows.Forms.Button();
-			this.butBigX = new System.Windows.Forms.Button();
 			this.toothChartDirectX = new SparksToothChart.ToothChartWrapper();
 			this.toothChartOpenGL = new SparksToothChart.ToothChartWrapper();
 			this.toothChart2D = new SparksToothChart.ToothChartWrapper();
+			this.label5 = new System.Windows.Forms.Label();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupBox3.SuspendLayout();
@@ -332,21 +333,22 @@
 			// 
 			// groupBox5
 			// 
+			this.groupBox5.Controls.Add(this.label5);
 			this.groupBox5.Controls.Add(this.butSizeWide);
 			this.groupBox5.Controls.Add(this.butSizeTall);
 			this.groupBox5.Controls.Add(this.butSizeNormal);
-			this.groupBox5.Location = new System.Drawing.Point(399,361);
+			this.groupBox5.Location = new System.Drawing.Point(350,361);
 			this.groupBox5.Name = "groupBox5";
-			this.groupBox5.Size = new System.Drawing.Size(113,99);
+			this.groupBox5.Size = new System.Drawing.Size(162,149);
 			this.groupBox5.TabIndex = 212;
 			this.groupBox5.TabStop = false;
 			this.groupBox5.Text = "Resize and Scale";
 			// 
 			// butSizeWide
 			// 
-			this.butSizeWide.Location = new System.Drawing.Point(9,68);
+			this.butSizeWide.Location = new System.Drawing.Point(87,43);
 			this.butSizeWide.Name = "butSizeWide";
-			this.butSizeWide.Size = new System.Drawing.Size(75,23);
+			this.butSizeWide.Size = new System.Drawing.Size(69,23);
 			this.butSizeWide.TabIndex = 206;
 			this.butSizeWide.Text = "Wide";
 			this.butSizeWide.UseVisualStyleBackColor = true;
@@ -354,9 +356,9 @@
 			// 
 			// butSizeTall
 			// 
-			this.butSizeTall.Location = new System.Drawing.Point(9,43);
+			this.butSizeTall.Location = new System.Drawing.Point(87,18);
 			this.butSizeTall.Name = "butSizeTall";
-			this.butSizeTall.Size = new System.Drawing.Size(75,23);
+			this.butSizeTall.Size = new System.Drawing.Size(69,23);
 			this.butSizeTall.TabIndex = 205;
 			this.butSizeTall.Text = "Tall";
 			this.butSizeTall.UseVisualStyleBackColor = true;
@@ -426,6 +428,26 @@
 			this.groupBox7.TabStop = false;
 			this.groupBox7.Text = "Restorations";
 			// 
+			// butBigX
+			// 
+			this.butBigX.Location = new System.Drawing.Point(10,68);
+			this.butBigX.Name = "butBigX";
+			this.butBigX.Size = new System.Drawing.Size(88,23);
+			this.butBigX.TabIndex = 209;
+			this.butBigX.Text = "Big X";
+			this.butBigX.UseVisualStyleBackColor = true;
+			this.butBigX.Click += new System.EventHandler(this.butBigX_Click);
+			// 
+			// butRCT
+			// 
+			this.butRCT.Location = new System.Drawing.Point(10,43);
+			this.butRCT.Name = "butRCT";
+			this.butRCT.Size = new System.Drawing.Size(88,23);
+			this.butRCT.TabIndex = 208;
+			this.butRCT.Text = "RCT/BU";
+			this.butRCT.UseVisualStyleBackColor = true;
+			this.butRCT.Click += new System.EventHandler(this.butRCT_Click);
+			// 
 			// butFillings
 			// 
 			this.butFillings.Location = new System.Drawing.Point(10,18);
@@ -453,26 +475,6 @@
 			this.groupBox8.TabIndex = 218;
 			this.groupBox8.TabStop = false;
 			this.groupBox8.Text = "Mouse clicks";
-			// 
-			// butRCT
-			// 
-			this.butRCT.Location = new System.Drawing.Point(10,43);
-			this.butRCT.Name = "butRCT";
-			this.butRCT.Size = new System.Drawing.Size(88,23);
-			this.butRCT.TabIndex = 208;
-			this.butRCT.Text = "RCT/BU";
-			this.butRCT.UseVisualStyleBackColor = true;
-			this.butRCT.Click += new System.EventHandler(this.butRCT_Click);
-			// 
-			// butBigX
-			// 
-			this.butBigX.Location = new System.Drawing.Point(10,68);
-			this.butBigX.Name = "butBigX";
-			this.butBigX.Size = new System.Drawing.Size(88,23);
-			this.butBigX.TabIndex = 209;
-			this.butBigX.Text = "Big X";
-			this.butBigX.UseVisualStyleBackColor = true;
-			this.butBigX.Click += new System.EventHandler(this.butBigX_Click);
 			// 
 			// toothChartDirectX
 			// 
@@ -515,6 +517,15 @@
 			this.toothChart2D.Size = new System.Drawing.Size(410,307);
 			this.toothChart2D.TabIndex = 195;
 			this.toothChart2D.UseHardware = false;
+			// 
+			// label5
+			// 
+			this.label5.Location = new System.Drawing.Point(6,71);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(151,71);
+			this.label5.TabIndex = 207;
+			this.label5.Text = "This is acutally a quick test of how it will behave when much larger.  Because no" +
+    "body will ever use it this small, it\'s OK that the numbers are too big.";
 			// 
 			// Form1
 			// 
@@ -598,6 +609,7 @@
 		private System.Windows.Forms.GroupBox groupBox8;
 		private System.Windows.Forms.Button butRCT;
 		private System.Windows.Forms.Button butBigX;
+		private System.Windows.Forms.Label label5;
 	}
 }
 
