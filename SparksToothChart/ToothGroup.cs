@@ -48,7 +48,7 @@ namespace SparksToothChart {
 				}
 			}
 			//Prepare the verticies into a vertex buffer.
-			CustomVertex.PositionNormalColored[] verts=new CustomVertex.PositionNormalColored[numVerts];
+			CustomVertex.PositionNormal[] verts=new CustomVertex.PositionNormal[numVerts];
 			for(int i=0;i<indexMap.Length;i++){
 				if(indexMap[i]>=0){
 					verts[indexMap[i]].X=VertexNormals[i].Vertex.X;
@@ -57,11 +57,10 @@ namespace SparksToothChart {
 					verts[indexMap[i]].Nx=VertexNormals[i].Normal.X;
 					verts[indexMap[i]].Ny=VertexNormals[i].Normal.Y;
 					verts[indexMap[i]].Nz=VertexNormals[i].Normal.Z;
-					verts[indexMap[i]].Color=Color.FromArgb(255,PaintColor.R,PaintColor.G,PaintColor.B).ToArgb();
 				}
 			}
-			VertexBuffer=new VertexBuffer(typeof(CustomVertex.PositionNormalColored),CustomVertex.PositionNormalColored.StrideSize*numVerts,
-				device,Usage.WriteOnly,CustomVertex.PositionNormalColored.Format,Pool.Managed);
+			VertexBuffer=new VertexBuffer(typeof(CustomVertex.PositionNormal),CustomVertex.PositionNormal.StrideSize*numVerts,
+				device,Usage.WriteOnly,CustomVertex.PositionNormal.Format,Pool.Managed);
 			VertexBuffer.SetData(verts,0,LockFlags.None);			
 			//Prepare the indicies into an index buffer.
 			//When drawing with a single index buffer inside of DirectX, all primitives must be the same type.

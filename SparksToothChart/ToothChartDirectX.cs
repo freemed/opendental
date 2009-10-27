@@ -378,7 +378,7 @@ namespace SparksToothChart {
 
 		private void DrawTooth(ToothGraphic toothGraphic) {
 			ToothGroup group;
-			device.VertexFormat=CustomVertex.PositionNormalColored.Format;
+			device.VertexFormat=CustomVertex.PositionNormal.Format;
 			for(int g=0;g<toothGraphic.Groups.Count;g++) {
 				group=(ToothGroup)toothGraphic.Groups[g];
 				if(!group.Visible) {
@@ -387,7 +387,7 @@ namespace SparksToothChart {
 				Material material=new Material();
 				Color materialColor;
 				if(toothGraphic.ShiftO<-10) {//if unerupted
-					materialColor=Color.FromArgb(group.PaintColor.A/16,group.PaintColor.R/16,group.PaintColor.G/16,group.PaintColor.B/16);
+					materialColor=Color.FromArgb(group.PaintColor.A/2,group.PaintColor.R/2,group.PaintColor.G/2,group.PaintColor.B/2);
 				} else {
 					materialColor=group.PaintColor;
 				}
