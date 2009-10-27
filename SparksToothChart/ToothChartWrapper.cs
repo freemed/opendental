@@ -150,15 +150,9 @@ namespace SparksToothChart {
 		}
 
 		///<summary>For the freehand drawing tool.</summary>
-		public Color DrawingColor{
-			//get{
-			//	return drawingColor;
-			//}
+		public Color ColorDrawing{
 			set{
 				TcData.ColorDrawing=value;
-				//if(drawMode!=DrawingMode.Simple2D) {
-				//	toothChartOpenGL.DrawingColor=value;
-				//}
 			}
 		}
 		#endregion Properties
@@ -258,9 +252,8 @@ namespace SparksToothChart {
 				}
 			}
 			TcData.SelectedTeeth.Clear();
-			//selectedTeeth=new string[0];
-			//DrawingSegmentList=new List<ToothInitial>();
-			//PointList=new List<Point>();
+			TcData.DrawingSegmentList=new List<ToothInitial>();
+			TcData.PointList=new List<Point>();
 			Invalidate();
 		}
 
@@ -392,53 +385,32 @@ namespace SparksToothChart {
 
 		///<summary>Set this tooth to show an implant</summary>
 		public void SetImplant(string toothID,Color color) {
-			/*
-			if(drawMode==DrawingMode.Simple2D) {
-				if(!ToothGraphic.IsValidToothID(toothID)) {
-					return;
-				}
-				ListToothGraphics[toothID].IsImplant=true;
-				ListToothGraphics[toothID].colorImplant=color;
-			}
-			else {
-				//toothChartOpenGL.SetImplant(toothID,color);
-			}*/
+			TcData.ListToothGraphics[toothID].IsImplant=true;
+			TcData.ListToothGraphics[toothID].colorImplant=color;
+			Invalidate();
 		}
 
 		///<summary>Set this tooth to show a sealant</summary>
 		public void SetSealant(string toothID,Color color) {
-			/*
-			if(drawMode==DrawingMode.Simple2D) {
-				if(!ToothGraphic.IsValidToothID(toothID)) {
-					return;
-				}
-				ListToothGraphics[toothID].IsSealant=true;
-				ListToothGraphics[toothID].colorSealant=color;
-			}
-			else {
-				toothChartOpenGL.SetSealant(toothID,color);
-			}
-			*/
+			TcData.ListToothGraphics[toothID].IsSealant=true;
+			TcData.ListToothGraphics[toothID].colorSealant=color;
+			Invalidate();
 		}
 
 		///<summary></summary>
 		public void AddDrawingSegment(ToothInitial drawingSegment) {
-			/*
-			if(drawMode==DrawingMode.Simple2D) {
-				bool alreadyAdded=false;
-				for(int i=0;i<DrawingSegmentList.Count;i++){
-					if(DrawingSegmentList[i].DrawingSegment==drawingSegment.DrawingSegment){
-						alreadyAdded=true;
-						break;
-					}
-				}
-				if(!alreadyAdded){
-					DrawingSegmentList.Add(drawingSegment);
+			bool alreadyAdded=false;
+			for(int i=0;i<TcData.DrawingSegmentList.Count;i++) {
+				if(TcData.DrawingSegmentList[i].DrawingSegment==drawingSegment.DrawingSegment) {
+					alreadyAdded=true;
+					break;
 				}
 			}
-			else {
-				toothChartOpenGL.AddDrawingSegment(drawingSegment);
-			}*/
+			if(!alreadyAdded){
+				TcData.DrawingSegmentList.Add(drawingSegment);
+			}
+			Invalidate();
+			//toothChartOpenGL.AddDrawingSegment(drawingSegment);
 		}
 
 		///<summary>Returns a bitmap of what is showing in the control.  Used for printing.</summary>
@@ -468,7 +440,7 @@ namespace SparksToothChart {
 
 		public void SetSelected(string tooth_id,bool setValue) {
 			TcData.SetSelected(tooth_id,setValue);
-			//Invalidate();//Invalidation will happen internally.
+			Invalidate();
 		}
 
 		///<summary></summary>

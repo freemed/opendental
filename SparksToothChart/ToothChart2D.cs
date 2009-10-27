@@ -18,12 +18,9 @@ namespace SparksToothChart {
 		private string hotTooth;
 		///<summary>The previous hotTooth.  If this is different than hotTooth, then mouse has just now moved to a new tooth.  Can be 0 to represent no previous.</summary>
 		private string hotToothOld;
-		///<summary>A list of points for a line currently being drawn.  Once the mouse is raised, this list gets cleared.</summary>
-		private List<Point> PointList;
 
 		public ToothChart2D() {
 			InitializeComponent();
-			PointList=new List<Point>();
 		}
 
 		protected override void OnPaint(PaintEventArgs e) {
@@ -360,7 +357,7 @@ namespace SparksToothChart {
 				}
 			}
 			else if(TcData.CursorTool==CursorTool.Pen) {
-				PointList.Add(new Point(e.X,e.Y));
+				TcData.PointList.Add(new Point(e.X,e.Y));
 			}
 			else if(TcData.CursorTool==CursorTool.Eraser) {
 				//do nothing
@@ -421,13 +418,13 @@ namespace SparksToothChart {
 				if(!MouseIsDown){
 					return;
 				}
-				PointList.Add(new Point(e.X,e.Y));
+				TcData.PointList.Add(new Point(e.X,e.Y));
 				//just add the last line segment instead of redrawing the whole thing.
 				Graphics g=this.CreateGraphics();
 				g.SmoothingMode=SmoothingMode.HighQuality;
 				Pen pen=new Pen(TcData.ColorDrawing,2f);
-				int i=PointList.Count-1;
-				g.DrawLine(pen,PointList[i-1].X,PointList[i-1].Y,PointList[i].X,PointList[i].Y);
+				int i=TcData.PointList.Count-1;
+				g.DrawLine(pen,TcData.PointList[i-1].X,TcData.PointList[i-1].Y,TcData.PointList[i].X,TcData.PointList[i].Y);
 				g.Dispose();
 				//Invalidate();
 			}
@@ -472,15 +469,15 @@ namespace SparksToothChart {
 			MouseIsDown=false;
 			if(TcData.CursorTool==CursorTool.Pen) {
 				string drawingSegment="";
-				for(int i=0;i<PointList.Count;i++) {
+				for(int i=0;i<TcData.PointList.Count;i++) {
 					if(i>0) {
 						drawingSegment+=";";
 					}
 					//I could compensate to center point here:
-					drawingSegment+=PointList[i].X+","+PointList[i].Y;
+					drawingSegment+=TcData.PointList[i].X+","+TcData.PointList[i].Y;
 				}
 				OnSegmentDrawn(drawingSegment);
-				PointList=new List<Point>();
+				TcData.PointList=new List<Point>();
 				//Invalidate();//?
 			}
 			else if(TcData.CursorTool==CursorTool.Eraser) {

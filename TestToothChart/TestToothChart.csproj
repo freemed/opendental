@@ -80,6 +80,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\OpenDentBusiness\OpenDentBusiness.csproj">
+      <Project>{3D0FC76E-803C-4DE2-BDB1-47D63A4E2357}</Project>
+      <Name>OpenDentBusiness</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SparksToothChart\SparksToothChart.csproj">
       <Project>{033B77F4-2E98-49A7-901F-5F388DEDF83E}</Project>
       <Name>SparksToothChart</Name>

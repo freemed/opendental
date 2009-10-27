@@ -35,7 +35,11 @@ namespace SparksToothChart {
 		public CursorTool CursorTool;
 		///<summary>The color being used for freehand drawing.</summary>
 		public Color ColorDrawing;
+		///<summary>This font object is used to measure strings.</summary>
 		public Font Font;
+		///<summary>A list of points for a line currently being drawn.  Once the mouse is raised, this list gets cleared.</summary>
+		public List<Point> PointList;
+
 
 		public ToothChartData() {
 			ListToothGraphics=new ToothGraphicCollection();
@@ -49,6 +53,7 @@ namespace SparksToothChart {
 			CursorTool=CursorTool.Pointer;
 			ColorDrawing=Color.Black;
 			Font=new Font(FontFamily.GenericSansSerif,8.25f);
+			PointList=new List<Point>();
 		}
 
 		///<summary>This gets set whenever the wrapper resizes.  It's the size of the control in screen pixels.</summary>

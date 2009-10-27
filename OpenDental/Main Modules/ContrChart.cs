@@ -6210,18 +6210,18 @@ namespace OpenDental{
 
 		private void panelTPdark_Click(object sender,EventArgs e) {
 			panelDrawColor.BackColor=panelTPdark.BackColor;
-			toothChart.DrawingColor=panelDrawColor.BackColor;
+			toothChart.ColorDrawing=panelDrawColor.BackColor;
 		}
 
 		private void panelTPlight_Click(object sender,EventArgs e) {
 			panelDrawColor.BackColor=panelTPlight.BackColor;
-			toothChart.DrawingColor=panelDrawColor.BackColor;
+			toothChart.ColorDrawing=panelDrawColor.BackColor;
 		}
 
 		private void panelCdark_Click(object sender,EventArgs e) {
 			panelDrawColor.BackColor=panelCdark.BackColor;
-			toothChart.DrawingColor=panelDrawColor.BackColor;
-			toothChart.DrawingColor=panelDrawColor.BackColor;
+			toothChart.ColorDrawing=panelDrawColor.BackColor;
+			toothChart.ColorDrawing=panelDrawColor.BackColor;
 		}
 
 		private void panelClight_Click(object sender,EventArgs e) {
@@ -6230,37 +6230,37 @@ namespace OpenDental{
 
 		private void panelECdark_Click(object sender,EventArgs e) {
 			panelDrawColor.BackColor=panelECdark.BackColor;
-			toothChart.DrawingColor=panelDrawColor.BackColor;
+			toothChart.ColorDrawing=panelDrawColor.BackColor;
 		}
 
 		private void panelEClight_Click(object sender,EventArgs e) {
 			panelDrawColor.BackColor=panelEClight.BackColor;
-			toothChart.DrawingColor=panelDrawColor.BackColor;
+			toothChart.ColorDrawing=panelDrawColor.BackColor;
 		}
 
 		private void panelEOdark_Click(object sender,EventArgs e) {
 			panelDrawColor.BackColor=panelEOdark.BackColor;
-			toothChart.DrawingColor=panelDrawColor.BackColor;
+			toothChart.ColorDrawing=panelDrawColor.BackColor;
 		}
 
 		private void panelEOlight_Click(object sender,EventArgs e) {
 			panelDrawColor.BackColor=panelEOlight.BackColor;
-			toothChart.DrawingColor=panelDrawColor.BackColor;
+			toothChart.ColorDrawing=panelDrawColor.BackColor;
 		}
 
 		private void panelRdark_Click(object sender,EventArgs e) {
 			panelDrawColor.BackColor=panelRdark.BackColor;
-			toothChart.DrawingColor=panelDrawColor.BackColor;
+			toothChart.ColorDrawing=panelDrawColor.BackColor;
 		}
 
 		private void panelRlight_Click(object sender,EventArgs e) {
 			panelDrawColor.BackColor=panelRlight.BackColor;
-			toothChart.DrawingColor=panelDrawColor.BackColor;
+			toothChart.ColorDrawing=panelDrawColor.BackColor;
 		}
 
 		private void panelBlack_Click(object sender,EventArgs e) {
 			panelDrawColor.BackColor=Color.Black;
-			toothChart.DrawingColor=Color.Black;
+			toothChart.ColorDrawing=Color.Black;
 		}
 
 		private void butColorOther_Click(object sender,EventArgs e) {
@@ -6270,7 +6270,7 @@ namespace OpenDental{
 				return;
 			}
 			panelDrawColor.BackColor=cd.Color;
-			toothChart.DrawingColor=panelDrawColor.BackColor;
+			toothChart.ColorDrawing=panelDrawColor.BackColor;
 		}
 		#endregion Draw
 

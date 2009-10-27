@@ -51,6 +51,7 @@
 			this.panelColorBackHighlightBlack = new System.Windows.Forms.Panel();
 			this.panelColorBackHighlightGray = new System.Windows.Forms.Panel();
 			this.groupBox5 = new System.Windows.Forms.GroupBox();
+			this.label5 = new System.Windows.Forms.Label();
 			this.butSizeWide = new System.Windows.Forms.Button();
 			this.butSizeTall = new System.Windows.Forms.Button();
 			this.butSizeNormal = new System.Windows.Forms.Button();
@@ -64,10 +65,27 @@
 			this.butFillings = new System.Windows.Forms.Button();
 			this.label4 = new System.Windows.Forms.Label();
 			this.groupBox8 = new System.Windows.Forms.GroupBox();
+			this.butBridges = new System.Windows.Forms.Button();
+			this.butImplants = new System.Windows.Forms.Button();
+			this.butSealants = new System.Windows.Forms.Button();
+			this.groupBox9 = new System.Windows.Forms.GroupBox();
+			this.radioColorChanger = new System.Windows.Forms.RadioButton();
+			this.radioEraser = new System.Windows.Forms.RadioButton();
+			this.radioPen = new System.Windows.Forms.RadioButton();
+			this.radioPointer = new System.Windows.Forms.RadioButton();
+			this.panelColorDraw = new System.Windows.Forms.Panel();
+			this.groupBox10 = new System.Windows.Forms.GroupBox();
+			this.panelColorDrawWhite = new System.Windows.Forms.Panel();
+			this.panelColorDrawBlue = new System.Windows.Forms.Panel();
+			this.panelColorDrawGreen = new System.Windows.Forms.Panel();
+			this.panelColorDrawBlack = new System.Windows.Forms.Panel();
+			this.panelColorDrawRed = new System.Windows.Forms.Panel();
+			this.butColorDrawOther = new System.Windows.Forms.Button();
+			this.butShowDrawing = new System.Windows.Forms.Button();
 			this.toothChartDirectX = new SparksToothChart.ToothChartWrapper();
 			this.toothChartOpenGL = new SparksToothChart.ToothChartWrapper();
 			this.toothChart2D = new SparksToothChart.ToothChartWrapper();
-			this.label5 = new System.Windows.Forms.Label();
+			this.label6 = new System.Windows.Forms.Label();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupBox3.SuspendLayout();
@@ -76,6 +94,8 @@
 			this.groupBox6.SuspendLayout();
 			this.groupBox7.SuspendLayout();
 			this.groupBox8.SuspendLayout();
+			this.groupBox9.SuspendLayout();
+			this.groupBox10.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -344,6 +364,15 @@
 			this.groupBox5.TabStop = false;
 			this.groupBox5.Text = "Resize and Scale";
 			// 
+			// label5
+			// 
+			this.label5.Location = new System.Drawing.Point(6,71);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(151,71);
+			this.label5.TabIndex = 207;
+			this.label5.Text = "This is acutally a quick test of how it will behave when much larger.  Because no" +
+    "body will ever use it this small, it\'s OK that the numbers are too big.";
+			// 
 			// butSizeWide
 			// 
 			this.butSizeWide.Location = new System.Drawing.Point(87,43);
@@ -418,12 +447,15 @@
 			// 
 			// groupBox7
 			// 
+			this.groupBox7.Controls.Add(this.butSealants);
+			this.groupBox7.Controls.Add(this.butImplants);
+			this.groupBox7.Controls.Add(this.butBridges);
 			this.groupBox7.Controls.Add(this.butBigX);
 			this.groupBox7.Controls.Add(this.butRCT);
 			this.groupBox7.Controls.Add(this.butFillings);
 			this.groupBox7.Location = new System.Drawing.Point(680,361);
 			this.groupBox7.Name = "groupBox7";
-			this.groupBox7.Size = new System.Drawing.Size(118,99);
+			this.groupBox7.Size = new System.Drawing.Size(118,173);
 			this.groupBox7.TabIndex = 216;
 			this.groupBox7.TabStop = false;
 			this.groupBox7.Text = "Restorations";
@@ -476,6 +508,186 @@
 			this.groupBox8.TabStop = false;
 			this.groupBox8.Text = "Mouse clicks";
 			// 
+			// butBridges
+			// 
+			this.butBridges.Location = new System.Drawing.Point(10,93);
+			this.butBridges.Name = "butBridges";
+			this.butBridges.Size = new System.Drawing.Size(88,23);
+			this.butBridges.TabIndex = 210;
+			this.butBridges.Text = "Bridges";
+			this.butBridges.UseVisualStyleBackColor = true;
+			this.butBridges.Click += new System.EventHandler(this.butBridges_Click);
+			// 
+			// butImplants
+			// 
+			this.butImplants.Location = new System.Drawing.Point(10,118);
+			this.butImplants.Name = "butImplants";
+			this.butImplants.Size = new System.Drawing.Size(88,23);
+			this.butImplants.TabIndex = 211;
+			this.butImplants.Text = "Implants";
+			this.butImplants.UseVisualStyleBackColor = true;
+			this.butImplants.Click += new System.EventHandler(this.butImplants_Click);
+			// 
+			// butSealants
+			// 
+			this.butSealants.Location = new System.Drawing.Point(10,143);
+			this.butSealants.Name = "butSealants";
+			this.butSealants.Size = new System.Drawing.Size(88,23);
+			this.butSealants.TabIndex = 212;
+			this.butSealants.Text = "Sealants";
+			this.butSealants.UseVisualStyleBackColor = true;
+			this.butSealants.Click += new System.EventHandler(this.butSealants_Click);
+			// 
+			// groupBox9
+			// 
+			this.groupBox9.Controls.Add(this.label6);
+			this.groupBox9.Controls.Add(this.butShowDrawing);
+			this.groupBox9.Controls.Add(this.groupBox10);
+			this.groupBox9.Controls.Add(this.panelColorDraw);
+			this.groupBox9.Controls.Add(this.radioColorChanger);
+			this.groupBox9.Controls.Add(this.radioEraser);
+			this.groupBox9.Controls.Add(this.radioPen);
+			this.groupBox9.Controls.Add(this.radioPointer);
+			this.groupBox9.Location = new System.Drawing.Point(840,510);
+			this.groupBox9.Name = "groupBox9";
+			this.groupBox9.Size = new System.Drawing.Size(288,200);
+			this.groupBox9.TabIndex = 219;
+			this.groupBox9.TabStop = false;
+			this.groupBox9.Text = "Drawing";
+			// 
+			// radioColorChanger
+			// 
+			this.radioColorChanger.Location = new System.Drawing.Point(10,72);
+			this.radioColorChanger.Name = "radioColorChanger";
+			this.radioColorChanger.Size = new System.Drawing.Size(122,17);
+			this.radioColorChanger.TabIndex = 9;
+			this.radioColorChanger.TabStop = true;
+			this.radioColorChanger.Text = "Color Changer";
+			this.radioColorChanger.UseVisualStyleBackColor = true;
+			this.radioColorChanger.Click += new System.EventHandler(this.radioColorChanger_Click);
+			// 
+			// radioEraser
+			// 
+			this.radioEraser.Location = new System.Drawing.Point(10,53);
+			this.radioEraser.Name = "radioEraser";
+			this.radioEraser.Size = new System.Drawing.Size(122,17);
+			this.radioEraser.TabIndex = 8;
+			this.radioEraser.TabStop = true;
+			this.radioEraser.Text = "Eraser";
+			this.radioEraser.UseVisualStyleBackColor = true;
+			this.radioEraser.Click += new System.EventHandler(this.radioEraser_Click);
+			// 
+			// radioPen
+			// 
+			this.radioPen.Location = new System.Drawing.Point(10,34);
+			this.radioPen.Name = "radioPen";
+			this.radioPen.Size = new System.Drawing.Size(122,17);
+			this.radioPen.TabIndex = 7;
+			this.radioPen.TabStop = true;
+			this.radioPen.Text = "Pen";
+			this.radioPen.UseVisualStyleBackColor = true;
+			this.radioPen.Click += new System.EventHandler(this.radioPen_Click);
+			// 
+			// radioPointer
+			// 
+			this.radioPointer.Checked = true;
+			this.radioPointer.Location = new System.Drawing.Point(10,15);
+			this.radioPointer.Name = "radioPointer";
+			this.radioPointer.Size = new System.Drawing.Size(122,17);
+			this.radioPointer.TabIndex = 6;
+			this.radioPointer.TabStop = true;
+			this.radioPointer.Text = "Pointer";
+			this.radioPointer.UseVisualStyleBackColor = true;
+			this.radioPointer.Click += new System.EventHandler(this.radioPointer_Click);
+			// 
+			// panelColorDraw
+			// 
+			this.panelColorDraw.BackColor = System.Drawing.Color.Black;
+			this.panelColorDraw.Location = new System.Drawing.Point(10,95);
+			this.panelColorDraw.Name = "panelColorDraw";
+			this.panelColorDraw.Size = new System.Drawing.Size(22,22);
+			this.panelColorDraw.TabIndex = 10;
+			// 
+			// groupBox10
+			// 
+			this.groupBox10.Controls.Add(this.butColorDrawOther);
+			this.groupBox10.Controls.Add(this.panelColorDrawWhite);
+			this.groupBox10.Controls.Add(this.panelColorDrawBlue);
+			this.groupBox10.Controls.Add(this.panelColorDrawGreen);
+			this.groupBox10.Controls.Add(this.panelColorDrawBlack);
+			this.groupBox10.Controls.Add(this.panelColorDrawRed);
+			this.groupBox10.Location = new System.Drawing.Point(134,51);
+			this.groupBox10.Name = "groupBox10";
+			this.groupBox10.Size = new System.Drawing.Size(147,73);
+			this.groupBox10.TabIndex = 11;
+			this.groupBox10.TabStop = false;
+			this.groupBox10.Text = "Set Color";
+			// 
+			// panelColorDrawWhite
+			// 
+			this.panelColorDrawWhite.BackColor = System.Drawing.Color.White;
+			this.panelColorDrawWhite.Location = new System.Drawing.Point(118,17);
+			this.panelColorDrawWhite.Name = "panelColorDrawWhite";
+			this.panelColorDrawWhite.Size = new System.Drawing.Size(22,22);
+			this.panelColorDrawWhite.TabIndex = 10;
+			this.panelColorDrawWhite.Click += new System.EventHandler(this.panelColorDrawWhite_Click);
+			// 
+			// panelColorDrawBlue
+			// 
+			this.panelColorDrawBlue.BackColor = System.Drawing.Color.RoyalBlue;
+			this.panelColorDrawBlue.Location = new System.Drawing.Point(62,17);
+			this.panelColorDrawBlue.Name = "panelColorDrawBlue";
+			this.panelColorDrawBlue.Size = new System.Drawing.Size(22,22);
+			this.panelColorDrawBlue.TabIndex = 9;
+			this.panelColorDrawBlue.Click += new System.EventHandler(this.panelColorDrawBlue_Click);
+			// 
+			// panelColorDrawGreen
+			// 
+			this.panelColorDrawGreen.BackColor = System.Drawing.Color.DarkGreen;
+			this.panelColorDrawGreen.Location = new System.Drawing.Point(90,17);
+			this.panelColorDrawGreen.Name = "panelColorDrawGreen";
+			this.panelColorDrawGreen.Size = new System.Drawing.Size(22,22);
+			this.panelColorDrawGreen.TabIndex = 7;
+			this.panelColorDrawGreen.Click += new System.EventHandler(this.panelColorDrawGreen_Click);
+			// 
+			// panelColorDrawBlack
+			// 
+			this.panelColorDrawBlack.BackColor = System.Drawing.Color.Black;
+			this.panelColorDrawBlack.Location = new System.Drawing.Point(6,17);
+			this.panelColorDrawBlack.Name = "panelColorDrawBlack";
+			this.panelColorDrawBlack.Size = new System.Drawing.Size(22,22);
+			this.panelColorDrawBlack.TabIndex = 6;
+			this.panelColorDrawBlack.Click += new System.EventHandler(this.panelColorDrawBlack_Click);
+			// 
+			// panelColorDrawRed
+			// 
+			this.panelColorDrawRed.BackColor = System.Drawing.Color.DarkRed;
+			this.panelColorDrawRed.Location = new System.Drawing.Point(34,17);
+			this.panelColorDrawRed.Name = "panelColorDrawRed";
+			this.panelColorDrawRed.Size = new System.Drawing.Size(22,22);
+			this.panelColorDrawRed.TabIndex = 4;
+			this.panelColorDrawRed.Click += new System.EventHandler(this.panelColorDrawRed_Click);
+			// 
+			// butColorDrawOther
+			// 
+			this.butColorDrawOther.Location = new System.Drawing.Point(6,45);
+			this.butColorDrawOther.Name = "butColorDrawOther";
+			this.butColorDrawOther.Size = new System.Drawing.Size(67,23);
+			this.butColorDrawOther.TabIndex = 213;
+			this.butColorDrawOther.Text = "Other";
+			this.butColorDrawOther.UseVisualStyleBackColor = true;
+			this.butColorDrawOther.Click += new System.EventHandler(this.butColorDrawOther_Click);
+			// 
+			// butShowDrawing
+			// 
+			this.butShowDrawing.Location = new System.Drawing.Point(9,126);
+			this.butShowDrawing.Name = "butShowDrawing";
+			this.butShowDrawing.Size = new System.Drawing.Size(100,23);
+			this.butShowDrawing.TabIndex = 213;
+			this.butShowDrawing.Text = "Show a Drawing";
+			this.butShowDrawing.UseVisualStyleBackColor = true;
+			this.butShowDrawing.Click += new System.EventHandler(this.butShowDrawing_Click);
+			// 
 			// toothChartDirectX
 			// 
 			this.toothChartDirectX.AutoFinish = false;
@@ -518,20 +730,21 @@
 			this.toothChart2D.TabIndex = 195;
 			this.toothChart2D.UseHardware = false;
 			// 
-			// label5
+			// label6
 			// 
-			this.label5.Location = new System.Drawing.Point(6,71);
-			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(151,71);
-			this.label5.TabIndex = 207;
-			this.label5.Text = "This is acutally a quick test of how it will behave when much larger.  Because no" +
-    "body will ever use it this small, it\'s OK that the numbers are too big.";
+			this.label6.Location = new System.Drawing.Point(11,152);
+			this.label6.Name = "label6";
+			this.label6.Size = new System.Drawing.Size(271,43);
+			this.label6.TabIndex = 214;
+			this.label6.Text = "There is not a test for the SegmentDrawn event which causes saving to the databas" +
+    "e.  That will be tested in the full application.  Must implement.";
 			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(1258,738);
+			this.Controls.Add(this.groupBox9);
 			this.Controls.Add(this.groupBox8);
 			this.Controls.Add(this.groupBox7);
 			this.Controls.Add(this.groupBox6);
@@ -560,6 +773,8 @@
 			this.groupBox6.ResumeLayout(false);
 			this.groupBox7.ResumeLayout(false);
 			this.groupBox8.ResumeLayout(false);
+			this.groupBox9.ResumeLayout(false);
+			this.groupBox10.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -610,6 +825,24 @@
 		private System.Windows.Forms.Button butRCT;
 		private System.Windows.Forms.Button butBigX;
 		private System.Windows.Forms.Label label5;
+		private System.Windows.Forms.Button butBridges;
+		private System.Windows.Forms.Button butImplants;
+		private System.Windows.Forms.Button butSealants;
+		private System.Windows.Forms.GroupBox groupBox9;
+		private System.Windows.Forms.RadioButton radioColorChanger;
+		private System.Windows.Forms.RadioButton radioEraser;
+		private System.Windows.Forms.RadioButton radioPen;
+		private System.Windows.Forms.RadioButton radioPointer;
+		private System.Windows.Forms.Panel panelColorDraw;
+		private System.Windows.Forms.GroupBox groupBox10;
+		private System.Windows.Forms.Panel panelColorDrawWhite;
+		private System.Windows.Forms.Panel panelColorDrawBlue;
+		private System.Windows.Forms.Panel panelColorDrawGreen;
+		private System.Windows.Forms.Panel panelColorDrawBlack;
+		private System.Windows.Forms.Panel panelColorDrawRed;
+		private System.Windows.Forms.Button butColorDrawOther;
+		private System.Windows.Forms.Button butShowDrawing;
+		private System.Windows.Forms.Label label6;
 	}
 }
 
