@@ -59,12 +59,14 @@ namespace SparksToothChart {
 		public event ToothChartDrawEventHandler SegmentDrawn=null;
 		///<summary>This is a reference to the TcData object that's at the wrapper level.</summary>
 		public ToothChartData TcData;
-		///<summary>GDI+ handle to this control. Used for line drawing and font measurement.</summary>
+		/// <summary>GDI+ handle to this control. Used for line drawing and font measurement.</summary>
 		private Graphics g=null;
-		///<summary>This is a GDI+ overlay that sits on top of the OpenGL scene.  It doesn't work well to draw directly on the control.</summary>
-		private Bitmap bitmapOverlay;
-		///<summary>A graphics object for the bitmapOverlay.</summary>
-		private Graphics gg=null;
+		//<summary>This is a GDI+ overlay that sits on top of the OpenGL scene.  It doesn't work well to draw directly on the control.</summary>
+		//private Bitmap bitmapInPictBox;
+		//<summary>A graphics object for the bitmapInPictBox.</summary>
+		//private Graphics gg=null;
+		//<summary>This picturebox will sit in front of the openGL scene, completely obscuring it.  The scene will be copied to it and further altered with GDI+</summary>
+		//private PictureBox pictBox;
 
 		///<summary>Specify the hardware mode to create the tooth chart with. Set hardwareMode=true to try for hardware accelerated graphics, and set hardwareMode=false to try and get software graphics.</summary>
 		public ToothChartOpenGL(bool hardwareMode,int preferredPixelFormatNum) {
@@ -76,6 +78,14 @@ namespace SparksToothChart {
 			TaoRenderEnabled=true;
 			Gl.glDisable(Gl.GL_TEXTURE);
 			//Disable texturing, since we don't use it.  This should prevent a glCopyPixels() problem in Gdi.SwapBuffersFast() on ATI graphics cards.
+			/* This didn't work because the OpenGL control is not designed to be a container.  I don't have time to wrap it in another layer.
+			pictBox=new PictureBox();
+			pictBox.Location=new Point(0,0);
+			pictBox.Name="pictBox";
+			pictBox.Size=this.Size;
+			pictBox.Dock=DockStyle.Fill;
+			pictBox.Image=bitmapInPictBox;
+			Controls.Add(pictBox);*/
 		}
 
 		public void InitializeGraphics() {
@@ -92,9 +102,9 @@ namespace SparksToothChart {
 		}
 
 		public int SelectedPixelFormatNumber {
-				get{
-						return selectedPixelFormat;
-				}
+			get{
+				return selectedPixelFormat;
+			}
 		}
 
 		///<summary>Returns a bitmap of what is showing in the control.  Used for printing.</summary>
@@ -189,13 +199,11 @@ namespace SparksToothChart {
 			}
 			//
 			Gl.glFlush();
-			bitmapOverlay=this.GetBitmap();
-			//bitmapOverlay=new Bitmap(  //Width,Height);
-			gg=Graphics.FromImage(bitmapOverlay);
-			//gg.Clear(Color.FromArgb(0,0,0,0));//clear, I hope
+			//bitmapInPictBox=GetBitmapOfOpenGL();
+			//gg=Graphics.FromImage(bitmapInPictBox);
 			DrawNumbersAndLines();
 			DrawDrawingSegments();
-			g.DrawImage(bitmapOverlay,0,0);
+			//g.DrawImage(bitmapInPictBox,0,0);
 		}
 
 		private void DrawFacialView(ToothGraphic toothGraphic) {
@@ -442,9 +450,6 @@ namespace SparksToothChart {
 		}
 
 		private void DrawNumbersAndLines() {
-			gg.DrawLine(new Pen(Brushes.White),0,this.Height/2,this.Width,this.Height/2);
-
-			/*
 			Gl.glPushMatrix();
 			Gl.glDisable(Gl.GL_LIGHTING);
 			Gl.glDisable(Gl.GL_BLEND);
@@ -459,7 +464,7 @@ namespace SparksToothChart {
 				//Gl.glVertex3f((float)WidthProjection/2f,0,0);
 				Gl.glVertex3f(-TcData.SizeOriginalProjection.Width/2f,0,0);
 				Gl.glVertex3f(TcData.SizeOriginalProjection.Width/2f,0,0);
-			Gl.glEnd();*/
+			Gl.glEnd();
 			string tooth_id;
 			for(int i=1;i<=52;i++){
 				tooth_id=Tooth.FromOrdinal(i);
@@ -470,12 +475,11 @@ namespace SparksToothChart {
 					DrawNumber(tooth_id,false,true);
 				}
 			}
-			//Gl.glPopMatrix();
-
+			Gl.glPopMatrix();
 		}
 
 		private void DrawDrawingSegments(){
-			string[] pointStr;
+			/*string[] pointStr;
 			List<Point> points;
 			Point point;
 			string[] xy;
@@ -493,13 +497,12 @@ namespace SparksToothChart {
 				}
 				for(int i=1;i<points.Count;i++) {
 					//if we set 0,0 to center, then this is where we would convert it back.
-					g.DrawLine(pen,points[i-1].X,
+					gg.DrawLine(pen,points[i-1].X,
 						points[i-1].Y,
 						points[i].X,
 						points[i].Y);
 				}
-			}
-			/*
+			}*/
 			Gl.glPushMatrix();
 			Gl.glDisable(Gl.GL_LIGHTING);
 			Gl.glEnable(Gl.GL_BLEND);
@@ -549,12 +552,12 @@ namespace SparksToothChart {
 				}
 				Gl.glEnd();
 			}
-			Gl.glPopMatrix();*/
+			Gl.glPopMatrix();
 		}
 
 		///<summary>Draws the number and the small rectangle behind it.  Draws in the appropriate color.  isFullRedraw means that all of the toothnumbers are being redrawn.  This helps with a few optimizations and with not painting blank rectangles when not needed.</summary>
 		private void DrawNumber(string tooth_id, bool isSelected, bool isFullRedraw) {
-			if(!Tooth.IsValidDB(tooth_id)) {
+			/*if(!Tooth.IsValidDB(tooth_id)) {
 				return;
 			}
 			if(isFullRedraw) {//if redrawing all numbers
@@ -571,7 +574,7 @@ namespace SparksToothChart {
 			//string displayNum=OpenDentBusiness.Tooth.GetToothLabelGraphic(tooth_id);
 			string displayNum=tooth_id;
 			float toMm=1f/TcData.ScaleMmToPix;
-			Rectangle rec=TcData.GetNumberRecPix(tooth_id,gg);
+			Rectangle rec=TcData.GetNumberRecPix(tooth_id,g);
 			//Rectangle recPix=TcData.ConvertRecToPix(recMm);
 			if(isSelected) {
 				gg.FillRectangle(new SolidBrush(TcData.ColorBackHighlight),rec);
@@ -591,10 +594,7 @@ namespace SparksToothChart {
 			}
 			else {
 				gg.DrawString(displayNum,Font,new SolidBrush(TcData.ColorText),rec.X,rec.Y);
-			}
-
-
-			/*
+			}*/
 			if(!Tooth.IsValidDB(tooth_id)) {
 				return;
 			}
@@ -675,7 +675,8 @@ namespace SparksToothChart {
 				PrintString(displayNum);
 			}
 			Gl.glPopMatrix();
-			Gl.glFlush();*/
+//todo: get rid of this?
+			Gl.glFlush();
 		}
 
 		/*
@@ -969,14 +970,15 @@ namespace SparksToothChart {
 				}
 				TcData.PointList.Add(new Point(e.X,e.Y));
 				//just add the last line segment instead of redrawing the whole thing.
+				/*
 				gg.SmoothingMode=SmoothingMode.HighQuality;
 				//g.CompositingMode=CompositingMode.SourceOver;
 			
 				Pen pen=new Pen(TcData.ColorDrawing,2f);
 				int i=TcData.PointList.Count-1;
 				gg.DrawLine(pen,TcData.PointList[i-1].X,TcData.PointList[i-1].Y,TcData.PointList[i].X,TcData.PointList[i].Y);
-				g.DrawImage(bitmapOverlay,0,0);
-				/*
+				//g.DrawImage(bitmapInPictBox,0,0);*/
+				
 				Gl.glPushMatrix();
 				Gl.glDisable(Gl.GL_LIGHTING);
 				Gl.glEnable(Gl.GL_BLEND);
@@ -996,7 +998,7 @@ namespace SparksToothChart {
 				Gl.glVertex3f(pointMm.X,pointMm.Y,0);
 				Gl.glEnd();
 				Gl.glPopMatrix();
-				Gl.glFlush();*/
+				Gl.glFlush();
 			}
 			else if(TcData.CursorTool==CursorTool.Eraser) {
 				if(!MouseIsDown){
@@ -1077,7 +1079,7 @@ namespace SparksToothChart {
 			else {
 				DrawNumber(tooth_id,false,false);
 			}
-			g.DrawImage(bitmapOverlay,0,0);
+			//g.DrawImage(bitmapInPictBox,0,0);
 			//RectangleF recMm=TcData.GetNumberRecMm(tooth_id,);
 			//Rectangle rec=TcData.ConvertRecToPix(recMm);
 			//Invalidate();//rec);//but it invalidates the whole thing anyway.  Oh, well.

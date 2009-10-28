@@ -87,11 +87,12 @@
 			this.butGetBitmapOpenGL = new System.Windows.Forms.Button();
 			this.butGetBitmapDirectX = new System.Windows.Forms.Button();
 			this.butGetBitmap2D = new System.Windows.Forms.Button();
+			this.textScreenshotBox = new System.Windows.Forms.TextBox();
+			this.label7 = new System.Windows.Forms.Label();
 			this.toothChartDirectX = new SparksToothChart.ToothChartWrapper();
 			this.toothChartOpenGL = new SparksToothChart.ToothChartWrapper();
 			this.toothChart2D = new SparksToothChart.ToothChartWrapper();
-			this.textScreenshotBox = new System.Windows.Forms.TextBox();
-			this.label7 = new System.Windows.Forms.Label();
+			this.pictureBox1 = new System.Windows.Forms.PictureBox();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupBox3.SuspendLayout();
@@ -103,6 +104,7 @@
 			this.groupBox9.SuspendLayout();
 			this.groupBox10.SuspendLayout();
 			this.groupBox11.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -747,6 +749,24 @@
 			this.butGetBitmap2D.UseVisualStyleBackColor = true;
 			this.butGetBitmap2D.Click += new System.EventHandler(this.butGetBitmap2D_Click);
 			// 
+			// textScreenshotBox
+			// 
+			this.textScreenshotBox.Location = new System.Drawing.Point(2,191);
+			this.textScreenshotBox.Name = "textScreenshotBox";
+			this.textScreenshotBox.Size = new System.Drawing.Size(1257,20);
+			this.textScreenshotBox.TabIndex = 221;
+			this.textScreenshotBox.Text = resources.GetString("textScreenshotBox.Text");
+			this.textScreenshotBox.Visible = false;
+			// 
+			// label7
+			// 
+			this.label7.Location = new System.Drawing.Point(91,20);
+			this.label7.Name = "label7";
+			this.label7.Size = new System.Drawing.Size(117,71);
+			this.label7.TabIndex = 215;
+			this.label7.Text = "Since screen capture is unreliable, a warning to that effect shows if a screencap" +
+    "ture is used.";
+			// 
 			// toothChartDirectX
 			// 
 			this.toothChartDirectX.AutoFinish = false;
@@ -789,29 +809,20 @@
 			this.toothChart2D.TabIndex = 195;
 			this.toothChart2D.UseHardware = false;
 			// 
-			// textScreenshotBox
+			// pictureBox1
 			// 
-			this.textScreenshotBox.Location = new System.Drawing.Point(2,191);
-			this.textScreenshotBox.Name = "textScreenshotBox";
-			this.textScreenshotBox.Size = new System.Drawing.Size(1257,20);
-			this.textScreenshotBox.TabIndex = 221;
-			this.textScreenshotBox.Text = resources.GetString("textScreenshotBox.Text");
-			this.textScreenshotBox.Visible = false;
-			// 
-			// label7
-			// 
-			this.label7.Location = new System.Drawing.Point(91,20);
-			this.label7.Name = "label7";
-			this.label7.Size = new System.Drawing.Size(117,71);
-			this.label7.TabIndex = 215;
-			this.label7.Text = "Since screen capture is unreliable, a warning to that effect shows if a screencap" +
-    "ture is used.";
+			this.pictureBox1.Location = new System.Drawing.Point(302,612);
+			this.pictureBox1.Name = "pictureBox1";
+			this.pictureBox1.Size = new System.Drawing.Size(100,50);
+			this.pictureBox1.TabIndex = 222;
+			this.pictureBox1.TabStop = false;
 			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(1258,738);
+			this.Controls.Add(this.pictureBox1);
 			this.Controls.Add(this.textScreenshotBox);
 			this.Controls.Add(this.groupBox11);
 			this.Controls.Add(this.groupBox9);
@@ -846,6 +857,7 @@
 			this.groupBox9.ResumeLayout(false);
 			this.groupBox10.ResumeLayout(false);
 			this.groupBox11.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -921,6 +933,7 @@
 		private System.Windows.Forms.Button butGetBitmap2D;
 		private System.Windows.Forms.TextBox textScreenshotBox;
 		private System.Windows.Forms.Label label7;
+		private System.Windows.Forms.PictureBox pictureBox1;
 	}
 }
 
