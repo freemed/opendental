@@ -154,83 +154,85 @@ namespace SparksToothChart {
 				||toothGraphic.IsPontic) {
 				DrawTooth(toothGraphic);
 			}
-			//Gl.glDisable(Gl.GL_DEPTH_TEST);
-			//if(toothGraphic.DrawBigX) {
-			//  Gl.glDisable(Gl.GL_LIGHTING);
-			//  Gl.glEnable(Gl.GL_BLEND);
-			//  //move the bigX 6mm to the Facial so it will paint in front of the tooth
-			//  Gl.glTranslatef(0,0,6f);
-			//  Gl.glBlendFunc(Gl.GL_SRC_ALPHA,Gl.GL_ONE_MINUS_SRC_ALPHA);
-			//  Gl.glLineWidth((float)Width/275f);//1.5f);//thickness of line depends on size of window
-			//  Gl.glColor3f(
-			//    (float)toothGraphic.colorX.R/255f,
-			//    (float)toothGraphic.colorX.G/255f,
-			//    (float)toothGraphic.colorX.B/255f);
-			//  if(ToothGraphic.IsMaxillary(toothGraphic.ToothID)) {
-			//    Gl.glBegin(Gl.GL_LINES);
-			//    Gl.glVertex2f(-2f,12f);
-			//    Gl.glVertex2f(2f,-6f);
-			//    Gl.glEnd();
-			//    Gl.glBegin(Gl.GL_LINES);
-			//    Gl.glVertex2f(2f,12f);
-			//    Gl.glVertex2f(-2f,-6f);
-			//    Gl.glEnd();
-			//  } else {
-			//    Gl.glBegin(Gl.GL_LINES);
-			//    Gl.glVertex2f(-2f,6f);
-			//    Gl.glVertex2f(2f,-12f);
-			//    Gl.glEnd();
-			//    Gl.glBegin(Gl.GL_LINES);
-			//    Gl.glVertex2f(2f,6f);
-			//    Gl.glVertex2f(-2f,-12f);
-			//    Gl.glEnd();
-			//  }
-			//}
-			//Gl.glPopMatrix();//reset to origin
-			//if(toothGraphic.Visible&&toothGraphic.IsRCT) {//draw RCT
-			//  Gl.glPushMatrix();
-			//  Gl.glTranslatef(0,0,10f);//move RCT forward 10mm so it will be visible.
-			//  Gl.glTranslatef(GetTransX(toothGraphic.ToothID),GetTransYfacial(toothGraphic.ToothID),0);
-			//  Gl.glDisable(Gl.GL_LIGHTING);
-			//  Gl.glEnable(Gl.GL_BLEND);
-			//  Gl.glColor3f(
-			//    (float)toothGraphic.colorRCT.R/255f,
-			//    (float)toothGraphic.colorRCT.G/255f,
-			//    (float)toothGraphic.colorRCT.B/255f);
-			//  //.5f);//only 1/2 darkness
-			//  Gl.glBlendFunc(Gl.GL_SRC_ALPHA,Gl.GL_ONE_MINUS_SRC_ALPHA);
-			//  Gl.glLineWidth((float)Width/225f);
-			//  Gl.glPointSize((float)Width/275f);//point is slightly smaller since no antialiasing
-			//  RotateAndTranslateUser(toothGraphic);
-			//  List<Line> lines=toothGraphic.GetRctLines();
-			//  for(int i=0;i<lines.Count;i++) {
-			//    Gl.glBegin(Gl.GL_LINE_STRIP);
-			//    for(int j=0;j<lines[i].Vertices.Count;j++) {
-			//      Gl.glVertex3f(lines[i].Vertices[j].X,lines[i].Vertices[j].Y,lines[i].Vertices[j].Z);
-			//    }
-			//    Gl.glEnd();
-			//  }
-			//  Gl.glPopMatrix();
-			//  //This section is a necessary workaround for OpenGL.
-			//  //It draws a point at each intersection to hide the unsightly transitions between line segments.
-			//  Gl.glPushMatrix();
-			//  Gl.glTranslatef(0,0,10.5f);//move forward 10.5mm so it will cover the lines
-			//  Gl.glTranslatef(GetTransX(toothGraphic.ToothID),GetTransYfacial(toothGraphic.ToothID),0);
-			//  RotateAndTranslateUser(toothGraphic);
-			//  Gl.glDisable(Gl.GL_BLEND);
-			//  for(int i=0;i<lines.Count;i++) {
-			//    Gl.glBegin(Gl.GL_POINTS);
-			//    for(int j=0;j<lines[i].Vertices.Count;j++) {
-			//      //but ignore the first and last.  We are only concerned with where lines meet.
-			//      if(j==0||j==lines[i].Vertices.Count-1) {
-			//        continue;
-			//      }
-			//      Gl.glVertex3f(lines[i].Vertices[j].X,lines[i].Vertices[j].Y,lines[i].Vertices[j].Z);
-			//    }
-			//    Gl.glEnd();
-			//  }
-			//  Gl.glPopMatrix();
-			//}
+			device.RenderState.ZBufferEnable=false;
+			device.RenderState.Lighting=false;
+			Matrix lineMatrix=device.Transform.World*device.Transform.View*device.Transform.Projection;
+			Line line=new Line(device);
+			line.Antialias=false;
+			if(toothGraphic.DrawBigX) {
+				//Thickness of line depends on size of window.
+				//The line size needs to be slightly larger than in OpenGL because
+				//lines are drawn with polygons in DirectX and they are anti-aliased,
+				//even when the line.Antialias flag is set.
+				line.Width=(float)Width/200f;
+				if(ToothGraphic.IsMaxillary(toothGraphic.ToothID)) {
+					line.DrawTransform(new Vector3[] {
+						new Vector3(-2f,12f,0f),
+						new Vector3(2f,-6f,0f),},
+						lineMatrix,
+						toothGraphic.colorX);
+					line.DrawTransform(new Vector3[] {
+						new Vector3(2f,12f,0f),
+						new Vector3(-2f,-6f,0f),},
+						lineMatrix,
+						toothGraphic.colorX);
+				} else {
+					line.DrawTransform(new Vector3[] {
+						new Vector3(-2f,6f,0f),
+						new Vector3(2f,-12f,0f),},
+						lineMatrix,
+						toothGraphic.colorX);
+					line.DrawTransform(new Vector3[] {
+						new Vector3(2f,6f,0f),
+						new Vector3(-2f,-12f,0f),},
+						lineMatrix,
+						toothGraphic.colorX);
+				}				
+			}
+			if(toothGraphic.Visible&&toothGraphic.IsRCT) {//draw RCT
+				//Thickness of lines depend on size of window.
+				//The line size needs to be slightly larger than in OpenGL because
+				//lines are drawn with polygons in DirectX and they are anti-aliased,
+				//even when the line.Antialias flag is set.
+				line.Width=(float)Width/160f;
+				List<LineSimple> linesSimple=toothGraphic.GetRctLines();
+				for(int i=0;i<linesSimple.Count;i++) {
+					List<Vector3> lineVerts=new List<Vector3> ();				
+					for(int j=0;j<linesSimple[i].Vertices.Count;j++) {
+						lineVerts.Add(new Vector3(linesSimple[i].Vertices[j].X,linesSimple[i].Vertices[j].Y,linesSimple[i].Vertices[j].Z));
+						if(j>0){
+							//TODO: Draw line extensions.
+						}
+					}
+					line.DrawTransform(lineVerts.ToArray(),
+						lineMatrix,
+						toothGraphic.colorRCT);
+				}
+
+				//Gl.glPointSize((float)Width/275f);//point is slightly smaller since no antialiasing
+				////This section is a necessary workaround for OpenGL.
+				////It draws a point at each intersection to hide the unsightly transitions between line segments.
+				//Gl.glPushMatrix();
+				//Gl.glTranslatef(0,0,10.5f);//move forward 10.5mm so it will cover the lines
+				//Gl.glTranslatef(GetTransX(toothGraphic.ToothID),GetTransYfacial(toothGraphic.ToothID),0);
+				//RotateAndTranslateUser(toothGraphic);
+				//Gl.glDisable(Gl.GL_BLEND);
+				//for(int i=0;i<lines.Count;i++) {
+				//  Gl.glBegin(Gl.GL_POINTS);
+				//  for(int j=0;j<lines[i].Vertices.Count;j++) {
+				//    //but ignore the first and last.  We are only concerned with where lines meet.
+				//    if(j==0||j==lines[i].Vertices.Count-1) {
+				//      continue;
+				//    }
+				//    Gl.glVertex3f(lines[i].Vertices[j].X,lines[i].Vertices[j].Y,lines[i].Vertices[j].Z);
+				//  }
+				//  Gl.glEnd();
+				//}
+				//Gl.glPopMatrix();
+			}
+
+
+
 			//if(toothGraphic.Visible&&toothGraphic.IsBU) {//BU or Post
 			//  Gl.glPushMatrix();
 			//  Gl.glTranslatef(0,0,13f);//move BU forward 13mm so it will be visible.
@@ -287,6 +289,9 @@ namespace SparksToothChart {
 			//  }
 			//  Gl.glPopMatrix();
 			//}
+			line.Dispose();
+			device.RenderState.ZBufferEnable=true;
+			device.RenderState.Lighting=true;
 		}
 
 		private void DrawOcclusalView(ToothGraphic toothGraphic,Matrix defOrient) {
