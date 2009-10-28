@@ -29,6 +29,7 @@ namespace SparksToothChart {
 			TcData=new ToothChartData();
 			InitializeComponent();
 			ResetControls();
+
 		}
 
 		#region Properties
@@ -181,12 +182,13 @@ namespace SparksToothChart {
 				toothChart2D.Location = new System.Drawing.Point(0,0);
 				toothChart2D.Name = "toothChart2D";
 				//toothChart2D.Size = new System.Drawing.Size(719,564);//unnecessary?
-				//toothChart2D.SegmentDrawn+=new ToothChartDrawEventHandler(toothChart_SegmentDrawn);
+//todo: Add this event
+//toothChart2D.SegmentDrawn+=new ToothChartDrawEventHandler(toothChart_SegmentDrawn);
 				toothChart2D.TcData=TcData;
 				toothChart2D.SuspendLayout();
 				this.Controls.Add(toothChart2D);
 				ResetTeeth();
-				//initialize graphics?
+				toothChart2D.InitializeGraphics();
 				toothChart2D.ResumeLayout();
 			}
 			else if(drawMode==DrawingMode.DirectX){
@@ -197,6 +199,7 @@ namespace SparksToothChart {
 				toothChartDirectX.Location = new System.Drawing.Point(0,0);
 				toothChartDirectX.Name = "toothChartDirectX";
 				//toothChartDirectX.Size = new System.Drawing.Size(719,564);//unnecessary?
+				//todo: Add this event
 				//toothChartDirectX.SegmentDrawn+=new ToothChartDrawEventHandler(toothChart_SegmentDrawn);
 				toothChartDirectX.TcData=TcData;
 				//toothChartDirectX.SuspendLayout?
@@ -214,7 +217,7 @@ namespace SparksToothChart {
 				toothChartOpenGL.Name = "toothChartOpenGL";
 				//toothChartOpenGL.Size = new System.Drawing.Size(719,564);//unnecessary?
 				toothChartOpenGL.TcData=TcData;
-				//toothChartOpenGL.SegmentDrawn+=new ToothChartDrawEventHandler(toothChart_SegmentDrawn);
+				toothChartOpenGL.SegmentDrawn+=new ToothChartDrawEventHandler(toothChart_SegmentDrawn);
 				toothChartOpenGL.SuspendLayout();
 				this.Controls.Add(toothChartOpenGL);
 				ResetTeeth();
@@ -416,7 +419,7 @@ namespace SparksToothChart {
 		///<summary>Returns a bitmap of what is showing in the control.  Used for printing.</summary>
 		public Bitmap GetBitmap() {
 			/*
-			Bitmap dummy=new Bitmap(this.Width,this.Height);
+			Bitmap bmp=new Bitmap(this.Width,this.Height);
 			Graphics g=Graphics.FromImage(dummy);
 			PaintEventArgs e=new PaintEventArgs(g,new Rectangle(0,0,dummy.Width,dummy.Height));
 			if(simpleMode) {
@@ -426,7 +429,17 @@ namespace SparksToothChart {
 			toothChartOpenGL.Render(e);
 			Bitmap result=toothChartOpenGL.ReadFrontBuffer();
 			g.Dispose();
-			return result;*/
+			return result;
+			return null;*/
+			if(drawMode==DrawingMode.Simple2D) {
+				return toothChart2D.GetBitmap();
+			}
+			if(drawMode==DrawingMode.OpenGL) {
+				return toothChartOpenGL.GetBitmap();
+			}
+			if(drawMode==DrawingMode.DirectX) {
+				return toothChartDirectX.GetBitmap();
+			}
 			return null;
 		}
 

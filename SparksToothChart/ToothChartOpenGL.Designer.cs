@@ -16,6 +16,9 @@ namespace SparksToothChart {
 			if(g!=null) {
 				g.Dispose();
 			}
+			if(gg!=null) {
+				gg.Dispose();
+			}
 			base.Dispose(disposing);
 		}
 

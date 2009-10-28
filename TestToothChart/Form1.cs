@@ -897,6 +897,33 @@ namespace TestToothChart {
 			toothChartDirectX.AddDrawingSegment(ti);
 		}
 
+		private void butGetBitmap2D_Click(object sender,EventArgs e) {
+			textScreenshotBox.Visible=true;
+			Application.DoEvents();
+			FormImageViewer form=new FormImageViewer();
+			form.Bmp=toothChart2D.GetBitmap();
+			form.Show();
+			textScreenshotBox.Visible=false;
+		}
+
+		private void butGetBitmapOpenGL_Click(object sender,EventArgs e) {
+			textScreenshotBox.Visible=true;
+			Application.DoEvents();
+			FormImageViewer form=new FormImageViewer();
+			form.Bmp=toothChartOpenGL.GetBitmap();
+			form.Show();
+			textScreenshotBox.Visible=false;
+		}
+
+		private void butGetBitmapDirectX_Click(object sender,EventArgs e) {
+			textScreenshotBox.Visible=true;
+			Application.DoEvents();
+			FormImageViewer form=new FormImageViewer();
+			form.Bmp=toothChartDirectX.GetBitmap();
+			form.Show();
+			textScreenshotBox.Visible=false;
+		}
+
 
 
 

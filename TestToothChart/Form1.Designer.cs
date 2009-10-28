@@ -60,32 +60,38 @@
 			this.butMissingHiddenComplex = new System.Windows.Forms.Button();
 			this.groupBox6 = new System.Windows.Forms.GroupBox();
 			this.groupBox7 = new System.Windows.Forms.GroupBox();
+			this.butSealants = new System.Windows.Forms.Button();
+			this.butImplants = new System.Windows.Forms.Button();
+			this.butBridges = new System.Windows.Forms.Button();
 			this.butBigX = new System.Windows.Forms.Button();
 			this.butRCT = new System.Windows.Forms.Button();
 			this.butFillings = new System.Windows.Forms.Button();
 			this.label4 = new System.Windows.Forms.Label();
 			this.groupBox8 = new System.Windows.Forms.GroupBox();
-			this.butBridges = new System.Windows.Forms.Button();
-			this.butImplants = new System.Windows.Forms.Button();
-			this.butSealants = new System.Windows.Forms.Button();
 			this.groupBox9 = new System.Windows.Forms.GroupBox();
-			this.radioColorChanger = new System.Windows.Forms.RadioButton();
-			this.radioEraser = new System.Windows.Forms.RadioButton();
-			this.radioPen = new System.Windows.Forms.RadioButton();
-			this.radioPointer = new System.Windows.Forms.RadioButton();
-			this.panelColorDraw = new System.Windows.Forms.Panel();
+			this.label6 = new System.Windows.Forms.Label();
+			this.butShowDrawing = new System.Windows.Forms.Button();
 			this.groupBox10 = new System.Windows.Forms.GroupBox();
+			this.butColorDrawOther = new System.Windows.Forms.Button();
 			this.panelColorDrawWhite = new System.Windows.Forms.Panel();
 			this.panelColorDrawBlue = new System.Windows.Forms.Panel();
 			this.panelColorDrawGreen = new System.Windows.Forms.Panel();
 			this.panelColorDrawBlack = new System.Windows.Forms.Panel();
 			this.panelColorDrawRed = new System.Windows.Forms.Panel();
-			this.butColorDrawOther = new System.Windows.Forms.Button();
-			this.butShowDrawing = new System.Windows.Forms.Button();
+			this.panelColorDraw = new System.Windows.Forms.Panel();
+			this.radioColorChanger = new System.Windows.Forms.RadioButton();
+			this.radioEraser = new System.Windows.Forms.RadioButton();
+			this.radioPen = new System.Windows.Forms.RadioButton();
+			this.radioPointer = new System.Windows.Forms.RadioButton();
+			this.groupBox11 = new System.Windows.Forms.GroupBox();
+			this.butGetBitmapOpenGL = new System.Windows.Forms.Button();
+			this.butGetBitmapDirectX = new System.Windows.Forms.Button();
+			this.butGetBitmap2D = new System.Windows.Forms.Button();
 			this.toothChartDirectX = new SparksToothChart.ToothChartWrapper();
 			this.toothChartOpenGL = new SparksToothChart.ToothChartWrapper();
 			this.toothChart2D = new SparksToothChart.ToothChartWrapper();
-			this.label6 = new System.Windows.Forms.Label();
+			this.textScreenshotBox = new System.Windows.Forms.TextBox();
+			this.label7 = new System.Windows.Forms.Label();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupBox3.SuspendLayout();
@@ -96,6 +102,7 @@
 			this.groupBox8.SuspendLayout();
 			this.groupBox9.SuspendLayout();
 			this.groupBox10.SuspendLayout();
+			this.groupBox11.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -460,6 +467,36 @@
 			this.groupBox7.TabStop = false;
 			this.groupBox7.Text = "Restorations";
 			// 
+			// butSealants
+			// 
+			this.butSealants.Location = new System.Drawing.Point(10,143);
+			this.butSealants.Name = "butSealants";
+			this.butSealants.Size = new System.Drawing.Size(88,23);
+			this.butSealants.TabIndex = 212;
+			this.butSealants.Text = "Sealants";
+			this.butSealants.UseVisualStyleBackColor = true;
+			this.butSealants.Click += new System.EventHandler(this.butSealants_Click);
+			// 
+			// butImplants
+			// 
+			this.butImplants.Location = new System.Drawing.Point(10,118);
+			this.butImplants.Name = "butImplants";
+			this.butImplants.Size = new System.Drawing.Size(88,23);
+			this.butImplants.TabIndex = 211;
+			this.butImplants.Text = "Implants";
+			this.butImplants.UseVisualStyleBackColor = true;
+			this.butImplants.Click += new System.EventHandler(this.butImplants_Click);
+			// 
+			// butBridges
+			// 
+			this.butBridges.Location = new System.Drawing.Point(10,93);
+			this.butBridges.Name = "butBridges";
+			this.butBridges.Size = new System.Drawing.Size(88,23);
+			this.butBridges.TabIndex = 210;
+			this.butBridges.Text = "Bridges";
+			this.butBridges.UseVisualStyleBackColor = true;
+			this.butBridges.Click += new System.EventHandler(this.butBridges_Click);
+			// 
 			// butBigX
 			// 
 			this.butBigX.Location = new System.Drawing.Point(10,68);
@@ -508,36 +545,6 @@
 			this.groupBox8.TabStop = false;
 			this.groupBox8.Text = "Mouse clicks";
 			// 
-			// butBridges
-			// 
-			this.butBridges.Location = new System.Drawing.Point(10,93);
-			this.butBridges.Name = "butBridges";
-			this.butBridges.Size = new System.Drawing.Size(88,23);
-			this.butBridges.TabIndex = 210;
-			this.butBridges.Text = "Bridges";
-			this.butBridges.UseVisualStyleBackColor = true;
-			this.butBridges.Click += new System.EventHandler(this.butBridges_Click);
-			// 
-			// butImplants
-			// 
-			this.butImplants.Location = new System.Drawing.Point(10,118);
-			this.butImplants.Name = "butImplants";
-			this.butImplants.Size = new System.Drawing.Size(88,23);
-			this.butImplants.TabIndex = 211;
-			this.butImplants.Text = "Implants";
-			this.butImplants.UseVisualStyleBackColor = true;
-			this.butImplants.Click += new System.EventHandler(this.butImplants_Click);
-			// 
-			// butSealants
-			// 
-			this.butSealants.Location = new System.Drawing.Point(10,143);
-			this.butSealants.Name = "butSealants";
-			this.butSealants.Size = new System.Drawing.Size(88,23);
-			this.butSealants.TabIndex = 212;
-			this.butSealants.Text = "Sealants";
-			this.butSealants.UseVisualStyleBackColor = true;
-			this.butSealants.Click += new System.EventHandler(this.butSealants_Click);
-			// 
 			// groupBox9
 			// 
 			this.groupBox9.Controls.Add(this.label6);
@@ -555,58 +562,24 @@
 			this.groupBox9.TabStop = false;
 			this.groupBox9.Text = "Drawing";
 			// 
-			// radioColorChanger
+			// label6
 			// 
-			this.radioColorChanger.Location = new System.Drawing.Point(10,72);
-			this.radioColorChanger.Name = "radioColorChanger";
-			this.radioColorChanger.Size = new System.Drawing.Size(122,17);
-			this.radioColorChanger.TabIndex = 9;
-			this.radioColorChanger.TabStop = true;
-			this.radioColorChanger.Text = "Color Changer";
-			this.radioColorChanger.UseVisualStyleBackColor = true;
-			this.radioColorChanger.Click += new System.EventHandler(this.radioColorChanger_Click);
+			this.label6.Location = new System.Drawing.Point(11,152);
+			this.label6.Name = "label6";
+			this.label6.Size = new System.Drawing.Size(271,43);
+			this.label6.TabIndex = 214;
+			this.label6.Text = "There is not a test for the SegmentDrawn event which causes saving to the databas" +
+    "e.  That will be tested in the full application.  Must implement.";
 			// 
-			// radioEraser
+			// butShowDrawing
 			// 
-			this.radioEraser.Location = new System.Drawing.Point(10,53);
-			this.radioEraser.Name = "radioEraser";
-			this.radioEraser.Size = new System.Drawing.Size(122,17);
-			this.radioEraser.TabIndex = 8;
-			this.radioEraser.TabStop = true;
-			this.radioEraser.Text = "Eraser";
-			this.radioEraser.UseVisualStyleBackColor = true;
-			this.radioEraser.Click += new System.EventHandler(this.radioEraser_Click);
-			// 
-			// radioPen
-			// 
-			this.radioPen.Location = new System.Drawing.Point(10,34);
-			this.radioPen.Name = "radioPen";
-			this.radioPen.Size = new System.Drawing.Size(122,17);
-			this.radioPen.TabIndex = 7;
-			this.radioPen.TabStop = true;
-			this.radioPen.Text = "Pen";
-			this.radioPen.UseVisualStyleBackColor = true;
-			this.radioPen.Click += new System.EventHandler(this.radioPen_Click);
-			// 
-			// radioPointer
-			// 
-			this.radioPointer.Checked = true;
-			this.radioPointer.Location = new System.Drawing.Point(10,15);
-			this.radioPointer.Name = "radioPointer";
-			this.radioPointer.Size = new System.Drawing.Size(122,17);
-			this.radioPointer.TabIndex = 6;
-			this.radioPointer.TabStop = true;
-			this.radioPointer.Text = "Pointer";
-			this.radioPointer.UseVisualStyleBackColor = true;
-			this.radioPointer.Click += new System.EventHandler(this.radioPointer_Click);
-			// 
-			// panelColorDraw
-			// 
-			this.panelColorDraw.BackColor = System.Drawing.Color.Black;
-			this.panelColorDraw.Location = new System.Drawing.Point(10,95);
-			this.panelColorDraw.Name = "panelColorDraw";
-			this.panelColorDraw.Size = new System.Drawing.Size(22,22);
-			this.panelColorDraw.TabIndex = 10;
+			this.butShowDrawing.Location = new System.Drawing.Point(9,126);
+			this.butShowDrawing.Name = "butShowDrawing";
+			this.butShowDrawing.Size = new System.Drawing.Size(100,23);
+			this.butShowDrawing.TabIndex = 213;
+			this.butShowDrawing.Text = "Show a Drawing";
+			this.butShowDrawing.UseVisualStyleBackColor = true;
+			this.butShowDrawing.Click += new System.EventHandler(this.butShowDrawing_Click);
 			// 
 			// groupBox10
 			// 
@@ -622,6 +595,16 @@
 			this.groupBox10.TabIndex = 11;
 			this.groupBox10.TabStop = false;
 			this.groupBox10.Text = "Set Color";
+			// 
+			// butColorDrawOther
+			// 
+			this.butColorDrawOther.Location = new System.Drawing.Point(6,45);
+			this.butColorDrawOther.Name = "butColorDrawOther";
+			this.butColorDrawOther.Size = new System.Drawing.Size(67,23);
+			this.butColorDrawOther.TabIndex = 213;
+			this.butColorDrawOther.Text = "Other";
+			this.butColorDrawOther.UseVisualStyleBackColor = true;
+			this.butColorDrawOther.Click += new System.EventHandler(this.butColorDrawOther_Click);
 			// 
 			// panelColorDrawWhite
 			// 
@@ -668,25 +651,101 @@
 			this.panelColorDrawRed.TabIndex = 4;
 			this.panelColorDrawRed.Click += new System.EventHandler(this.panelColorDrawRed_Click);
 			// 
-			// butColorDrawOther
+			// panelColorDraw
 			// 
-			this.butColorDrawOther.Location = new System.Drawing.Point(6,45);
-			this.butColorDrawOther.Name = "butColorDrawOther";
-			this.butColorDrawOther.Size = new System.Drawing.Size(67,23);
-			this.butColorDrawOther.TabIndex = 213;
-			this.butColorDrawOther.Text = "Other";
-			this.butColorDrawOther.UseVisualStyleBackColor = true;
-			this.butColorDrawOther.Click += new System.EventHandler(this.butColorDrawOther_Click);
+			this.panelColorDraw.BackColor = System.Drawing.Color.Black;
+			this.panelColorDraw.Location = new System.Drawing.Point(10,95);
+			this.panelColorDraw.Name = "panelColorDraw";
+			this.panelColorDraw.Size = new System.Drawing.Size(22,22);
+			this.panelColorDraw.TabIndex = 10;
 			// 
-			// butShowDrawing
+			// radioColorChanger
 			// 
-			this.butShowDrawing.Location = new System.Drawing.Point(9,126);
-			this.butShowDrawing.Name = "butShowDrawing";
-			this.butShowDrawing.Size = new System.Drawing.Size(100,23);
-			this.butShowDrawing.TabIndex = 213;
-			this.butShowDrawing.Text = "Show a Drawing";
-			this.butShowDrawing.UseVisualStyleBackColor = true;
-			this.butShowDrawing.Click += new System.EventHandler(this.butShowDrawing_Click);
+			this.radioColorChanger.Location = new System.Drawing.Point(10,72);
+			this.radioColorChanger.Name = "radioColorChanger";
+			this.radioColorChanger.Size = new System.Drawing.Size(122,17);
+			this.radioColorChanger.TabIndex = 9;
+			this.radioColorChanger.TabStop = true;
+			this.radioColorChanger.Text = "Color Changer";
+			this.radioColorChanger.UseVisualStyleBackColor = true;
+			this.radioColorChanger.Click += new System.EventHandler(this.radioColorChanger_Click);
+			// 
+			// radioEraser
+			// 
+			this.radioEraser.Location = new System.Drawing.Point(10,53);
+			this.radioEraser.Name = "radioEraser";
+			this.radioEraser.Size = new System.Drawing.Size(122,17);
+			this.radioEraser.TabIndex = 8;
+			this.radioEraser.TabStop = true;
+			this.radioEraser.Text = "Eraser";
+			this.radioEraser.UseVisualStyleBackColor = true;
+			this.radioEraser.Click += new System.EventHandler(this.radioEraser_Click);
+			// 
+			// radioPen
+			// 
+			this.radioPen.Location = new System.Drawing.Point(10,34);
+			this.radioPen.Name = "radioPen";
+			this.radioPen.Size = new System.Drawing.Size(122,17);
+			this.radioPen.TabIndex = 7;
+			this.radioPen.TabStop = true;
+			this.radioPen.Text = "Pen";
+			this.radioPen.UseVisualStyleBackColor = true;
+			this.radioPen.Click += new System.EventHandler(this.radioPen_Click);
+			// 
+			// radioPointer
+			// 
+			this.radioPointer.Checked = true;
+			this.radioPointer.Location = new System.Drawing.Point(10,15);
+			this.radioPointer.Name = "radioPointer";
+			this.radioPointer.Size = new System.Drawing.Size(122,17);
+			this.radioPointer.TabIndex = 6;
+			this.radioPointer.TabStop = true;
+			this.radioPointer.Text = "Pointer";
+			this.radioPointer.UseVisualStyleBackColor = true;
+			this.radioPointer.Click += new System.EventHandler(this.radioPointer_Click);
+			// 
+			// groupBox11
+			// 
+			this.groupBox11.Controls.Add(this.label7);
+			this.groupBox11.Controls.Add(this.butGetBitmapOpenGL);
+			this.groupBox11.Controls.Add(this.butGetBitmapDirectX);
+			this.groupBox11.Controls.Add(this.butGetBitmap2D);
+			this.groupBox11.Location = new System.Drawing.Point(536,528);
+			this.groupBox11.Name = "groupBox11";
+			this.groupBox11.Size = new System.Drawing.Size(214,99);
+			this.groupBox11.TabIndex = 220;
+			this.groupBox11.TabStop = false;
+			this.groupBox11.Text = "GetBitmap";
+			// 
+			// butGetBitmapOpenGL
+			// 
+			this.butGetBitmapOpenGL.Location = new System.Drawing.Point(10,43);
+			this.butGetBitmapOpenGL.Name = "butGetBitmapOpenGL";
+			this.butGetBitmapOpenGL.Size = new System.Drawing.Size(75,23);
+			this.butGetBitmapOpenGL.TabIndex = 213;
+			this.butGetBitmapOpenGL.Text = "OpenGL";
+			this.butGetBitmapOpenGL.UseVisualStyleBackColor = true;
+			this.butGetBitmapOpenGL.Click += new System.EventHandler(this.butGetBitmapOpenGL_Click);
+			// 
+			// butGetBitmapDirectX
+			// 
+			this.butGetBitmapDirectX.Location = new System.Drawing.Point(10,68);
+			this.butGetBitmapDirectX.Name = "butGetBitmapDirectX";
+			this.butGetBitmapDirectX.Size = new System.Drawing.Size(75,23);
+			this.butGetBitmapDirectX.TabIndex = 214;
+			this.butGetBitmapDirectX.Text = "DirectX";
+			this.butGetBitmapDirectX.UseVisualStyleBackColor = true;
+			this.butGetBitmapDirectX.Click += new System.EventHandler(this.butGetBitmapDirectX_Click);
+			// 
+			// butGetBitmap2D
+			// 
+			this.butGetBitmap2D.Location = new System.Drawing.Point(10,18);
+			this.butGetBitmap2D.Name = "butGetBitmap2D";
+			this.butGetBitmap2D.Size = new System.Drawing.Size(75,23);
+			this.butGetBitmap2D.TabIndex = 207;
+			this.butGetBitmap2D.Text = "2D";
+			this.butGetBitmap2D.UseVisualStyleBackColor = true;
+			this.butGetBitmap2D.Click += new System.EventHandler(this.butGetBitmap2D_Click);
 			// 
 			// toothChartDirectX
 			// 
@@ -730,20 +789,31 @@
 			this.toothChart2D.TabIndex = 195;
 			this.toothChart2D.UseHardware = false;
 			// 
-			// label6
+			// textScreenshotBox
 			// 
-			this.label6.Location = new System.Drawing.Point(11,152);
-			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(271,43);
-			this.label6.TabIndex = 214;
-			this.label6.Text = "There is not a test for the SegmentDrawn event which causes saving to the databas" +
-    "e.  That will be tested in the full application.  Must implement.";
+			this.textScreenshotBox.Location = new System.Drawing.Point(2,191);
+			this.textScreenshotBox.Name = "textScreenshotBox";
+			this.textScreenshotBox.Size = new System.Drawing.Size(1257,20);
+			this.textScreenshotBox.TabIndex = 221;
+			this.textScreenshotBox.Text = resources.GetString("textScreenshotBox.Text");
+			this.textScreenshotBox.Visible = false;
+			// 
+			// label7
+			// 
+			this.label7.Location = new System.Drawing.Point(91,20);
+			this.label7.Name = "label7";
+			this.label7.Size = new System.Drawing.Size(117,71);
+			this.label7.TabIndex = 215;
+			this.label7.Text = "Since screen capture is unreliable, a warning to that effect shows if a screencap" +
+    "ture is used.";
 			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(1258,738);
+			this.Controls.Add(this.textScreenshotBox);
+			this.Controls.Add(this.groupBox11);
 			this.Controls.Add(this.groupBox9);
 			this.Controls.Add(this.groupBox8);
 			this.Controls.Add(this.groupBox7);
@@ -775,7 +845,9 @@
 			this.groupBox8.ResumeLayout(false);
 			this.groupBox9.ResumeLayout(false);
 			this.groupBox10.ResumeLayout(false);
+			this.groupBox11.ResumeLayout(false);
 			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 
@@ -843,6 +915,12 @@
 		private System.Windows.Forms.Button butColorDrawOther;
 		private System.Windows.Forms.Button butShowDrawing;
 		private System.Windows.Forms.Label label6;
+		private System.Windows.Forms.GroupBox groupBox11;
+		private System.Windows.Forms.Button butGetBitmapOpenGL;
+		private System.Windows.Forms.Button butGetBitmapDirectX;
+		private System.Windows.Forms.Button butGetBitmap2D;
+		private System.Windows.Forms.TextBox textScreenshotBox;
+		private System.Windows.Forms.Label label7;
 	}
 }
 

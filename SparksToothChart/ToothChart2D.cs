@@ -18,9 +18,15 @@ namespace SparksToothChart {
 		private string hotTooth;
 		///<summary>The previous hotTooth.  If this is different than hotTooth, then mouse has just now moved to a new tooth.  Can be 0 to represent no previous.</summary>
 		private string hotToothOld;
+		///<summary>GDI+ handle to this control. Used for line drawing and font measurement.</summary>
+		private Graphics g=null;
 
 		public ToothChart2D() {
 			InitializeComponent();
+		}
+
+		public void InitializeGraphics() {
+			g=this.CreateGraphics();
 		}
 
 		protected override void OnPaint(PaintEventArgs e) {
@@ -285,7 +291,7 @@ namespace SparksToothChart {
 					return;
 				}
 			}
-	//fix this.  No calls to OpenDentBusiness that require database.
+			//fix this.  No calls to OpenDentBusiness that require database.
 			//string displayNum=OpenDentBusiness.Tooth.GetToothLabelGraphic(tooth_id);
 			string displayNum=tooth_id;
 			float toMm=1f/TcData.ScaleMmToPix;
@@ -337,6 +343,15 @@ namespace SparksToothChart {
 						points[i].Y);
 				}
 			}
+		}
+
+		///<summary>Returns a bitmap of what is showing in the control.  Used for printing.</summary>
+		public Bitmap GetBitmap() {
+			Bitmap bmp=new Bitmap(this.Width,this.Height);
+			Graphics gfx=Graphics.FromImage(bmp);
+			PaintEventArgs e=new PaintEventArgs(gfx,new Rectangle(0,0,bmp.Width,bmp.Height));
+			OnPaint(e);
+			return bmp;
 		}
 
 		#region Mouse And Selections
@@ -420,12 +435,12 @@ namespace SparksToothChart {
 				}
 				TcData.PointList.Add(new Point(e.X,e.Y));
 				//just add the last line segment instead of redrawing the whole thing.
-				Graphics g=this.CreateGraphics();
+				//Graphics g=this.CreateGraphics();
 				g.SmoothingMode=SmoothingMode.HighQuality;
 				Pen pen=new Pen(TcData.ColorDrawing,2f);
 				int i=TcData.PointList.Count-1;
 				g.DrawLine(pen,TcData.PointList[i-1].X,TcData.PointList[i-1].Y,TcData.PointList[i].X,TcData.PointList[i].Y);
-				g.Dispose();
+				//g.Dispose();
 				//Invalidate();
 			}
 			else if(TcData.CursorTool==CursorTool.Eraser) {

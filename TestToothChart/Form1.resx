@@ -120,4 +120,7 @@
   <data name="label4.Text" xml:space="preserve">
     <value>For now, this is tested manually rather than automatically.  To test, set Missing and Hidden to "Complex".  Then, try to select various teeth, both on the number and distant from the number.  Should behave the same way in all three charts.  Also test it in tall and wide modes.</value>
   </data>
+  <data name="textScreenshotBox.Text" xml:space="preserve">
+    <value>                          This demonstrates problem with screenshots                                                                               This demonstrates problem with screenshots                                                                     This demonstrates problem with screenshots</value>
+  </data>
 </root>

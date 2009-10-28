@@ -562,5 +562,16 @@ namespace SparksToothChart {
 			//Gl.glVertex3f((float)WidthProjection/2f,0,0);
 		}
 
+		///<summary>Returns a bitmap of what is showing in the control.  Used for printing.</summary>
+		public Bitmap GetBitmap() {
+//Todo: Improve
+			Bitmap bitmap=new Bitmap(this.Width,this.Height);
+			Graphics gfx=Graphics.FromImage(bitmap);
+			Point screenLoc=PointToScreen(Location);
+			gfx.CopyFromScreen(screenLoc.X,screenLoc.Y,0,0,new Size(Width,Height));
+			gfx.Dispose();
+			return bitmap;
+		}
+
 	}
 }
