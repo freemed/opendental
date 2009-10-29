@@ -35,6 +35,8 @@ namespace SparksToothChart {
 			pp.EnableAutoDepthStencil=true;
 			pp.AutoDepthStencilFormat=DepthFormat.D16;//Z-buffer depth of 16 bits.
 			pp.DeviceWindowHandle=this.Handle;
+			pp.BackBufferWidth=this.Width;
+			pp.BackBufferHeight=this.Height;
 			pp.MultiSample=MultiSampleType.FourSamples;//Anti-alias settings.
 			device=new Device(0,DeviceType.Hardware,this,CreateFlags.SoftwareVertexProcessing,pp);
 			device.DeviceReset+=new EventHandler(this.OnDeviceReset);
@@ -197,16 +199,38 @@ namespace SparksToothChart {
 				line.Width=(float)Width/160f;
 				List<LineSimple> linesSimple=toothGraphic.GetRctLines();
 				for(int i=0;i<linesSimple.Count;i++) {
-					List<Vector3> lineVerts=new List<Vector3> ();				
-					for(int j=0;j<linesSimple[i].Vertices.Count;j++) {
-						lineVerts.Add(new Vector3(linesSimple[i].Vertices[j].X,linesSimple[i].Vertices[j].Y,linesSimple[i].Vertices[j].Z));
-						if(j>0){
-							//TODO: Draw line extensions.
-						}
+					if(linesSimple[i].Vertices.Count<2){
+						continue;//Just to avoid internal errors, even though not likely.
 					}
-					line.DrawTransform(lineVerts.ToArray(),
-						lineMatrix,
-						toothGraphic.colorRCT);
+					//Convert each line strip into very simple two point lines so that line extensions can be calculated more easily below.
+					List <Vector3> twoPointLines=new List<Vector3> ();
+					for(int j=0;j<linesSimple[i].Vertices.Count-1;j++){
+						twoPointLines.Add(new Vector3(linesSimple[i].Vertices[j  ].X,linesSimple[i].Vertices[j  ].Y,linesSimple[i].Vertices[j  ].Z));
+						twoPointLines.Add(new Vector3(linesSimple[i].Vertices[j+1].X,linesSimple[i].Vertices[j+1].Y,linesSimple[i].Vertices[j+1].Z));
+					}
+					//Draw each individual two point line. The lines must be broken down from line strips so that when individual two point
+					//line locations are modified they do not affect any other two point lines within the same line strip.
+					for(int j=0;j<twoPointLines.Count;j+=2){
+						Vector3 p1=twoPointLines[j];
+						Vector3 p2=twoPointLines[j+1];
+						Vector3 lineDir=p2-p1;
+						lineDir.Normalize();//Gives the line direction a single unit length.
+						float extSize=0.25f;//The number of units to extend each end of the two point line.
+						p1=p1-extSize*lineDir;
+						p2=p2+extSize*lineDir;
+						Vector3[] lineVerts=new Vector3[] {p1,p2};
+						line.DrawTransform(lineVerts,lineMatrix,toothGraphic.colorRCT);
+					}
+
+					//List<Vector3> lineVerts=new List<Vector3> ();				
+					//for(int j=0;j<linesSimple[i].Vertices.Count;j++) {
+					//  lineVerts.Add(new Vector3(linesSimple[i].Vertices[j].X,linesSimple[i].Vertices[j].Y,linesSimple[i].Vertices[j].Z));
+					//}
+					//line.DrawTransform(lineVerts.ToArray(),
+					//  lineMatrix,
+					//  toothGraphic.colorRCT);
+
+
 				}
 
 				//Gl.glPointSize((float)Width/275f);//point is slightly smaller since no antialiasing
@@ -564,12 +588,10 @@ namespace SparksToothChart {
 
 		///<summary>Returns a bitmap of what is showing in the control.  Used for printing.</summary>
 		public Bitmap GetBitmap() {
-//Todo: Improve
-			Bitmap bitmap=new Bitmap(this.Width,this.Height);
-			Graphics gfx=Graphics.FromImage(bitmap);
-			Point screenLoc=PointToScreen(Location);
-			gfx.CopyFromScreen(screenLoc.X,screenLoc.Y,0,0,new Size(Width,Height));
-			gfx.Dispose();
+			Surface backBuffer=device.GetBackBuffer(0,0,BackBufferType.Mono);
+			GraphicsStream gs=SurfaceLoader.SaveToStream(ImageFileFormat.Bmp,backBuffer);
+			Bitmap bitmap=new Bitmap(gs);
+			backBuffer.Dispose();
 			return bitmap;
 		}
 
