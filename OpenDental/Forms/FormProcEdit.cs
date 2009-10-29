@@ -2041,7 +2041,9 @@ namespace OpenDental{
 			else{
 				if(ProcCur.Signature!=null && ProcCur.Signature!="") {
 					sigBox.Visible=true;
-					sigBoxTopaz.Visible=false;
+					if(sigBoxTopaz!=null) {
+						sigBoxTopaz.Visible=false;
+					}
 					sigBox.ClearTablet();
 					//sigBox.SetSigCompressionMode(0);
 					//sigBox.SetEncryptionMode(0);
