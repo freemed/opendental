@@ -1297,6 +1297,10 @@ namespace OpenDentBusiness {
 			double due;
 			double balance;
 			for(int i=0;i<rawPayPlan.Rows.Count;i++){
+				//if the guarantor is not in this family, don't continue--------------------------------
+				if(fam.GetIndex(PIn.PLong(rawPayPlan.Rows[i]["Guarantor"].ToString()))==-1) {
+					continue;
+				}
 				//first, calculate the numbers-------------------------------------------------------------
 				paid=0;
 				for(int p=0;p<rawPay.Rows.Count;p++){
