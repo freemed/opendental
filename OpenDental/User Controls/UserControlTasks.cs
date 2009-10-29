@@ -1062,7 +1062,7 @@ namespace OpenDental {
 
 		private void tree_MouseDown(object sender,System.Windows.Forms.MouseEventArgs e) {
 			for(int i=TreeHistory.Count-1;i>0;i--) {
-				if(TreeHistory[i].TaskListNum==(int)tree.GetNodeAt(e.X,e.Y).Tag) {
+				if(TreeHistory[i].TaskListNum==(long)tree.GetNodeAt(e.X,e.Y).Tag) {
 					break;//don't remove the node click on or any higher node
 				}
 				TreeHistory.RemoveAt(i);
