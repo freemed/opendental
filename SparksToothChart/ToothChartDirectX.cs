@@ -248,7 +248,6 @@ namespace SparksToothChart {
 						Vector3[] lineVerts=new Vector3[] {p1,p2};
 						line.DrawTransform(lineVerts,lineMatrix,toothGraphic.colorRCT);
 					}
-
 					//List<Vector3> lineVerts=new List<Vector3> ();				
 					//for(int j=0;j<linesSimple[i].Vertices.Count;j++) {
 					//  lineVerts.Add(new Vector3(linesSimple[i].Vertices[j].X,linesSimple[i].Vertices[j].Y,linesSimple[i].Vertices[j].Z));
@@ -256,10 +255,7 @@ namespace SparksToothChart {
 					//line.DrawTransform(lineVerts.ToArray(),
 					//  lineMatrix,
 					//  toothGraphic.colorRCT);
-
-
 				}
-
 				//Gl.glPointSize((float)Width/275f);//point is slightly smaller since no antialiasing
 				////This section is a necessary workaround for OpenGL.
 				////It draws a point at each intersection to hide the unsightly transitions between line segments.
@@ -281,9 +277,6 @@ namespace SparksToothChart {
 				//}
 				//Gl.glPopMatrix();
 			}
-
-
-
 			//if(toothGraphic.Visible&&toothGraphic.IsBU) {//BU or Post
 			//  Gl.glPushMatrix();
 			//  Gl.glTranslatef(0,0,13f);//move BU forward 13mm so it will be visible.
@@ -303,43 +296,33 @@ namespace SparksToothChart {
 			//  Gl.glEnd();
 			//  Gl.glPopMatrix();
 			//}
-			//if(toothGraphic.IsImplant) {
-			//  Gl.glPushMatrix();
-			//  Gl.glTranslatef(GetTransX(toothGraphic.ToothID),//Move the tooth to the correct position for facial view
-			//    GetTransYfacial(toothGraphic.ToothID),
-			//    0);
-			//  RotateAndTranslateUser(toothGraphic);
-			//  if(ToothGraphic.IsMaxillary(toothGraphic.ToothID)) {
-			//    //flip the implant upside down
-			//    Gl.glRotatef(180f,0,0,1f);
-			//  }
-			//  Gl.glEnable(Gl.GL_LIGHTING);
-			//  Gl.glEnable(Gl.GL_BLEND);
-			//  Gl.glEnable(Gl.GL_DEPTH_TEST);
-			//  ToothGroup group=(ToothGroup)ListToothGraphics["implant"].Groups[0];
-			//  float[] material_color=new float[] {
-			//    (float)toothGraphic.colorImplant.R/255f,
-			//    (float)toothGraphic.colorImplant.G/255f,
-			//    (float)toothGraphic.colorImplant.B/255f,
-			//    (float)toothGraphic.colorImplant.A/255f
-			//  };//RGBA
-			//  Gl.glMaterialfv(Gl.GL_FRONT,Gl.GL_SPECULAR,specular_color_normal);
-			//  Gl.glMaterialfv(Gl.GL_FRONT,Gl.GL_SHININESS,shininess);
-			//  Gl.glMaterialfv(Gl.GL_FRONT,Gl.GL_AMBIENT_AND_DIFFUSE,material_color);
-			//  Gl.glBlendFunc(Gl.GL_ONE,Gl.GL_ZERO);
-			//  Gl.glHint(Gl.GL_POLYGON_SMOOTH_HINT,Gl.GL_NICEST);
-			//  for(int i=0;i<group.Faces.Count;i++) {//  .GetLength(0);i++) {//loop through each face
-			//    Gl.glBegin(Gl.GL_POLYGON);
-			//    for(int j=0;j<group.Faces[i].IndexList.Count;j++) {//.Length;j++) {//loop through each vertex
-			//      //The index for both will always be the same because we enforce a 1:1 relationship.
-			//      //We show grabbing a float[3], but we could just as easily use the index itself.
-			//      Gl.glVertex3fv(ListToothGraphics["implant"].VertexNormals[group.Faces[i].IndexList[j]].Vertex.GetFloatArray());//Vertices[group.Faces[i][j][0]]);
-			//      Gl.glNormal3fv(ListToothGraphics["implant"].VertexNormals[group.Faces[i].IndexList[j]].Normal.GetFloatArray()); //.Normals[group.Faces[i][j][1]]);
-			//    }
-			//    Gl.glEnd();
-			//  }
-			//  Gl.glPopMatrix();
-			//}
+			if(toothGraphic.IsImplant) {
+				if(ToothGraphic.IsMaxillary(toothGraphic.ToothID)) {
+					//flip the implant upside down
+					Matrix flipVertMat=Matrix.Identity;
+					flipVertMat.RotateZ((float)Math.PI);
+					device.Transform.World=flipVertMat*device.Transform.World;
+				}
+				device.RenderState.ZBufferEnable=true;
+				device.RenderState.Lighting=true;
+				Material material=new Material();
+				material.Ambient=toothGraphic.colorImplant;
+				material.Diffuse=toothGraphic.colorImplant;
+				material.Specular=specular_color_normal;
+				material.SpecularSharpness=shininess;
+				device.Material=material;
+				ToothGraphic implantGraphic=TcData.ListToothGraphics["implant"];
+				device.VertexFormat=CustomVertex.PositionNormal.Format;
+				device.SetStreamSource(0,implantGraphic.vb,0);
+				for(int g=0;g<implantGraphic.Groups.Count;g++) {
+					ToothGroup group=(ToothGroup)implantGraphic.Groups[g];
+					if(!group.Visible) {
+						continue;
+					}
+					device.Indices=group.facesDirectX;
+					device.DrawIndexedPrimitives(PrimitiveType.TriangleList,0,0,implantGraphic.VertexNormals.Count,0,group.NumIndicies/3);
+				}
+			}
 			line.Dispose();
 			device.RenderState.ZBufferEnable=true;
 			device.RenderState.Lighting=true;
