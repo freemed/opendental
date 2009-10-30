@@ -29,7 +29,12 @@ namespace OpenDental.Bridges{
 				return;
 			}
 			ArrayList ForProgram=ProgramProperties.GetForProgram(ProgramCur.ProgramNum);
-			ProgramProperty PPCur=ProgramProperties.GetCur(ForProgram,"Acquisition computer name");
+			ProgramProperty PPCur=ProgramProperties.GetCur(ForProgram,"Enter 0 to use PatientNum, or 1 to use ChartNum");
+			if(PPCur.PropertyValue=="1" && pat.ChartNumber=="") {
+				MessageBox.Show("This patient must have a ChartNumber entered first.");
+				return;
+			}
+			PPCur=ProgramProperties.GetCur(ForProgram,"Acquisition computer name");
 			try {
 				if(Environment.MachineName.ToUpper()==PPCur.PropertyValue.ToUpper()) {
 					SendDataServer(ProgramCur,ForProgram,pat);
@@ -157,7 +162,8 @@ namespace OpenDental.Bridges{
 			string id="";
 			if(PPCur.PropertyValue=="0") {
 				id=pat.PatNum.ToString();
-			} else {
+			} 
+			else {
 				id=pat.ChartNumber;
 			}
 			//We are actually supposed to get the program path from the registry. We can enhance that later.
