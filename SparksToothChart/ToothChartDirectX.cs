@@ -23,6 +23,7 @@ namespace SparksToothChart {
 		private Color specular_color_normal;
 		private Color specular_color_cementum;
 		private float shininess;
+		private Microsoft.DirectX.Direct3D.Font xfont;
 
 		public ToothChartDirectX() {
 			InitializeComponent();
@@ -42,10 +43,15 @@ namespace SparksToothChart {
 			device=new Device(0,DeviceType.Hardware,this,CreateFlags.SoftwareVertexProcessing,pp);
 			device.DeviceReset+=new EventHandler(this.OnDeviceReset);
 			OnDeviceReset(device,null);
+			this.Font=new System.Drawing.Font("Arial",9f);//Required for calculating font background rectangle size in ToothChartData.
+			xfont=new Microsoft.DirectX.Direct3D.Font(device,
+				15,6,FontWeight.Normal,1,false,CharacterSet.Ansi,Precision.Device,
+				FontQuality.ClearType,PitchAndFamily.DefaultPitch,"Arial");
 			g=this.CreateGraphics();// Graphics.FromHwnd(this.Handle);
 		}
 
 		public void CleanUpDirectX(){
+			xfont.Dispose();
 			for(int i=0;i<TcData.ListToothGraphics.Count;i++) {
 				ToothGraphic tooth=TcData.ListToothGraphics[i];
 				for(int j=0;j<tooth.Groups.Count;j++) {
@@ -161,6 +167,10 @@ namespace SparksToothChart {
 			device.Present();
 		}
 
+		private Matrix ScreenSpaceMatrix(){
+			return device.Transform.World*device.Transform.View*device.Transform.Projection;
+		}
+
 		private void DrawFacialView(ToothGraphic toothGraphic,Matrix defOrient) {
 			Matrix toothTrans=Matrix.Identity;//Start with world transform defined by calling function.
 			toothTrans.Translate(GetTransX(toothGraphic.ToothID),
@@ -175,7 +185,7 @@ namespace SparksToothChart {
 			}
 			device.RenderState.ZBufferEnable=false;
 			device.RenderState.Lighting=false;
-			Matrix lineMatrix=device.Transform.World*device.Transform.View*device.Transform.Projection;
+			Matrix lineMatrix=ScreenSpaceMatrix();
 			Line line=new Line(device);
 			line.Antialias=false;
 			if(toothGraphic.DrawBigX) {
@@ -564,6 +574,7 @@ namespace SparksToothChart {
 			string displayNum=tooth_id;
 			float toMm=1f/TcData.ScaleMmToPix;
 			RectangleF recMm=TcData.GetNumberRecMm(tooth_id,g);
+			//recMm=new RectangleF(recMm.X,recMm.Y-1f*toMm,recMm.Width,recMm.Height);//Due to anti-aliasing, the boxes overlap one or two teeth unless adjusted.
 			Color backColor;
 			Color foreColor;
 			if(isSelected) {
@@ -587,6 +598,7 @@ namespace SparksToothChart {
 			int[] indicies=new int[] { 0,1,2,0,2,3 };
 			IndexBuffer ib=new IndexBuffer(typeof(int),indicies.Length,device,Usage.None,Pool.Managed);
 			ib.SetData(indicies,0,LockFlags.None);
+			device.VertexFormat=CustomVertex.PositionColored.Format;
 			device.SetStreamSource(0,vb,0);
 			device.Indices=ib;
 			device.DrawIndexedPrimitives(PrimitiveType.TriangleList,0,0,quadVerts.Length,0,indicies.Length/3);
@@ -599,15 +611,14 @@ namespace SparksToothChart {
 				&&!TcData.ListToothGraphics[Tooth.PriToPerm(tooth_id)].ShowPrimaryLetter) {
 				//do not print string
 			} else {
-				PrintString(displayNum,recMm.X+2f*toMm,recMm.Y+2f*toMm,15f);
+				PrintString(displayNum,recMm.X+2f*toMm,recMm.Y+13f*toMm,15f,foreColor);
 			}
 		}
 
-		private void PrintString(string text,float x,float y,float z) {
-			//TODO: Implement.
-			
-
-			
+		private void PrintString(string text,float x,float y,float z,Color color) {
+			Vector3 screenPoint=new Vector3(x,y,z);
+			screenPoint.Project(device.Viewport,device.Transform.Projection,device.Transform.View,device.Transform.World);
+			xfont.DrawText(null,text,new Point((int)screenPoint.X,(int)screenPoint.Y),color);
 		}
 
 		///<summary>Returns a bitmap of what is showing in the control.  Used for printing.</summary>
