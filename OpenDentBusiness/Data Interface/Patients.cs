@@ -1501,7 +1501,8 @@ namespace OpenDentBusiness{
 				+" ORDER BY (chartnumber+0) DESC ";//1/13/05 by Keyush Shaw-added 0.
 			if(DataConnection.DBtype==DatabaseType.Oracle){
 				command="SELECT * FROM ("+command+") WHERE ROWNUM<=1";
-			}else{//Assume MySQL
+			}
+			else{//Assume MySQL
 				command+="LIMIT 1";
 			}
 			DataTable table=Db.GetTable(command);
@@ -1510,10 +1511,12 @@ namespace OpenDentBusiness{
 			}
 			string lastChartNum=PIn.PString(table.Rows[0][0].ToString());
 			//or could add more match conditions
-			//if(Regex.IsMatch(lastChartNum,@"^\d+$")){//if is an integer
-			return(PIn.PLong(lastChartNum)+1).ToString();
-			//}
-			//return "1";//if there are no integer chartnumbers yet
+			try {
+				return (Convert.ToInt64(lastChartNum)+1).ToString();
+			}
+			catch {
+				throw new ApplicationException(lastChartNum+" is an existing ChartNumber.  It's too big to convert to a long int, so it's not possible to add one to automatically increment.");
+			}
 		}
 
 		///<summary>Returns the name(only one) of the patient using this chartnumber.</summary>

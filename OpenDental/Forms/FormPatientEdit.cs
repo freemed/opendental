@@ -2041,7 +2041,12 @@ namespace OpenDental{
 		}
 
 		private void butAuto_Click(object sender, System.EventArgs e) {
-			textChartNumber.Text=Patients.GetNextChartNum();
+			try {
+				textChartNumber.Text=Patients.GetNextChartNum();
+			}
+			catch(ApplicationException ex) {
+				MessageBox.Show(ex.Message);
+			}
 		}
 
 		private void textCity_TextChanged(object sender, System.EventArgs e) {
