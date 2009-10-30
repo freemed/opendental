@@ -17,51 +17,21 @@ namespace SparksToothChart {
 		///<summary>dim 1=the face. dim 2=the vertex. dim 3 always has length=2, with 1st vertex, and 2nd normal.</summary>
 		//public int[][][] Faces;
 		public List<Face> Faces;
-		///<summary>Corresponds to the Faces list.</summary>
+		///<summary>Corresponds to the Faces list. Indicies must be cached to draw DirectX triangles.</summary>
 		public IndexBuffer facesDirectX;
 		///<summary>Corresponds to the number of indicies referenced by the facesDirectX IndexBuffer. This relates to triangles,
 		///not to Polygons as in the Faces list. Must be a multiple of 3.</summary>
 		public int NumIndicies=0;
-		///<summary>Corresponds to VertexNormal list, but only for the vertifies in this group and is stored in DirectX native vertex format.</summary>
-		public VertexBuffer VertexBuffer;
 
 		public ToothGroup() {
 			Faces=new List<Face>();
 		}
 
-		public void PrepareForDirectX(Device device,List <VertexNormal> VertexNormals){
-			//Figure out which verticies this group uses.
-			bool[] usedVerts=new bool[VertexNormals.Count];
-			for(int i=0;i<Faces.Count;i++){
-				for(int j=0;j<Faces[i].IndexList.Count;j++){
-					usedVerts[Faces[i].IndexList[j]]=true;
-				}
+		public void PrepareForDirectX(Device device){
+			if(facesDirectX!=null){
+				facesDirectX.Dispose();
+				facesDirectX=null;
 			}
-			int[] indexMap=new int[usedVerts.Length];
-			int numVerts=0;
-			for(int i=0,v=0;i<usedVerts.Length;i++){
-				if(usedVerts[i]){
-					indexMap[i]=v++;
-					numVerts++;
-				}else{
-					indexMap[i]=-1;
-				}
-			}
-			//Prepare the verticies into a vertex buffer.
-			CustomVertex.PositionNormal[] verts=new CustomVertex.PositionNormal[numVerts];
-			for(int i=0;i<indexMap.Length;i++){
-				if(indexMap[i]>=0){
-					verts[indexMap[i]].X=VertexNormals[i].Vertex.X;
-					verts[indexMap[i]].Y=VertexNormals[i].Vertex.Y;
-					verts[indexMap[i]].Z=VertexNormals[i].Vertex.Z;
-					verts[indexMap[i]].Nx=VertexNormals[i].Normal.X;
-					verts[indexMap[i]].Ny=VertexNormals[i].Normal.Y;
-					verts[indexMap[i]].Nz=VertexNormals[i].Normal.Z;
-				}
-			}
-			VertexBuffer=new VertexBuffer(typeof(CustomVertex.PositionNormal),CustomVertex.PositionNormal.StrideSize*numVerts,
-				device,Usage.WriteOnly,CustomVertex.PositionNormal.Format,Pool.Managed);
-			VertexBuffer.SetData(verts,0,LockFlags.None);			
 			//Prepare the indicies into an index buffer.
 			//When drawing with a single index buffer inside of DirectX, all primitives must be the same type.
 			//Furthermore, there are no polygons inside of DirectX, only triangles. Therefore, at this point
@@ -71,10 +41,10 @@ namespace SparksToothChart {
 			List<int> indexList=new List<int>();
 			for(int i=0;i<Faces.Count;i++) {
 				for(int j=1;j<Faces[i].IndexList.Count-1;j++) {
-					//We create a triangle fan out of the indcies here for simplicity.
-					indexList.Add(indexMap[Faces[i].IndexList[0]]);
-					indexList.Add(indexMap[Faces[i].IndexList[j]]);
-					indexList.Add(indexMap[Faces[i].IndexList[j+1]]);
+					//We create a triangle fan out of the indcies here for simplicity, preserving the original polygon normal directionality.
+					indexList.Add(Faces[i].IndexList[0]);
+					indexList.Add(Faces[i].IndexList[j]);
+					indexList.Add(Faces[i].IndexList[j+1]);
 				}
 			}
 			int[] indicies=indexList.ToArray();

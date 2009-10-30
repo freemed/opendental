@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using Microsoft.DirectX;
 using Microsoft.DirectX.Direct3D;
+using OpenDentBusiness;
 
 namespace SparksToothChart {
 
@@ -41,19 +42,35 @@ namespace SparksToothChart {
 			device=new Device(0,DeviceType.Hardware,this,CreateFlags.SoftwareVertexProcessing,pp);
 			device.DeviceReset+=new EventHandler(this.OnDeviceReset);
 			OnDeviceReset(device,null);
+			g=this.CreateGraphics();// Graphics.FromHwnd(this.Handle);
+		}
+
+		public void CleanUpDirectX(){
 			for(int i=0;i<TcData.ListToothGraphics.Count;i++) {
 				ToothGraphic tooth=TcData.ListToothGraphics[i];
 				for(int j=0;j<tooth.Groups.Count;j++) {
 					ToothGroup group=tooth.Groups[j];
-					group.PrepareForDirectX(device,tooth.VertexNormals);
+					group.facesDirectX.Dispose();
+					group.facesDirectX=null;
 				}
+				tooth.vb.Dispose();
+				tooth.vb=null;
 			}
-			g=this.CreateGraphics();// Graphics.FromHwnd(this.Handle);
+			device.Dispose();
+			device=null;
 		}
 
 		///<summary>TODO: Handle the situation when there are suboptimal graphics cards.</summary>
 		public void OnDeviceReset(object sender,EventArgs e){
 			device=sender as Device;
+			for(int i=0;i<TcData.ListToothGraphics.Count;i++) {
+				ToothGraphic tooth=TcData.ListToothGraphics[i];
+				tooth.PrepareForDirectX(device);
+				for(int j=0;j<tooth.Groups.Count;j++) {
+					ToothGroup group=tooth.Groups[j];
+					group.PrepareForDirectX(device);
+				}
+			}
 		}
 
 		protected override void OnPaintBackground(PaintEventArgs e) {
@@ -136,12 +153,12 @@ namespace SparksToothChart {
 				DrawFacialView(TcData.ListToothGraphics[t],defOrient);
 				DrawOcclusalView(TcData.ListToothGraphics[t],defOrient);
 			}
-			device.EndScene();
-			device.Present();
 			//All DirectX drawing is finished for this frame.
 			//Now draw all lines using GDI+.
-			DrawTextAndLines();
+			DrawNumbersAndLines();
 			//DrawDrawingSegments();
+			device.EndScene();
+			device.Present();
 		}
 
 		private void DrawFacialView(ToothGraphic toothGraphic,Matrix defOrient) {
@@ -408,6 +425,7 @@ namespace SparksToothChart {
 		private void DrawTooth(ToothGraphic toothGraphic) {
 			ToothGroup group;
 			device.VertexFormat=CustomVertex.PositionNormal.Format;
+			device.SetStreamSource(0,toothGraphic.vb,0);
 			for(int g=0;g<toothGraphic.Groups.Count;g++) {
 				group=(ToothGroup)toothGraphic.Groups[g];
 				if(!group.Visible) {
@@ -430,7 +448,6 @@ namespace SparksToothChart {
 				material.SpecularSharpness=shininess;
 				device.Material=material;
 				//draw the group
-				device.SetStreamSource(0,group.VertexBuffer,0);
 			  device.Indices=group.facesDirectX;
 				device.DrawIndexedPrimitives(PrimitiveType.TriangleList,0,0,toothGraphic.VertexNormals.Count,0,group.NumIndicies/3);				
 			}
@@ -510,80 +527,87 @@ namespace SparksToothChart {
 			return -13f;
 		}
 
-		private void DrawTextAndLines() {
-
+		private void DrawNumbersAndLines() {
+			//Draw the center line.
 			g.DrawLine(new Pen(Brushes.White),0,this.Height/2,this.Width,this.Height/2);
+			//Draw the tooth numbers.
+			string tooth_id;
+			for(int i=1;i<=52;i++) {
+				tooth_id=Tooth.FromOrdinal(i);
+				if(TcData.SelectedTeeth.Contains(tooth_id)) {
+					DrawNumber(tooth_id,true,true);
+				} else {
+					DrawNumber(tooth_id,false,true);
+				}
+			}
+		}
 
+		///<summary>Draws the number and the small rectangle behind it.  Draws in the appropriate color.  isFullRedraw means that all of the toothnumbers are being redrawn.  This helps with a few optimizations and with not painting blank rectangles when not needed.</summary>
+		private void DrawNumber(string tooth_id,bool isSelected,bool isFullRedraw) {
+			if(!Tooth.IsValidDB(tooth_id)) {
+				return;
+			}
+			device.RenderState.Lighting=false;
+			device.RenderState.ZBufferEnable=false;
+			device.Transform.World=Matrix.Identity;
+			if(isFullRedraw) {//if redrawing all numbers
+				if(TcData.ListToothGraphics[tooth_id].HideNumber) {//and this is a "hidden" number
+					return;//skip
+				}
+				if(Tooth.IsPrimary(tooth_id)
+					&&!TcData.ListToothGraphics[Tooth.PriToPerm(tooth_id)].ShowPrimaryLetter)//but not set to show primary letters
+				{
+					return;
+				}
+			}
+			//fix this.  No calls to OpenDentBusiness that require database.
+			string displayNum=tooth_id;
+			float toMm=1f/TcData.ScaleMmToPix;
+			RectangleF recMm=TcData.GetNumberRecMm(tooth_id,g);
+			Color backColor;
+			Color foreColor;
+			if(isSelected) {
+				backColor=TcData.ColorBackHighlight;
+				foreColor=TcData.ColorTextHighlight;
+			} else {
+				backColor=TcData.ColorBackground;
+				foreColor=TcData.ColorText;
+			}
+			//Draw the background rectangle.
+			int backColorARGB=backColor.ToArgb();
+			CustomVertex.PositionColored[] quadVerts=new CustomVertex.PositionColored[] {
+					new CustomVertex.PositionColored(recMm.X,recMm.Y,14,backColorARGB),//LL
+					new CustomVertex.PositionColored(recMm.X,recMm.Y+recMm.Height,14,backColorARGB),//UL
+					new CustomVertex.PositionColored(recMm.X+recMm.Width,recMm.Y+recMm.Height,14,backColorARGB),//UR
+					new CustomVertex.PositionColored(recMm.X+recMm.Width,recMm.Y,14,backColorARGB),//LR
+				};
+			VertexBuffer vb=new VertexBuffer(typeof(CustomVertex.PositionColored),CustomVertex.PositionColored.StrideSize*quadVerts.Length,
+				device,Usage.WriteOnly,CustomVertex.PositionColored.Format,Pool.Managed);
+			vb.SetData(quadVerts,0,LockFlags.None);
+			int[] indicies=new int[] { 0,1,2,0,2,3 };
+			IndexBuffer ib=new IndexBuffer(typeof(int),indicies.Length,device,Usage.None,Pool.Managed);
+			ib.SetData(indicies,0,LockFlags.None);
+			device.SetStreamSource(0,vb,0);
+			device.Indices=ib;
+			device.DrawIndexedPrimitives(PrimitiveType.TriangleList,0,0,quadVerts.Length,0,indicies.Length/3);
+			ib.Dispose();
+			vb.Dispose();
+			//Draw the foreground text if needed.
+			if(TcData.ListToothGraphics[tooth_id].HideNumber) {//If number is hidden.
+				//do not print string
+			} else if(Tooth.IsPrimary(tooth_id)
+				&&!TcData.ListToothGraphics[Tooth.PriToPerm(tooth_id)].ShowPrimaryLetter) {
+				//do not print string
+			} else {
+				PrintString(displayNum,recMm.X+2f*toMm,recMm.Y+2f*toMm,15f);
+			}
+		}
 
-			//device.RenderState.Lighting=false;
-			//device.Lights[0].Enabled=false;
-		
-			////Draw the horizontal line accross the tooth chart.
-			//device.Transform.World=Matrix.Identity;
-			//CustomVertex.PositionColored[] linePoints=new CustomVertex.PositionColored[2];
-			//linePoints[0].X=-(float)WidthProjection/2f;
-			//linePoints[0].Color=Color.Red.ToArgb();
-			//linePoints[1].X=(float)WidthProjection/2f;
-			//linePoints[1].Color=Color.Blue.ToArgb();
-			//VertexBuffer vb=new VertexBuffer(typeof(CustomVertex.PositionColored),CustomVertex.PositionColored.StrideSize*linePoints.Length,
-			//  device,Usage.WriteOnly,CustomVertex.PositionColored.Format,Pool.Managed);
-			//vb.SetData(linePoints,0,LockFlags.None);
-			//device.SetStreamSource(0,vb,0);
-			//int[] indicies=new int[] { 0,1 };
-			//IndexBuffer ib=new IndexBuffer(typeof(int),indicies.Length,device,Usage.None,Pool.Managed);
-			//ib.SetData(indicies,0,LockFlags.None);
-			//device.Indices=ib;
-			//device.DrawIndexedPrimitives(PrimitiveType.LineList,0,0,linePoints.Length,0,linePoints.Length-1);
-			//vb.Dispose();
-			//ib.Dispose();
-
-			//Microsoft.DirectX.Direct3D.Line a;//This class is supposed to exist but does not! Maybe out Line class is blocking it? No idea...
-
-
-			////Draw the horizontal line accross the tooth chart.
-			//Matrix offset=Matrix.Identity;
-			//offset.Translate(-0.5f,0,0);
-			//device.Transform.World=offset;
-			//float lineWidth=(float)(Width/400f)/6f;
-			//CustomVertex.PositionColored[] linePoints=new CustomVertex.PositionColored[4];
-			////0
-			//linePoints[0].X=-(float)WidthProjection/2f;
-			//linePoints[0].Y=-lineWidth/2;
-			//linePoints[0].Color=Color.White.ToArgb();
-			////1
-			//linePoints[1].X=-(float)WidthProjection/2f;
-			//linePoints[1].Y=lineWidth/2;
-			//linePoints[1].Color=Color.White.ToArgb();
-			////2
-			//linePoints[2].X=(float)WidthProjection/2f;
-			//linePoints[2].Y=lineWidth/2;
-			//linePoints[2].Color=Color.White.ToArgb();
-			////3
-			//linePoints[3].X=(float)WidthProjection/2f;
-			//linePoints[3].Y=-lineWidth/2;
-			//linePoints[3].Color=Color.White.ToArgb();
-			////
-			//VertexBuffer vb=new VertexBuffer(typeof(CustomVertex.PositionColored),CustomVertex.PositionColored.StrideSize*linePoints.Length,
-			//  device,Usage.WriteOnly,CustomVertex.PositionColored.Format,Pool.Managed);
-			//vb.SetData(linePoints,0,LockFlags.None);
-			//device.SetStreamSource(0,vb,0);
-			//int[] indicies=new int[] { 0,2,1,0,3,2 };
-			//IndexBuffer ib=new IndexBuffer(typeof(int),indicies.Length,device,Usage.None,Pool.Managed);
-			//ib.SetData(indicies,0,LockFlags.None);
-			//device.Indices=ib;
-			//device.DrawIndexedPrimitives(PrimitiveType.TriangleList,0,0,linePoints.Length,0,indicies.Length/3);
-			//vb.Dispose();
-			//ib.Dispose();
-
-
-			//Gl.glColor3f(
-			//  (float)Color.White.R/255f,
-			//  (float)Color.White.G/255f,
-			//  (float)Color.White.B/255f);
-			//Gl.glLineWidth((float)Width/400f);//about 1
+		private void PrintString(string text,float x,float y,float z) {
+			//TODO: Implement.
 			
-			//Gl.glVertex3f(-(float)WidthProjection/2f,0,0);
-			//Gl.glVertex3f((float)WidthProjection/2f,0,0);
+
+			
 		}
 
 		///<summary>Returns a bitmap of what is showing in the control.  Used for printing.</summary>

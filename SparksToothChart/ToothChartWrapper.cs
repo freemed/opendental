@@ -192,6 +192,9 @@ namespace SparksToothChart {
 				toothChart2D.ResumeLayout();
 			}
 			else if(drawMode==DrawingMode.DirectX){
+				if(toothChartDirectX!=null){
+					toothChartDirectX.CleanUpDirectX();
+				}
 				toothChartDirectX=new ToothChartDirectX();//(hardwareMode,preferredPixelFormatNum);
 				//preferredPixelFormatNum=toothChart.SelectedPixelFormatNumber;
 				//toothChartDirectX.ColorText=colorText;
