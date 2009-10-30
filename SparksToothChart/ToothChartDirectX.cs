@@ -346,7 +346,12 @@ namespace SparksToothChart {
 			}
 			Matrix rotAndTranUser=RotateAndTranslateUser(toothGraphic);
 			device.Transform.World=rotAndTranUser*toothRot*toothTrans*defOrient;
-			if(toothGraphic.Visible//might not be visible if an implant
+			if(!Tooth.IsPrimary(toothGraphic.ToothID)//if perm tooth
+				&&Tooth.IsValidDB(Tooth.PermToPri(toothGraphic.ToothID))
+				&&TcData.ListToothGraphics[Tooth.PermToPri(toothGraphic.ToothID)].Visible)//and the primary tooth is visible
+			{
+				//do not paint
+			} else if(toothGraphic.Visible//might not be visible if an implant
 				||(toothGraphic.IsCrown&&toothGraphic.IsImplant))//a crown on an implant will paint
 			//pontics won't paint, because tooth is invisible
 			{
