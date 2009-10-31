@@ -198,12 +198,12 @@ namespace SparksToothChart {
 				DrawOcclusalView(TcData.ListToothGraphics[t]);
 			}
 			//
-			Gl.glFlush();
 			//bitmapInPictBox=GetBitmapOfOpenGL();
 			//gg=Graphics.FromImage(bitmapInPictBox);
 			DrawNumbersAndLines();
 			DrawDrawingSegments();
 			//g.DrawImage(bitmapInPictBox,0,0);
+			Gl.glFlush();
 		}
 
 		private void DrawFacialView(ToothGraphic toothGraphic) {
@@ -508,7 +508,9 @@ namespace SparksToothChart {
 			Gl.glEnable(Gl.GL_BLEND);
 			Gl.glBlendFunc(Gl.GL_SRC_ALPHA,Gl.GL_ONE_MINUS_SRC_ALPHA);
 			Gl.glDisable(Gl.GL_DEPTH_TEST);
-			float lWidth=(float)Width/300f;//about 1.5
+			//
+			//
+			float lWidth=(float)Width/220f;//300f;//about 1.5
 			Gl.glLineWidth(lWidth);
 			Gl.glPointSize((float)Width/350f);//slightly smaller
 			string[] pointStr;
@@ -517,7 +519,7 @@ namespace SparksToothChart {
 			string[] xy;
 			PointF pointMm;
 			Color color;
-			//float scaleDrawing=(float)Width/(float)TcData.SizeOriginalDrawing.Width;
+			float scaleDrawing=(float)Width/(float)TcData.SizeOriginalDrawing.Width;
 			for(int s=0;s<TcData.DrawingSegmentList.Count;s++) {
 				color=TcData.DrawingSegmentList[s].ColorDraw;
 				Gl.glColor3f(
@@ -529,7 +531,7 @@ namespace SparksToothChart {
 				for(int p=0;p<pointStr.Length;p++){
 					xy=pointStr[p].Split(',');
 					if(xy.Length==2){
-						point=new Point((int)(float.Parse(xy[0])*TcData.ScaleMmToPix),(int)(float.Parse(xy[1])*TcData.ScaleMmToPix));
+						point=new Point((int)(float.Parse(xy[0])*scaleDrawing),(int)(float.Parse(xy[1])*scaleDrawing));
 						points.Add(point);
 					}
 				}
@@ -541,6 +543,7 @@ namespace SparksToothChart {
 				}
 				Gl.glEnd();
 				//now draw a filled circle at each line strip intersection to make it look nicer
+				/* Not necessary on line segments because the endpoints are already so close together.  The circles made it look worse.
 				Gl.glBegin(Gl.GL_POINTS);
 				for(int i=0;i<points.Count;i++){
 					//but ignore the first and last.  We are only concerned with where lines meet.
@@ -550,7 +553,7 @@ namespace SparksToothChart {
 					pointMm=TcData.PixToMm(new Point(points[i].X,points[i].Y));
 					Gl.glVertex3f(pointMm.X,pointMm.Y,0);
 				}
-				Gl.glEnd();
+				Gl.glEnd();*/
 			}
 			Gl.glPopMatrix();
 		}
@@ -988,7 +991,7 @@ namespace SparksToothChart {
 					(float)TcData.ColorDrawing.R/255f,
 					(float)TcData.ColorDrawing.G/255f,
 					(float)TcData.ColorDrawing.B/255f);
-				Gl.glLineWidth((float)Width/300f);//about 2
+				Gl.glLineWidth((float)Width/220f);//300f);//about 2
 				int i=TcData.PointList.Count-1;
 				Gl.glBegin(Gl.GL_LINE_STRIP);
 				//if we set 0,0 to center, then this is where we would convert it back.
