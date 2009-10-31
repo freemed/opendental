@@ -1684,19 +1684,19 @@ namespace OpenDental{
 		///<summary>Clicked today.</summary>
 		private void butToday_Click(object sender,System.EventArgs e) {
 			AppointmentL.DateSelected=DateTime.Today;
-			RefreshPeriod();
+			SetWeeklyView(radioWeek.Checked);
 		}
 
 		///<summary>Clicked back one day.</summary>
 		private void butBack_Click(object sender,System.EventArgs e) {
 			AppointmentL.DateSelected=AppointmentL.DateSelected.AddDays(-1);
-			RefreshPeriod();
+			SetWeeklyView(radioWeek.Checked);
 		}
 
 		///<summary>Clicked forward one day.</summary>
 		private void butFwd_Click(object sender,System.EventArgs e) {
 			AppointmentL.DateSelected=AppointmentL.DateSelected.AddDays(1);
-			RefreshPeriod();
+			SetWeeklyView(radioWeek.Checked);
 		}
 
 		private void butBackMonth_Click(object sender,EventArgs e) {
