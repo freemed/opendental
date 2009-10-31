@@ -808,6 +808,8 @@ DROP TABLE IF EXISTS etAck";
 			To6_8_1();
 		}
 
+		//To6_7_25()//duplicated further down
+
 		private static void To6_8_1() {
 			if(FromVersion<new Version("6.8.1.0")) {
 				string command;
@@ -1735,6 +1737,25 @@ DROP TABLE IF EXISTS etAck";
 				catch { }
 				command="UPDATE preference SET ValueString = '6.8.1.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ32(command);
+			}
+			To6_8_7();
+		}
+
+		private static void To6_8_7() {
+			//duplicated in 6.7
+			if(FromVersion<new Version("6.8.7.0")) {
+				string command;
+				try {
+					command="ALTER TABLE claimpayment ADD INDEX (DepositNum)";
+					Db.NonQ(command);
+					command="ALTER TABLE payment ADD INDEX (DepositNum)";
+					Db.NonQ(command);
+				}
+				catch {
+					//in case any of the indices already exists.
+				}
+				command="UPDATE preference SET ValueString = '6.8.7.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
 			}
 			To6_9_0();
 		}
