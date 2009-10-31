@@ -78,6 +78,7 @@ namespace OpenDental{
 			ColTotal=new double[TableQ.Columns.Count];
 		}
 
+		/*
 		///<summary>This is typically used when we want to define the columns before we run the query.  If the query has already been run, then this method is not necessary.</summary>
 		public void InitializeColumns(int colcount) {
 			colWidth=new int[colcount];
@@ -86,7 +87,7 @@ namespace OpenDental{
 			colCaption=new string[colcount];
 			colAlign=new HorizontalAlignment[colcount];
 			ColTotal=new double[colcount];
-		}
+		}*/
 
 		///<summary>Runs the query and returns the result.  An improvement would be to pass in the query, but no time to rewrite.</summary>
 		public DataTable GetTempTable(){

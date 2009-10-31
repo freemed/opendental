@@ -477,7 +477,7 @@ namespace OpenDental{
 				}
 				report.SubTitle.Add(subt);
 			}
-			report.InitializeColumns(8);
+			//report.InitializeColumns(8);
 			report.SetColumn(this,0,"GUARANTOR",160);
 			report.SetColumn(this,1,"0-30 DAYS",80,HorizontalAlignment.Right);
 			report.SetColumn(this,2,"30-60 DAYS",80,HorizontalAlignment.Right);
