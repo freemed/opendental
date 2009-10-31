@@ -302,6 +302,37 @@ namespace OpenDental{
 				isAlph=true;
 			}
 			table=Providers.Refresh(schoolClass,isAlph);
+			//fix orders
+			bool doFix=false;
+			if(groupDentalSchools.Visible) {
+				if(checkAlphabetical.Checked) {
+					doFix=false;
+				}
+				else if(comboClass.SelectedIndex==0) {
+					doFix=false;
+				}
+				else{
+					doFix=true;
+				}
+			}
+			else {
+				doFix=true;
+			}
+			if(doFix) {
+				bool neededFixing=false;
+				Provider prov;
+				for(int i=0;i<table.Rows.Count;i++) {
+					if(table.Rows[i]["ItemOrder"].ToString()!=i.ToString()) {
+						prov=Providers.GetProv(PIn.PLong(table.Rows[i]["ProvNum"].ToString()));
+						prov.ItemOrder=i;
+						Providers.Update(prov);
+					}
+				}
+				if(neededFixing) {
+					DataValid.SetInvalid(InvalidType.Providers);
+					table=Providers.Refresh(schoolClass,isAlph);
+				}
+			}
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableProviders","Abbrev"),90);
@@ -364,7 +395,7 @@ namespace OpenDental{
 		private void butAdd_Click(object sender, System.EventArgs e) {
 			FormProvEdit FormP=new FormProvEdit();
 			FormP.ProvCur=new Provider();
-			FormP.ProvCur.ItemOrder=Providers.GetNextItemOrder();
+			FormP.ProvCur.ItemOrder=Providers.GetNextItemOrder();//this is clumsy and needs rewrite.
 			if(groupDentalSchools.Visible && comboClass.SelectedIndex>0){
 				FormP.ProvCur.SchoolClassNum=SchoolClasses.List[comboClass.SelectedIndex-1].SchoolClassNum;
 			}
@@ -403,6 +434,7 @@ namespace OpenDental{
 			otherprov.ItemOrder++;
 			Providers.Update(otherprov);
 			changed=true;
+			gridMain.SetSelected(false);
 			FillGrid();
 			gridMain.SetSelected(prov.ItemOrder,true);
 		}
@@ -424,6 +456,7 @@ namespace OpenDental{
 			otherprov.ItemOrder--;
 			Providers.Update(otherprov);
 			changed=true;
+			gridMain.SetSelected(false);
 			FillGrid();
 			gridMain.SetSelected(prov.ItemOrder,true);
 		}

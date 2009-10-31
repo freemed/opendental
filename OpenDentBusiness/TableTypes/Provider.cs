@@ -11,7 +11,7 @@ namespace OpenDentBusiness{
 		public long ProvNum;
 		///<summary>Abbreviation.  There was a limit of 5 char before version 5.4.  The new limit is 255 char.  This will allow more elegant solutions to various problems.  Providers will no longer be referred to by FName and LName.  Abbr is used as a human readable primary key.</summary>
 		public string Abbr;
-		///<summary>Order that provider will show in lists.</summary>
+		///<summary>Order that provider will show in lists. Was 1-based, now 0-based.</summary>
 		public int ItemOrder;
 		///<summary>Last name.</summary>
 		public string LName;

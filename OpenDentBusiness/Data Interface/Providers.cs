@@ -177,12 +177,13 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),schoolClass,isAlph);
 			}
-			string command="SELECT Abbr,LName,FName,provider.IsHidden,provider.ProvNum,GradYear,Descript,UserName "
+			string command="SELECT Abbr,LName,FName,provider.IsHidden,provider.ItemOrder,provider.ProvNum,GradYear,Descript,UserName "
 				+"FROM provider LEFT JOIN schoolclass ON provider.SchoolClassNum=schoolclass.SchoolClassNum "
 				+"LEFT JOIN userod ON userod.ProvNum=provider.ProvNum ";
 			if(schoolClass!=0){
 				command+="WHERE provider.SchoolClassNum="+POut.PLong(schoolClass)+" ";
 			}
+			command+="GROUP BY provider.ProvNum ";
 			if(isAlph){
 				command+="ORDER BY GradYear,Descript,LName,FName";
 			}
@@ -400,7 +401,7 @@ namespace OpenDentBusiness{
 			string command="SELECT MAX(ItemOrder) FROM provider";
 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0){
-				return 1;
+				return 0;
 			}
 			return PIn.PInt(table.Rows[0][0].ToString())+1;
 		}
