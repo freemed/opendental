@@ -160,11 +160,17 @@ namespace OpenDentBusiness {
 			}
 			else {*/
 			string srcFileName = ODFileUtils.CombinePaths(patFolder,doc.FileName);
-			if(File.Exists(srcFileName) && HasImageExtension(srcFileName)) {
-				return new Bitmap(srcFileName);
+			if(HasImageExtension(srcFileName)) {
+				//if(File.Exists(srcFileName) && HasImageExtension(srcFileName)) {
+				if(File.Exists(srcFileName)) {
+					return new Bitmap(srcFileName);
+				}
+				else {
+					throw new Exception();
+				}
 			}
 			else {
-				throw new Exception();
+				return null;
 			}
 		}
 
