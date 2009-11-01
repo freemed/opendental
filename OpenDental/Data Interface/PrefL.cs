@@ -30,6 +30,9 @@ namespace OpenDental {
 
 		///<summary>Called in two places.  Once from RefreshLocalData, and also from FormBackups after a restore.</summary>
 		public static bool CheckProgramVersion() {
+			if(PrefC.GetBool(PrefName.UpdateWindowShowsClassicView)) {
+				return CheckProgramVersionClassic();
+			}
 			Version storedVersion=new Version(PrefC.GetString(PrefName.ProgramVersion));
 			Version currentVersion=new Version(Application.ProductVersion);
 			string database="";
@@ -219,6 +222,71 @@ namespace OpenDental {
 				MessageBox.Show(Lan.g("Prefs","Your version of MySQL won't work with this program")+": "+thisVersion
 					+".  "+Lan.g("Prefs","You should upgrade to MySQL 4.1"));
 				Application.Exit();
+				return false;
+			}
+			return true;
+		}
+
+		///<summary>Essentially no changes have been made to this since version 6.5.</summary>
+		private static bool CheckProgramVersionClassic() {
+			Version storedVersion=new Version(PrefC.GetString(PrefName.ProgramVersion));
+			Version currentVersion=new Version(Application.ProductVersion);
+			string database=MiscData.GetCurrentDatabase();
+			if(storedVersion<currentVersion) {
+				Prefs.UpdateString(PrefName.ProgramVersion,currentVersion.ToString());
+				Cache.Refresh(InvalidType.Prefs);
+			}
+			if(storedVersion>currentVersion) {
+				if(PrefC.UsingAtoZfolder) {
+					string setupBinPath=ODFileUtils.CombinePaths(ImageStore.GetPreferredImagePath(),"Setup.exe");
+					if(File.Exists(setupBinPath)) {
+						if(MessageBox.Show("You are attempting to run version "+currentVersion.ToString(3)+",\r\n"
+							+"But the database "+database+"\r\n"
+							+"is already using version "+storedVersion.ToString(3)+".\r\n"
+							+"A newer version must have already been installed on at least one computer.\r\n"  
+							+"The setup program stored in your A to Z folder will now be launched.\r\n"
+							+"Or, if you hit Cancel, then you will have the option to download again."
+							,"",MessageBoxButtons.OKCancel)==DialogResult.Cancel) {
+							if(MessageBox.Show("Download again?","",MessageBoxButtons.OKCancel)
+								==DialogResult.OK) {
+								FormUpdate FormU=new FormUpdate();
+								FormU.ShowDialog();
+							}
+							Application.Exit();
+							return false;
+						}
+						try {
+							Process.Start(setupBinPath);
+						}
+						catch {
+							MessageBox.Show("Could not launch Setup.exe");
+						}
+					}
+					else if(MessageBox.Show("A newer version has been installed on at least one computer,"+
+							"but Setup.exe could not be found in any of the following paths: "+
+							ImageStore.GetPreferredImagePath()+".  Download again?","",MessageBoxButtons.OKCancel)==DialogResult.OK) {
+						FormUpdate FormU=new FormUpdate();
+						FormU.ShowDialog();
+					}
+				}
+				else {//Not using image path.
+					//perform program update automatically.
+					string patchName="Setup.exe";
+					string updateUri=PrefC.GetString(PrefName.UpdateWebsitePath);
+					string updateCode=PrefC.GetString(PrefName.UpdateCode);
+					string updateInfoMajor="";
+					string updateInfoMinor="";
+					if(FormUpdate.ShouldDownloadUpdate(updateUri,updateCode,out updateInfoMajor,out updateInfoMinor)) {
+						if(MessageBox.Show(updateInfoMajor+Lan.g("Prefs","Perform program update now?"),"",
+							MessageBoxButtons.YesNo)==DialogResult.Yes) {
+							string tempFile=ODFileUtils.CombinePaths(Path.GetTempPath(),patchName);//Resort to a more common temp file name.
+							FormUpdate.DownloadInstallPatchFromURI(updateUri+updateCode+"/"+patchName,//Source URI
+								tempFile,true,true);//Local destination file.
+							File.Delete(tempFile);//Cleanup install file.
+						}
+					}
+				}
+				Application.Exit();//always exits, whether launch of setup worked or not
 				return false;
 			}
 			return true;

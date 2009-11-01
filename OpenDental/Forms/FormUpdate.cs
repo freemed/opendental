@@ -289,7 +289,7 @@ namespace OpenDental{
 			this.panelClassic.Controls.Add(this.label6);
 			this.panelClassic.Controls.Add(this.textResult2);
 			this.panelClassic.Controls.Add(this.butDownload);
-			this.panelClassic.Location = new System.Drawing.Point(491,18);
+			this.panelClassic.Location = new System.Drawing.Point(296,12);
 			this.panelClassic.Name = "panelClassic";
 			this.panelClassic.Size = new System.Drawing.Size(568,494);
 			this.panelClassic.TabIndex = 48;
@@ -500,7 +500,7 @@ namespace OpenDental{
 			this.butLicense.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butLicense.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butLicense.CornerRadius = 4F;
-			this.butLicense.Location = new System.Drawing.Point(466,547);
+			this.butLicense.Location = new System.Drawing.Point(466,595);
 			this.butLicense.Name = "butLicense";
 			this.butLicense.Size = new System.Drawing.Size(88,25);
 			this.butLicense.TabIndex = 49;
@@ -515,7 +515,7 @@ namespace OpenDental{
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(560,547);
+			this.butClose.Location = new System.Drawing.Point(560,595);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75,25);
 			this.butClose.TabIndex = 0;
@@ -525,7 +525,7 @@ namespace OpenDental{
 			// FormUpdate
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(647,587);
+			this.ClientSize = new System.Drawing.Size(647,635);
 			this.Controls.Add(this.panelClassic);
 			this.Controls.Add(this.butCheck2);
 			this.Controls.Add(this.groupStable);
@@ -857,8 +857,7 @@ namespace OpenDental{
 			}
 			string updateInfoMajor="";
 			string updateInfoMinor="";
-			butDownload.Enabled=ShouldDownloadUpdate(textWebsitePath.Text,textUpdateCode.Text,
-							out updateInfoMajor,out updateInfoMinor);
+			butDownload.Enabled=ShouldDownloadUpdate(textWebsitePath.Text,textUpdateCode.Text,out updateInfoMajor,out updateInfoMinor);
 			textResult.Text=updateInfoMajor;
 			textResult2.Text=updateInfoMinor;
 		}
@@ -1060,9 +1059,7 @@ namespace OpenDental{
 		}
 
 		private void FormUpdate_FormClosing(object sender,FormClosingEventArgs e) {
-			if(Security.IsAuthorized(Permissions.Setup,DateTime.Now,true)
-				&& PrefC.GetBool(PrefName.UpdateWindowShowsClassicView))			
-			{
+			if(Security.IsAuthorized(Permissions.Setup,DateTime.Now,true)	&& PrefC.GetBool(PrefName.UpdateWindowShowsClassicView)){
 				SavePrefs();
 			}
 		}
