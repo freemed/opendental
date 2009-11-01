@@ -1245,7 +1245,7 @@ namespace OpenDental{
 			//RefreshLocalData(InvalidType.AllLocal);
 			RefreshLocalData(InvalidType.Prefs,InvalidType.Defs,InvalidType.Providers,//obviously heavily used
 				InvalidType.Signals,//so when mouse moves over light buttons, it won't crash
-				//InvalidType.Programs,//already done above
+				InvalidType.Programs,//already done above, but needs to be done explicitly to trigger the PostCleanup 
 				InvalidType.ToolBut);//so program buttons will show in all the toolbars
 			FillSignalButtons(null);
 			ContrManage2.InitializeOnStartup();//so that when a signal is received, it can handle it.
