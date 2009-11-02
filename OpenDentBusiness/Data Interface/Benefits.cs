@@ -95,45 +95,78 @@ namespace OpenDentBusiness {
 			if(like.CarrierNum==0){
 				return new List<Benefit>();
 			}
-			//Get planNums for all identical plans
-			string command="SELECT PlanNum FROM insplan "
+
+			//We might try creating a temporary table out of the matched insurance plans, then join with
+			//the benefits table so that the query could be sped up.
+			//Get benefits for all identical plans
+			string command="SELECT b.BenefitNum,b.PlanNum,b.PatPlanNum,b.CovCatNum,b.BenefitType,"
+				+"b.Percent,b.MonetaryAmt,b.TimePeriod,b.QuantityQualifier,b.Quantity,b.CodeNum,b.CoverageLevel "
+				+"FROM insplan i,benefit b "
 				//+"WHERE PlanNum != "   +POut.PInt(like.PlanNum)+" "
-				+"WHERE EmployerNum = '" +POut.PLong(like.EmployerNum)+"' "
-				+"AND GroupName = '"   +POut.PString(like.GroupName)+"' "
-				+"AND GroupNum = '"    +POut.PString(like.GroupNum)+"' "
-				+"AND DivisionNo = '"  +POut.PString(like.DivisionNo)+"'"
-				+"AND CarrierNum = '"  +POut.PLong(like.CarrierNum)+"' "
-				+"AND IsMedical = '"   +POut.PBool(like.IsMedical)+"' ";
+				+"WHERE i.PlanNum=b.PlanNum "
+				+"AND i.EmployerNum = '"+POut.PLong(like.EmployerNum)+"' "
+				+"AND i.GroupName = '"+POut.PString(like.GroupName)+"' "
+				+"AND i.GroupNum = '"+POut.PString(like.GroupNum)+"' "
+				+"AND i.DivisionNo = '"+POut.PString(like.DivisionNo)+"'"
+				+"AND i.CarrierNum = '"+POut.PLong(like.CarrierNum)+"' "
+				+"AND i.IsMedical = '"+POut.PBool(like.IsMedical)+"' ";
 			DataTable table=Db.GetTable(command);
-			string planNums="";
+			Benefit[] benList=new Benefit[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
-				if(i>0) {
-					planNums+=" OR";
-				}
-				planNums+=" PlanNum="+table.Rows[i][0].ToString();
+				benList[i]=new Benefit();
+				benList[i].BenefitNum=PIn.PLong(table.Rows[i][0].ToString());
+				benList[i].PlanNum=PIn.PLong(table.Rows[i][1].ToString());
+				benList[i].PatPlanNum=PIn.PLong(table.Rows[i][2].ToString());
+				benList[i].CovCatNum=PIn.PLong(table.Rows[i][3].ToString());
+				benList[i].BenefitType=(InsBenefitType)PIn.PLong(table.Rows[i][4].ToString());
+				benList[i].Percent=PIn.PInt(table.Rows[i][5].ToString());
+				benList[i].MonetaryAmt=PIn.PDouble(table.Rows[i][6].ToString());
+				benList[i].TimePeriod=(BenefitTimePeriod)PIn.PLong(table.Rows[i][7].ToString());
+				benList[i].QuantityQualifier=(BenefitQuantity)PIn.PLong(table.Rows[i][8].ToString());
+				benList[i].Quantity=PIn.PInt(table.Rows[i][9].ToString());
+				benList[i].CodeNum=PIn.PLong(table.Rows[i][10].ToString());
+				benList[i].CoverageLevel=(BenefitCoverageLevel)PIn.PLong(table.Rows[i][11].ToString());
 			}
-			Benefit[] benList=new Benefit[0];
-			if(table.Rows.Count>0){
-				//Get all benefits for all those plans
-				command="SELECT * FROM benefit WHERE"+planNums;
-				table=Db.GetTable(command);
-				benList=new Benefit[table.Rows.Count];
-				for(int i=0;i<table.Rows.Count;i++) {
-					benList[i]=new Benefit();
-					benList[i].BenefitNum       = PIn.PLong(table.Rows[i][0].ToString());
-					benList[i].PlanNum          = PIn.PLong(table.Rows[i][1].ToString());
-					benList[i].PatPlanNum       = PIn.PLong(table.Rows[i][2].ToString());
-					benList[i].CovCatNum        = PIn.PLong(table.Rows[i][3].ToString());
-					benList[i].BenefitType      = (InsBenefitType)PIn.PLong(table.Rows[i][4].ToString());
-					benList[i].Percent          = PIn.PInt(table.Rows[i][5].ToString());
-					benList[i].MonetaryAmt      = PIn.PDouble(table.Rows[i][6].ToString());
-					benList[i].TimePeriod       = (BenefitTimePeriod)PIn.PLong(table.Rows[i][7].ToString());
-					benList[i].QuantityQualifier= (BenefitQuantity)PIn.PLong(table.Rows[i][8].ToString());
-					benList[i].Quantity         = PIn.PInt(table.Rows[i][9].ToString());
-					benList[i].CodeNum          = PIn.PLong(table.Rows[i][10].ToString());
-					benList[i].CoverageLevel    = (BenefitCoverageLevel)PIn.PLong(table.Rows[i][11].ToString());
-				}
-			}
+			////Get planNums for all identical plans
+			//string command="SELECT PlanNum FROM insplan "
+			//  //+"WHERE PlanNum != "   +POut.PInt(like.PlanNum)+" "
+			//  +"WHERE EmployerNum = '" +POut.PLong(like.EmployerNum)+"' "
+			//  +"AND GroupName = '"   +POut.PString(like.GroupName)+"' "
+			//  +"AND GroupNum = '"    +POut.PString(like.GroupNum)+"' "
+			//  +"AND DivisionNo = '"  +POut.PString(like.DivisionNo)+"'"
+			//  +"AND CarrierNum = '"  +POut.PLong(like.CarrierNum)+"' "
+			//  +"AND IsMedical = '"   +POut.PBool(like.IsMedical)+"' ";
+			//DataTable table=Db.GetTable(command);
+			//string planNums="";
+			//for(int i=0;i<table.Rows.Count;i++) {
+			//  if(i>0) {
+			//    planNums+=" OR";
+			//  }
+			//  planNums+=" PlanNum="+table.Rows[i][0].ToString();
+			//}
+			//Benefit[] benList=new Benefit[0];
+			//if(table.Rows.Count>0){
+			//  //Get all benefits for all those plans
+			//  command="SELECT * FROM benefit WHERE"+planNums;
+			//  table=Db.GetTable(command);
+			//  benList=new Benefit[table.Rows.Count];
+			//  for(int i=0;i<table.Rows.Count;i++) {
+			//    benList[i]=new Benefit();
+			//    benList[i].BenefitNum       = PIn.PLong(table.Rows[i][0].ToString());
+			//    benList[i].PlanNum          = PIn.PLong(table.Rows[i][1].ToString());
+			//    benList[i].PatPlanNum       = PIn.PLong(table.Rows[i][2].ToString());
+			//    benList[i].CovCatNum        = PIn.PLong(table.Rows[i][3].ToString());
+			//    benList[i].BenefitType      = (InsBenefitType)PIn.PLong(table.Rows[i][4].ToString());
+			//    benList[i].Percent          = PIn.PInt(table.Rows[i][5].ToString());
+			//    benList[i].MonetaryAmt      = PIn.PDouble(table.Rows[i][6].ToString());
+			//    benList[i].TimePeriod       = (BenefitTimePeriod)PIn.PLong(table.Rows[i][7].ToString());
+			//    benList[i].QuantityQualifier= (BenefitQuantity)PIn.PLong(table.Rows[i][8].ToString());
+			//    benList[i].Quantity         = PIn.PInt(table.Rows[i][9].ToString());
+			//    benList[i].CodeNum          = PIn.PLong(table.Rows[i][10].ToString());
+			//    benList[i].CoverageLevel    = (BenefitCoverageLevel)PIn.PLong(table.Rows[i][11].ToString());
+			//  }
+			//}
+			//We could probably turn this last part into a group by within the query above in order to make this portion faster.
 			List<Benefit> retVal=new List<Benefit>();
 			//Loop through all benefits
 			bool matchFound;
