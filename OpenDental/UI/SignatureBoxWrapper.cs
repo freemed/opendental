@@ -33,6 +33,7 @@ namespace OpenDental.UI {
 				sigBoxTopaz.TabIndex=92;
 				sigBoxTopaz.Text="sigPlusNET1";
 				sigBoxTopaz.Visible=false;
+				sigBoxTopaz.Leave+=new EventHandler(sigBoxTopaz_Leave);
 				Controls.Add(sigBoxTopaz);
 				//It starts out accepting input. It will be set to 0 if a sig is already present.  It will be set back to 1 if note changes or if user clicks Clear.
 				CodeBase.TopazWrapper.SetTopazState(sigBoxTopaz,1);
@@ -182,10 +183,12 @@ namespace OpenDental.UI {
 			sigBox.Visible=false;
 			sigBoxTopaz.Visible=true;
 			if(allowTopaz){
+				CodeBase.TopazWrapper.ClearTopaz(sigBoxTopaz);
 				CodeBase.TopazWrapper.SetTopazState(sigBoxTopaz,1);
 			}
 			sigChanged=true;
 			labelInvalidSig.Visible=false;
+			sigBoxTopaz.Focus();
 			//To be able to use this control in FormProcEdit, we need to connect this to an event.
 			//ProcCur.UserNum=Security.CurUser.UserNum;
 			//textUser.Text=Userods.GetName(ProcCur.UserNum);
@@ -204,6 +207,12 @@ namespace OpenDental.UI {
 			}
 		}
 
+		private void sigBoxTopaz_Leave(object sender,EventArgs e) {
+			if(sigBox.GetTabletState()==1) {//if accepting input.
+				CodeBase.TopazWrapper.SetTopazState(sigBoxTopaz,0);
+			}
+		}
+
 		///<summary>Must set width and height of control and run FillSignature first.</summary>
 		public Bitmap GetSigImage(){
 			Bitmap sigBitmap=new Bitmap(Width-2,Height-2);
@@ -216,6 +225,8 @@ namespace OpenDental.UI {
 			}
 			return sigBitmap;
 		}
+
+		
 
 
 

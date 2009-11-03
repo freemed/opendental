@@ -117,7 +117,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Required dlls\RS232.dll</HintPath>
     </Reference>
-    <Reference Include="SigPlusNET, Version=1.0.2245.36238, Culture=neutral, PublicKeyToken=6aef07010bb0624f">
+    <Reference Include="SigPlusNET, Version=1.1.3358.14336, Culture=neutral, PublicKeyToken=6aef07010bb0624f, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Required dlls\SigPlusNET.dll</HintPath>
     </Reference>
