@@ -628,6 +628,7 @@ namespace OpenDental{
 			FamCur=Patients.GetFamily(patNum);
 			PatCur=FamCur.GetPatient(patNum);
 			PatFolder=ImageStore.GetPatientFolder(PatCur);//This is where the pat folder gets created if it does not yet exist.
+			ImageStore.AddMissingFilesToDatabase(PatCur);
 		}
 
 		private void RefreshModuleScreen(){

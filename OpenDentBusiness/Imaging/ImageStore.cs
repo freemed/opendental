@@ -166,7 +166,8 @@ namespace OpenDentBusiness {
 					return new Bitmap(srcFileName);
 				}
 				else {
-					throw new Exception();
+					//throw new Exception();
+					return null;
 				}
 			}
 			else {
