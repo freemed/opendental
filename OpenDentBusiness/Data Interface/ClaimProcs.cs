@@ -814,7 +814,11 @@ namespace OpenDentBusiness{
 			if(histList==null) {
 				return -1;
 			}
-			int thisOrdinal=PatPlans.GetFromList(patPlanList.ToArray(),patPlanNum).Ordinal;
+			PatPlan pp=PatPlans.GetFromList(patPlanList.ToArray(),patPlanNum);
+			if(pp==null) {
+				return -1;
+			}
+			int thisOrdinal=pp.Ordinal;
 			if(thisOrdinal==1) {
 				return -1;
 			}
