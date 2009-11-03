@@ -22,7 +22,7 @@ namespace SparksToothChart {
 		public ToothChartData TcData;
 		private Color specular_color_normal;
 		private Color specular_color_cementum;
-		private float shininess;
+		private float specularSharpness;
 		private Microsoft.DirectX.Direct3D.Font xfont;
 
 		public ToothChartDirectX() {
@@ -53,14 +53,14 @@ namespace SparksToothChart {
 		public void CleanUpDirectX(){
 			xfont.Dispose();
 			for(int i=0;i<TcData.ListToothGraphics.Count;i++) {
-				ToothGraphic tooth=TcData.ListToothGraphics[i];
-				for(int j=0;j<tooth.Groups.Count;j++) {
-					ToothGroup group=tooth.Groups[j];
+				ToothGraphic toothGraphic=TcData.ListToothGraphics[i];
+				for(int j=0;j<toothGraphic.Groups.Count;j++) {
+					ToothGroup group=toothGraphic.Groups[j];
 					group.facesDirectX.Dispose();
 					group.facesDirectX=null;
 				}
-				tooth.vb.Dispose();
-				tooth.vb=null;
+				toothGraphic.vb.Dispose();
+				toothGraphic.vb=null;
 			}
 			device.Dispose();
 			device=null;
@@ -120,7 +120,7 @@ namespace SparksToothChart {
 			device.RenderState.SpecularMaterialSource=ColorSource.Material;
 			float ambI=.4f;//.2f;//Darker for testing
 			float difI=.6f;//.4f;//Darker for testing
-			float specI=.2f;//.5f;//Had to turn specular down to avoid bleedout.
+			float specI=.8f;//.2f;//Had to turn specular down to avoid bleedout.
 			//I think we're going to need to eventually use shaders to get our pinpoint reflections.
 			//Set properties for light 0. Diffuse light.
 			device.Lights[0].Type=LightType.Directional;
@@ -132,9 +132,10 @@ namespace SparksToothChart {
 			//Material settings
 			float specNorm=1f;
 			float specCem=.1f;
+			//Also, see DrawTooth for the specular color used for enamel.
 			specular_color_normal=Color.FromArgb(255,(int)(255*specNorm),(int)(255*specNorm),(int)(255*specNorm));
 			specular_color_cementum=Color.FromArgb(255,(int)(255*specCem),(int)(255*specCem),(int)(255*specCem));
-			shininess=70f;//70f;//Not the same as in OpenGL. No maximum value. Smaller number means light is more spread out.
+			specularSharpness=70f;//70f;//Not the same as in OpenGL. No maximum value. Smaller number means light is more spread out.
 			//Draw
 			DrawScene();
 		}
@@ -179,8 +180,9 @@ namespace SparksToothChart {
 			Matrix rotAndTranUser=RotateAndTranslateUser(toothGraphic);
 			device.Transform.World=rotAndTranUser*toothTrans*defOrient;
 			if(toothGraphic.Visible
-				||(toothGraphic.IsCrown&&toothGraphic.IsImplant)
-				||toothGraphic.IsPontic) {
+				||(toothGraphic.IsCrown && toothGraphic.IsImplant)
+				||toothGraphic.IsPontic) 
+			{
 				DrawTooth(toothGraphic);
 			}
 			device.RenderState.ZBufferEnable=false;
@@ -205,7 +207,8 @@ namespace SparksToothChart {
 						new Vector3(-2f,-6f,0f),},
 						lineMatrix,
 						toothGraphic.colorX);
-				} else {
+				} 
+				else {
 					line.DrawTransform(new Vector3[] {
 						new Vector3(-2f,6f,0f),
 						new Vector3(2f,-12f,0f),},
@@ -218,7 +221,7 @@ namespace SparksToothChart {
 						toothGraphic.colorX);
 				}				
 			}
-			if(toothGraphic.Visible&&toothGraphic.IsRCT) {//draw RCT
+			if(toothGraphic.Visible && toothGraphic.IsRCT) {//draw RCT
 				//Thickness of lines depend on size of window.
 				//The line size needs to be slightly larger than in OpenGL because
 				//lines are drawn with polygons in DirectX and they are anti-aliased,
@@ -309,7 +312,7 @@ namespace SparksToothChart {
 				material.Ambient=toothGraphic.colorImplant;
 				material.Diffuse=toothGraphic.colorImplant;
 				material.Specular=specular_color_normal;
-				material.SpecularSharpness=shininess;
+				material.SpecularSharpness=specularSharpness;
 				device.Material=material;
 				ToothGraphic implantGraphic=TcData.ListToothGraphics["implant"];
 				device.VertexFormat=CustomVertex.PositionNormal.Format;
@@ -431,19 +434,27 @@ namespace SparksToothChart {
 				}
 				Material material=new Material();
 				Color materialColor;
-				if(toothGraphic.ShiftO<-10) {//if unerupted
+				if(toothGraphic.ShiftO < -10) {//if unerupted
 					materialColor=Color.FromArgb(group.PaintColor.A/2,group.PaintColor.R/2,group.PaintColor.G/2,group.PaintColor.B/2);
-				} else {
+				} 
+				else {
 					materialColor=group.PaintColor;
 				}
 				material.Ambient=materialColor;
 				material.Diffuse=materialColor;
 				if(group.GroupType==ToothGroupType.Cementum) {
 					material.Specular=specular_color_cementum;
-				} else {
+				} 
+				else if(group.PaintColor.R>245 && group.PaintColor.G>245 && group.PaintColor.B>235){
+					//because DirectX washes out the specular on the enamel, we have to turn it down only for the enamel color
+					//for reference, this is the current enamel color: Color.FromArgb(255,250,250,240)
+					float specEnamel=.4f;
+					material.Specular=Color.FromArgb(255,(int)(255*specEnamel),(int)(255*specEnamel),(int)(255*specEnamel));
+				}
+				else {
 					material.Specular=specular_color_normal;
 				}				
-				material.SpecularSharpness=shininess;
+				material.SpecularSharpness=specularSharpness;
 				device.Material=material;
 				//draw the group
 			  device.Indices=group.facesDirectX;

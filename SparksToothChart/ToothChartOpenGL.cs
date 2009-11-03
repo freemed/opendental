@@ -32,17 +32,9 @@ using OpenDentBusiness;
 
 namespace SparksToothChart {
 	public partial class ToothChartOpenGL:CodeBase.OpenGLWinFormsControl{//.SimpleOpenGlControl {
-		//<summary>A strongly typed collection of ToothGraphics.  This includes all 32 perm and all 20 primary teeth, whether they will be drawn or not.  If a tooth is missing, it gets marked as visible false.  If it's set to primary, then the permanent tooth gets repositioned under the primary, and a primary gets set to visible true.  If a tooth is impacted, it gets repositioned.  Supernumerary graphics are not yet supported, but they might be handled by adding to this list.  "implant" is also stored as another tooth in this collection.  It is just used to store the graphics for any implant.</summary>
-		//private ToothGraphicCollection ListToothGraphics;
 		float[] specular_color_normal;//white
 		float[] specular_color_cementum;//gray
-		float[] shininess;
-		//<summary>The width that the scene covers.  This is in mm in terms of the scene itself.  This is the only number required in order for this control to be any size.  The height of the viewport is calculated in terms of the same ratio as the width, with the resulting image being centered vertically, so no distortion.</summary>
-		//private double WidthProjection;
-		//<summary>valid values are "1" to "32", and "A" to "Z"</summary>
-		//private List<string> selectedTeeth;
-		//<summary>valid values are 1 to 32 (int)</summary>
-		//private ArrayList ALSelectedTeeth;		
+		float[] shininess;		
 		private bool MouseIsDown;
 		///<summary>Mouse move causes this variable to be updated with the current tooth that the mouse is hovering over.</summary>
 		private string hotTooth;
@@ -59,14 +51,8 @@ namespace SparksToothChart {
 		public event ToothChartDrawEventHandler SegmentDrawn=null;
 		///<summary>This is a reference to the TcData object that's at the wrapper level.</summary>
 		public ToothChartData TcData;
-		/// <summary>GDI+ handle to this control. Used for line drawing and font measurement.</summary>
+		///<summary>GDI+ handle to this control. Used for line drawing and font measurement.</summary>
 		private Graphics g=null;
-		//<summary>This is a GDI+ overlay that sits on top of the OpenGL scene.  It doesn't work well to draw directly on the control.</summary>
-		//private Bitmap bitmapInPictBox;
-		//<summary>A graphics object for the bitmapInPictBox.</summary>
-		//private Graphics gg=null;
-		//<summary>This picturebox will sit in front of the openGL scene, completely obscuring it.  The scene will be copied to it and further altered with GDI+</summary>
-		//private PictureBox pictBox;
 
 		///<summary>Specify the hardware mode to create the tooth chart with. Set hardwareMode=true to try for hardware accelerated graphics, and set hardwareMode=false to try and get software graphics.</summary>
 		public ToothChartOpenGL(bool hardwareMode,int preferredPixelFormatNum) {
@@ -542,18 +528,7 @@ namespace SparksToothChart {
 					Gl.glVertex3f(pointMm.X,pointMm.Y,0);
 				}
 				Gl.glEnd();
-				//now draw a filled circle at each line strip intersection to make it look nicer
-				/* Not necessary on line segments because the endpoints are already so close together.  The circles made it look worse.
-				Gl.glBegin(Gl.GL_POINTS);
-				for(int i=0;i<points.Count;i++){
-					//but ignore the first and last.  We are only concerned with where lines meet.
-					if(i==0 || i==points.Count-1){
-						continue;
-					}
-					pointMm=TcData.PixToMm(new Point(points[i].X,points[i].Y));
-					Gl.glVertex3f(pointMm.X,pointMm.Y,0);
-				}
-				Gl.glEnd();*/
+				//no filled circle at intersections
 			}
 			Gl.glPopMatrix();
 		}
