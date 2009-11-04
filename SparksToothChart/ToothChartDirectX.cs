@@ -24,6 +24,7 @@ namespace SparksToothChart {
 		private Color specular_color_cementum;
 		private float specularSharpness;
 		private Microsoft.DirectX.Direct3D.Font xfont;
+		private Microsoft.DirectX.Direct3D.Font xSealantFont;
 
 		public ToothChartDirectX() {
 			InitializeComponent();
@@ -47,10 +48,14 @@ namespace SparksToothChart {
 			xfont=new Microsoft.DirectX.Direct3D.Font(device,
 				15,6,FontWeight.Normal,1,false,CharacterSet.Ansi,Precision.Device,
 				FontQuality.ClearType,PitchAndFamily.DefaultPitch,"Arial");
+			xSealantFont=new Microsoft.DirectX.Direct3D.Font(device,
+				25,9,FontWeight.Regular,1,false,CharacterSet.Ansi,Precision.Device,
+				FontQuality.ClearType,PitchAndFamily.DefaultPitch,"Arial");
 			g=this.CreateGraphics();// Graphics.FromHwnd(this.Handle);
 		}
 
 		public void CleanUpDirectX(){
+			xSealantFont.Dispose();
 			xfont.Dispose();
 			for(int i=0;i<TcData.ListToothGraphics.Count;i++) {
 				ToothGraphic toothGraphic=TcData.ListToothGraphics[i];
@@ -360,67 +365,18 @@ namespace SparksToothChart {
 			{
 				DrawTooth(toothGraphic);
 			}
-			//Gl.glPopMatrix();//reset to origin
-			//if(toothGraphic.Visible&&
-			//  toothGraphic.IsSealant) {//draw sealant
-			//  Gl.glPushMatrix();
-			//  Gl.glTranslatef(0,0,6f);//move forward 6mm so it will be visible.
-			//  Gl.glTranslatef(GetTransX(toothGraphic.ToothID),GetTransYocclusal(toothGraphic.ToothID),0);
-			//  if(ToothGraphic.IsMaxillary(toothGraphic.ToothID)) {
-			//    Gl.glRotatef(-110f,1f,0,0);//rotate angle about line from origin to x,y,z
-			//  } else {//mandibular
-			//    if(ToothGraphic.IsAnterior(toothGraphic.ToothID)) {
-			//      Gl.glRotatef(110f,1f,0,0);
-			//    } else {
-			//      Gl.glRotatef(120f,1f,0,0);
-			//    }
-			//  }
-			//  Gl.glDisable(Gl.GL_LIGHTING);
-			//  Gl.glEnable(Gl.GL_BLEND);
-			//  Gl.glColor3f(
-			//    (float)toothGraphic.colorSealant.R/255f,
-			//    (float)toothGraphic.colorSealant.G/255f,
-			//    (float)toothGraphic.colorSealant.B/255f);
-			//  //.5f);//only 1/2 darkness
-			//  Gl.glBlendFunc(Gl.GL_SRC_ALPHA,Gl.GL_ONE_MINUS_SRC_ALPHA);
-			//  Gl.glLineWidth((float)Width/225f);
-			//  Gl.glPointSize((float)Width/275f);//point is slightly smaller since no antialiasing
-			//  RotateAndTranslateUser(toothGraphic);
-			//  Line line=toothGraphic.GetSealantLine();
-			//  Gl.glBegin(Gl.GL_LINE_STRIP);
-			//  for(int j=0;j<line.Vertices.Count;j++) {//loop through each vertex
-			//    Gl.glVertex3f(line.Vertices[j].X,line.Vertices[j].Y,line.Vertices[j].Z);
-			//  }
-			//  Gl.glEnd();
-			//  //The next 30 or so lines are all a stupid OpenGL workaround to hide the line intersections with big dots.
-			//  Gl.glPopMatrix();
-			//  //now, draw a point at each intersection to hide the unsightly transitions
-			//  Gl.glPushMatrix();
-			//  //move foward so it will cover the lines
-			//  Gl.glTranslatef(0,0,6.5f);
-			//  Gl.glTranslatef(GetTransX(toothGraphic.ToothID),GetTransYocclusal(toothGraphic.ToothID),0);
-			//  if(ToothGraphic.IsMaxillary(toothGraphic.ToothID)) {
-			//    Gl.glRotatef(-110f,1f,0,0);//rotate angle about line from origin to x,y,z
-			//  } else {//mandibular
-			//    if(ToothGraphic.IsAnterior(toothGraphic.ToothID)) {
-			//      Gl.glRotatef(110f,1f,0,0);
-			//    } else {
-			//      Gl.glRotatef(120f,1f,0,0);
-			//    }
-			//  }
-			//  RotateAndTranslateUser(toothGraphic);
-			//  Gl.glDisable(Gl.GL_BLEND);
-			//  Gl.glBegin(Gl.GL_POINTS);
-			//  for(int j=0;j<line.Vertices.Count;j++) {//loop through each vertex
-			//    //but ignore the first and last.  We are only concerned with where lines meet.
-			//    if(j==0||j==line.Vertices.Count-1) {
-			//      continue;
-			//    }
-			//    Gl.glVertex3f(line.Vertices[j].X,line.Vertices[j].Y,line.Vertices[j].Z);
-			//  }
-			//  Gl.glEnd();
-			//  Gl.glPopMatrix();
-			//}
+			device.RenderState.ZBufferEnable=false;
+			device.RenderState.Lighting=false;
+			float toMm=1f/TcData.ScaleMmToPix;
+			if(toothGraphic.Visible && toothGraphic.IsSealant) {//draw sealant
+				if(ToothGraphic.IsMaxillary(toothGraphic.ToothID)){
+					PrintString("S",-6f*toMm,-100f*toMm,-6f,toothGraphic.colorSealant,xSealantFont);
+				}else{
+					PrintString("S",-6f*toMm,22f*toMm,-6f,toothGraphic.colorSealant,xSealantFont);
+				}
+			}
+			device.RenderState.ZBufferEnable=true;
+			device.RenderState.Lighting=true;
 		}
 
 		private void DrawTooth(ToothGraphic toothGraphic) {
@@ -610,14 +566,14 @@ namespace SparksToothChart {
 				&&!TcData.ListToothGraphics[Tooth.PriToPerm(tooth_id)].ShowPrimaryLetter) {
 				//do not print string
 			} else {
-				PrintString(displayNum,recMm.X+2f*toMm,recMm.Y+13f*toMm,15f,foreColor);
+				PrintString(displayNum,recMm.X+2f*toMm,recMm.Y+13f*toMm,15f,foreColor,xfont);
 			}
 		}
 
-		private void PrintString(string text,float x,float y,float z,Color color) {
+		private void PrintString(string text,float x,float y,float z,Color color,Microsoft.DirectX.Direct3D.Font printFont) {
 			Vector3 screenPoint=new Vector3(x,y,z);
 			screenPoint.Project(device.Viewport,device.Transform.Projection,device.Transform.View,device.Transform.World);
-			xfont.DrawText(null,text,new Point((int)screenPoint.X,(int)screenPoint.Y),color);
+			printFont.DrawText(null,text,new Point((int)screenPoint.X,(int)screenPoint.Y),color);
 		}
 
 		///<summary>Returns a bitmap of what is showing in the control.  Used for printing.</summary>
