@@ -137,6 +137,7 @@ namespace OpenDentBusiness {
 				+",AllowedFeeSched= '" +POut.PLong   (plan.AllowedFeeSched)+"'"
 				+",TrojanID = '"       +POut.PString(plan.TrojanID)+"'"
 				+",FilingCode = '"     +POut.PLong   (plan.FilingCode)+"'"
+				+",FilingCodeSubtype = '"+POut.PLong(plan.FilingCodeSubtype)+"'"
 				+",ShowBaseUnits = '"  +POut.PBool  (plan.ShowBaseUnits)+"'"
 				//+",DedBeforePerc = '"  +POut.PBool  (plan.DedBeforePerc)+"'"
 				+",CodeSubstNone='"    +POut.PBool  (plan.CodeSubstNone)+"'"
