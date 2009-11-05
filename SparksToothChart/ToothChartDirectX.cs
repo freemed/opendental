@@ -113,7 +113,14 @@ namespace SparksToothChart {
 
 		protected void Render() {
 			//Set the view and projection matricies for the camera.
-			device.Transform.Projection=Matrix.OrthoLH(TcData.SizeOriginalProjection.Width,TcData.SizeOriginalProjection.Height,0,1000.0f);
+			float heightProj=TcData.SizeOriginalProjection.Height;
+			float widthProj=TcData.SizeOriginalProjection.Width;
+			if(TcData.IsWide) {
+				widthProj=heightProj*Width/Height;
+			} else {//tall
+				heightProj=widthProj*Height/Width;
+			}
+			device.Transform.Projection=Matrix.OrthoLH(widthProj,heightProj,0,1000.0f);
 			device.Transform.World=Matrix.Identity;
 			//viewport transformation not used. Default is to fill entire control.
 			device.RenderState.CullMode=Cull.None;//Do not cull triangles. Our triangles are too small for this feature to work reliably.
