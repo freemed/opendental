@@ -836,7 +836,9 @@ namespace OpenDentBusiness{
 		///<summary>2-Proprietary format for Renaissance.</summary>
 		Renaissance,
 		///<summary>3-CDAnet format version 4.</summary>
-		Canadian
+		Canadian,
+		///<summary>4-CSV file adaptable for use in Netherlands.</summary>
+		Dutch
 	}
 
 	///<summary>Used when submitting e-claims to some carriers who require extra provider identifiers.  Usage varies by company.  Only used as needed.</summary>

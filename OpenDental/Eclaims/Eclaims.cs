@@ -55,6 +55,9 @@ namespace OpenDental.Eclaims
 					Canadian.SendBatch(claimsByCHouse[i],batchNum);
 					continue;
 				}
+				else if(Clearinghouses.List[i].Eformat==ElectronicClaimFormat.Dutch) {
+					messageText=Dutch.SendBatch(claimsByCHouse[i],batchNum);
+				}
 				else{
 					messageText="";//(ElectronicClaimFormat.None does not get sent)
 				}
