@@ -160,15 +160,15 @@ namespace OpenDental.Bridges {
 			writer.WriteStartElement("Notes");
 			if(stmt.NoteBold!="") {
 				writer.WriteStartElement("Note");
-				writer.WriteAttributeString("FgColor",ColorToHexString(Color.DarkRed));
-				writer.WriteAttributeString("BgColor",ColorToHexString(Color.White));
+				writer.WriteAttributeString("FgColor","Red");//ColorToHexString(Color.DarkRed));
+				//writer.WriteAttributeString("BgColor",ColorToHexString(Color.White));
 				writer.WriteCData(stmt.NoteBold);
 				writer.WriteEndElement();//Note
 			}
 			if(stmt.Note!="") {
 				writer.WriteStartElement("Note");
-				writer.WriteAttributeString("FgColor",ColorToHexString(Color.Black));
-				writer.WriteAttributeString("BgColor",ColorToHexString(Color.White));
+				//writer.WriteAttributeString("FgColor",ColorToHexString(Color.Black));
+				//writer.WriteAttributeString("BgColor",ColorToHexString(Color.White));
 				writer.WriteCData(stmt.Note);
 				writer.WriteEndElement();//Note
 			}
@@ -363,6 +363,8 @@ namespace OpenDental.Bridges {
 					throw new Exception("Invalid program version. "+errormsg);
 				case "5":
 					throw new Exception("No customer contract. "+errormsg);
+				default://some as-yet-undefined error
+					throw new Exception("Error "+status+". "+errormsg);
 			}
 			//Step 2: Post upload request:
 			//string fileName=Directory.GetFiles(clearhouse.ExportPath)[0];
