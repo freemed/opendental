@@ -27,7 +27,15 @@ namespace SparksToothChart {
 		/// the contents of this method with the code editor. 
 		/// </summary>
 		private void InitializeComponent() {
-			components=new System.ComponentModel.Container();
+			this.SuspendLayout();
+			// 
+			// ToothChartDirectX
+			// 
+			this.MouseMove+=new System.Windows.Forms.MouseEventHandler(this.ToothChartDirectX_MouseMove);
+			this.MouseDown+=new System.Windows.Forms.MouseEventHandler(this.ToothChartDirectX_MouseDown);
+			this.MouseUp+=new System.Windows.Forms.MouseEventHandler(this.ToothChartDirectX_MouseUp);
+			this.ResumeLayout(false);
+
 		}
 
 		#endregion

@@ -202,14 +202,13 @@ namespace SparksToothChart {
 				toothChartDirectX.Location = new System.Drawing.Point(0,0);
 				toothChartDirectX.Name = "toothChartDirectX";
 				//toothChartDirectX.Size = new System.Drawing.Size(719,564);//unnecessary?
-				//todo: Add this event
-				//toothChartDirectX.SegmentDrawn+=new ToothChartDrawEventHandler(toothChart_SegmentDrawn);
+				toothChartDirectX.SegmentDrawn+=new ToothChartDrawEventHandler(toothChart_SegmentDrawn);
 				toothChartDirectX.TcData=TcData;
-				//toothChartDirectX.SuspendLayout?
+				toothChartDirectX.SuspendLayout();//Might help with the MDA debug error we used to get (if the option wasn't disabled in our compilers).
 				this.Controls.Add(toothChartDirectX);
 				ResetTeeth();
 				toothChartDirectX.InitializeGraphics();
-				//toothChartDirectX.ResumeLayout?
+				toothChartDirectX.ResumeLayout();//Might help with the MDA debug error we used to get (if the option wasn't disabled in our compilers).
 			}
 			else if(drawMode==DrawingMode.OpenGL){
 				toothChartOpenGL=new ToothChartOpenGL(hardwareMode,preferredPixelFormatNum);

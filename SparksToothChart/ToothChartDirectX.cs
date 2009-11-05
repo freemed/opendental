@@ -25,6 +25,13 @@ namespace SparksToothChart {
 		private float specularSharpness;
 		private Microsoft.DirectX.Direct3D.Font xfont;
 		private Microsoft.DirectX.Direct3D.Font xSealantFont;
+		private bool MouseIsDown=false;
+		[Category("Action"),Description("Occurs when the mouse goes up ending a drawing segment.")]
+		public event ToothChartDrawEventHandler SegmentDrawn=null;
+		///<summary>Mouse move causes this variable to be updated with the current tooth that the mouse is hovering over.</summary>
+		private string hotTooth;
+		///<summary>The previous hotTooth.  If this is different than hotTooth, then mouse has just now moved to a new tooth.  Can be 0 to represent no previous.</summary>
+		private string hotToothOld;
 
 		public ToothChartDirectX() {
 			InitializeComponent();
@@ -165,10 +172,8 @@ namespace SparksToothChart {
 				DrawFacialView(TcData.ListToothGraphics[t],defOrient);
 				DrawOcclusalView(TcData.ListToothGraphics[t],defOrient);
 			}
-			//All DirectX drawing is finished for this frame.
-			//Now draw all lines using GDI+.
 			DrawNumbersAndLines();
-			//DrawDrawingSegments();
+			DrawDrawingSegments();
 			device.EndScene();
 			device.Present();
 		}
@@ -576,6 +581,30 @@ namespace SparksToothChart {
 			printFont.DrawText(null,text,new Point((int)screenPoint.X,(int)screenPoint.Y),color);
 		}
 
+		private void DrawDrawingSegments() {
+			device.RenderState.Lighting=false;
+			device.RenderState.ZBufferEnable=false;
+			Line line=new Line(device);
+			line.Width=(float)Width/220f;//about 1.5			
+			float scaleDrawing=(float)Width/(float)TcData.SizeOriginalDrawing.Width;
+			for(int s=0;s<TcData.DrawingSegmentList.Count;s++) {				
+				string[] pointStr=TcData.DrawingSegmentList[s].DrawingSegment.Split(';');
+				List<Vector2> points=new List<Vector2>();
+				for(int p=0;p<pointStr.Length;p++) {
+					string[] xy=pointStr[p].Split(',');
+					if(xy.Length==2) {
+						Point point=new Point((int)(float.Parse(xy[0])*scaleDrawing),(int)(float.Parse(xy[1])*scaleDrawing));
+						//if we set 0,0 to center, then this is where we would convert it back.
+						PointF pointMm=TcData.PixToMm(point);
+						points.Add(new Vector2(pointMm.X,pointMm.Y));
+					}
+				}
+				line.Draw(points.ToArray(),TcData.DrawingSegmentList[s].ColorDraw);
+				//no filled circle at intersections
+			}
+			line.Dispose();
+		}
+
 		///<summary>Returns a bitmap of what is showing in the control.  Used for printing.</summary>
 		public Bitmap GetBitmap() {
 			Surface backBuffer=device.GetBackBuffer(0,0,BackBufferType.Mono);
@@ -583,6 +612,152 @@ namespace SparksToothChart {
 			Bitmap bitmap=new Bitmap(gs);
 			backBuffer.Dispose();
 			return bitmap;
+		}
+
+		private void ToothChartDirectX_MouseDown(object sender,MouseEventArgs e) {
+			MouseIsDown=true;
+			if(TcData.CursorTool==CursorTool.Pointer) {
+				string toothClicked=TcData.GetToothAtPoint(e.Location);
+				if(TcData.SelectedTeeth.Contains(toothClicked)) {
+					SetSelected(toothClicked,false);
+				} else {
+					SetSelected(toothClicked,true);
+				}
+			} else if(TcData.CursorTool==CursorTool.Pen) {
+				TcData.PointList.Add(new Point(e.X,e.Y));
+			} else if(TcData.CursorTool==CursorTool.Eraser) {
+				//do nothing
+			} else if(TcData.CursorTool==CursorTool.ColorChanger) {
+				//look for any lines near the "wand".
+				//since the line segments are so short, it's sufficient to check end points.
+				string[] xy;
+				string[] pointStr;
+				float x;
+				float y;
+				float dist;//the distance between the point being tested and the center of the eraser circle.
+				float radius=2f;//by trial and error to achieve best feel.
+				for(int i=0;i<TcData.DrawingSegmentList.Count;i++) {
+					pointStr=TcData.DrawingSegmentList[i].DrawingSegment.Split(';');
+					for(int p=0;p<pointStr.Length;p++) {
+						xy=pointStr[p].Split(',');
+						if(xy.Length==2) {
+							x=float.Parse(xy[0]);
+							y=float.Parse(xy[1]);
+							dist=(float)Math.Sqrt(Math.Pow(Math.Abs(x-e.X),2)+Math.Pow(Math.Abs(y-e.Y),2));
+							if(dist<=radius) {//testing circle intersection here
+								OnSegmentDrawn(TcData.DrawingSegmentList[i].DrawingSegment);
+								TcData.DrawingSegmentList[i].ColorDraw=TcData.ColorDrawing;
+								Invalidate();
+								return; ;
+							}
+						}
+					}
+				}
+			}
+		}
+
+		private void ToothChartDirectX_MouseMove(object sender,MouseEventArgs e) {
+			if(TcData.CursorTool==CursorTool.Pointer) {
+				hotTooth=TcData.GetToothAtPoint(e.Location);
+				if(hotTooth==hotToothOld) {//mouse has not moved to another tooth
+					return;
+				}
+				hotToothOld=hotTooth;
+				if(MouseIsDown) {//drag action
+					if(TcData.SelectedTeeth.Contains(hotTooth)) {
+						SetSelected(hotTooth,false);
+					} else {
+						SetSelected(hotTooth,true);
+					}
+				}
+			} else if(TcData.CursorTool==CursorTool.Pen) {
+				if(!MouseIsDown) {
+					return;
+				}
+				TcData.PointList.Add(new Point(e.X,e.Y));
+				device.RenderState.Lighting=false;
+				device.RenderState.ZBufferEnable=false;
+				Line line=new Line(device);
+				line.Width=(float)Width/220f;//about 2
+				PointF pMm1=TcData.PixToMm(TcData.PointList[TcData.PointList.Count-1]);
+				PointF pMm2=TcData.PixToMm(TcData.PointList[TcData.PointList.Count-2]);
+				line.Draw(new Vector2[] {
+					new Vector2(pMm1.X,pMm1.Y),
+					new Vector2(pMm2.X,pMm2.Y)},
+					TcData.ColorDrawing);
+				line.Dispose();
+			} else if(TcData.CursorTool==CursorTool.Eraser) {
+				if(!MouseIsDown) {
+					return;
+				}
+				//look for any lines that intersect the "eraser".
+				//since the line segments are so short, it's sufficient to check end points.
+				string[] xy;
+				string[] pointStr;
+				float x;
+				float y;
+				float dist;//the distance between the point being tested and the center of the eraser circle.
+				float radius=8f;//by trial and error to achieve best feel.
+				PointF eraserPt=new PointF(e.X+8.49f,e.Y+8.49f);
+				for(int i=0;i<TcData.DrawingSegmentList.Count;i++) {
+					pointStr=TcData.DrawingSegmentList[i].DrawingSegment.Split(';');
+					for(int p=0;p<pointStr.Length;p++) {
+						xy=pointStr[p].Split(',');
+						if(xy.Length==2) {
+							x=float.Parse(xy[0]);
+							y=float.Parse(xy[1]);
+							dist=(float)Math.Sqrt(Math.Pow(Math.Abs(x-eraserPt.X),2)+Math.Pow(Math.Abs(y-eraserPt.Y),2));
+							if(dist<=radius) {//testing circle intersection here
+								OnSegmentDrawn(TcData.DrawingSegmentList[i].DrawingSegment);//triggers a deletion from db.
+								TcData.DrawingSegmentList.RemoveAt(i);
+								Invalidate();
+								return; ;
+							}
+						}
+					}
+				}
+			} else if(TcData.CursorTool==CursorTool.ColorChanger) {
+				//do nothing	
+			}
+		}
+
+		private void ToothChartDirectX_MouseUp(object sender,MouseEventArgs e) {
+			MouseIsDown=false;
+			if(TcData.CursorTool==CursorTool.Pen) {
+				string drawingSegment="";
+				for(int i=0;i<TcData.PointList.Count;i++) {
+					if(i>0) {
+						drawingSegment+=";";
+					}
+					//I could compensate to center point here:
+					drawingSegment+=TcData.PointList[i].X+","+TcData.PointList[i].Y;
+				}
+				OnSegmentDrawn(drawingSegment);
+				TcData.PointList=new List<Point>();
+				//Invalidate();
+			} else if(TcData.CursorTool==CursorTool.Eraser) {
+				//do nothing
+			} else if(TcData.CursorTool==CursorTool.ColorChanger) {
+				//do nothing
+			}
+		}
+
+		///<summary></summary>
+		protected void OnSegmentDrawn(string drawingSegment) {
+			ToothChartDrawEventArgs tArgs=new ToothChartDrawEventArgs(drawingSegment);
+			if(SegmentDrawn!=null) {
+				SegmentDrawn(this,tArgs);
+			}
+		}
+
+		///<summary>Used by mousedown and mouse move to set teeth selected or unselected.  A similar method is used externally in the wrapper to set teeth selected.  This private method might be faster since it only draws the changes.</summary>
+		private void SetSelected(string tooth_id,bool setValue) {
+			TcData.SetSelected(tooth_id,setValue);
+			if(setValue) {
+				DrawNumber(tooth_id,true,false);
+			} else {
+				DrawNumber(tooth_id,false,false);
+			}
 		}
 
 	}
