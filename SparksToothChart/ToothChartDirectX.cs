@@ -584,22 +584,24 @@ namespace SparksToothChart {
 		private void DrawDrawingSegments() {
 			device.RenderState.Lighting=false;
 			device.RenderState.ZBufferEnable=false;
+			device.Transform.World=Matrix.Identity;
+			Matrix lineMatrix=ScreenSpaceMatrix();
 			Line line=new Line(device);
-			line.Width=(float)Width/220f;//about 1.5			
+			line.Width=(float)Width/175f;//about 2		
 			float scaleDrawing=(float)Width/(float)TcData.SizeOriginalDrawing.Width;
 			for(int s=0;s<TcData.DrawingSegmentList.Count;s++) {				
 				string[] pointStr=TcData.DrawingSegmentList[s].DrawingSegment.Split(';');
-				List<Vector2> points=new List<Vector2>();
+				List<Vector3> points=new List<Vector3>();
 				for(int p=0;p<pointStr.Length;p++) {
 					string[] xy=pointStr[p].Split(',');
 					if(xy.Length==2) {
 						Point point=new Point((int)(float.Parse(xy[0])*scaleDrawing),(int)(float.Parse(xy[1])*scaleDrawing));
 						//if we set 0,0 to center, then this is where we would convert it back.
 						PointF pointMm=TcData.PixToMm(point);
-						points.Add(new Vector2(pointMm.X,pointMm.Y));
+						points.Add(new Vector3(pointMm.X,pointMm.Y,0f));
 					}
 				}
-				line.Draw(points.ToArray(),TcData.DrawingSegmentList[s].ColorDraw);
+				line.DrawTransform(points.ToArray(),lineMatrix,TcData.DrawingSegmentList[s].ColorDraw);
 				//no filled circle at intersections
 			}
 			line.Dispose();
@@ -677,15 +679,19 @@ namespace SparksToothChart {
 				TcData.PointList.Add(new Point(e.X,e.Y));
 				device.RenderState.Lighting=false;
 				device.RenderState.ZBufferEnable=false;
+				device.Transform.World=Matrix.Identity;
+				Matrix lineMatrix=ScreenSpaceMatrix();
 				Line line=new Line(device);
-				line.Width=(float)Width/220f;//about 2
+				line.Width=(float)Width/175f;//about 2
 				PointF pMm1=TcData.PixToMm(TcData.PointList[TcData.PointList.Count-1]);
 				PointF pMm2=TcData.PixToMm(TcData.PointList[TcData.PointList.Count-2]);
-				line.Draw(new Vector2[] {
-					new Vector2(pMm1.X,pMm1.Y),
-					new Vector2(pMm2.X,pMm2.Y)},
+				line.DrawTransform(new Vector3[] {
+					new Vector3(pMm1.X,pMm1.Y,0f),
+					new Vector3(pMm2.X,pMm2.Y,0f)},
+					lineMatrix,
 					TcData.ColorDrawing);
 				line.Dispose();
+				Invalidate();
 			} else if(TcData.CursorTool==CursorTool.Eraser) {
 				if(!MouseIsDown) {
 					return;
