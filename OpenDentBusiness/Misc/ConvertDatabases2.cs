@@ -1757,6 +1757,35 @@ DROP TABLE IF EXISTS etAck";
 				command="UPDATE preference SET ValueString = '6.8.7.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To6_8_11();
+		}
+
+		private static void To6_8_11() {
+			//duplicated in 6.6 and 6.7
+			if(FromVersion<new Version("6.8.11.0")) {
+				string command;
+				//Mediadent version 4 and 5---------------------------------------
+				command="SELECT COUNT(*) FROM programproperty WHERE PropertyDesc='MediaDent Version 4 or 5'";
+				if(Db.GetScalar(command)=="0") {
+					command="SELECT ProgramNum FROM program WHERE ProgName='MediaDent'";
+					long programNum=PIn.PLong(Db.GetScalar(command));
+					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+						+") VALUES("
+						+"'"+POut.PLong(programNum)+"', "
+						+"'"+POut.PString("MediaDent Version 4 or 5")+"', "
+						+"'5')";
+					Db.NonQ(command);
+					//add back the image folder
+					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+						+") VALUES("
+						+"'"+POut.PLong(programNum)+"', "
+						+"'"+POut.PString("Image Folder")+"', "
+						+"'"+POut.PString(@"C:\Mediadent\patients\")+"')";
+					Db.NonQ(command);
+				}
+				command="UPDATE preference SET ValueString = '6.8.11.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
 			To6_9_0();
 		}
 
