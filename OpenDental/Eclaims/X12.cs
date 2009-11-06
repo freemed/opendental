@@ -1731,7 +1731,7 @@ namespace OpenDental.Eclaims
 				if(strb.Length!=0) {
 					strb.Append(",");
 				}
-				strb.Append("Medicaid ID");
+				strb.Append("BillProv Medicaid ID");
 			}
 			if(claim.PlanNum2>0){
 				InsPlan insPlan2=InsPlans.GetPlan(claim.PlanNum2,new List <InsPlan> ());
