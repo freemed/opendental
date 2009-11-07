@@ -2208,7 +2208,7 @@ namespace OpenDental{
   
 				//check code to see if it is a medical code
 				bool isMed=false;
-				if(procCur.MedicalCode!=""){
+				if(procCur.MedicalCode != null && procCur.MedicalCode != "") {
 					isMed=true;
 				}
 				//get fee schedule for medical ins or Fees.GetFeeSched if dental

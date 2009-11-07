@@ -4664,7 +4664,7 @@ namespace OpenDental{
 				//check to see if it is a med code
 				double insfee;
 				bool isMed = false;
-				if(ProcCur.MedicalCode != ""){
+				if(ProcCur.MedicalCode != null && ProcCur.MedicalCode != "") {
 					isMed = true;
 				}
 				//get fee schedule for medical ins or dental
@@ -4782,7 +4782,7 @@ namespace OpenDental{
 				//check to see if it is a med code
 				double insfee;
 				bool isMed = false;
-				if(ProcCur.MedicalCode != ""){
+				if(ProcCur.MedicalCode != null && ProcCur.MedicalCode != "") {
 					isMed = true;
 				}
 				//get fee schedule for medical ins or dental
