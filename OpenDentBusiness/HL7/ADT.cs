@@ -4,7 +4,7 @@ using System.Text;
 
 namespace OpenDentBusiness.HL7 {
 	public class ADT {
-		public static void ProcessMessage(MessageHL7 message,bool isStandalone){
+		public static void ProcessMessage(MessageHL7 message,bool useChartNumber){
 			/*string triggerevent=message.Segments[0].GetFieldComponent(8,1);
 			switch(triggerevent) {
 				case "A01"://Admit/Visit Information
@@ -29,7 +29,7 @@ namespace OpenDentBusiness.HL7 {
 			SegmentHL7 seg=message.GetSegment(SegmentName.PID,true);
 			long patNum=PIn.PLong(seg.GetFieldFullText(2));
 			Patient pat=null;
-			if(isStandalone) {
+			if(useChartNumber) {
 				pat=Patients.GetPatByChartNumber(patNum.ToString());
 				if(pat==null) {
 					//try to find the patient in question by using name and birthdate
@@ -53,7 +53,7 @@ namespace OpenDentBusiness.HL7 {
 			bool isNewPat = pat==null;
 			if(isNewPat) {
 				pat=new Patient();
-				if(isStandalone) {
+				if(useChartNumber) {
 					pat.ChartNumber=patNum.ToString();
 				}
 				else {
@@ -80,7 +80,7 @@ namespace OpenDentBusiness.HL7 {
 			}
 			//GT1-Guarantor-------------------------------------
 			seg=message.GetSegment(SegmentName.GT1,true);
-			SegmentPID.ProcessGT1(pat,seg,isStandalone);
+			SegmentPID.ProcessGT1(pat,seg,useChartNumber);
 			//IN1-Insurance-------------------------------------
 			List<SegmentHL7> segments=message.GetSegments(SegmentName.IN1);
 			for(int i=0;i<segments.Count;i++) {

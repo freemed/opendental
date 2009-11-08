@@ -185,6 +185,16 @@ namespace OpenDental{
 				}
 				return;
 			}
+			if(program.ProgName=="Mountainside") {
+				FormMountainside FormM=new FormMountainside();
+				FormM.ProgramCur=program;
+				FormM.ShowDialog();
+				if(FormM.DialogResult==DialogResult.OK) {
+					changed=true;
+					FillList();
+				}
+				return;
+			}
 			FormProgramLinkEdit FormPE=new FormProgramLinkEdit();
 			FormPE.ProgramCur=program;
 			FormPE.ShowDialog();

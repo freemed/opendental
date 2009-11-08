@@ -128,6 +128,8 @@ namespace OpenDentBusiness {
 		FuchsListSelectionColor,
 		FuchsOptionsOn,
 		GenericEClaimsForm,
+		HL7FolderOut,
+		HL7FolderIn,
 		ImageStoreIsDatabase,
 		ImageWindowingMax,
 		ImageWindowingMin,

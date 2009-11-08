@@ -332,8 +332,8 @@ namespace OpenDental{
 				radioModeTight.Checked=true;
 			}
 			SetModeVisibilities();
-			textHL7FolderIn.Text=GetProp("HL7FolderIn");
-			textHL7FolderOut.Text=GetProp("HL7FolderOut");
+			textHL7FolderIn.Text=PrefC.GetString(PrefName.HL7FolderIn);
+			textHL7FolderOut.Text=PrefC.GetString(PrefName.HL7FolderOut);
 			comboDefaultUserGroup.Items.Clear();
 			for(int i=0;i<UserGroups.List.Length;i++) {
 				comboDefaultUserGroup.Items.Add(UserGroups.List[i].Description);
@@ -440,10 +440,10 @@ namespace OpenDental{
 			ProgramCur.ProgDesc=textProgDesc.Text;
 			ProgramCur.Enabled=checkEnabled.Checked;
 			Programs.Update(ProgramCur);
-			ProgramProperties.SetProperty(ProgramCur.ProgramNum,"HL7FolderOut",textHL7FolderOut.Text);
+			Prefs.UpdateString(PrefName.HL7FolderOut,textHL7FolderOut.Text);
 			if(radioModeTight.Checked) {
 				ProgramProperties.SetProperty(ProgramCur.ProgramNum,"IsStandalone","0");
-				ProgramProperties.SetProperty(ProgramCur.ProgramNum,"HL7FolderIn",textHL7FolderIn.Text);
+				Prefs.UpdateString(PrefName.HL7FolderIn,textHL7FolderIn.Text);
 				ProgramProperties.SetProperty(ProgramCur.ProgramNum,"DefaultUserGroup",
 					UserGroups.List[comboDefaultUserGroup.SelectedIndex].UserGroupNum.ToString());
 				if(checkShowImages.Checked) {
@@ -455,11 +455,11 @@ namespace OpenDental{
 			}
 			else {//standalone
 				ProgramProperties.SetProperty(ProgramCur.ProgramNum,"IsStandalone","1");
-				ProgramProperties.SetProperty(ProgramCur.ProgramNum,"HL7FolderIn","");
+				Prefs.UpdateString(PrefName.HL7FolderIn,"");
 				ProgramProperties.SetProperty(ProgramCur.ProgramNum,"DefaultUserGroup","0");
 				ProgramProperties.SetProperty(ProgramCur.ProgramNum,"ShowImagesModule","1");
 			}
-			DataValid.SetInvalid(InvalidType.Programs);
+			DataValid.SetInvalid(InvalidType.Programs,InvalidType.Prefs);
 			return true;
 		}
 

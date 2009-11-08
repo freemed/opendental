@@ -1786,12 +1786,66 @@ DROP TABLE IF EXISTS etAck";
 				command="UPDATE preference SET ValueString = '6.8.11.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To6_8_12();
+		}
+
+		private static void To6_8_12() {
+			if(FromVersion<new Version("6.8.12.0")) {
+				string command;
+				//Ewoo_EZDent bridge-------------------------------------------------------------------------
+				command="INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
+					+") VALUES("
+					+"'EwooEZDent', "
+					+"'EwooEZDent from www.ewoousa.com', "
+					+"'0', "
+					+"'"+POut.PString(@"C:\EasyDent4\Edp4\EasyDent4.exe")+"', "
+					+"'', "
+					+"'')";
+				long programNum=Db.NonQ(command,true);
+				command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+					+") VALUES("
+					+"'"+POut.PLong(programNum)+"', "
+					+"'Enter 0 to use PatientNum, or 1 to use ChartNum', "
+					+"'0')";
+				Db.NonQ(command);
+				command="INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
+					+"VALUES ("
+					+"'"+POut.PLong(programNum)+"', "
+					+"'"+POut.PLong((int)ToolBarsAvail.ChartModule)+"', "
+					+"'EZDent')";
+				Db.NonQ(command);
+				command="UPDATE preference SET ValueString = '6.8.12.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ32(command);
+			}
 			To6_9_0();
 		}
 
 		private static void To6_9_0() {
 			if(FromVersion<new Version("6.9.0.0")) {
 				string command;
+				//Mountainside Bridge---------------------------------------------------------------------------
+				command="INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
+					+") VALUES("
+					+"'Mountainside', "
+					+"'Mountainside from www.mountainsidesoftware.com', "
+					+"'0', "
+					+"'', "
+					+"'', "
+					+"'')";
+				Db.NonQ(command);
+				//Move the HL7 folders from eCW to the pref table
+				command="SELECT PropertyValue FROM programproperty WHERE PropertyDesc='HL7FolderOut'";
+				string folder=Db.GetScalar(command);
+				command="INSERT INTO preference(PrefName,ValueString) VALUES('HL7FolderOut','"+POut.PString(folder)+"')";
+				Db.NonQ(command);
+				command="DELETE FROM programproperty WHERE PropertyDesc='HL7FolderOut'";
+				Db.NonQ(command);
+				command="SELECT PropertyValue FROM programproperty WHERE PropertyDesc='HL7FolderIn'";
+				folder=Db.GetScalar(command);
+				command="INSERT INTO preference(PrefName,ValueString) VALUES('HL7FolderIn','"+POut.PString(folder)+"')";
+				Db.NonQ(command);
+				command="DELETE FROM programproperty WHERE PropertyDesc='HL7FolderIn'";
+				Db.NonQ(command);
 
 
 

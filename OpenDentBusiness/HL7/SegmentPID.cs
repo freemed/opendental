@@ -34,7 +34,7 @@ namespace OpenDentBusiness.HL7 {
 		}
 
 		///<summary>If relationship is self, this loop does nothing.  A new pat will later change guarantor to be same as patnum. </summary>
-		public static void ProcessGT1(Patient pat,SegmentHL7 seg,bool isStandalone) {
+		public static void ProcessGT1(Patient pat,SegmentHL7 seg,bool useChartNumber) {
 			long guarNum=PIn.PLong(seg.GetFieldFullText(2));
 			if(seg.GetFieldFullText(11)=="1") {//if relationship is self
 				return;
@@ -42,7 +42,7 @@ namespace OpenDentBusiness.HL7 {
 			Patient guar=null;
 			Patient guarOld=null;
 			//So guarantor is someone else
-			if(isStandalone) {
+			if(useChartNumber) {
 				//try to find guarantor by using chartNumber
 				guar=Patients.GetPatByChartNumber(guarNum.ToString());
 				if(guar==null) {
@@ -67,7 +67,7 @@ namespace OpenDentBusiness.HL7 {
 			bool isNewGuar= guar==null;
 			if(isNewGuar) {//then we need to add guarantor to db
 				guar=new Patient();
-				if(isStandalone) {
+				if(useChartNumber) {
 					guar.ChartNumber=guarNum.ToString();
 				}
 				else {

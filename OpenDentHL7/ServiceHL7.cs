@@ -18,6 +18,7 @@ namespace OpenDentHL7 {
 	public partial class ServiceHL7:ServiceBase {
 		private System.Threading.Timer timer;
 		private static string inFolder;
+		///<summary>Indicates the standalone mode for eCW, or the use of Mountainside.  In both cases, chartNumber will be used instead of PatNum.</summary>
 		private static bool IsStandalone;
 
 		public ServiceHL7() {
@@ -60,15 +61,21 @@ namespace OpenDentHL7 {
 			}
 			//inform od via signal that this service is running
 
-			IsStandalone=ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="1";
+			IsStandalone=true;//and for Mountainside
+			if(Programs.IsEnabled("eClinicalWorks")
+				&& ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") 
+			{
+				IsStandalone=false;
+			}
 			//start filewatcher
 
-			string hl7folderOut=ProgramProperties.GetPropVal("eClinicalWorks","HL7FolderOut");
+			string hl7folderOut=PrefC.GetString(PrefName.HL7FolderOut);
+				//ProgramProperties.GetPropVal("eClinicalWorks","HL7FolderOut");
 				//HL7Msgs.GetHL7FolderOut();
 			if(!Directory.Exists(hl7folderOut)) {
 				throw new ApplicationException(hl7folderOut+" does not exist.");
 			}
-			FileSystemWatcher watcher=new FileSystemWatcher(hl7folderOut);//'out' from eCW
+			FileSystemWatcher watcher=new FileSystemWatcher(hl7folderOut);//'out' from eCW/Mountainside
 			watcher.Created += new FileSystemEventHandler(OnCreated);
 			watcher.Renamed += new RenamedEventHandler(OnRenamed);
 			watcher.EnableRaisingEvents=true;
@@ -81,7 +88,8 @@ namespace OpenDentHL7 {
 				return;//do not continue with the HL7 sending code below
 			}
 			//start polling the db for new HL7 messages to send
-			inFolder=ProgramProperties.GetPropVal("eClinicalWorks","HL7FolderIn");
+			inFolder=PrefC.GetString(PrefName.HL7FolderIn);
+				//ProgramProperties.GetPropVal("eClinicalWorks","HL7FolderIn");
 				//HL7Msgs.GetHL7FolderIn();
 			if(!Directory.Exists(inFolder)) {
 				throw new ApplicationException(inFolder+" does not exist.");
@@ -121,6 +129,7 @@ namespace OpenDentHL7 {
 			try {
 				MessageHL7 msg=new MessageHL7(msgtext);//this creates an entire heirarchy of objects.
 				if(msg.MsgType==MessageType.ADT) {
+					
 					ADT.ProcessMessage(msg,IsStandalone);
 				}
 				else if(msg.MsgType==MessageType.SIU && !IsStandalone) {//appointments don't get imported if standalone mode.
