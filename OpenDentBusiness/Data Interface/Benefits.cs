@@ -873,11 +873,19 @@ namespace OpenDentBusiness {
 				else if(benInd.CovCatNum!=0) {//specific category
 					spansForCat=CovSpans.GetForCat(benInd.CovCatNum);
 					bool isMatch=false;
-					for(int j=0;j<spansForCat.Length;j++) {
-						if(String.Compare(histList[i].StrProcCode,spansForCat[j].FromCode)>=0 
-							&& String.Compare(histList[i].StrProcCode,spansForCat[j].ToCode)<=0) {
+					if(histList[i].StrProcCode=="") {//If this was a 'total' payment that was not attached to a procedure
+						if(CovCats.GetEbenCat(benInd.CovCatNum)==EbenefitCategory.General) {//And if this is the general category
+							//Then it should affect this max.
 							isMatch=true;
-							break;
+						}
+					}
+					else {
+						for(int j=0;j<spansForCat.Length;j++) {
+							if(String.Compare(histList[i].StrProcCode,spansForCat[j].FromCode)>=0 
+							&& String.Compare(histList[i].StrProcCode,spansForCat[j].ToCode)<=0) {
+								isMatch=true;
+								break;
+							}
 						}
 					}
 					if(!isMatch) {
@@ -908,11 +916,19 @@ namespace OpenDentBusiness {
 				else if(benInd.CovCatNum!=0) {//specific category
 					spansForCat=CovSpans.GetForCat(benInd.CovCatNum);
 					bool isMatch=false;
-					for(int j=0;j<spansForCat.Length;j++) {
-						if(String.Compare(loopList[i].StrProcCode,spansForCat[j].FromCode)>=0 
-							&& String.Compare(loopList[i].StrProcCode,spansForCat[j].ToCode)<=0) {
+					if(loopList[i].StrProcCode=="") {//If this was a 'total' payment that was not attached to a procedure
+						if(CovCats.GetEbenCat(benInd.CovCatNum)==EbenefitCategory.General) {//And if this is the general category
+							//Then it should affect this max.
 							isMatch=true;
-							break;
+						}
+					}
+					else {
+						for(int j=0;j<spansForCat.Length;j++) {
+							if(String.Compare(loopList[i].StrProcCode,spansForCat[j].FromCode)>=0 
+							&& String.Compare(loopList[i].StrProcCode,spansForCat[j].ToCode)<=0) {
+								isMatch=true;
+								break;
+							}
 						}
 					}
 					if(!isMatch) {
@@ -973,11 +989,19 @@ namespace OpenDentBusiness {
 				else if(benFam.CovCatNum!=0) {//specific category
 					spansForCat=CovSpans.GetForCat(benFam.CovCatNum);
 					bool isMatch=false;
-					for(int j=0;j<spansForCat.Length;j++) {
-						if(String.Compare(histList[i].StrProcCode,spansForCat[j].FromCode)>=0 
-							&& String.Compare(histList[i].StrProcCode,spansForCat[j].ToCode)<=0) {
+					if(histList[i].StrProcCode=="") {//If this was a 'total' payment that was not attached to a procedure
+						if(CovCats.GetEbenCat(benInd.CovCatNum)==EbenefitCategory.General) {//And if this is the general category
+							//Then it should affect this max.
 							isMatch=true;
-							break;
+						}
+					}
+					else {
+						for(int j=0;j<spansForCat.Length;j++) {
+							if(String.Compare(histList[i].StrProcCode,spansForCat[j].FromCode)>=0 
+							&& String.Compare(histList[i].StrProcCode,spansForCat[j].ToCode)<=0) {
+								isMatch=true;
+								break;
+							}
 						}
 					}
 					if(!isMatch) {
@@ -1000,11 +1024,19 @@ namespace OpenDentBusiness {
 				else if(benFam.CovCatNum!=0) {//specific category
 					spansForCat=CovSpans.GetForCat(benFam.CovCatNum);
 					bool isMatch=false;
-					for(int j=0;j<spansForCat.Length;j++) {
-						if(String.Compare(loopList[i].StrProcCode,spansForCat[j].FromCode)>=0 
-							&& String.Compare(loopList[i].StrProcCode,spansForCat[j].ToCode)<=0) {
+					if(loopList[i].StrProcCode=="") {//If this was a 'total' payment that was not attached to a procedure
+						if(CovCats.GetEbenCat(benInd.CovCatNum)==EbenefitCategory.General) {//And if this is the general category
+							//Then it should affect this max.
 							isMatch=true;
-							break;
+						}
+					}
+					else {
+						for(int j=0;j<spansForCat.Length;j++) {
+							if(String.Compare(loopList[i].StrProcCode,spansForCat[j].FromCode)>=0 
+							&& String.Compare(loopList[i].StrProcCode,spansForCat[j].ToCode)<=0) {
+								isMatch=true;
+								break;
+							}
 						}
 					}
 					if(!isMatch) {

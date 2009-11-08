@@ -67,7 +67,7 @@ namespace OpenDental.Eclaims {
 				strb.Append(t);
 				strb.Append(t);
 				strb.Append(ProcedureCodes.GetStringProcCode(proc.CodeNum)+t);
-				strb.Append(t);//U/L needs work
+				strb.Append(t);//0=not applicable(default), 1=Upper, 2=Lower.
 				strb.Append(Tooth.ToInternat(proc.ToothNum)+t);
 				strb.Append(proc.Surf+t);//needs validation
 				strb.Append(t);
