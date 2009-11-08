@@ -213,11 +213,11 @@ namespace OpenDental{
 				return;
       }
 			if(AutoCodeItemC.HList.ContainsKey(FormP.SelectedCodeNum)
-				&& (int)AutoCodeItemC.HList[FormP.SelectedCodeNum] != AutoCodeItemCur.AutoCodeNum)
+				&& (long)AutoCodeItemC.HList[FormP.SelectedCodeNum] != AutoCodeItemCur.AutoCodeNum)
 			{
 				//This section is a fix for an old bug that did not cause items to get deleted properly
-				if(!AutoCodeC.HList.ContainsKey((int)AutoCodeItemC.HList[FormP.SelectedCodeNum])){
-					AutoCodeItems.Delete((int)AutoCodeItemC.HList[FormP.SelectedCodeNum]);
+				if(!AutoCodeC.HList.ContainsKey((long)AutoCodeItemC.HList[FormP.SelectedCodeNum])){
+					AutoCodeItems.Delete((long)AutoCodeItemC.HList[FormP.SelectedCodeNum]);
 					textADA.Text=ProcedureCodes.GetStringProcCode(FormP.SelectedCodeNum);
 				}
 				else{
