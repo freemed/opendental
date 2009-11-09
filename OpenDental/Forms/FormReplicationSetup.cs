@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 using OpenDentBusiness;
 using OpenDental.UI;
@@ -110,7 +111,7 @@ namespace OpenDental {
 		}
 
 		private void butSetRanges_Click(object sender,EventArgs e) {
-			if(ReplicationServers.Listt.Count==0) {
+			if(ReplicationServers.Listt.Count==0){
 				MessageBox.Show(Lan.g(this,"Please add at least one replication server to the list first"));
 				return;
 			}
@@ -159,6 +160,61 @@ namespace OpenDental {
 			MessageBox.Show(msg);
 		}
 
+		private void butSynch_Click(object sender,EventArgs e) {
+			if(textUsername.Text=="" || textPassword.Text=="") {
+				MsgBox.Show(this,"Please enter a username and password first.");
+				return;
+			}
+			if(ReplicationServers.Listt.Count==0) {
+				MsgBox.Show(this,"Please add at servers to the list first");
+				return;
+			}
+			Cursor=Cursors.WaitCursor;
+			string currentDatabaseName=MiscData.GetCurrentDatabase();
+			for(int i=0;i<ReplicationServers.Listt.Count;i++) {
+				string compName=ReplicationServers.Listt[i].Descript;
+				DataConnection dc=new DataConnection();
+				try {
+					try {
+						dc.SetDb(compName,currentDatabaseName,textUsername.Text,textPassword.Text,"","",DataConnection.DBtype);
+					}
+					catch(MySql.Data.MySqlClient.MySqlException ex) {
+						if(ex.Number==1042) {//The error 1042 is issued when the connection could not be made. 
+							throw ex;//Pass the exception along.
+						}
+						dc.cmd.Connection.Close();
+					}
+					//Connection is considered to be successfull at this point. Now restart the slave process to force replication.
+					string command="SLAVE STOP; START SLAVE; SHOW SLAVE STATUS;";
+					DataTable slaveStatus=dc.GetTable(command);
+					//Wait for the slave process to become active again.
+					for(int j=0;j<40 && slaveStatus.Rows[0]["Slave_IO_Running"].ToString().ToLower()!="yes";j++) {
+						Thread.Sleep(1000);
+						command="SHOW SLAVE STATUS";
+						slaveStatus=dc.GetTable(command);
+					}
+					if(slaveStatus.Rows[0]["Slave_IO_Running"].ToString().ToLower()!="yes") {
+						throw new Exception("Slave IO is not running on computer "+compName);
+					}
+					if(slaveStatus.Rows[0]["Slave_SQL_Running"].ToString().ToLower()!="yes") {
+						throw new Exception("Slave SQL is not running on computer "+compName);
+					}
+					//Wait for replication to complete.
+					while(slaveStatus.Rows[0]["Slave_IO_State"].ToString().ToLower()!="waiting for master to send event" || 
+						slaveStatus.Rows[0]["Seconds_Behind_Master"].ToString()!="0") {
+						slaveStatus=dc.GetTable(command);
+					}
+				}
+				catch(Exception ex) {
+					Cursor=Cursors.Default;
+					MessageBox.Show(Lan.g(this,"Error forcing replication on computer")+" "+compName+": "+ex.Message);
+					return;//Cancel operation.
+				}
+			}
+			Cursor=Cursors.Default;
+			MessageBox.Show(Lan.g(this,"Database synch completed successfully."));
+		}
+
 		private void butClose_Click(object sender,EventArgs e) {
 			Close();
 		}
@@ -168,6 +224,8 @@ namespace OpenDental {
 				DataValid.SetInvalid(InvalidType.ReplicationServers);
 			}
 		}
+
+	
 
 		
 

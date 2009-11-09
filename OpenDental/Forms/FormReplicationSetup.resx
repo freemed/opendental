@@ -120,4 +120,7 @@
   <data name="label1.Text" xml:space="preserve">
     <value>After adding servers to the list above, use the Set Ranges button to automatically set key ranges.  Ranges can be changed at any time with minimal risk.  If followed by a synchronization, there is zero risk.</value>
   </data>
+  <data name="label3.Text" xml:space="preserve">
+    <value>If using MySQL replication, this will send the following command to each server:  SLAVE STOP; START SLAVE; SHOW SLAVE STATUS; and it will then wait for each server to finish synching.  The Description of each server must be its name on this network.</value>
+  </data>
 </root>
