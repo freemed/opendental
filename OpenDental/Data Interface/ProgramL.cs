@@ -81,7 +81,10 @@ namespace OpenDental{
 				Dxis.SendData(prog,pat);
 				return;
 			}
-
+			else if(prog.ProgName=="EwooEZDent") {
+				Ewoo.SendData(prog,pat);
+				return;
+			}
 			else if(prog.ProgName=="FloridaProbe") {
 				FloridaProbe.SendData(prog,pat);
 				return;
