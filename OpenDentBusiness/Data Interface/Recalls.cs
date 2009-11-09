@@ -99,7 +99,7 @@ namespace OpenDentBusiness{
 				recall.DisableUntilBalance= PIn.PDouble(table.Rows[i][11].ToString());
 				recall.DisableUntilDate   = PIn.PDate  (table.Rows[i][12].ToString());
 				if(table.Columns.Count>13){
-					recall.DateScheduled= PIn.PDate  (table.Rows[i][11].ToString());
+					recall.DateScheduled= PIn.PDate  (table.Rows[i][13].ToString());
 				}
 				list.Add(recall);
 			}

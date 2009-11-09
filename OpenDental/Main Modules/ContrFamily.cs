@@ -1050,9 +1050,10 @@ namespace OpenDental{
 			ODGridCell cell;
 			for(int i=0;i<recallListPat.Count;i++){
 				row=new ODGridRow();
+				//Type
 				string cellStr=RecallTypes.GetDescription(recallListPat[i].RecallTypeNum);
-				
 				row.Cells.Add(cellStr);
+				//Due date
 				if(recallListPat[i].DateDue.Year<1880){
 					row.Cells.Add("");
 				}
@@ -1064,12 +1065,14 @@ namespace OpenDental{
 					}
 					row.Cells.Add(cell);
 				}
+				//Sched Date
 				if(recallListPat[i].DateScheduled.Year>1880){
 					row.Cells.Add(recallListPat[i].DateScheduled.ToShortDateString());
 				}
 				else{
 					row.Cells.Add("");
 				}
+				//Notes
 				cellStr="";
 				if(recallListPat[i].IsDisabled) {
 					cellStr+=Lan.g(this,"Disabled");
