@@ -203,13 +203,12 @@ namespace OpenDental{
     }
 
 		private void FillClaimForms(){
-			ArrayList ClaimFormsArray = new ArrayList();
 			for(int i=0;i<ClaimForms.ListShort.Length;i++) {
-				ClaimFormsArray.Add(ClaimForms.ListShort[i]);
+				comboClaimForm.Items.Add(ClaimForms.ListShort[i]);
+				if(ClaimForms.ListShort[i].ClaimFormNum==PrefC.GetLong(PrefName.DefaultClaimForm)) {
+					comboClaimForm.SelectedIndex=i;
+				}
 			}
-			comboClaimForm.DataSource=ClaimFormsArray;
-			comboClaimForm.ValueMember="ClaimFormKey";
-			comboClaimForm.DisplayMember="ClaimFormDescription";
 		}
 
 		private void FillPlanData(){
@@ -268,9 +267,13 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Please select a relationship first."));
 				return;
 			}
+			if(comboClaimForm.SelectedIndex==-1) {
+				MessageBox.Show(Lan.g(this,"Please select a claimform first."));
+				return;
+			}
 			PatRelat=(Relat)listRelat.SelectedIndex;
 			SelectedPlan=PlanList[gridMain.GetSelectedIndex()];
-			ClaimFormNum=Convert.ToInt16(comboClaimForm.SelectedValue.ToString());
+			ClaimFormNum=ClaimForms.ListShort[comboClaimForm.SelectedIndex].ClaimFormNum;
 			EFormat=EtransType.ClaimSent;//?? was 2;
       DialogResult=DialogResult.OK;
 		}
