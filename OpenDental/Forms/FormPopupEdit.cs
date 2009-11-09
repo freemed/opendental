@@ -70,13 +70,13 @@ namespace OpenDental{
 			this.checkIsDisabled = new System.Windows.Forms.CheckBox();
 			this.butDelete = new OpenDental.UI.Button();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.butNone = new OpenDental.UI.Button();
 			this.label3 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
 			this.comboMinutes = new System.Windows.Forms.ComboBox();
 			this.comboHours = new System.Windows.Forms.ComboBox();
 			this.butMinutes = new OpenDental.UI.Button();
 			this.butHours = new OpenDental.UI.Button();
-			this.butNone = new OpenDental.UI.Button();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -88,7 +88,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(347,289);
+			this.butCancel.Location = new System.Drawing.Point(347,181);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,26);
 			this.butCancel.TabIndex = 0;
@@ -103,7 +103,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(347,255);
+			this.butOK.Location = new System.Drawing.Point(347,147);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(77,26);
 			this.butOK.TabIndex = 1;
@@ -129,7 +129,8 @@ namespace OpenDental{
 			// 
 			// checkIsDisabled
 			// 
-			this.checkIsDisabled.Location = new System.Drawing.Point(50,255);
+			this.checkIsDisabled.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.checkIsDisabled.Location = new System.Drawing.Point(50,152);
 			this.checkIsDisabled.Name = "checkIsDisabled";
 			this.checkIsDisabled.Size = new System.Drawing.Size(235,18);
 			this.checkIsDisabled.TabIndex = 4;
@@ -146,7 +147,7 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(50,289);
+			this.butDelete.Location = new System.Drawing.Point(50,181);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(81,26);
 			this.butDelete.TabIndex = 5;
@@ -162,12 +163,27 @@ namespace OpenDental{
 			this.groupBox1.Controls.Add(this.comboHours);
 			this.groupBox1.Controls.Add(this.butMinutes);
 			this.groupBox1.Controls.Add(this.butHours);
-			this.groupBox1.Location = new System.Drawing.Point(50,142);
+			this.groupBox1.Location = new System.Drawing.Point(357,15);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(271,107);
 			this.groupBox1.TabIndex = 6;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Save and Disable for";
+			this.groupBox1.Visible = false;
+			// 
+			// butNone
+			// 
+			this.butNone.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butNone.Autosize = true;
+			this.butNone.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butNone.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butNone.CornerRadius = 4F;
+			this.butNone.Location = new System.Drawing.Point(91,20);
+			this.butNone.Name = "butNone";
+			this.butNone.Size = new System.Drawing.Size(77,24);
+			this.butNone.TabIndex = 31;
+			this.butNone.Text = "None";
+			this.butNone.Click += new System.EventHandler(this.butNone_Click);
 			// 
 			// label3
 			// 
@@ -233,24 +249,10 @@ namespace OpenDental{
 			this.butHours.Text = "Hours";
 			this.butHours.Click += new System.EventHandler(this.butHours_Click);
 			// 
-			// butNone
-			// 
-			this.butNone.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butNone.Autosize = true;
-			this.butNone.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butNone.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butNone.CornerRadius = 4F;
-			this.butNone.Location = new System.Drawing.Point(91,20);
-			this.butNone.Name = "butNone";
-			this.butNone.Size = new System.Drawing.Size(77,24);
-			this.butNone.TabIndex = 31;
-			this.butNone.Text = "None";
-			this.butNone.Click += new System.EventHandler(this.butNone_Click);
-			// 
 			// FormPopupEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(437,327);
+			this.ClientSize = new System.Drawing.Size(437,219);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.checkIsDisabled);

@@ -62,11 +62,11 @@ namespace OpenDental{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormPopupDisplay));
 			this.textDescription = new System.Windows.Forms.TextBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.comboHours = new System.Windows.Forms.ComboBox();
-			this.comboMinutes = new System.Windows.Forms.ComboBox();
-			this.label1 = new System.Windows.Forms.Label();
-			this.label2 = new System.Windows.Forms.Label();
 			this.label3 = new System.Windows.Forms.Label();
+			this.label2 = new System.Windows.Forms.Label();
+			this.label1 = new System.Windows.Forms.Label();
+			this.comboMinutes = new System.Windows.Forms.ComboBox();
+			this.comboHours = new System.Windows.Forms.ComboBox();
 			this.butPerm = new OpenDental.UI.Button();
 			this.butMinutes = new OpenDental.UI.Button();
 			this.butHours = new OpenDental.UI.Button();
@@ -92,39 +92,22 @@ namespace OpenDental{
 			this.groupBox1.Controls.Add(this.butPerm);
 			this.groupBox1.Controls.Add(this.butMinutes);
 			this.groupBox1.Controls.Add(this.butHours);
-			this.groupBox1.Location = new System.Drawing.Point(50,142);
+			this.groupBox1.Location = new System.Drawing.Point(362,34);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(271,103);
 			this.groupBox1.TabIndex = 3;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Disable for";
+			this.groupBox1.Visible = false;
 			// 
-			// comboHours
+			// label3
 			// 
-			this.comboHours.FormattingEnabled = true;
-			this.comboHours.Location = new System.Drawing.Point(15,48);
-			this.comboHours.MaxDropDownItems = 48;
-			this.comboHours.Name = "comboHours";
-			this.comboHours.Size = new System.Drawing.Size(70,21);
-			this.comboHours.TabIndex = 26;
-			// 
-			// comboMinutes
-			// 
-			this.comboMinutes.FormattingEnabled = true;
-			this.comboMinutes.Location = new System.Drawing.Point(15,21);
-			this.comboMinutes.MaxDropDownItems = 48;
-			this.comboMinutes.Name = "comboMinutes";
-			this.comboMinutes.Size = new System.Drawing.Size(70,21);
-			this.comboMinutes.TabIndex = 27;
-			// 
-			// label1
-			// 
-			this.label1.Location = new System.Drawing.Point(171,76);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(94,18);
-			this.label1.TabIndex = 4;
-			this.label1.Text = "All workstations";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.label3.Location = new System.Drawing.Point(171,21);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(94,18);
+			this.label3.TabIndex = 30;
+			this.label3.Text = "This workstation";
+			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// label2
 			// 
@@ -135,14 +118,32 @@ namespace OpenDental{
 			this.label2.Text = "This workstation";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// label3
+			// label1
 			// 
-			this.label3.Location = new System.Drawing.Point(171,21);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(94,18);
-			this.label3.TabIndex = 30;
-			this.label3.Text = "This workstation";
-			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.label1.Location = new System.Drawing.Point(171,76);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(94,18);
+			this.label1.TabIndex = 4;
+			this.label1.Text = "All workstations";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// comboMinutes
+			// 
+			this.comboMinutes.FormattingEnabled = true;
+			this.comboMinutes.Location = new System.Drawing.Point(15,21);
+			this.comboMinutes.MaxDropDownItems = 48;
+			this.comboMinutes.Name = "comboMinutes";
+			this.comboMinutes.Size = new System.Drawing.Size(70,21);
+			this.comboMinutes.TabIndex = 27;
+			// 
+			// comboHours
+			// 
+			this.comboHours.FormattingEnabled = true;
+			this.comboHours.Location = new System.Drawing.Point(15,48);
+			this.comboHours.MaxDropDownItems = 48;
+			this.comboHours.Name = "comboHours";
+			this.comboHours.Size = new System.Drawing.Size(70,21);
+			this.comboHours.TabIndex = 26;
 			// 
 			// butPerm
 			// 
@@ -194,7 +195,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(357,221);
+			this.butOK.Location = new System.Drawing.Point(323,168);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 1;
@@ -204,7 +205,7 @@ namespace OpenDental{
 			// FormPopupDisplay
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(459,266);
+			this.ClientSize = new System.Drawing.Size(425,213);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.textDescription);
 			this.Controls.Add(this.butOK);
@@ -297,11 +298,14 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
-			if(PopupCur.Description!=textDescription.Text){//if user changed the note
-				if(MsgBox.Show(this,true,"Save changes to note?")){
+			if(PopupCur.Description!=textDescription.Text) {//if user changed the note
+				if(MsgBox.Show(this,true,"Save changes to note?")) {
 					PopupCur.Description=textDescription.Text;
 					Popups.WriteObject(PopupCur);
 				}
+			}
+			else {
+				MinutesDisabled=10;
 			}
 			DialogResult=DialogResult.OK;
 		}
