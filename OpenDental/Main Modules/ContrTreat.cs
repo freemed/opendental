@@ -2220,7 +2220,7 @@ namespace OpenDental{
 					feeSch=Fees.GetFeeSched(PatCur,InsPlanList,PatPlanList);
 				}
 				insfee=Fees.GetAmount0(procCur.CodeNum,feeSch);
-				if(priplan!=null && priplan.PlanType=="p") {//PPO
+				if(priplan!=null && priplan.PlanType=="p" && !isMed) {//PPO
 					standardfee=Fees.GetAmount0(procCur.CodeNum,Providers.GetProv(Patients.GetProvNum(PatCur)).FeeSched);
 					if(standardfee>insfee) {
 						procCur.ProcFee=standardfee;
