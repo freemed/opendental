@@ -4661,6 +4661,9 @@ namespace OpenDental{
 			else {
 				//int totUnits = ProcCur.BaseUnits + ProcCur.UnitQty;
 				InsPlan priplan=null;
+				if(PatPlanList.Count>0) {
+					priplan=InsPlans.GetPlan(PatPlanList[0].PlanNum,PlanList);
+				}
 				//check to see if it is a med code
 				double insfee;
 				bool isMed = false;
@@ -4676,7 +4679,7 @@ namespace OpenDental{
 					feeSch = Fees.GetFeeSched(PatCur, PlanList, PatPlanList);
 				}
 				insfee = Fees.GetAmount0(ProcCur.CodeNum, feeSch);
-				if(priplan!=null && priplan.PlanType=="p") {//PPO
+				if(priplan!=null && priplan.PlanType=="p" && !isMed) {//PPO
 					double standardfee=Fees.GetAmount0(ProcCur.CodeNum,Providers.GetProv(Patients.GetProvNum(PatCur)).FeeSched);
 					if(standardfee>insfee) {
 						ProcCur.ProcFee=standardfee;
@@ -4779,6 +4782,9 @@ namespace OpenDental{
 			}
 			else {
 				InsPlan priplan=null;
+				if(PatPlanList.Count>0) {
+					priplan=InsPlans.GetPlan(PatPlanList[0].PlanNum,PlanList);
+				}
 				//check to see if it is a med code
 				double insfee;
 				bool isMed = false;
@@ -4794,7 +4800,7 @@ namespace OpenDental{
 					feeSch = Fees.GetFeeSched(PatCur, PlanList, PatPlanList);
 				}
 				insfee = Fees.GetAmount0(ProcCur.CodeNum, feeSch);
-				if(priplan!=null && priplan.PlanType=="p") {//PPO
+				if(priplan!=null && priplan.PlanType=="p" && !isMed) {//PPO
 					double standardfee=Fees.GetAmount0(ProcCur.CodeNum,Providers.GetProv(Patients.GetProvNum(PatCur)).FeeSched);
 					if(standardfee>insfee) {
 						ProcCur.ProcFee=standardfee;
