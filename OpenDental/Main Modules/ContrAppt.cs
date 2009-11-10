@@ -3194,8 +3194,10 @@ namespace OpenDental{
 				}
 			}
 			else if(e.Button.Tag.GetType()==typeof(long)){
-				Patient pat=Patients.GetPat(PatCur.PatNum);
-				ProgramL.Execute((long)e.Button.Tag,pat);
+				if(PatCur!=null){
+					Patient pat=Patients.GetPat(PatCur.PatNum);
+					ProgramL.Execute((long)e.Button.Tag,pat);
+				}
 			}
 		}
 
