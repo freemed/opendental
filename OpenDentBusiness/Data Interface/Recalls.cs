@@ -783,7 +783,8 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 			command=@"SELECT patient.Address,patguar.Address guarAddress,
 				patient.Address2,patguar.Address2 guarAddress2,
-				patient.City,patguar.City guarCity,recall.DateDue,patient.Email,patguar.Email guarEmail,
+				patient.City,patguar.City guarCity,patient.ClinicNum,patguar.ClinicNum guarClinicNum,
+				recall.DateDue,patient.Email,patguar.Email guarEmail,
 				patient.FName,patguar.FName guarFName,patient.Guarantor,
 				patient.LName,patguar.LName guarLName,temprecallmaxdate.MaxDateDue maxDateDue,
 				patient.MiddleI,
@@ -820,6 +821,7 @@ namespace OpenDentBusiness{
 			DataTable table=new DataTable();
 			table.Columns.Add("address");//includes address2. Can be guar.
 			table.Columns.Add("cityStZip");//Can be guar.
+			table.Columns.Add("clinicNum");//will be the guar clinicNum if grouped.
 			table.Columns.Add("dateDue");
 			table.Columns.Add("email");//Will be guar if grouped by family
 			table.Columns.Add("emailPatNum");//Will be guar if grouped by family
@@ -848,6 +850,7 @@ namespace OpenDentBusiness{
 					row["cityStZip"]=rawRows[i]["City"].ToString()+",  "
 						+rawRows[i]["State"].ToString()+"  "
 						+rawRows[i]["Zip"].ToString();
+					row["clinicNum"]=rawRows[i]["ClinicNum"].ToString();
 					row["dateDue"]=PIn.PDate(rawRows[i]["DateDue"].ToString()).ToShortDateString();
 					//since not grouping by family, this is always just the patient email
 					row["email"]=rawRows[i]["Email"].ToString();
@@ -894,6 +897,7 @@ namespace OpenDentBusiness{
 						row["cityStZip"]=rawRows[i]["City"].ToString()+",  "
 							+rawRows[i]["State"].ToString()+"  "
 							+rawRows[i]["Zip"].ToString();
+						row["clinicNum"]=rawRows[i]["ClinicNum"].ToString();
 						row["dateDue"]=PIn.PDate(rawRows[i]["DateDue"].ToString()).ToShortDateString();
 						//this will always be the guarantor email
 						row["email"]=rawRows[i]["guarEmail"].ToString();
@@ -941,6 +945,7 @@ namespace OpenDentBusiness{
 					row["cityStZip"]=rawRows[i]["guarCity"].ToString()+",  "
 						+rawRows[i]["guarState"].ToString()+"  "
 						+rawRows[i]["guarZip"].ToString();
+					row["clinicNum"]=rawRows[i]["guarClinicNum"].ToString();
 					row["dateDue"]=PIn.PDate(rawRows[i]["DateDue"].ToString()).ToShortDateString();
 					row["email"]=rawRows[i]["guarEmail"].ToString();
 					row["emailPatNum"]=rawRows[i]["Guarantor"].ToString();

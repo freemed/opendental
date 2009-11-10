@@ -1357,23 +1357,47 @@ namespace OpenDental{
 			int xAdj=(int)(PrefC.GetDouble(PrefName.RecallAdjustRight)*100);
 			float yPos=0+yAdj;//these refer to the upper left origin of each postcard
 			float xPos=0+xAdj;
+			long clinicNum;
+			Clinic clinic;
 			string str;
 			while(yPos<ev.PageBounds.Height-100 && patientsPrinted<AddrTable.Rows.Count){
 				//Return Address--------------------------------------------------------------------------
+				clinicNum=PIn.PLong(AddrTable.Rows[patientsPrinted]["ClinicNum"].ToString());
 				if(PrefC.GetBool(PrefName.RecallCardsShowReturnAdd)){
-					str=PrefC.GetString(PrefName.PracticeTitle)+"\r\n";
-					g.DrawString(str,new Font(FontFamily.GenericSansSerif,9,FontStyle.Bold),Brushes.Black,xPos+45,yPos+60);
-					str=PrefC.GetString(PrefName.PracticeAddress)+"\r\n";
-					if(PrefC.GetString(PrefName.PracticeAddress2)!=""){
-						str+=PrefC.GetString(PrefName.PracticeAddress2)+"\r\n";
+					if(!PrefC.GetBool(PrefName.EasyNoClinics) && Clinics.List.Length>0 //if using clinics
+						&& Clinics.GetClinic(clinicNum)!=null)//and this patient assigned to a clinic
+					{
+						clinic=Clinics.GetClinic(clinicNum);
+						str=clinic.Description+"\r\n";
+						g.DrawString(str,new Font(FontFamily.GenericSansSerif,9,FontStyle.Bold),Brushes.Black,xPos+45,yPos+60);
+						str=clinic.Address+"\r\n";
+						if(clinic.Address2!="") {
+							str+=clinic.Address2+"\r\n";
+						}
+						str+=clinic.City+",  "+clinic.State+"  "+clinic.Zip+"\r\n";
+						string phone=clinic.Phone;
+						if(CultureInfo.CurrentCulture.Name=="en-US" && phone.Length==10) {
+							str+="("+phone.Substring(0,3)+")"+phone.Substring(3,3)+"-"+phone.Substring(6);
+						}
+						else {//any other phone format
+							str+=phone;
+						}
 					}
-					str+=PrefC.GetString(PrefName.PracticeCity)+",  "+PrefC.GetString(PrefName.PracticeST)+"  "+PrefC.GetString(PrefName.PracticeZip)+"\r\n";
-					string phone=PrefC.GetString(PrefName.PracticePhone);
-					if(CultureInfo.CurrentCulture.Name=="en-US"&& phone.Length==10){
-						str+="("+phone.Substring(0,3)+")"+phone.Substring(3,3)+"-"+phone.Substring(6);
-					}
-					else{//any other phone format
-						str+=phone;
+					else {
+						str=PrefC.GetString(PrefName.PracticeTitle)+"\r\n";
+						g.DrawString(str,new Font(FontFamily.GenericSansSerif,9,FontStyle.Bold),Brushes.Black,xPos+45,yPos+60);
+						str=PrefC.GetString(PrefName.PracticeAddress)+"\r\n";
+						if(PrefC.GetString(PrefName.PracticeAddress2)!="") {
+							str+=PrefC.GetString(PrefName.PracticeAddress2)+"\r\n";
+						}
+						str+=PrefC.GetString(PrefName.PracticeCity)+",  "+PrefC.GetString(PrefName.PracticeST)+"  "+PrefC.GetString(PrefName.PracticeZip)+"\r\n";
+						string phone=PrefC.GetString(PrefName.PracticePhone);
+						if(CultureInfo.CurrentCulture.Name=="en-US"&& phone.Length==10) {
+							str+="("+phone.Substring(0,3)+")"+phone.Substring(3,3)+"-"+phone.Substring(6);
+						}
+						else {//any other phone format
+							str+=phone;
+						}
 					}
 					g.DrawString(str,new Font(FontFamily.GenericSansSerif,8),Brushes.Black,xPos+45,yPos+75);
 				}
