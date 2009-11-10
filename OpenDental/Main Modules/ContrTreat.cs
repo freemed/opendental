@@ -2406,15 +2406,7 @@ namespace OpenDental{
 				ClaimCur.ProvTreat=PatCur.PriProv;
 				//OK if 0, because auto select first in list when open claim
 			}
-			if(PrefC.GetLong(PrefName.InsBillingProv)==0){//default=0
-				ClaimCur.ProvBill=PrefC.GetLong(PrefName.PracticeDefaultProv);
-			}
-			else if(PrefC.GetLong(PrefName.InsBillingProv)==-1){//treat=-1
-				ClaimCur.ProvBill=ClaimCur.ProvTreat;//OK if zero, because it will get fixed in claim
-			}
-			else{//specific=any number >0. Foreign key to ProvNum
-				ClaimCur.ProvBill=PrefC.GetLong(PrefName.InsBillingProv);
-			}
+			ClaimCur.ProvBill=Providers.GetBillingProvNum(ClaimCur.ProvTreat,ClaimCur.ClinicNum);
 			ClaimCur.EmployRelated=YN.No;
       ClaimCur.ClaimType="PreAuth";
 			//this could be a little better if we automate figuring out the patrelat
