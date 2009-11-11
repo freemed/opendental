@@ -572,6 +572,9 @@ namespace OpenDentBusiness {
 					}
 				}
 				//if no category, then benefits are not restricted by proc code.
+				if(histList[i].Deduct==-1) {
+					continue;
+				}
 				retVal-=histList[i].Deduct;
 			}
 			//now, do a similar thing with loopList, individ-----------------------------------------------------------------------
@@ -606,6 +609,9 @@ namespace OpenDentBusiness {
 					}
 				}
 				//if no category, then benefits are not restricted by proc code.
+				if(loopList[i].Deduct==-1) {
+					continue;
+				}
 				retVal-=loopList[i].Deduct;
 			}
 			if(retVal<=0) {
@@ -648,6 +654,9 @@ namespace OpenDentBusiness {
 					}
 				}
 				//if no category, then benefits are not restricted by proc code.
+				if(histList[i].Deduct==-1) {
+					continue;
+				}
 				famded-=histList[i].Deduct;
 			}
 			//reduce family ded by amounts already used in loop---------------------------------------------------------------
@@ -675,6 +684,9 @@ namespace OpenDentBusiness {
 					}
 				}
 				//if no category, then benefits are not restricted by proc code.
+				if(loopList[i].Deduct==-1) {
+					continue;
+				}
 				famded-=loopList[i].Deduct;
 			}
 			//if the family deductible has all been used up on other procs
