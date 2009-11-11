@@ -27,7 +27,7 @@ namespace SparksToothChart {
 		public float ScaleMmToPix;
 		///<summary>Whenever the control is resized, this value is set.  If the control ratio is wider than the 3D chart ratio, then this is true.  There would be extra background space on the sides.  If the ratio is taller than the 3D chart, then extra background on the top and bottom.  Default is (barely) false.</summary>
 		public bool IsWide;
-		///<summary>This defines a rectangle within the control where the tooth chart it to be drawn.  It will be different than the SizeControl if the control is wider or taller than the projection ratio.  This is set every time the control is resized.  It's in pixels.</summary>
+		///<summary>This defines a rectangle within the control where the tooth chart is to be drawn.  It will be different than the SizeControl if the control is wider or taller than the projection ratio.  This is set every time the control is resized.  It's in pixels.</summary>
 		public Rectangle RectTarget;
 		/// <summary>When the drawing feature was originally added, this was the size of the tooth chart. This number must forever be preserved and drawings scaled to account for it.</summary>
 		public Size SizeOriginalDrawing=new Size(410,307);//NEVER CHANGE
@@ -39,6 +39,8 @@ namespace SparksToothChart {
 		public Font Font;
 		///<summary>A list of points for a line currently being drawn.  Once the mouse is raised, this list gets cleared.</summary>
 		public List<Point> PointList;
+		///<summary>The size of the current drawing in pixels / the size of the original drawing.  This number is used to scale original drawing to the new size.</summary>
+		public float PixelScaleRatio;
 
 
 		public ToothChartData() {
@@ -81,6 +83,7 @@ namespace SparksToothChart {
 					RectTarget.Height=(int)(((float)SizeOriginalDrawing.Height/SizeOriginalDrawing.Width)*RectTarget.Width);
 					RectTarget.Y=(sizeControl.Height-RectTarget.Height)/2;
 				}
+				PixelScaleRatio=(float)RectTarget.Width/(float)SizeOriginalDrawing.Width;
 			}
 		}
 
@@ -230,7 +233,7 @@ namespace SparksToothChart {
 		}
 
 		///<summary>This also adjusts the result to account for a control that is not the same proportion as the original.  Result could be outside the projection area.</summary>
-		public PointF PixToMm(Point pixPoint) {
+		public PointF PointPixToMm(Point pixPoint) {
 			/*
 			float toMmRatio=(float)WidthProjection/(float)widthControl;//mm/pix
 			float mmX=(((float)pixPoint.X)*toMmRatio)-((float)WidthProjection)/2f;
@@ -243,6 +246,14 @@ namespace SparksToothChart {
 			//float idealHeightProjection=(float)WidthProjection*(float)SizeOriginalDrawing.Height/(float)SizeOriginalDrawing.Width;
 			//float actualHeightProjection=(float)WidthProjection*(float)heightControl/(float)widthControl;
 			float mmY=(SizeOriginalProjection.Height)/2f-(((float)(pixPoint.Y-RectTarget.Y))*toMmRatio);
+			return new PointF(mmX,mmY);
+		}
+
+		/// <summary>Takes an original db point as originally entered in unscaled control coordinates, and returns coordinates in scene mm's.</summary>
+		public PointF PointDrawingPixToMm(Point pixPoint) {
+			float toMmRatio=1f/ScaleMmToPix;
+			float mmX=(((float)pixPoint.X*PixelScaleRatio)*toMmRatio)-((float)SizeOriginalProjection.Width)/2f;
+			float mmY=((float)SizeOriginalProjection.Height)/2f-(((float)pixPoint.Y*PixelScaleRatio)*toMmRatio);
 			return new PointF(mmX,mmY);
 		}
 
@@ -327,8 +338,8 @@ namespace SparksToothChart {
 			float delta=0;
 			//convert x and y to mm.  Use those measurements to match the closest tooth.
 			//float xPos=(float)((float)(x-Width/2)*WidthProjection/(float)Width);//in mm instead of screen coordinates
-			float xPos=PixToMm(point).X;
-			float yPos=PixToMm(point).Y;
+			float xPos=PointPixToMm(point).X;
+			float yPos=PointPixToMm(point).Y;
 			string perm_id;
 			bool isPriArea;//this point is where a primary letter might sometimes show
 			bool priShowing;

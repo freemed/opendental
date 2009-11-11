@@ -508,9 +508,9 @@ namespace SparksToothChart {
 			//
 			float lWidth=(float)Width/220f;//300f;//about 1.5
 			Gl.glLineWidth(lWidth);
-			Gl.glPointSize((float)Width/350f);//slightly smaller
+			//Gl.glPointSize((float)Width/350f);//slightly smaller
 			string[] pointStr;
-			List<Point> points;
+			List<PointF> points;
 			Point point;
 			string[] xy;
 			PointF pointMm;
@@ -523,19 +523,21 @@ namespace SparksToothChart {
 					(float)color.G/255f,
 					(float)color.B/255f);
 				pointStr=TcData.DrawingSegmentList[s].DrawingSegment.Split(';');
-				points=new List<Point>();
+				points=new List<PointF>();
 				for(int p=0;p<pointStr.Length;p++){
 					xy=pointStr[p].Split(',');
 					if(xy.Length==2){
-						point=new Point((int)(float.Parse(xy[0])*scaleDrawing),(int)(float.Parse(xy[1])*scaleDrawing));
-						points.Add(point);
+						point=new Point(Int32.Parse(xy[0]),Int32.Parse(xy[1]));
+						pointMm=TcData.PointDrawingPixToMm(point);
+						points.Add(pointMm);
 					}
 				}
 				Gl.glBegin(Gl.GL_LINE_STRIP);
 				for(int i=0;i<points.Count;i++){
 					//if we set 0,0 to center, then this is where we would convert it back.
-					pointMm=TcData.PixToMm(new Point(points[i].X,points[i].Y));
-					Gl.glVertex3f(pointMm.X,pointMm.Y,0);
+					//pointMm=TcData.PixToMm(new Point(points[i].X,points[i].Y));
+					//Gl.glVertex3f(pointMm.X,pointMm.Y,0);
+					Gl.glVertex3f(points[i].X,points[i].Y,0);
 				}
 				Gl.glEnd();
 				//no filled circle at intersections
@@ -980,9 +982,9 @@ namespace SparksToothChart {
 				int i=TcData.PointList.Count-1;
 				Gl.glBegin(Gl.GL_LINE_STRIP);
 				//if we set 0,0 to center, then this is where we would convert it back.
-				PointF pointMm=TcData.PixToMm(TcData.PointList[i-1]);
+				PointF pointMm=TcData.PointPixToMm(TcData.PointList[i-1]);
 				Gl.glVertex3f(pointMm.X,pointMm.Y,0);
-				pointMm=TcData.PixToMm(TcData.PointList[i]);
+				pointMm=TcData.PointPixToMm(TcData.PointList[i]);
 				Gl.glVertex3f(pointMm.X,pointMm.Y,0);
 				Gl.glEnd();
 				Gl.glPopMatrix();
