@@ -95,7 +95,17 @@ namespace SparksToothChart {
 
 		///<summary>Returns a bitmap of what is showing in the control.  Used for printing.</summary>
 		public Bitmap GetBitmap(){
-			return GetBitmapOfOpenGL();
+			//This doesn't seem to work sometimes
+			//return GetBitmapOfOpenGL();
+			//this seems convoluted
+			Bitmap dummy=new Bitmap(Width,Height);
+			Graphics g=Graphics.FromImage(dummy);
+			PaintEventArgs e=new PaintEventArgs(g,new Rectangle(0,0,Width,Height));
+			Render(e);
+			//Bitmap result=ReadFrontBuffer();
+			Bitmap result=GetBitmapOfOpenGL();
+			g.Dispose();
+			return result;
 		}
 
 		/// <summary>This only gets the 3D scene.</summary>
