@@ -238,7 +238,7 @@ namespace OpenDentBusiness {
 			}
 			ArrayList retVal=new ArrayList();
 			for(int i=0;i<docNums.Count;i++){
-				retVal.Add((string)hList[(int)docNums[i]]);
+				retVal.Add((string)hList[(long)docNums[i]]);
 			}
 			return retVal;
 		}
