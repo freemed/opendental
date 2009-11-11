@@ -1790,10 +1790,19 @@ namespace OpenDental{
 			}
 			par.AddFormattedText(text,headingFont);
 			par.AddLineBreak();
-			text=PrefC.GetString(PrefName.PracticeTitle);
-			par.AddText(text);
-			par.AddLineBreak();
-			text=PrefC.GetString(PrefName.PracticePhone);
+			if(PatCur.ClinicNum==0) {
+				text=PrefC.GetString(PrefName.PracticeTitle);
+				par.AddText(text);
+				par.AddLineBreak();
+				text=PrefC.GetString(PrefName.PracticePhone);
+			}
+			else {
+				Clinic clinic=Clinics.GetClinic(PatCur.ClinicNum);
+				text=clinic.Description;
+				par.AddText(text);
+				par.AddLineBreak();
+				text=clinic.Phone;
+			}
 			if(text.Length==10 && Application.CurrentCulture.Name=="en-US") {
 				text="("+text.Substring(0,3)+")"+text.Substring(3,3)+"-"+text.Substring(6);
 			}
