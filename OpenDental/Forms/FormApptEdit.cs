@@ -93,6 +93,8 @@ namespace OpenDental{
 		private Label label8;
 		private OpenDental.UI.Button butInsPlan1;
 		private OpenDental.UI.Button butInsPlan2;
+		private OpenDental.UI.Button butPickHyg;
+		private OpenDental.UI.Button butPickDentist;
 		///<summary>This is the way to pass a "signal" up to the parent form that OD is to close.</summary>
 		public bool CloseOD;
 
@@ -155,6 +157,7 @@ namespace OpenDental{
 			this.textTime = new System.Windows.Forms.TextBox();
 			this.butSlider = new System.Windows.Forms.Button();
 			this.panel1 = new System.Windows.Forms.Panel();
+			this.butInsPlan2 = new OpenDental.UI.Button();
 			this.butInsPlan1 = new OpenDental.UI.Button();
 			this.textInsPlan2 = new System.Windows.Forms.TextBox();
 			this.label9 = new System.Windows.Forms.Label();
@@ -195,7 +198,8 @@ namespace OpenDental{
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butComplete = new OpenDental.UI.Button();
-			this.butInsPlan2 = new OpenDental.UI.Button();
+			this.butPickDentist = new OpenDental.UI.Button();
+			this.butPickHyg = new OpenDental.UI.Button();
 			this.panel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -305,7 +309,7 @@ namespace OpenDental{
 			this.comboProvHyg.Location = new System.Drawing.Point(118,124);
 			this.comboProvHyg.MaxDropDownItems = 30;
 			this.comboProvHyg.Name = "comboProvHyg";
-			this.comboProvHyg.Size = new System.Drawing.Size(126,21);
+			this.comboProvHyg.Size = new System.Drawing.Size(107,21);
 			this.comboProvHyg.TabIndex = 132;
 			// 
 			// comboProvNum
@@ -314,7 +318,7 @@ namespace OpenDental{
 			this.comboProvNum.Location = new System.Drawing.Point(118,102);
 			this.comboProvNum.MaxDropDownItems = 100;
 			this.comboProvNum.Name = "comboProvNum";
-			this.comboProvNum.Size = new System.Drawing.Size(126,21);
+			this.comboProvNum.Size = new System.Drawing.Size(107,21);
 			this.comboProvNum.TabIndex = 131;
 			// 
 			// label12
@@ -397,6 +401,8 @@ namespace OpenDental{
 			// 
 			this.panel1.AutoScroll = true;
 			this.panel1.AutoScrollMargin = new System.Drawing.Size(0,3);
+			this.panel1.Controls.Add(this.butPickHyg);
+			this.panel1.Controls.Add(this.butPickDentist);
 			this.panel1.Controls.Add(this.butInsPlan2);
 			this.panel1.Controls.Add(this.butInsPlan1);
 			this.panel1.Controls.Add(this.textInsPlan2);
@@ -434,6 +440,20 @@ namespace OpenDental{
 			this.panel1.Name = "panel1";
 			this.panel1.Size = new System.Drawing.Size(265,247);
 			this.panel1.TabIndex = 147;
+			// 
+			// butInsPlan2
+			// 
+			this.butInsPlan2.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butInsPlan2.Autosize = false;
+			this.butInsPlan2.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butInsPlan2.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butInsPlan2.CornerRadius = 2F;
+			this.butInsPlan2.Location = new System.Drawing.Point(225,300);
+			this.butInsPlan2.Name = "butInsPlan2";
+			this.butInsPlan2.Size = new System.Drawing.Size(18,20);
+			this.butInsPlan2.TabIndex = 156;
+			this.butInsPlan2.Text = "...";
+			this.butInsPlan2.Click += new System.EventHandler(this.butInsPlan2_Click);
 			// 
 			// butInsPlan1
 			// 
@@ -868,19 +888,33 @@ namespace OpenDental{
 			this.butComplete.Visible = false;
 			this.butComplete.Click += new System.EventHandler(this.butComplete_Click);
 			// 
-			// butInsPlan2
+			// butPickDentist
 			// 
-			this.butInsPlan2.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butInsPlan2.Autosize = false;
-			this.butInsPlan2.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butInsPlan2.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butInsPlan2.CornerRadius = 2F;
-			this.butInsPlan2.Location = new System.Drawing.Point(225,300);
-			this.butInsPlan2.Name = "butInsPlan2";
-			this.butInsPlan2.Size = new System.Drawing.Size(18,20);
-			this.butInsPlan2.TabIndex = 156;
-			this.butInsPlan2.Text = "...";
-			this.butInsPlan2.Click += new System.EventHandler(this.butInsPlan2_Click);
+			this.butPickDentist.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butPickDentist.Autosize = false;
+			this.butPickDentist.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butPickDentist.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPickDentist.CornerRadius = 2F;
+			this.butPickDentist.Location = new System.Drawing.Point(226,103);
+			this.butPickDentist.Name = "butPickDentist";
+			this.butPickDentist.Size = new System.Drawing.Size(18,20);
+			this.butPickDentist.TabIndex = 157;
+			this.butPickDentist.Text = "...";
+			this.butPickDentist.Click += new System.EventHandler(this.butPickDentist_Click);
+			// 
+			// butPickHyg
+			// 
+			this.butPickHyg.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butPickHyg.Autosize = false;
+			this.butPickHyg.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butPickHyg.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPickHyg.CornerRadius = 2F;
+			this.butPickHyg.Location = new System.Drawing.Point(226,125);
+			this.butPickHyg.Name = "butPickHyg";
+			this.butPickHyg.Size = new System.Drawing.Size(18,20);
+			this.butPickHyg.TabIndex = 158;
+			this.butPickHyg.Text = "...";
+			this.butPickHyg.Click += new System.EventHandler(this.butPickHyg_Click);
 			// 
 			// FormApptEdit
 			// 
@@ -1134,6 +1168,30 @@ namespace OpenDental{
 			#if DEBUG
 				Text="AptNum"+AptCur.AptNum;
 			#endif
+		}
+
+		private void butPickDentist_Click(object sender,EventArgs e) {
+			FormProviderPick formp=new FormProviderPick();
+			//if(comboProvNum.SelectedIndex>0) {
+				formp.SelectedProvNum=ProviderC.List[comboProvNum.SelectedIndex].ProvNum;
+			//}
+			formp.ShowDialog();
+			if(formp.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			comboProvNum.SelectedIndex=Providers.GetIndex(formp.SelectedProvNum);
+		}
+
+		private void butPickHyg_Click(object sender,EventArgs e) {
+			FormProviderPick formp=new FormProviderPick();
+			if(comboProvHyg.SelectedIndex>0) {
+				formp.SelectedProvNum=ProviderC.List[comboProvHyg.SelectedIndex-1].ProvNum;
+			}
+			formp.ShowDialog();
+			if(formp.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			comboProvHyg.SelectedIndex=Providers.GetIndex(formp.SelectedProvNum)+1;
 		}
 
 		private void FillPatient(){
@@ -2095,6 +2153,8 @@ namespace OpenDental{
 				Appointments.Delete(AptCur.AptNum);
 			}
 		}
+
+		
 
 		
 
