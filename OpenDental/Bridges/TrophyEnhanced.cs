@@ -49,6 +49,7 @@ namespace OpenDental.Bridges{
 				if(patFolder=="") {//exit without displaying any further message.
 					return;
 				}
+				patFolder=ODFileUtils.CombinePaths(storagePath,patFolder);
 			}
 			else {//pat.TrophyFolder was already previously entered.
 				patFolder=ODFileUtils.CombinePaths(storagePath,pat.TrophyFolder);
