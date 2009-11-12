@@ -506,9 +506,8 @@ namespace SparksToothChart {
 			Gl.glDisable(Gl.GL_DEPTH_TEST);
 			//
 			//
-			float lWidth=(float)Width/220f;//300f;//about 1.5
+			float lWidth=2.5f*TcData.PixelScaleRatio;
 			Gl.glLineWidth(lWidth);
-			//Gl.glPointSize((float)Width/350f);//slightly smaller
 			string[] pointStr;
 			List<PointF> points;
 			Point point;

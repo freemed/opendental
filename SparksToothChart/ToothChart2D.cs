@@ -320,23 +320,26 @@ namespace SparksToothChart {
 
 		private void DrawDrawingSegments(Graphics g) {
 			string[] pointStr;
-			List<Point> points;
-			Point point;
+			List<PointF> points;
+			PointF pointf;
 			string[] xy;
+			float x;
+			float y;
 			Pen pen;
 			for(int s=0;s<TcData.DrawingSegmentList.Count;s++) {
-				pen=new Pen(TcData.DrawingSegmentList[s].ColorDraw,2f);
+				pen=new Pen(TcData.DrawingSegmentList[s].ColorDraw,2.2f*TcData.PixelScaleRatio);
 				pointStr=TcData.DrawingSegmentList[s].DrawingSegment.Split(';');
-				points=new List<Point>();
+				points=new List<PointF>();
 				for(int p=0;p<pointStr.Length;p++) {
 					xy=pointStr[p].Split(',');
 					if(xy.Length==2) {
-						point=new Point(int.Parse(xy[0]),int.Parse(xy[1]));
-						points.Add(point);
+						x=TcData.RectTarget.X+float.Parse(xy[0])*TcData.PixelScaleRatio;
+						y=TcData.RectTarget.Y+float.Parse(xy[1])*TcData.PixelScaleRatio;
+						pointf=new PointF(x,y);
+						points.Add(pointf);
 					}
 				}
 				for(int i=1;i<points.Count;i++) {
-					//if we set 0,0 to center, then this is where we would convert it back.
 					g.DrawLine(pen,points[i-1].X,
 						points[i-1].Y,
 						points[i].X,
