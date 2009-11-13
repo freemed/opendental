@@ -46,10 +46,10 @@ namespace SparksToothChart {
 		public Color colorRCT;
 		///<summary>True if this tooth is set to show the primary letter in addition to the perm number.  This can only be true for 20 of the 32 perm teeth.  A primary tooth would never have this value set.  </summary>
 		public bool ShowPrimaryLetter;
-		///<summary>This gets set to true if tooth has a BU or a post.</summary>
-		public bool IsBU;
-		///<summary>If BU, then this will contain the color.</summary>
-		public Color colorBU;
+		//<summary>This gets set to true if tooth has a BU or a post.</summary>//no more.  Just set group visibility.
+		//public bool IsBU;
+		//<summary>If BU, then this will contain the color.</summary>//no more. Just use group color
+		//public Color colorBU;
 		///<summary>This gets set to true if tooth has an implant.</summary>
 		public bool IsImplant;
 		///<summary>If implant, then this will contain the color.</summary>
@@ -152,7 +152,7 @@ namespace SparksToothChart {
 			hideNumber=false;
 			DrawBigX=false;
 			ShowPrimaryLetter=false;
-			IsBU=false;
+			//IsBU=false;
 			IsImplant=false;
 			IsCrown=false;
 			IsPontic=false;
@@ -188,7 +188,7 @@ namespace SparksToothChart {
 			}
 		}
 
-		///<summary>Used to set enamel and cementum colors externally.</summary>
+		///<summary>Used to set enamel, cementum, and BU colors externally.</summary>
 		public void SetGroupColor(ToothGroupType groupType,Color paintColor){
 			for(int i=0;i<Groups.Count;i++){
 				if(Groups[i].GroupType!=groupType){
@@ -229,8 +229,8 @@ namespace SparksToothChart {
 			}
 		}
 
-		///<summary>This is only used once for the initial fill of display lists.</summary>
-		public ToothGroup GetGroupForDisplayList(ToothGroupType groupType){
+		///<summary></summary>
+		public ToothGroup GetGroup(ToothGroupType groupType){
 			for(int i=0;i<Groups.Count;i++) {
 				if(Groups[i].GroupType==groupType) {
 					return Groups[i];
@@ -243,7 +243,7 @@ namespace SparksToothChart {
 		public int GetIndexForDisplayList(ToothGroup group) {
 			int toothInt=Tooth.ToOrdinal(toothID);
 			//this can be enhanced later, but it's very simple for now.
-			return (toothInt*10)+(int)group.GroupType;
+			return (toothInt*11)+(int)group.GroupType;
 		}
 
 		#endregion Public Methods
@@ -592,10 +592,10 @@ namespace SparksToothChart {
 								group.GroupType=ToothGroupType.O;
 								//group.PaintColor=Color.Green;
 								break;
-							case "g cube2_Canals":
+							case "g cube1_Canals":
 								group.GroupType=ToothGroupType.Canals;
 								break;
-							case "g cube2_Buildup":
+							case "g cube1_Buildup":
 								group.GroupType=ToothGroupType.Buildup;
 								break;
 							case "g cube1_Implant":
@@ -997,10 +997,12 @@ namespace SparksToothChart {
 			}
 		}
 
+
+		/*
 		///<summary></summary>
-		public Polygon GetBUpoly() {
+		public Triangle GetBUpoly() {
 			if(toothID=="1") {
-				return new Polygon(
+				return new Triangle(
 					-1.5f,0,0 , 
 					-1.5f,2.3f,0 ,
 					0,1.5f,0,
@@ -1008,7 +1010,7 @@ namespace SparksToothChart {
 					1.4f,0,0);
 			}
 			if(toothID=="16") {
-				return new Polygon(
+				return new Triangle(
 					1.5f,0,0 , 
 					1.5f,2.3f,0 ,
 					0,1.5f,0,
@@ -1016,7 +1018,7 @@ namespace SparksToothChart {
 					-1.4f,0,0 );
 			}
 			if(toothID=="2") {
-				return new Polygon(
+				return new Triangle(
 					-1.8f,0,0 , 
 					-1.8f,2.3f,0 ,
 					0,1.5f,0,
@@ -1024,7 +1026,7 @@ namespace SparksToothChart {
 					1.6f,0,0 );
 			}
 			if(toothID=="15") {
-				return new Polygon(
+				return new Triangle(
 					1.8f,0,0 , 
 					1.8f,2.3f,0 ,
 					0,1.5f,0,
@@ -1032,7 +1034,7 @@ namespace SparksToothChart {
 					-1.6f,0,0);
 			}
 			if(toothID=="3") {
-				return new Polygon(
+				return new Triangle(
 					-2.3f,0,0 , 
 					-2.3f,2.6f,0 ,
 					0,1.7f,0,
@@ -1040,7 +1042,7 @@ namespace SparksToothChart {
 					2.1f,0,0 );
 			}
 			if(toothID=="14") {
-				return new Polygon( 
+				return new Triangle( 
 					2.3f,0,0 , 
 					2.3f,2.6f,0 ,
 					0,1.7f,0,
@@ -1058,7 +1060,7 @@ namespace SparksToothChart {
 				|| toothID=="12"
 				|| toothID=="13"
 				) {
-				return new Polygon(
+				return new Triangle(
 					-.8f,0,0 , 
 					-.8f,3.5f,0 ,
 					.8f,3.5f,0 ,
@@ -1069,7 +1071,7 @@ namespace SparksToothChart {
 				|| toothID=="25"
 				|| toothID=="26"
 				) {
-				return new Polygon(
+				return new Triangle(
 					-.7f,0,0 , 
 					-.7f,-3.5f,0 ,
 					.7f,-3.5f,0 ,
@@ -1082,14 +1084,14 @@ namespace SparksToothChart {
 				|| toothID=="28"
 				|| toothID=="29"
 				) {
-				return new Polygon(
+				return new Triangle(
 					-.8f,0,0 , 
 					-.8f,-3.5f,0 ,
 					.8f,-3.5f,0 ,
 					.8f,0,0 );
 			}
 			if(toothID=="30") {
-				return new Polygon(
+				return new Triangle(
 					-2.8f,0,0 , 
 					-2.8f,-2.4f,0 ,
 					0,-1.5f,0,
@@ -1097,7 +1099,7 @@ namespace SparksToothChart {
 					2.3f,0,0 );
 			}
 			if(toothID=="19") {
-				return new Polygon(
+				return new Triangle(
 					2.8f,0,0 , 
 					2.8f,-2.4f,0 ,
 					0,-1.5f,0,
@@ -1105,7 +1107,7 @@ namespace SparksToothChart {
 					-2.3f,0,0 );
 			}
 			if(toothID=="31") {
-				return new Polygon( 
+				return new Triangle( 
 					-2.6f,0,0 , 
 					-2.6f,-2.1f,0 ,
 					0,-1.5f,0,
@@ -1113,7 +1115,7 @@ namespace SparksToothChart {
 					2.3f,0.5f,0 );
 			}
 			if(toothID=="18") {
-				return new Polygon(
+				return new Triangle(
 					2.6f,0,0 , 
 					2.6f,-2.1f,0 ,
 					0,-1.5f,0,
@@ -1121,7 +1123,7 @@ namespace SparksToothChart {
 					-2.3f,0.5f,0 );
 			}
 			if(toothID=="32") {
-				return new Polygon(
+				return new Triangle(
 					-2.6f,0,0 , 
 					-2.6f,-2.1f,0 ,
 					0,-1.5f,0,
@@ -1129,15 +1131,15 @@ namespace SparksToothChart {
 					2.1f,0,0 );
 			}
 			if(toothID=="17") {
-				return new Polygon(
+				return new Triangle(
 					2.6f,0,0 , 
 					2.6f,-2.1f,0 ,
 					0,-1.5f,0,
 					-2.1f,-2.1f,0 ,
 					-2.1f,0,0 );
 			}
-			return new Polygon();
+			return new Triangle();
 		}
-
+		*/
 	}
 }

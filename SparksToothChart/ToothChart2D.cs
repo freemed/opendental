@@ -102,9 +102,9 @@ namespace SparksToothChart {
 				//toothGraphic.colorRCT
 				//?
 			}
-			if(toothGraphic.Visible && toothGraphic.IsBU) {//BU or Post
+			//if(toothGraphic.Visible && toothGraphic.IsBU) {//BU or Post
 				//?
-			}
+			//}
 			if(toothGraphic.IsImplant) {
 				//?
 			}

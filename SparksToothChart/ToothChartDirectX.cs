@@ -308,7 +308,7 @@ namespace SparksToothChart {
 			//    (float)toothGraphic.colorBU.G/255f,
 			//    (float)toothGraphic.colorBU.B/255f);
 			//  RotateAndTranslateUser(toothGraphic);
-			//  Polygon poly=toothGraphic.GetBUpoly();
+			//  Triangle poly=toothGraphic.GetBUpoly();
 			//  Gl.glBegin(Gl.GL_POLYGON);
 			//  for(int i=0;i<poly.Vertices.Count;i++) {
 			//    Gl.glVertex3f(poly.Vertices[i].X,poly.Vertices[i].Y,poly.Vertices[i].Z);

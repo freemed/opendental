@@ -292,23 +292,26 @@ namespace SparksToothChart {
 				}
 				Gl.glPopMatrix();
 			}
-			if(toothGraphic.Visible && toothGraphic.IsBU) {//BU or Post
+			ToothGroup groupBU=toothGraphic.GetGroup(ToothGroupType.Buildup);//during debugging, not all teeth have a BU group yet.
+			if(toothGraphic.Visible && groupBU!=null && groupBU.Visible) {//BU or Post
 				Gl.glPushMatrix();
 				Gl.glTranslatef(0,0,13f);//move BU forward 13mm so it will be visible.
 				Gl.glTranslatef(TcData.GetTransX(toothGraphic.ToothID),TcData.GetTransYfacial(toothGraphic.ToothID),0);
 				Gl.glDisable(Gl.GL_LIGHTING);
 				Gl.glDisable(Gl.GL_BLEND);
+				Color colorBU=toothGraphic.GetGroup(ToothGroupType.Buildup).PaintColor;
 				Gl.glColor3f(
-					(float)toothGraphic.colorBU.R/255f,
-					(float)toothGraphic.colorBU.G/255f,
-					(float)toothGraphic.colorBU.B/255f);
+					(float)colorBU.R/255f,
+					(float)colorBU.G/255f,
+					(float)colorBU.B/255f);
 				RotateAndTranslateUser(toothGraphic);
-				Polygon poly=toothGraphic.GetBUpoly();
-				Gl.glBegin(Gl.GL_POLYGON);
-				for(int i=0;i<poly.Vertices.Count;i++) {
-					Gl.glVertex3f(poly.Vertices[i].X,poly.Vertices[i].Y,poly.Vertices[i].Z);
-				}
-				Gl.glEnd();
+				Gl.glCallList(displayListOffset+toothGraphic.GetIndexForDisplayList(toothGraphic.GetGroup(ToothGroupType.Buildup)));
+				//Triangle poly=toothGraphic.GetBUpoly();
+				//Gl.glBegin(Gl.GL_POLYGON);
+				//for(int i=0;i<poly.Vertices.Count;i++) {
+				//	Gl.glVertex3f(poly.Vertices[i].X,poly.Vertices[i].Y,poly.Vertices[i].Z);
+				//}
+				//Gl.glEnd();
 				Gl.glPopMatrix();
 			}
 			if(toothGraphic.IsImplant){
@@ -809,6 +812,9 @@ namespace SparksToothChart {
 			float[] material_color;
 			for(int g=0;g<toothGraphic.Groups.Count;g++) {
 				group=(ToothGroup)toothGraphic.Groups[g];
+				if(group.GroupType==ToothGroupType.Buildup) {
+					continue;
+				}
 				if(!group.Visible) {
 					continue;
 				}
@@ -847,8 +853,10 @@ namespace SparksToothChart {
 
 		///<summary>Only called once as part of initialization.</summary>
 		public void MakeDisplayLists(){
-			//total number of display lists will be: (52 teeth) x (10 group types)=520. But 1-9 not used, and 521-529 are used. 
-			displayListOffset=Gl.glGenLists(530);//not sure if I did this right
+			//total number of display lists will be: (52 teeth) x (11 group types)=572. But 1-10 not used, and 573-583 are used.
+				//520. But 1-9 not used, and 521-529 are used. 
+			//displayListOffset=Gl.glGenLists(530);//not sure if I did this right
+			displayListOffset=Gl.glGenLists(584);
 			ToothGraphic toothGraphic;
 			ToothGroup group;
 			for(int t=1;t<=52;t++) {
@@ -861,9 +869,9 @@ namespace SparksToothChart {
 				else{//perm
 					toothGraphic=TcData.ListToothGraphics[t.ToString()];
 				}
-				for(int g=0;g<10;g++){//groups 0-9
-					group=toothGraphic.GetGroupForDisplayList((ToothGroupType)g);
-					Gl.glNewList(displayListOffset+(t*10)+g,Gl.GL_COMPILE);
+				for(int g=0;g<11;g++){//groups 0-11
+					group=toothGraphic.GetGroup((ToothGroupType)g);
+					Gl.glNewList(displayListOffset+(t*11)+g,Gl.GL_COMPILE);
 						//ToothGraphic.GetDisplayListNum(i.ToString())
 					if(group!=null){
 						for(int f=0;f<group.Faces.Count;f++){//.GetLength(0);f++) {//loop through each face

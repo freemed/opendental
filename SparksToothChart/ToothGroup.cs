@@ -19,8 +19,7 @@ namespace SparksToothChart {
 		public List<Face> Faces;
 		///<summary>Corresponds to the Faces list. Indicies must be cached to draw DirectX triangles.</summary>
 		public IndexBuffer facesDirectX;
-		///<summary>Corresponds to the number of indicies referenced by the facesDirectX IndexBuffer. This relates to triangles,
-		///not to Polygons as in the Faces list. Must be a multiple of 3.</summary>
+		///<summary>Corresponds to the number of indicies referenced by the facesDirectX IndexBuffer. This relates to triangles, not to Polygons as in the Faces list. Must be a multiple of 3.</summary>
 		public int NumIndicies=0;
 
 		public ToothGroup() {
@@ -82,10 +81,10 @@ namespace SparksToothChart {
 		I,
 		///<summary>9. class V. In addition to B or F</summary>
 		V,
+		///<summary>10. The pulp chamber and post or buildup.  Because our teeth are not yet transparent, these faces need to be translated forward.</summary>
+		Buildup,
 		///<summary>Only present in the special implant tooth object.</summary>
 		Implant,
-		///<summary>Just a placeholder. The pulp chamber and post or buildup.</summary>
-		Buildup,
 		///<summary>Not used. Just a placeholder</summary>
 		Canals
 	}

@@ -383,8 +383,11 @@ namespace SparksToothChart {
 
 		///<summary>Set this tooth to show a BU or post.</summary>
 		public void SetBU(string toothID,Color color) {
-			TcData.ListToothGraphics[toothID].IsBU=true;
-			TcData.ListToothGraphics[toothID].colorBU=color;
+			//TcData.ListToothGraphics[toothID].IsBU=true;
+			//TcData.ListToothGraphics[toothID].colorBU=color;
+			//Buildups are now just another group, so
+			TcData.ListToothGraphics[toothID].SetGroupVisibility(ToothGroupType.Buildup,true);
+			TcData.ListToothGraphics[toothID].SetGroupColor(ToothGroupType.Buildup,color);
 			Invalidate();
 		}
 
