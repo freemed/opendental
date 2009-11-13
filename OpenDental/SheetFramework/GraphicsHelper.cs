@@ -45,19 +45,19 @@ namespace OpenDental {
 				lineIdx+=1;
 			}
 		}
-		
-		///<summary>The pdfSharp version of drawstring.  gfx is used for measurement.  gfxScale scales xObjects to pixels.</summary>
-		public static void DrawStringX(XGraphics g,Graphics gfx,double gfxScale,string str,XFont xfont,XBrush xbrush,XRect xbounds) {
+
+		///<summary>The pdfSharp version of drawstring.  g is used for measurement.  scaleToPix scales xObjects to pixels.</summary>
+		public static void DrawStringX(XGraphics xg,Graphics g,double scaleToPix,string str,XFont xfont,XBrush xbrush,XRect xbounds) {
 			//There are two coordinate systems here: pixels (used by us) and points (used by PdfSharp).
 			//MeasureString and ALL related measurement functions must use pixels.
 			//DrawString is the ONLY function that uses points.
 			//pixels:
-			Rectangle bounds=new Rectangle((int)(gfxScale*xbounds.Left),
-				(int)(gfxScale*xbounds.Top),
-				(int)(gfxScale*xbounds.Width),
-				(int)(gfxScale*xbounds.Height));
+			Rectangle bounds=new Rectangle((int)(scaleToPix*xbounds.Left),
+				(int)(scaleToPix*xbounds.Top),
+				(int)(scaleToPix*xbounds.Width),
+				(int)(scaleToPix*xbounds.Height));
 			FontStyle fontstyle=FontStyle.Regular;
-			if(xfont.Style==XFontStyle.Bold){
+			if(xfont.Style==XFontStyle.Bold) {
 				fontstyle=FontStyle.Bold;
 			}
 			//pixels: (except Size is em-size)
@@ -77,7 +77,7 @@ namespace OpenDental {
 					break;
 				}
 				//pixels:
-				gfx.MeasureString(str.Substring(ix),font,fit,format,out chars,out lines);
+				g.MeasureString(str.Substring(ix),font,fit,format,out chars,out lines);
 				//PdfSharp isn't smart enough to cut off the lower half of a line.
 				//if(bounds.Y+topPad+pixelsPerLine*lineIdx+font.Height > bounds.Bottom) {
 				//	layoutH=bounds.Bottom-(bounds.Y+topPad+pixelsPerLine*lineIdx);
@@ -86,12 +86,14 @@ namespace OpenDental {
 				//	layoutH=font.Height+2;
 				//}
 				//use points here:
+				float adjustTextDown=10f;//this value was arrived at by trial and error.
 				layoutRectangle=new RectangleF(
 					(float)xbounds.X,
-					(float)(xbounds.Y+(float)topPad/gfxScale+(pixelsPerLine/gfxScale)*lineIdx),
+					//(float)(xbounds.Y+(float)topPad/scaleToPix+(pixelsPerLine/scaleToPix)*lineIdx),
+					(float)(xbounds.Y+adjustTextDown+(pixelsPerLine/scaleToPix)*lineIdx),
 					(float)xbounds.Width+50,//any amount of extra padding here will not cause malfunction
 					0);//layoutH);
-				g.DrawString(str.Substring(ix,chars),xfont,xbrush,(double)layoutRectangle.Left,(double)layoutRectangle.Top);
+				xg.DrawString(str.Substring(ix,chars),xfont,xbrush,(double)layoutRectangle.Left,(double)layoutRectangle.Top);
 				lineIdx+=1;
 			}
 		}
