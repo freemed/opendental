@@ -90,10 +90,10 @@
 			this.butGetBitmap2D = new System.Windows.Forms.Button();
 			this.textScreenshotBox = new System.Windows.Forms.TextBox();
 			this.butVeneers = new System.Windows.Forms.Button();
+			this.butPrimaryBU = new System.Windows.Forms.Button();
 			this.toothChartDirectX = new SparksToothChart.ToothChartWrapper();
 			this.toothChartOpenGL = new SparksToothChart.ToothChartWrapper();
 			this.toothChart2D = new SparksToothChart.ToothChartWrapper();
-			this.butPrimaryBU = new System.Windows.Forms.Button();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupBox3.SuspendLayout();
@@ -779,6 +779,16 @@
 			this.butVeneers.UseVisualStyleBackColor = true;
 			this.butVeneers.Click += new System.EventHandler(this.butVeneers_Click);
 			// 
+			// butPrimaryBU
+			// 
+			this.butPrimaryBU.Location = new System.Drawing.Point(10,68);
+			this.butPrimaryBU.Name = "butPrimaryBU";
+			this.butPrimaryBU.Size = new System.Drawing.Size(88,23);
+			this.butPrimaryBU.TabIndex = 214;
+			this.butPrimaryBU.Text = "Primary BU";
+			this.butPrimaryBU.UseVisualStyleBackColor = true;
+			this.butPrimaryBU.Click += new System.EventHandler(this.butPrimaryBU_Click);
+			// 
 			// toothChartDirectX
 			// 
 			this.toothChartDirectX.AutoFinish = false;
@@ -820,15 +830,6 @@
 			this.toothChart2D.Size = new System.Drawing.Size(410,307);
 			this.toothChart2D.TabIndex = 195;
 			this.toothChart2D.UseHardware = false;
-			// 
-			// butPrimaryBU
-			// 
-			this.butPrimaryBU.Location = new System.Drawing.Point(10,68);
-			this.butPrimaryBU.Name = "butPrimaryBU";
-			this.butPrimaryBU.Size = new System.Drawing.Size(88,23);
-			this.butPrimaryBU.TabIndex = 214;
-			this.butPrimaryBU.Text = "Primary BU";
-			this.butPrimaryBU.UseVisualStyleBackColor = true;
 			// 
 			// Form1
 			// 
