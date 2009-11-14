@@ -1387,26 +1387,26 @@ namespace OpenDental{
 		private void updownRed_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e) {
 			//this is necessary because Microsoft's updown control is too buggy to be useful
 			Cursor=Cursors.WaitCursor;
-			Pref pref=null;
-			int currentValue=0;
+			PrefName prefname=PrefName.PerioRedProb;
 			if(sender==updownProb){
-				currentValue=PrefC.GetInt(PrefName.PerioRedProb);
+				prefname=PrefName.PerioRedProb;
 			}
 			else if(sender==updownMGJ) {
-				currentValue=PrefC.GetInt(PrefName.PerioRedMGJ);
+				prefname=PrefName.PerioRedMGJ;
 			}
 			else if(sender==updownGing) {
-				currentValue=PrefC.GetInt(PrefName.PerioRedGing);
+				prefname=PrefName.PerioRedGing;
 			}
 			else if(sender==updownCAL) {
-				currentValue=PrefC.GetInt(PrefName.PerioRedCAL);
+				prefname=PrefName.PerioRedCAL;
 			}
 			else if(sender==updownFurc) {
-				currentValue=PrefC.GetInt(PrefName.PerioRedFurc);
+				prefname=PrefName.PerioRedFurc;
 			}
 			else if(sender==updownMob) {
-				currentValue=PrefC.GetInt(PrefName.PerioRedMob);
+				prefname=PrefName.PerioRedMob;
 			}
+			int currentValue=PrefC.GetInt(prefname);
 			if(e.Y<8){//up
 				currentValue++;
 			}
@@ -1417,8 +1417,9 @@ namespace OpenDental{
 				}
 				currentValue--;
 			}
-			pref.ValueString=currentValue.ToString();
-			Prefs.Update(pref);
+			Prefs.UpdateLong(prefname,currentValue);
+			//pref.ValueString=currentValue.ToString();
+			//Prefs.Update(pref);
 			localDefsChanged=true;
 			Cache.Refresh(InvalidType.Prefs);
 			if(sender==updownProb){
