@@ -853,10 +853,10 @@ namespace SparksToothChart {
 
 		///<summary>Only called once as part of initialization.</summary>
 		public void MakeDisplayLists(){
-			//total number of display lists will be: (52 teeth) x (11 group types)=572. But 1-10 not used, and 573-583 are used.
+			//total number of display lists will be: (52 teeth) x (15 group types)=780. But 1-14 not used, and 780-794 are used.
 				//520. But 1-9 not used, and 521-529 are used. 
 			//displayListOffset=Gl.glGenLists(530);//not sure if I did this right
-			displayListOffset=Gl.glGenLists(584);
+			displayListOffset=Gl.glGenLists(795);
 			ToothGraphic toothGraphic;
 			ToothGroup group;
 			for(int t=1;t<=52;t++) {
@@ -869,9 +869,9 @@ namespace SparksToothChart {
 				else{//perm
 					toothGraphic=TcData.ListToothGraphics[t.ToString()];
 				}
-				for(int g=0;g<11;g++){//groups 0-11
+				for(int g=0;g<15;g++){//groups 0-14
 					group=toothGraphic.GetGroup((ToothGroupType)g);
-					Gl.glNewList(displayListOffset+(t*11)+g,Gl.GL_COMPILE);
+					Gl.glNewList(displayListOffset+(t*15)+g,Gl.GL_COMPILE);
 						//ToothGraphic.GetDisplayListNum(i.ToString())
 					if(group!=null){
 						for(int f=0;f<group.Faces.Count;f++){//.GetLength(0);f++) {//loop through each face

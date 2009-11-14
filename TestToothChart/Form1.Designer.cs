@@ -84,14 +84,15 @@
 			this.radioPen = new System.Windows.Forms.RadioButton();
 			this.radioPointer = new System.Windows.Forms.RadioButton();
 			this.groupBox11 = new System.Windows.Forms.GroupBox();
+			this.label7 = new System.Windows.Forms.Label();
 			this.butGetBitmapOpenGL = new System.Windows.Forms.Button();
 			this.butGetBitmapDirectX = new System.Windows.Forms.Button();
 			this.butGetBitmap2D = new System.Windows.Forms.Button();
 			this.textScreenshotBox = new System.Windows.Forms.TextBox();
-			this.label7 = new System.Windows.Forms.Label();
 			this.toothChartDirectX = new SparksToothChart.ToothChartWrapper();
 			this.toothChartOpenGL = new SparksToothChart.ToothChartWrapper();
 			this.toothChart2D = new SparksToothChart.ToothChartWrapper();
+			this.butVeneers = new System.Windows.Forms.Button();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupBox3.SuspendLayout();
@@ -454,6 +455,7 @@
 			// 
 			// groupBox7
 			// 
+			this.groupBox7.Controls.Add(this.butVeneers);
 			this.groupBox7.Controls.Add(this.butSealants);
 			this.groupBox7.Controls.Add(this.butImplants);
 			this.groupBox7.Controls.Add(this.butBridges);
@@ -462,7 +464,7 @@
 			this.groupBox7.Controls.Add(this.butFillings);
 			this.groupBox7.Location = new System.Drawing.Point(680,361);
 			this.groupBox7.Name = "groupBox7";
-			this.groupBox7.Size = new System.Drawing.Size(118,173);
+			this.groupBox7.Size = new System.Drawing.Size(118,194);
 			this.groupBox7.TabIndex = 216;
 			this.groupBox7.TabStop = false;
 			this.groupBox7.Text = "Restorations";
@@ -710,12 +712,21 @@
 			this.groupBox11.Controls.Add(this.butGetBitmapOpenGL);
 			this.groupBox11.Controls.Add(this.butGetBitmapDirectX);
 			this.groupBox11.Controls.Add(this.butGetBitmap2D);
-			this.groupBox11.Location = new System.Drawing.Point(536,528);
+			this.groupBox11.Location = new System.Drawing.Point(536,582);
 			this.groupBox11.Name = "groupBox11";
 			this.groupBox11.Size = new System.Drawing.Size(214,99);
 			this.groupBox11.TabIndex = 220;
 			this.groupBox11.TabStop = false;
 			this.groupBox11.Text = "GetBitmap";
+			// 
+			// label7
+			// 
+			this.label7.Location = new System.Drawing.Point(91,20);
+			this.label7.Name = "label7";
+			this.label7.Size = new System.Drawing.Size(117,71);
+			this.label7.TabIndex = 215;
+			this.label7.Text = "Since screen capture is unreliable, a warning to that effect shows if a screencap" +
+    "ture is used.";
 			// 
 			// butGetBitmapOpenGL
 			// 
@@ -755,15 +766,6 @@
 			this.textScreenshotBox.TabIndex = 221;
 			this.textScreenshotBox.Text = resources.GetString("textScreenshotBox.Text");
 			this.textScreenshotBox.Visible = false;
-			// 
-			// label7
-			// 
-			this.label7.Location = new System.Drawing.Point(91,20);
-			this.label7.Name = "label7";
-			this.label7.Size = new System.Drawing.Size(117,71);
-			this.label7.TabIndex = 215;
-			this.label7.Text = "Since screen capture is unreliable, a warning to that effect shows if a screencap" +
-    "ture is used.";
 			// 
 			// toothChartDirectX
 			// 
@@ -807,11 +809,21 @@
 			this.toothChart2D.TabIndex = 195;
 			this.toothChart2D.UseHardware = false;
 			// 
+			// butVeneers
+			// 
+			this.butVeneers.Location = new System.Drawing.Point(10,168);
+			this.butVeneers.Name = "butVeneers";
+			this.butVeneers.Size = new System.Drawing.Size(88,23);
+			this.butVeneers.TabIndex = 213;
+			this.butVeneers.Text = "Veneers";
+			this.butVeneers.UseVisualStyleBackColor = true;
+			this.butVeneers.Click += new System.EventHandler(this.butVeneers_Click);
+			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(1258,738);
+			this.ClientSize = new System.Drawing.Size(1258,737);
 			this.Controls.Add(this.textScreenshotBox);
 			this.Controls.Add(this.groupBox11);
 			this.Controls.Add(this.groupBox9);
@@ -921,6 +933,7 @@
 		private System.Windows.Forms.Button butGetBitmap2D;
 		private System.Windows.Forms.TextBox textScreenshotBox;
 		private System.Windows.Forms.Label label7;
+		private System.Windows.Forms.Button butVeneers;
 	}
 }
 

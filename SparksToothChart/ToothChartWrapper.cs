@@ -333,6 +333,7 @@ namespace SparksToothChart {
 			}
 			TcData.ListToothGraphics[toothID].SetSurfaceColors("MODBLFIV",color);
 			TcData.ListToothGraphics[toothID].SetGroupColor(ToothGroupType.Enamel,color);
+			TcData.ListToothGraphics[toothID].SetGroupColor(ToothGroupType.EnamelF,color);
 			this.Invalidate();
 		}
 
@@ -364,6 +365,7 @@ namespace SparksToothChart {
 			}
 			TcData.ListToothGraphics[toothID].SetSurfaceColors("MODBLFIV",color);
 			TcData.ListToothGraphics[toothID].SetGroupColor(ToothGroupType.Enamel,color);
+			TcData.ListToothGraphics[toothID].SetGroupColor(ToothGroupType.EnamelF,color);
 			Invalidate();
 		}
 
@@ -402,6 +404,16 @@ namespace SparksToothChart {
 		public void SetSealant(string toothID,Color color) {
 			TcData.ListToothGraphics[toothID].IsSealant=true;
 			TcData.ListToothGraphics[toothID].colorSealant=color;
+			Invalidate();
+		}
+
+		///<summary>This will mostly only be successful on certain anterior teeth.   For others, it will just show F coloring.</summary>
+		public void SetVeneer(string toothID,Color color) {
+			TcData.ListToothGraphics[toothID].SetSurfaceColors("FV",color);
+			TcData.ListToothGraphics[toothID].SetGroupColor(ToothGroupType.EnamelF,color);
+			TcData.ListToothGraphics[toothID].SetGroupColor(ToothGroupType.DF,color);
+			TcData.ListToothGraphics[toothID].SetGroupColor(ToothGroupType.MF,color);
+			TcData.ListToothGraphics[toothID].SetGroupColor(ToothGroupType.IF,color);
 			Invalidate();
 		}
 

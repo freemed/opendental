@@ -83,6 +83,14 @@ namespace SparksToothChart {
 		V,
 		///<summary>10. The pulp chamber and post or buildup.  Because our teeth are not yet transparent, these faces need to be translated forward.</summary>
 		Buildup,
+		///<summary>11. Only defined on some anterior teeth.  The small bit of enamel on the F that is not included in any filling.</summary>
+		EnamelF,
+		/// <summary>12. Only defined on some anterior teeth.  The F portion of the D filling.</summary>
+		DF,
+		/// <summary>13. Only defined on some anterior teeth.  The F portion of the M filling.</summary>
+		MF,
+		/// <summary>14. Only defined on some anterior teeth.  The F portion of the I filling.</summary>
+		IF,
 		///<summary>Only present in the special implant tooth object.</summary>
 		Implant,
 		///<summary>Not used. Just a placeholder</summary>

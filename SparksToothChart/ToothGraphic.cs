@@ -163,12 +163,14 @@ namespace SparksToothChart {
 			for(int i=0;i<surfaces.Length;i++){
 				if(surfaces[i]=='M'){
 					SetGroupColor(ToothGroupType.M,color);
+					SetGroupColor(ToothGroupType.MF,color);
 				}
 				else if(surfaces[i]=='O') {
 					SetGroupColor(ToothGroupType.O,color);
 				}
 				else if(surfaces[i]=='D') {
 					SetGroupColor(ToothGroupType.D,color);
+					SetGroupColor(ToothGroupType.DF,color);
 				}
 				else if(surfaces[i]=='B') {
 					SetGroupColor(ToothGroupType.B,color);
@@ -181,6 +183,7 @@ namespace SparksToothChart {
 				}
 				else if(surfaces[i]=='I') {
 					SetGroupColor(ToothGroupType.I,color);
+					SetGroupColor(ToothGroupType.IF,color);
 				}
 				else if(surfaces[i]=='F') {
 					SetGroupColor(ToothGroupType.F,color);
@@ -243,7 +246,7 @@ namespace SparksToothChart {
 		public int GetIndexForDisplayList(ToothGroup group) {
 			int toothInt=Tooth.ToOrdinal(toothID);
 			//this can be enhanced later, but it's very simple for now.
-			return (toothInt*11)+(int)group.GroupType;
+			return (toothInt*15)+(int)group.GroupType;
 		}
 
 		#endregion Public Methods
@@ -558,39 +561,30 @@ namespace SparksToothChart {
 								break;
 							case "g cube1_Enamel2":
 								group.GroupType=ToothGroupType.Enamel;
-								//group.PaintColor=Color.FromArgb(255,255,253,209);
 								break;
 							case "g cube1_M":
 								group.GroupType=ToothGroupType.M;
-								//group.PaintColor=Color.Purple;
 								break;
 							case "g cube1_D":
 								group.GroupType=ToothGroupType.D;
-								//group.PaintColor=Color.Yellow;
 								break;
 							case "g cube1_F":
 								group.GroupType=ToothGroupType.F;
-								//group.PaintColor=Color.Blue;
 								break;
 							case "g cube1_I":
 								group.GroupType=ToothGroupType.I;
-								//group.PaintColor=Color.Green;
 								break;
 							case "g cube1_L":
 								group.GroupType=ToothGroupType.L;
-								//group.PaintColor=Color.Blue;
 								break;
 							case "g cube1_V":
 								group.GroupType=ToothGroupType.V;
-								//group.PaintColor=Color.Green;
 								break;
 							case "g cube1_B":
 								group.GroupType=ToothGroupType.B;
-								//group.PaintColor=Color.Blue;
 								break;
 							case "g cube1_O":
 								group.GroupType=ToothGroupType.O;
-								//group.PaintColor=Color.Green;
 								break;
 							case "g cube1_Canals":
 								group.GroupType=ToothGroupType.Canals;
@@ -601,7 +595,18 @@ namespace SparksToothChart {
 							case "g cube1_Implant":
 								group.GroupType=ToothGroupType.Implant;
 								break;
-							//buildup
+							case "g cube1_EnamelF":
+								group.GroupType=ToothGroupType.EnamelF;
+								break;
+							case "g cube1_DF":
+								group.GroupType=ToothGroupType.DF;
+								break;
+							case "g cube1_MF":
+								group.GroupType=ToothGroupType.MF;
+								break;
+							case "g cube1_IF":
+								group.GroupType=ToothGroupType.IF;
+								break;
 						}
 					}
 					if(line.StartsWith("f")) {//face. Usually 4 vertices, but not always.

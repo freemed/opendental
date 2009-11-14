@@ -816,6 +816,45 @@ namespace TestToothChart {
 			toothChartDirectX.SetSealant("31",Color.Red);
 		}
 
+		private void butVeneers_Click(object sender,EventArgs e) {
+			toothChart2D.ResetTeeth();
+			toothChartOpenGL.ResetTeeth();
+			toothChartDirectX.ResetTeeth();
+			//
+			toothChart2D.SetVeneer("4",Color.DarkRed);
+			toothChart2D.SetVeneer("5",Color.DarkRed);
+			toothChart2D.SetVeneer("6",Color.DarkRed);
+			toothChart2D.SetVeneer("7",Color.DarkRed);
+			toothChart2D.SetVeneer("8",Color.DarkRed);
+			toothChart2D.SetVeneer("9",Color.DarkRed);
+			toothChart2D.SetVeneer("10",Color.DarkRed);
+			toothChart2D.SetVeneer("11",Color.DarkRed);
+			toothChart2D.SetVeneer("12",Color.DarkRed);
+			toothChart2D.SetVeneer("13",Color.DarkRed);
+			//
+			toothChartOpenGL.SetVeneer("4",Color.DarkRed);
+			toothChartOpenGL.SetVeneer("5",Color.DarkRed);
+			toothChartOpenGL.SetVeneer("6",Color.DarkRed);
+			toothChartOpenGL.SetVeneer("7",Color.DarkRed);
+			toothChartOpenGL.SetVeneer("8",Color.DarkRed);
+			toothChartOpenGL.SetVeneer("9",Color.DarkRed);
+			toothChartOpenGL.SetVeneer("10",Color.DarkRed);
+			toothChartOpenGL.SetVeneer("11",Color.DarkRed);
+			toothChartOpenGL.SetVeneer("12",Color.DarkRed);
+			toothChartOpenGL.SetVeneer("13",Color.DarkRed);
+			//
+			toothChartDirectX.SetVeneer("4",Color.DarkRed);
+			toothChartDirectX.SetVeneer("5",Color.DarkRed);
+			toothChartDirectX.SetVeneer("6",Color.DarkRed);
+			toothChartDirectX.SetVeneer("7",Color.DarkRed);
+			toothChartDirectX.SetVeneer("8",Color.DarkRed);
+			toothChartDirectX.SetVeneer("9",Color.DarkRed);
+			toothChartDirectX.SetVeneer("10",Color.DarkRed);
+			toothChartDirectX.SetVeneer("11",Color.DarkRed);
+			toothChartDirectX.SetVeneer("12",Color.DarkRed);
+			toothChartDirectX.SetVeneer("13",Color.DarkRed);
+		}
+
 		private void radioPointer_Click(object sender,EventArgs e) {
 			toothChart2D.CursorTool=CursorTool.Pointer;
 			toothChartOpenGL.CursorTool=CursorTool.Pointer;
@@ -923,6 +962,8 @@ namespace TestToothChart {
 			form.Show();
 			textScreenshotBox.Visible=false;
 		}
+
+		
 
 
 
