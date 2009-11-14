@@ -89,10 +89,11 @@
 			this.butGetBitmapDirectX = new System.Windows.Forms.Button();
 			this.butGetBitmap2D = new System.Windows.Forms.Button();
 			this.textScreenshotBox = new System.Windows.Forms.TextBox();
+			this.butVeneers = new System.Windows.Forms.Button();
 			this.toothChartDirectX = new SparksToothChart.ToothChartWrapper();
 			this.toothChartOpenGL = new SparksToothChart.ToothChartWrapper();
 			this.toothChart2D = new SparksToothChart.ToothChartWrapper();
-			this.butVeneers = new System.Windows.Forms.Button();
+			this.butPrimaryBU = new System.Windows.Forms.Button();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupBox3.SuspendLayout();
@@ -455,6 +456,7 @@
 			// 
 			// groupBox7
 			// 
+			this.groupBox7.Controls.Add(this.butPrimaryBU);
 			this.groupBox7.Controls.Add(this.butVeneers);
 			this.groupBox7.Controls.Add(this.butSealants);
 			this.groupBox7.Controls.Add(this.butImplants);
@@ -464,14 +466,14 @@
 			this.groupBox7.Controls.Add(this.butFillings);
 			this.groupBox7.Location = new System.Drawing.Point(680,361);
 			this.groupBox7.Name = "groupBox7";
-			this.groupBox7.Size = new System.Drawing.Size(118,194);
+			this.groupBox7.Size = new System.Drawing.Size(118,221);
 			this.groupBox7.TabIndex = 216;
 			this.groupBox7.TabStop = false;
 			this.groupBox7.Text = "Restorations";
 			// 
 			// butSealants
 			// 
-			this.butSealants.Location = new System.Drawing.Point(10,143);
+			this.butSealants.Location = new System.Drawing.Point(10,168);
 			this.butSealants.Name = "butSealants";
 			this.butSealants.Size = new System.Drawing.Size(88,23);
 			this.butSealants.TabIndex = 212;
@@ -481,7 +483,7 @@
 			// 
 			// butImplants
 			// 
-			this.butImplants.Location = new System.Drawing.Point(10,118);
+			this.butImplants.Location = new System.Drawing.Point(10,143);
 			this.butImplants.Name = "butImplants";
 			this.butImplants.Size = new System.Drawing.Size(88,23);
 			this.butImplants.TabIndex = 211;
@@ -491,7 +493,7 @@
 			// 
 			// butBridges
 			// 
-			this.butBridges.Location = new System.Drawing.Point(10,93);
+			this.butBridges.Location = new System.Drawing.Point(10,118);
 			this.butBridges.Name = "butBridges";
 			this.butBridges.Size = new System.Drawing.Size(88,23);
 			this.butBridges.TabIndex = 210;
@@ -501,7 +503,7 @@
 			// 
 			// butBigX
 			// 
-			this.butBigX.Location = new System.Drawing.Point(10,68);
+			this.butBigX.Location = new System.Drawing.Point(10,93);
 			this.butBigX.Name = "butBigX";
 			this.butBigX.Size = new System.Drawing.Size(88,23);
 			this.butBigX.TabIndex = 209;
@@ -767,6 +769,16 @@
 			this.textScreenshotBox.Text = resources.GetString("textScreenshotBox.Text");
 			this.textScreenshotBox.Visible = false;
 			// 
+			// butVeneers
+			// 
+			this.butVeneers.Location = new System.Drawing.Point(10,193);
+			this.butVeneers.Name = "butVeneers";
+			this.butVeneers.Size = new System.Drawing.Size(88,23);
+			this.butVeneers.TabIndex = 213;
+			this.butVeneers.Text = "Veneers";
+			this.butVeneers.UseVisualStyleBackColor = true;
+			this.butVeneers.Click += new System.EventHandler(this.butVeneers_Click);
+			// 
 			// toothChartDirectX
 			// 
 			this.toothChartDirectX.AutoFinish = false;
@@ -809,15 +821,14 @@
 			this.toothChart2D.TabIndex = 195;
 			this.toothChart2D.UseHardware = false;
 			// 
-			// butVeneers
+			// butPrimaryBU
 			// 
-			this.butVeneers.Location = new System.Drawing.Point(10,168);
-			this.butVeneers.Name = "butVeneers";
-			this.butVeneers.Size = new System.Drawing.Size(88,23);
-			this.butVeneers.TabIndex = 213;
-			this.butVeneers.Text = "Veneers";
-			this.butVeneers.UseVisualStyleBackColor = true;
-			this.butVeneers.Click += new System.EventHandler(this.butVeneers_Click);
+			this.butPrimaryBU.Location = new System.Drawing.Point(10,68);
+			this.butPrimaryBU.Name = "butPrimaryBU";
+			this.butPrimaryBU.Size = new System.Drawing.Size(88,23);
+			this.butPrimaryBU.TabIndex = 214;
+			this.butPrimaryBU.Text = "Primary BU";
+			this.butPrimaryBU.UseVisualStyleBackColor = true;
 			// 
 			// Form1
 			// 
@@ -934,6 +945,7 @@
 		private System.Windows.Forms.TextBox textScreenshotBox;
 		private System.Windows.Forms.Label label7;
 		private System.Windows.Forms.Button butVeneers;
+		private System.Windows.Forms.Button butPrimaryBU;
 	}
 }
 

@@ -409,7 +409,7 @@ namespace SparksToothChart {
 
 		///<summary>This will mostly only be successful on certain anterior teeth.   For others, it will just show F coloring.</summary>
 		public void SetVeneer(string toothID,Color color) {
-			TcData.ListToothGraphics[toothID].SetSurfaceColors("FV",color);
+			TcData.ListToothGraphics[toothID].SetSurfaceColors("BFV",color);
 			TcData.ListToothGraphics[toothID].SetGroupColor(ToothGroupType.EnamelF,color);
 			TcData.ListToothGraphics[toothID].SetGroupColor(ToothGroupType.DF,color);
 			TcData.ListToothGraphics[toothID].SetGroupColor(ToothGroupType.MF,color);

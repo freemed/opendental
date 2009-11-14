@@ -831,6 +831,16 @@ namespace TestToothChart {
 			toothChart2D.SetVeneer("11",Color.DarkRed);
 			toothChart2D.SetVeneer("12",Color.DarkRed);
 			toothChart2D.SetVeneer("13",Color.DarkRed);
+			toothChart2D.SetVeneer("20",Color.DarkRed);
+			toothChart2D.SetVeneer("21",Color.DarkRed);
+			toothChart2D.SetVeneer("22",Color.DarkRed);
+			toothChart2D.SetVeneer("23",Color.DarkRed);
+			toothChart2D.SetVeneer("24",Color.DarkRed);
+			toothChart2D.SetVeneer("25",Color.DarkRed);
+			toothChart2D.SetVeneer("26",Color.DarkRed);
+			toothChart2D.SetVeneer("27",Color.DarkRed);
+			toothChart2D.SetVeneer("28",Color.DarkRed);
+			toothChart2D.SetVeneer("29",Color.DarkRed);
 			//
 			toothChartOpenGL.SetVeneer("4",Color.DarkRed);
 			toothChartOpenGL.SetVeneer("5",Color.DarkRed);
@@ -842,6 +852,16 @@ namespace TestToothChart {
 			toothChartOpenGL.SetVeneer("11",Color.DarkRed);
 			toothChartOpenGL.SetVeneer("12",Color.DarkRed);
 			toothChartOpenGL.SetVeneer("13",Color.DarkRed);
+			toothChartOpenGL.SetVeneer("20",Color.DarkRed);
+			toothChartOpenGL.SetVeneer("21",Color.DarkRed);
+			toothChartOpenGL.SetVeneer("22",Color.DarkRed);
+			toothChartOpenGL.SetVeneer("23",Color.DarkRed);
+			toothChartOpenGL.SetVeneer("24",Color.DarkRed);
+			toothChartOpenGL.SetVeneer("25",Color.DarkRed);
+			toothChartOpenGL.SetVeneer("26",Color.DarkRed);
+			toothChartOpenGL.SetVeneer("27",Color.DarkRed);
+			toothChartOpenGL.SetVeneer("28",Color.DarkRed);
+			toothChartOpenGL.SetVeneer("29",Color.DarkRed);
 			//
 			toothChartDirectX.SetVeneer("4",Color.DarkRed);
 			toothChartDirectX.SetVeneer("5",Color.DarkRed);
@@ -853,6 +873,16 @@ namespace TestToothChart {
 			toothChartDirectX.SetVeneer("11",Color.DarkRed);
 			toothChartDirectX.SetVeneer("12",Color.DarkRed);
 			toothChartDirectX.SetVeneer("13",Color.DarkRed);
+			toothChartDirectX.SetVeneer("20",Color.DarkRed);
+			toothChartDirectX.SetVeneer("21",Color.DarkRed);
+			toothChartDirectX.SetVeneer("22",Color.DarkRed);
+			toothChartDirectX.SetVeneer("23",Color.DarkRed);
+			toothChartDirectX.SetVeneer("24",Color.DarkRed);
+			toothChartDirectX.SetVeneer("25",Color.DarkRed);
+			toothChartDirectX.SetVeneer("26",Color.DarkRed);
+			toothChartDirectX.SetVeneer("27",Color.DarkRed);
+			toothChartDirectX.SetVeneer("28",Color.DarkRed);
+			toothChartDirectX.SetVeneer("29",Color.DarkRed);
 		}
 
 		private void radioPointer_Click(object sender,EventArgs e) {
