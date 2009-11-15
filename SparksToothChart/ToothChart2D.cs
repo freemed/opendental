@@ -264,6 +264,9 @@ namespace SparksToothChart {
 		}
 
 		private void DrawNumbers(Graphics g) {
+			if(DesignMode) {
+				return;
+			}
 			string tooth_id;
 			for(int i=1;i<=52;i++) {
 				tooth_id=Tooth.FromOrdinal(i);
@@ -278,8 +281,18 @@ namespace SparksToothChart {
 
 		///<summary>Draws the number and the rectangle behind it.  Draws in the appropriate color</summary>
 		private void DrawNumber(string tooth_id,bool isSelected,bool isFullRedraw,Graphics g) {
+			if(DesignMode) {
+				return;
+			}
+			if(TcData==null) {
+				return;//trying to fix a designtime bug.
+			}
 			if(!Tooth.IsValidDB(tooth_id)) {
 				return;
+			}
+			if(TcData.ListToothGraphics[tooth_id]==null) {
+				//throw new Exception(tooth_id+" null");
+				return;//for some reason, it's still getting to here in DesignMode
 			}
 			if(isFullRedraw) {//if redrawing all numbers
 				if(TcData.ListToothGraphics[tooth_id].HideNumber) {//and this is a "hidden" number

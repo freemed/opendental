@@ -24,5 +24,11 @@ namespace SparksToothChart {
 			}
 			return retVal;
 		}
+
+		public Face Copy() {
+			Face f=new Face();
+			f.IndexList=new List<int>(this.IndexList);
+			return f;
+		}
 	}
 }

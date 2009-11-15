@@ -8,6 +8,8 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
+using Microsoft.DirectX;
+using Microsoft.DirectX.Direct3D;
 
 namespace SparksToothChart {
 	public partial class ToothChartWrapper:UserControl {
@@ -22,14 +24,12 @@ namespace SparksToothChart {
 		[Category("Action"),Description("Occurs when the mouse goes up ending a drawing segment.")]
 		public event ToothChartDrawEventHandler SegmentDrawn=null;
 		private DrawingMode drawMode;
-		///<summary>This data object will hold nearly all information about what to draw.  It is not exposed publicly, but is instead acted on by methods.</summary>
-		private ToothChartData TcData;
+		private ToothChartData tcData;
 		
 		public ToothChartWrapper() {
-			TcData=new ToothChartData();
+			tcData=new ToothChartData();
 			InitializeComponent();
 			ResetControls();
-
 		}
 
 		#region Properties
@@ -47,10 +47,29 @@ namespace SparksToothChart {
 			}
 		}
 
+		///<summary>This data object holds nearly all information about what to draw.  It is normally acted on by public methods of the wrapper instead of being accessed directly.</summary>
+		public ToothChartData TcData {
+			get {
+				return tcData;
+			}
+			set {
+				tcData=value;
+				if(drawMode==DrawingMode.Simple2D) {
+					toothChart2D.TcData=tcData;
+				}
+				else if(drawMode==DrawingMode.DirectX) {
+					toothChartDirectX.TcData=tcData;
+				}
+				else if(drawMode==DrawingMode.OpenGL) {
+					toothChartOpenGL.TcData=tcData;
+				}
+			}
+		}
+
 		///<summary>Valid values are 1-32 and A-Z.</summary>
 		public List<string> SelectedTeeth {
 			get {
-				return TcData.SelectedTeeth;
+				return tcData.SelectedTeeth;
 			}
 		}
 
@@ -58,10 +77,10 @@ namespace SparksToothChart {
 		[Browsable(false)]
 		public Color ColorBackground {
 			get {
-				return TcData.ColorBackground;
+				return tcData.ColorBackground;
 			}
 			set {
-				TcData.ColorBackground=value;
+				tcData.ColorBackground=value;
 				Invalidate();
 			}
 		}
@@ -70,7 +89,7 @@ namespace SparksToothChart {
 		[Browsable(false)]
 		public Color ColorText{
 			set {
-				TcData.ColorText=value;
+				tcData.ColorText=value;
 				Invalidate();
 			}
 		}
@@ -79,7 +98,7 @@ namespace SparksToothChart {
 		[Browsable(false)]
 		public Color ColorTextHighlight {
 			set {
-				TcData.ColorTextHighlight=value;
+				tcData.ColorTextHighlight=value;
 				Invalidate();
 			}
 		}
@@ -88,7 +107,7 @@ namespace SparksToothChart {
 		[Browsable(false)]
 		public Color ColorBackHighlight {
 			set {
-				TcData.ColorBackHighlight=value;
+				tcData.ColorBackHighlight=value;
 				Invalidate();
 			}
 		}
@@ -128,20 +147,20 @@ namespace SparksToothChart {
 
 		public CursorTool CursorTool{
 			get{
-				return TcData.CursorTool;
+				return tcData.CursorTool;
 			}
 			set{
-				TcData.CursorTool=value;
-				if(TcData.CursorTool==CursorTool.Pointer) {
+				tcData.CursorTool=value;
+				if(tcData.CursorTool==CursorTool.Pointer) {
 					this.Cursor=Cursors.Default;
 				}
-				if(TcData.CursorTool==CursorTool.Pen) {
+				if(tcData.CursorTool==CursorTool.Pen) {
 					this.Cursor=new Cursor(GetType(),"Pen.cur");
 				}
-				if(TcData.CursorTool==CursorTool.Eraser) {
+				if(tcData.CursorTool==CursorTool.Eraser) {
 					this.Cursor=new Cursor(GetType(),"EraseCircle.cur");
 				}
-				if(TcData.CursorTool==CursorTool.ColorChanger) {
+				if(tcData.CursorTool==CursorTool.ColorChanger) {
 					this.Cursor=new Cursor(GetType(),"ColorChanger.cur");
 				}
 				//if(drawMode!=DrawingMode.Simple2D) {
@@ -153,7 +172,7 @@ namespace SparksToothChart {
 		///<summary>For the freehand drawing tool.</summary>
 		public Color ColorDrawing{
 			set{
-				TcData.ColorDrawing=value;
+				tcData.ColorDrawing=value;
 			}
 		}
 		#endregion Properties
@@ -184,7 +203,7 @@ namespace SparksToothChart {
 				//toothChart2D.Size = new System.Drawing.Size(719,564);//unnecessary?
 //todo: Add this event
 //toothChart2D.SegmentDrawn+=new ToothChartDrawEventHandler(toothChart_SegmentDrawn);
-				toothChart2D.TcData=TcData;
+				toothChart2D.TcData=tcData;
 				toothChart2D.SuspendLayout();
 				this.Controls.Add(toothChart2D);
 				ResetTeeth();
@@ -203,7 +222,7 @@ namespace SparksToothChart {
 				toothChartDirectX.Name = "toothChartDirectX";
 				//toothChartDirectX.Size = new System.Drawing.Size(719,564);//unnecessary?
 				toothChartDirectX.SegmentDrawn+=new ToothChartDrawEventHandler(toothChart_SegmentDrawn);
-				toothChartDirectX.TcData=TcData;
+				toothChartDirectX.TcData=tcData;
 				toothChartDirectX.SuspendLayout();//Might help with the MDA debug error we used to get (if the option wasn't disabled in our compilers).
 				this.Controls.Add(toothChartDirectX);
 				ResetTeeth();
@@ -218,7 +237,7 @@ namespace SparksToothChart {
 				toothChartOpenGL.Location = new System.Drawing.Point(0,0);
 				toothChartOpenGL.Name = "toothChartOpenGL";
 				//toothChartOpenGL.Size = new System.Drawing.Size(719,564);//unnecessary?
-				toothChartOpenGL.TcData=TcData;
+				toothChartOpenGL.TcData=tcData;
 				toothChartOpenGL.SegmentDrawn+=new ToothChartDrawEventHandler(toothChart_SegmentDrawn);
 				toothChartOpenGL.SuspendLayout();
 				this.Controls.Add(toothChartOpenGL);
@@ -228,37 +247,42 @@ namespace SparksToothChart {
 			}
 		}
 
+		///<summary>Not normally used unless we are just trying to make a copy of an existing directX control.</summary>
+		public void InitializeDirectXGraphics() {
+			toothChartDirectX.InitializeGraphics();
+		}
+
 		#region Public Methods
 
 		///<summary>If ListToothGraphics is empty, then this fills it, including the complex process of loading all drawing points from local resources.  Or if not empty, then this resets all 32+20 teeth to default postitions, no restorations, etc. Primary teeth set to visible false.  Also clears selected.  Should surround with SuspendLayout / ResumeLayout.</summary>
 		public void ResetTeeth() {
 			//selectedTeeth=new string[0];
 			//this will only happen once when program first loads.  Unfortunately, there is no way to tell what the drawMode is going to be when loading the graphics from the file.  So any other initialization must happen in resetControls.
-			if(TcData.ListToothGraphics.Count==0) {
-				TcData.ListToothGraphics.Clear();
+			if(tcData.ListToothGraphics.Count==0) {
+				tcData.ListToothGraphics.Clear();
 				ToothGraphic tooth;
 				for(int i=1;i<=32;i++) {
 					tooth=new ToothGraphic(i.ToString());
 					tooth.Visible=true;
-					TcData.ListToothGraphics.Add(tooth);
+					tcData.ListToothGraphics.Add(tooth);
 					//primary
 					if(Tooth.PermToPri(i.ToString())!="") {
 						tooth=new ToothGraphic(Tooth.PermToPri(i.ToString()));
 						tooth.Visible=false;
-						TcData.ListToothGraphics.Add(tooth);
+						tcData.ListToothGraphics.Add(tooth);
 					}
 				}
 				tooth=new ToothGraphic("implant");
-				TcData.ListToothGraphics.Add(tooth);
+				tcData.ListToothGraphics.Add(tooth);
 			}
 			else {//list was already initially filled, but now user needs to reset it.
-				for(int i=0;i<TcData.ListToothGraphics.Count;i++) {//loop through all perm and pri teeth.
-					TcData.ListToothGraphics[i].Reset();
+				for(int i=0;i<tcData.ListToothGraphics.Count;i++) {//loop through all perm and pri teeth.
+					tcData.ListToothGraphics[i].Reset();
 				}
 			}
-			TcData.SelectedTeeth.Clear();
-			TcData.DrawingSegmentList=new List<ToothInitial>();
-			TcData.PointList=new List<Point>();
+			tcData.SelectedTeeth.Clear();
+			tcData.DrawingSegmentList=new List<ToothInitial>();
+			tcData.PointList=new List<Point>();
 			Invalidate();
 		}
 
@@ -267,12 +291,12 @@ namespace SparksToothChart {
 			if(!ToothGraphic.IsValidToothID(toothID)) {
 				return;
 			}
-			TcData.ListToothGraphics[toothID].ShiftM+=shiftM;
-			TcData.ListToothGraphics[toothID].ShiftO+=shiftO;
-			TcData.ListToothGraphics[toothID].ShiftB+=shiftB;
-			TcData.ListToothGraphics[toothID].Rotate+=rotate;
-			TcData.ListToothGraphics[toothID].TipM+=tipM;
-			TcData.ListToothGraphics[toothID].TipB+=tipB;
+			tcData.ListToothGraphics[toothID].ShiftM+=shiftM;
+			tcData.ListToothGraphics[toothID].ShiftO+=shiftO;
+			tcData.ListToothGraphics[toothID].ShiftB+=shiftB;
+			tcData.ListToothGraphics[toothID].Rotate+=rotate;
+			tcData.ListToothGraphics[toothID].TipM+=tipM;
+			tcData.ListToothGraphics[toothID].TipB+=tipB;
 			Invalidate();
 		}
 
@@ -284,102 +308,102 @@ namespace SparksToothChart {
 			if(Tooth.IsPrimary(toothID)) {
 				return;
 			}
-			TcData.ListToothGraphics[toothID].ShiftO-=12;
+			tcData.ListToothGraphics[toothID].ShiftO-=12;
 			if(ToothGraphic.IsValidToothID(Tooth.PermToPri(toothID))) {//if there's a primary tooth at this location
-				TcData.ListToothGraphics[Tooth.PermToPri(toothID)].Visible=true;//show the primary.
-				TcData.ListToothGraphics[toothID].ShowPrimaryLetter=true;
+				tcData.ListToothGraphics[Tooth.PermToPri(toothID)].Visible=true;//show the primary.
+				tcData.ListToothGraphics[toothID].ShowPrimaryLetter=true;
 			}		
 			//first pri mand molars, shift slightly to M
 			if(toothID=="21") {
-				TcData.ListToothGraphics["J"].ShiftM+=0.5f;
+				tcData.ListToothGraphics["J"].ShiftM+=0.5f;
 			}
 			if(toothID=="28") {
-				TcData.ListToothGraphics["S"].ShiftM+=0.5f;
+				tcData.ListToothGraphics["S"].ShiftM+=0.5f;
 			}
 			//second pri molars are huge, so shift distally for space
 			//and move all the perm molars distally too
 			if(toothID=="4") {
-				TcData.ListToothGraphics["A"].ShiftM-=0.5f;
-				TcData.ListToothGraphics["1"].ShiftM-=1;
-				TcData.ListToothGraphics["2"].ShiftM-=1;
-				TcData.ListToothGraphics["3"].ShiftM-=1;
+				tcData.ListToothGraphics["A"].ShiftM-=0.5f;
+				tcData.ListToothGraphics["1"].ShiftM-=1;
+				tcData.ListToothGraphics["2"].ShiftM-=1;
+				tcData.ListToothGraphics["3"].ShiftM-=1;
 			}
 			if(toothID=="13") {
-				TcData.ListToothGraphics["J"].ShiftM-=0.5f;
-				TcData.ListToothGraphics["14"].ShiftM-=1;
-				TcData.ListToothGraphics["15"].ShiftM-=1;
-				TcData.ListToothGraphics["16"].ShiftM-=1;
+				tcData.ListToothGraphics["J"].ShiftM-=0.5f;
+				tcData.ListToothGraphics["14"].ShiftM-=1;
+				tcData.ListToothGraphics["15"].ShiftM-=1;
+				tcData.ListToothGraphics["16"].ShiftM-=1;
 			}
 			if(toothID=="20") {
-				TcData.ListToothGraphics["K"].ShiftM-=1.2f;
-				TcData.ListToothGraphics["17"].ShiftM-=2.3f;
-				TcData.ListToothGraphics["18"].ShiftM-=2.3f;
-				TcData.ListToothGraphics["19"].ShiftM-=2.3f;
+				tcData.ListToothGraphics["K"].ShiftM-=1.2f;
+				tcData.ListToothGraphics["17"].ShiftM-=2.3f;
+				tcData.ListToothGraphics["18"].ShiftM-=2.3f;
+				tcData.ListToothGraphics["19"].ShiftM-=2.3f;
 			}
 			if(toothID=="29") {
-				TcData.ListToothGraphics["T"].ShiftM-=1.2f;
-				TcData.ListToothGraphics["30"].ShiftM-=2.3f;
-				TcData.ListToothGraphics["31"].ShiftM-=2.3f;
-				TcData.ListToothGraphics["32"].ShiftM-=2.3f;
+				tcData.ListToothGraphics["T"].ShiftM-=1.2f;
+				tcData.ListToothGraphics["30"].ShiftM-=2.3f;
+				tcData.ListToothGraphics["31"].ShiftM-=2.3f;
+				tcData.ListToothGraphics["32"].ShiftM-=2.3f;
 			}
 			Invalidate();
 		}
 
 		///<summary>This is used for crowns and for retainers.  Crowns will be visible on missing teeth with implants.  Crowns are visible on F and O views, unlike ponics which are only visible on F view.  If the tooth is not visible, that should be set before this call, because then, this will set the root invisible.</summary>
 		public void SetCrown(string toothID,Color color) {
-			TcData.ListToothGraphics[toothID].IsCrown=true;
-			if(!TcData.ListToothGraphics[toothID].Visible) {//tooth not visible, so set root invisible.
-				TcData.ListToothGraphics[toothID].SetGroupVisibility(ToothGroupType.Cementum,false);
+			tcData.ListToothGraphics[toothID].IsCrown=true;
+			if(!tcData.ListToothGraphics[toothID].Visible) {//tooth not visible, so set root invisible.
+				tcData.ListToothGraphics[toothID].SetGroupVisibility(ToothGroupType.Cementum,false);
 			}
-			TcData.ListToothGraphics[toothID].SetSurfaceColors("MODBLFIV",color);
-			TcData.ListToothGraphics[toothID].SetGroupColor(ToothGroupType.Enamel,color);
-			TcData.ListToothGraphics[toothID].SetGroupColor(ToothGroupType.EnamelF,color);
+			tcData.ListToothGraphics[toothID].SetSurfaceColors("MODBLFIV",color);
+			tcData.ListToothGraphics[toothID].SetGroupColor(ToothGroupType.Enamel,color);
+			tcData.ListToothGraphics[toothID].SetGroupColor(ToothGroupType.EnamelF,color);
 			this.Invalidate();
 		}
 
 		///<summary>A series of color settings will result in the last ones entered overriding earlier entries.</summary>
 		public void SetSurfaceColors(string toothID,string surfaces,Color color) {
-			TcData.ListToothGraphics[toothID].SetSurfaceColors(surfaces,color);
+			tcData.ListToothGraphics[toothID].SetSurfaceColors(surfaces,color);
 			Invalidate();
 		}
 
 		///<summary>Used for missing teeth.  This should always be done before setting restorations, because a pontic will cause the tooth to become visible again except for the root.  So if setMissing after a pontic, then the pontic can't show.</summary>
 		public void SetMissing(string toothID) {
-			TcData.ListToothGraphics[toothID].Visible=false;
+			tcData.ListToothGraphics[toothID].Visible=false;
 			Invalidate();
 		}
 
 		///<summary>This is just the same as SetMissing, except that it also hides the number from showing.  This is used, for example, if premolars are missing, and ortho has completely closed the space.  User will not be able to select this tooth because the number is hidden.</summary>
 		public void SetHidden(string toothID) {
-			TcData.ListToothGraphics[toothID].Visible=false;
-			TcData.ListToothGraphics[toothID].HideNumber=true;
+			tcData.ListToothGraphics[toothID].Visible=false;
+			tcData.ListToothGraphics[toothID].HideNumber=true;
 			Invalidate();
 		}
 
 		///<summary>This is used for any pontic, including bridges, full dentures, and partials.  It is usually used on a tooth that has already been set invisible.  This routine cuases the tooth to show again, but the root needs to be invisible.  Then, it sets the entire crown to the specified color.  If the tooth is already visible, then it does not set the root invisible.</summary>
 		public void SetPontic(string toothID,Color color) {
-			TcData.ListToothGraphics[toothID].IsPontic=true;
-			if(!TcData.ListToothGraphics[toothID].Visible) {
+			tcData.ListToothGraphics[toothID].IsPontic=true;
+			if(!tcData.ListToothGraphics[toothID].Visible) {
 				//tooth not visible, but since IsPontic changes the visibility behavior of the tooth, we need to set the root invisible.
-				TcData.ListToothGraphics[toothID].SetGroupVisibility(ToothGroupType.Cementum,false);
+				tcData.ListToothGraphics[toothID].SetGroupVisibility(ToothGroupType.Cementum,false);
 			}
-			TcData.ListToothGraphics[toothID].SetSurfaceColors("MODBLFIV",color);
-			TcData.ListToothGraphics[toothID].SetGroupColor(ToothGroupType.Enamel,color);
-			TcData.ListToothGraphics[toothID].SetGroupColor(ToothGroupType.EnamelF,color);
+			tcData.ListToothGraphics[toothID].SetSurfaceColors("MODBLFIV",color);
+			tcData.ListToothGraphics[toothID].SetGroupColor(ToothGroupType.Enamel,color);
+			tcData.ListToothGraphics[toothID].SetGroupColor(ToothGroupType.EnamelF,color);
 			Invalidate();
 		}
 
 		///<summary>Root canals are initially not visible.  This routine sets the canals visible, changes the color to the one specified, and also sets the cementum for the tooth to be semitransparent so that the canals can be seen.  Also sets the IsRCT flag for the tooth to true.</summary>
 		public void SetRCT(string toothID,Color color) {
-			TcData.ListToothGraphics[toothID].IsRCT=true;
-			TcData.ListToothGraphics[toothID].colorRCT=color;
+			tcData.ListToothGraphics[toothID].IsRCT=true;
+			tcData.ListToothGraphics[toothID].colorRCT=color;
 			Invalidate();
 		}
 
 		///<summary>This draws a big red extraction X right on top of the tooth.  It's up to the calling application to figure out when it's appropriate to do this.  Even if the tooth has been marked invisible, there's a good chance that this will still get drawn because a tooth can be set visible again for the drawing the pontic.  So the calling application needs to figure out when it's appropriate to draw the X, and not set this otherwise.</summary>
 		public void SetBigX(string toothID,Color color) {
-			TcData.ListToothGraphics[toothID].DrawBigX=true;
-			TcData.ListToothGraphics[toothID].colorX=color;
+			tcData.ListToothGraphics[toothID].DrawBigX=true;
+			tcData.ListToothGraphics[toothID].colorX=color;
 			Invalidate();
 		}
 
@@ -388,46 +412,46 @@ namespace SparksToothChart {
 			//TcData.ListToothGraphics[toothID].IsBU=true;
 			//TcData.ListToothGraphics[toothID].colorBU=color;
 			//Buildups are now just another group, so
-			TcData.ListToothGraphics[toothID].SetGroupVisibility(ToothGroupType.Buildup,true);
-			TcData.ListToothGraphics[toothID].SetGroupColor(ToothGroupType.Buildup,color);
+			tcData.ListToothGraphics[toothID].SetGroupVisibility(ToothGroupType.Buildup,true);
+			tcData.ListToothGraphics[toothID].SetGroupColor(ToothGroupType.Buildup,color);
 			Invalidate();
 		}
 
 		///<summary>Set this tooth to show an implant</summary>
 		public void SetImplant(string toothID,Color color) {
-			TcData.ListToothGraphics[toothID].IsImplant=true;
-			TcData.ListToothGraphics[toothID].colorImplant=color;
+			tcData.ListToothGraphics[toothID].IsImplant=true;
+			tcData.ListToothGraphics[toothID].colorImplant=color;
 			Invalidate();
 		}
 
 		///<summary>Set this tooth to show a sealant</summary>
 		public void SetSealant(string toothID,Color color) {
-			TcData.ListToothGraphics[toothID].IsSealant=true;
-			TcData.ListToothGraphics[toothID].colorSealant=color;
+			tcData.ListToothGraphics[toothID].IsSealant=true;
+			tcData.ListToothGraphics[toothID].colorSealant=color;
 			Invalidate();
 		}
 
 		///<summary>This will mostly only be successful on certain anterior teeth.   For others, it will just show F coloring.</summary>
 		public void SetVeneer(string toothID,Color color) {
-			TcData.ListToothGraphics[toothID].SetSurfaceColors("BFV",color);
-			TcData.ListToothGraphics[toothID].SetGroupColor(ToothGroupType.EnamelF,color);
-			TcData.ListToothGraphics[toothID].SetGroupColor(ToothGroupType.DF,color);
-			TcData.ListToothGraphics[toothID].SetGroupColor(ToothGroupType.MF,color);
-			TcData.ListToothGraphics[toothID].SetGroupColor(ToothGroupType.IF,color);
+			tcData.ListToothGraphics[toothID].SetSurfaceColors("BFV",color);
+			tcData.ListToothGraphics[toothID].SetGroupColor(ToothGroupType.EnamelF,color);
+			tcData.ListToothGraphics[toothID].SetGroupColor(ToothGroupType.DF,color);
+			tcData.ListToothGraphics[toothID].SetGroupColor(ToothGroupType.MF,color);
+			tcData.ListToothGraphics[toothID].SetGroupColor(ToothGroupType.IF,color);
 			Invalidate();
 		}
 
 		///<summary></summary>
 		public void AddDrawingSegment(ToothInitial drawingSegment) {
 			bool alreadyAdded=false;
-			for(int i=0;i<TcData.DrawingSegmentList.Count;i++) {
-				if(TcData.DrawingSegmentList[i].DrawingSegment==drawingSegment.DrawingSegment) {
+			for(int i=0;i<tcData.DrawingSegmentList.Count;i++) {
+				if(tcData.DrawingSegmentList[i].DrawingSegment==drawingSegment.DrawingSegment) {
 					alreadyAdded=true;
 					break;
 				}
 			}
 			if(!alreadyAdded){
-				TcData.DrawingSegmentList.Add(drawingSegment);
+				tcData.DrawingSegmentList.Add(drawingSegment);
 			}
 			Invalidate();
 			//toothChartOpenGL.AddDrawingSegment(drawingSegment);
@@ -464,12 +488,12 @@ namespace SparksToothChart {
 
 		protected override void OnResize(EventArgs e) {
 			base.OnResize(e);
-			TcData.SizeControl=this.Size;
+			tcData.SizeControl=this.Size;
 			Invalidate();
 		}
 
 		public void SetSelected(string tooth_id,bool setValue) {
-			TcData.SetSelected(tooth_id,setValue);
+			tcData.SetSelected(tooth_id,setValue);
 			Invalidate();
 		}
 

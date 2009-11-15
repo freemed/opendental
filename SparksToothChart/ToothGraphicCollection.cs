@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.DirectX;
+using Microsoft.DirectX.Direct3D;
 
 namespace SparksToothChart {
 	///<summary>A strongly typed collection of type ToothGraphic</summary>
@@ -95,6 +97,14 @@ namespace SparksToothChart {
 			}
 		}
 
+		///<summary></summary>
+		public ToothGraphicCollection Copy() {
+			ToothGraphicCollection collect=new ToothGraphicCollection();
+			for(int i=0;i<this.Count;i++) {
+				collect.Add(this[i].Copy());
+			}
+			return collect;
+		}
 
 
 

@@ -30,5 +30,10 @@ namespace SparksToothChart {
 		public override string ToString() {
 			return X.ToString()+","+Y.ToString()+","+Z.ToString();
 		}
+
+		public Vertex3f Copy() {
+			Vertex3f vf=new Vertex3f(this.X,this.Y,this.Z);
+			return vf;
+		}
 	}
 }

@@ -15,7 +15,7 @@ namespace SparksToothChart {
 	public partial class ToothChartDirectX:Control {
 
 		///<summary>DirectX handle to this control.</summary>
-		private Device device=null;
+		public Device device=null;
 		///<summary>GDI+ handle to this control. Used for line drawing at least.</summary>
 		private Graphics g=null;
 		///<summary>This is a reference to the TcData object that's at the wrapper level.</summary>
@@ -68,6 +68,9 @@ namespace SparksToothChart {
 				ToothGraphic toothGraphic=TcData.ListToothGraphics[i];
 				for(int j=0;j<toothGraphic.Groups.Count;j++) {
 					ToothGroup group=toothGraphic.Groups[j];
+					if(group.facesDirectX==null) {
+						continue;
+					}
 					group.facesDirectX.Dispose();
 					group.facesDirectX=null;
 				}

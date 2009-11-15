@@ -26,6 +26,19 @@ namespace SparksToothChart {
 			Faces=new List<Face>();
 		}
 
+		public ToothGroup Copy() {
+			ToothGroup tg=new ToothGroup();
+			tg.Visible=this.Visible;
+			tg.PaintColor=this.PaintColor;
+			tg.GroupType=this.GroupType;
+			tg.Faces=new List<Face>();
+			for(int i=0;i<this.Faces.Count;i++) {
+				tg.Faces.Add(this.Faces[i].Copy());
+			}
+			//facesDirectX and NumIndices will be set in a subsequent step when ToothChartWrapper.InitializeDirectXGraphics is run.
+			return tg;
+		}
+
 		public void PrepareForDirectX(Device device){
 			if(facesDirectX!=null){
 				facesDirectX.Dispose();

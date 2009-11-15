@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
 using OpenDentBusiness;
+using Microsoft.DirectX;
+using Microsoft.DirectX.Direct3D;
 
 namespace SparksToothChart {
 	///<summary>This is an object full of data about how to draw the 3D graphical teeth.  It also contains a number of helper functions that need to be shared between the different tooth charts.</summary>
@@ -36,12 +38,11 @@ namespace SparksToothChart {
 		///<summary>The color being used for freehand drawing.</summary>
 		public Color ColorDrawing;
 		///<summary>This font object is used to measure strings.</summary>
-		public Font Font;
+		public System.Drawing.Font Font;
 		///<summary>A list of points for a line currently being drawn.  Once the mouse is raised, this list gets cleared.</summary>
 		public List<Point> PointList;
 		///<summary>The size of the current drawing in pixels / the size of the original drawing.  This number is used to scale original drawing to the new size.</summary>
 		public float PixelScaleRatio;
-
 
 		public ToothChartData() {
 			ListToothGraphics=new ToothGraphicCollection();
@@ -54,8 +55,22 @@ namespace SparksToothChart {
 			DrawingSegmentList=new List<ToothInitial>();
 			CursorTool=CursorTool.Pointer;
 			ColorDrawing=Color.Black;
-			Font=new Font(FontFamily.GenericSansSerif,8.25f);
+			Font=new System.Drawing.Font(FontFamily.GenericSansSerif,8.25f);
 			PointList=new List<Point>();
+		}
+
+		///<summary></summary>
+		public ToothChartData Copy() {
+			ToothChartData data=new ToothChartData();
+			data.ListToothGraphics=this.ListToothGraphics.Copy();
+			data.ColorBackground=this.ColorBackground;
+			data.ColorText=this.ColorText;
+			data.ColorTextHighlight=this.ColorTextHighlight;
+			data.ColorBackHighlight=this.ColorBackHighlight;
+			data.DrawingSegmentList=this.DrawingSegmentList;
+			//some values set when control resized.
+			data.Font=this.Font;
+			return data;
 		}
 
 		///<summary>This gets set whenever the wrapper resizes.  It's the size of the control in screen pixels.</summary>

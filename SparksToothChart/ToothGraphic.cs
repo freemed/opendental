@@ -63,6 +63,46 @@ namespace SparksToothChart {
 		///<summary>If sealant, then this will contain the color.</summary>
 		public Color colorSealant;
 
+		///<summary></summary>
+		public ToothGraphic Copy() {
+			ToothGraphic tg=new ToothGraphic();
+			tg.toothID=this.toothID;
+			tg.VertexNormals=new List<VertexNormal>();
+			for(int i=0;i<this.VertexNormals.Count;i++){
+				tg.VertexNormals.Add(this.VertexNormals[i].Copy());
+			}
+			tg.vb=this.vb;
+			tg.Groups=new List<ToothGroup>(this.Groups);
+			for(int i=0;i<this.Groups.Count;i++) {
+				tg.Groups.Add(this.Groups[i].Copy());
+			}
+			tg.visible=this.visible;
+			tg.Rotate=this.Rotate;
+			tg.TipB=this.TipB;
+			tg.TipM=this.TipM;
+			tg.ShiftM=this.ShiftM;
+			tg.ShiftO=this.ShiftO;
+			tg.ShiftB=this.ShiftB;
+			tg.IsRCT=this.IsRCT;
+			tg.hideNumber=this.hideNumber;
+			tg.DrawBigX=this.DrawBigX;
+			tg.colorX=this.colorX;
+			tg.colorRCT=this.colorRCT;
+			tg.ShowPrimaryLetter=this.ShowPrimaryLetter;
+			tg.IsImplant=this.IsImplant;
+			tg.colorImplant=this.colorImplant;
+			tg.IsCrown=this.IsCrown;
+			tg.IsPontic=this.IsPontic;
+			tg.IsSealant=this.IsSealant;
+			tg.colorSealant=this.colorSealant;
+			return tg;
+		}
+
+		///<summary>Used in Copy()</summary>
+		internal ToothGraphic() {
+			
+		}
+
 		///<summary>Only called from ToothChartWrapper.ResetTeeth or from ToothChartOpenGL.ResetTeeth when program first loads.  Constructor requires passing in the toothID.  Exception will be thrown if not one of the following: 1-32 or A-T.  Always loads graphics data from local resources even if in simplemode.</summary>
 		public ToothGraphic(string tooth_id) {
 			if(tooth_id!="implant" && !IsValidToothID(tooth_id)) {
@@ -71,10 +111,16 @@ namespace SparksToothChart {
 			}
 			toothID=tooth_id;
 			VertexNormals=new List<VertexNormal>();
-			//if(!simplemode){
-				ImportObj();
-			//}
+			ImportObj();
 			SetDefaultColors();
+		}
+
+		public override string ToString() {
+			string retVal=this.toothID;
+			if(IsRCT) {
+				retVal+=", RCT";
+			}
+			return retVal;
 		}
 
 		#region properties
@@ -114,7 +160,7 @@ namespace SparksToothChart {
 		#region Public Methods
 
 		///<summary>Converts the VertexNormals list into a vertex buffer so the verticies can be used to render DirectX triangles.</summary>
-		public void PrepareForDirectX(Device device){
+		public void PrepareForDirectX(Device deviceRef){
 			if(vb!=null){
 				vb.Dispose();
 				vb=null;
@@ -129,7 +175,7 @@ namespace SparksToothChart {
 				verts[i].Nz=VertexNormals[i].Normal.Z;
 			}
 			vb=new VertexBuffer(typeof(CustomVertex.PositionNormal),CustomVertex.PositionNormal.StrideSize*verts.Length,
-				device,Usage.WriteOnly,CustomVertex.PositionNormal.Format,Pool.Managed);
+				deviceRef,Usage.WriteOnly,CustomVertex.PositionNormal.Format,Pool.Managed);
 			vb.SetData(verts,0,LockFlags.None);			
 		}
 
@@ -411,7 +457,7 @@ namespace SparksToothChart {
 
 		#endregion static functions
 
-		///<summary></summary>
+		///<summary>Should only be run on startup for efficiency.</summary>
 		private void ImportObj() {
 			byte[] buffer=null;
 			if(toothID=="1" || toothID=="16") {

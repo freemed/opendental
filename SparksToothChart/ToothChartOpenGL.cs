@@ -186,6 +186,9 @@ namespace SparksToothChart {
 		}
 
 		private void DrawScene() {
+			ToothChartWrapper wrapper=(ToothChartWrapper)this.Parent;
+			string wrappername=wrapper.Name;
+			bool isRCT8=wrapper.TcData.ListToothGraphics["8"].IsRCT;
 			for(int t=0;t<TcData.ListToothGraphics.Count;t++) {//loop through each tooth
 				if(TcData.ListToothGraphics[t].ToothID=="implant") {//this is not an actual tooth.
 					continue;
@@ -193,7 +196,7 @@ namespace SparksToothChart {
 				DrawFacialView(TcData.ListToothGraphics[t]);
 				DrawOcclusalView(TcData.ListToothGraphics[t]);
 			}
-			//
+			// 
 			//bitmapInPictBox=GetBitmapOfOpenGL();
 			//gg=Graphics.FromImage(bitmapInPictBox);
 			DrawNumbersAndLines();

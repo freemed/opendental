@@ -297,6 +297,9 @@ namespace TestToothChart {
 			toothChart2D.Size=new Size(410,307);
 			toothChartOpenGL.Size=new Size(410,307);
 			toothChartDirectX.Size=new Size(410,307);
+			toothChart2D.Location=new Point(8,28);
+			toothChartOpenGL.Location=new Point(424,28);
+			toothChartDirectX.Location=new Point(840,28);
 		}
 
 		private void butSizeTall_Click(object sender,EventArgs e) {
@@ -309,6 +312,24 @@ namespace TestToothChart {
 			toothChart2D.Size=new Size(410,190);
 			toothChartOpenGL.Size=new Size(410,190);
 			toothChartDirectX.Size=new Size(410,190);
+		}
+
+		private void butVeryTall_Click(object sender,EventArgs e) {
+			toothChart2D.Size=new Size(295,700);
+			toothChartOpenGL.Size=new Size(295,700);
+			toothChartDirectX.Size=new Size(295,700);
+			toothChart2D.Location=new Point(200,28);
+			toothChartOpenGL.Location=new Point(500,28);
+			toothChartDirectX.Location=new Point(800,28);
+		}
+
+		private void butVeryWide_Click(object sender,EventArgs e) {
+			toothChart2D.Size=new Size(1200,200);
+			toothChartOpenGL.Size=new Size(1200,200);
+			toothChartDirectX.Size=new Size(1200,200);
+			toothChart2D.Location=new Point(5,5);
+			toothChartOpenGL.Location=new Point(5,210);
+			toothChartDirectX.Location=new Point(5,415);
 		}
 
 		private void butMissing_Click(object sender,EventArgs e) {
@@ -1067,6 +1088,30 @@ namespace TestToothChart {
 			form.Show();
 			textScreenshotBox.Visible=false;
 		}
+
+		private void butFullscreen2D_Click(object sender,EventArgs e) {
+			FormFullScreen form=new FormFullScreen();
+			form.toothChartForBig.DrawMode=DrawingMode.Simple2D;
+			form.toothChartForBig.TcData=toothChartOpenGL.TcData.Copy();
+			form.ShowDialog();
+		}
+
+		private void butFullscreenOpenGL_Click(object sender,EventArgs e) {
+			FormFullScreen form=new FormFullScreen();
+			form.toothChartForBig.DrawMode=DrawingMode.OpenGL;
+			form.toothChartForBig.TcData=toothChartOpenGL.TcData.Copy();
+			form.ShowDialog();
+		}
+
+		private void butFullscreenDirectX_Click(object sender,EventArgs e) {
+			FormFullScreen form=new FormFullScreen();
+			form.toothChartForBig.DrawMode=DrawingMode.DirectX;
+			form.toothChartForBig.TcData=toothChartDirectX.TcData.Copy();
+			form.toothChartForBig.InitializeDirectXGraphics();
+			form.ShowDialog();
+		}
+
+	
 
 		
 

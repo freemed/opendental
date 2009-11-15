@@ -11,5 +11,12 @@ namespace SparksToothChart {
 		public override string ToString() {
 			return "v:"+Vertex.ToString()+" n:"+Normal.ToString();
 		}
+
+		public VertexNormal Copy(){
+			VertexNormal vn=new VertexNormal();
+			vn.Vertex=this.Vertex.Copy();
+			vn.Normal=this.Normal.Copy();
+			return vn;
+		}
 	}
 }
