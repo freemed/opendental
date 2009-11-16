@@ -91,8 +91,11 @@ namespace OpenDental{
 			toothChart.UseHardware=computerPref.GraphicsUseHardware;
 			toothChart.PreferredPixelFormatNumber=computerPref.PreferredPixelFormatNum;
 			//Must be last preference set, last so that all settings are caried through in the reinitialization this line triggers.
-			if(computerPref.GraphicsSimple){
+			if(computerPref.GraphicsSimple==DrawingMode.Simple2D){
 				toothChart.DrawMode=DrawingMode.Simple2D;
+			}
+			else if(computerPref.GraphicsSimple==DrawingMode.DirectX) {
+				toothChart.DrawMode=DrawingMode.DirectX;
 			}
 			else{
 				toothChart.DrawMode=DrawingMode.OpenGL;

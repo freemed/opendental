@@ -224,7 +224,7 @@ namespace SparksToothChart {
 				//move the bigX 6mm to the Facial so it will paint in front of the tooth
 				Gl.glTranslatef(0,0,6f);
 				Gl.glBlendFunc(Gl.GL_SRC_ALPHA,Gl.GL_ONE_MINUS_SRC_ALPHA);
-				Gl.glLineWidth((float)Width/275f);//1.5f);//thickness of line depends on size of window
+				Gl.glLineWidth(2f*TcData.PixelScaleRatio);//thickness of line depends on size of window
 				Gl.glColor3f (
 					(float)toothGraphic.colorX.R/255f,
 					(float)toothGraphic.colorX.G/255f,
@@ -263,8 +263,8 @@ namespace SparksToothChart {
 					(float)toothGraphic.colorRCT.B/255f);
 					//.5f);//only 1/2 darkness
 				Gl.glBlendFunc(Gl.GL_SRC_ALPHA,Gl.GL_ONE_MINUS_SRC_ALPHA);
-				Gl.glLineWidth(2.2f*TcData.PixelScaleRatio);//(float)Width/225f);
-				Gl.glPointSize(1.8f*TcData.PixelScaleRatio);//(float)Width/275f);//point is slightly smaller since no antialiasing
+				Gl.glLineWidth(2.2f*TcData.PixelScaleRatio);
+				Gl.glPointSize(1.8f*TcData.PixelScaleRatio);//point is slightly smaller since no antialiasing
 				RotateAndTranslateUser(toothGraphic);
 				List<LineSimple> lines=toothGraphic.GetRctLines();
 				for(int i=0;i<lines.Count;i++){

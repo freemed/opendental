@@ -16,7 +16,7 @@ namespace OpenDentBusiness {
 			ComputerPref computerPref=new ComputerPref();
 			//OpenGL tooth chart not supported on Unix systems.
 			if(Environment.OSVersion.Platform==PlatformID.Unix) {
-				computerPref.GraphicsSimple=true;
+				computerPref.GraphicsSimple=DrawingMode.Simple2D;
 			}
 			//Default sensor values to start
 			computerPref.SensorType="D";
@@ -49,7 +49,7 @@ namespace OpenDentBusiness {
 			computerPref.ComputerPrefNum=				PIn.PLong		(table.Rows[0][0].ToString());
 			computerPref.ComputerName=					PIn.PString		(table.Rows[0][1].ToString());
 			computerPref.GraphicsUseHardware=			PIn.PBool		(table.Rows[0][2].ToString());
-			computerPref.GraphicsSimple=				PIn.PBool		(table.Rows[0][3].ToString());
+			computerPref.GraphicsSimple=(DrawingMode)PIn.PInt  (table.Rows[0][3].ToString());
 			computerPref.SensorType=					PIn.PString		(table.Rows[0][4].ToString());
 			computerPref.SensorBinned=					PIn.PBool		(table.Rows[0][5].ToString());
 			computerPref.SensorPort=					PIn.PInt		(table.Rows[0][6].ToString());
@@ -96,7 +96,7 @@ namespace OpenDentBusiness {
 			}
 			command+="'"+POut.PString(computerPref.ComputerName)+"',"
 				+"'"+POut.PBool(computerPref.GraphicsUseHardware)+"',"
-				+"'"+POut.PBool(computerPref.GraphicsSimple)+"',"
+				+"'"+POut.PInt((int)computerPref.GraphicsSimple)+"',"
 				+"'"+POut.PString(computerPref.SensorType)+"',"
 				+"'"+POut.PBool(computerPref.SensorBinned)+"',"
 				+"'"+POut.PLong(computerPref.SensorPort)+"',"
@@ -124,7 +124,7 @@ namespace OpenDentBusiness {
 			string command="UPDATE computerpref SET "
 				+"ComputerName='"+POut.PString(computerPref.ComputerName)+"',"
 				+"GraphicsUseHardware='"+POut.PBool(computerPref.GraphicsUseHardware)+"',"
-				+"GraphicsSimple='"+POut.PBool(computerPref.GraphicsSimple)+"',"
+				+"GraphicsSimple='"+POut.PInt((int)computerPref.GraphicsSimple)+"',"
 				+"SensorType='"+POut.PString(computerPref.SensorType)+"',"
 				+"SensorBinned='"+POut.PBool(computerPref.SensorBinned)+"',"
 				+"SensorPort='"+POut.PLong(computerPref.SensorPort)+"',"

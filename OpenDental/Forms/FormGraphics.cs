@@ -18,20 +18,21 @@ namespace OpenDental{
 		private OpenDental.UI.Button butOK;
 		private CheckBox checkHardwareAccel;
 		private CheckBox checkDoubleBuffering;
-		private GroupBox group3DToothChart;
+		private GroupBox groupOpenGLToothChart;
 		private OpenDental.UI.ODGrid gridFormats;
 		private OpenGLWinFormsControl.PixelFormatValue[] formats=new OpenGLWinFormsControl.PixelFormatValue[0];
 		private int selectedFormatNum=0;
 		private CheckBox checkAllFormats;
 		//private bool refreshAllowed=false;
 		private RadioButton radioSimpleChart;
-		private RadioButton radio3DChart;
+		private RadioButton radioOpenGLChart;
 		private GroupBox groupBox1;
 		private Label label1;
 		private Label label2;
 		private Label label4;
 		private TextBox textSelected;
 		private Label label3;
+		private RadioButton radioDirectXChart;
 
 		/// <summary>
 		/// Required designer variable.
@@ -73,7 +74,7 @@ namespace OpenDental{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormGraphics));
 			this.checkHardwareAccel = new System.Windows.Forms.CheckBox();
 			this.checkDoubleBuffering = new System.Windows.Forms.CheckBox();
-			this.group3DToothChart = new System.Windows.Forms.GroupBox();
+			this.groupOpenGLToothChart = new System.Windows.Forms.GroupBox();
 			this.label4 = new System.Windows.Forms.Label();
 			this.textSelected = new System.Windows.Forms.TextBox();
 			this.label3 = new System.Windows.Forms.Label();
@@ -85,8 +86,9 @@ namespace OpenDental{
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.radioSimpleChart = new System.Windows.Forms.RadioButton();
-			this.radio3DChart = new System.Windows.Forms.RadioButton();
-			this.group3DToothChart.SuspendLayout();
+			this.radioOpenGLChart = new System.Windows.Forms.RadioButton();
+			this.radioDirectXChart = new System.Windows.Forms.RadioButton();
+			this.groupOpenGLToothChart.SuspendLayout();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -110,21 +112,21 @@ namespace OpenDental{
 			this.checkDoubleBuffering.UseVisualStyleBackColor = true;
 			this.checkDoubleBuffering.Click += new System.EventHandler(this.checkDoubleBuffering_Click);
 			// 
-			// group3DToothChart
+			// groupOpenGLToothChart
 			// 
-			this.group3DToothChart.Controls.Add(this.label4);
-			this.group3DToothChart.Controls.Add(this.textSelected);
-			this.group3DToothChart.Controls.Add(this.label3);
-			this.group3DToothChart.Controls.Add(this.label2);
-			this.group3DToothChart.Controls.Add(this.label1);
-			this.group3DToothChart.Controls.Add(this.groupBox1);
-			this.group3DToothChart.Controls.Add(this.gridFormats);
-			this.group3DToothChart.Location = new System.Drawing.Point(28,67);
-			this.group3DToothChart.Name = "group3DToothChart";
-			this.group3DToothChart.Size = new System.Drawing.Size(833,455);
-			this.group3DToothChart.TabIndex = 5;
-			this.group3DToothChart.TabStop = false;
-			this.group3DToothChart.Text = "Options For 3D Tooth Chart";
+			this.groupOpenGLToothChart.Controls.Add(this.label4);
+			this.groupOpenGLToothChart.Controls.Add(this.textSelected);
+			this.groupOpenGLToothChart.Controls.Add(this.label3);
+			this.groupOpenGLToothChart.Controls.Add(this.label2);
+			this.groupOpenGLToothChart.Controls.Add(this.label1);
+			this.groupOpenGLToothChart.Controls.Add(this.groupBox1);
+			this.groupOpenGLToothChart.Controls.Add(this.gridFormats);
+			this.groupOpenGLToothChart.Location = new System.Drawing.Point(28,91);
+			this.groupOpenGLToothChart.Name = "groupOpenGLToothChart";
+			this.groupOpenGLToothChart.Size = new System.Drawing.Size(833,455);
+			this.groupOpenGLToothChart.TabIndex = 5;
+			this.groupOpenGLToothChart.TabStop = false;
+			this.groupOpenGLToothChart.Text = "Options For OpenGL Tooth Chart";
 			// 
 			// label4
 			// 
@@ -210,7 +212,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(684,543);
+			this.butOK.Location = new System.Drawing.Point(684,557);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,26);
 			this.butOK.TabIndex = 1;
@@ -225,7 +227,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(786,543);
+			this.butCancel.Location = new System.Drawing.Point(786,557);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,26);
 			this.butCancel.TabIndex = 0;
@@ -234,7 +236,7 @@ namespace OpenDental{
 			// 
 			// radioSimpleChart
 			// 
-			this.radioSimpleChart.Location = new System.Drawing.Point(34,15);
+			this.radioSimpleChart.Location = new System.Drawing.Point(34,36);
 			this.radioSimpleChart.Name = "radioSimpleChart";
 			this.radioSimpleChart.Size = new System.Drawing.Size(146,19);
 			this.radioSimpleChart.TabIndex = 6;
@@ -243,24 +245,36 @@ namespace OpenDental{
 			this.radioSimpleChart.UseVisualStyleBackColor = true;
 			this.radioSimpleChart.Click += new System.EventHandler(this.radioSimpleChart_Click);
 			// 
-			// radio3DChart
+			// radioOpenGLChart
 			// 
-			this.radio3DChart.Location = new System.Drawing.Point(34,36);
-			this.radio3DChart.Name = "radio3DChart";
-			this.radio3DChart.Size = new System.Drawing.Size(146,19);
-			this.radio3DChart.TabIndex = 7;
-			this.radio3DChart.TabStop = true;
-			this.radio3DChart.Text = "Use 3D Tooth Chart";
-			this.radio3DChart.UseVisualStyleBackColor = true;
-			this.radio3DChart.Click += new System.EventHandler(this.radio3DChart_Click);
+			this.radioOpenGLChart.Location = new System.Drawing.Point(34,56);
+			this.radioOpenGLChart.Name = "radioOpenGLChart";
+			this.radioOpenGLChart.Size = new System.Drawing.Size(242,19);
+			this.radioOpenGLChart.TabIndex = 7;
+			this.radioOpenGLChart.TabStop = true;
+			this.radioOpenGLChart.Text = "Use OpenGL Tooth Chart (phasing out)";
+			this.radioOpenGLChart.UseVisualStyleBackColor = true;
+			this.radioOpenGLChart.Click += new System.EventHandler(this.radioOpenGLChart_Click);
+			// 
+			// radioDirectXChart
+			// 
+			this.radioDirectXChart.Location = new System.Drawing.Point(34,15);
+			this.radioDirectXChart.Name = "radioDirectXChart";
+			this.radioDirectXChart.Size = new System.Drawing.Size(233,19);
+			this.radioDirectXChart.TabIndex = 8;
+			this.radioDirectXChart.TabStop = true;
+			this.radioDirectXChart.Text = "Use DirectX Tooth Chart (recommended)";
+			this.radioDirectXChart.UseVisualStyleBackColor = true;
+			this.radioDirectXChart.Click += new System.EventHandler(this.radioDirectXChart_Click);
 			// 
 			// FormGraphics
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(892,594);
-			this.Controls.Add(this.radio3DChart);
+			this.Controls.Add(this.radioDirectXChart);
+			this.Controls.Add(this.radioOpenGLChart);
 			this.Controls.Add(this.radioSimpleChart);
-			this.Controls.Add(this.group3DToothChart);
+			this.Controls.Add(this.groupOpenGLToothChart);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -271,8 +285,8 @@ namespace OpenDental{
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Graphics Preferences";
 			this.Load += new System.EventHandler(this.FormGraphics_Load);
-			this.group3DToothChart.ResumeLayout(false);
-			this.group3DToothChart.PerformLayout();
+			this.groupOpenGLToothChart.ResumeLayout(false);
+			this.groupOpenGLToothChart.PerformLayout();
 			this.groupBox1.ResumeLayout(false);
 			this.ResumeLayout(false);
 
@@ -302,18 +316,23 @@ namespace OpenDental{
 			gridFormats.Columns.Add(col);
 			gridFormats.EndUpdate();
 			if(Environment.OSVersion.Platform==PlatformID.Unix) {//Force simple mode on Unix systems.
-				MsgBox.Show(this,"Linux users must use simple graphics mode.");
-				radio3DChart.Enabled=false;
-				group3DToothChart.Enabled=false;
+				MsgBox.Show(this,"Linux users must use simple tooth chart.");
+				radioDirectXChart.Enabled=false;
+				radioOpenGLChart.Enabled=false;
+				groupOpenGLToothChart.Enabled=false;
 				return;
 			}
 			ComputerPref computerPref=ComputerPrefs.GetForLocalComputer();
-			if(computerPref.GraphicsSimple){
+			if(computerPref.GraphicsSimple==DrawingMode.Simple2D){
 				radioSimpleChart.Checked=true;
-				group3DToothChart.Enabled=false;
+				groupOpenGLToothChart.Enabled=false;
+			}
+			else if(computerPref.GraphicsSimple==DrawingMode.DirectX){
+				radioDirectXChart.Checked=true;
+				groupOpenGLToothChart.Enabled=false;
 			}
 			else{
-				radio3DChart.Checked=true;
+				radioOpenGLChart.Checked=true;
 			}
 			checkHardwareAccel.Checked=computerPref.GraphicsUseHardware;
 			checkDoubleBuffering.Checked=computerPref.GraphicsDoubleBuffering;
@@ -372,18 +391,15 @@ namespace OpenDental{
 		}
 
 		private void radioSimpleChart_Click(object sender,EventArgs e) {
-			group3DToothChart.Enabled=false;
+			groupOpenGLToothChart.Enabled=false;
 		}
 
-		private void radio3DChart_Click(object sender,EventArgs e) {
-			group3DToothChart.Enabled=true;
-			//pick the best pixel format, completely ignoring the filters.
-			OpenGLWinFormsControl autoFormat=new OpenGLWinFormsControl();
-			OpenGLWinFormsControl.PixelFormatValue pfv=OpenGLWinFormsControl.ChoosePixelFormatEx(autoFormat.GetHDC());
-			autoFormat.Dispose();
-			selectedFormatNum=pfv.formatNumber;
-			textSelected.Text=selectedFormatNum.ToString();
-			RefreshFormats();
+		private void radioDirectXChart_Click(object sender,EventArgs e) {
+			groupOpenGLToothChart.Enabled=false;
+		}
+
+		private void radioOpenGLChart_Click(object sender,EventArgs e) {
+			groupOpenGLToothChart.Enabled=true;
 		}
 
 		private void checkHardwareAccel_Click(object sender,EventArgs e) {
@@ -420,7 +436,15 @@ namespace OpenDental{
 			contextTester.Dispose();
 			ComputerPref computerPref=ComputerPrefs.GetForLocalComputer();
 			computerPref.GraphicsUseHardware=checkHardwareAccel.Checked;
-			computerPref.GraphicsSimple=radioSimpleChart.Checked;
+			if(radioDirectXChart.Checked) {
+				computerPref.GraphicsSimple=DrawingMode.DirectX;
+			}
+			else if(radioSimpleChart.Checked) {
+				computerPref.GraphicsSimple=DrawingMode.Simple2D;
+			}
+			else {
+				computerPref.GraphicsSimple=DrawingMode.OpenGL;
+			}
 			computerPref.GraphicsDoubleBuffering=checkDoubleBuffering.Checked;
 			computerPref.PreferredPixelFormatNum=selectedFormatNum;
 			ComputerPrefs.Update(computerPref);
@@ -430,6 +454,8 @@ namespace OpenDental{
 		private void butCancel_Click(object sender,System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 		
 
 	}

@@ -68,17 +68,20 @@ namespace SparksToothChart {
 				ToothGraphic toothGraphic=TcData.ListToothGraphics[i];
 				for(int j=0;j<toothGraphic.Groups.Count;j++) {
 					ToothGroup group=toothGraphic.Groups[j];
-					if(group.facesDirectX==null) {//js- I added this to prevent a crash here
-						continue;
+					if(group.facesDirectX!=null) {//js- I added this to prevent a crash here
+						group.facesDirectX.Dispose();
+						group.facesDirectX=null;
 					}
-					group.facesDirectX.Dispose();
-					group.facesDirectX=null;
 				}
-				toothGraphic.vb.Dispose();
-				toothGraphic.vb=null;
+				if(toothGraphic.vb!=null) {
+					toothGraphic.vb.Dispose();
+					toothGraphic.vb=null;
+				}
 			}
-			device.Dispose();
-			device=null;
+			if(device!=null) {
+				device.Dispose();
+				device=null;
+			}
 		}
 
 		///<summary>TODO: Handle the situation when there are suboptimal graphics cards.</summary>
@@ -429,8 +432,11 @@ namespace SparksToothChart {
 				device.Material=material;
 				//draw the group
 			  device.Indices=group.facesDirectX;
-//js crashes here after closing a different toothChartDirectX.  AccessViolationException.  Attempted to read or write protected memory.
-//Although the error message is always the same, it frequently doesn't indicate that the following line is the problem, just giving an error with no line.
+//js crashes here after:
+//1. closing a different toothChartDirectX, or
+//2. moving the fullscreen window so that it uncovers a toothChartDirectX below it.
+//AccessViolationException.  Attempted to read or write protected memory.
+//Although the error message is always the same, it sometimes doesn't indicate that the following line is the problem, just giving an error with no line.
 				device.DrawIndexedPrimitives(PrimitiveType.TriangleList,0,0,toothGraphic.VertexNormals.Count,0,group.NumIndicies/3);				
 			}
 		}
@@ -533,6 +539,9 @@ namespace SparksToothChart {
 			device.RenderState.ZBufferEnable=false;
 			device.Transform.World=Matrix.Identity;
 			if(isFullRedraw) {//if redrawing all numbers
+				if(TcData.ListToothGraphics[tooth_id]==null) {
+					return;
+				}
 				if(TcData.ListToothGraphics[tooth_id].HideNumber) {//and this is a "hidden" number
 					return;//skip
 				}

@@ -124,13 +124,15 @@ namespace SparksToothChart {
 
 		public bool AutoFinish{
 			get{
-				if(drawMode==DrawingMode.Simple2D) {
+				if(drawMode==DrawingMode.OpenGL) {
+					return toothChartOpenGL.autoFinish;
+				}
+				else {
 					return false;
 				}
-				return toothChartOpenGL.autoFinish;
 			}
 			set{
-				if(drawMode!=DrawingMode.Simple2D) {
+				if(drawMode==DrawingMode.OpenGL) {
 					toothChartOpenGL.autoFinish=value;
 				}
 			}
@@ -552,9 +554,5 @@ namespace SparksToothChart {
 		}*/
 	}
 
-	public enum DrawingMode{
-		Simple2D,
-		OpenGL,
-		DirectX
-	}
+	
 }

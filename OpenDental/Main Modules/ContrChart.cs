@@ -3037,11 +3037,7 @@ namespace OpenDental{
 			toothChart.PreferredPixelFormatNumber=computerPref.PreferredPixelFormatNum;
 			//Must be last preference set here, because this causes the 
 																													//pixel format to be recreated.
-			if(computerPref.GraphicsSimple) {
-				toothChart.DrawMode=DrawingMode.Simple2D;
-			} else {
-				toothChart.DrawMode=DrawingMode.OpenGL;
-			}
+			toothChart.DrawMode=computerPref.GraphicsSimple;
 			//The preferred pixel format number changes to the selected pixel format number after a context is chosen.
 			computerPref.PreferredPixelFormatNum=toothChart.PreferredPixelFormatNumber;
 			ComputerPrefs.Update(computerPref);
@@ -3399,14 +3395,14 @@ namespace OpenDental{
 		}
 
 		private void menuToothChart_Popup(object sender,EventArgs e) {
-			ComputerPref computerPref=ComputerPrefs.GetForLocalComputer();
+			//ComputerPref computerPref=ComputerPrefs.GetForLocalComputer();
 			//only enable the big button if 3D graphics
-			if(computerPref.GraphicsSimple) {
+			/*if(computerPref.GraphicsSimple) {
 				menuItemChartBig.Enabled=false;
 			}
 			else {
 				menuItemChartBig.Enabled=true;
-			}
+			}*/
 		}
 
 		private void menuItemChartBig_Click(object sender,EventArgs e) {

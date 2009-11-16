@@ -816,7 +816,7 @@
 			this.toothChartDirectX.ColorBackground = System.Drawing.Color.FromArgb(((int)(((byte)(150)))),((int)(((byte)(145)))),((int)(((byte)(152)))));
 			this.toothChartDirectX.Cursor = System.Windows.Forms.Cursors.Default;
 			this.toothChartDirectX.CursorTool = SparksToothChart.CursorTool.Pointer;
-			this.toothChartDirectX.DrawMode = SparksToothChart.DrawingMode.Simple2D;
+			this.toothChartDirectX.DrawMode = OpenDentBusiness.DrawingMode.Simple2D;
 			this.toothChartDirectX.Location = new System.Drawing.Point(840,28);
 			this.toothChartDirectX.Name = "toothChartDirectX";
 			this.toothChartDirectX.PreferredPixelFormatNumber = 0;
@@ -832,7 +832,7 @@
 			this.toothChartOpenGL.ColorBackground = System.Drawing.Color.FromArgb(((int)(((byte)(150)))),((int)(((byte)(145)))),((int)(((byte)(152)))));
 			this.toothChartOpenGL.Cursor = System.Windows.Forms.Cursors.Default;
 			this.toothChartOpenGL.CursorTool = SparksToothChart.CursorTool.Pointer;
-			this.toothChartOpenGL.DrawMode = SparksToothChart.DrawingMode.Simple2D;
+			this.toothChartOpenGL.DrawMode = OpenDentBusiness.DrawingMode.Simple2D;
 			this.toothChartOpenGL.Location = new System.Drawing.Point(424,28);
 			this.toothChartOpenGL.Name = "toothChartOpenGL";
 			this.toothChartOpenGL.PreferredPixelFormatNumber = 0;
@@ -848,7 +848,7 @@
 			this.toothChart2D.ColorBackground = System.Drawing.Color.FromArgb(((int)(((byte)(150)))),((int)(((byte)(145)))),((int)(((byte)(152)))));
 			this.toothChart2D.Cursor = System.Windows.Forms.Cursors.Default;
 			this.toothChart2D.CursorTool = SparksToothChart.CursorTool.Pointer;
-			this.toothChart2D.DrawMode = SparksToothChart.DrawingMode.Simple2D;
+			this.toothChart2D.DrawMode = OpenDentBusiness.DrawingMode.Simple2D;
 			this.toothChart2D.Location = new System.Drawing.Point(8,28);
 			this.toothChart2D.Name = "toothChart2D";
 			this.toothChart2D.PreferredPixelFormatNumber = 0;

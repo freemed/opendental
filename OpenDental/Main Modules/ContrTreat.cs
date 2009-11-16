@@ -1694,21 +1694,16 @@ namespace OpenDental{
 				toothChart.Size=new Size(500,370);
 				//toothChart.Location=new Point(-600,-500);//off the visible screen
 				//toothChart.SendToBack();
-				ComputerPref computerPrefs=ComputerPrefs.GetForLocalComputer();
-				toothChart.UseHardware=computerPrefs.GraphicsUseHardware;
-				toothChart.PreferredPixelFormatNumber=computerPrefs.PreferredPixelFormatNum;
+				ComputerPref computerPref=ComputerPrefs.GetForLocalComputer();
+				toothChart.UseHardware=computerPref.GraphicsUseHardware;
+				toothChart.PreferredPixelFormatNumber=computerPref.PreferredPixelFormatNum;
 				//Must be last setting set for preferences, because
 																														//this is the line where the device pixel format is
 																														//recreated.
 																														//The preferred pixel format number changes to the selected pixel format number after a context is chosen.
-				if(computerPrefs.GraphicsSimple) {
-					toothChart.DrawMode=DrawingMode.Simple2D;
-				} 
-				else {
-					toothChart.DrawMode=DrawingMode.OpenGL;
-				}
-				computerPrefs.PreferredPixelFormatNum=toothChart.PreferredPixelFormatNumber;
-				ComputerPrefs.Update(computerPrefs);
+				toothChart.DrawMode=computerPref.GraphicsSimple;
+				computerPref.PreferredPixelFormatNum=toothChart.PreferredPixelFormatNumber;
+				ComputerPrefs.Update(computerPref);
 				this.Controls.Add(toothChart);
 				toothChart.BringToFront();
 				toothChart.ResetTeeth();

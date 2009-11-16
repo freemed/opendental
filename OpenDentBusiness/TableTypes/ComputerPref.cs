@@ -12,8 +12,8 @@ namespace OpenDentBusiness {
 		public string ComputerName;
 		///<summary>Set to true if the tooth chart is to use a hardware accelerated OpenGL window when available. Set to false to use software rendering when available. Of course, the final pixel format on the customer machine depends on the list of available formats. Best match pixel format is always used. This option only applies if GraphicsSimple is set to false.</summary>
 		public bool GraphicsUseHardware;
-		///<summary>Set to true to use the low-quality 2D tooth chart in the chart module. Set to false to use an 3D OpenGL based tooth chart in the chart module. This option is a work-around for machines where the OpenGL implementation on the local graphics hardware is buggy or unavailable (i.e. MONO).</summary>
-		public bool GraphicsSimple;
+		///<summary>Enum:DrawingMode Set to 1 to use the low-quality 2D tooth chart in the chart module. Set to 0 to use a 3D DirectX based tooth chart in the chart module. This option helps the program run even when the local graphics hardware is buggy or unavailable.</summary>
+		public DrawingMode GraphicsSimple;
 		///<summary>Indicates the type of Suni sensor connected to the local computer (if any). This can be a value of A, B, C, or D.</summary>
 		public string SensorType;
 		///<summary>Indicates wether or not the Suni sensor uses binned operation.</summary>
@@ -40,6 +40,15 @@ namespace OpenDentBusiness {
 		public ComputerPref Copy(){
 			return (ComputerPref)MemberwiseClone();
 		}
+	}
+
+	public enum DrawingMode{
+		///<summary>0</summary>
+		DirectX,
+		///<summary>1</summary>
+		Simple2D,
+		///<summary>2</summary>
+		OpenGL
 	}
 
 }
