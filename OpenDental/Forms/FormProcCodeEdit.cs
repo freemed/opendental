@@ -153,7 +153,7 @@ namespace OpenDental{
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(474,234);
+			this.label4.Location = new System.Drawing.Point(474,247);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(100,14);
 			this.label4.TabIndex = 3;
@@ -239,7 +239,7 @@ namespace OpenDental{
             "Sextant",
             "Arch",
             "Tooth Range"});
-			this.listTreatArea.Location = new System.Drawing.Point(476,252);
+			this.listTreatArea.Location = new System.Drawing.Point(476,265);
 			this.listTreatArea.Name = "listTreatArea";
 			this.listTreatArea.Size = new System.Drawing.Size(118,95);
 			this.listTreatArea.TabIndex = 2;
@@ -378,7 +378,7 @@ namespace OpenDental{
 			// 
 			this.listPaintType.Location = new System.Drawing.Point(476,31);
 			this.listPaintType.Name = "listPaintType";
-			this.listPaintType.Size = new System.Drawing.Size(118,199);
+			this.listPaintType.Size = new System.Drawing.Size(118,212);
 			this.listPaintType.TabIndex = 45;
 			// 
 			// labelColor

@@ -1144,7 +1144,7 @@ namespace OpenDentBusiness{
 		Expense
 	}
 
-	///<summary>Replaces the graphic type table in the database for the new 3D tooth chart.  We cannot yet do veneers.</summary>
+	///<summary></summary>
 	public enum ToothPaintingType{
 		///<summary>0</summary>
 		None,
@@ -1173,7 +1173,9 @@ namespace OpenDentBusiness{
 		///<summary>12</summary>
 		DentureLight,
 		///<summary>13</summary>
-		Sealant
+		Sealant,
+		///<summary>13</summary>
+		Veneer
 	}
 
 	///<summary></summary>
