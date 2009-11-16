@@ -68,7 +68,7 @@ namespace SparksToothChart {
 				ToothGraphic toothGraphic=TcData.ListToothGraphics[i];
 				for(int j=0;j<toothGraphic.Groups.Count;j++) {
 					ToothGroup group=toothGraphic.Groups[j];
-					if(group.facesDirectX==null) {
+					if(group.facesDirectX==null) {//js- I added this to prevent a crash here
 						continue;
 					}
 					group.facesDirectX.Dispose();
@@ -429,6 +429,8 @@ namespace SparksToothChart {
 				device.Material=material;
 				//draw the group
 			  device.Indices=group.facesDirectX;
+//js crashes here after closing a different toothChartDirectX.  AccessViolationException.  Attempted to read or write protected memory.
+//Although the error message is always the same, it frequently doesn't indicate that the following line is the problem, just giving an error with no line.
 				device.DrawIndexedPrimitives(PrimitiveType.TriangleList,0,0,toothGraphic.VertexNormals.Count,0,group.NumIndicies/3);				
 			}
 		}
