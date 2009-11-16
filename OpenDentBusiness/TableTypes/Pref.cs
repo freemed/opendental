@@ -261,6 +261,7 @@ namespace OpenDentBusiness {
 		UpdateWebsitePath,
 		UpdateWindowShowsClassicView,
 		UseBillingAddressOnClaims,
+		///<summary>Enum:ToothNumberingNomenclature 0=Universal(American), 1=FDI, 2=Haderup, 3=Palmer</summary>
 		UseInternationalToothNumbers,
 		WebServiceServerName,
 		WordProcessorPath,

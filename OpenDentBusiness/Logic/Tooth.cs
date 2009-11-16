@@ -139,69 +139,77 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Sometimes validated by IsValidDB before coming here, otherwise an invalid toothnum .  This should be run on all displayed tooth numbers. It will handle checking for whether user is using international tooth numbers.  All tooth numbers are passed in american values until the very last moment.  Just before display, the string is converted using this method.</summary>
-		public static string GetToothLabel(string tooth_id){
+		public static string GetToothLabel(string tooth_id,ToothNumberingNomenclature nomenclature) {
 			if(tooth_id==null || tooth_id==""){
 				return ""; // CWI: We should fix the source of these
 			}
-			int nomenclature = PrefC.GetInt(PrefName.UseInternationalToothNumbers);
-			if(nomenclature == 0){
-				return tooth_id; // Universal
+			//int nomenclature = PrefC.GetInt(PrefName.UseInternationalToothNumbers);
+			if(nomenclature == ToothNumberingNomenclature.Universal) {
+				return tooth_id; 
 			}
 			int index = Array.IndexOf(labelsUniversal, tooth_id);
 			if(index==-1){
 				return "-";
 			}
-			if (nomenclature == 1){ // FDI
+			if(nomenclature == ToothNumberingNomenclature.FDI) {
 				return labelsFDI[index];
 			}
-			else if (nomenclature == 2){ // Haderup
+			else if(nomenclature == ToothNumberingNomenclature.Haderup) { 
 				return labelsHaderup[index];
 			}
-			else if (nomenclature == 3){ // Palmer
+			else if(nomenclature == ToothNumberingNomenclature.Palmer) { 
 				return labelsPalmer[index];
 			}
 			return "-"; // Should never happen
 		}
 
+		public static string GetToothLabel(string tooth_id) {
+			return GetToothLabel(tooth_id,(ToothNumberingNomenclature)PrefC.GetInt(PrefName.UseInternationalToothNumbers));
+		}
+
 		///<summary>Identical to GetToothLabel, but just used in the 3D tooth chart because with Palmer, we don't want the UR, UL, etc.</summary>
-		public static string GetToothLabelGraphic(string tooth_id){
+		public static string GetToothLabelGraphic(string tooth_id,ToothNumberingNomenclature nomenclature){
 			if(tooth_id==null || tooth_id==""){
 				return ""; // CWI: We should fix the source of these
 			}
-			int nomenclature = PrefC.GetInt(PrefName.UseInternationalToothNumbers);
-			if(nomenclature == 0){
-				return tooth_id; // Universal
+			//int nomenclature = PrefC.GetInt(PrefName.UseInternationalToothNumbers);
+			if(nomenclature==ToothNumberingNomenclature.Universal) {
+				return tooth_id;
 			}
 			int index = Array.IndexOf(labelsUniversal, tooth_id);
 			if(index==-1){
 				return "-";
 			}
-			if (nomenclature == 1){ // FDI
+			if(nomenclature == ToothNumberingNomenclature.FDI) {
 				return labelsFDI[index];
 			}
-			else if (nomenclature == 2){ // Haderup
+			else if(nomenclature == ToothNumberingNomenclature.Haderup) { 
 				return labelsHaderup[index];
 			}
-			else if (nomenclature == 3){ // Palmer
+			else if(nomenclature == ToothNumberingNomenclature.Palmer) {
 				return labelsPalmerSimple[index];
 			}
 			return "-"; // Should never happen
 		}
 
+		public static string GetToothLabelGraphic(string tooth_id) {
+			return GetToothLabelGraphic(tooth_id,(ToothNumberingNomenclature)PrefC.GetInt(PrefName.UseInternationalToothNumbers));
+		}
+
 		///<summary>MUST be validated by IsValidEntry before coming here.  All user entered toothnumbers are run through this method which automatically checks to see if using international toothnumbers.  So the procedurelog class will always contain the american toothnum.</summary>
 		public static string GetToothId(string tooth_label){
-			int nomenclature = PrefC.GetInt(PrefName.UseInternationalToothNumbers);
-			if (nomenclature == 0){
-				return tooth_label; // Universal
+			ToothNumberingNomenclature nomenclature = (ToothNumberingNomenclature)PrefC.GetInt(PrefName.UseInternationalToothNumbers);
+			if(nomenclature == ToothNumberingNomenclature.Universal) {
+				return tooth_label;
 			}
 			int index = 0;
-			if (nomenclature == 1){ // FDI
+			if(nomenclature == ToothNumberingNomenclature.FDI) { 
 				index = Array.IndexOf(labelsFDI, tooth_label);
 			}
-			else if (nomenclature == 2){ // Haderup
+			else if(nomenclature == ToothNumberingNomenclature.Haderup) { 
 				index = Array.IndexOf(labelsHaderup, tooth_label);
 			}
-			else if (nomenclature == 3){ // Palmer
+			else if(nomenclature == ToothNumberingNomenclature.Palmer) { 
 				index = Array.IndexOf(labelsPalmer, tooth_label);
 			}
 			return labelsUniversal[index];
@@ -209,7 +217,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Sometimes validated by IsValidDB before coming here, otherwise an invalid toothnum .  This should be run on all displayed tooth numbers. It will handle checking for whether user is using international tooth numbers.  All tooth numbers are passed in american values until the very last moment.  Just before display, the string is converted using this method.</summary>
 		public static string ToInternat(string toothNum){ // CWI: Left for compatibility
-			return GetToothLabel(toothNum);
+			return GetToothLabel(toothNum,(ToothNumberingNomenclature)PrefC.GetInt(PrefName.UseInternationalToothNumbers));
 		}
 
 		///<summary>MUST be validated by IsValidEntry before coming here.  All user entered toothnumbers are run through this method which automatically checks to see if using international toothnumbers.  So the procedurelog class will always contain the american toothnum.</summary>
@@ -665,5 +673,16 @@ namespace OpenDentBusiness{
     }
 
 
+	}
+
+	public enum ToothNumberingNomenclature {
+		///<summary>0- American</summary>
+		Universal,
+		///<summary>1- International</summary>
+		FDI,
+		///<summary>2- </summary>
+		Haderup,
+		///<summary>3- Ortho</summary>
+		Palmer
 	}
 }

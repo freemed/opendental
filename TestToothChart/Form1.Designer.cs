@@ -24,9 +24,9 @@
 		/// </summary>
 		private void InitializeComponent() {
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-			SparksToothChart.ToothChartData toothChartData1 = new SparksToothChart.ToothChartData();
-			SparksToothChart.ToothChartData toothChartData2 = new SparksToothChart.ToothChartData();
-			SparksToothChart.ToothChartData toothChartData3 = new SparksToothChart.ToothChartData();
+			SparksToothChart.ToothChartData toothChartData13 = new SparksToothChart.ToothChartData();
+			SparksToothChart.ToothChartData toothChartData14 = new SparksToothChart.ToothChartData();
+			SparksToothChart.ToothChartData toothChartData15 = new SparksToothChart.ToothChartData();
 			this.label1 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
 			this.label3 = new System.Windows.Forms.Label();
@@ -102,6 +102,11 @@
 			this.butFullscreenDirectX = new System.Windows.Forms.Button();
 			this.butFullscreenOpenGL = new System.Windows.Forms.Button();
 			this.butFullscreen2D = new System.Windows.Forms.Button();
+			this.groupBox13 = new System.Windows.Forms.GroupBox();
+			this.butFDA = new System.Windows.Forms.Button();
+			this.butHaderup = new System.Windows.Forms.Button();
+			this.butUniversal = new System.Windows.Forms.Button();
+			this.butPalmer = new System.Windows.Forms.Button();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupBox3.SuspendLayout();
@@ -114,6 +119,7 @@
 			this.groupBox10.SuspendLayout();
 			this.groupBox11.SuspendLayout();
 			this.groupBox12.SuspendLayout();
+			this.groupBox13.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -822,8 +828,8 @@
 			this.toothChartDirectX.PreferredPixelFormatNumber = 0;
 			this.toothChartDirectX.Size = new System.Drawing.Size(410,307);
 			this.toothChartDirectX.TabIndex = 197;
-			toothChartData1.SizeControl = new System.Drawing.Size(410,307);
-			this.toothChartDirectX.TcData = toothChartData1;
+			toothChartData13.SizeControl = new System.Drawing.Size(410,307);
+			this.toothChartDirectX.TcData = toothChartData13;
 			this.toothChartDirectX.UseHardware = false;
 			// 
 			// toothChartOpenGL
@@ -838,8 +844,8 @@
 			this.toothChartOpenGL.PreferredPixelFormatNumber = 0;
 			this.toothChartOpenGL.Size = new System.Drawing.Size(410,307);
 			this.toothChartOpenGL.TabIndex = 196;
-			toothChartData2.SizeControl = new System.Drawing.Size(410,307);
-			this.toothChartOpenGL.TcData = toothChartData2;
+			toothChartData14.SizeControl = new System.Drawing.Size(410,307);
+			this.toothChartOpenGL.TcData = toothChartData14;
 			this.toothChartOpenGL.UseHardware = false;
 			// 
 			// toothChart2D
@@ -854,8 +860,8 @@
 			this.toothChart2D.PreferredPixelFormatNumber = 0;
 			this.toothChart2D.Size = new System.Drawing.Size(410,307);
 			this.toothChart2D.TabIndex = 195;
-			toothChartData3.SizeControl = new System.Drawing.Size(410,307);
-			this.toothChart2D.TcData = toothChartData3;
+			toothChartData15.SizeControl = new System.Drawing.Size(410,307);
+			this.toothChart2D.TcData = toothChartData15;
 			this.toothChart2D.UseHardware = false;
 			// 
 			// groupBox12
@@ -900,11 +906,65 @@
 			this.butFullscreen2D.UseVisualStyleBackColor = true;
 			this.butFullscreen2D.Click += new System.EventHandler(this.butFullscreen2D_Click);
 			// 
+			// groupBox13
+			// 
+			this.groupBox13.Controls.Add(this.butPalmer);
+			this.groupBox13.Controls.Add(this.butFDA);
+			this.groupBox13.Controls.Add(this.butHaderup);
+			this.groupBox13.Controls.Add(this.butUniversal);
+			this.groupBox13.Location = new System.Drawing.Point(401,361);
+			this.groupBox13.Name = "groupBox13";
+			this.groupBox13.Size = new System.Drawing.Size(118,123);
+			this.groupBox13.TabIndex = 222;
+			this.groupBox13.TabStop = false;
+			this.groupBox13.Text = "Tooth Numbers";
+			// 
+			// butFDA
+			// 
+			this.butFDA.Location = new System.Drawing.Point(10,43);
+			this.butFDA.Name = "butFDA";
+			this.butFDA.Size = new System.Drawing.Size(75,23);
+			this.butFDA.TabIndex = 213;
+			this.butFDA.Text = "FDA";
+			this.butFDA.UseVisualStyleBackColor = true;
+			this.butFDA.Click += new System.EventHandler(this.butFDA_Click);
+			// 
+			// butHaderup
+			// 
+			this.butHaderup.Location = new System.Drawing.Point(10,68);
+			this.butHaderup.Name = "butHaderup";
+			this.butHaderup.Size = new System.Drawing.Size(75,23);
+			this.butHaderup.TabIndex = 214;
+			this.butHaderup.Text = "Haderup";
+			this.butHaderup.UseVisualStyleBackColor = true;
+			this.butHaderup.Click += new System.EventHandler(this.butHaderup_Click);
+			// 
+			// butUniversal
+			// 
+			this.butUniversal.Location = new System.Drawing.Point(10,18);
+			this.butUniversal.Name = "butUniversal";
+			this.butUniversal.Size = new System.Drawing.Size(75,23);
+			this.butUniversal.TabIndex = 207;
+			this.butUniversal.Text = "Universal";
+			this.butUniversal.UseVisualStyleBackColor = true;
+			this.butUniversal.Click += new System.EventHandler(this.butUniversal_Click);
+			// 
+			// butPalmer
+			// 
+			this.butPalmer.Location = new System.Drawing.Point(10,93);
+			this.butPalmer.Name = "butPalmer";
+			this.butPalmer.Size = new System.Drawing.Size(75,23);
+			this.butPalmer.TabIndex = 215;
+			this.butPalmer.Text = "Palmer";
+			this.butPalmer.UseVisualStyleBackColor = true;
+			this.butPalmer.Click += new System.EventHandler(this.butPalmer_Click);
+			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(1258,737);
+			this.Controls.Add(this.groupBox13);
 			this.Controls.Add(this.groupBox5);
 			this.Controls.Add(this.textScreenshotBox);
 			this.Controls.Add(this.toothChartDirectX);
@@ -941,6 +1001,7 @@
 			this.groupBox10.ResumeLayout(false);
 			this.groupBox11.ResumeLayout(false);
 			this.groupBox12.ResumeLayout(false);
+			this.groupBox13.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -1023,6 +1084,11 @@
 		private System.Windows.Forms.Button butFullscreenDirectX;
 		private System.Windows.Forms.Button butFullscreenOpenGL;
 		private System.Windows.Forms.Button butFullscreen2D;
+		private System.Windows.Forms.GroupBox groupBox13;
+		private System.Windows.Forms.Button butFDA;
+		private System.Windows.Forms.Button butHaderup;
+		private System.Windows.Forms.Button butUniversal;
+		private System.Windows.Forms.Button butPalmer;
 	}
 }
 

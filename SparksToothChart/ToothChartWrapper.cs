@@ -486,6 +486,10 @@ namespace SparksToothChart {
 			return null;
 		}
 
+		public void SetNumberingNomenclature() {
+
+		}
+
 		#endregion
 
 		protected override void OnResize(EventArgs e) {

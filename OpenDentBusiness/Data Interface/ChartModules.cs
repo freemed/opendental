@@ -203,7 +203,8 @@ namespace OpenDentBusiness {
 				row["SheetNum"]=0;
 				row["Surf"]=rawProcs.Rows[i]["Surf"].ToString();
 				row["TaskNum"]=0;
-				row["toothNum"]=Tooth.GetToothLabel(rawProcs.Rows[i]["ToothNum"].ToString());
+				row["toothNum"]=Tooth.GetToothLabel(rawProcs.Rows[i]["ToothNum"].ToString(),
+					(ToothNumberingNomenclature)PrefC.GetInt(PrefName.UseInternationalToothNumbers));
 				row["ToothNum"]=rawProcs.Rows[i]["ToothNum"].ToString();
 				row["ToothRange"]=rawProcs.Rows[i]["ToothRange"].ToString();
 				if(rawProcs.Rows[i]["ProcNumLab"].ToString()=="0")

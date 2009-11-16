@@ -1111,6 +1111,24 @@ namespace TestToothChart {
 			form.ShowDialog();
 		}
 
+		private void butUniversal_Click(object sender,EventArgs e) {
+			//toothChart2D.nu
+			//toothChartOpenGL.AddDrawingSegment(ti);
+			//toothChartDirectX.AddDrawingSegment(ti);
+		}
+
+		private void butFDA_Click(object sender,EventArgs e) {
+
+		}
+
+		private void butHaderup_Click(object sender,EventArgs e) {
+
+		}
+
+		private void butPalmer_Click(object sender,EventArgs e) {
+
+		}
+
 	
 
 		
