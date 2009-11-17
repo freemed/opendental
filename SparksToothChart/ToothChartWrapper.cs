@@ -27,6 +27,7 @@ namespace SparksToothChart {
 		private ToothChartData tcData;
 		
 		public ToothChartWrapper() {
+			drawMode=DrawingMode.Simple2D;
 			tcData=new ToothChartData();
 			InitializeComponent();
 			ResetControls();
@@ -41,6 +42,12 @@ namespace SparksToothChart {
 			set{
 				if(Environment.OSVersion.Platform==PlatformID.Unix) {
 					return;//disallow changing from simpleMode if platform is Unix
+				}
+				if(drawMode==DrawingMode.DirectX && value!=DrawingMode.DirectX){
+					//If switching from from DirectX to another drawing mode,
+					//then we need to cleanup DirectX resources in case the 
+					//chart is never switched back to DirectX mode.
+					toothChartDirectX.Dispose();//Calls CleanupDirectX() and device.Dispose().
 				}
 				drawMode=value;
 				ResetControls();
@@ -214,7 +221,7 @@ namespace SparksToothChart {
 			}
 			else if(drawMode==DrawingMode.DirectX){
 				if(toothChartDirectX!=null){
-					toothChartDirectX.CleanUpDirectX();
+					toothChartDirectX.CleanupDirectX();
 				}
 				toothChartDirectX=new ToothChartDirectX();//(hardwareMode,preferredPixelFormatNum);
 				//preferredPixelFormatNum=toothChart.SelectedPixelFormatNumber;

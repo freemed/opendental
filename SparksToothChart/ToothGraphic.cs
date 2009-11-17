@@ -17,7 +17,7 @@ namespace SparksToothChart {
 		private string toothID;
 		public List<VertexNormal> VertexNormals;
 		///<summary>Corresponds to VertexNormal list, but DirectX required the verticies to be cached for rendering triangles.</summary>
-		public VertexBuffer vb;
+		public VertexBuffer vb=null;
 		///<summary>Collection of type ToothGroup.</summary>
 		public List<ToothGroup> Groups;
 		private bool visible;
@@ -161,10 +161,7 @@ namespace SparksToothChart {
 
 		///<summary>Converts the VertexNormals list into a vertex buffer so the verticies can be used to render DirectX triangles.</summary>
 		public void PrepareForDirectX(Device deviceRef){
-			if(vb!=null){
-				vb.Dispose();
-				vb=null;
-			}
+			CleanupDirectX();
 			CustomVertex.PositionNormal[] verts=new CustomVertex.PositionNormal[VertexNormals.Count];
 			for(int i=0;i<VertexNormals.Count;i++){
 				verts[i].X=VertexNormals[i].Vertex.X;
@@ -177,6 +174,16 @@ namespace SparksToothChart {
 			vb=new VertexBuffer(typeof(CustomVertex.PositionNormal),CustomVertex.PositionNormal.StrideSize*verts.Length,
 				deviceRef,Usage.WriteOnly,CustomVertex.PositionNormal.Format,Pool.Managed);
 			vb.SetData(verts,0,LockFlags.None);			
+		}
+
+		public void CleanupDirectX(){
+			if(vb!=null) {
+				vb.Dispose();
+				vb=null;
+			}
+			for(int g=0;g<Groups.Count;g++){
+				Groups[g].CleanupDirectX();
+			}
 		}
 
 		///<summary>Resets this tooth graphic to original location, visiblity, and no restorations.  If primary tooth, then Visible=false.  </summary>

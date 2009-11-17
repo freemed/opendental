@@ -50,43 +50,38 @@ namespace SparksToothChart {
 			pp.MultiSample=MultiSampleType.FourSamples;//Anti-alias settings.
 			device=new Device(0,DeviceType.Hardware,this,CreateFlags.SoftwareVertexProcessing,pp);
 			device.DeviceReset+=new EventHandler(this.OnDeviceReset);
+			device.DeviceLost+=new EventHandler(this.OnDeviceLost);
 			OnDeviceReset(device,null);
 			this.Font=new System.Drawing.Font("Arial",9f);//Required for calculating font background rectangle size in ToothChartData.
+			g=this.CreateGraphics();// Graphics.FromHwnd(this.Handle);
+		}
+
+		public void CleanupDirectX(){
+			if(xSealantFont!=null){
+				xSealantFont.Dispose();
+				xSealantFont=null;
+			}
+			if(xfont!=null){
+				xfont.Dispose();
+				xfont=null;
+			}
+			if(device!=null){
+				for(int i=0;i<TcData.ListToothGraphics.Count;i++) {
+					TcData.ListToothGraphics[i].CleanupDirectX();
+				}
+			}
+		}
+
+		///<summary></summary>
+		public void OnDeviceReset(object sender,EventArgs e){
+			CleanupDirectX();
+			device=sender as Device;
 			xfont=new Microsoft.DirectX.Direct3D.Font(device,
 				15,6,FontWeight.Normal,1,false,CharacterSet.Ansi,Precision.Device,
 				FontQuality.ClearType,PitchAndFamily.DefaultPitch,"Arial");
 			xSealantFont=new Microsoft.DirectX.Direct3D.Font(device,
 				25,9,FontWeight.Regular,1,false,CharacterSet.Ansi,Precision.Device,
 				FontQuality.ClearType,PitchAndFamily.DefaultPitch,"Arial");
-			g=this.CreateGraphics();// Graphics.FromHwnd(this.Handle);
-		}
-
-		public void CleanUpDirectX(){
-			xSealantFont.Dispose();
-			xfont.Dispose();
-			for(int i=0;i<TcData.ListToothGraphics.Count;i++) {
-				ToothGraphic toothGraphic=TcData.ListToothGraphics[i];
-				for(int j=0;j<toothGraphic.Groups.Count;j++) {
-					ToothGroup group=toothGraphic.Groups[j];
-					if(group.facesDirectX!=null) {//js- I added this to prevent a crash here
-						group.facesDirectX.Dispose();
-						group.facesDirectX=null;
-					}
-				}
-				if(toothGraphic.vb!=null) {
-					toothGraphic.vb.Dispose();
-					toothGraphic.vb=null;
-				}
-			}
-			if(device!=null) {
-				device.Dispose();
-				device=null;
-			}
-		}
-
-		///<summary>TODO: Handle the situation when there are suboptimal graphics cards.</summary>
-		public void OnDeviceReset(object sender,EventArgs e){
-			device=sender as Device;
 			for(int i=0;i<TcData.ListToothGraphics.Count;i++) {
 				ToothGraphic tooth=TcData.ListToothGraphics[i];
 				tooth.PrepareForDirectX(device);
@@ -95,6 +90,10 @@ namespace SparksToothChart {
 					group.PrepareForDirectX(device);
 				}
 			}
+		}
+
+		public void OnDeviceLost(object sender,EventArgs e){
+			CleanupDirectX();
 		}
 
 		protected override void OnPaintBackground(PaintEventArgs e) {

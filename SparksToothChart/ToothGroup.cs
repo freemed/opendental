@@ -18,7 +18,7 @@ namespace SparksToothChart {
 		//public int[][][] Faces;
 		public List<Face> Faces;
 		///<summary>Corresponds to the Faces list. Indicies must be cached to draw DirectX triangles.</summary>
-		public IndexBuffer facesDirectX;
+		public IndexBuffer facesDirectX=null;
 		///<summary>Corresponds to the number of indicies referenced by the facesDirectX IndexBuffer. This relates to triangles, not to Polygons as in the Faces list. Must be a multiple of 3.</summary>
 		public int NumIndicies=0;
 
@@ -40,10 +40,7 @@ namespace SparksToothChart {
 		}
 
 		public void PrepareForDirectX(Device device){
-			if(facesDirectX!=null){
-				facesDirectX.Dispose();
-				facesDirectX=null;
-			}
+			CleanupDirectX();
 			//Prepare the indicies into an index buffer.
 			//When drawing with a single index buffer inside of DirectX, all primitives must be the same type.
 			//Furthermore, there are no polygons inside of DirectX, only triangles. Therefore, at this point
@@ -63,6 +60,13 @@ namespace SparksToothChart {
 			facesDirectX=new IndexBuffer(typeof(int),indicies.Length,device,Usage.None,Pool.Managed);
 			facesDirectX.SetData(indicies,0,LockFlags.None);
 			NumIndicies=indicies.Length;
+		}
+
+		public void CleanupDirectX(){
+			if(facesDirectX!=null){
+				facesDirectX.Dispose();
+				facesDirectX=null;
+			}
 		}
 
 		public override string ToString() {
