@@ -558,15 +558,15 @@ namespace OpenDentBusiness{
 				}
 			}
 			//remove types from the list which do not apply to this patient.
-			for(int i=0;i<typeList.Count;i++){
-				if(isPerio){
-					if(PrefC.GetLong(PrefName.RecallTypeSpecialProphy)==typeList[i].RecallTypeNum){
+			for(int i=0;i<typeList.Count;i++){//it's ok to not go backwards because we immediately break.
+				if(isPerio) {
+					if(PrefC.GetLong(PrefName.RecallTypeSpecialProphy)==typeList[i].RecallTypeNum) {
 						typeList.RemoveAt(i);
 						break;
 					}
 				}
-				else{
-					if(PrefC.GetLong(PrefName.RecallTypeSpecialPerio)==typeList[i].RecallTypeNum){
+				else {
+					if(PrefC.GetLong(PrefName.RecallTypeSpecialPerio)==typeList[i].RecallTypeNum) {
 						typeList.RemoveAt(i);
 						break;
 					}

@@ -6186,11 +6186,12 @@ namespace OpenDental{
 				FillToothChart(true);
 			}
 			else if(radioEraser.Checked){
-				for(int i=0;i<ToothInitialList.Count;i++){
-					if(ToothInitialList[i].InitialType!=ToothInitialType.Drawing){
+				//for(int i=0;i<ToothInitialList.Count;i++){
+				for(int i=ToothInitialList.Count-1;i>=0;i--) {//go backwards
+					if(ToothInitialList[i].InitialType!=ToothInitialType.Drawing) {
 						continue;
 					}
-					if(ToothInitialList[i].DrawingSegment!=e.DrawingSegement){
+					if(ToothInitialList[i].DrawingSegment!=e.DrawingSegement) {
 						continue;
 					}
 					ToothInitials.Delete(ToothInitialList[i]);
