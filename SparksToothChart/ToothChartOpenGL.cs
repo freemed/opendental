@@ -603,7 +603,7 @@ namespace SparksToothChart {
 			//{
 			//	tooth_id=ToothGraphic.PermToPri(intTooth.ToString());
 			//}
-			if(isFullRedraw){//if redrawing all numbers
+			if(isFullRedraw) {//if redrawing all numbers
 				if(TcData.ListToothGraphics[tooth_id].HideNumber) {//and this is a "hidden" number
 					Gl.glPopMatrix();
 					return;//skip
@@ -615,9 +615,8 @@ namespace SparksToothChart {
 					return;
 				}
 			}
-//fix this.  No calls to OpenDentBusiness that require database.
-//string displayNum=OpenDentBusiness.Tooth.GetToothLabelGraphic(tooth_id);
-			string displayNum=tooth_id;
+			string displayNum=OpenDentBusiness.Tooth.GetToothLabelGraphic(tooth_id,TcData.ToothNumberingNomenclature);
+			//string displayNum=tooth_id;
 			float toMm=1f/TcData.ScaleMmToPix;
 			//float toMm=(float)WidthProjection/(float)Width;//mm/pix, a ratio that is used for conversions below. Fix this.
 			//float strWidthMm=MeasureStringMm(displayNum);

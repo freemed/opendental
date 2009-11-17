@@ -43,6 +43,7 @@ namespace SparksToothChart {
 		public List<Point> PointList;
 		///<summary>The size of the current drawing in pixels / the size of the original drawing.  This number is used to scale original drawing to the new size.</summary>
 		public float PixelScaleRatio;
+		public ToothNumberingNomenclature ToothNumberingNomenclature;
 
 		public ToothChartData() {
 			ListToothGraphics=new ToothGraphicCollection();

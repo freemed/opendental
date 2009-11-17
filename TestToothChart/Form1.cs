@@ -1112,23 +1112,30 @@ namespace TestToothChart {
 		}
 
 		private void butUniversal_Click(object sender,EventArgs e) {
-			//toothChart2D.nu
-			//toothChartOpenGL.AddDrawingSegment(ti);
-			//toothChartDirectX.AddDrawingSegment(ti);
+			toothChart2D.SetToothNumberingNomenclature(ToothNumberingNomenclature.Universal);
+			toothChartOpenGL.SetToothNumberingNomenclature(ToothNumberingNomenclature.Universal);
+			toothChartDirectX.SetToothNumberingNomenclature(ToothNumberingNomenclature.Universal);
 		}
 
-		private void butFDA_Click(object sender,EventArgs e) {
-
+		private void butFDI_Click(object sender,EventArgs e) {
+			toothChart2D.SetToothNumberingNomenclature(ToothNumberingNomenclature.FDI);
+			toothChartOpenGL.SetToothNumberingNomenclature(ToothNumberingNomenclature.FDI);
+			toothChartDirectX.SetToothNumberingNomenclature(ToothNumberingNomenclature.FDI);
 		}
 
 		private void butHaderup_Click(object sender,EventArgs e) {
-
+			toothChart2D.SetToothNumberingNomenclature(ToothNumberingNomenclature.Haderup);
+			toothChartOpenGL.SetToothNumberingNomenclature(ToothNumberingNomenclature.Haderup);
+			toothChartDirectX.SetToothNumberingNomenclature(ToothNumberingNomenclature.Haderup);
 		}
 
 		private void butPalmer_Click(object sender,EventArgs e) {
-
+			toothChart2D.SetToothNumberingNomenclature(ToothNumberingNomenclature.Palmer);
+			toothChartOpenGL.SetToothNumberingNomenclature(ToothNumberingNomenclature.Palmer);
+			toothChartDirectX.SetToothNumberingNomenclature(ToothNumberingNomenclature.Palmer);
 		}
 
+		
 	
 
 		

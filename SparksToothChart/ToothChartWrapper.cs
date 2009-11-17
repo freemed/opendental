@@ -487,7 +487,7 @@ namespace SparksToothChart {
 		}
 
 		public void SetToothNumberingNomenclature(ToothNumberingNomenclature nomenclature) {
-			//tcData.ToothNumberingNomenclature=nomenclature;
+			tcData.ToothNumberingNomenclature=nomenclature;
 			Invalidate();
 		}
 
