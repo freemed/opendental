@@ -779,7 +779,21 @@ namespace OpenDentBusiness{
 			//procDate;//was already calculated in the deductible section.
 			//Writeoff Estimate------------------------------------------------------------------------------------------
 			if(plan.PlanType=="p") {//PPO
-				double normalWriteOff=procFee-allowed;//This is what the normal writeoff would be if no other insurance was involved.
+				//we can't use the allowed previously calculated, because it might be the allowed of a substituted code.
+				//so we will calculate the allowed all over again, but this time, without using a substitution code.
+				//AllowedFeeSched and toothNum do not need to be passed in.  codeSubstNone is set to true to not subst.
+				double carrierAllowedNoSubst=InsPlans.GetAllowed(ProcedureCodes.GetProcCode(codeNum).ProcCode,plan.FeeSched,0,
+					true,"p","",cp.ProvNum);
+				double allowedNoSubst=procFee;
+				if(carrierAllowedNoSubst != -1) {
+					if(carrierAllowedNoSubst > procFee) {
+						allowedNoSubst=procFee;
+					}
+					else {
+						allowedNoSubst=carrierAllowedNoSubst;
+					}
+				}
+				double normalWriteOff=procFee-allowedNoSubst;//This is what the normal writeoff would be if no other insurance was involved.
 				if(normalWriteOff<0) {
 					normalWriteOff=0;
 				}
