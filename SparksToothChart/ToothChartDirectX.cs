@@ -551,8 +551,7 @@ namespace SparksToothChart {
 					return;
 				}
 			}
-			//fix this.  No calls to OpenDentBusiness that require database.
-			string displayNum=tooth_id;
+			string displayNum=Tooth.GetToothLabelGraphic(tooth_id,TcData.ToothNumberingNomenclature);
 			float toMm=1f/TcData.ScaleMmToPix;
 			RectangleF recMm=TcData.GetNumberRecMm(tooth_id,g);
 			//recMm=new RectangleF(recMm.X,recMm.Y-1f*toMm,recMm.Width,recMm.Height);//Due to anti-aliasing, the boxes overlap one or two teeth unless adjusted.

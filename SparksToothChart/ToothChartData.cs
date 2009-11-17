@@ -131,11 +131,7 @@ namespace SparksToothChart {
 				}
 			}
 			xPos+=GetTransX(tooth_id);
-			//fix this.
-			//string displayNum=OpenDentBusiness.Tooth.GetToothLabelGraphic(tooth_id);
-			//string displayNum=tooth_id;
-			//float strWidth=MeasureStringMm(displayNum);
-			string displayNum=tooth_id;
+			string displayNum=OpenDentBusiness.Tooth.GetToothLabelGraphic(tooth_id,ToothNumberingNomenclature);
 			float strWidthMm=g.MeasureString(displayNum,Font).Width/ScaleMmToPix;
 			xPos-=strWidthMm/2f;
 			//only use the ShiftM portion of the user translation

@@ -304,9 +304,7 @@ namespace SparksToothChart {
 					return;
 				}
 			}
-			//fix this.  No calls to OpenDentBusiness that require database.
-			//string displayNum=OpenDentBusiness.Tooth.GetToothLabelGraphic(tooth_id);
-			string displayNum=tooth_id;
+			string displayNum=OpenDentBusiness.Tooth.GetToothLabelGraphic(tooth_id,TcData.ToothNumberingNomenclature);
 			float toMm=1f/TcData.ScaleMmToPix;
 			Rectangle rec=TcData.GetNumberRecPix(tooth_id,g);
 			//Rectangle recPix=TcData.ConvertRecToPix(recMm);
