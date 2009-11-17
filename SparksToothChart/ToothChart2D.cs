@@ -60,11 +60,9 @@ namespace SparksToothChart {
 			//base.OnPaintBackground(e);//don't draw background
 		}
 
-		///<summary>Only called when in simple graphical mode.</summary>
+		///<summary></summary>
 		private void DrawFacialView(ToothGraphic toothGraphic,Graphics g) {
-			float x,y;
-			x=TcData.GetTransXpix(toothGraphic.ToothID);
-			y=TcData.GetTransYfacialPix(toothGraphic.ToothID);
+			/*
 			if(toothGraphic.Visible
 				|| (toothGraphic.IsCrown && toothGraphic.IsImplant)
 				|| toothGraphic.IsPontic) {
@@ -82,39 +80,45 @@ namespace SparksToothChart {
 				else {
 					//g.FillRectangle(new SolidBrush(colorBackSimple),x-w/2f,Height/2f+20,w,Height/2f-20);
 				}
-			}
+			}*/
 			if(toothGraphic.DrawBigX) {
-				float halfxwidth=6;
-				float xheight=58;
-				float offsetofx=73;
+				float x=TcData.GetTransXpix(toothGraphic.ToothID);
+				float y=TcData.GetTransYfacialPix(toothGraphic.ToothID);
+				float halfw=6f*TcData.PixelScaleRatio;
+				float halfh=29f*TcData.PixelScaleRatio;//58;
+				//float offsety=73;
 				//toothGraphic.colorX
-				if(ToothGraphic.IsMaxillary(toothGraphic.ToothID)) {
-					g.DrawLine(new Pen(toothGraphic.colorX),x-halfxwidth,Height/2f-offsetofx-xheight,x+halfxwidth,Height/2f-offsetofx);
-					g.DrawLine(new Pen(toothGraphic.colorX),x+halfxwidth,Height/2f-offsetofx-xheight,x-halfxwidth,Height/2f-offsetofx);
-				}
-				else {//Mandible
-					g.DrawLine(new Pen(toothGraphic.colorX),x-halfxwidth,Height/2f+offsetofx+xheight,x+halfxwidth,Height/2f+offsetofx);
-					g.DrawLine(new Pen(toothGraphic.colorX),x+halfxwidth,Height/2f+offsetofx+xheight,x-halfxwidth,Height/2f+offsetofx);
-				}
+				//if(ToothGraphic.IsMaxillary(toothGraphic.ToothID)) {
+					//g.DrawLine(new Pen(toothGraphic.colorX),x-halfxwidth,Height/2f-offsetofx-xheight,x+halfxwidth,Height/2f-offsetofx);
+					//g.DrawLine(new Pen(toothGraphic.colorX),x+halfxwidth,Height/2f-offsetofx-xheight,x-halfxwidth,Height/2f-offsetofx);
+					g.DrawLine(new Pen(toothGraphic.colorX,2f*TcData.PixelScaleRatio),x-halfw,y-halfh,x+halfw,y+halfh);
+					g.DrawLine(new Pen(toothGraphic.colorX,2f*TcData.PixelScaleRatio),x+halfw,y-halfh,x-halfw,y+halfh);
+				//}
+				//else {//Mandible
+					//g.DrawLine(new Pen(toothGraphic.colorX),x-halfxwidth,Height/2f+offsetofx+xheight,x+halfxwidth,Height/2f+offsetofx);
+					//g.DrawLine(new Pen(toothGraphic.colorX),x+halfxwidth,Height/2f+offsetofx+xheight,x-halfxwidth,Height/2f+offsetofx);
+				//	g.DrawLine(new Pen(toothGraphic.colorX),x-halfw,y+halfh,x+halfw,y);
+				//	g.DrawLine(new Pen(toothGraphic.colorX),x+halfw,y+halfh,x-halfw,y);
+				//}
 			}
-			if(toothGraphic.Visible && toothGraphic.IsRCT) {//draw RCT
+			//if(toothGraphic.Visible && toothGraphic.IsRCT) {//draw RCT
 				//x=,y= etc
 				//toothGraphic.colorRCT
 				//?
-			}
+			//}
 			//if(toothGraphic.Visible && toothGraphic.IsBU) {//BU or Post
 				//?
 			//}
-			if(toothGraphic.IsImplant) {
+			//if(toothGraphic.IsImplant) {
 				//?
-			}
+			//}
 		}
 
 		private void DrawOcclusalView(ToothGraphic toothGraphic,Graphics g) {
 			//now the occlusal surface. Absolute pixels instead of mm relative to center.
 			float x,y;
 			x=TcData.GetTransXpix(toothGraphic.ToothID);
-			y=TcData.GetTransYocclusalPix(toothGraphic.ToothID,Height);
+			y=TcData.GetTransYocclusalPix(toothGraphic.ToothID);
 			if(toothGraphic.Visible//might not be visible if an implant
 				|| (toothGraphic.IsCrown && toothGraphic.IsImplant)//a crown on an implant will paint
 			//pontics won't paint, because tooth is invisible
@@ -139,8 +143,8 @@ namespace SparksToothChart {
 					continue;
 				}
 				x=TcData.GetTransXpix(toothGraphic.ToothID);
-				y=TcData.GetTransYocclusalPix(toothGraphic.ToothID,Height);
-				float sqB=4;//half the size of the central sqare. B for Big.
+				y=TcData.GetTransYocclusalPix(toothGraphic.ToothID);
+				float sqB=4;//half the size of the central square. B for Big.
 				float cirB=9.5f;//radius of outer circle
 				float sqS=3;//S for small
 				float cirS=8f;

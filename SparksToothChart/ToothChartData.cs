@@ -190,19 +190,18 @@ namespace SparksToothChart {
 
 		///<summary>In control coords rather than mm.  This is not really meaninful except in 2D mode.  It calculates the location of the facial view in order to draw the big red X.</summary>
 		public float GetTransYfacialPix(string tooth_id) {
-			float basic=30;
 			if(ToothGraphic.IsMaxillary(tooth_id)) {
-				return sizeControl.Height/2-basic;
+				return sizeControl.Height/2-(101f*PixelScaleRatio);
 			}
-			return sizeControl.Height/2+basic;
+			return sizeControl.Height/2+(101f*PixelScaleRatio);
 		}
 
 		///<summary>In control coords rather than mm.  This is not really meaninful except in 2D mode.  It calculates the location of the occlusal surface in order to draw the bullseye.</summary>
-		public float GetTransYocclusalPix(string tooth_id,int heightControl) {
+		public float GetTransYocclusalPix(string tooth_id){//,int heightControl) {
 			if(ToothGraphic.IsMaxillary(tooth_id)) {
-				return heightControl/2-48f;
+				return sizeControl.Height/2-(48f*PixelScaleRatio);
 			}
-			return heightControl/2+48f;
+			return sizeControl.Height/2+(48f*PixelScaleRatio);
 		}
 
 		///<summary>Pri or perm tooth numbers are valid.  Only locations of perm teeth are stored.</summary>
