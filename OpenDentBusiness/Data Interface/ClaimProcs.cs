@@ -650,14 +650,15 @@ namespace OpenDentBusiness{
 					cp.CopayAmt=0;
 				}
 				if(cp.CopayOverride != -1) {//override the copay
-					cp.WriteOff=cp.BaseEst-cp.CopayOverride;
+					cp.WriteOffEst=cp.BaseEst-cp.CopayOverride;
 				}
 				else if(cp.CopayAmt!=-1) {//use the calculated copay
-					cp.WriteOff=cp.BaseEst-cp.CopayAmt;
+					cp.WriteOffEst=cp.BaseEst-cp.CopayAmt;
 				}
-				if(cp.WriteOff<0) {
-					cp.WriteOff=0;
+				if(cp.WriteOffEst<0) {
+					cp.WriteOffEst=0;
 				}
+				cp.WriteOff=cp.WriteOffEst;
 				cp.DedApplied=0;
 				cp.DedEst=0;
 				cp.Percentage=-1;
@@ -812,9 +813,10 @@ namespace OpenDentBusiness{
 					cp.WriteOffEst=normalWriteOff;
 				}
 			}
-			else if(plan.PlanType=="c") {//capitation
-				cp.WriteOffEst=cp.WriteOff;//this probably needs to change
-			}
+			//capitation calculation never makes it this far:
+			//else if(plan.PlanType=="c") {//capitation
+			//	cp.WriteOffEst=cp.WriteOff;//this probably needs to change
+			//}
 			else {
 				cp.WriteOffEst=-1;
 			}

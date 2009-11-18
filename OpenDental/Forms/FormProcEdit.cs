@@ -2328,7 +2328,9 @@ namespace OpenDental{
 				}
 				row.Cells.Add(ClaimProcs.GetPercentageDisplay(ClaimProcsForProc[i]));
 				row.Cells.Add(ClaimProcs.GetEstimateDisplay(ClaimProcsForProc[i]));
-				if(ClaimProcsForProc[i].Status==ClaimProcStatus.Estimate) {
+				if(ClaimProcsForProc[i].Status==ClaimProcStatus.Estimate
+					|| ClaimProcsForProc[i].Status==ClaimProcStatus.CapEstimate) 
+				{
 					row.Cells.Add("");
 					row.Cells.Add(ClaimProcs.GetWriteOffEstimateDisplay(ClaimProcsForProc[i]));
 				}
