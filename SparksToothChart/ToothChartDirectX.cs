@@ -436,7 +436,10 @@ namespace SparksToothChart {
 //2. moving the fullscreen window so that it uncovers a toothChartDirectX below it.
 //AccessViolationException.  Attempted to read or write protected memory.
 //Although the error message is always the same, it sometimes doesn't indicate that the following line is the problem, just giving an error with no line.
-				device.DrawIndexedPrimitives(PrimitiveType.TriangleList,0,0,toothGraphic.VertexNormals.Count,0,group.NumIndicies/3);				
+				try {
+					device.DrawIndexedPrimitives(PrimitiveType.TriangleList,0,0,toothGraphic.VertexNormals.Count,0,group.NumIndicies/3);
+				}
+				catch { }
 			}
 		}
 
