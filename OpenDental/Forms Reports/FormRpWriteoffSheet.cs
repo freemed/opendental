@@ -281,7 +281,7 @@ namespace OpenDental{
 			report.SetColumnPos(this,2,"Carrier",475);
 			report.SetColumnPos(this,3,"Provider",625);
 			report.SetColumnPos(this,4,"Amount",700,HorizontalAlignment.Right);
-			report.SetColumnPos(this,5,"",880,HorizontalAlignment.Right);
+			report.SetColumnPos(this,5,"",980,HorizontalAlignment.Right);
 			FormQuery2.ShowDialog();
 			DialogResult=DialogResult.OK;
 		}
