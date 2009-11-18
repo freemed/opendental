@@ -429,6 +429,10 @@ namespace OpenDental{
 		}
 
 		private static void FillFieldsForRx(Sheet sheet,RxPat rx,Patient pat,Provider prov) {
+			Clinic clinic=null;
+			if(pat.ClinicNum != 0) {
+				clinic=Clinics.GetClinic(pat.ClinicNum);
+			}
 			string text;
 			foreach(SheetField field in sheet.SheetFields) {
 				switch(field.FieldName) {
@@ -436,16 +440,34 @@ namespace OpenDental{
 						field.FieldValue=prov.GetFormalName();
 						break;
 					case "prov.address":
-						field.FieldValue=PrefC.GetString(PrefName.PracticeAddress);
-						if(PrefC.GetString(PrefName.PracticeAddress2)!=""){
-							field.FieldValue+="\r\n"+PrefC.GetString(PrefName.PracticeAddress2);
+						if(clinic==null) {
+							field.FieldValue=PrefC.GetString(PrefName.PracticeAddress);
+							if(PrefC.GetString(PrefName.PracticeAddress2)!="") {
+								field.FieldValue+="\r\n"+PrefC.GetString(PrefName.PracticeAddress2);
+							}
+						}
+						else{
+							field.FieldValue=clinic.Address;
+							if(clinic.Address2!="") {
+								field.FieldValue+="\r\n"+clinic.Address2;
+							}
 						}
 						break;
 					case "prov.cityStateZip":
-						field.FieldValue=PrefC.GetString(PrefName.PracticeCity)+", "+PrefC.GetString(PrefName.PracticeST)+" "+PrefC.GetString(PrefName.PracticeZip);;
+						if(clinic==null) {
+							field.FieldValue=PrefC.GetString(PrefName.PracticeCity)+", "+PrefC.GetString(PrefName.PracticeST)+" "+PrefC.GetString(PrefName.PracticeZip);
+						}
+						else {
+							field.FieldValue=clinic.City+", "+clinic.State+" "+clinic.Zip;
+						}
 						break;
 					case "prov.phone":
-						text=PrefC.GetString(PrefName.PracticePhone);
+						if(clinic==null) {
+							text=PrefC.GetString(PrefName.PracticePhone);
+						}
+						else {
+							text=clinic.Phone;
+						}
 						field.FieldValue=text;
 						if(text.Length==10) {
 							field.FieldValue="("+text.Substring(0,3)+")"+text.Substring(3,3)+"-"+text.Substring(6);
