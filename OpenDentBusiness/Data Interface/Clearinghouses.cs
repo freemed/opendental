@@ -203,7 +203,7 @@ namespace OpenDentBusiness{
 				RefreshCache();
 			}
 			if(payorID!="" && HList.ContainsKey(payorID)){
-				return (int)HList[payorID];
+				return (long)HList[payorID];
 			}
 			//payorID not found
 			Clearinghouse defaultCH=GetDefault();
