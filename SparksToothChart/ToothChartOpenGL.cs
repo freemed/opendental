@@ -827,6 +827,9 @@ namespace SparksToothChart {
 				if(group.GroupType==ToothGroupType.Buildup) {
 					continue;
 				}
+				if(group.GroupType==ToothGroupType.None) {
+					continue;
+				}
 				if(!group.Visible) {
 					continue;
 				}
