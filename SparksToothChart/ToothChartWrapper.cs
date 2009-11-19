@@ -505,6 +505,13 @@ namespace SparksToothChart {
 			base.OnResize(e);
 			tcData.SizeControl=this.Size;
 			Invalidate();
+			if(drawMode==DrawingMode.DirectX){
+				//Fire the resize event for the DirectX tooth chart.
+				//For some reason the Resize() and Size() events don't fire on the DirectX control
+				//if you create them through the designer. Perhaps there is something wrong, but this
+				//works for now.
+				toothChartDirectX.SetSize(this.Size);
+			}
 		}
 
 		public void SetSelected(string tooth_id,bool setValue) {

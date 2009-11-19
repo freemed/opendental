@@ -58,6 +58,16 @@ namespace SparksToothChart {
 			g=this.CreateGraphics();// Graphics.FromHwnd(this.Handle);
 		}
 
+		public void SetSize(Size size){
+			this.Size=size;
+			CleanupDirectX();
+			if(device!=null) {
+				device.Dispose();
+				device=null;
+			}
+			InitializeGraphics();
+		}
+
 		public void CleanupDirectX(){
 			if(xSealantFont!=null){
 				xSealantFont.Dispose();
@@ -96,6 +106,7 @@ namespace SparksToothChart {
 
 		public void OnDeviceResizing(object sender,EventArgs e) {
 			//Hmm, is this function ever called? I couldn't make it fire with initial testing.
+			int a=0;
 		}
 
 		protected override void OnPaintBackground(PaintEventArgs e) {
