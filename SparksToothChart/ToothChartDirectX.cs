@@ -237,7 +237,6 @@ namespace SparksToothChart {
 			device.RenderState.Lighting=false;
 			Matrix lineMatrix=ScreenSpaceMatrix();
 			Line line=new Line(device);
-			line.Antialias=false;
 			line.GlLines=true;
 			if(toothGraphic.DrawBigX) {
 				//Thickness of line depends on size of window.
@@ -405,7 +404,8 @@ namespace SparksToothChart {
 			device.SetStreamSource(0,toothGraphic.vb,0);
 			for(int g=0;g<toothGraphic.Groups.Count;g++) {
 				group=(ToothGroup)toothGraphic.Groups[g];
-				if(!group.Visible || group.facesDirectX==null || group.GroupType==ToothGroupType.Buildup) {
+				if(!group.Visible || group.facesDirectX==null || 
+					group.GroupType==ToothGroupType.Buildup || group.GroupType==ToothGroupType.None) {
 					continue;
 				}
 				Material material=new Material();
