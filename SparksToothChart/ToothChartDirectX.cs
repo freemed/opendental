@@ -32,7 +32,7 @@ namespace SparksToothChart {
 		private string hotTooth;
 		///<summary>The previous hotTooth.  If this is different than hotTooth, then mouse has just now moved to a new tooth.  Can be 0 to represent no previous.</summary>
 		private string hotToothOld;
-		private bool lostDevice=true;
+		private bool deviceLost=true;
 
 		public ToothChartDirectX() {
 			InitializeComponent();
@@ -60,6 +60,10 @@ namespace SparksToothChart {
 
 		public void SetSize(Size size){
 			this.Size=size;
+			Reinitialize();
+		}
+
+		public void Reinitialize(){
 			CleanupDirectX();
 			if(device!=null) {
 				device.Dispose();
@@ -86,7 +90,7 @@ namespace SparksToothChart {
 
 		///<summary></summary>
 		public void OnDeviceReset(object sender,EventArgs e){
-			lostDevice=false;
+			deviceLost=false;
 			CleanupDirectX();
 			device=sender as Device;
 			xfont=new Microsoft.DirectX.Direct3D.Font(device,
@@ -101,12 +105,11 @@ namespace SparksToothChart {
 		}
 
 		public void OnDeviceLost(object sender,EventArgs e){
-			lostDevice=true;
+			deviceLost=true;
 		}
 
 		public void OnDeviceResizing(object sender,EventArgs e) {
 			//Hmm, is this function ever called? I couldn't make it fire with initial testing.
-			int a=0;
 		}
 
 		protected override void OnPaintBackground(PaintEventArgs e) {
@@ -119,19 +122,29 @@ namespace SparksToothChart {
 
 		protected override void OnPaint(PaintEventArgs pe) {
 			//Color backColor=Color.FromArgb(150,145,152);
-//js After Windows switchUser/logon, lostDevice remains true, causing tooth chart to no longer show.
-			if(device==null || lostDevice) {
+			if(device==null || deviceLost) {
 				//When no rendering context has been set, simply display the control
 				//as a black rectangle. This will make the control draw as a blank
 				//rectangle when in the designer. 
 				pe.Graphics.FillRectangle(new SolidBrush(TcData.ColorBackground),new Rectangle(0,0,Width,Height));
 				return;
 			}
-//js I added this to prevent a crash.  See note at end of drawScened, line 207.
+			//When the OS user is switched then switched back or when coming back from stand by mode, the OS calls the OnPaint function
+			//even before it calls the OnDeviceLost() function. When this happens, the render will fail
+			//because the DirectX device is not in a valid state to be rendered to. Before the exception is returned from Render(), 
+			//a call is made by the OS to OnDeviceLost(), which sets deviceLost=true (when the OnPaint() function begins, deviceLost=false)
+			//so that further rendering will not occur with the device in its invalid state.
 			try {
 				Render();
 			}
-			catch { }
+			catch { 
+				if(deviceLost){
+					//Rendering failed because our device is invalid. Reinitialize the device and cached objects and force
+					//the control to be rerendered.
+					Reinitialize();
+					Invalidate();
+				}
+			}
 		}
 
 		protected void Render() {
