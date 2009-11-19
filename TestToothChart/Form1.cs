@@ -1055,7 +1055,7 @@ namespace TestToothChart {
 		private void butShowDrawing_Click(object sender,EventArgs e) {
 			ToothInitial ti=new ToothInitial();
 			ti.ColorDraw=Color.Blue;
-			ti.DrawingSegment="30,30;70,30;70,70;30,70;30,30";
+			ti.DrawingSegment="30,30;70,30;70,70;50,80;50,90;30,70;30,30";
 			ti.InitialType=ToothInitialType.Drawing;
 			toothChart2D.AddDrawingSegment(ti);
 			toothChartOpenGL.AddDrawingSegment(ti);

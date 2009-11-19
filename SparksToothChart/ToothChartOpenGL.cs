@@ -513,8 +513,8 @@ namespace SparksToothChart {
 			Gl.glDisable(Gl.GL_DEPTH_TEST);
 			//
 			//
-			float lWidth=2.5f*TcData.PixelScaleRatio;
-			Gl.glLineWidth(lWidth);
+			Gl.glLineWidth(2.2f*TcData.PixelScaleRatio);
+			Gl.glPointSize(1.8f*TcData.PixelScaleRatio);//slightly smaller
 			string[] pointStr;
 			List<PointF> points;
 			Point point;
@@ -546,7 +546,16 @@ namespace SparksToothChart {
 					Gl.glVertex3f(points[i].X,points[i].Y,0);
 				}
 				Gl.glEnd();
-				//no filled circle at intersections
+				//now draw a filled circle at each line strip intersection to make it look nicer when viewing fullscreen
+				Gl.glBegin(Gl.GL_POINTS);
+				for(int i=0;i<points.Count;i++){
+					//but ignore the first and last.  We are only concerned with where lines meet.
+					if(i==0 || i==points.Count-1){
+						continue;
+					}
+					Gl.glVertex3f(points[i].X,points[i].Y,0);
+				}
+				Gl.glEnd();
 			}
 			Gl.glPopMatrix();
 		}
