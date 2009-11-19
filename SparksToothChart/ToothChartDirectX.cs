@@ -537,7 +537,15 @@ namespace SparksToothChart {
 
 		private void DrawNumbersAndLines() {
 			//Draw the center line.
-			g.DrawLine(new Pen(Brushes.White),0,this.Height/2,this.Width,this.Height/2);
+			Line centerLine=new Line(device);
+			centerLine.Width=1f*TcData.PixelScaleRatio;
+			centerLine.Antialias=false;
+			centerLine.Begin();//Must call Line.Begin() in order for Antialias=false to take effect.
+			centerLine.Draw(new Vector2[] {
+				new Vector2(-1,this.Height/2),
+				new Vector2(this.Width,this.Height/2)},
+				Color.White);
+			centerLine.End();
 			//Draw the tooth numbers.
 			string tooth_id;
 			for(int i=1;i<=52;i++) {
