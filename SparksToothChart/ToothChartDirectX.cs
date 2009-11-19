@@ -119,6 +119,7 @@ namespace SparksToothChart {
 
 		protected override void OnPaint(PaintEventArgs pe) {
 			//Color backColor=Color.FromArgb(150,145,152);
+//js After Windows switchUser/logon, lostDevice remains true, causing tooth chart to no longer show.
 			if(device==null || lostDevice) {
 				//When no rendering context has been set, simply display the control
 				//as a black rectangle. This will make the control draw as a blank
@@ -126,6 +127,7 @@ namespace SparksToothChart {
 				pe.Graphics.FillRectangle(new SolidBrush(TcData.ColorBackground),new Rectangle(0,0,Width,Height));
 				return;
 			}
+//js I added this to prevent a crash.  See note at end of drawScened, line 207.
 			try {
 				Render();
 			}
@@ -203,7 +205,7 @@ namespace SparksToothChart {
 			DrawNumbersAndLines();
 			DrawDrawingSegments();
 			device.EndScene();
-			//This line would crash after windows logoff/logon.  So I added a try/catch at the OnPaint level.
+			//This line would crash after windows switchUser/logon.  So I added a try/catch at the OnPaint level.
 			device.Present();
 		}
 
