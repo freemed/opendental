@@ -126,7 +126,10 @@ namespace SparksToothChart {
 				pe.Graphics.FillRectangle(new SolidBrush(TcData.ColorBackground),new Rectangle(0,0,Width,Height));
 				return;
 			}
-			Render();
+			try {
+				Render();
+			}
+			catch { }
 		}
 
 		protected void Render() {
@@ -200,6 +203,7 @@ namespace SparksToothChart {
 			DrawNumbersAndLines();
 			DrawDrawingSegments();
 			device.EndScene();
+			//This line would crash after windows logoff/logon.  So I added a try/catch at the OnPaint level.
 			device.Present();
 		}
 

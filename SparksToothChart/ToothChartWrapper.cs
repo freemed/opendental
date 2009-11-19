@@ -210,8 +210,7 @@ namespace SparksToothChart {
 				toothChart2D.Location = new System.Drawing.Point(0,0);
 				toothChart2D.Name = "toothChart2D";
 				//toothChart2D.Size = new System.Drawing.Size(719,564);//unnecessary?
-//todo: Add this event
-//toothChart2D.SegmentDrawn+=new ToothChartDrawEventHandler(toothChart_SegmentDrawn);
+				toothChart2D.SegmentDrawn+=new ToothChartDrawEventHandler(toothChart_SegmentDrawn);
 				toothChart2D.TcData=tcData;
 				toothChart2D.SuspendLayout();
 				this.Controls.Add(toothChart2D);

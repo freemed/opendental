@@ -761,7 +761,7 @@
 			this.groupBox11.Controls.Add(this.butGetBitmapOpenGL);
 			this.groupBox11.Controls.Add(this.butGetBitmapDirectX);
 			this.groupBox11.Controls.Add(this.butGetBitmap2D);
-			this.groupBox11.Location = new System.Drawing.Point(536,582);
+			this.groupBox11.Location = new System.Drawing.Point(536,616);
 			this.groupBox11.Name = "groupBox11";
 			this.groupBox11.Size = new System.Drawing.Size(214,99);
 			this.groupBox11.TabIndex = 220;
@@ -869,7 +869,7 @@
 			this.groupBox12.Controls.Add(this.butFullscreenDirectX);
 			this.groupBox12.Controls.Add(this.butFullscreenOpenGL);
 			this.groupBox12.Controls.Add(this.butFullscreen2D);
-			this.groupBox12.Location = new System.Drawing.Point(401,582);
+			this.groupBox12.Location = new System.Drawing.Point(401,616);
 			this.groupBox12.Name = "groupBox12";
 			this.groupBox12.Size = new System.Drawing.Size(120,99);
 			this.groupBox12.TabIndex = 213;

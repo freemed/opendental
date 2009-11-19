@@ -2934,6 +2934,16 @@ namespace OpenDental{
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Printers");
 		}
 
+		private void menuItemGraphics_Click(object sender,EventArgs e) {
+			Cursor=Cursors.WaitCursor;
+			FormGraphics fg=new FormGraphics();
+			fg.ShowDialog();
+			Cursor=Cursors.Default;
+			if(fg.DialogResult==DialogResult.OK) {
+				ContrChart2.InitializeLocalData();
+			}
+		}
+
 		private void menuItemConfig_Click(object sender, System.EventArgs e) {
 			if(!Security.IsAuthorized(Permissions.ChooseDatabase)){
 				return;
@@ -3092,13 +3102,6 @@ namespace OpenDental{
 			FormFeeScheds FormF=new FormFeeScheds();
 			FormF.ShowDialog();
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Fee Schedules");
-		}
-
-		private void menuItemGraphics_Click(object sender,EventArgs e) {
-			FormGraphics fg=new FormGraphics();
-			if(fg.ShowDialog()==DialogResult.OK){
-				ContrChart2.InitializeLocalData();
-			}
 		}
 
 		private void menuItemImaging_Click(object sender,System.EventArgs e) {

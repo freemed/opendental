@@ -460,7 +460,8 @@ namespace SparksToothChart {
 				(float)TcData.ColorText.R/255f,
 				(float)TcData.ColorText.G/255f,
 				(float)TcData.ColorText.B/255f);
-			Gl.glLineWidth((float)Width/400f);//about 1
+			//this still doesn't seem to work quite right, but it's tolerable
+			Gl.glLineWidth(1f*TcData.PixelScaleRatio);
 			Gl.glBegin(Gl.GL_LINE_STRIP);
 				//Gl.glVertex3f(-(float)WidthProjection/2f,0,0);
 				//Gl.glVertex3f((float)WidthProjection/2f,0,0);

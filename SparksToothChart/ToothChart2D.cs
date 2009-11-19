@@ -18,6 +18,9 @@ namespace SparksToothChart {
 		private string hotTooth;
 		///<summary>The previous hotTooth.  If this is different than hotTooth, then mouse has just now moved to a new tooth.  Can be 0 to represent no previous.</summary>
 		private string hotToothOld;
+		///<summary></summary>
+		[Category("Action"),Description("Occurs when the mouse goes up ending a drawing segment.")]
+		public event ToothChartDrawEventHandler SegmentDrawn=null;
 		///<summary>GDI+ handle to this control. Used for line drawing and font measurement.</summary>
 		private Graphics g=null;
 
@@ -523,15 +526,10 @@ namespace SparksToothChart {
 
 		///<summary></summary>
 		protected void OnSegmentDrawn(string drawingSegment) {
-			/*
 			ToothChartDrawEventArgs tArgs=new ToothChartDrawEventArgs(drawingSegment);
 			if(SegmentDrawn!=null) {
 				SegmentDrawn(this,tArgs);
-			}*/
-		}
-
-		private void toothChart_SegmentDrawn(object sender,ToothChartDrawEventArgs e) {
-			//OnSegmentDrawn(e.DrawingSegement);
+			}
 		}
 
 		///<summary>Used by mousedown and mouse move to set teeth selected or unselected.  A similar method is used externally in the wrapper to set teeth selected.  This private method might be faster since it only draws the changes.</summary>
