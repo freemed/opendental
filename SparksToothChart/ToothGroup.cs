@@ -111,6 +111,8 @@ namespace SparksToothChart {
 		///<summary>Only present in the special implant tooth object.</summary>
 		Implant,
 		///<summary>Not used. Just a placeholder</summary>
-		Canals
+		Canals,
+		///<summary>Used where there are unknown materials present such as 'default'.  Always ignore these groups.</summary>
+		None
 	}
 }

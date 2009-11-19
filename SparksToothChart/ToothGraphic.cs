@@ -611,6 +611,9 @@ namespace SparksToothChart {
 						faces=new List<Face>();
 						//group.PaintColor=Color.FromArgb(255,255,253,209);//default to enamel
 						switch(line) {
+							default:
+								group.GroupType=ToothGroupType.None;
+								break;
 							case "g cube1_Cementum":
 								group.GroupType=ToothGroupType.Cementum;
 								break;
