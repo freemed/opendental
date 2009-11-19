@@ -20,6 +20,10 @@ namespace TestToothChart {
 			
 		}
 
+		private void FormFullScreen_FormClosed(object sender,FormClosedEventArgs e) {
+			this.toothChartForBig.Dispose();//Required for DirectX.
+		}
+
 	
 	}
 }

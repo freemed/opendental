@@ -1105,9 +1105,8 @@ namespace TestToothChart {
 
 		private void butFullscreenDirectX_Click(object sender,EventArgs e) {
 			FormFullScreen form=new FormFullScreen();
+			form.toothChartForBig.TcData=toothChartDirectX.TcData.Copy();//Must come before setting the draw mode.
 			form.toothChartForBig.DrawMode=DrawingMode.DirectX;
-			form.toothChartForBig.TcData=toothChartDirectX.TcData.Copy();
-			form.toothChartForBig.InitializeDirectXGraphics();
 			form.ShowDialog();
 		}
 

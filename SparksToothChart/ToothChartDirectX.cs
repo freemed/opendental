@@ -32,6 +32,7 @@ namespace SparksToothChart {
 		private string hotTooth;
 		///<summary>The previous hotTooth.  If this is different than hotTooth, then mouse has just now moved to a new tooth.  Can be 0 to represent no previous.</summary>
 		private string hotToothOld;
+		private bool lostDevice=true;
 
 		public ToothChartDirectX() {
 			InitializeComponent();
@@ -51,6 +52,7 @@ namespace SparksToothChart {
 			device=new Device(0,DeviceType.Hardware,this,CreateFlags.SoftwareVertexProcessing,pp);
 			device.DeviceReset+=new EventHandler(this.OnDeviceReset);
 			device.DeviceLost+=new EventHandler(this.OnDeviceLost);
+			device.DeviceResizing+=new CancelEventHandler(this.OnDeviceResizing);
 			OnDeviceReset(device,null);
 			this.Font=new System.Drawing.Font("Arial",9f);//Required for calculating font background rectangle size in ToothChartData.
 			g=this.CreateGraphics();// Graphics.FromHwnd(this.Handle);
@@ -74,6 +76,7 @@ namespace SparksToothChart {
 
 		///<summary></summary>
 		public void OnDeviceReset(object sender,EventArgs e){
+			lostDevice=false;
 			CleanupDirectX();
 			device=sender as Device;
 			xfont=new Microsoft.DirectX.Direct3D.Font(device,
@@ -83,17 +86,16 @@ namespace SparksToothChart {
 				25,9,FontWeight.Regular,1,false,CharacterSet.Ansi,Precision.Device,
 				FontQuality.ClearType,PitchAndFamily.DefaultPitch,"Arial");
 			for(int i=0;i<TcData.ListToothGraphics.Count;i++) {
-				ToothGraphic tooth=TcData.ListToothGraphics[i];
-				tooth.PrepareForDirectX(device);
-				for(int j=0;j<tooth.Groups.Count;j++) {
-					ToothGroup group=tooth.Groups[j];
-					group.PrepareForDirectX(device);
-				}
+				TcData.ListToothGraphics[i].PrepareForDirectX(device);
 			}
 		}
 
 		public void OnDeviceLost(object sender,EventArgs e){
-			CleanupDirectX();
+			lostDevice=true;
+		}
+
+		public void OnDeviceResizing(object sender,EventArgs e) {
+			//Hmm, is this function ever called? I couldn't make it fire with initial testing.
 		}
 
 		protected override void OnPaintBackground(PaintEventArgs e) {
@@ -106,7 +108,7 @@ namespace SparksToothChart {
 
 		protected override void OnPaint(PaintEventArgs pe) {
 			//Color backColor=Color.FromArgb(150,145,152);
-			if(device==null) {
+			if(device==null || lostDevice) {
 				//When no rendering context has been set, simply display the control
 				//as a black rectangle. This will make the control draw as a blank
 				//rectangle when in the designer. 
@@ -402,7 +404,7 @@ namespace SparksToothChart {
 			device.SetStreamSource(0,toothGraphic.vb,0);
 			for(int g=0;g<toothGraphic.Groups.Count;g++) {
 				group=(ToothGroup)toothGraphic.Groups[g];
-				if(!group.Visible) {
+				if(!group.Visible || group.facesDirectX==null) {
 					continue;
 				}
 				Material material=new Material();
@@ -431,15 +433,7 @@ namespace SparksToothChart {
 				device.Material=material;
 				//draw the group
 			  device.Indices=group.facesDirectX;
-//js crashes here after:
-//1. closing a different toothChartDirectX, or
-//2. moving the fullscreen window so that it uncovers a toothChartDirectX below it.
-//AccessViolationException.  Attempted to read or write protected memory.
-//Although the error message is always the same, it sometimes doesn't indicate that the following line is the problem, just giving an error with no line.
-				try {
-					device.DrawIndexedPrimitives(PrimitiveType.TriangleList,0,0,toothGraphic.VertexNormals.Count,0,group.NumIndicies/3);
-				}
-				catch { }
+				device.DrawIndexedPrimitives(PrimitiveType.TriangleList,0,0,toothGraphic.VertexNormals.Count,0,group.NumIndicies/3);
 			}
 		}
 

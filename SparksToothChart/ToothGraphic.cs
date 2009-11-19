@@ -63,7 +63,7 @@ namespace SparksToothChart {
 		///<summary>If sealant, then this will contain the color.</summary>
 		public Color colorSealant;
 
-		///<summary></summary>
+		///<summary>If using DirectX, the vb VertexBuffer variable must be instantiated in a subsequent call to PrepareForDirectX().</summary>
 		public ToothGraphic Copy() {
 			ToothGraphic tg=new ToothGraphic();
 			tg.toothID=this.toothID;
@@ -71,8 +71,7 @@ namespace SparksToothChart {
 			for(int i=0;i<this.VertexNormals.Count;i++){
 				tg.VertexNormals.Add(this.VertexNormals[i].Copy());
 			}
-			tg.vb=this.vb;
-			tg.Groups=new List<ToothGroup>(this.Groups);
+			tg.Groups=new List<ToothGroup>();
 			for(int i=0;i<this.Groups.Count;i++) {
 				tg.Groups.Add(this.Groups[i].Copy());
 			}
@@ -173,7 +172,10 @@ namespace SparksToothChart {
 			}
 			vb=new VertexBuffer(typeof(CustomVertex.PositionNormal),CustomVertex.PositionNormal.StrideSize*verts.Length,
 				deviceRef,Usage.WriteOnly,CustomVertex.PositionNormal.Format,Pool.Managed);
-			vb.SetData(verts,0,LockFlags.None);			
+			vb.SetData(verts,0,LockFlags.None);
+			for(int g=0;g<Groups.Count;g++) {
+				Groups[g].PrepareForDirectX(deviceRef);
+			}
 		}
 
 		public void CleanupDirectX(){

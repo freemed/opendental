@@ -256,10 +256,11 @@ namespace SparksToothChart {
 			}
 		}
 
+		//This step usually happens when the DrawMode property is set on the tooth chart wrapper, by way of the ResetControls() function.
 		///<summary>Not normally used unless we are just trying to make a copy of an existing directX control.</summary>
-		public void InitializeDirectXGraphics() {
-			toothChartDirectX.InitializeGraphics();
-		}
+		//public void InitializeDirectXGraphics() {
+		//  toothChartDirectX.InitializeGraphics();
+		//}
 
 		#region Public Methods
 

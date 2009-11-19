@@ -26,6 +26,7 @@ namespace SparksToothChart {
 			Faces=new List<Face>();
 		}
 
+		///<summary>If using DirectX, the facesDirectX IndexBuffer variable must be instantiated in a subsequent call to PrepareForDirectX().</summary>
 		public ToothGroup Copy() {
 			ToothGroup tg=new ToothGroup();
 			tg.Visible=this.Visible;
@@ -35,7 +36,6 @@ namespace SparksToothChart {
 			for(int i=0;i<this.Faces.Count;i++) {
 				tg.Faces.Add(this.Faces[i].Copy());
 			}
-			//facesDirectX and NumIndices will be set in a subsequent step when ToothChartWrapper.InitializeDirectXGraphics is run.
 			return tg;
 		}
 
