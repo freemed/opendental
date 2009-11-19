@@ -238,12 +238,14 @@ namespace SparksToothChart {
 			Matrix lineMatrix=ScreenSpaceMatrix();
 			Line line=new Line(device);
 			line.Antialias=false;
+			line.GlLines=true;
 			if(toothGraphic.DrawBigX) {
 				//Thickness of line depends on size of window.
 				//The line size needs to be slightly larger than in OpenGL because
 				//lines are drawn with polygons in DirectX and they are anti-aliased,
 				//even when the line.Antialias flag is set.
 				line.Width=(float)Width/200f;
+				line.Begin();
 				if(ToothGraphic.IsMaxillary(toothGraphic.ToothID)) {
 					line.DrawTransform(new Vector3[] {
 						new Vector3(-2f,12f,0f),
@@ -267,7 +269,8 @@ namespace SparksToothChart {
 						new Vector3(-2f,-12f,0f),},
 						lineMatrix,
 						toothGraphic.colorX);
-				}				
+				}
+				line.End();
 			}
 			if(toothGraphic.Visible && toothGraphic.IsRCT) {//draw RCT
 				//Thickness of lines depend on size of window.
@@ -283,70 +286,44 @@ namespace SparksToothChart {
 					//Convert each line strip into very simple two point lines so that line extensions can be calculated more easily below.
 					List <Vector3> twoPointLines=new List<Vector3> ();
 					for(int j=0;j<linesSimple[i].Vertices.Count-1;j++){
-						twoPointLines.Add(new Vector3(linesSimple[i].Vertices[j  ].X,linesSimple[i].Vertices[j  ].Y,linesSimple[i].Vertices[j  ].Z));
-						twoPointLines.Add(new Vector3(linesSimple[i].Vertices[j+1].X,linesSimple[i].Vertices[j+1].Y,linesSimple[i].Vertices[j+1].Z));
+					  twoPointLines.Add(new Vector3(linesSimple[i].Vertices[j  ].X,linesSimple[i].Vertices[j  ].Y,linesSimple[i].Vertices[j  ].Z));
+					  twoPointLines.Add(new Vector3(linesSimple[i].Vertices[j+1].X,linesSimple[i].Vertices[j+1].Y,linesSimple[i].Vertices[j+1].Z));
 					}
 					//Draw each individual two point line. The lines must be broken down from line strips so that when individual two point
 					//line locations are modified they do not affect any other two point lines within the same line strip.
 					for(int j=0;j<twoPointLines.Count;j+=2){
-						Vector3 p1=twoPointLines[j];
-						Vector3 p2=twoPointLines[j+1];
-						Vector3 lineDir=p2-p1;
-						lineDir.Normalize();//Gives the line direction a single unit length.
-						float extSize=0.25f;//The number of units to extend each end of the two point line.
-						p1=p1-extSize*lineDir;
-						p2=p2+extSize*lineDir;
-						Vector3[] lineVerts=new Vector3[] {p1,p2};
-						line.DrawTransform(lineVerts,lineMatrix,toothGraphic.colorRCT);
+					  Vector3 p1=twoPointLines[j];
+					  Vector3 p2=twoPointLines[j+1];
+					  Vector3 lineDir=p2-p1;
+					  lineDir.Normalize();//Gives the line direction a single unit length.
+					  float extSize=0.25f;//The number of units to extend each end of the two point line.
+					  p1=p1-extSize*lineDir;
+					  p2=p2+extSize*lineDir;
+					  Vector3[] lineVerts=new Vector3[] {p1,p2};
+					  line.Begin();
+					  line.DrawTransform(lineVerts,lineMatrix,toothGraphic.colorRCT);
+					  line.End();
 					}
-					//List<Vector3> lineVerts=new List<Vector3> ();				
-					//for(int j=0;j<linesSimple[i].Vertices.Count;j++) {
-					//  lineVerts.Add(new Vector3(linesSimple[i].Vertices[j].X,linesSimple[i].Vertices[j].Y,linesSimple[i].Vertices[j].Z));
-					//}
-					//line.DrawTransform(lineVerts.ToArray(),
-					//  lineMatrix,
-					//  toothGraphic.colorRCT);
 				}
-				//Gl.glPointSize((float)Width/275f);//point is slightly smaller since no antialiasing
-				////This section is a necessary workaround for OpenGL.
-				////It draws a point at each intersection to hide the unsightly transitions between line segments.
-				//Gl.glPushMatrix();
-				//Gl.glTranslatef(0,0,10.5f);//move forward 10.5mm so it will cover the lines
-				//Gl.glTranslatef(GetTransX(toothGraphic.ToothID),GetTransYfacial(toothGraphic.ToothID),0);
-				//RotateAndTranslateUser(toothGraphic);
-				//Gl.glDisable(Gl.GL_BLEND);
-				//for(int i=0;i<lines.Count;i++) {
-				//  Gl.glBegin(Gl.GL_POINTS);
-				//  for(int j=0;j<lines[i].Vertices.Count;j++) {
-				//    //but ignore the first and last.  We are only concerned with where lines meet.
-				//    if(j==0||j==lines[i].Vertices.Count-1) {
-				//      continue;
-				//    }
-				//    Gl.glVertex3f(lines[i].Vertices[j].X,lines[i].Vertices[j].Y,lines[i].Vertices[j].Z);
-				//  }
-				//  Gl.glEnd();
-				//}
-				//Gl.glPopMatrix();
 			}
-			//if(toothGraphic.Visible&&toothGraphic.IsBU) {//BU or Post
-			//  Gl.glPushMatrix();
-			//  Gl.glTranslatef(0,0,13f);//move BU forward 13mm so it will be visible.
-			//  Gl.glTranslatef(GetTransX(toothGraphic.ToothID),GetTransYfacial(toothGraphic.ToothID),0);
-			//  Gl.glDisable(Gl.GL_LIGHTING);
-			//  Gl.glDisable(Gl.GL_BLEND);
-			//  Gl.glColor3f(
-			//    (float)toothGraphic.colorBU.R/255f,
-			//    (float)toothGraphic.colorBU.G/255f,
-			//    (float)toothGraphic.colorBU.B/255f);
-			//  RotateAndTranslateUser(toothGraphic);
-			//  Triangle poly=toothGraphic.GetBUpoly();
-			//  Gl.glBegin(Gl.GL_POLYGON);
-			//  for(int i=0;i<poly.Vertices.Count;i++) {
-			//    Gl.glVertex3f(poly.Vertices[i].X,poly.Vertices[i].Y,poly.Vertices[i].Z);
-			//  }
-			//  Gl.glEnd();
-			//  Gl.glPopMatrix();
-			//}
+			ToothGroup groupBU=toothGraphic.GetGroup(ToothGroupType.Buildup);//during debugging, not all teeth have a BU group yet.
+			if(toothGraphic.Visible && groupBU!=null && groupBU.Visible) {//BU or Post
+				device.RenderState.ZBufferEnable=false;
+				device.RenderState.Lighting=true;
+				device.Lights[0].Enabled=false;//Disable the scene light.
+				device.Lights[1].Ambient=Color.White;
+				device.Lights[1].Enabled=true;
+				Color colorBU=toothGraphic.GetGroup(ToothGroupType.Buildup).PaintColor;
+				device.VertexFormat=CustomVertex.PositionNormal.Format;
+				device.SetStreamSource(0,toothGraphic.vb,0);
+				Material material=new Material();
+				material.Ambient=colorBU;
+				device.Material=material;
+				device.Indices=groupBU.facesDirectX;
+				device.DrawIndexedPrimitives(PrimitiveType.TriangleList,0,0,toothGraphic.VertexNormals.Count,0,groupBU.NumIndicies/3);
+				device.Lights[0].Enabled=true;
+				device.Lights[1].Enabled=false;
+			}
 			if(toothGraphic.IsImplant) {
 				if(ToothGraphic.IsMaxillary(toothGraphic.ToothID)) {
 					//flip the implant upside down
@@ -367,7 +344,7 @@ namespace SparksToothChart {
 				device.SetStreamSource(0,implantGraphic.vb,0);
 				for(int g=0;g<implantGraphic.Groups.Count;g++) {
 					ToothGroup group=(ToothGroup)implantGraphic.Groups[g];
-					if(!group.Visible) {
+					if(!group.Visible || group.GroupType==ToothGroupType.Buildup) {
 						continue;
 					}
 					device.Indices=group.facesDirectX;
@@ -428,7 +405,7 @@ namespace SparksToothChart {
 			device.SetStreamSource(0,toothGraphic.vb,0);
 			for(int g=0;g<toothGraphic.Groups.Count;g++) {
 				group=(ToothGroup)toothGraphic.Groups[g];
-				if(!group.Visible || group.facesDirectX==null) {
+				if(!group.Visible || group.facesDirectX==null || group.GroupType==ToothGroupType.Buildup) {
 					continue;
 				}
 				Material material=new Material();
@@ -452,7 +429,7 @@ namespace SparksToothChart {
 				}
 				else {
 					material.Specular=specular_color_normal;
-				}				
+				}
 				material.SpecularSharpness=specularSharpness;
 				device.Material=material;
 				//draw the group
@@ -649,7 +626,9 @@ namespace SparksToothChart {
 						points.Add(new Vector3(pointMm.X,pointMm.Y,0f));
 					}
 				}
+				line.Begin();
 				line.DrawTransform(points.ToArray(),lineMatrix,TcData.DrawingSegmentList[s].ColorDraw);
+				line.End();
 				//no filled circle at intersections
 			}
 			line.Dispose();
@@ -673,6 +652,9 @@ namespace SparksToothChart {
 				} else {
 					SetSelected(toothClicked,true);
 				}
+				Invalidate();
+				Application.DoEvents();//Force redraw.
+
 			} else if(TcData.CursorTool==CursorTool.Pen) {
 				TcData.PointList.Add(new Point(e.X,e.Y));
 			} else if(TcData.CursorTool==CursorTool.Eraser) {
@@ -719,6 +701,8 @@ namespace SparksToothChart {
 					} else {
 						SetSelected(hotTooth,true);
 					}
+					Invalidate();
+					Application.DoEvents();//Force redraw.
 				}
 			} else if(TcData.CursorTool==CursorTool.Pen) {
 				if(!MouseIsDown) {
@@ -733,11 +717,13 @@ namespace SparksToothChart {
 				line.Width=(float)Width/175f;//about 2
 				PointF pMm1=TcData.PointPixToMm(TcData.PointList[TcData.PointList.Count-1]);
 				PointF pMm2=TcData.PointPixToMm(TcData.PointList[TcData.PointList.Count-2]);
+				line.Begin();
 				line.DrawTransform(new Vector3[] {
 					new Vector3(pMm1.X,pMm1.Y,0f),
 					new Vector3(pMm2.X,pMm2.Y,0f)},
 					lineMatrix,
 					TcData.ColorDrawing);
+				line.End();
 				line.Dispose();
 				Invalidate();
 			} else if(TcData.CursorTool==CursorTool.Eraser) {
