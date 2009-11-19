@@ -60,16 +60,20 @@ namespace SparksToothChart {
 				return tcData;
 			}
 			set {
-				tcData=value;
 				if(drawMode==DrawingMode.Simple2D) {
-					toothChart2D.TcData=tcData;
+					toothChart2D.TcData=value;
 				}
 				else if(drawMode==DrawingMode.DirectX) {
-					toothChartDirectX.TcData=tcData;
+					if(tcData!=null){
+						tcData.CleanupDirectX();//Clean up old tc data DirectX objects to free video memory.
+					}
+					toothChartDirectX.TcData=value;
+					toothChartDirectX.TcData.PrepareForDirectX(toothChartDirectX.device);
 				}
 				else if(drawMode==DrawingMode.OpenGL) {
-					toothChartOpenGL.TcData=tcData;
+					toothChartOpenGL.TcData=value;
 				}
+				tcData=value;//Must set last so old tcdata can be cleaned up first.
 			}
 		}
 
@@ -220,7 +224,8 @@ namespace SparksToothChart {
 			}
 			else if(drawMode==DrawingMode.DirectX){
 				if(toothChartDirectX!=null){
-					toothChartDirectX.CleanupDirectX();
+					toothChartDirectX.Dispose();
+					toothChartDirectX=null;
 				}
 				toothChartDirectX=new ToothChartDirectX();//(hardwareMode,preferredPixelFormatNum);
 				//preferredPixelFormatNum=toothChart.SelectedPixelFormatNumber;

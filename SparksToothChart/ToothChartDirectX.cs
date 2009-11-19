@@ -81,11 +81,7 @@ namespace SparksToothChart {
 				xfont.Dispose();
 				xfont=null;
 			}
-			if(device!=null){
-				for(int i=0;i<TcData.ListToothGraphics.Count;i++) {
-					TcData.ListToothGraphics[i].CleanupDirectX();
-				}
-			}
+			TcData.CleanupDirectX();
 		}
 
 		///<summary></summary>
@@ -99,9 +95,7 @@ namespace SparksToothChart {
 			xSealantFont=new Microsoft.DirectX.Direct3D.Font(device,
 				25,9,FontWeight.Regular,1,false,CharacterSet.Ansi,Precision.Device,
 				FontQuality.ClearType,PitchAndFamily.DefaultPitch,"Arial");
-			for(int i=0;i<TcData.ListToothGraphics.Count;i++) {
-				TcData.ListToothGraphics[i].PrepareForDirectX(device);
-			}
+			TcData.PrepareForDirectX(device);
 		}
 
 		public void OnDeviceLost(object sender,EventArgs e){

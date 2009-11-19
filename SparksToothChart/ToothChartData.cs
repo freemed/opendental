@@ -74,6 +74,20 @@ namespace SparksToothChart {
 			return data;
 		}
 
+		///<summary>Unregisters all vertex and index buffers from their current device.</summary>
+		public void CleanupDirectX(){
+			for(int i=0;i<ListToothGraphics.Count;i++){
+				ListToothGraphics[i].CleanupDirectX();
+			}
+		}
+
+		///<summary>Registers all vertex and index buffers with the specified device.</summary>
+		public void PrepareForDirectX(Device device){
+			for(int i=0;i<ListToothGraphics.Count;i++) {
+				ListToothGraphics[i].PrepareForDirectX(device);
+			}
+		}
+
 		///<summary>This gets set whenever the wrapper resizes.  It's the size of the control in screen pixels.</summary>
 		public Size SizeControl {
 			get {
