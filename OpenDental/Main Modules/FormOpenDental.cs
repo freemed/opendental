@@ -2448,89 +2448,93 @@ namespace OpenDental{
 	
 		///<summary>Called every time timerSignals_Tick fires.  Usually about every 5-10 seconds.</summary>
 		public void ProcessSignals(){
-			List <Signal> sigList=Signals.RefreshTimed(signalLastRefreshed);//this also attaches all elements to their sigs
-			if(sigList.Count==0){
-				return;
-			}
-			if(Security.CurUser==null){
-				return;
-			}
-			//look for shutdown signal
-			for(int i=0;i<sigList.Count;i++) {
-				if(sigList[i].ITypes==((int)InvalidType.ShutDownNow).ToString()) {
-					timerSignals.Enabled=false;//quit receiving signals.
-					//start the thread that will kill the application
-					Thread killThread=new Thread(new ThreadStart(KillThread));
-					killThread.Start();
-					string msg="";
-					if(Process.GetCurrentProcess().ProcessName=="OpenDental") {
-						msg+="All copies of Open Dental ";
-					}
-					else {
-						msg+=Process.GetCurrentProcess().ProcessName+" ";
-					}
-					msg+=Lan.g(this,"will shut down in 15 seconds.  Quickly click OK on any open windows with unsaved data.");
-					MsgBoxCopyPaste msgbox=new MsgBoxCopyPaste(msg);
-					msgbox.Size=new Size(300,300);
-					msgbox.TopMost=true;
-					msgbox.ShowDialog();
+			try {
+				List<Signal> sigList=Signals.RefreshTimed(signalLastRefreshed);//this also attaches all elements to their sigs
+				if(sigList.Count==0) {
 					return;
 				}
-			}
-			if(sigList[sigList.Count-1].AckTime.Year>1880){
-				signalLastRefreshed=sigList[sigList.Count-1].AckTime;
-			}
-			else{
-				signalLastRefreshed=sigList[sigList.Count-1].SigDateTime;
-			}
-			if(ContrAppt2.Visible && Signals.ApptNeedsRefresh(sigList,AppointmentL.DateSelected.Date)){
-				ContrAppt2.RefreshPeriod();
-			}
-			bool areAnySignalsTasks=false;
-			for(int i=0;i<sigList.Count;i++){
-				if(sigList[i].ITypes==((int)InvalidType.Task).ToString()
-					|| sigList[i].ITypes==((int)InvalidType.TaskPopup).ToString())
-				{
-					areAnySignalsTasks=true;
+				if(Security.CurUser==null) {
+					return;
 				}
-			}
-			List<Task> tasksPopup=Signals.GetNewTaskPopupsThisUser(sigList,Security.CurUser.UserNum);
-			if(tasksPopup.Count>0){
-				for(int i=0;i<tasksPopup.Count;i++){
-					//Even though this is triggered to popup, if this is my own task, then do not popup.
-					if(tasksPopup[i].UserNum==Security.CurUser.UserNum){
-						continue;
+				//look for shutdown signal
+				for(int i=0;i<sigList.Count;i++) {
+					if(sigList[i].ITypes==((int)InvalidType.ShutDownNow).ToString()) {
+						timerSignals.Enabled=false;//quit receiving signals.
+						//start the thread that will kill the application
+						Thread killThread=new Thread(new ThreadStart(KillThread));
+						killThread.Start();
+						string msg="";
+						if(Process.GetCurrentProcess().ProcessName=="OpenDental") {
+							msg+="All copies of Open Dental ";
+						}
+						else {
+							msg+=Process.GetCurrentProcess().ProcessName+" ";
+						}
+						msg+=Lan.g(this,"will shut down in 15 seconds.  Quickly click OK on any open windows with unsaved data.");
+						MsgBoxCopyPaste msgbox=new MsgBoxCopyPaste(msg);
+						msgbox.Size=new Size(300,300);
+						msgbox.TopMost=true;
+						msgbox.ShowDialog();
+						return;
 					}
-					System.Media.SoundPlayer soundplay=new SoundPlayer(Properties.Resources.notify);
-					soundplay.Play();
-					this.BringToFront();//don't know if this is doing anything.
-					FormTaskEdit FormT=new FormTaskEdit(tasksPopup[i]);
-					FormT.IsPopup=true;
-					FormT.ShowDialog();
 				}
-			}
-			if(areAnySignalsTasks || tasksPopup.Count>0){
-				//if user has the Task dialog open, we can't easily tell it to refresh,
-				//So that dialog is responsible for auto refreshing every minute on a timer.
-				if(userControlTasks1.Visible){
-					userControlTasks1.RefreshTasks();
+				if(sigList[sigList.Count-1].AckTime.Year>1880) {
+					signalLastRefreshed=sigList[sigList.Count-1].AckTime;
 				}
+				else {
+					signalLastRefreshed=sigList[sigList.Count-1].SigDateTime;
+				}
+				if(ContrAppt2.Visible && Signals.ApptNeedsRefresh(sigList,AppointmentL.DateSelected.Date)) {
+					ContrAppt2.RefreshPeriod();
+				}
+				bool areAnySignalsTasks=false;
+				for(int i=0;i<sigList.Count;i++) {
+					if(sigList[i].ITypes==((int)InvalidType.Task).ToString()
+						|| sigList[i].ITypes==((int)InvalidType.TaskPopup).ToString()) {
+						areAnySignalsTasks=true;
+					}
+				}
+				List<Task> tasksPopup=Signals.GetNewTaskPopupsThisUser(sigList,Security.CurUser.UserNum);
+				if(tasksPopup.Count>0) {
+					for(int i=0;i<tasksPopup.Count;i++) {
+						//Even though this is triggered to popup, if this is my own task, then do not popup.
+						if(tasksPopup[i].UserNum==Security.CurUser.UserNum) {
+							continue;
+						}
+						System.Media.SoundPlayer soundplay=new SoundPlayer(Properties.Resources.notify);
+						soundplay.Play();
+						this.BringToFront();//don't know if this is doing anything.
+						FormTaskEdit FormT=new FormTaskEdit(tasksPopup[i]);
+						FormT.IsPopup=true;
+						FormT.ShowDialog();
+					}
+				}
+				if(areAnySignalsTasks || tasksPopup.Count>0) {
+					//if user has the Task dialog open, we can't easily tell it to refresh,
+					//So that dialog is responsible for auto refreshing every minute on a timer.
+					if(userControlTasks1.Visible) {
+						userControlTasks1.RefreshTasks();
+					}
+				}
+				List<int> itypes=Signals.GetInvalidTypes(sigList);
+				InvalidType[] itypeArray=new InvalidType[itypes.Count];
+				for(int i=0;i<itypeArray.Length;i++) {
+					itypeArray[i]=(InvalidType)itypes[i];
+				}
+				//InvalidTypes invalidTypes=Signals.GetInvalidTypes(sigList);
+				if(itypes.Count>0) {//invalidTypes!=0){
+					RefreshLocalData(itypeArray);
+				}
+				List<Signal> sigListButs=Signals.GetButtonSigs(sigList);
+				ContrManage2.LogMsgs(sigListButs);
+				FillSignalButtons(sigListButs);
+				//Need to add a test to this: do not play messages that are over 2 minutes old.
+				Thread newThread=new Thread(new ParameterizedThreadStart(PlaySounds));
+				newThread.Start(sigListButs);
 			}
-			List<int> itypes=Signals.GetInvalidTypes(sigList);
-			InvalidType[] itypeArray=new InvalidType[itypes.Count];
-			for(int i=0;i<itypeArray.Length;i++){
-				itypeArray[i]=(InvalidType)itypes[i];
+			catch {
+				signalLastRefreshed=DateTime.Now;
 			}
-			//InvalidTypes invalidTypes=Signals.GetInvalidTypes(sigList);
-			if(itypes.Count>0){//invalidTypes!=0){
-				RefreshLocalData(itypeArray);
-			}
-			List<Signal> sigListButs=Signals.GetButtonSigs(sigList);
-			ContrManage2.LogMsgs(sigListButs);
-			FillSignalButtons(sigListButs);
-			//Need to add a test to this: do not play messages that are over 2 minutes old.
-			Thread newThread=new Thread(new ParameterizedThreadStart(PlaySounds));
-			newThread.Start(sigListButs);
 		}
 
 		private void KillThread() {
