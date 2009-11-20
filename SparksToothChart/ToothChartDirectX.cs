@@ -88,12 +88,17 @@ namespace SparksToothChart {
 			deviceLost=false;
 			CleanupDirectX();
 			device=sender as Device;
-			TcData.Font=new System.Drawing.Font("Arial",9f*TcData.PixelScaleRatio);//Required for calculating font background rectangle size in ToothChartData.
+			////Required for calculating font background rectangle size in ToothChartData.
+			TcData.Font=new System.Drawing.Font("Arial",9f);
 			xfont=new Microsoft.DirectX.Direct3D.Font(device,
-				(int)Math.Round(14*TcData.PixelScaleRatio),(int)Math.Round(5*TcData.PixelScaleRatio),FontWeight.Normal,1,false,CharacterSet.Ansi,Precision.Device,
+				(int)Math.Round((float)(14*Math.Sqrt(TcData.PixelScaleRatio))),
+				(int)Math.Round((float)(5*Math.Sqrt(TcData.PixelScaleRatio))),
+				FontWeight.Normal,1,false,CharacterSet.Ansi,Precision.Device,
 				FontQuality.ClearType,PitchAndFamily.DefaultPitch,"Arial");
 			xSealantFont=new Microsoft.DirectX.Direct3D.Font(device,
-				(int)Math.Round(25*TcData.PixelScaleRatio),(int)Math.Round(9*TcData.PixelScaleRatio),FontWeight.Regular,1,false,CharacterSet.Ansi,Precision.Device,
+				(int)Math.Round(25*TcData.PixelScaleRatio),
+				(int)Math.Round(9*TcData.PixelScaleRatio),
+				FontWeight.Regular,1,false,CharacterSet.Ansi,Precision.Device,
 				FontQuality.ClearType,PitchAndFamily.DefaultPitch,"Arial");
 			TcData.PrepareForDirectX(device);
 		}
@@ -209,8 +214,8 @@ namespace SparksToothChart {
 				DrawFacialView(TcData.ListToothGraphics[t],defOrient);
 				DrawOcclusalView(TcData.ListToothGraphics[t],defOrient);
 			}
-			DrawNumbersAndLines();
 			DrawDrawingSegments();
+			DrawNumbersAndLines();//Numbers and center lines are top-most.
 			device.EndScene();
 			//This line would crash after windows switchUser/logon.  So I added a try/catch at the OnPaint level.
 			device.Present();
@@ -558,23 +563,15 @@ namespace SparksToothChart {
 			device.RenderState.Lighting=false;
 			device.RenderState.ZBufferEnable=false;
 			device.Transform.World=Matrix.Identity;
-			if(isFullRedraw) {//if redrawing all numbers
-				if(TcData.ListToothGraphics[tooth_id]==null) {
-					return;
-				}
-				if(TcData.ListToothGraphics[tooth_id].HideNumber) {//and this is a "hidden" number
-					return;//skip
-				}
-				if(Tooth.IsPrimary(tooth_id)
-					&&!TcData.ListToothGraphics[Tooth.PriToPerm(tooth_id)].ShowPrimaryLetter)//but not set to show primary letters
-				{
-					return;
-				}
-			}
 			string displayNum=Tooth.GetToothLabelGraphic(tooth_id,TcData.ToothNumberingNomenclature);
-			float toMm=1f/TcData.ScaleMmToPix;
 			RectangleF recMm=TcData.GetNumberRecMm(tooth_id,g);
-			//recMm=new RectangleF(recMm.X,recMm.Y-1f*toMm,recMm.Width,recMm.Height);//Due to anti-aliasing, the boxes overlap one or two teeth unless adjusted.
+			recMm.Width*=(float)Math.Pow(TcData.PixelScaleRatio,0.6);
+			recMm.Height*=(float)Math.Pow(TcData.PixelScaleRatio,0.6);
+			if(ToothGraphic.IsMaxillary(tooth_id)){
+				recMm.Y+=(float)(recMm.Bottom*(1-Math.Pow(TcData.PixelScaleRatio,0.16)));
+			}else{
+				recMm.Y+=(float)(recMm.Top*(1-Math.Pow(TcData.PixelScaleRatio,0.20)));
+			}
 			Color backColor;
 			Color foreColor;
 			if(isSelected) {
@@ -587,11 +584,11 @@ namespace SparksToothChart {
 			//Draw the background rectangle.
 			int backColorARGB=backColor.ToArgb();
 			CustomVertex.PositionColored[] quadVerts=new CustomVertex.PositionColored[] {
-					new CustomVertex.PositionColored(recMm.X,recMm.Y,14,backColorARGB),//LL
-					new CustomVertex.PositionColored(recMm.X,recMm.Y+recMm.Height,14,backColorARGB),//UL
-					new CustomVertex.PositionColored(recMm.X+recMm.Width,recMm.Y+recMm.Height,14,backColorARGB),//UR
-					new CustomVertex.PositionColored(recMm.X+recMm.Width,recMm.Y,14,backColorARGB),//LR
-				};
+			    new CustomVertex.PositionColored(recMm.X,recMm.Y,0,backColorARGB),//LL
+			    new CustomVertex.PositionColored(recMm.X,recMm.Y+recMm.Height,0,backColorARGB),//UL
+			    new CustomVertex.PositionColored(recMm.X+recMm.Width,recMm.Y+recMm.Height,0,backColorARGB),//UR
+			    new CustomVertex.PositionColored(recMm.X+recMm.Width,recMm.Y,0,backColorARGB),//LR
+			  };
 			VertexBuffer vb=new VertexBuffer(typeof(CustomVertex.PositionColored),CustomVertex.PositionColored.StrideSize*quadVerts.Length,
 				device,Usage.WriteOnly,CustomVertex.PositionColored.Format,Pool.Managed);
 			vb.SetData(quadVerts,0,LockFlags.None);
@@ -604,15 +601,7 @@ namespace SparksToothChart {
 			device.DrawIndexedPrimitives(PrimitiveType.TriangleList,0,0,quadVerts.Length,0,indicies.Length/3);
 			ib.Dispose();
 			vb.Dispose();
-			//Draw the foreground text if needed.
-			if(TcData.ListToothGraphics[tooth_id].HideNumber) {//If number is hidden.
-				//do not print string
-			} else if(Tooth.IsPrimary(tooth_id)
-				&&!TcData.ListToothGraphics[Tooth.PriToPerm(tooth_id)].ShowPrimaryLetter) {
-				//do not print string
-			} else {
-				PrintString(displayNum,recMm.X+2f*toMm,recMm.Y+13f*toMm,15f,foreColor,xfont);
-			}
+			PrintString(displayNum,recMm.X+recMm.Width*0.3f,recMm.Y+recMm.Height,0,foreColor,xfont);
 		}
 
 		private void PrintString(string text,float x,float y,float z,Color color,Microsoft.DirectX.Direct3D.Font printFont) {
