@@ -385,8 +385,7 @@ namespace SparksToothChart {
 				DrawTooth(toothGraphic);
 			}
 			Gl.glPopMatrix();//reset to origin
-			if(toothGraphic.Visible && 
-				toothGraphic.IsSealant){//draw sealant
+			if(toothGraphic.Visible && toothGraphic.IsSealant){//draw sealant
 				Gl.glPushMatrix();
 				Gl.glTranslatef(0,0,6f);//move forward 6mm so it will be visible.
 				Gl.glTranslatef(TcData.GetTransX(toothGraphic.ToothID),TcData.GetTransYocclusal(toothGraphic.ToothID),0);
@@ -409,8 +408,8 @@ namespace SparksToothChart {
 					(float)toothGraphic.colorSealant.B/255f);
 				//.5f);//only 1/2 darkness
 				Gl.glBlendFunc(Gl.GL_SRC_ALPHA,Gl.GL_ONE_MINUS_SRC_ALPHA);
-				Gl.glLineWidth((float)Width/225f);
-				Gl.glPointSize((float)Width/275f);//point is slightly smaller since no antialiasing
+				Gl.glLineWidth(2f*TcData.PixelScaleRatio);
+				Gl.glPointSize(1.7f*TcData.PixelScaleRatio);//point is slightly smaller since no antialiasing
 				RotateAndTranslateUser(toothGraphic);
 				LineSimple line=toothGraphic.GetSealantLine();
 				Gl.glBegin(Gl.GL_LINE_STRIP);
