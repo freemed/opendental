@@ -966,14 +966,22 @@ namespace SparksToothChart {
 				if(hotTooth==hotToothOld) {//mouse has not moved to another tooth
 					return;
 				}
-				hotToothOld=hotTooth;
 				if(MouseIsDown) {//drag action
-					if(TcData.SelectedTeeth.Contains(hotTooth)) {
-						SetSelected(hotTooth,false);
+					List<string> affectedTeeth=TcData.GetAffectedTeeth(hotToothOld,hotTooth,TcData.PointPixToMm(e.Location).Y);
+					for(int i=0;i<affectedTeeth.Count;i++) {
+						if(TcData.SelectedTeeth.Contains(affectedTeeth[i])) {
+							SetSelected(affectedTeeth[i],false);
+						}
+						else {
+							SetSelected(affectedTeeth[i],true);
+						}
 					}
-					else {
-						SetSelected(hotTooth,true);
-					}
+					hotToothOld=hotTooth;
+					//Invalidate();
+					//Application.DoEvents();
+				}
+				else {
+					hotToothOld=hotTooth;
 				}
 			}
 			else if(TcData.CursorTool==CursorTool.Pen) {
