@@ -695,17 +695,25 @@ namespace SparksToothChart {
 				if(hotTooth==hotToothOld) {//mouse has not moved to another tooth
 					return;
 				}
-				hotToothOld=hotTooth;
 				if(MouseIsDown) {//drag action
-					if(TcData.SelectedTeeth.Contains(hotTooth)) {
-						SetSelected(hotTooth,false);
-					} else {
-						SetSelected(hotTooth,true);
+					List<string> affectedTeeth=TcData.GetAffectedTeeth(hotToothOld,hotTooth,TcData.PointPixToMm(e.Location).Y);
+					for(int i=0;i<affectedTeeth.Count;i++) {
+						if(TcData.SelectedTeeth.Contains(affectedTeeth[i])) {
+							SetSelected(affectedTeeth[i],false);
+						}
+						else {
+							SetSelected(affectedTeeth[i],true);
+						}
 					}
+					hotToothOld=hotTooth;
 					Invalidate();
-					Application.DoEvents();//Force redraw.
+					Application.DoEvents();
 				}
-			} else if(TcData.CursorTool==CursorTool.Pen) {
+				else {
+					hotToothOld=hotTooth;
+				}
+			} 
+			else if(TcData.CursorTool==CursorTool.Pen) {
 				if(!MouseIsDown) {
 					return;
 				}
@@ -727,7 +735,9 @@ namespace SparksToothChart {
 				line.End();
 				line.Dispose();
 				Invalidate();
-			} else if(TcData.CursorTool==CursorTool.Eraser) {
+				Application.DoEvents();
+			} 
+			else if(TcData.CursorTool==CursorTool.Eraser) {
 				if(!MouseIsDown) {
 					return;
 				}
@@ -752,12 +762,14 @@ namespace SparksToothChart {
 								OnSegmentDrawn(TcData.DrawingSegmentList[i].DrawingSegment);//triggers a deletion from db.
 								TcData.DrawingSegmentList.RemoveAt(i);
 								Invalidate();
+								Application.DoEvents();
 								return; ;
 							}
 						}
 					}
 				}
-			} else if(TcData.CursorTool==CursorTool.ColorChanger) {
+			} 
+			else if(TcData.CursorTool==CursorTool.ColorChanger) {
 				//do nothing	
 			}
 		}

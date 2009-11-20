@@ -374,13 +374,8 @@ namespace SparksToothChart {
 			if(yPos>0) {//maxillary
 				for(int i=1;i<=16;i++) {
 					perm_id=i.ToString();
-					if(i>=4 && i<=13){
-						if(yPos>5.1f){
-							isPriArea=true;
-						}
-						else{
-							isPriArea=false;
-						}
+					if(i>=4 && i<=13 && !IsPermArea(yPos)){
+						isPriArea=true;
 					}
 					else{
 						isPriArea=false;
@@ -444,13 +439,8 @@ namespace SparksToothChart {
 			else {//mandibular
 				for(int i=17;i<=32;i++) {
 					perm_id=i.ToString();
-					if(i>=20 && i<=29) {
-						if(yPos<-4.4f) {
-							isPriArea=true;
-						}
-						else {
-							isPriArea=false;
-						}
+					if(i>=20 && i<=29 && !IsPermArea(yPos)) {
+						isPriArea=true;
 					}
 					else {
 						isPriArea=false;
@@ -512,7 +502,15 @@ namespace SparksToothChart {
 			}
 		}
 
-		///<summary>When this is used from within a toothchart in response to mouse activity, it is typically followed by explicit drawing instructions that efficiently show the user which teeth are selected.  When this is used from the wrapper, it's typically followed by an Invalidate().</summary>
+		///<summary>Input is y position in mm scene coordinates.  Will return true if it's close to the horizontal midline, in the area where the perm tooth numbers are.</summary>
+		public bool IsPermArea(float yPos) {
+			if(yPos > 5.1f || yPos < -4.4f) {
+				return false;
+			}
+			return true;
+		}
+
+		///<summary>When this is used from within a toothchart in response to mouse activity, it is typically followed by explicit drawing instructions that efficiently shows the user which teeth are selected.  When this is used from the wrapper, it's typically followed by an Invalidate().</summary>
 		public void SetSelected(string tooth_id,bool setValue) {
 			if(setValue) {
 				if(!SelectedTeeth.Contains(tooth_id)) {
@@ -528,6 +526,63 @@ namespace SparksToothChart {
 			}
 			//RectangleF recMm=TcData.GetNumberRecMm(tooth_id,);
 			//Rectangle rec=TcData.ConvertRecToPix(recMm);
+		}
+
+		///<summary>When teeth are selected using a sweeping mouse motion, it might be too fast for some intermediate teeth to be included. This method takes the first and last tooth_id's and returns a list including the last one as well as any intermediate teeth.</summary>
+		public List<string> GetAffectedTeeth(string startingId, string endingId,float yPos) {
+			List<string> affectedTeeth=new List<string>();
+			affectedTeeth.Add(endingId);
+			int startingOrdinal=Tooth.ToOrdinal(startingId);
+			if(Tooth.IsPrimary(startingId)) {
+				startingOrdinal=Tooth.ToOrdinal(Tooth.PriToPerm(startingId));
+			}
+			int endingOrdinal=Tooth.ToOrdinal(endingId);
+			if(Tooth.IsPrimary(endingId)) {
+				endingOrdinal=Tooth.ToOrdinal(Tooth.PriToPerm(endingId));
+			}
+			if(Math.Abs(startingOrdinal-endingOrdinal) <= 1) {//if they are not separated by more than one.
+				return affectedTeeth;
+			}
+			if(Tooth.IsMaxillary(startingId)!=Tooth.IsMaxillary(endingId)) {//if they are not in the same arch
+				return affectedTeeth;
+			}
+			bool isInPermArea=IsPermArea(yPos);//close to the horizontal midline
+			string permId;
+			string priId;//will be blank if invalid
+			if(endingOrdinal < startingOrdinal) {
+				for(int i=endingOrdinal+1;i<startingOrdinal;i++) {//we're only going after the teeth in between
+					permId=Tooth.FromOrdinal(i);
+					priId=Tooth.PermToPri(permId);
+					//the only situation where the following tests will fail is if set to primary, mouse is in the perm area, and perm is hidden.
+					if(priId!=""//it's possible to have a pri number here
+						&& ListToothGraphics[permId].ShowPrimaryLetter //and a primary letter is showing
+						&& !isInPermArea //and the mouse is in the primary area
+						&& !ListToothGraphics[priId].HideNumber) //and the primary tooth number is not hidden
+					{
+						affectedTeeth.Add(priId);
+					}
+					else if(!ListToothGraphics[permId].HideNumber){
+						affectedTeeth.Add(permId);
+					}
+				}
+			}
+			else {
+				for(int i=startingOrdinal+1;i<endingOrdinal;i++) {
+					permId=Tooth.FromOrdinal(i);
+					priId=Tooth.PermToPri(permId);
+					if(priId!=""
+						&& ListToothGraphics[permId].ShowPrimaryLetter 
+						&& !isInPermArea 
+						&& !ListToothGraphics[priId].HideNumber) 
+					{
+						affectedTeeth.Add(priId);
+					}
+					else if(!ListToothGraphics[permId].HideNumber) {
+						affectedTeeth.Add(permId);
+					}
+				}
+			}
+			return affectedTeeth;
 		}
 
 	}
