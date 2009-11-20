@@ -616,7 +616,7 @@ namespace SparksToothChart {
 			device.Transform.World=Matrix.Identity;
 			Matrix lineMatrix=ScreenSpaceMatrix();
 			Line line=new Line(device);
-			line.Width=2.5f*TcData.PixelScaleRatio;
+			line.Width=2.2f*TcData.PixelScaleRatio;
 			//line.GlLines=true;//js This was making lines draw with varying thicknesses and oblique tips.  Ugly.
 			for(int s=0;s<TcData.DrawingSegmentList.Count;s++) {				
 				string[] pointStr=TcData.DrawingSegmentList[s].DrawingSegment.Split(';');
