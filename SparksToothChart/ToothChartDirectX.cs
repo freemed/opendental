@@ -33,7 +33,6 @@ namespace SparksToothChart {
 		///<summary>The previous hotTooth.  If this is different than hotTooth, then mouse has just now moved to a new tooth.  Can be 0 to represent no previous.</summary>
 		private string hotToothOld;
 		private bool deviceLost=true;
-		private float textScale=1;
 
 		public ToothChartDirectX() {
 			InitializeComponent();
@@ -90,17 +89,11 @@ namespace SparksToothChart {
 			deviceLost=false;
 			CleanupDirectX();
 			device=sender as Device;
-			//Scale the text depending on the dimensions of the control.
-			if(TcData.IsWide) {
-				textScale=((float)TcData.SizeControl.Height)/TcData.SizeOriginalDrawing.Height;
-			}else{
-				textScale=((float)TcData.SizeControl.Width)/TcData.SizeOriginalDrawing.Width;
-			}
 			xfont=new Microsoft.DirectX.Direct3D.Font(device,
-				(int)Math.Round(15*textScale),(int)Math.Round(6*textScale),FontWeight.Normal,1,false,CharacterSet.Ansi,Precision.Device,
+				(int)Math.Round(15*TcData.PixelScaleRatio),(int)Math.Round(6*TcData.PixelScaleRatio),FontWeight.Normal,1,false,CharacterSet.Ansi,Precision.Device,
 				FontQuality.ClearType,PitchAndFamily.DefaultPitch,"Arial");
 			xSealantFont=new Microsoft.DirectX.Direct3D.Font(device,
-				(int)Math.Round(25*textScale),(int)Math.Round(9*textScale),FontWeight.Regular,1,false,CharacterSet.Ansi,Precision.Device,
+				(int)Math.Round(25*TcData.PixelScaleRatio),(int)Math.Round(9*TcData.PixelScaleRatio),FontWeight.Regular,1,false,CharacterSet.Ansi,Precision.Device,
 				FontQuality.ClearType,PitchAndFamily.DefaultPitch,"Arial");
 			TcData.PrepareForDirectX(device);
 		}
@@ -396,9 +389,9 @@ namespace SparksToothChart {
 			float toMm=1f/TcData.ScaleMmToPix;
 			if(toothGraphic.Visible && toothGraphic.IsSealant) {//draw sealant
 				if(ToothGraphic.IsMaxillary(toothGraphic.ToothID)){
-					PrintString("S",textScale*(-6f*toMm),textScale*(-100f*toMm),-6f,toothGraphic.colorSealant,xSealantFont);
+					PrintString("S",TcData.PixelScaleRatio*(-6f*toMm),TcData.PixelScaleRatio*(-100f*toMm),-6f,toothGraphic.colorSealant,xSealantFont);
 				}else{
-					PrintString("S",textScale*(-6f*toMm),textScale*(22f*toMm),-6f,toothGraphic.colorSealant,xSealantFont);
+					PrintString("S",TcData.PixelScaleRatio*(-6f*toMm),TcData.PixelScaleRatio*(22f*toMm),-6f,toothGraphic.colorSealant,xSealantFont);
 				}
 			}
 			device.RenderState.ZBufferEnable=true;
@@ -619,7 +612,8 @@ namespace SparksToothChart {
 			device.Transform.World=Matrix.Identity;
 			Matrix lineMatrix=ScreenSpaceMatrix();
 			Line line=new Line(device);
-			line.Width=(float)Width/175f;//about 2		
+			line.Width=(float)Width/175f;//about 2
+			line.GlLines=true;
 			float scaleDrawing=(float)Width/(float)TcData.SizeOriginalDrawing.Width;
 			for(int s=0;s<TcData.DrawingSegmentList.Count;s++) {				
 				string[] pointStr=TcData.DrawingSegmentList[s].DrawingSegment.Split(';');
