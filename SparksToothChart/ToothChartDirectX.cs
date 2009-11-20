@@ -630,9 +630,34 @@ namespace SparksToothChart {
 						points.Add(new Vector3(pointMm.X,pointMm.Y,0f));
 					}
 				}
-				line.Begin();
-				line.DrawTransform(points.ToArray(),lineMatrix,TcData.DrawingSegmentList[s].ColorDraw);
-				line.End();
+				//Convert each line strip into very simple two point lines so that line extensions can be calculated more easily below.
+				List<Vector3> twoPointLines=new List<Vector3>();
+				for(int j=0;j<points.Count-1;j++) {
+					twoPointLines.Add(new Vector3(
+						points[j].X,
+						points[j].Y,
+						points[j].Z));
+					twoPointLines.Add(new Vector3(
+						points[j+1].X,
+						points[j+1].Y,
+						points[j+1].Z));
+				}
+				//Draw each individual two point line. The lines must be broken down from line strips so that when individual two point
+		    //line locations are modified they do not affect any other two point lines within the same line strip.
+				//All lines are expanded on both sides here, because the drawing could end with a loop and the loop must be closed.
+		    for(int j=0;j<twoPointLines.Count;j+=2){
+		      Vector3 p1=(Vector3)twoPointLines[j];
+		      Vector3 p2=(Vector3)twoPointLines[j+1];
+		      Vector3 lineDir=p2-p1;
+		      lineDir.Normalize();//Gives the line direction a single unit length.
+		      float extSize=0.25f;//The number of units to extend each end of the two point line.
+					p1=p1-extSize*lineDir;
+					p2=p2+extSize*lineDir;
+		      Vector3[] lineVerts=new Vector3[] {p1,p2};
+		      line.Begin();
+					line.DrawTransform(lineVerts,lineMatrix,TcData.DrawingSegmentList[s].ColorDraw);
+		      line.End();
+		    }
 				//no filled circle at intersections
 			}
 			line.Dispose();
