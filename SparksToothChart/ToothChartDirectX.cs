@@ -612,18 +612,17 @@ namespace SparksToothChart {
 			device.Transform.World=Matrix.Identity;
 			Matrix lineMatrix=ScreenSpaceMatrix();
 			Line line=new Line(device);
-			line.Width=(float)Width/175f;//about 2
+			line.Width=2.5f*TcData.PixelScaleRatio;
 			line.GlLines=true;
-			float scaleDrawing=(float)Width/(float)TcData.SizeOriginalDrawing.Width;
 			for(int s=0;s<TcData.DrawingSegmentList.Count;s++) {				
 				string[] pointStr=TcData.DrawingSegmentList[s].DrawingSegment.Split(';');
 				List<Vector3> points=new List<Vector3>();
 				for(int p=0;p<pointStr.Length;p++) {
 					string[] xy=pointStr[p].Split(',');
 					if(xy.Length==2) {
-						Point point=new Point((int)(float.Parse(xy[0])*scaleDrawing),(int)(float.Parse(xy[1])*scaleDrawing));
+						Point point=new Point((int)(float.Parse(xy[0])),(int)(float.Parse(xy[1])));
 						//if we set 0,0 to center, then this is where we would convert it back.
-						PointF pointMm=TcData.PointPixToMm(point);
+						PointF pointMm=TcData.PointDrawingPixToMm(point);
 						points.Add(new Vector3(pointMm.X,pointMm.Y,0f));
 					}
 				}
