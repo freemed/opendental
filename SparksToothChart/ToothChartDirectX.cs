@@ -276,7 +276,7 @@ namespace SparksToothChart {
 				//The line size needs to be slightly larger than in OpenGL because
 				//lines are drawn with polygons in DirectX and they are anti-aliased,
 				//even when the line.Antialias flag is set.
-				line.Width=(float)Width/160f;
+				line.Width=2.5f*TcData.PixelScaleRatio;
 				List<LineSimple> linesSimple=toothGraphic.GetRctLines();
 				for(int i=0;i<linesSimple.Count;i++) {
 					if(linesSimple[i].Vertices.Count<2){
