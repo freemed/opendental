@@ -54,7 +54,6 @@ namespace SparksToothChart {
 			device.DeviceLost+=new EventHandler(this.OnDeviceLost);
 			device.DeviceResizing+=new CancelEventHandler(this.OnDeviceResizing);
 			OnDeviceReset(device,null);
-			this.Font=new System.Drawing.Font("Arial",9f);//Required for calculating font background rectangle size in ToothChartData.
 			g=this.CreateGraphics();// Graphics.FromHwnd(this.Handle);
 		}
 
@@ -89,8 +88,9 @@ namespace SparksToothChart {
 			deviceLost=false;
 			CleanupDirectX();
 			device=sender as Device;
+			TcData.Font=new System.Drawing.Font("Arial",9f*TcData.PixelScaleRatio);//Required for calculating font background rectangle size in ToothChartData.
 			xfont=new Microsoft.DirectX.Direct3D.Font(device,
-				(int)Math.Round(15*TcData.PixelScaleRatio),(int)Math.Round(6*TcData.PixelScaleRatio),FontWeight.Normal,1,false,CharacterSet.Ansi,Precision.Device,
+				(int)Math.Round(14*TcData.PixelScaleRatio),(int)Math.Round(5*TcData.PixelScaleRatio),FontWeight.Normal,1,false,CharacterSet.Ansi,Precision.Device,
 				FontQuality.ClearType,PitchAndFamily.DefaultPitch,"Arial");
 			xSealantFont=new Microsoft.DirectX.Direct3D.Font(device,
 				(int)Math.Round(25*TcData.PixelScaleRatio),(int)Math.Round(9*TcData.PixelScaleRatio),FontWeight.Regular,1,false,CharacterSet.Ansi,Precision.Device,
@@ -127,7 +127,7 @@ namespace SparksToothChart {
 			//even before it calls the OnDeviceLost() function. When this happens, the render will fail
 			//because the DirectX device is not in a valid state to be rendered to. Before the exception is returned from Render(), 
 			//a call is made by the OS to OnDeviceLost(), which sets deviceLost=true (when the OnPaint() function begins, deviceLost=false)
-			//so that further rendering will not occur with the device in its invalid state.
+			//so that further rendering will not occur with the device in its invalid state.elec
 			try {
 				Render();
 			}
