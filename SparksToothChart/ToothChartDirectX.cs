@@ -283,21 +283,36 @@ namespace SparksToothChart {
 						continue;//Just to avoid internal errors, even though not likely.
 					}
 					//Convert each line strip into very simple two point lines so that line extensions can be calculated more easily below.
-					List <Vector3> twoPointLines=new List<Vector3> ();
+					//Items in the array are tuples of (2D point,bool indicating end point).
+					List <object> twoPointLines=new List<object> ();
 					for(int j=0;j<linesSimple[i].Vertices.Count-1;j++){
-					  twoPointLines.Add(new Vector3(linesSimple[i].Vertices[j  ].X,linesSimple[i].Vertices[j  ].Y,linesSimple[i].Vertices[j  ].Z));
-					  twoPointLines.Add(new Vector3(linesSimple[i].Vertices[j+1].X,linesSimple[i].Vertices[j+1].Y,linesSimple[i].Vertices[j+1].Z));
+					  twoPointLines.Add(new Vector3(
+							linesSimple[i].Vertices[j  ].X,
+							linesSimple[i].Vertices[j  ].Y,
+							linesSimple[i].Vertices[j  ].Z));
+						twoPointLines.Add(j==0);
+					  twoPointLines.Add(new Vector3(
+							linesSimple[i].Vertices[j+1].X,
+							linesSimple[i].Vertices[j+1].Y,
+							linesSimple[i].Vertices[j+1].Z));
+						twoPointLines.Add(j==linesSimple[i].Vertices.Count-2);
 					}
 					//Draw each individual two point line. The lines must be broken down from line strips so that when individual two point
 					//line locations are modified they do not affect any other two point lines within the same line strip.
-					for(int j=0;j<twoPointLines.Count;j+=2){
-					  Vector3 p1=twoPointLines[j];
-					  Vector3 p2=twoPointLines[j+1];
+					for(int j=0;j<twoPointLines.Count;j+=4){
+					  Vector3 p1=(Vector3)twoPointLines[j];
+						bool p1IsEndPoint=(bool)twoPointLines[j+1];
+					  Vector3 p2=(Vector3)twoPointLines[j+2];
+						bool p2IsEndPoint=(bool)twoPointLines[j+3];
 					  Vector3 lineDir=p2-p1;
 					  lineDir.Normalize();//Gives the line direction a single unit length.
 					  float extSize=0.25f;//The number of units to extend each end of the two point line.
-					  p1=p1-extSize*lineDir;
-					  p2=p2+extSize*lineDir;
+						if(!p1IsEndPoint){//Do not extend the endpoints for the ends of the line strips.
+							p1=p1-extSize*lineDir;
+						}
+						if(!p2IsEndPoint){//Do not extend the endpoints for the ends of the line strips.
+							p2=p2+extSize*lineDir;
+						}
 					  Vector3[] lineVerts=new Vector3[] {p1,p2};
 					  line.Begin();
 					  line.DrawTransform(lineVerts,lineMatrix,toothGraphic.colorRCT);
