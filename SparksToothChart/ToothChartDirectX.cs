@@ -16,8 +16,8 @@ namespace SparksToothChart {
 
 		///<summary>DirectX handle to this control.</summary>
 		public Device device=null;
-		///<summary>GDI+ handle to this control. Used for line drawing at least.</summary>
-		private Graphics g=null;
+		//<summary>GDI+ handle to this control. Used for line drawing at least.</summary>
+		//private Graphics g=null;
 		///<summary>This is a reference to the TcData object that's at the wrapper level.</summary>
 		public ToothChartData TcData;
 		private Color specular_color_normal;
@@ -54,7 +54,7 @@ namespace SparksToothChart {
 			device.DeviceLost+=new EventHandler(this.OnDeviceLost);
 			device.DeviceResizing+=new CancelEventHandler(this.OnDeviceResizing);
 			OnDeviceReset(device,null);
-			g=this.CreateGraphics();// Graphics.FromHwnd(this.Handle);
+			//g=this.CreateGraphics();// Graphics.FromHwnd(this.Handle);
 		}
 
 		public void SetSize(Size size){
@@ -549,7 +549,8 @@ namespace SparksToothChart {
 				tooth_id=Tooth.FromOrdinal(i);
 				if(TcData.SelectedTeeth.Contains(tooth_id)) {
 					DrawNumber(tooth_id,true,true);
-				} else {
+				} 
+				else {
 					DrawNumber(tooth_id,false,true);
 				}
 			}
@@ -560,16 +561,25 @@ namespace SparksToothChart {
 			if(!Tooth.IsValidDB(tooth_id)) {
 				return;
 			}
+			if(TcData.ListToothGraphics[tooth_id].HideNumber) {//if this is a "hidden" number
+				return;//skip
+			}
+			//primary, but not set to show primary letters
+			if(Tooth.IsPrimary(tooth_id) && !TcData.ListToothGraphics[Tooth.PriToPerm(tooth_id)].ShowPrimaryLetter){
+				return;
+			}
 			device.RenderState.Lighting=false;
 			device.RenderState.ZBufferEnable=false;
 			device.Transform.World=Matrix.Identity;
 			string displayNum=Tooth.GetToothLabelGraphic(tooth_id,TcData.ToothNumberingNomenclature);
-			RectangleF recMm=TcData.GetNumberRecMm(tooth_id,g);
-			recMm.Width*=(float)Math.Pow(TcData.PixelScaleRatio,0.6);
-			recMm.Height*=(float)Math.Pow(TcData.PixelScaleRatio,0.6);
+			SizeF labelSize=MeasureStringMm(displayNum);
+			RectangleF recMm=TcData.GetNumberRecMm(tooth_id,labelSize);
+			//recMm.Width*=(float)Math.Pow(TcData.PixelScaleRatio,0.6);
+			//recMm.Height*=(float)Math.Pow(TcData.PixelScaleRatio,0.6);
 			if(ToothGraphic.IsMaxillary(tooth_id)){
 				recMm.Y+=(float)(recMm.Bottom*(1-Math.Pow(TcData.PixelScaleRatio,0.16)));
-			}else{
+			}
+			else{
 				recMm.Y+=(float)(recMm.Top*(1-Math.Pow(TcData.PixelScaleRatio,0.20)));
 			}
 			Color backColor;
@@ -577,7 +587,8 @@ namespace SparksToothChart {
 			if(isSelected) {
 				backColor=TcData.ColorBackHighlight;
 				foreColor=TcData.ColorTextHighlight;
-			} else {
+			} 
+			else {
 				backColor=TcData.ColorBackground;
 				foreColor=TcData.ColorText;
 			}
@@ -602,6 +613,14 @@ namespace SparksToothChart {
 			ib.Dispose();
 			vb.Dispose();
 			PrintString(displayNum,recMm.X+recMm.Width*0.3f,recMm.Y+recMm.Height,0,foreColor,xfont);
+		}
+
+		private SizeF MeasureStringMm(string text) {
+			//todo: Implement this using DirectX
+
+
+			//stub:
+			return new SizeF(12f/TcData.ScaleMmToPix,12f/TcData.ScaleMmToPix);
 		}
 
 		private void PrintString(string text,float x,float y,float z,Color color,Microsoft.DirectX.Direct3D.Font printFont) {

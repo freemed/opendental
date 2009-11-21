@@ -311,9 +311,12 @@ namespace SparksToothChart {
 					return;
 				}
 			}
-			string displayNum=OpenDentBusiness.Tooth.GetToothLabelGraphic(tooth_id,TcData.ToothNumberingNomenclature);
+			string displayNum=Tooth.GetToothLabelGraphic(tooth_id,TcData.ToothNumberingNomenclature);
 			float toMm=1f/TcData.ScaleMmToPix;
-			Rectangle rec=TcData.GetNumberRecPix(tooth_id,g);
+			float labelWidthMm=g.MeasureString(displayNum,Font).Width/TcData.ScaleMmToPix;
+			float labelHeightMm=((float)Font.Height-.5f)/TcData.ScaleMmToPix;
+			SizeF labelSizeF=new SizeF(labelWidthMm,(float)Font.Height/TcData.ScaleMmToPix);
+			Rectangle rec=TcData.GetNumberRecPix(tooth_id,labelSizeF);
 			//Rectangle recPix=TcData.ConvertRecToPix(recMm);
 			if(isSelected) {
 				g.FillRectangle(new SolidBrush(TcData.ColorBackHighlight),rec);
@@ -534,7 +537,7 @@ namespace SparksToothChart {
 
 		///<summary>Used by mousedown and mouse move to set teeth selected or unselected.  A similar method is used externally in the wrapper to set teeth selected.  This private method might be faster since it only draws the changes.</summary>
 		private void SetSelected(string tooth_id,bool setValue) {
-			Graphics g=this.CreateGraphics();
+			//Graphics g=this.CreateGraphics();
 			if(setValue) {
 				TcData.SelectedTeeth.Add(tooth_id);
 				DrawNumber(tooth_id,true,false,g);
@@ -543,9 +546,13 @@ namespace SparksToothChart {
 				TcData.SelectedTeeth.Remove(tooth_id);
 				DrawNumber(tooth_id,false,false,g);
 			}
-			RectangleF recF=TcData.GetNumberRecPix(tooth_id,g);
-			Rectangle rec=new Rectangle((int)recF.X,(int)recF.Y,(int)recF.Width,(int)recF.Height);
-			Invalidate(rec);
+			//string displayNum=Tooth.GetToothLabelGraphic(tooth_id,TcData.ToothNumberingNomenclature);
+			//float labelWidthMm=g.MeasureString(displayNum,Font).Width/TcData.ScaleMmToPix;
+			//float labelHeightMm=(float)Font.Height/TcData.ScaleMmToPix;
+			//SizeF labelSizeF=new SizeF(labelWidthMm,labelHeightMm);
+			//RectangleF recF=TcData.GetNumberRecPix(tooth_id,labelSizeF);
+			//Rectangle rec=new Rectangle((int)recF.X,(int)recF.Y,(int)recF.Width,(int)recF.Height);
+			Invalidate();//rec);
 			Application.DoEvents();
 			/*
 			if(TcData.ALSelectedTeeth.Count==0) {
@@ -564,7 +571,7 @@ namespace SparksToothChart {
 					}
 				}
 			}*/
-			g.Dispose();
+			//g.Dispose();
 		}
 
 		#endregion Mouse And Selections

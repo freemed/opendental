@@ -43,16 +43,16 @@ namespace SparksToothChart {
 		private int fontOffset;
 		private int displayListOffset;
 		private string[][] fontsymbols;
-		///<summary>This gets set to true during certain operations where we do not need to redraw all the teeth.  Specifically, during tooth selection where only the color of the tooth number text needs to change.  In this case, the rest of the scene will not be rendered again.</summary>
-		private bool suspendRendering;
+		//<summary>This gets set to true during certain operations where we do not need to redraw all the teeth.  Specifically, during tooth selection where only the color of the tooth number text needs to change.  In this case, the rest of the scene will not be rendered again.</summary>
+		//private bool suspendRendering;
 		private int selectedPixelFormat;
 		///<summary></summary>
 		[Category("Action"),Description("Occurs when the mouse goes up ending a drawing segment.")]
 		public event ToothChartDrawEventHandler SegmentDrawn=null;
 		///<summary>This is a reference to the TcData object that's at the wrapper level.</summary>
 		public ToothChartData TcData;
-		///<summary>GDI+ handle to this control. Used for line drawing and font measurement.</summary>
-		private Graphics g=null;
+		//<summary>GDI+ handle to this control. Used for line drawing and font measurement.</summary>
+		//private Graphics g=null;
 
 		///<summary>Specify the hardware mode to create the tooth chart with. Set hardwareMode=true to try for hardware accelerated graphics, and set hardwareMode=false to try and get software graphics.</summary>
 		public ToothChartOpenGL(bool hardwareMode,int preferredPixelFormatNum) {
@@ -76,7 +76,7 @@ namespace SparksToothChart {
 
 		public void InitializeGraphics() {
 			MakeDisplayLists();
-			g=this.CreateGraphics();
+			//g=this.CreateGraphics();
 		}
 
 		protected override void OnResize(EventArgs e) {
@@ -124,9 +124,9 @@ namespace SparksToothChart {
 		}
 
 		private void ToothChart_TaoRenderScene(object sender, System.EventArgs e){
-			if(suspendRendering){
-				return;
-			}
+			//if(suspendRendering){
+			//	return;
+			//}
 			//This first part was originally in setup context
 			Gl.glClearColor((float)TcData.ColorBackground.R/255f,(float)TcData.ColorBackground.G/255f,(float)TcData.ColorBackground.B/255f,0f);
 			Gl.glClearAccum(0f,0f,0f,0f);
@@ -629,7 +629,9 @@ namespace SparksToothChart {
 			float toMm=1f/TcData.ScaleMmToPix;
 			//float toMm=(float)WidthProjection/(float)Width;//mm/pix, a ratio that is used for conversions below. Fix this.
 			//float strWidthMm=MeasureStringMm(displayNum);
-			RectangleF recMm=TcData.GetNumberRecMm(tooth_id,g);//strWidthMm);
+			SizeF labelSizeF=MeasureStringMm(displayNum);// g.MeasureString(displayNum,Font).Width/TcData.ScaleMmToPix;
+			//SizeF labelSizeF
+			RectangleF recMm=TcData.GetNumberRecMm(tooth_id,labelSizeF);
 			//Rectangle recPix=TcData.ConvertRecToPix(recMm);
 			if(isSelected){
 				Gl.glColor3f(
@@ -685,20 +687,21 @@ namespace SparksToothChart {
 		/*
 		///<summary>Return value is in tooth coordinates, not pixels.  I left this in OpenGL rather than moving it to ToothChartData because the measurement strategy is very specific to the raster font defined here.</summary>
 		private float MeasureStringPix(string text){
-			float retVal=0;
-			for(int i=0;i<text.Length;i++){
-				if (fontsymbols[(byte)text[i]] != null) retVal+=fontsymbols[(byte)text[i]][0].Length+1;
-			}
+			
 			return retVal;
-		}
-
+		}*/
 		
 		/// <summary>  I left this in OpenGL rather than moving it to ToothChartData because the measurement strategy is very specific to the raster font defined here.</summary>
-		private float MeasureStringMm(string text){
-			//return MeasureStringPix(text)/(float)Width*(float)WidthProjection;
-			return MeasureStringPix(text)/TcData.ScaleMmToPix;
-
-		}*/ 
+		private SizeF MeasureStringMm(string text){
+			float pixelW=0;
+			for(int i=0;i<text.Length;i++){
+				if(fontsymbols[(byte)text[i]] != null) {
+					pixelW+=fontsymbols[(byte)text[i]][0].Length+1;
+				}
+			}
+			pixelW+=2;
+			return new SizeF(pixelW/TcData.ScaleMmToPix,12f/TcData.ScaleMmToPix);
+		}
 
 		private void MakeRasterFont() {
 			fontsymbols = new string[255][];

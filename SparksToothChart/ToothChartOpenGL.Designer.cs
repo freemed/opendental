@@ -13,11 +13,8 @@ namespace SparksToothChart {
 			if(disposing && (components != null)) {
 				components.Dispose();
 			}
-			if(g!=null) {
-				g.Dispose();
-			}
-			//if(gg!=null) {
-			//	gg.Dispose();
+			//if(g!=null) {
+			//	g.Dispose();
 			//}
 			base.Dispose(disposing);
 		}

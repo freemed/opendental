@@ -124,30 +124,31 @@ namespace SparksToothChart {
 			}
 		}
 
-		///<summary>Gets the rectangle surrounding a tooth number.  Used to draw the box and the number inside it.  Includes any mesial shifts.</summary>
-		public RectangleF GetNumberRecMm(string tooth_id,Graphics g){
+		///<summary>Gets the rectangle surrounding a tooth number.  Used to draw the box and the number inside it.  Includes any mesial shifts.  Pass in the labelSize in scene mm.  The resulting rectangle has origin at lower left regardless of what quadrant it's in.</summary>
+		public RectangleF GetNumberRecMm(string tooth_id,SizeF labelSizeF){
 			float xPos=0;
 			float yPos=0;
 			if(ToothGraphic.IsMaxillary(tooth_id)) {
 				if(Tooth.IsPrimary(tooth_id)) {
-					yPos+=5.1f;
+					yPos+=4.9f;
 				}
 				else {
-					yPos+=1.3f;
+					yPos+=.8f;
 				}
 			}
 			else {
 				if(Tooth.IsPrimary(tooth_id)) {
-					yPos-=7.6f;
+					yPos-=labelSizeF.Height+4.9f;
 				}
 				else {
-					yPos-=3.8f;
+					yPos-=labelSizeF.Height+.8f;
 				}
 			}
 			xPos+=GetTransX(tooth_id);
-			string displayNum=OpenDentBusiness.Tooth.GetToothLabelGraphic(tooth_id,ToothNumberingNomenclature);
-			float strWidthMm=g.MeasureString(displayNum,Font).Width/ScaleMmToPix;
-			xPos-=strWidthMm/2f;
+			//string displayNum=OpenDentBusiness.Tooth.GetToothLabelGraphic(tooth_id,ToothNumberingNomenclature);
+			//float strWidthMm=g.MeasureString(displayNum,Font).Width/ScaleMmToPix;
+			//xPos-=strWidthMm/2f;
+			xPos-=labelSizeF.Width/2f;
 			//only use the ShiftM portion of the user translation
 			if(ToothGraphic.IsRight(tooth_id)) {
 				xPos+=ListToothGraphics[tooth_id].ShiftM;
@@ -157,13 +158,13 @@ namespace SparksToothChart {
 			}
 			//float toMm=(float)WidthProjection/(float)widthControl;//mm/pix
 			float toMm=1f/ScaleMmToPix;
-			RectangleF recMm=new RectangleF(xPos-0f*toMm,yPos-2f*toMm,strWidthMm-1f*toMm,12f*toMm);//this rec has origin at LL
+			RectangleF recMm=new RectangleF(xPos-0f*toMm,yPos-0f*toMm,labelSizeF.Width-0f*toMm,labelSizeF.Height);//this rec has origin at LL
 			return recMm;
 		}
 
 		///<summary>Used by 2D tooth chart to get the rectangle in pixels surrounding a tooth number.  Used to draw the box and the number inside it.</summary>
-		public Rectangle GetNumberRecPix(string tooth_id,Graphics g) {
-			return ConvertRecToPix(GetNumberRecMm(tooth_id,g));
+		public Rectangle GetNumberRecPix(string tooth_id,SizeF labelSizeF) {
+			return ConvertRecToPix(GetNumberRecMm(tooth_id,labelSizeF));
 			/*
 			float xPos=GetTransXpix(tooth_id);
 			float yPos=sizeControl.Height/2f;
@@ -295,7 +296,7 @@ namespace SparksToothChart {
 
 		///<summary>The recMm has origin at LL.  The result has origin at UL and is in control coords.</summary>
 		private Rectangle ConvertRecToPix(RectangleF recMm) {
-			int w=(int)(recMm.Width*ScaleMmToPix)+1;
+			int w=(int)(recMm.Width*ScaleMmToPix);
 			int h=(int)(recMm.Height*ScaleMmToPix);
 			int x=(int)(recMm.X*ScaleMmToPix+sizeControl.Width/2);
 			int y=(int)((sizeControl.Height/2-recMm.Y*ScaleMmToPix)-h);

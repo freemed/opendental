@@ -14,9 +14,9 @@ namespace SparksToothChart {
 				components.Dispose();
 			}
 			if(disposing){
-				if(g!=null) {
-					g.Dispose();
-				}
+				//if(g!=null) {
+				//	g.Dispose();
+				//}
 				CleanupDirectX();
 				if(device!=null) {
 					device.Dispose();

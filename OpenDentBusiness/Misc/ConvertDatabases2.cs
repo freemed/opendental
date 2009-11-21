@@ -1846,6 +1846,8 @@ DROP TABLE IF EXISTS etAck";
 				Db.NonQ(command);
 				command="DELETE FROM programproperty WHERE PropertyDesc='HL7FolderIn'";
 				Db.NonQ(command);
+				//command="ALTER TABLE  ADD  bigint NOT NULL";
+				//Db.NonQ(command);
 			
 
 
