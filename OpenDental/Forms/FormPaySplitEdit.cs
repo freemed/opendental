@@ -17,7 +17,6 @@ namespace OpenDental
 		private OpenDental.UI.Button butOK;
 		private OpenDental.UI.Button butRemainder;
 		private System.Windows.Forms.Label label5;
-		private System.Windows.Forms.ListBox listProvider;
 		private System.Windows.Forms.ListBox listPatient;
 		private System.Windows.Forms.Label labelAmount;
 		private OpenDental.ValidDouble textAmount;
@@ -79,6 +78,10 @@ namespace OpenDental
 		private Label label16;
 		private Label label17;
 		private ComboBox comboUnearnedTypes;
+		private ComboBox comboProvider;
+		private OpenDental.UI.Button butPickProv;
+		private ComboBox comboClinic;
+		private Label labelClinic;
 		private double ProcPaidHere;
 
 
@@ -105,7 +108,6 @@ namespace OpenDental
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormPaySplitEdit));
 			this.labelRemainder = new System.Windows.Forms.Label();
 			this.label5 = new System.Windows.Forms.Label();
-			this.listProvider = new System.Windows.Forms.ListBox();
 			this.listPatient = new System.Windows.Forms.ListBox();
 			this.labelAmount = new System.Windows.Forms.Label();
 			this.checkPayPlan = new System.Windows.Forms.CheckBox();
@@ -139,11 +141,11 @@ namespace OpenDental
 			this.label4 = new System.Windows.Forms.Label();
 			this.label3 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
+			this.butDetach = new OpenDental.UI.Button();
+			this.butAttach = new OpenDental.UI.Button();
 			this.label15 = new System.Windows.Forms.Label();
 			this.label17 = new System.Windows.Forms.Label();
 			this.textDateEntry = new OpenDental.ValidDate();
-			this.butDetach = new OpenDental.UI.Button();
-			this.butAttach = new OpenDental.UI.Button();
 			this.textProcDate = new OpenDental.ValidDate();
 			this.textDatePay = new OpenDental.ValidDate();
 			this.butDelete = new OpenDental.UI.Button();
@@ -152,6 +154,10 @@ namespace OpenDental
 			this.butOK = new OpenDental.UI.Button();
 			this.ButCancel = new OpenDental.UI.Button();
 			this.comboUnearnedTypes = new System.Windows.Forms.ComboBox();
+			this.comboProvider = new System.Windows.Forms.ComboBox();
+			this.butPickProv = new OpenDental.UI.Button();
+			this.comboClinic = new System.Windows.Forms.ComboBox();
+			this.labelClinic = new System.Windows.Forms.Label();
 			this.groupPatient.SuspendLayout();
 			this.groupProcedure.SuspendLayout();
 			this.SuspendLayout();
@@ -167,19 +173,12 @@ namespace OpenDental
 			// 
 			// label5
 			// 
-			this.label5.Location = new System.Drawing.Point(301,9);
+			this.label5.Location = new System.Drawing.Point(33,144);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(95,16);
 			this.label5.TabIndex = 10;
 			this.label5.Text = "Provider";
-			this.label5.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-			// 
-			// listProvider
-			// 
-			this.listProvider.Location = new System.Drawing.Point(302,26);
-			this.listProvider.Name = "listProvider";
-			this.listProvider.Size = new System.Drawing.Size(161,147);
-			this.listProvider.TabIndex = 2;
+			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// listPatient
 			// 
@@ -250,7 +249,7 @@ namespace OpenDental
 			this.groupPatient.Controls.Add(this.textPatient);
 			this.groupPatient.Controls.Add(this.checkPatOtherFam);
 			this.groupPatient.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupPatient.Location = new System.Drawing.Point(480,17);
+			this.groupPatient.Location = new System.Drawing.Point(480,26);
 			this.groupPatient.Name = "groupPatient";
 			this.groupPatient.Size = new System.Drawing.Size(265,157);
 			this.groupPatient.TabIndex = 112;
@@ -286,7 +285,7 @@ namespace OpenDental
 			this.groupProcedure.Controls.Add(this.butDetach);
 			this.groupProcedure.Controls.Add(this.butAttach);
 			this.groupProcedure.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupProcedure.Location = new System.Drawing.Point(130,208);
+			this.groupProcedure.Location = new System.Drawing.Point(130,228);
 			this.groupProcedure.Name = "groupProcedure";
 			this.groupProcedure.Size = new System.Drawing.Size(615,225);
 			this.groupProcedure.TabIndex = 113;
@@ -513,32 +512,6 @@ namespace OpenDental
 			this.label2.Text = "Procedure Date";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
-			// label15
-			// 
-			this.label15.Location = new System.Drawing.Point(1,24);
-			this.label15.Name = "label15";
-			this.label15.Size = new System.Drawing.Size(127,16);
-			this.label15.TabIndex = 115;
-			this.label15.Text = "Entry Date";
-			this.label15.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// label17
-			// 
-			this.label17.Location = new System.Drawing.Point(3,120);
-			this.label17.Name = "label17";
-			this.label17.Size = new System.Drawing.Size(124,16);
-			this.label17.TabIndex = 116;
-			this.label17.Text = "Unearned Type";
-			this.label17.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// textDateEntry
-			// 
-			this.textDateEntry.Location = new System.Drawing.Point(129,22);
-			this.textDateEntry.Name = "textDateEntry";
-			this.textDateEntry.ReadOnly = true;
-			this.textDateEntry.Size = new System.Drawing.Size(92,20);
-			this.textDateEntry.TabIndex = 114;
-			// 
 			// butDetach
 			// 
 			this.butDetach.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -566,6 +539,32 @@ namespace OpenDental
 			this.butAttach.TabIndex = 8;
 			this.butAttach.Text = "Attach";
 			this.butAttach.Click += new System.EventHandler(this.butAttach_Click);
+			// 
+			// label15
+			// 
+			this.label15.Location = new System.Drawing.Point(1,24);
+			this.label15.Name = "label15";
+			this.label15.Size = new System.Drawing.Size(127,16);
+			this.label15.TabIndex = 115;
+			this.label15.Text = "Entry Date";
+			this.label15.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// label17
+			// 
+			this.label17.Location = new System.Drawing.Point(3,121);
+			this.label17.Name = "label17";
+			this.label17.Size = new System.Drawing.Size(124,16);
+			this.label17.TabIndex = 116;
+			this.label17.Text = "Unearned Type";
+			this.label17.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// textDateEntry
+			// 
+			this.textDateEntry.Location = new System.Drawing.Point(129,22);
+			this.textDateEntry.Name = "textDateEntry";
+			this.textDateEntry.ReadOnly = true;
+			this.textDateEntry.Size = new System.Drawing.Size(92,20);
+			this.textDateEntry.TabIndex = 114;
 			// 
 			// textProcDate
 			// 
@@ -630,7 +629,7 @@ namespace OpenDental
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(699,466);
+			this.butOK.Location = new System.Drawing.Point(606,496);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 5;
@@ -657,13 +656,56 @@ namespace OpenDental
 			this.comboUnearnedTypes.FormattingEnabled = true;
 			this.comboUnearnedTypes.Location = new System.Drawing.Point(129,118);
 			this.comboUnearnedTypes.Name = "comboUnearnedTypes";
-			this.comboUnearnedTypes.Size = new System.Drawing.Size(163,21);
+			this.comboUnearnedTypes.Size = new System.Drawing.Size(165,21);
 			this.comboUnearnedTypes.TabIndex = 117;
+			// 
+			// comboProvider
+			// 
+			this.comboProvider.FormattingEnabled = true;
+			this.comboProvider.Location = new System.Drawing.Point(129,143);
+			this.comboProvider.Name = "comboProvider";
+			this.comboProvider.Size = new System.Drawing.Size(145,21);
+			this.comboProvider.TabIndex = 118;
+			// 
+			// butPickProv
+			// 
+			this.butPickProv.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butPickProv.Autosize = false;
+			this.butPickProv.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butPickProv.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPickProv.CornerRadius = 2F;
+			this.butPickProv.Location = new System.Drawing.Point(276,143);
+			this.butPickProv.Name = "butPickProv";
+			this.butPickProv.Size = new System.Drawing.Size(18,20);
+			this.butPickProv.TabIndex = 158;
+			this.butPickProv.Text = "...";
+			this.butPickProv.Click += new System.EventHandler(this.butPickProv_Click);
+			// 
+			// comboClinic
+			// 
+			this.comboClinic.FormattingEnabled = true;
+			this.comboClinic.Location = new System.Drawing.Point(129,168);
+			this.comboClinic.Name = "comboClinic";
+			this.comboClinic.Size = new System.Drawing.Size(165,21);
+			this.comboClinic.TabIndex = 160;
+			// 
+			// labelClinic
+			// 
+			this.labelClinic.Location = new System.Drawing.Point(3,171);
+			this.labelClinic.Name = "labelClinic";
+			this.labelClinic.Size = new System.Drawing.Size(124,16);
+			this.labelClinic.TabIndex = 159;
+			this.labelClinic.Text = "Clinic";
+			this.labelClinic.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// FormPaySplitEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(801,541);
+			this.Controls.Add(this.comboClinic);
+			this.Controls.Add(this.labelClinic);
+			this.Controls.Add(this.butPickProv);
+			this.Controls.Add(this.comboProvider);
 			this.Controls.Add(this.comboUnearnedTypes);
 			this.Controls.Add(this.label17);
 			this.Controls.Add(this.textDateEntry);
@@ -681,7 +723,6 @@ namespace OpenDental
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.checkPayPlan);
 			this.Controls.Add(this.labelAmount);
-			this.Controls.Add(this.listProvider);
 			this.Controls.Add(this.label5);
 			this.Controls.Add(this.labelRemainder);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -720,10 +761,27 @@ namespace OpenDental
 				}
 			}
 			for(int i=0;i<ProviderC.List.Length;i++){
-				listProvider.Items.Add(ProviderC.List[i].Abbr);
+				comboProvider.Items.Add(ProviderC.List[i].Abbr);
 				if(ProviderC.List[i].ProvNum==PaySplitCur.ProvNum) {
-					listProvider.SelectedIndex=i;
+					comboProvider.SelectedIndex=i;
 				}
+			}
+			if(PrefC.GetBool(PrefName.EasyNoClinics)) {
+				labelClinic.Visible=false;
+				comboClinic.Visible=false;
+			}
+			else {
+				comboClinic.Items.Add("none");
+				comboClinic.SelectedIndex=0;
+				for(int i=0;i<Clinics.List.Length;i++) {
+					comboClinic.Items.Add(Clinics.List[i].Description);
+					if(Clinics.List[i].ClinicNum==PaySplitCur.ClinicNum) {
+						comboClinic.SelectedIndex=i+1;
+					}
+				}
+			}
+			if(PaySplitCur.ProvNum==0) {
+				comboProvider.SelectedIndex=0;
 			}
 			if(PaySplitCur.PayPlanNum==0){
 				checkPayPlan.Checked=false;
@@ -947,6 +1005,18 @@ namespace OpenDental
 			}
 		}
 
+		private void butPickProv_Click(object sender,EventArgs e) {
+			FormProviderPick formp=new FormProviderPick();
+			if(comboProvider.SelectedIndex>-1) {
+				formp.SelectedProvNum=ProviderC.List[comboProvider.SelectedIndex].ProvNum;
+			}
+			formp.ShowDialog();
+			if(formp.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			comboProvider.SelectedIndex=Providers.GetIndex(formp.SelectedProvNum);
+		}
+
 		private void butDelete_Click(object sender, System.EventArgs e) {
 			if(!MsgBox.Show(this,true,"Delete Item?")) {
 				return;
@@ -974,14 +1044,23 @@ namespace OpenDental
 			PaySplitCur.DatePay=PIn.PDate(textDatePay.Text);//gets overwritten anyway
 			PaySplitCur.ProcDate=PIn.PDate(textProcDate.Text);
 			PaySplitCur.SplitAmt=PIn.PDouble(textAmount.Text);
-			if(listProvider.SelectedIndex!=-1) {
-				PaySplitCur.ProvNum=ProviderC.List[listProvider.SelectedIndex].ProvNum;
-			}
+			//if(comboProvider.SelectedIndex!=-1) {
+				//we shouldn't silently change provider.
+			//	PaySplitCur.ProvNum=ProviderC.List[listProvider.SelectedIndex].ProvNum;
+			//}
 			if(comboUnearnedTypes.SelectedIndex==0) {
 				PaySplitCur.UnearnedType=0;
 			}
 			else {
 				PaySplitCur.UnearnedType=DefC.Short[(int)DefCat.PaySplitUnearnedType][comboUnearnedTypes.SelectedIndex-1].DefNum;
+			}
+			if(!PrefC.GetBool(PrefName.EasyNoClinics)) {
+				if(comboClinic.SelectedIndex==0) {//none
+					PaySplitCur.ClinicNum=0;
+				}
+				else {
+					PaySplitCur.ClinicNum=Clinics.List[comboClinic.SelectedIndex-1].ClinicNum;
+				}
 			}
 			//if(!checkPatOtherFam.Checked){
 				//This is still needed because it might be zero:
@@ -998,6 +1077,8 @@ namespace OpenDental
 			}
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 		
 

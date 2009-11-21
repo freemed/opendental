@@ -75,6 +75,8 @@ namespace OpenDentBusiness{
 		public double WriteOffEst;
 		///<summary>-1 if blank.  Overrides WriteOffEst.  Usually only used for PPOs.</summary>
 		public double WriteOffEstOverride;
+		///<summary>FK to clinic.ClinicNum.  Can be zero.  No user interface for editing.  Forced to always be the same as the procedure or the claim.</summary>
+		public long ClinicNum;
 		///<summary>Not a database column.  Used to help manage passing lists around.</summary>
 		public bool DoDelete;
 		

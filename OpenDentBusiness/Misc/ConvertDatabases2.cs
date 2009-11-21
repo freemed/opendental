@@ -1846,9 +1846,23 @@ DROP TABLE IF EXISTS etAck";
 				Db.NonQ(command);
 				command="DELETE FROM programproperty WHERE PropertyDesc='HL7FolderIn'";
 				Db.NonQ(command);
-				//command="ALTER TABLE  ADD  bigint NOT NULL";
-				//Db.NonQ(command);
-			
+				//Clinic enhancements----------------------------------------------------------------------------------------
+				command="ALTER TABLE paysplit ADD ClinicNum bigint NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE paysplit ADD INDEX (ClinicNum)";
+				Db.NonQ(command);
+				command="Update payment,paysplit SET paysplit.ClinicNum = payment.ClinicNum WHERE paysplit.PayNum = payment.PayNum";
+				Db.NonQ(command);
+				command="ALTER TABLE claimproc ADD ClinicNum bigint NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE claimproc ADD INDEX (ClinicNum)";
+				Db.NonQ(command);
+				command="Update procedurelog,claimproc SET claimproc.ClinicNum = procedurelog.ClinicNum WHERE claimproc.ProcNum = procedurelog.ProcNum";
+				Db.NonQ(command);
+				//then, for claimprocs that are total payments and not attached to any proc:
+				command="Update claim,claimproc SET claimproc.ClinicNum = claim.ClinicNum WHERE claimproc.ClaimNum = claim.ClaimNum AND claimproc.ProcNum=0";
+				Db.NonQ(command);
+
 
 
 

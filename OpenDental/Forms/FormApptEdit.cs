@@ -1172,9 +1172,9 @@ namespace OpenDental{
 
 		private void butPickDentist_Click(object sender,EventArgs e) {
 			FormProviderPick formp=new FormProviderPick();
-			//if(comboProvNum.SelectedIndex>0) {
+			if(comboProvNum.SelectedIndex>-1) {
 				formp.SelectedProvNum=ProviderC.List[comboProvNum.SelectedIndex].ProvNum;
-			//}
+			}
 			formp.ShowDialog();
 			if(formp.DialogResult!=DialogResult.OK) {
 				return;

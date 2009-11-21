@@ -39,6 +39,7 @@ namespace OpenDentBusiness{
 				split.ProcNum     = PIn.PLong(table.Rows[i][10].ToString());
 				split.DateEntry   = PIn.PDate(table.Rows[i][11].ToString());
 				split.UnearnedType= PIn.PLong(table.Rows[i][12].ToString());
+				split.ClinicNum   = PIn.PLong(table.Rows[i][13].ToString());
 				retVal.Add(split);
 			}
 			return retVal;
@@ -71,8 +72,9 @@ namespace OpenDentBusiness{
 				+ ",DatePay = "     +POut.PDate  (split.DatePay)
 				+ ",ProcNum = '"     +POut.PLong   (split.ProcNum)+"'"
 				//+ ",DateEntry = '"   +POut.PDate  (DateEntry)+"'"//not allowed to change
-				+ ",UnearnedType = '" +POut.PLong(split.UnearnedType)+"'"
-				+" WHERE splitNum = '"+POut.PLong (split.SplitNum)+"'";
+				+ ",UnearnedType = '"+POut.PLong(split.UnearnedType)+"'"
+				+ ",ClinicNum = '"   +POut.PLong(split.ClinicNum)+"'"
+				+" WHERE SplitNum = '"+POut.PLong (split.SplitNum)+"'";
  			Db.NonQ(command);
 		}
 
@@ -90,7 +92,7 @@ namespace OpenDentBusiness{
 				command+="SplitNum,";
 			}
 			command+="SplitAmt,PatNum,ProcDate, "
-				+"PayNum,IsDiscount,DiscountType,ProvNum,PayPlanNum,DatePay,ProcNum,DateEntry,UnearnedType) VALUES(";
+				+"PayNum,IsDiscount,DiscountType,ProvNum,PayPlanNum,DatePay,ProcNum,DateEntry,UnearnedType,ClinicNum) VALUES(";
 			if(PrefC.RandomKeys){
 				command+="'"+POut.PLong(split.SplitNum)+"', ";
 			}
@@ -106,7 +108,8 @@ namespace OpenDentBusiness{
 				+POut.PDate(split.DatePay)+", "
 				+"'"+POut.PLong(split.ProcNum)+"', "
 				+"NOW(), "//DateEntry: date of server
-				+"'"+POut.PLong(split.UnearnedType)+"')";
+				+"'"+POut.PLong(split.UnearnedType)+"', "
+				+"'"+POut.PLong(split.ClinicNum)+"')";
  			if(PrefC.RandomKeys){
 				Db.NonQ(command);
 			}
@@ -122,7 +125,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),split);
 				return;
 			}
-			string command= "DELETE from paysplit WHERE splitNum = "+POut.PLong(split.SplitNum);
+			string command= "DELETE from paysplit WHERE SplitNum = "+POut.PLong(split.SplitNum);
  			Db.NonQ(command);
 		}
 
@@ -269,7 +272,7 @@ namespace OpenDentBusiness{
 				}
 				if(newPaySplit==null) {
 					//PaySplit with matching SplitNum was not found, so it must have been deleted
-					PaySplits.Delete(oldSplitList[i]);
+					Delete(oldSplitList[i]);
 					continue;
 				}
 				//PaySplit was found with matching SplitNum, so check for changes
@@ -282,9 +285,10 @@ namespace OpenDentBusiness{
 					|| newPaySplit.ProcNum != oldSplitList[i].ProcNum
 					|| newPaySplit.ProvNum != oldSplitList[i].ProvNum
 					|| newPaySplit.SplitAmt != oldSplitList[i].SplitAmt
-					|| newPaySplit.UnearnedType != oldSplitList[i].UnearnedType) 
+					|| newPaySplit.UnearnedType != oldSplitList[i].UnearnedType
+					|| newPaySplit.ClinicNum != oldSplitList[i].ClinicNum) 
 				{
-					PaySplits.Update(newPaySplit);
+					Update(newPaySplit);
 				}
 			}
 			for(int i=0;i<newSplitList.Count;i++) {//loop through the new list
@@ -295,7 +299,7 @@ namespace OpenDentBusiness{
 					continue;
 				}
 				//entry with SplitNum=0, so it's new
-				PaySplits.Insert(newSplitList[i]);
+				Insert(newSplitList[i]);
 			}
 		}
 

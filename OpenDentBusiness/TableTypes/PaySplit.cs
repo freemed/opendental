@@ -31,6 +31,8 @@ namespace OpenDentBusiness{
 		public DateTime DateEntry;
 		///<summary>FK to definition.DefNum.  Usually 0 unless this is a special unearned split.</summary>
 		public long UnearnedType;
+		///<summary>FK to clinic.ClinicNum.  Can be 0.  Need not match the ClinicNum of the Payment, because a payment can be split between clinics.</summary>
+		public long ClinicNum;
 
 		///<summary>Returns a copy of this PaySplit.</summary>
 		public PaySplit Copy(){
