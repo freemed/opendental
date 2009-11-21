@@ -2821,10 +2821,13 @@ namespace OpenDental{
 		}
 
 		private void updateTotalMin(){
-			int startTime = Int16.Parse(textStart.Text);
-			int stopTime = Int16.Parse(textStop.Text);
-			int total=(((stopTime/100)*60)+(stopTime%100))-(((startTime/100)*60)+(startTime%100));
-			textTotal.Text=total.ToString();
+			try {
+				int startTime = PIn.PInt(textStart.Text);
+				int stopTime = PIn.PInt(textStop.Text);
+				int total=(((stopTime/100)*60)+(stopTime%100))-(((startTime/100)*60)+(startTime%100));
+				textTotal.Text=total.ToString();
+			}
+			catch { }
 		}
 
 		private void butShowMedical_Click(object sender,EventArgs e) {
@@ -2991,6 +2994,20 @@ namespace OpenDental{
 				MsgBox.Show(this,"Qty not valid.  Typical value is 1.");
 				return false;
 			}
+			try {
+				int startTime=PIn.PInt(textStart.Text);
+			}
+			catch {
+				MsgBox.Show(this,"Invalid start time.");
+				return false;
+			}
+			try {
+				int stopTime=PIn.PInt(textStop.Text);
+			}
+			catch {
+				MsgBox.Show(this,"Invalid stop time.");
+				return false;
+			}
 			if(errorProvider2.GetError(textSurfaces)!=""
 				|| errorProvider2.GetError(textTooth)!=""
 				){
@@ -3065,9 +3082,9 @@ namespace OpenDental{
 			ProcCur.CodeMod4 = textCodeMod4.Text;
 			ProcCur.RevCode = textRevCode.Text;
 			ProcCur.UnitCode = textUnitCode.Text;
-			ProcCur.UnitQty = Int16.Parse(textUnitQty.Text);
-			ProcCur.StartTime=Int16.Parse(textStart.Text);
-			ProcCur.StopTime=Int16.Parse(textStop.Text);
+			ProcCur.UnitQty = PIn.PInt(textUnitQty.Text);
+			ProcCur.StartTime=PIn.PInt(textStart.Text);
+			ProcCur.StopTime=PIn.PInt(textStop.Text);
 			if(ProcOld.ProcStatus!=ProcStat.C && ProcCur.ProcStatus==ProcStat.C){
 				ProcCur.DateEntryC=DateTime.Now;//this triggers it to set to server time NOW().
 			}

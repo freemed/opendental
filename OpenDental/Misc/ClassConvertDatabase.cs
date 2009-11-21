@@ -92,7 +92,7 @@ namespace OpenDental{
 			{
 				return false;//If user clicks cancel, then close the program
 			}
-			Cursor=Cursors.WaitCursor;
+			Cursor.Current=Cursors.WaitCursor;
 #if !DEBUG
 			if(DataConnection.DBtype!=DatabaseType.MySql
 				&& !MsgBox.Show(this,true,"If you have not made a backup, please Cancel and backup before continuing.  Continue?"))
@@ -105,7 +105,7 @@ namespace OpenDental{
 				}
 			}
 			catch(Exception e){
-				Cursor=Cursors.Default;
+				Cursor.Current=Cursors.Default;
 				if(e.Message!=""){
 					MessageBox.Show(e.Message);
 				}
@@ -119,7 +119,7 @@ namespace OpenDental{
 			}
 			ConvertDatabases.FromVersion=FromVersion;
 			ConvertDatabases.To2_8_2();//begins going through the chain of conversion steps
-			Cursor=Cursors.Default;
+			Cursor.Current=Cursors.Default;
 			MsgBox.Show(this,"Conversion successful");
 			if(FromVersion>=new Version("3.4.0")){
 				//CacheL.Refresh(InvalidType.Prefs);//or it won't know it has to update in the next line.
