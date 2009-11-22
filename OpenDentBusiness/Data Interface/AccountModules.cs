@@ -432,6 +432,7 @@ namespace OpenDentBusiness {
 			table.Columns.Add("chargesDouble",typeof(double));
 			table.Columns.Add("ClaimNum");
 			table.Columns.Add("ClaimPaymentNum");//if this is set, also set ClaimNum
+			table.Columns.Add("clinic");
 			table.Columns.Add("colorText");
 			table.Columns.Add("credits");
 			table.Columns.Add("creditsDouble",typeof(double));
@@ -479,7 +480,7 @@ namespace OpenDentBusiness {
 			double amt;
 			string command;
 			//claimprocs (ins payments)----------------------------------------------------------------------------
-			command="SELECT ClaimNum,ClaimPaymentNum,DateCP,SUM(InsPayAmt) InsPayAmt_,PatNum,ProcDate,"
+			command="SELECT ClaimNum,ClaimPaymentNum,ClinicNum,DateCP,SUM(InsPayAmt) InsPayAmt_,PatNum,ProcDate,"
 				+"ProvNum,SUM(WriteOff) WriteOff_,"
 				+"(SELECT ProvBill FROM claim WHERE claimproc.ClaimNum=claim.ClaimNum) provNum_ "
 				+"FROM claimproc "
@@ -492,11 +493,8 @@ namespace OpenDentBusiness {
 				}
 				command+="PatNum ="+POut.PLong(fam.ListPats[i].PatNum)+" ";
 			}
-			command+=") GROUP BY ClaimNum,DateCP ";
-			if(DataConnection.DBtype==DatabaseType.Oracle){
-				command+=",ClaimPaymentNum,PatNum,ProcDate,ProvNum ";
-			}
-			command+="ORDER BY DateCP";
+			command+=") GROUP BY ClaimNum,DateCP "
+				+"ORDER BY DateCP";
 			DataTable rawClaimPay=dcon.GetTable(command);
 			DateTime procdate;
 			double writeoff;
@@ -510,6 +508,7 @@ namespace OpenDentBusiness {
 				row["ClaimNum"]=rawClaimPay.Rows[i]["ClaimNum"].ToString();
 				row["ClaimPaymentNum"]="1";//this is now just a boolean flag indicating that it is a payment.
 				//this is because it will frequently not be attached to an actual claim payment.
+				row["clinic"]=Clinics.GetDesc(PIn.PLong(rawClaimPay.Rows[i]["ClinicNum"].ToString()));
 				row["colorText"]=DefC.Long[(int)DefCat.AccountColors][7].ItemColor.ToArgb().ToString();
 				amt=PIn.PDouble(rawClaimPay.Rows[i]["InsPayAmt_"].ToString());
 				writeoff=PIn.PDouble(rawClaimPay.Rows[i]["WriteOff_"].ToString());
@@ -551,7 +550,7 @@ namespace OpenDentBusiness {
 			command="SELECT "
 				+"(SELECT SUM(AdjAmt) FROM adjustment WHERE procedurelog.ProcNum=adjustment.ProcNum "
 				+"AND adjustment.PatNum IN ("+familyPatNums+")) adj_, "
-				+"procedurelog.BaseUnits,Descript,"
+				+"procedurelog.BaseUnits,procedurelog.ClinicNum,Descript,"
 				+"(SELECT SUM(InsPayAmt) FROM claimproc cp5 WHERE procedurelog.ProcNum=cp5.ProcNum "
 				+"AND cp5.PatNum IN ("+familyPatNums+")) insPayAmt_,"
 				+"(SELECT SUM(InsPayEst) FROM claimproc cp4 WHERE procedurelog.ProcNum=cp4.ProcNum "
@@ -600,6 +599,7 @@ namespace OpenDentBusiness {
 				row["charges"]=((double)row["chargesDouble"]).ToString("n");
 				row["ClaimNum"]="0";
 				row["ClaimPaymentNum"]="0";
+				row["clinic"]=Clinics.GetDesc(PIn.PLong(rawProc.Rows[i]["ClinicNum"].ToString()));
 				row["colorText"]=DefC.Long[(int)DefCat.AccountColors][0].ItemColor.ToArgb().ToString();
 				row["creditsDouble"]=0;
 				row["credits"]="";
@@ -683,7 +683,7 @@ namespace OpenDentBusiness {
 				rows.Add(row);
 			}
 			//Adjustments---------------------------------------------------------------------------------------
-			command="SELECT AdjAmt,AdjDate,AdjNum,AdjType,PatNum,ProvNum,AdjNote "
+			command="SELECT AdjAmt,AdjDate,AdjNum,AdjType,ClinicNum,PatNum,ProvNum,AdjNote "
 				+"FROM adjustment "
 				+"WHERE (";
 			for(int i=0;i<fam.ListPats.Length;i++){
@@ -714,6 +714,7 @@ namespace OpenDentBusiness {
 				}
 				row["ClaimNum"]="0";
 				row["ClaimPaymentNum"]="0";
+				row["clinic"]=Clinics.GetDesc(PIn.PLong(rawAdj.Rows[i]["ClinicNum"].ToString()));
 				row["colorText"]=DefC.Long[(int)DefCat.AccountColors][1].ItemColor.ToArgb().ToString();
 				dateT=PIn.PDateT(rawAdj.Rows[i]["AdjDate"].ToString());
 				row["DateTime"]=dateT;
@@ -740,7 +741,7 @@ namespace OpenDentBusiness {
 			}
 			//paysplits-----------------------------------------------------------------------------------------
 			DataTable rawPay;
-			command="SELECT CheckNum,DatePay,paysplit.PatNum,payment.PatNum patNumPayment_,PayAmt,"
+			command="SELECT CheckNum,paysplit.ClinicNum,DatePay,paysplit.PatNum,payment.PatNum patNumPayment_,PayAmt,"
 				+"paysplit.PayNum,PayPlanNum,"
 				+"PayType,ProcDate,GROUP_CONCAT(ProcNum) ProcNums_, "
 				+"ProvNum,SUM(SplitAmt) splitAmt_,payment.PayNote,paysplit.UnearnedType "
@@ -753,7 +754,7 @@ namespace OpenDentBusiness {
 				}
 				command+="paysplit.PatNum ="+POut.PLong(fam.ListPats[i].PatNum)+" ";
 			}
-			command+=") GROUP BY PayPlanNum,paysplit.PayNum,paysplit.PatNum,ProcDate ORDER BY ProcDate";
+			command+=") GROUP BY PayPlanNum,paysplit.PayNum,paysplit.PatNum,paysplit.ClinicNum,ProcDate ORDER BY ProcDate";
 			rawPay=dcon.GetTable(command);
 			double payamt;
 			for(int i=0;i<rawPay.Rows.Count;i++){
@@ -769,6 +770,7 @@ namespace OpenDentBusiness {
 				row["charges"]="";
 				row["ClaimNum"]="0";
 				row["ClaimPaymentNum"]="0";
+				row["clinic"]=Clinics.GetDesc(PIn.PLong(rawPay.Rows[i]["ClinicNum"].ToString()));
 				row["colorText"]=DefC.Long[(int)DefCat.AccountColors][3].ItemColor.ToArgb().ToString();
 				amt=PIn.PDouble(rawPay.Rows[i]["splitAmt_"].ToString());
 				row["creditsDouble"]=amt;
@@ -813,7 +815,7 @@ namespace OpenDentBusiness {
 			}
 			//claims (do not affect balance)-------------------------------------------------------------------------
 			DataTable rawClaim;
-			command="SELECT CarrierName,ClaimFee,claim.ClaimNum,ClaimStatus,ClaimType,DateReceived,DateService,"
+			command="SELECT CarrierName,ClaimFee,claim.ClaimNum,ClaimStatus,ClaimType,claim.ClinicNum,DateReceived,DateService,"
 				+"claim.DedApplied,claim.InsPayEst,"
 				+"claim.InsPayAmt,claim.PatNum,SUM(ProcFee) procAmt_,"
 				+"GROUP_CONCAT(claimproc.ProcNum) ProcNums_,ProvTreat,"
@@ -849,6 +851,7 @@ namespace OpenDentBusiness {
 				row["charges"]="";
 				row["ClaimNum"]=rawClaim.Rows[i]["ClaimNum"].ToString();
 				row["ClaimPaymentNum"]="0";
+				row["clinic"]=Clinics.GetDesc(PIn.PLong(rawClaim.Rows[i]["ClinicNum"].ToString()));
 				row["colorText"]=DefC.Long[(int)DefCat.AccountColors][4].ItemColor.ToArgb().ToString();
 					//might be changed lower down based on claim status
 				row["creditsDouble"]=0;
@@ -971,6 +974,7 @@ namespace OpenDentBusiness {
 				row["charges"]="";
 				row["ClaimNum"]="0";
 				row["ClaimPaymentNum"]="0";
+				row["clinic"]="";
 				row["colorText"]=DefC.Long[(int)DefCat.AccountColors][5].ItemColor.ToArgb().ToString();
 				row["creditsDouble"]=0;
 				row["credits"]="";
@@ -1053,6 +1057,7 @@ namespace OpenDentBusiness {
 				row["charges"]="";
 				row["ClaimNum"]="0";
 				row["ClaimPaymentNum"]="0";
+				row["clinic"]="";
 				row["colorText"]=DefC.Long[(int)DefCat.AccountColors][6].ItemColor.ToArgb().ToString();
 				//amt=PIn.PDouble(rawPayPlan.Rows[i]["principal_"].ToString());
 				amt=PIn.PDouble(rawPayPlan.Rows[i]["CompletedAmt"].ToString());

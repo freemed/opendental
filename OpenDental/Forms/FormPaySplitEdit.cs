@@ -661,6 +661,7 @@ namespace OpenDental
 			// 
 			// comboProvider
 			// 
+			this.comboProvider.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboProvider.FormattingEnabled = true;
 			this.comboProvider.Location = new System.Drawing.Point(129,143);
 			this.comboProvider.Name = "comboProvider";
@@ -683,6 +684,7 @@ namespace OpenDental
 			// 
 			// comboClinic
 			// 
+			this.comboClinic.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboClinic.FormattingEnabled = true;
 			this.comboClinic.Location = new System.Drawing.Point(129,168);
 			this.comboClinic.Name = "comboClinic";

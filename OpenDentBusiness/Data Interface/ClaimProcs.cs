@@ -112,6 +112,7 @@ namespace OpenDentBusiness{
 				cp.EstimateNote    =PIn.PString(table.Rows[i][32].ToString());
 				cp.WriteOffEst     = PIn.PDouble(table.Rows[i][33].ToString());
 				cp.WriteOffEstOverride= PIn.PDouble(table.Rows[i][34].ToString());
+				cp.ClinicNum       = PIn.PLong  (table.Rows[i][35].ToString());
 				retVal.Add(cp);
 			}
 			return retVal;
@@ -136,7 +137,7 @@ namespace OpenDentBusiness{
 				+"CopayAmt,NoBillIns,PaidOtherIns,BaseEst,CopayOverride,"
 				+"ProcDate,DateEntry,LineNumber,DedEst,DedEstOverride,InsEstTotal,"
 				+"InsEstTotalOverride,PaidOtherInsOverride,EstimateNote,WriteOffEst,"
-				+"WriteOffEstOverride) VALUES(";
+				+"WriteOffEstOverride,ClinicNum) VALUES(";
 			if(PrefC.RandomKeys) {
 				command+="'"+POut.PLong(cp.ClaimProcNum)+"', ";
 			}
@@ -174,7 +175,8 @@ namespace OpenDentBusiness{
 				+"'"+POut.PDouble(cp.PaidOtherInsOverride)+"',"
 				+"'"+POut.PString(cp.EstimateNote)+"', "
 				+"'"+POut.PDouble(cp.WriteOffEst)+"', "
-				+"'"+POut.PDouble(cp.WriteOffEstOverride)+"')";
+				+"'"+POut.PDouble(cp.WriteOffEstOverride)+"', "
+				+"'"+POut.PDouble(cp.ClinicNum)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -225,6 +227,7 @@ namespace OpenDentBusiness{
 				+",EstimateNote= '"   +POut.PString(cp.EstimateNote)+"'"
 				+",WriteOffEst= '"    +POut.PDouble(cp.WriteOffEst)+"'"
 				+",WriteOffEstOverride= '"+POut.PDouble(cp.WriteOffEstOverride)+"'"
+				+",ClinicNum= '"      +POut.PLong  (cp.ClinicNum)+"'"
 				+" WHERE claimprocnum = '"+POut.PLong(cp.ClaimProcNum)+"'";
 			//MessageBox.Show(string command);
 			Db.NonQ(command);
@@ -236,7 +239,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),cp);
 				return;
 			}
-			string command= "DELETE from claimproc WHERE claimprocNum = "+POut.PLong(cp.ClaimProcNum);
+			string command= "DELETE FROM claimproc WHERE ClaimProcNum = "+POut.PLong(cp.ClaimProcNum);
 			Db.NonQ(command);
 		}
 
@@ -277,6 +280,7 @@ namespace OpenDentBusiness{
 			cp.ProcDate=proc.ProcDate;
 			cp.WriteOffEst=-1;
 			cp.WriteOffEstOverride=-1;
+			cp.ClinicNum=proc.ClinicNum;
 			Insert(cp);
 		}
 
@@ -517,7 +521,7 @@ namespace OpenDentBusiness{
 				command+="'0' ";
 			}
 			command+=",DateCP="+POut.PDate(date)+" "
-				+"WHERE claimnum = '"+claimNum+"' AND "
+				+"WHERE ClaimNum = '"+claimNum+"' AND "
 				+"inspayamt != 0 AND ("
 				+"claimpaymentNum = '"+claimPaymentNum+"' OR claimpaymentNum = '0')";
 			//MessageBox.Show(string command);

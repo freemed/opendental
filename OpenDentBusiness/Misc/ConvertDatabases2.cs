@@ -1862,7 +1862,16 @@ DROP TABLE IF EXISTS etAck";
 				//then, for claimprocs that are total payments and not attached to any proc:
 				command="Update claim,claimproc SET claimproc.ClinicNum = claim.ClinicNum WHERE claimproc.ClaimNum = claim.ClaimNum AND claimproc.ProcNum=0";
 				Db.NonQ(command);
-
+				command="ALTER TABLE adjustment ADD ClinicNum bigint NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE adjustment ADD INDEX (ClinicNum)";
+				Db.NonQ(command);
+				//todo: followup on adjustments
+				command="ALTER TABLE payplancharge ADD ClinicNum bigint NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE payplancharge ADD INDEX (ClinicNum)";
+				Db.NonQ(command);
+				//todo: followup on payplancharge
 
 
 

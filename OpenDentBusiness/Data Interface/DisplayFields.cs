@@ -168,6 +168,18 @@ namespace OpenDentBusiness {
 				list.Add(new DisplayField("Addr/Ph Note",0,category));
 				list.Add(new DisplayField("PatFields",0,category));
 			}
+			else if(category==DisplayFieldCategory.AccountModule) {
+				list.Add(new DisplayField("Date",65,category));
+				list.Add(new DisplayField("Patient",100,category));
+				list.Add(new DisplayField("Prov",40,category));
+				//list.Add(new DisplayField("Clinic",50,category));
+				list.Add(new DisplayField("Code",46,category));
+				list.Add(new DisplayField("Tth",26,category));
+				list.Add(new DisplayField("Description",270,category));
+				list.Add(new DisplayField("Charges",60,category));
+				list.Add(new DisplayField("Credits",60,category));
+				list.Add(new DisplayField("Balance",60,category));
+			}
 			return list;
 		}
 
@@ -244,6 +256,18 @@ namespace OpenDentBusiness {
 				list.Add(new DisplayField("Referrals",0,category));
 				list.Add(new DisplayField("Addr/Ph Note",0,category));
 				list.Add(new DisplayField("PatFields",0,category));
+			}
+			else if(category==DisplayFieldCategory.AccountModule){
+				list.Add(new DisplayField("Date",65,category));
+				list.Add(new DisplayField("Patient",100,category));
+				list.Add(new DisplayField("Prov",40,category));
+				list.Add(new DisplayField("Clinic",50,category));
+				list.Add(new DisplayField("Code",46,category));
+				list.Add(new DisplayField("Tth",26,category));
+				list.Add(new DisplayField("Description",270,category));
+				list.Add(new DisplayField("Charges",60,category));
+				list.Add(new DisplayField("Credits",60,category));
+				list.Add(new DisplayField("Balance",60,category));
 			}
 			return list;
 		}

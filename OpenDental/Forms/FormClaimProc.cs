@@ -19,7 +19,6 @@ namespace OpenDental
 		private System.Windows.Forms.Label label9;
 		private OpenDental.ValidDouble textInsPayAmt;
 		private System.Windows.Forms.TextBox textRemarks;
-		private System.Windows.Forms.ListBox listStatus;
 		private IContainer components;
 		private OpenDental.ValidDouble textWriteOff;
 		private OpenDental.ValidDouble textInsPayEst;
@@ -33,7 +32,6 @@ namespace OpenDental
 		private System.Windows.Forms.Label label28;
 		private System.Windows.Forms.Label label29;
 		private System.Windows.Forms.TextBox textDescription;
-		private System.Windows.Forms.ListBox listProv;
 		private System.Windows.Forms.Label label30;
 		private System.Windows.Forms.TextBox textCodeSent;
 		private OpenDental.ValidDouble textFeeBilled;
@@ -124,6 +122,11 @@ namespace OpenDental
 		private ValidDouble textWriteOffEst;
 		private Label labelWriteOffEst;
 		private double PaidOtherInsBaseEst;
+		private TextBox textClinic;
+		private Label labelClinic;
+		private OpenDental.UI.Button butPickProv;
+		private ComboBox comboProvider;
+		private ComboBox comboStatus;
 		///<summary>This value is obtained by a query when this window first opens.  It only includes writeoff estimates, not actual writeoffs.  Will be 0 if this is a primary estimate.</summary>
 		private double WriteOffEstOtherIns;
 
@@ -204,7 +207,6 @@ namespace OpenDental
 			this.labelRemarks = new System.Windows.Forms.Label();
 			this.textRemarks = new System.Windows.Forms.TextBox();
 			this.label9 = new System.Windows.Forms.Label();
-			this.listStatus = new System.Windows.Forms.ListBox();
 			this.labelWriteOff = new System.Windows.Forms.Label();
 			this.labelInsPayEst = new System.Windows.Forms.Label();
 			this.labelNotInClaim = new System.Windows.Forms.Label();
@@ -219,7 +221,6 @@ namespace OpenDental
 			this.label28 = new System.Windows.Forms.Label();
 			this.label29 = new System.Windows.Forms.Label();
 			this.textDescription = new System.Windows.Forms.TextBox();
-			this.listProv = new System.Windows.Forms.ListBox();
 			this.label30 = new System.Windows.Forms.Label();
 			this.labelCodeSent = new System.Windows.Forms.Label();
 			this.textCodeSent = new System.Windows.Forms.TextBox();
@@ -283,6 +284,11 @@ namespace OpenDental
 			this.butDelete = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
+			this.textClinic = new System.Windows.Forms.TextBox();
+			this.labelClinic = new System.Windows.Forms.Label();
+			this.butPickProv = new OpenDental.UI.Button();
+			this.comboProvider = new System.Windows.Forms.ComboBox();
+			this.comboStatus = new System.Windows.Forms.ComboBox();
 			this.groupClaim.SuspendLayout();
 			this.panelClaimExtras.SuspendLayout();
 			this.panelEstimateInfo.SuspendLayout();
@@ -319,20 +325,12 @@ namespace OpenDental
 			// 
 			// label9
 			// 
-			this.label9.Location = new System.Drawing.Point(132,25);
+			this.label9.Location = new System.Drawing.Point(51,29);
 			this.label9.Name = "label9";
 			this.label9.Size = new System.Drawing.Size(80,17);
 			this.label9.TabIndex = 16;
 			this.label9.Text = "Status";
-			this.label9.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-			// 
-			// listStatus
-			// 
-			this.listStatus.Location = new System.Drawing.Point(133,44);
-			this.listStatus.Name = "listStatus";
-			this.listStatus.Size = new System.Drawing.Size(95,108);
-			this.listStatus.TabIndex = 17;
-			this.listStatus.MouseDown += new System.Windows.Forms.MouseEventHandler(this.listStatus_MouseDown);
+			this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// labelWriteOff
 			// 
@@ -364,12 +362,12 @@ namespace OpenDental
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(9,7);
+			this.label1.Location = new System.Drawing.Point(9,6);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(121,14);
 			this.label1.TabIndex = 28;
-			this.label1.Text = "Ins Plan:";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.label1.Text = "Ins Plan";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textInsPlan
 			// 
@@ -439,7 +437,7 @@ namespace OpenDental
 			// 
 			// label28
 			// 
-			this.label28.Location = new System.Drawing.Point(6,180);
+			this.label28.Location = new System.Drawing.Point(6,120);
 			this.label28.Name = "label28";
 			this.label28.Size = new System.Drawing.Size(125,17);
 			this.label28.TabIndex = 65;
@@ -448,7 +446,7 @@ namespace OpenDental
 			// 
 			// label29
 			// 
-			this.label29.Location = new System.Drawing.Point(9,224);
+			this.label29.Location = new System.Drawing.Point(9,164);
 			this.label29.Name = "label29";
 			this.label29.Size = new System.Drawing.Size(121,17);
 			this.label29.TabIndex = 67;
@@ -457,27 +455,20 @@ namespace OpenDental
 			// 
 			// textDescription
 			// 
-			this.textDescription.Location = new System.Drawing.Point(133,220);
+			this.textDescription.Location = new System.Drawing.Point(133,160);
 			this.textDescription.Name = "textDescription";
 			this.textDescription.ReadOnly = true;
 			this.textDescription.Size = new System.Drawing.Size(203,20);
 			this.textDescription.TabIndex = 68;
 			// 
-			// listProv
-			// 
-			this.listProv.Location = new System.Drawing.Point(263,44);
-			this.listProv.Name = "listProv";
-			this.listProv.Size = new System.Drawing.Size(120,108);
-			this.listProv.TabIndex = 70;
-			// 
 			// label30
 			// 
-			this.label30.Location = new System.Drawing.Point(262,26);
+			this.label30.Location = new System.Drawing.Point(58,53);
 			this.label30.Name = "label30";
 			this.label30.Size = new System.Drawing.Size(73,17);
 			this.label30.TabIndex = 69;
 			this.label30.Text = "Provider";
-			this.label30.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			this.label30.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// labelCodeSent
 			// 
@@ -530,7 +521,7 @@ namespace OpenDental
 			this.groupClaim.Controls.Add(this.radioEstimate);
 			this.groupClaim.Controls.Add(this.panelClaimExtras);
 			this.groupClaim.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupClaim.Location = new System.Drawing.Point(14,240);
+			this.groupClaim.Location = new System.Drawing.Point(14,188);
 			this.groupClaim.Name = "groupClaim";
 			this.groupClaim.Size = new System.Drawing.Size(460,309);
 			this.groupClaim.TabIndex = 90;
@@ -1024,7 +1015,7 @@ namespace OpenDental
 			// 
 			// labelProcDate
 			// 
-			this.labelProcDate.Location = new System.Drawing.Point(6,202);
+			this.labelProcDate.Location = new System.Drawing.Point(6,142);
 			this.labelProcDate.Name = "labelProcDate";
 			this.labelProcDate.Size = new System.Drawing.Size(126,17);
 			this.labelProcDate.TabIndex = 96;
@@ -1033,7 +1024,7 @@ namespace OpenDental
 			// 
 			// labelDateEntry
 			// 
-			this.labelDateEntry.Location = new System.Drawing.Point(6,159);
+			this.labelDateEntry.Location = new System.Drawing.Point(6,99);
 			this.labelDateEntry.Name = "labelDateEntry";
 			this.labelDateEntry.Size = new System.Drawing.Size(125,17);
 			this.labelDateEntry.TabIndex = 99;
@@ -1042,7 +1033,7 @@ namespace OpenDental
 			// 
 			// textDateEntry
 			// 
-			this.textDateEntry.Location = new System.Drawing.Point(133,155);
+			this.textDateEntry.Location = new System.Drawing.Point(133,95);
 			this.textDateEntry.Name = "textDateEntry";
 			this.textDateEntry.ReadOnly = true;
 			this.textDateEntry.Size = new System.Drawing.Size(83,20);
@@ -1050,14 +1041,14 @@ namespace OpenDental
 			// 
 			// textProcDate
 			// 
-			this.textProcDate.Location = new System.Drawing.Point(133,198);
+			this.textProcDate.Location = new System.Drawing.Point(133,138);
 			this.textProcDate.Name = "textProcDate";
 			this.textProcDate.Size = new System.Drawing.Size(83,20);
 			this.textProcDate.TabIndex = 97;
 			// 
 			// textDateCP
 			// 
-			this.textDateCP.Location = new System.Drawing.Point(133,176);
+			this.textDateCP.Location = new System.Drawing.Point(133,116);
 			this.textDateCP.Name = "textDateCP";
 			this.textDateCP.Size = new System.Drawing.Size(83,20);
 			this.textDateCP.TabIndex = 66;
@@ -1072,7 +1063,7 @@ namespace OpenDental
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(18,569);
+			this.butDelete.Location = new System.Drawing.Point(18,599);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(80,24);
 			this.butDelete.TabIndex = 3;
@@ -1088,7 +1079,7 @@ namespace OpenDental
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(802,569);
+			this.butCancel.Location = new System.Drawing.Point(802,599);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 2;
@@ -1103,17 +1094,72 @@ namespace OpenDental
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(702,569);
+			this.butOK.Location = new System.Drawing.Point(702,599);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 1;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
+			// textClinic
+			// 
+			this.textClinic.Location = new System.Drawing.Point(133,73);
+			this.textClinic.Name = "textClinic";
+			this.textClinic.ReadOnly = true;
+			this.textClinic.Size = new System.Drawing.Size(148,20);
+			this.textClinic.TabIndex = 102;
+			// 
+			// labelClinic
+			// 
+			this.labelClinic.Location = new System.Drawing.Point(9,75);
+			this.labelClinic.Name = "labelClinic";
+			this.labelClinic.Size = new System.Drawing.Size(121,14);
+			this.labelClinic.TabIndex = 101;
+			this.labelClinic.Text = "Clinic";
+			this.labelClinic.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// butPickProv
+			// 
+			this.butPickProv.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butPickProv.Autosize = false;
+			this.butPickProv.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butPickProv.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPickProv.CornerRadius = 2F;
+			this.butPickProv.Location = new System.Drawing.Point(280,50);
+			this.butPickProv.Name = "butPickProv";
+			this.butPickProv.Size = new System.Drawing.Size(18,20);
+			this.butPickProv.TabIndex = 160;
+			this.butPickProv.Text = "...";
+			this.butPickProv.Click += new System.EventHandler(this.butPickProv_Click);
+			// 
+			// comboProvider
+			// 
+			this.comboProvider.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboProvider.FormattingEnabled = true;
+			this.comboProvider.Location = new System.Drawing.Point(133,50);
+			this.comboProvider.Name = "comboProvider";
+			this.comboProvider.Size = new System.Drawing.Size(145,21);
+			this.comboProvider.TabIndex = 159;
+			// 
+			// comboStatus
+			// 
+			this.comboStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboStatus.FormattingEnabled = true;
+			this.comboStatus.Location = new System.Drawing.Point(133,26);
+			this.comboStatus.Name = "comboStatus";
+			this.comboStatus.Size = new System.Drawing.Size(145,21);
+			this.comboStatus.TabIndex = 161;
+			this.comboStatus.SelectionChangeCommitted += new System.EventHandler(this.comboStatus_SelectionChangeCommitted);
+			// 
 			// FormClaimProc
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(889,602);
+			this.ClientSize = new System.Drawing.Size(889,632);
+			this.Controls.Add(this.comboStatus);
+			this.Controls.Add(this.butPickProv);
+			this.Controls.Add(this.comboProvider);
+			this.Controls.Add(this.textClinic);
+			this.Controls.Add(this.labelClinic);
 			this.Controls.Add(this.textDateEntry);
 			this.Controls.Add(this.labelDateEntry);
 			this.Controls.Add(this.textProcDate);
@@ -1123,7 +1169,6 @@ namespace OpenDental
 			this.Controls.Add(this.textDescription);
 			this.Controls.Add(this.textDateCP);
 			this.Controls.Add(this.textInsPlan);
-			this.Controls.Add(this.listProv);
 			this.Controls.Add(this.label30);
 			this.Controls.Add(this.label29);
 			this.Controls.Add(this.label28);
@@ -1133,7 +1178,6 @@ namespace OpenDental
 			this.Controls.Add(this.butCancel);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.label9);
-			this.Controls.Add(this.listStatus);
 			this.Controls.Add(this.panelEstimateInfo);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
@@ -1268,16 +1312,16 @@ namespace OpenDental
 				labelNotInClaim.Visible=false;
 				panelClaimExtras.Visible=false;
 			}
-			listStatus.Items.Clear();
-			listStatus.Items.Add(Lan.g(this,"Estimate"));
-			listStatus.Items.Add(Lan.g(this,"Not Received"));
-			listStatus.Items.Add(Lan.g(this,"Received"));
-			listStatus.Items.Add(Lan.g(this,"PreAuthorization"));
-			listStatus.Items.Add(Lan.g(this,"Supplemental"));
-			listStatus.Items.Add(Lan.g(this,"CapClaim"));
-			listStatus.Items.Add(Lan.g(this,"CapEstimate"));
-			listStatus.Items.Add(Lan.g(this,"CapComplete"));
-			SetListStatus(ClaimProcCur.Status);
+			comboStatus.Items.Clear();
+			comboStatus.Items.Add(Lan.g(this,"Estimate"));
+			comboStatus.Items.Add(Lan.g(this,"Not Received"));
+			comboStatus.Items.Add(Lan.g(this,"Received"));
+			comboStatus.Items.Add(Lan.g(this,"PreAuthorization"));
+			comboStatus.Items.Add(Lan.g(this,"Supplemental"));
+			comboStatus.Items.Add(Lan.g(this,"CapClaim"));
+			comboStatus.Items.Add(Lan.g(this,"CapEstimate"));
+			comboStatus.Items.Add(Lan.g(this,"CapComplete"));
+			SetComboStatus(ClaimProcCur.Status);
 			if(ClaimProcCur.Status==ClaimProcStatus.Received || ClaimProcCur.Status==ClaimProcStatus.Supplemental){
 				labelDateEntry.Visible=true;
 				textDateEntry.Visible=true;
@@ -1286,17 +1330,24 @@ namespace OpenDental
 				labelDateEntry.Visible=false;
 				textDateEntry.Visible=false;
 			}
-			listProv.Items.Clear();
+			comboProvider.Items.Clear();
 			for(int i=0;i<ProviderC.List.Length;i++){
-				listProv.Items.Add(ProviderC.List[i].Abbr);
+				comboProvider.Items.Add(ProviderC.List[i].Abbr);
 				if(ClaimProcCur.ProvNum==ProviderC.List[i].ProvNum){
-					listProv.SelectedIndex=i;
+					comboProvider.SelectedIndex=i;
 				}
 			}
 			//this is not used, because the provider might simply be hidden. See bottom of page.
 			//if(listProv.SelectedIndex==-1){
 			//	listProv.SelectedIndex=0;//there should always be a provider
 			//}
+			if(PrefC.GetBool(PrefName.EasyNoClinics)) {
+				labelClinic.Visible=false;
+				textClinic.Visible=false;
+			}
+			else {
+				textClinic.Text=Clinics.GetDesc(ClaimProcCur.ClinicNum);
+			}
 			textDateEntry.Text=ClaimProcCur.DateEntry.ToShortDateString();
 			if(ClaimProcCur.ProcDate.Year<1880){
 				textProcDate.Text="";
@@ -1318,32 +1369,32 @@ namespace OpenDental
 			//MessageBox.Show(panelEstimateInfo.Visible.ToString());
 		}
 
-		private void SetListStatus(ClaimProcStatus status){
+		private void SetComboStatus(ClaimProcStatus status){
 			switch(status){
 				case ClaimProcStatus.Estimate:
-					listStatus.SelectedIndex=0;
+					comboStatus.SelectedIndex=0;
 					break;
 				case ClaimProcStatus.NotReceived:
-					listStatus.SelectedIndex=1;
+					comboStatus.SelectedIndex=1;
 					break;
 				case ClaimProcStatus.Received:
-					listStatus.SelectedIndex=2;
+					comboStatus.SelectedIndex=2;
 					break;
 				case ClaimProcStatus.Preauth:
-					listStatus.SelectedIndex=3;
+					comboStatus.SelectedIndex=3;
 					break;
 				//adjustments have a completely different user interface. Cannot access from here.
 				case ClaimProcStatus.Supplemental:
-					listStatus.SelectedIndex=4;
+					comboStatus.SelectedIndex=4;
 					break;
 				case ClaimProcStatus.CapClaim:
-					listStatus.SelectedIndex=5;
+					comboStatus.SelectedIndex=5;
 					break;
 				case ClaimProcStatus.CapEstimate:
-					listStatus.SelectedIndex=6;
+					comboStatus.SelectedIndex=6;
 					break;
 				case ClaimProcStatus.CapComplete:
-					listStatus.SelectedIndex=7;
+					comboStatus.SelectedIndex=7;
 					break;
 			}
 		}
@@ -1646,28 +1697,40 @@ namespace OpenDental
 			}
 		}
 
-		private void listStatus_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e) {
+		private void butPickProv_Click(object sender,EventArgs e) {
+			FormProviderPick formp=new FormProviderPick();
+			if(comboProvider.SelectedIndex > -1) {
+				formp.SelectedProvNum=ProviderC.List[comboProvider.SelectedIndex].ProvNum;
+			}
+			formp.ShowDialog();
+			if(formp.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			comboProvider.SelectedIndex=Providers.GetIndex(formp.SelectedProvNum);
+		}
+
+		private void comboStatus_SelectionChangeCommitted(object sender,EventArgs e) {
 			//MessageBox.Show(listStatus.SelectedIndex.ToString());
 			//new selected index will already be set
 			if(ClaimProcCur.Status!=ClaimProcStatus.Estimate//not an estimate
-				&& listStatus.SelectedIndex==0)//and clicked on estimate
+				&& comboStatus.SelectedIndex==0)//and clicked on estimate
 			{
-				SetListStatus(ClaimProcCur.Status);//no change
+				SetComboStatus(ClaimProcCur.Status);//no change
 				return;
 			}
-			if(ClaimProcCur.Status==ClaimProcStatus.Estimate){//is an estimate
-				SetListStatus(ClaimProcCur.Status);//no change
+			if(ClaimProcCur.Status==ClaimProcStatus.Estimate) {//is an estimate
+				SetComboStatus(ClaimProcCur.Status);//no change
 				return;
 			}
-			if(ClaimProcCur.Status==ClaimProcStatus.CapComplete	|| ClaimProcCur.Status==ClaimProcStatus.CapEstimate){//is a cap procedure
-				SetListStatus(ClaimProcCur.Status);//no change
+			if(ClaimProcCur.Status==ClaimProcStatus.CapComplete	|| ClaimProcCur.Status==ClaimProcStatus.CapEstimate) {//is a cap procedure
+				SetComboStatus(ClaimProcCur.Status);//no change
 				return;
 			}
-			if(ClaimProcCur.ClaimPaymentNum>0){
-				SetListStatus(ClaimProcCur.Status);//no change
+			if(ClaimProcCur.ClaimPaymentNum>0) {
+				SetComboStatus(ClaimProcCur.Status);//no change
 				return;
 			}
-			switch(listStatus.SelectedIndex){
+			switch(comboStatus.SelectedIndex) {
 				case 0:
 					ClaimProcCur.Status=ClaimProcStatus.Estimate;
 					break;
@@ -1693,14 +1756,18 @@ namespace OpenDental
 					ClaimProcCur.Status=ClaimProcStatus.CapComplete;
 					break;
 			}
-			if(ClaimProcCur.Status==ClaimProcStatus.Received || ClaimProcCur.Status==ClaimProcStatus.Supplemental){
+			if(ClaimProcCur.Status==ClaimProcStatus.Received || ClaimProcCur.Status==ClaimProcStatus.Supplemental) {
 				labelDateEntry.Visible=true;
 				textDateEntry.Visible=true;
 			}
-			else{
+			else {
 				labelDateEntry.Visible=false;
 				textDateEntry.Visible=false;
 			}
+		}
+
+		private void listStatus_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e) {
+			
 		}
 
 		private void checkNoBillIns_Click(object sender, System.EventArgs e) {
@@ -1814,10 +1881,10 @@ namespace OpenDental
 				return;
 			}
 			//status already handled
-			if(listProv.SelectedIndex!=-1){//if no prov selected, then that prov must simply be hidden,
+			if(comboProvider.SelectedIndex!=-1) {//if no prov selected, then that prov must simply be hidden,
 				//because all claimprocs are initially created with a prov(except preauth).
 				//So, in this case, don't change.
-				ClaimProcCur.ProvNum=ProviderC.List[listProv.SelectedIndex].ProvNum;
+				ClaimProcCur.ProvNum=ProviderC.List[comboProvider.SelectedIndex].ProvNum;
 			}
 			ClaimProcCur.ProcDate=PIn.PDate(textProcDate.Text);
 			if(!textDateCP.ReadOnly){
@@ -1854,6 +1921,8 @@ namespace OpenDental
 			}
 			ClaimProcCur=ClaimProcOld.Copy();//revert back to the old ClaimProc
 		}
+
+		
 
 	
 

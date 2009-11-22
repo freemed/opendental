@@ -75,7 +75,7 @@ namespace OpenDental{
 			this.listCategory.FormattingEnabled = true;
 			this.listCategory.Location = new System.Drawing.Point(23,34);
 			this.listCategory.Name = "listCategory";
-			this.listCategory.Size = new System.Drawing.Size(155,43);
+			this.listCategory.Size = new System.Drawing.Size(155,56);
 			this.listCategory.TabIndex = 57;
 			this.listCategory.DoubleClick += new System.EventHandler(this.listCategory_DoubleClick);
 			// 

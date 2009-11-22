@@ -76,7 +76,7 @@ namespace OpenDentBusiness{
 		public double WriteOff;
 		///<summary>The number of x-rays enclosed.</summary>
 		public int Radiographs;
-		///<summary>FK to clinic.ClinicNum.  0 if no clinic.</summary>
+		///<summary>FK to clinic.ClinicNum.  0 if no clinic.  Since one claim cannot have procs from multiple clinics, the clinicNum is set when creating the claim and then cannot be changed.  The claim would have to be deleted and recreated.  Otherwise, if changing at the claim level, a feature would have to be added that synched all procs, claimprocs, and probably some other tables.</summary>
 		public long ClinicNum;
 		///<summary>FK to claimform.ClaimFormNum.  0 if not assigned to use the claimform for the insplan.</summary>
 		public long ClaimForm;

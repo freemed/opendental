@@ -75,7 +75,7 @@ namespace OpenDentBusiness{
 		public double WriteOffEst;
 		///<summary>-1 if blank.  Overrides WriteOffEst.  Usually only used for PPOs.</summary>
 		public double WriteOffEstOverride;
-		///<summary>FK to clinic.ClinicNum.  Can be zero.  No user interface for editing.  Forced to always be the same as the procedure or the claim.</summary>
+		///<summary>FK to clinic.ClinicNum.  Can be zero.  No user interface for editing.  Forced to always be the same as the procedure, or if no procedure, then the claim.</summary>
 		public long ClinicNum;
 		///<summary>Not a database column.  Used to help manage passing lists around.</summary>
 		public bool DoDelete;
@@ -121,9 +121,10 @@ namespace OpenDentBusiness{
 				|| InsEstTotal != cp.InsEstTotal
 				|| InsEstTotalOverride != cp.InsEstTotalOverride
 				|| PaidOtherInsOverride != cp.PaidOtherInsOverride
+				|| EstimateNote != cp.EstimateNote
 				|| WriteOffEst != cp.WriteOffEst
 				|| WriteOffEstOverride != cp.WriteOffEstOverride
-				|| EstimateNote != cp.EstimateNote) 
+				|| ClinicNum != cp.ClinicNum) 
 			{
 				return false;
 			}

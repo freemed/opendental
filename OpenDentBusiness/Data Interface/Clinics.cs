@@ -4,9 +4,9 @@ using System.Data;
 using System.Reflection;
 
 namespace OpenDentBusiness{
-	///<summary>There is no cache for clinics.  We assume they will change almost never.</summary>
+	///<summary>There is no cache for clinics.  We assume they will almost never change.</summary>
 	public class Clinics {
-		///<summary></summary>
+		///<summary>Clinics cannot be hidden or deleted, so there is only one list.</summary>
 		private static Clinic[] list;
 
 		public static Clinic[] List{
