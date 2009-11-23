@@ -1486,6 +1486,7 @@ namespace OpenDental{
 			}
 			//uses default printer if selected printer not valid
 			*/
+//#if 
 			try{
 				pd2.Print();
 			}

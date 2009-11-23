@@ -124,6 +124,7 @@ namespace SparksToothChart {
 		}
 
 		///<summary>Set to true when using hardware rendering in OpenGL, and false otherwise. This will have no effect when in simple 2D graphics mode.</summary>
+		[Browsable(false)]
 		public bool UseHardware{
 			get{
 				return hardwareMode;
@@ -133,6 +134,7 @@ namespace SparksToothChart {
 			}
 		}
 
+		[Browsable(false)]
 		public bool AutoFinish{
 			get{
 				if(drawMode==DrawingMode.OpenGL) {
@@ -149,6 +151,7 @@ namespace SparksToothChart {
 			}
 		}
 
+		[Browsable(false)]
 		public int PreferredPixelFormatNumber{
 			get{
 				return preferredPixelFormatNum;
@@ -158,6 +161,7 @@ namespace SparksToothChart {
 			}
 		}
 
+		[Browsable(false)]
 		public CursorTool CursorTool{
 			get{
 				return tcData.CursorTool;
@@ -183,9 +187,24 @@ namespace SparksToothChart {
 		}
 
 		///<summary>For the freehand drawing tool.</summary>
+		[Browsable(false)]
 		public Color ColorDrawing{
 			set{
 				tcData.ColorDrawing=value;
+			}
+		}
+		
+		[Browsable(false)]
+		public bool PerioMode {
+			get {
+				return tcData.PerioMode;
+			}
+			set {
+				if(drawMode!=DrawingMode.DirectX) {
+					throw new Exception("Only allowed in DirectX");
+				}
+				tcData.PerioMode=value;
+				Invalidate();
 			}
 		}
 		#endregion Properties

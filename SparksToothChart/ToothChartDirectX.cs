@@ -190,7 +190,12 @@ namespace SparksToothChart {
 			specular_color_cementum=Color.FromArgb(255,(int)(255*specCem),(int)(255*specCem),(int)(255*specCem));
 			specularSharpness=70f;//70f;//Not the same as in OpenGL. No maximum value. Smaller number means light is more spread out.
 			//Draw
-			DrawScene();
+			if(TcData.PerioMode) {
+				DrawScenePerio();
+			}
+			else {
+				DrawScene();
+			}
 		}
 
 		private void DrawScene() {
@@ -218,7 +223,27 @@ namespace SparksToothChart {
 			DrawDrawingSegments();
 			DrawNumbersAndLines();//Numbers and center lines are top-most.			
 			device.EndScene();
-			//This line would crash after windows switchUser/logon.  So I added a try/catch at the OnPaint level.
+			device.Present();
+		}
+
+		private void DrawScenePerio() {
+			device.Clear(ClearFlags.Target|ClearFlags.ZBuffer,TcData.ColorBackground,1.0f,0);
+			device.BeginScene();
+			Matrix defOrient=Matrix.Identity;
+			defOrient.Scale(1f,1f,-1f);
+			Matrix trans=Matrix.Identity;
+			trans.Translate(0f,0f,400f);
+			defOrient=defOrient*trans;
+			for(int t=0;t<TcData.ListToothGraphics.Count;t++) {//loop through each tooth
+				if(TcData.ListToothGraphics[t].ToothID=="implant") {//this is not an actual tooth.
+					continue;
+				}
+				DrawFacialView(TcData.ListToothGraphics[t],defOrient);
+				//DrawOcclusalView(TcData.ListToothGraphics[t],defOrient);
+			}
+			//DrawDrawingSegments();
+			DrawNumbersAndLines();//Numbers and center lines are top-most.			
+			device.EndScene();
 			device.Present();
 		}
 

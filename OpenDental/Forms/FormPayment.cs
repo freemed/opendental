@@ -431,7 +431,7 @@ namespace OpenDental{
 			this.butPay.CornerRadius = 4F;
 			this.butPay.Image = global::OpenDental.Properties.Resources.Left;
 			this.butPay.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPay.Location = new System.Drawing.Point(650,205);
+			this.butPay.Location = new System.Drawing.Point(588,208);
 			this.butPay.Name = "butPay";
 			this.butPay.Size = new System.Drawing.Size(70,24);
 			this.butPay.TabIndex = 124;
@@ -441,11 +441,11 @@ namespace OpenDental{
 			// gridBal
 			// 
 			this.gridBal.HScrollVisible = false;
-			this.gridBal.Location = new System.Drawing.Point(650,234);
+			this.gridBal.Location = new System.Drawing.Point(588,234);
 			this.gridBal.Name = "gridBal";
 			this.gridBal.ScrollValue = 0;
 			this.gridBal.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridBal.Size = new System.Drawing.Size(319,198);
+			this.gridBal.Size = new System.Drawing.Size(381,198);
 			this.gridBal.TabIndex = 120;
 			this.gridBal.Title = "Family Balances";
 			this.gridBal.TranslationName = "TablePaymentBal";
@@ -457,7 +457,7 @@ namespace OpenDental{
 			this.gridMain.Location = new System.Drawing.Point(7,234);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(593,198);
+			this.gridMain.Size = new System.Drawing.Size(575,198);
 			this.gridMain.TabIndex = 116;
 			this.gridMain.Title = "Payment Splits (optional)";
 			this.gridMain.TranslationName = "TablePaySplits";
@@ -763,7 +763,7 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TablePaySplits","Prov"),50);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TablePaySplits","Clinic"),90);
+			col=new ODGridColumn(Lan.g("TablePaySplits","Clinic"),70);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TablePaySplits","Patient"),130);
 			gridMain.Columns.Add(col);
@@ -861,7 +861,7 @@ namespace OpenDental{
 			gridBal.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TablePaymentBal","Prov"),60);
 			gridBal.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TablePaymentBal","Clinic"),80);
+			col=new ODGridColumn(Lan.g("TablePaymentBal","Clinic"),70);
 			gridBal.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TablePaymentBal","Patient"),62);
 			gridBal.Columns.Add(col);
@@ -1171,6 +1171,15 @@ namespace OpenDental{
 			}
 			else {
 				PaymentCur.ClinicNum=Clinics.List[comboClinic.SelectedIndex-1].ClinicNum;
+			}
+			if(SplitList.Count>0) {
+				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Change clinic for all splits?")) {
+					return;
+				}
+				for(int i=0;i<SplitList.Count;i++) {
+					SplitList[i].ClinicNum=PaymentCur.ClinicNum;
+				}
+				FillMain();
 			}
 		}
 

@@ -67,6 +67,12 @@
     <Compile Include="FormImageViewer.Designer.cs">
       <DependentUpon>FormImageViewer.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormPerioTest.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormPerioTest.Designer.cs">
+      <DependentUpon>FormPerioTest.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">
@@ -80,6 +86,9 @@
     <EmbeddedResource Include="FormImageViewer.resx">
       <DependentUpon>FormImageViewer.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormPerioTest.resx">
+      <DependentUpon>FormPerioTest.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
