@@ -57,9 +57,26 @@ namespace SparksToothChart {
 				}
 			}
 			int[] indicies=indexList.ToArray();
-			facesDirectX=new IndexBuffer(typeof(int),indicies.Length,device,Usage.None,Pool.Managed);
-			facesDirectX.SetData(indicies,0,LockFlags.None);
-			NumIndicies=indicies.Length;
+			//Calculate the number of unique indicies so we know exactly now many verticies are referenced
+			//and then we can properly optimize our face order with Geometry.OptimizeFaces() below.
+			List <int> uniqueIndicies=new List<int> ();
+			for(int i=0;i<indicies.Length;i++){
+				if(uniqueIndicies.IndexOf(indicies[i])<0){
+					uniqueIndicies.Add(indicies[i]);
+				}
+			}
+			//Optimize the triangle order for excellent vertex caching.
+			int[] optimizedIndicies=Geometry.OptimizeFaces(indicies,uniqueIndicies.Count);
+			int[] optimalFaces=new int[optimizedIndicies.Length];
+			for(int f=0;f<optimalFaces.Length;f+=3) {
+				int oldFaceBase=3*optimizedIndicies[f/3];
+				optimalFaces[f]=indicies[oldFaceBase];
+				optimalFaces[f+1]=indicies[oldFaceBase+1];
+				optimalFaces[f+2]=indicies[oldFaceBase+2];
+			}
+			facesDirectX=new IndexBuffer(typeof(int),optimalFaces.Length,device,Usage.None,Pool.Managed);
+			facesDirectX.SetData(optimalFaces,0,LockFlags.None);
+			NumIndicies=optimalFaces.Length;
 		}
 
 		public void CleanupDirectX(){

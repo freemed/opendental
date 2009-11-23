@@ -16,8 +16,6 @@ namespace SparksToothChart {
 
 		///<summary>DirectX handle to this control.</summary>
 		public Device device=null;
-		//<summary>GDI+ handle to this control. Used for line drawing at least.</summary>
-		//private Graphics g=null;
 		///<summary>This is a reference to the TcData object that's at the wrapper level.</summary>
 		public ToothChartData TcData;
 		private Color specular_color_normal;
@@ -33,6 +31,8 @@ namespace SparksToothChart {
 		///<summary>The previous hotTooth.  If this is different than hotTooth, then mouse has just now moved to a new tooth.  Can be 0 to represent no previous.</summary>
 		private string hotToothOld;
 		private bool deviceLost=true;
+		//private DateTime frameBeginTime=DateTime.MinValue;
+		//private DateTime frameEndTime=DateTime.MinValue;
 
 		public ToothChartDirectX() {
 			InitializeComponent();
@@ -54,7 +54,6 @@ namespace SparksToothChart {
 			device.DeviceLost+=new EventHandler(this.OnDeviceLost);
 			device.DeviceResizing+=new CancelEventHandler(this.OnDeviceResizing);
 			OnDeviceReset(device,null);
-			//g=this.CreateGraphics();// Graphics.FromHwnd(this.Handle);
 		}
 
 		public void SetSize(Size size){
@@ -207,6 +206,7 @@ namespace SparksToothChart {
 			Matrix trans=Matrix.Identity;
 			trans.Translate(0f,0f,400f);
 			defOrient=defOrient*trans;
+			//frameBeginTime=DateTime.Now;
 			for(int t=0;t<TcData.ListToothGraphics.Count;t++) {//loop through each tooth
 				if(TcData.ListToothGraphics[t].ToothID=="implant") {//this is not an actual tooth.
 					continue;
@@ -214,8 +214,9 @@ namespace SparksToothChart {
 				DrawFacialView(TcData.ListToothGraphics[t],defOrient);
 				DrawOcclusalView(TcData.ListToothGraphics[t],defOrient);
 			}
+			//frameEndTime=DateTime.Now;
 			DrawDrawingSegments();
-			DrawNumbersAndLines();//Numbers and center lines are top-most.
+			DrawNumbersAndLines();//Numbers and center lines are top-most.			
 			device.EndScene();
 			//This line would crash after windows switchUser/logon.  So I added a try/catch at the OnPaint level.
 			device.Present();
@@ -248,7 +249,7 @@ namespace SparksToothChart {
 				//The line size needs to be slightly larger than in OpenGL because
 				//lines are drawn with polygons in DirectX and they are anti-aliased,
 				//even when the line.Antialias flag is set.
-				line.Width=(float)Width/200f;
+				line.Width=2.2f*TcData.PixelScaleRatio;
 				line.Begin();
 				if(ToothGraphic.IsMaxillary(toothGraphic.ToothID)) {
 					line.DrawTransform(new Vector3[] {
@@ -282,6 +283,7 @@ namespace SparksToothChart {
 				//lines are drawn with polygons in DirectX and they are anti-aliased,
 				//even when the line.Antialias flag is set.
 				line.Width=2.5f*TcData.PixelScaleRatio;
+				line.Begin();
 				List<LineSimple> linesSimple=toothGraphic.GetRctLines();
 				for(int i=0;i<linesSimple.Count;i++) {
 					if(linesSimple[i].Vertices.Count<2){
@@ -319,11 +321,10 @@ namespace SparksToothChart {
 							p2=p2+extSize*lineDir;
 						}
 					  Vector3[] lineVerts=new Vector3[] {p1,p2};
-					  line.Begin();
 					  line.DrawTransform(lineVerts,lineMatrix,toothGraphic.colorRCT);
-					  line.End();
 					}
 				}
+				line.End();
 			}
 			ToothGroup groupBU=toothGraphic.GetGroup(ToothGroupType.Buildup);//during debugging, not all teeth have a BU group yet.
 			if(toothGraphic.Visible && groupBU!=null && groupBU.Visible) {//BU or Post
@@ -418,6 +419,30 @@ namespace SparksToothChart {
 			device.RenderState.Lighting=true;
 		}
 
+		private Material GetGroupMaterial(ToothGraphic toothGraphic,ToothGroup group){
+			Material material=new Material();
+			Color materialColor;
+			if(toothGraphic.ShiftO<-10) {//if unerupted
+				materialColor=Color.FromArgb(group.PaintColor.A/2,group.PaintColor.R/2,group.PaintColor.G/2,group.PaintColor.B/2);
+			} else {
+				materialColor=group.PaintColor;
+			}
+			material.Ambient=materialColor;
+			material.Diffuse=materialColor;
+			if(group.GroupType==ToothGroupType.Cementum) {
+				material.Specular=specular_color_cementum;
+			} else if(group.PaintColor.R>245&&group.PaintColor.G>245&&group.PaintColor.B>235) {
+				//because DirectX washes out the specular on the enamel, we have to turn it down only for the enamel color
+				//for reference, this is the current enamel color: Color.FromArgb(255,250,250,240)
+				float specEnamel=.4f;
+				material.Specular=Color.FromArgb(255,(int)(255*specEnamel),(int)(255*specEnamel),(int)(255*specEnamel));
+			} else {
+				material.Specular=specular_color_normal;
+			}
+			material.SpecularSharpness=specularSharpness;
+			return material;
+		}
+
 		private void DrawTooth(ToothGraphic toothGraphic) {
 			ToothGroup group;
 			device.VertexFormat=CustomVertex.PositionNormal.Format;
@@ -428,30 +453,7 @@ namespace SparksToothChart {
 					group.GroupType==ToothGroupType.Buildup || group.GroupType==ToothGroupType.None) {
 					continue;
 				}
-				Material material=new Material();
-				Color materialColor;
-				if(toothGraphic.ShiftO < -10) {//if unerupted
-					materialColor=Color.FromArgb(group.PaintColor.A/2,group.PaintColor.R/2,group.PaintColor.G/2,group.PaintColor.B/2);
-				} 
-				else {
-					materialColor=group.PaintColor;
-				}
-				material.Ambient=materialColor;
-				material.Diffuse=materialColor;
-				if(group.GroupType==ToothGroupType.Cementum) {
-					material.Specular=specular_color_cementum;
-				} 
-				else if(group.PaintColor.R>245 && group.PaintColor.G>245 && group.PaintColor.B>235){
-					//because DirectX washes out the specular on the enamel, we have to turn it down only for the enamel color
-					//for reference, this is the current enamel color: Color.FromArgb(255,250,250,240)
-					float specEnamel=.4f;
-					material.Specular=Color.FromArgb(255,(int)(255*specEnamel),(int)(255*specEnamel),(int)(255*specEnamel));
-				}
-				else {
-					material.Specular=specular_color_normal;
-				}
-				material.SpecularSharpness=specularSharpness;
-				device.Material=material;
+				device.Material=GetGroupMaterial(toothGraphic,group);
 				//draw the group
 			  device.Indices=group.facesDirectX;
 				device.DrawIndexedPrimitives(PrimitiveType.TriangleList,0,0,toothGraphic.VertexNormals.Count,0,group.NumIndicies/3);
@@ -554,6 +556,9 @@ namespace SparksToothChart {
 					DrawNumber(tooth_id,false,true);
 				}
 			}
+			//TimeSpan displayTime=(frameEndTime-frameBeginTime);
+			//float fps=1000f/displayTime.Milliseconds;
+			//this.PrintString(fps.ToString(),0,0,0,Color.Blue,xfont);
 		}
 
 		///<summary>Draws the number and the small rectangle behind it.  Draws in the appropriate color.  isFullRedraw means that all of the toothnumbers are being redrawn.  This helps with a few optimizations and with not painting blank rectangles when not needed.</summary>
@@ -574,36 +579,30 @@ namespace SparksToothChart {
 			string displayNum=Tooth.GetToothLabelGraphic(tooth_id,TcData.ToothNumberingNomenclature);
 			SizeF labelSize=MeasureStringMm(displayNum);
 			RectangleF recMm=TcData.GetNumberRecMm(tooth_id,labelSize);
-			Color backColor;
-			Color foreColor;
+			Color foreColor=TcData.ColorText;
 			if(isSelected) {
-				backColor=TcData.ColorBackHighlight;
 				foreColor=TcData.ColorTextHighlight;
-			} 
-			else {
-				backColor=TcData.ColorBackground;
-				foreColor=TcData.ColorText;
-			}
-			//Draw the background rectangle.
-			int backColorARGB=backColor.ToArgb();
-			CustomVertex.PositionColored[] quadVerts=new CustomVertex.PositionColored[] {
+				//Draw the background rectangle only if the text is selected.
+				int backColorARGB=TcData.ColorBackHighlight.ToArgb();
+				CustomVertex.PositionColored[] quadVerts=new CustomVertex.PositionColored[] {
 			    new CustomVertex.PositionColored(recMm.X,recMm.Y,0,backColorARGB),//LL
 			    new CustomVertex.PositionColored(recMm.X,recMm.Y+recMm.Height,0,backColorARGB),//UL
 			    new CustomVertex.PositionColored(recMm.X+recMm.Width,recMm.Y+recMm.Height,0,backColorARGB),//UR
 			    new CustomVertex.PositionColored(recMm.X+recMm.Width,recMm.Y,0,backColorARGB),//LR
 			  };
-			VertexBuffer vb=new VertexBuffer(typeof(CustomVertex.PositionColored),CustomVertex.PositionColored.StrideSize*quadVerts.Length,
-				device,Usage.WriteOnly,CustomVertex.PositionColored.Format,Pool.Managed);
-			vb.SetData(quadVerts,0,LockFlags.None);
-			int[] indicies=new int[] { 0,1,2,0,2,3 };
-			IndexBuffer ib=new IndexBuffer(typeof(int),indicies.Length,device,Usage.None,Pool.Managed);
-			ib.SetData(indicies,0,LockFlags.None);
-			device.VertexFormat=CustomVertex.PositionColored.Format;
-			device.SetStreamSource(0,vb,0);
-			device.Indices=ib;
-			device.DrawIndexedPrimitives(PrimitiveType.TriangleList,0,0,quadVerts.Length,0,indicies.Length/3);
-			ib.Dispose();
-			vb.Dispose();
+				VertexBuffer vb=new VertexBuffer(typeof(CustomVertex.PositionColored),CustomVertex.PositionColored.StrideSize*quadVerts.Length,
+					device,Usage.WriteOnly,CustomVertex.PositionColored.Format,Pool.Managed);
+				vb.SetData(quadVerts,0,LockFlags.None);
+				int[] indicies=new int[] { 0,1,2,0,2,3 };
+				IndexBuffer ib=new IndexBuffer(typeof(int),indicies.Length,device,Usage.None,Pool.Managed);
+				ib.SetData(indicies,0,LockFlags.None);
+				device.VertexFormat=CustomVertex.PositionColored.Format;
+				device.SetStreamSource(0,vb,0);
+				device.Indices=ib;
+				device.DrawIndexedPrimitives(PrimitiveType.TriangleList,0,0,quadVerts.Length,0,indicies.Length/3);
+				ib.Dispose();
+				vb.Dispose();
+			}
 			//Offsets the text by 10% of the rectangle width to ensure that there is at least on pixel of space on
 			//the left for the background rectangle.
 			PrintString(displayNum,recMm.X+recMm.Width*0.1f,recMm.Y+recMm.Height,0,foreColor,xfont);
@@ -630,7 +629,7 @@ namespace SparksToothChart {
 			Matrix lineMatrix=ScreenSpaceMatrix();
 			Line line=new Line(device);
 			line.Width=2.2f*TcData.PixelScaleRatio;
-			//line.GlLines=true;//js This was making lines draw with varying thicknesses and oblique tips.  Ugly.
+			line.Begin();
 			for(int s=0;s<TcData.DrawingSegmentList.Count;s++) {				
 				string[] pointStr=TcData.DrawingSegmentList[s].DrawingSegment.Split(';');
 				List<Vector3> points=new List<Vector3>();
@@ -667,12 +666,22 @@ namespace SparksToothChart {
 					p1=p1-extSize*lineDir;
 					p2=p2+extSize*lineDir;
 		      Vector3[] lineVerts=new Vector3[] {p1,p2};
-		      line.Begin();
 					line.DrawTransform(lineVerts,lineMatrix,TcData.DrawingSegmentList[s].ColorDraw);
-		      line.End();
 		    }
 				//no filled circle at intersections
 			}
+			//Draw the points that make up the segment which is currently being drawn
+			//but which has not yet been sent to the database.
+			for(int p=1;p<TcData.PointList.Count;p++){
+				PointF pMm1=TcData.PointPixToMm(TcData.PointList[p]);
+				PointF pMm2=TcData.PointPixToMm(TcData.PointList[p-1]);
+				line.DrawTransform(new Vector3[] {
+						new Vector3(pMm1.X,pMm1.Y,0f),
+						new Vector3(pMm2.X,pMm2.Y,0f)},
+					lineMatrix,
+					TcData.ColorDrawing);
+			}
+			line.End();
 			line.Dispose();
 		}
 
@@ -759,22 +768,6 @@ namespace SparksToothChart {
 					return;
 				}
 				TcData.PointList.Add(new Point(e.X,e.Y));
-				device.RenderState.Lighting=false;
-				device.RenderState.ZBufferEnable=false;
-				device.Transform.World=Matrix.Identity;
-				Matrix lineMatrix=ScreenSpaceMatrix();
-				Line line=new Line(device);
-				line.Width=(float)Width/175f;//about 2
-				PointF pMm1=TcData.PointPixToMm(TcData.PointList[TcData.PointList.Count-1]);
-				PointF pMm2=TcData.PointPixToMm(TcData.PointList[TcData.PointList.Count-2]);
-				line.Begin();
-				line.DrawTransform(new Vector3[] {
-					new Vector3(pMm1.X,pMm1.Y,0f),
-					new Vector3(pMm2.X,pMm2.Y,0f)},
-					lineMatrix,
-					TcData.ColorDrawing);
-				line.End();
-				line.Dispose();
 				Invalidate();
 				Application.DoEvents();
 			} 
