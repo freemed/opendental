@@ -88,7 +88,7 @@ namespace SparksToothChart {
 			deviceLost=false;
 			CleanupDirectX();
 			device=sender as Device;
-			////Required for calculating font background rectangle size in ToothChartData.
+			//Required for calculating font background rectangle size in ToothChartData.
 			TcData.Font=new System.Drawing.Font("Arial",9f);
 			xfont=new Microsoft.DirectX.Direct3D.Font(device,
 				(int)Math.Round((float)(14*Math.Sqrt(TcData.PixelScaleRatio))),
@@ -574,14 +574,6 @@ namespace SparksToothChart {
 			string displayNum=Tooth.GetToothLabelGraphic(tooth_id,TcData.ToothNumberingNomenclature);
 			SizeF labelSize=MeasureStringMm(displayNum);
 			RectangleF recMm=TcData.GetNumberRecMm(tooth_id,labelSize);
-			//recMm.Width*=(float)Math.Pow(TcData.PixelScaleRatio,0.6);
-			//recMm.Height*=(float)Math.Pow(TcData.PixelScaleRatio,0.6);
-			if(ToothGraphic.IsMaxillary(tooth_id)){
-				recMm.Y+=(float)(recMm.Bottom*(1-Math.Pow(TcData.PixelScaleRatio,0.16)));
-			}
-			else{
-				recMm.Y+=(float)(recMm.Top*(1-Math.Pow(TcData.PixelScaleRatio,0.20)));
-			}
 			Color backColor;
 			Color foreColor;
 			if(isSelected) {
@@ -612,21 +604,23 @@ namespace SparksToothChart {
 			device.DrawIndexedPrimitives(PrimitiveType.TriangleList,0,0,quadVerts.Length,0,indicies.Length/3);
 			ib.Dispose();
 			vb.Dispose();
-			PrintString(displayNum,recMm.X+recMm.Width*0.3f,recMm.Y+recMm.Height,0,foreColor,xfont);
+			//Offsets the text by 10% of the rectangle width to ensure that there is at least on pixel of space on
+			//the left for the background rectangle.
+			PrintString(displayNum,recMm.X+recMm.Width*0.1f,recMm.Y+recMm.Height,0,foreColor,xfont);
 		}
 
 		private SizeF MeasureStringMm(string text) {
-			//todo: Implement this using DirectX
-
-
-			//stub:
-			return new SizeF(12f/TcData.ScaleMmToPix,12f/TcData.ScaleMmToPix);
+			Rectangle rectSize=xfont.MeasureString(null,text,DrawTextFormat.VerticalCenter,Color.White);
+			//DirectX appears to add more vertical spacing than GDI+. We scale the height here to 80% as a result.
+			//DirectX does not appear to add horizontal spacing into the width consideration. As a result, we widen 
+			//the output by 25% to ensure that the highlight border around the text has a border all the way around.
+			return new SizeF((rectSize.Width*1.25f)/TcData.ScaleMmToPix,(rectSize.Height*0.8f)/TcData.ScaleMmToPix);
 		}
 
 		private void PrintString(string text,float x,float y,float z,Color color,Microsoft.DirectX.Direct3D.Font printFont) {
 			Vector3 screenPoint=new Vector3(x,y,z);
 			screenPoint.Project(device.Viewport,device.Transform.Projection,device.Transform.View,device.Transform.World);
-			printFont.DrawText(null,text,new Point((int)screenPoint.X,(int)screenPoint.Y),color);
+			printFont.DrawText(null,text,new Point((int)Math.Ceiling(screenPoint.X),(int)Math.Floor(screenPoint.Y)),color);
 		}
 
 		private void DrawDrawingSegments() {
