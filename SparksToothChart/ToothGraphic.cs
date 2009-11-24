@@ -62,6 +62,10 @@ namespace SparksToothChart {
 		public bool IsSealant;
 		///<summary>If sealant, then this will contain the color.</summary>
 		public Color colorSealant;
+		///<summary>For perio, 1, 2, or 3.  It's a string because we'll later allow +.  The text gets drawn directly on the front of the tooth.</summary>
+		public string Mobility;
+		///<summary>If a mobility is set, the is the color.</summary>
+		public Color colorMobility;
 
 		///<summary>If using DirectX, the vb VertexBuffer variable must be instantiated in a subsequent call to PrepareForDirectX().</summary>
 		public ToothGraphic Copy() {

@@ -522,6 +522,12 @@ namespace SparksToothChart {
 			Invalidate();
 		}
 
+		public void SetMobility(string toothID,string mobility,Color color) {
+			tcData.ListToothGraphics[toothID].Mobility=mobility;
+			tcData.ListToothGraphics[toothID].colorMobility=color;
+			Invalidate();
+		}
+
 		#endregion
 
 		protected override void OnResize(EventArgs e) {

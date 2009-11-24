@@ -32,6 +32,13 @@ namespace TestToothChart {
 			//toothChart.MoveTooth("4",0,0,0,0,-5,0);
 			//toothChart.MoveTooth("16",0,20,0,-3,0,0);
 			//toothChart.MoveTooth("24",15,2,0,0,0,0);
+			toothChart.SetMobility("3","1",Color.Black);
+			toothChart.SetMobility("7","2",Color.Red);
+			toothChart.SetMobility("8","2",Color.Red);
+			toothChart.SetMobility("9","2",Color.Red);
+			toothChart.SetMobility("10","2",Color.Red);
+			toothChart.SetMobility("16","3",Color.Red);
+			toothChart.SetMobility("24","2",Color.Red);
 			
 		}
 
