@@ -20,6 +20,14 @@ namespace TestToothChart {
 			toothChart.ColorBackground=Color.White;
 			toothChart.ColorText=Color.Black;
 			toothChart.PerioMode=true;
+			toothChart.SetMissing("1");
+			toothChart.SetMissing("2");
+			toothChart.SetMissing("13");
+			toothChart.SetMissing("14");
+			toothChart.SetMissing("17");
+			toothChart.SetMissing("25");
+			toothChart.SetMissing("26");
+			toothChart.SetImplant("14",Color.Gray);
 		}
 
 		private void butPrint_Click(object sender,EventArgs e) {
