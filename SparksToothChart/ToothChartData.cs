@@ -25,7 +25,7 @@ namespace SparksToothChart {
 		private Size sizeControl;
 		/// <summary>In tooth mm, exactly how much of the projection to show.</summary>
 		public SizeF SizeOriginalProjection=new SizeF(130f,97.34f);
-		///<summary>Ratio of pix/mm.  Gets recalculated every time SizeControl changes due to wrapper resize.  Multiply this ratio times a tooth mm measurement to get a pixel equivalent. If starting with a pixel coordinate, then divide it by this ratio to get mm.</summary>
+		///<summary>Ratio of pix/mm.  Gets recalculated every time SizeControl changes due to wrapper resize.  Multiply this ratio times a tooth mm measurement to get a pixel equivalent. If starting with a pixel value, then divide it by this ratio to get mm.</summary>
 		public float ScaleMmToPix;
 		///<summary>Whenever the control is resized, this value is set.  If the control ratio is wider than the 3D chart ratio, then this is true.  There would be extra background space on the sides.  If the ratio is taller than the 3D chart, then extra background on the top and bottom.  Default is (barely) false.</summary>
 		public bool IsWide;
