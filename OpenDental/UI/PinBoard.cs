@@ -148,8 +148,8 @@ namespace OpenDental.UI {
 				}
 			}
 			catch { }
-			g.Dispose();
-			base.OnPaint(pe);
+			//g.Dispose();
+			//base.OnPaint(pe);
 		}
 
 		#region Mouse
