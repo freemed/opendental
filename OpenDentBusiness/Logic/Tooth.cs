@@ -672,29 +672,9 @@ namespace OpenDentBusiness{
       return surfTidy;      
     }
 
-		/// <summary>Returns the distance in mm that the given tooth should be shifted occlusally in order to line up properly for the perio chart.</summary>
+		/// <summary>This will be deleted as soon as it's no longer in use by DirectX chart.</summary>
 		public static float PerioShiftMm(string tooth_id) {
-			switch(tooth_id) {
-				default: 
-					return 0;
-				case "6":
-				case "11":
-					return 2;
-				case "7":
-				case "10":
-					return 1;
-				case "8":
-				case "9":
-					return 3;
-				case "23":
-				case "24":
-				case "25":
-				case "26":
-					return 2;
-				case "22":
-				case "27":
-					return 3;				
-			}
+			return 0;
 		}
 
 
