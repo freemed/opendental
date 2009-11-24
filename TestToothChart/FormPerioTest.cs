@@ -28,6 +28,10 @@ namespace TestToothChart {
 			toothChart.SetMissing("25");
 			toothChart.SetMissing("26");
 			toothChart.SetImplant("14",Color.Gray);
+			toothChart.MoveTooth("4",0,0,0,0,-5,0);
+			toothChart.MoveTooth("16",0,20,0,-3,0,0);
+			toothChart.MoveTooth("24",15,2,0,0,0,0);
+			
 		}
 
 		private void butPrint_Click(object sender,EventArgs e) {

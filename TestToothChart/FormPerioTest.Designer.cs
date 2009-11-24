@@ -23,7 +23,7 @@
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			SparksToothChart.ToothChartData toothChartData1 = new SparksToothChart.ToothChartData();
+			SparksToothChart.ToothChartData toothChartData2 = new SparksToothChart.ToothChartData();
 			this.butPrint = new System.Windows.Forms.Button();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.butColorBleed = new System.Windows.Forms.Button();
@@ -172,7 +172,8 @@
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(215,126);
 			this.label5.TabIndex = 218;
-			this.label5.Text = "Tests currently included:\r\nMissing teeth (1,2,13,14,17,25,26)\r\nImplant (14)";
+			this.label5.Text = "Tests currently included:\r\nMissing teeth (1,2,13,14,17,25,26)\r\nImplant (14)\r\nMove" +
+    "ments (4,16,24)";
 			// 
 			// toothChart
 			// 
@@ -187,8 +188,8 @@
 			this.toothChart.PreferredPixelFormatNumber = 0;
 			this.toothChart.Size = new System.Drawing.Size(700,667);
 			this.toothChart.TabIndex = 198;
-			toothChartData1.SizeControl = new System.Drawing.Size(700,667);
-			this.toothChart.TcData = toothChartData1;
+			toothChartData2.SizeControl = new System.Drawing.Size(700,667);
+			this.toothChart.TcData = toothChartData2;
 			this.toothChart.UseHardware = false;
 			// 
 			// FormPerioTest
