@@ -238,10 +238,8 @@ namespace SparksToothChart {
 				if(TcData.ListToothGraphics[t].ToothID=="implant") {//this is not an actual tooth.
 					continue;
 				}
-				DrawFacialView(TcData.ListToothGraphics[t],defOrient);
-				//DrawOcclusalView(TcData.ListToothGraphics[t],defOrient);
+				DrawFacialViewPerio(TcData.ListToothGraphics[t],defOrient);
 			}
-			//DrawDrawingSegments();
 			DrawNumbersAndLines();//Numbers and center lines are top-most.			
 			device.EndScene();
 			device.Present();
@@ -251,8 +249,102 @@ namespace SparksToothChart {
 			return device.Transform.World*device.Transform.View*device.Transform.Projection;
 		}
 
+		private void DrawFacialViewPerio(ToothGraphic toothGraphic,Matrix defOrient) {
+			Matrix toothTrans=Matrix.Identity;
+			toothTrans.Translate(GetTransX(toothGraphic.ToothID),
+				GetTransYfacial(toothGraphic.ToothID)+(ToothGraphic.IsMaxillary(toothGraphic.ToothID)?(15f):(-15f)),
+				0);
+			device.Transform.World=toothTrans*defOrient;
+			if(toothGraphic.Visible) {
+				DrawTooth(toothGraphic);
+				Matrix toothTransFlip=Matrix.Identity;
+				toothTransFlip.Translate(GetTransX(toothGraphic.ToothID),
+					GetTransYfacial(toothGraphic.ToothID)+(ToothGraphic.IsMaxillary(toothGraphic.ToothID)?(-20f):(20f)),
+					0);
+				Matrix flipMat=Matrix.Scaling(1f,1f,-1f);
+				device.Transform.World=flipMat*toothTransFlip*defOrient;
+				DrawTooth(toothGraphic);
+				device.Transform.World=toothTrans*defOrient;
+			}
+			device.RenderState.ZBufferEnable=false;
+			device.RenderState.Lighting=false;
+			Matrix lineMatrix=ScreenSpaceMatrix();
+			Line line=new Line(device);
+			line.GlLines=true;
+			if(toothGraphic.Visible&&toothGraphic.IsRCT) {//draw RCT
+				//Thickness of lines depend on size of window.
+				//The line size needs to be slightly larger than in OpenGL because
+				//lines are drawn with polygons in DirectX and they are anti-aliased,
+				//even when the line.Antialias flag is set.
+				line.Width=2.5f*TcData.PixelScaleRatio;
+				line.Begin();
+				List<LineSimple> linesSimple=toothGraphic.GetRctLines();
+				for(int i=0;i<linesSimple.Count;i++) {
+					if(linesSimple[i].Vertices.Count<2) {
+						continue;//Just to avoid internal errors, even though not likely.
+					}
+					//Convert each line strip into very simple two point lines so that line extensions can be calculated more easily below.
+					//Items in the array are tuples of (2D point,bool indicating end point).
+					List<object> twoPointLines=new List<object>();
+					for(int j=0;j<linesSimple[i].Vertices.Count-1;j++) {
+						twoPointLines.Add(new Vector3(
+							linesSimple[i].Vertices[j].X,
+							linesSimple[i].Vertices[j].Y,
+							linesSimple[i].Vertices[j].Z));
+						twoPointLines.Add(j==0);
+						twoPointLines.Add(new Vector3(
+							linesSimple[i].Vertices[j+1].X,
+							linesSimple[i].Vertices[j+1].Y,
+							linesSimple[i].Vertices[j+1].Z));
+						twoPointLines.Add(j==linesSimple[i].Vertices.Count-2);
+					}
+					//Draw each individual two point line. The lines must be broken down from line strips so that when individual two point
+					//line locations are modified they do not affect any other two point lines within the same line strip.
+					for(int j=0;j<twoPointLines.Count;j+=4) {
+						Vector3 p1=(Vector3)twoPointLines[j];
+						bool p1IsEndPoint=(bool)twoPointLines[j+1];
+						Vector3 p2=(Vector3)twoPointLines[j+2];
+						bool p2IsEndPoint=(bool)twoPointLines[j+3];
+						Vector3 lineDir=p2-p1;
+						lineDir.Normalize();//Gives the line direction a single unit length.
+						float extSize=0.25f;//The number of units to extend each end of the two point line.
+						if(!p1IsEndPoint) {//Do not extend the endpoints for the ends of the line strips.
+							p1=p1-extSize*lineDir;
+						}
+						if(!p2IsEndPoint) {//Do not extend the endpoints for the ends of the line strips.
+							p2=p2+extSize*lineDir;
+						}
+						Vector3[] lineVerts=new Vector3[] { p1,p2 };
+						line.DrawTransform(lineVerts,lineMatrix,toothGraphic.colorRCT);
+					}
+				}
+				line.End();
+			}
+			ToothGroup groupBU=toothGraphic.GetGroup(ToothGroupType.Buildup);//during debugging, not all teeth have a BU group yet.
+			if(toothGraphic.Visible&&groupBU!=null&&groupBU.Visible) {//BU or Post
+				device.RenderState.ZBufferEnable=false;
+				device.RenderState.Lighting=true;
+				device.Lights[0].Enabled=false;//Disable the scene light.
+				device.Lights[1].Ambient=Color.White;
+				device.Lights[1].Enabled=true;
+				Color colorBU=toothGraphic.GetGroup(ToothGroupType.Buildup).PaintColor;
+				device.VertexFormat=CustomVertex.PositionNormal.Format;
+				device.SetStreamSource(0,toothGraphic.vb,0);
+				Material material=new Material();
+				material.Ambient=colorBU;
+				device.Material=material;
+				device.Indices=groupBU.facesDirectX;
+				device.DrawIndexedPrimitives(PrimitiveType.TriangleList,0,0,toothGraphic.VertexNormals.Count,0,groupBU.NumIndicies/3);
+				device.Lights[0].Enabled=true;
+				device.Lights[1].Enabled=false;
+			}
+			line.Dispose();
+			device.RenderState.ZBufferEnable=true;
+			device.RenderState.Lighting=true;
+		}
+
 		private void DrawFacialView(ToothGraphic toothGraphic,Matrix defOrient) {
-			Matrix toothTrans=Matrix.Identity;//Start with world transform defined by calling function.
+			Matrix toothTrans=Matrix.Identity;
 			toothTrans.Translate(GetTransX(toothGraphic.ToothID),
 				GetTransYfacial(toothGraphic.ToothID),
 				0);
