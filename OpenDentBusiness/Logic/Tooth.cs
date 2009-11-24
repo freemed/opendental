@@ -673,7 +673,7 @@ namespace OpenDentBusiness{
     }
 
 		/// <summary>Returns the distance in mm that the given tooth should be shifted occlusally in order to line up properly for the perio chart.</summary>
-		public float PerioShiftMm(string tooth_id) {
+		public static float PerioShiftMm(string tooth_id) {
 
 			return 0;
 		}
