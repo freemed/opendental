@@ -28,9 +28,10 @@ namespace TestToothChart {
 			toothChart.SetMissing("25");
 			toothChart.SetMissing("26");
 			toothChart.SetImplant("14",Color.Gray);
-			toothChart.MoveTooth("4",0,0,0,0,-5,0);
-			toothChart.MoveTooth("16",0,20,0,-3,0,0);
-			toothChart.MoveTooth("24",15,2,0,0,0,0);
+			//Movements are too low of a priority to test right now.  We might not even want to implement them.
+			//toothChart.MoveTooth("4",0,0,0,0,-5,0);
+			//toothChart.MoveTooth("16",0,20,0,-3,0,0);
+			//toothChart.MoveTooth("24",15,2,0,0,0,0);
 			
 		}
 
