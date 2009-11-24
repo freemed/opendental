@@ -200,7 +200,7 @@ namespace SparksToothChart {
 				return tcData.PerioMode;
 			}
 			set {
-				if(drawMode!=DrawingMode.DirectX) {
+				if(drawMode!=DrawingMode.DirectX && value==true) {
 					throw new Exception("Only allowed in DirectX");
 				}
 				tcData.PerioMode=value;
