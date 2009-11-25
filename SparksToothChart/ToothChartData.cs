@@ -590,7 +590,7 @@ namespace SparksToothChart {
 			return affectedTeeth;
 		}
 
-		///<summary>Stub.  Use this to test a site (there are 3 sites per tooth face).  If it returns 0, do not draw a furctation.  If it returns a number 1-3, then use GetFurcationPos to know where to put the triangle or V.</summary>
+		///<summary>Use this to test a site (there are 3 sites per tooth face).  If it returns 0, do not draw a furctation.  If it returns a number 1-3, then use GetFurcationPos to know where to put the triangle or V.</summary>
 		public int GetFurcationValue(int intTooth,PerioSurf surf){
 			for(int i=0;i<ListPerioMeasure.Count;i++){
 				if(ListPerioMeasure[i].IntTooth!=intTooth) {
@@ -626,9 +626,57 @@ namespace SparksToothChart {
 			return 0;
 		}
 		
-		///<summary>Stub.  Use GetFurcationValue first.  Returns the position in mm of the center of the triangle relative to the center of the tooth.</summary>
+		///<summary>Use GetFurcationValue first.  Returns the position in mm of the center of the triangle relative to the center of the tooth.</summary>
 		public PointF GetFurcationPos(int intTooth,PerioSurf surf) {
-			return new PointF(0,0);
+			float ysign=1;
+			float xdirect=1;
+			if(Tooth.IsMaxillary(intTooth)) {
+				ysign=1;
+				if(surf==PerioSurf.B || surf==PerioSurf.L){
+					return new PointF(0,ysign*4.5f);
+				}
+				if(surf==PerioSurf.MB || surf==PerioSurf.ML) {
+					if(ToothGraphic.IsRight(intTooth.ToString())) {//UR quadrant
+						xdirect=1;
+					}
+					else {//UL
+						xdirect=-1;
+					}
+				}
+				else if(surf==PerioSurf.DB || surf==PerioSurf.DL) {
+					if(ToothGraphic.IsRight(intTooth.ToString())) {//UR quadrant
+						xdirect=-1;
+					}
+					else {//UL
+						xdirect=1;
+					}
+				}
+			}
+			else {//mand
+				ysign=-1;
+				if(surf==PerioSurf.B || surf==PerioSurf.L){
+					return new PointF(0,ysign*4.5f);
+				}
+				if(surf==PerioSurf.MB || surf==PerioSurf.ML) {
+					if(ToothGraphic.IsRight(intTooth.ToString())) {//LR quadrant
+						xdirect=1;
+					}
+					else {//LL
+						xdirect=-1;
+					}
+				}
+				else if(surf==PerioSurf.DB || surf==PerioSurf.DL) {
+					if(ToothGraphic.IsRight(intTooth.ToString())) {//LR quadrant
+						xdirect=-1;
+					}
+					else {//LL
+						xdirect=1;
+					}
+				}
+			}
+			//todo: finetune magnitude
+			return new PointF(xdirect*3f,ysign*4.5f);
+			//throw new ApplicationException("Furcation surface not recognized.")
 		}
 
 	}
