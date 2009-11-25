@@ -279,25 +279,70 @@ namespace SparksToothChart {
 			}
 			device.RenderState.ZBufferEnable=false;
 			device.RenderState.Lighting=false;
-			//Draw mobility numbers. Seperate loop than drawing the teeth, so that we don't need to change
+			Line line=new Line(device);
+			float sign=maxillary?1:-1;
+			//Separate loop than drawing the teeth, so that we don't need to change
 			//the device.RenderState.ZBufferEnable and device.RenderState.Lighting state variables for every
 			//tooth. This will help the speed a little.
 			for(int t=0;t<toothGraphics.Count;t++){
 				SizeF mobTextSize=MeasureStringMm(toothGraphics[t].Mobility);
+				//Draw mobility numbers.
 				device.Transform.World=Matrix.Translation(GetTransX(toothGraphics[t].ToothID)-mobTextSize.Width/2f,0,0)*orientation;
-				PrintString(toothGraphics[t].Mobility,0,maxillary?-1.5f:5.5f,0,Color.Black,xfont);
+				Matrix toothLineMat=ScreenSpaceMatrix();
+				PrintString(toothGraphics[t].Mobility,0,maxillary?-1.5f:5.5f,0,toothGraphics[t].colorMobility,xfont);
+				for(int j=0;j<TcData.ListPerioMeasure.Count;j++){
+					PerioMeasure pm=TcData.ListPerioMeasure[j];
+					if(pm.IntTooth==ToothGraphic.IdToInt(toothGraphics[t].ToothID)){
+						//Draw furcations when present.
+						if(pm.SequenceType==PerioSequenceType.Furcation){
+							const float triSideLenMM=2f;
+							const float triMidPointDistMM=4.5f;
+							Color triColor=Color.Black;
+							List <Vector3> triPoints=new List <Vector3> ();
+							//We form an equilateral triangle.
+							triPoints.Add(new Vector3(triSideLenMM/2f,sign*(triMidPointDistMM+(float)(triSideLenMM*Math.Sqrt(3)/2f)),0));
+							triPoints.Add(new Vector3(0,sign*triMidPointDistMM,0));
+							triPoints.Add(new Vector3(-triSideLenMM/2f,sign*(triMidPointDistMM+(float)(triSideLenMM*Math.Sqrt(3)/2f)),0));
+							if(pm.Bvalue==1){
+								DrawExtended3dLine(new Vector3[] { triPoints[0],triPoints[1],triPoints[2] },0.1f,false,triColor,2f,toothLineMat);
+							}else if(pm.Bvalue==2){
+								DrawExtended3dLine(new Vector3[] { triPoints[0],triPoints[1],triPoints[2],triPoints[0] },0.1f,true,triColor,2f,toothLineMat);
+							}else if(pm.Bvalue==3){
+								CustomVertex.PositionColored[] solidTriVerts=new CustomVertex.PositionColored[] {
+								  new CustomVertex.PositionColored(triPoints[0],triColor.ToArgb()),
+								  new CustomVertex.PositionColored(triPoints[1],triColor.ToArgb()),
+								  new CustomVertex.PositionColored(triPoints[2],triColor.ToArgb()),
+								};
+								VertexBuffer triVb=new VertexBuffer(typeof(CustomVertex.PositionColored),
+									CustomVertex.PositionColored.StrideSize*solidTriVerts.Length,
+									device,Usage.WriteOnly,CustomVertex.PositionColored.Format,Pool.Managed);
+								triVb.SetData(solidTriVerts,0,LockFlags.None);
+								int[] triIndicies=new int[] { 0,1,2 };
+								IndexBuffer triIb=new IndexBuffer(typeof(int),triIndicies.Length,device,Usage.None,Pool.Managed);
+								triIb.SetData(triIndicies,0,LockFlags.None);
+								device.VertexFormat=CustomVertex.PositionColored.Format;
+								device.SetStreamSource(0,triVb,0);
+								device.Indices=triIb;
+								device.DrawIndexedPrimitives(PrimitiveType.TriangleList,0,0,solidTriVerts.Length,0,triIndicies.Length/3);
+								triIb.Dispose();
+								triVb.Dispose();
+							}else{
+								//invalid value. assume no furcation.
+							}
+						}
+						break;
+					}
+				}
 			}
 			//The device.Transform.World matrix must be set before calling Line.Begin()
 			//or else your lines end up in the wrong location! This is odd behavior, since you *MUST*
 			//pass in your screen matrix when you call Line.DrawTransform(). This must be a DirectX bug.
 			device.Transform.World=orientation;
 			Matrix lineMat=ScreenSpaceMatrix();
-			float sign=maxillary?1:-1;
 			const float leftX=-65f;
 			const float rightX=65f;
 			const int mmMax=9;
 			//Draw the horizontal line at 0
-			Line line=new Line(device);
 			line.Antialias=false;
 			line.Width=1.5f;
 			line.Begin();
@@ -318,6 +363,46 @@ namespace SparksToothChart {
 				line.DrawTransform(
 					new Vector3[] { p1,p2 },
 					lineMat,Color.Gray);
+			}
+			line.End();
+			line.Dispose();
+		}
+
+		///<summary>Draws a line strip extending the two point lines which to not include endpoints. 
+		///Set extendEndPoints to true to extend the endpoints of the line.</summary>
+		private void DrawExtended3dLine(Vector3[] points,float extendDist,bool extendEndPoints,Color color,float lineWidth,Matrix transform){
+			//Convert each line strip into very simple two point lines so that line extensions can be calculated more easily below.
+			//Items in the array are tuples of (2D point,bool indicating end point).
+			List<object> twoPointLines=new List<object>();
+			for(int p=0;p<points.Length-1;p++) {
+				twoPointLines.Add(points[p]);
+				twoPointLines.Add(p==0);
+				twoPointLines.Add(points[p+1]);
+				twoPointLines.Add(p==points.Length-2);
+			}
+			Line line=new Line(device);
+			line.Antialias=false;
+			line.Width=lineWidth;
+			line.Begin();
+			//Draw each individual two point line. The lines must be broken down from line strips so that when individual two point
+			//line locations are modified they do not affect any other two point lines within the same line strip.
+			for(int j=0;j<twoPointLines.Count;j+=4) {
+				Vector3 p1=(Vector3)twoPointLines[j];
+				bool p1IsEndPoint=(bool)twoPointLines[j+1];
+				Vector3 p2=(Vector3)twoPointLines[j+2];
+				bool p2IsEndPoint=(bool)twoPointLines[j+3];
+				Vector3 lineDir=p2-p1;
+				lineDir.Normalize();//Gives the line direction a single unit length.
+				//Do not extend the endpoints for the ends of the line strips unless extendEndPoints=true.
+				if(!p1IsEndPoint || extendEndPoints) {
+					p1=p1-extendDist*lineDir;
+				}
+				//Do not extend the endpoints for the ends of the line strips unless extendEndPoints=true.
+				if(!p2IsEndPoint || extendEndPoints) {
+					p2=p2+extendDist*lineDir;
+				}
+				Vector3[] lineVerts=new Vector3[] { p1,p2 };
+				line.DrawTransform(lineVerts,transform,color);
 			}
 			line.End();
 			line.Dispose();

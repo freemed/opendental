@@ -536,6 +536,8 @@ namespace SparksToothChart {
 			pm.MLvalue=ml;
 			pm.Lvalue=l;
 			pm.DLvalue=dl;
+			pm.IntTooth=ToothGraphic.IdToInt(toothID);
+			pm.SequenceType=sequenceType;
 			TcData.ListPerioMeasure.Add(pm);
 		}
 
