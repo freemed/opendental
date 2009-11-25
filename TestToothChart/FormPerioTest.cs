@@ -20,11 +20,9 @@ namespace TestToothChart {
 			toothChart.ColorBackground=Color.White;
 			toothChart.ColorText=Color.Black;
 			toothChart.PerioMode=true;
-			toothChart.SetMissing("1");
-			toothChart.SetMissing("2");
 			toothChart.SetMissing("13");
 			toothChart.SetMissing("14");
-			toothChart.SetMissing("17");
+			toothChart.SetMissing("18");
 			toothChart.SetMissing("25");
 			toothChart.SetMissing("26");
 			toothChart.SetImplant("14",Color.Gray);
@@ -39,7 +37,28 @@ namespace TestToothChart {
 			toothChart.SetMobility("10","2",Color.Red);
 			toothChart.SetMobility("16","3",Color.Red);
 			toothChart.SetMobility("24","2",Color.Red);
-			
+			toothChart.AddPerioMeasure("2",PerioSequenceType.Furcation,-1,2,-1,1,-1,1);
+			toothChart.AddPerioMeasure("5",PerioSequenceType.Furcation,1,-1,-1,-1,-1,-1);
+			toothChart.AddPerioMeasure("30",PerioSequenceType.Furcation,-1,2,-1,-1,3,-1);
+			for(int i=1;i<=32;i++) {
+				string tooth_id=i.ToString();
+				//bleeding and suppuration on all MB sites
+				BleedingFlags bleedingFlags=BleedingFlags.Blood | BleedingFlags.Suppuration;
+				toothChart.AddPerioMeasure(tooth_id,PerioSequenceType.Bleeding,(int)bleedingFlags,-1,-1,-1,-1,-1);
+				//bleeding only all DL sites
+				bleedingFlags=BleedingFlags.Blood;
+				toothChart.AddPerioMeasure(tooth_id,PerioSequenceType.Bleeding,-1,-1,-1,-1,-1,(int)bleedingFlags);
+				//suppuration only all B sites
+				bleedingFlags=BleedingFlags.Suppuration;
+				toothChart.AddPerioMeasure(tooth_id,PerioSequenceType.Bleeding,-1,(int)bleedingFlags,-1,-1,-1,-1);
+				toothChart.AddPerioMeasure(tooth_id,PerioSequenceType.GingMargin,0,-1,1,1, 0,0);
+				toothChart.AddPerioMeasure(tooth_id,PerioSequenceType.Probing,   3, 2,3,4,-1,3);
+				toothChart.AddPerioMeasure(tooth_id,PerioSequenceType.CAL,       3,-1,4,5,-1,3);//basically GingMargin+Probing, unless one of them is -1
+
+
+
+				//toothChart.AddPerioMeasure(tooth_id,PerioSequenceType,-1,-1,-1,-1,-1,-1);
+			}
 		}
 
 		private void butPrint_Click(object sender,EventArgs e) {

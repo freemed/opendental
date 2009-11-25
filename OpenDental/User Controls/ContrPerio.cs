@@ -1835,20 +1835,7 @@ namespace OpenDental
 
 	
 
-	///<summary>Blood,pus,plaque,and calculus. Used in ContrPerio.PerioCell</summary>
-	[Flags]
-	public enum BleedingFlags{
-		///<summary>0</summary>
-		None=0,
-		///<summary>1</summary>
-		Blood=1,
-		///<summary>2</summary>
-		Suppuration=2,
-		///<summary>4</summary>
-		Plaque=4,
-		///<summary>8</summary>
-		Calculus=8
-	}
+	
 
 	///<summary></summary>
 	public struct PerioCell{

@@ -45,6 +45,8 @@ namespace SparksToothChart {
 		public float PixelScaleRatio;
 		public ToothNumberingNomenclature ToothNumberingNomenclature;
 		public bool PerioMode;
+		///<summary>This very closely mirrors the organization in the db, but we don't include here mobility or skiptooth.</summary>
+		public List<PerioMeasure> ListPerioMeasure;
 
 		public ToothChartData() {
 			ListToothGraphics=new ToothGraphicCollection();
@@ -59,6 +61,7 @@ namespace SparksToothChart {
 			ColorDrawing=Color.Black;
 			Font=new System.Drawing.Font(FontFamily.GenericSansSerif,8.25f);
 			PointList=new List<Point>();
+			ListPerioMeasure=new List<PerioMeasure>();
 		}
 
 		///<summary></summary>
@@ -108,7 +111,7 @@ namespace SparksToothChart {
 				}
 				else {//otherwise, use control w
 					IsWide=false;
-					ScaleMmToPix=(float)sizeControl.Width/SizeOriginalProjection.Width;
+					ScaleMmToPix=(float)sizeControl.Width/(float)SizeOriginalProjection.Width;
 					RectTarget.Width=sizeControl.Width;
 					RectTarget.X=0;
 					RectTarget.Height=(int)(((float)SizeOriginalDrawing.Height/SizeOriginalDrawing.Width)*RectTarget.Width);

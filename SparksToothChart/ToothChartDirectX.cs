@@ -279,24 +279,36 @@ namespace SparksToothChart {
 			//pass in your screen matrix when you call Line.DrawTransform(). This must be a DirectX bug.
 			device.Transform.World=orientation;
 			Matrix lineMat=ScreenSpaceMatrix();
-			Line line=new Line(device);
-			line.Antialias=false;
-			float lineWidthPix=1.5f;
-			line.Width=lineWidthPix/TcData.ScaleMmToPix;
-			line.Begin();
-			const float leftX=-63f;
-			const float rightX=64f;
+			const float leftX=-65f;
+			const float rightX=65f;
 			const int mmMax=9;
 			float sign=maxillary?1:-1;
-			//Draw the horizontal lines.
-			for(int mm=0;mm<=mmMax;mm+=3) {
-				Vector3 p1=new Vector3(leftX,sign*mm,0);
-				Vector3 p2=new Vector3(rightX,sign*mm,0);
+			//Draw the horizontal line at 0
+			Line line=new Line(device);
+			line.Antialias=false;
+			line.Width=1.5f;
+			line.Begin();
+			Vector3 p1=new Vector3(leftX,0,0);
+			Vector3 p2=new Vector3(rightX,0,0);
+			line.DrawTransform(
+				new Vector3[] { p1,p2 },
+				lineMat,TcData.ColorText);
+			line.End();
+			//Draw the other horizontal lines
+			line=new Line(device);
+			line.Antialias=false;
+			line.Width=1f;
+			line.Begin();
+			for(int mm=3;mm<=mmMax;mm+=3) {
+				p1=new Vector3(leftX,sign*mm,0);
+				p2=new Vector3(rightX,sign*mm,0);
 				line.DrawTransform(
 					new Vector3[] { p1,p2 },
-					lineMat,TcData.ColorText);
+					lineMat,Color.Gray);
 			}
 			//Draw the vertical lines on the end of each side.
+			//no
+			/*
 			//Left line.
 			line.DrawTransform(
 					new Vector3[] { new Vector3(leftX,0,0),new Vector3(leftX,sign*mmMax,0) },
@@ -304,7 +316,7 @@ namespace SparksToothChart {
 			//Right line.
 			line.DrawTransform(
 					new Vector3[] { new Vector3(rightX,0,0),new Vector3(rightX,sign*mmMax,0) },
-					lineMat,TcData.ColorText);
+					lineMat,TcData.ColorText);*/
 			line.End();
 			line.Dispose();
 		}
@@ -649,8 +661,7 @@ namespace SparksToothChart {
 			device.RenderState.ZBufferEnable=false;
 			//Draw the center line.
 			Line centerLine=new Line(device);
-			float lineWidthPix=2;
-			centerLine.Width=lineWidthPix/TcData.ScaleMmToPix;
+			centerLine.Width=2f;
 			centerLine.Antialias=false;
 			centerLine.Begin();//Must call Line.Begin() in order for Antialias=false to take effect.
 			centerLine.Draw(new Vector2[] {
@@ -660,11 +671,11 @@ namespace SparksToothChart {
 			centerLine.End();
 			//Draw the tooth numbers.
 			string tooth_id;
-			for(int i=1;i<=52;i++) {
+			for(int i=1;i<=32;i++) {
 				tooth_id=Tooth.FromOrdinal(i);
-				bool isSelected=TcData.SelectedTeeth.Contains(tooth_id);
-				float yOffset=ToothGraphic.IsMaxillary(tooth_id)?29:-27;
-				DrawNumber(tooth_id,isSelected,yOffset);
+				//bool isSelected=TcData.SelectedTeeth.Contains(tooth_id);
+				float yOffset=ToothGraphic.IsMaxillary(tooth_id)?30:-29;
+				DrawNumber(tooth_id,false,yOffset);
 			}
 		}
 

@@ -528,6 +528,17 @@ namespace SparksToothChart {
 			Invalidate();
 		}
 
+		public void AddPerioMeasure(string toothID,PerioSequenceType sequenceType,int mb,int b,int db,int ml,int l, int dl) {
+			PerioMeasure pm=new PerioMeasure();
+			pm.MBvalue=mb;
+			pm.Bvalue=b;
+			pm.DBvalue=db;
+			pm.MLvalue=ml;
+			pm.Lvalue=l;
+			pm.DLvalue=dl;
+			TcData.ListPerioMeasure.Add(pm);
+		}
+
 		#endregion
 
 		protected override void OnResize(EventArgs e) {
