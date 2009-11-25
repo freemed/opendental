@@ -590,14 +590,44 @@ namespace SparksToothChart {
 			return affectedTeeth;
 		}
 
-		///<summary>Stub.  Use this to test a location.  Then, if true, use GetFurcationPos to know where to put it.</summary>
-		public int GetFurcationValue(string tooth_id,PerioSurf surf){
-			//for(int i=
-			return 1;
+		///<summary>Stub.  Use this to test a site (there are 3 sites per tooth face).  If it returns 0, do not draw a furctation.  If it returns a number 1-3, then use GetFurcationPos to know where to put the triangle or V.</summary>
+		public int GetFurcationValue(int intTooth,PerioSurf surf){
+			for(int i=0;i<ListPerioMeasure.Count;i++){
+				if(ListPerioMeasure[i].IntTooth!=intTooth) {
+					continue;
+				}
+				if(ListPerioMeasure[i].SequenceType!=PerioSequenceType.Furcation){
+					continue;
+				}
+				int meas=0;
+				if(surf==PerioSurf.MB) {
+					meas=ListPerioMeasure[i].MBvalue;
+				}
+				if(surf==PerioSurf.B) {
+					meas=ListPerioMeasure[i].Bvalue;
+				}
+				if(surf==PerioSurf.DB) {
+					meas=ListPerioMeasure[i].DBvalue;
+				}
+				if(surf==PerioSurf.ML) {
+					meas=ListPerioMeasure[i].MLvalue;
+				}
+				if(surf==PerioSurf.L) {
+					meas=ListPerioMeasure[i].Lvalue;
+				}
+				if(surf==PerioSurf.DL) {
+					meas=ListPerioMeasure[i].DLvalue;
+				}
+				if(meas==-1) {
+					return 0;
+				}
+				return meas;
+			}
+			return 0;
 		}
 		
-		///<summary>Stub.  Use GetFurcationValue first.  Returns the position in mm relative to the center of the tooth.</summary>
-		public PointF GetFurcationPos(string tooth_id,PerioSurf surf) {
+		///<summary>Stub.  Use GetFurcationValue first.  Returns the position in mm of the center of the triangle relative to the center of the tooth.</summary>
+		public PointF GetFurcationPos(int intTooth,PerioSurf surf) {
 			return new PointF(0,0);
 		}
 

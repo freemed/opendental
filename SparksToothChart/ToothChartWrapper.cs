@@ -528,7 +528,7 @@ namespace SparksToothChart {
 			Invalidate();
 		}
 
-		public void AddPerioMeasure(string toothID,PerioSequenceType sequenceType,int mb,int b,int db,int ml,int l, int dl) {
+		public void AddPerioMeasure(int intTooth,PerioSequenceType sequenceType,int mb,int b,int db,int ml,int l, int dl) {
 			PerioMeasure pm=new PerioMeasure();
 			pm.MBvalue=mb;
 			pm.Bvalue=b;
@@ -536,7 +536,7 @@ namespace SparksToothChart {
 			pm.MLvalue=ml;
 			pm.Lvalue=l;
 			pm.DLvalue=dl;
-			pm.IntTooth=ToothGraphic.IdToInt(toothID);
+			pm.IntTooth=intTooth;
 			pm.SequenceType=sequenceType;
 			TcData.ListPerioMeasure.Add(pm);
 		}
