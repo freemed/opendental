@@ -118,6 +118,10 @@ namespace SparksToothChart {
 			Invalidate();//Force the control to redraw. 
 		}
 
+		private Matrix ScreenSpaceMatrix() {
+			return device.Transform.World*device.Transform.View*device.Transform.Projection;
+		}
+
 		protected override void OnPaint(PaintEventArgs pe) {
 			//Color backColor=Color.FromArgb(150,145,152);
 			if(device==null || deviceLost) {
@@ -229,118 +233,80 @@ namespace SparksToothChart {
 		private void DrawScenePerio() {
 			device.Clear(ClearFlags.Target|ClearFlags.ZBuffer,TcData.ColorBackground,1.0f,0);
 			device.BeginScene();
-			Matrix defOrient=Matrix.Identity;
-			defOrient.Scale(1f,1f,-1f);
-			Matrix trans=Matrix.Identity;
-			trans.Translate(0f,0f,400f);
-			defOrient=defOrient*trans;
+			Matrix defOrient=Matrix.Scaling(1f,1f,-1f)*Matrix.Translation(0,0,400f);
+			List <ToothGraphic> maxillaryTeeth=new List <ToothGraphic> ();
+			List <ToothGraphic> mandibleTeeth=new List <ToothGraphic> ();
 			for(int t=0;t<TcData.ListToothGraphics.Count;t++) {//loop through each tooth
 				if(TcData.ListToothGraphics[t].ToothID=="implant") {//this is not an actual tooth.
 					continue;
 				}
-				DrawFacialViewPerio(TcData.ListToothGraphics[t],defOrient);
+				if(ToothGraphic.IsMaxillary(TcData.ListToothGraphics[t].ToothID)){
+					maxillaryTeeth.Add(TcData.ListToothGraphics[t]);
+				}else{
+					mandibleTeeth.Add(TcData.ListToothGraphics[t]);
+				}
 			}
-			DrawNumbersAndLines();//Numbers and center lines are top-most.			
+			//Draw the maxillary upper-most row.
+			Matrix maxillaryUpperRowMat=Matrix.Translation(0,45f,0)*defOrient;
+			DrawPerioRow(maxillaryTeeth,maxillaryUpperRowMat,true);
+			//Draw the maxillary lower-most row with teeth which have negated z values.
+			Matrix maxillaryLowerRowMat=Matrix.Scaling(1f,1f,-1f)*Matrix.Translation(0,12f,0)*defOrient;
+			DrawPerioRow(maxillaryTeeth,maxillaryLowerRowMat,true);
+			//Draw the mandible upper-most row with teeth which have negated z values.
+			Matrix mandibleUpperRowMat=Matrix.Scaling(1f,1f,-1f)*Matrix.Translation(0,-12f,0)*defOrient;
+			DrawPerioRow(mandibleTeeth,mandibleUpperRowMat,false);
+			//Draw the mandible lower-most row.
+			Matrix mandibleLowerRowMat=Matrix.Translation(0,-45f,0)*defOrient;
+			DrawPerioRow(mandibleTeeth,mandibleLowerRowMat,false);
+			DrawNumbersAndLinesPerio();//Numbers and center lines are top-most.			
 			device.EndScene();
 			device.Present();
 		}
 
-		private Matrix ScreenSpaceMatrix(){
-			return device.Transform.World*device.Transform.View*device.Transform.Projection;
-		}
-
-		private void DrawFacialViewPerio(ToothGraphic toothGraphic,Matrix defOrient) {
-			Matrix toothTrans=Matrix.Identity;
-			toothTrans.Translate(GetTransX(toothGraphic.ToothID),
-				GetTransYfacial(toothGraphic.ToothID)+(ToothGraphic.IsMaxillary(toothGraphic.ToothID)?(15f):(-15f)),
-				0);
-			device.Transform.World=toothTrans*defOrient;
-			if(toothGraphic.Visible) {
-				DrawTooth(toothGraphic);
-				Matrix toothTransFlip=Matrix.Identity;
-				toothTransFlip.Translate(GetTransX(toothGraphic.ToothID),
-					GetTransYfacial(toothGraphic.ToothID)+(ToothGraphic.IsMaxillary(toothGraphic.ToothID)?(-20f):(20f)),
-					0);
-				Matrix flipMat=Matrix.Scaling(1f,1f,-1f);
-				device.Transform.World=flipMat*toothTransFlip*defOrient;
-				DrawTooth(toothGraphic);
-				device.Transform.World=toothTrans*defOrient;
+		private void DrawPerioRow(List <ToothGraphic> toothGraphics,Matrix orientation,bool maxillary){
+			for(int t=0;t<toothGraphics.Count;t++){
+				device.RenderState.ZBufferEnable=true;
+				device.RenderState.Lighting=true;
+				device.Transform.World=Matrix.Translation(GetTransX(toothGraphics[t].ToothID),0,0)*orientation;
+				if(toothGraphics[t].Visible) {
+					DrawTooth(toothGraphics[t]);
+				}
 			}
 			device.RenderState.ZBufferEnable=false;
 			device.RenderState.Lighting=false;
-			Matrix lineMatrix=ScreenSpaceMatrix();
+			//The device.Transform.World matrix must be set before calling Line.Begin()
+			//or else your lines end up in the wrong location! This is odd behavior, since you *MUST*
+			//pass in your screen matrix when you call Line.DrawTransform(). This must be a DirectX bug.
+			device.Transform.World=orientation;
+			Matrix lineMat=ScreenSpaceMatrix();
 			Line line=new Line(device);
-			line.GlLines=true;
-			if(toothGraphic.Visible&&toothGraphic.IsRCT) {//draw RCT
-				//Thickness of lines depend on size of window.
-				//The line size needs to be slightly larger than in OpenGL because
-				//lines are drawn with polygons in DirectX and they are anti-aliased,
-				//even when the line.Antialias flag is set.
-				line.Width=2.5f*TcData.PixelScaleRatio;
-				line.Begin();
-				List<LineSimple> linesSimple=toothGraphic.GetRctLines();
-				for(int i=0;i<linesSimple.Count;i++) {
-					if(linesSimple[i].Vertices.Count<2) {
-						continue;//Just to avoid internal errors, even though not likely.
-					}
-					//Convert each line strip into very simple two point lines so that line extensions can be calculated more easily below.
-					//Items in the array are tuples of (2D point,bool indicating end point).
-					List<object> twoPointLines=new List<object>();
-					for(int j=0;j<linesSimple[i].Vertices.Count-1;j++) {
-						twoPointLines.Add(new Vector3(
-							linesSimple[i].Vertices[j].X,
-							linesSimple[i].Vertices[j].Y,
-							linesSimple[i].Vertices[j].Z));
-						twoPointLines.Add(j==0);
-						twoPointLines.Add(new Vector3(
-							linesSimple[i].Vertices[j+1].X,
-							linesSimple[i].Vertices[j+1].Y,
-							linesSimple[i].Vertices[j+1].Z));
-						twoPointLines.Add(j==linesSimple[i].Vertices.Count-2);
-					}
-					//Draw each individual two point line. The lines must be broken down from line strips so that when individual two point
-					//line locations are modified they do not affect any other two point lines within the same line strip.
-					for(int j=0;j<twoPointLines.Count;j+=4) {
-						Vector3 p1=(Vector3)twoPointLines[j];
-						bool p1IsEndPoint=(bool)twoPointLines[j+1];
-						Vector3 p2=(Vector3)twoPointLines[j+2];
-						bool p2IsEndPoint=(bool)twoPointLines[j+3];
-						Vector3 lineDir=p2-p1;
-						lineDir.Normalize();//Gives the line direction a single unit length.
-						float extSize=0.25f;//The number of units to extend each end of the two point line.
-						if(!p1IsEndPoint) {//Do not extend the endpoints for the ends of the line strips.
-							p1=p1-extSize*lineDir;
-						}
-						if(!p2IsEndPoint) {//Do not extend the endpoints for the ends of the line strips.
-							p2=p2+extSize*lineDir;
-						}
-						Vector3[] lineVerts=new Vector3[] { p1,p2 };
-						line.DrawTransform(lineVerts,lineMatrix,toothGraphic.colorRCT);
-					}
-				}
-				line.End();
+			line.Antialias=false;
+			float lineWidthPix=1.5f;
+			line.Width=lineWidthPix/TcData.ScaleMmToPix;
+			line.Begin();
+			const float leftX=-63f;
+			const float rightX=64f;
+			const int mmMax=9;
+			float sign=maxillary?1:-1;
+			//Draw the horizontal lines.
+			for(int mm=0;mm<=mmMax;mm+=3) {
+				Vector3 p1=new Vector3(leftX,sign*mm,0);
+				Vector3 p2=new Vector3(rightX,sign*mm,0);
+				line.DrawTransform(
+					new Vector3[] { p1,p2 },
+					lineMat,TcData.ColorText);
 			}
-			ToothGroup groupBU=toothGraphic.GetGroup(ToothGroupType.Buildup);//during debugging, not all teeth have a BU group yet.
-			if(toothGraphic.Visible&&groupBU!=null&&groupBU.Visible) {//BU or Post
-				device.RenderState.ZBufferEnable=false;
-				device.RenderState.Lighting=true;
-				device.Lights[0].Enabled=false;//Disable the scene light.
-				device.Lights[1].Ambient=Color.White;
-				device.Lights[1].Enabled=true;
-				Color colorBU=toothGraphic.GetGroup(ToothGroupType.Buildup).PaintColor;
-				device.VertexFormat=CustomVertex.PositionNormal.Format;
-				device.SetStreamSource(0,toothGraphic.vb,0);
-				Material material=new Material();
-				material.Ambient=colorBU;
-				device.Material=material;
-				device.Indices=groupBU.facesDirectX;
-				device.DrawIndexedPrimitives(PrimitiveType.TriangleList,0,0,toothGraphic.VertexNormals.Count,0,groupBU.NumIndicies/3);
-				device.Lights[0].Enabled=true;
-				device.Lights[1].Enabled=false;
-			}
+			//Draw the vertical lines on the end of each side.
+			//Left line.
+			line.DrawTransform(
+					new Vector3[] { new Vector3(leftX,0,0),new Vector3(leftX,sign*mmMax,0) },
+					lineMat,TcData.ColorText);
+			//Right line.
+			line.DrawTransform(
+					new Vector3[] { new Vector3(rightX,0,0),new Vector3(rightX,sign*mmMax,0) },
+					lineMat,TcData.ColorText);
+			line.End();
 			line.Dispose();
-			device.RenderState.ZBufferEnable=true;
-			device.RenderState.Lighting=true;
 		}
 
 		private void DrawFacialView(ToothGraphic toothGraphic,Matrix defOrient) {
@@ -667,10 +633,10 @@ namespace SparksToothChart {
 			for(int i=1;i<=52;i++) {
 				tooth_id=Tooth.FromOrdinal(i);
 				if(TcData.SelectedTeeth.Contains(tooth_id)) {
-					DrawNumber(tooth_id,true,true);
+					DrawNumber(tooth_id,true,0);
 				} 
 				else {
-					DrawNumber(tooth_id,false,true);
+					DrawNumber(tooth_id,false,0);
 				}
 			}
 			//TimeSpan displayTime=(frameEndTime-frameBeginTime);
@@ -678,8 +644,32 @@ namespace SparksToothChart {
 			//this.PrintString(fps.ToString(),0,0,0,Color.Blue,xfont);
 		}
 
+		private void DrawNumbersAndLinesPerio() {
+			device.RenderState.Lighting=false;
+			device.RenderState.ZBufferEnable=false;
+			//Draw the center line.
+			Line centerLine=new Line(device);
+			float lineWidthPix=2;
+			centerLine.Width=lineWidthPix/TcData.ScaleMmToPix;
+			centerLine.Antialias=false;
+			centerLine.Begin();//Must call Line.Begin() in order for Antialias=false to take effect.
+			centerLine.Draw(new Vector2[] {
+				new Vector2(-1,this.Height/2),
+				new Vector2(this.Width,this.Height/2)},
+				Color.Black);
+			centerLine.End();
+			//Draw the tooth numbers.
+			string tooth_id;
+			for(int i=1;i<=52;i++) {
+				tooth_id=Tooth.FromOrdinal(i);
+				bool isSelected=TcData.SelectedTeeth.Contains(tooth_id);
+				float yOffset=ToothGraphic.IsMaxillary(tooth_id)?29:-27;
+				DrawNumber(tooth_id,isSelected,yOffset);
+			}
+		}
+
 		///<summary>Draws the number and the small rectangle behind it.  Draws in the appropriate color.  isFullRedraw means that all of the toothnumbers are being redrawn.  This helps with a few optimizations and with not painting blank rectangles when not needed.</summary>
-		private void DrawNumber(string tooth_id,bool isSelected,bool isFullRedraw) {
+		private void DrawNumber(string tooth_id,bool isSelected,float offsetY) {
 			if(!Tooth.IsValidDB(tooth_id)) {
 				return;
 			}
@@ -696,6 +686,7 @@ namespace SparksToothChart {
 			string displayNum=Tooth.GetToothLabelGraphic(tooth_id,TcData.ToothNumberingNomenclature);
 			SizeF labelSize=MeasureStringMm(displayNum);
 			RectangleF recMm=TcData.GetNumberRecMm(tooth_id,labelSize);
+			recMm.Y+=offsetY;
 			Color foreColor=TcData.ColorText;
 			if(isSelected) {
 				foreColor=TcData.ColorTextHighlight;
@@ -958,9 +949,9 @@ namespace SparksToothChart {
 		private void SetSelected(string tooth_id,bool setValue) {
 			TcData.SetSelected(tooth_id,setValue);
 			if(setValue) {
-				DrawNumber(tooth_id,true,false);
+				DrawNumber(tooth_id,true,0);
 			} else {
-				DrawNumber(tooth_id,false,false);
+				DrawNumber(tooth_id,false,0);
 			}
 		}
 
