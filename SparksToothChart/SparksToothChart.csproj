@@ -83,7 +83,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Face.cs" />
-    <Compile Include="Polygon.cs" />
     <Compile Include="Line.cs" />
     <Compile Include="ToothChart2D.cs">
       <SubType>UserControl</SubType>

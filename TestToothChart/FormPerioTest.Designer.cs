@@ -173,7 +173,7 @@
 			this.label5.Size = new System.Drawing.Size(215,126);
 			this.label5.TabIndex = 218;
 			this.label5.Text = "Tests currently included:\r\nMissing teeth (13,14,18,25,26)\r\nImplant (14)\r\nMobiliti" +
-    "es\r\nFurcations (2,5,30)";
+    "es\r\nFurcations (2,5,30)\r\nBleeding and Suppuration\r\nGM, CAL, MGJ\r\nProbing";
 			// 
 			// toothChart
 			// 

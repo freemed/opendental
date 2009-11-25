@@ -1853,23 +1853,7 @@ namespace OpenDental
 		//public Color ForeColor;
 	}
 
-	///<summary>Currently, only six surfaces are supported, but more can always be added.</summary>
-	public enum PerioSurf{
-		///<summary>Might be used for things such as mobility or missing tooth.</summary>
-		None,
-		///<summary>1</summary>
-		MB,
-		///<summary>2</summary>
-		B,
-		///<summary>3</summary>
-		DB,
-		///<summary>4</summary>
-		ML,
-		///<summary>5</summary>
-		L,
-		///<summary>6</summary>
-		DL
-	}
+	
 
 
 }

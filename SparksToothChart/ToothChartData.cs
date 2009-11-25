@@ -590,5 +590,16 @@ namespace SparksToothChart {
 			return affectedTeeth;
 		}
 
+		///<summary>Stub.  Use this to test a location.  Then, if true, use GetFurcationPos to know where to put it.</summary>
+		public int GetFurcationValue(string tooth_id,PerioSurf surf){
+			//for(int i=
+			return 1;
+		}
+		
+		///<summary>Stub.  Use GetFurcationValue first.  Returns the position in mm relative to the center of the tooth.</summary>
+		public PointF GetFurcationPos(string tooth_id,PerioSurf surf) {
+			return new PointF(0,0);
+		}
+
 	}
 }
