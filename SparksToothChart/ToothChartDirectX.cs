@@ -268,21 +268,34 @@ namespace SparksToothChart {
 				device.RenderState.ZBufferEnable=true;
 				device.RenderState.Lighting=true;
 				device.Transform.World=Matrix.Translation(GetTransX(toothGraphics[t].ToothID),0,0)*orientation;
-				if(toothGraphics[t].Visible) {
+				if(toothGraphics[t].Visible
+					|| (toothGraphics[t].IsCrown && toothGraphics[t].IsImplant)
+					|| toothGraphics[t].IsPontic) {
 					DrawTooth(toothGraphics[t]);
+				}
+				if(toothGraphics[t].IsImplant) {
+				  DrawImplant(toothGraphics[t]);
 				}
 			}
 			device.RenderState.ZBufferEnable=false;
 			device.RenderState.Lighting=false;
+			//Draw mobility numbers. Seperate loop than drawing the teeth, so that we don't need to change
+			//the device.RenderState.ZBufferEnable and device.RenderState.Lighting state variables for every
+			//tooth. This will help the speed a little.
+			for(int t=0;t<toothGraphics.Count;t++){
+				SizeF mobTextSize=MeasureStringMm(toothGraphics[t].Mobility);
+				device.Transform.World=Matrix.Translation(GetTransX(toothGraphics[t].ToothID)-mobTextSize.Width/2f,0,0)*orientation;
+				PrintString(toothGraphics[t].Mobility,0,maxillary?-1.5f:5.5f,0,Color.Black,xfont);
+			}
 			//The device.Transform.World matrix must be set before calling Line.Begin()
 			//or else your lines end up in the wrong location! This is odd behavior, since you *MUST*
 			//pass in your screen matrix when you call Line.DrawTransform(). This must be a DirectX bug.
 			device.Transform.World=orientation;
 			Matrix lineMat=ScreenSpaceMatrix();
+			float sign=maxillary?1:-1;
 			const float leftX=-65f;
 			const float rightX=65f;
 			const int mmMax=9;
-			float sign=maxillary?1:-1;
 			//Draw the horizontal line at 0
 			Line line=new Line(device);
 			line.Antialias=false;
@@ -306,17 +319,6 @@ namespace SparksToothChart {
 					new Vector3[] { p1,p2 },
 					lineMat,Color.Gray);
 			}
-			//Draw the vertical lines on the end of each side.
-			//no
-			/*
-			//Left line.
-			line.DrawTransform(
-					new Vector3[] { new Vector3(leftX,0,0),new Vector3(leftX,sign*mmMax,0) },
-					lineMat,TcData.ColorText);
-			//Right line.
-			line.DrawTransform(
-					new Vector3[] { new Vector3(rightX,0,0),new Vector3(rightX,sign*mmMax,0) },
-					lineMat,TcData.ColorText);*/
 			line.End();
 			line.Dispose();
 		}
@@ -440,35 +442,37 @@ namespace SparksToothChart {
 				device.Lights[1].Enabled=false;
 			}
 			if(toothGraphic.IsImplant) {
-				if(ToothGraphic.IsMaxillary(toothGraphic.ToothID)) {
-					//flip the implant upside down
-					Matrix flipVertMat=Matrix.Identity;
-					flipVertMat.RotateZ((float)Math.PI);
-					device.Transform.World=flipVertMat*device.Transform.World;
-				}
-				device.RenderState.ZBufferEnable=true;
-				device.RenderState.Lighting=true;
-				Material material=new Material();
-				material.Ambient=toothGraphic.colorImplant;
-				material.Diffuse=toothGraphic.colorImplant;
-				material.Specular=specular_color_normal;
-				material.SpecularSharpness=specularSharpness;
-				device.Material=material;
-				ToothGraphic implantGraphic=TcData.ListToothGraphics["implant"];
-				device.VertexFormat=CustomVertex.PositionNormal.Format;
-				device.SetStreamSource(0,implantGraphic.vb,0);
-				for(int g=0;g<implantGraphic.Groups.Count;g++) {
-					ToothGroup group=(ToothGroup)implantGraphic.Groups[g];
-					if(!group.Visible || group.GroupType==ToothGroupType.Buildup) {
-						continue;
-					}
-					device.Indices=group.facesDirectX;
-					device.DrawIndexedPrimitives(PrimitiveType.TriangleList,0,0,implantGraphic.VertexNormals.Count,0,group.NumIndicies/3);
-				}
+				DrawImplant(toothGraphic);
 			}
 			line.Dispose();
 			device.RenderState.ZBufferEnable=true;
 			device.RenderState.Lighting=true;
+		}
+
+		private void DrawImplant(ToothGraphic toothGraphic){
+			device.RenderState.ZBufferEnable=true;
+			device.RenderState.Lighting=true;
+			if(ToothGraphic.IsMaxillary(toothGraphic.ToothID)) {
+				//flip the implant upside down
+				device.Transform.World=Matrix.RotationZ((float)Math.PI)*device.Transform.World;
+			}
+			Material material=new Material();
+			material.Ambient=toothGraphic.colorImplant;
+			material.Diffuse=toothGraphic.colorImplant;
+			material.Specular=specular_color_normal;
+			material.SpecularSharpness=specularSharpness;
+			device.Material=material;
+			ToothGraphic implantGraphic=TcData.ListToothGraphics["implant"];
+			device.VertexFormat=CustomVertex.PositionNormal.Format;
+			device.SetStreamSource(0,implantGraphic.vb,0);
+			for(int g=0;g<implantGraphic.Groups.Count;g++) {
+				ToothGroup group=(ToothGroup)implantGraphic.Groups[g];
+				if(!group.Visible||group.GroupType==ToothGroupType.Buildup) {
+					continue;
+				}
+				device.Indices=group.facesDirectX;
+				device.DrawIndexedPrimitives(PrimitiveType.TriangleList,0,0,implantGraphic.VertexNormals.Count,0,group.NumIndicies/3);
+			}
 		}
 
 		private void DrawOcclusalView(ToothGraphic toothGraphic,Matrix defOrient) {
