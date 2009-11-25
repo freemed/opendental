@@ -661,7 +661,7 @@ namespace SparksToothChart {
 			device.RenderState.ZBufferEnable=false;
 			//Draw the center line.
 			Line centerLine=new Line(device);
-			centerLine.Width=2f;
+			centerLine.Width=2.5f;
 			centerLine.Antialias=false;
 			centerLine.Begin();//Must call Line.Begin() in order for Antialias=false to take effect.
 			centerLine.Draw(new Vector2[] {

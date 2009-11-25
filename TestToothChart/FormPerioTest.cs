@@ -51,13 +51,10 @@ namespace TestToothChart {
 				//suppuration only all B sites
 				bleedingFlags=BleedingFlags.Suppuration;
 				toothChart.AddPerioMeasure(tooth_id,PerioSequenceType.Bleeding,-1,(int)bleedingFlags,-1,-1,-1,-1);
-				toothChart.AddPerioMeasure(tooth_id,PerioSequenceType.GingMargin,0,-1,1,1, 0,0);
-				toothChart.AddPerioMeasure(tooth_id,PerioSequenceType.Probing,   3, 2,3,4,-1,3);
-				toothChart.AddPerioMeasure(tooth_id,PerioSequenceType.CAL,       3,-1,4,5,-1,3);//basically GingMargin+Probing, unless one of them is -1
-
-
-
-				//toothChart.AddPerioMeasure(tooth_id,PerioSequenceType,-1,-1,-1,-1,-1,-1);
+				toothChart.AddPerioMeasure(tooth_id,PerioSequenceType.GingMargin,0,1,1,1,0,0);
+				toothChart.AddPerioMeasure(tooth_id,PerioSequenceType.Probing,   3,2,3,4,2,3);
+				toothChart.AddPerioMeasure(tooth_id,PerioSequenceType.CAL,       3,3,4,5,2,3);//basically GingMargin+Probing, unless one of them is -1
+				toothChart.AddPerioMeasure(tooth_id,PerioSequenceType.MGJ,       5,5,5,6,5,5);
 			}
 		}
 
