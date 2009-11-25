@@ -248,22 +248,22 @@ namespace SparksToothChart {
 			}
 			//Draw the maxillary upper-most row.
 			Matrix maxillaryUpperRowMat=Matrix.Translation(0,45f,0)*defOrient;
-			DrawPerioRow(maxillaryTeeth,maxillaryUpperRowMat,true);
+			DrawPerioRow(maxillaryTeeth,maxillaryUpperRowMat,true,false);
 			//Draw the maxillary lower-most row with teeth which have negated z values.
 			Matrix maxillaryLowerRowMat=Matrix.Scaling(1f,1f,-1f)*Matrix.Translation(0,12f,0)*defOrient;
-			DrawPerioRow(maxillaryTeeth,maxillaryLowerRowMat,true);
+			DrawPerioRow(maxillaryTeeth,maxillaryLowerRowMat,true,true);
 			//Draw the mandible upper-most row with teeth which have negated z values.
 			Matrix mandibleUpperRowMat=Matrix.Scaling(1f,1f,-1f)*Matrix.Translation(0,-12f,0)*defOrient;
-			DrawPerioRow(mandibleTeeth,mandibleUpperRowMat,false);
+			DrawPerioRow(mandibleTeeth,mandibleUpperRowMat,false,true);
 			//Draw the mandible lower-most row.
 			Matrix mandibleLowerRowMat=Matrix.Translation(0,-45f,0)*defOrient;
-			DrawPerioRow(mandibleTeeth,mandibleLowerRowMat,false);
+			DrawPerioRow(mandibleTeeth,mandibleLowerRowMat,false,false);
 			DrawNumbersAndLinesPerio();//Numbers and center lines are top-most.			
 			device.EndScene();
 			device.Present();
 		}
 
-		private void DrawPerioRow(List <ToothGraphic> toothGraphics,Matrix orientation,bool maxillary){
+		private void DrawPerioRow(List <ToothGraphic> toothGraphics,Matrix orientation,bool maxillary,bool lingual){
 			for(int t=0;t<toothGraphics.Count;t++){
 				device.RenderState.ZBufferEnable=true;
 				device.RenderState.Lighting=true;
@@ -288,50 +288,17 @@ namespace SparksToothChart {
 				SizeF mobTextSize=MeasureStringMm(toothGraphics[t].Mobility);
 				//Draw mobility numbers.
 				device.Transform.World=Matrix.Translation(GetTransX(toothGraphics[t].ToothID)-mobTextSize.Width/2f,0,0)*orientation;
-				Matrix toothLineMat=ScreenSpaceMatrix();
 				PrintString(toothGraphics[t].Mobility,0,maxillary?-1.5f:5.5f,0,toothGraphics[t].colorMobility,xfont);
-				for(int j=0;j<TcData.ListPerioMeasure.Count;j++){
-					PerioMeasure pm=TcData.ListPerioMeasure[j];
-					if(pm.IntTooth==ToothGraphic.IdToInt(toothGraphics[t].ToothID)){
-						//Draw furcations when present.
-						if(pm.SequenceType==PerioSequenceType.Furcation){
-							const float triSideLenMM=2f;
-							const float triMidPointDistMM=4.5f;
-							Color triColor=Color.Black;
-							List <Vector3> triPoints=new List <Vector3> ();
-							//We form an equilateral triangle.
-							triPoints.Add(new Vector3(triSideLenMM/2f,sign*(triMidPointDistMM+(float)(triSideLenMM*Math.Sqrt(3)/2f)),0));
-							triPoints.Add(new Vector3(0,sign*triMidPointDistMM,0));
-							triPoints.Add(new Vector3(-triSideLenMM/2f,sign*(triMidPointDistMM+(float)(triSideLenMM*Math.Sqrt(3)/2f)),0));
-							if(pm.Bvalue==1){
-								DrawExtended3dLine(new Vector3[] { triPoints[0],triPoints[1],triPoints[2] },0.1f,false,triColor,2f,toothLineMat);
-							}else if(pm.Bvalue==2){
-								DrawExtended3dLine(new Vector3[] { triPoints[0],triPoints[1],triPoints[2],triPoints[0] },0.1f,true,triColor,2f,toothLineMat);
-							}else if(pm.Bvalue==3){
-								CustomVertex.PositionColored[] solidTriVerts=new CustomVertex.PositionColored[] {
-								  new CustomVertex.PositionColored(triPoints[0],triColor.ToArgb()),
-								  new CustomVertex.PositionColored(triPoints[1],triColor.ToArgb()),
-								  new CustomVertex.PositionColored(triPoints[2],triColor.ToArgb()),
-								};
-								VertexBuffer triVb=new VertexBuffer(typeof(CustomVertex.PositionColored),
-									CustomVertex.PositionColored.StrideSize*solidTriVerts.Length,
-									device,Usage.WriteOnly,CustomVertex.PositionColored.Format,Pool.Managed);
-								triVb.SetData(solidTriVerts,0,LockFlags.None);
-								int[] triIndicies=new int[] { 0,1,2 };
-								IndexBuffer triIb=new IndexBuffer(typeof(int),triIndicies.Length,device,Usage.None,Pool.Managed);
-								triIb.SetData(triIndicies,0,LockFlags.None);
-								device.VertexFormat=CustomVertex.PositionColored.Format;
-								device.SetStreamSource(0,triVb,0);
-								device.Indices=triIb;
-								device.DrawIndexedPrimitives(PrimitiveType.TriangleList,0,0,solidTriVerts.Length,0,triIndicies.Length/3);
-								triIb.Dispose();
-								triVb.Dispose();
-							}else{
-								//invalid value. assume no furcation.
-							}
-						}
-						break;
-					}
+				Matrix toothLineMat=ScreenSpaceMatrix();
+				int intTooth=ToothGraphic.IdToInt(toothGraphics[t].ToothID);
+				if(lingual){
+					DrawFurcationTriangle(intTooth,PerioSurf.DL,maxillary,toothLineMat);
+					DrawFurcationTriangle(intTooth,PerioSurf.L,maxillary,toothLineMat);
+					DrawFurcationTriangle(intTooth,PerioSurf.ML,maxillary,toothLineMat);					
+				}else{//buccal
+					DrawFurcationTriangle(intTooth,PerioSurf.DB,maxillary,toothLineMat);
+					DrawFurcationTriangle(intTooth,PerioSurf.B,maxillary,toothLineMat);
+					DrawFurcationTriangle(intTooth,PerioSurf.MB,maxillary,toothLineMat);
 				}
 			}
 			//The device.Transform.World matrix must be set before calling Line.Begin()
@@ -366,6 +333,48 @@ namespace SparksToothChart {
 			}
 			line.End();
 			line.Dispose();
+		}
+
+		private void DrawFurcationTriangle(int intTooth,PerioSurf perioSurf,bool maxillary,Matrix toothLineMat){
+			int furcationValue=TcData.GetFurcationValue(intTooth,perioSurf);
+			if(furcationValue<1||furcationValue>3) {
+				return;
+			}
+			PointF sitePos=TcData.GetFurcationPos(intTooth,perioSurf);
+			float sign=maxillary?1:-1;
+			const float triSideLenMM=2f;
+			Color triColor=Color.Black;
+			List<Vector3> triPoints=new List<Vector3>();
+			//We form an equilateral triangle.
+			triPoints.Add(new Vector3(sitePos.X+triSideLenMM/2f,sitePos.Y+sign*((float)(triSideLenMM*Math.Sqrt(3)/2f)),0));
+			triPoints.Add(new Vector3(sitePos.X,sitePos.Y,0));
+			triPoints.Add(new Vector3(sitePos.X-triSideLenMM/2f,sitePos.Y+sign*((float)(triSideLenMM*Math.Sqrt(3)/2f)),0));
+			if(furcationValue==1) {
+				DrawExtended3dLine(new Vector3[] { triPoints[0],triPoints[1],triPoints[2] },0.1f,false,triColor,2f,toothLineMat);
+			} else if(furcationValue==2) {
+				DrawExtended3dLine(new Vector3[] { triPoints[0],triPoints[1],triPoints[2],triPoints[0] },0.1f,true,triColor,2f,toothLineMat);
+			} else if(furcationValue==3) {
+				CustomVertex.PositionColored[] solidTriVerts=new CustomVertex.PositionColored[] {
+			          new CustomVertex.PositionColored(triPoints[0],triColor.ToArgb()),
+			          new CustomVertex.PositionColored(triPoints[1],triColor.ToArgb()),
+			          new CustomVertex.PositionColored(triPoints[2],triColor.ToArgb()),
+			        };
+				VertexBuffer triVb=new VertexBuffer(typeof(CustomVertex.PositionColored),
+					CustomVertex.PositionColored.StrideSize*solidTriVerts.Length,
+					device,Usage.WriteOnly,CustomVertex.PositionColored.Format,Pool.Managed);
+				triVb.SetData(solidTriVerts,0,LockFlags.None);
+				int[] triIndicies=new int[] { 0,1,2 };
+				IndexBuffer triIb=new IndexBuffer(typeof(int),triIndicies.Length,device,Usage.None,Pool.Managed);
+				triIb.SetData(triIndicies,0,LockFlags.None);
+				device.VertexFormat=CustomVertex.PositionColored.Format;
+				device.SetStreamSource(0,triVb,0);
+				device.Indices=triIb;
+				device.DrawIndexedPrimitives(PrimitiveType.TriangleList,0,0,solidTriVerts.Length,0,triIndicies.Length/3);
+				triIb.Dispose();
+				triVb.Dispose();
+			} else {
+				//invalid value. assume no furcation.
+			}
 		}
 
 		///<summary>Draws a line strip extending the two point lines which to not include endpoints. 
