@@ -626,7 +626,7 @@ namespace SparksToothChart {
 			return 0;
 		}
 		
-		///<summary>Use GetFurcationValue first.  Returns the position in mm of the center of the triangle relative to the center of the tooth.</summary>
+		///<summary>Use GetFurcationValue first.  Then, this method returns the position in mm of the center of the triangle relative to the center of the tooth.</summary>
 		public PointF GetFurcationPos(int intTooth,PerioSurf surf) {
 			float ysign=1;
 			float xdirect=1;
@@ -677,6 +677,16 @@ namespace SparksToothChart {
 			//todo: finetune magnitude
 			return new PointF(xdirect*3f,ysign*4.5f);
 			//throw new ApplicationException("Furcation surface not recognized.")
+		}
+
+		///<summary>Draws the short vertical lines that represent probing depths.  Use this on each site (3 per tooth face).  The z component will be 0.  The coordinates will be relative to the center of the tooth.  The line will always only have one segment.  It will return null if no line to draw at this site.  The color of the line will be pulled from a different method.  Use black for now.  This stub only draws at one site per tooth so far, M or B.</summary>
+		public LineSimple GetProbingLine(int intTooth,PerioSurf surf) {
+			if(Tooth.IsMaxillary(intTooth)) {
+				return new LineSimple(0,0,0,0,4,0);
+			}
+			else {//mand
+				return new LineSimple(0,0,0,0,-4,0);
+			}
 		}
 
 	}
