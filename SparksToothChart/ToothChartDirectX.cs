@@ -295,29 +295,11 @@ namespace SparksToothChart {
 			const float rightX=65f;
 			const int mmMax=9;
 			//Draw the horizontal line at 0
-			line.Antialias=false;
-			line.Width=1.5f;
-			line.Begin();
-			Vector3 p1=new Vector3(leftX,0,0);
-			Vector3 p2=new Vector3(rightX,0,0);
-			line.DrawTransform(
-				new Vector3[] { p1,p2 },
-				lineMat,TcData.ColorText);
-			line.End();
+			DrawExtended3dLine(new Vector3[] { new Vector3(leftX,0,0),new Vector3(rightX,0,0) },0,false,TcData.ColorText,1.5f,lineMat);
 			//Draw the other horizontal lines
-			line=new Line(device);
-			line.Antialias=false;
-			line.Width=.8f;
-			line.Begin();
 			for(int mm=3;mm<=mmMax;mm+=3) {
-				p1=new Vector3(leftX,sign*mm,0);
-				p2=new Vector3(rightX,sign*mm,0);
-				line.DrawTransform(
-					new Vector3[] { p1,p2 },
-					lineMat,Color.Gray);
+				DrawExtended3dLine(new Vector3[] { new Vector3(leftX,sign*mm,0),new Vector3(rightX,sign*mm,0) },0,false,Color.Gray,.8f,lineMat);
 			}
-			line.End();
-			line.Dispose();
 			//Separate loop than drawing the teeth, so that we don't need to change
 			//the device.RenderState.ZBufferEnable and device.RenderState.Lighting state variables for every
 			//tooth. This will help the speed a little.
@@ -340,6 +322,14 @@ namespace SparksToothChart {
 					DrawProbingBar(intTooth,PerioSurf.DL);
 					DrawProbingBar(intTooth,PerioSurf.L);
 					DrawProbingBar(intTooth,PerioSurf.ML);
+					//Draw bleeding droplets.
+					DrawDroplet(intTooth,PerioSurf.DL,true,maxillary);
+					DrawDroplet(intTooth,PerioSurf.L,true,maxillary);
+					DrawDroplet(intTooth,PerioSurf.ML,true,maxillary);
+					//Draw suppuration droplets.
+					DrawDroplet(intTooth,PerioSurf.DL,false,maxillary);
+					DrawDroplet(intTooth,PerioSurf.L,false,maxillary);
+					DrawDroplet(intTooth,PerioSurf.ML,false,maxillary);
 				}
 				else{//buccal
 					//Draw furcations at each tooth site if furcation present.
@@ -350,6 +340,14 @@ namespace SparksToothChart {
 					DrawProbingBar(intTooth,PerioSurf.DB);
 					DrawProbingBar(intTooth,PerioSurf.B);
 					DrawProbingBar(intTooth,PerioSurf.MB);
+					//Draw bleeding droplets.
+					DrawDroplet(intTooth,PerioSurf.DB,true,maxillary);
+					DrawDroplet(intTooth,PerioSurf.B,true,maxillary);
+					DrawDroplet(intTooth,PerioSurf.MB,true,maxillary);
+					//Draw suppuration droplets.
+					DrawDroplet(intTooth,PerioSurf.DB,false,maxillary);
+					DrawDroplet(intTooth,PerioSurf.B,false,maxillary);
+					DrawDroplet(intTooth,PerioSurf.MB,false,maxillary);
 				}
 			}
 			device.Transform.World=orientation;
@@ -357,24 +355,69 @@ namespace SparksToothChart {
 			//Draw GM lines.
 			List<LineSimple> gmLines=TcData.GetHorizontalLines(PerioSequenceType.GingMargin,maxillary,!lingual);
 			for(int i=0;i<gmLines.Count;i++) {
-				List<Vector3> gmLineV=this.LineSimpleToVector3List(gmLines[i]);
+				List<Vector3> gmLineV=LineSimpleToVector3List(gmLines[i]);
 				Vector3[] gmLineA=gmLineV.ToArray();
-				this.DrawExtended3dLine(gmLineA,0.2f,true,TcData.ColorGingivalMargin,2f,measureLineMat);
+				DrawExtended3dLine(gmLineA,0.2f,true,TcData.ColorGingivalMargin,2f,measureLineMat);
 			}
 			//Draw CAL lines.
 			List<LineSimple> calLines=TcData.GetHorizontalLines(PerioSequenceType.CAL,maxillary,!lingual);
 			for(int i=0;i<calLines.Count;i++) {
-				List<Vector3> calLineV=this.LineSimpleToVector3List(calLines[i]);
+				List<Vector3> calLineV=LineSimpleToVector3List(calLines[i]);
 				Vector3[] calLineA=calLineV.ToArray();
-				this.DrawExtended3dLine(calLineA,0.2f,true,TcData.ColorCAL,2f,measureLineMat);
+				DrawExtended3dLine(calLineA,0.2f,true,TcData.ColorCAL,2f,measureLineMat);
 			}
 			//Draw MGJ lines.
 			List<LineSimple> mgjLines=TcData.GetHorizontalLines(PerioSequenceType.MGJ,maxillary,!lingual);
 			for(int i=0;i<mgjLines.Count;i++) {
-				List<Vector3> mgjLineV=this.LineSimpleToVector3List(mgjLines[i]);
+				List<Vector3> mgjLineV=LineSimpleToVector3List(mgjLines[i]);
 				Vector3[] mgjLineA=mgjLineV.ToArray();
-				this.DrawExtended3dLine(mgjLineA,0.2f,true,TcData.ColorMGJ,2f,measureLineMat);
+				DrawExtended3dLine(mgjLineA,0.2f,true,TcData.ColorMGJ,2f,measureLineMat);
 			}
+		}
+
+		private void DrawDroplet(int intTooth,PerioSurf surf,bool isBleeding,bool maxillary) {
+			PointF dropletPos=TcData.GetBleedingOrSuppuration(intTooth,surf,isBleeding);
+			if(dropletPos.X==0 && dropletPos.Y==0){
+				return;//No droplet to draw at this site.
+			}
+			Matrix saveWorldMat=device.Transform.World;
+			device.Transform.World=Matrix.Translation(dropletPos.X,dropletPos.Y,0)*device.Transform.World;
+			if(!maxillary){
+				//When the droplet is for a mandibular tooth, flip the droplet about the x-axis (negate y values).
+				device.Transform.World=Matrix.Scaling(1f,-1f,1f)*device.Transform.World;
+			}
+			int dropletColor=TcData.ColorSuppuration.ToArgb();
+			if(isBleeding){
+				dropletColor=TcData.ColorBleeding.ToArgb();
+			}
+			List <PointF> dropletVertsP=TcData.GetDropletVertices();
+			List<CustomVertex.PositionColored> dropletVertsV=new List<CustomVertex.PositionColored>();
+			for(int p=0;p<dropletVertsP.Count;p++){
+				dropletVertsV.Add(new CustomVertex.PositionColored(
+					dropletVertsP[p].X,dropletVertsP[p].Y,0,dropletColor));
+			}
+			//This point is implied and is the last point.
+			dropletVertsV.Add(new CustomVertex.PositionColored(0,0,0,dropletColor));
+			VertexBuffer vb=new VertexBuffer(typeof(CustomVertex.PositionColored),
+				CustomVertex.PositionColored.StrideSize*dropletVertsV.Count,
+				device,Usage.WriteOnly,CustomVertex.PositionColored.Format,Pool.Managed);
+			vb.SetData(dropletVertsV.ToArray(),0,LockFlags.None);
+			List <int> indiciesL=new List<int> ();
+			for(int v=0;v<dropletVertsV.Count-2;v++){
+				indiciesL.Add(0);
+				indiciesL.Add(v+1);
+				indiciesL.Add(v+2);
+			}
+			int[] indicies=indiciesL.ToArray();
+			IndexBuffer ib=new IndexBuffer(typeof(int),indicies.Length,device,Usage.None,Pool.Managed);
+			ib.SetData(indicies,0,LockFlags.None);
+			device.VertexFormat=CustomVertex.PositionColored.Format;
+			device.SetStreamSource(0,vb,0);
+			device.Indices=ib;
+			device.DrawIndexedPrimitives(PrimitiveType.TriangleList,0,0,dropletVertsV.Count,0,indicies.Length/3);
+			ib.Dispose();
+			vb.Dispose();
+			device.Transform.World=saveWorldMat;
 		}
 
 		private void DrawProbingBar(int intTooth,PerioSurf perioSurf){
