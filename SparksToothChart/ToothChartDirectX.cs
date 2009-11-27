@@ -390,7 +390,10 @@ namespace SparksToothChart {
 			PointF sitePos=TcData.GetFurcationPos(intTooth,perioSurf);
 			float sign=maxillary?1:-1;
 			const float triSideLenMM=2f;
-			Color triColor=Color.Black;
+			Color triColor=TcData.ColorFurcations;
+			if(furcationValue>=TcData.RedLimitFurcations){
+				triColor=TcData.ColorFurcationsRed;
+			}
 			List<Vector3> triPoints=new List<Vector3>();
 			//We form an equilateral triangle.
 			triPoints.Add(new Vector3(sitePos.X+triSideLenMM/2f,sitePos.Y+sign*((float)(triSideLenMM*Math.Sqrt(3)/2f)),0));
