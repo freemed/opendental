@@ -679,7 +679,7 @@ namespace OpenDentBusiness{
 		Probing,
 		///<summary>5</summary>
 		SkipTooth,
-		///<summary>6</summary>
+		///<summary>6. Sum of flags for bleeding(1), suppuration(2), plaque(4), and calculus(8).</summary>
 		Bleeding,
 		///<summary>7. But this type is never saved to the db. It is always calculated on the fly.</summary>
 		CAL

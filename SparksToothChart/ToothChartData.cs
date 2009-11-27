@@ -949,6 +949,79 @@ namespace SparksToothChart {
 			return retVal;
 		}
 
+		///<summary>For a given tooth and surface, gets a point at which to draw bleeding or suppuration droplet.  Use this on each site (3 per tooth face). The coordinates will be relative to the center of the tooth.  It will return 0,0 if no droplet to draw at this site.  If isBleeding is false, then it gets suppuration.</summary>
+		public PointF GetBleedingOrSuppuration(int intTooth,PerioSurf surf,bool isBleeding) {
+			if(!ListToothGraphics[intTooth.ToString()].Visible && !ListToothGraphics[intTooth.ToString()].IsImplant) {
+				return new PointF(0,0);
+			}
+			float xshift=GetXShiftPerioSite(intTooth,surf);
+			float yshift=-1.5f;//max
+			if(!Tooth.IsMaxillary(intTooth)) {
+				yshift=1.5f;
+			}
+			int siteVal=-1;
+			for(int i=0;i<ListPerioMeasure.Count;i++) {
+				if(ListPerioMeasure[i].IntTooth!=intTooth) {
+					continue;
+				}
+				if(ListPerioMeasure[i].SequenceType!=PerioSequenceType.Bleeding) {
+					continue;
+				}
+				switch(surf) {
+					case PerioSurf.MB:
+						siteVal=ListPerioMeasure[i].MBvalue;
+						break;
+					case PerioSurf.B:
+						siteVal=ListPerioMeasure[i].Bvalue;
+						break;
+					case PerioSurf.DB:
+						siteVal=ListPerioMeasure[i].DBvalue;
+						break;
+					case PerioSurf.ML:
+						siteVal=ListPerioMeasure[i].MLvalue;
+						break;
+					case PerioSurf.L:
+						siteVal=ListPerioMeasure[i].Lvalue;
+						break;
+					case PerioSurf.DL:
+						siteVal=ListPerioMeasure[i].DLvalue;
+						break;
+				}
+				break;				
+			}
+			if(siteVal==-1 || siteVal==0) {
+				return new PointF(0,0);
+			}
+			if(isBleeding) {
+				if(((BleedingFlags)siteVal & BleedingFlags.Blood) == BleedingFlags.Blood) {
+					return new PointF(xshift-.3f,yshift);//shift bleeding points slightly to left.
+				}
+				else {
+					return new PointF(0,0);
+				}
+			}
+			else {//suppuration
+				if(((BleedingFlags)siteVal & BleedingFlags.Suppuration) == BleedingFlags.Suppuration) {
+					return new PointF(xshift+.3f,yshift);//shift suppuration points slightly to right.
+				}
+				else {
+					return new PointF(0,0);
+				}
+			}
+		}
+
+		///<summary>Returns a series of points that can be used to create a droplet shape for bleeding and suppuration.  The points form a pentagon with a sixth implied point at 0,0.  Use the points and 0,0 to create 5 triangles.  Coordinates are in mm's.  If the droplet needs to be scaled, that will be done inside this method rather than externally.  The droplet will need to be flipped or rotated about the 0,0 point for use in the mandibular.</summary>
+		public List<PointF> GetDropletVertices() {
+			List<PointF> retVal=new List<PointF>();
+			float scale=1f;
+			retVal.Add(new PointF(0,scale*.89f));//top point
+			retVal.Add(new PointF(scale*.34f,scale*.049f));//upper right
+			retVal.Add(new PointF(scale*.21f,scale*-.35f));//lower right
+			retVal.Add(new PointF(scale*-.21f,scale*-.35f));//lower left
+			retVal.Add(new PointF(scale*-.34f,scale*.049f));//upper left
+			return retVal;
+		}
+
 
 
 	}
