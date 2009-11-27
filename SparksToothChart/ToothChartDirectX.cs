@@ -307,7 +307,7 @@ namespace SparksToothChart {
 			//Draw the other horizontal lines
 			line=new Line(device);
 			line.Antialias=false;
-			line.Width=1f;
+			line.Width=.8f;
 			line.Begin();
 			for(int mm=3;mm<=mmMax;mm+=3) {
 				p1=new Vector3(leftX,sign*mm,0);

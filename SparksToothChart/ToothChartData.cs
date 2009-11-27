@@ -807,7 +807,6 @@ namespace SparksToothChart {
 				stopTooth=16;
 			}
 			LineSimple line=new LineSimple();
-			line.Vertices=new List<Vertex3f> ();
 			Vertex3f vertex;
 			int val1=-1;
 			int val2=-1;
@@ -817,6 +816,24 @@ namespace SparksToothChart {
 			PerioSurf surf2;
 			PerioSurf surf3;
 			while(t!=stopTooth){
+				if(!ListToothGraphics[t.ToString()].Visible && !ListToothGraphics[t.ToString()].IsImplant) {
+					//stop any existing line.
+					if(line.Vertices.Count==1) {//if there is already one point, then clear it, because a line can't have one point.
+						line.Vertices.Clear();
+					}
+					if(line.Vertices.Count>1) {//if 2 or more points in the line, then add the line to the result.
+						retVal.Add(line);
+						line=new LineSimple();//and initialize a new line for future points.
+					}
+					//increment to next tooth
+					if(isMaxillary) {
+						t++;
+					}
+					else {
+						t--;
+					}
+					continue;
+				}
 				//We are considering 3 points per tooth.  Reinitialize for the new tooth.
 				val1=-1;
 				val2=-1;

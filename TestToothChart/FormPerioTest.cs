@@ -68,7 +68,7 @@ namespace TestToothChart {
 				toothChart.AddPerioMeasure(i,PerioSequenceType.GingMargin,0,1,1,1,0,0);
 				toothChart.AddPerioMeasure(i,PerioSequenceType.Probing,   3,2,3,4,2,3);
 				toothChart.AddPerioMeasure(i,PerioSequenceType.CAL,       3,3,4,5,2,3);//basically GingMargin+Probing, unless one of them is -1
-				toothChart.AddPerioMeasure(i,PerioSequenceType.MGJ,       5,5,5,6,5,5);
+				toothChart.AddPerioMeasure(i,PerioSequenceType.MGJ,       5,5,5,6,6,6);
 			}
 		}
 
