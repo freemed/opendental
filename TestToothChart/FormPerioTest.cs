@@ -41,7 +41,6 @@ namespace TestToothChart {
 			//toothChart.MoveTooth("4",0,0,0,0,-5,0);
 			//toothChart.MoveTooth("16",0,20,0,-3,0,0);
 			//toothChart.MoveTooth("24",15,2,0,0,0,0);
-//Comment out the line below to cause the furcation on #2 to shift postion
 			toothChart.SetMobility("2","3",Color.Red);
 			toothChart.SetMobility("7","2",Color.Red);
 			toothChart.SetMobility("8","2",Color.Red);

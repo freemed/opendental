@@ -286,38 +286,6 @@ namespace SparksToothChart {
 			device.RenderState.Lighting=false;
 			Line line=new Line(device);
 			float sign=maxillary?1:-1;
-			//Separate loop than drawing the teeth, so that we don't need to change
-			//the device.RenderState.ZBufferEnable and device.RenderState.Lighting state variables for every
-			//tooth. This will help the speed a little.
-			for(int t=0;t<toothGraphics.Count;t++){
-				SizeF mobTextSize=MeasureStringMm(toothGraphics[t].Mobility);
-				//Draw mobility numbers.
-				device.Transform.World=Matrix.Translation(GetTransX(toothGraphics[t].ToothID)-mobTextSize.Width/2f,0,0)*orientation;
-				PrintString(toothGraphics[t].Mobility,0,maxillary?-2.5f:5.5f,0,toothGraphics[t].colorMobility,xfont);
-				Matrix toothLineMat=ScreenSpaceMatrix();
-				int intTooth=ToothGraphic.IdToInt(toothGraphics[t].ToothID);
-				device.Transform.World=Matrix.Translation(GetTransX(toothGraphics[t].ToothID),0,0)*orientation;
-				if(lingual){
-					//Draw furcations at each tooth site if furcation present.
-					DrawFurcationTriangle(intTooth,PerioSurf.DL,maxillary,toothLineMat);
-					DrawFurcationTriangle(intTooth,PerioSurf.L,maxillary,toothLineMat);
-					DrawFurcationTriangle(intTooth,PerioSurf.ML,maxillary,toothLineMat);
-					//Draw probing bars.
-					DrawProbingBar(intTooth,PerioSurf.DL);
-					DrawProbingBar(intTooth,PerioSurf.L);
-					DrawProbingBar(intTooth,PerioSurf.ML);
-				}
-				else{//buccal
-					//Draw furcations at each tooth site if furcation present.
-					DrawFurcationTriangle(intTooth,PerioSurf.DB,maxillary,toothLineMat);
-					DrawFurcationTriangle(intTooth,PerioSurf.B,maxillary,toothLineMat);
-					DrawFurcationTriangle(intTooth,PerioSurf.MB,maxillary,toothLineMat);
-					//Draw probing bars.
-					DrawProbingBar(intTooth,PerioSurf.DB);
-					DrawProbingBar(intTooth,PerioSurf.B);
-					DrawProbingBar(intTooth,PerioSurf.MB);
-				}
-			}
 			//The device.Transform.World matrix must be set before calling Line.Begin()
 			//or else your lines end up in the wrong location! This is odd behavior, since you *MUST*
 			//pass in your screen matrix when you call Line.DrawTransform(). This must be a DirectX bug.
@@ -350,6 +318,40 @@ namespace SparksToothChart {
 			}
 			line.End();
 			line.Dispose();
+			//Separate loop than drawing the teeth, so that we don't need to change
+			//the device.RenderState.ZBufferEnable and device.RenderState.Lighting state variables for every
+			//tooth. This will help the speed a little.
+			for(int t=0;t<toothGraphics.Count;t++){
+				SizeF mobTextSize=MeasureStringMm(toothGraphics[t].Mobility);
+				if(!lingual){
+					//Draw mobility numbers.
+					device.Transform.World=Matrix.Translation(GetTransX(toothGraphics[t].ToothID)-mobTextSize.Width/2f,0,0)*orientation;
+					PrintString(toothGraphics[t].Mobility,0,maxillary?-2.5f:5.5f,0,toothGraphics[t].colorMobility,xfont);
+				}
+				device.Transform.World=Matrix.Translation(GetTransX(toothGraphics[t].ToothID),0,0)*orientation;
+				Matrix toothLineMat=ScreenSpaceMatrix();
+				int intTooth=ToothGraphic.IdToInt(toothGraphics[t].ToothID);
+				if(lingual){
+					//Draw furcations at each tooth site if furcation present.
+					DrawFurcationTriangle(intTooth,PerioSurf.DL,maxillary,toothLineMat);
+					DrawFurcationTriangle(intTooth,PerioSurf.L,maxillary,toothLineMat);
+					DrawFurcationTriangle(intTooth,PerioSurf.ML,maxillary,toothLineMat);
+					//Draw probing bars.
+					DrawProbingBar(intTooth,PerioSurf.DL);
+					DrawProbingBar(intTooth,PerioSurf.L);
+					DrawProbingBar(intTooth,PerioSurf.ML);
+				}
+				else{//buccal
+					//Draw furcations at each tooth site if furcation present.
+					DrawFurcationTriangle(intTooth,PerioSurf.DB,maxillary,toothLineMat);
+					DrawFurcationTriangle(intTooth,PerioSurf.B,maxillary,toothLineMat);
+					DrawFurcationTriangle(intTooth,PerioSurf.MB,maxillary,toothLineMat);
+					//Draw probing bars.
+					DrawProbingBar(intTooth,PerioSurf.DB);
+					DrawProbingBar(intTooth,PerioSurf.B);
+					DrawProbingBar(intTooth,PerioSurf.MB);
+				}
+			}
 		}
 
 		private void DrawProbingBar(int intTooth,PerioSurf perioSurf){
@@ -401,11 +403,12 @@ namespace SparksToothChart {
 				DrawExtended3dLine(new Vector3[] { triPoints[0],triPoints[1],triPoints[2],triPoints[0] },0.1f,true,triColor,2f,toothLineMat);
 			} 
 			else if(furcationValue==3) {
+				DrawExtended3dLine(new Vector3[] { triPoints[0],triPoints[1],triPoints[2],triPoints[0] },0.1f,true,triColor,2f,toothLineMat);
 				CustomVertex.PositionColored[] solidTriVerts=new CustomVertex.PositionColored[] {
-			          new CustomVertex.PositionColored(triPoints[0],triColor.ToArgb()),
-			          new CustomVertex.PositionColored(triPoints[1],triColor.ToArgb()),
-			          new CustomVertex.PositionColored(triPoints[2],triColor.ToArgb()),
-			        };
+				        new CustomVertex.PositionColored(triPoints[0],triColor.ToArgb()),
+				        new CustomVertex.PositionColored(triPoints[1],triColor.ToArgb()),
+				        new CustomVertex.PositionColored(triPoints[2],triColor.ToArgb()),
+				      };
 				VertexBuffer triVb=new VertexBuffer(typeof(CustomVertex.PositionColored),
 					CustomVertex.PositionColored.StrideSize*solidTriVerts.Length,
 					device,Usage.WriteOnly,CustomVertex.PositionColored.Format,Pool.Managed);
