@@ -23,7 +23,7 @@
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			SparksToothChart.ToothChartData toothChartData1 = new SparksToothChart.ToothChartData();
+			SparksToothChart.ToothChartData toothChartData2 = new SparksToothChart.ToothChartData();
 			this.butPrint = new System.Windows.Forms.Button();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.labelRedLimitProbing = new System.Windows.Forms.Label();
@@ -48,7 +48,6 @@
 			this.label1 = new System.Windows.Forms.Label();
 			this.butColorPus = new System.Windows.Forms.Button();
 			this.butColorBleed = new System.Windows.Forms.Button();
-			this.label5 = new System.Windows.Forms.Label();
 			this.toothChart = new SparksToothChart.ToothChartWrapper();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
@@ -304,15 +303,6 @@
 			this.butColorBleed.TabIndex = 51;
 			this.butColorBleed.UseVisualStyleBackColor = false;
 			// 
-			// label5
-			// 
-			this.label5.Location = new System.Drawing.Point(473,727);
-			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(192,126);
-			this.label5.TabIndex = 218;
-			this.label5.Text = "Tests currently included:\r\nMissing teeth (13,14,18,25,26)\r\nImplant (14)\r\nMobiliti" +
-    "es\r\nFurcations (1,2,3,5,30)\r\nBleeding and Suppuration\r\nGM, CAL, MGJ\r\nProbing";
-			// 
 			// toothChart
 			// 
 			this.toothChart.AutoFinish = false;
@@ -326,8 +316,8 @@
 			this.toothChart.PreferredPixelFormatNumber = 0;
 			this.toothChart.Size = new System.Drawing.Size(700,667);
 			this.toothChart.TabIndex = 198;
-			toothChartData1.SizeControl = new System.Drawing.Size(700,667);
-			this.toothChart.TcData = toothChartData1;
+			toothChartData2.SizeControl = new System.Drawing.Size(700,667);
+			this.toothChart.TcData = toothChartData2;
 			this.toothChart.UseHardware = false;
 			// 
 			// FormPerioTest
@@ -335,7 +325,6 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(846,881);
-			this.Controls.Add(this.label5);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.butPrint);
 			this.Controls.Add(this.toothChart);
@@ -363,7 +352,6 @@
 		private System.Windows.Forms.Label label4;
 		private System.Windows.Forms.Button butColorCAL;
 		private System.Windows.Forms.Button butColorGM;
-		private System.Windows.Forms.Label label5;
 		private System.Windows.Forms.Label label7;
 		private System.Windows.Forms.Button butColorFurc;
 		private System.Windows.Forms.Label label8;

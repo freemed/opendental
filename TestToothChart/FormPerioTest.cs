@@ -57,14 +57,14 @@ namespace TestToothChart {
 			for(int i=1;i<=32;i++) {
 				//string tooth_id=i.ToString();
 				//bleeding and suppuration on all MB sites
-				BleedingFlags bleedingFlags=BleedingFlags.Blood | BleedingFlags.Suppuration;
-				toothChart.AddPerioMeasure(i,PerioSequenceType.Bleeding,(int)bleedingFlags,-1,-1,-1,-1,-1);
 				//bleeding only all DL sites
-				bleedingFlags=BleedingFlags.Blood;
-				toothChart.AddPerioMeasure(i,PerioSequenceType.Bleeding,-1,-1,-1,-1,-1,(int)bleedingFlags);
 				//suppuration only all B sites
-				bleedingFlags=BleedingFlags.Suppuration;
-				toothChart.AddPerioMeasure(i,PerioSequenceType.Bleeding,-1,(int)bleedingFlags,-1,-1,-1,-1);
+				//BleedingFlags bleedingFlags=BleedingFlags.Blood | BleedingFlags.Suppuration;//blood=1, suppuration=2
+				toothChart.AddPerioMeasure(i,PerioSequenceType.Bleeding,3,2,-1,-1,-1,1);
+				//bleedingFlags=BleedingFlags.Blood;
+				//toothChart.AddPerioMeasure(i,PerioSequenceType.Bleeding,-1,-1,-1,-1,-1,(int)bleedingFlags);
+				//bleedingFlags=BleedingFlags.Suppuration;
+				//toothChart.AddPerioMeasure(i,PerioSequenceType.Bleeding,-1,(int)bleedingFlags,-1,-1,-1,-1);
 				toothChart.AddPerioMeasure(i,PerioSequenceType.GingMargin,0,1,1,1,0,0);
 				toothChart.AddPerioMeasure(i,PerioSequenceType.Probing,   3,2,3,4,2,3);
 				toothChart.AddPerioMeasure(i,PerioSequenceType.CAL,       3,3,4,5,2,3);//basically GingMargin+Probing, unless one of them is -1
