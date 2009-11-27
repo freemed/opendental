@@ -807,6 +807,7 @@ namespace SparksToothChart {
 				stopTooth=16;
 			}
 			LineSimple line=new LineSimple();
+			line.Vertices=new List<Vertex3f> ();
 			Vertex3f vertex;
 			int val1=-1;
 			int val2=-1;

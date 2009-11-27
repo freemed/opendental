@@ -352,6 +352,29 @@ namespace SparksToothChart {
 					DrawProbingBar(intTooth,PerioSurf.MB);
 				}
 			}
+			device.Transform.World=orientation;
+			Matrix measureLineMat=ScreenSpaceMatrix();
+			//Draw GM lines.
+			List<LineSimple> gmLines=TcData.GetHorizontalLines(PerioSequenceType.GingMargin,maxillary,!lingual);
+			for(int i=0;i<gmLines.Count;i++) {
+				List<Vector3> gmLineV=this.LineSimpleToVector3List(gmLines[i]);
+				Vector3[] gmLineA=gmLineV.ToArray();
+				this.DrawExtended3dLine(gmLineA,0.2f,true,TcData.ColorGingivalMargin,2f,measureLineMat);
+			}
+			//Draw CAL lines.
+			List<LineSimple> calLines=TcData.GetHorizontalLines(PerioSequenceType.CAL,maxillary,!lingual);
+			for(int i=0;i<calLines.Count;i++) {
+				List<Vector3> calLineV=this.LineSimpleToVector3List(calLines[i]);
+				Vector3[] calLineA=calLineV.ToArray();
+				this.DrawExtended3dLine(calLineA,0.2f,true,TcData.ColorCAL,2f,measureLineMat);
+			}
+			//Draw MGJ lines.
+			List<LineSimple> mgjLines=TcData.GetHorizontalLines(PerioSequenceType.MGJ,maxillary,!lingual);
+			for(int i=0;i<mgjLines.Count;i++) {
+				List<Vector3> mgjLineV=this.LineSimpleToVector3List(mgjLines[i]);
+				Vector3[] mgjLineA=mgjLineV.ToArray();
+				this.DrawExtended3dLine(mgjLineA,0.2f,true,TcData.ColorMGJ,2f,measureLineMat);
+			}
 		}
 
 		private void DrawProbingBar(int intTooth,PerioSurf perioSurf){
@@ -429,6 +452,14 @@ namespace SparksToothChart {
 			else {
 				//invalid value. assume no furcation.
 			}
+		}
+
+		private List <Vector3> LineSimpleToVector3List(LineSimple lineSimple){
+			List <Vector3> vectorList=new List<Vector3> ();
+			for(int p=0;p<lineSimple.Vertices.Count;p++){
+				vectorList.Add(new Vector3(lineSimple.Vertices[p].X,lineSimple.Vertices[p].Y,lineSimple.Vertices[p].Z));
+			}
+			return vectorList;
 		}
 
 		///<summary>Draws a line strip extending the two point lines which to not include endpoints. 
