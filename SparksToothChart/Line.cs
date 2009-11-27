@@ -7,6 +7,11 @@ namespace SparksToothChart {
 	public class LineSimple {
 		public List<Vertex3f> Vertices;
 
+		///<summary></summary>
+		public LineSimple() {
+
+		}
+
 		///<summary>Specify a line as a series of points.  It's implied that they are grouped by threes.</summary>
 		public LineSimple(params float[] coords) {
 			Vertices=new List<Vertex3f>();

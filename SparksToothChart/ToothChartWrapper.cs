@@ -207,6 +207,95 @@ namespace SparksToothChart {
 				Invalidate();
 			}
 		}
+
+		///<summary></summary>
+		[Browsable(false)]
+		public Color ColorBleeding {
+			set {
+				tcData.ColorBleeding=value;
+			}
+		}
+
+		///<summary></summary>
+		[Browsable(false)]
+		public Color ColorSuppuration {
+			set {
+				tcData.ColorSuppuration=value;
+			}
+		}
+
+		///<summary></summary>
+		[Browsable(false)]
+		public Color ColorFurcations {
+			set {
+				tcData.ColorFurcations=value;
+			}
+		}
+
+		///<summary></summary>
+		[Browsable(false)]
+		public Color ColorFurcationsRed {
+			set {
+				tcData.ColorFurcationsRed=value;
+			}
+		}
+
+		///<summary></summary>
+		[Browsable(false)]
+		public Color ColorGingivalMargin {
+			set {
+				tcData.ColorGingivalMargin=value;
+			}
+		}
+
+		///<summary></summary>
+		[Browsable(false)]
+		public Color ColorCAL {
+			set {
+				tcData.ColorCAL=value;
+			}
+		}
+
+		///<summary></summary>
+		[Browsable(false)]
+		public Color ColorMGJ {
+			set {
+				tcData.ColorMGJ=value;
+			}
+		}
+
+		///<summary></summary>
+		[Browsable(false)]
+		public Color ColorProbing {
+			set {
+				tcData.ColorProbing=value;
+			}
+		}
+
+		///<summary></summary>
+		[Browsable(false)]
+		public Color ColorProbingRed {
+			set {
+				tcData.ColorProbingRed=value;
+			}
+		}
+
+		///<summary></summary>
+		[Browsable(false)]
+		public int RedLimitProbing {
+			set {
+				tcData.RedLimitProbing=value;
+			}
+		}
+
+		///<summary></summary>
+		[Browsable(false)]
+		public int RedLimitFurcations {
+			set {
+				tcData.RedLimitFurcations=value;
+			}
+		}
+
 		#endregion Properties
 
 		protected override void OnInvalidated(InvalidateEventArgs e) {

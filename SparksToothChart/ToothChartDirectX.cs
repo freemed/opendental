@@ -178,6 +178,11 @@ namespace SparksToothChart {
 			float ambI=.4f;//.2f;//Darker for testing
 			float difI=.6f;//.4f;//Darker for testing
 			float specI=.8f;//.2f;//Had to turn specular down to avoid bleedout.
+			if(TcData.PerioMode) {
+				//Want perio teeth to be more washed out so that other graphics are more visible.
+				ambI=.6f;
+				difI=.4f;
+			}
 			//I think we're going to need to eventually use shaders to get our pinpoint reflections.
 			//Set properties for light 0. Diffuse light.
 			device.Lights[0].Type=LightType.Directional;
@@ -288,7 +293,7 @@ namespace SparksToothChart {
 				SizeF mobTextSize=MeasureStringMm(toothGraphics[t].Mobility);
 				//Draw mobility numbers.
 				device.Transform.World=Matrix.Translation(GetTransX(toothGraphics[t].ToothID)-mobTextSize.Width/2f,0,0)*orientation;
-				PrintString(toothGraphics[t].Mobility,0,maxillary?-1.5f:5.5f,0,toothGraphics[t].colorMobility,xfont);
+				PrintString(toothGraphics[t].Mobility,0,maxillary?-2.5f:5.5f,0,toothGraphics[t].colorMobility,xfont);
 				Matrix toothLineMat=ScreenSpaceMatrix();
 				int intTooth=ToothGraphic.IdToInt(toothGraphics[t].ToothID);
 				device.Transform.World=Matrix.Translation(GetTransX(toothGraphics[t].ToothID),0,0)*orientation;
@@ -297,15 +302,20 @@ namespace SparksToothChart {
 					DrawFurcationTriangle(intTooth,PerioSurf.DL,maxillary,toothLineMat);
 					DrawFurcationTriangle(intTooth,PerioSurf.L,maxillary,toothLineMat);
 					DrawFurcationTriangle(intTooth,PerioSurf.ML,maxillary,toothLineMat);
-					//Draw probing bar.
+					//Draw probing bars.
+					DrawProbingBar(intTooth,PerioSurf.DL);
 					DrawProbingBar(intTooth,PerioSurf.L);
-				}else{//buccal
+					DrawProbingBar(intTooth,PerioSurf.ML);
+				}
+				else{//buccal
 					//Draw furcations at each tooth site if furcation present.
 					DrawFurcationTriangle(intTooth,PerioSurf.DB,maxillary,toothLineMat);
 					DrawFurcationTriangle(intTooth,PerioSurf.B,maxillary,toothLineMat);
 					DrawFurcationTriangle(intTooth,PerioSurf.MB,maxillary,toothLineMat);
-					//Draw probing bar.
+					//Draw probing bars.
+					DrawProbingBar(intTooth,PerioSurf.DB);
 					DrawProbingBar(intTooth,PerioSurf.B);
+					DrawProbingBar(intTooth,PerioSurf.MB);
 				}
 			}
 			//The device.Transform.World matrix must be set before calling Line.Begin()
@@ -343,17 +353,17 @@ namespace SparksToothChart {
 		}
 
 		private void DrawProbingBar(int intTooth,PerioSurf perioSurf){
-			const float barWidthMM=0.8f;
-			LineSimple barPoints=TcData.GetProbingLine(intTooth,perioSurf);
+			const float barWidthMM=0.6f;
+			Color colorBar;
+			LineSimple barPoints=TcData.GetProbingLine(intTooth,perioSurf,out colorBar);
 			if(barPoints==null){
 				return;
 			}
-			Color barColor=Color.Black;
 			CustomVertex.PositionColored[] quadVerts=new CustomVertex.PositionColored[] {
-			    new CustomVertex.PositionColored(barPoints.Vertices[0].X-barWidthMM/2f,barPoints.Vertices[0].Y,0,barColor.ToArgb()),
-			    new CustomVertex.PositionColored(barPoints.Vertices[0].X-barWidthMM/2f,barPoints.Vertices[1].Y,0,barColor.ToArgb()),
-			    new CustomVertex.PositionColored(barPoints.Vertices[0].X+barWidthMM/2f,barPoints.Vertices[1].Y,0,barColor.ToArgb()),
-			    new CustomVertex.PositionColored(barPoints.Vertices[0].X+barWidthMM/2f,barPoints.Vertices[0].Y,0,barColor.ToArgb()),
+			    new CustomVertex.PositionColored(barPoints.Vertices[0].X-barWidthMM/2f,barPoints.Vertices[0].Y,0,colorBar.ToArgb()),
+			    new CustomVertex.PositionColored(barPoints.Vertices[0].X-barWidthMM/2f,barPoints.Vertices[1].Y,0,colorBar.ToArgb()),
+			    new CustomVertex.PositionColored(barPoints.Vertices[0].X+barWidthMM/2f,barPoints.Vertices[1].Y,0,colorBar.ToArgb()),
+			    new CustomVertex.PositionColored(barPoints.Vertices[0].X+barWidthMM/2f,barPoints.Vertices[0].Y,0,colorBar.ToArgb()),
 			  };
 			VertexBuffer vb=new VertexBuffer(typeof(CustomVertex.PositionColored),
 				CustomVertex.PositionColored.StrideSize*quadVerts.Length,
@@ -372,7 +382,7 @@ namespace SparksToothChart {
 
 		private void DrawFurcationTriangle(int intTooth,PerioSurf perioSurf,bool maxillary,Matrix toothLineMat){
 			int furcationValue=TcData.GetFurcationValue(intTooth,perioSurf);
-			if(furcationValue<1||furcationValue>3) {
+			if(furcationValue<1 || furcationValue>3) {
 				return;
 			}
 			PointF sitePos=TcData.GetFurcationPos(intTooth,perioSurf);
@@ -386,9 +396,11 @@ namespace SparksToothChart {
 			triPoints.Add(new Vector3(sitePos.X-triSideLenMM/2f,sitePos.Y+sign*((float)(triSideLenMM*Math.Sqrt(3)/2f)),0));
 			if(furcationValue==1) {
 				DrawExtended3dLine(new Vector3[] { triPoints[0],triPoints[1],triPoints[2] },0.1f,false,triColor,2f,toothLineMat);
-			} else if(furcationValue==2) {
+			} 
+			else if(furcationValue==2) {
 				DrawExtended3dLine(new Vector3[] { triPoints[0],triPoints[1],triPoints[2],triPoints[0] },0.1f,true,triColor,2f,toothLineMat);
-			} else if(furcationValue==3) {
+			} 
+			else if(furcationValue==3) {
 				CustomVertex.PositionColored[] solidTriVerts=new CustomVertex.PositionColored[] {
 			          new CustomVertex.PositionColored(triPoints[0],triColor.ToArgb()),
 			          new CustomVertex.PositionColored(triPoints[1],triColor.ToArgb()),
@@ -407,7 +419,8 @@ namespace SparksToothChart {
 				device.DrawIndexedPrimitives(PrimitiveType.TriangleList,0,0,solidTriVerts.Length,0,triIndicies.Length/3);
 				triIb.Dispose();
 				triVb.Dispose();
-			} else {
+			} 
+			else {
 				//invalid value. assume no furcation.
 			}
 		}

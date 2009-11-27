@@ -47,6 +47,19 @@ namespace SparksToothChart {
 		public bool PerioMode;
 		///<summary>This very closely mirrors the organization in the db, but we don't include here mobility or skiptooth.</summary>
 		public List<PerioMeasure> ListPerioMeasure;
+		public Color ColorBleeding;
+		public Color ColorSuppuration;
+		public Color ColorFurcations;
+		public Color ColorFurcationsRed;
+		public Color ColorGingivalMargin;
+		public Color ColorCAL;
+		public Color ColorMGJ;
+		public Color ColorProbing;
+		public Color ColorProbingRed;
+		///<summary>Any probing bar that is deeper than or equal to this number will show in 'red'.  Typical value is 4 or 5.</summary>
+		public int RedLimitProbing;
+		///<summary>Any furcation grade that is greater than or equal to this number will show in 'red'.  Typical value is 2.</summary>
+		public int RedLimitFurcations;
 
 		public ToothChartData() {
 			ListToothGraphics=new ToothGraphicCollection();
@@ -626,37 +639,119 @@ namespace SparksToothChart {
 			return 0;
 		}
 		
-		///<summary>Use GetFurcationValue first.  Then, this method returns the position in mm of the center of the triangle relative to the center of the tooth.</summary>
+		///<summary>Use GetFurcationValue first.  Then, this method returns the position in mm of the tip of the triangle or V relative to the center of the tooth.</summary>
 		public PointF GetFurcationPos(int intTooth,PerioSurf surf) {
 			float ysign=1;
-			float xdirect=1;
 			if(Tooth.IsMaxillary(intTooth)) {
 				ysign=1;
-				if(surf==PerioSurf.B || surf==PerioSurf.L){
-					return new PointF(0,ysign*4.5f);
-				}
-				if(surf==PerioSurf.MB || surf==PerioSurf.ML) {
-					if(ToothGraphic.IsRight(intTooth.ToString())) {//UR quadrant
-						xdirect=1;
-					}
-					else {//UL
-						xdirect=-1;
-					}
-				}
-				else if(surf==PerioSurf.DB || surf==PerioSurf.DL) {
-					if(ToothGraphic.IsRight(intTooth.ToString())) {//UR quadrant
-						xdirect=-1;
-					}
-					else {//UL
-						xdirect=1;
-					}
-				}
 			}
 			else {//mand
 				ysign=-1;
-				if(surf==PerioSurf.B || surf==PerioSurf.L){
-					return new PointF(0,ysign*4.5f);
+			}
+			float xshift=GetXShiftPerioSite(intTooth,surf);
+			return new PointF(xshift,ysign*3.5f);
+		}
+
+		///<summary>Draws the short vertical lines that represent probing depths.  Use this on each site (3 per tooth face).  The z component will be 0.  The coordinates will be relative to the center of the tooth.  The line will always only have one segment.  It will return null if no line to draw at this site.  The color of the line will be pulled from a different method.</summary>
+		public LineSimple GetProbingLine(int intTooth,PerioSurf surf,out Color color) {
+			color=ColorProbing;
+			if(!ListToothGraphics[intTooth.ToString()].Visible && !ListToothGraphics[intTooth.ToString()].IsImplant) {
+				return null;
+			}
+			float xshift=GetXShiftPerioSite(intTooth,surf);
+			int gm=0;
+			int pd=0;//line length
+			for(int i=0;i<ListPerioMeasure.Count;i++) {
+				if(ListPerioMeasure[i].IntTooth!=intTooth) {
+					continue;
 				}
+				if(ListPerioMeasure[i].SequenceType==PerioSequenceType.Probing) {
+					switch(surf) {
+						case PerioSurf.MB:
+							pd=ListPerioMeasure[i].MBvalue;
+							break;
+						case PerioSurf.B:
+							pd=ListPerioMeasure[i].Bvalue;
+							break;
+						case PerioSurf.DB:
+							pd=ListPerioMeasure[i].DBvalue;
+							break;
+						case PerioSurf.ML:
+							pd=ListPerioMeasure[i].MLvalue;
+							break;
+						case PerioSurf.L:
+							pd=ListPerioMeasure[i].Lvalue;
+							break;
+						case PerioSurf.DL:
+							pd=ListPerioMeasure[i].DLvalue;
+							break;
+					}
+				}
+				if(ListPerioMeasure[i].SequenceType==PerioSequenceType.GingMargin) {
+					switch(surf) {
+						case PerioSurf.MB:
+							gm=ListPerioMeasure[i].MBvalue;
+							break;
+						case PerioSurf.B:
+							gm=ListPerioMeasure[i].Bvalue;
+							break;
+						case PerioSurf.DB:
+							gm=ListPerioMeasure[i].DBvalue;
+							break;
+						case PerioSurf.ML:
+							gm=ListPerioMeasure[i].MLvalue;
+							break;
+						case PerioSurf.L:
+							gm=ListPerioMeasure[i].Lvalue;
+							break;
+						case PerioSurf.DL:
+							gm=ListPerioMeasure[i].DLvalue;
+							break;
+					}
+				}
+			}
+			if(gm==-1) {
+				gm=0;
+			}
+			if(pd==0 || pd==-1) {
+				return null;
+			}
+			if(pd >= RedLimitProbing) {
+				color=ColorProbingRed;
+			}
+			if(Tooth.IsMaxillary(intTooth)) {
+				return new LineSimple(xshift,gm,0,xshift,gm+pd,0);
+			}
+			else {//mand
+				return new LineSimple(xshift,-gm,0,xshift,-(gm+pd),0);
+			}
+		}
+
+		///<summary>Relative to the center of the tooth. The sign is based on area of the mouth.  The magnitude is based on tooth width.  This will be used for the probing bars and horizontal lines.  Probably also for furcations.</summary>
+		private float GetXShiftPerioSite(int intTooth,PerioSurf surf) {
+			if(surf==PerioSurf.B || surf==PerioSurf.L) {
+				return 0;
+			}
+			float xdirect=1;
+			if(Tooth.IsMaxillary(intTooth)) {
+				if(surf==PerioSurf.MB || surf==PerioSurf.ML) {
+					if(ToothGraphic.IsRight(intTooth.ToString())) {//UR quadrant
+						xdirect=1;
+					}
+					else {//UL
+						xdirect=-1;
+					}
+				}
+				else if(surf==PerioSurf.DB || surf==PerioSurf.DL) {
+					if(ToothGraphic.IsRight(intTooth.ToString())) {//UR quadrant
+						xdirect=-1;
+					}
+					else {//UL
+						xdirect=1;
+					}
+				}
+			}
+			else {//mand
 				if(surf==PerioSurf.MB || surf==PerioSurf.ML) {
 					if(ToothGraphic.IsRight(intTooth.ToString())) {//LR quadrant
 						xdirect=1;
@@ -674,20 +769,187 @@ namespace SparksToothChart {
 					}
 				}
 			}
-			//todo: finetune magnitude
-			return new PointF(xdirect*3f,ysign*4.5f);
-			//throw new ApplicationException("Furcation surface not recognized.")
+			float toothW=ToothGraphic.GetWidth(intTooth);
+			float magnitude;
+			switch(intTooth) {
+				default:
+					magnitude=.28f; break;
+				case 1:
+				case 2:
+				case 15:
+				case 16:
+					magnitude=.32f; break;
+				case 17:
+				case 32:
+				case 18:
+				case 31:
+					magnitude=.35f; break;
+				case 3:
+				case 14:
+					magnitude=.38f; break;
+				case 19:
+				case 30:
+					magnitude=.37f; break;
+			}
+			if(ListToothGraphics[intTooth.ToString()].IsImplant) {
+				return 2f*xdirect;
+			}
+			return magnitude*toothW*xdirect;
 		}
 
-		///<summary>Draws the short vertical lines that represent probing depths.  Use this on each site (3 per tooth face).  The z component will be 0.  The coordinates will be relative to the center of the tooth.  The line will always only have one segment.  It will return null if no line to draw at this site.  The color of the line will be pulled from a different method.  Use black for now.  This stub only draws at one site per tooth so far, M or B.</summary>
-		public LineSimple GetProbingLine(int intTooth,PerioSurf surf) {
-			if(Tooth.IsMaxillary(intTooth)) {
-				return new LineSimple(0,0,0,0,4,0);
+		///<summary>This gets the entire set of lines for one perio row for one sequence type.  The allowed types are GM, MGJ, and CAL.  Each LineSimple is a series of connected lines.  But the result could have interruptions, so we return a list, each item in the list being continuous.  There may be zero items in the list.  Each line in the list is guaranteed to have at least 2 points in it.</summary>
+		public List<LineSimple> GetHorizontalLines(PerioSequenceType sequenceType,bool isMaxillary,bool isBuccal) {
+			List<LineSimple> retVal=new List<LineSimple>();
+			int startTooth=1;
+			int stopTooth=17;//doesn't perform a loop for 17.
+			if(!isMaxillary) {
+				startTooth=32;//We still go Left to Right, even on mand.
+				stopTooth=16;
 			}
-			else {//mand
-				return new LineSimple(0,0,0,0,-4,0);
+			LineSimple line=new LineSimple();
+			Vertex3f vertex;
+			int val1=-1;
+			int val2=-1;
+			int val3=-1;
+			int t=startTooth;
+			PerioSurf surf1;
+			PerioSurf surf2;
+			PerioSurf surf3;
+			while(t!=stopTooth){
+				//We are considering 3 points per tooth.  Reinitialize for the new tooth.
+				val1=-1;
+				val2=-1;
+				val3=-1;
+				surf1=PerioSurf.None;
+				surf2=PerioSurf.None;
+				surf3=PerioSurf.None;
+				for(int i=0;i<ListPerioMeasure.Count;i++) {
+					if(ListPerioMeasure[i].IntTooth!=t) {
+						continue;
+					}
+					if(ListPerioMeasure[i].SequenceType!=sequenceType) {
+						continue;
+					}
+					if(isBuccal) {
+						if(ToothGraphic.IsRight(t.ToString())) {
+							val1=ListPerioMeasure[i].DBvalue;
+							val2=ListPerioMeasure[i].Bvalue;
+							val3=ListPerioMeasure[i].MBvalue;
+							surf1=PerioSurf.DB;
+							surf2=PerioSurf.B;
+							surf3=PerioSurf.MB;
+						}
+						else {//for UL and LL
+							val1=ListPerioMeasure[i].MBvalue;
+							val2=ListPerioMeasure[i].Bvalue;
+							val3=ListPerioMeasure[i].DBvalue;
+							surf1=PerioSurf.MB;
+							surf2=PerioSurf.B;
+							surf3=PerioSurf.DB;
+						}
+					}
+					else {//lingual
+						if(ToothGraphic.IsRight(t.ToString())) {
+							val1=ListPerioMeasure[i].DLvalue;
+							val2=ListPerioMeasure[i].Lvalue;
+							val3=ListPerioMeasure[i].MLvalue;
+							surf1=PerioSurf.DL;
+							surf2=PerioSurf.L;
+							surf3=PerioSurf.ML;
+						}
+						else {//for UL and LL
+							val1=ListPerioMeasure[i].MLvalue;
+							val2=ListPerioMeasure[i].Lvalue;
+							val3=ListPerioMeasure[i].DLvalue;
+							surf1=PerioSurf.ML;
+							surf2=PerioSurf.L;
+							surf3=PerioSurf.DL;
+						}
+					}
+				}
+				//We have now filled our 3 points with values and need to evaluate those values.
+				//Any or all of the values may still be -1.
+				if(val1==-1) {
+					//we won't add a point to this line
+					if(line.Vertices.Count==1) {//if there is already one point, then clear it, because a line can't have one point.
+						line.Vertices.Clear();
+					}
+					if(line.Vertices.Count>1) {//if 2 or more points in the line, then add the line to the result.
+						retVal.Add(line);
+						line=new LineSimple();//and initialize a new line for future points.
+					}
+				}
+				else {//just add a point to the current line.
+					vertex=new Vertex3f();
+					vertex.Z=0;//we don't use z
+					if(isMaxillary) {
+						vertex.Y=val1;
+					}
+					else {
+						vertex.Y=-val1;
+					}
+					vertex.X=GetXShiftPerioSite(t,surf1)+ToothGraphic.GetDefaultOrthoXpos(t);
+					line.Vertices.Add(vertex);
+				}
+				//val2--------------------------
+				if(val2==-1) {
+					if(line.Vertices.Count==1) {
+						line.Vertices.Clear();
+					}
+					if(line.Vertices.Count>1) {
+						retVal.Add(line);
+						line=new LineSimple();
+					}
+				}
+				else {
+					vertex=new Vertex3f();
+					vertex.Z=0;
+					if(isMaxillary) {
+						vertex.Y=val2;
+					}
+					else {
+						vertex.Y=-val2;
+					}
+					vertex.X=GetXShiftPerioSite(t,surf2)+ToothGraphic.GetDefaultOrthoXpos(t);
+					line.Vertices.Add(vertex);
+				}
+				//val3-------------------------
+				if(val3==-1) {
+					if(line.Vertices.Count==1) {
+						line.Vertices.Clear();
+					}
+					if(line.Vertices.Count>1) {
+						retVal.Add(line);
+						line=new LineSimple();
+					}
+				}
+				else {
+					vertex=new Vertex3f();
+					vertex.Z=0;
+					if(isMaxillary) {
+						vertex.Y=val3;
+					}
+					else {
+						vertex.Y=-val3;
+					}
+					vertex.X=GetXShiftPerioSite(t,surf3)+ToothGraphic.GetDefaultOrthoXpos(t);
+					line.Vertices.Add(vertex);
+				}
+				//increment to next tooth
+				if(isMaxillary) {
+					t++;
+				}
+				else {
+					t--;
+				}
 			}
+			if(line.Vertices.Count>1) {
+				retVal.Add(line);
+			}
+			return retVal;
 		}
+
+
 
 	}
 }

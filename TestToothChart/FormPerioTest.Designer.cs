@@ -23,14 +23,14 @@
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			SparksToothChart.ToothChartData toothChartData1 = new SparksToothChart.ToothChartData();
+			SparksToothChart.ToothChartData toothChartData2 = new SparksToothChart.ToothChartData();
 			this.butPrint = new System.Windows.Forms.Button();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.label6 = new System.Windows.Forms.Label();
-			this.button4 = new System.Windows.Forms.Button();
+			this.butColorMGJ = new System.Windows.Forms.Button();
 			this.label3 = new System.Windows.Forms.Label();
 			this.label4 = new System.Windows.Forms.Label();
-			this.button1 = new System.Windows.Forms.Button();
+			this.butColorCAL = new System.Windows.Forms.Button();
 			this.butColorGM = new System.Windows.Forms.Button();
 			this.label2 = new System.Windows.Forms.Label();
 			this.label1 = new System.Windows.Forms.Label();
@@ -38,6 +38,18 @@
 			this.butColorBleed = new System.Windows.Forms.Button();
 			this.label5 = new System.Windows.Forms.Label();
 			this.toothChart = new SparksToothChart.ToothChartWrapper();
+			this.label7 = new System.Windows.Forms.Label();
+			this.butColorFurc = new System.Windows.Forms.Button();
+			this.label8 = new System.Windows.Forms.Label();
+			this.butColorProbing = new System.Windows.Forms.Button();
+			this.label9 = new System.Windows.Forms.Label();
+			this.butColorProbingRed = new System.Windows.Forms.Button();
+			this.label10 = new System.Windows.Forms.Label();
+			this.butColorFurcRed = new System.Windows.Forms.Button();
+			this.label11 = new System.Windows.Forms.Label();
+			this.label12 = new System.Windows.Forms.Label();
+			this.labelRedLimitFurcations = new System.Windows.Forms.Label();
+			this.labelRedLimitProbing = new System.Windows.Forms.Label();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -53,45 +65,57 @@
 			// 
 			// groupBox1
 			// 
+			this.groupBox1.Controls.Add(this.labelRedLimitProbing);
+			this.groupBox1.Controls.Add(this.labelRedLimitFurcations);
+			this.groupBox1.Controls.Add(this.label12);
+			this.groupBox1.Controls.Add(this.label11);
+			this.groupBox1.Controls.Add(this.label10);
+			this.groupBox1.Controls.Add(this.butColorFurcRed);
+			this.groupBox1.Controls.Add(this.label9);
+			this.groupBox1.Controls.Add(this.butColorProbingRed);
+			this.groupBox1.Controls.Add(this.label8);
+			this.groupBox1.Controls.Add(this.butColorProbing);
+			this.groupBox1.Controls.Add(this.label7);
+			this.groupBox1.Controls.Add(this.butColorFurc);
 			this.groupBox1.Controls.Add(this.label6);
-			this.groupBox1.Controls.Add(this.button4);
+			this.groupBox1.Controls.Add(this.butColorMGJ);
 			this.groupBox1.Controls.Add(this.label3);
 			this.groupBox1.Controls.Add(this.label4);
-			this.groupBox1.Controls.Add(this.button1);
+			this.groupBox1.Controls.Add(this.butColorCAL);
 			this.groupBox1.Controls.Add(this.butColorGM);
 			this.groupBox1.Controls.Add(this.label2);
 			this.groupBox1.Controls.Add(this.label1);
 			this.groupBox1.Controls.Add(this.butColorPus);
 			this.groupBox1.Controls.Add(this.butColorBleed);
-			this.groupBox1.Location = new System.Drawing.Point(66,722);
+			this.groupBox1.Location = new System.Drawing.Point(32,695);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(367,131);
+			this.groupBox1.Size = new System.Drawing.Size(427,174);
 			this.groupBox1.TabIndex = 217;
 			this.groupBox1.TabStop = false;
-			this.groupBox1.Text = "Setup Colors (not yet editable here)";
+			this.groupBox1.Text = "Setup Colors (not editable here)";
 			// 
 			// label6
 			// 
-			this.label6.Location = new System.Drawing.Point(150,90);
+			this.label6.Location = new System.Drawing.Point(6,126);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(136,18);
 			this.label6.TabIndex = 61;
 			this.label6.Text = "Mucogingival Junction";
 			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// button4
+			// butColorMGJ
 			// 
-			this.button4.BackColor = System.Drawing.Color.SandyBrown;
-			this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-			this.button4.Location = new System.Drawing.Point(288,88);
-			this.button4.Name = "button4";
-			this.button4.Size = new System.Drawing.Size(22,22);
-			this.button4.TabIndex = 59;
-			this.button4.UseVisualStyleBackColor = false;
+			this.butColorMGJ.BackColor = System.Drawing.Color.SandyBrown;
+			this.butColorMGJ.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+			this.butColorMGJ.Location = new System.Drawing.Point(144,124);
+			this.butColorMGJ.Name = "butColorMGJ";
+			this.butColorMGJ.Size = new System.Drawing.Size(22,22);
+			this.butColorMGJ.TabIndex = 59;
+			this.butColorMGJ.UseVisualStyleBackColor = false;
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(150,65);
+			this.label3.Location = new System.Drawing.Point(6,101);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(136,18);
 			this.label3.TabIndex = 58;
@@ -100,29 +124,29 @@
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(150,40);
+			this.label4.Location = new System.Drawing.Point(6,76);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(136,18);
 			this.label4.TabIndex = 57;
 			this.label4.Text = "Gingival Margin";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// button1
+			// butColorCAL
 			// 
-			this.button1.BackColor = System.Drawing.Color.LightSkyBlue;
-			this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-			this.button1.Location = new System.Drawing.Point(288,63);
-			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(22,22);
-			this.button1.TabIndex = 56;
-			this.button1.UseVisualStyleBackColor = false;
+			this.butColorCAL.BackColor = System.Drawing.Color.LightSkyBlue;
+			this.butColorCAL.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+			this.butColorCAL.Location = new System.Drawing.Point(144,99);
+			this.butColorCAL.Name = "butColorCAL";
+			this.butColorCAL.Size = new System.Drawing.Size(22,22);
+			this.butColorCAL.TabIndex = 56;
+			this.butColorCAL.UseVisualStyleBackColor = false;
 			// 
 			// butColorGM
 			// 
 			this.butColorGM.BackColor = System.Drawing.Color.Pink;
 			this.butColorGM.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
 			this.butColorGM.ForeColor = System.Drawing.SystemColors.ControlText;
-			this.butColorGM.Location = new System.Drawing.Point(288,38);
+			this.butColorGM.Location = new System.Drawing.Point(144,74);
 			this.butColorGM.Name = "butColorGM";
 			this.butColorGM.Size = new System.Drawing.Size(22,22);
 			this.butColorGM.TabIndex = 55;
@@ -130,7 +154,7 @@
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(22,65);
+			this.label2.Location = new System.Drawing.Point(64,51);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(78,18);
 			this.label2.TabIndex = 54;
@@ -139,7 +163,7 @@
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(22,40);
+			this.label1.Location = new System.Drawing.Point(64,26);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(78,18);
 			this.label1.TabIndex = 53;
@@ -150,7 +174,7 @@
 			// 
 			this.butColorPus.BackColor = System.Drawing.Color.Gold;
 			this.butColorPus.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-			this.butColorPus.Location = new System.Drawing.Point(102,63);
+			this.butColorPus.Location = new System.Drawing.Point(144,49);
 			this.butColorPus.Name = "butColorPus";
 			this.butColorPus.Size = new System.Drawing.Size(22,22);
 			this.butColorPus.TabIndex = 52;
@@ -160,7 +184,7 @@
 			// 
 			this.butColorBleed.BackColor = System.Drawing.Color.Red;
 			this.butColorBleed.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-			this.butColorBleed.Location = new System.Drawing.Point(102,38);
+			this.butColorBleed.Location = new System.Drawing.Point(144,24);
 			this.butColorBleed.Name = "butColorBleed";
 			this.butColorBleed.Size = new System.Drawing.Size(22,22);
 			this.butColorBleed.TabIndex = 51;
@@ -168,12 +192,12 @@
 			// 
 			// label5
 			// 
-			this.label5.Location = new System.Drawing.Point(454,727);
+			this.label5.Location = new System.Drawing.Point(473,727);
 			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(215,126);
+			this.label5.Size = new System.Drawing.Size(192,126);
 			this.label5.TabIndex = 218;
 			this.label5.Text = "Tests currently included:\r\nMissing teeth (13,14,18,25,26)\r\nImplant (14)\r\nMobiliti" +
-    "es\r\nFurcations (2,5,30)\r\nBleeding and Suppuration\r\nGM, CAL, MGJ\r\nProbing";
+    "es\r\nFurcations (1,2,3,5,30)\r\nBleeding and Suppuration\r\nGM, CAL, MGJ\r\nProbing";
 			// 
 			// toothChart
 			// 
@@ -188,9 +212,123 @@
 			this.toothChart.PreferredPixelFormatNumber = 0;
 			this.toothChart.Size = new System.Drawing.Size(700,667);
 			this.toothChart.TabIndex = 198;
-			toothChartData1.SizeControl = new System.Drawing.Size(700,667);
-			this.toothChart.TcData = toothChartData1;
+			toothChartData2.SizeControl = new System.Drawing.Size(700,667);
+			this.toothChart.TcData = toothChartData2;
 			this.toothChart.UseHardware = false;
+			// 
+			// label7
+			// 
+			this.label7.Location = new System.Drawing.Point(243,76);
+			this.label7.Name = "label7";
+			this.label7.Size = new System.Drawing.Size(78,18);
+			this.label7.TabIndex = 63;
+			this.label7.Text = "Furcations";
+			this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// butColorFurc
+			// 
+			this.butColorFurc.BackColor = System.Drawing.Color.Black;
+			this.butColorFurc.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+			this.butColorFurc.Location = new System.Drawing.Point(323,74);
+			this.butColorFurc.Name = "butColorFurc";
+			this.butColorFurc.Size = new System.Drawing.Size(22,22);
+			this.butColorFurc.TabIndex = 62;
+			this.butColorFurc.UseVisualStyleBackColor = false;
+			// 
+			// label8
+			// 
+			this.label8.Location = new System.Drawing.Point(243,26);
+			this.label8.Name = "label8";
+			this.label8.Size = new System.Drawing.Size(78,18);
+			this.label8.TabIndex = 65;
+			this.label8.Text = "Probing";
+			this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// butColorProbing
+			// 
+			this.butColorProbing.BackColor = System.Drawing.Color.Green;
+			this.butColorProbing.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+			this.butColorProbing.Location = new System.Drawing.Point(323,24);
+			this.butColorProbing.Name = "butColorProbing";
+			this.butColorProbing.Size = new System.Drawing.Size(22,22);
+			this.butColorProbing.TabIndex = 64;
+			this.butColorProbing.UseVisualStyleBackColor = false;
+			// 
+			// label9
+			// 
+			this.label9.Location = new System.Drawing.Point(243,51);
+			this.label9.Name = "label9";
+			this.label9.Size = new System.Drawing.Size(78,18);
+			this.label9.TabIndex = 67;
+			this.label9.Text = "Probing Red";
+			this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// butColorProbingRed
+			// 
+			this.butColorProbingRed.BackColor = System.Drawing.Color.Red;
+			this.butColorProbingRed.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+			this.butColorProbingRed.Location = new System.Drawing.Point(323,49);
+			this.butColorProbingRed.Name = "butColorProbingRed";
+			this.butColorProbingRed.Size = new System.Drawing.Size(22,22);
+			this.butColorProbingRed.TabIndex = 66;
+			this.butColorProbingRed.UseVisualStyleBackColor = false;
+			// 
+			// label10
+			// 
+			this.label10.Location = new System.Drawing.Point(222,101);
+			this.label10.Name = "label10";
+			this.label10.Size = new System.Drawing.Size(99,18);
+			this.label10.TabIndex = 69;
+			this.label10.Text = "Furcations Red";
+			this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// butColorFurcRed
+			// 
+			this.butColorFurcRed.BackColor = System.Drawing.Color.DarkRed;
+			this.butColorFurcRed.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+			this.butColorFurcRed.Location = new System.Drawing.Point(323,99);
+			this.butColorFurcRed.Name = "butColorFurcRed";
+			this.butColorFurcRed.Size = new System.Drawing.Size(22,22);
+			this.butColorFurcRed.TabIndex = 68;
+			this.butColorFurcRed.UseVisualStyleBackColor = false;
+			// 
+			// label11
+			// 
+			this.label11.Location = new System.Drawing.Point(191,126);
+			this.label11.Name = "label11";
+			this.label11.Size = new System.Drawing.Size(130,18);
+			this.label11.TabIndex = 70;
+			this.label11.Text = "Red Limit Furcations";
+			this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label12
+			// 
+			this.label12.Location = new System.Drawing.Point(191,144);
+			this.label12.Name = "label12";
+			this.label12.Size = new System.Drawing.Size(130,18);
+			this.label12.TabIndex = 71;
+			this.label12.Text = "Red Limit Probing";
+			this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// labelRedLimitFurcations
+			// 
+			this.labelRedLimitFurcations.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.labelRedLimitFurcations.Location = new System.Drawing.Point(323,125);
+			this.labelRedLimitFurcations.Name = "labelRedLimitFurcations";
+			this.labelRedLimitFurcations.Size = new System.Drawing.Size(22,18);
+			this.labelRedLimitFurcations.TabIndex = 72;
+			this.labelRedLimitFurcations.Text = "2";
+			this.labelRedLimitFurcations.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			// 
+			// labelRedLimitProbing
+			// 
+			this.labelRedLimitProbing.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.labelRedLimitProbing.Location = new System.Drawing.Point(323,144);
+			this.labelRedLimitProbing.Name = "labelRedLimitProbing";
+			this.labelRedLimitProbing.Size = new System.Drawing.Size(22,18);
+			this.labelRedLimitProbing.TabIndex = 73;
+			this.labelRedLimitProbing.Text = "4";
+			this.labelRedLimitProbing.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// FormPerioTest
 			// 
@@ -220,11 +358,23 @@
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Label label6;
-		private System.Windows.Forms.Button button4;
+		private System.Windows.Forms.Button butColorMGJ;
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.Label label4;
-		private System.Windows.Forms.Button button1;
+		private System.Windows.Forms.Button butColorCAL;
 		private System.Windows.Forms.Button butColorGM;
 		private System.Windows.Forms.Label label5;
+		private System.Windows.Forms.Label label7;
+		private System.Windows.Forms.Button butColorFurc;
+		private System.Windows.Forms.Label label8;
+		private System.Windows.Forms.Button butColorProbing;
+		private System.Windows.Forms.Label label9;
+		private System.Windows.Forms.Button butColorProbingRed;
+		private System.Windows.Forms.Label label10;
+		private System.Windows.Forms.Button butColorFurcRed;
+		private System.Windows.Forms.Label labelRedLimitFurcations;
+		private System.Windows.Forms.Label label12;
+		private System.Windows.Forms.Label label11;
+		private System.Windows.Forms.Label labelRedLimitProbing;
 	}
 }

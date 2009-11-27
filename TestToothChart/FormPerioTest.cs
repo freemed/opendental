@@ -20,6 +20,17 @@ namespace TestToothChart {
 			toothChart.ColorBackground=Color.White;
 			toothChart.ColorText=Color.Black;
 			toothChart.PerioMode=true;
+			toothChart.ColorBleeding=butColorBleed.BackColor;
+			toothChart.ColorSuppuration=butColorPus.BackColor;
+			toothChart.ColorGingivalMargin=butColorGM.BackColor;
+			toothChart.ColorCAL=butColorCAL.BackColor;
+			toothChart.ColorMGJ=butColorMGJ.BackColor;
+			toothChart.ColorProbing=butColorProbing.BackColor;
+			toothChart.ColorProbingRed=butColorProbingRed.BackColor;
+			toothChart.ColorFurcations=butColorFurc.BackColor;
+			toothChart.ColorFurcationsRed=butColorFurcRed.BackColor;
+			toothChart.RedLimitProbing=PIn.PInt(labelRedLimitProbing.Text);
+			toothChart.RedLimitFurcations=PIn.PInt(labelRedLimitFurcations.Text);
 			toothChart.SetMissing("13");
 			toothChart.SetMissing("14");
 			toothChart.SetMissing("18");
@@ -30,8 +41,8 @@ namespace TestToothChart {
 			//toothChart.MoveTooth("4",0,0,0,0,-5,0);
 			//toothChart.MoveTooth("16",0,20,0,-3,0,0);
 			//toothChart.MoveTooth("24",15,2,0,0,0,0);
+//Comment out the line below to cause the furcation on #2 to shift postion
 			toothChart.SetMobility("2","3",Color.Red);
-			toothChart.SetMobility("3","1",Color.Black);
 			toothChart.SetMobility("7","2",Color.Red);
 			toothChart.SetMobility("8","2",Color.Red);
 			toothChart.SetMobility("9","2",Color.Red);
@@ -39,9 +50,11 @@ namespace TestToothChart {
 			toothChart.SetMobility("16","3",Color.Red);
 			toothChart.SetMobility("24","2",Color.Red);
 			toothChart.SetMobility("31","3",Color.Red);
-			toothChart.AddPerioMeasure(2,PerioSequenceType.Furcation,-1,2,-1,1,-1,1);
+			toothChart.AddPerioMeasure(1,PerioSequenceType.Furcation,-1,2,-1,1,-1,-1);
+			toothChart.AddPerioMeasure(2,PerioSequenceType.Furcation,-1,2,-1,1,-1,-1);
+			toothChart.AddPerioMeasure(3,PerioSequenceType.Furcation,-1,2,-1,1,-1,-1);
 			toothChart.AddPerioMeasure(5,PerioSequenceType.Furcation,1,-1,-1,-1,-1,-1);
-			toothChart.AddPerioMeasure(30,PerioSequenceType.Furcation,-1,2,-1,-1,3,-1);
+			toothChart.AddPerioMeasure(30,PerioSequenceType.Furcation,-1,-1,-1,-1,3,-1);
 			for(int i=1;i<=32;i++) {
 				//string tooth_id=i.ToString();
 				//bleeding and suppuration on all MB sites
