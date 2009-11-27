@@ -21,9 +21,10 @@ namespace OpenDentBusiness{
 				+ ",adjtype = '"     +POut.PLong   (adj.AdjType)+"'"
 				+ ",provnum = '"     +POut.PLong   (adj.ProvNum)+"'"
 				+ ",adjnote = '"     +POut.PString(adj.AdjNote)+"'"
-				+ ",ProcDate = "    +POut.PDate  (adj.ProcDate)
+				+ ",ProcDate = "     +POut.PDate  (adj.ProcDate)
 				+ ",ProcNum = '"     +POut.PLong   (adj.ProcNum)+"'"
 				//DateEntry not allowed to change
+				+ ",ClinicNum = '"   +POut.PLong   (adj.ClinicNum)+"'"
 				+" WHERE adjNum = '" +POut.PLong   (adj.AdjNum)+"'";
 			Db.NonQ(command);
 		}
@@ -42,25 +43,21 @@ namespace OpenDentBusiness{
 				command+="AdjNum,";
 			}
 			command+="AdjDate,AdjAmt,PatNum, "
-				+"AdjType,ProvNum,AdjNote,ProcDate,ProcNum,DateEntry) VALUES(";
+				+"AdjType,ProvNum,AdjNote,ProcDate,ProcNum,DateEntry,ClinicNum) VALUES(";
 			if(PrefC.RandomKeys){
 				command+="'"+POut.PLong(adj.AdjNum)+"', ";
 			}
 			command+=
-				 POut.PDate  (adj.AdjDate)+", "
+				 POut.PDate(adj.AdjDate)+", "
 				+"'"+POut.PDouble(adj.AdjAmt)+"', "
-				+"'"+POut.PLong   (adj.PatNum)+"', "
-				+"'"+POut.PLong   (adj.AdjType)+"', "
-				+"'"+POut.PLong   (adj.ProvNum)+"', "
+				+"'"+POut.PLong(adj.PatNum)+"', "
+				+"'"+POut.PLong(adj.AdjType)+"', "
+				+"'"+POut.PLong(adj.ProvNum)+"', "
 				+"'"+POut.PString(adj.AdjNote)+"', "
-				+POut.PDate  (adj.ProcDate)+", "
-				+"'"+POut.PLong   (adj.ProcNum)+"', ";
-			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				command+=POut.PDateT(MiscData.GetNowDateTime());
-			}else{//Assume MySQL
-				command+="NOW()";//DateEntry set to server date
-			}
-			command+=")";
+				+POut.PDate(adj.ProcDate)+", "
+				+"'"+POut.PLong(adj.ProcNum)+"', "
+				+"NOW(),"//DateEntry set to server date
+				+"'"+POut.PLong(adj.ClinicNum)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -132,7 +129,8 @@ namespace OpenDentBusiness{
 				adj.AdjNote  = PIn.PString(table.Rows[i][6].ToString());
 				adj.ProcDate = PIn.PDate  (table.Rows[i][7].ToString());
 				adj.ProcNum  = PIn.PLong   (table.Rows[i][8].ToString());
-				adj.DateEntry= PIn.PDate  (table.Rows[i][9].ToString());
+				adj.DateEntry= PIn.PDate(table.Rows[i][9].ToString());
+				adj.ClinicNum= PIn.PLong  (table.Rows[i][10].ToString());
 				retVal.Add(adj);
 			}
 			return retVal;

@@ -26,7 +26,6 @@ namespace OpenDental{
 		private System.Windows.Forms.Label label3;
 		private OpenDental.UI.Button butDelete;
 		private OpenDental.ValidDouble textAmount;
-		private System.Windows.Forms.ListBox listProvider;
 		private System.Windows.Forms.ListBox listTypePos;
 		private System.Windows.Forms.ListBox listTypeNeg;
 		private ArrayList PosIndex=new ArrayList();
@@ -39,6 +38,10 @@ namespace OpenDental{
 		private Adjustment AdjustmentCur;
 		private OpenDental.ValidDate textDateEntry;
 		private System.Windows.Forms.Label label8;
+		private OpenDental.UI.Button butPickProv;
+		private ComboBox comboProv;
+		private ComboBox comboClinic;
+		private Label labelClinic;
 		///<summary></summary>
 		private DateTime dateLimit=DateTime.MinValue;
 		//<summary>Keeps track of current server time so that user cannot bypass security by altering workstation clock.  Sometimes we compare to nowDate, but sometimes, we're just interested in the date of the adjustment.</summary>
@@ -77,14 +80,17 @@ namespace OpenDental{
 			this.label3 = new System.Windows.Forms.Label();
 			this.butDelete = new OpenDental.UI.Button();
 			this.textAmount = new OpenDental.ValidDouble();
-			this.listProvider = new System.Windows.Forms.ListBox();
 			this.listTypePos = new System.Windows.Forms.ListBox();
 			this.listTypeNeg = new System.Windows.Forms.ListBox();
-			this.textNote = new OpenDental.ODtextBox();
 			this.textProcDate = new OpenDental.ValidDate();
 			this.label7 = new System.Windows.Forms.Label();
 			this.textDateEntry = new OpenDental.ValidDate();
 			this.label8 = new System.Windows.Forms.Label();
+			this.butPickProv = new OpenDental.UI.Button();
+			this.comboProv = new System.Windows.Forms.ComboBox();
+			this.comboClinic = new System.Windows.Forms.ComboBox();
+			this.labelClinic = new System.Windows.Forms.Label();
+			this.textNote = new OpenDental.ODtextBox();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -116,7 +122,7 @@ namespace OpenDental{
 			// 
 			// label6
 			// 
-			this.label6.Location = new System.Drawing.Point(282,14);
+			this.label6.Location = new System.Drawing.Point(315,14);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(167,16);
 			this.label6.TabIndex = 5;
@@ -125,7 +131,7 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(10,126);
+			this.label2.Location = new System.Drawing.Point(11,128);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(100,16);
 			this.label2.TabIndex = 10;
@@ -142,7 +148,7 @@ namespace OpenDental{
 			this.butOK.CornerRadius = 4F;
 			this.butOK.Location = new System.Drawing.Point(614,433);
 			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,26);
+			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 6;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
@@ -158,7 +164,7 @@ namespace OpenDental{
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.butCancel.Location = new System.Drawing.Point(614,471);
 			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,26);
+			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 7;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
@@ -172,7 +178,7 @@ namespace OpenDental{
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(495,14);
+			this.label3.Location = new System.Drawing.Point(528,14);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(182,16);
 			this.label3.TabIndex = 16;
@@ -188,7 +194,7 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Location = new System.Drawing.Point(24,469);
 			this.butDelete.Name = "butDelete";
-			this.butDelete.Size = new System.Drawing.Size(75,26);
+			this.butDelete.Size = new System.Drawing.Size(75,24);
 			this.butDelete.TabIndex = 17;
 			this.butDelete.Text = "&Delete";
 			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
@@ -200,16 +206,9 @@ namespace OpenDental{
 			this.textAmount.Size = new System.Drawing.Size(68,20);
 			this.textAmount.TabIndex = 1;
 			// 
-			// listProvider
-			// 
-			this.listProvider.Location = new System.Drawing.Point(112,124);
-			this.listProvider.Name = "listProvider";
-			this.listProvider.Size = new System.Drawing.Size(100,95);
-			this.listProvider.TabIndex = 2;
-			// 
 			// listTypePos
 			// 
-			this.listTypePos.Location = new System.Drawing.Point(266,34);
+			this.listTypePos.Location = new System.Drawing.Point(299,34);
 			this.listTypePos.Name = "listTypePos";
 			this.listTypePos.Size = new System.Drawing.Size(202,264);
 			this.listTypePos.TabIndex = 3;
@@ -217,22 +216,11 @@ namespace OpenDental{
 			// 
 			// listTypeNeg
 			// 
-			this.listTypeNeg.Location = new System.Drawing.Point(482,34);
+			this.listTypeNeg.Location = new System.Drawing.Point(515,34);
 			this.listTypeNeg.Name = "listTypeNeg";
 			this.listTypeNeg.Size = new System.Drawing.Size(206,264);
 			this.listTypeNeg.TabIndex = 4;
 			this.listTypeNeg.SelectedIndexChanged += new System.EventHandler(this.listTypeNeg_SelectedIndexChanged);
-			// 
-			// textNote
-			// 
-			this.textNote.AcceptsReturn = true;
-			this.textNote.Location = new System.Drawing.Point(176,354);
-			this.textNote.Multiline = true;
-			this.textNote.Name = "textNote";
-			this.textNote.QuickPasteType = OpenDentBusiness.QuickPasteType.Adjustment;
-			this.textNote.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textNote.Size = new System.Drawing.Size(355,140);
-			this.textNote.TabIndex = 0;
 			// 
 			// textProcDate
 			// 
@@ -267,11 +255,68 @@ namespace OpenDental{
 			this.label8.Text = "Entry Date";
 			this.label8.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
+			// butPickProv
+			// 
+			this.butPickProv.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butPickProv.Autosize = false;
+			this.butPickProv.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butPickProv.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPickProv.CornerRadius = 2F;
+			this.butPickProv.Location = new System.Drawing.Point(271,124);
+			this.butPickProv.Name = "butPickProv";
+			this.butPickProv.Size = new System.Drawing.Size(18,21);
+			this.butPickProv.TabIndex = 165;
+			this.butPickProv.Text = "...";
+			this.butPickProv.Click += new System.EventHandler(this.butPickProv_Click);
+			// 
+			// comboProv
+			// 
+			this.comboProv.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboProv.Location = new System.Drawing.Point(112,124);
+			this.comboProv.MaxDropDownItems = 30;
+			this.comboProv.Name = "comboProv";
+			this.comboProv.Size = new System.Drawing.Size(158,21);
+			this.comboProv.TabIndex = 164;
+			// 
+			// comboClinic
+			// 
+			this.comboClinic.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboClinic.Location = new System.Drawing.Point(112,149);
+			this.comboClinic.MaxDropDownItems = 30;
+			this.comboClinic.Name = "comboClinic";
+			this.comboClinic.Size = new System.Drawing.Size(177,21);
+			this.comboClinic.TabIndex = 162;
+			this.comboClinic.SelectionChangeCommitted += new System.EventHandler(this.comboClinic_SelectionChangeCommitted);
+			// 
+			// labelClinic
+			// 
+			this.labelClinic.Location = new System.Drawing.Point(-4,151);
+			this.labelClinic.Name = "labelClinic";
+			this.labelClinic.Size = new System.Drawing.Size(114,16);
+			this.labelClinic.TabIndex = 163;
+			this.labelClinic.Text = "Clinic";
+			this.labelClinic.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textNote
+			// 
+			this.textNote.AcceptsReturn = true;
+			this.textNote.Location = new System.Drawing.Point(176,354);
+			this.textNote.Multiline = true;
+			this.textNote.Name = "textNote";
+			this.textNote.QuickPasteType = OpenDentBusiness.QuickPasteType.Adjustment;
+			this.textNote.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.textNote.Size = new System.Drawing.Size(355,140);
+			this.textNote.TabIndex = 0;
+			// 
 			// FormAdjust
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(731,528);
+			this.Controls.Add(this.butPickProv);
+			this.Controls.Add(this.comboProv);
+			this.Controls.Add(this.comboClinic);
+			this.Controls.Add(this.labelClinic);
 			this.Controls.Add(this.textDateEntry);
 			this.Controls.Add(this.label8);
 			this.Controls.Add(this.textProcDate);
@@ -279,7 +324,6 @@ namespace OpenDental{
 			this.Controls.Add(this.textNote);
 			this.Controls.Add(this.listTypeNeg);
 			this.Controls.Add(this.listTypePos);
-			this.Controls.Add(this.listProvider);
 			this.Controls.Add(this.textAmount);
 			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.label3);
@@ -328,10 +372,25 @@ namespace OpenDental{
 				textAmount.Text=(-AdjustmentCur.AdjAmt).ToString("F");//shows without the neg sign
 			}
 			for(int i=0;i<ProviderC.List.Length;i++){
-				this.listProvider.Items.Add(ProviderC.List[i].GetLongDesc());
-				if(ProviderC.List[i].ProvNum==AdjustmentCur.ProvNum)
-					listProvider.SelectedIndex=i;
-			}				
+				comboProv.Items.Add(ProviderC.List[i].GetLongDesc());
+				if(ProviderC.List[i].ProvNum==AdjustmentCur.ProvNum) {
+					comboProv.SelectedIndex=i;
+				}
+			}
+			if(PrefC.GetBool(PrefName.EasyNoClinics)) {
+				labelClinic.Visible=false;
+				comboClinic.Visible=false;
+			}
+			else {
+				comboClinic.Items.Add("none");
+				comboClinic.SelectedIndex=0;
+				for(int i=0;i<Clinics.List.Length;i++) {
+					comboClinic.Items.Add(Clinics.List[i].Description);
+					if(Clinics.List[i].ClinicNum==AdjustmentCur.ClinicNum) {
+						comboClinic.SelectedIndex=i+1;
+					}
+				}
+			}
 			for(int i=0;i<DefC.Short[1].Length;i++){//temp.AdjType
 				if(DefC.Short[1][i].ItemValue=="+"){
 					PosIndex.Add(i);
@@ -356,6 +415,32 @@ namespace OpenDental{
 
 		private void listTypeNeg_SelectedIndexChanged(object sender, System.EventArgs e) {
 			if(listTypeNeg.SelectedIndex!=-1)	listTypePos.SelectedIndex=-1;
+		}
+
+		private void butPickProv_Click(object sender,EventArgs e) {
+			FormProviderPick formp=new FormProviderPick();
+			if(comboProv.SelectedIndex > -1) {
+				formp.SelectedProvNum=ProviderC.List[comboProv.SelectedIndex].ProvNum;
+			}
+			formp.ShowDialog();
+			if(formp.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			comboProv.SelectedIndex=Providers.GetIndex(formp.SelectedProvNum);
+			//ProcCur.ProvNum=formp.SelectedProvNum;
+		}
+
+		private void comboClinic_SelectionChangeCommitted(object sender,EventArgs e) {
+			/*
+			if(comboClinic.SelectedIndex==0) {
+				ProcCur.ClinicNum=0;
+			}
+			else {
+				ProcCur.ClinicNum=Clinics.List[comboClinic.SelectedIndex-1].ClinicNum;
+			}
+			for(int i=0;i<ClaimProcsForProc.Count;i++) {
+				ClaimProcsForProc[i].ClinicNum=ProcCur.ClinicNum;
+			}*/
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
@@ -390,11 +475,19 @@ namespace OpenDental{
 			//DateEntry not allowed to change
 			AdjustmentCur.AdjDate=PIn.PDate(textAdjDate.Text);
 			AdjustmentCur.ProcDate=PIn.PDate(textProcDate.Text);
-			if(listProvider.SelectedIndex==-1){
-				AdjustmentCur.ProvNum=PatCur.PriProv;
+			if(comboProv.SelectedIndex==-1) {//might be a hidden provider, so don't change.
+				//	AdjustmentCur.ProvNum=PatCur.PriProv;
 			}
 			else{
-				AdjustmentCur.ProvNum=ProviderC.List[this.listProvider.SelectedIndex].ProvNum;
+				AdjustmentCur.ProvNum=ProviderC.List[comboProv.SelectedIndex].ProvNum;
+			}
+			if(!PrefC.GetBool(PrefName.EasyNoClinics)) {
+				if(comboClinic.SelectedIndex==0) {
+					AdjustmentCur.ClinicNum=0;
+				}
+				else {
+					AdjustmentCur.ClinicNum=Clinics.List[comboClinic.SelectedIndex-1].ClinicNum;
+				}
 			}
 			if(listTypePos.SelectedIndex!=-1){
 				AdjustmentCur.AdjType=DefC.Short[(int)DefCat.AdjTypes][(int)PosIndex[listTypePos.SelectedIndex]].DefNum;
@@ -451,6 +544,8 @@ namespace OpenDental{
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 	}
 

@@ -354,7 +354,7 @@ namespace OpenDental{
 			this.butCalcIndex.CornerRadius = 4F;
 			this.butCalcIndex.Location = new System.Drawing.Point(863,215);
 			this.butCalcIndex.Name = "butCalcIndex";
-			this.butCalcIndex.Size = new System.Drawing.Size(84,22);
+			this.butCalcIndex.Size = new System.Drawing.Size(84,24);
 			this.butCalcIndex.TabIndex = 74;
 			this.butCalcIndex.Text = "Calc Index %";
 			this.toolTip1.SetToolTip(this.butCalcIndex,"Calculate the Index for all four types");
@@ -367,9 +367,9 @@ namespace OpenDental{
 			this.butCalculus.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCalculus.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCalculus.CornerRadius = 4F;
-			this.butCalculus.Location = new System.Drawing.Point(762,273);
+			this.butCalculus.Location = new System.Drawing.Point(762,272);
 			this.butCalculus.Name = "butCalculus";
-			this.butCalculus.Size = new System.Drawing.Size(88,22);
+			this.butCalculus.Size = new System.Drawing.Size(88,24);
 			this.butCalculus.TabIndex = 65;
 			this.butCalculus.Text = "Calculus";
 			this.toolTip1.SetToolTip(this.butCalculus,"C on your keyboard");
@@ -382,9 +382,9 @@ namespace OpenDental{
 			this.butPlaque.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butPlaque.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butPlaque.CornerRadius = 4F;
-			this.butPlaque.Location = new System.Drawing.Point(762,243);
+			this.butPlaque.Location = new System.Drawing.Point(762,242);
 			this.butPlaque.Name = "butPlaque";
-			this.butPlaque.Size = new System.Drawing.Size(88,22);
+			this.butPlaque.Size = new System.Drawing.Size(88,24);
 			this.butPlaque.TabIndex = 64;
 			this.butPlaque.Text = "Plaque";
 			this.toolTip1.SetToolTip(this.butPlaque,"P on your keyboard");
@@ -399,7 +399,7 @@ namespace OpenDental{
 			this.butSkip.CornerRadius = 4F;
 			this.butSkip.Location = new System.Drawing.Point(764,609);
 			this.butSkip.Name = "butSkip";
-			this.butSkip.Size = new System.Drawing.Size(88,22);
+			this.butSkip.Size = new System.Drawing.Size(88,24);
 			this.butSkip.TabIndex = 61;
 			this.butSkip.Text = "SkipTeeth";
 			this.toolTip1.SetToolTip(this.butSkip,"Toggle the selected teeth as skipped");
@@ -414,7 +414,7 @@ namespace OpenDental{
 			this.butCount.CornerRadius = 4F;
 			this.butCount.Location = new System.Drawing.Point(92,18);
 			this.butCount.Name = "butCount";
-			this.butCount.Size = new System.Drawing.Size(84,22);
+			this.butCount.Size = new System.Drawing.Size(84,24);
 			this.butCount.TabIndex = 1;
 			this.butCount.Text = "Count Teeth";
 			this.toolTip1.SetToolTip(this.butCount,"Count all six types");
@@ -427,9 +427,9 @@ namespace OpenDental{
 			this.butPus.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butPus.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butPus.CornerRadius = 4F;
-			this.butPus.Location = new System.Drawing.Point(762,333);
+			this.butPus.Location = new System.Drawing.Point(762,332);
 			this.butPus.Name = "butPus";
-			this.butPus.Size = new System.Drawing.Size(88,22);
+			this.butPus.Size = new System.Drawing.Size(88,24);
 			this.butPus.TabIndex = 42;
 			this.butPus.Text = "Suppuration";
 			this.toolTip1.SetToolTip(this.butPus,"S on your keyboard");
@@ -442,9 +442,9 @@ namespace OpenDental{
 			this.butBleed.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butBleed.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butBleed.CornerRadius = 4F;
-			this.butBleed.Location = new System.Drawing.Point(762,303);
+			this.butBleed.Location = new System.Drawing.Point(762,302);
 			this.butBleed.Name = "butBleed";
-			this.butBleed.Size = new System.Drawing.Size(88,22);
+			this.butBleed.Size = new System.Drawing.Size(88,24);
 			this.butBleed.TabIndex = 41;
 			this.butBleed.Text = "Bleeding";
 			this.toolTip1.SetToolTip(this.butBleed,"Space bar or B on your keyboard");
@@ -823,7 +823,7 @@ namespace OpenDental{
 			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butPrint.Location = new System.Drawing.Point(885,609);
 			this.butPrint.Name = "butPrint";
-			this.butPrint.Size = new System.Drawing.Size(75,22);
+			this.butPrint.Size = new System.Drawing.Size(75,24);
 			this.butPrint.TabIndex = 62;
 			this.butPrint.Text = "Print";
 			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
@@ -839,7 +839,7 @@ namespace OpenDental{
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butAdd.Location = new System.Drawing.Point(7,197);
 			this.butAdd.Name = "butAdd";
-			this.butAdd.Size = new System.Drawing.Size(82,22);
+			this.butAdd.Size = new System.Drawing.Size(82,24);
 			this.butAdd.TabIndex = 53;
 			this.butAdd.Text = "Add";
 			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
@@ -870,7 +870,7 @@ namespace OpenDental{
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butDelete.Location = new System.Drawing.Point(7,228);
 			this.butDelete.Name = "butDelete";
-			this.butDelete.Size = new System.Drawing.Size(82,22);
+			this.butDelete.Size = new System.Drawing.Size(82,24);
 			this.butDelete.TabIndex = 34;
 			this.butDelete.Text = "Delete";
 			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
@@ -1010,7 +1010,7 @@ namespace OpenDental{
 			this.butClose.CornerRadius = 4F;
 			this.butClose.Location = new System.Drawing.Point(885,658);
 			this.butClose.Name = "butClose";
-			this.butClose.Size = new System.Drawing.Size(75,22);
+			this.butClose.Size = new System.Drawing.Size(75,24);
 			this.butClose.TabIndex = 0;
 			this.butClose.Text = "Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);

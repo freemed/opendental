@@ -25,6 +25,8 @@ namespace OpenDentBusiness{
 		public long ProcNum;
 		///<summary>Timestamp automatically generated and user not allowed to change.  The actual date of entry.</summary>
 		public DateTime DateEntry;
+		///<summary>FK to clinic.ClinicNum.</summary>
+		public long ClinicNum;
 
 		/*///<summary>Returns a copy of this Adjustment.</summary>
 		public Adjustment Copy(){

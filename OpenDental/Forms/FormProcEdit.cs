@@ -2462,6 +2462,7 @@ namespace OpenDental{
 			adj.AdjDate=DateTime.Today;
 			adj.ProcDate=ProcCur.ProcDate;
 			adj.ProcNum=ProcCur.ProcNum;
+			adj.ClinicNum=ProcCur.ClinicNum;
 			FormAdjust FormA=new FormAdjust(PatCur,adj);
 			FormA.IsNew=true;
 			FormA.ShowDialog();
