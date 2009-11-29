@@ -207,9 +207,11 @@ namespace OpenDental.UI
 		protected override void OnTextChanged(EventArgs e) {
 			base.OnTextChanged (e);
 			if(autosize && Text!=""){
-				Graphics g=this.CreateGraphics();
 				int buffer=6;
-				int textWidth=(int)g.MeasureString(Text,Font).Width;
+				int textWidth=0;
+				using(Graphics g=this.CreateGraphics()) {
+					textWidth=(int)g.MeasureString(Text,Font).Width;
+				}
 				int oldWidth=Width;
 				if(this.Image==null){
 					if(Width<textWidth+buffer){

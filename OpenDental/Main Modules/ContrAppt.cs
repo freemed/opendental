@@ -1918,19 +1918,20 @@ namespace OpenDental{
 			if(ContrApptSheet2.Shadow==null){//if user resizes window to be very narrow
 				return;
 			}
-			Graphics grfx=Graphics.FromImage(ContrApptSheet2.Shadow);
-			for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++){
-				ContrApptSingle3[i].CreateShadow();
-				if(ContrApptSingle3[i].Location.X>=ContrApptSheet.TimeWidth+ContrApptSheet.ProvWidth*ContrApptSheet.ProvCount
+			using(Graphics grfx=Graphics.FromImage(ContrApptSheet2.Shadow)) {
+				for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++) {
+					ContrApptSingle3[i].CreateShadow();
+					if(ContrApptSingle3[i].Location.X>=ContrApptSheet.TimeWidth+ContrApptSheet.ProvWidth*ContrApptSheet.ProvCount
 					&& ContrApptSingle3[i].Width>3
-					&& ContrApptSingle3[i].Shadow!=null)
-				{
-					grfx.DrawImage(ContrApptSingle3[i].Shadow
-						,ContrApptSingle3[i].Location.X,ContrApptSingle3[i].Location.Y);
+					&& ContrApptSingle3[i].Shadow!=null) {
+						grfx.DrawImage(ContrApptSingle3[i].Shadow
+							,ContrApptSingle3[i].Location.X,ContrApptSingle3[i].Location.Y);
+					}
+					if(ContrApptSingle3[i].Shadow!=null) {
+						ContrApptSingle3[i].Shadow.Dispose();
+					}
 				}
-				ContrApptSingle3[i].Shadow=null;
 			}
-			grfx.Dispose();
 		}
 
 		///<summary>Gets the index within the array of appointment controls, based on the supplied primary key.</summary>

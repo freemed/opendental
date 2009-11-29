@@ -82,6 +82,18 @@ namespace OpenDental{
 				if(components != null){
 					components.Dispose();
 				}
+				if(Shadow!=null) {
+					Shadow.Dispose();
+				}
+				if(openBrush!=null) {
+					openBrush.Dispose();
+				}
+				if(closedBrush!=null) {
+					closedBrush.Dispose();
+				}
+				if(holidayBrush!=null) {
+					holidayBrush.Dispose();
+				}
 			}
 			base.Dispose( disposing );
 		}
@@ -261,30 +273,30 @@ namespace OpenDental{
 			if(SchedListPeriod==null){
 				return;//not sure if this is necessary
 			}
-			Graphics g=Graphics.FromImage(Shadow);
-			//background
-			g.FillRectangle(new SolidBrush(Color.LightGray),0,0,TimeWidth,Height);//L time bar
-			g.FillRectangle(new SolidBrush(Color.LightGray),TimeWidth+ColWidth*ColCount+ProvWidth*ProvCount,0,TimeWidth,Height);//R time bar
-			try{
-				openBrush=new SolidBrush(DefC.Long[(int)DefCat.AppointmentColors][0].ItemColor);
-				closedBrush=new SolidBrush(DefC.Long[(int)DefCat.AppointmentColors][1].ItemColor);
-        holidayBrush=new SolidBrush(DefC.Long[(int)DefCat.AppointmentColors][4].ItemColor);  
+			using(Graphics g=Graphics.FromImage(Shadow)) {
+				//background
+				g.FillRectangle(new SolidBrush(Color.LightGray),0,0,TimeWidth,Height);//L time bar
+				g.FillRectangle(new SolidBrush(Color.LightGray),TimeWidth+ColWidth*ColCount+ProvWidth*ProvCount,0,TimeWidth,Height);//R time bar
+				try {
+					openBrush=new SolidBrush(DefC.Long[(int)DefCat.AppointmentColors][0].ItemColor);
+					closedBrush=new SolidBrush(DefC.Long[(int)DefCat.AppointmentColors][1].ItemColor);
+					holidayBrush=new SolidBrush(DefC.Long[(int)DefCat.AppointmentColors][4].ItemColor);
+				}
+				catch {//this is just for design-time
+					openBrush=new SolidBrush(Color.White);
+					closedBrush=new SolidBrush(Color.LightGray);
+					holidayBrush=new SolidBrush(Color.FromArgb(255,128,128));
+				}
+				DrawMainBackground(g);
+				DrawBlockouts(g);
+				if(!IsWeeklyView) {
+					DrawProvScheds(g);
+					DrawProvBars(g);
+				}
+				DrawGridLines(g);
+				DrawRedTimeIndicator(g);
+				DrawMinutes(g);
 			}
-			catch{//this is just for design-time
-				openBrush=new SolidBrush(Color.White);
-				closedBrush=new SolidBrush(Color.LightGray);
-        holidayBrush=new SolidBrush(Color.FromArgb(255,128,128));
-			}
-			DrawMainBackground(g);
-			DrawBlockouts(g);
-			if(!IsWeeklyView){
-				DrawProvScheds(g);
-				DrawProvBars(g);
-			}
-			DrawGridLines(g);
-			DrawRedTimeIndicator(g);
-			DrawMinutes(g);
-			g.Dispose();
 		}
 
 		///<summary>Including the practice schedule</summary>
