@@ -23,7 +23,7 @@
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			SparksToothChart.ToothChartData toothChartData2 = new SparksToothChart.ToothChartData();
+			SparksToothChart.ToothChartData toothChartData7 = new SparksToothChart.ToothChartData();
 			this.butPrint = new System.Windows.Forms.Button();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.labelRedLimitProbing = new System.Windows.Forms.Label();
@@ -149,6 +149,7 @@
 			this.butColorFurcRed.Size = new System.Drawing.Size(22,22);
 			this.butColorFurcRed.TabIndex = 68;
 			this.butColorFurcRed.UseVisualStyleBackColor = false;
+			this.butColorFurcRed.Click += new System.EventHandler(this.butColorFurcRed_Click);
 			// 
 			// label9
 			// 
@@ -168,6 +169,7 @@
 			this.butColorProbingRed.Size = new System.Drawing.Size(22,22);
 			this.butColorProbingRed.TabIndex = 66;
 			this.butColorProbingRed.UseVisualStyleBackColor = false;
+			this.butColorProbingRed.Click += new System.EventHandler(this.butColorProbingRed_Click);
 			// 
 			// label8
 			// 
@@ -187,6 +189,7 @@
 			this.butColorProbing.Size = new System.Drawing.Size(22,22);
 			this.butColorProbing.TabIndex = 64;
 			this.butColorProbing.UseVisualStyleBackColor = false;
+			this.butColorProbing.Click += new System.EventHandler(this.butColorProbing_Click);
 			// 
 			// label7
 			// 
@@ -206,6 +209,7 @@
 			this.butColorFurc.Size = new System.Drawing.Size(22,22);
 			this.butColorFurc.TabIndex = 62;
 			this.butColorFurc.UseVisualStyleBackColor = false;
+			this.butColorFurc.Click += new System.EventHandler(this.butColorFurc_Click);
 			// 
 			// label6
 			// 
@@ -225,6 +229,7 @@
 			this.butColorMGJ.Size = new System.Drawing.Size(22,22);
 			this.butColorMGJ.TabIndex = 59;
 			this.butColorMGJ.UseVisualStyleBackColor = false;
+			this.butColorMGJ.Click += new System.EventHandler(this.butColorMGJ_Click);
 			// 
 			// label3
 			// 
@@ -253,6 +258,7 @@
 			this.butColorCAL.Size = new System.Drawing.Size(22,22);
 			this.butColorCAL.TabIndex = 56;
 			this.butColorCAL.UseVisualStyleBackColor = false;
+			this.butColorCAL.Click += new System.EventHandler(this.butColorCAL_Click);
 			// 
 			// butColorGM
 			// 
@@ -264,6 +270,7 @@
 			this.butColorGM.Size = new System.Drawing.Size(22,22);
 			this.butColorGM.TabIndex = 55;
 			this.butColorGM.UseVisualStyleBackColor = false;
+			this.butColorGM.Click += new System.EventHandler(this.butColorGM_Click);
 			// 
 			// label2
 			// 
@@ -316,8 +323,8 @@
 			this.toothChart.PreferredPixelFormatNumber = 0;
 			this.toothChart.Size = new System.Drawing.Size(700,667);
 			this.toothChart.TabIndex = 198;
-			toothChartData2.SizeControl = new System.Drawing.Size(700,667);
-			this.toothChart.TcData = toothChartData2;
+			toothChartData7.SizeControl = new System.Drawing.Size(700,667);
+			this.toothChart.TcData = toothChartData7;
 			this.toothChart.UseHardware = false;
 			// 
 			// FormPerioTest

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Text;
 
 namespace OpenDentBusiness {
@@ -119,6 +120,17 @@ namespace OpenDentBusiness {
 				throw new Exception(prefName+" is an invalid pref name.");
 			}
 			return PIn.PDateT(Dict[prefName.ToString()].ValueString);
+		}
+
+		///<summary>Gets a color from an int32 pref.</summary>
+		public static Color GetColor(PrefName prefName) {
+			if(Dict==null) {
+				Prefs.RefreshCache();
+			}
+			if(!Dict.ContainsKey(prefName.ToString())) {
+				throw new Exception(prefName+" is an invalid pref name.");
+			}
+			return Color.FromArgb(PIn.PInt(Dict[prefName.ToString()].ValueString));
 		}
 
 		///<summary>Used sometimes for prefs that are not part of the enum, especially for outside developers.</summary>

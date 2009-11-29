@@ -1866,12 +1866,26 @@ DROP TABLE IF EXISTS etAck";
 				Db.NonQ(command);
 				command="ALTER TABLE adjustment ADD INDEX (ClinicNum)";
 				Db.NonQ(command);
-				//todo: followup on adjustments
 				command="ALTER TABLE payplancharge ADD ClinicNum bigint NOT NULL";
 				Db.NonQ(command);
 				command="ALTER TABLE payplancharge ADD INDEX (ClinicNum)";
 				Db.NonQ(command);
-				//todo: followup on payplancharge
+				command="INSERT INTO preference(PrefName,ValueString) VALUES('PerioColorCAL','-16777011')";
+				Db.NonQ(command);
+				command="INSERT INTO preference(PrefName,ValueString) VALUES('PerioColorFurcations','-16777216')";
+				Db.NonQ(command);
+				command="INSERT INTO preference(PrefName,ValueString) VALUES('PerioColorFurcationsRed','-7667712')";
+				Db.NonQ(command);
+				command="INSERT INTO preference(PrefName,ValueString) VALUES('PerioColorGM','-8388480')";
+				Db.NonQ(command);
+				command="INSERT INTO preference(PrefName,ValueString) VALUES('PerioColorMGJ','-29696')";
+				Db.NonQ(command);
+				command="INSERT INTO preference(PrefName,ValueString) VALUES('PerioColorProbing','-16744448')";
+				Db.NonQ(command);
+				command="INSERT INTO preference(PrefName,ValueString) VALUES('PerioColorProbingRed','-65536')";
+				Db.NonQ(command);
+
+			
 
 
 

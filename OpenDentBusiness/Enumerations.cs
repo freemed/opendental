@@ -677,7 +677,7 @@ namespace OpenDentBusiness{
 		MGJ,
 		///<summary>4</summary>
 		Probing,
-		///<summary>5</summary>
+		///<summary>5-For the skiptooth type, set surf to none, and ToothValue to 1.</summary>
 		SkipTooth,
 		///<summary>6. Sum of flags for bleeding(1), suppuration(2), plaque(4), and calculus(8).</summary>
 		Bleeding,

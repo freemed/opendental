@@ -21,8 +21,10 @@ namespace OpenDentBusiness{
 		public double Interest;
 		///<summary>Any note about this particular payment plan charge</summary>
 		public string Note;
-		///<summary>FK to provider.ProvNum.  The ProvNum will be assigned according to what the patient owes.  This same provnum is used to show amount due in guarantor.  Payments applied should be to this provnum.</summary>
+		///<summary>FK to provider.ProvNum.  Since there is no ProvNum field at the payplan level, the provider must be the same for all payplancharges.  It's initially assigned as the patient priProv.  Payments applied should be to this provnum, although the current user interface does not help with this.</summary>
 		public long ProvNum;
+		///<summary>FK to clinic.ClinicNum.  Since there is no ClincNum field at the payplan level, the clinic must be the same for all payplancharges.  It's initially assigned using the patient clinic.  Payments applied should be to this clinic, although the current user interface does not help with this.</summary>
+		public long ClinicNum;
 		
 		///<summary></summary>
 		public PayPlanCharge Copy(){

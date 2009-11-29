@@ -823,6 +823,7 @@ namespace OpenDental{
 			tempPat.FeeSched   =PatCur.FeeSched;
 			tempPat.BillingType=PatCur.BillingType;
 			tempPat.AddrNote   =PatCur.AddrNote;
+			tempPat.ClinicNum  =PatCur.ClinicNum;
 			Patients.Insert(tempPat,false);
 			FormPatientEdit FormPE=new FormPatientEdit(tempPat,FamCur);
 			FormPE.IsNew=true;

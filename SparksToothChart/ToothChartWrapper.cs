@@ -627,7 +627,11 @@ namespace SparksToothChart {
 			pm.DLvalue=dl;
 			pm.IntTooth=intTooth;
 			pm.SequenceType=sequenceType;
-			TcData.ListPerioMeasure.Add(pm);
+			tcData.ListPerioMeasure.Add(pm);
+		}
+
+		public void AddPerioMeasure(PerioMeasure pm) {
+			tcData.ListPerioMeasure.Add(pm);
 		}
 
 		#endregion

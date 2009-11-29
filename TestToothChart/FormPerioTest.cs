@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
+using CodeBase;
 
 namespace TestToothChart {
 	public partial class FormPerioTest:Form {
@@ -59,12 +60,8 @@ namespace TestToothChart {
 				//bleeding and suppuration on all MB sites
 				//bleeding only all DL sites
 				//suppuration only all B sites
-				//BleedingFlags bleedingFlags=BleedingFlags.Blood | BleedingFlags.Suppuration;//blood=1, suppuration=2
-				toothChart.AddPerioMeasure(i,PerioSequenceType.Bleeding,3,2,-1,-1,-1,1);
-				//bleedingFlags=BleedingFlags.Blood;
-				//toothChart.AddPerioMeasure(i,PerioSequenceType.Bleeding,-1,-1,-1,-1,-1,(int)bleedingFlags);
-				//bleedingFlags=BleedingFlags.Suppuration;
-				//toothChart.AddPerioMeasure(i,PerioSequenceType.Bleeding,-1,(int)bleedingFlags,-1,-1,-1,-1);
+				//blood=1, suppuration=2, both=3
+				toothChart.AddPerioMeasure(i,PerioSequenceType.Bleeding,  3,2,-1,-1,-1,1);
 				toothChart.AddPerioMeasure(i,PerioSequenceType.GingMargin,0,1,1,1,0,0);
 				toothChart.AddPerioMeasure(i,PerioSequenceType.Probing,   3,2,3,4,2,3);
 				toothChart.AddPerioMeasure(i,PerioSequenceType.CAL,       3,3,4,5,2,3);//basically GingMargin+Probing, unless one of them is -1
@@ -84,6 +81,41 @@ namespace TestToothChart {
 			Graphics g=ev.Graphics;
 			Bitmap bitmap=toothChart.GetBitmap();
 			g.DrawImage(bitmap,75,75,bitmap.Width,bitmap.Height);
+		}
+
+		private void butColorGM_Click(object sender,EventArgs e) {
+			ShowColor(sender);
+		}
+
+		private void butColorCAL_Click(object sender,EventArgs e) {
+			ShowColor(sender);
+		}
+
+		private void butColorMGJ_Click(object sender,EventArgs e) {
+			ShowColor(sender);
+		}
+
+		private void butColorProbing_Click(object sender,EventArgs e) {
+			ShowColor(sender);
+		}
+
+		private void butColorProbingRed_Click(object sender,EventArgs e) {
+			ShowColor(sender);
+		}
+
+		private void butColorFurc_Click(object sender,EventArgs e) {
+			ShowColor(sender);
+		}
+
+		private void butColorFurcRed_Click(object sender,EventArgs e) {
+			ShowColor(sender);
+		}
+
+		private void ShowColor(object sender) {
+			Color color=((Button)sender).BackColor;
+			int colorint=color.ToArgb();
+			MsgBoxCopyPaste msgbox=new MsgBoxCopyPaste(colorint.ToString());
+			msgbox.ShowDialog();
 		}
 	}
 }

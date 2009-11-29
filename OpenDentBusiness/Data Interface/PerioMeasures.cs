@@ -136,30 +136,40 @@ namespace OpenDentBusiness{
 			//No need to check RemotingRole; no call to db.
 			DataTable table=GetMeasurementTable(patNum,listPerioExams);
 			List=new PerioMeasure[listPerioExams.Count,Enum.GetNames(typeof(PerioSequenceType)).Length,33];
-			int curExamI=0;
-			PerioMeasure Cur;
-			for(int i=0;i<table.Rows.Count;i++) {
-				Cur=new PerioMeasure();
-				Cur.PerioMeasureNum =PIn.PLong(table.Rows[i][0].ToString());
-				Cur.PerioExamNum    =PIn.PLong(table.Rows[i][1].ToString());
-				Cur.SequenceType    =(PerioSequenceType)PIn.PLong(table.Rows[i][2].ToString());
-				Cur.IntTooth        =PIn.PInt(table.Rows[i][3].ToString());
-				Cur.ToothValue      =PIn.PInt(table.Rows[i][4].ToString());
-				Cur.MBvalue         =PIn.PInt(table.Rows[i][5].ToString());
-				Cur.Bvalue          =PIn.PInt(table.Rows[i][6].ToString());
-				Cur.DBvalue         =PIn.PInt(table.Rows[i][7].ToString());
-				Cur.MLvalue         =PIn.PInt(table.Rows[i][8].ToString());
-				Cur.Lvalue          =PIn.PInt(table.Rows[i][9].ToString());
-				Cur.DLvalue         =PIn.PInt(table.Rows[i][10].ToString());
-				//perioexam.ExamDate                           11
+			int examIdx=0;
+			//PerioMeasure pm;
+			List<PerioMeasure> list=FillFromTable(table);
+			for(int i=0;i<list.Count;i++) {
 				//the next statement can also handle exams with no measurements:
 				if(i==0//if this is the first row
-					|| table.Rows[i][1].ToString() != table.Rows[i-1][1].ToString())//or examNum has changed
+					|| list[i].PerioExamNum != list[i-1].PerioExamNum)//or examNum has changed
 				{
-					curExamI=PerioExams.GetExamIndex(listPerioExams,PIn.PLong(table.Rows[i][1].ToString()));
+					examIdx=PerioExams.GetExamIndex(listPerioExams,list[i].PerioExamNum);
 				}
-				List[curExamI,(int)Cur.SequenceType,Cur.IntTooth]=Cur;
+				List[examIdx,(int)list[i].SequenceType,list[i].IntTooth]=list[i];
 			}
+		}
+
+		private static List<PerioMeasure> FillFromTable(DataTable table) {
+			//No need to check RemotingRole; no call to db.
+			PerioMeasure pm;
+			List<PerioMeasure> retVal=new List<PerioMeasure>();
+			for(int i=0;i<table.Rows.Count;i++) {
+				pm=new PerioMeasure();
+				pm.PerioMeasureNum =PIn.PLong(table.Rows[i][0].ToString());
+				pm.PerioExamNum    =PIn.PLong(table.Rows[i][1].ToString());
+				pm.SequenceType    =(PerioSequenceType)PIn.PLong(table.Rows[i][2].ToString());
+				pm.IntTooth        =PIn.PInt(table.Rows[i][3].ToString());
+				pm.ToothValue      =PIn.PInt(table.Rows[i][4].ToString());
+				pm.MBvalue         =PIn.PInt(table.Rows[i][5].ToString());
+				pm.Bvalue          =PIn.PInt(table.Rows[i][6].ToString());
+				pm.DBvalue         =PIn.PInt(table.Rows[i][7].ToString());
+				pm.MLvalue         =PIn.PInt(table.Rows[i][8].ToString());
+				pm.Lvalue          =PIn.PInt(table.Rows[i][9].ToString());
+				pm.DLvalue         =PIn.PInt(table.Rows[i][10].ToString());
+				retVal.Add(pm);
+			}
+			return retVal;
 		}
 
 		public static DataTable GetMeasurementTable(long patNum,List<PerioExam> listPerioExams) {
@@ -174,6 +184,16 @@ namespace OpenDentBusiness{
 				+" ORDER BY perioexam.ExamDate";
 			DataTable table=Db.GetTable(command);
 			return table;
+		}
+
+		public static List<PerioMeasure> GetAllForExam(long perioExamNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<PerioMeasure>>(MethodBase.GetCurrentMethod(),perioExamNum);
+			}
+			string command ="SELECT * FROM periomeasure "
+				+"WHERE PerioExamNum = "+POut.PLong(perioExamNum);
+			DataTable table=Db.GetTable(command);
+			return FillFromTable(table);
 		}
 			
 		
