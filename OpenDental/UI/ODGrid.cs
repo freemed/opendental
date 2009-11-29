@@ -369,65 +369,65 @@ namespace OpenDental.UI{
 
 		///<summary>After adding rows to the grid, this calculates the height of each row because some rows may have text wrap and will take up more than one row.  Also, rows with notes, must be made much larger, because notes start on the second line.  If column images are used, rows will be enlarged to make space for the images.</summary>
 		private void ComputeRows(){
-			Graphics g=this.CreateGraphics();
-			RowHeights=new int[rows.Count];
-			NoteHeights=new int[rows.Count];
-			RowLocs=new int[rows.Count];
-			GridH=0;
-			int cellH;
-			int noteW=0;
-			if(NoteSpanStop>0 && NoteSpanStart<columns.Count) {
-				for(int i=NoteSpanStart;i<=NoteSpanStop;i++) {
-					noteW+=columns[i].ColWidth;
-				}
-			}
-			int imageH=0;
-			for(int i=0;i<columns.Count;i++){
-				if(columns[i].ImageList!=null){
-					if(columns[i].ImageList.ImageSize.Height>imageH){
-						imageH=columns[i].ImageList.ImageSize.Height+1;
+			using(Graphics g=this.CreateGraphics()) {
+				RowHeights=new int[rows.Count];
+				NoteHeights=new int[rows.Count];
+				RowLocs=new int[rows.Count];
+				GridH=0;
+				int cellH;
+				int noteW=0;
+				if(NoteSpanStop>0 && NoteSpanStart<columns.Count) {
+					for(int i=NoteSpanStart;i<=NoteSpanStop;i++) {
+						noteW+=columns[i].ColWidth;
 					}
 				}
-			}
-			for(int i=0;i<rows.Count;i++){
-				RowHeights[i]=0;
-				if(wrapText){
-					//find the tallest col
-					for(int j=0;j<rows[i].Cells.Count;j++) {
-						if(rows[i].Height==0){//not set
-							cellH=(int)g.MeasureString(rows[i].Cells[j].Text,this.cellFont,columns[j].ColWidth).Height+1;
-						}
-						else{
-							cellH=rows[i].Height;
-						}
-						if(cellH>RowHeights[i]) {
-							RowHeights[i]=cellH;
+				int imageH=0;
+				for(int i=0;i<columns.Count;i++) {
+					if(columns[i].ImageList!=null) {
+						if(columns[i].ImageList.ImageSize.Height>imageH) {
+							imageH=columns[i].ImageList.ImageSize.Height+1;
 						}
 					}
 				}
-				else{
-					if(rows[i].Height==0){//not set
-						RowHeights[i]=(int)g.MeasureString("Any",this.cellFont).Height+1;
+				for(int i=0;i<rows.Count;i++) {
+					RowHeights[i]=0;
+					if(wrapText) {
+						//find the tallest col
+						for(int j=0;j<rows[i].Cells.Count;j++) {
+							if(rows[i].Height==0) {//not set
+								cellH=(int)g.MeasureString(rows[i].Cells[j].Text,this.cellFont,columns[j].ColWidth).Height+1;
+							}
+							else {
+								cellH=rows[i].Height;
+							}
+							if(cellH>RowHeights[i]) {
+								RowHeights[i]=cellH;
+							}
+						}
 					}
-					else{
-						RowHeights[i]=rows[i].Height;
+					else {
+						if(rows[i].Height==0) {//not set
+							RowHeights[i]=(int)g.MeasureString("Any",this.cellFont).Height+1;
+						}
+						else {
+							RowHeights[i]=rows[i].Height;
+						}
 					}
+					if(imageH>RowHeights[i]) {
+						RowHeights[i]=imageH;
+					}
+					if(noteW>0 && rows[i].Note!="") {
+						NoteHeights[i]=(int)g.MeasureString(rows[i].Note,this.cellFont,noteW).Height;
+					}
+					if(i==0) {
+						RowLocs[i]=0;
+					}
+					else {
+						RowLocs[i]=RowLocs[i-1]+RowHeights[i-1]+NoteHeights[i-1];
+					}
+					GridH+=RowHeights[i]+NoteHeights[i];
 				}
-				if(imageH>RowHeights[i]){
-					RowHeights[i]=imageH;
-				}
-				if(noteW>0 && rows[i].Note!=""){
-					NoteHeights[i]=(int)g.MeasureString(rows[i].Note,this.cellFont,noteW).Height;
-				}
-				if(i==0){
-					RowLocs[i]=0;
-				}
-				else{
-					RowLocs[i]=RowLocs[i-1]+RowHeights[i-1]+NoteHeights[i-1];
-				}
-				GridH+=RowHeights[i]+NoteHeights[i];
 			}
-			g.Dispose();
 		}
 
 		///<summary>Returns row. -1 if no valid row.  Supply the y position in pixels.</summary>
