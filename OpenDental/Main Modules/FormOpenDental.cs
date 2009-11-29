@@ -2551,31 +2551,41 @@ namespace OpenDental{
 			List<Signal> signalList=(List<Signal>)objSignalList;
 			string strSound;
 			byte[] rawData;
-			MemoryStream stream;
-			SoundPlayer simpleSound;
-			//loop through each signal
-			for(int s=0;s<signalList.Count;s++){
-				if(signalList[s].AckTime.Year>1880){
-					continue;//don't play any sounds for acks.
+			MemoryStream stream=null;
+			SoundPlayer simpleSound=null;
+			try {
+				//loop through each signal
+				for(int s=0;s<signalList.Count;s++) {
+					if(signalList[s].AckTime.Year>1880) {
+						continue;//don't play any sounds for acks.
+					}
+					if(s>0) {
+						Thread.Sleep(1000);//pause 1 second between signals.
+					}
+					//play all the sounds.
+					for(int e=0;e<signalList[s].ElementList.Length;e++) {
+						strSound=SigElementDefs.GetElement(signalList[s].ElementList[e].SigElementDefNum).Sound;
+						if(strSound=="") {
+							continue;
+						}
+						try {
+							rawData=Convert.FromBase64String(strSound);
+							stream=new MemoryStream(rawData);
+							simpleSound = new SoundPlayer(stream);
+							simpleSound.PlaySync();//sound will finish playing before thread continues
+						}
+						catch {
+							//do nothing
+						}
+					}
 				}
-				if(s>0){
-					Thread.Sleep(1000);//pause 1 second between signals.
+			}
+			finally {
+				if(stream!=null) {
+					stream.Dispose();
 				}
-				//play all the sounds.
-				for(int e=0;e<signalList[s].ElementList.Length;e++){
-					strSound=SigElementDefs.GetElement(signalList[s].ElementList[e].SigElementDefNum).Sound;
-					if(strSound==""){
-						continue;
-					}
-					try {
-						rawData=Convert.FromBase64String(strSound);
-						stream=new MemoryStream(rawData);
-						simpleSound = new SoundPlayer(stream);
-						simpleSound.PlaySync();//sound will finish playing before thread continues
-					}
-					catch {
-						//do nothing
-					}
+				if(simpleSound!=null) {
+					simpleSound.Dispose();
 				}
 			}
 		}
