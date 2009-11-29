@@ -27,9 +27,10 @@ namespace OpenDental.UI{
 		[Category("Property Changed"),Description("Event raised when user types in a textbox.")]
 		public event EventHandler CellTextChanged=null;
 		private string title;
-		private Font titleFont=new Font(FontFamily.GenericSansSerif,10,FontStyle.Bold);
-		private Font headerFont=new Font(FontFamily.GenericSansSerif,8.5f,FontStyle.Bold);
-		private Font cellFont=new Font(FontFamily.GenericSansSerif,8.5f);
+		//private Font titleFont=new Font(FontFamily.GenericSansSerif,10,FontStyle.Bold);
+		//private Font headerFont=new Font(FontFamily.GenericSansSerif,8.5f,FontStyle.Bold);
+		//private Font cellFont=new Font(FontFamily.GenericSansSerif,8.5f);
+		private float cellFontSize=8.5f;
 		private int titleHeight=18;
 		private int headerHeight=15;
 		private Color cGridLine=Color.FromArgb(180,180,180);
@@ -370,62 +371,64 @@ namespace OpenDental.UI{
 		///<summary>After adding rows to the grid, this calculates the height of each row because some rows may have text wrap and will take up more than one row.  Also, rows with notes, must be made much larger, because notes start on the second line.  If column images are used, rows will be enlarged to make space for the images.</summary>
 		private void ComputeRows(){
 			using(Graphics g=this.CreateGraphics()) {
-				RowHeights=new int[rows.Count];
-				NoteHeights=new int[rows.Count];
-				RowLocs=new int[rows.Count];
-				GridH=0;
-				int cellH;
-				int noteW=0;
-				if(NoteSpanStop>0 && NoteSpanStart<columns.Count) {
-					for(int i=NoteSpanStart;i<=NoteSpanStop;i++) {
-						noteW+=columns[i].ColWidth;
-					}
-				}
-				int imageH=0;
-				for(int i=0;i<columns.Count;i++) {
-					if(columns[i].ImageList!=null) {
-						if(columns[i].ImageList.ImageSize.Height>imageH) {
-							imageH=columns[i].ImageList.ImageSize.Height+1;
+				using(Font cellFont=new Font(FontFamily.GenericSansSerif,cellFontSize)) {
+					RowHeights=new int[rows.Count];
+					NoteHeights=new int[rows.Count];
+					RowLocs=new int[rows.Count];
+					GridH=0;
+					int cellH;
+					int noteW=0;
+					if(NoteSpanStop>0 && NoteSpanStart<columns.Count) {
+						for(int i=NoteSpanStart;i<=NoteSpanStop;i++) {
+							noteW+=columns[i].ColWidth;
 						}
 					}
-				}
-				for(int i=0;i<rows.Count;i++) {
-					RowHeights[i]=0;
-					if(wrapText) {
-						//find the tallest col
-						for(int j=0;j<rows[i].Cells.Count;j++) {
-							if(rows[i].Height==0) {//not set
-								cellH=(int)g.MeasureString(rows[i].Cells[j].Text,this.cellFont,columns[j].ColWidth).Height+1;
-							}
-							else {
-								cellH=rows[i].Height;
-							}
-							if(cellH>RowHeights[i]) {
-								RowHeights[i]=cellH;
+					int imageH=0;
+					for(int i=0;i<columns.Count;i++) {
+						if(columns[i].ImageList!=null) {
+							if(columns[i].ImageList.ImageSize.Height>imageH) {
+								imageH=columns[i].ImageList.ImageSize.Height+1;
 							}
 						}
 					}
-					else {
-						if(rows[i].Height==0) {//not set
-							RowHeights[i]=(int)g.MeasureString("Any",this.cellFont).Height+1;
+					for(int i=0;i<rows.Count;i++) {
+						RowHeights[i]=0;
+						if(wrapText) {
+							//find the tallest col
+							for(int j=0;j<rows[i].Cells.Count;j++) {
+								if(rows[i].Height==0) {//not set
+									cellH=(int)g.MeasureString(rows[i].Cells[j].Text,cellFont,columns[j].ColWidth).Height+1;
+								}
+								else {
+									cellH=rows[i].Height;
+								}
+								if(cellH>RowHeights[i]) {
+									RowHeights[i]=cellH;
+								}
+							}
 						}
 						else {
-							RowHeights[i]=rows[i].Height;
+							if(rows[i].Height==0) {//not set
+								RowHeights[i]=(int)g.MeasureString("Any",cellFont).Height+1;
+							}
+							else {
+								RowHeights[i]=rows[i].Height;
+							}
 						}
+						if(imageH>RowHeights[i]) {
+							RowHeights[i]=imageH;
+						}
+						if(noteW>0 && rows[i].Note!="") {
+							NoteHeights[i]=(int)g.MeasureString(rows[i].Note,cellFont,noteW).Height;
+						}
+						if(i==0) {
+							RowLocs[i]=0;
+						}
+						else {
+							RowLocs[i]=RowLocs[i-1]+RowHeights[i-1]+NoteHeights[i-1];
+						}
+						GridH+=RowHeights[i]+NoteHeights[i];
 					}
-					if(imageH>RowHeights[i]) {
-						RowHeights[i]=imageH;
-					}
-					if(noteW>0 && rows[i].Note!="") {
-						NoteHeights[i]=(int)g.MeasureString(rows[i].Note,this.cellFont,noteW).Height;
-					}
-					if(i==0) {
-						RowLocs[i]=0;
-					}
-					else {
-						RowLocs[i]=RowLocs[i-1]+RowHeights[i-1]+NoteHeights[i-1];
-					}
-					GridH+=RowHeights[i]+NoteHeights[i];
 				}
 			}
 		}
@@ -478,13 +481,13 @@ namespace OpenDental.UI{
 			}
 			ComputeColumns();//it's only here because I can't figure out how to do it when columns are added. It will be removed.
 			Bitmap doubleBuffer=new Bitmap(Width,Height,e.Graphics);
-			Graphics g=Graphics.FromImage(doubleBuffer);
-			DrawBackG(g);
-			DrawRows(g);
-			DrawTitleAndHeaders(g);//this will draw on top of any grid stuff
-			DrawOutline(g);
-			e.Graphics.DrawImageUnscaled(doubleBuffer,0,0);
-			g.Dispose();
+			using(Graphics g=Graphics.FromImage(doubleBuffer)) {
+				DrawBackG(g);
+				DrawRows(g);
+				DrawTitleAndHeaders(g);//this will draw on top of any grid stuff
+				DrawOutline(g);
+				e.Graphics.DrawImageUnscaled(doubleBuffer,0,0);
+			}
 		}
 
 		///<summary>Draws a solid gray background.</summary>
@@ -503,33 +506,41 @@ namespace OpenDental.UI{
 
 		///<summary>Draws the background, lines, and text for all rows that are visible.</summary>
 		private void DrawRows(Graphics g){
-			for(int i=0;i<rows.Count;i++){
-				if(-vScroll.Value+RowLocs[i]+RowHeights[i]+NoteHeights[i]<0){
-					continue;//lower edge of row above top of grid area
+			Font cellFont=new Font(FontFamily.GenericSansSerif,cellFontSize);
+			try {
+				for(int i=0;i<rows.Count;i++) {
+					if(-vScroll.Value+RowLocs[i]+RowHeights[i]+NoteHeights[i]<0) {
+						continue;//lower edge of row above top of grid area
+					}
+					if(-vScroll.Value+1+titleHeight+headerHeight+RowLocs[i]>Height) {
+						return;//row below lower edge of control
+					}
+					DrawRow(i,g,cellFont);
 				}
-				if(-vScroll.Value+1+titleHeight+headerHeight+RowLocs[i]>Height){
-					return;//row below lower edge of control
+			}
+			finally {
+				if(cellFont!=null) {
+					cellFont.Dispose();
 				}
-				DrawRow(i,g);
 			}
 		}
 
 		///<summary>Draws background, lines, image, and text for a single row.</summary>
-		private void DrawRow(int rowI,Graphics g){
+		private void DrawRow(int rowI,Graphics g,Font cellFont){
 			RectangleF textRect;
 			StringFormat format=new StringFormat();
 			Pen gridPen=new Pen(this.cGridLine);
 			Pen lowerPen=new Pen(this.cGridLine);
-			if(rowI==rows.Count-1){//last row
+			if(rowI==rows.Count-1) {//last row
 				lowerPen=new Pen(Color.FromArgb(120,120,120));
 			}
-			else 
-			if(rows[rowI].ColorLborder!=Color.Empty){
-				lowerPen=new Pen(rows[rowI].ColorLborder);
-			}
+			else
+				if(rows[rowI].ColorLborder!=Color.Empty) {
+					lowerPen=new Pen(rows[rowI].ColorLborder);
+				}
 			SolidBrush textBrush;
 			//selected row color
-			if(selectedIndices.Contains(rowI)){
+			if(selectedIndices.Contains(rowI)) {
 				g.FillRectangle(new SolidBrush(selectedRowColor),
 					1,
 					-vScroll.Value+1+titleHeight+headerHeight+RowLocs[rowI]+1,
@@ -537,7 +548,7 @@ namespace OpenDental.UI{
 					RowHeights[rowI]+NoteHeights[rowI]-1);
 			}
 			//colored row background
-			else if(rows[rowI].ColorBackG!=Color.White){
+			else if(rows[rowI].ColorBackG!=Color.White) {
 				g.FillRectangle(new SolidBrush(rows[rowI].ColorBackG),
 					1,
 					-vScroll.Value+1+titleHeight+headerHeight+RowLocs[rowI]+1,
@@ -545,7 +556,7 @@ namespace OpenDental.UI{
 					RowHeights[rowI]+NoteHeights[rowI]-1);
 			}
 			//normal row color
-			else{//need to draw over the gray background
+			else {//need to draw over the gray background
 				g.FillRectangle(new SolidBrush(rows[rowI].ColorBackG),
 					1,
 					-vScroll.Value+1+titleHeight+headerHeight+RowLocs[rowI]+1,
@@ -553,8 +564,7 @@ namespace OpenDental.UI{
 					RowHeights[rowI]+NoteHeights[rowI]-1);
 			}
 			if(selectionMode==GridSelectionMode.OneCell && selectedCell.X!=-1 && selectedCell.Y!=-1
-				&& selectedCell.Y==rowI)
-			{
+			&& selectedCell.Y==rowI) {
 				g.FillRectangle(new SolidBrush(selectedRowColor),
 					-hScroll.Value+1+ColPos[selectedCell.X],
 					-vScroll.Value+1+titleHeight+headerHeight+RowLocs[rowI]+1,
@@ -562,9 +572,9 @@ namespace OpenDental.UI{
 					RowHeights[rowI]+NoteHeights[rowI]-1);
 			}
 			//lines for note section
-			if(NoteHeights[rowI]>0){
+			if(NoteHeights[rowI]>0) {
 				//left vertical gridline
-				if(NoteSpanStart!=0){
+				if(NoteSpanStart!=0) {
 					g.DrawLine(gridPen,
 						-hScroll.Value+1+ColPos[NoteSpanStart],
 						-vScroll.Value+1+titleHeight+headerHeight+RowLocs[rowI]+RowHeights[rowI],
@@ -577,18 +587,18 @@ namespace OpenDental.UI{
 					-vScroll.Value+1+titleHeight+headerHeight+RowLocs[rowI]+RowHeights[rowI],
 					-hScroll.Value+1+ColPos[columns.Count-1]+columns[columns.Count-1].ColWidth,
 					-vScroll.Value+1+titleHeight+headerHeight+RowLocs[rowI]+RowHeights[rowI]);
-				
+
 			}
-			for(int i=0;i<columns.Count;i++){
+			for(int i=0;i<columns.Count;i++) {
 				//right vertical gridline
-				if(rowI==0){
+				if(rowI==0) {
 					g.DrawLine(gridPen,
 						-hScroll.Value+1+ColPos[i]+columns[i].ColWidth,
 						-vScroll.Value+1+titleHeight+headerHeight+RowLocs[rowI],
 						-hScroll.Value+1+ColPos[i]+columns[i].ColWidth,
 						-vScroll.Value+1+titleHeight+headerHeight+RowLocs[rowI]+RowHeights[rowI]);
 				}
-				else{
+				else {
 					g.DrawLine(gridPen,
 						-hScroll.Value+1+ColPos[i]+columns[i].ColWidth,
 						-vScroll.Value+1+titleHeight+headerHeight+RowLocs[rowI]+1,
@@ -596,14 +606,14 @@ namespace OpenDental.UI{
 						-vScroll.Value+1+titleHeight+headerHeight+RowLocs[rowI]+RowHeights[rowI]);
 				}
 				//lower horizontal gridline
-				if(i==0){
+				if(i==0) {
 					g.DrawLine(lowerPen,
 						-hScroll.Value+1+ColPos[i],
 						-vScroll.Value+1+titleHeight+headerHeight+RowLocs[rowI]+RowHeights[rowI]+NoteHeights[rowI],
 						-hScroll.Value+1+ColPos[i]+columns[i].ColWidth,
 						-vScroll.Value+1+titleHeight+headerHeight+RowLocs[rowI]+RowHeights[rowI]+NoteHeights[rowI]);
 				}
-				else{
+				else {
 					g.DrawLine(lowerPen,
 						-hScroll.Value+1+ColPos[i]+1,
 						-vScroll.Value+1+titleHeight+headerHeight+RowLocs[rowI]+RowHeights[rowI]+NoteHeights[rowI],
@@ -611,10 +621,10 @@ namespace OpenDental.UI{
 						-vScroll.Value+1+titleHeight+headerHeight+RowLocs[rowI]+RowHeights[rowI]+NoteHeights[rowI]);
 				}
 				//text
-				if(rows[rowI].Cells.Count-1<i){
+				if(rows[rowI].Cells.Count-1<i) {
 					continue;
 				}
-				switch(columns[i].TextAlign){
+				switch(columns[i].TextAlign) {
 					case HorizontalAlignment.Left:
 						format.Alignment=StringAlignment.Near;
 						break;
@@ -629,57 +639,57 @@ namespace OpenDental.UI{
 				int horizontal=-hScroll.Value+1+ColPos[i]+1;
 				int cellW=columns[i].ColWidth;
 				int cellH=RowHeights[rowI];
-				if(rows[rowI].Height!=0){//eg 19 for handling textbox
+				if(rows[rowI].Height!=0) {//eg 19 for handling textbox
 					vertical+=2;
 					cellH-=3;
 				}
-				if(columns[i].TextAlign==HorizontalAlignment.Right){
-					if(rows[rowI].Height!=0){//eg 19 for handling textbox
+				if(columns[i].TextAlign==HorizontalAlignment.Right) {
+					if(rows[rowI].Height!=0) {//eg 19 for handling textbox
 						horizontal-=4;
 						cellW+=2;
 					}
-					else{
+					else {
 						horizontal-=2;
 						cellW+=2;
 					}
 				}
 				textRect=new RectangleF(horizontal,vertical,cellW,cellH);
-				if(rows[rowI].Cells[i].ColorText==Color.Empty){
+				if(rows[rowI].Cells[i].ColorText==Color.Empty) {
 					textBrush=new SolidBrush(rows[rowI].ColorText);
 				}
-				else{
+				else {
 					textBrush=new SolidBrush(rows[rowI].Cells[i].ColorText);
 				}
-				if(rows[rowI].Cells[i].Bold==YN.Yes){
+				if(rows[rowI].Cells[i].Bold==YN.Yes) {
 					cellFont=new Font(cellFont,FontStyle.Bold);
 				}
-				else if(rows[rowI].Cells[i].Bold==YN.No){
+				else if(rows[rowI].Cells[i].Bold==YN.No) {
 					cellFont=new Font(cellFont,FontStyle.Regular);
 				}
-				else{//unknown.  Use row bold
-					if(rows[rowI].Bold){
+				else {//unknown.  Use row bold
+					if(rows[rowI].Bold) {
 						cellFont=new Font(cellFont,FontStyle.Bold);
 					}
-					else{
-						cellFont=new Font(cellFont,FontStyle.Regular);				
+					else {
+						cellFont=new Font(cellFont,FontStyle.Regular);
 					}
 				}
-				if(columns[i].ImageList==null){
+				if(columns[i].ImageList==null) {
 					g.DrawString(rows[rowI].Cells[i].Text,cellFont,textBrush,textRect,format);
 				}
-				else{
+				else {
 					int imageIndex=-1;
-					if(rows[rowI].Cells[i].Text!=""){
+					if(rows[rowI].Cells[i].Text!="") {
 						imageIndex=PIn.PInt(rows[rowI].Cells[i].Text);
 					}
-					if(imageIndex!=-1){
+					if(imageIndex!=-1) {
 						Image img=columns[i].ImageList.Images[imageIndex];
 						g.DrawImage(img,horizontal,vertical-1);
 					}
 				}
 			}
 			//note text
-			if(NoteHeights[rowI]>0 && NoteSpanStop>0 && NoteSpanStart<columns.Count){
+			if(NoteHeights[rowI]>0 && NoteSpanStop>0 && NoteSpanStart<columns.Count) {
 				int noteW=0;
 				for(int i=NoteSpanStart;i<=NoteSpanStop;i++) {
 					noteW+=columns[i].ColWidth;
@@ -706,21 +716,25 @@ namespace OpenDental.UI{
 			g.FillRectangle(new LinearGradientBrush(new Rectangle(0,0,Width,titleHeight+5),
 				//Color.FromArgb(172,171,196)
 				Color.White,Color.FromArgb(200,200,215),LinearGradientMode.Vertical),0,0,Width,titleHeight);
-			g.DrawString(title,titleFont,Brushes.Black,Width/2-g.MeasureString(title,titleFont).Width/2,2);
+			using(Font titleFont=new Font(FontFamily.GenericSansSerif,10,FontStyle.Bold)) {
+				g.DrawString(title,titleFont,Brushes.Black,Width/2-g.MeasureString(title,titleFont).Width/2,2);
+			}
 			//Column Headers-----------------------------------------------------------------------------------------
 			g.FillRectangle(new SolidBrush(this.cTitleBackG),0,titleHeight,Width,headerHeight);//background
 			g.DrawLine(new Pen(Color.FromArgb(102,102,122)),0,titleHeight,Width,titleHeight);//line between title and headers
-			for(int i=0;i<columns.Count;i++){
-				if(i!=0){
-					//vertical lines separating column headers
-					g.DrawLine(new Pen(Color.FromArgb(120,120,120)),-hScroll.Value+1+ColPos[i],titleHeight+3,
-						-hScroll.Value+1+ColPos[i],titleHeight+headerHeight-2);
-					g.DrawLine(new Pen(Color.White),-hScroll.Value+1+ColPos[i]+1,titleHeight+3,
-						-hScroll.Value+1+ColPos[i]+1,titleHeight+headerHeight-2);
+			using(Font headerFont=new Font(FontFamily.GenericSansSerif,8.5f,FontStyle.Bold)) {
+				for(int i=0;i<columns.Count;i++) {
+					if(i!=0) {
+						//vertical lines separating column headers
+						g.DrawLine(new Pen(Color.FromArgb(120,120,120)),-hScroll.Value+1+ColPos[i],titleHeight+3,
+							-hScroll.Value+1+ColPos[i],titleHeight+headerHeight-2);
+						g.DrawLine(new Pen(Color.White),-hScroll.Value+1+ColPos[i]+1,titleHeight+3,
+							-hScroll.Value+1+ColPos[i]+1,titleHeight+headerHeight-2);
+					}
+					g.DrawString(columns[i].Heading,headerFont,Brushes.Black,
+						-hScroll.Value+ColPos[i]+columns[i].ColWidth/2-g.MeasureString(columns[i].Heading,headerFont).Width/2,
+						titleHeight+2);
 				}
-				g.DrawString(columns[i].Heading,headerFont,Brushes.Black,
-					-hScroll.Value+ColPos[i]+columns[i].ColWidth/2-g.MeasureString(columns[i].Heading,headerFont).Width/2,
-					titleHeight+2);
 			}
 			//line below headers
 			g.DrawLine(new Pen(Color.FromArgb(120,120,120)),0,titleHeight+headerHeight,Width,titleHeight+headerHeight);
@@ -839,168 +853,177 @@ namespace OpenDental.UI{
 			Pen lowerPen;
 			SolidBrush textBrush;
 			RectangleF textRect;
-			//Font cellFont;
-			#region Headers
-			g.FillRectangle(Brushes.LightGray,xPos+ColPos[0],yPos,adj*(float)GridW,headerHeight);
-			g.DrawRectangle(Pens.Black,xPos+ColPos[0],yPos,adj*(float)GridW,headerHeight);
-			for(int i=1;i<ColPos.Length;i++) {
-				g.DrawLine(Pens.Black,xPos+adj*(float)ColPos[i],yPos,xPos+adj*(float)ColPos[i],yPos+headerHeight);
-			}
-			for(int i=0;i<columns.Count;i++) {
-				g.DrawString(columns[i].Heading,headerFont,Brushes.Black,xPos+adj*(float)ColPos[i],yPos);
-			}
-			#endregion Headers
-			#region Rows
-			yPos=marginTopFirstPage+headerHeight;//set for first page
-			while(rowsPrinted<rows.Count){
-				if(yPos+adj*(float)RowHeights[rowsPrinted]+adj*(float)NoteHeights[rowsPrinted] > bounds.Bottom){
-					//if row is too tall to fit
-					currentPage++;
-					yPos=bounds.Top+headerHeight;//reset y for next page. Header was already printed.
+			Font cellFont=new Font(FontFamily.GenericSansSerif,cellFontSize);
+			try {
+				#region Headers
+				g.FillRectangle(Brushes.LightGray,xPos+ColPos[0],yPos,adj*(float)GridW,headerHeight);
+				g.DrawRectangle(Pens.Black,xPos+ColPos[0],yPos,adj*(float)GridW,headerHeight);
+				for(int i=1;i<ColPos.Length;i++) {
+					g.DrawLine(Pens.Black,xPos+adj*(float)ColPos[i],yPos,xPos+adj*(float)ColPos[i],yPos+headerHeight);
 				}
-				//else {
-				//	yPos+=RowHeights[rowsPrinted]+NoteHeights[rowsPrinted];
-				//}
-				if(currentPage>pageNumber){
-					break;
-				}
-				if(currentPage==pageNumber){
-					//g.DrawString(rowsPrinted.ToString(),cellFont,Brushes.Black,xPos,yPos);
-					gridPen=new Pen(this.cGridLine);
-					lowerPen=new Pen(this.cGridLine);
-					if(rows[rowsPrinted].ColorLborder!=Color.Empty) {
-						lowerPen=new Pen(rows[rowsPrinted].ColorLborder);
+				using(Font headerFont=new Font(FontFamily.GenericSansSerif,8.5f,FontStyle.Bold)) {
+					for(int i=0;i<columns.Count;i++) {
+						g.DrawString(columns[i].Heading,headerFont,Brushes.Black,xPos+adj*(float)ColPos[i],yPos);
 					}
-					//lines for note section
-					if(NoteHeights[rowsPrinted]>0) {
-						//left vertical gridline
-						if(NoteSpanStart!=0) {
+				}
+				#endregion Headers
+				#region Rows
+				yPos=marginTopFirstPage+headerHeight;//set for first page
+				while(rowsPrinted<rows.Count) {
+					if(yPos+adj*(float)RowHeights[rowsPrinted]+adj*(float)NoteHeights[rowsPrinted] > bounds.Bottom) {
+						//if row is too tall to fit
+						currentPage++;
+						yPos=bounds.Top+headerHeight;//reset y for next page. Header was already printed.
+					}
+					//else {
+					//	yPos+=RowHeights[rowsPrinted]+NoteHeights[rowsPrinted];
+					//}
+					if(currentPage>pageNumber) {
+						break;
+					}
+					if(currentPage==pageNumber) {
+						//g.DrawString(rowsPrinted.ToString(),cellFont,Brushes.Black,xPos,yPos);
+						gridPen=new Pen(this.cGridLine);
+						lowerPen=new Pen(this.cGridLine);
+						if(rows[rowsPrinted].ColorLborder!=Color.Empty) {
+							lowerPen=new Pen(rows[rowsPrinted].ColorLborder);
+						}
+						//lines for note section
+						if(NoteHeights[rowsPrinted]>0) {
+							//left vertical gridline
+							if(NoteSpanStart!=0) {
+								g.DrawLine(gridPen,
+									xPos+adj*(float)ColPos[NoteSpanStart],
+									yPos+adj*(float)RowHeights[rowsPrinted],
+									xPos+adj*(float)ColPos[NoteSpanStart],
+									yPos+adj*(float)RowHeights[rowsPrinted]+adj*(float)NoteHeights[rowsPrinted]);
+							}
+							//Horizontal line which divides the main part of the row from the notes section of the row
 							g.DrawLine(gridPen,
-								xPos+adj*(float)ColPos[NoteSpanStart],
+								xPos+ColPos[0],
 								yPos+adj*(float)RowHeights[rowsPrinted],
-								xPos+adj*(float)ColPos[NoteSpanStart],
+								xPos+adj*(float)ColPos[columns.Count-1]+adj*(float)columns[columns.Count-1].ColWidth,
+								yPos+adj*(float)RowHeights[rowsPrinted]);
+							//right vertical gridline
+							g.DrawLine(gridPen,
+								xPos+adj*(float)ColPos[columns.Count-1]+adj*(float)columns[columns.Count-1].ColWidth,
+								yPos+adj*(float)RowHeights[rowsPrinted],
+								xPos+adj*(float)ColPos[columns.Count-1]+adj*(float)columns[columns.Count-1].ColWidth,
 								yPos+adj*(float)RowHeights[rowsPrinted]+adj*(float)NoteHeights[rowsPrinted]);
 						}
-						//Horizontal line which divides the main part of the row from the notes section of the row
+						//left vertical gridline
 						g.DrawLine(gridPen,
 							xPos+ColPos[0],
-							yPos+adj*(float)RowHeights[rowsPrinted],
-							xPos+adj*(float)ColPos[columns.Count-1]+adj*(float)columns[columns.Count-1].ColWidth,
-							yPos+adj*(float)RowHeights[rowsPrinted]);
-						//right vertical gridline
-						g.DrawLine(gridPen,
-							xPos+adj*(float)ColPos[columns.Count-1]+adj*(float)columns[columns.Count-1].ColWidth,
-							yPos+adj*(float)RowHeights[rowsPrinted],
-							xPos+adj*(float)ColPos[columns.Count-1]+adj*(float)columns[columns.Count-1].ColWidth,
-							yPos+adj*(float)RowHeights[rowsPrinted]+adj*(float)NoteHeights[rowsPrinted]);
-					}
-					//left vertical gridline
-					g.DrawLine(gridPen,
-						xPos+ColPos[0],
-						yPos,
-						xPos+ColPos[0],
-						yPos+adj*(float)RowHeights[rowsPrinted]+adj*(float)NoteHeights[rowsPrinted]);
-					for(int i=0;i<columns.Count;i++) {
-						//right vertical gridline
-						g.DrawLine(gridPen,
-							xPos+adj*(float)ColPos[i]+adj*(float)columns[i].ColWidth,
 							yPos,
-							xPos+adj*(float)ColPos[i]+adj*(float)columns[i].ColWidth,
-							yPos+adj*(float)RowHeights[rowsPrinted]);
-						//lower horizontal gridline
-						g.DrawLine(lowerPen,
-							xPos+adj*(float)ColPos[i],
-							yPos+adj*(float)RowHeights[rowsPrinted]+adj*(float)NoteHeights[rowsPrinted],
-							xPos+adj*(float)ColPos[i]+adj*(float)columns[i].ColWidth,
+							xPos+ColPos[0],
 							yPos+adj*(float)RowHeights[rowsPrinted]+adj*(float)NoteHeights[rowsPrinted]);
-						//text
-						if(rows[rowsPrinted].Cells.Count-1<i) {
-							continue;
+						for(int i=0;i<columns.Count;i++) {
+							//right vertical gridline
+							g.DrawLine(gridPen,
+								xPos+adj*(float)ColPos[i]+adj*(float)columns[i].ColWidth,
+								yPos,
+								xPos+adj*(float)ColPos[i]+adj*(float)columns[i].ColWidth,
+								yPos+adj*(float)RowHeights[rowsPrinted]);
+							//lower horizontal gridline
+							g.DrawLine(lowerPen,
+								xPos+adj*(float)ColPos[i],
+								yPos+adj*(float)RowHeights[rowsPrinted]+adj*(float)NoteHeights[rowsPrinted],
+								xPos+adj*(float)ColPos[i]+adj*(float)columns[i].ColWidth,
+								yPos+adj*(float)RowHeights[rowsPrinted]+adj*(float)NoteHeights[rowsPrinted]);
+							//text
+							if(rows[rowsPrinted].Cells.Count-1<i) {
+								continue;
+							}
+							switch(columns[i].TextAlign) {
+								case HorizontalAlignment.Left:
+									format.Alignment=StringAlignment.Near;
+									break;
+								case HorizontalAlignment.Center:
+									format.Alignment=StringAlignment.Center;
+									break;
+								case HorizontalAlignment.Right:
+									format.Alignment=StringAlignment.Far;
+									break;
+							}
+							if(rows[rowsPrinted].Cells[i].ColorText==Color.Empty) {
+								textBrush=new SolidBrush(rows[rowsPrinted].ColorText);
+							}
+							else {
+								textBrush=new SolidBrush(rows[rowsPrinted].Cells[i].ColorText);
+							}
+							if(rows[rowsPrinted].Cells[i].Bold==YN.Yes) {
+								cellFont=new Font(cellFont,FontStyle.Bold);
+							}
+							else if(rows[rowsPrinted].Cells[i].Bold==YN.No) {
+								cellFont=new Font(cellFont,FontStyle.Regular);
+							}
+							else {//unknown.  Use row bold
+								if(rows[rowsPrinted].Bold) {
+									cellFont=new Font(cellFont,FontStyle.Bold);
+								}
+								else {
+									cellFont=new Font(cellFont,FontStyle.Regular);
+								}
+							}
+							//Some printers will malfunction (BSOD) if print bold colored fonts.  This prevents the error.
+							if(textBrush.Color!=Color.Black && cellFont.Bold) {
+								cellFont=new Font(cellFont,FontStyle.Regular);
+							}
+							if(columns[i].TextAlign==HorizontalAlignment.Right) {
+								textRect=new RectangleF(
+									xPos+adj*(float)ColPos[i]-2,
+									yPos,
+									adj*(float)columns[i].ColWidth+2,
+									adj*(float)RowHeights[rowsPrinted]);
+								//shift the rect to account for MS issue with strings of different lengths
+								textRect.Location=new PointF
+									(textRect.X+adj*g.MeasureString(rows[rowsPrinted].Cells[i].Text,cellFont).Width/textRect.Width,
+									textRect.Y);
+								g.DrawString(rows[rowsPrinted].Cells[i].Text,cellFont,textBrush,textRect,format);
+
+							}
+							else {
+								textRect=new RectangleF(
+									xPos+adj*(float)ColPos[i],
+									yPos,
+									adj*(float)columns[i].ColWidth,
+									adj*(float)RowHeights[rowsPrinted]);
+								g.DrawString(rows[rowsPrinted].Cells[i].Text,cellFont,textBrush,textRect,format);
+							}
+							g.DrawString(rows[rowsPrinted].Cells[i].Text,cellFont,textBrush,textRect,format);
 						}
-						switch(columns[i].TextAlign) {
-							case HorizontalAlignment.Left:
-								format.Alignment=StringAlignment.Near;
-								break;
-							case HorizontalAlignment.Center:
-								format.Alignment=StringAlignment.Center;
-								break;
-							case HorizontalAlignment.Right:
-								format.Alignment=StringAlignment.Far;
-								break;
-						}
-						if(rows[rowsPrinted].Cells[i].ColorText==Color.Empty) {
-							textBrush=new SolidBrush(rows[rowsPrinted].ColorText);
-						}
-						else {
-							textBrush=new SolidBrush(rows[rowsPrinted].Cells[i].ColorText);
-						}
-						if(rows[rowsPrinted].Cells[i].Bold==YN.Yes) {
-							cellFont=new Font(cellFont,FontStyle.Bold);
-						}
-						else if(rows[rowsPrinted].Cells[i].Bold==YN.No) {
-							cellFont=new Font(cellFont,FontStyle.Regular);
-						}
-						else {//unknown.  Use row bold
+						//note text
+						if(NoteHeights[rowsPrinted]>0 && NoteSpanStop>0 && NoteSpanStart<columns.Count) {
+							int noteW=0;
+							for(int i=NoteSpanStart;i<=NoteSpanStop;i++) {
+								noteW+=(int)(adj*(float)columns[i].ColWidth);
+							}
 							if(rows[rowsPrinted].Bold) {
 								cellFont=new Font(cellFont,FontStyle.Bold);
 							}
 							else {
 								cellFont=new Font(cellFont,FontStyle.Regular);
 							}
-						}
-						//Some printers will malfunction (BSOD) if print bold colored fonts.  This prevents the error.
-						if(textBrush.Color!=Color.Black && cellFont.Bold) {
-							cellFont=new Font(cellFont,FontStyle.Regular);
-						}
-						if(columns[i].TextAlign==HorizontalAlignment.Right) {
+							textBrush=new SolidBrush(rows[rowsPrinted].ColorText);
 							textRect=new RectangleF(
-								xPos+adj*(float)ColPos[i]-2,
-								yPos,
-								adj*(float)columns[i].ColWidth+2,
-								adj*(float)RowHeights[rowsPrinted]);
-							//shift the rect to account for MS issue with strings of different lengths
-							textRect.Location=new PointF
-								(textRect.X+adj*g.MeasureString(rows[rowsPrinted].Cells[i].Text,cellFont).Width/textRect.Width,
-								textRect.Y);
-							g.DrawString(rows[rowsPrinted].Cells[i].Text,cellFont,textBrush,textRect,format);
-
+								xPos+adj*(float)ColPos[NoteSpanStart]+1,
+								yPos+adj*(float)RowHeights[rowsPrinted],
+								adj*(float)ColPos[NoteSpanStop]+adj*(float)columns[NoteSpanStop].ColWidth-adj*(float)ColPos[NoteSpanStart],
+								adj*(float)NoteHeights[rowsPrinted]);
+							format.Alignment=StringAlignment.Near;
+							g.DrawString(rows[rowsPrinted].Note,cellFont,textBrush,textRect,format);
 						}
-						else {
-							textRect=new RectangleF(
-								xPos+adj*(float)ColPos[i],
-								yPos,
-								adj*(float)columns[i].ColWidth,
-								adj*(float)RowHeights[rowsPrinted]);
-							g.DrawString(rows[rowsPrinted].Cells[i].Text,cellFont,textBrush,textRect,format);
-						}
-						g.DrawString(rows[rowsPrinted].Cells[i].Text,cellFont,textBrush,textRect,format);
 					}
-					//note text
-					if(NoteHeights[rowsPrinted]>0 && NoteSpanStop>0 && NoteSpanStart<columns.Count) {
-						int noteW=0;
-						for(int i=NoteSpanStart;i<=NoteSpanStop;i++) {
-							noteW+=(int)(adj*(float)columns[i].ColWidth);
-						}
-						if(rows[rowsPrinted].Bold) {
-							cellFont=new Font(cellFont,FontStyle.Bold);
-						}
-						else {
-							cellFont=new Font(cellFont,FontStyle.Regular);
-						}
-						textBrush=new SolidBrush(rows[rowsPrinted].ColorText);
-						textRect=new RectangleF(
-							xPos+adj*(float)ColPos[NoteSpanStart]+1,
-							yPos+adj*(float)RowHeights[rowsPrinted],
-							adj*(float)ColPos[NoteSpanStop]+adj*(float)columns[NoteSpanStop].ColWidth-adj*(float)ColPos[NoteSpanStart],
-							adj*(float)NoteHeights[rowsPrinted]);
-						format.Alignment=StringAlignment.Near;
-						g.DrawString(rows[rowsPrinted].Note,cellFont,textBrush,textRect,format);
-					}
+					yPos+=(int)(adj*(float)RowHeights[rowsPrinted]+adj*(float)NoteHeights[rowsPrinted]);
+					rowsPrinted++;
 				}
-				yPos+=(int)(adj*(float)RowHeights[rowsPrinted]+adj*(float)NoteHeights[rowsPrinted]);
-				rowsPrinted++;
+				#endregion Rows
 			}
-			#endregion Rows
+			finally {
+				if(cellFont!=null) {
+					cellFont.Dispose();
+				}
+			}
 			return yPos+4;
 		}
 		#endregion Printing
