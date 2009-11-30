@@ -67,7 +67,7 @@ namespace OpenDental.Bridges{
 				writer.WriteEndElement();//LinkageParameter
 				writer.Flush();
 				writer.Close();
-				MessageBox.Show(strb.ToString());
+				//MessageBox.Show(strb.ToString());
 				File.WriteAllText(linkage,strb.ToString());
 			}
 			try {
