@@ -106,7 +106,7 @@ namespace OpenDentBusiness{
 			DataObjectFactory<ReplicationServer>.DeleteObject(replicationServerNum);
 		}
 
-		private static int GetServer_id() {
+		public static int GetServer_id() {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetInt(MethodBase.GetCurrentMethod());
 			}
