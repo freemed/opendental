@@ -161,8 +161,8 @@ namespace OpenDental {
 		}
 
 		private void butSynch_Click(object sender,EventArgs e) {
-			if(textUsername.Text=="" || textPassword.Text=="") {
-				MsgBox.Show(this,"Please enter a username and password first.");
+			if(textUsername.Text=="") {
+				MsgBox.Show(this,"Please enter a username first.");
 				return;
 			}
 			if(ReplicationServers.Listt.Count==0) {
