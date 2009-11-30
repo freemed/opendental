@@ -23,6 +23,9 @@ namespace OpenDentHL7 {
 
 		public ServiceHL7() {
 			InitializeComponent();
+			CanStop = true;
+			ServiceName = "OpenDentHL7";
+			EventLog.WriteEntry("OpenDentHL7",DateTime.Now.ToLongTimeString()+" - Initialized.");
 		}
 
 		protected override void OnStart(string[] args) {
@@ -150,7 +153,9 @@ namespace OpenDentHL7 {
 		protected override void OnStop() {
 			//inform od via signal that this service has shut down
 			//timer.Enabled=false;
-			timer.Dispose();
+			if(timer!=null) {
+				timer.Dispose();
+			}
 		}
 
 		private static void TimerCallbackFunction(Object stateInfo) {
