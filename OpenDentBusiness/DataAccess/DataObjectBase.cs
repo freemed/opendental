@@ -124,6 +124,9 @@ namespace OpenDentBusiness.DataAccess {
 						else if(propType==typeof(int)){
 							prop.SetValue(this,int.Parse(propVal),null);
 						}
+						else if(propType==typeof(long)) {
+							prop.SetValue(this,long.Parse(propVal),null);
+						}
 						else if(propType==typeof(double)){
 							prop.SetValue(this,double.Parse(propVal),null);
 						}
