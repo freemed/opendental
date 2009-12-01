@@ -1817,6 +1817,23 @@ DROP TABLE IF EXISTS etAck";
 				command="UPDATE preference SET ValueString = '6.8.12.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ32(command);
 			}
+			To6_8_24();
+		}
+
+		private static void To6_8_24() {
+			if(FromVersion<new Version("6.8.24.0")) {
+				string command;
+				command="SELECT CodeNum FROM procedurecode WHERE ProcCode='D1204'";
+				string codeNum1204=Db.GetScalar(command);
+				command="SELECT CodeNum FROM procedurecode WHERE ProcCode='D1203'";
+				string codeNum1203=Db.GetScalar(command);
+				if(codeNum1203!="" && codeNum1204!="") {
+					command="UPDATE benefit SET CodeNum="+codeNum1203+" WHERE CodeNum="+codeNum1204;
+					Db.NonQ32(command);
+				}
+				command="UPDATE preference SET ValueString = '6.8.24.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ32(command);
+			}
 			To6_9_0();
 		}
 
