@@ -1253,8 +1253,13 @@ namespace OpenDental{
 			//LanguageForeigns.Refresh(CultureInfo.CurrentCulture);//automatically skips if current culture is en-US
 			DataValid.BecameInvalid += new OpenDental.ValidEventHandler(DataValid_BecameInvalid);
 			signalLastRefreshed=MiscData.GetNowDateTime();
-			timerSignals.Interval=PrefC.GetInt(PrefName.ProcessSigsIntervalInSecs)*1000;
-			timerSignals.Enabled=true;
+			if(PrefC.GetInt(PrefName.ProcessSigsIntervalInSecs)==0) {
+				timerSignals.Enabled=false;
+			}
+			else {
+				timerSignals.Interval=PrefC.GetInt(PrefName.ProcessSigsIntervalInSecs)*1000;
+				timerSignals.Enabled=true;
+			}
 			timerTimeIndic.Enabled=true;
 			myOutlookBar.Buttons[0].Caption=Lan.g(this,"Appts");
 			myOutlookBar.Buttons[1].Caption=Lan.g(this,"Family");
@@ -3186,7 +3191,8 @@ namespace OpenDental{
 				return;
 			}
 			//menuItemMergeDatabases.Visible=PrefC.GetBool(PrefName.RandomPrimaryKeys");
-			if(timerSignals.Interval==0){
+			//if(timerSignals.Interval==0){
+			if(PrefC.GetInt(PrefName.ProcessSigsIntervalInSecs)==0){
 				timerSignals.Enabled=false;
 			}
 			else{
