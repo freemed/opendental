@@ -58,29 +58,38 @@ namespace OpenDental{
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.toothChart = new SparksToothChart.ToothChartWrapper();
+			SparksToothChart.ToothChartData toothChartData1=new SparksToothChart.ToothChartData();
+			this.toothChart=new SparksToothChart.ToothChartWrapper();
 			this.SuspendLayout();
 			// 
 			// toothChart
 			// 
-			this.toothChart.ColorBackground = System.Drawing.Color.Empty;
-			this.toothChart.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.toothChart.Location = new System.Drawing.Point(0,0);
-			this.toothChart.Name = "toothChart";
-			this.toothChart.Size = new System.Drawing.Size(926,858);
-			this.toothChart.TabIndex = 0;
-			this.toothChart.UseHardware = false;
+			this.toothChart.AutoFinish=false;
+			this.toothChart.ColorBackground=System.Drawing.Color.Empty;
+			this.toothChart.CursorTool=SparksToothChart.CursorTool.Pointer;
+			this.toothChart.Dock=System.Windows.Forms.DockStyle.Fill;
+			this.toothChart.DrawMode=OpenDentBusiness.DrawingMode.Simple2D;
+			this.toothChart.Location=new System.Drawing.Point(0,0);
+			this.toothChart.Name="toothChart";
+			this.toothChart.PerioMode=false;
+			this.toothChart.PreferredPixelFormatNumber=0;
+			this.toothChart.Size=new System.Drawing.Size(926,858);
+			this.toothChart.TabIndex=0;
+			toothChartData1.SizeControl=new System.Drawing.Size(926,858);
+			this.toothChart.TcData=toothChartData1;
+			this.toothChart.UseHardware=false;
 			// 
 			// FormToothChartingBig
 			// 
-			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(926,858);
+			this.AutoScaleBaseSize=new System.Drawing.Size(5,13);
+			this.ClientSize=new System.Drawing.Size(926,858);
 			this.Controls.Add(this.toothChart);
-			this.Name = "FormToothChartingBig";
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-			this.ResizeEnd += new System.EventHandler(this.FormToothChartingBig_ResizeEnd);
-			this.Load += new System.EventHandler(this.FormToothChartingBig_Load);
+			this.Name="FormToothChartingBig";
+			this.StartPosition=System.Windows.Forms.FormStartPosition.CenterParent;
+			this.WindowState=System.Windows.Forms.FormWindowState.Maximized;
+			this.Load+=new System.EventHandler(this.FormToothChartingBig_Load);
+			this.FormClosed+=new System.Windows.Forms.FormClosedEventHandler(this.FormToothChartingBig_FormClosed);
+			this.ResizeEnd+=new System.EventHandler(this.FormToothChartingBig_ResizeEnd);
 			this.ResumeLayout(false);
 
 		}
@@ -329,9 +338,11 @@ namespace OpenDental{
 			}
 		}
 
-	
-
-		
+		private void FormToothChartingBig_FormClosed(object sender,FormClosedEventArgs e) {
+			//This helps ensure that the tooth chart wrapper is properly disposed of.
+			//This step is necessary so that graphics memory does not fill up.
+			Dispose();
+		}	
 
 
 	}

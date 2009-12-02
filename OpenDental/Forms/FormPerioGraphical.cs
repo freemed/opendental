@@ -194,5 +194,12 @@ namespace OpenDental {
 		private void butSave_Click(object sender,EventArgs e) {
 
 		}
+
+		private void FormPerioGraphical_FormClosed(object sender,FormClosedEventArgs e) {
+			//This helps ensure that the tooth chart wrapper is properly disposed of.
+			//This step is necessary so that graphics memory does not fill up.
+			Dispose();
+		}
+
 	}
 }
