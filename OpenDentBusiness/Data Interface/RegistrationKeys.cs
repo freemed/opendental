@@ -40,6 +40,7 @@ namespace OpenDentBusiness {
 				keys[i].UsesServerVersion		=PIn.PBool(table.Rows[i][8].ToString());
 				keys[i].IsFreeVersion		    =PIn.PBool(table.Rows[i][9].ToString());
 				keys[i].IsOnlyForTesting		=PIn.PBool(table.Rows[i][10].ToString());
+				keys[i].VotesAllotted   		=PIn.PInt (table.Rows[i][11].ToString());
 			}
 			return keys;
 		}
@@ -61,6 +62,7 @@ namespace OpenDentBusiness {
 				+",UsesServerVersion='"+POut.PBool(registrationKey.UsesServerVersion)+"' "
 				+",IsFreeVersion='"+POut.PBool(registrationKey.IsFreeVersion)+"' "
 				+",IsOnlyForTesting='"+POut.PBool(registrationKey.IsOnlyForTesting)+"' "
+				+",VotesAllotted='"+POut.PInt(registrationKey.VotesAllotted)+"' "
 				+" WHERE RegistrationKeyNum='"+POut.PLong(registrationKey.RegistrationKeyNum)+"'";
 			Db.NonQ(command);
 		}
@@ -103,7 +105,7 @@ namespace OpenDentBusiness {
 				command+="RegistrationKeyNum,";
 			}
 			command+="PatNum,RegKey,Note,DateStarted,DateDisabled,DateEnded,"
-				+"IsForeign,UsesServerVersion,IsFreeVersion,IsOnlyForTesting) VALUES(";
+				+"IsForeign,UsesServerVersion,IsFreeVersion,IsOnlyForTesting,VotesAllotted) VALUES(";
 			if(PrefC.RandomKeys) {
 				command+=POut.PLong(registrationKey.RegistrationKeyNum)+", ";
 			}
@@ -117,7 +119,8 @@ namespace OpenDentBusiness {
 				+"'"+POut.PBool(registrationKey.IsForeign)+"',"
 				+"'"+POut.PBool(registrationKey.UsesServerVersion)+"',"
 				+"'"+POut.PBool(registrationKey.IsFreeVersion)+"',"
-				+"'"+POut.PBool(registrationKey.IsOnlyForTesting)+"')";
+				+"'"+POut.PBool(registrationKey.IsOnlyForTesting)+"',"
+				+"'"+POut.PInt(registrationKey.VotesAllotted)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}

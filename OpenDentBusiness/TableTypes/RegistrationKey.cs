@@ -27,6 +27,8 @@ namespace OpenDentBusiness {
 		public bool IsFreeVersion;
 		///<summary>This customer is not using the software with live patient data, but only for testing and development purposes.</summary>
 		public bool IsOnlyForTesting;
+		///<summary>Typically 100, although it can be more for multilocation offices.</summary>
+		public int VotesAllotted;
 
 		public RegistrationKey Copy(){
 			return (RegistrationKey)this.MemberwiseClone();

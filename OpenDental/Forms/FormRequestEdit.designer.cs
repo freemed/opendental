@@ -23,7 +23,6 @@ namespace OpenDental{
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormRequestEdit));
 			this.label3 = new System.Windows.Forms.Label();
 			this.textDescription = new System.Windows.Forms.TextBox();
 			this.checkIsMine = new System.Windows.Forms.CheckBox();
@@ -45,7 +44,6 @@ namespace OpenDental{
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.textWeight = new System.Windows.Forms.TextBox();
 			this.label17 = new System.Windows.Forms.Label();
-			this.label15 = new System.Windows.Forms.Label();
 			this.label11 = new System.Windows.Forms.Label();
 			this.textTotalCritical = new System.Windows.Forms.TextBox();
 			this.label10 = new System.Windows.Forms.Label();
@@ -59,7 +57,6 @@ namespace OpenDental{
 			this.textBox1 = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.label14 = new System.Windows.Forms.Label();
-			this.labelAdmin = new System.Windows.Forms.Label();
 			this.label16 = new System.Windows.Forms.Label();
 			this.labelDiscuss = new System.Windows.Forms.Label();
 			this.textNote = new System.Windows.Forms.TextBox();
@@ -72,6 +69,8 @@ namespace OpenDental{
 			this.butCancel = new OpenDental.UI.Button();
 			this.textRequestId = new System.Windows.Forms.TextBox();
 			this.labelReqId = new System.Windows.Forms.Label();
+			this.textBounty = new System.Windows.Forms.TextBox();
+			this.label18 = new System.Windows.Forms.Label();
 			this.groupMyVotes.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.SuspendLayout();
@@ -264,9 +263,10 @@ namespace OpenDental{
 			// groupBox2
 			// 
 			this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox2.Controls.Add(this.textBounty);
+			this.groupBox2.Controls.Add(this.label18);
 			this.groupBox2.Controls.Add(this.textWeight);
 			this.groupBox2.Controls.Add(this.label17);
-			this.groupBox2.Controls.Add(this.label15);
 			this.groupBox2.Controls.Add(this.label11);
 			this.groupBox2.Controls.Add(this.textTotalCritical);
 			this.groupBox2.Controls.Add(this.label10);
@@ -276,15 +276,15 @@ namespace OpenDental{
 			this.groupBox2.Controls.Add(this.label13);
 			this.groupBox2.Location = new System.Drawing.Point(527,126);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(347,78);
+			this.groupBox2.Size = new System.Drawing.Size(347,80);
 			this.groupBox2.TabIndex = 72;
 			this.groupBox2.TabStop = false;
-			this.groupBox2.Text = "Total";
+			this.groupBox2.Text = "Totals - See manual for explanations";
 			// 
 			// textWeight
 			// 
 			this.textWeight.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))),((int)(((byte)(239)))),((int)(((byte)(243)))));
-			this.textWeight.Location = new System.Drawing.Point(264,10);
+			this.textWeight.Location = new System.Drawing.Point(264,17);
 			this.textWeight.Name = "textWeight";
 			this.textWeight.ReadOnly = true;
 			this.textWeight.Size = new System.Drawing.Size(38,20);
@@ -293,25 +293,16 @@ namespace OpenDental{
 			// 
 			// label17
 			// 
-			this.label17.Location = new System.Drawing.Point(301,11);
+			this.label17.Location = new System.Drawing.Point(301,18);
 			this.label17.Name = "label17";
 			this.label17.Size = new System.Drawing.Size(38,18);
 			this.label17.TabIndex = 86;
 			this.label17.Text = "/100";
 			this.label17.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// label15
-			// 
-			this.label15.Location = new System.Drawing.Point(188,33);
-			this.label15.Name = "label15";
-			this.label15.Size = new System.Drawing.Size(153,40);
-			this.label15.TabIndex = 82;
-			this.label15.Text = "Computed based on the other parameters.  A higher number is more important.";
-			this.label15.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
 			// label11
 			// 
-			this.label11.Location = new System.Drawing.Point(169,11);
+			this.label11.Location = new System.Drawing.Point(169,18);
 			this.label11.Name = "label11";
 			this.label11.Size = new System.Drawing.Size(95,18);
 			this.label11.TabIndex = 80;
@@ -321,7 +312,7 @@ namespace OpenDental{
 			// textTotalCritical
 			// 
 			this.textTotalCritical.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))),((int)(((byte)(229)))),((int)(((byte)(233)))));
-			this.textTotalCritical.Location = new System.Drawing.Point(108,32);
+			this.textTotalCritical.Location = new System.Drawing.Point(108,37);
 			this.textTotalCritical.Name = "textTotalCritical";
 			this.textTotalCritical.ReadOnly = true;
 			this.textTotalCritical.Size = new System.Drawing.Size(38,20);
@@ -329,7 +320,7 @@ namespace OpenDental{
 			// 
 			// label10
 			// 
-			this.label10.Location = new System.Drawing.Point(7,33);
+			this.label10.Location = new System.Drawing.Point(7,38);
 			this.label10.Name = "label10";
 			this.label10.Size = new System.Drawing.Size(99,18);
 			this.label10.TabIndex = 73;
@@ -339,7 +330,7 @@ namespace OpenDental{
 			// textTotalPledged
 			// 
 			this.textTotalPledged.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))),((int)(((byte)(239)))),((int)(((byte)(243)))));
-			this.textTotalPledged.Location = new System.Drawing.Point(108,54);
+			this.textTotalPledged.Location = new System.Drawing.Point(108,57);
 			this.textTotalPledged.Name = "textTotalPledged";
 			this.textTotalPledged.ReadOnly = true;
 			this.textTotalPledged.Size = new System.Drawing.Size(63,20);
@@ -347,7 +338,7 @@ namespace OpenDental{
 			// 
 			// label12
 			// 
-			this.label12.Location = new System.Drawing.Point(4,55);
+			this.label12.Location = new System.Drawing.Point(4,58);
 			this.label12.Name = "label12";
 			this.label12.Size = new System.Drawing.Size(103,18);
 			this.label12.TabIndex = 71;
@@ -357,7 +348,7 @@ namespace OpenDental{
 			// textTotalPoints
 			// 
 			this.textTotalPoints.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))),((int)(((byte)(229)))),((int)(((byte)(233)))));
-			this.textTotalPoints.Location = new System.Drawing.Point(108,10);
+			this.textTotalPoints.Location = new System.Drawing.Point(108,17);
 			this.textTotalPoints.Name = "textTotalPoints";
 			this.textTotalPoints.ReadOnly = true;
 			this.textTotalPoints.Size = new System.Drawing.Size(38,20);
@@ -365,7 +356,7 @@ namespace OpenDental{
 			// 
 			// label13
 			// 
-			this.label13.Location = new System.Drawing.Point(37,11);
+			this.label13.Location = new System.Drawing.Point(37,18);
 			this.label13.Name = "label13";
 			this.label13.Size = new System.Drawing.Size(69,18);
 			this.label13.TabIndex = 68;
@@ -431,18 +422,6 @@ namespace OpenDental{
 			this.label14.TabIndex = 80;
 			this.label14.Text = "(the lower the better)";
 			this.label14.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// labelAdmin
-			// 
-			this.labelAdmin.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.labelAdmin.Font = new System.Drawing.Font("Microsoft Sans Serif",9F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.labelAdmin.ForeColor = System.Drawing.Color.Maroon;
-			this.labelAdmin.Location = new System.Drawing.Point(796,241);
-			this.labelAdmin.Name = "labelAdmin";
-			this.labelAdmin.Size = new System.Drawing.Size(347,120);
-			this.labelAdmin.TabIndex = 83;
-			this.labelAdmin.Text = resources.GetString("labelAdmin.Text");
-			this.labelAdmin.Visible = false;
 			// 
 			// label16
 			// 
@@ -600,6 +579,24 @@ namespace OpenDental{
 			this.labelReqId.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.labelReqId.Visible = false;
 			// 
+			// textBounty
+			// 
+			this.textBounty.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))),((int)(((byte)(239)))),((int)(((byte)(243)))));
+			this.textBounty.Location = new System.Drawing.Point(253,57);
+			this.textBounty.Name = "textBounty";
+			this.textBounty.ReadOnly = true;
+			this.textBounty.Size = new System.Drawing.Size(63,20);
+			this.textBounty.TabIndex = 76;
+			// 
+			// label18
+			// 
+			this.label18.Location = new System.Drawing.Point(179,58);
+			this.label18.Name = "label18";
+			this.label18.Size = new System.Drawing.Size(73,18);
+			this.label18.TabIndex = 77;
+			this.label18.Text = "Bounty $";
+			this.label18.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// FormRequestEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -612,7 +609,6 @@ namespace OpenDental{
 			this.Controls.Add(this.textDifficulty);
 			this.Controls.Add(this.label16);
 			this.Controls.Add(this.butJordan);
-			this.Controls.Add(this.labelAdmin);
 			this.Controls.Add(this.butResubmit);
 			this.Controls.Add(this.label14);
 			this.Controls.Add(this.textBox1);
@@ -687,8 +683,6 @@ namespace OpenDental{
 		private System.Windows.Forms.TextBox textWeight;
 		private System.Windows.Forms.Label label11;
 		private System.Windows.Forms.Label label14;
-		private System.Windows.Forms.Label label15;
-		private System.Windows.Forms.Label labelAdmin;
 		private OpenDental.UI.Button butJordan;
 		private System.Windows.Forms.Label label17;
 		private System.Windows.Forms.Label label16;
@@ -697,5 +691,7 @@ namespace OpenDental{
 		private System.Windows.Forms.TextBox textNote;
 		private System.Windows.Forms.TextBox textRequestId;
 		private System.Windows.Forms.Label labelReqId;
+		private System.Windows.Forms.TextBox textBounty;
+		private System.Windows.Forms.Label label18;
 	}
 }

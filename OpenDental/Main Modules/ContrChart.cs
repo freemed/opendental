@@ -7061,6 +7061,7 @@ namespace OpenDental{
 			key.Note="";
 			key.DateStarted=DateTime.Today;
 			key.IsForeign=false;
+			key.VotesAllotted=100;
 			RegistrationKeys.Insert(key);
 			FillPtInfo();//Refresh registration key list in patient info grid.
 		}
@@ -7071,6 +7072,7 @@ namespace OpenDental{
 			key.Note="";
 			key.DateStarted=DateTime.Today;
 			key.IsForeign=true;
+			key.VotesAllotted=100;
 			RegistrationKeys.Insert(key);
 			FillPtInfo();
 		}

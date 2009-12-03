@@ -846,7 +846,24 @@ namespace OpenDental{
 		private void FormPayPlan_Load(object sender, System.EventArgs e) {
 			textPatient.Text=Patients.GetLim(PayPlanCur.PatNum).GetNameLF();
 			textGuarantor.Text=Patients.GetLim(PayPlanCur.Guarantor).GetNameLF();
-			
+
+			for(int i=0;i<ProviderC.List.Length;i++) {
+				comboProv.Items.Add(ProviderC.List[i].GetLongDesc());
+			}
+			//comboProv starts with no items selected.
+			if(PrefC.GetBool(PrefName.EasyNoClinics)) {
+				labelClinic.Visible=false;
+				comboClinic.Visible=false;
+			}
+			else {
+				comboClinic.Items.Add("none");
+				//also starts with no items selected.
+				for(int i=0;i<Clinics.List.Length;i++) {
+					comboClinic.Items.Add(Clinics.List[i].Description);
+				}
+			}
+
+
 			/*
 			for(int i=0;i<ProviderC.List.Length;i++) {
 				comboProv.Items.Add(ProviderC.List[i].GetLongDesc());
@@ -868,8 +885,6 @@ namespace OpenDental{
 					}
 				}
 			}*/
-
-
 			textDate.Text=PayPlanCur.PayPlanDate.ToShortDateString();
 			textAPR.Text=PayPlanCur.APR.ToString();
 			AmtPaid=PayPlans.GetAmtPaid(PayPlanCur.PayPlanNum);

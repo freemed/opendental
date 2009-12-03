@@ -20,6 +20,7 @@ namespace OpenDental {
 		private ODDataTable tableObj;
 		private Color colorDisabled;
 		private int myPointsUsed=0;
+		private int myPointsAllotted=0;
 		//private int DiscussIdCur;//only has a value during discuss edit.
 
 		public FormRequestEdit() {
@@ -40,14 +41,16 @@ namespace OpenDental {
 				textSubmitter.BackColor=colorDisabled;
 				textDifficulty.BackColor=Color.White;
 				textDifficulty.ReadOnly=false;
-				groupMyVotes.Visible=false;
+				//groupMyVotes.Visible=false;
 				butJordan.Visible=true;
 				labelReqId.Visible=true;
 				textRequestId.Visible=true;
 				textRequestId.Text=RequestId.ToString();
-				labelAdmin.Visible=true;
-				labelAdmin.Location=groupMyVotes.Location;
-				labelAdmin.Size=groupMyVotes.Size;
+				//labelAdmin.Visible=true;
+				//labelAdmin.Location=groupMyVotes.Location;
+				//labelAdmin.Size=groupMyVotes.Size;
+				textBounty.BackColor=Color.White;
+				textBounty.ReadOnly=false;
 			}
 			else{
 				if(RequestId==0){//new
@@ -198,6 +201,12 @@ namespace OpenDental {
 				textDetail.ReadOnly=true;
 			}
 			myPointsUsed=PIn.PInt(row["myPointsUsed"]);
+			try {
+				myPointsAllotted=PIn.PInt(row["myPointsAllotted"]);
+			}
+			catch {
+				myPointsAllotted=100;
+			}
 			//textMyPointsRemain.Text=;this will be filled automatically when myPoints changes
 			textMyPoints.Text=row["myPoints"];
 			RecalcMyPoints();
@@ -207,6 +216,10 @@ namespace OpenDental {
 			textTotalCritical.Text=row["totalCritical"];
 			textTotalPledged.Text=row["totalPledged"];
 			textWeight.Text=row["Weight"];
+			try {
+				textBounty.Text=row["Bounty"];
+			}
+			catch { }
 		}
 
 		private void textMyPoints_TextChanged(object sender,EventArgs e) {
@@ -219,7 +232,7 @@ namespace OpenDental {
 				if(textMyPoints.Text!=""){
 					mypoints=Convert.ToInt32(textMyPoints.Text);
 				}
-				textMyPointsRemain.Text=(100-myPointsUsed-mypoints).ToString();
+				textMyPointsRemain.Text=(myPointsAllotted-myPointsUsed-mypoints).ToString();
 			}
 			catch{
 				textMyPointsRemain.Text="";
@@ -452,13 +465,12 @@ namespace OpenDental {
 			int difficulty=0;
 			int myPoints=0;
 			double myPledge=0;
+			double bounty=0;
 			if(!doDelete){
 				if(textDescription.Text==""){
 					MsgBox.Show(this,"Description cannot be blank.");
 					return false;
 				}
-				//if(IsAdminMode){
-				//had to do this for everyone, because initial diff setting gets ignored otherwise.
 				try{
 					difficulty=int.Parse(textDifficulty.Text);
 				}
@@ -470,8 +482,15 @@ namespace OpenDental {
 					MsgBox.Show(this,"Difficulty is invalid.");
 					return false;
 				}
-				//}
-				//else{
+				if(IsAdminMode) {
+					try {
+						bounty=PIn.PInt(textBounty.Text);
+					}
+					catch {
+						MsgBox.Show(this,"Bounty is invalid.");
+						return false;
+					}
+				}
 				if(!IsAdminMode){
 					try{
 						myPoints=PIn.PInt(textMyPoints.Text);//handles "" gracefully
@@ -541,6 +560,12 @@ namespace OpenDental {
 						changesMade=true;
 					}
 				}
+				try {
+					if(textBounty.Text!=row["Bounty"]) {
+						changesMade=true;
+					}
+				}
+				catch { }
 			}
 			if(!changesMade){
 				//temporarily show me which ones shortcutted out
@@ -588,6 +613,12 @@ namespace OpenDental {
 						//difficulty
 						writer.WriteStartElement("Difficulty");
 						writer.WriteString(difficulty.ToString());
+						writer.WriteEndElement();
+					}
+					if(IsAdminMode) {
+						//Bounty
+						writer.WriteStartElement("Bounty");
+						writer.WriteString(bounty.ToString());
 						writer.WriteEndElement();
 					}
 					//approval

@@ -1901,8 +1901,12 @@ DROP TABLE IF EXISTS etAck";
 				Db.NonQ(command);
 				command="INSERT INTO preference(PrefName,ValueString) VALUES('PerioColorProbingRed','-65536')";
 				Db.NonQ(command);
+				command="ALTER TABLE registrationkey ADD VotesAllotted int NOT NULL";
+				Db.NonQ(command);
+				command="UPDATE registrationkey SET VotesAllotted =100";
+				Db.NonQ(command);
 
-			
+
 
 
 
