@@ -21,13 +21,12 @@ namespace OpenDentBusiness {
 			if(PrefC.RandomKeys) {
 				command+="MountItemNum,";
 			}
-			command+="MountItemNum,MountNum,Xpos,Ypos,OrdinalPos,Width,Height) VALUES(";
+			command+="MountNum,Xpos,Ypos,OrdinalPos,Width,Height) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PLong(mountItem.MountItemNum)+", ";
+				command+="'"+POut.PLong(mountItem.MountItemNum)+"',";
 			}
 			command+=
-				 "'"+POut.PLong(mountItem.MountItemNum)+"',"
-				+"'"+POut.PLong(mountItem.MountNum)+"',"
+				 "'"+POut.PLong(mountItem.MountNum)+"',"
 				+"'"+POut.PLong(mountItem.Xpos)+"',"
 				+"'"+POut.PLong(mountItem.Ypos)+"',"
 				+"'"+POut.PLong(mountItem.OrdinalPos)+"',"
@@ -35,8 +34,7 @@ namespace OpenDentBusiness {
 				+"'"+POut.PLong(mountItem.Height)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
-			}
-			else{
+			} else {
 				mountItem.MountItemNum=Db.NonQ(command,true);
 			}
 			return mountItem.MountItemNum;
