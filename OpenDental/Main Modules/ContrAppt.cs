@@ -1929,6 +1929,7 @@ namespace OpenDental{
 					}
 					if(ContrApptSingle3[i].Shadow!=null) {
 						ContrApptSingle3[i].Shadow.Dispose();
+						ContrApptSingle3[i].Shadow=null;
 					}
 				}
 			}
