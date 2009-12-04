@@ -139,6 +139,9 @@ namespace OpenDentBusiness.DataAccess {
 						else if(propType==typeof(byte)){
 							prop.SetValue(this,byte.Parse(propVal),null);
 						}
+						else if(propType==typeof(float)) {
+							prop.SetValue(this,float.Parse(propVal),null);
+						}
 						else{
 							throw new NotImplementedException("DataObjectBase.ReadXml does not yet support this property type: "+propType.ToString());
 						}
