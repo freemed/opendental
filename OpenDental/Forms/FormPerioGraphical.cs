@@ -188,7 +188,17 @@ namespace OpenDental {
 		}
 
 		private void butSetup_Click(object sender,EventArgs e) {
-
+			FormPerioGraphicalSetup fpgs=new FormPerioGraphicalSetup();
+			if(fpgs.ShowDialog()==DialogResult.OK){
+				this.toothChart.TcData.ColorCAL=Color.FromArgb(PrefC.GetInt(PrefName.PerioColorCAL));
+				this.toothChart.TcData.ColorFurcations=Color.FromArgb(PrefC.GetInt(PrefName.PerioColorFurcations));
+				this.toothChart.TcData.ColorFurcationsRed=Color.FromArgb(PrefC.GetInt(PrefName.PerioColorFurcationsRed));
+				this.toothChart.TcData.ColorGingivalMargin=Color.FromArgb(PrefC.GetInt(PrefName.PerioColorGM));
+				this.toothChart.TcData.ColorMGJ=Color.FromArgb(PrefC.GetInt(PrefName.PerioColorMGJ));
+				this.toothChart.TcData.ColorProbing=Color.FromArgb(PrefC.GetInt(PrefName.PerioColorProbing));
+				this.toothChart.TcData.ColorProbingRed=Color.FromArgb(PrefC.GetInt(PrefName.PerioColorProbingRed));
+				this.toothChart.Invalidate();
+			}
 		}
 
 		private void butSave_Click(object sender,EventArgs e) {
