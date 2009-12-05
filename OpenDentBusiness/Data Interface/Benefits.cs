@@ -759,6 +759,12 @@ namespace OpenDentBusiness {
 					if(!isMatch) {
 						continue;//no match
 					}
+					if(listShort[i].QuantityQualifier==BenefitQuantity.NumberOfServices
+						|| listShort[i].QuantityQualifier==BenefitQuantity.Months
+						|| listShort[i].QuantityQualifier==BenefitQuantity.Years) 
+					{
+						continue;//exclude frequencies
+					}
 					if(benInd != null && benInd.CovCatNum!=0) {//must compare
 						//only use the new one if the item order is larger
 						if(CovCats.GetOrderShort(listShort[i].CovCatNum) > CovCats.GetOrderShort(benInd.CovCatNum)) {
