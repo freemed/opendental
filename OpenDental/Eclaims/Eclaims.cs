@@ -167,6 +167,9 @@ namespace OpenDental.Eclaims
 			else if(clearhouse.Eformat==ElectronicClaimFormat.Canadian) {
 				return Canadian.GetMissingData(queueItem);
 			}
+			else if(clearhouse.Eformat==ElectronicClaimFormat.Dutch) {
+				return Dutch.GetMissingData(queueItem,out warnings);
+			}
 			return "";
 		}
 

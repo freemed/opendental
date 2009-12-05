@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 using OpenDentBusiness;
 using System.Windows.Forms;
 using CodeBase;
@@ -13,7 +14,7 @@ namespace OpenDental.Eclaims {
 		public static string SendBatch(List<ClaimSendQueueItem> queueItems,int batchNum) {
 			//We assume for now one file per claim.
 			for(int i=0;i<queueItems.Count;i++) {
-				if(!CreateClaim(queueItems[i],batchNum)){
+				if(!CreateClaim(queueItems[i],batchNum)) {
 					return "";
 				}
 			}
@@ -35,15 +36,16 @@ namespace OpenDental.Eclaims {
 			List<ClaimProc> claimProcsForClaim=ClaimProcs.GetForSendClaim(claimProcList,claim.ClaimNum);
 			List<Procedure> procList=Procedures.Refresh(claim.PatNum);
 			Procedure proc;
+			ProcedureCode procCode;
 			//ProcedureCode procCode;
 			for(int i=0;i<claimProcsForClaim.Count;i++) {
 				proc=Procedures.GetProcFromList(procList,claimProcsForClaim[i].ProcNum);
 				//procCode=Pro
-				strb.Append(provBill.SSN+t);//111
-				strb.Append(provBill.SSN+t);
-				strb.Append(t);
-				strb.Append(t);
-				strb.Append(pat.SSN+t);
+				strb.Append(provBill.SSN+t);//110
+				strb.Append(provBill.MedicaidID+t);//111
+				strb.Append(t);//112
+				strb.Append(t);//118
+				strb.Append(pat.SSN+t);//203/403
 				strb.Append(carrier.CarrierName+t);//carrier name?
 				strb.Append(insplan.SubscriberID+t);
 				strb.Append(pat.PatNum.ToString()+t);
@@ -58,16 +60,23 @@ namespace OpenDental.Eclaims {
 				strb.Append(DutchLName(pat.LName)+t);//last name without prefix
 				strb.Append(DutchLNamePrefix(pat.LName)+t);//prefix
 				strb.Append("2"+t);
-				strb.Append(t);//initials??
+				strb.Append(DutchInitials(pat)+t);//215. initials
 				strb.Append(pat.Zip+t);
-				strb.Append(pat.Address+t);//house number-Needs work
+				strb.Append(DutchAddressNumber(pat.Address)+t);//219 house number.  Already validated.
 				strb.Append(t);
 				strb.Append(proc.ProcDate.ToString("dd-MM-yyyy")+t);//procDate
-				strb.Append("01"+t);
+				procCode=ProcedureCodes.GetProcCode(proc.CodeNum);
+				string strProcCode=procCode.ProcCode;
+				if(strProcCode.EndsWith("00")) {//ending with 00 indicates it's a lab code.
+					strb.Append("02"+t);
+				}
+				else {
+					strb.Append("01"+t);//409. Procedure code (01) or lab costs (02)
+				}
 				strb.Append(t);
 				strb.Append(t);
-				strb.Append(ProcedureCodes.GetStringProcCode(proc.CodeNum)+t);
-				strb.Append(t);//0=not applicable(default), 1=Upper, 2=Lower.
+				strb.Append(strProcCode+t);
+				strb.Append(GetUL(proc,procCode)+t);//414. U/L.
 				strb.Append(Tooth.ToInternat(proc.ToothNum)+t);
 				strb.Append(proc.Surf+t);//needs validation
 				strb.Append(t);
@@ -117,12 +126,57 @@ namespace OpenDental.Eclaims {
 			if(!fullLName.Contains(",")) {
 				return "";
 			}
-			if(fullLName.EndsWith(",")){
+			if(fullLName.EndsWith(",")) {
 				return "";
 			}
 			string retVal=fullLName.Substring(fullLName.IndexOf(",")+1);// van der
 			retVal.TrimStart(' ');
 			return retVal;
+		}
+
+		public static string DutchInitials(Patient pat) {
+			string retVal=DutchLName(pat.LName).Substring(0,1);
+			if(pat.FName!="") {
+				retVal+=pat.FName.Substring(0,1);
+			}
+			return retVal;
+		}
+
+		///<summary>Returns only the house number portion of the address.  Expects a number.  Already validated that some text came before the number.</summary>
+		public static string DutchAddressNumber(string address) {
+			Match match=Regex.Match(address,"[0-9]+");//find the first group of numbers
+			return match.Value;
+		}
+
+		/// <summary>Returns either 0,1,or 2</summary>
+		public static string GetUL(Procedure proc,ProcedureCode procCode) {
+			if(procCode.TreatArea==TreatmentArea.Arch) {
+				if(proc.Surf=="U") {
+					return "1";
+				}
+				if(proc.Surf=="L") {
+					return "2";
+				}
+				return "0";//should never happen
+			}
+			else {
+				return "0";
+			}
+		}
+
+		///<summary>Returns a string describing all missing data on this claim.  Claim will not be allowed to be sent electronically unless this string comes back empty.  There is also an out parameter containing any warnings.  Warnings will not block sending.</summary>
+		public static string GetMissingData(ClaimSendQueueItem queueItem,out string warning) {
+			StringBuilder strb=new StringBuilder();
+			warning="";
+			Claim claim=Claims.GetClaim(queueItem.ClaimNum);
+			Patient pat=Patients.GetPat(claim.PatNum);
+			if(!Regex.IsMatch(pat.Address,@"^[a-zA-Z ]+[0-9]+")) {//format must be streetname, then some numbers, then anything else.
+				if(strb.Length!=0) {
+					strb.Append(",");
+				}
+				strb.Append("Patient address format");
+			}
+			return strb.ToString();
 		}
 
 	}
