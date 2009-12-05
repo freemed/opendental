@@ -1032,6 +1032,7 @@ namespace SparksToothChart {
 
 		///<summary>Returns a bitmap of what is showing in the control.  Used for printing.</summary>
 		public Bitmap GetBitmap() {
+			Render();//Redraw the scene to make sure the back buffer is up to date before copying it to a bitmap.
 			Surface backBuffer=device.GetBackBuffer(0,0,BackBufferType.Mono);
 			GraphicsStream gs=SurfaceLoader.SaveToStream(ImageFileFormat.Bmp,backBuffer);
 			Bitmap bitmap=new Bitmap(gs);
