@@ -16,13 +16,13 @@ namespace OpenDental {
 		}
 
 		private void FormPerioGraphicalSetup_Load(object sender,EventArgs e) {
-			this.butColorCal.BackColor=Color.FromArgb(PrefC.GetInt(PrefName.PerioColorCAL));
-			this.butColorFurc.BackColor=Color.FromArgb(PrefC.GetInt(PrefName.PerioColorFurcations));
-			this.butColorFurcRed.BackColor=Color.FromArgb(PrefC.GetInt(PrefName.PerioColorFurcationsRed));
-			this.butColorGM.BackColor=Color.FromArgb(PrefC.GetInt(PrefName.PerioColorGM));
-			this.butColorMGJ.BackColor=Color.FromArgb(PrefC.GetInt(PrefName.PerioColorMGJ));	
-			this.butColorProbing.BackColor=Color.FromArgb(PrefC.GetInt(PrefName.PerioColorProbing));
-			this.butColorProbingRed.BackColor=Color.FromArgb(PrefC.GetInt(PrefName.PerioColorProbingRed));
+			this.butColorCal.BackColor=PrefC.GetColor(PrefName.PerioColorCAL);
+			this.butColorFurc.BackColor=PrefC.GetColor(PrefName.PerioColorFurcations);
+			this.butColorFurcRed.BackColor=PrefC.GetColor(PrefName.PerioColorFurcationsRed);
+			this.butColorGM.BackColor=PrefC.GetColor(PrefName.PerioColorGM);
+			this.butColorMGJ.BackColor=PrefC.GetColor(PrefName.PerioColorMGJ);	
+			this.butColorProbing.BackColor=PrefC.GetColor(PrefName.PerioColorProbing);
+			this.butColorProbingRed.BackColor=PrefC.GetColor(PrefName.PerioColorProbingRed);
 		}
 
 		private void butColorCal_Click(object sender,EventArgs e) {

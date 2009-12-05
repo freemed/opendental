@@ -25,6 +25,7 @@
 		private void InitializeComponent() {
 			SparksToothChart.ToothChartData toothChartData1=new SparksToothChart.ToothChartData();
 			this.groupBox1=new System.Windows.Forms.GroupBox();
+			this.butSetup=new OpenDental.UI.Button();
 			this.panelColorMGJ=new System.Windows.Forms.Panel();
 			this.panelColorCAL=new System.Windows.Forms.Panel();
 			this.panelColorGM=new System.Windows.Forms.Panel();
@@ -41,7 +42,6 @@
 			this.toothChart=new SparksToothChart.ToothChartWrapper();
 			this.butPrint=new OpenDental.UI.Button();
 			this.butSave=new OpenDental.UI.Button();
-			this.butSetup=new OpenDental.UI.Button();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -67,9 +67,24 @@
 			this.groupBox1.TabIndex=217;
 			this.groupBox1.TabStop=false;
 			// 
+			// butSetup
+			// 
+			this.butSetup.AdjustImageLocation=new System.Drawing.Point(0,0);
+			this.butSetup.Autosize=true;
+			this.butSetup.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butSetup.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSetup.CornerRadius=4F;
+			this.butSetup.Location=new System.Drawing.Point(446,63);
+			this.butSetup.Name="butSetup";
+			this.butSetup.Size=new System.Drawing.Size(88,24);
+			this.butSetup.TabIndex=221;
+			this.butSetup.Text="Setup Colors";
+			this.butSetup.Click+=new System.EventHandler(this.butSetup_Click);
+			// 
 			// panelColorMGJ
 			// 
 			this.panelColorMGJ.BackColor=System.Drawing.Color.DarkOrange;
+			this.panelColorMGJ.Enabled=false;
 			this.panelColorMGJ.Location=new System.Drawing.Point(283,79);
 			this.panelColorMGJ.Name="panelColorMGJ";
 			this.panelColorMGJ.Size=new System.Drawing.Size(50,2);
@@ -78,6 +93,7 @@
 			// panelColorCAL
 			// 
 			this.panelColorCAL.BackColor=System.Drawing.Color.FromArgb(((int)(((byte)(0)))),((int)(((byte)(0)))),((int)(((byte)(192)))));
+			this.panelColorCAL.Enabled=false;
 			this.panelColorCAL.Location=new System.Drawing.Point(283,53);
 			this.panelColorCAL.Name="panelColorCAL";
 			this.panelColorCAL.Size=new System.Drawing.Size(50,2);
@@ -86,6 +102,7 @@
 			// panelColorGM
 			// 
 			this.panelColorGM.BackColor=System.Drawing.Color.Purple;
+			this.panelColorGM.Enabled=false;
 			this.panelColorGM.Location=new System.Drawing.Point(283,28);
 			this.panelColorGM.Name="panelColorGM";
 			this.panelColorGM.Size=new System.Drawing.Size(50,2);
@@ -94,6 +111,7 @@
 			// butColorProbingRed
 			// 
 			this.butColorProbingRed.BackColor=System.Drawing.Color.Red;
+			this.butColorProbingRed.Enabled=false;
 			this.butColorProbingRed.FlatStyle=System.Windows.Forms.FlatStyle.Popup;
 			this.butColorProbingRed.Location=new System.Drawing.Point(112,70);
 			this.butColorProbingRed.Name="butColorProbingRed";
@@ -113,6 +131,7 @@
 			// butColorProbing
 			// 
 			this.butColorProbing.BackColor=System.Drawing.Color.Green;
+			this.butColorProbing.Enabled=false;
 			this.butColorProbing.FlatStyle=System.Windows.Forms.FlatStyle.Popup;
 			this.butColorProbing.Location=new System.Drawing.Point(102,70);
 			this.butColorProbing.Name="butColorProbing";
@@ -168,6 +187,7 @@
 			// butColorPus
 			// 
 			this.butColorPus.BackColor=System.Drawing.Color.Gold;
+			this.butColorPus.Enabled=false;
 			this.butColorPus.FlatStyle=System.Windows.Forms.FlatStyle.Popup;
 			this.butColorPus.Location=new System.Drawing.Point(102,51);
 			this.butColorPus.Name="butColorPus";
@@ -178,6 +198,7 @@
 			// butColorBleed
 			// 
 			this.butColorBleed.BackColor=System.Drawing.Color.Red;
+			this.butColorBleed.Enabled=false;
 			this.butColorBleed.FlatStyle=System.Windows.Forms.FlatStyle.Popup;
 			this.butColorBleed.Location=new System.Drawing.Point(102,26);
 			this.butColorBleed.Name="butColorBleed";
@@ -229,20 +250,6 @@
 			this.butSave.TabIndex=219;
 			this.butSave.Text="Save to Images";
 			this.butSave.Click+=new System.EventHandler(this.butSave_Click);
-			// 
-			// butSetup
-			// 
-			this.butSetup.AdjustImageLocation=new System.Drawing.Point(0,0);
-			this.butSetup.Autosize=true;
-			this.butSetup.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butSetup.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
-			this.butSetup.CornerRadius=4F;
-			this.butSetup.Location=new System.Drawing.Point(446,63);
-			this.butSetup.Name="butSetup";
-			this.butSetup.Size=new System.Drawing.Size(88,24);
-			this.butSetup.TabIndex=221;
-			this.butSetup.Text="Setup Colors";
-			this.butSetup.Click+=new System.EventHandler(this.butSetup_Click);
 			// 
 			// FormPerioGraphical
 			// 

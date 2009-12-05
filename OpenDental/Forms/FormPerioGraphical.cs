@@ -190,13 +190,18 @@ namespace OpenDental {
 		private void butSetup_Click(object sender,EventArgs e) {
 			FormPerioGraphicalSetup fpgs=new FormPerioGraphicalSetup();
 			if(fpgs.ShowDialog()==DialogResult.OK){
-				this.toothChart.TcData.ColorCAL=Color.FromArgb(PrefC.GetInt(PrefName.PerioColorCAL));
-				this.toothChart.TcData.ColorFurcations=Color.FromArgb(PrefC.GetInt(PrefName.PerioColorFurcations));
-				this.toothChart.TcData.ColorFurcationsRed=Color.FromArgb(PrefC.GetInt(PrefName.PerioColorFurcationsRed));
-				this.toothChart.TcData.ColorGingivalMargin=Color.FromArgb(PrefC.GetInt(PrefName.PerioColorGM));
-				this.toothChart.TcData.ColorMGJ=Color.FromArgb(PrefC.GetInt(PrefName.PerioColorMGJ));
-				this.toothChart.TcData.ColorProbing=Color.FromArgb(PrefC.GetInt(PrefName.PerioColorProbing));
-				this.toothChart.TcData.ColorProbingRed=Color.FromArgb(PrefC.GetInt(PrefName.PerioColorProbingRed));
+				toothChart.ColorCAL=PrefC.GetColor(PrefName.PerioColorCAL);
+				panelColorCAL.BackColor=PrefC.GetColor(PrefName.PerioColorCAL);
+				toothChart.ColorFurcations=PrefC.GetColor(PrefName.PerioColorFurcations);
+				toothChart.ColorFurcationsRed=PrefC.GetColor(PrefName.PerioColorFurcationsRed);
+				toothChart.ColorGingivalMargin=PrefC.GetColor(PrefName.PerioColorGM);
+				panelColorGM.BackColor=PrefC.GetColor(PrefName.PerioColorGM);
+				toothChart.ColorMGJ=PrefC.GetColor(PrefName.PerioColorMGJ);
+				panelColorMGJ.BackColor=PrefC.GetColor(PrefName.PerioColorMGJ);				
+				toothChart.ColorProbing=PrefC.GetColor(PrefName.PerioColorProbing);
+				butColorProbing.BackColor=PrefC.GetColor(PrefName.PerioColorProbing);
+				toothChart.ColorProbingRed=PrefC.GetColor(PrefName.PerioColorProbingRed);
+				butColorProbingRed.BackColor=PrefC.GetColor(PrefName.PerioColorProbingRed);
 				this.toothChart.Invalidate();
 			}
 		}
