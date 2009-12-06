@@ -117,7 +117,7 @@ namespace OpenDental{
 			// 
 			// textFamEnd
 			// 
-			this.textFamEnd.Location = new System.Drawing.Point(736,390);
+			this.textFamEnd.Location = new System.Drawing.Point(835,390);
 			this.textFamEnd.Name = "textFamEnd";
 			this.textFamEnd.ReadOnly = true;
 			this.textFamEnd.Size = new System.Drawing.Size(56,20);
@@ -126,7 +126,7 @@ namespace OpenDental{
 			// 
 			// label10
 			// 
-			this.label10.Location = new System.Drawing.Point(574,393);
+			this.label10.Location = new System.Drawing.Point(673,393);
 			this.label10.Name = "label10";
 			this.label10.Size = new System.Drawing.Size(100,16);
 			this.label10.TabIndex = 126;
@@ -135,7 +135,7 @@ namespace OpenDental{
 			// 
 			// textFamStart
 			// 
-			this.textFamStart.Location = new System.Drawing.Point(675,390);
+			this.textFamStart.Location = new System.Drawing.Point(774,390);
 			this.textFamStart.Name = "textFamStart";
 			this.textFamStart.ReadOnly = true;
 			this.textFamStart.Size = new System.Drawing.Size(61,20);
@@ -226,7 +226,7 @@ namespace OpenDental{
 			this.butAdd.CornerRadius = 4F;
 			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(98,390);
+			this.butAdd.Location = new System.Drawing.Point(7,393);
 			this.butAdd.Name = "butAdd";
 			this.butAdd.Size = new System.Drawing.Size(92,24);
 			this.butAdd.TabIndex = 138;
@@ -280,10 +280,10 @@ namespace OpenDental{
 			// gridMain
 			// 
 			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(98,186);
+			this.gridMain.Location = new System.Drawing.Point(7,186);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(448,198);
+			this.gridMain.Size = new System.Drawing.Size(539,198);
 			this.gridMain.TabIndex = 129;
 			this.gridMain.Title = "Transfers";
 			this.gridMain.TranslationName = "FormProviderIncTrans";
@@ -295,7 +295,7 @@ namespace OpenDental{
 			this.gridBal.Location = new System.Drawing.Point(552,186);
 			this.gridBal.Name = "gridBal";
 			this.gridBal.ScrollValue = 0;
-			this.gridBal.Size = new System.Drawing.Size(254,198);
+			this.gridBal.Size = new System.Drawing.Size(361,198);
 			this.gridBal.TabIndex = 124;
 			this.gridBal.Title = "Family Balances";
 			this.gridBal.TranslationName = "TablePaymentBal";
@@ -308,7 +308,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(733,476);
+			this.butOK.Location = new System.Drawing.Point(804,476);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,26);
 			this.butOK.TabIndex = 1;
@@ -323,7 +323,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(733,517);
+			this.butCancel.Location = new System.Drawing.Point(804,517);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,26);
 			this.butCancel.TabIndex = 0;
@@ -333,7 +333,7 @@ namespace OpenDental{
 			// FormProviderIncTrans
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(854,564);
+			this.ClientSize = new System.Drawing.Size(925,564);
 			this.Controls.Add(this.butAdd);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.textDateEntry);
@@ -409,6 +409,8 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("FormProviderIncTrans","Prov"),50);
 			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("FormProviderIncTrans","Clinic"),60);
+			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("FormProviderIncTrans","Patient"),130);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("FormProviderIncTrans","Amount"),60,HorizontalAlignment.Right);
@@ -422,6 +424,7 @@ namespace OpenDental{
 				row=new ODGridRow();
 				row.Cells.Add(SplitList[i].ProcDate.ToShortDateString());
 				row.Cells.Add(Providers.GetAbbr(SplitList[i].ProvNum));
+				row.Cells.Add(Clinics.GetDesc(SplitList[i].ClinicNum));
 				row.Cells.Add(FamCur.GetNameInFamFL(SplitList[i].PatNum));
 				row.Cells.Add(SplitList[i].SplitAmt.ToString("F"));
 				row.Cells.Add(DefC.GetName(DefCat.PaySplitUnearnedType,SplitList[i].UnearnedType));//handles 0 just fine
@@ -451,6 +454,9 @@ namespace OpenDental{
 					if(tableBalances.Rows[f]["ProvNum"].ToString()!=SplitList[i].ProvNum.ToString()) {
 						continue;
 					}
+					if(tableBalances.Rows[f]["ClinicNum"].ToString()!=SplitList[i].ClinicNum.ToString()) {
+						continue;
+					}
 					amt=PIn.PDouble(tableBalances.Rows[f]["EndBal"].ToString())-SplitList[i].SplitAmt;
 					tableBalances.Rows[f]["EndBal"]=amt.ToString("N");
 				}
@@ -465,6 +471,8 @@ namespace OpenDental{
 			gridBal.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TablePaymentBal","Prov"),60);
 			gridBal.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TablePaymentBal","Clinic"),60);
+			gridBal.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TablePaymentBal","Patient"),62);
 			gridBal.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TablePaymentBal","Start"),60,HorizontalAlignment.Right);
@@ -476,6 +484,7 @@ namespace OpenDental{
 			for(int i=0;i<tableBalances.Rows.Count;i++) {
 				row=new ODGridRow();
 				row.Cells.Add(Providers.GetAbbr(PIn.PLong(tableBalances.Rows[i]["ProvNum"].ToString())));
+				row.Cells.Add(Clinics.GetDesc(PIn.PLong(tableBalances.Rows[i]["ClinicNum"].ToString())));
 				if(tableBalances.Rows[i]["Preferred"].ToString()=="") {
 					row.Cells.Add(tableBalances.Rows[i]["FName"].ToString());
 				}

@@ -982,7 +982,7 @@ namespace OpenDentBusiness{
 				WHERE patient.PatNum=procedurelog.PatNum
 				AND ProcStatus=2
 				AND patient.Guarantor=@GuarNum
-				GROUP BY patient.PatNum,ProvNum;
+				GROUP BY patient.PatNum,ProvNum,ClinicNum;
 			
 				/*Received insurance payments*/
 				INSERT INTO tempfambal (PatNum,ProvNum,ClinicNum,AmtBal)
@@ -991,7 +991,7 @@ namespace OpenDentBusiness{
 				WHERE patient.PatNum=claimproc.PatNum
 				AND (Status=1 OR Status=4 OR Status=5)/*received,supplemental,capclaim. (7-capcomplete writeoff)*/
 				AND patient.Guarantor=@GuarNum
-				GROUP BY patient.PatNum,ProvNum;
+				GROUP BY patient.PatNum,ProvNum,ClinicNum;
 
 				/*Insurance estimates*/
 				INSERT INTO tempfambal (PatNum,ProvNum,ClinicNum,InsEst)
@@ -1000,7 +1000,7 @@ namespace OpenDentBusiness{
 				WHERE patient.PatNum=claimproc.PatNum
 				AND Status=0 /*NotReceived*/
 				AND patient.Guarantor=@GuarNum
-				GROUP BY patient.PatNum,ProvNum;
+				GROUP BY patient.PatNum,ProvNum,ClinicNum;
 
 				/*Adjustments*/
 				INSERT INTO tempfambal (PatNum,ProvNum,ClinicNum,AmtBal)
@@ -1008,7 +1008,7 @@ namespace OpenDentBusiness{
 				FROM adjustment,patient
 				WHERE patient.PatNum=adjustment.PatNum
 				AND patient.Guarantor=@GuarNum
-				GROUP BY patient.PatNum,ProvNum;
+				GROUP BY patient.PatNum,ProvNum,ClinicNum;
 
 				/*Patient payments*/
 				INSERT INTO tempfambal (PatNum,ProvNum,ClinicNum,AmtBal)
@@ -1018,7 +1018,7 @@ namespace OpenDentBusiness{
 				AND paysplit.PayNum!=@ExcludePayNum
 				AND patient.Guarantor=@GuarNum
 				AND paysplit.PayPlanNum=0
-				GROUP BY patient.PatNum,ProvNum;
+				GROUP BY patient.PatNum,ProvNum,ClinicNum;
 
 				/*payplan princ reduction*/
 				INSERT INTO tempfambal (PatNum,ProvNum,ClinicNum,AmtBal)
@@ -1026,12 +1026,12 @@ namespace OpenDentBusiness{
 				FROM payplancharge,patient
 				WHERE patient.PatNum=payplancharge.PatNum
 				AND patient.Guarantor=@GuarNum
-				GROUP BY patient.PatNum,ProvNum;
+				GROUP BY patient.PatNum,ProvNum,ClinicNum;
 
 				SELECT tempfambal.PatNum,tempfambal.ProvNum,tempfambal.ClinicNum,SUM(AmtBal) StartBal,SUM(AmtBal-tempfambal.InsEst) AfterIns,FName,Preferred,'0' EndBal
 				FROM tempfambal,patient
 				WHERE tempfambal.PatNum=patient.PatNum
-				GROUP BY PatNum,ProvNum
+				GROUP BY PatNum,ProvNum,ClinicNum
 				ORDER BY Guarantor!=patient.PatNum,Birthdate,ProvNum;
 
 				DROP TABLE IF EXISTS tempfambal";

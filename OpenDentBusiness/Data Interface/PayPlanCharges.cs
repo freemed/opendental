@@ -58,6 +58,7 @@ namespace OpenDentBusiness{
 				ppcharge.Interest        = PIn.PDouble(table.Rows[i][6].ToString());
 				ppcharge.Note            = PIn.PString(table.Rows[i][7].ToString());
 				ppcharge.ProvNum         = PIn.PLong(table.Rows[i][8].ToString());
+				ppcharge.ClinicNum       = PIn.PLong(table.Rows[i][9].ToString());
 				retVal.Add(ppcharge);
 			}
 			return retVal;
@@ -78,7 +79,8 @@ namespace OpenDentBusiness{
 				+",Principal = '"      +POut.PDouble(charge.Principal)+"'"
 				+",Interest = '"       +POut.PDouble(charge.Interest)+"'"
 				+",Note = '"           +POut.PString(charge.Note)+"'"
-				+",ProvNum = '"        +POut.PLong   (charge.ProvNum)+"'"
+				+",ProvNum = '"        +POut.PLong(charge.ProvNum)+"'"
+				+",ClinicNum = '"        +POut.PLong(charge.ClinicNum)+"'"
 				+" WHERE PayPlanChargeNum = '"+POut.PLong(charge.PayPlanChargeNum)+"'";
  			Db.NonQ(command);
 		}
@@ -96,7 +98,7 @@ namespace OpenDentBusiness{
 			if(PrefC.RandomKeys){
 				command+="PayPlanChargeNum,";
 			}
-			command+="PayPlanNum,Guarantor,PatNum,ChargeDate,Principal,Interest,Note,ProvNum) VALUES(";
+			command+="PayPlanNum,Guarantor,PatNum,ChargeDate,Principal,Interest,Note,ProvNum,ClinicNum) VALUES(";
 			if(PrefC.RandomKeys){
 				command+="'"+POut.PLong(charge.PayPlanChargeNum)+"', ";
 			}
@@ -108,7 +110,8 @@ namespace OpenDentBusiness{
 				+"'"+POut.PDouble(charge.Principal)+"', "
 				+"'"+POut.PDouble(charge.Interest)+"', "
 				+"'"+POut.PString(charge.Note)+"', "
-				+"'"+POut.PLong   (charge.ProvNum)+"')";
+				+"'"+POut.PLong(charge.ProvNum)+"', "
+				+"'"+POut.PLong(charge.ClinicNum)+"')";
  			if(PrefC.RandomKeys){
 				Db.NonQ(command);
 			}
@@ -136,6 +139,18 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command="DELETE FROM payplancharge WHERE PayPlanNum="+payPlanNum.ToString();
+			Db.NonQ(command);
+		}
+
+		///<summary>When closing the payplan window, this sets all the charges to the appropriate provider and clinic.  This is the only way to set those fields.</summary>
+		public static void SetProvAndClinic(long payPlanNum,long provNum,long clinicNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),payPlanNum,provNum,clinicNum);
+				return;
+			}
+			string command="UPDATE payplancharge SET ProvNum="+POut.PLong(provNum)+", "
+				+"ClinicNum="+POut.PLong(clinicNum)+" "
+				+"WHERE PayPlanNum="+POut.PLong(payPlanNum);
 			Db.NonQ(command);
 		}
 	

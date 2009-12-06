@@ -1661,9 +1661,11 @@ namespace OpenDental{
 			}
 			for(int i=0;i<ProviderC.List.Length;i++){
 				comboPriProv.Items.Add(ProviderC.List[i].Abbr);
-				if(ProviderC.List[i].ProvNum==PatCur.PriProv)
+				if(ProviderC.List[i].ProvNum==PatCur.PriProv) {
 					comboPriProv.SelectedIndex=i;
+				}
 			}
+			/*Provider should not automatically change.  So may end up with no provider selected.
 			if(comboPriProv.SelectedIndex==-1){
 				int defaultindex=Providers.GetIndex(PrefC.GetLong(PrefName.PracticeDefaultProv));
 				if(defaultindex==-1) {//default provider hidden
@@ -1672,7 +1674,7 @@ namespace OpenDental{
 				else {
 					comboPriProv.SelectedIndex=defaultindex;
 				}
-			}
+			}*/
 			comboSecProv.Items.Clear();
 			comboSecProv.Items.Add(Lan.g(this,"none"));
 			comboSecProv.SelectedIndex=0;
@@ -2522,9 +2524,7 @@ namespace OpenDental{
 			}
 			PatCur.AddrNote=textAddrNotes.Text;
 			PatCur.DateFirstVisit=PIn.PDate(textDateFirstVisit.Text);
-			if(comboPriProv.SelectedIndex==-1)
-				PatCur.PriProv=0;
-			else{
+			if(comboPriProv.SelectedIndex!=-1) {
 				PatCur.PriProv=ProviderC.List[comboPriProv.SelectedIndex].ProvNum;
 			}
 			if(comboSecProv.SelectedIndex==0){

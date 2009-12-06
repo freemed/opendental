@@ -235,6 +235,17 @@ namespace OpenDentBusiness{
 			//return PlaceOfService.Office;
 		}
 
+		///<summary>Clinics cannot be hidden, so if clinicNum=0, this will return -1.</summary>
+		public static int GetIndex(long clinicNum) {
+			//No need to check RemotingRole; no call to db.
+			for(int i=0;i<List.Length;i++) {
+				if(List[i].ClinicNum==clinicNum) {
+					return i;
+				}
+			}
+			return -1;
+		}
+
 	}
 	
 

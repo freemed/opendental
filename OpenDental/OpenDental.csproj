@@ -833,9 +833,6 @@
     <Compile Include="Forms\FormReferralsPatient.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\FormProvIncTransAdd.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Forms\FormProviderIncTrans.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1953,10 +1950,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormReferralsPatient.resx">
       <DependentUpon>FormReferralsPatient.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormProvIncTransAdd.resx">
-      <DependentUpon>FormProvIncTransAdd.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormProviderIncTrans.resx">

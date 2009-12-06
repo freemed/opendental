@@ -846,30 +846,12 @@ namespace OpenDental{
 		private void FormPayPlan_Load(object sender, System.EventArgs e) {
 			textPatient.Text=Patients.GetLim(PayPlanCur.PatNum).GetNameLF();
 			textGuarantor.Text=Patients.GetLim(PayPlanCur.Guarantor).GetNameLF();
-
 			for(int i=0;i<ProviderC.List.Length;i++) {
 				comboProv.Items.Add(ProviderC.List[i].GetLongDesc());
-			}
-			//comboProv starts with no items selected.
-			if(PrefC.GetBool(PrefName.EasyNoClinics)) {
-				labelClinic.Visible=false;
-				comboClinic.Visible=false;
-			}
-			else {
-				comboClinic.Items.Add("none");
-				//also starts with no items selected.
-				for(int i=0;i<Clinics.List.Length;i++) {
-					comboClinic.Items.Add(Clinics.List[i].Description);
-				}
-			}
-
-
-			/*
-			for(int i=0;i<ProviderC.List.Length;i++) {
-				comboProv.Items.Add(ProviderC.List[i].GetLongDesc());
-				if(ProviderC.List[i].ProvNum==AdjustmentCur.ProvNum) {
+				if(IsNew && ProviderC.List[i].ProvNum==PatCur.PriProv) {//new payment plans default to pri prov
 					comboProv.SelectedIndex=i;
 				}
+				//but if not new, then the provider will be selected in FillCharges().
 			}
 			if(PrefC.GetBool(PrefName.EasyNoClinics)) {
 				labelClinic.Visible=false;
@@ -877,14 +859,15 @@ namespace OpenDental{
 			}
 			else {
 				comboClinic.Items.Add("none");
-				comboClinic.SelectedIndex=0;
+				//we don't want to do this.  The -1 indicates to pull clinic from charges on first loop
+				//comboClinic.SelectedIndex=0;//if not new, then clinic can be changed in the FillCharges()
 				for(int i=0;i<Clinics.List.Length;i++) {
 					comboClinic.Items.Add(Clinics.List[i].Description);
-					if(Clinics.List[i].ClinicNum==AdjustmentCur.ClinicNum) {
+					if(IsNew && Clinics.List[i].ClinicNum==PatCur.ClinicNum) {//new payment plans default to pat clinic
 						comboClinic.SelectedIndex=i+1;
 					}
 				}
-			}*/
+			}
 			textDate.Text=PayPlanCur.PayPlanDate.ToShortDateString();
 			textAPR.Text=PayPlanCur.APR.ToString();
 			AmtPaid=PayPlans.GetAmtPaid(PayPlanCur.PayPlanNum);
@@ -907,7 +890,7 @@ namespace OpenDental{
 			FillCharges();
 		}
 
-		/// <summary>Called 5 times.  This also fills prov and clinic based on the charges</summary>
+		/// <summary>Called 5 times.  This also fills prov and clinic based on the first charge if not new.</summary>
 		private void FillCharges(){
 			table=AccountModules.GetPayPlanAmort(PayPlanCur.PayPlanNum).Tables["payplanamort"];
 			gridCharges.BeginUpdate();
@@ -971,6 +954,19 @@ namespace OpenDental{
 			gridCharges.EndUpdate();
 			textAccumulatedDue.Text=PayPlans.GetAccumDue(PayPlanCur.PayPlanNum,ChargeList).ToString("n");
 			textPrincPaid.Text=PayPlans.GetPrincPaid(AmtPaid,PayPlanCur.PayPlanNum,ChargeList).ToString("n");
+			if(!IsNew && ChargeList.Count>1) {
+				if(comboProv.SelectedIndex==-1) {//This avoids resetting the combo every time FillCharges is run.
+					comboProv.SelectedIndex=Providers.GetIndex(ChargeList[0].ProvNum);//could still be -1
+				}
+				if(!PrefC.GetBool(PrefName.EasyNoClinics) && comboClinic.SelectedIndex==-1) {
+					if(ChargeList[0].ClinicNum==0){
+						comboClinic.SelectedIndex=0;
+					}
+					else{
+						comboClinic.SelectedIndex=Clinics.GetIndex(ChargeList[0].ClinicNum)+1;
+					}
+				}
+			}
 		}
 
 		private void butGoToPat_Click(object sender, System.EventArgs e) {
@@ -1133,7 +1129,8 @@ namespace OpenDental{
 				ppCharge.Interest=0;
 				ppCharge.Principal=downpayment;
 				ppCharge.Note=Lan.g(this,"Downpayment");
-				ppCharge.ProvNum=PatCur.PriProv;
+				ppCharge.ProvNum=PatCur.PriProv;//will be changed at the end.
+				ppCharge.ClinicNum=PatCur.ClinicNum;//will be changed at the end.
 				PayPlanCharges.Insert(ppCharge);
 			}
 			double principal=PIn.PDouble(textAmount.Text)-PIn.PDouble(textDownPayment.Text);
@@ -1252,7 +1249,8 @@ namespace OpenDental{
 			ppCharge.PayPlanNum=PayPlanCur.PayPlanNum;
 			ppCharge.Guarantor=PayPlanCur.Guarantor;
 			ppCharge.ChargeDate=DateTime.Today;
-			ppCharge.ProvNum=PatCur.PriProv;
+			ppCharge.ProvNum=PatCur.PriProv;//will be changed at the end.
+			ppCharge.ClinicNum=PatCur.ClinicNum;//will be changed at the end.
 			FormPayPlanChargeEdit FormP=new FormPayPlanChargeEdit(ppCharge);
 			FormP.IsNew=true;
 			FormP.ShowDialog();
@@ -1386,6 +1384,20 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please fix data entry errors first.");
 				return false;
 			}
+			if(table.Rows.Count==0) {
+				MsgBox.Show(this,"An amortization schedule must be created first.");
+				return false;
+			}
+			if(comboProv.SelectedIndex==-1) {
+				MsgBox.Show(this,"A provider must be selected first.");
+				return false;
+			}
+			if(!PrefC.GetBool(PrefName.EasyNoClinics)) {
+				if(comboClinic.SelectedIndex==-1) {
+					MsgBox.Show(this,"A clinic must be selected first.");
+					return false;
+				}
+			}
 			if(textAPR.Text==""){
 				textAPR.Text="0";
 			}
@@ -1397,6 +1409,17 @@ namespace OpenDental{
 			PayPlanCur.CompletedAmt=PIn.PDouble(textCompletedAmt.Text);
 			//PlanNum set already
 			PayPlans.Update(PayPlanCur);//always saved to db before opening this form
+			long provNum=ProviderC.List[comboProv.SelectedIndex].ProvNum;//already verified that there's a provider selected
+			long clinicNum=0;
+			if(!PrefC.GetBool(PrefName.EasyNoClinics)) {
+				if(comboClinic.SelectedIndex==0) {
+					clinicNum=0;
+				}
+				else {
+					clinicNum=Clinics.List[comboClinic.SelectedIndex-1].ClinicNum;
+				}
+			}
+			PayPlanCharges.SetProvAndClinic(PayPlanCur.PayPlanNum,provNum,clinicNum);
 			return true;
 		}
 
@@ -1416,10 +1439,6 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e){
-			if(table.Rows.Count==0){
-				MsgBox.Show(this,"You must create an amortization schedule first.");
-				return;
-			}
 			if(!SaveData()){
 				return;
 			}

@@ -21,7 +21,7 @@ namespace OpenDentBusiness{
 		public string PayNote;
 		///<summary>Set to true to indicate that a payment is split.  Just makes a few functions easier.  Might be eliminated.</summary>
 		public bool IsSplit;
-		///<summary>FK to patient.PatNum.  The patient where the payment entry will show.  But only the splits affect account balances.  This is 0 if the 'payment' is actually an income transfer to another provider.</summary>
+		///<summary>FK to patient.PatNum.  The patient where the payment entry will show.  But only the splits affect account balances.  This has a value even if the 'payment' is actually an income transfer to another provider.</summary>
 		public long PatNum;
 		///<summary>FK to clinic.ClinicNum.  Can be 0. Copied from patient.ClinicNum when creating payment, but user can override.  Not used in provider income transfers.  Cannot be used in financial reporting when grouping by clinic, because payments may be split between clinics.</summary>
 		public long ClinicNum;

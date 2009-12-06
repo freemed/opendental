@@ -79,6 +79,7 @@ namespace OpenDental{
 		private TextBox textDeposit;
 		private Label labelDeposit;
 		private TextBox textFamAfterIns;
+		private CheckBox checkPayTypeNone;
 		///<summary>This table gets created and filled once at the beginning.  After that, only the last column gets carefully updated.</summary>
 		private DataTable tableBalances;
 
@@ -141,6 +142,7 @@ namespace OpenDental{
 			this.textDeposit = new System.Windows.Forms.TextBox();
 			this.labelDeposit = new System.Windows.Forms.Label();
 			this.textFamAfterIns = new System.Windows.Forms.TextBox();
+			this.checkPayTypeNone = new System.Windows.Forms.CheckBox();
 			this.butPay = new OpenDental.UI.Button();
 			this.gridBal = new OpenDental.UI.ODGrid();
 			this.gridMain = new OpenDental.UI.ODGrid();
@@ -156,7 +158,7 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(405,2);
+			this.label1.Location = new System.Drawing.Point(404,2);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(154,16);
 			this.label1.TabIndex = 7;
@@ -224,7 +226,7 @@ namespace OpenDental{
 			// 
 			// label7
 			// 
-			this.label7.Location = new System.Drawing.Point(266,464);
+			this.label7.Location = new System.Drawing.Point(212,464);
 			this.label7.Name = "label7";
 			this.label7.Size = new System.Drawing.Size(286,14);
 			this.label7.TabIndex = 18;
@@ -233,7 +235,7 @@ namespace OpenDental{
 			// 
 			// textTotal
 			// 
-			this.textTotal.Location = new System.Drawing.Point(479,438);
+			this.textTotal.Location = new System.Drawing.Point(425,438);
 			this.textTotal.Name = "textTotal";
 			this.textTotal.ReadOnly = true;
 			this.textTotal.Size = new System.Drawing.Size(67,20);
@@ -242,7 +244,7 @@ namespace OpenDental{
 			// 
 			// label8
 			// 
-			this.label8.Location = new System.Drawing.Point(378,442);
+			this.label8.Location = new System.Drawing.Point(324,442);
 			this.label8.Name = "label8";
 			this.label8.Size = new System.Drawing.Size(100,16);
 			this.label8.TabIndex = 22;
@@ -251,7 +253,7 @@ namespace OpenDental{
 			// 
 			// listPayType
 			// 
-			this.listPayType.Location = new System.Drawing.Point(407,22);
+			this.listPayType.Location = new System.Drawing.Point(407,39);
 			this.listPayType.Name = "listPayType";
 			this.listPayType.Size = new System.Drawing.Size(120,95);
 			this.listPayType.TabIndex = 4;
@@ -270,7 +272,7 @@ namespace OpenDental{
 			// checkPayPlan
 			// 
 			this.checkPayPlan.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkPayPlan.Location = new System.Drawing.Point(694,75);
+			this.checkPayPlan.Location = new System.Drawing.Point(694,108);
 			this.checkPayPlan.Name = "checkPayPlan";
 			this.checkPayPlan.Size = new System.Drawing.Size(196,18);
 			this.checkPayPlan.TabIndex = 30;
@@ -324,9 +326,9 @@ namespace OpenDental{
 			// 
 			// labelDepositAccount
 			// 
-			this.labelDepositAccount.Location = new System.Drawing.Point(407,132);
+			this.labelDepositAccount.Location = new System.Drawing.Point(407,138);
 			this.labelDepositAccount.Name = "labelDepositAccount";
-			this.labelDepositAccount.Size = new System.Drawing.Size(260,18);
+			this.labelDepositAccount.Size = new System.Drawing.Size(260,17);
 			this.labelDepositAccount.TabIndex = 114;
 			this.labelDepositAccount.Text = "Pay into Account";
 			this.labelDepositAccount.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
@@ -335,7 +337,7 @@ namespace OpenDental{
 			// 
 			this.comboDepositAccount.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboDepositAccount.FormattingEnabled = true;
-			this.comboDepositAccount.Location = new System.Drawing.Point(407,152);
+			this.comboDepositAccount.Location = new System.Drawing.Point(407,157);
 			this.comboDepositAccount.Name = "comboDepositAccount";
 			this.comboDepositAccount.Size = new System.Drawing.Size(260,21);
 			this.comboDepositAccount.TabIndex = 113;
@@ -343,7 +345,7 @@ namespace OpenDental{
 			// panelXcharge
 			// 
 			this.panelXcharge.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panelXcharge.BackgroundImage")));
-			this.panelXcharge.Location = new System.Drawing.Point(556,22);
+			this.panelXcharge.Location = new System.Drawing.Point(694,12);
 			this.panelXcharge.Name = "panelXcharge";
 			this.panelXcharge.Size = new System.Drawing.Size(59,26);
 			this.panelXcharge.TabIndex = 118;
@@ -362,7 +364,7 @@ namespace OpenDental{
 			// 
 			// textDepositAccount
 			// 
-			this.textDepositAccount.Location = new System.Drawing.Point(407,176);
+			this.textDepositAccount.Location = new System.Drawing.Point(407,181);
 			this.textDepositAccount.Name = "textDepositAccount";
 			this.textDepositAccount.ReadOnly = true;
 			this.textDepositAccount.Size = new System.Drawing.Size(260,20);
@@ -397,7 +399,7 @@ namespace OpenDental{
 			// 
 			// textDeposit
 			// 
-			this.textDeposit.Location = new System.Drawing.Point(694,32);
+			this.textDeposit.Location = new System.Drawing.Point(694,75);
 			this.textDeposit.Name = "textDeposit";
 			this.textDeposit.ReadOnly = true;
 			this.textDeposit.Size = new System.Drawing.Size(100,20);
@@ -406,7 +408,7 @@ namespace OpenDental{
 			// labelDeposit
 			// 
 			this.labelDeposit.ForeColor = System.Drawing.Color.Firebrick;
-			this.labelDeposit.Location = new System.Drawing.Point(691,13);
+			this.labelDeposit.Location = new System.Drawing.Point(691,56);
 			this.labelDeposit.Name = "labelDeposit";
 			this.labelDeposit.Size = new System.Drawing.Size(199,16);
 			this.labelDeposit.TabIndex = 126;
@@ -422,6 +424,17 @@ namespace OpenDental{
 			this.textFamAfterIns.TabIndex = 127;
 			this.textFamAfterIns.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
+			// checkPayTypeNone
+			// 
+			this.checkPayTypeNone.Location = new System.Drawing.Point(407,21);
+			this.checkPayTypeNone.Name = "checkPayTypeNone";
+			this.checkPayTypeNone.Size = new System.Drawing.Size(204,18);
+			this.checkPayTypeNone.TabIndex = 128;
+			this.checkPayTypeNone.Text = "None (Income Transfer)";
+			this.checkPayTypeNone.UseVisualStyleBackColor = true;
+			this.checkPayTypeNone.Click += new System.EventHandler(this.checkPayTypeNone_Click);
+			this.checkPayTypeNone.CheckedChanged += new System.EventHandler(this.checkPayTypeNone_CheckedChanged);
+			// 
 			// butPay
 			// 
 			this.butPay.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -433,7 +446,7 @@ namespace OpenDental{
 			this.butPay.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butPay.Location = new System.Drawing.Point(588,208);
 			this.butPay.Name = "butPay";
-			this.butPay.Size = new System.Drawing.Size(70,24);
+			this.butPay.Size = new System.Drawing.Size(79,24);
 			this.butPay.TabIndex = 124;
 			this.butPay.Text = "Pay";
 			this.butPay.Click += new System.EventHandler(this.butPay_Click);
@@ -565,6 +578,7 @@ namespace OpenDental{
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(974,562);
+			this.Controls.Add(this.checkPayTypeNone);
 			this.Controls.Add(this.textFamAfterIns);
 			this.Controls.Add(this.textDeposit);
 			this.Controls.Add(this.labelDeposit);
@@ -622,12 +636,14 @@ namespace OpenDental{
 
 		private void FormPayment_Load(object sender, System.EventArgs e) {
 			if(IsNew){
+				checkPayTypeNone.Enabled=true;
 				if(!Security.IsAuthorized(Permissions.PaymentCreate)){//date not checked here
 					DialogResult=DialogResult.Cancel;
 					return;
 				}
 			}
 			else{
+				checkPayTypeNone.Enabled=false;
 				if(!Security.IsAuthorized(Permissions.PaymentEdit,PaymentCur.PayDate)){
 					butOK.Enabled=false;
 					butDeleteAll.Enabled=false;
@@ -665,9 +681,12 @@ namespace OpenDental{
 					listPayType.SelectedIndex=i;
 				}
 			}
-			if(listPayType.SelectedIndex==-1) {
-				listPayType.SelectedIndex=0;
+			if(PaymentCur.PayType==0) {
+				checkPayTypeNone.Checked=true;
 			}
+			//if(listPayType.SelectedIndex==-1) {
+			//	listPayType.SelectedIndex=0;
+			//}
 			textNote.Text=PaymentCur.PayNote;
 			if(PaymentCur.DepositNum==0){
 				labelDeposit.Visible=false;
@@ -677,6 +696,7 @@ namespace OpenDental{
 				textDeposit.Text=Deposits.GetOne(PaymentCur.DepositNum).DateDeposit.ToShortDateString();
 				textAmount.ReadOnly=true;
 				textAmount.BackColor=SystemColors.Control;
+				butPay.Enabled=false;
 			}
 			SplitList=PaySplits.GetForPayment(PaymentCur.PayNum);//Count might be 0
 			SplitListOld=new List<PaySplit>();
@@ -847,6 +867,9 @@ namespace OpenDental{
 					if(tableBalances.Rows[f]["ProvNum"].ToString()!=SplitList[i].ProvNum.ToString()) {
 						continue;
 					}
+					if(tableBalances.Rows[f]["ClinicNum"].ToString()!=SplitList[i].ClinicNum.ToString()) {
+						continue;
+					}
 					amt=PIn.PDouble(tableBalances.Rows[f]["EndBal"].ToString())-SplitList[i].SplitAmt;
 					tableBalances.Rows[f]["EndBal"]=amt.ToString("N");
 				}
@@ -861,7 +884,7 @@ namespace OpenDental{
 			gridBal.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TablePaymentBal","Prov"),60);
 			gridBal.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TablePaymentBal","Clinic"),70);
+			col=new ODGridColumn(Lan.g("TablePaymentBal","Clinic"),60);
 			gridBal.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TablePaymentBal","Patient"),62);
 			gridBal.Columns.Add(col);
@@ -1032,6 +1055,9 @@ namespace OpenDental{
 
 		///<summary>Called from all 3 places where listPayType gets changed.</summary>
 		private void SetComboDepositAccounts(){
+			if(listPayType.SelectedIndex==-1) {
+				return;
+			}
 			AccountingAutoPay autoPay=AccountingAutoPays.GetForPayType(
 				DefC.Short[(int)DefCat.PaymentTypes][listPayType.SelectedIndex].DefNum);
 			if(autoPay==null) {
@@ -1183,6 +1209,26 @@ namespace OpenDental{
 			}
 		}
 
+		private void checkPayTypeNone_CheckedChanged(object sender,EventArgs e) {
+			//this fires before the click event.  The Checked property also reflects the new value.
+			if(checkPayTypeNone.Checked) {
+				listPayType.Visible=false;
+				panelXcharge.Visible=false;
+				butPay.Text=Lan.g(this,"Transfer");
+			}
+			else {
+				listPayType.Visible=true;
+				panelXcharge.Visible=true;
+				butPay.Text=Lan.g(this,"Pay");
+			}
+		}
+
+		private void checkPayTypeNone_Click(object sender,EventArgs e) {
+			//The Checked property reflects the new value.
+			//Only possible if IsNew.
+
+		}
+
 		private void butDeleteAll_Click(object sender, System.EventArgs e) {
 			if(textDeposit.Visible){//this will get checked again by the middle layer
 				MsgBox.Show(this,"This payment is attached to a deposit.  Not allowed to delete.");
@@ -1232,13 +1278,24 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Please fix data entry errors first."));
 				return;
 			}
-			if(textAmount.Text==""){
-				MessageBox.Show(Lan.g(this,"Please enter an amount."));	
-				return;
+			if(checkPayTypeNone.Checked) {
+				if(PIn.PDouble(textAmount.Text)!=0) {
+					MsgBox.Show(this,"Amount must be zero for a transfer.");
+					return;
+				}
 			}
-			if(PIn.PDouble(textAmount.Text)==0) {
-				MessageBox.Show(Lan.g(this,"Amount must not be zero."));
-				return;
+			else{
+				if(textAmount.Text=="") {
+					MessageBox.Show(Lan.g(this,"Please enter an amount."));
+					return;
+				}
+				if(PIn.PDouble(textAmount.Text)==0) {
+					MessageBox.Show(Lan.g(this,"Amount must not be zero unless this is a transfer."));
+					return;
+				}
+				if(listPayType.SelectedIndex==-1) {
+					MsgBox.Show(this,"A payment type must be selected.");
+				}
 			}
 			if(IsNew){
 				//prevents backdating of initial payment
@@ -1273,12 +1330,17 @@ namespace OpenDental{
 				MessageBox.Show(ex.Message);//not able to alter, so must not allow user to continue.
 				return;
 			}
-			PaymentCur.PayAmt=PIn.PDouble(textAmount.Text);
+			PaymentCur.PayAmt=PIn.PDouble(textAmount.Text);//handles blank
 			PaymentCur.PayDate=PIn.PDate(textDate.Text);
 			PaymentCur.CheckNum=textCheckNum.Text;
 			PaymentCur.BankBranch=textBankBranch.Text;
 			PaymentCur.PayNote=textNote.Text;
-			PaymentCur.PayType=DefC.Short[(int)DefCat.PaymentTypes][listPayType.SelectedIndex].DefNum;
+			if(checkPayTypeNone.Checked) {
+				PaymentCur.PayType=0;
+			}
+			else {
+				PaymentCur.PayType=DefC.Short[(int)DefCat.PaymentTypes][listPayType.SelectedIndex].DefNum;
+			}
 			//PaymentCur.PatNum=PatCur.PatNum;//this is already done before opening this window.
 			//PaymentCur.ClinicNum already handled
 			if(SplitList.Count==0) {
@@ -1370,6 +1432,8 @@ namespace OpenDental{
 			//	return;
 			//}	
 		}
+
+		
 
 		
 

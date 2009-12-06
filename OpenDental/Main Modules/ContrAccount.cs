@@ -84,8 +84,6 @@ namespace OpenDental {
 		private Label labelCC;
 		private Label label1;
 		private TextBox textCCexp;
-		private ContextMenu contextMenuPayment;
-		private MenuItem menuItemProvIncTrans;
 		private MenuItem menuItemStatementEmail;
 		private Label labelBalanceAmt;
 		private TabControl tabControlShow;
@@ -258,8 +256,6 @@ namespace OpenDental {
 			this.label1 = new System.Windows.Forms.Label();
 			this.textCCexp = new System.Windows.Forms.TextBox();
 			this.labelCC = new System.Windows.Forms.Label();
-			this.contextMenuPayment = new System.Windows.Forms.ContextMenu();
-			this.menuItemProvIncTrans = new System.Windows.Forms.MenuItem();
 			this.tabControlShow = new System.Windows.Forms.TabControl();
 			this.tabMain = new System.Windows.Forms.TabPage();
 			this.textUrgFinNote = new OpenDental.ODtextBox();
@@ -1032,17 +1028,6 @@ namespace OpenDental {
 			this.labelCC.Text = "CC#";
 			this.labelCC.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// contextMenuPayment
-			// 
-			this.contextMenuPayment.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.menuItemProvIncTrans});
-			// 
-			// menuItemProvIncTrans
-			// 
-			this.menuItemProvIncTrans.Index = 0;
-			this.menuItemProvIncTrans.Text = "Income Transfer";
-			this.menuItemProvIncTrans.Click += new System.EventHandler(this.menuItemProvIncTrans_Click);
-			// 
 			// tabControlShow
 			// 
 			this.tabControlShow.Controls.Add(this.tabMain);
@@ -1668,8 +1653,8 @@ namespace OpenDental {
 			ToolBarMain.Buttons.Clear();
 			ODToolBarButton button;
 			button=new ODToolBarButton(Lan.g(this,"Payment"),1,"","Payment");
-			button.Style=ODToolBarButtonStyle.DropDownButton;
-			button.DropDownMenu=contextMenuPayment;
+			//button.Style=ODToolBarButtonStyle.DropDownButton;
+			//button.DropDownMenu=contextMenuPayment;
 			ToolBarMain.Buttons.Add(button);
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Adjustment"),2,"","Adjustment"));
 			button=new ODToolBarButton(Lan.g(this,"New Claim"),3,"","Insurance");
@@ -2377,6 +2362,7 @@ namespace OpenDental {
 			}
 			else if(table.Rows[e.Row]["PayNum"].ToString()!="0"){
 				Payment PaymentCur=Payments.GetPayment(PIn.PLong(table.Rows[e.Row]["PayNum"].ToString()));
+				/*
 				if(PaymentCur.PayType==0){//provider income transfer
 					FormProviderIncTrans FormPIT=new FormProviderIncTrans();
 					FormPIT.PatNum=PatCur.PatNum;
@@ -2384,11 +2370,11 @@ namespace OpenDental {
 					FormPIT.IsNew=false;
 					FormPIT.ShowDialog();
 				}
-				else{
-					FormPayment FormPayment2=new FormPayment(PatCur,FamCur,PaymentCur);
-					FormPayment2.IsNew=false;
-					FormPayment2.ShowDialog();
-				}
+				else{*/
+				FormPayment FormPayment2=new FormPayment(PatCur,FamCur,PaymentCur);
+				FormPayment2.IsNew=false;
+				FormPayment2.ShowDialog();
+				//}
 			}
 			else if(table.Rows[e.Row]["ClaimNum"].ToString()!="0"){//claims and claimpayments
 				Claim claim=Claims.GetClaim(PIn.PLong(table.Rows[e.Row]["ClaimNum"].ToString()));

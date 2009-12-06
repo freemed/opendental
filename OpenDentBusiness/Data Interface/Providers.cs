@@ -347,10 +347,9 @@ namespace OpenDentBusiness{
 			return 0;//should NEVER happen, but just in case, the 0 won't crash
 		}
 
-		///<summary></summary>
+		///<summary>Within the regular list of visible providers.  Will return -1 if the specified provider is not in the list.</summary>
 		public static int GetIndex(long provNum) {
 			//No need to check RemotingRole; no call to db.
-			//Gets the index of the provider in short list (visible providers)
 			for(int i=0;i<ProviderC.List.Length;i++){
 				if(ProviderC.List[i].ProvNum==provNum){
 					return i;
