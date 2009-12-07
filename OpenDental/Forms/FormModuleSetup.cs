@@ -397,9 +397,6 @@ namespace OpenDental{
 			this.checkShowFamilyCommByDefault.TabIndex = 75;
 			this.checkShowFamilyCommByDefault.Text = "Show Family Comm Entries By Default";
 			this.checkShowFamilyCommByDefault.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.toolTip1.SetToolTip(this.checkShowFamilyCommByDefault,"Generally used with \"Balances don\'t subtract insurance estimate\"\r\nchecked to the " +
-        "upper right of this option in the \"Statements\" section.\r\nHowever, it will work w" +
-        "ell either way.");
 			// 
 			// checkProviderIncomeShows
 			// 
@@ -411,9 +408,6 @@ namespace OpenDental{
 			this.checkProviderIncomeShows.TabIndex = 74;
 			this.checkProviderIncomeShows.Text = "Show provider income transfer window after entering insurance payment";
 			this.checkProviderIncomeShows.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.toolTip1.SetToolTip(this.checkProviderIncomeShows,"Generally used with \"Balances don\'t subtract insurance estimate\"\r\nchecked to the " +
-        "upper right of this option in the \"Statements\" section.\r\nHowever, it will work w" +
-        "ell either way.");
 			// 
 			// checkEclaimsSeparateTreatProv
 			// 

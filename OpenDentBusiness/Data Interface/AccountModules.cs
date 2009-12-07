@@ -794,16 +794,27 @@ namespace OpenDentBusiness {
 				if(rawPay.Rows[i]["UnearnedType"].ToString()!="0") {
 					row["description"]+=" - "+DefC.GetName(DefCat.PaySplitUnearnedType,PIn.PLong(rawPay.Rows[i]["UnearnedType"].ToString()));
 				}
+				if(rawPay.Rows[i]["PayType"].ToString()=="0") {//if a txfr, clear the description
+					row["description"]="";
+				}
 				//we might use DatePay here to add to description
 				if(rawPay.Rows[i]["PayNote"].ToString() !="" && showNotes) {
-					row["description"]+="\r\n"+rawPay.Rows[i]["PayNote"].ToString();
+					if(rawPay.Rows[i]["PayType"].ToString()!="0") {//if not a txfr
+						row["description"]+="\r\n";
+					}
+					row["description"]+=rawPay.Rows[i]["PayNote"].ToString();
 				}
 				row["patient"]=fam.GetNameInFamFirst(PIn.PLong(rawPay.Rows[i]["PatNum"].ToString()));
 				row["PatNum"]=rawPay.Rows[i]["PatNum"].ToString();
 				row["PayNum"]=rawPay.Rows[i]["PayNum"].ToString();
 				row["PayPlanNum"]="0";
 				row["PayPlanChargeNum"]="0";
-				row["ProcCode"]=Lans.g("AccountModule","Pay");
+				if(rawPay.Rows[i]["PayType"].ToString()=="0") {//if a txfr
+					row["ProcCode"]=Lans.g("AccountModule","Txfr");
+				}
+				else {
+					row["ProcCode"]=Lans.g("AccountModule","Pay");
+				}
 				row["ProcNum"]="0";
 				row["procsOnObj"]=PIn.PByteArray(rawPay.Rows[i]["ProcNums_"]);
 				row["prov"]=Providers.GetAbbr(PIn.PLong(rawPay.Rows[i]["ProvNum"].ToString()));

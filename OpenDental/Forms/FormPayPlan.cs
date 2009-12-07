@@ -1222,7 +1222,7 @@ namespace OpenDental{
 			}
 			else if(table.Rows[e.Row]["PayNum"].ToString()!="0"){
 				Payment pay=Payments.GetPayment(PIn.PLong(table.Rows[e.Row]["PayNum"].ToString()));
-				if(pay.PayType==0){//provider income transfer. I don't think this is possible, but you never know.
+				/*if(pay.PayType==0){//provider income transfer. I don't think this is possible, but you never know.
 					FormProviderIncTrans FormPIT=new FormProviderIncTrans();
 					FormPIT.PatNum=PatCur.PatNum;
 					FormPIT.PaymentCur=pay;
@@ -1232,14 +1232,14 @@ namespace OpenDental{
 						return;
 					}
 				}
-				else{
-					FormPayment FormPayment2=new FormPayment(PatCur,FamCur,pay);
-					FormPayment2.IsNew=false;
-					FormPayment2.ShowDialog();
-					if(FormPayment2.DialogResult==DialogResult.Cancel){
-						return;
-					}
+				else{*/
+				FormPayment FormPayment2=new FormPayment(PatCur,FamCur,pay);
+				FormPayment2.IsNew=false;
+				FormPayment2.ShowDialog();
+				if(FormPayment2.DialogResult==DialogResult.Cancel){
+					return;
 				}
+				//}
 			}
 			FillCharges();
 		}

@@ -3967,12 +3967,12 @@ namespace OpenDental{
 					Payment PaymentCur=new Payment();
 					PaymentCur.PayDate=DateTime.Today;
 					PaymentCur.PatNum=PatCur.PatNum;
+					PaymentCur.ClinicNum=PatCur.ClinicNum;
+					PaymentCur.PayType=0;//txfr
 					Payments.Insert(PaymentCur);
-					FormProviderIncTrans FormPIT=new FormProviderIncTrans();
-					FormPIT.IsNew=true;
-					FormPIT.PaymentCur=PaymentCur;
-					FormPIT.PatNum=PatCur.PatNum;
-					FormPIT.ShowDialog();
+					FormPayment Formp=new FormPayment(PatCur,FamCur,PaymentCur);
+					Formp.IsNew=true;
+					Formp.ShowDialog();
 				}
 			}
 			DialogResult=DialogResult.OK;

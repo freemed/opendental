@@ -2476,6 +2476,9 @@ namespace OpenDental {
 			PaymentCur.PayDate=DateTime.Today;
 			PaymentCur.PatNum=PatCur.PatNum;
 			PaymentCur.ClinicNum=PatCur.ClinicNum;
+			if(DefC.Short[(int)DefCat.PaymentTypes].Length>0){
+				PaymentCur.PayType=DefC.Short[(int)DefCat.PaymentTypes][0].DefNum;
+			}
 			Payments.Insert(PaymentCur);
 			FormPayment FormPayment2=new FormPayment(PatCur,FamCur,PaymentCur);
 			FormPayment2.IsNew=true;
@@ -2483,7 +2486,7 @@ namespace OpenDental {
 			ModuleSelected(PatCur.PatNum);
 		}
 
-		private void menuItemProvIncTrans_Click(object sender,EventArgs e) {
+		/*private void menuItemProvIncTrans_Click(object sender,EventArgs e) {
 			Payment PaymentCur=new Payment();
 			PaymentCur.PayDate=DateTime.Today;
 			PaymentCur.PatNum=PatCur.PatNum;
@@ -2495,7 +2498,7 @@ namespace OpenDental {
 			FormP.PatNum=PatCur.PatNum;
 			FormP.ShowDialog();
 			ModuleSelected(PatCur.PatNum);
-		}
+		}*/
 
 		private void OnAdj_Click() {
 			Adjustment AdjustmentCur=new Adjustment();
