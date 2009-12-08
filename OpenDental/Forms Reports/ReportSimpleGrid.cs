@@ -31,6 +31,8 @@ namespace OpenDental{
 		public List<string> Summary;
 		///<summary>This is a quick hack to allow printing account numbers on deposit slips in a different font.  It will typically be null.  It will be gone soon.</summary>
 		public string SummaryFont;
+		///<summary>If there are just too many columns for portrait.</summary>
+		public bool IsLandscape;
 
 		public ReportSimpleGrid() {
 			SubTitle=new List<string>();

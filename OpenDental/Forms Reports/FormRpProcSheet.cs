@@ -15,7 +15,6 @@ namespace OpenDental{
 		private System.Windows.Forms.MonthCalendar date2;
 		private System.Windows.Forms.MonthCalendar date1;
 		private System.Windows.Forms.Label labelTO;
-		private OpenDental.UI.Button butAll;
 		private System.Windows.Forms.ListBox listProv;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.RadioButton radioIndividual;
@@ -24,6 +23,7 @@ namespace OpenDental{
 	  private FormQuery FormQuery2;
 		private Label label2;
 		private TextBox textCode;
+		private CheckBox checkAllProv;
 		///<summary>The where clause for the providers.</summary>
 		private string whereProv;
 
@@ -56,7 +56,6 @@ namespace OpenDental{
 			this.date2 = new System.Windows.Forms.MonthCalendar();
 			this.date1 = new System.Windows.Forms.MonthCalendar();
 			this.labelTO = new System.Windows.Forms.Label();
-			this.butAll = new OpenDental.UI.Button();
 			this.listProv = new System.Windows.Forms.ListBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.radioIndividual = new System.Windows.Forms.RadioButton();
@@ -64,6 +63,7 @@ namespace OpenDental{
 			this.radioGrouped = new System.Windows.Forms.RadioButton();
 			this.label2 = new System.Windows.Forms.Label();
 			this.textCode = new System.Windows.Forms.TextBox();
+			this.checkAllProv = new System.Windows.Forms.CheckBox();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -118,31 +118,18 @@ namespace OpenDental{
 			this.labelTO.Text = "TO";
 			this.labelTO.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			// 
-			// butAll
-			// 
-			this.butAll.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butAll.Autosize = true;
-			this.butAll.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAll.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAll.CornerRadius = 4F;
-			this.butAll.Location = new System.Drawing.Point(519,189);
-			this.butAll.Name = "butAll";
-			this.butAll.Size = new System.Drawing.Size(75,26);
-			this.butAll.TabIndex = 34;
-			this.butAll.Text = "&All";
-			this.butAll.Click += new System.EventHandler(this.butAll_Click);
-			// 
 			// listProv
 			// 
-			this.listProv.Location = new System.Drawing.Point(518,33);
+			this.listProv.Location = new System.Drawing.Point(518,48);
 			this.listProv.Name = "listProv";
 			this.listProv.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
 			this.listProv.Size = new System.Drawing.Size(163,147);
 			this.listProv.TabIndex = 33;
+			this.listProv.Click += new System.EventHandler(this.listProv_Click);
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(518,14);
+			this.label1.Location = new System.Drawing.Point(516,14);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(104,16);
 			this.label1.TabIndex = 32;
@@ -196,16 +183,28 @@ namespace OpenDental{
 			this.textCode.Size = new System.Drawing.Size(100,20);
 			this.textCode.TabIndex = 38;
 			// 
+			// checkAllProv
+			// 
+			this.checkAllProv.Checked = true;
+			this.checkAllProv.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkAllProv.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkAllProv.Location = new System.Drawing.Point(518,30);
+			this.checkAllProv.Name = "checkAllProv";
+			this.checkAllProv.Size = new System.Drawing.Size(95,16);
+			this.checkAllProv.TabIndex = 48;
+			this.checkAllProv.Text = "All";
+			this.checkAllProv.Click += new System.EventHandler(this.checkAllProv_Click);
+			// 
 			// FormRpProcSheet
 			// 
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(724,437);
+			this.Controls.Add(this.checkAllProv);
 			this.Controls.Add(this.textCode);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.groupBox1);
-			this.Controls.Add(this.butAll);
 			this.Controls.Add(this.listProv);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.butCancel);
@@ -233,32 +232,41 @@ namespace OpenDental{
 			date2.SelectionStart=DateTime.Today;
 			for(int i=0;i<ProviderC.List.Length;i++){
 				listProv.Items.Add(ProviderC.List[i].GetLongDesc());
-				listProv.SetSelected(i,true);
 			}
 		}
 
-		private void butAll_Click(object sender, System.EventArgs e) {
-			for(int i=0;i<listProv.Items.Count;i++){
-				listProv.SetSelected(i,true);
+		private void checkAllProv_Click(object sender,EventArgs e) {
+			if(checkAllProv.Checked) {
+				listProv.SelectedIndices.Clear();
+			}
+		}
+
+		private void listProv_Click(object sender,EventArgs e) {
+			if(listProv.SelectedIndices.Count>0) {
+				checkAllProv.Checked=false;
 			}
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
 			//MessageBox.Show("This reporting feature is incomplete.");
 			//return;
-			if(listProv.SelectedIndices.Count==0){
+			if(!checkAllProv.Checked && listProv.SelectedIndices.Count==0) {
 				MsgBox.Show(this,"At least one provider must be selected.");
 				return;
 			}
-			whereProv="(";
-			for(int i=0;i<listProv.SelectedIndices.Count;i++){
-				if(i>0){
-					whereProv+="OR ";
+			whereProv="";
+			if(!checkAllProv.Checked) {
+				for(int i=0;i<listProv.SelectedIndices.Count;i++) {
+					if(i==0) {
+						whereProv+=" AND (";
+					}
+					else {
+						whereProv+="OR ";
+					}
+					whereProv+="procedurelog.ProvNum = "+POut.PLong(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+" ";
 				}
-				whereProv+="procedurelog.ProvNum = '"
-					+POut.PLong(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+"' ";
+				whereProv+=")";
 			}
-			whereProv+=")";
 			ReportSimpleGrid report=new ReportSimpleGrid();
 			if(radioIndividual.Checked){
 				CreateIndividual(report);
@@ -283,7 +291,7 @@ namespace OpenDental{
 				+"AND patient.PatNum=procedurelog.PatNum "
 				+"AND procedurelog.CodeNum=procedurecode.CodeNum "
 				+"AND provider.ProvNum=procedurelog.ProvNum "
-				+"AND "+whereProv+" "
+				+whereProv+" "
 				+"AND procedurecode.ProcCode LIKE '%"+POut.PString(textCode.Text)+"%' "
 				+"AND procedurelog.ProcDate >= " +POut.PDate(date1.SelectionStart)+" "
 				+"AND procedurelog.ProcDate <= " +POut.PDate(date2.SelectionStart)+" "
@@ -294,8 +302,20 @@ namespace OpenDental{
 			FormQuery2.SubmitReportQuery();			
 			report.Title="Daily Procedures";
 			report.SubTitle.Add(PrefC.GetString(PrefName.PracticeTitle));
-			report.SubTitle.Add(date1.SelectionStart.ToString("d")
-				+" - "+date2.SelectionStart.ToString("d"));	
+			report.SubTitle.Add(date1.SelectionStart.ToString("d")+" - "+date2.SelectionStart.ToString("d"));
+			if(checkAllProv.Checked) {
+				report.SubTitle.Add(Lan.g(this,"All Providers"));
+			}
+			else {
+				string provNames="";
+				for(int i=0;i<listProv.SelectedIndices.Count;i++) {
+					if(i>0) {
+						provNames+=", ";
+					}
+					provNames+=ProviderC.List[listProv.SelectedIndices[i]].Abbr;
+				}
+				report.SubTitle.Add(provNames);
+			}
 			report.SetColumnPos(this,0,"Date",80);
 			report.SetColumnPos(this,1,"Patient Name",230);
 			report.SetColumnPos(this,2,"ADA Code",305);
@@ -316,7 +336,7 @@ namespace OpenDental{
 				+"WHERE procedurelog.ProcStatus = '2' "
 				+"AND procedurelog.CodeNum=procedurecode.CodeNum "
 				+"AND definition.DefNum=procedurecode.ProcCat "
-				+"AND "+whereProv+" "
+				+whereProv+" "
 				+"AND procedurecode.ProcCode LIKE '%"+POut.PString(textCode.Text)+"%' "
 				+"AND procedurelog.ProcDate >= '" + date1.SelectionStart.ToString("yyyy-MM-dd")+"' "
 				+"AND procedurelog.ProcDate <= '" + date2.SelectionStart.ToString("yyyy-MM-dd")+"' "
@@ -327,8 +347,20 @@ namespace OpenDental{
 			FormQuery2.SubmitReportQuery();			
 			report.Title="Procedures By Procedure Code";
 			report.SubTitle.Add(PrefC.GetString(PrefName.PracticeTitle));
-			report.SubTitle.Add(date1.SelectionStart.ToString("d")
-				+" - "+date2.SelectionStart.ToString("d"));
+			report.SubTitle.Add(date1.SelectionStart.ToString("d")+" - "+date2.SelectionStart.ToString("d"));
+			if(checkAllProv.Checked) {
+				report.SubTitle.Add(Lan.g(this,"All Providers"));
+			}
+			else {
+				string provNames="";
+				for(int i=0;i<listProv.SelectedIndices.Count;i++) {
+					if(i>0) {
+						provNames+=", ";
+					}
+					provNames+=ProviderC.List[listProv.SelectedIndices[i]].Abbr;
+				}
+				report.SubTitle.Add(provNames);
+			}
 			report.SetColumnPos(this,0,"Category",150);
 			report.SetColumnPos(this,1,"Code",240);
 			report.SetColumnPos(this,2,"Description",420);

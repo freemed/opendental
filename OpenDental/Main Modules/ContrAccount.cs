@@ -2486,20 +2486,6 @@ namespace OpenDental {
 			ModuleSelected(PatCur.PatNum);
 		}
 
-		/*private void menuItemProvIncTrans_Click(object sender,EventArgs e) {
-			Payment PaymentCur=new Payment();
-			PaymentCur.PayDate=DateTime.Today;
-			PaymentCur.PatNum=PatCur.PatNum;
-			//PaymentCur.ClinicNum=PatCur.ClinicNum;
-			Payments.Insert(PaymentCur);
-			FormProviderIncTrans FormP=new FormProviderIncTrans();
-			FormP.IsNew=true;
-			FormP.PaymentCur=PaymentCur;
-			FormP.PatNum=PatCur.PatNum;
-			FormP.ShowDialog();
-			ModuleSelected(PatCur.PatNum);
-		}*/
-
 		private void OnAdj_Click() {
 			Adjustment AdjustmentCur=new Adjustment();
 			AdjustmentCur.DateEntry=DateTime.Today;//cannot be changed. Handled automatically

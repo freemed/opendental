@@ -32,8 +32,8 @@ namespace OpenDental{
 		private OpenDental.UI.Button butRight;
 		private FormQuery FormQuery2;
 		private DateTime dateFrom;
-		private ListBox listClinic;
-		private Label labelClinic;
+		private ListBox listClin;
+		private Label labelClin;
 		private DateTime dateTo;
 		///<summary>Can be set externally when automating.</summary>
 		public string DailyMonthlyAnnual;
@@ -43,6 +43,8 @@ namespace OpenDental{
 		private RadioButton radioWriteoffPay;
 		private RadioButton radioWriteoffProc;
 		private Label label5;
+		private CheckBox checkAllProv;
+		private CheckBox checkAllClin;
 		///<summary>If set externally, then this sets the date on startup.</summary>
 		public DateTime DateEnd;
 
@@ -86,12 +88,14 @@ namespace OpenDental{
 			this.textDateFrom = new OpenDental.ValidDate();
 			this.textDateTo = new OpenDental.ValidDate();
 			this.butLeft = new OpenDental.UI.Button();
-			this.listClinic = new System.Windows.Forms.ListBox();
-			this.labelClinic = new System.Windows.Forms.Label();
+			this.listClin = new System.Windows.Forms.ListBox();
+			this.labelClin = new System.Windows.Forms.Label();
 			this.groupBox3 = new System.Windows.Forms.GroupBox();
 			this.label5 = new System.Windows.Forms.Label();
 			this.radioWriteoffProc = new System.Windows.Forms.RadioButton();
 			this.radioWriteoffPay = new System.Windows.Forms.RadioButton();
+			this.checkAllProv = new System.Windows.Forms.CheckBox();
+			this.checkAllClin = new System.Windows.Forms.CheckBox();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.groupBox1.SuspendLayout();
@@ -110,11 +114,12 @@ namespace OpenDental{
 			// 
 			// listProv
 			// 
-			this.listProv.Location = new System.Drawing.Point(37,147);
+			this.listProv.Location = new System.Drawing.Point(37,165);
 			this.listProv.Name = "listProv";
 			this.listProv.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
 			this.listProv.Size = new System.Drawing.Size(154,186);
 			this.listProv.TabIndex = 30;
+			this.listProv.Click += new System.EventHandler(this.listProv_Click);
 			// 
 			// radioMonthly
 			// 
@@ -181,7 +186,7 @@ namespace OpenDental{
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(356,48);
+			this.label4.Location = new System.Drawing.Point(356,66);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(127,20);
 			this.label4.TabIndex = 41;
@@ -190,7 +195,7 @@ namespace OpenDental{
 			// 
 			// textToday
 			// 
-			this.textToday.Location = new System.Drawing.Point(485,46);
+			this.textToday.Location = new System.Drawing.Point(485,64);
 			this.textToday.Name = "textToday";
 			this.textToday.Size = new System.Drawing.Size(100,20);
 			this.textToday.TabIndex = 42;
@@ -205,7 +210,7 @@ namespace OpenDental{
 			this.groupBox2.Controls.Add(this.label3);
 			this.groupBox2.Controls.Add(this.butLeft);
 			this.groupBox2.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox2.Location = new System.Drawing.Point(390,72);
+			this.groupBox2.Location = new System.Drawing.Point(390,90);
 			this.groupBox2.Name = "groupBox2";
 			this.groupBox2.Size = new System.Drawing.Size(281,144);
 			this.groupBox2.TabIndex = 43;
@@ -268,29 +273,30 @@ namespace OpenDental{
 			this.butLeft.TabIndex = 44;
 			this.butLeft.Click += new System.EventHandler(this.butLeft_Click);
 			// 
-			// listClinic
+			// listClin
 			// 
-			this.listClinic.Location = new System.Drawing.Point(214,147);
-			this.listClinic.Name = "listClinic";
-			this.listClinic.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-			this.listClinic.Size = new System.Drawing.Size(154,186);
-			this.listClinic.TabIndex = 45;
+			this.listClin.Location = new System.Drawing.Point(215,165);
+			this.listClin.Name = "listClin";
+			this.listClin.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+			this.listClin.Size = new System.Drawing.Size(154,186);
+			this.listClin.TabIndex = 45;
+			this.listClin.Click += new System.EventHandler(this.listClin_Click);
 			// 
-			// labelClinic
+			// labelClin
 			// 
-			this.labelClinic.Location = new System.Drawing.Point(212,128);
-			this.labelClinic.Name = "labelClinic";
-			this.labelClinic.Size = new System.Drawing.Size(104,16);
-			this.labelClinic.TabIndex = 44;
-			this.labelClinic.Text = "Clinics";
-			this.labelClinic.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			this.labelClin.Location = new System.Drawing.Point(212,128);
+			this.labelClin.Name = "labelClin";
+			this.labelClin.Size = new System.Drawing.Size(104,16);
+			this.labelClin.TabIndex = 44;
+			this.labelClin.Text = "Clinics";
+			this.labelClin.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// groupBox3
 			// 
 			this.groupBox3.Controls.Add(this.label5);
 			this.groupBox3.Controls.Add(this.radioWriteoffProc);
 			this.groupBox3.Controls.Add(this.radioWriteoffPay);
-			this.groupBox3.Location = new System.Drawing.Point(390,238);
+			this.groupBox3.Location = new System.Drawing.Point(390,256);
 			this.groupBox3.Name = "groupBox3";
 			this.groupBox3.Size = new System.Drawing.Size(281,95);
 			this.groupBox3.TabIndex = 46;
@@ -329,6 +335,30 @@ namespace OpenDental{
 			this.radioWriteoffPay.TextAlign = System.Drawing.ContentAlignment.TopLeft;
 			this.radioWriteoffPay.UseVisualStyleBackColor = true;
 			// 
+			// checkAllProv
+			// 
+			this.checkAllProv.Checked = true;
+			this.checkAllProv.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkAllProv.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkAllProv.Location = new System.Drawing.Point(38,146);
+			this.checkAllProv.Name = "checkAllProv";
+			this.checkAllProv.Size = new System.Drawing.Size(95,16);
+			this.checkAllProv.TabIndex = 47;
+			this.checkAllProv.Text = "All";
+			this.checkAllProv.Click += new System.EventHandler(this.checkAllProv_Click);
+			// 
+			// checkAllClin
+			// 
+			this.checkAllClin.Checked = true;
+			this.checkAllClin.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkAllClin.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkAllClin.Location = new System.Drawing.Point(215,146);
+			this.checkAllClin.Name = "checkAllClin";
+			this.checkAllClin.Size = new System.Drawing.Size(95,16);
+			this.checkAllClin.TabIndex = 48;
+			this.checkAllClin.Text = "All";
+			this.checkAllClin.Click += new System.EventHandler(this.checkAllClin_Click);
+			// 
 			// butCancel
 			// 
 			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -337,7 +367,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(707,349);
+			this.butCancel.Location = new System.Drawing.Point(710,365);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,26);
 			this.butCancel.TabIndex = 4;
@@ -352,7 +382,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(707,314);
+			this.butOK.Location = new System.Drawing.Point(710,330);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,26);
 			this.butOK.TabIndex = 3;
@@ -362,10 +392,12 @@ namespace OpenDental{
 			// FormRpProdInc
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(815,401);
+			this.ClientSize = new System.Drawing.Size(818,417);
+			this.Controls.Add(this.checkAllClin);
+			this.Controls.Add(this.checkAllProv);
 			this.Controls.Add(this.groupBox3);
-			this.Controls.Add(this.listClinic);
-			this.Controls.Add(this.labelClinic);
+			this.Controls.Add(this.listClin);
+			this.Controls.Add(this.labelClin);
 			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.textToday);
 			this.Controls.Add(this.label4);
@@ -393,23 +425,20 @@ namespace OpenDental{
 		#endregion
 		private void FormProduction_Load(object sender, System.EventArgs e) {
 			textToday.Text=DateTime.Today.ToShortDateString();
-			listProv.Items.Add(Lan.g(this,"all"));
 			for(int i=0;i<ProviderC.List.Length;i++){
 				listProv.Items.Add(ProviderC.List[i].GetLongDesc());
 			}
-			listProv.SetSelected(0,true);
-			//if(PrefC.GetBool(PrefName.EasyNoClinics")){
-				listClinic.Visible=false;
-				labelClinic.Visible=false;
-			/*}
+			if(PrefC.GetBool(PrefName.EasyNoClinics)){
+				listClin.Visible=false;
+				labelClin.Visible=false;
+				checkAllClin.Visible=false;
+			}
 			else{
-				listClinic.Items.Add(Lan.g(this,"Unassigned"));
-				listClinic.SetSelected(0,true);
+				listClin.Items.Add(Lan.g(this,"Unassigned"));
 				for(int i=0;i<Clinics.List.Length;i++) {
-					listClinic.Items.Add(Clinics.List[i].Description);
-					listClinic.SetSelected(i+1,true);
+					listClin.Items.Add(Clinics.List[i].Description);
 				}
-			}*/
+			}
 			switch(DailyMonthlyAnnual){
 				case "Daily":
 					radioDaily.Checked=true;
@@ -437,6 +466,30 @@ namespace OpenDental{
 						break;
 				}
 				Close();
+			}
+		}
+
+		private void checkAllProv_Click(object sender,EventArgs e) {
+			if(checkAllProv.Checked) {
+				listProv.SelectedIndices.Clear();
+			}
+		}
+
+		private void listProv_Click(object sender,EventArgs e) {
+			if(listProv.SelectedIndices.Count>0) {
+				checkAllProv.Checked=false;
+			}
+		}
+
+		private void checkAllClin_Click(object sender,EventArgs e) {
+			if(checkAllClin.Checked) {
+				listClin.SelectedIndices.Clear();
+			}
+		}
+
+		private void listClin_Click(object sender,EventArgs e) {
+			if(listClin.SelectedIndices.Count>0) {
+				checkAllClin.Checked=false;
 			}
 		}
 
@@ -548,13 +601,14 @@ namespace OpenDental{
 			//PatientName
 			//Description
 			//Prov
+			//Clinic
 			//Production
 			//Adjustments
 			//Pt Income
 			//Ins Income
 			//last column is a unique id that is not displayed
 			string whereProv="";
-			if(listProv.SelectedIndices[0]!=0){
+			if(!checkAllProv.Checked){
 				for(int i=0;i<listProv.SelectedIndices.Count;i++){
 					if(i==0){
 						whereProv+=" AND (";
@@ -562,10 +616,27 @@ namespace OpenDental{
 					else{
 						whereProv+="OR ";
 					}
-					whereProv+="procedurelog.ProvNum = "
-						+POut.PLong(ProviderC.List[listProv.SelectedIndices[i]-1].ProvNum)+" ";
+					whereProv+="procedurelog.ProvNum = "+POut.PLong(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+" ";
 				}
 				whereProv+=") ";
+			}
+			string whereClin="";
+			if(!checkAllClin.Checked) {
+				for(int i=0;i<listClin.SelectedIndices.Count;i++) {
+					if(i==0) {
+						whereClin+=" AND (";
+					}
+					else {
+						whereClin+="OR ";
+					}
+					if(listClin.SelectedIndices[i]==0) {
+						whereClin+="procedurelog.ClinicNum = 0 ";
+					}
+					else {
+						whereClin+="procedurelog.ClinicNum = "+POut.PLong(Clinics.List[listClin.SelectedIndices[i]-1].ClinicNum)+" ";
+					}
+				}
+				whereClin+=") ";
 			}
 			ReportSimpleGrid report=new ReportSimpleGrid();
 			//Procedures------------------------------------------------------------------------------
@@ -574,6 +645,7 @@ namespace OpenDental{
 				+"CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName),' '),patient.MiddleI) AS namelf,"
 				+"procedurecode.Descript,"
 				+"provider.Abbr,"
+				+"procedurelog.ClinicNum,"
 				+"procedurelog.ProcFee*(CASE procedurelog.UnitQty+procedurelog.BaseUnits WHEN 0 THEN 1 ELSE procedurelog.UnitQty+procedurelog.BaseUnits END)-IFNULL(SUM(claimproc.WriteOff),0) $fee,"//if no writeoff, then subtract 0
 				+"'0000000000000' $Adj,"
 				+"'0000000000000' $InsW,"
@@ -588,13 +660,14 @@ namespace OpenDental{
 				+"AND procedurelog.CodeNum=procedurecode.CodeNum "
 				+"AND provider.ProvNum=procedurelog.ProvNum "
 				+whereProv
+				+whereClin
 				+"AND procedurelog.ProcDate >= " +POut.PDate(dateFrom)+" "
 				+"AND procedurelog.ProcDate <= " +POut.PDate(dateTo)+" "
 				+"GROUP BY procedurelog.ProcNum "
 				+") UNION (";
 			//Adjustments-----------------------------------------------------------------------------
 			whereProv="";
-			if(listProv.SelectedIndices[0]!=0){
+			if(!checkAllProv.Checked) {
 				for(int i=0;i<listProv.SelectedIndices.Count;i++){
 					if(i==0){
 						whereProv+=" AND (";
@@ -602,16 +675,34 @@ namespace OpenDental{
 					else{
 						whereProv+="OR ";
 					}
-					whereProv+="adjustment.ProvNum = "
-						+POut.PLong(ProviderC.List[listProv.SelectedIndices[i]-1].ProvNum)+" ";
+					whereProv+="adjustment.ProvNum = "+POut.PLong(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+" ";
 				}
 				whereProv+=") ";
+			}
+			whereClin="";
+			if(!checkAllClin.Checked) {
+				for(int i=0;i<listClin.SelectedIndices.Count;i++) {
+					if(i==0) {
+						whereClin+=" AND (";
+					}
+					else {
+						whereClin+="OR ";
+					}
+					if(listClin.SelectedIndices[i]==0) {
+						whereClin+="adjustment.ClinicNum = 0 ";
+					}
+					else {
+						whereClin+="adjustment.ClinicNum = "+POut.PLong(Clinics.List[listClin.SelectedIndices[i]-1].ClinicNum)+" ";
+					}
+				}
+				whereClin+=") ";
 			}
 			report.Query+="SELECT "
 				+"adjustment.AdjDate,"
 				+"CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName),' '),patient.MiddleI),"
 				+"definition.ItemName,"
 				+"provider.Abbr,"
+				+"adjustment.ClinicNum,"
 				+"'0',"
 				+"adjustment.AdjAmt,"
 				+"'0',"
@@ -623,12 +714,13 @@ namespace OpenDental{
 				+"AND provider.ProvNum=adjustment.ProvNum "
 			  +"AND patient.PatNum=adjustment.PatNum "
 				+whereProv
+				+whereClin
 				+"AND adjustment.AdjDate >= "+POut.PDate(dateFrom)+" "
 				+"AND adjustment.AdjDate <= "+POut.PDate(dateTo)
 				+") UNION (";
 			//Insurance Writeoff----------------------------------------------------------
 			whereProv="";
-			if(listProv.SelectedIndices[0]!=0){
+			if(!checkAllProv.Checked) {
 				for(int i=0;i<listProv.SelectedIndices.Count;i++){
 					if(i==0){
 						whereProv+=" AND (";
@@ -637,15 +729,34 @@ namespace OpenDental{
 						whereProv+="OR ";
 					}
 					whereProv+="claimproc.ProvNum = "
-						+POut.PLong(ProviderC.List[listProv.SelectedIndices[i]-1].ProvNum)+" ";
+						+POut.PLong(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+" ";
 				}
 				whereProv+=") ";
+			}
+			whereClin="";
+			if(!checkAllClin.Checked) {
+				for(int i=0;i<listClin.SelectedIndices.Count;i++) {
+					if(i==0) {
+						whereClin+=" AND (";
+					}
+					else {
+						whereClin+="OR ";
+					}
+					if(listClin.SelectedIndices[i]==0) {
+						whereClin+="claimproc.ClinicNum = 0 ";
+					}
+					else {
+						whereClin+="claimproc.ClinicNum = "+POut.PLong(Clinics.List[listClin.SelectedIndices[i]-1].ClinicNum)+" ";
+					}
+				}
+				whereClin+=") ";
 			}
 			if(radioWriteoffPay.Checked){
 				report.Query+="SELECT claimproc.DateCP,"
 					+"CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName),' '),patient.MiddleI),"
 					+"carrier.CarrierName,"
 					+"provider.Abbr,"
+					+"claimproc.ClinicNum,"
 					+"'0',"
 					+"'0',"
 					+"-SUM(claimproc.WriteOff),"
@@ -658,6 +769,7 @@ namespace OpenDental{
 					+"AND claimproc.PatNum = patient.PatNum "
 					+"AND carrier.CarrierNum = insplan.CarrierNum "
 					+whereProv
+					+whereClin
 					+"AND (claimproc.Status=1 OR claimproc.Status=4) "//received or supplemental
 					+"AND claimproc.WriteOff > '.0001' "
 					+"AND claimproc.DateCP >= "+POut.PDate(dateFrom)+" "
@@ -668,6 +780,7 @@ namespace OpenDental{
 					+"CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName),' '),patient.MiddleI),"
 					+"carrier.CarrierName,"
 					+"provider.Abbr,"
+					+"claimproc.ClinicNum,"
 					+"'0',"
 					+"'0',"
 					+"-SUM(claimproc.WriteOff),"
@@ -680,16 +793,17 @@ namespace OpenDental{
 					+"AND claimproc.PatNum = patient.PatNum "
 					+"AND carrier.CarrierNum = insplan.CarrierNum "
 					+whereProv
+					+whereClin
 					+"AND (claimproc.Status=1 OR claimproc.Status=4 OR claimproc.Status=0) "//received or supplemental or notreceived
 					+"AND claimproc.WriteOff > '.0001' "
 					+"AND claimproc.ProcDate >= "+POut.PDate(dateFrom)+" "
 					+"AND claimproc.ProcDate <= "+POut.PDate(dateTo)+" ";
 			}
-			report.Query+="GROUP BY claimproc.ClaimNum"
+			report.Query+="GROUP BY claimproc.ClaimProcNum"
 				+") UNION (";
 			//Patient Income------------------------------------------------------------------------------
 			whereProv="";
-			if(listProv.SelectedIndices[0]!=0){
+			if(!checkAllProv.Checked) {
 				for(int i=0;i<listProv.SelectedIndices.Count;i++){
 					if(i==0){
 						whereProv+=" AND (";
@@ -698,35 +812,58 @@ namespace OpenDental{
 						whereProv+="OR ";
 					}
 					whereProv+="paysplit.ProvNum = "
-						+POut.PLong(ProviderC.List[listProv.SelectedIndices[i]-1].ProvNum)+" ";
+						+POut.PLong(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+" ";
 				}
 				whereProv+=") ";
 			}
+			whereClin="";
+			if(!checkAllClin.Checked) {
+				for(int i=0;i<listClin.SelectedIndices.Count;i++) {
+					if(i==0) {
+						whereClin+=" AND (";
+					}
+					else {
+						whereClin+="OR ";
+					}
+					if(listClin.SelectedIndices[i]==0) {
+						whereClin+="paysplit.ClinicNum = 0 ";
+					}
+					else {
+						whereClin+="paysplit.ClinicNum = "+POut.PLong(Clinics.List[listClin.SelectedIndices[i]-1].ClinicNum)+" ";
+					}
+				}
+				whereClin+=") ";
+			}
 			report.Query+="SELECT "
 				+"paysplit.DatePay,"
-				+"GROUP_CONCAT(DISTINCT CONCAT(patient.LName,', ',patient.FName,' ',patient.MiddleI)),"
+				//+"GROUP_CONCAT(DISTINCT CONCAT(patient.LName,', ',patient.FName,' ',patient.MiddleI)),"
+				+"CONCAT(patient.LName,', ',patient.FName,' ',patient.MiddleI),"
 				+"definition.ItemName,"
-				+"GROUP_CONCAT(DISTINCT provider.Abbr),"
+				//+"GROUP_CONCAT(DISTINCT provider.Abbr),"
+				+"provider.Abbr,"
+				+"paysplit.ClinicNum,"
 				+"'0',"
 				+"'0',"
 				+"'0',"
 				+"SUM(paysplit.SplitAmt),"
 				+"'0',"
 				+"payment.PayNum "
-				+"FROM paysplit "//can't do cartesian join because provider income transfers would be excluded
+				+"FROM paysplit "//can't do cartesian join because income transfers would be excluded
 				+"LEFT JOIN payment ON payment.PayNum=paysplit.PayNum "
 				+"LEFT JOIN patient ON patient.PatNum=paysplit.PatNum "
 				+"LEFT JOIN provider ON provider.ProvNum=paysplit.ProvNum "
 				+"LEFT JOIN definition ON payment.PayType=definition.DefNum "
-				//notice that patient and prov are accurate, but if more than one, then only one shows
+				//notice that patient and prov are accurate, but if more than one, then only one shows//should be 'fixed'
 				+"WHERE payment.PayDate >= "+POut.PDate(dateFrom)+" "
 				+"AND payment.PayDate <= "+POut.PDate(dateTo)+" "
 				+whereProv
-				+"GROUP BY payment.PayNum"
+				+whereClin
+				//+"GROUP BY payment.PayNum"
+				+"GROUP BY paysplit.PatNum,paysplit.ProvNum,paysplit.ClinicNum"
 				+") UNION (";
 			//Insurance Income----------------------------------------------------------------------------
 			whereProv="";
-			if(listProv.SelectedIndices[0]!=0){
+			if(!checkAllProv.Checked) {
 				for(int i=0;i<listProv.SelectedIndices.Count;i++){
 					if(i==0){
 						whereProv+=" AND (";
@@ -735,15 +872,34 @@ namespace OpenDental{
 						whereProv+="OR ";
 					}
 					whereProv+="claimproc.ProvNum = "
-						+POut.PLong(ProviderC.List[listProv.SelectedIndices[i]-1].ProvNum)+" ";
+						+POut.PLong(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+" ";
 				}
 				whereProv+=") ";
 			}
+			whereClin="";
+			if(!checkAllClin.Checked) {
+				for(int i=0;i<listClin.SelectedIndices.Count;i++) {
+					if(i==0) {
+						whereClin+=" AND (";
+					}
+					else {
+						whereClin+="OR ";
+					}
+					if(listClin.SelectedIndices[i]==0) {
+						whereClin+="claimproc.ClinicNum = 0 ";
+					}
+					else {
+						whereClin+="claimproc.ClinicNum = "+POut.PLong(Clinics.List[listClin.SelectedIndices[i]-1].ClinicNum)+" ";
+					}
+				}
+				whereClin+=") ";
+			}
 			report.Query+="SELECT "
 				+"claimpayment.CheckDate,"
-				+"CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName),' '),patient.MiddleI),"
+				+"CONCAT(patient.LName,', ',patient.FName,' ',patient.MiddleI),"
 				+"carrier.CarrierName,"
 				+"provider.Abbr,"
+				+"claimproc.ClinicNum,"
 				+"'0',"
 				+"'0',"
 				+"'0',"
@@ -758,29 +914,121 @@ namespace OpenDental{
 				+"AND claimproc.PatNum = patient.PatNum "
 				+"AND carrier.CarrierNum = insplan.CarrierNum "
 				+whereProv
+				+whereClin
 				+"AND (claimproc.Status=1 OR claimproc.Status=4) "//received or supplemental
 				+"AND claimpayment.CheckDate >= "+POut.PDate(dateFrom)+" "
 				+"AND claimpayment.CheckDate <= "+POut.PDate(dateTo)+" "
-				+"GROUP BY claimproc.ClaimNum"
-				//+") ORDER BY procdate,namelf";//FIXME:UNION-ORDER-BY
-				+") ORDER BY 1,2";
+				//+"GROUP BY claimproc.ClaimNum"
+				+"GROUP BY claimproc.PatNum,claimproc.ProvNum,claimproc.PlanNum,claimproc.ClinicNum"
+				+") ORDER BY procdate,namelf";
 			//MessageBox.Show(report.Query);
 			FormQuery2=new FormQuery(report);
 			FormQuery2.IsReport=true;
-			FormQuery2.SubmitReportQuery();			
+			DataTable table=report.GetTempTable();
+			report.TableQ=new DataTable(null);
+			int colI=10;
+			if(!PrefC.GetBool(PrefName.EasyNoClinics)) {
+				colI=11;
+			}
+			for(int i=0;i<colI;i++) { //add columns
+				report.TableQ.Columns.Add(new System.Data.DataColumn());//blank columns
+			}
+			report.InitializeColumns();
+			DataRow row;
+			Double dbl;
+			for(int i=0;i<table.Rows.Count;i++) {
+				row = report.TableQ.NewRow();//create new row called 'row' based on structure of TableQ
+				row[0]=PIn.PDate(table.Rows[i][0].ToString()).ToShortDateString();
+				row[1]=table.Rows[i][1].ToString();//name
+				row[2]=table.Rows[i][2].ToString();//desc
+				row[3]=table.Rows[i][3].ToString();//prov
+				colI=4;
+				if(!PrefC.GetBool(PrefName.EasyNoClinics)) {
+					row[colI]=Clinics.GetDesc(PIn.PLong(table.Rows[i][4].ToString()));//clinic
+					colI++;
+				}
+				dbl=PIn.PDouble(table.Rows[i][5].ToString());//Prod
+				row[colI]=dbl.ToString("n");
+				report.ColTotal[colI]+=dbl;
+				colI++;
+				dbl=PIn.PDouble(table.Rows[i][6].ToString());//Adj
+				row[colI]=dbl.ToString("n");
+				report.ColTotal[colI]+=dbl;
+				colI++;
+				dbl=PIn.PDouble(table.Rows[i][7].ToString());//Writeoff
+				row[colI]=dbl.ToString("n");
+				report.ColTotal[colI]+=dbl;
+				colI++;
+				dbl=PIn.PDouble(table.Rows[i][8].ToString());//PtInc
+				row[colI]=dbl.ToString("n");
+				report.ColTotal[colI]+=dbl;
+				colI++;
+				dbl=PIn.PDouble(table.Rows[i][9].ToString());//InsInc
+				row[colI]=dbl.ToString("n");
+				report.ColTotal[colI]+=dbl;
+				colI++;
+				row[colI]=table.Rows[i][10].ToString();
+				report.TableQ.Rows.Add(row);
+			}
+			FormQuery2.ResetGrid();
+			//FormQuery2.SubmitReportQuery();
 			report.Title="Daily Production and Income";
 			report.SubTitle.Add(PrefC.GetString(PrefName.PracticeTitle));
-			report.SubTitle.Add(dateFrom.ToString("d")+" - "+dateTo.ToString("d"));	
-			report.SetColumnPos(this,0,"Date",80);
-			report.SetColumnPos(this,1,"Patient Name",210);
-			report.SetColumnPos(this,2,"Description",375);
-			report.SetColumnPos(this,3,"Prov",430);
-			report.SetColumnPos(this,4,"Production",495,HorizontalAlignment.Right);
-			report.SetColumnPos(this,5,"Adjustments",565,HorizontalAlignment.Right);
-			report.SetColumnPos(this,6,"Writeoff",630,HorizontalAlignment.Right);
-			report.SetColumnPos(this,7,"Pt Income",695,HorizontalAlignment.Right);
-			report.SetColumnPos(this,8,"Ins Income",760,HorizontalAlignment.Right);
-			report.SetColumnPos(this,9,"",1040,HorizontalAlignment.Right);
+			report.SubTitle.Add(dateFrom.ToString("d")+" - "+dateTo.ToString("d"));
+			if(checkAllProv.Checked) {
+				report.SubTitle.Add(Lan.g(this,"All Providers"));
+			}
+			else {
+				string provNames="";
+				for(int i=0;i<listProv.SelectedIndices.Count;i++) {
+					if(i>0) {
+						provNames+=", ";
+					}
+					provNames+=ProviderC.List[listProv.SelectedIndices[i]].Abbr;
+				}
+				report.SubTitle.Add(provNames);
+			}
+			if(!PrefC.GetBool(PrefName.EasyNoClinics)) {
+				report.IsLandscape=true;
+				if(checkAllClin.Checked) {
+					report.SubTitle.Add(Lan.g(this,"All Clinics"));
+				}
+				else {
+					string clinNames="";
+					for(int i=0;i<listClin.SelectedIndices.Count;i++) {
+						if(i>0) {
+							clinNames+=", ";
+						}
+						if(listClin.SelectedIndices[i]==0) {
+							clinNames+=Lan.g(this,"Unassigned");
+						}
+						else {
+							clinNames+=Clinics.List[listClin.SelectedIndices[i]-1].Description;
+						}
+					}
+					report.SubTitle.Add(clinNames);
+				}
+			}
+			report.SetColumn(this,0,"Date",80);
+			report.SetColumn(this,1,"Patient Name",130);
+			report.SetColumn(this,2,"Description",165);
+			report.SetColumn(this,3,"Prov",55);
+			colI=4;
+			if(!PrefC.GetBool(PrefName.EasyNoClinics)) {
+				report.SetColumn(this,colI,"Clinic",70);
+				colI++;
+			}
+			report.SetColumn(this,colI,"Production",65,HorizontalAlignment.Right);
+			colI++;
+			report.SetColumn(this,colI,"Adjust",70,HorizontalAlignment.Right);
+			colI++;
+			report.SetColumn(this,colI,"Writeoff",65,HorizontalAlignment.Right);
+			colI++;
+			report.SetColumn(this,colI,"Pt Income",65,HorizontalAlignment.Right);
+			colI++;
+			report.SetColumn(this,colI,"Ins Income",65,HorizontalAlignment.Right);
+			colI++;
+			report.SetColumn(this,colI,"",540,HorizontalAlignment.Right);
 			report.Summary.Add(
 				//=Lan.g(this,"Total Production (Production + Adjustments):")+" "
 				//+(report.ColTotal[4]+report.ColTotal[5]).ToString("c");
@@ -824,10 +1072,10 @@ Select procdate, sum(procfee) From procedurelog
 Group By procdate Order by procdate desc  
 */
 			ReportSimpleGrid report=new ReportSimpleGrid();
-			string whereProv;//used as the provider portion of the where clauses.
+			string whereProv,whereClin;//used as the provider portion of the where clauses.
 				//each whereProv needs to be set up separately for each query
 			whereProv="";
-			if(listProv.SelectedIndices[0]!=0){
+			if(!checkAllProv.Checked) {
 				for(int i=0;i<listProv.SelectedIndices.Count;i++){
 					if(i==0){
 						whereProv+=" AND (";
@@ -836,9 +1084,27 @@ Group By procdate Order by procdate desc
 						whereProv+="OR ";
 					}
 					whereProv+="procedurelog.ProvNum = "
-						+POut.PLong(ProviderC.List[listProv.SelectedIndices[i]-1].ProvNum)+" ";
+						+POut.PLong(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+" ";
 				}
 				whereProv+=") ";
+			}
+			whereClin="";
+			if(!checkAllClin.Checked) {
+				for(int i=0;i<listClin.SelectedIndices.Count;i++) {
+					if(i==0) {
+						whereClin+=" AND (";
+					}
+					else {
+						whereClin+="OR ";
+					}
+					if(listClin.SelectedIndices[i]==0) {
+						whereClin+="procedurelog.ClinicNum = 0 ";
+					}
+					else {
+						whereClin+="procedurelog.ClinicNum = "+POut.PLong(Clinics.List[listClin.SelectedIndices[i]-1].ClinicNum)+" ";
+					}
+				}
+				whereClin+=") ";
 			}
 			report.Query="SELECT procedurelog.ProcDate, "
 				+"SUM(procedurelog.ProcFee*(CASE procedurelog.UnitQty+procedurelog.BaseUnits WHEN 0 THEN 1 ELSE procedurelog.UnitQty+procedurelog.BaseUnits END)) "
@@ -847,6 +1113,7 @@ Group By procdate Order by procdate desc
 				+"AND procedurelog.ProcDate <= "+POut.PDate(dateTo)+" "
 				+"AND procedurelog.ProcStatus = '2' "//complete
 				+whereProv
+				+whereClin
 				+"GROUP BY procedurelog.ProcDate "
 				+"ORDER BY procedurelog.ProcDate";
 			TableCharge=report.GetTempTable();
@@ -859,7 +1126,7 @@ GROUP BY DateCP Order by DateCP
 */
 			report=new ReportSimpleGrid();
 			whereProv="";
-			if(listProv.SelectedIndices[0]!=0){
+			if(!checkAllProv.Checked) {
 				for(int i=0;i<listProv.SelectedIndices.Count;i++){
 					if(i==0){
 						whereProv+=" AND (";
@@ -868,15 +1135,34 @@ GROUP BY DateCP Order by DateCP
 						whereProv+="OR ";
 					}
 					whereProv+="claimproc.ProvNum = "
-						+POut.PLong(ProviderC.List[listProv.SelectedIndices[i]-1].ProvNum)+" ";
+						+POut.PLong(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+" ";
 				}
 				whereProv+=") ";
+			}
+			whereClin="";
+			if(!checkAllClin.Checked) {
+				for(int i=0;i<listClin.SelectedIndices.Count;i++) {
+					if(i==0) {
+						whereClin+=" AND (";
+					}
+					else {
+						whereClin+="OR ";
+					}
+					if(listClin.SelectedIndices[i]==0) {
+						whereClin+="claimproc.ClinicNum = 0 ";
+					}
+					else {
+						whereClin+="claimproc.ClinicNum = "+POut.PLong(Clinics.List[listClin.SelectedIndices[i]-1].ClinicNum)+" ";
+					}
+				}
+				whereClin+=") ";
 			}
 			report.Query="SELECT DateCP, SUM(WriteOff) FROM claimproc WHERE "
 				+"DateCP >= "+POut.PDate(dateFrom)+" "
 				+"AND DateCP <= "+POut.PDate(dateTo)+" "
 				+"AND Status = '7' "//CapComplete
 				+whereProv
+				+whereClin
 				+" GROUP BY DateCP "
 				+"ORDER BY DateCP"; 
 			TableCapWriteoff=report.GetTempTable();
@@ -889,7 +1175,7 @@ GROUP BY DateCP Order by DateCP
 */
 			report=new ReportSimpleGrid();
 			whereProv="";
-			if(listProv.SelectedIndices[0]!=0){
+			if(!checkAllProv.Checked) {
 				for(int i=0;i<listProv.SelectedIndices.Count;i++){
 					if(i==0){
 						whereProv+=" AND (";
@@ -898,9 +1184,27 @@ GROUP BY DateCP Order by DateCP
 						whereProv+="OR ";
 					}
 					whereProv+="ProvNum = "
-						+POut.PLong(ProviderC.List[listProv.SelectedIndices[i]-1].ProvNum)+" ";
+						+POut.PLong(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+" ";
 				}
 				whereProv+=") ";
+			}
+			whereClin="";
+			if(!checkAllClin.Checked) {
+				for(int i=0;i<listClin.SelectedIndices.Count;i++) {
+					if(i==0) {
+						whereClin+=" AND (";
+					}
+					else {
+						whereClin+="OR ";
+					}
+					if(listClin.SelectedIndices[i]==0) {
+						whereClin+="claimproc.ClinicNum = 0 ";
+					}
+					else {
+						whereClin+="claimproc.ClinicNum = "+POut.PLong(Clinics.List[listClin.SelectedIndices[i]-1].ClinicNum)+" ";
+					}
+				}
+				whereClin+=") ";
 			}
 			if(radioWriteoffPay.Checked){
 				report.Query="SELECT DateCP,SUM(WriteOff) FROM claimproc WHERE "
@@ -908,6 +1212,7 @@ GROUP BY DateCP Order by DateCP
 					+"AND DateCP <= "+POut.PDate(dateTo)+" "
 					+"AND (Status = '1' OR Status = 4) "//Recieved or supplemental. Otherwise, it's only an estimate.
 					+whereProv
+					+whereClin
 					+" GROUP BY DateCP "
 					+"ORDER BY DateCP"; 
 			}
@@ -917,6 +1222,7 @@ GROUP BY DateCP Order by DateCP
 					+"AND ProcDate <= "+POut.PDate(dateTo)+" "
 					+"AND (claimproc.Status=1 OR claimproc.Status=4 OR claimproc.Status=0) " //received or supplemental or notreceived
 					+whereProv
+					+whereClin
 					+" GROUP BY ProcDate "
 					+"ORDER BY ProcDate"; 
 			}
@@ -932,7 +1238,7 @@ GROUP BY SchedDate
 */
 			report=new ReportSimpleGrid();
 			whereProv="";
-			if(listProv.SelectedIndices[0]!=0){
+			if(!checkAllProv.Checked) {
 				for(int i=0;i<listProv.SelectedIndices.Count;i++){
 					if(i==0){
 						whereProv+=" AND (";
@@ -941,9 +1247,27 @@ GROUP BY SchedDate
 						whereProv+="OR ";
 					}
 					whereProv+="procedurelog.ProvNum = "
-						+POut.PLong(ProviderC.List[listProv.SelectedIndices[i]-1].ProvNum)+" ";
+						+POut.PLong(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+" ";
 				}
 				whereProv+=") ";
+			}
+			whereClin="";
+			if(!checkAllClin.Checked) {
+				for(int i=0;i<listClin.SelectedIndices.Count;i++) {
+					if(i==0) {
+						whereClin+=" AND (";
+					}
+					else {
+						whereClin+="OR ";
+					}
+					if(listClin.SelectedIndices[i]==0) {
+						whereClin+="procedurelog.ClinicNum = 0 ";
+					}
+					else {
+						whereClin+="procedurelog.ClinicNum = "+POut.PLong(Clinics.List[listClin.SelectedIndices[i]-1].ClinicNum)+" ";
+					}
+				}
+				whereClin+=") ";
 			}
 			report.Query= "SELECT FROM_DAYS(TO_DAYS(appointment.AptDateTime)) "//gets rid of time
 			  +"SchedDate,SUM(procedurelog.ProcFee) FROM appointment,procedurelog WHERE "
@@ -955,6 +1279,7 @@ GROUP BY SchedDate
 				+"AND FROM_DAYS(TO_DAYS(appointment.AptDateTime)) <= "
 				+POut.PDate(dateTo)+" "
 				+whereProv
+				+whereClin
 				+" GROUP BY SchedDate "
 				+"ORDER BY SchedDate"; 
 			TableSched=report.GetTempTable();
@@ -972,7 +1297,7 @@ group by claimpayment.checkdate order by procdate
 */
 			report=new ReportSimpleGrid();
 			whereProv="";
-			if(listProv.SelectedIndices[0]!=0){
+			if(!checkAllProv.Checked) {
 				for(int i=0;i<listProv.SelectedIndices.Count;i++){
 					if(i==0){
 						whereProv+=" AND (";
@@ -981,15 +1306,34 @@ group by claimpayment.checkdate order by procdate
 						whereProv+="OR ";
 					}
 					whereProv+="paysplit.ProvNum = "
-						+POut.PLong(ProviderC.List[listProv.SelectedIndices[i]-1].ProvNum)+" ";
+						+POut.PLong(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+" ";
 				}
 				whereProv+=") ";
+			}
+			whereClin="";
+			if(!checkAllClin.Checked) {
+				for(int i=0;i<listClin.SelectedIndices.Count;i++) {
+					if(i==0) {
+						whereClin+=" AND (";
+					}
+					else {
+						whereClin+="OR ";
+					}
+					if(listClin.SelectedIndices[i]==0) {
+						whereClin+="paysplit.ClinicNum = 0 ";
+					}
+					else {
+						whereClin+="paysplit.ClinicNum = "+POut.PLong(Clinics.List[listClin.SelectedIndices[i]-1].ClinicNum)+" ";
+					}
+				}
+				whereClin+=") ";
 			}
 			report.Query= "SELECT paysplit.DatePay,SUM(paysplit.splitamt) FROM paysplit "
 				+"WHERE paysplit.IsDiscount = '0' "
 				+"AND paysplit.DatePay >= "+POut.PDate(dateFrom)+" "
 				+"AND paysplit.DatePay <= "+POut.PDate(dateTo)+" "
 				+whereProv
+				+whereClin
 				+" GROUP BY paysplit.DatePay ORDER BY DatePay";
 			TablePay=report.GetTempTable();
 
@@ -1002,7 +1346,7 @@ group by claimpayment.checkdate order by procdate
 */
 			report=new ReportSimpleGrid();
 			whereProv="";
-			if(listProv.SelectedIndices[0]!=0){
+			if(!checkAllProv.Checked) {
 				for(int i=0;i<listProv.SelectedIndices.Count;i++){
 					if(i==0){
 						whereProv+=" AND (";
@@ -1011,9 +1355,27 @@ group by claimpayment.checkdate order by procdate
 						whereProv+="OR ";
 					}
 					whereProv+="claimproc.ProvNum = "
-						+POut.PLong(ProviderC.List[listProv.SelectedIndices[i]-1].ProvNum)+" ";
+						+POut.PLong(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+" ";
 				}
 				whereProv+=") ";
+			}
+			whereClin="";
+			if(!checkAllClin.Checked) {
+				for(int i=0;i<listClin.SelectedIndices.Count;i++) {
+					if(i==0) {
+						whereClin+=" AND (";
+					}
+					else {
+						whereClin+="OR ";
+					}
+					if(listClin.SelectedIndices[i]==0) {
+						whereClin+="claimproc.ClinicNum = 0 ";
+					}
+					else {
+						whereClin+="claimproc.ClinicNum = "+POut.PLong(Clinics.List[listClin.SelectedIndices[i]-1].ClinicNum)+" ";
+					}
+				}
+				whereClin+=") ";
 			}
 			report.Query= "SELECT claimpayment.CheckDate,SUM(claimproc.InsPayamt) "
 				+"FROM claimpayment,claimproc WHERE "
@@ -1022,6 +1384,7 @@ group by claimpayment.checkdate order by procdate
 				+"AND claimpayment.CheckDate >= " + POut.PDate(dateFrom)+" "
 				+"AND claimpayment.CheckDate <= " + POut.PDate(dateTo)+" "
 				+whereProv
+				+whereClin
 				+" GROUP BY claimpayment.CheckDate ORDER BY checkdate";			
 			TableIns=report.GetTempTable();
 // End TableIns, SPK 3/16/04
@@ -1036,7 +1399,7 @@ ORDER BY adjdate DESC
 */ 
   		report=new ReportSimpleGrid();
 			whereProv="";
-			if(listProv.SelectedIndices[0]!=0){
+			if(!checkAllProv.Checked) {
 				for(int i=0;i<listProv.SelectedIndices.Count;i++){
 					if(i==0){
 						whereProv+=" AND (";
@@ -1045,14 +1408,33 @@ ORDER BY adjdate DESC
 						whereProv+="OR ";
 					}
 					whereProv+="ProvNum = "
-						+POut.PLong(ProviderC.List[listProv.SelectedIndices[i]-1].ProvNum)+" ";
+						+POut.PLong(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+" ";
 				}
 				whereProv+=") ";
+			}
+			whereClin="";
+			if(!checkAllClin.Checked) {
+				for(int i=0;i<listClin.SelectedIndices.Count;i++) {
+					if(i==0) {
+						whereClin+=" AND (";
+					}
+					else {
+						whereClin+="OR ";
+					}
+					if(listClin.SelectedIndices[i]==0) {
+						whereClin+="adjustment.ClinicNum = 0 ";
+					}
+					else {
+						whereClin+="adjustment.ClinicNum = "+POut.PLong(Clinics.List[listClin.SelectedIndices[i]-1].ClinicNum)+" ";
+					}
+				}
+				whereClin+=") ";
 			}
 			report.Query="SELECT adjdate, SUM(adjamt) FROM adjustment WHERE "
 				+"adjdate >= "+POut.PDate(dateFrom)+" "
 				+"AND adjdate <= "+POut.PDate(dateTo)+" "
 				+whereProv
+				+whereClin
 				+" GROUP BY adjdate ORDER BY adjdate"; 
 			TableAdj=report.GetTempTable();
 
@@ -1150,7 +1532,7 @@ ORDER BY adjdate DESC
 			report.Title="Production and Income";
 			report.SubTitle.Add(PrefC.GetString(PrefName.PracticeTitle));
 			report.SubTitle.Add(textDateFrom.Text+" - "+textDateTo.Text);
-			if(listProv.SelectedIndices[0]==0){//allProv){
+			if(checkAllProv.Checked) {
 				report.SubTitle.Add(Lan.g(this,"All Providers"));
 			}
 			else{
@@ -1159,9 +1541,29 @@ ORDER BY adjdate DESC
 					if(i>0){
 						str+=", ";
 					}
-					str+=ProviderC.List[listProv.SelectedIndices[i]-1].Abbr;
+					str+=ProviderC.List[listProv.SelectedIndices[i]].Abbr;
 				}
 				report.SubTitle.Add(str);
+			}
+			if(!PrefC.GetBool(PrefName.EasyNoClinics)) {
+				if(checkAllClin.Checked) {
+					report.SubTitle.Add(Lan.g(this,"All Clinics"));
+				}
+				else {
+					string clinNames="";
+					for(int i=0;i<listClin.SelectedIndices.Count;i++) {
+						if(i>0) {
+							clinNames+=", ";
+						}
+						if(listClin.SelectedIndices[i]==0) {
+							clinNames+=Lan.g(this,"Unassigned");
+						}
+						else {
+							clinNames+=Clinics.List[listClin.SelectedIndices[i]-1].Description;
+						}
+					}
+					report.SubTitle.Add(clinNames);
+				}
 			}
 			report.Summary.Add(
 				//=Lan.g(this,"Total Production (Production + Scheduled + Adjustments):")+" "
@@ -1232,7 +1634,7 @@ ORDER BY adjdate DESC
 			ReportSimpleGrid report=new ReportSimpleGrid();
 			//Procedures------------------------------------------------------------------------------
 			string whereProv="";
-			if(listProv.SelectedIndices[0]!=0){
+			if(!checkAllProv.Checked) {
 				for(int i=0;i<listProv.SelectedIndices.Count;i++){
 					if(i==0){
 						whereProv+=" AND (";
@@ -1241,9 +1643,27 @@ ORDER BY adjdate DESC
 						whereProv+="OR ";
 					}
 					whereProv+="procedurelog.ProvNum = "
-						+POut.PLong(ProviderC.List[listProv.SelectedIndices[i]-1].ProvNum)+" ";
+						+POut.PLong(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+" ";
 				}
 				whereProv+=") ";
+			}
+			string whereClin="";
+			if(!checkAllClin.Checked) {
+				for(int i=0;i<listClin.SelectedIndices.Count;i++) {
+					if(i==0) {
+						whereClin+=" AND (";
+					}
+					else {
+						whereClin+="OR ";
+					}
+					if(listClin.SelectedIndices[i]==0) {
+						whereClin+="procedurelog.ClinicNum = 0 ";
+					}
+					else {
+						whereClin+="procedurelog.ClinicNum = "+POut.PLong(Clinics.List[listClin.SelectedIndices[i]-1].ClinicNum)+" ";
+					}
+				}
+				whereClin+=") ";
 			}
 			report.Query="SELECT "
 				+"procedurelog.ProcDate,"
@@ -1253,6 +1673,7 @@ ORDER BY adjdate DESC
 				+"AND claimproc.Status='7' "//only CapComplete writeoffs are subtracted here.
 				+"WHERE procedurelog.ProcStatus = '2' "
 				+whereProv
+				+whereClin
 				+"AND procedurelog.ProcDate >= " +POut.PDate(dateFrom)+" "
 				+"AND procedurelog.ProcDate <= " +POut.PDate(dateTo)+" "
 				+"GROUP BY MONTH(procedurelog.ProcDate)";
@@ -1260,7 +1681,7 @@ ORDER BY adjdate DESC
 			TableProduction=report.GetTempTable();
 			//Adjustments----------------------------------------------------------------------------
 			whereProv="";
-			if(listProv.SelectedIndices[0]!=0){
+			if(!checkAllProv.Checked) {
 				for(int i=0;i<listProv.SelectedIndices.Count;i++){
 					if(i==0){
 						whereProv+=" AND (";
@@ -1269,9 +1690,27 @@ ORDER BY adjdate DESC
 						whereProv+="OR ";
 					}
 					whereProv+="adjustment.ProvNum = "
-						+POut.PLong(ProviderC.List[listProv.SelectedIndices[i]-1].ProvNum)+" ";
+						+POut.PLong(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+" ";
 				}
 				whereProv+=") ";
+			}
+			whereClin="";
+			if(!checkAllClin.Checked) {
+				for(int i=0;i<listClin.SelectedIndices.Count;i++) {
+					if(i==0) {
+						whereClin+=" AND (";
+					}
+					else {
+						whereClin+="OR ";
+					}
+					if(listClin.SelectedIndices[i]==0) {
+						whereClin+="adjustment.ClinicNum = 0 ";
+					}
+					else {
+						whereClin+="adjustment.ClinicNum = "+POut.PLong(Clinics.List[listClin.SelectedIndices[i]-1].ClinicNum)+" ";
+					}
+				}
+				whereClin+=") ";
 			}
 			report.Query="SELECT "
 				+"adjustment.AdjDate,"
@@ -1280,11 +1719,12 @@ ORDER BY adjdate DESC
 				+"WHERE adjustment.AdjDate >= "+POut.PDate(dateFrom)+" "
 				+"AND adjustment.AdjDate <= "+POut.PDate(dateTo)+" "
 				+whereProv
+				+whereClin
 				+"GROUP BY MONTH(adjustment.AdjDate)";
 			TableAdj=report.GetTempTable();
 			//TableInsWriteoff--------------------------------------------------------------------------
 			whereProv="";
-			if(listProv.SelectedIndices[0]!=0){
+			if(!checkAllProv.Checked) {
 				for(int i=0;i<listProv.SelectedIndices.Count;i++){
 					if(i==0){
 						whereProv+=" AND (";
@@ -1293,9 +1733,27 @@ ORDER BY adjdate DESC
 						whereProv+="OR ";
 					}
 					whereProv+="ProvNum = "
-						+POut.PLong(ProviderC.List[listProv.SelectedIndices[i]-1].ProvNum)+" ";
+						+POut.PLong(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+" ";
 				}
 				whereProv+=") ";
+			}
+			whereClin="";
+			if(!checkAllClin.Checked) {
+				for(int i=0;i<listClin.SelectedIndices.Count;i++) {
+					if(i==0) {
+						whereClin+=" AND (";
+					}
+					else {
+						whereClin+="OR ";
+					}
+					if(listClin.SelectedIndices[i]==0) {
+						whereClin+="claimproc.ClinicNum = 0 ";
+					}
+					else {
+						whereClin+="claimproc.ClinicNum = "+POut.PLong(Clinics.List[listClin.SelectedIndices[i]-1].ClinicNum)+" ";
+					}
+				}
+				whereClin+=") ";
 			}
 			if(radioWriteoffPay.Checked){
 				report.Query="SELECT "
@@ -1305,6 +1763,7 @@ ORDER BY adjdate DESC
 					+"WHERE claimproc.DateCP >= "+POut.PDate(dateFrom)+" "
 					+"AND claimproc.DateCP <= "+POut.PDate(dateTo)+" "
 					+whereProv
+					+whereClin
 					+"AND (claimproc.Status=1 OR claimproc.Status=4) "//Received or supplemental
 					+"GROUP BY MONTH(claimproc.DateCP)";
 			}
@@ -1316,13 +1775,14 @@ ORDER BY adjdate DESC
 					+"WHERE claimproc.ProcDate >= "+POut.PDate(dateFrom)+" "
 					+"AND claimproc.ProcDate <= "+POut.PDate(dateTo)+" "
 					+whereProv
+					+whereClin
 					+"AND (claimproc.Status=1 OR claimproc.Status=4 OR claimproc.Status=0) " //received or supplemental or notreceived
 					+"GROUP BY MONTH(claimproc.ProcDate)";
 			}
 			TableInsWriteoff=report.GetTempTable();
 			//PtIncome--------------------------------------------------------------------------------
 			whereProv="";
-			if(listProv.SelectedIndices[0]!=0){
+			if(!checkAllProv.Checked) {
 				for(int i=0;i<listProv.SelectedIndices.Count;i++){
 					if(i==0){
 						whereProv+=" AND (";
@@ -1331,9 +1791,27 @@ ORDER BY adjdate DESC
 						whereProv+="OR ";
 					}
 					whereProv+="paysplit.ProvNum = "
-						+POut.PLong(ProviderC.List[listProv.SelectedIndices[i]-1].ProvNum)+" ";
+						+POut.PLong(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+" ";
 				}
 				whereProv+=") ";
+			}
+			whereClin="";
+			if(!checkAllClin.Checked) {
+				for(int i=0;i<listClin.SelectedIndices.Count;i++) {
+					if(i==0) {
+						whereClin+=" AND (";
+					}
+					else {
+						whereClin+="OR ";
+					}
+					if(listClin.SelectedIndices[i]==0) {
+						whereClin+="paysplit.ClinicNum = 0 ";
+					}
+					else {
+						whereClin+="paysplit.ClinicNum = "+POut.PLong(Clinics.List[listClin.SelectedIndices[i]-1].ClinicNum)+" ";
+					}
+				}
+				whereClin+=") ";
 			}
 			report.Query="SELECT "
 				+"paysplit.DatePay,"
@@ -1341,13 +1819,14 @@ ORDER BY adjdate DESC
 				+"FROM paysplit "
 				+"WHERE paysplit.IsDiscount=0 "//AND paysplit.PayNum=payment.PayNum "
 				+whereProv
+				+whereClin
 				+"AND paysplit.DatePay >= "+POut.PDate(dateFrom)+" "
 				+"AND paysplit.DatePay <= "+POut.PDate(dateTo)+" "
 				+"GROUP BY MONTH(paysplit.DatePay)";
 			TablePay=report.GetTempTable();
 			//InsIncome---------------------------------------------------------------------------------
 			whereProv="";
-			if(listProv.SelectedIndices[0]!=0){
+			if(!checkAllProv.Checked) {
 				for(int i=0;i<listProv.SelectedIndices.Count;i++){
 					if(i==0){
 						whereProv+=" AND (";
@@ -1356,9 +1835,27 @@ ORDER BY adjdate DESC
 						whereProv+="OR ";
 					}
 					whereProv+="claimproc.ProvNum = "
-						+POut.PLong(ProviderC.List[listProv.SelectedIndices[i]-1].ProvNum)+" ";
+						+POut.PLong(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+" ";
 				}
 				whereProv+=") ";
+			}
+			whereClin="";
+			if(!checkAllClin.Checked) {
+				for(int i=0;i<listClin.SelectedIndices.Count;i++) {
+					if(i==0) {
+						whereClin+=" AND (";
+					}
+					else {
+						whereClin+="OR ";
+					}
+					if(listClin.SelectedIndices[i]==0) {
+						whereClin+="claimproc.ClinicNum = 0 ";
+					}
+					else {
+						whereClin+="claimproc.ClinicNum = "+POut.PLong(Clinics.List[listClin.SelectedIndices[i]-1].ClinicNum)+" ";
+					}
+				}
+				whereClin+=") ";
 			}
 			report.Query= "SELECT claimpayment.CheckDate,SUM(claimproc.InsPayamt) "
 				+"FROM claimpayment,claimproc WHERE "
@@ -1366,6 +1863,7 @@ ORDER BY adjdate DESC
 				+"AND claimpayment.CheckDate >= " + POut.PDate(dateFrom)+" "
 				+"AND claimpayment.CheckDate <= " + POut.PDate(dateTo)+" "
 				+whereProv
+				+whereClin
 				+" GROUP BY claimpayment.CheckDate ORDER BY checkdate";
 			TableIns=report.GetTempTable(); 
 			report.TableQ=new DataTable(null);//new table with 7 columns
@@ -1410,7 +1908,6 @@ ORDER BY adjdate DESC
 						adjust+=PIn.PDouble(TableAdj.Rows[j][1].ToString());
 					}
    			}
-				// ***** added for inswriteoff, spk 5/19/05
 				for(int j=0;j<TableInsWriteoff.Rows.Count; j++){
 					if(dates[i].Year==PIn.PDate(TableInsWriteoff.Rows[j][0].ToString()).Year
 						&& dates[i].Month==PIn.PDate(TableInsWriteoff.Rows[j][0].ToString()).Month){
@@ -1433,14 +1930,14 @@ ORDER BY adjdate DESC
 				totalincome=ptincome+insincome;
 				row[1]=production.ToString("n");
 				row[2]=adjust.ToString("n");
-				row[3]=inswriteoff.ToString("n");	//spk
+				row[3]=inswriteoff.ToString("n");
 				row[4]=totalproduction.ToString("n");
 				row[5]=ptincome.ToString("n");
 				row[6]=insincome.ToString("n");		
 				row[7]=totalincome.ToString("n");
 				report.ColTotal[1]+=production;
 				report.ColTotal[2]+=adjust;	
-				report.ColTotal[3]+=inswriteoff;	//spk	
+				report.ColTotal[3]+=inswriteoff;
 				report.ColTotal[4]+=totalproduction;	
 				report.ColTotal[5]+=ptincome;	
 				report.ColTotal[6]+=insincome;	
@@ -1453,7 +1950,7 @@ ORDER BY adjdate DESC
 			report.Title="Annual Production and Income";
 			report.SubTitle.Add(PrefC.GetString(PrefName.PracticeTitle));
 			report.SubTitle.Add(textDateFrom.Text+" - "+textDateTo.Text);
-			if(listProv.SelectedIndices[0]==0){//allProv){
+			if(checkAllProv.Checked) {
 				report.SubTitle.Add(Lan.g(this,"All Providers"));
 			}
 			else{
@@ -1462,17 +1959,30 @@ ORDER BY adjdate DESC
 					if(i>0){
 						str+=", ";
 					}
-					str+=ProviderC.List[listProv.SelectedIndices[i]-1].Abbr;
+					str+=ProviderC.List[listProv.SelectedIndices[i]].Abbr;
 				}
 				report.SubTitle.Add(str);
 			}
-			/*report.Summary[0]
-				=Lan.g(this,"Total Production (Production + Scheduled + Adjustments):")+" "
-				+(report.ColTotal[2]+report.ColTotal[3]
-				+report.ColTotal[4]).ToString("c");
-			report.Summary[2]
-				=Lan.g(this,"Total Income (Pt Income + Ins Income):")+" "
-				+(report.ColTotal[5]+report.ColTotal[6]).ToString("c");*/
+			if(!PrefC.GetBool(PrefName.EasyNoClinics)) {
+				if(checkAllClin.Checked) {
+					report.SubTitle.Add(Lan.g(this,"All Clinics"));
+				}
+				else {
+					string clinNames="";
+					for(int i=0;i<listClin.SelectedIndices.Count;i++) {
+						if(i>0) {
+							clinNames+=", ";
+						}
+						if(listClin.SelectedIndices[i]==0) {
+							clinNames+=Lan.g(this,"Unassigned");
+						}
+						else {
+							clinNames+=Clinics.List[listClin.SelectedIndices[i]-1].Description;
+						}
+					}
+					report.SubTitle.Add(clinNames);
+				}
+			}
 			report.ColPos[0]=20;
 			report.ColPos[1]=120;
 			report.ColPos[2]=210;
@@ -1514,18 +2024,16 @@ ORDER BY adjdate DESC
 				MsgBox.Show(this,"Please fix data entry errors first.");
 				return;
 			}
-			if(listProv.SelectedIndices.Count==0){
-				MsgBox.Show(this,"You must select at least one provider.");
+			if(!checkAllProv.Checked && listProv.SelectedIndices.Count==0){
+				MsgBox.Show(this,"At least one provider must be selected.");
 				return;
 			}
-			if(listProv.SelectedIndices[0]==0 && listProv.SelectedIndices.Count>1){
-				MsgBox.Show(this,"You cannot select 'all' providers as well as specific providers.");
-				return;
+			if(!PrefC.GetBool(PrefName.EasyNoClinics)) {
+				if(!checkAllClin.Checked && listClin.SelectedIndices.Count==0) {
+					MsgBox.Show(this,"At least one clinic must be selected.");
+					return;
+				}
 			}
-			//if(!PrefC.GetBool(PrefName.EasyNoClinics") && listClinic.SelectedIndices.Count==0) {
-			//	MessageBox.Show(Lan.g(this,"You must select at least one clinic."));
-			//	return;
-			//}
 			dateFrom=PIn.PDate(textDateFrom.Text);
 			dateTo=PIn.PDate(textDateTo.Text);
 			if(radioDaily.Checked){
@@ -1535,8 +2043,8 @@ ORDER BY adjdate DESC
 				RunMonthly();
 			}
 			else{//annual
-				if(dateFrom.AddYears(1) <= dateTo) {
-					MsgBox.Show(this,"Date range for annual report cannot be greater than one year.");
+				if(dateFrom.AddYears(1) <= dateTo || dateFrom.Year != dateTo.Year) {
+					MsgBox.Show(this,"Date range for annual report cannot be greater than one year and must be within the same year.");
 					return;
 				}
 				RunAnnual();
@@ -1547,6 +2055,12 @@ ORDER BY adjdate DESC
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+	
+
+	
+
+		
 
 		
 

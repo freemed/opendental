@@ -50,8 +50,6 @@ namespace OpenDental{
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormRpPaySheet));
-			this.butCancel = new OpenDental.UI.Button();
-			this.butOK = new OpenDental.UI.Button();
 			this.date2 = new System.Windows.Forms.MonthCalendar();
 			this.date1 = new System.Windows.Forms.MonthCalendar();
 			this.labelTO = new System.Windows.Forms.Label();
@@ -64,38 +62,10 @@ namespace OpenDental{
 			this.checkAllTypes = new System.Windows.Forms.CheckBox();
 			this.listTypes = new System.Windows.Forms.ListBox();
 			this.checkIns = new System.Windows.Forms.CheckBox();
+			this.butCancel = new OpenDental.UI.Button();
+			this.butOK = new OpenDental.UI.Button();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
-			// 
-			// butCancel
-			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCancel.CornerRadius = 4F;
-			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(702,468);
-			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,26);
-			this.butCancel.TabIndex = 4;
-			this.butCancel.Text = "&Cancel";
-			// 
-			// butOK
-			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(702,433);
-			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,26);
-			this.butOK.TabIndex = 3;
-			this.butOK.Text = "&OK";
-			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
 			// date2
 			// 
@@ -125,6 +95,7 @@ namespace OpenDental{
 			this.listProv.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
 			this.listProv.Size = new System.Drawing.Size(163,199);
 			this.listProv.TabIndex = 36;
+			this.listProv.Click += new System.EventHandler(this.listProv_Click);
 			// 
 			// label1
 			// 
@@ -207,6 +178,36 @@ namespace OpenDental{
 			this.checkIns.TabIndex = 48;
 			this.checkIns.Text = "Insurance payments";
 			// 
+			// butCancel
+			// 
+			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butCancel.Autosize = true;
+			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.CornerRadius = 4F;
+			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this.butCancel.Location = new System.Drawing.Point(702,468);
+			this.butCancel.Name = "butCancel";
+			this.butCancel.Size = new System.Drawing.Size(75,26);
+			this.butCancel.TabIndex = 4;
+			this.butCancel.Text = "&Cancel";
+			// 
+			// butOK
+			// 
+			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butOK.Autosize = true;
+			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butOK.CornerRadius = 4F;
+			this.butOK.Location = new System.Drawing.Point(702,433);
+			this.butOK.Name = "butOK";
+			this.butOK.Size = new System.Drawing.Size(75,26);
+			this.butOK.TabIndex = 3;
+			this.butOK.Text = "&OK";
+			this.butOK.Click += new System.EventHandler(this.butOK_Click);
+			// 
 			// FormRpPaySheet
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
@@ -244,7 +245,6 @@ namespace OpenDental{
 				listProv.Items.Add(ProviderC.List[i].GetLongDesc());
 			}
 			checkAllProv.Checked=true;
-			listProv.Visible=false;
 			for(int i=0;i<DefC.Short[(int)DefCat.PaymentTypes].Length;i++) {
 				listTypes.Items.Add(DefC.Short[(int)DefCat.PaymentTypes][i].ItemName);
 			}
@@ -252,11 +252,14 @@ namespace OpenDental{
 		}
 
 		private void checkAllProv_Click(object sender,EventArgs e) {
-			if(checkAllProv.Checked){
-				listProv.Visible=false;
+			if(checkAllProv.Checked) {
+				listProv.SelectedIndices.Clear();
 			}
-			else{
-				listProv.Visible=true;
+		}
+
+		private void listProv_Click(object sender,EventArgs e) {
+			if(listProv.SelectedIndices.Count>0) {
+				checkAllProv.Checked=false;
 			}
 		}
 
@@ -373,6 +376,8 @@ namespace OpenDental{
 			FormR.ShowDialog();
 			DialogResult=DialogResult.OK;		
 		}
+
+		
 
 		
 
