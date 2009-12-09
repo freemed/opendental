@@ -15,17 +15,20 @@
     <DataSet Name="Data">
       <Query>
         <DataSourceName>DS1</DataSourceName>
-        <CommandText>SELECT DATE_FORMAT(claimproc.DateCP,'%c/%d/%Y') AS DateCP,CONCAT(patient.LName,', ',patient.FName,' ',patient.MiddleI) AS lfname,
-carrier.CarrierName,provider.Abbr,claimpayment.CheckNum,FORMAT(SUM(claimproc.InsPayAmt),2) amt,claimproc.ClaimNum 
-FROM claimproc,insplan,patient,carrier,provider,claimpayment 
-WHERE claimproc.ClaimPaymentNum = claimpayment.ClaimPaymentNum 
-AND provider.ProvNum=claimproc.ProvNum 
-AND claimproc.PlanNum = insplan.PlanNum 
-AND claimproc.PatNum = patient.PatNum 
-AND carrier.CarrierNum = insplan.CarrierNum  
-AND (claimproc.Status=1 OR claimproc.Status=4) 
+        <CommandText>SELECT claimproc.DateCP,CONCAT(patient.LName,', ',patient.FName,' ',patient.MiddleI) lfname,
+carrier.CarrierName,provider.Abbr,
+clinic.Description clinicDesc,
+claimpayment.CheckNum,SUM(claimproc.InsPayAmt) amt,claimproc.ClaimNum 
+FROM claimproc
+LEFT JOIN insplan ON claimproc.PlanNum = insplan.PlanNum 
+LEFT JOIN patient ON claimproc.PatNum = patient.PatNum
+LEFT JOIN carrier ON carrier.CarrierNum = insplan.CarrierNum
+LEFT JOIN provider ON provider.ProvNum=claimproc.ProvNum
+LEFT JOIN claimpayment ON claimproc.ClaimPaymentNum = claimpayment.ClaimPaymentNum
+LEFT JOIN clinic ON clinic.ClinicNum=claimproc.ClinicNum
+WHERE (claimproc.Status=1 OR claimproc.Status=4) 
 AND claimpayment.CheckDate &gt;= '2007-09-17' AND claimpayment.CheckDate &lt;= '2007-09-17' 
-GROUP BY claimproc.ClaimPaymentNum,provider.ProvNum</CommandText>
+GROUP BY claimproc.ClaimPaymentNum,provider.ProvNum,claimproc.ClinicNum</CommandText>
       </Query>
       <Fields>
         <Field Name="DateCP">
@@ -39,6 +42,9 @@ GROUP BY claimproc.ClaimPaymentNum,provider.ProvNum</CommandText>
         </Field>
         <Field Name="Abbr">
           <DataField>Abbr</DataField>
+        </Field>
+        <Field Name="clinicDesc">
+          <DataField>clinicDesc</DataField>
         </Field>
         <Field Name="CheckNum">
           <DataField>CheckNum</DataField>
@@ -54,16 +60,19 @@ GROUP BY claimproc.ClaimPaymentNum,provider.ProvNum</CommandText>
     <DataSet Name="DataPatPay">
       <Query>
         <DataSourceName>DS1</DataSourceName>
-        <CommandText>SELECT DATE_FORMAT(paysplit.DatePay,'%c/%d/%Y') AS DatePay,CONCAT(patient.LName,', ',patient.FName,' ',patient.MiddleI) AS lfname,
-payment.PayType,provider.Abbr,payment.CheckNum,
-FORMAT(SUM(paysplit.SplitAmt),2) amt, payment.PayNum,ItemName 
-FROM payment,patient,provider,paysplit,definition
-WHERE payment.PayNum=paysplit.PayNum 
-AND patient.PatNum=paysplit.PatNum 
-AND provider.ProvNum=paysplit.ProvNum
-AND definition.DefNum=payment.PayType 
-AND paysplit.DatePay &gt;= '2007-09-17' AND paysplit.DatePay &lt;= '2007-09-17' 
-GROUP BY payment.PayNum,patient.PatNum,provider.ProvNum</CommandText>
+        <CommandText>SELECT paysplit.DatePay,CONCAT(patient.LName,', ',patient.FName,' ',patient.MiddleI) AS lfname,
+payment.PayType,provider.Abbr,
+clinic.Description clinicDesc,
+payment.CheckNum,
+SUM(paysplit.SplitAmt) amt, payment.PayNum,ItemName 
+FROM paysplit
+LEFT JOIN payment ON payment.PayNum=paysplit.PayNum
+LEFT JOIN patient ON patient.PatNum=paysplit.PatNum
+LEFT JOIN provider ON provider.ProvNum=paysplit.ProvNum
+LEFT JOIN definition ON definition.DefNum=payment.PayType 
+LEFT JOIN clinic ON paysplit.ClinicNum=clinic.ClinicNum
+WHERE paysplit.DatePay &gt;= '2007-09-17' AND paysplit.DatePay &lt;= '2007-09-17' 
+GROUP BY payment.PayNum,patient.PatNum,provider.ProvNum,paysplit.ClinicNum</CommandText>
       </Query>
       <Fields>
         <Field Name="lfname">
@@ -74,6 +83,9 @@ GROUP BY payment.PayNum,patient.PatNum,provider.ProvNum</CommandText>
         </Field>
         <Field Name="Abbr">
           <DataField>Abbr</DataField>
+        </Field>
+        <Field Name="clinicDesc">
+          <DataField>clinicDesc</DataField>
         </Field>
         <Field Name="CheckNum">
           <DataField>CheckNum</DataField>
@@ -95,7 +107,7 @@ GROUP BY payment.PayNum,patient.PatNum,provider.ProvNum</CommandText>
     <DataSet Name="DataPracticeTitle">
       <Query>
         <DataSourceName>DS1</DataSourceName>
-        <CommandText>SELECT ValueString FROM preference WHERE PrefName='PracticeTitle'</CommandText>
+        <CommandText>SELECT ValueString FROM preference WHERE PrefName='PracticeTitle' OR PrefName='PracticeAddress'</CommandText>
       </Query>
       <Fields>
         <Field Name="ValueString">
@@ -108,7 +120,8 @@ GROUP BY payment.PayNum,patient.PatNum,provider.ProvNum</CommandText>
     <ReportItems>
       <Table Name="Table1">
         <DataSetName>Data</DataSetName>
-        <NoRows>Query returned no rows!</NoRows>
+        <NoRows>
+        </NoRows>
         <Style>
           <BorderStyle>
             <Default>Solid</Default>
@@ -125,6 +138,9 @@ GROUP BY payment.PayNum,patient.PatNum,provider.ProvNum</CommandText>
           </TableColumn>
           <TableColumn>
             <Width>105.7pt</Width>
+          </TableColumn>
+          <TableColumn>
+            <Width>39.8pt</Width>
           </TableColumn>
           <TableColumn>
             <Width>49.1pt</Width>
@@ -231,6 +247,28 @@ GROUP BY payment.PayNum,patient.PatNum,provider.ProvNum</CommandText>
                 </TableCell>
                 <TableCell>
                   <ReportItems>
+                    <Textbox Name="Textbox8">
+                      <Value>Clinic</Value>
+                      <Style xmlns="http://schemas.microsoft.com/sqlserver/reporting/2005/01/reportdefinition">
+                        <TextAlign>Left</TextAlign>
+                        <BorderStyle>
+                          <Default>None</Default>
+                          <Left>None</Left>
+                          <Right>None</Right>
+                          <Top>None</Top>
+                          <Bottom>None</Bottom>
+                        </BorderStyle>
+                        <FontWeight>Bold</FontWeight>
+                        <FontSize>8pt</FontSize>
+                        <VerticalAlign>Middle</VerticalAlign>
+                        <BorderColor />
+                        <BorderWidth />
+                      </Style>
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+                <TableCell>
+                  <ReportItems>
                     <Textbox Name="Textbox6">
                       <Value>Check #</Value>
                       <Style>
@@ -302,6 +340,7 @@ GROUP BY payment.PayNum,patient.PatNum,provider.ProvNum</CommandText>
                           <Bottom>Silver</Bottom>
                         </BorderColor>
                         <BorderWidth />
+                        <Format>MM/dd/yyyy</Format>
                         <VerticalAlign>Middle</VerticalAlign>
                       </Style>
                     </Textbox>
@@ -381,6 +420,29 @@ GROUP BY payment.PayNum,patient.PatNum,provider.ProvNum</CommandText>
                 </TableCell>
                 <TableCell>
                   <ReportItems>
+                    <Textbox Name="Textbox10">
+                      <Value>=Fields!clinicDesc.Value</Value>
+                      <Style xmlns="http://schemas.microsoft.com/sqlserver/reporting/2005/01/reportdefinition">
+                        <BorderStyle>
+                          <Default>Solid</Default>
+                        </BorderStyle>
+                        <PaddingLeft>2 pt</PaddingLeft>
+                        <FontSize>9pt</FontSize>
+                        <VerticalAlign>Middle</VerticalAlign>
+                        <BorderColor>
+                          <Default>Silver</Default>
+                          <Left>Silver</Left>
+                          <Right>Silver</Right>
+                          <Top>Silver</Top>
+                          <Bottom>Silver</Bottom>
+                        </BorderColor>
+                        <BorderWidth />
+                      </Style>
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+                <TableCell>
+                  <ReportItems>
                     <Textbox Name="CheckNum">
                       <Value>=Fields!CheckNum.Value</Value>
                       <CanGrow>true</CanGrow>
@@ -423,6 +485,7 @@ GROUP BY payment.PayNum,patient.PatNum,provider.ProvNum</CommandText>
                           <Bottom>Silver</Bottom>
                         </BorderColor>
                         <BorderWidth />
+                        <Format>0.00</Format>
                         <VerticalAlign>Middle</VerticalAlign>
                       </Style>
                     </Textbox>
@@ -432,8 +495,8 @@ GROUP BY payment.PayNum,patient.PatNum,provider.ProvNum</CommandText>
             </TableRow>
           </TableRows>
         </Details>
-        <Left>47.8pt</Left>
-        <Top>67.3pt</Top>
+        <Left>38.2pt</Left>
+        <Top>61.7pt</Top>
         <TableGroups>
           <TableGroup>
             <Grouping Name="TypeGroup">
@@ -528,6 +591,25 @@ GROUP BY payment.PayNum,patient.PatNum,provider.ProvNum</CommandText>
                     </TableCell>
                     <TableCell>
                       <ReportItems>
+                        <Textbox Name="Textbox29">
+                          <Value>
+                          </Value>
+                          <Style xmlns="http://schemas.microsoft.com/sqlserver/reporting/2005/01/reportdefinition">
+                            <BorderStyle>
+                              <Default>None</Default>
+                              <Left>None</Left>
+                              <Right>None</Right>
+                              <Top>None</Top>
+                              <Bottom>None</Bottom>
+                            </BorderStyle>
+                            <BorderColor />
+                            <BorderWidth />
+                          </Style>
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                    <TableCell>
+                      <ReportItems>
                         <Textbox Name="Textbox16">
                           <Style>
                             <BorderStyle>
@@ -580,8 +662,8 @@ GROUP BY payment.PayNum,patient.PatNum,provider.ProvNum</CommandText>
         <Height>12.75pt</Height>
         <Width>116.66pt</Width>
         <Value>Insurance Checks</Value>
-        <Left>46.4pt</Left>
-        <Top>53.1pt</Top>
+        <Left>36.8pt</Left>
+        <Top>47.5pt</Top>
         <Style>
           <BorderStyle />
           <BorderColor />
@@ -594,7 +676,8 @@ GROUP BY payment.PayNum,patient.PatNum,provider.ProvNum</CommandText>
       </Textbox>
       <Table Name="Table2">
         <DataSetName>DataPatPay</DataSetName>
-        <NoRows>Query returned no rows!</NoRows>
+        <NoRows>
+        </NoRows>
         <Style>
           <BorderStyle>
             <Default>Solid</Default>
@@ -608,6 +691,9 @@ GROUP BY payment.PayNum,patient.PatNum,provider.ProvNum</CommandText>
           </TableColumn>
           <TableColumn>
             <Width>219.2pt</Width>
+          </TableColumn>
+          <TableColumn>
+            <Width>39.8pt</Width>
           </TableColumn>
           <TableColumn>
             <Width>48.4pt</Width>
@@ -673,6 +759,28 @@ GROUP BY payment.PayNum,patient.PatNum,provider.ProvNum</CommandText>
                     <Textbox Name="Textbox18">
                       <Value>Provider</Value>
                       <Style>
+                        <TextAlign>Left</TextAlign>
+                        <BorderStyle>
+                          <Default>None</Default>
+                          <Left>None</Left>
+                          <Right>None</Right>
+                          <Top>None</Top>
+                          <Bottom>None</Bottom>
+                        </BorderStyle>
+                        <FontWeight>Bold</FontWeight>
+                        <FontSize>8pt</FontSize>
+                        <VerticalAlign>Middle</VerticalAlign>
+                        <BorderColor />
+                        <BorderWidth />
+                      </Style>
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="Textbox30">
+                      <Value>Clinic</Value>
+                      <Style xmlns="http://schemas.microsoft.com/sqlserver/reporting/2005/01/reportdefinition">
                         <TextAlign>Left</TextAlign>
                         <BorderStyle>
                           <Default>None</Default>
@@ -761,6 +869,7 @@ GROUP BY payment.PayNum,patient.PatNum,provider.ProvNum</CommandText>
                         </BorderColor>
                         <BorderWidth />
                         <VerticalAlign>Middle</VerticalAlign>
+                        <Format>MM/dd/yyyy</Format>
                       </Style>
                     </Textbox>
                   </ReportItems>
@@ -794,6 +903,28 @@ GROUP BY payment.PayNum,patient.PatNum,provider.ProvNum</CommandText>
                       <Value>=Fields!Abbr.Value</Value>
                       <CanGrow>true</CanGrow>
                       <Style>
+                        <BorderStyle>
+                          <Default>Solid</Default>
+                        </BorderStyle>
+                        <FontSize>9pt</FontSize>
+                        <VerticalAlign>Middle</VerticalAlign>
+                        <BorderColor>
+                          <Default>Silver</Default>
+                          <Left>Silver</Left>
+                          <Right>Silver</Right>
+                          <Top>Silver</Top>
+                          <Bottom>Silver</Bottom>
+                        </BorderColor>
+                        <BorderWidth />
+                      </Style>
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="Textbox31">
+                      <Value>=Fields!clinicDesc.Value</Value>
+                      <Style xmlns="http://schemas.microsoft.com/sqlserver/reporting/2005/01/reportdefinition">
                         <BorderStyle>
                           <Default>Solid</Default>
                         </BorderStyle>
@@ -854,6 +985,7 @@ GROUP BY payment.PayNum,patient.PatNum,provider.ProvNum</CommandText>
                         <BorderWidth />
                         <TextAlign>Right</TextAlign>
                         <VerticalAlign>Middle</VerticalAlign>
+                        <Format>0.00</Format>
                       </Style>
                     </Textbox>
                   </ReportItems>
@@ -897,6 +1029,25 @@ GROUP BY payment.PayNum,patient.PatNum,provider.ProvNum</CommandText>
                           </Value>
                           <CanGrow>true</CanGrow>
                           <Style>
+                            <BorderStyle>
+                              <Default>None</Default>
+                              <Left>None</Left>
+                              <Right>None</Right>
+                              <Top>None</Top>
+                              <Bottom>None</Bottom>
+                            </BorderStyle>
+                            <BorderColor />
+                            <BorderWidth />
+                          </Style>
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                    <TableCell>
+                      <ReportItems>
+                        <Textbox Name="Textbox32">
+                          <Value>
+                          </Value>
+                          <Style xmlns="http://schemas.microsoft.com/sqlserver/reporting/2005/01/reportdefinition">
                             <BorderStyle>
                               <Default>None</Default>
                               <Left>None</Left>
@@ -1021,6 +1172,25 @@ GROUP BY payment.PayNum,patient.PatNum,provider.ProvNum</CommandText>
                     </TableCell>
                     <TableCell>
                       <ReportItems>
+                        <Textbox Name="Textbox33">
+                          <Value>
+                          </Value>
+                          <Style xmlns="http://schemas.microsoft.com/sqlserver/reporting/2005/01/reportdefinition">
+                            <BorderStyle>
+                              <Default>None</Default>
+                              <Left>None</Left>
+                              <Right>None</Right>
+                              <Top>None</Top>
+                              <Bottom>None</Bottom>
+                            </BorderStyle>
+                            <BorderColor />
+                            <BorderWidth />
+                          </Style>
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                    <TableCell>
+                      <ReportItems>
                         <Textbox Name="Textbox40">
                           <Value>
                           </Value>
@@ -1069,15 +1239,15 @@ GROUP BY payment.PayNum,patient.PatNum,provider.ProvNum</CommandText>
             </Footer>
           </TableGroup>
         </TableGroups>
-        <Left>47.8pt</Left>
-        <Top>124.8pt</Top>
+        <Left>38.2pt</Left>
+        <Top>119.2pt</Top>
       </Table>
       <Textbox Name="Textbox23" xmlns="http://schemas.microsoft.com/sqlserver/reporting/2005/01/reportdefinition">
         <Height>12.75pt</Height>
         <Width>116.66pt</Width>
         <Value>Patient Payments</Value>
-        <Left>47.9pt</Left>
-        <Top>109.5pt</Top>
+        <Left>38.3pt</Left>
+        <Top>103.9pt</Top>
         <Style>
           <BorderStyle />
           <BorderColor />
@@ -1092,8 +1262,8 @@ GROUP BY payment.PayNum,patient.PatNum,provider.ProvNum</CommandText>
         <Height>11.25pt</Height>
         <Width>59.52pt</Width>
         <Value>=SUM(Fields!amt.Value,"Data")+SUM(Fields!amt.Value,"DataPatPay")</Value>
-        <Left>454.3pt</Left>
-        <Top>191.8pt</Top>
+        <Left>483.9pt</Left>
+        <Top>186.2pt</Top>
         <Style>
           <BorderStyle />
           <BorderColor />
@@ -1109,8 +1279,8 @@ GROUP BY payment.PayNum,patient.PatNum,provider.ProvNum</CommandText>
         <Height>12.00pt</Height>
         <Width>96.27pt</Width>
         <Value>Total All Payments</Value>
-        <Left>357.5pt</Left>
-        <Top>191.5pt</Top>
+        <Left>387.1pt</Left>
+        <Top>185.9pt</Top>
         <Style>
           <BorderStyle />
           <BorderColor />
@@ -1120,52 +1290,78 @@ GROUP BY payment.PayNum,patient.PatNum,provider.ProvNum</CommandText>
           <VerticalAlign>Middle</VerticalAlign>
         </Style>
       </Textbox>
-      <List Name="List1">
-        <Height>.6in</Height>
+      <Table Name="Table3">
+        <DataSetName>DataPracticeTitle</DataSetName>
+        <NoRows>
+        </NoRows>
+        <Style>
+          <BorderStyle>
+            <Default>None</Default>
+            <Left>None</Left>
+            <Right>None</Right>
+            <Top>None</Top>
+            <Bottom>None</Bottom>
+          </BorderStyle>
+          <BorderColor />
+          <BorderWidth />
+        </Style>
+        <TableColumns>
+          <TableColumn>
+            <Width>544.9pt</Width>
+          </TableColumn>
+        </TableColumns>
+        <Details>
+          <TableRows>
+            <TableRow>
+              <Height>12 pt</Height>
+              <TableCells>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="Textbox27">
+                      <Value>=Fields!ValueString.Value</Value>
+                      <CanGrow>true</CanGrow>
+                      <Style>
+                        <BorderStyle>
+                          <Default>None</Default>
+                          <Left>None</Left>
+                          <Right>None</Right>
+                          <Top>None</Top>
+                          <Bottom>None</Bottom>
+                        </BorderStyle>
+                        <BorderColor />
+                        <BorderWidth />
+                        <FontSize>9pt</FontSize>
+                        <TextAlign>Center</TextAlign>
+                        <FontWeight >Bold</FontWeight>
+                      </Style>
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+              </TableCells>
+            </TableRow>
+          </TableRows>
+        </Details>
+        <Left>7.5pt</Left>
+        <Top>22.3pt</Top>
+      </Table>
+      <Textbox Name="Textbox28" xmlns="http://schemas.microsoft.com/sqlserver/reporting/2005/01/reportdefinition">
+        <Height>18.00pt</Height>
         <Width>5in</Width>
-        <Left>100pt</Left>
-        <Top>0pt</Top>
+        <Value>Daily Payments</Value>
+        <Left>101.5pt</Left>
+        <Top>2.3pt</Top>
         <Style>
           <BorderStyle />
           <BorderColor />
           <BorderWidth />
+          <FontWeight>Bold</FontWeight>
+          <FontSize>14pt</FontSize>
+          <TextAlign>Center</TextAlign>
+          <VerticalAlign>Middle</VerticalAlign>
         </Style>
-        <DataSetName>DataPracticeTitle</DataSetName>
-        <ReportItems>
-          <Textbox Name="Textbox27">
-            <Height>12pt</Height>
-            <Width>4.8in</Width>
-            <Value>=Fields!ValueString.Value</Value>
-            <Left>7.2pt</Left>
-            <Top>21.6pt</Top>
-            <Style>
-              <BorderStyle />
-              <BorderColor />
-              <BorderWidth />
-              <TextAlign>Center</TextAlign>
-              <FontWeight>Bold</FontWeight>
-            </Style>
-          </Textbox>
-          <Textbox Name="Textbox10">
-            <Height>18.00pt</Height>
-            <Width>5in</Width>
-            <Value>Daily Payments</Value>
-            <Left>0pt</Left>
-            <Top>0pt</Top>
-            <Style>
-              <BorderStyle />
-              <BorderColor />
-              <BorderWidth />
-              <FontWeight>Bold</FontWeight>
-              <FontSize>17pt</FontSize>
-              <TextAlign>Center</TextAlign>
-              <VerticalAlign>Middle</VerticalAlign>
-            </Style>
-          </Textbox>
-        </ReportItems>
-      </List>
+      </Textbox>
     </ReportItems>
-    <Height>203.6pt</Height>
+    <Height>205.7pt</Height>
     <Columns>1</Columns>
   </Body>
   <PageFooter>
@@ -1197,7 +1393,7 @@ GROUP BY payment.PayNum,patient.PatNum,provider.ProvNum</CommandText>
     <DataSource Name="DS1">
       <ConnectionProperties>
         <DataProvider>MySQL.NET</DataProvider>
-        <ConnectString>Server=localhost;Database=development67;User ID=root;Password=;CharSet=utf8</ConnectString>
+        <ConnectString>Server=localhost;Database=development69;User ID=root;Password=;CharSet=utf8</ConnectString>
         <IntegratedSecurity>false</IntegratedSecurity>
       </ConnectionProperties>
     </DataSource>

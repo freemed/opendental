@@ -23,6 +23,10 @@ namespace OpenDental{
 		private CheckBox checkAllTypes;
 		private ListBox listTypes;
 		private CheckBox checkIns;
+		private CheckBox checkAllClin;
+		private ListBox listClin;
+		private Label labelClin;
+		private Label label2;
 		private CheckBox checkAllProv;
 		//private FormQuery FormQuery2;
 
@@ -62,6 +66,10 @@ namespace OpenDental{
 			this.checkAllTypes = new System.Windows.Forms.CheckBox();
 			this.listTypes = new System.Windows.Forms.ListBox();
 			this.checkIns = new System.Windows.Forms.CheckBox();
+			this.checkAllClin = new System.Windows.Forms.CheckBox();
+			this.listClin = new System.Windows.Forms.ListBox();
+			this.labelClin = new System.Windows.Forms.Label();
+			this.label2 = new System.Windows.Forms.Label();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.groupBox1.SuspendLayout();
@@ -90,7 +98,7 @@ namespace OpenDental{
 			// 
 			// listProv
 			// 
-			this.listProv.Location = new System.Drawing.Point(516,55);
+			this.listProv.Location = new System.Drawing.Point(530,55);
 			this.listProv.Name = "listProv";
 			this.listProv.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
 			this.listProv.Size = new System.Drawing.Size(163,199);
@@ -99,7 +107,7 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(514,16);
+			this.label1.Location = new System.Drawing.Point(528,16);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(104,16);
 			this.label1.TabIndex = 35;
@@ -108,8 +116,10 @@ namespace OpenDental{
 			// 
 			// checkAllProv
 			// 
+			this.checkAllProv.Checked = true;
+			this.checkAllProv.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.checkAllProv.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkAllProv.Location = new System.Drawing.Point(517,35);
+			this.checkAllProv.Location = new System.Drawing.Point(531,35);
 			this.checkAllProv.Name = "checkAllProv";
 			this.checkAllProv.Size = new System.Drawing.Size(95,16);
 			this.checkAllProv.TabIndex = 43;
@@ -118,18 +128,19 @@ namespace OpenDental{
 			// 
 			// groupBox1
 			// 
+			this.groupBox1.Controls.Add(this.label2);
 			this.groupBox1.Controls.Add(this.radioPatient);
 			this.groupBox1.Controls.Add(this.radioCheck);
 			this.groupBox1.Location = new System.Drawing.Point(31,263);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(161,72);
+			this.groupBox1.Size = new System.Drawing.Size(173,93);
 			this.groupBox1.TabIndex = 44;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Group By";
 			// 
 			// radioPatient
 			// 
-			this.radioPatient.Location = new System.Drawing.Point(8,43);
+			this.radioPatient.Location = new System.Drawing.Point(8,35);
 			this.radioPatient.Name = "radioPatient";
 			this.radioPatient.Size = new System.Drawing.Size(104,18);
 			this.radioPatient.TabIndex = 1;
@@ -139,7 +150,7 @@ namespace OpenDental{
 			// radioCheck
 			// 
 			this.radioCheck.Checked = true;
-			this.radioCheck.Location = new System.Drawing.Point(8,19);
+			this.radioCheck.Location = new System.Drawing.Point(8,16);
 			this.radioCheck.Name = "radioCheck";
 			this.radioCheck.Size = new System.Drawing.Size(104,18);
 			this.radioCheck.TabIndex = 0;
@@ -152,7 +163,7 @@ namespace OpenDental{
 			this.checkAllTypes.Checked = true;
 			this.checkAllTypes.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.checkAllTypes.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkAllTypes.Location = new System.Drawing.Point(286,262);
+			this.checkAllTypes.Location = new System.Drawing.Point(286,251);
 			this.checkAllTypes.Name = "checkAllTypes";
 			this.checkAllTypes.Size = new System.Drawing.Size(177,16);
 			this.checkAllTypes.TabIndex = 47;
@@ -161,7 +172,7 @@ namespace OpenDental{
 			// 
 			// listTypes
 			// 
-			this.listTypes.Location = new System.Drawing.Point(285,282);
+			this.listTypes.Location = new System.Drawing.Point(285,271);
 			this.listTypes.Name = "listTypes";
 			this.listTypes.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
 			this.listTypes.Size = new System.Drawing.Size(163,199);
@@ -172,11 +183,49 @@ namespace OpenDental{
 			this.checkIns.Checked = true;
 			this.checkIns.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.checkIns.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkIns.Location = new System.Drawing.Point(286,243);
+			this.checkIns.Location = new System.Drawing.Point(286,232);
 			this.checkIns.Name = "checkIns";
 			this.checkIns.Size = new System.Drawing.Size(177,16);
 			this.checkIns.TabIndex = 48;
 			this.checkIns.Text = "Insurance payments";
+			// 
+			// checkAllClin
+			// 
+			this.checkAllClin.Checked = true;
+			this.checkAllClin.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkAllClin.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkAllClin.Location = new System.Drawing.Point(530,304);
+			this.checkAllClin.Name = "checkAllClin";
+			this.checkAllClin.Size = new System.Drawing.Size(95,16);
+			this.checkAllClin.TabIndex = 54;
+			this.checkAllClin.Text = "All";
+			this.checkAllClin.Click += new System.EventHandler(this.checkAllClin_Click);
+			// 
+			// listClin
+			// 
+			this.listClin.Location = new System.Drawing.Point(530,323);
+			this.listClin.Name = "listClin";
+			this.listClin.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+			this.listClin.Size = new System.Drawing.Size(154,147);
+			this.listClin.TabIndex = 53;
+			this.listClin.Click += new System.EventHandler(this.listClin_Click);
+			// 
+			// labelClin
+			// 
+			this.labelClin.Location = new System.Drawing.Point(527,286);
+			this.labelClin.Name = "labelClin";
+			this.labelClin.Size = new System.Drawing.Size(104,16);
+			this.labelClin.TabIndex = 52;
+			this.labelClin.Text = "Clinics";
+			this.labelClin.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			// 
+			// label2
+			// 
+			this.label2.Location = new System.Drawing.Point(5,60);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(163,29);
+			this.label2.TabIndex = 55;
+			this.label2.Text = "Either way, provider splits will still show separately.";
 			// 
 			// butCancel
 			// 
@@ -187,7 +236,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(702,468);
+			this.butCancel.Location = new System.Drawing.Point(714,445);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,26);
 			this.butCancel.TabIndex = 4;
@@ -201,7 +250,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(702,433);
+			this.butOK.Location = new System.Drawing.Point(714,410);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,26);
 			this.butOK.TabIndex = 3;
@@ -211,7 +260,10 @@ namespace OpenDental{
 			// FormRpPaySheet
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(817,507);
+			this.ClientSize = new System.Drawing.Size(818,495);
+			this.Controls.Add(this.checkAllClin);
+			this.Controls.Add(this.listClin);
+			this.Controls.Add(this.labelClin);
 			this.Controls.Add(this.checkIns);
 			this.Controls.Add(this.checkAllTypes);
 			this.Controls.Add(this.listTypes);
@@ -244,7 +296,17 @@ namespace OpenDental{
 			for(int i=0;i<ProviderC.List.Length;i++) {
 				listProv.Items.Add(ProviderC.List[i].GetLongDesc());
 			}
-			checkAllProv.Checked=true;
+			if(PrefC.GetBool(PrefName.EasyNoClinics)) {
+				listClin.Visible=false;
+				labelClin.Visible=false;
+				checkAllClin.Visible=false;
+			}
+			else {
+				listClin.Items.Add(Lan.g(this,"Unassigned"));
+				for(int i=0;i<Clinics.List.Length;i++) {
+					listClin.Items.Add(Clinics.List[i].Description);
+				}
+			}
 			for(int i=0;i<DefC.Short[(int)DefCat.PaymentTypes].Length;i++) {
 				listTypes.Items.Add(DefC.Short[(int)DefCat.PaymentTypes][i].ItemName);
 			}
@@ -263,6 +325,18 @@ namespace OpenDental{
 			}
 		}
 
+		private void checkAllClin_Click(object sender,EventArgs e) {
+			if(checkAllClin.Checked) {
+				listClin.SelectedIndices.Clear();
+			}
+		}
+
+		private void listClin_Click(object sender,EventArgs e) {
+			if(listClin.SelectedIndices.Count>0) {
+				checkAllClin.Checked=false;
+			}
+		}
+
 		private void checkAllTypes_Click(object sender,EventArgs e) {
 			if(checkAllTypes.Checked){
 				listTypes.Visible=false;
@@ -277,72 +351,121 @@ namespace OpenDental{
 				MsgBox.Show(this,"At least one provider must be selected.");
 				return;
 			}
+			if(!PrefC.GetBool(PrefName.EasyNoClinics)) {
+				if(!checkAllClin.Checked && listClin.SelectedIndices.Count==0) {
+					MsgBox.Show(this,"At least one clinic must be selected.");
+					return;
+				}
+			}
 			if(!checkAllTypes.Checked && listTypes.SelectedIndices.Count==0 && !checkIns.Checked) {
 				MsgBox.Show(this,"At least one type must be selected.");
 				return;
 			}
-			string whereProv;
-			if(checkAllProv.Checked) {
-				whereProv="";
-			}
-			else {
-				whereProv="AND (";
+			string whereProv="";
+			if(!checkAllProv.Checked) {
 				for(int i=0;i<listProv.SelectedIndices.Count;i++) {
-					if(i>0) {
+					if(i==0) {
+						whereProv+=" AND (";
+					}
+					else {
 						whereProv+="OR ";
 					}
 					whereProv+="claimproc.ProvNum = "+POut.PLong(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+" ";
 				}
-				whereProv+=")";
+				whereProv+=") ";
+			}
+			string whereClin="";
+			if(!checkAllClin.Checked) {
+				for(int i=0;i<listClin.SelectedIndices.Count;i++) {
+					if(i==0) {
+						whereClin+=" AND (";
+					}
+					else {
+						whereClin+="OR ";
+					}
+					if(listClin.SelectedIndices[i]==0) {
+						whereClin+="claimproc.ClinicNum = 0 ";
+					}
+					else {
+						whereClin+="claimproc.ClinicNum = "+POut.PLong(Clinics.List[listClin.SelectedIndices[i]-1].ClinicNum)+" ";
+					}
+				}
+				whereClin+=") ";
 			}
 			string queryIns=
-				@"SELECT DATE_FORMAT(claimproc.DateCP,'%c/%d/%Y') AS DateCP,CONCAT(patient.LName,', ',patient.FName,' ',patient.MiddleI) AS lfname,
-				carrier.CarrierName,provider.Abbr,claimpayment.CheckNum,FORMAT(SUM(claimproc.InsPayAmt),2) amt,claimproc.ClaimNum 
-				FROM claimproc,insplan,patient,carrier,provider,claimpayment 
-				WHERE claimproc.ClaimPaymentNum = claimpayment.ClaimPaymentNum 
-				AND provider.ProvNum=claimproc.ProvNum 
-				AND claimproc.PlanNum = insplan.PlanNum 
-				AND claimproc.PatNum = patient.PatNum 
-				AND carrier.CarrierNum = insplan.CarrierNum "
-				+whereProv+" "
-				+"AND (claimproc.Status=1 OR claimproc.Status=4) " //received or supplemental
+				@"SELECT DATE_FORMAT(claimproc.DateCP,'%c/%d/%Y') DateCP,CONCAT(patient.LName,', ',patient.FName,' ',patient.MiddleI) lfname,
+carrier.CarrierName,provider.Abbr,
+clinic.Description clinicDesc,
+claimpayment.CheckNum,SUM(claimproc.InsPayAmt) amt,claimproc.ClaimNum 
+FROM claimproc
+LEFT JOIN insplan ON claimproc.PlanNum = insplan.PlanNum 
+LEFT JOIN patient ON claimproc.PatNum = patient.PatNum
+LEFT JOIN carrier ON carrier.CarrierNum = insplan.CarrierNum
+LEFT JOIN provider ON provider.ProvNum=claimproc.ProvNum
+LEFT JOIN claimpayment ON claimproc.ClaimPaymentNum = claimpayment.ClaimPaymentNum
+LEFT JOIN clinic ON clinic.ClinicNum=claimproc.ClinicNum
+WHERE (claimproc.Status=1 OR claimproc.Status=4) "//received or supplemental
+				+whereProv
+				+whereClin
 				+"AND claimpayment.CheckDate >= "+POut.PDate(date1.SelectionStart)+" "
 				+"AND claimpayment.CheckDate <= "+POut.PDate(date2.SelectionStart)+" ";
 			if(radioPatient.Checked){
-				queryIns+="GROUP BY patient.PatNum,claimproc.ClaimPaymentNum,provider.ProvNum";
+				queryIns+="GROUP BY patient.PatNum,claimproc.ClaimPaymentNum,provider.ProvNum,claimproc.ClinicNum";
 			}
 			else{
-				queryIns+="GROUP BY claimproc.ClaimPaymentNum,provider.ProvNum";
+				queryIns+="GROUP BY claimproc.ClaimPaymentNum,provider.ProvNum,claimproc.ClinicNum";
 			}
-			queryIns+=" ORDER BY claimproc.DateCP";
+			queryIns+=" ORDER BY claimproc.DateCP,lfname";
 			if(!checkIns.Checked){
 				queryIns+=" LIMIT 0";
 			}
 			//patient payments-----------------------------------------------------------------------------------------
-			if(checkAllProv.Checked){
-				whereProv="";
-			}
-			else{
-				whereProv="AND (";
+			whereProv="";
+			if(!checkAllProv.Checked) {
 				for(int i=0;i<listProv.SelectedIndices.Count;i++) {
-					if(i>0) {
+					if(i==0) {
+						whereProv+=" AND (";
+					}
+					else {
 						whereProv+="OR ";
 					}
 					whereProv+="paysplit.ProvNum = "+POut.PLong(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+" ";
 				}
-				whereProv+=")";
+				whereProv+=") ";
+			}
+			whereClin="";
+			if(!checkAllClin.Checked) {
+				for(int i=0;i<listClin.SelectedIndices.Count;i++) {
+					if(i==0) {
+						whereClin+=" AND (";
+					}
+					else {
+						whereClin+="OR ";
+					}
+					if(listClin.SelectedIndices[i]==0) {
+						whereClin+="paysplit.ClinicNum = 0 ";
+					}
+					else {
+						whereClin+="paysplit.ClinicNum = "+POut.PLong(Clinics.List[listClin.SelectedIndices[i]-1].ClinicNum)+" ";
+					}
+				}
+				whereClin+=") ";
 			}
 			string queryPat=
 				@"SELECT DATE_FORMAT(paysplit.DatePay,'%c/%d/%Y') AS DatePay,CONCAT(patient.LName,', ',patient.FName,' ',patient.MiddleI) AS lfname,
-				payment.PayType,provider.Abbr,payment.CheckNum,
-				FORMAT(SUM(paysplit.SplitAmt),2) amt, payment.PayNum,ItemName 
-				FROM paysplit
-				LEFT JOIN payment ON payment.PayNum=paysplit.PayNum 
-				LEFT JOIN patient ON patient.PatNum=paysplit.PatNum
-				LEFT JOIN provider ON provider.ProvNum=paysplit.ProvNum
-				LEFT JOIN definition ON definition.DefNum=payment.PayType 
-				WHERE 1 "
-				+whereProv+" "
+payment.PayType,provider.Abbr,
+clinic.Description clinicDesc,
+payment.CheckNum,
+FORMAT(SUM(paysplit.SplitAmt),2) amt, payment.PayNum,ItemName 
+FROM paysplit
+LEFT JOIN payment ON payment.PayNum=paysplit.PayNum
+LEFT JOIN patient ON patient.PatNum=paysplit.PatNum
+LEFT JOIN provider ON provider.ProvNum=paysplit.ProvNum
+LEFT JOIN definition ON definition.DefNum=payment.PayType 
+LEFT JOIN clinic ON paysplit.ClinicNum=clinic.ClinicNum
+WHERE 1 "
+				+whereProv
+				+whereClin
 				+"AND paysplit.DatePay >= "+POut.PDate(date1.SelectionStart)+" "
 				+"AND paysplit.DatePay <= "+POut.PDate(date2.SelectionStart)+" ";
 			if(listTypes.SelectedIndices.Count>0){
@@ -356,18 +479,55 @@ namespace OpenDental{
 				queryPat+=") ";
 			}
 			if(radioPatient.Checked){
-				queryPat+="GROUP BY paysplit.DatePay,paysplit.PayNum,patient.PatNum,provider.ProvNum";
+				queryPat+="GROUP BY paysplit.DatePay,paysplit.PayNum,patient.PatNum,provider.ProvNum,paysplit.ClinicNum";
 			}
 			else{
-				queryPat+="GROUP BY paysplit.DatePay,paysplit.PayNum,provider.ProvNum";
+				queryPat+="GROUP BY paysplit.DatePay,paysplit.PayNum,provider.ProvNum,paysplit.ClinicNum";
 			}
-			queryPat+=" ORDER BY paysplit.DatePay";
+			queryPat+=" ORDER BY paysplit.DatePay,lfname";
 			if(!checkAllTypes.Checked && listTypes.SelectedIndices.Count==0){
 				queryPat+=" LIMIT 0";
 			}
 			DataTable tableIns=Reports.GetTable(queryIns);
 			DataTable tablePat=Reports.GetTable(queryPat);
 			DataTable tablePref=Reports.GetTable("SELECT ValueString FROM preference WHERE PrefName='PracticeTitle'");
+			DataRow row=tablePref.NewRow();
+			if(checkAllProv.Checked) {
+				row[0]=Lan.g(this,"All Providers");
+			}
+			else {
+				string provNames="";
+				for(int i=0;i<listProv.SelectedIndices.Count;i++) {
+					if(i>0) {
+						provNames+=", ";
+					}
+					provNames+=ProviderC.List[listProv.SelectedIndices[i]].Abbr;
+				}
+				row[0]=provNames;
+			}
+			tablePref.Rows.Add(row);
+			if(!PrefC.GetBool(PrefName.EasyNoClinics)) {
+				row=tablePref.NewRow();
+				if(checkAllClin.Checked) {
+					row[0]=Lan.g(this,"All Clinics");
+				}
+				else {
+					string clinNames="";
+					for(int i=0;i<listClin.SelectedIndices.Count;i++) {
+						if(i>0) {
+							clinNames+=", ";
+						}
+						if(listClin.SelectedIndices[i]==0) {
+							clinNames+=Lan.g(this,"Unassigned");
+						}
+						else {
+							clinNames+=Clinics.List[listClin.SelectedIndices[i]-1].Description;
+						}
+					}
+					row[0]=clinNames;
+				}
+				tablePref.Rows.Add(row);
+			}
 			FormReportForRdl FormR=new FormReportForRdl();
 			FormR.SourceRdlString=Properties.Resources.PaymentsRDL;
 			FormR.RdlReport.DataSets["Data"].SetData(tableIns);
