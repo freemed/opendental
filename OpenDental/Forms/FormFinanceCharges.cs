@@ -506,7 +506,7 @@ namespace OpenDental{
 				else if(radio90.Checked) {
 					OverallBalance = AgingList[i].BalOver90;
 				}
-				if(OverallBalance <= 0) {
+				if(OverallBalance <= .01d) {
 					continue;
 				}
 				billingMatch = false;
