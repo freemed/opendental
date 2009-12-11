@@ -239,7 +239,12 @@ namespace SparksToothChart {
 		private void DrawScenePerio() {
 			device.Clear(ClearFlags.Target|ClearFlags.ZBuffer,TcData.ColorBackground,1.0f,0);
 			device.BeginScene();
-			float baseY=19f;
+			//The distance from y=0 to the tip of the highest root in the upper-most maxillary row.
+			const float maxYmm=63f;
+			//The baseY is used to force the perio chart to start as near to the top of the control as possible.
+			//This is helpful with the perio legend, because it allows one to increase the height of this control
+			//in order to give space for the perio legend to display at the bottom.
+			float baseY=Height/(2f*TcData.ScaleMmToPix)-maxYmm;
 			Matrix defOrient=Matrix.Scaling(1f,1f,-1f)*Matrix.Translation(0,baseY,400f);
 			List <ToothGraphic> maxillaryTeeth=new List <ToothGraphic> ();
 			List <ToothGraphic> mandibleTeeth=new List <ToothGraphic> ();
@@ -265,7 +270,7 @@ namespace SparksToothChart {
 			//Draw the mandible lower-most row.
 			Matrix mandibleLowerRowMat=Matrix.Translation(0,-45f,0)*defOrient;
 			DrawPerioRow(mandibleTeeth,mandibleLowerRowMat,false,false);
-			DrawNumbersAndLinesPerio();//Numbers and center lines are top-most.			
+			DrawNumbersAndLinesPerio(baseY);//Numbers and center lines are top-most.			
 			DrawPerioLegend(-50f,baseY-63f);
 			device.EndScene();
 			device.Present();
@@ -973,17 +978,20 @@ namespace SparksToothChart {
 			//this.PrintString(fps.ToString(),0,0,0,Color.Blue,xfont);
 		}
 
-		private void DrawNumbersAndLinesPerio() {
+		private void DrawNumbersAndLinesPerio(float baseY) {
 			device.RenderState.Lighting=false;
 			device.RenderState.ZBufferEnable=false;
 			//Draw the center line.
+			device.Transform.World=Matrix.Identity;
+			Matrix lineMatrix=ScreenSpaceMatrix();
 			Line centerLine=new Line(device);
 			centerLine.Width=2.5f;
 			centerLine.Antialias=false;
 			centerLine.Begin();//Must call Line.Begin() in order for Antialias=false to take effect.
-			centerLine.Draw(new Vector2[] {
-				new Vector2(-1,this.Height/2),
-				new Vector2(this.Width,this.Height/2)},
+			centerLine.DrawTransform(new Vector3[] {
+				new Vector3(-65f,baseY,0),
+				new Vector3(65f,baseY,0)},
+				lineMatrix,
 				Color.Black);
 			centerLine.End();
 			//Draw the tooth numbers.
@@ -992,7 +1000,7 @@ namespace SparksToothChart {
 				tooth_id=Tooth.FromOrdinal(i);
 				//bool isSelected=TcData.SelectedTeeth.Contains(tooth_id);
 				float yOffset=ToothGraphic.IsMaxillary(tooth_id)?30:-29;
-				DrawNumber(tooth_id,false,yOffset);
+				DrawNumber(tooth_id,false,baseY+yOffset);
 			}
 		}
 

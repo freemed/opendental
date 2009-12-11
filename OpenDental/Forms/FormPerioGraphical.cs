@@ -27,19 +27,12 @@ namespace OpenDental {
 			toothChart.ColorText=Color.Black;
 			toothChart.PerioMode=true;
 			toothChart.ColorBleeding=DefC.Short[(int)DefCat.MiscColors][1].ItemColor;
-			butColorBleed.BackColor=DefC.Short[(int)DefCat.MiscColors][1].ItemColor;
 			toothChart.ColorSuppuration=DefC.Short[(int)DefCat.MiscColors][2].ItemColor;
-			butColorPus.BackColor=DefC.Short[(int)DefCat.MiscColors][2].ItemColor;
 			toothChart.ColorProbing=PrefC.GetColor(PrefName.PerioColorProbing);
-			butColorProbing.BackColor=PrefC.GetColor(PrefName.PerioColorProbing);
 			toothChart.ColorProbingRed=PrefC.GetColor(PrefName.PerioColorProbingRed);
-			butColorProbingRed.BackColor=PrefC.GetColor(PrefName.PerioColorProbingRed);
 			toothChart.ColorGingivalMargin=PrefC.GetColor(PrefName.PerioColorGM);
-			panelColorGM.BackColor=PrefC.GetColor(PrefName.PerioColorGM);
 			toothChart.ColorCAL=PrefC.GetColor(PrefName.PerioColorCAL);
-			panelColorCAL.BackColor=PrefC.GetColor(PrefName.PerioColorCAL);
 			toothChart.ColorMGJ=PrefC.GetColor(PrefName.PerioColorMGJ);
-			panelColorMGJ.BackColor=PrefC.GetColor(PrefName.PerioColorMGJ);
 			toothChart.ColorFurcations=PrefC.GetColor(PrefName.PerioColorFurcations);
 			toothChart.ColorFurcationsRed=PrefC.GetColor(PrefName.PerioColorFurcationsRed);
 			toothChart.RedLimitProbing=PrefC.GetInt(PrefName.PerioRedProb);
@@ -228,17 +221,12 @@ namespace OpenDental {
 			FormPerioGraphicalSetup fpgs=new FormPerioGraphicalSetup();
 			if(fpgs.ShowDialog()==DialogResult.OK){
 				toothChart.ColorCAL=PrefC.GetColor(PrefName.PerioColorCAL);
-				panelColorCAL.BackColor=PrefC.GetColor(PrefName.PerioColorCAL);
 				toothChart.ColorFurcations=PrefC.GetColor(PrefName.PerioColorFurcations);
 				toothChart.ColorFurcationsRed=PrefC.GetColor(PrefName.PerioColorFurcationsRed);
 				toothChart.ColorGingivalMargin=PrefC.GetColor(PrefName.PerioColorGM);
-				panelColorGM.BackColor=PrefC.GetColor(PrefName.PerioColorGM);
-				toothChart.ColorMGJ=PrefC.GetColor(PrefName.PerioColorMGJ);
-				panelColorMGJ.BackColor=PrefC.GetColor(PrefName.PerioColorMGJ);				
+				toothChart.ColorMGJ=PrefC.GetColor(PrefName.PerioColorMGJ);	
 				toothChart.ColorProbing=PrefC.GetColor(PrefName.PerioColorProbing);
-				butColorProbing.BackColor=PrefC.GetColor(PrefName.PerioColorProbing);
 				toothChart.ColorProbingRed=PrefC.GetColor(PrefName.PerioColorProbingRed);
-				butColorProbingRed.BackColor=PrefC.GetColor(PrefName.PerioColorProbingRed);
 				this.toothChart.Invalidate();
 			}
 		}
