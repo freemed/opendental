@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Drawing.Printing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -183,14 +184,50 @@ namespace OpenDental {
 
 		private void pd2_PrintPage(object sender,PrintPageEventArgs ev) {//raised for each page to be printed.
 			Graphics g=ev.Graphics;
+			RenderPerioPrintout(g,PatCur,ev.MarginBounds);
+			//Bitmap bitmap=toothChart.GetBitmap();
+			//string clinicName="";
+			////This clinic name could be more accurate here in the future if we make perio exams clinic specific.
+			////Perhaps if there were a perioexam.ClinicNum column.
+			//if(PatCur.ClinicNum!=0){
+			//  Clinic clinic=Clinics.GetClinic(PatCur.ClinicNum);
+			//  clinicName=clinic.Description;
+			//}else{
+			//  clinicName=PrefC.GetString(PrefName.PracticeTitle);
+			//}
+			//float y=50f;
+			//SizeF m;
+			//Font font=new Font("Arial",15);
+			//string titleStr="PERIODONTAL EXAMINATION";
+			//m=g.MeasureString(titleStr,font);
+			//g.DrawString(titleStr,font,Brushes.Black,new PointF(ev.MarginBounds.Width/2f-m.Width/2f,y));
+			//y+=m.Height;
+			//font=new Font("Arial",11);
+			//m=g.MeasureString(clinicName,font);
+			//g.DrawString(clinicName,font,Brushes.Black,
+			//  new PointF(ev.MarginBounds.Width/2f-m.Width/2f,y));
+			//y+=m.Height;
+			//string patNameStr=PatCur.GetNameFLFormal();
+			//m=g.MeasureString(patNameStr,font);
+			//g.DrawString(patNameStr,font,Brushes.Black,new PointF(ev.MarginBounds.Width/2f-m.Width/2f,y));
+			//y+=m.Height;
+			//DateTime serverTimeNow=MiscData.GetNowDateTime();
+			//string timeNowStr=serverTimeNow.ToShortDateString();//Locale specific date.
+			//m=g.MeasureString(timeNowStr,font);
+			//g.DrawString(timeNowStr,font,Brushes.Black,new PointF(ev.MarginBounds.Width/2f-m.Width/2f,y));
+			//y+=m.Height;
+			//g.DrawImage(bitmap,ev.MarginBounds.Width/2f-bitmap.Width/2f,y,bitmap.Width,bitmap.Height);
+		}
+
+		public void RenderPerioPrintout(Graphics g,Patient pat,Rectangle marginBounds) {
 			Bitmap bitmap=toothChart.GetBitmap();
 			string clinicName="";
 			//This clinic name could be more accurate here in the future if we make perio exams clinic specific.
 			//Perhaps if there were a perioexam.ClinicNum column.
-			if(PatCur.ClinicNum!=0){
-				Clinic clinic=Clinics.GetClinic(PatCur.ClinicNum);
+			if(pat.ClinicNum!=0) {
+				Clinic clinic=Clinics.GetClinic(pat.ClinicNum);
 				clinicName=clinic.Description;
-			}else{
+			} else {
 				clinicName=PrefC.GetString(PrefName.PracticeTitle);
 			}
 			float y=50f;
@@ -198,23 +235,23 @@ namespace OpenDental {
 			Font font=new Font("Arial",15);
 			string titleStr="PERIODONTAL EXAMINATION";
 			m=g.MeasureString(titleStr,font);
-			g.DrawString(titleStr,font,Brushes.Black,new PointF(ev.MarginBounds.Width/2f-m.Width/2f,y));
+			g.DrawString(titleStr,font,Brushes.Black,new PointF(marginBounds.Width/2f-m.Width/2f,y));
 			y+=m.Height;
 			font=new Font("Arial",11);
 			m=g.MeasureString(clinicName,font);
 			g.DrawString(clinicName,font,Brushes.Black,
-				new PointF(ev.MarginBounds.Width/2f-m.Width/2f,y));
+				new PointF(marginBounds.Width/2f-m.Width/2f,y));
 			y+=m.Height;
 			string patNameStr=PatCur.GetNameFLFormal();
 			m=g.MeasureString(patNameStr,font);
-			g.DrawString(patNameStr,font,Brushes.Black,new PointF(ev.MarginBounds.Width/2f-m.Width/2f,y));
+			g.DrawString(patNameStr,font,Brushes.Black,new PointF(marginBounds.Width/2f-m.Width/2f,y));
 			y+=m.Height;
 			DateTime serverTimeNow=MiscData.GetNowDateTime();
 			string timeNowStr=serverTimeNow.ToShortDateString();//Locale specific date.
 			m=g.MeasureString(timeNowStr,font);
-			g.DrawString(timeNowStr,font,Brushes.Black,new PointF(ev.MarginBounds.Width/2f-m.Width/2f,y));
+			g.DrawString(timeNowStr,font,Brushes.Black,new PointF(marginBounds.Width/2f-m.Width/2f,y));
 			y+=m.Height;
-			g.DrawImage(bitmap,ev.MarginBounds.Width/2f-bitmap.Width/2f,y,bitmap.Width,bitmap.Height);
+			g.DrawImage(bitmap,marginBounds.Width/2f-bitmap.Width/2f,y,bitmap.Width,bitmap.Height);
 		}
 
 		private void butSetup_Click(object sender,EventArgs e) {
@@ -232,7 +269,45 @@ namespace OpenDental {
 		}
 
 		private void butSave_Click(object sender,EventArgs e) {
-
+			Bitmap perioPrintImage=null;
+			Graphics g=null;
+			Document doc=new Document();
+			bool docCreated=false;
+			try{
+				perioPrintImage=new Bitmap(850,1100);
+				g=Graphics.FromImage(perioPrintImage);
+				RenderPerioPrintout(g,PatCur,new Rectangle(0,0,perioPrintImage.Width,perioPrintImage.Height));
+				string patImagePath=ImageStore.GetPatientFolder(PatCur);
+				string filePath="";
+				do{
+					doc.DateCreated=MiscData.GetNowDateTime();
+					doc.FileName="perioexam_"+doc.DateCreated.ToString("yyyy_MM_dd_hh_mm_ss")+".png";
+					filePath=ODFileUtils.CombinePaths(patImagePath,doc.FileName);
+				}while(File.Exists(filePath));
+				doc.PatNum=PatCur.PatNum;
+				doc.ImgType=ImageType.Photo;
+				doc.DocCategory=DefC.GetByExactName(DefCat.ImageCats,"Tooth Charts");
+				doc.Description="Perio Exam";
+				doc.Note="Perio Exam";
+				Documents.Insert(doc,PatCur);
+				docCreated=true;
+				perioPrintImage.Save(filePath,System.Drawing.Imaging.ImageFormat.Png);
+				MessageBox.Show(Lan.g(this,"Image saved."));
+			}catch(Exception ex){
+				MessageBox.Show(Lan.g(this,"Image failed to save: "+Environment.NewLine+ex.ToString()));
+				if(docCreated) {
+					Documents.Delete(doc);
+				}
+			}finally{
+				if(g!=null){
+					g.Dispose();
+					g=null;
+				}
+				if(perioPrintImage!=null){
+					perioPrintImage.Dispose();
+					perioPrintImage=null;
+				}
+			}
 		}
 
 		private void FormPerioGraphical_FormClosed(object sender,FormClosedEventArgs e) {
