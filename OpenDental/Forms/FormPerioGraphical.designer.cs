@@ -25,7 +25,6 @@
 		private void InitializeComponent() {
 			SparksToothChart.ToothChartData toothChartData1=new SparksToothChart.ToothChartData();
 			this.groupBox1=new System.Windows.Forms.GroupBox();
-			this.butSetup=new OpenDental.UI.Button();
 			this.panelColorMGJ=new System.Windows.Forms.Panel();
 			this.panelColorCAL=new System.Windows.Forms.Panel();
 			this.panelColorGM=new System.Windows.Forms.Panel();
@@ -39,9 +38,10 @@
 			this.label1=new System.Windows.Forms.Label();
 			this.butColorPus=new System.Windows.Forms.Button();
 			this.butColorBleed=new System.Windows.Forms.Button();
-			this.toothChart=new SparksToothChart.ToothChartWrapper();
 			this.butPrint=new OpenDental.UI.Button();
 			this.butSave=new OpenDental.UI.Button();
+			this.butSetup=new OpenDental.UI.Button();
+			this.toothChart=new SparksToothChart.ToothChartWrapper();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -61,25 +61,11 @@
 			this.groupBox1.Controls.Add(this.label1);
 			this.groupBox1.Controls.Add(this.butColorPus);
 			this.groupBox1.Controls.Add(this.butColorBleed);
-			this.groupBox1.Location=new System.Drawing.Point(65,695);
+			this.groupBox1.Location=new System.Drawing.Point(65,888);
 			this.groupBox1.Name="groupBox1";
 			this.groupBox1.Size=new System.Drawing.Size(556,106);
 			this.groupBox1.TabIndex=217;
 			this.groupBox1.TabStop=false;
-			// 
-			// butSetup
-			// 
-			this.butSetup.AdjustImageLocation=new System.Drawing.Point(0,0);
-			this.butSetup.Autosize=true;
-			this.butSetup.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butSetup.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
-			this.butSetup.CornerRadius=4F;
-			this.butSetup.Location=new System.Drawing.Point(446,63);
-			this.butSetup.Name="butSetup";
-			this.butSetup.Size=new System.Drawing.Size(88,24);
-			this.butSetup.TabIndex=221;
-			this.butSetup.Text="Setup Colors";
-			this.butSetup.Click+=new System.EventHandler(this.butSetup_Click);
 			// 
 			// panelColorMGJ
 			// 
@@ -206,23 +192,6 @@
 			this.butColorBleed.TabIndex=51;
 			this.butColorBleed.UseVisualStyleBackColor=false;
 			// 
-			// toothChart
-			// 
-			this.toothChart.AutoFinish=false;
-			this.toothChart.ColorBackground=System.Drawing.Color.FromArgb(((int)(((byte)(150)))),((int)(((byte)(145)))),((int)(((byte)(152)))));
-			this.toothChart.Cursor=System.Windows.Forms.Cursors.Default;
-			this.toothChart.CursorTool=SparksToothChart.CursorTool.Pointer;
-			this.toothChart.DrawMode=OpenDentBusiness.DrawingMode.Simple2D;
-			this.toothChart.Location=new System.Drawing.Point(66,12);
-			this.toothChart.Name="toothChart";
-			this.toothChart.PerioMode=false;
-			this.toothChart.PreferredPixelFormatNumber=0;
-			this.toothChart.Size=new System.Drawing.Size(700,667);
-			this.toothChart.TabIndex=198;
-			toothChartData1.SizeControl=new System.Drawing.Size(700,667);
-			this.toothChart.TcData=toothChartData1;
-			this.toothChart.UseHardware=false;
-			// 
 			// butPrint
 			// 
 			this.butPrint.AdjustImageLocation=new System.Drawing.Point(0,0);
@@ -230,7 +199,7 @@
 			this.butPrint.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butPrint.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
 			this.butPrint.CornerRadius=4F;
-			this.butPrint.Location=new System.Drawing.Point(691,758);
+			this.butPrint.Location=new System.Drawing.Point(691,951);
 			this.butPrint.Name="butPrint";
 			this.butPrint.Size=new System.Drawing.Size(75,24);
 			this.butPrint.TabIndex=220;
@@ -244,18 +213,49 @@
 			this.butSave.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butSave.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
 			this.butSave.CornerRadius=4F;
-			this.butSave.Location=new System.Drawing.Point(674,717);
+			this.butSave.Location=new System.Drawing.Point(674,910);
 			this.butSave.Name="butSave";
 			this.butSave.Size=new System.Drawing.Size(92,24);
 			this.butSave.TabIndex=219;
 			this.butSave.Text="Save to Images";
 			this.butSave.Click+=new System.EventHandler(this.butSave_Click);
 			// 
+			// butSetup
+			// 
+			this.butSetup.AdjustImageLocation=new System.Drawing.Point(0,0);
+			this.butSetup.Autosize=true;
+			this.butSetup.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butSetup.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSetup.CornerRadius=4F;
+			this.butSetup.Location=new System.Drawing.Point(446,63);
+			this.butSetup.Name="butSetup";
+			this.butSetup.Size=new System.Drawing.Size(88,24);
+			this.butSetup.TabIndex=221;
+			this.butSetup.Text="Setup Colors";
+			this.butSetup.Click+=new System.EventHandler(this.butSetup_Click);
+			// 
+			// toothChart
+			// 
+			this.toothChart.AutoFinish=false;
+			this.toothChart.ColorBackground=System.Drawing.Color.FromArgb(((int)(((byte)(150)))),((int)(((byte)(145)))),((int)(((byte)(152)))));
+			this.toothChart.Cursor=System.Windows.Forms.Cursors.Default;
+			this.toothChart.CursorTool=SparksToothChart.CursorTool.Pointer;
+			this.toothChart.DrawMode=OpenDentBusiness.DrawingMode.Simple2D;
+			this.toothChart.Location=new System.Drawing.Point(66,12);
+			this.toothChart.Name="toothChart";
+			this.toothChart.PerioMode=false;
+			this.toothChart.PreferredPixelFormatNumber=0;
+			this.toothChart.Size=new System.Drawing.Size(700,759);
+			this.toothChart.TabIndex=198;
+			toothChartData1.SizeControl=new System.Drawing.Size(700,759);
+			this.toothChart.TcData=toothChartData1;
+			this.toothChart.UseHardware=false;
+			// 
 			// FormPerioGraphical
 			// 
 			this.AutoScaleDimensions=new System.Drawing.SizeF(6F,13F);
 			this.AutoScaleMode=System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize=new System.Drawing.Size(846,817);
+			this.ClientSize=new System.Drawing.Size(846,1018);
 			this.Controls.Add(this.butPrint);
 			this.Controls.Add(this.butSave);
 			this.Controls.Add(this.groupBox1);

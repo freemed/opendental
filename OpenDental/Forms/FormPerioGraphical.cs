@@ -13,6 +13,7 @@ using CodeBase;
 namespace OpenDental {
 	public partial class FormPerioGraphical:Form {
 		public PerioExam PerioExamCur;
+		private Patient PatCur;
 		//public List<PerioMeasure> ListPerioMeasures; 
 
 		public FormPerioGraphical() {
@@ -21,6 +22,7 @@ namespace OpenDental {
 		}
 
 		private void FormPerioGraphic_Load(object sender,EventArgs e) {
+			PatCur=Patients.GetPat(PerioExamCur.PatNum);
 			toothChart.ColorBackground=Color.White;
 			toothChart.ColorText=Color.Black;
 			toothChart.PerioMode=true;
@@ -178,13 +180,48 @@ namespace OpenDental {
 			pd2.PrintPage+=new PrintPageEventHandler(this.pd2_PrintPage);
 			pd2.OriginAtMargins=true;
 			pd2.DefaultPageSettings.Margins=new Margins(0,0,0,0);
+			//This prevents a bug caused by some printer drivers not reporting their papersize.
+			//But remember that other countries use A4 paper instead of 8 1/2 x 11.
+			if(pd2.DefaultPageSettings.PaperSize.Height==0) {
+				pd2.DefaultPageSettings.PaperSize=new PaperSize("default",850,1100);
+			}
 			pd2.Print();
 		}
 
 		private void pd2_PrintPage(object sender,PrintPageEventArgs ev) {//raised for each page to be printed.
 			Graphics g=ev.Graphics;
 			Bitmap bitmap=toothChart.GetBitmap();
-			g.DrawImage(bitmap,75,75,bitmap.Width,bitmap.Height);
+			string clinicName="";
+			//This clinic name could be more accurate here in the future if we make perio exams clinic specific.
+			//Perhaps if there were a perioexam.ClinicNum column.
+			if(PatCur.ClinicNum!=0){
+				Clinic clinic=Clinics.GetClinic(PatCur.ClinicNum);
+				clinicName=clinic.Description;
+			}else{
+				clinicName=PrefC.GetString(PrefName.PracticeTitle);
+			}
+			float y=50f;
+			SizeF m;
+			Font font=new Font("Arial",15);
+			string titleStr="PERIODONTAL EXAMINATION";
+			m=g.MeasureString(titleStr,font);
+			g.DrawString(titleStr,font,Brushes.Black,new PointF(ev.MarginBounds.Width/2f-m.Width/2f,y));
+			y+=m.Height;
+			font=new Font("Arial",11);
+			m=g.MeasureString(clinicName,font);
+			g.DrawString(clinicName,font,Brushes.Black,
+				new PointF(ev.MarginBounds.Width/2f-m.Width/2f,y));
+			y+=m.Height;
+			string patNameStr=PatCur.GetNameFLFormal();
+			m=g.MeasureString(patNameStr,font);
+			g.DrawString(patNameStr,font,Brushes.Black,new PointF(ev.MarginBounds.Width/2f-m.Width/2f,y));
+			y+=m.Height;
+			DateTime serverTimeNow=MiscData.GetNowDateTime();
+			string timeNowStr=serverTimeNow.ToShortDateString();//Locale specific date.
+			m=g.MeasureString(timeNowStr,font);
+			g.DrawString(timeNowStr,font,Brushes.Black,new PointF(ev.MarginBounds.Width/2f-m.Width/2f,y));
+			y+=m.Height;
+			g.DrawImage(bitmap,ev.MarginBounds.Width/2f-bitmap.Width/2f,y,bitmap.Width,bitmap.Height);
 		}
 
 		private void butSetup_Click(object sender,EventArgs e) {

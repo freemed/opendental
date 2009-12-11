@@ -18,6 +18,7 @@ namespace SparksToothChart {
 		public Device device=null;
 		///<summary>This is a reference to the TcData object that's at the wrapper level.</summary>
 		public ToothChartData TcData;
+		//public bool showPerioLegend=false;
 		private Color specular_color_normal;
 		private Color specular_color_cementum;
 		private float specularSharpness;
@@ -238,7 +239,8 @@ namespace SparksToothChart {
 		private void DrawScenePerio() {
 			device.Clear(ClearFlags.Target|ClearFlags.ZBuffer,TcData.ColorBackground,1.0f,0);
 			device.BeginScene();
-			Matrix defOrient=Matrix.Scaling(1f,1f,-1f)*Matrix.Translation(0,0,400f);
+			float baseY=19f;
+			Matrix defOrient=Matrix.Scaling(1f,1f,-1f)*Matrix.Translation(0,baseY,400f);
 			List <ToothGraphic> maxillaryTeeth=new List <ToothGraphic> ();
 			List <ToothGraphic> mandibleTeeth=new List <ToothGraphic> ();
 			for(int t=0;t<TcData.ListToothGraphics.Count;t++) {//loop through each tooth
@@ -264,6 +266,7 @@ namespace SparksToothChart {
 			Matrix mandibleLowerRowMat=Matrix.Translation(0,-45f,0)*defOrient;
 			DrawPerioRow(mandibleTeeth,mandibleLowerRowMat,false,false);
 			DrawNumbersAndLinesPerio();//Numbers and center lines are top-most.			
+			DrawPerioLegend(-50f,baseY-63f);
 			device.EndScene();
 			device.Present();
 		}
@@ -386,24 +389,30 @@ namespace SparksToothChart {
 				//When the droplet is for a mandibular tooth, flip the droplet about the x-axis (negate y values).
 				device.Transform.World=Matrix.Scaling(1f,-1f,1f)*device.Transform.World;
 			}
-			int dropletColor=TcData.ColorSuppuration.ToArgb();
+			Color dropletColor=TcData.ColorSuppuration;
 			if(isBleeding){
-				dropletColor=TcData.ColorBleeding.ToArgb();
+				dropletColor=TcData.ColorBleeding;
 			}
-			List <PointF> dropletVertsP=TcData.GetDropletVertices();
+			DrawDroplet(0,0,dropletColor);
+			device.Transform.World=saveWorldMat;
+		}
+
+		private void DrawDroplet(float x,float y,Color dropletColor){
+			int dropletColorArgb=dropletColor.ToArgb();
+			List<PointF> dropletVertsP=TcData.GetDropletVertices();
 			List<CustomVertex.PositionColored> dropletVertsV=new List<CustomVertex.PositionColored>();
-			for(int p=0;p<dropletVertsP.Count;p++){
+			for(int p=0;p<dropletVertsP.Count;p++) {
 				dropletVertsV.Add(new CustomVertex.PositionColored(
-					dropletVertsP[p].X,dropletVertsP[p].Y,0,dropletColor));
+					x+dropletVertsP[p].X,y+dropletVertsP[p].Y,0,dropletColorArgb));
 			}
 			//This point is implied and is the last point.
-			dropletVertsV.Add(new CustomVertex.PositionColored(0,0,0,dropletColor));
+			dropletVertsV.Add(new CustomVertex.PositionColored(x,y,0,dropletColorArgb));
 			VertexBuffer vb=new VertexBuffer(typeof(CustomVertex.PositionColored),
 				CustomVertex.PositionColored.StrideSize*dropletVertsV.Count,
 				device,Usage.WriteOnly,CustomVertex.PositionColored.Format,Pool.Managed);
 			vb.SetData(dropletVertsV.ToArray(),0,LockFlags.None);
-			List <int> indiciesL=new List<int> ();
-			for(int v=0;v<dropletVertsV.Count-2;v++){
+			List<int> indiciesL=new List<int>();
+			for(int v=0;v<dropletVertsV.Count-2;v++) {
 				indiciesL.Add(0);
 				indiciesL.Add(v+1);
 				indiciesL.Add(v+2);
@@ -417,7 +426,6 @@ namespace SparksToothChart {
 			device.DrawIndexedPrimitives(PrimitiveType.TriangleList,0,0,dropletVertsV.Count,0,indicies.Length/3);
 			ib.Dispose();
 			vb.Dispose();
-			device.Transform.World=saveWorldMat;
 		}
 
 		private void DrawProbingBar(int intTooth,PerioSurf perioSurf){
@@ -454,45 +462,61 @@ namespace SparksToothChart {
 				return;
 			}
 			PointF sitePos=TcData.GetFurcationPos(intTooth,perioSurf);
-			float sign=maxillary?1:-1;
-			const float triSideLenMM=2f;
-			Color triColor=TcData.ColorFurcations;
-			if(furcationValue>=TcData.RedLimitFurcations){
-				triColor=TcData.ColorFurcationsRed;
+			DrawFurcationTriangle(sitePos.X,sitePos.Y,maxillary,toothLineMat,furcationValue);
+		}
+
+		private Color GetFurcationColor(int furcationValue){
+			Color color=TcData.ColorFurcations;
+			if(furcationValue>=TcData.RedLimitFurcations) {
+				color=TcData.ColorFurcationsRed;
 			}
+			return color;
+		}
+
+		private void DrawFurcationTriangle(float tipx,float tipy,bool pointUp,Matrix lineMat,int furcationValue) {
+			const float triSideLenMM=2f;
+			float sign=pointUp?1:-1;
+			Color color=GetFurcationColor(furcationValue);
 			List<Vector3> triPoints=new List<Vector3>();
 			//We form an equilateral triangle.
-			triPoints.Add(new Vector3(sitePos.X+triSideLenMM/2f,sitePos.Y+sign*((float)(triSideLenMM*Math.Sqrt(3)/2f)),0));
-			triPoints.Add(new Vector3(sitePos.X,sitePos.Y,0));
-			triPoints.Add(new Vector3(sitePos.X-triSideLenMM/2f,sitePos.Y+sign*((float)(triSideLenMM*Math.Sqrt(3)/2f)),0));
+			triPoints.Add(new Vector3(tipx+triSideLenMM/2f,tipy+sign*((float)(triSideLenMM*Math.Sqrt(3)/2f)),0));
+			triPoints.Add(new Vector3(tipx,tipy,0));
+			triPoints.Add(new Vector3(tipx-triSideLenMM/2f,tipy+sign*((float)(triSideLenMM*Math.Sqrt(3)/2f)),0));
 			if(furcationValue==1) {
-				DrawExtended3dLine(new Vector3[] { triPoints[0],triPoints[1],triPoints[2] },0.1f,false,triColor,2f,toothLineMat);
-			} 
-			else if(furcationValue==2) {
-				DrawExtended3dLine(new Vector3[] { triPoints[0],triPoints[1],triPoints[2],triPoints[0] },0.1f,true,triColor,2f,toothLineMat);
-			} 
-			else if(furcationValue==3) {
-				DrawExtended3dLine(new Vector3[] { triPoints[0],triPoints[1],triPoints[2],triPoints[0] },0.1f,true,triColor,2f,toothLineMat);
-				CustomVertex.PositionColored[] solidTriVerts=new CustomVertex.PositionColored[] {
-				        new CustomVertex.PositionColored(triPoints[0],triColor.ToArgb()),
-				        new CustomVertex.PositionColored(triPoints[1],triColor.ToArgb()),
-				        new CustomVertex.PositionColored(triPoints[2],triColor.ToArgb()),
-				      };
-				VertexBuffer triVb=new VertexBuffer(typeof(CustomVertex.PositionColored),
-					CustomVertex.PositionColored.StrideSize*solidTriVerts.Length,
-					device,Usage.WriteOnly,CustomVertex.PositionColored.Format,Pool.Managed);
-				triVb.SetData(solidTriVerts,0,LockFlags.None);
-				int[] triIndicies=new int[] { 0,1,2 };
-				IndexBuffer triIb=new IndexBuffer(typeof(int),triIndicies.Length,device,Usage.None,Pool.Managed);
-				triIb.SetData(triIndicies,0,LockFlags.None);
-				device.VertexFormat=CustomVertex.PositionColored.Format;
-				device.SetStreamSource(0,triVb,0);
-				device.Indices=triIb;
-				device.DrawIndexedPrimitives(PrimitiveType.TriangleList,0,0,solidTriVerts.Length,0,triIndicies.Length/3);
-				triIb.Dispose();
-				triVb.Dispose();
-			} 
-			else {
+				DrawExtended3dLine(new Vector3[] { triPoints[0],triPoints[1],triPoints[2] },0.1f,false,color,2f,lineMat);
+			} else if(furcationValue==2) {
+				DrawExtended3dLine(new Vector3[] { triPoints[0],triPoints[1],triPoints[2],triPoints[0] },0.1f,true,color,2f,lineMat);
+			} else if(furcationValue==3) {
+				DrawExtended3dLine(new Vector3[] { triPoints[0],triPoints[1],triPoints[2],triPoints[0] },0.1f,true,color,2f,lineMat);
+				VertexBuffer triVb=null;
+				IndexBuffer triIb=null;
+				try{
+					CustomVertex.PositionColored[] solidTriVerts=new CustomVertex.PositionColored[] {
+									new CustomVertex.PositionColored(triPoints[0],color.ToArgb()),
+									new CustomVertex.PositionColored(triPoints[1],color.ToArgb()),
+									new CustomVertex.PositionColored(triPoints[2],color.ToArgb()),
+								};
+					triVb=new VertexBuffer(typeof(CustomVertex.PositionColored),
+						CustomVertex.PositionColored.StrideSize*solidTriVerts.Length,
+						device,Usage.WriteOnly,CustomVertex.PositionColored.Format,Pool.Managed);
+					triVb.SetData(solidTriVerts,0,LockFlags.None);
+					int[] triIndicies=new int[] { 0,1,2 };
+					triIb=new IndexBuffer(typeof(int),triIndicies.Length,device,Usage.None,Pool.Managed);
+					triIb.SetData(triIndicies,0,LockFlags.None);
+					device.VertexFormat=CustomVertex.PositionColored.Format;
+					device.SetStreamSource(0,triVb,0);
+					device.Indices=triIb;
+					device.DrawIndexedPrimitives(PrimitiveType.TriangleList,0,0,solidTriVerts.Length,0,triIndicies.Length/3);
+				}finally{
+					if(triVb!=null){
+						triVb.Dispose();
+						triVb=null;
+					}
+					if(triIb!=null){
+						triIb.Dispose();
+					}
+				}
+			} else {
 				//invalid value. assume no furcation.
 			}
 		}
@@ -781,6 +805,73 @@ namespace SparksToothChart {
 			}
 		}
 
+		///<summary>The advantage of drawing the perio legend within the DirectX perio control is that we can render the 
+		///furcation triangles and blood and supperation droplets to scale. We also have the ability to change the apperance
+		///of the legend if a user defined perio color changes.</summary>
+		private void DrawPerioLegend(float xLeft,float yTop) {
+			device.RenderState.Lighting=false;
+			device.RenderState.ZBufferEnable=false;
+			float ySpace=4f;
+			Color textColor=Color.Black;
+			device.Transform.World=Matrix.Translation(xLeft,yTop,0);
+			PrintString("Bleeding",0,0,0,textColor,xfont);
+			DrawDroplet(20f,-1.5f,TcData.ColorBleeding);
+			PrintString("Suppuration",0,-ySpace,0,textColor,xfont);
+			DrawDroplet(20f,-ySpace-1.5f,TcData.ColorSuppuration);
+			PrintString("Probing",0,-2*ySpace,0,textColor,xfont);
+			DrawColoredRectangle(new RectangleF(20f,-2*ySpace-3f,0.6f,3f),TcData.ColorProbing);
+			DrawColoredRectangle(new RectangleF(21f,-2*ySpace-3f,0.6f,3f),TcData.ColorProbingRed);
+			device.Transform.World=device.Transform.World*Matrix.Translation(25f,0,0);
+			PrintString("Gingival Margin",0,0,0,textColor,xfont);
+			DrawColoredRectangle(new RectangleF(35f,-1.5f,15f,2f/TcData.ScaleMmToPix),TcData.ColorGingivalMargin);
+			PrintString("Clinical Attachment Level",0,-ySpace,0,textColor,xfont);
+			DrawColoredRectangle(new RectangleF(35f,-ySpace-1.5f,15f,2f/TcData.ScaleMmToPix),TcData.ColorCAL);
+			PrintString("Mucogingival Junction",0,-2*ySpace,0,textColor,xfont);
+			DrawColoredRectangle(new RectangleF(35f,-2*ySpace-1.5f,15f,2f/TcData.ScaleMmToPix),TcData.ColorMGJ);
+			device.Transform.World=device.Transform.World*Matrix.Translation(55f,0,0);
+			Matrix lineMat=ScreenSpaceMatrix();
+			PrintString("Furcation 1",0,0,0,textColor,xfont);
+			DrawFurcationTriangle(17f,-0.5f,false,lineMat,1);
+			PrintString("Furcation 2",0,-ySpace,0,textColor,xfont);
+			DrawFurcationTriangle(17f,-ySpace-0.5f,false,lineMat,2);
+			PrintString("Furcation 3",0,-2*ySpace,0,textColor,xfont);
+			DrawFurcationTriangle(17f,-2*ySpace-0.5f,false,lineMat,3);
+		}
+		
+		private void DrawColoredRectangle(RectangleF rect,Color color){
+			VertexBuffer vb=null;
+			IndexBuffer ib=null;
+			try{
+				int colorArgb=color.ToArgb();
+				CustomVertex.PositionColored[] quadVerts=new CustomVertex.PositionColored[] {
+						new CustomVertex.PositionColored(rect.Left,rect.Bottom,0,colorArgb),
+						new CustomVertex.PositionColored(rect.Left,rect.Top,0,colorArgb),
+						new CustomVertex.PositionColored(rect.Right,rect.Top,0,colorArgb),
+						new CustomVertex.PositionColored(rect.Right,rect.Bottom,0,colorArgb),
+					};
+				vb=new VertexBuffer(typeof(CustomVertex.PositionColored),
+					CustomVertex.PositionColored.StrideSize*quadVerts.Length,
+					device,Usage.WriteOnly,CustomVertex.PositionColored.Format,Pool.Managed);
+				vb.SetData(quadVerts,0,LockFlags.None);
+				int[] indicies=new int[] { 0,1,2,0,2,3 };
+				ib=new IndexBuffer(typeof(int),indicies.Length,device,Usage.None,Pool.Managed);
+				ib.SetData(indicies,0,LockFlags.None);
+				device.VertexFormat=CustomVertex.PositionColored.Format;
+				device.SetStreamSource(0,vb,0);
+				device.Indices=ib;
+				device.DrawIndexedPrimitives(PrimitiveType.TriangleList,0,0,quadVerts.Length,0,indicies.Length/3);
+			}finally{
+				if(vb!=null){
+					vb.Dispose();
+					vb=null;
+				}
+				if(ib!=null){
+					ib.Dispose();
+					ib=null;
+				}
+			}
+		}
+
 		///<summary>Performs the rotations and translations entered by user for this tooth.  Usually, all numbers are just 0, resulting in no movement here. Returns the result as a Matrix that will need to be applied to any other movement and rotation matricies being applied to the tooth.</summary>
 		private Matrix RotateAndTranslateUser(ToothGraphic toothGraphic) {
 			//remembering that they actually show in the opposite order, so:
@@ -1030,16 +1121,6 @@ namespace SparksToothChart {
 			line.Dispose();
 		}
 
-		///<summary>Returns a bitmap of what is showing in the control.  Used for printing.</summary>
-		public Bitmap GetBitmap() {
-			Render();//Redraw the scene to make sure the back buffer is up to date before copying it to a bitmap.
-			Surface backBuffer=device.GetBackBuffer(0,0,BackBufferType.Mono);
-			GraphicsStream gs=SurfaceLoader.SaveToStream(ImageFileFormat.Bmp,backBuffer);
-			Bitmap bitmap=new Bitmap(gs);
-			backBuffer.Dispose();
-			return bitmap;
-		}
-
 		private void ToothChartDirectX_MouseDown(object sender,MouseEventArgs e) {
 			MouseIsDown=true;
 			if(TcData.CursorTool==CursorTool.Pointer) {
@@ -1191,6 +1272,16 @@ namespace SparksToothChart {
 			} else {
 				DrawNumber(tooth_id,false,0);
 			}
+		}
+
+		///<summary>Returns a bitmap of what is showing in the control.  Used for printing.</summary>
+		public Bitmap GetBitmap() {
+			Render();//Redraw the scene to make sure the back buffer is up to date before copying it to a bitmap.
+			Surface backBuffer=device.GetBackBuffer(0,0,BackBufferType.Mono);
+			GraphicsStream gs=SurfaceLoader.SaveToStream(ImageFileFormat.Bmp,backBuffer);
+			Bitmap bitmap=new Bitmap(gs);
+			backBuffer.Dispose();
+			return bitmap;
 		}
 
 	}
