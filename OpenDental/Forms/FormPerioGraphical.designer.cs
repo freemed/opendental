@@ -102,7 +102,6 @@
 			this.StartPosition=System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text="Graphical Perio Chart";
 			this.Load+=new System.EventHandler(this.FormPerioGraphic_Load);
-			this.FormClosed+=new System.Windows.Forms.FormClosedEventHandler(this.FormPerioGraphical_FormClosed);
 			this.ResumeLayout(false);
 
 		}

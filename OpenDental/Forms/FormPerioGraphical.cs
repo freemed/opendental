@@ -14,16 +14,14 @@ using CodeBase;
 namespace OpenDental {
 	public partial class FormPerioGraphical:Form {
 		public PerioExam PerioExamCur;
-		private Patient PatCur;
+		public Patient PatCur;
 		//public List<PerioMeasure> ListPerioMeasures; 
 
-		public FormPerioGraphical() {
+		public FormPerioGraphical(PerioExam perioExam,Patient patient) {
+			PerioExamCur=perioExam;
+			PatCur=patient;
 			InitializeComponent();
 			toothChart.DrawMode=DrawingMode.DirectX;
-		}
-
-		private void FormPerioGraphic_Load(object sender,EventArgs e) {
-			PatCur=Patients.GetPat(PerioExamCur.PatNum);
 			toothChart.ColorBackground=Color.White;
 			toothChart.ColorText=Color.Black;
 			toothChart.PerioMode=true;
@@ -54,7 +52,7 @@ namespace OpenDental {
 				measureProbe=null;
 				measureGM=null;
 				for(int i=0;i<listMeas.Count;i++) {
-					if(listMeas[i].IntTooth!=t){
+					if(listMeas[i].IntTooth!=t) {
 						continue;
 					}
 					if(listMeas[i].SequenceType==PerioSequenceType.Probing) {
@@ -64,73 +62,71 @@ namespace OpenDental {
 						measureGM=listMeas[i];
 					}
 				}
-				if(measureProbe==null || measureGM==null) {
+				if(measureProbe==null||measureGM==null) {
 					continue;//to the next tooth
 				}
 				//mb
 				calMB=-1;
 				gm=measureGM.MBvalue;
 				pd=measureProbe.MBvalue;
-				if(gm!=-1 && pd!=-1) {
+				if(gm!=-1&&pd!=-1) {
 					calMB=gm+pd;
 				}
 				//B
 				calB=-1;
 				gm=measureGM.Bvalue;
 				pd=measureProbe.Bvalue;
-				if(gm!=-1 && pd!=-1) {
+				if(gm!=-1&&pd!=-1) {
 					calB=gm+pd;
 				}
 				//DB
 				calDB=-1;
 				gm=measureGM.DBvalue;
 				pd=measureProbe.DBvalue;
-				if(gm!=-1 && pd!=-1) {
+				if(gm!=-1&&pd!=-1) {
 					calDB=gm+pd;
 				}
 				//ML
 				calML=-1;
 				gm=measureGM.MLvalue;
 				pd=measureProbe.MLvalue;
-				if(gm!=-1 && pd!=-1) {
+				if(gm!=-1&&pd!=-1) {
 					calML=gm+pd;
 				}
 				//L
 				calL=-1;
 				gm=measureGM.Lvalue;
 				pd=measureProbe.Lvalue;
-				if(gm!=-1 && pd!=-1) {
+				if(gm!=-1&&pd!=-1) {
 					calL=gm+pd;
 				}
 				//DL
 				calDL=-1;
 				gm=measureGM.DLvalue;
 				pd=measureProbe.DLvalue;
-				if(gm!=-1 && pd!=-1) {
+				if(gm!=-1&&pd!=-1) {
 					calDL=gm+pd;
 				}
-				if(calMB!=-1 || calB!=-1 || calDB!=-1 || calML!=-1 || calL!=-1 || calDL!=-1) {
+				if(calMB!=-1||calB!=-1||calDB!=-1||calML!=-1||calL!=-1||calDL!=-1) {
 					toothChart.AddPerioMeasure(t,PerioSequenceType.CAL,calMB,calB,calDB,calML,calL,calDL);
 				}
 			}
 			for(int i=0;i<listMeas.Count;i++) {
 				if(listMeas[i].SequenceType==PerioSequenceType.SkipTooth) {
 					toothChart.SetMissing(listMeas[i].IntTooth.ToString());
-				}
-				else if(listMeas[i].SequenceType==PerioSequenceType.Mobility) {
+				} else if(listMeas[i].SequenceType==PerioSequenceType.Mobility) {
 					int mob=listMeas[i].ToothValue;
 					Color color=Color.Black;
-					if(mob >= PrefC.GetInt(PrefName.PerioRedMob)){
-						color=Color.Red;	
+					if(mob>=PrefC.GetInt(PrefName.PerioRedMob)) {
+						color=Color.Red;
 					}
 					toothChart.SetMobility(listMeas[i].IntTooth.ToString(),mob.ToString(),color);
-				}
-				else {
+				} else {
 					toothChart.AddPerioMeasure(listMeas[i]);
 				}
 			}
 
-	
+
 			/*
 			toothChart.SetMissing("13");
 			toothChart.SetMissing("14");
@@ -167,6 +163,10 @@ namespace OpenDental {
 				toothChart.AddPerioMeasure(i,PerioSequenceType.CAL,       3,3,4,5,2,3);//basically GingMargin+Probing, unless one of them is -1
 				toothChart.AddPerioMeasure(i,PerioSequenceType.MGJ,       5,5,5,6,6,6);
 			}*/
+		}
+
+		private void FormPerioGraphic_Load(object sender,EventArgs e) {
+			
 		}
 
 		private void butPrint_Click(object sender,EventArgs e) {
@@ -220,7 +220,6 @@ namespace OpenDental {
 		}
 
 		public void RenderPerioPrintout(Graphics g,Patient pat,Rectangle marginBounds) {
-			Bitmap bitmap=toothChart.GetBitmap();
 			string clinicName="";
 			//This clinic name could be more accurate here in the future if we make perio exams clinic specific.
 			//Perhaps if there were a perioexam.ClinicNum column.
@@ -251,6 +250,7 @@ namespace OpenDental {
 			m=g.MeasureString(timeNowStr,font);
 			g.DrawString(timeNowStr,font,Brushes.Black,new PointF(marginBounds.Width/2f-m.Width/2f,y));
 			y+=m.Height;
+			Bitmap bitmap=toothChart.GetBitmap();
 			g.DrawImage(bitmap,marginBounds.Width/2f-bitmap.Width/2f,y,bitmap.Width,bitmap.Height);
 		}
 
@@ -269,51 +269,48 @@ namespace OpenDental {
 		}
 
 		private void butSave_Click(object sender,EventArgs e) {
+			SaveToImages();
+		}
+
+		public void SaveToImages(){
 			Bitmap perioPrintImage=null;
 			Graphics g=null;
 			Document doc=new Document();
 			bool docCreated=false;
-			try{
+			try {
 				perioPrintImage=new Bitmap(850,1100);
 				g=Graphics.FromImage(perioPrintImage);
 				RenderPerioPrintout(g,PatCur,new Rectangle(0,0,perioPrintImage.Width,perioPrintImage.Height));
 				string patImagePath=ImageStore.GetPatientFolder(PatCur);
 				string filePath="";
-				do{
+				do {
 					doc.DateCreated=MiscData.GetNowDateTime();
 					doc.FileName="perioexam_"+doc.DateCreated.ToString("yyyy_MM_dd_hh_mm_ss")+".png";
 					filePath=ODFileUtils.CombinePaths(patImagePath,doc.FileName);
-				}while(File.Exists(filePath));
+				} while(File.Exists(filePath));
 				doc.PatNum=PatCur.PatNum;
 				doc.ImgType=ImageType.Photo;
 				doc.DocCategory=DefC.GetByExactName(DefCat.ImageCats,"Tooth Charts");
 				doc.Description="Perio Exam";
-				doc.Note="Perio Exam";
 				Documents.Insert(doc,PatCur);
 				docCreated=true;
 				perioPrintImage.Save(filePath,System.Drawing.Imaging.ImageFormat.Png);
 				MessageBox.Show(Lan.g(this,"Image saved."));
-			}catch(Exception ex){
+			} catch(Exception ex) {
 				MessageBox.Show(Lan.g(this,"Image failed to save: "+Environment.NewLine+ex.ToString()));
 				if(docCreated) {
 					Documents.Delete(doc);
 				}
-			}finally{
-				if(g!=null){
+			} finally {
+				if(g!=null) {
 					g.Dispose();
 					g=null;
 				}
-				if(perioPrintImage!=null){
+				if(perioPrintImage!=null) {
 					perioPrintImage.Dispose();
 					perioPrintImage=null;
 				}
 			}
-		}
-
-		private void FormPerioGraphical_FormClosed(object sender,FormClosedEventArgs e) {
-			//This helps ensure that the tooth chart wrapper is properly disposed of.
-			//This step is necessary so that graphics memory does not fill up.
-			Dispose();
 		}
 
 	}

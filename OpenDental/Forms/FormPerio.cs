@@ -1531,7 +1531,10 @@ namespace OpenDental{
 		}
 
 		private void butSave_Click(object sender,EventArgs e) {
-
+			gridP.SaveCurExam(PerioExamCur.PerioExamNum);
+			FormPerioGraphical formg=new FormPerioGraphical(PerioExams.ListExams[listExams.SelectedIndex],PatCur);
+			formg.SaveToImages();
+			formg.Dispose();
 		}
 
 		private void pd2_PrintPage(object sender, PrintPageEventArgs ev){//raised for each page to be printed.
@@ -1627,9 +1630,9 @@ namespace OpenDental{
 			}
 			//if(listExams.SelectedIndex!=-1) {
 			gridP.SaveCurExam(PerioExamCur.PerioExamNum);
-			FormPerioGraphical formg=new FormPerioGraphical();
-			formg.PerioExamCur=PerioExams.ListExams[listExams.SelectedIndex];
+			FormPerioGraphical formg=new FormPerioGraphical(PerioExams.ListExams[listExams.SelectedIndex],PatCur);
 			formg.ShowDialog();
+			formg.Dispose();
 		}
 
 		private void butClose_Click(object sender, System.EventArgs e) {
