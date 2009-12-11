@@ -235,7 +235,9 @@ namespace OpenDentBusiness{
 					if(PrefC.GetLong(PrefName.RecallShowIfDaysFirstReminder)==-1) {
 						continue;
 					}
-					if(dateRemind.AddDays(PrefC.GetLong(PrefName.RecallShowIfDaysFirstReminder)) > DateTime.Today) {
+					if(dateRemind.AddDays(PrefC.GetLong(PrefName.RecallShowIfDaysFirstReminder)) > toDate// > DateTime.Today) {
+						|| dateRemind.AddDays(PrefC.GetLong(PrefName.RecallShowIfDaysFirstReminder)) < fromDate)
+					{
 						continue;
 					}
 				}
@@ -243,7 +245,9 @@ namespace OpenDentBusiness{
 					if(PrefC.GetLong(PrefName.RecallShowIfDaysSecondReminder)==-1) {
 						continue;
 					}
-					if(dateRemind.AddDays(PrefC.GetLong(PrefName.RecallShowIfDaysSecondReminder)) > DateTime.Today) {
+					if(dateRemind.AddDays(PrefC.GetLong(PrefName.RecallShowIfDaysSecondReminder)) > toDate// > DateTime.Today) {
+						|| dateRemind.AddDays(PrefC.GetLong(PrefName.RecallShowIfDaysSecondReminder)) < fromDate)
+					{
 						continue;
 					}
 				}
