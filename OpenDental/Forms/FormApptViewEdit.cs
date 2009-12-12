@@ -42,6 +42,11 @@ namespace OpenDental{
 		///<summary>A local list of ApptViewItems which are displayed in list on left.  Not updated to db until the form is closed.</summary>
 		private ArrayList displayedElements;
 		private CheckBox checkOnlyScheduledProvs;
+		private TextBox textBeforeTime;
+		private GroupBox groupBox1;
+		private Label labelBeforeTime;
+		private Label labelAfterTime;
+		private TextBox textAfterTime;
 		///<summary>Set this value before opening the form.</summary>
 		public ApptView ApptViewCur;
 		//<summary>Tracks MouseIsDown on listOps.</summary>
@@ -107,6 +112,12 @@ namespace OpenDental{
 			this.label6 = new System.Windows.Forms.Label();
 			this.textRowsPerIncr = new System.Windows.Forms.TextBox();
 			this.checkOnlyScheduledProvs = new System.Windows.Forms.CheckBox();
+			this.textBeforeTime = new System.Windows.Forms.TextBox();
+			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.labelBeforeTime = new System.Windows.Forms.Label();
+			this.labelAfterTime = new System.Windows.Forms.Label();
+			this.textAfterTime = new System.Windows.Forms.TextBox();
+			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -118,7 +129,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(622,592);
+			this.butCancel.Location = new System.Drawing.Point(622,620);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 0;
@@ -133,7 +144,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(522,592);
+			this.butOK.Location = new System.Drawing.Point(522,620);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 1;
@@ -150,7 +161,7 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(32,592);
+			this.butDelete.Location = new System.Drawing.Point(32,620);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(87,24);
 			this.butDelete.TabIndex = 38;
@@ -159,7 +170,7 @@ namespace OpenDental{
 			// 
 			// labelOps
 			// 
-			this.labelOps.Location = new System.Drawing.Point(32,89);
+			this.labelOps.Location = new System.Drawing.Point(32,128);
 			this.labelOps.Name = "labelOps";
 			this.labelOps.Size = new System.Drawing.Size(165,40);
 			this.labelOps.TabIndex = 39;
@@ -168,7 +179,7 @@ namespace OpenDental{
 			// 
 			// listOps
 			// 
-			this.listOps.Location = new System.Drawing.Point(32,131);
+			this.listOps.Location = new System.Drawing.Point(32,170);
 			this.listOps.Name = "listOps";
 			this.listOps.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
 			this.listOps.Size = new System.Drawing.Size(120,186);
@@ -176,7 +187,7 @@ namespace OpenDental{
 			// 
 			// listProv
 			// 
-			this.listProv.Location = new System.Drawing.Point(32,346);
+			this.listProv.Location = new System.Drawing.Point(32,385);
 			this.listProv.Name = "listProv";
 			this.listProv.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
 			this.listProv.Size = new System.Drawing.Size(120,212);
@@ -184,7 +195,7 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(32,321);
+			this.label2.Location = new System.Drawing.Point(32,360);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(128,23);
 			this.label2.TabIndex = 41;
@@ -193,7 +204,7 @@ namespace OpenDental{
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(110,13);
+			this.label3.Location = new System.Drawing.Point(110,10);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(187,18);
 			this.label3.TabIndex = 43;
@@ -202,14 +213,14 @@ namespace OpenDental{
 			// 
 			// textDescription
 			// 
-			this.textDescription.Location = new System.Drawing.Point(298,14);
+			this.textDescription.Location = new System.Drawing.Point(298,11);
 			this.textDescription.Name = "textDescription";
 			this.textDescription.Size = new System.Drawing.Size(250,20);
 			this.textDescription.TabIndex = 44;
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(215,97);
+			this.label4.Location = new System.Drawing.Point(215,136);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(174,31);
 			this.label4.TabIndex = 46;
@@ -224,7 +235,7 @@ namespace OpenDental{
             listViewItem1,
             listViewItem2});
 			this.listViewDisplay.LabelWrap = false;
-			this.listViewDisplay.Location = new System.Drawing.Point(218,131);
+			this.listViewDisplay.Location = new System.Drawing.Point(218,170);
 			this.listViewDisplay.MultiSelect = false;
 			this.listViewDisplay.Name = "listViewDisplay";
 			this.listViewDisplay.Size = new System.Drawing.Size(175,390);
@@ -241,7 +252,7 @@ namespace OpenDental{
             listViewItem3,
             listViewItem4});
 			this.listViewAvailable.LabelWrap = false;
-			this.listViewAvailable.Location = new System.Drawing.Point(454,131);
+			this.listViewAvailable.Location = new System.Drawing.Point(454,170);
 			this.listViewAvailable.MultiSelect = false;
 			this.listViewAvailable.Name = "listViewAvailable";
 			this.listViewAvailable.Size = new System.Drawing.Size(175,390);
@@ -251,7 +262,7 @@ namespace OpenDental{
 			// 
 			// label5
 			// 
-			this.label5.Location = new System.Drawing.Point(452,111);
+			this.label5.Location = new System.Drawing.Point(452,150);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(161,17);
 			this.label5.TabIndex = 49;
@@ -267,7 +278,7 @@ namespace OpenDental{
 			this.butDown.CornerRadius = 4F;
 			this.butDown.Image = global::OpenDental.Properties.Resources.down;
 			this.butDown.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDown.Location = new System.Drawing.Point(312,534);
+			this.butDown.Location = new System.Drawing.Point(312,573);
 			this.butDown.Name = "butDown";
 			this.butDown.Size = new System.Drawing.Size(82,24);
 			this.butDown.TabIndex = 50;
@@ -283,7 +294,7 @@ namespace OpenDental{
 			this.butUp.CornerRadius = 4F;
 			this.butUp.Image = global::OpenDental.Properties.Resources.up;
 			this.butUp.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butUp.Location = new System.Drawing.Point(218,534);
+			this.butUp.Location = new System.Drawing.Point(218,573);
 			this.butUp.Name = "butUp";
 			this.butUp.Size = new System.Drawing.Size(82,24);
 			this.butUp.TabIndex = 51;
@@ -298,7 +309,7 @@ namespace OpenDental{
 			this.butLeft.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butLeft.CornerRadius = 4F;
 			this.butLeft.Image = global::OpenDental.Properties.Resources.Left;
-			this.butLeft.Location = new System.Drawing.Point(404,240);
+			this.butLeft.Location = new System.Drawing.Point(404,279);
 			this.butLeft.Name = "butLeft";
 			this.butLeft.Size = new System.Drawing.Size(35,26);
 			this.butLeft.TabIndex = 52;
@@ -312,7 +323,7 @@ namespace OpenDental{
 			this.butRight.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butRight.CornerRadius = 4F;
 			this.butRight.Image = global::OpenDental.Properties.Resources.Right;
-			this.butRight.Location = new System.Drawing.Point(404,280);
+			this.butRight.Location = new System.Drawing.Point(404,319);
 			this.butRight.Name = "butRight";
 			this.butRight.Size = new System.Drawing.Size(35,26);
 			this.butRight.TabIndex = 53;
@@ -320,7 +331,7 @@ namespace OpenDental{
 			// 
 			// label6
 			// 
-			this.label6.Location = new System.Drawing.Point(51,37);
+			this.label6.Location = new System.Drawing.Point(51,34);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(246,18);
 			this.label6.TabIndex = 54;
@@ -329,7 +340,7 @@ namespace OpenDental{
 			// 
 			// textRowsPerIncr
 			// 
-			this.textRowsPerIncr.Location = new System.Drawing.Point(298,39);
+			this.textRowsPerIncr.Location = new System.Drawing.Point(298,36);
 			this.textRowsPerIncr.Name = "textRowsPerIncr";
 			this.textRowsPerIncr.Size = new System.Drawing.Size(56,20);
 			this.textRowsPerIncr.TabIndex = 55;
@@ -338,23 +349,68 @@ namespace OpenDental{
 			// checkOnlyScheduledProvs
 			// 
 			this.checkOnlyScheduledProvs.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkOnlyScheduledProvs.Location = new System.Drawing.Point(21,65);
+			this.checkOnlyScheduledProvs.Location = new System.Drawing.Point(6,11);
 			this.checkOnlyScheduledProvs.Name = "checkOnlyScheduledProvs";
-			this.checkOnlyScheduledProvs.Size = new System.Drawing.Size(291,18);
+			this.checkOnlyScheduledProvs.Size = new System.Drawing.Size(282,18);
 			this.checkOnlyScheduledProvs.TabIndex = 56;
 			this.checkOnlyScheduledProvs.Text = "Only show operatories for scheduled providers";
 			this.checkOnlyScheduledProvs.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkOnlyScheduledProvs.UseVisualStyleBackColor = true;
 			this.checkOnlyScheduledProvs.Click += new System.EventHandler(this.checkOnlyScheduledProvs_Click);
 			// 
+			// textBeforeTime
+			// 
+			this.textBeforeTime.Location = new System.Drawing.Point(263,30);
+			this.textBeforeTime.Name = "textBeforeTime";
+			this.textBeforeTime.Size = new System.Drawing.Size(56,20);
+			this.textBeforeTime.TabIndex = 57;
+			// 
+			// groupBox1
+			// 
+			this.groupBox1.Controls.Add(this.labelAfterTime);
+			this.groupBox1.Controls.Add(this.textAfterTime);
+			this.groupBox1.Controls.Add(this.labelBeforeTime);
+			this.groupBox1.Controls.Add(this.checkOnlyScheduledProvs);
+			this.groupBox1.Controls.Add(this.textBeforeTime);
+			this.groupBox1.Location = new System.Drawing.Point(35,53);
+			this.groupBox1.Name = "groupBox1";
+			this.groupBox1.Size = new System.Drawing.Size(354,76);
+			this.groupBox1.TabIndex = 58;
+			this.groupBox1.TabStop = false;
+			// 
+			// labelBeforeTime
+			// 
+			this.labelBeforeTime.Location = new System.Drawing.Point(77,30);
+			this.labelBeforeTime.Name = "labelBeforeTime";
+			this.labelBeforeTime.Size = new System.Drawing.Size(187,17);
+			this.labelBeforeTime.TabIndex = 58;
+			this.labelBeforeTime.Text = "Only if before time";
+			this.labelBeforeTime.TextAlign = System.Drawing.ContentAlignment.BottomRight;
+			// 
+			// labelAfterTime
+			// 
+			this.labelAfterTime.Location = new System.Drawing.Point(77,52);
+			this.labelAfterTime.Name = "labelAfterTime";
+			this.labelAfterTime.Size = new System.Drawing.Size(187,17);
+			this.labelAfterTime.TabIndex = 60;
+			this.labelAfterTime.Text = "Only if after time";
+			this.labelAfterTime.TextAlign = System.Drawing.ContentAlignment.BottomRight;
+			// 
+			// textAfterTime
+			// 
+			this.textAfterTime.Location = new System.Drawing.Point(263,52);
+			this.textAfterTime.Name = "textAfterTime";
+			this.textAfterTime.Size = new System.Drawing.Size(56,20);
+			this.textAfterTime.TabIndex = 59;
+			// 
 			// FormApptViewEdit
 			// 
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
-			this.ClientSize = new System.Drawing.Size(709,628);
-			this.Controls.Add(this.checkOnlyScheduledProvs);
+			this.ClientSize = new System.Drawing.Size(709,656);
 			this.Controls.Add(this.textRowsPerIncr);
+			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.label6);
 			this.Controls.Add(this.butRight);
 			this.Controls.Add(this.butLeft);
@@ -382,6 +438,8 @@ namespace OpenDental{
 			this.Text = "Appointment View Edit";
 			this.Load += new System.EventHandler(this.FormApptViewEdit_Load);
 			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormApptViewEdit_Closing);
+			this.groupBox1.ResumeLayout(false);
+			this.groupBox1.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -397,6 +455,12 @@ namespace OpenDental{
 				textRowsPerIncr.Text=ApptViewCur.RowsPerIncr.ToString();
 			}
 			checkOnlyScheduledProvs.Checked=ApptViewCur.OnlyScheduledProvs;
+			if(ApptViewCur.OnlySchedBeforeTime > new TimeSpan(0,0,0)) {
+				textBeforeTime.Text=(DateTime.Today+ApptViewCur.OnlySchedBeforeTime).ToShortTimeString();
+			}
+			if(ApptViewCur.OnlySchedAfterTime > new TimeSpan(0,0,0)) {
+				textAfterTime.Text=(DateTime.Today+ApptViewCur.OnlySchedAfterTime).ToShortTimeString();
+			}
 			SetOpLabel();
 			ApptViewItemL.GetForCurView(ApptViewCur,true,null);//passing in true triggers it to give us the proper list of ops.
 			for(int i=0;i<OperatoryC.ListShort.Count;i++){
@@ -476,9 +540,17 @@ namespace OpenDental{
 		private void SetOpLabel(){
 			if(checkOnlyScheduledProvs.Checked) {
 				labelOps.Text=Lan.g(this,"View Operatories (week view only)");
+				labelBeforeTime.Visible=true;
+				labelAfterTime.Visible=true;
+				textBeforeTime.Visible=true;
+				textAfterTime.Visible=true;
 			}
 			else {
 				labelOps.Text=Lan.g(this,"View Operatories");
+				labelBeforeTime.Visible=false;
+				labelAfterTime.Visible=false;
+				textBeforeTime.Visible=false;
+				textAfterTime.Visible=false;
 			}
 		}
 
@@ -595,6 +667,26 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"At least one row type must be displayed."));
 				return;
 			}
+			DateTime timeBefore=new DateTime();//only the time portion will be used.
+			if(checkOnlyScheduledProvs.Checked && textBeforeTime.Text!="") {
+				try {
+					timeBefore=DateTime.Parse(textBeforeTime.Text);
+				}
+				catch {
+					MsgBox.Show(this,"Time before invalid.");
+					return;
+				}
+			}
+			DateTime timeAfter=new DateTime();
+			if(checkOnlyScheduledProvs.Checked && textAfterTime.Text!="") {
+				try {
+					timeAfter=DateTime.Parse(textAfterTime.Text);
+				}
+				catch {
+					MsgBox.Show(this,"Time after invalid.");
+					return;
+				}
+			}
 			ApptViewItems.DeleteAllForView(ApptViewCur);//start with a clean slate
 			for(int i=0;i<OperatoryC.ListShort.Count;i++){
 				if(listOps.SelectedIndices.Contains(i)){
@@ -622,6 +714,8 @@ namespace OpenDental{
 			ApptViewCur.Description=textDescription.Text;
 			ApptViewCur.RowsPerIncr=PIn.PInt(textRowsPerIncr.Text);
 			ApptViewCur.OnlyScheduledProvs=checkOnlyScheduledProvs.Checked;
+			ApptViewCur.OnlySchedBeforeTime=timeBefore.TimeOfDay;
+			ApptViewCur.OnlySchedAfterTime=timeAfter.TimeOfDay;
 			ApptViews.Update(ApptViewCur);//same whether isnew or not
 			DialogResult=DialogResult.OK;
 		}

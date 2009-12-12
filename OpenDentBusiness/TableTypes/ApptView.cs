@@ -15,6 +15,10 @@ namespace OpenDentBusiness{
 		public int RowsPerIncr;
 		///<summary>If set to true, then the only operatories that will show will be for providers that have schedules for the day, ops with no provs assigned.</summary>
 		public bool OnlyScheduledProvs;
+		///<summary>If OnlyScheduledProvs is set to true, and this time is not 0:00, then only provider schedules with start or stop time before this time will be included.</summary>
+		public TimeSpan OnlySchedBeforeTime;
+		///<summary>If OnlyScheduledProvs is set to true, and this time is not 0:00, then only provider schedules with start or stop time after this time will be included.</summary>
+		public TimeSpan OnlySchedAfterTime;
 
 		public ApptView(){
 

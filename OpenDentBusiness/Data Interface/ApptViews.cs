@@ -10,7 +10,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static DataTable RefreshCache(){
 			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
-			string c="SELECT * FROM apptview ORDER BY itemorder";
+			string c="SELECT * FROM apptview ORDER BY ItemOrder";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),c);
 			table.TableName="ApptView";
 			FillCache(table);
@@ -26,7 +26,9 @@ namespace OpenDentBusiness{
 				ApptViewC.List[i].Description = PIn.PString(table.Rows[i][1].ToString());
 				ApptViewC.List[i].ItemOrder   = PIn.PInt   (table.Rows[i][2].ToString());
 				ApptViewC.List[i].RowsPerIncr = PIn.PInt   (table.Rows[i][3].ToString());
-				ApptViewC.List[i].OnlyScheduledProvs = PIn.PBool  (table.Rows[i][4].ToString());	
+				ApptViewC.List[i].OnlyScheduledProvs = PIn.PBool(table.Rows[i][4].ToString());
+				ApptViewC.List[i].OnlySchedBeforeTime= PIn.PTimeSpan(table.Rows[i][5].ToString());
+				ApptViewC.List[i].OnlySchedAfterTime = PIn.PTimeSpan(table.Rows[i][6].ToString());	
 			}
 		}
 
@@ -43,7 +45,7 @@ namespace OpenDentBusiness{
 			if(PrefC.RandomKeys) {
 				command+="ApptViewNum,";
 			}
-			command+="Description,ItemOrder,RowsPerIncr,OnlyScheduledProvs) VALUES(";
+			command+="Description,ItemOrder,RowsPerIncr,OnlyScheduledProvs,OnlySchedBeforeTime,OnlySchedAfterTime) VALUES(";
 			if(PrefC.RandomKeys) {
 				command+=POut.PLong(Cur.ApptViewNum)+", ";
 			}
@@ -51,7 +53,9 @@ namespace OpenDentBusiness{
 				 "'"+POut.PString(Cur.Description)+"', "
 				+"'"+POut.PLong   (Cur.ItemOrder)+"', "
 				+"'"+POut.PLong   (Cur.RowsPerIncr)+"', "
-				+"'"+POut.PBool  (Cur.OnlyScheduledProvs)+"')";
+				+"'"+POut.PBool(Cur.OnlyScheduledProvs)+"', "
+				+POut.PTimeSpan(Cur.OnlySchedBeforeTime)+", "
+				+POut.PTimeSpan(Cur.OnlySchedAfterTime)+")";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -72,6 +76,8 @@ namespace OpenDentBusiness{
 				+",ItemOrder = '"  +POut.PLong   (Cur.ItemOrder)+"'"
 				+",RowsPerIncr = '"+POut.PLong   (Cur.RowsPerIncr)+"'"
 				+",OnlyScheduledProvs = '"+POut.PBool(Cur.OnlyScheduledProvs)+"'"
+				+",OnlySchedBeforeTime = "+POut.PTimeSpan(Cur.OnlySchedBeforeTime)
+				+",OnlySchedAfterTime = "+POut.PTimeSpan(Cur.OnlySchedAfterTime)
 				+" WHERE ApptViewNum = '"+POut.PLong(Cur.ApptViewNum)+"'";
 			Db.NonQ(command);
 		}
@@ -82,7 +88,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
 				return;
 			}
-			string command="DELETE from apptview WHERE ApptViewNum = '"
+			string command="DELETE FROM apptview WHERE ApptViewNum = '"
 				+POut.PLong(Cur.ApptViewNum)+"'";
 			Db.NonQ(command);
 		}

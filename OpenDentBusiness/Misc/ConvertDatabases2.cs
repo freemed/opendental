@@ -1905,8 +1905,10 @@ DROP TABLE IF EXISTS etAck";
 				Db.NonQ(command);
 				command="UPDATE registrationkey SET VotesAllotted =100";
 				Db.NonQ(command);
-
-
+				command="ALTER TABLE apptview ADD OnlySchedBeforeTime time NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE apptview ADD OnlySchedAfterTime time NOT NULL";
+				Db.NonQ(command);
 
 
 

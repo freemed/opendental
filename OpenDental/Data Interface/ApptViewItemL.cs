@@ -98,6 +98,20 @@ namespace OpenDental{
 						if(dailySched[s].StartTime.TimeOfDay==dailySched[s].StopTime.TimeOfDay) {//skip if block has no length.
 							continue;
 						}
+						if(ApptViewCur.OnlySchedAfterTime > new TimeSpan(0,0,0)) {
+							if(dailySched[s].StartTime.TimeOfDay < ApptViewCur.OnlySchedAfterTime
+								|| dailySched[s].StopTime.TimeOfDay < ApptViewCur.OnlySchedAfterTime) 
+							{
+								continue;
+							}
+						}
+						if(ApptViewCur.OnlySchedBeforeTime > new TimeSpan(0,0,0)) {
+							if(dailySched[s].StartTime.TimeOfDay > ApptViewCur.OnlySchedBeforeTime
+								|| dailySched[s].StopTime.TimeOfDay > ApptViewCur.OnlySchedBeforeTime) 
+							{
+								continue;
+							}
+						}
 						listSchedOps=dailySched[s].Ops;
 						for(int p=0;p<listSchedOps.Count;p++) {
 							if(listSchedOps[p]==OperatoryC.ListShort[i].OperatoryNum) {

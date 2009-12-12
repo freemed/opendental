@@ -84,6 +84,7 @@ namespace OpenDental{
 				}
 				if(Shadow!=null) {
 					Shadow.Dispose();
+					Shadow=null;
 				}
 				if(openBrush!=null) {
 					openBrush.Dispose();

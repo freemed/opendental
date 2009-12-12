@@ -145,17 +145,19 @@ namespace OpenDentBusiness{
 				try {
 					DateTime dateT=new DateTime(1,1,1)+myTimeSpan;
 					retval=dateT.ToString("HH:mm:ss",CultureInfo.InvariantCulture);
-				} catch {
+				} 
+				catch {
 					//Do nothing. This will return the time zero.
 				}
 			}
-			if(DataConnection.DBtype==DatabaseType.MySql) {
+			//if(DataConnection.DBtype==DatabaseType.MySql) {
 				if(encapsulate) {
 					retval="'"+retval+"'";
 				}
-			} else {//oracle
-				retval="TO_TIMESTAMP('"+retval+"','HH24:MI:SS')";
-			}
+			//} 
+			//else {//oracle
+			//	retval="TO_TIMESTAMP('"+retval+"','HH24:MI:SS')";
+			//}
 			return retval;
 		}
 
