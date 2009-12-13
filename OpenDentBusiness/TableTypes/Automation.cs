@@ -1,0 +1,59 @@
+using System;
+using System.Collections;
+
+namespace OpenDentBusiness{
+	
+	///<summary>A trigger event causes one or more actions.</summary>
+	public class Automation{
+		///<summary>Primary key.</summary>
+		public long AutomationNum;
+		///<summary></summary>
+		public string Description;
+		///<summary>What triggers this automation</summary>
+		public AutomationTrigger AutoTrigger;
+		///<summary>If this has a CompleteProcedure trigger, this is a comma-delimited list of codes that will trigger the action.</summary>
+		public string ProcCodes;
+		///<summary>The action taken as a result of the trigger.  To get more than one action, create multiple automation entries.</summary>
+		public AutomationAction AutoAction;
+		///<summary>FK to sheet.SheetNum.  If the action is to print a sheet, then this tells which sheet to print.  So it must be a custom sheet.  Also, not that this organization does not allow passing parameters to the sheet such as which procedures were completed, or which appt was broken.</summary>
+		public long SheetNum;
+		///<summary>FK to definition.DefNum. Only used if action is CreateCommlog.</summary>
+		public long CommType;
+		///<summary>If a commlog action, then this is the text that goes in the commlog.  Might later be expanded to work with email or to use variables.</summary>
+		public string MessageContent;
+	}
+
+
+
+	///<summary></summary>
+	public enum AutomationTrigger {
+		///<summary></summary>
+		CompleteProcedure,
+		///<summary></summary>
+		BreakAppointment,
+		///<summary></summary>
+		ScheduleApptNewPat
+	}
+
+	///<summary></summary>
+	public enum AutomationAction {
+		///<summary></summary>
+		PrintPatientLetter,
+		///<summary></summary>
+		CreateCommlog,
+		///<summary>If a referral does not exist for this patient, then notify user instead.</summary>
+		PrintReferralLetter
+	}
+	
+
+
+}
+
+
+
+
+
+
+
+
+

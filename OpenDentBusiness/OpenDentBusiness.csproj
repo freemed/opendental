@@ -83,6 +83,7 @@
   <ItemGroup>
     <Compile Include="Cache\InsFilingCodeSubtypeC.cs" />
     <Compile Include="Cache\InsFilingCodeC.cs" />
+    <Compile Include="Data Interface\Automations.cs" />
     <Compile Include="Data Interface\ReplicationServers.cs" />
     <Compile Include="Data Interface\InsFilingCodes.cs" />
     <Compile Include="Data Interface\EtransMessageTexts.cs" />
@@ -338,6 +339,7 @@
     <Compile Include="Plugins\PluginBase.cs" />
     <Compile Include="Plugins\PluginContainer.cs" />
     <Compile Include="Plugins\Plugins.cs" />
+    <Compile Include="TableTypes\Automation.cs" />
     <Compile Include="TableTypes\ReplicationServer.cs" />
     <Compile Include="TableTypes\EtransMessageText.cs" />
     <Compile Include="TableTypes\InsFilingCode.cs" />

@@ -1909,7 +1909,22 @@ DROP TABLE IF EXISTS etAck";
 				Db.NonQ(command);
 				command="ALTER TABLE apptview ADD OnlySchedAfterTime time NOT NULL";
 				Db.NonQ(command);
+				command="DROP TABLE IF EXISTS automation";
+				Db.NonQ(command);
+				command=@"CREATE TABLE automation (
+					AutomationNum bigint NOT NULL auto_increment,
+					Description text NOT NULL,
+					Autotrigger tinyint NOT NULL,
+					ProcCodes text NOT NULL,
+					AutoAction tinyint NOT NULL,
+					SheetNum bigint NOT NULL,
+					CommType bigint NOT NULL,
+					MessageContent text NOT NULL,
+					PRIMARY KEY(AutomationNum)
+					)";
+				Db.NonQ(command);
 
+				
 
 
 

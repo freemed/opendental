@@ -313,7 +313,9 @@ namespace OpenDentBusiness{
 		///<summary>47</summary>
 		InsFilingCodes,
 		///<summary>48</summary>
-		ReplicationServers
+		ReplicationServers,
+		///<summary>49</summary>
+		Automation
 	}
 	//<summary></summary>
 	/*public enum ButtonType{

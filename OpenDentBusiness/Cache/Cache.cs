@@ -55,6 +55,9 @@ namespace OpenDentBusiness {
 				ds.Tables.Add(AutoCodeItems.RefreshCache());
 				ds.Tables.Add(AutoCodeConds.RefreshCache());
 			}
+			if(itypes.Contains((int)InvalidType.Automation) || isAll) {
+				ds.Tables.Add(Automations.RefreshCache());
+			}
 			if(itypes.Contains((int)InvalidType.AutoNotes) || isAll) {
 				ds.Tables.Add(AutoNotes.RefreshCache());
 				ds.Tables.Add(AutoNoteControls.RefreshCache());
@@ -211,6 +214,9 @@ namespace OpenDentBusiness {
 				AutoCodes.FillCache(ds.Tables["AutoCode"]);
 				AutoCodeItems.FillCache(ds.Tables["AutoCodeItem"]);
 				AutoCodeConds.FillCache(ds.Tables["AutoCodeCond"]);
+			}
+			if(itypes.Contains((int)InvalidType.Automation) || isAll) {
+				Automations.FillCache(ds.Tables["Automation"]);
 			}
 			if(itypes.Contains((int)InvalidType.AutoNotes) || isAll) {
 				AutoNotes.FillCache(ds.Tables["AutoNote"]);
