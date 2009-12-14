@@ -213,6 +213,7 @@
     <Compile Include="Bridges\TrophyEnhanced.cs" />
     <Compile Include="Bridges\VixWin.cs" />
     <Compile Include="Bridges\VixWinOld.cs" />
+    <Compile Include="Data Interface\AutomationL.cs" />
     <Compile Include="Data Interface\ClaimL.cs" />
     <Compile Include="Data Interface\ClearinghouseL.cs" />
     <Compile Include="Data Interface\AppointmentL.cs" />
@@ -225,6 +226,7 @@
     <Compile Include="Data Interface\PrefL.cs" />
     <Compile Include="Data Interface\PrinterL.cs" />
     <Compile Include="Data Interface\DefL.cs" />
+    <Compile Include="Data Interface\ProcedureL.cs" />
     <Compile Include="Data Interface\ProgramL.cs" />
     <Compile Include="Data Interface\RefAttachL.cs" />
     <Compile Include="Eclaims\AOS.cs" />

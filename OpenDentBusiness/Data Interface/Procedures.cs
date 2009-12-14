@@ -1496,8 +1496,8 @@ namespace OpenDentBusiness {
 			}
 		}
 
-		///<summary>Loops through each proc. Does not add notes to a procedure that already has notes. Used twice, security checked in both places before calling this.  Also sets provider for each proc.</summary>
-		public static void SetCompleteInAppt(Appointment apt,List<InsPlan> PlanList,List<PatPlan> patPlans,long siteNum,int patientAge) {
+		///<summary>Loops through each proc. Does not add notes to a procedure that already has notes. Used three times, security checked in all three places before calling this.  Also sets provider for each proc.</summary>
+		public static void SetCompleteInAppt(Appointment apt,List<InsPlan> PlanList,List<PatPlan> patPlans,long siteNum,int patientAge,List<Procedure> procsInAppt) { 
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),apt,PlanList,patPlans,siteNum,patientAge);
 				return;

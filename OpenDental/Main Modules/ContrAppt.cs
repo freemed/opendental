@@ -3113,6 +3113,9 @@ namespace OpenDental{
 					FormApptEdit FormAE=new FormApptEdit(apt.AptNum);//this is where security log entry is made
 					FormAE.IsNew=true;
 					FormAE.ShowDialog();
+					if(apt.IsNewPatient) {
+						AutomationL.Trigger(AutomationTrigger.CreateApptNewPat,null,apt.PatNum);
+					}
 					if(FormAE.DialogResult==DialogResult.OK){
 						RefreshModuleDataPatient(PatCur.PatNum);
 						OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
@@ -3726,6 +3729,7 @@ namespace OpenDental{
 				FormA.IsNew=true;
 				FormA.ShowDialog();
 			}
+			AutomationL.Trigger(AutomationTrigger.BreakAppointment,null,pat.PatNum);
 		}
 
 		private void OnComplete_Click(){
@@ -3758,7 +3762,7 @@ namespace OpenDental{
 			}
 			else {
 				Appointments.SetAptStatusComplete(apt.AptNum,PatPlans.GetPlanNum(PatPlanList,1),PatPlans.GetPlanNum(PatPlanList,2));
-				Procedures.SetCompleteInAppt(apt, PlanList, PatPlanList,pat.SiteNum,pat.Age);//loops through each proc
+				ProcedureL.SetCompleteInAppt(apt, PlanList, PatPlanList,pat.SiteNum,pat.Age);//loops through each proc
 				SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit, apt.PatNum,
 					pat.GetNameLF() + ", "
 					+ ContrApptSingle3[GetIndex(apt.AptNum)].DataRoww["procs"].ToString() + ", "

@@ -3266,6 +3266,9 @@ namespace OpenDental{
 				SecurityLogs.MakeLogEntry(Permissions.ProcComplCreate,PatCur.PatNum,
 					PatCur.GetNameLF()+", "+ProcedureCodes.GetProcCode(ProcCur.CodeNum).ProcCode+", "
 					+ProcCur.ProcFee.ToString("c"));
+				List<string> procCodeList=new List<string>();
+				procCodeList.Add(ProcedureCodes.GetStringProcCode(ProcCur.CodeNum));
+				AutomationL.Trigger(AutomationTrigger.CompleteProcedure,procCodeList,ProcCur.PatNum);
 			}
 			else if(IsNew && ProcCur.ProcStatus==ProcStat.C){
 				//if new procedure is complete

@@ -128,7 +128,21 @@ namespace OpenDentBusiness{
 				retStr[i]=PIn.PString(table.Rows[i][0].ToString());
 			}
 			return retStr;
-		}		
+		}
+
+		/// <summary>Gets the referral number for this patient.  If multiple, it returns the first one.  If none, it returns 0.  Does not consider referred To.</summary>
+		public static long GetReferralNum(long patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetLong(MethodBase.GetCurrentMethod(),patNum);
+			}
+			string command="SELECT ReferralNum "
+				+"FROM refattach " 
+				+"WHERE refattach.PatNum ="+POut.PLong(patNum)+" "
+				+"AND refattach.IsFrom=1 "
+				+"ORDER BY ItemOrder "
+				+"LIMIT 1";
+			return PIn.PLong(Db.GetScalar(command));
+		}
 
 	}
 }

@@ -2017,7 +2017,7 @@ namespace OpenDental{
 						return false;
 					}
 					List <PatPlan> PatPlanList=PatPlans.Refresh(AptCur.PatNum);
-					Procedures.SetCompleteInAppt(AptCur,PlanList,PatPlanList,pat.SiteNum,pat.Age);
+					ProcedureL.SetCompleteInAppt(AptCur,PlanList,PatPlanList,pat.SiteNum,pat.Age);
 					SecurityLogs.MakeLogEntry(Permissions.ProcComplCreate,pat.PatNum,
 						pat.GetNameLF()+" "+AptCur.AptDateTime.ToShortDateString());
 				}

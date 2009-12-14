@@ -8,7 +8,19 @@ using System.Windows.Forms;
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class Automations {
-		public static List<Automation> Listt;
+		private static List<Automation> listt;
+
+		public static List<Automation> Listt {
+			get {
+				if(listt==null) {
+					RefreshCache();
+				}
+				return listt;
+			}
+			set {
+				listt=value;
+			}
+		}
 
 		///<summary></summary>
 		public static DataTable RefreshCache() {
@@ -22,7 +34,7 @@ namespace OpenDentBusiness{
 
 		public static void FillCache(DataTable table){
 			//No need to check RemotingRole; no call to db.
-			Listt=new List<Automation>();
+			listt=new List<Automation>();
 			Automation auto;
 			for(int i=0;i<table.Rows.Count;i++) {
 				auto=new Automation();
@@ -34,7 +46,7 @@ namespace OpenDentBusiness{
 				auto.SheetDefNum   = PIn.PLong(table.Rows[i][5].ToString());
 				auto.CommType      = PIn.PLong(table.Rows[i][6].ToString());
 				auto.MessageContent= PIn.PString(table.Rows[i][7].ToString());
-				Listt.Add(auto);
+				listt.Add(auto);
 			}
 		}
 

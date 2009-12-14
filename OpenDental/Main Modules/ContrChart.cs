@@ -6443,7 +6443,7 @@ namespace OpenDental{
 					return;
 				}
 				Appointments.SetAptStatusComplete(apt.AptNum,PatPlans.GetPlanNum(PatPlanList,1),PatPlans.GetPlanNum(PatPlanList,2));
-				Procedures.SetCompleteInAppt(apt,PlanList,PatPlanList,PatCur.SiteNum,PatCur.Age);//loops through each proc
+				ProcedureL.SetCompleteInAppt(apt,PlanList,PatPlanList,PatCur.SiteNum,PatCur.Age);//loops through each proc
 				SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit, apt.PatNum,
 					PatCur.GetNameLF() + ", "
 					+ apt.ProcDescript + ", "
@@ -6489,25 +6489,17 @@ namespace OpenDental{
 					}
 				}
 			}
+			List<string> procCodeList=new List<string>();//for automation
 			for(int i=0;i<gridProg.SelectedIndices.Length;i++) {
 				row=(DataRow)gridProg.Rows[gridProg.SelectedIndices[i]].Tag;
 				apt=null;
 				procCur=Procedures.GetOneProc(PIn.PLong(row["ProcNum"].ToString()),true);
-				//The next few lines are contentious.  Some users want it one way, and some users want it the other way.
-				//Behavior #1: Include lines to prevent setting a procedure complete again.  Reasoning is that it's already been set
-				//complete, and should therefore be locked in a sense.  Would never make sense to set it complete again.
-				//Behavior #2: Do not include lines.  Allows setting a procedure complete again.  Reasoning is that user wants to
-				//be able to update the date on multiple procedures at once.  Now this only makes sense if you don't attach procs
-				//to appointments, because otherwise, the date always follows that of the appointment.
-				//Behavior #2 was used for quite a while, but we got too many complaints about the security of such a strategy.
-				//Starting with version 5.4, we had to switch to behavior #1.  This will generate complaints from people who were using
-				//this button to update the date.  But we now have a new feature in place to allow editing the date of multiple procs
-				//at once that can be used instead.
 				if(procCur.ProcStatus==ProcStat.C){
-					continue;//don't allow setting a procedure complete again.
+					continue;//don't allow setting a procedure complete again.  Important for security reasons.
 				}
 				procOld=procCur.Copy();
 				procCode=ProcedureCodes.GetProcCode(procCur.CodeNum);
+				procCodeList.Add(ProcedureCodes.GetStringProcCode(procCur.CodeNum));
 				if(procOld.ProcStatus!=ProcStat.C) {
 					//if procedure was already complete, then don't add more notes.
 					procCur.Note+=ProcCodeNotes.GetNote(procCur.ProvNum,procCur.CodeNum);//note wasn't complete, so add notes
@@ -6536,6 +6528,7 @@ namespace OpenDental{
 				//	((Procedure)gridProg.Rows[gridProg.SelectedIndices[i]].Tag).ProcNum,PIn.PDate(textDate.Text));
 				Procedures.ComputeEstimates(procCur,procCur.PatNum,ClaimProcList,false,PlanList,PatPlanList,BenefitList,PatCur.Age);
 			}
+			AutomationL.Trigger(AutomationTrigger.CompleteProcedure,procCodeList,PatCur.PatNum);
 			Recalls.Synch(PatCur.PatNum);
 			//if(skipped>0){
 			//	MessageBox.Show(Lan.g(this,".")+"\r\n"

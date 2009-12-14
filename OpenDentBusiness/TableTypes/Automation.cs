@@ -37,7 +37,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		BreakAppointment,
 		///<summary></summary>
-		ScheduleApptNewPat
+		CreateApptNewPat
 	}
 
 	///<summary></summary>
