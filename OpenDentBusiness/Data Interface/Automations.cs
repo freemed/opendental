@@ -31,7 +31,7 @@ namespace OpenDentBusiness{
 				auto.AutoTrigger   = (AutomationTrigger)PIn.PInt(table.Rows[i][2].ToString());
 				auto.ProcCodes     = PIn.PString(table.Rows[i][3].ToString());
 				auto.AutoAction    = (AutomationAction)PIn.PInt(table.Rows[i][4].ToString());
-				auto.SheetNum      = PIn.PLong(table.Rows[i][5].ToString());
+				auto.SheetDefNum   = PIn.PLong(table.Rows[i][5].ToString());
 				auto.CommType      = PIn.PLong(table.Rows[i][6].ToString());
 				auto.MessageContent= PIn.PString(table.Rows[i][7].ToString());
 				Listt.Add(auto);
@@ -51,7 +51,7 @@ namespace OpenDentBusiness{
 			if(PrefC.RandomKeys) {
 				command+="AutomationNum,";
 			}
-			command+="Description,AutoTrigger,ProcCodes,AutoAction,SheetNum,CommType,MessageContent) VALUES(";
+			command+="Description,AutoTrigger,ProcCodes,AutoAction,SheetDefNum,CommType,MessageContent) VALUES(";
 			if(PrefC.RandomKeys) {
 				command+=POut.PLong(auto.AutomationNum)+", ";
 			}
@@ -60,7 +60,7 @@ namespace OpenDentBusiness{
 				+"'"+POut.PInt((int)auto.AutoTrigger)+"', "
 				+"'"+POut.PString(auto.ProcCodes)+"', "
 				+"'"+POut.PInt((int)auto.AutoAction)+"', "
-				+"'"+POut.PLong(auto.SheetNum)+"', "
+				+"'"+POut.PLong(auto.SheetDefNum)+"', "
 				+"'"+POut.PLong(auto.CommType)+"', "
 				+"'"+POut.PString(auto.MessageContent)+"')";
 			if(PrefC.RandomKeys) {
@@ -83,7 +83,7 @@ namespace OpenDentBusiness{
 				+ ",AutoTrigger = '"  +POut.PInt((int)auto.AutoTrigger)+"'"
 				+ ",ProcCodes = '"    +POut.PString(auto.ProcCodes)+"'"
 				+ ",AutoAction = '"   +POut.PInt((int)auto.AutoAction)+"'"
-				+ ",SheetNum = '"     +POut.PLong(auto.SheetNum)+"'"
+				+ ",SheetDefNum = '"  +POut.PLong(auto.SheetDefNum)+"'"
 				+ ",CommType = '"     +POut.PLong(auto.CommType)+"'"
 				+ ",MessageContent = '" +POut.PString(auto.MessageContent)+"'"
 				+" WHERE AutomationNum = '" +POut.PLong   (auto.AutomationNum)+"'";

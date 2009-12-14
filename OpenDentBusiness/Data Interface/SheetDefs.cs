@@ -160,6 +160,17 @@ namespace OpenDentBusiness{
 			return retVal;
 		}
 
+		///<summary>Gets the description from the cache.</summary>
+		public static string GetDescription(long sheetDefNum) {
+			//No need to check RemotingRole; no call to db.
+			for(int i=0;i<SheetDefC.Listt.Count;i++) {
+				if(SheetDefC.Listt[i].SheetDefNum==sheetDefNum) {
+					return SheetDefC.Listt[i].Description;
+				}
+			}
+			return "";
+		}
+
 
 
 	}

@@ -15,12 +15,17 @@ namespace OpenDentBusiness{
 		public string ProcCodes;
 		///<summary>The action taken as a result of the trigger.  To get more than one action, create multiple automation entries.</summary>
 		public AutomationAction AutoAction;
-		///<summary>FK to sheet.SheetNum.  If the action is to print a sheet, then this tells which sheet to print.  So it must be a custom sheet.  Also, not that this organization does not allow passing parameters to the sheet such as which procedures were completed, or which appt was broken.</summary>
-		public long SheetNum;
+		///<summary>FK to sheetdef.SheetDefNum.  If the action is to print a sheet, then this tells which sheet to print.  So it must be a custom sheet.  Also, not that this organization does not allow passing parameters to the sheet such as which procedures were completed, or which appt was broken.</summary>
+		public long SheetDefNum;
 		///<summary>FK to definition.DefNum. Only used if action is CreateCommlog.</summary>
 		public long CommType;
 		///<summary>If a commlog action, then this is the text that goes in the commlog.  Might later be expanded to work with email or to use variables.</summary>
 		public string MessageContent;
+
+		public Automation Copy() {
+			return (Automation)MemberwiseClone();
+		}
+
 	}
 
 
