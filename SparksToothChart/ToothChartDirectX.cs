@@ -271,7 +271,7 @@ namespace SparksToothChart {
 			Matrix mandibleLowerRowMat=Matrix.Translation(0,-45f,0)*defOrient;
 			DrawPerioRow(mandibleTeeth,mandibleLowerRowMat,false,false);
 			DrawNumbersAndLinesPerio(baseY);//Numbers and center lines are top-most.			
-			DrawPerioLegend(-50f,baseY-63f);
+			DrawPerioLegend(-60f,baseY-63f);
 			device.EndScene();
 			device.Present();
 		}
@@ -820,20 +820,20 @@ namespace SparksToothChart {
 			Color textColor=Color.Black;
 			device.Transform.World=Matrix.Translation(xLeft,yTop,0);
 			PrintString("Bleeding",0,0,0,textColor,xfont);
-			DrawDroplet(20f,-1.5f,TcData.ColorBleeding);
+			DrawDroplet(18f,-1.5f,TcData.ColorBleeding);
 			PrintString("Suppuration",0,-ySpace,0,textColor,xfont);
-			DrawDroplet(20f,-ySpace-1.5f,TcData.ColorSuppuration);
+			DrawDroplet(18f,-ySpace-1.5f,TcData.ColorSuppuration);
 			PrintString("Probing",0,-2*ySpace,0,textColor,xfont);
-			DrawColoredRectangle(new RectangleF(20f,-2*ySpace-3f,0.6f,3f),TcData.ColorProbing);
-			DrawColoredRectangle(new RectangleF(21f,-2*ySpace-3f,0.6f,3f),TcData.ColorProbingRed);
-			device.Transform.World=device.Transform.World*Matrix.Translation(25f,0,0);
+			DrawColoredRectangle(new RectangleF(18f,-2*ySpace-3f,0.6f,3f),TcData.ColorProbing);
+			DrawColoredRectangle(new RectangleF(19f,-2*ySpace-3f,0.6f,3f),TcData.ColorProbingRed);
+			device.Transform.World=device.Transform.World*Matrix.Translation(35f,0,0);
 			PrintString("Gingival Margin",0,0,0,textColor,xfont);
 			DrawColoredRectangle(new RectangleF(35f,-1.5f,15f,2f/TcData.ScaleMmToPix),TcData.ColorGingivalMargin);
 			PrintString("Clinical Attachment Level",0,-ySpace,0,textColor,xfont);
 			DrawColoredRectangle(new RectangleF(35f,-ySpace-1.5f,15f,2f/TcData.ScaleMmToPix),TcData.ColorCAL);
 			PrintString("Mucogingival Junction",0,-2*ySpace,0,textColor,xfont);
 			DrawColoredRectangle(new RectangleF(35f,-2*ySpace-1.5f,15f,2f/TcData.ScaleMmToPix),TcData.ColorMGJ);
-			device.Transform.World=device.Transform.World*Matrix.Translation(55f,0,0);
+			device.Transform.World=device.Transform.World*Matrix.Translation(65f,0,0);
 			Matrix lineMat=ScreenSpaceMatrix();
 			PrintString("Furcation 1",0,0,0,textColor,xfont);
 			DrawFurcationTriangle(17f,-0.5f,false,lineMat,1);
