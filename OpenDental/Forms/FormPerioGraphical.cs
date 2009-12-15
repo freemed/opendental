@@ -185,38 +185,6 @@ namespace OpenDental {
 		private void pd2_PrintPage(object sender,PrintPageEventArgs ev) {//raised for each page to be printed.
 			Graphics g=ev.Graphics;
 			RenderPerioPrintout(g,PatCur,ev.MarginBounds);
-			//Bitmap bitmap=toothChart.GetBitmap();
-			//string clinicName="";
-			////This clinic name could be more accurate here in the future if we make perio exams clinic specific.
-			////Perhaps if there were a perioexam.ClinicNum column.
-			//if(PatCur.ClinicNum!=0){
-			//  Clinic clinic=Clinics.GetClinic(PatCur.ClinicNum);
-			//  clinicName=clinic.Description;
-			//}else{
-			//  clinicName=PrefC.GetString(PrefName.PracticeTitle);
-			//}
-			//float y=50f;
-			//SizeF m;
-			//Font font=new Font("Arial",15);
-			//string titleStr="PERIODONTAL EXAMINATION";
-			//m=g.MeasureString(titleStr,font);
-			//g.DrawString(titleStr,font,Brushes.Black,new PointF(ev.MarginBounds.Width/2f-m.Width/2f,y));
-			//y+=m.Height;
-			//font=new Font("Arial",11);
-			//m=g.MeasureString(clinicName,font);
-			//g.DrawString(clinicName,font,Brushes.Black,
-			//  new PointF(ev.MarginBounds.Width/2f-m.Width/2f,y));
-			//y+=m.Height;
-			//string patNameStr=PatCur.GetNameFLFormal();
-			//m=g.MeasureString(patNameStr,font);
-			//g.DrawString(patNameStr,font,Brushes.Black,new PointF(ev.MarginBounds.Width/2f-m.Width/2f,y));
-			//y+=m.Height;
-			//DateTime serverTimeNow=MiscData.GetNowDateTime();
-			//string timeNowStr=serverTimeNow.ToShortDateString();//Locale specific date.
-			//m=g.MeasureString(timeNowStr,font);
-			//g.DrawString(timeNowStr,font,Brushes.Black,new PointF(ev.MarginBounds.Width/2f-m.Width/2f,y));
-			//y+=m.Height;
-			//g.DrawImage(bitmap,ev.MarginBounds.Width/2f-bitmap.Width/2f,y,bitmap.Width,bitmap.Height);
 		}
 
 		public void RenderPerioPrintout(Graphics g,Patient pat,Rectangle marginBounds) {
@@ -269,10 +237,6 @@ namespace OpenDental {
 		}
 
 		private void butSave_Click(object sender,EventArgs e) {
-			SaveToImages();
-		}
-
-		public void SaveToImages(){
 			Bitmap perioPrintImage=null;
 			Graphics g=null;
 			Document doc=new Document();
@@ -280,6 +244,7 @@ namespace OpenDental {
 			try {
 				perioPrintImage=new Bitmap(850,1100);
 				g=Graphics.FromImage(perioPrintImage);
+				g.InterpolationMode=System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
 				RenderPerioPrintout(g,PatCur,new Rectangle(0,0,perioPrintImage.Width,perioPrintImage.Height));
 				string patImagePath=ImageStore.GetPatientFolder(PatCur);
 				string filePath="";
