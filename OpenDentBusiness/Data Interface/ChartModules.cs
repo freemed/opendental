@@ -707,13 +707,13 @@ namespace OpenDentBusiness {
 				rows.Add(row);
 			}
 			//sheet-----------------------------------------------------------------------------------------------------------------
-			command="SELECT SheetNum,DateTimeSheet,SheetType "
+			command="SELECT Description,SheetNum,DateTimeSheet,SheetType "
 				+"FROM sheet "
 				+"WHERE PatNum="+POut.PLong(patNum)
 				+" AND SheetType!="+POut.PLong((int)SheetTypeEnum.Rx)//rx are only accesssible from within Rx edit window.
 				+" ORDER BY DateTimeSheet";
 			DataTable rawSheet=dcon.GetTable(command);
-			SheetTypeEnum sheetType;
+			//SheetTypeEnum sheetType;
 			for(int i=0;i<rawSheet.Rows.Count;i++) {
 				row=table.NewRow();
 				row["aptDateTime"]=DateTime.MinValue;
@@ -722,8 +722,8 @@ namespace OpenDentBusiness {
 				row["colorBackG"]=Color.White.ToArgb();
 				row["colorText"]=Color.Black.ToArgb();//DefC.Long[(int)DefCat.ProgNoteColors][6].ItemColor.ToArgb().ToString();//needs to change
 				row["CommlogNum"]=0;
-				sheetType=(SheetTypeEnum)PIn.PLong(rawSheet.Rows[i]["SheetType"].ToString());
-				row["description"]=Lans.g("SheetTypeEnum",sheetType.ToString());
+				//sheetType=(SheetTypeEnum)PIn.PLong(rawSheet.Rows[i]["SheetType"].ToString());
+				row["description"]=rawSheet.Rows[i]["Description"].ToString();
 				row["dx"]="";
 				row["Dx"]="";
 				row["EmailMessageNum"]=0;

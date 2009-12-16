@@ -1923,8 +1923,14 @@ DROP TABLE IF EXISTS etAck";
 					PRIMARY KEY(AutomationNum)
 					)";
 				Db.NonQ(command);
-
-				
+				command="ALTER TABLE sheet ADD Description varchar(255) NOT NULL";
+				Db.NonQ(command);
+				//for each sheettype, set descriptions for all sheets of that type.
+				for(int i=0;i<Enum.GetNames(typeof(SheetTypeEnum)).Length;i++) {
+					command="UPDATE sheet SET Description= '"+POut.PString(Enum.GetNames(typeof(SheetTypeEnum))[i])+"' "
+						+"WHERE SheetType="+POut.PInt(i);
+					Db.NonQ(command);
+				}
 
 
 

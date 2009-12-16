@@ -29,19 +29,21 @@ namespace OpenDental{
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.panelMain = new System.Windows.Forms.Panel();
 			this.checkErase = new System.Windows.Forms.CheckBox();
+			this.butPDF = new OpenDental.UI.Button();
 			this.butDelete = new OpenDental.UI.Button();
 			this.textDateTime = new OpenDental.ValidDate();
 			this.butPrint = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.butPDF = new OpenDental.UI.Button();
+			this.textDescription = new System.Windows.Forms.TextBox();
+			this.label2 = new System.Windows.Forms.Label();
 			this.panel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// textNote
 			// 
 			this.textNote.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.textNote.Location = new System.Drawing.Point(580,68);
+			this.textNote.Location = new System.Drawing.Point(580,107);
 			this.textNote.Multiline = true;
 			this.textNote.Name = "textNote";
 			this.textNote.Size = new System.Drawing.Size(146,90);
@@ -50,7 +52,7 @@ namespace OpenDental{
 			// label1
 			// 
 			this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.label1.Location = new System.Drawing.Point(579,49);
+			this.label1.Location = new System.Drawing.Point(579,88);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(147,16);
 			this.label1.TabIndex = 7;
@@ -97,6 +99,22 @@ namespace OpenDental{
 			this.checkErase.Text = "Eraser Tool";
 			this.checkErase.UseVisualStyleBackColor = true;
 			this.checkErase.Click += new System.EventHandler(this.checkErase_Click);
+			// 
+			// butPDF
+			// 
+			this.butPDF.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butPDF.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butPDF.Autosize = true;
+			this.butPDF.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butPDF.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPDF.CornerRadius = 4F;
+			this.butPDF.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butPDF.Location = new System.Drawing.Point(645,376);
+			this.butPDF.Name = "butPDF";
+			this.butPDF.Size = new System.Drawing.Size(81,24);
+			this.butPDF.TabIndex = 83;
+			this.butPDF.Text = "Create PDF";
+			this.butPDF.Click += new System.EventHandler(this.butPDF_Click);
 			// 
 			// butDelete
 			// 
@@ -169,26 +187,30 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// butPDF
+			// textDescription
 			// 
-			this.butPDF.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butPDF.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butPDF.Autosize = true;
-			this.butPDF.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butPDF.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butPDF.CornerRadius = 4F;
-			this.butPDF.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPDF.Location = new System.Drawing.Point(645,376);
-			this.butPDF.Name = "butPDF";
-			this.butPDF.Size = new System.Drawing.Size(81,24);
-			this.butPDF.TabIndex = 83;
-			this.butPDF.Text = "Create PDF";
-			this.butPDF.Click += new System.EventHandler(this.butPDF_Click);
+			this.textDescription.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.textDescription.Location = new System.Drawing.Point(580,66);
+			this.textDescription.Name = "textDescription";
+			this.textDescription.Size = new System.Drawing.Size(146,20);
+			this.textDescription.TabIndex = 84;
+			// 
+			// label2
+			// 
+			this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.label2.Location = new System.Drawing.Point(579,47);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(147,16);
+			this.label2.TabIndex = 85;
+			this.label2.Text = "Description";
+			this.label2.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// FormSheetFillEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(737,551);
+			this.Controls.Add(this.textDescription);
+			this.Controls.Add(this.label2);
 			this.Controls.Add(this.butPDF);
 			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.checkErase);
@@ -224,5 +246,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butPrint;
 		private System.Windows.Forms.CheckBox checkErase;
 		private OpenDental.UI.Button butPDF;
+		private System.Windows.Forms.TextBox textDescription;
+		private System.Windows.Forms.Label label2;
 	}
 }

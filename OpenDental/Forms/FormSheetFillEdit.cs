@@ -54,6 +54,7 @@ namespace OpenDental {
 				panelMain.Height=SheetCur.Height;
 			}
 			textDateTime.Text=SheetCur.DateTimeSheet.ToShortDateString()+" "+SheetCur.DateTimeSheet.ToShortTimeString();
+			textDescription.Text=SheetCur.Description;
 			textNote.Text=SheetCur.InternalNote;
 			LayoutFields();
 		}
@@ -562,6 +563,7 @@ namespace OpenDental {
 				return false;
 			}
 			SheetCur.DateTimeSheet=PIn.PDateT(textDateTime.Text);
+			SheetCur.Description=textDescription.Text;
 			SheetCur.InternalNote=textNote.Text;
 			FillFieldsFromControls();//But SheetNums will still be 0 for a new sheet.
 			bool isNew=SheetCur.IsNew;
