@@ -843,103 +843,42 @@ namespace OpenDentBusiness{
 
 		///<summary>LName, 'Preferred' FName M</summary>
 		public string GetNameLF(){
-			string retVal="";
-			if(Title!=""){
-			//	retVal+=Title+" ";
-			}
-			retVal+=LName+", ";
-			if(Preferred!=""){
-				retVal+="'"+Preferred+"' ";
-			}
-			retVal+=FName;
-			if(MiddleI!=""){
-				retVal+=" "+MiddleI;
-			}
-			return retVal;
+			return Patients.GetNameLF(LName,FName,Preferred,middleI);
 		}
 
 		///<summary>FName 'Preferred' M LName</summary>
 		public string GetNameFL(){
-			string retVal="";
-			if(Title!="") {
-				//retVal+=Title+" ";
-			}
-			retVal+=FName+" ";
-			if(Preferred!="") {
-				retVal+="'"+Preferred+"' ";
-			}
-			if(MiddleI!=""){
-				retVal+=MiddleI+" ";
-			}
-			retVal+=LName;
-			return retVal;
+			return Patients.GetNameFL(LName,FName,preferred,middleI);
 		}
 
 		///<summary>FName/Preferred LName</summary>
 		public string GetNameFirstOrPrefL(){
-			string retVal="";
-			if(Preferred=="") {
-				retVal+=FName+" ";
-			}
-			else{
-				retVal+=Preferred+" ";
-			}
-			retVal+=LName;
-			return retVal;
+			return Patients.GetNameFirstOrPrefL(lName,FName,preferred);
 		}
 
 		///<summary>FName/Preferred M. LName</summary>
 		public string GetNameFirstOrPrefML(){
-			string retVal="";
-			if(Preferred=="") {
-				retVal+=FName+" ";
-			}
-			else{
-				retVal+=Preferred+" ";
-			}
-			if(MiddleI!=""){
-				retVal+=MiddleI+". ";
-			}
-			retVal+=LName;
-			return retVal;
+			return Patients.GetNameFirstOrPrefML(lName,FName,preferred,middleI);
 		}
 
 		///<summary>Title FName M LName</summary>
 		public string GetNameFLFormal() {
-			string retVal="";
-			if(Title!="") {
-				retVal+=Title+" ";
-			}
-			retVal+=FName+" "+MiddleI+" "+LName;
-			return retVal;
+			return Patients.GetNameFLFormal(lName,FName,middleI,title);
 		}
 
 		///<summary>Includes preferred.</summary>
 		public string GetNameFirst() {
-			string retVal=FName;
-			if(Preferred!="") {
-				retVal+=" '"+Preferred+"'";
-			}
-			return retVal;
+			return Patients.GetNameFirst(FName,preferred);
 		}
 
 		///<summary></summary>
 		public string GetNameFirstOrPreferred() {
-			if(Preferred!="") {
-				return Preferred;
-			}
-			return FName;
+			return Patients.GetNameFirstOrPreferred(fName,preferred);
 		}
 
 		///<summary>Dear __.  Does not include the "Dear" or the comma.</summary>
 		public string GetSalutation(){
-			if(Salutation!=""){
-				return Salutation;
-			}
-			if(Preferred!=""){
-				return Preferred;
-			}
-			return FName;
+			return Patients.GetSalutation(salutation,preferred,fName);
 		}
 	}
 

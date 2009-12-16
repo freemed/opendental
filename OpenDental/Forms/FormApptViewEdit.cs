@@ -477,6 +477,7 @@ namespace OpenDental{
 				}
 			}
 			allElements=new ArrayList();
+			allElements.Add("Address");
 			allElements.Add("AddrNote");
 			allElements.Add("Age");
 			allElements.Add("ASAP");
@@ -491,7 +492,6 @@ namespace OpenDental{
 			allElements.Add("PatNum");
 			allElements.Add("PatNumAndName");
 			allElements.Add("Procs");
-			//allElements.Add("ProcDescript");
 			allElements.Add("Production");
 			allElements.Add("Provider");
 			allElements.Add("WirelessPhone");

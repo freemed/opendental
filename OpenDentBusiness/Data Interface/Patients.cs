@@ -1781,6 +1781,125 @@ namespace OpenDentBusiness{
 			return true;
 		}
 
+		///<summary>LName, 'Preferred' FName M</summary>
+		public static string GetNameLF(string LName,string FName,string Preferred,string MiddleI) {
+			//No need to check RemotingRole; no call to db.
+			string retVal="";
+			//if(Title!=""){
+			//	retVal+=Title+" ";
+			//}
+			retVal+=LName+", ";
+			if(Preferred!=""){
+				retVal+="'"+Preferred+"' ";
+			}
+			retVal+=FName;
+			if(MiddleI!=""){
+				retVal+=" "+MiddleI;
+			}
+			return retVal;
+		}
+
+		///<summary>FName 'Preferred' M LName</summary>
+		public static string GetNameFL(string LName,string FName,string Preferred,string MiddleI) {
+			//No need to check RemotingRole; no call to db.
+			string retVal="";
+			//if(Title!="") {
+				//retVal+=Title+" ";
+			//}
+			retVal+=FName+" ";
+			if(Preferred!="") {
+				retVal+="'"+Preferred+"' ";
+			}
+			if(MiddleI!="") {
+				retVal+=MiddleI+" ";
+			}
+			retVal+=LName;
+			return retVal;
+		}
+
+		///<summary>FName/Preferred LName</summary>
+		public static string GetNameFirstOrPrefL(string LName,string FName,string Preferred) {
+			//No need to check RemotingRole; no call to db.
+			string retVal="";
+			if(Preferred=="") {
+				retVal+=FName+" ";
+			}
+			else {
+				retVal+=Preferred+" ";
+			}
+			retVal+=LName;
+			return retVal;
+		}
+
+		///<summary>FName/Preferred M. LName</summary>
+		public static string GetNameFirstOrPrefML(string LName,string FName,string Preferred,string MiddleI) {
+			//No need to check RemotingRole; no call to db.
+			string retVal="";
+			if(Preferred=="") {
+				retVal+=FName+" ";
+			}
+			else {
+				retVal+=Preferred+" ";
+			}
+			if(MiddleI!="") {
+				retVal+=MiddleI+". ";
+			}
+			retVal+=LName;
+			return retVal;
+		}
+
+		///<summary>Title FName M LName</summary>
+		public static string GetNameFLFormal(string LName,string FName,string MiddleI,string Title) {
+			//No need to check RemotingRole; no call to db.
+			string retVal="";
+			if(Title!="") {
+				retVal+=Title+" ";
+			}
+			retVal+=FName+" "+MiddleI+" "+LName;
+			return retVal;
+		}
+
+		///<summary>Includes preferred.</summary>
+		public static string GetNameFirst(string FName,string Preferred) {
+			//No need to check RemotingRole; no call to db.
+			string retVal=FName;
+			if(Preferred!="") {
+				retVal+=" '"+Preferred+"'";
+			}
+			return retVal;
+		}
+
+		///<summary></summary>
+		public static string GetNameFirstOrPreferred(string FName,string Preferred) {
+			//No need to check RemotingRole; no call to db.
+			if(Preferred!="") {
+				return Preferred;
+			}
+			return FName;
+		}
+
+		///<summary>Dear __.  Does not include the "Dear" or the comma.</summary>
+		public static string GetSalutation(string Salutation,string Preferred,string FName) {
+			//No need to check RemotingRole; no call to db.
+			if(Salutation!="") {
+				return Salutation;
+			}
+			if(Preferred!="") {
+				return Preferred;
+			}
+			return FName;
+		}
+
+		/// <summary>Result will be multiline.</summary>
+		public static string GetAddressFull(string address,string address2,string city,string state,string zip) {
+			string retVal=address;
+			if(address2!="") {
+				retVal+="\r\n"+address2;
+			}
+			retVal+="\r\n"+city+", "+state+" "+zip;
+			return retVal;
+		}
+
 	}
 
 	///<summary>Not a database table.  Just used in billing and finance charges.</summary>

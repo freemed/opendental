@@ -818,6 +818,7 @@ namespace OpenDentBusiness{
 			DataRow row;
 			//columns that start with lowercase are altered for display rather than being raw data.
 			table.Columns.Add("age");
+			table.Columns.Add("address");
 			table.Columns.Add("addrNote");
 			table.Columns.Add("apptModNote");
 			table.Columns.Add("aptDate");
@@ -859,11 +860,11 @@ namespace OpenDentBusiness{
 			table.Columns.Add("ProvNum");
 			table.Columns.Add("wkPhone");
 			table.Columns.Add("wirelessPhone");
-			string command="SELECT p1.Abbr ProvAbbr,p2.Abbr HygAbbr,patient.AddrNote,"
+			string command="SELECT p1.Abbr ProvAbbr,p2.Abbr HygAbbr,patient.Address,patient.Address2,patient.AddrNote,"
 				+"patient.ApptModNote,AptDateTime,appointment.AptNum,AptStatus,Assistant,"
 				+"patient.BillingType,patient.BirthDate,"
 				+"carrier1.CarrierName carrierName1,carrier2.CarrierName carrierName2,"
-				+"patient.ChartNumber,Confirmed,patient.CreditType,DateTimeChecked,DateTimeDue,DateTimeRecd,DateTimeSent,"
+				+"patient.ChartNumber,patient.City,Confirmed,patient.CreditType,DateTimeChecked,DateTimeDue,DateTimeRecd,DateTimeSent,"
 				+"guar.FamFinUrgNote,patient.FName,patient.Guarantor,patient.HmPhone,patient.ImageFolder,IsHygiene,IsNewPatient,"
 				+"LabCaseNum,patient.LName,patient.MedUrgNote,patient.MiddleI,Note,Op,appointment.PatNum,"
 				+"Pattern,patplan.PlanNum,patient.PreferConfirmMethod,patient.PreferContactMethod,patient.Preferred,"
@@ -875,7 +876,7 @@ namespace OpenDentBusiness{
 			else{
 				command+="WHERE procedurelog.AptNum=appointment.AptNum AND procedurelog.AptNum!=0) Production, ";
 			}
-			command+="ProvHyg,appointment.ProvNum,patient.WirelessPhone,patient.WkPhone "
+			command+="ProvHyg,appointment.ProvNum,patient.State,patient.WirelessPhone,patient.WkPhone,patient.Zip "
 				+"FROM appointment LEFT JOIN patient ON patient.PatNum=appointment.PatNum "
 				+"LEFT JOIN provider p1 ON p1.ProvNum=appointment.ProvNum "
 				+"LEFT JOIN provider p2 ON p2.ProvNum=appointment.ProvHyg ";
@@ -958,6 +959,8 @@ namespace OpenDentBusiness{
 			DateTime birthdate;
 			for(int i=0;i<raw.Rows.Count;i++) {
 				row=table.NewRow();
+				row["address"]=Patients.GetAddressFull(raw.Rows[i]["Address"].ToString(),raw.Rows[i]["Address2"].ToString(),
+					raw.Rows[i]["City"].ToString(),raw.Rows[i]["State"].ToString(),raw.Rows[i]["Zip"].ToString());
 				row["addrNote"]="";
 				if(raw.Rows[i]["AddrNote"].ToString()!=""){
 					row["addrNote"]=Lans.g("Appointments","AddrNote: ")+raw.Rows[i]["AddrNote"].ToString();
