@@ -512,6 +512,9 @@ namespace OpenDental {
 			}
 			switch(selected) {
 				case 0://Aging Report
+					if(!Security.IsAuthorized(Permissions.ReportProdInc)) {
+						return;
+					}
 					FormRpAging FormA=new FormRpAging();
 					FormA.ShowDialog();
 					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Aging");
@@ -552,6 +555,9 @@ namespace OpenDental {
 					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Payment Plans.");
 					break;
 				case 8://Receivable Breakdown
+					if(!Security.IsAuthorized(Permissions.ReportProdInc)) {
+						return;
+					}
 					FormRpReceivablesBreakdown FormRcv = new FormRpReceivablesBreakdown();
 					FormRcv.ShowDialog();
 					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Receivable Breakdown.");

@@ -1817,6 +1817,18 @@ namespace OpenDentBusiness{
 			return retVal;
 		}
 
+		///<summary>FName M LName</summary>
+		public static string GetNameFLnoPref(string LName,string FName,string MiddleI) {
+			//No need to check RemotingRole; no call to db.
+			string retVal="";
+			retVal+=FName+" ";
+			if(MiddleI!="") {
+				retVal+=MiddleI+" ";
+			}
+			retVal+=LName;
+			return retVal;
+		}
+
 		///<summary>FName/Preferred LName</summary>
 		public static string GetNameFirstOrPrefL(string LName,string FName,string Preferred) {
 			//No need to check RemotingRole; no call to db.

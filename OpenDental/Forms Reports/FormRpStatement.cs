@@ -972,7 +972,7 @@ namespace OpenDental{
 					patnum=PIn.PLong(tablename.Substring(7));
 				}
 				if(patnum!=0){
-					par.AddText(fam.GetNameInFamFL(patnum));
+					par.AddText(fam.GetNameInFamFLnoPref(patnum));
 				}
 				//if(FamilyStatementDataList[famIndex].PatAboutList[i].ApptDescript!=""){
 				//	par=section.AddParagraph();

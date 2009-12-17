@@ -50,6 +50,17 @@ namespace OpenDentBusiness
 			return GetLim(myPatNum).GetNameFL();
 		}
 
+		///<summary>Gets a formatted name from the family list.  If the patient is not in the family list, then it gets that info from the database.</summary>
+		public string GetNameInFamFLnoPref(long myPatNum) {
+			//No need to check RemotingRole; no call to db.
+			for(int i=0;i<ListPats.Length;i++) {
+				if(ListPats[i].PatNum==myPatNum) {
+					return ListPats[i].GetNameFLnoPref();
+				}
+			}
+			return GetLim(myPatNum).GetNameFLnoPref();
+		}
+
 		///<summary>Gets (preferred)first middle last</summary>
 		public string GetNameInFamFLI(int myi){
 			//No need to check RemotingRole; no call to db.

@@ -220,7 +220,7 @@ namespace OpenDentBusiness{
 				case Permissions.UserQuery:
 					return Lans.g("enumPermissions","User Query");
 				case Permissions.ReportProdInc:
-					return Lans.g("enumPermissions","Reports - Production and Income");
+					return Lans.g("enumPermissions","Reports - Production and Income, Aging");
 				case Permissions.TimecardDeleteEntry:
 					return Lans.g("enumPermissions","Timecard Delete Entry");
 			}
