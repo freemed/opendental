@@ -795,6 +795,7 @@ namespace OpenDentBusiness {
 			table.Columns.Add("minutes");
 			table.Columns.Add("Note");
 			table.Columns.Add("ProcDescript");
+			table.Columns.Add("PlannedApptNum");
 			//but we won't actually fill this table with rows until the very end.  It's more useful to use a List<> for now.
 			List<DataRow> rows=new List<DataRow>();
 			string command="SELECT plannedappt.AptNum,ItemOrder,PlannedApptNum,appointment.AptDateTime,"
@@ -871,6 +872,7 @@ namespace OpenDentBusiness {
 				row["ItemOrder"]=itemOrder.ToString();
 				row["minutes"]=(aptRow["Pattern"].ToString().Length*5).ToString();
 				row["Note"]=aptRow["Note"].ToString();
+				row["PlannedApptNum"]=rawPlannedAppts.Rows[i]["PlannedApptNum"].ToString();
 				row["ProcDescript"]=aptRow["ProcDescript"].ToString();
 				if(aptStatus==ApptStatus.Complete){
 					row["ProcDescript"]="(Completed) "+ row["ProcDescript"];

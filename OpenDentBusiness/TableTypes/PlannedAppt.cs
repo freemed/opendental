@@ -45,7 +45,7 @@ namespace OpenDentBusiness{
 		[DataField("ItemOrder")]
 		private int itemOrder;
 		private bool itemOrderChanged;
-		///<summary>One-indexed order of item in group of planned appts.</summary>
+		///<summary>Zero-indexed order of item in group of planned appts.</summary>
 		public int ItemOrder{
 			get{return itemOrder;}
 			set{if(itemOrder!=value){itemOrder=value;MarkDirty();itemOrderChanged=true;}}

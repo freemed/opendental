@@ -15,12 +15,14 @@ namespace OpenDentBusiness{
 			
 		//}
 
-		/*
 		///<Summary>Gets one plannedAppt from the database.</Summary>
-		public static plannedAppt CreateObject(int plannedApptNum){
-			return DataObjectFactory<plannedAppt>.CreateObject(plannedApptNum);
+		public static PlannedAppt CreateObject(long plannedApptNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<PlannedAppt>(MethodBase.GetCurrentMethod(),plannedApptNum);
+			}
+			return DataObjectFactory<PlannedAppt>.CreateObject(plannedApptNum);
 		}
-
+/*
 		public static List<plannedAppt> GetplannedAppts(int[] plannedApptNums){
 			Collection<plannedAppt> collectState=DataObjectFactory<plannedAppt>.CreateObjects(plannedApptNums);
 			return new List<plannedAppt>(collectState);		
