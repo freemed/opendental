@@ -135,9 +135,13 @@ namespace OpenDental.Eclaims {
 		}
 
 		public static string DutchInitials(Patient pat) {
-			string retVal=DutchLName(pat.LName).Substring(0,1);
-			if(pat.FName!="") {
-				retVal+=pat.FName.Substring(0,1);
+			string[] arrayFirstNames=pat.FName.Split(new char[]{'-'},StringSplitOptions.RemoveEmptyEntries);
+			string retVal="";
+			for(int i=0;i<arrayFirstNames.Length;i++) {
+				retVal+=arrayFirstNames[i].Substring(0,1).ToUpper()+".";
+			}
+			if(pat.MiddleI!="") {
+				retVal+=pat.MiddleI.Substring(0,1).ToUpper()+".";
 			}
 			return retVal;
 		}
