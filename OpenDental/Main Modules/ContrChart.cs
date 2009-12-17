@@ -5902,7 +5902,8 @@ namespace OpenDental{
 			gridPlanned.Rows.Clear();
 			ODGridRow row;
 			DataTable table=DataSetMain.Tables["Planned"];
-			//set the orders
+			//This gets done in the business layer:
+			/*
 			bool iochanged=false;
 			for(int i=0;i<table.Rows.Count;i++) {
 				if(table.Rows[i]["ItemOrder"].ToString()!=i.ToString()) {
@@ -5915,7 +5916,7 @@ namespace OpenDental{
 			if(iochanged) {
 				DataSetMain=ChartModules.GetAll(PatCur.PatNum,checkAudit.Checked);
 				table=DataSetMain.Tables["Planned"];
-			}
+			}*/
 			for(int i=0;i<table.Rows.Count;i++){
 				row=new ODGridRow();
 				row.Cells.Add(table.Rows[i]["ItemOrder"].ToString());

@@ -9,11 +9,15 @@ using OpenDentBusiness.DataAccess;
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class PlannedAppts{
-		//<summary></summary>
-		//public static List<PlannedAppt> Refresh(){
-			//string c="SELECT * from plannedAppt ORDER BY Description";
-			
-		//}
+
+		///<summary>Gets all planned appt objects for a patient.</summary>
+		public static List<PlannedAppt> Refresh(long patNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<PlannedAppt>>(MethodBase.GetCurrentMethod(),patNum);
+			}
+			string command="SELECT * FROM plannedappt WHERE PatNum="+POut.PLong(patNum);
+			return new List<PlannedAppt>(DataObjectFactory<PlannedAppt>.CreateObjects(command));
+		}
 
 		///<Summary>Gets one plannedAppt from the database.</Summary>
 		public static PlannedAppt CreateObject(long plannedApptNum){

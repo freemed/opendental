@@ -30,7 +30,7 @@ namespace OpenDental{
 		private System.Windows.Forms.ColumnHeader columnHeader4;
 		private System.Windows.Forms.ColumnHeader columnHeader3;
 		private System.Windows.Forms.ColumnHeader columnHeader5;
-		private Appointment[] ListOth;
+		private Appointment[] ApptList;
 		private List<Recall> RecallList;
 		private Patient PatCur;
 		private OpenDental.UI.Button butOK;
@@ -465,50 +465,57 @@ namespace OpenDental{
 				listFamily.Items.Add(item);
 			}
       checkDone.Checked=PatCur.PlannedIsDone;
-			ListOth=Appointments.GetForPat(PatCur.PatNum);
-			tbApts.ResetRows(ListOth.Length);
+			ApptList=Appointments.GetForPat(PatCur.PatNum);
+			List<PlannedAppt> plannedList=PlannedAppts.Refresh(PatCur.PatNum);
+			tbApts.ResetRows(ApptList.Length);
 			tbApts.SetGridColor(Color.DarkGray);
-			for (int i = 0; i < ListOth.Length; i++) {
-				tbApts.Cell[0, i] = ListOth[i].AptStatus.ToString();
-				if (ListOth[i].AptDateTime.Year > 1880) {
+			for(int i=0;i<ApptList.Length; i++) {
+				tbApts.Cell[0, i] = ApptList[i].AptStatus.ToString();
+				if (ApptList[i].AptDateTime.Year > 1880) {
 					//only regular still scheduled appts
-					if(ListOth[i].AptStatus != ApptStatus.Planned && ListOth[i].AptStatus != ApptStatus.PtNote 
-						&& ListOth[i].AptStatus != ApptStatus.PtNoteCompleted && ListOth[i].AptStatus != ApptStatus.UnschedList 
-						&& ListOth[i].AptStatus != ApptStatus.Broken)
+					if(ApptList[i].AptStatus != ApptStatus.Planned && ApptList[i].AptStatus != ApptStatus.PtNote 
+						&& ApptList[i].AptStatus != ApptStatus.PtNoteCompleted && ApptList[i].AptStatus != ApptStatus.UnschedList 
+						&& ApptList[i].AptStatus != ApptStatus.Broken)
 					{
-						tbApts.Cell[1,i] = ListOth[i].AptDateTime.ToString("d");
-						tbApts.Cell[2,i] = ListOth[i].AptDateTime.ToString("t");
-						if(ListOth[i].AptDateTime < DateTime.Today) { //Past
+						tbApts.Cell[1,i] = ApptList[i].AptDateTime.ToString("d");
+						tbApts.Cell[2,i] = ApptList[i].AptDateTime.ToString("t");
+						if(ApptList[i].AptDateTime < DateTime.Today) { //Past
 							tbApts.SetBackColorRow(i,(DefC.Long[(int)DefCat.ProgNoteColors][11].ItemColor));
 							tbApts.SetTextColorRow(i,(DefC.Long[(int)DefCat.ProgNoteColors][10].ItemColor));
 						}
-						else if(ListOth[i].AptDateTime.Date == DateTime.Today.Date) { //Today
+						else if(ApptList[i].AptDateTime.Date == DateTime.Today.Date) { //Today
 							tbApts.SetBackColorRow(i,(DefC.Long[(int)DefCat.ProgNoteColors][9].ItemColor));
 							tbApts.SetTextColorRow(i,(DefC.Long[(int)DefCat.ProgNoteColors][8].ItemColor));
 							tbApts.Cell[0,i] = Lan.g(this,"Today");
 						}
-						else if(ListOth[i].AptDateTime > DateTime.Today) { //Future
+						else if(ApptList[i].AptDateTime > DateTime.Today) { //Future
 							tbApts.SetBackColorRow(i,DefC.Long[(int)DefCat.ProgNoteColors][13].ItemColor);
 							tbApts.SetTextColorRow(i,(DefC.Long[(int)DefCat.ProgNoteColors][12].ItemColor));
 						}
 					}
-					else if(ListOth[i].AptStatus == ApptStatus.Planned) { //show line for planned appt
+					else if(ApptList[i].AptStatus == ApptStatus.Planned) { //show line for planned appt
 						tbApts.SetTextColorRow(i,DefC.Long[(int)DefCat.ProgNoteColors][16].ItemColor);
 						tbApts.SetBackColorRow(i,DefC.Long[(int)DefCat.ProgNoteColors][17].ItemColor);
-						tbApts.Cell[0,i] = Lan.g("enumApptStatus","Planned");
+						string txt=Lan.g("enumApptStatus","Planned")+" ";
+						for(int p=0;p<plannedList.Count;p++) {
+							if(plannedList[p].AptNum==ApptList[i].AptNum) {
+								txt+="#"+plannedList[p].ItemOrder.ToString();
+							}
+						}
+						tbApts.Cell[0,i] =txt;
 					}
-					else if(ListOth[i].AptStatus ==ApptStatus.PtNote) {
+					else if(ApptList[i].AptStatus ==ApptStatus.PtNote) {
 						tbApts.SetTextColorRow(i,DefC.Long[(int)DefCat.ProgNoteColors][18].ItemColor);
 						tbApts.SetBackColorRow(i,DefC.Long[(int)DefCat.ProgNoteColors][19].ItemColor);
 						tbApts.Cell[0,i] = Lan.g("enumApptStatus","PtNote");
 					}
-					else if(ListOth[i].AptStatus == ApptStatus.PtNoteCompleted) {
+					else if(ApptList[i].AptStatus == ApptStatus.PtNoteCompleted) {
 						tbApts.SetTextColorRow(i,DefC.Long[(int)DefCat.ProgNoteColors][20].ItemColor);
 						tbApts.SetBackColorRow(i,DefC.Long[(int)DefCat.ProgNoteColors][21].ItemColor);
 						tbApts.Cell[0,i] = Lan.g("enumApptStatus","PtNoteCompleted");
 					}
-					else if(ListOth[i].AptStatus == ApptStatus.Broken | ListOth[i].AptStatus == ApptStatus.UnschedList) {
-						if(ListOth[i].AptStatus == ApptStatus.Broken) {
+					else if(ApptList[i].AptStatus == ApptStatus.Broken | ApptList[i].AptStatus == ApptStatus.UnschedList) {
+						if(ApptList[i].AptStatus == ApptStatus.Broken) {
 							tbApts.Cell[0,i] = Lan.g("enumApptStatus","Broken");
 						}
 						else {
@@ -522,9 +529,9 @@ namespace OpenDental{
 					tbApts.Cell[1, i] = "";
 					tbApts.Cell[2, i] = "";
 				}
-				tbApts.Cell[3, i] = (ListOth[i].Pattern.Length * 5).ToString();
-				tbApts.Cell[4,i]=ListOth[i].ProcDescript;
-				tbApts.Cell[5,i]=ListOth[i].Note;
+				tbApts.Cell[3, i] = (ApptList[i].Pattern.Length * 5).ToString();
+				tbApts.Cell[4,i]=ApptList[i].ProcDescript;
+				tbApts.Cell[5,i]=ApptList[i].Note;
 			}
 			textFinUrg.Text=FamCur.ListPats[0].FamFinUrgNote;
 			tbApts.LayoutTables();
@@ -817,10 +824,10 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Please select appointment first."));
 				return;
 			}
-			if(!OKtoSendToPinboard(ListOth[tbApts.SelectedRow])){
+			if(!OKtoSendToPinboard(ApptList[tbApts.SelectedRow])){
 				return;
 			}
-			AptNumsSelected.Add(ListOth[tbApts.SelectedRow].AptNum);
+			AptNumsSelected.Add(ApptList[tbApts.SelectedRow].AptNum);
 			oResult=OtherResult.CopyToPinBoard;
 			DialogResult=DialogResult.OK;
 		}
@@ -829,8 +836,8 @@ namespace OpenDental{
 		private bool OKtoSendToPinboard(Appointment AptCur){
 			if(AptCur.AptStatus==ApptStatus.Planned){//if is a Planned appointment
 				bool PlannedIsSched=false;
-				for(int i=0;i<ListOth.Length;i++){
-					if(ListOth[i].NextAptNum==AptCur.AptNum){//if the planned appointment is already sched
+				for(int i=0;i<ApptList.Length;i++){
+					if(ApptList[i].NextAptNum==AptCur.AptNum){//if the planned appointment is already sched
 						PlannedIsSched=true;
 					}
 				}
@@ -864,16 +871,16 @@ namespace OpenDental{
 		private void tbApts_CellDoubleClicked(object sender, CellEventArgs e){
 			int currentSelection=tbApts.SelectedRow;
 			int currentScroll=tbApts.ScrollValue;
-			FormApptEdit FormAE=new FormApptEdit(ListOth[e.Row].AptNum);
+			FormApptEdit FormAE=new FormApptEdit(ApptList[e.Row].AptNum);
 			FormAE.PinIsVisible=true;
 			FormAE.ShowDialog();
 			if(FormAE.DialogResult!=DialogResult.OK)
 				return;
 			if(FormAE.PinClicked){
-				if(!OKtoSendToPinboard(ListOth[e.Row])){
+				if(!OKtoSendToPinboard(ApptList[e.Row])){
 					return;
 				}
-				AptNumsSelected.Add(ListOth[e.Row].AptNum);
+				AptNumsSelected.Add(ApptList[e.Row].AptNum);
 				oResult=OtherResult.CopyToPinBoard;
 				DialogResult=DialogResult.OK;
 			}
@@ -911,12 +918,12 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Please select appointment first."));
 				return;
 			}
-			if(ListOth[tbApts.SelectedRow].AptDateTime.Year<1880){
+			if(ApptList[tbApts.SelectedRow].AptDateTime.Year<1880){
 				MessageBox.Show(Lan.g(this,"Unable to go to unscheduled appointment."));
 				return;
 			}
-			AptNumsSelected.Add(ListOth[tbApts.SelectedRow].AptNum);
-			DateJumpToString=ListOth[tbApts.SelectedRow].AptDateTime.Date.ToShortDateString();
+			AptNumsSelected.Add(ApptList[tbApts.SelectedRow].AptNum);
+			DateJumpToString=ApptList[tbApts.SelectedRow].AptDateTime.Date.ToShortDateString();
 			oResult=OtherResult.GoTo;
 			DialogResult=DialogResult.OK;
 		}
@@ -928,7 +935,7 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Please select appointment first."));
 				return;
 			}
-			AptNumsSelected.Add(ListOth[tbApts.SelectedRow].AptNum);
+			AptNumsSelected.Add(ApptList[tbApts.SelectedRow].AptNum);
 			DialogResult=DialogResult.OK;
 		}
 
