@@ -94,12 +94,13 @@ namespace OpenDentBusiness {
 				}
 				strb.Append("Billing Prov LName");
 			}
+			/*this is now allowed to be blank because that's how we identify non-person
 			if(billProv.FName=="") {
 				if(strb.Length!=0) {
 					strb.Append(",");
 				}
 				strb.Append("Billing Prov FName");
-			}
+			}*/
 			if(billProv.SSN.Length<2) {
 				if(strb.Length!=0) {
 					strb.Append(",");

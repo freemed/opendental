@@ -279,11 +279,16 @@ namespace OpenDental.Eclaims
 					}
 					//2010AA NM1: Billing provider
 					seg++;
-					sw.Write("NM1*85*"//NM101: 85=Billing provider
-						+"1*"//NM102: 1=person,2=non-person
-						+Sout(billProv.LName,35)+"*"//NM103: Last name
-						//NM103 allowable length increased to 60
-						+Sout(billProv.FName,25)+"*"//NM104: First name
+					sw.Write("NM1*85*");//NM101: 85=Billing provider
+					if(billProv.FName==""){
+						sw.Write("2*");//NM102: 1=person,2=non-person
+					}
+					else{
+						sw.Write("1*");
+					}
+					sw.Write(Sout(billProv.LName,35)+"*"//NM103: Last name
+						//NM103 allowable length increased to 60?
+						+Sout(billProv.FName,25)+"*"//NM104: First name. Might be blank.
 						+Sout(billProv.MI,25)+"*"//NM105: Middle name. Since this is optional, there is no min length.
 						+"*"//NM106: not used
 						+"*");//NM107: Name suffix. not used
