@@ -6482,12 +6482,14 @@ namespace OpenDental{
 			bool showEmail=this.checkEmail.Checked;
 			bool showTask=this.checkTasks.Checked;
 			bool showLab=this.checkLabCase.Checked;
+			bool showSheets=this.checkSheets.Checked;
 			checkRx.Checked=false;
 			checkComm.Checked=false;
 			checkAppt.Checked=false;
 			checkEmail.Checked=false;
 			checkTasks.Checked=false;
 			checkLabCase.Checked=false;
+			checkSheets.Checked=false;
 			FillProgNotes();
 			try {
 				pagesPrinted=0;
@@ -6508,6 +6510,7 @@ namespace OpenDental{
 			checkEmail.Checked=showEmail;
 			checkTasks.Checked=showTask;
 			checkLabCase.Checked=showLab;
+			checkSheets.Checked=showSheets;
 			FillProgNotes();
 		}
 
