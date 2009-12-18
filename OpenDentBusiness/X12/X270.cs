@@ -171,7 +171,7 @@ namespace OpenDentBusiness
 			strb.AppendLine("TRN*1*"//TRN01: Trace Type Code.  1=Current Transaction Trace Numbers
 				+"1*"//TRN02: Trace Number.  We don't really have a good primary key yet.  Keep it simple. Use 1.
 				+"1"+billProv.SSN+"~");//TRN03: Entity Identifier. First digit is 1=EIN.  Next 9 digits are EIN.  Length validated.
-			//2000C NM1: Subscriber Name
+			//2100C NM1: Subscriber Name
 			seg++;
 			strb.AppendLine("NM1*IL*"//NM101: IL=Insured or Subscriber
 				+"1*"//NM102: 1=Person
@@ -182,13 +182,17 @@ namespace OpenDentBusiness
 				+"*"//NM107: suffix. Not present in Open Dental yet.
 				+"MI*"//NM108: MI=MemberID
 				+Sout(insPlan.SubscriberID.Replace("-",""),80)+"~");//NM109: Subscriber ID. Validated to be L>2.
-			//2000C DMG: Subscriber Demographic Information
+			//2100C REF: Subscriber Additional Information.  Without this, old plans seem to be frequently returned.
+			seg++;
+			strb.AppendLine("REF*6P*"//REF01: 6P=GroupNumber
+				+Sout(insPlan.GroupNum,30)+"~");//REF02: Supplemental ID. Validated.
+			//2100C DMG: Subscriber Demographic Information
 			seg++;
 			strb.AppendLine("DMG*D8*"//DMG01: Date Time Period Qualifier.  D8=CCYYMMDD
 				+subscriber.Birthdate.ToString("yyyyMMdd")+"~");//DMG02: Subscriber birthdate.  Validated
 				//DMG03: Gender code.  Situational.  F or M.  Since this was left out in the example,
 				//and since we don't want to send the wrong gender, we will not send this element.
-			//2000C DTP: Subscriber Date.  Deduced through trial and error that this is required by EHG even though not by X12 specs.
+			//2100C DTP: Subscriber Date.  Deduced through trial and error that this is required by EHG even though not by X12 specs.
 			seg++;
 			strb.AppendLine("DTP*307*"//DTP01: Qualifier.  307=Eligibility
 				+"D8*"//DTP02: Format Qualifier.
@@ -314,6 +318,12 @@ IEA*1*000012145~";
 					strb.Append(",");
 				}
 				strb.Append("Subscriber Birthdate");
+			}
+			if(insPlan.GroupNum=="") {
+				if(strb.Length!=0) {
+					strb.Append(",");
+				}
+				strb.Append("Group Number");
 			}
 			return strb.ToString();
 		}
