@@ -2386,6 +2386,7 @@ namespace OpenDental{
 									ben.MonetaryAmt=PIn.PDouble(fields[2]);
 									ben.PlanNum=PlanCur.PlanNum;
 									ben.TimePeriod=BenefitTimePeriod.CalendarYear;
+									ben.CoverageLevel=BenefitCoverageLevel.Individual;
 									benefitList.Add(ben.Copy());
 								}
 								break;
@@ -2410,6 +2411,7 @@ namespace OpenDental{
 								ben.PlanNum=PlanCur.PlanNum;
 								ben.TimePeriod=BenefitTimePeriod.CalendarYear;
 								ben.MonetaryAmt=amt;
+								ben.CoverageLevel=BenefitCoverageLevel.Individual;
 								benefitList.Add(ben.Copy());
 								ben=new Benefit();
 								ben.BenefitType=InsBenefitType.Deductible;
@@ -2417,6 +2419,7 @@ namespace OpenDental{
 								ben.PlanNum=PlanCur.PlanNum;
 								ben.TimePeriod=BenefitTimePeriod.CalendarYear;
 								ben.MonetaryAmt=0;//amt;
+								ben.CoverageLevel=BenefitCoverageLevel.Individual;
 								benefitList.Add(ben.Copy());
 								ben=new Benefit();
 								ben.BenefitType=InsBenefitType.Deductible;
@@ -2424,6 +2427,7 @@ namespace OpenDental{
 								ben.PlanNum=PlanCur.PlanNum;
 								ben.TimePeriod=BenefitTimePeriod.CalendarYear;
 								ben.MonetaryAmt=0;//amt;
+								ben.CoverageLevel=BenefitCoverageLevel.Individual;
 								benefitList.Add(ben.Copy());
 								break;
 							case "PREV"://eg 100%
