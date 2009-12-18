@@ -175,6 +175,7 @@ namespace OpenDental.Eclaims
 			Procedure proc;
 			ProcedureCode procCode;
 			Provider provTreat;//might be different for each proc
+			Provider billProv=null;
 			Clinic clinic=null;
 			int seg=0;//segments for a particular ST-SE transaction
 			for(int i=0;i<claimAr.GetLength(1);i++){
@@ -260,7 +261,7 @@ namespace OpenDental.Eclaims
 						+"*"//HL02: No parent. Not used
 						+"20*"//HL03: Heirarchical level code. 20=Information source
 						+"1~");//HL04: Heirarchical child code. 1=child HL present
-					Provider billProv=ProviderC.ListLong[Providers.GetIndexLong((long)claimAr[1,i])];
+					billProv=ProviderC.ListLong[Providers.GetIndexLong((long)claimAr[1,i])];
 					if(isMedical){
 						//2000A PRV: Provider Specialty Information
 						seg++;
@@ -959,27 +960,23 @@ namespace OpenDental.Eclaims
 					seg+=WriteProv_REF(sw,provTreat,(string)claimAr[0,i]);
 				}
 				//2310C (medical)Purchased Service provider secondary ID. We don't support this for medical
-				//2310C (not medical)NM1: Service facility location if not office
-				//or 2310D (medical)NM1: Service facility location. Required if different from 2010AA. Not supported.
-				//2310D (medical)N3,N4,REF,PER: not supported.
-				if(!isMedical && claim.PlaceService!=PlaceOfService.Office){
-					Provider provFac=ProviderC.List[Providers.GetIndex(PrefC.GetLong(PrefName.PracticeDefaultProv))];
+				//2310C (not medical)NM1: Service facility location.  Only required if PlaceService is 21,22,31, or 35.
+				//if(!isMedical && 
+				if(claim.PlaceService==PlaceOfService.InpatHospital || claim.PlaceService==PlaceOfService.OutpatHospital
+					|| claim.PlaceService==PlaceOfService.SkilledNursFac || claim.PlaceService==PlaceOfService.AdultLivCareFac) {
 					seg++;
-					sw.Write("NM1*FA*"//FA=Facility
+					sw.WriteLine("NM1*FA*"//FA=Facility
 						+"2*"//NM102: 2=non-person
-						+Sout(PrefC.GetString(PrefName.PracticeTitle),35)+"*"//NM103:Submitter Name
+						+Sout(billProv.LName,35)+"*"//NM103:Facility Name
 						+"*"//NM104: not used
 						+"*"//NM105: not used
 						+"*"//NM106: not used
-						+"*");//NM107: not used
-					if(provFac.UsingTIN){
-						sw.Write("24*");//NM108: 24=EIN, 34=SSN
-					}
-					else{
-						sw.Write("34*");
-					}
-					sw.WriteLine(Sout(provFac.SSN,80)+"~");//NM109: ID. Not validated.
+						+"*"//NM107: not used
+						+"XX*"//NM108: XX=NPI
+						+Sout(billProv.NationalProvID,80)+"~");//NM109: NPI. Validated.
 				}
+				//or 2310D (medical)NM1: Service facility location. Required if different from 2010AA. Not supported.
+				//2310D (medical)N3,N4,REF,PER: not supported.
 				//2310E (medical)NM1,REF Supervising Provider. Not supported.
 				//2310F (medical)NM1,N3,N4 Ambulance Pickup location. Not supported.
 				//2310G (medical)NM1,N3,N4 Ambulance Dropoff location. Not supported.
