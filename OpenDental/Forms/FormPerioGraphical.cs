@@ -219,7 +219,7 @@ namespace OpenDental {
 			g.DrawString(timeNowStr,font,Brushes.Black,new PointF(marginBounds.Width/2f-m.Width/2f,y));
 			y+=m.Height;
 			Bitmap bitmap=toothChart.GetBitmap();
-			g.DrawImage(bitmap,marginBounds.Width/2f-bitmap.Width/2f,y,bitmap.Width,bitmap.Height);
+			g.DrawImageUnscaled(bitmap,(int)(marginBounds.Width/2f-bitmap.Width/2f),(int)y);
 		}
 
 		private void butSetup_Click(object sender,EventArgs e) {
@@ -242,9 +242,13 @@ namespace OpenDental {
 			Document doc=new Document();
 			bool docCreated=false;
 			try {
-				perioPrintImage=new Bitmap(850,1100);
+				perioPrintImage=new Bitmap(750,1000);
 				g=Graphics.FromImage(perioPrintImage);
+				g.Clear(Color.White);
+				g.CompositingQuality=System.Drawing.Drawing2D.CompositingQuality.HighQuality;
 				g.InterpolationMode=System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+				g.SmoothingMode=System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+				g.TextRenderingHint=System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
 				RenderPerioPrintout(g,PatCur,new Rectangle(0,0,perioPrintImage.Width,perioPrintImage.Height));
 				string patImagePath=ImageStore.GetPatientFolder(PatCur);
 				string filePath="";
