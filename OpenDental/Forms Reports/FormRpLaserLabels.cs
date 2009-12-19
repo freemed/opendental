@@ -1028,11 +1028,19 @@ namespace OpenDental {
 				case 1:
 					command = "SELECT carrier.CarrierName,carrier.Address,carrier.Address2,carrier.City,carrier.State,carrier.Zip FROM carrier";
 					if(radioButSingle.Checked == true) {
-						command += " WHERE CONCAT(CONCAT(carrier.CarrierName,carrier.Address),carrier.City) = '" + textInsCoStart.Text + labInsCoStartAddr.Text + "'";
+						if(labInsCoStartAddr.Text=="") {
+							MsgBox.Show(this,"Please use the selection button first.");
+							return;
+						}
+						command += " WHERE CONCAT(carrier.CarrierName,carrier.Address) = '" + textInsCoStart.Text + labInsCoStartAddr.Text + "'";
 						RptAddrTable = Reports.GetTable(command);
+						if(RptAddrTable.Rows.Count==0) {
+							MsgBox.Show(this,"No matching carriers found.");
+							return;
+						}
 						AddrTable = RptAddrTable.Clone();
-						int numLabels = (int)numericInsCoSingle.Value;
-						for(int i = 0;i <= numLabels;++i) {
+						int numLabels=(int)numericInsCoSingle.Value;
+						for(int i=0;i<numLabels;i++) {
 							AddrTable.ImportRow(RptAddrTable.Rows[0]);
 						}
 						buildLabels();
