@@ -174,6 +174,8 @@ namespace OpenDental {
 			pd2.PrintPage+=new PrintPageEventHandler(this.pd2_PrintPage);
 			pd2.OriginAtMargins=true;
 			pd2.DefaultPageSettings.Margins=new Margins(0,0,0,0);
+			//pd2.DefaultPageSettings.PrinterResolution.X=300;
+			//pd2.DefaultPageSettings.PrinterResolution.Y=300;
 			//This prevents a bug caused by some printer drivers not reporting their papersize.
 			//But remember that other countries use A4 paper instead of 8 1/2 x 11.
 			if(pd2.DefaultPageSettings.PaperSize.Height==0) {
@@ -184,7 +186,7 @@ namespace OpenDental {
 
 		private void pd2_PrintPage(object sender,PrintPageEventArgs ev) {//raised for each page to be printed.
 			Graphics g=ev.Graphics;
-			RenderPerioPrintout(g,PatCur,ev.MarginBounds);
+			RenderPerioPrintout(g,PatCur,new Rectangle(0,50,ev.MarginBounds.Width,ev.MarginBounds.Height));
 		}
 
 		public void RenderPerioPrintout(Graphics g,Patient pat,Rectangle marginBounds) {
@@ -197,7 +199,7 @@ namespace OpenDental {
 			} else {
 				clinicName=PrefC.GetString(PrefName.PracticeTitle);
 			}
-			float y=50f;
+			float y=marginBounds.Y;
 			SizeF m;
 			Font font=new Font("Arial",15);
 			string titleStr="PERIODONTAL EXAMINATION";
@@ -219,7 +221,7 @@ namespace OpenDental {
 			g.DrawString(timeNowStr,font,Brushes.Black,new PointF(marginBounds.Width/2f-m.Width/2f,y));
 			y+=m.Height;
 			Bitmap bitmap=toothChart.GetBitmap();
-			g.DrawImageUnscaled(bitmap,(int)(marginBounds.Width/2f-bitmap.Width/2f),(int)y);
+			g.DrawImage(bitmap,marginBounds.Width/2f-bitmap.Width/2f,y,bitmap.Width,bitmap.Height);
 		}
 
 		private void butSetup_Click(object sender,EventArgs e) {
@@ -242,8 +244,10 @@ namespace OpenDental {
 			Document doc=new Document();
 			bool docCreated=false;
 			try {
-				perioPrintImage=new Bitmap(750,1000);
+				const int scale=6;
+				perioPrintImage=new Bitmap(750*scale,1000*scale);
 				g=Graphics.FromImage(perioPrintImage);
+				perioPrintImage.SetResolution(100,100);
 				g.Clear(Color.White);
 				g.CompositingQuality=System.Drawing.Drawing2D.CompositingQuality.HighQuality;
 				g.InterpolationMode=System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;

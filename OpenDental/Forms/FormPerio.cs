@@ -1545,6 +1545,7 @@ namespace OpenDental{
 			bool docCreated=false;
 			try {
 				perioPrintImage=new Bitmap(750,1000);
+				perioPrintImage.SetResolution(96,96);
 				g=Graphics.FromImage(perioPrintImage);
 				g.Clear(Color.White);
 				g.CompositingQuality=System.Drawing.Drawing2D.CompositingQuality.HighQuality;
