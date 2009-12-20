@@ -39,6 +39,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateFileCopier", "UpdateF
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestToothChart", "TestToothChart\TestToothChart.csproj", "{F9D78F18-2BEA-439B-8FA4-DF655F297A7F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDentalServer", "OpenDentalServer\OpenDentalServer.csproj", "{712C6A2B-88E1-49E9-AC67-F6372F0047BC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -131,6 +133,12 @@ Global
 		{F9D78F18-2BEA-439B-8FA4-DF655F297A7F}.LinuxRelease|Any CPU.Build.0 = Release|Any CPU
 		{F9D78F18-2BEA-439B-8FA4-DF655F297A7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F9D78F18-2BEA-439B-8FA4-DF655F297A7F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{712C6A2B-88E1-49E9-AC67-F6372F0047BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{712C6A2B-88E1-49E9-AC67-F6372F0047BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{712C6A2B-88E1-49E9-AC67-F6372F0047BC}.LinuxRelease|Any CPU.ActiveCfg = Release|Any CPU
+		{712C6A2B-88E1-49E9-AC67-F6372F0047BC}.LinuxRelease|Any CPU.Build.0 = Release|Any CPU
+		{712C6A2B-88E1-49E9-AC67-F6372F0047BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{712C6A2B-88E1-49E9-AC67-F6372F0047BC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
