@@ -129,7 +129,7 @@ namespace OpenDental {
 			// label6
 			// 
 			this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.label6.Location = new System.Drawing.Point(9,464);
+			this.label6.Location = new System.Drawing.Point(9,480);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(479,100);
 			this.label6.TabIndex = 17;
@@ -257,7 +257,7 @@ namespace OpenDental {
 			this.listMonthly.Location = new System.Drawing.Point(12,297);
 			this.listMonthly.Name = "listMonthly";
 			this.listMonthly.SelectionMode = System.Windows.Forms.SelectionMode.None;
-			this.listMonthly.Size = new System.Drawing.Size(204,154);
+			this.listMonthly.Size = new System.Drawing.Size(204,169);
 			this.listMonthly.TabIndex = 8;
 			this.listMonthly.MouseDown += new System.Windows.Forms.MouseEventHandler(this.listMonthly_MouseDown);
 			// 
@@ -269,7 +269,7 @@ namespace OpenDental {
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(558,511);
+			this.butClose.Location = new System.Drawing.Point(558,527);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75,26);
 			this.butClose.TabIndex = 0;
@@ -279,7 +279,7 @@ namespace OpenDental {
 			// FormReportsMore
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(680,573);
+			this.ClientSize = new System.Drawing.Size(680,589);
 			this.Controls.Add(this.labelArizonaPrimaryCare);
 			this.Controls.Add(this.listArizonaPrimaryCare);
 			this.Controls.Add(this.butLaserLabels);
@@ -340,6 +340,7 @@ namespace OpenDental {
 				Lan.g(this,"Payment Plans"),
 				Lan.g(this,"Receivable Breakdown"),
 				Lan.g(this,"Unearned Income"),
+				Lan.g(this,"Insurance Overpaid"),
 			});
 			listLists.Items.AddRange(new string[] {
 				Lan.g(this,"Appointments"),
@@ -566,6 +567,11 @@ namespace OpenDental {
 					FormRpUnearnedIncome FormU=new FormRpUnearnedIncome();
 					FormU.ShowDialog();
 					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Unearned Income.");
+					break;
+				case 10://Insurance Overpaid
+					FormRpInsOverpaid FormI=new FormRpInsOverpaid();
+					FormI.ShowDialog();
+					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Insurance Overpaid.");
 					break;
 			}
 		}
