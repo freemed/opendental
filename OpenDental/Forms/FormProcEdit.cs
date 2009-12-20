@@ -2676,7 +2676,8 @@ namespace OpenDental{
 				//Procedures.SetHideGraphical(ProcCur);//might not matter anymore
 				ToothInitials.SetValue(ProcCur.PatNum,ProcCur.ToothNum,ToothInitialType.Missing);
 			}
-			long provNum=ProviderC.List[comboProvNum.SelectedIndex].ProvNum;
+			//long provNum=ProviderC.List[comboProvNum.SelectedIndex].ProvNum;
+			long provNum=ProcCur.ProvNum;
 			textNotes.Text+=ProcCodeNotes.GetNote(provNum,ProcCur.CodeNum);
 			listProcStatus.SelectedIndex=-1;
 			//radioStatusC.Checked=true;
