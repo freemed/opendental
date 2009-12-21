@@ -55,4 +55,7 @@
     </StartWorkingDirectory>
     <StartWithIE>false</StartWithIE>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <StartWithIE>true</StartWithIE>
+  </PropertyGroup>
 </Project>
