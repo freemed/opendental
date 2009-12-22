@@ -3218,12 +3218,12 @@ namespace OpenDental{
 				ProcCur.Priority=DefC.Short[(int)DefCat.TxPriorities][comboPriority.SelectedIndex-1].DefNum;
 			}
 			ProcCur.PlaceService=(PlaceOfService)comboPlaceService.SelectedIndex;
-			if(comboClinic.SelectedIndex==0){
-				ProcCur.ClinicNum=0;
-			}
-			else{
-				ProcCur.ClinicNum=Clinics.List[comboClinic.SelectedIndex-1].ClinicNum;
-			}
+			//if(comboClinic.SelectedIndex==0){
+			//	ProcCur.ClinicNum=0;
+			//}
+			//else{
+			//	ProcCur.ClinicNum=Clinics.List[comboClinic.SelectedIndex-1].ClinicNum;
+			//}
 			//site set when user picks from list.
 			if(comboBillingTypeOne.SelectedIndex==0){
 				ProcCur.BillingTypeOne=0;
