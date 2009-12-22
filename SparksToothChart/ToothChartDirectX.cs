@@ -50,6 +50,7 @@ namespace SparksToothChart {
 			pp.BackBufferWidth=this.Width;
 			pp.BackBufferHeight=this.Height;
 			pp.MultiSample=MultiSampleType.FourSamples;//Anti-alias settings.
+			//This line fails on some machines:
 			device=new Device(0,DeviceType.Hardware,this,CreateFlags.SoftwareVertexProcessing,pp);
 			device.DeviceReset+=new EventHandler(this.OnDeviceReset);
 			device.DeviceLost+=new EventHandler(this.OnDeviceLost);

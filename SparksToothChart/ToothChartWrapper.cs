@@ -49,8 +49,14 @@ namespace SparksToothChart {
 					//chart is never switched back to DirectX mode.
 					toothChartDirectX.Dispose();//Calls CleanupDirectX() and device.Dispose().
 				}
-				drawMode=value;
-				ResetControls();
+				try {
+					drawMode=value;
+					ResetControls();
+				}
+				catch {
+					drawMode=DrawingMode.Simple2D;
+					ResetControls();
+				}
 			}
 		}
 
