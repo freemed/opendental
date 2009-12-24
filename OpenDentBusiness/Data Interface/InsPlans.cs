@@ -1069,7 +1069,14 @@ namespace OpenDentBusiness {
 			Db.NonQ(command);
 		}
 
-		
+		///<summary>Returns the number of plans affected.</summary>
+		public static long SetAllPlansToShowUCR() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetLong(MethodBase.GetCurrentMethod());
+			}
+			string command="UPDATE insplan SET ClaimsUseUCR=1 WHERE PlanType=''";
+			return Db.NonQ(command);
+		}
 
 	}
 }

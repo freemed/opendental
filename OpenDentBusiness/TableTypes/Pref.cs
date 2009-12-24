@@ -135,6 +135,7 @@ namespace OpenDentBusiness {
 		ImageWindowingMin,
 		InsBillingProv,
 		InsDefaultPPOpercent,
+		InsDefaultShowUCRonClaims,
 		InsurancePlansShared,
 		IntermingleFamilyDefault,
 		LabelPatientDefaultSheetDefNum,

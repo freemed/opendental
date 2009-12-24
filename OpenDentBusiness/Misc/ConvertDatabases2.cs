@@ -1940,7 +1940,8 @@ DROP TABLE IF EXISTS etAck";
 		private static void To7_0_0() {
 			if(FromVersion<new Version("7.0.0.0")) {
 				string command;
-				
+				command="INSERT INTO preference(PrefName,ValueString) VALUES('InsDefaultShowUCRonClaims','0')";
+				Db.NonQ(command);
 
 
 

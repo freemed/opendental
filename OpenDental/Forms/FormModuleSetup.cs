@@ -74,6 +74,7 @@ namespace OpenDental{
 		private CheckBox checkStatementShowProcBreakdown;
 		private CheckBox checkStatementShowNotes;
 		private CheckBox checkClaimsValidateACN;
+		private CheckBox checkInsDefaultShowUCRonClaims;
 		private List<Def> posAdjTypes;
 
 		///<summary></summary>
@@ -159,6 +160,7 @@ namespace OpenDental{
 			this.checkAllowedFeeSchedsAutomate = new System.Windows.Forms.CheckBox();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
+			this.checkInsDefaultShowUCRonClaims = new System.Windows.Forms.CheckBox();
 			this.groupBox1.SuspendLayout();
 			this.groupBox5.SuspendLayout();
 			this.groupBox4.SuspendLayout();
@@ -224,9 +226,9 @@ namespace OpenDental{
 			this.groupBox1.Controls.Add(this.checkTreatPlanShowGraphics);
 			this.groupBox1.Controls.Add(this.checkTreatPlanShowCompleted);
 			this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox1.Location = new System.Drawing.Point(12,383);
+			this.groupBox1.Location = new System.Drawing.Point(12,402);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(422,159);
+			this.groupBox1.Size = new System.Drawing.Size(422,140);
 			this.groupBox1.TabIndex = 48;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Treatment Plan module";
@@ -806,6 +808,7 @@ namespace OpenDental{
 			// 
 			// groupBox2
 			// 
+			this.groupBox2.Controls.Add(this.checkInsDefaultShowUCRonClaims);
 			this.groupBox2.Controls.Add(this.checkCoPayFeeScheduleBlankLikeZero);
 			this.groupBox2.Controls.Add(this.checkAllowedFeeSchedsAutomate);
 			this.groupBox2.Controls.Add(this.checkMedicalEclaimsEnabled);
@@ -813,7 +816,7 @@ namespace OpenDental{
 			this.groupBox2.Controls.Add(this.checkInsurancePlansShared);
 			this.groupBox2.Location = new System.Drawing.Point(12,233);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(422,146);
+			this.groupBox2.Size = new System.Drawing.Size(422,163);
 			this.groupBox2.TabIndex = 193;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Family module";
@@ -822,7 +825,7 @@ namespace OpenDental{
 			// 
 			this.checkCoPayFeeScheduleBlankLikeZero.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkCoPayFeeScheduleBlankLikeZero.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkCoPayFeeScheduleBlankLikeZero.Location = new System.Drawing.Point(3,111);
+			this.checkCoPayFeeScheduleBlankLikeZero.Location = new System.Drawing.Point(3,112);
 			this.checkCoPayFeeScheduleBlankLikeZero.Name = "checkCoPayFeeScheduleBlankLikeZero";
 			this.checkCoPayFeeScheduleBlankLikeZero.Size = new System.Drawing.Size(413,17);
 			this.checkCoPayFeeScheduleBlankLikeZero.TabIndex = 195;
@@ -833,7 +836,7 @@ namespace OpenDental{
 			// 
 			this.checkAllowedFeeSchedsAutomate.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkAllowedFeeSchedsAutomate.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkAllowedFeeSchedsAutomate.Location = new System.Drawing.Point(3,93);
+			this.checkAllowedFeeSchedsAutomate.Location = new System.Drawing.Point(3,94);
 			this.checkAllowedFeeSchedsAutomate.Name = "checkAllowedFeeSchedsAutomate";
 			this.checkAllowedFeeSchedsAutomate.Size = new System.Drawing.Size(413,17);
 			this.checkAllowedFeeSchedsAutomate.TabIndex = 193;
@@ -871,6 +874,18 @@ namespace OpenDental{
 			this.butOK.TabIndex = 7;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
+			// 
+			// checkInsDefaultShowUCRonClaims
+			// 
+			this.checkInsDefaultShowUCRonClaims.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkInsDefaultShowUCRonClaims.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkInsDefaultShowUCRonClaims.Location = new System.Drawing.Point(3,130);
+			this.checkInsDefaultShowUCRonClaims.Name = "checkInsDefaultShowUCRonClaims";
+			this.checkInsDefaultShowUCRonClaims.Size = new System.Drawing.Size(413,17);
+			this.checkInsDefaultShowUCRonClaims.TabIndex = 196;
+			this.checkInsDefaultShowUCRonClaims.Text = "Insurance plans default to show UCR fee on claims.";
+			this.checkInsDefaultShowUCRonClaims.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkInsDefaultShowUCRonClaims.Click += new System.EventHandler(this.checkInsDefaultShowUCRonClaims_Click);
 			// 
 			// FormModuleSetup
 			// 
@@ -952,11 +967,11 @@ namespace OpenDental{
 			checkApptRefreshEveryMinute.Checked=PrefC.GetBool(PrefName.ApptModuleRefreshesEveryMinute);
 			//Family module-----------------------------------------------------------------------
 			checkMedicalEclaimsEnabled.Checked=PrefC.GetBool(PrefName.MedicalEclaimsEnabled);
-			//checkDeductibleBeforePercent.Checked=PrefC.GetBool(PrefName.DeductibleBeforePercentAsDefault");
 			checkInsurancePlansShared.Checked=PrefC.GetBool(PrefName.InsurancePlansShared);
 			checkPPOpercentage.Checked=PrefC.GetBool(PrefName.InsDefaultPPOpercent);
 			checkAllowedFeeSchedsAutomate.Checked=PrefC.GetBool(PrefName.AllowedFeeSchedsAutomate);
 			checkCoPayFeeScheduleBlankLikeZero.Checked=PrefC.GetBool(PrefName.CoPay_FeeSchedule_BlankLikeZero);
+			checkInsDefaultShowUCRonClaims.Checked=PrefC.GetBool(PrefName.InsDefaultShowUCRonClaims);
 			//Account module-----------------------------------------------------------------------
 			checkStatementShowReturnAddress.Checked=PrefC.GetBool(PrefName.StatementShowReturnAddress);
 			checkShowCC.Checked=PrefC.GetBool(PrefName.StatementShowCreditCard);
@@ -1013,6 +1028,17 @@ namespace OpenDental{
 			Cursor=Cursors.Default;
 			MessageBox.Show(Lan.g(this,"Done.  Allowed fee schedules added: ")+schedsAdded.ToString());
 			DataValid.SetInvalid(InvalidType.FeeScheds);
+		}
+
+		private void checkInsDefaultShowUCRonClaims_Click(object sender,EventArgs e) {
+			if(!checkInsDefaultShowUCRonClaims.Checked) {
+				return;
+			}
+			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Would you like to immediately change all category percentage plans to show office UCR fees on claims?")) {
+				return;
+			}
+			long plansAffected=InsPlans.SetAllPlansToShowUCR();
+			MessageBox.Show(Lan.g(this,"Plans affected: ")+plansAffected.ToString());
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
@@ -1072,6 +1098,7 @@ namespace OpenDental{
 				| Prefs.UpdateBool(PrefName.AllowedFeeSchedsAutomate,checkAllowedFeeSchedsAutomate.Checked)
 				| Prefs.UpdateBool(PrefName.IntermingleFamilyDefault,checkIntermingleDefault.Checked)
 				| Prefs.UpdateBool(PrefName.CoPay_FeeSchedule_BlankLikeZero,checkCoPayFeeScheduleBlankLikeZero.Checked)
+				| Prefs.UpdateBool(PrefName.InsDefaultShowUCRonClaims,checkInsDefaultShowUCRonClaims.Checked)
 				| Prefs.UpdateBool(PrefName.ClaimsValidateACN,checkClaimsValidateACN.Checked)
 				)
 			{
@@ -1117,6 +1144,8 @@ namespace OpenDental{
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 		
 	}

@@ -1683,14 +1683,17 @@ namespace OpenDental{
 			textTrojanID.Text=PlanCur.TrojanID;
 			comboPlanType.Items.Clear();
 			comboPlanType.Items.Add(Lan.g(this,"Category Percentage"));
-			if(PlanCur.PlanType=="")
+			if(PlanCur.PlanType=="") {
 				comboPlanType.SelectedIndex=0;
+			}
 			comboPlanType.Items.Add(Lan.g(this,"PPO Percentage"));
-			if(PlanCur.PlanType=="p")
+			if(PlanCur.PlanType=="p") {
 				comboPlanType.SelectedIndex=1;
+			}
 			comboPlanType.Items.Add(Lan.g(this,"Medicaid or Flat Co-pay"));
-			if(PlanCur.PlanType=="f")
+			if(PlanCur.PlanType=="f") {
 				comboPlanType.SelectedIndex=2;
+			}
 			if(!PrefC.GetBool(PrefName.EasyHideCapitation)) {
 				comboPlanType.Items.Add(Lan.g(this,"Capitation"));
 				if(PlanCur.PlanType=="c")
@@ -1700,6 +1703,9 @@ namespace OpenDental{
 			checkCodeSubst.Checked=PlanCur.CodeSubstNone;
 			checkIsMedical.Checked=PlanCur.IsMedical;
 			checkClaimsUseUCR.Checked=PlanCur.ClaimsUseUCR;
+			if(IsNewPlan && PlanCur.PlanType=="" && PrefC.GetBool(PrefName.InsDefaultShowUCRonClaims)) {
+				checkClaimsUseUCR.Checked=true;
+			}
 			checkIsHidden.Checked=PlanCur.IsHidden;
 			//checkDedBeforePerc.Checked=PlanCur.DedBeforePerc;
 			checkShowBaseUnits.Checked=PlanCur.ShowBaseUnits;
@@ -1878,6 +1884,14 @@ namespace OpenDental{
 				case 3:
 					PlanCur.PlanType="c";
 					break;
+			}
+			if(PrefC.GetBool(PrefName.InsDefaultShowUCRonClaims)) {//otherwise, no automation on this field.
+				if(PlanCur.PlanType=="") {
+					checkClaimsUseUCR.Checked=true;
+				}
+				else {
+					checkClaimsUseUCR.Checked=false;
+				}
 			}
 		}
 
