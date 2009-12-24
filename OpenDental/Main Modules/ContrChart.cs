@@ -6834,6 +6834,14 @@ namespace OpenDental{
 				text="Chart Progress Notes";
 				g.DrawString(text,headingFont,Brushes.Black,center-g.MeasureString(text,headingFont).Width/2,yPos);
 				yPos+=(int)g.MeasureString(text,headingFont).Height;
+				//practice
+				text=PrefC.GetString(PrefName.PracticeTitle);
+				if(!PrefC.GetBool(PrefName.EasyNoClinics) && PatCur.ClinicNum!=0) {
+					text=Clinics.GetDesc(PatCur.ClinicNum);
+				}
+				g.DrawString(text,subHeadingFont,Brushes.Black,center-g.MeasureString(text,subHeadingFont).Width/2,yPos);
+				yPos+=(int)g.MeasureString(text,subHeadingFont).Height;
+				//name
 				text=PatCur.GetNameFL();
 				g.DrawString(text,subHeadingFont,Brushes.Black,center-g.MeasureString(text,subHeadingFont).Width/2,yPos);
 				yPos+=(int)g.MeasureString(text,subHeadingFont).Height;
