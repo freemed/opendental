@@ -6836,8 +6836,22 @@ namespace OpenDental{
 				yPos+=(int)g.MeasureString(text,headingFont).Height;
 				//practice
 				text=PrefC.GetString(PrefName.PracticeTitle);
-				if(!PrefC.GetBool(PrefName.EasyNoClinics) && PatCur.ClinicNum!=0) {
-					text=Clinics.GetDesc(PatCur.ClinicNum);
+				if(!PrefC.GetBool(PrefName.EasyNoClinics)) {
+					DataRow row;
+					long procNum;
+					long clinicNum;
+					for(int i=0;i<gridProg.Rows.Count;i++) {
+						row=(DataRow)gridProg.Rows[i].Tag;
+						procNum=PIn.PLong(row["ProcNum"].ToString());
+						if(procNum==0) {
+							continue;
+						}
+						clinicNum=Procedures.GetClinicNum(procNum);
+						if(clinicNum!=0) {//The first clinicNum that's encountered
+							text=Clinics.GetDesc(clinicNum);
+							break;
+						}
+					}
 				}
 				g.DrawString(text,subHeadingFont,Brushes.Black,center-g.MeasureString(text,subHeadingFont).Width/2,yPos);
 				yPos+=(int)g.MeasureString(text,subHeadingFont).Height;

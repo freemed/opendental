@@ -1573,7 +1573,14 @@ namespace OpenDentBusiness {
 			//Reporting.Allocators.AllocatorCollection.CallAll_Allocators(pt.Guarantor);
 		}
 
-
+		///<summary></summary>
+		public static long GetClinicNum(long procNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetLong(MethodBase.GetCurrentMethod(),procNum);
+			}
+			string command="SELECT ClinicNum FROM procedurelog WHERE ProcNum="+POut.PLong(procNum);
+			return PIn.PLong(Db.GetScalar(command));
+		}
 
 
 	}
