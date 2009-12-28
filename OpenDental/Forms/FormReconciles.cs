@@ -144,6 +144,7 @@ namespace OpenDental{
 				grid.Rows.Add(row);
 			}
 			grid.EndUpdate();
+			grid.ScrollToEnd();
 		}
 
 		private void grid_CellDoubleClick(object sender, OpenDental.UI.ODGridClickEventArgs e) {

@@ -492,9 +492,13 @@ namespace OpenDental{
 		}
 
 		private void Reconcile_Click() {
+			int selectedRow=gridMain.GetSelectedIndex();
+			int scrollValue=gridMain.ScrollValue;
 			FormReconciles FormR=new FormReconciles(AccountCur.AccountNum);
 			FormR.ShowDialog();
 			FillGrid();
+			gridMain.SetSelected(selectedRow,true);
+			gridMain.ScrollValue=scrollValue;
 		}
 
 		private void Print_Click(){
