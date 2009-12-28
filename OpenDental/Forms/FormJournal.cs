@@ -571,6 +571,7 @@ namespace OpenDental{
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			int selectedRow=e.Row;
+			int scrollValue=gridMain.ScrollValue;
 			FormTransactionEdit FormT=new FormTransactionEdit(
 				((JournalEntry)gridMain.Rows[e.Row].Tag).TransactionNum,AccountCur.AccountNum);
 			FormT.ShowDialog();
@@ -579,6 +580,7 @@ namespace OpenDental{
 			}
 			FillGrid();
 			gridMain.SetSelected(selectedRow,true);
+			gridMain.ScrollValue=scrollValue;
 		}
 
 		private void butDropFrom_Click(object sender,EventArgs e) {
