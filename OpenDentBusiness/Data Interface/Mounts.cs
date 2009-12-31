@@ -22,18 +22,18 @@ namespace OpenDentBusiness {
 			}
 			command+="MountNum,PatNum,DocCategory,DateCreated,Description,Note,ImgType,Width,Height) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PLong(mount.MountNum)+", ";
+				command+=POut.Long(mount.MountNum)+", ";
 			}
 			command+=
-				 "'"+POut.PLong(mount.MountNum)+"',"
-				+"'"+POut.PLong(mount.PatNum)+"',"
-				+"'"+POut.PLong(mount.DocCategory)+"',"
-				+POut.PDate(mount.DateCreated)+","
-				+"'"+POut.PString(mount.Description)+"',"
-				+"'"+POut.PString(mount.Note)+"',"
-				+"'"+POut.PLong((int)mount.ImgType)+"',"
-				+"'"+POut.PLong(mount.Width)+"',"
-				+"'"+POut.PLong(mount.Height)+"')";
+				 "'"+POut.Long(mount.MountNum)+"',"
+				+"'"+POut.Long(mount.PatNum)+"',"
+				+"'"+POut.Long(mount.DocCategory)+"',"
+				+POut.Date(mount.DateCreated)+","
+				+"'"+POut.String(mount.Description)+"',"
+				+"'"+POut.String(mount.Note)+"',"
+				+"'"+POut.Long((int)mount.ImgType)+"',"
+				+"'"+POut.Long(mount.Width)+"',"
+				+"'"+POut.Long(mount.Height)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -48,15 +48,15 @@ namespace OpenDentBusiness {
 				return Meth.GetLong(MethodBase.GetCurrentMethod(),mount);
 			}
 			string command="UPDATE mount SET "
-				+"PatNum='"+POut.PLong(mount.PatNum)+"',"
-				+"DocCategory='"+POut.PLong(mount.DocCategory)+"',"
-				+"DateCreated="+POut.PDate(mount.DateCreated)+","
-				+"Description='"+POut.PString(mount.Description)+"',"
-				+"Note='"+POut.PString(mount.Note)+"',"
-				+"ImgType='"+POut.PLong((int)mount.ImgType)+"',"
-				+"Width='"+POut.PLong(mount.Width)+"',"
-				+"Height='"+POut.PLong(mount.Height)+"' "
-				+"WHERE MountNum='"+POut.PLong(mount.MountNum)+"'";
+				+"PatNum='"+POut.Long(mount.PatNum)+"',"
+				+"DocCategory='"+POut.Long(mount.DocCategory)+"',"
+				+"DateCreated="+POut.Date(mount.DateCreated)+","
+				+"Description='"+POut.String(mount.Description)+"',"
+				+"Note='"+POut.String(mount.Note)+"',"
+				+"ImgType='"+POut.Long((int)mount.ImgType)+"',"
+				+"Width='"+POut.Long(mount.Width)+"',"
+				+"Height='"+POut.Long(mount.Height)+"' "
+				+"WHERE MountNum='"+POut.Long(mount.MountNum)+"'";
 			return Db.NonQ(command);
 		}
 
@@ -65,7 +65,7 @@ namespace OpenDentBusiness {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),mount);
 				return;
 			}
-			string command="DELETE FROM mount WHERE MountNum='"+POut.PLong(mount.MountNum)+"'";
+			string command="DELETE FROM mount WHERE MountNum='"+POut.Long(mount.MountNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -73,15 +73,15 @@ namespace OpenDentBusiness {
 		public static Mount Fill(DataRow mountRow){
 			//No need to check RemotingRole; no call to db.
 			Mount mount=new Mount();
-			mount.MountNum=PIn.PLong(mountRow["MountNum"].ToString());
-			mount.PatNum=PIn.PLong(mountRow["PatNum"].ToString());
-			mount.DocCategory=PIn.PLong(mountRow["DocCategory"].ToString());
-			mount.DateCreated=PIn.PDate(mountRow["DateCreated"].ToString());
-			mount.Description=PIn.PString(mountRow["Description"].ToString());
-			mount.Note=PIn.PString(mountRow["Note"].ToString());
-			mount.ImgType=(ImageType)PIn.PLong(mountRow["ImgType"].ToString());
-			mount.Width=PIn.PInt(mountRow["Width"].ToString());
-			mount.Height=PIn.PInt(mountRow["Height"].ToString());
+			mount.MountNum=PIn.Long(mountRow["MountNum"].ToString());
+			mount.PatNum=PIn.Long(mountRow["PatNum"].ToString());
+			mount.DocCategory=PIn.Long(mountRow["DocCategory"].ToString());
+			mount.DateCreated=PIn.Date(mountRow["DateCreated"].ToString());
+			mount.Description=PIn.String(mountRow["Description"].ToString());
+			mount.Note=PIn.String(mountRow["Note"].ToString());
+			mount.ImgType=(ImageType)PIn.Long(mountRow["ImgType"].ToString());
+			mount.Width=PIn.Int(mountRow["Width"].ToString());
+			mount.Height=PIn.Int(mountRow["Height"].ToString());
 			return mount;
 		}
 

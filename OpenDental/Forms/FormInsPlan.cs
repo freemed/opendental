@@ -1932,8 +1932,8 @@ namespace OpenDental{
 			//FillPlanCur();//this catches the non-synch fields
 			//Non-synched fields:
 			PlanCur.SubscriberID=textSubscriberID.Text;
-			PlanCur.DateEffective=PIn.PDate(textDateEffect.Text);//can handle misformed dates.
-			PlanCur.DateTerm=PIn.PDate(textDateTerm.Text);
+			PlanCur.DateEffective=PIn.Date(textDateEffect.Text);//can handle misformed dates.
+			PlanCur.DateTerm=PIn.Date(textDateTerm.Text);
 			PlanCur.ReleaseInfo=checkRelease.Checked;
 			PlanCur.AssignBen=checkAssign.Checked;
 			PlanCur.SubscNote=textSubscNote.Text;
@@ -2397,7 +2397,7 @@ namespace OpenDental{
 									ben=new Benefit();
 									ben.BenefitType=InsBenefitType.Limitations;
 									ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.General).CovCatNum;
-									ben.MonetaryAmt=PIn.PDouble(fields[2]);
+									ben.MonetaryAmt=PIn.Double(fields[2]);
 									ben.PlanNum=PlanCur.PlanNum;
 									ben.TimePeriod=BenefitTimePeriod.CalendarYear;
 									ben.CoverageLevel=BenefitCoverageLevel.Individual;
@@ -2417,7 +2417,7 @@ namespace OpenDental{
 								else {
 									fields[2]=fields[2].Remove(0,1);
 									fields[2]=fields[2].Split(new char[] { ' ' })[0];
-									amt=PIn.PDouble(fields[2]);
+									amt=PIn.Double(fields[2]);
 								}
 								ben=new Benefit();
 								ben.BenefitType=InsBenefitType.Deductible;
@@ -2450,7 +2450,7 @@ namespace OpenDental{
 									break;
 								}
 								splitField[0]=splitField[0].Remove(splitField[0].Length-1,1);//remove %
-								percent=PIn.PInt(splitField[0]);
+								percent=PIn.Int(splitField[0]);
 								if(percent<0 || percent>100) {
 									break;
 								}
@@ -2475,7 +2475,7 @@ namespace OpenDental{
 									break;
 								}
 								splitField[0]=splitField[0].Remove(splitField[0].Length-1,1);//remove %
-								percent=PIn.PInt(splitField[0]);
+								percent=PIn.Int(splitField[0]);
 								if(percent<0 || percent>100) {
 									break;
 								}
@@ -2514,7 +2514,7 @@ namespace OpenDental{
 									break;
 								}
 								splitField[0]=splitField[0].Remove(splitField[0].Length-1,1);//remove %
-								percent=PIn.PInt(splitField[0]);
+								percent=PIn.Int(splitField[0]);
 								if(percent<0 || percent>100) {
 									break;
 								}
@@ -2543,7 +2543,7 @@ namespace OpenDental{
 									ben=new Benefit();
 									ben.BenefitType=InsBenefitType.Limitations;
 									ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.Orthodontics).CovCatNum;
-									ben.MonetaryAmt=PIn.PDouble(fields[2]);
+									ben.MonetaryAmt=PIn.Double(fields[2]);
 									ben.PlanNum=PlanCur.PlanNum;
 									ben.TimePeriod=BenefitTimePeriod.CalendarYear;
 									benefitList.Add(ben.Copy());
@@ -2555,7 +2555,7 @@ namespace OpenDental{
 									break;
 								}
 								splitField[0]=splitField[0].Remove(splitField[0].Length-1,1);//remove %
-								percent=PIn.PInt(splitField[0]);
+								percent=PIn.Int(splitField[0]);
 								if(percent<0 || percent>100) {
 									break;
 								}
@@ -2728,7 +2728,7 @@ namespace OpenDental{
 								ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.General).CovCatNum;
 								ben.PlanNum=PlanCur.PlanNum;
 								ben.TimePeriod=BenefitTimePeriod.CalendarYear;
-								ben.MonetaryAmt=PIn.PDouble(splitField[0].Remove(0,1));//removes the $
+								ben.MonetaryAmt=PIn.Double(splitField[0].Remove(0,1));//removes the $
 								benefitList.Add(ben.Copy());
 							}
 							break;
@@ -2744,7 +2744,7 @@ namespace OpenDental{
 								ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.General).CovCatNum;
 								ben.PlanNum=PlanCur.PlanNum;
 								ben.TimePeriod=BenefitTimePeriod.CalendarYear;
-								ben.MonetaryAmt=PIn.PDouble(splitField[0].Remove(0,1));//removes the $
+								ben.MonetaryAmt=PIn.Double(splitField[0].Remove(0,1));//removes the $
 								benefitList.Add(ben.Copy());
 							}
 							break;
@@ -2761,7 +2761,7 @@ namespace OpenDental{
 								break;
 							}
 							splitField[0]=splitField[0].Remove(splitField[0].Length-1,1);//remove %
-							percent=PIn.PInt(splitField[0]);
+							percent=PIn.Int(splitField[0]);
 							if(percent<0 || percent>100) {
 								break;
 							}
@@ -2780,7 +2780,7 @@ namespace OpenDental{
 								break;
 							}
 							splitField[0]=splitField[0].Remove(splitField[0].Length-1,1);//remove %
-							percent=PIn.PInt(splitField[0]);
+							percent=PIn.Int(splitField[0]);
 							if(percent<0 || percent>100) {
 								break;
 							}
@@ -2820,7 +2820,7 @@ namespace OpenDental{
 								break;
 							}
 							splitField[0]=splitField[0].Remove(splitField[0].Length-1,1);//remove %
-							percent=PIn.PInt(splitField[0]);
+							percent=PIn.Int(splitField[0]);
 							if(percent<0 || percent>100) {
 								break;
 							}
@@ -2851,7 +2851,7 @@ namespace OpenDental{
 								break;
 							}
 							splitField[0]=splitField[0].Remove(splitField[0].Length-1,1);//remove %
-							percent=PIn.PInt(splitField[0]);
+							percent=PIn.Int(splitField[0]);
 							if(percent<0 || percent>100) {
 								break;
 							}
@@ -2875,7 +2875,7 @@ namespace OpenDental{
 								ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.Orthodontics).CovCatNum;
 								ben.PlanNum=PlanCur.PlanNum;
 								ben.TimePeriod=BenefitTimePeriod.CalendarYear;
-								ben.MonetaryAmt=PIn.PDouble(splitField[0].Remove(0,1));//removes the $
+								ben.MonetaryAmt=PIn.Double(splitField[0].Remove(0,1));//removes the $
 								benefitList.Add(ben.Copy());
 							}
 							break;
@@ -3462,10 +3462,10 @@ namespace OpenDental{
 			// Get Provider Information
 			table = Providers.GetDefaultPracticeProvider2();
 			if(table.Rows.Count != 0) {
-				infoReceiverFirstName = PIn.PString(table.Rows[0][0].ToString());
-				infoReceiverLastName = PIn.PString(table.Rows[0][1].ToString());
+				infoReceiverFirstName = PIn.String(table.Rows[0][0].ToString());
+				infoReceiverLastName = PIn.String(table.Rows[0][1].ToString());
 				// Case statment for TaxoCode
-				switch(PIn.PLong(table.Rows[0][2].ToString())) {
+				switch(PIn.Long(table.Rows[0][2].ToString())) {
 					case 1:
 						TaxoCode = "124Q00000X";
 						break;
@@ -3550,7 +3550,7 @@ namespace OpenDental{
 			//Get Provider NPI #
 			table = Providers.GetDefaultPracticeProvider3();
 			if(table.Rows.Count != 0) {
-				InfoReceiverProviderNPI.InnerText = PIn.PString(table.Rows[0][0].ToString());
+				InfoReceiverProviderNPI.InnerText = PIn.String(table.Rows[0][0].ToString());
 			};
 			InfoReceiver.AppendChild(InfoReceiverProviderNPI);
 			//SPK / AAD 8/13/08 Add NPI -- End
@@ -3585,9 +3585,9 @@ namespace OpenDental{
 			// Read Patient FName,LName,DOB, and Gender from Patient Table
 			table = Patients.GetPartialPatientData(PatPlanCur.PatNum);
 			if(table.Rows.Count != 0) {
-				PatientFirstName.InnerText = PIn.PString(table.Rows[0][0].ToString());
-				PatientLastName.InnerText = PIn.PString(table.Rows[0][1].ToString());
-				PatientDOB.InnerText = PIn.PString(table.Rows[0][2].ToString());
+				PatientFirstName.InnerText = PIn.String(table.Rows[0][0].ToString());
+				PatientLastName.InnerText = PIn.String(table.Rows[0][1].ToString());
+				PatientDOB.InnerText = PIn.String(table.Rows[0][2].ToString());
 				switch(comboRelationship.Text) {
 					case "Self":
 						RelationShip = "18";
@@ -3602,7 +3602,7 @@ namespace OpenDental{
 						RelationShip = "34";
 						break;
 				}
-				switch(PIn.PString(table.Rows[0][3].ToString())) {
+				switch(PIn.String(table.Rows[0][3].ToString())) {
 					case "1":
 						GenderCode = "F";
 						break;
@@ -3641,10 +3641,10 @@ namespace OpenDental{
 			// Read Subscriber FName,LName,DOB, and Gender from Patient Table
 			table=Patients.GetPartialPatientData2(PatPlanCur.PatNum);
 			if(table.Rows.Count != 0) {
-				SubscriberFirstName.InnerText = PIn.PString(table.Rows[0][0].ToString());
-				SubscriberLastName.InnerText = PIn.PString(table.Rows[0][1].ToString());
-				SubscriberDOB.InnerText = PIn.PString(table.Rows[0][2].ToString());
-				switch(PIn.PString(table.Rows[0][3].ToString())) {
+				SubscriberFirstName.InnerText = PIn.String(table.Rows[0][0].ToString());
+				SubscriberLastName.InnerText = PIn.String(table.Rows[0][1].ToString());
+				SubscriberDOB.InnerText = PIn.String(table.Rows[0][2].ToString());
+				switch(PIn.String(table.Rows[0][3].ToString())) {
 					case "1":
 						GenderCode = "F";
 						break;
@@ -3683,8 +3683,8 @@ namespace OpenDental{
 			// Read Patient FName,LName,DOB, and Gender from Patient Table
 			table=Providers.GetPrimaryProviders(PatPlanCur.PatNum);
 			if(table.Rows.Count != 0) {
-				renderingProviderFirstName = PIn.PString(table.Rows[0][0].ToString());
-				renderingProviderLastName = PIn.PString(table.Rows[0][1].ToString());
+				renderingProviderFirstName = PIn.String(table.Rows[0][0].ToString());
+				renderingProviderLastName = PIn.String(table.Rows[0][1].ToString());
 			}
 			else {
 				renderingProviderFirstName = infoReceiverFirstName;
@@ -3789,8 +3789,8 @@ namespace OpenDental{
 			}
 			//Subscriber: Can never be changed once a plan is created.
 			PlanCur.SubscriberID=textSubscriberID.Text;
-			PlanCur.DateEffective=PIn.PDate(textDateEffect.Text);
-			PlanCur.DateTerm=PIn.PDate(textDateTerm.Text);
+			PlanCur.DateEffective=PIn.Date(textDateEffect.Text);
+			PlanCur.DateTerm=PIn.Date(textDateTerm.Text);
 			GetEmployerNum();
 			PlanCur.GroupName=textGroupName.Text;
 			PlanCur.GroupNum=textGroupNum.Text;
@@ -3873,7 +3873,7 @@ namespace OpenDental{
 			if(comboFilingCodeSubtype.SelectedIndex != -1 && comboFilingCodeSubtype.SelectedIndex < subtypeList.Count) {
 				PlanCur.FilingCodeSubtype=subtypeList[comboFilingCodeSubtype.SelectedIndex].InsFilingCodeSubtypeNum;
 			}
-			PlanCur.DentaideCardSequence=PIn.PInt(textDentaide.Text);
+			PlanCur.DentaideCardSequence=PIn.Int(textDentaide.Text);
 			PlanCur.TrojanID=textTrojanID.Text;
 			PlanCur.PlanNote=textPlanNote.Text;
 			PlanCur.ReleaseInfo=checkRelease.Checked;
@@ -3889,8 +3889,8 @@ namespace OpenDental{
 			}
 			Cursor=Cursors.WaitCursor;
 			if(PatPlanCur!=null) {
-				if(PIn.PLong(textOrdinal.Text)!=PatPlanCur.Ordinal){//if ordinal changed
-					PatPlans.SetOrdinal(PatPlanCur.PatPlanNum,PIn.PInt(textOrdinal.Text));
+				if(PIn.Long(textOrdinal.Text)!=PatPlanCur.Ordinal){//if ordinal changed
+					PatPlans.SetOrdinal(PatPlanCur.PatPlanNum,PIn.Int(textOrdinal.Text));
 				}
 				PatPlanCur.IsPending=checkIsPending.Checked;
 				PatPlanCur.Relationship=(Relat)comboRelationship.SelectedIndex;

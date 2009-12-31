@@ -519,10 +519,10 @@ namespace OpenDental{
 					userdesc+=Lan.g(this,"(hidden)");
 				}
 				row.Cells.Add(userdesc);
-				row.Cells.Add(UserGroups.GetGroup(PIn.PLong(table.Rows[i]["UserGroupNum"].ToString())).Description);
-				row.Cells.Add(Employees.GetNameFL(PIn.PLong(table.Rows[i]["EmployeeNum"].ToString())));
-				row.Cells.Add(Providers.GetLongDesc(PIn.PLong(table.Rows[i]["ProvNum"].ToString())));
-				row.Cells.Add(Clinics.GetDesc(PIn.PLong(table.Rows[i]["ClinicNum"].ToString())));
+				row.Cells.Add(UserGroups.GetGroup(PIn.Long(table.Rows[i]["UserGroupNum"].ToString())).Description);
+				row.Cells.Add(Employees.GetNameFL(PIn.Long(table.Rows[i]["EmployeeNum"].ToString())));
+				row.Cells.Add(Providers.GetLongDesc(PIn.Long(table.Rows[i]["ProvNum"].ToString())));
+				row.Cells.Add(Clinics.GetDesc(PIn.Long(table.Rows[i]["ClinicNum"].ToString())));
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
@@ -530,7 +530,7 @@ namespace OpenDental{
 		}
 
 		private void gridMain_CellClick(object sender,ODGridClickEventArgs e) {
-			SelectedGroupNum=PIn.PLong(table.Rows[e.Row]["UserGroupNum"].ToString());
+			SelectedGroupNum=PIn.Long(table.Rows[e.Row]["UserGroupNum"].ToString());
 			for(int i=0;i<table.Rows.Count;i++){
 				if(table.Rows[i]["UserGroupNum"].ToString()==SelectedGroupNum.ToString()){
 					gridMain.Rows[i].ColorText=Color.Red;
@@ -576,7 +576,7 @@ namespace OpenDental{
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			Userod user=Userods.GetUser(PIn.PLong(table.Rows[e.Row]["UserNum"].ToString()));
+			Userod user=Userods.GetUser(PIn.Long(table.Rows[e.Row]["UserNum"].ToString()));
 			FormUserEdit FormU=new FormUserEdit(user);
 			FormU.ShowDialog();
 			if(FormU.DialogResult==DialogResult.Cancel){

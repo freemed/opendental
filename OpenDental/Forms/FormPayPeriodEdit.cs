@@ -227,9 +227,9 @@ namespace OpenDental{
 				MsgBox.Show(this,"Start and end dates are required.");
 				return;
 			}
-			PayPeriodCur.DateStart=PIn.PDate(textDateStart.Text);
-			PayPeriodCur.DateStop=PIn.PDate(textDateStop.Text);
-			PayPeriodCur.DatePaycheck=PIn.PDate(textDatePaycheck.Text);
+			PayPeriodCur.DateStart=PIn.Date(textDateStart.Text);
+			PayPeriodCur.DateStop=PIn.Date(textDateStop.Text);
+			PayPeriodCur.DatePaycheck=PIn.Date(textDatePaycheck.Text);
 			if(IsNew){
 				PayPeriods.Insert(PayPeriodCur);
 			}

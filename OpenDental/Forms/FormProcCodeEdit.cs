@@ -907,7 +907,7 @@ namespace OpenDental{
 			ProcCode.DefaultNote=textNote.Text;
 			ProcCode.PaintType=(ToothPaintingType)listPaintType.SelectedIndex;
 			ProcCode.TreatArea=(TreatmentArea)listTreatArea.SelectedIndex+1;
-			ProcCode.BaseUnits=PIn.PInt(textBaseUnits.Text.ToString());
+			ProcCode.BaseUnits=PIn.Int(textBaseUnits.Text.ToString());
 			if(listCategory.SelectedIndex!=-1)
 				ProcCode.ProcCat=DefC.Short[(int)DefCat.ProcCodeCats][listCategory.SelectedIndex].DefNum;
 			ProcedureCodes.Update(ProcCode);//whether new or not.

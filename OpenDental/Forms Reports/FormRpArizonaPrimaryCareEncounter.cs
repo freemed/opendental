@@ -52,14 +52,14 @@ namespace OpenDental {
 			}
 			string command="";
 			//Locate the payment definition number for payments of patients using the Arizona Primary Care program.
-			command="SELECT DefNum FROM definition WHERE Category="+POut.PLong((int)DefCat.PaymentTypes)+" AND IsHidden=0 AND LOWER(TRIM(ItemName))='noah'";
+			command="SELECT DefNum FROM definition WHERE Category="+POut.Long((int)DefCat.PaymentTypes)+" AND IsHidden=0 AND LOWER(TRIM(ItemName))='noah'";
 			DataTable payDefNumTab=Reports.GetTable(command);
 			if(payDefNumTab.Rows.Count!=1) {
 				MessageBox.Show("You must define exactly one payment type with the name 'NOAH' before running this report. "+
 					"This payment type must be used on payments made by Arizona Primary Care patients.");
 				return;
 			}
-			long payDefNum=PIn.PLong(payDefNumTab.Rows[0][0].ToString());
+			long payDefNum=PIn.Long(payDefNumTab.Rows[0][0].ToString());
 			string outputText="";
 			string patientsIdNumberStr="SPID#";
 			//Only certain procedures can be billed to the Arizona Primary Care program.
@@ -75,17 +75,17 @@ namespace OpenDental {
 				"AND LOWER(TRIM(c.CarrierName))='noah'";
 			DataTable primaryCarePatients=Reports.GetTable(command);
 			for(int i=0;i<primaryCarePatients.Rows.Count;i++) {
-				string patNum=POut.PLong(PIn.PLong(primaryCarePatients.Rows[i][0].ToString()));
+				string patNum=POut.Long(PIn.Long(primaryCarePatients.Rows[i][0].ToString()));
 				//Now that we have an Arizona Primary Care patient's patNum, we need to see if there are any appointments
 				//that the patient has attented (completed) in the date range specified where there is at least one ADA coded procedure
 				//associated with that appointment. If there are, then those appointments will be placed into the flat file.
 				command="SELECT a.AptNum FROM appointment a WHERE a.PatNum="+patNum+" AND a.AptStatus="+((int)ApptStatus.Complete)+" AND "+
-					"a.AptDateTime BETWEEN "+POut.PDate(dateTimeFrom.Value)+" AND "+POut.PDate(dateTimeTo.Value)+" AND "+
+					"a.AptDateTime BETWEEN "+POut.Date(dateTimeFrom.Value)+" AND "+POut.Date(dateTimeTo.Value)+" AND "+
 					"(SELECT COUNT(*) FROM procedurelog pl,procedurecode pc WHERE pl.AptNum=a.AptNum AND pc.CodeNum=pl.CodeNum AND "+
 					"pc.ProcCode IN ("+billableProcedures+") LIMIT 1)>0";
 				DataTable appointmentList=Reports.GetTable(command);
 				for(int j=0;j<appointmentList.Rows.Count;j++){
-					string aptNum=POut.PLong(PIn.PLong(appointmentList.Rows[j][0].ToString()));
+					string aptNum=POut.Long(PIn.Long(appointmentList.Rows[j][0].ToString()));
 					command="SELECT "+
 						"TRIM((SELECT f.FieldValue FROM patfield f WHERE f.PatNum=p.PatNum AND "+
 							"LOWER(f.FieldName)=LOWER('"+patientsIdNumberStr+"') LIMIT 1)) PCIN, "+//Patient's Care ID Number
@@ -165,11 +165,11 @@ namespace OpenDental {
 					}
 					outputRow+=pcin.PadLeft(15,'0');
 					//Patient's date of birth
-					outputRow+=PIn.PDate(primaryCareReportRow.Rows[0]["Birthdate"].ToString()).ToString("MMddyyyy");
+					outputRow+=PIn.Date(primaryCareReportRow.Rows[0]["Birthdate"].ToString()).ToString("MMddyyyy");
 					//Patient's gender
-					outputRow+=PIn.PString(primaryCareReportRow.Rows[0]["Gender"].ToString());
+					outputRow+=PIn.String(primaryCareReportRow.Rows[0]["Gender"].ToString());
 					//Patient's address
-					string householdAddress=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Address"].ToString()));
+					string householdAddress=POut.String(PIn.String(primaryCareReportRow.Rows[0]["Address"].ToString()));
 					if(householdAddress.Length>29) {
 						string newHouseholdAddress=householdAddress.Substring(0,29);
 						rowWarnings+="WARNING: Address for patient with patnum of "+patNum+" was longer than 29 characters and "+
@@ -179,7 +179,7 @@ namespace OpenDental {
 					}
 					outputRow+=householdAddress.PadRight(29,' ');
 					//Patient's city
-					string householdCity=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["City"].ToString()));
+					string householdCity=POut.String(PIn.String(primaryCareReportRow.Rows[0]["City"].ToString()));
 					if(householdCity.Length>15) {
 						string newHouseholdCity=householdCity.Substring(0,15);
 						rowWarnings+="WARNING: City name for patient with patnum of "+patNum+" was longer than 15 characters and "+
@@ -189,14 +189,14 @@ namespace OpenDental {
 					}
 					outputRow+=householdCity.PadRight(15,' ');
 					//Patient's State
-					string householdState=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["State"].ToString()));
+					string householdState=POut.String(PIn.String(primaryCareReportRow.Rows[0]["State"].ToString()));
 					if(householdState.ToUpper()!="AZ") {
 						rowErrors+="ERROR: State abbreviation for patient with patnum of "+patNum+" must be set to AZ."+Environment.NewLine;
 						householdState="AZ";
 					}
 					outputRow+=householdState;
 					//Patient's zip code
-					string householdZip=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Zip"].ToString()));
+					string householdZip=POut.String(PIn.String(primaryCareReportRow.Rows[0]["Zip"].ToString()));
 					if(householdZip.Length>5) {
 						string newHouseholdZip=householdZip.Substring(0,5);
 						rowWarnings+="WARNING: The zipcode for patient with patnum of "+patNum+" was longer than 5 characters in length and "+
@@ -211,101 +211,101 @@ namespace OpenDental {
 					}
 					outputRow+=householdZip.PadRight(5,' ');
 					//Patient's relationship to insured.
-					string insuranceRelationship=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["InsRelat"].ToString()));
+					string insuranceRelationship=POut.String(PIn.String(primaryCareReportRow.Rows[0]["InsRelat"].ToString()));
 					if(insuranceRelationship!="1"){//Not self?
 						rowWarnings+="WARNING: The patient insurance relationship is not 'self' for the patient with a patnum of "+patNum+Environment.NewLine;
 					}
 					outputRow+=insuranceRelationship;
 					//Patient's marital status
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["MaritalStatus"].ToString()));
+					outputRow+=POut.String(PIn.String(primaryCareReportRow.Rows[0]["MaritalStatus"].ToString()));
 					//Patient's employment status
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["EmploymentStatus"].ToString()));
+					outputRow+=POut.String(PIn.String(primaryCareReportRow.Rows[0]["EmploymentStatus"].ToString()));
 					//Patient's student status
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["StudentStatus"].ToString()));
+					outputRow+=POut.String(PIn.String(primaryCareReportRow.Rows[0]["StudentStatus"].ToString()));
 					//Insurance plan name
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["InsurancePlanName"].ToString())).PadRight(25,' ');
+					outputRow+=POut.String(PIn.String(primaryCareReportRow.Rows[0]["InsurancePlanName"].ToString())).PadRight(25,' ');
 					//Name of referring physician.
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["ReferringPhysicianName"].ToString())).PadRight(26,' ');
+					outputRow+=POut.String(PIn.String(primaryCareReportRow.Rows[0]["ReferringPhysicianName"].ToString())).PadRight(26,' ');
 					//ID# of referring physician
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["ReferringPhysicianID"].ToString())).PadLeft(6,' ');
+					outputRow+=POut.String(PIn.String(primaryCareReportRow.Rows[0]["ReferringPhysicianID"].ToString())).PadLeft(6,' ');
 					//Diagnosis code 1
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["DiagnosisCode1"].ToString())).PadRight(6,'0');
+					outputRow+=POut.String(PIn.String(primaryCareReportRow.Rows[0]["DiagnosisCode1"].ToString())).PadRight(6,'0');
 					//Diagnosis code 2
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["DiagnosisCode2"].ToString())).PadRight(6,'0');
+					outputRow+=POut.String(PIn.String(primaryCareReportRow.Rows[0]["DiagnosisCode2"].ToString())).PadRight(6,'0');
 					//Diagnosis code 3
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["DiagnosisCode3"].ToString())).PadRight(6,'0');
+					outputRow+=POut.String(PIn.String(primaryCareReportRow.Rows[0]["DiagnosisCode3"].ToString())).PadRight(6,'0');
 					//Diagnosis code 4
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["DiagnosisCode4"].ToString())).PadRight(6,'0');
+					outputRow+=POut.String(PIn.String(primaryCareReportRow.Rows[0]["DiagnosisCode4"].ToString())).PadRight(6,'0');
 					//Date of encounter
-					outputRow+=PIn.PDate(primaryCareReportRow.Rows[0]["DateOfEncounter"].ToString()).ToString("MMddyyyy");
+					outputRow+=PIn.Date(primaryCareReportRow.Rows[0]["DateOfEncounter"].ToString()).ToString("MMddyyyy");
 					//Procedure 1
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure1"].ToString())).PadRight(5,'0');
+					outputRow+=POut.String(PIn.String(primaryCareReportRow.Rows[0]["Procedure1"].ToString())).PadRight(5,'0');
 					//Procedure 1 modifier 1
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure1Modifier1"].ToString())).PadRight(2,'0');
+					outputRow+=POut.String(PIn.String(primaryCareReportRow.Rows[0]["Procedure1Modifier1"].ToString())).PadRight(2,'0');
 					//Procedure 1 modifier 2
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure1Modifier2"].ToString())).PadRight(2,'0');
+					outputRow+=POut.String(PIn.String(primaryCareReportRow.Rows[0]["Procedure1Modifier2"].ToString())).PadRight(2,'0');
 					//Procedure 1 diagnosis code
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure1DiagnosisCode"].ToString())).PadRight(4,'0');
+					outputRow+=POut.String(PIn.String(primaryCareReportRow.Rows[0]["Procedure1DiagnosisCode"].ToString())).PadRight(4,'0');
 					//Procedure 1 charges
-					outputRow+=Math.Round(PIn.PDouble(primaryCareReportRow.Rows[0]["Procedure1Charges"].ToString())).ToString().PadLeft(6,'0');
+					outputRow+=Math.Round(PIn.Double(primaryCareReportRow.Rows[0]["Procedure1Charges"].ToString())).ToString().PadLeft(6,'0');
 					//Procedure 2
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure2"].ToString())).PadRight(5,'0');
+					outputRow+=POut.String(PIn.String(primaryCareReportRow.Rows[0]["Procedure2"].ToString())).PadRight(5,'0');
 					//Procedure 2 modifier 1
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure2Modifier1"].ToString())).PadRight(2,'0');
+					outputRow+=POut.String(PIn.String(primaryCareReportRow.Rows[0]["Procedure2Modifier1"].ToString())).PadRight(2,'0');
 					//Procedure 2 modifier 2
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure2Modifier2"].ToString())).PadRight(2,'0');
+					outputRow+=POut.String(PIn.String(primaryCareReportRow.Rows[0]["Procedure2Modifier2"].ToString())).PadRight(2,'0');
 					//Procedure 2 diagnosis code
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure2DiagnosisCode"].ToString())).PadRight(4,'0');
+					outputRow+=POut.String(PIn.String(primaryCareReportRow.Rows[0]["Procedure2DiagnosisCode"].ToString())).PadRight(4,'0');
 					//Procedure 2 charges
-					outputRow+=Math.Round(PIn.PDouble(primaryCareReportRow.Rows[0]["Procedure2Charges"].ToString())).ToString().PadLeft(6,'0');
+					outputRow+=Math.Round(PIn.Double(primaryCareReportRow.Rows[0]["Procedure2Charges"].ToString())).ToString().PadLeft(6,'0');
 					//Procedure 3
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure3"].ToString())).PadRight(5,'0');
+					outputRow+=POut.String(PIn.String(primaryCareReportRow.Rows[0]["Procedure3"].ToString())).PadRight(5,'0');
 					//Procedure 3 modifier 1
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure3Modifier1"].ToString())).PadRight(2,'0');
+					outputRow+=POut.String(PIn.String(primaryCareReportRow.Rows[0]["Procedure3Modifier1"].ToString())).PadRight(2,'0');
 					//Procedure 3 modifier 2
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure3Modifier2"].ToString())).PadRight(2,'0');
+					outputRow+=POut.String(PIn.String(primaryCareReportRow.Rows[0]["Procedure3Modifier2"].ToString())).PadRight(2,'0');
 					//Procedure 3 diagnosis code
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure3DiagnosisCode"].ToString())).PadRight(4,'0');
+					outputRow+=POut.String(PIn.String(primaryCareReportRow.Rows[0]["Procedure3DiagnosisCode"].ToString())).PadRight(4,'0');
 					//Procedure 3 charges
-					outputRow+=Math.Round(PIn.PDouble(primaryCareReportRow.Rows[0]["Procedure3Charges"].ToString())).ToString().PadLeft(6,'0');
+					outputRow+=Math.Round(PIn.Double(primaryCareReportRow.Rows[0]["Procedure3Charges"].ToString())).ToString().PadLeft(6,'0');
 					//Procedure 4
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure4"].ToString())).PadRight(5,'0');
+					outputRow+=POut.String(PIn.String(primaryCareReportRow.Rows[0]["Procedure4"].ToString())).PadRight(5,'0');
 					//Procedure 4 modifier 1
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure4Modifier1"].ToString())).PadRight(2,'0');
+					outputRow+=POut.String(PIn.String(primaryCareReportRow.Rows[0]["Procedure4Modifier1"].ToString())).PadRight(2,'0');
 					//Procedure 4 modifier 2
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure4Modifier2"].ToString())).PadRight(2,'0');
+					outputRow+=POut.String(PIn.String(primaryCareReportRow.Rows[0]["Procedure4Modifier2"].ToString())).PadRight(2,'0');
 					//Procedure 4 diagnosis code
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure4DiagnosisCode"].ToString())).PadRight(4,'0');
+					outputRow+=POut.String(PIn.String(primaryCareReportRow.Rows[0]["Procedure4DiagnosisCode"].ToString())).PadRight(4,'0');
 					//Procedure 4 charges
-					outputRow+=Math.Round(PIn.PDouble(primaryCareReportRow.Rows[0]["Procedure4Charges"].ToString())).ToString().PadLeft(6,'0');
+					outputRow+=Math.Round(PIn.Double(primaryCareReportRow.Rows[0]["Procedure4Charges"].ToString())).ToString().PadLeft(6,'0');
 					//Procedure 5
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure5"].ToString())).PadRight(5,'0');
+					outputRow+=POut.String(PIn.String(primaryCareReportRow.Rows[0]["Procedure5"].ToString())).PadRight(5,'0');
 					//Procedure 5 modifier 1
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure5Modifier1"].ToString())).PadRight(2,'0');
+					outputRow+=POut.String(PIn.String(primaryCareReportRow.Rows[0]["Procedure5Modifier1"].ToString())).PadRight(2,'0');
 					//Procedure 5 modifier 2
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure5Modifier2"].ToString())).PadRight(2,'0');
+					outputRow+=POut.String(PIn.String(primaryCareReportRow.Rows[0]["Procedure5Modifier2"].ToString())).PadRight(2,'0');
 					//Procedure 5 diagnosis code
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure5DiagnosisCode"].ToString())).PadRight(4,'0');
+					outputRow+=POut.String(PIn.String(primaryCareReportRow.Rows[0]["Procedure5DiagnosisCode"].ToString())).PadRight(4,'0');
 					//Procedure 5 charges
-					outputRow+=Math.Round(PIn.PDouble(primaryCareReportRow.Rows[0]["Procedure5Charges"].ToString())).ToString().PadLeft(6,'0');
+					outputRow+=Math.Round(PIn.Double(primaryCareReportRow.Rows[0]["Procedure5Charges"].ToString())).ToString().PadLeft(6,'0');
 					//Procedure 6
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure6"].ToString())).PadRight(5,'0');
+					outputRow+=POut.String(PIn.String(primaryCareReportRow.Rows[0]["Procedure6"].ToString())).PadRight(5,'0');
 					//Procedure 6 modifier 1
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure6Modifier1"].ToString())).PadRight(2,'0');
+					outputRow+=POut.String(PIn.String(primaryCareReportRow.Rows[0]["Procedure6Modifier1"].ToString())).PadRight(2,'0');
 					//Procedure 6 modifier 2
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure6Modifier2"].ToString())).PadRight(2,'0');
+					outputRow+=POut.String(PIn.String(primaryCareReportRow.Rows[0]["Procedure6Modifier2"].ToString())).PadRight(2,'0');
 					//Procedure 6 diagnosis code
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure6DiagnosisCode"].ToString())).PadRight(4,'0');
+					outputRow+=POut.String(PIn.String(primaryCareReportRow.Rows[0]["Procedure6DiagnosisCode"].ToString())).PadRight(4,'0');
 					//Procedure 6 charges
-					outputRow+=Math.Round(PIn.PDouble(primaryCareReportRow.Rows[0]["Procedure6Charges"].ToString())).ToString().PadLeft(6,'0');
+					outputRow+=Math.Round(PIn.Double(primaryCareReportRow.Rows[0]["Procedure6Charges"].ToString())).ToString().PadLeft(6,'0');
 					//Total charges
-					outputRow+=Math.Round(PIn.PDouble(primaryCareReportRow.Rows[0]["TotalCharges"].ToString())).ToString().PadLeft(7,'0');
+					outputRow+=Math.Round(PIn.Double(primaryCareReportRow.Rows[0]["TotalCharges"].ToString())).ToString().PadLeft(7,'0');
 					//Amount paid
-					outputRow+=Math.Round(PIn.PDouble(primaryCareReportRow.Rows[0]["AmountPaid"].ToString())).ToString().PadLeft(7,'0');
+					outputRow+=Math.Round(PIn.Double(primaryCareReportRow.Rows[0]["AmountPaid"].ToString())).ToString().PadLeft(7,'0');
 					//Balance due
-					outputRow+=Math.Round(PIn.PDouble(primaryCareReportRow.Rows[0]["BalanceDue"].ToString())).ToString().PadLeft(7,'0');
+					outputRow+=Math.Round(PIn.Double(primaryCareReportRow.Rows[0]["BalanceDue"].ToString())).ToString().PadLeft(7,'0');
 					//Facility site number
-					string siteId=PIn.PString(primaryCareReportRow.Rows[0]["ClinicDescription"].ToString());
+					string siteId=PIn.String(primaryCareReportRow.Rows[0]["ClinicDescription"].ToString());
 					if(siteId=="null"){
 						siteId="";
 					}
@@ -318,7 +318,7 @@ namespace OpenDental {
 					}
 					outputRow+=siteId;
 					//Physician ID
-					string physicianId=PIn.PString(primaryCareReportRow.Rows[0]["PhysicianID"].ToString());
+					string physicianId=PIn.String(primaryCareReportRow.Rows[0]["PhysicianID"].ToString());
 					if(physicianId.Length>12){
 						string newPhysicianId=physicianId.Substring(0,12);
 						rowWarnings+="WARNING: The physician ID '"+physicianId+"' of the provider associated to the patient with a patnum of '"+patNum+
@@ -327,7 +327,7 @@ namespace OpenDental {
 					}
 					outputRow+=physicianId.PadLeft(12,'0');
 					//Pysician's First Name and Middle Initial
-					string physicianFirstAndMiddle=PIn.PString(primaryCareReportRow.Rows[0]["PhysicianFAndMNames"].ToString());
+					string physicianFirstAndMiddle=PIn.String(primaryCareReportRow.Rows[0]["PhysicianFAndMNames"].ToString());
 					if(physicianFirstAndMiddle.Length>12){
 						string newPhysicianFirstAndMiddle=physicianFirstAndMiddle.Substring(0,12);
 						rowWarnings+="WARNING: The physician first name and middle initial of the provider associated to the patient with "+
@@ -336,7 +336,7 @@ namespace OpenDental {
 					}
 					outputRow+=physicianFirstAndMiddle.PadRight(12,' ');
 					//Physician's last name.
-					string physicianLastName=PIn.PString(primaryCareReportRow.Rows[0]["PhysicianLName"].ToString());
+					string physicianLastName=PIn.String(primaryCareReportRow.Rows[0]["PhysicianLName"].ToString());
 					if(physicianLastName.Length>20){
 						string newPhysicianLastName=physicianLastName.Substring(0,20);
 						rowWarnings+="WARNING: The physician last name of the provider associated to the patient with a patnum of '"+patNum+"' "+

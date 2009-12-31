@@ -1901,7 +1901,7 @@ namespace OpenDental{
 				textAge.Text="";
 				return;
 			}
-			DateTime birthdate=PIn.PDate(textBirthdate.Text);
+			DateTime birthdate=PIn.Date(textBirthdate.Text);
 			if(birthdate>DateTime.Today){
 				birthdate=birthdate.AddYears(-100);
 			}
@@ -2486,7 +2486,7 @@ namespace OpenDental{
 				case 3: PatCur.Position=PatientPosition.Widowed; break;
 				case 4: PatCur.Position=PatientPosition.Divorced; break;
 			}
-			PatCur.Birthdate=PIn.PDate(textBirthdate.Text);
+			PatCur.Birthdate=PIn.Date(textBirthdate.Text);
 			if(CultureInfo.CurrentCulture.Name=="en-US"){
 				if(Regex.IsMatch(textSSN.Text,@"^\d\d\d-\d\d-\d\d\d\d$")){
 					PatCur.SSN=textSSN.Text.Substring(0,3)+textSSN.Text.Substring(4,2)
@@ -2523,7 +2523,7 @@ namespace OpenDental{
 				PatCur.Language=languageList[comboLanguage.SelectedIndex-1].Name;
 			}
 			PatCur.AddrNote=textAddrNotes.Text;
-			PatCur.DateFirstVisit=PIn.PDate(textDateFirstVisit.Text);
+			PatCur.DateFirstVisit=PIn.Date(textDateFirstVisit.Text);
 			if(comboPriProv.SelectedIndex!=-1) {
 				PatCur.PriProv=ProviderC.List[comboPriProv.SelectedIndex].ProvNum;
 			}
@@ -2561,7 +2561,7 @@ namespace OpenDental{
 			PatCur.PreferContactMethod=(ContactMethod)comboContact.SelectedIndex;
 			PatCur.PreferConfirmMethod=(ContactMethod)comboConfirm.SelectedIndex;
 			PatCur.PreferRecallMethod=(ContactMethod)comboRecall.SelectedIndex;
-			PatCur.AdmitDate=PIn.PDate(textAdmitDate.Text);
+			PatCur.AdmitDate=PIn.Date(textAdmitDate.Text);
 			if(PatCur.Guarantor==0){
 				PatCur.Guarantor=PatCur.PatNum;
 			}

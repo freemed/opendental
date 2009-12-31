@@ -23,7 +23,7 @@ namespace OpenDentBusiness{
 				+"LEFT JOIN tasklist t3 ON t3.TaskListNum=t2.Parent "
 				//+"LEFT JOIN taskancestor ON taskancestor.TaskList=tasklist.TaskList "
 				//+"LEFT JOIN task ON task.TaskNum=taskancestor.TaskNum AND task.TaskStatus=0 "
-				+"WHERE tasksubscription.UserNum="+POut.PLong(userNum)
+				+"WHERE tasksubscription.UserNum="+POut.Long(userNum)
 				+" AND tasksubscription.TaskListNum!=0 "
 				+"GROUP BY tasklist.TaskListNum "
 				+"ORDER BY DateTimeEntry";
@@ -72,7 +72,7 @@ namespace OpenDentBusiness{
 				+"(SELECT COUNT(*) FROM taskancestor,task WHERE taskancestor.TaskListNum=tasklist.TaskListNum "
 				+"AND task.TaskNum=taskancestor.TaskNum AND task.TaskStatus=0) "
 				+"FROM tasklist "
-				+"WHERE Parent="+POut.PLong(parent)
+				+"WHERE Parent="+POut.Long(parent)
 				+" ORDER BY DateTimeEntry";
 			return RefreshAndFill(Db.GetTable(command));
 		}
@@ -88,7 +88,7 @@ namespace OpenDentBusiness{
 				+"AND task.TaskNum=taskancestor.TaskNum AND task.TaskStatus=0) "
 				+"FROM tasklist "
 				+"WHERE IsRepeating=1 "
-				+"AND DateType="+POut.PLong((int)dateType)+" "
+				+"AND DateType="+POut.Long((int)dateType)+" "
 				+"ORDER BY DateTimeEntry";
 			return RefreshAndFill(Db.GetTable(command));
 		}
@@ -117,9 +117,9 @@ namespace OpenDentBusiness{
 				+"(SELECT COUNT(*) FROM taskancestor,task WHERE taskancestor.TaskListNum=tasklist.TaskListNum "
 				+"AND task.TaskNum=taskancestor.TaskNum AND task.TaskStatus=0) "
 				+"FROM tasklist "
-				+"WHERE DateTL >= "+POut.PDate(dateFrom)
-				+" AND DateTL <= "+POut.PDate(dateTo)
-				+" AND DateType="+POut.PLong((int)dateType)
+				+"WHERE DateTL >= "+POut.Date(dateFrom)
+				+" AND DateTL <= "+POut.Date(dateTo)
+				+" AND DateType="+POut.Long((int)dateType)
 				+" ORDER BY DateTimeEntry";
 			return RefreshAndFill(Db.GetTable(command));
 		}
@@ -132,7 +132,7 @@ namespace OpenDentBusiness{
 			if(taskListNum==0){
 				return null;
 			}
-			string command="SELECT * FROM tasklist WHERE TaskListNum="+POut.PLong(taskListNum);
+			string command="SELECT * FROM tasklist WHERE TaskListNum="+POut.Long(taskListNum);
 			List<TaskList> list=RefreshAndFill(Db.GetTable(command));
 			if(list.Count>0){
 				return list[0];
@@ -154,26 +154,26 @@ namespace OpenDentBusiness{
 			string desc;
 			for(int i=0;i<table.Rows.Count;i++) {
 				tasklist=new TaskList();
-				tasklist.TaskListNum    = PIn.PLong(table.Rows[i][0].ToString());
-				tasklist.Descript       = PIn.PString(table.Rows[i][1].ToString());
-				tasklist.Parent         = PIn.PLong(table.Rows[i][2].ToString());
-				tasklist.DateTL         = PIn.PDate(table.Rows[i][3].ToString());
-				tasklist.IsRepeating    = PIn.PBool(table.Rows[i][4].ToString());
-				tasklist.DateType       = (TaskDateType)PIn.PLong(table.Rows[i][5].ToString());
-				tasklist.FromNum        = PIn.PLong(table.Rows[i][6].ToString());
-				tasklist.ObjectType     = (TaskObjectType)PIn.PLong(table.Rows[i][7].ToString());
-				tasklist.DateTimeEntry  = PIn.PDateT(table.Rows[i][8].ToString());
+				tasklist.TaskListNum    = PIn.Long(table.Rows[i][0].ToString());
+				tasklist.Descript       = PIn.String(table.Rows[i][1].ToString());
+				tasklist.Parent         = PIn.Long(table.Rows[i][2].ToString());
+				tasklist.DateTL         = PIn.Date(table.Rows[i][3].ToString());
+				tasklist.IsRepeating    = PIn.Bool(table.Rows[i][4].ToString());
+				tasklist.DateType       = (TaskDateType)PIn.Long(table.Rows[i][5].ToString());
+				tasklist.FromNum        = PIn.Long(table.Rows[i][6].ToString());
+				tasklist.ObjectType     = (TaskObjectType)PIn.Long(table.Rows[i][7].ToString());
+				tasklist.DateTimeEntry  = PIn.DateT(table.Rows[i][8].ToString());
 				tasklist.ParentDesc="";
 				tasklist.NewTaskCount=0;
 				if(table.Columns.Count>9){
-					tasklist.NewTaskCount=PIn.PInt(table.Rows[i][9].ToString());
+					tasklist.NewTaskCount=PIn.Int(table.Rows[i][9].ToString());
 				}
 				if(table.Columns.Count>10){
-					desc=PIn.PString(table.Rows[i][10].ToString());
+					desc=PIn.String(table.Rows[i][10].ToString());
 					if(desc!=""){
 						tasklist.ParentDesc=desc+"/";
 					}
-					desc=PIn.PString(table.Rows[i][11].ToString());
+					desc=PIn.String(table.Rows[i][11].ToString());
 					if(desc!="") {
 						tasklist.ParentDesc=desc+"/"+tasklist.ParentDesc;
 					}
@@ -190,21 +190,21 @@ namespace OpenDentBusiness{
 			}
 			string command=
 				"SELECT * FROM tasklist "
-				+"WHERE ObjectType="+POut.PLong((int)oType)
+				+"WHERE ObjectType="+POut.Long((int)oType)
 				+" ORDER BY Descript";
 			DataTable table=Db.GetTable(command);
 			TaskList[] List=new TaskList[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new TaskList();
-				List[i].TaskListNum    = PIn.PLong(table.Rows[i][0].ToString());
-				List[i].Descript       = PIn.PString(table.Rows[i][1].ToString());
-				List[i].Parent         = PIn.PLong(table.Rows[i][2].ToString());
-				List[i].DateTL         = PIn.PDate(table.Rows[i][3].ToString());
-				List[i].IsRepeating    = PIn.PBool(table.Rows[i][4].ToString());
-				List[i].DateType       = (TaskDateType)PIn.PLong(table.Rows[i][5].ToString());
-				List[i].FromNum        = PIn.PLong(table.Rows[i][6].ToString());
-				List[i].ObjectType     = (TaskObjectType)PIn.PLong(table.Rows[i][7].ToString());
-				List[i].DateTimeEntry  = PIn.PDateT(table.Rows[i][8].ToString());
+				List[i].TaskListNum    = PIn.Long(table.Rows[i][0].ToString());
+				List[i].Descript       = PIn.String(table.Rows[i][1].ToString());
+				List[i].Parent         = PIn.Long(table.Rows[i][2].ToString());
+				List[i].DateTL         = PIn.Date(table.Rows[i][3].ToString());
+				List[i].IsRepeating    = PIn.Bool(table.Rows[i][4].ToString());
+				List[i].DateType       = (TaskDateType)PIn.Long(table.Rows[i][5].ToString());
+				List[i].FromNum        = PIn.Long(table.Rows[i][6].ToString());
+				List[i].ObjectType     = (TaskObjectType)PIn.Long(table.Rows[i][7].ToString());
+				List[i].DateTimeEntry  = PIn.DateT(table.Rows[i][8].ToString());
 			}
 			return List;
 		}
@@ -216,15 +216,15 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command= "UPDATE tasklist SET " 
-				+"Descript = '"       +POut.PString(tlist.Descript)+"'"
-				+",Parent = '"        +POut.PLong   (tlist.Parent)+"'"
-				+",DateTL = "        +POut.PDate  (tlist.DateTL)
-				+",IsRepeating = '"   +POut.PBool  (tlist.IsRepeating)+"'"
-				+",DateType = '"      +POut.PLong   ((int)tlist.DateType)+"'"
-				+",FromNum = '"       +POut.PLong   (tlist.FromNum)+"'"
-				+",ObjectType = '"    +POut.PLong   ((int)tlist.ObjectType)+"'"
-				+",DateTimeEntry = " +POut.PDateT (tlist.DateTimeEntry)
-				+" WHERE TaskListNum = '" +POut.PLong (tlist.TaskListNum)+"'";
+				+"Descript = '"       +POut.String(tlist.Descript)+"'"
+				+",Parent = '"        +POut.Long   (tlist.Parent)+"'"
+				+",DateTL = "        +POut.Date  (tlist.DateTL)
+				+",IsRepeating = '"   +POut.Bool  (tlist.IsRepeating)+"'"
+				+",DateType = '"      +POut.Long   ((int)tlist.DateType)+"'"
+				+",FromNum = '"       +POut.Long   (tlist.FromNum)+"'"
+				+",ObjectType = '"    +POut.Long   ((int)tlist.ObjectType)+"'"
+				+",DateTimeEntry = " +POut.DateT (tlist.DateTimeEntry)
+				+" WHERE TaskListNum = '" +POut.Long (tlist.TaskListNum)+"'";
  			Db.NonQ(command);
 		}
 
@@ -244,16 +244,16 @@ namespace OpenDentBusiness{
 			command+="Descript,Parent,DateTL,IsRepeating,DateType,"
 				+"FromNum,ObjectType,DateTimeEntry) VALUES(";
 			if(PrefC.RandomKeys){
-				command+="'"+POut.PLong(tlist.TaskListNum)+"', ";
+				command+="'"+POut.Long(tlist.TaskListNum)+"', ";
 			}
 			command+=
-				 "'"+POut.PString(tlist.Descript)+"', "
-				+"'"+POut.PLong   (tlist.Parent)+"', "
-				+POut.PDate  (tlist.DateTL)+", "
-				+"'"+POut.PBool  (tlist.IsRepeating)+"', "
-				+"'"+POut.PLong   ((int)tlist.DateType)+"', "
-				+"'"+POut.PLong   (tlist.FromNum)+"', "
-				+"'"+POut.PLong   ((int)tlist.ObjectType)+"', "
+				 "'"+POut.String(tlist.Descript)+"', "
+				+"'"+POut.Long   (tlist.Parent)+"', "
+				+POut.Date  (tlist.DateTL)+", "
+				+"'"+POut.Bool  (tlist.IsRepeating)+"', "
+				+"'"+POut.Long   ((int)tlist.DateType)+"', "
+				+"'"+POut.Long   (tlist.FromNum)+"', "
+				+"'"+POut.Long   ((int)tlist.ObjectType)+"', "
 				+"NOW() )";//DateTimeEntry set to current server time
  			if(PrefC.RandomKeys){
 				Db.NonQ(command);
@@ -291,23 +291,23 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),tlist);
 				return;
 			}
-			string command="SELECT COUNT(*) FROM tasklist WHERE Parent="+POut.PLong(tlist.TaskListNum);
+			string command="SELECT COUNT(*) FROM tasklist WHERE Parent="+POut.Long(tlist.TaskListNum);
 			DataTable table=Db.GetTable(command);
 			if(table.Rows[0][0].ToString()!="0"){
 				throw new Exception(Lans.g("TaskLists","Not allowed to delete task list because it still has child lists attached."));
 			}
-			command="SELECT COUNT(*) FROM task WHERE TaskListNum="+POut.PLong(tlist.TaskListNum);
+			command="SELECT COUNT(*) FROM task WHERE TaskListNum="+POut.Long(tlist.TaskListNum);
 			table=Db.GetTable(command);
 			if(table.Rows[0][0].ToString()!="0"){
 				throw new Exception(Lans.g("TaskLists","Not allowed to delete task list because it still has child tasks attached."));
 			}
-			command="SELECT COUNT(*) FROM userod WHERE TaskListInBox="+POut.PLong(tlist.TaskListNum);
+			command="SELECT COUNT(*) FROM userod WHERE TaskListInBox="+POut.Long(tlist.TaskListNum);
 			table=Db.GetTable(command);
 			if(table.Rows[0][0].ToString()!="0"){
 				throw new Exception(Lans.g("TaskLists","Not allowed to delete task list because it is attached to a user inbox."));
 			}
 			command= "DELETE from tasklist WHERE TaskListNum = '"
-				+POut.PLong(tlist.TaskListNum)+"'";
+				+POut.Long(tlist.TaskListNum)+"'";
  			Db.NonQ(command);
 		}
 

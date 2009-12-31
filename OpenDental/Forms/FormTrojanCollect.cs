@@ -510,7 +510,7 @@ namespace OpenDental{
 				lastProcDate=DateTime.MinValue;//this should never happen
 			}
 			else{
-				lastProcDate=PIn.PDate(table.Rows[0][0].ToString());
+				lastProcDate=PIn.Date(table.Rows[0][0].ToString());
 			}
 			table=TrojanQueries.GetMaxPaymentDate(guarCur.PatNum);
 			DateTime lastPayDate;
@@ -518,7 +518,7 @@ namespace OpenDental{
 				lastPayDate=DateTime.MinValue;
 			}
 			else {
-				lastPayDate=PIn.PDate(table.Rows[0][0].ToString());
+				lastPayDate=PIn.Date(table.Rows[0][0].ToString());
 			}
 			if(lastPayDate>lastProcDate){
 				textDate.Text=lastPayDate.ToString("MM/dd/yyyy");
@@ -536,7 +536,7 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
-			double amtDebt=PIn.PDouble(textAmount.Text);
+			double amtDebt=PIn.Double(textAmount.Text);
 			if(amtDebt==0){
 				MessageBox.Show("Please fill in an amount.");
 				return;
@@ -549,7 +549,7 @@ namespace OpenDental{
 				MessageBox.Show("Amount of debt is unreasonably large.");
 				return;
 			}
-			DateTime dateDelinquency=PIn.PDate(textDate.Text);
+			DateTime dateDelinquency=PIn.Date(textDate.Text);
 			if(dateDelinquency.Year<1950) {
 				MessageBox.Show("Date is not valid.");
 				return;

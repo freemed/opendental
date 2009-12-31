@@ -55,21 +55,21 @@ namespace OpenDentBusiness{
 			HList=new Hashtable();
 			for(int i=0;i<table.Rows.Count;i++){
 				List[i]=new Carrier();
-				List[i].CarrierNum  =PIn.PLong   (table.Rows[i][0].ToString());
-				List[i].CarrierName =PIn.PString(table.Rows[i][1].ToString());
-				List[i].Address     =PIn.PString(table.Rows[i][2].ToString());
-				List[i].Address2    =PIn.PString(table.Rows[i][3].ToString());
-				List[i].City        =PIn.PString(table.Rows[i][4].ToString());
-				List[i].State       =PIn.PString(table.Rows[i][5].ToString());
-				List[i].Zip         =PIn.PString(table.Rows[i][6].ToString());
-				List[i].Phone       =PIn.PString(table.Rows[i][7].ToString());
-				List[i].ElectID     =PIn.PString(table.Rows[i][8].ToString());
-				List[i].NoSendElect =PIn.PBool  (table.Rows[i][9].ToString());
-				List[i].IsCDA       =PIn.PBool  (table.Rows[i][10].ToString());
-				List[i].IsPMP       =PIn.PBool(table.Rows[i][11].ToString());
-				List[i].CDAnetVersion=PIn.PString(table.Rows[i][12].ToString());
-				List[i].CanadianNetworkNum=PIn.PLong(table.Rows[i][13].ToString());
-				List[i].IsHidden     =PIn.PBool(table.Rows[i][14].ToString());
+				List[i].CarrierNum  =PIn.Long   (table.Rows[i][0].ToString());
+				List[i].CarrierName =PIn.String(table.Rows[i][1].ToString());
+				List[i].Address     =PIn.String(table.Rows[i][2].ToString());
+				List[i].Address2    =PIn.String(table.Rows[i][3].ToString());
+				List[i].City        =PIn.String(table.Rows[i][4].ToString());
+				List[i].State       =PIn.String(table.Rows[i][5].ToString());
+				List[i].Zip         =PIn.String(table.Rows[i][6].ToString());
+				List[i].Phone       =PIn.String(table.Rows[i][7].ToString());
+				List[i].ElectID     =PIn.String(table.Rows[i][8].ToString());
+				List[i].NoSendElect =PIn.Bool  (table.Rows[i][9].ToString());
+				List[i].IsCDA       =PIn.Bool  (table.Rows[i][10].ToString());
+				List[i].IsPMP       =PIn.Bool(table.Rows[i][11].ToString());
+				List[i].CDAnetVersion=PIn.String(table.Rows[i][12].ToString());
+				List[i].CanadianNetworkNum=PIn.Long(table.Rows[i][13].ToString());
+				List[i].IsHidden     =PIn.Bool(table.Rows[i][14].ToString());
 				HList.Add(List[i].CarrierNum,List[i]);
 			}
 		}
@@ -91,7 +91,7 @@ namespace OpenDentBusiness{
 				+"LEFT JOIN canadiannetwork ON canadiannetwork.CanadianNetworkNum=carrier.CanadianNetworkNum "
 				+"LEFT JOIN insplan ON insplan.CarrierNum=carrier.CarrierNum "
 				+"WHERE "
-				+"CarrierName LIKE '%"+POut.PString(carrierName)+"%' ";
+				+"CarrierName LIKE '%"+POut.String(carrierName)+"%' ";
 			if(isCanadian){
 				command+="AND IsCDA=1 ";
 			}
@@ -132,7 +132,7 @@ namespace OpenDentBusiness{
 				row["CarrierName"]=tableRaw.Rows[i]["CarrierName"].ToString();
 				row["City"]=tableRaw.Rows[i]["City"].ToString();
 				row["ElectID"]=tableRaw.Rows[i]["ElectID"].ToString();
-				if(PIn.PBool(tableRaw.Rows[i]["IsHidden"].ToString())){
+				if(PIn.Bool(tableRaw.Rows[i]["IsHidden"].ToString())){
 					row["isHidden"]="X";
 				}
 				else{
@@ -140,7 +140,7 @@ namespace OpenDentBusiness{
 				}
 				row["insPlanCount"]=tableRaw.Rows[i]["insPlanCount"].ToString();
 				row["Phone"]=tableRaw.Rows[i]["Phone"].ToString();
-				if(PIn.PBool(tableRaw.Rows[i]["IsPMP"].ToString())){
+				if(PIn.Bool(tableRaw.Rows[i]["IsPMP"].ToString())){
 					row["pMP"]="X";
 				}
 				else{
@@ -179,43 +179,43 @@ namespace OpenDentBusiness{
 						throw new ApplicationException(Lans.g("Carriers","EDI Code must be exactly 6 numbers."));
 					}
 					command="SELECT CarrierNum FROM carrier WHERE "
-						+"ElectID = '"+POut.PString(Cur.ElectID)+"' "
+						+"ElectID = '"+POut.String(Cur.ElectID)+"' "
 						+"AND IsCDA=1 "
-						+"AND CarrierNum != "+POut.PLong(Cur.CarrierNum);
+						+"AND CarrierNum != "+POut.Long(Cur.CarrierNum);
 					table=Db.GetTable(command);
 					if(table.Rows.Count>0) {//if there already exists a Canadian carrier with that ElectID
 						throw new ApplicationException(Lans.g("Carriers","EDI Code already in use."));
 					}
 				}
 				//so the edited carrier looks good, but now we need to make sure that the original was allowed to be changed.
-				command="SELECT ElectID,IsCDA FROM carrier WHERE CarrierNum = '"+POut.PLong(Cur.CarrierNum)+"'";
+				command="SELECT ElectID,IsCDA FROM carrier WHERE CarrierNum = '"+POut.Long(Cur.CarrierNum)+"'";
 				table=Db.GetTable(command);
-				if(PIn.PBool(table.Rows[0][1].ToString())//if original carrier IsCDA
-					&& PIn.PString(table.Rows[0][0].ToString()) !=Cur.ElectID)//and the ElectID was changed
+				if(PIn.Bool(table.Rows[0][1].ToString())//if original carrier IsCDA
+					&& PIn.String(table.Rows[0][0].ToString()) !=Cur.ElectID)//and the ElectID was changed
 				{
-					command="SELECT COUNT(*) FROM etrans WHERE CarrierNum= "+POut.PLong(Cur.CarrierNum)
-						+" OR CarrierNum2="+POut.PLong(Cur.CarrierNum);
+					command="SELECT COUNT(*) FROM etrans WHERE CarrierNum= "+POut.Long(Cur.CarrierNum)
+						+" OR CarrierNum2="+POut.Long(Cur.CarrierNum);
 					if(Db.GetCount(command)!="0"){
 						throw new ApplicationException(Lans.g("Carriers","Not allowed to change EDI Code because it's in use in the claim history."));
 					}
 				}
 			}
 			command="UPDATE carrier SET "
-				+ "CarrierName= '" +POut.PString(Cur.CarrierName)+"' "
-				+ ",Address= '"    +POut.PString(Cur.Address)+"' "
-				+ ",Address2= '"   +POut.PString(Cur.Address2)+"' "
-				+ ",City= '"       +POut.PString(Cur.City)+"' "
-				+ ",State= '"      +POut.PString(Cur.State)+"' "
-				+ ",Zip= '"        +POut.PString(Cur.Zip)+"' "
-				+ ",Phone= '"      +POut.PString(Cur.Phone)+"' "
-				+ ",ElectID= '"    +POut.PString(Cur.ElectID)+"' "
-				+ ",NoSendElect= '"+POut.PBool  (Cur.NoSendElect)+"' "
-				+ ",IsCDA= '"      +POut.PBool  (Cur.IsCDA)+"' "
-				+ ",IsPMP= '"      +POut.PBool  (Cur.IsPMP)+"' "
-				+ ",CDAnetVersion= '"+POut.PString(Cur.CDAnetVersion)+"' "
-				+ ",CanadianNetworkNum= '"+POut.PLong(Cur.CanadianNetworkNum)+"' "
-				+ ",IsHidden= '"     +POut.PBool(Cur.IsHidden)+"' "
-				+"WHERE CarrierNum = '"+POut.PLong(Cur.CarrierNum)+"'";
+				+ "CarrierName= '" +POut.String(Cur.CarrierName)+"' "
+				+ ",Address= '"    +POut.String(Cur.Address)+"' "
+				+ ",Address2= '"   +POut.String(Cur.Address2)+"' "
+				+ ",City= '"       +POut.String(Cur.City)+"' "
+				+ ",State= '"      +POut.String(Cur.State)+"' "
+				+ ",Zip= '"        +POut.String(Cur.Zip)+"' "
+				+ ",Phone= '"      +POut.String(Cur.Phone)+"' "
+				+ ",ElectID= '"    +POut.String(Cur.ElectID)+"' "
+				+ ",NoSendElect= '"+POut.Bool  (Cur.NoSendElect)+"' "
+				+ ",IsCDA= '"      +POut.Bool  (Cur.IsCDA)+"' "
+				+ ",IsPMP= '"      +POut.Bool  (Cur.IsPMP)+"' "
+				+ ",CDAnetVersion= '"+POut.String(Cur.CDAnetVersion)+"' "
+				+ ",CanadianNetworkNum= '"+POut.Long(Cur.CanadianNetworkNum)+"' "
+				+ ",IsHidden= '"     +POut.Bool(Cur.IsHidden)+"' "
+				+"WHERE CarrierNum = '"+POut.Long(Cur.CarrierNum)+"'";
 			//MessageBox.Show(string command);
 			Db.NonQ(command);
 		}
@@ -236,7 +236,7 @@ namespace OpenDentBusiness{
 						throw new ApplicationException(Lans.g("Carriers","EDI Code must be exactly 6 numbers."));
 					}
 					command="SELECT CarrierNum FROM carrier WHERE "
-						+"ElectID = '"+POut.PString(Cur.ElectID)+"' "
+						+"ElectID = '"+POut.String(Cur.ElectID)+"' "
 						+"AND IsCDA=1";
 					DataTable table=Db.GetTable(command);
 					if(table.Rows.Count>0){//if there already exists a Canadian carrier with that ElectID
@@ -254,23 +254,23 @@ namespace OpenDentBusiness{
 			command+="CarrierName,Address,Address2,City,State,Zip,Phone,ElectID,NoSendElect,"
 				+"IsCDA,IsPMP,CDAnetVersion,CanadianNetworkNum,IsHidden) VALUES(";
 			if(PrefC.RandomKeys){
-				command+="'"+POut.PLong(Cur.CarrierNum)+"', ";
+				command+="'"+POut.Long(Cur.CarrierNum)+"', ";
 			}
 			command+=
-				 "'"+POut.PString(Cur.CarrierName)+"', "
-				+"'"+POut.PString(Cur.Address)+"', "
-				+"'"+POut.PString(Cur.Address2)+"', "
-				+"'"+POut.PString(Cur.City)+"', "
-				+"'"+POut.PString(Cur.State)+"', "
-				+"'"+POut.PString(Cur.Zip)+"', "
-				+"'"+POut.PString(Cur.Phone)+"', "
-				+"'"+POut.PString(Cur.ElectID)+"', "
-				+"'"+POut.PBool  (Cur.NoSendElect)+"', "
-				+"'"+POut.PBool  (Cur.IsCDA)+"', "
-				+"'"+POut.PBool  (Cur.IsPMP)+"', "
-				+"'"+POut.PString(Cur.CDAnetVersion)+"', "
-				+"'"+POut.PLong   (Cur.CanadianNetworkNum)+"', "
-				+"'"+POut.PBool  (Cur.IsHidden)+"')";
+				 "'"+POut.String(Cur.CarrierName)+"', "
+				+"'"+POut.String(Cur.Address)+"', "
+				+"'"+POut.String(Cur.Address2)+"', "
+				+"'"+POut.String(Cur.City)+"', "
+				+"'"+POut.String(Cur.State)+"', "
+				+"'"+POut.String(Cur.Zip)+"', "
+				+"'"+POut.String(Cur.Phone)+"', "
+				+"'"+POut.String(Cur.ElectID)+"', "
+				+"'"+POut.Bool  (Cur.NoSendElect)+"', "
+				+"'"+POut.Bool  (Cur.IsCDA)+"', "
+				+"'"+POut.Bool  (Cur.IsPMP)+"', "
+				+"'"+POut.String(Cur.CDAnetVersion)+"', "
+				+"'"+POut.Long   (Cur.CanadianNetworkNum)+"', "
+				+"'"+POut.Bool  (Cur.IsHidden)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -289,7 +289,7 @@ namespace OpenDentBusiness{
 			//look for dependencies in insplan table.
 			string command="SELECT CONCAT(CONCAT(LName,', '),FName) FROM patient,insplan" 
 				+" WHERE patient.PatNum=insplan.Subscriber"
-				+" AND insplan.CarrierNum = '"+POut.PLong(Cur.CarrierNum)+"'"
+				+" AND insplan.CarrierNum = '"+POut.Long(Cur.CarrierNum)+"'"
 				+" ORDER BY LName,FName";
 			DataTable table=Db.GetTable(command);
 			string strInUse;
@@ -299,13 +299,13 @@ namespace OpenDentBusiness{
 					if(i>0){
 						strInUse+=", ";
 					}
-					strInUse+=PIn.PString(table.Rows[i][0].ToString());
+					strInUse+=PIn.String(table.Rows[i][0].ToString());
 				}
 				throw new ApplicationException(Lans.g("Carriers","Not allowed to delete carrier because it is in use.  Subscribers using this carrier include ")+strInUse);
 			}
 			//look for dependencies in etrans table.
-			command="SELECT DateTimeTrans FROM etrans WHERE CarrierNum="+POut.PLong(Cur.CarrierNum)
-				+" OR CarrierNum2="+POut.PLong(Cur.CarrierNum);
+			command="SELECT DateTimeTrans FROM etrans WHERE CarrierNum="+POut.Long(Cur.CarrierNum)
+				+" OR CarrierNum2="+POut.Long(Cur.CarrierNum);
 			table=Db.GetTable(command);
 			if(table.Rows.Count>0){
 				strInUse="";
@@ -313,11 +313,11 @@ namespace OpenDentBusiness{
 					if(i>0) {
 						strInUse+=", ";
 					}
-					strInUse+=PIn.PDateT(table.Rows[i][0].ToString()).ToShortDateString();
+					strInUse+=PIn.DateT(table.Rows[i][0].ToString()).ToShortDateString();
 				}
 				throw new ApplicationException(Lans.g("Carriers","Not allowed to delete carrier because it is in use in the etrans table.  Dates of claim sent history include ")+strInUse);
 			}
-			command="DELETE from carrier WHERE CarrierNum = "+POut.PLong(Cur.CarrierNum);
+			command="DELETE from carrier WHERE CarrierNum = "+POut.Long(Cur.CarrierNum);
 			Db.NonQ(command);
 		}
 
@@ -328,12 +328,12 @@ namespace OpenDentBusiness{
 			}
 			string command="SELECT CONCAT(CONCAT(LName,', '),FName) FROM patient,insplan" 
 				+" WHERE patient.PatNum=insplan.Subscriber"
-				+" AND insplan.CarrierNum = '"+POut.PLong(Cur.CarrierNum)+"'"
+				+" AND insplan.CarrierNum = '"+POut.Long(Cur.CarrierNum)+"'"
 				+" ORDER BY LName,FName";
 			DataTable table=Db.GetTable(command);
 			string[] retStr=new string[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
-				retStr[i]=PIn.PString(table.Rows[i][0].ToString());
+				retStr[i]=PIn.String(table.Rows[i][0].ToString());
 			}
 			return retStr;
 		}
@@ -385,19 +385,19 @@ namespace OpenDentBusiness{
 			}
 			Carrier retVal=carrier.Copy();
 			string command="SELECT CarrierNum FROM carrier WHERE " 
-				+"CarrierName = '"    +POut.PString(carrier.CarrierName)+"' "
-				+"AND Address = '"    +POut.PString(carrier.Address)+"' "
-				+"AND Address2 = '"   +POut.PString(carrier.Address2)+"' "
-				+"AND City = '"       +POut.PString(carrier.City)+"' "
-				+"AND State = '"      +POut.PString(carrier.State)+"' "
-				+"AND Zip = '"        +POut.PString(carrier.Zip)+"' "
-				+"AND Phone = '"      +POut.PString(carrier.Phone)+"' "
-				+"AND ElectID = '"    +POut.PString(carrier.ElectID)+"' "
-				+"AND NoSendElect = '"+POut.PBool  (carrier.NoSendElect)+"'";
+				+"CarrierName = '"    +POut.String(carrier.CarrierName)+"' "
+				+"AND Address = '"    +POut.String(carrier.Address)+"' "
+				+"AND Address2 = '"   +POut.String(carrier.Address2)+"' "
+				+"AND City = '"       +POut.String(carrier.City)+"' "
+				+"AND State = '"      +POut.String(carrier.State)+"' "
+				+"AND Zip = '"        +POut.String(carrier.Zip)+"' "
+				+"AND Phone = '"      +POut.String(carrier.Phone)+"' "
+				+"AND ElectID = '"    +POut.String(carrier.ElectID)+"' "
+				+"AND NoSendElect = '"+POut.Bool  (carrier.NoSendElect)+"'";
 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count>0){
 				//A matching carrier was found in the database, so we will use it.
-				retVal.CarrierNum=PIn.PLong(table.Rows[0][0].ToString());
+				retVal.CarrierNum=PIn.Long(table.Rows[0][0].ToString());
 				return retVal;
 			}
 			//No match found.  Decide what to do.  Usually add carrier.--------------------------------------------------------------
@@ -405,11 +405,11 @@ namespace OpenDentBusiness{
 			if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="CA"){//en-CA or fr-CA
 				if(carrier.ElectID!=""){
 					command="SELECT CarrierNum FROM carrier WHERE "
-						+"ElectID = '"+POut.PString(carrier.ElectID)+"' "
+						+"ElectID = '"+POut.String(carrier.ElectID)+"' "
 						+"AND IsCDA=1";
 					table=Db.GetTable(command);
 					if(table.Rows.Count>0){//if there already exists a Canadian carrier with that ElectID
-						retVal.CarrierNum=PIn.PLong(table.Rows[0][0].ToString());
+						retVal.CarrierNum=PIn.Long(table.Rows[0][0].ToString());
 						//set carrier.CarrierNum to the carrier found (all other carrier fields will still be wrong)
 						//throw new ApplicationException(Lans.g("Carriers","The carrier information was changed based on the EDI Code provided."));
 						return retVal;
@@ -477,8 +477,8 @@ namespace OpenDentBusiness{
 			for(int i=0;i<carrierNums.Count;i++){
 				if(carrierNums[i]==pickedCarrierNum)
 					continue;
-				command="UPDATE insplan SET CarrierNum = '"+POut.PLong(pickedCarrierNum)
-					+"' WHERE CarrierNum = "+POut.PLong(carrierNums[i]);
+				command="UPDATE insplan SET CarrierNum = '"+POut.Long(pickedCarrierNum)
+					+"' WHERE CarrierNum = "+POut.Long(carrierNums[i]);
 				Db.NonQ(command);
 				command="DELETE FROM carrier"
 					+" WHERE CarrierNum = '"+carrierNums[i].ToString()+"'";
@@ -561,13 +561,13 @@ namespace OpenDentBusiness{
 				if(i>0){
 					command+=" OR";
 				}
-				command+=" patient.PatNum="+POut.PLong(patients[i].PatNum);
+				command+=" patient.PatNum="+POut.Long(patients[i].PatNum);
 			}
 			command+=" GROUP BY patient.PatNum";
 			DataTable table=Db.GetTable(command);
 			Dictionary<long,string> retVal=new Dictionary<long,string>();
 			for(int i=0;i<table.Rows.Count;i++){
-				retVal.Add(PIn.PLong(table.Rows[i]["PatNum"].ToString()),table.Rows[i]["CarrierName"].ToString());
+				retVal.Add(PIn.Long(table.Rows[i]["PatNum"].ToString()),table.Rows[i]["CarrierName"].ToString());
 			}
 			return retVal;
 		}

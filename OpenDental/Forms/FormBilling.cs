@@ -480,15 +480,15 @@ namespace OpenDental{
 			int scrollPos=gridBill.ScrollValue;
 			List<long> selectedKeys=new List<long>();
 			for(int i=0;i<gridBill.SelectedIndices.Length;i++){
-				selectedKeys.Add(PIn.PLong(table.Rows[gridBill.SelectedIndices[i]]["StatementNum"].ToString()));
+				selectedKeys.Add(PIn.Long(table.Rows[gridBill.SelectedIndices[i]]["StatementNum"].ToString()));
 			}
 			DateTime dateFrom=DateTime.MinValue;
 			DateTime dateTo=new DateTime(2200,1,1);
 			if(textDateStart.Text!=""){
-				dateFrom=PIn.PDate(textDateStart.Text);
+				dateFrom=PIn.Date(textDateStart.Text);
 			}
 			if(textDateEnd.Text!=""){
-				dateTo=PIn.PDate(textDateEnd.Text);
+				dateTo=PIn.Date(textDateEnd.Text);
 			}
 			table=Statements.GetBilling(radioSent.Checked,comboOrder.SelectedIndex,dateFrom,dateTo);
 			gridBill.BeginUpdate();
@@ -589,7 +589,7 @@ namespace OpenDental{
 		private void gridBill_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			FormStatementOptions FormSO=new FormStatementOptions();
 			Statement stmt;
-			stmt=Statements.CreateObject(PIn.PLong(table.Rows[e.Row]["StatementNum"].ToString()));
+			stmt=Statements.CreateObject(PIn.Long(table.Rows[e.Row]["StatementNum"].ToString()));
 			//FormSO.StmtList=stmtList;
 			FormSO.StmtCur=stmt;
 			FormSO.ShowDialog();
@@ -608,7 +608,7 @@ namespace OpenDental{
 				return;
 			}
 			else{
-				long patNum=PIn.PLong(table.Rows[gridBill.SelectedIndices[0]]["PatNum"].ToString());
+				long patNum=PIn.Long(table.Rows[gridBill.SelectedIndices[0]]["PatNum"].ToString());
 				OnGoToChanged(patNum);
 				SendToBack();//??
 			}
@@ -623,7 +623,7 @@ namespace OpenDental{
 			List<Statement> stmtList=new List<Statement>();
 			Statement stmt;
 			for(int i=0;i<gridBill.SelectedIndices.Length;i++){
-				stmt=Statements.CreateObject(PIn.PLong(table.Rows[gridBill.SelectedIndices[i]]["StatementNum"].ToString()));
+				stmt=Statements.CreateObject(PIn.Long(table.Rows[gridBill.SelectedIndices[i]]["StatementNum"].ToString()));
 				stmtList.Add(stmt.Copy());
 			}
 			FormSO.StmtList=stmtList;
@@ -747,7 +747,7 @@ namespace OpenDental{
 			DataSet dataSet;
 			List<long> stateNumsElect=new List<long>();
 			for(int i=0;i<gridBill.SelectedIndices.Length;i++){
-				stmt=Statements.CreateObject(PIn.PLong(table.Rows[gridBill.SelectedIndices[i]]["StatementNum"].ToString()));
+				stmt=Statements.CreateObject(PIn.Long(table.Rows[gridBill.SelectedIndices[i]]["StatementNum"].ToString()));
 				fam=Patients.GetFamily(stmt.PatNum);
 				pat=fam.GetPatient(stmt.PatNum);
 				patFolder=ImageStore.GetPatientFolder(pat);
@@ -892,7 +892,7 @@ namespace OpenDental{
 					int rowsChanged=0;
 					for(int i=0;i<table.Rows.Count;i++){
 						if(table.Rows[i]["IsSent"].ToString()=="0"){
-							Statements.DeleteObject(PIn.PLong(table.Rows[i]["StatementNum"].ToString()));
+							Statements.DeleteObject(PIn.Long(table.Rows[i]["StatementNum"].ToString()));
 							rowsChanged++;
 						}
 					}
@@ -921,7 +921,7 @@ namespace OpenDental{
 			// Populate Array And Open eBill Form
 			ArrayList PatientList = new ArrayList();
 			for (int i = 0; i < gridBill.SelectedIndices.Length; i++)
-					PatientList.Add(PIn.PLong(table.Rows[gridBill.SelectedIndices[i]]["PatNum"].ToString()));
+					PatientList.Add(PIn.Long(table.Rows[gridBill.SelectedIndices[i]]["PatNum"].ToString()));
 			// Open eBill form
 			FormPatienteBill FormPatienteBill = new FormPatienteBill(PatientList); 
 			FormPatienteBill.ShowDialog();

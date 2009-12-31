@@ -33,16 +33,16 @@ namespace OpenDentBusiness {
 			Userod user;
 			for(int i=0;i<table.Rows.Count;i++) {
 				user=new Userod();
-				user.UserNum       = PIn.PLong   (table.Rows[i][0].ToString());
-				user.UserName      = PIn.PString(table.Rows[i][1].ToString());
-				user.Password      = PIn.PString(table.Rows[i][2].ToString());
-				user.UserGroupNum  = PIn.PLong   (table.Rows[i][3].ToString());
-				user.EmployeeNum   = PIn.PLong   (table.Rows[i][4].ToString());
-				user.ClinicNum     = PIn.PLong   (table.Rows[i][5].ToString());
-				user.ProvNum       = PIn.PLong   (table.Rows[i][6].ToString());
-				user.IsHidden      = PIn.PBool  (table.Rows[i][7].ToString());
-				user.TaskListInBox = PIn.PLong   (table.Rows[i][8].ToString());
-				user.AnesthProvType = PIn.PInt  (table.Rows[i][9].ToString());
+				user.UserNum       = PIn.Long   (table.Rows[i][0].ToString());
+				user.UserName      = PIn.String(table.Rows[i][1].ToString());
+				user.Password      = PIn.String(table.Rows[i][2].ToString());
+				user.UserGroupNum  = PIn.Long   (table.Rows[i][3].ToString());
+				user.EmployeeNum   = PIn.Long   (table.Rows[i][4].ToString());
+				user.ClinicNum     = PIn.Long   (table.Rows[i][5].ToString());
+				user.ProvNum       = PIn.Long   (table.Rows[i][6].ToString());
+				user.IsHidden      = PIn.Bool  (table.Rows[i][7].ToString());
+				user.TaskListInBox = PIn.Long   (table.Rows[i][8].ToString());
+				user.AnesthProvType = PIn.Int  (table.Rows[i][9].ToString());
 				UserodC.Listt.Add(user);
 			}
 		}			
@@ -301,7 +301,7 @@ namespace OpenDentBusiness {
 			if(usertype=="prov" && schoolClassNum>0){
 				command="SELECT userod.* FROM userod,provider "
 					+"WHERE userod.ProvNum=provider.ProvNum "
-					+"AND SchoolClassNum="+POut.PLong(schoolClassNum)
+					+"AND SchoolClassNum="+POut.Long(schoolClassNum)
 					+" ORDER BY UserName";
 				return Db.GetTable(command);
 			}
@@ -329,16 +329,16 @@ namespace OpenDentBusiness {
 				return;
 			}
 			string command= "UPDATE userod SET " 
-				+"UserName = '"      +POut.PString(user.UserName)+"'"
-				+",Password = '"     +POut.PString(user.Password)+"'"
-				+",UserGroupNum = '" +POut.PLong   (user.UserGroupNum)+"'"
-				+",EmployeeNum = '"  +POut.PLong   (user.EmployeeNum)+"'"
-				+",ClinicNum = '"    +POut.PLong   (user.ClinicNum)+"'"
-				+",ProvNum = '"      +POut.PLong   (user.ProvNum)+"'"
-				+",IsHidden = '"     +POut.PBool  (user.IsHidden)+"'"
-				+",TaskListInBox = '"+POut.PLong   (user.TaskListInBox)+"'"
-                + ",AnesthProvType = '"+POut.PLong  (user.AnesthProvType)+"'"
-				+" WHERE UserNum = '"+POut.PLong   (user.UserNum)+"'";
+				+"UserName = '"      +POut.String(user.UserName)+"'"
+				+",Password = '"     +POut.String(user.Password)+"'"
+				+",UserGroupNum = '" +POut.Long   (user.UserGroupNum)+"'"
+				+",EmployeeNum = '"  +POut.Long   (user.EmployeeNum)+"'"
+				+",ClinicNum = '"    +POut.Long   (user.ClinicNum)+"'"
+				+",ProvNum = '"      +POut.Long   (user.ProvNum)+"'"
+				+",IsHidden = '"     +POut.Bool  (user.IsHidden)+"'"
+				+",TaskListInBox = '"+POut.Long   (user.TaskListInBox)+"'"
+                + ",AnesthProvType = '"+POut.Long  (user.AnesthProvType)+"'"
+				+" WHERE UserNum = '"+POut.Long   (user.UserNum)+"'";
  			Db.NonQ(command);
 		}
 
@@ -358,18 +358,18 @@ namespace OpenDentBusiness {
 			command+="UserName,Password,UserGroupNum,EmployeeNum,ClinicNum,ProvNum,IsHidden,TaskListInBox,"
 				+ "AnesthProvType) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PLong(user.UserNum)+", ";
+				command+=POut.Long(user.UserNum)+", ";
 			}
 			command+=
-				 "'"+POut.PString(user.UserName)+"', "
-				+"'"+POut.PString(user.Password)+"', "
-				+"'"+POut.PLong   (user.UserGroupNum)+"', "
-				+"'"+POut.PLong   (user.EmployeeNum)+"', "
-				+"'"+POut.PLong   (user.ClinicNum)+"', "
-				+"'"+POut.PLong   (user.ProvNum)+"', "
-				+"'"+POut.PBool  (user.IsHidden)+"', "
-				+"'"+POut.PLong   (user.TaskListInBox)+"', "
-				+ "'"+POut.PLong  (user.AnesthProvType)+"')";
+				 "'"+POut.String(user.UserName)+"', "
+				+"'"+POut.String(user.Password)+"', "
+				+"'"+POut.Long   (user.UserGroupNum)+"', "
+				+"'"+POut.Long   (user.EmployeeNum)+"', "
+				+"'"+POut.Long   (user.ClinicNum)+"', "
+				+"'"+POut.Long   (user.ProvNum)+"', "
+				+"'"+POut.Bool  (user.IsHidden)+"', "
+				+"'"+POut.Long   (user.TaskListInBox)+"', "
+				+ "'"+POut.Long  (user.AnesthProvType)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -401,15 +401,15 @@ namespace OpenDentBusiness {
 			//make sure that there would still be at least one user with security admin permissions
 			if(!isNew){
 				command="SELECT COUNT(*) FROM grouppermission "
-					+"WHERE PermType='"+POut.PLong((int)Permissions.SecurityAdmin)+"' "
-					+"AND UserGroupNum="+POut.PLong(user.UserGroupNum);
+					+"WHERE PermType='"+POut.Long((int)Permissions.SecurityAdmin)+"' "
+					+"AND UserGroupNum="+POut.Long(user.UserGroupNum);
 				if(Db.GetCount(command)=="0"){//if this user would not have admin
 					//make sure someone else has admin
 					command="SELECT COUNT(*) FROM userod,grouppermission "
-						+"WHERE grouppermission.PermType='"+POut.PLong((int)Permissions.SecurityAdmin)+"'"
+						+"WHERE grouppermission.PermType='"+POut.Long((int)Permissions.SecurityAdmin)+"'"
 						+" AND userod.UserGroupNum=grouppermission.UserGroupNum"
 						+" AND userod.IsHidden =0"
-						+" AND userod.UserNum != "+POut.PLong(user.UserNum);
+						+" AND userod.UserNum != "+POut.Long(user.UserNum);
 					if(Db.GetCount(command)=="0"){//there are no other users with this permission
 						throw new Exception(Lans.g("Users","At least one user must have Security Admin permission."));
 					}
@@ -417,8 +417,8 @@ namespace OpenDentBusiness {
 			}
 			//an admin user can never be hidden
 			command="SELECT COUNT(*) FROM grouppermission "
-				+"WHERE PermType='"+POut.PLong((int)Permissions.SecurityAdmin)+"' "
-				+"AND UserGroupNum="+POut.PLong(user.UserGroupNum);
+				+"WHERE PermType='"+POut.Long((int)Permissions.SecurityAdmin)+"' "
+				+"AND UserGroupNum="+POut.Long(user.UserGroupNum);
 			if(Db.GetCount(command)!="0"//if this user is admin
 				&& user.IsHidden)//and hidden
 			{
@@ -440,8 +440,8 @@ namespace OpenDentBusiness {
 			if(username==""){
 				return false;
 			}
-			string command="SELECT COUNT(*) FROM userod WHERE UserName='"+POut.PString(username)+"' "
-				+"AND UserNum !="+POut.PLong(excludeUserNum);
+			string command="SELECT COUNT(*) FROM userod WHERE UserName='"+POut.String(username)+"' "
+				+"AND UserNum !="+POut.Long(excludeUserNum);
 			DataTable table=Db.GetTable(command);
 			if(table.Rows[0][0].ToString()=="0") {
 				return true;

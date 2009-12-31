@@ -16,7 +16,7 @@ namespace OpenDentBusiness{
 			//DateSelected = thisDay;
 			string command=
 				"SELECT * from appointment "
-				+"WHERE AptDateTime BETWEEN '"+POut.PDate(startDate,false)+"' AND '"+POut.PDate(endDate.AddDays(1),false)+"'"
+				+"WHERE AptDateTime BETWEEN '"+POut.Date(startDate,false)+"' AND '"+POut.Date(endDate.AddDays(1),false)+"'"
 				+"AND aptstatus != '"+(int)ApptStatus.UnschedList+"' "
 				+"AND aptstatus != '"+(int)ApptStatus.Planned+"'";
 			DataTable table=Db.GetTable(command);
@@ -30,14 +30,14 @@ namespace OpenDentBusiness{
 			}
 			string command="SELECT * FROM appointment "
 				+"LEFT JOIN patient ON patient.PatNum=appointment.PatNum "
-				+"WHERE AptStatus = "+POut.PLong((int)ApptStatus.UnschedList)+" ";
+				+"WHERE AptStatus = "+POut.Long((int)ApptStatus.UnschedList)+" ";
 			if(provNum>0) {
-				command+="AND (appointment.ProvNum="+POut.PLong(provNum)+" OR appointment.ProvHyg="+POut.PLong(provNum)+") ";
+				command+="AND (appointment.ProvNum="+POut.Long(provNum)+" OR appointment.ProvHyg="+POut.Long(provNum)+") ";
 			}
 			if(siteNum>0) {
-				command+="AND patient.SiteNum="+POut.PLong(siteNum)+" ";
+				command+="AND patient.SiteNum="+POut.Long(siteNum)+" ";
 			}
-			command+="HAVING patient.PatStatus= "+POut.PLong((int)PatientStatus.Patient)+" ";			
+			command+="HAVING patient.PatStatus= "+POut.Long((int)PatientStatus.Patient)+" ";			
 			if(orderby=="status") {
 				command+="ORDER BY UnschedStatus,AptDateTime";
 			}
@@ -60,12 +60,12 @@ namespace OpenDentBusiness{
 			//if(orderby=="alph" || siteNum>0) {
 			//command+="LEFT JOIN patient ON patient.PatNum=appointment.PatNum ";
 			//}
-			command+="WHERE AptStatus = "+POut.PLong((int)ApptStatus.ASAP)+" ";
+			command+="WHERE AptStatus = "+POut.Long((int)ApptStatus.ASAP)+" ";
 			if(provNum>0) {
-				command+="AND (appointment.ProvNum="+POut.PLong(provNum)+" OR appointment.ProvHyg="+POut.PLong(provNum)+") ";
+				command+="AND (appointment.ProvNum="+POut.Long(provNum)+" OR appointment.ProvHyg="+POut.Long(provNum)+") ";
 			}
 			if(siteNum>0) {
-				command+="AND patient.SiteNum="+POut.PLong(siteNum)+" ";
+				command+="AND patient.SiteNum="+POut.Long(siteNum)+" ";
 			}
 			/*if(orderby=="status") {
 				command+="ORDER BY UnschedStatus,AptDateTime";
@@ -90,14 +90,14 @@ namespace OpenDentBusiness{
 				+"FROM appointment tplanned "
 				+"LEFT JOIN appointment tregular ON tplanned.aptnum = tregular.nextaptnum "
 				+"LEFT JOIN patient ON patient.PatNum=tplanned.PatNum "
-				+"WHERE tplanned.aptstatus = "+POut.PLong((int)ApptStatus.Planned)+" "
+				+"WHERE tplanned.aptstatus = "+POut.Long((int)ApptStatus.Planned)+" "
 				+"AND tregular.aptnum IS NULL "
-				+"AND patient.PatStatus="+POut.PLong((int)PatientStatus.Patient)+" ";
+				+"AND patient.PatStatus="+POut.Long((int)PatientStatus.Patient)+" ";
 			if(provNum>0) {
-				command+="AND (tplanned.ProvNum="+POut.PLong(provNum)+" OR tplanned.ProvHyg="+POut.PLong(provNum)+") ";
+				command+="AND (tplanned.ProvNum="+POut.Long(provNum)+" OR tplanned.ProvHyg="+POut.Long(provNum)+") ";
 			}
 			if(siteNum>0) {
-				command+="AND patient.SiteNum="+POut.PLong(siteNum)+" ";
+				command+="AND patient.SiteNum="+POut.Long(siteNum)+" ";
 			}
 			if(orderby=="status"){
 				command+="ORDER BY tplanned.UnschedStatus,tplanned.AptDateTime";
@@ -146,7 +146,7 @@ namespace OpenDentBusiness{
 				return null;
 			}
 			string command="SELECT * FROM appointment "
-				+"WHERE AptNum = '"+POut.PLong(aptNum)+"'";
+				+"WHERE AptNum = '"+POut.Long(aptNum)+"'";
 			DataTable table=Db.GetTable(command);
 			List<Appointment> list=TableToObjects(table);
 			if(list.Count==0) {
@@ -164,7 +164,7 @@ namespace OpenDentBusiness{
 				return null;
 			}
 			string command="SELECT * FROM appointment "
-				+"WHERE NextAptNum = '"+POut.PLong(nextAptNum)+"'";
+				+"WHERE NextAptNum = '"+POut.Long(nextAptNum)+"'";
 			DataTable table=Db.GetTable(command);
 			List<Appointment> list=TableToObjects(table);
 			if(list.Count==0) {
@@ -179,7 +179,7 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<List<Appointment>>(MethodBase.GetCurrentMethod(),patNum);
 			}
 			string command="SELECT * FROM appointment "
-				+"WHERE PatNum = "+POut.PLong(patNum)+" "
+				+"WHERE PatNum = "+POut.Long(patNum)+" "
 				+"AND AptDateTime > NOW() "
 				+"AND (aptstatus = "+(int)ApptStatus.Scheduled+" "
 				+"OR aptstatus = "+(int)ApptStatus.ASAP+") "
@@ -195,7 +195,7 @@ namespace OpenDentBusiness{
 			}
 			string command=
 				"SELECT * FROM appointment "
-				+"WHERE AptDateTime LIKE '"+POut.PDate(date,false)+"%' "
+				+"WHERE AptDateTime LIKE '"+POut.Date(date,false)+"%' "
 				+"AND aptstatus != '"+(int)ApptStatus.UnschedList+"' "
 				+"AND aptstatus != '"+(int)ApptStatus.Planned+"' "
 				+"AND (";
@@ -203,8 +203,8 @@ namespace OpenDentBusiness{
 				if(i>0) {
 					command+=" OR";
 				}
-				command+=" ProvNum="+POut.PLong(provNums[i])
-					+" OR ProvHyg="+POut.PLong(provNums[i]);
+				command+=" ProvNum="+POut.Long(provNums[i])
+					+" OR ProvHyg="+POut.Long(provNums[i]);
 			}
 			command+=") ORDER BY AptDateTime";
 			DataTable table=Db.GetTable(command);
@@ -215,8 +215,8 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Appointment>>(MethodBase.GetCurrentMethod(),changedSince,excludeOlderThan);
 			}
-			string command="SELECT * FROM appointment WHERE DateTStamp > "+POut.PDateT(changedSince)
-				+" AND AptDateTime > "+POut.PDateT(excludeOlderThan);
+			string command="SELECT * FROM appointment WHERE DateTStamp > "+POut.DateT(changedSince)
+				+" AND AptDateTime > "+POut.DateT(excludeOlderThan);
 			DataTable table=Db.GetTable(command);
 			return TableToObjects(table);
 		}
@@ -235,7 +235,7 @@ namespace OpenDentBusiness{
 				if(i>0){
 					command+=",";
 				}
-				command+=POut.PLong(appts[i].AptNum);
+				command+=POut.Long(appts[i].AptNum);
 			}
 			command+=")";
 			DataTable table=Db.GetTable(command);
@@ -334,31 +334,31 @@ namespace OpenDentBusiness{
 				+"Assistant,ClinicNum,IsHygiene,"//DateTStamp
 				+"DateTimeArrived,DateTimeSeated,DateTimeDismissed,InsPlan1,InsPlan2) VALUES(";
 			if(includeAptNum || PrefC.RandomKeys) {
-				command+="'"+POut.PLong(appt.AptNum)+"', ";
+				command+="'"+POut.Long(appt.AptNum)+"', ";
 			}
 			command+=
-				 "'"+POut.PLong   (appt.PatNum)+"', "
-				+"'"+POut.PLong   ((int)appt.AptStatus)+"', "
-				+"'"+POut.PString(appt.Pattern)+"', "
-				+"'"+POut.PLong   (appt.Confirmed)+"', "
-				+"'"+POut.PBool  (appt.TimeLocked)+"', "
-				+"'"+POut.PLong   (appt.Op)+"', "
-				+"'"+POut.PString(appt.Note)+"', "
-				+"'"+POut.PLong   (appt.ProvNum)+"', "
-				+"'"+POut.PLong   (appt.ProvHyg)+"', "
-				+POut.PDateT (appt.AptDateTime)+", "
-				+"'"+POut.PLong   (appt.NextAptNum)+"', "
-				+"'"+POut.PLong   (appt.UnschedStatus)+"', "
-				+"'"+POut.PBool  (appt.IsNewPatient)+"', "
-				+"'"+POut.PString(appt.ProcDescript)+"', "
-				+"'"+POut.PLong   (appt.Assistant)+"', "
-				+"'"+POut.PLong   (appt.ClinicNum)+"', "
-				+"'"+POut.PBool  (appt.IsHygiene)+"', "
-				    +POut.PDateT (appt.DateTimeArrived)+", "
-				    +POut.PDateT (appt.DateTimeSeated)+", "
-				    +POut.PDateT (appt.DateTimeDismissed)+", "
-				+"'"+POut.PLong		(appt.InsPlan1)+"', "
-				+"'"+POut.PLong		(appt.InsPlan2)+"')";
+				 "'"+POut.Long   (appt.PatNum)+"', "
+				+"'"+POut.Long   ((int)appt.AptStatus)+"', "
+				+"'"+POut.String(appt.Pattern)+"', "
+				+"'"+POut.Long   (appt.Confirmed)+"', "
+				+"'"+POut.Bool  (appt.TimeLocked)+"', "
+				+"'"+POut.Long   (appt.Op)+"', "
+				+"'"+POut.String(appt.Note)+"', "
+				+"'"+POut.Long   (appt.ProvNum)+"', "
+				+"'"+POut.Long   (appt.ProvHyg)+"', "
+				+POut.DateT (appt.AptDateTime)+", "
+				+"'"+POut.Long   (appt.NextAptNum)+"', "
+				+"'"+POut.Long   (appt.UnschedStatus)+"', "
+				+"'"+POut.Bool  (appt.IsNewPatient)+"', "
+				+"'"+POut.String(appt.ProcDescript)+"', "
+				+"'"+POut.Long   (appt.Assistant)+"', "
+				+"'"+POut.Long   (appt.ClinicNum)+"', "
+				+"'"+POut.Bool  (appt.IsHygiene)+"', "
+				    +POut.DateT (appt.DateTimeArrived)+", "
+				    +POut.DateT (appt.DateTimeSeated)+", "
+				    +POut.DateT (appt.DateTimeDismissed)+", "
+				+"'"+POut.Long		(appt.InsPlan1)+"', "
+				+"'"+POut.Long		(appt.InsPlan2)+"')";
 				//DateTStamp
 			if(includeAptNum || PrefC.RandomKeys) {
 				Db.NonQ(command);
@@ -381,62 +381,62 @@ namespace OpenDentBusiness{
 			bool comma=false;
 			string c = "UPDATE appointment SET ";
 			if(appt.PatNum!=oldApt.PatNum){
-				c+="PatNum = '"      +POut.PLong   (appt.PatNum)+"'";
+				c+="PatNum = '"      +POut.Long   (appt.PatNum)+"'";
 				comma=true;
 			}
 			if(appt.AptStatus!=oldApt.AptStatus){
 				if(comma) c+=",";
-				c+="AptStatus = '"   +POut.PLong   ((int)appt.AptStatus)+"'";
+				c+="AptStatus = '"   +POut.Long   ((int)appt.AptStatus)+"'";
 				comma=true;
 			}
 			if(appt.Pattern!=oldApt.Pattern){
 				if(comma) c+=",";
-				c+="Pattern = '"     +POut.PString(appt.Pattern)+"'";
+				c+="Pattern = '"     +POut.String(appt.Pattern)+"'";
 				comma=true;
 			}
 			if(appt.Confirmed!=oldApt.Confirmed){
 				if(comma) c+=",";
-				c+="Confirmed = '"   +POut.PLong   (appt.Confirmed)+"'";
+				c+="Confirmed = '"   +POut.Long   (appt.Confirmed)+"'";
 				comma=true;
 			}
 			if(appt.TimeLocked!=oldApt.TimeLocked){
 				if(comma) c+=",";
-				c+="TimeLocked = '"     +POut.PBool (appt.TimeLocked)+"'";
+				c+="TimeLocked = '"     +POut.Bool (appt.TimeLocked)+"'";
 				comma=true;
 			}
 			if(appt.Op!=oldApt.Op){
 				if(comma) c+=",";
-				c+="Op = '"          +POut.PLong   (appt.Op)+"'";
+				c+="Op = '"          +POut.Long   (appt.Op)+"'";
 				comma=true;
 			}
 			if(appt.Note!=oldApt.Note){
 				if(comma) c+=",";
-				c+="Note = '"        +POut.PString(appt.Note)+"'";
+				c+="Note = '"        +POut.String(appt.Note)+"'";
 				comma=true;
 			}
 			if(appt.ProvNum!=oldApt.ProvNum){
 				if(comma) c+=",";
-				c+="ProvNum = '"     +POut.PLong   (appt.ProvNum)+"'";
+				c+="ProvNum = '"     +POut.Long   (appt.ProvNum)+"'";
 				comma=true;
 			}
 			if(appt.ProvHyg!=oldApt.ProvHyg){
 				if(comma) c+=",";
-				c+="ProvHyg = '"     +POut.PLong   (appt.ProvHyg)+"'";
+				c+="ProvHyg = '"     +POut.Long   (appt.ProvHyg)+"'";
 				comma=true;
 			}
 			if(appt.AptDateTime!=oldApt.AptDateTime){
 				if(comma) c+=",";
-				c+="AptDateTime = " +POut.PDateT (appt.AptDateTime)+"";
+				c+="AptDateTime = " +POut.DateT (appt.AptDateTime)+"";
 				comma=true;
 			}
 			if(appt.NextAptNum!=oldApt.NextAptNum){
 				if(comma) c+=",";
-				c+="NextAptNum = '"  +POut.PLong   (appt.NextAptNum)+"'";
+				c+="NextAptNum = '"  +POut.Long   (appt.NextAptNum)+"'";
 				comma=true;
 			}
 			if(appt.UnschedStatus!=oldApt.UnschedStatus){
 				if(comma) c+=",";
-				c+="UnschedStatus = '" +POut.PLong(appt.UnschedStatus)+"'";
+				c+="UnschedStatus = '" +POut.Long(appt.UnschedStatus)+"'";
 				comma=true;
 			}
 			//if(appt.Lab!=oldApt.Lab){
@@ -446,17 +446,17 @@ namespace OpenDentBusiness{
 			//}
 			if(appt.IsNewPatient!=oldApt.IsNewPatient){
 				if(comma) c+=",";
-				c+="IsNewPatient = '"+POut.PBool  (appt.IsNewPatient)+"'";
+				c+="IsNewPatient = '"+POut.Bool  (appt.IsNewPatient)+"'";
 				comma=true;
 			}
 			if(appt.ProcDescript!=oldApt.ProcDescript){
 				if(comma) c+=",";
-				c+="ProcDescript = '"+POut.PString(appt.ProcDescript)+"'";
+				c+="ProcDescript = '"+POut.String(appt.ProcDescript)+"'";
 				comma=true;
 			}
 			if(appt.Assistant!=oldApt.Assistant){
 				if(comma) c+=",";
-				c+="Assistant = '"   +POut.PLong   (appt.Assistant)+"'";
+				c+="Assistant = '"   +POut.Long   (appt.Assistant)+"'";
 				comma=true;
 			}
 			/*
@@ -482,43 +482,43 @@ namespace OpenDentBusiness{
 			}*/
 			if(appt.ClinicNum!=oldApt.ClinicNum){
 				if(comma) c+=",";
-				c+="ClinicNum = '"   +POut.PLong  (appt.ClinicNum)+"'";
+				c+="ClinicNum = '"   +POut.Long  (appt.ClinicNum)+"'";
 				comma=true;
 			}
 			if(appt.IsHygiene!=oldApt.IsHygiene){
 				if(comma) c+=",";
-				c+="IsHygiene = '"   +POut.PBool (appt.IsHygiene)+"'";
+				c+="IsHygiene = '"   +POut.Bool (appt.IsHygiene)+"'";
 				comma=true;
 			}
 			//DateTStamp
 			if(appt.DateTimeArrived!=oldApt.DateTimeArrived){
 				if(comma) c+=",";
-				c+="DateTimeArrived = "   +POut.PDateT(appt.DateTimeArrived);
+				c+="DateTimeArrived = "   +POut.DateT(appt.DateTimeArrived);
 				comma=true;
 			}
 			if(appt.DateTimeSeated!=oldApt.DateTimeSeated){
 				if(comma) c+=",";
-				c+="DateTimeSeated = "   +POut.PDateT(appt.DateTimeSeated);
+				c+="DateTimeSeated = "   +POut.DateT(appt.DateTimeSeated);
 				comma=true;
 			}
 			if(appt.DateTimeDismissed!=oldApt.DateTimeDismissed){
 				if(comma) c+=",";
-				c+="DateTimeDismissed = "   +POut.PDateT(appt.DateTimeDismissed);
+				c+="DateTimeDismissed = "   +POut.DateT(appt.DateTimeDismissed);
 				comma=true;
 			}
 			if(appt.InsPlan1!=oldApt.InsPlan1){
 				if(comma) c+=",";
-				c+="InsPlan1 = "+POut.PLong(appt.InsPlan1);
+				c+="InsPlan1 = "+POut.Long(appt.InsPlan1);
 				comma=true;
 			}
 			if(appt.InsPlan2!=oldApt.InsPlan1) {
 				if(comma) c+=",";
-				c+="InsPlan2 = "+POut.PLong(appt.InsPlan2);
+				c+="InsPlan2 = "+POut.Long(appt.InsPlan2);
 				comma=true;
 			}
 			if(!comma)
 				return 0;//this means no change is actually required.
-			c+=" WHERE AptNum = '"+POut.PLong(appt.AptNum)+"'";
+			c+=" WHERE AptNum = '"+POut.Long(appt.AptNum)+"'";
  			long rowsChanged=Db.NonQ(c);
 			//MessageBox.Show(c);
 			return rowsChanged;
@@ -578,12 +578,12 @@ namespace OpenDentBusiness{
 				+"FROM patient,appointment,patient guar "
 				+"WHERE patient.PatNum=appointment.PatNum "
 				+"AND patient.Guarantor=guar.PatNum "
-				+"AND AptDateTime > "+POut.PDate(dateFrom)+" "
-				+"AND AptDateTime < "+POut.PDate(dateTo.AddDays(1))+" "
+				+"AND AptDateTime > "+POut.Date(dateFrom)+" "
+				+"AND AptDateTime < "+POut.Date(dateTo.AddDays(1))+" "
 				+"AND (AptStatus=1 "//scheduled
 				+"OR AptStatus=4) ";//ASAP
 			if(provNum>0){
-				command+="AND (appointment.ProvNum="+POut.PLong(provNum)+" OR appointment.ProvHyg="+POut.PLong(provNum)+") ";
+				command+="AND (appointment.ProvNum="+POut.Long(provNum)+" OR appointment.ProvHyg="+POut.Long(provNum)+") ";
 			}
 			command+="ORDER BY AptDateTime";
 			DataTable rawtable=Db.GetTable(command);
@@ -594,12 +594,12 @@ namespace OpenDentBusiness{
 				row=table.NewRow();
 				row["AddrNote"]=rawtable.Rows[i]["AddrNote"].ToString();
 				row["AptNum"]=rawtable.Rows[i]["AptNum"].ToString();
-				row["age"]=Patients.DateToAge(PIn.PDate(rawtable.Rows[i]["Birthdate"].ToString())).ToString();//we don't care about m/y.
-				dateT=PIn.PDateT(rawtable.Rows[i]["AptDateTime"].ToString());
+				row["age"]=Patients.DateToAge(PIn.Date(rawtable.Rows[i]["Birthdate"].ToString())).ToString();//we don't care about m/y.
+				dateT=PIn.DateT(rawtable.Rows[i]["AptDateTime"].ToString());
 				row["AptDateTime"]=dateT;
 				row["aptDateTime"]=dateT.ToShortDateString()+"\r\n"+dateT.ToShortTimeString();
-				row["confirmed"]=DefC.GetName(DefCat.ApptConfirmed,PIn.PLong(rawtable.Rows[i]["Confirmed"].ToString()));
-				contmeth=(ContactMethod)PIn.PInt(rawtable.Rows[i]["PreferConfirmMethod"].ToString());
+				row["confirmed"]=DefC.GetName(DefCat.ApptConfirmed,PIn.Long(rawtable.Rows[i]["Confirmed"].ToString()));
+				contmeth=(ContactMethod)PIn.Int(rawtable.Rows[i]["PreferConfirmMethod"].ToString());
 				if(contmeth==ContactMethod.None || contmeth==ContactMethod.HmPhone) {
 					row["contactMethod"]=Lans.g("FormConfirmList","Hm:")+rawtable.Rows[i]["HmPhone"].ToString();
 				}
@@ -685,7 +685,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),aptNum,newStatus);
 				return;
 			}
-			string command="UPDATE appointment SET Confirmed="+POut.PLong(newStatus);
+			string command="UPDATE appointment SET Confirmed="+POut.Long(newStatus);
 			if(PrefC.GetLong(PrefName.AppointmentTimeArrivedTrigger)==newStatus){
 				command+=",DateTimeArrived=NOW()";
 			}
@@ -695,7 +695,7 @@ namespace OpenDentBusiness{
 			else if(PrefC.GetLong(PrefName.AppointmentTimeDismissedTrigger)==newStatus){
 				command+=",DateTimeDismissed=NOW()";
 			}
-			command+=" WHERE AptNum="+POut.PLong(aptNum);
+			command+=" WHERE AptNum="+POut.Long(aptNum);
 			Db.NonQ(command);
 		}
 
@@ -705,7 +705,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),aptNum,newPattern);
 				return;
 			}
-			string command="UPDATE appointment SET Pattern='"+POut.PString(newPattern)+"' WHERE AptNum="+POut.PLong(aptNum);
+			string command="UPDATE appointment SET Pattern='"+POut.String(newPattern)+"' WHERE AptNum="+POut.Long(aptNum);
 			Db.NonQ(command);
 		}
 
@@ -715,8 +715,8 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),aptNum,newStatus);
 				return;
 			}
-			string command="UPDATE appointment SET AptStatus="+POut.PLong((int)newStatus)
-				+" WHERE AptNum="+POut.PLong(aptNum);
+			string command="UPDATE appointment SET AptStatus="+POut.Long((int)newStatus)
+				+" WHERE AptNum="+POut.Long(aptNum);
 			Db.NonQ(command);
 		}
 
@@ -727,10 +727,10 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command="UPDATE appointment SET "
-				+"AptStatus="+POut.PLong((int)ApptStatus.Complete)+", "
-				+"InsPlan1="+POut.PLong(planNum1)+", "
-				+"InsPlan2="+POut.PLong(planNum2)+" "
-				+"WHERE AptNum="+POut.PLong(aptNum);
+				+"AptStatus="+POut.Long((int)ApptStatus.Complete)+", "
+				+"InsPlan1="+POut.Long(planNum1)+", "
+				+"InsPlan2="+POut.Long(planNum2)+" "
+				+"WHERE AptNum="+POut.Long(aptNum);
 			Db.NonQ(command);
 		}
 
@@ -748,34 +748,34 @@ namespace OpenDentBusiness{
 			Appointment apt;
 			for(int i=0;i<table.Rows.Count;i++) {
 				apt=new Appointment();
-				apt.AptNum         =PIn.PLong(table.Rows[i][0].ToString());
-				apt.PatNum         =PIn.PLong(table.Rows[i][1].ToString());
-				apt.AptStatus      =(ApptStatus)PIn.PLong(table.Rows[i][2].ToString());
-				apt.Pattern        =PIn.PString(table.Rows[i][3].ToString());
-				apt.Confirmed      =PIn.PLong(table.Rows[i][4].ToString());
-				apt.TimeLocked     =PIn.PBool(table.Rows[i][5].ToString());
-				apt.Op             =PIn.PLong(table.Rows[i][6].ToString());
-				apt.Note           =PIn.PString(table.Rows[i][7].ToString());
-				apt.ProvNum        =PIn.PLong(table.Rows[i][8].ToString());
-				apt.ProvHyg        =PIn.PLong(table.Rows[i][9].ToString());
-				apt.AptDateTime    =PIn.PDateT(table.Rows[i][10].ToString());
-				apt.NextAptNum     =PIn.PLong(table.Rows[i][11].ToString());
-				apt.UnschedStatus  =PIn.PLong(table.Rows[i][12].ToString());
-				apt.IsNewPatient   =PIn.PBool(table.Rows[i][13].ToString());
-				apt.ProcDescript   =PIn.PString(table.Rows[i][14].ToString());
-				apt.Assistant      =PIn.PLong(table.Rows[i][15].ToString());
+				apt.AptNum         =PIn.Long(table.Rows[i][0].ToString());
+				apt.PatNum         =PIn.Long(table.Rows[i][1].ToString());
+				apt.AptStatus      =(ApptStatus)PIn.Long(table.Rows[i][2].ToString());
+				apt.Pattern        =PIn.String(table.Rows[i][3].ToString());
+				apt.Confirmed      =PIn.Long(table.Rows[i][4].ToString());
+				apt.TimeLocked     =PIn.Bool(table.Rows[i][5].ToString());
+				apt.Op             =PIn.Long(table.Rows[i][6].ToString());
+				apt.Note           =PIn.String(table.Rows[i][7].ToString());
+				apt.ProvNum        =PIn.Long(table.Rows[i][8].ToString());
+				apt.ProvHyg        =PIn.Long(table.Rows[i][9].ToString());
+				apt.AptDateTime    =PIn.DateT(table.Rows[i][10].ToString());
+				apt.NextAptNum     =PIn.Long(table.Rows[i][11].ToString());
+				apt.UnschedStatus  =PIn.Long(table.Rows[i][12].ToString());
+				apt.IsNewPatient   =PIn.Bool(table.Rows[i][13].ToString());
+				apt.ProcDescript   =PIn.String(table.Rows[i][14].ToString());
+				apt.Assistant      =PIn.Long(table.Rows[i][15].ToString());
 				//apt.InstructorNum  =PIn.PInt(table.Rows[i][16].ToString());
 				//apt.SchoolClassNum =PIn.PInt(table.Rows[i][17].ToString());
 				//apt.SchoolCourseNum=PIn.PInt(table.Rows[i][18].ToString());
 				//apt.GradePoint     =PIn.PFloat(table.Rows[i][19].ToString());
-				apt.ClinicNum      =PIn.PLong(table.Rows[i][16].ToString());
-				apt.IsHygiene      =PIn.PBool(table.Rows[i][17].ToString());
+				apt.ClinicNum      =PIn.Long(table.Rows[i][16].ToString());
+				apt.IsHygiene      =PIn.Bool(table.Rows[i][17].ToString());
 				//DateTStamp
-				apt.DateTimeArrived=PIn.PDateT(table.Rows[i][19].ToString());
-				apt.DateTimeSeated =PIn.PDateT(table.Rows[i][20].ToString());
-				apt.DateTimeDismissed=PIn.PDateT(table.Rows[i][21].ToString());
-				apt.InsPlan1=PIn.PLong(table.Rows[i][22].ToString());
-				apt.InsPlan2=PIn.PLong(table.Rows[i][23].ToString());
+				apt.DateTimeArrived=PIn.DateT(table.Rows[i][19].ToString());
+				apt.DateTimeSeated =PIn.DateT(table.Rows[i][20].ToString());
+				apt.DateTimeDismissed=PIn.DateT(table.Rows[i][21].ToString());
+				apt.InsPlan1=PIn.Long(table.Rows[i][22].ToString());
+				apt.InsPlan2=PIn.Long(table.Rows[i][23].ToString());
 				list.Add(apt);
 			}
 			return list;
@@ -893,12 +893,12 @@ namespace OpenDentBusiness{
 				+"LEFT JOIN carrier carrier1 ON plan1.CarrierNum=carrier1.CarrierNum "
 				+"LEFT JOIN carrier carrier2 ON plan2.CarrierNum=carrier2.CarrierNum ";
 			if(aptNum==0){
-				command+="WHERE AptDateTime >= "+POut.PDate(dateStart)+" "
-					+"AND AptDateTime < "+POut.PDate(dateEnd.AddDays(1))+" "
+				command+="WHERE AptDateTime >= "+POut.Date(dateStart)+" "
+					+"AND AptDateTime < "+POut.Date(dateEnd.AddDays(1))+" "
 					+ "AND AptStatus IN (1, 2, 4, 5, 7, 8) ";
 			}
 			else{
-				command+="WHERE appointment.AptNum="+POut.PLong(aptNum);
+				command+="WHERE appointment.AptNum="+POut.Long(aptNum);
 			}
 			command+=" GROUP BY appointment.AptNum";
 			DataTable raw=dcon.GetTable(command);
@@ -928,7 +928,7 @@ namespace OpenDentBusiness{
 					//	+"AND a.AptDateTime < "+POut.PDate(dateEnd.AddDays(1));
 				}
 				else {
-					command+=POut.PLong(aptNum);
+					command+=POut.Long(aptNum);
 				}
 				command+=")";
 				rawProc=dcon.GetTable(command);
@@ -945,8 +945,8 @@ namespace OpenDentBusiness{
 					+"AND procedurelog.ProcFee>0 "
 					+"AND claimproc.Status=6 "//estimate
 					+"AND procedurelog.procstatus=2 "
-					+"AND procedurelog.ProcDate >= "+POut.PDate(DateTime.Now.AddYears(-1))+" "
-					+"AND procedurelog.ProcDate <= "+POut.PDate(DateTime.Now)+ " "
+					+"AND procedurelog.ProcDate >= "+POut.Date(DateTime.Now.AddYears(-1))+" "
+					+"AND procedurelog.ProcDate <= "+POut.Date(DateTime.Now)+ " "
 					+"GROUP BY patient.Guarantor"; 
 				rawInsProc=dcon.GetTable(command);
 			}
@@ -965,9 +965,9 @@ namespace OpenDentBusiness{
 				if(raw.Rows[i]["AddrNote"].ToString()!=""){
 					row["addrNote"]=Lans.g("Appointments","AddrNote: ")+raw.Rows[i]["AddrNote"].ToString();
 				}
-				aptDate=PIn.PDateT(raw.Rows[i]["AptDateTime"].ToString());
+				aptDate=PIn.DateT(raw.Rows[i]["AptDateTime"].ToString());
 				row["AptDateTime"]=aptDate;
-				birthdate=PIn.PDate(raw.Rows[i]["Birthdate"].ToString());
+				birthdate=PIn.Date(raw.Rows[i]["Birthdate"].ToString());
 				row["age"]=Lans.g("Appointments","Age: ");
 				if(birthdate.Year>1880){
 					row["age"]+=PatientLogic.DateToAgeString(birthdate);
@@ -999,7 +999,7 @@ namespace OpenDentBusiness{
 				row["AptNum"]=raw.Rows[i]["AptNum"].ToString();
 				row["AptStatus"]=raw.Rows[i]["AptStatus"].ToString();
 				row["Assistant"]=raw.Rows[i]["Assistant"].ToString();
-				row["billingType"]=DefC.GetName(DefCat.BillingTypes,PIn.PLong(raw.Rows[i]["BillingType"].ToString()));
+				row["billingType"]=DefC.GetName(DefCat.BillingTypes,PIn.Long(raw.Rows[i]["BillingType"].ToString()));
 				row["chartNumber"]=raw.Rows[i]["ChartNumber"].ToString();
 				row["chartNumAndName"]="";
 				if(raw.Rows[i]["IsNewPatient"].ToString()=="1") {
@@ -1008,26 +1008,26 @@ namespace OpenDentBusiness{
 				row["chartNumAndName"]+=raw.Rows[i]["ChartNumber"].ToString()+" "
 					+PatientLogic.GetNameLF(raw.Rows[i]["LName"].ToString(),raw.Rows[i]["FName"].ToString(),
 					raw.Rows[i]["Preferred"].ToString(),raw.Rows[i]["MiddleI"].ToString());
-				row["confirmed"]=DefC.GetName(DefCat.ApptConfirmed,PIn.PLong(raw.Rows[i]["Confirmed"].ToString()));
+				row["confirmed"]=DefC.GetName(DefCat.ApptConfirmed,PIn.Long(raw.Rows[i]["Confirmed"].ToString()));
 				row["Confirmed"]=raw.Rows[i]["Confirmed"].ToString();
 				row["contactMethods"]="";
 				if(raw.Rows[i]["PreferConfirmMethod"].ToString()!="0"){
 					row["contactMethods"]+=Lans.g("Appointments","Confirm Method: ")
-						+((ContactMethod)PIn.PLong(raw.Rows[i]["PreferConfirmMethod"].ToString())).ToString();
+						+((ContactMethod)PIn.Long(raw.Rows[i]["PreferConfirmMethod"].ToString())).ToString();
 				}
 				if(raw.Rows[i]["PreferContactMethod"].ToString()!="0"){
 					if(row["contactMethods"].ToString()!="") {
 						row["contactMethods"]+="\r\n";
 					}
 					row["contactMethods"]+=Lans.g("Appointments","Contact Method: ")
-						+((ContactMethod)PIn.PLong(raw.Rows[i]["PreferContactMethod"].ToString())).ToString();
+						+((ContactMethod)PIn.Long(raw.Rows[i]["PreferContactMethod"].ToString())).ToString();
 				}
 				if(raw.Rows[i]["PreferRecallMethod"].ToString()!="0"){
 					if(row["contactMethods"].ToString()!="") {
 						row["contactMethods"]+="\r\n";
 					}
 					row["contactMethods"]+=Lans.g("Appointments","Recall Method: ")
-						+((ContactMethod)PIn.PLong(raw.Rows[i]["PreferRecallMethod"].ToString())).ToString();
+						+((ContactMethod)PIn.Long(raw.Rows[i]["PreferRecallMethod"].ToString())).ToString();
 				}
 				bool InsToSend=false;
 				if(rawInsProc!=null){
@@ -1071,24 +1071,24 @@ namespace OpenDentBusiness{
 				row["IsHygiene"]=raw.Rows[i]["IsHygiene"].ToString();
 				row["lab"]="";
 				if(raw.Rows[i]["LabCaseNum"].ToString()!=""){
-					labDate=PIn.PDateT(raw.Rows[i]["DateTimeChecked"].ToString());
+					labDate=PIn.DateT(raw.Rows[i]["DateTimeChecked"].ToString());
 					if(labDate.Year>1880) {
 						row["lab"]=Lans.g("Appointments","Lab Quality Checked");
 					}
 					else {
-						labDate=PIn.PDateT(raw.Rows[i]["DateTimeRecd"].ToString());
+						labDate=PIn.DateT(raw.Rows[i]["DateTimeRecd"].ToString());
 						if(labDate.Year>1880) {
 							row["lab"]=Lans.g("Appointments","Lab Received");
 						}
 						else {
-							labDate=PIn.PDateT(raw.Rows[i]["DateTimeSent"].ToString());
+							labDate=PIn.DateT(raw.Rows[i]["DateTimeSent"].ToString());
 							if(labDate.Year>1880) {
 								row["lab"]=Lans.g("Appointments","Lab Sent");//sent but not received
 							}
 							else {
 								row["lab"]=Lans.g("Appointments","Lab Not Sent");
 							}
-							labDueDate=PIn.PDateT(raw.Rows[i]["DateTimeDue"].ToString());
+							labDueDate=PIn.DateT(raw.Rows[i]["DateTimeDue"].ToString());
 							if(labDueDate.Year>1880) {
 								row["lab"]+=", "+Lans.g("Appointments","Due: ")//+dateDue.ToString("ddd")+" "
 									+labDueDate.ToShortDateString();//+" "+dateDue.ToShortTimeString();
@@ -1155,7 +1155,7 @@ namespace OpenDentBusiness{
 					}
 					row["procs"]+=rawProc.Rows[p]["AbbrDesc"].ToString();	
 				}
-				row["production"]=PIn.PDouble(raw.Rows[i]["Production"].ToString()).ToString("c");
+				row["production"]=PIn.Double(raw.Rows[i]["Production"].ToString()).ToString("c");
 				row["productionVal"]=raw.Rows[i]["Production"].ToString();
 				if(raw.Rows[i]["IsHygiene"].ToString()=="1"){
 					row["provider"]=raw.Rows[i]["HygAbbr"].ToString();
@@ -1197,7 +1197,7 @@ namespace OpenDentBusiness{
 				+"FROM employee,schedule "
 				+"WHERE schedule.EmployeeNum=employee.EmployeeNum "
 				+"AND SchedType=3 "//employee
-				+"AND SchedDate = "+POut.PDate(dateStart)+" "
+				+"AND SchedDate = "+POut.Date(dateStart)+" "
 				+"ORDER BY schedule.EmployeeNum,StartTime";
 			DataTable raw=dcon.GetTable(command);
 			DateTime startTime;
@@ -1213,8 +1213,8 @@ namespace OpenDentBusiness{
 				if(row["schedule"].ToString()!=""){
 					row["schedule"]+=",";
 				}
-				startTime=PIn.PDateT(raw.Rows[i]["StartTime"].ToString());
-				stopTime=PIn.PDateT(raw.Rows[i]["StopTime"].ToString());
+				startTime=PIn.DateT(raw.Rows[i]["StartTime"].ToString());
+				stopTime=PIn.DateT(raw.Rows[i]["StopTime"].ToString());
 				row["schedule"]+=startTime.ToString("h:mm")+"-"+stopTime.ToString("h:mm");
 				table.Rows.Add(row);
 			}
@@ -1239,7 +1239,7 @@ namespace OpenDentBusiness{
 			string command="SELECT DateTimeArrived,DateTimeSeated,LName,FName,Preferred,NOW() dateTimeNow "
 				+"FROM appointment,patient "
 				+"WHERE appointment.PatNum=patient.PatNum "
-				+"AND DATE(AptDateTime) = "+POut.PDate(dateStart)+" "
+				+"AND DATE(AptDateTime) = "+POut.Date(dateStart)+" "
 				+"AND TIME(DateTimeArrived) > 0 "
 				+"AND TIME(DateTimeArrived) < CURTIME() "
 				+"AND TIME(DateTimeSeated) = 0 "
@@ -1258,8 +1258,8 @@ namespace OpenDentBusiness{
 				pat.FName=raw.Rows[i]["FName"].ToString();
 				pat.Preferred=raw.Rows[i]["Preferred"].ToString();
 				row["patName"]=pat.GetNameLF();
-				dateTimeNow=PIn.PDateT(raw.Rows[i]["dateTimeNow"].ToString());
-				timeArrived=(PIn.PDateT(raw.Rows[i]["DateTimeArrived"].ToString())).TimeOfDay;
+				dateTimeNow=PIn.DateT(raw.Rows[i]["dateTimeNow"].ToString());
+				timeArrived=(PIn.DateT(raw.Rows[i]["DateTimeArrived"].ToString())).TimeOfDay;
 				waitTime=dateTimeNow-timeArrived;
 				row["waitTime"]=waitTime.ToString("H:mm:ss");
 				//minutes=waitTime.Minutes;
@@ -1292,8 +1292,8 @@ namespace OpenDentBusiness{
 			string command="SELECT schedule.*,GROUP_CONCAT(scheduleop.OperatoryNum) _ops "
 				+"FROM schedule "
 				+"LEFT JOIN scheduleop ON schedule.ScheduleNum=scheduleop.ScheduleNum "
-				+"WHERE SchedDate >= "+POut.PDate(dateStart)+" "
-				+"AND SchedDate <= "+POut.PDate(dateEnd)+" "
+				+"WHERE SchedDate >= "+POut.Date(dateStart)+" "
+				+"AND SchedDate <= "+POut.Date(dateEnd)+" "
 				+"GROUP BY schedule.ScheduleNum "
 				+"ORDER BY StartTime";
 			DataTable raw=Db.GetTable(command);
@@ -1302,15 +1302,15 @@ namespace OpenDentBusiness{
 			for(int i=0;i<raw.Rows.Count;i++){
 				row=table.NewRow();
 				row["ScheduleNum"]=raw.Rows[i]["ScheduleNum"].ToString();
-				row["SchedDate"]=POut.PDate(PIn.PDate(raw.Rows[i]["SchedDate"].ToString()),false);
-				row["StartTime"]=POut.PDateT(PIn.PDateT(raw.Rows[i]["StartTime"].ToString()),false);
-				row["StopTime"]=POut.PDateT(PIn.PDateT(raw.Rows[i]["StopTime"].ToString()),false);
+				row["SchedDate"]=POut.Date(PIn.Date(raw.Rows[i]["SchedDate"].ToString()),false);
+				row["StartTime"]=POut.DateT(PIn.DateT(raw.Rows[i]["StartTime"].ToString()),false);
+				row["StopTime"]=POut.DateT(PIn.DateT(raw.Rows[i]["StopTime"].ToString()),false);
 				row["SchedType"]=raw.Rows[i]["SchedType"].ToString();
 				row["ProvNum"]=raw.Rows[i]["ProvNum"].ToString();
 				row["BlockoutType"]=raw.Rows[i]["BlockoutType"].ToString();
 				row["Note"]=raw.Rows[i]["Note"].ToString();
 				row["Status"]=raw.Rows[i]["Status"].ToString();
-				row["ops"]=PIn.PByteArray(raw.Rows[i]["_ops"]);
+				row["ops"]=PIn.ByteArray(raw.Rows[i]["_ops"]);
 				row["EmployeeNum"]=raw.Rows[i]["EmployeeNum"].ToString();
 				table.Rows.Add(row);
 			}
@@ -1406,12 +1406,12 @@ namespace OpenDentBusiness{
 			//Patient billing type------------------------------------------------------------------
 			row=table.NewRow();
 			row["field"]=Lans.g("FormApptEdit","Billing Type");
-			row["value"]=DefC.GetName(DefCat.BillingTypes,PIn.PLong(rawPat.Rows[0]["BillingType"].ToString()));
+			row["value"]=DefC.GetName(DefCat.BillingTypes,PIn.Long(rawPat.Rows[0]["BillingType"].ToString()));
 			table.Rows.Add(row);
 			//Patient total balance-----------------------------------------------------------------
 			row=table.NewRow();
 			row["field"]=Lans.g("FormApptEdit","Total Balance");
-			double totalBalance=PIn.PDouble(rawPat.Rows[0]["EstBalance"].ToString());
+			double totalBalance=PIn.Double(rawPat.Rows[0]["EstBalance"].ToString());
 			row["value"]=totalBalance.ToString("F");
 			table.Rows.Add(row);
 			//Patient address and phone notes-------------------------------------------------------
@@ -1425,15 +1425,15 @@ namespace OpenDentBusiness{
 			DataTable familyBalance=Db.GetTable(command);
 			row=table.NewRow();
 			row["field"]=Lans.g("FormApptEdit","Family Balance");
-			double balance=PIn.PDouble(familyBalance.Rows[0]["BalTotal"].ToString())
-				-PIn.PDouble(familyBalance.Rows[0]["InsEst"].ToString());
+			double balance=PIn.Double(familyBalance.Rows[0]["BalTotal"].ToString())
+				-PIn.Double(familyBalance.Rows[0]["InsEst"].ToString());
 			row["value"]=balance.ToString("F");
 			table.Rows.Add(row);
 			//Site----------------------------------------------------------------------------------
 			if(!PrefC.GetBool(PrefName.EasyHidePublicHealth)){
 				row=table.NewRow();
 				row["field"]=Lans.g("FormApptEdit","Site");
-				row["value"]=Sites.GetDescription(PIn.PLong(rawPat.Rows[0]["SiteNum"].ToString()));
+				row["value"]=Sites.GetDescription(PIn.Long(rawPat.Rows[0]["SiteNum"].ToString()));
 				table.Rows.Add(row);
 			}
 			return table;
@@ -1481,10 +1481,10 @@ namespace OpenDentBusiness{
 			//3. All unattached completed procs with same date as appt.
 			//but only if one of these types
 			if(apptStatus=="1" || apptStatus=="2" || apptStatus=="4" || apptStatus=="5"){//sched,C,ASAP,broken
-				DateTime aptDate=PIn.PDateT(aptDateTime);
+				DateTime aptDate=PIn.DateT(aptDateTime);
 				command+=" OR (AptNum=0 "//unattached
 					+"AND ProcStatus=2 "//complete
-					+"AND Date(ProcDate)="+POut.PDate(aptDate)+")";//same date
+					+"AND Date(ProcDate)="+POut.Date(aptDate)+")";//same date
 			}
 			command+=")";
 			DataTable rawProc=Db.GetTable(command);
@@ -1517,14 +1517,14 @@ namespace OpenDentBusiness{
 				if(rawProc.Rows[i]["ToothRange"].ToString()!=""){
 					row["descript"]+=" #"+Tooth.FormatRangeForDisplay(rawProc.Rows[i]["ToothRange"].ToString());
 				}
-				row["fee"]=PIn.PDouble(rawProc.Rows[i]["ProcFee"].ToString()).ToString("F");
-				row["priority"]=DefC.GetName(DefCat.TxPriorities,PIn.PLong(rawProc.Rows[i]["Priority"].ToString()));
+				row["fee"]=PIn.Double(rawProc.Rows[i]["ProcFee"].ToString()).ToString("F");
+				row["priority"]=DefC.GetName(DefCat.TxPriorities,PIn.Long(rawProc.Rows[i]["Priority"].ToString()));
 				row["Priority"]=rawProc.Rows[i]["Priority"].ToString();
 				row["ProcCode"]=rawProc.Rows[i]["ProcCode"].ToString();
 				row["ProcNum"]=rawProc.Rows[i]["ProcNum"].ToString();
 				row["ProcStatus"]=rawProc.Rows[i]["ProcStatus"].ToString();
 				row["ProvNum"]=rawProc.Rows[i]["ProvNum"].ToString();
-				row["status"]=((ProcStat)PIn.PLong(rawProc.Rows[i]["ProcStatus"].ToString())).ToString();
+				row["status"]=((ProcStat)PIn.Long(rawProc.Rows[i]["ProcStatus"].ToString())).ToString();
 				row["toothNum"]=Tooth.GetToothLabel(rawProc.Rows[i]["ToothNum"].ToString());
 				row["ToothNum"]=rawProc.Rows[i]["ToothNum"].ToString();
 				row["ToothRange"]=rawProc.Rows[i]["ToothRange"].ToString();
@@ -1569,7 +1569,7 @@ namespace OpenDentBusiness{
 			DataTable rawComm=Db.GetTable(command);
 			for(int i=0;i<rawComm.Rows.Count;i++) {
 				row=table.NewRow();
-				row["commDateTime"]=PIn.PDateT(rawComm.Rows[i]["commDateTime"].ToString()).ToShortDateString();
+				row["commDateTime"]=PIn.DateT(rawComm.Rows[i]["commDateTime"].ToString()).ToShortDateString();
 				row["CommlogNum"]=rawComm.Rows[i]["CommlogNum"].ToString();
 				row["CommType"]=rawComm.Rows[i]["CommType"].ToString();
 				row["Note"]=rawComm.Rows[i]["Note"].ToString();
@@ -1606,24 +1606,24 @@ namespace OpenDentBusiness{
 			if(raw.Rows.Count>0){
 				row["LabCaseNum"]=raw.Rows[0]["LabCaseNum"].ToString();
 				row["labDescript"]=raw.Rows[0]["Description"].ToString();
-				date=PIn.PDateT(raw.Rows[0]["DateTimeChecked"].ToString());
+				date=PIn.DateT(raw.Rows[0]["DateTimeChecked"].ToString());
 				if(date.Year>1880){
 					row["labDescript"]+=", "+Lans.g("FormApptEdit","Quality Checked");
 				}
 				else{
-					date=PIn.PDateT(raw.Rows[0]["DateTimeRecd"].ToString());
+					date=PIn.DateT(raw.Rows[0]["DateTimeRecd"].ToString());
 					if(date.Year>1880){
 						row["labDescript"]+=", "+Lans.g("FormApptEdit","Received");
 					}
 					else{
-						date=PIn.PDateT(raw.Rows[0]["DateTimeSent"].ToString());
+						date=PIn.DateT(raw.Rows[0]["DateTimeSent"].ToString());
 						if(date.Year>1880){
 							row["labDescript"]+=", "+Lans.g("FormApptEdit","Sent");//sent but not received
 						}
 						else{
 							row["labDescript"]+=", "+Lans.g("FormApptEdit","Not Sent");
 						}
-						dateDue=PIn.PDateT(raw.Rows[0]["DateTimeDue"].ToString());
+						dateDue=PIn.DateT(raw.Rows[0]["DateTimeDue"].ToString());
 						if(dateDue.Year>1880) {
 							row["labDescript"]+=", "+Lans.g("FormAppEdit","Due: ")+dateDue.ToString("ddd")+" "
 								+dateDue.ToShortDateString()+" "+dateDue.ToShortTimeString();
@@ -1658,33 +1658,33 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command;
-			command="SELECT PatNum,IsNewPatient,AptStatus FROM appointment WHERE AptNum="+POut.PLong(aptNum);
+			command="SELECT PatNum,IsNewPatient,AptStatus FROM appointment WHERE AptNum="+POut.Long(aptNum);
 			DataTable table=Db.GetTable(command);
-			Patient pat=Patients.GetPat(PIn.PLong(table.Rows[0]["PatNum"].ToString()));
+			Patient pat=Patients.GetPat(PIn.Long(table.Rows[0]["PatNum"].ToString()));
 			if(table.Rows[0]["IsNewPatient"].ToString()=="1") {
 				Procedures.SetDateFirstVisit(DateTime.MinValue,3,pat);
 			}
 			//procs
 			if(table.Rows[0]["AptStatus"].ToString()=="6") {//planned
-				command="UPDATE procedurelog SET PlannedAptNum =0 WHERE PlannedAptNum = "+POut.PLong(aptNum);
+				command="UPDATE procedurelog SET PlannedAptNum =0 WHERE PlannedAptNum = "+POut.Long(aptNum);
 			}
 			else {
-				command="UPDATE procedurelog SET AptNum =0 WHERE AptNum = "+POut.PLong(aptNum);
+				command="UPDATE procedurelog SET AptNum =0 WHERE AptNum = "+POut.Long(aptNum);
 			}
 			Db.NonQ(command);
 			//labcases
 			if(table.Rows[0]["AptStatus"].ToString()=="6") {//planned
-				command="UPDATE labcase SET PlannedAptNum =0 WHERE PlannedAptNum = "+POut.PLong(aptNum);
+				command="UPDATE labcase SET PlannedAptNum =0 WHERE PlannedAptNum = "+POut.Long(aptNum);
 			}
 			else {
-				command="UPDATE labcase SET AptNum =0 WHERE AptNum = "+POut.PLong(aptNum);
+				command="UPDATE labcase SET AptNum =0 WHERE AptNum = "+POut.Long(aptNum);
 			}
 			Db.NonQ(command);
 			//plannedappt
-			command="DELETE FROM plannedappt WHERE AptNum="+POut.PLong(aptNum);
+			command="DELETE FROM plannedappt WHERE AptNum="+POut.Long(aptNum);
 			Db.NonQ(command);
 			//we will not reset item orders here
-			command="DELETE FROM appointment WHERE AptNum = "+POut.PLong(aptNum);
+			command="DELETE FROM appointment WHERE AptNum = "+POut.Long(aptNum);
 			Db.NonQ(command);
 			DeletedObjects.SetDeleted(DeletedObjectType.Appointment,aptNum);
 		}

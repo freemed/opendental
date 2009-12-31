@@ -537,12 +537,12 @@ namespace OpenDental{
 				computerPref.TaskDock=1;
 				changed=true;
 			}
-			if(computerPref.TaskX!=PIn.PInt(validNumX.Text)){
-				computerPref.TaskX=PIn.PInt(validNumX.Text);
+			if(computerPref.TaskX!=PIn.Int(validNumX.Text)){
+				computerPref.TaskX=PIn.Int(validNumX.Text);
 				changed=true;
 			}
-			if(computerPref.TaskY!=PIn.PInt(validNumY.Text)){
-				computerPref.TaskY=PIn.PInt(validNumY.Text);
+			if(computerPref.TaskY!=PIn.Int(validNumY.Text)){
+				computerPref.TaskY=PIn.Int(validNumY.Text);
 				changed=true;
 			}
 			//end of tasklist section-----------------------------------------------------------------------------
@@ -552,7 +552,7 @@ namespace OpenDental{
 				}
 			}
 			else{
-				if(Prefs.UpdateLong(PrefName.ProcessSigsIntervalInSecs,PIn.PLong(textSigInterval.Text))){
+				if(Prefs.UpdateLong(PrefName.ProcessSigsIntervalInSecs,PIn.Long(textSigInterval.Text))){
 					changed=true;
 				}
 			}

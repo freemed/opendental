@@ -241,11 +241,11 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"From Date cannot be left blank."));
 				return;
 			}
-			FromDate=PIn.PDate(textDateFrom.Text);
+			FromDate=PIn.Date(textDateFrom.Text);
 			if(textDateTo.Text=="")
 				ToDate=DateTime.MaxValue.AddDays(-1);
 			else
-				ToDate=PIn.PDate(textDateTo.Text);
+				ToDate=PIn.Date(textDateTo.Text);
 			//Create the file and first row--------------------------------------------------------
 			ArrayList ForProgram=ProgramProperties.GetForProgram(ProgramCur.ProgramNum);
 			ProgramProperty PPCur=ProgramProperties.GetCur(ForProgram, "Export Path");
@@ -265,40 +265,40 @@ namespace OpenDental{
 			}
 			DateTime aptDT;
 			for(int i=0;i<table.Rows.Count;i++){
-				sr.Write("\""+Dequote(PIn.PString(table.Rows[i][0].ToString()))+"\",");//0-LastName
+				sr.Write("\""+Dequote(PIn.String(table.Rows[i][0].ToString()))+"\",");//0-LastName
 				if(table.Rows[i][2].ToString()!=""){//if Preferred Name exists
-					sr.Write("\""+Dequote(PIn.PString(table.Rows[i][2].ToString()))+"\",");//2-PrefName
+					sr.Write("\""+Dequote(PIn.String(table.Rows[i][2].ToString()))+"\",");//2-PrefName
 				}
 				else{
-					sr.Write("\""+Dequote(PIn.PString(table.Rows[i][1].ToString()))+"\",");//1-FirstName 
+					sr.Write("\""+Dequote(PIn.String(table.Rows[i][1].ToString()))+"\",");//1-FirstName 
 				}
 				if(usePatNum){
 					sr.Write("\""+table.Rows[i][3].ToString()+"\",");//3-PatNum
 				}
 				else{
-					sr.Write("\""+Dequote(PIn.PString(table.Rows[i][4].ToString()))+"\",");//4-ChartNumber
+					sr.Write("\""+Dequote(PIn.String(table.Rows[i][4].ToString()))+"\",");//4-ChartNumber
 				}
-				sr.Write("\""+Dequote(PIn.PString(table.Rows[i][5].ToString()))+"\",");//5-HomePhone
-				sr.Write("\""+Dequote(PIn.PString(table.Rows[i][6].ToString()))+"\",");//6-WorkNumber
-				sr.Write("\""+Dequote(PIn.PString(table.Rows[i][7].ToString()))+"\",");//7-EmailAddress
+				sr.Write("\""+Dequote(PIn.String(table.Rows[i][5].ToString()))+"\",");//5-HomePhone
+				sr.Write("\""+Dequote(PIn.String(table.Rows[i][6].ToString()))+"\",");//6-WorkNumber
+				sr.Write("\""+Dequote(PIn.String(table.Rows[i][7].ToString()))+"\",");//7-EmailAddress
 				if(table.Rows[i][7].ToString()!=""){//if an email exists
 					sr.Write("\"T\",");//SendEmail
 				}
 				else{
 					sr.Write("\"F\",");
 				}
-				sr.Write("\""+Dequote(PIn.PString(table.Rows[i][8].ToString()))+"\",");//8-Address
-				sr.Write("\""+Dequote(PIn.PString(table.Rows[i][9].ToString()))+"\",");//9-Address2
-				sr.Write("\""+Dequote(PIn.PString(table.Rows[i][10].ToString()))+"\",");//10-City
-				sr.Write("\""+Dequote(PIn.PString(table.Rows[i][11].ToString()))+"\",");//11-State
-				sr.Write("\""+Dequote(PIn.PString(table.Rows[i][12].ToString()))+"\",");//12-Zip
-				aptDT=PIn.PDateT(table.Rows[i][13].ToString());
+				sr.Write("\""+Dequote(PIn.String(table.Rows[i][8].ToString()))+"\",");//8-Address
+				sr.Write("\""+Dequote(PIn.String(table.Rows[i][9].ToString()))+"\",");//9-Address2
+				sr.Write("\""+Dequote(PIn.String(table.Rows[i][10].ToString()))+"\",");//10-City
+				sr.Write("\""+Dequote(PIn.String(table.Rows[i][11].ToString()))+"\",");//11-State
+				sr.Write("\""+Dequote(PIn.String(table.Rows[i][12].ToString()))+"\",");//12-Zip
+				aptDT=PIn.DateT(table.Rows[i][13].ToString());
 				sr.Write("\""+aptDT.ToString("MM/dd/yyyy")+"\",");//13-ApptDate
 				sr.Write("\""+aptDT.ToString("hh:mm tt")+"\",");//13-ApptTime eg 01:30 PM
-				sr.Write("\""+Dequote(PIn.PString(table.Rows[i][14].ToString()))+"\",");//14-ApptReason
+				sr.Write("\""+Dequote(PIn.String(table.Rows[i][14].ToString()))+"\",");//14-ApptReason
 				sr.Write("\""+table.Rows[i][15].ToString()+"\",");//15-DoctorNumber. might possibly be 0
 				//15-DoctorName. Can handle 0 without any problem.
-				sr.Write("\""+Dequote(Providers.GetLName(PIn.PLong(table.Rows[i][15].ToString())))+"\",");
+				sr.Write("\""+Dequote(Providers.GetLName(PIn.Long(table.Rows[i][15].ToString())))+"\",");
 				if(table.Rows[i][16].ToString()=="1"){//16-IsNewPatient
 					sr.WriteLine("\"T\"");//SendEmail
 				}

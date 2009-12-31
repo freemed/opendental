@@ -38,8 +38,8 @@ namespace OpenDentBusiness {
 			List=new PatFieldDef[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new PatFieldDef();
-				List[i].PatFieldDefNum=PIn.PLong(table.Rows[i][0].ToString());
-				List[i].FieldName=PIn.PString(table.Rows[i][1].ToString());
+				List[i].PatFieldDefNum=PIn.Long(table.Rows[i][0].ToString());
+				List[i].FieldName=PIn.String(table.Rows[i][1].ToString());
 			}
 		}
 
@@ -50,11 +50,11 @@ namespace OpenDentBusiness {
 				return;
 			}
 			string command="UPDATE patfielddef SET " 
-				+"FieldName = '"        +POut.PString(p.FieldName)+"'"
-				+" WHERE PatFieldDefNum  ='"+POut.PLong   (p.PatFieldDefNum)+"'";
+				+"FieldName = '"        +POut.String(p.FieldName)+"'"
+				+" WHERE PatFieldDefNum  ='"+POut.Long   (p.PatFieldDefNum)+"'";
 			Db.NonQ(command);
-			command="UPDATE patfield SET FieldName='"+POut.PString(p.FieldName)+"'"
-				+" WHERE FieldName='"+POut.PString(oldFieldName)+"'";
+			command="UPDATE patfield SET FieldName='"+POut.String(p.FieldName)+"'"
+				+" WHERE FieldName='"+POut.String(oldFieldName)+"'";
 			Db.NonQ(command);
 		}
 
@@ -73,10 +73,10 @@ namespace OpenDentBusiness {
 			}
 			command+="FieldName) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PLong(p.PatFieldDefNum)+", ";
+				command+=POut.Long(p.PatFieldDefNum)+", ";
 			}
 			command+=
-				"'"+POut.PString(p.FieldName)+"')";
+				"'"+POut.String(p.FieldName)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -94,7 +94,7 @@ namespace OpenDentBusiness {
 			}
 			string command="SELECT LName,FName FROM patient,patfield WHERE "
 				+"patient.PatNum=patfield.PatNum "
-				+"AND FieldName='"+POut.PString(p.FieldName)+"'";
+				+"AND FieldName='"+POut.String(p.FieldName)+"'";
 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count>0){
 				string s=Lans.g("PatFieldDef","Not allowed to delete. Already in use by ")+table.Rows.Count.ToString()
@@ -107,7 +107,7 @@ namespace OpenDentBusiness {
 				}
 				throw new ApplicationException(s);
 			}
-			command="DELETE FROM patfielddef WHERE PatFieldDefNum ="+POut.PLong(p.PatFieldDefNum);
+			command="DELETE FROM patfielddef WHERE PatFieldDefNum ="+POut.Long(p.PatFieldDefNum);
 			Db.NonQ(command);
 		}
 				

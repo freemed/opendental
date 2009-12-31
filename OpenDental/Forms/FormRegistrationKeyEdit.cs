@@ -418,9 +418,9 @@ namespace OpenDental{
 				return;
 			}
 			//RegKey.RegKey=textKey.Text;//It's read only.
-			RegKey.DateStarted=PIn.PDate(textDateStarted.Text);
-			RegKey.DateDisabled=PIn.PDate(textDateDisabled.Text);
-			RegKey.DateEnded=PIn.PDate(textDateEnded.Text);
+			RegKey.DateStarted=PIn.Date(textDateStarted.Text);
+			RegKey.DateDisabled=PIn.Date(textDateDisabled.Text);
+			RegKey.DateEnded=PIn.Date(textDateEnded.Text);
 			RegKey.IsFreeVersion=checkFree.Checked;
 			RegKey.IsOnlyForTesting=checkTesting.Checked;
 			RegKey.UsesServerVersion=checkServerVersion.Checked;

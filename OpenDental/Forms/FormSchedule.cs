@@ -476,7 +476,7 @@ namespace OpenDental{
 			for(int i=0;i<listEmp.SelectedIndices.Count;i++){
 				empNums.Add(Employees.ListShort[listEmp.SelectedIndices[i]].EmployeeNum);
 			}
-			DataTable table=Schedules.GetPeriod(PIn.PDate(textDateFrom.Text),PIn.PDate(textDateTo.Text),provNums,
+			DataTable table=Schedules.GetPeriod(PIn.Date(textDateFrom.Text),PIn.Date(textDateTo.Text),provNums,
 				empNums,checkPractice.Checked);
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
@@ -528,14 +528,14 @@ namespace OpenDental{
 			if(!checkWeekend.Checked && (DateTime.Today.DayOfWeek==DayOfWeek.Sunday || DateTime.Today.DayOfWeek==DayOfWeek.Saturday)){
 				return;
 			}
-			if(DateTime.Today>PIn.PDate(textDateTo.Text) || DateTime.Today<PIn.PDate(textDateFrom.Text)){
+			if(DateTime.Today>PIn.Date(textDateTo.Text) || DateTime.Today<PIn.Date(textDateFrom.Text)){
 				return;
 			}
 			int colI=(int)DateTime.Today.DayOfWeek;
 			if(!checkWeekend.Checked){
 				colI--;
 			}
-			gridMain.Rows[Schedules.GetRowCal(PIn.PDate(textDateFrom.Text),DateTime.Today)].Cells[colI].ColorText=Color.Red;
+			gridMain.Rows[Schedules.GetRowCal(PIn.Date(textDateFrom.Text),DateTime.Today)].Cells[colI].ColorText=Color.Red;
 		}
 
 		private void butRefresh_Click(object sender,EventArgs e) {
@@ -569,8 +569,8 @@ namespace OpenDental{
 			}
 			//the "clickedCell" is in terms of the entire 7 col layout.
 			Point clickedCell=new Point(clickedCol,e.Row);
-			DateTime selectedDate=Schedules.GetDateCal(PIn.PDate(textDateFrom.Text),e.Row,clickedCol);
-			if(selectedDate<PIn.PDate(textDateFrom.Text) || selectedDate>PIn.PDate(textDateTo.Text)){
+			DateTime selectedDate=Schedules.GetDateCal(PIn.Date(textDateFrom.Text),e.Row,clickedCol);
+			if(selectedDate<PIn.Date(textDateFrom.Text) || selectedDate>PIn.Date(textDateTo.Text)){
 				return;
 			}
 			//MessageBox.Show(selectedDate.ToShortDateString());
@@ -618,7 +618,7 @@ namespace OpenDental{
 			if(checkWeekend.Checked) {
 				startI=0;
 			}
-			DateTime dateSelectedStart=Schedules.GetDateCal(PIn.PDate(textDateFrom.Text),gridMain.SelectedCell.Y,startI);
+			DateTime dateSelectedStart=Schedules.GetDateCal(PIn.Date(textDateFrom.Text),gridMain.SelectedCell.Y,startI);
 			DateTime dateSelectedEnd;
 			if(checkWeekend.Checked) {
 				dateSelectedEnd=dateSelectedStart.AddDays(6);
@@ -653,7 +653,7 @@ namespace OpenDental{
 			if(!checkWeekend.Checked) {
 				selectedCol++;
 			}
-			DateCopyStart=Schedules.GetDateCal(PIn.PDate(textDateFrom.Text),gridMain.SelectedCell.Y,selectedCol);
+			DateCopyStart=Schedules.GetDateCal(PIn.Date(textDateFrom.Text),gridMain.SelectedCell.Y,selectedCol);
 			DateCopyEnd=DateCopyStart;
 			textClipboard.Text=DateCopyStart.ToShortDateString();
 		}
@@ -673,7 +673,7 @@ namespace OpenDental{
 			if(checkWeekend.Checked){
 				startI=0;
 			}
-			DateCopyStart=Schedules.GetDateCal(PIn.PDate(textDateFrom.Text),gridMain.SelectedCell.Y,startI);
+			DateCopyStart=Schedules.GetDateCal(PIn.Date(textDateFrom.Text),gridMain.SelectedCell.Y,startI);
 			if(checkWeekend.Checked){
 				DateCopyEnd=DateCopyStart.AddDays(6);
 			}
@@ -710,7 +710,7 @@ namespace OpenDental{
 				if(checkWeekend.Checked) {
 					startI=0;
 				}
-				dateSelectedStart=Schedules.GetDateCal(PIn.PDate(textDateFrom.Text),gridMain.SelectedCell.Y,startI);
+				dateSelectedStart=Schedules.GetDateCal(PIn.Date(textDateFrom.Text),gridMain.SelectedCell.Y,startI);
 				if(checkWeekend.Checked) {
 					dateSelectedEnd=dateSelectedStart.AddDays(6);
 				}
@@ -723,7 +723,7 @@ namespace OpenDental{
 				if(!checkWeekend.Checked) {
 					selectedCol++;
 				}
-				dateSelectedStart=Schedules.GetDateCal(PIn.PDate(textDateFrom.Text),gridMain.SelectedCell.Y,selectedCol);
+				dateSelectedStart=Schedules.GetDateCal(PIn.Date(textDateFrom.Text),gridMain.SelectedCell.Y,selectedCol);
 				dateSelectedEnd=dateSelectedStart;
 			}
 			//it's not allowed to paste back over the same day or week.
@@ -808,7 +808,7 @@ namespace OpenDental{
 				if(checkWeekend.Checked) {
 					startI=0;
 				}
-				dateSelectedStart=Schedules.GetDateCal(PIn.PDate(textDateFrom.Text),gridMain.SelectedCell.Y,startI);
+				dateSelectedStart=Schedules.GetDateCal(PIn.Date(textDateFrom.Text),gridMain.SelectedCell.Y,startI);
 				if(checkWeekend.Checked) {
 					dateSelectedEnd=dateSelectedStart.AddDays(6);
 				}
@@ -821,7 +821,7 @@ namespace OpenDental{
 				if(!checkWeekend.Checked) {
 					selectedCol++;
 				}
-				dateSelectedStart=Schedules.GetDateCal(PIn.PDate(textDateFrom.Text),gridMain.SelectedCell.Y,selectedCol);
+				dateSelectedStart=Schedules.GetDateCal(PIn.Date(textDateFrom.Text),gridMain.SelectedCell.Y,selectedCol);
 				dateSelectedEnd=dateSelectedStart;
 			}
 			//it is allowed to paste back over the same day or week.
@@ -848,7 +848,7 @@ namespace OpenDental{
 			}
 			int dayDelta=0;//this is needed when repeat pasting days in order to calculate skipping weekends.
 			//dayDelta will start out zero and increment separately from r.
-			for(int r=0;r<PIn.PLong(textRepeat.Text);r++){
+			for(int r=0;r<PIn.Long(textRepeat.Text);r++){
 				if(checkReplace.Checked) {
 					if(isWeek){
 						Schedules.Clear(dateSelectedStart.AddDays(r*7),dateSelectedEnd.AddDays(r*7),

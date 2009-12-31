@@ -355,7 +355,7 @@ namespace ODR{
 					}
 				}
 				else if(Parameters[i].ValueType==ParamValueType.Date){
-					Parameters[i].CurrentValues.Add(PIn.PDate(inputs[i].Text));
+					Parameters[i].CurrentValues.Add(PIn.Date(inputs[i].Text));
 				}
 				/*else if(Parameters[i].ValueType==ParamValueType.Def){
 					ComboBoxMulti comboBox=(ComboBoxMulti)inputs[i];
@@ -373,10 +373,10 @@ namespace ODR{
 					}
 				}
 				else if(Parameters[i].ValueType==ParamValueType.Integer){
-					Parameters[i].CurrentValues.Add(PIn.PLong(inputs[i].Text));
+					Parameters[i].CurrentValues.Add(PIn.Long(inputs[i].Text));
 				}
 				else if(Parameters[i].ValueType==ParamValueType.Number){
-					Parameters[i].CurrentValues.Add(PIn.PDouble(inputs[i].Text));
+					Parameters[i].CurrentValues.Add(PIn.Double(inputs[i].Text));
 				}
 				else if(Parameters[i].ValueType==ParamValueType.String){
 					if(inputs[i].Text!=""){

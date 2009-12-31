@@ -611,12 +611,12 @@ namespace OpenDental
 				}
 				if(DataArray[i,row].Text==null || DataArray[i,row].Text==""){
 					drawOld=true;
-					cellValue=PIn.PInt(DataArray[i,row].OldText);
+					cellValue=PIn.Int(DataArray[i,row].OldText);
 					textColor=Color.Gray;
 				}
 				else{
 					drawOld=false;
-					cellValue=PIn.PInt(DataArray[i,row].Text);
+					cellValue=PIn.Int(DataArray[i,row].Text);
 					textColor=Color.Black;
 				}
 				//test for red
@@ -1055,7 +1055,7 @@ namespace OpenDental
 				return -1;
 			}
 			//MessageBox.Show("full");
-			return PIn.PInt(DataArray[curCell.X,curCell.Y].Text);
+			return PIn.Int(DataArray[curCell.X,curCell.Y].Text);
 		}
 
 		///<summary>Used in SaveCurExam to retrieve data from grid to save it.</summary>
@@ -1510,8 +1510,8 @@ namespace OpenDental
 				}
 				return;
 			}
-			int probValue=PIn.PInt(DataArray[probingCell.X,probingCell.Y].Text);
-			int gingValue=PIn.PInt(DataArray[gingLoc.X,gingLoc.Y].Text);
+			int probValue=PIn.Int(DataArray[probingCell.X,probingCell.Y].Text);
+			int gingValue=PIn.Int(DataArray[gingLoc.X,gingLoc.Y].Text);
 			DataArray[calLoc.X,calLoc.Y].Text=(gingValue+probValue).ToString();
 			if(alsoInvalidate){
 				Invalidate(Rectangle.Ceiling(GetBounds(calLoc.X,calLoc.Y)));
@@ -1794,8 +1794,8 @@ namespace OpenDental
 					if(cellText==null || cellText==""){
 						continue;
 					}
-					if((seqType==PerioSequenceType.MGJ && PIn.PLong(cellText)<=prefVal)
-						|| (seqType!=PerioSequenceType.MGJ && PIn.PLong(cellText)>=prefVal)){
+					if((seqType==PerioSequenceType.MGJ && PIn.Long(cellText)<=prefVal)
+						|| (seqType!=PerioSequenceType.MGJ && PIn.Long(cellText)>=prefVal)){
 						intTooth=(int)Math.Ceiling((double)x/3);
 						if(section==2 || section==3){//if mand
 							intTooth=33-intTooth;

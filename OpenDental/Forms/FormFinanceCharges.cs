@@ -444,7 +444,7 @@ namespace OpenDental{
 				!=DialogResult.OK) {
 					return;
 				}
-				long rowsAffected=Adjustments.UndoFinanceCharges(PIn.PDate(textDateUndo.Text));
+				long rowsAffected=Adjustments.UndoFinanceCharges(PIn.Date(textDateUndo.Text));
 				MessageBox.Show(Lan.g(this,"Finance charge adjustments deleted: ")+rowsAffected.ToString());
 				Ledgers.RunAging();
 				SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Finance Charges undo. Date "+textDateUndo.Text);
@@ -455,7 +455,7 @@ namespace OpenDental{
 				!=DialogResult.OK) {
 					return;
 				}
-				long rowsAffected=Adjustments.UndoBillingCharges(PIn.PDate(textDateUndo.Text));
+				long rowsAffected=Adjustments.UndoBillingCharges(PIn.Date(textDateUndo.Text));
 				MessageBox.Show(Lan.g(this,"Billing charge adjustments deleted: ")+rowsAffected.ToString());
 				Ledgers.RunAging();
 				SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Billing Charges undo. Date "+textDateUndo.Text);
@@ -469,7 +469,7 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Please fix data entry errors first."));
 				return;
 			}
-			DateTime date=PIn.PDate(textDate.Text);
+			DateTime date=PIn.Date(textDate.Text);
 			if(PrefC.GetDate(PrefName.FinanceChargeLastRun).AddDays(25)>date) {
 				if(!MsgBox.Show(this,true,"Warning.  Finance charges should not be run more than once per month.  Continue?")) {
 					return;
@@ -484,7 +484,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please select at least one billing type first.");
 				return;
 			}
-			if(PIn.PLong(textAPR.Text) < 2) {
+			if(PIn.Long(textAPR.Text) < 2) {
 				if(!MsgBox.Show(this,true,"The APR is much lower than normal. Do you wish to proceed?")) {
 					return;
 				}
@@ -529,7 +529,7 @@ namespace OpenDental{
 			}
 			if(radioFinanceCharge.Checked) {
 				if(Prefs.UpdateString(PrefName.FinanceChargeAPR,textAPR.Text) 
-					| Prefs.UpdateString(PrefName.FinanceChargeLastRun,POut.PDate(date,false)))
+					| Prefs.UpdateString(PrefName.FinanceChargeLastRun,POut.Date(date,false)))
 				{
 					DataValid.SetInvalid(InvalidType.Prefs);
 				}
@@ -542,7 +542,7 @@ namespace OpenDental{
 			}
 			else if(radioBillingCharge.Checked) {
 				if(Prefs.UpdateString(PrefName.BillingChargeAmount,textBillingCharge.Text)
-					| Prefs.UpdateString(PrefName.BillingChargeLastRun,POut.PDate(date,false)))
+					| Prefs.UpdateString(PrefName.BillingChargeLastRun,POut.Date(date,false)))
 				{
 					DataValid.SetInvalid(InvalidType.Prefs);
 				}
@@ -563,7 +563,7 @@ namespace OpenDental{
 			AdjustmentCur.ProcDate = date;
 			AdjustmentCur.AdjType = PrefC.GetLong(PrefName.FinanceChargeAdjustmentType);
 			AdjustmentCur.AdjNote = "";//"Finance Charge";
-			AdjustmentCur.AdjAmt = Math.Round(((PIn.PDouble(APR) * .01d / 12d) * OverallBalance),2);
+			AdjustmentCur.AdjAmt = Math.Round(((PIn.Double(APR) * .01d / 12d) * OverallBalance),2);
 			AdjustmentCur.ProvNum = PriProv;
 			Adjustments.Insert(AdjustmentCur);
 		}
@@ -576,7 +576,7 @@ namespace OpenDental{
 			AdjustmentCur.ProcDate = date;
 			AdjustmentCur.AdjType = PrefC.GetLong(PrefName.BillingChargeAdjustmentType);
 			AdjustmentCur.AdjNote = "";//"Billing Charge";
-			AdjustmentCur.AdjAmt = PIn.PDouble(BillingChargeAmount);
+			AdjustmentCur.AdjAmt = PIn.Double(BillingChargeAmount);
 			AdjustmentCur.ProvNum = PriProv;
 			Adjustments.Insert(AdjustmentCur);
 		}

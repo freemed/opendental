@@ -244,11 +244,11 @@ namespace OpenDental{
 			LanguageForeign[] LFList=LanguageForeigns.GetListForCulture(CultureInfo.CurrentCulture);
 			for(int i=0;i<LFList.Length;i++){
 				sw.WriteLine(
-					"INSERT INTO languageforeign VALUES ('"+POut.PString(LFList[i].ClassType)
-					+"', '"+POut.PString(LFList[i].English)
-					+"', '"+POut.PString(LFList[i].Culture)
-					+"', '"+POut.PString(LFList[i].Translation)
-					+"', '"+POut.PString(LFList[i].Comments)+"');"
+					"INSERT INTO languageforeign VALUES ('"+POut.String(LFList[i].ClassType)
+					+"', '"+POut.String(LFList[i].English)
+					+"', '"+POut.String(LFList[i].Culture)
+					+"', '"+POut.String(LFList[i].Translation)
+					+"', '"+POut.String(LFList[i].Comments)+"');"
 				);
 			}//for
 			sw.Close();

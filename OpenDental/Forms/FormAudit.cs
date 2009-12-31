@@ -358,11 +358,11 @@ namespace OpenDental{
 			}
 			SecurityLog[] logList=null;
 			if(comboPermission.SelectedIndex==0){
-				logList=SecurityLogs.Refresh(PIn.PDate(textDateFrom.Text),PIn.PDate(textDateTo.Text),
+				logList=SecurityLogs.Refresh(PIn.Date(textDateFrom.Text),PIn.Date(textDateTo.Text),
 					Permissions.None,PatNum,userNum);
 			}
 			else{
-				logList=SecurityLogs.Refresh(PIn.PDate(textDateFrom.Text),PIn.PDate(textDateTo.Text),
+				logList=SecurityLogs.Refresh(PIn.Date(textDateFrom.Text),PIn.Date(textDateTo.Text),
 					(Permissions)Enum.Parse(typeof(Permissions),comboPermission.SelectedItem.ToString()),PatNum,userNum);
 			}
 			grid.BeginUpdate();

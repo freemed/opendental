@@ -13,8 +13,8 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<List<Signal>>(MethodBase.GetCurrentMethod(),sinceDateT);
 			}
 			string command="SELECT * FROM signal "
-				+"WHERE SigDateTime>"+POut.PDateT(sinceDateT)+" "
-				+"OR AckTime>"+POut.PDateT(sinceDateT)+" "
+				+"WHERE SigDateTime>"+POut.DateT(sinceDateT)+" "
+				+"OR AckTime>"+POut.DateT(sinceDateT)+" "
 				+"ORDER BY SigDateTime";
 			//note: this might return an occasional row that has both times newer.
 			List<Signal> sigList=new List<Signal>();
@@ -37,10 +37,10 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<List<Signal>>(MethodBase.GetCurrentMethod(),sinceDateT);
 			}
 			string command="SELECT * FROM signal "
-				+"WHERE (SigDateTime>"+POut.PDateT(sinceDateT)+" "
-				+"OR AckTime>"+POut.PDateT(sinceDateT)+" "
+				+"WHERE (SigDateTime>"+POut.DateT(sinceDateT)+" "
+				+"OR AckTime>"+POut.DateT(sinceDateT)+" "
 				+"OR AckTime<'1880-01-01') "//always include all unacked.
-				+"AND SigType="+POut.PLong((int)SignalType.Button)
+				+"AND SigType="+POut.Long((int)SignalType.Button)
 				+" ORDER BY SigDateTime";
 			//note: this might return an occasional row that has both times newer.
 			List<Signal> sigList=new List<Signal>();
@@ -87,16 +87,16 @@ namespace OpenDentBusiness{
 			Signal sig;
 			for(int i=0;i<table.Rows.Count;i++) {
 				sig=new Signal();
-				sig.SignalNum  = PIn.PLong(table.Rows[i][0].ToString());
-				sig.FromUser   = PIn.PString(table.Rows[i][1].ToString());
-				sig.ITypes     = PIn.PString(table.Rows[i][2].ToString());
-				sig.DateViewing= PIn.PDate(table.Rows[i][3].ToString());
-				sig.SigType    = (SignalType)PIn.PLong(table.Rows[i][4].ToString());
-				sig.SigText    = PIn.PString(table.Rows[i][5].ToString());
-				sig.SigDateTime= PIn.PDateT(table.Rows[i][6].ToString());
-				sig.ToUser     = PIn.PString(table.Rows[i][7].ToString());
-				sig.AckTime    = PIn.PDateT(table.Rows[i][8].ToString());
-				sig.TaskNum    = PIn.PLong(table.Rows[i][9].ToString());
+				sig.SignalNum  = PIn.Long(table.Rows[i][0].ToString());
+				sig.FromUser   = PIn.String(table.Rows[i][1].ToString());
+				sig.ITypes     = PIn.String(table.Rows[i][2].ToString());
+				sig.DateViewing= PIn.Date(table.Rows[i][3].ToString());
+				sig.SigType    = (SignalType)PIn.Long(table.Rows[i][4].ToString());
+				sig.SigText    = PIn.String(table.Rows[i][5].ToString());
+				sig.SigDateTime= PIn.DateT(table.Rows[i][6].ToString());
+				sig.ToUser     = PIn.String(table.Rows[i][7].ToString());
+				sig.AckTime    = PIn.DateT(table.Rows[i][8].ToString());
+				sig.TaskNum    = PIn.Long(table.Rows[i][9].ToString());
 				retVal.Add(sig);
 			}
 			retVal.Sort();
@@ -110,16 +110,16 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command= "UPDATE signal SET " 
-				+"FromUser = '"    +POut.PString(sig.FromUser)+"'"
-				+",ITypes = '"     +POut.PString(sig.ITypes)+"'"
-				+",DateViewing = " +POut.PDate  (sig.DateViewing)
-				+",SigType = '"    +POut.PLong   ((int)sig.SigType)+"'"
-				+",SigText = '"    +POut.PString(sig.SigText)+"'"
+				+"FromUser = '"    +POut.String(sig.FromUser)+"'"
+				+",ITypes = '"     +POut.String(sig.ITypes)+"'"
+				+",DateViewing = " +POut.Date  (sig.DateViewing)
+				+",SigType = '"    +POut.Long   ((int)sig.SigType)+"'"
+				+",SigText = '"    +POut.String(sig.SigText)+"'"
 				//+",SigDateTime = '"+POut.PDateT (SigDateTime)+"'"//we don't want to ever update this
-				+",ToUser = '"     +POut.PString(sig.ToUser)+"'"
-				+",AckTime = "     +POut.PDateT (sig.AckTime)
-				+",TaskNum = '"    +POut.PLong   (sig.TaskNum)+"'"
-				+" WHERE SignalNum = '"+POut.PLong(sig.SignalNum)+"'";
+				+",ToUser = '"     +POut.String(sig.ToUser)+"'"
+				+",AckTime = "     +POut.DateT (sig.AckTime)
+				+",TaskNum = '"    +POut.Long   (sig.TaskNum)+"'"
+				+" WHERE SignalNum = '"+POut.Long(sig.SignalNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -143,18 +143,18 @@ namespace OpenDentBusiness{
 			command+="FromUser,ITypes,DateViewing,SigType,SigText,SigDateTime,ToUser,AckTime,TaskNum"
 				+") VALUES(";
 			if(PrefC.RandomKeys){
-				command+="'"+POut.PLong(sig.SignalNum)+"', ";
+				command+="'"+POut.Long(sig.SignalNum)+"', ";
 			}
 			command+=
-				 "'"+POut.PString(sig.FromUser)+"', "
-				+"'"+POut.PString(sig.ITypes)+"', "
-				+POut.PDate  (sig.DateViewing)+", "
-				+"'"+POut.PLong   ((int)sig.SigType)+"', "
-				+"'"+POut.PString(sig.SigText)+"', "
-				+POut.PDateT(sig.SigDateTime)+", "
-				+"'"+POut.PString(sig.ToUser)+"', "
-				+POut.PDateT (sig.AckTime)+", "
-				+"'"+POut.PLong(sig.TaskNum)+"')";
+				 "'"+POut.String(sig.FromUser)+"', "
+				+"'"+POut.String(sig.ITypes)+"', "
+				+POut.Date  (sig.DateViewing)+", "
+				+"'"+POut.Long   ((int)sig.SigType)+"', "
+				+"'"+POut.String(sig.SigText)+"', "
+				+POut.DateT(sig.SigDateTime)+", "
+				+"'"+POut.String(sig.ToUser)+"', "
+				+POut.DateT (sig.AckTime)+", "
+				+"'"+POut.Long(sig.TaskNum)+"')";
  			if(PrefC.RandomKeys){
 				Db.NonQ(command);
 			}
@@ -203,13 +203,13 @@ namespace OpenDentBusiness{
 				+"WHERE taskancestor.TaskListNum=tasklist.TaskListNum "
 				+"AND task.TaskNum=taskancestor.TaskNum "
 				+"AND tasksubscription.TaskListNum=tasklist.TaskListNum "
-				+"AND tasksubscription.UserNum="+POut.PLong(userNum)
+				+"AND tasksubscription.UserNum="+POut.Long(userNum)
 				+" AND (";
 			for(int i=0;i<sigListFiltered.Count;i++){
 				if(i>0){
 					command+=" OR ";
 				}
-				command+="task.TaskNum= "+POut.PLong(sigListFiltered[i].TaskNum);
+				command+="task.TaskNum= "+POut.Long(sigListFiltered[i].TaskNum);
 			}
 			command+=")";
 			return Tasks.RefreshAndFill(Db.GetTable(command));
@@ -235,8 +235,8 @@ namespace OpenDentBusiness{
 				}
 				strArray=signalList[i].ITypes.Split(',');
 				for(int t=0;t<strArray.Length;t++){
-					if(!retVal.Contains(PIn.PInt(strArray[t]))){
-						retVal.Add(PIn.PInt(strArray[t]));
+					if(!retVal.Contains(PIn.Int(strArray[t]))){
+						retVal.Add(PIn.Int(strArray[t]));
 					}
 				}
 			}
@@ -282,17 +282,17 @@ namespace OpenDentBusiness{
 			//Rewritten so that the SQL is compatible with both Oracle and MySQL.
 			string command= "SELECT signal.SignalNum FROM signal,sigelement,sigelementdef "
 				+"WHERE signal.AckTime < '1880-01-01' "
-				+"AND SigDateTime <= "+POut.PDateT(time)+" "
+				+"AND SigDateTime <= "+POut.DateT(time)+" "
 				+"AND signal.SignalNum=sigelement.SignalNum "
 				+"AND sigelement.SigElementDefNum=sigelementdef.SigElementDefNum "
-				+"AND sigelementdef.LightRow="+POut.PLong(buttonIndex);
+				+"AND sigelementdef.LightRow="+POut.Long(buttonIndex);
 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0){
 				return;
 			}
 			command="UPDATE signal SET AckTime = ";
 			if(DataConnection.DBtype==DatabaseType.Oracle){
-				command+=POut.PDateT(MiscData.GetNowDateTime());
+				command+=POut.DateT(MiscData.GetNowDateTime());
 			}else {//Assume MySQL
 				command+="NOW()";
 			}

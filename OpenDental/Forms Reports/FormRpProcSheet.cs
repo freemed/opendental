@@ -330,7 +330,7 @@ namespace OpenDental{
 					else {
 						whereProv+="OR ";
 					}
-					whereProv+="procedurelog.ProvNum = "+POut.PLong(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+" ";
+					whereProv+="procedurelog.ProvNum = "+POut.Long(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+" ";
 				}
 				whereProv+=") ";
 			}
@@ -347,7 +347,7 @@ namespace OpenDental{
 						whereClin+="procedurelog.ClinicNum = 0 ";
 					}
 					else {
-						whereClin+="procedurelog.ClinicNum = "+POut.PLong(Clinics.List[listClin.SelectedIndices[i]-1].ClinicNum)+" ";
+						whereClin+="procedurelog.ClinicNum = "+POut.Long(Clinics.List[listClin.SelectedIndices[i]-1].ClinicNum)+" ";
 					}
 				}
 				whereClin+=") ";
@@ -377,9 +377,9 @@ namespace OpenDental{
 				+"AND provider.ProvNum=procedurelog.ProvNum "
 				+whereProv
 				+whereClin
-				+"AND procedurecode.ProcCode LIKE '%"+POut.PString(textCode.Text)+"%' "
-				+"AND procedurelog.ProcDate >= " +POut.PDate(date1.SelectionStart)+" "
-				+"AND procedurelog.ProcDate <= " +POut.PDate(date2.SelectionStart)+" "
+				+"AND procedurecode.ProcCode LIKE '%"+POut.String(textCode.Text)+"%' "
+				+"AND procedurelog.ProcDate >= " +POut.Date(date1.SelectionStart)+" "
+				+"AND procedurelog.ProcDate <= " +POut.Date(date2.SelectionStart)+" "
 				+"GROUP BY procedurelog.ProcNum "
 				+"ORDER BY procedurelog.ProcDate,plfname,procedurecode.ProcCode,ToothNum";
 			FormQuery2=new FormQuery(report);
@@ -398,20 +398,20 @@ namespace OpenDental{
 			double dbl=0;
 			for(int i=0;i<table.Rows.Count;i++) {
 				row = report.TableQ.NewRow();//create new row called 'row' based on structure of TableQ
-				row[0]=PIn.PDate(table.Rows[i][0].ToString()).ToShortDateString();
+				row[0]=PIn.Date(table.Rows[i][0].ToString()).ToShortDateString();
 				row[1]=table.Rows[i][1].ToString();//name
 				row[2]=table.Rows[i][2].ToString();//adacode
 				row[3]=table.Rows[i][3].ToString();//tooth
 				row[4]=table.Rows[i][4].ToString();//descript
 				row[5]=table.Rows[i][5].ToString();//prov
 				if(!PrefC.GetBool(PrefName.EasyNoClinics)) {
-					row[6]=Clinics.GetDesc(PIn.PLong(table.Rows[i][6].ToString()));//clinic
-					dbl=PIn.PDouble(table.Rows[i][7].ToString());//fee
+					row[6]=Clinics.GetDesc(PIn.Long(table.Rows[i][6].ToString()));//clinic
+					dbl=PIn.Double(table.Rows[i][7].ToString());//fee
 					row[7]=dbl.ToString("n");
 					report.ColTotal[7]+=dbl;
 				}
 				else {
-					dbl=PIn.PDouble(table.Rows[i][7].ToString());//fee
+					dbl=PIn.Double(table.Rows[i][7].ToString());//fee
 					row[6]=dbl.ToString("n");
 					report.ColTotal[6]+=dbl;
 				}
@@ -481,7 +481,7 @@ namespace OpenDental{
 				+"AND definition.DefNum=procedurecode.ProcCat "
 				+whereProv
 				+whereClin
-				+"AND procedurecode.ProcCode LIKE '%"+POut.PString(textCode.Text)+"%' "
+				+"AND procedurecode.ProcCode LIKE '%"+POut.String(textCode.Text)+"%' "
 				+"AND procedurelog.ProcDate >= '" + date1.SelectionStart.ToString("yyyy-MM-dd")+"' "
 				+"AND procedurelog.ProcDate <= '" + date2.SelectionStart.ToString("yyyy-MM-dd")+"' "
 				+"GROUP BY procedurecode.ProcCode "

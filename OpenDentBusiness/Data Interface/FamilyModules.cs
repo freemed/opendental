@@ -23,10 +23,10 @@ namespace OpenDentBusiness {
 					table.Rows[i]["Title"]="";//handles null
 				}
 				if(table.Rows[i]["SchedBeforeTime"].ToString()==""){
-					table.Rows[i]["SchedBeforeTime"]=POut.PTimeSpan(TimeSpan.Zero,false);
+					table.Rows[i]["SchedBeforeTime"]=POut.TimeSpan(TimeSpan.Zero,false);
 				}
 				if(table.Rows[i]["SchedAfterTime"].ToString()==""){
-					table.Rows[i]["SchedAfterTime"]=POut.PTimeSpan(TimeSpan.Zero,false);
+					table.Rows[i]["SchedAfterTime"]=POut.TimeSpan(TimeSpan.Zero,false);
 				}
 			}
 			Family fam=new Family();
@@ -62,7 +62,7 @@ namespace OpenDentBusiness {
 				if(i>0) {
 					command+=" OR";
 				}
-				command+=" Subscriber="+POut.PLong(fam.ListPats[i].PatNum);
+				command+=" Subscriber="+POut.Long(fam.ListPats[i].PatNum);
 			}
 			//in union, distinct is implied
 			command+=") UNION (SELECT insplan.*,'0' FROM insplan,patplan WHERE insplan.PlanNum=patplan.PlanNum AND (";
@@ -70,7 +70,7 @@ namespace OpenDentBusiness {
 				if(i>0) {
 					command+=" OR";
 				}
-				command+=" patplan.PatNum="+POut.PLong(fam.ListPats[i].PatNum);
+				command+=" patplan.PatNum="+POut.Long(fam.ListPats[i].PatNum);
 			}
 			//command+=")) ORDER BY DateEffective";//FIXME:UNION-ORDER-BY
 			command+=")) ORDER BY 3";//***ORACLE ORDINAL

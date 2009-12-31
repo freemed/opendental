@@ -320,7 +320,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please enter a date first.");
 				return;
 			}
-			PlanCur.DateTP=PIn.PDate(textDateTP.Text);
+			PlanCur.DateTP=PIn.Date(textDateTP.Text);
 			PlanCur.Heading=textHeading.Text;
 			PlanCur.Note=textNote.Text;
 			TreatPlans.Update(PlanCur);

@@ -814,13 +814,13 @@ namespace OpenDental{
 				warning+="Payee not selected.";
 			}
 			if(textAccidentDate.Text!="") {
-				if(PIn.PDate(textAccidentDate.Text)>DateTime.Today) {
+				if(PIn.Date(textAccidentDate.Text)>DateTime.Today) {
 					if(warning!="") {
 						warning+="\r\n";
 					}
 					warning+="Accident date must be in the past.";
 				}
-				if(PIn.PDate(textAccidentDate.Text).Year<1980) {
+				if(PIn.Date(textAccidentDate.Text).Year<1980) {
 					if(warning!="") {
 						warning+="\r\n";
 					}
@@ -835,13 +835,13 @@ namespace OpenDental{
 				warning+="Max prosth not indicated.";
 			}
 			if(textDateInitialUpper.Text!="") {
-				if(PIn.PDate(textDateInitialUpper.Text)>DateTime.Today) {
+				if(PIn.Date(textDateInitialUpper.Text)>DateTime.Today) {
 					if(warning!="") {
 						warning+="\r\n";
 					}
 					warning+="Initial max date must be in the past.";
 				}
-				if(PIn.PDate(textDateInitialUpper.Text).Year<1900) {
+				if(PIn.Date(textDateInitialUpper.Text).Year<1900) {
 					if(warning!="") {
 						warning+="\r\n";
 					}
@@ -876,13 +876,13 @@ namespace OpenDental{
 				warning+="Mand prosth not indicated.";
 			}
 			if(textDateInitialLower.Text!=""){
-				if(PIn.PDate(textDateInitialLower.Text)>DateTime.Today){
+				if(PIn.Date(textDateInitialLower.Text)>DateTime.Today){
 					if(warning!=""){
 						warning+="\r\n";
 					}
 					warning+="Initial mand date must be in the past.";
 				}
-				if(PIn.PDate(textDateInitialLower.Text).Year<1900){
+				if(PIn.Date(textDateInitialLower.Text).Year<1900){
 					if(warning!=""){
 						warning+="\r\n";
 					}
@@ -996,7 +996,7 @@ namespace OpenDental{
 			CanCur.EligibilityCode=listEligibilityCode.SelectedIndex+1;
 			CanCur.SchoolName=textSchoolName.Text;
 			CanCur.PayeeCode=listPayeeCode.SelectedIndex+1;
-			ClaimCur.AccidentDate=PIn.PDate(textAccidentDate.Text);
+			ClaimCur.AccidentDate=PIn.Date(textAccidentDate.Text);
 			//CanCur.CardSequenceNumber=PIn.PInt(textCardSequenceNumber.Text);
 			//max prosth-----------------------------------------------------------------------------------------------------
 			if(radioMaxProsthYes.Checked) {
@@ -1008,7 +1008,7 @@ namespace OpenDental{
 			if(radioMandProsthX.Checked) {
 				CanCur.IsInitialUpper="X";
 			}
-			CanCur.DateInitialUpper=PIn.PDate(textDateInitialUpper.Text);
+			CanCur.DateInitialUpper=PIn.Date(textDateInitialUpper.Text);
 			CanCur.MaxProsthMaterial=comboMaxProsthMaterial.SelectedIndex;
 			//mand prosth-----------------------------------------------------------------------------------------------------
 			if(radioMandProsthYes.Checked) {
@@ -1020,7 +1020,7 @@ namespace OpenDental{
 			if(radioMandProsthX.Checked) {
 				CanCur.IsInitialLower="X";
 			}
-			CanCur.DateInitialLower=PIn.PDate(textDateInitialLower.Text);
+			CanCur.DateInitialLower=PIn.Date(textDateInitialLower.Text);
 			CanCur.MandProsthMaterial=comboMandProsthMaterial.SelectedIndex;
 			CanadianExtracts.UpdateForClaim(ClaimCur.ClaimNum,MissingList);
 			CanadianClaims.Update(CanCur);

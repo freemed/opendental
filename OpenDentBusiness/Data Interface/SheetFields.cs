@@ -24,7 +24,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),sheet);
 				return;
 			}
-			string command="SELECT * FROM sheetfield WHERE SheetNum="+POut.PLong(sheet.SheetNum)
+			string command="SELECT * FROM sheetfield WHERE SheetNum="+POut.Long(sheet.SheetNum)
 				+" ORDER BY SheetFieldNum";//the ordering is CRITICAL because the signature key is based on order.
 			sheet.SheetFields=new List<SheetField>(DataObjectFactory<SheetField>.CreateObjects(command));
 			//so parameters will also be in the field list, but they will just be ignored from here on out.
@@ -79,8 +79,8 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),drawingList,sheetNum);
 				return;
 			}
-			string command="DELETE FROM sheetfield WHERE SheetNum="+POut.PLong(sheetNum)
-				+" AND FieldType="+POut.PLong((int)SheetFieldType.Drawing);
+			string command="DELETE FROM sheetfield WHERE SheetNum="+POut.Long(sheetNum)
+				+" AND FieldType="+POut.Long((int)SheetFieldType.Drawing);
 			Db.NonQ(command);
 			foreach(SheetField field in drawingList){
 				WriteObject(field);

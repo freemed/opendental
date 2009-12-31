@@ -325,14 +325,14 @@ namespace OpenDental{
 				MsgBox.Show(this,"Start date cannot be left blank.");
 				return;
 			}
-			if(PIn.PDate(textDateStart.Text)<DateTime.Today.AddMonths(-1)){
+			if(PIn.Date(textDateStart.Text)<DateTime.Today.AddMonths(-1)){
 				MsgBox.Show(this,"Start date cannot be more than a month in the past.  But you can still enter previous charges manually in the account.");
 				return;
 			}
 			RepeatCur.ProcCode=textCode.Text;
-			RepeatCur.ChargeAmt=PIn.PDouble(textChargeAmt.Text);
-			RepeatCur.DateStart=PIn.PDate(textDateStart.Text);
-			RepeatCur.DateStop=PIn.PDate(textDateStop.Text);
+			RepeatCur.ChargeAmt=PIn.Double(textChargeAmt.Text);
+			RepeatCur.DateStart=PIn.Date(textDateStart.Text);
+			RepeatCur.DateStop=PIn.Date(textDateStop.Text);
 			RepeatCur.Note=textNote.Text;
 			if(IsNew){
 				RepeatCharges.Insert(RepeatCur);

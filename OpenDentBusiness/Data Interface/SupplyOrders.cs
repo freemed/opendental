@@ -16,7 +16,7 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<List<SupplyOrder>>(MethodBase.GetCurrentMethod(),supplierNum);
 			}
 			string command="SELECT * FROM supplyorder "
-				+"WHERE SupplierNum="+POut.PLong(supplierNum)
+				+"WHERE SupplierNum="+POut.Long(supplierNum)
 				+" ORDER BY DatePlaced";
 			return new List<SupplyOrder>(DataObjectFactory<SupplyOrder>.CreateObjects(command));
 		}
@@ -39,7 +39,7 @@ namespace OpenDentBusiness{
 			}
 			//validate that not already in use-no
 			//delete associated orderItems
-			string command="DELETE FROM supplyorderitem WHERE SupplyOrderNum="+POut.PLong(order.SupplyOrderNum);
+			string command="DELETE FROM supplyorderitem WHERE SupplyOrderNum="+POut.Long(order.SupplyOrderNum);
 			Db.NonQ(command);
 			DataObjectFactory<SupplyOrder>.DeleteObject(order);
 		}

@@ -36,22 +36,22 @@ namespace OpenDentBusiness {
 			List<Def> list=new List<Def>();
 			Def def;
 			for(int i=0;i<table.Rows.Count;i++) {
-				if(PIn.PLong(table.Rows[i][1].ToString())!=catIndex) {
+				if(PIn.Long(table.Rows[i][1].ToString())!=catIndex) {
 					continue;
 				}
-				if(PIn.PBool(table.Rows[i][6].ToString())//if is hidden
+				if(PIn.Bool(table.Rows[i][6].ToString())//if is hidden
 					&& !includeHidden)//and we don't want to include hidden
 				{
 					continue;
 				}
 				def=new Def();
-				def.DefNum    = PIn.PLong(table.Rows[i][0].ToString());
-				def.Category  = (DefCat)PIn.PLong(table.Rows[i][1].ToString());
-				def.ItemOrder = PIn.PInt(table.Rows[i][2].ToString());
-				def.ItemName  = PIn.PString(table.Rows[i][3].ToString());
-				def.ItemValue = PIn.PString(table.Rows[i][4].ToString());
-				def.ItemColor = Color.FromArgb(PIn.PInt(table.Rows[i][5].ToString()));
-				def.IsHidden  = PIn.PBool(table.Rows[i][6].ToString());
+				def.DefNum    = PIn.Long(table.Rows[i][0].ToString());
+				def.Category  = (DefCat)PIn.Long(table.Rows[i][1].ToString());
+				def.ItemOrder = PIn.Int(table.Rows[i][2].ToString());
+				def.ItemName  = PIn.String(table.Rows[i][3].ToString());
+				def.ItemValue = PIn.String(table.Rows[i][4].ToString());
+				def.ItemColor = Color.FromArgb(PIn.Int(table.Rows[i][5].ToString()));
+				def.IsHidden  = PIn.Bool(table.Rows[i][6].ToString());
 				list.Add(def);
 			}
 			return list.ToArray();
@@ -70,13 +70,13 @@ namespace OpenDentBusiness {
 			Def[] List=new Def[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++){
 				List[i]=new Def();
-				List[i].DefNum    = PIn.PLong   (table.Rows[i][0].ToString());
-				List[i].Category  = (DefCat)PIn.PLong   (table.Rows[i][1].ToString());
-				List[i].ItemOrder = PIn.PInt   (table.Rows[i][2].ToString());
-				List[i].ItemName  = PIn.PString(table.Rows[i][3].ToString());
-				List[i].ItemValue = PIn.PString(table.Rows[i][4].ToString());
-				List[i].ItemColor = Color.FromArgb(PIn.PInt(table.Rows[i][5].ToString()));
-				List[i].IsHidden  = PIn.PBool  (table.Rows[i][6].ToString());
+				List[i].DefNum    = PIn.Long   (table.Rows[i][0].ToString());
+				List[i].Category  = (DefCat)PIn.Long   (table.Rows[i][1].ToString());
+				List[i].ItemOrder = PIn.Int   (table.Rows[i][2].ToString());
+				List[i].ItemName  = PIn.String(table.Rows[i][3].ToString());
+				List[i].ItemValue = PIn.String(table.Rows[i][4].ToString());
+				List[i].ItemColor = Color.FromArgb(PIn.Int(table.Rows[i][5].ToString()));
+				List[i].IsHidden  = PIn.Bool  (table.Rows[i][6].ToString());
 			}
 			return List;
 		}
@@ -88,13 +88,13 @@ namespace OpenDentBusiness {
 				return;
 			}
 			string command = "UPDATE definition SET "
-				+ "Category = '"  +POut.PLong((int)def.Category)+"'"
-				+",ItemOrder = '" +POut.PLong(def.ItemOrder)+"'"
-				+",ItemName = '"  +POut.PString(def.ItemName)+"'"
-				+",ItemValue = '" +POut.PString(def.ItemValue)+"'"
-				+",ItemColor = '" +POut.PLong(def.ItemColor.ToArgb())+"'"
-				+",IsHidden = '"  +POut.PBool(def.IsHidden)+"'"
-				+"WHERE defnum = '"+POut.PLong(def.DefNum)+"'";
+				+ "Category = '"  +POut.Long((int)def.Category)+"'"
+				+",ItemOrder = '" +POut.Long(def.ItemOrder)+"'"
+				+",ItemName = '"  +POut.String(def.ItemName)+"'"
+				+",ItemValue = '" +POut.String(def.ItemValue)+"'"
+				+",ItemColor = '" +POut.Long(def.ItemColor.ToArgb())+"'"
+				+",IsHidden = '"  +POut.Bool(def.IsHidden)+"'"
+				+"WHERE defnum = '"+POut.Long(def.DefNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -114,15 +114,15 @@ namespace OpenDentBusiness {
 			command+="Category,ItemOrder,"
 				+"ItemName,ItemValue,ItemColor,IsHidden) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PLong(def.DefNum)+", ";
+				command+=POut.Long(def.DefNum)+", ";
 			}
 			command+=
-				 "'"+POut.PLong((int)def.Category)+"', "
-				+"'"+POut.PLong(def.ItemOrder)+"', "
-				+"'"+POut.PString(def.ItemName)+"', "
-				+"'"+POut.PString(def.ItemValue)+"', "
-				+"'"+POut.PLong(def.ItemColor.ToArgb())+"', "
-				+"'"+POut.PBool(def.IsHidden)+"')";
+				 "'"+POut.Long((int)def.Category)+"', "
+				+"'"+POut.Long(def.ItemOrder)+"', "
+				+"'"+POut.String(def.ItemName)+"', "
+				+"'"+POut.String(def.ItemValue)+"', "
+				+"'"+POut.Long(def.ItemColor.ToArgb())+"', "
+				+"'"+POut.Bool(def.IsHidden)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -141,15 +141,15 @@ namespace OpenDentBusiness {
 			if(def.Category!=DefCat.SupplyCats){
 				throw new ApplicationException("NOT Allowed to delete this type of def.");
 			}
-			string command="SELECT COUNT(*) FROM supply WHERE Category="+POut.PLong(def.DefNum);
+			string command="SELECT COUNT(*) FROM supply WHERE Category="+POut.Long(def.DefNum);
 			if(Db.GetCount(command)!="0"){
 				throw new ApplicationException(Lans.g("Defs","Def is in use.  Not allowed to delete."));
 			}
-			command="DELETE FROM definition WHERE DefNum="+POut.PLong(def.DefNum);
+			command="DELETE FROM definition WHERE DefNum="+POut.Long(def.DefNum);
 			Db.NonQ(command);
 			command="UPDATE definition SET ItemOrder=ItemOrder-1 "
-				+"WHERE Category="+POut.PLong((int)def.Category)
-				+" AND ItemOrder > "+POut.PLong(def.ItemOrder);
+				+"WHERE Category="+POut.Long((int)def.Category)
+				+" AND ItemOrder > "+POut.Long(def.ItemOrder);
 			Db.NonQ(command);
 		}
 

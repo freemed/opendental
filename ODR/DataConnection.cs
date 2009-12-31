@@ -177,7 +177,7 @@ namespace ODR{
 					cmd.CommandText="SELECT LAST_INSERT_ID()";
 					dr=(MySqlDataReader)cmd.ExecuteReader();
 					if(dr.Read()) {
-						InsertID=PIn.PLong(dr[0].ToString());
+						InsertID=PIn.Long(dr[0].ToString());
 					}
 				}
 			}

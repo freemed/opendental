@@ -40,11 +40,11 @@ namespace OpenDentBusiness{
 			list=new List<ProcCodeNote>();
 			for(int i=0;i<table.Rows.Count;i++) {
 				ProcCodeNote note=new ProcCodeNote();
-				note.ProcCodeNoteNum=PIn.PLong(table.Rows[i][0].ToString());
-				note.CodeNum=PIn.PLong(table.Rows[i][1].ToString());
-				note.ProvNum=PIn.PLong(table.Rows[i][2].ToString());
-				note.Note=PIn.PString(table.Rows[i][3].ToString());
-				note.ProcTime=PIn.PString(table.Rows[i][4].ToString());
+				note.ProcCodeNoteNum=PIn.Long(table.Rows[i][0].ToString());
+				note.CodeNum=PIn.Long(table.Rows[i][1].ToString());
+				note.ProvNum=PIn.Long(table.Rows[i][2].ToString());
+				note.Note=PIn.String(table.Rows[i][3].ToString());
+				note.ProcTime=PIn.String(table.Rows[i][4].ToString());
 				list.Add(note);
 			}
 		}
@@ -55,7 +55,7 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<List<ProcCodeNote>>(MethodBase.GetCurrentMethod(),codeNum);
 			}
 			List<ProcCodeNote> tempList=list;
-			string command="SELECT * FROM proccodenote WHERE CodeNum="+POut.PLong(codeNum);
+			string command="SELECT * FROM proccodenote WHERE CodeNum="+POut.Long(codeNum);
 			DataTable table=Db.GetTable(command);
 			FillCache(table);
 			List<ProcCodeNote> result=list;
@@ -78,13 +78,13 @@ namespace OpenDentBusiness{
 			}
 			command+="CodeNum,ProvNum,Note,ProcTime) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PLong(note.ProcCodeNoteNum)+", ";
+				command+=POut.Long(note.ProcCodeNoteNum)+", ";
 			}
 			command+=
-				 "'"+POut.PLong   (note.CodeNum)+"', "
-				+"'"+POut.PLong   (note.ProvNum)+"', "
-				+"'"+POut.PString(note.Note)+"', "
-				+"'"+POut.PString(note.ProcTime)+"')";
+				 "'"+POut.Long   (note.CodeNum)+"', "
+				+"'"+POut.Long   (note.ProvNum)+"', "
+				+"'"+POut.String(note.Note)+"', "
+				+"'"+POut.String(note.ProcTime)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -101,11 +101,11 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command="UPDATE proccodenote SET " 
-				+ "CodeNum = '"    +POut.PLong   (note.CodeNum)+"'"
-				+ ",ProvNum = '"   +POut.PLong   (note.ProvNum)+"'"
-				+ ",Note = '"      +POut.PString(note.Note)+"'"
-				+ ",ProcTime = '"  +POut.PString(note.ProcTime)+"'"
-				+" WHERE ProcCodeNoteNum = "+POut.PLong(note.ProcCodeNoteNum);
+				+ "CodeNum = '"    +POut.Long   (note.CodeNum)+"'"
+				+ ",ProvNum = '"   +POut.Long   (note.ProvNum)+"'"
+				+ ",Note = '"      +POut.String(note.Note)+"'"
+				+ ",ProcTime = '"  +POut.String(note.ProcTime)+"'"
+				+" WHERE ProcCodeNoteNum = "+POut.Long(note.ProcCodeNoteNum);
 			Db.NonQ(command);
 		}
 
@@ -114,7 +114,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),procCodeNoteNum);
 				return;
 			}
-			string command="DELETE FROM proccodenote WHERE ProcCodeNoteNum = "+POut.PLong(procCodeNoteNum);
+			string command="DELETE FROM proccodenote WHERE ProcCodeNoteNum = "+POut.Long(procCodeNoteNum);
 			Db.NonQ(command);
 		}
 

@@ -478,7 +478,7 @@ namespace OpenDentBusiness {
 			for(int i=0;i<table.Rows.Count;i++) {
 				command="DELETE FROM claim WHERE ClaimNum="+table.Rows[i][0].ToString();
 				Db.NonQ(command);
-				Lim=Patients.GetLim(PIn.PLong(table.Rows[i][1].ToString()));
+				Lim=Patients.GetLim(PIn.Long(table.Rows[i][1].ToString()));
 				log+=Lans.g("FormDatabaseMaintenance","Claim with invalid PlanNum deleted for ")+Lim.GetNameLF()+"\r\n";
 				numberFixed++;
 			}
@@ -519,7 +519,7 @@ namespace OpenDentBusiness {
 				OR sumwo-claim.WriteOff < -.01";
 			table=Db.GetTable(command);
 			for(int i=0;i<table.Rows.Count;i++) {
-				command="UPDATE claim SET WriteOff='"+POut.PDouble(PIn.PDouble(table.Rows[i]["sumwo"].ToString()))+"' "
+				command="UPDATE claim SET WriteOff='"+POut.Double(PIn.Double(table.Rows[i]["sumwo"].ToString()))+"' "
 					+"WHERE ClaimNum="+table.Rows[i]["ClaimNum"].ToString();
 				Db.NonQ(command);
 			}
@@ -546,7 +546,7 @@ namespace OpenDentBusiness {
 					HAVING _sumpay!=_checkamt";
 				table=Db.GetTable(command);
 				for(int i=0;i<table.Rows.Count;i++) {
-					command="UPDATE claimpayment SET CheckAmt='"+POut.PDouble(PIn.PDouble(table.Rows[i]["_sumpay"].ToString()))+"' "
+					command="UPDATE claimpayment SET CheckAmt='"+POut.Double(PIn.Double(table.Rows[i]["_sumpay"].ToString()))+"' "
 						+"WHERE ClaimPaymentNum="+table.Rows[i]["ClaimPaymentNum"].ToString();
 					Db.NonQ(command);
 				}
@@ -565,12 +565,12 @@ namespace OpenDentBusiness {
 					if(i==0) {
 						log+=Lans.g("FormDatabaseMaintenance","PRINT THIS FOR REFERENCE. Deposit sums recalculated:")+"\r\n";
 					}
-					DateTime date=PIn.PDate(table.Rows[i]["DateDeposit"].ToString());
-					Double oldval=PIn.PDouble(table.Rows[i]["Amount"].ToString());
-					Double newval=PIn.PDouble(table.Rows[i]["_sum"].ToString());
+					DateTime date=PIn.Date(table.Rows[i]["DateDeposit"].ToString());
+					Double oldval=PIn.Double(table.Rows[i]["Amount"].ToString());
+					Double newval=PIn.Double(table.Rows[i]["_sum"].ToString());
 					log+=date.ToShortDateString()+" "+Lans.g("FormDatabaseMaintenance","OldSum:")+oldval.ToString("c")
 						+", "+Lans.g("FormDatabaseMaintenance","NewSum:")+newval.ToString("c")+"\r\n";
-					command="UPDATE deposit SET Amount='"+POut.PDouble(PIn.PDouble(table.Rows[i]["_sum"].ToString()))+"' "
+					command="UPDATE deposit SET Amount='"+POut.Double(PIn.Double(table.Rows[i]["_sum"].ToString()))+"' "
 						+"WHERE DepositNum="+table.Rows[i]["DepositNum"].ToString();
 					Db.NonQ(command);
 				}
@@ -602,7 +602,7 @@ namespace OpenDentBusiness {
 					WHERE cp.ClaimPaymentNum IN (SELECT tcp.ClaimPaymentNum FROM tempclaimpaymenttest tcp)";
 				Db.NonQ(command);
 				command="SELECT COUNT(*) FROM tempclaimpaymenttest";
-				numberFixed=PIn.PInt(Db.GetTable(command).Rows[0][0].ToString());
+				numberFixed=PIn.Int(Db.GetTable(command).Rows[0][0].ToString());
 				command="DROP TABLE tempclaimpaymenttest PURGE";
 				Db.NonQ(command);
 				if(numberFixed>0||verbose) {
@@ -641,9 +641,9 @@ namespace OpenDentBusiness {
 				if(numberFixed>0) {
 					log+=Lans.g("FormDatabaseMaintenance","PRINT THIS FOR REFERENCE. Deposit sums recalculated:")+"\r\n";
 					for(int i=0;i<table.Rows.Count;i++) {
-						DateTime date=PIn.PDate(table.Rows[i]["DateDeposit"].ToString());
-						Double oldval=PIn.PDouble(table.Rows[i]["Amount"].ToString());
-						Double newval=PIn.PDouble(table.Rows[i]["sum_"].ToString());
+						DateTime date=PIn.Date(table.Rows[i]["DateDeposit"].ToString());
+						Double oldval=PIn.Double(table.Rows[i]["Amount"].ToString());
+						Double newval=PIn.Double(table.Rows[i]["sum_"].ToString());
 						log+=date.ToShortDateString()+" "+Lans.g("FormDatabaseMaintenance","OldSum:")+oldval.ToString("c")
 							+", "+Lans.g("FormDatabaseMaintenance","NewSum:")+newval.ToString("c")+"\r\n";
 					}
@@ -695,8 +695,8 @@ namespace OpenDentBusiness {
 			table=Db.GetTable(command);
 			DateTime datecp;
 			for(int i=0;i<table.Rows.Count;i++) {
-				datecp=PIn.PDate(table.Rows[i][1].ToString());
-				command="UPDATE claimproc SET DateCP="+POut.PDate(datecp)
+				datecp=PIn.Date(table.Rows[i][1].ToString());
+				command="UPDATE claimproc SET DateCP="+POut.Date(datecp)
 					+" WHERE ClaimProcNum="+table.Rows[i][0].ToString();
 				Db.NonQ(command);
 			}
@@ -735,7 +735,7 @@ namespace OpenDentBusiness {
 			for(int i=0;i<table.Rows.Count;i++) {
 				command="DELETE FROM claimproc WHERE ClaimProcNum="+table.Rows[i][0].ToString();
 				Db.NonQ(command);
-				Lim=Patients.GetLim(PIn.PLong(table.Rows[i][1].ToString()));
+				Lim=Patients.GetLim(PIn.Long(table.Rows[i][1].ToString()));
 				log+=Lans.g("FormDatabaseMaintenance","Claimproc with invalid PlanNum deleted for ")+Lim.GetNameLF()+"\r\n";
 				numberFixed++;
 			}
@@ -869,7 +869,7 @@ namespace OpenDentBusiness {
 			command=@"UPDATE clockevent SET TimeDisplayed=TimeEntered WHERE TimeDisplayed > NOW()";
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				command=@"UPDATE clockevent SET TimeDisplayed=TimeEntered WHERE TimeDisplayed > "
-					+POut.PDateT(MiscData.GetNowDateTime());
+					+POut.DateT(MiscData.GetNowDateTime());
 			}
 			int numberFixed=Db.NonQ32(command);
 			if(numberFixed>0 || verbose) {
@@ -886,7 +886,7 @@ namespace OpenDentBusiness {
 			command="SELECT DocNum FROM document WHERE DocCategory=0";
 			table=Db.GetTable(command);
 			for(int i=0;i<table.Rows.Count;i++) {
-				command="UPDATE document SET DocCategory="+POut.PLong(DefC.Short[(int)DefCat.ImageCats][0].DefNum)
+				command="UPDATE document SET DocCategory="+POut.Long(DefC.Short[(int)DefCat.ImageCats][0].DefNum)
 					+" WHERE DocNum="+table.Rows[i][0].ToString();
 				Db.NonQ(command);
 			}
@@ -936,7 +936,7 @@ namespace OpenDentBusiness {
 				Carrier carrier=new Carrier();
 				carrier.CarrierName="unknown";
 				Carriers.Insert(carrier);
-				command="UPDATE insplan SET CarrierNum="+POut.PLong(carrier.CarrierNum)
+				command="UPDATE insplan SET CarrierNum="+POut.Long(carrier.CarrierNum)
 					+" WHERE CarrierNum=0";
 				Db.NonQ(command);
 			}
@@ -952,7 +952,7 @@ namespace OpenDentBusiness {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
 			string log="";
-			command="UPDATE insplan SET ClaimFormNum="+POut.PLong(PrefC.GetLong(PrefName.DefaultClaimForm))
+			command="UPDATE insplan SET ClaimFormNum="+POut.Long(PrefC.GetLong(PrefName.DefaultClaimForm))
 				+" WHERE ClaimFormNum=0";
 			int numberFixed=Db.NonQ32(command);
 			if(numberFixed>0 || verbose) {
@@ -1023,7 +1023,7 @@ namespace OpenDentBusiness {
 			Patient pat;
 			Patient old;
 			for(int i=0;i<table.Rows.Count;i++) {
-				pat=Patients.GetPat(PIn.PLong(table.Rows[i][0].ToString()));
+				pat=Patients.GetPat(PIn.Long(table.Rows[i][0].ToString()));
 				old=pat.Copy();
 				pat.LName=pat.LName+Lans.g("FormDatabaseMaintenance","DELETED");
 				pat.PatStatus=PatientStatus.Archived;
@@ -1083,7 +1083,7 @@ namespace OpenDentBusiness {
 			}
 			string log="";
 			//I would rather set the provnum to that of the patient, but it's more complex.
-			command="UPDATE payplancharge SET ProvNum="+POut.PLong(PrefC.GetLong(PrefName.PracticeDefaultProv))
+			command="UPDATE payplancharge SET ProvNum="+POut.Long(PrefC.GetLong(PrefName.PracticeDefaultProv))
 				+" WHERE ProvNum=0";
 			int numberFixed=Db.NonQ32(command);
 			if(numberFixed>0 || verbose) {
@@ -1149,7 +1149,7 @@ namespace OpenDentBusiness {
 			//If the program locks up when trying to create a deposit slip, it's because someone removed the start date from the deposit edit window. Run this query to get back in.
 			DateTime date=PrefC.GetDate(PrefName.DateDepositsStarted);
 			if(date<DateTime.Now.AddMonths(-1)) {
-				command="UPDATE preference SET ValueString="+POut.PDate(DateTime.Today.AddDays(-21))
+				command="UPDATE preference SET ValueString="+POut.Date(DateTime.Today.AddDays(-21))
 					+" WHERE PrefName='DateDepositsStarted'";
 				Db.NonQ(command);
 				Signals.SetInvalid(InvalidType.Prefs);
@@ -1347,7 +1347,7 @@ namespace OpenDentBusiness {
 			command="SELECT procedurelog.ProcNum FROM procedurelog,claim,claimproc "
 				+"WHERE procedurelog.ProcNum=claimproc.ProcNum "
 				+"AND claim.ClaimNum=claimproc.ClaimNum "
-				+"AND procedurelog.ProcStatus!="+POut.PLong((int)ProcStat.C)+" "//procedure not complete
+				+"AND procedurelog.ProcStatus!="+POut.Long((int)ProcStat.C)+" "//procedure not complete
 				+"AND (claim.ClaimStatus='W' OR claim.ClaimStatus='S' OR claim.ClaimStatus='R') "//waiting, sent, or received
 				+"AND (claim.ClaimType='P' OR claim.ClaimType='S' OR claim.ClaimType='Other')";//pri, sec, or other.  Eliminates preauths.
 			table=Db.GetTable(command);
@@ -1418,10 +1418,10 @@ namespace OpenDentBusiness {
 			}
 			Provider prov;
 			for(int i=0;i<table.Rows.Count;i++) {
-				prov=Providers.GetProv(PIn.PLong(table.Rows[i][1].ToString()));
+				prov=Providers.GetProv(PIn.Long(table.Rows[i][1].ToString()));
 				log+=Lans.g("FormDatabaseMaintenance","Warning!  Hidden provider ")+" "+prov.Abbr+" "
 					+Lans.g("FormDatabaseMaintenance","has claim payments entered as recently as ")
-					+PIn.PDate(table.Rows[i][0].ToString()).ToShortDateString()
+					+PIn.Date(table.Rows[i][0].ToString()).ToShortDateString()
 					+Lans.g("FormDatabaseMaintenance",".  This data will be missing on income reports.")+"\r\n";
 			}
 			return log;
@@ -1437,8 +1437,8 @@ namespace OpenDentBusiness {
 				return log;
 			}
 			command="SELECT FName,LName,COUNT(*) countDups FROM patient LEFT JOIN recall ON recall.PatNum=patient.PatNum "
-				+"AND (recall.RecallTypeNum="+POut.PLong(RecallTypes.PerioType)+" "
-				+"OR recall.RecallTypeNum="+POut.PLong(RecallTypes.ProphyType)+") "
+				+"AND (recall.RecallTypeNum="+POut.Long(RecallTypes.PerioType)+" "
+				+"OR recall.RecallTypeNum="+POut.Long(RecallTypes.ProphyType)+") "
 				+"GROUP BY patient.PatNum HAVING countDups>1";
 			table=Db.GetTable(command);
 			if(table.Rows.Count==0) {
@@ -1549,7 +1549,7 @@ namespace OpenDentBusiness {
 			string log="";
 			command=@"DELETE FROM signal WHERE SigDateTime > NOW() OR AckTime > NOW()";
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				string nowDateTime=POut.PDateT(MiscData.GetNowDateTime());
+				string nowDateTime=POut.DateT(MiscData.GetNowDateTime());
 				command=@"DELETE FROM signal WHERE SigDateTime > "+nowDateTime+" OR AckTime > "+nowDateTime;
 			}
 			int numberFixed=Db.NonQ32(command);

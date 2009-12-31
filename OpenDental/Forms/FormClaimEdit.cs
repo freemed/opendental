@@ -3198,7 +3198,7 @@ namespace OpenDental{
 
 		private void gridPay_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			long tempClaimNum=ClaimCur.ClaimNum;
-			ClaimPayment claimPaymentCur=ClaimPayments.GetOne(PIn.PLong(tablePayments.Rows[e.Row]["ClaimPaymentNum"].ToString()));
+			ClaimPayment claimPaymentCur=ClaimPayments.GetOne(PIn.Long(tablePayments.Rows[e.Row]["ClaimPaymentNum"].ToString()));
 			FormClaimPayEdit FormCPE=new FormClaimPayEdit(claimPaymentCur);
 			//Security handled in that form.  Anyone can view.
 			FormCPE.OriginatingClaimNum=ClaimCur.ClaimNum;
@@ -3594,7 +3594,7 @@ namespace OpenDental{
 			ClaimCur.Attachments.Add(FormI.ClaimAttachNew);
 			FillAttachments();
 			if(textRadiographs.errorProvider1.GetError(textRadiographs)==""){
-				int radiographs=PIn.PInt(textRadiographs.Text);
+				int radiographs=PIn.Int(textRadiographs.Text);
 				radiographs++;
 				textRadiographs.Text=radiographs.ToString();
 			}
@@ -4039,12 +4039,12 @@ namespace OpenDental{
 				return;
 			}
 			//patnum
-			ClaimCur.DateService=PIn.PDate(textDateService.Text);
+			ClaimCur.DateService=PIn.Date(textDateService.Text);
 			if(textDateSent.Text==""){
 				ClaimCur.DateSent=DateTime.MinValue;
 			}
 			else{
-				ClaimCur.DateSent=PIn.PDate(textDateSent.Text);
+				ClaimCur.DateSent=PIn.Date(textDateSent.Text);
 			}
 			bool wasSentOrReceived=false;
 			switch(listClaimStatus.SelectedIndex){
@@ -4073,7 +4073,7 @@ namespace OpenDental{
 				ClaimCur.DateReceived=DateTime.MinValue;
 			}
 			else{
-				ClaimCur.DateReceived=PIn.PDate(textDateRec.Text);
+				ClaimCur.DateReceived=PIn.Date(textDateRec.Text);
 			}
 			//planNum
 			//patRelats will always be selected
@@ -4084,7 +4084,7 @@ namespace OpenDental{
 			}
 			ClaimCur.PreAuthString=textPreAuth.Text;
 			//isprosthesis handled earlier
-			ClaimCur.PriorDate=PIn.PDate(textPriorDate.Text);
+			ClaimCur.PriorDate=PIn.Date(textPriorDate.Text);
 			ClaimCur.ReasonUnderPaid=textReasonUnder.Text;
 			ClaimCur.ClaimNote=textNote.Text;
 			//ispreauth
@@ -4092,8 +4092,8 @@ namespace OpenDental{
 				ClaimCur.ProvBill=ProviderC.List[comboProvBill.SelectedIndex].ProvNum;
 			}
 			ClaimCur.IsOrtho=checkIsOrtho.Checked;
-			ClaimCur.OrthoRemainM=PIn.PInt(textOrthoRemainM.Text);
-			ClaimCur.OrthoDate=PIn.PDate(textOrthoDate.Text);
+			ClaimCur.OrthoRemainM=PIn.Int(textOrthoRemainM.Text);
+			ClaimCur.OrthoDate=PIn.Date(textOrthoDate.Text);
 			ClaimCur.RefNumString=textRefNum.Text;
 			ClaimCur.PlaceService=(PlaceOfService)comboPlaceService.SelectedIndex;
 			ClaimCur.EmployRelated=(YN)comboEmployRelated.SelectedIndex;
@@ -4111,7 +4111,7 @@ namespace OpenDental{
 					ClaimCur.AccidentRelated="O";
 					break;
 			}
-			ClaimCur.AccidentDate=PIn.PDate(textAccidentDate.Text);
+			ClaimCur.AccidentDate=PIn.Date(textAccidentDate.Text);
 			ClaimCur.AccidentST=textAccidentST.Text;
 			if(comboClinic.SelectedIndex==0){//none
 				ClaimCur.ClinicNum=0;
@@ -4120,9 +4120,9 @@ namespace OpenDental{
 				ClaimCur.ClinicNum=Clinics.List[comboClinic.SelectedIndex-1].ClinicNum;
 			}
 			//attachments
-			ClaimCur.Radiographs=PIn.PInt(textRadiographs.Text);
-			ClaimCur.AttachedImages=PIn.PInt(textAttachImages.Text);
-			ClaimCur.AttachedModels=PIn.PInt(textAttachModels.Text);
+			ClaimCur.Radiographs=PIn.Int(textRadiographs.Text);
+			ClaimCur.AttachedImages=PIn.Int(textAttachImages.Text);
+			ClaimCur.AttachedModels=PIn.Int(textAttachModels.Text);
 			List<string> flags=new List<string>();
 			if(checkAttachEoB.Checked){
 				flags.Add("EoB");

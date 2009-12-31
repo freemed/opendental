@@ -14,20 +14,20 @@ namespace OpenDentBusiness{
 			}
 			string command=
 				"SELECT * FROM refattach"
-				+" WHERE PatNum = "+POut.PLong(patNum)
+				+" WHERE PatNum = "+POut.Long(patNum)
 				+" ORDER BY itemorder";
 			DataTable table=Db.GetTable(command);
 			RefAttach[] List=new RefAttach[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new RefAttach();
-				List[i].RefAttachNum= PIn.PLong(table.Rows[i][0].ToString());
-				List[i].ReferralNum = PIn.PLong(table.Rows[i][1].ToString());
-				List[i].PatNum      = PIn.PLong(table.Rows[i][2].ToString());
-				List[i].ItemOrder   = PIn.PInt(table.Rows[i][3].ToString());
-				List[i].RefDate     = PIn.PDate(table.Rows[i][4].ToString());
-				List[i].IsFrom      = PIn.PBool(table.Rows[i][5].ToString());
-				List[i].RefToStatus = (ReferralToStatus)PIn.PLong(table.Rows[i][6].ToString());
-				List[i].Note        = PIn.PString(table.Rows[i][7].ToString());
+				List[i].RefAttachNum= PIn.Long(table.Rows[i][0].ToString());
+				List[i].ReferralNum = PIn.Long(table.Rows[i][1].ToString());
+				List[i].PatNum      = PIn.Long(table.Rows[i][2].ToString());
+				List[i].ItemOrder   = PIn.Int(table.Rows[i][3].ToString());
+				List[i].RefDate     = PIn.Date(table.Rows[i][4].ToString());
+				List[i].IsFrom      = PIn.Bool(table.Rows[i][5].ToString());
+				List[i].RefToStatus = (ReferralToStatus)PIn.Long(table.Rows[i][6].ToString());
+				List[i].Note        = PIn.String(table.Rows[i][7].ToString());
 			}
 			return List;
 		}
@@ -39,14 +39,14 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command= "UPDATE refattach SET " 
-				+ "ReferralNum = '" +POut.PLong   (attach.ReferralNum)+"'"
-				+ ",PatNum = '"     +POut.PLong   (attach.PatNum)+"'"
-				+ ",ItemOrder = '"  +POut.PLong   (attach.ItemOrder)+"'"
-				+ ",RefDate = "    +POut.PDate  (attach.RefDate)
-				+ ",IsFrom = '"     +POut.PBool  (attach.IsFrom)+"'"
-				+ ",RefToStatus = '"+POut.PLong   ((int)attach.RefToStatus)+"'"
-				+ ",Note = '"       +POut.PString(attach.Note)+"'"
-				+" WHERE RefAttachNum = '" +POut.PLong(attach.RefAttachNum)+"'";
+				+ "ReferralNum = '" +POut.Long   (attach.ReferralNum)+"'"
+				+ ",PatNum = '"     +POut.Long   (attach.PatNum)+"'"
+				+ ",ItemOrder = '"  +POut.Long   (attach.ItemOrder)+"'"
+				+ ",RefDate = "    +POut.Date  (attach.RefDate)
+				+ ",IsFrom = '"     +POut.Bool  (attach.IsFrom)+"'"
+				+ ",RefToStatus = '"+POut.Long   ((int)attach.RefToStatus)+"'"
+				+ ",Note = '"       +POut.String(attach.Note)+"'"
+				+" WHERE RefAttachNum = '" +POut.Long(attach.RefAttachNum)+"'";
  			Db.NonQ(command);
 		}
 
@@ -65,15 +65,15 @@ namespace OpenDentBusiness{
 			}			
 			command+="ReferralNum,PatNum,ItemOrder,RefDate,IsFrom,RefToStatus,Note) VALUES (";
 			if(PrefC.RandomKeys){
-				command+="'"+POut.PLong(attach.RefAttachNum)+"', ";
+				command+="'"+POut.Long(attach.RefAttachNum)+"', ";
 			}
-			command+="'"+POut.PLong(attach.ReferralNum)+"', "
-				+"'"+POut.PLong(attach.PatNum)+"', "
-				+"'"+POut.PLong(attach.ItemOrder)+"', "
-				+POut.PDate(attach.RefDate)+", "
-				+"'"+POut.PBool(attach.IsFrom)+"', "
-				+"'"+POut.PLong ((int)attach.RefToStatus)+"', "
-				+"'"+POut.PString(attach.Note)+"')";
+			command+="'"+POut.Long(attach.ReferralNum)+"', "
+				+"'"+POut.Long(attach.PatNum)+"', "
+				+"'"+POut.Long(attach.ItemOrder)+"', "
+				+POut.Date(attach.RefDate)+", "
+				+"'"+POut.Bool(attach.IsFrom)+"', "
+				+"'"+POut.Long ((int)attach.RefToStatus)+"', "
+				+"'"+POut.String(attach.Note)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -120,12 +120,12 @@ namespace OpenDentBusiness{
 				+"FROM patient,refattach,referral " 
 				+"WHERE patient.PatNum=refattach.PatNum "
 				+"AND refattach.ReferralNum=referral.ReferralNum "
-				+"AND refattach.IsFrom="+POut.PBool(IsFrom)
+				+"AND refattach.IsFrom="+POut.Bool(IsFrom)
 				+" AND referral.ReferralNum="+refNum.ToString();
 			DataTable table=Db.GetTable(command);
 			string[] retStr=new string[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++){
-				retStr[i]=PIn.PString(table.Rows[i][0].ToString());
+				retStr[i]=PIn.String(table.Rows[i][0].ToString());
 			}
 			return retStr;
 		}
@@ -137,11 +137,11 @@ namespace OpenDentBusiness{
 			}
 			string command="SELECT ReferralNum "
 				+"FROM refattach " 
-				+"WHERE refattach.PatNum ="+POut.PLong(patNum)+" "
+				+"WHERE refattach.PatNum ="+POut.Long(patNum)+" "
 				+"AND refattach.IsFrom=1 "
 				+"ORDER BY ItemOrder "
 				+"LIMIT 1";
-			return PIn.PLong(Db.GetScalar(command));
+			return PIn.Long(Db.GetScalar(command));
 		}
 
 	}

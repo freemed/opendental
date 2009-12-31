@@ -14,36 +14,36 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<PatientNote>(MethodBase.GetCurrentMethod(),patNum,guarantor);
 			}
-			string command="SELECT COUNT(*) FROM patientnote WHERE patnum = '"+POut.PLong(patNum)+"'";
+			string command="SELECT COUNT(*) FROM patientnote WHERE patnum = '"+POut.Long(patNum)+"'";
 			DataTable table=Db.GetTable(command);
 			if(table.Rows[0][0].ToString()=="0"){
 				InsertRow(patNum);
 			}
 			command ="SELECT PatNum,ApptPhone,Medical,Service,MedicalComp,Treatment,CCNumber,CCExpiration "
-				+"FROM patientnote WHERE patnum ='"+POut.PLong(patNum)+"'";
+				+"FROM patientnote WHERE patnum ='"+POut.Long(patNum)+"'";
 			table=Db.GetTable(command);
 			PatientNote Cur=new PatientNote();
-			Cur.PatNum      = PIn.PLong   (table.Rows[0][0].ToString());
-			Cur.ApptPhone   = PIn.PString(table.Rows[0][1].ToString());
-			Cur.Medical     = PIn.PString(table.Rows[0][2].ToString());
-			Cur.Service     = PIn.PString(table.Rows[0][3].ToString());
-			Cur.MedicalComp = PIn.PString(table.Rows[0][4].ToString());
-			Cur.Treatment   = PIn.PString(table.Rows[0][5].ToString());
-			Cur.CCNumber    = PIn.PString(table.Rows[0][6].ToString());
-			Cur.CCExpiration= PIn.PDate  (table.Rows[0][7].ToString());
+			Cur.PatNum      = PIn.Long   (table.Rows[0][0].ToString());
+			Cur.ApptPhone   = PIn.String(table.Rows[0][1].ToString());
+			Cur.Medical     = PIn.String(table.Rows[0][2].ToString());
+			Cur.Service     = PIn.String(table.Rows[0][3].ToString());
+			Cur.MedicalComp = PIn.String(table.Rows[0][4].ToString());
+			Cur.Treatment   = PIn.String(table.Rows[0][5].ToString());
+			Cur.CCNumber    = PIn.String(table.Rows[0][6].ToString());
+			Cur.CCExpiration= PIn.Date  (table.Rows[0][7].ToString());
 			//fam financial note:
 			command = 
-				"SELECT * FROM patientnote WHERE patnum ='"+POut.PLong(guarantor)+"'";
+				"SELECT * FROM patientnote WHERE patnum ='"+POut.Long(guarantor)+"'";
 			table=Db.GetTable(command);
 			if(table.Rows.Count==0){
 				InsertRow(guarantor);
 			}
 			command = 
 				"SELECT famfinancial "
-				+"FROM patientnote WHERE patnum ='"+POut.PLong(guarantor)+"'";
+				+"FROM patientnote WHERE patnum ='"+POut.Long(guarantor)+"'";
 			//MessageBox.Show(command);
 			table=Db.GetTable(command);
-			Cur.FamFinancial= PIn.PString(table.Rows[0][0].ToString());
+			Cur.FamFinancial= PIn.String(table.Rows[0][0].ToString());
 			return Cur;
 		}
 
@@ -55,18 +55,18 @@ namespace OpenDentBusiness{
 			}
 			string command = "UPDATE patientnote SET "
 				//+ "apptphone = '"   +POut.PString(Cur.ApptPhone)+"'"
-				+ "Medical = '"      +POut.PString(Cur.Medical)+"'"
-				+ ",Service = '"     +POut.PString(Cur.Service)+"'"
-				+ ",MedicalComp = '" +POut.PString(Cur.MedicalComp)+"'"
-				+ ",Treatment = '"   +POut.PString(Cur.Treatment)+"'"
-				+ ",CCNumber = '"    +POut.PString(Cur.CCNumber)+"'"
-				+ ",CCExpiration = "+POut.PDate  (Cur.CCExpiration)
-				+" WHERE patnum = '"+POut.PLong   (Cur.PatNum)+"'";
+				+ "Medical = '"      +POut.String(Cur.Medical)+"'"
+				+ ",Service = '"     +POut.String(Cur.Service)+"'"
+				+ ",MedicalComp = '" +POut.String(Cur.MedicalComp)+"'"
+				+ ",Treatment = '"   +POut.String(Cur.Treatment)+"'"
+				+ ",CCNumber = '"    +POut.String(Cur.CCNumber)+"'"
+				+ ",CCExpiration = "+POut.Date  (Cur.CCExpiration)
+				+" WHERE patnum = '"+POut.Long   (Cur.PatNum)+"'";
 			//MessageBox.Show(command);
 			Db.NonQ(command);
 			command = "UPDATE patientnote SET "
-				+ "famfinancial = '"+POut.PString(Cur.FamFinancial)+"'"
-				+" WHERE patnum = '"+POut.PLong   (guarantor)+"'";
+				+ "famfinancial = '"+POut.String(Cur.FamFinancial)+"'"
+				+" WHERE patnum = '"+POut.Long   (guarantor)+"'";
 			//MessageBox.Show(command);
 			Db.NonQ(command);
 		}

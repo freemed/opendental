@@ -682,7 +682,7 @@ namespace OpenDental{
 				}*/
 				gridMain.SetSelected(false);
 				for(int i=0;i<PtDataTable.Rows.Count;i++){
-					if(PIn.PLong(PtDataTable.Rows[i][0].ToString())==InitialPatNum) {
+					if(PIn.Long(PtDataTable.Rows[i][0].ToString())==InitialPatNum) {
 						gridMain.SetSelected(i,true);
 						break;
 					}
@@ -952,7 +952,7 @@ namespace OpenDental{
 			if(!PrefC.GetBool(PrefName.EasyHidePublicHealth) && comboSite.SelectedIndex!=0) {
 				siteNum=SiteC.List[comboSite.SelectedIndex-1].SiteNum;
 			}
-			DateTime birthdate=PIn.PDate(textBirthdate.Text);//this will frequently be minval.
+			DateTime birthdate=PIn.Date(textBirthdate.Text);//this will frequently be minval.
 			PtDataTable=Patients.GetPtDataTable(limit,textLName.Text,textFName.Text,textHmPhone.Text,
 				textAddress.Text,checkHideInactive.Checked,textCity.Text,textState.Text,
 				textSSN.Text,textPatNum.Text,textChartNumber.Text,billingType,
@@ -1134,7 +1134,7 @@ namespace OpenDental{
 
 		private void PatSelected(){
 			//SelectedPatNum=PIn.PInt(PtDataTable.Rows[grid2.CurrentRowIndex][0].ToString());
-			SelectedPatNum=PIn.PLong(PtDataTable.Rows[gridMain.GetSelectedIndex()][0].ToString());
+			SelectedPatNum=PIn.Long(PtDataTable.Rows[gridMain.GetSelectedIndex()][0].ToString());
 			DialogResult=DialogResult.OK;
 		}
 

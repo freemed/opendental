@@ -21,12 +21,12 @@ namespace OpenDentBusiness{
 			}
 			command+="ClaimNum, DisplayedFileName, ActualFileName) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+="'"+POut.PLong(attach.ClaimAttachNum)+"', ";
+				command+="'"+POut.Long(attach.ClaimAttachNum)+"', ";
 			}
 			command+=
-				 "'"+POut.PLong(attach.ClaimNum)+"', "
-				+"'"+POut.PString(attach.DisplayedFileName)+"', "
-				+"'"+POut.PString(attach.ActualFileName)+"')";
+				 "'"+POut.Long(attach.ClaimNum)+"', "
+				+"'"+POut.String(attach.DisplayedFileName)+"', "
+				+"'"+POut.String(attach.ActualFileName)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}

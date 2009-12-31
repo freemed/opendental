@@ -32,10 +32,10 @@ namespace OpenDentBusiness{
 			list=new UserQuery[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++){
 				list[i]=new UserQuery();
-				list[i].QueryNum    = PIn.PLong   (table.Rows[i][0].ToString());
-				list[i].Description = PIn.PString(table.Rows[i][1].ToString());
-				list[i].FileName    = PIn.PString(table.Rows[i][2].ToString());
-				list[i].QueryText   = PIn.PString(table.Rows[i][3].ToString());
+				list[i].QueryNum    = PIn.Long   (table.Rows[i][0].ToString());
+				list[i].Description = PIn.String(table.Rows[i][1].ToString());
+				list[i].FileName    = PIn.String(table.Rows[i][2].ToString());
+				list[i].QueryText   = PIn.String(table.Rows[i][3].ToString());
 			}
 		}
 
@@ -67,12 +67,12 @@ namespace OpenDentBusiness{
 			}
 			command+="description,filename,querytext) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PLong(Cur.QueryNum)+", ";
+				command+=POut.Long(Cur.QueryNum)+", ";
 			}
 			command+=
-				 "'"+POut.PString(Cur.Description)+"', "
-				+"'"+POut.PString(Cur.FileName)+"', "
-				+"'"+POut.PString(Cur.QueryText)+"')";
+				 "'"+POut.String(Cur.Description)+"', "
+				+"'"+POut.String(Cur.FileName)+"', "
+				+"'"+POut.String(Cur.QueryText)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -88,7 +88,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
 				return;
 			}
-			string command = "DELETE from userquery WHERE querynum = '"+POut.PLong(Cur.QueryNum)+"'";
+			string command = "DELETE from userquery WHERE querynum = '"+POut.Long(Cur.QueryNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -99,10 +99,10 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command = "UPDATE userquery SET "
-				+ "description = '" +POut.PString(Cur.Description)+"'"
-				+ ",filename = '"    +POut.PString(Cur.FileName)+"'"
-				+",querytext = '"   +POut.PString(Cur.QueryText)+"'"
-				+" WHERE querynum = '"+POut.PLong(Cur.QueryNum)+"'";
+				+ "description = '" +POut.String(Cur.Description)+"'"
+				+ ",filename = '"    +POut.String(Cur.FileName)+"'"
+				+",querytext = '"   +POut.String(Cur.QueryText)+"'"
+				+" WHERE querynum = '"+POut.Long(Cur.QueryNum)+"'";
 			Db.NonQ(command);
 		}
 	}

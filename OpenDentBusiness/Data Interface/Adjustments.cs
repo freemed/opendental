@@ -15,17 +15,17 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command="UPDATE adjustment SET " 
-				+ "adjdate = "      +POut.PDate  (adj.AdjDate)
-				+ ",adjamt = '"      +POut.PDouble(adj.AdjAmt)+"'"
-				+ ",patnum = '"      +POut.PLong   (adj.PatNum)+"'"
-				+ ",adjtype = '"     +POut.PLong   (adj.AdjType)+"'"
-				+ ",provnum = '"     +POut.PLong   (adj.ProvNum)+"'"
-				+ ",adjnote = '"     +POut.PString(adj.AdjNote)+"'"
-				+ ",ProcDate = "     +POut.PDate  (adj.ProcDate)
-				+ ",ProcNum = '"     +POut.PLong   (adj.ProcNum)+"'"
+				+ "adjdate = "      +POut.Date  (adj.AdjDate)
+				+ ",adjamt = '"      +POut.Double(adj.AdjAmt)+"'"
+				+ ",patnum = '"      +POut.Long   (adj.PatNum)+"'"
+				+ ",adjtype = '"     +POut.Long   (adj.AdjType)+"'"
+				+ ",provnum = '"     +POut.Long   (adj.ProvNum)+"'"
+				+ ",adjnote = '"     +POut.String(adj.AdjNote)+"'"
+				+ ",ProcDate = "     +POut.Date  (adj.ProcDate)
+				+ ",ProcNum = '"     +POut.Long   (adj.ProcNum)+"'"
 				//DateEntry not allowed to change
-				+ ",ClinicNum = '"   +POut.PLong   (adj.ClinicNum)+"'"
-				+" WHERE adjNum = '" +POut.PLong   (adj.AdjNum)+"'";
+				+ ",ClinicNum = '"   +POut.Long   (adj.ClinicNum)+"'"
+				+" WHERE adjNum = '" +POut.Long   (adj.AdjNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -45,19 +45,19 @@ namespace OpenDentBusiness{
 			command+="AdjDate,AdjAmt,PatNum, "
 				+"AdjType,ProvNum,AdjNote,ProcDate,ProcNum,DateEntry,ClinicNum) VALUES(";
 			if(PrefC.RandomKeys){
-				command+="'"+POut.PLong(adj.AdjNum)+"', ";
+				command+="'"+POut.Long(adj.AdjNum)+"', ";
 			}
 			command+=
-				 POut.PDate(adj.AdjDate)+", "
-				+"'"+POut.PDouble(adj.AdjAmt)+"', "
-				+"'"+POut.PLong(adj.PatNum)+"', "
-				+"'"+POut.PLong(adj.AdjType)+"', "
-				+"'"+POut.PLong(adj.ProvNum)+"', "
-				+"'"+POut.PString(adj.AdjNote)+"', "
-				+POut.PDate(adj.ProcDate)+", "
-				+"'"+POut.PLong(adj.ProcNum)+"', "
+				 POut.Date(adj.AdjDate)+", "
+				+"'"+POut.Double(adj.AdjAmt)+"', "
+				+"'"+POut.Long(adj.PatNum)+"', "
+				+"'"+POut.Long(adj.AdjType)+"', "
+				+"'"+POut.Long(adj.ProvNum)+"', "
+				+"'"+POut.String(adj.AdjNote)+"', "
+				+POut.Date(adj.ProcDate)+", "
+				+"'"+POut.Long(adj.ProcNum)+"', "
 				+"NOW(),"//DateEntry set to server date
-				+"'"+POut.PLong(adj.ClinicNum)+"')";
+				+"'"+POut.Long(adj.ClinicNum)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -99,7 +99,7 @@ namespace OpenDentBusiness{
 			}
 			string command=
 				"SELECT * FROM adjustment"
-				+" WHERE PatNum = "+POut.PLong(patNum)+" ORDER BY AdjDate";
+				+" WHERE PatNum = "+POut.Long(patNum)+" ORDER BY AdjDate";
 			return RefreshAndFill(Db.GetTable(command)).ToArray();
 		}
 
@@ -110,7 +110,7 @@ namespace OpenDentBusiness{
 			}
 			string command=
 				"SELECT * FROM adjustment"
-				+" WHERE AdjNum = "+POut.PLong(adjNum);
+				+" WHERE AdjNum = "+POut.Long(adjNum);
 			return RefreshAndFill(Db.GetTable(command))[0];
 		}
 
@@ -120,17 +120,17 @@ namespace OpenDentBusiness{
 			Adjustment adj;
 			for(int i=0;i<table.Rows.Count;i++){
 				adj=new Adjustment();
-				adj.AdjNum   = PIn.PLong   (table.Rows[i][0].ToString());
-				adj.AdjDate  = PIn.PDate  (table.Rows[i][1].ToString());
-				adj.AdjAmt   = PIn.PDouble(table.Rows[i][2].ToString());
-				adj.PatNum   = PIn.PLong   (table.Rows[i][3].ToString());
-				adj.AdjType  = PIn.PLong   (table.Rows[i][4].ToString());
-				adj.ProvNum  = PIn.PLong   (table.Rows[i][5].ToString());
-				adj.AdjNote  = PIn.PString(table.Rows[i][6].ToString());
-				adj.ProcDate = PIn.PDate  (table.Rows[i][7].ToString());
-				adj.ProcNum  = PIn.PLong   (table.Rows[i][8].ToString());
-				adj.DateEntry= PIn.PDate(table.Rows[i][9].ToString());
-				adj.ClinicNum= PIn.PLong  (table.Rows[i][10].ToString());
+				adj.AdjNum   = PIn.Long   (table.Rows[i][0].ToString());
+				adj.AdjDate  = PIn.Date  (table.Rows[i][1].ToString());
+				adj.AdjAmt   = PIn.Double(table.Rows[i][2].ToString());
+				adj.PatNum   = PIn.Long   (table.Rows[i][3].ToString());
+				adj.AdjType  = PIn.Long   (table.Rows[i][4].ToString());
+				adj.ProvNum  = PIn.Long   (table.Rows[i][5].ToString());
+				adj.AdjNote  = PIn.String(table.Rows[i][6].ToString());
+				adj.ProcDate = PIn.Date  (table.Rows[i][7].ToString());
+				adj.ProcNum  = PIn.Long   (table.Rows[i][8].ToString());
+				adj.DateEntry= PIn.Date(table.Rows[i][9].ToString());
+				adj.ClinicNum= PIn.Long  (table.Rows[i][10].ToString());
 				retVal.Add(adj);
 			}
 			return retVal;
@@ -180,9 +180,9 @@ namespace OpenDentBusiness{
 			DataTable table;
 			command="SELECT ValueString FROM preference WHERE PrefName = 'FinanceChargeAdjustmentType'";
 			table=Db.GetTable(command);
-			numAdj=PIn.PLong(table.Rows[0][0].ToString());
-			command="DELETE FROM adjustment WHERE AdjDate="+POut.PDate(dateUndo)
-				+" AND AdjType="+POut.PLong(numAdj);
+			numAdj=PIn.Long(table.Rows[0][0].ToString());
+			command="DELETE FROM adjustment WHERE AdjDate="+POut.Date(dateUndo)
+				+" AND AdjType="+POut.Long(numAdj);
 			return Db.NonQ(command);
 		}
 
@@ -196,9 +196,9 @@ namespace OpenDentBusiness{
 			DataTable table;
 			command="SELECT ValueString FROM preference WHERE PrefName = 'BillingChargeAdjustmentType'";
 			table=Db.GetTable(command);
-			numAdj=PIn.PLong(table.Rows[0][0].ToString());
-			command="DELETE FROM adjustment WHERE AdjDate="+POut.PDate(dateUndo)
-				+" AND AdjType="+POut.PLong(numAdj);
+			numAdj=PIn.Long(table.Rows[0][0].ToString());
+			command="DELETE FROM adjustment WHERE AdjDate="+POut.Date(dateUndo)
+				+" AND AdjType="+POut.Long(numAdj);
 			return Db.NonQ(command);
 		}
 

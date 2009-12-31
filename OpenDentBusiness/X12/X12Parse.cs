@@ -9,9 +9,9 @@ namespace OpenDentBusiness{
 			if(element.Length != 8) {
 				return DateTime.MinValue;
 			}
-			int year=PIn.PInt(element.Substring(0,4));
-			int month=PIn.PInt(element.Substring(4,2));
-			int day=PIn.PInt(element.Substring(6,2));
+			int year=PIn.Int(element.Substring(0,4));
+			int month=PIn.Int(element.Substring(4,2));
+			int day=PIn.Int(element.Substring(6,2));
 			DateTime dt=new DateTime(year,month,day);
 			return dt;
 		}

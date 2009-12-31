@@ -317,7 +317,7 @@ namespace OpenDental{
 					else {
 						whereProv+="OR ";
 					}
-					whereProv+="adjustment.ProvNum = "+POut.PLong(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+" ";
+					whereProv+="adjustment.ProvNum = "+POut.Long(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+" ";
 				}
 				whereProv+=") ";
 			}
@@ -334,7 +334,7 @@ namespace OpenDental{
 						whereClin+="adjustment.ClinicNum = 0 ";
 					}
 					else {
-						whereClin+="adjustment.ClinicNum = "+POut.PLong(Clinics.List[listClin.SelectedIndices[i]-1].ClinicNum)+" ";
+						whereClin+="adjustment.ClinicNum = "+POut.Long(Clinics.List[listClin.SelectedIndices[i]-1].ClinicNum)+" ";
 					}
 				}
 				whereClin+=") ";
@@ -345,7 +345,7 @@ namespace OpenDental{
 					whereType+="OR ";
 				}
 				whereType+="adjustment.AdjType = '"
-					+POut.PLong(DefC.Short[(int)DefCat.AdjTypes][listType.SelectedIndices[i]].DefNum)+"' ";
+					+POut.Long(DefC.Short[(int)DefCat.AdjTypes][listType.SelectedIndices[i]].DefNum)+"' ";
 			}
 			whereType+=")";
 			ReportSimpleGrid report=new ReportSimpleGrid();
@@ -358,8 +358,8 @@ namespace OpenDental{
 				+whereProv
 				+whereClin
 				+"AND "+whereType+" "
-				+"AND adjustment.AdjDate >= "+POut.PDate(date1.SelectionStart)+" "
-				+"AND adjustment.AdjDate <= "+POut.PDate(date2.SelectionStart);
+				+"AND adjustment.AdjDate >= "+POut.Date(date1.SelectionStart)+" "
+				+"AND adjustment.AdjDate <= "+POut.Date(date2.SelectionStart);
 			report.Query += " ORDER BY adjustment.AdjDate";
 			FormQuery2=new FormQuery(report);
 			FormQuery2.IsReport=true;
@@ -377,19 +377,19 @@ namespace OpenDental{
 			double dbl;
 			for(int i=0;i<table.Rows.Count;i++) {
 				row = report.TableQ.NewRow();//create new row called 'row' based on structure of TableQ
-				row[0]=PIn.PDate(table.Rows[i][0].ToString()).ToShortDateString();
+				row[0]=PIn.Date(table.Rows[i][0].ToString()).ToShortDateString();
 				row[1]=table.Rows[i][1].ToString();//name
-				row[2]=Providers.GetAbbr(PIn.PLong(table.Rows[i][2].ToString()));//prov
+				row[2]=Providers.GetAbbr(PIn.Long(table.Rows[i][2].ToString()));//prov
 				colI=3;
 				if(!PrefC.GetBool(PrefName.EasyNoClinics)) {
-					row[colI]=Clinics.GetDesc(PIn.PLong(table.Rows[i][3].ToString()));//clinic
+					row[colI]=Clinics.GetDesc(PIn.Long(table.Rows[i][3].ToString()));//clinic
 					colI++;
 				}
 				row[colI]=table.Rows[i][4].ToString();//Type
 				colI++;
 				row[colI]=table.Rows[i][5].ToString();//Note
 				colI++;
-				dbl=PIn.PDouble(table.Rows[i][6].ToString());//Amount
+				dbl=PIn.Double(table.Rows[i][6].ToString());//Amount
 				row[colI]=dbl.ToString("n");
 				report.ColTotal[colI]+=dbl;
 				report.TableQ.Rows.Add(row);

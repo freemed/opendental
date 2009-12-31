@@ -242,11 +242,11 @@ namespace OpenDental{
 				return;
 			}
 			if(checkOvertime.Checked){
-				TimeAdjustCur.RegHours=TimeSpan.FromHours(-PIn.PDouble(textHours.Text));
-				TimeAdjustCur.OTimeHours=TimeSpan.FromHours(PIn.PDouble(textHours.Text));
+				TimeAdjustCur.RegHours=TimeSpan.FromHours(-PIn.Double(textHours.Text));
+				TimeAdjustCur.OTimeHours=TimeSpan.FromHours(PIn.Double(textHours.Text));
 			}
 			else{
-				TimeAdjustCur.RegHours=TimeSpan.FromHours(PIn.PDouble(textHours.Text));
+				TimeAdjustCur.RegHours=TimeSpan.FromHours(PIn.Double(textHours.Text));
 				TimeAdjustCur.OTimeHours=TimeSpan.FromHours(0);
 			}
 			TimeAdjustCur.Note=textNote.Text;

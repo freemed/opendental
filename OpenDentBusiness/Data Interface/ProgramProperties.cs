@@ -25,10 +25,10 @@ namespace OpenDentBusiness {
 			ProgramProperty progprop;
 			for (int i=0;i<table.Rows.Count;i++){
 				progprop=new ProgramProperty();
-				progprop.ProgramPropertyNum =PIn.PLong(table.Rows[i][0].ToString());
-				progprop.ProgramNum         =PIn.PLong(table.Rows[i][1].ToString());
-				progprop.PropertyDesc       =PIn.PString(table.Rows[i][2].ToString());
-				progprop.PropertyValue      =PIn.PString(table.Rows[i][3].ToString());
+				progprop.ProgramPropertyNum =PIn.Long(table.Rows[i][0].ToString());
+				progprop.ProgramNum         =PIn.Long(table.Rows[i][1].ToString());
+				progprop.PropertyDesc       =PIn.String(table.Rows[i][2].ToString());
+				progprop.PropertyValue      =PIn.String(table.Rows[i][3].ToString());
 				ProgramPropertyC.Listt.Add(progprop);
 				//List[i].ValueType          =(FieldValueType)PIn.PInt(table.Rows[i][4].ToString());
 			}
@@ -42,10 +42,10 @@ namespace OpenDentBusiness {
 				return;
 			}
 			string command= "UPDATE programproperty SET "
-				+"ProgramNum = '"     +POut.PLong   (Cur.ProgramNum)+"'"
-				+",PropertyDesc  = '" +POut.PString(Cur.PropertyDesc)+"'"
-				+",PropertyValue = '" +POut.PString(Cur.PropertyValue)+"'"
-				+" WHERE ProgramPropertyNum = '"+POut.PLong(Cur.ProgramPropertyNum)+"'";
+				+"ProgramNum = '"     +POut.Long   (Cur.ProgramNum)+"'"
+				+",PropertyDesc  = '" +POut.String(Cur.PropertyDesc)+"'"
+				+",PropertyValue = '" +POut.String(Cur.PropertyValue)+"'"
+				+" WHERE ProgramPropertyNum = '"+POut.Long(Cur.ProgramPropertyNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -64,12 +64,12 @@ namespace OpenDentBusiness {
 			}
 			command+="ProgramNum,PropertyDesc,PropertyValue) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PLong(Cur.ProgramPropertyNum)+", ";
+				command+=POut.Long(Cur.ProgramPropertyNum)+", ";
 			}
 			command+=
-				 "'"+POut.PLong   (Cur.ProgramNum)+"', "
-				+"'"+POut.PString(Cur.PropertyDesc)+"', "
-				+"'"+POut.PString(Cur.PropertyValue)+"')";
+				 "'"+POut.Long   (Cur.ProgramNum)+"', "
+				+"'"+POut.String(Cur.PropertyDesc)+"', "
+				+"'"+POut.String(Cur.PropertyValue)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -119,9 +119,9 @@ namespace OpenDentBusiness {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),programNum,desc,propval);
 				return;
 			}
-			string command="UPDATE programproperty SET PropertyValue='"+POut.PString(propval)+"' "
-				+"WHERE ProgramNum="+POut.PLong(programNum)+" "
-				+"AND PropertyDesc='"+POut.PString(desc)+"'";
+			string command="UPDATE programproperty SET PropertyValue='"+POut.String(propval)+"' "
+				+"WHERE ProgramNum="+POut.Long(programNum)+" "
+				+"AND PropertyDesc='"+POut.String(desc)+"'";
 			Db.NonQ(command);
 		}
 
@@ -170,8 +170,8 @@ namespace OpenDentBusiness {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),programNum,desc);
 			}
-			string command="SELECT PropertyValue FROM programproperty WHERE ProgramNum="+POut.PLong(programNum)
-				+" AND PropertyDesc='"+POut.PString(desc)+"'";
+			string command="SELECT PropertyValue FROM programproperty WHERE ProgramNum="+POut.Long(programNum)
+				+" AND PropertyDesc='"+POut.String(desc)+"'";
 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0){
 				return "";

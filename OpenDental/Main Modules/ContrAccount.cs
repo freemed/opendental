@@ -1796,10 +1796,10 @@ namespace OpenDental {
 				&& textDateEnd.errorProvider1.GetError(textDateEnd)=="")
 			{
 				if(textDateStart.Text!=""){
-					fromDate=PIn.PDate(textDateStart.Text);
+					fromDate=PIn.Date(textDateStart.Text);
 				}
 				if(textDateEnd.Text!=""){
-					toDate=PIn.PDate(textDateEnd.Text);
+					toDate=PIn.Date(textDateEnd.Text);
 				}
 			}
 			bool viewingInRecall=ViewingInRecall;
@@ -1973,7 +1973,7 @@ namespace OpenDental {
 				if(!isSelectingFamily){
 					for(int i=0;i<tableMisc.Rows.Count;i++){
 						if(tableMisc.Rows[i]["descript"].ToString()=="patInsEst"){
-							double estBal=PatCur.EstBalance-PIn.PDouble(tableMisc.Rows[i]["value"].ToString());
+							double estBal=PatCur.EstBalance-PIn.Double(tableMisc.Rows[i]["value"].ToString());
 							labelPatEstBalAmt.Text=estBal.ToString("F");
 						}
 					}
@@ -1981,7 +1981,7 @@ namespace OpenDental {
 				labelUnearnedAmt.Text="";
 				for(int i=0;i<tableMisc.Rows.Count;i++){
 					if(tableMisc.Rows[i]["descript"].ToString()=="unearnedIncome") {
-						double unearned=PIn.PDouble(tableMisc.Rows[i]["value"].ToString());
+						double unearned=PIn.Double(tableMisc.Rows[i]["value"].ToString());
 						if(unearned!=0) {
 							labelUnearnedAmt.Text=unearned.ToString("F");
 						}
@@ -2284,7 +2284,7 @@ namespace OpenDental {
 							break;
 					}
 				}
-				row.ColorText=Color.FromArgb(PIn.PInt(table.Rows[i]["colorText"].ToString()));
+				row.ColorText=Color.FromArgb(PIn.Int(table.Rows[i]["colorText"].ToString()));
 				if(i==table.Rows.Count-1//last row
 					|| (DateTime)table.Rows[i]["DateTime"]!=(DateTime)table.Rows[i+1]["DateTime"])
 				{
@@ -2350,18 +2350,18 @@ namespace OpenDental {
 			Actscrollval=gridAccount.ScrollValue;
 			DataTable table=DataSetMain.Tables["account"];
 			if(table.Rows[e.Row]["ProcNum"].ToString()!="0"){
-				Procedure proc=Procedures.GetOneProc(PIn.PLong(table.Rows[e.Row]["ProcNum"].ToString()),true);
+				Procedure proc=Procedures.GetOneProc(PIn.Long(table.Rows[e.Row]["ProcNum"].ToString()),true);
 				Patient pat=FamCur.GetPatient(proc.PatNum);
 				FormProcEdit FormPE=new FormProcEdit(proc,pat,FamCur);
 				FormPE.ShowDialog();
 			}
 			else if(table.Rows[e.Row]["AdjNum"].ToString()!="0"){
-				Adjustment adj=Adjustments.GetOne(PIn.PLong(table.Rows[e.Row]["AdjNum"].ToString()));
+				Adjustment adj=Adjustments.GetOne(PIn.Long(table.Rows[e.Row]["AdjNum"].ToString()));
 				FormAdjust FormAdj=new FormAdjust(PatCur,adj);
 				FormAdj.ShowDialog();
 			}
 			else if(table.Rows[e.Row]["PayNum"].ToString()!="0"){
-				Payment PaymentCur=Payments.GetPayment(PIn.PLong(table.Rows[e.Row]["PayNum"].ToString()));
+				Payment PaymentCur=Payments.GetPayment(PIn.Long(table.Rows[e.Row]["PayNum"].ToString()));
 				/*
 				if(PaymentCur.PayType==0){//provider income transfer
 					FormProviderIncTrans FormPIT=new FormProviderIncTrans();
@@ -2377,20 +2377,20 @@ namespace OpenDental {
 				//}
 			}
 			else if(table.Rows[e.Row]["ClaimNum"].ToString()!="0"){//claims and claimpayments
-				Claim claim=Claims.GetClaim(PIn.PLong(table.Rows[e.Row]["ClaimNum"].ToString()));
+				Claim claim=Claims.GetClaim(PIn.Long(table.Rows[e.Row]["ClaimNum"].ToString()));
 				Patient pat=FamCur.GetPatient(claim.PatNum);
 				FormClaimEdit FormClaimEdit2=new FormClaimEdit(claim,pat,FamCur);
 				FormClaimEdit2.IsNew=false;
 				FormClaimEdit2.ShowDialog();
 			}
 			else if(table.Rows[e.Row]["StatementNum"].ToString()!="0"){
-				Statement statement=Statements.CreateObject(PIn.PLong(table.Rows[e.Row]["StatementNum"].ToString()));
+				Statement statement=Statements.CreateObject(PIn.Long(table.Rows[e.Row]["StatementNum"].ToString()));
 				FormStatementOptions FormS=new FormStatementOptions();
 				FormS.StmtCur=statement;
 				FormS.ShowDialog();
 			}
 			else if(table.Rows[e.Row]["PayPlanNum"].ToString()!="0"){
-				PayPlan payplan=PayPlans.GetOne(PIn.PLong(table.Rows[e.Row]["PayPlanNum"].ToString()));
+				PayPlan payplan=PayPlans.GetOne(PIn.Long(table.Rows[e.Row]["PayPlanNum"].ToString()));
 				FormPayPlan2=new FormPayPlan(PatCur,payplan);
 				FormPayPlan2.ShowDialog();
 				if(FormPayPlan2.GotoPatNum!=0){
@@ -2404,7 +2404,7 @@ namespace OpenDental {
 
 		private void gridPayPlan_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			DataTable table=DataSetMain.Tables["payplan"];
-			PayPlan payplan=PayPlans.GetOne(PIn.PLong(table.Rows[e.Row]["PayPlanNum"].ToString()));
+			PayPlan payplan=PayPlans.GetOne(PIn.Long(table.Rows[e.Row]["PayPlanNum"].ToString()));
 			FormPayPlan2=new FormPayPlan(PatCur,payplan);
 			FormPayPlan2.ShowDialog();
 			if(FormPayPlan2.GotoPatNum!=0){
@@ -2523,7 +2523,7 @@ namespace OpenDental {
 					if((double)table.Rows[i]["chargesDouble"]==0){
 						continue;//ignore zero fee procedures, but user can explicitly select them
 					}
-					if(Procedures.NeedsSent(PIn.PLong(table.Rows[i]["ProcNum"].ToString()),ClaimProcList,PatPlans.GetPlanNum(PatPlanList,1))){
+					if(Procedures.NeedsSent(PIn.Long(table.Rows[i]["ProcNum"].ToString()),ClaimProcList,PatPlans.GetPlanNum(PatPlanList,1))){
 						if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="CA" && countSelected==7){//en-CA or fr-CA
 							countIsOverMax=true;
 							continue;//only send 7.
@@ -2625,23 +2625,23 @@ namespace OpenDental {
 			//List<Procedure> procList=Procedures.GetProcFromList(procsForPat,  //.GetManyProcs(procNums);
 			Procedure proc;
 			for(int i=0;i<gridAccount.SelectedIndices.Length;i++){
-				proc=Procedures.GetProcFromList(procsForPat,PIn.PLong(table.Rows[gridAccount.SelectedIndices[i]]["ProcNum"].ToString()));
+				proc=Procedures.GetProcFromList(procsForPat,PIn.Long(table.Rows[gridAccount.SelectedIndices[i]]["ProcNum"].ToString()));
 				if(Procedures.NoBillIns(proc,ClaimProcList,PlanCur.PlanNum)){
 					MsgBox.Show(this,"Not allowed to send procedures to insurance that are marked 'Do not bill to ins'.");
 					return new Claim();
 				}
 			}
 			for(int i=0;i<gridAccount.SelectedIndices.Length;i++){
-				proc=Procedures.GetProcFromList(procsForPat,PIn.PLong(table.Rows[gridAccount.SelectedIndices[i]]["ProcNum"].ToString()));
+				proc=Procedures.GetProcFromList(procsForPat,PIn.Long(table.Rows[gridAccount.SelectedIndices[i]]["ProcNum"].ToString()));
 				if(Procedures.IsAlreadyAttachedToClaim(proc,ClaimProcList,PlanCur.PlanNum)){
 					MsgBox.Show(this,"Not allowed to send a procedure to the same insurance company twice.");
 					return new Claim();
 				}
 			}
-			proc=Procedures.GetProcFromList(procsForPat,PIn.PLong(table.Rows[gridAccount.SelectedIndices[0]]["ProcNum"].ToString()));
+			proc=Procedures.GetProcFromList(procsForPat,PIn.Long(table.Rows[gridAccount.SelectedIndices[0]]["ProcNum"].ToString()));
 			long clinicNum=proc.ClinicNum;
 			for(int i=1;i<gridAccount.SelectedIndices.Length;i++){//skips 0
-				proc=Procedures.GetProcFromList(procsForPat,PIn.PLong(table.Rows[gridAccount.SelectedIndices[i]]["ProcNum"].ToString()));
+				proc=Procedures.GetProcFromList(procsForPat,PIn.Long(table.Rows[gridAccount.SelectedIndices[i]]["ProcNum"].ToString()));
 				if(clinicNum!=proc.ClinicNum){
 					MsgBox.Show(this,"All procedures do not have the same clinic.");
 					return new Claim();
@@ -2651,14 +2651,14 @@ namespace OpenDental {
 			long procNum;
 			for(int i=0;i<gridAccount.SelectedIndices.Length;i++){//loop through selected procs
 				//and try to find an estimate that can be used
-				procNum=PIn.PLong(table.Rows[gridAccount.SelectedIndices[i]]["ProcNum"].ToString());
+				procNum=PIn.Long(table.Rows[gridAccount.SelectedIndices[i]]["ProcNum"].ToString());
 				claimProcs[i]=Procedures.GetClaimProcEstimate(procNum,ClaimProcList,PlanCur);
 			}
 			for(int i=0;i<claimProcs.Length;i++){//loop through each claimProc
 				//and create any missing estimates. This handles claims to 3rd and 4th ins co's.
 				if(claimProcs[i]==null){
 					claimProcs[i]=new ClaimProc();
-					proc=Procedures.GetProcFromList(procsForPat,PIn.PLong(table.Rows[gridAccount.SelectedIndices[i]]["ProcNum"].ToString()));//1:1
+					proc=Procedures.GetProcFromList(procsForPat,PIn.Long(table.Rows[gridAccount.SelectedIndices[i]]["ProcNum"].ToString()));//1:1
 					ClaimProcs.CreateEst(claimProcs[i],proc,PlanCur);
 				}
 			}
@@ -2717,9 +2717,9 @@ namespace OpenDental {
 			if(PlanCur.PlanType=="c"){//if capitation
 				ClaimCur.ClaimType="Cap";
 			}
-			ClaimCur.ProvTreat=Procedures.GetProcFromList(procsForPat,PIn.PLong(table.Rows[gridAccount.SelectedIndices[0]]["ProcNum"].ToString())).ProvNum;
+			ClaimCur.ProvTreat=Procedures.GetProcFromList(procsForPat,PIn.Long(table.Rows[gridAccount.SelectedIndices[0]]["ProcNum"].ToString())).ProvNum;
 			for(int i=0;i<gridAccount.SelectedIndices.Length;i++){
-				proc=Procedures.GetProcFromList(procsForPat,PIn.PLong(table.Rows[gridAccount.SelectedIndices[i]]["ProcNum"].ToString()));
+				proc=Procedures.GetProcFromList(procsForPat,PIn.Long(table.Rows[gridAccount.SelectedIndices[i]]["ProcNum"].ToString()));
 				if(!Providers.GetIsSec(proc.ProvNum)){//if not a hygienist
 					ClaimCur.ProvTreat=proc.ProvNum;
 				}
@@ -2746,7 +2746,7 @@ namespace OpenDental {
 			Procedure ProcCur;
 			//for(int i=0;i<tbAccount.SelectedIndices.Length;i++){
 			for(int i=0;i<claimProcs.Length;i++){
-				ProcCur=Procedures.GetProcFromList(procsForPat,PIn.PLong(table.Rows[gridAccount.SelectedIndices[i]]["ProcNum"].ToString()));//1:1
+				ProcCur=Procedures.GetProcFromList(procsForPat,PIn.Long(table.Rows[gridAccount.SelectedIndices[i]]["ProcNum"].ToString()));//1:1
 				//ClaimProc ClaimProcCur=new ClaimProc();
 				//ClaimProcCur.ProcNum=ProcCur.ProcNum;
 				claimProcs[i].ClaimNum=ClaimCur.ClaimNum;
@@ -2888,7 +2888,7 @@ namespace OpenDental {
 					if(table.Rows[i]["ProcNum"].ToString()=="0"){
 						continue;//ignore non-procedures
 					}
-					proc=Procedures.GetProcFromList(procsForPat,PIn.PLong(table.Rows[i]["ProcNum"].ToString()));
+					proc=Procedures.GetProcFromList(procsForPat,PIn.Long(table.Rows[i]["ProcNum"].ToString()));
 					if(proc.ProcFee==0){
 						continue;//ignore zero fee procedures, but user can explicitly select them
 					}
@@ -3039,20 +3039,20 @@ namespace OpenDental {
 				stmt.Intermingled = true;
 			}
 			if (PrefC.GetBool(PrefName.FuchsOptionsOn)){
-				stmt.DateRangeFrom = PIn.PDate(DateTime.Today.AddDays(-45).ToShortDateString());
-				stmt.DateRangeTo = PIn.PDate(DateTime.Today.ToShortDateString());
+				stmt.DateRangeFrom = PIn.Date(DateTime.Today.AddDays(-45).ToShortDateString());
+				stmt.DateRangeTo = PIn.Date(DateTime.Today.ToShortDateString());
 			} 
 			else{
 				if (textDateStart.errorProvider1.GetError(textDateStart) == "") {
 					if (textDateStart.Text != "") {
-						stmt.DateRangeFrom = PIn.PDate(textDateStart.Text);
+						stmt.DateRangeFrom = PIn.Date(textDateStart.Text);
 					}
 				}
 			}
 			stmt.DateRangeTo = DateTime.Today;//This is needed for payment plan accuracy.//new DateTime(2200,1,1);
 			if (textDateEnd.errorProvider1.GetError(textDateEnd) == "") {
 				if (textDateEnd.Text != "") {
-					stmt.DateRangeTo = PIn.PDate(textDateEnd.Text);
+					stmt.DateRangeTo = PIn.Date(textDateEnd.Text);
 				}
 			}
 			stmt.Note = "";
@@ -3098,13 +3098,13 @@ namespace OpenDental {
 			stmt.DateRangeFrom=DateTime.MinValue;
 			if(textDateStart.errorProvider1.GetError(textDateStart)==""){
 				if(textDateStart.Text!=""){
-					stmt.DateRangeFrom=PIn.PDate(textDateStart.Text);
+					stmt.DateRangeFrom=PIn.Date(textDateStart.Text);
 				}
 			}
 			stmt.DateRangeTo=new DateTime(2200,1,1);
 			if(textDateEnd.errorProvider1.GetError(textDateEnd)==""){
 				if(textDateEnd.Text!=""){
-					stmt.DateRangeTo=PIn.PDate(textDateEnd.Text);
+					stmt.DateRangeTo=PIn.Date(textDateEnd.Text);
 				}
 			}
 			stmt.Note="";
@@ -3131,7 +3131,7 @@ namespace OpenDental {
 			stmt.DateRangeFrom=DateTime.MinValue;
 			if(textDateStart.errorProvider1.GetError(textDateStart)==""){
 				if(textDateStart.Text!=""){
-					stmt.DateRangeFrom=PIn.PDate(textDateStart.Text);
+					stmt.DateRangeFrom=PIn.Date(textDateStart.Text);
 				}
 			}
 			if(PrefC.GetBool(PrefName.FuchsOptionsOn)) {
@@ -3140,7 +3140,7 @@ namespace OpenDental {
 			stmt.DateRangeTo=DateTime.Today;//Needed for payplan accuracy.//new DateTime(2200,1,1);
 			if(textDateEnd.errorProvider1.GetError(textDateEnd)==""){
 				if(textDateEnd.Text!=""){
-					stmt.DateRangeTo=PIn.PDate(textDateEnd.Text);
+					stmt.DateRangeTo=PIn.Date(textDateEnd.Text);
 				}
 			}
 			stmt.Note="";
@@ -3401,7 +3401,7 @@ namespace OpenDental {
 			}
 			if(DataSetMain.Tables["Commlog"].Rows[row]["CommlogNum"].ToString()!="0"){
 				Commlog CommlogCur=
-					Commlogs.GetOne(PIn.PLong(DataSetMain.Tables["Commlog"].Rows[row]["CommlogNum"].ToString()));
+					Commlogs.GetOne(PIn.Long(DataSetMain.Tables["Commlog"].Rows[row]["CommlogNum"].ToString()));
 				FormCommItem FormCI=new FormCommItem(CommlogCur);
 				FormCI.ShowDialog();
 				if(FormCI.DialogResult==DialogResult.OK) {
@@ -3410,7 +3410,7 @@ namespace OpenDental {
 			}
 			else if(DataSetMain.Tables["Commlog"].Rows[row]["EmailMessageNum"].ToString()!="0") {
 				EmailMessage email=
-					EmailMessages.GetOne(PIn.PLong(DataSetMain.Tables["Commlog"].Rows[row]["EmailMessageNum"].ToString()));
+					EmailMessages.GetOne(PIn.Long(DataSetMain.Tables["Commlog"].Rows[row]["EmailMessageNum"].ToString()));
 				FormEmailMessageEdit FormE=new FormEmailMessageEdit(email);
 				FormE.ShowDialog();
 				if(FormE.DialogResult==DialogResult.OK) {
@@ -3418,7 +3418,7 @@ namespace OpenDental {
 				}
 			}
 			else if(DataSetMain.Tables["Commlog"].Rows[row]["FormPatNum"].ToString()!="0") {
-				FormPat form=FormPats.GetOne(PIn.PLong(DataSetMain.Tables["Commlog"].Rows[row]["FormPatNum"].ToString()));
+				FormPat form=FormPats.GetOne(PIn.Long(DataSetMain.Tables["Commlog"].Rows[row]["FormPatNum"].ToString()));
 				FormFormPatEdit FormP=new FormFormPatEdit();
 				FormP.FormPatCur=form;
 				FormP.ShowDialog();
@@ -3427,7 +3427,7 @@ namespace OpenDental {
 				}
 			}
 			else if(DataSetMain.Tables["Commlog"].Rows[row]["SheetNum"].ToString()!="0") {
-				Sheet sheet=Sheets.GetSheet(PIn.PLong(DataSetMain.Tables["Commlog"].Rows[row]["SheetNum"].ToString()));
+				Sheet sheet=Sheets.GetSheet(PIn.Long(DataSetMain.Tables["Commlog"].Rows[row]["SheetNum"].ToString()));
 				FormSheetFillEdit FormSFE=new FormSheetFillEdit(sheet);
 				FormSFE.ShowDialog();
 				if(FormSFE.DialogResult==DialogResult.OK) {
@@ -3451,7 +3451,7 @@ namespace OpenDental {
 		#region ProgressNotes
 		///<summary>The supplied procedure row must include these columns: ProcDate,ProcStatus,ProcCode,Surf,ToothNum, and ToothRange, all in raw database format.</summary>
 		private bool ShouldDisplayProc(DataRow row) {
-			switch ((ProcStat)PIn.PLong(row["ProcStatus"].ToString())) {
+			switch ((ProcStat)PIn.Long(row["ProcStatus"].ToString())) {
 				case ProcStat.TP:
 					if (checkShowTP.Checked) {
 						return true;
@@ -3573,8 +3573,8 @@ namespace OpenDental {
 				if (checkNotes.Checked) {
 					row.Note = table.Rows[i]["note"].ToString();
 				}
-				row.ColorText = Color.FromArgb(PIn.PInt(table.Rows[i]["colorText"].ToString()));
-				row.ColorBackG = Color.FromArgb(PIn.PInt(table.Rows[i]["colorBackG"].ToString()));
+				row.ColorText = Color.FromArgb(PIn.Int(table.Rows[i]["colorText"].ToString()));
+				row.ColorBackG = Color.FromArgb(PIn.Int(table.Rows[i]["colorBackG"].ToString()));
 				row.Tag = table.Rows[i];
 				gridProg.Rows.Add(row);
 			
@@ -3591,7 +3591,7 @@ namespace OpenDental {
 					MsgBox.Show(this,"Not allowed to edit procedures when in audit mode.");
 					return;
 				}
-				Procedure proc = Procedures.GetOneProc(PIn.PLong(row["ProcNum"].ToString()),true);
+				Procedure proc = Procedures.GetOneProc(PIn.Long(row["ProcNum"].ToString()),true);
 				FormProcEdit FormP = new FormProcEdit(proc,PatCur,FamCur);
 				FormP.ShowDialog();
 				if(FormP.DialogResult != DialogResult.OK) {
@@ -3599,7 +3599,7 @@ namespace OpenDental {
 				}
 			}
 			else if(row["CommlogNum"].ToString() != "0") {
-				Commlog comm = Commlogs.GetOne(PIn.PLong(row["CommlogNum"].ToString()));
+				Commlog comm = Commlogs.GetOne(PIn.Long(row["CommlogNum"].ToString()));
 				FormCommItem FormC = new FormCommItem(comm);
 				FormC.ShowDialog();
 				if(FormC.DialogResult != DialogResult.OK) {
@@ -3607,7 +3607,7 @@ namespace OpenDental {
 				}
 			}
 			else if(row["RxNum"].ToString() != "0") {
-				RxPat rx = RxPats.GetRx(PIn.PLong(row["RxNum"].ToString()));
+				RxPat rx = RxPats.GetRx(PIn.Long(row["RxNum"].ToString()));
 				FormRxEdit FormRxE = new FormRxEdit(PatCur,rx);
 				FormRxE.ShowDialog();
 				if(FormRxE.DialogResult != DialogResult.OK) {
@@ -3615,7 +3615,7 @@ namespace OpenDental {
 				}
 			}
 			else if(row["LabCaseNum"].ToString() != "0") {
-				LabCase lab = LabCases.GetOne(PIn.PLong(row["LabCaseNum"].ToString()));
+				LabCase lab = LabCases.GetOne(PIn.Long(row["LabCaseNum"].ToString()));
 				FormLabCaseEdit FormL = new FormLabCaseEdit();
 				FormL.CaseCur = lab;
 				FormL.ShowDialog();
@@ -3624,7 +3624,7 @@ namespace OpenDental {
 				}
 			}
 			else if(row["TaskNum"].ToString() != "0") {
-				Task curTask = Tasks.GetOne(PIn.PLong(row["TaskNum"].ToString()));
+				Task curTask = Tasks.GetOne(PIn.Long(row["TaskNum"].ToString()));
 				FormTaskEdit FormT = new FormTaskEdit(curTask);
 				FormT.ShowDialog();
 				if(FormT.GotoType != TaskObjectType.None) {
@@ -3670,7 +3670,7 @@ namespace OpenDental {
 			}
 			else if(row["AptNum"].ToString() != "0") {
 				//Appointment apt=Appointments.GetOneApt(
-				FormApptEdit FormA = new FormApptEdit(PIn.PLong(row["AptNum"].ToString()));
+				FormApptEdit FormA = new FormApptEdit(PIn.Long(row["AptNum"].ToString()));
 				//PinIsVisible=false
 				FormA.ShowDialog();
 				if(FormA.DialogResult != DialogResult.OK) {
@@ -3678,7 +3678,7 @@ namespace OpenDental {
 				}
 			}
 			else if(row["EmailMessageNum"].ToString() != "0") {
-				EmailMessage msg = EmailMessages.GetOne(PIn.PLong(row["EmailMessageNum"].ToString()));
+				EmailMessage msg = EmailMessages.GetOne(PIn.Long(row["EmailMessageNum"].ToString()));
 				FormEmailMessageEdit FormE = new FormEmailMessageEdit(msg);
 				FormE.ShowDialog();
 				if(FormE.DialogResult != DialogResult.OK) {

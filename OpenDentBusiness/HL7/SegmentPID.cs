@@ -7,7 +7,7 @@ namespace OpenDentBusiness.HL7 {
 	public class SegmentPID {
 		///<summary>PatNum will not be altered here.  The pat passed in must either have PatNum=0, or must have a PatNum matching the segment.</summary>
 		public static void ProcessPID(Patient pat,SegmentHL7 seg) {
-			long patNum=PIn.PLong(seg.GetFieldFullText(2));
+			long patNum=PIn.Long(seg.GetFieldFullText(2));
 			//if(pat.PatNum==0) {
 			//	pat.PatNum=patNum;
 			//}
@@ -35,7 +35,7 @@ namespace OpenDentBusiness.HL7 {
 
 		///<summary>If relationship is self, this loop does nothing.  A new pat will later change guarantor to be same as patnum. </summary>
 		public static void ProcessGT1(Patient pat,SegmentHL7 seg,bool useChartNumber) {
-			long guarNum=PIn.PLong(seg.GetFieldFullText(2));
+			long guarNum=PIn.Long(seg.GetFieldFullText(2));
 			if(seg.GetFieldFullText(11)=="1") {//if relationship is self
 				return;
 			}
@@ -118,9 +118,9 @@ namespace OpenDentBusiness.HL7 {
 			if(str.Length != 8) {
 				return DateTime.MinValue;
 			}
-			int year=PIn.PInt(str.Substring(0,4));
-			int month=PIn.PInt(str.Substring(4,2));
-			int day=PIn.PInt(str.Substring(6));
+			int year=PIn.Int(str.Substring(0,4));
+			int month=PIn.Int(str.Substring(4,2));
+			int day=PIn.Int(str.Substring(6));
 			DateTime retVal=new DateTime(year,month,day);
 			return retVal;
 		}

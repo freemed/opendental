@@ -125,15 +125,15 @@ namespace OpenDentBusiness
 				return new Patient();
 			}
 			Patient Lim=new Patient();
-			Lim.PatNum     = PIn.PLong   (table.Rows[0][0].ToString());
-			Lim.LName      = PIn.PString(table.Rows[0][1].ToString());
-			Lim.FName      = PIn.PString(table.Rows[0][2].ToString());
-			Lim.MiddleI    = PIn.PString(table.Rows[0][3].ToString());
-			Lim.Preferred  = PIn.PString(table.Rows[0][4].ToString());
-			Lim.CreditType = PIn.PString(table.Rows[0][5].ToString());
-			Lim.Guarantor  = PIn.PLong   (table.Rows[0][6].ToString());
-			Lim.HasIns     = PIn.PString(table.Rows[0][7].ToString());
-			Lim.SSN        = PIn.PString(table.Rows[0][8].ToString());
+			Lim.PatNum     = PIn.Long   (table.Rows[0][0].ToString());
+			Lim.LName      = PIn.String(table.Rows[0][1].ToString());
+			Lim.FName      = PIn.String(table.Rows[0][2].ToString());
+			Lim.MiddleI    = PIn.String(table.Rows[0][3].ToString());
+			Lim.Preferred  = PIn.String(table.Rows[0][4].ToString());
+			Lim.CreditType = PIn.String(table.Rows[0][5].ToString());
+			Lim.Guarantor  = PIn.Long   (table.Rows[0][6].ToString());
+			Lim.HasIns     = PIn.String(table.Rows[0][7].ToString());
+			Lim.SSN        = PIn.String(table.Rows[0][8].ToString());
 			return Lim;
 		}
 

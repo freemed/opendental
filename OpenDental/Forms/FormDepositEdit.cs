@@ -411,7 +411,7 @@ namespace OpenDental{
 				}
 			}
 			if(IsNew){
-				textDateStart.Text=PIn.PDate(PrefC.GetString(PrefName.DateDepositsStarted)).ToShortDateString();
+				textDateStart.Text=PIn.Date(PrefC.GetString(PrefName.DateDepositsStarted)).ToShortDateString();
 				if(PrefC.GetBool(PrefName.EasyNoClinics)){
 					comboClinic.Visible=false;
 					labelClinic.Visible=false;
@@ -481,7 +481,7 @@ namespace OpenDental{
 		///<summary></summary>
 		private void FillGrids(){
 			if(IsNew){
-				DateTime dateStart=PIn.PDate(textDateStart.Text);
+				DateTime dateStart=PIn.Date(textDateStart.Text);
 				long clinicNum=0;
 				if(comboClinic.SelectedIndex!=0){
 					clinicNum=Clinics.List[comboClinic.SelectedIndex-1].ClinicNum;
@@ -596,7 +596,7 @@ namespace OpenDental{
 			else{
 				textBankAccountInfo.Text=Clinics.List[comboClinic.SelectedIndex-1].BankNumber;
 			}
-			if(Prefs.UpdateString(PrefName.DateDepositsStarted,POut.PDate(PIn.PDate(textDateStart.Text),false))){
+			if(Prefs.UpdateString(PrefName.DateDepositsStarted,POut.Date(PIn.Date(textDateStart.Text),false))){
 				changed=true;
 			}
 		}
@@ -647,7 +647,7 @@ namespace OpenDental{
 				//Only allowed to change date and bank account info, NOT attached checks.
 				//We enforce security here based on date displayed, not date entered.
 				//If user is trying to change date without permission:
-				DateTime date=PIn.PDate(textDate.Text);
+				DateTime date=PIn.Date(textDate.Text);
 				if(Security.IsAuthorized(Permissions.DepositSlips,date,true)){
 					if(!SaveToDB()) {
 						return;
@@ -723,7 +723,7 @@ namespace OpenDental{
 				return false;
 			}
 			//Prevent backdating----------------------------------------------------------------------------------------
-			DateTime date=PIn.PDate(textDate.Text);
+			DateTime date=PIn.Date(textDate.Text);
 			if(IsNew) {
 				if(!Security.IsAuthorized(Permissions.DepositSlips,date)) {
 					return false;
@@ -735,9 +735,9 @@ namespace OpenDental{
 					return false;
 				}
 			}
-			DepositCur.DateDeposit=PIn.PDate(textDate.Text);
+			DepositCur.DateDeposit=PIn.Date(textDate.Text);
 			//amount already handled.
-			DepositCur.BankAccountInfo=PIn.PString(textBankAccountInfo.Text);
+			DepositCur.BankAccountInfo=PIn.String(textBankAccountInfo.Text);
 			if(IsNew){
 				Deposits.Insert(DepositCur);
 				if(Accounts.DepositsLinked() && DepositCur.Amount>0){

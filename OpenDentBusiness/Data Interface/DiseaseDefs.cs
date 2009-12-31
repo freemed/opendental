@@ -54,10 +54,10 @@ namespace OpenDentBusiness {
 			ArrayList AL=new ArrayList();
 			for(int i=0;i<table.Rows.Count;i++) {
 				ListLong[i]=new DiseaseDef();
-				ListLong[i].DiseaseDefNum=PIn.PLong(table.Rows[i][0].ToString());
-				ListLong[i].DiseaseName=PIn.PString(table.Rows[i][1].ToString());
-				ListLong[i].ItemOrder=PIn.PInt(table.Rows[i][2].ToString());
-				ListLong[i].IsHidden=PIn.PBool(table.Rows[i][3].ToString());
+				ListLong[i].DiseaseDefNum=PIn.Long(table.Rows[i][0].ToString());
+				ListLong[i].DiseaseName=PIn.String(table.Rows[i][1].ToString());
+				ListLong[i].ItemOrder=PIn.Int(table.Rows[i][2].ToString());
+				ListLong[i].IsHidden=PIn.Bool(table.Rows[i][3].ToString());
 				if(!ListLong[i].IsHidden) {
 					AL.Add(ListLong[i]);
 				}
@@ -73,10 +73,10 @@ namespace OpenDentBusiness {
 				return;
 			}
 			string command="UPDATE diseasedef SET " 
-				+"DiseaseName = '" +POut.PString(def.DiseaseName)+"'"
-				+",ItemOrder = '"   +POut.PLong   (def.ItemOrder)+"'"
-				+",IsHidden = '"    +POut.PBool  (def.IsHidden)+"'"
-				+" WHERE DiseaseDefNum  ='"+POut.PLong   (def.DiseaseDefNum)+"'";
+				+"DiseaseName = '" +POut.String(def.DiseaseName)+"'"
+				+",ItemOrder = '"   +POut.Long   (def.ItemOrder)+"'"
+				+",IsHidden = '"    +POut.Bool  (def.IsHidden)+"'"
+				+" WHERE DiseaseDefNum  ='"+POut.Long   (def.DiseaseDefNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -95,12 +95,12 @@ namespace OpenDentBusiness {
 			}
 			command+="DiseaseName,ItemOrder,IsHidden) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PLong(def.DiseaseDefNum)+", ";
+				command+=POut.Long(def.DiseaseDefNum)+", ";
 			}
 			command+=
-				 "'"+POut.PString(def.DiseaseName)+"', "
-				+"'"+POut.PLong   (def.ItemOrder)+"', "
-				+"'"+POut.PBool  (def.IsHidden)+"')";
+				 "'"+POut.String(def.DiseaseName)+"', "
+				+"'"+POut.Long   (def.ItemOrder)+"', "
+				+"'"+POut.Bool  (def.IsHidden)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -118,7 +118,7 @@ namespace OpenDentBusiness {
 			}
 			string command="SELECT LName,FName FROM patient,disease WHERE "
 				+"patient.PatNum=disease.PatNum "
-				+"AND disease.DiseaseDefNum='"+POut.PLong(def.DiseaseDefNum)+"'";
+				+"AND disease.DiseaseDefNum='"+POut.Long(def.DiseaseDefNum)+"'";
 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count>0){
 				string s=Lans.g("DiseaseDef","Not allowed to delete. Already in use by ")+table.Rows.Count.ToString()
@@ -131,7 +131,7 @@ namespace OpenDentBusiness {
 				}
 				throw new ApplicationException(s);
 			}
-			command="DELETE FROM diseasedef WHERE DiseaseDefNum ="+POut.PLong(def.DiseaseDefNum);
+			command="DELETE FROM diseasedef WHERE DiseaseDefNum ="+POut.Long(def.DiseaseDefNum);
 			Db.NonQ(command);
 		}
 

@@ -26,11 +26,11 @@ namespace OpenDentBusiness{
 			for(int i=0;i<table.Rows.Count;i++){
 				rtype=new RecallType();
 				rtype.IsNew=false;
-				rtype.RecallTypeNum  = PIn.PLong   (table.Rows[i][0].ToString());
-				rtype.Description    = PIn.PString(table.Rows[i][1].ToString());
-				rtype.DefaultInterval= new Interval(PIn.PInt(table.Rows[i][2].ToString()));
-				rtype.TimePattern    = PIn.PString(table.Rows[i][3].ToString());
-				rtype.Procedures     = PIn.PString(table.Rows[i][4].ToString());
+				rtype.RecallTypeNum  = PIn.Long   (table.Rows[i][0].ToString());
+				rtype.Description    = PIn.String(table.Rows[i][1].ToString());
+				rtype.DefaultInterval= new Interval(PIn.Int(table.Rows[i][2].ToString()));
+				rtype.TimePattern    = PIn.String(table.Rows[i][3].ToString());
+				rtype.Procedures     = PIn.String(table.Rows[i][4].ToString());
 				list.Add(rtype);
 			}
 			//reorder rows for better usability

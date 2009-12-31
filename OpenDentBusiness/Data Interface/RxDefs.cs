@@ -17,13 +17,13 @@ namespace OpenDentBusiness{
 			RxDef[] List=new RxDef[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new RxDef();
-				List[i].RxDefNum    = PIn.PLong(table.Rows[i][0].ToString());
-				List[i].Drug        = PIn.PString(table.Rows[i][1].ToString());
-				List[i].Sig         = PIn.PString(table.Rows[i][2].ToString());
-				List[i].Disp        = PIn.PString(table.Rows[i][3].ToString());
-				List[i].Refills     = PIn.PString(table.Rows[i][4].ToString());
-				List[i].Notes       = PIn.PString(table.Rows[i][5].ToString());
-				List[i].IsControlled= PIn.PBool  (table.Rows[i][6].ToString());
+				List[i].RxDefNum    = PIn.Long(table.Rows[i][0].ToString());
+				List[i].Drug        = PIn.String(table.Rows[i][1].ToString());
+				List[i].Sig         = PIn.String(table.Rows[i][2].ToString());
+				List[i].Disp        = PIn.String(table.Rows[i][3].ToString());
+				List[i].Refills     = PIn.String(table.Rows[i][4].ToString());
+				List[i].Notes       = PIn.String(table.Rows[i][5].ToString());
+				List[i].IsControlled= PIn.Bool  (table.Rows[i][6].ToString());
 			}
 			return List;
 		}
@@ -35,13 +35,13 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command= "UPDATE rxdef SET " 
-				+"Drug = '"       +POut.PString(def.Drug)+"'"
-				+",Sig = '"       +POut.PString(def.Sig)+"'"
-				+",Disp = '"      +POut.PString(def.Disp)+"'"
-				+",Refills = '"   +POut.PString(def.Refills)+"'"
-				+",Notes = '"     +POut.PString(def.Notes)+"'"
-				+",IsControlled='"+POut.PBool  (def.IsControlled)+"'"
-				+" WHERE RxDefNum = '" +POut.PLong(def.RxDefNum)+"'";
+				+"Drug = '"       +POut.String(def.Drug)+"'"
+				+",Sig = '"       +POut.String(def.Sig)+"'"
+				+",Disp = '"      +POut.String(def.Disp)+"'"
+				+",Refills = '"   +POut.String(def.Refills)+"'"
+				+",Notes = '"     +POut.String(def.Notes)+"'"
+				+",IsControlled='"+POut.Bool  (def.IsControlled)+"'"
+				+" WHERE RxDefNum = '" +POut.Long(def.RxDefNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -60,15 +60,15 @@ namespace OpenDentBusiness{
 			}
 			command+="Drug,Sig,Disp,Refills,Notes,IsControlled) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PLong(def.RxDefNum)+", ";
+				command+=POut.Long(def.RxDefNum)+", ";
 			}
 			command+=
-				 "'"+POut.PString(def.Drug)+"', "
-				+"'"+POut.PString(def.Sig)+"', "
-				+"'"+POut.PString(def.Disp)+"', "
-				+"'"+POut.PString(def.Refills)+"', "
-				+"'"+POut.PString(def.Notes)+"', "
-				+"'"+POut.PBool(def.IsControlled)+"')";
+				 "'"+POut.String(def.Drug)+"', "
+				+"'"+POut.String(def.Sig)+"', "
+				+"'"+POut.String(def.Disp)+"', "
+				+"'"+POut.String(def.Refills)+"', "
+				+"'"+POut.String(def.Notes)+"', "
+				+"'"+POut.Bool(def.IsControlled)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -84,9 +84,9 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),def);
 				return;
 			}
-			string command="DELETE FROM rxalert WHERE RxDefNum="+POut.PLong(def.RxDefNum);
+			string command="DELETE FROM rxalert WHERE RxDefNum="+POut.Long(def.RxDefNum);
 			Db.NonQ(command);
-			command= "DELETE FROM rxdef WHERE RxDefNum = "+POut.PLong(def.RxDefNum);
+			command= "DELETE FROM rxdef WHERE RxDefNum = "+POut.Long(def.RxDefNum);
 			Db.NonQ(command);
 		}
 

@@ -219,9 +219,9 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g("All","Please fix data entry errors first."));
 				return;
 			}
-			ClaimProcCur.ProcDate=PIn.PDate(textDate.Text);
-			ClaimProcCur.InsPayAmt=PIn.PDouble(textInsUsed.Text);
-			ClaimProcCur.DedApplied=PIn.PDouble(textDedUsed.Text);
+			ClaimProcCur.ProcDate=PIn.Date(textDate.Text);
+			ClaimProcCur.InsPayAmt=PIn.Double(textInsUsed.Text);
+			ClaimProcCur.DedApplied=PIn.Double(textDedUsed.Text);
 			if(IsNew){
 				ClaimProcs.Insert(ClaimProcCur);
 			}

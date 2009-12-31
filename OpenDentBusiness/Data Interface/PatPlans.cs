@@ -25,13 +25,13 @@ namespace OpenDentBusiness{
 			List<PatPlan> retVal=new List<PatPlan>();
 			for(int i=0;i<table.Rows.Count;i++) {
 				patplan=new PatPlan();
-				patplan.PatPlanNum  = PIn.PLong(table.Rows[i][0].ToString());
-				patplan.PatNum      = PIn.PLong(table.Rows[i][1].ToString());
-				patplan.PlanNum     = PIn.PLong(table.Rows[i][2].ToString());
-				patplan.Ordinal     = PIn.PInt(table.Rows[i][3].ToString());
-				patplan.IsPending   = PIn.PBool(table.Rows[i][4].ToString());
-				patplan.Relationship= (Relat)PIn.PLong(table.Rows[i][5].ToString());
-				patplan.PatID       = PIn.PString(table.Rows[i][6].ToString());
+				patplan.PatPlanNum  = PIn.Long(table.Rows[i][0].ToString());
+				patplan.PatNum      = PIn.Long(table.Rows[i][1].ToString());
+				patplan.PlanNum     = PIn.Long(table.Rows[i][2].ToString());
+				patplan.Ordinal     = PIn.Int(table.Rows[i][3].ToString());
+				patplan.IsPending   = PIn.Bool(table.Rows[i][4].ToString());
+				patplan.Relationship= (Relat)PIn.Long(table.Rows[i][5].ToString());
+				patplan.PatID       = PIn.String(table.Rows[i][6].ToString());
 				retVal.Add(patplan);
 			}
 			return retVal;
@@ -44,13 +44,13 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command="UPDATE patplan SET " 
-				+"PatNum = '"       +POut.PLong   (p.PatNum)+"'"
-				+",PlanNum = '"     +POut.PLong   (p.PlanNum)+"'"
+				+"PatNum = '"       +POut.Long   (p.PatNum)+"'"
+				+",PlanNum = '"     +POut.Long   (p.PlanNum)+"'"
 				//+",Ordinal = '"     +POut.PInt   (Ordinal)+"'"//ordinal always set using SetOrdinal
-				+",IsPending = '"   +POut.PBool  (p.IsPending)+"'"
-				+",Relationship = '"+POut.PLong   ((int)p.Relationship)+"'"
-				+",PatID = '"       +POut.PString(p.PatID)+"'"
-				+" WHERE PatPlanNum = '" +POut.PLong(p.PatPlanNum)+"'";
+				+",IsPending = '"   +POut.Bool  (p.IsPending)+"'"
+				+",Relationship = '"+POut.Long   ((int)p.Relationship)+"'"
+				+",PatID = '"       +POut.String(p.PatID)+"'"
+				+" WHERE PatPlanNum = '" +POut.Long(p.PatPlanNum)+"'";
  			Db.NonQ(command);
 		}
 
@@ -69,15 +69,15 @@ namespace OpenDentBusiness{
 			}
 			command+="PatNum,PlanNum,Ordinal,IsPending,Relationship,PatID) VALUES(";
 			if(PrefC.RandomKeys){
-				command+="'"+POut.PLong(p.PatPlanNum)+"', ";
+				command+="'"+POut.Long(p.PatPlanNum)+"', ";
 			}
 			command+=
-				 "'"+POut.PLong   (p.PatNum)+"', "
-				+"'"+POut.PLong   (p.PlanNum)+"', "
-				+"'"+POut.PLong   (p.Ordinal)+"', "
-				+"'"+POut.PBool  (p.IsPending)+"', "
-				+"'"+POut.PLong   ((int)p.Relationship)+"', "
-				+"'"+POut.PString(p.PatID)+"')";
+				 "'"+POut.Long   (p.PatNum)+"', "
+				+"'"+POut.Long   (p.PlanNum)+"', "
+				+"'"+POut.Long   (p.Ordinal)+"', "
+				+"'"+POut.Bool  (p.IsPending)+"', "
+				+"'"+POut.Long   ((int)p.Relationship)+"', "
+				+"'"+POut.String(p.PatID)+"')";
 			if(PrefC.RandomKeys){
 				Db.NonQ(command);
 			}
@@ -155,12 +155,12 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),patPlanNum,newOrdinal);
 				return;
 			}
-			string command="SELECT PatNum FROM patplan WHERE PatPlanNum="+POut.PLong(patPlanNum);
+			string command="SELECT PatNum FROM patplan WHERE PatPlanNum="+POut.Long(patPlanNum);
 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0){
 				return;
 			}
-			long patNum=PIn.PLong(table.Rows[0][0].ToString());
+			long patNum=PIn.Long(table.Rows[0][0].ToString());
 			List<PatPlan> patPlans=Refresh(patNum);
 			//int oldOrdinal=GetFromList(patPlans,patPlanNum).Ordinal;
 			if(newOrdinal>patPlans.Count){
@@ -177,13 +177,13 @@ namespace OpenDentBusiness{
 				if(curOrdinal==newOrdinal){
 					curOrdinal++;//skip the newOrdinal when setting the sequence for the others.
 				}
-				command="UPDATE patplan SET Ordinal="+POut.PLong(curOrdinal)
-					+" WHERE PatPlanNum="+POut.PLong(patPlans[i].PatPlanNum);
+				command="UPDATE patplan SET Ordinal="+POut.Long(curOrdinal)
+					+" WHERE PatPlanNum="+POut.Long(patPlans[i].PatPlanNum);
 				Db.NonQ(command);
 				curOrdinal++;
 			}
-			command="UPDATE patplan SET Ordinal="+POut.PLong(newOrdinal)
-				+" WHERE PatPlanNum="+POut.PLong(patPlanNum);
+			command="UPDATE patplan SET Ordinal="+POut.Long(newOrdinal)
+				+" WHERE PatPlanNum="+POut.Long(patPlanNum);
 			Db.NonQ(command);
 		}
 
@@ -214,8 +214,8 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetLong(MethodBase.GetCurrentMethod(),patNum,planNum);
 			}
-			string command="SELECT PatPlanNum FROM patplan WHERE PatNum="+POut.PLong(patNum)+" AND PlanNum="+POut.PLong(planNum);
-			return PIn.PLong(Db.GetScalar(command));
+			string command="SELECT PatPlanNum FROM patplan WHERE PatNum="+POut.Long(patNum)+" AND PlanNum="+POut.Long(planNum);
+			return PIn.Long(Db.GetScalar(command));
 		}
 
 		///<summary>Gets directly from database.  Used by Trojan.</summary>
@@ -223,7 +223,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<PatPlan[]>(MethodBase.GetCurrentMethod(),planNum);
 			} 
-			string command="SELECT * FROM patplan WHERE PlanNum='"+POut.PLong(planNum)+"'";
+			string command="SELECT * FROM patplan WHERE PlanNum='"+POut.Long(planNum)+"'";
 			DataTable table=Db.GetTable(command);
 			return RefreshAndFill(table).ToArray();
 		}
@@ -233,8 +233,8 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<PatPlan>(MethodBase.GetCurrentMethod(),patNum,ordinal);
 			} 
-			string command="SELECT * FROM patplan WHERE PatNum="+POut.PLong(patNum)
-				+" AND Ordinal="+POut.PLong(ordinal);
+			string command="SELECT * FROM patplan WHERE PatNum="+POut.Long(patNum)
+				+" AND Ordinal="+POut.Long(ordinal);
 			DataTable table=Db.GetTable(command);
 			List<PatPlan> list=RefreshAndFill(table);
 			if(list.Count==0) {
@@ -249,25 +249,25 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),patPlanNum);
 				return;
 			} 
-			string command="SELECT PatNum FROM patplan WHERE PatPlanNum="+POut.PLong(patPlanNum);
+			string command="SELECT PatNum FROM patplan WHERE PatPlanNum="+POut.Long(patPlanNum);
 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0) {
 				return;
 			}
-			long patNum=PIn.PLong(table.Rows[0][0].ToString());
+			long patNum=PIn.Long(table.Rows[0][0].ToString());
 			List<PatPlan> patPlans=PatPlans.Refresh(patNum);
 			bool doDecrement=false;
 			for(int i=0;i<patPlans.Count;i++) {
 				if(doDecrement) {//patPlan has already been deleted, so decrement the rest.
-					command="UPDATE patplan SET Ordinal="+POut.PLong(patPlans[i].Ordinal-1)
-						+" WHERE PatPlanNum="+POut.PLong(patPlans[i].PatPlanNum);
+					command="UPDATE patplan SET Ordinal="+POut.Long(patPlans[i].Ordinal-1)
+						+" WHERE PatPlanNum="+POut.Long(patPlans[i].PatPlanNum);
 					Db.NonQ(command);
 					continue;
 				}
 				if(patPlans[i].PatPlanNum==patPlanNum) {
-					command="DELETE FROM patplan WHERE PatPlanNum="+POut.PLong(patPlanNum);
+					command="DELETE FROM patplan WHERE PatPlanNum="+POut.Long(patPlanNum);
 					Db.NonQ(command);
-					command="DELETE FROM benefit WHERE PatPlanNum=" +POut.PLong(patPlanNum);
+					command="DELETE FROM benefit WHERE PatPlanNum=" +POut.Long(patPlanNum);
 					Db.NonQ(command);
 					doDecrement=true;
 				}

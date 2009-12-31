@@ -201,7 +201,7 @@ namespace OpenDental{
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			FormReqStudentOne FormR=new FormReqStudentOne();
-			FormR.ProvNum=PIn.PLong(table.Rows[e.Row]["studentNum"].ToString());
+			FormR.ProvNum=PIn.Long(table.Rows[e.Row]["studentNum"].ToString());
 			FormR.ShowDialog();
 			FillGrid();
 		}

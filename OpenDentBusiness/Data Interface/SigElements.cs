@@ -22,16 +22,16 @@ namespace OpenDentBusiness{
 				if(i>0) {
 					command+=" OR ";
 				}
-				command+="SignalNum="+POut.PLong(signalList[i].SignalNum);
+				command+="SignalNum="+POut.Long(signalList[i].SignalNum);
 			}
 			command+=") ORDER BY sigelementdef.SigElementType";
 			DataTable table=Db.GetTable(command);
 			SigElement[] List=new SigElement[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new SigElement();
-				List[i].SigElementNum   = PIn.PLong(table.Rows[i][0].ToString());
-				List[i].SigElementDefNum= PIn.PLong(table.Rows[i][1].ToString());
-				List[i].SignalNum       = PIn.PLong(table.Rows[i][2].ToString());
+				List[i].SigElementNum   = PIn.Long(table.Rows[i][0].ToString());
+				List[i].SigElementDefNum= PIn.Long(table.Rows[i][1].ToString());
+				List[i].SignalNum       = PIn.Long(table.Rows[i][2].ToString());
 			}
 			//Array.Sort(List);
 			return List;
@@ -66,11 +66,11 @@ namespace OpenDentBusiness{
 			command+="SigElementDefNum,SignalNum"
 				+") VALUES(";
 			if(PrefC.RandomKeys){
-				command+="'"+POut.PLong(se.SigElementNum)+"', ";
+				command+="'"+POut.Long(se.SigElementNum)+"', ";
 			}
 			command+=
-				 "'"+POut.PLong   (se.SigElementDefNum)+"', "
-				+"'"+POut.PLong   (se.SignalNum)+"')";
+				 "'"+POut.Long   (se.SigElementDefNum)+"', "
+				+"'"+POut.Long   (se.SignalNum)+"')";
  			if(PrefC.RandomKeys){
 				Db.NonQ(command);
 			}

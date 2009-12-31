@@ -680,7 +680,7 @@ namespace OpenDental.UI{
 				else {
 					int imageIndex=-1;
 					if(rows[rowI].Cells[i].Text!="") {
-						imageIndex=PIn.PInt(rows[rowI].Cells[i].Text);
+						imageIndex=PIn.Int(rows[rowI].Cells[i].Text);
 					}
 					if(imageIndex!=-1) {
 						Image img=columns[i].ImageList.Images[imageIndex];

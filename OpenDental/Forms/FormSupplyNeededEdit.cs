@@ -37,7 +37,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please fix data entry errors first.");
 				return;
 			}
-			Supp.DateAdded=PIn.PDate(textDate.Text);
+			Supp.DateAdded=PIn.Date(textDate.Text);
 			Supp.Description=textDescription.Text;
 			SupplyNeededs.WriteObject(Supp);
 			DialogResult=DialogResult.OK;

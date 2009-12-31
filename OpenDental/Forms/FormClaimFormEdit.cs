@@ -1256,8 +1256,8 @@ namespace OpenDental{
 			ClaimFormCur.IsHidden=checkIsHidden.Checked;
 			ClaimFormCur.UniqueID=textUniqueID.Text;
 			ClaimFormCur.PrintImages=checkPrintImages.Checked;
-			ClaimFormCur.OffsetX=PIn.PInt(textOffsetX.Text);
-			ClaimFormCur.OffsetY=PIn.PInt(textOffsetY.Text);
+			ClaimFormCur.OffsetX=PIn.Int(textOffsetX.Text);
+			ClaimFormCur.OffsetY=PIn.Int(textOffsetY.Text);
 			ClaimForms.Update(ClaimFormCur);
 			return true;
 		}

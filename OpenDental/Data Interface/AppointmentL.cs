@@ -341,7 +341,7 @@ namespace OpenDental{
 				if(dayTable.Rows[i]["AptStatus"].ToString()==((int)ApptStatus.Broken).ToString()){//ignore broken appts
 					continue;
 				}
-				aptDateTime=PIn.PDateT(dayTable.Rows[i]["AptDateTime"].ToString());
+				aptDateTime=PIn.DateT(dayTable.Rows[i]["AptDateTime"].ToString());
 				if(ContrApptSheet.IsWeeklyView && aptDateTime.Date==apt.AptDateTime.Date){
 					continue;
 				}
@@ -366,7 +366,7 @@ namespace OpenDental{
 				}
 				if(overlaps){
 					//we need to add all codes for this appt to retVal
-					procs=Procedures.GetProcsOneApt(PIn.PLong(dayTable.Rows[i]["AptNum"].ToString()),procsMultApts);
+					procs=Procedures.GetProcsOneApt(PIn.Long(dayTable.Rows[i]["AptNum"].ToString()),procsMultApts);
 					for(int j=0;j<procs.Length;j++){
 						retVal.Add(ProcedureCodes.GetStringProcCode(procs[j].CodeNum));
 					}

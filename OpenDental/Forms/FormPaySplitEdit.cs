@@ -934,7 +934,7 @@ namespace OpenDental
 		private void ComputeProcTotals(){
 			ProcPaidHere=0;
 			if(textAmount.errorProvider1.GetError(textAmount)==""){
-				ProcPaidHere=-PIn.PDouble(textAmount.Text);	
+				ProcPaidHere=-PIn.Double(textAmount.Text);	
 			}
 			if(ProcPaidHere==0){
 				textProcPaidHere.Text="";
@@ -1043,9 +1043,9 @@ namespace OpenDental
 				MsgBox.Show(this,"Please enter an amount.");	
 				return;
 			}
-			PaySplitCur.DatePay=PIn.PDate(textDatePay.Text);//gets overwritten anyway
-			PaySplitCur.ProcDate=PIn.PDate(textProcDate.Text);
-			PaySplitCur.SplitAmt=PIn.PDouble(textAmount.Text);
+			PaySplitCur.DatePay=PIn.Date(textDatePay.Text);//gets overwritten anyway
+			PaySplitCur.ProcDate=PIn.Date(textProcDate.Text);
+			PaySplitCur.SplitAmt=PIn.Double(textAmount.Text);
 			//if(comboProvider.SelectedIndex!=-1) {
 				//we shouldn't silently change provider.
 			//	PaySplitCur.ProvNum=ProviderC.List[listProvider.SelectedIndex].ProvNum;

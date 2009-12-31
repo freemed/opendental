@@ -456,9 +456,9 @@ namespace OpenDental
 				else{
 					str=str.Replace("?FName",BirthdayTable.Rows[patientsPrinted]["FName"].ToString());
 				}
-				birthdate=PIn.PDate(BirthdayTable.Rows[patientsPrinted]["Birthdate"].ToString());
+				birthdate=PIn.Date(BirthdayTable.Rows[patientsPrinted]["Birthdate"].ToString());
 				//age=Shared.DateToAge(birthdate,PIn.PDate(textDateTo.Text).AddDays(1));//age on the day after the range
-				age=PIn.PInt(BirthdayTable.Rows[patientsPrinted]["Age"].ToString());
+				age=PIn.Int(BirthdayTable.Rows[patientsPrinted]["Age"].ToString());
 				str=str.Replace("?AgeOrdinal",Shared.NumberToOrdinal(age));
 				str=str.Replace("?Age",age.ToString());
 				g.DrawString(str,new Font(FontFamily.GenericSansSerif,10),Brushes.Black,new RectangleF(xPos+45,yPos+180,250,190));
@@ -507,8 +507,8 @@ namespace OpenDental
 				MsgBox.Show(this,"Please fix data entry errors first.");
 				return;
 			}
-			DateTime dateFrom=PIn.PDate(textDateFrom.Text);
-			DateTime dateTo=PIn.PDate(textDateTo.Text);
+			DateTime dateFrom=PIn.Date(textDateFrom.Text);
+			DateTime dateTo=PIn.Date(textDateTo.Text);
 			if(dateTo < dateFrom) 
 			{
 				MsgBox.Show(this,"To date cannot be before From date.");

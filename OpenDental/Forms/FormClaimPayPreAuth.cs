@@ -263,7 +263,7 @@ namespace OpenDental
 				}
 			}
 			for(int i=0;i<ClaimProcsToEdit.Count;i++){
-				ClaimProcsToEdit[i].InsPayEst=PIn.PDouble(gridMain.Rows[i].Cells[4].Text);
+				ClaimProcsToEdit[i].InsPayEst=PIn.Double(gridMain.Rows[i].Cells[4].Text);
 				ClaimProcsToEdit[i].Remarks=gridMain.Rows[i].Cells[5].Text;
 			}
 		}

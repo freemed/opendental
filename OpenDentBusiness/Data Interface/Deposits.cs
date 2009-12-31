@@ -34,7 +34,7 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<Deposit>(MethodBase.GetCurrentMethod(),depositNum);
 			}
 			string command="SELECT * FROM deposit "
-				+"WHERE DepositNum="+POut.PLong(depositNum);
+				+"WHERE DepositNum="+POut.Long(depositNum);
 			return RefreshAndFill(Db.GetTable(command))[0];
 		}
 
@@ -43,10 +43,10 @@ namespace OpenDentBusiness{
 			Deposit[] List=new Deposit[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new Deposit();
-				List[i].DepositNum     = PIn.PLong(table.Rows[i][0].ToString());
-				List[i].DateDeposit    = PIn.PDate(table.Rows[i][1].ToString());
-				List[i].BankAccountInfo= PIn.PString(table.Rows[i][2].ToString());
-				List[i].Amount         = PIn.PDouble(table.Rows[i][3].ToString());
+				List[i].DepositNum     = PIn.Long(table.Rows[i][0].ToString());
+				List[i].DateDeposit    = PIn.Date(table.Rows[i][1].ToString());
+				List[i].BankAccountInfo= PIn.String(table.Rows[i][2].ToString());
+				List[i].Amount         = PIn.Double(table.Rows[i][3].ToString());
 			}
 			return List;
 		}
@@ -58,10 +58,10 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command= "UPDATE deposit SET "
-				+"DateDeposit = "     +POut.PDate  (dep.DateDeposit)
-				+",BankAccountInfo = '"+POut.PString(dep.BankAccountInfo)+"'"
-				+",Amount = '"         +POut.PDouble(dep.Amount)+"'"
-				+" WHERE DepositNum ='"+POut.PLong   (dep.DepositNum)+"'";
+				+"DateDeposit = "     +POut.Date  (dep.DateDeposit)
+				+",BankAccountInfo = '"+POut.String(dep.BankAccountInfo)+"'"
+				+",Amount = '"         +POut.Double(dep.Amount)+"'"
+				+" WHERE DepositNum ='"+POut.Long   (dep.DepositNum)+"'";
 			//MessageBox.Show(string command);
  			Db.NonQ(command);
 		}
@@ -81,12 +81,12 @@ namespace OpenDentBusiness{
 			}
 			command+="DateDeposit,BankAccountInfo,Amount) VALUES(";
 			if(PrefC.RandomKeys){
-				command+="'"+POut.PLong(dep.DepositNum)+"', ";
+				command+="'"+POut.Long(dep.DepositNum)+"', ";
 			}
 			command+=
-				 POut.PDate  (dep.DateDeposit)+", "
-				+"'"+POut.PString(dep.BankAccountInfo)+"', "
-				+"'"+POut.PDouble(dep.Amount)+"')";
+				 POut.Date  (dep.DateDeposit)+", "
+				+"'"+POut.String(dep.BankAccountInfo)+"', "
+				+"'"+POut.Double(dep.Amount)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -105,8 +105,8 @@ namespace OpenDentBusiness{
 			//check dependencies
 			string command="";
 			if(dep.DepositNum !=0){
-				command="SELECT COUNT(*) FROM transaction WHERE DepositNum ="+POut.PLong(dep.DepositNum);
-				if(PIn.PLong(Db.GetCount(command))>0) {
+				command="SELECT COUNT(*) FROM transaction WHERE DepositNum ="+POut.Long(dep.DepositNum);
+				if(PIn.Long(Db.GetCount(command))>0) {
 					throw new ApplicationException(Lans.g("Deposits","Cannot delete deposit because it is attached to a transaction."));
 				}
 			}
@@ -116,11 +116,11 @@ namespace OpenDentBusiness{
 				throw new InvalidProgramException(Lans.g("Deposits","Cannot delete deposit because it has payments attached"));
 			}*/
 			//ready to delete
-			command="UPDATE payment SET DepositNum=0 WHERE DepositNum="+POut.PLong(dep.DepositNum);
+			command="UPDATE payment SET DepositNum=0 WHERE DepositNum="+POut.Long(dep.DepositNum);
 			Db.NonQ(command);
-			command="UPDATE claimpayment SET DepositNum=0 WHERE DepositNum="+POut.PLong(dep.DepositNum);
+			command="UPDATE claimpayment SET DepositNum=0 WHERE DepositNum="+POut.Long(dep.DepositNum);
 			Db.NonQ(command);
-			command= "DELETE FROM deposit WHERE DepositNum="+POut.PLong(dep.DepositNum);
+			command= "DELETE FROM deposit WHERE DepositNum="+POut.Long(dep.DepositNum);
  			Db.NonQ(command);
 		}
 

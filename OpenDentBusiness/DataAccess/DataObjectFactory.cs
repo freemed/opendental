@@ -251,29 +251,29 @@ namespace OpenDentBusiness.DataAccess {
 					// If the type in the dataset is "string", but the type in the code
 					// object isn't "string", we use the PIn class.
 					if (dataType == typeof(Bitmap)) {
-						dataValue = PIn.PBitmap((string)dataValue);
+						dataValue = PIn.Bitmap((string)dataValue);
 					}
 					else if (dataType == typeof(bool)) {
-						dataValue = PIn.PBool((string)dataValue);
+						dataValue = PIn.Bool((string)dataValue);
 					}
 					else if (dataType == typeof(Byte)) {
-						dataValue = PIn.PByte((string)dataValue);
+						dataValue = PIn.Byte((string)dataValue);
 					}
 					else if (dataType == typeof(DateTime)) {
 						// NOTE: Is there any difference between PIn.PDate and PIn.PDateT?
-						dataValue = PIn.PDate((string)dataValue);
+						dataValue = PIn.Date((string)dataValue);
 					}
 					else if (dataType == typeof(double)) {
-						dataValue = PIn.PDouble((string)dataValue);
+						dataValue = PIn.Double((string)dataValue);
 					}
 					else if (dataType == typeof(float)) {
-						dataValue = PIn.PFloat((string)dataValue);
+						dataValue = PIn.Float((string)dataValue);
 					}
 					else if (dataType == typeof(int)) {
-						dataValue = PIn.PInt((string)dataValue);
+						dataValue = PIn.Int((string)dataValue);
 					}
 					else if(dataType == typeof(long)) {
-						dataValue = PIn.PLong((string)dataValue);
+						dataValue = PIn.Long((string)dataValue);
 					}
 					else {
 						// NOTE: Support for "Sound" is not here yet. Maybe it should be exported
@@ -520,7 +520,7 @@ namespace OpenDentBusiness.DataAccess {
 							commandTextBuilder.Append(ParameterPrefix + field.DatabaseName);
 						}
 						else {
-							commandTextBuilder.Append(POut.PObject(field.Field.GetValue(value)));
+							commandTextBuilder.Append(POut.Object(field.Field.GetValue(value)));
 								//.AppendFormat("{0}", POut.PObject(field.Field.GetValue(value)));
 						}
 					}
@@ -537,7 +537,7 @@ namespace OpenDentBusiness.DataAccess {
 								commandTextBuilder.Append(ParameterPrefix + primaryKeyField.DatabaseName);
 							}
 							else {
-								commandTextBuilder.Append(POut.PObject(primaryKeyField.Field.GetValue(value)));
+								commandTextBuilder.Append(POut.Object(primaryKeyField.Field.GetValue(value)));
 							}
 						}
 					}
@@ -563,7 +563,7 @@ namespace OpenDentBusiness.DataAccess {
 							commandTextBuilder.Append(string.Format("{0} = {1}{0}", field.DatabaseName, ParameterPrefix));
 						}
 						else {
-							commandTextBuilder.Append(string.Format("{0} = {1}", field.DatabaseName, POut.PObject(field.Field.GetValue(value))));
+							commandTextBuilder.Append(string.Format("{0} = {1}", field.DatabaseName, POut.Object(field.Field.GetValue(value))));
 						}
 					}
 					commandTextBuilder.Append(" WHERE ");
@@ -579,7 +579,7 @@ namespace OpenDentBusiness.DataAccess {
 							commandTextBuilder.Append(string.Format("{0} = {1}{0}", field.DatabaseName, ParameterPrefix));
 						}
 						else {
-							commandTextBuilder.Append(string.Format("{0} = {1}", field.DatabaseName, POut.PObject(field.Field.GetValue(value))));
+							commandTextBuilder.Append(string.Format("{0} = {1}", field.DatabaseName, POut.Object(field.Field.GetValue(value))));
 						}
 					}
 				}
@@ -630,7 +630,7 @@ namespace OpenDentBusiness.DataAccess {
 				query = string.Format("DELETE FROM {0} WHERE {1} = {2}{1}", tableName, primaryKeyFieldName, ParameterPrefix);
 			}
 			else {
-				query = string.Format("DELETE FROM {0} WHERE {1} = '{2}'", tableName, primaryKeyFieldName, POut.PLong(id));
+				query = string.Format("DELETE FROM {0} WHERE {1} = '{2}'", tableName, primaryKeyFieldName, POut.Long(id));
 			}
 			using (IDbConnection connection = DataSettings.GetConnection())
 			using (IDbCommand command = connection.CreateCommand()) {
@@ -682,7 +682,7 @@ namespace OpenDentBusiness.DataAccess {
 						commandTextBuilder.Append(string.Format("{0} = {1}{0}", identityFields[i].DatabaseName, ParameterPrefix));
 					}
 					else {
-						commandTextBuilder.Append(string.Format("{0} = '{1}'", identityFields[i].DatabaseName, POut.PObject(identityFields[i].Field.GetValue(value))));
+						commandTextBuilder.Append(string.Format("{0} = '{1}'", identityFields[i].DatabaseName, POut.Object(identityFields[i].Field.GetValue(value))));
 					}
 					if (i != identityFields.Count - 1){
 						commandTextBuilder.Append(" AND ");

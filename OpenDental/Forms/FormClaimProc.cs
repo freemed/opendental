@@ -1579,43 +1579,43 @@ namespace OpenDental
 				ClaimProcCur.AllowedOverride=-1;
 			}
 			else {
-				ClaimProcCur.AllowedOverride=PIn.PDouble(textAllowedOverride.Text);
+				ClaimProcCur.AllowedOverride=PIn.Double(textAllowedOverride.Text);
 			}
 			if(textCopayOverride.Text=="") {
 				ClaimProcCur.CopayOverride=-1;
 			}
 			else {
-				ClaimProcCur.CopayOverride=PIn.PDouble(textCopayOverride.Text);
+				ClaimProcCur.CopayOverride=PIn.Double(textCopayOverride.Text);
 			}
 			if(textDedEstOverride.Text=="") {
 				ClaimProcCur.DedEstOverride=-1;
 			}
 			else {
-				ClaimProcCur.DedEstOverride=PIn.PDouble(textDedEstOverride.Text);
+				ClaimProcCur.DedEstOverride=PIn.Double(textDedEstOverride.Text);
 			}
 			if(textPercentOverride.Text=="") {
 				ClaimProcCur.PercentOverride=-1;
 			}
 			else {
-				ClaimProcCur.PercentOverride=PIn.PInt(textPercentOverride.Text);
+				ClaimProcCur.PercentOverride=PIn.Int(textPercentOverride.Text);
 			}
 			if(textPaidOtherInsOverride.Text=="") {
 				ClaimProcCur.PaidOtherInsOverride=-1;
 			}
 			else {
-				ClaimProcCur.PaidOtherInsOverride=PIn.PDouble(textPaidOtherInsOverride.Text);
+				ClaimProcCur.PaidOtherInsOverride=PIn.Double(textPaidOtherInsOverride.Text);
 			}
 			if(textInsEstTotalOverride.Text=="") {
 				ClaimProcCur.InsEstTotalOverride=-1;
 			}
 			else {
-				ClaimProcCur.InsEstTotalOverride=PIn.PDouble(textInsEstTotalOverride.Text);
+				ClaimProcCur.InsEstTotalOverride=PIn.Double(textInsEstTotalOverride.Text);
 			}
 			if(textWriteOffEstOverride.Text=="") {
 				ClaimProcCur.WriteOffEstOverride=-1;
 			}
 			else {
-				ClaimProcCur.WriteOffEstOverride=PIn.PDouble(textWriteOffEstOverride.Text);
+				ClaimProcCur.WriteOffEstOverride=PIn.Double(textWriteOffEstOverride.Text);
 			}
 			if(IsProc) {
 				ClaimProcs.ComputeBaseEst(ClaimProcCur,proc.ProcFee,proc.ToothNum,proc.CodeNum,Plan,PatPlanNum,BenefitList,
@@ -1676,10 +1676,10 @@ namespace OpenDental
 			textEstimateNote.Text=ClaimProcCur.EstimateNote;
 			//insurance box---------------------------------------------------------------
 			if(groupClaimInfo.Visible){
-				ClaimProcCur.DedApplied=PIn.PDouble(textDedApplied.Text);
-				ClaimProcCur.InsPayEst=PIn.PDouble(textInsPayEst.Text);
-				ClaimProcCur.InsPayAmt=PIn.PDouble(textInsPayAmt.Text);
-				ClaimProcCur.WriteOff=Math.Abs(PIn.PDouble(textWriteOff.Text));//if user enters a negative, convert it to a positive.
+				ClaimProcCur.DedApplied=PIn.Double(textDedApplied.Text);
+				ClaimProcCur.InsPayEst=PIn.Double(textInsPayEst.Text);
+				ClaimProcCur.InsPayAmt=PIn.Double(textInsPayAmt.Text);
+				ClaimProcCur.WriteOff=Math.Abs(PIn.Double(textWriteOff.Text));//if user enters a negative, convert it to a positive.
 				//for PPO's the writeoff now replaces consideration of allowed fee
 				if(IsProc) {
 					if(ClaimProcCur.Status==ClaimProcStatus.NotReceived) {//not received.
@@ -1791,7 +1791,7 @@ namespace OpenDental
 				){
 				return;
 			}
-			double copay=PIn.PDouble(textCopayOverride.Text);
+			double copay=PIn.Double(textCopayOverride.Text);
 			//always a procedure
 			double writeoff=proc.ProcFee-copay;
 			if(writeoff<0) {
@@ -1848,7 +1848,7 @@ namespace OpenDental
 
 		private bool AllAreValid(){
 			//disallow negative writeoffs
-			if(textWriteOffEstOverride.Text!="" && PIn.PDouble(textWriteOffEstOverride.Text)<0) {
+			if(textWriteOffEstOverride.Text!="" && PIn.Double(textWriteOffEstOverride.Text)<0) {
 				textWriteOffEstOverride.errorProvider1.SetError(textWriteOffEstOverride,"Write off must be a positive number.");
 			}
 			else {
@@ -1886,12 +1886,12 @@ namespace OpenDental
 				//So, in this case, don't change.
 				ClaimProcCur.ProvNum=ProviderC.List[comboProvider.SelectedIndex].ProvNum;
 			}
-			ClaimProcCur.ProcDate=PIn.PDate(textProcDate.Text);
+			ClaimProcCur.ProcDate=PIn.Date(textProcDate.Text);
 			if(!textDateCP.ReadOnly){
-				ClaimProcCur.DateCP=PIn.PDate(textDateCP.Text);
+				ClaimProcCur.DateCP=PIn.Date(textDateCP.Text);
 			}
 			ClaimProcCur.CodeSent=textCodeSent.Text;
-			ClaimProcCur.FeeBilled=PIn.PDouble(textFeeBilled.Text);
+			ClaimProcCur.FeeBilled=PIn.Double(textFeeBilled.Text);
 			ClaimProcCur.Remarks=textRemarks.Text;
 			//if status was changed to received, then set DateEntry
 			if(ClaimProcOld.Status!=ClaimProcStatus.Received && ClaimProcOld.Status!=ClaimProcStatus.Supplemental){

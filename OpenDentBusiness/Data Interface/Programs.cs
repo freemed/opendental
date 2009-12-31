@@ -29,14 +29,14 @@ namespace OpenDentBusiness{
 			ProgramC.Listt=new List<Program>();
 			for (int i=0;i<table.Rows.Count;i++){
 				prog=new Program();
-				prog.ProgramNum =PIn.PLong(table.Rows[i][0].ToString());
-				prog.ProgName   =PIn.PString(table.Rows[i][1].ToString());
-				prog.ProgDesc   =PIn.PString(table.Rows[i][2].ToString());
-				prog.Enabled    =PIn.PBool(table.Rows[i][3].ToString());
-				prog.Path       =PIn.PString(table.Rows[i][4].ToString());
-				prog.CommandLine=PIn.PString(table.Rows[i][5].ToString());
-				prog.Note       =PIn.PString(table.Rows[i][6].ToString());
-				prog.PluginDllName=PIn.PString(table.Rows[i][7].ToString());
+				prog.ProgramNum =PIn.Long(table.Rows[i][0].ToString());
+				prog.ProgName   =PIn.String(table.Rows[i][1].ToString());
+				prog.ProgDesc   =PIn.String(table.Rows[i][2].ToString());
+				prog.Enabled    =PIn.Bool(table.Rows[i][3].ToString());
+				prog.Path       =PIn.String(table.Rows[i][4].ToString());
+				prog.CommandLine=PIn.String(table.Rows[i][5].ToString());
+				prog.Note       =PIn.String(table.Rows[i][6].ToString());
+				prog.PluginDllName=PIn.String(table.Rows[i][7].ToString());
 				ProgramC.Listt.Add(prog);
 				if(!ProgramC.HList.ContainsKey(prog.ProgName)) {
 					ProgramC.HList.Add(prog.ProgName,prog);
@@ -51,14 +51,14 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command= "UPDATE program SET "
-				+"ProgName = '"     +POut.PString(Cur.ProgName)+"'"
-				+",ProgDesc  = '"   +POut.PString(Cur.ProgDesc)+"'"
-				+",Enabled  = '"    +POut.PBool  (Cur.Enabled)+"'"
-				+",Path = '"        +POut.PString(Cur.Path)+"'"
-				+",CommandLine  = '"+POut.PString(Cur.CommandLine)+"'"
-				+",Note  = '"       +POut.PString(Cur.Note)+"'"
-				+",PluginDllName  = '"+POut.PString(Cur.PluginDllName)+"'"
-				+" WHERE programnum = '"+POut.PLong(Cur.ProgramNum)+"'";
+				+"ProgName = '"     +POut.String(Cur.ProgName)+"'"
+				+",ProgDesc  = '"   +POut.String(Cur.ProgDesc)+"'"
+				+",Enabled  = '"    +POut.Bool  (Cur.Enabled)+"'"
+				+",Path = '"        +POut.String(Cur.Path)+"'"
+				+",CommandLine  = '"+POut.String(Cur.CommandLine)+"'"
+				+",Note  = '"       +POut.String(Cur.Note)+"'"
+				+",PluginDllName  = '"+POut.String(Cur.PluginDllName)+"'"
+				+" WHERE programnum = '"+POut.Long(Cur.ProgramNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -77,16 +77,16 @@ namespace OpenDentBusiness{
 			}
 			command+="ProgName,ProgDesc,Enabled,Path,CommandLine,Note,PluginDllName) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PLong(Cur.ProgramNum)+", ";
+				command+=POut.Long(Cur.ProgramNum)+", ";
 			}
 			command+=
-				 "'"+POut.PString(Cur.ProgName)+"', "
-				+"'"+POut.PString(Cur.ProgDesc)+"', "
-				+"'"+POut.PBool  (Cur.Enabled)+"', "
-				+"'"+POut.PString(Cur.Path)+"', "
-				+"'"+POut.PString(Cur.CommandLine)+"', "
-				+"'"+POut.PString(Cur.Note)+"', "
-				+"'"+POut.PString(Cur.PluginDllName)+"')";
+				 "'"+POut.String(Cur.ProgName)+"', "
+				+"'"+POut.String(Cur.ProgDesc)+"', "
+				+"'"+POut.Bool  (Cur.Enabled)+"', "
+				+"'"+POut.String(Cur.Path)+"', "
+				+"'"+POut.String(Cur.CommandLine)+"', "
+				+"'"+POut.String(Cur.Note)+"', "
+				+"'"+POut.String(Cur.PluginDllName)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -102,7 +102,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),prog);
 				return;
 			}
-			string command = "DELETE from toolbutitem WHERE ProgramNum = "+POut.PLong(prog.ProgramNum);
+			string command = "DELETE from toolbutitem WHERE ProgramNum = "+POut.Long(prog.ProgramNum);
 			Db.NonQ(command);
 			command = "DELETE from program WHERE ProgramNum = '"+prog.ProgramNum.ToString()+"'";
 			Db.NonQ(command);

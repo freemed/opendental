@@ -167,7 +167,7 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Please fix data entry errors first."));
 				return;
 			}
-			PerioExamCur.ExamDate=PIn.PDate(textDate.Text);
+			PerioExamCur.ExamDate=PIn.Date(textDate.Text);
 			PerioExamCur.ProvNum=ProviderC.List[listProv.SelectedIndex].ProvNum;
 			PerioExams.Update(PerioExamCur);
 			DialogResult=DialogResult.OK;

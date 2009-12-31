@@ -198,7 +198,7 @@ namespace OpenDental{
 				row[2]=ProcList[0].Descript;
 				row[3]=ProcList[0].AbbrDesc;
 			  row[4]=((double)Fees.GetAmount0(ProcList[0].CodeNum,feeSched)).ToString("F");
-				report.ColTotal[4]+=PIn.PDouble(row[4].ToString());
+				report.ColTotal[4]+=PIn.Double(row[4].ToString());
 				report.TableQ.Rows.Add(row);
 				for(int i=1;i<ProcList.Length;i++){//loop through data rows
 					row=report.TableQ.NewRow();//create new row called 'row' based on structure of TableQ

@@ -136,7 +136,7 @@ namespace OpenDental
 				(SELECT SUM(Principal+Interest) FROM payplancharge WHERE payplancharge.PayPlanNum=payplan.PayPlanNum
 				AND ChargeDate <= "+datesql+@") _accumDue,
 				(SELECT SUM(Principal+Interest) FROM payplancharge WHERE payplancharge.PayPlanNum=payplan.PayPlanNum
-				AND ChargeDate <= ADDDATE("+datesql+","+POut.PLong(PrefC.GetLong(PrefName.PayPlansBillInAdvanceDays))+@")) _dueTen,
+				AND ChargeDate <= ADDDATE("+datesql+","+POut.Long(PrefC.GetLong(PrefName.PayPlansBillInAdvanceDays))+@")) _dueTen,
 				(SELECT SUM(SplitAmt) FROM paysplit WHERE paysplit.PayPlanNum=payplan.PayPlanNum) _paid,
 				(SELECT SUM(Principal) FROM payplancharge WHERE payplancharge.PayPlanNum=payplan.PayPlanNum) _principal
 				FROM payplan
@@ -152,10 +152,10 @@ namespace OpenDental
 			double accumDue;
 			double dueTen;
 			for(int i=0;i<raw.Rows.Count;i++){
-				princ=PIn.PDouble(raw.Rows[i]["_principal"].ToString());
-				paid=PIn.PDouble(raw.Rows[i]["_paid"].ToString());
-				accumDue=PIn.PDouble(raw.Rows[i]["_accumDue"].ToString());
-				dueTen=PIn.PDouble(raw.Rows[i]["_dueTen"].ToString());
+				princ=PIn.Double(raw.Rows[i]["_principal"].ToString());
+				paid=PIn.Double(raw.Rows[i]["_paid"].ToString());
+				accumDue=PIn.Double(raw.Rows[i]["_accumDue"].ToString());
+				dueTen=PIn.Double(raw.Rows[i]["_dueTen"].ToString());
 				row=table.NewRow();
 				//payplanDate=PIn.PDate(raw.Rows[i]["PayPlanDate"].ToString());
 				//row["date"]=raw.Rows[i]["PayPlanDate"].ToString();//payplanDate.ToShortDateString();

@@ -26,9 +26,9 @@ namespace OpenDentBusiness{
 			for(int i=0;i<table.Rows.Count;i++){
 				trig=new RecallTrigger();
 				trig.IsNew=false;
-				trig.RecallTriggerNum = PIn.PLong   (table.Rows[i][0].ToString());
-				trig.RecallTypeNum    = PIn.PLong   (table.Rows[i][1].ToString());
-				trig.CodeNum          = PIn.PLong   (table.Rows[i][2].ToString());
+				trig.RecallTriggerNum = PIn.Long   (table.Rows[i][0].ToString());
+				trig.RecallTypeNum    = PIn.Long   (table.Rows[i][1].ToString());
+				trig.CodeNum          = PIn.Long   (table.Rows[i][2].ToString());
 				RecallTriggerC.Listt.Add(trig);
 			}
 		}
@@ -96,7 +96,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),recallTypeNum,triggerList);
 				return;
 			}
-			string command="DELETE FROM recalltrigger WHERE RecallTypeNum="+POut.PLong(recallTypeNum);
+			string command="DELETE FROM recalltrigger WHERE RecallTypeNum="+POut.Long(recallTypeNum);
 			Db.NonQ(command);
 			for(int i=0;i<triggerList.Count;i++){
 				triggerList[i].IsNew=true;

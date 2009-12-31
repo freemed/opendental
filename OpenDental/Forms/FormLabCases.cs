@@ -223,9 +223,9 @@ namespace OpenDental{
 			}
 			DateTime dateMax=new DateTime(2100,1,1);
 			if(textDateTo.Text!=""){
-				dateMax=PIn.PDate(textDateTo.Text);
+				dateMax=PIn.Date(textDateTo.Text);
 			}
-			table=LabCases.Refresh(PIn.PDate(textDateFrom.Text),dateMax,checkShowAll.Checked,checkShowUnattached.Checked);
+			table=LabCases.Refresh(PIn.Date(textDateFrom.Text),dateMax,checkShowAll.Checked,checkShowUnattached.Checked);
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableLabCases","Appt Date Time"),120);
@@ -256,7 +256,7 @@ namespace OpenDental{
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			long selectedLabCase=PIn.PLong(table.Rows[e.Row]["LabCaseNum"].ToString());
+			long selectedLabCase=PIn.Long(table.Rows[e.Row]["LabCaseNum"].ToString());
 			FormLabCaseEdit FormL=new FormLabCaseEdit();
 			FormL.CaseCur=LabCases.GetOne(selectedLabCase);
 			FormL.ShowDialog();
@@ -284,7 +284,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please select a lab case first.");
 				return;
 			}
-			Appointment apt=Appointments.GetOneApt(PIn.PLong(table.Rows[gridMain.GetSelectedIndex()]["AptNum"].ToString()));
+			Appointment apt=Appointments.GetOneApt(PIn.Long(table.Rows[gridMain.GetSelectedIndex()]["AptNum"].ToString()));
 			if(apt.AptStatus==ApptStatus.UnschedList){
 				MsgBox.Show(this,"Cannot go to an unscheduled appointment");
 				return;

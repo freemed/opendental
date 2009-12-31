@@ -140,8 +140,8 @@ namespace OpenDental{
 				+"AND procedurelog.ProcFee>0 "
 				+"AND claimproc.Status=6 "//estimate
 				+"AND procedurelog.procstatus=2 "
-				+"AND procedurelog.ProcDate >= "+POut.PDate(date1.SelectionStart)+" "
-				+"AND procedurelog.ProcDate <= "+POut.PDate(date2.SelectionStart)+" "
+				+"AND procedurelog.ProcDate >= "+POut.Date(date1.SelectionStart)+" "
+				+"AND procedurelog.ProcDate <= "+POut.Date(date2.SelectionStart)+" "
 				+"GROUP BY procedurelog.ProcNum";
 			/*}
 			else{

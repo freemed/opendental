@@ -198,22 +198,22 @@ namespace OpenDental.ReportingOld2
 					}
 				}
 				else if(valueType==FieldValueType.Date){
-					outputValue+=" "+Regex.Replace(snippet,@"\?",POut.PDate((DateTime)currentValues[i],false));
+					outputValue+=" "+Regex.Replace(snippet,@"\?",POut.Date((DateTime)currentValues[i],false));
 				}
 				else if(valueType==FieldValueType.Def){
-					outputValue+=" "+Regex.Replace(snippet,@"\?",POut.PLong((int)currentValues[i]));
+					outputValue+=" "+Regex.Replace(snippet,@"\?",POut.Long((int)currentValues[i]));
 				}
 				else if(valueType==FieldValueType.Enum){
-					outputValue+=" "+Regex.Replace(snippet,@"\?",POut.PLong((int)currentValues[i]));
+					outputValue+=" "+Regex.Replace(snippet,@"\?",POut.Long((int)currentValues[i]));
 				}
 				else if(valueType==FieldValueType.Integer){
-					outputValue+=" "+Regex.Replace(snippet,@"\?",POut.PLong((int)currentValues[i]));
+					outputValue+=" "+Regex.Replace(snippet,@"\?",POut.Long((int)currentValues[i]));
 				}
 				else	if(valueType==FieldValueType.String){
-					outputValue+=" "+Regex.Replace(snippet,@"\?",POut.PString((string)currentValues[i]));
+					outputValue+=" "+Regex.Replace(snippet,@"\?",POut.String((string)currentValues[i]));
 				}
 				else if(valueType==FieldValueType.Number){
-					outputValue+=" "+Regex.Replace(snippet,@"\?",POut.PDouble((double)currentValues[i]));
+					outputValue+=" "+Regex.Replace(snippet,@"\?",POut.Double((double)currentValues[i]));
 				}
 			}//for i
 			outputValue+=")";

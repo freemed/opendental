@@ -27,11 +27,11 @@ namespace OpenDentBusiness {
 			AutoNoteControl noteCont;
 			for (int i=0;i<table.Rows.Count;i++){
 				noteCont = new AutoNoteControl();
-				noteCont.AutoNoteControlNum = PIn.PLong(table.Rows[i][0].ToString());
-				noteCont.Descript = PIn.PString(table.Rows[i]["Descript"].ToString());
-				noteCont.ControlType = PIn.PString(table.Rows[i]["ControlType"].ToString());
-				noteCont.ControlLabel =PIn.PString(table.Rows[i]["ControlLabel"].ToString());
-				noteCont.ControlOptions = PIn.PString(table.Rows[i]["ControlOptions"].ToString());
+				noteCont.AutoNoteControlNum = PIn.Long(table.Rows[i][0].ToString());
+				noteCont.Descript = PIn.String(table.Rows[i]["Descript"].ToString());
+				noteCont.ControlType = PIn.String(table.Rows[i]["ControlType"].ToString());
+				noteCont.ControlLabel =PIn.String(table.Rows[i]["ControlLabel"].ToString());
+				noteCont.ControlOptions = PIn.String(table.Rows[i]["ControlOptions"].ToString());
 				Listt.Add(noteCont);
 			}
 		}
@@ -50,13 +50,13 @@ namespace OpenDentBusiness {
 			}
 			command+="Descript,ControlType,ControlLabel,ControlOptions) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PLong(autonotecontrol.AutoNoteControlNum)+", ";
+				command+=POut.Long(autonotecontrol.AutoNoteControlNum)+", ";
 			}
 			command+=		
-				 "'"+POut.PString(autonotecontrol.Descript)+"', " 
-				+"'"+POut.PString(autonotecontrol.ControlType)+"', "
-				+"'"+POut.PString(autonotecontrol.ControlLabel)+"' ,"			
-				+"'"+POut.PString(autonotecontrol.ControlOptions)+"')";
+				 "'"+POut.String(autonotecontrol.Descript)+"', " 
+				+"'"+POut.String(autonotecontrol.ControlType)+"', "
+				+"'"+POut.String(autonotecontrol.ControlLabel)+"' ,"			
+				+"'"+POut.String(autonotecontrol.ControlOptions)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -73,11 +73,11 @@ namespace OpenDentBusiness {
 				return;
 			}
 			string command="UPDATE autonotecontrol SET "
-				+"ControlType = '"+POut.PString(autonotecontrol.ControlType)+"', "
-				+"Descript = '"+POut.PString(autonotecontrol.Descript)+"', "
-				+"ControlLabel = '"+POut.PString(autonotecontrol.ControlLabel)+"', "
-				+"ControlOptions = '"+POut.PString(autonotecontrol.ControlOptions)+"' "
-				+"WHERE AutoNoteControlNum = '"+POut.PLong(autonotecontrol.AutoNoteControlNum)+"'";
+				+"ControlType = '"+POut.String(autonotecontrol.ControlType)+"', "
+				+"Descript = '"+POut.String(autonotecontrol.Descript)+"', "
+				+"ControlLabel = '"+POut.String(autonotecontrol.ControlLabel)+"', "
+				+"ControlOptions = '"+POut.String(autonotecontrol.ControlOptions)+"' "
+				+"WHERE AutoNoteControlNum = '"+POut.Long(autonotecontrol.AutoNoteControlNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -87,7 +87,7 @@ namespace OpenDentBusiness {
 				return;
 			}
 			//no validation for now.
-			string command="DELETE FROM autonotecontrol WHERE AutoNoteControlNum="+POut.PLong(autoNoteControlNum);
+			string command="DELETE FROM autonotecontrol WHERE AutoNoteControlNum="+POut.Long(autoNoteControlNum);
 			Db.NonQ(command);
 		}
 

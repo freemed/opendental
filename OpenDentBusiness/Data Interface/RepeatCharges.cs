@@ -13,20 +13,20 @@ namespace OpenDentBusiness{
 			}
 			string command="SELECT * FROM repeatcharge";
 			if(patNum!=0) {
-				command+=" WHERE PatNum = "+POut.PLong(patNum);
+				command+=" WHERE PatNum = "+POut.Long(patNum);
 			}
 			command+=" ORDER BY DateStart";
 			DataTable table=Db.GetTable(command);
 			RepeatCharge[] List=new RepeatCharge[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new RepeatCharge();
-				List[i].RepeatChargeNum= PIn.PLong(table.Rows[i][0].ToString());
-				List[i].PatNum         = PIn.PLong(table.Rows[i][1].ToString());
-				List[i].ProcCode       = PIn.PString(table.Rows[i][2].ToString());
-				List[i].ChargeAmt      = PIn.PDouble(table.Rows[i][3].ToString());
-				List[i].DateStart      = PIn.PDate(table.Rows[i][4].ToString());
-				List[i].DateStop       = PIn.PDate(table.Rows[i][5].ToString());
-				List[i].Note           = PIn.PString(table.Rows[i][6].ToString());
+				List[i].RepeatChargeNum= PIn.Long(table.Rows[i][0].ToString());
+				List[i].PatNum         = PIn.Long(table.Rows[i][1].ToString());
+				List[i].ProcCode       = PIn.String(table.Rows[i][2].ToString());
+				List[i].ChargeAmt      = PIn.Double(table.Rows[i][3].ToString());
+				List[i].DateStart      = PIn.Date(table.Rows[i][4].ToString());
+				List[i].DateStop       = PIn.Date(table.Rows[i][5].ToString());
+				List[i].Note           = PIn.String(table.Rows[i][6].ToString());
 			}
 			return List;
 		}	
@@ -38,13 +38,13 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command="UPDATE repeatcharge SET " 
-				+"PatNum = '"    +POut.PLong   (charge.PatNum)+"'"
-				+",ProcCode = '" +POut.PString(charge.ProcCode)+"'"
-				+",ChargeAmt = '"+POut.PDouble(charge.ChargeAmt)+"'"
-				+",DateStart = "+POut.PDate  (charge.DateStart)
-				+",DateStop = " +POut.PDate  (charge.DateStop)
-				+",Note = '"     +POut.PString(charge.Note)+"'"
-				+" WHERE RepeatChargeNum = '" +POut.PLong(charge.RepeatChargeNum)+"'";
+				+"PatNum = '"    +POut.Long   (charge.PatNum)+"'"
+				+",ProcCode = '" +POut.String(charge.ProcCode)+"'"
+				+",ChargeAmt = '"+POut.Double(charge.ChargeAmt)+"'"
+				+",DateStart = "+POut.Date  (charge.DateStart)
+				+",DateStop = " +POut.Date  (charge.DateStop)
+				+",Note = '"     +POut.String(charge.Note)+"'"
+				+" WHERE RepeatChargeNum = '" +POut.Long(charge.RepeatChargeNum)+"'";
  			Db.NonQ(command);
 		}
 
@@ -63,15 +63,15 @@ namespace OpenDentBusiness{
 			}
 			command+="PatNum,ProcCode,ChargeAmt,DateStart,DateStop,Note) VALUES(";
 			if(PrefC.RandomKeys){
-				command+="'"+POut.PLong(charge.RepeatChargeNum)+"', ";
+				command+="'"+POut.Long(charge.RepeatChargeNum)+"', ";
 			}
 			command+=
-				 "'"+POut.PLong   (charge.PatNum)+"', "
-				+"'"+POut.PString(charge.ProcCode)+"', "
-				+"'"+POut.PDouble(charge.ChargeAmt)+"', "
-				+POut.PDate  (charge.DateStart)+", "
-				+POut.PDate  (charge.DateStop)+", "
-				+"'"+POut.PString(charge.Note)+"')";
+				 "'"+POut.Long   (charge.PatNum)+"', "
+				+"'"+POut.String(charge.ProcCode)+"', "
+				+"'"+POut.Double(charge.ChargeAmt)+"', "
+				+POut.Date  (charge.DateStart)+", "
+				+POut.Date  (charge.DateStop)+", "
+				+"'"+POut.String(charge.Note)+"')";
 			if(PrefC.RandomKeys){
 				Db.NonQ(command);
 			}
@@ -87,7 +87,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),charge);
 				return;
 			}
-			string command="DELETE FROM repeatcharge WHERE RepeatChargeNum ="+POut.PLong(charge.RepeatChargeNum);
+			string command="DELETE FROM repeatcharge WHERE RepeatChargeNum ="+POut.Long(charge.RepeatChargeNum);
 			Db.NonQ(command);
 		}
 
@@ -98,12 +98,12 @@ namespace OpenDentBusiness{
 			}
 			ArrayList retVal=new ArrayList();
 			string command="SELECT ProcDate FROM procedurelog "
-				+"WHERE PatNum="+POut.PLong(patNum)
-				+" AND CodeNum="+POut.PLong(codeNum)
+				+"WHERE PatNum="+POut.Long(patNum)
+				+" AND CodeNum="+POut.Long(codeNum)
 				+" AND ProcStatus=2";//complete
 			DataTable table=Db.GetTable(command);
 			for(int i=0;i<table.Rows.Count;i++){
-				retVal.Add(PIn.PDate(table.Rows[i][0].ToString()));
+				retVal.Add(PIn.Date(table.Rows[i][0].ToString()));
 			}
 			return retVal;
 		}

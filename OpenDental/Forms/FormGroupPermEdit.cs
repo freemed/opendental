@@ -242,8 +242,8 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please fix data entry errors first.");
 				return;
 			}
-			Cur.NewerDays=PIn.PInt (textDays.Text);
-			Cur.NewerDate=PIn.PDate(textDate.Text);
+			Cur.NewerDays=PIn.Int (textDays.Text);
+			Cur.NewerDate=PIn.Date(textDate.Text);
 			try{
 				GroupPermissions.InsertOrUpdate(Cur,IsNew);
 			}

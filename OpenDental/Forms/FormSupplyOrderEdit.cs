@@ -60,9 +60,9 @@ namespace OpenDental {
 				Order.DatePlaced=new DateTime(2500,1,1);
 			}
 			else{
-				Order.DatePlaced=PIn.PDate(textDatePlaced.Text);
+				Order.DatePlaced=PIn.Date(textDatePlaced.Text);
 			}
-			Order.AmountTotal=PIn.PDouble(textAmountTotal.Text);
+			Order.AmountTotal=PIn.Double(textAmountTotal.Text);
 			Order.Note=textNote.Text;
 			SupplyOrders.WriteObject(Order);
 			DialogResult=DialogResult.OK;

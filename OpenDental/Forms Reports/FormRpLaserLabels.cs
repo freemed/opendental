@@ -1005,15 +1005,15 @@ namespace OpenDental {
 						if(i > 0) {
 							whereProv += ",";
 						}
-						whereProv += "'" + POut.PLong(ProviderC.List[listProviders.SelectedIndices[i]].ProvNum) + "'";
+						whereProv += "'" + POut.Long(ProviderC.List[listProviders.SelectedIndices[i]].ProvNum) + "'";
 					}
 					whereProv += ") ";
 					patStat = BuildPatStatList(checkActiveOnly.Checked);
 					command = SetPatientBaseSelect();
 					command += "WHERE CONCAT(CONCAT(CONCAT(CONCAT(LName,', '),FName),' '),MiddleI) >= " + 
-						"'" + POut.PString(textStartName.Text) + "'";
+						"'" + POut.String(textStartName.Text) + "'";
 					command += " AND CONCAT(CONCAT(CONCAT(CONCAT(LName,', '),FName),' '),MiddleI) <= " + 
-						"'" + POut.PString(textEndName.Text) + "'";
+						"'" + POut.String(textEndName.Text) + "'";
 					if(checkGroupByFamily.Checked == true) {
 						command += " AND patient.Guarantor = patient.PatNum";
 					}
@@ -1090,8 +1090,8 @@ namespace OpenDental {
 				//Birthday Labels Builder
 				//
 				case 3:
-					DateTime dateBirthdayFrom = PIn.PDate(textBirthdayFrom.Text);
-					DateTime dateBirthdayTo = PIn.PDate(textBirthdayTo.Text);
+					DateTime dateBirthdayFrom = PIn.Date(textBirthdayFrom.Text);
+					DateTime dateBirthdayTo = PIn.Date(textBirthdayTo.Text);
 					if(dateBirthdayTo < dateBirthdayFrom) {
 						MsgBox.Show(this,"To date cannot be before From date.");
 						return;
@@ -1438,8 +1438,8 @@ namespace OpenDental {
 			}
 		}
 		private void butBirthdayLeft_Click(object sender,EventArgs e) {
-			DateTime dateFrom=PIn.PDate(textBirthdayFrom.Text);
-			DateTime dateTo=PIn.PDate(textBirthdayTo.Text);
+			DateTime dateFrom=PIn.Date(textBirthdayFrom.Text);
+			DateTime dateTo=PIn.Date(textBirthdayTo.Text);
 			bool toLastDay=false;
 			if(CultureInfo.CurrentCulture.Calendar.GetDaysInMonth(dateTo.Year,dateTo.Month)==dateTo.Day) {
 				toLastDay=true;
@@ -1447,7 +1447,7 @@ namespace OpenDental {
 			textBirthdayFrom.Text=dateFrom.AddMonths(-1).ToString(Lan.g(this,"MM/dd"));
 			textBirthdayTo.Text=dateTo.AddMonths(-1).ToString(Lan.g(this,"MM/dd"));
 			if(toLastDay) {
-				dateTo=PIn.PDate(textBirthdayTo.Text);
+				dateTo=PIn.Date(textBirthdayTo.Text);
 				textBirthdayTo.Text=new DateTime(dateTo.Year,dateTo.Month,
 					CultureInfo.CurrentCulture.Calendar.GetDaysInMonth(dateTo.Year,dateTo.Month))
 					.ToString(Lan.g(this,"MM/dd"));
@@ -1455,8 +1455,8 @@ namespace OpenDental {
 		}
 
 		private void butBirthdayRight_Click(object sender,EventArgs e) {
-			DateTime dateFrom=PIn.PDate(textBirthdayFrom.Text);
-			DateTime dateTo=PIn.PDate(textBirthdayTo.Text);
+			DateTime dateFrom=PIn.Date(textBirthdayFrom.Text);
+			DateTime dateTo=PIn.Date(textBirthdayTo.Text);
 			textBirthdayFrom.Text=dateFrom.AddMonths(-1).ToShortDateString();
 			textBirthdayTo.Text=dateTo.AddMonths(-1).ToShortDateString();
 			bool toLastDay=false;
@@ -1466,7 +1466,7 @@ namespace OpenDental {
 			textBirthdayFrom.Text=dateFrom.AddMonths(1).ToString(Lan.g(this,"MM/dd"));
 			textBirthdayTo.Text=dateTo.AddMonths(1).ToString(Lan.g(this,"MM/dd"));
 			if(toLastDay) {
-				dateTo=PIn.PDate(textBirthdayTo.Text);
+				dateTo=PIn.Date(textBirthdayTo.Text);
 				textBirthdayTo.Text=new DateTime(dateTo.Year,dateTo.Month,
 					CultureInfo.CurrentCulture.Calendar.GetDaysInMonth(dateTo.Year,dateTo.Month))
 					.ToString(Lan.g(this,"MM/dd"));

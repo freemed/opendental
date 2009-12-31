@@ -1212,27 +1212,27 @@ namespace OpenDental{
  			else if(IsDate){
         if(DropListFilter.SelectedItem.ToString()=="First Visit Date"){
  					if(ListConditions.SelectedIndex==0){
-					  ListPrerequisites.Items.Add("*HAVING MIN(procdate) LIKE '%"+POut.PDate(DateTime.Parse(TextDate.Text),false)+"%'");   
-            ProcLogFirstDate="MIN(procdate) LIKE '%"+POut.PDate(DateTime.Parse(TextDate.Text),false)+"%'";
+					  ListPrerequisites.Items.Add("*HAVING MIN(procdate) LIKE '%"+POut.Date(DateTime.Parse(TextDate.Text),false)+"%'");   
+            ProcLogFirstDate="MIN(procdate) LIKE '%"+POut.Date(DateTime.Parse(TextDate.Text),false)+"%'";
 					}
 					else{
   					ListPrerequisites.Items.Add("*HAVING MIN(procdate) "+ListConditions.SelectedItem.ToString()
-              +" "+POut.PDate(DateTime.Parse(TextDate.Text))); 
+              +" "+POut.Date(DateTime.Parse(TextDate.Text))); 
             ProcLogFirstDate="MIN(procdate) "+ListConditions.SelectedItem.ToString()
-              +" "+POut.PDate(DateTime.Parse(TextDate.Text));
+              +" "+POut.Date(DateTime.Parse(TextDate.Text));
 					}          
           UsingProcLogFirst[UsingInsPlans.Count-1]=true;
         }
         else if(DropListFilter.SelectedItem.ToString()=="Last Visit Date"){
           if(ListConditions.SelectedIndex==0){
-					  ListPrerequisites.Items.Add("*HAVING MAX(procdate) LIKE '%"+POut.PDate(DateTime.Parse(TextDate.Text),false)+"%'"); 
-            ProcLogLastDate="MAX(procdate) LIKE '%"+POut.PDate(DateTime.Parse(TextDate.Text),false)+"%'";
+					  ListPrerequisites.Items.Add("*HAVING MAX(procdate) LIKE '%"+POut.Date(DateTime.Parse(TextDate.Text),false)+"%'"); 
+            ProcLogLastDate="MAX(procdate) LIKE '%"+POut.Date(DateTime.Parse(TextDate.Text),false)+"%'";
 					}
 					else{
   					 ListPrerequisites.Items.Add("*HAVING MAX(procdate) "+ListConditions.SelectedItem.ToString()
-               +" "+POut.PDate(DateTime.Parse(TextDate.Text))); 
+               +" "+POut.Date(DateTime.Parse(TextDate.Text))); 
              ProcLogLastDate="MAX(procdate) "+ListConditions.SelectedItem.ToString()
-               +" "+POut.PDate(DateTime.Parse(TextDate.Text)); 
+               +" "+POut.Date(DateTime.Parse(TextDate.Text)); 
 					}
           UsingProcLogLast[UsingInsPlans.Count-1]=true;
         }
@@ -1252,11 +1252,11 @@ namespace OpenDental{
         else{  
 					if(ListConditions.SelectedIndex==0){
 					ListPrerequisites.Items.Add(DropListFilter.SelectedItem.ToString()
-						+" Like '%"+POut.PDate(DateTime.Parse(TextDate.Text),false)+"%'"); 
+						+" Like '%"+POut.Date(DateTime.Parse(TextDate.Text),false)+"%'"); 
 					}
 					else{
 						ListPrerequisites.Items.Add(DropListFilter.SelectedItem.ToString()+" "
-							+ListConditions.SelectedItem.ToString()+" "+POut.PDate(DateTime.Parse(TextDate.Text)));      
+							+ListConditions.SelectedItem.ToString()+" "+POut.Date(DateTime.Parse(TextDate.Text)));      
 				  }
         }
 			}//end else if(isDate)

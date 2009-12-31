@@ -39,9 +39,9 @@ namespace OpenDentBusiness{
 			list=new SchoolClass[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				list[i]=new SchoolClass();
-				list[i].SchoolClassNum=PIn.PLong(table.Rows[i][0].ToString());
-				list[i].GradYear=PIn.PInt(table.Rows[i][1].ToString());
-				list[i].Descript=PIn.PString(table.Rows[i][2].ToString());
+				list[i].SchoolClassNum=PIn.Long(table.Rows[i][0].ToString());
+				list[i].GradYear=PIn.Int(table.Rows[i][1].ToString());
+				list[i].Descript=PIn.String(table.Rows[i][2].ToString());
 			}
 		}
 
@@ -53,10 +53,10 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command= "UPDATE schoolclass SET " 
-				+"SchoolClassNum = '" +POut.PLong   (sc.SchoolClassNum)+"'"
-				+",GradYear = '"      +POut.PLong   (sc.GradYear)+"'"
-				+",Descript = '"      +POut.PString(sc.Descript)+"'"
-				+" WHERE SchoolClassNum = '"+POut.PLong(sc.SchoolClassNum)+"'";
+				+"SchoolClassNum = '" +POut.Long   (sc.SchoolClassNum)+"'"
+				+",GradYear = '"      +POut.Long   (sc.GradYear)+"'"
+				+",Descript = '"      +POut.String(sc.Descript)+"'"
+				+" WHERE SchoolClassNum = '"+POut.Long(sc.SchoolClassNum)+"'";
  			Db.NonQ(command);
 		}
 
@@ -75,11 +75,11 @@ namespace OpenDentBusiness{
 			}
 			command+="GradYear,Descript) VALUES(";
 			if(PrefC.RandomKeys){
-				command+="'"+POut.PLong(sc.SchoolClassNum)+"', ";
+				command+="'"+POut.Long(sc.SchoolClassNum)+"', ";
 			}
 			command+=
-				 "'"+POut.PLong   (sc.GradYear)+"', "
-				+"'"+POut.PString(sc.Descript)+"')";
+				 "'"+POut.Long   (sc.GradYear)+"', "
+				+"'"+POut.String(sc.Descript)+"')";
  			if(PrefC.RandomKeys){
 				Db.NonQ(command);
 			}
@@ -111,20 +111,20 @@ namespace OpenDentBusiness{
 			}
 			//check for attached providers
 			string  command="SELECT COUNT(*) FROM provider WHERE SchoolClassNum = '"
-				+POut.PLong(classNum)+"'";
+				+POut.Long(classNum)+"'";
 			DataTable table=Db.GetTable(command);
-			if(PIn.PString(table.Rows[0][0].ToString())!="0"){
+			if(PIn.String(table.Rows[0][0].ToString())!="0"){
 				throw new Exception(Lans.g("SchoolClasses","Class already in use by providers."));
 			}
 			//check for attached reqneededs.
 			command="SELECT COUNT(*) FROM reqneeded WHERE SchoolClassNum = '"
-				+POut.PLong(classNum)+"'";
+				+POut.Long(classNum)+"'";
 			table=Db.GetTable(command);
-			if(PIn.PString(table.Rows[0][0].ToString())!="0") {
+			if(PIn.String(table.Rows[0][0].ToString())!="0") {
 				throw new Exception(Lans.g("SchoolClasses","Class already in use by 'requirements needed' table."));
 			}
 			command= "DELETE from schoolclass WHERE SchoolClassNum = '"
-				+POut.PLong(classNum)+"'";
+				+POut.Long(classNum)+"'";
  			Db.NonQ(command);
 		}
 

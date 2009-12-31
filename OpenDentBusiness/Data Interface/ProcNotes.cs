@@ -21,15 +21,15 @@ namespace OpenDentBusiness {
 			}
 			command+="PatNum, ProcNum, EntryDateTime, UserNum, Note, SigIsTopaz, Signature) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PLong(procNote.ProcNoteNum)+", ";
+				command+=POut.Long(procNote.ProcNoteNum)+", ";
 			}
 			command+=
-				 "'"+POut.PLong   (procNote.PatNum)+"', "
-				+"'"+POut.PLong   (procNote.ProcNum)+"', "
+				 "'"+POut.Long   (procNote.PatNum)+"', "
+				+"'"+POut.Long   (procNote.ProcNum)+"', "
 				+"NOW(), "//EntryDateTime
-				+"'"+POut.PLong   (procNote.UserNum)+"', "
-				+"'"+POut.PString(procNote.Note)+"', "
-				+"'"+POut.PBool  (procNote.SigIsTopaz)+"', "
+				+"'"+POut.Long   (procNote.UserNum)+"', "
+				+"'"+POut.String(procNote.Note)+"', "
+				+"'"+POut.Bool  (procNote.SigIsTopaz)+"', "
 				+"'"+POut.Base64 (procNote.Signature)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);

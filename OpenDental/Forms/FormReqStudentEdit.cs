@@ -472,7 +472,7 @@ namespace OpenDental{
 				ReqCur.InstructorNum=ProviderC.List[comboInstructor.SelectedIndex-1].ProvNum;
 			}
 			//DateCompleted
-			ReqCur.DateCompleted=PIn.PDate(textDateCompleted.Text);
+			ReqCur.DateCompleted=PIn.Date(textDateCompleted.Text);
 			try{
 				//if(IsNew){//inserting is always done as part of reqneededs.synch
 				//	LabCases.Insert(CaseCur);

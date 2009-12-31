@@ -25,12 +25,12 @@ namespace OpenDentBusiness {
 			CovCatC.ListShort=new List<CovCat>();
 			for(int i=0;i<table.Rows.Count;i++) {
 				covcat=new CovCat();
-				covcat.CovCatNum     =PIn.PLong(table.Rows[i][0].ToString());
-				covcat.Description   =PIn.PString(table.Rows[i][1].ToString());
-				covcat.DefaultPercent=PIn.PInt(table.Rows[i][2].ToString());
-				covcat.CovOrder      =PIn.PInt(table.Rows[i][3].ToString());
-				covcat.IsHidden      =PIn.PBool(table.Rows[i][4].ToString());
-				covcat.EbenefitCat   =(EbenefitCategory)PIn.PLong(table.Rows[i][5].ToString());
+				covcat.CovCatNum     =PIn.Long(table.Rows[i][0].ToString());
+				covcat.Description   =PIn.String(table.Rows[i][1].ToString());
+				covcat.DefaultPercent=PIn.Int(table.Rows[i][2].ToString());
+				covcat.CovOrder      =PIn.Int(table.Rows[i][3].ToString());
+				covcat.IsHidden      =PIn.Bool(table.Rows[i][4].ToString());
+				covcat.EbenefitCat   =(EbenefitCategory)PIn.Long(table.Rows[i][5].ToString());
 				CovCatC.Listt.Add(covcat);
 				if(!covcat.IsHidden) {
 					CovCatC.ListShort.Add(covcat);
@@ -45,12 +45,12 @@ namespace OpenDentBusiness {
 				return;
 			}
 			string command= "UPDATE covcat SET "
-				+ "Description = '"    +POut.PString(covcat.Description)+"'"
-				+",DefaultPercent = '" +POut.PLong   (covcat.DefaultPercent)+"'"
-				+",CovOrder = '"       +POut.PLong   (covcat.CovOrder)+"'"
-				+",IsHidden = '"       +POut.PBool  (covcat.IsHidden)+"'"
-				+",EbenefitCat = '"    +POut.PLong((int)covcat.EbenefitCat)+"'"
-				+" WHERE CovCatNum = '"+POut.PLong(covcat.CovCatNum)+"'";
+				+ "Description = '"    +POut.String(covcat.Description)+"'"
+				+",DefaultPercent = '" +POut.Long   (covcat.DefaultPercent)+"'"
+				+",CovOrder = '"       +POut.Long   (covcat.CovOrder)+"'"
+				+",IsHidden = '"       +POut.Bool  (covcat.IsHidden)+"'"
+				+",EbenefitCat = '"    +POut.Long((int)covcat.EbenefitCat)+"'"
+				+" WHERE CovCatNum = '"+POut.Long(covcat.CovCatNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -70,14 +70,14 @@ namespace OpenDentBusiness {
 			command+="Description,DefaultPercent,"
 				+"CovOrder,IsHidden,EbenefitCat) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PLong(covcat.CovCatNum)+", ";
+				command+=POut.Long(covcat.CovCatNum)+", ";
 			}
 			command+=
-				 "'"+POut.PString(covcat.Description)+"', "
-				+"'"+POut.PLong(covcat.DefaultPercent)+"', "
-				+"'"+POut.PLong(covcat.CovOrder)+"', "
-				+"'"+POut.PBool(covcat.IsHidden)+"', "
-				+"'"+POut.PLong((int)covcat.EbenefitCat)+"')";
+				 "'"+POut.String(covcat.Description)+"', "
+				+"'"+POut.Long(covcat.DefaultPercent)+"', "
+				+"'"+POut.Long(covcat.CovOrder)+"', "
+				+"'"+POut.Bool(covcat.IsHidden)+"', "
+				+"'"+POut.Long((int)covcat.EbenefitCat)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}

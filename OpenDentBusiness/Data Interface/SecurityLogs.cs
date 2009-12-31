@@ -15,27 +15,27 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<SecurityLog[]>(MethodBase.GetCurrentMethod(),dateFrom,dateTo,permType,patNum,userNum);
 			}
 			string command="SELECT * FROM securitylog "
-				+"WHERE LogDateTime >= "+POut.PDate(dateFrom)+" "
-				+"AND LogDateTime <= "+POut.PDate(dateTo.AddDays(1));
+				+"WHERE LogDateTime >= "+POut.Date(dateFrom)+" "
+				+"AND LogDateTime <= "+POut.Date(dateTo.AddDays(1));
 			if(patNum !=0) {
-				command+=" AND PatNum= '"+POut.PLong(patNum)+"'";
+				command+=" AND PatNum= '"+POut.Long(patNum)+"'";
 			}
 			if(permType!=Permissions.None) {
-				command+=" AND PermType="+POut.PLong((int)permType);
+				command+=" AND PermType="+POut.Long((int)permType);
 			}
 			if(userNum!=0) {
-				command+=" AND UserNum="+POut.PLong(userNum);
+				command+=" AND UserNum="+POut.Long(userNum);
 			}
 			DataTable table=Db.GetTable(command);
 			SecurityLog[] List=new SecurityLog[table.Rows.Count];
 			for(int i=0;i<List.Length;i++) {
 				List[i]=new SecurityLog();
-				List[i].SecurityLogNum= PIn.PLong(table.Rows[i][0].ToString());
-				List[i].PermType      = (Permissions)PIn.PLong(table.Rows[i][1].ToString());
-				List[i].UserNum       = PIn.PLong(table.Rows[i][2].ToString());
-				List[i].LogDateTime   = PIn.PDateT(table.Rows[i][3].ToString());
-				List[i].LogText       = PIn.PString(table.Rows[i][4].ToString());
-				List[i].PatNum        = PIn.PLong(table.Rows[i][5].ToString());
+				List[i].SecurityLogNum= PIn.Long(table.Rows[i][0].ToString());
+				List[i].PermType      = (Permissions)PIn.Long(table.Rows[i][1].ToString());
+				List[i].UserNum       = PIn.Long(table.Rows[i][2].ToString());
+				List[i].LogDateTime   = PIn.DateT(table.Rows[i][3].ToString());
+				List[i].LogText       = PIn.String(table.Rows[i][4].ToString());
+				List[i].PatNum        = PIn.Long(table.Rows[i][5].ToString());
 			}
 			return List;
 		}
@@ -55,14 +55,14 @@ namespace OpenDentBusiness{
 			}
 			command+="PermType,UserNum,LogDateTime,LogText,PatNum) VALUES(";
 			if(PrefC.RandomKeys){
-				command+="'"+POut.PLong(log.SecurityLogNum)+"', ";
+				command+="'"+POut.Long(log.SecurityLogNum)+"', ";
 			}
 			command+=
-				 "'"+POut.PLong   ((int)log.PermType)+"', "
-				+"'"+POut.PLong   (log.UserNum)+"', "
+				 "'"+POut.Long   ((int)log.PermType)+"', "
+				+"'"+POut.Long   (log.UserNum)+"', "
 				+"NOW(), "//LogDateTime set to current server time
-				+"'"+POut.PString(log.LogText)+"', "
-				+"'"+POut.PLong   (log.PatNum)+"')";
+				+"'"+POut.String(log.LogText)+"', "
+				+"'"+POut.Long   (log.PatNum)+"')";
  			if(PrefC.RandomKeys){
 				Db.NonQ(command);
 			}
@@ -89,21 +89,21 @@ namespace OpenDentBusiness{
 				if(i>0){
 					types+=" OR";
 				}
-				types+=" PermType="+POut.PLong((int)permTypes[i]);
+				types+=" PermType="+POut.Long((int)permTypes[i]);
 			}
 			string command="SELECT * FROM securitylog "
-				+"WHERE PatNum= '"+POut.PLong(patNum)+"' "
+				+"WHERE PatNum= '"+POut.Long(patNum)+"' "
 				+"AND ("+types+")";
 			DataTable table=Db.GetTable(command);
 			SecurityLog[] List=new SecurityLog[table.Rows.Count];
 			for(int i=0;i<List.Length;i++){
 				List[i]=new SecurityLog();
-				List[i].SecurityLogNum= PIn.PLong   (table.Rows[i][0].ToString());
-				List[i].PermType      = (Permissions)PIn.PLong(table.Rows[i][1].ToString());
-				List[i].UserNum       = PIn.PLong   (table.Rows[i][2].ToString());
-				List[i].LogDateTime   = PIn.PDateT (table.Rows[i][3].ToString());	
-				List[i].LogText       = PIn.PString(table.Rows[i][4].ToString());
-				List[i].PatNum        = PIn.PLong   (table.Rows[i][5].ToString());
+				List[i].SecurityLogNum= PIn.Long   (table.Rows[i][0].ToString());
+				List[i].PermType      = (Permissions)PIn.Long(table.Rows[i][1].ToString());
+				List[i].UserNum       = PIn.Long   (table.Rows[i][2].ToString());
+				List[i].LogDateTime   = PIn.DateT (table.Rows[i][3].ToString());	
+				List[i].LogText       = PIn.String(table.Rows[i][4].ToString());
+				List[i].PatNum        = PIn.Long   (table.Rows[i][5].ToString());
 			}
 			return List;
 		}

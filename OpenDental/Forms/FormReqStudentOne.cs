@@ -161,7 +161,7 @@ namespace OpenDental{
 			//}
 			//else{
 				FormReqStudentEdit FormRSE=new FormReqStudentEdit();
-				FormRSE.ReqCur=ReqStudents.GetOne(PIn.PLong(table.Rows[e.Row]["ReqStudentNum"].ToString()));
+				FormRSE.ReqCur=ReqStudents.GetOne(PIn.Long(table.Rows[e.Row]["ReqStudentNum"].ToString()));
 				FormRSE.ShowDialog();
 				if(FormRSE.DialogResult!=DialogResult.OK) {
 					return;

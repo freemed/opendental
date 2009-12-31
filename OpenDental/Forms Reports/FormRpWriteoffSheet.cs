@@ -314,7 +314,7 @@ namespace OpenDental{
 						whereProv+="OR ";
 					}
 					whereProv+="claimproc.ProvNum = "
-						+POut.PLong(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+" ";
+						+POut.Long(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+" ";
 				}
 				whereProv+=") ";
 			}
@@ -331,13 +331,13 @@ namespace OpenDental{
 						whereClin+="claimproc.ClinicNum = 0 ";
 					}
 					else {
-						whereClin+="claimproc.ClinicNum = "+POut.PLong(Clinics.List[listClin.SelectedIndices[i]-1].ClinicNum)+" ";
+						whereClin+="claimproc.ClinicNum = "+POut.Long(Clinics.List[listClin.SelectedIndices[i]-1].ClinicNum)+" ";
 					}
 				}
 				whereClin+=") ";
 			}
 			ReportSimpleGrid report=new ReportSimpleGrid();
-			report.Query="SET @FromDate="+POut.PDate(date1.SelectionStart)+", @ToDate="+POut.PDate(date2.SelectionStart)+";";
+			report.Query="SET @FromDate="+POut.Date(date1.SelectionStart)+", @ToDate="+POut.Date(date2.SelectionStart)+";";
 			if(radioWriteoffPay.Checked){
 				report.Query+="SELECT DATE(claimproc.DateCP) date,"
 					+"CONCAT(patient.LName,', ',patient.FName,' ',patient.MiddleI),"

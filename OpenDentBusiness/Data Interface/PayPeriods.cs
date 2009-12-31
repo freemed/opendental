@@ -37,10 +37,10 @@ namespace OpenDentBusiness{
 			List=new PayPeriod[table.Rows.Count];
 			for(int i=0;i<List.Length;i++) {
 				List[i]=new PayPeriod();
-				List[i].PayPeriodNum=PIn.PLong(table.Rows[i][0].ToString());
-				List[i].DateStart=PIn.PDate(table.Rows[i][1].ToString());
-				List[i].DateStop=PIn.PDate(table.Rows[i][2].ToString());
-				List[i].DatePaycheck=PIn.PDate(table.Rows[i][3].ToString());
+				List[i].PayPeriodNum=PIn.Long(table.Rows[i][0].ToString());
+				List[i].DateStart=PIn.Date(table.Rows[i][1].ToString());
+				List[i].DateStop=PIn.Date(table.Rows[i][2].ToString());
+				List[i].DatePaycheck=PIn.Date(table.Rows[i][3].ToString());
 			}
 		}
 
@@ -59,12 +59,12 @@ namespace OpenDentBusiness{
 			}
 			command+="DateStart,DateStop,DatePaycheck) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+="'"+POut.PLong(pp.PayPeriodNum)+"', ";
+				command+="'"+POut.Long(pp.PayPeriodNum)+"', ";
 			}
 			command+=
-				 POut.PDate  (pp.DateStart)+", "
-				+POut.PDate  (pp.DateStop)+", "
-				+POut.PDate  (pp.DatePaycheck)+")";
+				 POut.Date  (pp.DateStart)+", "
+				+POut.Date  (pp.DateStop)+", "
+				+POut.Date  (pp.DatePaycheck)+")";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -81,10 +81,10 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command= "UPDATE payperiod SET "
-				+"DateStart = "    +POut.PDate  (pp.DateStart)+" "
-				+",DateStop = "    +POut.PDate  (pp.DateStop)+" "
-				+",DatePaycheck = "+POut.PDate  (pp.DatePaycheck)+" "
-				+"WHERE PayPeriodNum = '"+POut.PLong(pp.PayPeriodNum)+"'";
+				+"DateStart = "    +POut.Date  (pp.DateStart)+" "
+				+",DateStop = "    +POut.Date  (pp.DateStop)+" "
+				+",DatePaycheck = "+POut.Date  (pp.DatePaycheck)+" "
+				+"WHERE PayPeriodNum = '"+POut.Long(pp.PayPeriodNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -94,7 +94,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),pp);
 				return;
 			}
-			string command= "DELETE FROM payperiod WHERE PayPeriodNum = "+POut.PLong(pp.PayPeriodNum);
+			string command= "DELETE FROM payperiod WHERE PayPeriodNum = "+POut.Long(pp.PayPeriodNum);
 			Db.NonQ(command);
 		}
 

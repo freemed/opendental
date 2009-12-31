@@ -200,7 +200,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please fix data entry errors first.");
 				return;
 			}
-			if(PIn.PLong(textDaysActual.Text)==0){
+			if(PIn.Long(textDaysActual.Text)==0){
 				MsgBox.Show(this,"Actual Days cannot be zero.");
 				return;
 			}
@@ -209,8 +209,8 @@ namespace OpenDental{
 				return;
 			}
 			LabTurnaroundCur.Description=textDescription.Text;
-			LabTurnaroundCur.DaysPublished=PIn.PInt(textDaysPublished.Text);
-			LabTurnaroundCur.DaysActual=PIn.PInt(textDaysActual.Text);
+			LabTurnaroundCur.DaysPublished=PIn.Int(textDaysPublished.Text);
+			LabTurnaroundCur.DaysActual=PIn.Int(textDaysActual.Text);
 			DialogResult=DialogResult.OK;
 		}
 

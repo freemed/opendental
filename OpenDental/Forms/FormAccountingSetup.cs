@@ -341,7 +341,7 @@ namespace OpenDental{
 				if(depStrArray[i]==""){
 					continue;
 				}
-				depAL.Add(PIn.PLong(depStrArray[i]));
+				depAL.Add(PIn.Long(depStrArray[i]));
 			}
 			FillDepList();
 			PickedDepAccountNum=PrefC.GetLong(PrefName.AccountingIncomeAccount);

@@ -25,9 +25,9 @@ namespace OpenDentBusiness{
 			//PrefName enumpn;
 			for(int i=0;i<table.Rows.Count;i++) {
 				pref=new Pref();
-				pref.PrefName=PIn.PString(table.Rows[i][0].ToString());
+				pref.PrefName=PIn.String(table.Rows[i][0].ToString());
 				//enumpn=
-				pref.ValueString=PIn.PString(table.Rows[i][1].ToString());
+				pref.ValueString=PIn.String(table.Rows[i][1].ToString());
 				//no need to load up the comments.  Especially since this will fail when user first runs version 5.8.
 					//pref.Comments=PIn.PString(table.Rows[i][2].ToString());
 				PrefC.Dict.Add(pref.PrefName,pref);
@@ -41,9 +41,9 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command= "UPDATE preference SET "
-				+"ValueString = '"+POut.PString(pref.ValueString)+"' "
+				+"ValueString = '"+POut.String(pref.ValueString)+"' "
 				//+",Comments = '"  +POut.PString(pref.Comments)+"' "
-				+" WHERE PrefName = '"+POut.PString(pref.PrefName)+"'";
+				+" WHERE PrefName = '"+POut.String(pref.PrefName)+"'";
 			Db.NonQ(command);
 		}
 
@@ -57,8 +57,8 @@ namespace OpenDentBusiness{
 				return false;//no change needed
 			}
 			string command= "UPDATE preference SET "
-				+"ValueString = '"+POut.PLong(newValue)+"' "
-				+"WHERE PrefName = '"+POut.PString(prefName.ToString())+"'";
+				+"ValueString = '"+POut.Long(newValue)+"' "
+				+"WHERE PrefName = '"+POut.String(prefName.ToString())+"'";
 			bool retVal=true;
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				retVal=Meth.GetBool(MethodBase.GetCurrentMethod(),prefName,newValue);
@@ -83,8 +83,8 @@ namespace OpenDentBusiness{
 				return false;//no change needed
 			}
 			string command = "UPDATE preference SET "
-				+"ValueString = '"+POut.PDouble(newValue)+"' "
-				+"WHERE PrefName = '"+POut.PString(prefName.ToString())+"'";
+				+"ValueString = '"+POut.Double(newValue)+"' "
+				+"WHERE PrefName = '"+POut.String(prefName.ToString())+"'";
 			bool retVal=true;
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				retVal=Meth.GetBool(MethodBase.GetCurrentMethod(),prefName,newValue);
@@ -111,8 +111,8 @@ namespace OpenDentBusiness{
 				return false;//no change needed
 			}
 			string command="UPDATE preference SET "
-				+"ValueString = '"+POut.PBool(newValue)+"' "
-				+"WHERE PrefName = '"+POut.PString(prefName.ToString())+"'";
+				+"ValueString = '"+POut.Bool(newValue)+"' "
+				+"WHERE PrefName = '"+POut.String(prefName.ToString())+"'";
 			bool retVal=true;
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				retVal=Meth.GetBool(MethodBase.GetCurrentMethod(),prefName,newValue,isForced);
@@ -133,8 +133,8 @@ namespace OpenDentBusiness{
 				return false;//no change needed
 			}
 			string command = "UPDATE preference SET "
-				+"ValueString = '"+POut.PString(newValue)+"' "
-				+"WHERE PrefName = '"+POut.PString(prefName.ToString())+"'";
+				+"ValueString = '"+POut.String(newValue)+"' "
+				+"WHERE PrefName = '"+POut.String(prefName.ToString())+"'";
 			bool retVal=true;
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				retVal=Meth.GetBool(MethodBase.GetCurrentMethod(),prefName,newValue);
@@ -159,8 +159,8 @@ namespace OpenDentBusiness{
 				return false;//no change needed
 			}
 			string command = "UPDATE preference SET "
-				+"ValueString = '"+POut.PString(newValue)+"' "
-				+"WHERE PrefName = '"+POut.PString(prefName)+"'";
+				+"ValueString = '"+POut.String(newValue)+"' "
+				+"WHERE PrefName = '"+POut.String(prefName)+"'";
 			bool retVal=true;
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				retVal=Meth.GetBool(MethodBase.GetCurrentMethod(),prefName,newValue);
@@ -185,8 +185,8 @@ namespace OpenDentBusiness{
 				return false;//no change needed
 			}
 			string command = "UPDATE preference SET "
-				+"ValueString = '"+POut.PDateT(newValue,false)+"' "
-				+"WHERE PrefName = '"+POut.PString(prefName.ToString())+"'";
+				+"ValueString = '"+POut.DateT(newValue,false)+"' "
+				+"WHERE PrefName = '"+POut.String(prefName.ToString())+"'";
 			bool retVal=true;
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				retVal=Meth.GetBool(MethodBase.GetCurrentMethod(),prefName,newValue);
@@ -196,7 +196,7 @@ namespace OpenDentBusiness{
 			}
 			Pref pref=new Pref();
 			pref.PrefName=prefName.ToString();
-			pref.ValueString=POut.PDateT(newValue,false);
+			pref.ValueString=POut.DateT(newValue,false);
 			PrefC.Dict[prefName.ToString()]=pref;//in some cases, we just want to change the pref in local memory instead of doing a refresh afterwards.
 			return retVal;
 		}

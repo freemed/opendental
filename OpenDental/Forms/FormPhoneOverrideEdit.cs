@@ -49,7 +49,7 @@ namespace OpenDental {
 
 		private void butOK_Click(object sender,EventArgs e) {
 			try{
-				phoneCur.Extension=PIn.PInt(textExtension.Text);
+				phoneCur.Extension=PIn.Int(textExtension.Text);
 			}
 			catch{
 				MessageBox.Show("Bad extension number.");

@@ -516,7 +516,7 @@ namespace OpenDental{
 				}
 				for(int m=0;m<tableMisc.Rows.Count;m++){
 					if(tableMisc.Rows[m]["descript"].ToString()=="payPlanDue"){
-						balTotal+=PIn.PDouble(tableMisc.Rows[m]["value"].ToString());
+						balTotal+=PIn.Double(tableMisc.Rows[m]["value"].ToString());
 						//payPlanDue;//PatGuar.PayPlanDue;
 					}
 				}
@@ -820,7 +820,7 @@ namespace OpenDental{
 					double patInsEst=0;
 					for(int m=0;m<tableMisc.Rows.Count;m++){
 						if(tableMisc.Rows[m]["descript"].ToString()=="patInsEst"){
-							patInsEst=PIn.PDouble(tableMisc.Rows[m]["value"].ToString());
+							patInsEst=PIn.Double(tableMisc.Rows[m]["value"].ToString());
 						}
 					}
 					double patBal=pat.EstBalance-patInsEst;
@@ -920,7 +920,7 @@ namespace OpenDental{
 				double payPlanDue=0;
 				for(int m=0;m<tableMisc.Rows.Count;m++){
 					if(tableMisc.Rows[m]["descript"].ToString()=="payPlanDue"){
-						payPlanDue=PIn.PDouble(tableMisc.Rows[m]["value"].ToString());
+						payPlanDue=PIn.Double(tableMisc.Rows[m]["value"].ToString());
 					}
 				}
 				par.AddText(Lan.g(this,"Payment Plan Amount Due: ")+payPlanDue.ToString("c"));//PatGuar.PayPlanDue.ToString("c"));
@@ -969,7 +969,7 @@ namespace OpenDental{
 				par.Format.SpaceAfter=Unit.FromInch(.05);
 				patnum=0;
 				if(tablename!="account"){//account123 etc.
-					patnum=PIn.PLong(tablename.Substring(7));
+					patnum=PIn.Long(tablename.Substring(7));
 				}
 				if(patnum!=0){
 					par.AddText(fam.GetNameInFamFLnoPref(patnum));

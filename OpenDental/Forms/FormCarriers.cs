@@ -326,7 +326,7 @@ namespace OpenDental{
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			FormCarrierEdit FormCE=new FormCarrierEdit();
-			FormCE.CarrierCur=Carriers.GetCarrier(PIn.PLong(table.Rows[e.Row]["CarrierNum"].ToString()));
+			FormCE.CarrierCur=Carriers.GetCarrier(PIn.Long(table.Rows[e.Row]["CarrierNum"].ToString()));
 			FormCE.ShowDialog();
 			if(FormCE.DialogResult!=DialogResult.OK){
 				return;
@@ -372,7 +372,7 @@ namespace OpenDental{
 			}
 			List<long> pickedCarrierNums=new List<long>();
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
-				pickedCarrierNums.Add(PIn.PLong(table.Rows[gridMain.SelectedIndices[i]]["CarrierNum"].ToString()));
+				pickedCarrierNums.Add(PIn.Long(table.Rows[gridMain.SelectedIndices[i]]["CarrierNum"].ToString()));
 			}
 			FormCarrierCombine FormCB=new FormCarrierCombine();
 			FormCB.CarrierNums=pickedCarrierNums;

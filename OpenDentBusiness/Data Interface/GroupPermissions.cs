@@ -22,11 +22,11 @@ namespace OpenDentBusiness{
 			GroupPermissionC.List=new GroupPermission[table.Rows.Count];
 			for(int i=0;i<GroupPermissionC.List.Length;i++) {
 				GroupPermissionC.List[i]=new GroupPermission();
-				GroupPermissionC.List[i].GroupPermNum  = PIn.PLong(table.Rows[i][0].ToString());
-				GroupPermissionC.List[i].NewerDate     = PIn.PDate(table.Rows[i][1].ToString());
-				GroupPermissionC.List[i].NewerDays     = PIn.PInt(table.Rows[i][2].ToString());
-				GroupPermissionC.List[i].UserGroupNum  = PIn.PLong(table.Rows[i][3].ToString());
-				GroupPermissionC.List[i].PermType      =(Permissions)PIn.PLong(table.Rows[i][4].ToString());
+				GroupPermissionC.List[i].GroupPermNum  = PIn.Long(table.Rows[i][0].ToString());
+				GroupPermissionC.List[i].NewerDate     = PIn.Date(table.Rows[i][1].ToString());
+				GroupPermissionC.List[i].NewerDays     = PIn.Int(table.Rows[i][2].ToString());
+				GroupPermissionC.List[i].UserGroupNum  = PIn.Long(table.Rows[i][3].ToString());
+				GroupPermissionC.List[i].PermType      =(Permissions)PIn.Long(table.Rows[i][4].ToString());
 			}
 		}
 
@@ -37,11 +37,11 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command= "UPDATE grouppermission SET " 
-				+"NewerDate = "   +POut.PDate  (gp.NewerDate)
-				+",NewerDays = '"   +POut.PLong   (gp.NewerDays)+"'"
-				+",UserGroupNum = '"+POut.PLong   (gp.UserGroupNum)+"'"
-				+",PermType = '"    +POut.PLong   ((int)gp.PermType)+"'"
-				+" WHERE GroupPermNum = '"+POut.PLong(gp.GroupPermNum)+"'";
+				+"NewerDate = "   +POut.Date  (gp.NewerDate)
+				+",NewerDays = '"   +POut.Long   (gp.NewerDays)+"'"
+				+",UserGroupNum = '"+POut.Long   (gp.UserGroupNum)+"'"
+				+",PermType = '"    +POut.Long   ((int)gp.PermType)+"'"
+				+" WHERE GroupPermNum = '"+POut.Long(gp.GroupPermNum)+"'";
  			Db.NonQ(command);
 		}
 
@@ -60,13 +60,13 @@ namespace OpenDentBusiness{
 			}
 			command+="NewerDate,NewerDays,UserGroupNum,PermType) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PLong(gp.GroupPermNum)+", ";
+				command+=POut.Long(gp.GroupPermNum)+", ";
 			}
 			command+=
-				 POut.PDate  (gp.NewerDate)+", "
-				+"'"+POut.PLong   (gp.NewerDays)+"', "
-				+"'"+POut.PLong   (gp.UserGroupNum)+"', "
-				+"'"+POut.PLong   ((int)gp.PermType)+"')";
+				 POut.Date  (gp.NewerDate)+", "
+				+"'"+POut.Long   (gp.NewerDays)+"', "
+				+"'"+POut.Long   (gp.UserGroupNum)+"', "
+				+"'"+POut.Long   ((int)gp.PermType)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -107,14 +107,14 @@ namespace OpenDentBusiness{
 			string command;
 			if(permType==Permissions.SecurityAdmin){
 				//need to make sure that at least one other user has this permission
-				command="SELECT COUNT(*) FROM grouppermission WHERE PermType='"+POut.PLong((int)permType)+"'";
+				command="SELECT COUNT(*) FROM grouppermission WHERE PermType='"+POut.Long((int)permType)+"'";
 				DataTable table=Db.GetTable(command);
 				if(table.Rows[0][0].ToString()=="1"){//only one, so this would delete the last one.
 					throw new Exception(Lans.g("FormSecurity","At least one group must have Security Admin permission."));
 				}
 			}
-			command="DELETE from grouppermission WHERE UserGroupNum='"+POut.PLong(groupNum)+"' "
-				+"AND PermType='"+POut.PLong((int)permType)+"'";
+			command="DELETE from grouppermission WHERE UserGroupNum='"+POut.Long(groupNum)+"' "
+				+"AND PermType='"+POut.Long((int)permType)+"'";
  			Db.NonQ(command);
 		}
 

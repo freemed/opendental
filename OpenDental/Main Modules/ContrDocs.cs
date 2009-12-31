@@ -728,8 +728,8 @@ namespace OpenDental{
 			}
 			else{//A node that requires processing was selected.
 				DataRow obj=(DataRow)node.Tag;
-				long mountNum=PIn.PLong(obj["MountNum"].ToString());
-				long docNum=PIn.PLong(obj["DocNum"].ToString());
+				long mountNum=PIn.Long(obj["MountNum"].ToString());
+				long docNum=PIn.Long(obj["DocNum"].ToString());
 				if(mountNum!=0){//This is a mount node.
 					//Creates a complete initial mount image. No need to call invalidate until changes are made to the mount later.
 					selectionMountItems=MountItems.GetItemsForMount(mountNum);

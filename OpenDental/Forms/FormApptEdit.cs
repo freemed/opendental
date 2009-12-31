@@ -1224,9 +1224,9 @@ namespace OpenDental{
 		private void CalcPatientFeeThisAppt() {
 			double feeThisAppt=0;
 			for(int i=0;i<gridProc.SelectedIndices.Length;i++) {
-				feeThisAppt+=PIn.PDouble(gridProc.Rows[gridProc.SelectedIndices[i]].Cells[6].Text);
+				feeThisAppt+=PIn.Double(gridProc.Rows[gridProc.SelectedIndices[i]].Cells[6].Text);
 			}
-			gridPatient.Rows[gridPatient.Rows.Count-1].Cells[1].Text=POut.PDouble(feeThisAppt);
+			gridPatient.Rows[gridPatient.Rows.Count-1].Cells[1].Text=POut.Double(feeThisAppt);
 			gridPatient.Invalidate();
 		}
 
@@ -1253,7 +1253,7 @@ namespace OpenDental{
 		}
 
 		private void gridComm_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			Commlog item=Commlogs.GetOne(PIn.PLong(DS.Tables["Comm"].Rows[e.Row]["CommlogNum"].ToString()));
+			Commlog item=Commlogs.GetOne(PIn.Long(DS.Tables["Comm"].Rows[e.Row]["CommlogNum"].ToString()));
 			FormCommItem FormCI=new FormCommItem(item);
 			FormCI.ShowDialog();
 			DS.Tables.Remove("Comm");
@@ -1324,7 +1324,7 @@ namespace OpenDental{
 			}
 			bool isPlanned=AptCur.AptStatus==ApptStatus.Planned;
 			List<long> procNums=new List<long>();
-			procNums.Add(PIn.PLong(DS.Tables["Procedure"].Rows[e.Row]["ProcNum"].ToString()));
+			procNums.Add(PIn.Long(DS.Tables["Procedure"].Rows[e.Row]["ProcNum"].ToString()));
 			if(isSelected){
 				//gridProc.SetSelected(e.Row,false);
 				Procedures.DetachFromApt(procNums,isPlanned);
@@ -1344,7 +1344,7 @@ namespace OpenDental{
 		}
 
 		private void gridProc_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			long procNum=PIn.PLong(DS.Tables["Procedure"].Rows[e.Row]["ProcNum"].ToString());
+			long procNum=PIn.Long(DS.Tables["Procedure"].Rows[e.Row]["ProcNum"].ToString());
 			Procedure proc=Procedures.GetOneProc(procNum,true);
 			FormProcEdit FormP=new FormProcEdit(proc,pat,fam);
 			FormP.ShowDialog();
@@ -1413,7 +1413,7 @@ namespace OpenDental{
 						}
 					}
 					//also deletes the claimProcs and adjustments. Might throw exception.
-					Procedures.Delete(PIn.PLong(DS.Tables["Procedure"].Rows[gridProc.SelectedIndices[i]]["ProcNum"].ToString()));
+					Procedures.Delete(PIn.Long(DS.Tables["Procedure"].Rows[gridProc.SelectedIndices[i]]["ProcNum"].ToString()));
 				}
 			}
 			catch(Exception ex){
@@ -1595,7 +1595,7 @@ namespace OpenDental{
 			}
 			ProcedureCode procCode;
 			if(gridProc.SelectedIndices.Length==1) {
-				codeNum=PIn.PLong(DS.Tables["Procedure"].Rows[gridProc.SelectedIndices[0]]["CodeNum"].ToString());
+				codeNum=PIn.Long(DS.Tables["Procedure"].Rows[gridProc.SelectedIndices[0]]["CodeNum"].ToString());
 				//we're not going to use the actual procedure.ProvNum, but instead base it on the providers selected for this appt.
 				//The actual provNums will be reset on closing.
 				procCode=ProcedureCodes.GetProcCode(codeNum);
@@ -1609,7 +1609,7 @@ namespace OpenDental{
 			}
 			else {//multiple procs or no procs
 				for(int i=0;i<gridProc.SelectedIndices.Length;i++) {
-					codeNum=PIn.PLong(DS.Tables["Procedure"].Rows[gridProc.SelectedIndices[i]]["CodeNum"].ToString());
+					codeNum=PIn.Long(DS.Tables["Procedure"].Rows[gridProc.SelectedIndices[i]]["CodeNum"].ToString());
 					procCode=ProcedureCodes.GetProcCode(codeNum);
 					if(procCode.IsHygiene) {//hygiene proc
 						procTime=ProcCodeNotes.GetTimePattern(hygNum,codeNum);
@@ -1808,7 +1808,7 @@ namespace OpenDental{
 			}
 			else{//already a labcase attached
 				FormLabCaseEdit FormLCE=new FormLabCaseEdit();
-				FormLCE.CaseCur=LabCases.GetOne(PIn.PLong(DS.Tables["Misc"].Rows[0]["LabCaseNum"].ToString()));
+				FormLCE.CaseCur=LabCases.GetOne(PIn.Long(DS.Tables["Misc"].Rows[0]["LabCaseNum"].ToString()));
 				FormLCE.ShowDialog();
 				if(FormLCE.DialogResult!=DialogResult.OK){
 					return;
@@ -1987,7 +1987,7 @@ namespace OpenDental{
 					AptCur.ProcDescript+=", ";
 				}
 				AptCur.ProcDescript+=ProcedureCodes.GetProcCode(
-					PIn.PLong(DS.Tables["Procedure"].Rows[gridProc.SelectedIndices[i]]["CodeNum"].ToString())).AbbrDesc;
+					PIn.Long(DS.Tables["Procedure"].Rows[gridProc.SelectedIndices[i]]["CodeNum"].ToString())).AbbrDesc;
 			}
 			//int[] procNums=new int[gridProc.SelectedIndices.Length];
 			//for(int i=0;i<procNums.Length;i++){

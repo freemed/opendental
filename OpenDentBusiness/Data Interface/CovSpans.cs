@@ -25,10 +25,10 @@ namespace OpenDentBusiness{
 			CovSpanC.List=new CovSpan[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				CovSpanC.List[i]=new CovSpan();
-				CovSpanC.List[i].CovSpanNum  = PIn.PLong(table.Rows[i][0].ToString());
-				CovSpanC.List[i].CovCatNum   = PIn.PLong(table.Rows[i][1].ToString());
-				CovSpanC.List[i].FromCode    = PIn.PString(table.Rows[i][2].ToString());
-				CovSpanC.List[i].ToCode      = PIn.PString(table.Rows[i][3].ToString());
+				CovSpanC.List[i].CovSpanNum  = PIn.Long(table.Rows[i][0].ToString());
+				CovSpanC.List[i].CovCatNum   = PIn.Long(table.Rows[i][1].ToString());
+				CovSpanC.List[i].FromCode    = PIn.String(table.Rows[i][2].ToString());
+				CovSpanC.List[i].ToCode      = PIn.String(table.Rows[i][3].ToString());
 			}
 		}
 
@@ -40,10 +40,10 @@ namespace OpenDentBusiness{
 			}
 			Validate(span);
 			string command="UPDATE covspan SET "
-				+"CovCatNum = '"+POut.PLong   (span.CovCatNum)+"'"
-				+",FromCode = '"+POut.PString(span.FromCode)+"'"
-				+",ToCode = '"  +POut.PString(span.ToCode)+"'"
-				+" WHERE CovSpanNum = '"+POut.PLong(span.CovSpanNum)+"'";
+				+"CovCatNum = '"+POut.Long   (span.CovCatNum)+"'"
+				+",FromCode = '"+POut.String(span.FromCode)+"'"
+				+",ToCode = '"  +POut.String(span.ToCode)+"'"
+				+" WHERE CovSpanNum = '"+POut.Long(span.CovSpanNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -64,12 +64,12 @@ namespace OpenDentBusiness{
 			command+="CovCatNum,"
 				+"FromCode,ToCode) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PLong(span.CovSpanNum)+", ";
+				command+=POut.Long(span.CovSpanNum)+", ";
 			}
 			command+=
-				 "'"+POut.PLong   (span.CovCatNum)+"', "
-				+"'"+POut.PString(span.FromCode)+"', "
-				+"'"+POut.PString(span.ToCode)+"')";
+				 "'"+POut.Long   (span.CovCatNum)+"', "
+				+"'"+POut.String(span.FromCode)+"', "
+				+"'"+POut.String(span.ToCode)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -97,7 +97,7 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command="DELETE FROM covspan"
-				+" WHERE CovSpanNum = '"+POut.PLong(span.CovSpanNum)+"'";
+				+" WHERE CovSpanNum = '"+POut.Long(span.CovSpanNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -107,7 +107,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),covCatNum);
 				return;
 			}
-			string command="DELETE FROM covspan WHERE CovCatNum = "+POut.PLong(covCatNum);
+			string command="DELETE FROM covspan WHERE CovCatNum = "+POut.Long(covCatNum);
 			Db.NonQ(command);
 		}
 

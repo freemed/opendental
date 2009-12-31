@@ -445,7 +445,7 @@ namespace OpenDental{
 			textPassword.Text=GetProp("Password");
 			textWorkstationName.Text=GetProp("WorkstationName");
 			textIntervalSeconds.Text=GetProp("IntervalSeconds");
-			DateTime datet=PIn.PDateT(GetProp("DateTimeLastUploaded"));
+			DateTime datet=PIn.DateT(GetProp("DateTimeLastUploaded"));
 			if(datet.Year>1880){
 				textDateTimeLastUploaded1.Text=datet.ToShortDateString()+"  "+datet.ToShortTimeString();
 			}
@@ -474,7 +474,7 @@ namespace OpenDental{
 				return;
 			}
 			propVal=ProgramProperties.GetPropVal(ProgramCur.ProgramNum,"DateTimeLastUploaded");
-			DateTime datet=PIn.PDateT(propVal);
+			DateTime datet=PIn.DateT(propVal);
 			if(datet.Year<1880){
 				if(!MsgBox.Show(this,true,"This is an initial synchronization.  It could take a while.  You can probably continue to work on this computer, but you will need to leave the program running on this workstation until the synch is done.  Begin initial synchronization?"))
 				{
@@ -516,11 +516,11 @@ namespace OpenDental{
 		private static void ThreadStartTarget(object data){
 			File.WriteAllText(logfile,DateTime.Now.ToString()+"  Synch thread started.\r\n");//creates or clears the log
 			Program prog=(Program)data;
-			int intervalSec=PIn.PInt(ProgramProperties.GetPropVal(prog.ProgramNum,"IntervalSeconds"));
+			int intervalSec=PIn.Int(ProgramProperties.GetPropVal(prog.ProgramNum,"IntervalSeconds"));
 			int intervalSecError=intervalSec*4;
 			string username=ProgramProperties.GetPropVal(prog.ProgramNum,"Username");
 			string password=ProgramProperties.GetPropVal(prog.ProgramNum,"Password");
-			DateTime dateTimeLastUploaded=PIn.PDateT(ProgramProperties.GetPropVal(prog.ProgramNum,"DateTimeLastUploaded"));
+			DateTime dateTimeLastUploaded=PIn.DateT(ProgramProperties.GetPropVal(prog.ProgramNum,"DateTimeLastUploaded"));
 			//track delta here
 			DateTime nowServer=MiscData.GetNowDateTime();
 			TimeSpan deltaTimeSpan=nowServer-DateTime.Now;//this was tested to work by adding delta to local time
@@ -1044,7 +1044,7 @@ namespace OpenDental{
 				}
 				if(totalObjectsToSynch==objectsInThisPost){
 					dateTimeLastUploaded=timeStartSynch+deltaTimeSpan;
-					ProgramProperties.SetProperty(prog.ProgramNum,"DateTimeLastUploaded",POut.PDateT(dateTimeLastUploaded,false));
+					ProgramProperties.SetProperty(prog.ProgramNum,"DateTimeLastUploaded",POut.DateT(dateTimeLastUploaded,false));
 					//POut.PDateT(MiscData.GetNowDateTime()));
 				}
 				//there are still objects to upload.
@@ -1083,7 +1083,7 @@ namespace OpenDental{
 			}
 			int intervalSec=0;
 			try{
-				intervalSec=PIn.PInt(textIntervalSeconds.Text);//"" is handled fine here
+				intervalSec=PIn.Int(textIntervalSeconds.Text);//"" is handled fine here
 			}
 			catch{
 				MessageBox.Show("Please fix the interval in seconds.");
@@ -1113,7 +1113,7 @@ namespace OpenDental{
 			ProgramProperties.SetProperty(ProgramCur.ProgramNum,"WorkstationName",textWorkstationName.Text.ToUpper());
 			ProgramProperties.SetProperty(ProgramCur.ProgramNum,"IntervalSeconds",intervalSec.ToString());
 			if(textDateTimeLastUploaded2.Text!=""){
-				ProgramProperties.SetProperty(ProgramCur.ProgramNum,"DateTimeLastUploaded",POut.PDateT(datetime,false));
+				ProgramProperties.SetProperty(ProgramCur.ProgramNum,"DateTimeLastUploaded",POut.DateT(datetime,false));
 			}
 			DataValid.SetInvalid(InvalidType.Programs);
 			return true;

@@ -12,18 +12,18 @@ namespace OpenDentBusiness {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Question[]>(MethodBase.GetCurrentMethod(),patNum);
 			}
-			string command="SELECT * FROM question WHERE PatNum="+POut.PLong(patNum)
+			string command="SELECT * FROM question WHERE PatNum="+POut.Long(patNum)
 				+" ORDER BY ItemOrder";
 			DataTable table=Db.GetTable(command);
 			Question[] List=new Question[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new Question();
-				List[i].QuestionNum= PIn.PLong(table.Rows[i][0].ToString());
-				List[i].PatNum     = PIn.PLong(table.Rows[i][1].ToString());
-				List[i].ItemOrder  = PIn.PInt(table.Rows[i][2].ToString());
-				List[i].Description= PIn.PString(table.Rows[i][3].ToString());
-				List[i].Answer     = PIn.PString(table.Rows[i][4].ToString());
-				List[i].FormPatNum = PIn.PLong   (table.Rows[i][5].ToString());
+				List[i].QuestionNum= PIn.Long(table.Rows[i][0].ToString());
+				List[i].PatNum     = PIn.Long(table.Rows[i][1].ToString());
+				List[i].ItemOrder  = PIn.Int(table.Rows[i][2].ToString());
+				List[i].Description= PIn.String(table.Rows[i][3].ToString());
+				List[i].Answer     = PIn.String(table.Rows[i][4].ToString());
+				List[i].FormPatNum = PIn.Long   (table.Rows[i][5].ToString());
 			}
 			return List;
 		}	
@@ -35,12 +35,12 @@ namespace OpenDentBusiness {
 				return;
 			}
 			string command="UPDATE question SET " 
-				+"PatNum = '"      +POut.PLong   (quest.PatNum)+"'"
-				+",ItemOrder = '"  +POut.PLong   (quest.ItemOrder)+"'"
-				+",Description = '"+POut.PString(quest.Description)+"'"
-				+",Answer = '"     +POut.PString(quest.Answer)+"'"
-				+",FormPatNum = '" +POut.PLong   (quest.FormPatNum)+"'"
-				+" WHERE QuestionNum  ='"+POut.PLong   (quest.QuestionNum)+"'";
+				+"PatNum = '"      +POut.Long   (quest.PatNum)+"'"
+				+",ItemOrder = '"  +POut.Long   (quest.ItemOrder)+"'"
+				+",Description = '"+POut.String(quest.Description)+"'"
+				+",Answer = '"     +POut.String(quest.Answer)+"'"
+				+",FormPatNum = '" +POut.Long   (quest.FormPatNum)+"'"
+				+" WHERE QuestionNum  ='"+POut.Long   (quest.QuestionNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -59,14 +59,14 @@ namespace OpenDentBusiness {
 			}
 			command+="PatNum,ItemOrder,Description,Answer,FormPatNum) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+="'"+POut.PLong(quest.QuestionNum)+"', ";
+				command+="'"+POut.Long(quest.QuestionNum)+"', ";
 			}
 			command+=
-				 "'"+POut.PLong   (quest.PatNum)+"', "
-				+"'"+POut.PLong   (quest.ItemOrder)+"', "
-				+"'"+POut.PString(quest.Description)+"', "
-				+"'"+POut.PString(quest.Answer)+"', "
-				+"'"+POut.PLong   (quest.FormPatNum)+"')";
+				 "'"+POut.Long   (quest.PatNum)+"', "
+				+"'"+POut.Long   (quest.ItemOrder)+"', "
+				+"'"+POut.String(quest.Description)+"', "
+				+"'"+POut.String(quest.Answer)+"', "
+				+"'"+POut.Long   (quest.FormPatNum)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}

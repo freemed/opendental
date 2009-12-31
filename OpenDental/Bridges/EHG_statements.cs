@@ -107,7 +107,7 @@ namespace OpenDental.Bridges {
 			double balanceForward=0;
 			for(int r=0;r<dataSet.Tables["misc"].Rows.Count;r++){
 				if(dataSet.Tables["misc"].Rows[r]["descript"].ToString()=="balanceForward"){
-					balanceForward=PIn.PDouble(dataSet.Tables["misc"].Rows[r]["value"].ToString());
+					balanceForward=PIn.Double(dataSet.Tables["misc"].Rows[r]["value"].ToString());
 				}
 			}
 			writer.WriteElementString("PriorBalance",balanceForward.ToString("F2"));
@@ -125,7 +125,7 @@ namespace OpenDental.Bridges {
 			}
 			double credits=0;
 			for(int i=0;i<tableAccount.Rows.Count;i++) {
-				credits+=PIn.PDouble(tableAccount.Rows[i]["creditsDouble"].ToString());
+				credits+=PIn.Double(tableAccount.Rows[i]["creditsDouble"].ToString());
 			}
 			writer.WriteElementString("Credits",credits.ToString("F2"));
 			//on a regular printed statement, the amount due at the top might be different from the balance at the middle right.
@@ -136,7 +136,7 @@ namespace OpenDental.Bridges {
 			//add payplan due amt:
 			for(int m=0;m<dataSet.Tables["misc"].Rows.Count;m++) {
 				if(dataSet.Tables["misc"].Rows[m]["descript"].ToString()=="payPlanDue") {
-					amountDue+=PIn.PDouble(dataSet.Tables["misc"].Rows[m]["value"].ToString());
+					amountDue+=PIn.Double(dataSet.Tables["misc"].Rows[m]["value"].ToString());
 				}
 			}
 			if(PrefC.GetBool(PrefName.BalancesDontSubtractIns)) {

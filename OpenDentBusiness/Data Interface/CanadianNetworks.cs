@@ -32,9 +32,9 @@ namespace OpenDentBusiness{
 			CanadianNetwork network;
 			for(int i=0;i<table.Rows.Count;i++){
 				network=new CanadianNetwork();
-				network.CanadianNetworkNum=PIn.PLong   (table.Rows[i][0].ToString());
-				network.Abbrev            =PIn.PString(table.Rows[i][1].ToString());
-				network.Descript          =PIn.PString(table.Rows[i][2].ToString());
+				network.CanadianNetworkNum=PIn.Long   (table.Rows[i][0].ToString());
+				network.Abbrev            =PIn.String(table.Rows[i][1].ToString());
+				network.Descript          =PIn.String(table.Rows[i][2].ToString());
 				listt.Add(network);
 			}
 		}
@@ -54,11 +54,11 @@ namespace OpenDentBusiness{
 			}
 			command+="Abbrev, Descript) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+="'"+POut.PLong(network.CanadianNetworkNum)+"', ";
+				command+="'"+POut.Long(network.CanadianNetworkNum)+"', ";
 			}
 			command+=
-				 "'"+POut.PString(network.Abbrev)+"', "
-				+"'"+POut.PString(network.Descript)+"')";
+				 "'"+POut.String(network.Abbrev)+"', "
+				+"'"+POut.String(network.Descript)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -75,9 +75,9 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command="UPDATE canadiannetwork SET "
-				+ "Abbrev = '"+POut.PString(Cur.Abbrev)+"' "
-				+ ",Descript='"+POut.PString(Cur.Descript)+"' "
-				+"WHERE CanadianNetworkNum = '"+POut.PLong(Cur.CanadianNetworkNum)+"'";
+				+ "Abbrev = '"+POut.String(Cur.Abbrev)+"' "
+				+ ",Descript='"+POut.String(Cur.Descript)+"' "
+				+"WHERE CanadianNetworkNum = '"+POut.Long(Cur.CanadianNetworkNum)+"'";
 			Db.NonQ(command);
 		}
 

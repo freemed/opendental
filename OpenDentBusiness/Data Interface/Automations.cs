@@ -38,14 +38,14 @@ namespace OpenDentBusiness{
 			Automation auto;
 			for(int i=0;i<table.Rows.Count;i++) {
 				auto=new Automation();
-				auto.AutomationNum = PIn.PLong(table.Rows[i][0].ToString());
-				auto.Description   = PIn.PString(table.Rows[i][1].ToString());
-				auto.AutoTrigger   = (AutomationTrigger)PIn.PInt(table.Rows[i][2].ToString());
-				auto.ProcCodes     = PIn.PString(table.Rows[i][3].ToString());
-				auto.AutoAction    = (AutomationAction)PIn.PInt(table.Rows[i][4].ToString());
-				auto.SheetDefNum   = PIn.PLong(table.Rows[i][5].ToString());
-				auto.CommType      = PIn.PLong(table.Rows[i][6].ToString());
-				auto.MessageContent= PIn.PString(table.Rows[i][7].ToString());
+				auto.AutomationNum = PIn.Long(table.Rows[i][0].ToString());
+				auto.Description   = PIn.String(table.Rows[i][1].ToString());
+				auto.AutoTrigger   = (AutomationTrigger)PIn.Int(table.Rows[i][2].ToString());
+				auto.ProcCodes     = PIn.String(table.Rows[i][3].ToString());
+				auto.AutoAction    = (AutomationAction)PIn.Int(table.Rows[i][4].ToString());
+				auto.SheetDefNum   = PIn.Long(table.Rows[i][5].ToString());
+				auto.CommType      = PIn.Long(table.Rows[i][6].ToString());
+				auto.MessageContent= PIn.String(table.Rows[i][7].ToString());
 				listt.Add(auto);
 			}
 		}
@@ -65,16 +65,16 @@ namespace OpenDentBusiness{
 			}
 			command+="Description,AutoTrigger,ProcCodes,AutoAction,SheetDefNum,CommType,MessageContent) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PLong(auto.AutomationNum)+", ";
+				command+=POut.Long(auto.AutomationNum)+", ";
 			}
 			command+=
-				 "'"+POut.PString(auto.Description)+"', "
-				+"'"+POut.PInt((int)auto.AutoTrigger)+"', "
-				+"'"+POut.PString(auto.ProcCodes)+"', "
-				+"'"+POut.PInt((int)auto.AutoAction)+"', "
-				+"'"+POut.PLong(auto.SheetDefNum)+"', "
-				+"'"+POut.PLong(auto.CommType)+"', "
-				+"'"+POut.PString(auto.MessageContent)+"')";
+				 "'"+POut.String(auto.Description)+"', "
+				+"'"+POut.Int((int)auto.AutoTrigger)+"', "
+				+"'"+POut.String(auto.ProcCodes)+"', "
+				+"'"+POut.Int((int)auto.AutoAction)+"', "
+				+"'"+POut.Long(auto.SheetDefNum)+"', "
+				+"'"+POut.Long(auto.CommType)+"', "
+				+"'"+POut.String(auto.MessageContent)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -91,14 +91,14 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command= "UPDATE automation SET " 
-				+ "Description = '"   +POut.PString(auto.Description)+"'"
-				+ ",AutoTrigger = '"  +POut.PInt((int)auto.AutoTrigger)+"'"
-				+ ",ProcCodes = '"    +POut.PString(auto.ProcCodes)+"'"
-				+ ",AutoAction = '"   +POut.PInt((int)auto.AutoAction)+"'"
-				+ ",SheetDefNum = '"  +POut.PLong(auto.SheetDefNum)+"'"
-				+ ",CommType = '"     +POut.PLong(auto.CommType)+"'"
-				+ ",MessageContent = '" +POut.PString(auto.MessageContent)+"'"
-				+" WHERE AutomationNum = '" +POut.PLong   (auto.AutomationNum)+"'";
+				+ "Description = '"   +POut.String(auto.Description)+"'"
+				+ ",AutoTrigger = '"  +POut.Int((int)auto.AutoTrigger)+"'"
+				+ ",ProcCodes = '"    +POut.String(auto.ProcCodes)+"'"
+				+ ",AutoAction = '"   +POut.Int((int)auto.AutoAction)+"'"
+				+ ",SheetDefNum = '"  +POut.Long(auto.SheetDefNum)+"'"
+				+ ",CommType = '"     +POut.Long(auto.CommType)+"'"
+				+ ",MessageContent = '" +POut.String(auto.MessageContent)+"'"
+				+" WHERE AutomationNum = '" +POut.Long   (auto.AutomationNum)+"'";
  			Db.NonQ(command);
 		}
 
@@ -109,7 +109,7 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command="DELETE FROM automation" 
-				+" WHERE AutomationNum = "+POut.PLong(auto.AutomationNum);
+				+" WHERE AutomationNum = "+POut.Long(auto.AutomationNum);
  			Db.NonQ(command);
 		}
 

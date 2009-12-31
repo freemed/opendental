@@ -26,12 +26,12 @@ namespace OpenDentBusiness {
 			DisplayField field;
 			for(int i=0;i<table.Rows.Count;i++){
 				field = new DisplayField();
-				field.DisplayFieldNum = PIn.PLong   (table.Rows[i][0].ToString());
-				field.InternalName    = PIn.PString(table.Rows[i][1].ToString());
-				field.ItemOrder       = PIn.PInt   (table.Rows[i][2].ToString());
-				field.Description     = PIn.PString(table.Rows[i][3].ToString());
-				field.ColumnWidth     = PIn.PInt   (table.Rows[i][4].ToString());
-				field.Category        = (DisplayFieldCategory)PIn.PLong(table.Rows[i][5].ToString());
+				field.DisplayFieldNum = PIn.Long   (table.Rows[i][0].ToString());
+				field.InternalName    = PIn.String(table.Rows[i][1].ToString());
+				field.ItemOrder       = PIn.Int   (table.Rows[i][2].ToString());
+				field.Description     = PIn.String(table.Rows[i][3].ToString());
+				field.ColumnWidth     = PIn.Int   (table.Rows[i][4].ToString());
+				field.Category        = (DisplayFieldCategory)PIn.Long(table.Rows[i][5].ToString());
 				DisplayFieldC.Listt.Add(field);
 			}
 		}
@@ -51,14 +51,14 @@ namespace OpenDentBusiness {
 			}
 			command+="InternalName,ItemOrder,Description,ColumnWidth,Category) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PLong(field.DisplayFieldNum)+", ";
+				command+=POut.Long(field.DisplayFieldNum)+", ";
 			}
 			command+=	
-				 "'"+POut.PString(field.InternalName)+"'," 
-				+"'"+POut.PLong   (field.ItemOrder)+"',"
-				+"'"+POut.PString(field.Description)+"'," 
-				+"'"+POut.PLong   (field.ColumnWidth)+"', "
-				+"'"+POut.PLong   ((int)field.Category)+"')";
+				 "'"+POut.String(field.InternalName)+"'," 
+				+"'"+POut.Long   (field.ItemOrder)+"',"
+				+"'"+POut.String(field.Description)+"'," 
+				+"'"+POut.Long   (field.ColumnWidth)+"', "
+				+"'"+POut.Long   ((int)field.Category)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -298,7 +298,7 @@ namespace OpenDentBusiness {
 					}
 				}
 			}
-			string command="DELETE FROM displayfield WHERE Category="+POut.PLong((int)category);
+			string command="DELETE FROM displayfield WHERE Category="+POut.Long((int)category);
 			Db.NonQ(command);
 			if(isDefault){
 				return;

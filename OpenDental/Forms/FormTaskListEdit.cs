@@ -291,7 +291,7 @@ namespace OpenDental{
 				return;
 			}
 			Cur.Descript=textDescript.Text;
-			Cur.DateTL=PIn.PDate(textDateTL.Text);
+			Cur.DateTL=PIn.Date(textDateTL.Text);
 			Cur.DateType=(TaskDateType)listDateType.SelectedIndex;
 			if(!checkFromNum.Checked){//user unchecked the box
 				Cur.FromNum=0;

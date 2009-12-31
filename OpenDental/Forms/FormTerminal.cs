@@ -1254,7 +1254,7 @@ namespace OpenDental{
 				case 3: PatCur.Position=PatientPosition.Widowed; break;
 				case 4: PatCur.Position=PatientPosition.Divorced; break;
 			}
-			PatCur.Birthdate=PIn.PDate(textBirthdate.Text);
+			PatCur.Birthdate=PIn.Date(textBirthdate.Text);
 			if(CultureInfo.CurrentCulture.Name=="en-US") {
 				if(Regex.IsMatch(textSSN.Text,@"^\d\d\d-\d\d-\d\d\d\d$")) {
 					PatCur.SSN=textSSN.Text.Substring(0,3)+textSSN.Text.Substring(4,2)

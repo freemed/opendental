@@ -13,7 +13,7 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<List<Schedule>>(MethodBase.GetCurrentMethod(),date);
 			}
 			string command="SELECT * FROM schedule "
-				+"WHERE SchedDate = "+POut.PDate(date)+" "
+				+"WHERE SchedDate = "+POut.Date(date)+" "
 				+"ORDER BY StartTime";
 			return RefreshAndFill(command);
 		}
@@ -28,8 +28,8 @@ namespace OpenDentBusiness{
 				return new List<Schedule>();
 			}
 			string command="SELECT * FROM schedule "
-				+"WHERE SchedDate >= "+POut.PDate(dateStart)+" "
-				+"AND SchedDate <= "+POut.PDate(dateEnd)+" "
+				+"WHERE SchedDate >= "+POut.Date(dateStart)+" "
+				+"AND SchedDate <= "+POut.Date(dateEnd)+" "
 				+"AND (";
 			string orClause="";//this is guaranteed to be non empty by the time the command is assembled.
 			if(includePractice) {
@@ -39,13 +39,13 @@ namespace OpenDentBusiness{
 				if(orClause!="") {
 					orClause+="OR ";
 				}
-				orClause+="schedule.ProvNum="+POut.PLong(provNums[i])+" ";
+				orClause+="schedule.ProvNum="+POut.Long(provNums[i])+" ";
 			}
 			for(int i=0;i<empNums.Count;i++) {
 				if(orClause!="") {
 					orClause+="OR ";
 				}
-				orClause+="schedule.EmployeeNum="+POut.PLong(empNums[i])+" ";
+				orClause+="schedule.EmployeeNum="+POut.Long(empNums[i])+" ";
 			}
 			command+=orClause+")";
 			return RefreshAndFill(command);
@@ -62,15 +62,15 @@ namespace OpenDentBusiness{
 			string command="SELECT schedule.* "
 				+"FROM schedule,scheduleop "
 				+"WHERE schedule.ScheduleNum=scheduleop.ScheduleNum "
-				+"AND SchedDate >= "+POut.PDate(dateStart)+" "
-				+"AND SchedDate <= "+POut.PDate(dateEnd)+" "
+				+"AND SchedDate >= "+POut.Date(dateStart)+" "
+				+"AND SchedDate <= "+POut.Date(dateEnd)+" "
 				+"AND SchedType=2 "//blockouts
 				+"AND (";//OperatoryNum=0 ";
 			for(int i=0;i<opNums.Count;i++) {
 				if(i>0){
 					command+=" OR ";
 				}
-				command+="OperatoryNum="+POut.PLong(opNums[i]);
+				command+="OperatoryNum="+POut.Long(opNums[i]);
 			}
 			command+=")";
 			return RefreshAndFill(command);
@@ -83,7 +83,7 @@ namespace OpenDentBusiness{
 			}
 			string command="SELECT schedule.* "
 				+"FROM schedule "//,provider "
-				+"WHERE SchedDate = "+POut.PDate(dateSched)+" "
+				+"WHERE SchedDate = "+POut.Date(dateSched)+" "
 				+"AND (SchedType=0 OR SchedType=1 OR SchedType=3)";//Practice or Provider or Employee
 			return RefreshAndFill(command);
 		}
@@ -101,8 +101,8 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Schedule>>(MethodBase.GetCurrentMethod(),changedSince);
 			}
-			string command="SELECT * FROM schedule WHERE DateTStamp > "+POut.PDateT(changedSince)
-				+" AND SchedType="+POut.PLong((int)ScheduleType.Provider);
+			string command="SELECT * FROM schedule WHERE DateTStamp > "+POut.DateT(changedSince)
+				+" AND SchedType="+POut.Long((int)ScheduleType.Provider);
 			return RefreshAndFill(command);
 		}
 
@@ -133,23 +133,23 @@ namespace OpenDentBusiness{
 			string[] oparray;
 			for(int i=0;i<table.Rows.Count;i++) {
 				sched=new Schedule();
-				sched.ScheduleNum    = PIn.PLong   (table.Rows[i]["ScheduleNum"].ToString());
-				sched.SchedDate      = PIn.PDate  (table.Rows[i]["SchedDate"].ToString());
-				sched.StartTime      = PIn.PDateT (table.Rows[i]["StartTime"].ToString());
-				sched.StopTime       = PIn.PDateT (table.Rows[i]["StopTime"].ToString());
-				sched.SchedType      = (ScheduleType)PIn.PLong(table.Rows[i]["SchedType"].ToString());
-				sched.ProvNum        = PIn.PLong   (table.Rows[i]["ProvNum"].ToString());
-				sched.BlockoutType   = PIn.PLong   (table.Rows[i]["BlockoutType"].ToString());
-				sched.Note           = PIn.PString(table.Rows[i]["Note"].ToString());
-				sched.Status         = (SchedStatus)PIn.PLong(table.Rows[i]["Status"].ToString());
-				sched.EmployeeNum    = PIn.PLong   (table.Rows[i]["EmployeeNum"].ToString());
+				sched.ScheduleNum    = PIn.Long   (table.Rows[i]["ScheduleNum"].ToString());
+				sched.SchedDate      = PIn.Date  (table.Rows[i]["SchedDate"].ToString());
+				sched.StartTime      = PIn.DateT (table.Rows[i]["StartTime"].ToString());
+				sched.StopTime       = PIn.DateT (table.Rows[i]["StopTime"].ToString());
+				sched.SchedType      = (ScheduleType)PIn.Long(table.Rows[i]["SchedType"].ToString());
+				sched.ProvNum        = PIn.Long   (table.Rows[i]["ProvNum"].ToString());
+				sched.BlockoutType   = PIn.Long   (table.Rows[i]["BlockoutType"].ToString());
+				sched.Note           = PIn.String(table.Rows[i]["Note"].ToString());
+				sched.Status         = (SchedStatus)PIn.Long(table.Rows[i]["Status"].ToString());
+				sched.EmployeeNum    = PIn.Long   (table.Rows[i]["EmployeeNum"].ToString());
 				if(table.Columns.Contains("ops")){
 					sched.Ops=new List<long>();
-					opstr=PIn.PString(table.Rows[i]["ops"].ToString());
+					opstr=PIn.String(table.Rows[i]["ops"].ToString());
 					if(opstr!=""){
 						oparray=opstr.Split(',');
 						for(int o=0;o<oparray.Length;o++){
-							sched.Ops.Add(PIn.PLong(oparray[o]));
+							sched.Ops.Add(PIn.Long(oparray[o]));
 						}
 					}
 				}
@@ -165,18 +165,18 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command= "UPDATE schedule SET " 
-				+ "SchedDate = "    +POut.PDate  (sched.SchedDate)
-				+ ",StartTime = "   +POut.PDateT (sched.StartTime)
-				+ ",StopTime = "    +POut.PDateT (sched.StopTime)
-				+ ",SchedType = '"   +POut.PLong   ((int)sched.SchedType)+"'"
-				+ ",ProvNum = '"     +POut.PLong   (sched.ProvNum)+"'"
-				+ ",BlockoutType = '"+POut.PLong   (sched.BlockoutType)+"'"
-				+ ",Note = '"        +POut.PString(sched.Note)+"'"
-				+ ",Status = '"      +POut.PLong   ((int)sched.Status)+"'"
-				+ ",EmployeeNum = '" +POut.PLong   (sched.EmployeeNum)+"'"
-				+" WHERE ScheduleNum = '" +POut.PLong (sched.ScheduleNum)+"'";
+				+ "SchedDate = "    +POut.Date  (sched.SchedDate)
+				+ ",StartTime = "   +POut.DateT (sched.StartTime)
+				+ ",StopTime = "    +POut.DateT (sched.StopTime)
+				+ ",SchedType = '"   +POut.Long   ((int)sched.SchedType)+"'"
+				+ ",ProvNum = '"     +POut.Long   (sched.ProvNum)+"'"
+				+ ",BlockoutType = '"+POut.Long   (sched.BlockoutType)+"'"
+				+ ",Note = '"        +POut.String(sched.Note)+"'"
+				+ ",Status = '"      +POut.Long   ((int)sched.Status)+"'"
+				+ ",EmployeeNum = '" +POut.Long   (sched.EmployeeNum)+"'"
+				+" WHERE ScheduleNum = '" +POut.Long (sched.ScheduleNum)+"'";
  			Db.NonQ(command);
-			command="DELETE FROM scheduleop WHERE ScheduleNum="+POut.PLong (sched.ScheduleNum);
+			command="DELETE FROM scheduleop WHERE ScheduleNum="+POut.Long (sched.ScheduleNum);
 			Db.NonQ(command);
 			ScheduleOp op;
 			for(int i=0;i<sched.Ops.Count;i++){
@@ -203,18 +203,18 @@ namespace OpenDentBusiness{
 			command+="scheddate,starttime,stoptime,"
 				+"SchedType,ProvNum,BlockoutType,Note,Status,EmployeeNum) VALUES(";
 			if(PrefC.RandomKeys){
-				command+="'"+POut.PLong(sched.ScheduleNum)+"', ";
+				command+="'"+POut.Long(sched.ScheduleNum)+"', ";
 			}
 			command+=
-				 POut.PDate  (sched.SchedDate)+", "
-				+POut.PDateT (sched.StartTime)+", "
-				+POut.PDateT (sched.StopTime)+", "
-				+"'"+POut.PLong   ((int)sched.SchedType)+"', "
-				+"'"+POut.PLong   (sched.ProvNum)+"', "
-				+"'"+POut.PLong   (sched.BlockoutType)+"', "
-				+"'"+POut.PString(sched.Note)+"', "
-				+"'"+POut.PLong   ((int)sched.Status)+"', "
-				+"'"+POut.PLong   (sched.EmployeeNum)+"')";
+				 POut.Date  (sched.SchedDate)+", "
+				+POut.DateT (sched.StartTime)+", "
+				+POut.DateT (sched.StopTime)+", "
+				+"'"+POut.Long   ((int)sched.SchedType)+"', "
+				+"'"+POut.Long   (sched.ProvNum)+"', "
+				+"'"+POut.Long   (sched.BlockoutType)+"', "
+				+"'"+POut.String(sched.Note)+"', "
+				+"'"+POut.Long   ((int)sched.Status)+"', "
+				+"'"+POut.Long   (sched.EmployeeNum)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -304,7 +304,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),sched);
 				return;
 			}
-			string command= "DELETE from schedule WHERE schedulenum = '"+POut.PLong(sched.ScheduleNum)+"'";
+			string command= "DELETE from schedule WHERE schedulenum = '"+POut.Long(sched.ScheduleNum)+"'";
  			Db.NonQ(command);
 			if(sched.SchedType==ScheduleType.Provider){
 				DeletedObjects.SetDeleted(DeletedObjectType.ScheduleProv,sched.ScheduleNum);
@@ -425,8 +425,8 @@ namespace OpenDentBusiness{
 			}
 			//SetAllDefault(date,ScheduleType.Blockout,0);
 			string command="DELETE from schedule WHERE "
-				+"SchedDate="    +POut.PDate(date)+" "
-				+"AND SchedType='"+POut.PLong((int)ScheduleType.Blockout)+"' ";
+				+"SchedDate="    +POut.Date(date)+" "
+				+"AND SchedType='"+POut.Long((int)ScheduleType.Blockout)+"' ";
 				//+"AND ProvNum='"  +POut.PInt(provNum)+"'";
 			Db.NonQ(command);
 			//CheckIfDeletedLastBlockout(date);
@@ -438,7 +438,7 @@ namespace OpenDentBusiness{
 			}
 			string command="SELECT COUNT(*) FROM schedule WHERE Status=2 "//holiday
 				+"AND SchedType=0 "//practice
-				+"AND SchedDate= "+POut.PDate(date);
+				+"AND SchedDate= "+POut.Date(date);
 			string result=Db.GetCount(command);
 			if(result=="0"){
 				return false;
@@ -467,8 +467,8 @@ namespace OpenDentBusiness{
 				+"FROM schedule "
 				+"LEFT JOIN provider ON schedule.ProvNum=provider.ProvNum "
 				+"LEFT JOIN employee ON schedule.EmployeeNum=employee.EmployeeNum "
-				+"WHERE SchedDate >= "+POut.PDate(dateStart)+" "
-				+"AND SchedDate <= "+POut.PDate(dateEnd)+" "
+				+"WHERE SchedDate >= "+POut.Date(dateStart)+" "
+				+"AND SchedDate <= "+POut.Date(dateEnd)+" "
 				+"AND (";
 			string orClause="";//this is guaranteed to be non empty by the time the command is assembled.
 			if(includePractice){
@@ -478,13 +478,13 @@ namespace OpenDentBusiness{
 				if(orClause!=""){
 					orClause+="OR ";
 				}
-				orClause+="schedule.ProvNum="+POut.PLong(provNums[i])+" ";
+				orClause+="schedule.ProvNum="+POut.Long(provNums[i])+" ";
 			}
 			for(int i=0;i<empNums.Count;i++) {
 				if(orClause!="") {
 					orClause+="OR ";
 				}
-				orClause+="schedule.EmployeeNum="+POut.PLong(empNums[i])+" ";
+				orClause+="schedule.EmployeeNum="+POut.Long(empNums[i])+" ";
 			}
 			command+=orClause+") ";
 			//if(FormChooseDatabase.DBtype==DatabaseType.Oracle){
@@ -510,9 +510,9 @@ namespace OpenDentBusiness{
 			}
 			int rowI;
 			for(int i=0;i<raw.Rows.Count;i++){
-				dateSched=PIn.PDate(raw.Rows[i]["SchedDate"].ToString());
-				startTime=PIn.PDateT(raw.Rows[i]["StartTime"].ToString());
-				stopTime=PIn.PDateT(raw.Rows[i]["StopTime"].ToString());
+				dateSched=PIn.Date(raw.Rows[i]["SchedDate"].ToString());
+				startTime=PIn.DateT(raw.Rows[i]["StartTime"].ToString());
+				stopTime=PIn.DateT(raw.Rows[i]["StopTime"].ToString());
 				rowI=GetRowCal(dateStart,dateSched);
 				if(i!=0//not first row
 					&& raw.Rows[i-1]["Abbr"].ToString()==raw.Rows[i]["Abbr"].ToString()//same provider as previous row
@@ -520,8 +520,8 @@ namespace OpenDentBusiness{
 					&& raw.Rows[i-1]["SchedDate"].ToString()==raw.Rows[i]["SchedDate"].ToString())//and same date as previous row
 				{
 					table.Rows[rowI][(int)dateSched.DayOfWeek]+=", ";
-					if(startTime.TimeOfDay==PIn.PDateT("12 AM").TimeOfDay
-						&& stopTime.TimeOfDay==PIn.PDateT("12 AM").TimeOfDay)
+					if(startTime.TimeOfDay==PIn.DateT("12 AM").TimeOfDay
+						&& stopTime.TimeOfDay==PIn.DateT("12 AM").TimeOfDay)
 					{
 						if(raw.Rows[i]["Status"].ToString()=="2") {//if holiday
 							table.Rows[rowI][(int)dateSched.DayOfWeek]+=Lans.g("Schedules","Holiday:");
@@ -533,8 +533,8 @@ namespace OpenDentBusiness{
 				}
 				else{
 					table.Rows[rowI][(int)dateSched.DayOfWeek]+="\r\n";
-					if(startTime.TimeOfDay==PIn.PDateT("12 AM").TimeOfDay
-						&& stopTime.TimeOfDay==PIn.PDateT("12 AM").TimeOfDay)
+					if(startTime.TimeOfDay==PIn.DateT("12 AM").TimeOfDay
+						&& stopTime.TimeOfDay==PIn.DateT("12 AM").TimeOfDay)
 					{
 						if(raw.Rows[i]["Status"].ToString()=="2"){//if holiday
 							table.Rows[rowI][(int)dateSched.DayOfWeek]+=Lans.g("Schedules","Holiday:");//+raw.Rows[i]["Note"].ToString();
@@ -600,14 +600,14 @@ namespace OpenDentBusiness{
 				}
 			}
 			//make deleted entries for synch purposes:
-			string command="SELECT ScheduleNum FROM schedule WHERE SchedDate= "+POut.PDate(schedDate)+" "
-				+"AND SchedType="+POut.PLong((int)ScheduleType.Provider);
+			string command="SELECT ScheduleNum FROM schedule WHERE SchedDate= "+POut.Date(schedDate)+" "
+				+"AND SchedType="+POut.Long((int)ScheduleType.Provider);
 			DataTable table=Db.GetTable(command);
 			for(int i=0;i<table.Rows.Count;i++){
-				DeletedObjects.SetDeleted(DeletedObjectType.ScheduleProv,PIn.PLong(table.Rows[i][0].ToString()));
+				DeletedObjects.SetDeleted(DeletedObjectType.ScheduleProv,PIn.Long(table.Rows[i][0].ToString()));
 			}
 			//Then, bulk delete.
-			command="DELETE FROM schedule WHERE SchedDate= "+POut.PDate(schedDate)+" "
+			command="DELETE FROM schedule WHERE SchedDate= "+POut.Date(schedDate)+" "
 				+"AND (SchedType=0 OR SchedType=1 OR SchedType=3)";
 			Db.NonQ(command);
 			for(int i=0;i<SchedList.Count;i++){
@@ -632,22 +632,22 @@ namespace OpenDentBusiness{
 					if(orClause!="") {
 						orClause+="OR ";
 					}
-					orClause+="schedule.ProvNum="+POut.PLong(provNums[i])+" ";
+					orClause+="schedule.ProvNum="+POut.Long(provNums[i])+" ";
 				}
 				command="SELECT ScheduleNum FROM schedule "
-					+"WHERE SchedDate >= "+POut.PDate(dateStart)+" "
-					+"AND SchedDate <= "+POut.PDate(dateEnd)+" "
-					+"AND SchedType="+POut.PLong((int)ScheduleType.Provider)
+					+"WHERE SchedDate >= "+POut.Date(dateStart)+" "
+					+"AND SchedDate <= "+POut.Date(dateEnd)+" "
+					+"AND SchedType="+POut.Long((int)ScheduleType.Provider)
 					+" AND ("+orClause+")";
 				DataTable table=Db.GetTable(command);
 				for(int i=0;i<table.Rows.Count;i++){
-					DeletedObjects.SetDeleted(DeletedObjectType.ScheduleProv,PIn.PLong(table.Rows[i][0].ToString()));
+					DeletedObjects.SetDeleted(DeletedObjectType.ScheduleProv,PIn.Long(table.Rows[i][0].ToString()));
 				}
 			}
 			//Then, the usual deletion for everything
 			command="DELETE FROM schedule "
-				+"WHERE SchedDate >= "+POut.PDate(dateStart)+" "
-				+"AND SchedDate <= "+POut.PDate(dateEnd)+" "
+				+"WHERE SchedDate >= "+POut.Date(dateStart)+" "
+				+"AND SchedDate <= "+POut.Date(dateEnd)+" "
 				+"AND (";
 			orClause="";//this is guaranteed to be non empty by the time the command is assembled.
 			if(includePractice) {
@@ -657,13 +657,13 @@ namespace OpenDentBusiness{
 				if(orClause!="") {
 					orClause+="OR ";
 				}
-				orClause+="schedule.ProvNum="+POut.PLong(provNums[i])+" ";
+				orClause+="schedule.ProvNum="+POut.Long(provNums[i])+" ";
 			}
 			for(int i=0;i<empNums.Count;i++) {
 				if(orClause!="") {
 					orClause+="OR ";
 				}
-				orClause+="schedule.EmployeeNum="+POut.PLong(empNums[i])+" ";
+				orClause+="schedule.EmployeeNum="+POut.Long(empNums[i])+" ";
 			}
 			command+=orClause+")";
 			Db.NonQ(command);
@@ -676,8 +676,8 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command="SELECT * FROM schedule WHERE "
-				+"SchedDate >= "+POut.PDate(dateStart)+" "
-				+"AND SchedDate <= "+POut.PDate(dateEnd)+" "
+				+"SchedDate >= "+POut.Date(dateStart)+" "
+				+"AND SchedDate <= "+POut.Date(dateEnd)+" "
 				+"AND SchedType=2";//blockouts
 			List<Schedule> listSched=RefreshAndFill(command);
 			//First, remove all the given ScheduleOps.
@@ -685,8 +685,8 @@ namespace OpenDentBusiness{
 				for(int o=0;o<opNums.Count;o++){
 					if(listSched[i].Ops.Contains(opNums[o])){
 						command="DELETE FROM scheduleop "
-							+"WHERE ScheduleNum="+POut.PLong(listSched[i].ScheduleNum)+" "
-							+"AND OperatoryNum="+POut.PLong(opNums[o]);
+							+"WHERE ScheduleNum="+POut.Long(listSched[i].ScheduleNum)+" "
+							+"AND OperatoryNum="+POut.Long(opNums[o]);
 						Db.NonQ(command);
 						listSched[i].Ops.Remove(opNums[o]);
 					}
@@ -697,7 +697,7 @@ namespace OpenDentBusiness{
 				if(listSched[i].Ops.Count>0){
 					continue;
 				}
-				command="DELETE FROM schedule WHERE ScheduleNum="+POut.PLong(listSched[i].ScheduleNum);
+				command="DELETE FROM schedule WHERE ScheduleNum="+POut.Long(listSched[i].ScheduleNum);
 				Db.NonQ(command);
 			}			
 		}

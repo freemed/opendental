@@ -734,14 +734,14 @@ namespace OpenDental{
 				for(int i=0;i<tableOut.Rows.Count;i++){
 					try{
 					if(tableOut.Columns[j].Caption.Substring(0,1)=="$"){
-						tableOut.Rows[i][j]=PIn.PDouble(tableOut.Rows[i][j].ToString()).ToString("F");
+						tableOut.Rows[i][j]=PIn.Double(tableOut.Rows[i][j].ToString()).ToString("F");
 						if(reportIn!=null) {
 							reportIn.ColAlign[j]=HorizontalAlignment.Right;
-							reportIn.ColTotal[j]+=PIn.PDouble(tableOut.Rows[i][j].ToString());
+							reportIn.ColTotal[j]+=PIn.Double(tableOut.Rows[i][j].ToString());
 						}
 					}
 					else if(tableOut.Columns[j].Caption.ToLower().StartsWith("date")){
-						date=PIn.PDate(tableOut.Rows[i][j].ToString());
+						date=PIn.Date(tableOut.Rows[i][j].ToString());
 						if(date.Year<1880){
 							tableOut.Rows[i][j]="";
 						}
@@ -778,7 +778,7 @@ namespace OpenDental{
             case "sigonfile": 
             case "notperson":
             case "isfrom":
-							tableOut.Rows[i][j]=PIn.PBool(tableOut.Rows[i][j].ToString()).ToString();
+							tableOut.Rows[i][j]=PIn.Bool(tableOut.Rows[i][j].ToString()).ToString();
 							break;
 						//date. Some of these are actually handled further up.
 						case "adjdate":
@@ -805,18 +805,18 @@ namespace OpenDental{
 						case "dateduecalc":
 						case "datefirstvisit":
 						case "mydate"://this is a workaround for the daily payment report
-							tableOut.Rows[i][j]=PIn.PDate(tableOut.Rows[i][j].ToString()).ToString("d");
+							tableOut.Rows[i][j]=PIn.Date(tableOut.Rows[i][j].ToString()).ToString("d");
 							break;
 						//age
 						case "birthdateforage":
-							tableOut.Rows[i][j]=PatientLogic.DateToAgeString(PIn.PDate(tableOut.Rows[i][j].ToString()));
+							tableOut.Rows[i][j]=PatientLogic.DateToAgeString(PIn.Date(tableOut.Rows[i][j].ToString()));
 							break;
             //time 
 						case "aptdatetime":
             case "starttime":
             case "stoptime":
-							tableOut.Rows[i][j]=PIn.PDateT(tableOut.Rows[i][j].ToString()).ToString("t")+"   "
-								+PIn.PDateT(tableOut.Rows[i][j].ToString()).ToString("d");
+							tableOut.Rows[i][j]=PIn.DateT(tableOut.Rows[i][j].ToString()).ToString("t")+"   "
+								+PIn.DateT(tableOut.Rows[i][j].ToString()).ToString("d");
 							break;
   					//double
 						case "adjamt":
@@ -844,10 +844,10 @@ namespace OpenDental{
 						case "bal_61_90":
 						case "balover90":
 						case "baltotal":
-							tableOut.Rows[i][j]=PIn.PDouble(tableOut.Rows[i][j].ToString()).ToString("F");
+							tableOut.Rows[i][j]=PIn.Double(tableOut.Rows[i][j].ToString()).ToString("F");
 							if(reportIn!=null) {
 								reportIn.ColAlign[j]=HorizontalAlignment.Right;
-								reportIn.ColTotal[j]+=PIn.PDouble(tableOut.Rows[i][j].ToString());
+								reportIn.ColTotal[j]+=PIn.Double(tableOut.Rows[i][j].ToString());
 							}
 							break;
 						case "toothnum":
@@ -856,44 +856,44 @@ namespace OpenDental{
 						//definitions:
 						case "adjtype":
 							tableOut.Rows[i][j]
-								=DefC.GetName(DefCat.AdjTypes,PIn.PLong(tableOut.Rows[i][j].ToString()));
+								=DefC.GetName(DefCat.AdjTypes,PIn.Long(tableOut.Rows[i][j].ToString()));
 							break;
 						case "confirmed":
 							tableOut.Rows[i][j]
-								=DefC.GetValue(DefCat.ApptConfirmed,PIn.PLong(tableOut.Rows[i][j].ToString()));
+								=DefC.GetValue(DefCat.ApptConfirmed,PIn.Long(tableOut.Rows[i][j].ToString()));
 							break;
 						case "dx":
 							tableOut.Rows[i][j]
-								=DefC.GetName(DefCat.Diagnosis,PIn.PLong(tableOut.Rows[i][j].ToString()));
+								=DefC.GetName(DefCat.Diagnosis,PIn.Long(tableOut.Rows[i][j].ToString()));
 							break;
 						case "discounttype":
 							tableOut.Rows[i][j]
-								=DefC.GetName(DefCat.DiscountTypes,PIn.PLong(tableOut.Rows[i][j].ToString()));
+								=DefC.GetName(DefCat.DiscountTypes,PIn.Long(tableOut.Rows[i][j].ToString()));
 							break;
 						case "doccategory":
 							tableOut.Rows[i][j]
-								=DefC.GetName(DefCat.ImageCats,PIn.PLong(tableOut.Rows[i][j].ToString()));
+								=DefC.GetName(DefCat.ImageCats,PIn.Long(tableOut.Rows[i][j].ToString()));
 							break;
 						case "op":
 							tableOut.Rows[i][j]
-								=Operatories.GetAbbrev(PIn.PLong(tableOut.Rows[i][j].ToString()));
+								=Operatories.GetAbbrev(PIn.Long(tableOut.Rows[i][j].ToString()));
 							break;
 						case "paytype":
 							tableOut.Rows[i][j]
-								=DefC.GetName(DefCat.PaymentTypes,PIn.PLong(tableOut.Rows[i][j].ToString()));
+								=DefC.GetName(DefCat.PaymentTypes,PIn.Long(tableOut.Rows[i][j].ToString()));
 							break;
 						case "proccat":
 							tableOut.Rows[i][j]
-								=DefC.GetName(DefCat.ProcCodeCats,PIn.PLong(tableOut.Rows[i][j].ToString()));
+								=DefC.GetName(DefCat.ProcCodeCats,PIn.Long(tableOut.Rows[i][j].ToString()));
 							break;
 						case "unschedstatus":
 						case "recallstatus":
 							tableOut.Rows[i][j]
-								=DefC.GetName(DefCat.RecallUnschedStatus,PIn.PLong(tableOut.Rows[i][j].ToString()));
+								=DefC.GetName(DefCat.RecallUnschedStatus,PIn.Long(tableOut.Rows[i][j].ToString()));
 							break;
 						case "billingtype":
 							tableOut.Rows[i][j]
-								=DefC.GetName(DefCat.BillingTypes,PIn.PLong(tableOut.Rows[i][j].ToString()));
+								=DefC.GetName(DefCat.BillingTypes,PIn.Long(tableOut.Rows[i][j].ToString()));
 							break;
 						//patnums:
 						case "patnum":
@@ -902,9 +902,9 @@ namespace OpenDental{
 						case "secpatnum":
 						case "subscriber":
             case "withpat":
-							if(patientNames.ContainsKey(PIn.PLong(tableOut.Rows[i][j].ToString()))) {
+							if(patientNames.ContainsKey(PIn.Long(tableOut.Rows[i][j].ToString()))) {
 								//MessageBox.Show((string)Patients.HList[PIn.PInt(tableOut.Rows[i][j].ToString())]);
-								tableOut.Rows[i][j]=patientNames[PIn.PLong(tableOut.Rows[i][j].ToString())];
+								tableOut.Rows[i][j]=patientNames[PIn.Long(tableOut.Rows[i][j].ToString())];
 							}
 							else
 								tableOut.Rows[i][j]="";
@@ -913,16 +913,16 @@ namespace OpenDental{
             case "plannum":
             case "priplannum":
             case "secplannum": 
-							if(hListPlans.ContainsKey(PIn.PLong(tableOut.Rows[i][j].ToString())))
-								tableOut.Rows[i][j]=hListPlans[PIn.PLong(tableOut.Rows[i][j].ToString())];
+							if(hListPlans.ContainsKey(PIn.Long(tableOut.Rows[i][j].ToString())))
+								tableOut.Rows[i][j]=hListPlans[PIn.Long(tableOut.Rows[i][j].ToString())];
 							else
 								tableOut.Rows[i][j]="";
 							break;
             //referralnum             
             case "referralnum":
-							if(PIn.PLong(tableOut.Rows[i][j].ToString())!=0){
+							if(PIn.Long(tableOut.Rows[i][j].ToString())!=0){
 								Referral referral=Referrals.GetReferral
-									(PIn.PLong(tableOut.Rows[i][j].ToString()));
+									(PIn.Long(tableOut.Rows[i][j].ToString()));
 								tableOut.Rows[i][j]
 									=referral.LName+", "+referral.FName+" "+referral.MName;
 							}
@@ -932,21 +932,21 @@ namespace OpenDental{
 						//enumerations:
 						case "aptstatus":
 							tableOut.Rows[i][j]
-								=((ApptStatus)PIn.PLong(tableOut.Rows[i][j].ToString())).ToString();
+								=((ApptStatus)PIn.Long(tableOut.Rows[i][j].ToString())).ToString();
 							break;
 						case "category":
-							tableOut.Rows[i][j]=((DefCat)PIn.PLong(tableOut.Rows[i][j].ToString())).ToString();
+							tableOut.Rows[i][j]=((DefCat)PIn.Long(tableOut.Rows[i][j].ToString())).ToString();
 							break;
 						case "renewmonth":
-							tableOut.Rows[i][j]=((Month)PIn.PLong(tableOut.Rows[i][j].ToString())).ToString();
+							tableOut.Rows[i][j]=((Month)PIn.Long(tableOut.Rows[i][j].ToString())).ToString();
 							break;
 						case "patstatus":
 							tableOut.Rows[i][j]
-								=((PatientStatus)PIn.PLong(tableOut.Rows[i][j].ToString())).ToString();
+								=((PatientStatus)PIn.Long(tableOut.Rows[i][j].ToString())).ToString();
 							break;
 						case "gender":
 							tableOut.Rows[i][j]
-								=((PatientGender)PIn.PLong(tableOut.Rows[i][j].ToString())).ToString();
+								=((PatientGender)PIn.Long(tableOut.Rows[i][j].ToString())).ToString();
 							break;
 						//case "lab":
 						//	tableOut.Rows[i][j]
@@ -954,13 +954,13 @@ namespace OpenDental{
 						//  break;
 						case "position":
 							tableOut.Rows[i][j]
-								=((PatientPosition)PIn.PLong(tableOut.Rows[i][j].ToString())).ToString();
+								=((PatientPosition)PIn.Long(tableOut.Rows[i][j].ToString())).ToString();
 							break;
 						case "deductwaivprev":
 						case "flocovered":
 						case "misstoothexcl":
 						case "procstatus":
-							tableOut.Rows[i][j]=((ProcStat)PIn.PLong(tableOut.Rows[i][j].ToString())).ToString();
+							tableOut.Rows[i][j]=((ProcStat)PIn.Long(tableOut.Rows[i][j].ToString())).ToString();
 							break;
 						case "majorwait":
 						case "hascaries":
@@ -969,47 +969,47 @@ namespace OpenDental{
 						case "earlychildcaries":
 						case "existingsealants":
 						case "missingallteeth":
-							tableOut.Rows[i][j]=((YN)PIn.PLong(tableOut.Rows[i][j].ToString())).ToString();
+							tableOut.Rows[i][j]=((YN)PIn.Long(tableOut.Rows[i][j].ToString())).ToString();
 							break;
 						case "prirelationship":
 						case "secrelationship":
-							tableOut.Rows[i][j]=((Relat)PIn.PLong(tableOut.Rows[i][j].ToString())).ToString();
+							tableOut.Rows[i][j]=((Relat)PIn.Long(tableOut.Rows[i][j].ToString())).ToString();
 							break;
 						case "treatarea":
 							tableOut.Rows[i][j]
-								=((TreatmentArea)PIn.PLong(tableOut.Rows[i][j].ToString())).ToString();
+								=((TreatmentArea)PIn.Long(tableOut.Rows[i][j].ToString())).ToString();
 							break;
 						case "specialty":
 							tableOut.Rows[i][j]
-								=((DentalSpecialty)PIn.PLong(tableOut.Rows[i][j].ToString())).ToString();
+								=((DentalSpecialty)PIn.Long(tableOut.Rows[i][j].ToString())).ToString();
 							break;
 						case "placeservice":
 							tableOut.Rows[i][j]
-								=((PlaceOfService)PIn.PLong(tableOut.Rows[i][j].ToString())).ToString();
+								=((PlaceOfService)PIn.Long(tableOut.Rows[i][j].ToString())).ToString();
 							break;
             case "employrelated": 
 							tableOut.Rows[i][j]
-								=((YN)PIn.PLong(tableOut.Rows[i][j].ToString())).ToString();
+								=((YN)PIn.Long(tableOut.Rows[i][j].ToString())).ToString();
 							break;
             case "schedtype": 
 							tableOut.Rows[i][j]
-								=((ScheduleType)PIn.PLong(tableOut.Rows[i][j].ToString())).ToString();
+								=((ScheduleType)PIn.Long(tableOut.Rows[i][j].ToString())).ToString();
 							break;
             case "dayofweek": 
 							tableOut.Rows[i][j]
-								=((DayOfWeek)PIn.PLong(tableOut.Rows[i][j].ToString())).ToString();
+								=((DayOfWeek)PIn.Long(tableOut.Rows[i][j].ToString())).ToString();
 							break;
 						case "race":
 							tableOut.Rows[i][j]
-								=((PatientRace)PIn.PLong(tableOut.Rows[i][j].ToString())).ToString();
+								=((PatientRace)PIn.Long(tableOut.Rows[i][j].ToString())).ToString();
 							break;
 						case "gradelevel":
 							tableOut.Rows[i][j]
-								=((PatientGrade)PIn.PLong(tableOut.Rows[i][j].ToString())).ToString();
+								=((PatientGrade)PIn.Long(tableOut.Rows[i][j].ToString())).ToString();
 							break;
 						case "urgency":
 							tableOut.Rows[i][j]
-								=((TreatmentUrgency)PIn.PLong(tableOut.Rows[i][j].ToString())).ToString();
+								=((TreatmentUrgency)PIn.Long(tableOut.Rows[i][j].ToString())).ToString();
 							break;
 						//miscellaneous:
 						case "provnum":
@@ -1018,11 +1018,11 @@ namespace OpenDental{
 						case "secprov":
             case "provtreat":
             case "provbill":   
-							tableOut.Rows[i][j]=Providers.GetAbbr(PIn.PLong(tableOut.Rows[i][j].ToString()));
+							tableOut.Rows[i][j]=Providers.GetAbbr(PIn.Long(tableOut.Rows[i][j].ToString()));
 							break;
 
 						case "covcatnum":
-							tableOut.Rows[i][j]=CovCats.GetDesc(PIn.PLong(tableOut.Rows[i][j].ToString()));
+							tableOut.Rows[i][j]=CovCats.GetDesc(PIn.Long(tableOut.Rows[i][j].ToString()));
 							break;
             case "referringprov": 
 	//					  tableOut.Rows[i][j]=CovCats.GetDesc(PIn.PInt(tableOut.Rows[i][j].ToString()));
@@ -1033,7 +1033,7 @@ namespace OpenDental{
 							break;
 						case "feesched":
 						case "feeschednum":
-							tableOut.Rows[i][j]=FeeScheds.GetDescription(PIn.PLong(tableOut.Rows[i][j].ToString()));
+							tableOut.Rows[i][j]=FeeScheds.GetDescription(PIn.Long(tableOut.Rows[i][j].ToString()));
 							break;
 					}//end switch column caption
 					}//end try

@@ -26,7 +26,7 @@ namespace OpenDentBusiness {
 			//	FROM treatplan
 			//	WHERE PatNum="+POut.PInt(PatCur.PatNum)+";";
 			//Db.NonQ(command);
-			command="SET @maxTpDate=(SELECT MAX(treatplan.DateTP) FROM treatplan WHERE PatNum="+POut.PLong(PatCur.PatNum)+");";
+			command="SET @maxTpDate=(SELECT MAX(treatplan.DateTP) FROM treatplan WHERE PatNum="+POut.Long(PatCur.PatNum)+");";
 			command+="SELECT ";
 			for(int i=0;i<letter.Fields.Count;i++) {
 				if(i>0) {
@@ -90,16 +90,16 @@ namespace OpenDentBusiness {
 				+"LEFT JOIN treatplan ON patient.PatNum=treatplan.PatNum AND DateTP=@maxTpDate "
 				+"LEFT JOIN patient patResp ON treatplan.ResponsParty=patResp.PatNum "
 				+"LEFT JOIN recall ON recall.PatNum=patient.PatNum "
-					+"AND (recall.RecallTypeNum="+POut.PLong(PrefC.GetLong(PrefName.RecallTypeSpecialProphy))
-					+" OR recall.RecallTypeNum="+POut.PLong(PrefC.GetLong(PrefName.RecallTypeSpecialPerio))+") "
+					+"AND (recall.RecallTypeNum="+POut.Long(PrefC.GetLong(PrefName.RecallTypeSpecialProphy))
+					+" OR recall.RecallTypeNum="+POut.Long(PrefC.GetLong(PrefName.RecallTypeSpecialPerio))+") "
 				+"LEFT JOIN patplan ON patplan.PatNum=patient.PatNum AND Ordinal=1 "
 				+"LEFT JOIN insplan ON patplan.PlanNum=insplan.PlanNum "
 				+"LEFT JOIN carrier ON carrier.CarrierNum=insplan.CarrierNum "
 				+"LEFT JOIN patient patSubsc ON patSubsc.PatNum=insplan.Subscriber "
 				+"LEFT JOIN appointment ON appointment.PatNum=patient.PatNum "
-					+"AND AptStatus="+POut.PLong((int)ApptStatus.Scheduled)+" "
+					+"AND AptStatus="+POut.Long((int)ApptStatus.Scheduled)+" "
 					+"AND AptDateTime > NOW() "
-				+"WHERE patient.PatNum="+POut.PLong(PatCur.PatNum)
+				+"WHERE patient.PatNum="+POut.Long(PatCur.PatNum)
 				+" GROUP BY patient.PatNum "
 				+"ORDER BY refattach.ItemOrder";
 			return Db.GetTable(command);

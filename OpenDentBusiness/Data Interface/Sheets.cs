@@ -52,12 +52,12 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Sheet>>(MethodBase.GetCurrentMethod(),patNum,referralNum);
 			}
-			string command="SELECT * FROM sheet WHERE PatNum="+POut.PLong(patNum)
+			string command="SELECT * FROM sheet WHERE PatNum="+POut.Long(patNum)
 				+" AND EXISTS(SELECT * FROM sheetfield "
 				+"WHERE sheet.SheetNum=sheetfield.SheetNum "
-				+"AND sheetfield.FieldType="+POut.PLong((int)SheetFieldType.Parameter)
+				+"AND sheetfield.FieldType="+POut.Long((int)SheetFieldType.Parameter)
 				+" AND sheetfield.FieldName='ReferralNum' "
-				+"AND sheetfield.FieldValue='"+POut.PLong(referralNum)+"')"
+				+"AND sheetfield.FieldValue='"+POut.Long(referralNum)+"')"
 				+" ORDER BY DateTimeSheet";
 			return new List<Sheet>(DataObjectFactory<Sheet>.CreateObjects(command));
 			//Collection<sheetData> collectState=DataObjectFactory<sheetData>.CreateObjects(sheetDataNums);
@@ -71,11 +71,11 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<Sheet>(MethodBase.GetCurrentMethod(),patNum,rxNum);
 			}
 			string command="SELECT sheet.* FROM sheet,sheetfield "
-				+"WHERE sheet.PatNum="+POut.PLong(patNum)
-				+" AND sheet.SheetType="+POut.PLong((int)SheetTypeEnum.Rx)
-				+" AND sheetfield.FieldType="+POut.PLong((int)SheetFieldType.Parameter)
+				+"WHERE sheet.PatNum="+POut.Long(patNum)
+				+" AND sheet.SheetType="+POut.Long((int)SheetTypeEnum.Rx)
+				+" AND sheetfield.FieldType="+POut.Long((int)SheetFieldType.Parameter)
 				+" AND sheetfield.FieldName='RxNum' "
-				+"AND sheetfield.FieldValue='"+POut.PLong(rxNum)+"'";
+				+"AND sheetfield.FieldValue='"+POut.Long(rxNum)+"'";
 			List<Sheet> sheetlist=new List<Sheet>(DataObjectFactory<Sheet>.CreateObjects(command));
 			if(sheetlist.Count==0){
 				return null;
@@ -113,7 +113,7 @@ namespace OpenDentBusiness{
 			if(table.Rows.Count>0){
 				throw new ApplicationException(Lans.g("sheetDatas","sheetData is already in use by patient(s). Not allowed to delete. "+pats));
 			}*/
-			string command="DELETE FROM sheetfield WHERE SheetNum="+POut.PLong(sheetNum);
+			string command="DELETE FROM sheetfield WHERE SheetNum="+POut.Long(sheetNum);
 			Db.NonQ(command);
 			DataObjectFactory<Sheet>.DeleteObject(sheetNum);
 		}

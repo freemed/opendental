@@ -196,7 +196,7 @@ namespace OpenDental{
 		}
 
 		private void FillGrid(){
-			ScreenGroupList= ScreenGroups.Refresh(PIn.PDate(textDateFrom.Text),PIn.PDate(textDateTo.Text));
+			ScreenGroupList= ScreenGroups.Refresh(PIn.Date(textDateFrom.Text),PIn.Date(textDateTo.Text));
 			ListViewItem[] items=new ListViewItem[ScreenGroupList.Count];
 			for(int i=0;i<items.Length;i++){
 				items[i]=new ListViewItem();

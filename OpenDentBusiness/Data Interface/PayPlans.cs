@@ -23,7 +23,7 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<PayPlan>(MethodBase.GetCurrentMethod(),payPlanNum);
 			}
 			string command="SELECT * FROM payplan"
-				+" WHERE PayPlanNum = "+POut.PLong(payPlanNum);
+				+" WHERE PayPlanNum = "+POut.Long(payPlanNum);
 			return RefreshAndFill(Db.GetTable(command))[0];
 		}
 
@@ -33,7 +33,7 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<List<PayPlan>>(MethodBase.GetCurrentMethod(),guarNum);
 			}
 			string command="SELECT * FROM payplan"
-				+" WHERE Guarantor = "+POut.PLong(guarNum);
+				+" WHERE Guarantor = "+POut.Long(guarNum);
 			//if(isIns){
 			//	command+=" AND PlanNum != 0";
 			//}
@@ -51,14 +51,14 @@ namespace OpenDentBusiness{
 			PayPlan payplan;
 			for(int i=0;i<table.Rows.Count;i++) {
 				payplan=new PayPlan();
-				payplan.PayPlanNum    = PIn.PLong   (table.Rows[i][0].ToString());
-				payplan.PatNum        = PIn.PLong   (table.Rows[i][1].ToString());
-				payplan.Guarantor     = PIn.PLong   (table.Rows[i][2].ToString());
-				payplan.PayPlanDate   = PIn.PDate  (table.Rows[i][3].ToString());
-				payplan.APR           = PIn.PDouble(table.Rows[i][4].ToString());
-				payplan.Note          = PIn.PString(table.Rows[i][5].ToString());
-				payplan.PlanNum       = PIn.PLong   (table.Rows[i][6].ToString());
-				payplan.CompletedAmt  = PIn.PDouble(table.Rows[i][7].ToString());
+				payplan.PayPlanNum    = PIn.Long   (table.Rows[i][0].ToString());
+				payplan.PatNum        = PIn.Long   (table.Rows[i][1].ToString());
+				payplan.Guarantor     = PIn.Long   (table.Rows[i][2].ToString());
+				payplan.PayPlanDate   = PIn.Date  (table.Rows[i][3].ToString());
+				payplan.APR           = PIn.Double(table.Rows[i][4].ToString());
+				payplan.Note          = PIn.String(table.Rows[i][5].ToString());
+				payplan.PlanNum       = PIn.Long   (table.Rows[i][6].ToString());
+				payplan.CompletedAmt  = PIn.Double(table.Rows[i][7].ToString());
 				retVal.Add(payplan);
 			}
 			return retVal;
@@ -71,14 +71,14 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command="UPDATE payplan SET " 
-				+"PatNum = '"         +POut.PLong   (plan.PatNum)+"'"
-				+",Guarantor = '"     +POut.PLong   (plan.Guarantor)+"'"
-				+",PayPlanDate = "    +POut.PDate  (plan.PayPlanDate)
-				+",APR = '"           +POut.PDouble(plan.APR)+"'"
-				+",Note = '"          +POut.PString(plan.Note)+"'"
-				+",PlanNum = '"       +POut.PLong   (plan.PlanNum)+"'"
-				+",CompletedAmt = '"  +POut.PDouble(plan.CompletedAmt)+"'"
-				+" WHERE PayPlanNum = '" +POut.PLong(plan.PayPlanNum)+"'";
+				+"PatNum = '"         +POut.Long   (plan.PatNum)+"'"
+				+",Guarantor = '"     +POut.Long   (plan.Guarantor)+"'"
+				+",PayPlanDate = "    +POut.Date  (plan.PayPlanDate)
+				+",APR = '"           +POut.Double(plan.APR)+"'"
+				+",Note = '"          +POut.String(plan.Note)+"'"
+				+",PlanNum = '"       +POut.Long   (plan.PlanNum)+"'"
+				+",CompletedAmt = '"  +POut.Double(plan.CompletedAmt)+"'"
+				+" WHERE PayPlanNum = '" +POut.Long(plan.PayPlanNum)+"'";
  			Db.NonQ(command);
 		}
 
@@ -97,16 +97,16 @@ namespace OpenDentBusiness{
 			}
 			command+="PatNum,Guarantor,PayPlanDate,APR,Note,PlanNum,CompletedAmt) VALUES(";
 			if(PrefC.RandomKeys){
-				command+="'"+POut.PLong(plan.PayPlanNum)+"', ";
+				command+="'"+POut.Long(plan.PayPlanNum)+"', ";
 			}
 			command+=
-				 "'"+POut.PLong   (plan.PatNum)+"', "
-				+"'"+POut.PLong   (plan.Guarantor)+"', "
-				+POut.PDate  (plan.PayPlanDate)+", "
-				+"'"+POut.PDouble(plan.APR)+"', "
-				+"'"+POut.PString(plan.Note)+"', "
-				+"'"+POut.PLong   (plan.PlanNum)+"', "
-				+"'"+POut.PDouble(plan.CompletedAmt)+"')";
+				 "'"+POut.Long   (plan.PatNum)+"', "
+				+"'"+POut.Long   (plan.Guarantor)+"', "
+				+POut.Date  (plan.PayPlanDate)+", "
+				+"'"+POut.Double(plan.APR)+"', "
+				+"'"+POut.String(plan.Note)+"', "
+				+"'"+POut.Long   (plan.PlanNum)+"', "
+				+"'"+POut.Double(plan.CompletedAmt)+"')";
 			if(PrefC.RandomKeys){
 				Db.NonQ(command);
 			}
@@ -145,7 +145,7 @@ namespace OpenDentBusiness{
 			if(table.Rows.Count==0){
 				return 0;
 			}
-			return PIn.PDouble(table.Rows[0][0].ToString());
+			return PIn.Double(table.Rows[0][0].ToString());
 		}
 
 		/// <summary>Gets info directly from database. Used when adding a payment.</summary>
@@ -154,12 +154,12 @@ namespace OpenDentBusiness{
 				return Meth.GetBool(MethodBase.GetCurrentMethod(),payPlanNum);
 			}
 			string command="SELECT SUM(paysplit.SplitAmt) FROM paysplit "
-				+"WHERE PayPlanNum = "+POut.PLong(payPlanNum);// +"' "
+				+"WHERE PayPlanNum = "+POut.Long(payPlanNum);// +"' "
 				//+" GROUP BY paysplit.PayPlanNum";
-			double amtPaid=PIn.PDouble(Db.GetScalar(command));
+			double amtPaid=PIn.Double(Db.GetScalar(command));
 			command="SELECT SUM(Principal+Interest) FROM payplancharge "
-				+"WHERE PayPlanNum = "+POut.PLong(payPlanNum);
-			double totalCost=PIn.PDouble(Db.GetScalar(command));
+				+"WHERE PayPlanNum = "+POut.Long(payPlanNum);
+			double totalCost=PIn.Double(Db.GetScalar(command));
 			if(totalCost-amtPaid < .01) {
 				return true;
 			}

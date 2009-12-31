@@ -839,12 +839,12 @@ namespace OpenDental{
 		private void FillGridBal(){
 			double famstart=0;
 			for(int i=0;i<tableBalances.Rows.Count;i++) {
-				famstart+=PIn.PDouble(tableBalances.Rows[i]["StartBal"].ToString());
+				famstart+=PIn.Double(tableBalances.Rows[i]["StartBal"].ToString());
 			}
 			textFamStart.Text=famstart.ToString("N");
 			double famafterins=0;
 			for(int i=0;i<tableBalances.Rows.Count;i++) {
-				famafterins+=PIn.PDouble(tableBalances.Rows[i]["AfterIns"].ToString());
+				famafterins+=PIn.Double(tableBalances.Rows[i]["AfterIns"].ToString());
 			}
 			if(!PrefC.GetBool(PrefName.BalancesDontSubtractIns)){
 				textFamAfterIns.Text=famafterins.ToString("N");
@@ -870,13 +870,13 @@ namespace OpenDental{
 					if(tableBalances.Rows[f]["ClinicNum"].ToString()!=SplitList[i].ClinicNum.ToString()) {
 						continue;
 					}
-					amt=PIn.PDouble(tableBalances.Rows[f]["EndBal"].ToString())-SplitList[i].SplitAmt;
+					amt=PIn.Double(tableBalances.Rows[f]["EndBal"].ToString())-SplitList[i].SplitAmt;
 					tableBalances.Rows[f]["EndBal"]=amt.ToString("N");
 				}
 			}
 			double famend=0;
 			for(int i=0;i<tableBalances.Rows.Count;i++) {
-				famend+=PIn.PDouble(tableBalances.Rows[i]["EndBal"].ToString());
+				famend+=PIn.Double(tableBalances.Rows[i]["EndBal"].ToString());
 			}
 			textFamEnd.Text=famend.ToString("N");
 			//fill grid--------------------------------------------------------------------------------------------
@@ -903,22 +903,22 @@ namespace OpenDental{
 			ODGridRow row;
 			for(int i=0;i<tableBalances.Rows.Count;i++){
 				row=new ODGridRow();
-				row.Cells.Add(Providers.GetAbbr(PIn.PLong(tableBalances.Rows[i]["ProvNum"].ToString())));
-				row.Cells.Add(Clinics.GetDesc(PIn.PLong(tableBalances.Rows[i]["ClinicNum"].ToString())));
+				row.Cells.Add(Providers.GetAbbr(PIn.Long(tableBalances.Rows[i]["ProvNum"].ToString())));
+				row.Cells.Add(Clinics.GetDesc(PIn.Long(tableBalances.Rows[i]["ClinicNum"].ToString())));
 				if(tableBalances.Rows[i]["Preferred"].ToString()==""){
 					row.Cells.Add(tableBalances.Rows[i]["FName"].ToString());
 				}
 				else{
 					row.Cells.Add("'"+tableBalances.Rows[i]["Preferred"].ToString()+"'");
 				}
-				row.Cells.Add(PIn.PDouble(tableBalances.Rows[i]["StartBal"].ToString()).ToString("N"));
+				row.Cells.Add(PIn.Double(tableBalances.Rows[i]["StartBal"].ToString()).ToString("N"));
 				if(PrefC.GetBool(PrefName.BalancesDontSubtractIns)){
 					row.Cells.Add("");
 				}
 				else{
-					row.Cells.Add(PIn.PDouble(tableBalances.Rows[i]["AfterIns"].ToString()).ToString("N"));
+					row.Cells.Add(PIn.Double(tableBalances.Rows[i]["AfterIns"].ToString()).ToString("N"));
 				}
-				row.Cells.Add(PIn.PDouble(tableBalances.Rows[i]["EndBal"].ToString()).ToString("N"));
+				row.Cells.Add(PIn.Double(tableBalances.Rows[i]["EndBal"].ToString()).ToString("N"));
 				//row.ColorBackG=SystemColors.Control;//Color.FromArgb(240,240,240);
 				gridBal.Rows.Add(row);
 			}
@@ -928,7 +928,7 @@ namespace OpenDental{
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			FormPaySplitEdit FormPS=new FormPaySplitEdit(FamCur);
 			FormPS.PaySplitCur=SplitList[e.Row];
-			FormPS.Remain=PaymentCur.PayAmt-PIn.PDouble(textTotal.Text)+SplitList[e.Row].SplitAmt;
+			FormPS.Remain=PaymentCur.PayAmt-PIn.Double(textTotal.Text)+SplitList[e.Row].SplitAmt;
 			FormPS.ShowDialog();
 			if(FormPS.PaySplitCur==null) {//user deleted
 				SplitList.RemoveAt(e.Row);
@@ -941,15 +941,15 @@ namespace OpenDental{
 		private void butAdd_Click(object sender, System.EventArgs e) {
 			PaySplit PaySplitCur=new PaySplit();
 			PaySplitCur.PayNum=PaymentCur.PayNum;
-			PaySplitCur.DatePay=PIn.PDate(textDate.Text);//this may be updated upon closing
-			PaySplitCur.ProcDate=PIn.PDate(textDate.Text);//this may be updated upon closing
+			PaySplitCur.DatePay=PIn.Date(textDate.Text);//this may be updated upon closing
+			PaySplitCur.ProcDate=PIn.Date(textDate.Text);//this may be updated upon closing
 			PaySplitCur.ProvNum=Patients.GetProvNum(PatCur);
 			PaySplitCur.PatNum=PatCur.PatNum;
 			PaySplitCur.ClinicNum=PaymentCur.ClinicNum;
 			FormPaySplitEdit FormPS=new FormPaySplitEdit(FamCur);
 			FormPS.PaySplitCur=PaySplitCur;
 			FormPS.IsNew=true;
-			FormPS.Remain=PaymentCur.PayAmt-PIn.PDouble(textTotal.Text);
+			FormPS.Remain=PaymentCur.PayAmt-PIn.Double(textTotal.Text);
 			if(FormPS.ShowDialog()!=DialogResult.OK){
 				return;
 			}
@@ -966,21 +966,21 @@ namespace OpenDental{
 			PaySplit split;
 			for(int i=0;i<gridBal.SelectedIndices.Length;i++){
 				if(PrefC.GetBool(PrefName.BalancesDontSubtractIns)){
-					amt=PIn.PDouble(tableBalances.Rows[gridBal.SelectedIndices[i]]["StartBal"].ToString());
+					amt=PIn.Double(tableBalances.Rows[gridBal.SelectedIndices[i]]["StartBal"].ToString());
 				}
 				else{
-					amt=PIn.PDouble(tableBalances.Rows[gridBal.SelectedIndices[i]]["AfterIns"].ToString());
+					amt=PIn.Double(tableBalances.Rows[gridBal.SelectedIndices[i]]["AfterIns"].ToString());
 				}
 				if(amt==0){
 					continue;
 				}
 				split=new PaySplit();
-				split.PatNum=PIn.PLong(tableBalances.Rows[gridBal.SelectedIndices[i]]["PatNum"].ToString());
+				split.PatNum=PIn.Long(tableBalances.Rows[gridBal.SelectedIndices[i]]["PatNum"].ToString());
 				split.PayNum=PaymentCur.PayNum;
 				split.ProcDate=PaymentCur.PayDate;//this may be updated upon closing
 				split.DatePay=PaymentCur.PayDate;//this may be updated upon closing
-				split.ProvNum=PIn.PLong(tableBalances.Rows[gridBal.SelectedIndices[i]]["ProvNum"].ToString());
-				split.ClinicNum=PIn.PLong(tableBalances.Rows[gridBal.SelectedIndices[i]]["ClinicNum"].ToString());
+				split.ProvNum=PIn.Long(tableBalances.Rows[gridBal.SelectedIndices[i]]["ProvNum"].ToString());
+				split.ClinicNum=PIn.Long(tableBalances.Rows[gridBal.SelectedIndices[i]]["ClinicNum"].ToString());
 				split.SplitAmt=amt;
 				SplitList.Add(split);
 			}
@@ -1044,7 +1044,7 @@ namespace OpenDental{
 			PaySplitCur.DatePay=PaymentCur.PayDate;//this may be updated upon closing
 			PaySplitCur.ProvNum=Patients.GetProvNum(PatCur);
 			PaySplitCur.ClinicNum=PaymentCur.ClinicNum;
-			PaySplitCur.SplitAmt=PIn.PDouble(textAmount.Text);
+			PaySplitCur.SplitAmt=PIn.Double(textAmount.Text);
 			SplitList.Add(PaySplitCur);
 		}
 
@@ -1104,7 +1104,7 @@ namespace OpenDental{
 			}
 			ProgramProperty prop=(ProgramProperty)ProgramProperties.GetForProgram(prog.ProgramNum)[0];
 			//still need to add functionality for accountingAutoPay
-			listPayType.SelectedIndex=DefC.GetOrder(DefCat.PaymentTypes,PIn.PLong(prop.PropertyValue));
+			listPayType.SelectedIndex=DefC.GetOrder(DefCat.PaymentTypes,PIn.Long(prop.PropertyValue));
 			SetComboDepositAccounts();
 			/*XCharge.exe [/TRANSACTIONTYPE:type] [/AMOUNT:amount] [/ACCOUNT:account] [/EXP:exp]
 				[“/TRACK:track”] [/ZIP:zip] [/ADDRESS:address] [/RECEIPT:receipt] [/CLERK:clerk]
@@ -1112,7 +1112,7 @@ namespace OpenDental{
 				[/RESULTFILE:”C:\Program Files\X-Charge\LocalTran\XCResult.txt”*/
 			ProcessStartInfo info=new ProcessStartInfo(prog.Path);
 			info.Arguments="";
-			double amt=PIn.PDouble(textAmount.Text);
+			double amt=PIn.Double(textAmount.Text);
 			if(amt>0){
 				info.Arguments+="/AMOUNT:"+amt.ToString("F2")+" ";
 			}
@@ -1156,7 +1156,7 @@ namespace OpenDental{
 						}
 					}
 					if(line.StartsWith("AMOUNT=")){
-						amt=PIn.PDouble(line.Substring(7));
+						amt=PIn.Double(line.Substring(7));
 						textAmount.Text=amt.ToString("F2");
 					}
 					line=reader.ReadLine();
@@ -1279,7 +1279,7 @@ namespace OpenDental{
 				return;
 			}
 			if(checkPayTypeNone.Checked) {
-				if(PIn.PDouble(textAmount.Text)!=0) {
+				if(PIn.Double(textAmount.Text)!=0) {
 					MsgBox.Show(this,"Amount must be zero for a transfer.");
 					return;
 				}
@@ -1289,7 +1289,7 @@ namespace OpenDental{
 					MessageBox.Show(Lan.g(this,"Please enter an amount."));
 					return;
 				}
-				if(PIn.PDouble(textAmount.Text)==0) {
+				if(PIn.Double(textAmount.Text)==0) {
 					MessageBox.Show(Lan.g(this,"Amount must not be zero unless this is a transfer."));
 					return;
 				}
@@ -1299,14 +1299,14 @@ namespace OpenDental{
 			}
 			if(IsNew){
 				//prevents backdating of initial payment
-				if(!Security.IsAuthorized(Permissions.PaymentCreate,PIn.PDate(textDate.Text))){
+				if(!Security.IsAuthorized(Permissions.PaymentCreate,PIn.Date(textDate.Text))){
 					return;
 				}
 			}
 			else{
 				//Editing an old entry will already be blocked if the date was too old, and user will not be able to click OK button
 				//This catches it if user changed the date to be older.
-				if(!Security.IsAuthorized(Permissions.PaymentEdit,PIn.PDate(textDate.Text))){
+				if(!Security.IsAuthorized(Permissions.PaymentEdit,PIn.Date(textDate.Text))){
 					return;
 				}
 			}
@@ -1323,15 +1323,15 @@ namespace OpenDental{
 				accountingNewAcct=0;
 			}
 			try {
-				accountingSynchRequired=Payments.ValidateLinkedEntries(accountingOldAmt,PIn.PDouble(textAmount.Text),IsNew,
+				accountingSynchRequired=Payments.ValidateLinkedEntries(accountingOldAmt,PIn.Double(textAmount.Text),IsNew,
 					PaymentCur.PayNum,accountingNewAcct);
 			}
 			catch(ApplicationException ex) {
 				MessageBox.Show(ex.Message);//not able to alter, so must not allow user to continue.
 				return;
 			}
-			PaymentCur.PayAmt=PIn.PDouble(textAmount.Text);//handles blank
-			PaymentCur.PayDate=PIn.PDate(textDate.Text);
+			PaymentCur.PayAmt=PIn.Double(textAmount.Text);//handles blank
+			PaymentCur.PayDate=PIn.Date(textDate.Text);
 			PaymentCur.CheckNum=textCheckNum.Text;
 			PaymentCur.BankBranch=textBankBranch.Text;
 			PaymentCur.PayNote=textNote.Text;
@@ -1362,9 +1362,9 @@ namespace OpenDental{
 				}
 			}
 			else if(SplitList.Count==1//if one split
-				&& PIn.PDouble(textAmount.Text) != SplitList[0].SplitAmt)//and amount doesn't match payment
+				&& PIn.Double(textAmount.Text) != SplitList[0].SplitAmt)//and amount doesn't match payment
 			{
-				SplitList[0].SplitAmt=PIn.PDouble(textAmount.Text);//make amounts match
+				SplitList[0].SplitAmt=PIn.Double(textAmount.Text);//make amounts match
 			}
 			else if(SplitList.Count==1//if one split
 				&& PaymentCur.PayDate != SplitList[0].ProcDate
@@ -1374,7 +1374,7 @@ namespace OpenDental{
 					SplitList[0].ProcDate=PaymentCur.PayDate;
 				}
 			}
-			else if(PaymentCur.PayAmt!=PIn.PDouble(textTotal.Text)) {
+			else if(PaymentCur.PayAmt!=PIn.Double(textTotal.Text)) {
 				MsgBox.Show(this,"Split totals must equal payment amount.");
 				//work on reallocation schemes here later
 				return;
@@ -1400,7 +1400,7 @@ namespace OpenDental{
 			//Accounting synch is done here.  All validation was done further up
 			//If user is trying to change the amount or linked account of an entry that was already copied and linked to accounting section
 			if(accountingSynchRequired){
-				Payments.AlterLinkedEntries(accountingOldAmt,PIn.PDouble(textAmount.Text),IsNew,
+				Payments.AlterLinkedEntries(accountingOldAmt,PIn.Double(textAmount.Text),IsNew,
 					PaymentCur.PayNum,accountingNewAcct,PaymentCur.PayDate,FamCur.GetNameInFamFL(PaymentCur.PatNum));
 			}
 			if(IsNew){

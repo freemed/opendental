@@ -10,7 +10,7 @@ namespace ODR{
 
 		///<summary></summary>
 		public static string RunningSum(string groupBy,string addValue){
-			double num=PIn.PDouble(addValue);
+			double num=PIn.Double(addValue);
 			if(groupByVal==null || groupBy!=groupByVal){//if new or changed group
 				runningSum=0;
 			}

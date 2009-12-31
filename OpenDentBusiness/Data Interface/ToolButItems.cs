@@ -41,10 +41,10 @@ namespace OpenDentBusiness{
 			list=new ToolButItem[table.Rows.Count];
 			for(int i=0;i<List.Length;i++){
 				list[i]=new ToolButItem();
-				list[i].ToolButItemNum  =PIn.PLong   (table.Rows[i][0].ToString());
-				list[i].ProgramNum      =PIn.PLong   (table.Rows[i][1].ToString());
-				list[i].ToolBar         =(ToolBarsAvail)PIn.PLong(table.Rows[i][2].ToString());
-				list[i].ButtonText      =PIn.PString(table.Rows[i][3].ToString());
+				list[i].ToolButItemNum  =PIn.Long   (table.Rows[i][0].ToString());
+				list[i].ProgramNum      =PIn.Long   (table.Rows[i][1].ToString());
+				list[i].ToolBar         =(ToolBarsAvail)PIn.Long(table.Rows[i][2].ToString());
+				list[i].ButtonText      =PIn.String(table.Rows[i][3].ToString());
 			}
 		}
 
@@ -63,12 +63,12 @@ namespace OpenDentBusiness{
 			}
 			command+="ProgramNum,ToolBar,ButtonText) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PLong(Cur.ToolButItemNum)+", ";
+				command+=POut.Long(Cur.ToolButItemNum)+", ";
 			}
 			command+=
-				 "'"+POut.PLong   (Cur.ProgramNum)+"', "
-				+"'"+POut.PLong   ((int)Cur.ToolBar)+"', "
-				+"'"+POut.PString(Cur.ButtonText)+"')";
+				 "'"+POut.Long   (Cur.ProgramNum)+"', "
+				+"'"+POut.Long   ((int)Cur.ToolBar)+"', "
+				+"'"+POut.String(Cur.ButtonText)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -85,10 +85,10 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command = "UPDATE toolbutitem SET "
-				+"ProgramNum ='" +POut.PLong   (Cur.ProgramNum)+"'"
-				+",ToolBar ='"   +POut.PLong   ((int)Cur.ToolBar)+"'"
-				+",ButtonText ='"+POut.PString(Cur.ButtonText)+"'"
-				+" WHERE ToolButItemNum = '"+POut.PLong(Cur.ToolButItemNum)+"'";
+				+"ProgramNum ='" +POut.Long   (Cur.ProgramNum)+"'"
+				+",ToolBar ='"   +POut.Long   ((int)Cur.ToolBar)+"'"
+				+",ButtonText ='"+POut.String(Cur.ButtonText)+"'"
+				+" WHERE ToolButItemNum = '"+POut.Long(Cur.ToolButItemNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -99,7 +99,7 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command = "DELETE from toolbutitem WHERE ToolButItemNum = '"
-				+POut.PLong(Cur.ToolButItemNum)+"'";
+				+POut.Long(Cur.ToolButItemNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -110,7 +110,7 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command = "DELETE from toolbutitem WHERE ProgramNum = '"
-				+POut.PLong(programNum)+"'";
+				+POut.Long(programNum)+"'";
 			Db.NonQ(command);
 		}
 

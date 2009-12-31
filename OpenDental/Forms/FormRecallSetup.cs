@@ -516,7 +516,7 @@ namespace OpenDental{
 			string[] typearray=PrefC.GetString(PrefName.RecallTypesShowingInList).Split(',');
 			if(typearray.Length>0){
 				for(int i=0;i<typearray.Length;i++){
-					recalltypes.Add(PIn.PLong(typearray[i]));
+					recalltypes.Add(PIn.Long(typearray[i]));
 				}
 			}
 			for(int i=0;i<RecallTypeC.Listt.Count;i++){
@@ -756,16 +756,16 @@ namespace OpenDental{
 				Prefs.UpdateLong(PrefName.RecallDaysPast,-1);
 			}
 			else {
-				Prefs.UpdateLong(PrefName.RecallDaysPast,PIn.PLong(textDaysPast.Text));
+				Prefs.UpdateLong(PrefName.RecallDaysPast,PIn.Long(textDaysPast.Text));
 			}
 			if(textDaysFuture.Text=="") {
 				Prefs.UpdateLong(PrefName.RecallDaysFuture,-1);
 			}
 			else {
-				Prefs.UpdateLong(PrefName.RecallDaysFuture,PIn.PLong(textDaysFuture.Text));
+				Prefs.UpdateLong(PrefName.RecallDaysFuture,PIn.Long(textDaysFuture.Text));
 			}
-			Prefs.UpdateDouble(PrefName.RecallAdjustRight,PIn.PDouble(textRight.Text));
-			Prefs.UpdateDouble(PrefName.RecallAdjustDown,PIn.PDouble(textDown.Text));
+			Prefs.UpdateDouble(PrefName.RecallAdjustRight,PIn.Double(textRight.Text));
+			Prefs.UpdateDouble(PrefName.RecallAdjustDown,PIn.Double(textDown.Text));
 			if(comboStatusEmailedRecall.SelectedIndex==-1){
 				Prefs.UpdateLong(PrefName.RecallStatusEmailed,0);
 			}
@@ -796,19 +796,19 @@ namespace OpenDental{
 				Prefs.UpdateLong(PrefName.RecallShowIfDaysFirstReminder,-1);
 			}
 			else {
-				Prefs.UpdateLong(PrefName.RecallShowIfDaysFirstReminder,PIn.PLong(textDaysFirstReminder.Text));
+				Prefs.UpdateLong(PrefName.RecallShowIfDaysFirstReminder,PIn.Long(textDaysFirstReminder.Text));
 			}
 			if(textDaysSecondReminder.Text=="") {
 				Prefs.UpdateLong(PrefName.RecallShowIfDaysSecondReminder,-1);
 			}
 			else {
-				Prefs.UpdateLong(PrefName.RecallShowIfDaysSecondReminder,PIn.PLong(textDaysSecondReminder.Text));
+				Prefs.UpdateLong(PrefName.RecallShowIfDaysSecondReminder,PIn.Long(textDaysSecondReminder.Text));
 			}
 			if(textMaxReminders.Text=="") {
 				Prefs.UpdateLong(PrefName.RecallMaxNumberReminders,-1);
 			}
 			else {
-				Prefs.UpdateLong(PrefName.RecallMaxNumberReminders,PIn.PLong(textMaxReminders.Text));
+				Prefs.UpdateLong(PrefName.RecallMaxNumberReminders,PIn.Long(textMaxReminders.Text));
 			}
 			changed=true;
 			DialogResult=DialogResult.OK;

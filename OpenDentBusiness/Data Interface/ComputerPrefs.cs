@@ -42,25 +42,25 @@ namespace OpenDentBusiness {
 			if(table.Rows.Count>1){
 				//Should never happen (would only happen if the primary key showed up more than once).
 				Logger.openlog.LogMB("Corrupt computerpref table in database. The computer name '"
-					+POut.PString(computerName)+"' is a primary key in multiple records. Please run the "
+					+POut.String(computerName)+"' is a primary key in multiple records. Please run the "
 					+"database maintenance tool, then call us for help if you still get this message.",
 					Logger.Severity.WARNING);
 			}
-			computerPref.ComputerPrefNum=				PIn.PLong		(table.Rows[0][0].ToString());
-			computerPref.ComputerName=					PIn.PString		(table.Rows[0][1].ToString());
-			computerPref.GraphicsUseHardware=			PIn.PBool		(table.Rows[0][2].ToString());
-			computerPref.GraphicsSimple=(DrawingMode)PIn.PInt  (table.Rows[0][3].ToString());
-			computerPref.SensorType=					PIn.PString		(table.Rows[0][4].ToString());
-			computerPref.SensorBinned=					PIn.PBool		(table.Rows[0][5].ToString());
-			computerPref.SensorPort=					PIn.PInt		(table.Rows[0][6].ToString());
-			computerPref.SensorExposure=				PIn.PInt		(table.Rows[0][7].ToString());
-			computerPref.GraphicsDoubleBuffering=		PIn.PBool		(table.Rows[0][8].ToString());
-			computerPref.PreferredPixelFormatNum=		PIn.PInt		(table.Rows[0][9].ToString());
-			computerPref.AtoZpath=						PIn.PString		(table.Rows[0][10].ToString());
-			computerPref.TaskKeepListHidden=			PIn.PBool		(table.Rows[0][11].ToString());
-			computerPref.TaskDock=						PIn.PInt		(table.Rows[0][12].ToString());
-			computerPref.TaskX=							PIn.PInt		(table.Rows[0][13].ToString());
-			computerPref.TaskY=							PIn.PInt		(table.Rows[0][14].ToString());
+			computerPref.ComputerPrefNum=				PIn.Long		(table.Rows[0][0].ToString());
+			computerPref.ComputerName=					PIn.String		(table.Rows[0][1].ToString());
+			computerPref.GraphicsUseHardware=			PIn.Bool		(table.Rows[0][2].ToString());
+			computerPref.GraphicsSimple=(DrawingMode)PIn.Int  (table.Rows[0][3].ToString());
+			computerPref.SensorType=					PIn.String		(table.Rows[0][4].ToString());
+			computerPref.SensorBinned=					PIn.Bool		(table.Rows[0][5].ToString());
+			computerPref.SensorPort=					PIn.Int		(table.Rows[0][6].ToString());
+			computerPref.SensorExposure=				PIn.Int		(table.Rows[0][7].ToString());
+			computerPref.GraphicsDoubleBuffering=		PIn.Bool		(table.Rows[0][8].ToString());
+			computerPref.PreferredPixelFormatNum=		PIn.Int		(table.Rows[0][9].ToString());
+			computerPref.AtoZpath=						PIn.String		(table.Rows[0][10].ToString());
+			computerPref.TaskKeepListHidden=			PIn.Bool		(table.Rows[0][11].ToString());
+			computerPref.TaskDock=						PIn.Int		(table.Rows[0][12].ToString());
+			computerPref.TaskX=							PIn.Int		(table.Rows[0][13].ToString());
+			computerPref.TaskY=							PIn.Int		(table.Rows[0][14].ToString());
 			return computerPref;
 		}
 
@@ -68,7 +68,7 @@ namespace OpenDentBusiness {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),computerName);
 			}
-			string command="SELECT * FROM computerpref WHERE ComputerName='"+POut.PString(computerName)+"'";
+			string command="SELECT * FROM computerpref WHERE ComputerName='"+POut.String(computerName)+"'";
 			try {
 				return Db.GetTable(command);
 			} catch {
@@ -92,22 +92,22 @@ namespace OpenDentBusiness {
 			command+="ComputerName,GraphicsUseHardware,GraphicsSimple,SensorType,SensorPort,SensorExposure,SensorBinned,"
 				+ "GraphicsDoubleBuffering,PreferredPixelFormatNum,AtoZpath,TaskKeepListHidden,TaskDock,TaskX,TaskY) VALUES(";
 			if(PrefC.RandomKeys){
-				command+="'"+POut.PLong(computerPref.ComputerPrefNum)+"',";
+				command+="'"+POut.Long(computerPref.ComputerPrefNum)+"',";
 			}
-			command+="'"+POut.PString(computerPref.ComputerName)+"',"
-				+"'"+POut.PBool(computerPref.GraphicsUseHardware)+"',"
-				+"'"+POut.PInt((int)computerPref.GraphicsSimple)+"',"
-				+"'"+POut.PString(computerPref.SensorType)+"',"
-				+"'"+POut.PBool(computerPref.SensorBinned)+"',"
-				+"'"+POut.PLong(computerPref.SensorPort)+"',"
-				+"'"+POut.PLong(computerPref.SensorExposure)+"',"
-				+"'"+POut.PBool(computerPref.GraphicsDoubleBuffering)+"',"
-				+"'"+POut.PLong(computerPref.PreferredPixelFormatNum)+"',"
-				+"'"+POut.PString(computerPref.AtoZpath)+"',"
-				+"'"+POut.PBool(computerPref.TaskKeepListHidden)+"',"
-				+"'"+POut.PLong(computerPref.TaskDock)+"',"
-				+"'"+POut.PLong(computerPref.TaskX)+"',"
-				+"'"+POut.PLong(computerPref.TaskY)+"')";
+			command+="'"+POut.String(computerPref.ComputerName)+"',"
+				+"'"+POut.Bool(computerPref.GraphicsUseHardware)+"',"
+				+"'"+POut.Int((int)computerPref.GraphicsSimple)+"',"
+				+"'"+POut.String(computerPref.SensorType)+"',"
+				+"'"+POut.Bool(computerPref.SensorBinned)+"',"
+				+"'"+POut.Long(computerPref.SensorPort)+"',"
+				+"'"+POut.Long(computerPref.SensorExposure)+"',"
+				+"'"+POut.Bool(computerPref.GraphicsDoubleBuffering)+"',"
+				+"'"+POut.Long(computerPref.PreferredPixelFormatNum)+"',"
+				+"'"+POut.String(computerPref.AtoZpath)+"',"
+				+"'"+POut.Bool(computerPref.TaskKeepListHidden)+"',"
+				+"'"+POut.Long(computerPref.TaskDock)+"',"
+				+"'"+POut.Long(computerPref.TaskX)+"',"
+				+"'"+POut.Long(computerPref.TaskY)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -122,21 +122,21 @@ namespace OpenDentBusiness {
 				return Meth.GetLong(MethodBase.GetCurrentMethod(),computerPref);
 			}
 			string command="UPDATE computerpref SET "
-				+"ComputerName='"+POut.PString(computerPref.ComputerName)+"',"
-				+"GraphicsUseHardware='"+POut.PBool(computerPref.GraphicsUseHardware)+"',"
-				+"GraphicsSimple='"+POut.PInt((int)computerPref.GraphicsSimple)+"',"
-				+"SensorType='"+POut.PString(computerPref.SensorType)+"',"
-				+"SensorBinned='"+POut.PBool(computerPref.SensorBinned)+"',"
-				+"SensorPort='"+POut.PLong(computerPref.SensorPort)+"',"
-				+"SensorExposure='"+POut.PLong(computerPref.SensorExposure)+"',"
-				+"GraphicsDoubleBuffering='"+POut.PBool(computerPref.GraphicsDoubleBuffering)+"',"
-				+"PreferredPixelFormatNum='"+POut.PLong(computerPref.PreferredPixelFormatNum)+"',"
-				+"AtoZpath='"+POut.PString(computerPref.AtoZpath)+"',"
-				+"TaskKeepListHidden='"+POut.PBool(computerPref.TaskKeepListHidden)+"',"
-				+"TaskDock='"+POut.PLong(computerPref.TaskDock)+"',"
-				+"TaskX='"+POut.PLong(computerPref.TaskX)+"',"
-				+"TaskY='"+POut.PLong(computerPref.TaskY)+"' "
-				+"WHERE ComputerPrefNum='"+POut.PLong(computerPref.ComputerPrefNum)+"'";
+				+"ComputerName='"+POut.String(computerPref.ComputerName)+"',"
+				+"GraphicsUseHardware='"+POut.Bool(computerPref.GraphicsUseHardware)+"',"
+				+"GraphicsSimple='"+POut.Int((int)computerPref.GraphicsSimple)+"',"
+				+"SensorType='"+POut.String(computerPref.SensorType)+"',"
+				+"SensorBinned='"+POut.Bool(computerPref.SensorBinned)+"',"
+				+"SensorPort='"+POut.Long(computerPref.SensorPort)+"',"
+				+"SensorExposure='"+POut.Long(computerPref.SensorExposure)+"',"
+				+"GraphicsDoubleBuffering='"+POut.Bool(computerPref.GraphicsDoubleBuffering)+"',"
+				+"PreferredPixelFormatNum='"+POut.Long(computerPref.PreferredPixelFormatNum)+"',"
+				+"AtoZpath='"+POut.String(computerPref.AtoZpath)+"',"
+				+"TaskKeepListHidden='"+POut.Bool(computerPref.TaskKeepListHidden)+"',"
+				+"TaskDock='"+POut.Long(computerPref.TaskDock)+"',"
+				+"TaskX='"+POut.Long(computerPref.TaskX)+"',"
+				+"TaskY='"+POut.Long(computerPref.TaskY)+"' "
+				+"WHERE ComputerPrefNum='"+POut.Long(computerPref.ComputerPrefNum)+"'";
 			return Db.NonQ(command);
 		}
 

@@ -363,21 +363,21 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please select an account first.");
 				return;
 			}*/
-			if(PIn.PDouble(textDebit.Text)<0 || PIn.PDouble(textCredit.Text)<0){
+			if(PIn.Double(textDebit.Text)<0 || PIn.Double(textCredit.Text)<0){
 				MsgBox.Show(this,"Both amounts not allowed to be less than 0.");
 				return;
 			}
-			if(PIn.PDouble(textDebit.Text)==0 && PIn.PDouble(textCredit.Text)==0) {
+			if(PIn.Double(textDebit.Text)==0 && PIn.Double(textCredit.Text)==0) {
 				MsgBox.Show(this,"One amount must be filled in.");
 				return;
 			}
-			if(PIn.PDouble(textDebit.Text)>0 && PIn.PDouble(textCredit.Text)>0) {
+			if(PIn.Double(textDebit.Text)>0 && PIn.Double(textCredit.Text)>0) {
 				MsgBox.Show(this,"Only one amount can be filled in.");
 				return;
 			}
 			EntryCur.AccountNum=AccountPicked.AccountNum;
-			EntryCur.DebitAmt=PIn.PDouble(textDebit.Text);
-			EntryCur.CreditAmt=PIn.PDouble(textCredit.Text);
+			EntryCur.DebitAmt=PIn.Double(textDebit.Text);
+			EntryCur.CreditAmt=PIn.Double(textCredit.Text);
 			EntryCur.Memo=textMemo.Text;
 			EntryCur.CheckNumber=textCheckNumber.Text;
 			DialogResult=DialogResult.OK;

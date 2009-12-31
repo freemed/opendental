@@ -302,15 +302,15 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Please fix data entry errors first."));
 				return;
 			}
-			DateTime dateFrom=PIn.PDate(textDateFrom.Text);
-			DateTime dateTo=PIn.PDate(textDateTo.Text);
+			DateTime dateFrom=PIn.Date(textDateFrom.Text);
+			DateTime dateTo=PIn.Date(textDateTo.Text);
 			bool toLastDay=false;
 			if(CultureInfo.CurrentCulture.Calendar.GetDaysInMonth(dateTo.Year,dateTo.Month)==dateTo.Day){
 				toLastDay=true;
 			}
 			textDateFrom.Text=dateFrom.AddMonths(-1).ToShortDateString();
 			textDateTo.Text=dateTo.AddMonths(-1).ToShortDateString();
-			dateTo=PIn.PDate(textDateTo.Text);
+			dateTo=PIn.Date(textDateTo.Text);
 			if(toLastDay){
 				textDateTo.Text=new DateTime(dateTo.Year,dateTo.Month,
 					CultureInfo.CurrentCulture.Calendar.GetDaysInMonth(dateTo.Year,dateTo.Month))
@@ -325,15 +325,15 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Please fix data entry errors first."));
 				return;
 			}
-			DateTime dateFrom=PIn.PDate(textDateFrom.Text);
-			DateTime dateTo=PIn.PDate(textDateTo.Text);
+			DateTime dateFrom=PIn.Date(textDateFrom.Text);
+			DateTime dateTo=PIn.Date(textDateTo.Text);
 			bool toLastDay=false;
 			if(CultureInfo.CurrentCulture.Calendar.GetDaysInMonth(dateTo.Year,dateTo.Month)==dateTo.Day){
 				toLastDay=true;
 			}
 			textDateFrom.Text=dateFrom.AddMonths(1).ToShortDateString();
 			textDateTo.Text=dateTo.AddMonths(1).ToShortDateString();
-			dateTo=PIn.PDate(textDateTo.Text);
+			dateTo=PIn.Date(textDateTo.Text);
 			if(toLastDay){
 				textDateTo.Text=new DateTime(dateTo.Year,dateTo.Month,
 					CultureInfo.CurrentCulture.Calendar.GetDaysInMonth(dateTo.Year,dateTo.Month))
@@ -356,8 +356,8 @@ namespace OpenDental{
 				MsgBox.Show(this,"You cannot select 'all' providers as well as specific providers.");
 				return;
 			}
-			DateTime dateFrom=PIn.PDate(textDateFrom.Text);
-			DateTime dateTo=PIn.PDate(textDateTo.Text);
+			DateTime dateFrom=PIn.Date(textDateFrom.Text);
+			DateTime dateTo=PIn.Date(textDateTo.Text);
 			string whereProv="";
 			if(listProv.SelectedIndices[0]!=0){
 				for(int i=0;i<listProv.SelectedIndices.Count;i++){
@@ -368,7 +368,7 @@ namespace OpenDental{
 						whereProv+="OR ";
 					}
 					whereProv+="patient.PriProv = "
-						+POut.PLong(ProviderC.List[listProv.SelectedIndices[i]-1].ProvNum)+" ";
+						+POut.Long(ProviderC.List[listProv.SelectedIndices[i]-1].ProvNum)+" ";
 				}
 				whereProv+=") ";
 			}
@@ -382,8 +382,8 @@ CONCAT(referral.LName,IF(referral.FName='','',','),referral.FName) refname,SUM(p
 			report.Query+=@" FROM
 				(SELECT PatNum, MIN(ProcDate) dateFirstProc FROM procedurelog
 				WHERE ProcStatus=2 GROUP BY PatNum
-				HAVING dateFirstProc >= "+POut.PDate(dateFrom)+" "
-				+"AND DATE(dateFirstProc) <= "+POut.PDate(dateTo)+" ) table1 "
+				HAVING dateFirstProc >= "+POut.Date(dateFrom)+" "
+				+"AND DATE(dateFirstProc) <= "+POut.Date(dateTo)+" ) table1 "
 				+@"INNER JOIN patient ON table1.PatNum=patient.PatNum 
 				LEFT JOIN procedurelog ON patient.PatNum=procedurelog.PatNum AND procedurelog.ProcStatus=2
 				LEFT JOIN refattach ON patient.PatNum=refattach.PatNum AND refattach.IsFrom=1

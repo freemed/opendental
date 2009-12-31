@@ -39,10 +39,10 @@ namespace OpenDentBusiness{
 			List=new QuickPasteCat[table.Rows.Count];
 			for(int i=0;i<List.Length;i++) {
 				List[i]=new QuickPasteCat();
-				List[i].QuickPasteCatNum=PIn.PLong(table.Rows[i][0].ToString());
-				List[i].Description=PIn.PString(table.Rows[i][1].ToString());
-				List[i].ItemOrder=PIn.PInt(table.Rows[i][2].ToString());
-				List[i].DefaultForTypes=PIn.PString(table.Rows[i][3].ToString());
+				List[i].QuickPasteCatNum=PIn.Long(table.Rows[i][0].ToString());
+				List[i].Description=PIn.String(table.Rows[i][1].ToString());
+				List[i].ItemOrder=PIn.Int(table.Rows[i][2].ToString());
+				List[i].DefaultForTypes=PIn.String(table.Rows[i][3].ToString());
 			}
 		}
 
@@ -61,12 +61,12 @@ namespace OpenDentBusiness{
 			}
 			command+="Description,ItemOrder,DefaultForTypes) VALUES(";
 			if(PrefC.RandomKeys){
-				command+="'"+POut.PLong(cat.QuickPasteCatNum)+"', ";
+				command+="'"+POut.Long(cat.QuickPasteCatNum)+"', ";
 			}
 			command+=
-				 "'"+POut.PString(cat.Description)+"', "
-				+"'"+POut.PLong   (cat.ItemOrder)+"', "
-				+"'"+POut.PString(cat.DefaultForTypes)+"')";
+				 "'"+POut.String(cat.Description)+"', "
+				+"'"+POut.Long   (cat.ItemOrder)+"', "
+				+"'"+POut.String(cat.DefaultForTypes)+"')";
 			//MessageBox.Show(string command);
  			if(PrefC.RandomKeys){
 				Db.NonQ(command);
@@ -84,10 +84,10 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command="UPDATE quickpastecat SET "
-				+"Description='"       +POut.PString(cat.Description)+"'"
-				+",ItemOrder = '"      +POut.PLong   (cat.ItemOrder)+"'"
-				+",DefaultForTypes = '"+POut.PString(cat.DefaultForTypes)+"'"
-				+" WHERE QuickPasteCatNum = '"+POut.PLong (cat.QuickPasteCatNum)+"'";
+				+"Description='"       +POut.String(cat.Description)+"'"
+				+",ItemOrder = '"      +POut.Long   (cat.ItemOrder)+"'"
+				+",DefaultForTypes = '"+POut.String(cat.DefaultForTypes)+"'"
+				+" WHERE QuickPasteCatNum = '"+POut.Long (cat.QuickPasteCatNum)+"'";
  			Db.NonQ(command);
 		}
 
@@ -98,7 +98,7 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command="DELETE from quickpastecat WHERE QuickPasteCatNum = '"
-				+POut.PLong(cat.QuickPasteCatNum)+"'";
+				+POut.Long(cat.QuickPasteCatNum)+"'";
  			Db.NonQ(command);
 		}
 

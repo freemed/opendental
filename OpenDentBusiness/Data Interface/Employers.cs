@@ -54,14 +54,14 @@ namespace OpenDentBusiness{
 			List=new Employer[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++){
 				List[i]=new Employer();
-				List[i].EmployerNum =PIn.PLong   (table.Rows[i][0].ToString());
-				List[i].EmpName     =PIn.PString(table.Rows[i][1].ToString());
-				List[i].Address     =PIn.PString(table.Rows[i][2].ToString());
-				List[i].Address2    =PIn.PString(table.Rows[i][3].ToString());
-				List[i].City        =PIn.PString(table.Rows[i][4].ToString());
-				List[i].State       =PIn.PString(table.Rows[i][5].ToString());
-				List[i].Zip         =PIn.PString(table.Rows[i][6].ToString());
-				List[i].Phone       =PIn.PString(table.Rows[i][7].ToString());
+				List[i].EmployerNum =PIn.Long   (table.Rows[i][0].ToString());
+				List[i].EmpName     =PIn.String(table.Rows[i][1].ToString());
+				List[i].Address     =PIn.String(table.Rows[i][2].ToString());
+				List[i].Address2    =PIn.String(table.Rows[i][3].ToString());
+				List[i].City        =PIn.String(table.Rows[i][4].ToString());
+				List[i].State       =PIn.String(table.Rows[i][5].ToString());
+				List[i].Zip         =PIn.String(table.Rows[i][6].ToString());
+				List[i].Phone       =PIn.String(table.Rows[i][7].ToString());
 				HList.Add(List[i].EmployerNum,List[i]);
 			}
 		}
@@ -88,14 +88,14 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command="UPDATE employer SET " 
-				+ "EmpName= '"  +POut.PString(Cur.EmpName)+"' "
-				+ ",Address= '"    +POut.PString(Cur.Address)+"' "
-				+ ",Address2= '"   +POut.PString(Cur.Address2)+"' "
-				+ ",City= '"       +POut.PString(Cur.City)+"' "
-				+ ",State= '"      +POut.PString(Cur.State)+"' "
-				+ ",Zip= '"        +POut.PString(Cur.Zip)+"' "
-				+ ",Phone= '"      +POut.PString(Cur.Phone)+"' "
-				+" WHERE EmployerNum = '"+POut.PLong(Cur.EmployerNum)+"'";
+				+ "EmpName= '"  +POut.String(Cur.EmpName)+"' "
+				+ ",Address= '"    +POut.String(Cur.Address)+"' "
+				+ ",Address2= '"   +POut.String(Cur.Address2)+"' "
+				+ ",City= '"       +POut.String(Cur.City)+"' "
+				+ ",State= '"      +POut.String(Cur.State)+"' "
+				+ ",Zip= '"        +POut.String(Cur.Zip)+"' "
+				+ ",Phone= '"      +POut.String(Cur.Phone)+"' "
+				+" WHERE EmployerNum = '"+POut.Long(Cur.EmployerNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -114,16 +114,16 @@ namespace OpenDentBusiness{
 			}
 			command+="EmpName,Address,Address2,City,State,Zip,Phone) VALUES(";
 			if(PrefC.RandomKeys){
-				command+="'"+POut.PLong(Cur.EmployerNum)+"', ";
+				command+="'"+POut.Long(Cur.EmployerNum)+"', ";
 			}
 			command+=
-				 "'"+POut.PString(Cur.EmpName)+"', "
-				+"'"+POut.PString(Cur.Address)+"', "
-				+"'"+POut.PString(Cur.Address2)+"', "
-				+"'"+POut.PString(Cur.City)+"', "
-				+"'"+POut.PString(Cur.State)+"', "
-				+"'"+POut.PString(Cur.Zip)+"', "
-				+"'"+POut.PString(Cur.Phone)+"')";
+				 "'"+POut.String(Cur.EmpName)+"', "
+				+"'"+POut.String(Cur.Address)+"', "
+				+"'"+POut.String(Cur.Address2)+"', "
+				+"'"+POut.String(Cur.City)+"', "
+				+"'"+POut.String(Cur.State)+"', "
+				+"'"+POut.String(Cur.Zip)+"', "
+				+"'"+POut.String(Cur.Phone)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -149,14 +149,14 @@ namespace OpenDentBusiness{
 				return Meth.GetString(MethodBase.GetCurrentMethod(),Cur);
 			}
 			string command="SELECT CONCAT(CONCAT(LName,', '),FName) FROM patient" 
-				+" WHERE EmployerNum = '"+POut.PLong(Cur.EmployerNum)+"'";
+				+" WHERE EmployerNum = '"+POut.Long(Cur.EmployerNum)+"'";
 			DataTable table=Db.GetTable(command);
 			string retStr="";
 			for(int i=0;i<table.Rows.Count;i++){
 				if(i>0){
 					retStr+="\r\n";//return, newline for multiple names.
 				}
-				retStr+=PIn.PString(table.Rows[i][0].ToString());
+				retStr+=PIn.String(table.Rows[i][0].ToString());
 			}
 			return retStr;
 		}
@@ -168,14 +168,14 @@ namespace OpenDentBusiness{
 			}
 			string command="SELECT insplan.Carrier,CONCAT(patient.LName,patient.FName) FROM insplan,patient" 
 				+" WHERE insplan.Subscriber=patient.PatNum"
-				+" AND insplan.EmployerNum = '"+POut.PLong(Cur.EmployerNum)+"'";
+				+" AND insplan.EmployerNum = '"+POut.Long(Cur.EmployerNum)+"'";
 			DataTable table=Db.GetTable(command);
 			string retStr="";
 			for(int i=0;i<table.Rows.Count;i++){
 				if(i>0){
 					retStr+="\r\n";//return, newline for multiple names.
 				}
-				retStr+=PIn.PString(table.Rows[i][1].ToString())+": "+PIn.PString(table.Rows[i][0].ToString());
+				retStr+=PIn.String(table.Rows[i][1].ToString())+": "+PIn.String(table.Rows[i][0].ToString());
 			}
 			return retStr;
 		}
@@ -225,10 +225,10 @@ namespace OpenDentBusiness{
 				return 0;
 			}
 			string command="SELECT EmployerNum FROM employer" 
-				+" WHERE EmpName = '"+POut.PString(empName)+"'";
+				+" WHERE EmpName = '"+POut.String(empName)+"'";
 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count>0){
-				return PIn.PLong(table.Rows[0][0].ToString());
+				return PIn.Long(table.Rows[0][0].ToString());
 			}
 			Employer Cur=new Employer();
 			Cur.EmpName=empName;

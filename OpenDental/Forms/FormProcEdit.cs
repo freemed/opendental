@@ -2484,7 +2484,7 @@ namespace OpenDental{
 				procFee=0;
 			}
 			else{
-				procFee=PIn.PDouble(textProcFee.Text);
+				procFee=PIn.Double(textProcFee.Text);
 			}
 			if(ProcCur.ProcFee==procFee){
 				return;
@@ -2844,8 +2844,8 @@ namespace OpenDental{
 
 		private void updateTotalMin(){
 			try {
-				int startTime = PIn.PInt(textStart.Text);
-				int stopTime = PIn.PInt(textStop.Text);
+				int startTime = PIn.Int(textStart.Text);
+				int stopTime = PIn.Int(textStop.Text);
 				int total=(((stopTime/100)*60)+(stopTime%100))-(((startTime/100)*60)+(startTime%100));
 				textTotal.Text=total.ToString();
 			}
@@ -3042,14 +3042,14 @@ namespace OpenDental{
 				return false;
 			}
 			try {
-				int startTime=PIn.PInt(textStart.Text);
+				int startTime=PIn.Int(textStart.Text);
 			}
 			catch {
 				MsgBox.Show(this,"Invalid start time.");
 				return false;
 			}
 			try {
-				int stopTime=PIn.PInt(textStop.Text);
+				int stopTime=PIn.Int(textStop.Text);
 			}
 			catch {
 				MsgBox.Show(this,"Invalid stop time.");
@@ -3076,12 +3076,12 @@ namespace OpenDental{
 				}
 			}*/
 			if(ProcOld.ProcStatus!=ProcStat.C && ProcCur.ProcStatus==ProcStat.C){//if status was changed to complete
-				if(!Security.IsAuthorized(Permissions.ProcComplCreate,PIn.PDate(textDate.Text))){//use the new date
+				if(!Security.IsAuthorized(Permissions.ProcComplCreate,PIn.Date(textDate.Text))){//use the new date
 					return false;
 				}
 			}
 			else if(IsNew && ProcCur.ProcStatus==ProcStat.C){//if new procedure is complete
-				if(!Security.IsAuthorized(Permissions.ProcComplCreate,PIn.PDate(textDate.Text))){
+				if(!Security.IsAuthorized(Permissions.ProcComplCreate,PIn.Date(textDate.Text))){
 					return false;
 				}
 			}
@@ -3091,7 +3091,7 @@ namespace OpenDental{
 						return false;
 					}
 					if(ProcCur.ProcStatus==ProcStat.C){//if it's still complete
-						if(!Security.IsAuthorized(Permissions.ProcComplEdit,PIn.PDate(textDate.Text))){//block new date, too
+						if(!Security.IsAuthorized(Permissions.ProcComplEdit,PIn.Date(textDate.Text))){//block new date, too
 							return false;
 						}
 					}
@@ -3129,15 +3129,15 @@ namespace OpenDental{
 			ProcCur.CodeMod4 = textCodeMod4.Text;
 			ProcCur.RevCode = textRevCode.Text;
 			ProcCur.UnitCode = textUnitCode.Text;
-			ProcCur.UnitQty = PIn.PInt(textUnitQty.Text);
-			ProcCur.StartTime=PIn.PInt(textStart.Text);
-			ProcCur.StopTime=PIn.PInt(textStop.Text);
+			ProcCur.UnitQty = PIn.Int(textUnitQty.Text);
+			ProcCur.StartTime=PIn.Int(textStart.Text);
+			ProcCur.StopTime=PIn.Int(textStop.Text);
 			if(ProcOld.ProcStatus!=ProcStat.C && ProcCur.ProcStatus==ProcStat.C){
 				ProcCur.DateEntryC=DateTime.Now;//this triggers it to set to server time NOW().
 			}
-			ProcCur.DateTP=PIn.PDate(this.textDateTP.Text);
-			ProcCur.ProcDate=PIn.PDate(this.textDate.Text);
-			ProcCur.ProcFee=PIn.PDouble(textProcFee.Text);
+			ProcCur.DateTP=PIn.Date(this.textDateTP.Text);
+			ProcCur.ProcDate=PIn.Date(this.textDate.Text);
+			ProcCur.ProcFee=PIn.Double(textProcFee.Text);
 			//ProcCur.LabFee=PIn.PDouble(textLabFee.Text);
 			//ProcCur.LabProcCode=textLabCode.Text;
 			//MessageBox.Show(ProcCur.ProcFee.ToString());
@@ -3250,7 +3250,7 @@ namespace OpenDental{
 						ProcCur.Prosthesis="R";
 						break;
 				}
-				ProcCur.DateOriginalProsth=PIn.PDate(textDateOriginalProsth.Text);
+				ProcCur.DateOriginalProsth=PIn.Date(textDateOriginalProsth.Text);
 			}
 			else{
 				ProcCur.Prosthesis="";

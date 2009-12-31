@@ -485,15 +485,15 @@ namespace OpenDental
 				}
 			}
 			for(int i=0;i<ClaimProcsToEdit.Length;i++){
-				ClaimProcsToEdit[i].DedApplied=PIn.PDouble(gridMain.Rows[i].Cells[6].Text);
+				ClaimProcsToEdit[i].DedApplied=PIn.Double(gridMain.Rows[i].Cells[6].Text);
 				if(gridMain.Rows[i].Cells[7].Text==""){
 					ClaimProcsToEdit[i].AllowedOverride=-1;
 				}
 				else{
-					ClaimProcsToEdit[i].AllowedOverride=PIn.PDouble(gridMain.Rows[i].Cells[7].Text);
+					ClaimProcsToEdit[i].AllowedOverride=PIn.Double(gridMain.Rows[i].Cells[7].Text);
 				}
-				ClaimProcsToEdit[i].InsPayAmt=PIn.PDouble(gridMain.Rows[i].Cells[8].Text);
-				ClaimProcsToEdit[i].WriteOff=PIn.PDouble(gridMain.Rows[i].Cells[9].Text);
+				ClaimProcsToEdit[i].InsPayAmt=PIn.Double(gridMain.Rows[i].Cells[8].Text);
+				ClaimProcsToEdit[i].WriteOff=PIn.Double(gridMain.Rows[i].Cells[9].Text);
 				ClaimProcsToEdit[i].Remarks=gridMain.Rows[i].Cells[12].Text;
 			}
 		}
@@ -608,11 +608,11 @@ namespace OpenDental
 					FeeCur=new Fee();
 					FeeCur.FeeSched=feeSched;
 					FeeCur.CodeNum=codeNum;
-					FeeCur.Amount=PIn.PDouble(gridMain.Rows[i].Cells[7].Text);
+					FeeCur.Amount=PIn.Double(gridMain.Rows[i].Cells[7].Text);
 					Fees.Insert(FeeCur);
 				}
 				else{
-					FeeCur.Amount=PIn.PDouble(gridMain.Rows[i].Cells[7].Text);
+					FeeCur.Amount=PIn.Double(gridMain.Rows[i].Cells[7].Text);
 					Fees.Update(FeeCur);
 				}
 			}

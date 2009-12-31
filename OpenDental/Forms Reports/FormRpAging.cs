@@ -378,7 +378,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Invalid date.");
 				return;
 			}
-			DateTime asOfDate=PIn.PDate(textDate.Text);
+			DateTime asOfDate=PIn.Date(textDate.Text);
 			//The aging report always show historical numbers based on the date entered.
 			Ledgers.ComputeAging(0,asOfDate,true);
 			ReportSimpleGrid report=new ReportSimpleGrid();
@@ -425,7 +425,7 @@ namespace OpenDental{
 					else {
 						cmd+=" OR billingtype = ";
 					}
-					cmd+=POut.PLong(DefC.Short[(int)DefCat.BillingTypes][listBillType.SelectedIndices[i]].DefNum);
+					cmd+=POut.Long(DefC.Short[(int)DefCat.BillingTypes][listBillType.SelectedIndices[i]].DefNum);
 				}
 				cmd+=") ";
 			}
@@ -437,7 +437,7 @@ namespace OpenDental{
 					else {
 						cmd+=" OR PriProv = ";
 					}
-					cmd+=POut.PLong(ProviderC.List[listProv.SelectedIndices[i]].ProvNum);
+					cmd+=POut.Long(ProviderC.List[listProv.SelectedIndices[i]].ProvNum);
 				}
 				cmd+=") ";
 			}

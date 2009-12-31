@@ -143,7 +143,7 @@ namespace OpenDental {
 			}
 			float w;
 			try{
-				w=PIn.PFloat(textWidth.Text);
+				w=PIn.Float(textWidth.Text);
 			}
 			catch{
 				return;
@@ -162,7 +162,7 @@ namespace OpenDental {
 			}
 			float h;
 			try{
-				h=PIn.PFloat(textHeight.Text);
+				h=PIn.Float(textHeight.Text);
 			}
 			catch{
 				return;
@@ -195,10 +195,10 @@ namespace OpenDental {
 				return;
 			}
 			SheetFieldDefCur.FieldName=comboFieldName.Text;
-			SheetFieldDefCur.XPos=PIn.PInt(textXPos.Text);
-			SheetFieldDefCur.YPos=PIn.PInt(textYPos.Text);
-			SheetFieldDefCur.Width=PIn.PInt(textWidth.Text);
-			SheetFieldDefCur.Height=PIn.PInt(textHeight.Text);
+			SheetFieldDefCur.XPos=PIn.Int(textXPos.Text);
+			SheetFieldDefCur.YPos=PIn.Int(textYPos.Text);
+			SheetFieldDefCur.Width=PIn.Int(textWidth.Text);
+			SheetFieldDefCur.Height=PIn.Int(textHeight.Text);
 			//don't save to database here.
 			DialogResult=DialogResult.OK;
 		}

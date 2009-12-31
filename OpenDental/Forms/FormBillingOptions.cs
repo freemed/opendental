@@ -823,7 +823,7 @@ namespace OpenDental{
 				FormAging FormA=new FormAging();
 				FormA.ShowDialog();
 			}
-			DateTime lastStatement=PIn.PDate(textLastStatement.Text);
+			DateTime lastStatement=PIn.Date(textLastStatement.Text);
 			string getAge="";
 			if(comboAge.SelectedIndex==1) getAge="30";
 			else if(comboAge.SelectedIndex==2) getAge="60";
@@ -838,16 +838,16 @@ namespace OpenDental{
 			}
 			Cursor=Cursors.WaitCursor;
 			List<PatAging> agingList=Patients.GetAgingList(getAge,lastStatement,billingNums,checkBadAddress.Checked,
-				checkExcludeNegative.Checked,PIn.PDouble(textExcludeLessThan.Text),
+				checkExcludeNegative.Checked,PIn.Double(textExcludeLessThan.Text),
 				checkExcludeInactive.Checked,checkIncludeChanged.Checked,checkExcludeInsPending.Checked,
 				checkExcludeIfProcs.Checked,checkIgnoreInPerson.Checked);
 			DateTime dateRangeFrom=DateTime.MinValue;
 			DateTime dateRangeTo=DateTime.Today;//Needed for payplan accuracy.//new DateTime(2200,1,1);
 			if(textDateStart.Text!=""){
-				dateRangeFrom=PIn.PDate(textDateStart.Text);
+				dateRangeFrom=PIn.Date(textDateStart.Text);
 			}
 			if(textDateEnd.Text!=""){
-				dateRangeTo=PIn.PDate(textDateEnd.Text);
+				dateRangeTo=PIn.Date(textDateEnd.Text);
 			}
 			if(agingList.Count==0){
 				Cursor=Cursors.Default;

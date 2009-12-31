@@ -183,7 +183,7 @@ namespace OpenDental{
 			report.AddSubTitle(((DateTime)report.ParameterFields["date1"].CurrentValues[0]).ToShortDateString()+" - "+((DateTime)report.ParameterFields["date2"].CurrentValues[0]).ToShortDateString());
 //incomplete: Implement formulas for situations like this:
 			for(int i=0;i<report.ReportTable.Rows.Count;i++){
-				if(PIn.PDouble(report.ReportTable.Rows[i][11].ToString())==-1){
+				if(PIn.Double(report.ReportTable.Rows[i][11].ToString())==-1){
 					report.ReportTable.Rows[i][11]="0";
 				}
 			}

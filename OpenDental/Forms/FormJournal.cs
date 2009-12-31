@@ -338,17 +338,17 @@ namespace OpenDental{
 				){
 				return;
 			}
-			DateTime dateFrom=PIn.PDate(textDateFrom.Text);
+			DateTime dateFrom=PIn.Date(textDateFrom.Text);
 			DateTime dateTo;
 			if(textDateTo.Text==""){
 				dateTo=DateTime.MaxValue;
 			}
 			else{
-				dateTo=PIn.PDate(textDateTo.Text);
+				dateTo=PIn.Date(textDateTo.Text);
 			}
 			double filterAmt=0;
 			if(textAmt.errorProvider1.GetError(textAmt)==""){
-				filterAmt=PIn.PDouble(textAmt.Text);
+				filterAmt=PIn.Double(textAmt.Text);
 			}
 			JournalList=JournalEntries.GetForAccount(AccountCur.AccountNum);
 			int scroll=gridMain.ScrollValue;
@@ -610,13 +610,13 @@ namespace OpenDental{
 						calendarFrom.SetDate(DateTime.Today);
 					}
 					else{
-						calendarFrom.SetDate(PIn.PDate(textDateFrom.Text));
+						calendarFrom.SetDate(PIn.Date(textDateFrom.Text));
 					}
 					if(textDateTo.Text=="") {
 						calendarTo.SetDate(DateTime.Today);
 					}
 					else {
-						calendarTo.SetDate(PIn.PDate(textDateTo.Text));
+						calendarTo.SetDate(PIn.Date(textDateTo.Text));
 					}
 				}
 				//show the calendars

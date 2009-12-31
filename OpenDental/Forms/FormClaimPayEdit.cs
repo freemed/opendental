@@ -468,14 +468,14 @@ namespace OpenDental{
 			}
 			if(IsNew){
 				//prevents backdating of initial check
-				if(!Security.IsAuthorized(Permissions.InsPayCreate,PIn.PDate(textDate.Text))){
+				if(!Security.IsAuthorized(Permissions.InsPayCreate,PIn.Date(textDate.Text))){
 					return;
 				}
 			}
 			else{
 				//Editing an old entry will already be blocked if the date was too old, and user will not be able to click OK button.
 				//This catches it if user changed the date to be older.
-				if(!Security.IsAuthorized(Permissions.InsPayEdit,PIn.PDate(textDate.Text))){
+				if(!Security.IsAuthorized(Permissions.InsPayEdit,PIn.Date(textDate.Text))){
 					return;
 				}
 			}
@@ -485,8 +485,8 @@ namespace OpenDental{
 			else{
 				ClaimPaymentCur.ClinicNum=Clinics.List[comboClinic.SelectedIndex-1].ClinicNum;
 			}
-			ClaimPaymentCur.CheckAmt=PIn.PDouble(textAmount.Text);
-			ClaimPaymentCur.CheckDate=PIn.PDate(textDate.Text);
+			ClaimPaymentCur.CheckAmt=PIn.Double(textAmount.Text);
+			ClaimPaymentCur.CheckDate=PIn.Date(textDate.Text);
 			ClaimPaymentCur.CheckNum=textCheckNum.Text;
 			ClaimPaymentCur.BankBranch=textBankBranch.Text;
 			ClaimPaymentCur.CarrierName=textCarrierName.Text;

@@ -40,13 +40,13 @@ namespace OpenDentBusiness {
 			list=new SigElementDef[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				list[i]=new SigElementDef();
-				list[i].SigElementDefNum= PIn.PLong(table.Rows[i][0].ToString());
-				list[i].LightRow        = PIn.PInt(table.Rows[i][1].ToString());
-				list[i].LightColor      = Color.FromArgb(PIn.PInt(table.Rows[i][2].ToString()));
-				list[i].SigElementType  = (SignalElementType)PIn.PLong(table.Rows[i][3].ToString());
-				list[i].SigText         = PIn.PString(table.Rows[i][4].ToString());
-				list[i].Sound           = PIn.PString(table.Rows[i][5].ToString());
-				list[i].ItemOrder       = PIn.PInt(table.Rows[i][6].ToString());
+				list[i].SigElementDefNum= PIn.Long(table.Rows[i][0].ToString());
+				list[i].LightRow        = PIn.Int(table.Rows[i][1].ToString());
+				list[i].LightColor      = Color.FromArgb(PIn.Int(table.Rows[i][2].ToString()));
+				list[i].SigElementType  = (SignalElementType)PIn.Long(table.Rows[i][3].ToString());
+				list[i].SigText         = PIn.String(table.Rows[i][4].ToString());
+				list[i].Sound           = PIn.String(table.Rows[i][5].ToString());
+				list[i].ItemOrder       = PIn.Int(table.Rows[i][6].ToString());
 			}
 		}
 	
@@ -57,13 +57,13 @@ namespace OpenDentBusiness {
 				return;
 			}
 			string command="UPDATE sigelementdef SET " 
-				+"LightRow = '"       +POut.PLong   (def.LightRow)+"'"
-				+",LightColor = '"    +POut.PLong   (def.LightColor.ToArgb())+"'"
-				+",SigElementType = '"+POut.PLong   ((int)def.SigElementType)+"'"
-				+",SigText = '"       +POut.PString(def.SigText)+"'"
-				+",Sound = '"         +POut.PString(def.Sound)+"'"
-				+",ItemOrder = '"     +POut.PLong   (def.ItemOrder)+"'"
-				+" WHERE SigElementDefNum  ='"+POut.PLong   (def.SigElementDefNum)+"'";
+				+"LightRow = '"       +POut.Long   (def.LightRow)+"'"
+				+",LightColor = '"    +POut.Long   (def.LightColor.ToArgb())+"'"
+				+",SigElementType = '"+POut.Long   ((int)def.SigElementType)+"'"
+				+",SigText = '"       +POut.String(def.SigText)+"'"
+				+",Sound = '"         +POut.String(def.Sound)+"'"
+				+",ItemOrder = '"     +POut.Long   (def.ItemOrder)+"'"
+				+" WHERE SigElementDefNum  ='"+POut.Long   (def.SigElementDefNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -83,15 +83,15 @@ namespace OpenDentBusiness {
 			command+="LightRow,LightColor,SigElementType,SigText,Sound,"
 				+"ItemOrder) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PLong(def.SigElementDefNum)+", ";
+				command+=POut.Long(def.SigElementDefNum)+", ";
 			}
 			command+=
-				 "'"+POut.PLong   (def.LightRow)+"', "
-				+"'"+POut.PLong   (def.LightColor.ToArgb())+"', "
-				+"'"+POut.PLong   ((int)def.SigElementType)+"', "
-				+"'"+POut.PString(def.SigText)+"', "
-				+"'"+POut.PString(def.Sound)+"', "
-				+"'"+POut.PLong   (def.ItemOrder)+"')";
+				 "'"+POut.Long   (def.LightRow)+"', "
+				+"'"+POut.Long   (def.LightColor.ToArgb())+"', "
+				+"'"+POut.Long   ((int)def.SigElementType)+"', "
+				+"'"+POut.String(def.SigText)+"', "
+				+"'"+POut.String(def.Sound)+"', "
+				+"'"+POut.Long   (def.ItemOrder)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -107,9 +107,9 @@ namespace OpenDentBusiness {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),def);
 				return;
 			}
-			string command="DELETE FROM sigbutdefelement WHERE SigElementDefNum="+POut.PLong(def.SigElementDefNum);
+			string command="DELETE FROM sigbutdefelement WHERE SigElementDefNum="+POut.Long(def.SigElementDefNum);
 			Db.NonQ(command);
-			command="DELETE FROM sigelementdef WHERE SigElementDefNum ="+POut.PLong(def.SigElementDefNum);
+			command="DELETE FROM sigelementdef WHERE SigElementDefNum ="+POut.Long(def.SigElementDefNum);
 			Db.NonQ(command);
 		}
 

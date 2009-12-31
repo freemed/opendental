@@ -17,9 +17,9 @@ namespace OpenDentBusiness{
 			}
 			string command="SELECT supply.* FROM supply,definition "
 				+"WHERE definition.DefNum=supply.Category "
-				+"AND supply.SupplierNum="+POut.PLong(supplierNum)+" ";
+				+"AND supply.SupplierNum="+POut.Long(supplierNum)+" ";
 			if(findText!=""){
-				command+="AND (supply.CatalogNumber REGEXP '"+POut.PString(findText)+"' OR supply.Descript REGEXP '"+POut.PString(findText)+"') ";
+				command+="AND (supply.CatalogNumber REGEXP '"+POut.String(findText)+"' OR supply.Descript REGEXP '"+POut.String(findText)+"') ";
 			}
 			if(!includeHidden){
 				command+="AND supply.IsHidden=0 ";
@@ -54,8 +54,8 @@ namespace OpenDentBusiness{
 				return;
 			}
 			//validate that not already in use.
-			string command="SELECT COUNT(*) FROM supplyorderitem WHERE SupplyNum="+POut.PLong(supp.SupplyNum);
-			int count=PIn.PInt(Db.GetCount(command));
+			string command="SELECT COUNT(*) FROM supplyorderitem WHERE SupplyNum="+POut.Long(supp.SupplyNum);
+			int count=PIn.Int(Db.GetCount(command));
 			if(count>0){
 				throw new ApplicationException(Lans.g("Supplies","Supply is already in use on an order. Not allowed to delete."));
 			}
@@ -88,13 +88,13 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetInt(MethodBase.GetCurrentMethod(),supplierNum,catNum);
 			}
-			string command="SELECT MAX(ItemOrder) FROM supply WHERE SupplierNum="+POut.PLong(supplierNum)
-				+" AND Category="+POut.PLong(catNum)+" AND IsHidden=0";
+			string command="SELECT MAX(ItemOrder) FROM supply WHERE SupplierNum="+POut.Long(supplierNum)
+				+" AND Category="+POut.Long(catNum)+" AND IsHidden=0";
 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0){
 				return -1;
 			}
-			return PIn.PInt(table.Rows[0][0].ToString());
+			return PIn.Int(table.Rows[0][0].ToString());
 		}
 
 		

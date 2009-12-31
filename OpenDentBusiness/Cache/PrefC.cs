@@ -31,7 +31,7 @@ namespace OpenDentBusiness {
 			if(!Dict.ContainsKey(prefName.ToString())) {
 				throw new Exception(prefName+" is an invalid pref name.");
 			}
-			return PIn.PLong(Dict[prefName.ToString()].ValueString);
+			return PIn.Long(Dict[prefName.ToString()].ValueString);
 		}
 
 		///<summary>Gets a pref of type int32.  Used when the pref is an enumeration, itemorder, etc.  Also used for historical queries in ConvertDatabase.</summary>
@@ -42,7 +42,7 @@ namespace OpenDentBusiness {
 			if(!Dict.ContainsKey(prefName.ToString())) {
 				throw new Exception(prefName+" is an invalid pref name.");
 			}
-			return PIn.PInt(Dict[prefName.ToString()].ValueString);
+			return PIn.Int(Dict[prefName.ToString()].ValueString);
 		}
 
 		///<summary>Gets a pref of type double.</summary>
@@ -53,7 +53,7 @@ namespace OpenDentBusiness {
 			if(!Dict.ContainsKey(prefName.ToString())) {
 				throw new Exception(prefName+" is an invalid pref name.");
 			}
-			return PIn.PDouble(Dict[prefName.ToString()].ValueString);
+			return PIn.Double(Dict[prefName.ToString()].ValueString);
 		}
 
 		///<summary>Gets a pref of type bool.</summary>
@@ -64,7 +64,7 @@ namespace OpenDentBusiness {
 			if(!Dict.ContainsKey(prefName.ToString())) {
 				throw new Exception(prefName+" is an invalid pref name.");
 			}
-			return PIn.PBool(Dict[prefName.ToString()].ValueString);
+			return PIn.Bool(Dict[prefName.ToString()].ValueString);
 		}
 
 		///<Summary>Gets a pref of type bool, but will not throw an exception if null or not found.  Indicate whether the silent default is true or false.</Summary>
@@ -75,7 +75,7 @@ namespace OpenDentBusiness {
 			if(!Dict.ContainsKey(prefName.ToString())) {
 				return silentDefault;
 			}
-			return PIn.PBool(Dict[prefName.ToString()].ValueString);
+			return PIn.Bool(Dict[prefName.ToString()].ValueString);
 		}
 
 		///<summary>Gets a pref of type string.</summary>
@@ -108,7 +108,7 @@ namespace OpenDentBusiness {
 			if(!Dict.ContainsKey(prefName.ToString())) {
 				throw new Exception(prefName+" is an invalid pref name.");
 			}
-			return PIn.PDate(Dict[prefName.ToString()].ValueString);
+			return PIn.Date(Dict[prefName.ToString()].ValueString);
 		}
 
 		///<summary>Gets a pref of type datetime.</summary>
@@ -119,7 +119,7 @@ namespace OpenDentBusiness {
 			if(!Dict.ContainsKey(prefName.ToString())) {
 				throw new Exception(prefName+" is an invalid pref name.");
 			}
-			return PIn.PDateT(Dict[prefName.ToString()].ValueString);
+			return PIn.DateT(Dict[prefName.ToString()].ValueString);
 		}
 
 		///<summary>Gets a color from an int32 pref.</summary>
@@ -130,7 +130,7 @@ namespace OpenDentBusiness {
 			if(!Dict.ContainsKey(prefName.ToString())) {
 				throw new Exception(prefName+" is an invalid pref name.");
 			}
-			return Color.FromArgb(PIn.PInt(Dict[prefName.ToString()].ValueString));
+			return Color.FromArgb(PIn.Int(Dict[prefName.ToString()].ValueString));
 		}
 
 		///<summary>Used sometimes for prefs that are not part of the enum, especially for outside developers.</summary>

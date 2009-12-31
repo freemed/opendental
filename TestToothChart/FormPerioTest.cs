@@ -30,8 +30,8 @@ namespace TestToothChart {
 			toothChart.ColorProbingRed=butColorProbingRed.BackColor;
 			toothChart.ColorFurcations=butColorFurc.BackColor;
 			toothChart.ColorFurcationsRed=butColorFurcRed.BackColor;
-			toothChart.RedLimitProbing=PIn.PInt(labelRedLimitProbing.Text);
-			toothChart.RedLimitFurcations=PIn.PInt(labelRedLimitFurcations.Text);
+			toothChart.RedLimitProbing=PIn.Int(labelRedLimitProbing.Text);
+			toothChart.RedLimitFurcations=PIn.Int(labelRedLimitFurcations.Text);
 			toothChart.SetMissing("13");
 			toothChart.SetMissing("14");
 			toothChart.SetMissing("18");

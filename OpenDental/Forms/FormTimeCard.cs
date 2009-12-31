@@ -487,14 +487,14 @@ namespace OpenDental{
 		///<summary>fromDB is set to false when it is refreshing every second so that there will be no extra network traffic.</summary>
 		private void FillMain(bool fromDB){
 			if(fromDB){
-				ClockEventList=ClockEvents.Refresh(EmployeeCur.EmployeeNum,PIn.PDate(textDateStart.Text),
-					PIn.PDate(textDateStop.Text),false,IsBreaks);
+				ClockEventList=ClockEvents.Refresh(EmployeeCur.EmployeeNum,PIn.Date(textDateStart.Text),
+					PIn.Date(textDateStop.Text),false,IsBreaks);
 				if(IsBreaks){
 					TimeAdjustList=new TimeAdjust[0];
 				}
 				else{
-					TimeAdjustList=TimeAdjusts.Refresh(EmployeeCur.EmployeeNum,PIn.PDate(textDateStart.Text),
-						PIn.PDate(textDateStop.Text));
+					TimeAdjustList=TimeAdjusts.Refresh(EmployeeCur.EmployeeNum,PIn.Date(textDateStart.Text),
+						PIn.Date(textDateStop.Text));
 				}
 			}
 			mergedAL=new ArrayList();
@@ -787,8 +787,8 @@ namespace OpenDental{
 			}
 			TimeAdjust adjust=new TimeAdjust();
 			adjust.EmployeeNum=EmployeeCur.EmployeeNum;
-			DateTime dateStop=PIn.PDate(textDateStop.Text);
-			if(DateTime.Today<=dateStop && DateTime.Today>=PIn.PDate(textDateStart.Text)) {
+			DateTime dateStop=PIn.Date(textDateStop.Text);
+			if(DateTime.Today<=dateStop && DateTime.Today>=PIn.Date(textDateStart.Text)) {
 				adjust.TimeEntry=DateTime.Now;
 			}
 			else {

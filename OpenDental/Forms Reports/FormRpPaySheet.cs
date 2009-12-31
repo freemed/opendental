@@ -370,7 +370,7 @@ namespace OpenDental{
 					else {
 						whereProv+="OR ";
 					}
-					whereProv+="claimproc.ProvNum = "+POut.PLong(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+" ";
+					whereProv+="claimproc.ProvNum = "+POut.Long(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+" ";
 				}
 				whereProv+=") ";
 			}
@@ -387,7 +387,7 @@ namespace OpenDental{
 						whereClin+="claimproc.ClinicNum = 0 ";
 					}
 					else {
-						whereClin+="claimproc.ClinicNum = "+POut.PLong(Clinics.List[listClin.SelectedIndices[i]-1].ClinicNum)+" ";
+						whereClin+="claimproc.ClinicNum = "+POut.Long(Clinics.List[listClin.SelectedIndices[i]-1].ClinicNum)+" ";
 					}
 				}
 				whereClin+=") ";
@@ -407,8 +407,8 @@ LEFT JOIN clinic ON clinic.ClinicNum=claimproc.ClinicNum
 WHERE (claimproc.Status=1 OR claimproc.Status=4) "//received or supplemental
 				+whereProv
 				+whereClin
-				+"AND claimpayment.CheckDate >= "+POut.PDate(date1.SelectionStart)+" "
-				+"AND claimpayment.CheckDate <= "+POut.PDate(date2.SelectionStart)+" ";
+				+"AND claimpayment.CheckDate >= "+POut.Date(date1.SelectionStart)+" "
+				+"AND claimpayment.CheckDate <= "+POut.Date(date2.SelectionStart)+" ";
 			if(radioPatient.Checked){
 				queryIns+="GROUP BY patient.PatNum,claimproc.ClaimPaymentNum,provider.ProvNum,claimproc.ClinicNum";
 			}
@@ -429,7 +429,7 @@ WHERE (claimproc.Status=1 OR claimproc.Status=4) "//received or supplemental
 					else {
 						whereProv+="OR ";
 					}
-					whereProv+="paysplit.ProvNum = "+POut.PLong(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+" ";
+					whereProv+="paysplit.ProvNum = "+POut.Long(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+" ";
 				}
 				whereProv+=") ";
 			}
@@ -446,7 +446,7 @@ WHERE (claimproc.Status=1 OR claimproc.Status=4) "//received or supplemental
 						whereClin+="paysplit.ClinicNum = 0 ";
 					}
 					else {
-						whereClin+="paysplit.ClinicNum = "+POut.PLong(Clinics.List[listClin.SelectedIndices[i]-1].ClinicNum)+" ";
+						whereClin+="paysplit.ClinicNum = "+POut.Long(Clinics.List[listClin.SelectedIndices[i]-1].ClinicNum)+" ";
 					}
 				}
 				whereClin+=") ";
@@ -466,15 +466,15 @@ LEFT JOIN clinic ON paysplit.ClinicNum=clinic.ClinicNum
 WHERE 1 "
 				+whereProv
 				+whereClin
-				+"AND paysplit.DatePay >= "+POut.PDate(date1.SelectionStart)+" "
-				+"AND paysplit.DatePay <= "+POut.PDate(date2.SelectionStart)+" ";
+				+"AND paysplit.DatePay >= "+POut.Date(date1.SelectionStart)+" "
+				+"AND paysplit.DatePay <= "+POut.Date(date2.SelectionStart)+" ";
 			if(listTypes.SelectedIndices.Count>0){
 				queryPat+="AND (";
 				for(int i=0;i<listTypes.SelectedIndices.Count;i++) {
 					if(i>0) {
 						queryPat+="OR ";
 					}
-					queryPat+="payment.PayType = "+POut.PLong(DefC.Short[(int)DefCat.PaymentTypes][listTypes.SelectedIndices[i]].DefNum)+" ";
+					queryPat+="payment.PayType = "+POut.Long(DefC.Short[(int)DefCat.PaymentTypes][listTypes.SelectedIndices[i]].DefNum)+" ";
 				}
 				queryPat+=") ";
 			}

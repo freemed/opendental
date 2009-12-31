@@ -373,8 +373,8 @@ namespace OpenDental{
 		}
 
 		private void FillMain(){
-			DateTime dateFrom=PIn.PDate(textDateFrom.Text);
-			DateTime dateTo=PIn.PDate(textDateTo.Text);
+			DateTime dateFrom=PIn.Date(textDateFrom.Text);
+			DateTime dateTo=PIn.Date(textDateTo.Text);
 			long provNum=0;
 			if(comboProv.SelectedIndex!=0) {
 				provNum=ProviderC.List[comboProv.SelectedIndex-1].ProvNum;
@@ -427,7 +427,7 @@ namespace OpenDental{
 
 		private void grid_CellClick(object sender, OpenDental.UI.ODGridClickEventArgs e) {
 			//row selected before this event triggered
-			SelectedPatNum=PIn.PLong(table.Rows[e.Row]["PatNum"].ToString());
+			SelectedPatNum=PIn.Long(table.Rows[e.Row]["PatNum"].ToString());
 			SetFamilyColors();
 			comboStatus.SelectedIndex=-1;
 		}
@@ -440,10 +440,10 @@ namespace OpenDental{
 				grid.Invalidate();
 				return;
 			}
-			long guar=PIn.PLong(table.Rows[grid.SelectedIndices[0]]["Guarantor"].ToString());
+			long guar=PIn.Long(table.Rows[grid.SelectedIndices[0]]["Guarantor"].ToString());
 			int famCount=0;
 			for(int i=0;i<grid.Rows.Count;i++){
-				if(PIn.PLong(table.Rows[i]["Guarantor"].ToString())==guar){
+				if(PIn.Long(table.Rows[i]["Guarantor"].ToString())==guar){
 					famCount++;
 					grid.Rows[i].ColorText=Color.Red;
 				}
@@ -462,9 +462,9 @@ namespace OpenDental{
 		}
 
 		private void grid_CellDoubleClick(object sender, OpenDental.UI.ODGridClickEventArgs e) {
-			SelectedPatNum=PIn.PLong(table.Rows[e.Row]["PatNum"].ToString());
+			SelectedPatNum=PIn.Long(table.Rows[e.Row]["PatNum"].ToString());
 			Cursor=Cursors.WaitCursor;
-			long selectedApt=PIn.PLong(table.Rows[e.Row]["AptNum"].ToString());
+			long selectedApt=PIn.Long(table.Rows[e.Row]["AptNum"].ToString());
 			//Appointment apt=Appointments.GetOneApt(selectedApt);
 			FormApptEdit FormA=new FormApptEdit(selectedApt);
 			FormA.PinIsVisible=true;
@@ -479,7 +479,7 @@ namespace OpenDental{
 				FillMain();
 			}
 			for(int i=0;i<table.Rows.Count;i++){
-				if(PIn.PLong(table.Rows[i]["AptNum"].ToString())==selectedApt){
+				if(PIn.Long(table.Rows[i]["AptNum"].ToString())==selectedApt){
 					grid.SetSelected(i,true);
 				}
 			}
@@ -495,10 +495,10 @@ namespace OpenDental{
 			Cursor=Cursors.WaitCursor;
 			long[] selectedApts=new long[grid.SelectedIndices.Length];
 			for(int i=0;i<grid.SelectedIndices.Length;i++){
-				selectedApts[i]=PIn.PLong(table.Rows[grid.SelectedIndices[i]]["AptNum"].ToString());
+				selectedApts[i]=PIn.Long(table.Rows[grid.SelectedIndices[i]]["AptNum"].ToString());
 			}
 			for(int i=0;i<grid.SelectedIndices.Length;i++){
-				apt=Appointments.GetOneApt(PIn.PLong(table.Rows[grid.SelectedIndices[i]]["AptNum"].ToString()));
+				apt=Appointments.GetOneApt(PIn.Long(table.Rows[grid.SelectedIndices[i]]["AptNum"].ToString()));
 				Appointment aptOld=apt.Copy();
 				int selectedI=comboStatus.SelectedIndex;
 				apt.Confirmed=DefC.Short[(int)DefCat.ApptConfirmed][selectedI].DefNum;
@@ -515,7 +515,7 @@ namespace OpenDental{
 			//reselect all the apts
 			for(int i=0;i<table.Rows.Count;i++){
 				for(int j=0;j<selectedApts.Length;j++){
-					if(PIn.PLong(table.Rows[i]["AptNum"].ToString())==selectedApts[j]){
+					if(PIn.Long(table.Rows[i]["AptNum"].ToString())==selectedApts[j]){
 						grid.SetSelected(i,true);
 					}
 				}
@@ -538,13 +538,13 @@ namespace OpenDental{
       if(grid.SelectedIndices.Length==0){
 				aptNums=new long[table.Rows.Count];
         for(int i=0;i<aptNums.Length;i++){
-          aptNums[i]=PIn.PLong(table.Rows[i]["AptNum"].ToString());
+          aptNums[i]=PIn.Long(table.Rows[i]["AptNum"].ToString());
         }
       }
       else{
 				aptNums=new long[grid.SelectedIndices.Length];
         for(int i=0;i<aptNums.Length;i++){
-          aptNums[i]=PIn.PLong(table.Rows[grid.SelectedIndices[i]]["AptNum"].ToString());
+          aptNums[i]=PIn.Long(table.Rows[grid.SelectedIndices[i]]["AptNum"].ToString());
         }
       }
       FormRpConfirm FormC=new FormRpConfirm(aptNums);
@@ -563,7 +563,7 @@ namespace OpenDental{
 			}
 			List<long> aptNums=new List<long>();
 			for(int i=0;i<grid.SelectedIndices.Length;i++) {
-        aptNums.Add(PIn.PLong(table.Rows[grid.SelectedIndices[i]]["AptNum"].ToString()));
+        aptNums.Add(PIn.Long(table.Rows[grid.SelectedIndices[i]]["AptNum"].ToString()));
       }
 			AddrTable=Appointments.GetAddrTable(aptNums);
 			pagesPrinted=0;
@@ -589,7 +589,7 @@ namespace OpenDental{
 			}
 			List<long> aptNums=new List<long>();
 			for(int i=0;i<grid.SelectedIndices.Length;i++) {
-        aptNums.Add(PIn.PLong(table.Rows[grid.SelectedIndices[i]]["AptNum"].ToString()));
+        aptNums.Add(PIn.Long(table.Rows[grid.SelectedIndices[i]]["AptNum"].ToString()));
       }
 			AddrTable=Appointments.GetAddrTable(aptNums);
 			pagesPrinted=0;
@@ -683,8 +683,8 @@ namespace OpenDental{
 				//Body text-------------------------------------------------------------------------------
 				str=PrefC.GetString(PrefName.ConfirmPostcardMessage);
 					//textPostcardMessage.Text;
-				str=str.Replace("[date]",PIn.PDate(AddrTable.Rows[patientsPrinted]["AptDateTime"].ToString()).ToShortDateString());
-				str=str.Replace("[time]",PIn.PDate(AddrTable.Rows[patientsPrinted]["AptDateTime"].ToString()).ToShortTimeString());
+				str=str.Replace("[date]",PIn.Date(AddrTable.Rows[patientsPrinted]["AptDateTime"].ToString()).ToShortDateString());
+				str=str.Replace("[time]",PIn.Date(AddrTable.Rows[patientsPrinted]["AptDateTime"].ToString()).ToShortTimeString());
 				g.DrawString(str,new Font(FontFamily.GenericSansSerif,10),Brushes.Black,new RectangleF(xPos+45,yPos+180,250,190));
 				//Patient's Address-----------------------------------------------------------------------
 				str=AddrTable.Rows[patientsPrinted]["FName"].ToString()+" "
@@ -766,7 +766,7 @@ namespace OpenDental{
 			if(grid.SelectedIndices.Length==0) {
 				ContactMethod cmeth;
 				for(int i=0;i<table.Rows.Count;i++) {
-					cmeth=(ContactMethod)PIn.PInt(table.Rows[i]["PreferConfirmMethod"].ToString());
+					cmeth=(ContactMethod)PIn.Int(table.Rows[i]["PreferConfirmMethod"].ToString());
 					if(cmeth!=ContactMethod.Email) {
 						continue;
 					}
@@ -802,7 +802,7 @@ namespace OpenDental{
 			//Appointment apt;
 			for(int i=0;i<grid.SelectedIndices.Length;i++){
 				message=new EmailMessage();
-				message.PatNum=PIn.PLong(table.Rows[grid.SelectedIndices[i]]["PatNum"].ToString());
+				message.PatNum=PIn.Long(table.Rows[grid.SelectedIndices[i]]["PatNum"].ToString());
 				message.ToAddress=table.Rows[grid.SelectedIndices[i]]["email"].ToString();//Could be guarantor email.
 				message.FromAddress=PrefC.GetString(PrefName.EmailSenderAddress);
 				message.Subject=PrefC.GetString(PrefName.ConfirmEmailSubject);
@@ -823,7 +823,7 @@ namespace OpenDental{
 				message.MsgDateTime=DateTime.Now;
 				message.SentOrReceived=CommSentOrReceived.Sent;
 				EmailMessages.Insert(message);
-				Appointments.SetConfirmed(PIn.PLong(table.Rows[grid.SelectedIndices[i]]["AptNum"].ToString()),PrefC.GetLong(PrefName.ConfirmStatusEmailed));
+				Appointments.SetConfirmed(PIn.Long(table.Rows[grid.SelectedIndices[i]]["AptNum"].ToString()),PrefC.GetLong(PrefName.ConfirmStatusEmailed));
 			}
 			FillMain();
 			Cursor=Cursors.Default;

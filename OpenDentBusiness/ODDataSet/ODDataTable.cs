@@ -46,16 +46,16 @@ namespace OpenDentBusiness{
 				obj=constructor.Invoke(null);
 				for(int f=0;f<fieldInfo.Length;f++){
 					if(fieldInfo[f].FieldType==typeof(int)){
-						fieldInfo[f].SetValue(obj,PIn.PLong(Rows[i][f]));
+						fieldInfo[f].SetValue(obj,PIn.Long(Rows[i][f]));
 					}
 					else if(fieldInfo[f].FieldType==typeof(bool)){
-						fieldInfo[f].SetValue(obj,PIn.PBool(Rows[i][f]));
+						fieldInfo[f].SetValue(obj,PIn.Bool(Rows[i][f]));
 					}
 					else if(fieldInfo[f].FieldType==typeof(string)){
-						fieldInfo[f].SetValue(obj,PIn.PString(Rows[i][f]));
+						fieldInfo[f].SetValue(obj,PIn.String(Rows[i][f]));
 					}
 					else if(fieldInfo[f].FieldType.IsEnum){
-						object val=((object[])Enum.GetValues(fieldInfo[f].FieldType))[PIn.PLong(Rows[i][f])];
+						object val=((object[])Enum.GetValues(fieldInfo[f].FieldType))[PIn.Long(Rows[i][f])];
 						fieldInfo[f].SetValue(obj,val);
 					}
 				}

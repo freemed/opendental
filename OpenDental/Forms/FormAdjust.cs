@@ -461,20 +461,20 @@ namespace OpenDental{
 			}
 			if(IsNew){
 				//prevents backdating of initial adjustment
-				if(!Security.IsAuthorized(Permissions.AdjustmentCreate,PIn.PDate(textAdjDate.Text))){
+				if(!Security.IsAuthorized(Permissions.AdjustmentCreate,PIn.Date(textAdjDate.Text))){
 					return;
 				}
 			}
 			else{
 				//Editing an old entry will already be blocked if the date was too old, and user will not be able to click OK button
 				//This catches it if user changed the date to be older.
-				if(!Security.IsAuthorized(Permissions.AdjustmentEdit,PIn.PDate(textAdjDate.Text))){
+				if(!Security.IsAuthorized(Permissions.AdjustmentEdit,PIn.Date(textAdjDate.Text))){
 					return;
 				}
 			}
 			//DateEntry not allowed to change
-			AdjustmentCur.AdjDate=PIn.PDate(textAdjDate.Text);
-			AdjustmentCur.ProcDate=PIn.PDate(textProcDate.Text);
+			AdjustmentCur.AdjDate=PIn.Date(textAdjDate.Text);
+			AdjustmentCur.ProcDate=PIn.Date(textProcDate.Text);
 			if(comboProv.SelectedIndex==-1) {//might be a hidden provider, so don't change.
 				//	AdjustmentCur.ProvNum=PatCur.PriProv;
 			}
@@ -496,10 +496,10 @@ namespace OpenDental{
 				AdjustmentCur.AdjType=DefC.Short[(int)DefCat.AdjTypes][(int)NegIndex[listTypeNeg.SelectedIndex]].DefNum;
 			}
 			if(DefC.GetValue(DefCat.AdjTypes,AdjustmentCur.AdjType)=="+"){//pos
-				AdjustmentCur.AdjAmt=PIn.PDouble(textAmount.Text);
+				AdjustmentCur.AdjAmt=PIn.Double(textAmount.Text);
 			}
 			else{//neg
-				AdjustmentCur.AdjAmt=-PIn.PDouble(textAmount.Text);
+				AdjustmentCur.AdjAmt=-PIn.Double(textAmount.Text);
 			}
 			AdjustmentCur.AdjNote=textNote.Text;
 			try{

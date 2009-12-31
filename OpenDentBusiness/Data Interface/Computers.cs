@@ -55,8 +55,8 @@ namespace OpenDentBusiness{
 			List=new Computer[table.Rows.Count];
 			for(int i=0;i<List.Length;i++) {
 				List[i]=new Computer();
-				List[i].ComputerNum=PIn.PLong(table.Rows[i][0].ToString());
-				List[i].CompName=PIn.PString(table.Rows[i][1].ToString());
+				List[i].ComputerNum=PIn.Long(table.Rows[i][0].ToString());
+				List[i].CompName=PIn.String(table.Rows[i][1].ToString());
 			}
 		}
 
@@ -76,10 +76,10 @@ namespace OpenDentBusiness{
 			command+="CompName"
 				+") VALUES(";
 			if(PrefC.RandomKeys){
-				command+="'"+POut.PLong(comp.ComputerNum)+"', ";
+				command+="'"+POut.Long(comp.ComputerNum)+"', ";
 			}
 			command+=
-				"'"+POut.PString(comp.CompName)+"')";
+				"'"+POut.String(comp.CompName)+"')";
 				//+"'"+POut.PString(PrinterName)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
@@ -142,7 +142,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),computerName);
 				return;
 			}
-			string command= "UPDATE computer SET LastHeartBeat=NOW() WHERE CompName = '"+POut.PString(computerName)+"'";
+			string command= "UPDATE computer SET LastHeartBeat=NOW() WHERE CompName = '"+POut.String(computerName)+"'";
 			Db.NonQ(command);
 		}
 
@@ -151,7 +151,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),computerName);
 				return;
 			}
-			string command= "UPDATE computer SET LastHeartBeat='0001-01-01' WHERE CompName = '"+POut.PString(computerName)+"'";
+			string command= "UPDATE computer SET LastHeartBeat='0001-01-01' WHERE CompName = '"+POut.String(computerName)+"'";
 			Db.NonQ(command);
 		}
 
@@ -161,7 +161,7 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command= "UPDATE computer SET LastHeartBeat='0001-01-01' "
-				+"WHERE CompName != '"+POut.PString(machineNameException)+"'";
+				+"WHERE CompName != '"+POut.String(machineNameException)+"'";
 			Db.NonQ(command);
 		}
 

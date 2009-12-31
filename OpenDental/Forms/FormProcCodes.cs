@@ -619,7 +619,7 @@ namespace OpenDental{
 			for(int i=0;i<ProcTable.Rows.Count;i++){
 				row=new ODGridRow();
 				if(i==0 || ProcTable.Rows[i-1]["ProcCat"].ToString() != ProcTable.Rows[i]["ProcCat"].ToString()){
-					row.Cells.Add(DefC.GetName(DefCat.ProcCodeCats,PIn.PLong(ProcTable.Rows[i]["ProcCat"].ToString())));
+					row.Cells.Add(DefC.GetName(DefCat.ProcCodeCats,PIn.Long(ProcTable.Rows[i]["ProcCat"].ToString())));
 				}
 				else{
 					row.Cells.Add("");
@@ -631,20 +631,20 @@ namespace OpenDental{
 					row.Cells.Add("");
 				}
 				else{
-					row.Cells.Add(PIn.PDouble(ProcTable.Rows[i]["FeeAmt1"].ToString()).ToString("n"));
+					row.Cells.Add(PIn.Double(ProcTable.Rows[i]["FeeAmt1"].ToString()).ToString("n"));
 				}
 				
 				if(ProcTable.Rows[i]["FeeAmt2"].ToString()=="-1") {
 					row.Cells.Add("");
 				}
 				else {
-					row.Cells.Add(PIn.PDouble(ProcTable.Rows[i]["FeeAmt2"].ToString()).ToString("n"));
+					row.Cells.Add(PIn.Double(ProcTable.Rows[i]["FeeAmt2"].ToString()).ToString("n"));
 				}
 				if(ProcTable.Rows[i]["FeeAmt3"].ToString()=="-1") {
 					row.Cells.Add("");
 				}
 				else {
-					row.Cells.Add(PIn.PDouble(ProcTable.Rows[i]["FeeAmt3"].ToString()).ToString("n"));
+					row.Cells.Add(PIn.Double(ProcTable.Rows[i]["FeeAmt3"].ToString()).ToString("n"));
 				}
 				gridMain.Rows.Add(row);
 			}
@@ -886,7 +886,7 @@ namespace OpenDental{
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			if(IsSelectionMode){
-				SelectedCodeNum=PIn.PLong(ProcTable.Rows[e.Row]["CodeNum"].ToString());
+				SelectedCodeNum=PIn.Long(ProcTable.Rows[e.Row]["CodeNum"].ToString());
 				DialogResult=DialogResult.OK;
 				return;
 			}
@@ -894,7 +894,7 @@ namespace OpenDental{
 			if(!Security.IsAuthorized(Permissions.Setup,DateTime.MinValue,true)){
 				return;
 			}
-			long codeNum=PIn.PLong(ProcTable.Rows[e.Row]["CodeNum"].ToString());
+			long codeNum=PIn.Long(ProcTable.Rows[e.Row]["CodeNum"].ToString());
 			//string =ProcTable.Rows[e.Row]["ProcCode"].ToString();
 			if(e.Col>3){//if double clicked on a fee
 				Fee FeeCur=null;
@@ -953,7 +953,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please select a procedure code first.");
 				return;
 			}
-			SelectedCodeNum=PIn.PLong(ProcTable.Rows[gridMain.GetSelectedIndex()]["CodeNum"].ToString());
+			SelectedCodeNum=PIn.Long(ProcTable.Rows[gridMain.GetSelectedIndex()]["CodeNum"].ToString());
 			DialogResult=DialogResult.OK;
 		}
 

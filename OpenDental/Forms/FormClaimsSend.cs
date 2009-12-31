@@ -703,7 +703,7 @@ namespace OpenDental{
 			//Now, the cool part.  Highlight all the claims that were just sent in the history grid
 			for(int i=0;i<queueItems.Count;i++){
 				for(int j=0;j<tableHistory.Rows.Count;j++){
-					long claimNum=PIn.PLong(tableHistory.Rows[j]["ClaimNum"].ToString());
+					long claimNum=PIn.Long(tableHistory.Rows[j]["ClaimNum"].ToString());
 					if(claimNum==queueItems[i].ClaimNum){
 						gridHistory.SetSelected(j,true);
 						break;
@@ -727,13 +727,13 @@ namespace OpenDental{
 				) {
 				return;
 			}
-			DateTime dateFrom=PIn.PDate(textDateFrom.Text);
+			DateTime dateFrom=PIn.Date(textDateFrom.Text);
 			DateTime dateTo;
 			if(textDateTo.Text=="") {
 				dateTo=DateTime.MaxValue;
 			}
 			else {
-				dateTo=PIn.PDate(textDateTo.Text);
+				dateTo=PIn.Date(textDateTo.Text);
 			}
 			tableHistory=Etranss.RefreshHistory(dateFrom,dateTo);
 			//listQueue=Claims.GetQueueList();
@@ -840,13 +840,13 @@ namespace OpenDental{
 						calendarFrom.SetDate(DateTime.Today);
 					}
 					else {
-						calendarFrom.SetDate(PIn.PDate(textDateFrom.Text));
+						calendarFrom.SetDate(PIn.Date(textDateFrom.Text));
 					}
 					if(textDateTo.Text=="") {
 						calendarTo.SetDate(DateTime.Today);
 					}
 					else {
-						calendarTo.SetDate(PIn.PDate(textDateTo.Text));
+						calendarTo.SetDate(PIn.Date(textDateTo.Text));
 					}
 				}
 				//show the calendars
@@ -901,7 +901,7 @@ namespace OpenDental{
 				//then they must all be Claim_Ren, ClaimSent, or ClaimPrinted
 				EtransType etype;
 				for(int i=0;i<gridHistory.SelectedIndices.Length;i++) {
-					etype=(EtransType)PIn.PLong(tableHistory.Rows[gridHistory.SelectedIndices[i]]["Etype"].ToString());
+					etype=(EtransType)PIn.Long(tableHistory.Rows[gridHistory.SelectedIndices[i]]["Etype"].ToString());
 					if(etype!=EtransType.Claim_Ren && etype!=EtransType.ClaimSent && etype!=EtransType.ClaimPrinted){
 						MsgBox.Show(this,"That type of transaction cannot be undone as a group.  Please undo one at a time.");
 						return;
@@ -911,7 +911,7 @@ namespace OpenDental{
 			//loop through each selected item, and see if they are allowed to be "undone".
 			//at this point, 
 			for(int i=0;i<gridHistory.SelectedIndices.Length;i++) {
-				if((EtransType)PIn.PLong(tableHistory.Rows[gridHistory.SelectedIndices[i]]["Etype"].ToString())==EtransType.Claim_CA){
+				if((EtransType)PIn.Long(tableHistory.Rows[gridHistory.SelectedIndices[i]]["Etype"].ToString())==EtransType.Claim_CA){
 					//if a 
 				}
 				//else if(){
@@ -923,7 +923,7 @@ namespace OpenDental{
 				return;
 			}
 			for(int i=0;i<gridHistory.SelectedIndices.Length;i++){
-				Etranss.Undo(PIn.PLong(tableHistory.Rows[gridHistory.SelectedIndices[i]]["EtransNum"].ToString()));
+				Etranss.Undo(PIn.Long(tableHistory.Rows[gridHistory.SelectedIndices[i]]["EtransNum"].ToString()));
 			}
 			FillGrid();
 			FillHistory();
@@ -940,7 +940,7 @@ namespace OpenDental{
 		}
 
 		private void gridHistory_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			Etrans et=Etranss.GetEtrans(PIn.PLong(tableHistory.Rows[e.Row]["EtransNum"].ToString()));
+			Etrans et=Etranss.GetEtrans(PIn.Long(tableHistory.Rows[e.Row]["EtransNum"].ToString()));
 			FormEtransEdit FormE=new FormEtransEdit();
 			FormE.EtransCur=et;
 			FormE.ShowDialog();
@@ -1039,7 +1039,7 @@ namespace OpenDental{
 				#endif
 			}
 			//does not yet handle multiple selections
-			Etrans etrans=Etranss.GetEtrans(PIn.PLong(tableHistory.Rows[gridHistory.SelectedIndices[0]]["EtransNum"].ToString()));
+			Etrans etrans=Etranss.GetEtrans(PIn.Long(tableHistory.Rows[gridHistory.SelectedIndices[0]]["EtransNum"].ToString()));
 			//blah blah blah
 			bool assigned=false;//TODO: set to true in the case of assigned claims, whatever that means.
 			FormCCDPrint FormP=new FormCCDPrint(etrans,assigned,EtransMessageTexts.GetMessageText(etrans.EtransMessageTextNum));//Print the form.

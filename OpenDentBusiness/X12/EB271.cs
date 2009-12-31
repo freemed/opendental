@@ -112,11 +112,11 @@ namespace OpenDentBusiness
 			}
 			//7
 			if(Segment.Get(7)!="") {
-				Benefitt.MonetaryAmt=PIn.PDouble(Segment.Get(7));//Monetary amount. Situational
+				Benefitt.MonetaryAmt=PIn.Double(Segment.Get(7));//Monetary amount. Situational
 			}
 			//8
 			if(Segment.Get(8)!="") {
-				Benefitt.Percent=100-(int)(PIn.PDouble(Segment.Get(8))*100);//Percent. Situational
+				Benefitt.Percent=100-(int)(PIn.Double(Segment.Get(8))*100);//Percent. Situational
 				Benefitt.CoverageLevel=BenefitCoverageLevel.None;
 			}
 			//9-Quantity qualifier
@@ -125,7 +125,7 @@ namespace OpenDentBusiness
 			}
 			//10-Quantity
 			if(Segment.Get(10)!="") {
-				Benefitt.Quantity=PIn.PInt(Segment.Get(10));
+				Benefitt.Quantity=PIn.Int(Segment.Get(10));
 			}
 			//11-Authorization. Ignored.
 			//12-In network. Ignored.
@@ -316,9 +316,9 @@ namespace OpenDentBusiness
 					}
 					return eb06val.Descript;
 				case 7:
-					return PIn.PDouble(elementCode).ToString("c");//Monetary amount. Situational
+					return PIn.Double(elementCode).ToString("c");//Monetary amount. Situational
 				case 8:
-					return "Patient pays "+(PIn.PDouble(elementCode)*100).ToString()+"%";//Percent. Situational
+					return "Patient pays "+(PIn.Double(elementCode)*100).ToString()+"%";//Percent. Situational
 				case 9://Quantity qualifier. Situational
 					EB09 eb09val=eb09.Find(EB09MatchesCode);
 					if(eb09val==null) {

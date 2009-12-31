@@ -291,7 +291,7 @@ namespace OpenDental{
 			Prefs.UpdateString(PrefName.EmailUsername,textUsername.Text);
 			Prefs.UpdateString(PrefName.EmailPassword,textPassword.Text);
 			try{
-				Prefs.UpdateLong(PrefName.EmailPort,PIn.PLong(textPort.Text));
+				Prefs.UpdateLong(PrefName.EmailPort,PIn.Long(textPort.Text));
 			}
 			catch{
 				MsgBox.Show(this,"invalid port number.");

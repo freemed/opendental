@@ -569,7 +569,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please fix data entry errors first.");
 				return;
 			}
-			double disableUntilBalance=PIn.PDouble(textBalance.Text);
+			double disableUntilBalance=PIn.Double(textBalance.Text);
 			if(disableUntilBalance<0){
 				MsgBox.Show(this,"Disabled balance must be greater than zero.");
 				return;
@@ -577,12 +577,12 @@ namespace OpenDental{
 			RecallCur.RecallTypeNum=RecallTypeC.Listt[comboType.SelectedIndex].RecallTypeNum;
 			RecallCur.IsDisabled=checkIsDisabled.Checked;
 			RecallCur.DisableUntilBalance=disableUntilBalance;
-			RecallCur.DisableUntilDate=PIn.PDate(textDisableDate.Text);
-			RecallCur.DateDue=PIn.PDate(textDateDue.Text);
-			RecallCur.RecallInterval.Years=PIn.PInt(textYears.Text);
-			RecallCur.RecallInterval.Months=PIn.PInt(textMonths.Text);
-			RecallCur.RecallInterval.Weeks=PIn.PInt(textWeeks.Text);
-			RecallCur.RecallInterval.Days=PIn.PInt(textDays.Text);
+			RecallCur.DisableUntilDate=PIn.Date(textDisableDate.Text);
+			RecallCur.DateDue=PIn.Date(textDateDue.Text);
+			RecallCur.RecallInterval.Years=PIn.Int(textYears.Text);
+			RecallCur.RecallInterval.Months=PIn.Int(textMonths.Text);
+			RecallCur.RecallInterval.Weeks=PIn.Int(textWeeks.Text);
+			RecallCur.RecallInterval.Days=PIn.Int(textDays.Text);
       if(comboStatus.SelectedIndex==0){
 				RecallCur.RecallStatus=0;
 			}

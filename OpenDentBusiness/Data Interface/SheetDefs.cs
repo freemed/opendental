@@ -26,14 +26,14 @@ namespace OpenDentBusiness{
 			for(int i=0;i<table.Rows.Count;i++){
 				sheetdef=new SheetDef();
 				sheetdef.IsNew=false;
-				sheetdef.SheetDefNum = PIn.PLong   (table.Rows[i][0].ToString());
-				sheetdef.Description = PIn.PString(table.Rows[i][1].ToString());
-				sheetdef.SheetType   = (SheetTypeEnum)PIn.PLong(table.Rows[i][2].ToString());
-				sheetdef.FontSize    = PIn.PFloat (table.Rows[i][3].ToString());
-				sheetdef.FontName    = PIn.PString(table.Rows[i][4].ToString());
-				sheetdef.Width       = PIn.PInt (table.Rows[i][5].ToString());
-				sheetdef.Height      = PIn.PInt   (table.Rows[i][6].ToString());
-				sheetdef.IsLandscape = PIn.PBool  (table.Rows[i][7].ToString());
+				sheetdef.SheetDefNum = PIn.Long   (table.Rows[i][0].ToString());
+				sheetdef.Description = PIn.String(table.Rows[i][1].ToString());
+				sheetdef.SheetType   = (SheetTypeEnum)PIn.Long(table.Rows[i][2].ToString());
+				sheetdef.FontSize    = PIn.Float (table.Rows[i][3].ToString());
+				sheetdef.FontName    = PIn.String(table.Rows[i][4].ToString());
+				sheetdef.Width       = PIn.Int (table.Rows[i][5].ToString());
+				sheetdef.Height      = PIn.Int   (table.Rows[i][6].ToString());
+				sheetdef.IsLandscape = PIn.Bool  (table.Rows[i][7].ToString());
 				SheetDefC.Listt.Add(sheetdef);
 			}
 		}
@@ -73,7 +73,7 @@ namespace OpenDentBusiness{
 			}
 			string command;
 			if(!sheetDef.IsNew){
-				command="DELETE FROM sheetfielddef WHERE SheetDefNum="+POut.PLong(sheetDef.SheetDefNum);
+				command="DELETE FROM sheetfielddef WHERE SheetDefNum="+POut.Long(sheetDef.SheetDefNum);
 				Db.NonQ(command);
 			}
 			DataObjectFactory<SheetDef>.WriteObject(sheetDef);
@@ -92,7 +92,7 @@ namespace OpenDentBusiness{
 				return;
 			}
 			//validate that not already in use by a refferral.
-			string command="SELECT LName,FName FROM referral WHERE Slip="+POut.PLong(sheetDefNum);
+			string command="SELECT LName,FName FROM referral WHERE Slip="+POut.Long(sheetDefNum);
 			DataTable table=Db.GetTable(command);
 			//int count=PIn.PInt(Db.GetCount(command));
 			string names="";
@@ -105,7 +105,7 @@ namespace OpenDentBusiness{
 			if(table.Rows.Count>0){
 				throw new ApplicationException(Lans.g("sheetDefs","SheetDef is already in use by referrals(s). Not allowed to delete. ")+names);
 			}
-			command="DELETE FROM sheetfielddef WHERE SheetDefNum="+POut.PLong(sheetDefNum);
+			command="DELETE FROM sheetfielddef WHERE SheetDefNum="+POut.Long(sheetDefNum);
 			Db.NonQ(command);
 			DataObjectFactory<SheetDef>.DeleteObject(sheetDefNum);
 		}

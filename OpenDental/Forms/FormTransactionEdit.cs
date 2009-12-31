@@ -941,12 +941,12 @@ namespace OpenDental{
 				entry.DateDisplayed=DateTime.Today;
 			}
 			else {
-				entry.DateDisplayed=PIn.PDate(textDate.Text);
+				entry.DateDisplayed=PIn.Date(textDate.Text);
 			}
 			entry.AccountNum=AccountOfOrigin.AccountNum;
 			double amt=0;
 			if(textAmount.errorProvider1.GetError(textAmount)==""){//if no error
-				amt=PIn.PDouble(textAmount.Text);
+				amt=PIn.Double(textAmount.Text);
 			}
 			//if amt==0, then both credit and debit remain 0
 			if(amt>0){
@@ -1024,7 +1024,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please fix data entry errors first.");
 				return;
 			}
-			DateTime date=PIn.PDate(textDate.Text);
+			DateTime date=PIn.Date(textDate.Text);
 			//Prevent backdating----------------------------------------------------------------------------------------
 			if(IsNew) {
 				if(!Security.IsAuthorized(Permissions.AccountingCreate,date)) {
@@ -1048,7 +1048,7 @@ namespace OpenDental{
 					MsgBox.Show(this,"Please select an account first.");
 					return;
 				}
-				double amt=PIn.PDouble(textAmount.Text);
+				double amt=PIn.Double(textAmount.Text);
 				if(amt==0){
 					MsgBox.Show(this,"Amount not allowed to be zero.");
 					return;

@@ -405,7 +405,7 @@ namespace OpenDental.UI
 				}
 			}
 			else if(multInputItems[item].ValueType==FieldValueType.Date){
-				retVal.Add(PIn.PDate(inputs[item].Text));
+				retVal.Add(PIn.Date(inputs[item].Text));
 			}
 			else if(multInputItems[item].ValueType==FieldValueType.Def){
 				ComboBoxMulti comboBox=(ComboBoxMulti)inputs[item];
@@ -424,10 +424,10 @@ namespace OpenDental.UI
 				}
 			}
 			else if(multInputItems[item].ValueType==FieldValueType.Integer){
-				retVal.Add(PIn.PLong(inputs[item].Text));
+				retVal.Add(PIn.Long(inputs[item].Text));
 			}
 			else if(multInputItems[item].ValueType==FieldValueType.Number){
-				retVal.Add(PIn.PDouble(inputs[item].Text));
+				retVal.Add(PIn.Double(inputs[item].Text));
 			}
 			else if(multInputItems[item].ValueType==FieldValueType.String){
 				if(inputs[item].Text!=""){

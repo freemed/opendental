@@ -437,7 +437,7 @@ namespace OpenDental{
 				}
 				req.PatNum=PatNum;
 				req.ProvNum=StudentList[gridStudents.GetSelectedIndex()].ProvNum;
-				req.ReqNeededNum=PIn.PLong(ReqTable.Rows[gridReqs.SelectedIndices[i]]["ReqNeededNum"].ToString());
+				req.ReqNeededNum=PIn.Long(ReqTable.Rows[gridReqs.SelectedIndices[i]]["ReqNeededNum"].ToString());
 				//req.ReqStudentNum=0 until synch on OK.
 				req.SchoolCourseNum=SchoolCourses.List[comboCourse.SelectedIndex].SchoolCourseNum;
 				reqsAttached.Add(req);

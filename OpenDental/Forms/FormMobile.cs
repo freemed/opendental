@@ -114,7 +114,7 @@ namespace OpenDental {
 				writer.WriteElementString("PatStatus",((int)pat.PatStatus).ToString());
 				writer.WriteElementString("Gender",((int)pat.Gender).ToString());
 				writer.WriteElementString("Position",((int)pat.Position).ToString());
-				writer.WriteElementString("Birthdate",POut.PDate(pat.Birthdate,false));
+				writer.WriteElementString("Birthdate",POut.Date(pat.Birthdate,false));
 				writer.WriteElementString("Address",pat.Address);
 				writer.WriteElementString("Address2",pat.Address2);
 				writer.WriteElementString("City",pat.City);
@@ -131,7 +131,7 @@ namespace OpenDental {
 			}
 			#endregion patients
 			#region appointments
-			DateTime dateBefore=PIn.PDate(textDateBefore.Text);
+			DateTime dateBefore=PIn.Date(textDateBefore.Text);
 			List<Appointment> apptsToSynch=Appointments.GetUAppoint(dateTimeLastSync,dateBefore);
 			objCount+=apptsToSynch.Count;
 			Appointment apt;
@@ -148,9 +148,9 @@ namespace OpenDental {
 				writer.WriteElementString("Note",apt.Note);
 				writer.WriteElementString("ProvNum",apt.ProvNum.ToString());
 				writer.WriteElementString("ProvHyg",apt.ProvHyg.ToString());
-				writer.WriteElementString("AptDateTime",POut.PDateT(apt.AptDateTime,false));
+				writer.WriteElementString("AptDateTime",POut.DateT(apt.AptDateTime,false));
 				writer.WriteElementString("ProcDescript",apt.ProcDescript);
-				writer.WriteElementString("IsHygiene",POut.PBool(apt.IsHygiene));
+				writer.WriteElementString("IsHygiene",POut.Bool(apt.IsHygiene));
 				writer.WriteEndElement();//appointment
 			}
 			#endregion appointments

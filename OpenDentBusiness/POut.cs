@@ -13,50 +13,50 @@ namespace OpenDentBusiness{
 
 	///<summary>Converts various datatypes into strings formatted correctly for MySQL. "P" was originally short for Parameter because this class was written specifically to replace parameters in the mysql queries. Using strings instead of parameters is much easier to debug. I would rather not ever depend on the mysql connector for this because the authors of the connector have been known to suddenly change its behavior.</summary>
 	public class POut{
-		public static string PObject(object value) {
+		public static string Object(object value) {
 			//if (value == null)
 			//	return string.Empty;//this would cause obvious bugs due to outgoing strings without quotes
 			//It's better to just have it crash here:
 			Type dataType = value.GetType();
 
 			if (dataType == typeof(string)) {
-				return "'"+PString((string)value)+"'";
+				return "'"+POut.String((string)value)+"'";
 			}
 			else if (dataType.IsEnum) {
 				return ((int)value).ToString();
 			}
 			else if (dataType == typeof(Bitmap)) {
-				return "'"+PBitmap((Bitmap)value)+"'";
+				return "'"+POut.Bitmap((Bitmap)value)+"'";
 			}
 			else if (dataType == typeof(bool)) {
-				return PBool((bool)value);
+				return POut.Bool((bool)value);
 			}
 			else if (dataType == typeof(Byte)) {
-				return PByte((Byte)value);
+				return POut.Byte((Byte)value);
 			}
 			else if (dataType == typeof(DateTime)) {
-				return PDateT((DateTime)value);
+				return POut.DateT((DateTime)value);
 			}
 			else if (dataType == typeof(TimeSpan)) {
-				return PTimeSpan((TimeSpan)value);
+				return POut.TimeSpan((TimeSpan)value);
 			}
 			else if (dataType == typeof(double)) {
-				return "'"+PDouble((double)value)+"'";
+				return "'"+POut.Double((double)value)+"'";
 			}
 			else if (dataType == typeof(float)) {
-				return PFloat((float)value);
+				return POut.Float((float)value);
 			}
 			else if (dataType == typeof(long)) {
-				return PLong((long)value);
+				return POut.Long((long)value);
 			}
 			else if(dataType == typeof(int)) {
-				return PInt((int)value);
+				return POut.Int((int)value);
 			}
 			else if(dataType == typeof(short)) {
-				return PShort((short)value);
+				return POut.Short((short)value);
 			}
 			else if(dataType == typeof(Interval)) {
-				return PLong(((Interval)value).ToInt());
+				return POut.Long(((Interval)value).ToInt());
 			}
 			else {
 				throw new NotSupportedException(string.Format(Resources.DataTypeNotSupportedByPOut, dataType.Name));
@@ -64,7 +64,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static string PBool (bool myBool){
+		public static string Bool (bool myBool){
 			if (myBool==true){
 				return "1";
 			}
@@ -74,17 +74,17 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static string PByte (byte myByte){
+		public static string Byte (byte myByte){
 			return myByte.ToString();
 		}
 
 		///<summary>Always encapsulates the result, depending on the current database connection.</summary>
-		public static string PDateT(DateTime myDateT) {
-			return PDateT(myDateT,true);
+		public static string DateT(DateTime myDateT) {
+			return DateT(myDateT,true);
 		}
 
 		///<summary></summary>
-		public static string PDateT(DateTime myDateT,bool encapsulate){
+		public static string DateT(DateTime myDateT,bool encapsulate){
 			if(myDateT.Year<1880) {
 				myDateT=DateTime.MinValue;
 			}
@@ -107,11 +107,11 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Converts a date to yyyy-MM-dd format which is the format required by MySQL. myDate is the date you want to convert. encapsulate is true for the first overload, making the result look like this: 'yyyy-MM-dd' for MySQL.</summary>
-		public static string PDate(DateTime myDate){
-			return PDate(myDate,true);
+		public static string Date(DateTime myDate){
+			return Date(myDate,true);
 		}
 
-		public static string PDate(DateTime myDate,bool encapsulate){
+		public static string Date(DateTime myDate,bool encapsulate){
 			if(myDate.Year<1880) {
 				myDate=DateTime.MinValue;
 			}
@@ -135,13 +135,13 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		public static string PTimeSpan(TimeSpan myTimeSpan) {
-			return PTimeSpan(myTimeSpan, true);
+		public static string TimeSpan(System.TimeSpan myTimeSpan) {
+			return POut.TimeSpan(myTimeSpan,true);
 		}
 
-		public static string PTimeSpan(TimeSpan myTimeSpan,bool encapsulate) {
+		public static string TimeSpan(System.TimeSpan myTimeSpan,bool encapsulate) {
 			string retval="00:00:00";
-			if(myTimeSpan!=TimeSpan.Zero) {
+			if(myTimeSpan!=System.TimeSpan.Zero) {
 				try {
 					DateTime dateT=new DateTime(1,1,1)+myTimeSpan;
 					retval=dateT.ToString("HH:mm:ss",CultureInfo.InvariantCulture);
@@ -162,7 +162,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static string PDouble(double myDouble){
+		public static string Double(double myDouble){
 			try{
 				//because decimal is a comma in Europe, this sends it to db with period instead 
 				return myDouble.ToString("f",new NumberFormatInfo());
@@ -173,26 +173,26 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static string PLong (long myLong){
+		public static string Long (long myLong){
 			return myLong.ToString();
 		}
 
 		///<summary></summary>
-		public static string PInt(int myInt) {
+		public static string Int(int myInt) {
 			return myInt.ToString();
 		}
 
-		public static string PShort(short myShort) {
+		public static string Short(short myShort) {
 			return myShort.ToString();
 		}
 
 		///<summary></summary>
-		public static string PFloat(float myFloat){
+		public static string Float(float myFloat){
 			return myFloat.ToString();
 		}
 
 		///<summary>Escapes all necessary characters.</summary>
-		public static string PString(string myString){
+		public static string String(string myString){
 			if(myString==null) {
 				return "";
 			}
@@ -256,7 +256,7 @@ namespace OpenDentBusiness{
 		}*/
 
 		///<summary></summary>
-		public static string PBitmap(Bitmap bitmap) {
+		public static string Bitmap(System.Drawing.Bitmap bitmap) {
 			if(bitmap==null) {
 				return "";
 			}
@@ -267,7 +267,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Converts the specified wav file into a string representation.  The timing of this is a little different than with the other "P" functions and is only used by the import button in FormSigElementDefEdit.  After that, the wav spends the rest of it's life as a string until "played" or exported.</summary>
-		public static string PSound(string filename) {
+		public static string Sound(string filename) {
 			if(!File.Exists(filename)) {
 				throw new ApplicationException("File does not exist.");
 			}

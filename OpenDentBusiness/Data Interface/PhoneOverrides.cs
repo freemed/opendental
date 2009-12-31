@@ -13,7 +13,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<PhoneOverride>(MethodBase.GetCurrentMethod(),phoneOverrideNum);
 			}
-			string command="SELECT * FROM phoneoverride WHERE PhoneOverrideNum="+POut.PLong(phoneOverrideNum);
+			string command="SELECT * FROM phoneoverride WHERE PhoneOverrideNum="+POut.Long(phoneOverrideNum);
 			List<PhoneOverride> list=SubmitAndFill(Db.GetTable(command));
 			if(list.Count==0){
 				return null;
@@ -27,8 +27,8 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<PhoneOverride>(MethodBase.GetCurrentMethod(),extension,employeeNum);
 			}
 			string command="SELECT * FROM phoneoverride "
-				+"WHERE Extension="+POut.PLong(extension)+" "
-				+"AND EmpCurrent="+POut.PLong(employeeNum);
+				+"WHERE Extension="+POut.Long(extension)+" "
+				+"AND EmpCurrent="+POut.Long(employeeNum);
 			List<PhoneOverride> list=SubmitAndFill(Db.GetTable(command));
 			if(list.Count==0){
 				return null;
@@ -42,11 +42,11 @@ namespace OpenDentBusiness{
 			PhoneOverride phoneCur;
 			for(int i=0;i<table.Rows.Count;i++){
 				phoneCur=new PhoneOverride();
-				phoneCur.PhoneOverrideNum=PIn.PInt   (table.Rows[0]["PhoneOverrideNum"].ToString());
-				phoneCur.Extension       =PIn.PInt   (table.Rows[0]["Extension"].ToString());
-				phoneCur.EmpCurrent      =PIn.PInt   (table.Rows[0]["EmpCurrent"].ToString());
-				phoneCur.IsAvailable     =PIn.PBool  (table.Rows[0]["IsAvailable"].ToString());
-				phoneCur.Explanation     =PIn.PString(table.Rows[0]["Explanation"].ToString());
+				phoneCur.PhoneOverrideNum=PIn.Int   (table.Rows[0]["PhoneOverrideNum"].ToString());
+				phoneCur.Extension       =PIn.Int   (table.Rows[0]["Extension"].ToString());
+				phoneCur.EmpCurrent      =PIn.Int   (table.Rows[0]["EmpCurrent"].ToString());
+				phoneCur.IsAvailable     =PIn.Bool  (table.Rows[0]["IsAvailable"].ToString());
+				phoneCur.Explanation     =PIn.String(table.Rows[0]["Explanation"].ToString());
 				list.Add(phoneCur);
 			}
 			return list;
@@ -67,13 +67,13 @@ namespace OpenDentBusiness{
 			}
 			command+="Extension,EmpCurrent,IsAvailable,Explanation) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PLong(phoneCur.PhoneOverrideNum)+", ";
+				command+=POut.Long(phoneCur.PhoneOverrideNum)+", ";
 			}
 			command+=
-				 POut.PLong(phoneCur.Extension)+","
-				+POut.PLong(phoneCur.EmpCurrent)+","
-				+POut.PBool(phoneCur.IsAvailable)+","
-				+"'"+POut.PString(phoneCur.Explanation)+"')";
+				 POut.Long(phoneCur.Extension)+","
+				+POut.Long(phoneCur.EmpCurrent)+","
+				+POut.Bool(phoneCur.IsAvailable)+","
+				+"'"+POut.String(phoneCur.Explanation)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -81,7 +81,7 @@ namespace OpenDentBusiness{
 				phoneCur.PhoneOverrideNum=Db.NonQ(command,true);
 			}
 			if(phoneCur.IsAvailable){
-				command="SELECT ClockStatus FROM employee WHERE EmployeeNum="+POut.PLong(phoneCur.EmpCurrent);
+				command="SELECT ClockStatus FROM employee WHERE EmployeeNum="+POut.Long(phoneCur.EmpCurrent);
 				DataTable tableEmp=Db.GetTable(command);
 				if(tableEmp.Rows.Count>0){
 					string status=tableEmp.Rows[0][0].ToString();
@@ -106,12 +106,12 @@ namespace OpenDentBusiness{
 			string command="UPDATE phoneoverride SET "
 				+"Extension="+phoneCur.Extension.ToString()+","
 				+"EmpCurrent="+phoneCur.EmpCurrent.ToString()+","
-				+"IsAvailable="+POut.PBool(phoneCur.IsAvailable)+","
-				+"Explanation='"+POut.PString(phoneCur.Explanation)+"' "
-				+"WHERE PhoneOverrideNum="+POut.PLong(phoneCur.PhoneOverrideNum);
+				+"IsAvailable="+POut.Bool(phoneCur.IsAvailable)+","
+				+"Explanation='"+POut.String(phoneCur.Explanation)+"' "
+				+"WHERE PhoneOverrideNum="+POut.Long(phoneCur.PhoneOverrideNum);
 			Db.NonQ(command);
 			if(phoneCur.IsAvailable){
-				command="SELECT ClockStatus FROM employee WHERE EmployeeNum="+POut.PLong(phoneCur.EmpCurrent);
+				command="SELECT ClockStatus FROM employee WHERE EmployeeNum="+POut.Long(phoneCur.EmpCurrent);
 				DataTable tableEmp=Db.GetTable(command);
 				if(tableEmp.Rows.Count>0){
 					string status=tableEmp.Rows[0][0].ToString();
@@ -131,9 +131,9 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),phoneCur);
 				return;
 			}
-			string command="DELETE FROM phoneoverride WHERE PhoneOverrideNum="+POut.PLong(phoneCur.PhoneOverrideNum);
+			string command="DELETE FROM phoneoverride WHERE PhoneOverrideNum="+POut.Long(phoneCur.PhoneOverrideNum);
 			Db.NonQ(command);
-			command="SELECT ClockStatus FROM employee WHERE EmployeeNum="+POut.PLong(phoneCur.EmpCurrent);
+			command="SELECT ClockStatus FROM employee WHERE EmployeeNum="+POut.Long(phoneCur.EmpCurrent);
 			DataTable tableEmp=Db.GetTable(command);
 			if(tableEmp.Rows.Count>0){
 				string status=tableEmp.Rows[0][0].ToString();

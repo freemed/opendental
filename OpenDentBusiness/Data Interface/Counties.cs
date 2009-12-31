@@ -20,9 +20,9 @@ namespace OpenDentBusiness{
 			County[] List=new County[table.Rows.Count];
 			for(int i=0;i<List.Length;i++){
 				List[i]=new County();
-				List[i].CountyName    =PIn.PString(table.Rows[i][0].ToString());
-				List[i].CountyCode    =PIn.PString(table.Rows[i][1].ToString());
-				List[i].OldCountyName =PIn.PString(table.Rows[i][0].ToString());
+				List[i].CountyName    =PIn.String(table.Rows[i][0].ToString());
+				List[i].CountyCode    =PIn.String(table.Rows[i][1].ToString());
+				List[i].OldCountyName =PIn.String(table.Rows[i][0].ToString());
 			}
 			return List;
 		}
@@ -44,7 +44,7 @@ namespace OpenDentBusiness{
 			DataTable table=Db.GetTable(command);
 			string[] ListNames=new string[table.Rows.Count];
 			for(int i=0;i<ListNames.Length;i++){
-				ListNames[i]=PIn.PString(table.Rows[i][0].ToString());
+				ListNames[i]=PIn.String(table.Rows[i][0].ToString());
 			}
 			return ListNames;
 		}
@@ -57,8 +57,8 @@ namespace OpenDentBusiness{
 			}
 			string command= "INSERT INTO county (CountyName,CountyCode) "
 				+"VALUES ("
-				+"'"+POut.PString(Cur.CountyName)+"', "
-				+"'"+POut.PString(Cur.CountyCode)+"')";
+				+"'"+POut.String(Cur.CountyName)+"', "
+				+"'"+POut.String(Cur.CountyCode)+"')";
 			//MessageBox.Show(string command);
 			Db.NonQ(command);
 			//Cur.ZipCodeNum=InsertID;
@@ -71,14 +71,14 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command = "UPDATE county SET "
-				+"CountyName ='"  +POut.PString(Cur.CountyName)+"'"
-				+",CountyCode ='" +POut.PString(Cur.CountyCode)+"'"
-				+" WHERE CountyName = '"+POut.PString(Cur.OldCountyName)+"'";
+				+"CountyName ='"  +POut.String(Cur.CountyName)+"'"
+				+",CountyCode ='" +POut.String(Cur.CountyCode)+"'"
+				+" WHERE CountyName = '"+POut.String(Cur.OldCountyName)+"'";
 			Db.NonQ(command);
 			//then, update all patients using that County
 			command = "UPDATE patient SET "
-				+"County ='"  +POut.PString(Cur.CountyName)+"'"
-				+" WHERE County = '"+POut.PString(Cur.OldCountyName)+"'";
+				+"County ='"  +POut.String(Cur.CountyName)+"'"
+				+" WHERE County = '"+POut.String(Cur.OldCountyName)+"'";
 			Db.NonQ(command);
 		}
 
@@ -88,7 +88,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
 				return;
 			}
-			string command= "DELETE from county WHERE CountyName = '"+POut.PString(Cur.CountyName)+"'";
+			string command= "DELETE from county WHERE CountyName = '"+POut.String(Cur.CountyName)+"'";
 			Db.NonQ(command);
 		}
 
@@ -99,14 +99,14 @@ namespace OpenDentBusiness{
 			}
 			string command=
 				"SELECT LName,FName from patient "
-				+"WHERE County = '"+POut.PString(countyName)+"' ";
+				+"WHERE County = '"+POut.String(countyName)+"' ";
 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0)
 				return "";
 			string retVal="";
 			for(int i=0;i<table.Rows.Count;i++){
-				retVal+=PIn.PString(table.Rows[i][0].ToString())+", "
-					+PIn.PString(table.Rows[i][1].ToString());
+				retVal+=PIn.String(table.Rows[i][0].ToString())+", "
+					+PIn.String(table.Rows[i][1].ToString());
 				if(i<table.Rows.Count-1){//if not the last row
 					retVal+="\r";
 				}
@@ -121,7 +121,7 @@ namespace OpenDentBusiness{
 			}
 			string command =
 				"SELECT * from county "
-				+"WHERE CountyName = '"+POut.PString(countyName)+"' ";
+				+"WHERE CountyName = '"+POut.String(countyName)+"' ";
 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0)
 				return false;

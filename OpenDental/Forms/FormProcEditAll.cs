@@ -77,7 +77,7 @@ namespace OpenDental {
 				return;
 			}
 			if(textDate.Text!=""){
-				DateTime procDate=PIn.PDate(textDate.Text);
+				DateTime procDate=PIn.Date(textDate.Text);
 				Appointment apt;
 				for(int i=0;i<ProcList.Count;i++){
 					if(ProcList[i].AptNum==0){

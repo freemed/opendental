@@ -42,11 +42,11 @@ namespace OpenDentBusiness {
 			listt=new SigButDef[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				listt[i]=new SigButDef();
-				listt[i].SigButDefNum= PIn.PLong(table.Rows[i][0].ToString());
-				listt[i].ButtonText  = PIn.PString(table.Rows[i][1].ToString());
-				listt[i].ButtonIndex = PIn.PInt(table.Rows[i][2].ToString());
-				listt[i].SynchIcon   = PIn.PInt(table.Rows[i][3].ToString());
-				listt[i].ComputerName= PIn.PString(table.Rows[i][4].ToString());
+				listt[i].SigButDefNum= PIn.Long(table.Rows[i][0].ToString());
+				listt[i].ButtonText  = PIn.String(table.Rows[i][1].ToString());
+				listt[i].ButtonIndex = PIn.Int(table.Rows[i][2].ToString());
+				listt[i].SynchIcon   = PIn.Int(table.Rows[i][3].ToString());
+				listt[i].ComputerName= PIn.String(table.Rows[i][4].ToString());
 				listt[i].ElementList=SigButDefElements.GetForButton(listt[i].SigButDefNum);
 			}
 		}
@@ -58,11 +58,11 @@ namespace OpenDentBusiness {
 				return;
 			}
 			string command="UPDATE sigbutdef SET " 
-				+"ButtonText = '"   +POut.PString(def.ButtonText)+"'"
-				+",ButtonIndex = '" +POut.PLong(def.ButtonIndex)+"'"
-				+",SynchIcon = '"   +POut.PLong(def.SynchIcon)+"'"
-				+",ComputerName = '"+POut.PString(def.ComputerName)+"'"
-				+" WHERE SigButDefNum  ='"+POut.PLong(def.SigButDefNum)+"'";
+				+"ButtonText = '"   +POut.String(def.ButtonText)+"'"
+				+",ButtonIndex = '" +POut.Long(def.ButtonIndex)+"'"
+				+",SynchIcon = '"   +POut.Long(def.SynchIcon)+"'"
+				+",ComputerName = '"+POut.String(def.ComputerName)+"'"
+				+" WHERE SigButDefNum  ='"+POut.Long(def.SigButDefNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -81,13 +81,13 @@ namespace OpenDentBusiness {
 			}
 			command+="ButtonText,ButtonIndex,SynchIcon,ComputerName) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PLong(def.SigButDefNum)+", ";
+				command+=POut.Long(def.SigButDefNum)+", ";
 			}
 			command+=
-				 "'"+POut.PString(def.ButtonText)+"', "
-				+"'"+POut.PLong(def.ButtonIndex)+"', "
-				+"'"+POut.PLong(def.SynchIcon)+"', "
-				+"'"+POut.PString(def.ComputerName)+"')";
+				 "'"+POut.String(def.ButtonText)+"', "
+				+"'"+POut.Long(def.ButtonIndex)+"', "
+				+"'"+POut.Long(def.SynchIcon)+"', "
+				+"'"+POut.String(def.ComputerName)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -103,9 +103,9 @@ namespace OpenDentBusiness {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),def);
 				return;
 			}
-			string command="DELETE FROM sigbutdefelement WHERE SigButDefNum="+POut.PLong(def.SigButDefNum);
+			string command="DELETE FROM sigbutdefelement WHERE SigButDefNum="+POut.Long(def.SigButDefNum);
 			Db.NonQ(command);
-			command="DELETE FROM sigbutdef WHERE SigButDefNum ="+POut.PLong(def.SigButDefNum);
+			command="DELETE FROM sigbutdef WHERE SigButDefNum ="+POut.Long(def.SigButDefNum);
 			Db.NonQ(command);
 		}
 
@@ -115,7 +115,7 @@ namespace OpenDentBusiness {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),def);
 				return;
 			}
-			string command="DELETE FROM sigbutdefelement WHERE SigButDefNum="+POut.PLong(def.SigButDefNum);
+			string command="DELETE FROM sigbutdefelement WHERE SigButDefNum="+POut.Long(def.SigButDefNum);
 			Db.NonQ(command);
 		}
 

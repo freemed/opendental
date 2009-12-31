@@ -9,8 +9,8 @@ namespace OpenDentBusiness{
 
 		public static DataTable Refresh(long schoolClass,long schoolCourse) {
 			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
-			string command="SELECT * FROM reqneeded WHERE SchoolClassNum="+POut.PLong(schoolClass)
-				+" AND SchoolCourseNum="+POut.PLong(schoolCourse)
+			string command="SELECT * FROM reqneeded WHERE SchoolClassNum="+POut.Long(schoolClass)
+				+" AND SchoolCourseNum="+POut.Long(schoolCourse)
 				+" ORDER BY Descript";
 			return Db.GetTable(command);
 		}
@@ -19,17 +19,17 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<ReqNeeded>(MethodBase.GetCurrentMethod(),reqNeededNum);
 			}
-			string command="SELECT * FROM reqneeded WHERE ReqNeededNum="+POut.PLong(reqNeededNum);
+			string command="SELECT * FROM reqneeded WHERE ReqNeededNum="+POut.Long(reqNeededNum);
  			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0){
 				return null;
 			}
 			ReqNeeded req=new ReqNeeded();
 			//for(int i=0;i<table.Rows.Count;i++){
-			req.ReqNeededNum   = PIn.PLong   (table.Rows[0][0].ToString());
-			req.Descript       = PIn.PString(table.Rows[0][1].ToString());
-			req.SchoolCourseNum= PIn.PLong   (table.Rows[0][2].ToString());
-			req.SchoolClassNum = PIn.PLong   (table.Rows[0][3].ToString());
+			req.ReqNeededNum   = PIn.Long   (table.Rows[0][0].ToString());
+			req.Descript       = PIn.String(table.Rows[0][1].ToString());
+			req.SchoolCourseNum= PIn.Long   (table.Rows[0][2].ToString());
+			req.SchoolClassNum = PIn.Long   (table.Rows[0][3].ToString());
 			return req;
 		}
 
@@ -40,10 +40,10 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command = "UPDATE reqneeded SET " 
-				+ "Descript = '"        +POut.PString(req.Descript)+"'"
-				+ ",SchoolCourseNum = '"+POut.PLong   (req.SchoolCourseNum)+"'"
-				+ ",SchoolClassNum = '" +POut.PLong   (req.SchoolClassNum)+"'"   
-				+" WHERE ReqNeededNum = '" +POut.PLong(req.ReqNeededNum)+"'";
+				+ "Descript = '"        +POut.String(req.Descript)+"'"
+				+ ",SchoolCourseNum = '"+POut.Long   (req.SchoolCourseNum)+"'"
+				+ ",SchoolClassNum = '" +POut.Long   (req.SchoolClassNum)+"'"   
+				+" WHERE ReqNeededNum = '" +POut.Long(req.ReqNeededNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -62,12 +62,12 @@ namespace OpenDentBusiness{
 			}
 			command+="Descript,SchoolCourseNum,SchoolClassNum) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+="'"+POut.PLong(req.ReqNeededNum)+"', ";
+				command+="'"+POut.Long(req.ReqNeededNum)+"', ";
 			}
 			command+=
-				 "'"+POut.PString(req.Descript)+"', "
-				+"'"+POut.PLong   (req.SchoolCourseNum)+"', "
-				+"'"+POut.PLong   (req.SchoolClassNum)+"')";
+				 "'"+POut.String(req.Descript)+"', "
+				+"'"+POut.Long   (req.SchoolCourseNum)+"', "
+				+"'"+POut.Long   (req.SchoolClassNum)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -85,7 +85,7 @@ namespace OpenDentBusiness{
 			}
 			//still need to validate
 			string command= "DELETE FROM reqneeded "
-				+"WHERE ReqNeededNum = "+POut.PLong(reqNeededNum);
+				+"WHERE ReqNeededNum = "+POut.Long(reqNeededNum);
 			Db.NonQ(command);
 		}
 

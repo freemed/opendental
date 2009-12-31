@@ -369,8 +369,8 @@ namespace OpenDental{
 					row.Cells.Add(Employees.GetEmp(SchedList[i].EmployeeNum).FName);
 				}
 				//times
-				if(SchedList[i].StartTime.TimeOfDay==PIn.PDateT("12 AM").TimeOfDay 
-					&& SchedList[i].StopTime.TimeOfDay==PIn.PDateT("12 AM").TimeOfDay)
+				if(SchedList[i].StartTime.TimeOfDay==PIn.DateT("12 AM").TimeOfDay 
+					&& SchedList[i].StopTime.TimeOfDay==PIn.DateT("12 AM").TimeOfDay)
 					//SchedList[i].SchedType==ScheduleType.Practice){
 				{
 					row.Cells.Add("");

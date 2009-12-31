@@ -178,8 +178,8 @@ namespace OpenDental{
 				);
 				INSERT INTO tempbroken SELECT PatNum,COUNT(*)
 				FROM adjustment WHERE "+types
-				+"AND AdjDate >= "+POut.PDate(date1.SelectionStart)+" "
-				+"AND AdjDate <= " +POut.PDate(date2.SelectionStart)+" "
+				+"AND AdjDate >= "+POut.Date(date1.SelectionStart)+" "
+				+"AND AdjDate <= " +POut.Date(date2.SelectionStart)+" "
 				+@"GROUP BY PatNum;
 				SELECT patient.PatNum,MIN(procedurelog.ProcDate) AS ProcDate,
 				CONCAT(CONCAT(provider.LName,', '),provider.FName) as ProvName,
@@ -193,8 +193,8 @@ namespace OpenDental{
 				LEFT JOIN tempbroken ON tempbroken.PatNum=patient.PatNum
 				WHERE	(procedurelog.ProcStatus='2'
 				AND procedurelog.ProvNum=provider.ProvNum
-				AND procedurelog.ProcDate >= "+POut.PDate(date1.SelectionStart)+" "
-				+"AND procedurelog.ProcDate <= " +POut.PDate(date2.SelectionStart)+" )"
+				AND procedurelog.ProcDate >= "+POut.Date(date1.SelectionStart)+" "
+				+"AND procedurelog.ProcDate <= " +POut.Date(date2.SelectionStart)+" )"
 				+"OR tempbroken.NumberBroken>0 "
 				+@"GROUP BY patient.PatNum
 				ORDER By ProcDate;

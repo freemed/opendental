@@ -20,42 +20,50 @@ namespace OpenDentBusiness{
 			Equipment equip;
 			for(int i=0;i<table.Rows.Count;i++) {
 				equip=new Equipment();
-				equip.EquipmentNum = PIn.PLong(table.Rows[i][0].ToString());
-				equip.Description  = PIn.PString(table.Rows[i][1].ToString());
-				equip.SerialNumber = PIn.PString(table.Rows[i][2].ToString());
-				equip.ModelYear    = PIn.PString(table.Rows[i][3].ToString());
-				equip.DatePurchased= PIn.PDate(table.Rows[i][4].ToString());
-				equip.DateSold     = PIn.PDate(table.Rows[i][5].ToString());
-				equip.PurchaseCost = PIn.PDouble(table.Rows[i][6].ToString());
-				equip.MarketValue  = PIn.PDouble(table.Rows[i][7].ToString());
-				equip.Location     = PIn.PString(table.Rows[i][8].ToString());
+				equip.EquipmentNum = PIn.Long(table.Rows[i][0].ToString());
+				equip.Description  = PIn.String(table.Rows[i][1].ToString());
+				equip.SerialNumber = PIn.String(table.Rows[i][2].ToString());
+				equip.ModelYear    = PIn.String(table.Rows[i][3].ToString());
+				equip.DatePurchased= PIn.Date(table.Rows[i][4].ToString());
+				equip.DateSold     = PIn.Date(table.Rows[i][5].ToString());
+				equip.PurchaseCost = PIn.Double(table.Rows[i][6].ToString());
+				equip.MarketValue  = PIn.Double(table.Rows[i][7].ToString());
+				equip.Location     = PIn.String(table.Rows[i][8].ToString());
 				list.Add(equip);
 			}
 			return list;
 		}
 
-
-		/*
 		///<summary></summary>
-		public static long Insert(equipment auto) {
+		public static long Insert(Equipment equip) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				auto.equipmentNum=Meth.GetLong(MethodBase.GetCurrentMethod(),auto);
-				return auto.equipmentNum;
+				equip.EquipmentNum=Meth.GetLong(MethodBase.GetCurrentMethod(),equip);
+				return equip.EquipmentNum;
 			}
 			if(PrefC.RandomKeys) {
-				auto.equipmentNum=ReplicationServers.GetKey("equipment","equipmentNum");
+				equip.EquipmentNum=ReplicationServers.GetKey("equipment","EquipmentNum");
 			}
 			string command="INSERT INTO equipment (";
 			if(PrefC.RandomKeys) {
-				command+="equipmentNum,";
+				command+="EquipmentNum,";
 			}
-			command+="Description,AutoTrigger,ProcCodes,AutoAction,SheetDefNum,CommType,MessageContent) VALUES(";
+			command+="Description,SerialNumber,ModelYear,DatePurchased,DateSold,PurchaseCost,MarketValue,Location) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PLong(auto.equipmentNum)+", ";
+				command+=POut.Long(equip.EquipmentNum)+", ";
 			}
+			/*
 			command+=
-				 "'"+POut.PString(auto.Description)+"', "
-				+"'"+POut.PInt((int)auto.AutoTrigger)+"', "
+				 "'"+POut.PString(equip.Description)+"', "
+				+"'"+POut.PString(equip.SerialNumber)+"', "
+				+"'"+POut(equip.ModelYear)+"', "
+				+"'"+POut(equip.DatePurchased)+"', "
+				+"'"+POut(equip.DateSold)+"', "
+				+"'"+POut(equip.PurchaseCost)+"', "
+				+"'"+POut(equip.MarketValue)+"', "
+				+"'"+POut(equip.Location)+"', "
+				+"'"+POut(equip)+"', "
+
+
 				+"'"+POut.PString(auto.ProcCodes)+"', "
 				+"'"+POut.PInt((int)auto.AutoAction)+"', "
 				+"'"+POut.PLong(auto.SheetDefNum)+"', "
@@ -66,10 +74,11 @@ namespace OpenDentBusiness{
 			}
 			else {
 				auto.equipmentNum=Db.NonQ(command,true);
-			}
-			return auto.equipmentNum;
+			}*/
+			return equip.EquipmentNum;
 		}
 
+		/*
 		///<summary></summary>
 		public static void Update(equipment auto) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {

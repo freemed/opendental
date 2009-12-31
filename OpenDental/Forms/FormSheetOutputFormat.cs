@@ -50,14 +50,14 @@ namespace OpenDental {
 					return;
 				}
 			}
-			if(PIn.PLong(textPaperCopies.Text)==0
+			if(PIn.Long(textPaperCopies.Text)==0
 				&& !checkEmailPat.Checked
 				&& !checkEmail2.Checked)
 			{
 				MsgBox.Show(this,"There are no output methods selected.");
 				return;
 			}
-			PaperCopies=PIn.PInt(textPaperCopies.Text);
+			PaperCopies=PIn.Int(textPaperCopies.Text);
 			EmailPat=checkEmailPat.Checked;
 			EmailPatAddress=textEmailPat.Text;
 			if(Email2Visible){

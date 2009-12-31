@@ -70,8 +70,8 @@ namespace OpenDental {
 			Supp.Category=DefC.Short[(int)DefCat.SupplyCats][comboCategory.SelectedIndex].DefNum;
 			Supp.CatalogNumber=textCatalogNumber.Text;
 			Supp.Descript=textDescript.Text;
-			Supp.LevelDesired=PIn.PFloat(textLevelDesired.Text);
-			Supp.Price=PIn.PDouble(textPrice.Text);
+			Supp.LevelDesired=PIn.Float(textLevelDesired.Text);
+			Supp.Price=PIn.Double(textPrice.Text);
 			Supp.IsHidden=checkIsHidden.Checked;
 			if(Supp.IsHiddenChanged) {
 				if(Supp.IsHidden) {

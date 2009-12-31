@@ -52,9 +52,9 @@ namespace OpenDentBusiness {
 			for(int i=0;i<table.Rows.Count;i++) {
 				langTemp=new Language();
 				//List[i].EnglishCommentsOld= PIn.PString(table.Rows[i][0].ToString());
-				langTemp.ClassType      = PIn.PString(table.Rows[i][1].ToString());
-				langTemp.English        = PIn.PString(table.Rows[i][2].ToString());
-				langTemp.IsObsolete     = PIn.PBool(table.Rows[i][3].ToString());
+				langTemp.ClassType      = PIn.String(table.Rows[i][1].ToString());
+				langTemp.English        = PIn.String(table.Rows[i][2].ToString());
+				langTemp.IsObsolete     = PIn.Bool(table.Rows[i][3].ToString());
 				if(!hList.ContainsKey(langTemp.ClassType+langTemp.English)) {
 					hList.Add(langTemp.ClassType+langTemp.English,langTemp);
 				}
@@ -128,8 +128,8 @@ namespace OpenDentBusiness {
 			}
 			string command = "INSERT "+ignoreClause+" INTO language (ClassType,English,EnglishComments,IsObsolete) "
 				+"VALUES("
-				+"'"+POut.PString(mylan.ClassType)+"', "
-				+"'"+POut.PString(mylan.English)+"','',0)";
+				+"'"+POut.String(mylan.ClassType)+"', "
+				+"'"+POut.String(mylan.English)+"','',0)";
 			Db.NonQ(command);
 		}
 
@@ -150,12 +150,12 @@ namespace OpenDentBusiness {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),classType,englishList);
 				return;
 			}
-			string command="DELETE FROM language WHERE ClassType='"+POut.PString(classType)+"' AND (";
+			string command="DELETE FROM language WHERE ClassType='"+POut.String(classType)+"' AND (";
 			for(int i=0;i<englishList.Count;i++) {
 				if(i>0) {
 					command+="OR ";
 				}
-				command+="English='"+POut.PString(englishList[i])+"' ";
+				command+="English='"+POut.String(englishList[i])+"' ";
 				if(HList.ContainsKey(classType+englishList[i])) {
 					HList.Remove(classType+englishList[i]);
 				}
@@ -173,7 +173,7 @@ namespace OpenDentBusiness {
 			DataTable table=Db.GetTable(command);
 			string[] ListCat=new string[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
-				ListCat[i]=PIn.PString(table.Rows[i][0].ToString());
+				ListCat[i]=PIn.String(table.Rows[i][0].ToString());
 			}
 			return ListCat;
 		}
@@ -184,15 +184,15 @@ namespace OpenDentBusiness {
 				return Meth.GetObject<Language[]>(MethodBase.GetCurrentMethod(),classType);
 			}
 			string command="SELECT * FROM language "
-				+"WHERE ClassType = BINARY '"+POut.PString(classType)+"' ORDER BY English";
+				+"WHERE ClassType = BINARY '"+POut.String(classType)+"' ORDER BY English";
 			DataTable table=Db.GetTable(command);
 			Language[] ListForCat=new Language[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				ListForCat[i]=new Language();
 				//ListForCat[i].EnglishComments= PIn.PString(table.Rows[i][0].ToString());
-				ListForCat[i].ClassType      = PIn.PString(table.Rows[i][1].ToString());
-				ListForCat[i].English        = PIn.PString(table.Rows[i][2].ToString());
-				ListForCat[i].IsObsolete     = PIn.PBool(table.Rows[i][3].ToString());
+				ListForCat[i].ClassType      = PIn.String(table.Rows[i][1].ToString());
+				ListForCat[i].English        = PIn.String(table.Rows[i][2].ToString());
+				ListForCat[i].IsObsolete     = PIn.Bool(table.Rows[i][3].ToString());
 			}
 			return ListForCat;
 		}

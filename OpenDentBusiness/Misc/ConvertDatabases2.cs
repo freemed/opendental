@@ -109,18 +109,18 @@ namespace OpenDentBusiness {
 					command="SELECT ValueString FROM preference WHERE PrefName='RecallPostcardMessage'";
 					table=Db.GetTable(command);
 					prefVal=table.Rows[0][0].ToString().Replace("?DueDate","[DueDate]");
-					command="UPDATE preference SET ValueString='"+POut.PString(prefVal)+"' WHERE PrefName='RecallPostcardMessage'";
+					command="UPDATE preference SET ValueString='"+POut.String(prefVal)+"' WHERE PrefName='RecallPostcardMessage'";
 					Db.NonQ32(command);
 					command="SELECT ValueString FROM preference WHERE PrefName='RecallPostcardFamMsg'";
 					table=Db.GetTable(command);
 					prefVal=table.Rows[0][0].ToString().Replace("?FamilyList","[FamilyList]");
-					command="UPDATE preference SET ValueString='"+POut.PString(prefVal)+"' WHERE PrefName='RecallPostcardFamMsg'";
+					command="UPDATE preference SET ValueString='"+POut.String(prefVal)+"' WHERE PrefName='RecallPostcardFamMsg'";
 					Db.NonQ32(command);
 					command="SELECT ValueString FROM preference WHERE PrefName='ConfirmPostcardMessage'";
 					table=Db.GetTable(command);
 					prefVal=table.Rows[0][0].ToString().Replace("?date","[date]");
 					prefVal=prefVal.Replace("?time","[time]");
-					command="UPDATE preference SET ValueString='"+POut.PString(prefVal)+"' WHERE PrefName='ConfirmPostcardMessage'";
+					command="UPDATE preference SET ValueString='"+POut.String(prefVal)+"' WHERE PrefName='ConfirmPostcardMessage'";
 					Db.NonQ32(command);
 					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('RecallEmailSubject3','','')";
 					Db.NonQ32(command);
@@ -173,7 +173,7 @@ namespace OpenDentBusiness {
 					newVal=table.Rows[i]["ControlOptions"].ToString();
 					newVal=newVal.TrimEnd(',');
 					newVal=newVal.Replace(",","\r\n");
-					command="UPDATE autonotecontrol SET ControlOptions='"+POut.PString(newVal)
+					command="UPDATE autonotecontrol SET ControlOptions='"+POut.String(newVal)
 						+"' WHERE AutoNoteControlNum="+table.Rows[i]["AutoNoteControlNum"].ToString();
 					Db.NonQ32(command);
 				}
@@ -223,19 +223,19 @@ namespace OpenDentBusiness {
 					int programNum=Db.NonQ32(command,true);
 					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 						+") VALUES("
-						+"'"+POut.PLong(programNum)+"', "
+						+"'"+POut.Long(programNum)+"', "
 						+"'HL7FolderIn', "
 						+"'')";
 					Db.NonQ32(command);
 					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 						+") VALUES("
-						+"'"+POut.PLong(programNum)+"', "
+						+"'"+POut.Long(programNum)+"', "
 						+"'HL7FolderOut', "
 						+"'')";
 					Db.NonQ32(command);
 					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 						+") VALUES("
-						+"'"+POut.PLong(programNum)+"', "
+						+"'"+POut.Long(programNum)+"', "
 						+"'DefaultUserGroup', "
 						+"'')";
 					Db.NonQ32(command);
@@ -275,15 +275,15 @@ namespace OpenDentBusiness {
 					int programNum;
 					if(table.Rows.Count>0 && table.Rows[0]["Enabled"].ToString()=="0") {//if XDR not enabled
 						//change the defaults
-						programNum=PIn.PInt(table.Rows[0]["ProgramNum"].ToString());
-						command="UPDATE program SET Path='"+POut.PString(@"C:\XDRClient\Bin\XDR.exe")+"' WHERE ProgramNum="+POut.PLong(programNum);
+						programNum=PIn.Int(table.Rows[0]["ProgramNum"].ToString());
+						command="UPDATE program SET Path='"+POut.String(@"C:\XDRClient\Bin\XDR.exe")+"' WHERE ProgramNum="+POut.Long(programNum);
 						Db.NonQ32(command);
-						command="UPDATE programproperty SET PropertyValue='"+POut.PString(@"C:\XDRClient\Bin\infofile.txt")+"' "
-							+"WHERE ProgramNum="+POut.PLong(programNum)+" "
+						command="UPDATE programproperty SET PropertyValue='"+POut.String(@"C:\XDRClient\Bin\infofile.txt")+"' "
+							+"WHERE ProgramNum="+POut.Long(programNum)+" "
 							+"AND PropertyDesc='InfoFile path'";
 						Db.NonQ32(command);
 						command="UPDATE toolbutitem SET ToolBar=7 "//The toolbar at the top that is common to all modules.
-							+"WHERE ProgramNum="+POut.PLong(programNum);
+							+"WHERE ProgramNum="+POut.Long(programNum);
 						Db.NonQ32(command);
 					}
 					//iCat Bridge---------------------------------------------------------------------------
@@ -292,7 +292,7 @@ namespace OpenDentBusiness {
 						+"'iCat', "
 						+"'iCat from www.imagingsciences.com', "
 						+"'0', "
-						+"'"+POut.PString(@"C:\Program Files\ISIP\iCATVision\Vision.exe")+"', "
+						+"'"+POut.String(@"C:\Program Files\ISIP\iCATVision\Vision.exe")+"', "
 						+"'', "
 						+"'')";
 					programNum=Db.NonQ32(command,true);
@@ -312,18 +312,18 @@ namespace OpenDentBusiness {
 						+") VALUES("
 						+"'"+programNum.ToString()+"', "
 						+"'XML output file path', "
-						+"'"+POut.PString(@"C:\iCat\Out\pm.xml")+"')";
+						+"'"+POut.String(@"C:\iCat\Out\pm.xml")+"')";
 					Db.NonQ32(command);
 					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 						+") VALUES("
 						+"'"+programNum.ToString()+"', "
 						+"'Return folder path', "
-						+"'"+POut.PString(@"C:\iCat\Return")+"')";
+						+"'"+POut.String(@"C:\iCat\Return")+"')";
 					Db.NonQ32(command);
 					command="INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
 						+"VALUES ("
-						+"'"+POut.PLong(programNum)+"', "
-						+"'"+POut.PLong((int)ToolBarsAvail.ChartModule)+"', "
+						+"'"+POut.Long(programNum)+"', "
+						+"'"+POut.Long((int)ToolBarsAvail.ChartModule)+"', "
 						+"'iCat')";
 					Db.NonQ32(command);
 					//end of iCat Bridge
@@ -389,17 +389,17 @@ namespace OpenDentBusiness {
 			if(FromVersion<new Version("6.6.16.0")) {
 				string command;
 				command="SELECT ProgramNum FROM program WHERE ProgName='MediaDent'";
-				int programNum=PIn.PInt(Db.GetScalar(command));
-				command="DELETE FROM programproperty WHERE ProgramNum="+POut.PLong(programNum)
+				int programNum=PIn.Int(Db.GetScalar(command));
+				command="DELETE FROM programproperty WHERE ProgramNum="+POut.Long(programNum)
 					+" AND PropertyDesc='Image Folder'";
 				Db.NonQ32(command);
 				command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 					+") VALUES("
-					+"'"+POut.PLong(programNum)+"', "
-					+"'"+POut.PString("Text file path")+"', "
-					+"'"+POut.PString(@"C:\MediadentInfo.txt")+"')";
+					+"'"+POut.Long(programNum)+"', "
+					+"'"+POut.String("Text file path")+"', "
+					+"'"+POut.String(@"C:\MediadentInfo.txt")+"')";
 				Db.NonQ32(command);
-				command="UPDATE program SET Note='Text file path needs to be the same on all computers.' WHERE ProgramNum="+POut.PLong(programNum);
+				command="UPDATE program SET Note='Text file path needs to be the same on all computers.' WHERE ProgramNum="+POut.Long(programNum);
 				Db.NonQ32(command);
 				command="UPDATE preference SET ValueString = '6.6.16.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ32(command);
@@ -508,22 +508,22 @@ DROP TABLE IF EXISTS etAck";
 					Db.NonQ32(command);
 					command="INSERT INTO covcat (Description,DefaultPercent,CovOrder,IsHidden,EbenefitCat) VALUES('X-Ray',100,2,0,13)";
 					int covCatNum=Db.NonQ32(command,true);
-					command="INSERT INTO covspan (CovCatNum,FromCode,ToCode) VALUES("+POut.PLong(covCatNum)+",'D0200','D0399')";
+					command="INSERT INTO covspan (CovCatNum,FromCode,ToCode) VALUES("+POut.Long(covCatNum)+",'D0200','D0399')";
 					Db.NonQ32(command);
 					command="SELECT MAX(CovOrder) FROM covcat";
-					int covOrder=PIn.PInt(Db.GetScalar(command));
+					int covOrder=PIn.Int(Db.GetScalar(command));
 					command="INSERT INTO covcat (Description,DefaultPercent,CovOrder,IsHidden,EbenefitCat) VALUES('Adjunctive',-1,"
-						+POut.PLong(covOrder+1)+",0,14)";//adjunctive
+						+POut.Long(covOrder+1)+",0,14)";//adjunctive
 					covCatNum=Db.NonQ32(command,true);
-					command="INSERT INTO covspan (CovCatNum,FromCode,ToCode) VALUES("+POut.PLong(covCatNum)+",'D9000','D9999')";
+					command="INSERT INTO covspan (CovCatNum,FromCode,ToCode) VALUES("+POut.Long(covCatNum)+",'D9000','D9999')";
 					Db.NonQ32(command);
 					command="SELECT CovCatNum FROM covcat WHERE EbenefitCat=1";//general
 					covCatNum=Db.NonQ32(command,true);
-					command="DELETE FROM covspan WHERE CovCatNum="+POut.PLong(covCatNum);
+					command="DELETE FROM covspan WHERE CovCatNum="+POut.Long(covCatNum);
 					Db.NonQ32(command);
-					command="INSERT INTO covspan (CovCatNum,FromCode,ToCode) VALUES("+POut.PLong(covCatNum)+",'D0000','D7999')";
+					command="INSERT INTO covspan (CovCatNum,FromCode,ToCode) VALUES("+POut.Long(covCatNum)+",'D0000','D7999')";
 					Db.NonQ32(command);
-					command="INSERT INTO covspan (CovCatNum,FromCode,ToCode) VALUES("+POut.PLong(covCatNum)+",'D9000','D9999')";
+					command="INSERT INTO covspan (CovCatNum,FromCode,ToCode) VALUES("+POut.Long(covCatNum)+",'D9000','D9999')";
 					Db.NonQ32(command);
 				}
 				command="ALTER TABLE claimproc ADD DedEst double NOT NULL";
@@ -602,16 +602,16 @@ DROP TABLE IF EXISTS etAck";
 				Db.NonQ32(command);
 				//eCW bridge enhancements
 				command="SELECT ProgramNum FROM program WHERE ProgName='eClinicalWorks'";
-				int programNum=PIn.PInt(Db.GetScalar(command));
+				int programNum=PIn.Int(Db.GetScalar(command));
 				command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 					+") VALUES("
-					+"'"+POut.PLong(programNum)+"', "
+					+"'"+POut.Long(programNum)+"', "
 					+"'ShowImagesModule', "
 					+"'0')";
 				Db.NonQ32(command);
 				command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 					+") VALUES("
-					+"'"+POut.PLong(programNum)+"', "
+					+"'"+POut.Long(programNum)+"', "
 					+"'IsStandalone', "
 					+"'0')";//starts out as false
 				Db.NonQ32(command);
@@ -720,7 +720,7 @@ DROP TABLE IF EXISTS etAck";
 					+"'Camsight', "
 					+"'Camsight from www.camsight.com', "
 					+"'0', "
-					+"'"+POut.PString(@"C:\cdm\cdm\cdmx\cdmx.exe")+"', "
+					+"'"+POut.String(@"C:\cdm\cdm\cdmx\cdmx.exe")+"', "
 					+"'', "
 					+"'')";
 				int programNum=Db.NonQ32(command,true);
@@ -732,8 +732,8 @@ DROP TABLE IF EXISTS etAck";
 				Db.NonQ32(command);
 				command="INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
 					+"VALUES ("
-					+"'"+POut.PLong(programNum)+"', "
-					+"'"+POut.PLong((int)ToolBarsAvail.ChartModule)+"', "
+					+"'"+POut.Long(programNum)+"', "
+					+"'"+POut.Long((int)ToolBarsAvail.ChartModule)+"', "
 					+"'Camsight')";
 				Db.NonQ32(command);
 				//CliniView Bridge---------------------------------------------------------------------------
@@ -742,7 +742,7 @@ DROP TABLE IF EXISTS etAck";
 					+"'CliniView', "
 					+"'CliniView', "
 					+"'0', "
-					+"'"+POut.PString(@"C:\Program Files\CliniView\CliniView.exe")+"', "
+					+"'"+POut.String(@"C:\Program Files\CliniView\CliniView.exe")+"', "
 					+"'', "
 					+"'')";
 				programNum=Db.NonQ32(command,true);
@@ -754,8 +754,8 @@ DROP TABLE IF EXISTS etAck";
 				Db.NonQ32(command);
 				command="INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
 					+"VALUES ("
-					+"'"+POut.PLong(programNum)+"', "
-					+"'"+POut.PLong((int)ToolBarsAvail.ChartModule)+"', "
+					+"'"+POut.Long(programNum)+"', "
+					+"'"+POut.Long((int)ToolBarsAvail.ChartModule)+"', "
 					+"'CliniView')";
 				Db.NonQ32(command);
 				command="UPDATE preference SET ValueString = '6.7.12.0' WHERE PrefName = 'DataBaseVersion'";
@@ -818,25 +818,25 @@ DROP TABLE IF EXISTS etAck";
 				DataTable table=Db.GetTable(command);
 				int groupNum;
 				for(int i=0;i<table.Rows.Count;i++) {
-					groupNum=PIn.PInt(table.Rows[i][0].ToString());
+					groupNum=PIn.Int(table.Rows[i][0].ToString());
 					command="INSERT INTO grouppermission (NewerDate,UserGroupNum,PermType) "
-						+"VALUES('0001-01-01',"+POut.PLong(groupNum)+","+POut.PLong((int)Permissions.TreatPlanEdit)+")";
+						+"VALUES('0001-01-01',"+POut.Long(groupNum)+","+POut.Long((int)Permissions.TreatPlanEdit)+")";
 					Db.NonQ32(command);
 					command="INSERT INTO grouppermission (NewerDate,UserGroupNum,PermType) "
-						+"VALUES('0001-01-01',"+POut.PLong(groupNum)+","+POut.PLong((int)Permissions.ReportProdInc)+")";
+						+"VALUES('0001-01-01',"+POut.Long(groupNum)+","+POut.Long((int)Permissions.ReportProdInc)+")";
 					Db.NonQ32(command);
 					command="INSERT INTO grouppermission (NewerDate,UserGroupNum,PermType) "
-						+"VALUES('0001-01-01',"+POut.PLong(groupNum)+","+POut.PLong((int)Permissions.TimecardDeleteEntry)+")";
+						+"VALUES('0001-01-01',"+POut.Long(groupNum)+","+POut.Long((int)Permissions.TimecardDeleteEntry)+")";
 					Db.NonQ32(command);
 				}
 				command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('BillingExcludeIfUnsentProcs','0','')";
 				Db.NonQ32(command);
 				command="SELECT MAX(DefNum) FROM definition";
-				int defNum=PIn.PInt(Db.GetScalar(command))+1;
+				int defNum=PIn.Int(Db.GetScalar(command))+1;
 				command="SELECT MAX(ItemOrder) FROM definition WHERE Category=18";
-				int order=PIn.PInt(Db.GetScalar(command))+1;
+				int order=PIn.Int(Db.GetScalar(command))+1;
 				command="INSERT INTO definition (DefNum,Category,ItemOrder,ItemName,ItemValue,ItemColor,IsHidden) VALUES("
-					+POut.PLong(defNum)+",18,"+POut.PLong(order)+",'Tooth Charts','T',0,0)";
+					+POut.Long(defNum)+",18,"+POut.Long(order)+",'Tooth Charts','T',0,0)";
 				Db.NonQ32(command);
 				command="ALTER TABLE apptview ADD OnlyScheduledProvs tinyint unsigned NOT NULL";
 				Db.NonQ32(command);
@@ -1714,11 +1714,11 @@ DROP TABLE IF EXISTS etAck";
 				command="DELETE FROM preference WHERE PrefName='ImageStore'";//this option is no longer supported.
 				Db.NonQ(command);
 				command="SELECT MAX(ItemOrder) FROM definition WHERE Category=2";
-				int itemOrder=PIn.PInt(Db.GetScalar(command))+1;//eg 7+1
+				int itemOrder=PIn.Int(Db.GetScalar(command))+1;//eg 7+1
 				//this should end up with an acceptable autoincrement even if using random primary keys.
-				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemValue) VALUES (2,"+POut.PInt(itemOrder)+",'E-mailed','E-mailed')";
+				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemValue) VALUES (2,"+POut.Int(itemOrder)+",'E-mailed','E-mailed')";
 				Db.NonQ(command);
-				command="SELECT DefNum FROM definition WHERE Category=2 AND ItemOrder="+POut.PInt(itemOrder);
+				command="SELECT DefNum FROM definition WHERE Category=2 AND ItemOrder="+POut.Int(itemOrder);
 				string defNumStr=Db.GetScalar(command);
 				command="INSERT INTO preference (PrefName,ValueString) VALUES ('ConfirmStatusEmailed','"+defNumStr+"')";
 				Db.NonQ(command);
@@ -1768,19 +1768,19 @@ DROP TABLE IF EXISTS etAck";
 				command="SELECT COUNT(*) FROM programproperty WHERE PropertyDesc='MediaDent Version 4 or 5'";
 				if(Db.GetScalar(command)=="0") {
 					command="SELECT ProgramNum FROM program WHERE ProgName='MediaDent'";
-					long programNum=PIn.PLong(Db.GetScalar(command));
+					long programNum=PIn.Long(Db.GetScalar(command));
 					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 						+") VALUES("
-						+"'"+POut.PLong(programNum)+"', "
-						+"'"+POut.PString("MediaDent Version 4 or 5")+"', "
+						+"'"+POut.Long(programNum)+"', "
+						+"'"+POut.String("MediaDent Version 4 or 5")+"', "
 						+"'5')";
 					Db.NonQ(command);
 					//add back the image folder
 					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 						+") VALUES("
-						+"'"+POut.PLong(programNum)+"', "
-						+"'"+POut.PString("Image Folder")+"', "
-						+"'"+POut.PString(@"C:\Mediadent\patients\")+"')";
+						+"'"+POut.Long(programNum)+"', "
+						+"'"+POut.String("Image Folder")+"', "
+						+"'"+POut.String(@"C:\Mediadent\patients\")+"')";
 					Db.NonQ(command);
 				}
 				command="UPDATE preference SET ValueString = '6.8.11.0' WHERE PrefName = 'DataBaseVersion'";
@@ -1798,20 +1798,20 @@ DROP TABLE IF EXISTS etAck";
 					+"'EwooEZDent', "
 					+"'EwooEZDent from www.ewoousa.com', "
 					+"'0', "
-					+"'"+POut.PString(@"C:\EasyDent4\Edp4\EasyDent4.exe")+"', "
+					+"'"+POut.String(@"C:\EasyDent4\Edp4\EasyDent4.exe")+"', "
 					+"'', "
 					+"'')";
 				long programNum=Db.NonQ(command,true);
 				command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 					+") VALUES("
-					+"'"+POut.PLong(programNum)+"', "
+					+"'"+POut.Long(programNum)+"', "
 					+"'Enter 0 to use PatientNum, or 1 to use ChartNum', "
 					+"'0')";
 				Db.NonQ(command);
 				command="INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
 					+"VALUES ("
-					+"'"+POut.PLong(programNum)+"', "
-					+"'"+POut.PLong((int)ToolBarsAvail.ChartModule)+"', "
+					+"'"+POut.Long(programNum)+"', "
+					+"'"+POut.Long((int)ToolBarsAvail.ChartModule)+"', "
 					+"'EZDent')";
 				Db.NonQ(command);
 				command="UPDATE preference SET ValueString = '6.8.12.0' WHERE PrefName = 'DataBaseVersion'";
@@ -1853,13 +1853,13 @@ DROP TABLE IF EXISTS etAck";
 				//Move the HL7 folders from eCW to the pref table
 				command="SELECT PropertyValue FROM programproperty WHERE PropertyDesc='HL7FolderOut'";
 				string folder=Db.GetScalar(command);
-				command="INSERT INTO preference(PrefName,ValueString) VALUES('HL7FolderOut','"+POut.PString(folder)+"')";
+				command="INSERT INTO preference(PrefName,ValueString) VALUES('HL7FolderOut','"+POut.String(folder)+"')";
 				Db.NonQ(command);
 				command="DELETE FROM programproperty WHERE PropertyDesc='HL7FolderOut'";
 				Db.NonQ(command);
 				command="SELECT PropertyValue FROM programproperty WHERE PropertyDesc='HL7FolderIn'";
 				folder=Db.GetScalar(command);
-				command="INSERT INTO preference(PrefName,ValueString) VALUES('HL7FolderIn','"+POut.PString(folder)+"')";
+				command="INSERT INTO preference(PrefName,ValueString) VALUES('HL7FolderIn','"+POut.String(folder)+"')";
 				Db.NonQ(command);
 				command="DELETE FROM programproperty WHERE PropertyDesc='HL7FolderIn'";
 				Db.NonQ(command);
@@ -1927,8 +1927,8 @@ DROP TABLE IF EXISTS etAck";
 				Db.NonQ(command);
 				//for each sheettype, set descriptions for all sheets of that type.
 				for(int i=0;i<Enum.GetNames(typeof(SheetTypeEnum)).Length;i++) {
-					command="UPDATE sheet SET Description= '"+POut.PString(Enum.GetNames(typeof(SheetTypeEnum))[i])+"' "
-						+"WHERE SheetType="+POut.PInt(i);
+					command="UPDATE sheet SET Description= '"+POut.String(Enum.GetNames(typeof(SheetTypeEnum))[i])+"' "
+						+"WHERE SheetType="+POut.Int(i);
 					Db.NonQ(command);
 				}
 				command="UPDATE preference SET ValueString = '6.9.1.0' WHERE PrefName = 'DataBaseVersion'";

@@ -404,11 +404,11 @@ namespace OpenDental{
 			ProcCur.Surf=textSurf.Text;
 			ProcCur.ProcCode=textCode.Text;
 			ProcCur.Descript=textDescript.Text;
-			ProcCur.FeeAmt=PIn.PDouble(textFeeAmt.Text);
-			ProcCur.PriInsAmt=PIn.PDouble(textPriInsAmt.Text);
-			ProcCur.SecInsAmt=PIn.PDouble(textSecInsAmt.Text);
-			ProcCur.Discount=PIn.PDouble(textDiscount.Text);
-			ProcCur.PatAmt=PIn.PDouble(textPatAmt.Text);
+			ProcCur.FeeAmt=PIn.Double(textFeeAmt.Text);
+			ProcCur.PriInsAmt=PIn.Double(textPriInsAmt.Text);
+			ProcCur.SecInsAmt=PIn.Double(textSecInsAmt.Text);
+			ProcCur.Discount=PIn.Double(textDiscount.Text);
+			ProcCur.PatAmt=PIn.Double(textPatAmt.Text);
 			ProcTPs.InsertOrUpdate(ProcCur,false);//IsNew not applicable here
 			SecurityLogs.MakeLogEntry(Permissions.TreatPlanEdit,ProcCur.PatNum,"Edit proc: "+ProcCur.Descript);
 			DialogResult=DialogResult.OK;

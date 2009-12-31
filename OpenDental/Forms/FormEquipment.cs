@@ -10,7 +10,7 @@ using OpenDentBusiness;
 
 namespace OpenDental {
 	public partial class FormEquipment:Form {
-		//private List<Supplier> listSuppliers;
+		private List<Equipment> listEquip;
 
 		public FormEquipment() {
 			InitializeComponent();
@@ -23,7 +23,7 @@ namespace OpenDental {
 
 		private void FillGrid(){
 			/*
-			listSuppliers=Suppliers.CreateObjects();
+			listEquip=Equipments.GetList();
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g(this,"Name"),110);

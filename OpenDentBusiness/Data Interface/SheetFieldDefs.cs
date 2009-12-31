@@ -26,19 +26,19 @@ namespace OpenDentBusiness{
 			for(int i=0;i<table.Rows.Count;i++){
 				sfd=new SheetFieldDef();
 				sfd.IsNew=false;
-				sfd.SheetFieldDefNum= PIn.PLong   (table.Rows[i][0].ToString());
-				sfd.SheetDefNum     = PIn.PLong   (table.Rows[i][1].ToString());
-				sfd.FieldType       = (SheetFieldType)PIn.PLong(table.Rows[i][2].ToString());
-				sfd.FieldName       = PIn.PString(table.Rows[i][3].ToString());
-				sfd.FieldValue      = PIn.PString(table.Rows[i][4].ToString());
-				sfd.FontSize        = PIn.PFloat (table.Rows[i][5].ToString());
-				sfd.FontName        = PIn.PString(table.Rows[i][6].ToString());
-				sfd.FontIsBold      = PIn.PBool  (table.Rows[i][7].ToString());
-				sfd.XPos            = PIn.PInt   (table.Rows[i][8].ToString());
-				sfd.YPos            = PIn.PInt   (table.Rows[i][9].ToString());
-				sfd.Width           = PIn.PInt   (table.Rows[i][10].ToString());
-				sfd.Height          = PIn.PInt   (table.Rows[i][11].ToString());
-				sfd.GrowthBehavior  = (GrowthBehaviorEnum)PIn.PLong(table.Rows[i][12].ToString());
+				sfd.SheetFieldDefNum= PIn.Long   (table.Rows[i][0].ToString());
+				sfd.SheetDefNum     = PIn.Long   (table.Rows[i][1].ToString());
+				sfd.FieldType       = (SheetFieldType)PIn.Long(table.Rows[i][2].ToString());
+				sfd.FieldName       = PIn.String(table.Rows[i][3].ToString());
+				sfd.FieldValue      = PIn.String(table.Rows[i][4].ToString());
+				sfd.FontSize        = PIn.Float (table.Rows[i][5].ToString());
+				sfd.FontName        = PIn.String(table.Rows[i][6].ToString());
+				sfd.FontIsBold      = PIn.Bool  (table.Rows[i][7].ToString());
+				sfd.XPos            = PIn.Int   (table.Rows[i][8].ToString());
+				sfd.YPos            = PIn.Int   (table.Rows[i][9].ToString());
+				sfd.Width           = PIn.Int   (table.Rows[i][10].ToString());
+				sfd.Height          = PIn.Int   (table.Rows[i][11].ToString());
+				sfd.GrowthBehavior  = (GrowthBehaviorEnum)PIn.Long(table.Rows[i][12].ToString());
 				SheetFieldDefC.Listt.Add(sfd);
 			}
 		}

@@ -1299,13 +1299,13 @@ namespace OpenDental{
 					for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++) {
 						tableAptNum=DS.Tables["Appointments"].Rows[i]["AptNum"].ToString();
 						if(tableAptNum==ContrApptSingle.SelectedAptNum.ToString()) {
-							aptconfirmed=PIn.PLong(DS.Tables["Appointments"].Rows[i]["Confirmed"].ToString());
+							aptconfirmed=PIn.Long(DS.Tables["Appointments"].Rows[i]["Confirmed"].ToString());
 							break;
 						}
 					}
 				}
 				else {//pinboard appt selected
-					aptconfirmed=PIn.PLong(pinBoard.SelectedAppt.DataRoww["Confirmed"].ToString());
+					aptconfirmed=PIn.Long(pinBoard.SelectedAppt.DataRoww["Confirmed"].ToString());
 				}
 				listConfirmed.SelectedIndex=DefC.GetOrder(DefCat.ApptConfirmed,aptconfirmed);//could be -1
 			}
@@ -1364,10 +1364,10 @@ namespace OpenDental{
 					//copy time pattern to provBar[]:
 					indexProv=-1;
 					if(row["IsHygiene"].ToString()=="1") {
-						indexProv=ApptViewItemL.GetIndexProv(PIn.PLong(row["ProvHyg"].ToString()));
+						indexProv=ApptViewItemL.GetIndexProv(PIn.Long(row["ProvHyg"].ToString()));
 					}
 					else {
-						indexProv=ApptViewItemL.GetIndexProv(PIn.PLong(row["ProvNum"].ToString()));
+						indexProv=ApptViewItemL.GetIndexProv(PIn.Long(row["ProvNum"].ToString()));
 					}
 					if(indexProv!=-1 && row["AptStatus"].ToString()!=((int)ApptStatus.Broken).ToString()) {
 						string pattern=ContrApptSingle.GetPatternShowing(row["Pattern"].ToString());
@@ -1815,14 +1815,14 @@ namespace OpenDental{
 					indexProv=-1;
 					if(DS.Tables["Appointments"].Rows[i]["IsHygiene"].ToString()=="1"){
 						if(DS.Tables["Appointments"].Rows[i]["ProvHyg"].ToString()=="0") {//set ishyg, but no hyg prov set.
-							indexProv=ApptViewItemL.GetIndexProv(PIn.PLong(DS.Tables["Appointments"].Rows[i]["ProvNum"].ToString()));
+							indexProv=ApptViewItemL.GetIndexProv(PIn.Long(DS.Tables["Appointments"].Rows[i]["ProvNum"].ToString()));
 						}
 						else {
-							indexProv=ApptViewItemL.GetIndexProv(PIn.PLong(DS.Tables["Appointments"].Rows[i]["ProvHyg"].ToString()));
+							indexProv=ApptViewItemL.GetIndexProv(PIn.Long(DS.Tables["Appointments"].Rows[i]["ProvHyg"].ToString()));
 						}
 					}
 					else{
-						indexProv=ApptViewItemL.GetIndexProv(PIn.PLong(DS.Tables["Appointments"].Rows[i]["ProvNum"].ToString()));
+						indexProv=ApptViewItemL.GetIndexProv(PIn.Long(DS.Tables["Appointments"].Rows[i]["ProvNum"].ToString()));
 					}
 					if(indexProv==-1){
 						continue;
@@ -1834,17 +1834,17 @@ namespace OpenDental{
 					{
 						//set individual production #'s
 						if(DS.Tables["Appointments"].Rows[i]["IsHygiene"].ToString() == "1" && !nohygAssigned) {
-							hygproduction += PIn.PDouble(DS.Tables["Appointments"].Rows[i]["productionVal"].ToString());
+							hygproduction += PIn.Double(DS.Tables["Appointments"].Rows[i]["productionVal"].ToString());
 						}
 						else {
-							drproduction += PIn.PDouble(DS.Tables["Appointments"].Rows[i]["productionVal"].ToString());
+							drproduction += PIn.Double(DS.Tables["Appointments"].Rows[i]["productionVal"].ToString());
 						}
 						//the production numbers above will not be accurate enough to be useful.  They are not based on individual
 						//procedures, so the inaccuracies will only cause more complaints rather than providing useful information.
 						//The only real solution would be to generate the total production numbers in another table
 						//from the business layer.  But even that won't work until hyg procedures are appropriately assigned
 						//when setting appointments.
-						totalproduction+=PIn.PDouble(DS.Tables["Appointments"].Rows[i]["productionVal"].ToString());
+						totalproduction+=PIn.Double(DS.Tables["Appointments"].Rows[i]["productionVal"].ToString());
 					}
 				}
 				textProduction.Text=totalproduction.ToString("c0");
@@ -1991,7 +1991,7 @@ namespace OpenDental{
 			//}
 			//if aptNum is already in DS, then use that row.  Otherwise, get a new row.
 			//it will set pt to the last appt on the pinboard.
-			RefreshModuleDataPatient(PIn.PLong(row["PatNum"].ToString()));
+			RefreshModuleDataPatient(PIn.Long(row["PatNum"].ToString()));
 			OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
 			//RefreshModulePatient(PIn.PInt(row["PatNum"].ToString()));
 			mouseIsDown=false;
@@ -2000,7 +2000,7 @@ namespace OpenDental{
 		}
 
 		private void pinBoard_SelectedIndexChanged(object sender,EventArgs e) {
-			RefreshModuleDataPatient(PIn.PLong(pinBoard.ApptList[pinBoard.SelectedIndex].DataRoww["PatNum"].ToString()));
+			RefreshModuleDataPatient(PIn.Long(pinBoard.ApptList[pinBoard.SelectedIndex].DataRoww["PatNum"].ToString()));
 			RefreshModuleScreenPatient();
 			OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
 			//RefreshModulePatient(PIn.PInt(pinBoard.ApptList[pinBoard.SelectedIndex].DataRoww["PatNum"].ToString()));
@@ -2086,9 +2086,9 @@ namespace OpenDental{
 			//security prevents moving an appointment by preventing placing it on the pinboard, not here
 			//We no longer ask user this question.  It just slows things down: "Move Appointment?"
 			//convert loc to new time
-			Appointment aptCur=Appointments.GetOneApt(PIn.PLong(pinBoard.SelectedAppt.DataRoww["AptNum"].ToString()));
+			Appointment aptCur=Appointments.GetOneApt(PIn.Long(pinBoard.SelectedAppt.DataRoww["AptNum"].ToString()));
 			Appointment aptOld=aptCur.Copy();
-			RefreshModuleDataPatient(PIn.PLong(pinBoard.SelectedAppt.DataRoww["PatNum"].ToString()));//redundant?
+			RefreshModuleDataPatient(PIn.Long(pinBoard.SelectedAppt.DataRoww["PatNum"].ToString()));//redundant?
 			//Patient pat=Patients.GetPat(PIn.PInt(pinBoard.SelectedAppt.DataRoww["PatNum"].ToString()));
 			if(aptCur.IsNewPatient && AppointmentL.DateSelected!=aptCur.AptDateTime){
 				Procedures.SetDateFirstVisit(AppointmentL.DateSelected,4,PatCur);
@@ -2105,7 +2105,7 @@ namespace OpenDental{
 				//this is crude and temporary:
 				List<long> aptNums=new List<long>();
 				for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++) {
-					aptNums.Add(PIn.PLong(DS.Tables["Appointments"].Rows[i]["AptNum"].ToString()));//ListDay[i].AptNum;
+					aptNums.Add(PIn.Long(DS.Tables["Appointments"].Rows[i]["AptNum"].ToString()));//ListDay[i].AptNum;
 				}
 				List<Procedure> procsMultApts=Procedures.GetProcsMultApts(aptNums);
 				Procedure[] procsForOne=Procedures.GetProcsOneApt(aptCur.AptNum,procsMultApts);
@@ -2273,7 +2273,7 @@ namespace OpenDental{
 				if(DS.Tables["Appointments"].Rows[i]["Op"].ToString()!=aptCur.Op.ToString()){
 					continue;
 				}
-				aptDateTime=PIn.PDateT(DS.Tables["Appointments"].Rows[i]["AptDateTime"].ToString());
+				aptDateTime=PIn.DateT(DS.Tables["Appointments"].Rows[i]["AptDateTime"].ToString());
 				if(aptDateTime.Date!=aptCur.AptDateTime.Date) {
 					continue;
 				}
@@ -2333,15 +2333,15 @@ namespace OpenDental{
 				if(op.ToString()!=DS.Tables["Appointments"].Rows[i]["Op"].ToString()){
 					continue;
 				}
-				aptDayOfWeek=(int)PIn.PDateT(DS.Tables["Appointments"].Rows[i]["AptDateTime"].ToString()).DayOfWeek;
+				aptDayOfWeek=(int)PIn.DateT(DS.Tables["Appointments"].Rows[i]["AptDateTime"].ToString()).DayOfWeek;
 				if(ContrApptSheet.IsWeeklyView && aptDayOfWeek!=day){
 					continue;
 				}
-				aptTime=PIn.PDateT(DS.Tables["Appointments"].Rows[i]["AptDateTime"].ToString()).TimeOfDay;
+				aptTime=PIn.DateT(DS.Tables["Appointments"].Rows[i]["AptDateTime"].ToString()).TimeOfDay;
 				if(aptTime <= time
 					&& time < aptTime+TimeSpan.FromMinutes(DS.Tables["Appointments"].Rows[i]["Pattern"].ToString().Length*5))
 				{
-					return PIn.PLong(DS.Tables["Appointments"].Rows[i]["AptNum"].ToString());
+					return PIn.Long(DS.Tables["Appointments"].Rows[i]["AptNum"].ToString());
 				}
 			}
 			return 0;
@@ -2417,7 +2417,7 @@ namespace OpenDental{
 				ContrApptSingle3[thisIndex].CreateShadow();
 				grfx.DrawImage(ContrApptSingle3[thisIndex].Shadow,ContrApptSingle3[thisIndex].Location.X
 					,ContrApptSingle3[thisIndex].Location.Y);
-				RefreshModuleDataPatient(PIn.PLong(ContrApptSingle3[thisIndex].DataRoww["PatNum"].ToString()));
+				RefreshModuleDataPatient(PIn.Long(ContrApptSingle3[thisIndex].DataRoww["PatNum"].ToString()));
 				RefreshModuleScreenPatient();
 				OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
 				//RefreshModulePatient(PIn.PInt(ContrApptSingle3[thisIndex].DataRoww["PatNum"].ToString()));
@@ -2583,7 +2583,7 @@ namespace OpenDental{
 					(TempApptSingle.Bottom-ContrApptSheet2.Location.Y-panelSheet.Location.Y);
 				TimeSpan bottomSpan=new TimeSpan(hr,minute,0);
 				//subtract to get the new length of appt
-				TimeSpan newspan=bottomSpan-PIn.PDateT(TempApptSingle.DataRoww["AptDateTime"].ToString()).TimeOfDay;
+				TimeSpan newspan=bottomSpan-PIn.DateT(TempApptSingle.DataRoww["AptDateTime"].ToString()).TimeOfDay;
 				int newpatternL=(int)newspan.TotalMinutes/5;
 				if(newpatternL < ContrApptSheet.MinPerIncr/5) {//eg. if 1 < 10/5, would make appt too short. 
 					newpatternL=ContrApptSheet.MinPerIncr/5;//sets new pattern length at one increment, typically 2 or 3 5min blocks
@@ -2600,7 +2600,7 @@ namespace OpenDental{
 				}
 				//Now, check for overlap with other appts.
 				DateTime aptDateTime;
-				DateTime aptDateTimeCur=PIn.PDateT(TempApptSingle.DataRoww["AptDateTime"].ToString());
+				DateTime aptDateTimeCur=PIn.DateT(TempApptSingle.DataRoww["AptDateTime"].ToString());
 				for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++) {
 					if(DS.Tables["Appointments"].Rows[i]["AptNum"].ToString()==TempApptSingle.DataRoww["AptNum"].ToString()) {
 						continue;
@@ -2608,7 +2608,7 @@ namespace OpenDental{
 					if(DS.Tables["Appointments"].Rows[i]["Op"].ToString()!=TempApptSingle.DataRoww["Op"].ToString()) {
 						continue;
 					}
-					aptDateTime=PIn.PDateT(DS.Tables["Appointments"].Rows[i]["AptDateTime"].ToString());
+					aptDateTime=PIn.DateT(DS.Tables["Appointments"].Rows[i]["AptDateTime"].ToString());
 					if(ContrApptSheet.IsWeeklyView && aptDateTime.Date!=aptDateTimeCur.Date) {
 						continue;
 					}
@@ -2624,7 +2624,7 @@ namespace OpenDental{
 				if(pattern=="") {
 					pattern="///";
 				}
-				Appointments.SetPattern(PIn.PLong(TempApptSingle.DataRoww["AptNum"].ToString()),pattern);
+				Appointments.SetPattern(PIn.Long(TempApptSingle.DataRoww["AptNum"].ToString()),pattern);
 				ResizingAppt=false;
 				mouseIsDown=false;
 				TempApptSingle.Dispose();
@@ -2712,14 +2712,14 @@ namespace OpenDental{
 			if(AppointmentRuleC.List.Length>0) {
 				List<long> aptNums=new List<long>();
 				for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++) {
-					aptNums.Add(PIn.PLong(DS.Tables["Appointments"].Rows[i]["AptNum"].ToString()));//ListDay[i].AptNum;
+					aptNums.Add(PIn.Long(DS.Tables["Appointments"].Rows[i]["AptNum"].ToString()));//ListDay[i].AptNum;
 				}
 				procsMultApts=Procedures.GetProcsMultApts(aptNums);
 			}
 			if(AppointmentRuleC.List.Length>0) {
 				long[] aptNums=new long[DS.Tables["Appointments"].Rows.Count];
 				for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++) {
-					aptNums[i]=PIn.PLong(DS.Tables["Appointments"].Rows[i]["AptNum"].ToString());//ListDay[i].AptNum;
+					aptNums[i]=PIn.Long(DS.Tables["Appointments"].Rows[i]["AptNum"].ToString());//ListDay[i].AptNum;
 				}
 				procsForOne=Procedures.GetProcsOneApt(apt.AptNum,procsMultApts);
 				ArrayList doubleBookedCodes=
@@ -2903,7 +2903,7 @@ namespace OpenDental{
 				{
 					try {
 						Bitmap patPict;
-						Documents.GetPatPict(PIn.PLong(row["PatNum"].ToString()),
+						Documents.GetPatPict(PIn.Long(row["PatNum"].ToString()),
 							ODFileUtils.CombinePaths(ImageStore.GetPreferredImagePath(),
 								row["ImageFolder"].ToString().Substring(0,1).ToUpper(),
 								row["ImageFolder"].ToString(),""),
@@ -3034,7 +3034,7 @@ namespace OpenDental{
 			//this logic is a little different than mouse down for now because on the first click of a 
 			//double click, an appointment control is created under the mouse.
 			if(ContrApptSingle.ClickedAptNum!=0){//on appt
-				long patnum=PIn.PLong(TempApptSingle.DataRoww["PatNum"].ToString());
+				long patnum=PIn.Long(TempApptSingle.DataRoww["PatNum"].ToString());
 				TempApptSingle.Dispose();
 				//security handled inside the form
 				FormApptEdit FormAE=new FormApptEdit(ContrApptSingle.ClickedAptNum);
@@ -3183,7 +3183,7 @@ namespace OpenDental{
 					break;
 				case OtherResult.GoTo:
 					ContrApptSingle.SelectedAptNum=FormAO.AptNumsSelected[0];
-					AppointmentL.DateSelected=PIn.PDate(FormAO.DateJumpToString);
+					AppointmentL.DateSelected=PIn.Date(FormAO.DateJumpToString);
 					RefreshModuleDataPatient(FormAO.SelectedPatNum);
 					OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
 					//RefreshModulePatient(FormAO.SelectedPatNum);
@@ -3504,7 +3504,7 @@ namespace OpenDental{
 			if(row["AptStatus"].ToString()==((int)ApptStatus.UnschedList).ToString()){//on unscheduled list
 				//do nothing to database
 			}
-			else if(PIn.PDateT(row["AptDateTime"].ToString()).Year>1880){//already scheduled
+			else if(PIn.DateT(row["AptDateTime"].ToString()).Year>1880){//already scheduled
 				//do nothing to database
 			}
 			else if(row["AptStatus"].ToString()==((int)ApptStatus.Planned).ToString()){
@@ -3512,14 +3512,14 @@ namespace OpenDental{
 			}
 			else{//for normal appt:
 				//this gets rid of new appointments that never made it off the pinboard
-				Appointments.Delete(PIn.PLong(row["AptNum"].ToString()));
+				Appointments.Delete(PIn.Long(row["AptNum"].ToString()));
 			}
 			if(pinBoard.SelectedIndex==-1){
 				RefreshModuleDataPatient(0);
 				//RefreshModulePatient(0);
 			}
 			else{
-				RefreshModuleDataPatient(PIn.PLong(pinBoard.ApptList[pinBoard.SelectedIndex].DataRoww["PatNum"].ToString()));
+				RefreshModuleDataPatient(PIn.Long(pinBoard.ApptList[pinBoard.SelectedIndex].DataRoww["PatNum"].ToString()));
 				OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
 				//RefreshModulePatient(PIn.PInt(pinBoard.ApptList[pinBoard.SelectedIndex].DataRoww["PatNum"].ToString()));
 			}
@@ -3668,7 +3668,7 @@ namespace OpenDental{
 				return;
 			}
 			Appointments.SetAptStatus(ContrApptSingle.SelectedAptNum,ApptStatus.UnschedList);
-			Patient pat=Patients.GetPat(PIn.PLong(ContrApptSingle3[thisI].DataRoww["PatNum"].ToString()));
+			Patient pat=Patients.GetPat(PIn.Long(ContrApptSingle3[thisI].DataRoww["PatNum"].ToString()));
 			SecurityLogs.MakeLogEntry(Permissions.AppointmentMove,pat.PatNum,
 				pat.GetNameLF()+", "
 				+ContrApptSingle3[thisI].DataRoww["procs"].ToString()+", "
@@ -3689,7 +3689,7 @@ namespace OpenDental{
 				return;
 			}
 			Appointment apt = Appointments.GetOneApt(ContrApptSingle.SelectedAptNum);
-			Patient pat=Patients.GetPat(PIn.PLong(ContrApptSingle3[thisI].DataRoww["PatNum"].ToString()));
+			Patient pat=Patients.GetPat(PIn.Long(ContrApptSingle3[thisI].DataRoww["PatNum"].ToString()));
 			if(!Security.IsAuthorized(Permissions.AppointmentEdit)) {
 				return;
 			}
@@ -3708,7 +3708,7 @@ namespace OpenDental{
 				+ContrApptSingle3[thisI].DataRoww["procs"].ToString()+", "
 				+ContrApptSingle3[thisI].DataRoww["AptDateTime"].ToString()+", "
 				+"Broke");
-			long provNum=PIn.PLong(ContrApptSingle3[thisI].DataRoww["ProvNum"].ToString());//remember before ModuleSelected
+			long provNum=PIn.Long(ContrApptSingle3[thisI].DataRoww["ProvNum"].ToString());//remember before ModuleSelected
 			ModuleSelected(pat.PatNum);
 			SetInvalid();		
 			if(PrefC.GetBool(PrefName.BrokenApptCommLogNotAdjustment)){
@@ -4131,7 +4131,7 @@ namespace OpenDental{
 			Cursor=Cursors.WaitCursor;
 			DateTime afterDate;
 			try{
-				afterDate=PIn.PDate(dateSearch.Text);
+				afterDate=PIn.Date(dateSearch.Text);
 				if(afterDate.Year<1880){
 					throw new Exception();
 				}
@@ -4153,8 +4153,8 @@ namespace OpenDental{
 					if(hrmin.Length>1) {
 						min=hrmin[1];
 					}
-					beforeTime=TimeSpan.FromHours(PIn.PDouble(hr))
-						+TimeSpan.FromMinutes(PIn.PDouble(min));
+					beforeTime=TimeSpan.FromHours(PIn.Double(hr))
+						+TimeSpan.FromMinutes(PIn.Double(min));
 					if(radioBeforePM.Checked && beforeTime.Hours<12){
 						beforeTime=beforeTime+TimeSpan.FromHours(12);
 					}
@@ -4177,8 +4177,8 @@ namespace OpenDental{
 					if(hrmin.Length>1) {
 						min=hrmin[1];
 					}
-					afterTime=TimeSpan.FromHours(PIn.PDouble(hr))
-						+TimeSpan.FromMinutes(PIn.PDouble(min));
+					afterTime=TimeSpan.FromHours(PIn.Double(hr))
+						+TimeSpan.FromMinutes(PIn.Double(min));
 					if(radioAfterPM.Checked && afterTime.Hours<12){
 						afterTime=afterTime+TimeSpan.FromHours(12);
 					}
@@ -4199,7 +4199,7 @@ namespace OpenDental{
 				providers[i]=ProviderC.List[listProviders.SelectedIndices[i]].ProvNum;
 			}
 			//the result might be empty
-			SearchResults=AppointmentL.GetSearchResults(PIn.PLong(pinBoard.SelectedAppt.DataRoww["AptNum"].ToString()),
+			SearchResults=AppointmentL.GetSearchResults(PIn.Long(pinBoard.SelectedAppt.DataRoww["AptNum"].ToString()),
 				afterDate,providers,10,beforeTime,afterTime);
 			listSearchResults.Items.Clear();
 			for(int i=0;i<SearchResults.Length;i++){

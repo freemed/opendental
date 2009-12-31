@@ -148,7 +148,7 @@ namespace OpenDental{
 			if(gridMain.GetSelectedIndex()==-1){
 				return;
 			}
-			SelectedPatNum=PIn.PLong(table.Rows[gridMain.GetSelectedIndex()]["PatNum"].ToString());
+			SelectedPatNum=PIn.Long(table.Rows[gridMain.GetSelectedIndex()]["PatNum"].ToString());
 			Close();
 		}
 

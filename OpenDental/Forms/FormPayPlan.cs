@@ -918,7 +918,7 @@ namespace OpenDental{
 				row.Cells.Add(table.Rows[i]["credits"].ToString());
 				row.Cells.Add(table.Rows[i]["balance"].ToString());
 				row.Cells.Add("");
-				row.ColorText=Color.FromArgb(PIn.PInt(table.Rows[i]["colorText"].ToString()));
+				row.ColorText=Color.FromArgb(PIn.Int(table.Rows[i]["colorText"].ToString()));
 				if(i<table.Rows.Count-1//not the last row
 					&& ((DateTime)table.Rows[i]["DateTime"]).Date<=DateTime.Today
 					&& ((DateTime)table.Rows[i+1]["DateTime"]).Date>DateTime.Today)
@@ -1086,7 +1086,7 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Please fix data entry errors first."));
 				return;
 			}
-			if(textAmount.Text=="" || PIn.PDouble(textAmount.Text)==0){
+			if(textAmount.Text=="" || PIn.Double(textAmount.Text)==0){
 				MsgBox.Show(this,"Please enter an amount first.");
 				return;
 			}
@@ -1103,11 +1103,11 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please enter a term or payment amount first.");
 				return;
 			}
-			if(textTerm.Text=="" && PIn.PDouble(textPeriodPayment.Text)==0){
+			if(textTerm.Text=="" && PIn.Double(textPeriodPayment.Text)==0){
 				MsgBox.Show(this,"Payment cannot be 0.");
 				return;
 			}
-			if(textPeriodPayment.Text=="" && PIn.PLong(textTerm.Text)<1){
+			if(textPeriodPayment.Text=="" && PIn.Long(textTerm.Text)<1){
 				MsgBox.Show(this,"Term cannot be less than 1.");
 				return;
 			}
@@ -1119,7 +1119,7 @@ namespace OpenDental{
 			}
 			PayPlanCharge ppCharge;
 			//down payment
-			double downpayment=PIn.PDouble(textDownPayment.Text);
+			double downpayment=PIn.Double(textDownPayment.Text);
 			if(downpayment!=0){
 				ppCharge=new PayPlanCharge();
 				ppCharge.PayPlanNum=PayPlanCur.PayPlanNum;
@@ -1133,8 +1133,8 @@ namespace OpenDental{
 				ppCharge.ClinicNum=PatCur.ClinicNum;//will be changed at the end.
 				PayPlanCharges.Insert(ppCharge);
 			}
-			double principal=PIn.PDouble(textAmount.Text)-PIn.PDouble(textDownPayment.Text);
-			double APR=PIn.PDouble(textAPR.Text);
+			double principal=PIn.Double(textAmount.Text)-PIn.Double(textDownPayment.Text);
+			double APR=PIn.Double(textAPR.Text);
 			double periodRate;
 			double periodPayment;
 			if(APR==0){
@@ -1149,7 +1149,7 @@ namespace OpenDental{
 				}
 			}
 			if(textTerm.Text!=""){//Use term to determine period payment
-				double term=PIn.PDouble(textTerm.Text);
+				double term=PIn.Double(textTerm.Text);
 				if(APR==0){
 					periodPayment=principal/term;
 				}
@@ -1158,12 +1158,12 @@ namespace OpenDental{
 				}
 			}
 			else{//Use period payment supplied
-				periodPayment=PIn.PDouble(textPeriodPayment.Text);
+				periodPayment=PIn.Double(textPeriodPayment.Text);
 			}
 			double tempP=principal;//the principal which will be decreased to zero in the loop.  Includes many decimal places.
 			double roundedP=principal;//This is used to make sure that last item can handle the .01 rounding error. 2 decimal places
 			int roundDec=CultureInfo.CurrentCulture.NumberFormat.NumberDecimalDigits;
-			DateTime firstDate=PIn.PDate(textDateFirstPay.Text);
+			DateTime firstDate=PIn.Date(textDateFirstPay.Text);
 			int countCharges=0;
 			while(tempP!=0 && countCharges<100){//the 100 limit prevents infinite loop
 				ppCharge=new PayPlanCharge();
@@ -1213,7 +1213,7 @@ namespace OpenDental{
 
 		private void gridCharges_CellDoubleClick(object sender, OpenDental.UI.ODGridClickEventArgs e) {
 			if(table.Rows[e.Row]["PayPlanChargeNum"].ToString()!="0"){
-				PayPlanCharge charge=PayPlanCharges.GetOne(PIn.PLong(table.Rows[e.Row]["PayPlanChargeNum"].ToString()));
+				PayPlanCharge charge=PayPlanCharges.GetOne(PIn.Long(table.Rows[e.Row]["PayPlanChargeNum"].ToString()));
 				FormPayPlanChargeEdit FormP=new FormPayPlanChargeEdit(charge);
 				FormP.ShowDialog();
 				if(FormP.DialogResult==DialogResult.Cancel){
@@ -1221,7 +1221,7 @@ namespace OpenDental{
 				}
 			}
 			else if(table.Rows[e.Row]["PayNum"].ToString()!="0"){
-				Payment pay=Payments.GetPayment(PIn.PLong(table.Rows[e.Row]["PayNum"].ToString()));
+				Payment pay=Payments.GetPayment(PIn.Long(table.Rows[e.Row]["PayNum"].ToString()));
 				/*if(pay.PayType==0){//provider income transfer. I don't think this is possible, but you never know.
 					FormProviderIncTrans FormPIT=new FormProviderIncTrans();
 					FormPIT.PatNum=PatCur.PatNum;
@@ -1403,10 +1403,10 @@ namespace OpenDental{
 			}
 			//PatNum not editable.
 			//Guarantor set already
-			PayPlanCur.PayPlanDate=PIn.PDate(textDate.Text);
-			PayPlanCur.APR=PIn.PDouble(textAPR.Text);
+			PayPlanCur.PayPlanDate=PIn.Date(textDate.Text);
+			PayPlanCur.APR=PIn.Double(textAPR.Text);
 			PayPlanCur.Note=textNote.Text;
-			PayPlanCur.CompletedAmt=PIn.PDouble(textCompletedAmt.Text);
+			PayPlanCur.CompletedAmt=PIn.Double(textCompletedAmt.Text);
 			//PlanNum set already
 			PayPlans.Update(PayPlanCur);//always saved to db before opening this form
 			long provNum=ProviderC.List[comboProv.SelectedIndex].ProvNum;//already verified that there's a provider selected

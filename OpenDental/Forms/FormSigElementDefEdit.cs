@@ -426,7 +426,7 @@ namespace OpenDental{
 				return;
 			}
 			try{
-				ElementCur.Sound=POut.PSound(openFileDialog1.FileName);
+				ElementCur.Sound=POut.Sound(openFileDialog1.FileName);
 				//labelSize.Text="Size: "+ElementCur.Sound.Length.ToString();
 			}
 			catch(ApplicationException ex){
@@ -443,7 +443,7 @@ namespace OpenDental{
 				return;
 			}
 			try {
-				PIn.PSound(ElementCur.Sound,saveFileDialog1.FileName);
+				PIn.Sound(ElementCur.Sound,saveFileDialog1.FileName);
 			}
 			catch(ApplicationException ex) {
 				MessageBox.Show(ex.Message);
@@ -482,7 +482,7 @@ namespace OpenDental{
 			}
 			ElementCur.SigElementType=(SignalElementType)listType.SelectedIndex;
 			ElementCur.SigText=textSigText.Text;
-			ElementCur.LightRow=PIn.PInt(textLightRow.Text);
+			ElementCur.LightRow=PIn.Int(textLightRow.Text);
 			ElementCur.LightColor=butColor.BackColor;
 			if(IsNew){
 				SigElementDefs.Insert(ElementCur);

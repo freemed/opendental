@@ -14,7 +14,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Reconcile[]>(MethodBase.GetCurrentMethod(),accountNum);
 			}
-			string command="SELECT * FROM reconcile WHERE AccountNum="+POut.PLong(accountNum)
+			string command="SELECT * FROM reconcile WHERE AccountNum="+POut.Long(accountNum)
 				+" ORDER BY DateReconcile";
 			return RefreshAndFill(Db.GetTable(command));
 		}
@@ -24,7 +24,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Reconcile>(MethodBase.GetCurrentMethod(),reconcileNum);
 			}
-			string command="SELECT * FROM reconcile WHERE ReconcileNum="+POut.PLong(reconcileNum);
+			string command="SELECT * FROM reconcile WHERE ReconcileNum="+POut.Long(reconcileNum);
 			return RefreshAndFill(Db.GetTable(command))[0];
 		}
 
@@ -33,12 +33,12 @@ namespace OpenDentBusiness{
 			Reconcile[] List=new Reconcile[table.Rows.Count];
 			for(int i=0;i<List.Length;i++) {
 				List[i]=new Reconcile();
-				List[i].ReconcileNum = PIn.PLong(table.Rows[i][0].ToString());
-				List[i].AccountNum   = PIn.PLong(table.Rows[i][1].ToString());
-				List[i].StartingBal  = PIn.PDouble(table.Rows[i][2].ToString());
-				List[i].EndingBal    = PIn.PDouble(table.Rows[i][3].ToString());
-				List[i].DateReconcile= PIn.PDate(table.Rows[i][4].ToString());
-				List[i].IsLocked     = PIn.PBool(table.Rows[i][5].ToString());
+				List[i].ReconcileNum = PIn.Long(table.Rows[i][0].ToString());
+				List[i].AccountNum   = PIn.Long(table.Rows[i][1].ToString());
+				List[i].StartingBal  = PIn.Double(table.Rows[i][2].ToString());
+				List[i].EndingBal    = PIn.Double(table.Rows[i][3].ToString());
+				List[i].DateReconcile= PIn.Date(table.Rows[i][4].ToString());
+				List[i].IsLocked     = PIn.Bool(table.Rows[i][5].ToString());
 			}
 			return List;
 		}	
@@ -58,14 +58,14 @@ namespace OpenDentBusiness{
 			}
 			command+="AccountNum,StartingBal,EndingBal,DateReconcile,IsLocked) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+="'"+POut.PLong(reconcile.ReconcileNum)+"', ";
+				command+="'"+POut.Long(reconcile.ReconcileNum)+"', ";
 			}
 			command+=
-				 "'"+POut.PLong   (reconcile.AccountNum)+"', "
-				+"'"+POut.PDouble(reconcile.StartingBal)+"', "
-				+"'"+POut.PDouble(reconcile.EndingBal)+"', "
-				+POut.PDate  (reconcile.DateReconcile)+", "
-				+"'"+POut.PBool  (reconcile.IsLocked)+"')";
+				 "'"+POut.Long   (reconcile.AccountNum)+"', "
+				+"'"+POut.Double(reconcile.StartingBal)+"', "
+				+"'"+POut.Double(reconcile.EndingBal)+"', "
+				+POut.Date  (reconcile.DateReconcile)+", "
+				+"'"+POut.Bool  (reconcile.IsLocked)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -82,12 +82,12 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command= "UPDATE reconcile SET "
-				+"AccountNum = '"    +POut.PLong   (reconcile.AccountNum)+"' "
-				+",StartingBal= '"   +POut.PDouble(reconcile.StartingBal)+"' "
-				+",EndingBal = '"    +POut.PDouble(reconcile.EndingBal)+"' "
-				+",DateReconcile = "+POut.PDate  (reconcile.DateReconcile)+" "
-				+",IsLocked = '"     +POut.PBool  (reconcile.IsLocked)+"' "
-				+"WHERE ReconcileNum = '"+POut.PLong(reconcile.ReconcileNum)+"'";
+				+"AccountNum = '"    +POut.Long   (reconcile.AccountNum)+"' "
+				+",StartingBal= '"   +POut.Double(reconcile.StartingBal)+"' "
+				+",EndingBal = '"    +POut.Double(reconcile.EndingBal)+"' "
+				+",DateReconcile = "+POut.Date  (reconcile.DateReconcile)+" "
+				+",IsLocked = '"     +POut.Bool  (reconcile.IsLocked)+"' "
+				+"WHERE ReconcileNum = '"+POut.Long(reconcile.ReconcileNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -98,12 +98,12 @@ namespace OpenDentBusiness{
 				return;
 			}
 			//check to see if any journal entries are attached to this Reconcile
-			string command="SELECT COUNT(*) FROM journalentry WHERE ReconcileNum="+POut.PLong(reconcile.ReconcileNum);
+			string command="SELECT COUNT(*) FROM journalentry WHERE ReconcileNum="+POut.Long(reconcile.ReconcileNum);
 			if(Db.GetCount(command)!="0"){
 				throw new ApplicationException(Lans.g("FormReconcileEdit",
 					"Not allowed to delete a Reconcile with existing journal entries."));
 			}
-			command="DELETE FROM reconcile WHERE ReconcileNum = "+POut.PLong(reconcile.ReconcileNum);
+			command="DELETE FROM reconcile WHERE ReconcileNum = "+POut.Long(reconcile.ReconcileNum);
 			Db.NonQ(command);
 		}
 

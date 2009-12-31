@@ -38,8 +38,8 @@ namespace OpenDental {
 			for(int i=0;i<table.Rows.Count;i++){
 				row=new ODGridRow();
 				row.Cells.Add(table.Rows[i]["Extension"].ToString());
-				row.Cells.Add(Employees.GetEmp(PIn.PLong(table.Rows[i]["EmpCurrent"].ToString())).FName);
-			  if(PIn.PBool(table.Rows[i]["IsAvailable"].ToString())){
+				row.Cells.Add(Employees.GetEmp(PIn.Long(table.Rows[i]["EmpCurrent"].ToString())).FName);
+			  if(PIn.Bool(table.Rows[i]["IsAvailable"].ToString())){
 					row.Cells.Add("X");
 				}
 				else{
@@ -61,7 +61,7 @@ namespace OpenDental {
 
 		private void gridMain_CellDoubleClick(object sender,OpenDental.UI.ODGridClickEventArgs e) {
 			FormPhoneOverrideEdit FormP=new FormPhoneOverrideEdit();
-			FormP.phoneCur=PhoneOverrides.GetPhoneOverride(PIn.PLong(table.Rows[e.Row]["PhoneOverrideNum"].ToString()));
+			FormP.phoneCur=PhoneOverrides.GetPhoneOverride(PIn.Long(table.Rows[e.Row]["PhoneOverrideNum"].ToString()));
 			FormP.ShowDialog();
 			FillGrid();
 		}

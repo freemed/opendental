@@ -3744,7 +3744,7 @@ namespace OpenDental{
 		private bool ShouldDisplayProc(DataRow row){
 			//if printing for hospital
 			if(hospitalDate.Year > 1880) {
-				if(hospitalDate.Date != PIn.PDateT(row["ProcDate"].ToString()).Date) {
+				if(hospitalDate.Date != PIn.DateT(row["ProcDate"].ToString()).Date) {
 					return false;
 				}
 				if(row["ProcStatus"].ToString() != ((int)ProcStat.C).ToString()) {
@@ -3824,7 +3824,7 @@ namespace OpenDental{
 				bool IsHygieneProc = (b1a & b1b) | (b2a && b2b) | (b3a & b3b);
 				if (IsHygieneProc)
 				{
-					return ProcStatDesired((ProcStat)PIn.PLong(row["ProcStatus"].ToString()));
+					return ProcStatDesired((ProcStat)PIn.Long(row["ProcStatus"].ToString()));
 				}
 				else
 					return false;
@@ -3838,13 +3838,13 @@ namespace OpenDental{
 				bool IsFilmExamProc = (b1a & b1b);
 				if (IsFilmExamProc)
 				{
-					return ProcStatDesired((ProcStat)PIn.PLong(row["ProcStatus"].ToString()));
+					return ProcStatDesired((ProcStat)PIn.Long(row["ProcStatus"].ToString()));
 				}
 				else
 					return false;
 
 			}
-			return ProcStatDesired((ProcStat)PIn.PLong(row["ProcStatus"].ToString()));
+			return ProcStatDesired((ProcStat)PIn.Long(row["ProcStatus"].ToString()));
 			// Put check for showing hygine in here
 			// Put check for showing films in here
 			// return false;
@@ -4048,8 +4048,8 @@ namespace OpenDental{
 				if(checkNotes.Checked){
 					row.Note=table.Rows[i]["note"].ToString();
 				}
-				row.ColorText=Color.FromArgb(PIn.PInt(table.Rows[i]["colorText"].ToString()));
-				row.ColorBackG=Color.FromArgb(PIn.PInt(table.Rows[i]["colorBackG"].ToString()));
+				row.ColorText=Color.FromArgb(PIn.Int(table.Rows[i]["colorText"].ToString()));
+				row.ColorBackG=Color.FromArgb(PIn.Int(table.Rows[i]["colorBackG"].ToString()));
 				row.Tag=table.Rows[i];
 				gridProg.Rows.Add(row);
 			}
@@ -4158,14 +4158,14 @@ namespace OpenDental{
 			Color cDark=Color.White;
 			for(int i=0;i<ProcList.Count;i++) {
 				if(ProcedureCodes.GetProcCode(ProcList[i]["ProcCode"].ToString()).PaintType==ToothPaintingType.Extraction && (
-					PIn.PLong(ProcList[i]["ProcStatus"].ToString())==(int)ProcStat.C
-					|| PIn.PLong(ProcList[i]["ProcStatus"].ToString())==(int)ProcStat.EC
-					|| PIn.PLong(ProcList[i]["ProcStatus"].ToString())==(int)ProcStat.EO
+					PIn.Long(ProcList[i]["ProcStatus"].ToString())==(int)ProcStat.C
+					|| PIn.Long(ProcList[i]["ProcStatus"].ToString())==(int)ProcStat.EC
+					|| PIn.Long(ProcList[i]["ProcStatus"].ToString())==(int)ProcStat.EO
 					)) {
 					continue;//prevents the red X. Missing teeth already handled.
 				}
 				if(ProcedureCodes.GetProcCode(ProcList[i]["ProcCode"].ToString()).GraphicColor==Color.FromArgb(0)){
-					switch((ProcStat)PIn.PLong(ProcList[i]["ProcStatus"].ToString())) {
+					switch((ProcStat)PIn.Long(ProcList[i]["ProcStatus"].ToString())) {
 						case ProcStat.C:
 							cDark=DefC.Short[(int)DefCat.ChartGraphicColors][1].ItemColor;
 							cLight=DefC.Short[(int)DefCat.ChartGraphicColors][6].ItemColor;
@@ -4560,7 +4560,7 @@ namespace OpenDental{
 					MsgBox.Show(this,"Not allowed to edit procedures when in audit mode.");
 					return;
 				}
-				Procedure proc=Procedures.GetOneProc(PIn.PLong(row["ProcNum"].ToString()),true);
+				Procedure proc=Procedures.GetOneProc(PIn.Long(row["ProcNum"].ToString()),true);
 				FormProcEdit FormP=new FormProcEdit(proc,PatCur,FamCur);
 				FormP.ShowDialog();
 				if(FormP.DialogResult!=DialogResult.OK) {
@@ -4568,7 +4568,7 @@ namespace OpenDental{
 				}
 			}
 			else if(row["CommlogNum"].ToString()!="0"){
-				Commlog comm=Commlogs.GetOne(PIn.PLong(row["CommlogNum"].ToString()));
+				Commlog comm=Commlogs.GetOne(PIn.Long(row["CommlogNum"].ToString()));
 				FormCommItem FormC=new FormCommItem(comm);
 				FormC.ShowDialog();
 				if(FormC.DialogResult!=DialogResult.OK){
@@ -4576,7 +4576,7 @@ namespace OpenDental{
 				}
 			}
 			else if(row["RxNum"].ToString()!="0") {
-				RxPat rx=RxPats.GetRx(PIn.PLong(row["RxNum"].ToString()));
+				RxPat rx=RxPats.GetRx(PIn.Long(row["RxNum"].ToString()));
 				FormRxEdit FormRxE=new FormRxEdit(PatCur,rx);
 				FormRxE.ShowDialog();
 				if(FormRxE.DialogResult!=DialogResult.OK){
@@ -4584,7 +4584,7 @@ namespace OpenDental{
 				}
 			}
 			else if(row["LabCaseNum"].ToString()!="0") {
-				LabCase lab=LabCases.GetOne(PIn.PLong(row["LabCaseNum"].ToString()));
+				LabCase lab=LabCases.GetOne(PIn.Long(row["LabCaseNum"].ToString()));
 				FormLabCaseEdit FormL=new FormLabCaseEdit();
 				FormL.CaseCur=lab;
 				FormL.ShowDialog();
@@ -4593,7 +4593,7 @@ namespace OpenDental{
 				}
 			}
 			else if(row["TaskNum"].ToString()!="0") {
-				Task curTask=Tasks.GetOne(PIn.PLong(row["TaskNum"].ToString()));
+				Task curTask=Tasks.GetOne(PIn.Long(row["TaskNum"].ToString()));
 				FormTaskEdit FormT=new FormTaskEdit(curTask);
 				FormT.ShowDialog();
 				if(FormT.GotoType!=TaskObjectType.None) {
@@ -4639,7 +4639,7 @@ namespace OpenDental{
 			}
 			else if(row["AptNum"].ToString()!="0") {
 				//Appointment apt=Appointments.GetOneApt(
-				FormApptEdit FormA=new FormApptEdit(PIn.PLong(row["AptNum"].ToString()));
+				FormApptEdit FormA=new FormApptEdit(PIn.Long(row["AptNum"].ToString()));
 				//PinIsVisible=false
 				FormA.ShowDialog();
 				if(FormA.CloseOD) {
@@ -4651,7 +4651,7 @@ namespace OpenDental{
 				}
 			}
 			else if(row["EmailMessageNum"].ToString()!="0") {
-				EmailMessage msg=EmailMessages.GetOne(PIn.PLong(row["EmailMessageNum"].ToString()));
+				EmailMessage msg=EmailMessages.GetOne(PIn.Long(row["EmailMessageNum"].ToString()));
 				FormEmailMessageEdit FormE=new FormEmailMessageEdit(msg);
 				FormE.ShowDialog();
 				if(FormE.DialogResult!=DialogResult.OK) {
@@ -4659,7 +4659,7 @@ namespace OpenDental{
 				}
 			}
 			else if(row["SheetNum"].ToString()!="0") {
-				Sheet sheet=Sheets.GetSheet(PIn.PLong(row["SheetNum"].ToString()));
+				Sheet sheet=Sheets.GetSheet(PIn.Long(row["SheetNum"].ToString()));
 				FormSheetFillEdit FormSFE=new FormSheetFillEdit(sheet);
 				FormSFE.ShowDialog();
 				if(FormSFE.DialogResult!=DialogResult.OK) {
@@ -4667,7 +4667,7 @@ namespace OpenDental{
 				}
 			}
 			else if(row["FormPatNum"].ToString()!="0"){
-				FormPat form=FormPats.GetOne(PIn.PLong(row["FormPatNum"].ToString()));
+				FormPat form=FormPats.GetOne(PIn.Long(row["FormPatNum"].ToString()));
 				FormFormPatEdit FormP=new FormFormPatEdit();
 				FormP.FormPatCur=form;
 				FormP.ShowDialog();
@@ -4694,7 +4694,7 @@ namespace OpenDental{
 				ProcCur.ProcDate=DateTime.Today;
 			}
 			else{
-				ProcCur.ProcDate=PIn.PDate(textDate.Text);
+				ProcCur.ProcDate=PIn.Date(textDate.Text);
 			}
 			ProcCur.DateTP=ProcCur.ProcDate;
 			if(newStatus==ProcStat.R || newStatus==ProcStat.EO || newStatus==ProcStat.EC) {
@@ -4816,7 +4816,7 @@ namespace OpenDental{
 				ProcCur.ProcDate=DateTime.Today;
 			}
 			else{
-				ProcCur.ProcDate=PIn.PDate(textDate.Text);
+				ProcCur.ProcDate=PIn.Date(textDate.Text);
 			}
 			ProcCur.DateTP=ProcCur.ProcDate;
 			if(newStatus==ProcStat.R || newStatus==ProcStat.EO || newStatus==ProcStat.EC) {
@@ -4924,7 +4924,7 @@ namespace OpenDental{
 
 		private void butAddProc_Click(object sender, System.EventArgs e){
 			if(newStatus==ProcStat.C){
-				if(!Security.IsAuthorized(Permissions.ProcComplCreate,PIn.PDate(textDate.Text))){
+				if(!Security.IsAuthorized(Permissions.ProcComplCreate,PIn.Date(textDate.Text))){
 					return;
 				}
 			}
@@ -5069,12 +5069,12 @@ namespace OpenDental{
 			for(int i=0;i<gridProg.SelectedIndices.Length;i++){
 				row=(DataRow)gridProg.Rows[gridProg.SelectedIndices[i]].Tag;
 				if(row["ProcNum"].ToString()!="0"){
-					if(PIn.PLong(row["ProcStatus"].ToString())==(int)ProcStat.C){
+					if(PIn.Long(row["ProcStatus"].ToString())==(int)ProcStat.C){
 						skippedC++;
 					}
 					else{
 						try{
-							Procedures.Delete(PIn.PLong(row["ProcNum"].ToString()));//also deletes the claimprocs
+							Procedures.Delete(PIn.Long(row["ProcNum"].ToString()));//also deletes the claimprocs
 						}
 						catch(Exception ex){
 							MessageBox.Show(ex.Message);
@@ -5082,7 +5082,7 @@ namespace OpenDental{
 					}
 				}
 				else if(row["RxNum"].ToString()!="0"){
-					RxPats.Delete(PIn.PLong(row["RxNum"].ToString()));
+					RxPats.Delete(PIn.Long(row["RxNum"].ToString()));
 				}
 				else if(row["CommlogNum"].ToString()!="0"){
 					skippedComlog++;
@@ -5144,7 +5144,7 @@ namespace OpenDental{
 		///<summary>If quickbutton, then pass the code in and set procButtonNum to 0.</summary>
 		private void ProcButtonClicked(long procButtonNum,string quickcode) {
 			if(newStatus==ProcStat.C){
-				if(!Security.IsAuthorized(Permissions.ProcComplCreate,PIn.PDate(textDate.Text))){
+				if(!Security.IsAuthorized(Permissions.ProcComplCreate,PIn.Date(textDate.Text))){
 					return;
 				}
 			}
@@ -5378,7 +5378,7 @@ namespace OpenDental{
 
 		private void EnterTypedCode() {
 			if(newStatus==ProcStat.C) {
-				if(!Security.IsAuthorized(Permissions.ProcComplCreate,PIn.PDate(textDate.Text))) {
+				if(!Security.IsAuthorized(Permissions.ProcComplCreate,PIn.Date(textDate.Text))) {
 					return;
 				}
 			}
@@ -5772,27 +5772,27 @@ namespace OpenDental{
 			for(int i=0;i<toothChart.SelectedTeeth.Count;i++) {
 				if(textShiftM.Text!=""){
 					ToothInitials.SetValue(PatCur.PatNum,toothChart.SelectedTeeth[i],
-						ToothInitialType.ShiftM,PIn.PFloat(textShiftM.Text));
+						ToothInitialType.ShiftM,PIn.Float(textShiftM.Text));
 				}
 				if(textShiftO.Text!="") {
 					ToothInitials.SetValue(PatCur.PatNum,toothChart.SelectedTeeth[i],
-						ToothInitialType.ShiftO,PIn.PFloat(textShiftO.Text));
+						ToothInitialType.ShiftO,PIn.Float(textShiftO.Text));
 				}
 				if(textShiftB.Text!="") {
 					ToothInitials.SetValue(PatCur.PatNum,toothChart.SelectedTeeth[i],
-						ToothInitialType.ShiftB,PIn.PFloat(textShiftB.Text));
+						ToothInitialType.ShiftB,PIn.Float(textShiftB.Text));
 				}
 				if(textRotate.Text!="") {
 					ToothInitials.SetValue(PatCur.PatNum,toothChart.SelectedTeeth[i],
-						ToothInitialType.Rotate,PIn.PFloat(textRotate.Text));
+						ToothInitialType.Rotate,PIn.Float(textRotate.Text));
 				}
 				if(textTipM.Text!="") {
 					ToothInitials.SetValue(PatCur.PatNum,toothChart.SelectedTeeth[i],
-						ToothInitialType.TipM,PIn.PFloat(textTipM.Text));
+						ToothInitialType.TipM,PIn.Float(textTipM.Text));
 				}
 				if(textTipB.Text!="") {
 					ToothInitials.SetValue(PatCur.PatNum,toothChart.SelectedTeeth[i],
-						ToothInitialType.TipB,PIn.PFloat(textTipB.Text));
+						ToothInitialType.TipB,PIn.Float(textTipB.Text));
 				}
 			}
 			ToothInitialList=ToothInitials.Refresh(PatCur.PatNum);
@@ -5924,8 +5924,8 @@ namespace OpenDental{
 				row.Cells.Add(table.Rows[i]["ProcDescript"].ToString());
 				row.Cells.Add(table.Rows[i]["Note"].ToString());
 				row.Cells.Add(table.Rows[i]["dateSched"].ToString());
-				row.ColorText=Color.FromArgb(PIn.PInt(table.Rows[i]["colorText"].ToString()));
-				row.ColorBackG=Color.FromArgb(PIn.PInt(table.Rows[i]["colorBackG"].ToString()));
+				row.ColorText=Color.FromArgb(PIn.Int(table.Rows[i]["colorText"].ToString()));
+				row.ColorBackG=Color.FromArgb(PIn.Int(table.Rows[i]["colorBackG"].ToString()));
 				gridPlanned.Rows.Add(row);
 			}
 			gridPlanned.EndUpdate();
@@ -5992,7 +5992,7 @@ namespace OpenDental{
 				return;
 			}
 			for(int i=0;i<gridPlanned.SelectedIndices.Length;i++){
-				Appointments.Delete(PIn.PLong(DataSetMain.Tables["Planned"].Rows[gridPlanned.SelectedIndices[i]]["AptNum"].ToString()));
+				Appointments.Delete(PIn.Long(DataSetMain.Tables["Planned"].Rows[gridPlanned.SelectedIndices[i]]["AptNum"].ToString()));
 			}
 			ModuleSelected(PatCur.PatNum);
 		}
@@ -6005,7 +6005,7 @@ namespace OpenDental{
 			}
 			List<long> aptNums=new List<long>();
 			for(int i=0;i<gridPlanned.SelectedIndices.Length;i++){
-				aptNums.Add(PIn.PLong(DataSetMain.Tables["Planned"].Rows[gridPlanned.SelectedIndices[i]]["AptNum"].ToString()));
+				aptNums.Add(PIn.Long(DataSetMain.Tables["Planned"].Rows[gridPlanned.SelectedIndices[i]]["AptNum"].ToString()));
 			}
 			GotoModule.PinToAppt(aptNums,0);
 		}
@@ -6025,10 +6025,10 @@ namespace OpenDental{
 				return;
 			}
 			PlannedAppt planned;
-			planned=PlannedAppts.CreateObject(PIn.PLong(table.Rows[idx]["PlannedApptNum"].ToString()));
+			planned=PlannedAppts.CreateObject(PIn.Long(table.Rows[idx]["PlannedApptNum"].ToString()));
 			planned.ItemOrder=idx-1;
 			PlannedAppts.WriteObject(planned);
-			planned=PlannedAppts.CreateObject(PIn.PLong(table.Rows[idx-1]["PlannedApptNum"].ToString()));
+			planned=PlannedAppts.CreateObject(PIn.Long(table.Rows[idx-1]["PlannedApptNum"].ToString()));
 			planned.ItemOrder=idx;
 			PlannedAppts.WriteObject(planned);
 			DataSetMain=ChartModules.GetAll(PatCur.PatNum,checkAudit.Checked);
@@ -6051,10 +6051,10 @@ namespace OpenDental{
 				return;
 			}
 			PlannedAppt planned;
-			planned=PlannedAppts.CreateObject(PIn.PLong(table.Rows[idx]["PlannedApptNum"].ToString()));
+			planned=PlannedAppts.CreateObject(PIn.Long(table.Rows[idx]["PlannedApptNum"].ToString()));
 			planned.ItemOrder=idx+1;
 			PlannedAppts.WriteObject(planned);
-			planned=PlannedAppts.CreateObject(PIn.PLong(table.Rows[idx+1]["PlannedApptNum"].ToString()));
+			planned=PlannedAppts.CreateObject(PIn.Long(table.Rows[idx+1]["PlannedApptNum"].ToString()));
 			planned.ItemOrder=idx;
 			PlannedAppts.WriteObject(planned);
 			DataSetMain=ChartModules.GetAll(PatCur.PatNum,checkAudit.Checked);
@@ -6063,7 +6063,7 @@ namespace OpenDental{
 		}
 
 		private void gridPlanned_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			long aptnum=PIn.PLong(DataSetMain.Tables["Planned"].Rows[e.Row]["AptNum"].ToString());
+			long aptnum=PIn.Long(DataSetMain.Tables["Planned"].Rows[e.Row]["AptNum"].ToString());
 			FormApptEdit FormAE=new FormApptEdit(aptnum);
 			FormAE.ShowDialog();
 			ModuleSelected(PatCur.PatNum);//if procs were added in appt, then this will display them*/
@@ -6083,7 +6083,7 @@ namespace OpenDental{
 						return; 
 					}
 					for(int i=0;i<DataSetMain.Tables["Planned"].Rows.Count;i++){
-						Appointments.Delete(PIn.PLong(DataSetMain.Tables["Planned"].Rows[i]["AptNum"].ToString()));
+						Appointments.Delete(PIn.Long(DataSetMain.Tables["Planned"].Rows[i]["AptNum"].ToString()));
 					}
 				}
 				PatCur.PlannedIsDone=true;
@@ -6475,7 +6475,7 @@ namespace OpenDental{
 				return;
 			}
 			DataRow row=(DataRow)gridProg.Rows[gridProg.SelectedIndices[0]].Tag;
-			hospitalDate=PIn.PDateT(row["ProcDate"].ToString());
+			hospitalDate=PIn.DateT(row["ProcDate"].ToString());
 			bool showRx=this.checkRx.Checked;
 			bool showComm=this.checkComm.Checked;
 			bool showApt=this.checkAppt.Checked;
@@ -6540,7 +6540,7 @@ namespace OpenDental{
 				if(!Security.IsAuthorized(Permissions.AppointmentEdit)){
 					return;
 				}
-				apt=Appointments.GetOneApt(PIn.PLong(((DataRow)gridProg.Rows[gridProg.SelectedIndices[0]].Tag)["AptNum"].ToString()));
+				apt=Appointments.GetOneApt(PIn.Long(((DataRow)gridProg.Rows[gridProg.SelectedIndices[0]].Tag)["AptNum"].ToString()));
 				if(apt.AptStatus == ApptStatus.Complete) {
 					MsgBox.Show(this,"Already complete.");
 					return;
@@ -6590,7 +6590,7 @@ namespace OpenDental{
 			//this loop is just for security:
 			for(int i=0;i<gridProg.SelectedIndices.Length;i++) {
 				row=(DataRow)gridProg.Rows[gridProg.SelectedIndices[i]].Tag;
-				procCur=Procedures.GetOneProc(PIn.PLong(row["ProcNum"].ToString()),true);
+				procCur=Procedures.GetOneProc(PIn.Long(row["ProcNum"].ToString()),true);
 				if(procCur.ProcStatus==ProcStat.C){
 					continue;//because it will be skipped below anyway
 				}
@@ -6601,7 +6601,7 @@ namespace OpenDental{
 					}
 				}
 				else{
-					if(!Security.IsAuthorized(Permissions.ProcComplCreate,PIn.PDate(textDate.Text))) {
+					if(!Security.IsAuthorized(Permissions.ProcComplCreate,PIn.Date(textDate.Text))) {
 						return;
 					}
 				}
@@ -6610,7 +6610,7 @@ namespace OpenDental{
 			for(int i=0;i<gridProg.SelectedIndices.Length;i++) {
 				row=(DataRow)gridProg.Rows[gridProg.SelectedIndices[i]].Tag;
 				apt=null;
-				procCur=Procedures.GetOneProc(PIn.PLong(row["ProcNum"].ToString()),true);
+				procCur=Procedures.GetOneProc(PIn.Long(row["ProcNum"].ToString()),true);
 				if(procCur.ProcStatus==ProcStat.C){
 					continue;//don't allow setting a procedure complete again.  Important for security reasons.
 				}
@@ -6629,7 +6629,7 @@ namespace OpenDental{
 					procCur.PlaceService=Clinics.GetPlaceService(apt.ClinicNum);
 				}
 				else {
-					procCur.ProcDate=PIn.PDate(textDate.Text);
+					procCur.ProcDate=PIn.Date(textDate.Text);
 					procCur.PlaceService=(PlaceOfService)PrefC.GetLong(PrefName.DefaultProcedurePlaceService);
 				}
 				procCur.SiteNum=PatCur.SiteNum;
@@ -6671,7 +6671,7 @@ namespace OpenDental{
 			Procedure proc;
 			for(int i=0;i<gridProg.SelectedIndices.Length;i++){
 				row=(DataRow)gridProg.Rows[gridProg.SelectedIndices[i]].Tag;
-				proc=Procedures.GetOneProc(PIn.PLong(row["ProcNum"].ToString()),false);
+				proc=Procedures.GetOneProc(PIn.Long(row["ProcNum"].ToString()),false);
 				proclist.Add(proc);
 			}
 			FormProcEditAll FormP=new FormProcEditAll();
@@ -6702,14 +6702,14 @@ namespace OpenDental{
 			Procedure procLab;
 			Procedure procOld;
 			if(isLab1){
-				procLab=Procedures.GetOneProc(PIn.PLong(row1["ProcNum"].ToString()),false);
+				procLab=Procedures.GetOneProc(PIn.Long(row1["ProcNum"].ToString()),false);
 				procOld=procLab.Copy();
-				procLab.ProcNumLab=PIn.PLong(row2["ProcNum"].ToString());
+				procLab.ProcNumLab=PIn.Long(row2["ProcNum"].ToString());
 			}
 			else{
-				procLab=Procedures.GetOneProc(PIn.PLong(row2["ProcNum"].ToString()),false);
+				procLab=Procedures.GetOneProc(PIn.Long(row2["ProcNum"].ToString()),false);
 				procOld=procLab.Copy();
-				procLab.ProcNumLab=PIn.PLong(row1["ProcNum"].ToString());
+				procLab.ProcNumLab=PIn.Long(row1["ProcNum"].ToString());
 			}
 			Procedures.Update(procLab,procOld);
 			ModuleSelected(PatCur.PatNum);
@@ -6729,7 +6729,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"The selected procedure is not attached as a lab procedure.");
 				return;
 			}
-			Procedure procLab=Procedures.GetOneProc(PIn.PLong(row["ProcNum"].ToString()),false);
+			Procedure procLab=Procedures.GetOneProc(PIn.Long(row["ProcNum"].ToString()),false);
 			Procedure procOld=procLab.Copy();
 			procLab.ProcNumLab=0;
 			Procedures.Update(procLab,procOld);
@@ -6842,7 +6842,7 @@ namespace OpenDental{
 					long clinicNum;
 					for(int i=0;i<gridProg.Rows.Count;i++) {
 						row=(DataRow)gridProg.Rows[i].Tag;
-						procNum=PIn.PLong(row["ProcNum"].ToString());
+						procNum=PIn.Long(row["ProcNum"].ToString());
 						if(procNum==0) {
 							continue;
 						}

@@ -36,15 +36,15 @@ namespace OpenDentBusiness{
 			Operatory op;
 			for(int i=0;i<table.Rows.Count;i++) {
 				op=new Operatory();
-				op.OperatoryNum = PIn.PLong(table.Rows[i][0].ToString());
-				op.OpName       = PIn.PString(table.Rows[i][1].ToString());
-				op.Abbrev       = PIn.PString(table.Rows[i][2].ToString());
-				op.ItemOrder    = PIn.PLong(table.Rows[i][3].ToString());
-				op.IsHidden     = PIn.PBool(table.Rows[i][4].ToString());
-				op.ProvDentist  = PIn.PLong(table.Rows[i][5].ToString());
-				op.ProvHygienist= PIn.PLong(table.Rows[i][6].ToString());
-				op.IsHygiene    = PIn.PBool(table.Rows[i][7].ToString());
-				op.ClinicNum    = PIn.PLong(table.Rows[i][8].ToString());
+				op.OperatoryNum = PIn.Long(table.Rows[i][0].ToString());
+				op.OpName       = PIn.String(table.Rows[i][1].ToString());
+				op.Abbrev       = PIn.String(table.Rows[i][2].ToString());
+				op.ItemOrder    = PIn.Long(table.Rows[i][3].ToString());
+				op.IsHidden     = PIn.Bool(table.Rows[i][4].ToString());
+				op.ProvDentist  = PIn.Long(table.Rows[i][5].ToString());
+				op.ProvHygienist= PIn.Long(table.Rows[i][6].ToString());
+				op.IsHygiene    = PIn.Bool(table.Rows[i][7].ToString());
+				op.ClinicNum    = PIn.Long(table.Rows[i][8].ToString());
 				//DateTStamp
 				oplist.Add(op);
 			}
@@ -68,17 +68,17 @@ namespace OpenDentBusiness{
 				+"IsHygiene,ClinicNum"//DateTStamp
 				+") VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PLong(op.OperatoryNum)+", ";
+				command+=POut.Long(op.OperatoryNum)+", ";
 			}
 			command+=
-				 "'"+POut.PString(op.OpName)+"', "
-				+"'"+POut.PString(op.Abbrev)+"', "
-				+"'"+POut.PLong   (op.ItemOrder)+"', "
-				+"'"+POut.PBool  (op.IsHidden)+"', "
-				+"'"+POut.PLong   (op.ProvDentist)+"', "
-				+"'"+POut.PLong   (op.ProvHygienist)+"', "
-				+"'"+POut.PBool  (op.IsHygiene)+"', "
-				+"'"+POut.PLong   (op.ClinicNum)+"')";
+				 "'"+POut.String(op.OpName)+"', "
+				+"'"+POut.String(op.Abbrev)+"', "
+				+"'"+POut.Long   (op.ItemOrder)+"', "
+				+"'"+POut.Bool  (op.IsHidden)+"', "
+				+"'"+POut.Long   (op.ProvDentist)+"', "
+				+"'"+POut.Long   (op.ProvHygienist)+"', "
+				+"'"+POut.Bool  (op.IsHygiene)+"', "
+				+"'"+POut.Long   (op.ClinicNum)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -95,16 +95,16 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command= "UPDATE operatory SET " 
-				+ "OpName = '"        +POut.PString(op.OpName)+"'"
-				+ ",Abbrev = '"       +POut.PString(op.Abbrev)+"'"
-				+ ",ItemOrder = '"    +POut.PLong   (op.ItemOrder)+"'"
-				+ ",IsHidden = '"     +POut.PBool  (op.IsHidden)+"'"
-				+ ",ProvDentist = '"  +POut.PLong   (op.ProvDentist)+"'"
-				+ ",ProvHygienist = '"+POut.PLong   (op.ProvHygienist)+"'"
-				+ ",IsHygiene = '"    +POut.PBool  (op.IsHygiene)+"'"
-				+ ",ClinicNum = '"    +POut.PLong   (op.ClinicNum)+"'"	
+				+ "OpName = '"        +POut.String(op.OpName)+"'"
+				+ ",Abbrev = '"       +POut.String(op.Abbrev)+"'"
+				+ ",ItemOrder = '"    +POut.Long   (op.ItemOrder)+"'"
+				+ ",IsHidden = '"     +POut.Bool  (op.IsHidden)+"'"
+				+ ",ProvDentist = '"  +POut.Long   (op.ProvDentist)+"'"
+				+ ",ProvHygienist = '"+POut.Long   (op.ProvHygienist)+"'"
+				+ ",IsHygiene = '"    +POut.Bool  (op.IsHygiene)+"'"
+				+ ",ClinicNum = '"    +POut.Long   (op.ClinicNum)+"'"	
 				//DateTStamp
-				+" WHERE OperatoryNum = '" +POut.PLong(op.OperatoryNum)+"'";
+				+" WHERE OperatoryNum = '" +POut.Long(op.OperatoryNum)+"'";
 			//MessageBox.Show(string command);
  			Db.NonQ(command);
 		}
@@ -131,7 +131,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Operatory>>(MethodBase.GetCurrentMethod(),changedSince);
 			}
-			string command="SELECT * FROM operatory WHERE DateTStamp > "+POut.PDateT(changedSince);
+			string command="SELECT * FROM operatory WHERE DateTStamp > "+POut.DateT(changedSince);
 			DataTable table=Db.GetTable(command);
 			return TableToList(table);
 		}

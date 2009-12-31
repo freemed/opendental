@@ -292,9 +292,9 @@ namespace OpenDental{
 				textInterest.Text="0";
 			}
 			//todo: test dates?  The day of the month should be the same as all others
-			PayPlanChargeCur.ChargeDate=PIn.PDate(textDate.Text);
-			PayPlanChargeCur.Principal=PIn.PDouble(textPrincipal.Text);
-			PayPlanChargeCur.Interest=PIn.PDouble(textInterest.Text);
+			PayPlanChargeCur.ChargeDate=PIn.Date(textDate.Text);
+			PayPlanChargeCur.Principal=PIn.Double(textPrincipal.Text);
+			PayPlanChargeCur.Interest=PIn.Double(textInterest.Text);
 			PayPlanChargeCur.Note=textNote.Text;
 			//not allowed to change provnum or clinicNum here.
 			if(IsNew){

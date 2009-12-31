@@ -345,7 +345,7 @@ namespace OpenDental.ReportingOld2
 			double retVal=0;
 			for(int i=0;i<dataTable.Rows.Count;i++){
 				if(Operation==SummaryOperation.Sum){
-					retVal+=PIn.PDouble(dataTable.Rows[i][col].ToString());
+					retVal+=PIn.Double(dataTable.Rows[i][col].ToString());
 						//PIn.PDouble(Report.ReportTable.Rows[i][Report.DataFields.IndexOf(fieldObject.DataSource.Name)].ToString())
 				}
 				else if(Operation==SummaryOperation.Count){

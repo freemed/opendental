@@ -117,7 +117,7 @@ namespace OpenDental {
 			string[] statusRespose;
 			char[] separatorequal = { '=' };
 			statusRespose = parseResponse[0].Split(separatorequal);
-			responseStatus = PIn.PInt(statusRespose[1]);
+			responseStatus = PIn.Int(statusRespose[1]);
 
 			Progress("Process Clearinghouse Authorization Response..");
 			string errormessage = string.Empty;
@@ -686,10 +686,10 @@ namespace OpenDental {
 			bool Singlepatient,Intermingled;
 			DateTime DateRangeFrom,DateRangeTo;
 			if(StmtTable.Rows.Count > 0) {
-				Singlepatient = PIn.PBool(StmtTable.Rows[0]["SinglePatient"].ToString());
-				DateRangeFrom = PIn.PDateT(StmtTable.Rows[0]["DateRangeFrom"].ToString());
-				DateRangeTo = PIn.PDateT(StmtTable.Rows[0]["DateRangeTo"].ToString());
-				Intermingled = PIn.PBool(StmtTable.Rows[0]["Intermingled"].ToString());
+				Singlepatient = PIn.Bool(StmtTable.Rows[0]["SinglePatient"].ToString());
+				DateRangeFrom = PIn.DateT(StmtTable.Rows[0]["DateRangeFrom"].ToString());
+				DateRangeTo = PIn.DateT(StmtTable.Rows[0]["DateRangeTo"].ToString());
+				Intermingled = PIn.Bool(StmtTable.Rows[0]["Intermingled"].ToString());
 			}
 			else {
 				Singlepatient = true;
@@ -854,7 +854,7 @@ namespace OpenDental {
 				string[] statusRespose;
 				char[] separatorequal = { '=' };
 				statusRespose = parseResponse[0].Split(separatorequal);
-				responseStatus = PIn.PInt(statusRespose[1]);
+				responseStatus = PIn.Int(statusRespose[1]);
 
 				string errormessage = string.Empty;
 				switch(responseStatus) {

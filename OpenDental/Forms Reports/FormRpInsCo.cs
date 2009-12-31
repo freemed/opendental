@@ -112,7 +112,7 @@ namespace OpenDental{
 		#endregion
 
 		private void butOK_Click(object sender, System.EventArgs e) {
-			carrier= PIn.PString(textBoxCarrier.Text);
+			carrier= PIn.String(textBoxCarrier.Text);
 			ReportSimpleGrid report=new ReportSimpleGrid();
 
 /*

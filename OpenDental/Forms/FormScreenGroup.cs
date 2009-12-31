@@ -629,7 +629,7 @@ namespace OpenDental{
 					return;
 				}
 			}
-			ScreenGroupCur.SGDate=PIn.PDate(textScreenDate.Text);
+			ScreenGroupCur.SGDate=PIn.Date(textScreenDate.Text);
 			ScreenGroupCur.Description=textDescription.Text;
 			ScreenGroupCur.ProvName=textProvName.Text;
 			ScreenGroupCur.ProvNum=comboProv.SelectedIndex+1;//this works for -1 also.

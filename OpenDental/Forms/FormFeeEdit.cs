@@ -181,7 +181,7 @@ namespace OpenDental{
 				Fees.Delete(FeeCur);
 			}
 			else{
-				FeeCur.Amount=PIn.PDouble(textFee.Text);
+				FeeCur.Amount=PIn.Double(textFee.Text);
 				//Fee object always created and inserted externally first
 				Fees.Update(FeeCur);
 			}

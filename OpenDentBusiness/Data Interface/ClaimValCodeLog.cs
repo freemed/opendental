@@ -13,10 +13,10 @@ namespace OpenDentBusiness {
 				return Meth.GetObject<double>(MethodBase.GetCurrentMethod(),Cur,Code);
 			}
 			double total = 0;
-			string command="SELECT * FROM claimvalcodelog WHERE ClaimNum='" + POut.PLong(Cur.ClaimNum) + "' AND ValCode='" + POut.PString(Code) + "'";
+			string command="SELECT * FROM claimvalcodelog WHERE ClaimNum='" + POut.Long(Cur.ClaimNum) + "' AND ValCode='" + POut.String(Code) + "'";
 			DataTable table=Db.GetTable(command);
 			for(int i=0;i<table.Rows.Count;i++){
-				total+=PIn.PDouble(table.Rows[i][4].ToString());
+				total+=PIn.Double(table.Rows[i][4].ToString());
 			}
 			return total;
 		}
@@ -30,12 +30,12 @@ namespace OpenDentBusiness {
 			ArrayList List=new ArrayList();
 			for(int i=0;i<table.Rows.Count;i++){
 				ClaimValCode vc = new ClaimValCode();
-				vc.ClaimValCodeLogNum=PIn.PLong(table.Rows[i][0].ToString());
-				vc.ClaimNum=PIn.PLong(table.Rows[i][1].ToString());
-				vc.ClaimField=PIn.PString(table.Rows[i][2].ToString());
-				vc.ValCode=PIn.PString(table.Rows[i][3].ToString());
-				vc.ValAmount=PIn.PDouble(table.Rows[i][4].ToString());
-				vc.Ordinal=PIn.PInt(table.Rows[i][5].ToString());
+				vc.ClaimValCodeLogNum=PIn.Long(table.Rows[i][0].ToString());
+				vc.ClaimNum=PIn.Long(table.Rows[i][1].ToString());
+				vc.ClaimField=PIn.String(table.Rows[i][2].ToString());
+				vc.ValCode=PIn.String(table.Rows[i][3].ToString());
+				vc.ValAmount=PIn.Double(table.Rows[i][4].ToString());
+				vc.Ordinal=PIn.Int(table.Rows[i][5].ToString());
 				List.Add(vc);
 			}
 			return List;
@@ -50,18 +50,18 @@ namespace OpenDentBusiness {
 				ClaimValCode vc = (ClaimValCode)vCodes[i];
 				if(vc.ClaimValCodeLogNum==0){
 					string command="INSERT INTO claimvalcodelog (ClaimNum,ClaimField,ValCode,ValAmount,Ordinal) VALUES("
-						+"'"+POut.PLong(vc.ClaimNum)+"', "
-						+"'"+POut.PString(vc.ClaimField)+"', "
-						+"'"+POut.PString(vc.ValCode)+"', "
-						+"'"+POut.PDouble(vc.ValAmount)+"', "
-						+"'"+POut.PLong(vc.Ordinal)+"')";
+						+"'"+POut.Long(vc.ClaimNum)+"', "
+						+"'"+POut.String(vc.ClaimField)+"', "
+						+"'"+POut.String(vc.ValCode)+"', "
+						+"'"+POut.Double(vc.ValAmount)+"', "
+						+"'"+POut.Long(vc.Ordinal)+"')";
  					Db.NonQ(command);
 				} else {
 				  string command="UPDATE claimvalcodelog SET "
-				    +"ClaimNum='" + POut.PLong(vc.ClaimNum) + "',"
-				    +"ValCode='" + POut.PString(vc.ValCode) + "',"
-				    +"ValAmount='" + POut.PDouble(vc.ValAmount) + "' "
-				    +"WHERE ClaimValCodeLogNum='" + POut.PLong(vc.ClaimValCodeLogNum) + "'";
+				    +"ClaimNum='" + POut.Long(vc.ClaimNum) + "',"
+				    +"ValCode='" + POut.String(vc.ValCode) + "',"
+				    +"ValAmount='" + POut.Double(vc.ValAmount) + "' "
+				    +"WHERE ClaimValCodeLogNum='" + POut.Long(vc.ClaimValCodeLogNum) + "'";
 				  Db.NonQ(command);
 				}
 			}

@@ -126,7 +126,7 @@ namespace OpenDental{
 			FormReportForRdl FormR=new FormReportForRdl();
 			string s=Properties.Resources.ReportAccountingBalanceSheet;
 			s=s.Replace("12/31/2007",date1.SelectionStart.ToShortDateString());
-			s=s.Replace("2007-12-31",POut.PDate(date1.SelectionStart,false));
+			s=s.Replace("2007-12-31",POut.Date(date1.SelectionStart,false));
 			FormR.SourceRdlString=s;
 			FormR.ShowDialog();
 			DialogResult=DialogResult.OK;		

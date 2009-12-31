@@ -431,7 +431,7 @@ namespace OpenDental{
 				) {
 				return;
 			}
-			textTarget.Text=(PIn.PDouble(textEnd.Text)-PIn.PDouble(textStart.Text)).ToString("n");
+			textTarget.Text=(PIn.Double(textEnd.Text)-PIn.Double(textStart.Text)).ToString("n");
 		}
 
 		private void textEnd_TextChanged(object sender,EventArgs e) {
@@ -440,7 +440,7 @@ namespace OpenDental{
 				) {
 				return;
 			}
-			textTarget.Text=(PIn.PDouble(textEnd.Text)-PIn.PDouble(textStart.Text)).ToString("n");
+			textTarget.Text=(PIn.Double(textEnd.Text)-PIn.Double(textStart.Text)).ToString("n");
 		}
 
 		private void checkLocked_Click(object sender,EventArgs e) {
@@ -483,9 +483,9 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please fix data entry errors first.");
 				return;
 			}
-			ReconcileCur.DateReconcile=PIn.PDate(textDate.Text);
-			ReconcileCur.StartingBal=PIn.PDouble(textStart.Text);
-			ReconcileCur.EndingBal=PIn.PDouble(textEnd.Text);
+			ReconcileCur.DateReconcile=PIn.Date(textDate.Text);
+			ReconcileCur.StartingBal=PIn.Double(textStart.Text);
+			ReconcileCur.EndingBal=PIn.Double(textEnd.Text);
 			ReconcileCur.IsLocked=checkLocked.Checked;
 			Reconciles.Update(ReconcileCur);
 			SaveList();

@@ -149,8 +149,8 @@ namespace OpenDental{
 				report.Query="SELECT DatePay,CONCAT(patient.LName,', ',patient.FName,' ',patient.MiddleI),SplitAmt "
 					+"FROM paysplit,patient "
 					+"WHERE paysplit.PatNum=patient.PatNum "
-					+"AND paysplit.DatePay >= "+POut.PDate(date1.SelectionStart)+" "
-					+"AND paysplit.DatePay <= "+POut.PDate(date2.SelectionStart)+" "
+					+"AND paysplit.DatePay >= "+POut.Date(date1.SelectionStart)+" "
+					+"AND paysplit.DatePay <= "+POut.Date(date2.SelectionStart)+" "
 					+"AND UnearnedType > 0 GROUP BY paysplit.SplitNum "
 					+"ORDER BY DatePay";
 				FormQuery2=new FormQuery(report);

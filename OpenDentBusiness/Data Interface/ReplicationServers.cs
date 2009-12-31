@@ -51,13 +51,13 @@ namespace OpenDentBusiness{
 			for(int i=0;i<table.Rows.Count;i++){
 				serv=new ReplicationServer();
 				serv.IsNew=false;
-				serv.ReplicationServerNum= PIn.PLong  (table.Rows[i][0].ToString());
-				serv.Descript            = PIn.PString(table.Rows[i][1].ToString());
-				serv.ServerId            = PIn.PInt   (table.Rows[i][2].ToString());
-				serv.RangeStart          = PIn.PLong  (table.Rows[i][3].ToString());
-				serv.RangeEnd            = PIn.PLong  (table.Rows[i][4].ToString());
-				serv.AtoZpath            = PIn.PString(table.Rows[i][5].ToString());
-				serv.UpdateBlocked       = PIn.PBool  (table.Rows[i][6].ToString());
+				serv.ReplicationServerNum= PIn.Long  (table.Rows[i][0].ToString());
+				serv.Descript            = PIn.String(table.Rows[i][1].ToString());
+				serv.ServerId            = PIn.Int   (table.Rows[i][2].ToString());
+				serv.RangeStart          = PIn.Long  (table.Rows[i][3].ToString());
+				serv.RangeEnd            = PIn.Long  (table.Rows[i][4].ToString());
+				serv.AtoZpath            = PIn.String(table.Rows[i][5].ToString());
+				serv.UpdateBlocked       = PIn.Bool  (table.Rows[i][6].ToString());
 				listt.Add(serv);
 			}
 		}
@@ -112,7 +112,7 @@ namespace OpenDentBusiness{
 			}
 			string command="SHOW VARIABLES LIKE 'server_id'";
 			DataTable table=Db.GetTable(command);
-			return PIn.PInt(table.Rows[0][1].ToString());
+			return PIn.Int(table.Rows[0][1].ToString());
 		}
 
 		///<summary>Generates a random primary key.  Tests to see if that key already exists before returning it for use.  The range of returned values is greater than 0, and less than or equal to 9223372036854775807.</summary>
@@ -217,7 +217,7 @@ namespace OpenDentBusiness{
 				//even though we are supposed to be guaranteed to not be a web client
 				return true;
 			}
-			string command="SELECT COUNT(*) FROM replicationserver WHERE ServerId="+POut.PInt(Server_id)//does trigger another query if during startup
+			string command="SELECT COUNT(*) FROM replicationserver WHERE ServerId="+POut.Int(Server_id)//does trigger another query if during startup
 				+" AND UpdateBlocked=1";
 			try {
 				if(Db.GetScalar(command)=="0") {

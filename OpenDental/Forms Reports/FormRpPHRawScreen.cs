@@ -133,8 +133,8 @@ namespace OpenDental{
 				Comments FROM screen
 				LEFT JOIN school ON screen.GradeSchool=school.SchoolName
 				LEFT JOIN county ON screen.County=county.CountyName
-				WHERE ScreenDate >= "+POut.PDate(date1.SelectionStart)+" "
-				+"AND ScreenDate <= " +POut.PDate(date2.SelectionStart);
+				WHERE ScreenDate >= "+POut.Date(date1.SelectionStart)+" "
+				+"AND ScreenDate <= " +POut.Date(date2.SelectionStart);
 			FormQuery2=new FormQuery(report);
 			FormQuery2.textTitle.Text="RawScreeningData"+DateTime.Today.ToString("MMddyyyy");
 			//FormQuery2.IsReport=true;

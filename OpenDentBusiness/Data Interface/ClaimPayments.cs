@@ -27,16 +27,16 @@ namespace OpenDentBusiness{
 				+"SUM(claimproc.InsPayAmt) amount,Note "
 				+"FROM claimpayment,claimproc "
 				+"WHERE claimpayment.ClaimPaymentNum = claimproc.ClaimPaymentNum "
-				+"AND claimproc.ClaimNum = '"+POut.PLong(claimNum)+"' "
+				+"AND claimproc.ClaimNum = '"+POut.Long(claimNum)+"' "
 				+"GROUP BY claimpayment.ClaimPaymentNum, BankBranch, CheckDate, CheckNum, Note";//required by Oracle
 			DataTable rawT=Db.GetTable(command);
 			DateTime date;
 			for(int i=0;i<rawT.Rows.Count;i++) {
 				row=table.NewRow();
-				row["amount"]=PIn.PDouble(rawT.Rows[i]["amount"].ToString()).ToString("F");
+				row["amount"]=PIn.Double(rawT.Rows[i]["amount"].ToString()).ToString("F");
 				row["BankBranch"]=rawT.Rows[i]["BankBranch"].ToString();
 				row["ClaimPaymentNum"]=rawT.Rows[i]["ClaimPaymentNum"].ToString();
-				date=PIn.PDate(rawT.Rows[i]["CheckDate"].ToString());
+				date=PIn.Date(rawT.Rows[i]["CheckDate"].ToString());
 				row["checkDate"]=date.ToShortDateString();
 				row["CheckNum"]=rawT.Rows[i]["CheckNum"].ToString();
 				row["Note"]=rawT.Rows[i]["Note"].ToString();
@@ -59,9 +59,9 @@ namespace OpenDentBusiness{
 				+"ClinicNum,DepositNum,CarrierName "
 				+"FROM claimpayment "
 				+"WHERE DepositNum = 0 "
-				+"AND CheckDate >= "+POut.PDate(dateStart);
+				+"AND CheckDate >= "+POut.Date(dateStart);
 			if(clinicNum!=0){
-				command+=" AND ClinicNum="+POut.PLong(clinicNum);
+				command+=" AND ClinicNum="+POut.Long(clinicNum);
 			}
 			return RefreshAndFill(Db.GetTable(command));
 		}
@@ -76,7 +76,7 @@ namespace OpenDentBusiness{
 				+"Checknum,BankBranch,Note,"
 				+"ClinicNum,DepositNum,CarrierName "
 				+"FROM claimpayment "
-				+"WHERE DepositNum = "+POut.PLong(depositNum);
+				+"WHERE DepositNum = "+POut.Long(depositNum);
 			return RefreshAndFill(Db.GetTable(command));
 		}
 
@@ -87,7 +87,7 @@ namespace OpenDentBusiness{
 			}
 			string command=
 				"SELECT * FROM claimpayment "
-				+"WHERE ClaimPaymentNum = "+POut.PLong(claimPaymentNum);
+				+"WHERE ClaimPaymentNum = "+POut.Long(claimPaymentNum);
 			return RefreshAndFill(Db.GetTable(command))[0];
 		}
 
@@ -96,15 +96,15 @@ namespace OpenDentBusiness{
 			ClaimPayment[] List=new ClaimPayment[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new ClaimPayment();
-				List[i].ClaimPaymentNum= PIn.PLong(table.Rows[i][0].ToString());
-				List[i].CheckDate      = PIn.PDate(table.Rows[i][1].ToString());
-				List[i].CheckAmt       = PIn.PDouble(table.Rows[i][2].ToString());
-				List[i].CheckNum       = PIn.PString(table.Rows[i][3].ToString());
-				List[i].BankBranch     = PIn.PString(table.Rows[i][4].ToString());
-				List[i].Note           = PIn.PString(table.Rows[i][5].ToString());
-				List[i].ClinicNum      = PIn.PLong(table.Rows[i][6].ToString());
-				List[i].DepositNum     = PIn.PLong(table.Rows[i][7].ToString());
-				List[i].CarrierName    = PIn.PString(table.Rows[i][8].ToString());
+				List[i].ClaimPaymentNum= PIn.Long(table.Rows[i][0].ToString());
+				List[i].CheckDate      = PIn.Date(table.Rows[i][1].ToString());
+				List[i].CheckAmt       = PIn.Double(table.Rows[i][2].ToString());
+				List[i].CheckNum       = PIn.String(table.Rows[i][3].ToString());
+				List[i].BankBranch     = PIn.String(table.Rows[i][4].ToString());
+				List[i].Note           = PIn.String(table.Rows[i][5].ToString());
+				List[i].ClinicNum      = PIn.Long(table.Rows[i][6].ToString());
+				List[i].DepositNum     = PIn.Long(table.Rows[i][7].ToString());
+				List[i].CarrierName    = PIn.String(table.Rows[i][8].ToString());
 			}
 			return List;
 		}
@@ -126,17 +126,17 @@ namespace OpenDentBusiness{
 			command+="CheckDate,CheckAmt,CheckNum,"
 				+"BankBranch,Note,ClinicNum,DepositNum,CarrierName) VALUES(";
 			if(PrefC.RandomKeys){
-				command+="'"+POut.PLong(cp.ClaimPaymentNum)+"', ";
+				command+="'"+POut.Long(cp.ClaimPaymentNum)+"', ";
 			}
 			command+=
-				 POut.PDate  (cp.CheckDate)+", "
-				+"'"+POut.PDouble(cp.CheckAmt)+"', "
-				+"'"+POut.PString(cp.CheckNum)+"', "
-				+"'"+POut.PString(cp.BankBranch)+"', "
-				+"'"+POut.PString(cp.Note)+"', "
-				+"'"+POut.PLong   (cp.ClinicNum)+"', "
-				+"'"+POut.PLong   (cp.DepositNum)+"', "
-				+"'"+POut.PString(cp.CarrierName)+"')";
+				 POut.Date  (cp.CheckDate)+", "
+				+"'"+POut.Double(cp.CheckAmt)+"', "
+				+"'"+POut.String(cp.CheckNum)+"', "
+				+"'"+POut.String(cp.BankBranch)+"', "
+				+"'"+POut.String(cp.Note)+"', "
+				+"'"+POut.Long   (cp.ClinicNum)+"', "
+				+"'"+POut.Long   (cp.DepositNum)+"', "
+				+"'"+POut.String(cp.CarrierName)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -153,26 +153,26 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command="SELECT DepositNum,CheckAmt FROM claimpayment "
-				+"WHERE ClaimPaymentNum="+POut.PLong(cp.ClaimPaymentNum);
+				+"WHERE ClaimPaymentNum="+POut.Long(cp.ClaimPaymentNum);
 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0){
 				return;
 			}
 			if(table.Rows[0][0].ToString()!="0"//if claimpayment is already attached to a deposit
-				&& PIn.PDouble(table.Rows[0][1].ToString())!=cp.CheckAmt)//and checkAmt changes
+				&& PIn.Double(table.Rows[0][1].ToString())!=cp.CheckAmt)//and checkAmt changes
 			{
 				throw new ApplicationException(Lans.g("ClaimPayments","Not allowed to change the amount on checks attached to deposits."));
 			}
 			command="UPDATE claimpayment SET "
-				+"checkdate = "   +POut.PDate  (cp.CheckDate)+" "
-				+",checkamt = '"   +POut.PDouble(cp.CheckAmt)+"' "
-				+",checknum = '"   +POut.PString(cp.CheckNum)+"' "
-				+",bankbranch = '" +POut.PString(cp.BankBranch)+"' "
-				+",note = '"       +POut.PString(cp.Note)+"' "
-				+",ClinicNum = '"  +POut.PLong   (cp.ClinicNum)+"' "
-				+",DepositNum = '" +POut.PLong   (cp.DepositNum)+"' "
-				+",CarrierName = '"+POut.PString(cp.CarrierName)+"' "
-				+"WHERE ClaimPaymentnum = '"+POut.PLong   (cp.ClaimPaymentNum)+"'";
+				+"checkdate = "   +POut.Date  (cp.CheckDate)+" "
+				+",checkamt = '"   +POut.Double(cp.CheckAmt)+"' "
+				+",checknum = '"   +POut.String(cp.CheckNum)+"' "
+				+",bankbranch = '" +POut.String(cp.BankBranch)+"' "
+				+",note = '"       +POut.String(cp.Note)+"' "
+				+",ClinicNum = '"  +POut.Long   (cp.ClinicNum)+"' "
+				+",DepositNum = '" +POut.Long   (cp.DepositNum)+"' "
+				+",CarrierName = '"+POut.String(cp.CarrierName)+"' "
+				+"WHERE ClaimPaymentnum = '"+POut.Long   (cp.ClaimPaymentNum)+"'";
 			//MessageBox.Show(string command);
  			Db.NonQ(command);
 		}
@@ -184,7 +184,7 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command="SELECT DepositNum FROM claimpayment "
-				+"WHERE ClaimPaymentNum="+POut.PLong(cp.ClaimPaymentNum);
+				+"WHERE ClaimPaymentNum="+POut.Long(cp.ClaimPaymentNum);
 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0){
 				return;
@@ -196,11 +196,11 @@ namespace OpenDentBusiness{
 			}
 			command= "UPDATE claimproc SET "
 				+"ClaimPaymentNum=0 "
-				+"WHERE claimpaymentNum="+POut.PLong(cp.ClaimPaymentNum);
+				+"WHERE claimpaymentNum="+POut.Long(cp.ClaimPaymentNum);
 			//MessageBox.Show(string command);
 			Db.NonQ(command);
 			command= "DELETE FROM claimpayment "
-				+"WHERE ClaimPaymentnum ="+POut.PLong(cp.ClaimPaymentNum);
+				+"WHERE ClaimPaymentnum ="+POut.Long(cp.ClaimPaymentNum);
 			//MessageBox.Show(string command);
  			Db.NonQ(command);
 		}

@@ -2279,21 +2279,21 @@ namespace OpenDental{
 				procTP.Descript=gridMain.Rows[gridMain.SelectedIndices[i]]
 					.Cells[gridMain.Columns.GetIndex(Lan.g("TableTP","Description"))].Text;
 				if(checkShowFees.Checked){
-					procTP.FeeAmt=PIn.PDouble(gridMain.Rows[gridMain.SelectedIndices[i]]
+					procTP.FeeAmt=PIn.Double(gridMain.Rows[gridMain.SelectedIndices[i]]
 						.Cells[gridMain.Columns.GetIndex(Lan.g("TableTP","Fee"))].Text);
 				}
 				if(checkShowIns.Checked){
-					procTP.PriInsAmt=PIn.PDouble(gridMain.Rows[gridMain.SelectedIndices[i]]
+					procTP.PriInsAmt=PIn.Double(gridMain.Rows[gridMain.SelectedIndices[i]]
 						.Cells[gridMain.Columns.GetIndex(Lan.g("TableTP","Pri Ins"))].Text);
-					procTP.SecInsAmt=PIn.PDouble(gridMain.Rows[gridMain.SelectedIndices[i]]
+					procTP.SecInsAmt=PIn.Double(gridMain.Rows[gridMain.SelectedIndices[i]]
 						.Cells[gridMain.Columns.GetIndex(Lan.g("TableTP","Sec Ins"))].Text);
 				}
 				if(checkShowDiscount.Checked){
-					procTP.Discount=PIn.PDouble(gridMain.Rows[gridMain.SelectedIndices[i]]
+					procTP.Discount=PIn.Double(gridMain.Rows[gridMain.SelectedIndices[i]]
 							.Cells[gridMain.Columns.GetIndex(Lan.g("TableTP","Discount"))].Text);
 				}
 				if(checkShowIns.Checked){
-					procTP.PatAmt=PIn.PDouble(gridMain.Rows[gridMain.SelectedIndices[i]]
+					procTP.PatAmt=PIn.Double(gridMain.Rows[gridMain.SelectedIndices[i]]
 						.Cells[gridMain.Columns.GetIndex(Lan.g("TableTP","Pat"))].Text);
 				}
 				ProcTPs.InsertOrUpdate(procTP,true);

@@ -20,7 +20,7 @@ namespace OpenDentBusiness {
 				command="SELECT CURRENT_TIMESTAMP FROM DUAL";
 			}
 			DataTable table=Db.GetTable(command);
-			return PIn.PDateT(table.Rows[0][0].ToString());
+			return PIn.DateT(table.Rows[0][0].ToString());
 		}
 
 		///<summary>Used in MakeABackup to ensure a unique backup database name.</summary>
@@ -50,7 +50,7 @@ namespace OpenDentBusiness {
 			DataConnection dcon=new DataConnection();
 			string command="SELECT database()";
 			DataTable table=dcon.GetTable(command);
-			string oldDb=PIn.PString(table.Rows[0][0].ToString());
+			string oldDb=PIn.String(table.Rows[0][0].ToString());
 			string newDb=oldDb+"backup_"+DateTime.Today.ToString("MM_dd_yyyy");
 			command="SHOW DATABASES";
 			table=dcon.GetTable(command);
@@ -96,7 +96,7 @@ namespace OpenDentBusiness {
 			}
 			string command="SELECT database()";
 			DataTable table=Db.GetTable(command);
-			return PIn.PString(table.Rows[0][0].ToString());
+			return PIn.String(table.Rows[0][0].ToString());
 		}
 
 		public static string GetMySqlVersion() {
@@ -105,7 +105,7 @@ namespace OpenDentBusiness {
 			}
 			string command="SELECT @@version";
 			DataTable table=Db.GetTable(command);
-			return PIn.PString(table.Rows[0][0].ToString());
+			return PIn.String(table.Rows[0][0].ToString());
 		}
 
 		///<summary>Returns a collection of unique AtoZ folders for the array of dbnames passed in.  It will not include the current AtoZ folder for this database, even if shared by another db.</summary>
@@ -145,7 +145,7 @@ namespace OpenDentBusiness {
 			for(int i=0;i<dbNames.Length;i++) {
 				try {
 					dcon=new DataConnection(dbNames[i]);
-					string command="UPDATE preference SET ValueString ='"+POut.PString(Environment.MachineName)
+					string command="UPDATE preference SET ValueString ='"+POut.String(Environment.MachineName)
 						+"' WHERE PrefName='UpdateInProgressOnComputerName'";
 					dcon.NonQ(command);
 				}

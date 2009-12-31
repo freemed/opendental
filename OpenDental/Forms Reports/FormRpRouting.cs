@@ -263,7 +263,7 @@ namespace OpenDental
 				MessageBox.Show(Lan.g(this,"Date is required."));
 				return;
 			}
-			date=PIn.PDate(textDate.Text);
+			date=PIn.Date(textDate.Text);
 			if(listProv.SelectedIndices.Count==0){
 				MessageBox.Show(Lan.g(this,"You must select at least one provider."));
 				return;

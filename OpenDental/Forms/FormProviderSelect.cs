@@ -289,7 +289,7 @@ namespace OpenDental{
 		private void FillGrid(){
 			long selectedProvNum=0;
 			if(gridMain.SelectedIndices.Length==1){
-				selectedProvNum=PIn.PLong(table.Rows[gridMain.SelectedIndices[0]]["ProvNum"].ToString());
+				selectedProvNum=PIn.Long(table.Rows[gridMain.SelectedIndices[0]]["ProvNum"].ToString());
 			}
 			int scroll=gridMain.ScrollValue;
 			Cache.Refresh(InvalidType.Providers);
@@ -323,7 +323,7 @@ namespace OpenDental{
 				Provider prov;
 				for(int i=0;i<table.Rows.Count;i++) {
 					if(table.Rows[i]["ItemOrder"].ToString()!=i.ToString()) {
-						prov=Providers.GetProv(PIn.PLong(table.Rows[i]["ProvNum"].ToString()));
+						prov=Providers.GetProv(PIn.Long(table.Rows[i]["ProvNum"].ToString()));
 						prov.ItemOrder=i;
 						Providers.Update(prov);
 					}
@@ -425,9 +425,9 @@ namespace OpenDental{
 			if(gridMain.SelectedIndices[0]==0) {//already at top
 				return;
 			}
-			Provider prov=Providers.GetProv(PIn.PLong(table.Rows[gridMain.SelectedIndices[0]]["ProvNum"].ToString()));
+			Provider prov=Providers.GetProv(PIn.Long(table.Rows[gridMain.SelectedIndices[0]]["ProvNum"].ToString()));
 				//.ListLong[gridMain.GetSelectedIndex()];
-			Provider otherprov=Providers.GetProv(PIn.PLong(table.Rows[gridMain.SelectedIndices[0]-1]["ProvNum"].ToString()));
+			Provider otherprov=Providers.GetProv(PIn.Long(table.Rows[gridMain.SelectedIndices[0]-1]["ProvNum"].ToString()));
 				//ProviderC.ListLong[gridMain.GetSelectedIndex()-1];
 			prov.ItemOrder--;
 			Providers.Update(prov);
@@ -447,9 +447,9 @@ namespace OpenDental{
 			if(gridMain.SelectedIndices[0]==ProviderC.ListLong.Length-1) {//already at bottom
 				return;
 			}
-			Provider prov=Providers.GetProv(PIn.PLong(table.Rows[gridMain.SelectedIndices[0]]["ProvNum"].ToString()));
+			Provider prov=Providers.GetProv(PIn.Long(table.Rows[gridMain.SelectedIndices[0]]["ProvNum"].ToString()));
 				//ProviderC.ListLong[gridMain.GetSelectedIndex()];
-			Provider otherprov=Providers.GetProv(PIn.PLong(table.Rows[gridMain.SelectedIndices[0]+1]["ProvNum"].ToString()));
+			Provider otherprov=Providers.GetProv(PIn.Long(table.Rows[gridMain.SelectedIndices[0]+1]["ProvNum"].ToString()));
 				//ProviderC.ListLong[gridMain.GetSelectedIndex()+1];
 			prov.ItemOrder++;
 			Providers.Update(prov);
@@ -463,7 +463,7 @@ namespace OpenDental{
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			FormProvEdit FormP=new FormProvEdit();
-			FormP.ProvCur=Providers.GetProv(PIn.PLong(table.Rows[gridMain.SelectedIndices[0]]["ProvNum"].ToString()));
+			FormP.ProvCur=Providers.GetProv(PIn.Long(table.Rows[gridMain.SelectedIndices[0]]["ProvNum"].ToString()));
 			FormP.ShowDialog();
 			if(FormP.DialogResult!=DialogResult.OK) {
 				return;
@@ -491,7 +491,7 @@ namespace OpenDental{
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++){
 				Userod user=new Userod();
 				user.UserGroupNum=UserGroups.List[comboUserGroup.SelectedIndex].UserGroupNum;
-				user.ProvNum=PIn.PLong(table.Rows[gridMain.SelectedIndices[i]]["ProvNum"].ToString());
+				user.ProvNum=PIn.Long(table.Rows[gridMain.SelectedIndices[i]]["ProvNum"].ToString());
 				user.UserName=GetUniqueUserName(table.Rows[gridMain.SelectedIndices[i]]["LName"].ToString(),
 					table.Rows[gridMain.SelectedIndices[i]]["FName"].ToString());
 				user.Password=user.UserName;//this will be enhanced later.

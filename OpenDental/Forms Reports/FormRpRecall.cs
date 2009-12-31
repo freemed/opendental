@@ -274,7 +274,7 @@ namespace OpenDental{
         if(i>0){
 					SQLwhere+=" OR ";
 				}
-        SQLwhere+="recall.RecallNum="+POut.PLong(RecallNumList[i]);
+        SQLwhere+="recall.RecallNum="+POut.Long(RecallNumList[i]);
       }
 			SQLwhere+=")";
     }

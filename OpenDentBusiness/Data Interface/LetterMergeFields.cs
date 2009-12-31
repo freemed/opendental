@@ -27,9 +27,9 @@ namespace OpenDentBusiness{
 			list=new LetterMergeField[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				list[i]=new LetterMergeField();
-				list[i].FieldNum=PIn.PLong(table.Rows[i][0].ToString());
-				list[i].LetterMergeNum=PIn.PLong(table.Rows[i][1].ToString());
-				list[i].FieldName=PIn.PString(table.Rows[i][2].ToString());
+				list[i].FieldNum=PIn.Long(table.Rows[i][0].ToString());
+				list[i].LetterMergeNum=PIn.Long(table.Rows[i][1].ToString());
+				list[i].FieldName=PIn.String(table.Rows[i][2].ToString());
 			}
 		}
 
@@ -49,11 +49,11 @@ namespace OpenDentBusiness{
 			command+="LetterMergeNum,FieldName"
 				+") VALUES(";
 			if(PrefC.RandomKeys){
-				command+="'"+POut.PLong(lmf.FieldNum)+"', ";
+				command+="'"+POut.Long(lmf.FieldNum)+"', ";
 			}
 			command+=
-				 "'"+POut.PLong   (lmf.LetterMergeNum)+"', "
-				+"'"+POut.PString(lmf.FieldName)+"')";
+				 "'"+POut.Long   (lmf.LetterMergeNum)+"', "
+				+"'"+POut.String(lmf.FieldName)+"')";
  			if(PrefC.RandomKeys){
 				Db.NonQ(command);
 			}
@@ -105,7 +105,7 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command="DELETE FROM lettermergefield "
-				+"WHERE LetterMergeNum = "+POut.PLong(letterMergeNum);
+				+"WHERE LetterMergeNum = "+POut.Long(letterMergeNum);
 			Db.NonQ(command);
 		}
 

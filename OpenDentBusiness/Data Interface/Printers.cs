@@ -26,11 +26,11 @@ namespace OpenDentBusiness{
 			list=new Printer[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				list[i]=new Printer();
-				list[i].PrinterNum=PIn.PLong(table.Rows[i][0].ToString());
-				list[i].ComputerNum=PIn.PLong(table.Rows[i][1].ToString());
-				list[i].PrintSit=(PrintSituation)PIn.PLong(table.Rows[i][2].ToString());
-				list[i].PrinterName=PIn.PString(table.Rows[i][3].ToString());
-				list[i].DisplayPrompt=PIn.PBool(table.Rows[i][4].ToString());
+				list[i].PrinterNum=PIn.Long(table.Rows[i][0].ToString());
+				list[i].ComputerNum=PIn.Long(table.Rows[i][1].ToString());
+				list[i].PrintSit=(PrintSituation)PIn.Long(table.Rows[i][2].ToString());
+				list[i].PrinterName=PIn.String(table.Rows[i][3].ToString());
+				list[i].DisplayPrompt=PIn.Bool(table.Rows[i][4].ToString());
 			}
 		}
 
@@ -41,8 +41,8 @@ namespace OpenDentBusiness{
 			}
 			Printer[] tempList=list;
 			string command="SELECT * FROM printer WHERE "
-				+"PrintSit = '"      +POut.PLong((int)sit)+"' "
-				+"AND ComputerNum ='"+POut.PLong(compNum)+"'";
+				+"PrintSit = '"      +POut.Long((int)sit)+"' "
+				+"AND ComputerNum ='"+POut.Long(compNum)+"'";
 			DataTable table=Db.GetTable(command);
 			FillCache(table);
 			if(list.Length==0){
@@ -69,13 +69,13 @@ namespace OpenDentBusiness{
 			command+="ComputerNum,PrintSit,PrinterName,"
 				+"DisplayPrompt) VALUES(";
 			if(PrefC.RandomKeys){
-				command+="'"+POut.PLong(cur.PrinterNum)+"', ";
+				command+="'"+POut.Long(cur.PrinterNum)+"', ";
 			}
 			command+=
-				 "'"+POut.PLong   (cur.ComputerNum)+"', "
-				+"'"+POut.PLong   ((int)cur.PrintSit)+"', "
-				+"'"+POut.PString(cur.PrinterName)+"', "
-				+"'"+POut.PBool  (cur.DisplayPrompt)+"')";
+				 "'"+POut.Long   (cur.ComputerNum)+"', "
+				+"'"+POut.Long   ((int)cur.PrintSit)+"', "
+				+"'"+POut.String(cur.PrinterName)+"', "
+				+"'"+POut.Bool  (cur.DisplayPrompt)+"')";
  			if(PrefC.RandomKeys){
 				Db.NonQ(command);
 			}
@@ -92,11 +92,11 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command="UPDATE printer SET "
-				+"ComputerNum = '"   +POut.PLong   (cur.ComputerNum)+"' "
-				+",PrintSit = '"     +POut.PLong   ((int)cur.PrintSit)+"' "
-				+",PrinterName = '"  +POut.PString(cur.PrinterName)+"' "
-				+",DisplayPrompt = '"+POut.PBool  (cur.DisplayPrompt)+"' "
-				+"WHERE PrinterNum = '"+POut.PLong(cur.PrinterNum)+"'";
+				+"ComputerNum = '"   +POut.Long   (cur.ComputerNum)+"' "
+				+",PrintSit = '"     +POut.Long   ((int)cur.PrintSit)+"' "
+				+",PrinterName = '"  +POut.String(cur.PrinterName)+"' "
+				+",DisplayPrompt = '"+POut.Bool  (cur.DisplayPrompt)+"' "
+				+"WHERE PrinterNum = '"+POut.Long(cur.PrinterNum)+"'";
  			Db.NonQ(command);
 		}
 
@@ -107,7 +107,7 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command="DELETE FROM printer "
-				+"WHERE PrinterNum = "+POut.PLong(cur.PrinterNum);
+				+"WHERE PrinterNum = "+POut.Long(cur.PrinterNum);
 			Db.NonQ(command);
 		}
 
@@ -147,12 +147,12 @@ namespace OpenDentBusiness{
 			//Computer[] compList=Computers.Refresh();
 			//Computer compCur=Computers.GetCur();
 			string command="SELECT ComputerNum FROM computer "
-				+"WHERE CompName = '"+POut.PString(computerName)+"'";
+				+"WHERE CompName = '"+POut.String(computerName)+"'";
  			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0){
 				return;//computer not yet entered in db.
 			}
-			long compNum=PIn.PLong(table.Rows[0][0].ToString());
+			long compNum=PIn.Long(table.Rows[0][0].ToString());
 			Printer existing=GetOnePrinter(sit,compNum);   //GetForSit(sit);
 			if(printerName=="" && !displayPrompt){//then should not be an entry in db
 				if(existing!=null){//need to delete Printer

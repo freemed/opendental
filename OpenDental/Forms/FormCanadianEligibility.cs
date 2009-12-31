@@ -173,7 +173,7 @@ namespace OpenDental{
 				AsOfDate=DateTime.Today;
 			}
 			else{
-				AsOfDate=PIn.PDate(textDate.Text);
+				AsOfDate=PIn.Date(textDate.Text);
 			}
 			if(AsOfDate.Year<1980 || AsOfDate.Year>DateTime.Today.Year+10){
 				MsgBox.Show(this,"Unreasonable date.");

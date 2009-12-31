@@ -195,7 +195,7 @@ namespace OpenDental{
 			if(!IsMulti){
 				Cur.ToothNum=Tooth.FromInternat(textToothNum.Text);
 			}
-			Cur.DateExtraction=PIn.PDate(textDateExtracted.Text);
+			Cur.DateExtraction=PIn.Date(textDateExtracted.Text);
 			DialogResult=DialogResult.OK;
 		}
 

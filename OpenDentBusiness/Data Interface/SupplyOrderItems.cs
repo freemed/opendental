@@ -19,7 +19,7 @@ namespace OpenDentBusiness{
 				+"FROM supplyorderitem,definition,supply "
 				+"WHERE definition.DefNum=supply.Category "
 				+"AND supply.SupplyNum=supplyorderitem.SupplyNum "
-				+"AND supplyorderitem.SupplyOrderNum="+POut.PLong(orderNum)+" "
+				+"AND supplyorderitem.SupplyOrderNum="+POut.Long(orderNum)+" "
 				+"ORDER BY definition.ItemOrder,supply.ItemOrder";
 			return Db.GetTable(command);
 		}
@@ -28,7 +28,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<SupplyOrderItem>(MethodBase.GetCurrentMethod(),supplyOrderItemNum);
 			}
-			string command="SELECT * FROM supplyorderitem WHERE SupplyOrderItemNum="+POut.PLong(supplyOrderItemNum);
+			string command="SELECT * FROM supplyorderitem WHERE SupplyOrderItemNum="+POut.Long(supplyOrderItemNum);
 			return DataObjectFactory<SupplyOrderItem>.CreateObject(command);
 		}
 

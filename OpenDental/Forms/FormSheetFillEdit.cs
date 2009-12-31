@@ -325,8 +325,8 @@ namespace OpenDental {
 					for(int p=0;p<pointStr.Length;p++){
 						xy=pointStr[p].Split(',');
 						if(xy.Length==2){
-							x=PIn.PFloat(xy[0]);
-							y=PIn.PFloat(xy[1]);
+							x=PIn.Float(xy[0]);
+							y=PIn.Float(xy[1]);
 							dist=(float)Math.Sqrt(Math.Pow(Math.Abs(x-eraserPt.X),2)+Math.Pow(Math.Abs(y-eraserPt.Y),2));
 							if(dist<=radius){//testing circle intersection here
 								SheetCur.SheetFields.Remove(field);
@@ -390,7 +390,7 @@ namespace OpenDental {
 					for(int p=0;p<pointStr.Length;p++){
 						xy=pointStr[p].Split(',');
 						if(xy.Length==2){
-							point=new Point(PIn.PInt(xy[0]),PIn.PInt(xy[1]));
+							point=new Point(PIn.Int(xy[0]),PIn.Int(xy[1]));
 							points.Add(point);
 						}
 					}
@@ -464,7 +464,7 @@ namespace OpenDental {
 					FormS.Email2Visible=false;//prevents trying to attach email to nonexistent referral.
 				}
 				else{
-					long referralNum=PIn.PLong(parameter.ParamValue.ToString());
+					long referralNum=PIn.Long(parameter.ParamValue.ToString());
 					referral=Referrals.GetReferral(referralNum);
 					if(referral.EMail!=""){
 						FormS.Email2Address=referral.EMail;
@@ -562,7 +562,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please fix data entry errors first.");
 				return false;
 			}
-			SheetCur.DateTimeSheet=PIn.PDateT(textDateTime.Text);
+			SheetCur.DateTimeSheet=PIn.DateT(textDateTime.Text);
 			SheetCur.Description=textDescription.Text;
 			SheetCur.InternalNote=textNote.Text;
 			FillFieldsFromControls();//But SheetNums will still be 0 for a new sheet.

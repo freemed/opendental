@@ -160,15 +160,15 @@ namespace OpenDental {
 			string detail=row["Detail"];
 			detail=detail.Replace("\n","\r\n");
 			textDetail.Text=detail;
-			checkIsMine.Checked=PIn.PBool(row["isMine"]);
+			checkIsMine.Checked=PIn.Bool(row["isMine"]);
 			textDifficulty.Text=row["Difficulty"];
-			int approval=PIn.PInt(row["Approval"]);
+			int approval=PIn.Int(row["Approval"]);
 			if(IsAdminMode){
 				textSubmitter.Text=row["submitter"];
 			}
 			comboApproval.SelectedIndex=approval;
 			//textApproval gets set automatically due to comboApproval_SelectedIndexChanged.
-			if(!IsAdminMode && PIn.PBool(row["isMine"])){//user editing their own request
+			if(!IsAdminMode && PIn.Bool(row["isMine"])){//user editing their own request
 				if((ApprovalEnum)approval==ApprovalEnum.New
 					|| (ApprovalEnum)approval==ApprovalEnum.NeedsClarification
 					|| (ApprovalEnum)approval==ApprovalEnum.NotARequest
@@ -200,9 +200,9 @@ namespace OpenDental {
 				textDetail.BackColor=colorDisabled;
 				textDetail.ReadOnly=true;
 			}
-			myPointsUsed=PIn.PInt(row["myPointsUsed"]);
+			myPointsUsed=PIn.Int(row["myPointsUsed"]);
 			try {
-				myPointsAllotted=PIn.PInt(row["myPointsAllotted"]);
+				myPointsAllotted=PIn.Int(row["myPointsAllotted"]);
 			}
 			catch {
 				myPointsAllotted=100;
@@ -210,7 +210,7 @@ namespace OpenDental {
 			//textMyPointsRemain.Text=;this will be filled automatically when myPoints changes
 			textMyPoints.Text=row["myPoints"];
 			RecalcMyPoints();
-			checkIsCritical.Checked=PIn.PBool(row["IsCritical"]);
+			checkIsCritical.Checked=PIn.Bool(row["IsCritical"]);
 			textMyPledge.Text=row["myPledge"];
 			textTotalPoints.Text=row["totalPoints"];
 			textTotalCritical.Text=row["totalCritical"];
@@ -484,7 +484,7 @@ namespace OpenDental {
 				}
 				if(IsAdminMode) {
 					try {
-						bounty=PIn.PInt(textBounty.Text);
+						bounty=PIn.Int(textBounty.Text);
 					}
 					catch {
 						MsgBox.Show(this,"Bounty is invalid.");
@@ -493,7 +493,7 @@ namespace OpenDental {
 				}
 				if(!IsAdminMode){
 					try{
-						myPoints=PIn.PInt(textMyPoints.Text);//handles "" gracefully
+						myPoints=PIn.Int(textMyPoints.Text);//handles "" gracefully
 					}
 					catch{
 						MsgBox.Show(this,"Points is invalid.");
@@ -521,7 +521,7 @@ namespace OpenDental {
 						return false;
 					}
 				}
-				double myPointsRemain=PIn.PDouble(textMyPointsRemain.Text);
+				double myPointsRemain=PIn.Double(textMyPointsRemain.Text);
 				if(myPointsRemain<0){
 					MsgBox.Show(this,"You have gone over your allotted 100 points.");
 					return false;
@@ -548,13 +548,13 @@ namespace OpenDental {
 				if(textDifficulty.Text!=row["Difficulty"]){
 					changesMade=true;
 				}
-				int approval=PIn.PInt(row["Approval"]);
+				int approval=PIn.Int(row["Approval"]);
 				if(comboApproval.SelectedIndex!=approval){
 					changesMade=true;
 				}
 				if(groupMyVotes.Visible){
 					if(textMyPoints.Text!=row["myPoints"]
-						|| checkIsCritical.Checked!=PIn.PBool(row["IsCritical"])
+						|| checkIsCritical.Checked!=PIn.Bool(row["IsCritical"])
 						|| textMyPledge.Text!=row["myPledge"])
 					{
 						changesMade=true;

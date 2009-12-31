@@ -46,11 +46,11 @@ namespace OpenDentBusiness{
 			LanguageForeign lf;
 			for(int i=0;i<table.Rows.Count;i++) {
 				lf=new LanguageForeign();
-				lf.ClassType  = PIn.PString(table.Rows[i][0].ToString());
-				lf.English    = PIn.PString(table.Rows[i][1].ToString());
-				lf.Culture    = PIn.PString(table.Rows[i][2].ToString());
-				lf.Translation= PIn.PString(table.Rows[i][3].ToString());
-				lf.Comments   = PIn.PString(table.Rows[i][4].ToString());
+				lf.ClassType  = PIn.String(table.Rows[i][0].ToString());
+				lf.English    = PIn.String(table.Rows[i][1].ToString());
+				lf.Culture    = PIn.String(table.Rows[i][2].ToString());
+				lf.Translation= PIn.String(table.Rows[i][3].ToString());
+				lf.Comments   = PIn.String(table.Rows[i][4].ToString());
 				if(lf.Culture==cultureInfoName) {//if exact culture match
 					if(hList.ContainsKey(lf.ClassType+lf.English)) {
 						hList.Remove(lf.ClassType+lf.English);//remove any existing entry
@@ -76,11 +76,11 @@ namespace OpenDentBusiness{
 			string command= "INSERT INTO languageforeign(ClassType,English,Culture"
 				+",Translation,Comments) "
 				+"VALUES("
-				+"'"+POut.PString(lf.ClassType)+"', "
-				+"'"+POut.PString(lf.English)+"', "
-				+"'"+POut.PString(lf.Culture)+"', "
-				+"'"+POut.PString(lf.Translation)+"', "
-				+"'"+POut.PString(lf.Comments)+"')";
+				+"'"+POut.String(lf.ClassType)+"', "
+				+"'"+POut.String(lf.English)+"', "
+				+"'"+POut.String(lf.Culture)+"', "
+				+"'"+POut.String(lf.Translation)+"', "
+				+"'"+POut.String(lf.Comments)+"')";
 			Db.NonQ(command);
 		}
 
@@ -91,10 +91,10 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command="UPDATE languageforeign SET " 
-				+"Translation	= '"+POut.PString(lf.Translation)+"'"
-				+",Comments = '"  +POut.PString(lf.Comments)+"'" 
-				+" WHERE ClassType= BINARY '"+POut.PString(lf.ClassType)+"'" 
-				+" AND English= BINARY '"+POut.PString(lf.English)+"'"
+				+"Translation	= '"+POut.String(lf.Translation)+"'"
+				+",Comments = '"  +POut.String(lf.Comments)+"'" 
+				+" WHERE ClassType= BINARY '"+POut.String(lf.ClassType)+"'" 
+				+" AND English= BINARY '"+POut.String(lf.English)+"'"
 				+" AND Culture= '"+CultureInfo.CurrentCulture.Name+"'";
 			Db.NonQ(command);
 		}
@@ -106,8 +106,8 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command= "DELETE from languageforeign "
-				+"WHERE ClassType=BINARY '"+POut.PString(lf.ClassType)+"' "
-				+"AND English=BINARY '"    +POut.PString(lf.English)+"' "
+				+"WHERE ClassType=BINARY '"+POut.String(lf.ClassType)+"' "
+				+"AND English=BINARY '"    +POut.String(lf.English)+"' "
 				+"AND Culture='"+CultureInfo.CurrentCulture.Name+"'";
 			Db.NonQ(command);
 		}
@@ -124,11 +124,11 @@ namespace OpenDentBusiness{
 			LanguageForeign[] List=new LanguageForeign[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++){
 				List[i]=new LanguageForeign();
-				List[i].ClassType  = PIn.PString(table.Rows[i][0].ToString());
-				List[i].English    = PIn.PString(table.Rows[i][1].ToString());
-				List[i].Culture    = PIn.PString(table.Rows[i][2].ToString());
-				List[i].Translation= PIn.PString(table.Rows[i][3].ToString());
-				List[i].Comments   = PIn.PString(table.Rows[i][4].ToString());
+				List[i].ClassType  = PIn.String(table.Rows[i][0].ToString());
+				List[i].English    = PIn.String(table.Rows[i][1].ToString());
+				List[i].Culture    = PIn.String(table.Rows[i][2].ToString());
+				List[i].Translation= PIn.String(table.Rows[i][3].ToString());
+				List[i].Comments   = PIn.String(table.Rows[i][4].ToString());
 			}
 			return List;
 		}
@@ -140,16 +140,16 @@ namespace OpenDentBusiness{
 			}
 			string command=
 				"SELECT * FROM languageforeign "
-				+"WHERE ClassType='"+POut.PString(classType)+"'";
+				+"WHERE ClassType='"+POut.String(classType)+"'";
 			DataTable table=Db.GetTable(command);
 			LanguageForeign[] List=new LanguageForeign[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++){
 				List[i]=new LanguageForeign();
-				List[i].ClassType  = PIn.PString(table.Rows[i][0].ToString());
-				List[i].English    = PIn.PString(table.Rows[i][1].ToString());
-				List[i].Culture    = PIn.PString(table.Rows[i][2].ToString());
-				List[i].Translation= PIn.PString(table.Rows[i][3].ToString());
-				List[i].Comments   = PIn.PString(table.Rows[i][4].ToString());
+				List[i].ClassType  = PIn.String(table.Rows[i][0].ToString());
+				List[i].English    = PIn.String(table.Rows[i][1].ToString());
+				List[i].Culture    = PIn.String(table.Rows[i][2].ToString());
+				List[i].Translation= PIn.String(table.Rows[i][3].ToString());
+				List[i].Comments   = PIn.String(table.Rows[i][4].ToString());
 			}
 			return List;
 		}

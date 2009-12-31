@@ -258,7 +258,7 @@ namespace OpenDental {
 						whereProv += "OR ";
 					}
 					whereProv += "procedurelog.ProvNum = '"
-                    + POut.PLong(ProviderC.List[listProv.SelectedIndices[i]].ProvNum) + "' ";
+                    + POut.Long(ProviderC.List[listProv.SelectedIndices[i]].ProvNum) + "' ";
 				}
 				whereProv += ")";
 			}
@@ -305,7 +305,7 @@ namespace OpenDental {
 			gridTxPlanList.Rows.Clear();
 			for(int i = 0;i <= AddrTable.Rows.Count - 1;i++) // changed < to <= , SPK
             {
-				PatNum = PIn.PLong(AddrTable.Rows[i]["PatNum"].ToString());
+				PatNum = PIn.Long(AddrTable.Rows[i]["PatNum"].ToString());
 				PriMax = 0;
 				PriPend = 0;
 				PriUsed = 0;
@@ -584,19 +584,19 @@ namespace OpenDental {
 				row[9] = gridRow.Cells[9].Text.PadLeft(6); // Insurance Pays
 				row[10] = gridRow.Cells[10].Text.PadLeft(7); // Unused Primary
 				row[11] = gridRow.Cells[11].Text.PadLeft(7); // Unused Secondary
-				report.ColTotal[7] += PIn.PDouble(row[7].ToString());
-				report.ColTotal[8] += PIn.PDouble(row[8].ToString());
-				report.ColTotal[9] += PIn.PDouble(row[9].ToString()); //gridRow.Cells[9].ToString()
-				report.ColTotal[10] += PIn.PDouble(row[10].ToString());
-				report.ColTotal[11] += PIn.PDouble(row[11].ToString());
+				report.ColTotal[7] += PIn.Double(row[7].ToString());
+				report.ColTotal[8] += PIn.Double(row[8].ToString());
+				report.ColTotal[9] += PIn.Double(row[9].ToString()); //gridRow.Cells[9].ToString()
+				report.ColTotal[10] += PIn.Double(row[10].ToString());
+				report.ColTotal[11] += PIn.Double(row[11].ToString());
 				// 11/1/08 HINA/SPK Add Logic to Print Patient Total
 				if(row[1].ToString() == "") {
 					patRecordCount += 1;
-					patFee += PIn.PDouble(row[7].ToString());
-					patPays += PIn.PDouble(row[8].ToString());
-					patInsPays += PIn.PDouble(row[9].ToString());
-					payUnusesPrimary += PIn.PDouble(row[10].ToString());
-					payUnusesSecondary += PIn.PDouble(row[11].ToString());
+					patFee += PIn.Double(row[7].ToString());
+					patPays += PIn.Double(row[8].ToString());
+					patInsPays += PIn.Double(row[9].ToString());
+					payUnusesPrimary += PIn.Double(row[10].ToString());
+					payUnusesSecondary += PIn.Double(row[11].ToString());
 				}
 				else {
 					if(row[1].ToString() != currentPatient) {
@@ -639,11 +639,11 @@ namespace OpenDental {
 
 					}
 					patRecordCount = 1;
-					patFee += PIn.PDouble(row[7].ToString());
-					patPays += PIn.PDouble(row[8].ToString());
-					patInsPays += PIn.PDouble(row[9].ToString());
-					payUnusesPrimary += PIn.PDouble(row[10].ToString());
-					payUnusesSecondary += PIn.PDouble(row[11].ToString());
+					patFee += PIn.Double(row[7].ToString());
+					patPays += PIn.Double(row[8].ToString());
+					patInsPays += PIn.Double(row[9].ToString());
+					payUnusesPrimary += PIn.Double(row[10].ToString());
+					payUnusesSecondary += PIn.Double(row[11].ToString());
 				}
 				report.TableQ.Rows.Add(row);
 				

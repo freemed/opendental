@@ -13,7 +13,7 @@ namespace OpenDentBusiness{
 			}
 			string command=
 				"SELECT * FROM transaction "
-				+"WHERE TransactionNum="+POut.PLong(transactionNum);
+				+"WHERE TransactionNum="+POut.Long(transactionNum);
 			return RefreshAndFill(Db.GetTable(command));
 		}
 
@@ -25,11 +25,11 @@ namespace OpenDentBusiness{
 			}
 			Transaction trans=new Transaction();
 			trans=new Transaction();
-			trans.TransactionNum= PIn.PLong(table.Rows[0][0].ToString());
-			trans.DateTimeEntry = PIn.PDateT(table.Rows[0][1].ToString());
-			trans.UserNum       = PIn.PLong(table.Rows[0][2].ToString());
-			trans.DepositNum    = PIn.PLong(table.Rows[0][3].ToString());
-			trans.PayNum        = PIn.PLong(table.Rows[0][4].ToString());
+			trans.TransactionNum= PIn.Long(table.Rows[0][0].ToString());
+			trans.DateTimeEntry = PIn.DateT(table.Rows[0][1].ToString());
+			trans.UserNum       = PIn.Long(table.Rows[0][2].ToString());
+			trans.DepositNum    = PIn.Long(table.Rows[0][3].ToString());
+			trans.PayNum        = PIn.Long(table.Rows[0][4].ToString());
 			return trans;
 		}
 
@@ -40,7 +40,7 @@ namespace OpenDentBusiness{
 			}
 			string command=
 				"SELECT * FROM transaction "
-				+"WHERE DepositNum="+POut.PLong(depositNum);
+				+"WHERE DepositNum="+POut.Long(depositNum);
 			return RefreshAndFill(Db.GetTable(command));
 		}
 
@@ -51,7 +51,7 @@ namespace OpenDentBusiness{
 			}
 			string command=
 				"SELECT * FROM transaction "
-				+"WHERE PayNum="+POut.PLong(payNum);
+				+"WHERE PayNum="+POut.Long(payNum);
 			return RefreshAndFill(Db.GetTable(command));
 		}
 
@@ -70,13 +70,13 @@ namespace OpenDentBusiness{
 			}
 			command+="DateTimeEntry,UserNum,DepositNum,PayNum) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+="'"+POut.PLong(trans.TransactionNum)+"', ";
+				command+="'"+POut.Long(trans.TransactionNum)+"', ";
 			}
 			command+=
 				 "NOW(), "//DateTimeEntry set to current server time
-				+"'"+POut.PLong   (trans.UserNum)+"', "
-				+"'"+POut.PLong   (trans.DepositNum)+"', "
-				+"'"+POut.PLong   (trans.PayNum)+"')";
+				+"'"+POut.Long   (trans.UserNum)+"', "
+				+"'"+POut.Long   (trans.DepositNum)+"', "
+				+"'"+POut.Long   (trans.PayNum)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -93,11 +93,11 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command= "UPDATE transaction SET "
-				+"DateTimeEntry = " +POut.PDateT (trans.DateTimeEntry)+" "
-				+",UserNum = '"      +POut.PLong   (trans.UserNum)+"' "
-				+",DepositNum = '"   +POut.PLong   (trans.DepositNum)+"' "
-				+",PayNum = '"       +POut.PLong   (trans.PayNum)+"' "
-				+"WHERE TransactionNum = '"+POut.PLong(trans.TransactionNum)+"'";
+				+"DateTimeEntry = " +POut.DateT (trans.DateTimeEntry)+" "
+				+",UserNum = '"      +POut.Long   (trans.UserNum)+"' "
+				+",DepositNum = '"   +POut.Long   (trans.DepositNum)+"' "
+				+",PayNum = '"       +POut.Long   (trans.PayNum)+"' "
+				+"WHERE TransactionNum = '"+POut.Long(trans.TransactionNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -107,9 +107,9 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),trans);
 				return;
 			}
-			string command="DELETE FROM journalentry WHERE TransactionNum="+POut.PLong(trans.TransactionNum);
+			string command="DELETE FROM journalentry WHERE TransactionNum="+POut.Long(trans.TransactionNum);
 			Db.NonQ(command);
-			command= "DELETE FROM transaction WHERE TransactionNum = "+POut.PLong(trans.TransactionNum);
+			command= "DELETE FROM transaction WHERE TransactionNum = "+POut.Long(trans.TransactionNum);
 			Db.NonQ(command);
 		}
 
@@ -121,7 +121,7 @@ namespace OpenDentBusiness{
 				return Meth.GetBool(MethodBase.GetCurrentMethod(),trans);
 			}
 			string command="SELECT COUNT(*) FROM journalentry WHERE ReconcileNum !=0"
-				+" AND TransactionNum="+POut.PLong(trans.TransactionNum);
+				+" AND TransactionNum="+POut.Long(trans.TransactionNum);
 			if(Db.GetCount(command)=="0") {
 				return false;
 			}

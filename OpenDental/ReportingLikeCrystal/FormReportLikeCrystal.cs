@@ -557,30 +557,30 @@ namespace OpenDental.ReportingOld2
 								[i][MyReport.DataFields.IndexOf(fieldObject.DataField)].ToString();
 							displayText=rawText;
 							if(fieldObject.ValueType==FieldValueType.Age){
-								displayText=Patients.AgeToString(Patients.DateToAge(PIn.PDate(MyReport.ReportTable.Rows[i][MyReport.DataFields.IndexOf(fieldObject.DataField)].ToString())));//(fieldObject.FormatString);
+								displayText=Patients.AgeToString(Patients.DateToAge(PIn.Date(MyReport.ReportTable.Rows[i][MyReport.DataFields.IndexOf(fieldObject.DataField)].ToString())));//(fieldObject.FormatString);
 							}
 							else if(fieldObject.ValueType==FieldValueType.Boolean){
-								displayText=PIn.PBool(MyReport.ReportTable.Rows[i][MyReport.DataFields.IndexOf(fieldObject.DataField)].ToString()).ToString();//(fieldObject.FormatString);
+								displayText=PIn.Bool(MyReport.ReportTable.Rows[i][MyReport.DataFields.IndexOf(fieldObject.DataField)].ToString()).ToString();//(fieldObject.FormatString);
 								if(i>0 && fieldObject.SuppressIfDuplicate){
-									prevDisplayText=PIn.PBool(MyReport.ReportTable.Rows[i-1][MyReport.DataFields.IndexOf(fieldObject.DataField)].ToString()).ToString();
+									prevDisplayText=PIn.Bool(MyReport.ReportTable.Rows[i-1][MyReport.DataFields.IndexOf(fieldObject.DataField)].ToString()).ToString();
 								}
 							}
 							else if(fieldObject.ValueType==FieldValueType.Date){
-								displayText=PIn.PDateT(MyReport.ReportTable.Rows[i][MyReport.DataFields.IndexOf(fieldObject.DataField)].ToString()).ToString(fieldObject.FormatString);
+								displayText=PIn.DateT(MyReport.ReportTable.Rows[i][MyReport.DataFields.IndexOf(fieldObject.DataField)].ToString()).ToString(fieldObject.FormatString);
 								if(i>0 && fieldObject.SuppressIfDuplicate){
-									prevDisplayText=PIn.PDateT(MyReport.ReportTable.Rows[i-1][MyReport.DataFields.IndexOf(fieldObject.DataField)].ToString()).ToString(fieldObject.FormatString);
+									prevDisplayText=PIn.DateT(MyReport.ReportTable.Rows[i-1][MyReport.DataFields.IndexOf(fieldObject.DataField)].ToString()).ToString(fieldObject.FormatString);
 								}
 							}
 							else if(fieldObject.ValueType==FieldValueType.Integer){
-								displayText=PIn.PLong(MyReport.ReportTable.Rows[i][MyReport.DataFields.IndexOf(fieldObject.DataField)].ToString()).ToString(fieldObject.FormatString);
+								displayText=PIn.Long(MyReport.ReportTable.Rows[i][MyReport.DataFields.IndexOf(fieldObject.DataField)].ToString()).ToString(fieldObject.FormatString);
 								if(i>0 && fieldObject.SuppressIfDuplicate){
-									prevDisplayText=PIn.PLong(MyReport.ReportTable.Rows[i-1][MyReport.DataFields.IndexOf(fieldObject.DataField)].ToString()).ToString(fieldObject.FormatString);
+									prevDisplayText=PIn.Long(MyReport.ReportTable.Rows[i-1][MyReport.DataFields.IndexOf(fieldObject.DataField)].ToString()).ToString(fieldObject.FormatString);
 								}
 							}
 							else if(fieldObject.ValueType==FieldValueType.Number){
-								displayText=PIn.PDouble(MyReport.ReportTable.Rows[i][MyReport.DataFields.IndexOf(fieldObject.DataField)].ToString()).ToString(fieldObject.FormatString);
+								displayText=PIn.Double(MyReport.ReportTable.Rows[i][MyReport.DataFields.IndexOf(fieldObject.DataField)].ToString()).ToString(fieldObject.FormatString);
 								if(i>0 && fieldObject.SuppressIfDuplicate){
-									prevDisplayText=PIn.PDouble(MyReport.ReportTable.Rows[i-1][MyReport.DataFields.IndexOf(fieldObject.DataField)].ToString()).ToString(fieldObject.FormatString);
+									prevDisplayText=PIn.Double(MyReport.ReportTable.Rows[i-1][MyReport.DataFields.IndexOf(fieldObject.DataField)].ToString()).ToString(fieldObject.FormatString);
 								}
 							}
 							else if(fieldObject.ValueType==FieldValueType.String){

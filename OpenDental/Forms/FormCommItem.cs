@@ -363,7 +363,7 @@ namespace OpenDental{
 			//	MsgBox.Show(this,"Please select a type.");
 			//	return;
 			//}
-			CommlogCur.CommDateTime=PIn.PDateT(textDateTime.Text);
+			CommlogCur.CommDateTime=PIn.DateT(textDateTime.Text);
 			//there may not be a commtype selected.
 			if(listType.SelectedIndex==-1){
 				CommlogCur.CommType=0;

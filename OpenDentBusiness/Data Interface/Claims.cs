@@ -24,7 +24,7 @@ namespace OpenDentBusiness{
 				+" AND insplan.PlanNum = claim.PlanNum"
 				+" AND insplan.CarrierNum = carrier.CarrierNum"
 				+" AND (claimproc.Status = '1' OR claimproc.Status = '4' OR claimproc.Status=5)"//received or supplemental or capclaim
- 				+" AND (claimproc.ClaimPaymentNum = '"+POut.PLong(claimPaymentNum)+"'";
+ 				+" AND (claimproc.ClaimPaymentNum = '"+POut.Long(claimPaymentNum)+"'";
 			if(showUnattached){
 				command+=" OR (claimproc.InsPayAmt != 0 AND claimproc.ClaimPaymentNum = '0'))"
 					+" GROUP BY claimproc.ClaimNum";
@@ -39,15 +39,15 @@ namespace OpenDentBusiness{
 			ClaimPaySplit split;
 			for(int i=0;i<table.Rows.Count;i++){
 				split=new ClaimPaySplit();
-				split.DateClaim      =PIn.PDate  (table.Rows[i]["DateService"].ToString());
-				split.ProvAbbr       =Providers.GetAbbr(PIn.PLong(table.Rows[i]["ProvTreat"].ToString()));
-				split.PatName        =PIn.PString(table.Rows[i]["_patName"].ToString());
-				split.Carrier        =PIn.PString(table.Rows[i]["CarrierName"].ToString());
-				split.FeeBilled      =PIn.PDouble(table.Rows[i]["_feeBilled"].ToString());
-				split.InsPayAmt      =PIn.PDouble(table.Rows[i]["_insPayAmt"].ToString());
-				split.ClaimNum       =PIn.PLong   (table.Rows[i]["ClaimNum"].ToString());
-				split.ClaimPaymentNum=PIn.PLong   (table.Rows[i]["ClaimPaymentNum"].ToString());
-				split.PatNum         =PIn.PLong   (table.Rows[i]["PatNum"].ToString());
+				split.DateClaim      =PIn.Date  (table.Rows[i]["DateService"].ToString());
+				split.ProvAbbr       =Providers.GetAbbr(PIn.Long(table.Rows[i]["ProvTreat"].ToString()));
+				split.PatName        =PIn.String(table.Rows[i]["_patName"].ToString());
+				split.Carrier        =PIn.String(table.Rows[i]["CarrierName"].ToString());
+				split.FeeBilled      =PIn.Double(table.Rows[i]["_feeBilled"].ToString());
+				split.InsPayAmt      =PIn.Double(table.Rows[i]["_insPayAmt"].ToString());
+				split.ClaimNum       =PIn.Long   (table.Rows[i]["ClaimNum"].ToString());
+				split.ClaimPaymentNum=PIn.Long   (table.Rows[i]["ClaimPaymentNum"].ToString());
+				split.PatNum         =PIn.Long   (table.Rows[i]["PatNum"].ToString());
 				splits.Add(split);
 			}
 			return splits;
@@ -62,16 +62,16 @@ namespace OpenDentBusiness{
 				+" WHERE ClaimNum = "+claimNum.ToString();
 			DataTable table=Db.GetTable(command);
 			Claim retClaim=SubmitAndFill(table)[0];
-			command="SELECT * FROM claimattach WHERE ClaimNum = "+POut.PLong(claimNum);
+			command="SELECT * FROM claimattach WHERE ClaimNum = "+POut.Long(claimNum);
 			table=Db.GetTable(command);
 			retClaim.Attachments=new List<ClaimAttach>();
 			ClaimAttach attach;
 			for(int i=0;i<table.Rows.Count;i++){
 				attach=new ClaimAttach();
-				attach.ClaimAttachNum   =PIn.PLong   (table.Rows[i][0].ToString());
-				attach.ClaimNum         =PIn.PLong   (table.Rows[i][1].ToString());
-				attach.DisplayedFileName=PIn.PString(table.Rows[i][2].ToString());
-				attach.ActualFileName   =PIn.PString(table.Rows[i][3].ToString());
+				attach.ClaimAttachNum   =PIn.Long   (table.Rows[i][0].ToString());
+				attach.ClaimNum         =PIn.Long   (table.Rows[i][1].ToString());
+				attach.DisplayedFileName=PIn.String(table.Rows[i][2].ToString());
+				attach.ActualFileName   =PIn.String(table.Rows[i][3].ToString());
 				retClaim.Attachments.Add(attach);
 			}
 			return retClaim;
@@ -96,47 +96,47 @@ namespace OpenDentBusiness{
 			List<Claim> claims=new List<Claim>();
 			for(int i=0;i<table.Rows.Count;i++){
 				tempClaim=new Claim();
-				tempClaim.ClaimNum     =		PIn.PLong   (table.Rows[i][0].ToString());
-				tempClaim.PatNum       =		PIn.PLong   (table.Rows[i][1].ToString());
-				tempClaim.DateService  =		PIn.PDate  (table.Rows[i][2].ToString());
-				tempClaim.DateSent     =		PIn.PDate  (table.Rows[i][3].ToString());
-				tempClaim.ClaimStatus  =		PIn.PString(table.Rows[i][4].ToString());
-				tempClaim.DateReceived =		PIn.PDate  (table.Rows[i][5].ToString());
-				tempClaim.PlanNum      =		PIn.PLong   (table.Rows[i][6].ToString());
-				tempClaim.ProvTreat    =		PIn.PLong   (table.Rows[i][7].ToString());
-				tempClaim.ClaimFee     =		PIn.PDouble(table.Rows[i][8].ToString());
-				tempClaim.InsPayEst    =		PIn.PDouble(table.Rows[i][9].ToString());
-				tempClaim.InsPayAmt    =		PIn.PDouble(table.Rows[i][10].ToString());
-				tempClaim.DedApplied   =		PIn.PDouble(table.Rows[i][11].ToString());
-				tempClaim.PreAuthString=		PIn.PString(table.Rows[i][12].ToString());
-				tempClaim.IsProsthesis =		PIn.PString(table.Rows[i][13].ToString());
-				tempClaim.PriorDate    =		PIn.PDate  (table.Rows[i][14].ToString());
-				tempClaim.ReasonUnderPaid=	PIn.PString(table.Rows[i][15].ToString());
-				tempClaim.ClaimNote    =		PIn.PString(table.Rows[i][16].ToString());
-				tempClaim.ClaimType    =    PIn.PString(table.Rows[i][17].ToString());
-				tempClaim.ProvBill     =		PIn.PLong   (table.Rows[i][18].ToString());
-				tempClaim.ReferringProv=		PIn.PLong   (table.Rows[i][19].ToString());
-				tempClaim.RefNumString =		PIn.PString(table.Rows[i][20].ToString());
-				tempClaim.PlaceService = (PlaceOfService)PIn.PLong(table.Rows[i][21].ToString());
-				tempClaim.AccidentRelated=	PIn.PString(table.Rows[i][22].ToString());
-				tempClaim.AccidentDate  =		PIn.PDate  (table.Rows[i][23].ToString());
-				tempClaim.AccidentST    =		PIn.PString(table.Rows[i][24].ToString());
-				tempClaim.EmployRelated=(YN)PIn.PLong   (table.Rows[i][25].ToString());
-				tempClaim.IsOrtho       =		PIn.PBool  (table.Rows[i][26].ToString());
-				tempClaim.OrthoRemainM  =		PIn.PInt   (table.Rows[i][27].ToString());
-				tempClaim.OrthoDate     =		PIn.PDate  (table.Rows[i][28].ToString());
-				tempClaim.PatRelat      =(Relat)PIn.PLong(table.Rows[i][29].ToString());
-				tempClaim.PlanNum2      =   PIn.PLong   (table.Rows[i][30].ToString());
-				tempClaim.PatRelat2     =(Relat)PIn.PLong(table.Rows[i][31].ToString());
-				tempClaim.WriteOff      =   PIn.PDouble(table.Rows[i][32].ToString());
-				tempClaim.Radiographs   =   PIn.PInt   (table.Rows[i][33].ToString());
-				tempClaim.ClinicNum     =   PIn.PLong   (table.Rows[i][34].ToString());
-				tempClaim.ClaimForm     =   PIn.PLong   (table.Rows[i][35].ToString());
-				tempClaim.EFormat       =(EtransType)PIn.PLong(table.Rows[i][36].ToString());
-				tempClaim.AttachedImages=   PIn.PInt   (table.Rows[i][37].ToString());
-				tempClaim.AttachedModels=   PIn.PInt   (table.Rows[i][38].ToString());
-				tempClaim.AttachedFlags =   PIn.PString(table.Rows[i][39].ToString());
-				tempClaim.AttachmentID  =   PIn.PString(table.Rows[i][40].ToString());
+				tempClaim.ClaimNum     =		PIn.Long   (table.Rows[i][0].ToString());
+				tempClaim.PatNum       =		PIn.Long   (table.Rows[i][1].ToString());
+				tempClaim.DateService  =		PIn.Date  (table.Rows[i][2].ToString());
+				tempClaim.DateSent     =		PIn.Date  (table.Rows[i][3].ToString());
+				tempClaim.ClaimStatus  =		PIn.String(table.Rows[i][4].ToString());
+				tempClaim.DateReceived =		PIn.Date  (table.Rows[i][5].ToString());
+				tempClaim.PlanNum      =		PIn.Long   (table.Rows[i][6].ToString());
+				tempClaim.ProvTreat    =		PIn.Long   (table.Rows[i][7].ToString());
+				tempClaim.ClaimFee     =		PIn.Double(table.Rows[i][8].ToString());
+				tempClaim.InsPayEst    =		PIn.Double(table.Rows[i][9].ToString());
+				tempClaim.InsPayAmt    =		PIn.Double(table.Rows[i][10].ToString());
+				tempClaim.DedApplied   =		PIn.Double(table.Rows[i][11].ToString());
+				tempClaim.PreAuthString=		PIn.String(table.Rows[i][12].ToString());
+				tempClaim.IsProsthesis =		PIn.String(table.Rows[i][13].ToString());
+				tempClaim.PriorDate    =		PIn.Date  (table.Rows[i][14].ToString());
+				tempClaim.ReasonUnderPaid=	PIn.String(table.Rows[i][15].ToString());
+				tempClaim.ClaimNote    =		PIn.String(table.Rows[i][16].ToString());
+				tempClaim.ClaimType    =    PIn.String(table.Rows[i][17].ToString());
+				tempClaim.ProvBill     =		PIn.Long   (table.Rows[i][18].ToString());
+				tempClaim.ReferringProv=		PIn.Long   (table.Rows[i][19].ToString());
+				tempClaim.RefNumString =		PIn.String(table.Rows[i][20].ToString());
+				tempClaim.PlaceService = (PlaceOfService)PIn.Long(table.Rows[i][21].ToString());
+				tempClaim.AccidentRelated=	PIn.String(table.Rows[i][22].ToString());
+				tempClaim.AccidentDate  =		PIn.Date  (table.Rows[i][23].ToString());
+				tempClaim.AccidentST    =		PIn.String(table.Rows[i][24].ToString());
+				tempClaim.EmployRelated=(YN)PIn.Long   (table.Rows[i][25].ToString());
+				tempClaim.IsOrtho       =		PIn.Bool  (table.Rows[i][26].ToString());
+				tempClaim.OrthoRemainM  =		PIn.Int   (table.Rows[i][27].ToString());
+				tempClaim.OrthoDate     =		PIn.Date  (table.Rows[i][28].ToString());
+				tempClaim.PatRelat      =(Relat)PIn.Long(table.Rows[i][29].ToString());
+				tempClaim.PlanNum2      =   PIn.Long   (table.Rows[i][30].ToString());
+				tempClaim.PatRelat2     =(Relat)PIn.Long(table.Rows[i][31].ToString());
+				tempClaim.WriteOff      =   PIn.Double(table.Rows[i][32].ToString());
+				tempClaim.Radiographs   =   PIn.Int   (table.Rows[i][33].ToString());
+				tempClaim.ClinicNum     =   PIn.Long   (table.Rows[i][34].ToString());
+				tempClaim.ClaimForm     =   PIn.Long   (table.Rows[i][35].ToString());
+				tempClaim.EFormat       =(EtransType)PIn.Long(table.Rows[i][36].ToString());
+				tempClaim.AttachedImages=   PIn.Int   (table.Rows[i][37].ToString());
+				tempClaim.AttachedModels=   PIn.Int   (table.Rows[i][38].ToString());
+				tempClaim.AttachedFlags =   PIn.String(table.Rows[i][39].ToString());
+				tempClaim.AttachmentID  =   PIn.String(table.Rows[i][40].ToString());
 				claims.Add(tempClaim);
 			}
 			return claims;
@@ -174,49 +174,49 @@ namespace OpenDentBusiness{
 				+",patrelat2,writeoff,Radiographs,ClinicNum,ClaimForm,EFormat,"
 				+"AttachedImages,AttachedModels,AttachedFlags,AttachmentID) VALUES(";
 			if(PrefC.RandomKeys){
-				command+="'"+POut.PLong(Cur.ClaimNum)+"', ";
+				command+="'"+POut.Long(Cur.ClaimNum)+"', ";
 			}
 			command+=
-				 "'"+POut.PLong   (Cur.PatNum)+"', "
-				+POut.PDate  (Cur.DateService)+", "
-				+POut.PDate  (Cur.DateSent)+", "
-				+"'"+POut.PString(Cur.ClaimStatus)+"', "
-				+POut.PDate  (Cur.DateReceived)+", "
-				+"'"+POut.PLong   (Cur.PlanNum)+"', "
-				+"'"+POut.PLong   (Cur.ProvTreat)+"', "
-				+"'"+POut.PDouble(Cur.ClaimFee)+"', "
-				+"'"+POut.PDouble(Cur.InsPayEst)+"', "
-				+"'"+POut.PDouble(Cur.InsPayAmt)+"', "
-				+"'"+POut.PDouble(Cur.DedApplied)+"', "
-				+"'"+POut.PString(Cur.PreAuthString)+"', "
-				+"'"+POut.PString(Cur.IsProsthesis)+"', "
-				+POut.PDate  (Cur.PriorDate)+", "
-				+"'"+POut.PString(Cur.ReasonUnderPaid)+"', "
-				+"'"+POut.PString(Cur.ClaimNote)+"', "
-				+"'"+POut.PString(Cur.ClaimType)+"', "
-				+"'"+POut.PLong   (Cur.ProvBill)+"', "
-				+"'"+POut.PLong   (Cur.ReferringProv)+"', "
-				+"'"+POut.PString(Cur.RefNumString)+"', "
-				+"'"+POut.PLong   ((int)Cur.PlaceService)+"', "
-				+"'"+POut.PString(Cur.AccidentRelated)+"', "
-				+POut.PDate  (Cur.AccidentDate)+", "
-				+"'"+POut.PString(Cur.AccidentST)+"', "
-				+"'"+POut.PLong   ((int)Cur.EmployRelated)+"', "
-				+"'"+POut.PBool  (Cur.IsOrtho)+"', "
-				+"'"+POut.PLong   (Cur.OrthoRemainM)+"', "
-				+POut.PDate  (Cur.OrthoDate)+", "
-				+"'"+POut.PLong   ((int)Cur.PatRelat)+"', "
-				+"'"+POut.PLong   (Cur.PlanNum2)+"', "
-				+"'"+POut.PLong   ((int)Cur.PatRelat2)+"', "
-				+"'"+POut.PDouble(Cur.WriteOff)+"', "
-				+"'"+POut.PLong   (Cur.Radiographs)+"', "
-				+"'"+POut.PLong   (Cur.ClinicNum)+"', "
-				+"'"+POut.PLong   (Cur.ClaimForm)+"', "
-				+"'"+POut.PLong   ((int)Cur.EFormat)+"', "
-				+"'"+POut.PLong   (Cur.AttachedImages)+"', "
-				+"'"+POut.PLong   (Cur.AttachedModels)+"', "
-				+"'"+POut.PString(Cur.AttachedFlags)+"', "
-				+"'"+POut.PString(Cur.AttachmentID)+"')";
+				 "'"+POut.Long   (Cur.PatNum)+"', "
+				+POut.Date  (Cur.DateService)+", "
+				+POut.Date  (Cur.DateSent)+", "
+				+"'"+POut.String(Cur.ClaimStatus)+"', "
+				+POut.Date  (Cur.DateReceived)+", "
+				+"'"+POut.Long   (Cur.PlanNum)+"', "
+				+"'"+POut.Long   (Cur.ProvTreat)+"', "
+				+"'"+POut.Double(Cur.ClaimFee)+"', "
+				+"'"+POut.Double(Cur.InsPayEst)+"', "
+				+"'"+POut.Double(Cur.InsPayAmt)+"', "
+				+"'"+POut.Double(Cur.DedApplied)+"', "
+				+"'"+POut.String(Cur.PreAuthString)+"', "
+				+"'"+POut.String(Cur.IsProsthesis)+"', "
+				+POut.Date  (Cur.PriorDate)+", "
+				+"'"+POut.String(Cur.ReasonUnderPaid)+"', "
+				+"'"+POut.String(Cur.ClaimNote)+"', "
+				+"'"+POut.String(Cur.ClaimType)+"', "
+				+"'"+POut.Long   (Cur.ProvBill)+"', "
+				+"'"+POut.Long   (Cur.ReferringProv)+"', "
+				+"'"+POut.String(Cur.RefNumString)+"', "
+				+"'"+POut.Long   ((int)Cur.PlaceService)+"', "
+				+"'"+POut.String(Cur.AccidentRelated)+"', "
+				+POut.Date  (Cur.AccidentDate)+", "
+				+"'"+POut.String(Cur.AccidentST)+"', "
+				+"'"+POut.Long   ((int)Cur.EmployRelated)+"', "
+				+"'"+POut.Bool  (Cur.IsOrtho)+"', "
+				+"'"+POut.Long   (Cur.OrthoRemainM)+"', "
+				+POut.Date  (Cur.OrthoDate)+", "
+				+"'"+POut.Long   ((int)Cur.PatRelat)+"', "
+				+"'"+POut.Long   (Cur.PlanNum2)+"', "
+				+"'"+POut.Long   ((int)Cur.PatRelat2)+"', "
+				+"'"+POut.Double(Cur.WriteOff)+"', "
+				+"'"+POut.Long   (Cur.Radiographs)+"', "
+				+"'"+POut.Long   (Cur.ClinicNum)+"', "
+				+"'"+POut.Long   (Cur.ClaimForm)+"', "
+				+"'"+POut.Long   ((int)Cur.EFormat)+"', "
+				+"'"+POut.Long   (Cur.AttachedImages)+"', "
+				+"'"+POut.Long   (Cur.AttachedModels)+"', "
+				+"'"+POut.String(Cur.AttachedFlags)+"', "
+				+"'"+POut.String(Cur.AttachmentID)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -233,50 +233,50 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command= "UPDATE claim SET "
-				+"patnum = '"          +POut.PLong   (Cur.PatNum)+"' "
-				+",dateservice = "    +POut.PDate  (Cur.DateService)+" "
-				+",datesent = "       +POut.PDate  (Cur.DateSent)+" "
-				+",claimstatus = '"    +POut.PString(Cur.ClaimStatus)+"' "
-				+",datereceived = "   +POut.PDate  (Cur.DateReceived)+" "
-				+",plannum = '"        +POut.PLong   (Cur.PlanNum)+"' "
-				+",provtreat = '"      +POut.PLong   (Cur.ProvTreat)+"' "
-				+",claimfee = '"       +POut.PDouble(Cur.ClaimFee)+"' "
-				+",inspayest = '"      +POut.PDouble(Cur.InsPayEst)+"' "
-				+",inspayamt = '"      +POut.PDouble(Cur.InsPayAmt)+"' "
-				+",dedapplied = '"   +  POut.PDouble(Cur.DedApplied)+"' "
-				+",preauthstring = '"+	POut.PString(Cur.PreAuthString)+"' "
-				+",isprosthesis = '" +	POut.PString(Cur.IsProsthesis)+"' "
-				+",priordate = "    +	POut.PDate  (Cur.PriorDate)+" "
-				+",reasonunderpaid = '"+POut.PString(Cur.ReasonUnderPaid)+"' "
-				+",claimnote = '"    +	POut.PString(Cur.ClaimNote)+"' "
-				+",claimtype='"      +	POut.PString(Cur.ClaimType)+"' "
-				+",provbill = '"     +	POut.PLong   (Cur.ProvBill)+"' "
-				+",referringprov = '"+	POut.PLong   (Cur.ReferringProv)+"' "
-				+",refnumstring = '" +	POut.PString(Cur.RefNumString)+"' "
-				+",placeservice = '" +	POut.PLong   ((int)Cur.PlaceService)+"' "
-				+",accidentrelated = '"+POut.PString(Cur.AccidentRelated)+"' "//ask Derek why this was out of order.
-				+",accidentdate = "   +	POut.PDate  (Cur.AccidentDate)+" "
-				+",accidentst = '"    +	POut.PString(Cur.AccidentST)+"' "
-				+",employrelated = '" +	POut.PLong   ((int)Cur.EmployRelated)+"' "
-				+",isortho = '"       +	POut.PBool  (Cur.IsOrtho)+"' "
-				+",orthoremainm = '"  +	POut.PLong   (Cur.OrthoRemainM)+"' "
-				+",orthodate = "      +	POut.PDate  (Cur.OrthoDate)+" "
-				+",patrelat = '"      +	POut.PLong   ((int)Cur.PatRelat)+"' "
-				+",plannum2 = '"      +	POut.PLong   (Cur.PlanNum2)+"' "
-				+",patrelat2 = '"     +	POut.PLong   ((int)Cur.PatRelat2)+"' "
-				+",writeoff = '"      +	POut.PDouble(Cur.WriteOff)+"' "
-				+",Radiographs = '"   + POut.PLong   (Cur.Radiographs)+"' "
-				+",ClinicNum = '"     + POut.PLong   (Cur.ClinicNum)+"' "
-				+",ClaimForm = '"     + POut.PLong   (Cur.ClaimForm)+"' "
-				+",EFormat = '"       + POut.PLong   ((int)Cur.EFormat)+"' "
-				+",AttachedImages = '"+ POut.PLong   (Cur.AttachedImages)+"' "
-				+",AttachedModels = '"+ POut.PLong   (Cur.AttachedModels)+"' "
-				+",AttachedFlags = '" + POut.PString(Cur.AttachedFlags)+"' "
-				+",AttachmentID = '"  + POut.PString(Cur.AttachmentID)+"' "
-				+"WHERE claimnum = '"+	POut.PLong   (Cur.ClaimNum)+"'";
+				+"patnum = '"          +POut.Long   (Cur.PatNum)+"' "
+				+",dateservice = "    +POut.Date  (Cur.DateService)+" "
+				+",datesent = "       +POut.Date  (Cur.DateSent)+" "
+				+",claimstatus = '"    +POut.String(Cur.ClaimStatus)+"' "
+				+",datereceived = "   +POut.Date  (Cur.DateReceived)+" "
+				+",plannum = '"        +POut.Long   (Cur.PlanNum)+"' "
+				+",provtreat = '"      +POut.Long   (Cur.ProvTreat)+"' "
+				+",claimfee = '"       +POut.Double(Cur.ClaimFee)+"' "
+				+",inspayest = '"      +POut.Double(Cur.InsPayEst)+"' "
+				+",inspayamt = '"      +POut.Double(Cur.InsPayAmt)+"' "
+				+",dedapplied = '"   +  POut.Double(Cur.DedApplied)+"' "
+				+",preauthstring = '"+	POut.String(Cur.PreAuthString)+"' "
+				+",isprosthesis = '" +	POut.String(Cur.IsProsthesis)+"' "
+				+",priordate = "    +	POut.Date  (Cur.PriorDate)+" "
+				+",reasonunderpaid = '"+POut.String(Cur.ReasonUnderPaid)+"' "
+				+",claimnote = '"    +	POut.String(Cur.ClaimNote)+"' "
+				+",claimtype='"      +	POut.String(Cur.ClaimType)+"' "
+				+",provbill = '"     +	POut.Long   (Cur.ProvBill)+"' "
+				+",referringprov = '"+	POut.Long   (Cur.ReferringProv)+"' "
+				+",refnumstring = '" +	POut.String(Cur.RefNumString)+"' "
+				+",placeservice = '" +	POut.Long   ((int)Cur.PlaceService)+"' "
+				+",accidentrelated = '"+POut.String(Cur.AccidentRelated)+"' "//ask Derek why this was out of order.
+				+",accidentdate = "   +	POut.Date  (Cur.AccidentDate)+" "
+				+",accidentst = '"    +	POut.String(Cur.AccidentST)+"' "
+				+",employrelated = '" +	POut.Long   ((int)Cur.EmployRelated)+"' "
+				+",isortho = '"       +	POut.Bool  (Cur.IsOrtho)+"' "
+				+",orthoremainm = '"  +	POut.Long   (Cur.OrthoRemainM)+"' "
+				+",orthodate = "      +	POut.Date  (Cur.OrthoDate)+" "
+				+",patrelat = '"      +	POut.Long   ((int)Cur.PatRelat)+"' "
+				+",plannum2 = '"      +	POut.Long   (Cur.PlanNum2)+"' "
+				+",patrelat2 = '"     +	POut.Long   ((int)Cur.PatRelat2)+"' "
+				+",writeoff = '"      +	POut.Double(Cur.WriteOff)+"' "
+				+",Radiographs = '"   + POut.Long   (Cur.Radiographs)+"' "
+				+",ClinicNum = '"     + POut.Long   (Cur.ClinicNum)+"' "
+				+",ClaimForm = '"     + POut.Long   (Cur.ClaimForm)+"' "
+				+",EFormat = '"       + POut.Long   ((int)Cur.EFormat)+"' "
+				+",AttachedImages = '"+ POut.Long   (Cur.AttachedImages)+"' "
+				+",AttachedModels = '"+ POut.Long   (Cur.AttachedModels)+"' "
+				+",AttachedFlags = '" + POut.String(Cur.AttachedFlags)+"' "
+				+",AttachmentID = '"  + POut.String(Cur.AttachmentID)+"' "
+				+"WHERE claimnum = '"+	POut.Long   (Cur.ClaimNum)+"'";
 			Db.NonQ(command);
 			//now, delete all attachments and recreate.
-			command="DELETE FROM claimattach WHERE ClaimNum="+POut.PLong(Cur.ClaimNum);
+			command="DELETE FROM claimattach WHERE ClaimNum="+POut.Long(Cur.ClaimNum);
 			Db.NonQ(command);
 			for(int i=0;i<Cur.Attachments.Count;i++) {
 				Cur.Attachments[i].ClaimNum=Cur.ClaimNum;
@@ -290,11 +290,11 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
 				return;
 			}
-			string command = "DELETE FROM claim WHERE ClaimNum = '"+POut.PLong(Cur.ClaimNum)+"'";
+			string command = "DELETE FROM claim WHERE ClaimNum = '"+POut.Long(Cur.ClaimNum)+"'";
 			Db.NonQ(command);
-			command = "DELETE FROM canadianclaim WHERE ClaimNum = '"+POut.PLong(Cur.ClaimNum)+"'";
+			command = "DELETE FROM canadianclaim WHERE ClaimNum = '"+POut.Long(Cur.ClaimNum)+"'";
 			Db.NonQ(command);
-			command = "DELETE FROM canadianextract WHERE ClaimNum = '"+POut.PLong(Cur.ClaimNum)+"'";
+			command = "DELETE FROM canadianextract WHERE ClaimNum = '"+POut.Long(Cur.ClaimNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -306,7 +306,7 @@ namespace OpenDentBusiness{
 			}
 			string command = "UPDATE procedurelog SET "
 				+"claimnum = '0' "
-				+"WHERE claimnum = '"+POut.PLong(Cur.ClaimNum)+"'";
+				+"WHERE claimnum = '"+POut.Long(Cur.ClaimNum)+"'";
 			//MessageBox.Show(string command);
 			Db.NonQ(command);
 		}
@@ -334,10 +334,10 @@ namespace OpenDentBusiness{
 				command+="WHERE (claim.ClaimStatus = 'W' OR claim.ClaimStatus = 'P') ";
 			}
 			else{
-				command+="WHERE claim.ClaimNum="+POut.PLong(claimNum)+" ";
+				command+="WHERE claim.ClaimNum="+POut.Long(claimNum)+" ";
 			}
 			if(clinicNum>0) {
-				command+="AND claim.ClinicNum="+POut.PLong(clinicNum)+" ";
+				command+="AND claim.ClinicNum="+POut.Long(clinicNum)+" ";
 			}
 			command+="ORDER BY insplan.IsMedical, patient.LName";//this puts the medical claims at the end, helping with the looping in X12.
 			//MessageBox.Show(string command);
@@ -345,14 +345,14 @@ namespace OpenDentBusiness{
 			ClaimSendQueueItem[] listQueue=new ClaimSendQueueItem[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++){
 				listQueue[i]=new ClaimSendQueueItem();
-				listQueue[i].ClaimNum        = PIn.PLong   (table.Rows[i][0].ToString());
-				listQueue[i].NoSendElect     = PIn.PBool  (table.Rows[i][1].ToString());
-				listQueue[i].PatName         = PIn.PString(table.Rows[i][2].ToString());
-				listQueue[i].ClaimStatus     = PIn.PString(table.Rows[i][3].ToString());
-				listQueue[i].Carrier         = PIn.PString(table.Rows[i][4].ToString());
-				listQueue[i].PatNum          = PIn.PLong   (table.Rows[i][5].ToString());
-				listQueue[i].ClearinghouseNum=Clearinghouses.GetNumForPayor(PIn.PString(table.Rows[i][6].ToString()));
-				listQueue[i].IsMedical       = PIn.PBool  (table.Rows[i][7].ToString());
+				listQueue[i].ClaimNum        = PIn.Long   (table.Rows[i][0].ToString());
+				listQueue[i].NoSendElect     = PIn.Bool  (table.Rows[i][1].ToString());
+				listQueue[i].PatName         = PIn.String(table.Rows[i][2].ToString());
+				listQueue[i].ClaimStatus     = PIn.String(table.Rows[i][3].ToString());
+				listQueue[i].Carrier         = PIn.String(table.Rows[i][4].ToString());
+				listQueue[i].PatNum          = PIn.Long   (table.Rows[i][5].ToString());
+				listQueue[i].ClearinghouseNum=Clearinghouses.GetNumForPayor(PIn.String(table.Rows[i][6].ToString()));
+				listQueue[i].IsMedical       = PIn.Bool  (table.Rows[i][7].ToString());
 			}
 			return listQueue;
 		}
@@ -375,7 +375,7 @@ namespace OpenDentBusiness{
 				if(i>0){
 					str.Append(" OR");
 				}
-				str.Append(" claim.ClaimNum="+POut.PLong(claimNums[i]));//((ClaimSendQueueItem)queueItems[i]).ClaimNum.ToString());
+				str.Append(" claim.ClaimNum="+POut.Long(claimNums[i]));//((ClaimSendQueueItem)queueItems[i]).ClaimNum.ToString());
 			}
 			string command;
 			if(DataConnection.DBtype==DatabaseType.Oracle){//FIXME:ORDER-BY. Probably Fixed.  ??
@@ -400,11 +400,11 @@ namespace OpenDentBusiness{
 			DataTable table=Db.GetTable(command);
 			object[,] myA=new object[5,table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++){
-				myA[0,i]=PIn.PString(table.Rows[i][0].ToString());
-				myA[1,i]=PIn.PLong   (table.Rows[i][1].ToString());
-				myA[2,i]=PIn.PLong   (table.Rows[i][2].ToString());
-				myA[3,i]=PIn.PLong   (table.Rows[i][3].ToString());
-				myA[4,i]=PIn.PLong   (table.Rows[i][4].ToString());
+				myA[0,i]=PIn.String(table.Rows[i][0].ToString());
+				myA[1,i]=PIn.Long   (table.Rows[i][1].ToString());
+				myA[2,i]=PIn.Long   (table.Rows[i][2].ToString());
+				myA[3,i]=PIn.Long   (table.Rows[i][3].ToString());
+				myA[4,i]=PIn.Long   (table.Rows[i][4].ToString());
 			}
 			return myA;
 		}

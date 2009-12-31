@@ -16,19 +16,19 @@ namespace OpenDentBusiness{
 			}
 			string command=
 				"SELECT * FROM toothinitial"
-				+" WHERE PatNum = "+POut.PLong(patNum);
+				+" WHERE PatNum = "+POut.Long(patNum);
 			DataTable table=Db.GetTable(command);
 			List<ToothInitial> tList=new List<ToothInitial>();
 			ToothInitial ti;
 			for(int i=0;i<table.Rows.Count;i++) {
 				ti=new ToothInitial();
-				ti.ToothInitialNum= PIn.PLong   (table.Rows[i][0].ToString());
-				ti.PatNum         = PIn.PLong   (table.Rows[i][1].ToString());
-				ti.ToothNum       = PIn.PString(table.Rows[i][2].ToString());
-				ti.InitialType    = (ToothInitialType)PIn.PLong(table.Rows[i][3].ToString());
-				ti.Movement       = PIn.PFloat (table.Rows[i][4].ToString());
-				ti.DrawingSegment = PIn.PString(table.Rows[i][5].ToString());
-				ti.ColorDraw      = Color.FromArgb(PIn.PInt(table.Rows[i][6].ToString()));
+				ti.ToothInitialNum= PIn.Long   (table.Rows[i][0].ToString());
+				ti.PatNum         = PIn.Long   (table.Rows[i][1].ToString());
+				ti.ToothNum       = PIn.String(table.Rows[i][2].ToString());
+				ti.InitialType    = (ToothInitialType)PIn.Long(table.Rows[i][3].ToString());
+				ti.Movement       = PIn.Float (table.Rows[i][4].ToString());
+				ti.DrawingSegment = PIn.String(table.Rows[i][5].ToString());
+				ti.ColorDraw      = Color.FromArgb(PIn.Int(table.Rows[i][6].ToString()));
 				tList.Add(ti);
 			}
 			return tList;
@@ -50,15 +50,15 @@ namespace OpenDentBusiness{
 			}
 			command+="PatNum,ToothNum,InitialType,Movement,DrawingSegment,ColorDraw) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+="'"+POut.PLong(init.ToothInitialNum)+"', ";
+				command+="'"+POut.Long(init.ToothInitialNum)+"', ";
 			}
 			command+=
-				 "'"+POut.PLong   (init.PatNum)+"', "
-				+"'"+POut.PString(init.ToothNum)+"', "
-				+"'"+POut.PLong   ((int)init.InitialType)+"', "
-				+"'"+POut.PFloat (init.Movement)+"', "
-				+"'"+POut.PString(init.DrawingSegment)+"', "
-				+"'"+POut.PLong   (init.ColorDraw.ToArgb())+"')";
+				 "'"+POut.Long   (init.PatNum)+"', "
+				+"'"+POut.String(init.ToothNum)+"', "
+				+"'"+POut.Long   ((int)init.InitialType)+"', "
+				+"'"+POut.Float (init.Movement)+"', "
+				+"'"+POut.String(init.DrawingSegment)+"', "
+				+"'"+POut.Long   (init.ColorDraw.ToArgb())+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -75,13 +75,13 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command= "UPDATE toothinitial SET "
-				+"PatNum = '"        +POut.PLong   (init.PatNum)+"', "
-				+"ToothNum= '"       +POut.PString(init.ToothNum)+"', "
-				+"InitialType = '"   +POut.PLong   ((int)init.InitialType)+"', "
-				+"Movement = '"      +POut.PFloat (init.Movement)+"', "
-				+"DrawingSegment = '"+POut.PString(init.DrawingSegment)+"', "
-				+"ColorDraw = '"     +POut.PLong   (init.ColorDraw.ToArgb())+"' "
-				+"WHERE ToothInitialNum = '"+POut.PLong(init.ToothInitialNum)+"'";
+				+"PatNum = '"        +POut.Long   (init.PatNum)+"', "
+				+"ToothNum= '"       +POut.String(init.ToothNum)+"', "
+				+"InitialType = '"   +POut.Long   ((int)init.InitialType)+"', "
+				+"Movement = '"      +POut.Float (init.Movement)+"', "
+				+"DrawingSegment = '"+POut.String(init.DrawingSegment)+"', "
+				+"ColorDraw = '"     +POut.Long   (init.ColorDraw.ToArgb())+"' "
+				+"WHERE ToothInitialNum = '"+POut.Long(init.ToothInitialNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -154,9 +154,9 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),patNum,tooth_id,initialType);
 				return;
 			}
-			string command="DELETE FROM toothinitial WHERE PatNum="+POut.PLong(patNum)
-				+" AND ToothNum='"+POut.PString(tooth_id)
-				+"' AND InitialType="+POut.PLong((int)initialType);
+			string command="DELETE FROM toothinitial WHERE PatNum="+POut.Long(patNum)
+				+" AND ToothNum='"+POut.String(tooth_id)
+				+"' AND InitialType="+POut.Long((int)initialType);
 			Db.NonQ(command);
 		}
 
@@ -166,8 +166,8 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),patNum,initialType);
 				return;
 			}
-			string command="DELETE FROM toothinitial WHERE PatNum="+POut.PLong(patNum)
-				+" AND InitialType="+POut.PLong((int)initialType);
+			string command="DELETE FROM toothinitial WHERE PatNum="+POut.Long(patNum)
+				+" AND InitialType="+POut.Long((int)initialType);
 			Db.NonQ(command);
 		}
 

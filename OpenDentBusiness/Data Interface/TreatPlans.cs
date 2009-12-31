@@ -16,20 +16,20 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<TreatPlan[]>(MethodBase.GetCurrentMethod(),patNum);
 			}
 			string command="SELECT * FROM treatplan "
-				+"WHERE PatNum="+POut.PLong(patNum)
+				+"WHERE PatNum="+POut.Long(patNum)
 				+" ORDER BY DateTP";
 			DataTable table=Db.GetTable(command);
 			TreatPlan[] List=new TreatPlan[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new TreatPlan();
-				List[i].TreatPlanNum= PIn.PLong   (table.Rows[i][0].ToString());
-				List[i].PatNum      = PIn.PLong   (table.Rows[i][1].ToString());
-				List[i].DateTP      = PIn.PDate  (table.Rows[i][2].ToString());
-				List[i].Heading     = PIn.PString(table.Rows[i][3].ToString());
-				List[i].Note        = PIn.PString(table.Rows[i][4].ToString());
-				List[i].Signature   = PIn.PString(table.Rows[i][5].ToString());
-				List[i].SigIsTopaz  = PIn.PBool  (table.Rows[i][6].ToString());
-				List[i].ResponsParty= PIn.PLong   (table.Rows[i][7].ToString());
+				List[i].TreatPlanNum= PIn.Long   (table.Rows[i][0].ToString());
+				List[i].PatNum      = PIn.Long   (table.Rows[i][1].ToString());
+				List[i].DateTP      = PIn.Date  (table.Rows[i][2].ToString());
+				List[i].Heading     = PIn.String(table.Rows[i][3].ToString());
+				List[i].Note        = PIn.String(table.Rows[i][4].ToString());
+				List[i].Signature   = PIn.String(table.Rows[i][5].ToString());
+				List[i].SigIsTopaz  = PIn.Bool  (table.Rows[i][6].ToString());
+				List[i].ResponsParty= PIn.Long   (table.Rows[i][7].ToString());
 			}
 			return List;
 		}
@@ -41,14 +41,14 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command= "UPDATE treatplan SET "
-				+"PatNum = '"     +POut.PLong   (tp.PatNum)+"'"
-				+",DateTP = "     +POut.PDate  (tp.DateTP)
-				+",Heading = '"   +POut.PString(tp.Heading)+"'"
-				+",Note = '"      +POut.PString(tp.Note)+"'"
-				+",Signature = '" +POut.PString(tp.Signature)+"'"
-				+",SigIsTopaz = '"+POut.PBool  (tp.SigIsTopaz)+"'"
-				+",ResponsParty='"+POut.PLong   (tp.ResponsParty)+"'"
-				+" WHERE TreatPlanNum = '"+POut.PLong(tp.TreatPlanNum)+"'";
+				+"PatNum = '"     +POut.Long   (tp.PatNum)+"'"
+				+",DateTP = "     +POut.Date  (tp.DateTP)
+				+",Heading = '"   +POut.String(tp.Heading)+"'"
+				+",Note = '"      +POut.String(tp.Note)+"'"
+				+",Signature = '" +POut.String(tp.Signature)+"'"
+				+",SigIsTopaz = '"+POut.Bool  (tp.SigIsTopaz)+"'"
+				+",ResponsParty='"+POut.Long   (tp.ResponsParty)+"'"
+				+" WHERE TreatPlanNum = '"+POut.Long(tp.TreatPlanNum)+"'";
  			Db.NonQ(command);
 		}
 
@@ -67,16 +67,16 @@ namespace OpenDentBusiness{
 			}
 			command+="PatNum,DateTP,Heading,Note,Signature,SigIsTopaz,ResponsParty) VALUES(";
 			if(PrefC.RandomKeys){
-				command+="'"+POut.PLong(tp.TreatPlanNum)+"', ";
+				command+="'"+POut.Long(tp.TreatPlanNum)+"', ";
 			}
 			command+=
-				 "'"+POut.PLong   (tp.PatNum)+"', "
-				+POut.PDate  (tp.DateTP)+", "
-				+"'"+POut.PString(tp.Heading)+"', "
-				+"'"+POut.PString(tp.Note)+"', "
-				+"'"+POut.PString(tp.Signature)+"', "
-				+"'"+POut.PBool  (tp.SigIsTopaz)+"', "
-				+"'"+POut.PLong   (tp.ResponsParty)+"')";
+				 "'"+POut.Long   (tp.PatNum)+"', "
+				+POut.Date  (tp.DateTP)+", "
+				+"'"+POut.String(tp.Heading)+"', "
+				+"'"+POut.String(tp.Note)+"', "
+				+"'"+POut.String(tp.Signature)+"', "
+				+"'"+POut.Bool  (tp.SigIsTopaz)+"', "
+				+"'"+POut.Long   (tp.ResponsParty)+"')";
  			if(PrefC.RandomKeys){
 				Db.NonQ(command);
 			}
@@ -93,13 +93,13 @@ namespace OpenDentBusiness{
 				return;
 			}
 			//check proctp for dependencies
-			string command="SELECT * FROM proctp WHERE TreatPlanNum ="+POut.PLong(tp.TreatPlanNum);
+			string command="SELECT * FROM proctp WHERE TreatPlanNum ="+POut.Long(tp.TreatPlanNum);
 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count>0){
 				//this should never happen
 				throw new InvalidProgramException(Lans.g("TreatPlans","Cannot delete treatment plan because it has ProcTP's attached"));
 			}
-			command= "DELETE from treatplan WHERE TreatPlanNum = '"+POut.PLong(tp.TreatPlanNum)+"'";
+			command= "DELETE from treatplan WHERE TreatPlanNum = '"+POut.Long(tp.TreatPlanNum)+"'";
  			Db.NonQ(command);
 		}
 

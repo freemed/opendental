@@ -212,8 +212,8 @@ namespace OpenDental{
 				listOps.SetSelected(0,true);
 			}
 			textNote.Text=SchedCur.Note;
-			if(SchedCur.StartTime.TimeOfDay==PIn.PDateT("12 AM").TimeOfDay 
-				&& SchedCur.StopTime.TimeOfDay==PIn.PDateT("12 AM").TimeOfDay)
+			if(SchedCur.StartTime.TimeOfDay==PIn.DateT("12 AM").TimeOfDay 
+				&& SchedCur.StopTime.TimeOfDay==PIn.DateT("12 AM").TimeOfDay)
 			{ 
 				comboStop.Visible=false;
 				comboStart.Visible=false;

@@ -26,17 +26,17 @@ namespace OpenDentBusiness{
 			for(int i=0;i<table.Rows.Count;i++){
 				pharm=new Pharmacy();
 				pharm.IsNew=false;
-				pharm.PharmacyNum= PIn.PLong   (table.Rows[i][0].ToString());
-				pharm.PharmID    = PIn.PString(table.Rows[i][1].ToString());
-				pharm.StoreName  = PIn.PString(table.Rows[i][2].ToString());
-				pharm.Phone      = PIn.PString(table.Rows[i][3].ToString());
-				pharm.Fax        = PIn.PString(table.Rows[i][4].ToString());
-				pharm.Address    = PIn.PString(table.Rows[i][5].ToString());
-				pharm.Address2   = PIn.PString(table.Rows[i][6].ToString());
-				pharm.City       = PIn.PString(table.Rows[i][7].ToString());
-				pharm.State      = PIn.PString(table.Rows[i][8].ToString());
-				pharm.Zip        = PIn.PString(table.Rows[i][9].ToString());
-				pharm.Note       = PIn.PString(table.Rows[i][10].ToString());
+				pharm.PharmacyNum= PIn.Long   (table.Rows[i][0].ToString());
+				pharm.PharmID    = PIn.String(table.Rows[i][1].ToString());
+				pharm.StoreName  = PIn.String(table.Rows[i][2].ToString());
+				pharm.Phone      = PIn.String(table.Rows[i][3].ToString());
+				pharm.Fax        = PIn.String(table.Rows[i][4].ToString());
+				pharm.Address    = PIn.String(table.Rows[i][5].ToString());
+				pharm.Address2   = PIn.String(table.Rows[i][6].ToString());
+				pharm.City       = PIn.String(table.Rows[i][7].ToString());
+				pharm.State      = PIn.String(table.Rows[i][8].ToString());
+				pharm.Zip        = PIn.String(table.Rows[i][9].ToString());
+				pharm.Note       = PIn.String(table.Rows[i][10].ToString());
 				PharmacyC.Listt.Add(pharm);
 			}
 		}

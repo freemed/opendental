@@ -34,10 +34,10 @@ namespace OpenDentBusiness{
 			Medication med;
 			for(int i=0;i<table.Rows.Count;i++) {
 				med=new Medication();
-				med.MedicationNum=PIn.PLong(table.Rows[i][0].ToString());
-				med.MedName      =PIn.PString(table.Rows[i][1].ToString());
-				med.GenericNum   =PIn.PLong(table.Rows[i][2].ToString());
-				med.Notes        =PIn.PString(table.Rows[i][3].ToString());
+				med.MedicationNum=PIn.Long(table.Rows[i][0].ToString());
+				med.MedName      =PIn.String(table.Rows[i][1].ToString());
+				med.GenericNum   =PIn.Long(table.Rows[i][2].ToString());
+				med.Notes        =PIn.String(table.Rows[i][3].ToString());
 				retVal.Add(med);
 			}
 			return retVal;
@@ -50,10 +50,10 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command = "UPDATE medication SET " 
-				+ "medname = '"      +POut.PString(Cur.MedName)+"'"
-				+ ",genericnum = '"  +POut.PLong   (Cur.GenericNum)+"'"
-				+ ",notes = '"       +POut.PString(Cur.Notes)+"'"
-				+" WHERE medicationnum = '" +POut.PLong   (Cur.MedicationNum)+"'";
+				+ "medname = '"      +POut.String(Cur.MedName)+"'"
+				+ ",genericnum = '"  +POut.Long   (Cur.GenericNum)+"'"
+				+ ",notes = '"       +POut.String(Cur.Notes)+"'"
+				+" WHERE medicationnum = '" +POut.Long   (Cur.MedicationNum)+"'";
 			//MessageBox.Show(command);
 			Db.NonQ(command);
 		}
@@ -74,12 +74,12 @@ namespace OpenDentBusiness{
 			command+="medname,genericnum,notes"
 				+") VALUES(";
 			if(PrefC.RandomKeys){
-				command+="'"+POut.PLong(Cur.MedicationNum)+"', ";
+				command+="'"+POut.Long(Cur.MedicationNum)+"', ";
 			}
 			command+=
-				 "'"+POut.PString(Cur.MedName)+"', "
-				+"'"+POut.PLong   (Cur.GenericNum)+"', "
-				+"'"+POut.PString(Cur.Notes)+"')";
+				 "'"+POut.String(Cur.MedName)+"', "
+				+"'"+POut.Long   (Cur.GenericNum)+"', "
+				+"'"+POut.String(Cur.Notes)+"')";
 			if(PrefC.RandomKeys){
 				Db.NonQ(command);
 			}
@@ -111,7 +111,7 @@ namespace OpenDentBusiness{
 			DataTable table=Db.GetTable(command);
 			string[] retVal=new string[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++){
-				retVal[i]=PIn.PString(table.Rows[i][0].ToString());
+				retVal[i]=PIn.String(table.Rows[i][0].ToString());
 			}
 			return retVal;
 		}
@@ -128,7 +128,7 @@ namespace OpenDentBusiness{
 			DataTable table=Db.GetTable(command);
 			string[] retVal=new string[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++){
-				retVal[i]=PIn.PString(table.Rows[i][0].ToString());
+				retVal[i]=PIn.String(table.Rows[i][0].ToString());
 			}
 			return retVal;
 		}

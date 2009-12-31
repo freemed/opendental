@@ -274,7 +274,7 @@ namespace OpenDental {
 				textAge1.Text="";
 				return;
 			}
-			DateTime birthdate=PIn.PDate(textBirthdate1.Text);
+			DateTime birthdate=PIn.Date(textBirthdate1.Text);
 			if(birthdate>DateTime.Today){
 				birthdate=birthdate.AddYears(-100);
 			}
@@ -286,7 +286,7 @@ namespace OpenDental {
 				textAge2.Text="";
 				return;
 			}
-			DateTime birthdate=PIn.PDate(textBirthdate2.Text);
+			DateTime birthdate=PIn.Date(textBirthdate2.Text);
 			if(birthdate>DateTime.Today){
 				birthdate=birthdate.AddYears(-100);
 			}
@@ -298,7 +298,7 @@ namespace OpenDental {
 				textAge3.Text="";
 				return;
 			}
-			DateTime birthdate=PIn.PDate(textBirthdate3.Text);
+			DateTime birthdate=PIn.Date(textBirthdate3.Text);
 			if(birthdate>DateTime.Today){
 				birthdate=birthdate.AddYears(-100);
 			}
@@ -310,7 +310,7 @@ namespace OpenDental {
 				textAge4.Text="";
 				return;
 			}
-			DateTime birthdate=PIn.PDate(textBirthdate4.Text);
+			DateTime birthdate=PIn.Date(textBirthdate4.Text);
 			if(birthdate>DateTime.Today){
 				birthdate=birthdate.AddYears(-100);
 			}
@@ -322,7 +322,7 @@ namespace OpenDental {
 				textAge5.Text="";
 				return;
 			}
-			DateTime birthdate=PIn.PDate(textBirthdate5.Text);
+			DateTime birthdate=PIn.Date(textBirthdate5.Text);
 			if(birthdate>DateTime.Today){
 				birthdate=birthdate.AddYears(-100);
 			}
@@ -1295,7 +1295,7 @@ namespace OpenDental {
 			else{
 				guar.Position=PatientPosition.Married;
 			}
-			guar.Birthdate=PIn.PDate(textBirthdate1.Text);
+			guar.Birthdate=PIn.Date(textBirthdate1.Text);
 			guar.BillingType=PrefC.GetLong(PrefName.PracticeDefaultBillType);
 			guar.PatStatus=PatientStatus.Patient;
 			guar.PriProv=ProviderC.List[comboPriProv1.SelectedIndex].ProvNum;
@@ -1355,7 +1355,7 @@ namespace OpenDental {
 				else{
 					pat2.Position=PatientPosition.Married;
 				}
-				pat2.Birthdate=PIn.PDate(textBirthdate2.Text);
+				pat2.Birthdate=PIn.Date(textBirthdate2.Text);
 				pat2.BillingType=PrefC.GetLong(PrefName.PracticeDefaultBillType);
 				pat2.PatStatus=PatientStatus.Patient;
 				pat2.PriProv=ProviderC.List[comboPriProv2.SelectedIndex].ProvNum;
@@ -1394,7 +1394,7 @@ namespace OpenDental {
 					pat3.Gender=PatientGender.Female;
 				}
 				pat3.Position=PatientPosition.Child;
-				pat3.Birthdate=PIn.PDate(textBirthdate3.Text);
+				pat3.Birthdate=PIn.Date(textBirthdate3.Text);
 				pat3.BillingType=PrefC.GetLong(PrefName.PracticeDefaultBillType);
 				pat3.PatStatus=PatientStatus.Patient;
 				pat3.PriProv=ProviderC.List[comboPriProv3.SelectedIndex].ProvNum;
@@ -1433,7 +1433,7 @@ namespace OpenDental {
 					pat4.Gender=PatientGender.Female;
 				}
 				pat4.Position=PatientPosition.Child;
-				pat4.Birthdate=PIn.PDate(textBirthdate4.Text);
+				pat4.Birthdate=PIn.Date(textBirthdate4.Text);
 				pat4.BillingType=PrefC.GetLong(PrefName.PracticeDefaultBillType);
 				pat4.PatStatus=PatientStatus.Patient;
 				pat4.PriProv=ProviderC.List[comboPriProv4.SelectedIndex].ProvNum;
@@ -1472,7 +1472,7 @@ namespace OpenDental {
 					pat5.Gender=PatientGender.Female;
 				}
 				pat5.Position=PatientPosition.Child;
-				pat5.Birthdate=PIn.PDate(textBirthdate5.Text);
+				pat5.Birthdate=PIn.Date(textBirthdate5.Text);
 				pat5.BillingType=PrefC.GetLong(PrefName.PracticeDefaultBillType);
 				pat5.PatStatus=PatientStatus.Patient;
 				pat5.PriProv=ProviderC.List[comboPriProv5.SelectedIndex].ProvNum;

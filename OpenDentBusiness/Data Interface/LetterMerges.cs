@@ -63,11 +63,11 @@ namespace OpenDentBusiness{
 			Listt=new LetterMerge[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				Listt[i]=new LetterMerge();
-				Listt[i].LetterMergeNum=PIn.PLong(table.Rows[i][0].ToString());
-				Listt[i].Description=PIn.PString(table.Rows[i][1].ToString());
-				Listt[i].TemplateName=PIn.PString(table.Rows[i][2].ToString());
-				Listt[i].DataFileName=PIn.PString(table.Rows[i][3].ToString());
-				Listt[i].Category=PIn.PLong(table.Rows[i][4].ToString());
+				Listt[i].LetterMergeNum=PIn.Long(table.Rows[i][0].ToString());
+				Listt[i].Description=PIn.String(table.Rows[i][1].ToString());
+				Listt[i].TemplateName=PIn.String(table.Rows[i][2].ToString());
+				Listt[i].DataFileName=PIn.String(table.Rows[i][3].ToString());
+				Listt[i].Category=PIn.Long(table.Rows[i][4].ToString());
 				Listt[i].Fields=LetterMergeFields.GetForLetter(Listt[i].LetterMergeNum);
 			}
 		}
@@ -88,13 +88,13 @@ namespace OpenDentBusiness{
 			command+="Description,TemplateName,DataFileName,"
 				+"Category) VALUES(";
 			if(PrefC.RandomKeys){
-				command+="'"+POut.PLong(merge.LetterMergeNum)+"', ";
+				command+="'"+POut.Long(merge.LetterMergeNum)+"', ";
 			}
 			command+=
-				 "'"+POut.PString(merge.Description)+"', "
-				+"'"+POut.PString(merge.TemplateName)+"', "
-				+"'"+POut.PString(merge.DataFileName)+"', "
-				+"'"+POut.PLong   (merge.Category)+"')";
+				 "'"+POut.String(merge.Description)+"', "
+				+"'"+POut.String(merge.TemplateName)+"', "
+				+"'"+POut.String(merge.DataFileName)+"', "
+				+"'"+POut.Long   (merge.Category)+"')";
  			if(PrefC.RandomKeys){
 				Db.NonQ(command);
 			}
@@ -111,11 +111,11 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command="UPDATE lettermerge SET "
-				+"Description = '"   +POut.PString(merge.Description)+"' "
-				+",TemplateName = '" +POut.PString(merge.TemplateName)+"' "
-				+",DataFileName = '" +POut.PString(merge.DataFileName)+"' "
-				+",Category = '"     +POut.PLong   (merge.Category)+"' "
-				+"WHERE LetterMergeNum = '"+POut.PLong(merge.LetterMergeNum)+"'";
+				+"Description = '"   +POut.String(merge.Description)+"' "
+				+",TemplateName = '" +POut.String(merge.TemplateName)+"' "
+				+",DataFileName = '" +POut.String(merge.DataFileName)+"' "
+				+",Category = '"     +POut.Long   (merge.Category)+"' "
+				+"WHERE LetterMergeNum = '"+POut.Long(merge.LetterMergeNum)+"'";
  			Db.NonQ(command);
 		}
 
@@ -126,7 +126,7 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command="DELETE FROM lettermerge "
-				+"WHERE LetterMergeNum = "+POut.PLong(merge.LetterMergeNum);
+				+"WHERE LetterMergeNum = "+POut.Long(merge.LetterMergeNum);
 			Db.NonQ(command);
 		}
 

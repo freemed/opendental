@@ -28,30 +28,30 @@ namespace OpenDentBusiness {
 						continue;
 					}
 					if(propertyInfo[f].PropertyType==typeof(int)){
-						propertyInfo[f].SetValue(obj,PIn.PLong(this[propertyInfo[f].Name]),null);
+						propertyInfo[f].SetValue(obj,PIn.Long(this[propertyInfo[f].Name]),null);
 					}
 					else if(propertyInfo[f].PropertyType==typeof(bool)){
-						propertyInfo[f].SetValue(obj,PIn.PBool(this[propertyInfo[f].Name]),null);
+						propertyInfo[f].SetValue(obj,PIn.Bool(this[propertyInfo[f].Name]),null);
 					}
 					else if(propertyInfo[f].PropertyType==typeof(string)){
-						propertyInfo[f].SetValue(obj,PIn.PString(this[propertyInfo[f].Name]),null);
+						propertyInfo[f].SetValue(obj,PIn.String(this[propertyInfo[f].Name]),null);
 					}
 					else if(propertyInfo[f].PropertyType==typeof(DateTime)){
 						//since this does not differentiate between date and datetime, there is potential for bugs.
-						propertyInfo[f].SetValue(obj,PIn.PDateT(this[propertyInfo[f].Name]),null);
+						propertyInfo[f].SetValue(obj,PIn.DateT(this[propertyInfo[f].Name]),null);
 					}
 					else if(propertyInfo[f].PropertyType.IsEnum){
-						object val=((object[])Enum.GetValues(propertyInfo[f].PropertyType))[PIn.PLong(this[propertyInfo[f].Name])];
+						object val=((object[])Enum.GetValues(propertyInfo[f].PropertyType))[PIn.Long(this[propertyInfo[f].Name])];
 						propertyInfo[f].SetValue(obj,val,null);
 					}
 					else if(propertyInfo[f].PropertyType==typeof(double)){
-						propertyInfo[f].SetValue(obj,PIn.PDouble(this[propertyInfo[f].Name]),null);
+						propertyInfo[f].SetValue(obj,PIn.Double(this[propertyInfo[f].Name]),null);
 					}
 					else if(propertyInfo[f].PropertyType==typeof(TimeSpan)){
-						propertyInfo[f].SetValue(obj,PIn.PTimeSpan(this[propertyInfo[f].Name]),null);
+						propertyInfo[f].SetValue(obj,PIn.TimeSpan(this[propertyInfo[f].Name]),null);
 					}
 					else if(propertyInfo[f].PropertyType==typeof(Byte)){
-						propertyInfo[f].SetValue(obj,PIn.PByte(this[propertyInfo[f].Name]),null);
+						propertyInfo[f].SetValue(obj,PIn.Byte(this[propertyInfo[f].Name]),null);
 					}
 					else{
 						throw new System.NotImplementedException();
@@ -62,16 +62,16 @@ namespace OpenDentBusiness {
 				FieldInfo[] fieldInfo=objectType.GetFields();
 				for(int f=0;f<fieldInfo.Length;f++){
 					if(fieldInfo[f].FieldType==typeof(int)){
-						fieldInfo[f].SetValue(obj,PIn.PLong(this[f]));
+						fieldInfo[f].SetValue(obj,PIn.Long(this[f]));
 					}
 					else if(fieldInfo[f].FieldType==typeof(bool)){
-						fieldInfo[f].SetValue(obj,PIn.PBool(this[f]));
+						fieldInfo[f].SetValue(obj,PIn.Bool(this[f]));
 					}
 					else if(fieldInfo[f].FieldType==typeof(string)){
-						fieldInfo[f].SetValue(obj,PIn.PString(this[f]));
+						fieldInfo[f].SetValue(obj,PIn.String(this[f]));
 					}
 					else if(fieldInfo[f].FieldType.IsEnum){
-						object val=((object[])Enum.GetValues(fieldInfo[f].FieldType))[PIn.PLong(this[f])];
+						object val=((object[])Enum.GetValues(fieldInfo[f].FieldType))[PIn.Long(this[f])];
 						fieldInfo[f].SetValue(obj,val);
 					}
 					else{

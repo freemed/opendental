@@ -207,7 +207,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"At least one provider must be selected.");
 				return;
 			}
-			int daysOld=PIn.PInt(textDaysOld.Text);
+			int daysOld=PIn.Int(textDaysOld.Text);
 			//FormQuery2.ResetGrid();//this is a method in FormQuery2;
 			ReportSimpleGrid report=new ReportSimpleGrid();
 			DateTime startQDate = DateTime.Today.AddDays(-daysOld);
@@ -219,7 +219,7 @@ namespace OpenDental{
 				+"WHERE claim.PlanNum = insplan.PlanNum "
 				+"AND claim.PatNum = patient.PatNum "
 				+"AND carrier.CarrierNum = insplan.CarrierNum "
-				+"AND claim.ClaimStatus='S' && claim.DateSent <= "+POut.PDate(startQDate)+" ";
+				+"AND claim.ClaimStatus='S' && claim.DateSent <= "+POut.Date(startQDate)+" ";
 			if(!checkPreauth.Checked){
 				report.Query+="AND claim.ClaimType != 'PreAuth' ";
 			}
@@ -231,8 +231,8 @@ namespace OpenDental{
 					else {
 						report.Query+=" OR ";
 					}
-					report.Query+=	"(claim.ProvBill="+POut.PLong(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)
-						+" OR claim.ProvTreat="+POut.PLong(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+")";
+					report.Query+=	"(claim.ProvBill="+POut.Long(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)
+						+" OR claim.ProvTreat="+POut.Long(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+")";
 				}
 				report.Query+=") ";
 			}
@@ -250,23 +250,23 @@ namespace OpenDental{
 				//start filling 'row'. First column is carrier:
 				row[0]=tableTemp.Rows[i][0];
 				row[1]=tableTemp.Rows[i][7];
-				if(PIn.PString(tableTemp.Rows[i][2].ToString())=="P")
+				if(PIn.String(tableTemp.Rows[i][2].ToString())=="P")
           row[2]="Primary";
-				if(PIn.PString(tableTemp.Rows[i][2].ToString())=="S")
+				if(PIn.String(tableTemp.Rows[i][2].ToString())=="S")
           row[2]="Secondary";
-				if(PIn.PString(tableTemp.Rows[i][2].ToString())=="PreAuth")
+				if(PIn.String(tableTemp.Rows[i][2].ToString())=="PreAuth")
           row[2]="PreAuth";
-				if(PIn.PString(tableTemp.Rows[i][2].ToString())=="Other")
+				if(PIn.String(tableTemp.Rows[i][2].ToString())=="Other")
           row[2]="Other";
 				row[3]=tableTemp.Rows[i][4];
-				row[4]=(PIn.PDate(tableTemp.Rows[i][3].ToString())).ToString("d");
-				row[5]=PIn.PDouble(tableTemp.Rows[i][6].ToString()).ToString("F");
+				row[4]=(PIn.Date(tableTemp.Rows[i][3].ToString())).ToString("d");
+				row[5]=PIn.Double(tableTemp.Rows[i][6].ToString()).ToString("F");
         //TimeSpan d = DateTime.Today.Subtract((PIn.PDate(tableTemp.Rows[i][5].ToString())));
 				//if(d.Days>5000)
 				//	row[4]="";
 				//else
 				//	row[4]=d.Days.ToString();
-				report.ColTotal[5]+=PIn.PDouble(tableTemp.Rows[i][6].ToString());
+				report.ColTotal[5]+=PIn.Double(tableTemp.Rows[i][6].ToString());
 				report.TableQ.Rows.Add(row);
       }
 			FormQuery2.ResetGrid();//this is a method in FormQuery;

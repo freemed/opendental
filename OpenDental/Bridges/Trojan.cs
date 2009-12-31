@@ -174,15 +174,15 @@ namespace OpenDental.Bridges {
 				//Patient name, Guarantor name, guarantor SSN, guarantor birthdate, insurance plan group number,
 				//and reason for pending deletion.
 				fpr.Graph.DrawString(
-					PIn.PString(pendingDeletionTable.Rows[i][0].ToString())+" "+PIn.PString(pendingDeletionTable.Rows[i][1].ToString())+Environment.NewLine+
-					PIn.PString(pendingDeletionTable.Rows[i][2].ToString())+" "+PIn.PString(pendingDeletionTable.Rows[i][3].ToString())+Environment.NewLine+
-					" SSN: "+PIn.PString(pendingDeletionTable.Rows[i][4].ToString())+Environment.NewLine+
-					" Birth: "+PIn.PDate(pendingDeletionTable.Rows[i][5].ToString()).ToShortDateString()+Environment.NewLine+
-					" Group: "+PIn.PString(pendingDeletionTable.Rows[i][6].ToString()),font,Brushes.Black,
+					PIn.String(pendingDeletionTable.Rows[i][0].ToString())+" "+PIn.String(pendingDeletionTable.Rows[i][1].ToString())+Environment.NewLine+
+					PIn.String(pendingDeletionTable.Rows[i][2].ToString())+" "+PIn.String(pendingDeletionTable.Rows[i][3].ToString())+Environment.NewLine+
+					" SSN: "+PIn.String(pendingDeletionTable.Rows[i][4].ToString())+Environment.NewLine+
+					" Birth: "+PIn.Date(pendingDeletionTable.Rows[i][5].ToString()).ToShortDateString()+Environment.NewLine+
+					" Group: "+PIn.String(pendingDeletionTable.Rows[i][6].ToString()),font,Brushes.Black,
 					new RectangleF(20,y+5,215,95));
 				//Pending deletion reason.
 				for(int j=0;j<deletePatientRecords.Count;j++) {
-					if(deletePatientRecords[j][0]==PIn.PString(pendingDeletionTable.Rows[i][8].ToString())) {
+					if(deletePatientRecords[j][0]==PIn.String(pendingDeletionTable.Rows[i][8].ToString())) {
 						text="REASON FOR DELETION: "+deletePatientRecords[j][7];
 						if(deletePatientRecords[j][1].ToUpper()=="F"){
 							text="FINALLY DELETED"+Environment.NewLine+text;
@@ -193,13 +193,13 @@ namespace OpenDental.Bridges {
 					}
 				}
 				//Trojan ID.
-				fpr.Graph.DrawString(PIn.PString(pendingDeletionTable.Rows[i][8].ToString()),font,Brushes.Black,new RectangleF(240,y+5,85,95));
+				fpr.Graph.DrawString(PIn.String(pendingDeletionTable.Rows[i][8].ToString()),font,Brushes.Black,new RectangleF(240,y+5,85,95));
 				//Employer Name and Phone.
-				fpr.Graph.DrawString(PIn.PString(pendingDeletionTable.Rows[i][9].ToString())+Environment.NewLine+
-					PIn.PString(pendingDeletionTable.Rows[i][10].ToString()),font,Brushes.Black,new RectangleF(330,y+5,170,95));
+				fpr.Graph.DrawString(PIn.String(pendingDeletionTable.Rows[i][9].ToString())+Environment.NewLine+
+					PIn.String(pendingDeletionTable.Rows[i][10].ToString()),font,Brushes.Black,new RectangleF(330,y+5,170,95));
 				//Carrier Name and Phone
-				fpr.Graph.DrawString(PIn.PString(pendingDeletionTable.Rows[i][11].ToString())+Environment.NewLine+
-					PIn.PString(pendingDeletionTable.Rows[i][12].ToString()),font,Brushes.Black,
+				fpr.Graph.DrawString(PIn.String(pendingDeletionTable.Rows[i][11].ToString())+Environment.NewLine+
+					PIn.String(pendingDeletionTable.Rows[i][12].ToString()),font,Brushes.Black,
 					new RectangleF(500,y+5,150,95));
 				//Leave space between records.
 				y+=recordHeight+recordSpacing;
@@ -291,15 +291,15 @@ namespace OpenDental.Bridges {
 				//Patient name, Guarantor name, guarantor SSN, guarantor birthdate, insurance plan group number,
 				//and reason for pending deletion.
 				fpr.Graph.DrawString(
-					PIn.PString(pendingDeletionTableTrojan.Rows[i][0].ToString())+" "+PIn.PString(pendingDeletionTableTrojan.Rows[i][1].ToString())+Environment.NewLine+
-					PIn.PString(pendingDeletionTableTrojan.Rows[i][2].ToString())+" "+PIn.PString(pendingDeletionTableTrojan.Rows[i][3].ToString())+Environment.NewLine+
-					" SSN: "+PIn.PString(pendingDeletionTableTrojan.Rows[i][4].ToString())+Environment.NewLine+
-					" Birth: "+PIn.PDate(pendingDeletionTableTrojan.Rows[i][5].ToString()).ToShortDateString()+Environment.NewLine+
-					" Group: "+PIn.PString(pendingDeletionTableTrojan.Rows[i][6].ToString()),font,Brushes.Black,
+					PIn.String(pendingDeletionTableTrojan.Rows[i][0].ToString())+" "+PIn.String(pendingDeletionTableTrojan.Rows[i][1].ToString())+Environment.NewLine+
+					PIn.String(pendingDeletionTableTrojan.Rows[i][2].ToString())+" "+PIn.String(pendingDeletionTableTrojan.Rows[i][3].ToString())+Environment.NewLine+
+					" SSN: "+PIn.String(pendingDeletionTableTrojan.Rows[i][4].ToString())+Environment.NewLine+
+					" Birth: "+PIn.Date(pendingDeletionTableTrojan.Rows[i][5].ToString()).ToShortDateString()+Environment.NewLine+
+					" Group: "+PIn.String(pendingDeletionTableTrojan.Rows[i][6].ToString()),font,Brushes.Black,
 					new RectangleF(80,y+5,185,95));
 				//Pending deletion reason.
 				for(int j=0;j<deleteTrojanRecords.Count;j++) {
-					if(deleteTrojanRecords[j][0]==PIn.PString(pendingDeletionTableTrojan.Rows[i][8].ToString())) {
+					if(deleteTrojanRecords[j][0]==PIn.String(pendingDeletionTableTrojan.Rows[i][8].ToString())) {
 						text="REASON FOR DELETION: "+deleteTrojanRecords[j][7];
 						if(deleteTrojanRecords[j][1].ToUpper()=="F"){
 							text="FINALLY DELETED"+Environment.NewLine+text;
@@ -310,15 +310,15 @@ namespace OpenDental.Bridges {
 					}
 				}
 				//Trojan ID.
-				fpr.Graph.DrawString(PIn.PString(pendingDeletionTableTrojan.Rows[i][8].ToString()),font,Brushes.Black,new RectangleF(265,y+5,85,95));
+				fpr.Graph.DrawString(PIn.String(pendingDeletionTableTrojan.Rows[i][8].ToString()),font,Brushes.Black,new RectangleF(265,y+5,85,95));
 				//Correct Employer boxes and arrow.
 				text="Yes No";
 				fpr.Graph.DrawString(text,font,Brushes.Black,345,y);
 				fpr.Graph.DrawRectangle(Pens.Black,new Rectangle(350,(int)(y+15),15,15));
 				fpr.Graph.DrawRectangle(Pens.Black,new Rectangle(375,(int)(y+15),15,15));
 				//Employer Name and Phone.
-				fpr.Graph.DrawString(PIn.PString(pendingDeletionTableTrojan.Rows[i][9].ToString())+Environment.NewLine+
-					PIn.PString(pendingDeletionTableTrojan.Rows[i][10].ToString()),font,Brushes.Black,new RectangleF(420,y+5,175,95));
+				fpr.Graph.DrawString(PIn.String(pendingDeletionTableTrojan.Rows[i][9].ToString())+Environment.NewLine+
+					PIn.String(pendingDeletionTableTrojan.Rows[i][10].ToString()),font,Brushes.Black,new RectangleF(420,y+5,175,95));
 				//New employer information if necessary.
 				text="New\nEmployer:";
 				fpr.Graph.DrawString(text,font,Brushes.Black,345,y+85);
@@ -333,8 +333,8 @@ namespace OpenDental.Bridges {
 				fpr.Graph.DrawRectangle(Pens.Black,new Rectangle(605,(int)(y+15),15,15));
 				fpr.Graph.DrawRectangle(Pens.Black,new Rectangle(630,(int)(y+15),15,15));
 				//Carrier Name and Phone
-				fpr.Graph.DrawString(PIn.PString(pendingDeletionTableTrojan.Rows[i][11].ToString())+Environment.NewLine+
-					PIn.PString(pendingDeletionTableTrojan.Rows[i][12].ToString()),font,Brushes.Black,
+				fpr.Graph.DrawString(PIn.String(pendingDeletionTableTrojan.Rows[i][11].ToString())+Environment.NewLine+
+					PIn.String(pendingDeletionTableTrojan.Rows[i][12].ToString()),font,Brushes.Black,
 					new RectangleF(670,y+5,225,95));
 				//New carrier information if necessary.
 				text="New\nCarrier:";
@@ -489,7 +489,7 @@ namespace OpenDental.Bridges {
 							ben=new Benefit();
 							ben.BenefitType=InsBenefitType.Limitations;
 							ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.General).CovCatNum;
-							ben.MonetaryAmt=PIn.PDouble(fields[2]);
+							ben.MonetaryAmt=PIn.Double(fields[2]);
 							ben.TimePeriod=BenefitTimePeriod.CalendarYear;
 							benefitList.Add(ben.Copy());
 						}
@@ -511,7 +511,7 @@ namespace OpenDental.Bridges {
 						else {
 							fields[2]=fields[2].Remove(0,1);
 							fields[2]=fields[2].Split(new char[] { ' ' })[0];
-							ben.MonetaryAmt=PIn.PDouble(fields[2]);
+							ben.MonetaryAmt=PIn.Double(fields[2]);
 						}
 						benefitList.Add(ben.Copy());
 						break;
@@ -521,7 +521,7 @@ namespace OpenDental.Bridges {
 							break;
 						}
 						splitField[0]=splitField[0].Remove(splitField[0].Length-1,1);//remove %
-						percent=PIn.PInt(splitField[0]);
+						percent=PIn.Int(splitField[0]);
 						if(percent<0 || percent>100) {
 							break;
 						}
@@ -538,7 +538,7 @@ namespace OpenDental.Bridges {
 							break;
 						}
 						splitField[0]=splitField[0].Remove(splitField[0].Length-1,1);//remove %
-						percent=PIn.PInt(splitField[0]);
+						percent=PIn.Int(splitField[0]);
 						if(percent<0 || percent>100) {
 							break;
 						}
@@ -567,7 +567,7 @@ namespace OpenDental.Bridges {
 							break;
 						}
 						splitField[0]=splitField[0].Remove(splitField[0].Length-1,1);//remove %
-						percent=PIn.PInt(splitField[0]);
+						percent=PIn.Int(splitField[0]);
 						if(percent<0 || percent>100) {
 							break;
 						}

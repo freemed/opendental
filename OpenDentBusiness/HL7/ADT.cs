@@ -27,7 +27,7 @@ namespace OpenDentBusiness.HL7 {
 			//EVN-Ignore
 			//PID-------------------------------------
 			SegmentHL7 seg=message.GetSegment(SegmentName.PID,true);
-			long patNum=PIn.PLong(seg.GetFieldFullText(2));
+			long patNum=PIn.Long(seg.GetFieldFullText(2));
 			Patient pat=null;
 			if(useChartNumber) {
 				pat=Patients.GetPatByChartNumber(patNum.ToString());
@@ -110,7 +110,7 @@ namespace OpenDentBusiness.HL7 {
 			//as a general strategy, if certain things are the same, like subscriber and carrier,
 			//then we change the existing plan.
 			//However, if basics change at all, then we drop the old plan and create a new one
-			int ordinal=PIn.PInt(seg.GetFieldFullText(1));
+			int ordinal=PIn.Int(seg.GetFieldFullText(1));
 			PatPlan oldPatPlan=PatPlans.GetPatPlan(pat.PatNum,ordinal);
 			if(oldPatPlan==null) {
 				//create a new plan and a new patplan

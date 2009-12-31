@@ -1849,7 +1849,7 @@ namespace OpenDental{
 				else{
 					ben.TimePeriod=BenefitTimePeriod.ServiceYear;					
 				}
-				ben.MonetaryAmt=PIn.PDouble(textAnnualMax.Text);
+				ben.MonetaryAmt=PIn.Double(textAnnualMax.Text);
 				ben.CoverageLevel=BenefitCoverageLevel.Individual;
 				benefitListAll.Add(ben);
 			}
@@ -1866,7 +1866,7 @@ namespace OpenDental{
 				else {
 					ben.TimePeriod=BenefitTimePeriod.ServiceYear;
 				}
-				ben.MonetaryAmt=PIn.PDouble(textAnnualMaxFam.Text);
+				ben.MonetaryAmt=PIn.Double(textAnnualMaxFam.Text);
 				ben.CoverageLevel=BenefitCoverageLevel.Family;
 				benefitListAll.Add(ben);
 			}
@@ -1883,7 +1883,7 @@ namespace OpenDental{
 				else{
 					ben.TimePeriod=BenefitTimePeriod.ServiceYear;					
 				}
-				ben.MonetaryAmt=PIn.PDouble(textDeductible.Text);
+				ben.MonetaryAmt=PIn.Double(textDeductible.Text);
 				ben.CoverageLevel=BenefitCoverageLevel.Individual;
 				benefitListAll.Add(ben);
 			}
@@ -1900,7 +1900,7 @@ namespace OpenDental{
 				else {
 					ben.TimePeriod=BenefitTimePeriod.ServiceYear;
 				}
-				ben.MonetaryAmt=PIn.PDouble(textDeductibleFam.Text);
+				ben.MonetaryAmt=PIn.Double(textDeductibleFam.Text);
 				ben.CoverageLevel=BenefitCoverageLevel.Family;
 				benefitListAll.Add(ben);
 			}
@@ -1912,7 +1912,7 @@ namespace OpenDental{
 				ben.CovCatNum=0;
 				ben.PlanNum=PlanNum;
 				ben.QuantityQualifier=BenefitQuantity.AgeLimit;
-				ben.Quantity=PIn.PInt(textFlo.Text);
+				ben.Quantity=PIn.Int(textFlo.Text);
 				benefitListAll.Add(ben);
 			}
 			//frequency BW
@@ -1937,7 +1937,7 @@ namespace OpenDental{
 				else if(comboBW.SelectedIndex==2){
 					ben.QuantityQualifier=BenefitQuantity.Months;
 				}
-				ben.Quantity=PIn.PInt(textBW.Text);
+				ben.Quantity=PIn.Int(textBW.Text);
 				//ben.TimePeriod is none for years or months, although calYear, or ServiceYear, or Years might work too
 				benefitListAll.Add(ben);
 			}
@@ -1963,7 +1963,7 @@ namespace OpenDental{
 				else if(comboPano.SelectedIndex==2) {
 					ben.QuantityQualifier=BenefitQuantity.Months;
 				}
-				ben.Quantity=PIn.PInt(textPano.Text);
+				ben.Quantity=PIn.Int(textPano.Text);
 				//ben.TimePeriod is none for years or months, although calYear, or ServiceYear, or Years might work too
 				benefitListAll.Add(ben);
 			}
@@ -1989,7 +1989,7 @@ namespace OpenDental{
 				else if(comboExams.SelectedIndex==2) {
 					ben.QuantityQualifier=BenefitQuantity.Months;
 				}
-				ben.Quantity=PIn.PInt(textExams.Text);
+				ben.Quantity=PIn.Int(textExams.Text);
 				//ben.TimePeriod is none for years or months, although calYear, or ServiceYear, or Years might work too
 				benefitListAll.Add(ben);
 			}
@@ -2001,7 +2001,7 @@ namespace OpenDental{
 				ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.Orthodontics).CovCatNum;
 				ben.PlanNum=PlanNum;
 				ben.TimePeriod=BenefitTimePeriod.Lifetime;
-				ben.MonetaryAmt=PIn.PDouble(textOrthoMax.Text);
+				ben.MonetaryAmt=PIn.Double(textOrthoMax.Text);
 				benefitListAll.Add(ben);
 			}
 			//ortho percent
@@ -2010,7 +2010,7 @@ namespace OpenDental{
 				ben.CodeNum=0;
 				ben.BenefitType=InsBenefitType.CoInsurance;
 				ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.Orthodontics).CovCatNum;
-				ben.Percent=PIn.PInt(textOrthoPercent.Text);
+				ben.Percent=PIn.Int(textOrthoPercent.Text);
 				ben.PlanNum=PlanNum;
 				if(checkCalendarYear.Checked) {
 					ben.TimePeriod=BenefitTimePeriod.CalendarYear;
@@ -2033,7 +2033,7 @@ namespace OpenDental{
 				else {
 					ben.TimePeriod=BenefitTimePeriod.ServiceYear;
 				}
-				ben.MonetaryAmt=PIn.PDouble(textDeductDiag.Text);
+				ben.MonetaryAmt=PIn.Double(textDeductDiag.Text);
 				ben.CoverageLevel=BenefitCoverageLevel.Individual;
 				benefitListAll.Add(ben);
 			}
@@ -2050,7 +2050,7 @@ namespace OpenDental{
 				else {
 					ben.TimePeriod=BenefitTimePeriod.ServiceYear;
 				}
-				ben.MonetaryAmt=PIn.PDouble(textDeductDiagFam.Text);
+				ben.MonetaryAmt=PIn.Double(textDeductDiagFam.Text);
 				ben.CoverageLevel=BenefitCoverageLevel.Family;
 				benefitListAll.Add(ben);
 			}
@@ -2067,7 +2067,7 @@ namespace OpenDental{
 				else {
 					ben.TimePeriod=BenefitTimePeriod.ServiceYear;
 				}
-				ben.MonetaryAmt=PIn.PDouble(textDeductXray.Text);
+				ben.MonetaryAmt=PIn.Double(textDeductXray.Text);
 				ben.CoverageLevel=BenefitCoverageLevel.Individual;
 				benefitListAll.Add(ben);
 			}
@@ -2084,7 +2084,7 @@ namespace OpenDental{
 				else {
 					ben.TimePeriod=BenefitTimePeriod.ServiceYear;
 				}
-				ben.MonetaryAmt=PIn.PDouble(textDeductXrayFam.Text);
+				ben.MonetaryAmt=PIn.Double(textDeductXrayFam.Text);
 				ben.CoverageLevel=BenefitCoverageLevel.Family;
 				benefitListAll.Add(ben);
 			}
@@ -2101,7 +2101,7 @@ namespace OpenDental{
 				else {
 					ben.TimePeriod=BenefitTimePeriod.ServiceYear;
 				}
-				ben.MonetaryAmt=PIn.PDouble(textDeductPrevent.Text);
+				ben.MonetaryAmt=PIn.Double(textDeductPrevent.Text);
 				ben.CoverageLevel=BenefitCoverageLevel.Individual;
 				benefitListAll.Add(ben);
 			}
@@ -2118,7 +2118,7 @@ namespace OpenDental{
 				else {
 					ben.TimePeriod=BenefitTimePeriod.ServiceYear;
 				}
-				ben.MonetaryAmt=PIn.PDouble(textDeductPreventFam.Text);
+				ben.MonetaryAmt=PIn.Double(textDeductPreventFam.Text);
 				ben.CoverageLevel=BenefitCoverageLevel.Family;
 				benefitListAll.Add(ben);
 			}
@@ -2128,7 +2128,7 @@ namespace OpenDental{
 				ben.CodeNum=0;
 				ben.BenefitType=InsBenefitType.CoInsurance;
 				ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.Diagnostic).CovCatNum;
-				ben.Percent=PIn.PInt(textDiagnostic.Text);
+				ben.Percent=PIn.Int(textDiagnostic.Text);
 				ben.PlanNum=PlanNum;
 				if(checkCalendarYear.Checked) {
 					ben.TimePeriod=BenefitTimePeriod.CalendarYear;
@@ -2144,7 +2144,7 @@ namespace OpenDental{
 				ben.CodeNum=0;
 				ben.BenefitType=InsBenefitType.CoInsurance;
 				ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.DiagnosticXRay).CovCatNum;
-				ben.Percent=PIn.PInt(textXray.Text);
+				ben.Percent=PIn.Int(textXray.Text);
 				ben.PlanNum=PlanNum;
 				if(checkCalendarYear.Checked) {
 					ben.TimePeriod=BenefitTimePeriod.CalendarYear;
@@ -2160,7 +2160,7 @@ namespace OpenDental{
 				ben.CodeNum=0;
 				ben.BenefitType=InsBenefitType.CoInsurance;
 				ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.RoutinePreventive).CovCatNum;
-				ben.Percent=PIn.PInt(textRoutinePrev.Text);
+				ben.Percent=PIn.Int(textRoutinePrev.Text);
 				ben.PlanNum=PlanNum;
 				if(checkCalendarYear.Checked) {
 					ben.TimePeriod=BenefitTimePeriod.CalendarYear;
@@ -2176,7 +2176,7 @@ namespace OpenDental{
 				ben.CodeNum=0;
 				ben.BenefitType=InsBenefitType.CoInsurance;
 				ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.Restorative).CovCatNum;
-				ben.Percent=PIn.PInt(textRestorative.Text);
+				ben.Percent=PIn.Int(textRestorative.Text);
 				ben.PlanNum=PlanNum;
 				if(checkCalendarYear.Checked) {
 					ben.TimePeriod=BenefitTimePeriod.CalendarYear;
@@ -2192,7 +2192,7 @@ namespace OpenDental{
 				ben.CodeNum=0;
 				ben.BenefitType=InsBenefitType.CoInsurance;
 				ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.Endodontics).CovCatNum;
-				ben.Percent=PIn.PInt(textEndo.Text);
+				ben.Percent=PIn.Int(textEndo.Text);
 				ben.PlanNum=PlanNum;
 				if(checkCalendarYear.Checked) {
 					ben.TimePeriod=BenefitTimePeriod.CalendarYear;
@@ -2208,7 +2208,7 @@ namespace OpenDental{
 				ben.CodeNum=0;
 				ben.BenefitType=InsBenefitType.CoInsurance;
 				ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.Periodontics).CovCatNum;
-				ben.Percent=PIn.PInt(textPerio.Text);
+				ben.Percent=PIn.Int(textPerio.Text);
 				ben.PlanNum=PlanNum;
 				if(checkCalendarYear.Checked) {
 					ben.TimePeriod=BenefitTimePeriod.CalendarYear;
@@ -2224,7 +2224,7 @@ namespace OpenDental{
 				ben.CodeNum=0;
 				ben.BenefitType=InsBenefitType.CoInsurance;
 				ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.OralSurgery).CovCatNum;
-				ben.Percent=PIn.PInt(textOralSurg.Text);
+				ben.Percent=PIn.Int(textOralSurg.Text);
 				ben.PlanNum=PlanNum;
 				if(checkCalendarYear.Checked) {
 					ben.TimePeriod=BenefitTimePeriod.CalendarYear;
@@ -2240,7 +2240,7 @@ namespace OpenDental{
 				ben.CodeNum=0;
 				ben.BenefitType=InsBenefitType.CoInsurance;
 				ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.Crowns).CovCatNum;
-				ben.Percent=PIn.PInt(textCrowns.Text);
+				ben.Percent=PIn.Int(textCrowns.Text);
 				ben.PlanNum=PlanNum;
 				if(checkCalendarYear.Checked) {
 					ben.TimePeriod=BenefitTimePeriod.CalendarYear;
@@ -2256,7 +2256,7 @@ namespace OpenDental{
 				ben.CodeNum=0;
 				ben.BenefitType=InsBenefitType.CoInsurance;
 				ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.Prosthodontics).CovCatNum;
-				ben.Percent=PIn.PInt(textProsth.Text);
+				ben.Percent=PIn.Int(textProsth.Text);
 				ben.PlanNum=PlanNum;
 				if(checkCalendarYear.Checked) {
 					ben.TimePeriod=BenefitTimePeriod.CalendarYear;
@@ -2272,7 +2272,7 @@ namespace OpenDental{
 				ben.CodeNum=0;
 				ben.BenefitType=InsBenefitType.CoInsurance;
 				ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.MaxillofacialProsth).CovCatNum;
-				ben.Percent=PIn.PInt(textMaxProsth.Text);
+				ben.Percent=PIn.Int(textMaxProsth.Text);
 				ben.PlanNum=PlanNum;
 				if(checkCalendarYear.Checked) {
 					ben.TimePeriod=BenefitTimePeriod.CalendarYear;
@@ -2288,7 +2288,7 @@ namespace OpenDental{
 				ben.CodeNum=0;
 				ben.BenefitType=InsBenefitType.CoInsurance;
 				ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.Accident).CovCatNum;
-				ben.Percent=PIn.PInt(textAccident.Text);
+				ben.Percent=PIn.Int(textAccident.Text);
 				ben.PlanNum=PlanNum;
 				if(checkCalendarYear.Checked) {
 					ben.TimePeriod=BenefitTimePeriod.CalendarYear;
@@ -2325,7 +2325,7 @@ namespace OpenDental{
 				MonthRenew=0;
 			}
 			else {
-				MonthRenew=PIn.PInt(textMonth.Text);
+				MonthRenew=PIn.Int(textMonth.Text);
 			}
 			Note=textSubscNote.Text;
 			DialogResult=DialogResult.OK;

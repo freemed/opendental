@@ -21,7 +21,7 @@ namespace OpenDentBusiness{
 			else {
 				ComputeAging(0,DateTime.Today,false);
 				if(PrefC.GetDate(PrefName.DateLastAging) != DateTime.Today) {
-					Prefs.UpdateString(PrefName.DateLastAging,POut.PDate(DateTime.Today,false));
+					Prefs.UpdateString(PrefName.DateLastAging,POut.Date(DateTime.Today,false));
 					//Since this is always called from UI, the above line works fine to keep the prefs cache current.
 				}
 			}
@@ -54,20 +54,20 @@ namespace OpenDentBusiness{
 				+",BalTotal  = 0"
 				+",PayPlanDue= 0";
 			if(guarantor!=0) {
-				command+=" WHERE Guarantor="+POut.PLong(guarantor);
+				command+=" WHERE Guarantor="+POut.Long(guarantor);
 			}
 			Db.NonQ(command);
 			if(AsOfDate.Year<1880){
 				AsOfDate=DateTime.Today;
 			}
-			string asOfDate=POut.PDate(AsOfDate);
-			string billInAdvanceDate=POut.PDate(AsOfDate.AddDays(PrefC.GetLong(PrefName.PayPlansBillInAdvanceDays)));
+			string asOfDate=POut.Date(AsOfDate);
+			string billInAdvanceDate=POut.Date(AsOfDate.AddDays(PrefC.GetLong(PrefName.PayPlansBillInAdvanceDays)));
 			if(historic){
-				billInAdvanceDate=POut.PDate(DateTime.Today.AddDays(PrefC.GetLong(PrefName.PayPlansBillInAdvanceDays)));
+				billInAdvanceDate=POut.Date(DateTime.Today.AddDays(PrefC.GetLong(PrefName.PayPlansBillInAdvanceDays)));
 			}
-			string thirtyDaysAgo=POut.PDate(AsOfDate.AddDays(-30));
-			string sixtyDaysAgo=POut.PDate(AsOfDate.AddDays(-60));
-			string ninetyDaysAgo=POut.PDate(AsOfDate.AddDays(-90));
+			string thirtyDaysAgo=POut.Date(AsOfDate.AddDays(-30));
+			string sixtyDaysAgo=POut.Date(AsOfDate.AddDays(-60));
+			string ninetyDaysAgo=POut.Date(AsOfDate.AddDays(-90));
 			string familyPatNums="";
 			Collection <string> familyPatNumList=new Collection<string> ();
 			if(guarantor!=0) {

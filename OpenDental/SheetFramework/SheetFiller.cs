@@ -241,7 +241,7 @@ namespace OpenDental{
 				if(field.FieldType!=SheetFieldType.PatImage){
 					continue;
 				}
-				category=PIn.PLong(field.FieldName);
+				category=PIn.Long(field.FieldName);
 				field.FieldName="0";//in case we can't find an image, this will be 0.
 				field.FieldValue="";
 				//go backwards to find the latest date

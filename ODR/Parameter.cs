@@ -137,22 +137,22 @@ namespace ODR
 					}
 				}
 				else if(valueType==ParamValueType.Date){
-					outputValue+=Regex.Replace(snippet,@"\?",POut.PDate((DateTime)currentValues[i],false));
+					outputValue+=Regex.Replace(snippet,@"\?",POut.Date((DateTime)currentValues[i],false));
 				}
 				else if(valueType==ParamValueType.Enum){
-					outputValue+=Regex.Replace(snippet,@"\?",POut.PLong((int)currentValues[i]));
+					outputValue+=Regex.Replace(snippet,@"\?",POut.Long((int)currentValues[i]));
 				}
 				else if(valueType==ParamValueType.Integer){
-					outputValue+=Regex.Replace(snippet,@"\?",POut.PLong((int)currentValues[i]));
+					outputValue+=Regex.Replace(snippet,@"\?",POut.Long((int)currentValues[i]));
 				}
 				else if(valueType==ParamValueType.String){
-					outputValue+=Regex.Replace(snippet,@"\?",POut.PString((string)currentValues[i]));
+					outputValue+=Regex.Replace(snippet,@"\?",POut.String((string)currentValues[i]));
 				}
 				else if(valueType==ParamValueType.Number){
-					outputValue+=Regex.Replace(snippet,@"\?",POut.PDouble((double)currentValues[i]));
+					outputValue+=Regex.Replace(snippet,@"\?",POut.Double((double)currentValues[i]));
 				}
 				else if(valueType==ParamValueType.QueryData){
-					outputValue+=Regex.Replace(snippet,@"\?",POut.PString((string)currentValues[i]));
+					outputValue+=Regex.Replace(snippet,@"\?",POut.String((string)currentValues[i]));
 				}
 			}
 			outputValue+=")";

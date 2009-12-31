@@ -278,7 +278,7 @@ namespace OpenDental {
 				}
 				else {
 					bDate = wDate;
-					eDate = POut.PDate(date1.SelectionStart.AddDays(1)).Substring(1,10);// Needed because all Queries are < end date to get correct Starting AR
+					eDate = POut.Date(date1.SelectionStart.AddDays(1)).Substring(1,10);// Needed because all Queries are < end date to get correct Starting AR
 				}
 				string whereProv;//used as the provider portion of the where clauses.
 				//each whereProv needs to be set up separately for each query
@@ -293,7 +293,7 @@ namespace OpenDental {
 							whereProv += "OR ";
 						}
 						whereProv += "procedurelog.ProvNum = "
-                            + POut.PLong(ProviderC.List[listProv.SelectedIndices[i] - 1].ProvNum) + " ";
+                            + POut.Long(ProviderC.List[listProv.SelectedIndices[i] - 1].ProvNum) + " ";
 					}
 					whereProv += ") ";
 				}
@@ -317,7 +317,7 @@ namespace OpenDental {
 							whereProv += "OR ";
 						}
 						whereProv += "claimproc.ProvNum = "
-                            + POut.PLong(ProviderC.List[listProv.SelectedIndices[i] - 1].ProvNum) + " ";
+                            + POut.Long(ProviderC.List[listProv.SelectedIndices[i] - 1].ProvNum) + " ";
 					}
 					whereProv += ") ";
 				}
@@ -353,7 +353,7 @@ namespace OpenDental {
 							whereProv += "OR ";
 						}
 						whereProv += "ProvNum = "
-                            + POut.PLong(ProviderC.List[listProv.SelectedIndices[i] - 1].ProvNum) + " ";
+                            + POut.Long(ProviderC.List[listProv.SelectedIndices[i] - 1].ProvNum) + " ";
 					}
 					whereProv += ") ";
 				}
@@ -388,7 +388,7 @@ namespace OpenDental {
 							whereProv += "OR ";
 						}
 						whereProv += "paysplit.ProvNum = "
-                            + POut.PLong(ProviderC.List[listProv.SelectedIndices[i] - 1].ProvNum) + " ";
+                            + POut.Long(ProviderC.List[listProv.SelectedIndices[i] - 1].ProvNum) + " ";
 					}
 					whereProv += ") ";
 				}
@@ -409,7 +409,7 @@ namespace OpenDental {
 							whereProv += "OR ";
 						}
 						whereProv += "claimproc.ProvNum = "
-                            + POut.PLong(ProviderC.List[listProv.SelectedIndices[i] - 1].ProvNum) + " ";
+                            + POut.Long(ProviderC.List[listProv.SelectedIndices[i] - 1].ProvNum) + " ";
 					}
 					whereProv += ") ";
 				}
@@ -432,7 +432,7 @@ namespace OpenDental {
 							whereProv += "OR ";
 						}
 						whereProv += "ProvNum = "
-                            + POut.PLong(ProviderC.List[listProv.SelectedIndices[i] - 1].ProvNum) + " ";
+                            + POut.Long(ProviderC.List[listProv.SelectedIndices[i] - 1].ProvNum) + " ";
 					}
 					whereProv += ") ";
 				}
@@ -447,22 +447,22 @@ namespace OpenDental {
 				//Finaly Generate Report showing the breakdown upto the date specified with totals for what is on the report
 				if(j == 0) {
 					for(int k = 0;k < TableCharge.Rows.Count;k++) {
-						rcvProd += PIn.PDouble(TableCharge.Rows[k][1].ToString());
+						rcvProd += PIn.Double(TableCharge.Rows[k][1].ToString());
 					}
 					for(int k = 0;k < TableCapWriteoff.Rows.Count;k++) {
-						rcvWriteoff += PIn.PDouble(TableCapWriteoff.Rows[k][1].ToString());
+						rcvWriteoff += PIn.Double(TableCapWriteoff.Rows[k][1].ToString());
 					}
 					for(int k = 0;k < TableInsWriteoff.Rows.Count;k++) {
-						rcvWriteoff += PIn.PDouble(TableInsWriteoff.Rows[k][1].ToString());
+						rcvWriteoff += PIn.Double(TableInsWriteoff.Rows[k][1].ToString());
 					}
 					for(int k = 0;k < TablePay.Rows.Count;k++) {
-						rcvPayment += PIn.PDouble(TablePay.Rows[k][1].ToString());
+						rcvPayment += PIn.Double(TablePay.Rows[k][1].ToString());
 					}
 					for(int k = 0;k < TableIns.Rows.Count;k++) {
-						rcvInsPayment += PIn.PDouble(TableIns.Rows[k][1].ToString());
+						rcvInsPayment += PIn.Double(TableIns.Rows[k][1].ToString());
 					}
 					for(int k = 0;k < TableAdj.Rows.Count;k++) {
-						rcvAdj += PIn.PDouble(TableAdj.Rows[k][1].ToString());
+						rcvAdj += PIn.Double(TableAdj.Rows[k][1].ToString());
 					}
 					TableCharge.Clear();
 					TableCapWriteoff.Clear();
@@ -485,41 +485,41 @@ namespace OpenDental {
 						report.TableQ.Columns.Add(new System.Data.DataColumn());//blank columns
 					}
 					report.InitializeColumns();
-					eDate = POut.PDate(date1.SelectionStart).Substring(1,10);// Reset EndDate to Selected Date
-					DateTime[] dates = new DateTime[(PIn.PDate(eDate) - PIn.PDate(bDate)).Days + 1];
+					eDate = POut.Date(date1.SelectionStart).Substring(1,10);// Reset EndDate to Selected Date
+					DateTime[] dates = new DateTime[(PIn.Date(eDate) - PIn.Date(bDate)).Days + 1];
 					for(int i = 0;i < dates.Length;i++) {//usually 31 days in loop
-						dates[i] = PIn.PDate(bDate).AddDays(i);
+						dates[i] = PIn.Date(bDate).AddDays(i);
 						//create new row called 'row' based on structure of TableQ
 						DataRow row = report.TableQ.NewRow();
 						row[0] = dates[i].ToShortDateString();
 						for(int k = 0;k < TableCharge.Rows.Count;k++) {
-							if(dates[i] == (PIn.PDate(TableCharge.Rows[k][0].ToString()))) {
-								rcvProd += PIn.PDouble(TableCharge.Rows[k][1].ToString());
+							if(dates[i] == (PIn.Date(TableCharge.Rows[k][0].ToString()))) {
+								rcvProd += PIn.Double(TableCharge.Rows[k][1].ToString());
 							}
 						}
 						for(int k = 0;k < TableCapWriteoff.Rows.Count;k++) {
-							if(dates[i] == (PIn.PDate(TableCapWriteoff.Rows[k][0].ToString()))) {
-								rcvWriteoff += PIn.PDouble(TableCapWriteoff.Rows[k][1].ToString());
+							if(dates[i] == (PIn.Date(TableCapWriteoff.Rows[k][0].ToString()))) {
+								rcvWriteoff += PIn.Double(TableCapWriteoff.Rows[k][1].ToString());
 							}
 						}
 						for(int k = 0;k < TableAdj.Rows.Count;k++) {
-							if(dates[i] == (PIn.PDate(TableAdj.Rows[k][0].ToString()))) {
-								rcvAdj += PIn.PDouble(TableAdj.Rows[k][1].ToString());
+							if(dates[i] == (PIn.Date(TableAdj.Rows[k][0].ToString()))) {
+								rcvAdj += PIn.Double(TableAdj.Rows[k][1].ToString());
 							}
 						}
 						for(int k = 0;k < TableInsWriteoff.Rows.Count;k++) {
-							if(dates[i] == (PIn.PDate(TableInsWriteoff.Rows[k][0].ToString()))) {
-								rcvWriteoff += PIn.PDouble(TableInsWriteoff.Rows[k][1].ToString());
+							if(dates[i] == (PIn.Date(TableInsWriteoff.Rows[k][0].ToString()))) {
+								rcvWriteoff += PIn.Double(TableInsWriteoff.Rows[k][1].ToString());
 							}
 						}
 						for(int k = 0;k < TablePay.Rows.Count;k++) {
-							if(dates[i] == (PIn.PDate(TablePay.Rows[k][0].ToString()))) {
-								rcvPayment += PIn.PDouble(TablePay.Rows[k][1].ToString());
+							if(dates[i] == (PIn.Date(TablePay.Rows[k][0].ToString()))) {
+								rcvPayment += PIn.Double(TablePay.Rows[k][1].ToString());
 							}
 						}
 						for(int k = 0;k < TableIns.Rows.Count;k++) {
-							if(dates[i] == (PIn.PDate(TableIns.Rows[k][0].ToString()))) {
-								rcvInsPayment += PIn.PDouble(TableIns.Rows[k][1].ToString());
+							if(dates[i] == (PIn.Date(TableIns.Rows[k][0].ToString()))) {
+								rcvInsPayment += PIn.Double(TableIns.Rows[k][1].ToString());
 							}
 						}
 						rcvDaily = (rcvProd + rcvAdj - rcvWriteoff) - (rcvPayment + rcvInsPayment);

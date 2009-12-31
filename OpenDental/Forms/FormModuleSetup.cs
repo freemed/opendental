@@ -1070,7 +1070,7 @@ namespace OpenDental{
 				| Prefs.UpdateBool(PrefName.StatementShowProcBreakdown,checkStatementShowProcBreakdown.Checked)
 				| Prefs.UpdateBool(PrefName.StatementAccountsUseChartNumber,comboUseChartNum.SelectedIndex==1)
 				| Prefs.UpdateBool(PrefName.BalancesDontSubtractIns,checkBalancesDontSubtractIns.Checked)
-				| Prefs.UpdateLong(PrefName.PayPlansBillInAdvanceDays,PIn.PLong(textPayPlansBillInAdvanceDays.Text))
+				| Prefs.UpdateLong(PrefName.PayPlansBillInAdvanceDays,PIn.Long(textPayPlansBillInAdvanceDays.Text))
 				| Prefs.UpdateBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily,checkAgingMonthly.Checked)
 				| Prefs.UpdateBool(PrefName.EclaimsSeparateTreatProv,checkEclaimsSeparateTreatProv.Checked)
 				| Prefs.UpdateBool(PrefName.MedicalEclaimsEnabled,checkMedicalEclaimsEnabled.Checked)
@@ -1110,7 +1110,7 @@ namespace OpenDental{
 				}
 			}
 			else{
-				if(Prefs.UpdateLong(PrefName.StatementsCalcDueDate,PIn.PLong(textStatementsCalcDueDate.Text))){
+				if(Prefs.UpdateLong(PrefName.StatementsCalcDueDate,PIn.Long(textStatementsCalcDueDate.Text))){
 					changed=true;
 				}
 			}

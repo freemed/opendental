@@ -20,13 +20,13 @@ namespace OpenDentBusiness{
 			Contact[] List = new Contact[table.Rows.Count];
 			for(int i=0;i<List.Length;i++){
 				List[i]=new Contact();
-				List[i].ContactNum = PIn.PLong   (table.Rows[i][0].ToString());
-				List[i].LName      = PIn.PString(table.Rows[i][1].ToString());
-				List[i].FName      = PIn.PString(table.Rows[i][2].ToString());
-				List[i].WkPhone    = PIn.PString(table.Rows[i][3].ToString());
-				List[i].Fax        = PIn.PString(table.Rows[i][4].ToString());
-				List[i].Category   = PIn.PLong   (table.Rows[i][5].ToString());
-				List[i].Notes      = PIn.PString(table.Rows[i][6].ToString());
+				List[i].ContactNum = PIn.Long   (table.Rows[i][0].ToString());
+				List[i].LName      = PIn.String(table.Rows[i][1].ToString());
+				List[i].FName      = PIn.String(table.Rows[i][2].ToString());
+				List[i].WkPhone    = PIn.String(table.Rows[i][3].ToString());
+				List[i].Fax        = PIn.String(table.Rows[i][4].ToString());
+				List[i].Category   = PIn.Long   (table.Rows[i][5].ToString());
+				List[i].Notes      = PIn.String(table.Rows[i][6].ToString());
 			}
 			return List;
 		}
@@ -47,15 +47,15 @@ namespace OpenDentBusiness{
 			command+="LName,FName,WkPhone,Fax,Category,"
 				+"Notes) VALUES(";
 			if(PrefC.RandomKeys){
-				command+="'"+POut.PLong(Cur.ContactNum)+"', ";
+				command+="'"+POut.Long(Cur.ContactNum)+"', ";
 			}
 			command+=
-				 "'"+POut.PString(Cur.LName)+"', "
-				+"'"+POut.PString(Cur.FName)+"', "
-				+"'"+POut.PString(Cur.WkPhone)+"', "
-				+"'"+POut.PString(Cur.Fax)+"', "
-				+"'"+POut.PLong   (Cur.Category)+"', "
-				+"'"+POut.PString(Cur.Notes)+"')";
+				 "'"+POut.String(Cur.LName)+"', "
+				+"'"+POut.String(Cur.FName)+"', "
+				+"'"+POut.String(Cur.WkPhone)+"', "
+				+"'"+POut.String(Cur.Fax)+"', "
+				+"'"+POut.Long   (Cur.Category)+"', "
+				+"'"+POut.String(Cur.Notes)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -72,13 +72,13 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command = "UPDATE contact SET "
-				+"lname = '"    +POut.PString(Cur.LName)+"' "
-				+",fname = '"   +POut.PString(Cur.FName)+"' "
-				+",wkphone = '" +POut.PString(Cur.WkPhone)+"' "
-				+",fax = '"     +POut.PString(Cur.Fax)+"' "
-				+",category = '"+POut.PLong   (Cur.Category)+"' "
-				+",notes = '"   +POut.PString(Cur.Notes)+"' "
-				+"WHERE contactnum = '"+POut.PLong  (Cur.ContactNum)+"'";
+				+"lname = '"    +POut.String(Cur.LName)+"' "
+				+",fname = '"   +POut.String(Cur.FName)+"' "
+				+",wkphone = '" +POut.String(Cur.WkPhone)+"' "
+				+",fax = '"     +POut.String(Cur.Fax)+"' "
+				+",category = '"+POut.Long   (Cur.Category)+"' "
+				+",notes = '"   +POut.String(Cur.Notes)+"' "
+				+"WHERE contactnum = '"+POut.Long  (Cur.ContactNum)+"'";
 			//MessageBox.Show(string command);
 			Db.NonQ(command);
 		}

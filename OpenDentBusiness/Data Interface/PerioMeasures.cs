@@ -18,17 +18,17 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command = "UPDATE periomeasure SET "
-				+ "PerioExamNum = '"+POut.PLong   (Cur.PerioExamNum)+"'"
-				+",SequenceType = '"+POut.PLong   ((int)Cur.SequenceType)+"'"
-				+",IntTooth = '"    +POut.PLong   (Cur.IntTooth)+"'"
-				+",ToothValue = '"  +POut.PLong   (Cur.ToothValue)+"'"
-				+",MBvalue = '"     +POut.PLong   (Cur.MBvalue)+"'"
-				+",Bvalue = '"      +POut.PLong   (Cur.Bvalue)+"'"
-				+",DBvalue = '"     +POut.PLong   (Cur.DBvalue)+"'"
-				+",MLvalue = '"     +POut.PLong   (Cur.MLvalue)+"'"
-				+",Lvalue = '"      +POut.PLong   (Cur.Lvalue)+"'"
-				+",DLvalue = '"     +POut.PLong   (Cur.DLvalue)+"'"
-				+" WHERE PerioMeasureNum = '"+POut.PLong(Cur.PerioMeasureNum)+"'";
+				+ "PerioExamNum = '"+POut.Long   (Cur.PerioExamNum)+"'"
+				+",SequenceType = '"+POut.Long   ((int)Cur.SequenceType)+"'"
+				+",IntTooth = '"    +POut.Long   (Cur.IntTooth)+"'"
+				+",ToothValue = '"  +POut.Long   (Cur.ToothValue)+"'"
+				+",MBvalue = '"     +POut.Long   (Cur.MBvalue)+"'"
+				+",Bvalue = '"      +POut.Long   (Cur.Bvalue)+"'"
+				+",DBvalue = '"     +POut.Long   (Cur.DBvalue)+"'"
+				+",MLvalue = '"     +POut.Long   (Cur.MLvalue)+"'"
+				+",Lvalue = '"      +POut.Long   (Cur.Lvalue)+"'"
+				+",DLvalue = '"     +POut.Long   (Cur.DLvalue)+"'"
+				+" WHERE PerioMeasureNum = '"+POut.Long(Cur.PerioMeasureNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -49,19 +49,19 @@ namespace OpenDentBusiness{
 				+"MBvalue,Bvalue,DBvalue,MLvalue,Lvalue,DLvalue"
 				+") VALUES(";
 			if(PrefC.RandomKeys){
-				command+="'"+POut.PLong(Cur.PerioMeasureNum)+"', ";
+				command+="'"+POut.Long(Cur.PerioMeasureNum)+"', ";
 			}
 			command+=
-				 "'"+POut.PLong   (Cur.PerioExamNum)+"', "
-				+"'"+POut.PLong   ((int)Cur.SequenceType)+"', "
-				+"'"+POut.PLong   (Cur.IntTooth)+"', "
-				+"'"+POut.PLong   (Cur.ToothValue)+"', "
-				+"'"+POut.PLong   (Cur.MBvalue)+"', "
-				+"'"+POut.PLong   (Cur.Bvalue)+"', "
-				+"'"+POut.PLong   (Cur.DBvalue)+"', "
-				+"'"+POut.PLong   (Cur.MLvalue)+"', "
-				+"'"+POut.PLong   (Cur.Lvalue)+"', "
-				+"'"+POut.PLong   (Cur.DLvalue)+"')";
+				 "'"+POut.Long   (Cur.PerioExamNum)+"', "
+				+"'"+POut.Long   ((int)Cur.SequenceType)+"', "
+				+"'"+POut.Long   (Cur.IntTooth)+"', "
+				+"'"+POut.Long   (Cur.ToothValue)+"', "
+				+"'"+POut.Long   (Cur.MBvalue)+"', "
+				+"'"+POut.Long   (Cur.Bvalue)+"', "
+				+"'"+POut.Long   (Cur.DBvalue)+"', "
+				+"'"+POut.Long   (Cur.MLvalue)+"', "
+				+"'"+POut.Long   (Cur.Lvalue)+"', "
+				+"'"+POut.Long   (Cur.DLvalue)+"')";
 			if(PrefC.RandomKeys){
 				Db.NonQ(command);
 			}
@@ -94,7 +94,7 @@ namespace OpenDentBusiness{
 			//first, delete all skipped teeth for this exam
 			string command = "DELETE from periomeasure WHERE "
 				+"PerioExamNum = '"+perioExamNum.ToString()+"' "
-				+"AND SequenceType = '"+POut.PLong((int)PerioSequenceType.SkipTooth)+"'";
+				+"AND SequenceType = '"+POut.Long((int)PerioSequenceType.SkipTooth)+"'";
 			Db.NonQ(command);
 			//then add the new ones in one at a time.
 			PerioMeasure Cur;
@@ -120,13 +120,13 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<List<int>>(MethodBase.GetCurrentMethod(),perioExamNum);
 			}
 			string command = "SELECT IntTooth FROM periomeasure WHERE "
-				+"SequenceType = '"+POut.PInt((int)PerioSequenceType.SkipTooth)+"' "
+				+"SequenceType = '"+POut.Int((int)PerioSequenceType.SkipTooth)+"' "
 				+"AND PerioExamNum = '"+perioExamNum.ToString()+"' "
 				+"AND ToothValue = '1'";
 			DataTable table=Db.GetTable(command);
 			List<int> retVal=new List<int>();
 			for(int i=0;i<table.Rows.Count;i++){
-				retVal.Add(PIn.PInt(table.Rows[i][0].ToString()));
+				retVal.Add(PIn.Int(table.Rows[i][0].ToString()));
 			}
 			return retVal;
 		}
@@ -156,17 +156,17 @@ namespace OpenDentBusiness{
 			List<PerioMeasure> retVal=new List<PerioMeasure>();
 			for(int i=0;i<table.Rows.Count;i++) {
 				pm=new PerioMeasure();
-				pm.PerioMeasureNum =PIn.PLong(table.Rows[i][0].ToString());
-				pm.PerioExamNum    =PIn.PLong(table.Rows[i][1].ToString());
-				pm.SequenceType    =(PerioSequenceType)PIn.PLong(table.Rows[i][2].ToString());
-				pm.IntTooth        =PIn.PInt(table.Rows[i][3].ToString());
-				pm.ToothValue      =PIn.PInt(table.Rows[i][4].ToString());
-				pm.MBvalue         =PIn.PInt(table.Rows[i][5].ToString());
-				pm.Bvalue          =PIn.PInt(table.Rows[i][6].ToString());
-				pm.DBvalue         =PIn.PInt(table.Rows[i][7].ToString());
-				pm.MLvalue         =PIn.PInt(table.Rows[i][8].ToString());
-				pm.Lvalue          =PIn.PInt(table.Rows[i][9].ToString());
-				pm.DLvalue         =PIn.PInt(table.Rows[i][10].ToString());
+				pm.PerioMeasureNum =PIn.Long(table.Rows[i][0].ToString());
+				pm.PerioExamNum    =PIn.Long(table.Rows[i][1].ToString());
+				pm.SequenceType    =(PerioSequenceType)PIn.Long(table.Rows[i][2].ToString());
+				pm.IntTooth        =PIn.Int(table.Rows[i][3].ToString());
+				pm.ToothValue      =PIn.Int(table.Rows[i][4].ToString());
+				pm.MBvalue         =PIn.Int(table.Rows[i][5].ToString());
+				pm.Bvalue          =PIn.Int(table.Rows[i][6].ToString());
+				pm.DBvalue         =PIn.Int(table.Rows[i][7].ToString());
+				pm.MLvalue         =PIn.Int(table.Rows[i][8].ToString());
+				pm.Lvalue          =PIn.Int(table.Rows[i][9].ToString());
+				pm.DLvalue         =PIn.Int(table.Rows[i][10].ToString());
 				retVal.Add(pm);
 			}
 			return retVal;
@@ -191,7 +191,7 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<List<PerioMeasure>>(MethodBase.GetCurrentMethod(),perioExamNum);
 			}
 			string command ="SELECT * FROM periomeasure "
-				+"WHERE PerioExamNum = "+POut.PLong(perioExamNum);
+				+"WHERE PerioExamNum = "+POut.Long(perioExamNum);
 			DataTable table=Db.GetTable(command);
 			return FillFromTable(table);
 		}

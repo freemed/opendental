@@ -280,8 +280,8 @@ namespace OpenDental
 				MessageBox.Show(Lan.g(this,"From and To dates are required."));
 				return;
 			}
-			DateTime dateFrom=PIn.PDate(textDateFrom.Text);
-			DateTime dateTo=PIn.PDate(textDateTo.Text);
+			DateTime dateFrom=PIn.Date(textDateFrom.Text);
+			DateTime dateTo=PIn.Date(textDateTo.Text);
 			if(dateTo < dateFrom) 
 			{
 				MessageBox.Show(Lan.g(this,"To date cannot be before From date."));
@@ -300,7 +300,7 @@ namespace OpenDental
 				if(i>0){
 					whereProv+=",";
 				}
-				whereProv+="'"+POut.PLong(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+"'";
+				whereProv+="'"+POut.Long(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+"'";
 			}
 			whereProv += ") ";
 			//create the report
@@ -321,8 +321,8 @@ namespace OpenDental
 				appointment.ProcDescript,
 				patient.HmPhone, patient.WkPhone, patient.WirelessPhone
 				FROM appointment INNER JOIN patient ON appointment.PatNum = patient.PatNum
-				WHERE appointment.AptDateTime between " + POut.PDate(dateFrom) + " AND "
-				+POut.PDate(dateTo.AddDays(1)) + " AND " +
+				WHERE appointment.AptDateTime between " + POut.Date(dateFrom) + " AND "
+				+POut.Date(dateTo.AddDays(1)) + " AND " +
 				"AptStatus != '" + (int)ApptStatus.UnschedList + "' AND " +
 				"AptStatus != '" + (int)ApptStatus.Planned + "' AND " +
 				whereProv + " " +

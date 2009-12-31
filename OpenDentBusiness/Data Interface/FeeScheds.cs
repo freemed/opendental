@@ -27,11 +27,11 @@ namespace OpenDentBusiness{
 			for(int i=0;i<table.Rows.Count;i++){
 				sched=new FeeSched();
 				sched.IsNew=false;
-				sched.FeeSchedNum = PIn.PLong   (table.Rows[i][0].ToString());
-				sched.Description = PIn.PString(table.Rows[i][1].ToString());
-				sched.FeeSchedType= (FeeScheduleType)PIn.PLong(table.Rows[i][2].ToString());
-				sched.ItemOrder   = PIn.PInt   (table.Rows[i][3].ToString());
-				sched.IsHidden    = PIn.PBool  (table.Rows[i][4].ToString());
+				sched.FeeSchedNum = PIn.Long   (table.Rows[i][0].ToString());
+				sched.Description = PIn.String(table.Rows[i][1].ToString());
+				sched.FeeSchedType= (FeeScheduleType)PIn.Long(table.Rows[i][2].ToString());
+				sched.ItemOrder   = PIn.Int   (table.Rows[i][3].ToString());
+				sched.IsHidden    = PIn.Bool  (table.Rows[i][4].ToString());
 				FeeSchedC.ListLong.Add(sched);
 				if(!sched.IsHidden){
 					FeeSchedC.ListShort.Add(sched);

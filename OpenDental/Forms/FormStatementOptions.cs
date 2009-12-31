@@ -1280,18 +1280,18 @@ namespace OpenDental{
 			//	return false;
 			//}
 			if(StmtList==null){
-				StmtCur.DateSent=PIn.PDate(textDate.Text);
+				StmtCur.DateSent=PIn.Date(textDate.Text);
 				StmtCur.IsSent=checkIsSent.Checked;
 				StmtCur.Mode_=(StatementMode)listMode.SelectedIndex;
 				StmtCur.HidePayment=checkHidePayment.Checked;
 				StmtCur.SinglePatient=checkSinglePatient.Checked;
 				StmtCur.Intermingled=checkIntermingled.Checked;
-				StmtCur.DateRangeFrom=PIn.PDate(textDateStart.Text);//handles blank
+				StmtCur.DateRangeFrom=PIn.Date(textDateStart.Text);//handles blank
 				if(textDateEnd.Text==""){
 					StmtCur.DateRangeTo=new DateTime(2200,1,1);//max val
 				}
 				else{
-					StmtCur.DateRangeTo=PIn.PDate(textDateEnd.Text);
+					StmtCur.DateRangeTo=PIn.Date(textDateEnd.Text);
 				}
 				StmtCur.Note=textNote.Text;
 				StmtCur.NoteBold=textNoteBold.Text;
@@ -1300,7 +1300,7 @@ namespace OpenDental{
 			else{
 				for(int i=0;i<StmtList.Count;i++){
 					if(textDate.Text!=""){
-						StmtList[i].DateSent=PIn.PDate(textDate.Text);
+						StmtList[i].DateSent=PIn.Date(textDate.Text);
 					}
 					if(checkIsSent.CheckState!=CheckState.Indeterminate){
 						StmtList[i].IsSent=checkIsSent.Checked;
@@ -1318,14 +1318,14 @@ namespace OpenDental{
 						StmtList[i].Intermingled=checkIntermingled.Checked;
 					}
 					if(textDateStart.Text!="?"){
-						StmtList[i].DateRangeFrom=PIn.PDate(textDateStart.Text);//handles blank
+						StmtList[i].DateRangeFrom=PIn.Date(textDateStart.Text);//handles blank
 					}
 					if(textDateStart.Text!="?"){
 						if(textDateEnd.Text==""){
 							StmtList[i].DateRangeTo=new DateTime(2200,1,1);//max val
 						}
 						else{
-							StmtList[i].DateRangeTo=PIn.PDate(textDateEnd.Text);
+							StmtList[i].DateRangeTo=PIn.Date(textDateEnd.Text);
 						}
 					}
 					if(textNote.Text!="?"){

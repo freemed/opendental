@@ -42,9 +42,9 @@ namespace OpenDentBusiness{
 			School school;
 			for(int i=0;i<table.Rows.Count;i++){
 				school=new School();
-				school.SchoolName =PIn.PString(table.Rows[i][0].ToString());
-				school.SchoolCode =PIn.PString(table.Rows[i][1].ToString());
-				school.OldSchoolName =PIn.PString(table.Rows[i][0].ToString());
+				school.SchoolName =PIn.String(table.Rows[i][0].ToString());
+				school.SchoolCode =PIn.String(table.Rows[i][1].ToString());
+				school.OldSchoolName =PIn.String(table.Rows[i][0].ToString());
 				retVal.Add(school);
 			}
 			return retVal;
@@ -68,7 +68,7 @@ namespace OpenDentBusiness{
 			DataTable table=Db.GetTable(command);;
 			ListNames=new string[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++){
-				ListNames[i]=PIn.PString(table.Rows[i][0].ToString());
+				ListNames[i]=PIn.String(table.Rows[i][0].ToString());
 			}
 		}
 
@@ -80,8 +80,8 @@ namespace OpenDentBusiness{
 			}
 			string command = "INSERT INTO school (SchoolName,SchoolCode) "
 				+"VALUES ("
-				+"'"+POut.PString(Cur.SchoolName)+"', "
-				+"'"+POut.PString(Cur.SchoolCode)+"')";
+				+"'"+POut.String(Cur.SchoolName)+"', "
+				+"'"+POut.String(Cur.SchoolCode)+"')";
 			//MessageBox.Show(string command);
 			Db.NonQ(command);
 		}
@@ -93,14 +93,14 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command = "UPDATE school SET "
-				+"SchoolName ='"  +POut.PString(Cur.SchoolName)+"'"
-				+",SchoolCode ='" +POut.PString(Cur.SchoolCode)+"'"
-				+" WHERE SchoolName = '"+POut.PString(Cur.OldSchoolName)+"'";
+				+"SchoolName ='"  +POut.String(Cur.SchoolName)+"'"
+				+",SchoolCode ='" +POut.String(Cur.SchoolCode)+"'"
+				+" WHERE SchoolName = '"+POut.String(Cur.OldSchoolName)+"'";
 			Db.NonQ(command);
 			//then, update all patients using that school
 			command = "UPDATE patient SET "
-				+"GradeSchool ='"  +POut.PString(Cur.SchoolName)+"'"
-				+" WHERE GradeSchool = '"+POut.PString(Cur.OldSchoolName)+"'";
+				+"GradeSchool ='"  +POut.String(Cur.SchoolName)+"'"
+				+" WHERE GradeSchool = '"+POut.String(Cur.OldSchoolName)+"'";
 			Db.NonQ(command);
 		}
 
@@ -110,7 +110,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
 				return;
 			}
-			string command = "DELETE from school WHERE SchoolName = '"+POut.PString(Cur.SchoolName)+"'";
+			string command = "DELETE from school WHERE SchoolName = '"+POut.String(Cur.SchoolName)+"'";
 			Db.NonQ(command);
 		}
 
@@ -121,14 +121,14 @@ namespace OpenDentBusiness{
 			}
 			string command =
 				"SELECT LName,FName from patient "
-				+"WHERE GradeSchool = '"+POut.PString(schoolName)+"' ";
+				+"WHERE GradeSchool = '"+POut.String(schoolName)+"' ";
 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0)
 				return "";
 			string retVal="";
 			for(int i=0;i<table.Rows.Count;i++){
-				retVal+=PIn.PString(table.Rows[i][0].ToString())+", "
-					+PIn.PString(table.Rows[i][1].ToString());
+				retVal+=PIn.String(table.Rows[i][0].ToString())+", "
+					+PIn.String(table.Rows[i][1].ToString());
 				if(i<table.Rows.Count-1){//if not the last row
 					retVal+="\r";
 				}
@@ -143,7 +143,7 @@ namespace OpenDentBusiness{
 			}
 			string command =
 				"SELECT * from school "
-				+"WHERE SchoolName = '"+POut.PString(schoolName)+"' ";
+				+"WHERE SchoolName = '"+POut.String(schoolName)+"' ";
 			DataTable table=Db.GetTable(command);;
 			if(table.Rows.Count==0)
 				return false;

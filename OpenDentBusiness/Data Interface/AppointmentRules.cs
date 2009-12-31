@@ -23,11 +23,11 @@ namespace OpenDentBusiness{
 			AppointmentRuleC.List=new AppointmentRule[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				AppointmentRuleC.List[i]=new AppointmentRule();
-				AppointmentRuleC.List[i].AppointmentRuleNum = PIn.PLong(table.Rows[i][0].ToString());
-				AppointmentRuleC.List[i].RuleDesc           = PIn.PString(table.Rows[i][1].ToString());
-				AppointmentRuleC.List[i].CodeStart          = PIn.PString(table.Rows[i][2].ToString());
-				AppointmentRuleC.List[i].CodeEnd            = PIn.PString(table.Rows[i][3].ToString());
-				AppointmentRuleC.List[i].IsEnabled          = PIn.PBool(table.Rows[i][4].ToString());
+				AppointmentRuleC.List[i].AppointmentRuleNum = PIn.Long(table.Rows[i][0].ToString());
+				AppointmentRuleC.List[i].RuleDesc           = PIn.String(table.Rows[i][1].ToString());
+				AppointmentRuleC.List[i].CodeStart          = PIn.String(table.Rows[i][2].ToString());
+				AppointmentRuleC.List[i].CodeEnd            = PIn.String(table.Rows[i][3].ToString());
+				AppointmentRuleC.List[i].IsEnabled          = PIn.Bool(table.Rows[i][4].ToString());
 			}
 		}
 
@@ -46,13 +46,13 @@ namespace OpenDentBusiness{
 			}
 			command+="RuleDesc,CodeStart,CodeEnd,IsEnabled) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PLong(rule.AppointmentRuleNum)+", ";
+				command+=POut.Long(rule.AppointmentRuleNum)+", ";
 			}
 			command+=
-				 "'"+POut.PString(rule.RuleDesc)+"', "
-				+"'"+POut.PString(rule.CodeStart)+"', "
-				+"'"+POut.PString(rule.CodeEnd)+"', "
-				+"'"+POut.PBool  (rule.IsEnabled)+"')";
+				 "'"+POut.String(rule.RuleDesc)+"', "
+				+"'"+POut.String(rule.CodeStart)+"', "
+				+"'"+POut.String(rule.CodeEnd)+"', "
+				+"'"+POut.Bool  (rule.IsEnabled)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -69,11 +69,11 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command= "UPDATE appointmentrule SET " 
-				+ "RuleDesc = '"      +POut.PString(rule.RuleDesc)+"'"
-				+ ",CodeStart = '" +POut.PString(rule.CodeStart)+"'"
-				+ ",CodeEnd = '"   +POut.PString(rule.CodeEnd)+"'"
-				+ ",IsEnabled = '"    +POut.PBool  (rule.IsEnabled)+"'"
-				+" WHERE AppointmentRuleNum = '" +POut.PLong   (rule.AppointmentRuleNum)+"'";
+				+ "RuleDesc = '"      +POut.String(rule.RuleDesc)+"'"
+				+ ",CodeStart = '" +POut.String(rule.CodeStart)+"'"
+				+ ",CodeEnd = '"   +POut.String(rule.CodeEnd)+"'"
+				+ ",IsEnabled = '"    +POut.Bool  (rule.IsEnabled)+"'"
+				+" WHERE AppointmentRuleNum = '" +POut.Long   (rule.AppointmentRuleNum)+"'";
  			Db.NonQ(command);
 		}
 
@@ -84,7 +84,7 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command="DELETE FROM appointmentrule" 
-				+" WHERE AppointmentRuleNum = "+POut.PLong(rule.AppointmentRuleNum);
+				+" WHERE AppointmentRuleNum = "+POut.Long(rule.AppointmentRuleNum);
  			Db.NonQ(command);
 		}
 

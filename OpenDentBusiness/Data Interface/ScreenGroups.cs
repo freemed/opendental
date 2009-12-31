@@ -15,8 +15,8 @@ namespace OpenDentBusiness{
 			}
 			string command =
 				"SELECT * from screengroup "
-				+"WHERE SGDate >= "+POut.PDateT(fromDate)+" "
-				+"AND SGDate <= "+POut.PDateT(toDate.AddDays(1))+" "
+				+"WHERE SGDate >= "+POut.DateT(fromDate)+" "
+				+"AND SGDate <= "+POut.DateT(toDate.AddDays(1))+" "
 				//added one day since it's calculated based on midnight.
 				+"ORDER BY SGDate,ScreenGroupNum";
 			DataTable table=Db.GetTable(command);;
@@ -24,9 +24,9 @@ namespace OpenDentBusiness{
 			ScreenGroup sg;
 			for(int i=0;i<table.Rows.Count;i++){
 				sg=new ScreenGroup();
-				sg.ScreenGroupNum =                  PIn.PLong(table.Rows[i][0].ToString());
-				sg.Description    =                  PIn.PString(table.Rows[i][1].ToString());
-				sg.SGDate         =                  PIn.PDate(table.Rows[i][2].ToString());
+				sg.ScreenGroupNum =                  PIn.Long(table.Rows[i][0].ToString());
+				sg.Description    =                  PIn.String(table.Rows[i][1].ToString());
+				sg.SGDate         =                  PIn.Date(table.Rows[i][2].ToString());
 				list.Add(sg);
 			}
 			return list;
@@ -47,11 +47,11 @@ namespace OpenDentBusiness{
 			}
 			command+="Description,SGDate) VALUES(";
 			if(PrefC.RandomKeys){
-				command+="'"+POut.PLong(Cur.ScreenGroupNum)+"', ";
+				command+="'"+POut.Long(Cur.ScreenGroupNum)+"', ";
 			}
 			command+=
-				 "'"+POut.PString(Cur.Description)+"', "
-				+POut.PDate  (Cur.SGDate)+")";
+				 "'"+POut.String(Cur.Description)+"', "
+				+POut.Date  (Cur.SGDate)+")";
 			if(PrefC.RandomKeys){
 				Db.NonQ(command);
 			}
@@ -68,9 +68,9 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command = "UPDATE screengroup SET "
-				+"Description ='"  +POut.PString(Cur.Description)+"'"
-				+",SGDate ="      +POut.PDate  (Cur.SGDate)
-				+" WHERE ScreenGroupNum = '" +POut.PLong(Cur.ScreenGroupNum)+"'";
+				+"Description ='"  +POut.String(Cur.Description)+"'"
+				+",SGDate ="      +POut.Date  (Cur.SGDate)
+				+" WHERE ScreenGroupNum = '" +POut.Long(Cur.ScreenGroupNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -80,9 +80,9 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
 				return;
 			}
-			string command="DELETE from screen WHERE ScreenGroupNum ='"+POut.PLong(Cur.ScreenGroupNum)+"'";
+			string command="DELETE from screen WHERE ScreenGroupNum ='"+POut.Long(Cur.ScreenGroupNum)+"'";
 			Db.NonQ(command);
-			command="DELETE from screengroup WHERE ScreenGroupNum ='"+POut.PLong(Cur.ScreenGroupNum)+"'";
+			command="DELETE from screengroup WHERE ScreenGroupNum ='"+POut.Long(Cur.ScreenGroupNum)+"'";
 			Db.NonQ(command);
 		}
 

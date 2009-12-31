@@ -56,15 +56,15 @@ namespace OpenDentBusiness{
 			ArrayList tempAL=new ArrayList();
 			for(int i=0;i<table.Rows.Count;i++) {
 				ListLong[i]=new ClaimForm();
-				ListLong[i].ClaimFormNum=PIn.PLong(table.Rows[i][0].ToString());
-				ListLong[i].Description=PIn.PString(table.Rows[i][1].ToString());
-				ListLong[i].IsHidden=PIn.PBool(table.Rows[i][2].ToString());
-				ListLong[i].FontName=PIn.PString(table.Rows[i][3].ToString());
-				ListLong[i].FontSize=PIn.PFloat(table.Rows[i][4].ToString());
-				ListLong[i].UniqueID=PIn.PString(table.Rows[i][5].ToString());
-				ListLong[i].PrintImages=PIn.PBool(table.Rows[i][6].ToString());
-				ListLong[i].OffsetX=PIn.PInt(table.Rows[i][7].ToString());
-				ListLong[i].OffsetY=PIn.PInt(table.Rows[i][8].ToString());
+				ListLong[i].ClaimFormNum=PIn.Long(table.Rows[i][0].ToString());
+				ListLong[i].Description=PIn.String(table.Rows[i][1].ToString());
+				ListLong[i].IsHidden=PIn.Bool(table.Rows[i][2].ToString());
+				ListLong[i].FontName=PIn.String(table.Rows[i][3].ToString());
+				ListLong[i].FontSize=PIn.Float(table.Rows[i][4].ToString());
+				ListLong[i].UniqueID=PIn.String(table.Rows[i][5].ToString());
+				ListLong[i].PrintImages=PIn.Bool(table.Rows[i][6].ToString());
+				ListLong[i].OffsetX=PIn.Int(table.Rows[i][7].ToString());
+				ListLong[i].OffsetY=PIn.Int(table.Rows[i][8].ToString());
 				ListLong[i].Items=ClaimFormItems.GetListForForm(ListLong[i].ClaimFormNum);
 				if(!ListLong[i].IsHidden)
 					tempAL.Add(ListLong[i]);
@@ -91,17 +91,17 @@ namespace OpenDentBusiness{
 			command+="Description,IsHidden,FontName,FontSize"
 				+",UniqueId,PrintImages,OffsetX,OffsetY) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PLong(cf.ClaimFormNum)+", ";
+				command+=POut.Long(cf.ClaimFormNum)+", ";
 			}
 			command+=
-				 "'"+POut.PString(cf.Description)+"', "
-				+"'"+POut.PBool  (cf.IsHidden)+"', "
-				+"'"+POut.PString(cf.FontName)+"', "
-				+"'"+POut.PFloat (cf.FontSize)+"', "
-				+"'"+POut.PString(cf.UniqueID)+"', "
-				+"'"+POut.PBool  (cf.PrintImages)+"', "
-				+"'"+POut.PLong   (cf.OffsetX)+"', "
-				+"'"+POut.PLong   (cf.OffsetY)+"')";
+				 "'"+POut.String(cf.Description)+"', "
+				+"'"+POut.Bool  (cf.IsHidden)+"', "
+				+"'"+POut.String(cf.FontName)+"', "
+				+"'"+POut.Float (cf.FontSize)+"', "
+				+"'"+POut.String(cf.UniqueID)+"', "
+				+"'"+POut.Bool  (cf.PrintImages)+"', "
+				+"'"+POut.Long   (cf.OffsetX)+"', "
+				+"'"+POut.Long   (cf.OffsetY)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -118,15 +118,15 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command="UPDATE claimform SET "
-				+"Description = '" +POut.PString(cf.Description)+"' "
-				+",IsHidden = '"    +POut.PBool  (cf.IsHidden)+"' "
-				+",FontName = '"    +POut.PString(cf.FontName)+"' "
-				+",FontSize = '"    +POut.PFloat (cf.FontSize)+"' "
-				+",UniqueID = '"    +POut.PString(cf.UniqueID)+"' "
-				+",PrintImages = '" +POut.PBool  (cf.PrintImages)+"' "
-				+",OffsetX = '"     +POut.PLong   (cf.OffsetX)+"' "
-				+",OffsetY = '"     +POut.PLong   (cf.OffsetY)+"' "
-				+"WHERE ClaimFormNum = '"+POut.PLong   (cf.ClaimFormNum)+"'";
+				+"Description = '" +POut.String(cf.Description)+"' "
+				+",IsHidden = '"    +POut.Bool  (cf.IsHidden)+"' "
+				+",FontName = '"    +POut.String(cf.FontName)+"' "
+				+",FontSize = '"    +POut.Float (cf.FontSize)+"' "
+				+",UniqueID = '"    +POut.String(cf.UniqueID)+"' "
+				+",PrintImages = '" +POut.Bool  (cf.PrintImages)+"' "
+				+",OffsetX = '"     +POut.Long   (cf.OffsetX)+"' "
+				+",OffsetY = '"     +POut.Long   (cf.OffsetY)+"' "
+				+"WHERE ClaimFormNum = '"+POut.Long   (cf.ClaimFormNum)+"'";
  			Db.NonQ(command);
 		}
 
@@ -149,10 +149,10 @@ namespace OpenDentBusiness{
 			}
 			//Then, delete the claimform
 			command="DELETE FROM claimform "
-				+"WHERE ClaimFormNum = '"+POut.PLong(cf.ClaimFormNum)+"'";
+				+"WHERE ClaimFormNum = '"+POut.Long(cf.ClaimFormNum)+"'";
 			Db.NonQ(command);
 			command="DELETE FROM claimformitem "
-				+"WHERE ClaimFormNum = '"+POut.PLong(cf.ClaimFormNum)+"'";
+				+"WHERE ClaimFormNum = '"+POut.Long(cf.ClaimFormNum)+"'";
 			Db.NonQ(command);
 			return true;
 		}
@@ -169,14 +169,14 @@ namespace OpenDentBusiness{
  			DataTable table=Db.GetTable(command);
 			long[] claimFormNums=new long[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++){
-				claimFormNums[i]=PIn.PLong   (table.Rows[i][0].ToString());
+				claimFormNums[i]=PIn.Long   (table.Rows[i][0].ToString());
 			}
 			//loop through each matching claimform
 			for(int i=0;i<claimFormNums.Length;i++){
 				cf.ClaimFormNum=claimFormNums[i];
 				Update(cf);
 				command="DELETE FROM claimformitem "
-					+"WHERE ClaimFormNum = '"+POut.PLong(claimFormNums[i])+"'";
+					+"WHERE ClaimFormNum = '"+POut.Long(claimFormNums[i])+"'";
 				Db.NonQ(command);
 				for(int j=0;j<cf.Items.Length;j++){
 					cf.Items[j].ClaimFormNum=claimFormNums[i];
@@ -215,8 +215,8 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetLong(MethodBase.GetCurrentMethod(),oldClaimFormNum,newClaimFormNum);
 			}
-			string command="UPDATE insplan SET ClaimFormNum="+POut.PLong(newClaimFormNum)
-				+" WHERE ClaimFormNum="+POut.PLong(oldClaimFormNum);
+			string command="UPDATE insplan SET ClaimFormNum="+POut.Long(newClaimFormNum)
+				+" WHERE ClaimFormNum="+POut.Long(oldClaimFormNum);
 			return Db.NonQ(command);
 		}
 

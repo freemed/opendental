@@ -418,7 +418,7 @@ namespace OpenDental {
 			DateTime startDate=DateTime.MinValue;
 			if(textStartDate.Visible && textStartDate.Text!=""){
 				if(textStartDate.errorProvider1.GetError(textStartDate)==""){
-					startDate=PIn.PDate(textStartDate.Text);
+					startDate=PIn.Date(textStartDate.Text);
 				}
 				else{//invalid date
 					startDate=DateTime.Today.AddDays(-7);

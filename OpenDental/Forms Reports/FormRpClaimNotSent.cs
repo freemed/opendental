@@ -196,14 +196,14 @@ namespace OpenDental{
 			report.InitializeColumns();
 			for(int i=0;i<tempT.Rows.Count;i++) {//loop through data rows
 				DataRow row=report.TableQ.NewRow();//create new row called 'row' based on structure of TableQ
-				row[0]=(PIn.PDate(tempT.Rows[i][0].ToString())).ToShortDateString();//claim dateservice
-				if(PIn.PString(tempT.Rows[i][2].ToString())=="P")
+				row[0]=(PIn.Date(tempT.Rows[i][0].ToString())).ToShortDateString();//claim dateservice
+				if(PIn.String(tempT.Rows[i][2].ToString())=="P")
           row[1]="Primary";
-				if(PIn.PString(tempT.Rows[i][2].ToString())=="S")
+				if(PIn.String(tempT.Rows[i][2].ToString())=="S")
           row[1]="Secondary";
-				if(PIn.PString(tempT.Rows[i][2].ToString())=="PreAuth")
+				if(PIn.String(tempT.Rows[i][2].ToString())=="PreAuth")
           row[1]="PreAuth";
-				if(PIn.PString(tempT.Rows[i][2].ToString())=="Other")
+				if(PIn.String(tempT.Rows[i][2].ToString())=="Other")
           row[1]="Other";
 				if(tempT.Rows[i][3].ToString().Equals("H"))
 				  row[2]="Holding";//Claim Status
@@ -213,8 +213,8 @@ namespace OpenDental{
 				  row[2]="Unsent";//Claim Status
 				row[3]=tempT.Rows[i][4];//Patient name
 				row[4]=tempT.Rows[i][5];//Ins Carrier
-				row[5]=PIn.PDouble(tempT.Rows[i][6].ToString()).ToString("F");//claim fee
-				report.ColTotal[5]+=PIn.PDouble(tempT.Rows[i][6].ToString());
+				row[5]=PIn.Double(tempT.Rows[i][6].ToString()).ToString("F");//claim fee
+				report.ColTotal[5]+=PIn.Double(tempT.Rows[i][6].ToString());
 				report.TableQ.Rows.Add(row);
       }
 			FormQuery2.ResetGrid();//this is a method in FormQuery2;	

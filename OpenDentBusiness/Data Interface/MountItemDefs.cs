@@ -42,12 +42,12 @@ namespace OpenDentBusiness {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),def);
 			}
 			string command="UPDATE mountitemdef SET " 
-				+"MountDefNum = '"+POut.PLong(def.MountDefNum)+"'"
-				+",Xpos = '"      +POut.PLong(def.Xpos)+"'"
-				+",Ypos = '"      +POut.PLong(def.Ypos)+"'"
-				+",Width = '"     +POut.PLong(def.Width)+"'"
-				+",Height = '"    +POut.PLong(def.Height)+"'"
-				+" WHERE MountItemDefNum  ='"+POut.PLong (def.MountItemDefNum)+"'";
+				+"MountDefNum = '"+POut.Long(def.MountDefNum)+"'"
+				+",Xpos = '"      +POut.Long(def.Xpos)+"'"
+				+",Ypos = '"      +POut.Long(def.Ypos)+"'"
+				+",Width = '"     +POut.Long(def.Width)+"'"
+				+",Height = '"    +POut.Long(def.Height)+"'"
+				+" WHERE MountItemDefNum  ='"+POut.Long (def.MountItemDefNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -66,14 +66,14 @@ namespace OpenDentBusiness {
 			}
 			command+="MountDefNum,Xpos,Ypos,Width,Height) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PLong(def.MountItemDefNum)+", ";
+				command+=POut.Long(def.MountItemDefNum)+", ";
 			}
 			command+=
-				 "'"+POut.PLong(def.MountDefNum)+"', "
-				+"'"+POut.PLong(def.Xpos)+"', "
-				+"'"+POut.PLong(def.Ypos)+"', "
-				+"'"+POut.PLong(def.Width)+"', "
-				+"'"+POut.PLong(def.Height)+"')";
+				 "'"+POut.Long(def.MountDefNum)+"', "
+				+"'"+POut.Long(def.Xpos)+"', "
+				+"'"+POut.Long(def.Ypos)+"', "
+				+"'"+POut.Long(def.Width)+"', "
+				+"'"+POut.Long(def.Height)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -89,7 +89,7 @@ namespace OpenDentBusiness {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),mountItemDefNum);
 				return;
 			}
-			string command="DELETE FROM mountitemdef WHERE MountItemDefNum="+POut.PLong(mountItemDefNum);
+			string command="DELETE FROM mountitemdef WHERE MountItemDefNum="+POut.Long(mountItemDefNum);
 			Db.NonQ(command);
 		}
 

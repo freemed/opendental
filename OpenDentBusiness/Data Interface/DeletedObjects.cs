@@ -39,15 +39,15 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<DeletedObject>>(MethodBase.GetCurrentMethod(),changedSince);
 			}
-			string command="SELECT * FROM deletedobject WHERE DateTStamp > "+POut.PDateT(changedSince);
+			string command="SELECT * FROM deletedobject WHERE DateTStamp > "+POut.DateT(changedSince);
 			DataTable table=Db.GetTable(command);
 			List<DeletedObject> list=new List<DeletedObject>();
 			DeletedObject delObj;
 			for(int i=0;i<table.Rows.Count;i++) {
 				delObj=new DeletedObject();
-				delObj.DeletedObjectNum =PIn.PLong(table.Rows[i][0].ToString());
-				delObj.ObjectNum        =PIn.PLong(table.Rows[i][1].ToString());
-				delObj.ObjectType       =(DeletedObjectType)PIn.PLong(table.Rows[i][2].ToString());
+				delObj.DeletedObjectNum =PIn.Long(table.Rows[i][0].ToString());
+				delObj.ObjectNum        =PIn.Long(table.Rows[i][1].ToString());
+				delObj.ObjectType       =(DeletedObjectType)PIn.Long(table.Rows[i][2].ToString());
 				//DateTStamp
 				list.Add(delObj);
 			}

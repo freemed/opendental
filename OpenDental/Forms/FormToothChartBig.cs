@@ -199,14 +199,14 @@ namespace OpenDental{
 			Color cDark=Color.White;
 			for(int i=0;i<ProcList.Count;i++) {
 				if(ProcedureCodes.GetProcCode(ProcList[i]["ProcCode"].ToString()).PaintType==ToothPaintingType.Extraction && (
-					PIn.PLong(ProcList[i]["ProcStatus"].ToString())==(int)ProcStat.C
-					|| PIn.PLong(ProcList[i]["ProcStatus"].ToString())==(int)ProcStat.EC
-					|| PIn.PLong(ProcList[i]["ProcStatus"].ToString())==(int)ProcStat.EO
+					PIn.Long(ProcList[i]["ProcStatus"].ToString())==(int)ProcStat.C
+					|| PIn.Long(ProcList[i]["ProcStatus"].ToString())==(int)ProcStat.EC
+					|| PIn.Long(ProcList[i]["ProcStatus"].ToString())==(int)ProcStat.EO
 					)) {
 					continue;//prevents the red X. Missing teeth already handled.
 				}
 				if(ProcedureCodes.GetProcCode(ProcList[i]["ProcCode"].ToString()).GraphicColor==Color.FromArgb(0)) {
-					switch((ProcStat)PIn.PLong(ProcList[i]["ProcStatus"].ToString())) {
+					switch((ProcStat)PIn.Long(ProcList[i]["ProcStatus"].ToString())) {
 						case ProcStat.C:
 							cDark=DefC.Short[(int)DefCat.ChartGraphicColors][1].ItemColor;
 							cLight=DefC.Short[(int)DefCat.ChartGraphicColors][6].ItemColor;

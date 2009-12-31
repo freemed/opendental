@@ -444,9 +444,9 @@ namespace OpenDental
 			double UnusedPri=0;
             double UnusedSec = -1;
             if (checkPrimary.Checked)
-                UnusedPri = PIn.PDouble(textPrimary.Text);
+                UnusedPri = PIn.Double(textPrimary.Text);
             if (checkSecondary.Checked)
-                UnusedSec = PIn.PDouble(textSecondary.Text);
+                UnusedSec = PIn.Double(textSecondary.Text);
 
             // prepare procedure selection
             ArrayList procedureList = new ArrayList();

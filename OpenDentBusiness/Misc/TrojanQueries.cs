@@ -15,7 +15,7 @@ namespace OpenDentBusiness {
 			}
 			string command=@"SELECT MAX(ProcDate) FROM procedurelog,patient
 				WHERE patient.PatNum=procedurelog.PatNum
-				AND patient.Guarantor="+POut.PLong(PatNum);
+				AND patient.Guarantor="+POut.Long(PatNum);
 			return Db.GetTable(command);
 		}
 
@@ -25,7 +25,7 @@ namespace OpenDentBusiness {
 			}
 			string command=@"SELECT MAX(DatePay) FROM paysplit,patient
 				WHERE patient.PatNum=paysplit.PatNum
-				AND patient.Guarantor="+POut.PLong(PatNum);
+				AND patient.Guarantor="+POut.Long(PatNum);
 			return Db.GetTable(command);
 		}
 
@@ -36,18 +36,18 @@ namespace OpenDentBusiness {
 			}
 			string command="SELECT ValueString FROM preference WHERE PrefName='TrojanExpressCollectPreviousFileNumber'";
 			DataTable table=Db.GetTable(command);
-			int previousNum=PIn.PInt(table.Rows[0][0].ToString());
+			int previousNum=PIn.Int(table.Rows[0][0].ToString());
 			int thisNum=previousNum+1;
-			command="UPDATE preference SET ValueString='"+POut.PLong(thisNum)+
+			command="UPDATE preference SET ValueString='"+POut.Long(thisNum)+
 				"' WHERE PrefName='TrojanExpressCollectPreviousFileNumber'"
-				+" AND ValueString='"+POut.PLong(previousNum)+"'";
+				+" AND ValueString='"+POut.Long(previousNum)+"'";
 			int result=Db.NonQ32(command);
 			while(result!=1) {//someone else sent one at the same time
 				previousNum++;
 				thisNum++;
-				command="UPDATE preference SET ValueString='"+POut.PLong(thisNum)+
+				command="UPDATE preference SET ValueString='"+POut.Long(thisNum)+
 					"' WHERE PrefName='TrojanExpressCollectPreviousFileNumber'"
-					+" AND ValueString='"+POut.PLong(previousNum)+"'";
+					+" AND ValueString='"+POut.Long(previousNum)+"'";
 				result=Db.NonQ32(command);
 			}
 			return thisNum;
@@ -130,22 +130,22 @@ namespace OpenDentBusiness {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetInt(MethodBase.GetCurrentMethod(),plan);
 			}
-			string command="SELECT PlanNum FROM insplan WHERE TrojanID='"+POut.PString(plan.TrojanID)+"'"; 
+			string command="SELECT PlanNum FROM insplan WHERE TrojanID='"+POut.String(plan.TrojanID)+"'"; 
 			DataTable table=Db.GetTable(command);
 			long planNum;
 			for(int i=0;i<table.Rows.Count;i++) {
-				planNum=PIn.PLong(table.Rows[i][0].ToString());
+				planNum=PIn.Long(table.Rows[i][0].ToString());
 				//update plan
 				command="UPDATE insplan SET "
-					+"EmployerNum='"+POut.PLong(plan.EmployerNum)+"', "
-					+"GroupName='"  +POut.PString(plan.GroupName)+"', "
-					+"GroupNum='"   +POut.PString(plan.GroupNum)+"', "
-					+"CarrierNum='" +POut.PLong(plan.CarrierNum)+"', "
-					+"BenefitNotes='"+POut.PString(plan.BenefitNotes)+"' "
-					+"WHERE PlanNum="+POut.PLong(planNum);
+					+"EmployerNum='"+POut.Long(plan.EmployerNum)+"', "
+					+"GroupName='"  +POut.String(plan.GroupName)+"', "
+					+"GroupNum='"   +POut.String(plan.GroupNum)+"', "
+					+"CarrierNum='" +POut.Long(plan.CarrierNum)+"', "
+					+"BenefitNotes='"+POut.String(plan.BenefitNotes)+"' "
+					+"WHERE PlanNum="+POut.Long(planNum);
 				Db.NonQ(command);
 				//clear benefits
-				command="DELETE FROM benefit WHERE PlanNum="+POut.PLong(planNum);
+				command="DELETE FROM benefit WHERE PlanNum="+POut.Long(planNum);
 				Db.NonQ(command);
 				//benefitList
 				for(int j=0;j<benefitList.Count;j++) {

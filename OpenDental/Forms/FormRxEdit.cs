@@ -454,7 +454,7 @@ namespace OpenDental{
 			if(listProv.SelectedIndex!=-1){
 				RxPatCur.ProvNum=ProviderC.List[listProv.SelectedIndex].ProvNum;
 			}
-			RxPatCur.RxDate=PIn.PDate(textDate.Text);
+			RxPatCur.RxDate=PIn.Date(textDate.Text);
 			RxPatCur.Drug=textDrug.Text;
 			RxPatCur.IsControlled=checkControlled.Checked;
 			RxPatCur.Sig=textSig.Text;

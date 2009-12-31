@@ -20,7 +20,7 @@ namespace OpenDentBusiness
 				if(Segments[i].SegmentID=="CLM"){
 					if(Segments[i].Get(1).TrimStart(new char[] {'0'})==claimNum.ToString()){//if for specified claim
 						try {
-							return PIn.PInt(curTransNumStr);
+							return PIn.Int(curTransNumStr);
 						}
 						catch {
 							return 0;

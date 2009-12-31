@@ -481,14 +481,14 @@ namespace OpenDental{
 			double fee;
 			using(StreamWriter sr=File.CreateText(Dlg.FileName)){
 				for(int i=0;i<table.Rows.Count;i++){
-					sr.Write(PIn.PString(table.Rows[i]["ProcCode"].ToString())+"\t");
-					fee=PIn.PDouble(table.Rows[i]["FeeAmt1"].ToString());
+					sr.Write(PIn.String(table.Rows[i]["ProcCode"].ToString())+"\t");
+					fee=PIn.Double(table.Rows[i]["FeeAmt1"].ToString());
 					if(fee!=-1) {
 						sr.Write(fee.ToString("n"));
 					}
 					sr.Write("\t");
-					sr.Write(PIn.PString(table.Rows[i]["AbbrDesc"].ToString())+"\t");
-					sr.WriteLine(PIn.PString(table.Rows[i]["Descript"].ToString()));
+					sr.Write(PIn.String(table.Rows[i]["AbbrDesc"].ToString())+"\t");
+					sr.WriteLine(PIn.String(table.Rows[i]["Descript"].ToString()));
 				}
 			}
 			Cursor=Cursors.Default;
@@ -523,7 +523,7 @@ namespace OpenDental{
 				while(line!=null){
 					fields=line.Split(new string[1] {"\t"},StringSplitOptions.None);
 					if(fields.Length>1 && fields[1]!=""){//skips blank fees
-						feeAmt=PIn.PDouble(fields[1]);
+						feeAmt=PIn.Double(fields[1]);
 						Fees.Import(fields[0],feeAmt,SchedNum);
 					}
 					line=sr.ReadLine();

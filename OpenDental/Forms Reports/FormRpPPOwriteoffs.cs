@@ -273,8 +273,8 @@ namespace OpenDental{
 			if(textCarrier.Text!=""){
 				report.AddSubTitle(Lan.g(this,"Carrier like: ")+textCarrier.Text);
 			}
-			report.Query="SET @DateFrom="+POut.PDate(date1.SelectionStart)+", @DateTo="+POut.PDate(date2.SelectionStart)
-				+", @CarrierName='%"+POut.PString(textCarrier.Text)+"%';";
+			report.Query="SET @DateFrom="+POut.Date(date1.SelectionStart)+", @DateTo="+POut.Date(date2.SelectionStart)
+				+", @CarrierName='%"+POut.String(textCarrier.Text)+"%';";
 			if(radioWriteoffPay.Checked){
 				report.Query+=@"SELECT claimproc.DateCP,
 					CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName),' '),patient.MiddleI),
@@ -345,8 +345,8 @@ namespace OpenDental{
 				report.AddSubTitle(Lan.g(this,"Carrier like: ")+textCarrier.Text);
 			}
 			if(radioWriteoffPay.Checked){
-				report.Query="SET @DateFrom="+POut.PDate(date1.SelectionStart)+", @DateTo="+POut.PDate(date2.SelectionStart)
-					+", @CarrierName='%"+POut.PString(textCarrier.Text)+"%';"
+				report.Query="SET @DateFrom="+POut.Date(date1.SelectionStart)+", @DateTo="+POut.Date(date2.SelectionStart)
+					+", @CarrierName='%"+POut.String(textCarrier.Text)+"%';"
 					+@"SELECT carrier.CarrierName,
 					SUM(claimproc.FeeBilled),
 					SUM(claimproc.FeeBilled-claimproc.WriteOff),
@@ -364,8 +364,8 @@ namespace OpenDental{
 					ORDER BY carrier.CarrierName";
 			}
 			else{
-				report.Query="SET @DateFrom="+POut.PDate(date1.SelectionStart)+", @DateTo="+POut.PDate(date2.SelectionStart)
-					+", @CarrierName='%"+POut.PString(textCarrier.Text)+"%';"
+				report.Query="SET @DateFrom="+POut.Date(date1.SelectionStart)+", @DateTo="+POut.Date(date2.SelectionStart)
+					+", @CarrierName='%"+POut.String(textCarrier.Text)+"%';"
 					+@"SELECT carrier.CarrierName,
 					SUM(claimproc.FeeBilled),
 					SUM(claimproc.FeeBilled-claimproc.WriteOff),

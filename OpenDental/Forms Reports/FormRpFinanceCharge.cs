@@ -136,8 +136,8 @@ namespace OpenDental{
 				"SELECT CONCAT(patient.LName,', ',patient.FName,' ',patient.MiddleI),adjamt "
 				+"FROM patient,adjustment "
 				+"WHERE patient.patnum=adjustment.patnum "
-				+"AND adjustment.adjdate = "+POut.PDate(PrefC.GetDate(PrefName.FinanceChargeLastRun))
-				+"AND adjustment.adjtype = '"+POut.PLong(PrefC.GetLong(PrefName.FinanceChargeAdjustmentType))+"'";
+				+"AND adjustment.adjdate = "+POut.Date(PrefC.GetDate(PrefName.FinanceChargeLastRun))
+				+"AND adjustment.adjtype = '"+POut.Long(PrefC.GetLong(PrefName.FinanceChargeAdjustmentType))+"'";
 			FormQuery2=new FormQuery(report);
 			FormQuery2.IsReport=true;
 			FormQuery2.SubmitReportQuery();		

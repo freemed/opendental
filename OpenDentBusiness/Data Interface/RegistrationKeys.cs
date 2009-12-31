@@ -20,7 +20,7 @@ namespace OpenDentBusiness {
 			string command="SELECT * FROM registrationkey WHERE ";
 			Family fam=Patients.GetFamily(patNum);
 			for(int i=0;i<fam.ListPats.Length;i++){
-				command+="PatNum="+POut.PLong(fam.ListPats[i].PatNum)+" ";
+				command+="PatNum="+POut.Long(fam.ListPats[i].PatNum)+" ";
 				if(i<fam.ListPats.Length-1){
 					command+="OR ";
 				}
@@ -29,18 +29,18 @@ namespace OpenDentBusiness {
 			RegistrationKey[] keys=new RegistrationKey[table.Rows.Count];
 			for(int i=0;i<keys.Length;i++){
 				keys[i]=new RegistrationKey();
-				keys[i].RegistrationKeyNum	=PIn.PLong(table.Rows[i][0].ToString());
-				keys[i].PatNum							=PIn.PLong(table.Rows[i][1].ToString());
-				keys[i].RegKey							=PIn.PString(table.Rows[i][2].ToString());
-				keys[i].Note								=PIn.PString(table.Rows[i][3].ToString());
-				keys[i].DateStarted 				=PIn.PDate(table.Rows[i][4].ToString());
-				keys[i].DateDisabled				=PIn.PDate(table.Rows[i][5].ToString());
-				keys[i].DateEnded   				=PIn.PDate(table.Rows[i][6].ToString());
-				keys[i].IsForeign   				=PIn.PBool(table.Rows[i][7].ToString());
-				keys[i].UsesServerVersion		=PIn.PBool(table.Rows[i][8].ToString());
-				keys[i].IsFreeVersion		    =PIn.PBool(table.Rows[i][9].ToString());
-				keys[i].IsOnlyForTesting		=PIn.PBool(table.Rows[i][10].ToString());
-				keys[i].VotesAllotted   		=PIn.PInt (table.Rows[i][11].ToString());
+				keys[i].RegistrationKeyNum	=PIn.Long(table.Rows[i][0].ToString());
+				keys[i].PatNum							=PIn.Long(table.Rows[i][1].ToString());
+				keys[i].RegKey							=PIn.String(table.Rows[i][2].ToString());
+				keys[i].Note								=PIn.String(table.Rows[i][3].ToString());
+				keys[i].DateStarted 				=PIn.Date(table.Rows[i][4].ToString());
+				keys[i].DateDisabled				=PIn.Date(table.Rows[i][5].ToString());
+				keys[i].DateEnded   				=PIn.Date(table.Rows[i][6].ToString());
+				keys[i].IsForeign   				=PIn.Bool(table.Rows[i][7].ToString());
+				keys[i].UsesServerVersion		=PIn.Bool(table.Rows[i][8].ToString());
+				keys[i].IsFreeVersion		    =PIn.Bool(table.Rows[i][9].ToString());
+				keys[i].IsOnlyForTesting		=PIn.Bool(table.Rows[i][10].ToString());
+				keys[i].VotesAllotted   		=PIn.Int (table.Rows[i][11].ToString());
 			}
 			return keys;
 		}
@@ -52,18 +52,18 @@ namespace OpenDentBusiness {
 				return;
 			}
 			string command="UPDATE registrationkey SET "
-				+"PatNum='"+POut.PLong(registrationKey.PatNum)+"' "
-				+",RegKey='"+POut.PString(registrationKey.RegKey)+"' "
-				+",Note='"+POut.PString(registrationKey.Note)+"' "
-				+",DateStarted="+POut.PDate(registrationKey.DateStarted)+" "
-				+",DateDisabled="+POut.PDate(registrationKey.DateDisabled)+" "
-				+",DateEnded="+POut.PDate(registrationKey.DateEnded)+" "
-				+",IsForeign='"+POut.PBool(registrationKey.IsForeign)+"' "
-				+",UsesServerVersion='"+POut.PBool(registrationKey.UsesServerVersion)+"' "
-				+",IsFreeVersion='"+POut.PBool(registrationKey.IsFreeVersion)+"' "
-				+",IsOnlyForTesting='"+POut.PBool(registrationKey.IsOnlyForTesting)+"' "
-				+",VotesAllotted='"+POut.PInt(registrationKey.VotesAllotted)+"' "
-				+" WHERE RegistrationKeyNum='"+POut.PLong(registrationKey.RegistrationKeyNum)+"'";
+				+"PatNum='"+POut.Long(registrationKey.PatNum)+"' "
+				+",RegKey='"+POut.String(registrationKey.RegKey)+"' "
+				+",Note='"+POut.String(registrationKey.Note)+"' "
+				+",DateStarted="+POut.Date(registrationKey.DateStarted)+" "
+				+",DateDisabled="+POut.Date(registrationKey.DateDisabled)+" "
+				+",DateEnded="+POut.Date(registrationKey.DateEnded)+" "
+				+",IsForeign='"+POut.Bool(registrationKey.IsForeign)+"' "
+				+",UsesServerVersion='"+POut.Bool(registrationKey.UsesServerVersion)+"' "
+				+",IsFreeVersion='"+POut.Bool(registrationKey.IsFreeVersion)+"' "
+				+",IsOnlyForTesting='"+POut.Bool(registrationKey.IsOnlyForTesting)+"' "
+				+",VotesAllotted='"+POut.Int(registrationKey.VotesAllotted)+"' "
+				+" WHERE RegistrationKeyNum='"+POut.Long(registrationKey.RegistrationKeyNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -107,20 +107,20 @@ namespace OpenDentBusiness {
 			command+="PatNum,RegKey,Note,DateStarted,DateDisabled,DateEnded,"
 				+"IsForeign,UsesServerVersion,IsFreeVersion,IsOnlyForTesting,VotesAllotted) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PLong(registrationKey.RegistrationKeyNum)+", ";
+				command+=POut.Long(registrationKey.RegistrationKeyNum)+", ";
 			}
 			command+=
-				 "'"+POut.PLong(registrationKey.PatNum)+"',"
-				+"'"+POut.PString(registrationKey.RegKey)+"',"
-				+"'"+POut.PString(registrationKey.Note)+"',"
-				+POut.PDate(registrationKey.DateStarted)+","
-				+POut.PDate(registrationKey.DateDisabled)+","
-				+POut.PDate(registrationKey.DateEnded)+","
-				+"'"+POut.PBool(registrationKey.IsForeign)+"',"
-				+"'"+POut.PBool(registrationKey.UsesServerVersion)+"',"
-				+"'"+POut.PBool(registrationKey.IsFreeVersion)+"',"
-				+"'"+POut.PBool(registrationKey.IsOnlyForTesting)+"',"
-				+"'"+POut.PInt(registrationKey.VotesAllotted)+"')";
+				 "'"+POut.Long(registrationKey.PatNum)+"',"
+				+"'"+POut.String(registrationKey.RegKey)+"',"
+				+"'"+POut.String(registrationKey.Note)+"',"
+				+POut.Date(registrationKey.DateStarted)+","
+				+POut.Date(registrationKey.DateDisabled)+","
+				+POut.Date(registrationKey.DateEnded)+","
+				+"'"+POut.Bool(registrationKey.IsForeign)+"',"
+				+"'"+POut.Bool(registrationKey.UsesServerVersion)+"',"
+				+"'"+POut.Bool(registrationKey.IsFreeVersion)+"',"
+				+"'"+POut.Bool(registrationKey.IsOnlyForTesting)+"',"
+				+"'"+POut.Int(registrationKey.VotesAllotted)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -136,7 +136,7 @@ namespace OpenDentBusiness {
 				return;
 			}
 			string command="DELETE FROM registrationkey WHERE RegistrationKeyNum='"
-				+POut.PLong(registrationKeyNum)+"'";
+				+POut.Long(registrationKeyNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -145,7 +145,7 @@ namespace OpenDentBusiness {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetBool(MethodBase.GetCurrentMethod(),regKey);
 			}
-			string command="SELECT RegKey FROM registrationkey WHERE RegKey='"+POut.PString(regKey)+"'";
+			string command="SELECT RegKey FROM registrationkey WHERE RegKey='"+POut.String(regKey)+"'";
 			DataTable table=Db.GetTable(command);
 			return (table.Rows.Count>0);
 		}
@@ -219,7 +219,7 @@ namespace OpenDentBusiness {
 				else {
 					row["dateStop"]="";
 				}
-				dateRepeatStop=PIn.PDate(raw.Rows[i]["Date_"].ToString());
+				dateRepeatStop=PIn.Date(raw.Rows[i]["Date_"].ToString());
 				if(dateRepeatStop.Year>1880) {
 					if(row["dateStop"].ToString()!="") {
 						row["dateStop"]+="\r\n";

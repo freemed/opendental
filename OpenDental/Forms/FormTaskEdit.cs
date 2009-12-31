@@ -880,15 +880,15 @@ namespace OpenDental{
 			if(resetUser && Cur.Descript!=textDescript.Text){
 				Cur.UserNum=Security.CurUser.UserNum;
 			}
-			Cur.DateTimeEntry=PIn.PDateT(textDateTimeEntry.Text);
+			Cur.DateTimeEntry=PIn.DateT(textDateTimeEntry.Text);
 			if(Cur.TaskStatus==TaskStatusEnum.Done && textDateTimeFinished.Text==""){
 				Cur.DateTimeFinished=DateTime.Now;
 			}
 			else{
-				Cur.DateTimeFinished=PIn.PDateT(textDateTimeFinished.Text);
+				Cur.DateTimeFinished=PIn.DateT(textDateTimeFinished.Text);
 			}
 			Cur.Descript=textDescript.Text;
-			Cur.DateTask=PIn.PDate(textDateTask.Text);
+			Cur.DateTask=PIn.Date(textDateTask.Text);
 			Cur.DateType=(TaskDateType)comboDateType.SelectedIndex;
 			if(!checkFromNum.Checked){//user unchecked the box. Never allowed to check if initially unchecked
 				Cur.FromNum=0;
