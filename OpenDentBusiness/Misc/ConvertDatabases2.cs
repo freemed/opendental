@@ -1942,6 +1942,28 @@ DROP TABLE IF EXISTS etAck";
 				string command;
 				command="INSERT INTO preference(PrefName,ValueString) VALUES('InsDefaultShowUCRonClaims','0')";
 				Db.NonQ(command);
+				command="DROP TABLE IF EXISTS equipment";
+				Db.NonQ(command);
+				command=@"CREATE TABLE equipment (
+					EquipmentNum bigint NOT NULL auto_increment,
+					Description text NOT NULL,
+					SerialNumber varchar(255),
+					ModelYear varchar(2),
+					DatePurchased date NOT NULL default '0001-01-01',
+					DateSold date NOT NULL default '0001-01-01',
+					PurchaseCost double NOT NULL,
+					MarketValue double NOT NULL,
+					Location text NOT NULL,
+					PRIMARY KEY(EquipmentNum)
+					)";
+				Db.NonQ(command);
+
+
+
+
+
+
+
 
 
 

@@ -33,6 +33,7 @@ namespace OpenDental {
 			this.gridNeeded = new OpenDental.UI.ODGrid();
 			this.comboSupplier = new System.Windows.Forms.ComboBox();
 			this.label3 = new System.Windows.Forms.Label();
+			this.butPrint = new OpenDental.UI.Button();
 			this.tabControl = new System.Windows.Forms.TabControl();
 			this.tabSupplies = new System.Windows.Forms.TabPage();
 			this.checkShowHidden = new System.Windows.Forms.CheckBox();
@@ -49,7 +50,7 @@ namespace OpenDental {
 			this.butClose = new OpenDental.UI.Button();
 			this.label1 = new System.Windows.Forms.Label();
 			this.comboBox1 = new System.Windows.Forms.ComboBox();
-			this.butPrint = new OpenDental.UI.Button();
+			this.menuItemEquipment = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip1.SuspendLayout();
 			this.splitContainer.Panel1.SuspendLayout();
 			this.splitContainer.Panel2.SuspendLayout();
@@ -63,7 +64,8 @@ namespace OpenDental {
 			// 
 			this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuItemSuppliers,
-            this.menuItemCategories});
+            this.menuItemCategories,
+            this.menuItemEquipment});
 			this.menuStrip1.Location = new System.Drawing.Point(0,0);
 			this.menuStrip1.Name = "menuStrip1";
 			this.menuStrip1.Size = new System.Drawing.Size(763,24);
@@ -73,14 +75,14 @@ namespace OpenDental {
 			// menuItemSuppliers
 			// 
 			this.menuItemSuppliers.Name = "menuItemSuppliers";
-			this.menuItemSuppliers.Size = new System.Drawing.Size(62,20);
+			this.menuItemSuppliers.Size = new System.Drawing.Size(67,20);
 			this.menuItemSuppliers.Text = "Suppliers";
 			this.menuItemSuppliers.Click += new System.EventHandler(this.menuItemSuppliers_Click);
 			// 
 			// menuItemCategories
 			// 
 			this.menuItemCategories.Name = "menuItemCategories";
-			this.menuItemCategories.Size = new System.Drawing.Size(71,20);
+			this.menuItemCategories.Size = new System.Drawing.Size(75,20);
 			this.menuItemCategories.Text = "Categories";
 			this.menuItemCategories.Click += new System.EventHandler(this.menuItemCategories_Click);
 			// 
@@ -188,6 +190,23 @@ namespace OpenDental {
 			this.label3.TabIndex = 10;
 			this.label3.Text = "Supplier";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// butPrint
+			// 
+			this.butPrint.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butPrint.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butPrint.Autosize = true;
+			this.butPrint.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butPrint.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPrint.CornerRadius = 4F;
+			this.butPrint.Image = global::OpenDental.Properties.Resources.butPrint;
+			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butPrint.Location = new System.Drawing.Point(311,324);
+			this.butPrint.Name = "butPrint";
+			this.butPrint.Size = new System.Drawing.Size(80,26);
+			this.butPrint.TabIndex = 24;
+			this.butPrint.Text = "Print";
+			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
 			// 
 			// tabControl
 			// 
@@ -394,22 +413,12 @@ namespace OpenDental {
 			this.comboBox1.Size = new System.Drawing.Size(173,21);
 			this.comboBox1.TabIndex = 8;
 			// 
-			// butPrint
+			// menuItemEquipment
 			// 
-			this.butPrint.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butPrint.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butPrint.Autosize = true;
-			this.butPrint.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butPrint.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butPrint.CornerRadius = 4F;
-			this.butPrint.Image = global::OpenDental.Properties.Resources.butPrint;
-			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPrint.Location = new System.Drawing.Point(311,324);
-			this.butPrint.Name = "butPrint";
-			this.butPrint.Size = new System.Drawing.Size(80,26);
-			this.butPrint.TabIndex = 24;
-			this.butPrint.Text = "Print";
-			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
+			this.menuItemEquipment.Name = "menuItemEquipment";
+			this.menuItemEquipment.Size = new System.Drawing.Size(77,20);
+			this.menuItemEquipment.Text = "Equipment";
+			this.menuItemEquipment.Click += new System.EventHandler(this.menuItemEquipment_Click);
 			// 
 			// FormSupplyInventory
 			// 
@@ -465,5 +474,6 @@ namespace OpenDental {
 		private OpenDental.UI.Button butNewSupply;
 		private OpenDental.UI.Button butAddToOrder;
 		private OpenDental.UI.Button butPrint;
+		private System.Windows.Forms.ToolStripMenuItem menuItemEquipment;
 	}
 }

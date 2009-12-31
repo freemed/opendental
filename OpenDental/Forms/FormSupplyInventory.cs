@@ -553,6 +553,11 @@ namespace OpenDental {
 			FillGridOrderItem();
 		}
 
+		private void menuItemEquipment_Click(object sender,EventArgs e) {
+			FormEquipment form=new FormEquipment();
+			form.ShowDialog();
+		}
+
 		private void butPrint_Click(object sender,EventArgs e) {
 			if(tabControl.SelectedIndex==1 && gridOrder.GetSelectedIndex()==-1){
 				MsgBox.Show(this,"Please select an order first.");
@@ -674,6 +679,8 @@ namespace OpenDental {
 		private void butClose_Click(object sender,EventArgs e) {
 			Close();
 		}
+
+		
 
 		
 
