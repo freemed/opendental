@@ -39,19 +39,58 @@ namespace SparksToothChart {
 			InitializeComponent();
 		}
 
+		private Device GetAcceptableDevice(DeviceType[] deviceTypes,Format[] backBufferFormats,bool windowed,
+			DepthFormat[] depthStencilFormats) {
+			List<Format> acceptableAdapterFormats=new List<Format>();
+			foreach(AdapterInformation adapter in Manager.Adapters) {
+				foreach(DeviceType deviceType in deviceTypes) {
+					foreach(DisplayMode displayMode in adapter.SupportedDisplayModes) {
+						foreach(Format backBufferFormat in backBufferFormats) {
+							if(Manager.CheckDeviceType(
+								adapter.Adapter,
+								deviceType,
+								displayMode.Format,
+								backBufferFormat,
+								windowed)) {
+								//Now make sure the depth buffer meets one of the required formats.
+								foreach(DepthFormat depthStencilFormat in depthStencilFormats) {
+									if(Manager.CheckDeviceFormat(adapter.Adapter,deviceType,displayMode.Format,
+										Usage.DepthStencil,ResourceType.Surface,depthStencilFormat)) {
+										if(Manager.CheckDepthStencilMatch(adapter.Adapter,deviceType,displayMode.Format,
+											backBufferFormat,depthStencilFormat)) {
+											//This depth stencil format is compatible
+											PresentParameters pp=new PresentParameters();
+											pp.BackBufferFormat=backBufferFormat;
+											pp.BackBufferWidth=this.Width;//Would normally be set to a DisplayMode.Width in a full-screen application.
+											pp.BackBufferHeight=this.Height;//Would normally be set to a DisplayMode.Width in a full-screen application.
+											pp.SwapEffect=SwapEffect.Discard;//Required value for anti-aliasing.
+											pp.Windowed=true;//Must be set to true for controls.
+											pp.DeviceWindowHandle=this.Handle;
+											pp.EnableAutoDepthStencil=true;
+											pp.AutoDepthStencilFormat=depthStencilFormat;
+											pp.MultiSample=MultiSampleType.FourSamples;//Anti-alias settings. I think this setting always works.
+											return new Device(adapter.Adapter,deviceType,this,CreateFlags.SoftwareVertexProcessing,pp);
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			return null;
+		}
+
 		///<summary>Must be called after the ToothChartDirectX control has been added to a form and should be called before it is drawn the first time.</summary>
-		public void InitializeGraphics(){
-			PresentParameters pp=new PresentParameters();
-			pp.Windowed=true;
-			pp.SwapEffect=SwapEffect.Discard;
-			pp.EnableAutoDepthStencil=true;
-			pp.AutoDepthStencilFormat=DepthFormat.D16;//Z-buffer depth of 16 bits.
-			pp.DeviceWindowHandle=this.Handle;
-			pp.BackBufferWidth=this.Width;
-			pp.BackBufferHeight=this.Height;
-			pp.MultiSample=MultiSampleType.FourSamples;//Anti-alias settings.
-			//This line fails on some machines:
-			device=new Device(0,DeviceType.Hardware,this,CreateFlags.SoftwareVertexProcessing,pp);
+		public void InitializeGraphics() {
+			device=GetAcceptableDevice(
+				new DeviceType[] { DeviceType.Reference },
+				new Format[] { Format.A8R8G8B8,Format.X8R8G8B8,Format.A2R10G10B10,Format.R5G6B5,Format.A1R5G5B5,Format.X1R5G5B5 },
+				true,
+				new DepthFormat[] { DepthFormat.D16,DepthFormat.D32,DepthFormat.D24X8,DepthFormat.D24X4S4,DepthFormat.D15S1,DepthFormat.D24S8 });
+			if(device==null) {
+				throw new Exception("Failed to attain an acceptable DirectX graphics adapter.");
+			}
 			device.DeviceReset+=new EventHandler(this.OnDeviceReset);
 			device.DeviceLost+=new EventHandler(this.OnDeviceLost);
 			device.DeviceResizing+=new CancelEventHandler(this.OnDeviceResizing);
