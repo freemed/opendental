@@ -157,6 +157,10 @@ namespace OpenDentBusiness{
 					return Lans.g("enumPermissions","Adjustment Create");
 				case Permissions.AdjustmentEdit:
 					return Lans.g("enumPermissions","Adjustment Edit");
+				case Permissions.AnesthesiaIntakeMeds:
+					return Lans.g("enumPermissions","Intake Anesthetic Medications into Inventory");
+				case Permissions.AnesthesiaControlMeds:
+					return Lans.g("enumPermissions","Edit Anesthetic Records; Edit/Adjust Inventory Counts");
 				case Permissions.AppointmentCreate:
 					return Lans.g("enumPermissions","Appointment Create");
 				case Permissions.AppointmentEdit:
@@ -177,6 +181,8 @@ namespace OpenDentBusiness{
 					return Lans.g("enumPermissions","Claim Sent Edit");
 				case Permissions.DepositSlips:
 					return Lans.g("enumPermissions","Deposit Slips");
+				case Permissions.EquipmentDelete:
+					return Lans.g("enumPermissions","Equipment Delete");
 				case Permissions.FamilyModule:
 					return Lans.g("enumPermissions","Family Module");
 				case Permissions.ImagesModule:
@@ -201,16 +207,14 @@ namespace OpenDentBusiness{
 					return Lans.g("enumPermissions","Reports");
 				case Permissions.RxCreate:
 					return Lans.g("enumPermissions","Rx Create");
-				case Permissions.AnesthesiaIntakeMeds:
-					return Lans.g("enumPermissions", "Intake Anesthetic Medications into Inventory");
-				case Permissions.AnesthesiaControlMeds:
-					return Lans.g("enumPermissions", "Edit Anesthetic Records; Edit/Adjust Inventory Counts");
 				case Permissions.Schedules:
 					return Lans.g("enumPermissions","Schedules - Practice and Provider");
 				case Permissions.SecurityAdmin:
 					return Lans.g("enumPermissions","Security Admin");
 				case Permissions.Setup:
 					return Lans.g("enumPermissions","Setup - Covers a wide variety of setup functions");
+				case Permissions.TimecardDeleteEntry:
+					return Lans.g("enumPermissions","Timecard Delete Entry");
 				case Permissions.TimecardsEditAll:
 					return Lans.g("enumPermissions","Edit All Timecards");
 				case Permissions.TPModule:
@@ -221,8 +225,6 @@ namespace OpenDentBusiness{
 					return Lans.g("enumPermissions","User Query");
 				case Permissions.ReportProdInc:
 					return Lans.g("enumPermissions","Reports - Production and Income, Aging");
-				case Permissions.TimecardDeleteEntry:
-					return Lans.g("enumPermissions","Timecard Delete Entry");
 			}
 			return "";//should never happen
 		}
@@ -240,6 +242,7 @@ namespace OpenDentBusiness{
 				|| permType==Permissions.DepositSlips//prevents backdating
 				|| permType==Permissions.TreatPlanEdit
 				|| permType==Permissions.TimecardDeleteEntry
+				|| permType==Permissions.EquipmentDelete
 				)
 			{
 				return true;

@@ -112,9 +112,9 @@ namespace OpenDentBusiness{
 		}
 
 		public static string Date(DateTime myDate,bool encapsulate){
-			if(myDate.Year<1880) {
-				myDate=DateTime.MinValue;
-			}
+			//if(myDate.Year<1880) {
+			//	myDate=DateTime.MinValue;
+			//}
 			try{
 				//the new DTFormatInfo is to prevent changes in year for Korea
 				string outDate=myDate.ToString("yyyy-MM-dd",new DateTimeFormatInfo());

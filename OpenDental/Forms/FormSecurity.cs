@@ -33,7 +33,6 @@ namespace OpenDental{
 		private Label label1;
 		private TextBox textDate;
 		private OpenDental.UI.Button butChange;
-		private Panel panel1;
 		private DataTable table;
 
 		///<summary></summary>
@@ -80,14 +79,12 @@ namespace OpenDental{
 			this.checkCannotEditOwn = new System.Windows.Forms.CheckBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.textDate = new System.Windows.Forms.TextBox();
-			this.panel1 = new System.Windows.Forms.Panel();
 			this.butChange = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butSetAll = new OpenDental.UI.Button();
 			this.butAddUser = new OpenDental.UI.Button();
 			this.butAddGroup = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
-			this.panel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// treePermissions
@@ -96,12 +93,12 @@ namespace OpenDental{
 			this.treePermissions.ImageIndex = 0;
 			this.treePermissions.ImageList = this.imageListPerm;
 			this.treePermissions.ItemHeight = 15;
-			this.treePermissions.Location = new System.Drawing.Point(0,0);
+			this.treePermissions.Location = new System.Drawing.Point(471,29);
 			this.treePermissions.Name = "treePermissions";
 			this.treePermissions.SelectedImageIndex = 0;
 			this.treePermissions.ShowPlusMinus = false;
 			this.treePermissions.ShowRootLines = false;
-			this.treePermissions.Size = new System.Drawing.Size(399,644);
+			this.treePermissions.Size = new System.Drawing.Size(416,637);
 			this.treePermissions.TabIndex = 6;
 			this.treePermissions.DoubleClick += new System.EventHandler(this.treePermissions_DoubleClick);
 			this.treePermissions.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treePermissions_AfterSelect);
@@ -197,18 +194,6 @@ namespace OpenDental{
 			this.textDate.Size = new System.Drawing.Size(82,20);
 			this.textDate.TabIndex = 94;
 			// 
-			// panel1
-			// 
-			this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.panel1.AutoScroll = true;
-			this.panel1.Controls.Add(this.treePermissions);
-			this.panel1.Location = new System.Drawing.Point(471,29);
-			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(416,637);
-			this.panel1.TabIndex = 96;
-			// 
 			// butChange
 			// 
 			this.butChange.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -303,7 +288,7 @@ namespace OpenDental{
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(894,700);
-			this.Controls.Add(this.panel1);
+			this.Controls.Add(this.treePermissions);
 			this.Controls.Add(this.butChange);
 			this.Controls.Add(this.textDate);
 			this.Controls.Add(this.label1);
@@ -326,7 +311,6 @@ namespace OpenDental{
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Security";
 			this.Load += new System.EventHandler(this.FormSecurity_Load);
-			this.panel1.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -453,6 +437,8 @@ namespace OpenDental{
 						node2.Nodes.Add(node3);
 					node3=SetNode(Permissions.TimecardDeleteEntry);
 						node2.Nodes.Add(node3);
+					node.Nodes.Add(node2);
+				node2=SetNode(Permissions.EquipmentDelete);
 					node.Nodes.Add(node2);
 				treePermissions.Nodes.Add(node);
 			treePermissions.ExpandAll();

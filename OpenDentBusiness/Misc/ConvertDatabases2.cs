@@ -1954,6 +1954,7 @@ DROP TABLE IF EXISTS etAck";
 					PurchaseCost double NOT NULL,
 					MarketValue double NOT NULL,
 					Location text NOT NULL,
+					DateEntry date NOT NULL default '0001-01-01',
 					PRIMARY KEY(EquipmentNum)
 					)";
 				Db.NonQ(command);

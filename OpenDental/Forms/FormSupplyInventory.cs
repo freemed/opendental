@@ -548,12 +548,19 @@ namespace OpenDental {
 		}
 
 		private void menuItemCategories_Click(object sender,EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.Setup)) {
+				return;
+			}
 			FormDefinitions FormD=new FormDefinitions(DefCat.SupplyCats);
 			FormD.ShowDialog();
 			FillGridOrderItem();
+			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Definitions.");
 		}
 
 		private void menuItemEquipment_Click(object sender,EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.Setup)) {
+				return;
+			}
 			FormEquipment form=new FormEquipment();
 			form.ShowDialog();
 		}

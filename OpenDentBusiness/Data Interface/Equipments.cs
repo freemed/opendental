@@ -10,11 +10,31 @@ namespace OpenDentBusiness{
 	public class Equipments {
 
 		///<summary></summary>
-		public static List<Equipment> GetList() {
+		public static List<Equipment> GetList(DateTime fromDate,DateTime toDate,EnumEquipmentDisplayMode display) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<Equipment>>(MethodBase.GetCurrentMethod());
+				return Meth.GetObject<List<Equipment>>(MethodBase.GetCurrentMethod(),fromDate,toDate,display);
 			}
-			string command="SELECT * FROM equipment ORDER BY DatePurchased";
+			string command="";
+			if(display==EnumEquipmentDisplayMode.Purchased){
+				command="SELECT * FROM equipment "
+					+"WHERE DatePurchased >= "+POut.Date(fromDate)
+					+" AND DatePurchased <= "+POut.Date(toDate)
+					+" ORDER BY DatePurchased";
+			}
+			if(display==EnumEquipmentDisplayMode.Sold) {
+				command="SELECT * FROM equipment "
+					+"WHERE DateSold >= "+POut.Date(fromDate)
+					+" AND DateSold <= "+POut.Date(toDate)
+					+" ORDER BY DatePurchased";
+			}
+			if(display==EnumEquipmentDisplayMode.All) {
+				command="SELECT * FROM equipment "
+					+"WHERE (DatePurchased >= "+POut.Date(fromDate)
+					+" AND DatePurchased <= "+POut.Date(toDate)+")"
+					+" OR (DateSold >= "+POut.Date(fromDate)
+					+" AND DateSold <= "+POut.Date(toDate)+")"
+					+" ORDER BY DatePurchased";
+			}
 			DataTable table=Db.GetTable(command);
 			List<Equipment> list=new List<Equipment>();
 			Equipment equip;
@@ -29,6 +49,7 @@ namespace OpenDentBusiness{
 				equip.PurchaseCost = PIn.Double(table.Rows[i][6].ToString());
 				equip.MarketValue  = PIn.Double(table.Rows[i][7].ToString());
 				equip.Location     = PIn.String(table.Rows[i][8].ToString());
+				equip.DateEntry    = PIn.Date(table.Rows[i][9].ToString());
 				list.Add(equip);
 			}
 			return list;
@@ -47,71 +68,97 @@ namespace OpenDentBusiness{
 			if(PrefC.RandomKeys) {
 				command+="EquipmentNum,";
 			}
-			command+="Description,SerialNumber,ModelYear,DatePurchased,DateSold,PurchaseCost,MarketValue,Location) VALUES(";
+			command+="Description,SerialNumber,ModelYear,DatePurchased,DateSold,PurchaseCost,MarketValue,Location,DateEntry) VALUES(";
 			if(PrefC.RandomKeys) {
 				command+=POut.Long(equip.EquipmentNum)+", ";
 			}
-			/*
 			command+=
-				 "'"+POut.PString(equip.Description)+"', "
-				+"'"+POut.PString(equip.SerialNumber)+"', "
-				+"'"+POut(equip.ModelYear)+"', "
-				+"'"+POut(equip.DatePurchased)+"', "
-				+"'"+POut(equip.DateSold)+"', "
-				+"'"+POut(equip.PurchaseCost)+"', "
-				+"'"+POut(equip.MarketValue)+"', "
-				+"'"+POut(equip.Location)+"', "
-				+"'"+POut(equip)+"', "
-
-
-				+"'"+POut.PString(auto.ProcCodes)+"', "
-				+"'"+POut.PInt((int)auto.AutoAction)+"', "
-				+"'"+POut.PLong(auto.SheetDefNum)+"', "
-				+"'"+POut.PLong(auto.CommType)+"', "
-				+"'"+POut.PString(auto.MessageContent)+"')";
+				 "'"+POut.String(equip.Description)+"', "
+				+"'"+POut.String(equip.SerialNumber)+"', "
+				+"'"+POut.String(equip.ModelYear)+"', "
+				+POut.Date(equip.DatePurchased)+", "
+				+POut.Date(equip.DateSold)+", "
+				+"'"+POut.Double(equip.PurchaseCost)+"', "
+				+"'"+POut.Double(equip.MarketValue)+"', "
+				+"'"+POut.String(equip.Location)+"', "
+				+POut.Date(equip.DateEntry)+")";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {
-				auto.equipmentNum=Db.NonQ(command,true);
-			}*/
+				equip.EquipmentNum=Db.NonQ(command,true);
+			}
 			return equip.EquipmentNum;
 		}
 
-		/*
 		///<summary></summary>
-		public static void Update(equipment auto) {
+		public static void Update(Equipment equip) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),auto);
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),equip);
 				return;
 			}
 			string command= "UPDATE equipment SET " 
-				+ "Description = '"   +POut.PString(auto.Description)+"'"
-				+ ",AutoTrigger = '"  +POut.PInt((int)auto.AutoTrigger)+"'"
-				+ ",ProcCodes = '"    +POut.PString(auto.ProcCodes)+"'"
-				+ ",AutoAction = '"   +POut.PInt((int)auto.AutoAction)+"'"
-				+ ",SheetDefNum = '"  +POut.PLong(auto.SheetDefNum)+"'"
-				+ ",CommType = '"     +POut.PLong(auto.CommType)+"'"
-				+ ",MessageContent = '" +POut.PString(auto.MessageContent)+"'"
-				+" WHERE equipmentNum = '" +POut.PLong   (auto.equipmentNum)+"'";
+				+ "Description = '"  +POut.String(equip.Description)+"'"
+				+ ",SerialNumber = '"+POut.String(equip.SerialNumber)+"'"
+				+ ",ModelYear = '"   +POut.String(equip.ModelYear)+"'"
+				+ ",DatePurchased = "+POut.Date(equip.DatePurchased)
+				+ ",DateSold = "     +POut.Date(equip.DateSold)
+				+ ",PurchaseCost = '"+POut.Double(equip.PurchaseCost)+"'"
+				+ ",MarketValue = '" +POut.Double(equip.MarketValue)+"'"
+				+ ",Location = '"    +POut.String(equip.Location)+"'"
+				+ ",DateEntry = "   +POut.Date(equip.DateEntry)
+				+" WHERE equipmentNum = '" +POut.Long (equip.EquipmentNum)+"'";
  			Db.NonQ(command);
 		}
 
 		///<summary></summary>
-		public static void Delete(equipment auto) {
+		public static void Delete(Equipment equip) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),auto);
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),equip);
 				return;
 			}
 			string command="DELETE FROM equipment" 
-				+" WHERE equipmentNum = "+POut.PLong(auto.equipmentNum);
+				+" WHERE EquipmentNum = "+POut.Long(equip.EquipmentNum);
  			Db.NonQ(command);
 		}
-		*/
+
+		///<summary>Generates a unique 3 char alphanumeric serialnumber.  Checks to make sure it's not already in use.</summary>
+		public static string GenerateSerialNum() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod());
+			}
+			string retVal="";
+			bool isDuplicate=true;
+			Random rand=new Random();
+			while(isDuplicate){
+				retVal="";
+				for(int i=0;i<4;i++) {
+					int r=rand.Next(0,34);
+					if(r<9) {
+						retVal+=(char)('1'+r);//1-9, no zero
+					}
+					else {
+						retVal+=(char)('A'+r-9);
+					}
+				}
+				string command="SELECT COUNT(*) FROM equipment WHERE SerialNumber = '"+POut.String(retVal)+"'";
+				if(Db.GetScalar(command)=="0") {
+					isDuplicate=false;
+				}
+			}
+			return retVal;
+		}
+		
 
 		
 		
 
+	}
+
+	public enum EnumEquipmentDisplayMode {
+		Purchased,
+		Sold,
+		All
 	}
 	
 

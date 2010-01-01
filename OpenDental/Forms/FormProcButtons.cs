@@ -317,6 +317,9 @@ namespace OpenDental{
 		}
 
 		private void butEdit_Click(object sender,EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.Setup)) {
+				return;
+			}
 			FormDefinitions FormD=new FormDefinitions(DefCat.ProcButtonCats);
 			FormD.ShowDialog();
 			FillCategories();

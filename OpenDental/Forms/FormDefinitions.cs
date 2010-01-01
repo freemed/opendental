@@ -32,7 +32,7 @@ namespace OpenDental{
 		private Def[] DefsList;
 		private int DefsSelected;
 
-		///<summary></summary>
+		///<summary>Must check security before allowing this window to open.</summary>
 		public FormDefinitions(DefCat selectedCat){
 			InitializeComponent();// Required for Windows Form Designer support
 			SelectedCat=(int)selectedCat;
