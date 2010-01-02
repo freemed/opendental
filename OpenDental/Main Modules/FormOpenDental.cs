@@ -1246,6 +1246,7 @@ namespace OpenDental{
 			if(!PrefsStartup()){//looks for the AtoZ folder here, but would like to eventually move that down to after login
 				Cursor=Cursors.Default;
 				Splash.Dispose();
+				Application.Exit();
 				return;
 			}
 			if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") {
