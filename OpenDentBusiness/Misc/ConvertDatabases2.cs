@@ -1711,8 +1711,9 @@ DROP TABLE IF EXISTS etAck";
 				Db.NonQ(command);
 				//We will not delete this pref just in case it's needed later.  It's not used anywhere right now.
 				//command = "DELETE FROM preference WHERE PrefName='EnableAnesthMod'";
-				command="DELETE FROM preference WHERE PrefName='ImageStore'";//this option is no longer supported.
-				Db.NonQ(command);
+				//We will not delete this pref just in case it's needed later.  It's not used anywhere right now.
+				//command="DELETE FROM preference WHERE PrefName='ImageStore'";//this option is no longer supported.
+				//Db.NonQ(command);
 				command="SELECT MAX(ItemOrder) FROM definition WHERE Category=2";
 				int itemOrder=PIn.Int(Db.GetScalar(command))+1;//eg 7+1
 				//this should end up with an acceptable autoincrement even if using random primary keys.
@@ -1815,7 +1816,7 @@ DROP TABLE IF EXISTS etAck";
 					+"'EZDent')";
 				Db.NonQ(command);
 				command="UPDATE preference SET ValueString = '6.8.12.0' WHERE PrefName = 'DataBaseVersion'";
-				Db.NonQ32(command);
+				Db.NonQ(command);
 			}
 			To6_8_24();
 		}
@@ -1829,10 +1830,10 @@ DROP TABLE IF EXISTS etAck";
 				string codeNum1203=Db.GetScalar(command);
 				if(codeNum1203!="" && codeNum1204!="") {
 					command="UPDATE benefit SET CodeNum="+codeNum1203+" WHERE CodeNum="+codeNum1204;
-					Db.NonQ32(command);
+					Db.NonQ(command);
 				}
 				command="UPDATE preference SET ValueString = '6.8.24.0' WHERE PrefName = 'DataBaseVersion'";
-				Db.NonQ32(command);
+				Db.NonQ(command);
 			}
 			To6_9_1();
 		}
