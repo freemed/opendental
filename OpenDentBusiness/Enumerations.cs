@@ -441,9 +441,9 @@ namespace OpenDentBusiness{
 		OutpatHospital,
 		///<summary>4. CPT code 31</summary>
 		SkilledNursFac,
-		///<summary>5. Not defined in the CPT.  In X12, this is code 35.</summary>
-		AdultLivCareFac,
-		///<summary>6. CPT code ?</summary>
+		///<summary>5. CPT code 33.  In X12, a similar code AdultLivCareFac 35 is mentioned.</summary>
+		CustodialCareFacility,
+		///<summary>6. CPT code ?.  We use 11 for office.</summary>
 		OtherLocation,
 		///<summary>7. CPT code 15</summary>
 		MobileUnit,
@@ -457,6 +457,10 @@ namespace OpenDentBusiness{
 		PublicHealthClinic,
 		///<summary>12. CPT code 72</summary>
 		RuralHealthClinic,
+		///<summary>13. CPT code 23</summary>
+		EmergencyRoomHospital,
+		///<summary>14. CPT code 24</summary>
+		AmbulatorySurgicalCenter
 	}
 	///<summary>Used in the other appointments window to keep track of the result when closing.</summary>
 	public enum OtherResult{

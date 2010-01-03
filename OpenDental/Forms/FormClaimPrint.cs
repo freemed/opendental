@@ -1080,7 +1080,7 @@ namespace OpenDental{
 							displayStrings[i]="X";
 						break;
 					case "PlaceIsExtCareFacilityADA2002":
-						if(ClaimCur.PlaceService==PlaceOfService.AdultLivCareFac
+						if(ClaimCur.PlaceService==PlaceOfService.CustodialCareFacility
 							|| ClaimCur.PlaceService==PlaceOfService.SkilledNursFac)
 							displayStrings[i]="X";
 						break;
@@ -1098,7 +1098,7 @@ namespace OpenDental{
 							displayStrings[i]="X";
 						break;
 					case "PlaceIsAdultLivCareFac":
-						if(ClaimCur.PlaceService==PlaceOfService.AdultLivCareFac)
+						if(ClaimCur.PlaceService==PlaceOfService.CustodialCareFacility)
 							displayStrings[i]="X";
 						break;
 					case "PlaceIsSkilledNursFac":
@@ -1480,8 +1480,12 @@ namespace OpenDental{
 			switch(place){
 				default:
 					return "";
-				case PlaceOfService.AdultLivCareFac:
-					return "33";//aka Custodial care facility
+				case PlaceOfService.AmbulatorySurgicalCenter:
+					return "24";
+				case PlaceOfService.CustodialCareFacility:
+					return "33";
+				case PlaceOfService.EmergencyRoomHospital:
+					return "23";
 				case PlaceOfService.InpatHospital:
 					return "21";
 				case PlaceOfService.Office:

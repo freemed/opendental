@@ -965,10 +965,10 @@ namespace OpenDental.Eclaims
 					seg+=WriteProv_REF(sw,provTreat,(string)claimAr[0,i]);
 				}
 				//2310C (medical)Purchased Service provider secondary ID. We don't support this for medical
-				//2310C (not medical)NM1: Service facility location.  Only required if PlaceService is 21,22,31, or 35.
+				//2310C (not medical)NM1: Service facility location.  Only required if PlaceService is 21,22,31, or 35. 35 does not exist in CPT, so we assume 33
 				//if(!isMedical && 
 				if(claim.PlaceService==PlaceOfService.InpatHospital || claim.PlaceService==PlaceOfService.OutpatHospital
-					|| claim.PlaceService==PlaceOfService.SkilledNursFac || claim.PlaceService==PlaceOfService.AdultLivCareFac) {
+					|| claim.PlaceService==PlaceOfService.SkilledNursFac || claim.PlaceService==PlaceOfService.CustodialCareFacility) {//AdultLivCareFac
 					seg++;
 					sw.WriteLine("NM1*FA*"//FA=Facility
 						+"2*"//NM102: 2=non-person
@@ -1457,8 +1457,12 @@ namespace OpenDental.Eclaims
 
 		private static string GetPlaceService(PlaceOfService place){
 			switch(place){
-				case PlaceOfService.AdultLivCareFac:
-					return "35";
+				case PlaceOfService.AmbulatorySurgicalCenter:
+					return "24";
+				case PlaceOfService.CustodialCareFacility:
+					return "33";
+				case PlaceOfService.EmergencyRoomHospital:
+					return "23";
 				case PlaceOfService.FederalHealthCenter:
 					return "50";
 				case PlaceOfService.InpatHospital:
