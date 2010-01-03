@@ -1935,6 +1935,17 @@ DROP TABLE IF EXISTS etAck";
 				command="UPDATE preference SET ValueString = '6.9.1.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ32(command);
 			}
+			To6_9_4();
+		}
+
+		private static void To6_9_4() {
+			if(FromVersion<new Version("6.9.4.0")) {
+				string command;
+				command="ALTER TABLE automation CHANGE SheetNum SheetDefNum bigint NOT NULL";
+				Db.NonQ(command);
+				command="UPDATE preference SET ValueString = '6.9.4.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ32(command);
+			}
 			To7_0_0();
 		}
 
