@@ -1689,5 +1689,74 @@ namespace OpenDentBusiness{
 			DeletedObjects.SetDeleted(DeletedObjectType.Appointment,aptNum);
 		}
 
+		/// <summary>If make5minute is false, then result will be in 10 or 15 minutes blocks and will need a later conversion step before going to db.</summary>
+		public static string CalculatePattern(long provDent,long provHyg,List<long> codeNums,bool make5minute) {
+			StringBuilder strBTime=new StringBuilder("");
+			string procTime="";
+			ProcedureCode procCode;
+			if(codeNums.Count==1) {
+				procCode=ProcedureCodes.GetProcCode(codeNums[0]);
+				if(procCode.IsHygiene) {//hygiene proc
+					procTime=ProcCodeNotes.GetTimePattern(provHyg,codeNums[0]);
+				}
+				else {//dentist proc
+					procTime=ProcCodeNotes.GetTimePattern(provDent,codeNums[0]);
+				}
+				strBTime.Append(procTime);
+			}
+			else {//multiple procs or no procs
+				for(int i=0;i<codeNums.Count;i++) {
+					procCode=ProcedureCodes.GetProcCode(codeNums[i]);
+					if(procCode.IsHygiene) {//hygiene proc
+						procTime=ProcCodeNotes.GetTimePattern(provHyg,codeNums[i]);
+					}
+					else {//dentist proc
+						procTime=ProcCodeNotes.GetTimePattern(provDent,codeNums[i]);
+					}
+					if(procTime.Length<2) {
+						continue;
+					}
+					for(int n=1;n<procTime.Length-1;n++) {
+						if(procTime.Substring(n,1)=="/") {
+							strBTime.Append("/");
+						}
+						else {
+							strBTime.Insert(0,"X");
+						}
+					}
+				}
+			}
+			if(codeNums.Count>1) {//multiple procs
+				strBTime.Insert(0,"/");
+				strBTime.Append("/");
+			}
+			else if(codeNums.Count==0) {//0 procs
+				strBTime.Append("/");
+			}
+			if(strBTime.Length>39) {
+				strBTime.Remove(39,strBTime.Length-39);
+			}
+			string pattern=strBTime.ToString();
+			if(make5minute) {
+				return ConvertPatternTo5(pattern);
+			}
+			return pattern;
+		}
+
+		public static string ConvertPatternTo5(string pattern) {
+			StringBuilder savePattern=new StringBuilder();
+			for(int i=0;i<pattern.Length;i++) {
+				savePattern.Append(pattern.Substring(i,1));
+				savePattern.Append(pattern.Substring(i,1));
+				if(PrefC.GetLong(PrefName.AppointmentTimeIncrement)==15) {
+					savePattern.Append(pattern.Substring(i,1));
+				}
+			}
+			if(savePattern.Length==0) {
+				savePattern=new StringBuilder("/");
+			}
+			return savePattern.ToString();
+		}
+
 	}
 }

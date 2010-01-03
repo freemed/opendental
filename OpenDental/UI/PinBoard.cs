@@ -115,6 +115,20 @@ namespace OpenDental.UI {
 			Invalidate();
 		}
 
+		///<summary>If an appt is already on the pinboard, and the information in it is change externally, this 'refreshes' the data.</summary>
+		public void ResetData(DataRow row) {
+			for(int i=0;i<apptList.Count;i++) {
+				if(apptList[i].DataRoww["AptNum"].ToString()==row["AptNum"].ToString()) {
+					apptList[i].DataRoww=row;
+					apptList[i].SetSize();
+					apptList[i].Width=Width-2;
+					//PinApptSingle.IsSelected=true;
+					//PinApptSingle.Location=new Point(0,13*apptList.Count);
+				}
+			}
+			Invalidate();
+		}
+
 		/*
 		///<Summary>Sets all appointments to specified value.</Summary>
 		public void SetSelected(bool setValue){

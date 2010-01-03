@@ -29,7 +29,7 @@ namespace OpenDental{
 		//private User user;
 		private DataTable table;
 		
-		///<summary></summary>
+		///<summary>This isn't actually a selection window anymore.  It's just the provider setup list.</summary>
 		public FormProviderSelect(){
 			InitializeComponent();
 			Lan.F(this);

@@ -1580,67 +1580,22 @@ namespace OpenDental{
 			if(checkTimeLocked.Checked){
 				return;
 			}
-			//int adjTimeU=PIn.PInt(textAddTime.Text)/PrefC.GetLong(PrefName.AppointmentTimeIncrement");
-			strBTime=new StringBuilder("");
-			string procTime="";
-			long codeNum;
-			long dentNum=Patients.GetProvNum(pat);
-			long hygNum=Patients.GetProvNum(pat);
+			//We are using the providers selected for the appt rather than the providers for the procs.
+			//Providers for the procs get reset when closing this form.
+			long provDent=Patients.GetProvNum(pat);
+			long provHyg=Patients.GetProvNum(pat);
 			if(comboProvNum.SelectedIndex!=-1){
-				dentNum=ProviderC.List[comboProvNum.SelectedIndex].ProvNum;
-				hygNum=ProviderC.List[comboProvNum.SelectedIndex].ProvNum;
+				provDent=ProviderC.List[comboProvNum.SelectedIndex].ProvNum;
+				provHyg=ProviderC.List[comboProvNum.SelectedIndex].ProvNum;
 			}
 			if(comboProvHyg.SelectedIndex!=0) {
-				hygNum=ProviderC.List[comboProvHyg.SelectedIndex-1].ProvNum;
+				provHyg=ProviderC.List[comboProvHyg.SelectedIndex-1].ProvNum;
 			}
-			ProcedureCode procCode;
-			if(gridProc.SelectedIndices.Length==1) {
-				codeNum=PIn.Long(DS.Tables["Procedure"].Rows[gridProc.SelectedIndices[0]]["CodeNum"].ToString());
-				//we're not going to use the actual procedure.ProvNum, but instead base it on the providers selected for this appt.
-				//The actual provNums will be reset on closing.
-				procCode=ProcedureCodes.GetProcCode(codeNum);
-				if(procCode.IsHygiene) {//hygiene proc
-					procTime=ProcCodeNotes.GetTimePattern(hygNum,codeNum);
-				}
-				else {//dentist proc
-					procTime=ProcCodeNotes.GetTimePattern(dentNum,codeNum);
-				}
-				strBTime.Append(procTime);
+			List<long> codeNums=new List<long>();
+			for(int i=0;i<gridProc.SelectedIndices.Length;i++) {
+				codeNums.Add(PIn.Long(DS.Tables["Procedure"].Rows[gridProc.SelectedIndices[i]]["CodeNum"].ToString()));
 			}
-			else {//multiple procs or no procs
-				for(int i=0;i<gridProc.SelectedIndices.Length;i++) {
-					codeNum=PIn.Long(DS.Tables["Procedure"].Rows[gridProc.SelectedIndices[i]]["CodeNum"].ToString());
-					procCode=ProcedureCodes.GetProcCode(codeNum);
-					if(procCode.IsHygiene) {//hygiene proc
-						procTime=ProcCodeNotes.GetTimePattern(hygNum,codeNum);
-					}
-					else {//dentist proc
-						procTime=ProcCodeNotes.GetTimePattern(dentNum,codeNum);
-					}
-					if(procTime.Length<2){
-						continue;
-					}
-					for(int n=1;n<procTime.Length-1;n++) {
-						if(procTime.Substring(n,1)=="/") {
-							strBTime.Append("/");
-						}
-						else {
-							strBTime.Insert(0,"X");
-						}
-					}
-				}
-			}
-			//MessageBox.Show(strBTime.ToString());
-			if(gridProc.SelectedIndices.Length>1) {//multiple procs
-				strBTime.Insert(0,"/");
-				strBTime.Append("/");
-			}
-			else if(gridProc.SelectedIndices.Length==0) {//0 procs
-				strBTime.Append("/");
-			}
-			if(strBTime.Length>39) {
-				strBTime.Remove(39,strBTime.Length-39);
-			}
+			strBTime=new StringBuilder(Appointments.CalculatePattern(provDent,provHyg,codeNums,false));
 		}
 
 		private void checkTimeLocked_Click(object sender,EventArgs e) {
@@ -1926,19 +1881,7 @@ namespace OpenDental{
 			//set procs complete was moved further down
 			//convert from current increment into 5 minute increment
 			//MessageBox.Show(strBTime.ToString());
-			StringBuilder savePattern=new StringBuilder();
-			for(int i=0;i<strBTime.Length;i++) {
-				savePattern.Append(strBTime[i]);
-				savePattern.Append(strBTime[i]);
-				if(PrefC.GetLong(PrefName.AppointmentTimeIncrement)==15) {
-					savePattern.Append(strBTime[i]);
-				}
-			}
-			if(savePattern.Length==0) {
-				savePattern=new StringBuilder("/");
-			}
-			//MessageBox.Show(savePattern.ToString());
-			AptCur.Pattern=savePattern.ToString();
+			AptCur.Pattern=Appointments.ConvertPatternTo5(strBTime.ToString());
 			if(comboUnschedStatus.SelectedIndex==0){//none
 				AptCur.UnschedStatus=0;
 			}

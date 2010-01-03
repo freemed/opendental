@@ -2012,6 +2012,14 @@ namespace OpenDental{
 			if(pinBoard.SelectedIndex==-1){
 				return;
 			}
+			if(e.Button==MouseButtons.Right) {
+				ContextMenu cmen=new ContextMenu();
+				MenuItem menuItemProv=new MenuItem(Lan.g(this,"Change Provider"));
+				menuItemProv.Click+=new EventHandler(menuItemProv_Click);
+				cmen.MenuItems.Add(menuItemProv);
+				cmen.Show(pinBoard,e.Location);
+				return;
+			}
 			mouseIsDown = true;
 			//ContrApptSingle.PinBoardIsSelected=true;
 			TempApptSingle=new ContrApptSingle();
@@ -2035,6 +2043,61 @@ namespace OpenDental{
 			contOrigin=new Point(pinBoard.Location.X+panelCalendar.Location.X,
 				pinBoard.SelectedAppt.Location.Y+pinBoard.Location.Y+panelCalendar.Location.Y);
 				//PinApptSingle.Location;
+		}
+
+		void menuItemProv_Click(object sender,EventArgs e) {
+			//throw new NotImplementedException();
+			Appointment apt=Appointments.GetOneApt(PIn.Long(pinBoard.SelectedAppt.DataRoww["AptNum"].ToString()));
+			Appointment oldApt=apt.Copy();
+			if(apt==null) {
+				MessageBox.Show("Appointment not found.");
+				return;
+			}
+			long provNum=apt.ProvNum;
+			if(apt.IsHygiene) {
+				provNum=apt.ProvHyg;
+			}
+			FormProviderPick formPick=new FormProviderPick();
+			formPick.SelectedProvNum=provNum;
+			formPick.ShowDialog();
+			if(formPick.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			if(formPick.SelectedProvNum==provNum) {
+				return;//provider not changed.
+			}
+			if(apt.IsHygiene) {
+				apt.ProvHyg=formPick.SelectedProvNum;
+			}
+			else {
+				apt.ProvNum=formPick.SelectedProvNum;
+			}
+			List<Procedure> procsForSingleApt=Procedures.GetProcsForSingle(apt.AptNum,false);
+			List<long> codeNums=new List<long>();
+			for(int p=0;p<procsForSingleApt.Count;p++) {
+				codeNums.Add(procsForSingleApt[p].CodeNum);
+			}
+			string calcPattern=Appointments.CalculatePattern(apt.ProvNum,apt.ProvHyg,codeNums,true);
+			if(apt.Pattern != calcPattern) {
+				if(!apt.TimeLocked || MsgBox.Show(this,MsgBoxButtons.YesNo,"Appointment length is locked.  Change length for new provider anyway?")) {
+					apt.Pattern=calcPattern;
+				}
+			}
+			Appointments.Update(apt,oldApt);
+			Procedures.SetProvidersInAppointment(apt,procsForSingleApt);
+			ModuleSelected(PatCur.PatNum);
+			DataRow row=null;
+			if(apt.AptStatus==ApptStatus.Planned) {
+				row=Appointments.RefreshOneApt(apt.AptNum,true).Tables["Appointments"].Rows[0];
+			}
+			else {
+				row=Appointments.RefreshOneApt(apt.AptNum,false).Tables["Appointments"].Rows[0];
+			}
+			if(row==null) {
+				return;
+			}
+			pinBoard.ResetData(row);
+			//MessageBox.Show(Providers.GetAbbr(apt.ProvNum));
 		}
 
 		///<Summary>Moves pinboard appt if mouse is down.</Summary>
@@ -2125,6 +2188,53 @@ namespace OpenDental{
 			Operatory curOp=OperatoryC.ListShort[ApptViewItemL.VisOps
 				[ContrApptSheet2.ConvertToOp(TempApptSingle.Location.X-ContrApptSheet2.Location.X)]];
 			aptCur.Op=curOp.OperatoryNum;
+			long assignedDent=Schedules.GetAssignedProvNumForSpot(SchedListPeriod,curOp,false,aptCur.AptDateTime);
+			long assignedHyg=Schedules.GetAssignedProvNumForSpot(SchedListPeriod,curOp,true,aptCur.AptDateTime);
+			List<Procedure> procsForSingleApt=null;
+			if(aptCur.AptStatus!=ApptStatus.PtNote && aptCur.AptStatus!=ApptStatus.PtNoteCompleted) {
+				//if no dentist/hygienist is assigned to spot, then keep the original dentist/hygienist without prompt.  All appts must have prov.
+				if((assignedDent!=0 && assignedDent!=aptCur.ProvNum) || (assignedHyg!=0 && assignedHyg!=aptCur.ProvHyg)) {
+					if(MessageBox.Show(Lan.g(this,"Change provider?"),"",MessageBoxButtons.YesNo)==DialogResult.Yes) {
+						if(assignedDent!=0) {
+							aptCur.ProvNum=assignedDent;
+						}
+						if(assignedHyg!=0) {//the hygienist will only be changed if the spot has a hygienist.
+							aptCur.ProvHyg=assignedHyg;
+						}
+						if(curOp.IsHygiene) {
+							aptCur.IsHygiene=true;
+						}
+						else {//op not marked as hygiene op
+							if(assignedDent==0) {//no dentist assigned
+								if(assignedHyg!=0) {//hyg is assigned (we don't really have to test for this)
+									aptCur.IsHygiene=true;
+								}
+							}
+							else {//dentist is assigned
+								if(assignedHyg==0) {//hyg is not assigned
+									aptCur.IsHygiene=false;
+								}
+								//if both dentist and hyg are assigned, it's tricky
+								//only explicitly set it if user has a dentist assigned to the op
+								if(curOp.ProvDentist!=0) {
+									aptCur.IsHygiene=false;
+								}
+							}
+						}
+						procsForSingleApt=Procedures.GetProcsForSingle(aptCur.AptNum,false);
+						List<long> codeNums=new List<long>();
+						for(int p=0;p<procsForSingleApt.Count;p++) {
+							codeNums.Add(procsForSingleApt[p].CodeNum);
+						}
+						string calcPattern=Appointments.CalculatePattern(aptCur.ProvNum,aptCur.ProvHyg,codeNums,true);
+						if(aptCur.Pattern != calcPattern) {
+							if(!aptCur.TimeLocked || MsgBox.Show(this,MsgBoxButtons.YesNo,"Appointment length is locked.  Change length for new provider anyway?")) {
+								aptCur.Pattern=calcPattern;
+							}
+						}
+					}
+				}
+			}
 			if(DoesOverlap(aptCur)){
 				int startingOp=ApptViewItemL.GetIndexOp(aptCur.Op);
 				bool stillOverlaps=true;
@@ -2158,41 +2268,7 @@ namespace OpenDental{
 			if(aptCur.AptStatus==ApptStatus.UnschedList){
 				aptCur.AptStatus=ApptStatus.Scheduled;
 			}
-			long assignedDent=Schedules.GetAssignedProvNumForSpot(SchedListPeriod,curOp,false,aptCur.AptDateTime);
-			long assignedHyg=Schedules.GetAssignedProvNumForSpot(SchedListPeriod,curOp,true,aptCur.AptDateTime);
-			if(aptCur.AptStatus!=ApptStatus.PtNote && aptCur.AptStatus!=ApptStatus.PtNoteCompleted) {
-				//if no dentist/hygienist is assigned to spot, then keep the original dentist/hygienist without prompt.  All appts must have prov.
-				if((assignedDent!=0 && assignedDent!=aptCur.ProvNum) || (assignedHyg!=0 && assignedHyg!=aptCur.ProvHyg)) {
-					if(MessageBox.Show(Lan.g(this,"Change provider?"),"",MessageBoxButtons.YesNo)==DialogResult.Yes) {
-						if(assignedDent!=0) {
-							aptCur.ProvNum=assignedDent;
-						}
-						if(assignedHyg!=0) {//the hygienist will only be changed if the spot has a hygienist.
-							aptCur.ProvHyg=assignedHyg;
-						}
-						if(curOp.IsHygiene) {
-							aptCur.IsHygiene=true;
-						}
-						else {//op not marked as hygiene op
-							if(assignedDent==0) {//no dentist assigned
-								if(assignedHyg!=0) {//hyg is assigned (we don't really have to test for this)
-									aptCur.IsHygiene=true;
-								}
-							}
-							else {//dentist is assigned
-								if(assignedHyg==0) {//hyg is not assigned
-									aptCur.IsHygiene=false;
-								}
-								//if both dentist and hyg are assigned, it's tricky
-								//only explicitly set it if user has a dentist assigned to the op
-								if(curOp.ProvDentist!=0) {
-									aptCur.IsHygiene=false;
-								}
-							}
-						}
-					}
-				}
-			}
+			//original position of provider settings
 			aptCur.ClinicNum=curOp.ClinicNum;//we always make clinic match without prompt
 			if(aptCur.AptStatus==ApptStatus.Planned){//if Planned appt is on pinboard
 				long plannedAptNum=aptCur.AptNum;
@@ -2246,7 +2322,10 @@ namespace OpenDental{
 					return;
 				}
 			}
-			Procedures.SetProvidersInAppointment(aptCur,Procedures.GetProcsForSingle(aptCur.AptNum,false));
+			if(procsForSingleApt==null) {
+				procsForSingleApt=Procedures.GetProcsForSingle(aptCur.AptNum,false);
+			}
+			Procedures.SetProvidersInAppointment(aptCur,procsForSingleApt);
 			TempApptSingle.Dispose();
 			pinBoard.ClearSelected();
 			//PinApptSingle.Visible=false;
@@ -2738,38 +2817,10 @@ namespace OpenDental{
 			Operatory curOp=OperatoryC.ListShort
 				[ApptViewItemL.VisOps[ContrApptSheet2.ConvertToOp(TempApptSingle.Location.X-ContrApptSheet2.Location.X)]];
 			apt.Op=curOp.OperatoryNum;
-			if(DoesOverlap(apt)) {
-				int startingOp=ApptViewItemL.GetIndexOp(apt.Op);
-				bool stillOverlaps=true;
-				for(int i=startingOp;i<ApptViewItemL.VisOps.Count;i++) {
-					apt.Op=OperatoryC.ListShort[ApptViewItemL.VisOps[i]].OperatoryNum;
-					if(!DoesOverlap(apt)) {
-						stillOverlaps=false;
-						break;
-					}
-				}
-				if(stillOverlaps) {
-					for(int i=startingOp;i>=0;i--) {
-						apt.Op=OperatoryC.ListShort[ApptViewItemL.VisOps[i]].OperatoryNum;
-						if(!DoesOverlap(apt)) {
-							stillOverlaps=false;
-							break;
-						}
-					}
-				}
-				if(stillOverlaps) {
-					MessageBox.Show(Lan.g(this,"Appointment overlaps existing appointment."));
-					mouseIsDown=false;
-					boolAptMoved=false;
-					TempApptSingle.Dispose();
-					return;
-				}
-			}//end if DoesOverlap
-			if(apt.AptStatus==ApptStatus.Broken && timeWasMoved) {
-				apt.AptStatus=ApptStatus.Scheduled;
-			}
+			//Set providers----------------------
 			long assignedDent=Schedules.GetAssignedProvNumForSpot(SchedListPeriod,curOp,false,apt.AptDateTime);
 			long assignedHyg=Schedules.GetAssignedProvNumForSpot(SchedListPeriod,curOp,true,apt.AptDateTime);
+			List<Procedure> procsForSingleApt=null;
 			if(apt.AptStatus!=ApptStatus.PtNote && apt.AptStatus!=ApptStatus.PtNoteCompleted) {
 				//if no dentist/hygenist is assigned to spot, then keep the original dentist/hygenist without prompt.  All appts must have prov.
 				if((assignedDent!=0 && assignedDent!=apt.ProvNum) || (assignedHyg!=0 && assignedHyg!=apt.ProvHyg)) {
@@ -2800,9 +2851,51 @@ namespace OpenDental{
 								}
 							}
 						}
+						procsForSingleApt=Procedures.GetProcsForSingle(apt.AptNum,false);
+						List<long> codeNums=new List<long>();
+						for(int p=0;p<procsForSingleApt.Count;p++) {
+							codeNums.Add(procsForSingleApt[p].CodeNum);
+						}
+						string calcPattern=Appointments.CalculatePattern(apt.ProvNum,apt.ProvHyg,codeNums,true);
+						if(apt.Pattern != calcPattern){
+							if(!apt.TimeLocked || MsgBox.Show(this,MsgBoxButtons.YesNo,"Appointment length is locked.  Change length for new provider anyway?")) {
+								apt.Pattern=calcPattern;
+							}
+						}
 					}
 				}
 			}
+			if(DoesOverlap(apt)) {
+				int startingOp=ApptViewItemL.GetIndexOp(apt.Op);
+				bool stillOverlaps=true;
+				for(int i=startingOp;i<ApptViewItemL.VisOps.Count;i++) {
+					apt.Op=OperatoryC.ListShort[ApptViewItemL.VisOps[i]].OperatoryNum;
+					if(!DoesOverlap(apt)) {
+						stillOverlaps=false;
+						break;
+					}
+				}
+				if(stillOverlaps) {
+					for(int i=startingOp;i>=0;i--) {
+						apt.Op=OperatoryC.ListShort[ApptViewItemL.VisOps[i]].OperatoryNum;
+						if(!DoesOverlap(apt)) {
+							stillOverlaps=false;
+							break;
+						}
+					}
+				}
+				if(stillOverlaps) {
+					MessageBox.Show(Lan.g(this,"Appointment overlaps existing appointment."));
+					mouseIsDown=false;
+					boolAptMoved=false;
+					TempApptSingle.Dispose();
+					return;
+				}
+			}//end if DoesOverlap
+			if(apt.AptStatus==ApptStatus.Broken && timeWasMoved) {
+				apt.AptStatus=ApptStatus.Scheduled;
+			}
+			//original location of provider code
 			apt.ClinicNum=curOp.ClinicNum;//we always make clinic match without prompt
 			try {
 				Appointments.Update(apt,aptOld);
@@ -2811,7 +2904,10 @@ namespace OpenDental{
 				MessageBox.Show(ex.Message);
 			}
 			if(apt.AptStatus!=ApptStatus.Complete){
-				Procedures.SetProvidersInAppointment(apt,Procedures.GetProcsForSingle(apt.AptNum,false));
+				if(procsForSingleApt==null) {
+					procsForSingleApt=Procedures.GetProcsForSingle(apt.AptNum,false);
+				}
+				Procedures.SetProvidersInAppointment(apt,procsForSingleApt);
 			}
 			SecurityLogs.MakeLogEntry(Permissions.AppointmentMove,apt.PatNum,
 				Patients.GetLim(apt.PatNum).GetNameFL()+", "
