@@ -22,7 +22,7 @@ namespace OpenDental.Bridges{
 
 		///<summary>Launches the program using command line.  It is confirmed that there is no space after the -P or -N</summary>
 		public static void SendData(Program ProgramCur, Patient pat){
-			ArrayList ForProgram=ProgramProperties.GetForProgram(ProgramCur.ProgramNum);;
+			//ArrayList ForProgram=ProgramProperties.GetForProgram(ProgramCur.ProgramNum);;
 			if(pat==null){
 				try{
 					Process.Start(ProgramCur.Path);//should start Trophy without bringing up a pt.
@@ -38,9 +38,15 @@ namespace OpenDental.Bridges{
 				return;
 			}
 			string patFolder="";
-			if(pat.TrophyFolder=="") {
+			if(pat.TrophyFolder=="") {//no trophy folder assigned yet
+				bool isNumberedMode=ProgramProperties.GetPropVal(ProgramCur.ProgramNum,"Enter 1 to enable Numbered Mode")=="1";
 				try{
-					patFolder=AutomaticallyGetTrophyFolder(pat,storagePath);
+					if(isNumberedMode){
+						patFolder=AutomaticallyGetTrophyFolderNumbered(pat,storagePath);
+					}
+					else{
+						patFolder=AutomaticallyGetTrophyFolder(pat,storagePath);
+					}
 				}
 				catch(Exception ex){
 					MessageBox.Show(ex.Message);
@@ -70,6 +76,46 @@ namespace OpenDental.Bridges{
 			}
 		}
 
+		///<summary>Guaranteed to always return a valid foldername unless major error or user chooses to exit.  This also saves the TrophyFolder value to this patient in the db and creates the new folder.</summary>
+		private static string AutomaticallyGetTrophyFolderNumbered(Patient pat,string storagePath) {
+			string retVal="";
+			string folderDesired=pat.PatNum.ToString().PadLeft(6,'0');
+			DirectoryInfo dirInfo=new DirectoryInfo(storagePath);
+			DirectoryInfo[] dirArray=dirInfo.GetDirectories(folderDesired,SearchOption.AllDirectories);
+			if(dirArray.Length==0) {//Create a folder using the AtoZ naming convention
+				//retVal= ImageStore.GetPatientFolder(pat);
+				string name=pat.LName+pat.FName;
+				retVal="";
+				for(int i=0;i<name.Length;i++) {
+					if(Char.IsLetter(name,i)) {
+						retVal+=name.Substring(i,1);
+					}
+				}
+				retVal+=pat.PatNum.ToString();//ensures unique name
+				retVal=ODFileUtils.CombinePaths(retVal.Substring(0,1).ToUpper(),retVal);
+				string fullPath=ODFileUtils.CombinePaths(storagePath,retVal);
+				if(!Directory.Exists(fullPath)) {
+					try {
+						Directory.CreateDirectory(fullPath);
+					}
+					catch {
+						throw new Exception("Error.  Could not create folder: "+fullPath);
+					}
+				}
+			}
+			else {//use the found folder
+				if(storagePath != dirArray[0].FullName.Substring(0,storagePath.Length)) {
+					throw new ApplicationException("storagePath variable ("+storagePath+") does not match dirArray value ("+dirArray[0].FullName.Substring(0,storagePath.Length)+")");
+				}
+				retVal=dirArray[0].FullName.Substring(storagePath.Length);
+				retVal=retVal.TrimStart('\\');
+			}
+			Patient PatOld=pat.Copy();
+			pat.TrophyFolder=retVal;
+			Patients.Update(pat,PatOld);
+			return retVal;
+		}
+		
 		///<summary>Guaranteed to always return a valid foldername unless major error or user chooses to exit.  This also saves the TrophyFolder value to this patient in the db.</summary>
 		private static string AutomaticallyGetTrophyFolder(Patient pat,string storagePath) {
 			string retVal="";

@@ -1933,7 +1933,7 @@ DROP TABLE IF EXISTS etAck";
 					Db.NonQ(command);
 				}
 				command="UPDATE preference SET ValueString = '6.9.1.0' WHERE PrefName = 'DataBaseVersion'";
-				Db.NonQ32(command);
+				Db.NonQ(command);
 			}
 			To6_9_4();
 		}
@@ -1943,8 +1943,19 @@ DROP TABLE IF EXISTS etAck";
 				string command;
 				command="ALTER TABLE automation CHANGE SheetNum SheetDefNum bigint NOT NULL";
 				Db.NonQ(command);
+				//Trophy
+				command="SELECT ProgramNum FROM program WHERE ProgName='TrophyEnhanced'";
+				long programNum=PIn.Long(Db.GetScalar(command));
+				if(programNum>0) {
+					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+						+") VALUES("
+						+"'"+POut.Long(programNum)+"', "
+						+"'Enter 1 to enable Numbered Mode', "
+						+"'0')";
+					Db.NonQ(command);
+				}
 				command="UPDATE preference SET ValueString = '6.9.4.0' WHERE PrefName = 'DataBaseVersion'";
-				Db.NonQ32(command);
+				Db.NonQ(command);
 			}
 			To7_0_0();
 		}
