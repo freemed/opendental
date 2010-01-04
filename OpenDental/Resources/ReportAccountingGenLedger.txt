@@ -284,7 +284,7 @@
                   <ReportItems>
                     <Textbox Name="Memo">
                       <Value>=Fields!Memo.Value</Value>
-                      <CanGrow>False</CanGrow>
+                      <CanGrow>true</CanGrow>
                       <Style>
                         <BorderStyle>
                           <Default>Solid</Default>
