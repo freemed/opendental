@@ -172,7 +172,7 @@ namespace OpenDental{
 			types+=")";
 			report.Query=@"
 				CREATE TEMPORARY TABLE tempbroken(
-					PatNum mediumint unsigned NOT NULL,
+					PatNum bigint unsigned NOT NULL,
 					NumberBroken smallint NOT NULL,
 					PRIMARY KEY (PatNum)
 				);
@@ -184,15 +184,15 @@ namespace OpenDental{
 				SELECT patient.PatNum,MIN(procedurelog.ProcDate) AS ProcDate,
 				CONCAT(CONCAT(provider.LName,', '),provider.FName) as ProvName,
 				County,county.CountyCode,
-				GradeSchool,school.SchoolCode,GradeLevel,Birthdate,Race,Gender,Urgency,BillingType,
-				patient.NextAptNum='-1' AS Done,tempbroken.NumberBroken
-				FROM patient,provider
+				patient.SchoolName,school.SchoolCode,GradeLevel,Birthdate,Race,Gender,Urgency,BillingType,
+				patient.PlannedIsDone,tempbroken.NumberBroken
+				FROM patient
 				LEFT JOIN procedurelog ON procedurelog.PatNum=patient.PatNum
-				LEFT JOIN school ON patient.GradeSchool=school.SchoolName
+				LEFT JOIN provider ON procedurelog.ProvNum=provider.ProvNum
+				LEFT JOIN school ON patient.SchoolName=school.SchoolName
 				LEFT JOIN county ON patient.County=county.CountyName
 				LEFT JOIN tempbroken ON tempbroken.PatNum=patient.PatNum
 				WHERE	(procedurelog.ProcStatus='2'
-				AND procedurelog.ProvNum=provider.ProvNum
 				AND procedurelog.ProcDate >= "+POut.Date(date1.SelectionStart)+" "
 				+"AND procedurelog.ProcDate <= " +POut.Date(date2.SelectionStart)+" )"
 				+"OR tempbroken.NumberBroken>0 "
