@@ -45,12 +45,16 @@ namespace OpenDental{
 				return true;
 			}
 			PrintDialog dialog=new PrintDialog();
+			//pSet.Collate is true here
 			dialog.PrinterSettings=pSet;
 			dialog.UseEXDialog=true;
 			#if DEBUG
 				return true;
 			#else
-				if(dialog.ShowDialog()!=DialogResult.OK){
+				DialogResult result=dialog.ShowDialog();
+				//but dialog.PrinterSettings.Collate is false here.  I don't know what triggers the change.
+				pSet.Collate=true;//force it back to true.
+				if(result!=DialogResult.OK){
 					return false;
 				}
 				//if(!dialog.PrinterSettings.IsValid){//not needed since we have already checked each name.
