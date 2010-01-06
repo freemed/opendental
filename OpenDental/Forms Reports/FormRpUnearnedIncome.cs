@@ -146,9 +146,10 @@ namespace OpenDental{
 		private void butOK_Click(object sender,EventArgs e) {
 			ReportSimpleGrid report=new ReportSimpleGrid();
 			if(radioDateRange.Checked) {
-				report.Query="SELECT DatePay,CONCAT(patient.LName,', ',patient.FName,' ',patient.MiddleI),SplitAmt "
-					+"FROM paysplit,patient "
+				report.Query="SELECT DatePay,CONCAT(patient.LName,', ',patient.FName,' ',patient.MiddleI),ItemName,SplitAmt "
+					+"FROM paysplit,patient,definition "
 					+"WHERE paysplit.PatNum=patient.PatNum "
+					+"AND definition.DefNum=paysplit.UnearnedType "
 					+"AND paysplit.DatePay >= "+POut.Date(date1.SelectionStart)+" "
 					+"AND paysplit.DatePay <= "+POut.Date(date2.SelectionStart)+" "
 					+"AND UnearnedType > 0 GROUP BY paysplit.SplitNum "
@@ -160,12 +161,14 @@ namespace OpenDental{
 				report.SubTitle.Add(PrefC.GetString(PrefName.PracticeTitle));
 				report.SetColumn(this,0,"Date",100);
 				report.SetColumn(this,1,"Patient",140);
-				report.SetColumn(this,2,"Amount",80,HorizontalAlignment.Right);
+				report.SetColumn(this,2,"Type",110);
+				report.SetColumn(this,3,"Amount",80,HorizontalAlignment.Right);
 			}
 			else {
-				report.Query="SELECT CONCAT(patient.LName,', ',patient.FName,' ',patient.MiddleI),SUM(SplitAmt) Amount "
-					+"FROM paysplit,patient "
+				report.Query="SELECT CONCAT(patient.LName,', ',patient.FName,' ',patient.MiddleI),GROUP_CONCAT(DISTINCT ItemName),SUM(SplitAmt) Amount "
+					+"FROM paysplit,patient,definition "
 					+"WHERE paysplit.PatNum=patient.PatNum "
+					+"AND definition.DefNum=paysplit.UnearnedType "
 					+"AND UnearnedType > 0 GROUP BY paysplit.PatNum HAVING Amount != 0";
 				FormQuery2=new FormQuery(report);
 				FormQuery2.IsReport=true;
@@ -173,7 +176,8 @@ namespace OpenDental{
 				report.Title="Unearned Income Liabilities";
 				report.SubTitle.Add(PrefC.GetString(PrefName.PracticeTitle));
 				report.SetColumn(this,0,"Patient",140);
-				report.SetColumn(this,1,"Amount",80,HorizontalAlignment.Right);
+				report.SetColumn(this,1,"Type(s)",110);
+				report.SetColumn(this,2,"Amount",80,HorizontalAlignment.Right);
 			}
 			FormQuery2.ShowDialog();
 			DialogResult=DialogResult.OK;
