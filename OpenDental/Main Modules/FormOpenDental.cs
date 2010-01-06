@@ -2519,6 +2519,9 @@ namespace OpenDental{
 						}
 						System.Media.SoundPlayer soundplay=new SoundPlayer(Properties.Resources.notify);
 						soundplay.Play();
+						if(userControlTasks1.PopupsAreBlocked) {
+							break;//one sound for the group as a whole
+						}
 						this.BringToFront();//don't know if this is doing anything.
 						FormTaskEdit FormT=new FormTaskEdit(tasksPopup[i]);
 						FormT.IsPopup=true;

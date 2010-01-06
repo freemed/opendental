@@ -34,6 +34,8 @@ namespace OpenDental {
 		///<summary></summary>
 		[Category("Property Changed"),Description("Event raised when user wants to go to a patient or related object.")]
 		public event EventHandler GoToChanged=null;
+		///<summary>Toggle button controls this field.</summary>
+		public bool PopupsAreBlocked;
 
 		public UserControlTasks() {
 			InitializeComponent();
@@ -107,7 +109,12 @@ namespace OpenDental {
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Setup"),-1,"","Setup"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Add TaskList"),0,"","AddList"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Add Task"),1,"","AddTask"));
-			//ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Exit"),-1,"","Exit"));
+			ODToolBarButton button=new ODToolBarButton();
+			button.Style=ODToolBarButtonStyle.ToggleButton;
+			button.Text=Lan.g(this,"BlockPopups");
+			button.ToolTipText=Lan.g(this,"Sounds will still play, but popups will be blocked.");
+			button.Tag="Block";
+			ToolBarMain.Buttons.Add(button);
 			ToolBarMain.Invalidate();
 		}
 
@@ -488,6 +495,9 @@ namespace OpenDental {
 				case "AddTask":
 					OnAddTask_Click();
 					break;
+				case "Block":
+					OnBlock_Click();
+					break;
 			}
 		}
 
@@ -577,6 +587,16 @@ namespace OpenDental {
 				return;
 			}
 			FillGrid();
+		}
+
+		private void OnBlock_Click() {
+			if(ToolBarMain.Buttons["Block"].Pushed) {
+				PopupsAreBlocked=true;
+				MsgBox.Show(this,"Try not to block popups for too long.  Remember to unblock after a while.");
+			}
+			else {
+				PopupsAreBlocked=false;
+			}
 		}
 
 		private void OnEdit_Click() {
