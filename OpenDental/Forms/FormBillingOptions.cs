@@ -824,6 +824,9 @@ namespace OpenDental{
 				FormA.ShowDialog();
 			}
 			DateTime lastStatement=PIn.Date(textLastStatement.Text);
+			if(textLastStatement.Text=="") {
+				lastStatement=DateTime.Today;
+			}
 			string getAge="";
 			if(comboAge.SelectedIndex==1) getAge="30";
 			else if(comboAge.SelectedIndex==2) getAge="60";
