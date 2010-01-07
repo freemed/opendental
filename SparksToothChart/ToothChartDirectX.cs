@@ -39,174 +39,50 @@ namespace SparksToothChart {
 			InitializeComponent();
 		}
 
-		private Device MakeBasicDevice(bool windowed){
+		private Device MakeBasicDevice(DeviceType deviceType) {
 			try {
 				PresentParameters pp=new PresentParameters();
 				pp.AutoDepthStencilFormat=DepthFormat.D16;
 				pp.BackBufferCount=1;
-				pp.BackBufferFormat=Manager.Adapters.Default.CurrentDisplayMode.Format;
-				if(windowed) {
-					pp.BackBufferHeight=this.Height;
-					pp.BackBufferWidth=this.Width;
-					pp.FullScreenRefreshRateInHz=0;//Must be 0 in windowed mode.
-				} else {
-					pp.BackBufferHeight=Manager.Adapters.Default.CurrentDisplayMode.Height;
-					pp.BackBufferWidth=Manager.Adapters.Default.CurrentDisplayMode.Width;
-					pp.FullScreenRefreshRateInHz=Manager.Adapters.Default.CurrentDisplayMode.RefreshRate;
-				}
+				pp.BackBufferFormat=Format.X8R8G8B8;
+				pp.BackBufferHeight=this.Height;
+				pp.BackBufferWidth=this.Width;
+				pp.FullScreenRefreshRateInHz=0;//Must be 0 in windowed mode.
 				pp.DeviceWindow=this;
 				pp.DeviceWindowHandle=this.Handle;
 				pp.EnableAutoDepthStencil=true;
 				pp.ForceNoMultiThreadedFlag=false;
 				pp.MultiSample=MultiSampleType.None;
 				//Can we use 4X anti-aliasing?
-				if(Manager.CheckDeviceMultiSampleType(Manager.Adapters.Default.Adapter,DeviceType.Reference,
-					Manager.Adapters.Default.CurrentDisplayMode.Format,windowed,MultiSampleType.FourSamples)) {
+				if(Manager.CheckDeviceMultiSampleType(Manager.Adapters.Default.Adapter,deviceType,
+					pp.BackBufferFormat,true,MultiSampleType.FourSamples)) {
 					pp.MultiSample=MultiSampleType.FourSamples;
 				} //If not, try using 3X antialiasing.
-				else if(Manager.CheckDeviceMultiSampleType(Manager.Adapters.Default.Adapter,DeviceType.Reference,
-					Manager.Adapters.Default.CurrentDisplayMode.Format,windowed,MultiSampleType.ThreeSamples)) {
+				else if(Manager.CheckDeviceMultiSampleType(Manager.Adapters.Default.Adapter,deviceType,
+					pp.BackBufferFormat,true,MultiSampleType.ThreeSamples)) {
 					pp.MultiSample=MultiSampleType.ThreeSamples;
 				} //If not, try using 2X antialiasing.
-				else if(Manager.CheckDeviceMultiSampleType(Manager.Adapters.Default.Adapter,DeviceType.Reference,
-					Manager.Adapters.Default.CurrentDisplayMode.Format,windowed,MultiSampleType.TwoSamples)) {
+				else if(Manager.CheckDeviceMultiSampleType(Manager.Adapters.Default.Adapter,deviceType,
+					pp.BackBufferFormat,true,MultiSampleType.TwoSamples)) {
 					pp.MultiSample=MultiSampleType.TwoSamples;
 				}
 				pp.MultiSampleQuality=0;
 				pp.PresentationInterval=PresentInterval.Default;
 				pp.PresentFlag=PresentFlag.None;
 				pp.SwapEffect=SwapEffect.Discard;//Required to be set to discard for anti-aliasing.
-				pp.Windowed=windowed;//Must be set to true for controls.
-				Device defaultDevice=new Device(Manager.Adapters.Default.Adapter,DeviceType.Reference,this,CreateFlags.SoftwareVertexProcessing,pp);
-				return defaultDevice;
+				pp.Windowed=true;//Must be set to true for controls.
+				Device basicDevice=new Device(Manager.Adapters.Default.Adapter,deviceType,this,CreateFlags.SoftwareVertexProcessing,pp);
+				return basicDevice;
 			} catch {
 			}
 			return null;
 		}
 
-		private Device GetAcceptableDevice(DeviceType[] deviceTypes,Format[] backBufferFormats,bool windowed,
-			DepthFormat[] depthStencilFormats){
-			//We first check the sanity of the local graphics card. If we can't even create
-			//a basic software rendering device, then we abort.
-			Device defaultDevice=MakeBasicDevice(windowed);
-			if(defaultDevice==null){
-				return null;//No feasible device found
-			}
-			defaultDevice.Dispose();//Free memory to allow space for a new device.
-			List<Format> acceptableAdapterFormats=new List<Format>();
-			foreach(AdapterInformation adapter in Manager.Adapters) {
-				foreach(DeviceType deviceType in deviceTypes) {
-					foreach(DisplayMode displayMode in adapter.SupportedDisplayModes) {
-						foreach(Format backBufferFormat in backBufferFormats) {
-							if(displayMode.Format!=backBufferFormat) {
-								//We require the display buffer to have the same format as the back buffer,
-								//so that we know that a back buffer flip will work.
-								continue;
-							}
-							if(Manager.CheckDeviceType(
-									adapter.Adapter,
-									deviceType,
-									displayMode.Format,
-									displayMode.Format,
-									windowed)) {
-								//Now make sure the depth buffer meets one of the required formats.
-								foreach(DepthFormat depthStencilFormat in depthStencilFormats) {
-									if(Manager.CheckDeviceFormat(adapter.Adapter,deviceType,displayMode.Format,
-											Usage.DepthStencil,ResourceType.Surface,depthStencilFormat)) {
-										if(Manager.CheckDepthStencilMatch(adapter.Adapter,deviceType,displayMode.Format,
-												displayMode.Format,depthStencilFormat)) {
-											//This depth stencil format is compatible
-											Caps caps=Manager.GetDeviceCaps(adapter.Adapter,deviceType);
-											PresentParameters pp=new PresentParameters();
-											pp.AutoDepthStencilFormat=depthStencilFormat;
-											pp.BackBufferCount=1;
-											pp.BackBufferFormat=displayMode.Format;
-											if(windowed) {
-												pp.BackBufferHeight=this.Height;
-												pp.BackBufferWidth=this.Width;
-												pp.FullScreenRefreshRateInHz=0;//Must be 0 in windowed mode.
-											} else {
-												pp.BackBufferHeight=displayMode.Height;
-												pp.BackBufferWidth=displayMode.Width;
-												pp.FullScreenRefreshRateInHz=displayMode.RefreshRate;
-											}
-											pp.DeviceWindow=this;
-											pp.DeviceWindowHandle=this.Handle;
-											pp.EnableAutoDepthStencil=true;
-											pp.ForceNoMultiThreadedFlag=false;
-											pp.MultiSample=MultiSampleType.FourSamples;//Anti-alias settings
-											pp.MultiSampleQuality=0;
-											pp.PresentationInterval=PresentInterval.Default;
-											pp.PresentFlag=PresentFlag.None;
-											pp.SwapEffect=SwapEffect.Discard;//Required to be set to discard for anti-aliasing.
-											pp.Windowed=windowed;//Must be set to true for controls.
-											//Make certain we can use 4X anti-aliasing.
-											if(!Manager.CheckDeviceMultiSampleType(adapter.Adapter,deviceType,displayMode.Format,windowed,pp.MultiSample)) {
-												continue;
-											}
-											CreateFlags createFlags;
-											//if(caps.DeviceCaps.SupportsHardwareTransformAndLight){
-											//  createFlags=CreateFlags.HardwareVertexProcessing;
-											//}else{
-											createFlags=CreateFlags.SoftwareVertexProcessing;//Software vertex processing should always work.
-											//}
-											//if(caps.DeviceCaps.SupportsPureDevice){
-											//  createFlags|=CreateFlags.PureDevice;
-											//}
-											Device functionalDevice=null;
-											try {
-												functionalDevice=new Device(adapter.Adapter,deviceType,this,createFlags,pp);
-												return functionalDevice;
-											} catch {
-												//Just skip this one and try the next one. 
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			//I decided against going with the fail-safe, because it is too slow.
-			////If all else fails, try a software only, default device. This is the most likely device to work, even if it is slow.
-			//return MakeBasicDevice(windowed);
-			return null;//No feasible device found.
-		}
-
 		///<summary>Must be called after the ToothChartDirectX control has been added to a form and should be called before it is drawn the first time.</summary>
-		public void InitializeGraphics(){
-			device=GetAcceptableDevice(
-				new DeviceType[] { DeviceType.Hardware,DeviceType.Reference },
-				//All display formats listed out in case we want to try them all (for exhaustive tests).
-				//new Format[] { Format.A16B16G16R16, Format.A16B16G16R16F, Format.A1R5G5B5, Format.A2B10G10R10, Format.A2R10G10B10, Format.A2W10V10U10,
-				//    Format.A32B32G32R32F, Format.A4L4, Format.A4R4G4B4, Format.A8,Format.A8B8G8R8,Format.A8L8,Format.A8P8, Format.A8R3G3B2,
-				//    Format.A8R8G8B8,Format.CxV8U8,Format.D15S1,Format.D16,Format.D16Lockable,Format.D24S8,Format.D24SingleS8,Format.D24X4S4,
-				//    Format.D24X8,Format.D32,Format.D32SingleLockable,Format.Dxt1,Format.Dxt2,Format.Dxt3,Format.Dxt4,Format.Dxt5,
-				//    Format.G16R16,Format.G16R16F,Format.G32R32F,Format.G8R8G8B8,Format.L16,Format.L6V5U5,Format.L8,Format.Multi2Argb8,
-				//    Format.P8,Format.Q16W16V16U16,Format.Q8W8V8U8,Format.R16F,Format.R32F,Format.R3G3B2,Format.R5G6B5,Format.R8G8B8,Format.R8G8B8G8,
-				//    Format.Unknown,Format.Uyvy,Format.V16U16,Format.V8U8,Format.VertexData,Format.X1R5G5B5,Format.X4R4G4B4,Format.X8B8G8R8,Format.X8L8V8U8,
-				//    Format.X8R8G8B8,Format.Yuy2 },
-				new Format[] {
-					//16-bit formats
-					Format.R5G6B5,Format.A1R5G5B5,Format.X1R5G5B5,//Format.A4R4G4B4,Format.A8R3G3B2,Format.X4R4G4B4,
-					//32-bit formats
-					Format.A8R8G8B8,Format.R8G8B8,Format.A8B8G8R8,Format.X8R8G8B8,//Format.X8B8G8R8,Format.A2R10G10B10,Format.R8G8B8G8,Format.G8R8G8B8,Format.A2B10G10R10,
-					//64-bit formats
-					//Format.A16B16G16R16,Format.A16B16G16R16F,Format.A32B32G32R32F,Format.Multi2Argb8,
-					//8-bit formats
-					//Format.R3G3B2
-					},
-				true,
-				//All depth formats listed out in case we want to try them all (for exhaustive tests).
-				//new DepthFormat[] { DepthFormat.D15S1,DepthFormat.D16,DepthFormat.D16Lockable,DepthFormat.D24S8,DepthFormat.D24SingleS8,DepthFormat.D24X4S4,
-				//    DepthFormat.D24X8,DepthFormat.D32,DepthFormat.D32SingleLockable,DepthFormat.L16,DepthFormat.Unknown}
-				new DepthFormat[] { DepthFormat.D16,DepthFormat.D15S1,DepthFormat.D24S8//,DepthFormat.D24SingleS8,DepthFormat.D24X4S4,
-					//DepthFormat.D24X8,DepthFormat.D32,DepthFormat.D32SingleLockable,DepthFormat.L16
-				}
-				);
-			if(device==null){
-				throw new Exception("Failed to attain an acceptable DirectX graphics adapter. Your graphics card may not support DirectX.");
+		public void InitializeGraphics() {
+			device=MakeBasicDevice(DeviceType.Hardware);
+			if(device==null) {
+				throw new Exception("Failed to attain an acceptable DirectX graphics device.");
 			}
 			device.DeviceReset+=new EventHandler(this.OnDeviceReset);
 			device.DeviceLost+=new EventHandler(this.OnDeviceLost);
