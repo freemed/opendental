@@ -90,6 +90,23 @@ namespace OpenDental{
 			butDelete = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
+			// butDelete
+			// 
+			butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
+			butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			butDelete.Autosize = true;
+			butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			butDelete.CornerRadius = 4F;
+			butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
+			butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			butDelete.Location = new System.Drawing.Point(48,421);
+			butDelete.Name = "butDelete";
+			butDelete.Size = new System.Drawing.Size(75,24);
+			butDelete.TabIndex = 16;
+			butDelete.Text = "&Delete";
+			butDelete.Click += new System.EventHandler(this.butDelete_Click);
+			// 
 			// label1
 			// 
 			this.label1.Location = new System.Drawing.Point(48,24);
@@ -164,7 +181,7 @@ namespace OpenDental{
 			this.labelMessage.Name = "labelMessage";
 			this.labelMessage.Size = new System.Drawing.Size(120,20);
 			this.labelMessage.TabIndex = 25;
-			this.labelMessage.Text = "Commlog Message";
+			this.labelMessage.Text = "Message";
 			this.labelMessage.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textMessage
@@ -228,23 +245,6 @@ namespace OpenDental{
 			this.butProcCode.Text = "...";
 			this.butProcCode.Click += new System.EventHandler(this.butProcCode_Click);
 			// 
-			// butDelete
-			// 
-			butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
-			butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			butDelete.Autosize = true;
-			butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			butDelete.CornerRadius = 4F;
-			butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
-			butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			butDelete.Location = new System.Drawing.Point(48,322);
-			butDelete.Name = "butDelete";
-			butDelete.Size = new System.Drawing.Size(75,24);
-			butDelete.TabIndex = 16;
-			butDelete.Text = "&Delete";
-			butDelete.Click += new System.EventHandler(this.butDelete_Click);
-			// 
 			// butOK
 			// 
 			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -253,7 +253,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(483,290);
+			this.butOK.Location = new System.Drawing.Point(536,389);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 4;
@@ -268,7 +268,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(483,322);
+			this.butCancel.Location = new System.Drawing.Point(536,421);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 5;
@@ -278,7 +278,7 @@ namespace OpenDental{
 			// FormAutomationEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(584,366);
+			this.ClientSize = new System.Drawing.Size(637,465);
 			this.Controls.Add(this.butProcCode);
 			this.Controls.Add(this.comboSheetDef);
 			this.Controls.Add(this.comboCommType);

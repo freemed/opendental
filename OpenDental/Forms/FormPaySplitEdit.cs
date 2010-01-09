@@ -1046,10 +1046,9 @@ namespace OpenDental
 			PaySplitCur.DatePay=PIn.Date(textDatePay.Text);//gets overwritten anyway
 			PaySplitCur.ProcDate=PIn.Date(textProcDate.Text);
 			PaySplitCur.SplitAmt=PIn.Double(textAmount.Text);
-			//if(comboProvider.SelectedIndex!=-1) {
-				//we shouldn't silently change provider.
-			//	PaySplitCur.ProvNum=ProviderC.List[listProvider.SelectedIndex].ProvNum;
-			//}
+			if(comboProvider.SelectedIndex > -1) {//if none selected, we won't silently change
+				PaySplitCur.ProvNum=ProviderC.List[comboProvider.SelectedIndex].ProvNum;
+			}
 			if(comboUnearnedTypes.SelectedIndex==0) {
 				PaySplitCur.UnearnedType=0;
 			}

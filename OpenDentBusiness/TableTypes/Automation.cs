@@ -19,7 +19,7 @@ namespace OpenDentBusiness{
 		public long SheetDefNum;
 		///<summary>FK to definition.DefNum. Only used if action is CreateCommlog.</summary>
 		public long CommType;
-		///<summary>If a commlog action, then this is the text that goes in the commlog.  Might later be expanded to work with email or to use variables.</summary>
+		///<summary>If a commlog action, then this is the text that goes in the commlog.  If this is a ShowStatementNoteBold action, then this is the NoteBold. Might later be expanded to work with email or to use variables.</summary>
 		public string MessageContent;
 
 		public Automation Copy() {
@@ -38,6 +38,8 @@ namespace OpenDentBusiness{
 		BreakAppointment,
 		///<summary></summary>
 		CreateApptNewPat
+		//<summary>Either a single statement or as part of the billing process.  Either print or </summary>
+		//CreateStatement
 	}
 
 	///<summary></summary>
@@ -48,6 +50,8 @@ namespace OpenDentBusiness{
 		CreateCommlog,
 		///<summary>If a referral does not exist for this patient, then notify user instead.</summary>
 		PrintReferralLetter
+		//<summary></summary>
+		//AddStatementNoteBold
 	}
 	
 
