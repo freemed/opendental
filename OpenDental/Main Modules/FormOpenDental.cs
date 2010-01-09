@@ -206,6 +206,7 @@ namespace OpenDental{
 		private MenuItem menuItemInsFilingCodes;
 		private MenuItem menuItemReplication;
 		private MenuItem menuItemAutomation;
+		private ContextMenu menuForm;
 		private OpenDental.UI.ODToolBar ToolBarMain;
 
 		///<summary></summary>
@@ -312,6 +313,7 @@ namespace OpenDental{
 			this.menuItemApptRules = new System.Windows.Forms.MenuItem();
 			this.menuItemApptViews = new System.Windows.Forms.MenuItem();
 			this.menuItemAutoCodes = new System.Windows.Forms.MenuItem();
+			this.menuItemAutomation = new System.Windows.Forms.MenuItem();
 			this.menuItemAutoNotes = new System.Windows.Forms.MenuItem();
 			this.menuItemClaimForms = new System.Windows.Forms.MenuItem();
 			this.menuItemClearinghouses = new System.Windows.Forms.MenuItem();
@@ -410,7 +412,7 @@ namespace OpenDental{
 			this.lightSignalGrid1 = new OpenDental.UI.LightSignalGrid();
 			this.smartCardWatcher1 = new OpenDental.SmartCards.SmartCardWatcher();
 			this.timerHeartBeat = new System.Windows.Forms.Timer(this.components);
-			this.menuItemAutomation = new System.Windows.Forms.MenuItem();
+			this.menuForm = new System.Windows.Forms.ContextMenu();
 			this.SuspendLayout();
 			// 
 			// timerTimeIndic
@@ -546,6 +548,12 @@ namespace OpenDental{
 			this.menuItemAutoCodes.Index = 2;
 			this.menuItemAutoCodes.Text = "Auto Codes";
 			this.menuItemAutoCodes.Click += new System.EventHandler(this.menuItemAutoCodes_Click);
+			// 
+			// menuItemAutomation
+			// 
+			this.menuItemAutomation.Index = 3;
+			this.menuItemAutomation.Text = "Automation";
+			this.menuItemAutomation.Click += new System.EventHandler(this.menuItemAutomation_Click);
 			// 
 			// menuItemAutoNotes
 			// 
@@ -1189,11 +1197,9 @@ namespace OpenDental{
 			this.timerHeartBeat.Interval = 180000;
 			this.timerHeartBeat.Tick += new System.EventHandler(this.timerHeartBeat_Tick);
 			// 
-			// menuItemAutomation
+			// menuForm
 			// 
-			this.menuItemAutomation.Index = 3;
-			this.menuItemAutomation.Text = "Automation";
-			this.menuItemAutomation.Click += new System.EventHandler(this.menuItemAutomation_Click);
+			this.menuForm.Popup += new System.EventHandler(this.menuForm_Popup);
 			// 
 			// FormOpenDental
 			// 
@@ -1375,7 +1381,12 @@ namespace OpenDental{
 			}
 			string updateComputerName=PrefC.GetStringSilent(PrefName.UpdateInProgressOnComputerName);
 			if(updateComputerName != "" && Environment.MachineName != updateComputerName) {
-				MessageBox.Show("An update is in progress on "+updateComputerName+".  Not allowed to start up until that update is complete.");
+				DialogResult result=MessageBox.Show("An update is in progress on "+updateComputerName+".  Not allowed to start up until that update is complete.\r\n\r\nIf you are the person who started the update and you wish to override this message because an update is not in progress, click Retry.\r\n\r\nDo not click Retry unless you started the update.",
+					"",MessageBoxButtons.RetryCancel);
+				if(result==DialogResult.Retry) {
+					Prefs.UpdateString(PrefName.UpdateInProgressOnComputerName,"");
+					MsgBox.Show(this,"You will be allowed access when you restart.");
+				}
 				return false;
 			}
 			//if RemotingRole.ClientWeb, version will have already been checked at login, so no danger here.
@@ -1633,6 +1644,15 @@ namespace OpenDental{
 			button.Style=ODToolBarButtonStyle.DropDownButton;
 			button.DropDownMenu=menuLetter;
 			ToolBarMain.Buttons.Add(button);
+
+
+			button=new ODToolBarButton(Lan.g(this,"Form"),-1,"","Form");
+			button.Style=ODToolBarButtonStyle.DropDownButton;
+			button.DropDownMenu=menuForm;
+			ToolBarMain.Buttons.Add(button);
+
+
+
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"To Task List"),3,Lan.g(this,"Send to Task List"),"Tasklist"));
 			button=new ODToolBarButton(Lan.g(this,"Label"),4,Lan.g(this,"Print Label"),"Label");
 			button.Style=ODToolBarButtonStyle.DropDownButton;
@@ -1671,6 +1691,9 @@ namespace OpenDental{
 						break;
 					case "Letter":
 						OnLetter_Click();
+						break;
+					case "Form":
+						OnForm_Click();
 						break;
 					case "Tasklist":
 						OnTasklist_Click();
@@ -1730,6 +1753,7 @@ namespace OpenDental{
 				ToolBarMain.Buttons["EmailDropdown"].Enabled=false;
 				ToolBarMain.Buttons["Commlog"].Enabled=false;
 				ToolBarMain.Buttons["Letter"].Enabled=false;
+				ToolBarMain.Buttons["Form"].Enabled=false;
 				ToolBarMain.Buttons["Tasklist"].Enabled=false;
 				ToolBarMain.Buttons["Label"].Enabled=false;
 				ToolBarMain.Buttons["Popups"].Enabled=false;
@@ -1744,6 +1768,7 @@ namespace OpenDental{
 				ToolBarMain.Buttons["EmailDropdown"].Enabled=true;
 				ToolBarMain.Buttons["Commlog"].Enabled=true;
 				ToolBarMain.Buttons["Letter"].Enabled=true;
+				ToolBarMain.Buttons["Form"].Enabled=true;
 				ToolBarMain.Buttons["Tasklist"].Enabled=true;
 				ToolBarMain.Buttons["Label"].Enabled=true;
 				ToolBarMain.Buttons["Popups"].Enabled=true;
@@ -1965,6 +1990,20 @@ namespace OpenDental{
 				//FormL.ReferralCur=refer;
 				//FormL.ShowDialog();
 			}
+		}
+
+		private void OnForm_Click() {
+			MsgBox.Show(this,"Please use the dropdown list instead.");
+			return;
+		}
+
+		private void menuForm_Popup(object sender,EventArgs e) {
+			menuLetter.MenuItems.Clear();
+
+		}
+
+		private void menuForm_Click(object sender,System.EventArgs e) {
+			
 		}
 
 		private void OnTasklist_Click(){
@@ -4051,6 +4090,8 @@ namespace OpenDental{
 			//This step is necessary so that graphics memory does not fill up.
 			Dispose();
 		}
+
+		
 
 	
 
