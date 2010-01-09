@@ -3288,6 +3288,11 @@ namespace OpenDental{
 			FormProgramLinks FormPL=new FormProgramLinks();
 			FormPL.ShowDialog();
 			ContrChart2.InitializeLocalData();//for eCW
+			LayoutToolBar();
+			if(CurPatNum>0) {
+				Patient pat=Patients.GetPat(CurPatNum);
+				FillPatientButton(CurPatNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber,pat.SiteNum);//To disable email button, etc.
+			}
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Program Links");
 		}
 
