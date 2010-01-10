@@ -479,7 +479,7 @@ namespace SparksToothChart {
 
 		///<summary>This is used for crowns and for retainers.  Crowns will be visible on missing teeth with implants.  Crowns are visible on F and O views, unlike ponics which are only visible on F view.  If the tooth is not visible, that should be set before this call, because then, this will set the root invisible.</summary>
 		public void SetCrown(string toothID,Color color) {
-			if(toothID=="") {
+			if(!ToothGraphic.IsValidToothID(toothID)) {
 				return;
 			}
 			tcData.ListToothGraphics[toothID].IsCrown=true;
@@ -494,7 +494,7 @@ namespace SparksToothChart {
 
 		///<summary>A series of color settings will result in the last ones entered overriding earlier entries.</summary>
 		public void SetSurfaceColors(string toothID,string surfaces,Color color) {
-			if(toothID=="") {
+			if(!ToothGraphic.IsValidToothID(toothID)) {
 				return;
 			}
 			tcData.ListToothGraphics[toothID].SetSurfaceColors(surfaces,color);
@@ -503,7 +503,7 @@ namespace SparksToothChart {
 
 		///<summary>Used for missing teeth.  This should always be done before setting restorations, because a pontic will cause the tooth to become visible again except for the root.  So if setMissing after a pontic, then the pontic can't show.</summary>
 		public void SetMissing(string toothID) {
-			if(toothID=="") {
+			if(!ToothGraphic.IsValidToothID(toothID)) {
 				return;
 			}
 			tcData.ListToothGraphics[toothID].Visible=false;
@@ -512,7 +512,7 @@ namespace SparksToothChart {
 
 		///<summary>This is just the same as SetMissing, except that it also hides the number from showing.  This is used, for example, if premolars are missing, and ortho has completely closed the space.  User will not be able to select this tooth because the number is hidden.</summary>
 		public void SetHidden(string toothID) {
-			if(toothID=="") {
+			if(!ToothGraphic.IsValidToothID(toothID)) {
 				return;
 			}
 			tcData.ListToothGraphics[toothID].Visible=false;
@@ -522,7 +522,7 @@ namespace SparksToothChart {
 
 		///<summary>This is used for any pontic, including bridges, full dentures, and partials.  It is usually used on a tooth that has already been set invisible.  This routine cuases the tooth to show again, but the root needs to be invisible.  Then, it sets the entire crown to the specified color.  If the tooth is already visible, then it does not set the root invisible.</summary>
 		public void SetPontic(string toothID,Color color) {
-			if(toothID=="") {
+			if(!ToothGraphic.IsValidToothID(toothID)) {
 				return;
 			}
 			tcData.ListToothGraphics[toothID].IsPontic=true;
@@ -538,7 +538,7 @@ namespace SparksToothChart {
 
 		///<summary>Root canals are initially not visible.  This routine sets the canals visible, changes the color to the one specified, and also sets the cementum for the tooth to be semitransparent so that the canals can be seen.  Also sets the IsRCT flag for the tooth to true.</summary>
 		public void SetRCT(string toothID,Color color) {
-			if(toothID=="") {
+			if(!ToothGraphic.IsValidToothID(toothID)) {
 				return;
 			}
 			tcData.ListToothGraphics[toothID].IsRCT=true;
@@ -548,7 +548,7 @@ namespace SparksToothChart {
 
 		///<summary>This draws a big red extraction X right on top of the tooth.  It's up to the calling application to figure out when it's appropriate to do this.  Even if the tooth has been marked invisible, there's a good chance that this will still get drawn because a tooth can be set visible again for the drawing the pontic.  So the calling application needs to figure out when it's appropriate to draw the X, and not set this otherwise.</summary>
 		public void SetBigX(string toothID,Color color) {
-			if(toothID=="") {
+			if(!ToothGraphic.IsValidToothID(toothID)) {
 				return;
 			}
 			tcData.ListToothGraphics[toothID].DrawBigX=true;
@@ -558,7 +558,7 @@ namespace SparksToothChart {
 
 		///<summary>Set this tooth to show a BU or post.</summary>
 		public void SetBU(string toothID,Color color) {
-			if(toothID=="") {
+			if(!ToothGraphic.IsValidToothID(toothID)) {
 				return;
 			}
 			//TcData.ListToothGraphics[toothID].IsBU=true;
@@ -571,7 +571,7 @@ namespace SparksToothChart {
 
 		///<summary>Set this tooth to show an implant</summary>
 		public void SetImplant(string toothID,Color color) {
-			if(toothID=="") {
+			if(!ToothGraphic.IsValidToothID(toothID)) {
 				return;
 			}
 			tcData.ListToothGraphics[toothID].IsImplant=true;
@@ -581,7 +581,7 @@ namespace SparksToothChart {
 
 		///<summary>Set this tooth to show a sealant</summary>
 		public void SetSealant(string toothID,Color color) {
-			if(toothID=="") {
+			if(!ToothGraphic.IsValidToothID(toothID)) {
 				return;
 			}
 			tcData.ListToothGraphics[toothID].IsSealant=true;
@@ -591,7 +591,7 @@ namespace SparksToothChart {
 
 		///<summary>This will mostly only be successful on certain anterior teeth.   For others, it will just show F coloring.</summary>
 		public void SetVeneer(string toothID,Color color) {
-			if(toothID=="") {
+			if(!ToothGraphic.IsValidToothID(toothID)) {
 				return;
 			}
 			tcData.ListToothGraphics[toothID].SetSurfaceColors("BFV",color);
@@ -651,6 +651,9 @@ namespace SparksToothChart {
 		}
 
 		public void SetMobility(string toothID,string mobility,Color color) {
+			if(!ToothGraphic.IsValidToothID(toothID)) {
+				return;
+			}
 			tcData.ListToothGraphics[toothID].Mobility=mobility;
 			tcData.ListToothGraphics[toothID].colorMobility=color;
 			Invalidate();
