@@ -1644,15 +1644,10 @@ namespace OpenDental{
 			button.Style=ODToolBarButtonStyle.DropDownButton;
 			button.DropDownMenu=menuLetter;
 			ToolBarMain.Buttons.Add(button);
-
-
-			button=new ODToolBarButton(Lan.g(this,"Form"),-1,"","Form");
+			button=new ODToolBarButton(Lan.g(this,"Forms"),-1,"","Form");
 			button.Style=ODToolBarButtonStyle.DropDownButton;
 			button.DropDownMenu=menuForm;
 			ToolBarMain.Buttons.Add(button);
-
-
-
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"To Task List"),3,Lan.g(this,"Send to Task List"),"Tasklist"));
 			button=new ODToolBarButton(Lan.g(this,"Label"),4,Lan.g(this,"Print Label"),"Label");
 			button.Style=ODToolBarButtonStyle.DropDownButton;
@@ -1993,8 +1988,9 @@ namespace OpenDental{
 		}
 
 		private void OnForm_Click() {
-			MsgBox.Show(this,"Please use the dropdown list instead.");
-			return;
+			FormPatientForms formP=new FormPatientForms();
+			formP.ShowDialog();
+			RefreshCurrentModule();
 		}
 
 		private void menuForm_Popup(object sender,EventArgs e) {
