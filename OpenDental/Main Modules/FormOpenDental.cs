@@ -1998,12 +1998,44 @@ namespace OpenDental{
 		}
 
 		private void menuForm_Popup(object sender,EventArgs e) {
-			menuLetter.MenuItems.Clear();
-
+			menuForm.MenuItems.Clear();
+			MenuItem menuItem;
+			List<SheetDef> formList=SheetDefs.GetCustomForType(SheetTypeEnum.PatientForm);
+			if(formList.Count==0) {//we will later supply an internal sheet
+				//menuItem=new MenuItem(Lan.g(this,"LName, FName, Address"),menuLabel_Click);
+				//menuItem.Tag="PatientLFAddress";
+				//menuLabel.MenuItems.Add(menuItem);
+				menuItem=new MenuItem(Lan.g(this,"No forms set up yet in sheets"));
+				menuForm.MenuItems.Add(menuItem);
+			}
+			else {
+				for(int i=0;i<formList.Count;i++) {
+					menuItem=new MenuItem(formList[i].Description,menuForm_Click);
+					menuItem.Tag=formList[i];
+					menuForm.MenuItems.Add(menuItem);
+				}
+			}
 		}
 
 		private void menuForm_Click(object sender,System.EventArgs e) {
-			
+			if(((MenuItem)sender).Tag==null) {
+				return;
+			}
+			//Patient pat=Patients.GetPat(CurPatNum);
+			//if(((MenuItem)sender).Tag.GetType()==typeof(SheetDef)) {//always true
+			SheetDef sheetDef=(SheetDef)(((MenuItem)sender).Tag);
+			SheetDefs.GetFieldsAndParameters(sheetDef);
+			Sheet sheet=SheetUtil.CreateSheet(sheetDef,CurPatNum);
+			SheetParameter.SetParameter(sheet,"PatNum",CurPatNum);
+			SheetFiller.FillFields(sheet);
+			using(Graphics g=this.CreateGraphics()) {
+				SheetUtil.CalculateHeights(sheet,g);
+			}
+			FormSheetFillEdit FormSF=new FormSheetFillEdit(sheet);
+			FormSF.ShowDialog();
+			if(FormSF.DialogResult==DialogResult.OK) {
+				RefreshCurrentModule();
+			}
 		}
 
 		private void OnTasklist_Click(){

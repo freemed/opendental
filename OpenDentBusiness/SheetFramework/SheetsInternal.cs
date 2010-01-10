@@ -36,8 +36,10 @@ namespace OpenDentBusiness{
 					return PatientLetter();
 				case SheetInternalType.ReferralLetter:
 					return ReferralLetter();
-				//case SheetInternalType.PatientRegistration:
+				//case SheetInternalType.PatientRegistration://no time for this right now
 				//	return PatientRegistration();
+				case SheetInternalType.RoutingSlip:
+					return RoutingSlip();
 				default:
 					throw new ApplicationException("Invalid SheetInternalType.");
 			}
@@ -53,7 +55,7 @@ namespace OpenDentBusiness{
 		
 		private static SheetDef LabelPatientMail(){
 			SheetDef sheet=new SheetDef(SheetTypeEnum.LabelPatient);
-			sheet.Description="LabelPatientMail";
+			sheet.Description="Label Patient Mail";
 			sheet.FontName="Microsoft Sans Serif";
 			sheet.FontSize=12f;
 			sheet.Width=108;
@@ -71,7 +73,7 @@ namespace OpenDentBusiness{
 
 		private static SheetDef LabelPatientLFAddress() {
 			SheetDef sheet=new SheetDef(SheetTypeEnum.LabelPatient);
-			sheet.Description="LabelPatientLFAddress";
+			sheet.Description="Label PatientLFAddress";
 			sheet.FontName="Microsoft Sans Serif";
 			sheet.FontSize=12f;
 			sheet.Width=108;
@@ -89,7 +91,7 @@ namespace OpenDentBusiness{
 
 		private static SheetDef LabelPatientLFChartNumber(){
 			SheetDef sheet=new SheetDef(SheetTypeEnum.LabelPatient);
-			sheet.Description="LabelPatientLFChartNumber";
+			sheet.Description="Label PatientLFChartNumber";
 			sheet.FontName="Microsoft Sans Serif";
 			sheet.FontSize=12f;
 			sheet.Width=108;
@@ -105,7 +107,7 @@ namespace OpenDentBusiness{
 
 		private static SheetDef LabelPatientLFPatNum() {
 			SheetDef sheet=new SheetDef(SheetTypeEnum.LabelPatient);
-			sheet.Description="LabelPatientLFPatNum";
+			sheet.Description="Label PatientLFPatNum";
 			sheet.FontName="Microsoft Sans Serif";
 			sheet.FontSize=12f;
 			sheet.Width=108;
@@ -121,7 +123,7 @@ namespace OpenDentBusiness{
 
 		private static SheetDef LabelPatientRadiograph(){
 			SheetDef sheet=new SheetDef(SheetTypeEnum.LabelPatient);
-			sheet.Description="LabelPatientRadiograph";
+			sheet.Description="Label Patient Radiograph";
 			sheet.FontName="Microsoft Sans Serif";
 			sheet.FontSize=12f;
 			sheet.Width=108;
@@ -140,7 +142,7 @@ namespace OpenDentBusiness{
 
 		private static SheetDef LabelText() {
 			SheetDef sheet=new SheetDef(SheetTypeEnum.LabelPatient);
-			sheet.Description="LabelText";
+			sheet.Description="Label Text";
 			sheet.FontName="Microsoft Sans Serif";
 			sheet.FontSize=12f;
 			sheet.Width=108;
@@ -154,7 +156,7 @@ namespace OpenDentBusiness{
 
 		private static SheetDef LabelCarrier(){
 			SheetDef sheet=new SheetDef(SheetTypeEnum.LabelCarrier);
-			sheet.Description="LabelCarrier";
+			sheet.Description="Label Carrier";
 			sheet.FontName="Microsoft Sans Serif";
 			sheet.FontSize=12f;
 			sheet.Width=108;
@@ -172,7 +174,7 @@ namespace OpenDentBusiness{
 
 		private static SheetDef LabelReferral(){
 			SheetDef sheet=new SheetDef(SheetTypeEnum.LabelReferral);
-			sheet.Description="LabelReferral";
+			sheet.Description="Label Referral";
 			sheet.FontName="Microsoft Sans Serif";
 			sheet.FontSize=12f;
 			sheet.Width=108;
@@ -190,7 +192,7 @@ namespace OpenDentBusiness{
 
 		private static SheetDef ReferralSlip(){
 			SheetDef sheet=new SheetDef(SheetTypeEnum.ReferralSlip);
-			sheet.Description="ReferralSlip";
+			sheet.Description="Referral Slip";
 			sheet.FontName="Microsoft Sans Serif";
 			sheet.FontSize=9f;
 			sheet.Width=450;
@@ -240,7 +242,7 @@ namespace OpenDentBusiness{
 
 		private static SheetDef LabelAppointment() {
 			SheetDef sheet=new SheetDef(SheetTypeEnum.LabelAppointment);
-			sheet.Description="LabelAppointment";
+			sheet.Description="Label Appointment";
 			sheet.FontName="Microsoft Sans Serif";
 			sheet.FontSize=10f;
 			sheet.Width=108;
@@ -349,7 +351,7 @@ namespace OpenDentBusiness{
 
 		private static SheetDef Consent(){
 			SheetDef sheet=new SheetDef(SheetTypeEnum.Consent);
-			sheet.Description="ExtractionConsent";
+			sheet.Description="Extraction Consent";
 			sheet.FontName="Microsoft Sans Serif";
 			sheet.FontSize=11f;
 			sheet.Width=850;
@@ -387,7 +389,7 @@ By signing below you acknowledge that you understand the information presented, 
 
 		private static SheetDef PatientLetter(){
 			SheetDef sheet=new SheetDef(SheetTypeEnum.PatientLetter);
-			sheet.Description="PatientLetter";
+			sheet.Description="Patient Letter";
 			sheet.FontName="Microsoft Sans Serif";
 			sheet.FontSize=11f;
 			sheet.Width=850;
@@ -435,7 +437,7 @@ By signing below you acknowledge that you understand the information presented, 
 
 		private static SheetDef ReferralLetter(){
 			SheetDef sheet=new SheetDef(SheetTypeEnum.ReferralLetter);
-			sheet.Description="ReferralLetter";
+			sheet.Description="Referral Letter";
 			sheet.FontName="Microsoft Sans Serif";
 			sheet.FontSize=11f;
 			sheet.Width=850;
@@ -496,6 +498,22 @@ By signing below you acknowledge that you understand the information presented, 
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewImage("Patient Info.gif",0,0,770,999));
 			return sheet;
 		}*/
+
+		private static SheetDef RoutingSlip() {
+			SheetDef sheet=new SheetDef(SheetTypeEnum.RoutingSlip);
+			sheet.Description="Routing Slip";
+			sheet.FontName="Microsoft Sans Serif";
+			sheet.FontSize=9f;
+			sheet.Width=850;
+			sheet.Height=1100;
+			int rowH=14;
+			int y=50;
+			
+
+
+
+			return sheet;
+		}
 
 		
 

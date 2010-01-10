@@ -55,6 +55,13 @@ namespace OpenDentBusiness{
 				list.Add(new SheetParameter(true,"PatNum"));
 				list.Add(new SheetParameter(true,"ReferralNum"));
 			}
+			if(sheetType==SheetTypeEnum.PatientForm) {
+				list.Add(new SheetParameter(true,"PatNum"));
+			}
+			if(sheetType==SheetTypeEnum.RoutingSlip) {
+				list.Add(new SheetParameter(true,"PatNum"));
+				list.Add(new SheetParameter(true,"AptNum"));
+			}
 			return list;
 		}
 

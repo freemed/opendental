@@ -57,6 +57,15 @@ namespace OpenDental{
 					refer=Referrals.GetReferral((long)GetParamByName(sheet,"ReferralNum").ParamValue);
 					FillFieldsForReferralLetter(sheet,pat,refer);
 					break;
+				case SheetTypeEnum.PatientForm:
+					pat=Patients.GetPat((long)GetParamByName(sheet,"PatNum").ParamValue);
+					FillFieldsForPatientForm(sheet,pat);
+					break;
+				case SheetTypeEnum.RoutingSlip:
+					pat=Patients.GetPat((long)GetParamByName(sheet,"PatNum").ParamValue);
+					Appointment apt=Appointments.GetOneApt((long)GetParamByName(sheet,"AptNum").ParamValue);
+					FillFieldsForRoutingSlip(sheet,pat,apt);
+					break;
 			}
 			FillFieldsInStaticText(sheet,pat);
 			FillPatientImages(sheet,pat);
@@ -624,6 +633,96 @@ namespace OpenDental{
 						field.FieldValue=Providers.GetFormalName(pat.PriProv);
 						break;
 				}
+			}
+		}
+
+		private static void FillFieldsForPatientForm(Sheet sheet,Patient pat) {
+			foreach(SheetField field in sheet.SheetFields) {
+				/*switch(field.FieldName) {
+					case "PracticeTitle":
+						field.FieldValue=PrefC.GetString(PrefName.PracticeTitle);
+						break;
+					case "PracticeAddress":
+						field.FieldValue=PrefC.GetString(PrefName.PracticeAddress);
+						if(PrefC.GetString(PrefName.PracticeAddress2) != "") {
+							field.FieldValue+="\r\n"+PrefC.GetString(PrefName.PracticeAddress2);
+						}
+						break;
+					case "practiceCityStateZip":
+						field.FieldValue=PrefC.GetString(PrefName.PracticeCity)+", "
+							+PrefC.GetString(PrefName.PracticeST)+"  "
+							+PrefC.GetString(PrefName.PracticeZip);
+						break;
+					case "referral.nameFL":
+						field.FieldValue=Referrals.GetNameFL(refer.ReferralNum);
+						break;
+					case "referral.address":
+						field.FieldValue=refer.Address;
+						if(refer.Address2!="") {
+							field.FieldValue+="\r\n"+refer.Address2;
+						}
+						break;
+					case "referral.cityStateZip":
+						field.FieldValue=refer.City+", "+refer.ST+" "+refer.Zip;
+						break;
+					case "today.DayDate":
+						field.FieldValue=DateTime.Today.ToString("dddd, MM/dd/yyyy");
+						break;
+					case "patient.nameFL":
+						field.FieldValue=pat.GetNameFL();
+						break;
+					case "referral.salutation":
+						field.FieldValue="Dear "+refer.FName+":";
+						break;
+					case "patient.priProvNameFL":
+						field.FieldValue=Providers.GetFormalName(pat.PriProv);
+						break;
+				}*/
+			}
+		}
+
+		private static void FillFieldsForRoutingSlip(Sheet sheet,Patient pat,Appointment apt) {
+			foreach(SheetField field in sheet.SheetFields) {
+				/*switch(field.FieldName) {
+					case "PracticeTitle":
+						field.FieldValue=PrefC.GetString(PrefName.PracticeTitle);
+						break;
+					case "PracticeAddress":
+						field.FieldValue=PrefC.GetString(PrefName.PracticeAddress);
+						if(PrefC.GetString(PrefName.PracticeAddress2) != "") {
+							field.FieldValue+="\r\n"+PrefC.GetString(PrefName.PracticeAddress2);
+						}
+						break;
+					case "practiceCityStateZip":
+						field.FieldValue=PrefC.GetString(PrefName.PracticeCity)+", "
+							+PrefC.GetString(PrefName.PracticeST)+"  "
+							+PrefC.GetString(PrefName.PracticeZip);
+						break;
+					case "referral.nameFL":
+						field.FieldValue=Referrals.GetNameFL(refer.ReferralNum);
+						break;
+					case "referral.address":
+						field.FieldValue=refer.Address;
+						if(refer.Address2!="") {
+							field.FieldValue+="\r\n"+refer.Address2;
+						}
+						break;
+					case "referral.cityStateZip":
+						field.FieldValue=refer.City+", "+refer.ST+" "+refer.Zip;
+						break;
+					case "today.DayDate":
+						field.FieldValue=DateTime.Today.ToString("dddd, MM/dd/yyyy");
+						break;
+					case "patient.nameFL":
+						field.FieldValue=pat.GetNameFL();
+						break;
+					case "referral.salutation":
+						field.FieldValue="Dear "+refer.FName+":";
+						break;
+					case "patient.priProvNameFL":
+						field.FieldValue=Providers.GetFormalName(pat.PriProv);
+						break;
+				}*/
 			}
 		}
 

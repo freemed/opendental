@@ -22,9 +22,11 @@ namespace OpenDentBusiness {
 		///<summary>7-Requires SheetParameter for PatNum.</summary>
 		PatientLetter,
 		///<summary>8-Requires SheetParameters for PatNum,ReferralNum.</summary>
-		ReferralLetter
-		//<Summary>-Requires SheetParameter for PatNum.</Summary>
-		//PatientRegistration
+		ReferralLetter,
+		///<Summary>9-Requires SheetParameter for PatNum.</Summary>
+		PatientForm,
+		///<Summary>10-Requires SheetParameters for PatNum,AptNum.</Summary>
+		RoutingSlip
 		/*StatementHeader,
 		TxPlanHeader,
 		LabSlip,
@@ -85,8 +87,9 @@ namespace OpenDentBusiness {
 		Rx,
 		Consent,
 		PatientLetter,
-		ReferralLetter
-		//PatientRegistration
+		ReferralLetter,
+		//PatientRegistration//We don't have time to do this right now.  But offices can do this on their own from scratch
+		RoutingSlip
 	}
 
 	public enum OutInCheck{

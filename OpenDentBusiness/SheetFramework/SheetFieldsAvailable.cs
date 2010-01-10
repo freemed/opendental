@@ -37,8 +37,10 @@ namespace OpenDentBusiness{
 					return GetPatientLetter(outInCheck);
 				case SheetTypeEnum.ReferralLetter:
 					return GetReferralLetter(outInCheck);
-				//case SheetTypeEnum.PatientRegistration:
-				//	return GetPatientRegistration(outInCheck);
+				case SheetTypeEnum.PatientForm:
+					return GetPatientForm(outInCheck);
+				case SheetTypeEnum.RoutingSlip:
+					return GetRoutingSlip(outInCheck);
 			}
 			return new List<SheetFieldDef>();
 		}
@@ -211,14 +213,49 @@ namespace OpenDentBusiness{
 			return list;
 		}
 
-		/*
-		private static List<SheetFieldDef> GetPatientRegistration(OutInCheck outInCheck) {
+		private static List<SheetFieldDef> GetPatientForm(OutInCheck outInCheck) {
 			List<SheetFieldDef> list=new List<SheetFieldDef>();
 			if(outInCheck==OutInCheck.Out){
-				
-				
+				//I can't really think of any for this kind				
 			}
 			else if(outInCheck==OutInCheck.In){
+				list.Add(NewInput("FName"));
+				list.Add(NewInput("LName"));
+				list.Add(NewInput("MiddleI"));
+				list.Add(NewInput("Preferred"));
+				list.Add(NewInput("Birthdate"));
+				list.Add(NewInput("SSN"));
+				list.Add(NewInput("Address"));
+				list.Add(NewInput("Address2"));
+				list.Add(NewInput("City"));
+				list.Add(NewInput("State"));
+				list.Add(NewInput("Zip"));
+				list.Add(NewInput("HmPhone"));//We will have to strip off notes.
+				list.Add(NewInput("WkPhone"));
+				list.Add(NewInput("WirelessPhone"));
+				/*list.Add(NewInput(""));
+				list.Add(NewInput(""));
+				list.Add(NewInput(""));
+				list.Add(NewInput(""));
+				list.Add(NewInput(""));
+				list.Add(NewInput(""));
+				list.Add(NewInput(""));*/
+			}
+			else if(outInCheck==OutInCheck.Check){
+				list.Add(NewCheck("GenderIsMale"));
+				list.Add(NewCheck("GenderIsFemale"));
+				list.Add(NewCheck("PositionIsMarried"));
+				list.Add(NewCheck("PositionIsSingle"));
+				//list.Add(NewCheck(""));
+				list.Add(NewCheck("misc"));
+			}
+			return list;
+		}
+
+		private static List<SheetFieldDef> GetRoutingSlip(OutInCheck outInCheck) {
+			List<SheetFieldDef> list=new List<SheetFieldDef>();
+			if(outInCheck==OutInCheck.Out) {
+				/*
 				list.Add(NewOutput("FName"));
 				list.Add(NewOutput("LName"));
 				list.Add(NewOutput("MiddleI"));
@@ -230,32 +267,25 @@ namespace OpenDentBusiness{
 				list.Add(NewOutput("City"));
 				list.Add(NewOutput("State"));
 				list.Add(NewOutput("Zip"));
-				list.Add(NewOutput("HmPhone"));
+				list.Add(NewOutput("HmPhone"));//We will have to strip off notes.
 				list.Add(NewOutput("WkPhone"));
 				list.Add(NewOutput("WirelessPhone"));
-				/*list.Add(NewOutput(""));
 				list.Add(NewOutput(""));
 				list.Add(NewOutput(""));
 				list.Add(NewOutput(""));
 				list.Add(NewOutput(""));
 				list.Add(NewOutput(""));
 				list.Add(NewOutput(""));
-
-				list.Add(NewInput("notes"));
+				list.Add(NewOutput(""));*/
 			}
-			else if(outInCheck==OutInCheck.Check){
-				list.Add(NewCheck("GenderIsMale"));
-				list.Add(NewCheck("GenderIsFemale"));
-				list.Add(NewCheck("PositionIsMarried"));
-				list.Add(NewCheck("PositionIsSingle"));
-				//list.Add(NewCheck(""));
-				
-
-
-				list.Add(NewCheck("misc"));
+			else if(outInCheck==OutInCheck.In) {
+				//Not applicable
+			}
+			else if(outInCheck==OutInCheck.Check) {
+				//Not applicable
 			}
 			return list;
-		}*/
+		}
 
 
 	}
