@@ -112,7 +112,14 @@ namespace OpenDental.Eclaims
 						throw new Exception("No customer contract. "+errormsg);
 				}
 				//Step 2: Post upload request:
-				string fileName=Directory.GetFiles(clearhouse.ExportPath)[0];
+				string[] fileNames=Directory.GetFiles(clearhouse.ExportPath);
+				if(fileNames.Length>1){
+					for(int f=0;f<fileNames.Length;f++) {
+						File.Delete(fileNames[f]);
+					}
+					throw new ApplicationException("A previous batch submission was found in an incomplete state.  You will need to resubmit your most recent batch as well as this batch.  Also check reports to be certain that all expected claims went through.");
+				}
+				string fileName=fileNames[0];
 				string boundary="------------7d13e425b00d0";
 				postData=
 					"--"+boundary+"\r\n"
