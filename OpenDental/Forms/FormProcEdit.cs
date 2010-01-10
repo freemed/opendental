@@ -1402,6 +1402,7 @@ namespace OpenDental{
 			this.comboProvNum.Name = "comboProvNum";
 			this.comboProvNum.Size = new System.Drawing.Size(158,21);
 			this.comboProvNum.TabIndex = 100;
+			this.comboProvNum.SelectionChangeCommitted += new System.EventHandler(this.comboProvNum_SelectionChangeCommitted);
 			// 
 			// textUser
 			// 
@@ -1500,7 +1501,7 @@ namespace OpenDental{
 			this.butPickSite.CornerRadius = 2F;
 			this.butPickSite.Location = new System.Drawing.Point(440,260);
 			this.butPickSite.Name = "butPickSite";
-			this.butPickSite.Size = new System.Drawing.Size(18,21);
+			this.butPickSite.Size = new System.Drawing.Size(19,21);
 			this.butPickSite.TabIndex = 112;
 			this.butPickSite.TabStop = false;
 			this.butPickSite.Text = "...";
@@ -2990,6 +2991,10 @@ namespace OpenDental{
 			ProcCur.ProvNum=formp.SelectedProvNum;
 		}
 
+		private void comboProvNum_SelectionChangeCommitted(object sender,EventArgs e) {
+			ProcCur.ProvNum=ProviderC.List[comboProvNum.SelectedIndex].ProvNum;
+		}
+
 		private void comboClinic_SelectionChangeCommitted(object sender,EventArgs e) {
 			if(comboClinic.SelectedIndex==0) {
 				ProcCur.ClinicNum=0;
@@ -3444,6 +3449,8 @@ namespace OpenDental{
 		private void butCancel_Click(object sender,System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 		
 
