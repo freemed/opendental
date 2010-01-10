@@ -75,6 +75,9 @@ namespace OpenDentBusiness {
 				else if(letter.Fields[i]=="Age") {
 					command+="patient.Birthdate BirthdateForAge";
 				}
+				else if(letter.Fields[i]=="Guarantor") {
+					command+="CONCAT(patGuar.FName,' ',patGuar.LName) Guarantor";
+				}
 				else if(letter.Fields[i].StartsWith("referral.")) {
 					command+="referral."+letter.Fields[i].Substring(9);
 				}
@@ -99,6 +102,7 @@ namespace OpenDentBusiness {
 				+"LEFT JOIN appointment ON appointment.PatNum=patient.PatNum "
 					+"AND AptStatus="+POut.Long((int)ApptStatus.Scheduled)+" "
 					+"AND AptDateTime > NOW() "
+				+"LEFT JOIN patient patGuar ON patGuar.PatNum=patient.Guarantor "
 				+"WHERE patient.PatNum="+POut.Long(PatCur.PatNum)
 				+" GROUP BY patient.PatNum "
 				+"ORDER BY refattach.ItemOrder";

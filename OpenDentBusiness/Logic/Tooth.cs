@@ -385,10 +385,12 @@ namespace OpenDentBusiness{
 				return false;
 			}
 			int intTooth=Convert.ToInt32(toothNum);
-			if(intTooth<=32)
+			if(intTooth<=32) {
 				return true;
-			if(intTooth>=51 && intTooth<=82)//supernumerary
-				return true;	
+			}
+			if(intTooth>=51 && intTooth<=82) {//supernumerary
+				return true;
+			}
 			return false;
 		}
 
