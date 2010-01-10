@@ -384,7 +384,7 @@ namespace OpenDentBusiness {
 				rows.Add(row);
 			}
 			//sheet---------------------------------------------------------------------------------------
-			command="SELECT DateTimeSheet,SheetNum,SheetType "
+			command="SELECT DateTimeSheet,SheetNum,SheetType,Description "
 				+"FROM sheet WHERE PatNum ="+POut.Long(patNum)
 				+" AND SheetType!="+POut.Long((int)SheetTypeEnum.Rx)//rx are only accesssible from within Rx edit window.
 				+" ORDER BY DateTimeSheet";
@@ -404,7 +404,7 @@ namespace OpenDentBusiness {
 				row["FormPatNum"]="0";
 				row["mode"]="";
 				sheetType=(SheetTypeEnum)PIn.Long(rawSheet.Rows[i]["SheetType"].ToString());
-				row["Note"]=Lans.g("SheetTypeEnum",sheetType.ToString());
+				row["Note"]=rawSheet.Rows[i]["Description"].ToString();
 				row["patName"]="";
 				row["SheetNum"]=rawSheet.Rows[i]["SheetNum"].ToString();
 				//row["sentOrReceived"]="";
