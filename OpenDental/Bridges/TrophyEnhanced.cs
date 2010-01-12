@@ -82,17 +82,8 @@ namespace OpenDental.Bridges{
 			string folderDesired=pat.PatNum.ToString().PadLeft(6,'0');
 			DirectoryInfo dirInfo=new DirectoryInfo(storagePath);
 			DirectoryInfo[] dirArray=dirInfo.GetDirectories(folderDesired,SearchOption.AllDirectories);
-			if(dirArray.Length==0) {//Create a folder using the AtoZ naming convention
-				//retVal= ImageStore.GetPatientFolder(pat);
-				string name=pat.LName+pat.FName;
-				retVal="";
-				for(int i=0;i<name.Length;i++) {
-					if(Char.IsLetter(name,i)) {
-						retVal+=name.Substring(i,1);
-					}
-				}
-				retVal+=pat.PatNum.ToString();//ensures unique name
-				retVal=ODFileUtils.CombinePaths(retVal.Substring(0,1).ToUpper(),retVal);
+			if(dirArray.Length==0) {//Create a folder using the numbering convention
+				retVal=ODFileUtils.CombinePaths(folderDesired.Substring(4,2),folderDesired);
 				string fullPath=ODFileUtils.CombinePaths(storagePath,retVal);
 				if(!Directory.Exists(fullPath)) {
 					try {
