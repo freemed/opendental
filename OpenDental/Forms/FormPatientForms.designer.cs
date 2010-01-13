@@ -84,6 +84,7 @@ namespace OpenDental{
 			this.butSheets.Size = new System.Drawing.Size(69,24);
 			this.butSheets.TabIndex = 3;
 			this.butSheets.Text = "Sheets";
+			this.butSheets.Click += new System.EventHandler(this.butSheets_Click);
 			// 
 			// butImage
 			// 
@@ -97,6 +98,7 @@ namespace OpenDental{
 			this.butImage.Size = new System.Drawing.Size(72,24);
 			this.butImage.TabIndex = 4;
 			this.butImage.Text = "Image Cats";
+			this.butImage.Click += new System.EventHandler(this.butImage_Click);
 			// 
 			// FormPatientForms
 			// 

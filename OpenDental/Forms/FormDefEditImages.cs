@@ -27,6 +27,7 @@ namespace OpenDental{
 		private CheckBox checkS;
 		private CheckBox checkP;
 		private CheckBox checkX;
+		private CheckBox checkF;
 		private GroupBox groupBox1;
 		
 		///<summary></summary>
@@ -61,10 +62,11 @@ namespace OpenDental{
 			this.butCancel = new OpenDental.UI.Button();
 			this.checkHidden = new System.Windows.Forms.CheckBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.checkX = new System.Windows.Forms.CheckBox();
-			this.checkP = new System.Windows.Forms.CheckBox();
-			this.checkS = new System.Windows.Forms.CheckBox();
 			this.checkT = new System.Windows.Forms.CheckBox();
+			this.checkS = new System.Windows.Forms.CheckBox();
+			this.checkP = new System.Windows.Forms.CheckBox();
+			this.checkX = new System.Windows.Forms.CheckBox();
+			this.checkF = new System.Windows.Forms.CheckBox();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -130,16 +132,44 @@ namespace OpenDental{
 			// 
 			// groupBox1
 			// 
+			this.groupBox1.Controls.Add(this.checkF);
 			this.groupBox1.Controls.Add(this.checkT);
 			this.groupBox1.Controls.Add(this.checkS);
 			this.groupBox1.Controls.Add(this.checkP);
 			this.groupBox1.Controls.Add(this.checkX);
 			this.groupBox1.Location = new System.Drawing.Point(226,22);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(215,100);
+			this.groupBox1.Size = new System.Drawing.Size(215,119);
 			this.groupBox1.TabIndex = 7;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Usage";
+			// 
+			// checkT
+			// 
+			this.checkT.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkT.Location = new System.Drawing.Point(8,91);
+			this.checkT.Name = "checkT";
+			this.checkT.Size = new System.Drawing.Size(201,18);
+			this.checkT.TabIndex = 7;
+			this.checkT.Text = "Graphical Tooth Charts (only one)";
+			// 
+			// checkS
+			// 
+			this.checkS.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkS.Location = new System.Drawing.Point(8,73);
+			this.checkS.Name = "checkS";
+			this.checkS.Size = new System.Drawing.Size(201,18);
+			this.checkS.TabIndex = 6;
+			this.checkS.Text = "Statements (only one)";
+			// 
+			// checkP
+			// 
+			this.checkP.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkP.Location = new System.Drawing.Point(8,55);
+			this.checkP.Name = "checkP";
+			this.checkP.Size = new System.Drawing.Size(201,18);
+			this.checkP.TabIndex = 5;
+			this.checkP.Text = "Patient Pictures (only one)";
 			// 
 			// checkX
 			// 
@@ -150,32 +180,14 @@ namespace OpenDental{
 			this.checkX.TabIndex = 4;
 			this.checkX.Text = "Show in Chart module";
 			// 
-			// checkP
+			// checkF
 			// 
-			this.checkP.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkP.Location = new System.Drawing.Point(8,37);
-			this.checkP.Name = "checkP";
-			this.checkP.Size = new System.Drawing.Size(201,18);
-			this.checkP.TabIndex = 5;
-			this.checkP.Text = "Patient Pictures (only one)";
-			// 
-			// checkS
-			// 
-			this.checkS.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkS.Location = new System.Drawing.Point(8,55);
-			this.checkS.Name = "checkS";
-			this.checkS.Size = new System.Drawing.Size(201,18);
-			this.checkS.TabIndex = 6;
-			this.checkS.Text = "Statements (only one)";
-			// 
-			// checkT
-			// 
-			this.checkT.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkT.Location = new System.Drawing.Point(8,73);
-			this.checkT.Name = "checkT";
-			this.checkT.Size = new System.Drawing.Size(201,18);
-			this.checkT.TabIndex = 7;
-			this.checkT.Text = "Graphical Tooth Charts (only one)";
+			this.checkF.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkF.Location = new System.Drawing.Point(8,37);
+			this.checkF.Name = "checkF";
+			this.checkF.Size = new System.Drawing.Size(201,18);
+			this.checkF.TabIndex = 8;
+			this.checkF.Text = "Show in Patient Forms";
 			// 
 			// FormDefEditImages
 			// 
@@ -195,7 +207,7 @@ namespace OpenDental{
 			this.Name = "FormDefEditImages";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Edit Definition";
+			this.Text = "Edit Image Category";
 			this.Load += new System.EventHandler(this.FormDefEdit_Load);
 			this.groupBox1.ResumeLayout(false);
 			this.ResumeLayout(false);
@@ -209,6 +221,9 @@ namespace OpenDental{
 			//textValue.Text=DefCur.ItemValue;
 			if(DefCur.ItemValue.Contains("X")) {
 				checkX.Checked=true;
+			}
+			if(DefCur.ItemValue.Contains("F")) {
+				checkF.Checked=true;
 			}
 			if(DefCur.ItemValue.Contains("P")) {
 				checkP.Checked=true;
@@ -231,6 +246,9 @@ namespace OpenDental{
 			string itemVal="";
 			if(checkX.Checked) {
 				itemVal+="X";
+			}
+			if(checkF.Checked) {
+				itemVal+="F";
 			}
 			if(checkP.Checked) {
 				itemVal+="P";

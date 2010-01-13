@@ -499,6 +499,12 @@ namespace OpenDental{
 			if(itemValue.Contains("X")){
 				retVal=Lan.g(this,"ChartModule");
 			}
+			if(itemValue.Contains("F")) {
+				if(retVal!="") {
+					retVal+=", ";
+				}
+				retVal+=Lan.g(this,"PatientForm");
+			}
 			if(itemValue.Contains("P")){
 				if(retVal!=""){
 					retVal+=", ";
