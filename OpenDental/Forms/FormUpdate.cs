@@ -974,6 +974,9 @@ namespace OpenDental{
 			//copy the Setup.exe to the AtoZ folders for the other db's.
 			List<string> atozNameList=MiscData.GetAtoZforDb(dblist);
 			for(int i=0;i<atozNameList.Count;i++) {
+				if(destinationPath==Path.Combine(atozNameList[i],"Setup.exe")) {//if they are sharing an AtoZ folder.
+					continue;
+				}
 				if(Directory.Exists(atozNameList[i])) {
 					File.Copy(destinationPath,//copy the Setup.exe that was just downloaded to this AtoZ folder
 						Path.Combine(atozNameList[i],"Setup.exe"),//to the other atozFolder
