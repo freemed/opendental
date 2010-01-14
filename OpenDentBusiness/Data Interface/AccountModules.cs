@@ -389,7 +389,7 @@ namespace OpenDentBusiness {
 				+" AND SheetType!="+POut.Long((int)SheetTypeEnum.Rx)//rx are only accesssible from within Rx edit window.
 				+" ORDER BY DateTimeSheet";
 			DataTable rawSheet=dcon.GetTable(command);
-			SheetTypeEnum sheetType;
+			//SheetTypeEnum sheetType;
 			for(int i=0;i<rawSheet.Rows.Count;i++) {
 				row=table.NewRow();
 				dateT=PIn.DateT(rawSheet.Rows[i]["DateTimeSheet"].ToString());
@@ -403,7 +403,7 @@ namespace OpenDentBusiness {
 				row["EmailMessageNum"]="0";
 				row["FormPatNum"]="0";
 				row["mode"]="";
-				sheetType=(SheetTypeEnum)PIn.Long(rawSheet.Rows[i]["SheetType"].ToString());
+				//sheetType=(SheetTypeEnum)PIn.Long(rawSheet.Rows[i]["SheetType"].ToString());
 				row["Note"]=rawSheet.Rows[i]["Description"].ToString();
 				row["patName"]="";
 				row["SheetNum"]=rawSheet.Rows[i]["SheetNum"].ToString();

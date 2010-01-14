@@ -206,7 +206,6 @@ namespace OpenDental{
 		private MenuItem menuItemInsFilingCodes;
 		private MenuItem menuItemReplication;
 		private MenuItem menuItemAutomation;
-		private ContextMenu menuForm;
 		private OpenDental.UI.ODToolBar ToolBarMain;
 
 		///<summary></summary>
@@ -412,7 +411,6 @@ namespace OpenDental{
 			this.lightSignalGrid1 = new OpenDental.UI.LightSignalGrid();
 			this.smartCardWatcher1 = new OpenDental.SmartCards.SmartCardWatcher();
 			this.timerHeartBeat = new System.Windows.Forms.Timer(this.components);
-			this.menuForm = new System.Windows.Forms.ContextMenu();
 			this.SuspendLayout();
 			// 
 			// timerTimeIndic
@@ -1197,10 +1195,6 @@ namespace OpenDental{
 			this.timerHeartBeat.Interval = 180000;
 			this.timerHeartBeat.Tick += new System.EventHandler(this.timerHeartBeat_Tick);
 			// 
-			// menuForm
-			// 
-			this.menuForm.Popup += new System.EventHandler(this.menuForm_Popup);
-			// 
 			// FormOpenDental
 			// 
 			this.ClientSize = new System.Drawing.Size(982,626);
@@ -1645,8 +1639,8 @@ namespace OpenDental{
 			button.DropDownMenu=menuLetter;
 			ToolBarMain.Buttons.Add(button);
 			button=new ODToolBarButton(Lan.g(this,"Forms"),-1,"","Form");
-			button.Style=ODToolBarButtonStyle.DropDownButton;
-			button.DropDownMenu=menuForm;
+			//button.Style=ODToolBarButtonStyle.DropDownButton;
+			//button.DropDownMenu=menuForm;
 			ToolBarMain.Buttons.Add(button);
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"To Task List"),3,Lan.g(this,"Send to Task List"),"Tasklist"));
 			button=new ODToolBarButton(Lan.g(this,"Label"),4,Lan.g(this,"Print Label"),"Label");
@@ -1989,10 +1983,14 @@ namespace OpenDental{
 
 		private void OnForm_Click() {
 			FormPatientForms formP=new FormPatientForms();
+			formP.PatNum=CurPatNum;
 			formP.ShowDialog();
-			RefreshCurrentModule();
+			if(ContrAccount2.Visible || ContrChart2.Visible) {//The only two modules where a new form would show.
+				RefreshCurrentModule();
+			}
 		}
 
+		/*
 		private void menuForm_Popup(object sender,EventArgs e) {
 			menuForm.MenuItems.Clear();
 			MenuItem menuItem;
@@ -2032,7 +2030,7 @@ namespace OpenDental{
 			if(FormSF.DialogResult==DialogResult.OK) {
 				RefreshCurrentModule();
 			}
-		}
+		}*/
 
 		private void OnTasklist_Click(){
 			FormTaskListSelect FormT=new FormTaskListSelect(TaskObjectType.Patient,CurPatNum);
@@ -2386,6 +2384,12 @@ namespace OpenDental{
 				ContrAppt2.Visible=true;
 				this.ActiveControl=this.ContrAppt2;
 				ContrAppt2.ModuleSelected(CurPatNum,e.PinAppts);
+			}
+			else if(e.DocNum>0) {
+				myOutlookBar.SelectedIndex=e.IModule;
+				ContrDocs2.Visible=true;
+				this.ActiveControl=this.ContrDocs2;
+				ContrDocs2.ModuleSelected(CurPatNum,e.DocNum);
 			}
 			else if(e.IModule!=-1){
 				myOutlookBar.SelectedIndex=e.IModule;

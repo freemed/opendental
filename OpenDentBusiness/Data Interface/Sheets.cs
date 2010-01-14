@@ -164,6 +164,75 @@ namespace OpenDentBusiness{
 			return strBuild.ToString();
 		}
 
+		public static DataTable GetPatientFormsTable(long patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),patNum);
+			}
+			//DataConnection dcon=new DataConnection();
+			DataTable table=new DataTable("");
+			DataRow row;
+			//columns that start with lowercase are altered for display rather than being raw data.
+			table.Columns.Add("dateTime",typeof(DateTime));
+			table.Columns.Add("date");
+			table.Columns.Add("description");
+			table.Columns.Add("DocNum");
+			table.Columns.Add("imageCat");
+			table.Columns.Add("SheetNum");
+			table.Columns.Add("time");
+			//but we won't actually fill this table with rows until the very end.  It's more useful to use a List<> for now.
+			List<DataRow> rows=new List<DataRow>();
+			//sheet---------------------------------------------------------------------------------------
+			string command="SELECT DateTimeSheet,SheetNum,Description "
+				+"FROM sheet WHERE PatNum ="+POut.Long(patNum)
+				+" AND SheetType="+POut.Long((int)SheetTypeEnum.PatientForm)
+				+" ORDER BY DateTimeSheet";
+			DataTable rawSheet=Db.GetTable(command);
+			DateTime dateT;
+			for(int i=0;i<rawSheet.Rows.Count;i++) {
+				row=table.NewRow();
+				dateT=PIn.DateT(rawSheet.Rows[i]["DateTimeSheet"].ToString());
+				row["dateTime"]=dateT;
+				row["date"]=dateT.ToShortDateString();
+				row["description"]=rawSheet.Rows[i]["Description"].ToString();
+				row["DocNum"]="0";
+				row["imageCat"]="";
+				row["SheetNum"]=rawSheet.Rows[i]["SheetNum"].ToString();
+				if(dateT.TimeOfDay!=TimeSpan.Zero) {
+					row["time"]=dateT.ToString("h:mm")+dateT.ToString("%t").ToLower();
+				}
+				rows.Add(row);
+			}
+			//document---------------------------------------------------------------------------------------
+			command="SELECT DateCreated,DocCategory,DocNum,Note "
+				+"FROM document WHERE PatNum ="+POut.Long(patNum)
+				+" ORDER BY DateCreated";
+			DataTable rawDoc=Db.GetTable(command);
+			long docCat;
+			for(int i=0;i<rawDoc.Rows.Count;i++) {
+				row=table.NewRow();
+				dateT=PIn.DateT(rawDoc.Rows[i]["DateCreated"].ToString());
+				row["dateTime"]=dateT;
+				row["date"]=dateT.ToShortDateString();
+				row["description"]=rawDoc.Rows[i]["Note"].ToString();
+				row["DocNum"]=rawDoc.Rows[i]["DocNum"].ToString();
+				docCat=PIn.Long(rawDoc.Rows[i]["DocCategory"].ToString());
+				row["imageCat"]=DefC.GetName(DefCat.ImageCats,docCat);
+				row["SheetNum"]="0";
+				if(dateT.TimeOfDay!=TimeSpan.Zero) {
+					row["time"]=dateT.ToString("h:mm")+dateT.ToString("%t").ToLower();
+				}
+				rows.Add(row);
+			}
+			//Sorting
+			for(int i=0;i<rows.Count;i++) {
+				table.Rows.Add(rows[i]);
+			}
+			DataView view = table.DefaultView;
+			view.Sort = "dateTime";
+			table = view.ToTable();
+			return table;
+		}
+
 		
 
 	}

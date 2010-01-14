@@ -601,8 +601,13 @@ namespace OpenDental{
 			paintTools.Invalidate();
 		}
 
-		///<summary></summary>
+		///<summary>One of two overloads.</summary>
 		public void ModuleSelected(long patNum) {
+			ModuleSelected(patNum,0);
+		}
+
+		///<summary>This overload is needed when jumping to a specific image from FormPatientForms.</summary>
+		public void ModuleSelected(long patNum,long docNum) {
 			if(!PrefC.UsingAtoZfolder) {
 				MsgBox.Show(this,"Not currently using documents. Turn on the A to Z folders option by going to Setup | Data Paths to enable imaging.");
 				this.Enabled=false;
@@ -611,6 +616,7 @@ namespace OpenDental{
 			this.Enabled=true;
 			RefreshModuleData(patNum);
 			RefreshModuleScreen();
+			SelectTreeNode(GetNodeById(MakeIdentifier(docNum.ToString(),"0")));
 		}
 
 		///<summary></summary>

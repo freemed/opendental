@@ -167,27 +167,32 @@ namespace OpenDental{
 
 		///<summary>Goes directly to an existing appointment.</summary>
 		public static void GotoAppointment(DateTime dateSelected,long selectedAptNum) {
-			OnModuleSelected(new ModuleEventArgs(dateSelected,new List<long>(),selectedAptNum,0,0,0));
+			OnModuleSelected(new ModuleEventArgs(dateSelected,new List<long>(),selectedAptNum,0,0,0,0));
 		}
 
 		///<summary>Goes directly to a claim in someone's Account.</summary>
 		public static void GotoClaim(long claimNum) {
-			OnModuleSelected(new ModuleEventArgs(DateTime.MinValue,new List<long>(),0,2,claimNum,0));
+			OnModuleSelected(new ModuleEventArgs(DateTime.MinValue,new List<long>(),0,2,claimNum,0,0));
 		}
 
 		///<summary>Goes directly to an Account.  Sometimes, patient is selected some other way instead of being passed in here, so OK to pass in a patNum of zero.</summary>
 		public static void GotoAccount(long patNum) {
-			OnModuleSelected(new ModuleEventArgs(DateTime.MinValue,new List<long>(),0,2,0,patNum));
+			OnModuleSelected(new ModuleEventArgs(DateTime.MinValue,new List<long>(),0,2,0,patNum,0));
 		}
 		
 		///<summary>Goes directly to Family module.  Sometimes, patient is selected some other way instead of being passed in here, so OK to pass in a patNum of zero.</summary>
 		public static void GotoFamily(long patNum) {
-			OnModuleSelected(new ModuleEventArgs(DateTime.MinValue,new List<long>(),0,1,0,patNum));
+			OnModuleSelected(new ModuleEventArgs(DateTime.MinValue,new List<long>(),0,1,0,patNum,0));
 		}
 
 		///<summary>Puts appointment on pinboard, then jumps to Appointments module.  Sometimes, patient is selected some other way instead of being passed in here, so OK to pass in a patNum of zero.</summary>
 		public static void PinToAppt(List<long> pinAptNums,long patNum) {
-			OnModuleSelected(new ModuleEventArgs(DateTime.Today,pinAptNums,0,0,0,patNum));
+			OnModuleSelected(new ModuleEventArgs(DateTime.Today,pinAptNums,0,0,0,patNum,0));
+		}
+
+		///<summary>Jumps to Images module and pulls up the specified image.</summary>
+		public static void GotoImage(long patNum,long docNum) {
+			OnModuleSelected(new ModuleEventArgs(DateTime.MinValue,new List<long>(),0,5,0,patNum,docNum));
 		}
 
 		///<summary></summary>
@@ -209,10 +214,11 @@ namespace OpenDental{
 		private int iModule;
 		private long claimNum;
 		private long patNum;
+		private long docNum;//image
 		
 		///<summary></summary>
 		public ModuleEventArgs(DateTime dateSelected,List<long> pinAppts,long selectedAptNum,int iModule,
-			long claimNum,long patNum)
+			long claimNum,long patNum,long docNum)
 			: base()
 		{
 			this.dateSelected=dateSelected;
@@ -221,6 +227,7 @@ namespace OpenDental{
 			this.iModule=iModule;
 			this.claimNum=claimNum;
 			this.patNum=patNum;
+			this.docNum=docNum;
 		}
 
 		///<summary>If going to the ApptModule, this lets you pick a date.</summary>
@@ -251,6 +258,11 @@ namespace OpenDental{
 		///<summary></summary>
 		public long PatNum {
 			get { return patNum; }
+		}
+
+		///<summary>If going to Images module, this lets you pick which image.</summary>
+		public long DocNum {
+			get { return docNum; }
 		}
 	}
 
