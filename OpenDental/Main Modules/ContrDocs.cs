@@ -815,6 +815,9 @@ namespace OpenDental{
 
 		private void pdfFileError(object sender, System.EventArgs e) {
 			PictureBox1.Visible=true;
+			ToolBarMain.Enabled=true;
+			paintTools.Enabled=true;
+			brightnessContrastSlider.Enabled=true;
 			axAcroPDF1.Visible=false;
 		}
 
