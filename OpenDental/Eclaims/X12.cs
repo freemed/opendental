@@ -1215,6 +1215,14 @@ namespace OpenDental.Eclaims
 							}
 							sw.WriteLine("~");
 						}
+						else if(procCode.TreatArea==TreatmentArea.ToothRange) {
+							string[] individTeeth=proc.ToothRange.Split(',');
+							for(int t=0;t<individTeeth.Length;t++) {
+								seg++;
+								sw.WriteLine("TOO*JP*"//TOO01: JP=National tooth numbering
+									+individTeeth[t]+"~");//TOO02: Tooth number
+							}
+						}
 					}
 					//2400 DTP: Date of service if different from claim, but we will always show the date. Better compatibility.
 					//Required if medical anyway.
