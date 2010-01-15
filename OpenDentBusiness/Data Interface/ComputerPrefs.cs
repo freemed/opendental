@@ -8,6 +8,7 @@ using CodeBase;
 
 namespace OpenDentBusiness {
 	public class ComputerPrefs {
+		//public static ComputerPref ForLocalComputer;//js Maybe do this later for speed.
 
 		///<summary>Returns the computer preferences for the computer which this instance of Open Dental is running on.</summary>
 		public static ComputerPref GetForLocalComputer(){

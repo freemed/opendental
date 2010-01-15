@@ -1301,7 +1301,21 @@ namespace OpenDental{
 				ProcedureCodes.ResetADAdescriptions();
 				Prefs.UpdateBool(PrefName.ADAdescriptionsReset,true);
 			}
-			Splash.Dispose();
+			Splash.Dispose();			
+			//Choose a default DirectX format when no DirectX format has been specified and running in DirectX tooth chart mode.
+			ComputerPref localComputerPrefs=ComputerPrefs.GetForLocalComputer();
+			if(localComputerPrefs.GraphicsSimple==DrawingMode.DirectX && localComputerPrefs.DirectXFormat==""){
+				MessageBox.Show(Lan.g(this,"Optimizing tooth chart graphics. This may take a few minutes. You will be notified when the process is complete."));
+				localComputerPrefs.DirectXFormat=FormGraphics.GetPreferredDirectXFormat(this);
+				if(localComputerPrefs.DirectXFormat=="invalid"){
+					//No valid local DirectX format could be found.
+					//Simply revert to OpenGL.
+					localComputerPrefs.GraphicsSimple=DrawingMode.OpenGL;
+				}
+				ComputerPrefs.Update(localComputerPrefs);
+				ContrChart2.InitializeOnStartup();
+				MsgBox.Show(this,"Done optimizing tooth chart graphics.");
+			}
 			if(Security.CurUser==null) {
 				Userod adminUser=Userods.GetAdminUser();
 				if(adminUser.Password=="") {

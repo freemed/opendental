@@ -372,7 +372,8 @@ namespace OpenDental{
 						textSelected.Text=(i+1).ToString();
 					}
 				}
-			}else if(this.radioOpenGLChart.Checked){
+			}
+			else if(this.radioOpenGLChart.Checked){
 				textSelected.Text=selectedFormatNum.ToString();
 				gridFormats.BeginUpdate();
 				gridFormats.Columns.Clear();
@@ -487,27 +488,17 @@ namespace OpenDental{
 
 		///<summary>CAUTION: Runs slowly. May take minutes. Returns the string "invalid" if no suitable Direct X format can be found.</summary>
 		public static string GetPreferredDirectXFormat(Form callingForm) {
-			ToothChartDirectX.DirectXDeviceFormat[] usableFormats=GetAllUsableDirectXFormats(callingForm);
-			if(usableFormats.Length>0) {
-				return usableFormats[0].ToString();
+			ToothChartDirectX.DirectXDeviceFormat[] possibleStandardFormats=ToothChartDirectX.GetStandardDeviceFormats();
+			for(int i=0;i<possibleStandardFormats.Length;i++) {
+				if(TestDirectXFormat(callingForm,possibleStandardFormats[i].ToString())) {
+					return possibleStandardFormats[i].ToString();
+				}
 			}
 			return "invalid";
 		}
 
-		///<summary>CAUTION: Runs slowly, may take minutes, but only returns devices which WILL WORK for a DirectX tooth chart on the local computer.</summary>
-		public static ToothChartDirectX.DirectXDeviceFormat[] GetAllUsableDirectXFormats(Form callingForm) {
-			ToothChartDirectX.DirectXDeviceFormat[] possibleStandardFormats=ToothChartDirectX.GetStandardDeviceFormats();
-			List<ToothChartDirectX.DirectXDeviceFormat> usableFormats=new List<ToothChartDirectX.DirectXDeviceFormat>();
-			for(int i=0;i<possibleStandardFormats.Length;i++) {
-				if(TestDirectXFormat(callingForm,possibleStandardFormats[i].ToString())) {
-					usableFormats.Add(possibleStandardFormats[i]);
-				}
-			}
-			return usableFormats.ToArray();
-		}
-
 		///<summary>Returns true if the given directXFormat works for a DirectX tooth chart on the local computer.</summary>
-		public static bool TestDirectXFormat(Form callingForm,string directXFormat){
+		public static bool TestDirectXFormat(Form callingForm,string directXFormat) {
 			ToothChartWrapper toothChartTest=new ToothChartWrapper();
 			toothChartTest.Visible=false;
 			//We add the invisible tooth chart to our form so that the device context will initialize properly

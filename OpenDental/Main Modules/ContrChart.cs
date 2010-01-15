@@ -3069,6 +3069,9 @@ namespace OpenDental{
 			//Lan.C(this,menuPrimary.MenuItems[1]);
 			//Lan.C(this,menuPrimary.MenuItems[2]);
 			LayoutToolBar();
+			ComputerPref localComputerPrefs=ComputerPrefs.GetForLocalComputer();
+			this.toothChart.DeviceFormat=new ToothChartDirectX.DirectXDeviceFormat(localComputerPrefs.DirectXFormat);
+			this.toothChart.DrawMode=localComputerPrefs.GraphicsSimple;//triggers ResetControls.
 		}
 
 		///<summary>Called every time prefs are changed from any workstation.</summary>

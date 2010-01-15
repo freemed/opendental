@@ -44,6 +44,7 @@ namespace SparksToothChart {
 				if(Environment.OSVersion.Platform==PlatformID.Unix) {
 					return;//disallow changing from simpleMode if platform is Unix
 				}
+				//do not break out if not changing mode.  ContrChart.InitializeOnStartup assumes this code will always run.
 				if(drawMode==DrawingMode.DirectX && value!=DrawingMode.DirectX){
 					//If switching from from DirectX to another drawing mode,
 					//then we need to cleanup DirectX resources in case the 
