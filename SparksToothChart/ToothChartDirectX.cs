@@ -94,19 +94,6 @@ namespace SparksToothChart {
 					pp.EnableAutoDepthStencil=true;
 					pp.ForceNoMultiThreadedFlag=false;
 					pp.MultiSample=maxMultiSampleType;
-					//Can we use 4X anti-aliasing?
-					if(Manager.CheckDeviceMultiSampleType(Manager.Adapters.Default.Adapter,deviceType,
-						pp.BackBufferFormat,true,MultiSampleType.FourSamples)) {
-						pp.MultiSample=MultiSampleType.FourSamples;
-					} //If not, try using 3X antialiasing.
-					else if(Manager.CheckDeviceMultiSampleType(Manager.Adapters.Default.Adapter,deviceType,
-						pp.BackBufferFormat,true,MultiSampleType.ThreeSamples)) {
-						pp.MultiSample=MultiSampleType.ThreeSamples;
-					} //If not, try using 2X antialiasing.
-					else if(Manager.CheckDeviceMultiSampleType(Manager.Adapters.Default.Adapter,deviceType,
-						pp.BackBufferFormat,true,MultiSampleType.TwoSamples)) {
-						pp.MultiSample=MultiSampleType.TwoSamples;
-					}
 					pp.MultiSampleQuality=0;
 					pp.PresentationInterval=PresentInterval.Default;
 					pp.PresentFlag=PresentFlag.None;
@@ -186,11 +173,11 @@ namespace SparksToothChart {
 											format.backBufferFormat=backBufferFormat;
 											format.maxMultiSampleType=MultiSampleType.None;
 											Caps caps=Manager.GetDeviceCaps(adapter.Adapter,deviceType);
-											if(!Manager.CheckDeviceMultiSampleType(adapter.Adapter,deviceType,displayMode.Format,windowed,MultiSampleType.FourSamples)) {
+											if(Manager.CheckDeviceMultiSampleType(adapter.Adapter,deviceType,displayMode.Format,windowed,MultiSampleType.FourSamples)) {
 												format.maxMultiSampleType=MultiSampleType.FourSamples;
-											}else if(!Manager.CheckDeviceMultiSampleType(adapter.Adapter,deviceType,displayMode.Format,windowed,MultiSampleType.ThreeSamples)) {
+											}else if(Manager.CheckDeviceMultiSampleType(adapter.Adapter,deviceType,displayMode.Format,windowed,MultiSampleType.ThreeSamples)) {
 												format.maxMultiSampleType=MultiSampleType.ThreeSamples;
-											}else if(!Manager.CheckDeviceMultiSampleType(adapter.Adapter,deviceType,displayMode.Format,windowed,MultiSampleType.TwoSamples)) {
+											}else if(Manager.CheckDeviceMultiSampleType(adapter.Adapter,deviceType,displayMode.Format,windowed,MultiSampleType.TwoSamples)) {
 												format.maxMultiSampleType=MultiSampleType.TwoSamples;
 											}else{
 												continue;//Do not accept a format which does not support anti-aliasing.

@@ -87,10 +87,10 @@ namespace OpenDental{
 			this.label1=new System.Windows.Forms.Label();
 			this.groupFilters=new System.Windows.Forms.GroupBox();
 			this.checkAllFormats=new System.Windows.Forms.CheckBox();
+			this.gridFormats=new OpenDental.UI.ODGrid();
 			this.radioSimpleChart=new System.Windows.Forms.RadioButton();
 			this.radioOpenGLChart=new System.Windows.Forms.RadioButton();
 			this.radioDirectXChart=new System.Windows.Forms.RadioButton();
-			this.gridFormats=new OpenDental.UI.ODGrid();
 			this.butOK=new OpenDental.UI.Button();
 			this.butCancel=new OpenDental.UI.Button();
 			this.group3DToothChart.SuspendLayout();
@@ -196,6 +196,18 @@ namespace OpenDental{
 			this.checkAllFormats.UseVisualStyleBackColor=true;
 			this.checkAllFormats.Click+=new System.EventHandler(this.checkAllFormats_Click);
 			// 
+			// gridFormats
+			// 
+			this.gridFormats.HScrollVisible=false;
+			this.gridFormats.Location=new System.Drawing.Point(6,226);
+			this.gridFormats.Name="gridFormats";
+			this.gridFormats.ScrollValue=0;
+			this.gridFormats.Size=new System.Drawing.Size(821,223);
+			this.gridFormats.TabIndex=8;
+			this.gridFormats.Title="Available Graphics Formats";
+			this.gridFormats.TranslationName=null;
+			this.gridFormats.CellClick+=new OpenDental.UI.ODGridClickEventHandler(this.gridFormats_CellClick);
+			// 
 			// radioSimpleChart
 			// 
 			this.radioSimpleChart.Location=new System.Drawing.Point(34,36);
@@ -228,18 +240,6 @@ namespace OpenDental{
 			this.radioDirectXChart.Text="Use DirectX Tooth Chart (recommended)";
 			this.radioDirectXChart.UseVisualStyleBackColor=true;
 			this.radioDirectXChart.Click+=new System.EventHandler(this.radioDirectXChart_Click);
-			// 
-			// gridFormats
-			// 
-			this.gridFormats.HScrollVisible=false;
-			this.gridFormats.Location=new System.Drawing.Point(6,226);
-			this.gridFormats.Name="gridFormats";
-			this.gridFormats.ScrollValue=0;
-			this.gridFormats.Size=new System.Drawing.Size(821,223);
-			this.gridFormats.TabIndex=8;
-			this.gridFormats.Title="Available Graphics Formats";
-			this.gridFormats.TranslationName=null;
-			this.gridFormats.CellClick+=new OpenDental.UI.ODGridClickEventHandler(this.gridFormats_CellClick);
 			// 
 			// butOK
 			// 
@@ -485,12 +485,64 @@ namespace OpenDental{
 			}
 		}
 
+		///<summary>CAUTION: Runs slowly. May take minutes. Returns the string "invalid" if no suitable Direct X format can be found.</summary>
+		public static string GetPreferredDirectXFormat(Form callingForm) {
+			ToothChartDirectX.DirectXDeviceFormat[] usableFormats=GetAllUsableDirectXFormats(callingForm);
+			if(usableFormats.Length>0) {
+				return usableFormats[0].ToString();
+			}
+			return "invalid";
+		}
+
+		///<summary>CAUTION: Runs slowly, may take minutes, but only returns devices which WILL WORK for a DirectX tooth chart on the local computer.</summary>
+		public static ToothChartDirectX.DirectXDeviceFormat[] GetAllUsableDirectXFormats(Form callingForm) {
+			ToothChartDirectX.DirectXDeviceFormat[] possibleStandardFormats=ToothChartDirectX.GetStandardDeviceFormats();
+			List<ToothChartDirectX.DirectXDeviceFormat> usableFormats=new List<ToothChartDirectX.DirectXDeviceFormat>();
+			for(int i=0;i<possibleStandardFormats.Length;i++) {
+				if(TestDirectXFormat(callingForm,possibleStandardFormats[i].ToString())) {
+					usableFormats.Add(possibleStandardFormats[i]);
+				}
+			}
+			return usableFormats.ToArray();
+		}
+
+		///<summary>Returns true if the given directXFormat works for a DirectX tooth chart on the local computer.</summary>
+		public static bool TestDirectXFormat(Form callingForm,string directXFormat){
+			ToothChartWrapper toothChartTest=new ToothChartWrapper();
+			toothChartTest.Visible=false;
+			//We add the invisible tooth chart to our form so that the device context will initialize properly
+			//and our device creation test will then be accurate.
+			callingForm.Controls.Add(toothChartTest);
+			toothChartTest.DeviceFormat=new ToothChartDirectX.DirectXDeviceFormat(directXFormat);
+			toothChartTest.DrawMode=DrawingMode.DirectX;//Creates the device.
+			if(toothChartTest.DrawMode==DrawingMode.Simple2D) {
+				//The chart is set back to 2D mode when there is an error initializing.
+				toothChartTest.Dispose();
+				return false;
+			}
+			//Now we check to be sure that one can draw and retrieve a screen shot from a DirectX control
+			//using the specified device format.
+			try {
+				Bitmap screenShot=toothChartTest.GetBitmap();
+				screenShot.Dispose();
+			} catch {
+				toothChartTest.Dispose();
+				return false;
+			}
+			toothChartTest.Dispose();
+			return true;
+		}
+
 		private void butOK_Click(object sender,System.EventArgs e) {
 			ComputerPref computerPref=ComputerPrefs.GetForLocalComputer();
 			if(radioDirectXChart.Checked) {
+				if(!TestDirectXFormat(this,selectedDirectXFormat)){
+					MessageBox.Show(Lan.g(this,"Please choose a different device format, "+
+						"the selected device format will not support the DirectX 3D tooth chart on this computer"));
+					return;
+				}
 				computerPref.GraphicsSimple=DrawingMode.DirectX;
 				computerPref.DirectXFormat=selectedDirectXFormat;
-				//TODO: test DirectX device creation works?
 			}
 			else if(radioSimpleChart.Checked) {
 				computerPref.GraphicsSimple=DrawingMode.Simple2D;
