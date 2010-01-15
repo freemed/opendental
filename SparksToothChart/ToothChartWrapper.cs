@@ -19,6 +19,7 @@ namespace SparksToothChart {
 		private ToothChartOpenGL toothChartOpenGL;
 		private ToothChartDirectX toothChartDirectX;
 		private int preferredPixelFormatNum;
+		private ToothChartDirectX.DirectXDeviceFormat deviceFormat=null;
 		
 		///<summary></summary>
 		[Category("Action"),Description("Occurs when the mouse goes up ending a drawing segment.")]
@@ -164,6 +165,16 @@ namespace SparksToothChart {
 			}
 			set{
 				preferredPixelFormatNum=value;
+			}
+		}
+
+		[Browsable(false)]
+		public ToothChartDirectX.DirectXDeviceFormat DeviceFormat {
+			get {
+				return deviceFormat;
+			}
+			set {
+				deviceFormat=value;
 			}
 		}
 
@@ -353,6 +364,7 @@ namespace SparksToothChart {
 				toothChartDirectX.SuspendLayout();//Might help with the MDA debug error we used to get (if the option wasn't disabled in our compilers).
 				this.Controls.Add(toothChartDirectX);
 				ResetTeeth();
+				toothChartDirectX.deviceFormat=deviceFormat;
 				toothChartDirectX.InitializeGraphics();
 				toothChartDirectX.ResumeLayout();//Might help with the MDA debug error we used to get (if the option wasn't disabled in our compilers).
 			}

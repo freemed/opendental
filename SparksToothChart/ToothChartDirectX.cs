@@ -18,6 +18,7 @@ namespace SparksToothChart {
 		public Device device=null;
 		///<summary>This is a reference to the TcData object that's at the wrapper level.</summary>
 		public ToothChartData TcData;
+		public DirectXDeviceFormat deviceFormat=null;
 		//public bool showPerioLegend=false;
 		private Color specular_color_normal;
 		private Color specular_color_cementum;
@@ -35,62 +36,131 @@ namespace SparksToothChart {
 		//private DateTime frameBeginTime=DateTime.MinValue;
 		//private DateTime frameEndTime=DateTime.MinValue;
 
+		public class DirectXDeviceFormat{
+			public AdapterInformation adapter=null;
+			public DeviceType deviceType=DeviceType.NullReference;
+			public CreateFlags createFlags=CreateFlags.SoftwareVertexProcessing;
+			public DepthFormat depthStencilFormat=DepthFormat.D16;
+			public Format backBufferFormat=Format.R5G6B5;
+			public MultiSampleType maxMultiSampleType=MultiSampleType.None;
+
+			public DirectXDeviceFormat(){
+			}
+
+			///<summary>Inverse of ToString(). String to DirectXDeviceFormat.</summary>
+			public DirectXDeviceFormat(string directXFormat){
+				if(directXFormat.IndexOf(';')<0){
+					//Invalid format.
+					return;
+				}
+				string[] settings=directXFormat.Split(new char[] {';'});
+				adapter=Manager.Adapters[PIn.Int(settings[0])];
+				deviceType=(DeviceType)Enum.Parse(typeof(DeviceType),settings[1]);
+				createFlags=(CreateFlags)PIn.Int(settings[2]);
+				depthStencilFormat=(DepthFormat)Enum.Parse(typeof(DepthFormat),settings[3]);
+				backBufferFormat=(Format)Enum.Parse(typeof(Format),settings[4]);
+				maxMultiSampleType=(MultiSampleType)Enum.Parse(typeof(MultiSampleType),settings[5]);
+			}
+
+			public override string ToString() {
+				return ""+adapter.Adapter+";"+Enum.GetName(typeof(DeviceType),deviceType)+";"+((int)createFlags)+";"+
+					Enum.GetName(typeof(DepthFormat),depthStencilFormat)+";"+Enum.GetName(typeof(Format),backBufferFormat)+";"+
+					Enum.GetName(typeof(MultiSampleType),maxMultiSampleType);
+			}
+
+			public override bool Equals(object obj) {
+				if(obj.GetType()!=typeof(DirectXDeviceFormat)){
+					return false;
+				}
+				DirectXDeviceFormat xformat=(DirectXDeviceFormat)obj;
+				return(xformat.ToString()==this.ToString());
+			}
+
+			public override int GetHashCode() {
+				return base.GetHashCode();
+			}
+
+			public Device CreateDevice(Control control){
+				try {
+					PresentParameters pp=new PresentParameters();
+					pp.AutoDepthStencilFormat=depthStencilFormat;
+					pp.BackBufferCount=1;
+					pp.BackBufferFormat=backBufferFormat;
+					pp.BackBufferHeight=control.Height;
+					pp.BackBufferWidth=control.Width;
+					pp.FullScreenRefreshRateInHz=0;//Must be 0 in windowed mode.
+					pp.DeviceWindow=control;
+					pp.DeviceWindowHandle=control.Handle;
+					pp.EnableAutoDepthStencil=true;
+					pp.ForceNoMultiThreadedFlag=false;
+					pp.MultiSample=maxMultiSampleType;
+					//Can we use 4X anti-aliasing?
+					if(Manager.CheckDeviceMultiSampleType(Manager.Adapters.Default.Adapter,deviceType,
+						pp.BackBufferFormat,true,MultiSampleType.FourSamples)) {
+						pp.MultiSample=MultiSampleType.FourSamples;
+					} //If not, try using 3X antialiasing.
+					else if(Manager.CheckDeviceMultiSampleType(Manager.Adapters.Default.Adapter,deviceType,
+						pp.BackBufferFormat,true,MultiSampleType.ThreeSamples)) {
+						pp.MultiSample=MultiSampleType.ThreeSamples;
+					} //If not, try using 2X antialiasing.
+					else if(Manager.CheckDeviceMultiSampleType(Manager.Adapters.Default.Adapter,deviceType,
+						pp.BackBufferFormat,true,MultiSampleType.TwoSamples)) {
+						pp.MultiSample=MultiSampleType.TwoSamples;
+					}
+					pp.MultiSampleQuality=0;
+					pp.PresentationInterval=PresentInterval.Default;
+					pp.PresentFlag=PresentFlag.None;
+					pp.SwapEffect=SwapEffect.Discard;//Required to be set to discard for anti-aliasing.
+					pp.Windowed=true;//Must be set to true for controls.
+					Device dev=new Device(adapter.Adapter,deviceType,control,createFlags,pp);
+					////This test is not valid here because a draw call will always fail until the device is in
+					////the display state (the control is visible from within a window for instance).
+					//try{
+					//  //Test to ensure that one can actually draw to the created device. If drawing is not permitted,
+					//  //then this device will not be usable for rendering the tooth chart.
+					//  ToothChartDirectX.DrawColoredRectangle(dev,new RectangleF(-10000,-10000,20000,20000),Color.Gray);
+					//}catch{
+					//  dev.Dispose();
+					//  return null;
+					//}
+					return dev;
+				} catch {
+				}
+				return null;
+			}
+
+		}
+
 		public ToothChartDirectX() {
 			InitializeComponent();
 		}
 
-		private Device MakeBasicDevice(DeviceType deviceType){
-			try {
-				PresentParameters pp=new PresentParameters();
-				pp.AutoDepthStencilFormat=DepthFormat.D16;
-				pp.BackBufferCount=1;
-				pp.BackBufferFormat=Format.R5G6B5;
-				pp.BackBufferHeight=this.Height;
-				pp.BackBufferWidth=this.Width;
-				pp.FullScreenRefreshRateInHz=0;//Must be 0 in windowed mode.
-				pp.DeviceWindow=this;
-				pp.DeviceWindowHandle=this.Handle;
-				pp.EnableAutoDepthStencil=true;
-				pp.ForceNoMultiThreadedFlag=false;
-				pp.MultiSample=MultiSampleType.None;
-				//Can we use 4X anti-aliasing?
-				if(Manager.CheckDeviceMultiSampleType(Manager.Adapters.Default.Adapter,deviceType,
-					pp.BackBufferFormat,true,MultiSampleType.FourSamples)) {
-					pp.MultiSample=MultiSampleType.FourSamples;
-				} //If not, try using 3X antialiasing.
-				else if(Manager.CheckDeviceMultiSampleType(Manager.Adapters.Default.Adapter,deviceType,
-					pp.BackBufferFormat,true,MultiSampleType.ThreeSamples)) {
-					pp.MultiSample=MultiSampleType.ThreeSamples;
-				} //If not, try using 2X antialiasing.
-				else if(Manager.CheckDeviceMultiSampleType(Manager.Adapters.Default.Adapter,deviceType,
-					pp.BackBufferFormat,true,MultiSampleType.TwoSamples)) {
-					pp.MultiSample=MultiSampleType.TwoSamples;
-				}
-				pp.MultiSampleQuality=0;
-				pp.PresentationInterval=PresentInterval.Default;
-				pp.PresentFlag=PresentFlag.None;
-				pp.SwapEffect=SwapEffect.Discard;//Required to be set to discard for anti-aliasing.
-				pp.Windowed=true;//Must be set to true for controls.
-				Device basicDevice=new Device(Manager.Adapters.Default.Adapter,deviceType,this,CreateFlags.SoftwareVertexProcessing,pp);
-				return basicDevice;
-			} catch {
-			}
-			return null;
+		public static DirectXDeviceFormat[] GetStandardDeviceFormats(){
+			DeviceType[] deviceTypes=new DeviceType[] { DeviceType.Hardware,DeviceType.Reference };
+			Format[] backBufferFormats=new Format[] { 
+				//16bit formats
+				Format.R5G6B5,Format.A1R5G5B5,Format.X1R5G5B5,
+				//24bit formats
+				Format.R8G8B8,
+				//32bit formats
+				Format.A8R8G8B8,Format.X8R8G8B8,Format.A2R10G10B10,Format.A2B10G10R10,Format.A8B8G8R8,Format.G8R8G8B8,Format.R8G8B8G8,Format.X8B8G8R8,
+				//64bit formats
+				Format.A16B16G16R16,
+			};
+			DepthFormat[] depthFormats=new DepthFormat[] { DepthFormat.D16,DepthFormat.D32,DepthFormat.D24X8,DepthFormat.D15S1,DepthFormat.D24S8,
+				DepthFormat.D24SingleS8,DepthFormat.D24X4S4,DepthFormat.L16};
+			return ToothChartDirectX.GetPossibleDeviceFormats(deviceTypes,backBufferFormats,true,depthFormats);
 		}
 
-		private Device GetAcceptableDevice(DeviceType[] deviceTypes,Format[] backBufferFormats,bool windowed,DepthFormat[] depthStencilFormats){
-			//We first check the sanity of the local graphics card. If we can't even create
-			//a basic software rendering device, then we abort.
-			Device defaultDevice=MakeBasicDevice(DeviceType.Reference);
-			if(defaultDevice==null){
-				return null;//No feasible device found
-			}
-			defaultDevice.Dispose();//Free memory to allow space for a new device.
-			List<Format> acceptableAdapterFormats=new List<Format>();
-			foreach(AdapterInformation adapter in Manager.Adapters) {
-				foreach(DeviceType deviceType in deviceTypes) {
-					foreach(DisplayMode displayMode in adapter.SupportedDisplayModes) {
-						foreach(Format backBufferFormat in backBufferFormats) {
+		private static DirectXDeviceFormat[] GetPossibleDeviceFormats(DeviceType[] deviceTypes,Format[] backBufferFormats,bool windowed,DepthFormat[] depthStencilFormats) {
+			List <DirectXDeviceFormat> possibleFormats=new List<DirectXDeviceFormat> ();
+			for(int a=0;a<Manager.Adapters.Count;a++){
+				AdapterInformation adapter=Manager.Adapters[a];
+				for(int t=0;t<deviceTypes.Length;t++){
+					DeviceType deviceType=deviceTypes[t];
+					for(int b=0;b<backBufferFormats.Length;b++){
+						Format backBufferFormat=backBufferFormats[b];
+						foreach(DisplayMode displayMode in adapter.SupportedDisplayModes) {
 							if(displayMode.Format!=backBufferFormat) {
 								//We require the display buffer to have the same format as the back buffer,
 								//so that we know that a back buffer flip will work.
@@ -108,53 +178,28 @@ namespace SparksToothChart {
 										Usage.DepthStencil,ResourceType.Surface,depthStencilFormat)) {
 										if(Manager.CheckDepthStencilMatch(adapter.Adapter,deviceType,displayMode.Format,
 											displayMode.Format,depthStencilFormat)) {
-											//This depth stencil format is compatible
+											DirectXDeviceFormat format=new DirectXDeviceFormat();
+											format.adapter=adapter;
+											format.deviceType=deviceType;
+											format.createFlags=CreateFlags.SoftwareVertexProcessing;
+											format.depthStencilFormat=depthStencilFormat;
+											format.backBufferFormat=backBufferFormat;
+											format.maxMultiSampleType=MultiSampleType.None;
 											Caps caps=Manager.GetDeviceCaps(adapter.Adapter,deviceType);
-											PresentParameters pp=new PresentParameters();
-											pp.AutoDepthStencilFormat=depthStencilFormat;
-											pp.BackBufferCount=1;
-											pp.BackBufferFormat=displayMode.Format;
-											if(windowed) {
-												pp.BackBufferHeight=this.Height;
-												pp.BackBufferWidth=this.Width;
-												pp.FullScreenRefreshRateInHz=0;//Must be 0 in windowed mode.
-											} else {
-												pp.BackBufferHeight=displayMode.Height;
-												pp.BackBufferWidth=displayMode.Width;
-												pp.FullScreenRefreshRateInHz=displayMode.RefreshRate;
+											if(!Manager.CheckDeviceMultiSampleType(adapter.Adapter,deviceType,displayMode.Format,windowed,MultiSampleType.FourSamples)) {
+												format.maxMultiSampleType=MultiSampleType.FourSamples;
+											}else if(!Manager.CheckDeviceMultiSampleType(adapter.Adapter,deviceType,displayMode.Format,windowed,MultiSampleType.ThreeSamples)) {
+												format.maxMultiSampleType=MultiSampleType.ThreeSamples;
+											}else if(!Manager.CheckDeviceMultiSampleType(adapter.Adapter,deviceType,displayMode.Format,windowed,MultiSampleType.TwoSamples)) {
+												format.maxMultiSampleType=MultiSampleType.TwoSamples;
+											}else{
+												continue;//Do not accept a format which does not support anti-aliasing.
 											}
-											pp.DeviceWindow=this;
-											pp.DeviceWindowHandle=this.Handle;
-											pp.EnableAutoDepthStencil=true;
-											pp.ForceNoMultiThreadedFlag=false;
-											pp.MultiSample=MultiSampleType.FourSamples;//Anti-alias settings
-											pp.MultiSampleQuality=0;
-											pp.PresentationInterval=PresentInterval.Default;
-											pp.PresentFlag=PresentFlag.None;
-											pp.SwapEffect=SwapEffect.Discard;//Required to be set to discard for anti-aliasing.
-											pp.Windowed=windowed;//Must be set to true for controls.
-											//Make certain we can use 4X anti-aliasing.
-											if(!Manager.CheckDeviceMultiSampleType(adapter.Adapter,deviceType,displayMode.Format,windowed,pp.MultiSample)) {
+											if(possibleFormats.IndexOf(format)>-1){
+												//Skip duplicate formats.
 												continue;
 											}
-											CreateFlags createFlags;
-											//This hardware vertex processing check doesn't seem to work. The device gets created, but then
-											//the resulting output to the device is transparent/blank for some reason.
-											//if(caps.DeviceCaps.SupportsHardwareTransformAndLight){
-											//  createFlags=CreateFlags.HardwareVertexProcessing;
-											//}else{
-											createFlags=CreateFlags.SoftwareVertexProcessing;//Software vertex processing should always work.
-											//}
-											//if(caps.DeviceCaps.SupportsPureDevice){
-											//  createFlags|=CreateFlags.PureDevice;
-											//}
-											Device functionalDevice=null;
-											try {
-												functionalDevice=new Device(adapter.Adapter,deviceType,this,createFlags,pp);
-												return functionalDevice;
-											} catch {
-												//Just skip this one and try the next one. 
-											}
+											possibleFormats.Add(format);
 										}
 									}
 								}
@@ -163,51 +208,141 @@ namespace SparksToothChart {
 					}
 				}
 			}
-			return null;//No feasible device found.
+			return possibleFormats.ToArray();
+		}
+
+		///<summary>Returns the number of bits corresponding to the given format. Returns 0 if the format has not yet been accounted for.</summary>
+		public static int GetFormatBitCount(Format format){
+			Format[] eightBitFormats=new Format[]{
+				Format.A4L4,Format.A8,Format.L8,Format.P8,Format.R3G3B2,
+			};
+			Format[] sixteenBitFormats=new Format[]{
+				Format.A1R5G5B5,Format.A4R4G4B4,Format.A8L8,Format.A8P8,Format.A8R3G3B2,Format.D15S1,Format.D16,
+				Format.D16Lockable,Format.L16,Format.L6V5U5,Format.R16F,Format.R5G6B5,Format.V8U8,Format.X1R5G5B5,
+				Format.X4R4G4B4,
+			};
+			Format[] twentyFourBitFormats=new Format[]{
+				Format.R8G8B8,
+			};
+			Format[] thirtyTwoBitFormats=new Format[]{
+				Format.A2B10G10R10,Format.A2R10G10B10,Format.A2W10V10U10,Format.A8B8G8R8,Format.A8R8G8B8,
+				Format.D24S8,Format.D24SingleS8,Format.D24X4S4,Format.D24X8,Format.D32,Format.D32SingleLockable,
+				Format.G16R16,Format.G16R16F,Format.G8R8G8B8,Format.Q8W8V8U8,Format.R32F,Format.R8G8B8G8,Format.V16U16,
+				Format.X8B8G8R8,Format.X8L8V8U8,Format.X8R8G8B8,
+			};
+			Format[] sixtyFourBitFormats=new Format[]{
+				Format.A16B16G16R16,Format.A16B16G16R16F,Format.G32R32F,Format.Q16W16V16U16,
+			};
+			Format[] oneHundredTwentyEightBitFormats=new Format[]{
+				Format.A32B32G32R32F,
+			};
+			for(int i=0;i<eightBitFormats.Length;i++) {
+				if(format==eightBitFormats[i]) {
+					return 8;
+				}
+			}
+			for(int i=0;i<sixteenBitFormats.Length;i++){
+				if(format==sixteenBitFormats[i]){
+					return 16;
+				}
+			}
+			for(int i=0;i<twentyFourBitFormats.Length;i++){
+				if(format==twentyFourBitFormats[i]){
+					return 24;
+				}
+			}
+			for(int i=0;i<thirtyTwoBitFormats.Length;i++){
+				if(format==thirtyTwoBitFormats[i]){
+					return 32;
+				}
+			}
+			for(int i=0;i<sixtyFourBitFormats.Length;i++){
+				if(format==sixtyFourBitFormats[i]){
+					return 64;
+				}
+			}
+			for(int i=0;i<oneHundredTwentyEightBitFormats.Length;i++){
+				if(format==oneHundredTwentyEightBitFormats[i]){
+					return 128;
+				}
+			}
+			//Format has not yet been accounted for.
+			//Format.CxV8U8,Format.Dxt1,Format.Dxt2,Format.Dxt3,Format.Dxt4,Format.Dxt5,Format.Multi2Argb8,
+			//Format.Unknown,Format.Uyvy,Format.VertexData,Format.Yuy2
+			return 0;
+		}
+
+		///<summary>Returns the number of bits represented by the given depth format. Returns 0 if the given depth format is not yet accounted for.</summary>
+		public static int GetDepthFormatBitCount(DepthFormat depthFormat){
+			DepthFormat[] sixteenBitFormats=new DepthFormat[]{
+				DepthFormat.D15S1,DepthFormat.D16,DepthFormat.D16Lockable,DepthFormat.L16,
+			};
+			DepthFormat[] thirtyTwoBitFormats=new DepthFormat[] {
+				DepthFormat.D24S8,DepthFormat.D24SingleS8,DepthFormat.D24X4S4,DepthFormat.D24X8,
+				DepthFormat.D32,DepthFormat.D32SingleLockable,
+			};
+			for(int i=0;i<sixteenBitFormats.Length;i++){
+				if(depthFormat==sixteenBitFormats[i]){
+					return 16;
+				}
+			}
+			for(int i=0;i<thirtyTwoBitFormats.Length;i++){
+				if(depthFormat==thirtyTwoBitFormats[i]){
+					return 32;
+				}
+			}
+			//The specified format it not yet accounted for.
+			//DepthFormat.Unknown
+			return 0;
+		}
+
+		public static int GetMultiSampleNumberForType(MultiSampleType multiSampleType){
+			if(multiSampleType==MultiSampleType.TwoSamples){
+				return 2;
+			}else if(multiSampleType==MultiSampleType.ThreeSamples){
+				return 3;
+			} else if(multiSampleType==MultiSampleType.FourSamples) {
+				return 4;
+			} else if(multiSampleType==MultiSampleType.FiveSamples) {
+				return 5;
+			} else if(multiSampleType==MultiSampleType.SixSamples) {
+				return 6;
+			} else if(multiSampleType==MultiSampleType.SevenSamples) {
+				return 7;
+			} else if(multiSampleType==MultiSampleType.EightSamples) {
+				return 8;
+			} else if(multiSampleType==MultiSampleType.NineSamples) {
+				return 9;
+			} else if(multiSampleType==MultiSampleType.TenSamples) {
+				return 10;
+			} else if(multiSampleType==MultiSampleType.ElevenSamples) {
+				return 11;
+			} else if(multiSampleType==MultiSampleType.TwelveSamples) {
+				return 12;
+			} else if(multiSampleType==MultiSampleType.ThirteenSamples) {
+				return 13;
+			} else if(multiSampleType==MultiSampleType.FourteenSamples) {
+				return 14;
+			} else if(multiSampleType==MultiSampleType.FifteenSamples) {
+				return 15;
+			} else if(multiSampleType==MultiSampleType.SixteenSamples) {
+				return 16;
+			}
+			return 0;
 		}
 
 		///<summary>Must be called after the ToothChartDirectX control has been added to a form and should be called before it is drawn the first time.</summary>
 		public void InitializeGraphics(){
-			//First try and create a basic but fast device. If that fails, then find a device that will work for the local graphics card.
-			device=MakeBasicDevice(DeviceType.Hardware);
-			if(device==null){
-				device=GetAcceptableDevice(
-					//DeviceType.Software is rarely used. DeviceType.NullReference produces a device you cannot draw to.
-					new DeviceType[] { DeviceType.Hardware,DeviceType.Reference },
-					//All display formats listed out in case we want to try them all (for exhaustive tests).
-					//new Format[] { Format.A16B16G16R16, Format.A16B16G16R16F, Format.A1R5G5B5, Format.A2B10G10R10, Format.A2R10G10B10, Format.A2W10V10U10,
-					//    Format.A32B32G32R32F, Format.A4L4, Format.A4R4G4B4, Format.A8,Format.A8B8G8R8,Format.A8L8,Format.A8P8, Format.A8R3G3B2,
-					//    Format.A8R8G8B8,Format.CxV8U8,Format.D15S1,Format.D16,Format.D16Lockable,Format.D24S8,Format.D24SingleS8,Format.D24X4S4,
-					//    Format.D24X8,Format.D32,Format.D32SingleLockable,Format.Dxt1,Format.Dxt2,Format.Dxt3,Format.Dxt4,Format.Dxt5,
-					//    Format.G16R16,Format.G16R16F,Format.G32R32F,Format.G8R8G8B8,Format.L16,Format.L6V5U5,Format.L8,Format.Multi2Argb8,
-					//    Format.P8,Format.Q16W16V16U16,Format.Q8W8V8U8,Format.R16F,Format.R32F,Format.R3G3B2,Format.R5G6B5,Format.R8G8B8,Format.R8G8B8G8,
-					//    Format.Unknown,Format.Uyvy,Format.V16U16,Format.V8U8,Format.VertexData,Format.X1R5G5B5,Format.X4R4G4B4,Format.X8B8G8R8,Format.X8L8V8U8,
-					//    Format.X8R8G8B8,Format.Yuy2 },
-					new Format[] { 
-						//16bit formats
-						Format.R5G6B5,Format.A1R5G5B5,Format.X1R5G5B5,
-						//24bit formats
-						Format.R8G8B8,
-						//32bit formats
-						Format.A8R8G8B8,Format.X8R8G8B8,Format.A2R10G10B10,Format.A2B10G10R10,Format.A8B8G8R8,Format.G8R8G8B8,Format.R8G8B8G8,Format.X8B8G8R8,
-						//64bit formats
-						Format.A16B16G16R16,
-					},
-					true,
-					//All depth formats listed out in case we want to try them all (for exhaustive tests).
-					//new DepthFormat[] { DepthFormat.D15S1,DepthFormat.D16,DepthFormat.D16Lockable,DepthFormat.D24S8,DepthFormat.D24SingleS8,DepthFormat.D24X4S4,
-					//    DepthFormat.D24X8,DepthFormat.D32,DepthFormat.D32SingleLockable,DepthFormat.L16,DepthFormat.Unknown}
-					new DepthFormat[] { DepthFormat.D15S1,DepthFormat.D16,DepthFormat.D32,DepthFormat.D24S8,
-						DepthFormat.D24SingleS8,DepthFormat.D24X4S4,DepthFormat.D24X8,DepthFormat.L16}
-					);
-				if(device==null){
-					throw new Exception("Failed to attain an acceptable DirectX graphics device. Your graphics card may not support DirectX.");
+			if(deviceFormat!=null){
+				device=deviceFormat.CreateDevice(this);
+				if(device==null) {
+					throw new Exception("Failed to create DirectX device.");
 				}
+				device.DeviceReset+=new EventHandler(this.OnDeviceReset);
+				device.DeviceLost+=new EventHandler(this.OnDeviceLost);
+				device.DeviceResizing+=new CancelEventHandler(this.OnDeviceResizing);
+				OnDeviceReset(device,null);
 			}
-			device.DeviceReset+=new EventHandler(this.OnDeviceReset);
-			device.DeviceLost+=new EventHandler(this.OnDeviceLost);
-			device.DeviceResizing+=new CancelEventHandler(this.OnDeviceResizing);
-			OnDeviceReset(device,null);
 		}
 
 		public void SetSize(Size size){
@@ -977,15 +1112,15 @@ namespace SparksToothChart {
 			PrintString("Suppuration",0,-ySpace,0,textColor,xfont);
 			DrawDroplet(18f,-ySpace-1.5f,TcData.ColorSuppuration);
 			PrintString("Probing",0,-2*ySpace,0,textColor,xfont);
-			DrawColoredRectangle(new RectangleF(18f,-2*ySpace-3f,0.6f,3f),TcData.ColorProbing);
-			DrawColoredRectangle(new RectangleF(19f,-2*ySpace-3f,0.6f,3f),TcData.ColorProbingRed);
+			DrawColoredRectangle(device,new RectangleF(18f,-2*ySpace-3f,0.6f,3f),TcData.ColorProbing);
+			DrawColoredRectangle(device,new RectangleF(19f,-2*ySpace-3f,0.6f,3f),TcData.ColorProbingRed);
 			device.Transform.World=device.Transform.World*Matrix.Translation(35f,0,0);
 			PrintString("Gingival Margin",0,0,0,textColor,xfont);
-			DrawColoredRectangle(new RectangleF(35f,-1.5f,15f,2f/TcData.ScaleMmToPix),TcData.ColorGingivalMargin);
+			DrawColoredRectangle(device,new RectangleF(35f,-1.5f,15f,2f/TcData.ScaleMmToPix),TcData.ColorGingivalMargin);
 			PrintString("Clinical Attachment Level",0,-ySpace,0,textColor,xfont);
-			DrawColoredRectangle(new RectangleF(35f,-ySpace-1.5f,15f,2f/TcData.ScaleMmToPix),TcData.ColorCAL);
+			DrawColoredRectangle(device,new RectangleF(35f,-ySpace-1.5f,15f,2f/TcData.ScaleMmToPix),TcData.ColorCAL);
 			PrintString("Mucogingival Junction",0,-2*ySpace,0,textColor,xfont);
-			DrawColoredRectangle(new RectangleF(35f,-2*ySpace-1.5f,15f,2f/TcData.ScaleMmToPix),TcData.ColorMGJ);
+			DrawColoredRectangle(device,new RectangleF(35f,-2*ySpace-1.5f,15f,2f/TcData.ScaleMmToPix),TcData.ColorMGJ);
 			device.Transform.World=device.Transform.World*Matrix.Translation(65f,0,0);
 			Matrix lineMat=ScreenSpaceMatrix();
 			PrintString("Furcation 1",0,0,0,textColor,xfont);
@@ -996,7 +1131,7 @@ namespace SparksToothChart {
 			DrawFurcationTriangle(17f,-2*ySpace-0.5f,false,lineMat,3);
 		}
 		
-		private void DrawColoredRectangle(RectangleF rect,Color color){
+		public static void DrawColoredRectangle(Device dev,RectangleF rect,Color color){
 			VertexBuffer vb=null;
 			IndexBuffer ib=null;
 			try{
@@ -1009,15 +1144,15 @@ namespace SparksToothChart {
 					};
 				vb=new VertexBuffer(typeof(CustomVertex.PositionColored),
 					CustomVertex.PositionColored.StrideSize*quadVerts.Length,
-					device,Usage.WriteOnly,CustomVertex.PositionColored.Format,Pool.Managed);
+					dev,Usage.WriteOnly,CustomVertex.PositionColored.Format,Pool.Managed);
 				vb.SetData(quadVerts,0,LockFlags.None);
 				int[] indicies=new int[] { 0,1,2,0,2,3 };
-				ib=new IndexBuffer(typeof(int),indicies.Length,device,Usage.None,Pool.Managed);
+				ib=new IndexBuffer(typeof(int),indicies.Length,dev,Usage.None,Pool.Managed);
 				ib.SetData(indicies,0,LockFlags.None);
-				device.VertexFormat=CustomVertex.PositionColored.Format;
-				device.SetStreamSource(0,vb,0);
-				device.Indices=ib;
-				device.DrawIndexedPrimitives(PrimitiveType.TriangleList,0,0,quadVerts.Length,0,indicies.Length/3);
+				dev.VertexFormat=CustomVertex.PositionColored.Format;
+				dev.SetStreamSource(0,vb,0);
+				dev.Indices=ib;
+				dev.DrawIndexedPrimitives(PrimitiveType.TriangleList,0,0,quadVerts.Length,0,indicies.Length/3);
 			}finally{
 				if(vb!=null){
 					vb.Dispose();

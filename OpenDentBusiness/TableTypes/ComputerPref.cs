@@ -36,6 +36,11 @@ namespace OpenDentBusiness {
 		public int TaskX;
 		///<summary>Y pos for bottom docked task list.</summary>
 		public int TaskY;
+		///<summary>Holds a semi-colon separated list of enumeration names and values representing a DirectX format. If blank, then
+		///no format is currently set and the best theoretical foramt will be chosen at program startup. If this value is set to
+		///'opengl' then this computer is using OpenGL and a DirectX format will not be picked.</summary>
+		public string DirectXFormat;
+
 
 		public ComputerPref Copy(){
 			return (ComputerPref)MemberwiseClone();

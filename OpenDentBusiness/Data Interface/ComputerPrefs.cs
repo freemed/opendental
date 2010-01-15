@@ -61,6 +61,7 @@ namespace OpenDentBusiness {
 			computerPref.TaskDock=						PIn.Int		(table.Rows[0][12].ToString());
 			computerPref.TaskX=							PIn.Int		(table.Rows[0][13].ToString());
 			computerPref.TaskY=							PIn.Int		(table.Rows[0][14].ToString());
+			computerPref.DirectXFormat=			PIn.String(table.Rows[0][15].ToString());
 			return computerPref;
 		}
 
@@ -90,7 +91,7 @@ namespace OpenDentBusiness {
 				command+="ComputerPrefNum,";
 			}			
 			command+="ComputerName,GraphicsUseHardware,GraphicsSimple,SensorType,SensorPort,SensorExposure,SensorBinned,"
-				+ "GraphicsDoubleBuffering,PreferredPixelFormatNum,AtoZpath,TaskKeepListHidden,TaskDock,TaskX,TaskY) VALUES(";
+				+ "GraphicsDoubleBuffering,PreferredPixelFormatNum,AtoZpath,TaskKeepListHidden,TaskDock,TaskX,TaskY,DirectXFormat) VALUES(";
 			if(PrefC.RandomKeys){
 				command+="'"+POut.Long(computerPref.ComputerPrefNum)+"',";
 			}
@@ -107,7 +108,8 @@ namespace OpenDentBusiness {
 				+"'"+POut.Bool(computerPref.TaskKeepListHidden)+"',"
 				+"'"+POut.Long(computerPref.TaskDock)+"',"
 				+"'"+POut.Long(computerPref.TaskX)+"',"
-				+"'"+POut.Long(computerPref.TaskY)+"')";
+				+"'"+POut.Long(computerPref.TaskY)+"',"
+				+"'"+POut.String(computerPref.DirectXFormat)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -135,7 +137,8 @@ namespace OpenDentBusiness {
 				+"TaskKeepListHidden='"+POut.Bool(computerPref.TaskKeepListHidden)+"',"
 				+"TaskDock='"+POut.Long(computerPref.TaskDock)+"',"
 				+"TaskX='"+POut.Long(computerPref.TaskX)+"',"
-				+"TaskY='"+POut.Long(computerPref.TaskY)+"' "
+				+"TaskY='"+POut.Long(computerPref.TaskY)+"',"
+				+"DirectXFormat='"+POut.String(computerPref.DirectXFormat)+"' "
 				+"WHERE ComputerPrefNum='"+POut.Long(computerPref.ComputerPrefNum)+"'";
 			return Db.NonQ(command);
 		}

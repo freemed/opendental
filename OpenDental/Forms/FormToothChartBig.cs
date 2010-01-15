@@ -104,6 +104,7 @@ namespace OpenDental{
 				toothChart.DrawMode=DrawingMode.Simple2D;
 			}
 			else if(computerPref.GraphicsSimple==DrawingMode.DirectX) {
+				toothChart.DeviceFormat=new ToothChartDirectX.DirectXDeviceFormat(computerPref.DirectXFormat);
 				toothChart.DrawMode=DrawingMode.DirectX;
 			}
 			else{

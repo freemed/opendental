@@ -1697,6 +1697,7 @@ namespace OpenDental{
 				ComputerPref computerPref=ComputerPrefs.GetForLocalComputer();
 				toothChart.UseHardware=computerPref.GraphicsUseHardware;
 				toothChart.PreferredPixelFormatNumber=computerPref.PreferredPixelFormatNum;
+				toothChart.DeviceFormat=new ToothChartDirectX.DirectXDeviceFormat(computerPref.DirectXFormat);
 				//Must be last setting set for preferences, because
 																														//this is the line where the device pixel format is
 																														//recreated.

@@ -1957,6 +1957,17 @@ DROP TABLE IF EXISTS etAck";
 				command="UPDATE preference SET ValueString = '6.9.4.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To6_9_10();
+		}
+
+		private static void To6_9_10() {
+			if(FromVersion<new Version("6.9.10.0")) {
+				string command;
+				command="ALTER TABLE computerpref ADD COLUMN DirectXFormat VARCHAR(255) DEFAULT ''";
+				Db.NonQ(command);
+				command="UPDATE preference SET ValueString = '6.9.10.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
 			To7_0_0();
 		}
 
