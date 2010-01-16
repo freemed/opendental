@@ -508,6 +508,7 @@ namespace OpenDental{
 			toothChartTest.DrawMode=DrawingMode.DirectX;//Creates the device.
 			if(toothChartTest.DrawMode==DrawingMode.Simple2D) {
 				//The chart is set back to 2D mode when there is an error initializing.
+				callingForm.Controls.Remove(toothChartTest);
 				toothChartTest.Dispose();
 				return false;
 			}
@@ -517,9 +518,11 @@ namespace OpenDental{
 				Bitmap screenShot=toothChartTest.GetBitmap();
 				screenShot.Dispose();
 			} catch {
+				callingForm.Controls.Remove(toothChartTest);
 				toothChartTest.Dispose();
 				return false;
 			}
+			callingForm.Controls.Remove(toothChartTest);
 			toothChartTest.Dispose();
 			return true;
 		}

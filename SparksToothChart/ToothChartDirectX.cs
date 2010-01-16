@@ -80,7 +80,7 @@ namespace SparksToothChart {
 				return base.GetHashCode();
 			}
 
-			public Device CreateDevice(Control control){
+			public Device CreateDevice(Control control) {
 				try {
 					PresentParameters pp=new PresentParameters();
 					pp.AutoDepthStencilFormat=depthStencilFormat;
@@ -100,21 +100,12 @@ namespace SparksToothChart {
 					pp.SwapEffect=SwapEffect.Discard;//Required to be set to discard for anti-aliasing.
 					pp.Windowed=true;//Must be set to true for controls.
 					Device dev=new Device(adapter.Adapter,deviceType,control,createFlags,pp);
-					////This test is not valid here because a draw call will always fail until the device is in
-					////the display state (the control is visible from within a window for instance).
-					//try{
-					//  //Test to ensure that one can actually draw to the created device. If drawing is not permitted,
-					//  //then this device will not be usable for rendering the tooth chart.
-					//  ToothChartDirectX.DrawColoredRectangle(dev,new RectangleF(-10000,-10000,20000,20000),Color.Gray);
-					//}catch{
-					//  dev.Dispose();
-					//  return null;
-					//}
 					return dev;
 				} catch {
 				}
 				return null;
 			}
+
 
 		}
 
@@ -139,13 +130,27 @@ namespace SparksToothChart {
 			return ToothChartDirectX.GetPossibleDeviceFormats(deviceTypes,backBufferFormats,true,depthFormats);
 		}
 
+		private static bool IsDeviceMultiSampleOK(AdapterInformation adapter,DeviceType deviceType,DepthFormat depthFormat,
+			Format backbufferFormat,MultiSampleType multisampleType,bool windowed) {
+			int qualityLevels=0;
+			int result=0;
+			//Verify that the render target surface supports the given multisample type
+			if(Manager.CheckDeviceMultiSampleType(adapter.Adapter,deviceType,backbufferFormat,windowed,multisampleType,out result,out qualityLevels)) {
+				//Verify that the depth stencil surface supports the given multisample type
+				if(Manager.CheckDeviceMultiSampleType(adapter.Adapter,deviceType,(Format)depthFormat,windowed,multisampleType,out result,out qualityLevels)) {
+					return (result==((int)ResultCode.Success));
+				}
+			}
+			return false;
+		}
+
 		private static DirectXDeviceFormat[] GetPossibleDeviceFormats(DeviceType[] deviceTypes,Format[] backBufferFormats,bool windowed,DepthFormat[] depthStencilFormats) {
-			List <DirectXDeviceFormat> possibleFormats=new List<DirectXDeviceFormat> ();
-			for(int a=0;a<Manager.Adapters.Count;a++){
+			List<DirectXDeviceFormat> possibleFormats=new List<DirectXDeviceFormat>();
+			for(int a=0;a<Manager.Adapters.Count;a++) {
 				AdapterInformation adapter=Manager.Adapters[a];
-				for(int t=0;t<deviceTypes.Length;t++){
+				for(int t=0;t<deviceTypes.Length;t++) {
 					DeviceType deviceType=deviceTypes[t];
-					for(int b=0;b<backBufferFormats.Length;b++){
+					for(int b=0;b<backBufferFormats.Length;b++) {
 						Format backBufferFormat=backBufferFormats[b];
 						foreach(DisplayMode displayMode in adapter.SupportedDisplayModes) {
 							if(displayMode.Format!=backBufferFormat) {
@@ -172,17 +177,19 @@ namespace SparksToothChart {
 											format.depthStencilFormat=depthStencilFormat;
 											format.backBufferFormat=backBufferFormat;
 											format.maxMultiSampleType=MultiSampleType.None;
-											Caps caps=Manager.GetDeviceCaps(adapter.Adapter,deviceType);
-											if(Manager.CheckDeviceMultiSampleType(adapter.Adapter,deviceType,displayMode.Format,windowed,MultiSampleType.FourSamples)) {
-												format.maxMultiSampleType=MultiSampleType.FourSamples;
-											}else if(Manager.CheckDeviceMultiSampleType(adapter.Adapter,deviceType,displayMode.Format,windowed,MultiSampleType.ThreeSamples)) {
-												format.maxMultiSampleType=MultiSampleType.ThreeSamples;
-											}else if(Manager.CheckDeviceMultiSampleType(adapter.Adapter,deviceType,displayMode.Format,windowed,MultiSampleType.TwoSamples)) {
-												format.maxMultiSampleType=MultiSampleType.TwoSamples;
-											}else{
-												continue;//Do not accept a format which does not support anti-aliasing.
+											//Anti-aliasing/multi-sampling appears to only work on hardware devices.
+											if(deviceType==DeviceType.Hardware) {
+												Caps caps=Manager.GetDeviceCaps(adapter.Adapter,deviceType);
+												//An multisampling/anti-aliasing method must be supported both on the back buffer and with the depth buffer in order for it to be usable.
+												if(IsDeviceMultiSampleOK(adapter,deviceType,depthStencilFormat,backBufferFormat,MultiSampleType.FourSamples,windowed)) {
+													format.maxMultiSampleType=MultiSampleType.FourSamples;
+												} else if(IsDeviceMultiSampleOK(adapter,deviceType,depthStencilFormat,backBufferFormat,MultiSampleType.ThreeSamples,windowed)) {
+													format.maxMultiSampleType=MultiSampleType.ThreeSamples;
+												} else if(IsDeviceMultiSampleOK(adapter,deviceType,depthStencilFormat,backBufferFormat,MultiSampleType.TwoSamples,windowed)) {
+													format.maxMultiSampleType=MultiSampleType.TwoSamples;
+												}
 											}
-											if(possibleFormats.IndexOf(format)>-1){
+											if(possibleFormats.IndexOf(format)>-1) {
 												//Skip duplicate formats.
 												continue;
 											}
