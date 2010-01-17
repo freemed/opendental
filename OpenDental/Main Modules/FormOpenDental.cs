@@ -3059,6 +3059,7 @@ namespace OpenDental{
 			Cursor=Cursors.Default;
 			if(fg.DialogResult==DialogResult.OK) {
 				ContrChart2.InitializeLocalData();
+				RefreshCurrentModule();
 			}
 		}
 
