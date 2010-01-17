@@ -264,13 +264,19 @@ namespace OpenDental{
 		}
 
 		private void textTimeDisplayed_Validating(object sender, System.ComponentModel.CancelEventArgs e) {
+			DateTime timeDisplayed=DateTime.Now;
 			try{
-				ClockEventCur.TimeDisplayed=DateTime.Parse(textTimeDisplayed.Text);
+				timeDisplayed=DateTime.Parse(textTimeDisplayed.Text);
 			}
 			catch{
 				MessageBox.Show(Lan.g(this,"Please enter a valid date and time."));
 				e.Cancel=true;
 			}
+			if(timeDisplayed.Date > DateTime.Today) {
+				MessageBox.Show(Lan.g(this,"Date cannot be a future date."));
+				e.Cancel=true;
+			}
+			ClockEventCur.TimeDisplayed=timeDisplayed;
 		}
 
 		private void butDelete_Click(object sender, System.EventArgs e) {
