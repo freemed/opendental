@@ -69,7 +69,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(618,330);
+			this.butCancel.Location = new System.Drawing.Point(686,330);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(76,24);
 			this.butCancel.TabIndex = 6;
@@ -84,7 +84,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(618,294);
+			this.butOK.Location = new System.Drawing.Point(686,294);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(76,24);
 			this.butOK.TabIndex = 5;
@@ -93,7 +93,8 @@ namespace OpenDental{
 			// 
 			// labelRelat
 			// 
-			this.labelRelat.Location = new System.Drawing.Point(512,16);
+			this.labelRelat.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.labelRelat.Location = new System.Drawing.Point(580,16);
 			this.labelRelat.Name = "labelRelat";
 			this.labelRelat.Size = new System.Drawing.Size(206,20);
 			this.labelRelat.TabIndex = 8;
@@ -101,7 +102,8 @@ namespace OpenDental{
 			// 
 			// listRelat
 			// 
-			this.listRelat.Location = new System.Drawing.Point(514,38);
+			this.listRelat.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.listRelat.Location = new System.Drawing.Point(582,38);
 			this.listRelat.Name = "listRelat";
 			this.listRelat.Size = new System.Drawing.Size(180,186);
 			this.listRelat.TabIndex = 9;
@@ -112,7 +114,7 @@ namespace OpenDental{
 			this.gridMain.Location = new System.Drawing.Point(22,38);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(459,186);
+			this.gridMain.Size = new System.Drawing.Size(527,186);
 			this.gridMain.TabIndex = 10;
 			this.gridMain.Title = "Insurance Plans for Family";
 			this.gridMain.TranslationName = "TableInsPlans";
@@ -121,7 +123,7 @@ namespace OpenDental{
 			// butNone
 			// 
 			this.butNone.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butNone.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butNone.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.butNone.Autosize = true;
 			this.butNone.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butNone.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
@@ -138,7 +140,7 @@ namespace OpenDental{
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
-			this.ClientSize = new System.Drawing.Size(724,374);
+			this.ClientSize = new System.Drawing.Size(792,374);
 			this.Controls.Add(this.butNone);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.listRelat);
@@ -178,8 +180,9 @@ namespace OpenDental{
 		private void FillPlanData(){
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g("TableInsPlans","#"),20);
-			gridMain.Columns.Add(col);
+			ODGridColumn col;
+			//col=new ODGridColumn(Lan.g("TableInsPlans","#"),20);
+			//gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableInsPlans","Subscriber"),140);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableInsPlans","Ins Carrier"),100);
@@ -188,21 +191,28 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableInsPlans","Date Term."),90);
 			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableInsPlans","Used By"),90);
+			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
+			PatPlan[] patPlanArray;
 			for(int i=0;i<PlanList.Count;i++) {
 				row=new ODGridRow();
-				row.Cells.Add((i+1).ToString());
+				//row.Cells.Add((i+1).ToString());
 				row.Cells.Add(FamCur.GetNameInFamLF(PlanList[i].Subscriber));
 				row.Cells.Add(Carriers.GetName(PlanList[i].CarrierNum));
 				if(PlanList[i].DateEffective.Year<1880)
 					row.Cells.Add("");
 				else
 					row.Cells.Add(PlanList[i].DateEffective.ToString("d"));
-				if(PlanList[i].DateTerm.Year<1880)
+				if(PlanList[i].DateTerm.Year<1880) {
 					row.Cells.Add("");
-				else
+				}
+				else {
 					row.Cells.Add(PlanList[i].DateTerm.ToString("d"));
+				}
+				patPlanArray=PatPlans.GetByPlanNum(PlanList[i].PlanNum);
+				row.Cells.Add(patPlanArray.Length.ToString());
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();

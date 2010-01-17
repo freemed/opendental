@@ -96,7 +96,7 @@ namespace OpenDental{
 			// 
 			this.listPlans.Location = new System.Drawing.Point(24,21);
 			this.listPlans.Name = "listPlans";
-			this.listPlans.Size = new System.Drawing.Size(271,134);
+			this.listPlans.Size = new System.Drawing.Size(368,160);
 			this.listPlans.TabIndex = 2;
 			this.listPlans.DoubleClick += new System.EventHandler(this.listPlans_DoubleClick);
 			// 
@@ -138,8 +138,24 @@ namespace OpenDental{
 
 		private void FormInsSelectSubscr_Load(object sender, System.EventArgs e) {
 			PlanList=InsPlans.GetListForSubscriber(Subscriber);
+			PatPlan[] patPlanArray;
+			string str;
+			InsPlan plan;
 			for(int i=0;i<PlanList.Count;i++){
-				listPlans.Items.Add(InsPlans.GetCarrierName(PlanList[i].PlanNum,PlanList));
+				plan=InsPlans.GetPlan(PlanList[i].PlanNum,PlanList);
+				if(plan==null){
+					listPlans.Items.Add("invalid plan");
+					continue;
+				}
+				str=InsPlans.GetCarrierName(PlanList[i].PlanNum,PlanList);
+				if(plan.GroupNum!="") {
+					str+=Lan.g(this," group:")+plan.GroupNum;
+				}
+				patPlanArray=PatPlans.GetByPlanNum(PlanList[i].PlanNum);
+				if(patPlanArray.Length==0) {
+					str+=" "+Lan.g(this,"(not in use)");
+				}
+				listPlans.Items.Add(str);
 			}
 		}
 

@@ -218,7 +218,7 @@ namespace OpenDentBusiness{
 			return PIn.Long(Db.GetScalar(command));
 		}
 
-		///<summary>Gets directly from database.  Used by Trojan.</summary>
+		///<summary>Gets directly from database.  Used by Trojan. Also used in a few loops where it shouldn't be.  It will be faster to replace this with a single query instead of those loops.</summary>
 		public static PatPlan[] GetByPlanNum(long planNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<PatPlan[]>(MethodBase.GetCurrentMethod(),planNum);

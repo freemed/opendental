@@ -69,7 +69,7 @@ namespace OpenDental{
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(418,249);
+			this.butClose.Location = new System.Drawing.Point(475,252);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75,26);
 			this.butClose.TabIndex = 0;
@@ -82,7 +82,7 @@ namespace OpenDental{
 			this.gridMain.Location = new System.Drawing.Point(34,57);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(459,150);
+			this.gridMain.Size = new System.Drawing.Size(516,157);
 			this.gridMain.TabIndex = 1;
 			this.gridMain.Title = "Insurance Plans for Family";
 			this.gridMain.TranslationName = "TableInsPlans";
@@ -101,7 +101,7 @@ namespace OpenDental{
 			// FormPlansForFamily
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(545,300);
+			this.ClientSize = new System.Drawing.Size(585,300);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.butClose);
@@ -126,8 +126,9 @@ namespace OpenDental{
 			PlanList=InsPlans.Refresh(FamCur);
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g("TableInsPlans","#"),20);
-			gridMain.Columns.Add(col);
+			ODGridColumn col;
+			//=new ODGridColumn(Lan.g("TableInsPlans","#"),20);
+			//gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableInsPlans","Subscriber"),140);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableInsPlans","Ins Carrier"),100);
@@ -136,21 +137,28 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableInsPlans","Date Term."),90);
 			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableInsPlans","Used By"),90);
+			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
+			PatPlan[] patPlanArray;
 			for(int i=0;i<PlanList.Count;i++){
 				row=new ODGridRow();
-				row.Cells.Add((i+1).ToString());
+				//row.Cells.Add((i+1).ToString());
 				row.Cells.Add(FamCur.GetNameInFamLF(PlanList[i].Subscriber));
 				row.Cells.Add(Carriers.GetName(PlanList[i].CarrierNum));
 				if(PlanList[i].DateEffective.Year<1880)
 					row.Cells.Add("");
 				else
 					row.Cells.Add(PlanList[i].DateEffective.ToString("d"));
-				if(PlanList[i].DateTerm.Year<1880)
+				if(PlanList[i].DateTerm.Year<1880) {
 					row.Cells.Add("");
-				else
+				}
+				else {
 					row.Cells.Add(PlanList[i].DateTerm.ToString("d"));
+				}
+				patPlanArray=PatPlans.GetByPlanNum(PlanList[i].PlanNum);
+				row.Cells.Add(patPlanArray.Length.ToString());
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
