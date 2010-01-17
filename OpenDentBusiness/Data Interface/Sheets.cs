@@ -204,7 +204,10 @@ namespace OpenDentBusiness{
 			}
 			//document---------------------------------------------------------------------------------------
 			command="SELECT DateCreated,DocCategory,DocNum,Note "
-				+"FROM document WHERE PatNum ="+POut.Long(patNum)
+				+"FROM document,definition "
+				+"WHERE document.DocCategory=definition.DefNum"
+				+" AND PatNum ="+POut.Long(patNum)
+				+" AND definition.ItemValue LIKE '%F%'"
 				+" ORDER BY DateCreated";
 			DataTable rawDoc=Db.GetTable(command);
 			long docCat;

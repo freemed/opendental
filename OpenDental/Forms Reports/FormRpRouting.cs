@@ -25,8 +25,8 @@ namespace OpenDental
 		private OpenDental.UI.Button butOK;
 		private OpenDental.UI.Button butDisplayed;
 		private OpenDental.UI.Button butToday;
-		///<summary>This list of appointments gets filled.  Each appointment will result in one page when printing.</summary>
-		private Appointment[] Appts;
+		//<summary>This list of appointments gets filled.  Each appointment will result in one page when printing.</summary>
+		//private List<Appointment> Appts;
 		private int pagesPrinted;
 		private PrintDocument pd;
 		private OpenDental.UI.PrintPreview printPreview;
@@ -218,11 +218,20 @@ namespace OpenDental
 
 		private void FormRpRouting_Load(object sender, System.EventArgs e){
 			if(ApptNum!=0){
-				Appts=new Appointment[] {Appointments.GetOneApt(ApptNum)};
-				if(Appts.Length==0 || Appts[0]==null) {
+				/*
+				List<Appointment> Appts=new List<Appointment>();
+				Appts.Add(Appointments.GetOneApt(ApptNum));
+				if(Appts.Count==0 || Appts[0]==null) {
 					MsgBox.Show(this,"Appointment not found");
 					return;
 				}
+				PrintOneRoutingSlip(Appts[0]);
+				DialogResult=DialogResult.OK;
+				return;
+				 */
+				  
+				  
+				/*
 				pagesPrinted=0;
 				pd=new PrintDocument();
 				pd.PrintPage+=new PrintPageEventHandler(this.pd_PrintPage);
@@ -230,7 +239,7 @@ namespace OpenDental
 				pd.DefaultPageSettings.Margins=new Margins(0,0,0,0);
 				printPreview=new OpenDental.UI.PrintPreview(PrintSituation.Default,pd,Appts.Length);
 				printPreview.ShowDialog();
-				DialogResult=DialogResult.OK;
+				DialogResult=DialogResult.OK;*/
 			}
 			for(int i=0;i<ProviderC.List.Length;i++){
 				listProv.Items.Add(ProviderC.List[i].GetLongDesc());
@@ -272,11 +281,15 @@ namespace OpenDental
 			for(int i=0;i<listProv.SelectedIndices.Count;i++) {
 				provNums.Add(ProviderC.List[listProv.SelectedIndices[i]].ProvNum);
 			}
-			Appts=Appointments.GetRouting(date,provNums);
-			if(Appts.Length==0){
-				MsgBox.Show(this,"There are no appointments scheduled for that date.");
-				return;
-			}
+			List<long> aptNums=Appointments.GetRouting(date,provNums);
+			//if(Appts.Count==0){
+			//	MsgBox.Show(this,"There are no appointments scheduled for that date.");
+			//	return;
+			//}
+			
+
+
+			/*
 			pagesPrinted=0;
 			pd=new PrintDocument();
 			pd.PrintPage+=new PrintPageEventHandler(this.pd_PrintPage);
@@ -286,7 +299,7 @@ namespace OpenDental
 			printPreview.ShowDialog();
 			if(printPreview.DialogResult!=DialogResult.OK){
 				return;
-			}
+			}*/
 			DialogResult=DialogResult.OK;
 		}
 
@@ -294,8 +307,39 @@ namespace OpenDental
 			DialogResult=DialogResult.Cancel;
 		}
 
+		private void PrintRoutingSlips(List<long> aptNums) {
+			SheetDef sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.RoutingSlip);
+			List<Sheet> sheetBatch=SheetUtil.CreateBatch(sheetDef,aptNums);
+			try {
+				SheetPrinting.PrintBatch(sheetBatch);
+			}
+			catch(Exception ex) {
+				MessageBox.Show(ex.Message);
+			}
+			/*
+			SheetDef sheetDef;
+			List<SheetDef> customSheetDefs=SheetDefs.GetCustomForType(SheetTypeEnum.LabelAppointment);
+			if(customSheetDefs.Count==0) {
+				sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.LabelAppointment);
+			}
+			else {
+				sheetDef=customSheetDefs[0];
+				SheetDefs.GetFieldsAndParameters(sheetDef);
+			}
+			Sheet sheet=SheetUtil.CreateSheet(sheetDef);
+			SheetParameter.SetParameter(sheet,"AptNum",aptNum);
+			SheetFiller.FillFields(sheet);
+			try {
+				SheetPrinting.Print(sheet);
+			}
+			catch(Exception ex) {
+				MessageBox.Show(ex.Message);
+			}*/
+		}
+
 		///<summary>raised for each page to be printed.  One page per appointment.</summary>
 		private void pd_PrintPage(object sender,PrintPageEventArgs ev) {
+			/*
 			if(ApptNum!=0) {//just for one appointment
 				date=AppointmentL.DateSelected;
 			}
@@ -539,9 +583,9 @@ namespace OpenDental
 				ev.HasMorePages=false;
 				pagesPrinted=0;
 			}
-			else {
+			else {*/
 				ev.HasMorePages=true;
-			}
+			//}
 		}
 
 

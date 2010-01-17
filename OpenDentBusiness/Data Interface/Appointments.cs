@@ -188,13 +188,13 @@ namespace OpenDentBusiness{
 			return TableToObjects(table);
 		}
 
-		///<summary>Gets a list of appointments for one day in the schedule for a given set of providers.</summary>
-		public static Appointment[] GetRouting(DateTime date,List<long> provNums) {
+		///<summary>Gets a list of aptNums for one day in the schedule for a given set of providers.</summary>
+		public static List<long> GetRouting(DateTime date,List<long> provNums) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<Appointment[]>(MethodBase.GetCurrentMethod(),date,provNums);
+				return Meth.GetObject<List<long>>(MethodBase.GetCurrentMethod(),date,provNums);
 			}
 			string command=
-				"SELECT * FROM appointment "
+				"SELECT AptNum FROM appointment "
 				+"WHERE AptDateTime LIKE '"+POut.Date(date,false)+"%' "
 				+"AND aptstatus != '"+(int)ApptStatus.UnschedList+"' "
 				+"AND aptstatus != '"+(int)ApptStatus.Planned+"' "
@@ -208,7 +208,12 @@ namespace OpenDentBusiness{
 			}
 			command+=") ORDER BY AptDateTime";
 			DataTable table=Db.GetTable(command);
-			return TableToObjects(table).ToArray();
+			List<long> retVal=new List<long>();
+			for(int i=0;i<table.Rows.Count;i++) {
+				retVal.Add(PIn.Long(table.Rows[i][0].ToString()));
+			}
+			return retVal;
+			//return TableToObjects(table).ToArray();
 		}
 
 		public static List<Appointment> GetUAppoint(DateTime changedSince,DateTime excludeOlderThan){
