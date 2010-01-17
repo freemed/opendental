@@ -79,10 +79,17 @@ namespace OpenDental.Bridges{
 		///<summary>Guaranteed to always return a valid foldername unless major error or user chooses to exit.  This also saves the TrophyFolder value to this patient in the db and creates the new folder.</summary>
 		private static string AutomaticallyGetTrophyFolderNumbered(Patient pat,string storagePath) {
 			string retVal="";
-			string folderDesired=pat.PatNum.ToString().PadLeft(6,'0');
+			string folderDesired=pat.PatNum.ToString();//.PadLeft(6,'0');
 			DirectoryInfo dirInfo=new DirectoryInfo(storagePath);
 			DirectoryInfo[] dirArray=dirInfo.GetDirectories(folderDesired,SearchOption.AllDirectories);
-			if(dirArray.Length==0) {//Create a folder using the numbering convention
+			List<DirectoryInfo> dirList=new List<DirectoryInfo>();
+			for(int i=0;i<dirArray.Length;i++) {
+				if(dirArray[i].Parent.FullName.TrimEnd('\\')==storagePath.TrimEnd('\\')){//filter out any that are directly in the AtoZ folder
+					continue;
+				}
+				dirList.Add(dirArray[i]);
+			}
+			if(dirList.Count==0) {//Create a folder using the numbering convention
 				retVal=ODFileUtils.CombinePaths(folderDesired.Substring(4,2),folderDesired);
 				string fullPath=ODFileUtils.CombinePaths(storagePath,retVal);
 				if(!Directory.Exists(fullPath)) {
@@ -95,10 +102,10 @@ namespace OpenDental.Bridges{
 				}
 			}
 			else {//use the found folder
-				if(storagePath != dirArray[0].FullName.Substring(0,storagePath.Length)) {
-					throw new ApplicationException("storagePath variable ("+storagePath+") does not match dirArray value ("+dirArray[0].FullName.Substring(0,storagePath.Length)+")");
+				if(storagePath != dirList[0].FullName.Substring(0,storagePath.Length)) {
+					throw new ApplicationException("storagePath variable ("+storagePath+") does not match dirList value ("+dirList[0].FullName.Substring(0,storagePath.Length)+")");
 				}
-				retVal=dirArray[0].FullName.Substring(storagePath.Length);
+				retVal=dirList[0].FullName.Substring(storagePath.Length);
 				retVal=retVal.TrimStart('\\');
 			}
 			Patient PatOld=pat.Copy();
