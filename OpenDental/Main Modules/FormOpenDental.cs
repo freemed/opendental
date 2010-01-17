@@ -1387,6 +1387,13 @@ namespace OpenDental{
 			if(!PrefL.CheckMySqlVersion41()){
 				return false;
 			}
+			try {
+				MiscData.SetSqlMode();
+			}
+			catch {
+				MessageBox.Show("Unable to set global sql mode.  User probably does not have enough permission.");
+				return false;
+			}
 			string updateComputerName=PrefC.GetStringSilent(PrefName.UpdateInProgressOnComputerName);
 			if(updateComputerName != "" && Environment.MachineName != updateComputerName) {
 				DialogResult result=MessageBox.Show("An update is in progress on "+updateComputerName+".  Not allowed to start up until that update is complete.\r\n\r\nIf you are the person who started the update and you wish to override this message because an update is not in progress, click Retry.\r\n\r\nDo not click Retry unless you started the update.",

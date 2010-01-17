@@ -153,6 +153,14 @@ namespace OpenDentBusiness {
 			}
 		}
 
+		public static void SetSqlMode() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod());
+				return;
+			}
+			string command="SET GLOBAL sql_mode=''";//in case user did not use our my.ini file.
+			Db.NonQ(command);
+		}
 
 	}
 
