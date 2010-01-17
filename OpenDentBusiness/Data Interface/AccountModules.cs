@@ -554,7 +554,8 @@ namespace OpenDentBusiness {
 				+"(SELECT SUM(InsPayAmt) FROM claimproc cp5 WHERE procedurelog.ProcNum=cp5.ProcNum "
 				+"AND cp5.PatNum IN ("+familyPatNums+")) insPayAmt_,"
 				+"(SELECT SUM(InsPayEst) FROM claimproc cp4 WHERE procedurelog.ProcNum=cp4.ProcNum "
-				+"AND InsPayAmt=0 AND cp4.PatNum IN ("+familyPatNums+")) insPayEst_,"
+				//+"AND InsPayAmt=0 AND cp4.PatNum IN ("+familyPatNums+")) insPayEst_,"
+				+"AND cp4.Status=0 AND cp4.PatNum IN ("+familyPatNums+")) insPayEst_,"//only include estimates for pending claims
 				+"LaymanTerm,procedurelog.MedicalCode,MAX(cp1.NoBillIns) noBillIns_,procedurelog.PatNum,"
 				+"(SELECT SUM(paysplit.SplitAmt) FROM paysplit WHERE procedurelog.ProcNum=paysplit.ProcNum "
 				+"AND paysplit.PatNum IN ("+familyPatNums+")) patPay_,"
