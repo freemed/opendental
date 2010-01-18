@@ -101,16 +101,14 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Schedule>>(MethodBase.GetCurrentMethod(),changedSince);
 			}
-			string command="SELECT * FROM schedule WHERE DateTStamp > "+POut.DateT(changedSince)
+			string command="SELECT * schedule WHERE DateTStamp > "+POut.DateT(changedSince)
 				+" AND SchedType="+POut.Long((int)ScheduleType.Provider);
 			return RefreshAndFill(command);
 		}
 
+		///<summary>This is only allowed because it's PRIVATE.</summary>
 		private static List<Schedule> RefreshAndFill(string command) {
 			//Not a typical refreshandfill, as it contains a query.
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<Schedule>>(MethodBase.GetCurrentMethod(),command);
-			}
 			//The GROUP_CONCAT() function returns a comma separated list of items.
 			//In this case, the ops column is filled with a comma separated list of
 			//operatories for the corresponding schedule record.
@@ -187,7 +185,7 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		///<summary>This should not be used from outside this class unless proper validation is written similar to InsertOrUpdate.  It's currently used a lot for copy/paste situations, where most of the validation is not needed.</summary>
+		///<summary>This should not be used from outside this class unless proper validation is written similar to InsertOrUpdate.</summary>
 		public static long Insert(Schedule sched){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				sched.ScheduleNum=Meth.GetLong(MethodBase.GetCurrentMethod(),sched);
@@ -232,7 +230,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void InsertOrUpdate(Schedule sched, bool isNew){
+		public static void InsertOrUpdate(Schedule sched,bool isNew,bool failSilently){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),sched,isNew);
 				return;
@@ -246,6 +244,9 @@ namespace OpenDentBusiness{
 				throw new Exception(Lans.g("Schedule","Stop time cannot be the same as the start time."));
 			}
 			if(Overlaps(sched)){
+				if(failSilently) {//used in blockout pasting
+					return;
+				}
 				throw new Exception(Lans.g("Schedule","Cannot overlap another time block."));
 			}
 			if(isNew){
@@ -417,19 +418,16 @@ namespace OpenDentBusiness{
 			//return 0;//none
 		}
 
-		///<summary>Clears all blockouts for day.  But then defaults would show.  So adds a "closed" blockout.</summary>
+		///<summary>Clears all blockouts for day.</summary>
 		public static void ClearBlockoutsForDay(DateTime date){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),date);
 				return;
 			}
-			//SetAllDefault(date,ScheduleType.Blockout,0);
 			string command="DELETE from schedule WHERE "
 				+"SchedDate="    +POut.Date(date)+" "
 				+"AND SchedType='"+POut.Long((int)ScheduleType.Blockout)+"' ";
-				//+"AND ProvNum='"  +POut.PInt(provNum)+"'";
 			Db.NonQ(command);
-			//CheckIfDeletedLastBlockout(date);
 		}
 
 		public static bool DateIsHoliday(DateTime date){

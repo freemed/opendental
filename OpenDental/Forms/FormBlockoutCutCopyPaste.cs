@@ -349,6 +349,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Not allowed to paste back onto the same date as is on the clipboard.");
 				return;
 			}
+			Cursor=Cursors.WaitCursor;
 			List<long> opNums=ApptViewItems.GetOpsForView(ApptViewNumCur);
 			List<Schedule> SchedList=Schedules.RefreshPeriodBlockouts(DateCopyStart,DateCopyEnd,opNums);
 			if(checkReplace.Checked) {
@@ -368,8 +369,9 @@ namespace OpenDental{
 				else {
 					sched.SchedDate=dateSelectedStart;
 				}
-				Schedules.Insert(sched);
+				Schedules.InsertOrUpdate(sched,true,true);//Doing it this way makes use of validation to prevent overlaps
 			}
+			Cursor=Cursors.Default;
 			Close();
 		}
 
@@ -403,6 +405,7 @@ namespace OpenDental{
 				dateSelectedStart=DateSelected;
 				dateSelectedEnd=DateSelected;
 			}
+			Cursor=Cursors.WaitCursor;
 			//it is allowed to paste back over the same day or week.
 			List<long> opNums=ApptViewItems.GetOpsForView(ApptViewNumCur);
 			List<Schedule> SchedList=Schedules.RefreshPeriodBlockouts(DateCopyStart,DateCopyEnd,opNums);
@@ -432,7 +435,7 @@ namespace OpenDental{
 					else {
 						sched.SchedDate=dateSelectedStart.AddDays(dayDelta);
 					}
-					Schedules.Insert(sched);
+					Schedules.InsertOrUpdate(sched,true,true);
 				}
 				if(!checkWeekend.Checked && dateSelectedStart.AddDays(dayDelta).DayOfWeek==DayOfWeek.Friday) {
 					dayDelta+=3;
@@ -441,6 +444,7 @@ namespace OpenDental{
 					dayDelta++;
 				}
 			}
+			Cursor=Cursors.Default;
 			Close();
 		}
 

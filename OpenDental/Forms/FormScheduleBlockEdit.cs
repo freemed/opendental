@@ -305,7 +305,7 @@ namespace OpenDental{
 				SchedCur.Ops.Add(OperatoryC.ListShort[listOp.SelectedIndices[i]].OperatoryNum);
 			}
 			try{
-				Schedules.InsertOrUpdate(SchedCur,IsNew);
+				Schedules.InsertOrUpdate(SchedCur,IsNew,false);
 			}
 			catch(Exception ex){
 				MessageBox.Show(ex.Message);

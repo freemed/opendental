@@ -159,6 +159,8 @@ namespace OpenDentBusiness {
 				return;
 			}
 			string command="SET GLOBAL sql_mode=''";//in case user did not use our my.ini file.
+			//A slightly more elegant approach could require less user permissions.  It could first check SELECT @@GLOBAL.sql_mode, 
+			//and then only attempt to set if it was not blank already.
 			Db.NonQ(command);
 		}
 
