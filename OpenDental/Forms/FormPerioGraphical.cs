@@ -10,6 +10,7 @@ using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
 using CodeBase;
+using SparksToothChart;
 
 namespace OpenDental {
 	public partial class FormPerioGraphical:Form {
@@ -21,6 +22,8 @@ namespace OpenDental {
 			PerioExamCur=perioExam;
 			PatCur=patient;
 			InitializeComponent();
+			ComputerPref localComputerPrefs=ComputerPrefs.GetForLocalComputer();
+			toothChart.DeviceFormat=new ToothChartDirectX.DirectXDeviceFormat(localComputerPrefs.DirectXFormat);//Must be set before draw mode
 			toothChart.DrawMode=DrawingMode.DirectX;
 			toothChart.ColorBackground=Color.White;
 			toothChart.ColorText=Color.Black;
