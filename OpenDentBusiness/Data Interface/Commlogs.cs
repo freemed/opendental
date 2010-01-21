@@ -182,6 +182,28 @@ namespace OpenDentBusiness{
 			return 0;
 		}
 
+		public static int GetRecallUndoCount(DateTime date) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetInt(MethodBase.GetCurrentMethod(),date);
+			}
+			string command="SELECT COUNT(*) FROM commlog "
+				+"WHERE DATE(CommDateTime) = "+POut.Date(date)+" "
+				+"AND (SELECT ItemValue FROM definition WHERE definition.DefNum=commlog.CommType) ='"+CommItemTypeAuto.RECALL.ToString()+"'";
+			return PIn.Int(Db.GetScalar(command));
+		}
+
+		
+		public static void RecallUndo(DateTime date) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),date);
+				return;
+			}
+			string command="DELETE FROM commlog "
+				+"WHERE DATE(CommDateTime) = "+POut.Date(date)+" "
+				+"AND (SELECT ItemValue FROM definition WHERE definition.DefNum=commlog.CommType) ='"+CommItemTypeAuto.RECALL.ToString()+"'";
+			Db.NonQ(command);
+		}
+
 	}
 
 	///<summary></summary>

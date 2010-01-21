@@ -69,6 +69,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butCommlog;
 		private MenuItem menuItemSeeFamily;
 		private OpenDental.UI.Button butGotoFamily;
+		private OpenDental.UI.Button butUndo;
 		private MenuItem menuItemSeeAccount;
 		//<summary>Only used if PinClicked=true</summary>
 		//public List<long> AptNumsSelected;
@@ -131,11 +132,12 @@ namespace OpenDental{
 			this.labelPatientCount = new System.Windows.Forms.Label();
 			this.butLabelOne = new OpenDental.UI.Button();
 			this.menuRightClick = new System.Windows.Forms.ContextMenu();
-			this.menuItemSeeAccount = new System.Windows.Forms.MenuItem();
 			this.menuItemSeeFamily = new System.Windows.Forms.MenuItem();
+			this.menuItemSeeAccount = new System.Windows.Forms.MenuItem();
 			this.butGotoAccount = new OpenDental.UI.Button();
 			this.butCommlog = new OpenDental.UI.Button();
 			this.butGotoFamily = new OpenDental.UI.Button();
+			this.butUndo = new OpenDental.UI.Button();
 			this.groupBox1.SuspendLayout();
 			this.groupBox3.SuspendLayout();
 			this.SuspendLayout();
@@ -409,7 +411,7 @@ namespace OpenDental{
 			this.butPostcards.CornerRadius = 4F;
 			this.butPostcards.Image = global::OpenDental.Properties.Resources.butPreview;
 			this.butPostcards.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPostcards.Location = new System.Drawing.Point(6,663);
+			this.butPostcards.Location = new System.Drawing.Point(6,637);
 			this.butPostcards.Name = "butPostcards";
 			this.butPostcards.Size = new System.Drawing.Size(119,24);
 			this.butPostcards.TabIndex = 16;
@@ -528,17 +530,17 @@ namespace OpenDental{
             this.menuItemSeeFamily,
             this.menuItemSeeAccount});
 			// 
-			// menuItemSeeAccount
-			// 
-			this.menuItemSeeAccount.Index = 1;
-			this.menuItemSeeAccount.Text = "See Account";
-			this.menuItemSeeAccount.Click += new System.EventHandler(this.menuItemSeeAccount_Click);
-			// 
 			// menuItemSeeFamily
 			// 
 			this.menuItemSeeFamily.Index = 0;
 			this.menuItemSeeFamily.Text = "See Family";
 			this.menuItemSeeFamily.Click += new System.EventHandler(this.menuItemSeeFamily_Click);
+			// 
+			// menuItemSeeAccount
+			// 
+			this.menuItemSeeAccount.Index = 1;
+			this.menuItemSeeAccount.Text = "See Account";
+			this.menuItemSeeAccount.Click += new System.EventHandler(this.menuItemSeeAccount_Click);
 			// 
 			// butGotoAccount
 			// 
@@ -586,11 +588,27 @@ namespace OpenDental{
 			this.butGotoFamily.Text = "Go to Family";
 			this.butGotoFamily.Click += new System.EventHandler(this.butGotoFamily_Click);
 			// 
+			// butUndo
+			// 
+			this.butUndo.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butUndo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butUndo.Autosize = true;
+			this.butUndo.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butUndo.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butUndo.CornerRadius = 4F;
+			this.butUndo.Location = new System.Drawing.Point(6,663);
+			this.butUndo.Name = "butUndo";
+			this.butUndo.Size = new System.Drawing.Size(119,24);
+			this.butUndo.TabIndex = 67;
+			this.butUndo.Text = "Undo";
+			this.butUndo.Click += new System.EventHandler(this.butUndo_Click);
+			// 
 			// FormRecallList
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butClose;
 			this.ClientSize = new System.Drawing.Size(975,691);
+			this.Controls.Add(this.butUndo);
 			this.Controls.Add(this.butGotoFamily);
 			this.Controls.Add(this.butCommlog);
 			this.Controls.Add(this.butGotoAccount);
@@ -1186,6 +1204,14 @@ namespace OpenDental{
 			Cursor=Cursors.Default;
 		}
 
+		private void butUndo_Click(object sender,EventArgs e) {
+			FormRecallListUndo form=new FormRecallListUndo();
+			form.ShowDialog();
+			if(form.DialogResult==DialogResult.OK) {
+				FillMain(null);
+			}
+		}
+
 		private void butEmail_Click(object sender,EventArgs e) {
 			if(gridMain.Rows.Count < 1){
         MessageBox.Show(Lan.g(this,"There are no Patients in the Recall table.  Must have at least one."));    
@@ -1695,6 +1721,8 @@ namespace OpenDental{
 				SelectedPatNum=PIn.Long(table.Rows[gridMain.SelectedIndices[0]]["PatNum"].ToString());
 			}
 		}
+
+		
 
 		
 

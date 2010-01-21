@@ -981,7 +981,6 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
-
 	}
 
 	///<summary>The supplied DataRows must include the following columns: Guarantor, PatNum, guarLName, guarFName, LName, FName, DateDue, maxDateDue.  maxDateDue is the most recent DateDue for all family members in the list and needs to be the same for all family members.  This date will be used for better grouping.</summary>
