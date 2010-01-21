@@ -717,9 +717,9 @@ namespace OpenDental{
 				return;
 			}
 			PictureBox1.Visible=true;
-			ToolBarMain.Enabled=true;
-			paintTools.Enabled=true;
-			brightnessContrastSlider.Enabled=true;
+			//ToolBarMain.Enabled=true;
+			//paintTools.Enabled=true;
+			//brightnessContrastSlider.Enabled=true;
 			if(axAcroPDF1!=null){
 				axAcroPDF1.Dispose();//Clear any previously loaded Acrobat .pdf file.
 			}
@@ -766,26 +766,29 @@ namespace OpenDental{
 						if(ImageHelper.HasImageExtension(selectionDoc.FileName)) {
 							MessageBox.Show(Lan.g(this,"File not found: ") + selectionDoc.FileName);
 						}else if(Path.GetExtension(selectionDoc.FileName).ToLower()==".pdf"){//Adobe acrobat file.
-							PictureBox1.Visible=false;
-							ToolBarMain.Enabled=false;
-							paintTools.Enabled=false;
-							brightnessContrastSlider.Enabled=false;
-							axAcroPDF1=new AxAcroPDFLib.AxAcroPDF();
-							this.Controls.Add(axAcroPDF1);
-							axAcroPDF1.Visible=true;
-							axAcroPDF1.Size=PictureBox1.Size;
-							axAcroPDF1.Location=PictureBox1.Location;
-							axAcroPDF1.OnError+=new EventHandler(pdfFileError);
-							string pdfFilePath=ODFileUtils.CombinePaths(PatFolder,selectionDoc.FileName);
-							if(!File.Exists(pdfFilePath)){
-								MessageBox.Show(Lan.g(this,"File not found: ") + selectionDoc.FileName);
-							}else{
-								axAcroPDF1.LoadFile(pdfFilePath);//The return status of this function doesn't seem to be helpful.
+							try{
+								axAcroPDF1=new AxAcroPDFLib.AxAcroPDF();
+								this.Controls.Add(axAcroPDF1);
+								axAcroPDF1.Visible=true;
+								axAcroPDF1.Size=PictureBox1.Size;
+								axAcroPDF1.Location=PictureBox1.Location;
+								axAcroPDF1.OnError+=new EventHandler(pdfFileError);
+								string pdfFilePath=ODFileUtils.CombinePaths(PatFolder,selectionDoc.FileName);
+								if(!File.Exists(pdfFilePath)){
+									MessageBox.Show(Lan.g(this,"File not found: ") + selectionDoc.FileName);
+								}else{
+									axAcroPDF1.LoadFile(pdfFilePath);//The return status of this function doesn't seem to be helpful.
+									PictureBox1.Visible=false;
+								}
+							}catch{
+								//An exception can happen if they do not have Adobe Acrobat Reader version 8.0 or later installed.
+								//Simply ignore this exception and do nothing. We never used to display .pdf files anyway, so we
+								//essentially revert back to the old behavior in this case.
 							}
 						}
 					}
 					SetBrightnessAndContrast();
-					EnableAllTools(true);
+					EnableAllTools(PictureBox1.Visible);
 				}
 				curImageWidths=new int[currentImages.Length];
 				curImageHeights=new int[currentImages.Length];
