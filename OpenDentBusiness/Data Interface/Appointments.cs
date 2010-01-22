@@ -86,28 +86,37 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Appointment>>(MethodBase.GetCurrentMethod(),orderby,provNum,siteNum);
 			}
-			string command="SELECT tplanned.*,tregular.aptnum "
-				+"FROM appointment tplanned "
-				+"LEFT JOIN appointment tregular ON tplanned.aptnum = tregular.nextaptnum "
-				+"LEFT JOIN patient ON patient.PatNum=tplanned.PatNum "
-				+"WHERE tplanned.aptstatus = "+POut.Long((int)ApptStatus.Planned)+" "
-				+"AND tregular.aptnum IS NULL "
-				+"AND patient.PatStatus="+POut.Long((int)PatientStatus.Patient)+" ";
+			//We create a in-memory temporary table by joining the appointment and patient
+			//tables to get a list of planned appointments for active paients, then we
+			//perform a left join on that temporary table against the appointment table
+			//to exclude any appointments in the temporary table which are already refereced
+			//by the NextAptNum column by any other appointment within the appointment table.
+			//Using an in-memory temporary table reduces the number of row comparisons performed for
+			//this query overall as compared to left joining the appointment table onto itself,
+			//because the in-memory temporary table has many fewer rows than the appointment table
+			//on average.
+			string command="SELECT tplanned.*,tregular.AptNum "
+				+"FROM (SELECT a.* FROM appointment a,patient p "
+					+"WHERE a.AptStatus="+POut.Long((int)ApptStatus.Planned)
+					+" AND p.PatStatus="+POut.Long((int)PatientStatus.Patient)+" AND a.PatNum=p.PatNum ";
 			if(provNum>0) {
-				command+="AND (tplanned.ProvNum="+POut.Long(provNum)+" OR tplanned.ProvHyg="+POut.Long(provNum)+") ";
+				command+="AND (a.ProvNum="+POut.Long(provNum)+" OR a.ProvHyg="+POut.Long(provNum)+") ";
 			}
 			if(siteNum>0) {
-				command+="AND patient.SiteNum="+POut.Long(siteNum)+" ";
+				command+="AND p.SiteNum="+POut.Long(siteNum)+" ";
 			}
-			if(orderby=="status"){
-				command+="ORDER BY tplanned.UnschedStatus,tplanned.AptDateTime";
+			if(orderby=="status") {
+				command+="ORDER BY a.UnschedStatus,a.AptDateTime";
+			} 
+			else if(orderby=="alph") {
+				command+="ORDER BY p.LName,p.FName";
+			} 
+			else { //if(orderby=="date"){
+				command+="ORDER BY a.AptDateTime";
 			}
-			else if(orderby=="alph"){
-				command+="ORDER BY LName,FName";
-			}
-			else{ //if(orderby=="date"){
-				command+="ORDER BY tplanned.AptDateTime";
-			}
+			command+=") tplanned "
+				+"LEFT JOIN appointment tregular ON tplanned.AptNum=tregular.NextAptNum "
+				+"WHERE tregular.AptNum IS NULL";
 			DataTable table=Db.GetTable(command);
 			return TableToObjects(table);
 		}
