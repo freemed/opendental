@@ -1126,7 +1126,7 @@ namespace OpenDental{
 			}
 			info.Arguments+="\"/ZIP:"+pat.Zip+"\" ";
 			info.Arguments+="\"/ADDRESS:"+pat.Address+"\" ";
-			info.Arguments+="/RECEIPT:"+PaymentCur.PayNum.ToString()+" ";//aka invoice#
+			info.Arguments+="/RECEIPT:Pat"+PaymentCur.PatNum.ToString()+" ";//aka invoice#
 			info.Arguments+="\"/CLERK:"+Security.CurUser.UserName+"\" ";
 			info.Arguments+="/AUTOCLOSE ";
 			string resultfile=Path.Combine(Path.GetDirectoryName(prog.Path),"XResult.txt");
