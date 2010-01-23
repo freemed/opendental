@@ -171,7 +171,7 @@ namespace OpenDental{
 			}
 			Appointment AptCur=new Appointment();
 			AptCur.PatNum=patCur.PatNum;
-			AptCur.AptStatus=ApptStatus.Scheduled;
+			AptCur.AptStatus=ApptStatus.UnschedList;//In all places where this is used, the unsched status with no aptDateTime will cause the appt to be deleted when the pinboard is cleared.
 			if(patCur.PriProv==0){
 				AptCur.ProvNum=PrefC.GetLong(PrefName.PracticeDefaultProv);
 			}

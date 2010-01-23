@@ -600,6 +600,7 @@ namespace OpenDental{
 				}
 				int minutes=(int)(ContrAppt.SheetClickedonMin/ContrApptSheet.MinPerIncr)*ContrApptSheet.MinPerIncr;
 				apt.AptDateTime=new DateTime(d.Year,d.Month,d.Day,ContrAppt.SheetClickedonHour,minutes,0);
+				apt.AptStatus=ApptStatus.Scheduled;
 				apt.Op=ContrAppt.SheetClickedonOp;
 				Operatory curOp=Operatories.GetOperatory(apt.Op);
 				if(curOp.ProvDentist!=0) {
@@ -766,7 +767,7 @@ namespace OpenDental{
 				AptCur.ProvNum=PatCur.PriProv;
 			}
 			AptCur.ProvHyg=PatCur.SecProv;
-			AptCur.AptDateTime=DateTime.Now;
+			AptCur.AptDateTime=DateTime.MinValue;//(was .Now) This is what triggers automatic deletion from db when clear pinboard is clicked.
 			AptCur.ClinicNum=PatCur.ClinicNum;
 			if(InitialClick){//initially double clicked on appt module
 				DateTime d;
@@ -791,7 +792,7 @@ namespace OpenDental{
 			}
 			else{
 				//new appt will be placed on pinboard instead of specific time
-				AptCur.AptStatus=ApptStatus.UnschedList;
+				AptCur.AptStatus=ApptStatus.UnschedList;//This is so that if it's on the pinboard when use shuts down OD, no db inconsistency.
 			}
 			try{
 				Appointments.Insert(AptCur);

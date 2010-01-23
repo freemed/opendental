@@ -3604,8 +3604,13 @@ namespace OpenDental{
 			DataRow row=pinBoard.ApptList[pinBoard.SelectedIndex].DataRoww;
 			pinBoard.ClearSelected();
 			ContrApptSingle.SelectedAptNum=-1;
-			if(row["AptStatus"].ToString()==((int)ApptStatus.UnschedList).ToString()){//on unscheduled list
-				//do nothing to database
+			if(row["AptStatus"].ToString()==((int)ApptStatus.UnschedList).ToString()){//unscheduled status
+				if(PIn.DateT(row["AptDateTime"].ToString()).Year<1880) {//Indicates that this was a brand new appt
+					Appointments.Delete(PIn.Long(row["AptNum"].ToString()));
+				}
+				else {//was actually on the unscheduled list
+					//do nothing to database
+				}
 			}
 			else if(PIn.DateT(row["AptDateTime"].ToString()).Year>1880){//already scheduled
 				//do nothing to database
@@ -3613,9 +3618,9 @@ namespace OpenDental{
 			else if(row["AptStatus"].ToString()==((int)ApptStatus.Planned).ToString()){
 				//do nothing except remove it from pinboard
 			}
-			else{//for normal appt:
+			else{//Not sure when this would apply, since new appts start out as unsched.  Maybe patient notes?  Leave it just in case.
 				//this gets rid of new appointments that never made it off the pinboard
-				Appointments.Delete(PIn.Long(row["AptNum"].ToString()));
+				//Appointments.Delete(PIn.Long(row["AptNum"].ToString()));
 			}
 			if(pinBoard.SelectedIndex==-1){
 				RefreshModuleDataPatient(0);
