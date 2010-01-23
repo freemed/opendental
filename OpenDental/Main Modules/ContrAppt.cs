@@ -4458,7 +4458,7 @@ namespace OpenDental{
 					if(aptsOnePat[a].AptDateTime.Date<=DateTime.Today){
 						continue;//ignore old appts
 					}
-					str+=name+": "+aptsOnePat[a].AptDateTime.ToString()+"\r\n";
+					str+=name+": "+aptsOnePat[a].AptDateTime.ToShortDateString()+" "+aptsOnePat[a].AptDateTime.ToShortTimeString()+"\r\n";
 				}
 			}
 			g.DrawString(str,new Font(FontFamily.GenericSansSerif,9),Brushes.Black,40,180);
