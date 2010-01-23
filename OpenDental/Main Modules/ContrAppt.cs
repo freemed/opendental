@@ -3620,7 +3620,7 @@ namespace OpenDental{
 			}
 			else{//Not sure when this would apply, since new appts start out as unsched.  Maybe patient notes?  Leave it just in case.
 				//this gets rid of new appointments that never made it off the pinboard
-				//Appointments.Delete(PIn.Long(row["AptNum"].ToString()));
+				Appointments.Delete(PIn.Long(row["AptNum"].ToString()));
 			}
 			if(pinBoard.SelectedIndex==-1){
 				RefreshModuleDataPatient(0);
