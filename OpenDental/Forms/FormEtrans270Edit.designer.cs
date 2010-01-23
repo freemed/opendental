@@ -23,12 +23,12 @@ namespace OpenDental{
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			this.label6 = new System.Windows.Forms.Label();
+			this.labelNote = new System.Windows.Forms.Label();
 			this.textNote = new System.Windows.Forms.TextBox();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.butShowResponse = new OpenDental.UI.Button();
 			this.butShowRequest = new OpenDental.UI.Button();
-			this.label1 = new System.Windows.Forms.Label();
+			this.labelImport = new System.Windows.Forms.Label();
 			this.butImport = new OpenDental.UI.Button();
 			this.gridBen = new OpenDental.UI.ODGrid();
 			this.gridDates = new OpenDental.UI.ODGrid();
@@ -36,21 +36,26 @@ namespace OpenDental{
 			this.butDelete = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.groupImport = new System.Windows.Forms.GroupBox();
 			this.radioInNetwork = new System.Windows.Forms.RadioButton();
 			this.radioOutNetwork = new System.Windows.Forms.RadioButton();
+			this.groupBox3 = new System.Windows.Forms.GroupBox();
+			this.radioModeElect = new System.Windows.Forms.RadioButton();
+			this.radioModeMessage = new System.Windows.Forms.RadioButton();
+			this.butPrint = new OpenDental.UI.Button();
 			this.groupBox2.SuspendLayout();
-			this.groupBox1.SuspendLayout();
+			this.groupImport.SuspendLayout();
+			this.groupBox3.SuspendLayout();
 			this.SuspendLayout();
 			// 
-			// label6
+			// labelNote
 			// 
-			this.label6.Location = new System.Drawing.Point(6,576);
-			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(100,17);
-			this.label6.TabIndex = 15;
-			this.label6.Text = "Note";
-			this.label6.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			this.labelNote.Location = new System.Drawing.Point(6,576);
+			this.labelNote.Name = "labelNote";
+			this.labelNote.Size = new System.Drawing.Size(100,17);
+			this.labelNote.TabIndex = 15;
+			this.labelNote.Text = "Note";
+			this.labelNote.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// textNote
 			// 
@@ -99,14 +104,14 @@ namespace OpenDental{
 			this.butShowRequest.Text = "Request";
 			this.butShowRequest.Click += new System.EventHandler(this.butShowRequest_Click);
 			// 
-			// label1
+			// labelImport
 			// 
-			this.label1.Location = new System.Drawing.Point(295,421);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(133,17);
-			this.label1.TabIndex = 120;
-			this.label1.Text = "Selected Benefits";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.labelImport.Location = new System.Drawing.Point(295,421);
+			this.labelImport.Name = "labelImport";
+			this.labelImport.Size = new System.Drawing.Size(133,17);
+			this.labelImport.TabIndex = 120;
+			this.labelImport.Text = "Selected Benefits";
+			this.labelImport.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// butImport
 			// 
@@ -207,16 +212,16 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// groupBox1
+			// groupImport
 			// 
-			this.groupBox1.Controls.Add(this.radioInNetwork);
-			this.groupBox1.Controls.Add(this.radioOutNetwork);
-			this.groupBox1.Location = new System.Drawing.Point(476,64);
-			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(167,58);
-			this.groupBox1.TabIndex = 124;
-			this.groupBox1.TabStop = false;
-			this.groupBox1.Text = "Mark for import if";
+			this.groupImport.Controls.Add(this.radioInNetwork);
+			this.groupImport.Controls.Add(this.radioOutNetwork);
+			this.groupImport.Location = new System.Drawing.Point(470,73);
+			this.groupImport.Name = "groupImport";
+			this.groupImport.Size = new System.Drawing.Size(167,58);
+			this.groupImport.TabIndex = 124;
+			this.groupImport.TabStop = false;
+			this.groupImport.Text = "Mark for import if";
 			// 
 			// radioInNetwork
 			// 
@@ -240,18 +245,68 @@ namespace OpenDental{
 			this.radioOutNetwork.UseVisualStyleBackColor = true;
 			this.radioOutNetwork.Click += new System.EventHandler(this.radioOutNetwork_Click);
 			// 
+			// groupBox3
+			// 
+			this.groupBox3.Controls.Add(this.radioModeElect);
+			this.groupBox3.Controls.Add(this.radioModeMessage);
+			this.groupBox3.Location = new System.Drawing.Point(470,12);
+			this.groupBox3.Name = "groupBox3";
+			this.groupBox3.Size = new System.Drawing.Size(167,58);
+			this.groupBox3.TabIndex = 126;
+			this.groupBox3.TabStop = false;
+			this.groupBox3.Text = "Viewing Mode";
+			// 
+			// radioModeElect
+			// 
+			this.radioModeElect.Checked = true;
+			this.radioModeElect.Location = new System.Drawing.Point(12,16);
+			this.radioModeElect.Name = "radioModeElect";
+			this.radioModeElect.Size = new System.Drawing.Size(121,18);
+			this.radioModeElect.TabIndex = 121;
+			this.radioModeElect.TabStop = true;
+			this.radioModeElect.Text = "Electronic Import";
+			this.radioModeElect.UseVisualStyleBackColor = true;
+			this.radioModeElect.Click += new System.EventHandler(this.radioModeElect_Click);
+			// 
+			// radioModeMessage
+			// 
+			this.radioModeMessage.Location = new System.Drawing.Point(12,35);
+			this.radioModeMessage.Name = "radioModeMessage";
+			this.radioModeMessage.Size = new System.Drawing.Size(121,18);
+			this.radioModeMessage.TabIndex = 122;
+			this.radioModeMessage.Text = "Message Text";
+			this.radioModeMessage.UseVisualStyleBackColor = true;
+			this.radioModeMessage.Click += new System.EventHandler(this.radioModeMessage_Click);
+			// 
+			// butPrint
+			// 
+			this.butPrint.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butPrint.Autosize = true;
+			this.butPrint.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butPrint.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPrint.CornerRadius = 4F;
+			this.butPrint.Location = new System.Drawing.Point(644,106);
+			this.butPrint.Name = "butPrint";
+			this.butPrint.Size = new System.Drawing.Size(75,24);
+			this.butPrint.TabIndex = 127;
+			this.butPrint.Text = "Print";
+			this.butPrint.Visible = false;
+			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
+			// 
 			// FormEtrans270Edit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(882,674);
-			this.Controls.Add(this.groupBox1);
-			this.Controls.Add(this.label1);
+			this.Controls.Add(this.butPrint);
+			this.Controls.Add(this.groupBox3);
+			this.Controls.Add(this.groupImport);
+			this.Controls.Add(this.labelImport);
 			this.Controls.Add(this.butImport);
 			this.Controls.Add(this.gridBen);
 			this.Controls.Add(this.gridDates);
 			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.gridMain);
-			this.Controls.Add(this.label6);
+			this.Controls.Add(this.labelNote);
 			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.textNote);
 			this.Controls.Add(this.butOK);
@@ -262,7 +317,8 @@ namespace OpenDental{
 			this.Load += new System.EventHandler(this.FormEtrans270Edit_Load);
 			this.Shown += new System.EventHandler(this.FormEtrans270Edit_Shown);
 			this.groupBox2.ResumeLayout(false);
-			this.groupBox1.ResumeLayout(false);
+			this.groupImport.ResumeLayout(false);
+			this.groupBox3.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -272,7 +328,7 @@ namespace OpenDental{
 
 		private OpenDental.UI.Button butOK;
 		private OpenDental.UI.Button butCancel;
-		private System.Windows.Forms.Label label6;
+		private System.Windows.Forms.Label labelNote;
 		private System.Windows.Forms.TextBox textNote;
 		private OpenDental.UI.Button butDelete;
 		private OpenDental.UI.ODGrid gridMain;
@@ -282,9 +338,13 @@ namespace OpenDental{
 		private OpenDental.UI.ODGrid gridDates;
 		private OpenDental.UI.ODGrid gridBen;
 		private OpenDental.UI.Button butImport;
-		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.GroupBox groupBox1;
+		private System.Windows.Forms.Label labelImport;
+		private System.Windows.Forms.GroupBox groupImport;
 		private System.Windows.Forms.RadioButton radioInNetwork;
 		private System.Windows.Forms.RadioButton radioOutNetwork;
+		private System.Windows.Forms.GroupBox groupBox3;
+		private System.Windows.Forms.RadioButton radioModeElect;
+		private System.Windows.Forms.RadioButton radioModeMessage;
+		private OpenDental.UI.Button butPrint;
 	}
 }

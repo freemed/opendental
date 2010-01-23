@@ -136,7 +136,7 @@ namespace OpenDentBusiness
 		}
 
 		///<summary>The most human-readable description possible.  This is only used in one place, the 270/271 window.</summary>
-		public string GetDescription() {
+		public string GetDescription(bool isMessageMode) {
 			bool containsAddress=false;
 			bool containsDate=false;
 			for(int i=0;i<SupplementalSegments.Count;i++) {
@@ -163,7 +163,7 @@ namespace OpenDentBusiness
 			}
 			string retVal="";
 			string txt;
-			txt=GetDescript(1);//Eligibility or benefit information. Required
+			txt=GetDescript(1,isMessageMode);//Eligibility or benefit information. Required
 			if(txt!="") {
 				retVal+=txt;
 			}
@@ -182,11 +182,13 @@ namespace OpenDentBusiness
 			if(txt!="") {
 				retVal+=", "+txt;
 			}
-			/*txt=GetDescript(5);//Plan coverage description. Situational
-			//We won't include this due to clutter.
-			if(txt!="") {
-				retVal+=", "+txt;
-			}*/
+			txt=GetDescript(5);//Plan coverage description. Situational
+			if(isMessageMode && txt!="") {//Causes clutter.
+				if(retVal!="") {
+					retVal+=", ";
+				}
+				retVal+=txt;
+			}
 			txt=GetDescript(6);//Time period qualifier. Situational
 			if(txt!="") {
 				retVal+=", "+txt;
@@ -195,7 +197,7 @@ namespace OpenDentBusiness
 			if(txt!="") {
 				retVal+=", "+txt;
 			}
-			txt=GetDescript(8);//Percent. Situational
+			txt=GetDescript(8,isMessageMode);//Percent. Situational
 			if(txt!="") {
 				retVal+=", "+txt;
 			}
@@ -222,9 +224,12 @@ namespace OpenDentBusiness
 			for(int i=0;i<SupplementalSegments.Count;i++) {
 				//addresses already handled
 				//messages are just annoying and cluttery
-				//if(SupplementalSegments[i].SegmentID=="MSG") {
-				//	retVal+=", "+SupplementalSegments[i].Get(1);
-				//}
+				if(!isMessageMode) {
+					continue;
+				}
+				if(SupplementalSegments[i].SegmentID=="MSG") {
+					retVal+=", "+SupplementalSegments[i].Get(1);
+				}
 			}
 			return retVal;
 		}
@@ -278,6 +283,11 @@ namespace OpenDentBusiness
 
 		///<summary>The most human-readable description possible for a single element.</summary>
 		public string GetDescript(int elementPos) {
+			return GetDescript(elementPos,false);
+		}
+
+		///<summary>The most human-readable description possible for a single element.</summary>
+		public string GetDescript(int elementPos,bool isMessageMode) {
 			string elementCode=Segment.Get(elementPos);
 			if(elementCode=="") {
 				return "";
@@ -287,6 +297,9 @@ namespace OpenDentBusiness
 					//This is a required element, but we still won't assume it's found
 					EB01 eb01val=eb01.Find(EB01MatchesCode);
 					if(eb01val==null) {
+						return "";
+					}
+					if(eb01val.Code=="D" && isMessageMode) {//D is for benefit description, which is already obvious
 						return "";
 					}
 					return eb01val.Descript;
@@ -318,7 +331,12 @@ namespace OpenDentBusiness
 				case 7:
 					return PIn.Double(elementCode).ToString("c");//Monetary amount. Situational
 				case 8:
-					return "Patient pays "+(PIn.Double(elementCode)*100).ToString()+"%";//Percent. Situational
+					if(isMessageMode) {//delta sends 80% instead of 20% like they should
+						return (PIn.Double(elementCode)*100).ToString()+"%";//Percent.
+					}
+					else {
+						return "Patient pays "+(PIn.Double(elementCode)*100).ToString()+"%";//Percent. Situational
+					}
 				case 9://Quantity qualifier. Situational
 					EB09 eb09val=eb09.Find(EB09MatchesCode);
 					if(eb09val==null) {

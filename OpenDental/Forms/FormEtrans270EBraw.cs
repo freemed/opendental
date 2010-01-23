@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Text;
+using System.Web;
 using System.Windows.Forms;
 using OpenDental.UI;
 using OpenDentBusiness;
@@ -18,7 +20,14 @@ namespace OpenDental {
 		}
 
 		private void FormEtrans270EBraw_Load(object sender,EventArgs e) {
-			textRaw.Text=EB271val.ToString();
+			string rawText=EB271val.ToString();
+			if(rawText.Contains("%")) {
+				rawText=X12Parse.UrlDecode(rawText).ToLower();
+				//url detection depends on a few strategically placed spaces
+				rawText=rawText.Replace("http"," http");
+				rawText=rawText.Replace("~"," ~");
+			}
+			textRaw.Text=rawText;
 			FillGrid();
 		}
 
@@ -41,6 +50,10 @@ namespace OpenDental {
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
+		}
+
+		private void textRaw_LinkClicked(object sender,LinkClickedEventArgs e) {
+			Process.Start(e.LinkText);
 		}
 
 		private void butClose_Click(object sender,EventArgs e) {

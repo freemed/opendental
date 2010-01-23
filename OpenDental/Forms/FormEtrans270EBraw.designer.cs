@@ -24,9 +24,9 @@ namespace OpenDental{
 		/// </summary>
 		private void InitializeComponent() {
 			this.label1 = new System.Windows.Forms.Label();
-			this.textRaw = new System.Windows.Forms.TextBox();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butClose = new OpenDental.UI.Button();
+			this.textRaw = new System.Windows.Forms.RichTextBox();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -37,15 +37,6 @@ namespace OpenDental{
 			this.label1.TabIndex = 4;
 			this.label1.Text = "Raw benefit information as received from the insurance company";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-			// 
-			// textRaw
-			// 
-			this.textRaw.Location = new System.Drawing.Point(16,34);
-			this.textRaw.Multiline = true;
-			this.textRaw.Name = "textRaw";
-			this.textRaw.ReadOnly = true;
-			this.textRaw.Size = new System.Drawing.Size(401,112);
-			this.textRaw.TabIndex = 5;
 			// 
 			// gridMain
 			// 
@@ -73,12 +64,22 @@ namespace OpenDental{
 			this.butClose.Text = "Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
+			// textRaw
+			// 
+			this.textRaw.Location = new System.Drawing.Point(16,34);
+			this.textRaw.Name = "textRaw";
+			this.textRaw.ReadOnly = true;
+			this.textRaw.Size = new System.Drawing.Size(401,126);
+			this.textRaw.TabIndex = 23;
+			this.textRaw.Text = "";
+			this.textRaw.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.textRaw_LinkClicked);
+			// 
 			// FormEtrans270EBraw
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(572,452);
-			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.textRaw);
+			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.butClose);
 			this.Name = "FormEtrans270EBraw";
@@ -86,7 +87,6 @@ namespace OpenDental{
 			this.Text = "Raw Benefit Info";
 			this.Load += new System.EventHandler(this.FormEtrans270EBraw_Load);
 			this.ResumeLayout(false);
-			this.PerformLayout();
 
 		}
 
@@ -94,7 +94,7 @@ namespace OpenDental{
 
 		private OpenDental.UI.Button butClose;
 		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.TextBox textRaw;
 		private OpenDental.UI.ODGrid gridMain;
+		private System.Windows.Forms.RichTextBox textRaw;
 	}
 }

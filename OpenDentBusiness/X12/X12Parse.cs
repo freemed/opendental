@@ -16,5 +16,15 @@ namespace OpenDentBusiness{
 			return dt;
 		}
 
+		public static string UrlDecode(string t) {
+			t=t.Replace("%3A",":");
+			t=t.Replace("%26","&");
+			t=t.Replace("%2F","/");
+			t=t.Replace("%3D","=");
+			t=t.Replace("%3F","?");
+			//there are more we could do later.
+			return t;
+		}
+
 	}
 }
