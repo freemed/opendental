@@ -1029,19 +1029,23 @@ namespace OpenDental{
 			report.SetColumn(this,colI,"Ins Income",65,HorizontalAlignment.Right);
 			colI++;
 			report.SetColumn(this,colI,"",540,HorizontalAlignment.Right);
-			report.Summary.Add(
-				//=Lan.g(this,"Total Production (Production + Adjustments):")+" "
-				//+(report.ColTotal[4]+report.ColTotal[5]).ToString("c");
-				// added spk 5/19/05
-				Lan.g(this,"Total Production (Production + Adjustments - Writeoffs):")+" "
-				+(report.ColTotal[4]+report.ColTotal[5]+report.ColTotal[6])
-				.ToString("c"));
+			double total;
+			if(PrefC.GetBool(PrefName.EasyNoClinics)) {
+				total=report.ColTotal[4]+report.ColTotal[5]+report.ColTotal[6];
+			}
+			else {
+				total=report.ColTotal[5]+report.ColTotal[6]+report.ColTotal[7];
+			}
+			report.Summary.Add(Lan.g(this,"Total Production (Production + Adjustments - Writeoffs):")+" "+total.ToString("c"));
 			report.Summary.Add("");
-			report.Summary.Add(
-				Lan.g(this,"Total Income (Pt Income + Ins Income):")+" "
-				+(report.ColTotal[7]+report.ColTotal[8]).ToString("c"));
+			if(PrefC.GetBool(PrefName.EasyNoClinics)) {
+				total=report.ColTotal[7]+report.ColTotal[8];
+			}
+			else {
+				total=report.ColTotal[8]+report.ColTotal[9];
+			}
+			report.Summary.Add(Lan.g(this,"Total Income (Pt Income + Ins Income):")+" "+total.ToString("c"));
 			FormQuery2.ShowDialog();
-
 		}
 
 		private void RunMonthly(){
