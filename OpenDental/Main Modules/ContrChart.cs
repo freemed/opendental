@@ -3079,6 +3079,7 @@ namespace OpenDental{
 			butAddKey.Visible=PrefC.GetBool(PrefName.DistributorKey);
 			butForeignKey.Visible=PrefC.GetBool(PrefName.DistributorKey);
 			ComputerPref computerPref=ComputerPrefs.GetForLocalComputer();
+			toothChart.SetToothNumberingNomenclature((ToothNumberingNomenclature)PrefC.GetInt(PrefName.UseInternationalToothNumbers));
 			toothChart.UseHardware=computerPref.GraphicsUseHardware;
 			toothChart.PreferredPixelFormatNumber=computerPref.PreferredPixelFormatNum;
 			toothChart.DeviceFormat=new ToothChartDirectX.DirectXDeviceFormat(computerPref.DirectXFormat);

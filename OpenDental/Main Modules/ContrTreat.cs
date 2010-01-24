@@ -1696,6 +1696,7 @@ namespace OpenDental{
 				//toothChart.SendToBack();
 				ComputerPref computerPref=ComputerPrefs.GetForLocalComputer();
 				toothChart.UseHardware=computerPref.GraphicsUseHardware;
+				toothChart.SetToothNumberingNomenclature((ToothNumberingNomenclature)PrefC.GetInt(PrefName.UseInternationalToothNumbers));
 				toothChart.PreferredPixelFormatNumber=computerPref.PreferredPixelFormatNum;
 				toothChart.DeviceFormat=new ToothChartDirectX.DirectXDeviceFormat(computerPref.DirectXFormat);
 				//Must be last setting set for preferences, because

@@ -25,6 +25,7 @@ namespace OpenDental {
 			ComputerPref localComputerPrefs=ComputerPrefs.GetForLocalComputer();
 			toothChart.DeviceFormat=new ToothChartDirectX.DirectXDeviceFormat(localComputerPrefs.DirectXFormat);//Must be set before draw mode
 			toothChart.DrawMode=DrawingMode.DirectX;
+			toothChart.SetToothNumberingNomenclature((ToothNumberingNomenclature)PrefC.GetInt(PrefName.UseInternationalToothNumbers));
 			toothChart.ColorBackground=Color.White;
 			toothChart.ColorText=Color.Black;
 			toothChart.PerioMode=true;
