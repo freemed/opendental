@@ -58,7 +58,8 @@ namespace OpenDental{
 			//But ClaimProcsAll has not been refreshed.
 			for(int i=0;i<ClaimProcsForClaim.Count;i++) {
 				if(ClaimProcsForClaim[i].Status!=ClaimProcStatus.NotReceived
-					&& ClaimProcsForClaim[i].Status!=ClaimProcStatus.Preauth) {
+					&& ClaimProcsForClaim[i].Status!=ClaimProcStatus.Preauth
+					&& ClaimProcsForClaim[i].Status!=ClaimProcStatus.CapClaim) {
 					continue;
 				}
 				ProcCur=Procedures.GetProcFromList(procList,ClaimProcsForClaim[i].ProcNum);
@@ -84,11 +85,14 @@ namespace OpenDental{
 						ClaimProcsForClaim[i].FeeBilled=qty*ProcCur.ProcFee;
 					}
 				}
+				else if(claimCur.ClaimType=="Cap") {
+					ClaimProcsForClaim[i].FeeBilled=0;
+				}
 				else {//don't use ucr.  Use the procedure fee instead.
 					ClaimProcsForClaim[i].FeeBilled=qty*ProcCur.ProcFee;
 				}
 				claimFee+=ClaimProcsForClaim[i].FeeBilled;
-				if(claimCur.ClaimType=="PreAuth" || claimCur.ClaimType=="Other") {
+				if(claimCur.ClaimType=="PreAuth" || claimCur.ClaimType=="Other" || claimCur.ClaimType=="Cap") {
 					//only the fee gets calculated, the rest does not
 					ClaimProcs.Update(ClaimProcsForClaim[i]);
 					continue;
