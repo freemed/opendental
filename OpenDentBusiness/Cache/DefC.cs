@@ -152,6 +152,30 @@ namespace OpenDentBusiness {
 			return retVal;
 		}
 
+		///<summary>Returns a DefNum for the special image category specified.  Returns 0 if no match found.</summary>
+		public static long GetImageCat(ImageCategorySpecial specialCat) {
+			Def[] defs=DefC.GetList(DefCat.ImageCats);
+			for(int i=0;i<defs.Length;i++) {
+				if(defs[i].ItemValue.Contains(specialCat.ToString())) {
+					return defs[i].DefNum;
+				}
+			}
+			return 0;
+		}
 
+	}
+
+	///<summary></summary>
+	public enum ImageCategorySpecial {
+		///<summary>Show in Chart module.</summary>
+		X,
+		///<summary>Show in patient forms.</summary>
+		F,
+		///<summary>Patient picture (only one)</summary>
+		P,
+		///<summary>Statements (only one)</summary>
+		S,
+		///<summary>Graphical tooth charts and perio charts (only one)</summary>
+		T
 	}
 }

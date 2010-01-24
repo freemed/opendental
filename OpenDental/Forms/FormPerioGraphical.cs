@@ -190,7 +190,7 @@ namespace OpenDental {
 
 		private void pd2_PrintPage(object sender,PrintPageEventArgs ev) {//raised for each page to be printed.
 			Graphics g=ev.Graphics;
-			RenderPerioPrintout(g,PatCur,new Rectangle(0,50,ev.MarginBounds.Width,ev.MarginBounds.Height));
+			RenderPerioPrintout(g,PatCur,ev.MarginBounds);//,new Rectangle(0,50,ev.MarginBounds.Width,ev.MarginBounds.Height));
 		}
 
 		public void RenderPerioPrintout(Graphics g,Patient pat,Rectangle marginBounds) {
@@ -200,32 +200,33 @@ namespace OpenDental {
 			if(pat.ClinicNum!=0) {
 				Clinic clinic=Clinics.GetClinic(pat.ClinicNum);
 				clinicName=clinic.Description;
-			} else {
+			} 
+			else {
 				clinicName=PrefC.GetString(PrefName.PracticeTitle);
 			}
-			float y=marginBounds.Y;
-			SizeF m;
+			float y=70;
+			SizeF sizeFPage=new SizeF(marginBounds.Width,marginBounds.Height);
+			SizeF sizeStr;
 			Font font=new Font("Arial",15);
 			string titleStr="PERIODONTAL EXAMINATION";
-			m=g.MeasureString(titleStr,font);
-			g.DrawString(titleStr,font,Brushes.Black,new PointF(marginBounds.Width/2f-m.Width/2f,y));
-			y+=m.Height;
+			sizeStr=g.MeasureString(titleStr,font);
+			g.DrawString(titleStr,font,Brushes.Black,new PointF(sizeFPage.Width/2f-sizeStr.Width/2f,y));
+			y+=sizeStr.Height;
 			font=new Font("Arial",11);
-			m=g.MeasureString(clinicName,font);
-			g.DrawString(clinicName,font,Brushes.Black,
-				new PointF(marginBounds.Width/2f-m.Width/2f,y));
-			y+=m.Height;
+			sizeStr=g.MeasureString(clinicName,font);
+			g.DrawString(clinicName,font,Brushes.Black,new PointF(sizeFPage.Width/2f-sizeStr.Width/2f,y));
+			y+=sizeStr.Height;
 			string patNameStr=PatCur.GetNameFLFormal();
-			m=g.MeasureString(patNameStr,font);
-			g.DrawString(patNameStr,font,Brushes.Black,new PointF(marginBounds.Width/2f-m.Width/2f,y));
-			y+=m.Height;
+			sizeStr=g.MeasureString(patNameStr,font);
+			g.DrawString(patNameStr,font,Brushes.Black,new PointF(sizeFPage.Width/2f-sizeStr.Width/2f,y));
+			y+=sizeStr.Height;
 			DateTime serverTimeNow=MiscData.GetNowDateTime();
 			string timeNowStr=serverTimeNow.ToShortDateString();//Locale specific date.
-			m=g.MeasureString(timeNowStr,font);
-			g.DrawString(timeNowStr,font,Brushes.Black,new PointF(marginBounds.Width/2f-m.Width/2f,y));
-			y+=m.Height;
-			Bitmap bitmap=toothChart.GetBitmap();
-			g.DrawImage(bitmap,marginBounds.Width/2f-bitmap.Width/2f,y,bitmap.Width,bitmap.Height);
+			sizeStr=g.MeasureString(timeNowStr,font);
+			g.DrawString(timeNowStr,font,Brushes.Black,new PointF(sizeFPage.Width/2f-sizeStr.Width/2f,y));
+			y+=sizeStr.Height;
+			Bitmap bitmapTC=toothChart.GetBitmap();
+			g.DrawImage(bitmapTC,sizeFPage.Width/2f-bitmapTC.Width/2f,y,bitmapTC.Width,bitmapTC.Height);
 		}
 
 		private void butSetup_Click(object sender,EventArgs e) {
@@ -243,51 +244,56 @@ namespace OpenDental {
 		}
 
 		private void butSave_Click(object sender,EventArgs e) {
-			Bitmap perioPrintImage=null;
+			long defNumToothCharts=DefC.GetImageCat(ImageCategorySpecial.T);
+			if(defNumToothCharts==0) {
+				MsgBox.Show(this,"In Setup, Definitions, Image Categories, a category needs to be set for graphical tooth charts.");
+				return;
+			}
+			Bitmap bitmap=null;
 			Graphics g=null;
 			Document doc=new Document();
-			bool docCreated=false;
+			bool docSaved=false;
 			try {
-				const int scale=6;
-				perioPrintImage=new Bitmap(750*scale,1000*scale);
-				g=Graphics.FromImage(perioPrintImage);
-				perioPrintImage.SetResolution(100,100);
+				bitmap=new Bitmap(750,1000);
+				g=Graphics.FromImage(bitmap);
 				g.Clear(Color.White);
 				g.CompositingQuality=System.Drawing.Drawing2D.CompositingQuality.HighQuality;
-				g.InterpolationMode=System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
 				g.SmoothingMode=System.Drawing.Drawing2D.SmoothingMode.HighQuality;
-				g.TextRenderingHint=System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
-				RenderPerioPrintout(g,PatCur,new Rectangle(0,0,perioPrintImage.Width,perioPrintImage.Height));
+				RenderPerioPrintout(g,PatCur,new Rectangle(0,0,bitmap.Width,bitmap.Height));
 				string patImagePath=ImageStore.GetPatientFolder(PatCur);
-				string filePath="";
-				do {
-					doc.DateCreated=MiscData.GetNowDateTime();
-					doc.FileName="perioexam_"+doc.DateCreated.ToString("yyyy_MM_dd_hh_mm_ss")+".png";
-					filePath=ODFileUtils.CombinePaths(patImagePath,doc.FileName);
-				} while(File.Exists(filePath));
+				doc.DateCreated=MiscData.GetNowDateTime();
+				doc.FileName=".jpg";
 				doc.PatNum=PatCur.PatNum;
 				doc.ImgType=ImageType.Photo;
-				doc.DocCategory=DefC.GetByExactName(DefCat.ImageCats,"Tooth Charts");
+				doc.DocCategory=defNumToothCharts;
 				doc.Description="Perio Exam";
 				Documents.Insert(doc,PatCur);
-				docCreated=true;
-				perioPrintImage.Save(filePath,System.Drawing.Imaging.ImageFormat.Png);
+				doc=Documents.GetByNum(doc.DocNum);
+				string filePath=ODFileUtils.CombinePaths(patImagePath,doc.FileName);
+				bitmap.Save(filePath);
+				docSaved=true;
 				MessageBox.Show(Lan.g(this,"Image saved."));
-			} catch(Exception ex) {
+			} 
+			catch(Exception ex) {
 				MessageBox.Show(Lan.g(this,"Image failed to save: "+Environment.NewLine+ex.ToString()));
-				if(docCreated) {
+				if(docSaved) {
 					Documents.Delete(doc);
 				}
-			} finally {
+			} 
+			finally {
 				if(g!=null) {
 					g.Dispose();
 					g=null;
 				}
-				if(perioPrintImage!=null) {
-					perioPrintImage.Dispose();
-					perioPrintImage=null;
+				if(bitmap!=null) {
+					bitmap.Dispose();
+					bitmap=null;
 				}
 			}
+		}
+
+		private void butClose_Click(object sender,EventArgs e) {
+			Close();
 		}
 
 	}

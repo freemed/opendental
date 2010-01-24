@@ -87,7 +87,7 @@ namespace OpenDentBusiness {
 			return Fill(Db.GetTable(command));
 		}*/
 
-		///<summary>Inserts a new document into db, creates a filename based on Cur.DocNum, and then updates the db with this filename.  Should always refresh the document after calling this method in order to get the correct filename for RemotingRole.ClientWeb.</summary>
+		///<summary>Usually, set just the extension before passing in the doc.  Inserts a new document into db, creates a filename based on Cur.DocNum, and then updates the db with this filename.  Should always refresh the document after calling this method in order to get the correct filename for RemotingRole.ClientWeb.</summary>
 		public static long Insert(Document doc,Patient pat) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				doc.DocNum=Meth.GetLong(MethodBase.GetCurrentMethod(),doc,pat);

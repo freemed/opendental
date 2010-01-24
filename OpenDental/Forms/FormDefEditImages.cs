@@ -217,6 +217,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormDefEdit_Load(object sender,System.EventArgs e) {
+			//Also see DefC.GetImageCat and ImageCategorySpecial when reworking this form.
 			textName.Text=DefCur.ItemName;
 			//textValue.Text=DefCur.ItemValue;
 			if(DefCur.ItemValue.Contains("X")) {
