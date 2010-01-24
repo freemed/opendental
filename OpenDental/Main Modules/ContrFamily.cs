@@ -848,7 +848,7 @@ namespace OpenDental{
 			PaySplit[] PaySplitList=PaySplits.Refresh(PatCur.PatNum);//
 			List<ClaimProc> claimProcList=ClaimProcs.Refresh(PatCur.PatNum);
 			Commlog[] commlogList=Commlogs.Refresh(PatCur.PatNum);
-			PayPlan[] payPlanList=PayPlans.Refresh(PatCur.Guarantor,PatCur.PatNum);
+			int payPlanCount=PayPlans.GetDependencyCount(PatCur.PatNum);
 			List<InsPlan> planList=InsPlans.Refresh(FamCur);
 			List<MedicationPat> medList=MedicationPats.GetList(PatCur.PatNum);
 			PatPlanList=PatPlans.Refresh(PatCur.PatNum);
@@ -860,7 +860,7 @@ namespace OpenDental{
 			bool hasPay=PaySplitList.Length>0;
 			bool hasClaimProcs=claimProcList.Count>0;
 			bool hasComm=commlogList.Length>0;
-			bool hasPayPlans=payPlanList.Length>0;
+			bool hasPayPlans=payPlanCount>0;
 			bool hasInsPlans=false;
 			bool hasMeds=medList.Count>0;
 			for(int i=0;i<planList.Count;i++){

@@ -7,15 +7,15 @@ using System.Reflection;
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class PayPlans {
-		///<summary>Gets a list of all payplans for a given patient, whether they are the guarantor or the patient.  This is also used in UpdateAll to store all payment plans in entire database.</summary>
-		public static PayPlan[] Refresh(long guarantor,long patNum) {
+		///<summary>Gets a list of all payplans for a given patient, whether they are the patient or the guarantor.  This is only used in one place, when deleting a patient to check dependencies.</summary>
+		public static int GetDependencyCount(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<PayPlan[]>(MethodBase.GetCurrentMethod(),guarantor,patNum);
+				return Meth.GetInt(MethodBase.GetCurrentMethod(),patNum);
 			}
-			string command="SELECT * FROM payplan"
-				+" WHERE PatNum = "+patNum.ToString()
-				+" OR Guarantor = "+guarantor.ToString()+" ORDER BY payplandate";
-			return RefreshAndFill(Db.GetTable(command)).ToArray();
+			string command="SELECT COUNT(*) FROM payplan"
+				+" WHERE PatNum = "+POut.Long(patNum)
+				+" OR Guarantor = "+POut.Long(patNum);
+			return PIn.Int(Db.GetScalar(command));
 		}
 
 		public static PayPlan GetOne(long payPlanNum) {
