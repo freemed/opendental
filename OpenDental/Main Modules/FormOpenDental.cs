@@ -3832,10 +3832,10 @@ namespace OpenDental{
 		//Help
 		private void menuItemRemote_Click(object sender,System.EventArgs e) {
 			try {
-				Process.Start("http://www.open-dent.com/contact.html");
+				Process.Start("http://www.opendental.com/contact.html");
 			}
 			catch {
-				MessageBox.Show(Lan.g(this,"Could not find")+" http://www.open-dent.com/contact.html");
+				MessageBox.Show(Lan.g(this,"Could not find")+" http://www.opendental.com/contact.html");
 			}
 			/*
 			if(!MsgBox.Show(this,true,"A remote connection will now be attempted. Do NOT continue unless you are already on the phone with us.  Do you want to continue?"))
@@ -3861,7 +3861,7 @@ namespace OpenDental{
 
 		private void menuItemHelpContents_Click(object sender, System.EventArgs e) {
 			try{
-				Process.Start("http://www.open-dent.com/manual/toc.html");
+				Process.Start("http://www.opendental.com/manual/toc.html");
 			}
 			catch{
 				MsgBox.Show(this,"Could not find file.");
@@ -3870,7 +3870,7 @@ namespace OpenDental{
 
 		private void menuItemHelpIndex_Click(object sender, System.EventArgs e) {
 			try{
-				Process.Start(@"http://www.open-dent.com/manual/alphabetical.html");
+				Process.Start(@"http://www.opendental.com/manual/alphabetical.html");
 			}
 			catch{
 				MessageBox.Show("Could not find file.");
