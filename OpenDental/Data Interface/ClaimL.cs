@@ -85,9 +85,9 @@ namespace OpenDental{
 						ClaimProcsForClaim[i].FeeBilled=qty*ProcCur.ProcFee;
 					}
 				}
-				else if(claimCur.ClaimType=="Cap") {
-					ClaimProcsForClaim[i].FeeBilled=0;
-				}
+				//else if(claimCur.ClaimType=="Cap") {//Even for capitation, use the proc fee.
+				//	ClaimProcsForClaim[i].FeeBilled=0;
+				//}
 				else {//don't use ucr.  Use the procedure fee instead.
 					ClaimProcsForClaim[i].FeeBilled=qty*ProcCur.ProcFee;
 				}
