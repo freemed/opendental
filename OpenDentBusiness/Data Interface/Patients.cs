@@ -1781,6 +1781,47 @@ namespace OpenDentBusiness{
 			return true;
 		}
 
+		public static void MergeTwoPatients(long patTo,long patFrom){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),patTo,patFrom);
+				return;
+			}
+			if(patTo==patFrom) {
+				//Do not merge the same patient onto itself.
+				return;
+			}
+			string[] patNumForeignKeys=new string[]{//TODO: Need to add missing foreign keys to this list.
+				"adjustment.Patnum",
+				"appointment.PatNum",
+				"claim.PatNum",
+				"claimproc.PatNum",
+				"commlog.PatNum",
+				"disease.PatNum",
+				"docattach.PatNum",
+				"document.PatNum",
+				"etrans.PatNum",
+				"insplan.Subscriber",
+				"labcase.PatNum",
+				"medicationpat.PatNum",
+				"perioexam.PatNum","patfield.PatNum","patplan.PatNum","payment.PatNum","paysplit.PatNum",
+				"procedurelog.PatNum","procnote.PatNum","proctp.PatNum",
+				"question.PatNum",
+				"recall.PatNum","refattach.PatNum","rxpat.PatNum",
+				"toothinitial.PatNum","treatplan.PatNum",
+			};
+			string command="";
+			for(int i=0;i<patNumForeignKeys.Length;i++) {
+				string[] tableAndKeyName=patNumForeignKeys[i].Split(new char[] {'.'});
+				command="UPDATE "+tableAndKeyName[0]+" SET "+tableAndKeyName[1]+"="+POut.Long(patTo)+" WHERE "+tableAndKeyName[1]+"="+POut.Long(patFrom);
+				//Db.NonQ(command);
+			}
+			command="DELETE FROM patientnote WHERE PatNum="+POut.Long(patFrom);
+			//Db.NonQ(command);
+			//Mark the patient where data was pulled from as deleted.
+			command="UPDATE patient SET PatStatus=4 WHERE PatNum="+POut.Long(patFrom);
+			//Db.NonQ(command);
+		}
+
 		///<summary>LName, 'Preferred' FName M</summary>
 		public static string GetNameLF(string LName,string FName,string Preferred,string MiddleI) {
 			//No need to check RemotingRole; no call to db.
