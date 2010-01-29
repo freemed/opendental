@@ -622,6 +622,11 @@ namespace OpenDentBusiness{
 				cp.BaseEst=cp.AllowedOverride;
 				cp.InsEstTotal=cp.AllowedOverride;
 			}
+			else if(plan.PlanType=="c"){//capitation estimate.  No allowed fee sched.  No substitute codes.
+				allowed=procFee;
+				cp.BaseEst=procFee;
+				cp.InsEstTotal=procFee;
+			}
 			else {
 				//no point in wasting time calculating this unless it's needed.
 				double carrierAllowed=InsPlans.GetAllowed(ProcedureCodes.GetProcCode(codeNum).ProcCode,plan.FeeSched,plan.AllowedFeeSched,
