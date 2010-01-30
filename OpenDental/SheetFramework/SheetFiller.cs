@@ -579,7 +579,7 @@ namespace OpenDental{
 						field.FieldValue=pat.City+", "+pat.State+" "+pat.Zip;
 						break;
 					case "today.DayDate":
-						field.FieldValue=DateTime.Today.ToString("dddd, MM/dd/yyyy");
+						field.FieldValue=DateTime.Today.ToString("dddd")+", "+DateTime.Today.ToShortDateString();
 						break;
 					case "patient.salutation":
 						field.FieldValue="Dear "+pat.GetSalutation()+":";
@@ -621,7 +621,7 @@ namespace OpenDental{
 						field.FieldValue=refer.City+", "+refer.ST+" "+refer.Zip;
 						break;
 					case "today.DayDate":
-						field.FieldValue=DateTime.Today.ToString("dddd, MM/dd/yyyy");
+						field.FieldValue=DateTime.Today.ToString("dddd")+", "+DateTime.Today.ToShortDateString();
 						break;
 					case "patient.nameFL":
 						field.FieldValue=pat.GetNameFL();
@@ -666,7 +666,7 @@ namespace OpenDental{
 						field.FieldValue=refer.City+", "+refer.ST+" "+refer.Zip;
 						break;
 					case "today.DayDate":
-						field.FieldValue=DateTime.Today.ToString("dddd, MM/dd/yyyy");
+						field.FieldValue=DateTime.Today.ToString("dddd")+", "+DateTime.Today.ToShortDateString();
 						break;
 					case "patient.nameFL":
 						field.FieldValue=pat.GetNameFL();
@@ -711,7 +711,7 @@ namespace OpenDental{
 						field.FieldValue=refer.City+", "+refer.ST+" "+refer.Zip;
 						break;
 					case "today.DayDate":
-						field.FieldValue=DateTime.Today.ToString("dddd, MM/dd/yyyy");
+						field.FieldValue=DateTime.Today.ToString("dddd")+", "+DateTime.Today.ToShortDateString();
 						break;
 					case "patient.nameFL":
 						field.FieldValue=pat.GetNameFL();
