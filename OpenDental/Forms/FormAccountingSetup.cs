@@ -181,8 +181,8 @@ namespace OpenDental{
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(492,27);
 			this.label2.TabIndex = 32;
-			this.label2.Text = "Everytime a deposit is created, an accounting transaction will also be automatica" +
-    "lly created.";
+			this.label2.Text = "Every time a deposit is created, an accounting transaction will also be automatic" +
+    "ally created.";
 			// 
 			// butAdd
 			// 
@@ -260,9 +260,11 @@ namespace OpenDental{
 			// 
 			this.label5.Location = new System.Drawing.Point(19,26);
 			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(492,50);
+			this.label5.Size = new System.Drawing.Size(492,47);
 			this.label5.TabIndex = 32;
-			this.label5.Text = resources.GetString("label5.Text");
+			this.label5.Text = "Some payment types do not use deposit slips.  An example is cashbox entries.  For" +
+    " these types, an accounting transaction will be automatically created each time " +
+    "a patient payment is entered.";
 			// 
 			// butAddPay
 			// 
@@ -356,7 +358,7 @@ namespace OpenDental{
 		private void FillDepList(){
 			listAccountsDep.Items.Clear();
 			for(int i=0;i<depAL.Count;i++){
-				listAccountsDep.Items.Add(AccountC.GetDescript((int)depAL[i]));
+				listAccountsDep.Items.Add(AccountC.GetDescript((long)depAL[i]));
 			}
 		}
 
