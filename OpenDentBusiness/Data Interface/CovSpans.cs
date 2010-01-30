@@ -138,6 +138,18 @@ namespace OpenDentBusiness{
 			return retVal;
 		}
 
+		///<summary>If the supplied code falls within any of the supplied spans, then returns true.</summary>
+		public static bool IsCodeInSpans(string strProcCode,CovSpan[] covSpanArray) {
+			//No need to check RemotingRole; no call to db.
+			for(int i=0;i<covSpanArray.Length;i++) {
+				if(String.Compare(strProcCode,covSpanArray[i].FromCode)>=0
+					&& String.Compare(strProcCode,covSpanArray[i].ToCode)<=0) {
+					return true;
+				}
+			}
+			return false;
+		}
+
 	}
 
 	

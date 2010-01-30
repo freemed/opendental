@@ -378,7 +378,17 @@ namespace OpenDentBusiness {
 			DateTime renewDate=BenefitLogic.ComputeRenewDate(asofDate,curPlan.MonthRenew);
 			DateTime stopDate=renewDate.AddYears(1);
 			double retVal=0;
+			CovCat generalCat=CovCats.GetForEbenCat(EbenefitCategory.General);
+			CovSpan[] covSpanArray=null;
+			if(generalCat!=null) {
+				covSpanArray=CovSpans.GetForCat(generalCat.CovCatNum);
+			}
 			for(int i=0;i<histList.Count;i++) {
+				if(generalCat!=null) {//If there is a general category, then we only consider codes within it.  This is how we exclude ortho.
+					if(!CovSpans.IsCodeInSpans(histList[i].StrProcCode,covSpanArray)) {//for example, ortho
+						continue;
+					}
+				}
 				if(histList[i].PlanNum==curPlan.PlanNum
 					&& histList[i].ClaimNum != excludeClaim
 					&& histList[i].ProcDate < stopDate
@@ -405,7 +415,17 @@ namespace OpenDentBusiness {
 			DateTime renewDate=BenefitLogic.ComputeRenewDate(asofDate,curPlan.MonthRenew);
 			DateTime stopDate=renewDate.AddYears(1);
 			double retVal=0;
+			CovCat generalCat=CovCats.GetForEbenCat(EbenefitCategory.General);
+			CovSpan[] covSpanArray=null;
+			if(generalCat!=null) {
+				covSpanArray=CovSpans.GetForCat(generalCat.CovCatNum);
+			}
 			for(int i=0;i<histList.Count;i++) {
+				if(generalCat!=null){//If there is a general category, then we only consider codes within it.  This is how we exclude ortho.
+					if(!CovSpans.IsCodeInSpans(histList[i].StrProcCode,covSpanArray)){//for example, ortho
+						continue;
+					}
+				}
 				if(histList[i].PlanNum==planNum
 					&& histList[i].ClaimNum != excludeClaim
 					&& histList[i].ProcDate < stopDate
