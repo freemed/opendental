@@ -918,7 +918,10 @@ namespace OpenDentBusiness {
 				amtpaid=PIn.Double(rawClaim.Rows[i]["InsPayAmt"].ToString());
 				writeoff=PIn.Double(rawClaim.Rows[i]["WriteOff"].ToString());
 				deductible=PIn.Double(rawClaim.Rows[i]["DedApplied"].ToString());
-				if(!PrefC.GetBool(PrefName.BalancesDontSubtractIns) &&	(claimStatus=="W" || claimStatus=="S")){
+				if(!PrefC.GetBool(PrefName.BalancesDontSubtractIns) 
+					&& (claimStatus=="W" || claimStatus=="S")
+					&& rawClaim.Rows[i]["ClaimType"].ToString()!="Cap")
+				{
 					if (amtpaid != 0 && ((insest - amtpaid) >= 0)) {//show additional info on resubmits
 						row["description"] += "\r\n" + Lans.g("ContrAccount", "Remaining Est. Payment Pending:") + " " + (insest - amtpaid).ToString("c");
 					}
@@ -926,11 +929,13 @@ namespace OpenDentBusiness {
 						row["description"] += "\r\n" + Lans.g("ContrAccount", "Estimated Payment Pending:") + " " + insest.ToString("c");
 					}
 				}
-				if(amtpaid != 0){
-					row["description"]+="\r\n"+Lans.g("ContrAccount","Payment:")+" "+amtpaid.ToString("c");
-				} 
-				else if(amtpaid==0 && (claimStatus=="R")){
-					row["description"]+="\r\n"+Lans.g("ContrAccount", "NO PAYMENT");
+				if(rawClaim.Rows[i]["ClaimType"].ToString()!="Cap"){
+					if(amtpaid != 0){
+						row["description"]+="\r\n"+Lans.g("ContrAccount","Payment:")+" "+amtpaid.ToString("c");
+					} 
+					else if(amtpaid==0 && (claimStatus=="R")){
+						row["description"]+="\r\n"+Lans.g("ContrAccount", "NO PAYMENT");
+					}
 				}
 				if(writeoff!=0){
 					row["description"]+="\r\n"+Lans.g("ContrAccount","Writeoff:")+" "+writeoff.ToString("c");
@@ -938,7 +943,10 @@ namespace OpenDentBusiness {
 				if(deductible!=0){
 					row["description"]+="\r\n"+Lans.g("ContrAccount","Deductible Applied:")+" "+deductible.ToString("c");
 				}
-				if(!PrefC.GetBool(PrefName.BalancesDontSubtractIns) &&	(claimStatus=="W" || claimStatus=="S")){
+				if(!PrefC.GetBool(PrefName.BalancesDontSubtractIns) 
+					&&	(claimStatus=="W" || claimStatus=="S")
+					&& rawClaim.Rows[i]["ClaimType"].ToString()!="Cap")
+				{
 					patport=procAmt-insest-writeoff;
 					if(patport<0){
 						patport=0;
