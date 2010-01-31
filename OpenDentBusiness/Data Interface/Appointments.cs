@@ -1397,6 +1397,11 @@ namespace OpenDentBusiness{
 			row["field"]=Lans.g("FormApptEdit","Middle Initial");
 			row["value"]=rawPat.Rows[0]["MiddleI"];
 			table.Rows.Add(row);
+			//Patient birthdate----------------------------------------------------------------
+			row=table.NewRow();
+			row["field"]=Lans.g("FormApptEdit","Birthdate");
+			row["value"]=PIn.Date(rawPat.Rows[0]["Birthdate"].ToString()).ToShortDateString();
+			table.Rows.Add(row);
 			//Patient home phone--------------------------------------------------------------------
 			row=table.NewRow();
 			row["field"]=Lans.g("FormApptEdit","Home Phone");
