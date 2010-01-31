@@ -64,7 +64,8 @@ namespace OpenDental {
 					string patnum=this.gridMergeFromPatients.Rows[i].Cells[0].Text;
 					if(patnum==fps.SelectedPatNum.ToString()) {
 						this.gridMergeFromPatients.SetSelected(i,true);
-					}else{
+					}
+					else{
 						this.gridMergeFromPatients.SetSelected(i,false);
 					}
 				}
@@ -95,6 +96,10 @@ namespace OpenDental {
 		}
 
 		private void butMerge_Click(object sender,EventArgs e) {
+			//Validate name and birthdate match
+			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Merge all patients from the list into the patient shown at the top?")) {
+				return;
+			}
 			long patTo=Convert.ToInt64(this.textPatientIDInto.Text.Trim());
 			for(int i=0;i<this.gridMergeFromPatients.Rows.Count;i++){
 				long patFrom=Convert.ToInt64(this.gridMergeFromPatients.Rows[i].Cells[0].Text.Trim());

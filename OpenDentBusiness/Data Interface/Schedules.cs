@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Reflection;
 
 namespace OpenDentBusiness{
@@ -72,7 +73,7 @@ namespace OpenDentBusiness{
 				}
 				command+="OperatoryNum="+POut.Long(opNums[i]);
 			}
-			command+=")";
+			command+=") GROUP BY schedule.ScheduleNum";
 			return RefreshAndFill(command);
 		}
 
@@ -243,12 +244,13 @@ namespace OpenDentBusiness{
 			{
 				throw new Exception(Lans.g("Schedule","Stop time cannot be the same as the start time."));
 			}
+			/*
 			if(Overlaps(sched)){
 				if(failSilently) {//used in blockout pasting
 					return;
 				}
 				throw new Exception(Lans.g("Schedule","Cannot overlap another time block."));
-			}
+			}*/
 			if(isNew){
 				Insert(sched);
 			}
@@ -700,7 +702,80 @@ namespace OpenDentBusiness{
 			}			
 		}
 
-		
+		public static int GetDuplicateBlockoutCount() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetInt(MethodBase.GetCurrentMethod());
+			}
+			string command=@"SELECT COUNT(*) countDups,SchedDate,schedule.ScheduleNum,
+				(SELECT GROUP_CONCAT(so1.OperatoryNum ORDER BY so1.OperatoryNum) FROM scheduleop so1 WHERE so1.ScheduleNum=schedule.ScheduleNum) AS ops				
+				FROM schedule
+				WHERE SchedType=2
+				GROUP BY SchedDate,ops,StartTime,StopTime
+				HAVING countDups > 1";
+			DataTable table=Db.GetTable(command);
+			int retVal=0;
+			for(int i=0;i<table.Rows.Count;i++) {
+				retVal+=PIn.Int(table.Rows[i][0].ToString())-1;
+			}
+			return retVal;
+		}
+
+		///<summary></summary>
+		public static void ClearDuplicates() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod());
+				return;
+			}
+			//First, create a temp table with operatories for all blockouts
+			string command="DROP TABLE IF EXISTS tempBlockoutOps";
+			Db.NonQ(command);
+			command=@"CREATE TABLE tempBlockoutOps
+				SELECT ScheduleNum,
+				(SELECT GROUP_CONCAT(so1.OperatoryNum ORDER BY so1.OperatoryNum) FROM scheduleop so1 WHERE so1.ScheduleNum=schedule.ScheduleNum) AS ops
+				FROM schedule
+				WHERE SchedType=2
+				GROUP BY ScheduleNum";
+			Db.NonQ(command);
+			command="ALTER TABLE tempBlockoutOps ADD INDEX (ScheduleNum)";
+			Db.NonQ(command);
+			//Get a list of scheduleNums that have duplicates
+			//A duplicate is defined as a matching opsList and matching times
+			//The result list will contain one random scheduleNum out of the many duplicates
+			command=@"SELECT SchedDate,ScheduleNum,StartTime,StopTime,
+				(SELECT ops FROM tempBlockoutOps WHERE tempBlockoutOps.ScheduleNum=schedule.ScheduleNum) ops_______________ops,
+				COUNT(*) countDups
+				FROM schedule
+				WHERE SchedType=2
+				GROUP BY SchedDate,ops_______________ops,StartTime,StopTime
+				HAVING countDups > 1";
+			DataTable table=Db.GetTable(command);
+			DateTime schedDate;
+			DateTime startTime;
+			DateTime stopTime;
+			string ops;
+			long scheduleNum;
+			for(int i=0;i<table.Rows.Count;i++){
+				schedDate=PIn.Date(table.Rows[i][0].ToString());
+				scheduleNum=PIn.Long(table.Rows[i][1].ToString());
+				startTime=PIn.DateT(table.Rows[i][2].ToString());
+				stopTime=PIn.DateT(table.Rows[i][3].ToString());
+				ops=PIn.ByteArray(table.Rows[i][4]);
+				command="DELETE FROM schedule WHERE "
+					+"SchedDate = "+POut.Date(schedDate)+" "
+					+"AND ScheduleNum != "+POut.Long(scheduleNum)+" "
+					+"AND StartTime = '"+startTime.ToString("hh:mm",new DateTimeFormatInfo())+":00' "
+					+"AND StopTime = '"+stopTime.ToString("hh:mm",new DateTimeFormatInfo())+":00' "
+					+"AND (SELECT ops FROM tempBlockoutOps WHERE tempBlockoutOps.ScheduleNum=schedule.ScheduleNum) = '"+POut.String(ops)+"' ";
+				Db.NonQ(command);
+			}
+			command="DROP TABLE IF EXISTS tempBlockoutOps";
+			Db.NonQ(command);
+			//clear all the orphaned scheduleops
+			command="DELETE FROM scheduleop WHERE NOT EXISTS(SELECT * FROM schedule WHERE scheduleop.ScheduleNum=schedule.ScheduleNum)";
+			long result=Db.NonQ(command);//we can test the result in debug
+		}
+
+
 	}
 
 	

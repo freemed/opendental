@@ -363,6 +363,7 @@ namespace OpenDental{
 			}
 			for(int i=0;i<SchedList.Count;i++) {
 				sched=SchedList[i];
+				sched.ScheduleNum=0;//So that overlap logic works.
 				if(isWeek) {
 					sched.SchedDate=sched.SchedDate.AddDays(weekDelta*7);
 				}
@@ -429,6 +430,7 @@ namespace OpenDental{
 				}
 				for(int i=0;i<SchedList.Count;i++) {
 					sched=SchedList[i].Copy();
+					sched.ScheduleNum=0;//So that overlap logic works.
 					if(isWeek) {
 						sched.SchedDate=sched.SchedDate.AddDays((weekDelta+r)*7);
 					}

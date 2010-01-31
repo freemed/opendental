@@ -344,6 +344,12 @@
     <Compile Include="Forms\BasicTemplate.designer.cs">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormBlockoutDuplicatesFix.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormBlockoutDuplicatesFix.designer.cs">
+      <DependentUpon>FormBlockoutDuplicatesFix.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormPatientMerge.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -3648,6 +3654,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormBlockoutDuplicatesFix.resx">
+      <DependentUpon>FormBlockoutDuplicatesFix.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormPatientMerge.resx">
