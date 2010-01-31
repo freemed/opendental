@@ -659,7 +659,7 @@ namespace OpenDentBusiness {
 					}
 					extraDetail+=Lans.g("AccountModule","Ins Est: ")+insPayEst.ToString("c");
 				}
-				if(patPort>0) {
+				if(patPort>0 && writeOffCap==0){//if there is a cap writeoff, showing a patient portion would calculate wrong.
 					if(extraDetail!="") {
 						extraDetail+=", ";
 					}
