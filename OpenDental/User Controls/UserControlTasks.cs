@@ -986,7 +986,10 @@ namespace OpenDental {
 				menuItemCopy.Enabled=true;
 				menuItemDelete.Enabled=true;
 			}
-			if(ClipTaskList==null && ClipTask==null) {
+			if(tabContr.SelectedIndex==0 && TreeHistory.Count==0) {//not allowed to paste into the trunk of a user tab
+				menuItemPaste.Enabled=false;
+			}
+			else if(ClipTaskList==null && ClipTask==null) {
 				menuItemPaste.Enabled=false;
 			}
 			else {//there is an item on our clipboard
