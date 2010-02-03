@@ -40,6 +40,7 @@ namespace OpenDental{
 		private Label label4;
 		private OpenDental.UI.Button butUpdate;
 		private Label label5;
+		private OpenDental.UI.Button butImportEcw;
 		///<summary>The defNum of the fee schedule that is currently displayed in the main window.</summary>
 		private long SchedNum;
 
@@ -100,6 +101,7 @@ namespace OpenDental{
 			this.label4 = new System.Windows.Forms.Label();
 			this.butUpdate = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
+			this.butImportEcw = new OpenDental.UI.Button();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupBox3.SuspendLayout();
@@ -284,12 +286,13 @@ namespace OpenDental{
 			// 
 			// groupBox5
 			// 
+			this.groupBox5.Controls.Add(this.butImportEcw);
 			this.groupBox5.Controls.Add(this.butImport);
 			this.groupBox5.Controls.Add(this.butExport);
 			this.groupBox5.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.groupBox5.Location = new System.Drawing.Point(15,188);
 			this.groupBox5.Name = "groupBox5";
-			this.groupBox5.Size = new System.Drawing.Size(205,59);
+			this.groupBox5.Size = new System.Drawing.Size(205,87);
 			this.groupBox5.TabIndex = 5;
 			this.groupBox5.TabStop = false;
 			this.groupBox5.Text = "Export/Import";
@@ -371,6 +374,20 @@ namespace OpenDental{
 			this.butClose.Text = "&Cancel";
 			this.butClose.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// butImportEcw
+			// 
+			this.butImportEcw.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butImportEcw.Autosize = true;
+			this.butImportEcw.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butImportEcw.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butImportEcw.CornerRadius = 4F;
+			this.butImportEcw.Location = new System.Drawing.Point(116,55);
+			this.butImportEcw.Name = "butImportEcw";
+			this.butImportEcw.Size = new System.Drawing.Size(75,24);
+			this.butImportEcw.TabIndex = 6;
+			this.butImportEcw.Text = "Import eCW";
+			this.butImportEcw.Click += new System.EventHandler(this.butImportEcw_Click);
+			// 
 			// FormFeeSchedTools
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
@@ -404,6 +421,9 @@ namespace OpenDental{
 		private void FormFeeSchedTools_Load(object sender, System.EventArgs e) {
 			for(int i=0;i<FeeSchedC.ListShort.Count;i++){
 				comboCopyFrom.Items.Add(FeeSchedC.ListShort[i].Description);
+			}
+			if(!Programs.IsEnabled("eClinicalWorks")) {
+				butImportEcw.Visible=false;
 			}
 		}
 
@@ -533,6 +553,103 @@ namespace OpenDental{
 			DialogResult=DialogResult.OK;
 		}
 
+		private void butImportEcw_Click(object sender,EventArgs e) {
+			Cursor=Cursors.WaitCursor;
+			OpenFileDialog Dlg=new OpenFileDialog();
+			#if DEBUG
+				Dlg.InitialDirectory=@"E:\My Documents\Bridge Info\eClinicalWorks\FeeSchedules";
+			#endif
+			if(Dlg.ShowDialog()!=DialogResult.OK) {
+				Cursor=Cursors.Default;
+				return;
+			}
+			if(!File.Exists(Dlg.FileName)) {
+				Cursor=Cursors.Default;
+				MsgBox.Show(this,"File not found");
+				return;
+			}
+			string extension=Path.GetExtension(Dlg.FileName);
+			if(extension!=".csv") {
+				Cursor=Cursors.Default;
+				MsgBox.Show(this,"Only .csv files may be imported.");
+				return;
+			}
+			string[] lines=File.ReadAllLines(Dlg.FileName);
+			if(lines.Length==0 || lines[0]!="Code,Description,Unit Fee,Allowed Fee,POS,TOS,Modifier,RequiresCliaID,GlobalBillingDays,ChargeCode") {
+				Cursor=Cursors.Default;
+				MessageBox.Show("Unexpected file format. First line in file should be:\r\nCode,Description,Unit Fee,Allowed Fee,POS,TOS,Modifier,RequiresCliaID,GlobalBillingDays,ChargeCode");
+				return;
+			}
+			string feeSchedName=Path.GetFileNameWithoutExtension(Dlg.FileName);
+			FeeSched feesched=FeeScheds.GetByExactName(feeSchedName,FeeScheduleType.Normal);
+			if(feesched==null) {
+				feesched=new FeeSched();
+				feesched.Description=feeSchedName;
+				feesched.FeeSchedType=FeeScheduleType.Normal;
+				feesched.ItemOrder=FeeSchedC.ListLong[FeeSchedC.ListLong.Count-1].ItemOrder+1;
+				feesched.IsHidden=false;
+				feesched.IsNew=true;
+				FeeScheds.WriteObject(feesched);
+				DataValid.SetInvalid(InvalidType.FeeScheds);
+			}
+			else{
+				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Fee schedule already exists and all the fees will be overwritten.  Continue?")) {
+					Cursor=Cursors.Default;
+					return;
+				}
+				Fees.ClearFeeSched(feesched.FeeSchedNum);
+			}
+			bool importAllowed=false;
+			if(MsgBox.Show(this,MsgBoxButtons.YesNo,"Import Allowed Fee column instead of Unit Fee column?")) {
+				importAllowed=true;
+			}
+			int imported=0;
+			int skippedCode=0;
+			int skippedMalformed=0;
+			string[] fieldArray;
+			List<string> fields;
+			double feeAmt=0;
+			string codeText="";
+			for(int i=1;i<lines.Length;i++){
+				fieldArray=lines[i].Split(new string[1] { "\"" },StringSplitOptions.RemoveEmptyEntries);//half the 'fields' will be commas
+				fields=new List<string>();
+				for(int f=0;f<fieldArray.Length;f++) {
+					if(fieldArray[f]==",") {
+						continue;
+					}
+					fields.Add(fieldArray[f]);
+				}
+				if(fields.Count<4) {
+					skippedMalformed++;
+					continue;
+				}
+				if(importAllowed) {
+					feeAmt=PIn.Double(fields[3]);
+				}
+				else {
+					feeAmt=PIn.Double(fields[2]);
+				}
+				codeText=fields[0];
+				if(!ProcedureCodes.IsValidCode(codeText)) {
+					skippedCode++;
+					continue;
+				}
+				Fees.Import(fields[0],feeAmt,feesched.FeeSchedNum);
+				imported++;
+			}
+			DataValid.SetInvalid(InvalidType.Fees);
+			Cursor=Cursors.Default;
+			string displayMsg="Import complete.\r\nCodes imported: "+imported.ToString();
+			if(skippedCode>0) {
+				displayMsg+="\r\nCodes skipped because not valid codes in Open Dental: "+skippedCode.ToString();
+			}
+			if(skippedMalformed>0) {
+				displayMsg+="\r\nCodes skipped because malformed line in text file: "+skippedMalformed.ToString();
+			}
+			MessageBox.Show(displayMsg);
+			DialogResult=DialogResult.OK;
+		}
+
 		private void butUpdate_Click(object sender,EventArgs e) {
 			if(!MsgBox.Show(this,true,"All treatment planned procedures for all patients will be updated.  Only the fee will be updated, not the insurance estimate.  It might take a few minutes.  Continue?")) {
 				return;
@@ -547,6 +664,8 @@ namespace OpenDental{
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 		
 

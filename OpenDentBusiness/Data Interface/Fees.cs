@@ -243,7 +243,7 @@ namespace OpenDentBusiness{
 			return retVal;
 		}
 
-		///<summary>Clears all fees from one fee schedule.  Supply the DefNum of the feeSchedule.</summary>
+		///<summary>Clears all fees from one fee schedule.  Supply the FeeSchedNum of the feeSchedule.</summary>
 		public static void ClearFeeSched(long schedNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),schedNum);

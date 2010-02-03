@@ -106,6 +106,7 @@ namespace OpenDentBusiness{
 			return true;
 		}
 
+		///<summary>Will return null if exact name not found.</summary>
 		public static FeeSched GetByExactName(string description){
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<FeeSchedC.ListLong.Count;i++){
@@ -116,6 +117,7 @@ namespace OpenDentBusiness{
 			return null;
 		}
 
+		///<summary>Will return null if exact name not found.</summary>
 		public static FeeSched GetByExactName(string description,FeeScheduleType feeSchedType){
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<FeeSchedC.ListLong.Count;i++){
