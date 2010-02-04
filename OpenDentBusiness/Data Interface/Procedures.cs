@@ -1067,7 +1067,7 @@ namespace OpenDentBusiness {
 			return strLine;
 		}
 
-		///<summary>Used do display procedure descriptions on appointments. The returned string also includes surf and toothNum.</summary>
+		///<summary>Used to display procedure descriptions on appointments. The returned string also includes surf and toothNum.</summary>
 		public static string GetDescription(Procedure proc) {
 			//No need to check RemotingRole; no call to db.
 			return ConvertProcToString(proc.CodeNum,proc.Surf,proc.ToothNum);

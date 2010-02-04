@@ -215,10 +215,11 @@ namespace OpenDentBusiness{
 
 		private static List<SheetFieldDef> GetPatientForm(OutInCheck outInCheck) {
 			List<SheetFieldDef> list=new List<SheetFieldDef>();
-			if(outInCheck==OutInCheck.Out){
+			/*if(outInCheck==OutInCheck.Out){
 				//I can't really think of any for this kind				
 			}
 			else if(outInCheck==OutInCheck.In){
+				
 				list.Add(NewInput("FName"));
 				list.Add(NewInput("LName"));
 				list.Add(NewInput("MiddleI"));
@@ -233,13 +234,13 @@ namespace OpenDentBusiness{
 				list.Add(NewInput("HmPhone"));//We will have to strip off notes.
 				list.Add(NewInput("WkPhone"));
 				list.Add(NewInput("WirelessPhone"));
-				/*list.Add(NewInput(""));
 				list.Add(NewInput(""));
 				list.Add(NewInput(""));
 				list.Add(NewInput(""));
 				list.Add(NewInput(""));
 				list.Add(NewInput(""));
-				list.Add(NewInput(""));*/
+				list.Add(NewInput(""));
+				list.Add(NewInput(""));
 			}
 			else if(outInCheck==OutInCheck.Check){
 				list.Add(NewCheck("GenderIsMale"));
@@ -248,35 +249,22 @@ namespace OpenDentBusiness{
 				list.Add(NewCheck("PositionIsSingle"));
 				//list.Add(NewCheck(""));
 				list.Add(NewCheck("misc"));
-			}
+			}*/
 			return list;
 		}
 
 		private static List<SheetFieldDef> GetRoutingSlip(OutInCheck outInCheck) {
 			List<SheetFieldDef> list=new List<SheetFieldDef>();
 			if(outInCheck==OutInCheck.Out) {
-				/*
-				list.Add(NewOutput("FName"));
-				list.Add(NewOutput("LName"));
-				list.Add(NewOutput("MiddleI"));
-				list.Add(NewOutput("Preferred"));
-				list.Add(NewOutput("Birthdate"));
-				list.Add(NewOutput("SSN"));
-				list.Add(NewOutput("Address"));
-				list.Add(NewOutput("Address2"));
-				list.Add(NewOutput("City"));
-				list.Add(NewOutput("State"));
-				list.Add(NewOutput("Zip"));
-				list.Add(NewOutput("HmPhone"));//We will have to strip off notes.
-				list.Add(NewOutput("WkPhone"));
-				list.Add(NewOutput("WirelessPhone"));
-				list.Add(NewOutput(""));
-				list.Add(NewOutput(""));
-				list.Add(NewOutput(""));
-				list.Add(NewOutput(""));
-				list.Add(NewOutput(""));
-				list.Add(NewOutput(""));
-				list.Add(NewOutput(""));*/
+				list.Add(NewOutput("patient.nameFL"));
+				list.Add(NewOutput("appt.timeDate"));
+				list.Add(NewOutput("appt.length"));
+				list.Add(NewOutput("appt.providers"));
+				list.Add(NewOutput("appt.procedures"));
+				list.Add(NewOutput("appt.Note"));
+				list.Add(NewOutput("otherFamilyMembers"));
+				
+				
 			}
 			else if(outInCheck==OutInCheck.In) {
 				//Not applicable

@@ -503,15 +503,98 @@ By signing below you acknowledge that you understand the information presented, 
 			SheetDef sheet=new SheetDef(SheetTypeEnum.RoutingSlip);
 			sheet.Description="Routing Slip";
 			sheet.FontName="Microsoft Sans Serif";
-			sheet.FontSize=9f;
+			sheet.FontSize=10f;
 			sheet.Width=850;
 			sheet.Height=1100;
-			int rowH=14;
+			int rowH=18;
+			int x=75;
 			int y=50;
-			
-
-
-
+			//Title----------------------------------------------------------------------------------------------------------
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Routing Slip",12f,sheet.FontName,true,373,y,200,22));
+			y+=35;
+			//Today's appointment, including procedures-----------------------------------------------------------------------
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("patient.nameFL",sheet.FontSize,sheet.FontName,true,x,y,500,19));
+			y+=19;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("appt.timeDate",sheet.FontSize,sheet.FontName,false,x,y,500,rowH));
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("appt.length",sheet.FontSize,sheet.FontName,false,x,y,500,rowH));
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("appt.providers",sheet.FontSize,sheet.FontName,false,x,y,500,rowH,GrowthBehaviorEnum.DownGlobal));
+			y+=rowH-2;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Procedures:",sheet.FontSize,sheet.FontName,false,x,y,500,rowH));
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("appt.procedures",sheet.FontSize,sheet.FontName,false,x+10,y,490,rowH,GrowthBehaviorEnum.DownGlobal));
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Note:",sheet.FontSize,sheet.FontName,false,x,y,40,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("appt.Note",sheet.FontSize,sheet.FontName,false,x+40,y,460,rowH,GrowthBehaviorEnum.DownGlobal));
+			y+=rowH;
+			y+=3;
+			//Patient/Family Info---------------------------------------------------------------------------------------------
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewLine(x,y,725,0));
+			y+=3;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Patient Info",sheet.FontSize,sheet.FontName,true,x,y,500,19));
+			y+=19;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("PatNum: [PatNum]",sheet.FontSize,sheet.FontName,false,x,y,500,rowH));
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Age: [age]",sheet.FontSize,sheet.FontName,false,x,y,500,rowH));
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Date of First Visit: [DateFirstVisit]",sheet.FontSize,sheet.FontName,false,x,y,500,rowH));
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Billing Type: [BillingType]",sheet.FontSize,sheet.FontName,false,x,y,500,rowH));
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Recall Due Date: [dateRecallDue]",sheet.FontSize,sheet.FontName,false,x,y,500,rowH));
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Medical notes: [MedUrgNote]",sheet.FontSize,sheet.FontName,false,x,y,725,rowH,GrowthBehaviorEnum.DownGlobal));
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Other Family Members",sheet.FontSize,sheet.FontName,true,x,y,500,19));
+			y+=19;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("otherFamilyMembers",sheet.FontSize,sheet.FontName,false,x,y,500,rowH,GrowthBehaviorEnum.DownGlobal));
+			y+=rowH;
+			y+=3;
+			//Insurance Info---------------------------------------------------------------------------------------------
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewLine(x,y,725,0));
+			y+=3;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Primary Insurance",sheet.FontSize,sheet.FontName,true,x,y,360,19));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Secondary Insurance",sheet.FontSize,sheet.FontName,true,x+365,y,360,19));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewLine(x+362,y,0,124));
+			y+=19;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText(
+@"[carrierName]
+Subscriber: [subscriberNameFL]
+Annual Max: [insAnnualMax], Pending: [insPending], Used: [insUsed]
+Deductible: [insDeductible], Ded Used: [insDeductibleUsed]
+[insPercentages]"
+				,sheet.FontSize,sheet.FontName,false,x,y,360,105,GrowthBehaviorEnum.DownGlobal));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText(
+@"[carrier2Name]
+Subscriber: [subscriber2NameFL]
+Annual Max: [ins2AnnualMax], Pending: [ins2Pending], Used: [ins2Used]
+Deductible: [ins2Deductible], Ded Used: [ins2DeductibleUsed]
+[ins2Percentages]"
+				,sheet.FontSize,sheet.FontName,false,x+365,y,360,105,GrowthBehaviorEnum.DownGlobal));
+			y+=105;
+			//Account Info---------------------------------------------------------------------------------------------
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewLine(x,y,725,0));
+			y+=3;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Account Info",sheet.FontSize,sheet.FontName,true,x,y,500,19));
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText(
+				@"Guarantor: [guarantorNameFL]
+Balance: [balTotal]
+-Ins Est: [balInsEst]
+=Total: [balTotalMinusInsEst]
+Aging: 0-30:[bal_0_30]  31-60:[bal_31_60]  61-90:[bal_61_90]  90+:[balOver90]
+Fam Urgent Fin Note: [famFinUrgNote]"
+				,sheet.FontSize,sheet.FontName,false,x,y,725,rowH,GrowthBehaviorEnum.DownGlobal));
+			y+=rowH;
+			y+=3;
+			//Insurance Info---------------------------------------------------------------------------------------------
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewLine(x,y,725,0));
+			y+=3;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Treatment Plan",sheet.FontSize,sheet.FontName,true,x,y,500,19,GrowthBehaviorEnum.DownGlobal));
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("[treatmentPlanProcs]",sheet.FontSize,sheet.FontName,false,x,y,500,19,GrowthBehaviorEnum.DownGlobal));
+			y+=rowH;
 			return sheet;
 		}
 

@@ -236,6 +236,19 @@ namespace OpenDentBusiness{
 			return table;
 		}
 
+		public static bool ContainsStaticField(Sheet sheet,string fieldName) {
+			//No need to check RemotingRole; no call to db
+			foreach(SheetField field in sheet.SheetFields) {
+				if(field.FieldType!=SheetFieldType.StaticText) {
+					continue;
+				}
+				if(field.FieldValue.Contains("["+fieldName+"]")) {
+					return true;
+				}
+			}
+			return false;
+		}
+
 		
 
 	}

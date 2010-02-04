@@ -3694,8 +3694,16 @@ namespace OpenDental{
 					PrintApptCard();
 					break;
 				case 11:
+					//for now, this only allows one type of routing slip.  But it could be easily changed.
 					FormRpRouting FormR=new FormRpRouting();
-					FormR.ApptNum=ContrApptSingle.ClickedAptNum;
+					FormR.AptNum=ContrApptSingle.ClickedAptNum;
+					List<SheetDef> customSheetDefs=SheetDefs.GetCustomForType(SheetTypeEnum.RoutingSlip);
+					if(customSheetDefs.Count==0) {
+						FormR.SheetDefNum=0;
+					}
+					else {
+						FormR.SheetDefNum=customSheetDefs[0].SheetDefNum;
+					}
 					FormR.ShowDialog();
 					break;
 			}

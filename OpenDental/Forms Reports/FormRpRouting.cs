@@ -33,7 +33,9 @@ namespace OpenDental
 		///<summary>The date that the user selected.</summary>
 		private DateTime date;
 		///<summary>If set externally beforehand, then the user will not see any choices, and only a routing slip for the one appt will print.</summary>
-		public long ApptNum;
+		public long AptNum;
+		/// <summary>If ApptNum is set, then this should be set also.</summary>
+		public long SheetDefNum;
 
 		/// <summary>
 		/// Required designer variable.
@@ -217,29 +219,30 @@ namespace OpenDental
 		#endregion
 
 		private void FormRpRouting_Load(object sender, System.EventArgs e){
-			if(ApptNum!=0){
+			if(AptNum!=0){
 				/*
-				List<Appointment> Appts=new List<Appointment>();
-				Appts.Add(Appointments.GetOneApt(ApptNum));
-				if(Appts.Count==0 || Appts[0]==null) {
-					MsgBox.Show(this,"Appointment not found");
-					return;
+				SheetDef sheetDef=null;
+				if(SheetDefNum==0) {
+					sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.RoutingSlip);
 				}
-				PrintOneRoutingSlip(Appts[0]);
+				else {
+					sheetDef=SheetDefs.GetSheetDef(SheetDefNum);
+				}
+				Sheet sheet=SheetUtil.CreateSheet(sheetDef);
+				SheetParameter.SetParameter(sheet,"AptNum",AptNum);
+				SheetFiller.FillFields(sheet);
+				using(Graphics g=this.CreateGraphics()) {
+					SheetUtil.CalculateHeights(sheet,g);
+				}
+				FormSheetFillEdit FormS=new FormSheetFillEdit(sheet);
+				FormS.ShowDialog();*/
+
+				
+				List<long> aptNums=new List<long>();
+				aptNums.Add(AptNum);
+				PrintRoutingSlips(aptNums,SheetDefNum);
 				DialogResult=DialogResult.OK;
 				return;
-				 */
-				  
-				  
-				/*
-				pagesPrinted=0;
-				pd=new PrintDocument();
-				pd.PrintPage+=new PrintPageEventHandler(this.pd_PrintPage);
-				pd.OriginAtMargins=true;
-				pd.DefaultPageSettings.Margins=new Margins(0,0,0,0);
-				printPreview=new OpenDental.UI.PrintPreview(PrintSituation.Default,pd,Appts.Length);
-				printPreview.ShowDialog();
-				DialogResult=DialogResult.OK;*/
 			}
 			for(int i=0;i<ProviderC.List.Length;i++){
 				listProv.Items.Add(ProviderC.List[i].GetLongDesc());
@@ -282,24 +285,16 @@ namespace OpenDental
 				provNums.Add(ProviderC.List[listProv.SelectedIndices[i]].ProvNum);
 			}
 			List<long> aptNums=Appointments.GetRouting(date,provNums);
-			//if(Appts.Count==0){
-			//	MsgBox.Show(this,"There are no appointments scheduled for that date.");
-			//	return;
-			//}
-			
-
-
-			/*
-			pagesPrinted=0;
-			pd=new PrintDocument();
-			pd.PrintPage+=new PrintPageEventHandler(this.pd_PrintPage);
-			pd.OriginAtMargins=true;
-			pd.DefaultPageSettings.Margins=new Margins(0,0,0,0);
-			printPreview=new OpenDental.UI.PrintPreview(PrintSituation.Default,pd,Appts.Length);
-			printPreview.ShowDialog();
-			if(printPreview.DialogResult!=DialogResult.OK){
-				return;
-			}*/
+			SheetDef sheetDef;
+			List<SheetDef> customSheetDefs=SheetDefs.GetCustomForType(SheetTypeEnum.RoutingSlip);
+			if(customSheetDefs.Count==0){
+				sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.RoutingSlip);
+			}
+			else{
+				sheetDef=customSheetDefs[0];//Instead of doing this, we could give the user a list to pick from on this form.
+				//SheetDefs.GetFieldsAndParameters(sheetDef);
+			}
+			PrintRoutingSlips(aptNums,sheetDef.SheetDefNum);
 			DialogResult=DialogResult.OK;
 		}
 
@@ -307,8 +302,15 @@ namespace OpenDental
 			DialogResult=DialogResult.Cancel;
 		}
 
-		private void PrintRoutingSlips(List<long> aptNums) {
-			SheetDef sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.RoutingSlip);
+		/// <summary>Specify a sheetDefNum of 0 for the internal Routing slip.</summary>
+		private void PrintRoutingSlips(List<long> aptNums,long sheetDefNum) {
+			SheetDef sheetDef;
+			if(sheetDefNum==0){
+				sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.RoutingSlip);
+			}
+			else{
+				sheetDef=SheetDefs.GetSheetDef(sheetDefNum);//includes fields and parameters
+			}
 			List<Sheet> sheetBatch=SheetUtil.CreateBatch(sheetDef,aptNums);
 			try {
 				SheetPrinting.PrintBatch(sheetBatch);
@@ -316,277 +318,9 @@ namespace OpenDental
 			catch(Exception ex) {
 				MessageBox.Show(ex.Message);
 			}
-			/*
-			SheetDef sheetDef;
-			List<SheetDef> customSheetDefs=SheetDefs.GetCustomForType(SheetTypeEnum.LabelAppointment);
-			if(customSheetDefs.Count==0) {
-				sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.LabelAppointment);
-			}
-			else {
-				sheetDef=customSheetDefs[0];
-				SheetDefs.GetFieldsAndParameters(sheetDef);
-			}
-			Sheet sheet=SheetUtil.CreateSheet(sheetDef);
-			SheetParameter.SetParameter(sheet,"AptNum",aptNum);
-			SheetFiller.FillFields(sheet);
-			try {
-				SheetPrinting.Print(sheet);
-			}
-			catch(Exception ex) {
-				MessageBox.Show(ex.Message);
-			}*/
 		}
 
-		///<summary>raised for each page to be printed.  One page per appointment.</summary>
-		private void pd_PrintPage(object sender,PrintPageEventArgs ev) {
-			/*
-			if(ApptNum!=0) {//just for one appointment
-				date=AppointmentL.DateSelected;
-			}
-			Graphics g=ev.Graphics;
-			float y=50;
-			float x=0;
-			string str;
-			float sizeW;//used when measuring text for placement
-			Font fontTitle=new Font(FontFamily.GenericSansSerif,12,FontStyle.Bold);
-			Font fontHeading=new Font(FontFamily.GenericSansSerif,10,FontStyle.Bold);
-			Font font=new Font(FontFamily.GenericSansSerif,10);
-			SolidBrush brush=new SolidBrush(Color.Black);
-			//Title----------------------------------------------------------------------------------------------------------
-			str=Lan.g(this,"Routing Slip");
-			sizeW=g.MeasureString(str,fontTitle).Width;
-			x=425-sizeW/2;
-			g.DrawString(str,fontTitle,brush,x,y);
-			y+=35;
-			x=75;
-			//Today's appointment, including procedures-----------------------------------------------------------------------
-			Family fam=Patients.GetFamily(Appts[pagesPrinted].PatNum);
-			Patient pat=fam.GetPatient(Appts[pagesPrinted].PatNum);
-			str=pat.GetNameFL();
-			g.DrawString(str,fontHeading,brush,x,y);
-			y+=18;
-			str=Appts[pagesPrinted].AptDateTime.ToShortTimeString()+"  "+Appts[pagesPrinted].AptDateTime.ToShortDateString();
-			g.DrawString(str,fontHeading,brush,x,y);
-			y+=18;
-			str=(Appts[pagesPrinted].Pattern.Length*5).ToString()+" "+Lan.g(this,"minutes");
-			g.DrawString(str,font,brush,x,y);
-			y+=15;
-			str=Providers.GetAbbr(Appts[pagesPrinted].ProvNum);
-			g.DrawString(str,font,brush,x,y);
-			y+=15;
-			if(Appts[pagesPrinted].ProvHyg!=0) {
-				str=Providers.GetAbbr(Appts[pagesPrinted].ProvHyg);
-				g.DrawString(str,font,brush,x,y);
-				y+=15;
-			}
-			str=Lan.g(this,"Procedures:");
-			g.DrawString(str,font,brush,x,y);
-			y+=15;
-			List<Procedure> procsAll=Procedures.Refresh(pat.PatNum);
-			Procedure[] procsApt=Procedures.GetProcsOneApt(Appts[pagesPrinted].AptNum,procsAll);
-			for(int i=0;i<procsApt.Length;i++) {
-				str="   "+Procedures.GetDescription(procsApt[i]);
-				g.DrawString(str,font,brush,x,y);
-				y+=15;
-			}
-			str=Lan.g(this,"Note:")+" "+Appts[pagesPrinted].Note;
-			SizeF sizef=g.MeasureString(str,font,725);
-			RectangleF rectf=new RectangleF(x,y,sizef.Width,sizef.Height);
-			g.DrawString(str,font,brush,rectf);
-			y+=sizef.Height;
-			y+=5;
-			//Patient/Family Info---------------------------------------------------------------------------------------------
-			g.DrawLine(Pens.Black,75,y,775,y);
-			str=Lan.g(this,"Patient Info");
-			g.DrawString(str,fontHeading,brush,x,y);
-			y+=18;
-			str=Lan.g(this,"PatNum:")+" "+pat.PatNum.ToString();
-			g.DrawString(str,font,brush,x,y);
-			y+=15;
-			str=Lan.g(this,"Age:")+" ";
-			if(pat.Age>0){
-				str+=pat.Age.ToString();
-			}
-			g.DrawString(str,font,brush,x,y);
-			y+=15;
-			str=Lan.g(this,"Date of First Visit:")+" ";
-			if(pat.DateFirstVisit.Year<1880){
-				str+="?";
-			}
-			else if(pat.DateFirstVisit==Appts[pagesPrinted].AptDateTime.Date){
-				str+=Lan.g(this,"New Patient");
-			}
-			else{
-				str+=pat.DateFirstVisit.ToShortDateString();
-			}
-			g.DrawString(str,font,brush,x,y);
-			y+=15;
-			str=Lan.g(this,"Billing Type:")+" "+DefC.GetName(DefCat.BillingTypes,pat.BillingType);
-			g.DrawString(str,font,brush,x,y);
-			y+=15;
-			List<long> patNums=new List<long>();
-			patNums.Add(pat.PatNum);
-			List<Recall> recallList=Recalls.GetList(patNums);
-			str=Lan.g(this,"Recall Due Date:")+" ";
-			if(recallList.Count>0){
-				str+=recallList[0].DateDue.ToShortDateString();
-			}
-			g.DrawString(str,font,brush,x,y);
-			y+=15;
-			str=Lan.g(this,"Medical notes:")+" "+pat.MedUrgNote;
-			g.DrawString(str,font,brush,x,y);
-			y+=25;
-			//Other Family Members
-			str=Lan.g(this,"Other Family Members");
-			g.DrawString(str,fontHeading,brush,x,y);
-			y+=18;
-			for(int i=0;i<fam.ListPats.Length;i++) {
-				if(fam.ListPats[i].PatNum==pat.PatNum) {
-					continue;
-				}
-				if(fam.ListPats[i].PatStatus==PatientStatus.Archived
-					|| fam.ListPats[i].PatStatus==PatientStatus.Deceased) {
-					continue;
-				}
-				str=fam.ListPats[i].GetNameFL();
-				if(fam.ListPats[i].Age>0){
-					str+=",   "+fam.ListPats[i].Age.ToString();
-				}
-				g.DrawString(str,font,brush,x,y);
-				y+=15;
-			}
-			y+=10;
-			//Insurance Info--------------------------------------------------------------------------------------------------
-			g.DrawLine(Pens.Black,75,y,775,y);
-			str=Lan.g(this,"Insurance");
-			g.DrawString(str,fontHeading,brush,x,y);
-			y+=18;
-			List<PatPlan> patPlanList=PatPlans.Refresh(pat.PatNum);
-			List<InsPlan> plans=InsPlans.Refresh(fam);
-			List<ClaimProc> claimProcList=ClaimProcs.Refresh(pat.PatNum);
-			List<Benefit> benefits=Benefits.Refresh(patPlanList);
-			List<ClaimProcHist> histList=ClaimProcs.GetHistList(pat.PatNum,benefits,patPlanList,plans,DateTime.Today);
-			InsPlan plan;
-			Carrier carrier;
-			string subscriber;
-			if(patPlanList.Count==0){
-				str=Lan.g(this,"none");
-				g.DrawString(str,font,brush,x,y);
-				y+=15;
-			}
-			for(int i=0;i<patPlanList.Count;i++){
-				plan=InsPlans.GetPlan(patPlanList[i].PlanNum,plans);
-				carrier=Carriers.GetCarrier(plan.CarrierNum);
-				str=carrier.CarrierName;
-				g.DrawString(str,fontHeading,brush,x,y);
-				y+=18;
-				subscriber=fam.GetNameInFamFL(plan.Subscriber);
-				if(subscriber=="") {//subscriber from another family
-					subscriber=Patients.GetLim(plan.Subscriber).GetNameLF();
-				}
-				str=Lan.g(this,"Subscriber:")+" "+subscriber;
-				g.DrawString(str,font,brush,x,y);
-				y+=15;
-				str=Lan.g(this,"Annual Max:")+" ";
-				double max=Benefits.GetAnnualMaxDisplay(benefits,patPlanList[i].PlanNum,patPlanList[i].PatPlanNum);
-				if(max!=-1) {
-					str+=max.ToString("c")+", ";
-					double pending=InsPlans.GetPendingDisplay(histList,DateTime.Today,plan,patPlanList[i].PatPlanNum,-1,pat.PatNum);
-					str+=Lan.g(this,"Pending:")+" "+pending.ToString("c")+", ";
-					double used=InsPlans.GetInsUsedDisplay(histList,DateTime.Today,patPlanList[i].PlanNum,patPlanList[i].PatPlanNum,-1,plans);
-					str+=Lan.g(this,"Used:")+" "+used.ToString("c");
-					g.DrawString(str,font,brush,x,y);
-					y+=15;
-				}
-				double dedInd=Benefits.GetDeductGeneralDisplay(benefits,patPlanList[i].PlanNum,patPlanList[i].PatPlanNum,BenefitCoverageLevel.Individual);
-				if(dedInd!=-1) {
-					str=Lan.g(this,"Deductible:")+" "+dedInd.ToString("c")+", ";
-					double dedUsed=InsPlans.GetDedUsedDisplay(histList,DateTime.Today,patPlanList[i].PlanNum,patPlanList[i].PatPlanNum,-1,plans,
-						BenefitCoverageLevel.Individual,pat.PatNum);
-					str+=Lan.g(this,"Ded Used:")+" "+dedUsed.ToString("c");
-					g.DrawString(str,font,brush,x,y);
-					y+=15;
-				}
-				double dedFam=Benefits.GetDeductGeneralDisplay(benefits,patPlanList[i].PlanNum,patPlanList[i].PatPlanNum,BenefitCoverageLevel.Family);
-				if(dedFam!=-1) {
-					str=Lan.g(this,"Family Deductible:")+" "+dedFam.ToString("c")+", ";
-					double dedUsedFam=InsPlans.GetDedUsedDisplay(histList,DateTime.Today,patPlanList[i].PlanNum,patPlanList[i].PatPlanNum,-1,plans,
-						BenefitCoverageLevel.Family,pat.PatNum);
-					str+=Lan.g(this,"Ded Used Fam:")+" "+dedUsedFam.ToString("c");
-					g.DrawString(str,font,brush,x,y);
-					y+=15;
-				}
-				str="";
-				for(int j=0;j<benefits.Count;j++){
-					if(benefits[j].PlanNum != plan.PlanNum){
-						continue;
-					}
-					if(benefits[j].BenefitType != InsBenefitType.CoInsurance) {
-						continue;
-					}
-					if(str!=""){
-						str+=",  ";
-					}
-					str+=CovCats.GetDesc(benefits[j].CovCatNum)+" "+benefits[j].Percent.ToString()+"%";
-				}
-				if(str!=""){
-					sizef=g.MeasureString(str,font,725);
-					rectf=new RectangleF(x,y,sizef.Width,sizef.Height);
-					g.DrawString(str,font,brush,rectf);
-					y+=sizef.Height;
-				}
-			}
-			y+=5;
-			//Account Info---------------------------------------------------------------------------------------------------
-			g.DrawLine(Pens.Black,75,y,775,y);
-			str=Lan.g(this,"Account Info");
-			g.DrawString(str,fontHeading,brush,x,y);
-			y+=18;
-			str=Lan.g(this,"Guarantor:")+" "+fam.ListPats[0].GetNameFL();
-			g.DrawString(str,font,brush,x,y);
-			y+=15;
-			str=Lan.g(this,"Balance:")+(fam.ListPats[0].BalTotal-fam.ListPats[0].InsEst).ToString("c");
-			if(fam.ListPats[0].InsEst>.01){
-				str+="  ("+fam.ListPats[0].BalTotal.ToString("c")+" - "
-					+fam.ListPats[0].InsEst.ToString("c")+" "+Lan.g(this,"InsEst")+")";
-			}
-			g.DrawString(str,font,brush,x,y);
-			y+=15;
-			str=Lan.g(this,"Aging:")
-				+"  0-30:"+fam.ListPats[0].Bal_0_30.ToString("c")
-				+"  31-60:"+fam.ListPats[0].Bal_31_60.ToString("c")
-				+"  61-90:"+fam.ListPats[0].Bal_61_90.ToString("c")
-				+"  90+:"+fam.ListPats[0].BalOver90.ToString("c");
-			g.DrawString(str,font,brush,x,y);
-			y+=15;
-			str=Lan.g(this,"Fam Urgent Fin Note:")+fam.ListPats[0].FamFinUrgNote;
-			sizef=g.MeasureString(str,font,725);
-			rectf=new RectangleF(x,y,sizef.Width,sizef.Height);
-			g.DrawString(str,font,brush,rectf);
-			y+=sizef.Height;
-			y+=5;
-			//Treatment Plan--------------------------------------------------------------------------------------------------
-			g.DrawLine(Pens.Black,75,y,775,y);
-			str=Lan.g(this,"Treatment Plan");
-			g.DrawString(str,fontHeading,brush,x,y);
-			y+=18;
-			for(int i=0;i<procsAll.Count;i++){
-				if(procsAll[i].ProcStatus!=ProcStat.TP){
-					continue;
-				}
-				str=Procedures.GetDescription(procsAll[i]);
-				g.DrawString(str,font,brush,x,y);
-				y+=15;
-			}
-			pagesPrinted++;
-			if(pagesPrinted==Appts.Length) {
-				ev.HasMorePages=false;
-				pagesPrinted=0;
-			}
-			else {*/
-				ev.HasMorePages=true;
-			//}
-		}
+	
 
 
 

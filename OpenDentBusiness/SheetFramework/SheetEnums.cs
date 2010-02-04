@@ -25,7 +25,7 @@ namespace OpenDentBusiness {
 		ReferralLetter,
 		///<Summary>9-Requires SheetParameter for PatNum.</Summary>
 		PatientForm,
-		///<Summary>10-Requires SheetParameters for PatNum,AptNum.</Summary>
+		///<Summary>10-Requires SheetParameter for AptNum.  Does not get saved to db.</Summary>
 		RoutingSlip
 		/*StatementHeader,
 		TxPlanHeader,

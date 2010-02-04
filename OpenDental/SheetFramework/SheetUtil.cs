@@ -48,7 +48,8 @@ namespace OpenDental{
 					fontstyle=FontStyle.Bold;
 				}
 				font=new Font(field.FontName,field.FontSize,fontstyle);
-				calcH=(int)g.MeasureString(field.FieldValue,font).Height+2;//min 2 to prevent hidden text due to scroll.
+				//calcH=(int)g.MeasureString(field.FieldValue,font).Height;//this was too short
+				calcH=GraphicsHelper.MeasureStringH(g,field.FieldValue,font,field.Width);
 				if(calcH<=field.Height){
 					continue;
 				}
