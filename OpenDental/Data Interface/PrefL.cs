@@ -28,7 +28,7 @@ namespace OpenDental {
 			}
 		}
 
-		///<summary>Called in two places.  Once from RefreshLocalData, and also from FormBackups after a restore.</summary>
+		///<summary>Called in two places.  Once from FormOpenDental.PrefsStartup, and also from FormBackups after a restore.</summary>
 		public static bool CheckProgramVersion() {
 			if(PrefC.GetBool(PrefName.UpdateWindowShowsClassicView)) {
 				return CheckProgramVersionClassic();
@@ -45,8 +45,11 @@ namespace OpenDental {
 				if(PrefC.GetString(PrefName.UpdateInProgressOnComputerName)==""){//1. Just performed an update from this workstation on another database.
 					//This is very common for admins when viewing slighly older databases.
 					//There should be no annoying behavior here.  So do nothing.
-					Prefs.UpdateString(PrefName.ProgramVersion,currentVersion.ToString());
-					Cache.Refresh(InvalidType.Prefs);
+					#if !DEBUG
+						//Excluding this in debug allows us to view slightly older databases without accidentally altering them.
+						Prefs.UpdateString(PrefName.ProgramVersion,currentVersion.ToString());
+						Cache.Refresh(InvalidType.Prefs);
+					#endif
 					return true;
 				}
 				//and 2a. Just performed an update from this workstation on this database.  
