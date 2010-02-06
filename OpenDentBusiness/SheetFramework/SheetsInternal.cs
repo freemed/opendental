@@ -40,6 +40,15 @@ namespace OpenDentBusiness{
 					return PatientRegistration();
 				case SheetInternalType.RoutingSlip:
 					return RoutingSlip();
+				case SheetInternalType.FinancialAgreement:
+					return FinancialAgreement();
+				case SheetInternalType.HIPAA:
+					return HIPAA();
+				case SheetInternalType.MedicalHistory:
+					return MedicalHistory();
+
+
+
 				default:
 					throw new ApplicationException("Invalid SheetInternalType.");
 			}
@@ -695,7 +704,54 @@ Fam Urgent Fin Note: [famFinUrgNote]"
 			return sheet;
 		}
 
-		
+		private static SheetDef FinancialAgreement(){
+			SheetDef sheet=new SheetDef(SheetTypeEnum.PatientForm);
+			sheet.Description="Financial Agreement";
+			sheet.FontName="Microsoft Sans Serif";
+			sheet.FontSize=10f;
+			sheet.Width=850;
+			sheet.Height=1100;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Financial Agreement",12f,sheet.FontName,true,332,65,200,20));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Date: [dateToday]",sheet.FontSize,sheet.FontName,false,92,135,120,18));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText(@"* For my convenience, this office may release my information to my insurance company, and receive payment directly from them.
+* I understand that if I begin major treatment that involves lab work, I will be responsible for the fee at that time.
+* If sent to collections, I agree to pay all related fees and court costs.
+* Every effort will be made to help me with my insurance, but if they do not pay as expected, I will still be responsible.
+* I agree to pay finance charges of 1.5% per month (18% APR) on any balance 90 days past due.
+* I will pay a fee for appointments broken without 24 hours notice. 
+* Treatment plans may change, and I will be responsible for the work actually done.",sheet.FontSize,sheet.FontName,false,92,167,670,155));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("I agree to let this office run a credit report.  If no, then all fees are due at time of service.",sheet.FontSize,sheet.FontName,false,92,337,550,18));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewRect(93,360,11,11));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewRect(93,378,11,11));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewCheckBox("misc",94,361,10,10));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewCheckBox("misc",94,379,10,10));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Yes",sheet.FontSize,sheet.FontName,false,108,358,40,18));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("No",sheet.FontSize,sheet.FontName,false,108,376,40,18));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewSigBox(258,434,364,81));
+			return sheet;
+		}
+
+		private static SheetDef HIPAA(){
+			SheetDef sheet=new SheetDef(SheetTypeEnum.PatientForm);
+			sheet.Description="HIPAA";
+			sheet.FontName="Microsoft Sans Serif";
+			sheet.FontSize=10f;
+			sheet.Width=850;
+			sheet.Height=1100;
+
+			return sheet;
+		}
+
+		private static SheetDef MedicalHistory() {
+			SheetDef sheet=new SheetDef(SheetTypeEnum.MedicalHistory);
+			sheet.Description="Medical History";
+			sheet.FontName="Microsoft Sans Serif";
+			sheet.FontSize=10f;
+			sheet.Width=850;
+			sheet.Height=1100;
+
+			return sheet;
+		}
 
 	}
 }

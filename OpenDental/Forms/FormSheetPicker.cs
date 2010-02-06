@@ -14,6 +14,7 @@ namespace OpenDental {
 		///<summary>Only if OK.</summary>
 		public SheetDef SelectedSheetDef;
 		private bool showingInternalSheetDefs;
+		private bool showingInternalMed;
 
 		public FormSheetPicker() {
 			InitializeComponent();
@@ -25,6 +26,20 @@ namespace OpenDental {
 			if(listSheets.Count==0 && SheetType==SheetTypeEnum.PatientForm) {
 				showingInternalSheetDefs=true;
 				listSheets.Add(SheetsInternal.GetSheetDef(SheetInternalType.PatientRegistration));
+				listSheets.Add(SheetsInternal.GetSheetDef(SheetInternalType.FinancialAgreement));
+				listSheets.Add(SheetsInternal.GetSheetDef(SheetInternalType.HIPAA));
+			}
+			if(SheetType==SheetTypeEnum.PatientForm) {//we will also show medical history
+				List<SheetDef> listMedSheets=SheetDefs.GetCustomForType(SheetTypeEnum.MedicalHistory);
+				if(listMedSheets.Count==0) {
+					showingInternalMed=true;
+					listSheets.Add(SheetsInternal.GetSheetDef(SheetInternalType.MedicalHistory));
+				}
+				else{//if user has added any of their own medical history forms
+					for(int i=0;i<listMedSheets.Count;i++) {
+						listSheets.Add(listMedSheets[i]);
+					}
+				}
 			}
 			labelSheetType.Text=Lan.g("enumSheetTypeEnum",SheetType.ToString());
 			for(int i=0;i<listSheets.Count;i++){
@@ -37,7 +52,10 @@ namespace OpenDental {
 				return;
 			}
 			SelectedSheetDef=listSheets[listMain.SelectedIndex];
-			if(!showingInternalSheetDefs) {
+			if(SelectedSheetDef.SheetType==SheetTypeEnum.PatientForm && !showingInternalSheetDefs) {
+				SheetDefs.GetFieldsAndParameters(SelectedSheetDef);
+			}
+			if(SelectedSheetDef.SheetType==SheetTypeEnum.MedicalHistory && !showingInternalMed) {
 				SheetDefs.GetFieldsAndParameters(SelectedSheetDef);
 			}
 			DialogResult=DialogResult.OK;
@@ -49,7 +67,10 @@ namespace OpenDental {
 				return;
 			}
 			SelectedSheetDef=listSheets[listMain.SelectedIndex];
-			if(!showingInternalSheetDefs) {
+			if(SelectedSheetDef.SheetType==SheetTypeEnum.PatientForm && !showingInternalSheetDefs) {
+				SheetDefs.GetFieldsAndParameters(SelectedSheetDef);
+			}
+			if(SelectedSheetDef.SheetType==SheetTypeEnum.MedicalHistory && !showingInternalMed) {
 				SheetDefs.GetFieldsAndParameters(SelectedSheetDef);
 			}
 			DialogResult=DialogResult.OK;
