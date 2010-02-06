@@ -401,7 +401,7 @@ namespace OpenDentBusiness{
 		[DataField("StudentStatus")]
 		private string studentStatus;
 		bool studentStatusChanged;
-		/// <summary>Single char for Nonstudent, Parttime, or Fulltime.  Blank=Nonstudent</summary>
+		/// <summary>Single char for Nonstudent, Parttime, or Fulltime.  Blank also=Nonstudent</summary>
 		public string StudentStatus {
 			get { return studentStatus; }
 			set { if(studentStatus!=value){studentStatus = value; MarkDirty(); studentStatusChanged = true; }}

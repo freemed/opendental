@@ -43,6 +43,7 @@ namespace OpenDental {
 				for(int i=0;i<files.Length;i++){
 					comboFieldName.Items.Add(Path.GetFileName(files[i]));
 				}
+				//comboFieldName.Items.Add("Patient Info.gif");
 			}
 		}
 
@@ -90,7 +91,11 @@ namespace OpenDental {
 				pictureBox.Image=Image.FromFile(textFullPath.Text);
 				textWidth2.Text=pictureBox.Image.Width.ToString();
 				textHeight2.Text=pictureBox.Image.Height.ToString();
-				
+			}
+			else if(comboFieldName.Text=="Patient Info.gif") {
+				pictureBox.Image=Properties.Resources.Patient_Info;
+				textWidth2.Text=pictureBox.Image.Width.ToString();
+				textHeight2.Text=pictureBox.Image.Height.ToString();
 			}
 			else{
 				pictureBox.Image=null;
@@ -190,7 +195,9 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please enter a file name first.");
 				return;
 			}
-			if(!File.Exists(textFullPath.Text)){
+			if(!File.Exists(textFullPath.Text)
+				&& comboFieldName.Text!="Patient Info.gif") 
+			{
 				MsgBox.Show(this,"Image file does not exist.");
 				return;
 			}

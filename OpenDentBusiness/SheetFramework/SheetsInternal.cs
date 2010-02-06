@@ -36,8 +36,8 @@ namespace OpenDentBusiness{
 					return PatientLetter();
 				case SheetInternalType.ReferralLetter:
 					return ReferralLetter();
-				//case SheetInternalType.PatientRegistration://no time for this right now
-				//	return PatientRegistration();
+				case SheetInternalType.PatientRegistration:
+					return PatientRegistration();
 				case SheetInternalType.RoutingSlip:
 					return RoutingSlip();
 				default:
@@ -487,17 +487,114 @@ By signing below you acknowledge that you understand the information presented, 
 		}
 
 
-		/*private static SheetDef PatientRegistration(){
-			SheetDef sheet=new SheetDef(SheetTypeEnum.PatientRegistration);
+		private static SheetDef PatientRegistration() {
+			SheetDef sheet=new SheetDef(SheetTypeEnum.PatientForm);
+			sheet.Description="Registration Form";
 			sheet.FontName="Microsoft Sans Serif";
-			sheet.FontSize=9f;
+			sheet.FontSize=10f;
 			sheet.Width=850;
 			sheet.Height=1100;
-			int rowH=14;
-			int y=50;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewImage("Patient Info.gif",0,0,770,999));
+			int rowH=16;
+			int y=30;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewImage("Patient Info.gif",60,y,720,813));
+			y=204;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("LName",sheet.FontSize,sheet.FontName,false,126,y,150,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("FName",sheet.FontSize,sheet.FontName,false,293,y,145,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("MiddleI",sheet.FontSize,sheet.FontName,false,447,y,50,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("Preferred",sheet.FontSize,sheet.FontName,false,507,y,150,rowH));
+			y=236;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("Birthdate",sheet.FontSize,sheet.FontName,false,133,y,105,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("SSN",sheet.FontSize,sheet.FontName,false,292,y,140,rowH));
+			y=241;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewCheckBox("GenderIsMale",499,y,10,10));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewCheckBox("GenderIsFemale",536,y,10,10));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewCheckBox("PositionIsMarried",649,y,10,10));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewCheckBox("positionIsNotMarried",683,y,10,10));
+			y=255;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("WkPhone",sheet.FontSize,sheet.FontName,false,152,y,120,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("WirelessPhone",sheet.FontSize,sheet.FontName,false,381,y,120,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("wirelessCarrier",sheet.FontSize,sheet.FontName,false,631,y,130,rowH));
+			y=274;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("Email",sheet.FontSize,sheet.FontName,false,114,y,575,rowH));
+			y=299;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewCheckBox("PreferContactMethodIsHmPhone",345,y,10,10));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewCheckBox("PreferContactMethodIsWkPhone",429,y,10,10));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewCheckBox("PreferContactMethodIsWirelessPh",513,y,10,10));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewCheckBox("PreferContactMethodIsEmail",607,y,10,10));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewCheckBox("PreferContactMethodIsTextMessage",666,y,10,10));
+			y=318;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewCheckBox("PreferConfirmMethodIsHmPhone",343,y,10,10));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewCheckBox("PreferConfirmMethodIsWkPhone",428,y,10,10));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewCheckBox("PreferConfirmMethodIsWirelessPh",511,y,10,10));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewCheckBox("PreferConfirmMethodIsEmail",605,y,10,10));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewCheckBox("PreferConfirmMethodIsTextMessage",664,y,10,10));
+			y=337;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewCheckBox("PreferRecallMethodIsHmPhone",343,y,10,10));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewCheckBox("PreferRecallMethodIsWkPhone",428,y,10,10));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewCheckBox("PreferRecallMethodIsWirelessPh",512,y,10,10));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewCheckBox("PreferRecallMethodIsEmail",605,y,10,10));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewCheckBox("PreferRecallMethodIsTextMessage",665,y,10,10));
+			//cover up the options for text messages since we don't support that yet
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText(".",sheet.FontSize,sheet.FontName,false,660,293,100,70));
+			y=356;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewCheckBox("StudentStatusIsNonstudent",346,y,10,10));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewCheckBox("StudentStatusIsFulltime",443,y,10,10));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewCheckBox("StudentStatusIsParttime",520,y,10,10));
+			y=375;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewCheckBox("guarantorIsSelf",270,y,10,10));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewCheckBox("guarantorIsOther",320,y,10,10));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("guarantorNameF",sheet.FontSize,sheet.FontName,false,378,370,150,rowH));
+			y=409;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("referredFrom",sheet.FontSize,sheet.FontName,false,76,y,600,rowH));
+			y=473;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewCheckBox("addressAndHmPhoneIsSameEntireFamily",283,y,10,10));
+			y=487;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("Address",sheet.FontSize,sheet.FontName,false,128,y,425,rowH));
+			y=506;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("Address2",sheet.FontSize,sheet.FontName,false,141,y,425,rowH));
+			y=525;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("City",sheet.FontSize,sheet.FontName,false,103,y,200,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("State",sheet.FontSize,sheet.FontName,false,359,y,45,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("Zip",sheet.FontSize,sheet.FontName,false,439,y,100,rowH));
+			y=544;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("HmPhone",sheet.FontSize,sheet.FontName,false,156,y,120,rowH));
+			//Ins 1--------------------------------------------------------------------------------------------------------------
+			y=603;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewCheckBox("ins1RelatIsSelf",267,y,10,10));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewCheckBox("ins1RelatIsSpouse",320,y,10,10));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewCheckBox("ins1RelatIsChild",394,y,10,10));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewCheckBox("ins1RelatIsNotSelfSpouseChild",457,y,10,10));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("ins1RelatDescript",sheet.FontSize,sheet.FontName,false,515,598,200,rowH));
+			y=619;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("ins1SubscriberNameF",sheet.FontSize,sheet.FontName,false,184,y,250,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("ins1SubscriberID",sheet.FontSize,sheet.FontName,false,565,y,140,rowH));
+			y=638;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("ins1CarrierName",sheet.FontSize,sheet.FontName,false,201,y,290,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("ins1CarrierPhone",sheet.FontSize,sheet.FontName,false,552,y,170,rowH));
+			y=657;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("ins1EmployerName",sheet.FontSize,sheet.FontName,false,136,y,190,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("ins1GroupName",sheet.FontSize,sheet.FontName,false,419,y,160,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("ins1GroupNum",sheet.FontSize,sheet.FontName,false,638,y,120,rowH));
+			//Ins 2-------------------------------------------------------------------------------------------------------------
+			y=729;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewCheckBox("ins2RelatIsSelf",267,y,10,10));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewCheckBox("ins2RelatIsSpouse",320,y,10,10));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewCheckBox("ins2RelatIsChild",394,y,10,10));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewCheckBox("ins2RelatIsNotSelfSpouseChild",457,y,10,10));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("ins2RelatDescript",sheet.FontSize,sheet.FontName,false,515,598+126,200,rowH));
+			y=619+126;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("ins2SubscriberNameF",sheet.FontSize,sheet.FontName,false,184,y,250,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("ins2SubscriberID",sheet.FontSize,sheet.FontName,false,565,y,140,rowH));
+			y=638+126;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("ins2CarrierName",sheet.FontSize,sheet.FontName,false,201,y,290,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("ins2CarrierPhone",sheet.FontSize,sheet.FontName,false,552,y,170,rowH));
+			y=657+126;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("ins2EmployerName",sheet.FontSize,sheet.FontName,false,136,y,190,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("ins2GroupName",sheet.FontSize,sheet.FontName,false,419,y,160,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("ins2GroupNum",sheet.FontSize,sheet.FontName,false,638,y,120,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("misc",sheet.FontSize,sheet.FontName,false,136,821,600,200));
 			return sheet;
-		}*/
+		}
 
 		private static SheetDef RoutingSlip() {
 			SheetDef sheet=new SheetDef(SheetTypeEnum.RoutingSlip);
@@ -513,7 +610,7 @@ By signing below you acknowledge that you understand the information presented, 
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Routing Slip",12f,sheet.FontName,true,373,y,200,22));
 			y+=35;
 			//Today's appointment, including procedures-----------------------------------------------------------------------
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("patient.nameFL",sheet.FontSize,sheet.FontName,true,x,y,500,19));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("[nameFL]",sheet.FontSize,sheet.FontName,true,x,y,500,19));
 			y+=19;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("appt.timeDate",sheet.FontSize,sheet.FontName,false,x,y,500,rowH));
 			y+=rowH;

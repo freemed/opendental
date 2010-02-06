@@ -1363,7 +1363,9 @@ namespace OpenDentBusiness{
 		///<summary>6</summary>
 		SeeNotes,
 		///<summary>7</summary>
-		Mail
+		Mail,
+		///<summary>8</summary>
+		TextMessage
 	}
 
 	///<summary>0=None,1=Declined,2=Scheduled,3=Consulted,4=InTreatment,5=Complete</summary>

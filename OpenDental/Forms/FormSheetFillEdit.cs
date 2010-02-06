@@ -79,10 +79,16 @@ namespace OpenDental {
 					continue;
 				}
 				string filePathAndName=ODFileUtils.CombinePaths(SheetUtil.GetImagePath(),field.FieldName);
-				if(!File.Exists(filePathAndName)){
+				Image img=null;
+				if(File.Exists(filePathAndName)){
+					img=Image.FromFile(filePathAndName);
+				}
+				else if(field.FieldName=="Patient Info.gif") {
+					img=Properties.Resources.Patient_Info;
+				}
+				else{
 					continue;
 				}
-				Image img=Image.FromFile(filePathAndName);
 				//we will now change the resolution to 100x100 to make this screen faster and to simplify calculations.
 				//I tested it, and this does not decrease the screen quality.
 				Image img2=new Bitmap(img,field.Width,field.Height);

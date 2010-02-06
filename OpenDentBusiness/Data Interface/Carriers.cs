@@ -353,7 +353,7 @@ namespace OpenDentBusiness{
 			return "";
 		}
 
-		///<summary>Replacing GetCur. Gets the specified carrier. This also refreshes the list if necessary, so it will work even if the list has not been refreshed recently.</summary>
+		///<summary>Gets the specified carrier from Cache. This also refreshes the list if necessary, so it will work even if the list has not been refreshed recently.</summary>
 		public static Carrier GetCarrier(long carrierNum) {
 			//No need to check RemotingRole; no call to db.
 			if(carrierNum==0){

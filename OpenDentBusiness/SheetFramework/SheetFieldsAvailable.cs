@@ -215,56 +215,95 @@ namespace OpenDentBusiness{
 
 		private static List<SheetFieldDef> GetPatientForm(OutInCheck outInCheck) {
 			List<SheetFieldDef> list=new List<SheetFieldDef>();
-			/*if(outInCheck==OutInCheck.Out){
+			if(outInCheck==OutInCheck.Out){
 				//I can't really think of any for this kind				
 			}
 			else if(outInCheck==OutInCheck.In){
-				
-				list.Add(NewInput("FName"));
-				list.Add(NewInput("LName"));
-				list.Add(NewInput("MiddleI"));
-				list.Add(NewInput("Preferred"));
-				list.Add(NewInput("Birthdate"));
-				list.Add(NewInput("SSN"));
 				list.Add(NewInput("Address"));
 				list.Add(NewInput("Address2"));
+				list.Add(NewInput("Birthdate"));
 				list.Add(NewInput("City"));
+				list.Add(NewInput("Email"));
+				list.Add(NewInput("FName"));
+				list.Add(NewInput("guarantorNameF"));
+				list.Add(NewInput("HmPhone"));//We will have to handle trailing notes.
+				list.Add(NewInput("ins1CarrierName"));
+				list.Add(NewInput("ins1CarrierPhone"));
+				list.Add(NewInput("ins1EmployerName"));
+				list.Add(NewInput("ins1GroupName"));
+				list.Add(NewInput("ins1GroupNum"));
+				list.Add(NewInput("ins1RelatDescript"));
+				list.Add(NewInput("ins1SubscriberID"));
+				list.Add(NewInput("ins1SubscriberNameF"));
+				list.Add(NewInput("ins2CarrierName"));
+				list.Add(NewInput("ins2CarrierPhone"));
+				list.Add(NewInput("ins2EmployerName"));
+				list.Add(NewInput("ins2GroupName"));
+				list.Add(NewInput("ins2GroupNum"));
+				list.Add(NewInput("ins2RelatDescript"));
+				list.Add(NewInput("ins2SubscriberID"));
+				list.Add(NewInput("ins2SubscriberNameF"));
+				list.Add(NewInput("LName"));
+				list.Add(NewInput("MiddleI"));
+				list.Add(NewInput("misc"));
+				list.Add(NewInput("Preferred"));
+				list.Add(NewInput("referredFrom"));
+				list.Add(NewInput("SSN"));
 				list.Add(NewInput("State"));
-				list.Add(NewInput("Zip"));
-				list.Add(NewInput("HmPhone"));//We will have to strip off notes.
 				list.Add(NewInput("WkPhone"));
 				list.Add(NewInput("WirelessPhone"));
-				list.Add(NewInput(""));
-				list.Add(NewInput(""));
-				list.Add(NewInput(""));
-				list.Add(NewInput(""));
-				list.Add(NewInput(""));
-				list.Add(NewInput(""));
-				list.Add(NewInput(""));
+				list.Add(NewInput("wirelessCarrier"));
+				list.Add(NewInput("Zip"));
 			}
 			else if(outInCheck==OutInCheck.Check){
+				list.Add(NewCheck("addressAndHmPhoneIsSameEntireFamily"));
 				list.Add(NewCheck("GenderIsMale"));
 				list.Add(NewCheck("GenderIsFemale"));
-				list.Add(NewCheck("PositionIsMarried"));
-				list.Add(NewCheck("PositionIsSingle"));
-				//list.Add(NewCheck(""));
+				list.Add(NewCheck("guarantorIsOther"));
+				list.Add(NewCheck("guarantorIsSelf"));
+				list.Add(NewCheck("ins1RelatIsChild"));
+				list.Add(NewCheck("ins1RelatIsNotSelfSpouseChild"));
+				list.Add(NewCheck("ins1RelatIsSelf"));
+				list.Add(NewCheck("ins1RelatIsSpouse"));
+				list.Add(NewCheck("ins2RelatIsChild"));
+				list.Add(NewCheck("ins2RelatIsNotSelfSpouseChild"));
+				list.Add(NewCheck("ins2RelatIsSelf"));
+				list.Add(NewCheck("ins2RelatIsSpouse"));
 				list.Add(NewCheck("misc"));
-			}*/
+				list.Add(NewCheck("PositionIsMarried"));
+				list.Add(NewCheck("positionIsNotMarried"));
+				list.Add(NewCheck("PreferConfirmMethodIsEmail"));
+				list.Add(NewCheck("PreferConfirmMethodIsHmPhone"));
+				list.Add(NewCheck("PreferConfirmMethodIsTextMessage"));
+				list.Add(NewCheck("PreferConfirmMethodIsWirelessPh"));
+				list.Add(NewCheck("PreferConfirmMethodIsWkPhone"));
+				list.Add(NewCheck("PreferContactMethodIsEmail"));
+				list.Add(NewCheck("PreferContactMethodIsHmPhone"));
+				list.Add(NewCheck("PreferContactMethodIsTextMessage"));
+				list.Add(NewCheck("PreferContactMethodIsWirelessPh"));
+				list.Add(NewCheck("PreferContactMethodIsWkPhone"));
+				list.Add(NewCheck("PreferRecallMethodIsEmail"));
+				list.Add(NewCheck("PreferRecallMethodIsHmPhone"));
+				list.Add(NewCheck("PreferRecallMethodIsTextMessage"));
+				list.Add(NewCheck("PreferRecallMethodIsWirelessPh"));
+				list.Add(NewCheck("PreferRecallMethodIsWkPhone"));
+				list.Add(NewCheck("StudentStatusIsFulltime"));
+				list.Add(NewCheck("StudentStatusIsNonstudent"));
+				list.Add(NewCheck("StudentStatusIsParttime"));
+			}
 			return list;
 		}
 
 		private static List<SheetFieldDef> GetRoutingSlip(OutInCheck outInCheck) {
 			List<SheetFieldDef> list=new List<SheetFieldDef>();
 			if(outInCheck==OutInCheck.Out) {
-				list.Add(NewOutput("patient.nameFL"));
 				list.Add(NewOutput("appt.timeDate"));
 				list.Add(NewOutput("appt.length"));
 				list.Add(NewOutput("appt.providers"));
 				list.Add(NewOutput("appt.procedures"));
 				list.Add(NewOutput("appt.Note"));
 				list.Add(NewOutput("otherFamilyMembers"));
-				
-				
+				//most fields turned out to work best as static text.
 			}
 			else if(outInCheck==OutInCheck.In) {
 				//Not applicable

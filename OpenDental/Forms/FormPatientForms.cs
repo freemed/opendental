@@ -19,6 +19,8 @@ namespace OpenDental {
 		}
 
 		private void FormPatientForms_Load(object sender,EventArgs e) {
+			Patient pat=Patients.GetLim(PatNum);
+			Text=Lan.g(this,"Patient Forms for")+" "+pat.GetNameFL();
 			FillGrid();
 		}
 

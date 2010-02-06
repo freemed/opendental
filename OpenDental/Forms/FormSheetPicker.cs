@@ -13,6 +13,7 @@ namespace OpenDental {
 		private List<SheetDef> listSheets;
 		///<summary>Only if OK.</summary>
 		public SheetDef SelectedSheetDef;
+		private bool showingInternalSheetDefs;
 
 		public FormSheetPicker() {
 			InitializeComponent();
@@ -21,6 +22,10 @@ namespace OpenDental {
 
 		private void FormSheetPicker_Load(object sender,EventArgs e) {
 			listSheets=SheetDefs.GetCustomForType(SheetType);
+			if(listSheets.Count==0 && SheetType==SheetTypeEnum.PatientForm) {
+				showingInternalSheetDefs=true;
+				listSheets.Add(SheetsInternal.GetSheetDef(SheetInternalType.PatientRegistration));
+			}
 			labelSheetType.Text=Lan.g("enumSheetTypeEnum",SheetType.ToString());
 			for(int i=0;i<listSheets.Count;i++){
 				listMain.Items.Add(listSheets[i].Description);
@@ -32,7 +37,9 @@ namespace OpenDental {
 				return;
 			}
 			SelectedSheetDef=listSheets[listMain.SelectedIndex];
-			SheetDefs.GetFieldsAndParameters(SelectedSheetDef);
+			if(!showingInternalSheetDefs) {
+				SheetDefs.GetFieldsAndParameters(SelectedSheetDef);
+			}
 			DialogResult=DialogResult.OK;
 		}
 
@@ -42,7 +49,9 @@ namespace OpenDental {
 				return;
 			}
 			SelectedSheetDef=listSheets[listMain.SelectedIndex];
-			SheetDefs.GetFieldsAndParameters(SelectedSheetDef);
+			if(!showingInternalSheetDefs) {
+				SheetDefs.GetFieldsAndParameters(SelectedSheetDef);
+			}
 			DialogResult=DialogResult.OK;
 		}
 

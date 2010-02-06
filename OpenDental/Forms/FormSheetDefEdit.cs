@@ -150,10 +150,16 @@ namespace OpenDental {
 				}
 				if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.Image){
 					string filePathAndName=ODFileUtils.CombinePaths(SheetUtil.GetImagePath(),SheetDefCur.SheetFieldDefs[i].FieldName);
-					if(!File.Exists(filePathAndName)){
+					Image img=null;
+					if(File.Exists(filePathAndName)){
+						img=Image.FromFile(filePathAndName);
+					}
+					else if(SheetDefCur.SheetFieldDefs[i].FieldName=="Patient Info.gif") {
+						img=Properties.Resources.Patient_Info;
+					}
+					else{
 						continue;
 					}
-					Image img=Image.FromFile(filePathAndName);
 					g.DrawImage(img,SheetDefCur.SheetFieldDefs[i].XPos,SheetDefCur.SheetFieldDefs[i].YPos,
 						SheetDefCur.SheetFieldDefs[i].Width,SheetDefCur.SheetFieldDefs[i].Height);
 					continue;
@@ -268,6 +274,10 @@ namespace OpenDental {
 		}
 
 		private void butAddOutputText_Click(object sender,EventArgs e) {
+			if(SheetFieldsAvailable.GetList(SheetDefCur.SheetType,OutInCheck.Out).Count==0) {
+				MsgBox.Show(this,"There are no output fields available for this type of sheet.");
+				return;
+			}
 			Font font=new Font(SheetDefCur.FontName,SheetDefCur.FontSize);
 			FormSheetFieldOutput FormS=new FormSheetFieldOutput();
 			FormS.SheetDefCur=SheetDefCur;
@@ -629,6 +639,9 @@ namespace OpenDental {
 
 		private void panelMain_MouseMove(object sender,MouseEventArgs e) {
 			if(!MouseIsDown){
+				return;
+			}
+			if(IsInternal) {
 				return;
 			}
 			for(int i=0;i<listFields.SelectedIndices.Count;i++){

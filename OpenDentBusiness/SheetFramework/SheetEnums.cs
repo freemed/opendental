@@ -88,7 +88,7 @@ namespace OpenDentBusiness {
 		Consent,
 		PatientLetter,
 		ReferralLetter,
-		//PatientRegistration//We don't have time to do this right now.  But offices can do this on their own from scratch
+		PatientRegistration,
 		RoutingSlip
 	}
 

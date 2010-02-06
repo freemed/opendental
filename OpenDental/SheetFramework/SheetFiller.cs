@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.Text;
 using OpenDentBusiness;
 
@@ -784,47 +785,353 @@ namespace OpenDental{
 		}
 
 		private static void FillFieldsForPatientForm(Sheet sheet,Patient pat) {
+			Family fam=Patients.GetFamily(pat.PatNum);
+			List<PatPlan> patPlanList=PatPlans.Refresh(pat.PatNum);
+			List<InsPlan> planList=InsPlans.Refresh(fam);
+			InsPlan insplan1=null;
+			Carrier carrier1=null;
+			if(patPlanList.Count>0){
+				insplan1=InsPlans.GetPlan(patPlanList[0].PlanNum,planList);
+				carrier1=Carriers.GetCarrier(insplan1.CarrierNum);
+			}
+			InsPlan insplan2=null;
+			Carrier carrier2=null;
+			if(patPlanList.Count>1) {
+				insplan2=InsPlans.GetPlan(patPlanList[1].PlanNum,planList);
+				carrier2=Carriers.GetCarrier(insplan2.CarrierNum);
+			}
 			foreach(SheetField field in sheet.SheetFields) {
-				/*switch(field.FieldName) {
-					case "PracticeTitle":
-						field.FieldValue=PrefC.GetString(PrefName.PracticeTitle);
+				switch(field.FieldName) {
+					case "Address":
+						field.FieldValue=pat.Address;
 						break;
-					case "PracticeAddress":
-						field.FieldValue=PrefC.GetString(PrefName.PracticeAddress);
-						if(PrefC.GetString(PrefName.PracticeAddress2) != "") {
-							field.FieldValue+="\r\n"+PrefC.GetString(PrefName.PracticeAddress2);
+					case "Address2":
+						field.FieldValue=pat.Address2;
+						break;
+					case "addressAndHmPhoneIsSameEntireFamily":
+						bool isSame=true;
+						for(int i=0;i<fam.ListPats.Length;i++){
+							if(pat.HmPhone!=fam.ListPats[i].HmPhone
+								|| pat.Address!=fam.ListPats[i].Address
+								|| pat.Address2!=fam.ListPats[i].Address2
+								|| pat.City!=fam.ListPats[i].City
+								|| pat.State!=fam.ListPats[i].State
+								|| pat.Zip!=fam.ListPats[i].Zip)
+							{
+								isSame=false;
+								break;
+							}
+						}
+						if(isSame) {
+							field.FieldValue="X";
 						}
 						break;
-					case "practiceCityStateZip":
-						field.FieldValue=PrefC.GetString(PrefName.PracticeCity)+", "
-							+PrefC.GetString(PrefName.PracticeST)+"  "
-							+PrefC.GetString(PrefName.PracticeZip);
+					case "Birthdate":
+						field.FieldValue=pat.Birthdate.ToShortDateString();
 						break;
-					case "referral.nameFL":
-						field.FieldValue=Referrals.GetNameFL(refer.ReferralNum);
+					case "City":
+						field.FieldValue=pat.City;
 						break;
-					case "referral.address":
-						field.FieldValue=refer.Address;
-						if(refer.Address2!="") {
-							field.FieldValue+="\r\n"+refer.Address2;
+					case "Email":
+						field.FieldValue=pat.Email;
+						break;
+					case "FName":
+						field.FieldValue=pat.FName;
+						break;
+					case "GenderIsFemale":
+						if(pat.Gender==PatientGender.Female) {
+							field.FieldValue="X";
 						}
 						break;
-					case "referral.cityStateZip":
-						field.FieldValue=refer.City+", "+refer.ST+" "+refer.Zip;
+					case "GenderIsMale":
+						if(pat.Gender==PatientGender.Male) {
+							field.FieldValue="X";
+						}
 						break;
-					case "today.DayDate":
-						field.FieldValue=DateTime.Today.ToString("dddd")+", "+DateTime.Today.ToShortDateString();
+					case "guarantorIsOther":
+						if(pat.Guarantor!=pat.PatNum) {
+							field.FieldValue="X";
+						}
 						break;
-					case "patient.nameFL":
-						field.FieldValue=pat.GetNameFL();
+					case "guarantorIsSelf":
+						if(pat.Guarantor==pat.PatNum) {
+							field.FieldValue="X";
+						}
 						break;
-					case "referral.salutation":
-						field.FieldValue="Dear "+refer.FName+":";
+					case "guarantorNameF":
+						if(pat.Guarantor!=pat.PatNum) {//if self, this will be blank
+							field.FieldValue=fam.ListPats[0].FName;
+						}
 						break;
-					case "patient.priProvNameFL":
-						field.FieldValue=Providers.GetFormalName(pat.PriProv);
+					case "HmPhone":
+						field.FieldValue=pat.HmPhone;
 						break;
-				}*/
+					case "ins1CarrierName":
+						if(carrier1!=null){
+							field.FieldValue=carrier1.CarrierName;
+						}
+						break;
+					case "ins1CarrierPhone":
+						if(carrier1!=null) {
+							field.FieldValue=carrier1.Phone;
+						}
+						break;
+					case "ins1EmployerName":
+						if(insplan1!=null) {
+							field.FieldValue=Employers.GetName(insplan1.EmployerNum);
+						}
+						break;
+					case "ins1GroupName":
+						if(insplan1!=null) {
+							field.FieldValue=insplan1.GroupName;
+						}
+						break;
+					case "ins1GroupNum":
+						if(insplan1!=null) {
+							field.FieldValue=insplan1.GroupNum;
+						}
+						break;
+					case "ins1RelatDescript"://only if not Self, Spouse, or Child
+						if(patPlanList.Count>0 && patPlanList[0].Relationship!=Relat.Self 
+							&& patPlanList[0].Relationship!=Relat.Spouse && patPlanList[0].Relationship!=Relat.Child) 
+						{
+							field.FieldValue=Lan.g("enumRelat","patPlanList[0].Relationship.ToString()");
+						}
+						break;
+					case "ins1RelatIsChild":
+						if(patPlanList.Count>0 && patPlanList[0].Relationship==Relat.Child) {
+							field.FieldValue="X";
+						}
+						break;
+					case "ins1RelatIsNotSelfSpouseChild":
+						if(patPlanList.Count>0 && patPlanList[0].Relationship!=Relat.Self 
+							&& patPlanList[0].Relationship!=Relat.Spouse && patPlanList[0].Relationship!=Relat.Child) 
+						{
+							field.FieldValue="X";
+						}
+						break;
+					case "ins1RelatIsSelf":
+						if(patPlanList.Count>0 && patPlanList[0].Relationship==Relat.Self) {
+							field.FieldValue="X";
+						}
+						break;
+					case "ins1RelatIsSpouse":
+						if(patPlanList.Count>0 && patPlanList[0].Relationship==Relat.Spouse) {
+							field.FieldValue="X";
+						}
+						break;
+					case "ins1SubscriberID":
+						if(insplan1!=null) {
+							field.FieldValue=insplan1.SubscriberID;
+						}
+						break;
+					case "ins1SubscriberNameF":
+						if(insplan1!=null) {
+							field.FieldValue=fam.GetNameInFamFirst(insplan1.Subscriber);
+						}
+						break;
+					case "ins2CarrierName":
+						if(carrier2!=null) {
+							field.FieldValue=carrier2.CarrierName;
+						}
+						break;
+					case "ins2CarrierPhone":
+						if(carrier2!=null) {
+							field.FieldValue=carrier2.Phone;
+						}
+						break;
+					case "ins2EmployerName":
+						if(insplan2!=null) {
+							field.FieldValue=Employers.GetName(insplan2.EmployerNum);
+						}
+						break;
+					case "ins2GroupName":
+						if(insplan2!=null) {
+							field.FieldValue=insplan2.GroupName;
+						}
+						break;
+					case "ins2GroupNum":
+						if(insplan2!=null) {
+							field.FieldValue=insplan2.GroupNum;
+						}
+						break;
+					case "ins2RelatDescript"://only if not Self, Spouse, or Child
+						if(patPlanList.Count>1 && patPlanList[1].Relationship!=Relat.Self 
+							&& patPlanList[1].Relationship!=Relat.Spouse && patPlanList[1].Relationship!=Relat.Child) 
+						{
+							field.FieldValue=Lan.g("enumRelat","patPlanList[1].Relationship.ToString()");
+						}
+						break;
+					case "ins2RelatIsChild":
+						if(patPlanList.Count>1 && patPlanList[1].Relationship==Relat.Child) {
+							field.FieldValue="X";
+						}
+						break;
+					case "ins2RelatIsNotSelfSpouseChild":
+						if(patPlanList.Count>1 && patPlanList[1].Relationship!=Relat.Self 
+							&& patPlanList[1].Relationship!=Relat.Spouse && patPlanList[1].Relationship!=Relat.Child) 
+						{
+							field.FieldValue="X";
+						}
+						break;
+					case "ins2RelatIsSelf":
+						if(patPlanList.Count>1 && patPlanList[1].Relationship==Relat.Self) {
+							field.FieldValue="X";
+						}
+						break;
+					case "ins2RelatIsSpouse":
+						if(patPlanList.Count>1 && patPlanList[1].Relationship==Relat.Spouse) {
+							field.FieldValue="X";
+						}
+						break;
+					case "ins2SubscriberID":
+						if(insplan2!=null) {
+							field.FieldValue=insplan2.SubscriberID;
+						}
+						break;
+					case "ins2SubscriberNameF":
+						if(insplan2!=null) {
+							field.FieldValue=fam.GetNameInFamFirst(insplan2.Subscriber);
+						}
+						break;
+					case "LName":
+						field.FieldValue=pat.LName;
+						break;
+					case "MiddleI":
+						field.FieldValue=pat.MiddleI;
+						break;
+					case "PositionIsMarried":
+						if(pat.Position==PatientPosition.Married) {
+							field.FieldValue="X";
+						}
+						break;
+					case "PositionIsNotMarried":
+						if(pat.Position!=PatientPosition.Married) {
+							field.FieldValue="X";
+						}
+						break;
+					case "PreferConfirmMethodIsEmail":
+						if(pat.PreferConfirmMethod==ContactMethod.Email) {
+							field.FieldValue="X";
+						}
+						break;
+					case "PreferConfirmMethodIsHmPhone":
+						if(pat.PreferConfirmMethod==ContactMethod.HmPhone) {
+							field.FieldValue="X";
+						}
+						break;
+					case "PreferConfirmMethodIsTextMessage":
+						if(pat.PreferConfirmMethod==ContactMethod.TextMessage) {
+							field.FieldValue="X";
+						}
+						break;
+					case "PreferConfirmMethodIsWirelessPh":
+						if(pat.PreferConfirmMethod==ContactMethod.WirelessPh) {
+							field.FieldValue="X";
+						}
+						break;
+					case "PreferConfirmMethodIsWkPhone":
+						if(pat.PreferConfirmMethod==ContactMethod.WkPhone) {
+							field.FieldValue="X";
+						}
+						break;
+					case "PreferContactMethodIsEmail":
+						if(pat.PreferContactMethod==ContactMethod.Email) {
+							field.FieldValue="X";
+						}
+						break;
+					case "PreferContactMethodIsHmPhone":
+						if(pat.PreferContactMethod==ContactMethod.HmPhone) {
+							field.FieldValue="X";
+						}
+						break;
+					case "PreferContactMethodIsTextMessage":
+						if(pat.PreferContactMethod==ContactMethod.TextMessage) {
+							field.FieldValue="X";
+						}
+						break;
+					case "PreferContactMethodIsWirelessPh":
+						if(pat.PreferContactMethod==ContactMethod.WirelessPh) {
+							field.FieldValue="X";
+						}
+						break;
+					case "PreferContactMethodIsWkPhone":
+						if(pat.PreferContactMethod==ContactMethod.WkPhone) {
+							field.FieldValue="X";
+						}
+						break;
+					case "PreferRecallMethodIsEmail":
+						if(pat.PreferRecallMethod==ContactMethod.Email) {
+							field.FieldValue="X";
+						}
+						break;
+					case "PreferRecallMethodIsHmPhone":
+						if(pat.PreferRecallMethod==ContactMethod.HmPhone) {
+							field.FieldValue="X";
+						}
+						break;
+					case "PreferRecallMethodIsTextMessage":
+						if(pat.PreferRecallMethod==ContactMethod.TextMessage) {
+							field.FieldValue="X";
+						}
+						break;
+					case "PreferRecallMethodIsWirelessPh":
+						if(pat.PreferRecallMethod==ContactMethod.WirelessPh) {
+							field.FieldValue="X";
+						}
+						break;
+					case "PreferRecallMethodIsWkPhone":
+						if(pat.PreferRecallMethod==ContactMethod.WkPhone) {
+							field.FieldValue="X";
+						}
+						break;
+					case "Preferred":
+						field.FieldValue=pat.Preferred;
+						break;
+					case "referredFrom":
+						field.FieldValue=Referrals.GetNameFL(Referrals.GetReferralForPat(pat.PatNum).ReferralNum);
+						break;
+					case "SSN":
+						if(CultureInfo.CurrentCulture.Name=="en-US" && pat.SSN.Length==9){//and length exactly 9 (no data gets lost in formatting)
+							field.FieldValue=pat.SSN.Substring(0,3)+"-"+pat.SSN.Substring(3,2)+"-"+pat.SSN.Substring(5,4);
+						}
+						else {
+							field.FieldValue=pat.SSN;
+						}
+						break;
+					case "State":
+						field.FieldValue=pat.State;
+						break;
+					case "StudentStatusIsFulltime":
+						if(pat.StudentStatus=="F") {
+							field.FieldValue="X";
+						}
+						break;
+					case "StudentStatusIsNonstudent":
+						if(pat.StudentStatus==""
+							|| pat.StudentStatus=="N") 
+						{
+							field.FieldValue="X";
+						}
+						break;
+					case "StudentStatusIsParttime":
+						if(pat.StudentStatus=="P") {
+							field.FieldValue="X";
+						}
+						break;
+					case "WirelessPhone":
+						field.FieldValue=pat.WirelessPhone;
+						break;
+					case "wirelessCarrier":
+						field.FieldValue="";//not implemented
+						break;
+					case "WkPhone":
+						field.FieldValue=pat.WkPhone;
+						break;
+					case "Zip":
+						field.FieldValue=pat.Zip;
+						break;
+				}
 			}
 		}
 
@@ -833,9 +1140,6 @@ namespace OpenDental{
 			string str;
 			foreach(SheetField field in sheet.SheetFields) {
 				switch(field.FieldName) {
-					case "patient.nameFL":
-						field.FieldValue=pat.GetNameFL();
-						break;
 					case "appt.timeDate":
 						field.FieldValue=apt.AptDateTime.ToShortTimeString()+"  "+apt.AptDateTime.ToShortDateString();
 						break;
@@ -883,18 +1187,6 @@ namespace OpenDental{
 						}
 						field.FieldValue=str;
 						break;
-
-						
-/*				case "":
-						field.FieldValue=;
-						break;
-
-			
-			
-		
-
-
-			*/
 				}
 			}
 		}

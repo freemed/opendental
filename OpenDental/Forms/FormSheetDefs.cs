@@ -77,18 +77,18 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(478,10);
+			this.label1.Location = new System.Drawing.Point(12,10);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(205,15);
 			this.label1.TabIndex = 16;
 			this.label1.Text = "Label assigned to patient button";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// comboLabel
 			// 
 			this.comboLabel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboLabel.FormattingEnabled = true;
-			this.comboLabel.Location = new System.Drawing.Point(480,27);
+			this.comboLabel.Location = new System.Drawing.Point(223,8);
 			this.comboLabel.MaxDropDownItems = 20;
 			this.comboLabel.Name = "comboLabel";
 			this.comboLabel.Size = new System.Drawing.Size(185,21);
@@ -98,9 +98,9 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(478,60);
+			this.label2.Location = new System.Drawing.Point(414,6);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(205,82);
+			this.label2.Size = new System.Drawing.Size(428,33);
 			this.label2.TabIndex = 18;
 			this.label2.Text = "Most other sheet types are assigned simply by creating custom sheets of the same " +
     "type.  Referral slips are set in the referral edit window of each referral.";
@@ -115,11 +115,11 @@ namespace OpenDental{
 			this.butCopy2.CornerRadius = 4F;
 			this.butCopy2.Image = global::OpenDental.Properties.Resources.Add;
 			this.butCopy2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butCopy2.Location = new System.Drawing.Point(98,635);
+			this.butCopy2.Location = new System.Drawing.Point(620,635);
 			this.butCopy2.Name = "butCopy2";
-			this.butCopy2.Size = new System.Drawing.Size(80,24);
+			this.butCopy2.Size = new System.Drawing.Size(89,24);
 			this.butCopy2.TabIndex = 19;
-			this.butCopy2.Text = "Copy";
+			this.butCopy2.Text = "Duplicate";
 			this.butCopy2.Click += new System.EventHandler(this.butCopy2_Click);
 			// 
 			// butCopy
@@ -129,9 +129,9 @@ namespace OpenDental{
 			this.butCopy.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCopy.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCopy.CornerRadius = 4F;
-			this.butCopy.Image = global::OpenDental.Properties.Resources.down;
+			this.butCopy.Image = global::OpenDental.Properties.Resources.Right;
 			this.butCopy.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butCopy.Location = new System.Drawing.Point(196,295);
+			this.butCopy.Location = new System.Drawing.Point(361,635);
 			this.butCopy.Name = "butCopy";
 			this.butCopy.Size = new System.Drawing.Size(75,24);
 			this.butCopy.TabIndex = 15;
@@ -141,10 +141,10 @@ namespace OpenDental{
 			// grid1
 			// 
 			this.grid1.HScrollVisible = false;
-			this.grid1.Location = new System.Drawing.Point(12,12);
+			this.grid1.Location = new System.Drawing.Point(12,42);
 			this.grid1.Name = "grid1";
 			this.grid1.ScrollValue = 0;
-			this.grid1.Size = new System.Drawing.Size(437,278);
+			this.grid1.Size = new System.Drawing.Size(424,583);
 			this.grid1.TabIndex = 14;
 			this.grid1.Title = "Internal";
 			this.grid1.TranslationName = null;
@@ -153,10 +153,10 @@ namespace OpenDental{
 			// grid2
 			// 
 			this.grid2.HScrollVisible = false;
-			this.grid2.Location = new System.Drawing.Point(12,325);
+			this.grid2.Location = new System.Drawing.Point(445,42);
 			this.grid2.Name = "grid2";
 			this.grid2.ScrollValue = 0;
-			this.grid2.Size = new System.Drawing.Size(437,302);
+			this.grid2.Size = new System.Drawing.Size(424,583);
 			this.grid2.TabIndex = 12;
 			this.grid2.Title = "Custom";
 			this.grid2.TranslationName = null;
@@ -172,7 +172,7 @@ namespace OpenDental{
 			this.butNew.CornerRadius = 4F;
 			this.butNew.Image = global::OpenDental.Properties.Resources.Add;
 			this.butNew.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butNew.Location = new System.Drawing.Point(12,635);
+			this.butNew.Location = new System.Drawing.Point(534,635);
 			this.butNew.Name = "butNew";
 			this.butNew.Size = new System.Drawing.Size(80,24);
 			this.butNew.TabIndex = 10;
@@ -187,7 +187,7 @@ namespace OpenDental{
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(608,635);
+			this.butClose.Location = new System.Drawing.Point(794,635);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75,24);
 			this.butClose.TabIndex = 0;
@@ -197,7 +197,7 @@ namespace OpenDental{
 			// FormSheetDefs
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(695,669);
+			this.ClientSize = new System.Drawing.Size(881,669);
 			this.Controls.Add(this.butCopy2);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.comboLabel);
@@ -250,7 +250,7 @@ namespace OpenDental{
 		private void FillGrid1(){
 			grid1.BeginUpdate();
 			grid1.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g("TableSheetDef","Description"),155);
+			ODGridColumn col=new ODGridColumn(Lan.g("TableSheetDef","Description"),170);
 			grid1.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableSheetDef","Type"),100);
 			grid1.Columns.Add(col);
@@ -271,7 +271,7 @@ namespace OpenDental{
 			SheetFieldDefs.RefreshCache();
 			grid2.BeginUpdate();
 			grid2.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g("TableSheetDef","Description"),155);
+			ODGridColumn col=new ODGridColumn(Lan.g("TableSheetDef","Description"),170);
 			grid2.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableSheetDef","Type"),100);
 			grid2.Columns.Add(col);
