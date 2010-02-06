@@ -1605,7 +1605,7 @@
     <Compile Include="Forms\FormTelephone.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\FormTerminal.cs">
+    <Compile Include="Forms\FormTerminalOld.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\FormTerminalManager.cs">
@@ -2944,9 +2944,9 @@
       <SubType>Designer</SubType>
       <DependentUpon>FormTelephone.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormTerminal.resx">
+    <EmbeddedResource Include="Forms\FormTerminalOld.resx">
       <SubType>Designer</SubType>
-      <DependentUpon>FormTerminal.cs</DependentUpon>
+      <DependentUpon>FormTerminalOld.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormTerminalManager.resx">
       <SubType>Designer</SubType>

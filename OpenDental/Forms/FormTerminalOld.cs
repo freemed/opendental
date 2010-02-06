@@ -12,7 +12,7 @@ namespace OpenDental{
 	/// <summary>
 	/// Summary description for FormBasicTemplate.
 	/// </summary>
-	public class FormTerminal : System.Windows.Forms.Form{
+	public class FormTerminalOld:System.Windows.Forms.Form {
 		private OpenDental.UI.Button butClose;
 		private OpenDental.UI.Button butSubmit;
 		private TabControl tabMain;
@@ -81,7 +81,7 @@ namespace OpenDental{
 		private QuestionDef[] QuestionDefList;
 
 		///<summary></summary>
-		public FormTerminal()
+		public FormTerminalOld()
 		{
 			//
 			// Required for Windows Form Designer support
@@ -795,7 +795,7 @@ namespace OpenDental{
 			this.butClose.Text = "Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
-			// FormTerminal
+			// FormTerminalOld
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(1016,760);
@@ -808,7 +808,7 @@ namespace OpenDental{
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
-			this.Name = "FormTerminal";
+			this.Name = "FormTerminalOld";
 			this.ShowInTaskbar = false;
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
