@@ -183,9 +183,9 @@ namespace OpenDentBusiness{
 			List<DataRow> rows=new List<DataRow>();
 			//sheet---------------------------------------------------------------------------------------
 			string command="SELECT DateTimeSheet,SheetNum,Description "
-				+"FROM sheet WHERE PatNum ="+POut.Long(patNum)
-				+" AND SheetType="+POut.Long((int)SheetTypeEnum.PatientForm)
-				+" ORDER BY DateTimeSheet";
+				+"FROM sheet WHERE PatNum ="+POut.Long(patNum)+" "
+				+"AND (SheetType="+POut.Long((int)SheetTypeEnum.PatientForm)+" OR SheetType="+POut.Long((int)SheetTypeEnum.MedicalHistory)+") "
+				+"ORDER BY DateTimeSheet";
 			DataTable rawSheet=Db.GetTable(command);
 			DateTime dateT;
 			for(int i=0;i<rawSheet.Rows.Count;i++) {

@@ -45,6 +45,7 @@ namespace OpenDental{
 			this.textXPos = new OpenDental.ValidNum();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.labelTextW = new System.Windows.Forms.Label();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -170,6 +171,7 @@ namespace OpenDental{
 			this.textFieldValue.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
 			this.textFieldValue.Size = new System.Drawing.Size(812,335);
 			this.textFieldValue.TabIndex = 102;
+			this.textFieldValue.TextChanged += new System.EventHandler(this.textFieldValue_TextChanged);
 			this.textFieldValue.Leave += new System.EventHandler(this.textFieldValue_Leave);
 			// 
 			// listFields
@@ -276,10 +278,20 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// labelTextW
+			// 
+			this.labelTextW.Location = new System.Drawing.Point(194,554);
+			this.labelTextW.Name = "labelTextW";
+			this.labelTextW.Size = new System.Drawing.Size(109,16);
+			this.labelTextW.TabIndex = 104;
+			this.labelTextW.Text = "TextW: ";
+			this.labelTextW.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
 			// FormSheetFieldStatic
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(852,662);
+			this.Controls.Add(this.labelTextW);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.listFields);
 			this.Controls.Add(this.textFieldValue);
@@ -332,5 +344,6 @@ namespace OpenDental{
 		private System.Windows.Forms.TextBox textFieldValue;
 		private System.Windows.Forms.ListBox listFields;
 		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.Label labelTextW;
 	}
 }

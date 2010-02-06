@@ -150,6 +150,22 @@ namespace OpenDental {
 			textSelectionStart=textFieldValue.SelectionStart;
 		}
 
+		private void textFieldValue_TextChanged(object sender,EventArgs e) {
+			int textW=0;
+			float fontSize=10f;
+			try{
+				fontSize=float.Parse(textFontSize.Text);
+			}
+			catch{
+			}
+			using(Graphics g=this.CreateGraphics()){
+				using(Font font=new Font(comboFontName.Text,fontSize)){
+					textW=(int)g.MeasureString(textFieldValue.Text,font).Width;
+				}
+			}
+			labelTextW.Text=Lan.g(this,"TextW: ")+textW.ToString();
+		}
+
 		private void butDelete_Click(object sender,EventArgs e) {
 			SheetFieldDefCur=null;
 			DialogResult=DialogResult.OK;
@@ -201,6 +217,8 @@ namespace OpenDental {
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 		
 

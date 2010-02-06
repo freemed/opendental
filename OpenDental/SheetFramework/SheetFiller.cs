@@ -67,6 +67,10 @@ namespace OpenDental{
 					pat=Patients.GetPat(apt.PatNum);
 					FillFieldsForRoutingSlip(sheet,pat,apt);
 					break;
+				case SheetTypeEnum.MedicalHistory:
+					pat=Patients.GetPat((long)GetParamByName(sheet,"PatNum").ParamValue);
+					FillFieldsForMedicalHistory(sheet,pat);
+					break;
 			}
 			FillFieldsInStaticText(sheet,pat);
 			FillPatientImages(sheet,pat);
@@ -1191,8 +1195,16 @@ namespace OpenDental{
 			}
 		}
 
-
-
+		private static void FillFieldsForMedicalHistory(Sheet sheet,Patient pat) {
+			/*There aren't any fields for medical history yet
+			foreach(SheetField field in sheet.SheetFields) {
+				switch(field.FieldName) {
+					case "appt.timeDate":
+						field.FieldValue=apt.AptDateTime.ToShortTimeString()+"  "+apt.AptDateTime.ToShortDateString();
+						break;
+				}
+			}*/
+		}
 
 
 

@@ -90,8 +90,8 @@ namespace OpenDentBusiness {
 		Consent,
 		PatientLetter,
 		ReferralLetter,
-		PatientRegistration,
 		RoutingSlip,
+		PatientRegistration,
 		FinancialAgreement,
 		HIPAA,
 		MedicalHistory

@@ -35,13 +35,16 @@ namespace OpenDental {
 					showingInternalMed=true;
 					listSheets.Add(SheetsInternal.GetSheetDef(SheetInternalType.MedicalHistory));
 				}
-				else{//if user has added any of their own medical history forms
+				else {//if user has added any of their own medical history forms
 					for(int i=0;i<listMedSheets.Count;i++) {
 						listSheets.Add(listMedSheets[i]);
 					}
 				}
+				labelSheetType.Text=Lan.g("this","Patient Forms and Medical Histories");
 			}
-			labelSheetType.Text=Lan.g("enumSheetTypeEnum",SheetType.ToString());
+			else {
+				labelSheetType.Text=Lan.g("enumSheetTypeEnum",SheetType.ToString());
+			}
 			for(int i=0;i<listSheets.Count;i++){
 				listMain.Items.Add(listSheets[i].Description);
 			}

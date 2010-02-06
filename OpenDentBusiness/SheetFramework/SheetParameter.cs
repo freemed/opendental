@@ -61,6 +61,9 @@ namespace OpenDentBusiness{
 			if(sheetType==SheetTypeEnum.RoutingSlip) {
 				list.Add(new SheetParameter(true,"AptNum"));
 			}
+			if(sheetType==SheetTypeEnum.MedicalHistory) {
+				list.Add(new SheetParameter(true,"PatNum"));
+			}
 			return list;
 		}
 

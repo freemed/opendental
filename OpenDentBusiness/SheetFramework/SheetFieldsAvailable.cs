@@ -41,6 +41,8 @@ namespace OpenDentBusiness{
 					return GetPatientForm(outInCheck);
 				case SheetTypeEnum.RoutingSlip:
 					return GetRoutingSlip(outInCheck);
+				case SheetTypeEnum.MedicalHistory:
+					return GetMedicalHistory(outInCheck);
 			}
 			return new List<SheetFieldDef>();
 		}
@@ -310,6 +312,20 @@ namespace OpenDentBusiness{
 			}
 			else if(outInCheck==OutInCheck.Check) {
 				//Not applicable
+			}
+			return list;
+		}
+
+		private static List<SheetFieldDef> GetMedicalHistory(OutInCheck outInCheck) {
+			List<SheetFieldDef> list=new List<SheetFieldDef>();
+			if(outInCheck==OutInCheck.Out) {
+				//none
+			}
+			else if(outInCheck==OutInCheck.In) {
+				list.Add(NewInput("misc"));
+			}
+			else if(outInCheck==OutInCheck.Check) {
+				list.Add(NewCheck("misc"));
 			}
 			return list;
 		}
