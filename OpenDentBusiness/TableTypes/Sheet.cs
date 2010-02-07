@@ -160,10 +160,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("ShowInTerminal")]
-		private bool showInTerminal;
+		private int showInTerminal;
 		private bool showInTerminalChanged;
-		///<summary>If set to true, then this sheet will show in the patient terminal for the patient to fill out.</summary>
-		public bool ShowInTerminal {
+		///<summary>The order that this sheet will show in the patient terminal for the patient to fill out.  Or zero if not set.</summary>
+		public int ShowInTerminal {
 			get { return showInTerminal; }
 			set { if(showInTerminal!=value) { showInTerminal=value; MarkDirty(); showInTerminalChanged=true; } }
 		}

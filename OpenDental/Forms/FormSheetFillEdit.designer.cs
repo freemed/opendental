@@ -23,21 +23,24 @@ namespace OpenDental{
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
+			this.components = new System.ComponentModel.Container();
 			this.textNote = new System.Windows.Forms.TextBox();
-			this.label1 = new System.Windows.Forms.Label();
-			this.label3 = new System.Windows.Forms.Label();
+			this.labelNote = new System.Windows.Forms.Label();
+			this.labelDateTime = new System.Windows.Forms.Label();
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.panelMain = new System.Windows.Forms.Panel();
 			this.checkErase = new System.Windows.Forms.CheckBox();
+			this.textDescription = new System.Windows.Forms.TextBox();
+			this.labelDescription = new System.Windows.Forms.Label();
+			this.labelShowInTerminal = new System.Windows.Forms.Label();
+			this.textShowInTerminal = new OpenDental.ValidNumber();
 			this.butPDF = new OpenDental.UI.Button();
 			this.butDelete = new OpenDental.UI.Button();
 			this.textDateTime = new OpenDental.ValidDate();
 			this.butPrint = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.textDescription = new System.Windows.Forms.TextBox();
-			this.label2 = new System.Windows.Forms.Label();
-			this.checkShowInTerminal = new System.Windows.Forms.CheckBox();
+			this.timer1 = new System.Windows.Forms.Timer(this.components);
 			this.panel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -50,25 +53,25 @@ namespace OpenDental{
 			this.textNote.Size = new System.Drawing.Size(146,90);
 			this.textNote.TabIndex = 6;
 			// 
-			// label1
+			// labelNote
 			// 
-			this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.label1.Location = new System.Drawing.Point(579,88);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(147,16);
-			this.label1.TabIndex = 7;
-			this.label1.Text = "Internal Note";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			this.labelNote.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.labelNote.Location = new System.Drawing.Point(579,88);
+			this.labelNote.Name = "labelNote";
+			this.labelNote.Size = new System.Drawing.Size(147,16);
+			this.labelNote.TabIndex = 7;
+			this.labelNote.Text = "Internal Note";
+			this.labelNote.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
-			// label3
+			// labelDateTime
 			// 
-			this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.label3.Location = new System.Drawing.Point(579,6);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(84,16);
-			this.label3.TabIndex = 76;
-			this.label3.Text = "Date time";
-			this.label3.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			this.labelDateTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.labelDateTime.Location = new System.Drawing.Point(579,6);
+			this.labelDateTime.Name = "labelDateTime";
+			this.labelDateTime.Size = new System.Drawing.Size(84,16);
+			this.labelDateTime.TabIndex = 76;
+			this.labelDateTime.Text = "Date time";
+			this.labelDateTime.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// panel1
 			// 
@@ -100,6 +103,44 @@ namespace OpenDental{
 			this.checkErase.Text = "Eraser Tool";
 			this.checkErase.UseVisualStyleBackColor = true;
 			this.checkErase.Click += new System.EventHandler(this.checkErase_Click);
+			// 
+			// textDescription
+			// 
+			this.textDescription.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.textDescription.Location = new System.Drawing.Point(580,66);
+			this.textDescription.Name = "textDescription";
+			this.textDescription.Size = new System.Drawing.Size(146,20);
+			this.textDescription.TabIndex = 84;
+			// 
+			// labelDescription
+			// 
+			this.labelDescription.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.labelDescription.Location = new System.Drawing.Point(579,47);
+			this.labelDescription.Name = "labelDescription";
+			this.labelDescription.Size = new System.Drawing.Size(147,16);
+			this.labelDescription.TabIndex = 85;
+			this.labelDescription.Text = "Description";
+			this.labelDescription.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			// 
+			// labelShowInTerminal
+			// 
+			this.labelShowInTerminal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.labelShowInTerminal.Location = new System.Drawing.Point(579,203);
+			this.labelShowInTerminal.Name = "labelShowInTerminal";
+			this.labelShowInTerminal.Size = new System.Drawing.Size(127,16);
+			this.labelShowInTerminal.TabIndex = 86;
+			this.labelShowInTerminal.Text = "Show Order In Terminal";
+			this.labelShowInTerminal.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			// 
+			// textShowInTerminal
+			// 
+			this.textShowInTerminal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.textShowInTerminal.Location = new System.Drawing.Point(703,203);
+			this.textShowInTerminal.MaxVal = 127;
+			this.textShowInTerminal.MinVal = 1;
+			this.textShowInTerminal.Name = "textShowInTerminal";
+			this.textShowInTerminal.Size = new System.Drawing.Size(23,20);
+			this.textShowInTerminal.TabIndex = 87;
 			// 
 			// butPDF
 			// 
@@ -188,50 +229,28 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// textDescription
+			// timer1
 			// 
-			this.textDescription.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.textDescription.Location = new System.Drawing.Point(580,66);
-			this.textDescription.Name = "textDescription";
-			this.textDescription.Size = new System.Drawing.Size(146,20);
-			this.textDescription.TabIndex = 84;
-			// 
-			// label2
-			// 
-			this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.label2.Location = new System.Drawing.Point(579,47);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(147,16);
-			this.label2.TabIndex = 85;
-			this.label2.Text = "Description";
-			this.label2.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-			// 
-			// checkShowInTerminal
-			// 
-			this.checkShowInTerminal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.checkShowInTerminal.Location = new System.Drawing.Point(581,203);
-			this.checkShowInTerminal.Name = "checkShowInTerminal";
-			this.checkShowInTerminal.Size = new System.Drawing.Size(145,20);
-			this.checkShowInTerminal.TabIndex = 86;
-			this.checkShowInTerminal.Text = "Show In Terminal";
-			this.checkShowInTerminal.UseVisualStyleBackColor = true;
+			this.timer1.Interval = 4000;
+			this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
 			// 
 			// FormSheetFillEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(737,551);
-			this.Controls.Add(this.checkShowInTerminal);
+			this.Controls.Add(this.textShowInTerminal);
+			this.Controls.Add(this.labelShowInTerminal);
 			this.Controls.Add(this.textDescription);
-			this.Controls.Add(this.label2);
+			this.Controls.Add(this.labelDescription);
 			this.Controls.Add(this.butPDF);
 			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.checkErase);
 			this.Controls.Add(this.panel1);
 			this.Controls.Add(this.textDateTime);
 			this.Controls.Add(this.butPrint);
-			this.Controls.Add(this.label3);
+			this.Controls.Add(this.labelDateTime);
 			this.Controls.Add(this.textNote);
-			this.Controls.Add(this.label1);
+			this.Controls.Add(this.labelNote);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
 			this.Name = "FormSheetFillEdit";
@@ -249,9 +268,9 @@ namespace OpenDental{
 		private OpenDental.UI.Button butOK;
 		private OpenDental.UI.Button butCancel;
 		private System.Windows.Forms.TextBox textNote;
-		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.Label labelNote;
 		private ValidDate textDateTime;
-		private System.Windows.Forms.Label label3;
+		private System.Windows.Forms.Label labelDateTime;
 		private System.Windows.Forms.Panel panel1;
 		private System.Windows.Forms.Panel panelMain;
 		private OpenDental.UI.Button butDelete;
@@ -259,7 +278,9 @@ namespace OpenDental{
 		private System.Windows.Forms.CheckBox checkErase;
 		private OpenDental.UI.Button butPDF;
 		private System.Windows.Forms.TextBox textDescription;
-		private System.Windows.Forms.Label label2;
-		private System.Windows.Forms.CheckBox checkShowInTerminal;
+		private System.Windows.Forms.Label labelDescription;
+		private System.Windows.Forms.Label labelShowInTerminal;
+		private ValidNumber textShowInTerminal;
+		private System.Windows.Forms.Timer timer1;
 	}
 }

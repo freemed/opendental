@@ -12,8 +12,6 @@ namespace OpenDental {
 	public partial class FormPatientForms:Form {
 		DataTable table;
 		public long PatNum;
-		//<summary>When closing this form, if sheets were sent to the terminal, this will be true.  Indicating that the Terminal Manager should show.</summary>
-		//public bool TerminalSent;
 
 		public FormPatientForms() {
 			InitializeComponent();
@@ -107,14 +105,12 @@ namespace OpenDental {
 				SheetUtil.CalculateHeights(sheet,this.CreateGraphics());
 				if(FormS.TerminalSend) {
 					sheet.InternalNote="";//because null not ok
-					sheet.ShowInTerminal=true;
+					sheet.ShowInTerminal=Sheets.GetBiggestShowInTerminal(PatNum)+1;
 					Sheets.SaveNewSheet(sheet);//save each sheet.
 				}
 			}
 			if(FormS.TerminalSend) {
-				//if sent to terminal, do not show a dialog now.
-				//TerminalSent=true;
-				//Close();
+				//do not show a dialog now.
 				//User will need to click the terminal button.
 				FillGrid();
 			}
@@ -130,7 +126,7 @@ namespace OpenDental {
 		private void butTerminal_Click(object sender,EventArgs e) {
 			bool hasTerminal=false;
 			for(int i=0;i<table.Rows.Count;i++) {
-				if(table.Rows[i]["showInTerminal"].ToString()=="X") {
+				if(table.Rows[i]["showInTerminal"].ToString()!="") {
 					hasTerminal=true;
 					break;
 				}
@@ -139,7 +135,11 @@ namespace OpenDental {
 				MsgBox.Show(this,"No forms for this patient are set to show in the terminal.");
 				return;
 			}
-
+			FormTerminal formT=new FormTerminal();
+			formT.IsSimpleMode=true;
+			formT.PatNum=PatNum;
+			formT.ShowDialog();
+			FillGrid();
 		}
 
 		private void butCancel_Click(object sender,EventArgs e) {

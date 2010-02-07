@@ -22,6 +22,10 @@ namespace OpenDental {
 		private Image imgDraw;
 		private bool drawingsAltered;
 		public bool RxIsControlled;
+		///<summary>When in terminal, some options are not visible.</summary>
+		public bool IsInTerminal;
+		///<summary>If set to true, then this form will poll the database every 4 seconds, listening for a signal to close itself.  This is useful if the receptionist accidentally loads up the wrong patient.</summary>
+		public bool TerminalListenShut;
 
 		public FormSheetFillEdit(Sheet sheet){
 			InitializeComponent();
@@ -45,6 +49,22 @@ namespace OpenDental {
 		}
 
 		private void FormSheetFillEdit_Load(object sender,EventArgs e) {
+			if(IsInTerminal) {
+				labelDateTime.Visible=false;
+				textDateTime.Visible=false;
+				labelDescription.Visible=false;
+				textDescription.Visible=false;
+				labelNote.Visible=false;
+				textNote.Visible=false;
+				labelShowInTerminal.Visible=false;
+				textShowInTerminal.Visible=false;
+				butPrint.Visible=false;
+				butPDF.Visible=false;
+				butDelete.Visible=false;
+				if(TerminalListenShut) {
+					timer1.Enabled=true;
+				}
+			}
 			if(SheetCur.IsLandscape){
 				panelMain.Width=SheetCur.Height;
 				panelMain.Height=SheetCur.Width;
@@ -56,7 +76,9 @@ namespace OpenDental {
 			textDateTime.Text=SheetCur.DateTimeSheet.ToShortDateString()+" "+SheetCur.DateTimeSheet.ToShortTimeString();
 			textDescription.Text=SheetCur.Description;
 			textNote.Text=SheetCur.InternalNote;
-			checkShowInTerminal.Checked=SheetCur.ShowInTerminal;
+			if(SheetCur.ShowInTerminal>0) {
+				textShowInTerminal.Text=SheetCur.ShowInTerminal.ToString();
+			}
 			LayoutFields();
 		}
 
@@ -217,6 +239,20 @@ namespace OpenDental {
 				panelMain.Controls.Add(sigBox);
 				sigBox.BringToFront();
 			}
+		}
+
+		///<summary>Only if TerminalListenShut.  Occurs every 4 seconds. Checks database for status changes.  Shouldn't happen very often, because it means user will lose all data that they may have entered.</summary>
+		private void timer1_Tick(object sender,EventArgs e) {
+			TerminalActive terminal=TerminalActives.GetTerminal(Environment.MachineName);
+			if(terminal==null) {//no terminal is supposed to be running here.
+				DialogResult=DialogResult.Cancel;
+				return;
+			}
+			if(terminal.PatNum==SheetCur.PatNum) {
+				return;
+			}
+			//So terminal.PatNum must either be 0 or be an entirely different patient.
+			DialogResult=DialogResult.Cancel;
 		}
 
 		///<summary>Triggered when any field value changes.  This immediately invalidates signatures.  It also causes fields to grow as needed.</summary>
@@ -565,14 +601,16 @@ namespace OpenDental {
 		}
 
 		private bool TryToSaveData(){
-			if(textDateTime.errorProvider1.GetError(textDateTime)!=""){
+			if(textDateTime.errorProvider1.GetError(textDateTime)!=""
+				|| textShowInTerminal.errorProvider1.GetError(textShowInTerminal)!="")
+			{
 				MsgBox.Show(this,"Please fix data entry errors first.");
 				return false;
 			}
 			SheetCur.DateTimeSheet=PIn.DateT(textDateTime.Text);
 			SheetCur.Description=textDescription.Text;
 			SheetCur.InternalNote=textNote.Text;
-			SheetCur.ShowInTerminal=checkShowInTerminal.Checked;
+			SheetCur.ShowInTerminal=PIn.Int(textShowInTerminal.Text);
 			FillFieldsFromControls();//But SheetNums will still be 0 for a new sheet.
 			bool isNew=SheetCur.IsNew;
 			Sheets.WriteObject(SheetCur);
@@ -690,6 +728,8 @@ namespace OpenDental {
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 		
 

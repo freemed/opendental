@@ -26,6 +26,7 @@ namespace OpenDental{
 		private Label labelPatient;
 		private GroupBox groupBox2;
 		private OpenDental.UI.Button butClear;
+		private OpenDental.UI.Button butDelete;
 		private TerminalActive[] TerminalList;
 		//private int counterActivated;
 		//private bool isAdvanced;
@@ -43,7 +44,7 @@ namespace OpenDental{
 			//label4.Visible=true;
 			//#endif
 			//isAdvanced=false;
-			Width=239;
+			//Width=239;
 		}
 
 		/// <summary>
@@ -78,11 +79,12 @@ namespace OpenDental{
 			this.labelSheets = new System.Windows.Forms.Label();
 			this.labelPatient = new System.Windows.Forms.Label();
 			this.listSheets = new System.Windows.Forms.ListBox();
+			this.butLoad = new OpenDental.UI.Button();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.butSave = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butClear = new OpenDental.UI.Button();
-			this.butSave = new OpenDental.UI.Button();
-			this.butLoad = new OpenDental.UI.Button();
+			this.butDelete = new OpenDental.UI.Button();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.SuspendLayout();
@@ -155,6 +157,21 @@ namespace OpenDental{
 			this.listSheets.Size = new System.Drawing.Size(120,147);
 			this.listSheets.TabIndex = 8;
 			// 
+			// butLoad
+			// 
+			this.butLoad.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butLoad.Autosize = true;
+			this.butLoad.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butLoad.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butLoad.CornerRadius = 4F;
+			this.butLoad.Location = new System.Drawing.Point(14,219);
+			this.butLoad.Name = "butLoad";
+			this.butLoad.Size = new System.Drawing.Size(93,24);
+			this.butLoad.TabIndex = 7;
+			this.butLoad.Text = "Load Patient";
+			this.butLoad.UseVisualStyleBackColor = true;
+			this.butLoad.Click += new System.EventHandler(this.butLoad_Click);
+			// 
 			// groupBox2
 			// 
 			this.groupBox2.Controls.Add(this.textPassword);
@@ -166,6 +183,21 @@ namespace OpenDental{
 			this.groupBox2.TabIndex = 12;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Password";
+			// 
+			// butSave
+			// 
+			this.butSave.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butSave.Autosize = true;
+			this.butSave.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butSave.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSave.CornerRadius = 4F;
+			this.butSave.Location = new System.Drawing.Point(145,48);
+			this.butSave.Name = "butSave";
+			this.butSave.Size = new System.Drawing.Size(97,24);
+			this.butSave.TabIndex = 6;
+			this.butSave.Text = "Save Password";
+			this.butSave.UseVisualStyleBackColor = true;
+			this.butSave.Click += new System.EventHandler(this.butSave_Click);
 			// 
 			// gridMain
 			// 
@@ -189,44 +221,32 @@ namespace OpenDental{
 			this.butClear.Name = "butClear";
 			this.butClear.Size = new System.Drawing.Size(93,24);
 			this.butClear.TabIndex = 13;
-			this.butClear.Text = "Clear Terminal";
+			this.butClear.Text = "Clear Patient";
 			this.butClear.UseVisualStyleBackColor = true;
 			this.butClear.Click += new System.EventHandler(this.butClear_Click);
 			// 
-			// butSave
+			// butDelete
 			// 
-			this.butSave.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butSave.Autosize = true;
-			this.butSave.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butSave.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butSave.CornerRadius = 4F;
-			this.butSave.Location = new System.Drawing.Point(145,48);
-			this.butSave.Name = "butSave";
-			this.butSave.Size = new System.Drawing.Size(97,24);
-			this.butSave.TabIndex = 6;
-			this.butSave.Text = "Save Password";
-			this.butSave.UseVisualStyleBackColor = true;
-			this.butSave.Click += new System.EventHandler(this.butSave_Click);
-			// 
-			// butLoad
-			// 
-			this.butLoad.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butLoad.Autosize = true;
-			this.butLoad.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butLoad.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butLoad.CornerRadius = 4F;
-			this.butLoad.Location = new System.Drawing.Point(14,219);
-			this.butLoad.Name = "butLoad";
-			this.butLoad.Size = new System.Drawing.Size(93,24);
-			this.butLoad.TabIndex = 7;
-			this.butLoad.Text = "Load Patient";
-			this.butLoad.UseVisualStyleBackColor = true;
-			this.butLoad.Click += new System.EventHandler(this.butLoad_Click);
+			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDelete.Autosize = true;
+			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDelete.CornerRadius = 4F;
+			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
+			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butDelete.Location = new System.Drawing.Point(21,279);
+			this.butDelete.Name = "butDelete";
+			this.butDelete.Size = new System.Drawing.Size(84,24);
+			this.butDelete.TabIndex = 14;
+			this.butDelete.Text = "Delete";
+			this.butDelete.UseVisualStyleBackColor = true;
+			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
 			// 
 			// FormTerminalManager
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(665,410);
+			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.butClear);
 			this.Controls.Add(this.groupBox2);
@@ -319,17 +339,18 @@ namespace OpenDental{
 			}
 		}
 
-		/*
-		private void butAdvanced_Click(object sender,EventArgs e) {
-			if(isAdvanced) {
-				isAdvanced=false;
-				Width=239;
+		private void butDelete_Click(object sender,EventArgs e) {
+			if(gridMain.GetSelectedIndex()==-1) {
+				MsgBox.Show(this,"Please select a terminal first.");
+				return;
 			}
-			else {
-				isAdvanced=true;
-				Width=749;
+			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"A terminal row should not be deleted unless it is showing erroneously and there really is no terminal running on the computer shown.  Continue anyway?")) {
+				return;
 			}
-		}*/
+			//string computerName=
+			TerminalActives.DeleteAllForComputer(TerminalList[gridMain.GetSelectedIndex()].ComputerName);
+			FillGrid();
+		}
 
 		private void butClear_Click(object sender,EventArgs e) {
 			if(gridMain.GetSelectedIndex()==-1) {
@@ -479,6 +500,8 @@ namespace OpenDental{
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 		
 

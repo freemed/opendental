@@ -102,7 +102,7 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<List<Sheet>>(MethodBase.GetCurrentMethod(),patNum);
 			}
 			string command="SELECT * FROM sheet WHERE PatNum="+POut.Long(patNum)
-				+" AND ShowInTerminal=1";
+				+" AND ShowInTerminal > 0 ORDER BY ShowInTerminal";
 			List<Sheet> sheetlist=new List<Sheet>(DataObjectFactory<Sheet>.CreateObjects(command));
 			return sheetlist;
 		}
@@ -196,39 +196,45 @@ namespace OpenDentBusiness{
 			DataTable table=new DataTable("");
 			DataRow row;
 			//columns that start with lowercase are altered for display rather than being raw data.
-			table.Columns.Add("dateTime",typeof(DateTime));
 			table.Columns.Add("date");
+			table.Columns.Add("dateOnly",typeof(DateTime));//to help with sorting
+			table.Columns.Add("dateTime",typeof(DateTime));
 			table.Columns.Add("description");
 			table.Columns.Add("DocNum");
 			table.Columns.Add("imageCat");
 			table.Columns.Add("SheetNum");
 			table.Columns.Add("showInTerminal");
 			table.Columns.Add("time");
+			table.Columns.Add("timeOnly",typeof(TimeSpan));//to help with sorting
 			//but we won't actually fill this table with rows until the very end.  It's more useful to use a List<> for now.
 			List<DataRow> rows=new List<DataRow>();
 			//sheet---------------------------------------------------------------------------------------
 			string command="SELECT DateTimeSheet,SheetNum,Description,ShowInTerminal "
 				+"FROM sheet WHERE PatNum ="+POut.Long(patNum)+" "
-				+"AND (SheetType="+POut.Long((int)SheetTypeEnum.PatientForm)+" OR SheetType="+POut.Long((int)SheetTypeEnum.MedicalHistory)+") "
-				+"ORDER BY DateTimeSheet";
+				+"AND (SheetType="+POut.Long((int)SheetTypeEnum.PatientForm)+" OR SheetType="+POut.Long((int)SheetTypeEnum.MedicalHistory)+") ";
+				//+"ORDER BY ShowInTerminal";//DATE(DateTimeSheet),ShowInTerminal,TIME(DateTimeSheet)";
 			DataTable rawSheet=Db.GetTable(command);
 			DateTime dateT;
 			for(int i=0;i<rawSheet.Rows.Count;i++) {
 				row=table.NewRow();
 				dateT=PIn.DateT(rawSheet.Rows[i]["DateTimeSheet"].ToString());
-				row["dateTime"]=dateT;
 				row["date"]=dateT.ToShortDateString();
+				row["dateOnly"]=dateT.Date;
+				row["dateTime"]=dateT;
 				row["description"]=rawSheet.Rows[i]["Description"].ToString();
 				row["DocNum"]="0";
 				row["imageCat"]="";
 				row["SheetNum"]=rawSheet.Rows[i]["SheetNum"].ToString();
-				row["showInTerminal"]="";
-				if(PIn.Bool(rawSheet.Rows[i]["ShowInTerminal"].ToString())) {
-					row["showInTerminal"]="X";
+				if(rawSheet.Rows[i]["ShowInTerminal"].ToString()=="0") {
+					row["showInTerminal"]="";
+				}
+				else {
+					row["showInTerminal"]=rawSheet.Rows[i]["ShowInTerminal"].ToString();
 				}
 				if(dateT.TimeOfDay!=TimeSpan.Zero) {
 					row["time"]=dateT.ToString("h:mm")+dateT.ToString("%t").ToLower();
 				}
+				row["timeOnly"]=dateT.TimeOfDay;
 				rows.Add(row);
 			}
 			//document---------------------------------------------------------------------------------------
@@ -236,15 +242,16 @@ namespace OpenDentBusiness{
 				+"FROM document,definition "
 				+"WHERE document.DocCategory=definition.DefNum"
 				+" AND PatNum ="+POut.Long(patNum)
-				+" AND definition.ItemValue LIKE '%F%'"
-				+" ORDER BY DateCreated";
+				+" AND definition.ItemValue LIKE '%F%'";
+				//+" ORDER BY DateCreated";
 			DataTable rawDoc=Db.GetTable(command);
 			long docCat;
 			for(int i=0;i<rawDoc.Rows.Count;i++) {
 				row=table.NewRow();
 				dateT=PIn.DateT(rawDoc.Rows[i]["DateCreated"].ToString());
-				row["dateTime"]=dateT;
 				row["date"]=dateT.ToShortDateString();
+				row["dateOnly"]=dateT.Date;
+				row["dateTime"]=dateT;
 				row["description"]=rawDoc.Rows[i]["Note"].ToString();
 				row["DocNum"]=rawDoc.Rows[i]["DocNum"].ToString();
 				docCat=PIn.Long(rawDoc.Rows[i]["DocCategory"].ToString());
@@ -254,6 +261,7 @@ namespace OpenDentBusiness{
 				if(dateT.TimeOfDay!=TimeSpan.Zero) {
 					row["time"]=dateT.ToString("h:mm")+dateT.ToString("%t").ToLower();
 				}
+				row["timeOnly"]=dateT.TimeOfDay;
 				rows.Add(row);
 			}
 			//Sorting
@@ -261,7 +269,7 @@ namespace OpenDentBusiness{
 				table.Rows.Add(rows[i]);
 			}
 			DataView view = table.DefaultView;
-			view.Sort = "dateTime";
+			view.Sort = "dateOnly,showInTerminal,timeOnly";
 			table = view.ToTable();
 			return table;
 		}
@@ -278,6 +286,26 @@ namespace OpenDentBusiness{
 			}
 			return false;
 		}
+
+		///<summary></summary>
+		public static int GetBiggestShowInTerminal(long patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetInt(MethodBase.GetCurrentMethod(),patNum);
+			}
+			string command="SELECT MAX(ShowInTerminal) FROM sheet WHERE PatNum="+POut.Long(patNum);
+			return PIn.Int(Db.GetScalar(command));
+		}
+
+		///<summary></summary>
+		public static void ClearFromTerminal(long patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),patNum);
+				return;
+			}
+			string command="UPDATE sheet SET ShowInTerminal=0 WHERE PatNum="+POut.Long(patNum);
+			Db.NonQ(command);
+		}
+		
 
 		
 
