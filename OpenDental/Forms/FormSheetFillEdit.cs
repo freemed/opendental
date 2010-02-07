@@ -56,6 +56,7 @@ namespace OpenDental {
 			textDateTime.Text=SheetCur.DateTimeSheet.ToShortDateString()+" "+SheetCur.DateTimeSheet.ToShortTimeString();
 			textDescription.Text=SheetCur.Description;
 			textNote.Text=SheetCur.InternalNote;
+			checkShowInTerminal.Checked=SheetCur.ShowInTerminal;
 			LayoutFields();
 		}
 
@@ -571,6 +572,7 @@ namespace OpenDental {
 			SheetCur.DateTimeSheet=PIn.DateT(textDateTime.Text);
 			SheetCur.Description=textDescription.Text;
 			SheetCur.InternalNote=textNote.Text;
+			SheetCur.ShowInTerminal=checkShowInTerminal.Checked;
 			FillFieldsFromControls();//But SheetNums will still be 0 for a new sheet.
 			bool isNew=SheetCur.IsNew;
 			Sheets.WriteObject(SheetCur);

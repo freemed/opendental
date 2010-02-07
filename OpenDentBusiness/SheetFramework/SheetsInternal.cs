@@ -710,7 +710,7 @@ Fam Urgent Fin Note: [famFinUrgNote]"
 			sheet.FontName="Microsoft Sans Serif";
 			sheet.FontSize=10f;
 			sheet.Width=850;
-			sheet.Height=1100;
+			sheet.Height=550;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Financial Agreement",12f,sheet.FontName,true,332,65,200,20));
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Date: [dateToday]",sheet.FontSize,sheet.FontName,false,92,135,120,18));
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText(@"* For my convenience, this office may release my information to my insurance company, and receive payment directly from them.
@@ -727,7 +727,7 @@ Fam Urgent Fin Note: [famFinUrgNote]"
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewCheckBox("misc",94,379,10,10));
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Yes",sheet.FontSize,sheet.FontName,false,108,358,40,18));
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("No",sheet.FontSize,sheet.FontName,false,108,376,40,18));
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewSigBox(258,434,364,81));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewSigBox(258,416,364,81));
 			return sheet;
 		}
 

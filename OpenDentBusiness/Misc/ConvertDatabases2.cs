@@ -1992,7 +1992,8 @@ DROP TABLE IF EXISTS etAck";
 					PRIMARY KEY(EquipmentNum)
 					)";
 				Db.NonQ(command);
-
+				command="ALTER TABLE sheet ADD ShowInTerminal tinyint NOT NULL";
+				Db.NonQ(command);
 
 
 

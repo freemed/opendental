@@ -12,6 +12,8 @@ namespace OpenDental {
 	public partial class FormPatientForms:Form {
 		DataTable table;
 		public long PatNum;
+		//<summary>When closing this form, if sheets were sent to the terminal, this will be true.  Indicating that the Terminal Manager should show.</summary>
+		//public bool TerminalSent;
 
 		public FormPatientForms() {
 			InitializeComponent();
@@ -31,9 +33,11 @@ namespace OpenDental {
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Time"),42);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Image Category"),120);
+			col=new ODGridColumn(Lan.g(this,"Terminal"),55,HorizontalAlignment.Center);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Description"),100);
+			col=new ODGridColumn(Lan.g(this,"Description"),210);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g(this,"Image Category"),120);
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
@@ -42,8 +46,9 @@ namespace OpenDental {
 				row=new ODGridRow();
 				row.Cells.Add(table.Rows[i]["date"].ToString());
 				row.Cells.Add(table.Rows[i]["time"].ToString());
-				row.Cells.Add(table.Rows[i]["imageCat"].ToString());
+				row.Cells.Add(table.Rows[i]["showInTerminal"].ToString());
 				row.Cells.Add(table.Rows[i]["description"].ToString());
+				row.Cells.Add(table.Rows[i]["imageCat"].ToString());
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
@@ -92,21 +97,56 @@ namespace OpenDental {
 			if(FormS.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			SheetDef sheetDef=FormS.SelectedSheetDef;
-			Sheet sheet=SheetUtil.CreateSheet(sheetDef,PatNum);
-			SheetParameter.SetParameter(sheet,"PatNum",PatNum);
-			SheetFiller.FillFields(sheet);
-			SheetUtil.CalculateHeights(sheet,this.CreateGraphics());
-			FormSheetFillEdit FormSF=new FormSheetFillEdit(sheet);
-			FormSF.ShowDialog();
-			if(FormSF.DialogResult==DialogResult.OK) {
+			SheetDef sheetDef;
+			Sheet sheet=null;//only useful if not Terminal
+			for(int i=0;i<FormS.SelectedSheetDefs.Count;i++) {
+				sheetDef=FormS.SelectedSheetDefs[i];
+				sheet=SheetUtil.CreateSheet(sheetDef,PatNum);
+				SheetParameter.SetParameter(sheet,"PatNum",PatNum);
+				SheetFiller.FillFields(sheet);
+				SheetUtil.CalculateHeights(sheet,this.CreateGraphics());
+				if(FormS.TerminalSend) {
+					sheet.InternalNote="";//because null not ok
+					sheet.ShowInTerminal=true;
+					Sheets.SaveNewSheet(sheet);//save each sheet.
+				}
+			}
+			if(FormS.TerminalSend) {
+				//if sent to terminal, do not show a dialog now.
+				//TerminalSent=true;
+				//Close();
+				//User will need to click the terminal button.
 				FillGrid();
 			}
+			else{
+				FormSheetFillEdit FormSF=new FormSheetFillEdit(sheet);
+				FormSF.ShowDialog();
+				if(FormSF.DialogResult==DialogResult.OK) {
+					FillGrid();
+				}
+			}
+		}
+
+		private void butTerminal_Click(object sender,EventArgs e) {
+			bool hasTerminal=false;
+			for(int i=0;i<table.Rows.Count;i++) {
+				if(table.Rows[i]["showInTerminal"].ToString()=="X") {
+					hasTerminal=true;
+					break;
+				}
+			}
+			if(!hasTerminal) {
+				MsgBox.Show(this,"No forms for this patient are set to show in the terminal.");
+				return;
+			}
+
 		}
 
 		private void butCancel_Click(object sender,EventArgs e) {
 			Close();
 		}
+
+		
 
 		
 

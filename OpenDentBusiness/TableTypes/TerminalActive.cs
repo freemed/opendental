@@ -9,9 +9,9 @@ namespace OpenDentBusiness{
 		public long TerminalActiveNum;
 		///<summary>The name of the computer where the terminal is active.</summary>
 		public string ComputerName;
-		///<summary>Enum:TerminalStatusEnum  Indicates at what point the patient is in the sequence. 0=standby, 1=PatientInfo, 2=Medical, 3=UpdateOnly.  If status is 1, then nobody else on the network can open the patient edit window for that patient.</summary>
+		///<summary>Enum:TerminalStatusEnum  No longer used.  Instead, the PatNum field is used.  Used to indicates at what point the patient was in the sequence. 0=standby, 1=PatientInfo, 2=Medical, 3=UpdateOnly.  If status is 1, then nobody else on the network could open the patient edit window for that patient.</summary>
 		public TerminalStatusEnum TerminalStatus;
-		///<summary>FK to patient.PatNum.  The patient currently showing in the terminal.  0 if terminal is in standby mode.</summary>
+		///<summary>FK to patient.PatNum.  The patient currently showing in the terminal.  If 0, then terminal is in standby mode.</summary>
 		public long PatNum;
 
 		///<summary></summary>

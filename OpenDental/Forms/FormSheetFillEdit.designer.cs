@@ -37,6 +37,7 @@ namespace OpenDental{
 			this.butCancel = new OpenDental.UI.Button();
 			this.textDescription = new System.Windows.Forms.TextBox();
 			this.label2 = new System.Windows.Forms.Label();
+			this.checkShowInTerminal = new System.Windows.Forms.CheckBox();
 			this.panel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -205,10 +206,21 @@ namespace OpenDental{
 			this.label2.Text = "Description";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
+			// checkShowInTerminal
+			// 
+			this.checkShowInTerminal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.checkShowInTerminal.Location = new System.Drawing.Point(581,203);
+			this.checkShowInTerminal.Name = "checkShowInTerminal";
+			this.checkShowInTerminal.Size = new System.Drawing.Size(145,20);
+			this.checkShowInTerminal.TabIndex = 86;
+			this.checkShowInTerminal.Text = "Show In Terminal";
+			this.checkShowInTerminal.UseVisualStyleBackColor = true;
+			// 
 			// FormSheetFillEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(737,551);
+			this.Controls.Add(this.checkShowInTerminal);
 			this.Controls.Add(this.textDescription);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.butPDF);
@@ -248,5 +260,6 @@ namespace OpenDental{
 		private OpenDental.UI.Button butPDF;
 		private System.Windows.Forms.TextBox textDescription;
 		private System.Windows.Forms.Label label2;
+		private System.Windows.Forms.CheckBox checkShowInTerminal;
 	}
 }

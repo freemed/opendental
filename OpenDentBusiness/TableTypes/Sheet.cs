@@ -158,6 +158,18 @@ namespace OpenDentBusiness{
 		public bool DescriptionChanged {
 			get { return descriptionChanged; }
 		}
+
+		[DataField("ShowInTerminal")]
+		private bool showInTerminal;
+		private bool showInTerminalChanged;
+		///<summary>If set to true, then this sheet will show in the patient terminal for the patient to fill out.</summary>
+		public bool ShowInTerminal {
+			get { return showInTerminal; }
+			set { if(showInTerminal!=value) { showInTerminal=value; MarkDirty(); showInTerminalChanged=true; } }
+		}
+		public bool ShowInTerminalChanged {
+			get { return showInTerminalChanged; }
+		}
 		
 		public Sheet Copy(){
 			return (Sheet)Clone();

@@ -47,6 +47,19 @@ namespace OpenDentBusiness{
 			return sheet;
 		}
 
+		///<Summary>This is normally done in FormSheetFillEdit, but if we bypass that window for some reason, we can also save a new sheet here.  Does not save any drawings.  Does not save signatures.  Does not save any parameters (PatNum parameters never get saved anyway).</Summary>
+		public static void SaveNewSheet(Sheet sheet) {
+			//No need to check RemotingRole; no call to db.
+			if(!sheet.IsNew) {
+				throw new Exception("Only new sheets allowed");
+			}
+			WriteObject(sheet);
+			foreach(SheetField fld in sheet.SheetFields) {
+				fld.SheetNum=sheet.SheetNum;
+				SheetFields.WriteObject(fld);
+			}
+		}
+
 		///<summary>Used in FormRefAttachEdit to show all referral slips for the patient/referral combo.  Usually 0 or 1 results.</summary>
 		public static List<Sheet> GetReferralSlips(long patNum,long referralNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
@@ -81,6 +94,17 @@ namespace OpenDentBusiness{
 				return null;
 			}
 			return sheetlist[0];
+		}
+
+		///<summary>Gets all sheets for a patient that have the terminal flag set.</summary>
+		public static List<Sheet> GetForTerminal(long patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Sheet>>(MethodBase.GetCurrentMethod(),patNum);
+			}
+			string command="SELECT * FROM sheet WHERE PatNum="+POut.Long(patNum)
+				+" AND ShowInTerminal=1";
+			List<Sheet> sheetlist=new List<Sheet>(DataObjectFactory<Sheet>.CreateObjects(command));
+			return sheetlist;
 		}
 
 		///<summary></summary>
@@ -178,11 +202,12 @@ namespace OpenDentBusiness{
 			table.Columns.Add("DocNum");
 			table.Columns.Add("imageCat");
 			table.Columns.Add("SheetNum");
+			table.Columns.Add("showInTerminal");
 			table.Columns.Add("time");
 			//but we won't actually fill this table with rows until the very end.  It's more useful to use a List<> for now.
 			List<DataRow> rows=new List<DataRow>();
 			//sheet---------------------------------------------------------------------------------------
-			string command="SELECT DateTimeSheet,SheetNum,Description "
+			string command="SELECT DateTimeSheet,SheetNum,Description,ShowInTerminal "
 				+"FROM sheet WHERE PatNum ="+POut.Long(patNum)+" "
 				+"AND (SheetType="+POut.Long((int)SheetTypeEnum.PatientForm)+" OR SheetType="+POut.Long((int)SheetTypeEnum.MedicalHistory)+") "
 				+"ORDER BY DateTimeSheet";
@@ -197,6 +222,10 @@ namespace OpenDentBusiness{
 				row["DocNum"]="0";
 				row["imageCat"]="";
 				row["SheetNum"]=rawSheet.Rows[i]["SheetNum"].ToString();
+				row["showInTerminal"]="";
+				if(PIn.Bool(rawSheet.Rows[i]["ShowInTerminal"].ToString())) {
+					row["showInTerminal"]="X";
+				}
 				if(dateT.TimeOfDay!=TimeSpan.Zero) {
 					row["time"]=dateT.ToString("h:mm")+dateT.ToString("%t").ToLower();
 				}
@@ -221,6 +250,7 @@ namespace OpenDentBusiness{
 				docCat=PIn.Long(rawDoc.Rows[i]["DocCategory"].ToString());
 				row["imageCat"]=DefC.GetName(DefCat.ImageCats,docCat);
 				row["SheetNum"]="0";
+				row["showInTerminal"]="";
 				if(dateT.TimeOfDay!=TimeSpan.Zero) {
 					row["time"]=dateT.ToString("h:mm")+dateT.ToString("%t").ToLower();
 				}
