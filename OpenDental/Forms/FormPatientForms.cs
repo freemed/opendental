@@ -68,23 +68,23 @@ namespace OpenDental {
 			}
 		}
 
-		private void butImage_Click(object sender,EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.Setup)) {
-				return;
-			}
-			FormDefinitions formD=new FormDefinitions(DefCat.ImageCats);
-			formD.ShowDialog();
-			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Defs");
-			FillGrid();
-		}
-
-		private void butSheets_Click(object sender,EventArgs e) {
+		private void menuItemSheets_Click(object sender,EventArgs e) {
 			if(!Security.IsAuthorized(Permissions.Setup)) {
 				return;
 			}
 			FormSheetDefs FormSD=new FormSheetDefs();
 			FormSD.ShowDialog();
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Sheets");
+			FillGrid();
+		}
+
+		private void menuItemImageCats_Click(object sender,EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.Setup)) {
+				return;
+			}
+			FormDefinitions formD=new FormDefinitions(DefCat.ImageCats);
+			formD.ShowDialog();
+			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Defs");
 			FillGrid();
 		}
 
@@ -141,10 +141,22 @@ namespace OpenDental {
 			formT.ShowDialog();
 			FillGrid();
 		}
+		
+		private void butImport_Click(object sender,EventArgs e) {
+			if(gridMain.SelectedIndices.Length !=1) {
+				MsgBox.Show(this,"Please select one completed form from the list above first.");
+				return;
+			}
+
+		}
 
 		private void butCancel_Click(object sender,EventArgs e) {
 			Close();
 		}
+
+		
+
+		
 
 		
 

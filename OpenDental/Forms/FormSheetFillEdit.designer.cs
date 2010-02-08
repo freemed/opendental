@@ -33,6 +33,7 @@ namespace OpenDental{
 			this.textDescription = new System.Windows.Forms.TextBox();
 			this.labelDescription = new System.Windows.Forms.Label();
 			this.labelShowInTerminal = new System.Windows.Forms.Label();
+			this.timer1 = new System.Windows.Forms.Timer(this.components);
 			this.textShowInTerminal = new OpenDental.ValidNumber();
 			this.butPDF = new OpenDental.UI.Button();
 			this.butDelete = new OpenDental.UI.Button();
@@ -40,14 +41,13 @@ namespace OpenDental{
 			this.butPrint = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.timer1 = new System.Windows.Forms.Timer(this.components);
 			this.panel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// textNote
 			// 
 			this.textNote.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.textNote.Location = new System.Drawing.Point(580,107);
+			this.textNote.Location = new System.Drawing.Point(633,107);
 			this.textNote.Multiline = true;
 			this.textNote.Name = "textNote";
 			this.textNote.Size = new System.Drawing.Size(146,90);
@@ -56,7 +56,7 @@ namespace OpenDental{
 			// labelNote
 			// 
 			this.labelNote.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.labelNote.Location = new System.Drawing.Point(579,88);
+			this.labelNote.Location = new System.Drawing.Point(632,88);
 			this.labelNote.Name = "labelNote";
 			this.labelNote.Size = new System.Drawing.Size(147,16);
 			this.labelNote.TabIndex = 7;
@@ -66,7 +66,7 @@ namespace OpenDental{
 			// labelDateTime
 			// 
 			this.labelDateTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.labelDateTime.Location = new System.Drawing.Point(579,6);
+			this.labelDateTime.Location = new System.Drawing.Point(632,6);
 			this.labelDateTime.Name = "labelDateTime";
 			this.labelDateTime.Size = new System.Drawing.Size(84,16);
 			this.labelDateTime.TabIndex = 76;
@@ -82,7 +82,7 @@ namespace OpenDental{
 			this.panel1.Controls.Add(this.panelMain);
 			this.panel1.Location = new System.Drawing.Point(3,3);
 			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(564,536);
+			this.panel1.Size = new System.Drawing.Size(617,657);
 			this.panel1.TabIndex = 78;
 			// 
 			// panelMain
@@ -96,7 +96,7 @@ namespace OpenDental{
 			// checkErase
 			// 
 			this.checkErase.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.checkErase.Location = new System.Drawing.Point(645,272);
+			this.checkErase.Location = new System.Drawing.Point(698,393);
 			this.checkErase.Name = "checkErase";
 			this.checkErase.Size = new System.Drawing.Size(89,20);
 			this.checkErase.TabIndex = 81;
@@ -107,7 +107,7 @@ namespace OpenDental{
 			// textDescription
 			// 
 			this.textDescription.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.textDescription.Location = new System.Drawing.Point(580,66);
+			this.textDescription.Location = new System.Drawing.Point(633,66);
 			this.textDescription.Name = "textDescription";
 			this.textDescription.Size = new System.Drawing.Size(146,20);
 			this.textDescription.TabIndex = 84;
@@ -115,7 +115,7 @@ namespace OpenDental{
 			// labelDescription
 			// 
 			this.labelDescription.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.labelDescription.Location = new System.Drawing.Point(579,47);
+			this.labelDescription.Location = new System.Drawing.Point(632,47);
 			this.labelDescription.Name = "labelDescription";
 			this.labelDescription.Size = new System.Drawing.Size(147,16);
 			this.labelDescription.TabIndex = 85;
@@ -125,17 +125,22 @@ namespace OpenDental{
 			// labelShowInTerminal
 			// 
 			this.labelShowInTerminal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.labelShowInTerminal.Location = new System.Drawing.Point(579,203);
+			this.labelShowInTerminal.Location = new System.Drawing.Point(632,203);
 			this.labelShowInTerminal.Name = "labelShowInTerminal";
 			this.labelShowInTerminal.Size = new System.Drawing.Size(127,16);
 			this.labelShowInTerminal.TabIndex = 86;
 			this.labelShowInTerminal.Text = "Show Order In Terminal";
 			this.labelShowInTerminal.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
+			// timer1
+			// 
+			this.timer1.Interval = 4000;
+			this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+			// 
 			// textShowInTerminal
 			// 
 			this.textShowInTerminal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.textShowInTerminal.Location = new System.Drawing.Point(703,203);
+			this.textShowInTerminal.Location = new System.Drawing.Point(756,203);
 			this.textShowInTerminal.MaxVal = 127;
 			this.textShowInTerminal.MinVal = 1;
 			this.textShowInTerminal.Name = "textShowInTerminal";
@@ -151,7 +156,7 @@ namespace OpenDental{
 			this.butPDF.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butPDF.CornerRadius = 4F;
 			this.butPDF.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPDF.Location = new System.Drawing.Point(645,376);
+			this.butPDF.Location = new System.Drawing.Point(698,497);
 			this.butPDF.Name = "butPDF";
 			this.butPDF.Size = new System.Drawing.Size(81,24);
 			this.butPDF.TabIndex = 83;
@@ -168,7 +173,7 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(645,429);
+			this.butDelete.Location = new System.Drawing.Point(698,550);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(81,24);
 			this.butDelete.TabIndex = 79;
@@ -178,7 +183,7 @@ namespace OpenDental{
 			// textDateTime
 			// 
 			this.textDateTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.textDateTime.Location = new System.Drawing.Point(580,24);
+			this.textDateTime.Location = new System.Drawing.Point(633,24);
 			this.textDateTime.Name = "textDateTime";
 			this.textDateTime.Size = new System.Drawing.Size(146,20);
 			this.textDateTime.TabIndex = 77;
@@ -192,7 +197,7 @@ namespace OpenDental{
 			this.butPrint.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butPrint.CornerRadius = 4F;
 			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPrint.Location = new System.Drawing.Point(645,325);
+			this.butPrint.Location = new System.Drawing.Point(698,446);
 			this.butPrint.Name = "butPrint";
 			this.butPrint.Size = new System.Drawing.Size(81,24);
 			this.butPrint.TabIndex = 80;
@@ -207,7 +212,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(645,485);
+			this.butOK.Location = new System.Drawing.Point(698,606);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(81,24);
 			this.butOK.TabIndex = 3;
@@ -222,22 +227,17 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(645,515);
+			this.butCancel.Location = new System.Drawing.Point(698,636);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(81,24);
 			this.butCancel.TabIndex = 2;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// timer1
-			// 
-			this.timer1.Interval = 4000;
-			this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-			// 
 			// FormSheetFillEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(737,551);
+			this.ClientSize = new System.Drawing.Size(790,672);
 			this.Controls.Add(this.textShowInTerminal);
 			this.Controls.Add(this.labelShowInTerminal);
 			this.Controls.Add(this.textDescription);

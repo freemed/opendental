@@ -23,27 +23,51 @@ namespace OpenDental{
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+			this.setupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuItemSheets = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuItemImageCats = new System.Windows.Forms.ToolStripMenuItem();
 			this.butTerminal = new OpenDental.UI.Button();
 			this.butAdd = new OpenDental.UI.Button();
-			this.butImage = new OpenDental.UI.Button();
-			this.butSheets = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butCancel = new OpenDental.UI.Button();
-			this.groupBox1.SuspendLayout();
+			this.butImport = new OpenDental.UI.Button();
+			this.label1 = new System.Windows.Forms.Label();
+			this.menuStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
-			// groupBox1
+			// menuStrip1
 			// 
-			this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.groupBox1.Controls.Add(this.butImage);
-			this.groupBox1.Controls.Add(this.butSheets);
-			this.groupBox1.Location = new System.Drawing.Point(12,569);
-			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(161,46);
-			this.groupBox1.TabIndex = 5;
-			this.groupBox1.TabStop = false;
-			this.groupBox1.Text = "Setup";
+			this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.setupToolStripMenuItem});
+			this.menuStrip1.Location = new System.Drawing.Point(0,0);
+			this.menuStrip1.Name = "menuStrip1";
+			this.menuStrip1.Size = new System.Drawing.Size(615,24);
+			this.menuStrip1.TabIndex = 8;
+			this.menuStrip1.Text = "menuStrip1";
+			// 
+			// setupToolStripMenuItem
+			// 
+			this.setupToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuItemSheets,
+            this.menuItemImageCats});
+			this.setupToolStripMenuItem.Name = "setupToolStripMenuItem";
+			this.setupToolStripMenuItem.Size = new System.Drawing.Size(49,20);
+			this.setupToolStripMenuItem.Text = "Setup";
+			// 
+			// menuItemSheets
+			// 
+			this.menuItemSheets.Name = "menuItemSheets";
+			this.menuItemSheets.Size = new System.Drawing.Size(166,22);
+			this.menuItemSheets.Text = "Sheets";
+			this.menuItemSheets.Click += new System.EventHandler(this.menuItemSheets_Click);
+			// 
+			// menuItemImageCats
+			// 
+			this.menuItemImageCats.Name = "menuItemImageCats";
+			this.menuItemImageCats.Size = new System.Drawing.Size(166,22);
+			this.menuItemImageCats.Text = "Image Categories";
+			this.menuItemImageCats.Click += new System.EventHandler(this.menuItemImageCats_Click);
 			// 
 			// butTerminal
 			// 
@@ -54,7 +78,7 @@ namespace OpenDental{
 			this.butTerminal.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butTerminal.CornerRadius = 4F;
 			this.butTerminal.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butTerminal.Location = new System.Drawing.Point(353,585);
+			this.butTerminal.Location = new System.Drawing.Point(93,585);
 			this.butTerminal.Name = "butTerminal";
 			this.butTerminal.Size = new System.Drawing.Size(75,24);
 			this.butTerminal.TabIndex = 7;
@@ -71,40 +95,12 @@ namespace OpenDental{
 			this.butAdd.CornerRadius = 4F;
 			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(272,585);
+			this.butAdd.Location = new System.Drawing.Point(12,585);
 			this.butAdd.Name = "butAdd";
 			this.butAdd.Size = new System.Drawing.Size(75,24);
 			this.butAdd.TabIndex = 6;
 			this.butAdd.Text = "Add";
 			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
-			// 
-			// butImage
-			// 
-			this.butImage.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butImage.Autosize = true;
-			this.butImage.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butImage.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butImage.CornerRadius = 4F;
-			this.butImage.Location = new System.Drawing.Point(82,16);
-			this.butImage.Name = "butImage";
-			this.butImage.Size = new System.Drawing.Size(72,24);
-			this.butImage.TabIndex = 4;
-			this.butImage.Text = "Image Cats";
-			this.butImage.Click += new System.EventHandler(this.butImage_Click);
-			// 
-			// butSheets
-			// 
-			this.butSheets.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butSheets.Autosize = true;
-			this.butSheets.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butSheets.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butSheets.CornerRadius = 4F;
-			this.butSheets.Location = new System.Drawing.Point(7,16);
-			this.butSheets.Name = "butSheets";
-			this.butSheets.Size = new System.Drawing.Size(69,24);
-			this.butSheets.TabIndex = 3;
-			this.butSheets.Text = "Sheets";
-			this.butSheets.Click += new System.EventHandler(this.butSheets_Click);
 			// 
 			// gridMain
 			// 
@@ -112,13 +108,13 @@ namespace OpenDental{
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(12,12);
+			this.gridMain.Location = new System.Drawing.Point(12,27);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(592,553);
+			this.gridMain.Size = new System.Drawing.Size(592,538);
 			this.gridMain.TabIndex = 4;
 			this.gridMain.Title = "Patient Forms and Medical Histories";
-			this.gridMain.TranslationName = null;
+			this.gridMain.TranslationName = "FormPatientForms";
 			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			// 
 			// butCancel
@@ -136,21 +132,52 @@ namespace OpenDental{
 			this.butCancel.Text = "Close";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// butImport
+			// 
+			this.butImport.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butImport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butImport.Autosize = true;
+			this.butImport.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butImport.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butImport.CornerRadius = 4F;
+			this.butImport.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butImport.Location = new System.Drawing.Point(174,585);
+			this.butImport.Name = "butImport";
+			this.butImport.Size = new System.Drawing.Size(75,24);
+			this.butImport.TabIndex = 9;
+			this.butImport.Text = "Import";
+			this.butImport.Click += new System.EventHandler(this.butImport_Click);
+			// 
+			// label1
+			// 
+			this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.label1.Location = new System.Drawing.Point(253,588);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(173,18);
+			this.label1.TabIndex = 10;
+			this.label1.Text = "(from sheet into database)";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
 			// FormPatientForms
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(615,618);
+			this.Controls.Add(this.label1);
+			this.Controls.Add(this.butImport);
 			this.Controls.Add(this.butTerminal);
 			this.Controls.Add(this.butAdd);
-			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.butCancel);
+			this.Controls.Add(this.menuStrip1);
+			this.MainMenuStrip = this.menuStrip1;
 			this.Name = "FormPatientForms";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Patient Forms and Medical Histories";
 			this.Load += new System.EventHandler(this.FormPatientForms_Load);
-			this.groupBox1.ResumeLayout(false);
+			this.menuStrip1.ResumeLayout(false);
+			this.menuStrip1.PerformLayout();
 			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 
@@ -158,10 +185,13 @@ namespace OpenDental{
 
 		private OpenDental.UI.Button butCancel;
 		private OpenDental.UI.ODGrid gridMain;
-		private System.Windows.Forms.GroupBox groupBox1;
-		private OpenDental.UI.Button butSheets;
-		private OpenDental.UI.Button butImage;
 		private OpenDental.UI.Button butAdd;
 		private OpenDental.UI.Button butTerminal;
+		private System.Windows.Forms.MenuStrip menuStrip1;
+		private System.Windows.Forms.ToolStripMenuItem setupToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem menuItemSheets;
+		private System.Windows.Forms.ToolStripMenuItem menuItemImageCats;
+		private OpenDental.UI.Button butImport;
+		private System.Windows.Forms.Label label1;
 	}
 }
