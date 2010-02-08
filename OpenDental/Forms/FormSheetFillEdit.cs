@@ -359,7 +359,7 @@ namespace OpenDental {
 				float y;
 				float dist;//the distance between the point being tested and the center of the eraser circle.
 				float radius=8f;//by trial and error to achieve best feel.
-				PointF eraserPt=new PointF(e.X+8.49f,e.Y+8.49f);
+				PointF eraserPt=new PointF(e.X+pictDraw.Left+8.49f,e.Y+pictDraw.Top+8.49f);
 				foreach(SheetField field in SheetCur.SheetFields){
 					if(field.FieldType!=SheetFieldType.Drawing){
 						continue;
