@@ -25,6 +25,11 @@ namespace OpenDental {
 		}
 
 		private void FillGrid(){
+			//if a sheet is selected, remember it
+			long selectedSheetNum=0;
+			if(gridMain.GetSelectedIndex()!=-1) {
+				selectedSheetNum=PIn.Long(table.Rows[gridMain.GetSelectedIndex()]["SheetNum"].ToString());
+			}
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g(this,"Date"),70);
@@ -50,6 +55,14 @@ namespace OpenDental {
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
+			if(selectedSheetNum!=0) {
+				for(int i=0;i<table.Rows.Count;i++) {
+					if(table.Rows[i]["SheetNum"].ToString()==selectedSheetNum.ToString()) {
+						gridMain.SetSelected(i,true);
+						break;
+					}
+				}
+			}
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
@@ -147,7 +160,20 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please select one completed form from the list above first.");
 				return;
 			}
-
+			long sheetNum=PIn.Long(table.Rows[gridMain.SelectedIndices[0]]["SheetNum"].ToString());
+			if(sheetNum==0) {
+				MsgBox.Show(this,"Images cannot be imported into the database.");
+				return;
+			}
+			Sheet sheet=Sheets.GetSheet(sheetNum);
+			if(sheet.SheetType!=SheetTypeEnum.PatientForm) {
+				MsgBox.Show(this,"For now, only sheets of type 'PatientForm' can be imported.");
+				return;
+			}
+			FormSheetImport formSI=new FormSheetImport();
+			formSI.SheetCur=sheet;
+			formSI.ShowDialog();
+			//No need to refresh grid because no changes could have been made.
 		}
 
 		private void butCancel_Click(object sender,EventArgs e) {

@@ -23,7 +23,7 @@ namespace OpenDentBusiness{
 		//public long EmailMessageNum;
 		///<Summary>No longer used.  Use the statement table instead.</Summary>
 		public bool IsStatementSent;
-		///<summary>FK to user.UserNum.</summary>
+		///<summary>FK to userod.UserNum.</summary>
 		public long UserNum;
 
 		///<summary></summary>

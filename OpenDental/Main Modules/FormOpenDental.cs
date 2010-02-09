@@ -2025,9 +2025,13 @@ namespace OpenDental{
 			FormPatientForms formP=new FormPatientForms();
 			formP.PatNum=CurPatNum;
 			formP.ShowDialog();
-			if(ContrAccount2.Visible || ContrChart2.Visible) {//The only two modules where a new form would show.
-				RefreshCurrentModule();
-			}
+			//if(ContrAccount2.Visible || ContrChart2.Visible//The only two modules where a new form would show.
+			//	|| ContrFamily2.Visible){//patient info
+			//always refresh, especially to get the titlebar right after an import.
+			Patient pat=Patients.GetPat(CurPatNum);
+			RefreshCurrentModule();
+			FillPatientButton(CurPatNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber,pat.SiteNum);
+			//}
 		}
 
 		private void OnTasklist_Click(){

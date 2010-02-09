@@ -60,16 +60,16 @@ namespace OpenDental{
 			// 
 			// labelPrompt
 			// 
-			this.labelPrompt.Location = new System.Drawing.Point(30,9);
+			this.labelPrompt.Location = new System.Drawing.Point(31,10);
 			this.labelPrompt.Name = "labelPrompt";
-			this.labelPrompt.Size = new System.Drawing.Size(516,55);
+			this.labelPrompt.Size = new System.Drawing.Size(387,36);
 			this.labelPrompt.TabIndex = 2;
 			this.labelPrompt.Text = "labelPrompt";
 			this.labelPrompt.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// textResult
 			// 
-			this.textResult.Location = new System.Drawing.Point(32,70);
+			this.textResult.Location = new System.Drawing.Point(32,51);
 			this.textResult.Name = "textResult";
 			this.textResult.Size = new System.Drawing.Size(385,20);
 			this.textResult.TabIndex = 0;
@@ -82,7 +82,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(456,153);
+			this.butOK.Location = new System.Drawing.Point(262,107);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,26);
 			this.butOK.TabIndex = 1;
@@ -97,7 +97,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(456,194);
+			this.butCancel.Location = new System.Drawing.Point(343,107);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,26);
 			this.butCancel.TabIndex = 2;
@@ -107,7 +107,7 @@ namespace OpenDental{
 			// InputBox
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(561,243);
+			this.ClientSize = new System.Drawing.Size(430,145);
 			this.Controls.Add(this.textResult);
 			this.Controls.Add(this.labelPrompt);
 			this.Controls.Add(this.butOK);
