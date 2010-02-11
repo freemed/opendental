@@ -17,13 +17,6 @@ namespace OpenDental {
 		}
 
 		private void FormPatientMerge_Load(object sender,EventArgs e) {
-			this.gridMergeFromPatients.BeginUpdate();
-			this.gridMergeFromPatients.Columns.Clear();
-			ODGridColumn col=new ODGridColumn("Patient ID",80);
-			this.gridMergeFromPatients.Columns.Add(col);
-			col=new ODGridColumn("Patient Name",120);
-			this.gridMergeFromPatients.Columns.Add(col);
-			this.gridMergeFromPatients.EndUpdate();
 		}
 
 		private void butChangePatientInto_Click(object sender,EventArgs e) {
@@ -36,76 +29,50 @@ namespace OpenDental {
 			CheckUIState();
 		}
 
-		private void butAddPatientFrom_Click(object sender,EventArgs e) {
+		private void butChangePatientFrom_Click(object sender,EventArgs e) {
 			FormPatientSelect fps=new FormPatientSelect();
-			if(fps.ShowDialog()==DialogResult.OK){
-				//Do not add the patient to the list if already added.
-				bool alreadyExists=false;
-				for(int i=0;i<this.gridMergeFromPatients.Rows.Count;i++){
-					string patnum=this.gridMergeFromPatients.Rows[i].Cells[0].Text;
-					if(patnum==fps.SelectedPatNum.ToString()){
-						alreadyExists=true;
-						break;
-					}
-				}
-				if(!alreadyExists){
-					this.gridMergeFromPatients.BeginUpdate();
-					ODGridRow row=new ODGridRow();
-					ODGridCell cell=new ODGridCell(fps.SelectedPatNum.ToString());
-					row.Cells.Add(cell);
-					Patient pat=Patients.GetPat(fps.SelectedPatNum);
-					cell=new ODGridCell(pat.GetNameFLFormal());
-					row.Cells.Add(cell);
-					this.gridMergeFromPatients.Rows.Add(row);
-					this.gridMergeFromPatients.EndUpdate();
-				}
-				//Select the most recently chosen patient (even if they were already in the list).
-				for(int i=0;i<this.gridMergeFromPatients.Rows.Count;i++) {
-					string patnum=this.gridMergeFromPatients.Rows[i].Cells[0].Text;
-					if(patnum==fps.SelectedPatNum.ToString()) {
-						this.gridMergeFromPatients.SetSelected(i,true);
-					}
-					else{
-						this.gridMergeFromPatients.SetSelected(i,false);
-					}
-				}
+			if(fps.ShowDialog()==DialogResult.OK) {
+				this.textPatientIDFrom.Text=fps.SelectedPatNum.ToString();
+				Patient pat=Patients.GetPat(fps.SelectedPatNum);
+				this.textPatientNameFrom.Text=pat.GetNameFLFormal();
 			}
-			CheckUIState();
-		}
-
-		private void butRemoveSelectedPatientsFrom_Click(object sender,EventArgs e) {
-			List<int> selectedIndicies=new List <int> (this.gridMergeFromPatients.SelectedIndices);
-			this.gridMergeFromPatients.BeginUpdate();
-			List <ODGridRow> rowsKept=new List<ODGridRow> ();
-			for(int i=0;i<this.gridMergeFromPatients.Rows.Count;i++){
-				if(selectedIndicies.IndexOf(i)<0){
-					//Keep the item if it is not selected for removal.
-					rowsKept.Add(this.gridMergeFromPatients.Rows[i]);
-				}
-			}
-			this.gridMergeFromPatients.Rows.Clear();
-			for(int i=0;i<rowsKept.Count;i++){
-				this.gridMergeFromPatients.Rows.Add(rowsKept[i]);
-			}
-			this.gridMergeFromPatients.EndUpdate();
 			CheckUIState();
 		}
 
 		private void CheckUIState(){
-			this.butMerge.Enabled=(this.textPatientIDInto.Text.Trim()!="" && this.gridMergeFromPatients.Rows.Count>0);
+			this.butMerge.Enabled=(this.textPatientIDInto.Text.Trim()!="" && this.textPatientIDFrom.Text.Trim()!="");
 		}
 
 		private void butMerge_Click(object sender,EventArgs e) {
-			//Validate name and birthdate match
-			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Merge all patients from the list into the patient shown at the top?")) {
+			//Validating a name a birthdate match seems too specific and will reduce the usefullness of 
+			//the merge tool because for instance the user may want to merge duplicate patients which
+			//have name spelled slightly differently and which are actually the same patient.
+			if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"Merge the patient at the bottom into the patient shown at the top?")) {
 				return;
 			}
+			this.Cursor=Cursors.WaitCursor;
 			long patTo=Convert.ToInt64(this.textPatientIDInto.Text.Trim());
-			for(int i=0;i<this.gridMergeFromPatients.Rows.Count;i++){
-				long patFrom=Convert.ToInt64(this.gridMergeFromPatients.Rows[i].Cells[0].Text.Trim());
-				Patients.MergeTwoPatients(patTo,patFrom);
+			long patFrom=Convert.ToInt64(this.textPatientIDFrom.Text.Trim());
+			Patient patientFrom=Patients.GetPat(patFrom);
+			if(patientFrom.PatNum==patientFrom.Guarantor){
+				Family fam=Patients.GetFamily(patFrom);
+				if(fam.ListPats.Length>1){
+					this.Cursor=Cursors.Default;
+					if(!MsgBox.Show(this,MsgBoxButtons.YesNo,
+						"The patient you have chosen to merge from is a guarantor. Merging this patient into another account will "
+						+"cause all familiy members of the patient being merged from to be moved into the same family as the "
+						+"patient account being merged into. Do you wish to continue with the merge?")) {
+						//The user chose not to merge.
+						return;
+					}
+					this.Cursor=Cursors.WaitCursor;
+				}
 			}
-			DialogResult=DialogResult.OK;
+			Patients.MergeTwoPatients(patTo,patFrom);
+			this.textPatientIDFrom.Text="";
+			this.textPatientNameFrom.Text="";
+			CheckUIState();
+			this.Cursor=Cursors.Default;
 		}
 
 		private void butCancel_Click(object sender,EventArgs e) {

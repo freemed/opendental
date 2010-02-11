@@ -4,10 +4,12 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Diagnostics;
+using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using OpenDentBusiness.DataAccess;
+using CodeBase;
 
 namespace OpenDentBusiness{
 	
@@ -1781,6 +1783,8 @@ namespace OpenDentBusiness{
 			return true;
 		}
 
+		///<summary>To prevent orphaned patients, if patFrom is a guarantor then all family members of patFrom 
+		///are moved into the family patTo belongs to, and then the merge of the two specified accounts is performed.</summary>
 		public static void MergeTwoPatients(long patTo,long patFrom){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),patTo,patFrom);
@@ -1790,36 +1794,136 @@ namespace OpenDentBusiness{
 				//Do not merge the same patient onto itself.
 				return;
 			}
-			string[] patNumForeignKeys=new string[]{//TODO: Need to add missing foreign keys to this list.
-				"adjustment.Patnum",
+			string[] guarantorForeignKeys=new string[]{
+				"patient.Guarantor",
+				"payplan.Guarantor",
+				"payplancharge.Guarantor",
+			};
+			string[] patNumForeignKeys=new string[]{
+				"adjustment.PatNum",
+				"anestheticrecord.PatNum",
+				"anesthvsdata.PatNum",
 				"appointment.PatNum",
 				"claim.PatNum",
 				"claimproc.PatNum",
 				"commlog.PatNum",
 				"disease.PatNum",
-				"docattach.PatNum",
 				"document.PatNum",
+				"emailmessage.PatNum",
 				"etrans.PatNum",
+				"formpat.PatNum",
 				"insplan.Subscriber",
 				"labcase.PatNum",
 				"medicationpat.PatNum",
-				"perioexam.PatNum","patfield.PatNum","patplan.PatNum","payment.PatNum","paysplit.PatNum",
-				"procedurelog.PatNum","procnote.PatNum","proctp.PatNum",
+				"mount.PatNum",
+				"patfield.PatNum",				
+				"patient.ResponsParty",
+				//The patientnote table is ignored because only one record can exist for each patient. 
+				//The record in 'patFrom' remains so it can be accessed again if needed.
+				//"patientnote.PatNum"				
+				"patplan.PatNum",
+				"payment.PatNum",				
+				"payplan.PatNum",				
+				"payplancharge.PatNum",
+				"paysplit.PatNum",
+				"perioexam.PatNum",
+				"phonenumber.PatNum",
+				"plannedappt.PatNum",
+				"popup.PatNum",
+				"procedurelog.PatNum",
+				"procnote.PatNum",
+				"proctp.PatNum",
 				"question.PatNum",
-				"recall.PatNum","refattach.PatNum","rxpat.PatNum",
-				"toothinitial.PatNum","treatplan.PatNum",
+				"recall.PatNum",
+				"refattach.PatNum",
+				"referral.PatNum",
+				"registrationkey.PatNum",
+				"repeatcharge.PatNum",
+				"reqstudent.PatNum",
+				"rxpat.PatNum",
+				"securitylog.PatNum",
+				"sheet.PatNum",
+				"statement.PatNum",
+				//task.KeyNum,//Taken care of in a seperate step, because it is not always a patnum.
+				"terminalactive.PatNum",
+				"toothinitial.PatNum",
+				"treatplan.PatNum",
+				"treatplan.ResponsParty",
 			};
 			string command="";
+			Patient patientFrom=Patients.GetPat(patFrom);
+			Patient patientTo=Patients.GetPat(patTo);
+			string atozFrom=ImageStore.GetPatientFolder(patientFrom);
+			string atozTo=ImageStore.GetPatientFolder(patientTo);
+			//Move the patient documents within the 'patFrom' A to Z folder to the 'patTo' A to Z folder.
+			//We have to be careful here of documents with the same name. We have to rename such documents
+			//so that no documents are overwritten/lost.
+			string[] fromFiles=Directory.GetFiles(atozFrom);
+			for(int i=0;i<fromFiles.Length;i++) {
+				string fileName=Path.GetFileName(fromFiles[i]);
+				string destFilePath=ODFileUtils.CombinePaths(atozTo,fileName);
+				if(File.Exists(destFilePath)) {
+					//The file being copied has the same name as a possibly different file within the destination a to z folder.
+					//We need to copy the file under a unique file name and then make sure to update the document table to reflect
+					//the change.
+					destFilePath=ODFileUtils.CombinePaths(atozTo,patientFrom.PatNum.ToString()+fileName);
+					while(File.Exists(destFilePath)){
+						destFilePath=ODFileUtils.CombinePaths(atozTo,patientFrom.PatNum.ToString()+"_"+DateTime.Now.ToString("yyyy_MM_dd_hh_mm_ss")+fileName);
+					}
+					command="UPDATE document "
+						+"SET FileName="+POut.String(Path.GetFileName(destFilePath))+" "
+						+"WHERE FileName="+POut.String(fileName)+" AND PatNum="+POut.Long(patFrom)+" LIMIT 1";
+					Db.NonQ(command);					
+				}
+				File.Copy(fromFiles[i],destFilePath);//Will throw exception if file already exists.
+				try {
+					File.Delete(fromFiles[i]);
+				} catch {
+					//If we were unable to delete the file then it is probably because someone has the document open currently.
+					//Just skip deleting the file. This means that occasionally there will be an extra file in their backup
+					//which is just clutter but at least the merge is guaranteed this way.
+				}
+			}
+			//Update all guarantor foreign keys to change them from 'patFrom' to 
+			//the guarantor of 'patTo'. This will effectively move all 'patFrom' family members 
+			//to the family defined by 'patTo' in the case that 'patFrom' is a guarantor. If
+			//'patFrom' is not a guarantor, then these commands will have no effect and are
+			//thus safe to always be run.
+			for(int i=0;i<guarantorForeignKeys.Length;i++){
+				string[] tableAndKeyName=guarantorForeignKeys[i].Split(new char[] { '.' });
+				command="UPDATE "+tableAndKeyName[0]
+					+" SET "+tableAndKeyName[1]+"="+POut.Long(patientTo.Guarantor)
+					+" WHERE "+tableAndKeyName[1]+"="+POut.Long(patFrom);
+				Db.NonQ(command);
+			}
+			//At this point, the 'patFrom' is a regular patient and is absoloutely not a guarantor.
+			//Now modify all PatNum foreign keys from 'patFrom' to 'patTo' to complete the majority of the
+			//merge of the records between the two accounts.			
 			for(int i=0;i<patNumForeignKeys.Length;i++) {
 				string[] tableAndKeyName=patNumForeignKeys[i].Split(new char[] {'.'});
-				command="UPDATE "+tableAndKeyName[0]+" SET "+tableAndKeyName[1]+"="+POut.Long(patTo)+" WHERE "+tableAndKeyName[1]+"="+POut.Long(patFrom);
-				//Db.NonQ(command);
+				command="UPDATE "+tableAndKeyName[0]
+					+" SET "+tableAndKeyName[1]+"="+POut.Long(patTo)
+					+" WHERE "+tableAndKeyName[1]+"="+POut.Long(patFrom);
+				Db.NonQ(command);
 			}
-			command="DELETE FROM patientnote WHERE PatNum="+POut.Long(patFrom);
-			//Db.NonQ(command);
-			//Mark the patient where data was pulled from as deleted.
-			command="UPDATE patient SET PatStatus=4 WHERE PatNum="+POut.Long(patFrom);
-			//Db.NonQ(command);
+			//We have to move over the tasks belonging to the 'patFrom' patient in a seperate step because
+			//the KeyNum field of the task table might be a foreign key to something other than a patnum,
+			//including possibly an appointment number.
+			command="UPDATE task "
+				+"SET KeyNum="+POut.Long(patTo)+" "
+				+"WHERE KeyNum="+POut.Long(patFrom)+" AND ObjectType="+((int)TaskObjectType.Patient);
+			Db.NonQ(command);
+			//Mark the patient where data was pulled from as archived unless the patient is already marked as deceased.
+			//We need to have the patient marked either archived or deceased so that it is hidden by default, and
+			//we also need the customer to be able to access the account again in case a particular table gets missed
+			//in the merge tool after an update to Open Dental. This will allow our customers to remerge the missing
+			//data after a bug fix is released. 
+			command="UPDATE patient "
+				+"SET PatStatus="+((int)PatientStatus.Archived)+" "
+				+"WHERE PatNum="+POut.Long(patFrom)+" "
+				+"AND PatStatus<>"+((int)PatientStatus.Deceased)+" "
+				+"LIMIT 1";
+			Db.NonQ(command);
 		}
 
 		///<summary>LName, 'Preferred' FName M</summary>
