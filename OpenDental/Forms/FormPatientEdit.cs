@@ -925,6 +925,7 @@ namespace OpenDental{
 			// 
 			this.comboZip.DropDownWidth = 198;
 			this.comboZip.Location = new System.Drawing.Point(149,135);
+			this.comboZip.MaxDropDownItems = 20;
 			this.comboZip.Name = "comboZip";
 			this.comboZip.Size = new System.Drawing.Size(198,21);
 			this.comboZip.TabIndex = 60;
@@ -1789,7 +1790,7 @@ namespace OpenDental{
 			for(int i=0;i<ZipCodes.ALFrequent.Count;i++)
 			{
 				comboZip.Items.Add(((ZipCode)ZipCodes.ALFrequent[i]).ZipCodeDigits
-					+"("+((ZipCode)ZipCodes.ALFrequent[i]).City+")");
+					+" ("+((ZipCode)ZipCodes.ALFrequent[i]).City+")");
 			}
 		}
 

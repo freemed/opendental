@@ -1176,7 +1176,7 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
-		///<summary>Used in new patient terminal.  Synchs less fields than the normal synch.</summary>
+		///<summary>Used in patient terminal, aka sheet import.  Synchs less fields than the normal synch.</summary>
 		public static void UpdateAddressForFamTerminal(Patient pat) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),pat);

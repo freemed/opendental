@@ -110,6 +110,7 @@ namespace OpenDental {
 			TerminalSend=true;
 			if(listMain.SelectedIndices.Count>1) {
 				DialogResult=DialogResult.OK;
+				return;
 			}
 			//otherwise, leave window open so more forms can be sent
 			for(int i=0;i<listMain.SelectedIndices.Count;i++) {
@@ -142,6 +143,7 @@ namespace OpenDental {
 		private void butClose_Click(object sender,EventArgs e) {
 			if(SelectedSheetDefs==null || SelectedSheetDefs.Count==0) {
 				DialogResult=DialogResult.Cancel;
+				return;
 			}
 			//TerminalSend will have already been set true in this case.
 			DialogResult=DialogResult.OK;

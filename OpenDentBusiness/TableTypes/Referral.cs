@@ -55,6 +55,21 @@ namespace OpenDentBusiness{
 			return (Referral)this.MemberwiseClone();
 		}
 		
+		///<summary>Includes title, such as DMD.</summary>
+		public string GetNameFL() {
+			string retVal="";
+			if(FName!="") {
+				retVal+=FName+" ";
+			}
+			if(MName!="") {
+				retVal+=MName+" ";
+			}
+			retVal+=LName;
+			if(Title!="") {
+				retVal+=", "+Title;
+			}
+			return retVal;
+		}
 
 	}
 

@@ -200,18 +200,7 @@ namespace OpenDentBusiness{
 			if(referral==null) {
 				return "";
 			}
-			string retVal="";
-			if(referral.FName!="") {
-				retVal+=referral.FName+" ";
-			}
-			if(referral.MName!="") {
-				retVal+=referral.MName+" ";
-			}
-			retVal+=referral.LName;
-			if(referral.Title!="") {
-				retVal+=", "+referral.Title;
-			}
-			return retVal;
+			return referral.GetNameFL();
 		}
 
 		///<summary></summary>

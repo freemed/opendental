@@ -227,7 +227,7 @@ namespace OpenDentBusiness{
 				list.Add(NewInput("City"));
 				list.Add(NewInput("Email"));
 				list.Add(NewInput("FName"));
-				list.Add(NewInput("guarantorNameF"));
+				list.Add(NewInput("guarantorNameF"));//only if not self
 				list.Add(NewInput("HmPhone"));//We will have to handle trailing notes.
 				list.Add(NewInput("ins1CarrierName"));
 				list.Add(NewInput("ins1CarrierPhone"));

@@ -12,9 +12,18 @@ namespace OpenDental {
 	public partial class FormSheetImport:Form {
 		public Sheet SheetCur;
 		private List<SheetImportRow> rows;
-		//<summary>As the user makes a few choices about how to import certain rows, their choices and edits are stored here.</summary>
-		//private List<SheetImportRow> edits;
 		private Patient pat;
+		private Family fam;
+		///<summary>We must have a readily available bool, whether or not this checkbox field is present on the sheet.  It gets set at the very beginning, then gets changes based on user input on the sheet and in this window.</summary>
+		private bool AddressSameForFam;
+		private InsPlan plan1;
+		private InsPlan plan2;
+		private List<PatPlan> patPlanList;
+		private List<InsPlan> planList;
+		private PatPlan patPlan1;
+		private PatPlan patPlan2;
+		private Relat ins1Relat;
+		private Relat ins2Relat;
 
 		public FormSheetImport() {
 			InitializeComponent();
@@ -23,7 +32,42 @@ namespace OpenDental {
 
 		private void FormSheetImport_Load(object sender,EventArgs e) {
 			pat=Patients.GetPat(SheetCur.PatNum);
-			//edits=new List<SheetImportRow>();
+			fam=Patients.GetFamily(SheetCur.PatNum);
+			AddressSameForFam=true;
+			for(int i=0;i<fam.ListPats.Length;i++) {
+				if(pat.HmPhone!=fam.ListPats[i].HmPhone
+					|| pat.Address!=fam.ListPats[i].Address
+					|| pat.Address2!=fam.ListPats[i].Address2
+					|| pat.City!=fam.ListPats[i].City
+					|| pat.State!=fam.ListPats[i].State
+					|| pat.Zip!=fam.ListPats[i].Zip) 
+				{
+					AddressSameForFam=false;
+					break;
+				}
+			}
+			patPlanList=PatPlans.Refresh(SheetCur.PatNum);
+			planList=InsPlans.Refresh(fam);
+			if(patPlanList.Count==0) {
+				patPlan1=null;
+				plan1=null;
+				ins1Relat=Relat.Self;
+			}
+			else {
+				patPlan1=patPlanList[0];
+				plan1=InsPlans.GetPlan(patPlan1.PlanNum,planList);
+				ins1Relat=patPlan1.Relationship;
+			}
+			if(patPlanList.Count<2) {
+				patPlan2=null;
+				plan2=null;
+				ins2Relat=Relat.Self;
+			}
+			else {
+				patPlan2=patPlanList[1];
+				plan2=InsPlans.GetPlan(patPlan2.PlanNum,planList);
+				ins2Relat=patPlan2.Relationship;
+			}
 			FillRows();
 			FillGrid();
 		}
@@ -37,6 +81,7 @@ namespace OpenDental {
 			row.FieldName="Personal";
 			row.IsSeparator=true;
 			rows.Add(row);
+			#region personal
 			//LName---------------------------------------------
 			fieldVal=GetInputValue("LName");
 			if(fieldVal!=null) {
@@ -46,6 +91,8 @@ namespace OpenDental {
 				row.OldValObj=pat.LName;
 				row.NewValDisplay=fieldVal;
 				row.NewValObj=row.NewValDisplay;
+				row.ImpValDisplay=row.NewValDisplay;
+				row.ImpValObj=row.NewValObj;
 				row.ObjType=typeof(string);
 				if(row.OldValDisplay!=row.NewValDisplay) {
 					row.DoImport=true;
@@ -61,6 +108,8 @@ namespace OpenDental {
 				row.OldValObj=pat.FName;
 				row.NewValDisplay=fieldVal;
 				row.NewValObj=row.NewValDisplay;
+				row.ImpValDisplay=row.NewValDisplay;
+				row.ImpValObj=row.NewValObj;
 				row.ObjType=typeof(string);
 				if(row.OldValDisplay!=row.NewValDisplay) {
 					row.DoImport=true;
@@ -76,6 +125,8 @@ namespace OpenDental {
 				row.OldValObj=pat.MiddleI;
 				row.NewValDisplay=fieldVal;
 				row.NewValObj=row.NewValDisplay;
+				row.ImpValDisplay=row.NewValDisplay;
+				row.ImpValObj=row.NewValObj;
 				row.ObjType=typeof(string);
 				if(row.OldValDisplay!=row.NewValDisplay) {
 					row.DoImport=true;
@@ -91,6 +142,8 @@ namespace OpenDental {
 				row.OldValObj=pat.Preferred;
 				row.NewValDisplay=fieldVal;
 				row.NewValObj=row.NewValDisplay;
+				row.ImpValDisplay=row.NewValDisplay;
+				row.ImpValObj=row.NewValObj;
 				row.ObjType=typeof(string);
 				if(row.OldValDisplay!=row.NewValDisplay) {
 					row.DoImport=true;
@@ -117,6 +170,8 @@ namespace OpenDental {
 					row.NewValDisplay=Lan.g("enumPatientGender",gender.ToString());
 				}
 				row.NewValObj=gender;
+				row.ImpValDisplay=row.NewValDisplay;
+				row.ImpValObj=row.NewValObj;
 				row.ObjType=typeof(PatientGender);
 				if(gender!=PatientGender.Unknown
 					&& pat.Gender!=gender) 
@@ -165,10 +220,11 @@ namespace OpenDental {
 						row.DoImport=false;
 					}
 				}
+				row.ImpValDisplay=row.NewValDisplay;
+				row.ImpValObj=row.NewValObj;
 				row.ObjType=typeof(PatientPosition);
 				rows.Add(row);
 			}
-			#region temp
 			//Birthdate---------------------------------------------
 			fieldVal=GetInputValue("Birthdate");
 			if(fieldVal!=null) {
@@ -188,6 +244,8 @@ namespace OpenDental {
 				else {
 					row.NewValDisplay=((DateTime)row.NewValObj).ToShortDateString();
 				}
+				row.ImpValDisplay=row.NewValDisplay;
+				row.ImpValObj=row.NewValObj;
 				row.ObjType=typeof(DateTime);
 				if(row.OldValDisplay!=row.NewValDisplay) {
 					row.DoImport=true;
@@ -203,6 +261,8 @@ namespace OpenDental {
 				row.OldValObj=pat.SSN;
 				row.NewValDisplay=fieldVal.Replace("-","");//quickly strip dashes
 				row.NewValObj=row.NewValDisplay;
+				row.ImpValDisplay=row.NewValDisplay;
+				row.ImpValObj=row.NewValObj;
 				row.ObjType=typeof(string);
 				if(row.OldValDisplay!=row.NewValDisplay) {
 					row.DoImport=true;
@@ -218,6 +278,8 @@ namespace OpenDental {
 				row.OldValObj=pat.WkPhone;
 				row.NewValDisplay=fieldVal;
 				row.NewValObj=row.NewValDisplay;
+				row.ImpValDisplay=row.NewValDisplay;
+				row.ImpValObj=row.NewValObj;
 				row.ObjType=typeof(string);
 				if(row.OldValDisplay!=row.NewValDisplay) {
 					row.DoImport=true;
@@ -233,6 +295,8 @@ namespace OpenDental {
 				row.OldValObj=pat.WirelessPhone;
 				row.NewValDisplay=fieldVal;
 				row.NewValObj=row.NewValDisplay;
+				row.ImpValDisplay=row.NewValDisplay;
+				row.ImpValObj=row.NewValObj;
 				row.ObjType=typeof(string);
 				if(row.OldValDisplay!=row.NewValDisplay) {
 					row.DoImport=true;
@@ -248,8 +312,11 @@ namespace OpenDental {
 				row.OldValObj="";
 				row.NewValDisplay=fieldVal;
 				row.NewValObj=row.NewValDisplay;
+				row.ImpValDisplay=row.NewValDisplay;
+				row.ImpValObj=row.NewValObj;
 				row.ObjType=typeof(string);
 				row.DoImport=false;
+				row.IsFlagged=true;//if user entered nothing, the red text won't show anyway.
 				rows.Add(row);
 			}
 			//Email---------------------------------------------
@@ -261,13 +328,14 @@ namespace OpenDental {
 				row.OldValObj=pat.Email;
 				row.NewValDisplay=fieldVal;
 				row.NewValObj=row.NewValDisplay;
+				row.ImpValDisplay=row.NewValDisplay;
+				row.ImpValObj=row.NewValObj;
 				row.ObjType=typeof(string);
 				if(row.OldValDisplay!=row.NewValDisplay) {
 					row.DoImport=true;
 				}
 				rows.Add(row);
 			}
-			#endregion
 			//PreferContactMethod---------------------------------------------
 			if(ContainsFieldThatStartsWith("PreferContactMethod")) {
 				ContactMethod cmeth=pat.PreferContactMethod;
@@ -292,6 +360,8 @@ namespace OpenDental {
 				row.OldValObj=pat.PreferContactMethod;
 				row.NewValDisplay=Lan.g("enumContactMethod",cmeth.ToString());
 				row.NewValObj=cmeth;
+				row.ImpValDisplay=row.NewValDisplay;
+				row.ImpValObj=row.NewValObj;
 				row.ObjType=typeof(ContactMethod);
 				if(pat.PreferContactMethod!=cmeth) {
 					row.DoImport=true;
@@ -322,6 +392,8 @@ namespace OpenDental {
 				row.OldValObj=pat.PreferConfirmMethod;
 				row.NewValDisplay=Lan.g("enumContactMethod",cmeth.ToString());
 				row.NewValObj=cmeth;
+				row.ImpValDisplay=row.NewValDisplay;
+				row.ImpValObj=row.NewValObj;
 				row.ObjType=typeof(ContactMethod);
 				if(pat.PreferConfirmMethod!=cmeth) {
 					row.DoImport=true;
@@ -352,34 +424,259 @@ namespace OpenDental {
 				row.OldValObj=pat.PreferRecallMethod;
 				row.NewValDisplay=Lan.g("enumContactMethod",cmeth.ToString());
 				row.NewValObj=cmeth;
+				row.ImpValDisplay=row.NewValDisplay;
+				row.ImpValObj=row.NewValObj;
 				row.ObjType=typeof(ContactMethod);
 				if(pat.PreferRecallMethod!=cmeth) {
 					row.DoImport=true;
 				}
 				rows.Add(row);
 			}
-			/*
-			//---------------------------------------------
-			fieldVal=GetInputValue("");
+			//guarantor---------------------------------------------
+			if(ContainsFieldThatStartsWith("guarantor")) {
+				row=new SheetImportRow();
+				row.FieldName="guarantor";
+				string guarantorNameF=Lan.g(this,"Self");
+				if(pat.Guarantor!=pat.PatNum) {
+					guarantorNameF=fam.GetNameInFamFirst(pat.Guarantor);
+				}
+				row.OldValDisplay=guarantorNameF;
+				row.OldValObj=guarantorNameF;
+				fieldVal=GetInputValue("guarantorNameF");
+				if(fieldVal!="") {//if user entered a name
+					guarantorNameF=fieldVal;
+				}
+				else if(IsChecked("guarantorIsSelf")) {
+					guarantorNameF=Lan.g(this,"Self");
+				}
+				else if(IsChecked("guarantorIsOther")) {//but no name entered
+					guarantorNameF=Lan.g(this,"Other");
+				}
+				row.NewValDisplay=guarantorNameF;
+				row.NewValObj=guarantorNameF;
+				row.ImpValDisplay="";
+				row.ImpValObj="";
+				row.ObjType=typeof(string);
+				row.DoImport=false;
+				if(row.OldValDisplay!=row.NewValDisplay) {
+					row.IsFlagged=true;
+				}
+				rows.Add(row);
+			}
+			//referredFrom---------------------------------------------
+			fieldVal=GetInputValue("referredFrom");
 			if(fieldVal!=null) {
 				row=new SheetImportRow();
-				row.FieldName="";
-				row.OldValDisplay=pat;
-				row.OldValObj=pat;
-				row.NewValDisplay=fieldVal;
-				row.NewValObj=row.NewValDisplay;
+				row.FieldName="referredFrom";
+				Referral refer=Referrals.GetReferralForPat(pat.PatNum);
+				if(refer==null) {//there was no existing referral
+					row.OldValDisplay="";
+					row.OldValObj=null;
+					row.NewValDisplay=fieldVal;
+					row.NewValObj=null;
+					if(row.NewValDisplay!="") {//user did enter a referral
+						row.ImpValDisplay=Lan.g(this,"[double click to pick]");
+						row.ImpValObj=null;
+						row.IsFlaggedImp=true;
+						row.DoImport=false;//this will change to true after they pick a referral
+					}
+					else {//user still did not enter a referral
+						row.ImpValDisplay="";
+						row.ImpValObj=null;
+						row.DoImport=false;
+					}
+				}
+				else {//there was an existing referral. We don't allow changing from here since mostly for new patients.
+					row.OldValDisplay=refer.GetNameFL();
+					row.OldValObj=refer;
+					row.NewValDisplay=fieldVal;
+					row.NewValObj=null;
+					row.ImpValDisplay="";
+					row.ImpValObj=null;
+					row.DoImport=false;
+					if(row.OldValDisplay!=row.NewValDisplay) {//if patient changed an existing referral, at least let user know.
+						row.IsFlagged=true;//although they won't be able to do anything about it here
+					}
+				}
+				row.ObjType=typeof(Referral);
+				rows.Add(row);
+			}
+			#endregion personal
+			//Separator-------------------------------------------
+			row=new SheetImportRow();
+			row.FieldName="Address and Home Phone";
+			row.IsSeparator=true;
+			rows.Add(row);
+			#region address
+			//SameForEntireFamily-------------------------------------------
+			if(ContainsOneOfFields("addressAndHmPhoneIsSameEntireFamily")) {
+				row=new SheetImportRow();
+				row.FieldName="addressAndHmPhoneIsSameEntireFamily";
+				row.FieldDisplay="Same for entire family";
+				if(AddressSameForFam) {//remember we calculated this in the form constructor.
+					row.OldValDisplay="X";
+					row.OldValObj="X";
+				}
+				else {
+					row.OldValDisplay="";
+					row.OldValObj="";
+				}
+				//And now, we will revise AddressSameForFam based on user input
+				AddressSameForFam=IsChecked("addressAndHmPhoneIsSameEntireFamily");
+				if(AddressSameForFam) {
+					row.NewValDisplay="X";
+					row.NewValObj="X";
+					row.ImpValDisplay="X";
+					row.ImpValObj="X";
+				}
+				else {
+					row.NewValDisplay="";
+					row.NewValObj="";
+					row.ImpValDisplay="";
+					row.ImpValObj="";
+				}
 				row.ObjType=typeof(string);
 				if(row.OldValDisplay!=row.NewValDisplay) {
 					row.DoImport=true;
 				}
 				rows.Add(row);
-			}*/
-			row=new SheetImportRow();
-			row.FieldName="Address and Home Phone";
-			row.IsSeparator=true;
-			rows.Add(row);
+			}
+			//Address---------------------------------------------
+			fieldVal=GetInputValue("Address");
+			if(fieldVal!=null) {
+				row=new SheetImportRow();
+				row.FieldName="Address";
+				row.OldValDisplay=pat.Address;
+				row.OldValObj=pat.Address;
+				row.NewValDisplay=fieldVal;
+				row.NewValObj=row.NewValDisplay;
+				row.ImpValDisplay=row.NewValDisplay;
+				row.ImpValObj=row.NewValObj;
+				row.ObjType=typeof(string);
+				if(row.OldValDisplay!=row.NewValDisplay) {
+					row.DoImport=true;
+				}
+				rows.Add(row);
+			}
+			//Address2---------------------------------------------
+			fieldVal=GetInputValue("Address2");
+			if(fieldVal!=null) {
+				row=new SheetImportRow();
+				row.FieldName="Address2";
+				row.OldValDisplay=pat.Address2;
+				row.OldValObj=pat.Address2;
+				row.NewValDisplay=fieldVal;
+				row.NewValObj=row.NewValDisplay;
+				row.ImpValDisplay=row.NewValDisplay;
+				row.ImpValObj=row.NewValObj;
+				row.ObjType=typeof(string);
+				if(row.OldValDisplay!=row.NewValDisplay) {
+					row.DoImport=true;
+				}
+				rows.Add(row);
+			}
+			//City---------------------------------------------
+			fieldVal=GetInputValue("City");
+			if(fieldVal!=null) {
+				row=new SheetImportRow();
+				row.FieldName="City";
+				row.OldValDisplay=pat.City;
+				row.OldValObj=pat.City;
+				row.NewValDisplay=fieldVal;
+				row.NewValObj=row.NewValDisplay;
+				row.ImpValDisplay=row.NewValDisplay;
+				row.ImpValObj=row.NewValObj;
+				row.ObjType=typeof(string);
+				if(row.OldValDisplay!=row.NewValDisplay) {
+					row.DoImport=true;
+				}
+				rows.Add(row);
+			}
+			//State---------------------------------------------
+			fieldVal=GetInputValue("State");
+			if(fieldVal!=null) {
+				row=new SheetImportRow();
+				row.FieldName="State";
+				row.OldValDisplay=pat.State;
+				row.OldValObj=pat.State;
+				row.NewValDisplay=fieldVal;
+				row.NewValObj=row.NewValDisplay;
+				row.ImpValDisplay=row.NewValDisplay;
+				row.ImpValObj=row.NewValObj;
+				row.ObjType=typeof(string);
+				if(row.OldValDisplay!=row.NewValDisplay) {
+					row.DoImport=true;
+				}
+				rows.Add(row);
+			}
+			//Zip---------------------------------------------
+			fieldVal=GetInputValue("Zip");
+			if(fieldVal!=null) {
+				row=new SheetImportRow();
+				row.FieldName="Zip";
+				row.OldValDisplay=pat.Zip;
+				row.OldValObj=pat.Zip;
+				row.NewValDisplay=fieldVal;
+				row.NewValObj=row.NewValDisplay;
+				row.ImpValDisplay=row.NewValDisplay;
+				row.ImpValObj=row.NewValObj;
+				row.ObjType=typeof(string);
+				if(row.OldValDisplay!=row.NewValDisplay) {
+					row.DoImport=true;
+				}
+				rows.Add(row);
+			}
+			//HmPhone---------------------------------------------
+			fieldVal=GetInputValue("HmPhone");
+			if(fieldVal!=null) {
+				row=new SheetImportRow();
+				row.FieldName="HmPhone";
+				row.OldValDisplay=pat.HmPhone;
+				row.OldValObj=pat.HmPhone;
+				row.NewValDisplay=fieldVal;
+				row.NewValObj=row.NewValDisplay;
+				row.ImpValDisplay=row.NewValDisplay;
+				row.ImpValObj=row.NewValObj;
+				row.ObjType=typeof(string);
+				if(row.OldValDisplay!=row.NewValDisplay) {
+					row.DoImport=true;
+				}
+				rows.Add(row);
+			}
+			#endregion address
+			//ins1Relat------------------------------------------------------------
+			/*
+			if(ContainsFieldThatStartsWith("ins1Relat")) {
+				row=new SheetImportRow();
+				row.FieldName="ins1Relat";
+				row.FieldDisplay="ins1 Relationship";
+				if(patPlan1!=null) {
+					Relat relat=patPlan1.Relationship;
+					if(IsChecked("")) {
+						cmeth=ContactMethod.Email;
+					}
+					row.OldValDisplay=Lan.g("enumRelat",relat.ToString());
+					row.OldValObj=relat;
+				}
+				else {
+					row.OldValDisplay="";
+					row.OldValObj=null;
+				}
 
 
+
+
+				row.NewValDisplay=Lan.g("enumRelat",cmeth.ToString());
+				row.NewValObj=cmeth;
+				row.ImpValDisplay=row.NewValDisplay;
+				row.ImpValObj=row.NewValObj;
+				row.ObjType=typeof(ContactMethod);
+				if(pat.PreferContactMethod!=cmeth) {
+					row.DoImport=true;
+				}
+				rows.Add(row);
+			}
+			*/
 
 
 
@@ -392,16 +689,19 @@ namespace OpenDental {
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col; 
-			col=new ODGridColumn(Lan.g(this,"FieldName"),150);
+			col=new ODGridColumn(Lan.g(this,"FieldName"),140);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Current Value"),260);
+			col=new ODGridColumn(Lan.g(this,"Current Value"),175);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"New Value"),260);
+			col=new ODGridColumn(Lan.g(this,"Entered Value"),175);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g(this,"Import Value"),175);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Do Import"),60,HorizontalAlignment.Center);
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
+			ODGridCell cell;
 			for(int i=0;i<rows.Count;i++) {
 				row=new ODGridRow();
 				if(rows[i].IsSeparator) {
@@ -409,13 +709,30 @@ namespace OpenDental {
 					row.Cells.Add("");
 					row.Cells.Add("");
 					row.Cells.Add("");
+					row.Cells.Add("");
 					row.ColorBackG=Color.DarkSlateGray;
 					row.ColorText=Color.White;
 				}
 				else {
-					row.Cells.Add(rows[i].FieldName);
+					if(rows[i].FieldDisplay!=null) {
+						row.Cells.Add(rows[i].FieldDisplay);
+					}
+					else {
+						row.Cells.Add(rows[i].FieldName);
+					}
 					row.Cells.Add(rows[i].OldValDisplay);
-					row.Cells.Add(rows[i].NewValDisplay);
+					cell=new ODGridCell(rows[i].NewValDisplay);
+					if(rows[i].IsFlagged) {
+						cell.ColorText=Color.Firebrick;
+						cell.Bold=YN.Yes;
+					}
+					row.Cells.Add(cell);
+					cell=new ODGridCell(rows[i].ImpValDisplay);
+					if(rows[i].IsFlaggedImp) {
+						cell.ColorText=Color.Firebrick;
+						cell.Bold=YN.Yes;
+					}
+					row.Cells.Add(cell);
 					if(rows[i].DoImport) {
 						row.Cells.Add("X");
 						row.ColorBackG=Color.FromArgb(225,225,225);
@@ -493,89 +810,134 @@ namespace OpenDental {
 		}
 
 		private void gridMain_CellClick(object sender,ODGridClickEventArgs e) {
-			if(e.Col!=3) {
+			if(e.Col!=4) {
 				return;
 			}
 			if(rows[e.Row].IsSeparator) {
 				return;
 			}
-			if(rows[e.Row].FieldName=="wirelessCarrier") {
-				MsgBox.Show(this,"This field cannot be imported");
+			if(!IsImportable(rows[e.Row])) {
 				return;
 			}
 			rows[e.Row].DoImport=!rows[e.Row].DoImport;
 			FillGrid();
 		}
 
+		///<summary>Mostly the same as IsImportable.  But subtle differences.</summary>
+		private bool IsEditable(SheetImportRow row) {
+			//if(row.FieldName=="addressAndHmPhoneIsSameEntireFamily") {
+			//	return true;
+			//}
+			return IsImportable(row);
+		}
+
+		private bool IsImportable(SheetImportRow row) {
+			if(row.FieldName=="wirelessCarrier"
+				|| row.FieldName=="guarantor")
+				//|| row.FieldName=="addressAndHmPhoneIsSameEntireFamily") 
+			{
+				MessageBox.Show(row.FieldName+" "+Lan.g(this,"cannot be imported."));
+				return false;
+			}
+			if(row.FieldName=="referredFrom") {
+				if(row.OldValObj!=null) {
+					MsgBox.Show(this,"This patient already has a referral source selected and it cannot be changed from here.");
+					return false;
+				}
+			}
+			return true;
+		}
+
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			if(e.Col!=2) {
+			if(e.Col!=3) {
 				return;
 			}
 			if(rows[e.Row].IsSeparator) {
 				return;
 			}
-			if(rows[e.Row].ObjType==typeof(string)) {
-				InputBox inputbox=new InputBox(rows[e.Row].FieldName);
-				inputbox.textResult.Text=rows[e.Row].NewValDisplay;
-				inputbox.ShowDialog();
-				if(inputbox.DialogResult==DialogResult.OK){
-					if(rows[e.Row].NewValDisplay==inputbox.textResult.Text) {//value is now same as original
-						rows[e.Row].DoImport=false;
-					}
-					else {
-						rows[e.Row].DoImport=true;
-					}
-					rows[e.Row].NewValDisplay=inputbox.textResult.Text;
-					rows[e.Row].NewValObj=inputbox.textResult.Text;
+			if(!IsEditable(rows[e.Row])){
+				return;
+			}
+			if(rows[e.Row].FieldName=="referredFrom") {
+				FormReferralSelect formRS=new FormReferralSelect();
+				formRS.IsSelectionMode=true;
+				formRS.ShowDialog();
+				if(formRS.DialogResult!=DialogResult.OK) {
+					return;
 				}
+				Referral referralSelected=formRS.SelectedReferral;
+				rows[e.Row].DoImport=true;
+				rows[e.Row].IsFlaggedImp=false;
+				rows[e.Row].ImpValDisplay=referralSelected.GetNameFL();
+				rows[e.Row].ImpValObj=referralSelected;
+			}
+			else if(rows[e.Row].ObjType==typeof(string)) {
+				InputBox inputbox=new InputBox(rows[e.Row].FieldName);
+				inputbox.textResult.Text=rows[e.Row].ImpValDisplay;
+				inputbox.ShowDialog();
+				if(inputbox.DialogResult!=DialogResult.OK) {
+					return;
+				}
+				if(rows[e.Row].FieldName=="addressAndHmPhoneIsSameEntireFamily") {
+					if(inputbox.textResult.Text==""){
+						AddressSameForFam=false;	
+					}
+					else if(inputbox.textResult.Text!="X") {
+						AddressSameForFam=true;
+					}
+					else{
+						MsgBox.Show(this,"The only allowed values are X or blank.");
+						return;
+					}
+				}
+				if(rows[e.Row].OldValDisplay==inputbox.textResult.Text) {//value is now same as original
+					rows[e.Row].DoImport=false;
+				}
+				else {
+					rows[e.Row].DoImport=true;
+				}
+				rows[e.Row].ImpValDisplay=inputbox.textResult.Text;
+				rows[e.Row].ImpValObj=inputbox.textResult.Text;
 			}
 			else if(rows[e.Row].ObjType.IsEnum) {
 				//Note.  This only works for zero-indexed enums.
 				FormSheetImportEnumPicker formEnum=new FormSheetImportEnumPicker(rows[e.Row].FieldName);
 				for(int i=0;i<Enum.GetNames(rows[e.Row].ObjType).Length;i++) {
 					formEnum.comboResult.Items.Add(Enum.GetNames(rows[e.Row].ObjType)[i]);
-					if(rows[e.Row].NewValObj!=null && i==(int)rows[e.Row].NewValObj){
+					if(rows[e.Row].ImpValObj!=null && i==(int)rows[e.Row].ImpValObj) {
 						formEnum.comboResult.SelectedIndex=i;
 					}
 				}
 				formEnum.ShowDialog();
 				if(formEnum.DialogResult==DialogResult.OK) {
 					int selectedI=formEnum.comboResult.SelectedIndex;
-					if(rows[e.Row].NewValObj==null) {//was initially null
-						if(selectedI==-1) {//user made no change.  Still null
-							rows[e.Row].DoImport=false;//impossible to import a null
-						}
-						else{//an item was selected
-							rows[e.Row].NewValObj=Enum.ToObject(rows[e.Row].ObjType,selectedI);
-							rows[e.Row].NewValDisplay=rows[e.Row].NewValObj.ToString();
-							if((int)rows[e.Row].NewValObj==(int)rows[e.Row].OldValObj) {//but they just changed it back to the old setting for the patient.
-								rows[e.Row].DoImport=false;//so no need to import
-							}
-							else {
-								rows[e.Row].DoImport=true;
-							}
+					if(rows[e.Row].ImpValObj==null) {//was initially null
+						if(selectedI!=-1) {//an item was selected
+							rows[e.Row].ImpValObj=Enum.ToObject(rows[e.Row].ObjType,selectedI);
+							rows[e.Row].ImpValDisplay=rows[e.Row].ImpValObj.ToString();
 						}
 					}
-					else{//was not initially null
-						if((int)rows[e.Row].NewValObj==selectedI) {//but value not changed
-							rows[e.Row].DoImport=false;
+					else {//was not initially null
+						if((int)rows[e.Row].ImpValObj!=selectedI) {//value was changed.
+							//There's no way for the use to set it to null, so we do not need to test that
+							rows[e.Row].ImpValObj=Enum.ToObject(rows[e.Row].ObjType,selectedI);
+							rows[e.Row].ImpValDisplay=rows[e.Row].ImpValObj.ToString();
 						}
-						else{//value must have changed.  There's no way for the use to set it to null, so we do not need to test that
-							rows[e.Row].NewValObj=Enum.ToObject(rows[e.Row].ObjType,selectedI);
-							rows[e.Row].NewValDisplay=rows[e.Row].NewValObj.ToString();
-							if((int)rows[e.Row].NewValObj==(int)rows[e.Row].OldValObj) {//but they just changed it back to the old setting for the patient.
-								rows[e.Row].DoImport=false;//so no need to import
-							}
-							else {
-								rows[e.Row].DoImport=true;
-							}
-						}
+					}
+					if(selectedI==-1) {
+						rows[e.Row].DoImport=false;//impossible to import a null
+					}
+					else if((int)rows[e.Row].ImpValObj==(int)rows[e.Row].OldValObj) {//it's the old setting for the patient, whether or not they actually changed it.
+						rows[e.Row].DoImport=false;//so no need to import
+					}
+					else {
+						rows[e.Row].DoImport=true;
 					}
 				}
 			}
-			else if(rows[e.Row].ObjType==typeof(DateTime)) {
+			else if(rows[e.Row].ObjType==typeof(DateTime)) {//this is only for one field so far: Birthdate
 				InputBox inputbox=new InputBox(rows[e.Row].FieldName);
-				inputbox.textResult.Text=rows[e.Row].NewValDisplay;
+				inputbox.textResult.Text=rows[e.Row].ImpValDisplay;
 				inputbox.ShowDialog();
 				if(inputbox.DialogResult!=DialogResult.OK) {
 					return;
@@ -583,8 +945,8 @@ namespace OpenDental {
 				DateTime enteredDate;
 				if(inputbox.textResult.Text=="") {
 					enteredDate=DateTime.MinValue;
-					rows[e.Row].NewValObj=enteredDate;
-					rows[e.Row].NewValDisplay="";
+					rows[e.Row].ImpValObj=enteredDate;
+					rows[e.Row].ImpValDisplay="";
 				}
 				else {
 					try {
@@ -598,10 +960,10 @@ namespace OpenDental {
 						MsgBox.Show(this,"Invalid date");
 						return;
 					}
-					rows[e.Row].NewValObj=enteredDate;
-					rows[e.Row].NewValDisplay=enteredDate.ToShortDateString();
+					rows[e.Row].ImpValObj=enteredDate;
+					rows[e.Row].ImpValDisplay=enteredDate.ToShortDateString();
 				}
-				if(rows[e.Row].NewValDisplay==rows[e.Row].OldValDisplay) {//value is now same as original
+				if(rows[e.Row].ImpValDisplay==rows[e.Row].OldValDisplay) {//value is now same as original
 					rows[e.Row].DoImport=false;
 				}
 				else {
@@ -630,71 +992,86 @@ namespace OpenDental {
 				}
 				switch(rows[i].FieldName){
 					case "LName":
-						pat.LName=rows[i].NewValDisplay;
+						pat.LName=rows[i].ImpValDisplay;
 						break;
 					case "FName":
-						pat.FName=rows[i].NewValDisplay;
+						pat.FName=rows[i].ImpValDisplay;
 						break;
 					case "MiddleI":
-						pat.MiddleI=rows[i].NewValDisplay;
+						pat.MiddleI=rows[i].ImpValDisplay;
 						break;
 					case "Preferred":
-						pat.Preferred=rows[i].NewValDisplay;
+						pat.Preferred=rows[i].ImpValDisplay;
 						break;
 					case "Gender":
-						pat.Gender=(PatientGender)rows[i].NewValObj;
+						pat.Gender=(PatientGender)rows[i].ImpValObj;
 						break;
 					case "Position":
-						pat.Position=(PatientPosition)rows[i].NewValObj;
+						pat.Position=(PatientPosition)rows[i].ImpValObj;
 						break;
 					case "Birthdate":
-						pat.Birthdate=(DateTime)rows[i].NewValObj;
+						pat.Birthdate=(DateTime)rows[i].ImpValObj;
 						break;
 					case "SSN":
-						pat.SSN=rows[i].NewValDisplay;
+						pat.SSN=rows[i].ImpValDisplay;
 						break;
 					case "WkPhone":
-						pat.WkPhone=rows[i].NewValDisplay;
+						pat.WkPhone=rows[i].ImpValDisplay;
 						break;
 					case "WirelessPhone":
-						pat.WirelessPhone=rows[i].NewValDisplay;
+						pat.WirelessPhone=rows[i].ImpValDisplay;
 						break;
 					case "Email":
-						pat.Email=rows[i].NewValDisplay;
+						pat.Email=rows[i].ImpValDisplay;
 						break;
 					case "PreferContactMethod":
-						pat.PreferContactMethod=(ContactMethod)rows[i].NewValObj;
+						pat.PreferContactMethod=(ContactMethod)rows[i].ImpValObj;
 						break;
 					case "PreferConfirmMethod":
-						pat.PreferConfirmMethod=(ContactMethod)rows[i].NewValObj;
+						pat.PreferConfirmMethod=(ContactMethod)rows[i].ImpValObj;
 						break;
 					case "PreferRecallMethod":
-						pat.PreferRecallMethod=(ContactMethod)rows[i].NewValObj;
+						pat.PreferRecallMethod=(ContactMethod)rows[i].ImpValObj;
 						break;
-
-
-						/*
+					//guarantor-can't import
+					case "referredFrom":
+						RefAttach ra=new RefAttach();
+						ra.IsFrom=true;
+						ra.ItemOrder=1;
+						ra.PatNum=pat.PatNum;
+						ra.RefDate=DateTime.Today;
+						ra.ReferralNum=((Referral)rows[i].ImpValObj).ReferralNum;
+						RefAttaches.Insert(ra);
+						break;
+					//AddressSameForFam already set, but not really importable by itself
 					case "Address":
-						pat=rows[i].NewValDisplay;
+						pat.Address=rows[i].ImpValDisplay;
 						break;
-					case "":
-						pat=rows[i].NewValDisplay;
+					case "Address2":
+						pat.Address2=rows[i].ImpValDisplay;
 						break;
-					case "":
-						pat=rows[i].NewValDisplay;
+					case "City":
+						pat.City=rows[i].ImpValDisplay;
 						break;
-					case "":
-						pat=rows[i].NewValDisplay;
+					case "State":
+						pat.State=rows[i].ImpValDisplay;
 						break;
-					case "":
-						pat=rows[i].NewValDisplay;
+					case "Zip":
+						pat.Zip=rows[i].ImpValDisplay;
 						break;
-					case "":
-						pat=rows[i].NewValDisplay;
-						break;*/
+					case "HmPhone":
+						pat.HmPhone=rows[i].ImpValDisplay;
+						break;
+					
+
+
+
 				}
 			}
 			Patients.Update(pat,patientOld);
+			if(AddressSameForFam) {
+				Patients.UpdateAddressForFam(pat);
+			}
 			MsgBox.Show(this,"Done.");
 			DialogResult=DialogResult.OK;
 		}
@@ -705,14 +1082,22 @@ namespace OpenDental {
 
 		private class SheetImportRow {
 			public string FieldName;
+			///<summary>Overrides FieldName.  If null, use FieldName;</summary>
+			public string FieldDisplay;
 			public string OldValDisplay;
 			public object OldValObj;
 			public string NewValDisplay;
 			public object NewValObj;
+			public string ImpValDisplay;
+			public object ImpValObj;
 			public bool DoImport;
 			public bool IsSeparator;
 			///<summary>This is needed because the NewValObj might be null.</summary>
 			public Type ObjType;
+			///<summary>Some fields are not importable, but they still need to be made obvious to user by coloring the user-entered value red.</summary>
+			public bool IsFlagged;
+			///<summary>The import cell is shown with colored text to prompt user to notice.</summary>
+			public bool IsFlaggedImp;
 		}
 
 		
