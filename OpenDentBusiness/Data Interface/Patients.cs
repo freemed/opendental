@@ -1866,13 +1866,13 @@ namespace OpenDentBusiness{
 					//The file being copied has the same name as a possibly different file within the destination a to z folder.
 					//We need to copy the file under a unique file name and then make sure to update the document table to reflect
 					//the change.
-					destFilePath=ODFileUtils.CombinePaths(atozTo,patientFrom.PatNum.ToString()+fileName);
+					destFilePath=ODFileUtils.CombinePaths(atozTo,patientFrom.PatNum.ToString()+"_"+fileName);
 					while(File.Exists(destFilePath)){
-						destFilePath=ODFileUtils.CombinePaths(atozTo,patientFrom.PatNum.ToString()+"_"+DateTime.Now.ToString("yyyy_MM_dd_hh_mm_ss")+fileName);
+						destFilePath=ODFileUtils.CombinePaths(atozTo,patientFrom.PatNum.ToString()+"_"+DateTime.Now.ToString("yyyy_MM_dd_hh_mm_ss")+"_"+fileName);
 					}
 					command="UPDATE document "
-						+"SET FileName="+POut.String(Path.GetFileName(destFilePath))+" "
-						+"WHERE FileName="+POut.String(fileName)+" AND PatNum="+POut.Long(patFrom)+" LIMIT 1";
+						+"SET FileName='"+POut.String(Path.GetFileName(destFilePath))+"' "
+						+"WHERE FileName='"+POut.String(fileName)+"' AND PatNum="+POut.Long(patFrom)+" LIMIT 1";
 					Db.NonQ(command);					
 				}
 				File.Copy(fromFiles[i],destFilePath);//Will throw exception if file already exists.
