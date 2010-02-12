@@ -26,6 +26,7 @@ namespace OpenDentBusiness{
 			if(userNum!=0) {
 				command+=" AND UserNum="+POut.Long(userNum);
 			}
+			command+=" ORDER BY LogDateTime";
 			DataTable table=Db.GetTable(command);
 			SecurityLog[] List=new SecurityLog[table.Rows.Count];
 			for(int i=0;i<List.Length;i++) {
@@ -93,7 +94,8 @@ namespace OpenDentBusiness{
 			}
 			string command="SELECT * FROM securitylog "
 				+"WHERE PatNum= '"+POut.Long(patNum)+"' "
-				+"AND ("+types+")";
+				+"AND ("+types+") "
+				+"ORDER BY LogDateTime";
 			DataTable table=Db.GetTable(command);
 			SecurityLog[] List=new SecurityLog[table.Rows.Count];
 			for(int i=0;i<List.Length;i++){
