@@ -74,7 +74,7 @@ namespace OpenDentBusiness
 			return retStr;
 		}
 
-		///<summary>Gets first name from the family list.  If the patient is not in the family list, then it gets that info from the database.</summary>
+		///<summary>Gets first name from the family list.  If the patient is not in the family list, then it gets that info from the database.  Includes preferred.</summary>
 		public string GetNameInFamFirst(long myPatNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<ListPats.Length;i++){

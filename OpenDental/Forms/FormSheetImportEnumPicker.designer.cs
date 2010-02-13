@@ -27,6 +27,7 @@ namespace OpenDental{
 			this.labelPrompt = new System.Windows.Forms.Label();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.butClear = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// comboResult
@@ -78,10 +79,26 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// butClear
+			// 
+			this.butClear.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butClear.Autosize = true;
+			this.butClear.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butClear.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butClear.CornerRadius = 4F;
+			this.butClear.Location = new System.Drawing.Point(34,109);
+			this.butClear.Name = "butClear";
+			this.butClear.Size = new System.Drawing.Size(75,24);
+			this.butClear.TabIndex = 6;
+			this.butClear.Text = "Clear Val";
+			this.butClear.Click += new System.EventHandler(this.butClear_Click);
+			// 
 			// FormSheetImportEnumPicker
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(430,145);
+			this.Controls.Add(this.butClear);
 			this.Controls.Add(this.labelPrompt);
 			this.Controls.Add(this.comboResult);
 			this.Controls.Add(this.butOK);
@@ -99,5 +116,6 @@ namespace OpenDental{
 		private OpenDental.UI.Button butCancel;
 		public System.Windows.Forms.Label labelPrompt;
 		public System.Windows.Forms.ComboBox comboResult;
+		private OpenDental.UI.Button butClear;
 	}
 }

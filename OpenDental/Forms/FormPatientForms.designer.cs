@@ -155,7 +155,7 @@ namespace OpenDental{
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(173,18);
 			this.label1.TabIndex = 10;
-			this.label1.Text = "(from sheet into database)";
+			this.label1.Text = "(from form into database)";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// FormPatientForms

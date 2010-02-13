@@ -22,8 +22,10 @@ namespace OpenDental {
 		private List<InsPlan> planList;
 		private PatPlan patPlan1;
 		private PatPlan patPlan2;
-		private Relat ins1Relat;
-		private Relat ins2Relat;
+		private Relat? ins1Relat;
+		private Relat? ins2Relat;
+		private Carrier carrier1;
+		private Carrier carrier2;
 
 		public FormSheetImport() {
 			InitializeComponent();
@@ -51,22 +53,26 @@ namespace OpenDental {
 			if(patPlanList.Count==0) {
 				patPlan1=null;
 				plan1=null;
-				ins1Relat=Relat.Self;
+				ins1Relat=null;
+				carrier1=null;
 			}
 			else {
 				patPlan1=patPlanList[0];
 				plan1=InsPlans.GetPlan(patPlan1.PlanNum,planList);
 				ins1Relat=patPlan1.Relationship;
+				carrier1=Carriers.GetCarrier(plan1.CarrierNum);
 			}
 			if(patPlanList.Count<2) {
 				patPlan2=null;
 				plan2=null;
-				ins2Relat=Relat.Self;
+				ins2Relat=null;
+				carrier2=null;
 			}
 			else {
 				patPlan2=patPlanList[1];
 				plan2=InsPlans.GetPlan(patPlan2.PlanNum,planList);
 				ins2Relat=patPlan2.Relationship;
+				carrier2=Carriers.GetCarrier(plan2.CarrierNum);
 			}
 			FillRows();
 			FillGrid();
@@ -644,44 +650,501 @@ namespace OpenDental {
 				rows.Add(row);
 			}
 			#endregion address
+			//Separator-------------------------------------------
+			row=new SheetImportRow();
+			row.FieldName="Insurance Policy 1";
+			row.IsSeparator=true;
+			rows.Add(row);
+			#region ins1
+			//It turns out that importing insurance is crazy complicated if want it to be perfect.
+			//So it's better to table that plan for now.
+			//The new strategy is simply to show them what the user entered and notify them if it seems different.
 			//ins1Relat------------------------------------------------------------
-			/*
 			if(ContainsFieldThatStartsWith("ins1Relat")) {
 				row=new SheetImportRow();
 				row.FieldName="ins1Relat";
-				row.FieldDisplay="ins1 Relationship";
+				row.FieldDisplay="Relationship";
 				if(patPlan1!=null) {
-					Relat relat=patPlan1.Relationship;
-					if(IsChecked("")) {
-						cmeth=ContactMethod.Email;
-					}
-					row.OldValDisplay=Lan.g("enumRelat",relat.ToString());
-					row.OldValObj=relat;
+					//ins1Relat=patPlan1.Relationship;//was already set at top
+					row.OldValDisplay=Lan.g("enumRelat",ins1Relat.ToString());
+					row.OldValObj=ins1Relat;
+					
 				}
 				else {
 					row.OldValDisplay="";
 					row.OldValObj=null;
 				}
-
-
-
-
-				row.NewValDisplay=Lan.g("enumRelat",cmeth.ToString());
-				row.NewValObj=cmeth;
-				row.ImpValDisplay=row.NewValDisplay;
-				row.ImpValObj=row.NewValObj;
-				row.ObjType=typeof(ContactMethod);
-				if(pat.PreferContactMethod!=cmeth) {
-					row.DoImport=true;
+				//start calculating the new relat that was entered on the sheet
+				if(!IsChecked("ins1RelatIsChild") && !IsChecked("ins1RelatIsSelf") 
+					&& !IsChecked("ins1RelatIsSpouse") && !IsChecked("ins1RelatIsNotSelfSpouseChild"))
+				{
+					//user didn't enter any relat at all.
+					row.NewValDisplay="";
+					row.NewValObj=null;
+				}
+				else{
+					//although we make use of ins1Relat here and set its value, we won't use it when doing the actual import.
+					//For that, we will return to ImpValObj.
+					if(IsChecked("ins1RelatIsChild")) {
+						ins1Relat=Relat.Child;
+					}
+					if(IsChecked("ins1RelatIsSelf")) {
+						ins1Relat=Relat.Self;
+					}
+					if(IsChecked("ins1RelatIsSpouse")) {
+						ins1Relat=Relat.Spouse;
+					}
+					//at this point, ins1Relat may still be null.
+					if(IsChecked("ins1RelatIsNotSelfSpouseChild")) {//complex
+						fieldVal=GetInputValue("ins2RelatDescript");
+						if(fieldVal=="") {//user didn't enter anything
+							row.NewValDisplay="";
+							row.NewValObj=null;
+						}
+						else {
+							row.NewValDisplay=fieldVal;
+							row.NewValObj=null;
+						}
+					}
+					else{//simple. We know for sure what the value is now.
+						row.NewValDisplay=Lan.g("enumRelat",ins1Relat.ToString());
+						row.NewValObj=ins1Relat;
+					}
+				}
+				row.ImpValDisplay="";
+				row.ImpValObj=null;
+				row.ObjType=typeof(Relat?);
+				//if(patPlanList.Count>0) {
+				row.DoImport=false;
+				//}
+				//else if((Relat?)row.OldValObj!=(Relat?)row.NewValObj) {
+				//	row.DoImport=true;
+					//}
+				if(row.OldValDisplay!=row.NewValDisplay) {
+					row.IsFlagged=true;
 				}
 				rows.Add(row);
 			}
-			*/
+			//ins1Subscriber---------------------------------------------
+			fieldVal=GetInputValue("ins1SubscriberNameF");
+			if(fieldVal!=null) {
+				row=new SheetImportRow();
+				row.FieldName="ins1Subscriber";
+				row.FieldDisplay="Subscriber";
+				if(plan1!=null) {
+					row.OldValDisplay=fam.GetNameInFamFirst(plan1.Subscriber);
+					row.OldValObj=plan1.Subscriber;
+				}
+				else {
+					row.OldValDisplay="";
+					row.OldValObj=null;
+				}
+				row.NewValDisplay=fieldVal;//whether it's empty or has a value					
+				row.NewValObj=row.NewValDisplay;
+				row.ImpValDisplay="";
+				row.ImpValObj="";
+				row.ObjType=typeof(string);
+				row.DoImport=false;
+				if(row.OldValDisplay!=row.NewValDisplay) {
+					row.IsFlagged=true;
+				}
+				rows.Add(row);
+			}
+			//ins1SubscriberID---------------------------------------------
+			fieldVal=GetInputValue("ins1SubscriberID");
+			if(fieldVal!=null) {
+				row=new SheetImportRow();
+				row.FieldName="ins1SubscriberID";
+				row.FieldDisplay="Subscriber ID";
+				if(plan1!=null) {
+					row.OldValDisplay=plan1.SubscriberID;
+					row.OldValObj="";
+				}
+				else {
+					row.OldValDisplay="";
+					row.OldValObj="";
+				}
+				row.NewValDisplay=fieldVal;//whether it's empty or has a value					
+				row.NewValObj="";
+				row.ImpValDisplay="";
+				row.ImpValObj="";
+				row.ObjType=typeof(string);
+				row.DoImport=false;
+				if(row.OldValDisplay!=row.NewValDisplay) {
+					row.IsFlagged=true;
+				}
+				rows.Add(row);
+			}
+			//ins1CarrierName---------------------------------------------
+			fieldVal=GetInputValue("ins1CarrierName");
+			if(fieldVal!=null) {
+				row=new SheetImportRow();
+				row.FieldName="ins1CarrierName";
+				row.FieldDisplay="Carrier";
+				if(carrier1!=null) {
+					row.OldValDisplay=carrier1.CarrierName;
+					row.OldValObj="";
+				}
+				else {
+					row.OldValDisplay="";
+					row.OldValObj="";
+				}
+				row.NewValDisplay=fieldVal;//whether it's empty or has a value					
+				row.NewValObj="";
+				row.ImpValDisplay="";
+				row.ImpValObj="";
+				row.ObjType=typeof(string);
+				row.DoImport=false;
+				if(row.OldValDisplay!=row.NewValDisplay) {
+					row.IsFlagged=true;
+				}
+				rows.Add(row);
+			}
+			//ins1CarrierPhone---------------------------------------------
+			fieldVal=GetInputValue("ins1CarrierPhone");
+			if(fieldVal!=null) {
+				row=new SheetImportRow();
+				row.FieldName="ins1CarrierPhone";
+				row.FieldDisplay="Phone";
+				if(carrier1!=null) {
+					row.OldValDisplay=carrier1.Phone;
+					row.OldValObj="";
+				}
+				else {
+					row.OldValDisplay="";
+					row.OldValObj="";
+				}
+				row.NewValDisplay=fieldVal;//whether it's empty or has a value					
+				row.NewValObj="";
+				row.ImpValDisplay="";
+				row.ImpValObj="";
+				row.ObjType=typeof(string);
+				row.DoImport=false;
+				if(row.OldValDisplay!=row.NewValDisplay) {
+					row.IsFlagged=true;
+				}
+				rows.Add(row);
+			}
+			//ins1EmployerName---------------------------------------------
+			fieldVal=GetInputValue("ins1EmployerName");
+			if(fieldVal!=null) {
+				row=new SheetImportRow();
+				row.FieldName="ins1EmployerName";
+				row.FieldDisplay="Employer";
+				if(plan1==null){
+					row.OldValDisplay="";
+				}
+				else{
+					row.OldValDisplay=Employers.GetName(plan1.EmployerNum);
+				}
+				row.OldValObj="";
+				row.NewValDisplay=fieldVal;					
+				row.NewValObj="";
+				row.ImpValDisplay="";
+				row.ImpValObj="";
+				row.ObjType=typeof(string);
+				row.DoImport=false;
+				if(row.OldValDisplay!=row.NewValDisplay) {
+					row.IsFlagged=true;
+				}
+				rows.Add(row);
+			}
+			//ins1GroupName---------------------------------------------
+			fieldVal=GetInputValue("ins1GroupName");
+			if(fieldVal!=null) {
+				row=new SheetImportRow();
+				row.FieldName="ins1GroupName";
+				row.FieldDisplay="Group Name";
+				if(plan1!=null) {
+					row.OldValDisplay=plan1.GroupName;
+				}
+				else {
+					row.OldValDisplay="";
+				}
+				row.OldValObj="";
+				row.NewValDisplay=fieldVal;					
+				row.NewValObj="";
+				row.ImpValDisplay="";
+				row.ImpValObj="";
+				row.ObjType=typeof(string);
+				row.DoImport=false;
+				if(row.OldValDisplay!=row.NewValDisplay) {
+					row.IsFlagged=true;
+				}
+				rows.Add(row);
+			}
+			//ins1GroupNum---------------------------------------------
+			fieldVal=GetInputValue("ins1GroupNum");
+			if(fieldVal!=null) {
+				row=new SheetImportRow();
+				row.FieldName="ins1GroupNum";
+				row.FieldDisplay="Group Num";
+				if(plan1!=null) {
+					row.OldValDisplay=plan1.GroupNum;
+				}
+				else {
+					row.OldValDisplay="";
+				}
+				row.OldValObj="";
+				row.NewValDisplay=fieldVal;					
+				row.NewValObj="";
+				row.ImpValDisplay="";
+				row.ImpValObj="";
+				row.ObjType=typeof(string);
+				row.DoImport=false;
+				if(row.OldValDisplay!=row.NewValDisplay) {
+					row.IsFlagged=true;
+				}
+				rows.Add(row);
+			}
+			#endregion ins1
+			//Separator-------------------------------------------
+			row=new SheetImportRow();
+			row.FieldName="Insurance Policy 2";
+			row.IsSeparator=true;
+			rows.Add(row);
+			#region ins2
+			//It turns out that importing insurance is crazy complicated if want it to be perfect.
+			//So it's better to table that plan for now.
+			//The new strategy is simply to show them what the user entered and notify them if it seems different.
+			//ins2Relat------------------------------------------------------------
+			if(ContainsFieldThatStartsWith("ins2Relat")) {
+				row=new SheetImportRow();
+				row.FieldName="ins2Relat";
+				row.FieldDisplay="Relationship";
+				if(patPlan2!=null) {
+					//ins2Relat=patPlan2.Relationship;//was already set at top
+					row.OldValDisplay=Lan.g("enumRelat",ins2Relat.ToString());
+					row.OldValObj=ins2Relat;
 
-
-
-
-
+				}
+				else {
+					row.OldValDisplay="";
+					row.OldValObj=null;
+				}
+				//start calculating the new relat that was entered on the sheet
+				if(!IsChecked("ins2RelatIsChild") && !IsChecked("ins2RelatIsSelf") 
+					&& !IsChecked("ins2RelatIsSpouse") && !IsChecked("ins2RelatIsNotSelfSpouseChild")) {
+					//user didn't enter any relat at all.
+					row.NewValDisplay="";
+					row.NewValObj=null;
+				}
+				else {
+					//although we make use of ins2Relat here and set its value, we won't use it when doing the actual import.
+					//For that, we will return to ImpValObj.
+					if(IsChecked("ins2RelatIsChild")) {
+						ins2Relat=Relat.Child;
+					}
+					if(IsChecked("ins2RelatIsSelf")) {
+						ins2Relat=Relat.Self;
+					}
+					if(IsChecked("ins2RelatIsSpouse")) {
+						ins2Relat=Relat.Spouse;
+					}
+					//at this point, ins2Relat may still be null.
+					if(IsChecked("ins2RelatIsNotSelfSpouseChild")) {//complex
+						fieldVal=GetInputValue("ins2RelatDescript");
+						if(fieldVal=="") {//user didn't enter anything
+							row.NewValDisplay="";
+							row.NewValObj=null;
+						}
+						else {
+							row.NewValDisplay=fieldVal;
+							row.NewValObj=null;
+						}
+					}
+					else {//simple. We know for sure what the value is now.
+						row.NewValDisplay=Lan.g("enumRelat",ins2Relat.ToString());
+						row.NewValObj=ins2Relat;
+					}
+				}
+				row.ImpValDisplay="";
+				row.ImpValObj=null;
+				row.ObjType=typeof(Relat?);
+				//if(patPlanList.Count>0) {
+				row.DoImport=false;
+				//}
+				//else if((Relat?)row.OldValObj!=(Relat?)row.NewValObj) {
+				//	row.DoImport=true;
+				//}
+				if(row.OldValDisplay!=row.NewValDisplay) {
+					row.IsFlagged=true;
+				}
+				rows.Add(row);
+			}
+			//ins2Subscriber---------------------------------------------
+			fieldVal=GetInputValue("ins2SubscriberNameF");
+			if(fieldVal!=null) {
+				row=new SheetImportRow();
+				row.FieldName="ins2Subscriber";
+				row.FieldDisplay="Subscriber";
+				if(plan2!=null) {
+					row.OldValDisplay=fam.GetNameInFamFirst(plan2.Subscriber);
+					row.OldValObj=plan2.Subscriber;
+				}
+				else {
+					row.OldValDisplay="";
+					row.OldValObj=null;
+				}
+				row.NewValDisplay=fieldVal;//whether it's empty or has a value					
+				row.NewValObj=row.NewValDisplay;
+				row.ImpValDisplay="";
+				row.ImpValObj="";
+				row.ObjType=typeof(string);
+				row.DoImport=false;
+				if(row.OldValDisplay!=row.NewValDisplay) {
+					row.IsFlagged=true;
+				}
+				rows.Add(row);
+			}
+			//ins2SubscriberID---------------------------------------------
+			fieldVal=GetInputValue("ins2SubscriberID");
+			if(fieldVal!=null) {
+				row=new SheetImportRow();
+				row.FieldName="ins2SubscriberID";
+				row.FieldDisplay="Subscriber ID";
+				if(plan2!=null) {
+					row.OldValDisplay=plan2.SubscriberID;
+					row.OldValObj="";
+				}
+				else {
+					row.OldValDisplay="";
+					row.OldValObj="";
+				}
+				row.NewValDisplay=fieldVal;//whether it's empty or has a value					
+				row.NewValObj="";
+				row.ImpValDisplay="";
+				row.ImpValObj="";
+				row.ObjType=typeof(string);
+				row.DoImport=false;
+				if(row.OldValDisplay!=row.NewValDisplay) {
+					row.IsFlagged=true;
+				}
+				rows.Add(row);
+			}
+			//ins2CarrierName---------------------------------------------
+			fieldVal=GetInputValue("ins2CarrierName");
+			if(fieldVal!=null) {
+				row=new SheetImportRow();
+				row.FieldName="ins2CarrierName";
+				row.FieldDisplay="Carrier";
+				if(carrier2!=null) {
+					row.OldValDisplay=carrier2.CarrierName;
+					row.OldValObj="";
+				}
+				else {
+					row.OldValDisplay="";
+					row.OldValObj="";
+				}
+				row.NewValDisplay=fieldVal;//whether it's empty or has a value					
+				row.NewValObj="";
+				row.ImpValDisplay="";
+				row.ImpValObj="";
+				row.ObjType=typeof(string);
+				row.DoImport=false;
+				if(row.OldValDisplay!=row.NewValDisplay) {
+					row.IsFlagged=true;
+				}
+				rows.Add(row);
+			}
+			//ins2CarrierPhone---------------------------------------------
+			fieldVal=GetInputValue("ins2CarrierPhone");
+			if(fieldVal!=null) {
+				row=new SheetImportRow();
+				row.FieldName="ins2CarrierPhone";
+				row.FieldDisplay="Phone";
+				if(carrier2!=null) {
+					row.OldValDisplay=carrier2.Phone;
+					row.OldValObj="";
+				}
+				else {
+					row.OldValDisplay="";
+					row.OldValObj="";
+				}
+				row.NewValDisplay=fieldVal;//whether it's empty or has a value					
+				row.NewValObj="";
+				row.ImpValDisplay="";
+				row.ImpValObj="";
+				row.ObjType=typeof(string);
+				row.DoImport=false;
+				if(row.OldValDisplay!=row.NewValDisplay) {
+					row.IsFlagged=true;
+				}
+				rows.Add(row);
+			}
+			//ins2EmployerName---------------------------------------------
+			fieldVal=GetInputValue("ins2EmployerName");
+			if(fieldVal!=null) {
+				row=new SheetImportRow();
+				row.FieldName="ins2EmployerName";
+				row.FieldDisplay="Employer";
+				if(plan2==null){
+					row.OldValDisplay="";
+				}
+				else{
+					row.OldValDisplay=Employers.GetName(plan2.EmployerNum);
+				}
+				row.OldValObj="";
+				row.NewValDisplay=fieldVal;
+				row.NewValObj="";
+				row.ImpValDisplay="";
+				row.ImpValObj="";
+				row.ObjType=typeof(string);
+				row.DoImport=false;
+				if(row.OldValDisplay!=row.NewValDisplay) {
+					row.IsFlagged=true;
+				}
+				rows.Add(row);
+			}
+			//ins2GroupName---------------------------------------------
+			fieldVal=GetInputValue("ins2GroupName");
+			if(fieldVal!=null) {
+				row=new SheetImportRow();
+				row.FieldName="ins2GroupName";
+				row.FieldDisplay="Group Name";
+				if(plan2!=null) {
+					row.OldValDisplay=plan2.GroupName;
+				}
+				else {
+					row.OldValDisplay="";
+				}
+				row.OldValObj="";
+				row.NewValDisplay=fieldVal;
+				row.NewValObj="";
+				row.ImpValDisplay="";
+				row.ImpValObj="";
+				row.ObjType=typeof(string);
+				row.DoImport=false;
+				if(row.OldValDisplay!=row.NewValDisplay) {
+					row.IsFlagged=true;
+				}
+				rows.Add(row);
+			}
+			//ins2GroupNum---------------------------------------------
+			fieldVal=GetInputValue("ins2GroupNum");
+			if(fieldVal!=null) {
+				row=new SheetImportRow();
+				row.FieldName="ins2GroupNum";
+				row.FieldDisplay="Group Num";
+				if(plan2!=null) {
+					row.OldValDisplay=plan2.GroupNum;
+				}
+				else {
+					row.OldValDisplay="";
+				}
+				row.OldValObj="";
+				row.NewValDisplay=fieldVal;
+				row.NewValObj="";
+				row.ImpValDisplay="";
+				row.ImpValObj="";
+				row.ObjType=typeof(string);
+				row.DoImport=false;
+				if(row.OldValDisplay!=row.NewValDisplay) {
+					row.IsFlagged=true;
+				}
+				rows.Add(row);
+			}
+			#endregion ins2
 		}
 
 		private void FillGrid() {
@@ -845,6 +1308,12 @@ namespace OpenDental {
 					return false;
 				}
 			}
+			if(row.FieldName.StartsWith("ins1") || row.FieldName.StartsWith("ins2")) {
+				//if(patPlanList.Count>0) {
+				MsgBox.Show(this,"Insurance cannot be imported.  It's too complex.");
+				return false;
+				//}
+			}
 			return true;
 		}
 
@@ -899,6 +1368,56 @@ namespace OpenDental {
 				rows[e.Row].ImpValDisplay=inputbox.textResult.Text;
 				rows[e.Row].ImpValObj=inputbox.textResult.Text;
 			}
+			/*else if(rows[e.Row].ObjType.IsGenericType){//==typeof(Nullable)) {
+				Type underlyingT=Nullable.GetUnderlyingType(rows[e.Row].ObjType);
+				FormSheetImportEnumPicker formEnum=new FormSheetImportEnumPicker(rows[e.Row].FieldName);
+				formEnum.ShowClearButton=true;
+				for(int i=0;i<Enum.GetNames(underlyingT).Length;i++) {
+					formEnum.comboResult.Items.Add(Enum.GetNames(underlyingT)[i]);
+					if(rows[e.Row].ImpValObj!=null && i==(int)rows[e.Row].ImpValObj) {
+						formEnum.comboResult.SelectedIndex=i;
+					}
+				}
+				formEnum.ShowDialog();
+				if(formEnum.DialogResult==DialogResult.OK) {
+					int selectedI=formEnum.comboResult.SelectedIndex;
+					if(rows[e.Row].ImpValObj==null) {//was initially null
+						if(selectedI!=-1) {//an item was selected
+							rows[e.Row].ImpValObj=Enum.ToObject(underlyingT,selectedI);
+							rows[e.Row].ImpValDisplay=rows[e.Row].ImpValObj.ToString();
+						}
+					}
+					else {//was not initially null
+						if((int)rows[e.Row].ImpValObj!=selectedI) {//value was changed.
+							if(selectedI==-1){
+								rows[e.Row].ImpValObj=null;
+								rows[e.Row].ImpValDisplay="";
+							}
+							else{
+								rows[e.Row].ImpValObj=Enum.ToObject(underlyingT,selectedI);
+								rows[e.Row].ImpValDisplay=rows[e.Row].ImpValObj.ToString();
+							}
+						}
+					}
+					if(patPlanList.Count>0) {
+						rows[e.Row].DoImport=false;//can't change an existing plan from here.
+					}
+					else if(selectedI==-1) {
+						if(rows[e.Row].OldValObj==null){
+							rows[e.Row].DoImport=false;//no change
+						}
+						else{
+							rows[e.Row].DoImport=true;
+						}
+					}
+					else if((int)rows[e.Row].ImpValObj==(int)rows[e.Row].OldValObj) {//it's the old setting for the patient, whether or not they actually changed it.
+						rows[e.Row].DoImport=false;//so no need to import
+					}
+					else {
+						rows[e.Row].DoImport=true;
+					}
+				}
+			}*/
 			else if(rows[e.Row].ObjType.IsEnum) {
 				//Note.  This only works for zero-indexed enums.
 				FormSheetImportEnumPicker formEnum=new FormSheetImportEnumPicker(rows[e.Row].FieldName);
@@ -1062,10 +1581,7 @@ namespace OpenDental {
 					case "HmPhone":
 						pat.HmPhone=rows[i].ImpValDisplay;
 						break;
-					
-
-
-
+					//ins1 and ins2 do not get imported.
 				}
 			}
 			Patients.Update(pat,patientOld);
@@ -1074,6 +1590,44 @@ namespace OpenDental {
 			}
 			MsgBox.Show(this,"Done.");
 			DialogResult=DialogResult.OK;
+		}
+
+		private bool DoImport(string fieldName) {
+			for(int i=0;i<rows.Count;i++) {
+				if(rows[i].FieldName!=fieldName) {
+					continue;
+				}
+				return rows[i].DoImport;
+			}
+			return false;
+		}
+
+		///<summary>Will return null if field not found or if field marked to not import.</summary>
+		private object GetImpObj(string fieldName) {
+			for(int i=0;i<rows.Count;i++) {
+				if(rows[i].FieldName!=fieldName) {
+					continue;
+				}
+				if(!rows[i].DoImport) {
+					return null;
+				}
+				return rows[i].ImpValObj;
+			}
+			return null;
+		}
+
+		///<summary>Will return empty string field not found or if field marked to not import.</summary>
+		private string GetImpDisplay(string fieldName) {
+			for(int i=0;i<rows.Count;i++) {
+				if(rows[i].FieldName!=fieldName) {
+					continue;
+				}
+				if(!rows[i].DoImport) {
+					return "";
+				}
+				return rows[i].ImpValDisplay;
+			}
+			return "";
 		}
 
 		private void butCancel_Click(object sender,EventArgs e) {
