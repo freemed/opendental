@@ -7,10 +7,12 @@ using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
 using OpenDental.UI;
+using Acrobat;
 
 namespace OpenDental {
 	public partial class FormSheetImport:Form {
 		public Sheet SheetCur;
+		public Document DocCur;
 		private List<SheetImportRow> rows;
 		private Patient pat;
 		private Family fam;
@@ -26,6 +28,7 @@ namespace OpenDental {
 		private Relat? ins2Relat;
 		private Carrier carrier1;
 		private Carrier carrier2;
+		private string acrobatXML;
 
 		public FormSheetImport() {
 			InitializeComponent();
@@ -33,8 +36,15 @@ namespace OpenDental {
 		}
 
 		private void FormSheetImport_Load(object sender,EventArgs e) {
-			pat=Patients.GetPat(SheetCur.PatNum);
-			fam=Patients.GetFamily(SheetCur.PatNum);
+			if(SheetCur!=null) {
+				pat=Patients.GetPat(SheetCur.PatNum);
+			}
+			else {
+				pat=Patients.GetPat(DocCur.PatNum);
+				//acrobatXML=VBbridges.Acrobat.GetAllFieldsAsXML(CodeBase.ODFileUtils.CombinePaths(ImageStore.GetPatientFolder(pat),DocCur.FileName));
+				//MessageBox.Show(acrobatXML);
+			}
+			fam=Patients.GetFamily(pat.PatNum);
 			AddressSameForFam=true;
 			for(int i=0;i<fam.ListPats.Length;i++) {
 				if(pat.HmPhone!=fam.ListPats[i].HmPhone
@@ -48,7 +58,7 @@ namespace OpenDental {
 					break;
 				}
 			}
-			patPlanList=PatPlans.Refresh(SheetCur.PatNum);
+			patPlanList=PatPlans.Refresh(pat.PatNum);
 			planList=InsPlans.Refresh(fam);
 			if(patPlanList.Count==0) {
 				patPlan1=null;
@@ -1212,62 +1222,82 @@ namespace OpenDental {
 
 		///<summary>If the specified fieldName does not exist, returns null</summary>
 		private string GetInputValue(string fieldName) {
-			for(int i=0;i<SheetCur.SheetFields.Count;i++) {
-				if(SheetCur.SheetFields[i].FieldType!=SheetFieldType.InputField){
-					continue;
+			if(SheetCur!=null) {
+				for(int i=0;i<SheetCur.SheetFields.Count;i++) {
+					if(SheetCur.SheetFields[i].FieldType!=SheetFieldType.InputField) {
+						continue;
+					}
+					if(SheetCur.SheetFields[i].FieldName != fieldName) {
+						continue;
+					}
+					return SheetCur.SheetFields[i].FieldValue;
 				}
-				if(SheetCur.SheetFields[i].FieldName != fieldName){
-					continue;
-				}
-				return SheetCur.SheetFields[i].FieldValue;
+			}
+			else {
+
 			}
 			return null;
 		}
 
 		///<summary>Only the true condition is tested.  If the specified fieldName does not exist, returns false.</summary>
 		private bool IsChecked(string fieldName) {
-			for(int i=0;i<SheetCur.SheetFields.Count;i++) {
-				if(SheetCur.SheetFields[i].FieldType!=SheetFieldType.CheckBox){
-					continue;
+			if(SheetCur!=null) {
+				for(int i=0;i<SheetCur.SheetFields.Count;i++) {
+					if(SheetCur.SheetFields[i].FieldType!=SheetFieldType.CheckBox){
+						continue;
+					}
+					if(SheetCur.SheetFields[i].FieldName != fieldName){
+						continue;
+					}
+					//if(SheetCur.SheetFields[i].FieldValue=="") {
+					//	return YN.No;
+					//}
+					if(SheetCur.SheetFields[i].FieldValue=="X") {
+						return true;
+					}
 				}
-				if(SheetCur.SheetFields[i].FieldName != fieldName){
-					continue;
-				}
-				//if(SheetCur.SheetFields[i].FieldValue=="") {
-				//	return YN.No;
-				//}
-				if(SheetCur.SheetFields[i].FieldValue=="X") {
-					return true;
-				}
+			}
+			else {
+
 			}
 			return false;
 		}
 
 		private bool ContainsOneOfFields(params string[] fieldNames) {
-			for(int i=0;i<SheetCur.SheetFields.Count;i++) {
-				if(SheetCur.SheetFields[i].FieldType!=SheetFieldType.CheckBox
-					&& SheetCur.SheetFields[i].FieldType!=SheetFieldType.InputField) 
-				{
-					continue;
-				}
-				for(int f=0;f<fieldNames.Length;f++) {
-					if(SheetCur.SheetFields[i].FieldName==fieldNames[f]) {
-						return true;
+			if(SheetCur!=null) {
+				for(int i=0;i<SheetCur.SheetFields.Count;i++) {
+					if(SheetCur.SheetFields[i].FieldType!=SheetFieldType.CheckBox
+						&& SheetCur.SheetFields[i].FieldType!=SheetFieldType.InputField) 
+					{
+						continue;
+					}
+					for(int f=0;f<fieldNames.Length;f++) {
+						if(SheetCur.SheetFields[i].FieldName==fieldNames[f]) {
+							return true;
+						}
 					}
 				}
+			}
+			else {
+
 			}
 			return false;
 		}
 
 		private bool ContainsFieldThatStartsWith(string fieldName) {
-			for(int i=0;i<SheetCur.SheetFields.Count;i++) {
-				if(SheetCur.SheetFields[i].FieldType!=SheetFieldType.CheckBox
+			if(SheetCur!=null) {
+				for(int i=0;i<SheetCur.SheetFields.Count;i++) {
+					if(SheetCur.SheetFields[i].FieldType!=SheetFieldType.CheckBox
 					&& SheetCur.SheetFields[i].FieldType!=SheetFieldType.InputField) {
-					continue;
+						continue;
+					}
+					if(SheetCur.SheetFields[i].FieldName.StartsWith(fieldName)) {
+						return true;
+					}
 				}
-				if(SheetCur.SheetFields[i].FieldName.StartsWith(fieldName)){
-					return true;
-				}
+			}
+			else {
+
 			}
 			return false;
 		}

@@ -238,7 +238,7 @@ namespace OpenDentBusiness{
 				rows.Add(row);
 			}
 			//document---------------------------------------------------------------------------------------
-			command="SELECT DateCreated,DocCategory,DocNum,Note "
+			command="SELECT DateCreated,DocCategory,DocNum,Description "
 				+"FROM document,definition "
 				+"WHERE document.DocCategory=definition.DefNum"
 				+" AND PatNum ="+POut.Long(patNum)
@@ -252,7 +252,7 @@ namespace OpenDentBusiness{
 				row["date"]=dateT.ToShortDateString();
 				row["dateOnly"]=dateT.Date;
 				row["dateTime"]=dateT;
-				row["description"]=rawDoc.Rows[i]["Note"].ToString();
+				row["description"]=rawDoc.Rows[i]["Description"].ToString();
 				row["DocNum"]=rawDoc.Rows[i]["DocNum"].ToString();
 				docCat=PIn.Long(rawDoc.Rows[i]["DocCategory"].ToString());
 				row["imageCat"]=DefC.GetName(DefCat.ImageCats,docCat);

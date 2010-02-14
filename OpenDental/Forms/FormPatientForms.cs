@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Text;
 using System.Windows.Forms;
 using OpenDental.UI;
@@ -161,17 +162,27 @@ namespace OpenDental {
 				return;
 			}
 			long sheetNum=PIn.Long(table.Rows[gridMain.SelectedIndices[0]]["SheetNum"].ToString());
-			if(sheetNum==0) {
-				MsgBox.Show(this,"Images cannot be imported into the database.");
-				return;
+			long docNum=PIn.Long(table.Rows[gridMain.SelectedIndices[0]]["DocNum"].ToString());
+			Document doc=null;
+			if(docNum!=0) {
+				doc=Documents.GetByNum(docNum);
+				string extens=Path.GetExtension(doc.FileName);
+				if(extens.ToLower()=="pdf") {
+					MsgBox.Show(this,"Images cannot be imported into the database.");
+					return;
+				}
 			}
-			Sheet sheet=Sheets.GetSheet(sheetNum);
-			if(sheet.SheetType!=SheetTypeEnum.PatientForm) {
-				MsgBox.Show(this,"For now, only sheets of type 'PatientForm' can be imported.");
-				return;
+			Sheet sheet=null;
+			if(sheetNum!=0) {
+				sheet=Sheets.GetSheet(sheetNum);
+				if(sheet.SheetType!=SheetTypeEnum.PatientForm) {
+					MsgBox.Show(this,"For now, only sheets of type 'PatientForm' can be imported.");
+					return;
+				}
 			}
 			FormSheetImport formSI=new FormSheetImport();
 			formSI.SheetCur=sheet;
+			formSI.DocCur=doc;
 			formSI.ShowDialog();
 			//No need to refresh grid because no changes could have been made.
 		}
