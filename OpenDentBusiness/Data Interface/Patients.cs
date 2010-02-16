@@ -1794,11 +1794,6 @@ namespace OpenDentBusiness{
 				//Do not merge the same patient onto itself.
 				return;
 			}
-			string[] guarantorForeignKeys=new string[]{
-				"patient.Guarantor",
-				"payplan.Guarantor",
-				"payplancharge.Guarantor",
-			};
 			string[] patNumForeignKeys=new string[]{
 				"adjustment.PatNum",
 				"anestheticrecord.PatNum",
@@ -1822,8 +1817,10 @@ namespace OpenDentBusiness{
 				//The record in 'patFrom' remains so it can be accessed again if needed.
 				//"patientnote.PatNum"				
 				"patplan.PatNum",
-				"payment.PatNum",				
+				"payment.PatNum",
+				"payplan.Guarantor",//Treated as a patnum, because it is actually a guarantor for the payment plan, and not a patient guarantor.
 				"payplan.PatNum",				
+				"payplancharge.Guarantor",//Treated as a patnum, because it is actually a guarantor for the payment plan, and not a patient guarantor.
 				"payplancharge.PatNum",
 				"paysplit.PatNum",
 				"perioexam.PatNum",
@@ -1887,15 +1884,12 @@ namespace OpenDentBusiness{
 			//Update all guarantor foreign keys to change them from 'patFrom' to 
 			//the guarantor of 'patTo'. This will effectively move all 'patFrom' family members 
 			//to the family defined by 'patTo' in the case that 'patFrom' is a guarantor. If
-			//'patFrom' is not a guarantor, then these commands will have no effect and are
+			//'patFrom' is not a guarantor, then this command will have no effect and is
 			//thus safe to always be run.
-			for(int i=0;i<guarantorForeignKeys.Length;i++){
-				string[] tableAndKeyName=guarantorForeignKeys[i].Split(new char[] { '.' });
-				command="UPDATE "+tableAndKeyName[0]
-					+" SET "+tableAndKeyName[1]+"="+POut.Long(patientTo.Guarantor)
-					+" WHERE "+tableAndKeyName[1]+"="+POut.Long(patFrom);
-				Db.NonQ(command);
-			}
+			command="UPDATE patient "
+				+"SET Guarantor="+POut.Long(patientTo.Guarantor)+" "
+				+"WHERE Guarantor="+POut.Long(patFrom);
+			Db.NonQ(command);
 			//At this point, the 'patFrom' is a regular patient and is absoloutely not a guarantor.
 			//Now modify all PatNum foreign keys from 'patFrom' to 'patTo' to complete the majority of the
 			//merge of the records between the two accounts.			

@@ -25,17 +25,21 @@ namespace OpenDental{
 		private void InitializeComponent() {
 			System.ComponentModel.ComponentResourceManager resources=new System.ComponentModel.ComponentResourceManager(typeof(FormPatientMerge));
 			this.groupBox1=new System.Windows.Forms.GroupBox();
-			this.butChangePatientInto=new OpenDental.UI.Button();
 			this.textPatientNameInto=new System.Windows.Forms.TextBox();
 			this.label2=new System.Windows.Forms.Label();
 			this.label1=new System.Windows.Forms.Label();
 			this.textPatientIDInto=new System.Windows.Forms.TextBox();
 			this.groupBox2=new System.Windows.Forms.GroupBox();
-			this.butChangePatientFrom=new OpenDental.UI.Button();
 			this.textPatientNameFrom=new System.Windows.Forms.TextBox();
 			this.label3=new System.Windows.Forms.Label();
 			this.label4=new System.Windows.Forms.Label();
 			this.textPatientIDFrom=new System.Windows.Forms.TextBox();
+			this.label5=new System.Windows.Forms.Label();
+			this.textPatToBirthdate=new System.Windows.Forms.TextBox();
+			this.label6=new System.Windows.Forms.Label();
+			this.textPatFromBirthdate=new System.Windows.Forms.TextBox();
+			this.butChangePatientFrom=new OpenDental.UI.Button();
+			this.butChangePatientInto=new OpenDental.UI.Button();
 			this.butMerge=new OpenDental.UI.Button();
 			this.butCancel=new OpenDental.UI.Button();
 			this.groupBox1.SuspendLayout();
@@ -44,6 +48,8 @@ namespace OpenDental{
 			// 
 			// groupBox1
 			// 
+			this.groupBox1.Controls.Add(this.textPatToBirthdate);
+			this.groupBox1.Controls.Add(this.label5);
 			this.groupBox1.Controls.Add(this.butChangePatientInto);
 			this.groupBox1.Controls.Add(this.textPatientNameInto);
 			this.groupBox1.Controls.Add(this.label2);
@@ -57,27 +63,12 @@ namespace OpenDental{
 			this.groupBox1.Text="Patient to merge into. The patient chosen below will be merged into this account."+
 					"";
 			// 
-			// butChangePatientInto
-			// 
-			this.butChangePatientInto.AdjustImageLocation=new System.Drawing.Point(0,0);
-			this.butChangePatientInto.Anchor=((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom|System.Windows.Forms.AnchorStyles.Right)));
-			this.butChangePatientInto.Autosize=true;
-			this.butChangePatientInto.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butChangePatientInto.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
-			this.butChangePatientInto.CornerRadius=4F;
-			this.butChangePatientInto.Location=new System.Drawing.Point(550,34);
-			this.butChangePatientInto.Name="butChangePatientInto";
-			this.butChangePatientInto.Size=new System.Drawing.Size(75,24);
-			this.butChangePatientInto.TabIndex=4;
-			this.butChangePatientInto.Text="Change";
-			this.butChangePatientInto.Click+=new System.EventHandler(this.butChangePatientInto_Click);
-			// 
 			// textPatientNameInto
 			// 
-			this.textPatientNameInto.Location=new System.Drawing.Point(153,36);
+			this.textPatientNameInto.Location=new System.Drawing.Point(153,37);
 			this.textPatientNameInto.Name="textPatientNameInto";
 			this.textPatientNameInto.ReadOnly=true;
-			this.textPatientNameInto.Size=new System.Drawing.Size(369,20);
+			this.textPatientNameInto.Size=new System.Drawing.Size(237,20);
 			this.textPatientNameInto.TabIndex=3;
 			// 
 			// label2
@@ -103,11 +94,13 @@ namespace OpenDental{
 			this.textPatientIDInto.Location=new System.Drawing.Point(6,37);
 			this.textPatientIDInto.Name="textPatientIDInto";
 			this.textPatientIDInto.ReadOnly=true;
-			this.textPatientIDInto.Size=new System.Drawing.Size(124,20);
+			this.textPatientIDInto.Size=new System.Drawing.Size(141,20);
 			this.textPatientIDInto.TabIndex=0;
 			// 
 			// groupBox2
 			// 
+			this.groupBox2.Controls.Add(this.textPatFromBirthdate);
+			this.groupBox2.Controls.Add(this.label6);
 			this.groupBox2.Controls.Add(this.butChangePatientFrom);
 			this.groupBox2.Controls.Add(this.textPatientNameFrom);
 			this.groupBox2.Controls.Add(this.label3);
@@ -121,27 +114,12 @@ namespace OpenDental{
 			this.groupBox2.Text="Patient to merge from. This account will be merged into the account above. This a"+
 					"ccount will be archived if not marked deceased.";
 			// 
-			// butChangePatientFrom
-			// 
-			this.butChangePatientFrom.AdjustImageLocation=new System.Drawing.Point(0,0);
-			this.butChangePatientFrom.Anchor=((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom|System.Windows.Forms.AnchorStyles.Right)));
-			this.butChangePatientFrom.Autosize=true;
-			this.butChangePatientFrom.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butChangePatientFrom.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
-			this.butChangePatientFrom.CornerRadius=4F;
-			this.butChangePatientFrom.Location=new System.Drawing.Point(550,34);
-			this.butChangePatientFrom.Name="butChangePatientFrom";
-			this.butChangePatientFrom.Size=new System.Drawing.Size(75,24);
-			this.butChangePatientFrom.TabIndex=9;
-			this.butChangePatientFrom.Text="Change";
-			this.butChangePatientFrom.Click+=new System.EventHandler(this.butChangePatientFrom_Click);
-			// 
 			// textPatientNameFrom
 			// 
-			this.textPatientNameFrom.Location=new System.Drawing.Point(153,36);
+			this.textPatientNameFrom.Location=new System.Drawing.Point(153,37);
 			this.textPatientNameFrom.Name="textPatientNameFrom";
 			this.textPatientNameFrom.ReadOnly=true;
-			this.textPatientNameFrom.Size=new System.Drawing.Size(369,20);
+			this.textPatientNameFrom.Size=new System.Drawing.Size(237,20);
 			this.textPatientNameFrom.TabIndex=8;
 			// 
 			// label3
@@ -167,8 +145,72 @@ namespace OpenDental{
 			this.textPatientIDFrom.Location=new System.Drawing.Point(6,37);
 			this.textPatientIDFrom.Name="textPatientIDFrom";
 			this.textPatientIDFrom.ReadOnly=true;
-			this.textPatientIDFrom.Size=new System.Drawing.Size(124,20);
+			this.textPatientIDFrom.Size=new System.Drawing.Size(141,20);
 			this.textPatientIDFrom.TabIndex=5;
+			// 
+			// label5
+			// 
+			this.label5.AutoSize=true;
+			this.label5.Location=new System.Drawing.Point(393,18);
+			this.label5.Name="label5";
+			this.label5.Size=new System.Drawing.Size(85,13);
+			this.label5.TabIndex=5;
+			this.label5.Text="Patient Birthdate";
+			// 
+			// textPatToBirthdate
+			// 
+			this.textPatToBirthdate.Location=new System.Drawing.Point(396,37);
+			this.textPatToBirthdate.Name="textPatToBirthdate";
+			this.textPatToBirthdate.ReadOnly=true;
+			this.textPatToBirthdate.Size=new System.Drawing.Size(126,20);
+			this.textPatToBirthdate.TabIndex=6;
+			// 
+			// label6
+			// 
+			this.label6.AutoSize=true;
+			this.label6.Location=new System.Drawing.Point(396,20);
+			this.label6.Name="label6";
+			this.label6.Size=new System.Drawing.Size(85,13);
+			this.label6.TabIndex=10;
+			this.label6.Text="Patient Birthdate";
+			// 
+			// textPatFromBirthdate
+			// 
+			this.textPatFromBirthdate.Location=new System.Drawing.Point(396,37);
+			this.textPatFromBirthdate.Name="textPatFromBirthdate";
+			this.textPatFromBirthdate.ReadOnly=true;
+			this.textPatFromBirthdate.Size=new System.Drawing.Size(126,20);
+			this.textPatFromBirthdate.TabIndex=11;
+			// 
+			// butChangePatientFrom
+			// 
+			this.butChangePatientFrom.AdjustImageLocation=new System.Drawing.Point(0,0);
+			this.butChangePatientFrom.Anchor=((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom|System.Windows.Forms.AnchorStyles.Right)));
+			this.butChangePatientFrom.Autosize=true;
+			this.butChangePatientFrom.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butChangePatientFrom.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
+			this.butChangePatientFrom.CornerRadius=4F;
+			this.butChangePatientFrom.Location=new System.Drawing.Point(550,34);
+			this.butChangePatientFrom.Name="butChangePatientFrom";
+			this.butChangePatientFrom.Size=new System.Drawing.Size(75,24);
+			this.butChangePatientFrom.TabIndex=9;
+			this.butChangePatientFrom.Text="Change";
+			this.butChangePatientFrom.Click+=new System.EventHandler(this.butChangePatientFrom_Click);
+			// 
+			// butChangePatientInto
+			// 
+			this.butChangePatientInto.AdjustImageLocation=new System.Drawing.Point(0,0);
+			this.butChangePatientInto.Anchor=((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom|System.Windows.Forms.AnchorStyles.Right)));
+			this.butChangePatientInto.Autosize=true;
+			this.butChangePatientInto.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butChangePatientInto.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
+			this.butChangePatientInto.CornerRadius=4F;
+			this.butChangePatientInto.Location=new System.Drawing.Point(550,34);
+			this.butChangePatientInto.Name="butChangePatientInto";
+			this.butChangePatientInto.Size=new System.Drawing.Size(75,24);
+			this.butChangePatientInto.TabIndex=4;
+			this.butChangePatientInto.Text="Change";
+			this.butChangePatientInto.Click+=new System.EventHandler(this.butChangePatientInto_Click);
 			// 
 			// butMerge
 			// 
@@ -239,5 +281,9 @@ namespace OpenDental{
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.Label label4;
 		private System.Windows.Forms.TextBox textPatientIDFrom;
+		private System.Windows.Forms.TextBox textPatToBirthdate;
+		private System.Windows.Forms.Label label5;
+		private System.Windows.Forms.TextBox textPatFromBirthdate;
+		private System.Windows.Forms.Label label6;
 	}
 }
