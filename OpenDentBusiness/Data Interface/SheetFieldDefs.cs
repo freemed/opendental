@@ -39,6 +39,7 @@ namespace OpenDentBusiness{
 				sfd.Width           = PIn.Int   (table.Rows[i][10].ToString());
 				sfd.Height          = PIn.Int   (table.Rows[i][11].ToString());
 				sfd.GrowthBehavior  = (GrowthBehaviorEnum)PIn.Long(table.Rows[i][12].ToString());
+				sfd.RadioButtonValue= PIn.String(table.Rows[i][13].ToString());
 				SheetFieldDefC.Listt.Add(sfd);
 			}
 		}

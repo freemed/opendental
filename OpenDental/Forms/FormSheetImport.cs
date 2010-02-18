@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -8,6 +9,7 @@ using System.Windows.Forms;
 using OpenDentBusiness;
 using OpenDental.UI;
 using Acrobat;
+using AFORMAUTLib;//Acrobat forms
 
 namespace OpenDental {
 	public partial class FormSheetImport:Form {
@@ -28,7 +30,7 @@ namespace OpenDental {
 		private Relat? ins2Relat;
 		private Carrier carrier1;
 		private Carrier carrier2;
-		private string acrobatXML;
+		private Dictionary<string,string> dictAcrobatFields;
 
 		public FormSheetImport() {
 			InitializeComponent();
@@ -41,8 +43,41 @@ namespace OpenDental {
 			}
 			else {
 				pat=Patients.GetPat(DocCur.PatNum);
-				//acrobatXML=VBbridges.Acrobat.GetAllFieldsAsXML(CodeBase.ODFileUtils.CombinePaths(ImageStore.GetPatientFolder(pat),DocCur.FileName));
-				//MessageBox.Show(acrobatXML);
+				CAcroApp acroApp=null;
+				try {
+					acroApp=new AcroAppClass();//Initialize Acrobat by creating App object
+				}
+				catch {
+					MsgBox.Show(this,"Requires Acrobat 9 Pro to be installed on this computer.");
+					DialogResult=DialogResult.Cancel;
+					return;
+				}
+				acroApp.Show();// Show Acrobat Viewer
+				CAcroAVDoc avDoc=new AcroAVDocClass();
+				string pathToPdf=CodeBase.ODFileUtils.CombinePaths(ImageStore.GetPatientFolder(pat),DocCur.FileName);
+				if(!avDoc.Open(pathToPdf,"")){
+					MessageBox.Show(Lan.g(this,"Could not open")+" "+pathToPdf);
+					DialogResult=DialogResult.Cancel;
+					return;
+				}
+				IAFormApp formApp=new AFormAppClass();//Create a IAFormApp object so we can access the form fields in the open document
+				IFields myFields=(IFields)formApp.Fields;// Get the IFields object associated with the form
+				IEnumerator myEnumerator = myFields.GetEnumerator();// Get the IEnumerator object for myFields
+				dictAcrobatFields=new Dictionary<string,string>();
+				IField myField;
+				while(myEnumerator.MoveNext()) {
+					myField=(IField)myEnumerator.Current;// Get the IField object
+					if(myField.Value==null){
+						continue;
+					}
+					MessageBox.Show("Name:"+myField.Name+"  Value:"+myField.Value);
+					if(dictAcrobatFields.ContainsKey(myField.Name)) {
+						continue;
+					}
+					dictAcrobatFields.Add(myField.Name,myField.Value);
+					//name:topmostSubform[0].page1[0].SSN[0]
+				}
+				acroApp.Exit();
 			}
 			fam=Patients.GetFamily(pat.PatNum);
 			AddressSameForFam=true;
@@ -1233,8 +1268,10 @@ namespace OpenDental {
 					return SheetCur.SheetFields[i].FieldValue;
 				}
 			}
-			else {
-
+			else {//pdf
+				if(dictAcrobatFields.ContainsKey(fieldName)) {
+					return dictAcrobatFields[fieldName];
+				}
 			}
 			return null;
 		}
@@ -1258,7 +1295,11 @@ namespace OpenDental {
 				}
 			}
 			else {
-
+				if(dictAcrobatFields.ContainsKey(fieldName)) {
+					if(dictAcrobatFields[fieldName]=="true") {//need to test this
+						return true;
+					}
+				}
 			}
 			return false;
 		}
@@ -1279,7 +1320,11 @@ namespace OpenDental {
 				}
 			}
 			else {
-
+				for(int f=0;f<fieldNames.Length;f++) {
+					if(dictAcrobatFields.ContainsKey(fieldNames[f])) {
+						return true;
+					}
+				}
 			}
 			return false;
 		}
@@ -1297,7 +1342,11 @@ namespace OpenDental {
 				}
 			}
 			else {
-
+				foreach(string fieldkey in dictAcrobatFields.Keys){
+					if(fieldkey.StartsWith(fieldName)) {
+						return true;
+					}
+				}
 			}
 			return false;
 		}

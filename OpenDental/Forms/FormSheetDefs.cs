@@ -340,7 +340,6 @@ namespace OpenDental{
 				return;
 			}
 			SheetDef sheetdef=internalList[grid1.GetSelectedIndex()].Copy();
-			sheetdef.Description=Enum.GetNames(typeof(SheetInternalType))[grid1.GetSelectedIndex()];
 			sheetdef.IsNew=true;
 			SheetDefs.WriteObject(sheetdef);
 			grid1.SetSelected(false);

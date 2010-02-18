@@ -162,6 +162,18 @@ namespace OpenDentBusiness{
 		public bool GrowthBehaviorChanged{
 			get{return growthBehaviorChanged;}
 		}
+
+		[DataField("RadioButtonValue")]
+		private string radioButtonValue;
+		private bool radioButtonValueChanged;
+		///<summary>This is only used for checkboxes that you want to behave like radiobuttons.  Set the FieldName the same for each Checkbox in the group.  The FieldValue will likely be X for one of them and empty string for the others.  Each of them will have a different RadioButtonValue.  Whichever box has X, the RadioButtonValue for that box will be used when importing..</summary>
+		public string RadioButtonValue{
+			get{return radioButtonValue;}
+			set{if(radioButtonValue!=value){radioButtonValue=value;MarkDirty();radioButtonValueChanged=true;}}
+		}
+		public bool RadioButtonValueChanged{
+			get{return radioButtonValueChanged;}
+		}
 				
 		public SheetField Copy(){
 			return (SheetField)Clone();

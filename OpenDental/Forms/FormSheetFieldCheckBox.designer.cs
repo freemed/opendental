@@ -36,6 +36,10 @@ namespace OpenDental{
 			this.textXPos = new OpenDental.ValidNum();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.groupRadio = new System.Windows.Forms.GroupBox();
+			this.listRadio = new System.Windows.Forms.ListBox();
+			this.label1 = new System.Windows.Forms.Label();
+			this.groupRadio.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// label2
@@ -52,8 +56,9 @@ namespace OpenDental{
 			this.listFields.FormattingEnabled = true;
 			this.listFields.Location = new System.Drawing.Point(15,37);
 			this.listFields.Name = "listFields";
-			this.listFields.Size = new System.Drawing.Size(142,277);
+			this.listFields.Size = new System.Drawing.Size(142,316);
 			this.listFields.TabIndex = 85;
+			this.listFields.SelectedIndexChanged += new System.EventHandler(this.listFields_SelectedIndexChanged);
 			this.listFields.DoubleClick += new System.EventHandler(this.listFields_DoubleClick);
 			// 
 			// label5
@@ -102,7 +107,7 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(15,345);
+			this.butDelete.Location = new System.Drawing.Point(15,386);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(77,24);
 			this.butDelete.TabIndex = 100;
@@ -153,7 +158,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(346,315);
+			this.butOK.Location = new System.Drawing.Point(285,386);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 3;
@@ -168,17 +173,47 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(346,345);
+			this.butCancel.Location = new System.Drawing.Point(366,386);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 2;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// groupRadio
+			// 
+			this.groupRadio.Controls.Add(this.listRadio);
+			this.groupRadio.Controls.Add(this.label1);
+			this.groupRadio.Location = new System.Drawing.Point(195,164);
+			this.groupRadio.Name = "groupRadio";
+			this.groupRadio.Size = new System.Drawing.Size(246,199);
+			this.groupRadio.TabIndex = 101;
+			this.groupRadio.TabStop = false;
+			this.groupRadio.Text = "Radio Button Value";
+			// 
+			// listRadio
+			// 
+			this.listRadio.FormattingEnabled = true;
+			this.listRadio.Location = new System.Drawing.Point(52,68);
+			this.listRadio.Name = "listRadio";
+			this.listRadio.Size = new System.Drawing.Size(142,121);
+			this.listRadio.TabIndex = 88;
+			this.listRadio.Click += new System.EventHandler(this.listRadio_Click);
+			// 
+			// label1
+			// 
+			this.label1.Location = new System.Drawing.Point(6,20);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(234,46);
+			this.label1.TabIndex = 87;
+			this.label1.Text = "Use the same Field Name for each radio button in a group.  But set a different Ra" +
+    "dio Button Value for each.";
+			// 
 			// FormSheetFieldCheckBox
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(433,381);
+			this.ClientSize = new System.Drawing.Size(453,422);
+			this.Controls.Add(this.groupRadio);
 			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.textHeight);
 			this.Controls.Add(this.label8);
@@ -196,6 +231,7 @@ namespace OpenDental{
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Edit CheckBox";
 			this.Load += new System.EventHandler(this.FormSheetFieldCheckBox_Load);
+			this.groupRadio.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -216,5 +252,8 @@ namespace OpenDental{
 		private ValidNum textHeight;
 		private System.Windows.Forms.Label label8;
 		private OpenDental.UI.Button butDelete;
+		private System.Windows.Forms.GroupBox groupRadio;
+		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.ListBox listRadio;
 	}
 }

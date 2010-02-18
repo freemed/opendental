@@ -47,16 +47,54 @@ namespace OpenDentBusiness{
 			return new List<SheetFieldDef>();
 		}
 
-		private static SheetFieldDef NewOutput(string fieldName){
-			return new SheetFieldDef(SheetFieldType.OutputText,fieldName,"",0,"",false,0,0,0,0,GrowthBehaviorEnum.None);
+		///<summary>For a given fieldName, return all the allowed radioButtonValues.  Will frequently be an empty list if a checkbox with this fieldname is not allowed to act as a radiobutton.</summary>
+		public static List<string> GetRadio(string fieldName) {
+			List<string> retVal=new List<string>();
+			string[] stringAr=null;
+			switch(fieldName) {
+				default:
+					return retVal;
+				case "Gender":
+					stringAr=Enum.GetNames(typeof(PatientGender));
+					break;
+				case "ins1Relat":
+				case "ins2Relat":
+					stringAr=Enum.GetNames(typeof(Relat));
+					break;
+				case "Position":
+					stringAr=Enum.GetNames(typeof(PatientPosition));
+					break;
+				case "PreferContactMethod":
+				case "PreferConfirmMethod":
+				case "PreferRecallMethod":
+					stringAr=Enum.GetNames(typeof(ContactMethod));
+					break;
+				case "StudentStatus":
+					retVal.Add("Nonstudent");
+					retVal.Add("Parttime");
+					retVal.Add("Fulltime");
+					return retVal;
+			}
+			for(int i=0;i<stringAr.Length;i++) {
+				retVal.Add(stringAr[i]);
+			}
+			return retVal;
+		}
+
+		private static SheetFieldDef NewOutput(string fieldName) {
+			return new SheetFieldDef(SheetFieldType.OutputText,fieldName,"",0,"",false,0,0,0,0,GrowthBehaviorEnum.None,"");
 		}
 
 		private static SheetFieldDef NewInput(string fieldName){
-			return new SheetFieldDef(SheetFieldType.InputField,fieldName,"",0,"",false,0,0,0,0,GrowthBehaviorEnum.None);
+			return new SheetFieldDef(SheetFieldType.InputField,fieldName,"",0,"",false,0,0,0,0,GrowthBehaviorEnum.None,"");
 		}
 
 		private static SheetFieldDef NewCheck(string fieldName){
-			return new SheetFieldDef(SheetFieldType.CheckBox,fieldName,"",0,"",false,0,0,0,0,GrowthBehaviorEnum.None);
+			return new SheetFieldDef(SheetFieldType.CheckBox,fieldName,"",0,"",false,0,0,0,0,GrowthBehaviorEnum.None,"");
+		}
+
+		private static SheetFieldDef NewRadio(string fieldName,string radioButtonValue){
+			return new SheetFieldDef(SheetFieldType.CheckBox,fieldName,"",0,"",false,0,0,0,0,GrowthBehaviorEnum.None,radioButtonValue);
 		}
 
 		private static List<SheetFieldDef> GetLabelPatient(OutInCheck outInCheck){
@@ -259,39 +297,15 @@ namespace OpenDentBusiness{
 			}
 			else if(outInCheck==OutInCheck.Check){
 				list.Add(NewCheck("addressAndHmPhoneIsSameEntireFamily"));
-				list.Add(NewCheck("GenderIsMale"));
-				list.Add(NewCheck("GenderIsFemale"));
-				list.Add(NewCheck("guarantorIsOther"));
-				list.Add(NewCheck("guarantorIsSelf"));
-				list.Add(NewCheck("ins1RelatIsChild"));
-				list.Add(NewCheck("ins1RelatIsNotSelfSpouseChild"));
-				list.Add(NewCheck("ins1RelatIsSelf"));
-				list.Add(NewCheck("ins1RelatIsSpouse"));
-				list.Add(NewCheck("ins2RelatIsChild"));
-				list.Add(NewCheck("ins2RelatIsNotSelfSpouseChild"));
-				list.Add(NewCheck("ins2RelatIsSelf"));
-				list.Add(NewCheck("ins2RelatIsSpouse"));
+				list.Add(NewCheck("Gender"));
+				list.Add(NewCheck("ins1Relat"));
+				list.Add(NewCheck("ins2Relat"));
 				list.Add(NewCheck("misc"));
-				list.Add(NewCheck("PositionIsMarried"));
-				list.Add(NewCheck("positionIsNotMarried"));
-				list.Add(NewCheck("PreferConfirmMethodIsEmail"));
-				list.Add(NewCheck("PreferConfirmMethodIsHmPhone"));
-				list.Add(NewCheck("PreferConfirmMethodIsTextMessage"));
-				list.Add(NewCheck("PreferConfirmMethodIsWirelessPh"));
-				list.Add(NewCheck("PreferConfirmMethodIsWkPhone"));
-				list.Add(NewCheck("PreferContactMethodIsEmail"));
-				list.Add(NewCheck("PreferContactMethodIsHmPhone"));
-				list.Add(NewCheck("PreferContactMethodIsTextMessage"));
-				list.Add(NewCheck("PreferContactMethodIsWirelessPh"));
-				list.Add(NewCheck("PreferContactMethodIsWkPhone"));
-				list.Add(NewCheck("PreferRecallMethodIsEmail"));
-				list.Add(NewCheck("PreferRecallMethodIsHmPhone"));
-				list.Add(NewCheck("PreferRecallMethodIsTextMessage"));
-				list.Add(NewCheck("PreferRecallMethodIsWirelessPh"));
-				list.Add(NewCheck("PreferRecallMethodIsWkPhone"));
-				list.Add(NewCheck("StudentStatusIsFulltime"));
-				list.Add(NewCheck("StudentStatusIsNonstudent"));
-				list.Add(NewCheck("StudentStatusIsParttime"));
+				list.Add(NewCheck("Position"));
+				list.Add(NewCheck("PreferConfirmMethod"));
+				list.Add(NewCheck("PreferContactMethod"));
+				list.Add(NewCheck("PreferRecallMethod"));
+				list.Add(NewCheck("StudentStatus"));
 			}
 			return list;
 		}
@@ -329,6 +343,8 @@ namespace OpenDentBusiness{
 			}
 			return list;
 		}
+
+
 
 
 	}

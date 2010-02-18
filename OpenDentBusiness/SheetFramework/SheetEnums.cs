@@ -62,7 +62,7 @@ namespace OpenDentBusiness {
 		Line,
 		///<Summary>A simple rectangle outline.</Summary>
 		Rectangle,
-		///<summary>A clickable area on the screen.  It's a form of input, so treated similarly to an InputField.  The X will go from corner to corner of the rectangle specified.</summary>
+		///<summary>A clickable area on the screen.  It's a form of input, so treated similarly to an InputField.  The X will go from corner to corner of the rectangle specified.  It can also behave like a radio button</summary>
 		CheckBox,
 		///<summary>A signature box, either Topaz pad or directly on the screen with stylus/mouse.  The signature is encrypted based an a hash of all other field values in the entire sheet, excluding other SigBoxes.  The order is critical.</summary>
 		SigBox,

@@ -1994,8 +1994,10 @@ DROP TABLE IF EXISTS etAck";
 				Db.NonQ(command);
 				command="ALTER TABLE sheet ADD ShowInTerminal tinyint NOT NULL";
 				Db.NonQ(command);
-
-
+				command="ALTER TABLE sheetfielddef ADD RadioButtonValue varchar(255) NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE sheetfield ADD RadioButtonValue varchar(255) NOT NULL";
+				Db.NonQ(command);
 
 
 

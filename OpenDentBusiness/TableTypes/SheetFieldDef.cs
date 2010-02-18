@@ -59,7 +59,7 @@ namespace OpenDentBusiness{
 		[DataField("FieldValue")]
 		private string fieldValue;
 		private bool fieldValueChanged;
-		///<summary>For StaticText, this text can include bracketed fields, like [nameLF].  For OutputText and InputField, this will be blank.</summary>
+		///<summary>For StaticText, this text can include bracketed fields, like [nameLF].  For OutputText and InputField, this will be blank.  For CheckBoxes, either X or blank.  Even if the checkbox is set to behave like a radio button.</summary>
 		public string FieldValue{
 			get{return fieldValue;}
 			set{if(fieldValue!=value){fieldValue=value;MarkDirty();fieldValueChanged=true;}}
@@ -164,6 +164,19 @@ namespace OpenDentBusiness{
 			get{return growthBehaviorChanged;}
 		}
 
+		[DataField("RadioButtonValue")]
+		private string radioButtonValue;
+		private bool radioButtonValueChanged;
+		///<summary>This is only used for checkboxes that you want to behave like radiobuttons.  Set the FieldName the same for each Checkbox in the group.  The FieldValue will likely be X for one of them and empty string for the others.  Each of them will have a different RadioButtonValue.  Whichever box has X, the RadioButtonValue for that box will be used when importing..</summary>
+		public string RadioButtonValue{
+			get{return radioButtonValue;}
+			set{if(radioButtonValue!=value){radioButtonValue=value;MarkDirty();radioButtonValueChanged=true;}}
+		}
+		public bool RadioButtonValueChanged{
+			get{return radioButtonValueChanged;}
+		}
+
+
 		public SheetFieldDef(){
 			//required for use as a generic.
 		}
@@ -171,7 +184,7 @@ namespace OpenDentBusiness{
 		public SheetFieldDef(SheetFieldType fieldType,string fieldName,string fieldValue,
 			float fontSize,string fontName,bool fontIsBold,
 			int xPos,int yPos,int width,int height,
-			GrowthBehaviorEnum growthBehavior) 
+			GrowthBehaviorEnum growthBehavior,string radioButtonValue) 
 		{
 			FieldType=fieldType;
 			FieldName=fieldName;
@@ -184,6 +197,7 @@ namespace OpenDentBusiness{
 			Width=width;
 			Height=height;
 			GrowthBehavior=growthBehavior;
+			RadioButtonValue=radioButtonValue;
 		}
 
 		public SheetFieldDef Copy(){
@@ -207,60 +221,65 @@ namespace OpenDentBusiness{
 			int xPos,int yPos,int width,int height)
 		{
 			return new SheetFieldDef(SheetFieldType.OutputText,fieldName,"",fontSize,fontName,fontIsBold,
-				xPos,yPos,width,height,GrowthBehaviorEnum.None);
+				xPos,yPos,width,height,GrowthBehaviorEnum.None,"");
 		}
 
 		public static SheetFieldDef NewOutput(string fieldName,float fontSize,string fontName,bool fontIsBold,
 			int xPos,int yPos,int width,int height,GrowthBehaviorEnum growthBehavior)
 		{
 			return new SheetFieldDef(SheetFieldType.OutputText,fieldName,"",fontSize,fontName,fontIsBold,
-				xPos,yPos,width,height,growthBehavior);
+				xPos,yPos,width,height,growthBehavior,"");
 		}
 
 		public static SheetFieldDef NewStaticText(string fieldValue,float fontSize,string fontName,bool fontIsBold,
 			int xPos,int yPos,int width,int height)
 		{
 			return new SheetFieldDef(SheetFieldType.StaticText,"",fieldValue,fontSize,fontName,fontIsBold,
-				xPos,yPos,width,height,GrowthBehaviorEnum.None);
+				xPos,yPos,width,height,GrowthBehaviorEnum.None,"");
 		}
 
 		public static SheetFieldDef NewStaticText(string fieldValue,float fontSize,string fontName,bool fontIsBold,
 			int xPos,int yPos,int width,int height,GrowthBehaviorEnum growthBehavior)
 		{
 			return new SheetFieldDef(SheetFieldType.StaticText,"",fieldValue,fontSize,fontName,fontIsBold,
-				xPos,yPos,width,height,growthBehavior);
+				xPos,yPos,width,height,growthBehavior,"");
 		}
 
 		public static SheetFieldDef NewInput(string fieldName,float fontSize,string fontName,bool fontIsBold,
 			int xPos,int yPos,int width,int height)
 		{
 			return new SheetFieldDef(SheetFieldType.InputField,fieldName,"",fontSize,fontName,fontIsBold,
-				xPos,yPos,width,height,GrowthBehaviorEnum.None);
+				xPos,yPos,width,height,GrowthBehaviorEnum.None,"");
 		}
 
 		public static SheetFieldDef NewImage(string fileName,int xPos,int yPos,int width,int height) {
 			return new SheetFieldDef(SheetFieldType.Image,fileName,"",0,"",false,
-				xPos,yPos,width,height,GrowthBehaviorEnum.None);
+				xPos,yPos,width,height,GrowthBehaviorEnum.None,"");
 		}
 
 		public static SheetFieldDef NewLine(int xPos,int yPos,int width,int height) {
 			return new SheetFieldDef(SheetFieldType.Line,"","",0,"",false,
-				xPos,yPos,width,height,GrowthBehaviorEnum.None);
+				xPos,yPos,width,height,GrowthBehaviorEnum.None,"");
 		}
 
 		public static SheetFieldDef NewRect(int xPos,int yPos,int width,int height) {
 			return new SheetFieldDef(SheetFieldType.Rectangle,"","",0,"",false,
-				xPos,yPos,width,height,GrowthBehaviorEnum.None);
+				xPos,yPos,width,height,GrowthBehaviorEnum.None,"");
 		}
 
 		public static SheetFieldDef NewCheckBox(string fieldName,int xPos,int yPos,int width,int height) {
 			return new SheetFieldDef(SheetFieldType.CheckBox,fieldName,"",0,"",false,
-				xPos,yPos,width,height,GrowthBehaviorEnum.None);
+				xPos,yPos,width,height,GrowthBehaviorEnum.None,"");
+		}
+
+		public static SheetFieldDef NewRadioButton(string fieldName,string radioButtonValue,int xPos,int yPos,int width,int height) {
+			return new SheetFieldDef(SheetFieldType.CheckBox,fieldName,"",0,"",false,
+				xPos,yPos,width,height,GrowthBehaviorEnum.None,radioButtonValue);
 		}
 
 		public static SheetFieldDef NewSigBox(int xPos,int yPos,int width,int height) {
 			return new SheetFieldDef(SheetFieldType.SigBox,"","",0,"",false,
-				xPos,yPos,width,height,GrowthBehaviorEnum.None);
+				xPos,yPos,width,height,GrowthBehaviorEnum.None,"");
 		}
 
 		///<Summary>Should only be called after FieldValue has been set, due to GrowthBehavior.</Summary>

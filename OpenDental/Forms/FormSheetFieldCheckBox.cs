@@ -16,6 +16,7 @@ namespace OpenDental {
 		public SheetDef SheetDefCur;
 		private List<SheetFieldDef> AvailFields;
 		public bool IsReadOnly;
+		private List<string> radioButtonValues;
 
 		public FormSheetFieldCheckBox() {
 			InitializeComponent();
@@ -40,6 +41,33 @@ namespace OpenDental {
 			textYPos.Text=SheetFieldDefCur.YPos.ToString();
 			textWidth.Text=SheetFieldDefCur.Width.ToString();
 			textHeight.Text=SheetFieldDefCur.Height.ToString();
+		}
+
+		private void listFields_SelectedIndexChanged(object sender,EventArgs e) {
+			if(listFields.SelectedIndex==-1){
+				groupRadio.Visible=false;
+				return;
+			}
+			radioButtonValues=SheetFieldsAvailable.GetRadio(AvailFields[listFields.SelectedIndex].FieldName);
+			if(radioButtonValues.Count==0) {
+				groupRadio.Visible=false;
+				return;
+			}
+			groupRadio.Visible=true;
+			listRadio.Items.Clear();
+			for(int i=0;i<radioButtonValues.Count;i++) {
+				listRadio.Items.Add(radioButtonValues[i]);
+				if(SheetFieldDefCur.RadioButtonValue==radioButtonValues[i]) {
+					listRadio.SelectedIndex=i;
+				}
+			}
+		}
+
+		private void listRadio_Click(object sender,EventArgs e) {
+			if(listRadio.SelectedIndex==-1){
+				return;
+			}
+			SheetFieldDefCur.RadioButtonValue=radioButtonValues[listRadio.SelectedIndex];
 		}
 
 		private void listFields_DoubleClick(object sender,EventArgs e) {
@@ -73,6 +101,12 @@ namespace OpenDental {
 			SheetFieldDefCur.YPos=PIn.Int(textYPos.Text);
 			SheetFieldDefCur.Width=PIn.Int(textWidth.Text);
 			SheetFieldDefCur.Height=PIn.Int(textHeight.Text);
+			if(!groupRadio.Visible || listRadio.SelectedIndex==-1) {
+				SheetFieldDefCur.RadioButtonValue="";
+			}
+			else {
+				SheetFieldDefCur.RadioButtonValue=radioButtonValues[listRadio.SelectedIndex];
+			}
 			//don't save to database here.
 			DialogResult=DialogResult.OK;
 		}
@@ -80,6 +114,10 @@ namespace OpenDental {
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
+
+		
 
 		
 

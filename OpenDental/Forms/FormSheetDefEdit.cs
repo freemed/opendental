@@ -83,6 +83,7 @@ namespace OpenDental {
 
 		private void FillFieldList(){
 			listFields.Items.Clear();
+			string txt;
 			for(int i=0;i<SheetDefCur.SheetFieldDefs.Count;i++){
 				if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.StaticText){
 					listFields.Items.Add(SheetDefCur.SheetFieldDefs[i].FieldValue);
@@ -108,7 +109,12 @@ namespace OpenDental {
 					listFields.Items.Add(Lan.g(this,"Signature Box"));
 				}
 				else if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.CheckBox){
-					listFields.Items.Add(Lan.g(this,"Check:")+SheetDefCur.SheetFieldDefs[i].FieldName);
+					txt=//Lan.g(this,"Check:")+
+						SheetDefCur.SheetFieldDefs[i].FieldName;
+					if(SheetDefCur.SheetFieldDefs[i].RadioButtonValue!="") {
+						txt+=" - "+SheetDefCur.SheetFieldDefs[i].RadioButtonValue;
+					}
+					listFields.Items.Add(txt);
 				}
 				else{
 					listFields.Items.Add(SheetDefCur.SheetFieldDefs[i].FieldName);
