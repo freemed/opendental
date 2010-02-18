@@ -505,6 +505,11 @@ namespace OpenDental{
 			panelNote.Height=(int)Math.Min(114,Height-PictureBox1.Location.Y);
 			int panelNoteHeight=(panelNote.Visible?panelNote.Height:0);
 			PictureBox1.Height=Height-panelNoteHeight-PictureBox1.Location.Y;
+			if(axAcroPDF1!=null){
+				axAcroPDF1.Location=PictureBox1.Location;
+				axAcroPDF1.Width=PictureBox1.Width;
+				axAcroPDF1.Height=PictureBox1.Height;
+			}
 			panelNote.Location=new Point(PictureBox1.Left,Height-panelNoteHeight-1);
 			paintTools.Location=new Point(brightnessContrastSlider.Location.X+brightnessContrastSlider.Width+4,paintTools.Location.Y);
 			paintTools.Size=new Size(PictureBox1.Width-brightnessContrastSlider.Width-4,paintTools.Height);
@@ -717,9 +722,6 @@ namespace OpenDental{
 				return;
 			}
 			PictureBox1.Visible=true;
-			//ToolBarMain.Enabled=true;
-			//paintTools.Enabled=true;
-			//brightnessContrastSlider.Enabled=true;
 			if(axAcroPDF1!=null){
 				axAcroPDF1.Dispose();//Clear any previously loaded Acrobat .pdf file.
 			}
@@ -788,7 +790,8 @@ namespace OpenDental{
 						}
 					}
 					SetBrightnessAndContrast();
-					EnableAllTools(PictureBox1.Visible);
+					EnableTreeItemTools(PictureBox1.Visible,true,true,PictureBox1.Visible,true,PictureBox1.Visible,PictureBox1.Visible,PictureBox1.Visible,
+						PictureBox1.Visible,PictureBox1.Visible,PictureBox1.Visible,PictureBox1.Visible,PictureBox1.Visible);
 				}
 				curImageWidths=new int[currentImages.Length];
 				curImageHeights=new int[currentImages.Length];
@@ -818,7 +821,6 @@ namespace OpenDental{
 
 		private void pdfFileError(object sender, System.EventArgs e) {
 			PictureBox1.Visible=true;
-			ToolBarMain.Enabled=true;
 			paintTools.Enabled=true;
 			brightnessContrastSlider.Enabled=true;
 			axAcroPDF1.Visible=false;
