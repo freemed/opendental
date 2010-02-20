@@ -1998,9 +1998,26 @@ DROP TABLE IF EXISTS etAck";
 				Db.NonQ(command);
 				command="ALTER TABLE sheetfield ADD RadioButtonValue varchar(255) NOT NULL";
 				Db.NonQ(command);
-
-
-
+				//add a bunch of indexes to the benefit table to make it faster when there are many similar plans
+				command="ALTER TABLE benefit ADD INDEX(CovCatNum)";
+				Db.NonQ(command);
+				command="ALTER TABLE benefit ADD INDEX(BenefitType)";
+				Db.NonQ(command);
+				command="ALTER TABLE benefit ADD INDEX(Percent)";
+				Db.NonQ(command);
+				command="ALTER TABLE benefit ADD INDEX(MonetaryAmt)";
+				Db.NonQ(command);
+				command="ALTER TABLE benefit ADD INDEX(TimePeriod)";
+				Db.NonQ(command);
+				command="ALTER TABLE benefit ADD INDEX(QuantityQualifier)";
+				Db.NonQ(command);
+				command="ALTER TABLE benefit ADD INDEX(Quantity)";
+				Db.NonQ(command);
+				command="ALTER TABLE benefit ADD INDEX(CodeNum)";
+				Db.NonQ(command);
+				command="ALTER TABLE benefit ADD INDEX(CoverageLevel)";
+				Db.NonQ(command);
+				
 
 
 

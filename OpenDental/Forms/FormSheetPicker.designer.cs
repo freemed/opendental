@@ -26,10 +26,10 @@ namespace OpenDental{
 			this.label2 = new System.Windows.Forms.Label();
 			this.labelSheetType = new System.Windows.Forms.Label();
 			this.listMain = new System.Windows.Forms.ListBox();
+			this.labelTerminal = new System.Windows.Forms.Label();
 			this.butTerminal = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
-			this.labelTerminal = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// label2
@@ -44,9 +44,9 @@ namespace OpenDental{
 			// 
 			this.labelSheetType.Location = new System.Drawing.Point(29,62);
 			this.labelSheetType.Name = "labelSheetType";
-			this.labelSheetType.Size = new System.Drawing.Size(165,14);
+			this.labelSheetType.Size = new System.Drawing.Size(239,14);
 			this.labelSheetType.TabIndex = 14;
-			this.labelSheetType.Text = "labelSheetType";
+			this.labelSheetType.Text = "Patient Forms and Medical Histories";
 			this.labelSheetType.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// listMain
@@ -57,6 +57,14 @@ namespace OpenDental{
 			this.listMain.Size = new System.Drawing.Size(164,329);
 			this.listMain.TabIndex = 13;
 			this.listMain.DoubleClick += new System.EventHandler(this.listMain_DoubleClick);
+			// 
+			// labelTerminal
+			// 
+			this.labelTerminal.Location = new System.Drawing.Point(294,233);
+			this.labelTerminal.Name = "labelTerminal";
+			this.labelTerminal.Size = new System.Drawing.Size(88,32);
+			this.labelTerminal.TabIndex = 17;
+			this.labelTerminal.Text = "Multiple sheets can be sent";
 			// 
 			// butTerminal
 			// 
@@ -102,14 +110,6 @@ namespace OpenDental{
 			this.butClose.TabIndex = 2;
 			this.butClose.Text = "&Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
-			// 
-			// labelTerminal
-			// 
-			this.labelTerminal.Location = new System.Drawing.Point(294,233);
-			this.labelTerminal.Name = "labelTerminal";
-			this.labelTerminal.Size = new System.Drawing.Size(88,32);
-			this.labelTerminal.TabIndex = 17;
-			this.labelTerminal.Text = "Multiple sheets can be sent";
 			// 
 			// FormSheetPicker
 			// 

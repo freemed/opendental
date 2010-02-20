@@ -255,7 +255,7 @@ namespace OpenDental {
 			DialogResult=DialogResult.Cancel;
 		}
 
-		///<summary>Triggered when any field value changes.  This immediately invalidates signatures.  It also causes fields to grow as needed.</summary>
+		///<summary>Triggered when any field value changes.  This immediately invalidates signatures.  It also causes fields to grow as needed and deselects other radiobuttons in a group.</summary>
 		private void text_TextChanged(object sender,EventArgs e) {
 			foreach(Control control in panelMain.Controls){
 				if(control.GetType()!=typeof(OpenDental.UI.SignatureBoxWrapper)){
@@ -267,6 +267,33 @@ namespace OpenDental {
 				SheetField field=(SheetField)control.Tag;
 				OpenDental.UI.SignatureBoxWrapper sigBox=(OpenDental.UI.SignatureBoxWrapper)control;
 				sigBox.SetInvalid();
+			}
+			if(sender.GetType()==typeof(SheetCheckBox)) {
+				SheetCheckBox checkbox=(SheetCheckBox)sender;
+				if(checkbox.Tag==null) {
+					return;
+				}
+				if(!checkbox.IsChecked) {//if user unchecked a radiobutton, nothing else happens
+					return;
+				}
+				SheetField fieldThis=(SheetField)checkbox.Tag;
+				foreach(Control control in panelMain.Controls) {//set some other radiobuttons to be not checked
+					if(control.GetType()!=typeof(SheetCheckBox)) {
+						continue;
+					}
+					if(control.Tag==null) {
+						continue;
+					}
+					if(control==sender) {
+						continue;
+					}
+					SheetField fieldOther=(SheetField)control.Tag;
+					if(fieldThis.FieldName!=fieldOther.FieldName) {//different radio group
+						continue;
+					}
+					((SheetCheckBox)control).IsChecked=false;
+				}
+				return;
 			}
 			if(sender.GetType() != typeof(RichTextBox)){
 				//since CheckBoxes also trigger this event for sig invalid.
@@ -410,6 +437,7 @@ namespace OpenDental {
 				field.FieldValue+=(PointList[i].X+pictDraw.Left)+","+(PointList[i].Y+pictDraw.Top);
 			}
 			field.FontName="";
+			field.RadioButtonValue="";
 			SheetCur.SheetFields.Add(field);
 			PointList.Clear();
 			RefreshPanel();

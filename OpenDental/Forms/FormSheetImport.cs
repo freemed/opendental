@@ -52,7 +52,8 @@ namespace OpenDental {
 					DialogResult=DialogResult.Cancel;
 					return;
 				}
-				acroApp.Show();// Show Acrobat Viewer
+				//acroApp.Show();// Show Acrobat Viewer
+				//acroApp.Hide();//This is annoying if Acrobat is already open for some other reason.
 				CAcroAVDoc avDoc=new AcroAVDocClass();
 				string pathToPdf=CodeBase.ODFileUtils.CombinePaths(ImageStore.GetPatientFolder(pat),DocCur.FileName);
 				if(!avDoc.Open(pathToPdf,"")){
@@ -65,19 +66,46 @@ namespace OpenDental {
 				IEnumerator myEnumerator = myFields.GetEnumerator();// Get the IEnumerator object for myFields
 				dictAcrobatFields=new Dictionary<string,string>();
 				IField myField;
+				string nameClean;
+				string valClean;
 				while(myEnumerator.MoveNext()) {
 					myField=(IField)myEnumerator.Current;// Get the IField object
 					if(myField.Value==null){
 						continue;
 					}
-					MessageBox.Show("Name:"+myField.Name+"  Value:"+myField.Value);
-					if(dictAcrobatFields.ContainsKey(myField.Name)) {
+					//if the form was designed in LiveCycle, the names will look like this: topmostSubform[0].page1[0].SSN[0]
+					//Whereas, if it was designed in Acrobat, the names will look like this: SSN
+					//So...
+					nameClean=myField.Name;
+					if(nameClean.Contains("[") && nameClean.Contains(".")) {
+						nameClean=nameClean.Substring(nameClean.LastIndexOf(".")+1);
+						nameClean=nameClean.Substring(0,nameClean.IndexOf("["));
+					}
+					if(nameClean=="misc") {
+						int suffix=1;
+						nameClean=nameClean+suffix.ToString();
+						while(dictAcrobatFields.ContainsKey(nameClean)) {//untested.
+							suffix++;
+							nameClean=nameClean+suffix.ToString();
+						}
+					}
+					valClean=myField.Value;
+					if(valClean=="Off") {
+						valClean="";
+					}
+					//myField.Type//possible values include text,radiobutton,checkbox
+					//MessageBox.Show("Raw:"+myField.Name+"  Name:"+nameClean+"  Value:"+myField.Value);
+					if(dictAcrobatFields.ContainsKey(nameClean)) {
 						continue;
 					}
-					dictAcrobatFields.Add(myField.Name,myField.Value);
+					dictAcrobatFields.Add(nameClean,valClean);
 					//name:topmostSubform[0].page1[0].SSN[0]
 				}
+				//acroApp.Hide();//Doesn't work well enough
+				//this.BringToFront();//Doesn't work
+				//acroApp.Minimize();
 				acroApp.Exit();
+				acroApp=null;
 			}
 			fam=Patients.GetFamily(pat.PatNum);
 			AddressSameForFam=true;
@@ -202,78 +230,61 @@ namespace OpenDental {
 				rows.Add(row);
 			}
 			//Gender---------------------------------------------
-			if(ContainsOneOfFields("GenderIsMale","GenderIsFemale")) {
-				PatientGender gender=PatientGender.Unknown;
-				if(IsChecked("GenderIsMale")) {
-					gender=PatientGender.Male;
-				}
-				else if(IsChecked("GenderIsFemale")) {
-					gender=PatientGender.Female;
-				}
+			fieldVal=GetRadioValue("Gender");
+			if(fieldVal!=null) {//field exists on form
 				row=new SheetImportRow();
 				row.FieldName="Gender";
 				row.OldValDisplay=Lan.g("enumPatientGender",pat.Gender.ToString());
 				row.OldValObj=pat.Gender;
-				if(gender==PatientGender.Unknown) {
+				if(fieldVal=="") {//no box was checked
 					row.NewValDisplay="";
+					row.NewValObj=null;
 				}
 				else {
-					row.NewValDisplay=Lan.g("enumPatientGender",gender.ToString());
+					try {
+						PatientGender gender=(PatientGender)Enum.Parse(typeof(PatientGender),fieldVal);
+						row.NewValDisplay=Lan.g("enumPatientGender",gender.ToString());
+						row.NewValObj=gender;
+					}
+					catch {
+						MessageBox.Show(fieldVal+Lan.g(this," is not a valid gender."));
+					}
 				}
-				row.NewValObj=gender;
 				row.ImpValDisplay=row.NewValDisplay;
 				row.ImpValObj=row.NewValObj;
 				row.ObjType=typeof(PatientGender);
-				if(gender!=PatientGender.Unknown
-					&& pat.Gender!=gender) 
-				{
+				if(row.NewValObj!=null && (PatientGender)row.NewValObj!=pat.Gender) {
 					row.DoImport=true;
 				}
 				rows.Add(row);
 			}
 			//Position---------------------------------------------
-			if(ContainsOneOfFields("PositionIsMarried","positionIsNotMarried")) {
-				YN isMarried=YN.Unknown;
-				if(IsChecked("PositionIsMarried")) {
-					isMarried=YN.Yes;
-				}
-				else if(IsChecked("positionIsNotMarried")) {
-					isMarried=YN.No;
-				}
+			fieldVal=GetRadioValue("Position");
+			if(fieldVal!=null) {//field exists on form
 				row=new SheetImportRow();
 				row.FieldName="Position";
-				row.OldValDisplay=Lan.g("enumPatientPosition",pat.Position.ToString());
+				row.OldValDisplay=Lan.g("enumPatientPositionr",pat.Position.ToString());
 				row.OldValObj=pat.Position;
-				if(isMarried==YN.Unknown) {
-					row.NewValObj=null;
+				if(fieldVal=="") {//no box was checked
 					row.NewValDisplay="";
-					row.DoImport=false;
+					row.NewValObj=null;
 				}
-				else if(isMarried==YN.Yes) {
-					row.NewValObj=PatientPosition.Married;
-					row.NewValDisplay=Lan.g("enumPatientPosition",row.NewValObj.ToString());
-					if(pat.Position==PatientPosition.Married) {
-						row.DoImport=false;
+				else {
+					try {
+						PatientPosition position=(PatientPosition)Enum.Parse(typeof(PatientPosition),fieldVal);
+						row.NewValDisplay=Lan.g("enumPatientPosition",position.ToString());
+						row.NewValObj=position;
 					}
-					else {
-						row.DoImport=true;
-					}
-				}
-				else {//indicated not married
-					if(pat.Position==PatientPosition.Married) {
-						row.NewValObj=PatientPosition.Single;
-						row.NewValDisplay=Lan.g("enumPatientPosition",row.NewValObj.ToString());
-						row.DoImport=true;
-					}
-					else {//no change needs to be made.
-						row.NewValObj=null;
-						row.NewValDisplay=Lan.g(this,"NotMarried");
-						row.DoImport=false;
+					catch {
+						MessageBox.Show(fieldVal+Lan.g(this," is not a valid PatientPosition."));
 					}
 				}
 				row.ImpValDisplay=row.NewValDisplay;
 				row.ImpValObj=row.NewValObj;
 				row.ObjType=typeof(PatientPosition);
+				if(row.NewValObj!=null && (PatientPosition)row.NewValObj!=pat.Position) {
+					row.DoImport=true;
+				}
 				rows.Add(row);
 			}
 			//Birthdate---------------------------------------------
@@ -388,129 +399,89 @@ namespace OpenDental {
 				rows.Add(row);
 			}
 			//PreferContactMethod---------------------------------------------
-			if(ContainsFieldThatStartsWith("PreferContactMethod")) {
-				ContactMethod cmeth=pat.PreferContactMethod;
-				if(IsChecked("PreferContactMethodIsEmail")) {
-					cmeth=ContactMethod.Email;
-				}
-				if(IsChecked("PreferContactMethodIsHmPhone")) {
-					cmeth=ContactMethod.HmPhone;
-				}
-				if(IsChecked("PreferContactMethodIsTextMessage")) {
-					cmeth=ContactMethod.TextMessage;
-				}
-				if(IsChecked("PreferContactMethodIsWirelessPh")) {
-					cmeth=ContactMethod.WirelessPh;
-				}
-				if(IsChecked("PreferContactMethodIsWkPhone")) {
-					cmeth=ContactMethod.WkPhone;
-				}
+			fieldVal=GetRadioValue("PreferContactMethod");
+			if(fieldVal!=null) {
 				row=new SheetImportRow();
 				row.FieldName="PreferContactMethod";
 				row.OldValDisplay=Lan.g("enumContactMethod",pat.PreferContactMethod.ToString());
 				row.OldValObj=pat.PreferContactMethod;
-				row.NewValDisplay=Lan.g("enumContactMethod",cmeth.ToString());
-				row.NewValObj=cmeth;
+				if(fieldVal=="") {
+					row.NewValDisplay="";
+					row.NewValObj=null;
+				}
+				else {
+					try {
+						ContactMethod cmeth=(ContactMethod)Enum.Parse(typeof(ContactMethod),fieldVal);
+						row.NewValDisplay=Lan.g("enumContactMethod",cmeth.ToString());
+						row.NewValObj=cmeth;
+					}
+					catch {
+						MessageBox.Show(fieldVal+Lan.g(this," is not a valid ContactMethod."));
+					}
+				}
 				row.ImpValDisplay=row.NewValDisplay;
 				row.ImpValObj=row.NewValObj;
 				row.ObjType=typeof(ContactMethod);
-				if(pat.PreferContactMethod!=cmeth) {
+				if(row.NewValObj!=null && (ContactMethod)row.NewValObj!=pat.PreferContactMethod) {
 					row.DoImport=true;
 				}
 				rows.Add(row);
 			}
 			//PreferConfirmMethod---------------------------------------------
-			if(ContainsFieldThatStartsWith("PreferConfirmMethod")) {
-				ContactMethod cmeth=pat.PreferConfirmMethod;
-				if(IsChecked("PreferConfirmMethodIsEmail")) {
-					cmeth=ContactMethod.Email;
-				}
-				if(IsChecked("PreferConfirmMethodIsHmPhone")) {
-					cmeth=ContactMethod.HmPhone;
-				}
-				if(IsChecked("PreferConfirmMethodIsTextMessage")) {
-					cmeth=ContactMethod.TextMessage;
-				}
-				if(IsChecked("PreferConfirmMethodIsWirelessPh")) {
-					cmeth=ContactMethod.WirelessPh;
-				}
-				if(IsChecked("PreferConfirmMethodIsWkPhone")) {
-					cmeth=ContactMethod.WkPhone;
-				}
+			fieldVal=GetRadioValue("PreferConfirmMethod");
+			if(fieldVal!=null) {
 				row=new SheetImportRow();
 				row.FieldName="PreferConfirmMethod";
 				row.OldValDisplay=Lan.g("enumContactMethod",pat.PreferConfirmMethod.ToString());
 				row.OldValObj=pat.PreferConfirmMethod;
-				row.NewValDisplay=Lan.g("enumContactMethod",cmeth.ToString());
-				row.NewValObj=cmeth;
+				if(fieldVal=="") {
+					row.NewValDisplay="";
+					row.NewValObj=null;
+				}
+				else {
+					try {
+						ContactMethod cmeth=(ContactMethod)Enum.Parse(typeof(ContactMethod),fieldVal);
+						row.NewValDisplay=Lan.g("enumContactMethod",cmeth.ToString());
+						row.NewValObj=cmeth;
+					}
+					catch {
+						MessageBox.Show(fieldVal+Lan.g(this," is not a valid ContactMethod."));
+					}
+				}
 				row.ImpValDisplay=row.NewValDisplay;
 				row.ImpValObj=row.NewValObj;
 				row.ObjType=typeof(ContactMethod);
-				if(pat.PreferConfirmMethod!=cmeth) {
+				if(row.NewValObj!=null && (ContactMethod)row.NewValObj!=pat.PreferConfirmMethod) {
 					row.DoImport=true;
 				}
 				rows.Add(row);
 			}
 			//PreferRecallMethod---------------------------------------------
-			if(ContainsFieldThatStartsWith("PreferRecallMethod")) {
-				ContactMethod cmeth=pat.PreferRecallMethod;
-				if(IsChecked("PreferRecallMethodIsEmail")) {
-					cmeth=ContactMethod.Email;
-				}
-				if(IsChecked("PreferRecallMethodIsHmPhone")) {
-					cmeth=ContactMethod.HmPhone;
-				}
-				if(IsChecked("PreferRecallMethodIsTextMessage")) {
-					cmeth=ContactMethod.TextMessage;
-				}
-				if(IsChecked("PreferRecallMethodIsWirelessPh")) {
-					cmeth=ContactMethod.WirelessPh;
-				}
-				if(IsChecked("PreferRecallMethodIsWkPhone")) {
-					cmeth=ContactMethod.WkPhone;
-				}
+			fieldVal=GetRadioValue("PreferRecallMethod");
+			if(fieldVal!=null) {
 				row=new SheetImportRow();
 				row.FieldName="PreferRecallMethod";
 				row.OldValDisplay=Lan.g("enumContactMethod",pat.PreferRecallMethod.ToString());
 				row.OldValObj=pat.PreferRecallMethod;
-				row.NewValDisplay=Lan.g("enumContactMethod",cmeth.ToString());
-				row.NewValObj=cmeth;
+				if(fieldVal=="") {
+					row.NewValDisplay="";
+					row.NewValObj=null;
+				}
+				else {
+					try {
+						ContactMethod cmeth=(ContactMethod)Enum.Parse(typeof(ContactMethod),fieldVal);
+						row.NewValDisplay=Lan.g("enumContactMethod",cmeth.ToString());
+						row.NewValObj=cmeth;
+					}
+					catch {
+						MessageBox.Show(fieldVal+Lan.g(this," is not a valid ContactMethod."));
+					}
+				}
 				row.ImpValDisplay=row.NewValDisplay;
 				row.ImpValObj=row.NewValObj;
 				row.ObjType=typeof(ContactMethod);
-				if(pat.PreferRecallMethod!=cmeth) {
+				if(row.NewValObj!=null && (ContactMethod)row.NewValObj!=pat.PreferRecallMethod) {
 					row.DoImport=true;
-				}
-				rows.Add(row);
-			}
-			//guarantor---------------------------------------------
-			if(ContainsFieldThatStartsWith("guarantor")) {
-				row=new SheetImportRow();
-				row.FieldName="guarantor";
-				string guarantorNameF=Lan.g(this,"Self");
-				if(pat.Guarantor!=pat.PatNum) {
-					guarantorNameF=fam.GetNameInFamFirst(pat.Guarantor);
-				}
-				row.OldValDisplay=guarantorNameF;
-				row.OldValObj=guarantorNameF;
-				fieldVal=GetInputValue("guarantorNameF");
-				if(fieldVal!="") {//if user entered a name
-					guarantorNameF=fieldVal;
-				}
-				else if(IsChecked("guarantorIsSelf")) {
-					guarantorNameF=Lan.g(this,"Self");
-				}
-				else if(IsChecked("guarantorIsOther")) {//but no name entered
-					guarantorNameF=Lan.g(this,"Other");
-				}
-				row.NewValDisplay=guarantorNameF;
-				row.NewValObj=guarantorNameF;
-				row.ImpValDisplay="";
-				row.ImpValObj="";
-				row.ObjType=typeof(string);
-				row.DoImport=false;
-				if(row.OldValDisplay!=row.NewValDisplay) {
-					row.IsFlagged=true;
 				}
 				rows.Add(row);
 			}
@@ -705,66 +676,31 @@ namespace OpenDental {
 			//So it's better to table that plan for now.
 			//The new strategy is simply to show them what the user entered and notify them if it seems different.
 			//ins1Relat------------------------------------------------------------
-			if(ContainsFieldThatStartsWith("ins1Relat")) {
+			fieldVal=GetRadioValue("ins1Relat");
+			if(fieldVal!=null) {
 				row=new SheetImportRow();
 				row.FieldName="ins1Relat";
 				row.FieldDisplay="Relationship";
-				if(patPlan1!=null) {
-					//ins1Relat=patPlan1.Relationship;//was already set at top
-					row.OldValDisplay=Lan.g("enumRelat",ins1Relat.ToString());
-					row.OldValObj=ins1Relat;
-					
-				}
-				else {
-					row.OldValDisplay="";
-					row.OldValObj=null;
-				}
-				//start calculating the new relat that was entered on the sheet
-				if(!IsChecked("ins1RelatIsChild") && !IsChecked("ins1RelatIsSelf") 
-					&& !IsChecked("ins1RelatIsSpouse") && !IsChecked("ins1RelatIsNotSelfSpouseChild"))
-				{
-					//user didn't enter any relat at all.
+				row.OldValDisplay=Lan.g("enumRelat",ins1Relat.ToString());
+				row.OldValObj=ins1Relat;
+				if(fieldVal=="") {
 					row.NewValDisplay="";
 					row.NewValObj=null;
 				}
-				else{
-					//although we make use of ins1Relat here and set its value, we won't use it when doing the actual import.
-					//For that, we will return to ImpValObj.
-					if(IsChecked("ins1RelatIsChild")) {
-						ins1Relat=Relat.Child;
+				else {
+					try {
+						Relat relat=(Relat)Enum.Parse(typeof(Relat),fieldVal);
+						row.NewValDisplay=Lan.g("enumRelat",relat.ToString());
+						row.NewValObj=relat;
 					}
-					if(IsChecked("ins1RelatIsSelf")) {
-						ins1Relat=Relat.Self;
-					}
-					if(IsChecked("ins1RelatIsSpouse")) {
-						ins1Relat=Relat.Spouse;
-					}
-					//at this point, ins1Relat may still be null.
-					if(IsChecked("ins1RelatIsNotSelfSpouseChild")) {//complex
-						fieldVal=GetInputValue("ins2RelatDescript");
-						if(fieldVal=="") {//user didn't enter anything
-							row.NewValDisplay="";
-							row.NewValObj=null;
-						}
-						else {
-							row.NewValDisplay=fieldVal;
-							row.NewValObj=null;
-						}
-					}
-					else{//simple. We know for sure what the value is now.
-						row.NewValDisplay=Lan.g("enumRelat",ins1Relat.ToString());
-						row.NewValObj=ins1Relat;
+					catch {
+						MessageBox.Show(fieldVal+Lan.g(this," is not a valid Relationship."));
 					}
 				}
 				row.ImpValDisplay="";
 				row.ImpValObj=null;
-				row.ObjType=typeof(Relat?);
-				//if(patPlanList.Count>0) {
+				row.ObjType=typeof(Relat);
 				row.DoImport=false;
-				//}
-				//else if((Relat?)row.OldValObj!=(Relat?)row.NewValObj) {
-				//	row.DoImport=true;
-					//}
 				if(row.OldValDisplay!=row.NewValDisplay) {
 					row.IsFlagged=true;
 				}
@@ -953,65 +889,31 @@ namespace OpenDental {
 			//So it's better to table that plan for now.
 			//The new strategy is simply to show them what the user entered and notify them if it seems different.
 			//ins2Relat------------------------------------------------------------
-			if(ContainsFieldThatStartsWith("ins2Relat")) {
+			fieldVal=GetRadioValue("ins2Relat");
+			if(fieldVal!=null) {
 				row=new SheetImportRow();
 				row.FieldName="ins2Relat";
 				row.FieldDisplay="Relationship";
-				if(patPlan2!=null) {
-					//ins2Relat=patPlan2.Relationship;//was already set at top
-					row.OldValDisplay=Lan.g("enumRelat",ins2Relat.ToString());
-					row.OldValObj=ins2Relat;
-
-				}
-				else {
-					row.OldValDisplay="";
-					row.OldValObj=null;
-				}
-				//start calculating the new relat that was entered on the sheet
-				if(!IsChecked("ins2RelatIsChild") && !IsChecked("ins2RelatIsSelf") 
-					&& !IsChecked("ins2RelatIsSpouse") && !IsChecked("ins2RelatIsNotSelfSpouseChild")) {
-					//user didn't enter any relat at all.
+				row.OldValDisplay=Lan.g("enumRelat",ins2Relat.ToString());
+				row.OldValObj=ins2Relat;
+				if(fieldVal=="") {
 					row.NewValDisplay="";
 					row.NewValObj=null;
 				}
 				else {
-					//although we make use of ins2Relat here and set its value, we won't use it when doing the actual import.
-					//For that, we will return to ImpValObj.
-					if(IsChecked("ins2RelatIsChild")) {
-						ins2Relat=Relat.Child;
+					try {
+						Relat relat=(Relat)Enum.Parse(typeof(Relat),fieldVal);
+						row.NewValDisplay=Lan.g("enumRelat",relat.ToString());
+						row.NewValObj=relat;
 					}
-					if(IsChecked("ins2RelatIsSelf")) {
-						ins2Relat=Relat.Self;
-					}
-					if(IsChecked("ins2RelatIsSpouse")) {
-						ins2Relat=Relat.Spouse;
-					}
-					//at this point, ins2Relat may still be null.
-					if(IsChecked("ins2RelatIsNotSelfSpouseChild")) {//complex
-						fieldVal=GetInputValue("ins2RelatDescript");
-						if(fieldVal=="") {//user didn't enter anything
-							row.NewValDisplay="";
-							row.NewValObj=null;
-						}
-						else {
-							row.NewValDisplay=fieldVal;
-							row.NewValObj=null;
-						}
-					}
-					else {//simple. We know for sure what the value is now.
-						row.NewValDisplay=Lan.g("enumRelat",ins2Relat.ToString());
-						row.NewValObj=ins2Relat;
+					catch {
+						MessageBox.Show(fieldVal+Lan.g(this," is not a valid Relationship."));
 					}
 				}
 				row.ImpValDisplay="";
 				row.ImpValObj=null;
-				row.ObjType=typeof(Relat?);
-				//if(patPlanList.Count>0) {
+				row.ObjType=typeof(Relat);
 				row.DoImport=false;
-				//}
-				//else if((Relat?)row.OldValObj!=(Relat?)row.NewValObj) {
-				//	row.DoImport=true;
-				//}
 				if(row.OldValDisplay!=row.NewValDisplay) {
 					row.IsFlagged=true;
 				}
@@ -1190,6 +1092,29 @@ namespace OpenDental {
 				rows.Add(row);
 			}
 			#endregion ins2
+			//Separator-------------------------------------------
+			row=new SheetImportRow();
+			row.FieldName="Misc";
+			row.IsSeparator=true;
+			rows.Add(row);
+			//misc----------------------------------------------------
+			List<string> miscVals=GetMiscValues();
+			for(int i=0;i<miscVals.Count;i++) {
+				fieldVal=miscVals[i];
+				row=new SheetImportRow();
+				row.FieldName="misc";
+				row.FieldDisplay="misc"+(i+1).ToString();
+				row.OldValDisplay="";
+				row.OldValObj="";
+				row.NewValDisplay=fieldVal;
+				row.NewValObj="";
+				row.ImpValDisplay="";
+				row.ImpValObj="";
+				row.ObjType=typeof(string);
+				row.DoImport=false;
+				row.IsFlagged=true;
+				rows.Add(row);
+			}
 		}
 
 		private void FillGrid() {
@@ -1276,6 +1201,34 @@ namespace OpenDental {
 			return null;
 		}
 
+		///<summary>If no radiobox with that name exists, returns null.  If no box is checked, it returns empty string.</summary>
+		private string GetRadioValue(string fieldName) {
+			if(SheetCur!=null) {
+				bool fieldFound=false;
+				for(int i=0;i<SheetCur.SheetFields.Count;i++) {
+					if(SheetCur.SheetFields[i].FieldType!=SheetFieldType.CheckBox) {
+						continue;
+					}
+					if(SheetCur.SheetFields[i].FieldName != fieldName) {
+						continue;
+					}
+					fieldFound=true;
+					if(SheetCur.SheetFields[i].FieldValue=="X") {
+						return SheetCur.SheetFields[i].RadioButtonValue;
+					}
+				}
+				if(fieldFound) {//but no X
+					return "";
+				}
+			}
+			else {//pdf
+				if(dictAcrobatFields.ContainsKey(fieldName)) {
+					return dictAcrobatFields[fieldName];
+				}
+			}
+			return null;
+		}
+
 		///<summary>Only the true condition is tested.  If the specified fieldName does not exist, returns false.</summary>
 		private bool IsChecked(string fieldName) {
 			if(SheetCur!=null) {
@@ -1286,9 +1239,6 @@ namespace OpenDental {
 					if(SheetCur.SheetFields[i].FieldName != fieldName){
 						continue;
 					}
-					//if(SheetCur.SheetFields[i].FieldValue=="") {
-					//	return YN.No;
-					//}
 					if(SheetCur.SheetFields[i].FieldValue=="X") {
 						return true;
 					}
@@ -1302,6 +1252,32 @@ namespace OpenDental {
 				}
 			}
 			return false;
+		}
+
+		///<summary>Returns the values of all the "misc" textbox fields on this form.</summary>
+		private List<string> GetMiscValues() {
+			List<string> retVal=new List<string>();
+			if(SheetCur!=null) {
+				for(int i=0;i<SheetCur.SheetFields.Count;i++) {
+					if(SheetCur.SheetFields[i].FieldType!=SheetFieldType.InputField) {
+						continue;
+					}
+					if(SheetCur.SheetFields[i].FieldName != "misc") {
+						continue;
+					}
+					retVal.Add(SheetCur.SheetFields[i].FieldValue);
+				}
+			}
+			else {//pdf
+				int suffix=1;
+				string keyname="misc"+suffix.ToString();
+				while(dictAcrobatFields.ContainsKey(keyname)) {//not rigorously tested
+					retVal.Add(dictAcrobatFields[keyname]);
+					suffix++;
+					keyname="misc"+suffix.ToString();
+				}
+			}
+			return retVal;
 		}
 
 		private bool ContainsOneOfFields(params string[] fieldNames) {
@@ -1367,17 +1343,7 @@ namespace OpenDental {
 
 		///<summary>Mostly the same as IsImportable.  But subtle differences.</summary>
 		private bool IsEditable(SheetImportRow row) {
-			//if(row.FieldName=="addressAndHmPhoneIsSameEntireFamily") {
-			//	return true;
-			//}
-			return IsImportable(row);
-		}
-
-		private bool IsImportable(SheetImportRow row) {
-			if(row.FieldName=="wirelessCarrier"
-				|| row.FieldName=="guarantor")
-				//|| row.FieldName=="addressAndHmPhoneIsSameEntireFamily") 
-			{
+			if(row.FieldName=="wirelessCarrier"){
 				MessageBox.Show(row.FieldName+" "+Lan.g(this,"cannot be imported."));
 				return false;
 			}
@@ -1389,11 +1355,19 @@ namespace OpenDental {
 			}
 			if(row.FieldName.StartsWith("ins1") || row.FieldName.StartsWith("ins2")) {
 				//if(patPlanList.Count>0) {
-				MsgBox.Show(this,"Insurance cannot be imported.  It's too complex.");
+				MsgBox.Show(this,"Insurance cannot be imported yet.");
 				return false;
 				//}
 			}
 			return true;
+		}
+
+		private bool IsImportable(SheetImportRow row) {
+			if(row.ImpValObj==null) {
+				MsgBox.Show(this,"Please enter a value for this row first.");
+				return false;
+			}
+			return IsEditable(row);
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
@@ -1517,7 +1491,7 @@ namespace OpenDental {
 					}
 					else {//was not initially null
 						if((int)rows[e.Row].ImpValObj!=selectedI) {//value was changed.
-							//There's no way for the use to set it to null, so we do not need to test that
+							//There's no way for the user to set it to null, so we do not need to test that
 							rows[e.Row].ImpValObj=Enum.ToObject(rows[e.Row].ObjType,selectedI);
 							rows[e.Row].ImpValDisplay=rows[e.Row].ImpValObj.ToString();
 						}
@@ -1631,7 +1605,6 @@ namespace OpenDental {
 					case "PreferRecallMethod":
 						pat.PreferRecallMethod=(ContactMethod)rows[i].ImpValObj;
 						break;
-					//guarantor-can't import
 					case "referredFrom":
 						RefAttach ra=new RefAttach();
 						ra.IsFrom=true;

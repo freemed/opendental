@@ -265,14 +265,12 @@ namespace OpenDentBusiness{
 				list.Add(NewInput("City"));
 				list.Add(NewInput("Email"));
 				list.Add(NewInput("FName"));
-				list.Add(NewInput("guarantorNameF"));//only if not self
-				list.Add(NewInput("HmPhone"));//We will have to handle trailing notes.
+				list.Add(NewInput("HmPhone"));
 				list.Add(NewInput("ins1CarrierName"));
 				list.Add(NewInput("ins1CarrierPhone"));
 				list.Add(NewInput("ins1EmployerName"));
 				list.Add(NewInput("ins1GroupName"));
 				list.Add(NewInput("ins1GroupNum"));
-				list.Add(NewInput("ins1RelatDescript"));
 				list.Add(NewInput("ins1SubscriberID"));
 				list.Add(NewInput("ins1SubscriberNameF"));
 				list.Add(NewInput("ins2CarrierName"));
@@ -280,7 +278,6 @@ namespace OpenDentBusiness{
 				list.Add(NewInput("ins2EmployerName"));
 				list.Add(NewInput("ins2GroupName"));
 				list.Add(NewInput("ins2GroupNum"));
-				list.Add(NewInput("ins2RelatDescript"));
 				list.Add(NewInput("ins2SubscriberID"));
 				list.Add(NewInput("ins2SubscriberNameF"));
 				list.Add(NewInput("LName"));

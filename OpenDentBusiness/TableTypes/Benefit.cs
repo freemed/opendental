@@ -136,6 +136,10 @@ namespace OpenDentBusiness{
 			return (Benefit)MemberwiseClone();
 		}
 
+		///<summary>Returns true if all the fields match except BenefitNum</summary>
+		public bool IsSimilar(Benefit ben){
+			return false;
+		}
 		
 
 	}

@@ -167,8 +167,8 @@ namespace OpenDental {
 			if(docNum!=0) {
 				doc=Documents.GetByNum(docNum);
 				string extens=Path.GetExtension(doc.FileName);
-				if(extens.ToLower()=="pdf") {
-					MsgBox.Show(this,"Images cannot be imported into the database.");
+				if(extens.ToLower()!=".pdf") {
+					MsgBox.Show(this,"Only pdf's and sheets can be imported into the database.");
 					return;
 				}
 			}

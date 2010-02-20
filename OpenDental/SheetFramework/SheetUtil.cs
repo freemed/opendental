@@ -157,6 +157,7 @@ namespace OpenDental{
 				field.FontSize=sheetFieldDefList[i].FontSize;
 				field.GrowthBehavior=sheetFieldDefList[i].GrowthBehavior;
 				field.Height=sheetFieldDefList[i].Height;
+				field.RadioButtonValue=sheetFieldDefList[i].RadioButtonValue;
 				//field.SheetNum=sheetFieldList[i];//set later
 				field.Width=sheetFieldDefList[i].Width;
 				field.XPos=sheetFieldDefList[i].XPos;

@@ -535,7 +535,7 @@ namespace OpenDental{
 					//Eliminated in 5.0 for speed.
 				//}
 				//then benefits
-				Benefits.UpdateListForIdentical(new List<Benefit>(),benList,planNums);//there will always be changes
+				Benefits.UpdateListForIdentical(new List<Benefit>(),benList,planNums);
 				//Then PlanNote.  This is much simpler than the usual synch, because user has seen all versions of note.
 				InsPlans.UpdateNoteForPlans(planNums,planToMergeTo.PlanNote);
 			}

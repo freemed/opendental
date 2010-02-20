@@ -2310,10 +2310,24 @@ namespace OpenDental{
 				if(!ConvertFormToBenefits()){
 					return;
 				}
-				OriginalBenList.Clear();
-				for(int i=0;i<benefitListAll.Count;i++){
-					OriginalBenList.Add(benefitListAll[i]);
+				//OriginalBenList.Clear();
+				//for(int i=0;i<benefitListAll.Count;i++){
+				//	OriginalBenList.Add(benefitListAll[i]);
+				//}
+				//We can't just clear the list.  Then, we wouldn't be able to test it for most efficient db queries.
+				//loop through the old list.  If no match is found in the new list, delete the entry from the old list.  That will cause a deletion from the db.
+				for(int i=OriginalBenList.Count-1;i>=0;i--){
+					bool matchFound=false;
+					for(int j=0;j<benefitListAll.Count;j++){
+						//if(benefitListAll[j]
+					}
 				}
+
+
+				//loop through the new list.  If no match is found in the old list, add the entry to the old list.  This will cause an insert because BenefitNum will be 0.
+
+
+
 			}
 			else{//not simple view
 				OriginalBenList.Clear();

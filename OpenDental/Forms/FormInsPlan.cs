@@ -3906,7 +3906,7 @@ namespace OpenDental{
 			}
 			if(checkApplyAll.Checked){//also triggered when IsForAll, because box is checked but hidden
 				InsPlans.UpdateForLike(PlanCurOld,PlanCur);
-				bool changed=Benefits.UpdateListForIdentical(benefitListOld,benefitList,planNums);
+				Benefits.UpdateListForIdentical(benefitListOld,benefitList,planNums);
 				//if(changed){
 					//for(int i=0;i<planNums.Count;i++){
 						//InsPlans.ComputeEstimatesForPlan(planNums[i]);

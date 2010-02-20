@@ -842,29 +842,9 @@ namespace OpenDental{
 					case "FName":
 						field.FieldValue=pat.FName;
 						break;
-					case "GenderIsFemale":
-						if(pat.Gender==PatientGender.Female) {
+					case "Gender":
+						if(field.RadioButtonValue==pat.Gender.ToString()) {
 							field.FieldValue="X";
-						}
-						break;
-					case "GenderIsMale":
-						if(pat.Gender==PatientGender.Male) {
-							field.FieldValue="X";
-						}
-						break;
-					case "guarantorIsOther":
-						if(pat.Guarantor!=pat.PatNum) {
-							field.FieldValue="X";
-						}
-						break;
-					case "guarantorIsSelf":
-						if(pat.Guarantor==pat.PatNum) {
-							field.FieldValue="X";
-						}
-						break;
-					case "guarantorNameF":
-						if(pat.Guarantor!=pat.PatNum) {//if self, this will be blank
-							field.FieldValue=fam.ListPats[0].FName;
 						}
 						break;
 					case "HmPhone":
@@ -895,32 +875,8 @@ namespace OpenDental{
 							field.FieldValue=insplan1.GroupNum;
 						}
 						break;
-					case "ins1RelatDescript"://only if not Self, Spouse, or Child
-						if(patPlanList.Count>0 && patPlanList[0].Relationship!=Relat.Self 
-							&& patPlanList[0].Relationship!=Relat.Spouse && patPlanList[0].Relationship!=Relat.Child) 
-						{
-							field.FieldValue=Lan.g("enumRelat","patPlanList[0].Relationship.ToString()");
-						}
-						break;
-					case "ins1RelatIsChild":
-						if(patPlanList.Count>0 && patPlanList[0].Relationship==Relat.Child) {
-							field.FieldValue="X";
-						}
-						break;
-					case "ins1RelatIsNotSelfSpouseChild":
-						if(patPlanList.Count>0 && patPlanList[0].Relationship!=Relat.Self 
-							&& patPlanList[0].Relationship!=Relat.Spouse && patPlanList[0].Relationship!=Relat.Child) 
-						{
-							field.FieldValue="X";
-						}
-						break;
-					case "ins1RelatIsSelf":
-						if(patPlanList.Count>0 && patPlanList[0].Relationship==Relat.Self) {
-							field.FieldValue="X";
-						}
-						break;
-					case "ins1RelatIsSpouse":
-						if(patPlanList.Count>0 && patPlanList[0].Relationship==Relat.Spouse) {
+					case "ins1Relat":
+						if(patPlanList.Count>0 && patPlanList[0].Relationship.ToString()==field.RadioButtonValue) {
 							field.FieldValue="X";
 						}
 						break;
@@ -959,32 +915,8 @@ namespace OpenDental{
 							field.FieldValue=insplan2.GroupNum;
 						}
 						break;
-					case "ins2RelatDescript"://only if not Self, Spouse, or Child
-						if(patPlanList.Count>1 && patPlanList[1].Relationship!=Relat.Self 
-							&& patPlanList[1].Relationship!=Relat.Spouse && patPlanList[1].Relationship!=Relat.Child) 
-						{
-							field.FieldValue=Lan.g("enumRelat","patPlanList[1].Relationship.ToString()");
-						}
-						break;
-					case "ins2RelatIsChild":
-						if(patPlanList.Count>1 && patPlanList[1].Relationship==Relat.Child) {
-							field.FieldValue="X";
-						}
-						break;
-					case "ins2RelatIsNotSelfSpouseChild":
-						if(patPlanList.Count>1 && patPlanList[1].Relationship!=Relat.Self 
-							&& patPlanList[1].Relationship!=Relat.Spouse && patPlanList[1].Relationship!=Relat.Child) 
-						{
-							field.FieldValue="X";
-						}
-						break;
-					case "ins2RelatIsSelf":
-						if(patPlanList.Count>1 && patPlanList[1].Relationship==Relat.Self) {
-							field.FieldValue="X";
-						}
-						break;
-					case "ins2RelatIsSpouse":
-						if(patPlanList.Count>1 && patPlanList[1].Relationship==Relat.Spouse) {
+					case "ins2Relat":
+						if(patPlanList.Count>1 && patPlanList[1].Relationship.ToString()==field.RadioButtonValue) {
 							field.FieldValue="X";
 						}
 						break;
@@ -1004,88 +936,23 @@ namespace OpenDental{
 					case "MiddleI":
 						field.FieldValue=pat.MiddleI;
 						break;
-					case "PositionIsMarried":
-						if(pat.Position==PatientPosition.Married) {
+					case "Position":
+						if(pat.Position.ToString()==field.RadioButtonValue) {
 							field.FieldValue="X";
 						}
 						break;
-					case "PositionIsNotMarried":
-						if(pat.Position!=PatientPosition.Married) {
+					case "PreferConfirmMethod":
+						if(pat.PreferConfirmMethod.ToString()==field.RadioButtonValue) {
 							field.FieldValue="X";
 						}
 						break;
-					case "PreferConfirmMethodIsEmail":
-						if(pat.PreferConfirmMethod==ContactMethod.Email) {
+					case "PreferContactMethod":
+						if(pat.PreferContactMethod.ToString()==field.RadioButtonValue) {
 							field.FieldValue="X";
 						}
 						break;
-					case "PreferConfirmMethodIsHmPhone":
-						if(pat.PreferConfirmMethod==ContactMethod.HmPhone) {
-							field.FieldValue="X";
-						}
-						break;
-					case "PreferConfirmMethodIsTextMessage":
-						if(pat.PreferConfirmMethod==ContactMethod.TextMessage) {
-							field.FieldValue="X";
-						}
-						break;
-					case "PreferConfirmMethodIsWirelessPh":
-						if(pat.PreferConfirmMethod==ContactMethod.WirelessPh) {
-							field.FieldValue="X";
-						}
-						break;
-					case "PreferConfirmMethodIsWkPhone":
-						if(pat.PreferConfirmMethod==ContactMethod.WkPhone) {
-							field.FieldValue="X";
-						}
-						break;
-					case "PreferContactMethodIsEmail":
-						if(pat.PreferContactMethod==ContactMethod.Email) {
-							field.FieldValue="X";
-						}
-						break;
-					case "PreferContactMethodIsHmPhone":
-						if(pat.PreferContactMethod==ContactMethod.HmPhone) {
-							field.FieldValue="X";
-						}
-						break;
-					case "PreferContactMethodIsTextMessage":
-						if(pat.PreferContactMethod==ContactMethod.TextMessage) {
-							field.FieldValue="X";
-						}
-						break;
-					case "PreferContactMethodIsWirelessPh":
-						if(pat.PreferContactMethod==ContactMethod.WirelessPh) {
-							field.FieldValue="X";
-						}
-						break;
-					case "PreferContactMethodIsWkPhone":
-						if(pat.PreferContactMethod==ContactMethod.WkPhone) {
-							field.FieldValue="X";
-						}
-						break;
-					case "PreferRecallMethodIsEmail":
-						if(pat.PreferRecallMethod==ContactMethod.Email) {
-							field.FieldValue="X";
-						}
-						break;
-					case "PreferRecallMethodIsHmPhone":
-						if(pat.PreferRecallMethod==ContactMethod.HmPhone) {
-							field.FieldValue="X";
-						}
-						break;
-					case "PreferRecallMethodIsTextMessage":
-						if(pat.PreferRecallMethod==ContactMethod.TextMessage) {
-							field.FieldValue="X";
-						}
-						break;
-					case "PreferRecallMethodIsWirelessPh":
-						if(pat.PreferRecallMethod==ContactMethod.WirelessPh) {
-							field.FieldValue="X";
-						}
-						break;
-					case "PreferRecallMethodIsWkPhone":
-						if(pat.PreferRecallMethod==ContactMethod.WkPhone) {
+					case "PreferRecallMethod":
+						if(pat.PreferRecallMethod.ToString()==field.RadioButtonValue) {
 							field.FieldValue="X";
 						}
 						break;
@@ -1106,22 +973,17 @@ namespace OpenDental{
 					case "State":
 						field.FieldValue=pat.State;
 						break;
-					case "StudentStatusIsFulltime":
-						if(pat.StudentStatus=="F") {
+					case "StudentStatus":
+						if(pat.StudentStatus=="F" && field.RadioButtonValue=="Fulltime") {
 							field.FieldValue="X";
 						}
-						break;
-					case "StudentStatusIsNonstudent":
-						if(pat.StudentStatus==""
-							|| pat.StudentStatus=="N") 
-						{
+						if(pat.StudentStatus=="N" && field.RadioButtonValue=="Nonstudent") {
 							field.FieldValue="X";
 						}
-						break;
-					case "StudentStatusIsParttime":
-						if(pat.StudentStatus=="P") {
+						if(pat.StudentStatus=="P" && field.RadioButtonValue=="Parttime") {
 							field.FieldValue="X";
 						}
+
 						break;
 					case "WirelessPhone":
 						field.FieldValue=pat.WirelessPhone;
