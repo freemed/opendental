@@ -1364,6 +1364,7 @@ namespace OpenDentBusiness {
 					continue;
 				}
 				//benefit was found with matching benefitNum, so check for changes
+				/*
 				if(//newBenefit.PlanNum             != oldBenefitList[i].PlanNum
 					//|| newBenefit.PatPlanNum        != oldBenefitList[i].PatPlanNum
 					   newBenefit.CovCatNum         != oldBenefitList[i].CovCatNum
@@ -1403,7 +1404,7 @@ namespace OpenDentBusiness {
 						+"AND CodeNum="+POut.Long(oldBenefitList[i].CodeNum)+" "
 						+"AND CoverageLevel="+POut.Int((int)oldBenefitList[i].CoverageLevel);
 					Db.NonQ(command);
-				}
+				}*/
 			}
 			//}
 			/*

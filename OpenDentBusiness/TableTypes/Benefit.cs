@@ -127,7 +127,7 @@ namespace OpenDentBusiness{
 			if(PlanNum==0 && ben.PlanNum!=0) {
 				return 1;
 			}
-			//Last resort.  Can't find any significant differencesin the type, so:
+			//Last resort.  Can't find any significant differences in the type, so:
 			return 0;//then values are the same.
 		}
 
@@ -136,9 +136,23 @@ namespace OpenDentBusiness{
 			return (Benefit)MemberwiseClone();
 		}
 
-		///<summary>Returns true if all the fields match except BenefitNum</summary>
+		///<summary>Returns true if most of the fields match except BenefitNum</summary>
 		public bool IsSimilar(Benefit ben){
-			return false;
+			if(//PlanNum             != oldBenefitList[i].PlanNum
+				//|| PatPlanNum        != oldBenefitList[i].PatPlanNum
+					 CovCatNum         != ben.CovCatNum
+				|| BenefitType       != ben.BenefitType
+				|| Percent           != ben.Percent
+				|| MonetaryAmt       != ben.MonetaryAmt
+				|| TimePeriod        != ben.TimePeriod
+				|| QuantityQualifier != ben.QuantityQualifier
+				|| Quantity          != ben.Quantity
+				|| CodeNum           != ben.CodeNum 
+				|| CoverageLevel     != ben.CoverageLevel) 
+			{
+				return false;
+			}
+			return true;
 		}
 		
 

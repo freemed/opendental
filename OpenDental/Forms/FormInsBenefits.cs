@@ -2315,21 +2315,32 @@ namespace OpenDental{
 				//	OriginalBenList.Add(benefitListAll[i]);
 				//}
 				//We can't just clear the list.  Then, we wouldn't be able to test it for most efficient db queries.
-				//loop through the old list.  If no match is found in the new list, delete the entry from the old list.  That will cause a deletion from the db.
-				for(int i=OriginalBenList.Count-1;i>=0;i--){
+				for(int i=OriginalBenList.Count-1;i>=0;i--){//loop through the old list, backwards.
 					bool matchFound=false;
 					for(int j=0;j<benefitListAll.Count;j++){
-						//if(benefitListAll[j]
+						if(benefitListAll[j].IsSimilar(OriginalBenList[i])) {
+							matchFound=true;
+						}
+					}
+					if(!matchFound) {//If no match is found in the new list
+						//delete the entry from the old list.  That will cause a deletion from the db later.
+						OriginalBenList.RemoveAt(i);
 					}
 				}
-
-
-				//loop through the new list.  If no match is found in the old list, add the entry to the old list.  This will cause an insert because BenefitNum will be 0.
-
-
-
+				for(int j=0;j<benefitListAll.Count;j++) {//loop through the new list.
+					bool matchFound=false;
+					for(int i=0;i<OriginalBenList.Count;i++) {
+						if(benefitListAll[j].IsSimilar(OriginalBenList[i])) {
+							matchFound=true;
+						}
+					}
+					if(!matchFound) {//If no match is found in the old list
+						//add the entry to the old list.  This will cause an insert because BenefitNum will be 0.
+						OriginalBenList.Add(benefitListAll[j]);
+					}
+				}
 			}
-			else{//not simple view
+			else{//not simple view.  Will optimize this later for speed.  Should be easier.
 				OriginalBenList.Clear();
 				for(int i=0;i<benefitList.Count;i++){
 					OriginalBenList.Add(benefitList[i]);
