@@ -22,8 +22,9 @@ namespace OpenDental {
 		private void butChangePatientInto_Click(object sender,EventArgs e) {
 			FormPatientSelect fps=new FormPatientSelect();
 			if(fps.ShowDialog()==DialogResult.OK){
-				this.textPatientIDInto.Text=fps.SelectedPatNum.ToString();
-				Patient pat=Patients.GetPat(fps.SelectedPatNum);
+				long selectedPatNum=fps.SelectedPatNum;//to prevent warning about marshal-by-reference
+				this.textPatientIDInto.Text=selectedPatNum.ToString();
+				Patient pat=Patients.GetPat(selectedPatNum);
 				this.textPatientNameInto.Text=pat.GetNameFLFormal();
 				this.textPatToBirthdate.Text=pat.Birthdate.ToShortDateString();
 			}
@@ -33,8 +34,9 @@ namespace OpenDental {
 		private void butChangePatientFrom_Click(object sender,EventArgs e) {
 			FormPatientSelect fps=new FormPatientSelect();
 			if(fps.ShowDialog()==DialogResult.OK) {
-				this.textPatientIDFrom.Text=fps.SelectedPatNum.ToString();
-				Patient pat=Patients.GetPat(fps.SelectedPatNum);
+				long selectedPatNum=fps.SelectedPatNum;//to prevent warning about marshal-by-reference
+				this.textPatientIDFrom.Text=selectedPatNum.ToString();
+				Patient pat=Patients.GetPat(selectedPatNum);
 				this.textPatientNameFrom.Text=pat.GetNameFLFormal();
 				this.textPatFromBirthdate.Text=pat.Birthdate.ToShortDateString();
 			}

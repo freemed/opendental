@@ -14,9 +14,9 @@ namespace OpenDental{
 		private OpenDental.UI.Button butClose;
 		private System.ComponentModel.Container components = null;
 		private OpenDental.UI.ODGrid gridMain;
-		private bool changed;
+		//private bool changed;
 		//private User user;
-		private DataTable table;
+		//private DataTable table;
 		private OpenDental.UI.Button butOK;
 		///<summary>This can be set ahead of time to preselect a provider.  After closing with OK, this will have the selected provider number.</summary>
 		public long SelectedProvNum;

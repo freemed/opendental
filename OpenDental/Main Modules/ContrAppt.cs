@@ -147,7 +147,7 @@ namespace OpenDental{
 		private Patient PatCur;
 		private FormRecallList FormRecallL;
 		private Timer timerTests;
-		private int stressCounter;
+		//private int stressCounter;
 
 		///<summary></summary>
 		public ContrAppt(){
