@@ -139,7 +139,7 @@ namespace OpenDentBusiness {
 
 		public static void LockWorkstationsForDbs(string[] dbNames) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				throw new ApplicationException("MiscData.GetAtoZforDb failed.  Updates not allowed from ClientWeb.");
+				throw new ApplicationException("MiscData.LockWorkstationsForDbs failed.  Updates not allowed from ClientWeb.");
 			}
 			DataConnection dcon=null;
 			for(int i=0;i<dbNames.Length;i++) {
@@ -147,6 +147,22 @@ namespace OpenDentBusiness {
 					dcon=new DataConnection(dbNames[i]);
 					string command="UPDATE preference SET ValueString ='"+POut.String(Environment.MachineName)
 						+"' WHERE PrefName='UpdateInProgressOnComputerName'";
+					dcon.NonQ(command);
+				}
+				catch { }
+			}
+		}
+
+		public static void UnlockWorkstationsForDbs(string[] dbNames) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				throw new ApplicationException("MiscData.UnlockWorkstationsForDbs failed.  Updates not allowed from ClientWeb.");
+			}
+			DataConnection dcon=null;
+			for(int i=0;i<dbNames.Length;i++) {
+				try {
+					dcon=new DataConnection(dbNames[i]);
+					string command="UPDATE preference SET ValueString =''"
+						+" WHERE PrefName='UpdateInProgressOnComputerName'";
 					dcon.NonQ(command);
 				}
 				catch { }

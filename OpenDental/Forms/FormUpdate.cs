@@ -952,12 +952,20 @@ namespace OpenDental{
 			MiscData.LockWorkstationsForDbs(dblist);//lock workstations for other db's.
 			File.Delete(destinationPath);
 			WebRequest wr=WebRequest.Create(downloadUri);
-			WebResponse webResp=wr.GetResponse();
+			WebResponse webResp=null;
+			try{
+				webResp=wr.GetResponse();
+			}
+			catch(Exception ex){
+				CodeBase.MsgBoxCopyPaste msgbox=new MsgBoxCopyPaste(ex.Message+"\r\nUri: "+downloadUri);
+				msgbox.ShowDialog();
+				MiscData.UnlockWorkstationsForDbs(dblist);//unlock workstations since nothing was actually done.
+				return;
+			}
 			int fileSize=(int)webResp.ContentLength/1024;
 			FormProgress FormP=new FormProgress();
 			//start the thread that will perform the download
-			System.Threading.ThreadStart downloadDelegate=
-					delegate { DownloadInstallPatchWorker(downloadUri,destinationPath,ref FormP); };
+			System.Threading.ThreadStart downloadDelegate= delegate { DownloadInstallPatchWorker(downloadUri,destinationPath,ref FormP); };
 			Thread workerThread=new System.Threading.Thread(downloadDelegate);
 			workerThread.Start();
 			//display the progress dialog to the user:
@@ -968,7 +976,7 @@ namespace OpenDental{
 			FormP.ShowDialog();
 			if(FormP.DialogResult==DialogResult.Cancel) {
 				workerThread.Abort();
-				Prefs.UpdateString(PrefName.UpdateInProgressOnComputerName,"");//unlock workstations, since nothing was actually done.
+				MiscData.UnlockWorkstationsForDbs(dblist);//unlock workstations since nothing was actually done.
 				return;
 			}
 			//copy the Setup.exe to the AtoZ folders for the other db's.
