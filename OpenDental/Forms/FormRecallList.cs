@@ -1540,6 +1540,9 @@ namespace OpenDental{
 		}
 
 		private void menuItemSeeFamily_Click(object sender,EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.FamilyModule)) {
+				return;
+			}
 			if(gridMain.SelectedIndices.Length==0) {
 				MsgBox.Show(this,"Please select a patient first.");
 				return;
@@ -1549,6 +1552,9 @@ namespace OpenDental{
 		}
 
 		private void menuItemSeeAccount_Click(object sender,EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.AccountModule)) {
+				return;
+			}
 			if(gridMain.SelectedIndices.Length==0) {
 				MsgBox.Show(this,"Please select a patient first.");
 				return;
@@ -1559,6 +1565,9 @@ namespace OpenDental{
 		}
 
 		private void butGotoFamily_Click(object sender,EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.FamilyModule)) {
+				return;
+			}
 			if(gridMain.SelectedIndices.Length==0) {
 				MsgBox.Show(this,"Please select a patient first.");
 				return;
@@ -1569,6 +1578,9 @@ namespace OpenDental{
 		}
 
 		private void butGotoAccount_Click(object sender,EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.AccountModule)) {
+				return;
+			}
 			if(gridMain.SelectedIndices.Length==0) {
 				MsgBox.Show(this,"Please select a patient first.");
 				return;
