@@ -11,6 +11,7 @@ namespace OpenDental {
 		public BasicTemplate() {
 			InitializeComponent();
 			Lan.F(this);
+
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
