@@ -142,7 +142,8 @@ namespace OpenDentBusiness {
 				//+",DedBeforePerc = '"  +POut.PBool  (plan.DedBeforePerc)+"'"
 				+",CodeSubstNone='"    +POut.Bool  (plan.CodeSubstNone)+"'"
 				+",IsHidden='"         +POut.Bool  (plan.IsHidden)+"'"
-				//MonthRenew would be different between similar plans
+				+",MonthRenew='"       +POut.Int   (plan.MonthRenew)+"'"
+				//It is most likely that MonthRenew would be the same for everyone on the same plan.  If we get complaints, we might have to add an option.
 				+" WHERE "
 				+"EmployerNum = '"        +POut.Long   (like.EmployerNum)+"' "
 				+"AND GroupName = '"      +POut.String(like.GroupName)+"' "
