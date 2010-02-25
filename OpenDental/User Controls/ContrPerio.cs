@@ -1752,6 +1752,9 @@ namespace OpenDental
 					}
 				}
 			}
+			if(counter==0) {
+				return (0).ToString("F0");
+			}
 			return (100*counter/((32-skippedTeeth.Count)*6)).ToString("F0");
 		}
 
