@@ -422,6 +422,7 @@ namespace OpenDental{
 				return new string[0];
 			}
 			try{
+				File.Delete(ODFileUtils.CombinePaths(Application.StartupPath,"tempCompNames.txt"));
 				ArrayList retList=new ArrayList();
 				//string myAdd=Dns.GetHostByName(Dns.GetHostName()).AddressList[0].ToString();//obsolete
 				string myAdd=Dns.GetHostEntry(Dns.GetHostName()).AddressList[0].ToString();
