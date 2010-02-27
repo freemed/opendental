@@ -423,7 +423,7 @@ namespace OpenDentBusiness {
 			}
 			for(int i=0;i<histList.Count;i++) {
 				if(generalCat!=null){//If there is a general category, then we only consider codes within it.  This is how we exclude ortho.
-					if(!CovSpans.IsCodeInSpans(histList[i].StrProcCode,covSpanArray)){//for example, ortho
+					if(histList[i].StrProcCode!="" && !CovSpans.IsCodeInSpans(histList[i].StrProcCode,covSpanArray)){//for example, ortho
 						continue;
 					}
 				}
