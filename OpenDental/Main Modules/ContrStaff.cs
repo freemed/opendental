@@ -657,7 +657,15 @@ namespace OpenDental{
 				butTimeCard,
 				label2,
 				butClockIn,
-				butClockOut
+				butClockOut,
+				butSendClaims,
+				butBilling,
+				butDeposit,
+				butSupply,
+				butTasks,
+				butBackup,
+				butAccounting,
+				butBreaks
 				});
 			RefreshFullMessages();//after this, messages just get added to the list.
 			//But if checkIncludeAck is clicked,then it does RefreshMessages again.
