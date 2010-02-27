@@ -1370,7 +1370,7 @@ namespace OpenDental{
 				&& PaymentCur.PayDate != SplitList[0].ProcDate
 				&& SplitList[0].ProcNum==0)//not attached to procedure
 			{
-				if(MsgBox.Show(this,true,"Change split date to match payment date?")) {
+				if(MsgBox.Show(this,MsgBoxButtons.YesNo,"Change split date to match payment date?")) {
 					SplitList[0].ProcDate=PaymentCur.PayDate;
 				}
 			}

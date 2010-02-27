@@ -209,11 +209,11 @@ namespace OpenDental
 			// 
 			// label7
 			// 
-			this.label7.Location = new System.Drawing.Point(24,73);
+			this.label7.Location = new System.Drawing.Point(12,73);
 			this.label7.Name = "label7";
-			this.label7.Size = new System.Drawing.Size(104,16);
+			this.label7.Size = new System.Drawing.Size(116,16);
 			this.label7.TabIndex = 24;
-			this.label7.Text = "Split Date";
+			this.label7.Text = "(procedure date)";
 			this.label7.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// label1
@@ -1039,13 +1039,19 @@ namespace OpenDental
 				MessageBox.Show(Lan.g(this,"Please fix data entry errors first."));
 				return;
 			}
-			if(textAmount.Text==""){
-				MsgBox.Show(this,"Please enter an amount.");	
+			DateTime procDate=PIn.Date(textProcDate.Text);
+			if(procDate>DateTime.Today) {
+				MsgBox.Show(this,"Date may not be in the future.");
+				return;
+			}
+			Double amount=PIn.Double(textAmount.Text);
+			if(amount==0) {
+				MsgBox.Show(this,"Please enter an amount");
 				return;
 			}
 			PaySplitCur.DatePay=PIn.Date(textDatePay.Text);//gets overwritten anyway
-			PaySplitCur.ProcDate=PIn.Date(textProcDate.Text);
-			PaySplitCur.SplitAmt=PIn.Double(textAmount.Text);
+			PaySplitCur.ProcDate=procDate;
+			PaySplitCur.SplitAmt=amount;
 			if(comboProvider.SelectedIndex > -1) {//if none selected, we won't silently change
 				PaySplitCur.ProvNum=ProviderC.List[comboProvider.SelectedIndex].ProvNum;
 			}
