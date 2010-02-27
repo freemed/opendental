@@ -1502,7 +1502,6 @@ namespace OpenDental{
 		}
 
 		private void butPrint_Click(object sender, System.EventArgs e) {
-			//pagesPrinted=0;
 			pd2=new PrintDocument();
 			pd2.PrintPage+=new PrintPageEventHandler(this.pd2_PrintPage);
 			pd2.OriginAtMargins=true;
@@ -1510,19 +1509,6 @@ namespace OpenDental{
 			if(!PrinterL.SetPrinter(pd2,PrintSituation.TPPerio)){
 				return;
 			}
-			/*
-			printDialog2=new PrintDialog();
-			printDialog2.PrinterSettings=new PrinterSettings();
-			printDialog2.PrinterSettings.PrinterName=Computers.Cur.PrinterName;
-			if(printDialog2.ShowDialog()!=DialogResult.OK){
-				return;
-			}
-			if(printDialog2.PrinterSettings.IsValid){
-				pd2.PrinterSettings=printDialog2.PrinterSettings;
-			}
-			//uses default printer if selected printer not valid
-			*/
-//#if 
 			try{
 				pd2.Print();
 			}

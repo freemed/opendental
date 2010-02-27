@@ -178,12 +178,8 @@ namespace OpenDental {
 			pd2.PrintPage+=new PrintPageEventHandler(this.pd2_PrintPage);
 			pd2.OriginAtMargins=true;
 			pd2.DefaultPageSettings.Margins=new Margins(0,0,0,0);
-			//pd2.DefaultPageSettings.PrinterResolution.X=300;
-			//pd2.DefaultPageSettings.PrinterResolution.Y=300;
-			//This prevents a bug caused by some printer drivers not reporting their papersize.
-			//But remember that other countries use A4 paper instead of 8 1/2 x 11.
-			if(pd2.DefaultPageSettings.PaperSize.Height==0) {
-				pd2.DefaultPageSettings.PaperSize=new PaperSize("default",850,1100);
+			if(!PrinterL.SetPrinter(pd2,PrintSituation.TPPerio)) {
+				return;
 			}
 			pd2.Print();
 		}
