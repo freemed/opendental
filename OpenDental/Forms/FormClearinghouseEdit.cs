@@ -896,8 +896,8 @@ namespace OpenDental{
 				}
 			}
 //todo: Check all parts of program to allow either trailing slash or not
-			if(!Directory.Exists(textExportPath.Text)){
-				if(MsgBox.Show(this,true,"Export path does not exist. Attempt to create?")) {
+			if(textExportPath.Text!="" && !Directory.Exists(textExportPath.Text)){
+				if(MsgBox.Show(this,MsgBoxButtons.YesNo,"Export path does not exist. Attempt to create?")) {
 					try{
 						Directory.CreateDirectory(textExportPath.Text);
 						MsgBox.Show(this,"Folder created.");
@@ -909,8 +909,8 @@ namespace OpenDental{
 					}
 				}
 			}
-			if(!Directory.Exists(textResponsePath.Text)) {
-				if(MsgBox.Show(this,true,"Report path does not exist. Attempt to create?")) {
+			if(textResponsePath.Text!="" && !Directory.Exists(textResponsePath.Text)) {
+				if(MsgBox.Show(this,MsgBoxButtons.YesNo,"Report path does not exist. Attempt to create?")) {
 					try {
 						Directory.CreateDirectory(textResponsePath.Text);
 						MsgBox.Show(this,"Folder created.");

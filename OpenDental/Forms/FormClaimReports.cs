@@ -160,18 +160,28 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please select a clearinghouse first.");
 				return;
 			}
-			if(Clearinghouses.List[comboClearhouse.SelectedIndex].ISA08=="113504607") {//TesiaLink
-				MsgBox.Show(this,"No need to Retrieve.  Available reports are automatically downloaded every three minutes.");
+			if(!Directory.Exists(Clearinghouses.List[comboClearhouse.SelectedIndex].ResponsePath)) {
+				MsgBox.Show(this,"Clearinghouse does not have a valid Report Path set.");
+				return;
+			}
+			//For Tesia, user wouldn't normally manually retrieve.
+			if(Clearinghouses.List[comboClearhouse.SelectedIndex].ISA08=="113504607") {
+				if((PrefC.RandomKeys && !PrefC.GetBool(PrefName.EasyNoClinics))//See FormClaimsSend_Load
+					|| !Clearinghouses.List[comboClearhouse.SelectedIndex].IsDefault) 
+				{
+					//But they might need to in these situations.
+					ImportReportFiles();
+					MsgBox.Show(this,"Done");
+				}
+				else{
+					MsgBox.Show(this,"No need to Retrieve.  Available reports are automatically downloaded every three minutes.");
+				}
 				return;
 			}
 			if(Clearinghouses.List[comboClearhouse.SelectedIndex].CommBridge==EclaimsCommBridge.None
 				|| Clearinghouses.List[comboClearhouse.SelectedIndex].CommBridge==EclaimsCommBridge.Renaissance
 				|| Clearinghouses.List[comboClearhouse.SelectedIndex].CommBridge==EclaimsCommBridge.RECS) {
 				MsgBox.Show(this,"No built-in functionality for retrieving reports from this clearinghouse.");
-				return;
-			}
-			if(!Directory.Exists(Clearinghouses.List[comboClearhouse.SelectedIndex].ResponsePath)) {
-				MsgBox.Show(this,"Clearinghouse does not have a valid Report Path set.");
 				return;
 			}
 			if(!MsgBox.Show(this,true,"Connect to clearinghouse to retrieve reports?")) {
@@ -181,10 +191,12 @@ namespace OpenDental{
 			RetrieveReports();
 			ImportReportFiles();
 			labelRetrieving.Visible=false;
+			MsgBox.Show(this,"Done");
 		}
 
 		private void RetrieveReports() {
 			if(Clearinghouses.List[comboClearhouse.SelectedIndex].ISA08=="113504607") {//TesiaLink
+				//But the import will still happen
 				return;
 			}
 			if(Clearinghouses.List[comboClearhouse.SelectedIndex].CommBridge==EclaimsCommBridge.None
