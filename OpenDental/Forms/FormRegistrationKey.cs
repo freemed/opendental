@@ -2,6 +2,7 @@ using System;
 using System.Drawing;
 using System.Collections;
 using System.ComponentModel;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using OpenDentBusiness;
 
@@ -14,20 +15,13 @@ namespace OpenDental{
 		private OpenDental.UI.Button butOK;
 		private Label label1;
 		private TextBox textKey1;
-		private TextBox textKey2;
-		private TextBox textKey3;
-		private TextBox textKey4;
 		private Label label2;
 		private CheckBox checkAgree;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
 		private System.ComponentModel.Container components = null;
-		private string prevKey1Text="";
-		private string prevKey2Text="";
-		private string prevKey3Text="";
 		private RichTextBox richTextAgreement;
-		private string prevKey4Text="";
 
 		///<summary></summary>
 		public FormRegistrationKey()
@@ -64,14 +58,11 @@ namespace OpenDental{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormRegistrationKey));
 			this.label1 = new System.Windows.Forms.Label();
 			this.textKey1 = new System.Windows.Forms.TextBox();
-			this.textKey2 = new System.Windows.Forms.TextBox();
-			this.textKey3 = new System.Windows.Forms.TextBox();
-			this.textKey4 = new System.Windows.Forms.TextBox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.checkAgree = new System.Windows.Forms.CheckBox();
+			this.richTextAgreement = new System.Windows.Forms.RichTextBox();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.richTextAgreement = new System.Windows.Forms.RichTextBox();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -87,38 +78,11 @@ namespace OpenDental{
 			// 
 			this.textKey1.Location = new System.Drawing.Point(164,29);
 			this.textKey1.Name = "textKey1";
-			this.textKey1.Size = new System.Drawing.Size(62,20);
+			this.textKey1.Size = new System.Drawing.Size(243,20);
 			this.textKey1.TabIndex = 0;
 			this.textKey1.WordWrap = false;
-			this.textKey1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textKey1_KeyPress);
 			this.textKey1.TextChanged += new System.EventHandler(this.textKey1_TextChanged);
-			// 
-			// textKey2
-			// 
-			this.textKey2.Location = new System.Drawing.Point(232,29);
-			this.textKey2.Name = "textKey2";
-			this.textKey2.Size = new System.Drawing.Size(62,20);
-			this.textKey2.TabIndex = 1;
-			this.textKey2.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textKey2_KeyPress);
-			this.textKey2.TextChanged += new System.EventHandler(this.textKey2_TextChanged);
-			// 
-			// textKey3
-			// 
-			this.textKey3.Location = new System.Drawing.Point(300,29);
-			this.textKey3.Name = "textKey3";
-			this.textKey3.Size = new System.Drawing.Size(62,20);
-			this.textKey3.TabIndex = 2;
-			this.textKey3.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textKey3_KeyPress);
-			this.textKey3.TextChanged += new System.EventHandler(this.textKey3_TextChanged);
-			// 
-			// textKey4
-			// 
-			this.textKey4.Location = new System.Drawing.Point(368,29);
-			this.textKey4.Name = "textKey4";
-			this.textKey4.Size = new System.Drawing.Size(62,20);
-			this.textKey4.TabIndex = 3;
-			this.textKey4.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textKey4_KeyPress);
-			this.textKey4.TextChanged += new System.EventHandler(this.textKey4_TextChanged);
+			this.textKey1.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textKey1_KeyUp);
 			// 
 			// label2
 			// 
@@ -138,6 +102,14 @@ namespace OpenDental{
 			this.checkAgree.Text = "I agree to the terms of the above license agreement in its entirety.";
 			this.checkAgree.UseVisualStyleBackColor = true;
 			this.checkAgree.CheckedChanged += new System.EventHandler(this.checkAgree_CheckedChanged);
+			// 
+			// richTextAgreement
+			// 
+			this.richTextAgreement.Location = new System.Drawing.Point(26,82);
+			this.richTextAgreement.Name = "richTextAgreement";
+			this.richTextAgreement.Size = new System.Drawing.Size(675,465);
+			this.richTextAgreement.TabIndex = 8;
+			this.richTextAgreement.Text = "";
 			// 
 			// butOK
 			// 
@@ -170,14 +142,6 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// richTextAgreement
-			// 
-			this.richTextAgreement.Location = new System.Drawing.Point(26,82);
-			this.richTextAgreement.Name = "richTextAgreement";
-			this.richTextAgreement.Size = new System.Drawing.Size(675,465);
-			this.richTextAgreement.TabIndex = 8;
-			this.richTextAgreement.Text = "";
-			// 
 			// FormRegistrationKey
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
@@ -186,9 +150,6 @@ namespace OpenDental{
 			this.Controls.Add(this.checkAgree);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.textKey1);
-			this.Controls.Add(this.textKey4);
-			this.Controls.Add(this.textKey3);
-			this.Controls.Add(this.textKey2);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
@@ -210,25 +171,73 @@ namespace OpenDental{
 		private void FormRegistrationKey_Load(object sender,EventArgs e) {
 			string key=PrefC.GetString(PrefName.RegistrationKey);
 			if(key!=null && key.Length==16){
-				textKey1.Text=key.Substring(0,4);
-				textKey2.Text=key.Substring(4,4);
-				textKey3.Text=key.Substring(8,4);
-				textKey4.Text=key.Substring(12,4);
+				key=key.Substring(0,4)+"-"+key.Substring(4,4)+"-"+key.Substring(8,4)+"-"+key.Substring(12,4);
 			}
+			textKey1.Text=key;
 			richTextAgreement.Rtf=Properties.Resources.CDT_Content_End_User_License;
+			SetOKEnabled();
 		}
 
 		public static bool ValidateKey(string keystr){
 			return CDT.Class1.ValidateKey(keystr);
 		}
 
+		private void textKey1_KeyUp(object sender,KeyEventArgs e) {
+			int cursor=textKey1.SelectionStart;
+			textKey1.Text=textKey1.Text.ToUpper();
+			int length=textKey1.Text.Length;
+			if(Regex.IsMatch(textKey1.Text,@"^[A-Z0-9]{5}$")) {
+				textKey1.Text=textKey1.Text.Substring(0,4)+"-"+textKey1.Text.Substring(4);
+			}
+			else if(Regex.IsMatch(textKey1.Text,@"^[A-Z0-9]{4}-[A-Z0-9]{5}$")) {
+				textKey1.Text=textKey1.Text.Substring(0,9)+"-"+textKey1.Text.Substring(9);
+			}
+			else if(Regex.IsMatch(textKey1.Text,@"^[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{5}$")) {
+				textKey1.Text=textKey1.Text.Substring(0,14)+"-"+textKey1.Text.Substring(14);
+			}
+			if(textKey1.Text.Length>length) {
+				cursor++;
+			}
+			textKey1.SelectionStart=cursor;
+		}
+
+		private void textKey1_TextChanged(object sender,EventArgs e) {
+			SetOKEnabled();
+		}
+
+		private void checkAgree_CheckedChanged(object sender,EventArgs e) {
+			SetOKEnabled();
+		}
+
+		private void SetOKEnabled(){
+			if(checkAgree.Checked || textKey1.Text==""){
+				butOK.Enabled=true;
+			}
+			else{
+				butOK.Enabled=false;
+			}
+		}
+
 		private void butOK_Click(object sender, System.EventArgs e) {
-			string keyattempt=textKey1.Text+textKey2.Text+textKey3.Text+textKey4.Text;
-			if(!ValidateKey(keyattempt)){
+			if(textKey1.Text!="" 
+				&& !Regex.IsMatch(textKey1.Text,@"^[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$")
+				&& !Regex.IsMatch(textKey1.Text,@"^[A-Z0-9]{16}$"))
+			{
+				MsgBox.Show(this,"Invalid registration key format.");
+				return;
+			}
+			string regkey="";
+			if(Regex.IsMatch(textKey1.Text,@"^[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$")){
+				regkey=textKey1.Text.Substring(0,4)+textKey1.Text.Substring(5,4)+textKey1.Text.Substring(10,4)+textKey1.Text.Substring(15,4);
+			}
+			else if(Regex.IsMatch(textKey1.Text,@"^[A-Z0-9]{16}$")){
+				regkey=textKey1.Text;
+			}
+			if(regkey!="" && !ValidateKey(regkey)){
 				MsgBox.Show(this,"Invalid registration key.");
 				return;
 			}
-			Prefs.UpdateString(PrefName.RegistrationKey,keyattempt);
+			Prefs.UpdateString(PrefName.RegistrationKey,regkey);
 			//prefs refresh automatically in the calling class anyway.
 			DialogResult=DialogResult.OK;
 		}
@@ -237,66 +246,11 @@ namespace OpenDental{
 			DialogResult=DialogResult.Cancel;
 		}
 
-		private void checkAgree_CheckedChanged(object sender,EventArgs e) {
-			butOK.Enabled=checkAgree.Checked;
-		}
+		
 
-		private void textKey1_TextChanged(object sender,EventArgs e) {
-			if(textKey1.Text.Length==4){
-				textKey2.Select();
-			}else if(textKey1.Text.Length>4){
-				textKey1.Text=prevKey1Text;
-				textKey1.Invalidate();
-				textKey2.Select();
-			}
-			prevKey1Text=textKey1.Text;
-		}
+		
 
-		private void textKey2_TextChanged(object sender,EventArgs e) {
-			if(textKey2.Text.Length==4) {
-				textKey3.Select();
-			}else if(textKey2.Text.Length>4) {
-				textKey2.Text=prevKey2Text;
-				textKey2.Invalidate();
-				textKey3.Select();
-			}
-			prevKey2Text=textKey2.Text;
-		}
-
-		private void textKey3_TextChanged(object sender,EventArgs e) {
-			if(textKey3.Text.Length==4) {
-				textKey4.Select();
-			}else if(textKey3.Text.Length>4) {
-				textKey3.Text=prevKey3Text;
-				textKey3.Invalidate();
-				textKey4.Select();
-			}
-			prevKey3Text=textKey3.Text;
-		}
-
-		private void textKey4_TextChanged(object sender,EventArgs e) {
-			if(textKey4.Text.Length>4) {
-				textKey4.Text=prevKey4Text;
-				textKey4.Invalidate();
-			}
-			prevKey4Text=textKey4.Text;
-		}
-
-		private void textKey1_KeyPress(object sender,KeyPressEventArgs e) {
-			e.KeyChar=(""+e.KeyChar).ToUpper()[0];
-		}
-
-		private void textKey2_KeyPress(object sender,KeyPressEventArgs e) {
-			e.KeyChar=(""+e.KeyChar).ToUpper()[0];
-		}
-
-		private void textKey3_KeyPress(object sender,KeyPressEventArgs e) {
-			e.KeyChar=(""+e.KeyChar).ToUpper()[0];
-		}
-
-		private void textKey4_KeyPress(object sender,KeyPressEventArgs e) {
-			e.KeyChar=(""+e.KeyChar).ToUpper()[0];
-		}
+		
 
 	}
 }

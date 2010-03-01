@@ -28,6 +28,7 @@ namespace OpenDental{
 		private Label label8;
 		private TextBox textWebProxyAddress;
 		private Label label7;
+		private OpenDental.UI.Button butChange;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -79,12 +80,13 @@ namespace OpenDental{
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.textWebProxyAddress = new System.Windows.Forms.TextBox();
-			this.label7 = new System.Windows.Forms.Label();
-			this.textWebProxyUserName = new System.Windows.Forms.TextBox();
-			this.label8 = new System.Windows.Forms.Label();
 			this.textWebProxyPassword = new System.Windows.Forms.TextBox();
 			this.label9 = new System.Windows.Forms.Label();
+			this.textWebProxyUserName = new System.Windows.Forms.TextBox();
+			this.label8 = new System.Windows.Forms.Label();
+			this.textWebProxyAddress = new System.Windows.Forms.TextBox();
+			this.label7 = new System.Windows.Forms.Label();
+			this.butChange = new OpenDental.UI.Button();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -109,6 +111,7 @@ namespace OpenDental{
 			this.textRegKey.Font = new System.Drawing.Font("Courier New",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
 			this.textRegKey.Location = new System.Drawing.Point(192,211);
 			this.textRegKey.Name = "textRegKey";
+			this.textRegKey.ReadOnly = true;
 			this.textRegKey.Size = new System.Drawing.Size(193,20);
 			this.textRegKey.TabIndex = 40;
 			this.textRegKey.TextChanged += new System.EventHandler(this.textRegKey_TextChanged);
@@ -125,12 +128,11 @@ namespace OpenDental{
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(391,211);
+			this.label4.Location = new System.Drawing.Point(464,212);
 			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(265,19);
+			this.label4.Size = new System.Drawing.Size(204,33);
 			this.label4.TabIndex = 42;
 			this.label4.Text = "Valid for one office ONLY.  This is tracked.";
-			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// textUpdateServerAddress
 			// 
@@ -219,40 +221,6 @@ namespace OpenDental{
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Web Proxy (most users will ignore this section)";
 			// 
-			// textWebProxyAddress
-			// 
-			this.textWebProxyAddress.Font = new System.Drawing.Font("Courier New",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.textWebProxyAddress.Location = new System.Drawing.Point(180,19);
-			this.textWebProxyAddress.Name = "textWebProxyAddress";
-			this.textWebProxyAddress.Size = new System.Drawing.Size(363,20);
-			this.textWebProxyAddress.TabIndex = 42;
-			// 
-			// label7
-			// 
-			this.label7.Location = new System.Drawing.Point(25,20);
-			this.label7.Name = "label7";
-			this.label7.Size = new System.Drawing.Size(155,19);
-			this.label7.TabIndex = 43;
-			this.label7.Text = "Address";
-			this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textWebProxyUserName
-			// 
-			this.textWebProxyUserName.Font = new System.Drawing.Font("Courier New",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.textWebProxyUserName.Location = new System.Drawing.Point(180,45);
-			this.textWebProxyUserName.Name = "textWebProxyUserName";
-			this.textWebProxyUserName.Size = new System.Drawing.Size(127,20);
-			this.textWebProxyUserName.TabIndex = 44;
-			// 
-			// label8
-			// 
-			this.label8.Location = new System.Drawing.Point(25,46);
-			this.label8.Name = "label8";
-			this.label8.Size = new System.Drawing.Size(155,19);
-			this.label8.TabIndex = 45;
-			this.label8.Text = "UserName";
-			this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
 			// textWebProxyPassword
 			// 
 			this.textWebProxyPassword.Font = new System.Drawing.Font("Courier New",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
@@ -271,10 +239,60 @@ namespace OpenDental{
 			this.label9.Text = "Password";
 			this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// textWebProxyUserName
+			// 
+			this.textWebProxyUserName.Font = new System.Drawing.Font("Courier New",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.textWebProxyUserName.Location = new System.Drawing.Point(180,45);
+			this.textWebProxyUserName.Name = "textWebProxyUserName";
+			this.textWebProxyUserName.Size = new System.Drawing.Size(127,20);
+			this.textWebProxyUserName.TabIndex = 44;
+			// 
+			// label8
+			// 
+			this.label8.Location = new System.Drawing.Point(25,46);
+			this.label8.Name = "label8";
+			this.label8.Size = new System.Drawing.Size(155,19);
+			this.label8.TabIndex = 45;
+			this.label8.Text = "UserName";
+			this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textWebProxyAddress
+			// 
+			this.textWebProxyAddress.Font = new System.Drawing.Font("Courier New",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.textWebProxyAddress.Location = new System.Drawing.Point(180,19);
+			this.textWebProxyAddress.Name = "textWebProxyAddress";
+			this.textWebProxyAddress.Size = new System.Drawing.Size(363,20);
+			this.textWebProxyAddress.TabIndex = 42;
+			// 
+			// label7
+			// 
+			this.label7.Location = new System.Drawing.Point(25,20);
+			this.label7.Name = "label7";
+			this.label7.Size = new System.Drawing.Size(155,19);
+			this.label7.TabIndex = 43;
+			this.label7.Text = "Address";
+			this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// butChange
+			// 
+			this.butChange.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butChange.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butChange.Autosize = true;
+			this.butChange.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butChange.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butChange.CornerRadius = 4F;
+			this.butChange.Location = new System.Drawing.Point(391,209);
+			this.butChange.Name = "butChange";
+			this.butChange.Size = new System.Drawing.Size(67,23);
+			this.butChange.TabIndex = 50;
+			this.butChange.Text = "Change";
+			this.butChange.Click += new System.EventHandler(this.butChange_Click);
+			// 
 			// FormUpdateSetup
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(680,433);
+			this.Controls.Add(this.butChange);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.label6);
 			this.Controls.Add(this.textMultiple);
@@ -345,6 +363,19 @@ namespace OpenDental{
 			textRegKey.SelectionStart=cursor;
 		}
 
+		private void butChange_Click(object sender,EventArgs e) {
+			FormRegistrationKey formR=new FormRegistrationKey();
+			formR.ShowDialog();
+			DataValid.SetInvalid(InvalidType.Prefs);
+			string regkey=PrefC.GetString(PrefName.RegistrationKey);
+			if(regkey.Length==16){
+				textRegKey.Text=regkey.Substring(0,4)+"-"+regkey.Substring(4,4)+"-"+regkey.Substring(8,4)+"-"+regkey.Substring(12,4);
+			}
+			else{
+				textRegKey.Text=regkey;
+			}
+		}
+
 		private void butOK_Click(object sender, System.EventArgs e) {
 			if(textRegKey.Text!="" 
 				&& !Regex.IsMatch(textRegKey.Text,@"^[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$")
@@ -383,6 +414,8 @@ namespace OpenDental{
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 		
 
