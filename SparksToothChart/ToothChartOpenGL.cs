@@ -1104,7 +1104,7 @@ namespace SparksToothChart {
 			//g.DrawImage(bitmapInPictBox,0,0);
 			//RectangleF recMm=TcData.GetNumberRecMm(tooth_id,);
 			//Rectangle rec=TcData.ConvertRecToPix(recMm);
-			//Invalidate();//rec);//but it invalidates the whole thing anyway.  Oh, well.
+			Invalidate();//rec);//but it invalidates the whole thing anyway.  Oh, well.
 			//Application.DoEvents();
 			//suspendRendering=false;
 		}
