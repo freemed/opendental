@@ -34,6 +34,7 @@ namespace OpenDental {
 		private GroupBox groupInsBox;
 		private RadioButton radioWriteoffPay;
 		private RadioButton radioWriteoffProc;
+		private Label label2;
 		private FormQuery FormQuery2;
 
 		///<summary></summary>
@@ -69,6 +70,7 @@ namespace OpenDental {
 			this.groupInsBox = new System.Windows.Forms.GroupBox();
 			this.radioWriteoffProc = new System.Windows.Forms.RadioButton();
 			this.radioWriteoffPay = new System.Windows.Forms.RadioButton();
+			this.label2 = new System.Windows.Forms.Label();
 			this.groupInsBox.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -81,7 +83,7 @@ namespace OpenDental {
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(468,245);
+			this.butCancel.Location = new System.Drawing.Point(468,286);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,26);
 			this.butCancel.TabIndex = 3;
@@ -95,7 +97,7 @@ namespace OpenDental {
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(378,245);
+			this.butOK.Location = new System.Drawing.Point(378,286);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,26);
 			this.butOK.TabIndex = 2;
@@ -104,13 +106,13 @@ namespace OpenDental {
 			// 
 			// date1
 			// 
-			this.date1.Location = new System.Drawing.Point(317,43);
+			this.date1.Location = new System.Drawing.Point(317,56);
 			this.date1.Name = "date1";
 			this.date1.TabIndex = 4;
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(314,24);
+			this.label1.Location = new System.Drawing.Point(314,37);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(230,16);
 			this.label1.TabIndex = 5;
@@ -119,7 +121,7 @@ namespace OpenDental {
 			// 
 			// listProv
 			// 
-			this.listProv.Location = new System.Drawing.Point(27,45);
+			this.listProv.Location = new System.Drawing.Point(27,58);
 			this.listProv.Name = "listProv";
 			this.listProv.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
 			this.listProv.Size = new System.Drawing.Size(126,147);
@@ -127,7 +129,7 @@ namespace OpenDental {
 			// 
 			// labelProvider
 			// 
-			this.labelProvider.Location = new System.Drawing.Point(24,26);
+			this.labelProvider.Location = new System.Drawing.Point(24,39);
 			this.labelProvider.Name = "labelProvider";
 			this.labelProvider.Size = new System.Drawing.Size(103,16);
 			this.labelProvider.TabIndex = 7;
@@ -137,7 +139,7 @@ namespace OpenDental {
 			// listClinic
 			// 
 			this.listClinic.FormattingEnabled = true;
-			this.listClinic.Location = new System.Drawing.Point(171,45);
+			this.listClinic.Location = new System.Drawing.Point(171,58);
 			this.listClinic.Name = "listClinic";
 			this.listClinic.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
 			this.listClinic.Size = new System.Drawing.Size(126,147);
@@ -145,7 +147,7 @@ namespace OpenDental {
 			// 
 			// labClinic
 			// 
-			this.labClinic.Location = new System.Drawing.Point(171,26);
+			this.labClinic.Location = new System.Drawing.Point(171,39);
 			this.labClinic.Name = "labClinic";
 			this.labClinic.Size = new System.Drawing.Size(103,16);
 			this.labClinic.TabIndex = 32;
@@ -156,7 +158,7 @@ namespace OpenDental {
 			// 
 			this.groupInsBox.Controls.Add(this.radioWriteoffProc);
 			this.groupInsBox.Controls.Add(this.radioWriteoffPay);
-			this.groupInsBox.Location = new System.Drawing.Point(27,204);
+			this.groupInsBox.Location = new System.Drawing.Point(27,217);
 			this.groupInsBox.Name = "groupInsBox";
 			this.groupInsBox.Size = new System.Drawing.Size(270,66);
 			this.groupInsBox.TabIndex = 33;
@@ -183,12 +185,22 @@ namespace OpenDental {
 			this.radioWriteoffPay.Text = "Using insurance payment date.";
 			this.radioWriteoffPay.UseVisualStyleBackColor = true;
 			// 
+			// label2
+			// 
+			this.label2.Location = new System.Drawing.Point(24,9);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(519,20);
+			this.label2.TabIndex = 34;
+			this.label2.Text = "This report has some limitations.  It does not take into account any payment plan" +
+    "s.";
+			// 
 			// FormRpReceivablesBreakdown
 			// 
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
-			this.ClientSize = new System.Drawing.Size(567,283);
+			this.ClientSize = new System.Drawing.Size(567,324);
+			this.Controls.Add(this.label2);
 			this.Controls.Add(this.groupInsBox);
 			this.Controls.Add(this.labClinic);
 			this.Controls.Add(this.listClinic);
