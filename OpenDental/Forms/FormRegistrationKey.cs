@@ -178,6 +178,7 @@ namespace OpenDental{
 			SetOKEnabled();
 		}
 
+		/// <summary>If using the foreign CDT.dll, it always returns true (valid), regardless of whether the box is blank or malformed.</summary>
 		public static bool ValidateKey(string keystr){
 			return CDT.Class1.ValidateKey(keystr);
 		}
@@ -233,7 +234,7 @@ namespace OpenDental{
 			else if(Regex.IsMatch(textKey1.Text,@"^[A-Z0-9]{16}$")){
 				regkey=textKey1.Text;
 			}
-			if(regkey!="" && !ValidateKey(regkey)){
+			if(!ValidateKey(regkey)){//a blank registration key will only be valid if the CDT.dll is foreign
 				MsgBox.Show(this,"Invalid registration key.");
 				return;
 			}
