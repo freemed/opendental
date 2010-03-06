@@ -12,7 +12,7 @@ namespace TestToothChart {
 		static void Main() {
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(new FormPerioTest());
+			Application.Run(new Form1());
 		}
 	}
 }

@@ -14,6 +14,7 @@ namespace TestToothChart {
 		public Form1() {
 			InitializeComponent();
 			toothChart2D.DrawMode=DrawingMode.Simple2D;
+			toothChartOpenGL.PreferredPixelFormatNumber=7;
 			toothChartOpenGL.DrawMode=DrawingMode.OpenGL;
 			toothChartDirectX.DrawMode=DrawingMode.DirectX;
 		}

@@ -1198,14 +1198,12 @@ namespace OpenDental{
 			// 
 			// checkApplyAll
 			// 
-			this.checkApplyAll.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkApplyAll.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkApplyAll.Location = new System.Drawing.Point(508,679);
+			this.checkApplyAll.Location = new System.Drawing.Point(468,676);
 			this.checkApplyAll.Name = "checkApplyAll";
-			this.checkApplyAll.Size = new System.Drawing.Size(283,21);
+			this.checkApplyAll.Size = new System.Drawing.Size(269,21);
 			this.checkApplyAll.TabIndex = 12;
 			this.checkApplyAll.Text = "Apply changes to all identical insurance plans";
-			this.checkApplyAll.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkApplyAll.UseVisualStyleBackColor = true;
 			// 
 			// label18

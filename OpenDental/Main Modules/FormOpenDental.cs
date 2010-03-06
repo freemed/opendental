@@ -1430,7 +1430,7 @@ namespace OpenDental{
 			}
 			//if(PrefC.UsingAtoZfolder && ImageStore.GetPreferredImagePath()==null) {//AtoZ folder not found
 			string prefImagePath=ImageStore.GetPreferredImagePath();
-			if(prefImagePath!=null && !Directory.Exists(prefImagePath)) {//AtoZ folder not found
+			if(prefImagePath==null || !Directory.Exists(prefImagePath)) {//AtoZ folder not found
 				Cache.Refresh(InvalidType.Security);
 				FormPath FormP=new FormPath();
 				FormP.IsStartingUp=true;
