@@ -2680,7 +2680,8 @@ namespace OpenDental{
 				//a ClaimCanadian object will not be loaded or created for existing claims unless user clicks supplemental info button.
 			}
 			if(IsNew){
-				//butPayWizard.Enabled=false;
+				butCheckAdd.Enabled=false;
+				groupEnterPayment.Enabled=false;
 			}
 			else if(ClaimCur.ClaimStatus=="S" || ClaimCur.ClaimStatus=="R"){//sent or received
 				if(!Security.IsAuthorized(Permissions.ClaimSentEdit,ClaimCur.DateSent)){
@@ -4192,9 +4193,15 @@ namespace OpenDental{
 		}
 
 		private void FormClaimEdit_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
-			if(DialogResult==DialogResult.OK)
+			if(DialogResult==DialogResult.OK) {
 				return;
+			}
 			if(IsNew){
+				if(ClaimCur.InsPayAmt>0) {
+					MsgBox.Show(this,"Not allowed to cancel because an insurance payment was entered.  Either click OK, or zero out the insurance payments.");
+					e.Cancel=true;
+					return;
+				}
 				for(int i=0;i<ClaimProcsForClaim.Count;i++){
 					if(ClaimProcsForClaim[i].Status==ClaimProcStatus.CapClaim){
 						ClaimProcs.Delete(ClaimProcsForClaim[i]);
