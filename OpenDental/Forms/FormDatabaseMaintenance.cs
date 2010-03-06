@@ -247,6 +247,8 @@ namespace OpenDental {
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.ClaimProcEstNoBillIns(verbose);
 			Application.DoEvents();
+			textLog.Text+=DatabaseMaintenance.ClaimProcEstWithInsPaidAmt(verbose);
+			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.ClaimProcProvNumMissing(verbose);
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.ClaimProcPreauthNotMatchClaim(verbose);

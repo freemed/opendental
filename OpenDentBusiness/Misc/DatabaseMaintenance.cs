@@ -293,121 +293,43 @@ namespace OpenDentBusiness {
 			string log="";
 			//because of the way this is grouped, it will just get one of many patients for each
 			int numberFixed=0;
-			if(DataConnection.DBtype==DatabaseType.MySql) {
-				command=@"SELECT claimproc.ClaimPaymentNum,ROUND(SUM(InsPayAmt),2) _sumpay,ROUND(CheckAmt,2) _checkamt
-					FROM claimpayment,claimproc
-					WHERE claimpayment.ClaimPaymentNum=claimproc.ClaimPaymentNum
-					GROUP BY claimproc.ClaimPaymentNum
-					HAVING _sumpay!=_checkamt";
-				table=Db.GetTable(command);
-				for(int i=0;i<table.Rows.Count;i++) {
-					command="UPDATE claimpayment SET CheckAmt='"+POut.Double(PIn.Double(table.Rows[i]["_sumpay"].ToString()))+"' "
-						+"WHERE ClaimPaymentNum="+table.Rows[i]["ClaimPaymentNum"].ToString();
-					Db.NonQ(command);
-				}
-				numberFixed=table.Rows.Count;
-				if(numberFixed>0||verbose) {
-					log+=Lans.g("FormDatabaseMaintenance","Claim payment sums fixed: ")+numberFixed.ToString()+"\r\n";
-				}
-				//now deposits which were affected by the changes above--------------------------------------------------
-				command=@"SELECT DepositNum,deposit.Amount,DateDeposit,
-					IFNULL((SELECT SUM(CheckAmt) FROM claimpayment WHERE claimpayment.DepositNum=deposit.DepositNum GROUP BY deposit.DepositNum),0)
-					+IFNULL((SELECT SUM(PayAmt) FROM payment WHERE payment.DepositNum=deposit.DepositNum GROUP BY deposit.DepositNum),0) _sum
-					FROM deposit
-					HAVING ROUND(_sum,2) != ROUND(deposit.Amount,2)";
-				table=Db.GetTable(command);
-				for(int i=0;i<table.Rows.Count;i++) {
-					if(i==0) {
-						log+=Lans.g("FormDatabaseMaintenance","PRINT THIS FOR REFERENCE. Deposit sums recalculated:")+"\r\n";
-					}
-					DateTime date=PIn.Date(table.Rows[i]["DateDeposit"].ToString());
-					Double oldval=PIn.Double(table.Rows[i]["Amount"].ToString());
-					Double newval=PIn.Double(table.Rows[i]["_sum"].ToString());
-					log+=date.ToShortDateString()+" "+Lans.g("FormDatabaseMaintenance","OldSum:")+oldval.ToString("c")
-						+", "+Lans.g("FormDatabaseMaintenance","NewSum:")+newval.ToString("c")+"\r\n";
-					command="UPDATE deposit SET Amount='"+POut.Double(PIn.Double(table.Rows[i]["_sum"].ToString()))+"' "
-						+"WHERE DepositNum="+table.Rows[i]["DepositNum"].ToString();
-					Db.NonQ(command);
-				}
-				if(numberFixed>0||verbose) {
-					log+=Lans.g("FormDatabaseMaintenance","Deposit sums fixed: ")+numberFixed.ToString()+"\r\n";
-				}
+			command=@"SELECT claimproc.ClaimPaymentNum,ROUND(SUM(InsPayAmt),2) _sumpay,ROUND(CheckAmt,2) _checkamt
+				FROM claimpayment,claimproc
+				WHERE claimpayment.ClaimPaymentNum=claimproc.ClaimPaymentNum
+				GROUP BY claimproc.ClaimPaymentNum
+				HAVING _sumpay!=_checkamt";
+			table=Db.GetTable(command);
+			for(int i=0;i<table.Rows.Count;i++) {
+				command="UPDATE claimpayment SET CheckAmt='"+POut.Double(PIn.Double(table.Rows[i]["_sumpay"].ToString()))+"' "
+					+"WHERE ClaimPaymentNum="+table.Rows[i]["ClaimPaymentNum"].ToString();
+				Db.NonQ(command);
 			}
-			else {//oracle
-				//Delete the temporary table if it already exists.
-				try {
-					command="SELECT COUNT(*) FROM tempclaimpaymenttest";
-					Db.GetTable(command);
-					//The table exists at this point.
-					command="DROP TABLE tempclaimpaymenttest PURGE";
-					Db.NonQ(command);
-				}
-				catch {//The temp table does not exist.
-				}
-				command=@"CREATE TABLE tempclaimpaymenttest AS SELECT cl.ClaimPaymentNum,ROUND(SUM(cl.InsPayAmt),2) sumpay_,
-									ROUND(cp.CheckAmt,2) checkamt_
-								FROM claimpayment cp,claimproc cl
-								WHERE cp.ClaimPaymentNum=cl.ClaimPaymentNum
-								GROUP BY cl.ClaimPaymentNum, cp.CheckAmt";
-				Db.NonQ(command);
-				command="DELETE FROM tempclaimpaymenttest WHERE sumpay_=checkamt_";
-				Db.NonQ(command);
-				command=@"UPDATE claimpayment cp 
-					SET cp.CheckAmt=(SELECT sumpay_ FROM tempclaimpaymenttest tcpt WHERE tcpt.ClaimPaymentNum=cp.ClaimPaymentNum)
-					WHERE cp.ClaimPaymentNum IN (SELECT tcp.ClaimPaymentNum FROM tempclaimpaymenttest tcp)";
-				Db.NonQ(command);
-				command="SELECT COUNT(*) FROM tempclaimpaymenttest";
-				numberFixed=PIn.Int(Db.GetTable(command).Rows[0][0].ToString());
-				command="DROP TABLE tempclaimpaymenttest PURGE";
-				Db.NonQ(command);
-				if(numberFixed>0||verbose) {
-					log+=Lans.g("FormDatabaseMaintenance","Claim payment sums fixed: ")+numberFixed.ToString()+"\r\n";
-				}
-				//now deposits which were affected by the changes above--------------------------------------------------
-				try {
-					command="SELECT COUNT(*) FROM tempdeposittest";
-					Db.GetTable(command);
-					//The table exists at this point.
-					command="DROP TABLE tempdeposittest PURGE";
-					Db.NonQ(command);
-				}
-				catch {//The table does not exist.
-				}
-				command=@"CREATE TABLE tempdeposittest AS SELECT d.DepositNum,d.Amount,d.DateDeposit,
-					(SELECT SUM(cp.CheckAmt) FROM claimpayment cp WHERE cp.DepositNum=d.DepositNum GROUP BY d.DepositNum) claimsum_,
-					(SELECT SUM(p.PayAmt) FROM payment p WHERE p.DepositNum=d.DepositNum GROUP BY d.DepositNum) paysum_,
-					0 sum_
-					FROM deposit d";
-				Db.NonQ(command);
-				command="UPDATE tempdeposittest SET claimsum_=0 WHERE claimsum_ IS NULL";
-				Db.NonQ(command);
-				command="UPDATE tempdeposittest SET paysum_=0 WHERE paysum_ IS NULL";
-				Db.NonQ(command);
-				command="UPDATE tempdeposittest SET sum_=claimsum_+paysum_";
-				Db.NonQ(command);
-				command="DELETE FROM tempdeposittest WHERE ROUND(sum_,2)=ROUND(Amount,2)";
-				Db.NonQ(command);
-				command="UPDATE deposit d SET d.Amount=(SELECT tdt.sum_ FROM tempdeposittest tdt WHERE tdt.DepositNum=d.DepositNum) WHERE "+
-					"d.DepositNum IN (SELECT tdt2.DepositNum FROM tempdeposittest tdt2)";
-				Db.NonQ(command);
-				command="SELECT * FROM tempdeposittest";
-				table=Db.GetTable(command);
-				numberFixed=table.Rows.Count;
-				if(numberFixed>0) {
+			numberFixed=table.Rows.Count;
+			if(numberFixed>0||verbose) {
+				log+=Lans.g("FormDatabaseMaintenance","Claim payment sums fixed: ")+numberFixed.ToString()+"\r\n";
+			}
+			//now deposits which were affected by the changes above--------------------------------------------------
+			command=@"SELECT DepositNum,deposit.Amount,DateDeposit,
+				IFNULL((SELECT SUM(CheckAmt) FROM claimpayment WHERE claimpayment.DepositNum=deposit.DepositNum GROUP BY deposit.DepositNum),0)
+				+IFNULL((SELECT SUM(PayAmt) FROM payment WHERE payment.DepositNum=deposit.DepositNum GROUP BY deposit.DepositNum),0) _sum
+				FROM deposit
+				HAVING ROUND(_sum,2) != ROUND(deposit.Amount,2)";
+			table=Db.GetTable(command);
+			for(int i=0;i<table.Rows.Count;i++) {
+				if(i==0) {
 					log+=Lans.g("FormDatabaseMaintenance","PRINT THIS FOR REFERENCE. Deposit sums recalculated:")+"\r\n";
-					for(int i=0;i<table.Rows.Count;i++) {
-						DateTime date=PIn.Date(table.Rows[i]["DateDeposit"].ToString());
-						Double oldval=PIn.Double(table.Rows[i]["Amount"].ToString());
-						Double newval=PIn.Double(table.Rows[i]["sum_"].ToString());
-						log+=date.ToShortDateString()+" "+Lans.g("FormDatabaseMaintenance","OldSum:")+oldval.ToString("c")
-							+", "+Lans.g("FormDatabaseMaintenance","NewSum:")+newval.ToString("c")+"\r\n";
-					}
 				}
-				command="DROP TABLE tempdeposittest PURGE";
+				DateTime date=PIn.Date(table.Rows[i]["DateDeposit"].ToString());
+				Double oldval=PIn.Double(table.Rows[i]["Amount"].ToString());
+				Double newval=PIn.Double(table.Rows[i]["_sum"].ToString());
+				log+=date.ToShortDateString()+" "+Lans.g("FormDatabaseMaintenance","OldSum:")+oldval.ToString("c")
+					+", "+Lans.g("FormDatabaseMaintenance","NewSum:")+newval.ToString("c")+"\r\n";
+				command="UPDATE deposit SET Amount='"+POut.Double(PIn.Double(table.Rows[i]["_sum"].ToString()))+"' "
+					+"WHERE DepositNum="+table.Rows[i]["DepositNum"].ToString();
 				Db.NonQ(command);
-				if(numberFixed>0||verbose) {
-					log+=Lans.g("FormDatabaseMaintenance","Deposit sums fixed: ")+numberFixed.ToString()+"\r\n";
-				}
+			}
+			if(numberFixed>0||verbose) {
+				log+=Lans.g("FormDatabaseMaintenance","Deposit sums fixed: ")+numberFixed.ToString()+"\r\n";
 			}
 			return log;
 		}
@@ -524,6 +446,19 @@ namespace OpenDentBusiness {
 			int numberFixed=Db.NonQ32(command);
 			if(numberFixed>0 || verbose) {
 				log+=Lans.g("FormDatabaseMaintenance","Claimproc estimates set to zero because marked NoBillIns: ")+numberFixed.ToString()+"\r\n";
+			}
+			return log;
+		}
+
+		public static string ClaimProcEstWithInsPaidAmt(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
+			string log="";
+			command=@"UPDATE claimproc SET InsPayAmt=0 WHERE InsPayAmt > 0 AND ClaimNum=0 AND Status=6";
+			int numberFixed=Db.NonQ32(command);
+			if(numberFixed>0 || verbose) {
+				log+=Lans.g("FormDatabaseMaintenance","ClaimProc estimates with InsPaidAmt > 0 fixed: ")+numberFixed.ToString()+"\r\n";
 			}
 			return log;
 		}
