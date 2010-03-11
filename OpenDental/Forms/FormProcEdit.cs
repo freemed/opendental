@@ -2392,10 +2392,10 @@ namespace OpenDental{
 			ClaimProcs.CreateEst(cp,ProcCur,FormIS.SelectedPlan);
 			long patPlanNum=PatPlans.GetPatPlanNum(PatPlanList,FormIS.SelectedPlan.PlanNum);
 			if(patPlanNum > 0){
-				double paidOtherInsEstTotal=ClaimProcs.GetPaidOtherInsEstTotal(cp,PatPlanList);
-				double writeOffEstOtherIns=ClaimProcs.GetWriteOffEstOtherIns(cp,PatPlanList);
+				double paidOtherInsTotal=ClaimProcs.GetPaidOtherInsTotal(cp,PatPlanList);
+				double writeOffOtherIns=ClaimProcs.GetWriteOffOtherIns(cp,PatPlanList);
 				ClaimProcs.ComputeBaseEst(cp,ProcCur.ProcFee,ProcCur.ToothNum,ProcCur.CodeNum,FormIS.SelectedPlan,patPlanNum,benList,
-					HistList,LoopList,PatPlanList,paidOtherInsEstTotal,paidOtherInsEstTotal,PatCur.Age,writeOffEstOtherIns);	
+					HistList,LoopList,PatPlanList,paidOtherInsTotal,paidOtherInsTotal,PatCur.Age,writeOffOtherIns);	
 			}
 			FormClaimProc FormC=new FormClaimProc(cp,ProcCur,FamCur,PatCur,PlanList,HistList,ref LoopList,PatPlanList);
 			//FormC.NoPermission not needed because butAddEstimate not enabled

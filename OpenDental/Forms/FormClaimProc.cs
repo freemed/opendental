@@ -117,7 +117,7 @@ namespace OpenDental
 		private List<ClaimProcHist> LoopList;
 		private List<PatPlan> PatPlanList;
 		///<summary>This value is obtained by a query when this window first opens.  It only includes estimates, not actual payments or pending payments.  Will be 0 if this is a primary estimate.</summary>
-		private double PaidOtherInsEstTotal;
+		private double PaidOtherInsTotal;
 		private ValidDouble textWriteOffEstOverride;
 		private ValidDouble textWriteOffEst;
 		private Label labelWriteOffEst;
@@ -127,8 +127,8 @@ namespace OpenDental
 		private OpenDental.UI.Button butPickProv;
 		private ComboBox comboProvider;
 		private ComboBox comboStatus;
-		///<summary>This value is obtained by a query when this window first opens.  It only includes writeoff estimates, not actual writeoffs.  Will be 0 if this is a primary estimate.</summary>
-		private double WriteOffEstOtherIns;
+		///<summary>This value is obtained by a query when this window first opens.  It includes both actual writeoffs and estimated writeoffs.  Will be 0 if this is a primary estimate.</summary>
+		private double WriteOffOtherIns;
 
 		///<summary>procCur can be null if not editing from within an actual procedure.</summary>
 		public FormClaimProc(ClaimProc claimProcCur,Procedure procCur,Family famCur,Patient patCur,List <InsPlan> planList,List<ClaimProcHist> histList,ref List<ClaimProcHist> loopList,List<PatPlan> patPlanList){
@@ -1211,9 +1211,9 @@ namespace OpenDental
 			Plan=InsPlans.GetPlan(ClaimProcCur.PlanNum,PlanList);
 			PatPlanNum=PatPlans.GetPatPlanNum(PatPlanList,Plan.PlanNum);
 			BenefitList=null;//only fill it if proc
-			PaidOtherInsEstTotal=ClaimProcs.GetPaidOtherInsEstTotal(ClaimProcCur,PatPlanList);
+			PaidOtherInsTotal=ClaimProcs.GetPaidOtherInsTotal(ClaimProcCur,PatPlanList);
 			PaidOtherInsBaseEst=ClaimProcs.GetPaidOtherInsBaseEst(ClaimProcCur,PatPlanList);
-			WriteOffEstOtherIns=ClaimProcs.GetWriteOffEstOtherIns(ClaimProcCur,PatPlanList);
+			WriteOffOtherIns=ClaimProcs.GetWriteOffOtherIns(ClaimProcCur,PatPlanList);
 			textInsPlan.Text=InsPlans.GetDescript(ClaimProcCur.PlanNum,FamCur,PlanList);
 			checkNoBillIns.Checked=ClaimProcCur.NoBillIns;
 			if(ClaimProcCur.ClaimPaymentNum>0){//attached to ins check
@@ -1619,7 +1619,9 @@ namespace OpenDental
 			}
 			if(IsProc) {
 				ClaimProcs.ComputeBaseEst(ClaimProcCur,proc.ProcFee,proc.ToothNum,proc.CodeNum,Plan,PatPlanNum,BenefitList,
-					HistList,LoopList,PatPlanList,PaidOtherInsEstTotal,PaidOtherInsBaseEst,PatCur.Age,WriteOffEstOtherIns);
+					HistList,LoopList,PatPlanList,PaidOtherInsTotal,PaidOtherInsBaseEst,PatCur.Age,WriteOffOtherIns);
+				//Paid other ins is not accurate
+
 			}
 			//else {
 			//	ClaimProcs.ComputeBaseEst(ClaimProcCur,0,"",0,Plan,PatPlanNum,BenefitList,HistList,LoopList);

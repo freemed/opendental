@@ -577,8 +577,8 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		///<summary>Calculates the Base estimate, InsEstTotal, and all the other insurance numbers for a single claimproc.  This is is not done on the fly.  Use Procedure.GetEst to later retrieve the estimate. This function replaces all of the upper estimating logic that was within FormClaimProc.  BaseEst=((fee or allowedOverride)-Copay) x (percentage or percentOverride).  The calling class must have already created the claimProc, and this function simply updates the BaseEst field of that claimproc. pst.Tot not used.  For Estimate and CapEstimate, all the estimate fields will be recalculated except the overrides.  histList and loopList can be null.  If so, then deductible and annual max will not be recalculated.  histList and loopList may only make sense in TP module and claimEdit.  loopList contains all claimprocs in the current list (TP or claim) that come before this procedure.  PaidOtherInsEstTotal should only contain sum of InsEstTotal/Override, not any paid or pending payments.  PaidOtherInsBaseEst</summary>
-		public static void ComputeBaseEst(ClaimProc cp,double procFee,string toothNum,long codeNum,InsPlan plan,long patPlanNum,List<Benefit> benList,List<ClaimProcHist> histList,List<ClaimProcHist> loopList,List<PatPlan> patPlanList,double paidOtherInsEstTotal,double paidOtherInsBaseEst,int patientAge,double writeOffEstOtherIns) {
+		///<summary>Calculates the Base estimate, InsEstTotal, and all the other insurance numbers for a single claimproc.  This is is not done on the fly.  Use Procedure.GetEst to later retrieve the estimate. This function replaces all of the upper estimating logic that was within FormClaimProc.  BaseEst=((fee or allowedOverride)-Copay) x (percentage or percentOverride).  The calling class must have already created the claimProc, and this function simply updates the BaseEst field of that claimproc. pst.Tot not used.  For Estimate and CapEstimate, all the estimate fields will be recalculated except the overrides.  histList and loopList can be null.  If so, then deductible and annual max will not be recalculated.  histList and loopList may only make sense in TP module and claimEdit.  loopList contains all claimprocs in the current list (TP or claim) that come before this procedure.  PaidOtherInsEstTotal should only contain sum of InsEstTotal/Override, or paid, depending on the status.  PaidOtherInsBaseEst also includes actual payments.</summary>
+		public static void ComputeBaseEst(ClaimProc cp,double procFee,string toothNum,long codeNum,InsPlan plan,long patPlanNum,List<Benefit> benList,List<ClaimProcHist> histList,List<ClaimProcHist> loopList,List<PatPlan> patPlanList,double paidOtherInsTot,double paidOtherInsBase,int patientAge,double writeOffOtherIns) {
 			//No need to check RemotingRole; no call to db.
 			if(cp.Status==ClaimProcStatus.CapClaim
 				|| cp.Status==ClaimProcStatus.CapComplete
@@ -719,9 +719,18 @@ namespace OpenDentBusiness{
 				cp.InsEstTotal=cp.InsEstTotal*(double)cp.Percentage/100d;
 			}
 			//PaidOtherIns----------------------------------------------------------------------------------------
-			double paidOtherInsActual=GetPaidOtherIns(cp,patPlanList,patPlanNum,histList);//can return -1 for primary
+			//double paidOtherInsActual=GetPaidOtherIns(cp,patPlanList,patPlanNum,histList);//can return -1 for primary
+			PatPlan pp=PatPlans.GetFromList(patPlanList.ToArray(),patPlanNum);
 			//if -1, that indicates primary ins, not a proc, or no histlist.  We should not alter it in this case.
-			if(paidOtherInsActual!=-1) {
+			//if(paidOtherInsActual!=-1) {
+			//An older restriction was that histList must not be null.  But since this is now straight from db, that's not restriction.
+			if(pp==null) {
+				//corruption.  Do nothing.
+			}
+			else if(pp.Ordinal==1 || cp.ProcNum==0){
+				cp.PaidOtherIns=0;
+			}
+			else{
 				//The normal calculation uses the InsEstTotal from the primary ins.
 				//But in TP module, if not using max and deduct, then the amount estimated to be paid by primary will be different.
 				//It will use the primary BaseEst instead of the primary InsEstTotal.
@@ -729,19 +738,20 @@ namespace OpenDentBusiness{
 				//the secondary BaseEst should use the primary BaseEst when calculating paidOtherIns.
 				//The BaseEst will, however, use PaidOtherInsOverride, if user has entered one.
 				//This calculation doesn't need to be accurate unless viewing TP,
-				//so it's ok to pass in a dummy value, like paidOtherInsEstTotal.
+				//so it's ok to pass in a dummy value, like paidOtherInsTotal.
 				//We do InsEstTotal first
-				cp.PaidOtherIns=paidOtherInsActual+paidOtherInsEstTotal;
-				double paidOtherInsTotal=cp.PaidOtherIns;
+				//cp.PaidOtherIns=paidOtherInsActual+paidOtherInsEstTotal;
+				cp.PaidOtherIns=paidOtherInsTot;
+				double paidOtherInsTotTemp=cp.PaidOtherIns;
 				if(cp.PaidOtherInsOverride != -1) {//use the override
-					paidOtherInsTotal=cp.PaidOtherInsOverride;
+					paidOtherInsTotTemp=cp.PaidOtherInsOverride;
 				}
 				//example: Fee:200, InsEstT:80, BaseEst:100, PaidOI:110.
 				//So... MaxPtP:90.
 				//Since InsEstT is not greater than MaxPtoP, no change.
 				//Since BaseEst is greater than MaxPtoP, BaseEst changed to 90.
-				if(paidOtherInsTotal != -1) {
-					double maxPossibleToPay=allowed-paidOtherInsTotal;
+				if(paidOtherInsTotTemp != -1) {
+					double maxPossibleToPay=allowed-paidOtherInsTotTemp;
 					if(maxPossibleToPay<0) {
 						maxPossibleToPay=0;
 					}
@@ -750,12 +760,12 @@ namespace OpenDentBusiness{
 					}
 				}
 				//Then, we do BaseEst
-				double paidOtherInsBase=paidOtherInsActual+paidOtherInsBaseEst;
+				double paidOtherInsBaseTemp=paidOtherInsBase;//paidOtherInsActual+paidOtherInsBaseEst;
 				if(cp.PaidOtherInsOverride != -1) {//use the override
-					paidOtherInsBase=cp.PaidOtherInsOverride;
+					paidOtherInsBaseTemp=cp.PaidOtherInsOverride;
 				}
-				if(paidOtherInsBase != -1) {
-					double maxPossibleToPay=allowed-paidOtherInsBase;
+				if(paidOtherInsBaseTemp != -1) {
+					double maxPossibleToPay=allowed-paidOtherInsBaseTemp;
 					if(maxPossibleToPay<0) {
 						maxPossibleToPay=0;
 					}
@@ -807,7 +817,7 @@ namespace OpenDentBusiness{
 				if(normalWriteOff<0) {
 					normalWriteOff=0;
 				}
-				double remainingWriteOff=procFee-paidOtherInsEstTotal-writeOffEstOtherIns;//This is the fee minus whatever other ins has already paid or written off.
+				double remainingWriteOff=procFee-paidOtherInsTot-writeOffOtherIns;//This is the fee minus whatever other ins has already paid or written off.
 				if(remainingWriteOff<0) {
 					remainingWriteOff=0;
 				}
@@ -831,6 +841,7 @@ namespace OpenDentBusiness{
 			}
 		}
 
+		/*
 		///<summary>We don't care about a looplist because those would be for different procedures.  So this calculation really only makes sense when calculating secondary insurance in the claim edit window or when calculating secondary estimates in the TP module.  HistList will include actual payments and estimated pending payments for this proc, but it will not include primary estimates.  Estimates are not handled here, but are instead passed in to ComputeBaseEst</summary>
 		private static double GetPaidOtherIns(ClaimProc cp,List<PatPlan> patPlanList,long patPlanNum,List<ClaimProcHist> histList) {
 			if(cp.ProcNum==0) {
@@ -857,10 +868,10 @@ namespace OpenDentBusiness{
 				retVal+=histList[i].Amount;
 			}
 			return retVal;
-		}
+		}*/
 
-		///<summary>Only useful if secondary ins or greater.  For one procedure, it gets the sum of InsEstTotal/Override for other insurances with lower ordinals.  Estimates only.  No pending payments.  Will return 0 if ordinal of this claimproc is 1.</summary>
-		public static double GetPaidOtherInsEstTotal(ClaimProc cp,List<PatPlan> patPlanList) {
+		///<summary>Only useful if secondary ins or greater.  For one procedure, it gets the sum of InsEstTotal/Override for other insurances with lower ordinals.  Either estimates or actual payments.  Will return 0 if ordinal of this claimproc is 1.</summary>
+		public static double GetPaidOtherInsTotal(ClaimProc cp,List<PatPlan> patPlanList) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<double>(MethodBase.GetCurrentMethod(),cp,patPlanList);
 			}
@@ -871,13 +882,15 @@ namespace OpenDentBusiness{
 			if(thisOrdinal==1) {
 				return 0;
 			}
-			string command="SELECT PlanNum,InsEstTotal,InsEstTotalOverride FROM claimproc WHERE ProcNum="+POut.Long(cp.ProcNum);
+			string command="SELECT PlanNum,InsEstTotal,InsEstTotalOverride,InsPayAmt,Status FROM claimproc WHERE ProcNum="+POut.Long(cp.ProcNum);
 			DataTable table=Db.GetTable(command);
 			double retVal=0;
 			long planNum;
 			int ordinal;
 			double insEstTotal;
 			double insEstTotalOverride;
+			double insPayAmt;
+			ClaimProcStatus status;
 			for(int i=0;i<table.Rows.Count;i++) {
 				planNum=PIn.Long(table.Rows[i]["PlanNum"].ToString());
 				ordinal=PatPlans.GetOrdinal(patPlanList,planNum);
@@ -886,17 +899,26 @@ namespace OpenDentBusiness{
 				}
 				insEstTotal=PIn.Double(table.Rows[i]["InsEstTotal"].ToString());
 				insEstTotalOverride=PIn.Double(table.Rows[i]["InsEstTotalOverride"].ToString());
-				if(insEstTotalOverride != -1) {
-					retVal+=insEstTotalOverride;
+				insPayAmt=PIn.Double(table.Rows[i]["InsPayAmt"].ToString());
+				status=(ClaimProcStatus)PIn.Int(table.Rows[i]["Status"].ToString());
+				if(status==ClaimProcStatus.Received || status==ClaimProcStatus.Supplemental) 
+				{
+					retVal+=insPayAmt;
 				}
-				else {
-					retVal+=insEstTotal;
+				if(status==ClaimProcStatus.Estimate || status==ClaimProcStatus.NotReceived) 
+				{
+					if(insEstTotalOverride != -1) {
+						retVal+=insEstTotalOverride;
+					}
+					else {
+						retVal+=insEstTotal;
+					}
 				}
 			}
 			return retVal;
 		}
 
-		///<summary>Only useful if secondary ins or greater.  For one procedure, it gets the sum of BaseEst for other insurances with lower ordinals.  Estimates only.  No pending payments.  Will return 0 if ordinal of this claimproc is 1.</summary>
+		///<summary>Only useful if secondary ins or greater.  For one procedure, it gets the sum of BaseEst for other insurances with lower ordinals.  Either estimates or actual payments.  Will return 0 if ordinal of this claimproc is 1.</summary>
 		public static double GetPaidOtherInsBaseEst(ClaimProc cp,List<PatPlan> patPlanList) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<double>(MethodBase.GetCurrentMethod(),cp,patPlanList);
@@ -908,12 +930,14 @@ namespace OpenDentBusiness{
 			if(thisOrdinal==1) {
 				return 0;
 			}
-			string command="SELECT PlanNum,BaseEst FROM claimproc WHERE ProcNum="+POut.Long(cp.ProcNum);
+			string command="SELECT PlanNum,BaseEst,InsPayAmt,Status FROM claimproc WHERE ProcNum="+POut.Long(cp.ProcNum);
 			DataTable table=Db.GetTable(command);
 			double retVal=0;
 			long planNum;
 			int ordinal;
 			double baseEst;
+			double insPayAmt;
+			ClaimProcStatus status;
 			for(int i=0;i<table.Rows.Count;i++) {
 				planNum=PIn.Long(table.Rows[i]["PlanNum"].ToString());
 				ordinal=PatPlans.GetOrdinal(patPlanList,planNum);
@@ -921,13 +945,20 @@ namespace OpenDentBusiness{
 					continue;
 				}
 				baseEst=PIn.Double(table.Rows[i]["BaseEst"].ToString());
-				retVal+=baseEst;
+				insPayAmt=PIn.Double(table.Rows[i]["InsPayAmt"].ToString());
+				status=(ClaimProcStatus)PIn.Int(table.Rows[i]["Status"].ToString());
+				if(status==ClaimProcStatus.Received || status==ClaimProcStatus.Supplemental) {
+					retVal+=insPayAmt;
+				}
+				if(status==ClaimProcStatus.Estimate || status==ClaimProcStatus.NotReceived) {
+					retVal+=baseEst;
+				}
 			}
 			return retVal;
 		}
 
-		///<summary>Only useful if secondary ins or greater.  For one procedure, it gets the sum of WriteOffEstimates/Override for other insurances with lower ordinals.  Estimates only.  No actual writeoffs.  Will return 0 if ordinal of this claimproc is 1.</summary>
-		public static double GetWriteOffEstOtherIns(ClaimProc cp,List<PatPlan> patPlanList) {
+		///<summary>Only useful if secondary ins or greater.  For one procedure, it gets the sum of WriteOffEstimates/Override for other insurances with lower ordinals.  Either estimates or actual writeoffs.  Will return 0 if ordinal of this claimproc is 1.</summary>
+		public static double GetWriteOffOtherIns(ClaimProc cp,List<PatPlan> patPlanList) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<double>(MethodBase.GetCurrentMethod(),cp,patPlanList);
 			}
@@ -938,13 +969,15 @@ namespace OpenDentBusiness{
 			if(thisOrdinal==1) {
 				return 0;
 			}
-			string command="SELECT PlanNum,WriteOffEst,WriteOffEstOverride FROM claimproc WHERE ProcNum="+POut.Long(cp.ProcNum);
+			string command="SELECT PlanNum,WriteOffEst,WriteOffEstOverride,WriteOff,Status FROM claimproc WHERE ProcNum="+POut.Long(cp.ProcNum);
 			DataTable table=Db.GetTable(command);
 			double retVal=0;
 			long planNum;
 			int ordinal;
 			double writeOffEst;
 			double writeOffEstOverride;
+			double writeOff;
+			ClaimProcStatus status;
 			for(int i=0;i<table.Rows.Count;i++) {
 				planNum=PIn.Long(table.Rows[i]["PlanNum"].ToString());
 				ordinal=PatPlans.GetOrdinal(patPlanList,planNum);
@@ -953,11 +986,18 @@ namespace OpenDentBusiness{
 				}
 				writeOffEst=PIn.Double(table.Rows[i]["WriteOffEst"].ToString());
 				writeOffEstOverride=PIn.Double(table.Rows[i]["WriteOffEstOverride"].ToString());
-				if(writeOffEstOverride != -1) {
-					retVal+=writeOffEstOverride;
+				writeOff=PIn.Double(table.Rows[i]["WriteOff"].ToString());
+				status=(ClaimProcStatus)PIn.Int(table.Rows[i]["Status"].ToString());
+				if(status==ClaimProcStatus.Received || status==ClaimProcStatus.Supplemental) {
+					retVal+=writeOff;
 				}
-				else if(writeOffEst !=-1){
-					retVal+=writeOffEst;
+				if(status==ClaimProcStatus.Estimate || status==ClaimProcStatus.NotReceived) {
+					if(writeOffEstOverride != -1) {
+						retVal+=writeOffEstOverride;
+					}
+					else if(writeOffEst !=-1){
+						retVal+=writeOffEst;
+					}
 				}
 			}
 			return retVal;
