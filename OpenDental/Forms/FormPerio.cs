@@ -1524,6 +1524,9 @@ namespace OpenDental{
 				return;
 			}
 			gridP.SaveCurExam(PerioExamCur.PerioExamNum);
+			PerioExams.Refresh(PatCur.PatNum);
+			PerioMeasures.Refresh(PatCur.PatNum,PerioExams.ListExams);
+			FillGrid();
 			Bitmap gridImage=null;
 			Bitmap perioPrintImage=null;
 			Graphics g=null;
@@ -1704,6 +1707,9 @@ namespace OpenDental{
 			}
 			//if(listExams.SelectedIndex!=-1) {
 			gridP.SaveCurExam(PerioExamCur.PerioExamNum);
+			PerioExams.Refresh(PatCur.PatNum);//refresh instead
+			PerioMeasures.Refresh(PatCur.PatNum,PerioExams.ListExams);
+			FillGrid();
 			FormPerioGraphical formg=new FormPerioGraphical(PerioExams.ListExams[listExams.SelectedIndex],PatCur);
 			formg.ShowDialog();
 			formg.Dispose();

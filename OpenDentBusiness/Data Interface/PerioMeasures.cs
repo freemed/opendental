@@ -30,6 +30,14 @@ namespace OpenDentBusiness{
 				+",DLvalue = '"     +POut.Long   (Cur.DLvalue)+"'"
 				+" WHERE PerioMeasureNum = '"+POut.Long(Cur.PerioMeasureNum)+"'";
 			Db.NonQ(command);
+			//3-10-10 A bug that only lasted for a few weeks has resulted in a number of duplicate entries for each tooth.
+			//So we need to clean up duplicates as we go.  Might put in db maint later.
+			command="DELETE FROM periomeasure WHERE "
+				+ "PerioExamNum = "+POut.Long(Cur.PerioExamNum)
+				+" AND SequenceType = "+POut.Long((int)Cur.SequenceType)
+				+" AND IntTooth = "+POut.Long(Cur.IntTooth)
+				+" AND PerioMeasureNum != "+POut.Long(Cur.PerioMeasureNum);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>
