@@ -681,9 +681,9 @@ namespace OpenDental{
 				//Try to connect to the database directly
 				try {
 					DataConnection.DBtype=DatabaseType.MySql;
-					if(listType.SelectedIndex==1) {
+					//if(listType.SelectedIndex==1) {
 						//DataConnection.DBtype=DatabaseType.Oracle;
-					}
+					//}
 					DataSettings.DbType = DataConnection.DBtype;
 					dcon=new OpenDentBusiness.DataConnection(DataConnection.DBtype);
 					if(textConnectionString.Text.Length>0){

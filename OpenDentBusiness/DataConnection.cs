@@ -79,6 +79,7 @@ namespace OpenDentBusiness{
 				port=serverNamePort[1];
 			}
 			string connectStr="";
+			/*
 			if(DBtype==DatabaseType.Oracle){
 				connectStr=
 					"Data Source=(DESCRIPTION=(ADDRESS_LIST="
@@ -86,17 +87,17 @@ namespace OpenDentBusiness{
 				+ "(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME="+pDatabase+")));"
 				+ "User Id="+pUserID+";Password="+pPassword+";";
 			}
-			else if(DBtype==DatabaseType.MySql){
-				connectStr=
-					"Server="+serverName
-					+";Port="+port//although this does seem to cause a bug in Mono.  We will revisit this bug if needed to exclude the port option only for Mono.
-					+";Database="+pDatabase
-					//+";Connect Timeout=20"
-					+";User ID="+pUserID
-					+";Password="+pPassword
-					+";CharSet=utf8";
-					//+";Pooling=false";
-			}
+			else if(DBtype==DatabaseType.MySql){*/
+			connectStr=
+				"Server="+serverName
+				+";Port="+port//although this does seem to cause a bug in Mono.  We will revisit this bug if needed to exclude the port option only for Mono.
+				+";Database="+pDatabase
+				//+";Connect Timeout=20"
+				+";User ID="+pUserID
+				+";Password="+pPassword
+				+";CharSet=utf8";
+				//+";Pooling=false";
+			//}
 			return connectStr;
 		}
 
@@ -112,7 +113,7 @@ namespace OpenDentBusiness{
 			if(userLow!=""){
 				connectStrLow=BuildSimpleConnectionString(server,db,userLow,passLow);
 			}
-			TestConnection(connectStr,connectStrLow,dbtype);
+			TestConnection(connectStr,connectStrLow,dbtype,false);
 			//connection strings must be valid, so OK to set permanently
 			Database=db;
 			ServerName=server;//yes, it includes the port
@@ -123,21 +124,28 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>This needs to be run every time we switch databases, especially on startup.  Will throw an exception if fails.  Calling class should catch exception.</summary>
-		public void SetDb(string connectStr,string connectStrLow,DatabaseType dbtype){
-			TestConnection(connectStr,connectStrLow,dbtype);
+		public void SetDb(string connectStr,string connectStrLow,DatabaseType dbtype,bool skipValidation){
+			TestConnection(connectStr,connectStrLow,dbtype,skipValidation);
 			//connection string must be valid, so OK to set permanently
 			ConnectionString=connectStr;
 		}
 
-		private void TestConnection(string connectStr,string connectStrLow,DatabaseType dbtype) {
+		///<summary></summary>
+		public void SetDb(string connectStr,string connectStrLow,DatabaseType dbtype){
+			SetDb(connectStr,connectStrLow,dbtype,false);
+		}
+
+		private void TestConnection(string connectStr,string connectStrLow,DatabaseType dbtype,bool skipValidation) {
 			DBtype=dbtype;
 			con=new MySqlConnection(connectStr);
 			cmd = new MySqlCommand();
 			//cmd.CommandTimeout=30;
 			cmd.Connection=con;
 			con.Open();
-			cmd.CommandText="UPDATE preference SET ValueString = '0' WHERE ValueString = '0'";
-			cmd.ExecuteNonQuery();
+			if(!skipValidation){
+				cmd.CommandText="UPDATE preference SET ValueString = '0' WHERE ValueString = '0'";
+				cmd.ExecuteNonQuery();
+			}
 			con.Close();
 			if(connectStrLow!=""){
 				con=new MySqlConnection(connectStrLow);

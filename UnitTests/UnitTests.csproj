@@ -73,6 +73,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BenefitT.cs" />
+    <Compile Include="DatabaseTools.cs" />
     <Compile Include="FormUnitTests.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -104,8 +106,15 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="RecyclingBin.cs" />
+    <Compile Include="Sandbox.cs" />
+    <Compile Include="ToothT.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CodeBase\xCodeBase.csproj">
+      <Project>{18F7BC78-4B99-48D3-A1F1-0D13A63E3CF9}</Project>
+      <Name>xCodeBase</Name>
+    </ProjectReference>
     <ProjectReference Include="..\OpenDental\OpenDental.csproj">
       <Project>{8136317D-C936-49B6-9E31-D90F02D2F207}</Project>
       <Name>OpenDental</Name>
@@ -114,6 +123,9 @@
       <Project>{3D0FC76E-803C-4DE2-BDB1-47D63A4E2357}</Project>
       <Name>OpenDentBusiness</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\dump.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
