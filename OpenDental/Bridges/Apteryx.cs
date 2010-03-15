@@ -18,16 +18,18 @@ namespace OpenDental.Bridges{
 
 		///<summary>Launches the program using a combination of command line characters and the patient.Cur data.</summary>
 		public static void SendData(Program ProgramCur, Patient pat){
-			ArrayList ForProgram=ProgramProperties.GetForProgram(ProgramCur.ProgramNum);;
+			ArrayList ForProgram=ProgramProperties.GetForProgram(ProgramCur.ProgramNum);
 			if(pat!=null){
-				string info="\""+pat.LName+", "+pat.FName+"::";
+				//We remove double-quotes from the first and last name of the patient so extra double-quotes don't
+				//cause confusion in the command line parameters for Apteryx.
+				string info="\""+pat.LName.Replace("\"","")+", "+pat.FName.Replace("\"","")+"::";
 				if(pat.SSN.Length==9){
 					info+=pat.SSN.Substring(0,3)+"-"
 						+pat.SSN.Substring(3,2)+"-"
 						+pat.SSN.Substring(5,4);
 				}
 				//Patient id can be any string format
-				ProgramProperty PPCur=ProgramProperties.GetCur(ForProgram, "Enter 0 to use PatientNum, or 1 to use ChartNum");;
+				ProgramProperty PPCur=ProgramProperties.GetCur(ForProgram, "Enter 0 to use PatientNum, or 1 to use ChartNum");
 				if(PPCur.PropertyValue=="0"){
 					info+="::"+pat.PatNum.ToString();
 				}
