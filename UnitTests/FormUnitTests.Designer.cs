@@ -29,6 +29,8 @@ namespace UnitTests {
 			this.butNewDb = new System.Windows.Forms.Button();
 			this.label2 = new System.Windows.Forms.Label();
 			this.butRun = new System.Windows.Forms.Button();
+			this.label3 = new System.Windows.Forms.Label();
+			this.textSpecificTest = new System.Windows.Forms.TextBox();
 			this.SuspendLayout();
 			// 
 			// textResults
@@ -80,11 +82,29 @@ namespace UnitTests {
 			this.butRun.UseVisualStyleBackColor = true;
 			this.butRun.Click += new System.EventHandler(this.butRun_Click);
 			// 
+			// label3
+			// 
+			this.label3.Location = new System.Drawing.Point(92,66);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(90,18);
+			this.label3.TabIndex = 8;
+			this.label3.Text = "Specific test #";
+			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// textSpecificTest
+			// 
+			this.textSpecificTest.Location = new System.Drawing.Point(177,66);
+			this.textSpecificTest.Name = "textSpecificTest";
+			this.textSpecificTest.Size = new System.Drawing.Size(74,20);
+			this.textSpecificTest.TabIndex = 9;
+			// 
 			// FormUnitTests
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(687,807);
+			this.Controls.Add(this.textSpecificTest);
+			this.Controls.Add(this.label3);
 			this.Controls.Add(this.butRun);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.butNewDb);
@@ -107,6 +127,8 @@ namespace UnitTests {
 		private System.Windows.Forms.Button butNewDb;
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.Button butRun;
+		private System.Windows.Forms.Label label3;
+		private System.Windows.Forms.TextBox textSpecificTest;
 	}
 }
 

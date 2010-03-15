@@ -60,22 +60,7 @@ namespace UnitTests.Properties {
             }
         }
         
-        /// <summary>
-        ///   Looks up a localized string similar to /*
-        ///SQLyog Community- MySQL GUI v8.22 
-        ///MySQL - 5.0.22-community-nt : Database - unittest
-        ///*********************************************************************
-        ///*/        ///
-        ///
-        ////*!40101 SET NAMES utf8 */;
-        ///
-        ////*!40101 SET SQL_MODE=&apos;&apos;*/;
-        ///
-        ////*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-        ////*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-        ////*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE=&apos;NO_AUTO_VALUE_ON_ZERO&apos; */;
-        ////*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTE [rest of string was truncated]&quot;;.
-        /// </summary>
+        /// <summary></summary>
         internal static string dump {
             get {
                 return ResourceManager.GetString("dump", resourceCulture);

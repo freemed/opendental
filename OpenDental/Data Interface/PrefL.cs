@@ -13,12 +13,12 @@ namespace OpenDental {
 	public class PrefL{
 
 		///<summary>This ONLY runs when first opening the program.  It returns true if either no conversion is necessary, or if conversion was successful.  False for other situations like corrupt db, trying to convert to older version, etc.</summary>
-		public static bool ConvertDB() {
+		public static bool ConvertDB(bool silent,string toVersion) {
 			ClassConvertDatabase ClassConvertDatabase2=new ClassConvertDatabase();
 			string pref=PrefC.GetString(PrefName.DataBaseVersion);
 				//(Pref)PrefC.HList["DataBaseVersion"];
 			//Debug.WriteLine(pref.PrefName+","+pref.ValueString);
-			if(ClassConvertDatabase2.Convert(pref)){
+			if(ClassConvertDatabase2.Convert(pref,toVersion,silent)) {
 				//((Pref)PrefC.HList["DataBaseVersion"]).ValueString)) {
 				return true;
 			}
@@ -26,6 +26,11 @@ namespace OpenDental {
 				Application.Exit();
 				return false;
 			}
+		}
+
+		///<summary>This ONLY runs when first opening the program.  It returns true if either no conversion is necessary, or if conversion was successful.  False for other situations like corrupt db, trying to convert to older version, etc.</summary>
+		public static bool ConvertDB() {
+			return ConvertDB(false,Application.ProductVersion);
 		}
 
 		///<summary>Called in two places.  Once from FormOpenDental.PrefsStartup, and also from FormBackups after a restore.</summary>

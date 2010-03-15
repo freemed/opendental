@@ -109,6 +109,7 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
+		///<summary>Returns null if no fee exists for code/feeSched combo.</summary>
 		public static Fee GetFee(long codeNum,long feeSchedNum) {
 			//No need to check RemotingRole; no call to db.
 			if(codeNum==0){

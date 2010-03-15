@@ -27,9 +27,9 @@ namespace OpenDental{
 		private System.Version ToVersion;
 
 		///<summary>Return false to indicate exit app.  Only called when program first starts up at the beginning of FormOpenDental.PrefsStartup.</summary>
-		public bool Convert(string fromVersion){
+		public bool Convert(string fromVersion,string toVersion,bool silent) {
 			FromVersion=new Version(fromVersion);
-			ToVersion=new Version(Application.ProductVersion);
+			ToVersion=new Version(toVersion);//Application.ProductVersion);
 			if(FromVersion>=new Version("3.4.0") && PrefC.GetBool(PrefName.CorruptedDatabase)){
 				MsgBox.Show(this,"Your database is corrupted because a conversion failed.  Please contact us.  This database is unusable and you will need to restore from a backup.");
 				return false;//shuts program down.
@@ -86,7 +86,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"This replication server is blocked from performing updates.");
 				return false;
 			}
-			if(MessageBox.Show(Lan.g(this,"Your database will now be converted")+"\r"
+			if(!silent && MessageBox.Show(Lan.g(this,"Your database will now be converted")+"\r"
 				+Lan.g(this,"from version")+" "+FromVersion.ToString()+"\r"
 				+Lan.g(this,"to version")+" "+ToVersion.ToString()+"\r"
 				+Lan.g(this,"The conversion works best if you are on the server.  Depending on the speed of your computer, it can be as fast as a few seconds, or it can take as long as 10 minutes.")
@@ -122,7 +122,9 @@ namespace OpenDental{
 			ConvertDatabases.FromVersion=FromVersion;
 			ConvertDatabases.To2_8_2();//begins going through the chain of conversion steps
 			Cursor.Current=Cursors.Default;
-			MsgBox.Show(this,"Conversion successful");
+			if(!silent) {
+				MsgBox.Show(this,"Conversion successful");
+			}
 			if(FromVersion>=new Version("3.4.0")){
 				//CacheL.Refresh(InvalidType.Prefs);//or it won't know it has to update in the next line.
 				Prefs.UpdateBool(PrefName.CorruptedDatabase,false,true);//more forceful refresh in order to properly change flag

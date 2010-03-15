@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -17,24 +18,50 @@ namespace UnitTests {
 		}
 
 		private void FormUnitTests_Load(object sender,EventArgs e) {
-			throw new Exception("");
-			//DatabaseTools.SetDbConnection("unittest");
+			//throw new Exception("");
+			//if(!DatabaseTools.SetDbConnection("unittest")){
+
+			//}
 			//if(!DatabaseTools.DbExists()){
 			//	MessageBox.Show("Database does not exist: "+DatabaseTools.dbName);
 			//}
-		}
+			
 
-		
+		}
 
 		private void butNewDb_Click(object sender,EventArgs e) {
 			textResults.Text="";
+			Application.DoEvents();
 			Cursor=Cursors.WaitCursor;
+			if(!DatabaseTools.SetDbConnection("")){
+				MessageBox.Show("Could not connect");
+				return;
+			}
 			DatabaseTools.FreshFromDump();
 			textResults.Text+="Fresh database loaded from sql dump.";
 			Cursor=Cursors.Default;
 		}
 
 		private void butRun_Click(object sender,EventArgs e) {
+			textResults.Text="";
+			Application.DoEvents();
+			Cursor=Cursors.WaitCursor;
+			if(!DatabaseTools.SetDbConnection("unittest")) {//if database doesn't exist
+				DatabaseTools.SetDbConnection("");
+				textResults.Text+=DatabaseTools.FreshFromDump();//this also sets database to be unittest.
+			}
+			else {
+				textResults.Text+=DatabaseTools.ClearDb();
+			}
+			Application.DoEvents();
+			int specificTest=PIn.Int(textSpecificTest.Text);//typically zero
+			textResults.Text+=ClaimProcT.TestDualPPO(specificTest);
+			Application.DoEvents();
+
+			Cursor=Cursors.Default;
+
+
+
 			//SetDbConnection();
 			/*
 			BenefitComputeRenewDate();
