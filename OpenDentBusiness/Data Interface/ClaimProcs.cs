@@ -821,8 +821,11 @@ namespace OpenDentBusiness{
 				if(remainingWriteOff<0) {
 					remainingWriteOff=0;
 				}
+				if(writeOffOtherIns>0) {//no secondary writeoff estimates allowed
+					cp.WriteOffEst=0;
+				}
 				//We can't go over either number.  We must use the smaller of the two.  If one of them is zero, then the writeoff is zero.
-				if(remainingWriteOff==0 || normalWriteOff==0){
+				else if(remainingWriteOff==0 || normalWriteOff==0) {
 					cp.WriteOffEst=0;
 				}
 				else if(remainingWriteOff<=normalWriteOff) {

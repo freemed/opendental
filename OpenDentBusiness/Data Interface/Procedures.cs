@@ -1384,6 +1384,53 @@ namespace OpenDentBusiness {
 				patPlans,benefitList,histList,loopList,saveToDb,patientAge);
 			ComputeForOrdinal(4,claimProcs,proc,PlanList,isInitialEntry,ref paidOtherInsEstTotal,ref paidOtherInsBaseEst,ref writeOffEstOtherIns,
 				patPlans,benefitList,histList,loopList,saveToDb,patientAge);
+			//At this point, for a PPO with secondary, the sum of all estimates plus primary writeoff might be greater than fee.
+			if(patPlans.Count>1){
+				PlanCur=InsPlans.GetPlan(patPlans[0].PlanNum,PlanList);
+				if(PlanCur.PlanType=="p") {
+					claimProcs=ClaimProcs.Refresh(patNum);
+					ClaimProc priClaimProc=null;
+					double sumPay=0;//Either actual or estimate
+					for(int i=0;i<claimProcs.Count;i++){
+						if(claimProcs[i].ProcNum!=proc.ProcNum){
+							continue;
+						}
+						if(claimProcs[i].Status==ClaimProcStatus.Adjustment
+							|| claimProcs[i].Status==ClaimProcStatus.CapClaim
+							|| claimProcs[i].Status==ClaimProcStatus.CapComplete
+							|| claimProcs[i].Status==ClaimProcStatus.CapEstimate
+							|| claimProcs[i].Status==ClaimProcStatus.Preauth)
+						{
+							continue;
+						}
+						if(claimProcs[i].PlanNum==PlanCur.PlanNum && claimProcs[i].WriteOffEst>0){
+							priClaimProc=claimProcs[i];
+						}
+						if(claimProcs[i].Status==ClaimProcStatus.Received
+							|| claimProcs[i].Status==ClaimProcStatus.Supplemental ){
+							sumPay+=claimProcs[i].InsPayAmt;
+						}
+						if(claimProcs[i].Status==ClaimProcStatus.Estimate){
+							if(claimProcs[i].InsEstTotalOverride!=-1){
+								sumPay+=claimProcs[i].InsEstTotalOverride;
+							}
+							else{
+								sumPay+=claimProcs[i].InsEstTotal;
+							}
+						}
+						if(claimProcs[i].Status==ClaimProcStatus.NotReceived){
+							sumPay+=claimProcs[i].InsPayEst;
+						}
+					}
+					//Alter primary WO if needed.
+					if(priClaimProc!=null){
+						if(sumPay+priClaimProc.WriteOffEst > proc.ProcFee){
+							priClaimProc.WriteOffEst= proc.ProcFee-sumPay;
+							ClaimProcs.Update(priClaimProc);
+						}
+					}
+				}
+			}
 		}
 
 		///<summary>Passing in 4 will compute for 4 as well as any other situation such as dropped plan.</summary>
