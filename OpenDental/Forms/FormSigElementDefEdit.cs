@@ -7,6 +7,7 @@ using System.IO;
 using System.Media;
 using System.Windows.Forms;
 using OpenDentBusiness;
+using CodeBase;
 
 namespace OpenDental{
 	/// <summary>
@@ -416,7 +417,27 @@ namespace OpenDental{
 		}
 
 		private void butRecord_Click(object sender,EventArgs e) {
-			Process.Start("sndrec32.exe");
+			//The following article was used to figure out how to launch the appropriate executable:
+			//http://blogs.microsoft.co.il/blogs/tamir/archive/2007/12/04/seek-and-hide-x64-or-where-my-sound-recoder.aspx
+			try{
+				//Try to launch the sound recorder program within the Windows operating system
+				//for all versions of Windows prior to Windows Vista.
+				Process.Start("sndrec32.exe");
+			}catch{
+				//We are on a Windows Vista or later Operating System.
+				//The path to the SoundRecorder.exe changes depending on if the Operating System
+				//is 32 bit or 64 bit.
+				try{
+					//First try to launch the SoundRecorder.exe for 32 bit Operating Systems.
+					Process.Start("SoundRecorder.exe");
+				}catch{
+					//This is a 64 bit Operating System. A special environment variable path must be used to indirectly access
+					//the SoundRecoder.exe file. The resulting path inside of the soundRecoderVirtualPath variable will only
+					//exist inside of this program and does not actually exist if one tries to browse to it.
+					string soundRecorderVirtualPath=Environment.ExpandEnvironmentVariables(@"%systemroot%\Sysnative")+"\\SoundRecorder.exe";
+					Process.Start(soundRecorderVirtualPath);
+				}
+			}
 		}
 
 		private void butImport_Click(object sender,EventArgs e) {
