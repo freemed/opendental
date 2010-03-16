@@ -277,6 +277,9 @@ namespace OpenDental {
 					return;
 				}
 				SheetField fieldThis=(SheetField)checkbox.Tag;
+				if(fieldThis.RadioButtonValue==""){//if it's a checkbox instead of a radiobutton
+					return;
+				}
 				foreach(Control control in panelMain.Controls) {//set some other radiobuttons to be not checked
 					if(control.GetType()!=typeof(SheetCheckBox)) {
 						continue;
