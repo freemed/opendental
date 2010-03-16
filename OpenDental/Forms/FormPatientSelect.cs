@@ -1066,6 +1066,7 @@ namespace OpenDental{
 			}
 			PatCur.PatStatus=PatientStatus.Patient;
 			PatCur.BillingType=PrefC.GetLong(PrefName.PracticeDefaultBillType);
+			PatCur.PriProv=PrefC.GetLong(PrefName.PracticeDefaultProv);
 			Patients.Insert(PatCur,false);
 			Patient PatOld=PatCur.Copy();
 			PatCur.Guarantor=PatCur.PatNum;
