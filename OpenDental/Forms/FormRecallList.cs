@@ -720,7 +720,7 @@ namespace OpenDental{
 			DateTime fromDate;
 			DateTime toDate;
 			if(textDateStart.Text==""){
-				fromDate=DateTime.MinValue.AddDays(1);//because we don't want to include 010101
+				fromDate=DateTime.MinValue;
 			}
 			else{
 				fromDate=PIn.Date(textDateStart.Text);

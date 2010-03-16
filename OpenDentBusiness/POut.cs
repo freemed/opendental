@@ -112,6 +112,9 @@ namespace OpenDentBusiness{
 		}
 
 		public static string Date(DateTime myDate,bool encapsulate){
+			//js I commented this out Jan 2010 because we do not want this method to behave unexpectedly.
+			//As a result, we have already had one bug in the recall, and we might have more.
+			//But this must not be reverted.
 			//if(myDate.Year<1880) {
 			//	myDate=DateTime.MinValue;
 			//}
