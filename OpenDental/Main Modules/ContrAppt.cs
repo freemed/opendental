@@ -3864,6 +3864,10 @@ namespace OpenDental{
 				return;
 			}
 			Appointment apt = Appointments.GetOneApt(ContrApptSingle.SelectedAptNum);
+			if(apt.AptDateTime.Date>DateTime.Today) {
+				MsgBox.Show(this,"Not allowed to set complete future appointments.");
+				return;
+			}
 			if(apt.AptStatus == ApptStatus.PtNoteCompleted) {
 				return;
 			}
