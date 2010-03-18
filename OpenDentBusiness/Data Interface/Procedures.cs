@@ -1388,8 +1388,9 @@ namespace OpenDentBusiness {
 			if(patPlans.Count>1){
 				PlanCur=InsPlans.GetPlan(patPlans[0].PlanNum,PlanList);
 				if(PlanCur.PlanType=="p") {
-					claimProcs=ClaimProcs.Refresh(patNum);
-					ClaimProc priClaimProc=null;
+					//claimProcs=ClaimProcs.Refresh(patNum);
+					//ClaimProc priClaimProc=null;
+					int priClaimProcIdx=-1;
 					double sumPay=0;//Either actual or estimate
 					for(int i=0;i<claimProcs.Count;i++){
 						if(claimProcs[i].ProcNum!=proc.ProcNum){
@@ -1404,7 +1405,7 @@ namespace OpenDentBusiness {
 							continue;
 						}
 						if(claimProcs[i].PlanNum==PlanCur.PlanNum && claimProcs[i].WriteOffEst>0){
-							priClaimProc=claimProcs[i];
+							priClaimProcIdx=i;
 						}
 						if(claimProcs[i].Status==ClaimProcStatus.Received
 							|| claimProcs[i].Status==ClaimProcStatus.Supplemental ){
@@ -1423,10 +1424,12 @@ namespace OpenDentBusiness {
 						}
 					}
 					//Alter primary WO if needed.
-					if(priClaimProc!=null){
-						if(sumPay+priClaimProc.WriteOffEst > proc.ProcFee){
-							priClaimProc.WriteOffEst= proc.ProcFee-sumPay;
-							ClaimProcs.Update(priClaimProc);
+					if(priClaimProcIdx!=-1){
+						if(sumPay+claimProcs[priClaimProcIdx].WriteOffEst > proc.ProcFee){
+							claimProcs[priClaimProcIdx].WriteOffEst= proc.ProcFee-sumPay;
+							if(saveToDb){
+								ClaimProcs.Update(claimProcs[priClaimProcIdx]);
+							}
 						}
 					}
 				}

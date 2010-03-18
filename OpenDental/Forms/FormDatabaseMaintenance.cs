@@ -239,6 +239,8 @@ namespace OpenDental {
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.ClaimProcDateNotMatchPayment(verbose);
 			Application.DoEvents();
+			textLog.Text+=DatabaseMaintenance.ClaimProcDeleteDuplicates(verbose);//
+			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.ClaimProcDeleteWithInvalidClaimNum(verbose);
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.ClaimProcDeleteWithInvalidPlanNum(verbose);

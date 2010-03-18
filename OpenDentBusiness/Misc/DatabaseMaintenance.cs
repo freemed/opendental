@@ -384,6 +384,42 @@ namespace OpenDentBusiness {
 			return log;
 		}
 
+		/// <summary>This addresses a bug discovered on 3/17/10.  Some duplicate claimprocs had been created.  The bug only lasted a few days.</summary>
+		public static string ClaimProcDeleteDuplicates(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
+			string log="";
+			command=@"SELECT PatNum,ClaimNum,FeeBilled,Status,ProcNum,ProcDate,ClaimProcNum,InsPayAmt,LineNumber, COUNT(*) cnt
+FROM claimproc
+WHERE ClaimNum > 0
+AND ProcNum>0
+AND Status!=4
+GROUP BY Claimnum,ProcNum,Status,InsPayAmt,FeeBilled,LineNumber
+HAVING cnt>1";
+			table=Db.GetTable(command);
+			int numberFixed=0;
+			double insPayAmt;
+			double feeBilled;
+			for(int i=0;i<table.Rows.Count;i++) {
+				insPayAmt=PIn.Double(table.Rows[i]["InsPayAmt"].ToString());
+				feeBilled=PIn.Double(table.Rows[i]["FeeBilled"].ToString());
+				command="DELETE FROM claimproc "
+					+"WHERE ClaimNum= "+table.Rows[i]["ClaimNum"].ToString()+" "
+					+"AND ProcNum= "+table.Rows[i]["ProcNum"].ToString()+" "
+					+"AND Status= "+table.Rows[i]["Status"].ToString()+" "
+					+"AND InsPayAmt= '"+POut.Double(insPayAmt)+"' "
+					+"AND FeeBilled= '"+POut.Double(feeBilled)+"' "
+					+"AND LineNumber= "+table.Rows[i]["LineNumber"].ToString()+" "
+					+"AND ClaimProcNum != "+table.Rows[i]["ClaimProcNum"].ToString();
+				numberFixed+=Db.NonQ32(command);
+			}
+			if(numberFixed>0 || verbose) {
+				log+=Lans.g("FormDatabaseMaintenance","Claimprocs deleted due duplicate entries: ")+numberFixed.ToString()+".  Run this tool again to fix related totals.\r\n";
+			}
+			return log;
+		}
+
 		public static string ClaimProcDeleteWithInvalidClaimNum(bool verbose) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
