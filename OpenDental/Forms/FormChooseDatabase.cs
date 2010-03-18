@@ -411,6 +411,7 @@ namespace OpenDental{
 				+"Current directory: "+Environment.CurrentDirectory);*/
 			#if DEBUG
 				//textURI.Text="http://localhost/OpenDentalServer/ServiceMain.asmx";
+				textURI.Text="http://localhost:49262/ServiceMain.asmx";
 				textUser2.Text="Admin";
 				textPassword2.Text="pass";
 			#endif

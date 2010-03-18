@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDental.UI;
@@ -25,8 +26,8 @@ namespace OpenDental{
 		private OpenDental.UI.Button butAttachDep;
 		private OpenDental.UI.Button butDelete;
 		private Transaction TransCur;
-		private ArrayList JournalList;
-		private ArrayList JournalListOld;
+		private List<JournalEntry> JournalList;
+		private List<JournalEntry> JournalListOld;
 		private Label label3;
 		private TextBox textDebit;
 		private TextBox textCredit;
@@ -548,13 +549,13 @@ namespace OpenDental{
 					butDelete.Enabled=false;
 				}
 			}
-			JournalListOld=new ArrayList();
+			JournalListOld=new List<JournalEntry>();
 			for(int i=0;i<JournalList.Count;i++) {
-				JournalListOld.Add(((JournalEntry)JournalList[i]).Copy());
+				JournalListOld.Add(JournalList[i].Copy());
 			}
 			textDateTimeEntry.Text=TransCur.DateTimeEntry.ToString();
 			if(JournalList.Count>0) {
-				textDate.Text=((JournalEntry)JournalList[0]).DateDisplayed.ToShortDateString();
+				textDate.Text=JournalList[0].DateDisplayed.ToShortDateString();
 			}
 			else {
 				textDate.Text=DateTime.Today.ToShortDateString();
@@ -778,7 +779,7 @@ namespace OpenDental{
 					textCheckNumber.Text=journalOther.CheckNumber;
 				}
 			}
-			JournalList=new ArrayList();
+			JournalList=new List<JournalEntry>();
 		}
 
 		private void butChange_Click(object sender,EventArgs e) {
@@ -1004,7 +1005,7 @@ namespace OpenDental{
 					securityentry+=AccountC.GetDescript(((JournalEntry)JournalList[i]).AccountNum);
 				}
 				securityentry+=". "+tot.ToString("c");
-				JournalList=new ArrayList();//in case it fails, we don't want to leave this list around.
+				JournalList=new List<JournalEntry>();//in case it fails, we don't want to leave this list around.
 			}
 			try {
 				Transactions.Delete(TransCur);

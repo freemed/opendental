@@ -455,13 +455,13 @@ namespace OpenDental{
 				else{
 					comboDepositAccount.Enabled=false;
 					labelDepositAccount.Text=Lan.g(this,"Deposited into Account");
-					ArrayList jeAL=JournalEntries.GetForTrans(trans.TransactionNum);
-					for(int i=0;i<jeAL.Count;i++){
-						if(AccountC.GetAccount(((JournalEntry)jeAL[i]).AccountNum).AcctType==AccountType.Asset){
-							comboDepositAccount.Items.Add(AccountC.GetDescript(((JournalEntry)jeAL[i]).AccountNum));
+					List<JournalEntry> jeL=JournalEntries.GetForTrans(trans.TransactionNum);
+					for(int i=0;i<jeL.Count;i++){
+						if(AccountC.GetAccount(jeL[i].AccountNum).AcctType==AccountType.Asset){
+							comboDepositAccount.Items.Add(AccountC.GetDescript(jeL[i].AccountNum));
 							comboDepositAccount.SelectedIndex=0;
-							textDepositAccount.Text=((JournalEntry)jeAL[i]).DateDisplayed.ToShortDateString()
-								+" "+((JournalEntry)jeAL[i]).DebitAmt.ToString("c");
+							textDepositAccount.Text=jeL[i].DateDisplayed.ToShortDateString()
+								+" "+jeL[i].DebitAmt.ToString("c");
 							break;
 						}
 					}

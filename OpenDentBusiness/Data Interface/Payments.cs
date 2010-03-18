@@ -384,7 +384,7 @@ namespace OpenDentBusiness{
 			if(amtChanged && Transactions.IsReconciled(trans)) {
 				throw new ApplicationException(Lans.g("Payments","Not allowed to change amount.  This payment is attached to an accounting transaction that has been reconciled.  You will need to detach it from within the accounting section of the program."));
 			}
-			ArrayList jeAL=JournalEntries.GetForTrans(trans.TransactionNum);
+			List<JournalEntry> jeL=JournalEntries.GetForTrans(trans.TransactionNum);
 			long oldAcct=0;
 			JournalEntry jeDebit=null;
 			JournalEntry jeCredit=null;
@@ -392,16 +392,16 @@ namespace OpenDentBusiness{
 			if(oldAmt<0) {
 				absOld=-oldAmt;
 			}
-			for(int i=0;i<jeAL.Count;i++) {//we make sure down below that this count is exactly 2.
-				if(AccountC.GetAccount(((JournalEntry)jeAL[i]).AccountNum).AcctType==AccountType.Asset) {
-					oldAcct=((JournalEntry)jeAL[i]).AccountNum;
+			for(int i=0;i<jeL.Count;i++) {//we make sure down below that this count is exactly 2.
+				if(AccountC.GetAccount(jeL[i].AccountNum).AcctType==AccountType.Asset) {
+					oldAcct=jeL[i].AccountNum;
 				}
-				if(((JournalEntry)jeAL[i]).DebitAmt==absOld) {
-					jeDebit=(JournalEntry)jeAL[i];
+				if(jeL[i].DebitAmt==absOld) {
+					jeDebit=jeL[i];
 				}
 				//old credit entry
-				if(((JournalEntry)jeAL[i]).CreditAmt==absOld) {
-					jeCredit=(JournalEntry)jeAL[i];
+				if(jeL[i].CreditAmt==absOld) {
+					jeCredit=jeL[i];
 				}
 			}
 			if(jeCredit==null || jeDebit==null) {
@@ -421,7 +421,7 @@ namespace OpenDentBusiness{
 			if(!amtChanged && !acctChanged){
 				return false;//no changes being made to amount or account, so no synch required.
 			}
-			if(jeAL.Count!=2) {
+			if(jeL.Count!=2) {
 				throw new ApplicationException(Lans.g("Payments","Not able to automatically change the amount in the accounting section to match the change made here.  You will need to detach it from within the accounting section."));
 			}
 			//Amount or account changed on an existing linked transaction.
@@ -485,7 +485,7 @@ namespace OpenDentBusiness{
 				return;
 			}
 			//at this point, we have established that there is a previous transaction.
-			ArrayList jeAL=JournalEntries.GetForTrans(trans.TransactionNum);
+			List<JournalEntry> jeL=JournalEntries.GetForTrans(trans.TransactionNum);
 			long oldAcct=0;
 			JournalEntry jeDebit=null;
 			JournalEntry jeCredit=null;
@@ -501,15 +501,15 @@ namespace OpenDentBusiness{
 				signChanged=true;
 			}
 			for(int i=0;i<2;i++){
-				if(AccountC.GetAccount(((JournalEntry)jeAL[i]).AccountNum).AcctType==AccountType.Asset) {
-					oldAcct=((JournalEntry)jeAL[i]).AccountNum;
+				if(AccountC.GetAccount(jeL[i].AccountNum).AcctType==AccountType.Asset) {
+					oldAcct=jeL[i].AccountNum;
 				}
-				if(((JournalEntry)jeAL[i]).DebitAmt==absOld) {
-					jeDebit=(JournalEntry)jeAL[i];
+				if(jeL[i].DebitAmt==absOld) {
+					jeDebit=jeL[i];
 				}
 				//old credit entry
-				if(((JournalEntry)jeAL[i]).CreditAmt==absOld) {
-					jeCredit=(JournalEntry)jeAL[i];
+				if(jeL[i].CreditAmt==absOld) {
+					jeCredit=jeL[i];
 				}
 			}
 			//Already validated that both je's are not null, and that oldAcct is not 0.

@@ -9,19 +9,20 @@ namespace OpenDentBusiness{
 	public class JournalEntries {
 
 		///<summary>Used when displaying the splits for a transaction.</summary>
-		public static ArrayList GetForTrans(long transactionNum) {
+		public static List<JournalEntry> GetForTrans(long transactionNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<ArrayList>(MethodBase.GetCurrentMethod(),transactionNum);
+				return Meth.GetObject<List<JournalEntry>>(MethodBase.GetCurrentMethod(),transactionNum);
 			}
 			string command=
 				"SELECT * FROM journalentry "
 				+"WHERE TransactionNum="+POut.Long(transactionNum);
-			List<JournalEntry> List=RefreshAndFill(Db.GetTable(command));
-			ArrayList retVal=new ArrayList();
-			for(int i=0;i<List.Count;i++) {
-				retVal.Add(List[i]);
-			}
-			return retVal;
+			List<JournalEntry> list=RefreshAndFill(Db.GetTable(command));
+			//ArrayList retVal=new ArrayList();
+			//for(int i=0;i<List.Count;i++) {
+			//	retVal.Add(List[i]);
+			//}
+			//return retVal;
+			return list;
 		}
 
 		///<summary>Used to display a list of entries for one account.</summary>
@@ -148,10 +149,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Used in FormTransactionEdit to synch database with changes user made to the journalEntry list for a transaction.  Must supply an old list for comparison.  Only the differences are saved.  Surround with try/catch, because it will thrown an exception if any entries are negative.</summary>
-		public static void UpdateList(ArrayList oldJournalList,ArrayList newJournalList) {
+		public static void UpdateList(List<JournalEntry> oldJournalList,List<JournalEntry> newJournalList) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<newJournalList.Count;i++){
-				if(((JournalEntry)newJournalList[i]).DebitAmt<0 || ((JournalEntry)newJournalList[i]).CreditAmt<0){
+				if(newJournalList[i].DebitAmt<0 || newJournalList[i].CreditAmt<0){
 					throw new ApplicationException(Lans.g("JournalEntries","Error. Credit and debit must both be positive."));
 				}
 			}
@@ -159,11 +160,11 @@ namespace OpenDentBusiness{
 			for(int i=0;i<oldJournalList.Count;i++) {//loop through the old list
 				newJournalEntry=null;
 				for(int j=0;j<newJournalList.Count;j++) {
-					if(newJournalList[j]==null || ((JournalEntry)newJournalList[j]).JournalEntryNum==0) {
+					if(newJournalList[j]==null || newJournalList[j].JournalEntryNum==0) {
 						continue;
 					}
-					if(((JournalEntry)oldJournalList[i]).JournalEntryNum==((JournalEntry)newJournalList[j]).JournalEntryNum) {
-						newJournalEntry=(JournalEntry)newJournalList[j];
+					if(oldJournalList[i].JournalEntryNum==newJournalList[j].JournalEntryNum) {
+						newJournalEntry=newJournalList[j];
 						break;
 					}
 				}
@@ -173,13 +174,13 @@ namespace OpenDentBusiness{
 					continue;
 				}
 				//journalentry was found with matching journalEntryNum, so check for changes
-				if(newJournalEntry.AccountNum != ((JournalEntry)oldJournalList[i]).AccountNum
-					|| newJournalEntry.DateDisplayed != ((JournalEntry)oldJournalList[i]).DateDisplayed
-					|| newJournalEntry.DebitAmt != ((JournalEntry)oldJournalList[i]).DebitAmt
-					|| newJournalEntry.CreditAmt != ((JournalEntry)oldJournalList[i]).CreditAmt
-					|| newJournalEntry.Memo != ((JournalEntry)oldJournalList[i]).Memo
-					|| newJournalEntry.Splits != ((JournalEntry)oldJournalList[i]).Splits
-					|| newJournalEntry.CheckNumber!= ((JournalEntry)oldJournalList[i]).CheckNumber) 
+				if(newJournalEntry.AccountNum != oldJournalList[i].AccountNum
+					|| newJournalEntry.DateDisplayed != oldJournalList[i].DateDisplayed
+					|| newJournalEntry.DebitAmt != oldJournalList[i].DebitAmt
+					|| newJournalEntry.CreditAmt != oldJournalList[i].CreditAmt
+					|| newJournalEntry.Memo != oldJournalList[i].Memo
+					|| newJournalEntry.Splits != oldJournalList[i].Splits
+					|| newJournalEntry.CheckNumber!= oldJournalList[i].CheckNumber) 
 				{
 					Update(newJournalEntry);
 				}
@@ -188,19 +189,19 @@ namespace OpenDentBusiness{
 				if(newJournalList[i]==null) {
 					continue;
 				}
-				if(((JournalEntry)newJournalList[i]).JournalEntryNum!=0) {
+				if(newJournalList[i].JournalEntryNum!=0) {
 					continue;
 				}
 				//entry with journalEntryNum=0, so it's new
-				Insert((JournalEntry)newJournalList[i]);
+				Insert(newJournalList[i]);
 			}
 		}
 
 		///<summary>Called from FormTransactionEdit.</summary>
-		public static bool AttachedToReconcile(ArrayList journalList){
+		public static bool AttachedToReconcile(List<JournalEntry> journalList){
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<journalList.Count;i++){
-				if(((JournalEntry)journalList[i]).ReconcileNum!=0){
+				if(journalList[i].ReconcileNum!=0){
 					return true;
 				}
 			}
@@ -208,11 +209,11 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Called from FormTransactionEdit.</summary>
-		public static DateTime GetReconcileDate(ArrayList journalList) {
+		public static DateTime GetReconcileDate(List<JournalEntry> journalList) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<journalList.Count;i++) {
-				if(((JournalEntry)journalList[i]).ReconcileNum!=0) {
-					return Reconciles.GetOne(((JournalEntry)journalList[i]).ReconcileNum).DateReconcile;
+				if(journalList[i].ReconcileNum!=0) {
+					return Reconciles.GetOne(journalList[i].ReconcileNum).DateReconcile;
 				}
 			}
 			return DateTime.MinValue;

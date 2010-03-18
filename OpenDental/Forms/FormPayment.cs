@@ -758,15 +758,15 @@ namespace OpenDental{
 				}
 				else {
 					//add only the description based on PaymentCur attached to transaction
-					ArrayList jeAL=JournalEntries.GetForTrans(trans.TransactionNum);
-					for(int i=0;i<jeAL.Count;i++) {
-						if(AccountC.GetAccount(((JournalEntry)jeAL[i]).AccountNum).AcctType==AccountType.Asset) {
-							textDepositAccount.Text=((JournalEntry)jeAL[i]).DateDisplayed.ToShortDateString();
-							if(((JournalEntry)jeAL[i]).DebitAmt>0){
-								textDepositAccount.Text+=" "+((JournalEntry)jeAL[i]).DebitAmt.ToString("c");
+					List<JournalEntry> jeL=JournalEntries.GetForTrans(trans.TransactionNum);
+					for(int i=0;i<jeL.Count;i++) {
+						if(AccountC.GetAccount(jeL[i].AccountNum).AcctType==AccountType.Asset) {
+							textDepositAccount.Text=jeL[i].DateDisplayed.ToShortDateString();
+							if(jeL[i].DebitAmt>0){
+								textDepositAccount.Text+=" "+jeL[i].DebitAmt.ToString("c");
 							}
 							else{//negative
-								textDepositAccount.Text+=" "+(-((JournalEntry)jeAL[i]).CreditAmt).ToString("c");
+								textDepositAccount.Text+=" "+(-jeL[i].CreditAmt).ToString("c");
 							}
 							break;
 						}
