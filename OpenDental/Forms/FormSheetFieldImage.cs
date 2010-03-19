@@ -57,6 +57,10 @@ namespace OpenDental {
 				MsgBox.Show(this,"File does not exist.");
 				return;
 			}
+			if(!ImageHelper.HasImageExtension(dlg.FileName)){
+				MsgBox.Show(this,"Only allowed to import an image.");
+				return;
+			}
 			string newName=ODFileUtils.CombinePaths(SheetUtil.GetImagePath(),Path.GetFileName(dlg.FileName));
 			if(File.Exists(newName)){
 				MsgBox.Show(this,"A file of that name already exists in SheetImages.  Please rename the file before importing.");
