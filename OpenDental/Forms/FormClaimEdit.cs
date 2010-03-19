@@ -255,7 +255,7 @@ namespace OpenDental{
 			ClaimCur=claimCur;
 			if(ClaimCur.ClaimForm != 0){
 				ClaimFormCur=ClaimForms.GetClaimForm(ClaimCur.ClaimForm);
-				ClaimValCodes=ClaimValCodeLog.GetValCodes(ClaimCur);
+				ClaimValCodes=ClaimValCodeLogs.GetValCodes(ClaimCur);
 				CurCondCodeLog=ClaimCondCodeLogs.GetOne(ClaimCur.ClaimNum);
 			}
 			InitializeComponent();// Required for Windows Form Designer support
@@ -2788,7 +2788,7 @@ namespace OpenDental{
 			this.Text=Lan.g(this,"Edit Claim")+" - "+PatCur.GetNameLF();
 			if(ClaimValCodes!=null){
 				for(int i=0;i<ClaimValCodes.Count;i++){
-					ClaimValCode vc = (ClaimValCode)ClaimValCodes[i];
+					ClaimValCodeLog vc = (ClaimValCodeLog)ClaimValCodes[i];
 					TextBox code = (TextBox)Controls.Find("textVC" + i + "Code", true)[0];
 					code.Text=vc.ValCode.ToString();
 					TextBox amount = (TextBox)Controls.Find("textVC" + i + "Amount", true)[0];
@@ -4154,7 +4154,7 @@ namespace OpenDental{
 			Claims.Update(ClaimCur);
 			if(ClaimValCodes!=null){
 				for(int i=0;i<ClaimValCodes.Count;i++){ //update existing Value Code pairs
-					ClaimValCode vc = (ClaimValCode)ClaimValCodes[i];
+					ClaimValCodeLog vc = (ClaimValCodeLog)ClaimValCodes[i];
 					TextBox code = (TextBox)Controls.Find("textVC" + i + "Code", true)[0];
 					vc.ValCode=code.Text.ToString();
 					TextBox amount = (TextBox)Controls.Find("textVC" + i + "Amount", true)[0];
@@ -4164,7 +4164,7 @@ namespace OpenDental{
 					vc.ValAmount=Double.Parse(amt);
 				}
 				for(int i=(ClaimValCodes.Count);i<12;i++){ //add new Value Code pairs
-					ClaimValCode vc = new ClaimValCode();
+					ClaimValCodeLog vc = new ClaimValCodeLog();
 					TextBox code = (TextBox)Controls.Find("textVC" + i + "Code", true)[0];
 					vc.ValCode=code.Text.ToString();
 					TextBox amount = (TextBox)Controls.Find("textVC" + i + "Amount", true)[0];
@@ -4178,7 +4178,7 @@ namespace OpenDental{
 						ClaimValCodes.Add(vc);
 					}
 				}
-				ClaimValCodeLog.Update(ClaimValCodes);
+				ClaimValCodeLogs.Update(ClaimValCodes);
 			}
 			if(wasSentOrReceived){
 				SecurityLogs.MakeLogEntry(Permissions.ClaimSentEdit,ClaimCur.PatNum,

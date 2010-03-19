@@ -2426,15 +2426,15 @@ namespace OpenDental{
 		}
 
 		private void FillMedValueCodes(){
-			MedValueCodes = ClaimValCodeLog.GetValCodes(ClaimCur);
+			MedValueCodes = ClaimValCodeLogs.GetValCodes(ClaimCur);
 			if(MedValueCodes.Count>0){
-				ClaimValCode[] vcA;
-				vcA = new ClaimValCode[12];
+				ClaimValCodeLog[] vcA;
+				vcA = new ClaimValCodeLog[12];
 				for(int i=0;i<MedValueCodes.Count;i++){
-					vcA[i]=(ClaimValCode)MedValueCodes[i];
+					vcA[i]=(ClaimValCodeLog)MedValueCodes[i];
 				}
 				for(int i=MedValueCodes.Count;i<12;i++){
-					vcA[i]= new ClaimValCode();
+					vcA[i]= new ClaimValCodeLog();
 				}
 				for(int i=0;i<ClaimFormCur.Items.Length;i++){
 					switch(ClaimFormCur.Items[i].FieldName){
@@ -2699,7 +2699,7 @@ namespace OpenDental{
 			if (MedPlanArrayList.Count > 2){
 				MedInsC = (InsPlan)MedPlanArrayList[2];
 			}
-			double TotalValAmount = ClaimValCodeLog.GetValAmountTotal(ClaimCur,"23");
+			double TotalValAmount = ClaimValCodeLogs.GetValAmountTotal(ClaimCur,"23");
 			//MessageBox.Show(TotalValAmount.ToString());
 			double PriorPayments = 0;
 			if(isPrimary||isSecondary||isTertiary){

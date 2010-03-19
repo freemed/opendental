@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Text;
 
 namespace OpenDentBusiness {
-	public class ClaimValCodeLog {
+	public class ClaimValCodeLogs {
 
 		public static double GetValAmountTotal(Claim Cur, string Code){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
@@ -21,7 +21,7 @@ namespace OpenDentBusiness {
 			return total;
 		}
 
-		public static ArrayList GetValCodes(Claim Cur){
+		public static ArrayList GetValCodes(Claim Cur) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<ArrayList>(MethodBase.GetCurrentMethod(),Cur);
 			}
@@ -29,7 +29,7 @@ namespace OpenDentBusiness {
 			DataTable table=Db.GetTable(command);
 			ArrayList List=new ArrayList();
 			for(int i=0;i<table.Rows.Count;i++){
-				ClaimValCode vc = new ClaimValCode();
+				ClaimValCodeLog vc = new ClaimValCodeLog();
 				vc.ClaimValCodeLogNum=PIn.Long(table.Rows[i][0].ToString());
 				vc.ClaimNum=PIn.Long(table.Rows[i][1].ToString());
 				vc.ClaimField=PIn.String(table.Rows[i][2].ToString());
@@ -47,7 +47,7 @@ namespace OpenDentBusiness {
 				return;
 			}
 			for(int i=0;i<vCodes.Count;i++){
-				ClaimValCode vc = (ClaimValCode)vCodes[i];
+				ClaimValCodeLog vc = (ClaimValCodeLog)vCodes[i];
 				if(vc.ClaimValCodeLogNum==0){
 					string command="INSERT INTO claimvalcodelog (ClaimNum,ClaimField,ValCode,ValAmount,Ordinal) VALUES("
 						+"'"+POut.Long(vc.ClaimNum)+"', "
@@ -56,7 +56,8 @@ namespace OpenDentBusiness {
 						+"'"+POut.Double(vc.ValAmount)+"', "
 						+"'"+POut.Long(vc.Ordinal)+"')";
  					Db.NonQ(command);
-				} else {
+				} 
+				else {
 				  string command="UPDATE claimvalcodelog SET "
 				    +"ClaimNum='" + POut.Long(vc.ClaimNum) + "',"
 				    +"ValCode='" + POut.String(vc.ValCode) + "',"

@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace OpenDentBusiness {
-
-	public class ClaimValCode {
+	///<summary>Not well documented.  Has something to do with medical claims.</summary>
+	public class ClaimValCodeLog {
 		///<summary>Primary key.</summary>
 		public long ClaimValCodeLogNum;
 		///<summary>FK to claim.ClaimNum.</summary>

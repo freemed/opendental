@@ -182,7 +182,7 @@
     <Compile Include="Data Interface\ClaimPayments.cs" />
     <Compile Include="Data Interface\ClaimProcs.cs" />
     <Compile Include="Data Interface\Claims.cs" />
-    <Compile Include="Data Interface\ClaimValCodeLog.cs" />
+    <Compile Include="Data Interface\ClaimValCodeLogs.cs" />
     <Compile Include="Data Interface\Clearinghouses.cs" />
     <Compile Include="Data Interface\Clinics.cs" />
     <Compile Include="Data Interface\ClockEvents.cs" />
@@ -446,7 +446,7 @@
     <Compile Include="TableTypes\ClaimFormItem.cs" />
     <Compile Include="TableTypes\ClaimPayment.cs" />
     <Compile Include="TableTypes\ClaimProc.cs" />
-    <Compile Include="TableTypes\ClaimValCode.cs" />
+    <Compile Include="TableTypes\ClaimValCodeLog.cs" />
     <Compile Include="TableTypes\Clearinghouse.cs" />
     <Compile Include="TableTypes\Clinic.cs" />
     <Compile Include="TableTypes\ClockEvent.cs" />
