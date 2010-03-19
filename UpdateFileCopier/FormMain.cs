@@ -61,7 +61,12 @@ namespace UpdateFileCopier {
 				//	continue;//skip this one.
 				//}
 				//any file exclusions will have happened when originally copying files into the AtoZ folder.
-				File.Copy(appfiles[i].FullName,Path.Combine(DestDirectory,appfiles[i].Name),true);
+				try{
+					File.Copy(appfiles[i].FullName,Path.Combine(DestDirectory,appfiles[i].Name),true);
+				}
+				catch{
+					//silently fail.  This can prevent all kinds of problems if there are extra files sitting around.
+				}
 			}
 			//DirectoryInfo dirInfoDest=new DirectoryInfo(DestDirectory);
 			//MessageBox.Show(dirInfoDest.GetFiles().Length.ToString());
