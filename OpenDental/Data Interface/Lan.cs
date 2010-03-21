@@ -61,19 +61,37 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public static void C(System.Windows.Forms.Control sender,System.Windows.Forms.Control[] contr) {
-			for(int i=0;i<contr.Length;i++) {
-				if(contr[i].GetType()==typeof(UI.ODGrid)) {
-					((UI.ODGrid)contr[i]).Title=Lans.ConvertString(((UI.ODGrid)contr[i]).TranslationName,((UI.ODGrid)contr[i]).Title);
-					foreach(UI.ODGridColumn col in ((UI.ODGrid)contr[i]).Columns) {
-						col.Heading=Lans.ConvertString(((UI.ODGrid)contr[i]).TranslationName,col.Heading);
+			C(sender,contr,false);
+		}
+
+		///<summary></summary>
+		public static void C(System.Windows.Forms.Control sender,System.Windows.Forms.Control[] controls,bool isRecursive) {
+			for(int i=0;i<controls.Length;i++) {
+				if(controls[i].GetType()==typeof(UI.ODGrid)) {
+					((UI.ODGrid)controls[i]).Title=Lans.ConvertString(((UI.ODGrid)controls[i]).TranslationName,((UI.ODGrid)controls[i]).Title);
+					foreach(UI.ODGridColumn col in ((UI.ODGrid)controls[i]).Columns) {
+						col.Heading=Lans.ConvertString(((UI.ODGrid)controls[i]).TranslationName,col.Heading);
 					}
 					continue;
 				}
-				contr[i].Text=Lans.ConvertString(sender.GetType().Name,contr[i].Text);
+				controls[i].Text=Lans.ConvertString(sender.GetType().Name,controls[i].Text);
+				if(isRecursive) {
+					Cchildren(sender.GetType().Name,controls[i]);
+				}
 			}
-			//if(itemInserted) {
-			//	Lans.RefreshCache();
-			//}
+		}
+
+		///<summary>This is recursive, but a little simpler than Fchildren.</summary>
+		private static void Cchildren(string classType,Control parent) {
+			foreach(Control contr in parent.Controls) {
+				if(contr.HasChildren) {
+					Cchildren(classType,contr);
+				}
+				if(contr.Text=="") {
+					continue;
+				}
+				contr.Text=Lans.ConvertString(classType,contr.Text);
+			}
 		}
 
 		//forms----------------------------------------------------------------------------------------
@@ -123,19 +141,21 @@ namespace OpenDental{
 					Fchildren(sender,contr,exclusions);
 				}
 				//ignore any controls except the types we are interested in
-				if(contr.GetType()!=typeof(TextBox)
-					&& contr.GetType()!=typeof(Button)
-					&& contr.GetType()!=typeof(OpenDental.UI.Button)
-					&& contr.GetType()!=typeof(Label)
-					&& contr.GetType()!=typeof(GroupBox)
-					&& contr.GetType()!=typeof(CheckBox)
-					&& contr.GetType()!=typeof(RadioButton)) {
+				Type contrType=contr.GetType();
+				if(contrType!=typeof(TextBox)
+					&& contrType!=typeof(Button)
+					&& contrType!=typeof(OpenDental.UI.Button)
+					&& contrType!=typeof(Label)
+					&& contrType!=typeof(GroupBox)
+					&& contrType!=typeof(CheckBox)
+					&& contrType!=typeof(RadioButton)) 
+				{
 					continue;
 				}
 				if(contr.Text=="") {
 					continue;
 				}
-				if(!Contains(exclusions,contr)) {
+				if(exclusions!=null && !Contains(exclusions,contr)) {
 					if(contr.Text=="OK"
 						|| contr.Text=="&OK"
 						|| contr.Text=="Cancel"

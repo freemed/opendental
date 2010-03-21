@@ -3032,8 +3032,7 @@ namespace OpenDental{
 			//gridProg.Location=new Point(tabProc.Left,tabProc.Bottom+2);
 			//gridProg.Height=this.ClientSize.Height-gridProg.Location.Y-2;
 			//can't use Lan.F
-			Lan.C(this,new Control[]
-				{
+			Lan.C(this,new Control[]{
 				//groupPlanned,
 				checkDone,
 				butNew,
@@ -3066,9 +3065,16 @@ namespace OpenDental{
 				butOK,
 				label13
 			});
-			//Lan.C(this,menuPrimary.MenuItems[0]);
-			//Lan.C(this,menuPrimary.MenuItems[1]);
-			//Lan.C(this,menuPrimary.MenuItems[2]);
+			Lan.C(this,new Control[]{
+				//these were missing.  Added as recursive.
+				tabEnterTx,
+				tabMissing,
+				tabMovements,
+				tabPrimary,
+				tabPlanned,
+				tabShow,
+				tabDraw},
+				true);
 			LayoutToolBar();
 			ComputerPref localComputerPrefs=ComputerPrefs.GetForLocalComputer();
 			this.toothChart.DeviceFormat=new ToothChartDirectX.DirectXDeviceFormat(localComputerPrefs.DirectXFormat);
