@@ -72,7 +72,8 @@ namespace OpenDental{
 		private System.Windows.Forms.TabPage tabPage4;
 		private System.Windows.Forms.TabControl tabControlImages;
 		private System.Windows.Forms.Panel panelImages;
-		private bool TreatmentNoteChanged;
+		///<summary>public for plugins</summary>
+		public bool TreatmentNoteChanged;
 		///<summary>Keeps track of which tab is selected. It's the index of the selected tab.</summary>
 		private int selectedImageTab=0;
 		private bool MouseIsDownOnImageSplitter;
@@ -3488,6 +3489,9 @@ namespace OpenDental{
 		}
 
 		private void FillPtInfo(){
+			if(Plugins.Active && Plugins.HookMethod(this,"ContrChart.FillPtInfo",PatCur)) {
+				return;
+			}
 			gridPtInfo.Height=tabControlImages.Top-gridPtInfo.Top;
 			textTreatmentNotes.Text="";
 			if(PatCur!=null){
