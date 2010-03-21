@@ -168,6 +168,7 @@ namespace OpenDentBusiness{
 				field.Width=0;
 				field.Height=0;
 				field.GrowthBehavior=GrowthBehaviorEnum.None;
+				field.RadioButtonValue="";
 				SheetFields.WriteObject(field);
 			}
 		}
