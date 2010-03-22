@@ -394,6 +394,7 @@ namespace OpenDentBusiness {
 FROM claimproc
 WHERE ClaimNum > 0
 AND ProcNum>0
+AND Status!=4/*exclude supplemental*/
 GROUP BY Claimnum,ProcNum,Status,InsPayAmt,FeeBilled,LineNumber
 HAVING cnt>1";
 			table=Db.GetTable(command);
