@@ -250,6 +250,17 @@ namespace OpenDentBusiness{
 			return rValue;
 		}
 
+		///<summary>Loops through List to find the given extension and returns the employeeNum if found.  Otherwise, returns -1;</summary>
+		public static long GetEmpNumAtExtension(int phoneExt) {
+			//No need to check RemotingRole; no call to db.
+			for(int i=0;i<ListLong.Length;i++){
+				if(ListLong[i].PhoneExt==phoneExt){
+					return ListLong[i].EmployeeNum;
+				}
+			}
+			return -1;
+		}
+
 		public static DataTable GetPhoneTable(){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod());
@@ -263,14 +274,19 @@ namespace OpenDentBusiness{
 			}
 		}
 
+		///<summary>this code is similar to code in the phone tracking server.  But here, we frequently only change clockStatus and ColorBar by setting employeeNum=-1.  If employeeNum is not -1, then EmployeeName also gets set.</summary>
 		public static void SetPhoneStatus(string clockStatus,int extens){
+			SetPhoneStatus(clockStatus,extens,-1);
+		}
+
+		///<summary>this code is similar to code in the phone tracking server.  But here, we frequently only change clockStatus and ColorBar by setting employeeNum=-1.  If employeeNum is not -1, then EmployeeName also gets set.  If employeeNum==0, then clears employee from that row.</summary>
+		public static void SetPhoneStatus(string clockStatus,int extens,long employeeNum){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),clockStatus,extens);
 				return;
 			}
-			//this code is similar to code in the phone tracking server.
-			//But here, it ONLY changes clockStatus and ColorBar.
-			string command=@"SELECT EmployeeNum,Description,
+			//
+			string command=@"SELECT EmployeeNum,Description,EmployeeName,
 				IFNULL(IsAvailable,1) isAvail, COUNT(IsAvailable) overridden
 				FROM phone
 				LEFT JOIN phoneoverride ON phone.Extension=phoneoverride.Extension
@@ -281,6 +297,15 @@ namespace OpenDentBusiness{
 				return;
 			}
 			long empNum=PIn.Long(tablePhone.Rows[0]["EmployeeNum"].ToString());
+			string empName=PIn.String(tablePhone.Rows[0]["EmployeeName"].ToString());
+			if(employeeNum==0){
+				empNum=0;
+				empName="";
+			}
+			else if(employeeNum>0){
+				empNum=employeeNum;
+				empName=Employees.GetEmp(empNum).FName;
+			}
 			bool isAvailable=PIn.Bool(tablePhone.Rows[0]["isAvail"].ToString());
 			bool overridden=PIn.Bool(tablePhone.Rows[0]["overridden"].ToString());
 			bool isInUse=false;
@@ -289,7 +314,9 @@ namespace OpenDentBusiness{
 			}
 			Color colorBar=GetColorBar(clockStatus,overridden,isAvailable,empNum,isInUse);
 			command="UPDATE phone SET ClockStatus='"+POut.String(clockStatus)+"', "
-				+"ColorBar="+colorBar.ToArgb().ToString()+" "
+				+"ColorBar="+colorBar.ToArgb().ToString()+", "
+				+"EmployeeNum="+POut.Long(empNum)+", "
+				+"EmployeeName='"+POut.String(empName)+"' "
 				+"WHERE Extension="+extens;
 			Db.NonQ(command);
 		}
@@ -318,29 +345,20 @@ namespace OpenDentBusiness{
 			//No need to check RemotingRole; no call to db.
 			//there is an exact duplicate of this function in the phone server.
 			Color colorBar=Color.White;
-			if(overridden && !isAvailable){
+			if(empNum==0){
+				//no colors
+			}
+			else if(overridden && !isAvailable){
 				//no colors
 			}
 			else if(!overridden
-				&& (empNum==4//amber
-				|| empNum==21//natalie
-				|| empNum==20//britt
-				|| empNum==22//jordan
+				&& (empNum==22//jordan
 				|| empNum==15//derek
 				|| empNum==18//james
 				))
 			{
 				//no colors
 			}
-			//else if(!overridden
-			//	&& (empNum==15//derek
-			//	|| empNum==18))//james
-			//{
-				//this prevents green bar from showing.
-			//	if(isInUse){
-			//		colorBar=Color.Salmon;
-			//	}
-			//}
 			else if(isInUse){
 				colorBar=Color.Salmon;
 			}

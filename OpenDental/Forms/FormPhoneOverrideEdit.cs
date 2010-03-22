@@ -35,6 +35,10 @@ namespace OpenDental {
 				//don't even give them a chance to check the box
 				checkIsAvailable.Visible=false;
 			}
+			if(!IsNew){
+				textExtension.Enabled=false;//prevent changing the extension.  The logic is not tight enough to handle this.  User can delete an make a new override.
+				comboEmp.Enabled=false;
+			}
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {

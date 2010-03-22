@@ -80,6 +80,8 @@ namespace OpenDentBusiness{
 			else{
 				phoneCur.PhoneOverrideNum=Db.NonQ(command,true);
 			}
+			//Now do some work on the phone table to display the change just made.
+			//First the new overridden extension
 			if(phoneCur.IsAvailable){
 				command="SELECT ClockStatus FROM employee WHERE EmployeeNum="+POut.Long(phoneCur.EmpCurrent);
 				DataTable tableEmp=Db.GetTable(command);
@@ -88,11 +90,16 @@ namespace OpenDentBusiness{
 					if(status=="Working"){
 						status="Available";
 					}
-					Employees.SetPhoneStatus(status,phoneCur.Extension);
+					Employees.SetPhoneStatus(status,phoneCur.Extension,phoneCur.EmpCurrent);
 				}
 			}
 			else{
-				Employees.SetPhoneStatus("Unavailable",phoneCur.Extension);
+				Employees.SetPhoneStatus("Unavailable",phoneCur.Extension,phoneCur.EmpCurrent);
+			}
+			//then the old extension for the emp.  But only if it's different.
+			long defaultExtension=Employees.GetEmp(phoneCur.EmpCurrent).PhoneExt;
+			if(defaultExtension > 0 && defaultExtension != phoneCur.Extension){
+				Employees.SetPhoneStatus("",(int)defaultExtension,0);//clear it out.
 			}
 			return phoneCur.PhoneOverrideNum;
 		}
@@ -110,6 +117,8 @@ namespace OpenDentBusiness{
 				+"Explanation='"+POut.String(phoneCur.Explanation)+"' "
 				+"WHERE PhoneOverrideNum="+POut.Long(phoneCur.PhoneOverrideNum);
 			Db.NonQ(command);
+			//The only change that the UI allows is to change IsAvailable.  Extension and emp can't have changed.
+			//Change the phone table.
 			if(phoneCur.IsAvailable){
 				command="SELECT ClockStatus FROM employee WHERE EmployeeNum="+POut.Long(phoneCur.EmpCurrent);
 				DataTable tableEmp=Db.GetTable(command);
@@ -118,11 +127,11 @@ namespace OpenDentBusiness{
 					if(status=="Working"){
 						status="Available";
 					}
-					Employees.SetPhoneStatus(status,phoneCur.Extension);
+					Employees.SetPhoneStatus(status,phoneCur.Extension,phoneCur.EmpCurrent);
 				}
 			}
 			else{
-				Employees.SetPhoneStatus("Unavailable",phoneCur.Extension);
+				Employees.SetPhoneStatus("Unavailable",phoneCur.Extension,phoneCur.EmpCurrent);
 			}
 		}
 
@@ -133,14 +142,36 @@ namespace OpenDentBusiness{
 			}
 			string command="DELETE FROM phoneoverride WHERE PhoneOverrideNum="+POut.Long(phoneCur.PhoneOverrideNum);
 			Db.NonQ(command);
-			command="SELECT ClockStatus FROM employee WHERE EmployeeNum="+POut.Long(phoneCur.EmpCurrent);
-			DataTable tableEmp=Db.GetTable(command);
-			if(tableEmp.Rows.Count>0){
-				string status=tableEmp.Rows[0][0].ToString();
-				if(status=="Working"){
-					status="Available";
+			//Now do some work on the phone table to display the change just made.
+			//First, reset the overridden extension
+			long empNumOriginal=Employees.GetEmpNumAtExtension(phoneCur.Extension);//determine what employee belongs at that extension
+			if(empNumOriginal>0){
+				command="SELECT ClockStatus FROM employee WHERE EmployeeNum="+POut.Long(empNumOriginal);
+				DataTable tableEmp=Db.GetTable(command);
+				if(tableEmp.Rows.Count>0){
+					string status=tableEmp.Rows[0][0].ToString();
+					if(status=="Working"){
+						status="Available";
+					}
+					Employees.SetPhoneStatus(status,phoneCur.Extension,empNumOriginal);
 				}
-				Employees.SetPhoneStatus(status,phoneCur.Extension);
+			}
+			else{
+				//not sure what would happen here.  If no emp is assigned that extension by default, then, I guess clear it?
+				Employees.SetPhoneStatus("",phoneCur.Extension,0);
+			}
+			//then reset the default extension for the emp.  But only if it's different.
+			long defaultExtension=Employees.GetEmp(phoneCur.EmpCurrent).PhoneExt;
+			if(defaultExtension > 0 && defaultExtension != phoneCur.Extension){
+				command="SELECT ClockStatus FROM employee WHERE EmployeeNum="+POut.Long(phoneCur.EmpCurrent);
+				DataTable tableEmp=Db.GetTable(command);
+				if(tableEmp.Rows.Count>0){
+					string status=tableEmp.Rows[0][0].ToString();
+					if(status=="Working"){
+						status="Available";
+					}
+					Employees.SetPhoneStatus(status,(int)defaultExtension,phoneCur.EmpCurrent);
+				}
 			}
 		}
 
@@ -152,10 +183,7 @@ namespace OpenDentBusiness{
 				return;//no override exists.
 			}
 			Employee emp=Employees.GetEmp(empNum);
-			if(empNum==4//amber
-				|| empNum==21//natalie
-				|| empNum==20//britt
-				|| empNum==22//jordan
+			if(empNum==22//jordan
 				|| empNum==15//derek
 				|| empNum==18)//james
 			{

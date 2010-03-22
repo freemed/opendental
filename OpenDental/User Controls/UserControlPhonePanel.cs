@@ -311,7 +311,7 @@ namespace OpenDental {
 			//Employees.SetUnavailable(extension,employeeNum);
 			//Get an override if it exists
 			PhoneOverride phoneOR=PhoneOverrides.GetByExtAndEmp(extension,employeeNum);
-			if(phoneOR==null){
+			if(phoneOR==null){//there is no override for that extension/emp combo.
 				phoneOR=new PhoneOverride();
 				phoneOR.EmpCurrent=employeeNum;
 				phoneOR.Extension=extension;
@@ -430,6 +430,10 @@ namespace OpenDental {
 		///<summary>If already clocked in, this does nothing.  Returns false if not able to clock in due to security, or true if successful.</summary>
 		private bool ClockIn(){
 			long employeeNum=PIn.Long(tablePhone.Rows[rowI]["EmployeeNum"].ToString());
+			if(employeeNum==0){
+				MsgBox.Show(this,"No employee at that extension.");
+				return false;
+			}
 			if(ClockEvents.IsClockedIn(employeeNum)){
 				return true;//if employee is already clocked in, then return
 			}
