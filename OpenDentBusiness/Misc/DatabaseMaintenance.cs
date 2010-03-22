@@ -390,11 +390,12 @@ namespace OpenDentBusiness {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
 			string log="";
+			/*Please see http://www.opendental.com/manual/bugcp.html
 			command=@"SELECT PatNum,ClaimNum,FeeBilled,Status,ProcNum,ProcDate,ClaimProcNum,InsPayAmt,LineNumber, COUNT(*) cnt
 FROM claimproc
 WHERE ClaimNum > 0
 AND ProcNum>0
-AND Status!=4/*exclude supplemental*/
+AND Status!=4/*exclude supplemental*
 GROUP BY Claimnum,ProcNum,Status,InsPayAmt,FeeBilled,LineNumber
 HAVING cnt>1";
 			table=Db.GetTable(command);
@@ -416,7 +417,7 @@ HAVING cnt>1";
 			}
 			if(numberFixed>0 || verbose) {
 				log+=Lans.g("FormDatabaseMaintenance","Claimprocs deleted due duplicate entries: ")+numberFixed.ToString()+".  Run this tool again to fix related totals.\r\n";
-			}
+			}*/
 			return log;
 		}
 
