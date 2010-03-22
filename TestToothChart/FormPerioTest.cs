@@ -14,6 +14,9 @@ namespace TestToothChart {
 	public partial class FormPerioTest:Form {
 		public FormPerioTest() {
 			InitializeComponent();
+			//Assume that a hardware format on the default adapter using 16 bit color and 16 bit depth buffer
+			//with 4X antialiasing will work for testing purposes.
+			toothChart.DeviceFormat=new SparksToothChart.ToothChartDirectX.DirectXDeviceFormat("0;Hardware;32;D16;R5G6B5;FourSamples");
 			toothChart.DrawMode=DrawingMode.DirectX;
 		}
 
