@@ -26,6 +26,7 @@ namespace OpenDental {
 		private TextBox textLog;
 		private Label label1;
 		private CheckBox checkShow;
+		private OpenDental.UI.Button butTemp;
 		private OpenDental.UI.Button butPrint;
 
 		///<summary></summary>
@@ -68,6 +69,7 @@ namespace OpenDental {
 			this.label1 = new System.Windows.Forms.Label();
 			this.checkShow = new System.Windows.Forms.CheckBox();
 			this.butPrint = new OpenDental.UI.Button();
+			this.butTemp = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// butClose
@@ -158,12 +160,29 @@ namespace OpenDental {
 			this.butPrint.Text = "Print";
 			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
 			// 
+			// butTemp
+			// 
+			this.butTemp.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butTemp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butTemp.Autosize = true;
+			this.butTemp.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butTemp.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butTemp.CornerRadius = 4F;
+			this.butTemp.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butTemp.Location = new System.Drawing.Point(27,631);
+			this.butTemp.Name = "butTemp";
+			this.butTemp.Size = new System.Drawing.Size(87,26);
+			this.butTemp.TabIndex = 19;
+			this.butTemp.Text = "Temp Check";
+			this.butTemp.Click += new System.EventHandler(this.butTemp_Click);
+			// 
 			// FormDatabaseMaintenance
 			// 
 			this.AcceptButton = this.buttonCheck;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butClose;
 			this.ClientSize = new System.Drawing.Size(895,667);
+			this.Controls.Add(this.butTemp);
 			this.Controls.Add(this.butPrint);
 			this.Controls.Add(this.checkShow);
 			this.Controls.Add(this.label1);
@@ -368,6 +387,11 @@ namespace OpenDental {
 			int xPos=ev.MarginBounds.Left;
 			ev.Graphics.DrawString(textLog.Text,new Font("Courier New",10),Brushes.Black,xPos,yPos);
 			ev.HasMorePages = false;
+		}
+
+		private void butTemp_Click(object sender,EventArgs e) {
+			FormDatabaseMaintTemp form=new FormDatabaseMaintTemp();
+			form.ShowDialog();
 		}
 
 

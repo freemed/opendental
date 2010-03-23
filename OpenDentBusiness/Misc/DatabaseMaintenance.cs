@@ -1306,8 +1306,98 @@ HAVING cnt>1";
 
 
 
+		public static List<string> GetDatabaseNames(){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<string>>(MethodBase.GetCurrentMethod());
+			}
+			List<string> retVal=new List<string>();
+			command="SHOW DATABASES";
+			//if this next step fails, table will simply have 0 rows
+			DataTable table=Db.GetTable(command);
+			for(int i=0;i<table.Rows.Count;i++){
+				retVal.Add(table.Rows[i][0].ToString());
+			}
+			return retVal;
+		}
+
+		///<summary></summary>
+		public static string GetDuplicateClaimProcs(){
+			command=@"SELECT LName,FName,patient.PatNum,ClaimNum,FeeBilled,Status,ProcNum,ProcDate,ClaimProcNum,InsPayAmt,LineNumber, COUNT(*) cnt
+FROM claimproc
+LEFT JOIN patient ON patient.PatNum=claimproc.PatNum
+WHERE ClaimNum > 0
+AND ProcNum>0
+AND Status!=4/*exclude supplemental*/
+GROUP BY ClaimNum,ProcNum,Status,InsPayAmt,FeeBilled,LineNumber
+HAVING cnt>1";
+			table=Db.GetTable(command);
+			string retVal="";
+			if(table.Rows.Count==0){
+				retVal+="Duplicate claim payments: None found.  Database OK.\r\n";
+			}
+			else{
+				retVal+="Duplicate claim payments found:\r\n";
+				//double amt;
+				DateTime date;
+				//long patNum;
+				for(int i=0;i<table.Rows.Count;i++){
+					if(i>0){//check for duplicate rows.  We only want to report each claim once.
+						if(table.Rows[i]["ClaimNum"].ToString()==table.Rows[i-1]["ClaimNum"].ToString()){
+							continue;
+						}
+					}
+					//amt=PIn.Double(table.Rows[i]["InsPayAmt"].ToString());
+					date=PIn.Date(table.Rows[i]["ProcDate"].ToString());
+					//patNum=PIn.Long(table.Rows[i]["PatNum"].ToString());
+					retVal+=table.Rows[i]["LName"].ToString()+", "
+						+table.Rows[i]["FName"].ToString()+" "
+						+"("+table.Rows[i]["PatNum"].ToString()+"), "
+						+date.ToShortDateString()+"\r\n";
+						//+amt.ToString("c")+"\r\n";
+				}
+			}
+			retVal+="\r\n";
+			//supplemental
+			command=@"SELECT LName,FName,patient.PatNum,ClaimNum,FeeBilled,Status,ProcNum,ProcDate,ClaimProcNum,InsPayAmt,LineNumber, COUNT(*) cnt
+FROM claimproc
+LEFT JOIN patient ON patient.PatNum=claimproc.PatNum
+WHERE ClaimNum > 0
+AND ProcNum>0
+AND Status=4/*only supplemental*/
+GROUP BY Claimnum,ProcNum,Status,InsPayAmt,FeeBilled,LineNumber
+HAVING cnt>1";
+			table=Db.GetTable(command);
+			if(table.Rows.Count==0){
+				retVal+="Duplicate supplemental payments: None found.  Database OK.\r\n";
+			}
+			else{
+				retVal+="Duplicate supplemental payments found (may be false positives):\r\n";
+				//double amt;
+				DateTime date;
+				for(int i=0;i<table.Rows.Count;i++){
+					if(i>0){
+						if(table.Rows[i]["ClaimNum"].ToString()==table.Rows[i-1]["ClaimNum"].ToString()){
+							continue;
+						}
+					}
+					//amt=PIn.Double(table.Rows[i]["InsPayAmt"].ToString());
+					date=PIn.Date(table.Rows[i]["ProcDate"].ToString());
+					retVal+=table.Rows[i]["LName"].ToString()+", "
+						+table.Rows[i]["FName"].ToString()+" "
+						+"("+table.Rows[i]["PatNum"].ToString()+"), "
+						+date.ToShortDateString()+"\r\n";
+						//+amt.ToString("c")+"\r\n";
+				}
+			}
+			retVal+="\r\n";
 
 
+
+
+
+			return retVal;
+		}
+		
 
 	}
 }
