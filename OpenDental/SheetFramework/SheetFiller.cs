@@ -960,7 +960,10 @@ namespace OpenDental{
 						field.FieldValue=pat.Preferred;
 						break;
 					case "referredFrom":
-						field.FieldValue=Referrals.GetNameFL(Referrals.GetReferralForPat(pat.PatNum).ReferralNum);
+						Referral referral=Referrals.GetReferralForPat(pat.PatNum);
+						if(referral!=null){
+							field.FieldValue=Referrals.GetNameFL(referral.ReferralNum);
+						}
 						break;
 					case "SSN":
 						if(CultureInfo.CurrentCulture.Name=="en-US" && pat.SSN.Length==9){//and length exactly 9 (no data gets lost in formatting)
