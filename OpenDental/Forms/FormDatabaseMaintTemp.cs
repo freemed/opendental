@@ -4,8 +4,10 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Text;
 using System.Windows.Forms;
+using CodeBase;
 using OpenDentBusiness;
 
 namespace OpenDental {
@@ -39,6 +41,7 @@ namespace OpenDental {
 
 			Cursor=Cursors.WaitCursor;
 			textResults.Text=DatabaseMaintenance.GetDuplicateClaimProcs();
+			textResults.Text+=DatabaseMaintenance.GetMissingClaimProcs(comboDbs.SelectedItem.ToString());
 			Cursor=Cursors.Default;
 		}
 
@@ -47,7 +50,10 @@ namespace OpenDental {
 		}
 
 		private void butPrint_Click(object sender,EventArgs e) {
-
+			string fileName=CodeBase.ODFileUtils.CombinePaths(Path.GetTempPath(),"results.txt");
+			File.WriteAllText(fileName,textResults.Text);
+			Process.Start(fileName);
+			MsgBox.Show(this,"Please print from the text editor.");
 		}
 
 		private void linkLabel1_LinkClicked(object sender,LinkLabelLinkClickedEventArgs e) {

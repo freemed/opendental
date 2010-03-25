@@ -1390,11 +1390,28 @@ HAVING cnt>1";
 				}
 			}
 			retVal+="\r\n";
+			return retVal;
+		}
 
-
-
-
-
+		///<summary></summary>
+		public static string GetMissingClaimProcs(string olddb) {
+			command="SELECT LName,FName,patient.PatNum,ClaimNum,FeeBilled,Status,ProcNum,ProcDate,ClaimProcNum,InsPayAmt,LineNumber "
+				+"FROM "+olddb+".claimproc "
+				+"LEFT JOIN "+olddb+".patient ON "+olddb+".patient.PatNum="+olddb+".claimproc.PatNum "
+				+"WHERE NOT EXISTS(SELECT * FROM claimproc WHERE claimproc.ClaimProcNum="+olddb+".claimproc.ClaimProcNum) "
+				+"AND ClaimNum > 0 AND ProcNum>0";
+			table=Db.GetTable(command);
+			string retVal="";
+			if(table.Rows.Count==0) {
+				retVal+="Missing claim payments: None found.  Database OK.\r\n";
+			}
+			else {
+				retVal+="Missing claim payments found: "+table.Rows.Count.ToString()+"\r\n"
+					+"";
+				//for(int i=0;i<table.Rows.Count;i++) {
+				//	retVal+=table.Rows[i]["LName"].ToString()+", "
+				//}
+			}
 			return retVal;
 		}
 		
