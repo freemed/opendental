@@ -1320,8 +1320,12 @@ HAVING cnt>1";
 			return retVal;
 		}
 
-		///<summary></summary>
+		///<summary>Will return empty string if no problems.</summary>
 		public static string GetDuplicateClaimProcs(){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod());
+			}
+			string retVal="";
 			command=@"SELECT LName,FName,patient.PatNum,ClaimNum,FeeBilled,Status,ProcNum,ProcDate,ClaimProcNum,InsPayAmt,LineNumber, COUNT(*) cnt
 FROM claimproc
 LEFT JOIN patient ON patient.PatNum=claimproc.PatNum
@@ -1331,63 +1335,66 @@ AND Status!=4/*exclude supplemental*/
 GROUP BY ClaimNum,ProcNum,Status,InsPayAmt,FeeBilled,LineNumber
 HAVING cnt>1";
 			table=Db.GetTable(command);
-			string retVal="";
 			if(table.Rows.Count==0){
-				retVal+="Duplicate claim payments: None found.  Database OK.\r\n";
+				return "";
 			}
-			else{
-				retVal+="Duplicate claim payments found:\r\n";
-				//double amt;
-				DateTime date;
-				//long patNum;
-				for(int i=0;i<table.Rows.Count;i++){
-					if(i>0){//check for duplicate rows.  We only want to report each claim once.
-						if(table.Rows[i]["ClaimNum"].ToString()==table.Rows[i-1]["ClaimNum"].ToString()){
-							continue;
-						}
+			retVal+="Duplicate claim payments found:\r\n";
+			//double amt;
+			DateTime date;
+			//long patNum;
+			for(int i=0;i<table.Rows.Count;i++){
+				if(i>0){//check for duplicate rows.  We only want to report each claim once.
+					if(table.Rows[i]["ClaimNum"].ToString()==table.Rows[i-1]["ClaimNum"].ToString()){
+						continue;
 					}
-					//amt=PIn.Double(table.Rows[i]["InsPayAmt"].ToString());
-					date=PIn.Date(table.Rows[i]["ProcDate"].ToString());
-					//patNum=PIn.Long(table.Rows[i]["PatNum"].ToString());
-					retVal+=table.Rows[i]["LName"].ToString()+", "
-						+table.Rows[i]["FName"].ToString()+" "
-						+"("+table.Rows[i]["PatNum"].ToString()+"), "
-						+date.ToShortDateString()+"\r\n";
-						//+amt.ToString("c")+"\r\n";
 				}
+				//amt=PIn.Double(table.Rows[i]["InsPayAmt"].ToString());
+				date=PIn.Date(table.Rows[i]["ProcDate"].ToString());
+				//patNum=PIn.Long(table.Rows[i]["PatNum"].ToString());
+				retVal+=table.Rows[i]["LName"].ToString()+", "
+					+table.Rows[i]["FName"].ToString()+" "
+					+"("+table.Rows[i]["PatNum"].ToString()+"), "
+					+date.ToShortDateString()+"\r\n";
+					//+amt.ToString("c")+"\r\n";
 			}
 			retVal+="\r\n";
-			//supplemental
+			return retVal;
+		}
+
+		///<summary>Will return empty string if no problems.</summary>
+		public static string GetDuplicateSupplementalPayments(){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod());
+			}
+			string retVal="";
 			command=@"SELECT LName,FName,patient.PatNum,ClaimNum,FeeBilled,Status,ProcNum,ProcDate,ClaimProcNum,InsPayAmt,LineNumber, COUNT(*) cnt
 FROM claimproc
 LEFT JOIN patient ON patient.PatNum=claimproc.PatNum
 WHERE ClaimNum > 0
 AND ProcNum>0
 AND Status=4/*only supplemental*/
-GROUP BY Claimnum,ProcNum,Status,InsPayAmt,FeeBilled,LineNumber
+GROUP BY Claimnum,ProcNum,Status,InsPayAmt,FeeBilled,LineNumber,ClaimPaymentNum
 HAVING cnt>1";
 			table=Db.GetTable(command);
 			if(table.Rows.Count==0){
-				retVal+="Duplicate supplemental payments: None found.  Database OK.\r\n";
+				return "";
 			}
-			else{
-				retVal+="Duplicate supplemental payments found (may be false positives):\r\n";
-				//double amt;
-				DateTime date;
-				for(int i=0;i<table.Rows.Count;i++){
-					if(i>0){
-						if(table.Rows[i]["ClaimNum"].ToString()==table.Rows[i-1]["ClaimNum"].ToString()){
-							continue;
-						}
+			retVal+="Duplicate supplemental payments found (may be false positives):\r\n";
+			//double amt;
+			DateTime date;
+			for(int i=0;i<table.Rows.Count;i++){
+				if(i>0){
+					if(table.Rows[i]["ClaimNum"].ToString()==table.Rows[i-1]["ClaimNum"].ToString()){
+						continue;
 					}
-					//amt=PIn.Double(table.Rows[i]["InsPayAmt"].ToString());
-					date=PIn.Date(table.Rows[i]["ProcDate"].ToString());
-					retVal+=table.Rows[i]["LName"].ToString()+", "
-						+table.Rows[i]["FName"].ToString()+" "
-						+"("+table.Rows[i]["PatNum"].ToString()+"), "
-						+date.ToShortDateString()+"\r\n";
-						//+amt.ToString("c")+"\r\n";
 				}
+				//amt=PIn.Double(table.Rows[i]["InsPayAmt"].ToString());
+				date=PIn.Date(table.Rows[i]["ProcDate"].ToString());
+				retVal+=table.Rows[i]["LName"].ToString()+", "
+					+table.Rows[i]["FName"].ToString()+" "
+					+"("+table.Rows[i]["PatNum"].ToString()+"), "
+					+date.ToShortDateString()+"\r\n";
+					//+amt.ToString("c")+"\r\n";
 			}
 			retVal+="\r\n";
 			return retVal;
@@ -1395,25 +1402,107 @@ HAVING cnt>1";
 
 		///<summary></summary>
 		public static string GetMissingClaimProcs(string olddb) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),olddb);
+			}
+			string retVal="";
 			command="SELECT LName,FName,patient.PatNum,ClaimNum,FeeBilled,Status,ProcNum,ProcDate,ClaimProcNum,InsPayAmt,LineNumber "
 				+"FROM "+olddb+".claimproc "
 				+"LEFT JOIN "+olddb+".patient ON "+olddb+".patient.PatNum="+olddb+".claimproc.PatNum "
 				+"WHERE NOT EXISTS(SELECT * FROM claimproc WHERE claimproc.ClaimProcNum="+olddb+".claimproc.ClaimProcNum) "
 				+"AND ClaimNum > 0 AND ProcNum>0";
 			table=Db.GetTable(command);
-			string retVal="";
-			if(table.Rows.Count==0) {
-				retVal+="Missing claim payments: None found.  Database OK.\r\n";
+			command="SELECT ClaimPaymentNum "
+				+"FROM "+olddb+".claimpayment "
+				+"WHERE NOT EXISTS(SELECT * FROM claimpayment WHERE claimpayment.ClaimPaymentNum="+olddb+".claimpayment.ClaimPaymentNum) ";
+			DataTable table2=Db.GetTable(command);
+			if(table.Rows.Count==0 && table2.Rows.Count==0) {
+				return "";
 			}
-			else {
-				retVal+="Missing claim payments found: "+table.Rows.Count.ToString()+"\r\n"
-					+"";
-				//for(int i=0;i<table.Rows.Count;i++) {
-				//	retVal+=table.Rows[i]["LName"].ToString()+", "
-				//}
-			}
+			retVal+="Missing claim payments found: "+table.Rows.Count.ToString()+"\r\n";
+			retVal+="Missing claim checks found: "+table2.Rows.Count.ToString()+"\r\n";
 			return retVal;
 		}
+
+		public static bool DatabaseIsOlderThanMarchSeventeenth(string olddb){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetBool(MethodBase.GetCurrentMethod(),olddb);
+			}
+			command="SELECT COUNT(*) FROM "+olddb+".claimproc WHERE DateEntry > '2010-03-16'";
+			if(Db.GetCount(command)=="0"){
+				return true;
+			}
+			return false;
+		}
+
+		/// <summary></summary>
+		public static string FixClaimProcDeleteDuplicates() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod());
+			}
+			string log="";
+			command=@"SELECT LName,FName,patient.PatNum,ClaimNum,FeeBilled,Status,ProcNum,ProcDate,ClaimProcNum,InsPayAmt,LineNumber, COUNT(*) cnt
+FROM claimproc
+LEFT JOIN patient ON patient.PatNum=claimproc.PatNum
+WHERE ClaimNum > 0
+AND ProcNum>0
+AND Status!=4/*exclude supplemental*/
+GROUP BY ClaimNum,ProcNum,Status,InsPayAmt,FeeBilled,LineNumber
+HAVING cnt>1";
+			table=Db.GetTable(command);
+			int numberFixed=0;
+			double insPayAmt;
+			double feeBilled;
+			for(int i=0;i<table.Rows.Count;i++) {
+				insPayAmt=PIn.Double(table.Rows[i]["InsPayAmt"].ToString());
+				feeBilled=PIn.Double(table.Rows[i]["FeeBilled"].ToString());
+				command="DELETE FROM claimproc "
+					+"WHERE ClaimNum= "+table.Rows[i]["ClaimNum"].ToString()+" "
+					+"AND ProcNum= "+table.Rows[i]["ProcNum"].ToString()+" "
+					+"AND Status= "+table.Rows[i]["Status"].ToString()+" "
+					+"AND InsPayAmt= '"+POut.Double(insPayAmt)+"' "
+					+"AND FeeBilled= '"+POut.Double(feeBilled)+"' "
+					+"AND LineNumber= "+table.Rows[i]["LineNumber"].ToString()+" "
+					+"AND ClaimProcNum != "+table.Rows[i]["ClaimProcNum"].ToString();
+				numberFixed+=Db.NonQ32(command);
+			}
+			log+="Claimprocs deleted due duplicate entries: "+numberFixed.ToString()+".\r\n";
+			return log;
+		}
+
+		/// <summary></summary>
+		public static string FixMissingClaimProcs(string olddb) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod());
+			}
+			string log="";
+			command="SELECT LName,FName,patient.PatNum,ClaimNum,FeeBilled,Status,ProcNum,ProcDate,ClaimProcNum,InsPayAmt,LineNumber "
+				+"FROM "+olddb+".claimproc "
+				+"LEFT JOIN "+olddb+".patient ON "+olddb+".patient.PatNum="+olddb+".claimproc.PatNum "
+				+"WHERE NOT EXISTS(SELECT * FROM claimproc WHERE claimproc.ClaimProcNum="+olddb+".claimproc.ClaimProcNum) "
+				+"AND ClaimNum > 0 AND ProcNum>0";
+			table=Db.GetTable(command);
+			int numberFixed=0;
+			for(int i=0;i<table.Rows.Count;i++) {
+				command="INSERT INTO claimproc SELECT * FROM "+olddb+".claimproc "
+					+"WHERE "+olddb+".claimproc.ClaimProcNum="+table.Rows[i]["ClaimProcNum"].ToString();
+				numberFixed+=Db.NonQ32(command);
+			}
+			command="SELECT ClaimPaymentNum "
+				+"FROM "+olddb+".claimpayment "
+				+"WHERE NOT EXISTS(SELECT * FROM claimpayment WHERE claimpayment.ClaimPaymentNum="+olddb+".claimpayment.ClaimPaymentNum) ";
+			table=Db.GetTable(command);
+			int numberFixed2=0;
+			for(int i=0;i<table.Rows.Count;i++) {
+				command="INSERT INTO claimpayment SELECT * FROM "+olddb+".claimpayment "
+					+"WHERE "+olddb+".claimpayment.ClaimPaymentNum="+table.Rows[i]["ClaimPaymentNum"].ToString();
+				numberFixed2+=Db.NonQ32(command);
+			}
+			log+="Missing claimprocs added back: "+numberFixed.ToString()+".\r\n";
+			log+="Missing claimpayments added back: "+numberFixed2.ToString()+".\r\n";
+			return log;
+		}
+		
 		
 
 	}

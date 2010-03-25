@@ -12,10 +12,14 @@ using OpenDentBusiness;
 
 namespace OpenDental {
 	public partial class FormDatabaseMaintTemp:Form {
+		//private bool backupMade;
+		private string duplicateClaimProcInfo;
+		private string duplicateSuppInfo;
+		private string missingSuppInfo;
+
 		public FormDatabaseMaintTemp() {
 			InitializeComponent();
 			Lan.F(this);
-
 		}
 
 		private void FormDatabaseMaintTemp_Load(object sender,EventArgs e) {
@@ -38,10 +42,38 @@ namespace OpenDental {
 				return;
 			}
 			//make sure it's not this database
-
+			if(comboDbs.SelectedItem.ToString()==MiscData.GetCurrentDatabase()){
+				MsgBox.Show(this,"Please choose a database other than the current database.");
+				return;
+			}
+			//make sure it's from before March 17th.
+			//if(!DatabaseMaintenance.DatabaseIsOlderThanMarchSeventeenth(comboDbs.SelectedItem.ToString())){
+			//	MsgBox.Show(this,"The backup database must be older than March 17, 2010.");
+			//	return;
+			//}
 			Cursor=Cursors.WaitCursor;
-			textResults.Text=DatabaseMaintenance.GetDuplicateClaimProcs();
-			textResults.Text+=DatabaseMaintenance.GetMissingClaimProcs(comboDbs.SelectedItem.ToString());
+			textResults.Text="";
+			duplicateClaimProcInfo=DatabaseMaintenance.GetDuplicateClaimProcs();
+			if(duplicateClaimProcInfo==""){
+				textResults.Text+="Duplicate claim payments: None found.  Database OK.\r\n\r\n";
+			}
+			else{
+				textResults.Text+=duplicateClaimProcInfo;
+			}
+			duplicateSuppInfo=DatabaseMaintenance.GetDuplicateSupplementalPayments();
+			if(duplicateSuppInfo==""){
+				textResults.Text+="Duplicate supplemental payments: None found.  Database OK.\r\n\r\n";
+			}
+			else{
+				textResults.Text+=duplicateSuppInfo;
+			}
+			missingSuppInfo=DatabaseMaintenance.GetMissingClaimProcs(comboDbs.SelectedItem.ToString());
+			if(missingSuppInfo==""){
+				textResults.Text+="Missing claim payments: None found.  Database OK.";
+			}
+			else{
+				textResults.Text+=missingSuppInfo;
+			}
 			Cursor=Cursors.Default;
 		}
 
@@ -58,6 +90,38 @@ namespace OpenDental {
 
 		private void linkLabel1_LinkClicked(object sender,LinkLabelLinkClickedEventArgs e) {
 			Process.Start("http://www.opendental.com/manual/bugcp.html");
+		}
+
+		private void butBackup_Click(object sender,EventArgs e) {
+			Cursor=Cursors.WaitCursor;
+			MiscData.MakeABackup();
+			//backupMade=true;
+			if(duplicateClaimProcInfo!=""){
+				butFix1.Enabled=true;
+			}
+			if(duplicateSuppInfo!=""){
+				butFix2.Enabled=true;
+			}
+			if(missingSuppInfo!=""){
+				butFix3.Enabled=true;
+			}
+			Cursor=Cursors.Default;
+		}
+
+		private void butFix1_Click(object sender,EventArgs e) {
+			Cursor=Cursors.WaitCursor;
+			textResults.Text=DatabaseMaintenance.FixClaimProcDeleteDuplicates();
+			Cursor=Cursors.Default;
+		}
+
+		private void butFix2_Click(object sender,EventArgs e) {
+			MessageBox.Show("There is not yet a fix for duplicate supplemental payments due to concern about false positives. If you have duplicates, we will need to get a copy of your database to analyze it here.");
+		}
+
+		private void butFix3_Click(object sender,EventArgs e) {
+			Cursor=Cursors.WaitCursor;
+			textResults.Text=DatabaseMaintenance.FixMissingClaimProcs(comboDbs.SelectedItem.ToString());
+			Cursor=Cursors.Default;
 		}
 
 		
