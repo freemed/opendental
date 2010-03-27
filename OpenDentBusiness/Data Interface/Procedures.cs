@@ -1570,6 +1570,9 @@ namespace OpenDentBusiness {
 				if(ProcList[i].AptNum!=apt.AptNum) {
 					continue;
 				}
+				//if(ProcList[i].ProcStatus==ProcStat.C) {//if the procedure is already complete, don't touch it.
+				//too severe
+				//}
 				//attach the note, if it exists.
 				for(int n=rawNotes.Rows.Count-1;n>=0;n--) {//loop through each note, backwards.
 					if(ProcList[i].ProcNum.ToString()!=rawNotes.Rows[n]["ProcNum"].ToString()) {
@@ -1588,8 +1591,8 @@ namespace OpenDentBusiness {
 					ToothInitials.SetValue(apt.PatNum,ProcList[i].ToothNum,ToothInitialType.Missing);
 				}
 				ProcList[i].ProcStatus=ProcStat.C;
-				ProcList[i].ProcDate=apt.AptDateTime.Date;
 				if(oldProc.ProcStatus!=ProcStat.C) {
+					ProcList[i].ProcDate=apt.AptDateTime.Date;//only change date to match appt if not already complete.
 					ProcList[i].DateEntryC=DateTime.Now;//this triggers it to set to server time NOW().
 				}
 				ProcList[i].PlaceService=(PlaceOfService)PrefC.GetLong(PrefName.DefaultProcedurePlaceService);

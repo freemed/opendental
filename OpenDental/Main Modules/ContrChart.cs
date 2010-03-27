@@ -6611,6 +6611,10 @@ namespace OpenDental{
 				}
 				if(procCur.AptNum!=0) {//if attached to an appointment
 					apt=Appointments.GetOneApt(procCur.AptNum);
+					if(apt.AptDateTime.Date > MiscData.GetNowDateTime().Date) {
+						MessageBox.Show(Lan.g(this,"Not allowed because a procedure is attached to a future appointment with a date of ")+apt.AptDateTime.ToShortDateString());
+						return;
+					}
 					if(!Security.IsAuthorized(Permissions.ProcComplCreate,apt.AptDateTime)) {
 						return;
 					}

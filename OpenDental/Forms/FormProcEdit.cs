@@ -2668,7 +2668,12 @@ namespace OpenDental{
 			}
 			Procedures.SetDateFirstVisit(DateTime.Today,2,PatCur);
 			if(ProcCur.AptNum!=0){//if attached to an appointment
-				textDate.Text=Appointments.GetOneApt(ProcCur.AptNum).AptDateTime.ToShortDateString();
+				Appointment apt=Appointments.GetOneApt(ProcCur.AptNum);
+				if(apt.AptDateTime.Date > MiscData.GetNowDateTime().Date){//if appointment is in the future
+					MessageBox.Show(Lan.g(this,"Not allowed because procedure is attached to a future appointment with a date of ")+apt.AptDateTime.ToShortDateString());
+					return;
+				}
+				textDate.Text=apt.AptDateTime.ToShortDateString();
 			}
 			else{
 				textDate.Text=DateTime.Today.ToShortDateString();
@@ -3081,6 +3086,14 @@ namespace OpenDental{
 				}
 			}*/
 			if(ProcOld.ProcStatus!=ProcStat.C && ProcCur.ProcStatus==ProcStat.C){//if status was changed to complete
+				if(ProcCur.AptNum!=0) {//if attached to an appointment
+					Appointment apt=Appointments.GetOneApt(ProcCur.AptNum);
+					if(apt.AptDateTime.Date > MiscData.GetNowDateTime().Date) {//if appointment is in the future
+						MessageBox.Show(Lan.g(this,"Not allowed because procedure is attached to a future appointment with a date of ")+apt.AptDateTime.ToShortDateString());
+						return false;
+					}
+					textDate.Text=apt.AptDateTime.ToShortDateString();
+				}
 				if(!Security.IsAuthorized(Permissions.ProcComplCreate,PIn.Date(textDate.Text))){//use the new date
 					return false;
 				}

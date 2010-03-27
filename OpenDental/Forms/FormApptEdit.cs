@@ -1866,7 +1866,17 @@ namespace OpenDental{
 					return false;
 				}
 			}
-			if (AptCur.AptStatus == ApptStatus.Planned) {
+			//This change was just slightly too risky to make to 6.9, so 7.0 only
+			if(AptCur.AptStatus!=ApptStatus.Complete//was not originally complete
+				&& AptCur.AptStatus!=ApptStatus.PtNote
+				&& AptCur.AptStatus!=ApptStatus.PtNoteCompleted
+				&& comboStatus.SelectedIndex==1 //making it complete
+				&& AptCur.AptDateTime.Date > DateTime.Today)//and future appt
+			{
+				MsgBox.Show(this,"Not allowed to set complete future appointments.");
+				return false;
+			}
+			if(AptCur.AptStatus == ApptStatus.Planned) {
 				;
 			}
 			else if(comboStatus.SelectedIndex==-1) {
