@@ -14,7 +14,7 @@ using OpenDentBusiness;
 
 namespace OpenDental {
 	///<summary>Used to add functionality to the MigraDoc framework.  Specifically, it helps with absolute positioning.</summary>
-	class MigraDocHelper {
+	public class MigraDocHelper {
 		///<Summary>Creates a container frame in a section.  This allows other objects to be placed absolutely within a given area by adding more textframes within this one.  This frame is full width and is automatically placed after previous elements.</Summary>
 		public static TextFrame CreateContainer(Section section){
 			TextFrame framebig=section.AddTextFrame();

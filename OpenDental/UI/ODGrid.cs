@@ -129,9 +129,11 @@ namespace OpenDental.UI{
 		///<summary></summary>
 		protected override void OnLoad(EventArgs e) {
 			base.OnLoad (e);
-			this.Parent.MouseWheel+=new MouseEventHandler(Parent_MouseWheel);
-			this.Parent.KeyDown+=new KeyEventHandler(Parent_KeyDown);
-			this.Parent.KeyUp+=new KeyEventHandler(Parent_KeyUp);
+			if(this.Parent!=null) {
+				this.Parent.MouseWheel+=new MouseEventHandler(Parent_MouseWheel);
+				this.Parent.KeyDown+=new KeyEventHandler(Parent_KeyDown);
+				this.Parent.KeyUp+=new KeyEventHandler(Parent_KeyUp);
+			}
 		}
 
 		///<summary></summary>
