@@ -313,13 +313,27 @@ namespace OpenDentBusiness{
 			return PIn.Int(Db.GetCount(command));
 		}
 
-		///<summary>Appends a carriage return as well as the text to any task.</summary>
+		///<summary>Appends a carriage return as well as the text to any task.  If a taskListNum is specified, then it also changes the taskList.</summary>
 		public static void Append(long taskNum,string text) {
+			//No need to check RemotingRole; no call to db.
+			Append(taskNum,text,-1);
+		}
+
+		///<summary>Appends a carriage return as well as the text to any task.  If a taskListNum is specified, then it also changes the taskList.</summary>
+		public static void Append(long taskNum,string text,long taskListNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),taskNum,text);
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),taskNum,text,taskListNum);
 				return;
 			}
-			string command="UPDATE task SET task.Descript=CONCAT(task.Descript,'"+POut.String("\r\n"+text)+"') WHERE TaskNum="+POut.Long(taskNum);
+			string command;
+			if(taskListNum==-1) {
+				command="UPDATE task SET Descript=CONCAT(Descript,'"+POut.String("\r\n"+text)+"') WHERE TaskNum="+POut.Long(taskNum);
+			}
+			else {
+				command="UPDATE task SET Descript=CONCAT(Descript,'"+POut.String("\r\n"+text)+"'), "
+					+"TaskListNum="+POut.Long(taskListNum)+" "
+					+"WHERE TaskNum="+POut.Long(taskNum);
+			}
 			Db.NonQ(command);
 		}
 	

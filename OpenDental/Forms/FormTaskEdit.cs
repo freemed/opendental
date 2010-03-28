@@ -901,7 +901,7 @@ namespace OpenDental{
 				}
 				else{
 					if(!Cur.Equals(CurOld)){//If user clicks OK without making any changes, then skip.
-						Tasks.Update(Cur,CurOld);
+						Tasks.Update(Cur,CurOld);//if task has already been altered, then this is where it will fail.
 					}
 				}
 			}
@@ -923,9 +923,15 @@ namespace OpenDental{
 
 		private void butReply_Click(object sender,EventArgs e) {
 			//This can't happen if IsNew
-			if(textAppend.Text!="") {
-				MsgBox.Show(this,"Either use an Append button, or clear that text box before clicking OK.");
+			//This also can't happen unless the task is in my inbox.
+			if(textAppend.Text=="" && textDescript.Text==Cur.Descript) {//nothing changed
+				MsgBox.Show(this,"Please type in a reply before using the reply button.");
 				return;
+			}
+			if(textAppend.Text!="" && textDescript.Text!=Cur.Descript) {//changed and appending
+				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Text in the main description has changed and the change will not be saved.  Continue anyway?")) {
+					return;
+				}
 			}
 			if(Cur.UserNum==Security.CurUser.UserNum){
 				MsgBox.Show(this,"You can't reply to yourself.");
@@ -936,9 +942,14 @@ namespace OpenDental{
 				MsgBox.Show(this,"No inbox has been setup for this user yet.");
 				return;
 			}
-			Cur.TaskListNum=inbox;
-			if(!SaveCur(true)){
-				return;
+			if(textAppend.Text!=""){//append
+				Tasks.Append(Cur.TaskNum,textAppend.Text,inbox);
+			}
+			else{//just change
+				Cur.TaskListNum=inbox;
+				if(!SaveCur(true)){
+					return;
+				}
 			}
 			DataValid.SetInvalidTask(Cur.TaskNum,true);//popup
 			DialogResult=DialogResult.OK;
