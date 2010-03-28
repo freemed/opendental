@@ -264,6 +264,7 @@ namespace OpenDental{
 		///<summary>This technique is just stupid.  Needs to be rewritten to use OnDraw with double buffering.</summary>
 		public void CreateShadow(){
 			if(Shadow!=null){
+				Shadow.Dispose();
 				Shadow=null;
 			}
 			if(Width<2)
