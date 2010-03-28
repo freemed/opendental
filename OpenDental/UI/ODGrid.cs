@@ -490,6 +490,8 @@ namespace OpenDental.UI{
 				DrawOutline(g);
 				e.Graphics.DrawImageUnscaled(doubleBuffer,0,0);
 			}
+			doubleBuffer.Dispose();
+			doubleBuffer=null;
 		}
 
 		///<summary>Draws a solid gray background.</summary>
