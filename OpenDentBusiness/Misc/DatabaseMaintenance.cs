@@ -971,6 +971,23 @@ HAVING cnt>1";
 			return log;
 		}
 
+		public static string ProcedurelogAttachedToWrongApptDate(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
+			string log="";
+			command=@"UPDATE procedurelog,appointment
+				SET procedurelog.AptNum=0
+				WHERE procedurelog.AptNum = appointment.AptNum
+				AND DATE(procedurelog.ProcDate) != DATE(appointment.AptDateTime)
+				AND procedurelog.ProcStatus = 2";//only detach completed procs 
+			int numberFixed=Db.NonQ32(command);
+			if(numberFixed>0 || verbose) {
+				log+=Lans.g("FormDatabaseMaintenance","Procedures detached from appointments due to mismatched dates: ")+numberFixed.ToString()+"\r\n";
+			}
+			return log;
+		}
+
 		public static string ProcedurelogBaseUnitsZero(bool verbose) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);

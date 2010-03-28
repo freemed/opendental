@@ -318,6 +318,8 @@ namespace OpenDental {
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.ProcedurelogAttachedToWrongAppts(verbose);
 			Application.DoEvents();
+			textLog.Text+=DatabaseMaintenance.ProcedurelogAttachedToWrongApptDate(verbose);
+			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.ProcedurelogBaseUnitsZero(verbose);
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.ProcedurelogCodeNumZero(verbose);
