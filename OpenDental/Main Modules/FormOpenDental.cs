@@ -2599,6 +2599,7 @@ namespace OpenDental{
 						FormTaskEdit FormT=new FormTaskEdit(tasksPopup[i]);
 						FormT.IsPopup=true;
 						FormT.ShowDialog();
+						TaskGoTo(FormT.GotoType,FormT.GotoKeyNum);
 					}
 				}
 				if(areAnySignalsTasks || tasksPopup.Count>0) {
@@ -2939,18 +2940,24 @@ namespace OpenDental{
 		}
 
 		private void userControlTasks1_GoToChanged(object sender,EventArgs e) {
-			if(userControlTasks1.GotoType==TaskObjectType.Patient) {
-				if(userControlTasks1.GotoKeyNum!=0) {
-					CurPatNum=userControlTasks1.GotoKeyNum;//OnPatientSelected(FormT.GotoKeyNum);
-					//GotoModule.GotoAccount();
+			TaskGoTo(userControlTasks1.GotoType,userControlTasks1.GotoKeyNum);
+		}
+
+		private void TaskGoTo(TaskObjectType taskOT,long keyNum){
+			if(taskOT==TaskObjectType.None) {
+				return;
+			}
+			if(taskOT==TaskObjectType.Patient) {
+				if(keyNum!=0) {
+					CurPatNum=keyNum;
 					Patient pat=Patients.GetPat(CurPatNum);
 					RefreshCurrentModule();
 					FillPatientButton(CurPatNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber,pat.SiteNum);
 				}
 			}
-			if(userControlTasks1.GotoType==TaskObjectType.Appointment) {
-				if(userControlTasks1.GotoKeyNum!=0) {
-					Appointment apt=Appointments.GetOneApt(userControlTasks1.GotoKeyNum);
+			if(taskOT==TaskObjectType.Appointment) {
+				if(keyNum!=0) {
+					Appointment apt=Appointments.GetOneApt(keyNum);
 					if(apt==null) {
 						MsgBox.Show(this,"Appointment has been deleted, so it's not available.");
 						return;
