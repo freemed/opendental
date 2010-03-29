@@ -955,19 +955,31 @@ namespace OpenDental{
 			DialogResult=DialogResult.OK;
 		}
 
+		///<summary>Send to another user.</summary>
 		private void butSend_Click(object sender,EventArgs e) {
-			if(textAppend.Text!="") {
-				MsgBox.Show(this,"Either use an Append button, or clear that text box before clicking OK.");
+			//This button is always present.
+			if(textAppend.Text=="" && textDescript.Text==Cur.Descript) {//nothing changed
+				MsgBox.Show(this,"Please type in a message before using the Send To button.");
 				return;
+			}
+			if(textAppend.Text!="" && textDescript.Text!=Cur.Descript) {//changed and appending
+				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Text in the main description has changed and the change will not be saved.  Continue anyway?")) {
+					return;
+				}
 			}
 			FormTaskSendUser FormT=new FormTaskSendUser();
 			FormT.ShowDialog();
 			if(FormT.DialogResult!=DialogResult.OK){
 				return;
 			}
-			Cur.TaskListNum=FormT.TaskListNum;
-			if(!SaveCur(true)){
-				return;
+			if(textAppend.Text!=""){//append
+				Tasks.Append(Cur.TaskNum,textAppend.Text,FormT.TaskListNum);
+			}
+			else{//just change
+				Cur.TaskListNum=FormT.TaskListNum;
+				if(!SaveCur(true)){
+					return;
+				}
 			}
 			DataValid.SetInvalidTask(Cur.TaskNum,true);//popup
 			DialogResult=DialogResult.OK;
