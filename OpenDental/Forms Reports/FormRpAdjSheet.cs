@@ -351,7 +351,7 @@ namespace OpenDental{
 			ReportSimpleGrid report=new ReportSimpleGrid();
 			report.Query="SELECT adjustment.AdjDate,"
 				+"CONCAT(patient.LName,', ',patient.FName,' ',patient.MiddleI),"
-				+"adjustment.ProvNum,Adjustment.ClinicNum,"
+				+"adjustment.ProvNum,adjustment.ClinicNum,"
 				+"definition.ItemName,adjustment.AdjNote,adjustment.AdjAmt FROM "
 				+"adjustment,patient,definition WHERE adjustment.AdjType=definition.DefNum "
 			  +"AND patient.PatNum=adjustment.PatNum "
