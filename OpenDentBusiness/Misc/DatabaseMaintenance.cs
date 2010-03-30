@@ -1500,8 +1500,21 @@ HAVING cnt>1";
 				+"AND ClaimNum > 0 AND ProcNum>0";
 			table=Db.GetTable(command);
 			int numberFixed=0;
+			command="SELECT ValueString FROM "+olddb+".preference WHERE PrefName = 'DataBaseVersion'";
+			string oldVersString=Db.GetScalar(command);
+			Version oldVersion=new Version(oldVersString);
+			if(oldVersion < new Version("6.7.1.0")) {
+				return "Version of old database is too old to use with the automated tool: "+oldVersString;
+			}
 			for(int i=0;i<table.Rows.Count;i++) {
-				command="INSERT INTO claimproc SELECT * FROM "+olddb+".claimproc "
+				command="INSERT INTO claimproc SELECT *";
+				if(oldVersion < new Version("6.8.1.0")) {
+					command+=",-1,-1,0";
+				}
+				else if(oldVersion < new Version("6.9.1.0")) {
+					command+=",0";
+				}
+				command+=" FROM "+olddb+".claimproc "
 					+"WHERE "+olddb+".claimproc.ClaimProcNum="+table.Rows[i]["ClaimProcNum"].ToString();
 				numberFixed+=Db.NonQ32(command);
 			}

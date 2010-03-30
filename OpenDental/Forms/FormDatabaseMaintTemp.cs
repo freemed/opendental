@@ -94,7 +94,9 @@ namespace OpenDental {
 
 		private void butBackup_Click(object sender,EventArgs e) {
 			Cursor=Cursors.WaitCursor;
+			#if !DEBUG
 			MiscData.MakeABackup();
+			#endif
 			//backupMade=true;
 			if(duplicateClaimProcInfo!=""){
 				butFix1.Enabled=true;

@@ -23,7 +23,6 @@ namespace OpenDental{
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormDatabaseMaintTemp));
 			this.linkLabel1 = new System.Windows.Forms.LinkLabel();
 			this.label1 = new System.Windows.Forms.Label();
 			this.comboDbs = new System.Windows.Forms.ComboBox();
@@ -32,14 +31,14 @@ namespace OpenDental{
 			this.label4 = new System.Windows.Forms.Label();
 			this.textResults = new System.Windows.Forms.TextBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.label6 = new System.Windows.Forms.Label();
-			this.label5 = new System.Windows.Forms.Label();
-			this.label7 = new System.Windows.Forms.Label();
-			this.label8 = new System.Windows.Forms.Label();
 			this.butFix3 = new OpenDental.UI.Button();
+			this.label8 = new System.Windows.Forms.Label();
 			this.butFix2 = new OpenDental.UI.Button();
+			this.label7 = new System.Windows.Forms.Label();
 			this.butFix1 = new OpenDental.UI.Button();
+			this.label6 = new System.Windows.Forms.Label();
 			this.butBackup = new OpenDental.UI.Button();
+			this.label5 = new System.Windows.Forms.Label();
 			this.butPrint = new OpenDental.UI.Button();
 			this.butRun = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
@@ -54,7 +53,8 @@ namespace OpenDental{
 			this.linkLabel1.Size = new System.Drawing.Size(671,51);
 			this.linkLabel1.TabIndex = 5;
 			this.linkLabel1.TabStop = true;
-			this.linkLabel1.Text = resources.GetString("linkLabel1.Text");
+			this.linkLabel1.Text = "This tool checks the database to make sure no damage was done by a specific bug a" +
+    "s described at\r\nhttp://www.opendental.com/manual/bugcp.html\r\n";
 			this.linkLabel1.UseCompatibleTextRendering = true;
 			this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
 			// 
@@ -133,43 +133,6 @@ namespace OpenDental{
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Fix (only if needed)";
 			// 
-			// label6
-			// 
-			this.label6.Location = new System.Drawing.Point(318,15);
-			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(205,18);
-			this.label6.TabIndex = 15;
-			this.label6.Text = "Fix duplicate claim payments";
-			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label5
-			// 
-			this.label5.Location = new System.Drawing.Point(9,16);
-			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(131,74);
-			this.label5.TabIndex = 13;
-			this.label5.Text = "Step 5.  Make a backup.  A backup must be made before any of the buttons at the r" +
-    "ight will be available.";
-			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// label7
-			// 
-			this.label7.Location = new System.Drawing.Point(318,40);
-			this.label7.Name = "label7";
-			this.label7.Size = new System.Drawing.Size(205,18);
-			this.label7.TabIndex = 17;
-			this.label7.Text = "Fix duplicate supplemental payments";
-			this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label8
-			// 
-			this.label8.Location = new System.Drawing.Point(214,65);
-			this.label8.Name = "label8";
-			this.label8.Size = new System.Drawing.Size(309,18);
-			this.label8.TabIndex = 19;
-			this.label8.Text = "Fix missing claim payments (by pulling from backup db)";
-			this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
 			// butFix3
 			// 
 			this.butFix3.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -185,6 +148,15 @@ namespace OpenDental{
 			this.butFix3.TabIndex = 20;
 			this.butFix3.Text = "Fix";
 			this.butFix3.Click += new System.EventHandler(this.butFix3_Click);
+			// 
+			// label8
+			// 
+			this.label8.Location = new System.Drawing.Point(214,65);
+			this.label8.Name = "label8";
+			this.label8.Size = new System.Drawing.Size(309,18);
+			this.label8.TabIndex = 19;
+			this.label8.Text = "Fix missing claim payments (by pulling from backup db)";
+			this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// butFix2
 			// 
@@ -202,6 +174,15 @@ namespace OpenDental{
 			this.butFix2.Text = "Fix";
 			this.butFix2.Click += new System.EventHandler(this.butFix2_Click);
 			// 
+			// label7
+			// 
+			this.label7.Location = new System.Drawing.Point(318,40);
+			this.label7.Name = "label7";
+			this.label7.Size = new System.Drawing.Size(205,18);
+			this.label7.TabIndex = 17;
+			this.label7.Text = "Fix duplicate supplemental payments";
+			this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// butFix1
 			// 
 			this.butFix1.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -218,6 +199,15 @@ namespace OpenDental{
 			this.butFix1.Text = "Fix";
 			this.butFix1.Click += new System.EventHandler(this.butFix1_Click);
 			// 
+			// label6
+			// 
+			this.label6.Location = new System.Drawing.Point(318,15);
+			this.label6.Name = "label6";
+			this.label6.Size = new System.Drawing.Size(205,18);
+			this.label6.TabIndex = 15;
+			this.label6.Text = "Fix duplicate claim payments";
+			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// butBackup
 			// 
 			this.butBackup.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -232,6 +222,16 @@ namespace OpenDental{
 			this.butBackup.TabIndex = 14;
 			this.butBackup.Text = "Backup";
 			this.butBackup.Click += new System.EventHandler(this.butBackup_Click);
+			// 
+			// label5
+			// 
+			this.label5.Location = new System.Drawing.Point(9,16);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(131,74);
+			this.label5.TabIndex = 13;
+			this.label5.Text = "Step 5.  Make a backup.  A backup must be made before any of the buttons at the r" +
+    "ight will be available.";
+			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// butPrint
 			// 
