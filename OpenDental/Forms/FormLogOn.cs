@@ -222,6 +222,7 @@ namespace OpenDental{
 					MessageBox.Show(Lan.g(this,"There are ")+taskcount+Lan.g(this," unfinished tasks on your tasklists."));
 				}
 			}
+			Plugins.HookAddCode(this,"FormLogOn.butOK_Click_end");
 			DialogResult=DialogResult.OK;
 		}
 
