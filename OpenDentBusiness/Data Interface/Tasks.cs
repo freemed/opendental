@@ -319,7 +319,7 @@ namespace OpenDentBusiness{
 			Append(taskNum,text,-1);
 		}
 
-		///<summary>Appends a carriage return as well as the text to any task.  If a taskListNum is specified, then it also changes the taskList.</summary>
+		///<summary>Appends a carriage return as well as the text to any task.  If a taskListNum is specified, then it also changes the taskList.    Must call TaskAncestors.Synch after this.</summary>
 		public static void Append(long taskNum,string text,long taskListNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),taskNum,text,taskListNum);
