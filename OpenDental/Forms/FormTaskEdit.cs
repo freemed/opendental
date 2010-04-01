@@ -945,7 +945,7 @@ namespace OpenDental{
 			if(textAppend.Text!=""){//append
 				Cur.TaskListNum=inbox;//so that synch will work
 				Tasks.Append(Cur.TaskNum,textAppend.Text,inbox);
-				TaskAncestors.Synch(task);
+				TaskAncestors.Synch(Cur);
 			}
 			else{//just change
 				Cur.TaskListNum=inbox;
@@ -977,7 +977,7 @@ namespace OpenDental{
 			if(textAppend.Text!=""){//append
 				Cur.TaskListNum=FormT.TaskListNum;//so that synch will work
 				Tasks.Append(Cur.TaskNum,textAppend.Text,FormT.TaskListNum);
-				TaskAncestors.Synch(task);
+				TaskAncestors.Synch(Cur);
 			}
 			else{//just change
 				Cur.TaskListNum=FormT.TaskListNum;

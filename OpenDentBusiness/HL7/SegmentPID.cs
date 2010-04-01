@@ -31,6 +31,7 @@ namespace OpenDentBusiness.HL7 {
 			pat.Position=MaritalStatusParse(seg.GetFieldFullText(16));
 			//pat.ChartNumber=seg.GetFieldFullText(18);//this is wrong.  Would also break standalone mode
 			pat.SSN=seg.GetFieldFullText(19);
+			pat.FeeSched=FeeScheduleParse(seg.GetFieldFullText(22));
 		}
 
 		///<summary>If relationship is self, this loop does nothing.  A new pat will later change guarantor to be same as patnum. </summary>
@@ -230,7 +231,17 @@ namespace OpenDentBusiness.HL7 {
 			return prov.ProvNum;
 		}
 
-
+		/// <summary>Will return 0 if string cannot be parsed to a number.  Will return 0 if the fee schedule passed in does not exactly match the description of a regular fee schedule.</summary>
+		public static long FeeScheduleParse(string str) {
+			if(str=="") {
+				return 0;
+			}
+			FeeSched feeSched=FeeScheds.GetByExactName(str,FeeScheduleType.Normal);
+			if(feeSched==null){
+				return 0;
+			}
+			return feeSched.FeeSchedNum;
+		}
 
 
 
