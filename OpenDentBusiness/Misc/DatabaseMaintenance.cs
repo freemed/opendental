@@ -1107,7 +1107,8 @@ HAVING cnt>1";
 			return log;
 		}
 
-		public static string ProcedurelogUndeleteAttachedToClaim(bool verbose) {
+		/*public static string ProcedurelogUndeleteAttachedToClaim(bool verbose) {
+			//This is no longer used and can be considered buggy.  It was replaced by the better ProcedurelogTpAttachedToClaim
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
@@ -1125,7 +1126,7 @@ HAVING cnt>1";
 				log+=Lans.g("FormDatabaseMaintenance","Procedures undeleted because found attached to claims: ")+numberFixed.ToString()+"\r\n";
 			}
 			return log;
-		}
+		}*/
 
 		public static string ProcedurelogUnitQtyZero(bool verbose) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
