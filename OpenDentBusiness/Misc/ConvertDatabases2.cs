@@ -2026,6 +2026,11 @@ DROP TABLE IF EXISTS etAck";
 		private static void To7_1_0() {
 			if(FromVersion<new Version("7.1.0.0")) {
 				string command;
+				try {
+					command="ALTER TABLE refattach ADD INDEX (PatNum)";
+					Db.NonQ(command);
+				}
+				catch {}
 				
 
 
