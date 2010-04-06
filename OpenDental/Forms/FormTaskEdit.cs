@@ -960,10 +960,6 @@ namespace OpenDental{
 		///<summary>Send to another user.</summary>
 		private void butSend_Click(object sender,EventArgs e) {
 			//This button is always present.
-			if(textAppend.Text=="" && textDescript.Text==Cur.Descript) {//nothing changed
-				MsgBox.Show(this,"Please type in a message before using the Send To button.");
-				return;
-			}
 			if(textAppend.Text!="" && textDescript.Text!=Cur.Descript) {//changed and appending
 				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Text in the main description has changed and the change will not be saved.  Continue anyway?")) {
 					return;
