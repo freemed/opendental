@@ -514,7 +514,7 @@ namespace OpenDental{
 				}
 				else{
 					if(ImageStore.GetValidPathFromString(textDocPath.Text)==null){
-						MsgBox.Show(this,"The path is invalid.");
+						MsgBox.Show(this,"The path is invalid.  The folder must exist and must contain all 26 A through Z folders.");
 						return;
 					}
 				}				
