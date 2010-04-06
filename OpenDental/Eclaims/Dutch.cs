@@ -51,10 +51,10 @@ namespace OpenDental.Eclaims {
 				strb.Append(pat.PatNum.ToString()+t);
 				strb.Append(pat.Birthdate.ToString("dd-MM-yyyy")+t);
 				if(pat.Gender==PatientGender.Female) {
-					strb.Append("V"+t);
+					strb.Append("2"+t);//"V"+t);
 				}
 				else {
-					strb.Append("M"+t);
+					strb.Append("1"+t);//M"+t);
 				}
 				strb.Append("1"+t);
 				strb.Append(DutchLName(pat.LName)+t);//last name without prefix
