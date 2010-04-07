@@ -1430,15 +1430,33 @@ HAVING cnt>1";
 				+"WHERE NOT EXISTS(SELECT * FROM claimproc WHERE claimproc.ClaimProcNum="+olddb+".claimproc.ClaimProcNum) "
 				+"AND ClaimNum > 0 AND ProcNum>0";
 			table=Db.GetTable(command);
+			double insPayAmt;
+			double feeBilled;
+			int count=0;
+			for(int i=0;i<table.Rows.Count;i++){
+				insPayAmt=PIn.Double(table.Rows[i]["InsPayAmt"].ToString());
+				feeBilled=PIn.Double(table.Rows[i]["FeeBilled"].ToString());
+				command="SELECT COUNT(*) FROM "+olddb+".claimproc "
+					+"WHERE ClaimNum= "+table.Rows[i]["ClaimNum"].ToString()+" "
+					+"AND ProcNum= "+table.Rows[i]["ProcNum"].ToString()+" "
+					+"AND Status= "+table.Rows[i]["Status"].ToString()+" "
+					+"AND InsPayAmt= '"+POut.Double(insPayAmt)+"' "
+					+"AND FeeBilled= '"+POut.Double(feeBilled)+"' "
+					+"AND LineNumber= "+table.Rows[i]["LineNumber"].ToString();
+				string result=Db.GetCount(command);
+				if(result!="1"){//only include in result if there are duplicates in old db.
+					count++;
+				}
+			}
 			command="SELECT ClaimPaymentNum "
 				+"FROM "+olddb+".claimpayment "
 				+"WHERE NOT EXISTS(SELECT * FROM claimpayment WHERE claimpayment.ClaimPaymentNum="+olddb+".claimpayment.ClaimPaymentNum) ";
 			DataTable table2=Db.GetTable(command);
-			if(table.Rows.Count==0 && table2.Rows.Count==0) {
+			if(count==0 && table2.Rows.Count==0) {
 				return "";
 			}
-			retVal+="Missing claim payments found: "+table.Rows.Count.ToString()+"\r\n";
-			retVal+="Missing claim checks found: "+table2.Rows.Count.ToString()+"\r\n";
+			retVal+="Missing claim payments found: "+count.ToString()+"\r\n";
+			retVal+="Missing claim checks found (probably false positives): "+table2.Rows.Count.ToString()+"\r\n";
 			return retVal;
 		}
 
@@ -1507,7 +1525,22 @@ HAVING cnt>1";
 			if(oldVersion < new Version("6.7.1.0")) {
 				return "Version of old database is too old to use with the automated tool: "+oldVersString;
 			}
+			double insPayAmt;
+			double feeBilled;
 			for(int i=0;i<table.Rows.Count;i++) {
+				insPayAmt=PIn.Double(table.Rows[i]["InsPayAmt"].ToString());
+				feeBilled=PIn.Double(table.Rows[i]["FeeBilled"].ToString());
+				command="SELECT COUNT(*) FROM "+olddb+".claimproc "
+					+"WHERE ClaimNum= "+table.Rows[i]["ClaimNum"].ToString()+" "
+					+"AND ProcNum= "+table.Rows[i]["ProcNum"].ToString()+" "
+					+"AND Status= "+table.Rows[i]["Status"].ToString()+" "
+					+"AND InsPayAmt= '"+POut.Double(insPayAmt)+"' "
+					+"AND FeeBilled= '"+POut.Double(feeBilled)+"' "
+					+"AND LineNumber= "+table.Rows[i]["LineNumber"].ToString();
+				string result=Db.GetCount(command);
+				if(result=="1"){//only include in result if there are duplicates in old db.
+					continue;
+				}
 				command="INSERT INTO claimproc SELECT *";
 				if(oldVersion < new Version("6.8.1.0")) {
 					command+=",-1,-1,0";
