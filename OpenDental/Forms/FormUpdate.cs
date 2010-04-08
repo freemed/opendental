@@ -289,7 +289,7 @@ namespace OpenDental{
 			this.panelClassic.Controls.Add(this.label6);
 			this.panelClassic.Controls.Add(this.textResult2);
 			this.panelClassic.Controls.Add(this.butDownload);
-			this.panelClassic.Location = new System.Drawing.Point(296,12);
+			this.panelClassic.Location = new System.Drawing.Point(471,12);
 			this.panelClassic.Name = "panelClassic";
 			this.panelClassic.Size = new System.Drawing.Size(568,494);
 			this.panelClassic.TabIndex = 48;
@@ -811,12 +811,27 @@ namespace OpenDental{
 
 		private void butInstallBuild_Click(object sender,EventArgs e) {
 			string patchName="Setup.exe";
+			//string 
+			string fileNameWithVers=buildAvailable;//6.9.23F
+			fileNameWithVers=fileNameWithVers.Replace("F","");//6.9.23
+			fileNameWithVers=fileNameWithVers.Replace(".","_");//6_9_23
+			fileNameWithVers="Setup_"+fileNameWithVers+".exe";//Setup_6_9_23.exe
 			string destDir=ImageStore.GetPreferredImagePath();
+			string destDir2=null;
 			if(destDir==null) {//Not using A to Z folders?
 				destDir=Path.GetTempPath();
+				//destDir2=null;//already null
+			}
+			else {
+				destDir2=ODFileUtils.CombinePaths(destDir,"SetupFiles");
+				if(!Directory.Exists(destDir2)) {
+					
+				}
 			}
 			DownloadInstallPatchFromURI(PrefC.GetString(PrefName.UpdateWebsitePath)+buildAvailableCode+"/"+patchName,//Source URI
-				ODFileUtils.CombinePaths(destDir,patchName),true,true);//Local destination file.
+				ODFileUtils.CombinePaths(destDir,patchName),//Local destination file.
+				true,true,
+				ODFileUtils.CombinePaths(destDir,patchName));//second destination file.
 		}
 
 		private void butInstallStable_Click(object sender,EventArgs e) {
@@ -826,7 +841,7 @@ namespace OpenDental{
 				destDir=Path.GetTempPath();
 			}
 			DownloadInstallPatchFromURI(PrefC.GetString(PrefName.UpdateWebsitePath)+stableAvailableCode+"/"+patchName,//Source URI
-				ODFileUtils.CombinePaths(destDir,patchName),true,true);//Local destination file.
+				ODFileUtils.CombinePaths(destDir,patchName),true,true,null);//Local destination file.
 		}
 
 		private void butInstallBeta_Click(object sender,EventArgs e) {
@@ -836,7 +851,7 @@ namespace OpenDental{
 				destDir=Path.GetTempPath();
 			}
 			DownloadInstallPatchFromURI(PrefC.GetString(PrefName.UpdateWebsitePath)+betaAvailableCode+"/"+patchName,//Source URI
-				ODFileUtils.CombinePaths(destDir,patchName),true,true);//Local destination file.
+				ODFileUtils.CombinePaths(destDir,patchName),true,true,null);//Local destination file.
 		}
 
 		private void butCheck_Click(object sender, System.EventArgs e) {
@@ -926,10 +941,11 @@ namespace OpenDental{
 				destDir=Path.GetTempPath();
 			}
 			DownloadInstallPatchFromURI(textWebsitePath.Text+textUpdateCode.Text+"/"+patchName,//Source URI
-				ODFileUtils.CombinePaths(destDir,patchName),true,false);//Local destination file.
+				ODFileUtils.CombinePaths(destDir,patchName),true,false,null);//Local destination file.
 		}
 
-		public static void DownloadInstallPatchFromURI(string downloadUri,string destinationPath,bool runSetupAfterDownload,bool showShutdownWindow){
+		/// <summary>destinationPath includes filename (Setup.exe).  destinationPath2 will create a second copy at the specified path/filename, or it will be skipped if null or empty.</summary>
+		public static void DownloadInstallPatchFromURI(string downloadUri,string destinationPath,bool runSetupAfterDownload,bool showShutdownWindow,string destinationPath2){
 			string[] dblist=PrefC.GetString(PrefName.UpdateMultipleDatabases).Split(new string[] {","},StringSplitOptions.RemoveEmptyEntries);
 			if(showShutdownWindow) {
 				//Even if updating multiple databases, extra shutdown signals are not needed.

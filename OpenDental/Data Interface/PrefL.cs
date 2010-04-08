@@ -186,7 +186,7 @@ namespace OpenDental {
 			string tempFile=ODFileUtils.CombinePaths(dlg.SelectedPath,patchName);
 				//ODFileUtils.CombinePaths(Path.GetTempPath(),patchName);
 			FormUpdate.DownloadInstallPatchFromURI(updateUri+updateCode+"/"+patchName,//Source URI
-				tempFile,true,false);//Local destination file.
+				tempFile,true,false,null);//Local destination file.
 			File.Delete(tempFile);//Cleanup install file.
 		}
 
@@ -289,7 +289,7 @@ namespace OpenDental {
 							MessageBoxButtons.YesNo)==DialogResult.Yes) {
 							string tempFile=ODFileUtils.CombinePaths(Path.GetTempPath(),patchName);//Resort to a more common temp file name.
 							FormUpdate.DownloadInstallPatchFromURI(updateUri+updateCode+"/"+patchName,//Source URI
-								tempFile,true,true);//Local destination file.
+								tempFile,true,true,null);//Local destination file.
 							File.Delete(tempFile);//Cleanup install file.
 						}
 					}
