@@ -1335,6 +1335,7 @@ namespace OpenDental{
 				ContrChart2.InitializeOnStartup();
 				MsgBox.Show(this,"Done optimizing tooth chart graphics.");
 			}
+			Plugins.LoadAllPlugins(this);
 			if(Security.CurUser==null) {
 				Userod adminUser=Userods.GetAdminUser();
 				if(adminUser.Password=="") {
@@ -1370,7 +1371,6 @@ namespace OpenDental{
 			Bridges.Trojan.StartupCheck();
 			FormUAppoint.StartThreadIfEnabled();
 			Bridges.ICat.StartFileWatcher();
-			Plugins.LoadAllPlugins(this);
 			#if !TRIALONLY
 				if(PrefC.GetDate(PrefName.BackupReminderLastDateRun).AddMonths(1)<DateTime.Today) {
 					FormBackupReminder FormBR=new FormBackupReminder();
