@@ -58,7 +58,7 @@ namespace OpenDentBusiness{
 		}
 		
 		///<summary></summary>
-		private static void Update(ProcTP proc){
+		public static void Update(ProcTP proc){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),proc);
 				return;
@@ -83,7 +83,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		private static long Insert(ProcTP proc){
+		public static long Insert(ProcTP proc){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				proc.ProcTPNum=Meth.GetLong(MethodBase.GetCurrentMethod(),proc);
 				return proc.ProcTPNum;
