@@ -263,6 +263,7 @@ namespace OpenDentBusiness {
 		UpdateInProgressOnComputerName,
 		UpdateMultipleDatabases,
 		UpdateServerAddress,
+		UpdateShowMsiButtons,
 		UpdateWebProxyAddress,
 		UpdateWebProxyPassword,
 		UpdateWebProxyUserName,

@@ -65,6 +65,9 @@ namespace OpenDental{
 		private static string stableAvailableDisplay;
 		private static string betaAvailable;
 		private static string betaAvailableCode;
+		private OpenDental.UI.Button butDownloadMsiBuild;
+		private OpenDental.UI.Button butDownloadMsiBeta;
+		private OpenDental.UI.Button butDownloadMsiStable;
 		private static string betaAvailableDisplay;
 
 		///<summary></summary>
@@ -136,6 +139,9 @@ namespace OpenDental{
 			this.butCheck2 = new OpenDental.UI.Button();
 			this.butLicense = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
+			this.butDownloadMsiBuild = new OpenDental.UI.Button();
+			this.butDownloadMsiStable = new OpenDental.UI.Button();
+			this.butDownloadMsiBeta = new OpenDental.UI.Button();
 			this.panelClassic.SuspendLayout();
 			this.groupBuild.SuspendLayout();
 			this.groupBeta.SuspendLayout();
@@ -336,6 +342,7 @@ namespace OpenDental{
 			// 
 			// groupBuild
 			// 
+			this.groupBuild.Controls.Add(this.butDownloadMsiBuild);
 			this.groupBuild.Controls.Add(this.textBuild);
 			this.groupBuild.Controls.Add(this.butInstallBuild);
 			this.groupBuild.Controls.Add(this.label2);
@@ -384,6 +391,7 @@ namespace OpenDental{
 			// 
 			// groupBeta
 			// 
+			this.groupBeta.Controls.Add(this.butDownloadMsiBeta);
 			this.groupBeta.Controls.Add(this.textBeta);
 			this.groupBeta.Controls.Add(this.butInstallBeta);
 			this.groupBeta.Controls.Add(this.label5);
@@ -432,6 +440,7 @@ namespace OpenDental{
 			// 
 			// groupStable
 			// 
+			this.groupStable.Controls.Add(this.butDownloadMsiStable);
 			this.groupStable.Controls.Add(this.textStable);
 			this.groupStable.Controls.Add(this.butInstallStable);
 			this.groupStable.Controls.Add(this.label11);
@@ -522,6 +531,51 @@ namespace OpenDental{
 			this.butClose.Text = "&Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
+			// butDownloadMsiBuild
+			// 
+			this.butDownloadMsiBuild.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDownloadMsiBuild.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butDownloadMsiBuild.Autosize = true;
+			this.butDownloadMsiBuild.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDownloadMsiBuild.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDownloadMsiBuild.CornerRadius = 4F;
+			this.butDownloadMsiBuild.Location = new System.Drawing.Point(220,80);
+			this.butDownloadMsiBuild.Name = "butDownloadMsiBuild";
+			this.butDownloadMsiBuild.Size = new System.Drawing.Size(83,25);
+			this.butDownloadMsiBuild.TabIndex = 52;
+			this.butDownloadMsiBuild.Text = "Download msi";
+			this.butDownloadMsiBuild.Click += new System.EventHandler(this.butDownMsiBuild_Click);
+			// 
+			// butDownloadMsiStable
+			// 
+			this.butDownloadMsiStable.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDownloadMsiStable.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butDownloadMsiStable.Autosize = true;
+			this.butDownloadMsiStable.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDownloadMsiStable.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDownloadMsiStable.CornerRadius = 4F;
+			this.butDownloadMsiStable.Location = new System.Drawing.Point(220,80);
+			this.butDownloadMsiStable.Name = "butDownloadMsiStable";
+			this.butDownloadMsiStable.Size = new System.Drawing.Size(83,25);
+			this.butDownloadMsiStable.TabIndex = 53;
+			this.butDownloadMsiStable.Text = "Download msi";
+			this.butDownloadMsiStable.Click += new System.EventHandler(this.butDownloadMsiStable_Click);
+			// 
+			// butDownloadMsiBeta
+			// 
+			this.butDownloadMsiBeta.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDownloadMsiBeta.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butDownloadMsiBeta.Autosize = true;
+			this.butDownloadMsiBeta.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDownloadMsiBeta.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDownloadMsiBeta.CornerRadius = 4F;
+			this.butDownloadMsiBeta.Location = new System.Drawing.Point(220,88);
+			this.butDownloadMsiBeta.Name = "butDownloadMsiBeta";
+			this.butDownloadMsiBeta.Size = new System.Drawing.Size(83,25);
+			this.butDownloadMsiBeta.TabIndex = 53;
+			this.butDownloadMsiBeta.Text = "Download msi";
+			this.butDownloadMsiBeta.Click += new System.EventHandler(this.butDownloadMsiBeta_Click);
+			// 
 			// FormUpdate
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -564,6 +618,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormUpdate_Load(object sender, System.EventArgs e) {
+			SetMsiVisibility();
 			labelVersion.Text=Lan.g(this,"Using Version:")+" "+Application.ProductVersion;
 			//keeps the trailing year up to date
 			this.label10.Text=Lan.g(this, "This program Copyright 2003-")+DateTime.Now.ToString("yyyy")+Lan.g(this,", Jordan S. Sparks, D.M.D., Frederik Carlier, and others.");
@@ -594,6 +649,13 @@ namespace OpenDental{
 			}
 			FormUpdateSetup FormU=new FormUpdateSetup();
 			FormU.ShowDialog();
+			SetMsiVisibility();
+		}
+
+		private void SetMsiVisibility() {
+			butDownloadMsiBuild.Visible=PrefC.GetBool(PrefName.UpdateShowMsiButtons);
+			butDownloadMsiStable.Visible=PrefC.GetBool(PrefName.UpdateShowMsiButtons);
+			butDownloadMsiBeta.Visible=PrefC.GetBool(PrefName.UpdateShowMsiButtons);
 		}
 
 		private void butCheck2_Click(object sender,EventArgs e) {
@@ -879,6 +941,21 @@ namespace OpenDental{
 				ODFileUtils.CombinePaths(destDir2,patchName));
 		}
 
+		private void butDownMsiBuild_Click(object sender,EventArgs e) {
+			string fileName=PrefC.GetString(PrefName.UpdateWebsitePath)+buildAvailableCode+"/OpenDental.msi";
+			Process.Start(fileName);
+		}
+
+		private void butDownloadMsiStable_Click(object sender,EventArgs e) {
+			string fileName=PrefC.GetString(PrefName.UpdateWebsitePath)+stableAvailableCode+"/OpenDental.msi";
+			Process.Start(fileName);
+		}
+
+		private void butDownloadMsiBeta_Click(object sender,EventArgs e) {
+			string fileName=PrefC.GetString(PrefName.UpdateWebsitePath)+betaAvailableCode+"/OpenDental.msi";
+			Process.Start(fileName);
+		}
+
 		private void butCheck_Click(object sender, System.EventArgs e) {
 			Cursor=Cursors.WaitCursor;
 			SavePrefs();
@@ -1122,6 +1199,8 @@ namespace OpenDental{
 				SavePrefs();
 			}
 		}
+
+		
 
 		
 

@@ -2031,6 +2031,8 @@ DROP TABLE IF EXISTS etAck";
 					Db.NonQ(command);
 				}
 				catch {}
+				command="INSERT INTO preference(PrefName,ValueString) VALUES('UpdateShowMsiButtons','0')";
+				Db.NonQ(command);
 				
 
 

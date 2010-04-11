@@ -29,6 +29,8 @@ namespace OpenDental{
 		private TextBox textWebProxyAddress;
 		private Label label7;
 		private OpenDental.UI.Button butChange;
+		private CheckBox checkShowMsi;
+		private Label label10;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -87,6 +89,8 @@ namespace OpenDental{
 			this.textWebProxyAddress = new System.Windows.Forms.TextBox();
 			this.label7 = new System.Windows.Forms.Label();
 			this.butChange = new OpenDental.UI.Button();
+			this.checkShowMsi = new System.Windows.Forms.CheckBox();
+			this.label10 = new System.Windows.Forms.Label();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -288,10 +292,32 @@ namespace OpenDental{
 			this.butChange.Text = "Change";
 			this.butChange.Click += new System.EventHandler(this.butChange_Click);
 			// 
+			// checkShowMsi
+			// 
+			this.checkShowMsi.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkShowMsi.Location = new System.Drawing.Point(12,307);
+			this.checkShowMsi.Name = "checkShowMsi";
+			this.checkShowMsi.Size = new System.Drawing.Size(194,24);
+			this.checkShowMsi.TabIndex = 51;
+			this.checkShowMsi.Text = "Show buttons for msi";
+			this.checkShowMsi.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkShowMsi.UseVisualStyleBackColor = true;
+			// 
+			// label10
+			// 
+			this.label10.Location = new System.Drawing.Point(212,309);
+			this.label10.Name = "label10";
+			this.label10.Size = new System.Drawing.Size(210,19);
+			this.label10.TabIndex = 52;
+			this.label10.Text = "the buttons would just confuse most offices";
+			this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
 			// FormUpdateSetup
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(680,433);
+			this.Controls.Add(this.label10);
+			this.Controls.Add(this.checkShowMsi);
 			this.Controls.Add(this.butChange);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.label6);
@@ -336,6 +362,7 @@ namespace OpenDental{
 				textRegKey.Text=regkey;
 			}
 			textMultiple.Text=PrefC.GetString(PrefName.UpdateMultipleDatabases);
+			checkShowMsi.Checked=PrefC.GetBool(PrefName.UpdateShowMsiButtons);
 		}
 
 		private void textRegKey_KeyUp(object sender,KeyEventArgs e) {
@@ -397,6 +424,7 @@ namespace OpenDental{
 				regkey=textRegKey.Text;
 			}
 			if( Prefs.UpdateString(PrefName.UpdateServerAddress,textUpdateServerAddress.Text)
+				| Prefs.UpdateBool(PrefName.UpdateShowMsiButtons,checkShowMsi.Checked)
 				| Prefs.UpdateString(PrefName.UpdateWebsitePath,textWebsitePath.Text)
 				| Prefs.UpdateString(PrefName.UpdateWebProxyAddress,textWebProxyAddress.Text)
 				| Prefs.UpdateString(PrefName.UpdateWebProxyUserName,textWebProxyUserName.Text)
