@@ -811,7 +811,6 @@ namespace OpenDental{
 
 		private void butInstallBuild_Click(object sender,EventArgs e) {
 			string patchName="Setup.exe";
-			//string 
 			string fileNameWithVers=buildAvailable;//6.9.23F
 			fileNameWithVers=fileNameWithVers.Replace("F","");//6.9.23
 			fileNameWithVers=fileNameWithVers.Replace(".","_");//6_9_23
@@ -825,33 +824,59 @@ namespace OpenDental{
 			else {
 				destDir2=ODFileUtils.CombinePaths(destDir,"SetupFiles");
 				if(!Directory.Exists(destDir2)) {
-					
+					Directory.CreateDirectory(destDir2);
 				}
 			}
 			DownloadInstallPatchFromURI(PrefC.GetString(PrefName.UpdateWebsitePath)+buildAvailableCode+"/"+patchName,//Source URI
 				ODFileUtils.CombinePaths(destDir,patchName),//Local destination file.
 				true,true,
-				ODFileUtils.CombinePaths(destDir,patchName));//second destination file.
+				ODFileUtils.CombinePaths(destDir2,patchName));//second destination file.
 		}
 
 		private void butInstallStable_Click(object sender,EventArgs e) {
 			string patchName="Setup.exe";
+			string fileNameWithVers=stableAvailable;
+			fileNameWithVers=fileNameWithVers.Replace("F","");
+			fileNameWithVers=fileNameWithVers.Replace(".","_");
+			fileNameWithVers="Setup_"+fileNameWithVers+".exe";
 			string destDir=ImageStore.GetPreferredImagePath();
+			string destDir2=null;
 			if(destDir==null) {//Not using A to Z folders?
 				destDir=Path.GetTempPath();
 			}
+			else {
+				destDir2=ODFileUtils.CombinePaths(destDir,"SetupFiles");
+				if(!Directory.Exists(destDir2)) {
+					Directory.CreateDirectory(destDir2);
+				}
+			}
 			DownloadInstallPatchFromURI(PrefC.GetString(PrefName.UpdateWebsitePath)+stableAvailableCode+"/"+patchName,//Source URI
-				ODFileUtils.CombinePaths(destDir,patchName),true,true,null);//Local destination file.
+				ODFileUtils.CombinePaths(destDir,patchName),
+				true,true,
+				ODFileUtils.CombinePaths(destDir2,patchName));
 		}
 
 		private void butInstallBeta_Click(object sender,EventArgs e) {
 			string patchName="Setup.exe";
+			string fileNameWithVers=betaAvailable;
+			fileNameWithVers=fileNameWithVers.Replace("F","");
+			fileNameWithVers=fileNameWithVers.Replace(".","_");
+			fileNameWithVers="Setup_"+fileNameWithVers+".exe";
 			string destDir=ImageStore.GetPreferredImagePath();
+			string destDir2=null;
 			if(destDir==null) {//Not using A to Z folders?
 				destDir=Path.GetTempPath();
 			}
+			else {
+				destDir2=ODFileUtils.CombinePaths(destDir,"SetupFiles");
+				if(!Directory.Exists(destDir2)) {
+					Directory.CreateDirectory(destDir2);
+				}
+			}
 			DownloadInstallPatchFromURI(PrefC.GetString(PrefName.UpdateWebsitePath)+betaAvailableCode+"/"+patchName,//Source URI
-				ODFileUtils.CombinePaths(destDir,patchName),true,true,null);//Local destination file.
+				ODFileUtils.CombinePaths(destDir,patchName),
+				true,true,
+				ODFileUtils.CombinePaths(destDir2,patchName));
 		}
 
 		private void butCheck_Click(object sender, System.EventArgs e) {
@@ -994,6 +1019,13 @@ namespace OpenDental{
 				workerThread.Abort();
 				MiscData.UnlockWorkstationsForDbs(dblist);//unlock workstations since nothing was actually done.
 				return;
+			}
+			//copy to second destination directory
+			if(destinationPath2!=null && destinationPath2!=""){
+				if(File.Exists(destinationPath2)){
+					File.Delete(destinationPath2);
+				}
+				File.Copy(destinationPath,destinationPath2);
 			}
 			//copy the Setup.exe to the AtoZ folders for the other db's.
 			List<string> atozNameList=MiscData.GetAtoZforDb(dblist);
