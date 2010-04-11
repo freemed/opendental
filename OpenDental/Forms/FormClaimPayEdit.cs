@@ -457,6 +457,10 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
+			if(textDate.Text=="") {
+				MsgBox.Show(this,"Please enter a date first.");
+				return;
+			}
 			if(textDate.errorProvider1.GetError(textDate)!="")
 			{
 				MsgBox.Show(this,"Please fix data entry errors first.");
