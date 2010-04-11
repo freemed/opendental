@@ -225,6 +225,11 @@ namespace OpenDental {
 			}
 			else {
 				e.HasMorePages=false;
+				double total=0;
+				for(int i=0;i<listEquip.Count;i++){
+					total+=listEquip[i].MarketValue;
+				}
+				g.DrawString(Lan.g(this,"Total Est Value:")+" "+total.ToString("c"),Font,Brushes.Black,550,yPos);
 			}
 			g.Dispose();
 		}
