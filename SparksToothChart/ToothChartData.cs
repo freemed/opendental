@@ -848,11 +848,34 @@ namespace SparksToothChart {
 					if(ListPerioMeasure[i].SequenceType!=sequenceType) {
 						continue;
 					}
+					PerioMeasure pmGM=null;
+					//We need to draw MGJ as dist from GM, not CEJ
+					if(sequenceType==PerioSequenceType.MGJ) {
+						for(int m=0;m<ListPerioMeasure.Count;m++) {
+							if(ListPerioMeasure[m].IntTooth==t
+								&& ListPerioMeasure[m].SequenceType==PerioSequenceType.GingMargin) 
+							{
+								pmGM=ListPerioMeasure[m];
+								break;
+							}
+						}
+					}
 					if(isBuccal) {
 						if(ToothGraphic.IsRight(t.ToString())) {
 							val1=ListPerioMeasure[i].DBvalue;
 							val2=ListPerioMeasure[i].Bvalue;
 							val3=ListPerioMeasure[i].MBvalue;
+							if(sequenceType==PerioSequenceType.MGJ && pmGM!=null) {
+								if(pmGM.DBvalue!=-1) {
+									val1+=pmGM.DBvalue;
+								}
+								if(pmGM.Bvalue!=-1) {
+									val2+=pmGM.Bvalue;
+								}
+								if(pmGM.MBvalue!=-1) {
+									val3+=pmGM.MBvalue;
+								}
+							}
 							surf1=PerioSurf.DB;
 							surf2=PerioSurf.B;
 							surf3=PerioSurf.MB;
@@ -861,6 +884,17 @@ namespace SparksToothChart {
 							val1=ListPerioMeasure[i].MBvalue;
 							val2=ListPerioMeasure[i].Bvalue;
 							val3=ListPerioMeasure[i].DBvalue;
+							if(sequenceType==PerioSequenceType.MGJ && pmGM!=null) {
+								if(pmGM.MBvalue!=-1) {
+									val1+=pmGM.MBvalue;
+								}
+								if(pmGM.Bvalue!=-1) {
+									val2+=pmGM.Bvalue;
+								}
+								if(pmGM.DBvalue!=-1) {
+									val3+=pmGM.DBvalue;
+								}
+							}
 							surf1=PerioSurf.MB;
 							surf2=PerioSurf.B;
 							surf3=PerioSurf.DB;
@@ -871,6 +905,17 @@ namespace SparksToothChart {
 							val1=ListPerioMeasure[i].DLvalue;
 							val2=ListPerioMeasure[i].Lvalue;
 							val3=ListPerioMeasure[i].MLvalue;
+							if(sequenceType==PerioSequenceType.MGJ && pmGM!=null) {
+								if(pmGM.DLvalue!=-1) {
+									val1+=pmGM.DLvalue;
+								}
+								if(pmGM.Lvalue!=-1) {
+									val2+=pmGM.Lvalue;
+								}
+								if(pmGM.MLvalue!=-1) {
+									val3+=pmGM.MLvalue;
+								}
+							}
 							surf1=PerioSurf.DL;
 							surf2=PerioSurf.L;
 							surf3=PerioSurf.ML;
@@ -879,6 +924,17 @@ namespace SparksToothChart {
 							val1=ListPerioMeasure[i].MLvalue;
 							val2=ListPerioMeasure[i].Lvalue;
 							val3=ListPerioMeasure[i].DLvalue;
+							if(sequenceType==PerioSequenceType.MGJ && pmGM!=null) {
+								if(pmGM.MLvalue!=-1) {
+									val1+=pmGM.MLvalue;
+								}
+								if(pmGM.Lvalue!=-1) {
+									val2+=pmGM.Lvalue;
+								}
+								if(pmGM.DLvalue!=-1) {
+									val3+=pmGM.DLvalue;
+								}
+							}
 							surf1=PerioSurf.ML;
 							surf2=PerioSurf.L;
 							surf3=PerioSurf.DL;
