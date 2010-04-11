@@ -60,6 +60,9 @@ namespace OpenDentBusiness{
 			//if(orderby=="alph" || siteNum>0) {
 			//command+="LEFT JOIN patient ON patient.PatNum=appointment.PatNum ";
 			//}
+			if(siteNum>0) {
+				command+="LEFT JOIN patient ON patient.PatNum=appointment.PatNum ";
+			}
 			command+="WHERE AptStatus = "+POut.Long((int)ApptStatus.ASAP)+" ";
 			if(provNum>0) {
 				command+="AND (appointment.ProvNum="+POut.Long(provNum)+" OR appointment.ProvHyg="+POut.Long(provNum)+") ";
