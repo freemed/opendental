@@ -649,7 +649,7 @@ namespace SparksToothChart {
 				ysign=-1;
 			}
 			float xshift=GetXShiftPerioSite(intTooth,surf);
-			return new PointF(xshift,ysign*3.5f);
+			return new PointF(xshift,ysign*9.5f);
 		}
 
 		///<summary>Draws the short vertical lines that represent probing depths.  Use this on each site (3 per tooth face).  The z component will be 0.  The coordinates will be relative to the center of the tooth.  The line will always only have one segment.  It will return null if no line to draw at this site.  The color of the line will be pulled from a different method.</summary>
