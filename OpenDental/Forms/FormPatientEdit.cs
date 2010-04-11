@@ -1700,6 +1700,11 @@ namespace OpenDental{
 					comboBillType.SelectedIndex=i;
 			}
 			if(comboBillType.SelectedIndex==-1){
+				if(comboBillType.Items.Count==0) {
+					MsgBox.Show(this,"Error.  All billing types have been hidden.  Please go to Definitions and unhide at least one.");
+					DialogResult=DialogResult.Cancel;
+					return;
+				}
 				comboBillType.SelectedIndex=0;
 			}
 			comboClinic.Items.Clear();
