@@ -713,6 +713,9 @@ namespace OpenDentBusiness {
 			if(groupNum!="") {
 				command+="AND GroupNum LIKE '%"+POut.String(groupNum)+"%' ";
 			}
+			if(trojanID!=""){
+				command+="AND TrojanID LIKE '%"+POut.String(trojanID)+"%' ";
+			}
 			if(!showHidden){
 				command+="AND insplan.IsHidden=0 ";
 			}
