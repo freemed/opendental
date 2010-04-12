@@ -63,6 +63,7 @@ namespace OpenDentBusiness{
 			if(clinicNum!=0){
 				command+=" AND ClinicNum="+POut.Long(clinicNum);
 			}
+			command+=" ORDER BY CheckDate";
 			return RefreshAndFill(Db.GetTable(command));
 		}
 
@@ -76,7 +77,8 @@ namespace OpenDentBusiness{
 				+"Checknum,BankBranch,Note,"
 				+"ClinicNum,DepositNum,CarrierName "
 				+"FROM claimpayment "
-				+"WHERE DepositNum = "+POut.Long(depositNum);
+				+"WHERE DepositNum = "+POut.Long(depositNum)
+				+" ORDER BY CheckDate";
 			return RefreshAndFill(Db.GetTable(command));
 		}
 

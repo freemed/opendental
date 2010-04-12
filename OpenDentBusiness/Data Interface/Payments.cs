@@ -56,8 +56,9 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<List <Payment>>(MethodBase.GetCurrentMethod(),depositNum);
 			}
 			string command=
-				"SELECT * from payment"
-				+" WHERE DepositNum = "+POut.Long(depositNum);
+				"SELECT * FROM payment "
+				+"WHERE DepositNum = "+POut.Long(depositNum)+" "
+				+"ORDER BY PayDate";
 			return RefreshAndFill(Db.GetTable(command));
 		}
 
@@ -85,6 +86,7 @@ namespace OpenDentBusiness{
 					command+=")";
 				}
 			}
+			command+=" ORDER BY PayDate";
 			return RefreshAndFill(Db.GetTable(command));
 		}
 
