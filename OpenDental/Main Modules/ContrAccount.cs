@@ -1611,7 +1611,7 @@ namespace OpenDental {
 					//label10,
 					labelUrgFinNote,
 					labelFamFinancial,
-					butComm,
+					//butComm,
 					butRefresh,
 					gridAccount,
 					gridAcctPat,
@@ -1807,7 +1807,7 @@ namespace OpenDental {
 				ToolBarMain.Invalidate();
 				textUrgFinNote.Enabled=false;
 				textFinNotes.Enabled=false;
-				butComm.Enabled=false;
+				//butComm.Enabled=false;
 				tabControlShow.Enabled=false;
 			}
 			else{
@@ -1820,7 +1820,7 @@ namespace OpenDental {
 				ToolBarMain.Invalidate();
 				textUrgFinNote.Enabled=true;
 				textFinNotes.Enabled=true;
-				butComm.Enabled=true;
+				//butComm.Enabled=true;
 				tabControlShow.Enabled=true;
 			}
 			FillPats(isSelectingFamily);
