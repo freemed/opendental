@@ -192,7 +192,7 @@ namespace OpenDentBusiness{
 					"WHERE pp.CompletedAmt<>0 "+
 					(guarantor==0?"":(" AND pp.PatNum IN "+familyPatNums))+";";
 			//Now that we have all of the pertinent transaction history, we will calculate all of the charges for
-			//the associated patients.
+			//the associated patients. 
 			//Calculate over 90 day charges for all specified families.
 			command+="UPDATE "+tempAgingTableName+" a,"+
 				//Calculate the total charges for each patient during this time period and 
