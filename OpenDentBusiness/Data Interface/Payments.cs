@@ -212,12 +212,14 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),pay);
 				return;
 			}
-			string command="SELECT DepositNum FROM payment WHERE PayNum="+POut.Long(pay.PayNum);
+			string command="SELECT DepositNum,PayAmt FROM payment WHERE PayNum="+POut.Long(pay.PayNum);
 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0){
 				return;
 			}
-			if(table.Rows[0][0].ToString()!="0"){//if payment is already attached to a deposit
+			if(table.Rows[0]["DepositNum"].ToString()!="0"//if payment is already attached to a deposit
+				&& PIn.Double(table.Rows[0]["PayAmt"].ToString())!=0)//and it's not new
+			{
 				#if !DEBUG
 				throw new ApplicationException(Lans.g("Payments","Not allowed to delete a payment attached to a deposit."));
 				#endif
