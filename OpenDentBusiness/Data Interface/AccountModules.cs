@@ -755,7 +755,7 @@ namespace OpenDentBusiness {
 				}
 				command+="paysplit.PatNum ="+POut.Long(fam.ListPats[i].PatNum)+" ";
 			}
-			command+=") GROUP BY PayPlanNum,paysplit.PayNum,paysplit.PatNum,paysplit.ClinicNum,ProcDate ORDER BY ProcDate";
+			command+=") GROUP BY PayPlanNum,paysplit.PayNum,paysplit.PatNum,paysplit.ClinicNum,DatePay ORDER BY DatePay";//ProcDate ORDER BY ProcDate";
 			rawPay=dcon.GetTable(command);
 			double payamt;
 			for(int i=0;i<rawPay.Rows.Count;i++){
@@ -776,7 +776,7 @@ namespace OpenDentBusiness {
 				amt=PIn.Double(rawPay.Rows[i]["splitAmt_"].ToString());
 				row["creditsDouble"]=amt;
 				row["credits"]=((double)row["creditsDouble"]).ToString("n");
-				dateT=PIn.DateT(rawPay.Rows[i]["ProcDate"].ToString());
+				dateT=PIn.DateT(rawPay.Rows[i]["DatePay"].ToString());//was ProcDate in earlier versions
 				row["DateTime"]=dateT;
 				row["date"]=dateT.ToString(Lans.GetShortDateTimeFormat());
 				row["description"]=DefC.GetName(DefCat.PaymentTypes,PIn.Long(rawPay.Rows[i]["PayType"].ToString()));

@@ -11,7 +11,7 @@ namespace OpenDentBusiness{
 		public double SplitAmt;
 		///<summary>FK to patient.PatNum.</summary>
 		public long PatNum;
-		///<summary>Procedure date.  This is the date that shows on the account.  Frequently the same as the date of the payment, but not necessarily.  Not when the payment was made.  This is what the aging will be based on in a future version.</summary>
+		///<summary>Procedure date.  Typically only used if tied to a procedure.  In older versions (before 7.0), this was the date that showed on the account.  Frequently the same as the date of the payment, but not necessarily.  Not when the payment was made.  This is what the aging will be based on in a future version.</summary>
 		public DateTime ProcDate;
 		///<summary>FK to payment.PayNum.  Every paysplit must be linked to a payment.</summary>
 		public long PayNum;
