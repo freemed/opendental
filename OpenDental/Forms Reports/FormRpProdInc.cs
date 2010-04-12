@@ -664,7 +664,7 @@ namespace OpenDental{
 				+"AND procedurelog.ProcDate >= " +POut.Date(dateFrom)+" "
 				+"AND procedurelog.ProcDate <= " +POut.Date(dateTo)+" "
 				+"GROUP BY procedurelog.ProcNum "
-				+") UNION (";
+				+") UNION ALL (";
 			//Adjustments-----------------------------------------------------------------------------
 			whereProv="";
 			if(!checkAllProv.Checked) {
@@ -717,7 +717,7 @@ namespace OpenDental{
 				+whereClin
 				+"AND adjustment.AdjDate >= "+POut.Date(dateFrom)+" "
 				+"AND adjustment.AdjDate <= "+POut.Date(dateTo)
-				+") UNION (";
+				+") UNION ALL (";
 			//Insurance Writeoff----------------------------------------------------------
 			whereProv="";
 			if(!checkAllProv.Checked) {
@@ -800,7 +800,7 @@ namespace OpenDental{
 					+"AND claimproc.ProcDate <= "+POut.Date(dateTo)+" ";
 			}
 			report.Query+="GROUP BY claimproc.ClaimProcNum"
-				+") UNION (";
+				+") UNION ALL (";
 			//Patient Income------------------------------------------------------------------------------
 			whereProv="";
 			if(!checkAllProv.Checked) {
@@ -860,7 +860,7 @@ namespace OpenDental{
 				+whereClin
 				//+"GROUP BY payment.PayNum"
 				+"GROUP BY paysplit.PatNum,paysplit.ProvNum,paysplit.ClinicNum"
-				+") UNION (";
+				+") UNION ALL (";
 			//Insurance Income----------------------------------------------------------------------------
 			whereProv="";
 			if(!checkAllProv.Checked) {
