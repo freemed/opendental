@@ -33,7 +33,6 @@ namespace OpenDental {
 		private OpenDental.UI.ODToolBar ToolBarMain;
 		private System.Windows.Forms.ImageList imageListMain;
 		private System.Windows.Forms.Panel panelSplitter;
-		private OpenDental.UI.Button butComm;
 		private System.Windows.Forms.Panel panelCommButs;
 		private OpenDental.ODtextBox textFinNotes;
 		private System.Windows.Forms.ContextMenu contextMenuStatement;
@@ -198,7 +197,6 @@ namespace OpenDental {
 			this.panelSplitter = new System.Windows.Forms.Panel();
 			this.panelCommButs = new System.Windows.Forms.Panel();
 			this.butTrojan = new OpenDental.UI.Button();
-			this.butComm = new OpenDental.UI.Button();
 			this.contextMenuStatement = new System.Windows.Forms.ContextMenu();
 			this.menuItemStatementWalkout = new System.Windows.Forms.MenuItem();
 			this.menuItemStatementEmail = new System.Windows.Forms.MenuItem();
@@ -393,7 +391,6 @@ namespace OpenDental {
 			// panelCommButs
 			// 
 			this.panelCommButs.Controls.Add(this.butTrojan);
-			this.panelCommButs.Controls.Add(this.butComm);
 			this.panelCommButs.Location = new System.Drawing.Point(749,429);
 			this.panelCommButs.Name = "panelCommButs";
 			this.panelCommButs.Size = new System.Drawing.Size(163,63);
@@ -406,27 +403,12 @@ namespace OpenDental {
 			this.butTrojan.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butTrojan.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butTrojan.CornerRadius = 4F;
-			this.butTrojan.Location = new System.Drawing.Point(3,29);
+			this.butTrojan.Location = new System.Drawing.Point(3,3);
 			this.butTrojan.Name = "butTrojan";
 			this.butTrojan.Size = new System.Drawing.Size(146,25);
 			this.butTrojan.TabIndex = 93;
 			this.butTrojan.Text = "Send Transaction to Trojan";
 			this.butTrojan.Click += new System.EventHandler(this.butTrojan_Click);
-			// 
-			// butComm
-			// 
-			this.butComm.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butComm.Autosize = true;
-			this.butComm.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butComm.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butComm.CornerRadius = 4F;
-			this.butComm.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butComm.Location = new System.Drawing.Point(3,2);
-			this.butComm.Name = "butComm";
-			this.butComm.Size = new System.Drawing.Size(98,26);
-			this.butComm.TabIndex = 68;
-			this.butComm.Text = "Questionnaire";
-			this.butComm.Click += new System.EventHandler(this.butComm_Click);
 			// 
 			// contextMenuStatement
 			// 
@@ -3361,7 +3343,7 @@ namespace OpenDental {
 			//tbAccount.LayoutTables();
 		}
 
-		private void butComm_Click(object sender, System.EventArgs e) {
+		/*private void butComm_Click(object sender, System.EventArgs e) {
 			FormPat form=new FormPat();
 			form.PatNum=PatCur.PatNum;
 			form.FormDateTime=DateTime.Now;
@@ -3377,7 +3359,7 @@ namespace OpenDental {
 		private void butTask_Click(object sender, System.EventArgs e) {
 			//FormTaskListSelect FormT=new FormTaskListSelect(TaskObjectType.Patient,PatCur.PatNum);
 			//FormT.ShowDialog();
-		}
+		}*/
 
 		private void butTrojan_Click(object sender,EventArgs e) {
 			FormTrojanCollect FormT=new FormTrojanCollect();
