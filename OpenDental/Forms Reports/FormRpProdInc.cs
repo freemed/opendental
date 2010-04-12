@@ -859,7 +859,7 @@ namespace OpenDental{
 				+whereProv
 				+whereClin
 				//+"GROUP BY payment.PayNum"
-				+"GROUP BY paysplit.PatNum,paysplit.ProvNum,paysplit.ClinicNum"
+				+"GROUP BY paysplit.PatNum,paysplit.ProvNum,paysplit.ClinicNum,PayType"
 				+") UNION ALL (";
 			//Insurance Income----------------------------------------------------------------------------
 			whereProv="";
