@@ -585,7 +585,16 @@ namespace OpenDentBusiness{
 			//No need to check RemotingRole; no call to db.
 			DateTime dateFirstRow;//the first date of row 0. Typically a few days before startDate. Always a Sun.
 			dateFirstRow=startDate.AddDays(-(int)startDate.DayOfWeek);//example: (Tues,May 9).AddDays(-2)=Sun,May 7.
-			return dateFirstRow.AddDays(row*7+col);
+			int days=row*7+col;
+			//peculiar bug.  When days=211 (startDate=4/1/10, row=30, col=1
+			//and dateFirstRow=3/28/2010 and the current computer date is 4/14/10, and OS is Win7(possibly others),
+			//dateFirstRow.AddDays(days)=10/24/10 00:59:58 (off by two seconds)
+			//Spent hours trying to duplicate in isolated environment, but it behaves fine outside of this program.
+			//Ticks are same, but result is different.
+			//Commenting out the CultureInfo changes in FormOpenDental_Load did not help.
+			//Not worth further debugging, so:
+			DateTime retVal=dateFirstRow.AddDays(days).AddSeconds(5);
+			return retVal.Date;
 		}
 
 		///<summary>Surround with try/catch.  Deletes all existing practice, provider, and employee schedules for a day and then saves the provided list.</summary>
