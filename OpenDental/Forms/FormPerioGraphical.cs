@@ -216,10 +216,9 @@ namespace OpenDental {
 			sizeStr=g.MeasureString(patNameStr,font);
 			g.DrawString(patNameStr,font,Brushes.Black,new PointF(sizeFPage.Width/2f-sizeStr.Width/2f,y));
 			y+=sizeStr.Height;
-			DateTime serverTimeNow=MiscData.GetNowDateTime();
-			string timeNowStr=serverTimeNow.ToShortDateString();//Locale specific date.
-			sizeStr=g.MeasureString(timeNowStr,font);
-			g.DrawString(timeNowStr,font,Brushes.Black,new PointF(sizeFPage.Width/2f-sizeStr.Width/2f,y));
+			string examDateStr=PerioExamCur.ExamDate.ToShortDateString();//Locale specific exam date.
+			sizeStr=g.MeasureString(examDateStr,font);
+			g.DrawString(examDateStr,font,Brushes.Black,new PointF(sizeFPage.Width/2f-sizeStr.Width/2f,y));
 			y+=sizeStr.Height;
 			Bitmap bitmapTC=toothChart.GetBitmap();
 			g.DrawImage(bitmapTC,sizeFPage.Width/2f-bitmapTC.Width/2f,y,bitmapTC.Width,bitmapTC.Height);
