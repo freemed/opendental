@@ -26,10 +26,10 @@ namespace OpenDental{
 			this.label2 = new System.Windows.Forms.Label();
 			this.labelSheetType = new System.Windows.Forms.Label();
 			this.listMain = new System.Windows.Forms.ListBox();
-			this.labelTerminal = new System.Windows.Forms.Label();
 			this.butTerminal = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
+			this.labelTerminal = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// label2
@@ -58,23 +58,14 @@ namespace OpenDental{
 			this.listMain.TabIndex = 13;
 			this.listMain.DoubleClick += new System.EventHandler(this.listMain_DoubleClick);
 			// 
-			// labelTerminal
-			// 
-			this.labelTerminal.Location = new System.Drawing.Point(294,233);
-			this.labelTerminal.Name = "labelTerminal";
-			this.labelTerminal.Size = new System.Drawing.Size(88,32);
-			this.labelTerminal.TabIndex = 17;
-			this.labelTerminal.Text = "Multiple sheets can be sent";
-			// 
 			// butTerminal
 			// 
 			this.butTerminal.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butTerminal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butTerminal.Autosize = true;
 			this.butTerminal.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butTerminal.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butTerminal.CornerRadius = 4F;
-			this.butTerminal.Location = new System.Drawing.Point(294,205);
+			this.butTerminal.Location = new System.Drawing.Point(284,175);
 			this.butTerminal.Name = "butTerminal";
 			this.butTerminal.Size = new System.Drawing.Size(75,24);
 			this.butTerminal.TabIndex = 16;
@@ -89,7 +80,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(294,351);
+			this.butOK.Location = new System.Drawing.Point(284,351);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 3;
@@ -104,12 +95,20 @@ namespace OpenDental{
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(294,385);
+			this.butClose.Location = new System.Drawing.Point(284,385);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75,24);
 			this.butClose.TabIndex = 2;
 			this.butClose.Text = "&Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
+			// 
+			// labelTerminal
+			// 
+			this.labelTerminal.Location = new System.Drawing.Point(282,205);
+			this.labelTerminal.Name = "labelTerminal";
+			this.labelTerminal.Size = new System.Drawing.Size(88,30);
+			this.labelTerminal.TabIndex = 19;
+			this.labelTerminal.Text = "Multiple sheets can be sent";
 			// 
 			// FormSheetPicker
 			// 

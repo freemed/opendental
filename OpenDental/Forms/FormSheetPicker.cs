@@ -98,24 +98,13 @@ namespace OpenDental {
 				if(sheetDef.SheetDefNum!=0) {
 					SheetDefs.GetFieldsAndParameters(sheetDef);
 				}
-				/*
-				if(sheetDef.SheetType==SheetTypeEnum.PatientForm && !showingInternalSheetDefs) {
-					SheetDefs.GetFieldsAndParameters(sheetDef);
-				}
-				if(sheetDef.SheetType==SheetTypeEnum.MedicalHistory && !showingInternalMed) {
-					SheetDefs.GetFieldsAndParameters(sheetDef);
-				}*/
 				SelectedSheetDefs.Add(sheetDef);
 			}
 			TerminalSend=true;
-			if(listMain.SelectedIndices.Count>1) {
-				DialogResult=DialogResult.OK;
-				return;
-			}
-			//otherwise, leave window open so more forms can be sent
-			for(int i=0;i<listMain.SelectedIndices.Count;i++) {
-				listMain.SetSelected(listMain.SelectedIndices[i],false);
-			}
+			DialogResult=DialogResult.OK;
+			//for(int i=0;i<listMain.Items.Count;i++) {
+			//	listMain.SetSelected(i,false);
+			//}
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
@@ -148,6 +137,8 @@ namespace OpenDental {
 			//TerminalSend will have already been set true in this case.
 			DialogResult=DialogResult.OK;
 		}
+
+		
 
 		
 
