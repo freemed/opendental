@@ -438,6 +438,7 @@ namespace OpenDental{
 				item.SubItems.Add(FamCur.ListPats[i].Gender.ToString());
 				dateDue=DateTime.MinValue;
 				dateSched=DateTime.MinValue;
+				bool isdisabled=false;
 				for(int j=0;j<RecallList.Count;j++){
 					if(RecallList[j].PatNum==FamCur.ListPats[i].PatNum
 						&& (RecallList[j].RecallTypeNum==RecallTypes.PerioType
@@ -445,9 +446,13 @@ namespace OpenDental{
 					{
 						dateDue=RecallList[j].DateDue;
 						dateSched=RecallList[j].DateScheduled;
+						isdisabled=RecallList[j].IsDisabled;
 					}
 				}
-				if(dateDue.Year<1880){
+				if(isdisabled){
+					item.SubItems.Add(Lan.g(this,"disabled"));
+				}
+				else if(dateDue.Year<1880){
 					item.SubItems.Add("");
 				}
 				else{

@@ -1077,6 +1077,13 @@ namespace OpenDental{
 				cellStr="";
 				if(recallListPat[i].IsDisabled) {
 					cellStr+=Lan.g(this,"Disabled");
+					if(recallListPat[i].DatePrevious.Year>1800){
+						cellStr+=Lan.g(this,". Previous: ")+recallListPat[i].DatePrevious.ToShortDateString();
+						if(recallListPat[i].RecallInterval!=new Interval(0,0,0,0)){
+							DateTime duedate=recallListPat[i].DatePrevious+recallListPat[i].RecallInterval;
+							cellStr+=Lan.g(this,". (Due): ")+duedate.ToShortDateString();
+						}
+					}
 				}
 				if(recallListPat[i].DisableUntilDate.Year>1880) {
 					if(cellStr!="") {
