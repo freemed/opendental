@@ -953,7 +953,17 @@ namespace OpenDentBusiness {
 						continue;
 					}
 				}
-				//if no category, then benefits are not restricted by proc code.
+				else{//if no category, then benefits are not normally restricted by proc code.
+					//The problem is that if the amount in the loop is from an ortho proc, then the general category will exclude ortho.
+					//But sometimes, the annual max is in the system as no category instead of general category.
+					CovCat generalCat=CovCats.GetForEbenCat(EbenefitCategory.General);
+					if(generalCat!=null) {//If there is a general category, then we only consider codes within it.  This is how we exclude ortho.
+						CovSpan[] covSpanArray=CovSpans.GetForCat(generalCat.CovCatNum);
+						if(loopList[i].StrProcCode!="" && !CovSpans.IsCodeInSpans(loopList[i].StrProcCode,covSpanArray)){//for example, ortho
+							continue;
+						}
+					}
+				}
 				maxInd-=loopList[i].Amount;
 			}
 			if(maxInd <= 0) {//then patient has used up all of their annual max, so no coverage.
