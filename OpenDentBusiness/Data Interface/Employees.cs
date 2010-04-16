@@ -354,7 +354,8 @@ namespace OpenDentBusiness{
 			else if(!overridden
 				&& (empNum==22//jordan
 				|| empNum==15//derek
-				|| empNum==18//james
+				|| empNum==18//spike
+				|| empNum==17//nathan
 				))
 			{
 				//no colors
