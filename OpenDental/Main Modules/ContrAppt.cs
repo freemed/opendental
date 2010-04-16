@@ -2228,7 +2228,8 @@ namespace OpenDental{
 								}
 							}
 						}
-						procsForSingleApt=Procedures.GetProcsForSingle(aptCur.AptNum,false);
+						bool isplanned=aptCur.AptStatus==ApptStatus.Planned;
+						procsForSingleApt=Procedures.GetProcsForSingle(aptCur.AptNum,isplanned);
 						List<long> codeNums=new List<long>();
 						for(int p=0;p<procsForSingleApt.Count;p++) {
 							codeNums.Add(procsForSingleApt[p].CodeNum);
