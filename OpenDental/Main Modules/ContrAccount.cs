@@ -140,6 +140,7 @@ namespace OpenDental {
 		private Label label11;
 		private Label label10;
 		private Label label9;
+		private double PPBalanceTotal;
 
 		#region UserVariables
 		///<summary>This holds nearly all of the data needed for display.  It is retrieved in one call to the database.</summary>
@@ -1793,7 +1794,7 @@ namespace OpenDental {
 			FamCur=Patients.GetFamily(patNum);//for now, have to get family after dataset due to aging calc.
 			PatCur=FamCur.GetPatient(patNum);
 			PatientNoteCur=PatientNotes.Refresh(PatCur.PatNum,PatCur.Guarantor);
-			Plugins.HookAddCode(this,"ContrAccount.RefreshModuleData_end",FamCur,PatCur);
+			Plugins.HookAddCode(this,"ContrAccount.RefreshModuleData_end",FamCur,PatCur,DataSetMain,isSelectingFamily);
 		}
 
 		private void RefreshModuleScreen(bool isSelectingFamily) {
@@ -1941,6 +1942,9 @@ namespace OpenDental {
 		}
 
 		private void FillAging(bool isSelectingFamily) {
+			if(Plugins.Active && Plugins.HookMethod(this,"ContrAccount.FillAging",FamCur,PatCur,DataSetMain,isSelectingFamily)) {
+				return;
+			}
 			if(PatCur!=null) {
 				textOver90.Text=FamCur.ListPats[0].BalOver90.ToString("F");
 				text61_90.Text=FamCur.ListPats[0].Bal_61_90.ToString("F");
@@ -2111,7 +2115,7 @@ namespace OpenDental {
 			gridPayPlan.Rows.Clear();
 			UI.ODGridRow row;
 			UI.ODGridCell cell;
-			double PPBalanceTotal=0;
+			PPBalanceTotal=0;
 			double PPDueTotal=0;
 			for(int i=0;i<table.Rows.Count;i++) {
 				row=new ODGridRow();
