@@ -125,11 +125,11 @@ namespace OpenDental{
 			// labelShowInTerminal
 			// 
 			this.labelShowInTerminal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.labelShowInTerminal.Location = new System.Drawing.Point(632,203);
+			this.labelShowInTerminal.Location = new System.Drawing.Point(632,204);
 			this.labelShowInTerminal.Name = "labelShowInTerminal";
-			this.labelShowInTerminal.Size = new System.Drawing.Size(127,16);
+			this.labelShowInTerminal.Size = new System.Drawing.Size(120,16);
 			this.labelShowInTerminal.TabIndex = 86;
-			this.labelShowInTerminal.Text = "Show Order In Terminal";
+			this.labelShowInTerminal.Text = "Show Order In Kiosk";
 			this.labelShowInTerminal.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// timer1
@@ -140,11 +140,11 @@ namespace OpenDental{
 			// textShowInTerminal
 			// 
 			this.textShowInTerminal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.textShowInTerminal.Location = new System.Drawing.Point(756,203);
+			this.textShowInTerminal.Location = new System.Drawing.Point(750,203);
 			this.textShowInTerminal.MaxVal = 127;
 			this.textShowInTerminal.MinVal = 1;
 			this.textShowInTerminal.Name = "textShowInTerminal";
-			this.textShowInTerminal.Size = new System.Drawing.Size(23,20);
+			this.textShowInTerminal.Size = new System.Drawing.Size(29,20);
 			this.textShowInTerminal.TabIndex = 87;
 			// 
 			// butPDF

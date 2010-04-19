@@ -82,7 +82,7 @@ namespace OpenDental{
 			this.butTerminal.Name = "butTerminal";
 			this.butTerminal.Size = new System.Drawing.Size(75,24);
 			this.butTerminal.TabIndex = 7;
-			this.butTerminal.Text = "Terminal";
+			this.butTerminal.Text = "Kiosk";
 			this.butTerminal.Click += new System.EventHandler(this.butTerminal_Click);
 			// 
 			// butAdd

@@ -97,8 +97,8 @@ namespace OpenDental{
 			this.textWelcome.Size = new System.Drawing.Size(366,169);
 			this.textWelcome.TabIndex = 3;
 			this.textWelcome.TabStop = false;
-			this.textWelcome.Text = "Welcome!\r\n\r\nThis  terminal is used for filling out forms.\r\n\r\nThe receptionist wil" +
-    "l prepare the screen for you.";
+			this.textWelcome.Text = "Welcome!\r\n\r\nThis kiosk is used for filling out forms.\r\n\r\nThe receptionist will pr" +
+    "epare the screen for you.";
 			this.textWelcome.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
 			// 
 			// labelConnection

@@ -1041,13 +1041,13 @@ namespace OpenDental{
 			// menuItemTerminal
 			// 
 			this.menuItemTerminal.Index = 10;
-			this.menuItemTerminal.Text = "Terminal";
+			this.menuItemTerminal.Text = "Kiosk";
 			this.menuItemTerminal.Click += new System.EventHandler(this.menuItemTerminal_Click);
 			// 
 			// menuItemTerminalManager
 			// 
 			this.menuItemTerminalManager.Index = 11;
-			this.menuItemTerminalManager.Text = "Terminal Manager";
+			this.menuItemTerminalManager.Text = "Kiosk Manager";
 			this.menuItemTerminalManager.Click += new System.EventHandler(this.menuItemTerminalManager_Click);
 			// 
 			// menuItemReqStudents

@@ -103,8 +103,8 @@ namespace OpenDental{
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(327,31);
 			this.label2.TabIndex = 4;
-			this.label2.Text = "To close a terminal, go to that computer and click close.  You will need to enter" +
-    " this password:";
+			this.label2.Text = "To close a kiosk, go to that computer and click the hidden button at the lower ri" +
+    "ght.  You will need to enter this password:";
 			// 
 			// textPassword
 			// 
@@ -138,7 +138,7 @@ namespace OpenDental{
 			this.labelSheets.Name = "labelSheets";
 			this.labelSheets.Size = new System.Drawing.Size(123,18);
 			this.labelSheets.TabIndex = 10;
-			this.labelSheets.Text = "Forms for Terminal";
+			this.labelSheets.Text = "Forms for Kiosk";
 			this.labelSheets.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// labelPatient
@@ -257,7 +257,7 @@ namespace OpenDental{
 			this.MinimizeBox = false;
 			this.Name = "FormTerminalManager";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Terminal Manager";
+			this.Text = "Kiosk Manager";
 			this.Load += new System.EventHandler(this.FormTerminalManager_Load);
 			this.Activated += new System.EventHandler(this.FormTerminalManager_Activated);
 			this.groupBox1.ResumeLayout(false);

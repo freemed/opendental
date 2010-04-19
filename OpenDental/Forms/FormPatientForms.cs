@@ -37,7 +37,7 @@ namespace OpenDental {
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Time"),42);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Terminal"),55,HorizontalAlignment.Center);
+			col=new ODGridColumn(Lan.g(this,"Kiosk"),55,HorizontalAlignment.Center);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Description"),210);
 			gridMain.Columns.Add(col);
