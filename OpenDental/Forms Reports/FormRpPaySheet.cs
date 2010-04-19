@@ -396,7 +396,7 @@ namespace OpenDental{
 				@"SELECT DATE_FORMAT(claimproc.DateCP,'%c/%d/%Y') DateCP,CONCAT(patient.LName,', ',patient.FName,' ',patient.MiddleI) lfname,
 carrier.CarrierName,provider.Abbr,
 clinic.Description clinicDesc,
-claimpayment.CheckNum,SUM(claimproc.InsPayAmt) amt,claimproc.ClaimNum 
+claimpayment.CheckNum,FORMAT(SUM(claimproc.InsPayAmt),2) amt,claimproc.ClaimNum 
 FROM claimproc
 LEFT JOIN insplan ON claimproc.PlanNum = insplan.PlanNum 
 LEFT JOIN patient ON claimproc.PatNum = patient.PatNum
