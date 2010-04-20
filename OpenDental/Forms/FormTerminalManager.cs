@@ -79,12 +79,12 @@ namespace OpenDental{
 			this.labelSheets = new System.Windows.Forms.Label();
 			this.labelPatient = new System.Windows.Forms.Label();
 			this.listSheets = new System.Windows.Forms.ListBox();
-			this.butLoad = new OpenDental.UI.Button();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
-			this.butSave = new OpenDental.UI.Button();
+			this.butDelete = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butClear = new OpenDental.UI.Button();
-			this.butDelete = new OpenDental.UI.Button();
+			this.butSave = new OpenDental.UI.Button();
+			this.butLoad = new OpenDental.UI.Button();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.SuspendLayout();
@@ -157,21 +157,6 @@ namespace OpenDental{
 			this.listSheets.Size = new System.Drawing.Size(120,147);
 			this.listSheets.TabIndex = 8;
 			// 
-			// butLoad
-			// 
-			this.butLoad.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butLoad.Autosize = true;
-			this.butLoad.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butLoad.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butLoad.CornerRadius = 4F;
-			this.butLoad.Location = new System.Drawing.Point(14,219);
-			this.butLoad.Name = "butLoad";
-			this.butLoad.Size = new System.Drawing.Size(93,24);
-			this.butLoad.TabIndex = 7;
-			this.butLoad.Text = "Load Patient";
-			this.butLoad.UseVisualStyleBackColor = true;
-			this.butLoad.Click += new System.EventHandler(this.butLoad_Click);
-			// 
 			// groupBox2
 			// 
 			this.groupBox2.Controls.Add(this.textPassword);
@@ -183,47 +168,6 @@ namespace OpenDental{
 			this.groupBox2.TabIndex = 12;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Password";
-			// 
-			// butSave
-			// 
-			this.butSave.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butSave.Autosize = true;
-			this.butSave.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butSave.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butSave.CornerRadius = 4F;
-			this.butSave.Location = new System.Drawing.Point(145,48);
-			this.butSave.Name = "butSave";
-			this.butSave.Size = new System.Drawing.Size(97,24);
-			this.butSave.TabIndex = 6;
-			this.butSave.Text = "Save Password";
-			this.butSave.UseVisualStyleBackColor = true;
-			this.butSave.Click += new System.EventHandler(this.butSave_Click);
-			// 
-			// gridMain
-			// 
-			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(21,67);
-			this.gridMain.Name = "gridMain";
-			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(421,206);
-			this.gridMain.TabIndex = 2;
-			this.gridMain.Title = "Active Terminals";
-			this.gridMain.TranslationName = "TableTerminals";
-			// 
-			// butClear
-			// 
-			this.butClear.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butClear.Autosize = true;
-			this.butClear.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butClear.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butClear.CornerRadius = 4F;
-			this.butClear.Location = new System.Drawing.Point(349,279);
-			this.butClear.Name = "butClear";
-			this.butClear.Size = new System.Drawing.Size(93,24);
-			this.butClear.TabIndex = 13;
-			this.butClear.Text = "Clear Patient";
-			this.butClear.UseVisualStyleBackColor = true;
-			this.butClear.Click += new System.EventHandler(this.butClear_Click);
 			// 
 			// butDelete
 			// 
@@ -241,6 +185,62 @@ namespace OpenDental{
 			this.butDelete.Text = "Delete";
 			this.butDelete.UseVisualStyleBackColor = true;
 			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
+			// 
+			// gridMain
+			// 
+			this.gridMain.HScrollVisible = false;
+			this.gridMain.Location = new System.Drawing.Point(21,67);
+			this.gridMain.Name = "gridMain";
+			this.gridMain.ScrollValue = 0;
+			this.gridMain.Size = new System.Drawing.Size(421,206);
+			this.gridMain.TabIndex = 2;
+			this.gridMain.Title = "Active Kiosks";
+			this.gridMain.TranslationName = "TableTerminals";
+			// 
+			// butClear
+			// 
+			this.butClear.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butClear.Autosize = true;
+			this.butClear.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butClear.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butClear.CornerRadius = 4F;
+			this.butClear.Location = new System.Drawing.Point(349,279);
+			this.butClear.Name = "butClear";
+			this.butClear.Size = new System.Drawing.Size(93,24);
+			this.butClear.TabIndex = 13;
+			this.butClear.Text = "Clear Patient";
+			this.butClear.UseVisualStyleBackColor = true;
+			this.butClear.Click += new System.EventHandler(this.butClear_Click);
+			// 
+			// butSave
+			// 
+			this.butSave.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butSave.Autosize = true;
+			this.butSave.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butSave.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSave.CornerRadius = 4F;
+			this.butSave.Location = new System.Drawing.Point(145,48);
+			this.butSave.Name = "butSave";
+			this.butSave.Size = new System.Drawing.Size(97,24);
+			this.butSave.TabIndex = 6;
+			this.butSave.Text = "Save Password";
+			this.butSave.UseVisualStyleBackColor = true;
+			this.butSave.Click += new System.EventHandler(this.butSave_Click);
+			// 
+			// butLoad
+			// 
+			this.butLoad.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butLoad.Autosize = true;
+			this.butLoad.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butLoad.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butLoad.CornerRadius = 4F;
+			this.butLoad.Location = new System.Drawing.Point(14,219);
+			this.butLoad.Name = "butLoad";
+			this.butLoad.Size = new System.Drawing.Size(93,24);
+			this.butLoad.TabIndex = 7;
+			this.butLoad.Text = "Load Patient";
+			this.butLoad.UseVisualStyleBackColor = true;
+			this.butLoad.Click += new System.EventHandler(this.butLoad_Click);
 			// 
 			// FormTerminalManager
 			// 

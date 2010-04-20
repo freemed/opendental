@@ -281,7 +281,7 @@ namespace OpenDental{
 			this.Controls.Add(this.butCancel);
 			this.Name = "FormEquipmentEdit";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Supplier";
+			this.Text = "Equipment";
 			this.Load += new System.EventHandler(this.FormEquipmentEdit_Load);
 			this.ResumeLayout(false);
 			this.PerformLayout();
