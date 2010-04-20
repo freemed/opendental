@@ -561,6 +561,10 @@ namespace OpenDental{
 						if(ClaimCur.ClaimType!="PreAuth")
 							displayStrings[i]="X";
 						break;
+					case "ShowPreauthorizationIfPreauth":
+						if(ClaimCur.ClaimType=="PreAuth")
+							displayStrings[i]="Preauthorization";
+						break;
 					case "IsMedicaidClaim"://this should later be replaced with an insplan field.
 						if(PatCur.MedicaidID!="")
 							displayStrings[i]="X";
@@ -707,7 +711,10 @@ namespace OpenDental{
 						displayStrings[i]=subsc.Zip;
 						break;
 					case "SubscrPhone":
-						displayStrings[i]=subsc.HmPhone;
+						string phone=subsc.HmPhone.Replace("(","");
+						phone=phone.Replace(")","    ");
+						phone=phone.Replace("-","  ");
+						displayStrings[i]=phone;
 						break;
 					case "SubscrDOB":
 						if(ClaimFormCur.Items[i].FormatString=="")
@@ -837,7 +844,10 @@ namespace OpenDental{
 						displayStrings[i]=PatCur.Zip;
 						break;
 					case "PatientPhone":
-						displayStrings[i]=PatCur.HmPhone;
+						string phonep=PatCur.HmPhone.Replace("(","");
+						phonep=phonep.Replace(")","    ");
+						phonep=phonep.Replace("-","  ");
+						displayStrings[i]=phonep;
 						break;
 					case "PatientDOB":
 						if(ClaimFormCur.Items[i].FormatString=="")
@@ -1465,6 +1475,9 @@ namespace OpenDental{
 						break;
 					case "ReferringProvNPI":
 						displayStrings[i]=ClaimReferral.NationalProvID;
+						break;
+					case "ReferringProvNameFL":
+						displayStrings[i]=ClaimReferral.GetNameFL();
 						break;
 				}//switch
 				if(CultureInfo.CurrentCulture.Name=="nl-BE"//Dutch Belgium

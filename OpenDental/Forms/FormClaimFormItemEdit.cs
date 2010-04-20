@@ -222,6 +222,7 @@ namespace OpenDental{
 				"FixedText",
 				"IsPreAuth",
 				"IsStandardClaim",
+				"ShowPreauthorizationIfPreauth",
 				"IsMedicaidClaim",
 				"IsGroupHealthPlan",
 				"PreAuthString",
@@ -712,7 +713,8 @@ namespace OpenDental{
 				"MedValAmount41c",
 				"MedValCode41d",
 				"MedValAmount41d",
-				"ReferringProvNPI"
+				"ReferringProvNPI",
+				"ReferringProvNameFL"
 			};
 		}
 
