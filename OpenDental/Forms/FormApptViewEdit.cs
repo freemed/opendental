@@ -489,6 +489,7 @@ namespace OpenDental{
 			allElements.Add("PremedFlag");
 			allElements.Add("Note");
 			allElements.Add("PatientName");
+			allElements.Add("PatientNameF");
 			allElements.Add("PatNum");
 			allElements.Add("PatNumAndName");
 			allElements.Add("Procs");

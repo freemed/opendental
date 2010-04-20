@@ -863,6 +863,7 @@ namespace OpenDentBusiness{
 			table.Columns.Add("Note");
 			table.Columns.Add("Op");
 			table.Columns.Add("patientName");
+			table.Columns.Add("patientNameF");
 			table.Columns.Add("PatNum");
 			table.Columns.Add("patNum");
 			table.Columns.Add("GuarNum");
@@ -1121,6 +1122,7 @@ namespace OpenDentBusiness{
 				}
 				row["patientName"]+=PatientLogic.GetNameLF(raw.Rows[i]["LName"].ToString(),raw.Rows[i]["FName"].ToString(),
 					raw.Rows[i]["Preferred"].ToString(),raw.Rows[i]["MiddleI"].ToString());
+				row["patientNameF"]=raw.Rows[i]["FName"].ToString();
 				row["PatNum"]=raw.Rows[i]["PatNum"].ToString();
 				row["patNum"]="PatNum: "+raw.Rows[i]["PatNum"].ToString();
 				row["GuarNum"]=raw.Rows[i]["Guarantor"].ToString();
