@@ -382,7 +382,11 @@ namespace OpenDental{
 			//The aging report always show historical numbers based on the date entered.
 			Ledgers.ComputeAging(0,asOfDate,true);
 			ReportSimpleGrid report=new ReportSimpleGrid();
-			string cmd="SELECT CONCAT(CONCAT(CONCAT(CONCAT(LName,', '),FName),' '),MiddleI)"
+			string cmd="SELECT CONCAT(";
+			if(PrefC.GetBool(PrefName.ReportsShowPatNum)){
+				cmd+="CAST(PatNum AS CHAR),'-',";
+			}
+			cmd+="LName,', ',FName,' ',MiddleI)"
 				+",Bal_0_30,Bal_31_60,Bal_61_90,BalOver90"
 				+",BalTotal "
 				+",InsEst"

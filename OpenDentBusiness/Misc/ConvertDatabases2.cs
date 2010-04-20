@@ -2033,6 +2033,10 @@ DROP TABLE IF EXISTS etAck";
 				catch {}
 				command="INSERT INTO preference(PrefName,ValueString) VALUES('UpdateShowMsiButtons','0')";
 				Db.NonQ(command);
+				command="INSERT INTO preference(PrefName,ValueString) VALUES('ReportsPPOwriteoffDefaultToProcDate','0')";
+				Db.NonQ(command);
+				command="INSERT INTO preference(PrefName,ValueString) VALUES('ReportsShowPatNum','0')";
+				Db.NonQ(command);
 				
 
 

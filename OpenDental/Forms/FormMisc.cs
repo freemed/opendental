@@ -38,6 +38,8 @@ namespace OpenDental{
 		private CheckBox checkTitleBarShowSite;
 		private TextBox textWebServiceServerName;
 		private Label label2;
+		private CheckBox checkReportsProcDate;
+		private CheckBox checkReportsShowPatNum;
 		private Label label1;
 		//private List<Def> posAdjTypes;
 
@@ -89,6 +91,8 @@ namespace OpenDental{
 			this.butOK = new OpenDental.UI.Button();
 			this.textWebServiceServerName = new System.Windows.Forms.TextBox();
 			this.label2 = new System.Windows.Forms.Label();
+			this.checkReportsProcDate = new System.Windows.Forms.CheckBox();
+			this.checkReportsShowPatNum = new System.Windows.Forms.CheckBox();
 			this.groupBox2.SuspendLayout();
 			this.groupBoxTaskDefaults.SuspendLayout();
 			this.groupBox6.SuspendLayout();
@@ -113,7 +117,7 @@ namespace OpenDental{
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(59,205);
+			this.label4.Location = new System.Drawing.Point(59,183);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(298,17);
 			this.label4.TabIndex = 64;
@@ -316,7 +320,7 @@ namespace OpenDental{
 			// 
 			this.checkTitleBarShowSite.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkTitleBarShowSite.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkTitleBarShowSite.Location = new System.Drawing.Point(74,60);
+			this.checkTitleBarShowSite.Location = new System.Drawing.Point(75,60);
 			this.checkTitleBarShowSite.Name = "checkTitleBarShowSite";
 			this.checkTitleBarShowSite.Size = new System.Drawing.Size(362,17);
 			this.checkTitleBarShowSite.TabIndex = 74;
@@ -338,7 +342,7 @@ namespace OpenDental{
 			this.butLanguages.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butLanguages.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butLanguages.CornerRadius = 4F;
-			this.butLanguages.Location = new System.Drawing.Point(360,200);
+			this.butLanguages.Location = new System.Drawing.Point(360,178);
 			this.butLanguages.Name = "butLanguages";
 			this.butLanguages.Size = new System.Drawing.Size(88,24);
 			this.butLanguages.TabIndex = 63;
@@ -388,24 +392,48 @@ namespace OpenDental{
 			// 
 			// textWebServiceServerName
 			// 
-			this.textWebServiceServerName.Location = new System.Drawing.Point(284,234);
+			this.textWebServiceServerName.Location = new System.Drawing.Point(284,212);
 			this.textWebServiceServerName.Name = "textWebServiceServerName";
 			this.textWebServiceServerName.Size = new System.Drawing.Size(165,20);
 			this.textWebServiceServerName.TabIndex = 197;
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(4,235);
+			this.label2.Location = new System.Drawing.Point(4,213);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(279,17);
 			this.label2.TabIndex = 198;
 			this.label2.Text = "Web Service: Server Name";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// checkReportsProcDate
+			// 
+			this.checkReportsProcDate.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkReportsProcDate.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkReportsProcDate.Location = new System.Drawing.Point(87,238);
+			this.checkReportsProcDate.Name = "checkReportsProcDate";
+			this.checkReportsProcDate.Size = new System.Drawing.Size(362,17);
+			this.checkReportsProcDate.TabIndex = 199;
+			this.checkReportsProcDate.Text = "Reports default to using Proc Date for PPO writeoffs";
+			this.checkReportsProcDate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// checkReportsShowPatNum
+			// 
+			this.checkReportsShowPatNum.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkReportsShowPatNum.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkReportsShowPatNum.Location = new System.Drawing.Point(15,256);
+			this.checkReportsShowPatNum.Name = "checkReportsShowPatNum";
+			this.checkReportsShowPatNum.Size = new System.Drawing.Size(434,17);
+			this.checkReportsShowPatNum.TabIndex = 200;
+			this.checkReportsShowPatNum.Text = "Reports show PatNum: Aging, OutstandingIns, ProcsNotBilled";
+			this.checkReportsShowPatNum.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// FormMisc
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(602,486);
+			this.Controls.Add(this.checkReportsShowPatNum);
+			this.Controls.Add(this.checkReportsProcDate);
 			this.Controls.Add(this.textWebServiceServerName);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.label1);
@@ -468,6 +496,8 @@ namespace OpenDental{
 			validNumY.Text=computerPref.TaskY.ToString();
 			checkTitleBarShowSite.Checked=PrefC.GetBool(PrefName.TitleBarShowSite);
 			textWebServiceServerName.Text=PrefC.GetString(PrefName.WebServiceServerName);
+			checkReportsProcDate.Checked=PrefC.GetBool(PrefName.ReportsPPOwriteoffDefaultToProcDate);
+			checkReportsShowPatNum.Checked=PrefC.GetBool(PrefName.ReportsShowPatNum);
 		}
 
 		private void butLanguages_Click(object sender,EventArgs e) {
@@ -520,6 +550,8 @@ namespace OpenDental{
 				| Prefs.UpdateBool(PrefName.TasksCheckOnStartup, checkTasksCheckOnStartup.Checked)
 				| Prefs.UpdateBool(PrefName.TitleBarShowSite, checkTitleBarShowSite.Checked)
 				| Prefs.UpdateString(PrefName.WebServiceServerName,textWebServiceServerName.Text)
+				| Prefs.UpdateBool(PrefName.ReportsPPOwriteoffDefaultToProcDate,checkReportsProcDate.Checked)
+				| Prefs.UpdateBool(PrefName.ReportsShowPatNum,checkReportsShowPatNum.Checked)
 				)
 			{
 				changed=true;

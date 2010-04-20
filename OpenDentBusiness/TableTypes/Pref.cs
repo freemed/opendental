@@ -222,6 +222,8 @@ namespace OpenDentBusiness {
 		RegistrationNumberClaim,
 		RenaissanceLastBatchNumber,
 		ReportFolderName,
+		ReportsPPOwriteoffDefaultToProcDate,
+		ReportsShowPatNum,
 		SalesTaxPercentage,
 		ScannerCompression,
 		ScannerCompressionPhotos,

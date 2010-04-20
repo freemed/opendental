@@ -467,6 +467,9 @@ namespace OpenDental{
 				}
 				Close();
 			}
+			if(PrefC.GetBool(PrefName.ReportsPPOwriteoffDefaultToProcDate)){
+				radioWriteoffProc.Checked=true;
+			}
 		}
 
 		private void checkAllProv_Click(object sender,EventArgs e) {
@@ -2053,7 +2056,7 @@ ORDER BY adjdate DESC
 				}
 				RunAnnual();
 			}
-			DialogResult=DialogResult.OK;	
+			//DialogResult=DialogResult.OK;//Stay here so that a series of similar reports can be run
 		}
 
 		private void butCancel_Click(object sender, System.EventArgs e) {

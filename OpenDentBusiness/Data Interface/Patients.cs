@@ -667,10 +667,10 @@ namespace OpenDentBusiness{
  		///<summary>Only used for the Select Patient dialog.  Pass in a billing type of 0 for all billing types.</summary>
 		public static DataTable GetPtDataTable(bool limit,string lname,string fname,string phone,
 			string address,bool hideInactive,string city,string state,string ssn,string patnum,string chartnumber,
-			long billingtype,bool guarOnly,bool showArchived,long clinicNum,DateTime birthdate,long siteNum)
+			long billingtype,bool guarOnly,bool showArchived,long clinicNum,DateTime birthdate,long siteNum,string subscriberId)
 		{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetTable(MethodBase.GetCurrentMethod(),limit,lname,fname,phone,address,hideInactive,city,state,ssn,patnum,chartnumber,billingtype,guarOnly,showArchived,clinicNum,birthdate,siteNum);
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),limit,lname,fname,phone,address,hideInactive,city,state,ssn,patnum,chartnumber,billingtype,guarOnly,showArchived,clinicNum,birthdate,siteNum,subscriberId);
 			}
 			string billingsnippet=" ";
 			if(billingtype!=0){
@@ -702,10 +702,17 @@ namespace OpenDentBusiness{
 				regexp+=phonedigits[i];
 			}
 			string command= 
-				"SELECT PatNum,LName,FName,MiddleI,Preferred,Birthdate,SSN,HmPhone,WkPhone,Address,PatStatus"
-				+",BillingType,ChartNumber,City,State,PriProv,SiteNum "
-				+"FROM patient "
-				+"WHERE PatStatus != '4' "//not status 'deleted'
+				"SELECT patient.PatNum,LName,FName,MiddleI,Preferred,Birthdate,SSN,HmPhone,WkPhone,Address,PatStatus"
+				+",BillingType,ChartNumber,City,State,PriProv,SiteNum ";
+			if(subscriberId!=""){
+				command+=",SubscriberId ";
+			}
+			command+="FROM patient ";
+			if(subscriberId!=""){
+				command+="LEFT JOIN patplan ON patplan.PatNum=patient.PatNum "
+					+"LEFT JOIN insplan ON patplan.PlanNum=insplan.PlanNum ";
+			}
+			command+="WHERE PatStatus != '4' "//not status 'deleted'
 				+(lname.Length>0?"AND LOWER(LName) LIKE '"+POut.String(lname).ToLower()+"%' ":"") //case matters in a like statement in oracle.
 				+(fname.Length>0?"AND LOWER(FName) LIKE '"+POut.String(fname).ToLower()+"%' ":"");//case matters in a like statement in oracle.
 			if(regexp!="") {
@@ -744,6 +751,9 @@ namespace OpenDentBusiness{
 			}
 			if(siteNum>0) {
 				command+="AND SiteNum="+POut.Long(siteNum)+" ";
+			}
+			if(subscriberId!=""){
+				command+="AND SubscriberId LIKE '%"+POut.String(subscriberId)+"%' ";
 			}
 			command+="ORDER BY LName,FName ";
 			if(limit){

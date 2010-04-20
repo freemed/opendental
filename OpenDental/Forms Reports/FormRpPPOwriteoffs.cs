@@ -253,6 +253,9 @@ namespace OpenDental{
 		private void FormRpPPOwriteoffs_Load(object sender, System.EventArgs e) {
 			date1.SelectionStart=new DateTime(DateTime.Today.Year,DateTime.Today.Month,1).AddMonths(-1);
 			date2.SelectionStart=new DateTime(DateTime.Today.Year,DateTime.Today.Month,1).AddDays(-1);
+			if(PrefC.GetBool(PrefName.ReportsPPOwriteoffDefaultToProcDate)){
+				radioWriteoffProc.Checked=true;
+			}
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {

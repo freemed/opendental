@@ -267,6 +267,9 @@ namespace OpenDental{
 					listClin.Items.Add(Clinics.List[i].Description);
 				}
 			}
+			if(PrefC.GetBool(PrefName.ReportsPPOwriteoffDefaultToProcDate)){
+				radioWriteoffProc.Checked=true;
+			}
 		}
 
 		private void checkAllProv_Click(object sender,EventArgs e) {

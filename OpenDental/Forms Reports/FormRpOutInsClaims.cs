@@ -213,7 +213,11 @@ namespace OpenDental{
 			DateTime startQDate = DateTime.Today.AddDays(-daysOld);
 			report.Query = "SELECT carrier.CarrierName,claim.ClaimNum"
 				+",claim.ClaimType,claim.DateService,"
-				+"CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName),' '),patient.MiddleI), claim.DateSent"
+				+"CONCAT(";
+			if(PrefC.GetBool(PrefName.ReportsShowPatNum)){
+				report.Query+="CAST(patient.PatNum AS CHAR),'-',";
+			}
+			report.Query+="patient.LName,', ',patient.FName,' ',patient.MiddleI), claim.DateSent"
 				+",claim.ClaimFee,carrier.Phone "
 				+"FROM claim,insplan,patient,carrier "
 				+"WHERE claim.PlanNum = insplan.PlanNum "
