@@ -113,7 +113,9 @@ namespace OpenDental{
 					if(treatmentPlanProcs!="") {
 						treatmentPlanProcs+="\r\n";
 					}
-					treatmentPlanProcs+=Procedures.GetDescription(procsList[i]);
+					treatmentPlanProcs+=ProcedureCodes.GetStringProcCode(procsList[i].CodeNum)+", "
+						+Procedures.GetDescription(procsList[i])+", "
+						+procsList[i].ProcFee.ToString("c");
 				}
 			}
 			//Insurance------------------------
