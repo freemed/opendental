@@ -98,19 +98,19 @@ namespace OpenDental{
 			this.textAckMessage = new System.Windows.Forms.RichTextBox();
 			this.label8 = new System.Windows.Forms.Label();
 			this.textDateTimeTrans = new System.Windows.Forms.TextBox();
+			this.checkAttachments = new System.Windows.Forms.CheckBox();
 			this.butPrint = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.checkAttachments = new System.Windows.Forms.CheckBox();
 			this.groupAck.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// textMessageText
 			// 
 			this.textMessageText.BackColor = System.Drawing.SystemColors.Window;
+			this.textMessageText.ImeMode = System.Windows.Forms.ImeMode.NoControl;
 			this.textMessageText.Location = new System.Drawing.Point(12,52);
 			this.textMessageText.Name = "textMessageText";
-			this.textMessageText.ReadOnly = true;
 			this.textMessageText.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
 			this.textMessageText.Size = new System.Drawing.Size(455,379);
 			this.textMessageText.TabIndex = 2;
@@ -254,7 +254,6 @@ namespace OpenDental{
 			this.textAckMessage.BackColor = System.Drawing.SystemColors.Window;
 			this.textAckMessage.Location = new System.Drawing.Point(12,37);
 			this.textAckMessage.Name = "textAckMessage";
-			this.textAckMessage.ReadOnly = true;
 			this.textAckMessage.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
 			this.textAckMessage.Size = new System.Drawing.Size(386,379);
 			this.textAckMessage.TabIndex = 4;
@@ -276,6 +275,17 @@ namespace OpenDental{
 			this.textDateTimeTrans.ReadOnly = true;
 			this.textDateTimeTrans.Size = new System.Drawing.Size(214,20);
 			this.textDateTimeTrans.TabIndex = 15;
+			// 
+			// checkAttachments
+			// 
+			this.checkAttachments.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkAttachments.Location = new System.Drawing.Point(1,569);
+			this.checkAttachments.Name = "checkAttachments";
+			this.checkAttachments.Size = new System.Drawing.Size(125,18);
+			this.checkAttachments.TabIndex = 19;
+			this.checkAttachments.Text = "Attachments Sent";
+			this.checkAttachments.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkAttachments.UseVisualStyleBackColor = true;
 			// 
 			// butPrint
 			// 
@@ -323,17 +333,6 @@ namespace OpenDental{
 			this.butCancel.TabIndex = 0;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
-			// 
-			// checkAttachments
-			// 
-			this.checkAttachments.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkAttachments.Location = new System.Drawing.Point(1,569);
-			this.checkAttachments.Name = "checkAttachments";
-			this.checkAttachments.Size = new System.Drawing.Size(125,18);
-			this.checkAttachments.TabIndex = 19;
-			this.checkAttachments.Text = "Attachments Sent";
-			this.checkAttachments.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkAttachments.UseVisualStyleBackColor = true;
 			// 
 			// FormEtransEdit
 			// 

@@ -433,7 +433,7 @@ namespace OpenDental{
 
 		private void FormSchedule_Load(object sender,EventArgs e) {
 			if(!Security.IsAuthorized(Permissions.Schedules,DateTime.MinValue,true)) {
-				gridMain.Enabled=false;
+				//gridMain.Enabled=false;
 				butDelete.Enabled=false;
 				groupCopy.Enabled=false;
 				groupPaste.Enabled=false;
@@ -557,6 +557,9 @@ namespace OpenDental{
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			if(!Security.IsAuthorized(Permissions.Schedules,DateTime.MinValue)) {
+				return;
+			}
 			if(textDateFrom.errorProvider1.GetError(textDateFrom)!=""
 				|| textDateTo.errorProvider1.GetError(textDateTo)!="")
 			{
