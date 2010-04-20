@@ -704,6 +704,7 @@ namespace OpenDental{
 		}
 
 		private void SetGridCols(){
+			//This pattern is wrong.
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col;

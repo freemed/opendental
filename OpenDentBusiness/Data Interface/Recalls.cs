@@ -115,17 +115,18 @@ namespace OpenDentBusiness{
 			return RefreshAndFill(table);
 		}
 
-		///<summary>Only used in FormRecallList to get a list of patients with recall.  Supply a date range, using min and max values if user left blank.  If provNum=0, then it will get all provnums.  It looks for both provider match in either PriProv or SecProv.  If sortAlph is false, it will sort by dueDate.</summary>
+		///<summary>Only used in FormRecallList to get a list of patients with recall.  Supply a date range, using min and max values if user left blank.  If provNum=0, then it will get all provnums.  It looks for both provider match in either PriProv or SecProv.</summary>
 		public static DataTable GetRecallList(DateTime fromDate,DateTime toDate,bool groupByFamilies,long provNum,long clinicNum,
-			long siteNum,bool sortAlph,RecallListShowNumberReminders showReminders,List<long> excludePatNums)
+			long siteNum,RecallListSort sortBy,RecallListShowNumberReminders showReminders,List<long> excludePatNums)
 		{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetTable(MethodBase.GetCurrentMethod(),fromDate,toDate,groupByFamilies,provNum,clinicNum,siteNum,sortAlph,showReminders,excludePatNums);
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),fromDate,toDate,groupByFamilies,provNum,clinicNum,siteNum,sortBy,showReminders,excludePatNums);
 			}
 			DataTable table=new DataTable();
 			DataRow row;
 			//columns that start with lowercase are altered for display rather than being raw data.
 			table.Columns.Add("age");
+			table.Columns.Add("billingType");
 			table.Columns.Add("contactMethod");//text representation for display
 			table.Columns.Add("dateLastReminder");
 			table.Columns.Add("DateDue",typeof(DateTime));
@@ -149,7 +150,7 @@ namespace OpenDentBusiness{
 			List<DataRow> rows=new List<DataRow>();
 			string command;
 			command=
-				@"SELECT patguar.BalTotal,patient.Birthdate,recall.DateDue,MAX(CommDateTime) _dateLastReminder,
+				@"SELECT patguar.BalTotal,patient.BillingType,patient.Birthdate,recall.DateDue,MAX(CommDateTime) _dateLastReminder,
 				DisableUntilBalance,DisableUntilDate,
 				patient.Email,patguar.Email _guarEmail,patguar.FName _guarFName,
 				patguar.LName _guarLName,patient.FName,
@@ -306,6 +307,7 @@ namespace OpenDentBusiness{
 				}
 				row=table.NewRow();
 				row["age"]=Patients.DateToAge(PIn.Date(rawtable.Rows[i]["Birthdate"].ToString())).ToString();//we don't care about m/y.
+				row["billingType"]=DefC.GetName(DefCat.BillingTypes,PIn.Long(rawtable.Rows[i]["BillingType"].ToString()));
 				contmeth=(ContactMethod)PIn.Long(rawtable.Rows[i]["PreferRecallMethod"].ToString());
 				if(contmeth==ContactMethod.None){
 					if(groupByFamilies){
@@ -442,7 +444,7 @@ namespace OpenDentBusiness{
 			}
 			RecallComparer comparer=new RecallComparer();
 			comparer.GroupByFamilies=groupByFamilies;
-			comparer.SortAlph=sortAlph;
+			comparer.SortBy=sortBy;
 			rows.Sort(comparer);
 			for(int i=0;i<rows.Count;i++) {
 				table.Rows.Add(rows[i]);
@@ -759,9 +761,9 @@ namespace OpenDentBusiness{
 		}
 
 		/// <summary></summary>
-		public static DataTable GetAddrTable(List<long> recallNums,bool groupByFamily,bool sortAlph) {
+		public static DataTable GetAddrTable(List<long> recallNums,bool groupByFamily,RecallListSort sortBy) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetTable(MethodBase.GetCurrentMethod(),recallNums,groupByFamily,sortAlph);
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),recallNums,groupByFamily,sortBy);
 			}
 			//get maxDateDue for each family.
 			string command=@"DROP TABLE IF EXISTS temprecallmaxdate;
@@ -818,7 +820,7 @@ namespace OpenDentBusiness{
 			}
 			RecallComparer comparer=new RecallComparer();
 			comparer.GroupByFamilies=groupByFamily;
-			comparer.SortAlph=sortAlph;
+			comparer.SortBy=sortBy;
 			rawRows.Sort(comparer);
 			DataTable table=new DataTable();
 			table.Columns.Add("address");//includes address2. Can be guar.
@@ -981,17 +983,17 @@ namespace OpenDentBusiness{
 
 	}
 
-	///<summary>The supplied DataRows must include the following columns: Guarantor, PatNum, guarLName, guarFName, LName, FName, DateDue, maxDateDue.  maxDateDue is the most recent DateDue for all family members in the list and needs to be the same for all family members.  This date will be used for better grouping.</summary>
+	///<summary>The supplied DataRows must include the following columns: Guarantor, PatNum, guarLName, guarFName, LName, FName, DateDue, maxDateDue, billingType.  maxDateDue is the most recent DateDue for all family members in the list and needs to be the same for all family members.  This date will be used for better grouping.</summary>
 	class RecallComparer:IComparer<DataRow> {
 		public bool GroupByFamilies;
 		///<summary>rather than by the ordinary DueDate.</summary>
-		public bool SortAlph;
+		public RecallListSort SortBy;
 
 		///<summary></summary>
 		public int Compare(DataRow x,DataRow y) {
 			//NOTE: Even if grouping by families, each family is not necessarily going to have a guarantor.
 			if(GroupByFamilies) {
-				if(SortAlph) {
+				if(SortBy==RecallListSort.Alphabetical) {
 					//if guarantors are different, sort by guarantor name
 					if(x["Guarantor"].ToString() != y["Guarantor"].ToString()) {
 						if(x["guarLName"].ToString() != y["guarLName"].ToString()) {
@@ -1001,7 +1003,7 @@ namespace OpenDentBusiness{
 					}
 					return 0;//order within family does not matter
 				}
-				else {//sort by maxDateDue
+				else if(SortBy==RecallListSort.DueDate) {
 					DateTime xD=PIn.Date(x["maxDateDue"].ToString());
 					DateTime yD=PIn.Date(y["maxDateDue"].ToString());
 					if(xD != yD) {
@@ -1017,15 +1019,41 @@ namespace OpenDentBusiness{
 					return (xD.CompareTo(yD));
 					//return 0;
 				}
+				else if(SortBy==RecallListSort.BillingType){
+					if(x["billingType"].ToString()!=y["billingType"].ToString()){
+						return x["billingType"].ToString().CompareTo(y["billingType"].ToString());
+					}
+					//if billing types are the same, sort by dueDate
+					DateTime xD=PIn.Date(x["maxDateDue"].ToString());
+					DateTime yD=PIn.Date(y["maxDateDue"].ToString());
+					if(xD != yD) {
+						return (xD.CompareTo(yD));
+					}
+					//if dates are same, sort/group by guarantor
+					if(x["Guarantor"].ToString() != y["Guarantor"].ToString()) {
+						return (x["Guarantor"].ToString().CompareTo(y["Guarantor"].ToString()));
+					}
+				}
 			}
 			else {//individual patients
-				if(SortAlph) {
+				if(SortBy==RecallListSort.Alphabetical) {
 					if(x["LName"].ToString() != y["LName"].ToString()) {
 						return x["LName"].ToString().CompareTo(y["LName"].ToString());
 					}
 					return x["FName"].ToString().CompareTo(y["FName"].ToString());
 				}
-				else {//sort by DueDate
+				else if(SortBy==RecallListSort.DueDate) {
+					if((DateTime)x["DateDue"] != (DateTime)y["DateDue"]) {
+						return ((DateTime)x["DateDue"]).CompareTo(((DateTime)y["DateDue"]));
+					}
+					//if duedates are the same, sort by LName
+					return x["LName"].ToString().CompareTo(y["LName"].ToString());
+				}
+				else if(SortBy==RecallListSort.BillingType){
+					if(x["billingType"].ToString()!=y["billingType"].ToString()){
+						return x["billingType"].ToString().CompareTo(y["billingType"].ToString());
+					}
+					//if billing types are the same, sort by dueDate
 					if((DateTime)x["DateDue"] != (DateTime)y["DateDue"]) {
 						return ((DateTime)x["DateDue"]).CompareTo(((DateTime)y["DateDue"]));
 					}
@@ -1033,7 +1061,7 @@ namespace OpenDentBusiness{
 					return x["LName"].ToString().CompareTo(y["LName"].ToString());
 				}
 			}
-			//return 0;
+			return 0;
 		}
 	}
 
@@ -1046,6 +1074,12 @@ namespace OpenDentBusiness{
 		Four,
 		Five,
 		SixPlus
+	}
+
+	public enum RecallListSort{
+		DueDate,
+		Alphabetical,
+		BillingType
 	}
 	
 

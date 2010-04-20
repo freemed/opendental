@@ -1415,7 +1415,9 @@ namespace OpenDentBusiness{
 		///<summary>2</summary>
 		PatientInformation,
 		///<summary>3</summary>
-		AccountModule
+		AccountModule,
+		///<summary>4</summary>
+		RecallList
 	}
 
 	public enum DeletedObjectType{

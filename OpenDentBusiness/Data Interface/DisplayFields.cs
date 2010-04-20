@@ -180,6 +180,19 @@ namespace OpenDentBusiness {
 				list.Add(new DisplayField("Credits",60,category));
 				list.Add(new DisplayField("Balance",60,category));
 			}
+			else if(category==DisplayFieldCategory.RecallList) {
+				list.Add(new DisplayField("Due Date",75,category));
+				list.Add(new DisplayField("Patient",120,category));
+				list.Add(new DisplayField("Age",30,category));
+				list.Add(new DisplayField("Type",60,category));
+				list.Add(new DisplayField("Interval",50,category));
+				list.Add(new DisplayField("#Remind",55,category));
+				list.Add(new DisplayField("LastRemind",75,category));
+				list.Add(new DisplayField("Contact",120,category));
+				list.Add(new DisplayField("Status",130,category));
+				list.Add(new DisplayField("Note",215,category));
+				//list.Add(new DisplayField("BillingType",100,category));
+			}
 			return list;
 		}
 
@@ -268,6 +281,19 @@ namespace OpenDentBusiness {
 				list.Add(new DisplayField("Charges",60,category));
 				list.Add(new DisplayField("Credits",60,category));
 				list.Add(new DisplayField("Balance",60,category));
+			}
+			else if(category==DisplayFieldCategory.RecallList) {
+				list.Add(new DisplayField("Due Date",75,category));
+				list.Add(new DisplayField("Patient",120,category));
+				list.Add(new DisplayField("Age",30,category));
+				list.Add(new DisplayField("Type",60,category));
+				list.Add(new DisplayField("Interval",50,category));
+				list.Add(new DisplayField("#Remind",55,category));
+				list.Add(new DisplayField("LastRemind",75,category));
+				list.Add(new DisplayField("Contact",120,category));
+				list.Add(new DisplayField("Status",130,category));
+				list.Add(new DisplayField("Note",215,category));
+				list.Add(new DisplayField("BillingType",100,category));
 			}
 			return list;
 		}

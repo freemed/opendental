@@ -420,7 +420,7 @@ namespace OpenDental{
 			// 
 			// gridMain
 			// 
-			this.gridMain.HScrollVisible = false;
+			this.gridMain.HScrollVisible = true;
 			this.gridMain.Location = new System.Drawing.Point(6,88);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
@@ -643,8 +643,9 @@ namespace OpenDental{
 		private void FormRecallList_Load(object sender, System.EventArgs e) {
 			//AptNumsSelected=new List<long>();
 			checkGroupFamilies.Checked=PrefC.GetBool(PrefName.RecallGroupByFamily);
-			comboSort.Items.Add(Lan.g(this,"Due Date"));
-			comboSort.Items.Add(Lan.g(this,"Alphabetical"));
+			for(int i=0;i<Enum.GetNames(typeof(RecallListSort)).Length;i++){
+				comboSort.Items.Add(Lan.g("enumRecallListSort",Enum.GetNames(typeof(RecallListSort))[i]));
+			}
 			comboSort.SelectedIndex=0;
 			comboNumberReminders.Items.Add(Lan.g(this,"all"));
 			comboNumberReminders.Items.Add("0");
@@ -743,53 +744,67 @@ namespace OpenDental{
 			if(!PrefC.GetBool(PrefName.EasyHidePublicHealth) && comboSite.SelectedIndex!=0) {
 				siteNum=SiteC.List[comboSite.SelectedIndex-1].SiteNum;
 			}
-			bool sortAlph=false;
-			if(comboSort.SelectedIndex==1){
-				sortAlph=true;
-			}
+			RecallListSort sortBy=(RecallListSort)comboSort.SelectedIndex;
 			RecallListShowNumberReminders showReminders=(RecallListShowNumberReminders)comboNumberReminders.SelectedIndex;
 			if(excludePatNums==null) {
 				excludePatNums=new List<long>();
 			}
-			table=Recalls.GetRecallList(fromDate,toDate,checkGroupFamilies.Checked,provNum,clinicNum,siteNum,sortAlph,showReminders,excludePatNums);
+			table=Recalls.GetRecallList(fromDate,toDate,checkGroupFamilies.Checked,provNum,clinicNum,siteNum,sortBy,showReminders,excludePatNums);
 			int scrollval=gridMain.ScrollValue;
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g("TableRecallList","Due Date"),75);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableRecallList","Patient"),120);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableRecallList","Age"),30);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableRecallList","Type"),60);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableRecallList","Interval"),50);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableRecallList","#Remind"),55);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableRecallList","LastRemind"),75);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableRecallList","Contact"),120);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableRecallList","Status"),130);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableRecallList","Note"),200);
-			gridMain.Columns.Add(col);
+			ODGridColumn col;
+			List<DisplayField> fields=DisplayFields.GetForCategory(DisplayFieldCategory.RecallList);
+			for(int i=0;i<fields.Count;i++) {
+				if(fields[i].Description=="") {
+					col=new ODGridColumn(fields[i].InternalName,fields[i].ColumnWidth);
+				}
+				else {
+					col=new ODGridColumn(fields[i].Description,fields[i].ColumnWidth);
+				}
+				gridMain.Columns.Add(col);
+			}
 			gridMain.Rows.Clear();
 			ODGridRow row;
 			for(int i=0;i<table.Rows.Count;i++){
 				row=new ODGridRow();
-				row.Cells.Add(table.Rows[i]["dueDate"].ToString());
-				row.Cells.Add(table.Rows[i]["patientName"].ToString());
-				row.Cells.Add(table.Rows[i]["age"].ToString());
-				row.Cells.Add(table.Rows[i]["recallType"].ToString());
-				row.Cells.Add(table.Rows[i]["recallInterval"].ToString());
-				row.Cells.Add(table.Rows[i]["numberOfReminders"].ToString());
-				row.Cells.Add(table.Rows[i]["dateLastReminder"].ToString());
-				row.Cells.Add(table.Rows[i]["contactMethod"].ToString());
-				row.Cells.Add(table.Rows[i]["status"].ToString());
-				row.Cells.Add(table.Rows[i]["Note"].ToString());
-				row.Tag=table.Rows[i];//although not used yet.
+				for(int f=0;f<fields.Count;f++) {
+					switch(fields[f].InternalName){
+						case "Due Date":
+							row.Cells.Add(table.Rows[i]["dueDate"].ToString());
+							break;
+						case "Patient":
+							row.Cells.Add(table.Rows[i]["patientName"].ToString());
+							break;
+						case "Age":
+							row.Cells.Add(table.Rows[i]["age"].ToString());
+							break;
+						case "Type":
+							row.Cells.Add(table.Rows[i]["recallType"].ToString());
+							break;
+						case "Interval":
+							row.Cells.Add(table.Rows[i]["recallInterval"].ToString());
+							break;
+						case "#Remind":
+							row.Cells.Add(table.Rows[i]["numberOfReminders"].ToString());
+							break;
+						case "LastRemind":
+							row.Cells.Add(table.Rows[i]["dateLastReminder"].ToString());
+							break;
+						case "Contact":
+							row.Cells.Add(table.Rows[i]["contactMethod"].ToString());
+							break;
+						case "Status":
+							row.Cells.Add(table.Rows[i]["status"].ToString());
+							break;
+						case "Note":
+							row.Cells.Add(table.Rows[i]["Note"].ToString());
+							break;
+						case "BillingType":
+							row.Cells.Add(table.Rows[i]["billingType"].ToString());
+							break;
+					}
+				}
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
@@ -1053,11 +1068,8 @@ namespace OpenDental{
       for(int i=0;i<gridMain.SelectedIndices.Length;i++){
         recallNums.Add(PIn.Long(table.Rows[gridMain.SelectedIndices[i]]["RecallNum"].ToString()));
       }
-			bool sortAlph=false;
-			if(comboSort.SelectedIndex==1){
-				sortAlph=true;
-			}
-			AddrTable=Recalls.GetAddrTable(recallNums,checkGroupFamilies.Checked,sortAlph);
+			RecallListSort sortBy=(RecallListSort)comboSort.SelectedIndex;
+			AddrTable=Recalls.GetAddrTable(recallNums,checkGroupFamilies.Checked,sortBy);
 			pagesPrinted=0;
 			patientsPrinted=0;
 			pd=new PrintDocument();
@@ -1094,11 +1106,8 @@ namespace OpenDental{
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
 				recallNums.Add(PIn.Long(table.Rows[gridMain.SelectedIndices[i]]["RecallNum"].ToString()));
 			}
-			bool sortAlph=false;
-			if(comboSort.SelectedIndex==1) {
-				sortAlph=true;
-			}
-			AddrTable=Recalls.GetAddrTable(recallNums,checkGroupFamilies.Checked,sortAlph);
+			RecallListSort sortBy=(RecallListSort)comboSort.SelectedIndex;
+			AddrTable=Recalls.GetAddrTable(recallNums,checkGroupFamilies.Checked,sortBy);
 			patientsPrinted=0;
 			string text;
 			while(patientsPrinted<AddrTable.Rows.Count) {
@@ -1163,11 +1172,8 @@ namespace OpenDental{
       for(int i=0;i<gridMain.SelectedIndices.Length;i++){
         recallNums.Add(PIn.Long(table.Rows[gridMain.SelectedIndices[i]]["RecallNum"].ToString()));
       }
-			bool sortAlph=false;
-			if(comboSort.SelectedIndex==1) {
-				sortAlph=true;
-			}
-			AddrTable=Recalls.GetAddrTable(recallNums,checkGroupFamilies.Checked,sortAlph);
+			RecallListSort sortBy=(RecallListSort)comboSort.SelectedIndex;
+			AddrTable=Recalls.GetAddrTable(recallNums,checkGroupFamilies.Checked,sortBy);
 			pagesPrinted=0;
 			patientsPrinted=0;
 			pd=new PrintDocument();
@@ -1263,11 +1269,8 @@ namespace OpenDental{
       for(int i=0;i<gridMain.SelectedIndices.Length;i++){
         recallNums.Add(PIn.Long(table.Rows[gridMain.SelectedIndices[i]]["RecallNum"].ToString()));
       }
-			bool sortAlph=false;
-			if(comboSort.SelectedIndex==1) {
-				sortAlph=true;
-			}
-			AddrTable=Recalls.GetAddrTable(recallNums,checkGroupFamilies.Checked,sortAlph);
+			RecallListSort sortBy=(RecallListSort)comboSort.SelectedIndex;
+			AddrTable=Recalls.GetAddrTable(recallNums,checkGroupFamilies.Checked,sortBy);
 			EmailMessage message;
 			string str="";
 			string[] recallNumArray;
