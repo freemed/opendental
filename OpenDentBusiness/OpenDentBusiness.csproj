@@ -116,7 +116,6 @@
   <ItemGroup>
     <Compile Include="Cache\InsFilingCodeSubtypeC.cs" />
     <Compile Include="Cache\InsFilingCodeC.cs" />
-    <Compile Include="Crud\Account.cs" />
     <Compile Include="Data Interface\Automations.cs" />
     <Compile Include="Data Interface\Equipments.cs" />
     <Compile Include="Data Interface\ReplicationServers.cs" />
@@ -631,6 +630,7 @@
     <None Include="Web References\OpenDentalServer\ServiceMain.wsdl" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Crud\" />
     <Folder Include="WebServer\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

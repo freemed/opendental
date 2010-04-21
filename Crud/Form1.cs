@@ -33,19 +33,15 @@ namespace Crud {
 			}
 			Type typeTableBase=typeof(TableBase);
 			Assembly assembly=Assembly.GetAssembly(typeTableBase);
+			StringBuilder strb;
 			foreach(Type type in assembly.GetTypes()){
 				if(type.BaseType!=typeTableBase){
 					continue;
 				}
+				strb=new StringBuilder();
+
 				File.Create(Path.Combine(crudDir,type.Name+".cs"));
 			}
-
-
-
-
-
-
-
 			MessageBox.Show("Done");
 			Application.Exit();
 		}
