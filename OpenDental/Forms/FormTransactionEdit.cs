@@ -788,7 +788,7 @@ namespace OpenDental{
 			if(FormA.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			AccountPicked=FormA.SelectedAccount.Copy();
+			AccountPicked=FormA.SelectedAccount.Clone();
 			textAccount.Text=AccountPicked.Description;
 			butChange.Text=Lan.g(this,"Change");
 		}

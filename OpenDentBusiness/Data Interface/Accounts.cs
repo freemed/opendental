@@ -35,7 +35,7 @@ namespace OpenDentBusiness{
 				AccountC.ListLong[i].Inactive    = PIn.Bool(table.Rows[i][4].ToString());
 				AccountC.ListLong[i].AccountColor= Color.FromArgb(PIn.Int(table.Rows[i][5].ToString()));
 				if(!AccountC.ListLong[i].Inactive) {
-					AL.Add(AccountC.ListLong[i].Copy());
+					AL.Add(AccountC.ListLong[i].Clone());
 				}
 			}
 			AccountC.ListShort=new Account[AL.Count];

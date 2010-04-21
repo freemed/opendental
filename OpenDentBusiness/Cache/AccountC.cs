@@ -56,7 +56,7 @@ namespace OpenDentBusiness {
 			}
 			for(int i=0;i<ListLong.Length;i++) {
 				if(ListLong[i].AccountNum==accountNum) {
-					return ListLong[i].Copy();
+					return ListLong[i].Clone();
 				}
 			}
 			return null;//just in case

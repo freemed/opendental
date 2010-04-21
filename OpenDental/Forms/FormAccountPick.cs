@@ -186,7 +186,7 @@ namespace OpenDental{
 					&& AccountC.ListLong[i].AcctType != AccountC.ListLong[i+1].AcctType){
 					row.ColorLborder=Color.Black;
 				}
-				row.Tag=AccountC.ListLong[i].Copy();
+				row.Tag=AccountC.ListLong[i].Clone();
 				row.ColorBackG=AccountC.ListLong[i].AccountColor;
 				gridMain.Rows.Add(row);
 			}
@@ -194,7 +194,7 @@ namespace OpenDental{
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			SelectedAccount=((Account)gridMain.Rows[e.Row].Tag).Copy();
+			SelectedAccount=((Account)gridMain.Rows[e.Row].Tag).Clone();
 			DialogResult=DialogResult.OK;
 		}
 
@@ -207,7 +207,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please select an account first.");
 				return;
 			}
-			SelectedAccount=((Account)gridMain.Rows[gridMain.GetSelectedIndex()].Tag).Copy();
+			SelectedAccount=((Account)gridMain.Rows[gridMain.GetSelectedIndex()].Tag).Clone();
 			DialogResult=DialogResult.OK;
 		}
 

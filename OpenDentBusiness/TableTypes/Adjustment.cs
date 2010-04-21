@@ -4,7 +4,8 @@ using System.Collections;
 namespace OpenDentBusiness{
 	
 	///<summary>An adjustment in the patient account.  Usually, adjustments are very simple, just being assigned to one patient and provider.  But they can also be attached to a procedure to represent a discount on that procedure.  Attaching adjustments to procedures is not automated, so it is not very common.</summary>
-	public class Adjustment{
+	[Serializable()]
+	public class Adjustment:TableBase{
 		///<summary>Primary key.</summary>
 		public long AdjNum;
 		///<summary>The date that the adjustment shows in the patient account.</summary>
@@ -28,13 +29,10 @@ namespace OpenDentBusiness{
 		///<summary>FK to clinic.ClinicNum.</summary>
 		public long ClinicNum;
 
-		/*///<summary>Returns a copy of this Adjustment.</summary>
-		public Adjustment Copy(){
-			Adjustment a=new Adjustment();
-			a.AdjNum=AdjNum;
-			//etc
-			return a;
-		}*/
+		///<summary></summary>
+		public Adjustment Clone() {
+			return (Adjustment)this.MemberwiseClone();
+		}
 
 		
 	}
