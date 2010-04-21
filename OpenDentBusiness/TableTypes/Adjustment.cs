@@ -7,6 +7,7 @@ namespace OpenDentBusiness{
 	[Serializable()]
 	public class Adjustment:TableBase{
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long AdjNum;
 		///<summary>The date that the adjustment shows in the patient account.</summary>
 		public DateTime AdjDate;
@@ -25,6 +26,7 @@ namespace OpenDentBusiness{
 		///<summary>FK to procedurelog.ProcNum.  Only used if attached to a procedure.  Otherwise, 0.</summary>
 		public long ProcNum;
 		///<summary>Timestamp automatically generated and user not allowed to change.  The actual date of entry.</summary>
+		[CrudColumn(SpecialType=EnumCrudSpecialColType.DateEntry)]
 		public DateTime DateEntry;
 		///<summary>FK to clinic.ClinicNum.</summary>
 		public long ClinicNum;

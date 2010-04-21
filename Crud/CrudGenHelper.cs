@@ -21,5 +21,14 @@ namespace Crud {
 			throw new ApplicationException("No primary key defined for "+tableName);
 		}
 
+		///<summary>The name of the table in the database.  By default, the lowercase name of the class type.</summary>
+		public static string GetTableName(Type typeClass) {
+			object[] attributes = typeClass.GetCustomAttributes(typeof(CrudTableAttribute),true);
+			if(attributes.Length==0) {
+				return typeClass.Name.ToLower();
+			}
+			return((CrudTableAttribute)attributes[0]).TableName;
+		}
+
 	}
 }

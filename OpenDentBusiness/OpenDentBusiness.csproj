@@ -116,6 +116,7 @@
   <ItemGroup>
     <Compile Include="Cache\InsFilingCodeSubtypeC.cs" />
     <Compile Include="Cache\InsFilingCodeC.cs" />
+    <Compile Include="CrudFramework\CrudTableAttribute.cs" />
     <Compile Include="CrudFramework\CrudColumnAttribute.cs" />
     <Compile Include="Crud\AccountCrud.cs" />
     <Compile Include="Crud\AdjustmentCrud.cs" />
