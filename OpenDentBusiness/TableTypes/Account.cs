@@ -8,6 +8,7 @@ namespace OpenDentBusiness{
 	[Serializable()]
 	public class Account:TableBase{
 		///<summary>Primary key..</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long AccountNum;
 		///<summary>.</summary>
 		public string Description;

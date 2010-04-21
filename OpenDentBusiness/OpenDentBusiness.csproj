@@ -116,6 +116,9 @@
   <ItemGroup>
     <Compile Include="Cache\InsFilingCodeSubtypeC.cs" />
     <Compile Include="Cache\InsFilingCodeC.cs" />
+    <Compile Include="CrudFramework\CrudColumnAttribute.cs" />
+    <Compile Include="Crud\AccountCrud.cs" />
+    <Compile Include="Crud\AdjustmentCrud.cs" />
     <Compile Include="Data Interface\Automations.cs" />
     <Compile Include="Data Interface\Equipments.cs" />
     <Compile Include="Data Interface\ReplicationServers.cs" />
@@ -379,7 +382,7 @@
     <Compile Include="TableTypes\EtransMessageText.cs" />
     <Compile Include="TableTypes\InsFilingCode.cs" />
     <Compile Include="TableTypes\InsFilingCodeSubtype.cs" />
-    <Compile Include="TableTypes\TableBase.cs" />
+    <Compile Include="CrudFramework\TableBase.cs" />
     <Compile Include="X12\DTP271.cs" />
     <Compile Include="X12\EB271.cs" />
     <Compile Include="X12\X12Generator.cs" />
@@ -630,7 +633,6 @@
     <None Include="Web References\OpenDentalServer\ServiceMain.wsdl" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Crud\" />
     <Folder Include="WebServer\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
