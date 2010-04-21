@@ -30,7 +30,7 @@ namespace OpenDentBusiness{
 				AccountC.ListLong[i]=new Account();
 				AccountC.ListLong[i].AccountNum  = PIn.Long(table.Rows[i][0].ToString());
 				AccountC.ListLong[i].Description = PIn.String(table.Rows[i][1].ToString());
-				AccountC.ListLong[i].AcctType    = (AccountType)PIn.Long(table.Rows[i][2].ToString());
+				AccountC.ListLong[i].AcctType    = (AccountType)PIn.Int(table.Rows[i][2].ToString());
 				AccountC.ListLong[i].BankNumber  = PIn.String(table.Rows[i][3].ToString());
 				AccountC.ListLong[i].Inactive    = PIn.Bool(table.Rows[i][4].ToString());
 				AccountC.ListLong[i].AccountColor= Color.FromArgb(PIn.Int(table.Rows[i][5].ToString()));

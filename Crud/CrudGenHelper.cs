@@ -30,5 +30,23 @@ namespace Crud {
 			return((CrudTableAttribute)attributes[0]).TableName;
 		}
 
+		public static List<FieldInfo> GetFieldsExceptPriKey(FieldInfo[] fields,FieldInfo priKey) {
+			List<FieldInfo> retVal=new List<FieldInfo>();
+			for(int i=0;i<fields.Length;i++) {
+				if(fields[i].Name!=priKey.Name) {
+					retVal.Add(fields[i]);
+				}
+			}
+			return retVal;
+		}
+
+		public static EnumCrudSpecialColType GetSpecialType(FieldInfo field) {
+			object[] attributes = field.GetCustomAttributes(typeof(CrudColumnAttribute),true);
+			if(attributes.Length==0) {
+				return EnumCrudSpecialColType.None;
+			}
+			return ((CrudColumnAttribute)attributes[0]).SpecialType;
+		}
+
 	}
 }

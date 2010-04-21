@@ -107,7 +107,11 @@ namespace OpenDentBusiness.Crud{
 			strb.Append(rn+t3+@"if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException(""Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n""+command);
 			}");
-			strb.Append(rn+t3+"return null;");
+			strb.Append(rn+t3+"List<"+typeClass.Name+"> list=TableToList(Db.GetTable(command));");
+			strb.Append(rn+t3+"if(list.Count==0) {");
+			strb.Append(rn+t4+"return null;");
+			strb.Append(rn+t3+"}");
+			strb.Append(rn+t3+"return list[0];");
 			strb.Append(rn+t2+"}");
 			//SelectMany-----------------------------------------------------------------------------------------
 			strb.Append(rn+rn+t2+"///<summary>Gets one "+typeClass.Name+" object from the database using a query.</summary>");
@@ -115,7 +119,8 @@ namespace OpenDentBusiness.Crud{
 			strb.Append(rn+t3+@"if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException(""Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n""+command);
 			}");
-			strb.Append(rn+t3+"return null;");
+			strb.Append(rn+t3+"List<"+typeClass.Name+"> list=TableToList(Db.GetTable(command));");
+			strb.Append(rn+t3+"return list;");
 			strb.Append(rn+t2+"}");
 			//TableToList----------------------------------------------------------------------------------------
 			strb.Append(rn+rn+t2+"///<summary>Converts a DataTable to a list of objects.</summary>");
@@ -135,7 +140,7 @@ namespace OpenDentBusiness.Crud{
 				//note.  These are not guaranteed to be in any particular order.
 				strb.Append(rn+t4+"obj."+fields[f].Name.PadRight(longestField,' ')+"= ");
 				if(fields[f].FieldType.IsEnum) {
-					strb.Append("("+fields[f].FieldType.Name+")PIn.Long(");
+					strb.Append("("+fields[f].FieldType.Name+")PIn.Int(");
 				}
 				else switch(fields[f].FieldType.Name){
 					default:
@@ -172,7 +177,82 @@ namespace OpenDentBusiness.Crud{
 			//Insert---------------------------------------------------------------------------------------------
 			strb.Append(rn+rn+t2+"///<summary>Inserts one "+typeClass.Name+" into the database.  Returns the new priKey.</summary>");
 			strb.Append(rn+t2+"internal static long Insert("+typeClass.Name+" obj){");
-			strb.Append(rn+t3+"return 0;");
+			strb.Append(rn+t3+"if(PrefC.RandomKeys) {");
+			strb.Append(rn+t4+"obj."+priKey.Name+"=ReplicationServers.GetKey(\""+tablename+"\",\""+priKey.Name+"\");");
+			strb.Append(rn+t3+"}");
+			strb.Append(rn+t3+"string command=\"INSERT INTO "+tablename+" (\";");
+			strb.Append(rn+t3+"if(PrefC.RandomKeys) {");
+			strb.Append(rn+t4+"command+=\""+priKey.Name+",\";");
+			strb.Append(rn+t3+"}");
+			strb.Append(rn+t3+"command+=\"");
+			List<FieldInfo> fieldsExceptPri=CrudGenHelper.GetFieldsExceptPriKey(fields,priKey);
+			for(int f=0;f<fieldsExceptPri.Count;f++) {
+				if(f>0) {
+					strb.Append(",");
+				}
+				strb.Append(fieldsExceptPri[f].Name);
+			}
+			strb.Append(") VALUES(\";");
+			strb.Append(rn+t3+"if(PrefC.RandomKeys) {");
+			strb.Append(rn+t4+"command+=POut.Long(obj."+priKey.Name+")+\",\";");
+			strb.Append(rn+t3+"}");
+			strb.Append(rn+t3+"command+=");
+			for(int f=0;f<fieldsExceptPri.Count;f++) {
+				strb.Append(rn+t4);
+				if(f==0) {
+					strb.Append(" ");
+				}
+				else {
+					strb.Append("+");
+				}
+				EnumCrudSpecialColType specialType=CrudGenHelper.GetSpecialType(fieldsExceptPri[f]);
+				if(specialType==EnumCrudSpecialColType.DateEntry) {
+					//+"NOW(),"//DateEntry set to server date
+					strb.Append("\"NOW()");
+				}
+				else if(specialType==EnumCrudSpecialColType.TimeStamp) {
+					throw new ApplicationException("Timestamp not yet implemented.");
+				}
+				else if(fieldsExceptPri[f].FieldType.IsEnum) {
+					strb.Append("    POut.Int   ((int)obj."+fieldsExceptPri[f].Name+")+\"");
+				}
+				else switch(fieldsExceptPri[f].FieldType.Name) {
+					default:
+						throw new ApplicationException("Type not yet supported: "+fieldsExceptPri[f].FieldType.Name);
+					case "Boolean":
+						strb.Append("    POut.Bool  (obj."+fieldsExceptPri[f].Name+")+\"");
+						break;
+					case "Color":
+						strb.Append("    POut.Int   (obj."+fieldsExceptPri[f].Name+".ToArgb())+\"");
+						break;
+					case "DateTime"://Need to handle DateT fields here better.
+						strb.Append("    POut.Date  (obj."+fieldsExceptPri[f].Name+")+\"");
+						break;
+					case "Double":
+						strb.Append("\"'\"+POut.Double(obj."+fieldsExceptPri[f].Name+")+\"'");
+						break;
+					case "Int64":
+						strb.Append("    POut.Long  (obj."+fieldsExceptPri[f].Name+")+\"");
+						break;
+					case "String":
+						strb.Append("\"'\"+POut.String(obj."+fieldsExceptPri[f].Name+")+\"'");
+						break;
+				}
+				strb.Append("");
+				if(f<fieldsExceptPri.Count-1) {
+					strb.Append(",\"");
+				}
+				else {
+					strb.Append(")\";");
+				}
+			} 
+			strb.Append(rn+t3+"if(PrefC.RandomKeys) {");
+			strb.Append(rn+t4+"Db.NonQ(command);");
+			strb.Append(rn+t3+"}");
+			strb.Append(rn+t3+"else {");
+			strb.Append(rn+t4+"obj."+priKey.Name+"=Db.NonQ(command,true);");
+			strb.Append(rn+t3+"}");
+			strb.Append(rn+t3+"return obj."+priKey.Name+";");
 			strb.Append(rn+t2+"}");
 			//Update---------------------------------------------------------------------------------------------
 			strb.Append(rn+rn+t2+"///<summary>Updates one "+typeClass.Name+" in the database.</summary>");
