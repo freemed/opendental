@@ -21,67 +21,33 @@ namespace OpenDentBusiness{
 
 		public static void FillCache(DataTable table){
 			//No need to check RemotingRole; no call to db.
-			FeeSchedC.ListLong=new List<FeeSched>();
+			//FeeSchedC.ListLong=new List<FeeSched>();
 			FeeSchedC.ListShort=new List<FeeSched>();
-			FeeSched sched;
-			for(int i=0;i<table.Rows.Count;i++){
-				sched=new FeeSched();
-				sched.IsNew=false;
-				sched.FeeSchedNum = PIn.Long   (table.Rows[i][0].ToString());
-				sched.Description = PIn.String(table.Rows[i][1].ToString());
-				sched.FeeSchedType= (FeeScheduleType)PIn.Long(table.Rows[i][2].ToString());
-				sched.ItemOrder   = PIn.Int   (table.Rows[i][3].ToString());
-				sched.IsHidden    = PIn.Bool  (table.Rows[i][4].ToString());
-				FeeSchedC.ListLong.Add(sched);
-				if(!sched.IsHidden){
-					FeeSchedC.ListShort.Add(sched);
+			FeeSchedC.ListLong=Crud.FeeSchedCrud.TableToList(table);
+			for(int i=0;i<FeeSchedC.ListLong.Count;i++) {
+				if(!FeeSchedC.ListLong[i].IsHidden) {
+					FeeSchedC.ListShort.Add(FeeSchedC.ListLong[i]);
 				}
 			}
 		}
 
-		/*
-		///<Summary>Gets one FeeSched from the database.</Summary>
-		public static FeeSched CreateObject(int feeSchedNum){
-			return DataObjectFactory<FeeSched>.CreateObject(feeSchedNum);
-		}
-
-		public static List<FeeSched> GetFeeScheds(int[] FeeSchedNums){
-			Collection<FeeSched> collectState=DataObjectFactory<FeeSched>.CreateObjects(FeeSchedNums);
-			return new List<FeeSched>(collectState);		
-		}*/
-
 		///<summary></summary>
-		public static long WriteObject(FeeSched feeSched) {
+		public static long Insert(FeeSched feeSched) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				feeSched.FeeSchedNum=Meth.GetLong(MethodBase.GetCurrentMethod(),feeSched);
 				return feeSched.FeeSchedNum;
 			}
-			DataObjectFactory<FeeSched>.WriteObject(feeSched);
-			return feeSched.FeeSchedNum;
+			return Crud.FeeSchedCrud.Insert(feeSched);
 		}
 
-		/*//<summary></summary>
-		public static void DeleteObject(int FeeSchedNum){
-			//validate that not already in use.
-			string command="SELECT LName,FName FROM patient WHERE FeeSchedNum="+POut.PInt(FeeSchedNum);
-			DataTable table=Db.GetTable(command);
-			//int count=PIn.PInt(Db.GetCount(command));
-			string pats="";
-			for(int i=0;i<table.Rows.Count;i++){
-				if(i>0){
-					pats+=", ";
-				}
-				pats+=table.Rows[i]["FName"].ToString()+" "+table.Rows[i]["LName"].ToString();
+		///<summary></summary>
+		public static void Update(FeeSched feeSched) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),feeSched);
+				return;
 			}
-			if(table.Rows.Count>0){
-				throw new ApplicationException(Lans.g("FeeScheds","FeeSched is already in use by patient(s). Not allowed to delete. ")+pats);
-			}
-			DataObjectFactory<FeeSched>.DeleteObject(FeeSchedNum);
+			Crud.FeeSchedCrud.Update(feeSched);
 		}
-
-		//public static void DeleteObject(int FeeSchedNum){
-		//	DataObjectFactory<FeeSched>.DeleteObject(FeeSchedNum);
-		//}*/
 
 		public static string GetDescription(long feeSchedNum) {
 			//No need to check RemotingRole; no call to db.

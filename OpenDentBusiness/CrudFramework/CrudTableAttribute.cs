@@ -7,6 +7,7 @@ namespace OpenDentBusiness {
 	public class CrudTableAttribute : Attribute {
 		public CrudTableAttribute() {
 			this.tableName="";
+			this.isDeleteForbidden=false;
 		}
 
 		private string tableName;
@@ -15,5 +16,13 @@ namespace OpenDentBusiness {
 			get { return tableName; }
 			set { tableName=value; }
 		}
+
+		private bool isDeleteForbidden;
+		///<summary>Set to true for tables where rows are not deleted.</summary>
+		public bool IsDeleteForbidden {
+			get { return isDeleteForbidden; }
+			set { isDeleteForbidden=value; }
+		}
+
 	}
 }

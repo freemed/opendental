@@ -888,9 +888,9 @@ namespace OpenDentBusiness {
 					sched=new FeeSched();
 					sched.Description=carrierName;
 					sched.FeeSchedType=FeeScheduleType.Allowed;
-					sched.IsNew=true;
+					//sched.IsNew=true;
 					sched.ItemOrder=itemOrder;
-					FeeScheds.WriteObject(sched);
+					FeeScheds.Insert(sched);
 					itemOrder++;
 				}
 				//assign the fee sched to many plans

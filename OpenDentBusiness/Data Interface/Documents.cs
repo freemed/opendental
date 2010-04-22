@@ -22,7 +22,7 @@ namespace OpenDentBusiness {
 			}
 			string command="SELECT * FROM document WHERE PatNum="+POut.Long(patNum)+" ORDER BY DateCreated";
 			DataTable table=Db.GetTable(command);
-			return Fill(table);
+			return Crud.DocumentCrud.TableToList(table).ToArray();
 		}
 
 		///<summary>Gets the document with the specified document number.</summary>
@@ -30,55 +30,20 @@ namespace OpenDentBusiness {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Document>(MethodBase.GetCurrentMethod(),docNum);
 			}
-			string command="SELECT * FROM document WHERE DocNum='"+docNum+"'";
-			DataTable table=Db.GetTable(command);
-			if(table.Rows.Count<1){
+			Document doc=Crud.DocumentCrud.SelectOne(docNum);
+			if(doc==null){
 				return new Document();
 			}
-			return Fill(table.Rows[0]);
-		}
-
-		///<summary></summary>
-		public static Document Fill(DataRow row){
-			//No need to check RemotingRole; no call to db.
-			if(row==null) {
-				return null;
-			}
-			Document doc=new Document();
-			doc.DocNum          =PIn.Long   (row[0].ToString());
-			doc.Description     =PIn.String(row[1].ToString());
-			doc.DateCreated     =PIn.Date  (row[2].ToString());
-			doc.DocCategory     =PIn.Long   (row[3].ToString());
-			doc.PatNum          =PIn.Long   (row[4].ToString());
-			doc.FileName        =PIn.String(row[5].ToString());
-			doc.ImgType         =(ImageType)PIn.Long(row[6].ToString());
-			doc.IsFlipped       =PIn.Bool  (row[7].ToString());
-			doc.DegreesRotated  =PIn.Short (row[8].ToString());
-			doc.ToothNumbers    =PIn.String(row[9].ToString());
-			doc.Note            =PIn.String(row[10].ToString());
-			doc.SigIsTopaz      =PIn.Bool  (row[11].ToString());
-			doc.Signature       =PIn.String(row[12].ToString());
-			doc.CropX           =PIn.Int   (row[13].ToString());
-			doc.CropY           =PIn.Int   (row[14].ToString());
-			doc.CropW           =PIn.Int   (row[15].ToString());
-			doc.CropH           =PIn.Int   (row[16].ToString());
-			doc.WindowingMin    =PIn.Int   (row[17].ToString());
-			doc.WindowingMax    =PIn.Int   (row[18].ToString());
-			doc.MountItemNum    =PIn.Long   (row[19].ToString());
-			doc.DateTStamp      =PIn.DateT (row[20].ToString());
 			return doc;
 		}
 
-		public static Document[] Fill(DataTable documents){
+		public static Document[] Fill(DataTable table){
 			//No need to check RemotingRole; no call to db.
-			if(documents==null){
+			if(table==null){
 				return new Document[0];
 			}
-			Document[] List=new Document[documents.Rows.Count];
-			for(int i=0;i<documents.Rows.Count;i++) {
-				List[i]=Fill(documents.Rows[i]);
-			}
-			return List;
+			List<Document> list=Crud.DocumentCrud.TableToList(table);
+			return list.ToArray();
 		}
 
 		/*
@@ -93,47 +58,7 @@ namespace OpenDentBusiness {
 				doc.DocNum=Meth.GetLong(MethodBase.GetCurrentMethod(),doc,pat);
 				return doc.DocNum;
 			}
-			if(PrefC.RandomKeys) {
-				doc.DocNum=ReplicationServers.GetKey("document","DocNum");
-			}
-			string command="INSERT INTO document (";
-			if(PrefC.RandomKeys) {
-				command+="DocNum,";
-			}
-			command+="Description,DateCreated,DocCategory,PatNum,FileName,ImgType,"
-				+"IsFlipped,DegreesRotated,ToothNumbers,Note,SigIsTopaz,Signature,CropX,CropY,CropW,CropH,"
-				+"WindowingMin,WindowingMax,MountItemNum) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+="'"+POut.Long(doc.DocNum)+"', ";
-			}
-			command+=
-				 "'"+POut.String(doc.Description)+"', "
-				+POut.Date(doc.DateCreated)+", "
-				+"'"+POut.Long(doc.DocCategory)+"', "
-				+"'"+POut.Long(doc.PatNum)+"', "
-				+"'"+POut.String(doc.FileName)+"', "//this may simply be the extension at this point, or it may be the full filename.
-				+"'"+POut.Long((int)doc.ImgType)+"', "
-				+"'"+POut.Bool(doc.IsFlipped)+"', "
-				+"'"+POut.Long(doc.DegreesRotated)+"', "
-				+"'"+POut.String(doc.ToothNumbers)+"', "
-				+"'"+POut.String(doc.Note)+"', "
-				+"'"+POut.Bool(doc.SigIsTopaz)+"', "
-				+"'"+POut.String(doc.Signature)+"',"
-				+"'"+POut.Long(doc.CropX)+"',"
-				+"'"+POut.Long(doc.CropY)+"',"
-				+"'"+POut.Long(doc.CropW)+"',"
-				+"'"+POut.Long(doc.CropH)+"',"
-				+"'"+POut.Long(doc.WindowingMin)+"',"
-				+"'"+POut.Long(doc.WindowingMax)+"',"
-				+"'"+POut.Long(doc.MountItemNum)+"')";
-				//DateTStamp
-			//MessageBox.Show(cmd.CommandText);
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				doc.DocNum=Db.NonQ(command,true);
-			}
+			doc.DocNum=Crud.DocumentCrud.Insert(doc);
 			//If the current filename is just an extension, then assign it a unique name.
 			if(doc.FileName==Path.GetExtension(doc.FileName)) {
 				string extension=doc.FileName;
@@ -146,7 +71,7 @@ namespace OpenDentBusiness {
 				}
 				doc.FileName+=doc.DocNum.ToString()+extension;//ensures unique name
 				//there is still a slight chance that someone manually added a file with this name, so quick fix:
-				command="SELECT FileName FROM document WHERE PatNum="+POut.Long(doc.PatNum);
+				string command="SELECT FileName FROM document WHERE PatNum="+POut.Long(doc.PatNum);
 				DataTable table=Db.GetTable(command);
 				string[] usedNames=new string[table.Rows.Count];
 				for(int i=0;i<table.Rows.Count;i++) {
@@ -170,30 +95,7 @@ namespace OpenDentBusiness {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),doc);
 				return;
 			}
-			string command="UPDATE document SET " 
-				+ "Description = '"				+POut.String(doc.Description)+"'"
-				+ ",DateCreated = "				+POut.Date(doc.DateCreated)
-				+ ",DocCategory = '"			+POut.Long(doc.DocCategory)+"'"
-				+ ",PatNum = '"						+POut.Long(doc.PatNum)+"'"
-				+ ",FileName    = '"			+POut.String(doc.FileName)+"'"
-				+ ",ImgType    = '"				+POut.Long((int)doc.ImgType)+"'"
-				+ ",IsFlipped   = '"			+POut.Bool(doc.IsFlipped)+"'"
-				+ ",DegreesRotated   = '"	+POut.Long(doc.DegreesRotated)+"'"
-				+ ",ToothNumbers   = '"		+POut.String(doc.ToothNumbers)+"'"
-				+ ",Note   = '"						+POut.String(doc.Note)+"'"
-				+ ",SigIsTopaz    = '"		+POut.Bool(doc.SigIsTopaz)+"'"
-				+ ",Signature   = '"			+POut.String(doc.Signature)+"'"
-				+ ",CropX       ='"				+POut.Long(doc.CropX)+"'"
-				+ ",CropY       ='"				+POut.Long(doc.CropY)+"'"
-				+ ",CropW       ='"				+POut.Long(doc.CropW)+"'"
-				+ ",CropH       ='"				+POut.Long(doc.CropH)+"'"
-				+ ",WindowingMin ='"			+POut.Long(doc.WindowingMin)+"'"
-				+ ",WindowingMax ='"			+POut.Long(doc.WindowingMax)+"'"
-				+ ",MountItemNum ='"			+POut.Long(doc.MountItemNum)+"'"
-				//DateTStamp
-				+" WHERE DocNum = '"			+POut.Long(doc.DocNum)+"'";
-			//MessageBox.Show(cmd.CommandText);
-			Db.NonQ(command);
+			Crud.DocumentCrud.Update(doc);
 		}
 
 		///<summary></summary>

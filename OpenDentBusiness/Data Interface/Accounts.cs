@@ -48,30 +48,7 @@ namespace OpenDentBusiness{
 				acct.AccountNum=Meth.GetLong(MethodBase.GetCurrentMethod(),acct);
 				return acct.AccountNum;
 			}
-			if(PrefC.RandomKeys) {
-				acct.AccountNum=ReplicationServers.GetKey("account","AccountNum");
-			}
-			string command="INSERT INTO account (";
-			if(PrefC.RandomKeys) {
-				command+="AccountNum,";
-			}
-			command+="Description,AcctType,BankNumber,Inactive,AccountColor) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+="'"+POut.Long(acct.AccountNum)+"', ";
-			}
-			command+=
-				 "'"+POut.String(acct.Description)+"', "
-				+"'"+POut.Long   ((int)acct.AcctType)+"', "
-				+"'"+POut.String(acct.BankNumber)+"', "
-				+"'"+POut.Bool  (acct.Inactive)+"', "
-				+"'"+POut.Long   (acct.AccountColor.ToArgb())+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				acct.AccountNum=Db.NonQ(command,true);
-			}
-			return acct.AccountNum;
+			return Crud.AccountCrud.Insert(acct);
 		}
 
 		///<summary></summary>
@@ -80,14 +57,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),acct);
 				return;
 			}
-			string command= "UPDATE account SET "
-				+"Description = '"  +POut.String(acct.Description)+"' "
-				+",AcctType = '"    +POut.Long   ((int)acct.AcctType)+"' "
-				+",BankNumber = '"  +POut.String(acct.BankNumber)+"' "
-				+",Inactive = '"    +POut.Bool  (acct.Inactive)+"' "
-				+",AccountColor = '"+POut.Long   (acct.AccountColor.ToArgb())+"' "
-				+"WHERE AccountNum = '"+POut.Long(acct.AccountNum)+"'";
-			Db.NonQ(command);
+			Crud.AccountCrud.Update(acct);
 		}
 
 		///<summary>Throws exception if account is in use.</summary>

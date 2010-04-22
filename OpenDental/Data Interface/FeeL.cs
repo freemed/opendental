@@ -18,15 +18,15 @@ namespace OpenDental{
 				feeSched.ItemOrder=FeeSchedC.ListLong.Count;
 				feeSched.Description=feeSchedName;
 				feeSched.FeeSchedType=FeeScheduleType.Normal;
-				feeSched.IsNew=true;
-				FeeScheds.WriteObject(feeSched);
+				//feeSched.IsNew=true;
+				FeeScheds.Insert(feeSched);
 				//Cache.Refresh(InvalidType.FeeScheds);
 				//Fees.Refresh();
 				DataValid.SetInvalid(InvalidType.FeeScheds, InvalidType.Fees);
 			}
 			if(feeSched.IsHidden){
 				feeSched.IsHidden=false;//unhide it
-				FeeScheds.WriteObject(feeSched);
+				FeeScheds.Update(feeSched);
 				DataValid.SetInvalid(InvalidType.FeeScheds);
 			}
 			Fee fee=Fees.GetFee(ProcedureCodes.GetCodeNum(procCode),feeSched.FeeSchedNum);

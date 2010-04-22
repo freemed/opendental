@@ -277,7 +277,7 @@ namespace OpenDental{
 				for(int i=0;i<FeeSchedsForType.Count;i++){
 					if(FeeSchedsForType[i].ItemOrder!=i){
 						FeeSchedsForType[i].ItemOrder=i;
-						FeeScheds.WriteObject(FeeSchedsForType[i]);
+						FeeScheds.Update(FeeSchedsForType[i]);
 						outOfSynch=true;
 						changed=true;
 					}
@@ -369,9 +369,9 @@ namespace OpenDental{
 			int order1=FeeSchedsForType[idx-1].ItemOrder;
 			int order2=FeeSchedsForType[idx].ItemOrder;
 			FeeSchedsForType[idx-1].ItemOrder=order2;
-			FeeScheds.WriteObject(FeeSchedsForType[idx-1]);
+			FeeScheds.Update(FeeSchedsForType[idx-1]);
 			FeeSchedsForType[idx].ItemOrder=order1;
-			FeeScheds.WriteObject(FeeSchedsForType[idx]);
+			FeeScheds.Update(FeeSchedsForType[idx]);
 			changed=true;
 			FillGrid();
 			gridMain.SetSelected(idx-1,true);
@@ -389,9 +389,9 @@ namespace OpenDental{
 			int order1=FeeSchedsForType[idx].ItemOrder;
 			int order2=FeeSchedsForType[idx+1].ItemOrder;
 			FeeSchedsForType[idx].ItemOrder=order2;
-			FeeScheds.WriteObject(FeeSchedsForType[idx]);
+			FeeScheds.Update(FeeSchedsForType[idx]);
 			FeeSchedsForType[idx+1].ItemOrder=order1;
-			FeeScheds.WriteObject(FeeSchedsForType[idx+1]);
+			FeeScheds.Update(FeeSchedsForType[idx+1]);
 			changed=true;
 			FillGrid();
 			gridMain.SetSelected(idx+1,true);
@@ -404,7 +404,7 @@ namespace OpenDental{
 			for(int i=0;i<FeeSchedsForType.Count;i++){
 				if(FeeSchedsForType[i].ItemOrder!=i){
 					FeeSchedsForType[i].ItemOrder=i;
-					FeeScheds.WriteObject(FeeSchedsForType[i]);
+					FeeScheds.Update(FeeSchedsForType[i]);
 				}
 			}
 			changed=true;

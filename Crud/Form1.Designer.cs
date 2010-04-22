@@ -71,8 +71,6 @@
 			// checkOne
 			// 
 			this.checkOne.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
-			this.checkOne.Checked = true;
-			this.checkOne.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.checkOne.Location = new System.Drawing.Point(40,142);
 			this.checkOne.Name = "checkOne";
 			this.checkOne.Size = new System.Drawing.Size(372,47);

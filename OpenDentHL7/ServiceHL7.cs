@@ -173,7 +173,7 @@ namespace OpenDentHL7 {
 				//EventLog.WriteEntry("Attempting to create file: "+filename);
 				File.WriteAllText(filename,list[i].MsgText);
 				list[i].HL7Status=HL7MessageStatus.OutSent;
-				HL7Msgs.WriteObject(list[i]);//set the status to sent.
+				HL7Msgs.Update(list[i]);//set the status to sent.
 			}
 		}
 	}

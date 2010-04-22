@@ -218,7 +218,7 @@ namespace OpenDental{
 			for(int i=0;i<InsFilingCodeC.Listt.Count;i++) {
 			  if(InsFilingCodeC.Listt[i].ItemOrder!=i) {
 			    InsFilingCodeC.Listt[i].ItemOrder=i;
-			    InsFilingCodes.WriteObject(InsFilingCodeC.Listt[i]);
+			    InsFilingCodes.Update(InsFilingCodeC.Listt[i]);
 			    changed=true;
 			  }
 			}
@@ -307,9 +307,9 @@ namespace OpenDental{
 			int order1=InsFilingCodeC.Listt[idx-1].ItemOrder;
 			int order2=InsFilingCodeC.Listt[idx].ItemOrder;
 			InsFilingCodeC.Listt[idx-1].ItemOrder=order2;
-			InsFilingCodes.WriteObject(InsFilingCodeC.Listt[idx-1]);
+			InsFilingCodes.Update(InsFilingCodeC.Listt[idx-1]);
 			InsFilingCodeC.Listt[idx].ItemOrder=order1;
-			InsFilingCodes.WriteObject(InsFilingCodeC.Listt[idx]);
+			InsFilingCodes.Update(InsFilingCodeC.Listt[idx]);
 			changed=true;
 			FillGrid();
 			gridMain.SetSelected(idx-1,true);
@@ -327,9 +327,9 @@ namespace OpenDental{
 			int order1=InsFilingCodeC.Listt[idx].ItemOrder;
 			int order2=InsFilingCodeC.Listt[idx+1].ItemOrder;
 			InsFilingCodeC.Listt[idx].ItemOrder=order2;
-			InsFilingCodes.WriteObject(InsFilingCodeC.Listt[idx]);
+			InsFilingCodes.Update(InsFilingCodeC.Listt[idx]);
 			InsFilingCodeC.Listt[idx+1].ItemOrder=order1;
-			InsFilingCodes.WriteObject(InsFilingCodeC.Listt[idx+1]);
+			InsFilingCodes.Update(InsFilingCodeC.Listt[idx+1]);
 			changed=true;
 			FillGrid();
 			gridMain.SetSelected(idx+1,true);

@@ -120,6 +120,11 @@
     <Compile Include="CrudFramework\CrudColumnAttribute.cs" />
     <Compile Include="Crud\AccountCrud.cs" />
     <Compile Include="Crud\AdjustmentCrud.cs" />
+    <Compile Include="Crud\DeletedObjectCrud.cs" />
+    <Compile Include="Crud\DocumentCrud.cs" />
+    <Compile Include="Crud\FeeSchedCrud.cs" />
+    <Compile Include="Crud\HL7MsgCrud.cs" />
+    <Compile Include="Crud\InsFilingCodeCrud.cs" />
     <Compile Include="Data Interface\Automations.cs" />
     <Compile Include="Data Interface\Equipments.cs" />
     <Compile Include="Data Interface\ReplicationServers.cs" />

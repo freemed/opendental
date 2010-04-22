@@ -14,19 +14,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),adj);
 				return;
 			}
-			string command="UPDATE adjustment SET " 
-				+ "adjdate = "      +POut.Date  (adj.AdjDate)
-				+ ",adjamt = '"      +POut.Double(adj.AdjAmt)+"'"
-				+ ",patnum = '"      +POut.Long   (adj.PatNum)+"'"
-				+ ",adjtype = '"     +POut.Long   (adj.AdjType)+"'"
-				+ ",provnum = '"     +POut.Long   (adj.ProvNum)+"'"
-				+ ",adjnote = '"     +POut.String(adj.AdjNote)+"'"
-				+ ",ProcDate = "     +POut.Date  (adj.ProcDate)
-				+ ",ProcNum = '"     +POut.Long   (adj.ProcNum)+"'"
-				//DateEntry not allowed to change
-				+ ",ClinicNum = '"   +POut.Long   (adj.ClinicNum)+"'"
-				+" WHERE adjNum = '" +POut.Long   (adj.AdjNum)+"'";
-			Db.NonQ(command);
+			Crud.AdjustmentCrud.Update(adj);
 		}
 
 		///<summary></summary>
@@ -35,51 +23,8 @@ namespace OpenDentBusiness{
 				adj.AdjNum=Meth.GetLong(MethodBase.GetCurrentMethod(),adj);
 				return adj.AdjNum;
 			}
-			if(PrefC.RandomKeys){
-				adj.AdjNum=ReplicationServers.GetKey("adjustment","AdjNum");
-			}
-			string command= "INSERT INTO adjustment (";
-			if(PrefC.RandomKeys){
-				command+="AdjNum,";
-			}
-			command+="AdjDate,AdjAmt,PatNum, "
-				+"AdjType,ProvNum,AdjNote,ProcDate,ProcNum,DateEntry,ClinicNum) VALUES(";
-			if(PrefC.RandomKeys){
-				command+="'"+POut.Long(adj.AdjNum)+"', ";
-			}
-			command+=
-				 POut.Date(adj.AdjDate)+", "
-				+"'"+POut.Double(adj.AdjAmt)+"', "
-				+"'"+POut.Long(adj.PatNum)+"', "
-				+"'"+POut.Long(adj.AdjType)+"', "
-				+"'"+POut.Long(adj.ProvNum)+"', "
-				+"'"+POut.String(adj.AdjNote)+"', "
-				+POut.Date(adj.ProcDate)+", "
-				+"'"+POut.Long(adj.ProcNum)+"', "
-				+"NOW(),"//DateEntry set to server date
-				+"'"+POut.Long(adj.ClinicNum)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				adj.AdjNum=Db.NonQ(command,true);
-			}
-			return adj.AdjNum;
+			return Crud.AdjustmentCrud.Insert(adj);
 		}
-
-		/*
-		///<summary></summary>
-		public static void InsertOrUpdate(Adjustment adj, bool IsNew){
-			//if(){
-				//throw new Exception(Lans.g(this,""));
-			//}
-			if(IsNew){
-				Insert(adj);
-			}
-			else{
-				Update(adj);
-			}
-		}*/
 
 		///<summary>This will soon be eliminated or changed to only allow deleting on same day as EntryDate.</summary>
 		public static void Delete(Adjustment adj){
@@ -87,9 +32,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),adj);
 				return;
 			}
-			string command="DELETE FROM adjustment "
-				+"WHERE AdjNum = '"+adj.AdjNum.ToString()+"'";
- 			Db.NonQ(command);
+			Crud.AdjustmentCrud.Delete(adj.AdjNum);
 		}
 
 		///<summary>Gets all adjustments for a single patient.</summary>
@@ -100,7 +43,7 @@ namespace OpenDentBusiness{
 			string command=
 				"SELECT * FROM adjustment"
 				+" WHERE PatNum = "+POut.Long(patNum)+" ORDER BY AdjDate";
-			return RefreshAndFill(Db.GetTable(command)).ToArray();
+			return Crud.AdjustmentCrud.SelectMany(command).ToArray();
 		}
 
 		///<summary>Gets one adjustment from the db.</summary>
@@ -111,29 +54,7 @@ namespace OpenDentBusiness{
 			string command=
 				"SELECT * FROM adjustment"
 				+" WHERE AdjNum = "+POut.Long(adjNum);
-			return RefreshAndFill(Db.GetTable(command))[0];
-		}
-
-		private static List<Adjustment> RefreshAndFill(DataTable table){
-			//No need to check RemotingRole; no call to db.
-			List<Adjustment> retVal=new List<Adjustment>();
-			Adjustment adj;
-			for(int i=0;i<table.Rows.Count;i++){
-				adj=new Adjustment();
-				adj.AdjNum   = PIn.Long   (table.Rows[i][0].ToString());
-				adj.AdjDate  = PIn.Date  (table.Rows[i][1].ToString());
-				adj.AdjAmt   = PIn.Double(table.Rows[i][2].ToString());
-				adj.PatNum   = PIn.Long   (table.Rows[i][3].ToString());
-				adj.AdjType  = PIn.Long   (table.Rows[i][4].ToString());
-				adj.ProvNum  = PIn.Long   (table.Rows[i][5].ToString());
-				adj.AdjNote  = PIn.String(table.Rows[i][6].ToString());
-				adj.ProcDate = PIn.Date  (table.Rows[i][7].ToString());
-				adj.ProcNum  = PIn.Long   (table.Rows[i][8].ToString());
-				adj.DateEntry= PIn.Date(table.Rows[i][9].ToString());
-				adj.ClinicNum= PIn.Long  (table.Rows[i][10].ToString());
-				retVal.Add(adj);
-			}
-			return retVal;
+			return Crud.AdjustmentCrud.SelectOne(adjNum);
 		}
 
 		///<summary>Loops through the supplied list of adjustments and returns an ArrayList of adjustments for the given proc.</summary>

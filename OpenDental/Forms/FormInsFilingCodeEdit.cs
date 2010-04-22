@@ -310,7 +310,12 @@ namespace OpenDental{
 			InsFilingCodeCur.Descript=textDescription.Text;
 			InsFilingCodeCur.EclaimCode=textEclaimCode.Text;
 			try {
-				InsFilingCodes.WriteObject(InsFilingCodeCur);
+				if(InsFilingCodeCur.IsNew) {
+					InsFilingCodes.Insert(InsFilingCodeCur);
+				}
+				else {
+					InsFilingCodes.Update(InsFilingCodeCur);
+				}
 			} 
 			catch(Exception ex) {
 				MessageBox.Show(ex.Message);

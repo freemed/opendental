@@ -21,15 +21,15 @@ namespace UnitTests {
 			long patNum=Patients.Insert(pat,false);
 			//Fee Schedules
 			FeeSched feeSched=new FeeSched();
-			feeSched.IsNew=true;
+			//feeSched.IsNew=true;
 			feeSched.FeeSchedType=FeeScheduleType.Normal;
 			feeSched.Description="DualPPO1";
-			long feeSchedNum1=FeeScheds.WriteObject(feeSched);
+			long feeSchedNum1=FeeScheds.Insert(feeSched);
 			feeSched=new FeeSched();
-			feeSched.IsNew=true;
+			//feeSched.IsNew=true;
 			feeSched.FeeSchedType=FeeScheduleType.Normal;
 			feeSched.Description="DualPPO2";
-			long feeSchedNum2=FeeScheds.WriteObject(feeSched);
+			long feeSchedNum2=FeeScheds.Insert(feeSched);
 			FeeScheds.RefreshCache();
 			//Standard Fee
 			Fees.RefreshCache();

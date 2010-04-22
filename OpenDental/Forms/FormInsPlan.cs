@@ -3846,9 +3846,9 @@ namespace OpenDental{
 						sched=new FeeSched();
 						sched.Description=CarrierCur.CarrierName;
 						sched.FeeSchedType=FeeScheduleType.Allowed;
-						sched.IsNew=true;
+						//sched.IsNew=true;
 						sched.ItemOrder=FeeSchedC.ListLong.Count;
-						FeeScheds.WriteObject(sched);
+						FeeScheds.Insert(sched);
 						DataValid.SetInvalid(InvalidType.FeeScheds);
 					}
 					PlanCur.AllowedFeeSched=sched.FeeSchedNum;

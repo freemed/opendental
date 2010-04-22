@@ -22,17 +22,7 @@ namespace OpenDentBusiness{
 
 		public static void FillCache(DataTable table) {
 			//No need to check RemotingRole; no call to db.
-			InsFilingCodeC.Listt=new List <InsFilingCode>();
-			InsFilingCode insFilingCode;
-			for(int i=0;i<table.Rows.Count;i++) {
-				insFilingCode=new InsFilingCode();
-				insFilingCode.IsNew=false;
-				insFilingCode.InsFilingCodeNum=PIn.Long(table.Rows[i][0].ToString());
-				insFilingCode.Descript=PIn.String(table.Rows[i][1].ToString());
-				insFilingCode.EclaimCode=PIn.String(table.Rows[i][2].ToString());
-				insFilingCode.ItemOrder=PIn.Int(table.Rows[i][3].ToString());
-				InsFilingCodeC.Listt.Add(insFilingCode);
-			}
+			InsFilingCodeC.Listt=Crud.InsFilingCodeCrud.TableToList(table);
 		}
 
 		public static string GetEclaimCode(long insFilingCodeNum) {
@@ -47,13 +37,22 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static long WriteObject(InsFilingCode insFilingCode) {
+		public static long Insert(InsFilingCode insFilingCode) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				insFilingCode.InsFilingCodeNum=Meth.GetLong(MethodBase.GetCurrentMethod(),insFilingCode);
 				return insFilingCode.InsFilingCodeNum;
 			}
-			DataObjectFactory<InsFilingCode>.WriteObject(insFilingCode);
+			insFilingCode.InsFilingCodeNum=Crud.InsFilingCodeCrud.Insert(insFilingCode);
 			return insFilingCode.InsFilingCodeNum;
+		}
+
+		///<summary></summary>
+		public static void Update(InsFilingCode insFilingCode) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),insFilingCode);
+				return;
+			}
+			Crud.InsFilingCodeCrud.Update(insFilingCode);
 		}
 
 		///<summary>Surround with try/catch</summary>
@@ -66,7 +65,7 @@ namespace OpenDentBusiness{
 			if(Db.GetScalar(command) != "0") {
 				throw new ApplicationException(Lans.g("InsFilingCode","Already in use by insplans."));
 			}
-			DataObjectFactory<InsFilingCode>.DeleteObject(insFilingCodeNum);
+			Crud.InsFilingCodeCrud.Delete(insFilingCodeNum);
 		}
 
 

@@ -188,7 +188,12 @@ namespace OpenDental{
 			FeeSchedCur.FeeSchedType=(FeeScheduleType)listType.SelectedIndex;
 			FeeSchedCur.IsHidden=checkIsHidden.Checked;
 			try{
-				FeeScheds.WriteObject(FeeSchedCur);
+				if(FeeSchedCur.IsNew) {
+					FeeScheds.Insert(FeeSchedCur);
+				}
+				else {
+					FeeScheds.Update(FeeSchedCur);
+				}
 			}
 			catch(Exception ex){
 				MessageBox.Show(ex.Message);

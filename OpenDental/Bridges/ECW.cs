@@ -19,7 +19,7 @@ namespace OpenDental.Bridges {
 			msg.AptNum=apt.AptNum;
 			msg.HL7Status=HL7MessageStatus.OutPending;//it will be marked outSent by the HL7 service.
 			msg.MsgText=dft.GenerateMessage();
-			HL7Msgs.WriteObject(msg);
+			HL7Msgs.Insert(msg);
 		}
 
 

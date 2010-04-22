@@ -588,8 +588,8 @@ namespace OpenDental{
 				feesched.FeeSchedType=FeeScheduleType.Normal;
 				feesched.ItemOrder=FeeSchedC.ListLong[FeeSchedC.ListLong.Count-1].ItemOrder+1;
 				feesched.IsHidden=false;
-				feesched.IsNew=true;
-				FeeScheds.WriteObject(feesched);
+				//feesched.IsNew=true;
+				FeeScheds.Insert(feesched);
 				DataValid.SetInvalid(InvalidType.FeeScheds);
 			}
 			else{

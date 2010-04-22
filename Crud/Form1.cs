@@ -160,6 +160,9 @@ namespace OpenDentBusiness.Crud{
 					case "Int64":
 						strb.Append("PIn.Long  (");
 						break;
+					case "Int32":
+						strb.Append("PIn.Int   (");
+						break;
 					case "String":
 						strb.Append("PIn.String(");
 						break;
@@ -187,6 +190,9 @@ namespace OpenDentBusiness.Crud{
 			strb.Append(rn+t3+"command+=\"");
 			List<FieldInfo> fieldsExceptPri=CrudGenHelper.GetFieldsExceptPriKey(fields,priKey);
 			for(int f=0;f<fieldsExceptPri.Count;f++) {
+				if(CrudGenHelper.GetSpecialType(fieldsExceptPri[f])==EnumCrudSpecialColType.TimeStamp) {
+					continue;
+				}
 				if(f>0) {
 					strb.Append(",");
 				}
@@ -197,21 +203,22 @@ namespace OpenDentBusiness.Crud{
 			strb.Append(rn+t4+"command+=POut.Long(obj."+priKey.Name+")+\",\";");
 			strb.Append(rn+t3+"}");
 			strb.Append(rn+t3+"command+=");
+			EnumCrudSpecialColType specialType;
 			for(int f=0;f<fieldsExceptPri.Count;f++) {
 				strb.Append(rn+t4);
+				specialType=CrudGenHelper.GetSpecialType(fieldsExceptPri[f]);
+				if(specialType==EnumCrudSpecialColType.TimeStamp) {
+					strb.Append("//"+fieldsExceptPri[f].Name+" can only be set by MySQL");
+					continue;
+				}
 				if(f==0) {
 					strb.Append(" ");
 				}
 				else {
 					strb.Append("+");
 				}
-				EnumCrudSpecialColType specialType=CrudGenHelper.GetSpecialType(fieldsExceptPri[f]);
 				if(specialType==EnumCrudSpecialColType.DateEntry) {
-					//+"NOW(),"//DateEntry set to server date
 					strb.Append("\"NOW()");
-				}
-				else if(specialType==EnumCrudSpecialColType.TimeStamp) {
-					throw new ApplicationException("Timestamp not yet implemented.");
 				}
 				else if(fieldsExceptPri[f].FieldType.IsEnum) {
 					strb.Append("    POut.Int   ((int)obj."+fieldsExceptPri[f].Name+")+\"");
@@ -234,12 +241,20 @@ namespace OpenDentBusiness.Crud{
 					case "Int64":
 						strb.Append("    POut.Long  (obj."+fieldsExceptPri[f].Name+")+\"");
 						break;
+					case "Int32":
+						strb.Append("    POut.Int   (obj."+fieldsExceptPri[f].Name+")+\"");
+						break;
 					case "String":
 						strb.Append("\"'\"+POut.String(obj."+fieldsExceptPri[f].Name+")+\"'");
 						break;
 				}
-				strb.Append("");
-				if(f<fieldsExceptPri.Count-1) {
+				if(f==fieldsExceptPri.Count-2
+					&& CrudGenHelper.GetSpecialType(fieldsExceptPri[f+1])==EnumCrudSpecialColType.TimeStamp) 
+				{
+					//in case the last field is a timestamp
+					strb.Append(")\";");
+				}
+				else if(f<fieldsExceptPri.Count-1) {
 					strb.Append(",\"");
 				}
 				else {
@@ -257,13 +272,75 @@ namespace OpenDentBusiness.Crud{
 			//Update---------------------------------------------------------------------------------------------
 			strb.Append(rn+rn+t2+"///<summary>Updates one "+typeClass.Name+" in the database.</summary>");
 			strb.Append(rn+t2+"internal static void Update("+typeClass.Name+" obj){");
-			strb.Append(rn);
+			strb.Append(rn+t3+"string command=\"UPDATE "+tablename+" SET \"");
+			for(int f=0;f<fieldsExceptPri.Count;f++) {
+				specialType=CrudGenHelper.GetSpecialType(fieldsExceptPri[f]);
+				if(specialType==EnumCrudSpecialColType.DateEntry) {
+					strb.Append(rn+t4+"//"+fieldsExceptPri[f].Name+" not allowed to change");
+					continue;
+				}
+				if(specialType==EnumCrudSpecialColType.TimeStamp) {
+					strb.Append(rn+t4+"//"+fieldsExceptPri[f].Name+" can only be set by MySQL");
+					continue;
+				}
+				strb.Append(rn+t4+"+\""+fieldsExceptPri[f].Name.PadRight(longestField,' ')+"= ");
+				if(fieldsExceptPri[f].FieldType.IsEnum) {
+					strb.Append(" \"+POut.Int   ((int)obj."+fieldsExceptPri[f].Name+")+\"");
+				}
+				else switch(fieldsExceptPri[f].FieldType.Name) {
+					default:
+						throw new ApplicationException("Type not yet supported: "+fieldsExceptPri[f].FieldType.Name);
+					case "Boolean":
+						strb.Append(" \"+POut.Bool  (obj."+fieldsExceptPri[f].Name+")+\"");
+						break;
+					case "Color":
+						strb.Append(" \"+POut.Int   (obj."+fieldsExceptPri[f].Name+".ToArgb())+\"");
+						break;
+					case "DateTime"://Need to handle DateT fields here better.
+						strb.Append(" \"+POut.Date  (obj."+fieldsExceptPri[f].Name+")+\"");
+						break;
+					case "Double":
+						strb.Append("'\"+POut.Double(obj."+fieldsExceptPri[f].Name+")+\"'");
+						break;
+					case "Int64":
+						strb.Append(" \"+POut.Long  (obj."+fieldsExceptPri[f].Name+")+\"");
+						break;
+					case "Int32":
+						strb.Append(" \"+POut.Int   (obj."+fieldsExceptPri[f].Name+")+\"");
+						break;
+					case "String":
+						strb.Append("'\"+POut.String(obj."+fieldsExceptPri[f].Name+")+\"'");
+						break;
+				}
+				if(f==fieldsExceptPri.Count-2
+					&& CrudGenHelper.GetSpecialType(fieldsExceptPri[f+1])==EnumCrudSpecialColType.TimeStamp) 
+				{
+					//in case the last field is a timestamp
+					//strb.Append(" \"");
+				}
+				else if(f<fieldsExceptPri.Count-1) {
+					strb.Append(",");
+				}
+				strb.Append(" \"");
+			}
+			strb.Append(rn+t4+"+\"WHERE "+priKey.Name+" = \"+POut.Long(obj."+priKey.Name+");");
+			strb.Append(rn+t3+"Db.NonQ(command);");
 			strb.Append(rn+t2+"}");
 			//Delete---------------------------------------------------------------------------------------------
-			strb.Append(rn+rn+t2+"///<summary>Deletes one "+typeClass.Name+" from the database.  We might decide to not allow this for some tables.</summary>");
-			strb.Append(rn+t2+"internal static void Delete(long "+priKeyParam+"){");
-			strb.Append(rn);
-			strb.Append(rn+t2+"}");
+			if(CrudGenHelper.IsDeleteForbidden(typeClass)) {
+				strb.Append(rn+rn+t2+"//Delete not allowed for this table");
+				strb.Append(rn+t2+"//internal static void Delete(long "+priKeyParam+"){");
+				strb.Append(rn+t2+"//");
+				strb.Append(rn+t2+"//}");
+			}
+			else {
+				strb.Append(rn+rn+t2+"///<summary>Deletes one "+typeClass.Name+" from the database.</summary>");
+				strb.Append(rn+t2+"internal static void Delete(long "+priKeyParam+"){");
+				strb.Append(rn+t3+"string command=\"DELETE FROM "+tablename+" \"");
+				strb.Append(rn+t4+"+\"WHERE "+priKey.Name+" = \"+POut.Long("+priKeyParam+");");
+				strb.Append(rn+t3+"Db.NonQ(command);");
+				strb.Append(rn+t2+"}");
+			}
 			//Footer
 			strb.Append(@"
 	}

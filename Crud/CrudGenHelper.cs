@@ -30,6 +30,15 @@ namespace Crud {
 			return((CrudTableAttribute)attributes[0]).TableName;
 		}
 
+		///<summary></summary>
+		public static bool IsDeleteForbidden(Type typeClass) {
+			object[] attributes = typeClass.GetCustomAttributes(typeof(CrudTableAttribute),true);
+			if(attributes.Length==0) {
+				return false;
+			}
+			return ((CrudTableAttribute)attributes[0]).IsDeleteForbidden;
+		}
+
 		public static List<FieldInfo> GetFieldsExceptPriKey(FieldInfo[] fields,FieldInfo priKey) {
 			List<FieldInfo> retVal=new List<FieldInfo>();
 			for(int i=0;i<fields.Length;i++) {

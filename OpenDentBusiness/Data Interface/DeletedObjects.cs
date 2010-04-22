@@ -9,30 +9,13 @@ using OpenDentBusiness.DataAccess;
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class DeletedObjects{
-		
-		/*
-		///<Summary>Gets one DeletedObject from the database.</Summary>
-		public static DeletedObject CreateObject(int DeletedObjectNum){
-			return DataObjectFactory<DeletedObject>.CreateObject(DeletedObjectNum);
-		}
-
-		public static List<DeletedObject> GetDeletedObjects(int[] DeletedObjectNums){
-			Collection<DeletedObject> collectState=DataObjectFactory<DeletedObject>.CreateObjects(DeletedObjectNums);
-			return new List<DeletedObject>(collectState);		
-		}
-
-		///<summary></summary>
-		public static void WriteObject(DeletedObject deletedObject){
-			DataObjectFactory<DeletedObject>.WriteObject(deletedObject);
-		}*/
 
 		///<summary></summary>
 		public static void SetDeleted(DeletedObjectType objType,long objectNum){
 			DeletedObject delObj=new DeletedObject();
-			delObj.IsNew=true;
 			delObj.ObjectNum=objectNum;
 			delObj.ObjectType=objType;
-			DataObjectFactory<DeletedObject>.WriteObject(delObj);
+			Crud.DeletedObjectCrud.Insert(delObj);
 		}
 
 		public static List<DeletedObject> GetUAppoint(DateTime changedSince){
