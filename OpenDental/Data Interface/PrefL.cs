@@ -71,6 +71,11 @@ namespace OpenDental {
 						while(Directory.Exists(folderUpdate) && DateTime.Now < now.AddSeconds(10)) {//up to 10 seconds
 							Application.DoEvents();
 						}
+						if(Directory.Exists(folderUpdate)){
+							MessageBox.Show("Please delete this folder and then try again: "+folderUpdate);
+							Application.Exit();
+							return false;
+						}
 					}
 					Directory.CreateDirectory(folderUpdate);
 					DirectoryInfo dirInfo=new DirectoryInfo(Application.StartupPath);
