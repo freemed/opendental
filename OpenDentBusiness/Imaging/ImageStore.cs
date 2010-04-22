@@ -458,7 +458,7 @@ namespace OpenDentBusiness {
 
 		/*
 		private static void SaveDocumentToDatabase(Document doc,Stream stream) {
-			// Copy the contents to a byte array
+			// Clone the contents to a byte array
 			int length = (int)stream.Length;
 			byte[] buffer = new byte[length];
 			stream.Read(buffer,0,length);

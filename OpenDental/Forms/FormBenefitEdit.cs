@@ -47,7 +47,7 @@ namespace OpenDental{
 		///<summary></summary>
 		public FormBenefitEdit(long patPlanNum,long planNum) {
 			InitializeComponent();
-			//BenCur=benCur.Copy();
+			//BenCur=benCur.Clone();
 			PatPlanNum=patPlanNum;
 			PlanNum=planNum;
 			Lan.F(this);

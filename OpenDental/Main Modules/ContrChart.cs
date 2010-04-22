@@ -5986,7 +5986,7 @@ namespace OpenDental{
 				}
 			}
 			if(allProcsHyg && PatCur.SecProv!=0){
-				Appointment aptOld=AptCur.Copy();
+				Appointment aptOld=AptCur.Clone();
 				AptCur.ProvNum=PatCur.SecProv;
 				Appointments.Update(AptCur,aptOld);
 			}

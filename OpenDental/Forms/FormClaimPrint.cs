@@ -435,7 +435,7 @@ namespace OpenDental{
 			Patient PatCur=FamCur.GetPatient(ThisPatNum);
 			List<Claim> ClaimList=Claims.Refresh(PatCur.PatNum);
 			ClaimCur=Claims.GetFromList(ClaimList,ThisClaimNum);
-				//((Claim)Claims.HList[ThisClaimNum]).Copy();
+				//((Claim)Claims.HList[ThisClaimNum]).Clone();
 			PlanList=InsPlans.Refresh(FamCur);
 			InsPlan otherPlan=InsPlans.GetPlan(ClaimCur.PlanNum2,PlanList);
 			if(otherPlan==null){
@@ -3045,7 +3045,7 @@ namespace OpenDental{
 				return GetPlaceOfServiceNum(ClaimCur.PlaceService);
 			}
 			//(Procedure)Procedures.HList[ClaimProcsForClaim[procIndex].ProcNum];
-			//Procedure ProcOld=ProcCur.Copy();
+			//Procedure ProcOld=ProcCur.Clone();
 			if(field=="Diagnosis"){
 				if(ProcCur.DiagnosticCode==""){
 					return "";

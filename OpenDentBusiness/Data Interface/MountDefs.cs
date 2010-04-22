@@ -23,18 +23,7 @@ namespace OpenDentBusiness {
 
 		private static void FillCache(DataTable table){
 			//No need to check RemotingRole; no call to db.
-			MountDefC.Listt=new List<MountDef>();
-			MountDef mount;
-			for(int i=0;i<table.Rows.Count;i++) {
-				mount=new MountDef();
-				mount.MountDefNum =PIn.Long   (table.Rows[i][0].ToString());
-				mount.Description =PIn.String(table.Rows[i][1].ToString());
-				mount.ItemOrder   =PIn.Int   (table.Rows[i][2].ToString());
-				mount.IsRadiograph=PIn.Bool  (table.Rows[i][3].ToString());
-				mount.Width       =PIn.Int   (table.Rows[i][4].ToString());
-				mount.Height      =PIn.Int   (table.Rows[i][5].ToString());
-				MountDefC.Listt.Add(mount);
-			}
+			MountDefC.Listt=Crud.MountDefCrud.TableToList(table);
 		}
 
 		///<summary></summary>
@@ -43,14 +32,7 @@ namespace OpenDentBusiness {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),def);
 				return;
 			}
-			string command="UPDATE mountdef SET " 
-				+"Description = '"   +POut.String(def.Description)+"'"
-				+",ItemOrder = '" +POut.Long(def.ItemOrder)+"'"
-				+",IsRadiograph = '" +POut.Bool(def.IsRadiograph)+"'"
-				+",Width = '" +POut.Long(def.Width)+"'"
-				+",Height = '" +POut.Long(def.Height)+"'"
-				+" WHERE MountDefNum  ='"+POut.Long (def.MountDefNum)+"'";
-			Db.NonQ(command);
+			Crud.MountDefCrud.Update(def);
 		}
 
 		///<summary></summary>
@@ -59,30 +41,7 @@ namespace OpenDentBusiness {
 				def.MountDefNum=Meth.GetLong(MethodBase.GetCurrentMethod(),def);
 				return def.MountDefNum;
 			}
-			if(PrefC.RandomKeys) {
-				def.MountDefNum=ReplicationServers.GetKey("mountdef","MountDefNum");
-			}
-			string command="INSERT INTO mountdef (";
-			if(PrefC.RandomKeys) {
-				command+="MountDefNum,";
-			}
-			command+="Description,ItemOrder,IsRadiograph,Width,Height) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+=POut.Long(def.MountDefNum)+", ";
-			}
-			command+=
-				 "'"+POut.String(def.Description)+"', "
-				+"'"+POut.Long(def.ItemOrder)+"', "
-				+"'"+POut.Bool(def.IsRadiograph)+"', "
-				+"'"+POut.Long(def.Width)+"', "
-				+"'"+POut.Long(def.Height)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else{
-				def.MountDefNum=Db.NonQ(command,true);
-			}
-			return def.MountDefNum;
+			return Crud.MountDefCrud.Insert(def);
 		}
 
 		///<summary>No need to surround with try/catch, because all deletions are allowed.</summary>

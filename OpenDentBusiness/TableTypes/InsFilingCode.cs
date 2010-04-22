@@ -16,7 +16,7 @@ namespace OpenDentBusiness{
 		///<summary>Display order for this filing code within the UI.  0-indexed.</summary>
 		public int ItemOrder;
 		
-		public InsFilingCode Copy(){
+		public InsFilingCode Clone(){
 			return (InsFilingCode)this.MemberwiseClone();
 		}	
 

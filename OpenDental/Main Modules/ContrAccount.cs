@@ -1744,7 +1744,7 @@ namespace OpenDental {
 			if(UrgFinNoteChanged) {
 				//Patient tempPat=Patients.Cur;
 				Patient patOld=FamCur.ListPats[0].Copy();
-				//Patients.CurOld=Patients.Cur.Copy();//important
+				//Patients.CurOld=Patients.Cur.Clone();//important
 				FamCur.ListPats[0].FamFinUrgNote=textUrgFinNote.Text;
 				Patients.Update(FamCur.ListPats[0],patOld);
 				//Patients.GetFamily(tempPat.PatNum);

@@ -183,7 +183,7 @@ namespace OpenDental {
 					&& selectedDate.Month==DateTime.Today.Month 
 					&& selectedDate.Year==DateTime.Today.Year) 
 				{
-					Today=oneday.Copy();
+					Today=oneday.Clone();
 					Today.Bounds.X+=1;
 					Today.Bounds.Y+=1;
 					Today.Bounds.Width-=2;

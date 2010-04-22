@@ -360,7 +360,7 @@ namespace OpenDental{
 					&& Accounts.ListLong[i].AcctType != Accounts.ListLong[i+1].AcctType){
 					row.ColorLborder=Color.Black;
 				}
-				row.Tag=Accounts.ListLong[i].Copy();
+				row.Tag=Accounts.ListLong[i].Clone();
 				row.ColorBackG=Accounts.ListLong[i].AccountColor;
 				gridMain.Rows.Add(row);
 			}*/

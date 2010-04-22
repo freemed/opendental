@@ -13,7 +13,7 @@ namespace OpenDentBusiness{
 		public string FieldName;
 
 		/*//<summary>Returns a copy of the clearinghouse.</summary>
-    public ClaimForm Copy(){
+    public ClaimForm Clone(){
 			ClaimForm cf=new ClaimForm();
 			cf.ClaimFormNum=ClaimFormNum;
 			cf.Description=Description;

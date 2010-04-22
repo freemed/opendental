@@ -108,7 +108,7 @@ namespace OpenDental{
 			Lan.F(this);
 			DS=Appointments.GetApptEdit(aptNum);
 			AptCur=Appointments.TableToObject(DS.Tables["Appointment"]);
-			AptOld=AptCur.Copy();
+			AptOld=AptCur.Clone();
 		}
 
 		/// <summary>
@@ -1390,7 +1390,7 @@ namespace OpenDental{
 			Procedures.DetachFromApt(procNums,isPlanned);
 			Recalls.Synch(AptCur.PatNum);//needs to be moved into Procedures.Delete
 			DS.Tables.Remove("Procedure");
-			DS.Tables.Add(Appointments.GetApptEdit(AptCur.AptNum).Tables["Procedure"].Copy());
+			DS.Tables.Add(Appointments.GetApptEdit(AptCur.AptNum).Tables["Procedure"].Clone());
 			FillProcedures();
 		}*/
 
@@ -1524,7 +1524,7 @@ namespace OpenDental{
 			}
 			/*
 			FormApptProcs FormAP=new FormApptProcs();
-			FormAP.AptCur=AptCur.Copy();
+			FormAP.AptCur=AptCur.Clone();
 			//but we do need the status to be accurate:
 			if (AptCur.AptStatus == ApptStatus.Planned) {
 				;

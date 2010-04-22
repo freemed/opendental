@@ -39,7 +39,7 @@ namespace OpenDentBusiness.HL7 {
 				apt.AptStatus=ApptStatus.Scheduled;
 			}
 			else{
-				aptOld=apt.Copy();
+				aptOld=apt.Clone();
 			}
 			if(apt.PatNum != pat.PatNum) {
 				return;//we can't process this message because wrong patnum.  No good way to notify user yet.

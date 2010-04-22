@@ -210,11 +210,11 @@ namespace OpenDental{
 				return;
 			}
 			else {
-				ProcButton but=ButtonList[listViewButtons.SelectedIndices[0]].Copy();
+				ProcButton but=ButtonList[listViewButtons.SelectedIndices[0]].Clone();
 				but.ItemOrder--;
 				ProcButtons.Update(but);
 				selected=but.ItemOrder;
-				but=ButtonList[listViewButtons.SelectedIndices[0]-1].Copy();
+				but=ButtonList[listViewButtons.SelectedIndices[0]-1].Clone();
 				but.ItemOrder++;
 				ProcButtons.Update(but);
 			}

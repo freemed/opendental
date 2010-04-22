@@ -17,7 +17,7 @@ namespace OpenDentBusiness{
 		public bool IsEnabled;
 
 		///<summary>Returns a copy of this AppointmentRule.</summary>
-		public AppointmentRule Copy(){
+		public AppointmentRule Clone(){
 			AppointmentRule a=new AppointmentRule();
 			a.AppointmentRuleNum=AppointmentRuleNum;
 			a.RuleDesc=RuleDesc;

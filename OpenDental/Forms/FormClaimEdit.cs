@@ -3466,7 +3466,7 @@ namespace OpenDental{
 				ClaimProcs.Update(ClaimProcsForClaim[gridProc.SelectedIndices[i]]);//moves it to the new claim
 			}
 			//now, set Claims.Cur back to the originalClaim.  The new claim will now show on the account.
-			//ClaimCur=originalClaim;//.Copy()
+			//ClaimCur=originalClaim;//.Clone()
 			ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
 			FillGrids();
 		}

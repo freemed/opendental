@@ -1436,7 +1436,7 @@ namespace OpenDentBusiness {
 					if(newBenefitList[j].PatPlanNum!=0) {
 						continue;//skip benefits attached to patients.  We are only concerned with ones attached to plans.
 					}
-					newBenefit=(newBenefitList[j].Copy();
+					newBenefit=(newBenefitList[j].Clone();
 					newBenefit.PlanNum=planNums[i];
 					Insert(newBenefit);
 				}

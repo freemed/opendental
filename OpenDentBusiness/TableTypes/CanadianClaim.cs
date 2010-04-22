@@ -40,7 +40,7 @@ namespace OpenDentBusiness{
 
 		/*
 		///<summary></summary>
-		public CanadianClaim Copy() {
+		public CanadianClaim Clone() {
 			Account a=new Account();
 			a.AccountNum=AccountNum;
 			a.Description=Description;

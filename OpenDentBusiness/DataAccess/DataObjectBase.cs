@@ -50,7 +50,7 @@ namespace OpenDentBusiness.DataAccess {
 			OnModified(EventArgs.Empty);
 		}
 
-		///<summary>Deep MemberwiseClone.  The returned type is object.  Many of the DataObjects have a Copy function which returns an object of the correct type.</summary>
+		///<summary>Deep MemberwiseClone.  The returned type is object.  Many of the DataObjects have a Clone function which returns an object of the correct type.</summary>
 		public virtual object Clone() {
 			return this.MemberwiseClone();
 		}

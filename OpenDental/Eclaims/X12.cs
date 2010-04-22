@@ -427,7 +427,7 @@ namespace OpenDental.Eclaims
 						saveFile=ODFileUtils.CombinePaths(saveFolder,
 							claim.ClaimNum.ToString()+"_"+(c+1).ToString()+Path.GetExtension(claim.Attachments[c].DisplayedFileName)+".IMG");
 						storedFile=ODFileUtils.CombinePaths(FormEmailMessageEdit.GetAttachPath(),claim.Attachments[c].ActualFileName);
-						File.Copy(storedFile,saveFile,true);
+						File.Clone(storedFile,saveFile,true);
 					}					
 				}*/
 				#endregion

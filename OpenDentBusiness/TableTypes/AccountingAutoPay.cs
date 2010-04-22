@@ -13,7 +13,7 @@ namespace OpenDentBusiness{
 		public string PickList;
 
 		///<summary>Returns a copy of this AccountingAutoPay.</summary>
-		public AccountingAutoPay Copy(){
+		public AccountingAutoPay Clone(){
 			AccountingAutoPay a=new AccountingAutoPay();
 			a.AccountingAutoPayNum=AccountingAutoPayNum;
 			a.PayType=PayType;

@@ -120,8 +120,8 @@ namespace OpenDentBusiness{
 			//byte[] filebytes = GetBytes(doc);
 			//int fileLength = filebytes.Length;
 			//byte[] buffer = new byte[textbytes.Length + filebytes.Length];
-			//Array.Copy(filebytes,0,buffer,0,fileLength);
-			//Array.Copy(textbytes,0,buffer,fileLength,textbytes.Length);
+			//Array.Clone(filebytes,0,buffer,0,fileLength);
+			//Array.Clone(textbytes,0,buffer,fileLength,textbytes.Length);
 			HashAlgorithm algorithm = MD5.Create();
 			byte[] hash = algorithm.ComputeHash(textbytes);//always results in length of 16.
 			return Encoding.ASCII.GetString(hash);

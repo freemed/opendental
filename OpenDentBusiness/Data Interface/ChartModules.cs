@@ -808,12 +808,15 @@ namespace OpenDentBusiness {
 			//but we won't actually fill this table with rows until the very end.  It's more useful to use a List<> for now.
 			List<DataRow> rows=new List<DataRow>();
 			string command="SELECT plannedappt.AptNum,ItemOrder,PlannedApptNum,appointment.AptDateTime,"
-				+"appointment.Pattern,appointment.AptStatus "
+				+"appointment.Pattern,appointment.AptStatus,COUNT(procedurelog.ProcNum) someAreComplete "//The count won't be accurate, but it will tell us if not zero.
 				+"FROM plannedappt "
 				+"LEFT JOIN appointment ON appointment.NextAptNum=plannedappt.AptNum "
+				+"LEFT JOIN procedurelog ON procedurelog.PlannedAptNum=plannedappt.AptNum "//grab all attached completed procs
+				+"AND procedurelog.ProcStatus=2 "
 				+"WHERE plannedappt.PatNum="+POut.Long(patNum)+" "
 				+"GROUP BY plannedappt.AptNum "
 				+"ORDER BY ItemOrder";
+			//plannedappt.AptNum does refer to the planned appt, but the other fields in the result are for the linked scheduled appt.
 			DataTable rawPlannedAppts=dcon.GetTable(command);
 			DataRow aptRow;
 			int itemOrder=1;
@@ -884,10 +887,13 @@ namespace OpenDentBusiness {
 				row["PlannedApptNum"]=rawPlannedAppts.Rows[i]["PlannedApptNum"].ToString();
 				row["ProcDescript"]=aptRow["ProcDescript"].ToString();
 				if(aptStatus==ApptStatus.Complete) {
-					row["ProcDescript"]="(Completed) "+ row["ProcDescript"];
+					row["ProcDescript"]=Lans.g("ContrChart","(Completed) ")+ row["ProcDescript"];
 				}
 				else if(dateSched == DateTime.Today.Date) {
-					row["ProcDescript"]="(Today's) "+ row["ProcDescript"];
+					row["ProcDescript"]=Lans.g("ContrChart","(Today's) ")+ row["ProcDescript"];
+				}
+				else if(rawPlannedAppts.Rows[i]["someAreComplete"].ToString()!="0"){
+					row["ProcDescript"]=Lans.g("ContrChart","(Some procs complete) ")+ row["ProcDescript"];
 				}
 				rows.Add(row);
 				itemOrder++;

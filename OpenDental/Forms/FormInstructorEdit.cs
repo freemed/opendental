@@ -34,7 +34,7 @@ namespace OpenDental{
 			// Required for Windows Form Designer support
 			//
 			InitializeComponent();
-			//InstCur=instCur.Copy();
+			//InstCur=instCur.Clone();
 			Lan.F(this);
 		}
 

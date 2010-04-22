@@ -595,7 +595,7 @@ namespace OpenDental{
 			}
 			AptNumsSelected.Add(apt.AptNum);
 			if(this.InitialClick) {
-				Appointment oldApt=apt.Copy();
+				Appointment oldApt=apt.Clone();
 				DateTime d;
 				if(ContrApptSheet.IsWeeklyView) {
 					d=ContrAppt.WeekStartDate.AddDays(ContrAppt.SheetClickedonDay);

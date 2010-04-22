@@ -35,7 +35,7 @@ namespace OpenDental{
 
 		///<summary>Just before printing or displaying the final sheet output, the heights and y positions of various fields are adjusted according to their growth behavior.  This also now gets run every time a user changes the value of a textbox while filling out a sheet.</summary>
 		public static void CalculateHeights(Sheet sheet,Graphics g){
-			//Sheet sheetCopy=sheet.Copy();
+			//Sheet sheetCopy=sheet.Clone();
 			int calcH;
 			Font font;
 			FontStyle fontstyle;

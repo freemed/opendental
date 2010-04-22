@@ -122,7 +122,7 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1
 	//    //        int progress = 0;
 	//    //        if (worker != null)
 	//    //        {
-	//    //            worker.ReportProgress(progress, "**SCROLL****LOG**Preparing to Copy Data from OpenDental to  "
+	//    //            worker.ReportProgress(progress, "**SCROLL****LOG**Preparing to Clone Data from OpenDental to  "
 	//    //                + PaymentProcessor_Ledger.OrignalTableName + ".");
 	//    //            worker.ReportProgress(progress, "**SCROLL****LOG** ");
 	//    //        }

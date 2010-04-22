@@ -237,12 +237,13 @@ namespace OpenDental{
 
 		private void gridInsFilingCodeSubtypes_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			FormInsFilingCodeSubtypeEdit FormI=new FormInsFilingCodeSubtypeEdit();
-			FormI.InsFilingCodeSubtypeCur=insFilingCodeSubtypes[e.Row].Copy();
+			FormI.InsFilingCodeSubtypeCur=insFilingCodeSubtypes[e.Row].Clone();
 			FormI.ShowDialog();
 			if(FormI.DialogResult==DialogResult.OK){
 				try {
-					InsFilingCodeSubtypes.WriteObject(FormI.InsFilingCodeSubtypeCur);
-				} catch(Exception ex) {
+					InsFilingCodeSubtypes.Update(FormI.InsFilingCodeSubtypeCur);
+				} 
+				catch(Exception ex) {
 					MessageBox.Show(ex.Message);
 					return;
 				}
@@ -266,8 +267,9 @@ namespace OpenDental{
 				}
 				FormI.InsFilingCodeSubtypeCur.InsFilingCodeNum=InsFilingCodeCur.InsFilingCodeNum;
 				try {
-					InsFilingCodeSubtypes.WriteObject(FormI.InsFilingCodeSubtypeCur);
-				} catch(Exception ex) {
+					InsFilingCodeSubtypes.Insert(FormI.InsFilingCodeSubtypeCur);
+				} 
+				catch(Exception ex) {
 					MessageBox.Show(ex.Message);
 					return;
 				}

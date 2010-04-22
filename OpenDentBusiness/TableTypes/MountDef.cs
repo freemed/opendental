@@ -2,94 +2,27 @@ using System;
 using System.Collections;
 using OpenDentBusiness.DataAccess;
 
-
 namespace OpenDentBusiness{
-
 	/// <summary>THIS TABLE IS NOT BEING USED.  These can be freely deleted, renamed, moved, etc. without affecting any patient info.  mountitemdef</summary>
-	[DataObject("mountdef")]
-	public class MountDef : DataObjectBase {
-		[DataField("MountDefNum", PrimaryKey=true, AutoNumber=true)]
-		private long mountDefNum;
+	[Serializable()]
+	public class MountDef : TableBase {
 		/// <summary>Primary key.</summary>
-		public long MountDefNum {
-			get { return mountDefNum; }
-			set { mountDefNum = value; MarkDirty(); mountDefNumChanged = true; }
-		}
-		bool mountDefNumChanged;
-		public bool MountDefNumChanged {
-			get { return mountDefNumChanged; }
-		}
-
-		[DataField("Description")]
-		private string description;
+		[CrudColumn(IsPriKey=true)]
+		public long MountDefNum;
 		/// <summary>.</summary>
-		public string Description {
-			get { return description; }
-			set { description = value; MarkDirty(); descriptionChanged = true; }
-		}
-		bool descriptionChanged;
-		public bool DescriptionChanged {
-			get { return descriptionChanged; }
-		}
-
-		[DataField("ItemOrder")]
-		private int itemOrder;
+		public string Description;
 		/// <summary>The order that the mount defs will show in various lists.</summary>
-		public int ItemOrder {
-			get { return itemOrder; }
-			set { itemOrder = value; MarkDirty(); itemOrderChanged = true; }
-		}
-		bool itemOrderChanged;
-		public bool ItemOrderChanged {
-			get { return itemOrderChanged; }
-		}
-
-		[DataField("IsRadiograph")]
-		private bool isRadiograph;
+		public int ItemOrder;
 		/// <summary>Set to true if this is just xrays.  If true, this prevents image from being scaled to fit inside the mount.  If false (composite photographs for example) then the images will be scaled to fit inside the mount. Later, the basic appearance or background color might be set based on this flag as well.</summary>
-		public bool IsRadiograph {
-			get { return isRadiograph; }
-			set { isRadiograph = value; MarkDirty(); isRadiographChanged = true; }
-		}
-		bool isRadiographChanged;
-		public bool IsRadiographChanged {
-			get { return isRadiographChanged; }
-		}
-
-		[DataField("Width")]
-		private int width;
+		public bool IsRadiograph;
 		/// <summary>The width of the mount, in pixels.  For radiograph mounts, this could be very large.  It must be large enough for the radiographs to fit in the mount without scaling.  For photos, it should also be large so that the scaling won't be too noticeable.  Shrinking to view or print will always produce nicer results than enlarging to view or print.</summary>
-		public int Width {
-			get { return width; }
-			set { width = value; MarkDirty(); widthChanged = true; }
-		}
-		bool widthChanged;
-		public bool WidthChanged {
-			get { return widthChanged; }
-		}
-
-		[DataField("Height")]
-		private int height;
+		public int Width;
 		/// <summary>Height of the mount in pixels.</summary>
-		public int Height {
-			get { return height; }
-			set { height = value; MarkDirty(); heightChanged = true; }
-		}
-		bool heightChanged;
-		public bool HeightChanged {
-			get { return heightChanged; }
-		}
+		public int Height;
 
 		///<summary></summary>
 		public MountDef Copy() {
-			MountDef m=new MountDef();
-			m.MountDefNum=MountDefNum;
-			m.Description=Description;
-			m.ItemOrder=ItemOrder;
-			m.IsRadiograph=IsRadiograph;
-			m.Width=Width;
-			m.Height=Height;
-			return m;
+			return (MountDef)this.MemberwiseClone();
 		}
 
 		

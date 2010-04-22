@@ -1124,7 +1124,7 @@ namespace OpenDental{
 						if(row.ColorText==Color.White) {
 							row.ColorText=Color.Black;
 						}
-						row.Tag=ProcListTP[i].Copy();
+						row.Tag=ProcListTP[i].Clone();
 						gridMain.Rows.Add(row);
 					}*/
 					#endregion Canadian Lab
@@ -1525,7 +1525,7 @@ namespace OpenDental{
 						continue;
 					}
 					//ProcCur=(Procedure)gridMain.Rows[gridMain.SelectedIndices[i]].Tag;
-					//ProcOld=ProcCur.Copy();
+					//ProcOld=ProcCur.Clone();
 					if(clickedRow==0){//set priority to "no priority"
 						//ProcCur.Priority=0;
 						Procedures.UpdatePriority(((Procedure)gridMain.Rows[gridMain.SelectedIndices[i]].Tag).ProcNum,0);
@@ -2209,7 +2209,7 @@ namespace OpenDental{
 			List<ClaimProc> claimProcList=ClaimProcs.RefreshForTP(PatCur.PatNum);
       for(int i=0;i<ProcListTP.Length;i++){
 				procCur=ProcListTP[i];
-				//procOld=procCur.Copy();
+				//procOld=procCur.Clone();
 				//first the fees
   
 				//check code to see if it is a medical code

@@ -34,21 +34,30 @@ namespace OpenDentBusiness {
 		}
 
 		///<Summary>Gets one InsFilingCodeSubtype from the database.</Summary>
-		public static InsFilingCodeSubtype CreateObject(long insFilingCodeSubtypeNum) {
+		public static InsFilingCodeSubtype GetOne(long insFilingCodeSubtypeNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<InsFilingCodeSubtype>(MethodBase.GetCurrentMethod(),insFilingCodeSubtypeNum);
 			}
-			return DataObjectFactory<InsFilingCodeSubtype>.CreateObject(insFilingCodeSubtypeNum);
+			return Crud.InsFilingCodeSubtypeCrud.SelectOne(insFilingCodeSubtypeNum);
 		}
 
 		///<summary></summary>
-		public static long WriteObject(InsFilingCodeSubtype insFilingCodeSubtype) {
+		public static long Insert(InsFilingCodeSubtype insFilingCodeSubtype) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				insFilingCodeSubtype.InsFilingCodeSubtypeNum=Meth.GetLong(MethodBase.GetCurrentMethod(),insFilingCodeSubtype);
 				return insFilingCodeSubtype.InsFilingCodeSubtypeNum;
 			}
-			DataObjectFactory<InsFilingCodeSubtype>.WriteObject(insFilingCodeSubtype);
+			insFilingCodeSubtype.InsFilingCodeSubtypeNum=Crud.InsFilingCodeSubtypeCrud.Insert(insFilingCodeSubtype);
 			return insFilingCodeSubtype.InsFilingCodeSubtypeNum;
+		}
+
+		///<summary></summary>
+		public static void Update(InsFilingCodeSubtype insFilingCodeSubtype) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),insFilingCodeSubtype);
+				return;
+			}
+			Crud.InsFilingCodeSubtypeCrud.Update(insFilingCodeSubtype);
 		}
 
 		///<summary>Surround with try/catch</summary>
@@ -61,7 +70,7 @@ namespace OpenDentBusiness {
 			if(Db.GetScalar(command) != "0") {
 				throw new ApplicationException(Lans.g("InsFilingCodeSubtype","Already in use by insplans."));
 			}
-			DataObjectFactory<InsFilingCodeSubtype>.DeleteObject(insFilingCodeSubtypeNum);
+			Crud.InsFilingCodeSubtypeCrud.Delete(insFilingCodeSubtypeNum);
 		}
 
 		public static List<InsFilingCodeSubtype> GetForInsFilingCode(long insFilingCodeNum) {

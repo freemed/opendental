@@ -229,7 +229,7 @@ namespace OpenDentBusiness{
 			for(int i=0;i<RecallTypeC.Listt.Count;i++){
 				triggers=RecallTriggers.GetForType(RecallTypeC.Listt[i].RecallTypeNum);
 				if(triggers.Count==0){
-					retVal.Add(RecallTypeC.Listt[i].Copy());
+					retVal.Add(RecallTypeC.Listt[i].Clone());
 				}
 			}
 			return retVal;

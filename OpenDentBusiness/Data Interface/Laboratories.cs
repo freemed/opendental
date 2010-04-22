@@ -119,7 +119,7 @@ namespace OpenDentBusiness{
 		public static Laboratory GetLaboratory(int LaboratoryNum){
 			for(int i=0;i<ListLabs.Count;i++){
 				if(ListLabs[i].LaboratoryNum==LaboratoryNum){
-					return ListLabs[i].Copy();
+					return ListLabs[i].Clone();
 				}
 			}
 			return null;

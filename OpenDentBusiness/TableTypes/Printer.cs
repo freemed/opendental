@@ -17,7 +17,7 @@ namespace OpenDentBusiness{
 		public bool DisplayPrompt;
 
 		/*//<summary>Returns a copy of the clearinghouse.</summary>
-    public ClaimForm Copy(){
+    public ClaimForm Clone(){
 			ClaimForm cf=new ClaimForm();
 			cf.ClaimFormNum=ClaimFormNum;
 			cf.Description=Description;

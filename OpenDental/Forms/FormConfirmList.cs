@@ -499,7 +499,7 @@ namespace OpenDental{
 			}
 			for(int i=0;i<grid.SelectedIndices.Length;i++){
 				apt=Appointments.GetOneApt(PIn.Long(table.Rows[grid.SelectedIndices[i]]["AptNum"].ToString()));
-				Appointment aptOld=apt.Copy();
+				Appointment aptOld=apt.Clone();
 				int selectedI=comboStatus.SelectedIndex;
 				apt.Confirmed=DefC.Short[(int)DefCat.ApptConfirmed][selectedI].DefNum;
 				try{

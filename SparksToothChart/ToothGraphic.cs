@@ -101,7 +101,7 @@ namespace SparksToothChart {
 			return tg;
 		}
 
-		///<summary>Used in Copy()</summary>
+		///<summary>Used in Clone()</summary>
 		internal ToothGraphic() {
 			
 		}

@@ -21,7 +21,7 @@ namespace OpenDentBusiness{
 		//public bool IsHidden;//do this later
 		
 		///<summary></summary>
-		public Instructor Copy(){
+		public Instructor Clone(){
 			Instructor i=new Instructor();
 			i.InstructorNum=InstructorNum;
 			i.LName=LName;

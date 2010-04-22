@@ -402,7 +402,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please select a terminal first.");
 				return;
 			}
-			TerminalActive terminal=TerminalList[gridMain.GetSelectedIndex()].Copy();
+			TerminalActive terminal=TerminalList[gridMain.GetSelectedIndex()].Clone();
 			if(terminal.TerminalStatus==TerminalStatusEnum.Standby) {
 				//MsgBox.Show(this,"Please load a patient onto this terminal first.");
 				return;
@@ -421,7 +421,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please select a terminal first.");
 				return;
 			}
-			TerminalActive terminal=TerminalList[gridMain.GetSelectedIndex()].Copy();
+			TerminalActive terminal=TerminalList[gridMain.GetSelectedIndex()].Clone();
 			if(terminal.TerminalStatus==TerminalStatusEnum.Standby) {
 				MsgBox.Show(this,"Please load a patient onto this terminal first.");
 				return;
@@ -439,7 +439,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please select a terminal first.");
 				return;
 			}
-			TerminalActive terminal=TerminalList[gridMain.GetSelectedIndex()].Copy();
+			TerminalActive terminal=TerminalList[gridMain.GetSelectedIndex()].Clone();
 			if(terminal.TerminalStatus==TerminalStatusEnum.Standby) {
 				MsgBox.Show(this,"Please load a patient onto this terminal first.");
 				return;
@@ -468,7 +468,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please select a terminal first.");
 				return;
 			}
-			TerminalActive terminal=TerminalList[gridMain.GetSelectedIndex()].Copy();
+			TerminalActive terminal=TerminalList[gridMain.GetSelectedIndex()].Clone();
 			if(terminal.TerminalStatus==TerminalStatusEnum.Standby) {
 				MsgBox.Show(this,"Please load a patient onto this terminal first.");
 				return;

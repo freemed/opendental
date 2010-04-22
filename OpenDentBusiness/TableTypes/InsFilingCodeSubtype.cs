@@ -4,46 +4,18 @@ using OpenDentBusiness.DataAccess;
 
 namespace OpenDentBusiness{
 	///<summary>Stores the list of insurance filing code subtypes.</summary>
-	[DataObject("insfilingcodesubtype")]
-	public class InsFilingCodeSubtype : DataObjectBase{
-		[DataField("InsFilingCodeSubtypeNum",PrimaryKey=true,AutoNumber=true)]
-		private long insFilingCodeSubtypeNum;
-		private bool insFilingCodeSubtypeNumChanged;
+	[Serializable()]
+	public class InsFilingCodeSubtype : TableBase{
 		///<summary>Primary key.</summary>
-		public long InsFilingCodeSubtypeNum{
-			get{return insFilingCodeSubtypeNum;}
-			set{if(insFilingCodeSubtypeNum!=value){insFilingCodeSubtypeNum=value;MarkDirty();insFilingCodeSubtypeNumChanged=true;}}
-		}
-		public bool InsFilingCodeSubtypeNumChanged{
-			get{return insFilingCodeSubtypeNumChanged;}
-		}
-
-		[DataField("InsFilingCodeNum")]
-		private long insFilingCodeNum;
-		private bool insFilingCodeNumChanged;
+		[CrudColumn(IsPriKey=true)]
+		public long InsFilingCodeSubtypeNum;
 		///<summary>FK to insfilingcode.insfilingcodenum</summary>
-		public long InsFilingCodeNum{
-			get{return insFilingCodeNum;}
-			set{if(insFilingCodeNum!=value){insFilingCodeNum=value;MarkDirty();insFilingCodeNumChanged=true;}}
-		}
-		public bool InsFilingCodeNumChanged{
-			get{return insFilingCodeNumChanged;}
-		}
-
-		[DataField("Descript")]
-		private string descript;
-		private bool descriptChanged;
+		public long InsFilingCodeNum;
 		///<summary>The description of the insurance filing code subtype.</summary>
-		public string Descript{
-			get{return descript;}
-			set{if(descript!=value){descript=value;MarkDirty();descriptChanged=true;}}
-		}
-		public bool DescriptChanged{
-			get{return descriptChanged;}
-		}
+		public string Descript;
 		
-		public InsFilingCodeSubtype Copy(){
-			return (InsFilingCodeSubtype)Clone();
+		public InsFilingCodeSubtype Clone(){
+			return (InsFilingCodeSubtype)this.MemberwiseClone();
 		}	
 	}
 }

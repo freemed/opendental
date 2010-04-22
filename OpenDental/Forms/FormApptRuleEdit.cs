@@ -33,7 +33,7 @@ namespace OpenDental{
 			//
 			// Required for Windows Form Designer support
 			//
-			ApptRuleCur=apptRuleCur.Copy();
+			ApptRuleCur=apptRuleCur.Clone();
 			InitializeComponent();
 			Lan.F(this);
 		}

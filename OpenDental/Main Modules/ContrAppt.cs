@@ -2055,7 +2055,7 @@ namespace OpenDental{
 		void menuItemProv_Click(object sender,EventArgs e) {
 			//throw new NotImplementedException();
 			Appointment apt=Appointments.GetOneApt(PIn.Long(pinBoard.SelectedAppt.DataRoww["AptNum"].ToString()));
-			Appointment oldApt=apt.Copy();
+			Appointment oldApt=apt.Clone();
 			if(apt==null) {
 				MessageBox.Show("Appointment not found.");
 				return;
@@ -2157,7 +2157,7 @@ namespace OpenDental{
 			//We no longer ask user this question.  It just slows things down: "Move Appointment?"
 			//convert loc to new time
 			Appointment aptCur=Appointments.GetOneApt(PIn.Long(pinBoard.SelectedAppt.DataRoww["AptNum"].ToString()));
-			Appointment aptOld=aptCur.Copy();
+			Appointment aptOld=aptCur.Clone();
 			RefreshModuleDataPatient(PIn.Long(pinBoard.SelectedAppt.DataRoww["PatNum"].ToString()));//redundant?
 			//Patient pat=Patients.GetPat(PIn.PInt(pinBoard.SelectedAppt.DataRoww["PatNum"].ToString()));
 			if(aptCur.IsNewPatient && AppointmentL.DateSelected!=aptCur.AptDateTime){
@@ -2562,7 +2562,7 @@ namespace OpenDental{
 					if(clickedOnBlock){
 						menuBlockout.MenuItems[0].Enabled=true;//Edit
 						menuBlockout.MenuItems[1].Enabled=true;//Cut
-						menuBlockout.MenuItems[2].Enabled=true;//Copy
+						menuBlockout.MenuItems[2].Enabled=true;//Clone
 						menuBlockout.MenuItems[3].Enabled=false;//paste. Can't paste on top of an existing blockout
 						menuBlockout.MenuItems[4].Enabled=true;//Delete
 					}
@@ -2763,7 +2763,7 @@ namespace OpenDental{
 			}
 			//moving to a new location-----------------------------------------------------------------------------------------------
 			Appointment apt=Appointments.GetOneApt(ContrApptSingle.SelectedAptNum);
-			aptOld=apt.Copy();
+			aptOld=apt.Clone();
 			int tHr=ContrApptSheet2.ConvertToHour
 				(TempApptSingle.Location.Y-ContrApptSheet2.Location.Y-panelSheet.Location.Y);
 			int tMin=ContrApptSheet2.ConvertToMin
@@ -3146,7 +3146,7 @@ namespace OpenDental{
 				if(FormAE.DialogResult==DialogResult.OK){
 					Appointment apt=Appointments.GetOneApt(ContrApptSingle.ClickedAptNum);
 					if(apt!=null && DoesOverlap(apt)){
-						Appointment aptOld=apt.Copy();
+						Appointment aptOld=apt.Clone();
 						MsgBox.Show(this,"Appointment is too long and would overlap another appointment.  Automatically shortened to fit.");
 						while(DoesOverlap(apt)){
 							apt.Pattern=apt.Pattern.Substring(0,apt.Pattern.Length-1);

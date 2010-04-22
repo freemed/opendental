@@ -36,7 +36,7 @@ namespace OpenDental{
 			InitializeComponent();
 			Lan.F(this);
 			//PatNum=patNum;
-			//FormPatCur=formPatCur.Copy();
+			//FormPatCur=formPatCur.Clone();
 			multInput.IsQuestionnaire=true;
 		}
 

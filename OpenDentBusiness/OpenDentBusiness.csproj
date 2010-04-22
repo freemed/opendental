@@ -125,6 +125,11 @@
     <Compile Include="Crud\FeeSchedCrud.cs" />
     <Compile Include="Crud\HL7MsgCrud.cs" />
     <Compile Include="Crud\InsFilingCodeCrud.cs" />
+    <Compile Include="Crud\InsFilingCodeSubtypeCrud.cs" />
+    <Compile Include="Crud\MountCrud.cs" />
+    <Compile Include="Crud\MountDefCrud.cs" />
+    <Compile Include="Crud\MountItemCrud.cs" />
+    <Compile Include="Crud\MountItemDefCrud.cs" />
     <Compile Include="Data Interface\Automations.cs" />
     <Compile Include="Data Interface\Equipments.cs" />
     <Compile Include="Data Interface\ReplicationServers.cs" />

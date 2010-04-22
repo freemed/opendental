@@ -1147,7 +1147,7 @@ namespace OpenDental{
 			}
 			PatCur.PatStatus=PatientStatus.Patient;
 			Patients.Insert(PatCur,false);
-			Patient PatOld=PatCur.Copy();
+			Patient PatOld=PatCur.Clone();
 			PatCur.Guarantor=PatCur.PatNum;
 			Patients.Update(PatCur,PatOld);
 			Family FamCur=Patients.GetFamily(PatCur.PatNum);

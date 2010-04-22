@@ -62,7 +62,7 @@ namespace OpenDentBusiness{
 		public long InsPlan2;
 
 		///<summary>Returns a copy of the appointment.</summary>
-    public Appointment Copy(){
+    public Appointment Clone(){
 			return (Appointment)this.MemberwiseClone();
 		}
 

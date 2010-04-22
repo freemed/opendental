@@ -722,7 +722,7 @@ namespace OpenDental{
 					FormPayPlanSelect FormPPS=new FormPayPlanSelect(payPlanList,chargeList);
 					FormPPS.ShowDialog();
 					if(FormPPS.DialogResult==DialogResult.OK){
-						//return PayPlanList[FormPPS.IndexSelected].Copy();
+						//return PayPlanList[FormPPS.IndexSelected].Clone();
 						AddOneSplit();//the amount and date will be updated upon closing
 						SplitList[SplitList.Count-1].PayPlanNum=payPlanList[FormPPS.IndexSelected].PayPlanNum;
 					}

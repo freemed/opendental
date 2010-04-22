@@ -994,7 +994,7 @@ namespace OpenDentBusiness{
 		private static void To3_4_0() {
 			if(FromVersion < new Version("3.4.0.0")) {
 				ExecuteFile("convert_3_4_0.txt");//Might throw an exception which we handle.
-				//----------------Copy payment dates into paysplits--------------------------------------
+				//----------------Clone payment dates into paysplits--------------------------------------
 				string command="SELECT paysplit.SplitNum,payment.PayDate FROM payment,paysplit "
 					+"WHERE payment.PayNum=paysplit.PayNum";
 				DataTable table=Db.GetTable(command);
