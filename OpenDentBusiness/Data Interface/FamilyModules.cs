@@ -30,7 +30,7 @@ namespace OpenDentBusiness {
 				}
 			}
 			Family fam=new Family();
-			fam.ListPats=Patients.TableToList(table).ToArray();
+			fam.ListPats=Crud.PatientCrud.TableToList(table).ToArray();
 			ds.Tables.Add(table);
 			ds.Tables.Add(GetPatPlanList(patNum));
 			ds.Tables.Add(GetPlanList(fam));

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using OpenDentBusiness;
+using OpenDentBusiness.DataAccess;
 
 namespace Crud {
 	public class CrudGenHelper {
@@ -39,12 +41,29 @@ namespace Crud {
 			return ((CrudTableAttribute)attributes[0]).IsDeleteForbidden;
 		}
 
+		///<summary>This also excludes fields that are not in the database, like patient.Age.</summary>
 		public static List<FieldInfo> GetFieldsExceptPriKey(FieldInfo[] fields,FieldInfo priKey) {
 			List<FieldInfo> retVal=new List<FieldInfo>();
 			for(int i=0;i<fields.Length;i++) {
-				if(fields[i].Name!=priKey.Name) {
-					retVal.Add(fields[i]);
+				if(fields[i].Name==priKey.Name) {
+					continue;
 				}
+				if(IsNotDbColumn(fields[i])){
+					continue;
+				}
+				retVal.Add(fields[i]);
+			}
+			return retVal;
+		}
+
+		///<summary>This only excludes fields that are not in the database, like patient.Age.</summary>
+		public static List<FieldInfo> GetFieldsExceptNotDb(FieldInfo[] fields) {
+			List<FieldInfo> retVal=new List<FieldInfo>();
+			for(int i=0;i<fields.Length;i++) {
+				if(IsNotDbColumn(fields[i])){
+					continue;
+				}
+				retVal.Add(fields[i]);
 			}
 			return retVal;
 		}
@@ -56,6 +75,110 @@ namespace Crud {
 			}
 			return ((CrudColumnAttribute)attributes[0]).SpecialType;
 		}
+
+		///<summary>Normally false</summary>
+		public static bool IsNotDbColumn(FieldInfo field) {
+			object[] attributes = field.GetCustomAttributes(typeof(CrudColumnAttribute),true);
+			if(attributes.Length==0) {
+				return false;
+			}
+			return ((CrudColumnAttribute)attributes[0]).IsNotDbColumn;
+		}
+
+		public static void ConnectToDatabase(string dbName){
+			OpenDentBusiness.DataConnection dcon=new OpenDentBusiness.DataConnection();
+			DataSettings.CreateConnectionString("localhost",dbName,"root","");
+			dcon.SetDb("localhost",dbName,"root","","","",DatabaseType.MySql);
+			RemotingClient.RemotingRole=RemotingRole.ClientDirect;
+		}
+
+		///<summary>Makes sure the tablename is valid.  Goes through each column and makes sure that the column is present and that the type in the database is a supported type for this C# data type.  Throws exception if it fails.</summary>
+		public static void ValidateTypes(Type typeClass,string dbName){
+			string tablename=GetTableName(typeClass);
+			string command="SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE table_schema = '"+dbName+"' AND table_name = '"+tablename+"'";
+			if(DataCore.GetScalar(command)!="1"){
+				throw new Exception(tablename+" is not a valid table");
+			}
+			command="SELECT COLUMN_NAME, DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS "
+				+"WHERE table_name = '"+tablename+"' AND table_schema = '"+dbName+"'";// AND column_name = '"+fields[i].Name+"'";
+			//for testing: SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '' AND table_schema = 'development71' AND column_name = ''
+			DataTable table=DataCore.GetTable(command);
+			FieldInfo[] fields=typeClass.GetFields();
+			for(int i=0;i<fields.Length;i++){
+				if(IsNotDbColumn(fields[i])){
+					continue;
+				}
+				ValidateColumn(dbName,tablename,fields[i],table);
+			}
+		}
+
+		public static void ValidateColumn(string dbName,string tablename,FieldInfo field,DataTable table){
+			//make sure the column exists
+			string dataTypeInDb="";
+			for(int i=0;i<table.Rows.Count;i++){
+				if(table.Rows[i]["COLUMN_NAME"].ToString().ToLower()==field.Name.ToLower()){
+					dataTypeInDb=table.Rows[i]["DATA_TYPE"].ToString();
+				}
+			}
+			if(dataTypeInDb==""){
+				throw new Exception(tablename+"."+field.Name+" column not found.");
+			}
+			EnumCrudSpecialColType specialColType=GetSpecialType(field);
+			string dataTypeExpected="";
+			string dataTypeExpected2="";//if an alternate datatype is allowed
+			string dataTypeExpected3="";
+			if(specialColType==EnumCrudSpecialColType.TimeStamp) {
+				dataTypeExpected="timestamp";
+			}
+			else if(specialColType==EnumCrudSpecialColType.DateEntry) {
+				dataTypeExpected="date";
+			}
+			else if(field.FieldType.IsEnum) {
+				dataTypeExpected="tinyint";
+				dataTypeExpected2="int";
+			}
+			else switch(field.FieldType.Name) {
+				default:
+					throw new ApplicationException("Type not yet supported: "+field.FieldType.Name);
+				case "Boolean":
+					dataTypeExpected="tinyint";
+					break;
+				case "Byte":
+					dataTypeExpected="tinyint";
+					break;
+				case "Color":
+					dataTypeExpected="int";
+					break;
+				case "DateTime"://Need to handle DateT fields here better.
+					dataTypeExpected="date";
+					break;
+				case "Double":
+					dataTypeExpected="double";
+					break;
+				case "Int64":
+					dataTypeExpected="bigint";
+					break;
+				case "Int32":
+					dataTypeExpected="int";
+					dataTypeExpected2="smallint";//ok as long as the coding is careful.  Less than ideal.
+					break;
+				case "String":
+					dataTypeExpected="varchar";
+					dataTypeExpected2="text";
+					dataTypeExpected3="char";
+					break;
+				case "TimeSpan":
+					dataTypeExpected="time";
+					break;
+			}
+			if(dataTypeInDb!=dataTypeExpected && dataTypeInDb!=dataTypeExpected2 && dataTypeInDb!=dataTypeExpected3){
+				throw new Exception(tablename+"."+field.Name+" type mismatch for type "+field.FieldType.Name+".  Found "+dataTypeInDb+", but expecting "+dataTypeExpected);
+			}
+		}
+
+
+
+
 
 	}
 }

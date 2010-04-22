@@ -43,60 +43,100 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Converts a DataTable to a list of objects.</summary>
 		internal static List<MountItem> TableToList(DataTable table){
 			List<MountItem> retVal=new List<MountItem>();
-			MountItem obj;
+			MountItem mountItem;
 			for(int i=0;i<table.Rows.Count;i++) {
-				obj=new MountItem();
-				obj.MountItemNum= PIn.Long  (table.Rows[i]["MountItemNum"].ToString());
-				obj.MountNum    = PIn.Long  (table.Rows[i]["MountNum"].ToString());
-				obj.Xpos        = PIn.Int   (table.Rows[i]["Xpos"].ToString());
-				obj.Ypos        = PIn.Int   (table.Rows[i]["Ypos"].ToString());
-				obj.OrdinalPos  = PIn.Int   (table.Rows[i]["OrdinalPos"].ToString());
-				obj.Width       = PIn.Int   (table.Rows[i]["Width"].ToString());
-				obj.Height      = PIn.Int   (table.Rows[i]["Height"].ToString());
-				retVal.Add(obj);
+				mountItem=new MountItem();
+				mountItem.MountItemNum= PIn.Long  (table.Rows[i]["MountItemNum"].ToString());
+				mountItem.MountNum    = PIn.Long  (table.Rows[i]["MountNum"].ToString());
+				mountItem.Xpos        = PIn.Int   (table.Rows[i]["Xpos"].ToString());
+				mountItem.Ypos        = PIn.Int   (table.Rows[i]["Ypos"].ToString());
+				mountItem.OrdinalPos  = PIn.Int   (table.Rows[i]["OrdinalPos"].ToString());
+				mountItem.Width       = PIn.Int   (table.Rows[i]["Width"].ToString());
+				mountItem.Height      = PIn.Int   (table.Rows[i]["Height"].ToString());
+				retVal.Add(mountItem);
 			}
 			return retVal;
 		}
 
 		///<summary>Inserts one MountItem into the database.  Returns the new priKey.</summary>
-		internal static long Insert(MountItem obj){
-			if(PrefC.RandomKeys) {
-				obj.MountItemNum=ReplicationServers.GetKey("mountitem","MountItemNum");
+		internal static long Insert(MountItem mountItem){
+			return Insert(mountItem,false);
+		}
+
+		///<summary>Inserts one MountItem into the database.  Provides option to use the existing priKey.</summary>
+		internal static long Insert(MountItem mountItem,bool useExistingPK){
+			if(!useExistingPK && PrefC.RandomKeys) {
+				mountItem.MountItemNum=ReplicationServers.GetKey("mountitem","MountItemNum");
 			}
 			string command="INSERT INTO mountitem (";
-			if(PrefC.RandomKeys) {
+			if(useExistingPK || PrefC.RandomKeys) {
 				command+="MountItemNum,";
 			}
 			command+="MountNum,Xpos,Ypos,OrdinalPos,Width,Height) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+=POut.Long(obj.MountItemNum)+",";
+			if(useExistingPK || PrefC.RandomKeys) {
+				command+=POut.Long(mountItem.MountItemNum)+",";
 			}
 			command+=
-				     POut.Long  (obj.MountNum)+","
-				+    POut.Int   (obj.Xpos)+","
-				+    POut.Int   (obj.Ypos)+","
-				+    POut.Int   (obj.OrdinalPos)+","
-				+    POut.Int   (obj.Width)+","
-				+    POut.Int   (obj.Height)+")";
-			if(PrefC.RandomKeys) {
+				     POut.Long  (mountItem.MountNum)+","
+				+    POut.Int   (mountItem.Xpos)+","
+				+    POut.Int   (mountItem.Ypos)+","
+				+    POut.Int   (mountItem.OrdinalPos)+","
+				+    POut.Int   (mountItem.Width)+","
+				+    POut.Int   (mountItem.Height)+")";
+			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {
-				obj.MountItemNum=Db.NonQ(command,true);
+				mountItem.MountItemNum=Db.NonQ(command,true);
 			}
-			return obj.MountItemNum;
+			return mountItem.MountItemNum;
 		}
 
 		///<summary>Updates one MountItem in the database.</summary>
-		internal static void Update(MountItem obj){
+		internal static void Update(MountItem mountItem){
 			string command="UPDATE mountitem SET "
-				+"MountNum    =  "+POut.Long  (obj.MountNum)+", "
-				+"Xpos        =  "+POut.Int   (obj.Xpos)+", "
-				+"Ypos        =  "+POut.Int   (obj.Ypos)+", "
-				+"OrdinalPos  =  "+POut.Int   (obj.OrdinalPos)+", "
-				+"Width       =  "+POut.Int   (obj.Width)+", "
-				+"Height      =  "+POut.Int   (obj.Height)+" "
-				+"WHERE MountItemNum = "+POut.Long(obj.MountItemNum);
+				+"MountNum    =  "+POut.Long  (mountItem.MountNum)+", "
+				+"Xpos        =  "+POut.Int   (mountItem.Xpos)+", "
+				+"Ypos        =  "+POut.Int   (mountItem.Ypos)+", "
+				+"OrdinalPos  =  "+POut.Int   (mountItem.OrdinalPos)+", "
+				+"Width       =  "+POut.Int   (mountItem.Width)+", "
+				+"Height      =  "+POut.Int   (mountItem.Height)+" "
+				+"WHERE MountItemNum = "+POut.Long(mountItem.MountItemNum);
+			Db.NonQ(command);
+		}
+
+		///<summary>Updates one MountItem in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
+		internal static void Update(MountItem mountItem,MountItem oldMountItem){
+			string command="";
+			if(mountItem.MountNum != oldMountItem.MountNum) {
+				if(command!=""){ command+=",";}
+				command+="MountNum = "+POut.Long(mountItem.MountNum)+"";
+			}
+			if(mountItem.Xpos != oldMountItem.Xpos) {
+				if(command!=""){ command+=",";}
+				command+="Xpos = "+POut.Int(mountItem.Xpos)+"";
+			}
+			if(mountItem.Ypos != oldMountItem.Ypos) {
+				if(command!=""){ command+=",";}
+				command+="Ypos = "+POut.Int(mountItem.Ypos)+"";
+			}
+			if(mountItem.OrdinalPos != oldMountItem.OrdinalPos) {
+				if(command!=""){ command+=",";}
+				command+="OrdinalPos = "+POut.Int(mountItem.OrdinalPos)+"";
+			}
+			if(mountItem.Width != oldMountItem.Width) {
+				if(command!=""){ command+=",";}
+				command+="Width = "+POut.Int(mountItem.Width)+"";
+			}
+			if(mountItem.Height != oldMountItem.Height) {
+				if(command!=""){ command+=",";}
+				command+="Height = "+POut.Int(mountItem.Height)+"";
+			}
+			if(command==""){
+				return;
+			}
+			command="UPDATE mountitem SET "+command
+				+" WHERE MountItemNum = "+POut.Long(mountItem.MountItemNum);
 			Db.NonQ(command);
 		}
 

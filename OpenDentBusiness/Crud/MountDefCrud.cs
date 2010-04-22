@@ -43,57 +43,93 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Converts a DataTable to a list of objects.</summary>
 		internal static List<MountDef> TableToList(DataTable table){
 			List<MountDef> retVal=new List<MountDef>();
-			MountDef obj;
+			MountDef mountDef;
 			for(int i=0;i<table.Rows.Count;i++) {
-				obj=new MountDef();
-				obj.MountDefNum = PIn.Long  (table.Rows[i]["MountDefNum"].ToString());
-				obj.Description = PIn.String(table.Rows[i]["Description"].ToString());
-				obj.ItemOrder   = PIn.Int   (table.Rows[i]["ItemOrder"].ToString());
-				obj.IsRadiograph= PIn.Bool  (table.Rows[i]["IsRadiograph"].ToString());
-				obj.Width       = PIn.Int   (table.Rows[i]["Width"].ToString());
-				obj.Height      = PIn.Int   (table.Rows[i]["Height"].ToString());
-				retVal.Add(obj);
+				mountDef=new MountDef();
+				mountDef.MountDefNum = PIn.Long  (table.Rows[i]["MountDefNum"].ToString());
+				mountDef.Description = PIn.String(table.Rows[i]["Description"].ToString());
+				mountDef.ItemOrder   = PIn.Int   (table.Rows[i]["ItemOrder"].ToString());
+				mountDef.IsRadiograph= PIn.Bool  (table.Rows[i]["IsRadiograph"].ToString());
+				mountDef.Width       = PIn.Int   (table.Rows[i]["Width"].ToString());
+				mountDef.Height      = PIn.Int   (table.Rows[i]["Height"].ToString());
+				retVal.Add(mountDef);
 			}
 			return retVal;
 		}
 
 		///<summary>Inserts one MountDef into the database.  Returns the new priKey.</summary>
-		internal static long Insert(MountDef obj){
-			if(PrefC.RandomKeys) {
-				obj.MountDefNum=ReplicationServers.GetKey("mountdef","MountDefNum");
+		internal static long Insert(MountDef mountDef){
+			return Insert(mountDef,false);
+		}
+
+		///<summary>Inserts one MountDef into the database.  Provides option to use the existing priKey.</summary>
+		internal static long Insert(MountDef mountDef,bool useExistingPK){
+			if(!useExistingPK && PrefC.RandomKeys) {
+				mountDef.MountDefNum=ReplicationServers.GetKey("mountdef","MountDefNum");
 			}
 			string command="INSERT INTO mountdef (";
-			if(PrefC.RandomKeys) {
+			if(useExistingPK || PrefC.RandomKeys) {
 				command+="MountDefNum,";
 			}
 			command+="Description,ItemOrder,IsRadiograph,Width,Height) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+=POut.Long(obj.MountDefNum)+",";
+			if(useExistingPK || PrefC.RandomKeys) {
+				command+=POut.Long(mountDef.MountDefNum)+",";
 			}
 			command+=
-				 "'"+POut.String(obj.Description)+"',"
-				+    POut.Int   (obj.ItemOrder)+","
-				+    POut.Bool  (obj.IsRadiograph)+","
-				+    POut.Int   (obj.Width)+","
-				+    POut.Int   (obj.Height)+")";
-			if(PrefC.RandomKeys) {
+				 "'"+POut.String(mountDef.Description)+"',"
+				+    POut.Int   (mountDef.ItemOrder)+","
+				+    POut.Bool  (mountDef.IsRadiograph)+","
+				+    POut.Int   (mountDef.Width)+","
+				+    POut.Int   (mountDef.Height)+")";
+			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {
-				obj.MountDefNum=Db.NonQ(command,true);
+				mountDef.MountDefNum=Db.NonQ(command,true);
 			}
-			return obj.MountDefNum;
+			return mountDef.MountDefNum;
 		}
 
 		///<summary>Updates one MountDef in the database.</summary>
-		internal static void Update(MountDef obj){
+		internal static void Update(MountDef mountDef){
 			string command="UPDATE mountdef SET "
-				+"Description = '"+POut.String(obj.Description)+"', "
-				+"ItemOrder   =  "+POut.Int   (obj.ItemOrder)+", "
-				+"IsRadiograph=  "+POut.Bool  (obj.IsRadiograph)+", "
-				+"Width       =  "+POut.Int   (obj.Width)+", "
-				+"Height      =  "+POut.Int   (obj.Height)+" "
-				+"WHERE MountDefNum = "+POut.Long(obj.MountDefNum);
+				+"Description = '"+POut.String(mountDef.Description)+"', "
+				+"ItemOrder   =  "+POut.Int   (mountDef.ItemOrder)+", "
+				+"IsRadiograph=  "+POut.Bool  (mountDef.IsRadiograph)+", "
+				+"Width       =  "+POut.Int   (mountDef.Width)+", "
+				+"Height      =  "+POut.Int   (mountDef.Height)+" "
+				+"WHERE MountDefNum = "+POut.Long(mountDef.MountDefNum);
+			Db.NonQ(command);
+		}
+
+		///<summary>Updates one MountDef in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
+		internal static void Update(MountDef mountDef,MountDef oldMountDef){
+			string command="";
+			if(mountDef.Description != oldMountDef.Description) {
+				if(command!=""){ command+=",";}
+				command+="Description = '"+POut.String(mountDef.Description)+"'";
+			}
+			if(mountDef.ItemOrder != oldMountDef.ItemOrder) {
+				if(command!=""){ command+=",";}
+				command+="ItemOrder = "+POut.Int(mountDef.ItemOrder)+"";
+			}
+			if(mountDef.IsRadiograph != oldMountDef.IsRadiograph) {
+				if(command!=""){ command+=",";}
+				command+="IsRadiograph = "+POut.Bool(mountDef.IsRadiograph)+"";
+			}
+			if(mountDef.Width != oldMountDef.Width) {
+				if(command!=""){ command+=",";}
+				command+="Width = "+POut.Int(mountDef.Width)+"";
+			}
+			if(mountDef.Height != oldMountDef.Height) {
+				if(command!=""){ command+=",";}
+				command+="Height = "+POut.Int(mountDef.Height)+"";
+			}
+			if(command==""){
+				return;
+			}
+			command="UPDATE mountdef SET "+command
+				+" WHERE MountDefNum = "+POut.Long(mountDef.MountDefNum);
 			Db.NonQ(command);
 		}
 

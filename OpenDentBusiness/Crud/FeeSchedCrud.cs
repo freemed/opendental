@@ -43,54 +43,86 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Converts a DataTable to a list of objects.</summary>
 		internal static List<FeeSched> TableToList(DataTable table){
 			List<FeeSched> retVal=new List<FeeSched>();
-			FeeSched obj;
+			FeeSched feeSched;
 			for(int i=0;i<table.Rows.Count;i++) {
-				obj=new FeeSched();
-				obj.FeeSchedNum = PIn.Long  (table.Rows[i]["FeeSchedNum"].ToString());
-				obj.Description = PIn.String(table.Rows[i]["Description"].ToString());
-				obj.FeeSchedType= (FeeScheduleType)PIn.Int(table.Rows[i]["FeeSchedType"].ToString());
-				obj.ItemOrder   = PIn.Int   (table.Rows[i]["ItemOrder"].ToString());
-				obj.IsHidden    = PIn.Bool  (table.Rows[i]["IsHidden"].ToString());
-				retVal.Add(obj);
+				feeSched=new FeeSched();
+				feeSched.FeeSchedNum = PIn.Long  (table.Rows[i]["FeeSchedNum"].ToString());
+				feeSched.Description = PIn.String(table.Rows[i]["Description"].ToString());
+				feeSched.FeeSchedType= (FeeScheduleType)PIn.Int(table.Rows[i]["FeeSchedType"].ToString());
+				feeSched.ItemOrder   = PIn.Int   (table.Rows[i]["ItemOrder"].ToString());
+				feeSched.IsHidden    = PIn.Bool  (table.Rows[i]["IsHidden"].ToString());
+				retVal.Add(feeSched);
 			}
 			return retVal;
 		}
 
 		///<summary>Inserts one FeeSched into the database.  Returns the new priKey.</summary>
-		internal static long Insert(FeeSched obj){
-			if(PrefC.RandomKeys) {
-				obj.FeeSchedNum=ReplicationServers.GetKey("feesched","FeeSchedNum");
+		internal static long Insert(FeeSched feeSched){
+			return Insert(feeSched,false);
+		}
+
+		///<summary>Inserts one FeeSched into the database.  Provides option to use the existing priKey.</summary>
+		internal static long Insert(FeeSched feeSched,bool useExistingPK){
+			if(!useExistingPK && PrefC.RandomKeys) {
+				feeSched.FeeSchedNum=ReplicationServers.GetKey("feesched","FeeSchedNum");
 			}
 			string command="INSERT INTO feesched (";
-			if(PrefC.RandomKeys) {
+			if(useExistingPK || PrefC.RandomKeys) {
 				command+="FeeSchedNum,";
 			}
 			command+="Description,FeeSchedType,ItemOrder,IsHidden) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+=POut.Long(obj.FeeSchedNum)+",";
+			if(useExistingPK || PrefC.RandomKeys) {
+				command+=POut.Long(feeSched.FeeSchedNum)+",";
 			}
 			command+=
-				 "'"+POut.String(obj.Description)+"',"
-				+    POut.Int   ((int)obj.FeeSchedType)+","
-				+    POut.Int   (obj.ItemOrder)+","
-				+    POut.Bool  (obj.IsHidden)+")";
-			if(PrefC.RandomKeys) {
+				 "'"+POut.String(feeSched.Description)+"',"
+				+    POut.Int   ((int)feeSched.FeeSchedType)+","
+				+    POut.Int   (feeSched.ItemOrder)+","
+				+    POut.Bool  (feeSched.IsHidden)+")";
+			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {
-				obj.FeeSchedNum=Db.NonQ(command,true);
+				feeSched.FeeSchedNum=Db.NonQ(command,true);
 			}
-			return obj.FeeSchedNum;
+			return feeSched.FeeSchedNum;
 		}
 
 		///<summary>Updates one FeeSched in the database.</summary>
-		internal static void Update(FeeSched obj){
+		internal static void Update(FeeSched feeSched){
 			string command="UPDATE feesched SET "
-				+"Description = '"+POut.String(obj.Description)+"', "
-				+"FeeSchedType=  "+POut.Int   ((int)obj.FeeSchedType)+", "
-				+"ItemOrder   =  "+POut.Int   (obj.ItemOrder)+", "
-				+"IsHidden    =  "+POut.Bool  (obj.IsHidden)+" "
-				+"WHERE FeeSchedNum = "+POut.Long(obj.FeeSchedNum);
+				+"Description = '"+POut.String(feeSched.Description)+"', "
+				+"FeeSchedType=  "+POut.Int   ((int)feeSched.FeeSchedType)+", "
+				+"ItemOrder   =  "+POut.Int   (feeSched.ItemOrder)+", "
+				+"IsHidden    =  "+POut.Bool  (feeSched.IsHidden)+" "
+				+"WHERE FeeSchedNum = "+POut.Long(feeSched.FeeSchedNum);
+			Db.NonQ(command);
+		}
+
+		///<summary>Updates one FeeSched in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
+		internal static void Update(FeeSched feeSched,FeeSched oldFeeSched){
+			string command="";
+			if(feeSched.Description != oldFeeSched.Description) {
+				if(command!=""){ command+=",";}
+				command+="Description = '"+POut.String(feeSched.Description)+"'";
+			}
+			if(feeSched.FeeSchedType != oldFeeSched.FeeSchedType) {
+				if(command!=""){ command+=",";}
+				command+="FeeSchedType = "+POut.Int   ((int)feeSched.FeeSchedType)+"";
+			}
+			if(feeSched.ItemOrder != oldFeeSched.ItemOrder) {
+				if(command!=""){ command+=",";}
+				command+="ItemOrder = "+POut.Int(feeSched.ItemOrder)+"";
+			}
+			if(feeSched.IsHidden != oldFeeSched.IsHidden) {
+				if(command!=""){ command+=",";}
+				command+="IsHidden = "+POut.Bool(feeSched.IsHidden)+"";
+			}
+			if(command==""){
+				return;
+			}
+			command="UPDATE feesched SET "+command
+				+" WHERE FeeSchedNum = "+POut.Long(feeSched.FeeSchedNum);
 			Db.NonQ(command);
 		}
 

@@ -43,51 +43,79 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Converts a DataTable to a list of objects.</summary>
 		internal static List<HL7Msg> TableToList(DataTable table){
 			List<HL7Msg> retVal=new List<HL7Msg>();
-			HL7Msg obj;
+			HL7Msg hL7Msg;
 			for(int i=0;i<table.Rows.Count;i++) {
-				obj=new HL7Msg();
-				obj.HL7MsgNum= PIn.Long  (table.Rows[i]["HL7MsgNum"].ToString());
-				obj.HL7Status= (HL7MessageStatus)PIn.Int(table.Rows[i]["HL7Status"].ToString());
-				obj.MsgText  = PIn.String(table.Rows[i]["MsgText"].ToString());
-				obj.AptNum   = PIn.Long  (table.Rows[i]["AptNum"].ToString());
-				retVal.Add(obj);
+				hL7Msg=new HL7Msg();
+				hL7Msg.HL7MsgNum= PIn.Long  (table.Rows[i]["HL7MsgNum"].ToString());
+				hL7Msg.HL7Status= (HL7MessageStatus)PIn.Int(table.Rows[i]["HL7Status"].ToString());
+				hL7Msg.MsgText  = PIn.String(table.Rows[i]["MsgText"].ToString());
+				hL7Msg.AptNum   = PIn.Long  (table.Rows[i]["AptNum"].ToString());
+				retVal.Add(hL7Msg);
 			}
 			return retVal;
 		}
 
 		///<summary>Inserts one HL7Msg into the database.  Returns the new priKey.</summary>
-		internal static long Insert(HL7Msg obj){
-			if(PrefC.RandomKeys) {
-				obj.HL7MsgNum=ReplicationServers.GetKey("hl7msg","HL7MsgNum");
+		internal static long Insert(HL7Msg hL7Msg){
+			return Insert(hL7Msg,false);
+		}
+
+		///<summary>Inserts one HL7Msg into the database.  Provides option to use the existing priKey.</summary>
+		internal static long Insert(HL7Msg hL7Msg,bool useExistingPK){
+			if(!useExistingPK && PrefC.RandomKeys) {
+				hL7Msg.HL7MsgNum=ReplicationServers.GetKey("hl7msg","HL7MsgNum");
 			}
 			string command="INSERT INTO hl7msg (";
-			if(PrefC.RandomKeys) {
+			if(useExistingPK || PrefC.RandomKeys) {
 				command+="HL7MsgNum,";
 			}
 			command+="HL7Status,MsgText,AptNum) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+=POut.Long(obj.HL7MsgNum)+",";
+			if(useExistingPK || PrefC.RandomKeys) {
+				command+=POut.Long(hL7Msg.HL7MsgNum)+",";
 			}
 			command+=
-				     POut.Int   ((int)obj.HL7Status)+","
-				+"'"+POut.String(obj.MsgText)+"',"
-				+    POut.Long  (obj.AptNum)+")";
-			if(PrefC.RandomKeys) {
+				     POut.Int   ((int)hL7Msg.HL7Status)+","
+				+"'"+POut.String(hL7Msg.MsgText)+"',"
+				+    POut.Long  (hL7Msg.AptNum)+")";
+			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {
-				obj.HL7MsgNum=Db.NonQ(command,true);
+				hL7Msg.HL7MsgNum=Db.NonQ(command,true);
 			}
-			return obj.HL7MsgNum;
+			return hL7Msg.HL7MsgNum;
 		}
 
 		///<summary>Updates one HL7Msg in the database.</summary>
-		internal static void Update(HL7Msg obj){
+		internal static void Update(HL7Msg hL7Msg){
 			string command="UPDATE hl7msg SET "
-				+"HL7Status=  "+POut.Int   ((int)obj.HL7Status)+", "
-				+"MsgText  = '"+POut.String(obj.MsgText)+"', "
-				+"AptNum   =  "+POut.Long  (obj.AptNum)+" "
-				+"WHERE HL7MsgNum = "+POut.Long(obj.HL7MsgNum);
+				+"HL7Status=  "+POut.Int   ((int)hL7Msg.HL7Status)+", "
+				+"MsgText  = '"+POut.String(hL7Msg.MsgText)+"', "
+				+"AptNum   =  "+POut.Long  (hL7Msg.AptNum)+" "
+				+"WHERE HL7MsgNum = "+POut.Long(hL7Msg.HL7MsgNum);
+			Db.NonQ(command);
+		}
+
+		///<summary>Updates one HL7Msg in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
+		internal static void Update(HL7Msg hL7Msg,HL7Msg oldHL7Msg){
+			string command="";
+			if(hL7Msg.HL7Status != oldHL7Msg.HL7Status) {
+				if(command!=""){ command+=",";}
+				command+="HL7Status = "+POut.Int   ((int)hL7Msg.HL7Status)+"";
+			}
+			if(hL7Msg.MsgText != oldHL7Msg.MsgText) {
+				if(command!=""){ command+=",";}
+				command+="MsgText = '"+POut.String(hL7Msg.MsgText)+"'";
+			}
+			if(hL7Msg.AptNum != oldHL7Msg.AptNum) {
+				if(command!=""){ command+=",";}
+				command+="AptNum = "+POut.Long(hL7Msg.AptNum)+"";
+			}
+			if(command==""){
+				return;
+			}
+			command="UPDATE hl7msg SET "+command
+				+" WHERE HL7MsgNum = "+POut.Long(hL7Msg.HL7MsgNum);
 			Db.NonQ(command);
 		}
 

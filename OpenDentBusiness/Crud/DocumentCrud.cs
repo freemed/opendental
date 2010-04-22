@@ -43,102 +43,195 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Converts a DataTable to a list of objects.</summary>
 		internal static List<Document> TableToList(DataTable table){
 			List<Document> retVal=new List<Document>();
-			Document obj;
+			Document document;
 			for(int i=0;i<table.Rows.Count;i++) {
-				obj=new Document();
-				obj.DocNum        = PIn.Long  (table.Rows[i]["DocNum"].ToString());
-				obj.Description   = PIn.String(table.Rows[i]["Description"].ToString());
-				obj.DateCreated   = PIn.Date  (table.Rows[i]["DateCreated"].ToString());
-				obj.DocCategory   = PIn.Long  (table.Rows[i]["DocCategory"].ToString());
-				obj.PatNum        = PIn.Long  (table.Rows[i]["PatNum"].ToString());
-				obj.FileName      = PIn.String(table.Rows[i]["FileName"].ToString());
-				obj.ImgType       = (ImageType)PIn.Int(table.Rows[i]["ImgType"].ToString());
-				obj.IsFlipped     = PIn.Bool  (table.Rows[i]["IsFlipped"].ToString());
-				obj.DegreesRotated= PIn.Int   (table.Rows[i]["DegreesRotated"].ToString());
-				obj.ToothNumbers  = PIn.String(table.Rows[i]["ToothNumbers"].ToString());
-				obj.Note          = PIn.String(table.Rows[i]["Note"].ToString());
-				obj.SigIsTopaz    = PIn.Bool  (table.Rows[i]["SigIsTopaz"].ToString());
-				obj.Signature     = PIn.String(table.Rows[i]["Signature"].ToString());
-				obj.CropX         = PIn.Int   (table.Rows[i]["CropX"].ToString());
-				obj.CropY         = PIn.Int   (table.Rows[i]["CropY"].ToString());
-				obj.CropW         = PIn.Int   (table.Rows[i]["CropW"].ToString());
-				obj.CropH         = PIn.Int   (table.Rows[i]["CropH"].ToString());
-				obj.WindowingMin  = PIn.Int   (table.Rows[i]["WindowingMin"].ToString());
-				obj.WindowingMax  = PIn.Int   (table.Rows[i]["WindowingMax"].ToString());
-				obj.MountItemNum  = PIn.Long  (table.Rows[i]["MountItemNum"].ToString());
-				obj.DateTStamp    = PIn.Date  (table.Rows[i]["DateTStamp"].ToString());
-				retVal.Add(obj);
+				document=new Document();
+				document.DocNum        = PIn.Long  (table.Rows[i]["DocNum"].ToString());
+				document.Description   = PIn.String(table.Rows[i]["Description"].ToString());
+				document.DateCreated   = PIn.Date  (table.Rows[i]["DateCreated"].ToString());
+				document.DocCategory   = PIn.Long  (table.Rows[i]["DocCategory"].ToString());
+				document.PatNum        = PIn.Long  (table.Rows[i]["PatNum"].ToString());
+				document.FileName      = PIn.String(table.Rows[i]["FileName"].ToString());
+				document.ImgType       = (ImageType)PIn.Int(table.Rows[i]["ImgType"].ToString());
+				document.IsFlipped     = PIn.Bool  (table.Rows[i]["IsFlipped"].ToString());
+				document.DegreesRotated= PIn.Int   (table.Rows[i]["DegreesRotated"].ToString());
+				document.ToothNumbers  = PIn.String(table.Rows[i]["ToothNumbers"].ToString());
+				document.Note          = PIn.String(table.Rows[i]["Note"].ToString());
+				document.SigIsTopaz    = PIn.Bool  (table.Rows[i]["SigIsTopaz"].ToString());
+				document.Signature     = PIn.String(table.Rows[i]["Signature"].ToString());
+				document.CropX         = PIn.Int   (table.Rows[i]["CropX"].ToString());
+				document.CropY         = PIn.Int   (table.Rows[i]["CropY"].ToString());
+				document.CropW         = PIn.Int   (table.Rows[i]["CropW"].ToString());
+				document.CropH         = PIn.Int   (table.Rows[i]["CropH"].ToString());
+				document.WindowingMin  = PIn.Int   (table.Rows[i]["WindowingMin"].ToString());
+				document.WindowingMax  = PIn.Int   (table.Rows[i]["WindowingMax"].ToString());
+				document.MountItemNum  = PIn.Long  (table.Rows[i]["MountItemNum"].ToString());
+				document.DateTStamp    = PIn.Date  (table.Rows[i]["DateTStamp"].ToString());
+				retVal.Add(document);
 			}
 			return retVal;
 		}
 
 		///<summary>Inserts one Document into the database.  Returns the new priKey.</summary>
-		internal static long Insert(Document obj){
-			if(PrefC.RandomKeys) {
-				obj.DocNum=ReplicationServers.GetKey("document","DocNum");
+		internal static long Insert(Document document){
+			return Insert(document,false);
+		}
+
+		///<summary>Inserts one Document into the database.  Provides option to use the existing priKey.</summary>
+		internal static long Insert(Document document,bool useExistingPK){
+			if(!useExistingPK && PrefC.RandomKeys) {
+				document.DocNum=ReplicationServers.GetKey("document","DocNum");
 			}
 			string command="INSERT INTO document (";
-			if(PrefC.RandomKeys) {
+			if(useExistingPK || PrefC.RandomKeys) {
 				command+="DocNum,";
 			}
 			command+="Description,DateCreated,DocCategory,PatNum,FileName,ImgType,IsFlipped,DegreesRotated,ToothNumbers,Note,SigIsTopaz,Signature,CropX,CropY,CropW,CropH,WindowingMin,WindowingMax,MountItemNum) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+=POut.Long(obj.DocNum)+",";
+			if(useExistingPK || PrefC.RandomKeys) {
+				command+=POut.Long(document.DocNum)+",";
 			}
 			command+=
-				 "'"+POut.String(obj.Description)+"',"
-				+    POut.Date  (obj.DateCreated)+","
-				+    POut.Long  (obj.DocCategory)+","
-				+    POut.Long  (obj.PatNum)+","
-				+"'"+POut.String(obj.FileName)+"',"
-				+    POut.Int   ((int)obj.ImgType)+","
-				+    POut.Bool  (obj.IsFlipped)+","
-				+    POut.Int   (obj.DegreesRotated)+","
-				+"'"+POut.String(obj.ToothNumbers)+"',"
-				+"'"+POut.String(obj.Note)+"',"
-				+    POut.Bool  (obj.SigIsTopaz)+","
-				+"'"+POut.String(obj.Signature)+"',"
-				+    POut.Int   (obj.CropX)+","
-				+    POut.Int   (obj.CropY)+","
-				+    POut.Int   (obj.CropW)+","
-				+    POut.Int   (obj.CropH)+","
-				+    POut.Int   (obj.WindowingMin)+","
-				+    POut.Int   (obj.WindowingMax)+","
-				+    POut.Long  (obj.MountItemNum)+")";
+				 "'"+POut.String(document.Description)+"',"
+				+    POut.Date  (document.DateCreated)+","
+				+    POut.Long  (document.DocCategory)+","
+				+    POut.Long  (document.PatNum)+","
+				+"'"+POut.String(document.FileName)+"',"
+				+    POut.Int   ((int)document.ImgType)+","
+				+    POut.Bool  (document.IsFlipped)+","
+				+    POut.Int   (document.DegreesRotated)+","
+				+"'"+POut.String(document.ToothNumbers)+"',"
+				+"'"+POut.String(document.Note)+"',"
+				+    POut.Bool  (document.SigIsTopaz)+","
+				+"'"+POut.String(document.Signature)+"',"
+				+    POut.Int   (document.CropX)+","
+				+    POut.Int   (document.CropY)+","
+				+    POut.Int   (document.CropW)+","
+				+    POut.Int   (document.CropH)+","
+				+    POut.Int   (document.WindowingMin)+","
+				+    POut.Int   (document.WindowingMax)+","
+				+    POut.Long  (document.MountItemNum)+")";
 				//DateTStamp can only be set by MySQL
-			if(PrefC.RandomKeys) {
+			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {
-				obj.DocNum=Db.NonQ(command,true);
+				document.DocNum=Db.NonQ(command,true);
 			}
-			return obj.DocNum;
+			return document.DocNum;
 		}
 
 		///<summary>Updates one Document in the database.</summary>
-		internal static void Update(Document obj){
+		internal static void Update(Document document){
 			string command="UPDATE document SET "
-				+"Description   = '"+POut.String(obj.Description)+"', "
-				+"DateCreated   =  "+POut.Date  (obj.DateCreated)+", "
-				+"DocCategory   =  "+POut.Long  (obj.DocCategory)+", "
-				+"PatNum        =  "+POut.Long  (obj.PatNum)+", "
-				+"FileName      = '"+POut.String(obj.FileName)+"', "
-				+"ImgType       =  "+POut.Int   ((int)obj.ImgType)+", "
-				+"IsFlipped     =  "+POut.Bool  (obj.IsFlipped)+", "
-				+"DegreesRotated=  "+POut.Int   (obj.DegreesRotated)+", "
-				+"ToothNumbers  = '"+POut.String(obj.ToothNumbers)+"', "
-				+"Note          = '"+POut.String(obj.Note)+"', "
-				+"SigIsTopaz    =  "+POut.Bool  (obj.SigIsTopaz)+", "
-				+"Signature     = '"+POut.String(obj.Signature)+"', "
-				+"CropX         =  "+POut.Int   (obj.CropX)+", "
-				+"CropY         =  "+POut.Int   (obj.CropY)+", "
-				+"CropW         =  "+POut.Int   (obj.CropW)+", "
-				+"CropH         =  "+POut.Int   (obj.CropH)+", "
-				+"WindowingMin  =  "+POut.Int   (obj.WindowingMin)+", "
-				+"WindowingMax  =  "+POut.Int   (obj.WindowingMax)+", "
-				+"MountItemNum  =  "+POut.Long  (obj.MountItemNum)+" "
+				+"Description   = '"+POut.String(document.Description)+"', "
+				+"DateCreated   =  "+POut.Date  (document.DateCreated)+", "
+				+"DocCategory   =  "+POut.Long  (document.DocCategory)+", "
+				+"PatNum        =  "+POut.Long  (document.PatNum)+", "
+				+"FileName      = '"+POut.String(document.FileName)+"', "
+				+"ImgType       =  "+POut.Int   ((int)document.ImgType)+", "
+				+"IsFlipped     =  "+POut.Bool  (document.IsFlipped)+", "
+				+"DegreesRotated=  "+POut.Int   (document.DegreesRotated)+", "
+				+"ToothNumbers  = '"+POut.String(document.ToothNumbers)+"', "
+				+"Note          = '"+POut.String(document.Note)+"', "
+				+"SigIsTopaz    =  "+POut.Bool  (document.SigIsTopaz)+", "
+				+"Signature     = '"+POut.String(document.Signature)+"', "
+				+"CropX         =  "+POut.Int   (document.CropX)+", "
+				+"CropY         =  "+POut.Int   (document.CropY)+", "
+				+"CropW         =  "+POut.Int   (document.CropW)+", "
+				+"CropH         =  "+POut.Int   (document.CropH)+", "
+				+"WindowingMin  =  "+POut.Int   (document.WindowingMin)+", "
+				+"WindowingMax  =  "+POut.Int   (document.WindowingMax)+", "
+				+"MountItemNum  =  "+POut.Long  (document.MountItemNum)+" "
 				//DateTStamp can only be set by MySQL
-				+"WHERE DocNum = "+POut.Long(obj.DocNum);
+				+"WHERE DocNum = "+POut.Long(document.DocNum);
+			Db.NonQ(command);
+		}
+
+		///<summary>Updates one Document in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
+		internal static void Update(Document document,Document oldDocument){
+			string command="";
+			if(document.Description != oldDocument.Description) {
+				if(command!=""){ command+=",";}
+				command+="Description = '"+POut.String(document.Description)+"'";
+			}
+			if(document.DateCreated != oldDocument.DateCreated) {
+				if(command!=""){ command+=",";}
+				command+="DateCreated = "+POut.Date(document.DateCreated)+"";
+			}
+			if(document.DocCategory != oldDocument.DocCategory) {
+				if(command!=""){ command+=",";}
+				command+="DocCategory = "+POut.Long(document.DocCategory)+"";
+			}
+			if(document.PatNum != oldDocument.PatNum) {
+				if(command!=""){ command+=",";}
+				command+="PatNum = "+POut.Long(document.PatNum)+"";
+			}
+			if(document.FileName != oldDocument.FileName) {
+				if(command!=""){ command+=",";}
+				command+="FileName = '"+POut.String(document.FileName)+"'";
+			}
+			if(document.ImgType != oldDocument.ImgType) {
+				if(command!=""){ command+=",";}
+				command+="ImgType = "+POut.Int   ((int)document.ImgType)+"";
+			}
+			if(document.IsFlipped != oldDocument.IsFlipped) {
+				if(command!=""){ command+=",";}
+				command+="IsFlipped = "+POut.Bool(document.IsFlipped)+"";
+			}
+			if(document.DegreesRotated != oldDocument.DegreesRotated) {
+				if(command!=""){ command+=",";}
+				command+="DegreesRotated = "+POut.Int(document.DegreesRotated)+"";
+			}
+			if(document.ToothNumbers != oldDocument.ToothNumbers) {
+				if(command!=""){ command+=",";}
+				command+="ToothNumbers = '"+POut.String(document.ToothNumbers)+"'";
+			}
+			if(document.Note != oldDocument.Note) {
+				if(command!=""){ command+=",";}
+				command+="Note = '"+POut.String(document.Note)+"'";
+			}
+			if(document.SigIsTopaz != oldDocument.SigIsTopaz) {
+				if(command!=""){ command+=",";}
+				command+="SigIsTopaz = "+POut.Bool(document.SigIsTopaz)+"";
+			}
+			if(document.Signature != oldDocument.Signature) {
+				if(command!=""){ command+=",";}
+				command+="Signature = '"+POut.String(document.Signature)+"'";
+			}
+			if(document.CropX != oldDocument.CropX) {
+				if(command!=""){ command+=",";}
+				command+="CropX = "+POut.Int(document.CropX)+"";
+			}
+			if(document.CropY != oldDocument.CropY) {
+				if(command!=""){ command+=",";}
+				command+="CropY = "+POut.Int(document.CropY)+"";
+			}
+			if(document.CropW != oldDocument.CropW) {
+				if(command!=""){ command+=",";}
+				command+="CropW = "+POut.Int(document.CropW)+"";
+			}
+			if(document.CropH != oldDocument.CropH) {
+				if(command!=""){ command+=",";}
+				command+="CropH = "+POut.Int(document.CropH)+"";
+			}
+			if(document.WindowingMin != oldDocument.WindowingMin) {
+				if(command!=""){ command+=",";}
+				command+="WindowingMin = "+POut.Int(document.WindowingMin)+"";
+			}
+			if(document.WindowingMax != oldDocument.WindowingMax) {
+				if(command!=""){ command+=",";}
+				command+="WindowingMax = "+POut.Int(document.WindowingMax)+"";
+			}
+			if(document.MountItemNum != oldDocument.MountItemNum) {
+				if(command!=""){ command+=",";}
+				command+="MountItemNum = "+POut.Long(document.MountItemNum)+"";
+			}
+			//DateTStamp can only be set by MySQL
+			if(command==""){
+				return;
+			}
+			command="UPDATE document SET "+command
+				+" WHERE DocNum = "+POut.Long(document.DocNum);
 			Db.NonQ(command);
 		}
 

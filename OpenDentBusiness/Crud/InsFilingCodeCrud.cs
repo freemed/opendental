@@ -43,51 +43,79 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Converts a DataTable to a list of objects.</summary>
 		internal static List<InsFilingCode> TableToList(DataTable table){
 			List<InsFilingCode> retVal=new List<InsFilingCode>();
-			InsFilingCode obj;
+			InsFilingCode insFilingCode;
 			for(int i=0;i<table.Rows.Count;i++) {
-				obj=new InsFilingCode();
-				obj.InsFilingCodeNum= PIn.Long  (table.Rows[i]["InsFilingCodeNum"].ToString());
-				obj.Descript        = PIn.String(table.Rows[i]["Descript"].ToString());
-				obj.EclaimCode      = PIn.String(table.Rows[i]["EclaimCode"].ToString());
-				obj.ItemOrder       = PIn.Int   (table.Rows[i]["ItemOrder"].ToString());
-				retVal.Add(obj);
+				insFilingCode=new InsFilingCode();
+				insFilingCode.InsFilingCodeNum= PIn.Long  (table.Rows[i]["InsFilingCodeNum"].ToString());
+				insFilingCode.Descript        = PIn.String(table.Rows[i]["Descript"].ToString());
+				insFilingCode.EclaimCode      = PIn.String(table.Rows[i]["EclaimCode"].ToString());
+				insFilingCode.ItemOrder       = PIn.Int   (table.Rows[i]["ItemOrder"].ToString());
+				retVal.Add(insFilingCode);
 			}
 			return retVal;
 		}
 
 		///<summary>Inserts one InsFilingCode into the database.  Returns the new priKey.</summary>
-		internal static long Insert(InsFilingCode obj){
-			if(PrefC.RandomKeys) {
-				obj.InsFilingCodeNum=ReplicationServers.GetKey("insfilingcode","InsFilingCodeNum");
+		internal static long Insert(InsFilingCode insFilingCode){
+			return Insert(insFilingCode,false);
+		}
+
+		///<summary>Inserts one InsFilingCode into the database.  Provides option to use the existing priKey.</summary>
+		internal static long Insert(InsFilingCode insFilingCode,bool useExistingPK){
+			if(!useExistingPK && PrefC.RandomKeys) {
+				insFilingCode.InsFilingCodeNum=ReplicationServers.GetKey("insfilingcode","InsFilingCodeNum");
 			}
 			string command="INSERT INTO insfilingcode (";
-			if(PrefC.RandomKeys) {
+			if(useExistingPK || PrefC.RandomKeys) {
 				command+="InsFilingCodeNum,";
 			}
 			command+="Descript,EclaimCode,ItemOrder) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+=POut.Long(obj.InsFilingCodeNum)+",";
+			if(useExistingPK || PrefC.RandomKeys) {
+				command+=POut.Long(insFilingCode.InsFilingCodeNum)+",";
 			}
 			command+=
-				 "'"+POut.String(obj.Descript)+"',"
-				+"'"+POut.String(obj.EclaimCode)+"',"
-				+    POut.Int   (obj.ItemOrder)+")";
-			if(PrefC.RandomKeys) {
+				 "'"+POut.String(insFilingCode.Descript)+"',"
+				+"'"+POut.String(insFilingCode.EclaimCode)+"',"
+				+    POut.Int   (insFilingCode.ItemOrder)+")";
+			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {
-				obj.InsFilingCodeNum=Db.NonQ(command,true);
+				insFilingCode.InsFilingCodeNum=Db.NonQ(command,true);
 			}
-			return obj.InsFilingCodeNum;
+			return insFilingCode.InsFilingCodeNum;
 		}
 
 		///<summary>Updates one InsFilingCode in the database.</summary>
-		internal static void Update(InsFilingCode obj){
+		internal static void Update(InsFilingCode insFilingCode){
 			string command="UPDATE insfilingcode SET "
-				+"Descript        = '"+POut.String(obj.Descript)+"', "
-				+"EclaimCode      = '"+POut.String(obj.EclaimCode)+"', "
-				+"ItemOrder       =  "+POut.Int   (obj.ItemOrder)+" "
-				+"WHERE InsFilingCodeNum = "+POut.Long(obj.InsFilingCodeNum);
+				+"Descript        = '"+POut.String(insFilingCode.Descript)+"', "
+				+"EclaimCode      = '"+POut.String(insFilingCode.EclaimCode)+"', "
+				+"ItemOrder       =  "+POut.Int   (insFilingCode.ItemOrder)+" "
+				+"WHERE InsFilingCodeNum = "+POut.Long(insFilingCode.InsFilingCodeNum);
+			Db.NonQ(command);
+		}
+
+		///<summary>Updates one InsFilingCode in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
+		internal static void Update(InsFilingCode insFilingCode,InsFilingCode oldInsFilingCode){
+			string command="";
+			if(insFilingCode.Descript != oldInsFilingCode.Descript) {
+				if(command!=""){ command+=",";}
+				command+="Descript = '"+POut.String(insFilingCode.Descript)+"'";
+			}
+			if(insFilingCode.EclaimCode != oldInsFilingCode.EclaimCode) {
+				if(command!=""){ command+=",";}
+				command+="EclaimCode = '"+POut.String(insFilingCode.EclaimCode)+"'";
+			}
+			if(insFilingCode.ItemOrder != oldInsFilingCode.ItemOrder) {
+				if(command!=""){ command+=",";}
+				command+="ItemOrder = "+POut.Int(insFilingCode.ItemOrder)+"";
+			}
+			if(command==""){
+				return;
+			}
+			command="UPDATE insfilingcode SET "+command
+				+" WHERE InsFilingCodeNum = "+POut.Long(insFilingCode.InsFilingCodeNum);
 			Db.NonQ(command);
 		}
 

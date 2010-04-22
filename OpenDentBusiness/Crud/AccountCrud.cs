@@ -43,57 +43,93 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Converts a DataTable to a list of objects.</summary>
 		internal static List<Account> TableToList(DataTable table){
 			List<Account> retVal=new List<Account>();
-			Account obj;
+			Account account;
 			for(int i=0;i<table.Rows.Count;i++) {
-				obj=new Account();
-				obj.AccountNum  = PIn.Long  (table.Rows[i]["AccountNum"].ToString());
-				obj.Description = PIn.String(table.Rows[i]["Description"].ToString());
-				obj.AcctType    = (AccountType)PIn.Int(table.Rows[i]["AcctType"].ToString());
-				obj.BankNumber  = PIn.String(table.Rows[i]["BankNumber"].ToString());
-				obj.Inactive    = PIn.Bool  (table.Rows[i]["Inactive"].ToString());
-				obj.AccountColor= Color.FromArgb(PIn.Int(table.Rows[i]["AccountColor"].ToString()));
-				retVal.Add(obj);
+				account=new Account();
+				account.AccountNum  = PIn.Long  (table.Rows[i]["AccountNum"].ToString());
+				account.Description = PIn.String(table.Rows[i]["Description"].ToString());
+				account.AcctType    = (AccountType)PIn.Int(table.Rows[i]["AcctType"].ToString());
+				account.BankNumber  = PIn.String(table.Rows[i]["BankNumber"].ToString());
+				account.Inactive    = PIn.Bool  (table.Rows[i]["Inactive"].ToString());
+				account.AccountColor= Color.FromArgb(PIn.Int(table.Rows[i]["AccountColor"].ToString()));
+				retVal.Add(account);
 			}
 			return retVal;
 		}
 
 		///<summary>Inserts one Account into the database.  Returns the new priKey.</summary>
-		internal static long Insert(Account obj){
-			if(PrefC.RandomKeys) {
-				obj.AccountNum=ReplicationServers.GetKey("account","AccountNum");
+		internal static long Insert(Account account){
+			return Insert(account,false);
+		}
+
+		///<summary>Inserts one Account into the database.  Provides option to use the existing priKey.</summary>
+		internal static long Insert(Account account,bool useExistingPK){
+			if(!useExistingPK && PrefC.RandomKeys) {
+				account.AccountNum=ReplicationServers.GetKey("account","AccountNum");
 			}
 			string command="INSERT INTO account (";
-			if(PrefC.RandomKeys) {
+			if(useExistingPK || PrefC.RandomKeys) {
 				command+="AccountNum,";
 			}
 			command+="Description,AcctType,BankNumber,Inactive,AccountColor) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+=POut.Long(obj.AccountNum)+",";
+			if(useExistingPK || PrefC.RandomKeys) {
+				command+=POut.Long(account.AccountNum)+",";
 			}
 			command+=
-				 "'"+POut.String(obj.Description)+"',"
-				+    POut.Int   ((int)obj.AcctType)+","
-				+"'"+POut.String(obj.BankNumber)+"',"
-				+    POut.Bool  (obj.Inactive)+","
-				+    POut.Int   (obj.AccountColor.ToArgb())+")";
-			if(PrefC.RandomKeys) {
+				 "'"+POut.String(account.Description)+"',"
+				+    POut.Int   ((int)account.AcctType)+","
+				+"'"+POut.String(account.BankNumber)+"',"
+				+    POut.Bool  (account.Inactive)+","
+				+    POut.Int   (account.AccountColor.ToArgb())+")";
+			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {
-				obj.AccountNum=Db.NonQ(command,true);
+				account.AccountNum=Db.NonQ(command,true);
 			}
-			return obj.AccountNum;
+			return account.AccountNum;
 		}
 
 		///<summary>Updates one Account in the database.</summary>
-		internal static void Update(Account obj){
+		internal static void Update(Account account){
 			string command="UPDATE account SET "
-				+"Description = '"+POut.String(obj.Description)+"', "
-				+"AcctType    =  "+POut.Int   ((int)obj.AcctType)+", "
-				+"BankNumber  = '"+POut.String(obj.BankNumber)+"', "
-				+"Inactive    =  "+POut.Bool  (obj.Inactive)+", "
-				+"AccountColor=  "+POut.Int   (obj.AccountColor.ToArgb())+" "
-				+"WHERE AccountNum = "+POut.Long(obj.AccountNum);
+				+"Description = '"+POut.String(account.Description)+"', "
+				+"AcctType    =  "+POut.Int   ((int)account.AcctType)+", "
+				+"BankNumber  = '"+POut.String(account.BankNumber)+"', "
+				+"Inactive    =  "+POut.Bool  (account.Inactive)+", "
+				+"AccountColor=  "+POut.Int   (account.AccountColor.ToArgb())+" "
+				+"WHERE AccountNum = "+POut.Long(account.AccountNum);
+			Db.NonQ(command);
+		}
+
+		///<summary>Updates one Account in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
+		internal static void Update(Account account,Account oldAccount){
+			string command="";
+			if(account.Description != oldAccount.Description) {
+				if(command!=""){ command+=",";}
+				command+="Description = '"+POut.String(account.Description)+"'";
+			}
+			if(account.AcctType != oldAccount.AcctType) {
+				if(command!=""){ command+=",";}
+				command+="AcctType = "+POut.Int   ((int)account.AcctType)+"";
+			}
+			if(account.BankNumber != oldAccount.BankNumber) {
+				if(command!=""){ command+=",";}
+				command+="BankNumber = '"+POut.String(account.BankNumber)+"'";
+			}
+			if(account.Inactive != oldAccount.Inactive) {
+				if(command!=""){ command+=",";}
+				command+="Inactive = "+POut.Bool(account.Inactive)+"";
+			}
+			if(account.AccountColor != oldAccount.AccountColor) {
+				if(command!=""){ command+=",";}
+				command+="AccountColor = "+POut.Int(account.AccountColor.ToArgb())+"";
+			}
+			if(command==""){
+				return;
+			}
+			command="UPDATE account SET "+command
+				+" WHERE AccountNum = "+POut.Long(account.AccountNum);
 			Db.NonQ(command);
 		}
 

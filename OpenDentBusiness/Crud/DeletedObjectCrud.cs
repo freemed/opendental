@@ -43,51 +43,76 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Converts a DataTable to a list of objects.</summary>
 		internal static List<DeletedObject> TableToList(DataTable table){
 			List<DeletedObject> retVal=new List<DeletedObject>();
-			DeletedObject obj;
+			DeletedObject deletedObject;
 			for(int i=0;i<table.Rows.Count;i++) {
-				obj=new DeletedObject();
-				obj.DeletedObjectNum= PIn.Long  (table.Rows[i]["DeletedObjectNum"].ToString());
-				obj.ObjectNum       = PIn.Long  (table.Rows[i]["ObjectNum"].ToString());
-				obj.ObjectType      = (DeletedObjectType)PIn.Int(table.Rows[i]["ObjectType"].ToString());
-				obj.DateTStamp      = PIn.Date  (table.Rows[i]["DateTStamp"].ToString());
-				retVal.Add(obj);
+				deletedObject=new DeletedObject();
+				deletedObject.DeletedObjectNum= PIn.Long  (table.Rows[i]["DeletedObjectNum"].ToString());
+				deletedObject.ObjectNum       = PIn.Long  (table.Rows[i]["ObjectNum"].ToString());
+				deletedObject.ObjectType      = (DeletedObjectType)PIn.Int(table.Rows[i]["ObjectType"].ToString());
+				deletedObject.DateTStamp      = PIn.Date  (table.Rows[i]["DateTStamp"].ToString());
+				retVal.Add(deletedObject);
 			}
 			return retVal;
 		}
 
 		///<summary>Inserts one DeletedObject into the database.  Returns the new priKey.</summary>
-		internal static long Insert(DeletedObject obj){
-			if(PrefC.RandomKeys) {
-				obj.DeletedObjectNum=ReplicationServers.GetKey("deletedobject","DeletedObjectNum");
+		internal static long Insert(DeletedObject deletedObject){
+			return Insert(deletedObject,false);
+		}
+
+		///<summary>Inserts one DeletedObject into the database.  Provides option to use the existing priKey.</summary>
+		internal static long Insert(DeletedObject deletedObject,bool useExistingPK){
+			if(!useExistingPK && PrefC.RandomKeys) {
+				deletedObject.DeletedObjectNum=ReplicationServers.GetKey("deletedobject","DeletedObjectNum");
 			}
 			string command="INSERT INTO deletedobject (";
-			if(PrefC.RandomKeys) {
+			if(useExistingPK || PrefC.RandomKeys) {
 				command+="DeletedObjectNum,";
 			}
 			command+="ObjectNum,ObjectType) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+=POut.Long(obj.DeletedObjectNum)+",";
+			if(useExistingPK || PrefC.RandomKeys) {
+				command+=POut.Long(deletedObject.DeletedObjectNum)+",";
 			}
 			command+=
-				     POut.Long  (obj.ObjectNum)+","
-				+    POut.Int   ((int)obj.ObjectType)+")";
+				     POut.Long  (deletedObject.ObjectNum)+","
+				+    POut.Int   ((int)deletedObject.ObjectType)+")";
 				//DateTStamp can only be set by MySQL
-			if(PrefC.RandomKeys) {
+			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {
-				obj.DeletedObjectNum=Db.NonQ(command,true);
+				deletedObject.DeletedObjectNum=Db.NonQ(command,true);
 			}
-			return obj.DeletedObjectNum;
+			return deletedObject.DeletedObjectNum;
 		}
 
 		///<summary>Updates one DeletedObject in the database.</summary>
-		internal static void Update(DeletedObject obj){
+		internal static void Update(DeletedObject deletedObject){
 			string command="UPDATE deletedobject SET "
-				+"ObjectNum       =  "+POut.Long  (obj.ObjectNum)+", "
-				+"ObjectType      =  "+POut.Int   ((int)obj.ObjectType)+" "
+				+"ObjectNum       =  "+POut.Long  (deletedObject.ObjectNum)+", "
+				+"ObjectType      =  "+POut.Int   ((int)deletedObject.ObjectType)+" "
 				//DateTStamp can only be set by MySQL
-				+"WHERE DeletedObjectNum = "+POut.Long(obj.DeletedObjectNum);
+				+"WHERE DeletedObjectNum = "+POut.Long(deletedObject.DeletedObjectNum);
+			Db.NonQ(command);
+		}
+
+		///<summary>Updates one DeletedObject in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
+		internal static void Update(DeletedObject deletedObject,DeletedObject oldDeletedObject){
+			string command="";
+			if(deletedObject.ObjectNum != oldDeletedObject.ObjectNum) {
+				if(command!=""){ command+=",";}
+				command+="ObjectNum = "+POut.Long(deletedObject.ObjectNum)+"";
+			}
+			if(deletedObject.ObjectType != oldDeletedObject.ObjectType) {
+				if(command!=""){ command+=",";}
+				command+="ObjectType = "+POut.Int   ((int)deletedObject.ObjectType)+"";
+			}
+			//DateTStamp can only be set by MySQL
+			if(command==""){
+				return;
+			}
+			command="UPDATE deletedobject SET "+command
+				+" WHERE DeletedObjectNum = "+POut.Long(deletedObject.DeletedObjectNum);
 			Db.NonQ(command);
 		}
 

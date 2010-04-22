@@ -43,48 +43,72 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Converts a DataTable to a list of objects.</summary>
 		internal static List<InsFilingCodeSubtype> TableToList(DataTable table){
 			List<InsFilingCodeSubtype> retVal=new List<InsFilingCodeSubtype>();
-			InsFilingCodeSubtype obj;
+			InsFilingCodeSubtype insFilingCodeSubtype;
 			for(int i=0;i<table.Rows.Count;i++) {
-				obj=new InsFilingCodeSubtype();
-				obj.InsFilingCodeSubtypeNum= PIn.Long  (table.Rows[i]["InsFilingCodeSubtypeNum"].ToString());
-				obj.InsFilingCodeNum       = PIn.Long  (table.Rows[i]["InsFilingCodeNum"].ToString());
-				obj.Descript               = PIn.String(table.Rows[i]["Descript"].ToString());
-				retVal.Add(obj);
+				insFilingCodeSubtype=new InsFilingCodeSubtype();
+				insFilingCodeSubtype.InsFilingCodeSubtypeNum= PIn.Long  (table.Rows[i]["InsFilingCodeSubtypeNum"].ToString());
+				insFilingCodeSubtype.InsFilingCodeNum       = PIn.Long  (table.Rows[i]["InsFilingCodeNum"].ToString());
+				insFilingCodeSubtype.Descript               = PIn.String(table.Rows[i]["Descript"].ToString());
+				retVal.Add(insFilingCodeSubtype);
 			}
 			return retVal;
 		}
 
 		///<summary>Inserts one InsFilingCodeSubtype into the database.  Returns the new priKey.</summary>
-		internal static long Insert(InsFilingCodeSubtype obj){
-			if(PrefC.RandomKeys) {
-				obj.InsFilingCodeSubtypeNum=ReplicationServers.GetKey("insfilingcodesubtype","InsFilingCodeSubtypeNum");
+		internal static long Insert(InsFilingCodeSubtype insFilingCodeSubtype){
+			return Insert(insFilingCodeSubtype,false);
+		}
+
+		///<summary>Inserts one InsFilingCodeSubtype into the database.  Provides option to use the existing priKey.</summary>
+		internal static long Insert(InsFilingCodeSubtype insFilingCodeSubtype,bool useExistingPK){
+			if(!useExistingPK && PrefC.RandomKeys) {
+				insFilingCodeSubtype.InsFilingCodeSubtypeNum=ReplicationServers.GetKey("insfilingcodesubtype","InsFilingCodeSubtypeNum");
 			}
 			string command="INSERT INTO insfilingcodesubtype (";
-			if(PrefC.RandomKeys) {
+			if(useExistingPK || PrefC.RandomKeys) {
 				command+="InsFilingCodeSubtypeNum,";
 			}
 			command+="InsFilingCodeNum,Descript) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+=POut.Long(obj.InsFilingCodeSubtypeNum)+",";
+			if(useExistingPK || PrefC.RandomKeys) {
+				command+=POut.Long(insFilingCodeSubtype.InsFilingCodeSubtypeNum)+",";
 			}
 			command+=
-				     POut.Long  (obj.InsFilingCodeNum)+","
-				+"'"+POut.String(obj.Descript)+"')";
-			if(PrefC.RandomKeys) {
+				     POut.Long  (insFilingCodeSubtype.InsFilingCodeNum)+","
+				+"'"+POut.String(insFilingCodeSubtype.Descript)+"')";
+			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {
-				obj.InsFilingCodeSubtypeNum=Db.NonQ(command,true);
+				insFilingCodeSubtype.InsFilingCodeSubtypeNum=Db.NonQ(command,true);
 			}
-			return obj.InsFilingCodeSubtypeNum;
+			return insFilingCodeSubtype.InsFilingCodeSubtypeNum;
 		}
 
 		///<summary>Updates one InsFilingCodeSubtype in the database.</summary>
-		internal static void Update(InsFilingCodeSubtype obj){
+		internal static void Update(InsFilingCodeSubtype insFilingCodeSubtype){
 			string command="UPDATE insfilingcodesubtype SET "
-				+"InsFilingCodeNum       =  "+POut.Long  (obj.InsFilingCodeNum)+", "
-				+"Descript               = '"+POut.String(obj.Descript)+"' "
-				+"WHERE InsFilingCodeSubtypeNum = "+POut.Long(obj.InsFilingCodeSubtypeNum);
+				+"InsFilingCodeNum       =  "+POut.Long  (insFilingCodeSubtype.InsFilingCodeNum)+", "
+				+"Descript               = '"+POut.String(insFilingCodeSubtype.Descript)+"' "
+				+"WHERE InsFilingCodeSubtypeNum = "+POut.Long(insFilingCodeSubtype.InsFilingCodeSubtypeNum);
+			Db.NonQ(command);
+		}
+
+		///<summary>Updates one InsFilingCodeSubtype in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
+		internal static void Update(InsFilingCodeSubtype insFilingCodeSubtype,InsFilingCodeSubtype oldInsFilingCodeSubtype){
+			string command="";
+			if(insFilingCodeSubtype.InsFilingCodeNum != oldInsFilingCodeSubtype.InsFilingCodeNum) {
+				if(command!=""){ command+=",";}
+				command+="InsFilingCodeNum = "+POut.Long(insFilingCodeSubtype.InsFilingCodeNum)+"";
+			}
+			if(insFilingCodeSubtype.Descript != oldInsFilingCodeSubtype.Descript) {
+				if(command!=""){ command+=",";}
+				command+="Descript = '"+POut.String(insFilingCodeSubtype.Descript)+"'";
+			}
+			if(command==""){
+				return;
+			}
+			command="UPDATE insfilingcodesubtype SET "+command
+				+" WHERE InsFilingCodeSubtypeNum = "+POut.Long(insFilingCodeSubtype.InsFilingCodeSubtypeNum);
 			Db.NonQ(command);
 		}
 

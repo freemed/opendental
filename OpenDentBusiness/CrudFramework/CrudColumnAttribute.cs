@@ -8,6 +8,7 @@ namespace OpenDentBusiness {
 		public CrudColumnAttribute() {
 			this.isPriKey=false;
 			this.specialType=EnumCrudSpecialColType.None;
+			this.isNotDbColumn=false;
 		}
 
 		private bool isPriKey;
@@ -21,6 +22,12 @@ namespace OpenDentBusiness {
 			get { return specialType; }
 			set { specialType=value; }
 		}
+
+		private bool isNotDbColumn;
+		public bool IsNotDbColumn {
+			get { return isNotDbColumn; }
+			set { isNotDbColumn=value; }
+		}
 	}
 
 	public enum EnumCrudSpecialColType {
@@ -28,7 +35,8 @@ namespace OpenDentBusiness {
 		///<summary>User not allowed to change.  Insert must use NOW().</summary>
 		DateEntry,
 		///<summary>Gets set and updated by MySQL.  Leave these columns completely out of Insert and Update statements.</summary>
-		TimeStamp
+		TimeStamp,
+		
 		//Some more that we might add:
 		//DateT, Timespan
 	}

@@ -43,72 +43,125 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Converts a DataTable to a list of objects.</summary>
 		internal static List<Adjustment> TableToList(DataTable table){
 			List<Adjustment> retVal=new List<Adjustment>();
-			Adjustment obj;
+			Adjustment adjustment;
 			for(int i=0;i<table.Rows.Count;i++) {
-				obj=new Adjustment();
-				obj.AdjNum   = PIn.Long  (table.Rows[i]["AdjNum"].ToString());
-				obj.AdjDate  = PIn.Date  (table.Rows[i]["AdjDate"].ToString());
-				obj.AdjAmt   = PIn.Double(table.Rows[i]["AdjAmt"].ToString());
-				obj.PatNum   = PIn.Long  (table.Rows[i]["PatNum"].ToString());
-				obj.AdjType  = PIn.Long  (table.Rows[i]["AdjType"].ToString());
-				obj.ProvNum  = PIn.Long  (table.Rows[i]["ProvNum"].ToString());
-				obj.AdjNote  = PIn.String(table.Rows[i]["AdjNote"].ToString());
-				obj.ProcDate = PIn.Date  (table.Rows[i]["ProcDate"].ToString());
-				obj.ProcNum  = PIn.Long  (table.Rows[i]["ProcNum"].ToString());
-				obj.DateEntry= PIn.Date  (table.Rows[i]["DateEntry"].ToString());
-				obj.ClinicNum= PIn.Long  (table.Rows[i]["ClinicNum"].ToString());
-				retVal.Add(obj);
+				adjustment=new Adjustment();
+				adjustment.AdjNum   = PIn.Long  (table.Rows[i]["AdjNum"].ToString());
+				adjustment.AdjDate  = PIn.Date  (table.Rows[i]["AdjDate"].ToString());
+				adjustment.AdjAmt   = PIn.Double(table.Rows[i]["AdjAmt"].ToString());
+				adjustment.PatNum   = PIn.Long  (table.Rows[i]["PatNum"].ToString());
+				adjustment.AdjType  = PIn.Long  (table.Rows[i]["AdjType"].ToString());
+				adjustment.ProvNum  = PIn.Long  (table.Rows[i]["ProvNum"].ToString());
+				adjustment.AdjNote  = PIn.String(table.Rows[i]["AdjNote"].ToString());
+				adjustment.ProcDate = PIn.Date  (table.Rows[i]["ProcDate"].ToString());
+				adjustment.ProcNum  = PIn.Long  (table.Rows[i]["ProcNum"].ToString());
+				adjustment.DateEntry= PIn.Date  (table.Rows[i]["DateEntry"].ToString());
+				adjustment.ClinicNum= PIn.Long  (table.Rows[i]["ClinicNum"].ToString());
+				retVal.Add(adjustment);
 			}
 			return retVal;
 		}
 
 		///<summary>Inserts one Adjustment into the database.  Returns the new priKey.</summary>
-		internal static long Insert(Adjustment obj){
-			if(PrefC.RandomKeys) {
-				obj.AdjNum=ReplicationServers.GetKey("adjustment","AdjNum");
+		internal static long Insert(Adjustment adjustment){
+			return Insert(adjustment,false);
+		}
+
+		///<summary>Inserts one Adjustment into the database.  Provides option to use the existing priKey.</summary>
+		internal static long Insert(Adjustment adjustment,bool useExistingPK){
+			if(!useExistingPK && PrefC.RandomKeys) {
+				adjustment.AdjNum=ReplicationServers.GetKey("adjustment","AdjNum");
 			}
 			string command="INSERT INTO adjustment (";
-			if(PrefC.RandomKeys) {
+			if(useExistingPK || PrefC.RandomKeys) {
 				command+="AdjNum,";
 			}
 			command+="AdjDate,AdjAmt,PatNum,AdjType,ProvNum,AdjNote,ProcDate,ProcNum,DateEntry,ClinicNum) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+=POut.Long(obj.AdjNum)+",";
+			if(useExistingPK || PrefC.RandomKeys) {
+				command+=POut.Long(adjustment.AdjNum)+",";
 			}
 			command+=
-				     POut.Date  (obj.AdjDate)+","
-				+"'"+POut.Double(obj.AdjAmt)+"',"
-				+    POut.Long  (obj.PatNum)+","
-				+    POut.Long  (obj.AdjType)+","
-				+    POut.Long  (obj.ProvNum)+","
-				+"'"+POut.String(obj.AdjNote)+"',"
-				+    POut.Date  (obj.ProcDate)+","
-				+    POut.Long  (obj.ProcNum)+","
+				     POut.Date  (adjustment.AdjDate)+","
+				+"'"+POut.Double(adjustment.AdjAmt)+"',"
+				+    POut.Long  (adjustment.PatNum)+","
+				+    POut.Long  (adjustment.AdjType)+","
+				+    POut.Long  (adjustment.ProvNum)+","
+				+"'"+POut.String(adjustment.AdjNote)+"',"
+				+    POut.Date  (adjustment.ProcDate)+","
+				+    POut.Long  (adjustment.ProcNum)+","
 				+"NOW(),"
-				+    POut.Long  (obj.ClinicNum)+")";
-			if(PrefC.RandomKeys) {
+				+    POut.Long  (adjustment.ClinicNum)+")";
+			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {
-				obj.AdjNum=Db.NonQ(command,true);
+				adjustment.AdjNum=Db.NonQ(command,true);
 			}
-			return obj.AdjNum;
+			return adjustment.AdjNum;
 		}
 
 		///<summary>Updates one Adjustment in the database.</summary>
-		internal static void Update(Adjustment obj){
+		internal static void Update(Adjustment adjustment){
 			string command="UPDATE adjustment SET "
-				+"AdjDate  =  "+POut.Date  (obj.AdjDate)+", "
-				+"AdjAmt   = '"+POut.Double(obj.AdjAmt)+"', "
-				+"PatNum   =  "+POut.Long  (obj.PatNum)+", "
-				+"AdjType  =  "+POut.Long  (obj.AdjType)+", "
-				+"ProvNum  =  "+POut.Long  (obj.ProvNum)+", "
-				+"AdjNote  = '"+POut.String(obj.AdjNote)+"', "
-				+"ProcDate =  "+POut.Date  (obj.ProcDate)+", "
-				+"ProcNum  =  "+POut.Long  (obj.ProcNum)+", "
+				+"AdjDate  =  "+POut.Date  (adjustment.AdjDate)+", "
+				+"AdjAmt   = '"+POut.Double(adjustment.AdjAmt)+"', "
+				+"PatNum   =  "+POut.Long  (adjustment.PatNum)+", "
+				+"AdjType  =  "+POut.Long  (adjustment.AdjType)+", "
+				+"ProvNum  =  "+POut.Long  (adjustment.ProvNum)+", "
+				+"AdjNote  = '"+POut.String(adjustment.AdjNote)+"', "
+				+"ProcDate =  "+POut.Date  (adjustment.ProcDate)+", "
+				+"ProcNum  =  "+POut.Long  (adjustment.ProcNum)+", "
 				//DateEntry not allowed to change
-				+"ClinicNum=  "+POut.Long  (obj.ClinicNum)+" "
-				+"WHERE AdjNum = "+POut.Long(obj.AdjNum);
+				+"ClinicNum=  "+POut.Long  (adjustment.ClinicNum)+" "
+				+"WHERE AdjNum = "+POut.Long(adjustment.AdjNum);
+			Db.NonQ(command);
+		}
+
+		///<summary>Updates one Adjustment in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
+		internal static void Update(Adjustment adjustment,Adjustment oldAdjustment){
+			string command="";
+			if(adjustment.AdjDate != oldAdjustment.AdjDate) {
+				if(command!=""){ command+=",";}
+				command+="AdjDate = "+POut.Date(adjustment.AdjDate)+"";
+			}
+			if(adjustment.AdjAmt != oldAdjustment.AdjAmt) {
+				if(command!=""){ command+=",";}
+				command+="AdjAmt = '"+POut.Double(adjustment.AdjAmt)+"'";
+			}
+			if(adjustment.PatNum != oldAdjustment.PatNum) {
+				if(command!=""){ command+=",";}
+				command+="PatNum = "+POut.Long(adjustment.PatNum)+"";
+			}
+			if(adjustment.AdjType != oldAdjustment.AdjType) {
+				if(command!=""){ command+=",";}
+				command+="AdjType = "+POut.Long(adjustment.AdjType)+"";
+			}
+			if(adjustment.ProvNum != oldAdjustment.ProvNum) {
+				if(command!=""){ command+=",";}
+				command+="ProvNum = "+POut.Long(adjustment.ProvNum)+"";
+			}
+			if(adjustment.AdjNote != oldAdjustment.AdjNote) {
+				if(command!=""){ command+=",";}
+				command+="AdjNote = '"+POut.String(adjustment.AdjNote)+"'";
+			}
+			if(adjustment.ProcDate != oldAdjustment.ProcDate) {
+				if(command!=""){ command+=",";}
+				command+="ProcDate = "+POut.Date(adjustment.ProcDate)+"";
+			}
+			if(adjustment.ProcNum != oldAdjustment.ProcNum) {
+				if(command!=""){ command+=",";}
+				command+="ProcNum = "+POut.Long(adjustment.ProcNum)+"";
+			}
+			//DateEntry not allowed to change
+			if(adjustment.ClinicNum != oldAdjustment.ClinicNum) {
+				if(command!=""){ command+=",";}
+				command+="ClinicNum = "+POut.Long(adjustment.ClinicNum)+"";
+			}
+			if(command==""){
+				return;
+			}
+			command="UPDATE adjustment SET "+command
+				+" WHERE AdjNum = "+POut.Long(adjustment.AdjNum);
 			Db.NonQ(command);
 		}
 

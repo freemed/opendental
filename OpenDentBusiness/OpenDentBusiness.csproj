@@ -130,6 +130,7 @@
     <Compile Include="Crud\MountDefCrud.cs" />
     <Compile Include="Crud\MountItemCrud.cs" />
     <Compile Include="Crud\MountItemDefCrud.cs" />
+    <Compile Include="Crud\PatientCrud.cs" />
     <Compile Include="Data Interface\Automations.cs" />
     <Compile Include="Data Interface\Equipments.cs" />
     <Compile Include="Data Interface\ReplicationServers.cs" />

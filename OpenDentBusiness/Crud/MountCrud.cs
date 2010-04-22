@@ -43,66 +43,114 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Converts a DataTable to a list of objects.</summary>
 		internal static List<Mount> TableToList(DataTable table){
 			List<Mount> retVal=new List<Mount>();
-			Mount obj;
+			Mount mount;
 			for(int i=0;i<table.Rows.Count;i++) {
-				obj=new Mount();
-				obj.MountNum   = PIn.Long  (table.Rows[i]["MountNum"].ToString());
-				obj.PatNum     = PIn.Long  (table.Rows[i]["PatNum"].ToString());
-				obj.DocCategory= PIn.Long  (table.Rows[i]["DocCategory"].ToString());
-				obj.DateCreated= PIn.Date  (table.Rows[i]["DateCreated"].ToString());
-				obj.Description= PIn.String(table.Rows[i]["Description"].ToString());
-				obj.Note       = PIn.String(table.Rows[i]["Note"].ToString());
-				obj.ImgType    = (ImageType)PIn.Int(table.Rows[i]["ImgType"].ToString());
-				obj.Width      = PIn.Int   (table.Rows[i]["Width"].ToString());
-				obj.Height     = PIn.Int   (table.Rows[i]["Height"].ToString());
-				retVal.Add(obj);
+				mount=new Mount();
+				mount.MountNum   = PIn.Long  (table.Rows[i]["MountNum"].ToString());
+				mount.PatNum     = PIn.Long  (table.Rows[i]["PatNum"].ToString());
+				mount.DocCategory= PIn.Long  (table.Rows[i]["DocCategory"].ToString());
+				mount.DateCreated= PIn.Date  (table.Rows[i]["DateCreated"].ToString());
+				mount.Description= PIn.String(table.Rows[i]["Description"].ToString());
+				mount.Note       = PIn.String(table.Rows[i]["Note"].ToString());
+				mount.ImgType    = (ImageType)PIn.Int(table.Rows[i]["ImgType"].ToString());
+				mount.Width      = PIn.Int   (table.Rows[i]["Width"].ToString());
+				mount.Height     = PIn.Int   (table.Rows[i]["Height"].ToString());
+				retVal.Add(mount);
 			}
 			return retVal;
 		}
 
 		///<summary>Inserts one Mount into the database.  Returns the new priKey.</summary>
-		internal static long Insert(Mount obj){
-			if(PrefC.RandomKeys) {
-				obj.MountNum=ReplicationServers.GetKey("mount","MountNum");
+		internal static long Insert(Mount mount){
+			return Insert(mount,false);
+		}
+
+		///<summary>Inserts one Mount into the database.  Provides option to use the existing priKey.</summary>
+		internal static long Insert(Mount mount,bool useExistingPK){
+			if(!useExistingPK && PrefC.RandomKeys) {
+				mount.MountNum=ReplicationServers.GetKey("mount","MountNum");
 			}
 			string command="INSERT INTO mount (";
-			if(PrefC.RandomKeys) {
+			if(useExistingPK || PrefC.RandomKeys) {
 				command+="MountNum,";
 			}
 			command+="PatNum,DocCategory,DateCreated,Description,Note,ImgType,Width,Height) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+=POut.Long(obj.MountNum)+",";
+			if(useExistingPK || PrefC.RandomKeys) {
+				command+=POut.Long(mount.MountNum)+",";
 			}
 			command+=
-				     POut.Long  (obj.PatNum)+","
-				+    POut.Long  (obj.DocCategory)+","
-				+    POut.Date  (obj.DateCreated)+","
-				+"'"+POut.String(obj.Description)+"',"
-				+"'"+POut.String(obj.Note)+"',"
-				+    POut.Int   ((int)obj.ImgType)+","
-				+    POut.Int   (obj.Width)+","
-				+    POut.Int   (obj.Height)+")";
-			if(PrefC.RandomKeys) {
+				     POut.Long  (mount.PatNum)+","
+				+    POut.Long  (mount.DocCategory)+","
+				+    POut.Date  (mount.DateCreated)+","
+				+"'"+POut.String(mount.Description)+"',"
+				+"'"+POut.String(mount.Note)+"',"
+				+    POut.Int   ((int)mount.ImgType)+","
+				+    POut.Int   (mount.Width)+","
+				+    POut.Int   (mount.Height)+")";
+			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {
-				obj.MountNum=Db.NonQ(command,true);
+				mount.MountNum=Db.NonQ(command,true);
 			}
-			return obj.MountNum;
+			return mount.MountNum;
 		}
 
 		///<summary>Updates one Mount in the database.</summary>
-		internal static void Update(Mount obj){
+		internal static void Update(Mount mount){
 			string command="UPDATE mount SET "
-				+"PatNum     =  "+POut.Long  (obj.PatNum)+", "
-				+"DocCategory=  "+POut.Long  (obj.DocCategory)+", "
-				+"DateCreated=  "+POut.Date  (obj.DateCreated)+", "
-				+"Description= '"+POut.String(obj.Description)+"', "
-				+"Note       = '"+POut.String(obj.Note)+"', "
-				+"ImgType    =  "+POut.Int   ((int)obj.ImgType)+", "
-				+"Width      =  "+POut.Int   (obj.Width)+", "
-				+"Height     =  "+POut.Int   (obj.Height)+" "
-				+"WHERE MountNum = "+POut.Long(obj.MountNum);
+				+"PatNum     =  "+POut.Long  (mount.PatNum)+", "
+				+"DocCategory=  "+POut.Long  (mount.DocCategory)+", "
+				+"DateCreated=  "+POut.Date  (mount.DateCreated)+", "
+				+"Description= '"+POut.String(mount.Description)+"', "
+				+"Note       = '"+POut.String(mount.Note)+"', "
+				+"ImgType    =  "+POut.Int   ((int)mount.ImgType)+", "
+				+"Width      =  "+POut.Int   (mount.Width)+", "
+				+"Height     =  "+POut.Int   (mount.Height)+" "
+				+"WHERE MountNum = "+POut.Long(mount.MountNum);
+			Db.NonQ(command);
+		}
+
+		///<summary>Updates one Mount in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
+		internal static void Update(Mount mount,Mount oldMount){
+			string command="";
+			if(mount.PatNum != oldMount.PatNum) {
+				if(command!=""){ command+=",";}
+				command+="PatNum = "+POut.Long(mount.PatNum)+"";
+			}
+			if(mount.DocCategory != oldMount.DocCategory) {
+				if(command!=""){ command+=",";}
+				command+="DocCategory = "+POut.Long(mount.DocCategory)+"";
+			}
+			if(mount.DateCreated != oldMount.DateCreated) {
+				if(command!=""){ command+=",";}
+				command+="DateCreated = "+POut.Date(mount.DateCreated)+"";
+			}
+			if(mount.Description != oldMount.Description) {
+				if(command!=""){ command+=",";}
+				command+="Description = '"+POut.String(mount.Description)+"'";
+			}
+			if(mount.Note != oldMount.Note) {
+				if(command!=""){ command+=",";}
+				command+="Note = '"+POut.String(mount.Note)+"'";
+			}
+			if(mount.ImgType != oldMount.ImgType) {
+				if(command!=""){ command+=",";}
+				command+="ImgType = "+POut.Int   ((int)mount.ImgType)+"";
+			}
+			if(mount.Width != oldMount.Width) {
+				if(command!=""){ command+=",";}
+				command+="Width = "+POut.Int(mount.Width)+"";
+			}
+			if(mount.Height != oldMount.Height) {
+				if(command!=""){ command+=",";}
+				command+="Height = "+POut.Int(mount.Height)+"";
+			}
+			if(command==""){
+				return;
+			}
+			command="UPDATE mount SET "+command
+				+" WHERE MountNum = "+POut.Long(mount.MountNum);
 			Db.NonQ(command);
 		}
 
