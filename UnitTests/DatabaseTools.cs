@@ -4,7 +4,6 @@ using System.Reflection;
 using System.Text;
 using OpenDental;
 using OpenDentBusiness;
-using OpenDentBusiness.DataAccess;
 using System.Windows.Forms;
 
 namespace UnitTests {
@@ -22,10 +21,8 @@ namespace UnitTests {
 			//Try to connect to the database directly
 			try {
 				DataConnection.DBtype=DatabaseType.MySql;
-				DataSettings.DbType = DataConnection.DBtype;
 				dcon=new OpenDentBusiness.DataConnection(DataConnection.DBtype);
-				DataSettings.ConnectionString = "Server=localhost;Database="+dbName+";User ID=root;Password=;CharSet=utf8";
-				dcon.SetDb(DataSettings.ConnectionString,"",DataConnection.DBtype,true);
+				dcon.SetDb("Server=localhost;Database="+dbName+";User ID=root;Password=;CharSet=utf8","",DataConnection.DBtype,true);
 				RemotingClient.RemotingRole=RemotingRole.ClientDirect;
 				return true;
 			}

@@ -6,7 +6,6 @@ using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
-using OpenDentBusiness.DataAccess;
 
 namespace Crud {
 	public class CrudGenHelper {
@@ -88,7 +87,6 @@ namespace Crud {
 
 		public static void ConnectToDatabase(string dbName){
 			OpenDentBusiness.DataConnection dcon=new OpenDentBusiness.DataConnection();
-			DataSettings.CreateConnectionString("localhost",dbName,"root","");
 			dcon.SetDb("localhost",dbName,"root","","","",DatabaseType.MySql);
 			RemotingClient.RemotingRole=RemotingRole.ClientDirect;
 		}

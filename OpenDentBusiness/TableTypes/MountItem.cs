@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using OpenDentBusiness.DataAccess;
 
 namespace OpenDentBusiness {
 	/// <summary>These are always attached to a mount and are constant. Should not be deleted, but rather updated if geometry changes.</summary>

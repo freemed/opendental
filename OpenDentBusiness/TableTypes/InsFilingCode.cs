@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using OpenDentBusiness.DataAccess;
 
 namespace OpenDentBusiness{
 	///<summary>An optional field on insplan and claims.  This lets user customize so that they can track insurance types.</summary>

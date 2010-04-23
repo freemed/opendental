@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using OpenDentBusiness.DataAccess;
 
 namespace OpenDentBusiness{
 	///<summary>Only used internally by OpenDental, Inc.  Not used by anyone else.</summary>

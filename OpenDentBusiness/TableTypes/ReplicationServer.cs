@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using OpenDentBusiness.DataAccess;
 
 namespace OpenDentBusiness{
 	///<summary>If replication is being used, then this stores information about each server.  Each row is one server.</summary>

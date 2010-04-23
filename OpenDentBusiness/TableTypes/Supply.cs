@@ -1,9 +1,7 @@
 using System;
 using System.Collections;
-using OpenDentBusiness.DataAccess;
 
 namespace OpenDentBusiness{
-
 	///<summary>A dental supply or office supply item.</summary>
 	[Serializable()]
 	public class Supply : TableBase {

@@ -9,7 +9,6 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using OpenDentBusiness;
 using CodeBase;
-using OpenDentBusiness.DataAccess;
 
 namespace OpenDentBusiness {
 	///<summary>Handles documents and images for the Images module</summary>
@@ -168,11 +167,7 @@ namespace OpenDentBusiness {
 				+" AND document.DocCategory="+POut.Long(defNumPicts)
 				+" ORDER BY DateCreated DESC ";
 			//gets the most recent
-			if(DataSettings.DbType==DatabaseType.Oracle){
-				command="SELECT * FROM ("+command+") WHERE ROWNUM<=1";
-			}else{//Assume MySQL
-				command+="LIMIT 1";
-			}
+			command+="LIMIT 1";
 			DataTable table=Db.GetTable(command);
 			Document[] pictureDocs=Fill(table);
 			if(pictureDocs==null || pictureDocs.Length<1){//no pictures

@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using OpenDentBusiness.DataAccess;
 
 namespace OpenDentBusiness{
 	///<summary>All recalls are based on these recall types.  Recall triggers are in their own table.</summary>

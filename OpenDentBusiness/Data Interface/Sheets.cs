@@ -5,7 +5,6 @@ using System.Collections.ObjectModel;
 using System.Data;
 using System.Reflection;
 using System.Text;
-using OpenDentBusiness.DataAccess;
 
 namespace OpenDentBusiness{
 	///<summary></summary>

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using OpenDentBusiness.DataAccess;
 
 namespace OpenDentBusiness{
 	///<summary>HL7 messages sent and received.</summary>

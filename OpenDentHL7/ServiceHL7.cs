@@ -12,7 +12,6 @@ using System.Xml;
 using System.Xml.XPath;
 using OpenDentBusiness;
 using OpenDentBusiness.HL7;
-using OpenDentBusiness.DataAccess;//this namespace is in the OpenDentBusiness project.
 
 namespace OpenDentHL7 {
 	public partial class ServiceHL7:ServiceBase {
@@ -49,7 +48,6 @@ namespace OpenDentHL7 {
 			OpenDentBusiness.DataConnection dcon=new OpenDentBusiness.DataConnection();
 			//Try to connect to the database directly
 			try {
-				DataSettings.CreateConnectionString(computerName,database,user,password);
 				dcon.SetDb(computerName,database,user,password,"","",DataConnection.DBtype);
 				//a direct connection does not utilize lower privileges.
 				RemotingClient.RemotingRole=RemotingRole.ClientDirect;

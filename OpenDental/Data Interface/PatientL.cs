@@ -6,7 +6,6 @@ using System.Data;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using OpenDentBusiness.DataAccess;
 using OpenDentBusiness;
 
 namespace OpenDental{

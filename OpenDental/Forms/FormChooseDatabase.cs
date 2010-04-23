@@ -17,7 +17,6 @@ using System.Xml;
 using System.Xml.XPath;
 using OpenDentBusiness;
 using CodeBase;
-using OpenDentBusiness.DataAccess;
 
 namespace OpenDental{
 	///<summary></summary>
@@ -645,11 +644,9 @@ namespace OpenDental{
 			//Try to connect to the database directly
 			try {
 				if(textConnectionString.Text.Length>0){
-					DataSettings.ConnectionString = textConnectionString.Text; 
 					dcon.SetDb(textConnectionString.Text,"",DataConnection.DBtype);
 				}
 				else{
-					DataSettings.CreateConnectionString(comboComputerName.Text, comboDatabase.Text, textUser.Text, textPassword.Text);
 					dcon.SetDb(comboComputerName.Text,comboDatabase.Text,textUser.Text,textPassword.Text,"","",DataConnection.DBtype);
 				}
 				//a direct connection does not utilize lower privileges.
@@ -685,14 +682,11 @@ namespace OpenDental{
 					//if(listType.SelectedIndex==1) {
 						//DataConnection.DBtype=DatabaseType.Oracle;
 					//}
-					DataSettings.DbType = DataConnection.DBtype;
 					dcon=new OpenDentBusiness.DataConnection(DataConnection.DBtype);
 					if(textConnectionString.Text.Length>0){
-						DataSettings.ConnectionString = textConnectionString.Text; 
 						dcon.SetDb(textConnectionString.Text,"",DataConnection.DBtype);
 					}
 					else{
-						DataSettings.CreateConnectionString(comboComputerName.Text,comboDatabase.Text,textUser.Text,textPassword.Text);
 						dcon.SetDb(comboComputerName.Text,comboDatabase.Text,textUser.Text,textPassword.Text,"","",DataConnection.DBtype);
 					}
 					//a direct connection does not utilize lower privileges.

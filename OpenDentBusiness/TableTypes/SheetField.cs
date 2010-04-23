@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Drawing;
-using OpenDentBusiness.DataAccess;
 
 namespace OpenDentBusiness{
 	///<summary>One field on a sheet.</summary>

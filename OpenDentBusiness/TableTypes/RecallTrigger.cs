@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using OpenDentBusiness.DataAccess;
 
 namespace OpenDentBusiness{
 	///<summary>Links one procedurecode to one recalltype.  The presence of this trigger is used when determining DatePrevious in the recall table.</summary>

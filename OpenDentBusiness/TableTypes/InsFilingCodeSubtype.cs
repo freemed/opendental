@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using OpenDentBusiness.DataAccess;
 
 namespace OpenDentBusiness{
 	///<summary>Stores the list of insurance filing code subtypes.</summary>

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using OpenDentBusiness.DataAccess;
 
 namespace OpenDentBusiness {
 	/// <summary>A mount shows in the images module just like other images in the tree.  But it is just a container for images within it rather than an actual image itself.</summary>

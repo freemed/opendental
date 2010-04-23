@@ -11,7 +11,6 @@ using System.Web.Services.Protocols;
 using System.Xml;
 using System.Xml.Serialization;
 using OpenDentBusiness;
-using OpenDentBusiness.DataAccess;
 
 namespace OpenDentalServer {
 	/// <summary></summary>

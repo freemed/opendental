@@ -7,7 +7,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Serialization;
-using OpenDentBusiness.DataAccess;
 
 namespace OpenDentBusiness {
 	public class XmlConverter {
@@ -52,13 +51,6 @@ namespace OpenDentBusiness {
 		///<summary>Should accept any type.  Tested types include System types, OD types, Arrays, Lists, arrays of DtoObject, null DataObjectBase, null arrays, null Lists.  But not DataTable or DataSet.  If we find a type that isn't supported, then we need to add it.  Types that are currently unsupported include Arrays of DataObjectBase that contain a null.  Lists that contain nulls are untested and may be an issue for DataObjectBase.</summary>
 		public static T Deserialize<T>(string xmlData) {
 			Type type = typeof(T);
-			if(type.BaseType==typeof(DataObjectBase)) {
-				//need to test for null. Example:
-				//<?xml version="1.0" encoding="utf-16"?><Document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:nil="true" />
-				if(Regex.IsMatch(xmlData,"<"+type.Name+"[^>]*xsi:nil=\"true\"")) {
-					return default(T);//null
-				}
-			}
 			/*later.  I don't think arrays will null objects will be an issue.
 			if(type.IsArray) {
 				Type arrayType=type.GetElementType();

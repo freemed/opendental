@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using OpenDentBusiness.DataAccess;
 
 namespace OpenDentBusiness{
 	/// <summary>THIS TABLE IS NOT BEING USED.  These are always attached to mountdefs.  Can be deleted without any problems.</summary>
