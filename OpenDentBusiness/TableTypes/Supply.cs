@@ -5,116 +5,27 @@ using OpenDentBusiness.DataAccess;
 namespace OpenDentBusiness{
 
 	///<summary>A dental supply or office supply item.</summary>
-	[DataObject("supply")]
-	public class Supply : DataObjectBase {
-		[DataField("SupplyNum", PrimaryKey=true, AutoNumber=true)]
-		private long supplyNum;
-		bool supplyNumChanged;
+	[Serializable()]
+	public class Supply : TableBase {
 		/// <summary>Primary key.</summary>
-		public long SupplyNum {
-			get { return supplyNum; }
-			set { if(supplyNum!=value){supplyNum = value; MarkDirty(); supplyNumChanged = true; }}
-		}
-		public bool SupplyNumChanged {
-			get { return supplyNumChanged; }
-		}
-
-		[DataField("SupplierNum")]
-		private long supplierNum;
-		bool supplierNumChanged;
+		[CrudColumn(IsPriKey=true)]
+		public long SupplyNum;
 		/// <summary>FK to supplier.SupplierNum</summary>
-		public long SupplierNum {
-			get { return supplierNum; }
-			set { if(supplierNum!=value){supplierNum = value; MarkDirty(); supplierNumChanged = true;} }
-		}
-		public bool SupplierNumChanged {
-			get { return supplierNumChanged; }
-		}
-
-		[DataField("CatalogNumber")]
-		private string catalogNumber;
-		bool catalogNumberChanged;
+		public long SupplierNum;
 		/// <summary>The catalog item number that the supplier uses to identify the supply.</summary>
-		public string CatalogNumber {
-			get { return catalogNumber; }
-			set { if(catalogNumber!=value){catalogNumber = value; MarkDirty(); catalogNumberChanged = true; }}
-		}
-		public bool CatalogNumberChanged {
-			get { return catalogNumberChanged; }
-		}
-
-		[DataField("Descript")]
-		private string descript;
-		bool descriptChanged;
+		public string CatalogNumber;
 		/// <summary>The description can be similar to the catalog, but not required.  Typically includes qty per box/case, etc.</summary>
-		public string Descript {
-			get { return descript; }
-			set { if(descript!=value){descript = value; MarkDirty(); descriptChanged = true; }}
-		}
-		public bool DescriptChanged {
-			get { return descriptChanged; }
-		}
-
-		[DataField("Category")]
-		private long category;
-		bool categoryChanged;
+		public string Descript;
 		/// <summary>FK to definition.DefNum.  User can define their own categories for supplies.</summary>
-		public long Category {
-			get { return category; }
-			set { if(category!=value){category = value; MarkDirty(); categoryChanged = true;} }
-		}
-		public bool CategoryChanged {
-			get { return categoryChanged; }
-		}
-
-		[DataField("ItemOrder")]
-		private int itemOrder;
-		bool itemOrderChanged;
+		public long Category;
 		///<summary>The zero-based order of this supply within it's category.</summary>
-		public int ItemOrder {
-			get { return itemOrder; }
-			set { if(itemOrder!=value){itemOrder = value; MarkDirty(); itemOrderChanged = true; }}
-		}
-		public bool ItemOrderChanged {
-			get { return itemOrderChanged; }
-		}
-
-		[DataField("LevelDesired")]
-		private float levelDesired;
-		bool levelDesiredChanged;
+		public int ItemOrder;
 		/// <summary>The level that a fresh order should bring item back up to.  Can include fractions.  If this is 0, then it will be displayed as having this field blank rather than showing 0.  This simply gives a cleaner look.</summary>
-		public float LevelDesired {
-			get { return levelDesired; }
-			set { if(levelDesired!=value){levelDesired = value; MarkDirty(); levelDesiredChanged = true;} }
-		}
-		public bool LevelDesiredChanged {
-			get { return levelDesiredChanged; }
-		}
-
-		[DataField("IsHidden")]
-		private bool isHidden;
-		bool isHiddenChanged;
+		public float LevelDesired;
 		/// <summary>If hidden, then this supply item won't normally show in the main list.</summary>
-		public bool IsHidden {
-			get { return isHidden; }
-			set { if(isHidden!=value){isHidden = value; MarkDirty(); isHiddenChanged = true;} }
-		}
-		public bool IsHiddenChanged {
-			get { return isHiddenChanged; }
-		}
-
-		[DataField("Price")]
-		private double price;
-		bool priceChanged;
+		public bool IsHidden;
 		/// <summary>The price per unit that the supplier charges for this supply.  If this is 0.00, then no price will be displayed.</summary>
-		public double Price {
-			get { return price; }
-			set { if(price!=value){price = value; MarkDirty(); priceChanged = true;} }
-		}
-		public bool PriceChanged {
-			get { return priceChanged; }
-		}
-
+		public double Price;
 		
 
 			

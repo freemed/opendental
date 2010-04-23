@@ -178,15 +178,14 @@ namespace OpenDental {
 			int scrollVal=gridMain.ScrollValue;
 			//change all the appropriate itemorders
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++){//loop from the top down
-				listSupply[gridMain.SelectedIndices[i]-1].ItemOrder++;//move the one above it down
-				listSupply[gridMain.SelectedIndices[i]].ItemOrder--;//move this one up
+				//move the one above it down
+				listSupply[gridMain.SelectedIndices[i]-1].ItemOrder++;
+				Supplies.WriteObject(listSupply[gridMain.SelectedIndices[i]-1]);
+				//move this one up
+				listSupply[gridMain.SelectedIndices[i]].ItemOrder--;
+				Supplies.WriteObject(listSupply[gridMain.SelectedIndices[i]]);
+				//keep the list uptodate
 				listSupply.Reverse(gridMain.SelectedIndices[i]-1,2);
-			}
-			//persist changes
-			for(int i=0;i<listSupply.Count;i++){
-				if(listSupply[i].ItemOrderChanged){
-					Supplies.WriteObject(listSupply[i]);
-				}
 			}
 			FillGrid();
 			//reselect the original supplyNums
@@ -233,15 +232,14 @@ namespace OpenDental {
 			int scrollVal=gridMain.ScrollValue;
 			//change all the appropriate itemorders in the main list
 			for(int i=gridMain.SelectedIndices.Length-1;i>=0;i--) {//loop from the bottom up
-				listSupply[gridMain.SelectedIndices[i]+1].ItemOrder--;//move the one below it up
-				listSupply[gridMain.SelectedIndices[i]].ItemOrder++;//move this one down
+				//move the one below it up
+				listSupply[gridMain.SelectedIndices[i]+1].ItemOrder--;
+				Supplies.WriteObject(listSupply[gridMain.SelectedIndices[i]+1]);
+				//move this one down
+				listSupply[gridMain.SelectedIndices[i]].ItemOrder++;
+				Supplies.WriteObject(listSupply[gridMain.SelectedIndices[i]]);
+				//keep the list uptodate
 				listSupply.Reverse(gridMain.SelectedIndices[i],2);
-			}
-			//Persist changes
-			for(int i=0;i<listSupply.Count;i++) {
-				if(listSupply[i].ItemOrderChanged) {
-					Supplies.WriteObject(listSupply[i]);
-				}
 			}
 			FillGrid();
 			//reselect the original supplyNums

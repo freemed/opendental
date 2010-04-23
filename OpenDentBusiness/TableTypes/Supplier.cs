@@ -5,103 +5,25 @@ using OpenDentBusiness.DataAccess;
 namespace OpenDentBusiness{
 
 	///<summary>A company that provides supplies for the office, typically dental supplies.</summary>
-	[DataObject("supplier")]
-	public class Supplier : DataObjectBase {
-		[DataField("SupplierNum", PrimaryKey=true, AutoNumber=true)]
-		private long supplierNum;
-		bool supplierNumChanged;
+	[Serializable()]
+	public class Supplier : TableBase {
 		/// <summary>Primary key.</summary>
-		public long SupplierNum {
-			get { return supplierNum; }
-			set { supplierNum = value; MarkDirty(); supplierNumChanged = true; }
-		}
-		public bool SupplierNumChanged {
-			get { return supplierNumChanged; }
-		}
-
-		[DataField("Name")]
-		private string name;
-		bool nameChanged;
+		[CrudColumn(IsPriKey=true)]
+		public long SupplierNum;
 		/// <summary>.</summary>
-		public string Name {
-			get { return name; }
-			set { name = value; MarkDirty(); nameChanged = true; }
-		}
-		public bool NameChanged {
-			get { return nameChanged; }
-		}
-
-		[DataField("Phone")]
-		private string phone;
-		bool phoneChanged;
+		public string Name;
 		/// <summary>.</summary>
-		public string Phone {
-			get { return phone; }
-			set { phone = value; MarkDirty(); phoneChanged = true; }
-		}
-		public bool PhoneChanged {
-			get { return phoneChanged; }
-		}
-
-		[DataField("CustomerId")]
-		private string customerId;
-		bool customerIdChanged;
+		public string Phone;
 		/// <summary>The customer ID that this office uses for transactions with the supplier</summary>
-		public string CustomerId {
-			get { return customerId; }
-			set { customerId = value; MarkDirty(); customerIdChanged = true; }
-		}
-		public bool CustomerIdChanged {
-			get { return customerIdChanged; }
-		}
-
-		[DataField("Website")]
-		private string website;
-		bool websiteChanged;
+		public string CustomerId;
 		/// <summary>Full address to website.  We might make it clickable.</summary>
-		public string Website {
-			get { return website; }
-			set { website = value; MarkDirty(); websiteChanged = true; }
-		}
-		public bool WebsiteChanged {
-			get { return websiteChanged; }
-		}
-
-		[DataField("UserName")]
-		private string userName;
-		bool userNameChanged;
+		public string Website;
 		/// <summary>The username used to log in to the supplier website.</summary>
-		public string UserName {
-			get { return userName; }
-			set { userName = value; MarkDirty(); userNameChanged = true; }
-		}
-		public bool UserNameChanged {
-			get { return userNameChanged; }
-		}
-
-		[DataField("Password")]
-		private string password;
-		bool passwordChanged;
+		public string UserName;
 		/// <summary>The password to log in to the supplier website.  Not encrypted or hidden in any way.</summary>
-		public string Password {
-			get { return password; }
-			set { password = value; MarkDirty(); passwordChanged = true; }
-		}
-		public bool PasswordChanged {
-			get { return passwordChanged; }
-		}
-
-		[DataField("Note")]
-		private string note;
-		bool noteChanged;
+		public string Password;
 		/// <summary>Any note regarding supplier.  Could hold address, CC info, etc.</summary>
-		public string Note {
-			get { return note; }
-			set { note = value; MarkDirty(); noteChanged = true; }
-		}
-		public bool NoteChanged {
-			get { return noteChanged; }
-		}
+		public string Note;
 
 		
 

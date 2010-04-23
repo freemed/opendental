@@ -440,15 +440,13 @@ namespace OpenDental {
 			int scrollVal=gridSupplyMain.ScrollValue;
 			//change all the appropriate itemorders
 			for(int i=0;i<gridSupplyMain.SelectedIndices.Length;i++) {//loop from the top down
-				listSupply[gridSupplyMain.SelectedIndices[i]-1].ItemOrder++;//move the one above it down
-				listSupply[gridSupplyMain.SelectedIndices[i]].ItemOrder--;//move this one up
+				//move the one above it down
+				listSupply[gridSupplyMain.SelectedIndices[i]-1].ItemOrder++;
+				Supplies.WriteObject(listSupply[gridSupplyMain.SelectedIndices[i]-1]);
+				//move this one up
+				listSupply[gridSupplyMain.SelectedIndices[i]].ItemOrder--;
+				Supplies.WriteObject(listSupply[gridSupplyMain.SelectedIndices[i]]);
 				listSupply.Reverse(gridSupplyMain.SelectedIndices[i]-1,2);
-			}
-			//persist changes
-			for(int i=0;i<listSupply.Count;i++) {
-				if(listSupply[i].ItemOrderChanged) {
-					Supplies.WriteObject(listSupply[i]);
-				}
 			}
 			FillGridSupplyMain();
 			//reselect the original supplyNums
@@ -494,15 +492,13 @@ namespace OpenDental {
 			int scrollVal=gridSupplyMain.ScrollValue;
 			//change all the appropriate itemorders in the main list
 			for(int i=gridSupplyMain.SelectedIndices.Length-1;i>=0;i--) {//loop from the bottom up
-				listSupply[gridSupplyMain.SelectedIndices[i]+1].ItemOrder--;//move the one below it up
-				listSupply[gridSupplyMain.SelectedIndices[i]].ItemOrder++;//move this one down
+				//move the one below it up
+				listSupply[gridSupplyMain.SelectedIndices[i]+1].ItemOrder--;
+				Supplies.WriteObject(listSupply[gridSupplyMain.SelectedIndices[i]+1]);
+				//move this one down
+				listSupply[gridSupplyMain.SelectedIndices[i]].ItemOrder++;
+				Supplies.WriteObject(listSupply[gridSupplyMain.SelectedIndices[i]]);
 				listSupply.Reverse(gridSupplyMain.SelectedIndices[i],2);
-			}
-			//Persist changes
-			for(int i=0;i<listSupply.Count;i++) {
-				if(listSupply[i].ItemOrderChanged) {
-					Supplies.WriteObject(listSupply[i]);
-				}
 			}
 			FillGridSupplyMain();
 			//reselect the original supplyNums

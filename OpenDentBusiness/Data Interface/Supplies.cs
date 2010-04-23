@@ -25,7 +25,7 @@ namespace OpenDentBusiness{
 				command+="AND supply.IsHidden=0 ";
 			}
 			command+="ORDER BY definition.ItemOrder,supply.ItemOrder";
-			return new List<Supply>(DataObjectFactory<Supply>.CreateObjects(command));
+			return Crud.SupplyCrud.SelectMany(command);
 		}
 
 		///<Summary>Gets one supply from the database.  Used for display in SupplyOrderItemEdit window.</Summary>
@@ -33,8 +33,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Supply>(MethodBase.GetCurrentMethod(),supplyNum);
 			}
-			//string command="SELECT * FROM supply WHERE SupplyNum="+POut.PInt(supplyNum);
-			return DataObjectFactory<Supply>.CreateObject(supplyNum);
+			return Crud.SupplyCrud.SelectOne(supplyNum);
 		}
 
 		///<summary></summary>
@@ -43,8 +42,13 @@ namespace OpenDentBusiness{
 				supp.SupplyNum=Meth.GetLong(MethodBase.GetCurrentMethod(),supp);
 				return supp.SupplyNum;
 			}
-			DataObjectFactory<Supply>.WriteObject(supp);
-			return supp.SupplyNum;
+			if(supp.IsNew){
+				return Crud.SupplyCrud.Insert(supp);
+			}
+			else{
+				Crud.SupplyCrud.Update(supp);
+				return supp.SupplyNum;
+			}
 		}
 
 		///<summary>Surround with try-catch.</summary>
@@ -59,7 +63,7 @@ namespace OpenDentBusiness{
 			if(count>0){
 				throw new ApplicationException(Lans.g("Supplies","Supply is already in use on an order. Not allowed to delete."));
 			}
-			DataObjectFactory<Supply>.DeleteObject(supp);
+			Crud.SupplyCrud.Delete(supp.SupplyNum);
 		}
 
 		///<Summary>Loops through the supplied list and verifies that the ItemOrders are not corrupted.  If they are, then it fixes them.  Returns true if fix was required.  It makes a few assumptions about the quality of the list supplied.  Specifically, that there are no missing items, and that categories are grouped and sorted.</Summary>

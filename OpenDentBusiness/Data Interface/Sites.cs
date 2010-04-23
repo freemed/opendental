@@ -21,14 +21,7 @@ namespace OpenDentBusiness{
 
 		public static void FillCache(DataTable table){
 			//No need to check RemotingRole; no call to db.
-			SiteC.List=new Site[table.Rows.Count];
-			for(int i=0;i<SiteC.List.Length;i++){
-				SiteC.List[i]=new Site();
-				SiteC.List[i].IsNew=false;
-				SiteC.List[i].SiteNum    = PIn.Long   (table.Rows[i][0].ToString());
-				SiteC.List[i].Description= PIn.String(table.Rows[i][1].ToString());
-				SiteC.List[i].Note       = PIn.String(table.Rows[i][2].ToString());
-			}
+			SiteC.List=Crud.SiteCrud.TableToList(table).ToArray();
 		}
 
 		///<Summary>Gets one Site from the database.</Summary>
@@ -36,15 +29,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Site>(MethodBase.GetCurrentMethod(),siteNum);
 			}
-			return DataObjectFactory<Site>.CreateObject(siteNum);
-		}
-
-		public static List<Site> GetSites(List<long> siteNums) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<Site>>(MethodBase.GetCurrentMethod(),siteNums);
-			}
-			Collection<Site> collectState=DataObjectFactory<Site>.CreateObjects(siteNums);
-			return new List<Site>(collectState);		
+			return Crud.SiteCrud.SelectOne(siteNum);
 		}
 
 		///<summary></summary>
@@ -53,8 +38,13 @@ namespace OpenDentBusiness{
 				site.SiteNum=Meth.GetLong(MethodBase.GetCurrentMethod(),site);
 				return site.SiteNum;
 			}
-			DataObjectFactory<Site>.WriteObject(site);
-			return site.SiteNum;
+			if(site.IsNew){
+				return Crud.SiteCrud.Insert(site);
+			}
+			else{
+				Crud.SiteCrud.Update(site);
+				return site.SiteNum;
+			}
 		}
 
 		///<summary></summary>
@@ -77,12 +67,8 @@ namespace OpenDentBusiness{
 			if(table.Rows.Count>0){
 				throw new ApplicationException(Lans.g("Sites","Site is already in use by patient(s). Not allowed to delete. ")+pats);
 			}
-			DataObjectFactory<Site>.DeleteObject(siteNum);
+			Crud.SiteCrud.Delete(siteNum);
 		}
-
-		//public static void DeleteObject(int siteNum){
-		//	DataObjectFactory<Site>.DeleteObject(siteNum);
-		//}
 
 		public static string GetDescription(long siteNum) {
 			//No need to check RemotingRole; no call to db.

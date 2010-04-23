@@ -18,16 +18,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Statement>(MethodBase.GetCurrentMethod(),statementNum);
 			}
-			//string command="SELECT * FROM statement WHERE SupplyNum="+POut.PInt(supplyNum);
-			return DataObjectFactory<Statement>.CreateObject(statementNum);
-		}
-
-		public static List<Statement> GetStatements(List<long> statementNums) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<Statement>>(MethodBase.GetCurrentMethod(),statementNums);
-			} 
-			Collection<Statement> collectState=DataObjectFactory<Statement>.CreateObjects(statementNums);
-			return new List<Statement>(collectState);		
+			return Crud.StatementCrud.SelectOne(statementNum);
 		}
 
 		///<summary></summary>
@@ -36,8 +27,13 @@ namespace OpenDentBusiness{
 				statement.StatementNum=Meth.GetLong(MethodBase.GetCurrentMethod(),statement);
 				return statement.StatementNum;
 			}
-			DataObjectFactory<Statement>.WriteObject(statement);
-			return statement.StatementNum;
+			if(statement.IsNew){
+				return Crud.StatementCrud.Insert(statement);
+			}
+			else{
+				Crud.StatementCrud.Update(statement);
+				return  statement.StatementNum;
+			}
 		}
 
 		///<summary></summary>
@@ -47,12 +43,7 @@ namespace OpenDentBusiness{
 				return;
 			}
 			//validate that not already in use.
-			//string command="SELECT COUNT(*) FROM supplyorderitem WHERE SupplyNum="+POut.PInt(supp.SupplyNum);
-			//int count=PIn.PInt(Db.GetCount(command));
-			//if(count>0){
-			//	throw new ApplicationException(Lans.g("Supplies","Supply is already in use on an order. Not allowed to delete."));
-			//}
-			DataObjectFactory<Statement>.DeleteObject(statement);
+			Crud.StatementCrud.Delete(statement.StatementNum);
 		}
 
 		public static void DeleteObject(long statementNum) {
@@ -60,7 +51,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),statementNum);
 				return;
 			}
-			DataObjectFactory<Statement>.DeleteObject(statementNum);
+			Crud.StatementCrud.Delete(statementNum);
 		}
 
 		///<summary>Queries the database to determine if there are any unsent statements.</summary>

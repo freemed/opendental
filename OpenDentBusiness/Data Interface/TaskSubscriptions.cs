@@ -9,15 +9,6 @@ using OpenDentBusiness.DataAccess;
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class TaskSubscriptions {
-
-		/*
-		///<summary>Gets all TaskSubscriptions for one user.</summary>
-		public static List<TaskSubscription> CreateObjects(int userNum) {
-			string command="SELECT * FROM tasksubscription "
-				+"WHERE UserNum="+POut.PInt(userNum)
-				+" ORDER BY ";
-			return new List<TaskSubscription>(DataObjectFactory<TaskSubscription>.CreateObjects(command));
-		}*/
 	
 		///<summary></summary>
 		public static long WriteObject(TaskSubscription subsc){
@@ -25,15 +16,14 @@ namespace OpenDentBusiness{
 				subsc.TaskSubscriptionNum=Meth.GetLong(MethodBase.GetCurrentMethod(),subsc);
 				return subsc.TaskSubscriptionNum;
 			}
-			DataObjectFactory<TaskSubscription>.WriteObject(subsc);
-			return subsc.TaskSubscriptionNum;
+			if(subsc.IsNew){
+				return Crud.TaskSubscriptionCrud.Insert(subsc);
+			}
+			else{
+				Crud.TaskSubscriptionCrud.Update(subsc);
+				return subsc.TaskSubscriptionNum;
+			}
 		}
-
-		/*
-		///<summary>Surround with try-catch.</summary>
-		public static void DeleteObject(TaskSubscription subsc){
-			DataObjectFactory<TaskSubscription>.DeleteObject(subsc);
-		}*/
 
 		///<summary>Creates a subscription to a list.</summary>
 		public static void SubscList(long taskListNum,long userNum) {
@@ -53,21 +43,6 @@ namespace OpenDentBusiness{
 			WriteObject(subsc);
 		}
 
-		/*
-		///<summary>Creates a subscription to a task.</summary>
-		public static void SubscTask(int taskNum,int userNum) {
-			string command="SELECT COUNT(*) FROM tasksubscription "
-				+"WHERE UserNum="+POut.PInt(userNum)
-				+" AND TaskNum="+POut.PInt(taskNum);
-			if(Db.GetCount(command)!="0") {
-				throw new ApplicationException(Lans.g("TaskSubscriptions","User already subscribed."));
-			}
-			TaskSubscription subsc=new TaskSubscription();
-			subsc.UserNum=userNum;
-			subsc.TaskNum=taskNum;
-			WriteObject(subsc);
-		}*/
-
 		///<summary>Removes a subscription to a list.</summary>
 		public static void UnsubscList(long taskListNum,long userNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
@@ -80,15 +55,7 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
-		/*
-		///<summary>Removes a subscription to a task.</summary>
-		public static void UnsubscTask(int taskNum,int userNum) {
-			string command="DELETE FROM tasksubscription "
-				+"WHERE UserNum="+POut.PInt(userNum)
-				+" AND TaskNum="+POut.PInt(taskNum);
-			Db.NonQ(command);
-		}*/
-		
+
 		
 		
 

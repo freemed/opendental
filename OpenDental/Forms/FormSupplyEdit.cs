@@ -11,6 +11,8 @@ namespace OpenDental {
 	public partial class FormSupplyEdit:Form {
 		public Supply Supp;
 		public List<Supplier> ListSupplier;
+		private bool isHiddenInitialVal;
+		private long categoryInitialVal;
 
 		public FormSupplyEdit() {
 			InitializeComponent();
@@ -28,6 +30,7 @@ namespace OpenDental {
 			if(comboCategory.SelectedIndex==-1){
 				comboCategory.SelectedIndex=0;//There are no hidden cats, and presence of cats is checked before allowing user to add new.
 			}
+			categoryInitialVal=Supp.Category;
 			textCatalogNumber.Text=Supp.CatalogNumber;
 			textDescript.Text=Supp.Descript;
 			if(Supp.LevelDesired!=0){
@@ -37,6 +40,7 @@ namespace OpenDental {
 				textPrice.Text=Supp.Price.ToString("n");
 			}
 			checkIsHidden.Checked=Supp.IsHidden;
+			isHiddenInitialVal=Supp.IsHidden;
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
@@ -73,7 +77,7 @@ namespace OpenDental {
 			Supp.LevelDesired=PIn.Float(textLevelDesired.Text);
 			Supp.Price=PIn.Double(textPrice.Text);
 			Supp.IsHidden=checkIsHidden.Checked;
-			if(Supp.IsHiddenChanged) {
+			if(Supp.IsHidden != isHiddenInitialVal) {
 				if(Supp.IsHidden) {
 					Supp.ItemOrder=0;
 				}
@@ -82,7 +86,7 @@ namespace OpenDental {
 				}
 			}
 			Supplies.WriteObject(Supp);
-			if(Supp.IsHiddenChanged || Supp.CategoryChanged){
+			if(Supp.IsHidden != isHiddenInitialVal || Supp.Category != categoryInitialVal){
 				List<Supply> listSupply=Supplies.CreateObjects(false,Supp.SupplierNum,"");
 				Supplies.CleanupItemOrders(listSupply);
 			}
@@ -92,6 +96,8 @@ namespace OpenDental {
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 		
 	}

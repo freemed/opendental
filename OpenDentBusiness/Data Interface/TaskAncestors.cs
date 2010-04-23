@@ -16,15 +16,14 @@ namespace OpenDentBusiness{
 				ancestor.TaskAncestorNum=Meth.GetLong(MethodBase.GetCurrentMethod(),ancestor);
 				return ancestor.TaskAncestorNum;
 			}
-			DataObjectFactory<TaskAncestor>.WriteObject(ancestor);
-			return ancestor.TaskAncestorNum;
+			if(ancestor.IsNew){
+				return Crud.TaskAncestorCrud.Insert(ancestor);
+			}
+			else{
+				Crud.TaskAncestorCrud.Update(ancestor);
+				return ancestor.TaskAncestorNum;
+			}
 		}
-
-		/*
-		///<summary>Surround with try-catch.</summary>
-		public static void DeleteObject(TaskAncestor subsc){
-			DataObjectFactory<TaskAncestor>.DeleteObject(subsc);
-		}*/
 
 		public static void Synch(Task task){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {

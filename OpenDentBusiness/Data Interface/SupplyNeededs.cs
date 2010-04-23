@@ -16,7 +16,7 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<List<SupplyNeeded>>(MethodBase.GetCurrentMethod());
 			}
 			string command="SELECT * FROM supplyneeded ORDER BY DateAdded";
-			return new List<SupplyNeeded>(DataObjectFactory<SupplyNeeded>.CreateObjects(command));
+			return Crud.SupplyNeededCrud.SelectMany(command);
 		}
 
 		///<summary></summary>
@@ -25,8 +25,13 @@ namespace OpenDentBusiness{
 				supp.SupplyNeededNum=Meth.GetLong(MethodBase.GetCurrentMethod(),supp);
 				return supp.SupplyNeededNum;
 			}
-			DataObjectFactory<SupplyNeeded>.WriteObject(supp);
-			return supp.SupplyNeededNum;
+			if(supp.IsNew){
+				return Crud.SupplyNeededCrud.Insert(supp);
+			}
+			else{
+				Crud.SupplyNeededCrud.Update(supp);
+				return supp.SupplyNeededNum;
+			}
 		}
 
 		///<summary></summary>
@@ -35,7 +40,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),supp);
 				return;
 			}
-			DataObjectFactory<SupplyNeeded>.DeleteObject(supp);
+			Crud.SupplyNeededCrud.Delete(supp.SupplyNeededNum);
 		}
 
 

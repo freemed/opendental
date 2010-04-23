@@ -5,43 +5,15 @@ using OpenDentBusiness.DataAccess;
 namespace OpenDentBusiness{
 
 	///<summary></summary>
-	[DataObject("supplyneeded")]
-	public class SupplyNeeded : DataObjectBase {
-		[DataField("SupplyNeededNum", PrimaryKey=true, AutoNumber=true)]
-		private long supplyNeededNum;
-		bool supplyNeededNumChanged;
+	[Serializable()]
+	public class SupplyNeeded : TableBase {
 		/// <summary>Primary key.</summary>
-		public long SupplyNeededNum {
-			get { return supplyNeededNum; }
-			set { supplyNeededNum = value; MarkDirty(); supplyNeededNumChanged = true; }
-		}
-		public bool SupplyNeededNumChanged {
-			get { return supplyNeededNumChanged; }
-		}
-
-		[DataField("Description")]
-		private string description;
-		bool descriptionChanged;
+		[CrudColumn(IsPriKey=true)]
+		public long SupplyNeededNum;
 		/// <summary>.</summary>
-		public string Description {
-			get { return description; }
-			set { description = value; MarkDirty(); descriptionChanged = true; }
-		}
-		public bool DescriptionChanged {
-			get { return descriptionChanged; }
-		}
-
-		[DataField("DateAdded")]
-		private DateTime dateAdded;
-		bool dateAddedChanged;
+		public string Description;
 		/// <summary>.</summary>
-		public DateTime DateAdded {
-			get { return dateAdded; }
-			set { dateAdded = value; MarkDirty(); dateAddedChanged = true; }
-		}
-		public bool DateAddedChanged {
-			get { return dateAddedChanged; }
-		}
+		public DateTime DateAdded;
 
 		
 

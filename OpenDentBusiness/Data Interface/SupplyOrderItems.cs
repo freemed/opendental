@@ -29,7 +29,7 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<SupplyOrderItem>(MethodBase.GetCurrentMethod(),supplyOrderItemNum);
 			}
 			string command="SELECT * FROM supplyorderitem WHERE SupplyOrderItemNum="+POut.Long(supplyOrderItemNum);
-			return DataObjectFactory<SupplyOrderItem>.CreateObject(command);
+			return Crud.SupplyOrderItemCrud.SelectOne(command);
 		}
 
 		///<summary></summary>
@@ -38,8 +38,13 @@ namespace OpenDentBusiness{
 				supp.SupplyOrderItemNum=Meth.GetLong(MethodBase.GetCurrentMethod(),supp);
 				return supp.SupplyOrderItemNum;
 			}
-			DataObjectFactory<SupplyOrderItem>.WriteObject(supp);
-			return supp.SupplyOrderItemNum;
+			if(supp.IsNew){
+				return Crud.SupplyOrderItemCrud.Insert(supp);
+			}
+			else{
+				Crud.SupplyOrderItemCrud.Update(supp);
+				return supp.SupplyOrderItemNum;
+			}
 		}
 
 		///<summary>Surround with try-catch.</summary>
@@ -49,8 +54,7 @@ namespace OpenDentBusiness{
 				return;
 			}
 			//validate that not already in use.
-
-			DataObjectFactory<SupplyOrderItem>.DeleteObject(supp);
+			Crud.SupplyOrderItemCrud.Delete(supp.SupplyOrderItemNum);
 		}
 
 		

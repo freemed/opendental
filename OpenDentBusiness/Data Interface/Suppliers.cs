@@ -16,7 +16,7 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<List<Supplier>>(MethodBase.GetCurrentMethod());
 			}
 			string command="SELECT * FROM supplier ORDER BY Name";
-			return new List<Supplier>(DataObjectFactory<Supplier>.CreateObjects(command));
+			return Crud.SupplierCrud.SelectMany(command);
 		}
 
 		///<summary></summary>
@@ -25,8 +25,13 @@ namespace OpenDentBusiness{
 				supp.SupplierNum=Meth.GetLong(MethodBase.GetCurrentMethod(),supp);
 				return supp.SupplierNum;
 			}
-			DataObjectFactory<Supplier>.WriteObject(supp);
-			return supp.SupplierNum;
+			if(supp.IsNew){
+				return Crud.SupplierCrud.Insert(supp);
+			}
+			else{
+				Crud.SupplierCrud.Update(supp);
+				return supp.SupplierNum;
+			}
 		}
 
 		///<summary>Surround with try-catch.</summary>
@@ -46,7 +51,7 @@ namespace OpenDentBusiness{
 			if(count>0) {
 				throw new ApplicationException(Lans.g("Supplies","Supplier is already in use on a supply. Not allowed to delete."));
 			}
-			DataObjectFactory<Supplier>.DeleteObject(supp);
+			Crud.SupplierCrud.Delete(supp.SupplierNum);
 		}
 
 		public static string GetName(List<Supplier> listSupplier,long supplierNum) {

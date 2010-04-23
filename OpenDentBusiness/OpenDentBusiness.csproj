@@ -142,6 +142,15 @@
     <Compile Include="Crud\SheetDefCrud.cs" />
     <Compile Include="Crud\SheetFieldCrud.cs" />
     <Compile Include="Crud\SheetFieldDefCrud.cs" />
+    <Compile Include="Crud\SiteCrud.cs" />
+    <Compile Include="Crud\StatementCrud.cs" />
+    <Compile Include="Crud\SupplierCrud.cs" />
+    <Compile Include="Crud\SupplyCrud.cs" />
+    <Compile Include="Crud\SupplyNeededCrud.cs" />
+    <Compile Include="Crud\SupplyOrderCrud.cs" />
+    <Compile Include="Crud\SupplyOrderItemCrud.cs" />
+    <Compile Include="Crud\TaskAncestorCrud.cs" />
+    <Compile Include="Crud\TaskSubscriptionCrud.cs" />
     <Compile Include="Data Interface\Automations.cs" />
     <Compile Include="Data Interface\Equipments.cs" />
     <Compile Include="Data Interface\ReplicationServers.cs" />

@@ -5,67 +5,19 @@ using OpenDentBusiness.DataAccess;
 namespace OpenDentBusiness{
 
 	///<summary>One item on one supply order.  This table links supplies to orders as well as storing a small amount of additional info.</summary>
-	[DataObject("supplyorderitem")]
-	public class SupplyOrderItem : DataObjectBase {
-		[DataField("SupplyOrderItemNum", PrimaryKey=true, AutoNumber=true)]
-		private long supplyOrderItemNum;
-		bool supplyOrderItemNumChanged;
+	[Serializable()]
+	public class SupplyOrderItem : TableBase {
 		/// <summary>Primary key.</summary>
-		public long SupplyOrderItemNum {
-			get { return supplyOrderItemNum; }
-			set { supplyOrderItemNum = value; MarkDirty(); supplyOrderItemNumChanged = true; }
-		}
-		public bool SupplyOrderItemNumChanged {
-			get { return supplyOrderItemNumChanged; }
-		}
-
-		[DataField("SupplyOrderNum")]
-		private long supplyOrderNum;
-		bool supplyOrderNumChanged;
+		[CrudColumn(IsPriKey=true)]
+		public long SupplyOrderItemNum;
 		/// <summary>FK to supplyorder.supplyOrderNum.</summary>
-		public long SupplyOrderNum {
-			get { return supplyOrderNum; }
-			set { supplyOrderNum = value; MarkDirty(); supplyOrderNumChanged = true; }
-		}
-		public bool SupplyOrderNumChanged {
-			get { return supplyOrderNumChanged; }
-		}
-
-		[DataField("SupplyNum")]
-		private long supplyNum;
-		bool supplyNumChanged;
+		public long SupplyOrderNum;
 		/// <summary>FK to supply.SupplyNum.</summary>
-		public long SupplyNum {
-			get { return supplyNum; }
-			set { supplyNum = value; MarkDirty(); supplyNumChanged = true; }
-		}
-		public bool SupplyNumChanged {
-			get { return supplyNumChanged; }
-		}
-
-		[DataField("Qty")]
-		private int qty;
-		bool qtyChanged;
+		public long SupplyNum;
 		/// <summary>How many were ordered.</summary>
-		public int Qty {
-			get { return qty; }
-			set { qty = value; MarkDirty(); qtyChanged = true; }
-		}
-		public bool QtyChanged {
-			get { return qtyChanged; }
-		}
-
-		[DataField("Price")]
-		private double price;
-		bool priceChanged;
+		public int Qty;
 		/// <summary>Price per unit on this order.</summary>
-		public double Price {
-			get { return price; }
-			set { price = value; MarkDirty(); priceChanged = true; }
-		}
-		public bool PriceChanged {
-			get { return priceChanged; }
-		}
+		public double Price;
 
 			
 	}
