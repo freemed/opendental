@@ -21,27 +21,7 @@ namespace OpenDentBusiness{
 
 		public static void FillCache(DataTable table){
 			//No need to check RemotingRole; no call to db.
-			SheetFieldDefC.Listt=new List<SheetFieldDef>();
-			SheetFieldDef sfd;
-			for(int i=0;i<table.Rows.Count;i++){
-				sfd=new SheetFieldDef();
-				sfd.IsNew=false;
-				sfd.SheetFieldDefNum= PIn.Long   (table.Rows[i][0].ToString());
-				sfd.SheetDefNum     = PIn.Long   (table.Rows[i][1].ToString());
-				sfd.FieldType       = (SheetFieldType)PIn.Long(table.Rows[i][2].ToString());
-				sfd.FieldName       = PIn.String(table.Rows[i][3].ToString());
-				sfd.FieldValue      = PIn.String(table.Rows[i][4].ToString());
-				sfd.FontSize        = PIn.Float (table.Rows[i][5].ToString());
-				sfd.FontName        = PIn.String(table.Rows[i][6].ToString());
-				sfd.FontIsBold      = PIn.Bool  (table.Rows[i][7].ToString());
-				sfd.XPos            = PIn.Int   (table.Rows[i][8].ToString());
-				sfd.YPos            = PIn.Int   (table.Rows[i][9].ToString());
-				sfd.Width           = PIn.Int   (table.Rows[i][10].ToString());
-				sfd.Height          = PIn.Int   (table.Rows[i][11].ToString());
-				sfd.GrowthBehavior  = (GrowthBehaviorEnum)PIn.Long(table.Rows[i][12].ToString());
-				sfd.RadioButtonValue= PIn.String(table.Rows[i][13].ToString());
-				SheetFieldDefC.Listt.Add(sfd);
-			}
+			SheetFieldDefC.Listt=Crud.SheetFieldDefCrud.TableToList(table);
 		}
 
 		///<Summary>Gets one SheetFieldDef from the database.</Summary>
@@ -49,15 +29,8 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<SheetFieldDef>(MethodBase.GetCurrentMethod(),sheetFieldDefNum);
 			}
-			return DataObjectFactory<SheetFieldDef>.CreateObject(sheetFieldDefNum);
+			return Crud.SheetFieldDefCrud.SelectOne(sheetFieldDefNum);
 		}
-
-		/*Better to get the data from cache
-		///<summary>Gets all fieldDefs for one sheetDef.</summary>
-		public static List<SheetFieldDef> GetForSheetDef(int sheetDefNum){
-			string command="SELECT * FROM sheetfielddef WHERE SheetDefNum="+POut.PInt(sheetDefNum);
-			return new List<SheetFieldDef>(DataObjectFactory<SheetFieldDef>.CreateObjects(command));
-		}*/
 
 		///<summary></summary>
 		public static long WriteObject(SheetFieldDef sheetFieldDef) {
@@ -65,8 +38,13 @@ namespace OpenDentBusiness{
 				sheetFieldDef.SheetFieldDefNum=Meth.GetLong(MethodBase.GetCurrentMethod(),sheetFieldDef);
 				return sheetFieldDef.SheetFieldDefNum;
 			}
-			DataObjectFactory<SheetFieldDef>.WriteObject(sheetFieldDef);
-			return sheetFieldDef.SheetFieldDefNum;
+			if(sheetFieldDef.IsNew){
+				return Crud.SheetFieldDefCrud.Insert(sheetFieldDef);
+			}
+			else{
+				Crud.SheetFieldDefCrud.Update(sheetFieldDef);
+				return sheetFieldDef.SheetFieldDefNum;
+			}
 		}
 
 		///<summary></summary>
@@ -75,38 +53,10 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),sheetFieldDefNum);
 				return;
 			}
-			//validate that not already in use.
-			/*string command="SELECT LName,FName FROM patient WHERE sheetDataNum="+POut.PInt(sheetDataNum);
-			DataTable table=Db.GetTable(command);
-			//int count=PIn.PInt(Db.GetCount(command));
-			string pats="";
-			for(int i=0;i<table.Rows.Count;i++){
-				if(i>0){
-					pats+=", ";
-				}
-				pats+=table.Rows[i]["FName"].ToString()+" "+table.Rows[i]["LName"].ToString();
-			}
-			if(table.Rows.Count>0){
-				throw new ApplicationException(Lans.g("sheetDatas","sheetData is already in use by patient(s). Not allowed to delete. "+pats));
-			}*/
-			DataObjectFactory<SheetFieldDef>.DeleteObject(sheetFieldDefNum);
+			Crud.SheetFieldDefCrud.Delete(sheetFieldDefNum);
 		}
 
-		//public static void DeleteObject(int sheetDataNum){
-		//	DataObjectFactory<sheetData>.DeleteObject(sheetDataNum);
-		//}
-
-		/*public static string GetDescription(int sheetDataNum){
-			if(sheetDataNum==0){
-				return "";
-			}
-			for(int i=0;i<sheetDataC.List.Length;i++){
-				if(sheetDataC.List[i].sheetDataNum==sheetDataNum){
-					return sheetDataC.List[i].Description;
-				}
-			}
-			return "";
-		}*/
+		
 
 	}
 }

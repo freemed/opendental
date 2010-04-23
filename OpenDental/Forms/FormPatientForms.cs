@@ -119,7 +119,7 @@ namespace OpenDental {
 				SheetUtil.CalculateHeights(sheet,this.CreateGraphics());
 				if(FormS.TerminalSend) {
 					sheet.InternalNote="";//because null not ok
-					sheet.ShowInTerminal=Sheets.GetBiggestShowInTerminal(PatNum)+1;
+					sheet.ShowInTerminal=(byte)(Sheets.GetBiggestShowInTerminal(PatNum)+1);
 					Sheets.SaveNewSheet(sheet);//save each sheet.
 				}
 			}

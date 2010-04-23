@@ -118,5 +118,18 @@ namespace OpenDentBusiness.Crud{
 				+"WHERE InsFilingCodeSubtypeNum = "+POut.Long(insFilingCodeSubtypeNum);
 			Db.NonQ(command);
 		}
+
+				/*
+				command="DROP TABLE IF EXISTS insfilingcodesubtype";
+				Db.NonQ(command);
+				command=@"CREATE TABLE insfilingcodesubtype (
+					InsFilingCodeSubtypeNum bigint NOT NULL auto_increment,
+					InsFilingCodeNum bigint NOT NULL,
+					Descript varchar(255) NOT NULL,
+					PRIMARY KEY (InsFilingCodeSubtypeNum),
+					INDEX(?)
+					) DEFAULT CHARSET=utf8";
+				*/
+
 	}
 }

@@ -36,8 +36,7 @@ namespace OpenDentBusiness {
 		DateEntry,
 		///<summary>Gets set and updated by MySQL.  Leave these columns completely out of Insert and Update statements.</summary>
 		TimeStamp,
-		
-		//Some more that we might add:
-		//DateT, Timespan
+		///<summary>Same C# type as Date, but the MySQL database uses datetime instead of date.</summary>
+		DateT
 	}
 }

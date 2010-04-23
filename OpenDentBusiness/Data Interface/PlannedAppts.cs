@@ -16,56 +16,34 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<List<PlannedAppt>>(MethodBase.GetCurrentMethod(),patNum);
 			}
 			string command="SELECT * FROM plannedappt WHERE PatNum="+POut.Long(patNum);
-			return new List<PlannedAppt>(DataObjectFactory<PlannedAppt>.CreateObjects(command));
+			return Crud.PlannedApptCrud.SelectMany(command);
 		}
 
 		///<Summary>Gets one plannedAppt from the database.</Summary>
-		public static PlannedAppt CreateObject(long plannedApptNum){
+		public static PlannedAppt GetOne(long plannedApptNum){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<PlannedAppt>(MethodBase.GetCurrentMethod(),plannedApptNum);
 			}
-			return DataObjectFactory<PlannedAppt>.CreateObject(plannedApptNum);
+			return Crud.PlannedApptCrud.SelectOne(plannedApptNum);
 		}
-/*
-		public static List<plannedAppt> GetplannedAppts(int[] plannedApptNums){
-			Collection<plannedAppt> collectState=DataObjectFactory<plannedAppt>.CreateObjects(plannedApptNums);
-			return new List<plannedAppt>(collectState);		
-		}*/
 
 		///<summary></summary>
-		public static long WriteObject(PlannedAppt plannedAppt) {
+		public static long Insert(PlannedAppt plannedAppt) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				plannedAppt.PlannedApptNum=Meth.GetLong(MethodBase.GetCurrentMethod(),plannedAppt);
 				return plannedAppt.PlannedApptNum;
 			}
-			DataObjectFactory<PlannedAppt>.WriteObject(plannedAppt);
-			return plannedAppt.PlannedApptNum;
+			return Crud.PlannedApptCrud.Insert(plannedAppt);
 		}
 
-		/*
 		///<summary></summary>
-		public static void DeleteObject(int plannedApptNum){
-			//validate that not already in use.
-			string command="SELECT LName,FName FROM patient WHERE plannedApptNum="+POut.PInt(plannedApptNum);
-			DataTable table=Db.GetTable(command);
-			//int count=PIn.PInt(Db.GetCount(command));
-			string pats="";
-			for(int i=0;i<table.Rows.Count;i++){
-				if(i>0){
-					pats+=", ";
-				}
-				pats+=table.Rows[i]["FName"].ToString()+" "+table.Rows[i]["LName"].ToString();
+		public static void Update(PlannedAppt plannedAppt) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),plannedAppt);
+				return;
 			}
-			if(table.Rows.Count>0){
-				throw new ApplicationException(Lans.g("plannedAppts","plannedAppt is already in use by patient(s). Not allowed to delete. ")+pats);
-			}
-			DataObjectFactory<plannedAppt>.DeleteObject(plannedApptNum);
-		}*/
-
-		//public static void DeleteObject(int plannedApptNum){
-		//	DataObjectFactory<plannedAppt>.DeleteObject(plannedApptNum);
-		//}
-
+			Crud.PlannedApptCrud.Update(plannedAppt);
+		}
 		
 
 	}

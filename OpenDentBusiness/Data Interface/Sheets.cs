@@ -10,33 +10,13 @@ using OpenDentBusiness.DataAccess;
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class Sheets{
-		/*
-		//<summary></summary>
-		public static DataTable RefreshCache(){
-			string c="SELECT * from sheetData ORDER BY Description";
-			DataTable table=Meth.GetTable(MethodInfo.GetCurrentMethod(),c);
-			table.TableName="sheetData";
-			FillCache(table);
-			return table;
-		}
-
-		public static void FillCache(DataTable table){
-			sheetDataC.List=new sheetData[table.Rows.Count];
-			for(int i=0;i<sheetDataC.List.Length;i++){
-				sheetDataC.List[i]=new sheetData();
-				sheetDataC.List[i].IsNew=false;
-				sheetDataC.List[i].sheetDataNum    = PIn.PInt   (table.Rows[i][0].ToString());
-				sheetDataC.List[i].Description= PIn.PString(table.Rows[i][1].ToString());
-				sheetDataC.List[i].Note       = PIn.PString(table.Rows[i][2].ToString());
-			}
-		}*/
-
+		
 		///<Summary>Gets one Sheet from the database.</Summary>
 		public static Sheet CreateObject(long sheetNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Sheet>(MethodBase.GetCurrentMethod(),sheetNum);
 			}
-			return DataObjectFactory<Sheet>.CreateObject(sheetNum);
+			return Crud.SheetCrud.SelectOne(sheetNum);
 		}
 
 		///<summary>Gets a single sheet from the database.  Then, gets all the fields and parameters for it.  So it returns a fully functional sheet.</summary>
@@ -72,10 +52,7 @@ namespace OpenDentBusiness{
 				+" AND sheetfield.FieldName='ReferralNum' "
 				+"AND sheetfield.FieldValue='"+POut.Long(referralNum)+"')"
 				+" ORDER BY DateTimeSheet";
-			return new List<Sheet>(DataObjectFactory<Sheet>.CreateObjects(command));
-			//Collection<sheetData> collectState=DataObjectFactory<sheetData>.CreateObjects(sheetDataNums);
-			//return new List<sheetData>(collectState);		
-			//return list;
+			return Crud.SheetCrud.SelectMany(command);
 		}
 
 		///<summary>Used in FormRxEdit to view an existing rx.  Will return null if none exist.</summary>
@@ -89,11 +66,7 @@ namespace OpenDentBusiness{
 				+" AND sheetfield.FieldType="+POut.Long((int)SheetFieldType.Parameter)
 				+" AND sheetfield.FieldName='RxNum' "
 				+"AND sheetfield.FieldValue='"+POut.Long(rxNum)+"'";
-			List<Sheet> sheetlist=new List<Sheet>(DataObjectFactory<Sheet>.CreateObjects(command));
-			if(sheetlist.Count==0){
-				return null;
-			}
-			return sheetlist[0];
+			return Crud.SheetCrud.SelectOne(command);
 		}
 
 		///<summary>Gets all sheets for a patient that have the terminal flag set.</summary>
@@ -103,8 +76,7 @@ namespace OpenDentBusiness{
 			}
 			string command="SELECT * FROM sheet WHERE PatNum="+POut.Long(patNum)
 				+" AND ShowInTerminal > 0 ORDER BY ShowInTerminal";
-			List<Sheet> sheetlist=new List<Sheet>(DataObjectFactory<Sheet>.CreateObjects(command));
-			return sheetlist;
+			return Crud.SheetCrud.SelectMany(command);
 		}
 
 		///<summary></summary>
@@ -113,8 +85,13 @@ namespace OpenDentBusiness{
 				sheet.SheetNum=Meth.GetLong(MethodBase.GetCurrentMethod(),sheet);
 				return sheet.SheetNum;
 			}
-			DataObjectFactory<Sheet>.WriteObject(sheet);
-			return sheet.SheetNum;
+			if(sheet.IsNew){
+				return Crud.SheetCrud.Insert(sheet);
+			}
+			else{
+				Crud.SheetCrud.Update(sheet);
+				return sheet.SheetNum;
+			}
 		}
 
 		///<summary></summary>
@@ -123,28 +100,10 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),sheetNum);
 				return;
 			}
-			//validate that not already in use.
-			/*string command="SELECT LName,FName FROM patient WHERE sheetDataNum="+POut.PInt(sheetDataNum);
-			DataTable table=Db.GetTable(command);
-			//int count=PIn.PInt(Db.GetCount(command));
-			string pats="";
-			for(int i=0;i<table.Rows.Count;i++){
-				if(i>0){
-					pats+=", ";
-				}
-				pats+=table.Rows[i]["FName"].ToString()+" "+table.Rows[i]["LName"].ToString();
-			}
-			if(table.Rows.Count>0){
-				throw new ApplicationException(Lans.g("sheetDatas","sheetData is already in use by patient(s). Not allowed to delete. "+pats));
-			}*/
 			string command="DELETE FROM sheetfield WHERE SheetNum="+POut.Long(sheetNum);
 			Db.NonQ(command);
-			DataObjectFactory<Sheet>.DeleteObject(sheetNum);
+			Crud.SheetCrud.Delete(sheetNum);
 		}
-
-		//public static void DeleteObject(int sheetDataNum){
-		//	DataObjectFactory<sheetData>.DeleteObject(sheetDataNum);
-		//}
 
 		///<summary>Converts parameters into sheetfield objects, and then saves those objects in the database.  The parameters will never again enjoy full parameter status, but will just be read-only fields from here on out.  It ignores PatNum parameters, since those are already part of the sheet itself.</summary>
 		public static void SaveParameters(Sheet sheet){
@@ -289,12 +248,12 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int GetBiggestShowInTerminal(long patNum) {
+		public static byte GetBiggestShowInTerminal(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetInt(MethodBase.GetCurrentMethod(),patNum);
+				return Meth.GetObject<byte>(MethodBase.GetCurrentMethod(),patNum);
 			}
 			string command="SELECT MAX(ShowInTerminal) FROM sheet WHERE PatNum="+POut.Long(patNum);
-			return PIn.Int(Db.GetScalar(command));
+			return PIn.Byte(Db.GetScalar(command));
 		}
 
 		///<summary></summary>

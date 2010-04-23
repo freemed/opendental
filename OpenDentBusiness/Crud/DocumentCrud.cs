@@ -66,7 +66,7 @@ namespace OpenDentBusiness.Crud{
 				document.WindowingMin  = PIn.Int   (table.Rows[i]["WindowingMin"].ToString());
 				document.WindowingMax  = PIn.Int   (table.Rows[i]["WindowingMax"].ToString());
 				document.MountItemNum  = PIn.Long  (table.Rows[i]["MountItemNum"].ToString());
-				document.DateTStamp    = PIn.Date  (table.Rows[i]["DateTStamp"].ToString());
+				document.DateTStamp    = PIn.DateT (table.Rows[i]["DateTStamp"].ToString());
 				retVal.Add(document);
 			}
 			return retVal;
@@ -241,5 +241,36 @@ namespace OpenDentBusiness.Crud{
 				+"WHERE DocNum = "+POut.Long(docNum);
 			Db.NonQ(command);
 		}
+
+				/*
+				command="DROP TABLE IF EXISTS document";
+				Db.NonQ(command);
+				command=@"CREATE TABLE document (
+					DocNum bigint NOT NULL auto_increment,
+					Description varchar(255) NOT NULL,
+					DateCreated date NOT NULL default '0001-01-01',
+					DocCategory bigint NOT NULL,
+					PatNum bigint NOT NULL,
+					FileName varchar(255) NOT NULL,
+					ImgType tinyint NOT NULL,
+					IsFlipped tinyint NOT NULL,
+					DegreesRotated int NOT NULL,
+					ToothNumbers varchar(255) NOT NULL,
+					Note varchar(255) NOT NULL,
+					SigIsTopaz tinyint NOT NULL,
+					Signature varchar(255) NOT NULL,
+					CropX int NOT NULL,
+					CropY int NOT NULL,
+					CropW int NOT NULL,
+					CropH int NOT NULL,
+					WindowingMin int NOT NULL,
+					WindowingMax int NOT NULL,
+					MountItemNum bigint NOT NULL,
+					DateTStamp timestamp,
+					PRIMARY KEY (DocNum),
+					INDEX(?)
+					) DEFAULT CHARSET=utf8";
+				*/
+
 	}
 }

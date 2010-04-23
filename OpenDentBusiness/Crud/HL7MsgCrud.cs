@@ -125,5 +125,19 @@ namespace OpenDentBusiness.Crud{
 				+"WHERE HL7MsgNum = "+POut.Long(hL7MsgNum);
 			Db.NonQ(command);
 		}
+
+				/*
+				command="DROP TABLE IF EXISTS hl7msg";
+				Db.NonQ(command);
+				command=@"CREATE TABLE hl7msg (
+					HL7MsgNum bigint NOT NULL auto_increment,
+					HL7Status tinyint NOT NULL,
+					MsgText varchar(255) NOT NULL,
+					AptNum bigint NOT NULL,
+					PRIMARY KEY (HL7MsgNum),
+					INDEX(?)
+					) DEFAULT CHARSET=utf8";
+				*/
+
 	}
 }

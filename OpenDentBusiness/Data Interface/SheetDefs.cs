@@ -21,21 +21,7 @@ namespace OpenDentBusiness{
 
 		public static void FillCache(DataTable table){
 			//No need to check RemotingRole; no call to db.
-			SheetDefC.Listt=new List<SheetDef>();
-			SheetDef sheetdef;
-			for(int i=0;i<table.Rows.Count;i++){
-				sheetdef=new SheetDef();
-				sheetdef.IsNew=false;
-				sheetdef.SheetDefNum = PIn.Long   (table.Rows[i][0].ToString());
-				sheetdef.Description = PIn.String(table.Rows[i][1].ToString());
-				sheetdef.SheetType   = (SheetTypeEnum)PIn.Long(table.Rows[i][2].ToString());
-				sheetdef.FontSize    = PIn.Float (table.Rows[i][3].ToString());
-				sheetdef.FontName    = PIn.String(table.Rows[i][4].ToString());
-				sheetdef.Width       = PIn.Int (table.Rows[i][5].ToString());
-				sheetdef.Height      = PIn.Int   (table.Rows[i][6].ToString());
-				sheetdef.IsLandscape = PIn.Bool  (table.Rows[i][7].ToString());
-				SheetDefC.Listt.Add(sheetdef);
-			}
+			SheetDefC.Listt=Crud.SheetDefCrud.TableToList(table);
 		}
 
 		///<Summary>Gets one SheetDef from the cache.  Also includes the fields and parameters for the sheetdef.</Summary>
@@ -51,19 +37,7 @@ namespace OpenDentBusiness{
 			//if sheetdef is null, it will crash, just as it should.
 			GetFieldsAndParameters(sheetdef);
 			return sheetdef;
-			//return DataObjectFactory<SheetDef>.CreateObject(sheetDefNum);
 		}
-
-		//<summary>Used in FormRefAttachEdit to show all referral slips for the patient/referral combo.  Usually 0 or 1 results.</summary>
-		//public static List<Sheet> GetReferralSlips(int patNum,int referralNum){
-		//	string command="SELECT * FROM sheet WHERE PatNum="+POut.PInt(patNum)
-		//		+" ORDER BY DateTimeSheet";
-			//still need to enhance query to filter by referralNum.
-		//	return new List<Sheet>(DataObjectFactory<Sheet>.CreateObjects(command));
-			//Collection<sheetData> collectState=DataObjectFactory<sheetData>.CreateObjects(sheetDataNums);
-			//return new List<sheetData>(collectState);		
-			//return list;
-		//}
 
 		///<summary>Includes all attached fields.  It simply deletes all the old fields and inserts new ones.</summary>
 		public static long WriteObject(SheetDef sheetDef){
@@ -76,7 +50,12 @@ namespace OpenDentBusiness{
 				command="DELETE FROM sheetfielddef WHERE SheetDefNum="+POut.Long(sheetDef.SheetDefNum);
 				Db.NonQ(command);
 			}
-			DataObjectFactory<SheetDef>.WriteObject(sheetDef);
+			if(sheetDef.IsNew){
+				sheetDef.SheetDefNum=Crud.SheetDefCrud.Insert(sheetDef);
+			}
+			else{
+				Crud.SheetDefCrud.Update(sheetDef);
+			}
 			foreach(SheetFieldDef field in sheetDef.SheetFieldDefs){
 				field.IsNew=true;
 				field.SheetDefNum=sheetDef.SheetDefNum;
@@ -107,12 +86,8 @@ namespace OpenDentBusiness{
 			}
 			command="DELETE FROM sheetfielddef WHERE SheetDefNum="+POut.Long(sheetDefNum);
 			Db.NonQ(command);
-			DataObjectFactory<SheetDef>.DeleteObject(sheetDefNum);
+			Crud.SheetDefCrud.Delete(sheetDefNum);
 		}
-
-		//public static void DeleteObject(int sheetDataNum){
-		//	DataObjectFactory<sheetData>.DeleteObject(sheetDataNum);
-		//}
 
 		///<summary>Sheetdefs and sheetfielddefs are archived separately.  So when we need to use a sheetdef, we must run this method to pull all the associated fields from the archive.  Then it will be ready for printing, copying, etc.</summary>
 		public static void GetFieldsAndParameters(SheetDef sheetdef){

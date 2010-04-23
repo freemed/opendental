@@ -641,7 +641,7 @@ namespace OpenDental {
 			SheetCur.DateTimeSheet=PIn.DateT(textDateTime.Text);
 			SheetCur.Description=textDescription.Text;
 			SheetCur.InternalNote=textNote.Text;
-			SheetCur.ShowInTerminal=PIn.Int(textShowInTerminal.Text);
+			SheetCur.ShowInTerminal=PIn.Byte(textShowInTerminal.Text);
 			FillFieldsFromControls();//But SheetNums will still be 0 for a new sheet.
 			bool isNew=SheetCur.IsNew;
 			Sheets.WriteObject(SheetCur);

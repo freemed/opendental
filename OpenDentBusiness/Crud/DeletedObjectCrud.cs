@@ -49,7 +49,7 @@ namespace OpenDentBusiness.Crud{
 				deletedObject.DeletedObjectNum= PIn.Long  (table.Rows[i]["DeletedObjectNum"].ToString());
 				deletedObject.ObjectNum       = PIn.Long  (table.Rows[i]["ObjectNum"].ToString());
 				deletedObject.ObjectType      = (DeletedObjectType)PIn.Int(table.Rows[i]["ObjectType"].ToString());
-				deletedObject.DateTStamp      = PIn.Date  (table.Rows[i]["DateTStamp"].ToString());
+				deletedObject.DateTStamp      = PIn.DateT (table.Rows[i]["DateTStamp"].ToString());
 				retVal.Add(deletedObject);
 			}
 			return retVal;
@@ -122,5 +122,19 @@ namespace OpenDentBusiness.Crud{
 				+"WHERE DeletedObjectNum = "+POut.Long(deletedObjectNum);
 			Db.NonQ(command);
 		}
+
+				/*
+				command="DROP TABLE IF EXISTS deletedobject";
+				Db.NonQ(command);
+				command=@"CREATE TABLE deletedobject (
+					DeletedObjectNum bigint NOT NULL auto_increment,
+					ObjectNum bigint NOT NULL,
+					ObjectType tinyint NOT NULL,
+					DateTStamp timestamp,
+					PRIMARY KEY (DeletedObjectNum),
+					INDEX(?)
+					) DEFAULT CHARSET=utf8";
+				*/
+
 	}
 }

@@ -4,43 +4,15 @@ using OpenDentBusiness.DataAccess;
 
 namespace OpenDentBusiness{
 	///<summary>Only used internally by OpenDental, Inc.  Not used by anyone else.</summary>
-	[DataObject("phonenumber")]
-	public class PhoneNumber : DataObjectBase{
-		[DataField("PhoneNumberNum",PrimaryKey=true,AutoNumber=true)]
-		private long phoneNumberNum;
-		private bool phoneNumberNumChanged;
+	[Serializable()]
+	public class PhoneNumber : TableBase{
 		///<summary>Primary key.</summary>
-		public long PhoneNumberNum{
-			get{return phoneNumberNum;}
-			set{if(phoneNumberNum!=value){phoneNumberNum=value;MarkDirty();phoneNumberNumChanged=true;}}
-		}
-		public bool PhoneNumberNumChanged{
-			get{return phoneNumberNumChanged;}
-		}
-
-		[DataField("PatNum")]
-		private long patNum;
-		private bool patNumChanged;
+		[CrudColumn(IsPriKey=true)]
+		public long PhoneNumberNum;
 		///<summary>FK to patient.PatNum.</summary>
-		public long PatNum{
-			get{return patNum;}
-			set{if(patNum!=value){patNum=value;MarkDirty();patNumChanged=true;}}
-		}
-		public bool PatNumChanged{
-			get{return patNumChanged;}
-		}
-
-		[DataField("PhoneNumberVal")]
-		private string phoneNumberVal;
-		private bool phoneNumberValChanged;
+		public long PatNum;
 		///<summary>The actual phone number for the patient.  Includes any punctuation.  No leading 1 or plus, so almost always 10 digits.</summary>
-		public string PhoneNumberVal{
-			get{return phoneNumberVal;}
-			set{if(phoneNumberVal!=value){phoneNumberVal=value;MarkDirty();phoneNumberValChanged=true;}}
-		}
-		public bool PhoneNumberValChanged{
-			get{return phoneNumberValChanged;}
-		}
+		public string PhoneNumberVal;
 
 	
 	}

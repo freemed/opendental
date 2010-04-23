@@ -224,7 +224,7 @@ namespace OpenDental {
 			PhoneNumber ph=new PhoneNumber();
 			ph.PatNum=FormOpenDental.CurPatNum;
 			ph.PhoneNumberVal=tablePhone.Rows[rowI]["CustomerNumber"].ToString();
-			PhoneNumbers.WriteObject(ph);
+			PhoneNumbers.Insert(ph);
 			//tell the phone server to refresh this row with the patient name and patnum
 			DataValid.SetInvalid(InvalidType.PhoneNumbers);
 		}

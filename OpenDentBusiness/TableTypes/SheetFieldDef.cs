@@ -6,175 +6,37 @@ using OpenDentBusiness.DataAccess;
 
 namespace OpenDentBusiness{
 	///<summary>One field on a sheetDef.</summary>
-	[DataObject("sheetfielddef")]
-	public class SheetFieldDef : DataObjectBase{
-		[DataField("SheetFieldDefNum",PrimaryKey=true,AutoNumber=true)]
-		private long sheetFieldDefNum;
-		private bool sheetFieldDefNumChanged;
+	[Serializable()]
+	public class SheetFieldDef:TableBase {
 		///<summary>Primary key.</summary>
-		public long SheetFieldDefNum{
-			get{return sheetFieldDefNum;}
-			set{if(sheetFieldDefNum!=value){sheetFieldDefNum=value;MarkDirty();sheetFieldDefNumChanged=true;}}
-		}
-		public bool SheetFieldDefNumChanged{
-			get{return sheetFieldDefNumChanged;}
-		}
-
-		[DataField("SheetDefNum")]
-		private long sheetDefNum;
-		private bool sheetDefNumChanged;
+		[CrudColumn(IsPriKey=true)]
+		public long SheetFieldDefNum;
 		///<summary>FK to sheetdef.SheetDefNum.</summary>
-		public long SheetDefNum{
-			get{return sheetDefNum;}
-			set{if(sheetDefNum!=value){sheetDefNum=value;MarkDirty();sheetDefNumChanged=true;}}
-		}
-		public bool SheetDefNumChanged{
-			get{return sheetDefNumChanged;}
-		}
-
-		[DataField("FieldType")]
-		private SheetFieldType fieldType;
-		private bool fieldTypeChanged;
+		public long SheetDefNum;
 		///<summary>Enum:SheetFieldType  OutputText, InputField, StaticText,Parameter(only used for SheetField, not SheetFieldDef),Image,Drawing,Line,Rectangle,CheckBox,SigBox,PatImage.</summary>
-		public SheetFieldType FieldType{
-			get{return fieldType;}
-			set{if(fieldType!=value){fieldType=value;MarkDirty();fieldTypeChanged=true;}}
-		}
-		public bool FieldTypeChanged{
-			get{return fieldTypeChanged;}
-		}
-
-		[DataField("FieldName")]
-		private string fieldName;
-		private bool fieldNameChanged;
+		public SheetFieldType FieldType;
 		///<summary>Mostly for OutputText, InputField, and CheckBox types.  Each sheet typically has a main datatable type.  For OutputText types, FieldName is usually the string representation of the database column for the main table.  For other tables, it can be of the form table.Column.  There may also be extra fields available that are not strictly pulled from the database.  Extra fields will start with lowercase to indicate that they are not pure database fields.  The list of available fields for each type in SheetFieldsAvailable.  Users can pick from that list.  Likewise, InputField types are internally tied to actions to persist the data.  So they are also hard coded and are available in SheetFieldsAvailable.  For static images, this is the full file name including extension, but without path.  Static images paths are reconstructed by looking in the AtoZ folder, SheetImages folder.  For Pat Images, this is an long FK/DefNum to the default folder for the image.  The filename of a PatImage will later be stored in FieldValue.</summary>
-		public string FieldName{
-			get{return fieldName;}
-			set{if(fieldName!=value){fieldName=value;MarkDirty();fieldNameChanged=true;}}
-		}
-		public bool FieldNameChanged{
-			get{return fieldNameChanged;}
-		}
-
-		[DataField("FieldValue")]
-		private string fieldValue;
-		private bool fieldValueChanged;
+		public string FieldName;
 		///<summary>For StaticText, this text can include bracketed fields, like [nameLF].  For OutputText and InputField, this will be blank.  For CheckBoxes, either X or blank.  Even if the checkbox is set to behave like a radio button.</summary>
-		public string FieldValue{
-			get{return fieldValue;}
-			set{if(fieldValue!=value){fieldValue=value;MarkDirty();fieldValueChanged=true;}}
-		}
-		public bool FieldValueChanged{
-			get{return fieldValueChanged;}
-		}
-
-		[DataField("FontSize")]
-		private float fontSize;
-		private bool fontSizeChanged;
+		public string FieldValue;
 		///<summary>The fontSize for this field regardless of the default for the sheet.  The actual font must be saved with each sheetField.</summary>
-		public float FontSize{
-			get{return fontSize;}
-			set{if(fontSize!=value){fontSize=value;MarkDirty();fontSizeChanged=true;}}
-		}
-		public bool FontSizeChanged{
-			get{return fontSizeChanged;}
-		}
-
-		[DataField("FontName")]
-		private string fontName;
-		private bool fontNameChanged;
+		public float FontSize;
 		///<summary>The fontName for this field regardless of the default for the sheet.  The actual font must be saved with each sheetField.</summary>
-		public string FontName{
-			get{return fontName;}
-			set{if(fontName!=value){fontName=value;MarkDirty();fontNameChanged=true;}}
-		}
-		public bool FontNameChanged{
-			get{return fontNameChanged;}
-		}
-
-		[DataField("FontIsBold")]
-		private bool fontIsBold;
-		private bool fontIsBoldChanged;
+		public string FontName;
 		///<summary></summary>
-		public bool FontIsBold{
-			get{return fontIsBold;}
-			set{if(fontIsBold!=value){fontIsBold=value;MarkDirty();fontIsBoldChanged=true;}}
-		}
-		public bool FontIsBoldChanged{
-			get{return fontIsBoldChanged;}
-		}
-
-		[DataField("XPos")]
-		private int xPos;
-		private bool xPosChanged;
+		public bool FontIsBold;
 		///<summary>In pixels.</summary>
-		public int XPos {
-			get{return xPos;}
-			set{if(xPos!=value){xPos=value;MarkDirty();xPosChanged=true;}}
-		}
-		public bool XPosChanged{
-			get{return xPosChanged;}
-		}
-
-		[DataField("YPos")]
-		private int yPos;
-		private bool yPosChanged;
+		public int XPos;
 		///<summary>In pixels.</summary>
-		public int YPos {
-			get{return yPos;}
-			set{if(yPos!=value){yPos=value;MarkDirty();yPosChanged=true;}}
-		}
-		public bool YPosChanged{
-			get{return yPosChanged;}
-		}
-
-		[DataField("Width")]
-		private int width;
-		private bool widthChanged;
+		public int YPos;
 		///<summary>The field will be constrained horizontally to this size.  Not allowed to be zero.</summary>
-		public int Width {
-			get{return width;}
-			set{if(width!=value){width=value;MarkDirty();widthChanged=true;}}
-		}
-		public bool WidthChanged{
-			get{return widthChanged;}
-		}
-
-		[DataField("Height")]
-		private int height;
-		private bool heightChanged;
+		public int Width;
 		///<summary>The field will be constrained vertically to this size.  Not allowed to be 0.  It's not allowed to be zero so that it will be visible on the designer.</summary>
-		public int Height {
-			get{return height;}
-			set{if(height!=value){height=value;MarkDirty();heightChanged=true;}}
-		}
-		public bool HeightChanged{
-			get{return heightChanged;}
-		}
-
-		[DataField("GrowthBehavior")]
-		private GrowthBehaviorEnum growthBehavior;
-		private bool growthBehaviorChanged;
+		public int Height;
 		///<summary>Enum:GrowthBehaviorEnum</summary>
-		public GrowthBehaviorEnum GrowthBehavior{
-			get{return growthBehavior;}
-			set{if(growthBehavior!=value){growthBehavior=value;MarkDirty();growthBehaviorChanged=true;}}
-		}
-		public bool GrowthBehaviorChanged{
-			get{return growthBehaviorChanged;}
-		}
-
-		[DataField("RadioButtonValue")]
-		private string radioButtonValue;
-		private bool radioButtonValueChanged;
+		public GrowthBehaviorEnum GrowthBehavior;
 		///<summary>This is only used for checkboxes that you want to behave like radiobuttons.  Set the FieldName the same for each Checkbox in the group.  The FieldValue will likely be X for one of them and empty string for the others.  Each of them will have a different RadioButtonValue.  Whichever box has X, the RadioButtonValue for that box will be used when importing..</summary>
-		public string RadioButtonValue{
-			get{return radioButtonValue;}
-			set{if(radioButtonValue!=value){radioButtonValue=value;MarkDirty();radioButtonValueChanged=true;}}
-		}
-		public bool RadioButtonValueChanged{
-			get{return radioButtonValueChanged;}
-		}
+		public string RadioButtonValue;
 
 
 		public SheetFieldDef(){
@@ -205,7 +67,7 @@ namespace OpenDentBusiness{
 		}
 
 		public override string ToString() {
-			return fieldName+" "+fieldValue;
+			return FieldName+" "+FieldValue;
 		}
 
 		///<Summary></Summary>

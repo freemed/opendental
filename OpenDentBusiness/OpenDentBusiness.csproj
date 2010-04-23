@@ -131,6 +131,17 @@
     <Compile Include="Crud\MountItemCrud.cs" />
     <Compile Include="Crud\MountItemDefCrud.cs" />
     <Compile Include="Crud\PatientCrud.cs" />
+    <Compile Include="Crud\PharmacyCrud.cs" />
+    <Compile Include="Crud\PhoneNumberCrud.cs" />
+    <Compile Include="Crud\PlannedApptCrud.cs" />
+    <Compile Include="Crud\PopupCrud.cs" />
+    <Compile Include="Crud\RecallTriggerCrud.cs" />
+    <Compile Include="Crud\RecallTypeCrud.cs" />
+    <Compile Include="Crud\ReplicationServerCrud.cs" />
+    <Compile Include="Crud\SheetCrud.cs" />
+    <Compile Include="Crud\SheetDefCrud.cs" />
+    <Compile Include="Crud\SheetFieldCrud.cs" />
+    <Compile Include="Crud\SheetFieldDefCrud.cs" />
     <Compile Include="Data Interface\Automations.cs" />
     <Compile Include="Data Interface\Equipments.cs" />
     <Compile Include="Data Interface\ReplicationServers.cs" />

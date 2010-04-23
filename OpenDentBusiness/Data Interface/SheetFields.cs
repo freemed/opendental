@@ -15,7 +15,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<SheetField>(MethodBase.GetCurrentMethod(),sheetFieldNum);
 			}
-			return DataObjectFactory<SheetField>.CreateObject(sheetFieldNum);
+			return Crud.SheetFieldCrud.SelectOne(sheetFieldNum);
 		}
 
 		///<summary>When we need to use a sheet, we must run this method to pull all the associated fields and parameters from the database.  Then it will be ready for printing, copying, etc.</summary>
@@ -26,7 +26,7 @@ namespace OpenDentBusiness{
 			}
 			string command="SELECT * FROM sheetfield WHERE SheetNum="+POut.Long(sheet.SheetNum)
 				+" ORDER BY SheetFieldNum";//the ordering is CRITICAL because the signature key is based on order.
-			sheet.SheetFields=new List<SheetField>(DataObjectFactory<SheetField>.CreateObjects(command));
+			sheet.SheetFields=Crud.SheetFieldCrud.SelectMany(command);
 			//so parameters will also be in the field list, but they will just be ignored from here on out.
 			//because we will have an explicit parameter list instead.
 			sheet.Parameters=new List<SheetParameter>();
@@ -46,8 +46,13 @@ namespace OpenDentBusiness{
 				sheetField.SheetFieldNum=Meth.GetLong(MethodBase.GetCurrentMethod(),sheetField);
 				return sheetField.SheetFieldNum;
 			}
-			DataObjectFactory<SheetField>.WriteObject(sheetField);
-			return sheetField.SheetFieldNum;
+			if(sheetField.IsNew){
+				return Crud.SheetFieldCrud.Insert(sheetField);
+			}
+			else{
+				Crud.SheetFieldCrud.Update(sheetField);
+				return sheetField.SheetFieldNum;
+			}
 		}
 
 		///<summary></summary>
@@ -56,21 +61,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),sheetFieldNum);
 				return;
 			}
-			//validate that not already in use.
-			/*string command="SELECT LName,FName FROM patient WHERE sheetDataNum="+POut.PInt(sheetDataNum);
-			DataTable table=Db.GetTable(command);
-			//int count=PIn.PInt(Db.GetCount(command));
-			string pats="";
-			for(int i=0;i<table.Rows.Count;i++){
-				if(i>0){
-					pats+=", ";
-				}
-				pats+=table.Rows[i]["FName"].ToString()+" "+table.Rows[i]["LName"].ToString();
-			}
-			if(table.Rows.Count>0){
-				throw new ApplicationException(Lans.g("sheetDatas","sheetData is already in use by patient(s). Not allowed to delete. "+pats));
-			}*/
-			DataObjectFactory<SheetField>.DeleteObject(sheetFieldNum);
+			Crud.SheetFieldCrud.Delete(sheetFieldNum);
 		}
 
 		///<summary>Deletes all existing drawing fields for a sheet from the database and then adds back the list supplied.</summary>
@@ -87,21 +78,7 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		//public static void DeleteObject(int sheetDataNum){
-		//	DataObjectFactory<sheetData>.DeleteObject(sheetDataNum);
-		//}
-
-		/*public static string GetDescription(int sheetDataNum){
-			if(sheetDataNum==0){
-				return "";
-			}
-			for(int i=0;i<sheetDataC.List.Length;i++){
-				if(sheetDataC.List[i].sheetDataNum==sheetDataNum){
-					return sheetDataC.List[i].Description;
-				}
-			}
-			return "";
-		}*/
+	
 
 
 

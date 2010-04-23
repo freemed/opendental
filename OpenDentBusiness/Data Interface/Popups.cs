@@ -16,17 +16,25 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<List<Popup>>(MethodBase.GetCurrentMethod(),patNum);
 			} 
 			string command="SELECT * FROM popup WHERE PatNum = "+POut.Long(patNum);
-			return new List<Popup>(DataObjectFactory<Popup>.CreateObjects(command));
+			return Crud.PopupCrud.SelectMany(command);
 		}
 
 		///<summary></summary>
-		public static long WriteObject(Popup popup) {
+		public static long Insert(Popup popup) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				popup.PopupNum=Meth.GetLong(MethodBase.GetCurrentMethod(),popup);
 				return popup.PopupNum;
 			}
-			DataObjectFactory<Popup>.WriteObject(popup);
-			return popup.PopupNum;
+			return Crud.PopupCrud.Insert(popup);
+		}
+
+		///<summary></summary>
+		public static void Update(Popup popup) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),popup);
+				return;
+			}
+			Crud.PopupCrud.Update(popup);
 		}
 
 		///<summary></summary>
@@ -35,7 +43,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),popup);
 				return;
 			}
-			DataObjectFactory<Popup>.DeleteObject(popup);
+			Crud.PopupCrud.Delete(popup.PopupNum);
 		}
 
 

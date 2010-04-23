@@ -60,49 +60,16 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		/*
-		///<Summary>Gets one RecallType from the database.</Summary>
-		public static RecallType CreateObject(int recallTypeNum){
-			return DataObjectFactory<RecallType>.CreateObject(recallTypeNum);
-		}
-
-		public static List<RecallType> GetRecallTypes(int[] RecallTypeNums){
-			Collection<RecallType> collectState=DataObjectFactory<RecallType>.CreateObjects(RecallTypeNums);
-			return new List<RecallType>(collectState);		
-		}*/
-
 		///<summary></summary>
 		public static long WriteObject(RecallType recallType) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				recallType.RecallTypeNum=Meth.GetLong(MethodBase.GetCurrentMethod(),recallType);
 				return recallType.RecallTypeNum;
 			}
-			DataObjectFactory<RecallType>.WriteObject(recallType);
-			return recallType.RecallTypeNum;
+//DataObjectFactory<RecallType>.WriteObject(recallType);
+//return recallType.RecallTypeNum;
+			return 0;
 		}
-
-		/*//<summary></summary>
-		public static void DeleteObject(int RecallTypeNum){
-			//validate that not already in use.
-			string command="SELECT LName,FName FROM patient WHERE RecallTypeNum="+POut.PInt(RecallTypeNum);
-			DataTable table=Db.GetTable(command);
-			//int count=PIn.PInt(Db.GetCount(command));
-			string pats="";
-			for(int i=0;i<table.Rows.Count;i++){
-				if(i>0){
-					pats+=", ";
-				}
-				pats+=table.Rows[i]["FName"].ToString()+" "+table.Rows[i]["LName"].ToString();
-			}
-			if(table.Rows.Count>0){
-				throw new ApplicationException(Lans.g("RecallTypes","RecallType is already in use by patient(s). Not allowed to delete. ")+pats);
-			}
-			DataObjectFactory<RecallType>.DeleteObject(RecallTypeNum);
-		}*/
-
-		//public static void DeleteObject(int RecallTypeNum){
-		//	DataObjectFactory<RecallType>.DeleteObject(RecallTypeNum);
-		//}
 
 		public static string GetDescription(long recallTypeNum) {
 			//No need to check RemotingRole; no call to db.

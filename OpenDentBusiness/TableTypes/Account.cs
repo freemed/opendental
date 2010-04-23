@@ -3,7 +3,6 @@ using System.Collections;
 using System.Drawing;
 
 namespace OpenDentBusiness{
-
 	///<summary>Used in the accounting section in chart of accounts.  Not related to patient accounts in any way.</summary>
 	[Serializable()]
 	public class Account:TableBase{

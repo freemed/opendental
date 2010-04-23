@@ -62,48 +62,23 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		/*
-		///<Summary>Gets one replicationServer from the database.</Summary>
-		public static replicationServer CreateObject(int replicationServerNum){
-			return DataObjectFactory<replicationServer>.CreateObject(replicationServerNum);
-		}*/
-
 		///<summary></summary>
 		public static long WriteObject(ReplicationServer serv) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				serv.ReplicationServerNum=Meth.GetLong(MethodBase.GetCurrentMethod(),serv);
 				return serv.ReplicationServerNum;
 			}
-			DataObjectFactory<ReplicationServer>.WriteObject(serv);
-			return serv.ReplicationServerNum;
+//DataObjectFactory<ReplicationServer>.WriteObject(serv);
+//return serv.ReplicationServerNum;
+			return 0;
 		}
-
-		/*
-		///<summary></summary>
-		public static void DeleteObject(int replicationServerNum){
-			//validate that not already in use.
-			string command="SELECT LName,FName FROM patient WHERE replicationServerNum="+POut.PInt(replicationServerNum);
-			DataTable table=Db.GetTable(command);
-			//int count=PIn.PInt(Db.GetCount(command));
-			string pats="";
-			for(int i=0;i<table.Rows.Count;i++){
-				if(i>0){
-					pats+=", ";
-				}
-				pats+=table.Rows[i]["FName"].ToString()+" "+table.Rows[i]["LName"].ToString();
-			}
-			if(table.Rows.Count>0){
-				throw new ApplicationException(Lans.g("replicationServers","replicationServer is already in use by patient(s). Not allowed to delete. ")+pats);
-			}
-			DataObjectFactory<replicationServer>.DeleteObject(replicationServerNum);
-		}*/
 
 		public static void DeleteObject(long replicationServerNum){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),replicationServerNum);
 				return;
 			}
-			DataObjectFactory<ReplicationServer>.DeleteObject(replicationServerNum);
+//DataObjectFactory<ReplicationServer>.DeleteObject(replicationServerNum);
 		}
 
 		public static int GetServer_id() {
@@ -150,27 +125,6 @@ namespace OpenDentBusiness{
 				|| KeyInUse(tablename,field,rndLong));
 			return rndLong;
 		}
-
-		/*
-		private static long GetNumComputers() {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetLong(MethodBase.GetCurrentMethod());
-			}
-			string command="SELECT COUNT(*) FROM computer";
-			DataTable table=Db.GetTable(command);
-			return PIn.PInt(table.Rows[0][0].ToString());
-		}
-
-		private static long GetComputerNumForName(string computerName) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetLong(MethodBase.GetCurrentMethod(),computerName);
-			}
-			string command="SELECT COUNT(*) FROM computer "+
-				"WHERE ComputerNum <=(SELECT ComputerNum FROM computer AS temp WHERE CompName "+
-				"LIKE '"+computerName+"')";
-			DataTable table=Db.GetTable(command);
-			return PIn.PInt(table.Rows[0][0].ToString());
-		}*/
 
 		private static bool KeyInUse(string tablename,string field,long keynum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {

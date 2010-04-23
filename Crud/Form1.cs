@@ -138,10 +138,18 @@ namespace OpenDentBusiness.Crud{
 					longestField=fieldsInDb[f].Name.Length;
 				}
 			}
+			EnumCrudSpecialColType specialType;
 			for(int f=0;f<fieldsInDb.Count;f++){
-				//note.  These are not guaranteed to be in any particular order.
+				//Fields are not guaranteed to be in any particular order.
+				specialType=CrudGenHelper.GetSpecialType(fieldsInDb[f]);
 				strb.Append(rn+t4+obj+"."+fieldsInDb[f].Name.PadRight(longestField,' ')+"= ");
-				if(fieldsInDb[f].FieldType.IsEnum) {
+				if(specialType==EnumCrudSpecialColType.DateT
+					|| specialType==EnumCrudSpecialColType.TimeStamp)
+				{
+					//specialTypes.DateEntry is handled fine by the normal DateTime (date) below.
+					strb.Append("PIn.DateT (");
+				}
+				else if(fieldsInDb[f].FieldType.IsEnum) {
 					strb.Append("("+fieldsInDb[f].FieldType.Name+")PIn.Int(");
 				}
 				else switch(fieldsInDb[f].FieldType.Name){
@@ -156,17 +164,23 @@ namespace OpenDentBusiness.Crud{
 					case "Color":
 						strb.Append("Color.FromArgb(PIn.Int(");
 						break;
-					case "DateTime"://This ONLY handles date, not dateT which will be a special type.
+					case "DateTime"://This ONLY handles date, not dateT which is a special type.
 						strb.Append("PIn.Date  (");
 						break;
 					case "Double":
 						strb.Append("PIn.Double(");
+						break;
+					case "Interval":
+						strb.Append("new Interval(PIn.Int(");
 						break;
 					case "Int64":
 						strb.Append("PIn.Long  (");
 						break;
 					case "Int32":
 						strb.Append("PIn.Int   (");
+						break;
+					case "Single":
+						strb.Append("PIn.Float (");
 						break;
 					case "String":
 						strb.Append("PIn.String(");
@@ -176,7 +190,7 @@ namespace OpenDentBusiness.Crud{
 						break;
 				}
 				strb.Append("table.Rows[i][\""+fieldsInDb[f].Name+"\"].ToString())");
-				if(fieldsInDb[f].FieldType.Name=="Color") {
+				if(fieldsInDb[f].FieldType.Name=="Color" || fieldsInDb[f].FieldType.Name=="Interval") {
 					strb.Append(")");
 				}
 				strb.Append(";");
@@ -216,7 +230,6 @@ namespace OpenDentBusiness.Crud{
 			strb.Append(rn+t4+"command+=POut.Long("+obj+"."+priKey.Name+")+\",\";");
 			strb.Append(rn+t3+"}");
 			strb.Append(rn+t3+"command+=");
-			EnumCrudSpecialColType specialType;
 			for(int f=0;f<fieldsExceptPri.Count;f++) {
 				strb.Append(rn+t4);
 				specialType=CrudGenHelper.GetSpecialType(fieldsExceptPri[f]);
@@ -233,6 +246,9 @@ namespace OpenDentBusiness.Crud{
 				if(specialType==EnumCrudSpecialColType.DateEntry) {
 					strb.Append("\"NOW()");
 				}
+				else if(specialType==EnumCrudSpecialColType.DateT) {
+					strb.Append("    POut.DateT ("+obj+"."+fieldsExceptPri[f].Name+")+\"");
+				}
 				else if(fieldsExceptPri[f].FieldType.IsEnum) {
 					strb.Append("    POut.Int   ((int)"+obj+"."+fieldsExceptPri[f].Name+")+\"");
 				}
@@ -248,17 +264,23 @@ namespace OpenDentBusiness.Crud{
 					case "Color":
 						strb.Append("    POut.Int   ("+obj+"."+fieldsExceptPri[f].Name+".ToArgb())+\"");
 						break;
-					case "DateTime"://Need to handle DateT fields here better.
+					case "DateTime"://This is only for date, not dateT.
 						strb.Append("    POut.Date  ("+obj+"."+fieldsExceptPri[f].Name+")+\"");
 						break;
 					case "Double":
 						strb.Append("\"'\"+POut.Double("+obj+"."+fieldsExceptPri[f].Name+")+\"'");
+						break;
+					case "Interval":
+						strb.Append("    POut.Int   ("+obj+"."+fieldsExceptPri[f].Name+".ToInt())+\"");
 						break;
 					case "Int64":
 						strb.Append("    POut.Long  ("+obj+"."+fieldsExceptPri[f].Name+")+\"");
 						break;
 					case "Int32":
 						strb.Append("    POut.Int   ("+obj+"."+fieldsExceptPri[f].Name+")+\"");
+						break;
+					case "Single":
+						strb.Append("    POut.Float ("+obj+"."+fieldsExceptPri[f].Name+")+\"");
 						break;
 					case "String":
 						strb.Append("\"'\"+POut.String("+obj+"."+fieldsExceptPri[f].Name+")+\"'");
@@ -303,7 +325,10 @@ namespace OpenDentBusiness.Crud{
 					continue;
 				}
 				strb.Append(rn+t4+"+\""+fieldsExceptPri[f].Name.PadRight(longestField,' ')+"= ");
-				if(fieldsExceptPri[f].FieldType.IsEnum) {
+				if(specialType==EnumCrudSpecialColType.DateT){
+					strb.Append(" \"+POut.DateT ("+obj+"."+fieldsExceptPri[f].Name+")+\"");
+				}
+				else if(fieldsExceptPri[f].FieldType.IsEnum) {
 					strb.Append(" \"+POut.Int   ((int)"+obj+"."+fieldsExceptPri[f].Name+")+\"");
 				}
 				else switch(fieldsExceptPri[f].FieldType.Name) {
@@ -318,17 +343,23 @@ namespace OpenDentBusiness.Crud{
 					case "Color":
 						strb.Append(" \"+POut.Int   ("+obj+"."+fieldsExceptPri[f].Name+".ToArgb())+\"");
 						break;
-					case "DateTime"://Need to handle DateT fields here better.
+					case "DateTime"://This is only for date, not dateT
 						strb.Append(" \"+POut.Date  ("+obj+"."+fieldsExceptPri[f].Name+")+\"");
 						break;
 					case "Double":
 						strb.Append("'\"+POut.Double("+obj+"."+fieldsExceptPri[f].Name+")+\"'");
+						break;
+					case "Interval":
+						strb.Append(" \"+POut.Int   ("+obj+"."+fieldsExceptPri[f].Name+".ToInt())+\"");
 						break;
 					case "Int64":
 						strb.Append(" \"+POut.Long  ("+obj+"."+fieldsExceptPri[f].Name+")+\"");
 						break;
 					case "Int32":
 						strb.Append(" \"+POut.Int   ("+obj+"."+fieldsExceptPri[f].Name+")+\"");
+						break;
+					case "Single":
+						strb.Append(" \"+POut.Float ("+obj+"."+fieldsExceptPri[f].Name+")+\"");
 						break;
 					case "String":
 						strb.Append("'\"+POut.String("+obj+"."+fieldsExceptPri[f].Name+")+\"'");
@@ -368,7 +399,10 @@ namespace OpenDentBusiness.Crud{
 				strb.Append(rn+t3+"if("+obj+"."+fieldsExceptPri[f].Name+" != "+oldObj+"."+fieldsExceptPri[f].Name+") {");
 				strb.Append(rn+t4+"if(command!=\"\"){ command+=\",\";}");
 				strb.Append(rn+t4+"command+=\""+fieldsExceptPri[f].Name+" = ");
-				if(fieldsExceptPri[f].FieldType.IsEnum) {
+				if(specialType==EnumCrudSpecialColType.DateT){
+					strb.Append("\"+POut.DateT("+obj+"."+fieldsExceptPri[f].Name+")+\"");
+				}
+				else if(fieldsExceptPri[f].FieldType.IsEnum) {
 					strb.Append("\"+POut.Int   ((int)"+obj+"."+fieldsExceptPri[f].Name+")+\"");
 				}
 				else switch(fieldsExceptPri[f].FieldType.Name) {
@@ -383,17 +417,23 @@ namespace OpenDentBusiness.Crud{
 					case "Color":
 						strb.Append("\"+POut.Int("+obj+"."+fieldsExceptPri[f].Name+".ToArgb())+\"");
 						break;
-					case "DateTime"://Need to handle DateT fields here better.
+					case "DateTime"://This is only for date, not dateT.
 						strb.Append("\"+POut.Date("+obj+"."+fieldsExceptPri[f].Name+")+\"");
 						break;
 					case "Double":
 						strb.Append("'\"+POut.Double("+obj+"."+fieldsExceptPri[f].Name+")+\"'");
+						break;
+					case "Interval":
+						strb.Append("\"+POut.Int("+obj+"."+fieldsExceptPri[f].Name+".ToInt())+\"");
 						break;
 					case "Int64":
 						strb.Append("\"+POut.Long("+obj+"."+fieldsExceptPri[f].Name+")+\"");
 						break;
 					case "Int32":
 						strb.Append("\"+POut.Int("+obj+"."+fieldsExceptPri[f].Name+")+\"");
+						break;
+					case "Single":
+						strb.Append("\"+POut.Float("+obj+"."+fieldsExceptPri[f].Name+")+\"");
 						break;
 					case "String":
 						strb.Append("'\"+POut.String("+obj+"."+fieldsExceptPri[f].Name+")+\"'");
@@ -427,6 +467,73 @@ namespace OpenDentBusiness.Crud{
 				strb.Append(rn+t3+"Db.NonQ(command);");
 				strb.Append(rn+t2+"}");
 			}
+			//Create Table---------------------------------------------------------------------------------------
+			strb.Append(rn+rn+t4+"/*");
+			strb.Append(rn+t4+"command=\"DROP TABLE IF EXISTS "+tablename+"\";");
+			strb.Append(rn+t4+"Db.NonQ(command);");
+			strb.Append(rn+t4+"command=@\"CREATE TABLE "+tablename+" (");
+			strb.Append(rn+t5+priKey.Name+" bigint NOT NULL auto_increment,");
+			for(int f=0;f<fieldsExceptPri.Count;f++) {
+				strb.Append(rn+t5+fieldsExceptPri[f].Name+" ");
+				specialType=CrudGenHelper.GetSpecialType(fieldsExceptPri[f]);
+				if(specialType==EnumCrudSpecialColType.DateEntry) {
+					strb.Append("date NOT NULL default '0001-01-01',");
+					continue;
+				}
+				if(specialType==EnumCrudSpecialColType.TimeStamp) {
+					strb.Append("timestamp,");
+					continue;
+				}
+				if(specialType==EnumCrudSpecialColType.DateT) {
+					strb.Append("datetime NOT NULL default '0001-01-01 00:00:00',");//untested
+					continue;
+				}
+				if(fieldsExceptPri[f].FieldType.IsEnum) {
+					strb.Append("tinyint NOT NULL,");
+				}
+				else switch(fieldsExceptPri[f].FieldType.Name) {
+					default:
+						throw new ApplicationException("Type not yet supported: "+fieldsExceptPri[f].FieldType.Name);
+					case "Boolean":
+						strb.Append("tinyint NOT NULL,");
+						break;
+					case "Byte":
+						strb.Append("tinyint NOT NULL,");
+						break;
+					case "Color":
+						strb.Append("int NOT NULL,");
+						break;
+					case "DateTime"://This is only for date, not dateT
+						strb.Append("date NOT NULL default '0001-01-01',");
+						break;
+					case "Double":
+						strb.Append("double NOT NULL,");
+						break;
+					case "Interval":
+						strb.Append("int NOT NULL,");
+						break;
+					case "Int64":
+						strb.Append("bigint NOT NULL,");
+						break;
+					case "Int32":
+						strb.Append("int NOT NULL,");
+						break;
+					case "Single":
+						strb.Append("float NOT NULL,");
+						break;
+					case "String":
+						strb.Append("varchar(255) NOT NULL,");
+						break;
+					case "TimeSpan":
+						strb.Append("time NOT NULL,");
+						break;
+				}
+			}
+			strb.Append(rn+t5+"PRIMARY KEY ("+priKey.Name+"),");
+			strb.Append(rn+t5+"INDEX(?)");
+			strb.Append(rn+t5+") DEFAULT CHARSET=utf8\";");
+			strb.Append(rn+t4+"*/");
+			strb.Append(rn);
 			//Footer
 			strb.Append(@"
 	}

@@ -171,5 +171,26 @@ namespace OpenDentBusiness.Crud{
 				+"WHERE AdjNum = "+POut.Long(adjNum);
 			Db.NonQ(command);
 		}
+
+				/*
+				command="DROP TABLE IF EXISTS adjustment";
+				Db.NonQ(command);
+				command=@"CREATE TABLE adjustment (
+					AdjNum bigint NOT NULL auto_increment,
+					AdjDate date NOT NULL default '0001-01-01',
+					AdjAmt double NOT NULL,
+					PatNum bigint NOT NULL,
+					AdjType bigint NOT NULL,
+					ProvNum bigint NOT NULL,
+					AdjNote varchar(255) NOT NULL,
+					ProcDate date NOT NULL default '0001-01-01',
+					ProcNum bigint NOT NULL,
+					DateEntry date NOT NULL default '0001-01-01',
+					ClinicNum bigint NOT NULL,
+					PRIMARY KEY (AdjNum),
+					INDEX(?)
+					) DEFAULT CHARSET=utf8";
+				*/
+
 	}
 }

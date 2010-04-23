@@ -160,5 +160,24 @@ namespace OpenDentBusiness.Crud{
 				+"WHERE MountNum = "+POut.Long(mountNum);
 			Db.NonQ(command);
 		}
+
+				/*
+				command="DROP TABLE IF EXISTS mount";
+				Db.NonQ(command);
+				command=@"CREATE TABLE mount (
+					MountNum bigint NOT NULL auto_increment,
+					PatNum bigint NOT NULL,
+					DocCategory bigint NOT NULL,
+					DateCreated date NOT NULL default '0001-01-01',
+					Description varchar(255) NOT NULL,
+					Note varchar(255) NOT NULL,
+					ImgType tinyint NOT NULL,
+					Width int NOT NULL,
+					Height int NOT NULL,
+					PRIMARY KEY (MountNum),
+					INDEX(?)
+					) DEFAULT CHARSET=utf8";
+				*/
+
 	}
 }

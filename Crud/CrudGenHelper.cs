@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Windows.Forms;
 using OpenDentBusiness;
 using OpenDentBusiness.DataAccess;
 
@@ -97,11 +98,15 @@ namespace Crud {
 			string tablename=GetTableName(typeClass);
 			string command="SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE table_schema = '"+dbName+"' AND table_name = '"+tablename+"'";
 			if(DataCore.GetScalar(command)!="1"){
-				throw new Exception(tablename+" is not a valid table");
+				if(MessageBox.Show(tablename+" was not found in the database.  Continue anyway?","",MessageBoxButtons.OKCancel)==DialogResult.Cancel) {
+					Application.Exit();
+				}
+				else {
+					return;//can't validate
+				}
 			}
 			command="SELECT COLUMN_NAME, DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS "
-				+"WHERE table_name = '"+tablename+"' AND table_schema = '"+dbName+"'";// AND column_name = '"+fields[i].Name+"'";
-			//for testing: SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '' AND table_schema = 'development71' AND column_name = ''
+				+"WHERE table_name = '"+tablename+"' AND table_schema = '"+dbName+"'";
 			DataTable table=DataCore.GetTable(command);
 			FieldInfo[] fields=typeClass.GetFields();
 			for(int i=0;i<fields.Length;i++){
@@ -133,6 +138,9 @@ namespace Crud {
 			else if(specialColType==EnumCrudSpecialColType.DateEntry) {
 				dataTypeExpected="date";
 			}
+			else if(specialColType==EnumCrudSpecialColType.DateT) {
+				dataTypeExpected="datetime";
+			}
 			else if(field.FieldType.IsEnum) {
 				dataTypeExpected="tinyint";
 				dataTypeExpected2="int";
@@ -155,12 +163,19 @@ namespace Crud {
 				case "Double":
 					dataTypeExpected="double";
 					break;
+				case "Interval":
+					dataTypeExpected="int";
+					break;
 				case "Int64":
 					dataTypeExpected="bigint";
 					break;
 				case "Int32":
 					dataTypeExpected="int";
 					dataTypeExpected2="smallint";//ok as long as the coding is careful.  Less than ideal.
+					//tinyint not allowed.  Change C# type to byte.
+					break;
+				case "Single":
+					dataTypeExpected="float";
 					break;
 				case "String":
 					dataTypeExpected="varchar";

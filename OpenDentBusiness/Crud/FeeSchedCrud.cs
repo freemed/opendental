@@ -132,5 +132,20 @@ namespace OpenDentBusiness.Crud{
 				+"WHERE FeeSchedNum = "+POut.Long(feeSchedNum);
 			Db.NonQ(command);
 		}
+
+				/*
+				command="DROP TABLE IF EXISTS feesched";
+				Db.NonQ(command);
+				command=@"CREATE TABLE feesched (
+					FeeSchedNum bigint NOT NULL auto_increment,
+					Description varchar(255) NOT NULL,
+					FeeSchedType tinyint NOT NULL,
+					ItemOrder int NOT NULL,
+					IsHidden tinyint NOT NULL,
+					PRIMARY KEY (FeeSchedNum),
+					INDEX(?)
+					) DEFAULT CHARSET=utf8";
+				*/
+
 	}
 }

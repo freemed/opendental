@@ -9,107 +9,31 @@ using OpenDentBusiness.DataAccess;
 namespace OpenDentBusiness{
 
 	///<summary>A definition (template) for a sheet.  Can be pulled from the database, or it can be internally defined.</summary>
-	[DataObject("sheetdef")]
-	public class SheetDef : DataObjectBase{
-		[DataField("SheetDefNum",PrimaryKey=true,AutoNumber=true)]
-		private long sheetDefNum;
-		private bool sheetDefNumChanged;
+	[Serializable()]
+	public class SheetDef:TableBase {
 		///<summary>Primary key.</summary>
-		public long SheetDefNum{
-			get{return sheetDefNum;}
-			set{if(sheetDefNum!=value){sheetDefNum=value;MarkDirty();sheetDefNumChanged=true;}}
-		}
-		public bool SheetDefNumChanged{
-			get{return sheetDefNumChanged;}
-		}
-
-		[DataField("Description")]
-		private string description;
-		private bool descriptionChanged;
+		[CrudColumn(IsPriKey=true)]
+		public long SheetDefNum;
 		///<summary>The description of this sheetdef.</summary>
-		public string Description{
-			get{return description;}
-			set{if(description!=value){description=value;MarkDirty();descriptionChanged=true;}}
-		}
-		public bool DescriptionChanged{
-			get{return descriptionChanged;}
-		}
-
-		[DataField("SheetType")]
-		private SheetTypeEnum sheetType;
-		private bool sheetTypeChanged;
+		public string Description;
 		///<summary>Enum:SheetTypeEnum</summary>
-		public SheetTypeEnum SheetType{
-			get{return sheetType;}
-			set{if(sheetType!=value){sheetType=value;MarkDirty();sheetTypeChanged=true;}}
-		}
-		public bool SheetTypeChanged{
-			get{return sheetTypeChanged;}
-		}
-
-		[DataField("FontSize")]
-		private float fontSize;
-		private bool fontSizeChanged;
+		public SheetTypeEnum SheetType;
 		///<summary>The default fontSize for the sheet.  The actual font must still be saved with each sheetField.</summary>
-		public float FontSize{
-			get{return fontSize;}
-			set{if(fontSize!=value){fontSize=value;MarkDirty();fontSizeChanged=true;}}
-		}
-		public bool FontSizeChanged{
-			get{return fontSizeChanged;}
-		}
-
-		[DataField("FontName")]
-		private string fontName;
-		private bool fontNameChanged;
+		public float FontSize;
 		///<summary>The default fontName for the sheet.  The actual font must still be saved with each sheetField.</summary>
-		public string FontName{
-			get{return fontName;}
-			set{if(fontName!=value){fontName=value;MarkDirty();fontNameChanged=true;}}
-		}
-		public bool FontNameChanged{
-			get{return fontNameChanged;}
-		}
-
-		[DataField("Width")]
-		private int width;
-		private bool widthChanged;
+		public string FontName;
 		///<summary>Width of the sheet in pixels, 100 pixels per inch.</summary>
-		public int Width{
-			get{return width;}
-			set{if(width!=value){width=value;MarkDirty();widthChanged=true;}}
-		}
-		public bool WidthChanged{
-			get{return widthChanged;}
-		}
-
-		[DataField("Height")]
-		private int height;
-		private bool heightChanged;
+		public int Width;
 		///<summary>Height of the sheet in pixels, 100 pixels per inch.</summary>
-		public int Height{
-			get{return height;}
-			set{if(height!=value){height=value;MarkDirty();heightChanged=true;}}
-		}
-		public bool HeightChanged{
-			get{return heightChanged;}
-		}
-	
-		[DataField("IsLandscape")]
-		private bool isLandscape;
-		private bool isLandscapeChanged;
+		public int Height;
 		///<summary></summary>
-		public bool IsLandscape{
-			get{return isLandscape;}
-			set{if(isLandscape!=value){isLandscape=value;MarkDirty();isLandscapeChanged=true;}}
-		}
-		public bool IsLandscapeChanged{
-			get{return isLandscapeChanged;}
-		}
+		public bool IsLandscape;
 
 		///<Summary>A collection of all parameters for this sheetdef.  There's usually only one parameter.  The first parameter will be a List long if it's a batch.  If a sheet has already been filled, saved to the database, and printed, then there is no longer any need for the parameters in order to fill the data.  So a retrieved sheet will have no parameters, signalling a skip in the fill phase.  There will still be parameters tucked away in the Field data in the database, but they won't become part of the sheet.</Summary>
+		[CrudColumn(IsNotDbColumn=true)]
 		public List<SheetParameter> Parameters;
 		///<Summary></Summary>
+		[CrudColumn(IsNotDbColumn=true)]
 		public List<SheetFieldDef> SheetFieldDefs;		
 
 		///<Summary></Summary>

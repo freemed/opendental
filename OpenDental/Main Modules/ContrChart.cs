@@ -5966,7 +5966,7 @@ namespace OpenDental{
 			plannedAppt.AptNum=AptCur.AptNum;
 			plannedAppt.PatNum=PatCur.PatNum;
 			plannedAppt.ItemOrder=DataSetMain.Tables["Planned"].Rows.Count+1;
-			PlannedAppts.WriteObject(plannedAppt);
+			PlannedAppts.Insert(plannedAppt);
 			FormApptEdit FormApptEdit2=new FormApptEdit(AptCur.AptNum);
 			FormApptEdit2.IsNew=true;
 			FormApptEdit2.ShowDialog();
@@ -6040,12 +6040,12 @@ namespace OpenDental{
 				return;
 			}
 			PlannedAppt planned;
-			planned=PlannedAppts.CreateObject(PIn.Long(table.Rows[idx]["PlannedApptNum"].ToString()));
+			planned=PlannedAppts.GetOne(PIn.Long(table.Rows[idx]["PlannedApptNum"].ToString()));
 			planned.ItemOrder=idx-1;
-			PlannedAppts.WriteObject(planned);
-			planned=PlannedAppts.CreateObject(PIn.Long(table.Rows[idx-1]["PlannedApptNum"].ToString()));
+			PlannedAppts.Update(planned);
+			planned=PlannedAppts.GetOne(PIn.Long(table.Rows[idx-1]["PlannedApptNum"].ToString()));
 			planned.ItemOrder=idx;
-			PlannedAppts.WriteObject(planned);
+			PlannedAppts.Update(planned);
 			DataSetMain=ChartModules.GetAll(PatCur.PatNum,checkAudit.Checked);
 			FillPlanned();
 			gridPlanned.SetSelected(idx-1,true);
@@ -6066,12 +6066,12 @@ namespace OpenDental{
 				return;
 			}
 			PlannedAppt planned;
-			planned=PlannedAppts.CreateObject(PIn.Long(table.Rows[idx]["PlannedApptNum"].ToString()));
+			planned=PlannedAppts.GetOne(PIn.Long(table.Rows[idx]["PlannedApptNum"].ToString()));
 			planned.ItemOrder=idx+1;
-			PlannedAppts.WriteObject(planned);
-			planned=PlannedAppts.CreateObject(PIn.Long(table.Rows[idx+1]["PlannedApptNum"].ToString()));
+			PlannedAppts.Update(planned);
+			planned=PlannedAppts.GetOne(PIn.Long(table.Rows[idx+1]["PlannedApptNum"].ToString()));
 			planned.ItemOrder=idx;
-			PlannedAppts.WriteObject(planned);
+			PlannedAppts.Update(planned);
 			DataSetMain=ChartModules.GetAll(PatCur.PatNum,checkAudit.Checked);
 			FillPlanned();
 			gridPlanned.SetSelected(idx+1,true);

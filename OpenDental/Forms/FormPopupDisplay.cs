@@ -92,7 +92,7 @@ namespace OpenDental{
 			this.groupBox1.Controls.Add(this.butPerm);
 			this.groupBox1.Controls.Add(this.butMinutes);
 			this.groupBox1.Controls.Add(this.butHours);
-			this.groupBox1.Location = new System.Drawing.Point(362,34);
+			this.groupBox1.Location = new System.Drawing.Point(350,34);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(271,103);
 			this.groupBox1.TabIndex = 3;
@@ -157,7 +157,6 @@ namespace OpenDental{
 			this.butPerm.Size = new System.Drawing.Size(77,24);
 			this.butPerm.TabIndex = 28;
 			this.butPerm.Text = "Permanently";
-			this.butPerm.Click += new System.EventHandler(this.butPerm_Click);
 			// 
 			// butMinutes
 			// 
@@ -171,7 +170,6 @@ namespace OpenDental{
 			this.butMinutes.Size = new System.Drawing.Size(77,24);
 			this.butMinutes.TabIndex = 4;
 			this.butMinutes.Text = "Minutes";
-			this.butMinutes.Click += new System.EventHandler(this.butMinutes_Click);
 			// 
 			// butHours
 			// 
@@ -185,7 +183,6 @@ namespace OpenDental{
 			this.butHours.Size = new System.Drawing.Size(77,24);
 			this.butHours.TabIndex = 3;
 			this.butHours.Text = "Hours";
-			this.butHours.Click += new System.EventHandler(this.butHours_Click);
 			// 
 			// butOK
 			// 
@@ -240,68 +237,11 @@ namespace OpenDental{
 			MinutesDisabled=0;
 		}
 
-		private void butMinutes_Click(object sender,EventArgs e) {
-			int minutes=0;
-			try {
-				minutes=Convert.ToInt32(comboMinutes.Text);
-			}
-			catch {
-				MsgBox.Show(this,"Invalid number.");
-				return;
-			}
-			if(minutes<1 || minutes>1440){
-				MsgBox.Show(this,"Number out of range.");
-				return;
-			}
-			if(PopupCur.Description!=textDescription.Text) {//if user changed the note
-				if(MsgBox.Show(this,true,"Save changes to note?")) {
-					PopupCur.Description=textDescription.Text;
-					Popups.WriteObject(PopupCur);
-				}
-			}
-			MinutesDisabled=minutes;
-			DialogResult=DialogResult.OK;
-		}
-
-		private void butHours_Click(object sender,EventArgs e) {
-			int hours=0;
-			try {
-				hours=Convert.ToInt32(comboHours.Text);
-			}
-			catch {
-				MsgBox.Show(this,"Invalid number.");
-				return;
-			}
-			if(hours<1 || hours>24) {
-				MsgBox.Show(this,"Number out of range.");
-				return;
-			}
-			if(PopupCur.Description!=textDescription.Text) {//if user changed the note
-				if(MsgBox.Show(this,true,"Save changes to note?")) {
-					PopupCur.Description=textDescription.Text;
-					Popups.WriteObject(PopupCur);
-				}
-			}
-			MinutesDisabled=hours*60;
-			DialogResult=DialogResult.OK;
-		}
-
-		private void butPerm_Click(object sender,EventArgs e) {
-			PopupCur.IsDisabled=true;
-			if(PopupCur.Description!=textDescription.Text) {//if user changed the note
-				if(MsgBox.Show(this,true,"Save changes to note?")) {
-					PopupCur.Description=textDescription.Text;
-				}
-			}
-			Popups.WriteObject(PopupCur);
-			DialogResult=DialogResult.OK;
-		}
-
 		private void butOK_Click(object sender, System.EventArgs e) {
 			if(PopupCur.Description!=textDescription.Text) {//if user changed the note
 				if(MsgBox.Show(this,true,"Save changes to note?")) {
 					PopupCur.Description=textDescription.Text;
-					Popups.WriteObject(PopupCur);
+					Popups.Update(PopupCur);
 				}
 			}
 			else {

@@ -21,77 +21,43 @@ namespace OpenDentBusiness{
 
 		public static void FillCache(DataTable table){
 			//No need to check RemotingRole; no call to db.
-			PharmacyC.Listt=new List<Pharmacy>();
-			Pharmacy pharm;
-			for(int i=0;i<table.Rows.Count;i++){
-				pharm=new Pharmacy();
-				pharm.IsNew=false;
-				pharm.PharmacyNum= PIn.Long   (table.Rows[i][0].ToString());
-				pharm.PharmID    = PIn.String(table.Rows[i][1].ToString());
-				pharm.StoreName  = PIn.String(table.Rows[i][2].ToString());
-				pharm.Phone      = PIn.String(table.Rows[i][3].ToString());
-				pharm.Fax        = PIn.String(table.Rows[i][4].ToString());
-				pharm.Address    = PIn.String(table.Rows[i][5].ToString());
-				pharm.Address2   = PIn.String(table.Rows[i][6].ToString());
-				pharm.City       = PIn.String(table.Rows[i][7].ToString());
-				pharm.State      = PIn.String(table.Rows[i][8].ToString());
-				pharm.Zip        = PIn.String(table.Rows[i][9].ToString());
-				pharm.Note       = PIn.String(table.Rows[i][10].ToString());
-				PharmacyC.Listt.Add(pharm);
-			}
+			PharmacyC.Listt=Crud.PharmacyCrud.TableToList(table);
 		}
 
 		///<Summary>Gets one Pharmacy from the database.</Summary>
-		public static Pharmacy CreateObject(long PharmacyNum) {
+		public static Pharmacy GetOne(long pharmacyNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<Pharmacy>(MethodBase.GetCurrentMethod(),PharmacyNum);
+				return Meth.GetObject<Pharmacy>(MethodBase.GetCurrentMethod(),pharmacyNum);
 			}
-			return DataObjectFactory<Pharmacy>.CreateObject(PharmacyNum);
-		}
-
-		public static List<Pharmacy> GetPharmacies(List<long> PharmacyNums) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<Pharmacy>>(MethodBase.GetCurrentMethod(),PharmacyNums);
-			}
-			Collection<Pharmacy> collectState=DataObjectFactory<Pharmacy>.CreateObjects(PharmacyNums);
-			return new List<Pharmacy>(collectState);		
+			return Crud.PharmacyCrud.SelectOne(pharmacyNum);
 		}
 
 		///<summary></summary>
-		public static long WriteObject(Pharmacy Pharmacy){
+		public static long Insert(Pharmacy pharmacy){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Pharmacy.PharmacyNum=Meth.GetLong(MethodBase.GetCurrentMethod(),Pharmacy);
-				return Pharmacy.PharmacyNum;
+				pharmacy.PharmacyNum=Meth.GetLong(MethodBase.GetCurrentMethod(),pharmacy);
+				return pharmacy.PharmacyNum;
 			}
-			DataObjectFactory<Pharmacy>.WriteObject(Pharmacy);
-			return Pharmacy.PharmacyNum;
+			return Crud.PharmacyCrud.Insert(pharmacy);
 		}
 
 		///<summary></summary>
-		public static void DeleteObject(long PharmacyNum) {
+		public static void Update(Pharmacy pharmacy){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),PharmacyNum);
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),pharmacy);
 				return;
 			}
-			//validate that not already in use.
-			/*string command="SELECT LName,FName FROM patient WHERE PharmacyNum="+POut.PInt(PharmacyNum);
-			DataTable table=Db.GetTable(command);
-			string pats="";
-			for(int i=0;i<table.Rows.Count;i++){
-				if(i>0){
-					pats+=", ";
-				}
-				pats+=table.Rows[i]["FName"].ToString()+" "+table.Rows[i]["LName"].ToString();
-			}
-			if(table.Rows.Count>0){
-				throw new ApplicationException(Lans.g("Pharmacys","Pharmacy is already in use by patient(s). Not allowed to delete. "+pats));
-			}*/
-			DataObjectFactory<Pharmacy>.DeleteObject(PharmacyNum);
+			Crud.PharmacyCrud.Update(pharmacy);
 		}
 
-		//public static void DeleteObject(int PharmacyNum){
-		//	DataObjectFactory<Pharmacy>.DeleteObject(PharmacyNum);
-		//}
+		///<summary></summary>
+		public static void DeleteObject(long pharmacyNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),pharmacyNum);
+				return;
+			}
+			Crud.PharmacyCrud.Delete(pharmacyNum);
+		}
 
 		public static string GetDescription(long PharmacyNum) {
 			//No need to check RemotingRole; no call to db.
