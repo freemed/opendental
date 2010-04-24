@@ -119,17 +119,5 @@ namespace OpenDentBusiness.Crud{
 			Db.NonQ(command);
 		}
 
-				/*
-				command="DROP TABLE IF EXISTS phonenumber";
-				Db.NonQ(command);
-				command=@"CREATE TABLE phonenumber (
-					PhoneNumberNum bigint NOT NULL auto_increment,
-					PatNum bigint NOT NULL,
-					PhoneNumberVal varchar(255) NOT NULL,
-					PRIMARY KEY (PhoneNumberNum),
-					INDEX(?)
-					) DEFAULT CHARSET=utf8";
-				*/
-
 	}
 }

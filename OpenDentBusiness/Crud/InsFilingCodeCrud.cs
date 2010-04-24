@@ -126,18 +126,5 @@ namespace OpenDentBusiness.Crud{
 			Db.NonQ(command);
 		}
 
-				/*
-				command="DROP TABLE IF EXISTS insfilingcode";
-				Db.NonQ(command);
-				command=@"CREATE TABLE insfilingcode (
-					InsFilingCodeNum bigint NOT NULL auto_increment,
-					Descript varchar(255) NOT NULL,
-					EclaimCode varchar(255) NOT NULL,
-					ItemOrder int NOT NULL,
-					PRIMARY KEY (InsFilingCodeNum),
-					INDEX(?)
-					) DEFAULT CHARSET=utf8";
-				*/
-
 	}
 }

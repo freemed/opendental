@@ -133,19 +133,5 @@ namespace OpenDentBusiness.Crud{
 			Db.NonQ(command);
 		}
 
-				/*
-				command="DROP TABLE IF EXISTS supplyorderitem";
-				Db.NonQ(command);
-				command=@"CREATE TABLE supplyorderitem (
-					SupplyOrderItemNum bigint NOT NULL auto_increment,
-					SupplyOrderNum bigint NOT NULL,
-					SupplyNum bigint NOT NULL,
-					Qty int NOT NULL,
-					Price double NOT NULL,
-					PRIMARY KEY (SupplyOrderItemNum),
-					INDEX(?)
-					) DEFAULT CHARSET=utf8";
-				*/
-
 	}
 }

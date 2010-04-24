@@ -126,18 +126,5 @@ namespace OpenDentBusiness.Crud{
 			Db.NonQ(command);
 		}
 
-				/*
-				command="DROP TABLE IF EXISTS plannedappt";
-				Db.NonQ(command);
-				command=@"CREATE TABLE plannedappt (
-					PlannedApptNum bigint NOT NULL auto_increment,
-					PatNum bigint NOT NULL,
-					AptNum bigint NOT NULL,
-					ItemOrder int NOT NULL,
-					PRIMARY KEY (PlannedApptNum),
-					INDEX(?)
-					) DEFAULT CHARSET=utf8";
-				*/
-
 	}
 }

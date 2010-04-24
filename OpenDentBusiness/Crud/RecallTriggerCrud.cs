@@ -119,17 +119,5 @@ namespace OpenDentBusiness.Crud{
 			Db.NonQ(command);
 		}
 
-				/*
-				command="DROP TABLE IF EXISTS recalltrigger";
-				Db.NonQ(command);
-				command=@"CREATE TABLE recalltrigger (
-					RecallTriggerNum bigint NOT NULL auto_increment,
-					RecallTypeNum bigint NOT NULL,
-					CodeNum bigint NOT NULL,
-					PRIMARY KEY (RecallTriggerNum),
-					INDEX(?)
-					) DEFAULT CHARSET=utf8";
-				*/
-
 	}
 }

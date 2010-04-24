@@ -119,17 +119,5 @@ namespace OpenDentBusiness.Crud{
 			Db.NonQ(command);
 		}
 
-				/*
-				command="DROP TABLE IF EXISTS tasksubscription";
-				Db.NonQ(command);
-				command=@"CREATE TABLE tasksubscription (
-					TaskSubscriptionNum bigint NOT NULL auto_increment,
-					UserNum bigint NOT NULL,
-					TaskListNum bigint NOT NULL,
-					PRIMARY KEY (TaskSubscriptionNum),
-					INDEX(?)
-					) DEFAULT CHARSET=utf8";
-				*/
-
 	}
 }

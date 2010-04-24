@@ -140,20 +140,5 @@ namespace OpenDentBusiness.Crud{
 			Db.NonQ(command);
 		}
 
-				/*
-				command="DROP TABLE IF EXISTS mountdef";
-				Db.NonQ(command);
-				command=@"CREATE TABLE mountdef (
-					MountDefNum bigint NOT NULL auto_increment,
-					Description varchar(255) NOT NULL,
-					ItemOrder int NOT NULL,
-					IsRadiograph tinyint NOT NULL,
-					Width int NOT NULL,
-					Height int NOT NULL,
-					PRIMARY KEY (MountDefNum),
-					INDEX(?)
-					) DEFAULT CHARSET=utf8";
-				*/
-
 	}
 }

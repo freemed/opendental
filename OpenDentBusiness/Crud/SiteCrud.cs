@@ -119,17 +119,5 @@ namespace OpenDentBusiness.Crud{
 			Db.NonQ(command);
 		}
 
-				/*
-				command="DROP TABLE IF EXISTS site";
-				Db.NonQ(command);
-				command=@"CREATE TABLE site (
-					SiteNum bigint NOT NULL auto_increment,
-					Description varchar(255) NOT NULL,
-					Note varchar(255) NOT NULL,
-					PRIMARY KEY (SiteNum),
-					INDEX(?)
-					) DEFAULT CHARSET=utf8";
-				*/
-
 	}
 }

@@ -140,20 +140,5 @@ namespace OpenDentBusiness.Crud{
 			Db.NonQ(command);
 		}
 
-				/*
-				command="DROP TABLE IF EXISTS account";
-				Db.NonQ(command);
-				command=@"CREATE TABLE account (
-					AccountNum bigint NOT NULL auto_increment,
-					Description varchar(255) NOT NULL,
-					AcctType tinyint NOT NULL,
-					BankNumber varchar(255) NOT NULL,
-					Inactive tinyint NOT NULL,
-					AccountColor int NOT NULL,
-					PRIMARY KEY (AccountNum),
-					INDEX(?)
-					) DEFAULT CHARSET=utf8";
-				*/
-
 	}
 }

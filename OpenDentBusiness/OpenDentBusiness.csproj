@@ -151,6 +151,7 @@
     <Compile Include="Crud\SupplyOrderItemCrud.cs" />
     <Compile Include="Crud\TaskAncestorCrud.cs" />
     <Compile Include="Crud\TaskSubscriptionCrud.cs" />
+    <Compile Include="Crud\TaskUnreadCrud.cs" />
     <Compile Include="Crud\UserodCrud.cs" />
     <Compile Include="Data Interface\Automations.cs" />
     <Compile Include="Data Interface\Equipments.cs" />

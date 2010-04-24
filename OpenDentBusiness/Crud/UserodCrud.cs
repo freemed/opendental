@@ -175,30 +175,5 @@ namespace OpenDentBusiness.Crud{
 			Db.NonQ(command);
 		}
 
-				/*
-				command="DROP TABLE IF EXISTS userod";
-				Db.NonQ(command);
-				command=@"CREATE TABLE userod (
-					UserNum bigint NOT NULL auto_increment,
-					UserName varchar(255) NOT NULL,
-					Password varchar(255) NOT NULL,
-					UserGroupNum bigint NOT NULL,
-					EmployeeNum bigint NOT NULL,
-					ClinicNum bigint NOT NULL,
-					ProvNum bigint NOT NULL,
-					IsHidden tinyint NOT NULL,
-					TaskListInBox bigint NOT NULL,
-					AnesthProvType int NOT NULL,
-					DefaultHidePopups tinyint NOT NULL,
-					PRIMARY KEY (UserNum),
-					INDEX(?)
-					) DEFAULT CHARSET=utf8";
-				*/
-
-				/*
-				command="ALTER TABLE userod ADD DefaultHidePopups tinyint NOT NULL";
-				Db.NonQ(command);
-				*/
-
 	}
 }

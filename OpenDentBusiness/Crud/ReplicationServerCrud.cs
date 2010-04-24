@@ -147,21 +147,5 @@ namespace OpenDentBusiness.Crud{
 			Db.NonQ(command);
 		}
 
-				/*
-				command="DROP TABLE IF EXISTS replicationserver";
-				Db.NonQ(command);
-				command=@"CREATE TABLE replicationserver (
-					ReplicationServerNum bigint NOT NULL auto_increment,
-					Descript varchar(255) NOT NULL,
-					ServerId int NOT NULL,
-					RangeStart bigint NOT NULL,
-					RangeEnd bigint NOT NULL,
-					AtoZpath varchar(255) NOT NULL,
-					UpdateBlocked tinyint NOT NULL,
-					PRIMARY KEY (ReplicationServerNum),
-					INDEX(?)
-					) DEFAULT CHARSET=utf8";
-				*/
-
 	}
 }

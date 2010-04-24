@@ -126,18 +126,5 @@ namespace OpenDentBusiness.Crud{
 			Db.NonQ(command);
 		}
 
-				/*
-				command="DROP TABLE IF EXISTS popup";
-				Db.NonQ(command);
-				command=@"CREATE TABLE popup (
-					PopupNum bigint NOT NULL auto_increment,
-					PatNum bigint NOT NULL,
-					Description varchar(255) NOT NULL,
-					IsDisabled tinyint NOT NULL,
-					PRIMARY KEY (PopupNum),
-					INDEX(?)
-					) DEFAULT CHARSET=utf8";
-				*/
-
 	}
 }

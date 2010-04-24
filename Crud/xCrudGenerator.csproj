@@ -80,6 +80,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CrudGenHelper.cs" />
+    <Compile Include="CrudQueries.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

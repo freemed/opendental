@@ -119,17 +119,5 @@ namespace OpenDentBusiness.Crud{
 			Db.NonQ(command);
 		}
 
-				/*
-				command="DROP TABLE IF EXISTS supplyneeded";
-				Db.NonQ(command);
-				command=@"CREATE TABLE supplyneeded (
-					SupplyNeededNum bigint NOT NULL auto_increment,
-					Description varchar(255) NOT NULL,
-					DateAdded date NOT NULL default '0001-01-01',
-					PRIMARY KEY (SupplyNeededNum),
-					INDEX(?)
-					) DEFAULT CHARSET=utf8";
-				*/
-
 	}
 }

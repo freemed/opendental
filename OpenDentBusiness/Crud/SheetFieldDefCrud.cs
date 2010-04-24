@@ -196,28 +196,5 @@ namespace OpenDentBusiness.Crud{
 			Db.NonQ(command);
 		}
 
-				/*
-				command="DROP TABLE IF EXISTS sheetfielddef";
-				Db.NonQ(command);
-				command=@"CREATE TABLE sheetfielddef (
-					SheetFieldDefNum bigint NOT NULL auto_increment,
-					SheetDefNum bigint NOT NULL,
-					FieldType tinyint NOT NULL,
-					FieldName varchar(255) NOT NULL,
-					FieldValue varchar(255) NOT NULL,
-					FontSize float NOT NULL,
-					FontName varchar(255) NOT NULL,
-					FontIsBold tinyint NOT NULL,
-					XPos int NOT NULL,
-					YPos int NOT NULL,
-					Width int NOT NULL,
-					Height int NOT NULL,
-					GrowthBehavior tinyint NOT NULL,
-					RadioButtonValue varchar(255) NOT NULL,
-					PRIMARY KEY (SheetFieldDefNum),
-					INDEX(?)
-					) DEFAULT CHARSET=utf8";
-				*/
-
 	}
 }

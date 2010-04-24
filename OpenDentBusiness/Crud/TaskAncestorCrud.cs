@@ -119,17 +119,5 @@ namespace OpenDentBusiness.Crud{
 			Db.NonQ(command);
 		}
 
-				/*
-				command="DROP TABLE IF EXISTS taskancestor";
-				Db.NonQ(command);
-				command=@"CREATE TABLE taskancestor (
-					TaskAncestorNum bigint NOT NULL auto_increment,
-					TaskNum bigint NOT NULL,
-					TaskListNum bigint NOT NULL,
-					PRIMARY KEY (TaskAncestorNum),
-					INDEX(?)
-					) DEFAULT CHARSET=utf8";
-				*/
-
 	}
 }

@@ -175,25 +175,5 @@ namespace OpenDentBusiness.Crud{
 			Db.NonQ(command);
 		}
 
-				/*
-				command="DROP TABLE IF EXISTS pharmacy";
-				Db.NonQ(command);
-				command=@"CREATE TABLE pharmacy (
-					PharmacyNum bigint NOT NULL auto_increment,
-					PharmID varchar(255) NOT NULL,
-					StoreName varchar(255) NOT NULL,
-					Phone varchar(255) NOT NULL,
-					Fax varchar(255) NOT NULL,
-					Address varchar(255) NOT NULL,
-					Address2 varchar(255) NOT NULL,
-					City varchar(255) NOT NULL,
-					State varchar(255) NOT NULL,
-					Zip varchar(255) NOT NULL,
-					Note varchar(255) NOT NULL,
-					PRIMARY KEY (PharmacyNum),
-					INDEX(?)
-					) DEFAULT CHARSET=utf8";
-				*/
-
 	}
 }

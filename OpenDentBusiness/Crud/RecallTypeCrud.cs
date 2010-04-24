@@ -133,19 +133,5 @@ namespace OpenDentBusiness.Crud{
 			Db.NonQ(command);
 		}
 
-				/*
-				command="DROP TABLE IF EXISTS recalltype";
-				Db.NonQ(command);
-				command=@"CREATE TABLE recalltype (
-					RecallTypeNum bigint NOT NULL auto_increment,
-					Description varchar(255) NOT NULL,
-					DefaultInterval int NOT NULL,
-					TimePattern varchar(255) NOT NULL,
-					Procedures varchar(255) NOT NULL,
-					PRIMARY KEY (RecallTypeNum),
-					INDEX(?)
-					) DEFAULT CHARSET=utf8";
-				*/
-
 	}
 }

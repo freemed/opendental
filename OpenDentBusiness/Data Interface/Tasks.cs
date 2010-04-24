@@ -61,6 +61,33 @@ namespace OpenDentBusiness{
 			return RefreshAndFill(Db.GetTable(command));
 		}
 
+		///<summary>Gets all 'new' tasks for a user.</summary>
+		public static List<Task> RefreshUserNew(long userNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Task>>(MethodBase.GetCurrentMethod(),userNum);
+			}
+			string command="";
+				
+				/*
+				
+				"SELECT tasklist.*,"
+				+"(SELECT COUNT(*) FROM taskancestor,task WHERE taskancestor.TaskListNum=tasklist.TaskListNum "
+				+"AND task.TaskNum=taskancestor.TaskNum AND task.TaskStatus=0),"
+				+"t2.Descript,t3.Descript FROM tasksubscription "
+				+"LEFT JOIN tasklist ON tasklist.TaskListNum=tasksubscription.TaskListNum "
+				+"LEFT JOIN tasklist t2 ON t2.TaskListNum=tasklist.Parent "
+				+"LEFT JOIN tasklist t3 ON t3.TaskListNum=t2.Parent "
+				//+"LEFT JOIN taskancestor ON taskancestor.TaskList=tasklist.TaskList "
+				//+"LEFT JOIN task ON task.TaskNum=taskancestor.TaskNum AND task.TaskStatus=0 "
+				+"WHERE tasksubscription.UserNum="+POut.Long(userNum)
+				+" AND tasksubscription.TaskListNum!=0 "
+				+"GROUP BY tasklist.TaskListNum "
+				+"ORDER BY DateTimeEntry";
+			*/
+
+			return RefreshAndFill(Db.GetTable(command));
+		}
+
 		///<summary>Gets all tasks for the repeating trunk.  Always includes "done".</summary>
 		public static List<Task> RefreshRepeatingTrunk() {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {

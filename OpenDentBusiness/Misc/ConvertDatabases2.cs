@@ -2040,6 +2040,7 @@ DROP TABLE IF EXISTS etAck";
 				command="ALTER TABLE userod ADD DefaultHidePopups tinyint NOT NULL";
 				Db.NonQ(command);
 				
+				
 
 
 				command="UPDATE preference SET ValueString = '7.1.0.0' WHERE PrefName = 'DataBaseVersion'";
@@ -2053,3 +2054,33 @@ DROP TABLE IF EXISTS etAck";
 
 	}
 }
+
+
+
+				/*
+				command="DROP TABLE IF EXISTS taskunread";
+				Db.NonQ(command);
+				command=@"CREATE TABLE taskunread (
+					TaskUnreadNum bigint NOT NULL auto_increment,
+					TaskNum bigint NOT NULL,
+					UserNum bigint NOT NULL,
+					PRIMARY KEY (TaskUnreadNum),
+					INDEX(TaskNum)
+					INDEX(UserNum)
+					(delete this comment as well as any INDEX rows above that do not apply.)
+					) DEFAULT CHARSET=utf8";
+				*/
+
+				/*
+				command="DROP TABLE IF EXISTS taskunread";
+				Db.NonQ(command);
+				command=@"CREATE TABLE taskunread (
+					TaskUnreadNum bigint NOT NULL auto_increment,
+					TaskNum bigint NOT NULL,
+					UserNum bigint NOT NULL,
+					PRIMARY KEY (TaskUnreadNum),
+					INDEX(TaskNum),
+					INDEX(UserNum)
+					(delete this comment as well as any INDEX rows above that do not apply.)
+					) DEFAULT CHARSET=utf8";
+				*/

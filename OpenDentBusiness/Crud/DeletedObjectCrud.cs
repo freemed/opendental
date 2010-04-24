@@ -123,18 +123,5 @@ namespace OpenDentBusiness.Crud{
 			Db.NonQ(command);
 		}
 
-				/*
-				command="DROP TABLE IF EXISTS deletedobject";
-				Db.NonQ(command);
-				command=@"CREATE TABLE deletedobject (
-					DeletedObjectNum bigint NOT NULL auto_increment,
-					ObjectNum bigint NOT NULL,
-					ObjectType tinyint NOT NULL,
-					DateTStamp timestamp,
-					PRIMARY KEY (DeletedObjectNum),
-					INDEX(?)
-					) DEFAULT CHARSET=utf8";
-				*/
-
 	}
 }

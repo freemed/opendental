@@ -146,6 +146,9 @@ namespace OpenDental {
 			if(tabContr.SelectedTab==tabUser) {
 				tree.Top=tabContr.Bottom;
 			}
+			else if(tabContr.SelectedTab==tabNew) {
+				tree.Top=tabContr.Bottom;
+			}
 			else if(tabContr.SelectedTab==tabMain) {
 				tree.Top=tabContr.Bottom;
 			}
@@ -430,9 +433,6 @@ namespace OpenDental {
 				TasksList=new List<Task>();
 				return;
 			}
-			if(tabContr.SelectedTab==tabUser) {//user
-				//TaskListsAllGeneral=TaskLists.GetAllGeneral();
-			}
 			if(parent!=0){//not a trunk
 				TaskListsList=TaskLists.RefreshChildren(parent);
 				TasksList=Tasks.RefreshChildren(parent,checkShowFinished.Checked,startDate);
@@ -440,7 +440,10 @@ namespace OpenDental {
 			else if(tabContr.SelectedTab==tabUser) {
 				TaskListsList=TaskLists.RefreshUserTrunk(Security.CurUser.UserNum);
 				TasksList=new List<Task>();//no tasks in the user trunk
-					//Tasks.RefreshUserTrunk(Security.CurUser.UserNum);
+			}
+			else if(tabContr.SelectedTab==tabNew) {
+				TaskListsList=new List<TaskList>();//no task lists in new tab
+				TasksList=Tasks.RefreshUserNew(Security.CurUser.UserNum);
 			}
 			else if(tabContr.SelectedTab==tabMain) {
 				TaskListsList=TaskLists.RefreshMainTrunk();

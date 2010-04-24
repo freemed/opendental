@@ -95,7 +95,17 @@ namespace Crud {
 			}
 			return retVal;
 		}
-		
+
+		///<summary>Pass in fields processed by GetFieldsExceptPriKey.  This quick method returns the bigint fields so that indexes can possibly be added.</summary>
+		public static List<FieldInfo> GetBigIntFields(List<FieldInfo> fieldsExceptPri) {
+			List<FieldInfo> retVal=new List<FieldInfo>();
+			for(int i=0;i<fieldsExceptPri.Count;i++) {
+				if(fieldsExceptPri[i].FieldType.Name=="Int64") {
+					retVal.Add(fieldsExceptPri[i]);
+				}
+			}
+			return retVal;
+		}
 
 		public static EnumCrudSpecialColType GetSpecialType(FieldInfo field) {
 			object[] attributes = field.GetCustomAttributes(typeof(CrudColumnAttribute),true);
@@ -125,12 +135,7 @@ namespace Crud {
 			string tablename=GetTableName(typeClass);
 			string command="SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE table_schema = '"+dbName+"' AND table_name = '"+tablename+"'";
 			if(DataCore.GetScalar(command)!="1"){
-				if(MessageBox.Show(tablename+" was not found in the database.  Continue anyway?","",MessageBoxButtons.OKCancel)==DialogResult.Cancel) {
-					Application.Exit();
-				}
-				else {
-					return;//can't validate
-				}
+				return;//can't validate
 			}
 			command="SELECT COLUMN_NAME, DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS "
 				+"WHERE table_name = '"+tablename+"' AND table_schema = '"+dbName+"'";
@@ -153,15 +158,7 @@ namespace Crud {
 				}
 			}
 			if(dataTypeInDb==""){
-				if(MessageBox.Show("A new column was found in the file definition that is not in the database:\r\n"
-					+tablename+"."+field.Name+"\r\n"
-					+"An ALTER TABLE entry will be made in the Crud file.\r\n"
-					+"The ALTER TABLE snippet should be copied to ConvertDatabase2.cs.\r\n"
-					+"The query it contains should be manually run on the test database.\r\n"
-					,"",MessageBoxButtons.OKCancel)==DialogResult.Cancel) {
-					Application.Exit();
-					return;
-				}
+				return;//can't validate
 			}
 			EnumCrudSpecialColType specialColType=GetSpecialType(field);
 			string dataTypeExpected="";
