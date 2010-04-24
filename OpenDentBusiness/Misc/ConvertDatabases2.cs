@@ -2037,6 +2037,8 @@ DROP TABLE IF EXISTS etAck";
 				Db.NonQ(command);
 				command="INSERT INTO preference(PrefName,ValueString) VALUES('ReportsShowPatNum','0')";
 				Db.NonQ(command);
+				command="ALTER TABLE userod ADD DefaultHidePopups tinyint NOT NULL";
+				Db.NonQ(command);
 				
 
 

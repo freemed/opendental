@@ -7,6 +7,27 @@ using System.Reflection;
 namespace OpenDentBusiness{
 	///<summary>Handles database commands related to the adjustment table in the db.</summary>
 	public class Adjustments {
+		///<summary>Gets all adjustments for a single patient.</summary>
+		public static Adjustment[] Refresh(long patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Adjustment[]>(MethodBase.GetCurrentMethod(),patNum);
+			}
+			string command=
+				"SELECT * FROM adjustment"
+				+" WHERE PatNum = "+POut.Long(patNum)+" ORDER BY AdjDate";
+			return Crud.AdjustmentCrud.SelectMany(command).ToArray();
+		}
+
+		///<summary>Gets one adjustment from the db.</summary>
+		public static Adjustment GetOne(long adjNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Adjustment>(MethodBase.GetCurrentMethod(),adjNum);
+			}
+			string command=
+				"SELECT * FROM adjustment"
+				+" WHERE AdjNum = "+POut.Long(adjNum);
+			return Crud.AdjustmentCrud.SelectOne(adjNum);
+		}
 
 		///<summary></summary>
 		public static void Update(Adjustment adj){
@@ -33,28 +54,6 @@ namespace OpenDentBusiness{
 				return;
 			}
 			Crud.AdjustmentCrud.Delete(adj.AdjNum);
-		}
-
-		///<summary>Gets all adjustments for a single patient.</summary>
-		public static Adjustment[] Refresh(long patNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<Adjustment[]>(MethodBase.GetCurrentMethod(),patNum);
-			}
-			string command=
-				"SELECT * FROM adjustment"
-				+" WHERE PatNum = "+POut.Long(patNum)+" ORDER BY AdjDate";
-			return Crud.AdjustmentCrud.SelectMany(command).ToArray();
-		}
-
-		///<summary>Gets one adjustment from the db.</summary>
-		public static Adjustment GetOne(long adjNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<Adjustment>(MethodBase.GetCurrentMethod(),adjNum);
-			}
-			string command=
-				"SELECT * FROM adjustment"
-				+" WHERE AdjNum = "+POut.Long(adjNum);
-			return Crud.AdjustmentCrud.SelectOne(adjNum);
 		}
 
 		///<summary>Loops through the supplied list of adjustments and returns an ArrayList of adjustments for the given proc.</summary>

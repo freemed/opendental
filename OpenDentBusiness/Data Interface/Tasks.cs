@@ -9,7 +9,7 @@ namespace OpenDentBusiness{
 	public class Tasks {
 		///<summary>Only used from UI.</summary>
 		public static ArrayList LastOpenList;
-		///<summary>Only used from UI.</summary>
+		///<summary>Only used from UI.  The index of the last open tab.</summary>
 		public static int LastOpenGroup;
 		///<summary>Only used from UI.</summary>
 		public static DateTime LastOpenDate;

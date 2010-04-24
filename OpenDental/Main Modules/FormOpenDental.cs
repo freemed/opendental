@@ -2605,6 +2605,7 @@ namespace OpenDental{
 				if(areAnySignalsTasks || tasksPopup.Count>0) {
 					//if user has the Task dialog open, we can't easily tell it to refresh,
 					//So that dialog is responsible for auto refreshing every minute on a timer.
+					//Improve this.
 					if(userControlTasks1.Visible) {
 						userControlTasks1.RefreshTasks();
 					}

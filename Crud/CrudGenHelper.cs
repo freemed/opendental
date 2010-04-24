@@ -68,6 +68,35 @@ namespace Crud {
 			return retVal;
 		}
 
+		///<summary>This gets all new fields which are found in the table definition but not in the database.  Result will be empty if the table itself is not in the database.</summary>
+		public static List<FieldInfo> GetNewFields(FieldInfo[] fields,Type typeClass,string dbName) {
+			string tablename=GetTableName(typeClass);
+			string command="SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE table_schema = '"+dbName+"' AND table_name = '"+tablename+"'";
+			if(DataCore.GetScalar(command)!="1") {
+				return new List<FieldInfo>();
+			}
+			command="SELECT COLUMN_NAME, DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS "
+				+"WHERE table_name = '"+tablename+"' AND table_schema = '"+dbName+"'";
+			DataTable table=DataCore.GetTable(command);
+			List<FieldInfo> retVal=new List<FieldInfo>();
+			for(int i=0;i<fields.Length;i++) {
+				if(IsNotDbColumn(fields[i])) {
+					continue;
+				}
+				bool found=false; ;
+				for(int t=0;t<table.Rows.Count;t++) {
+					if(table.Rows[t]["COLUMN_NAME"].ToString().ToLower()==fields[i].Name.ToLower()) {
+						found=true;
+					}
+				}
+				if(!found) {
+					retVal.Add(fields[i]);
+				}
+			}
+			return retVal;
+		}
+		
+
 		public static EnumCrudSpecialColType GetSpecialType(FieldInfo field) {
 			object[] attributes = field.GetCustomAttributes(typeof(CrudColumnAttribute),true);
 			if(attributes.Length==0) {
@@ -124,7 +153,15 @@ namespace Crud {
 				}
 			}
 			if(dataTypeInDb==""){
-				throw new Exception(tablename+"."+field.Name+" column not found.");
+				if(MessageBox.Show("A new column was found in the file definition that is not in the database:\r\n"
+					+tablename+"."+field.Name+"\r\n"
+					+"An ALTER TABLE entry will be made in the Crud file.\r\n"
+					+"The ALTER TABLE snippet should be copied to ConvertDatabase2.cs.\r\n"
+					+"The query it contains should be manually run on the test database.\r\n"
+					,"",MessageBoxButtons.OKCancel)==DialogResult.Cancel) {
+					Application.Exit();
+					return;
+				}
 			}
 			EnumCrudSpecialColType specialColType=GetSpecialType(field);
 			string dataTypeExpected="";

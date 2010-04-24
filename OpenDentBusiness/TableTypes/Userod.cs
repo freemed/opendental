@@ -4,8 +4,10 @@ using System.Text;
 
 namespace OpenDentBusiness{
 		///<summary>(User OD since "user" is a reserved word) Users are a completely separate entity from Providers and Employees even though they can be linked.  A usernumber can never be changed, ensuring a permanent way to record database entries and leave an audit trail.  A user can be a provider, employee, or neither.</summary>
-	public class Userod{
+	[Serializable()]
+	public class Userod:TableBase{
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long UserNum;
 		///<summary>.</summary>
 		public string UserName;
@@ -25,13 +27,14 @@ namespace OpenDentBusiness{
 		public long TaskListInBox;
 		/// <summary> Defaults to 3 (regular user) unless specified. Helps populates the Anesthetist, Surgeon, Assistant and Circulator dropdowns properly on FormAnestheticRecord/// </summary>
 		public int AnesthProvType;
-
+		///<summary>If set to true, the hide popups button will start out pressed for this user.</summary>
+		public bool DefaultHidePopups;
 
 		public Userod(){
 
 		}
 
-		public Userod(long userNum, string userName, string password, long userGroupNum, long employeeNum, long clinicNum, long provNum, bool isHidden, int anesthProvType)
+		public Userod(long userNum,string userName,string password,long userGroupNum,long employeeNum,long clinicNum,long provNum,bool isHidden,int anesthProvType,bool defaultHidePopups)
 		{ 
 			UserNum=userNum;
 			UserName=userName;
@@ -42,6 +45,7 @@ namespace OpenDentBusiness{
 			ProvNum=provNum;
 			IsHidden=isHidden;
 			AnesthProvType=anesthProvType;
+			DefaultHidePopups=defaultHidePopups;
 		}
 		
 		///<summary></summary>

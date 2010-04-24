@@ -29,22 +29,7 @@ namespace OpenDentBusiness {
 
 		public static void FillCache(DataTable table){
 			//No need to check RemotingRole; no call to db.
-			UserodC.Listt=new List<Userod>();//[UserB.RawData.Rows.Count];
-			Userod user;
-			for(int i=0;i<table.Rows.Count;i++) {
-				user=new Userod();
-				user.UserNum       = PIn.Long   (table.Rows[i][0].ToString());
-				user.UserName      = PIn.String(table.Rows[i][1].ToString());
-				user.Password      = PIn.String(table.Rows[i][2].ToString());
-				user.UserGroupNum  = PIn.Long   (table.Rows[i][3].ToString());
-				user.EmployeeNum   = PIn.Long   (table.Rows[i][4].ToString());
-				user.ClinicNum     = PIn.Long   (table.Rows[i][5].ToString());
-				user.ProvNum       = PIn.Long   (table.Rows[i][6].ToString());
-				user.IsHidden      = PIn.Bool  (table.Rows[i][7].ToString());
-				user.TaskListInBox = PIn.Long   (table.Rows[i][8].ToString());
-				user.AnesthProvType = PIn.Int  (table.Rows[i][9].ToString());
-				UserodC.Listt.Add(user);
-			}
+			UserodC.Listt=Crud.UserodCrud.TableToList(table);
 		}			
 
 		///<summary></summary>
@@ -74,28 +59,6 @@ namespace OpenDentBusiness {
 			}
 			return null;
 		}
-
-		
-		/*
-			Userod user=null;
-			for(int i=0;i<RawData.Rows.Count;i++) {
-				if(RawData.Rows[i]["UserNum"].ToString()!=userNum.ToString()){
-					continue;
-				}
-				user=new Userod();
-				user.UserNum       = PIn.PInt   (RawData.Rows[i][0].ToString());
-				user.UserName      = PIn.PString(RawData.Rows[i][1].ToString());
-				user.Password      = PIn.PString(RawData.Rows[i][2].ToString());
-				user.UserGroupNum  = PIn.PInt   (RawData.Rows[i][3].ToString());
-				user.EmployeeNum   = PIn.PInt(RawData.Rows[i][4].ToString());
-				user.ClinicNum     = PIn.PInt(RawData.Rows[i][5].ToString());
-				user.ProvNum       = PIn.PInt(RawData.Rows[i][6].ToString());
-				user.IsHidden      = PIn.PBool  (RawData.Rows[i][7].ToString());
-				user.TaskListInBox = PIn.PInt   (RawData.Rows[i][8].ToString());
-				user.AnesthProvType = PIn.PInt   (RawData.Rows[i][9].ToString());
-			}
-			return user;
-		}		*/
 
 		public static string GetName(long userNum){
 			//No need to check RemotingRole; no call to db.
@@ -323,59 +286,14 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		private static void Update(Userod user){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),user);
-				return;
-			}
-			string command= "UPDATE userod SET " 
-				+"UserName = '"      +POut.String(user.UserName)+"'"
-				+",Password = '"     +POut.String(user.Password)+"'"
-				+",UserGroupNum = '" +POut.Long   (user.UserGroupNum)+"'"
-				+",EmployeeNum = '"  +POut.Long   (user.EmployeeNum)+"'"
-				+",ClinicNum = '"    +POut.Long   (user.ClinicNum)+"'"
-				+",ProvNum = '"      +POut.Long   (user.ProvNum)+"'"
-				+",IsHidden = '"     +POut.Bool  (user.IsHidden)+"'"
-				+",TaskListInBox = '"+POut.Long   (user.TaskListInBox)+"'"
-                + ",AnesthProvType = '"+POut.Long  (user.AnesthProvType)+"'"
-				+" WHERE UserNum = '"+POut.Long   (user.UserNum)+"'";
- 			Db.NonQ(command);
+			//No need to check RemotingRole because it is checked in InsertOrUpdate before calling this.
+			Crud.UserodCrud.Update(user);
 		}
 
 		///<summary></summary>
 		private static long Insert(Userod user){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				user.UserNum=Meth.GetLong(MethodBase.GetCurrentMethod(),user);
-				return user.UserNum;
-			}
-			if(PrefC.RandomKeys) {
-				user.UserNum=ReplicationServers.GetKey("userod","UserNum");
-			}
-			string command="INSERT INTO userod (";
-			if(PrefC.RandomKeys) {
-				command+="UserNum,";
-			}
-			command+="UserName,Password,UserGroupNum,EmployeeNum,ClinicNum,ProvNum,IsHidden,TaskListInBox,"
-				+ "AnesthProvType) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+=POut.Long(user.UserNum)+", ";
-			}
-			command+=
-				 "'"+POut.String(user.UserName)+"', "
-				+"'"+POut.String(user.Password)+"', "
-				+"'"+POut.Long   (user.UserGroupNum)+"', "
-				+"'"+POut.Long   (user.EmployeeNum)+"', "
-				+"'"+POut.Long   (user.ClinicNum)+"', "
-				+"'"+POut.Long   (user.ProvNum)+"', "
-				+"'"+POut.Bool  (user.IsHidden)+"', "
-				+"'"+POut.Long   (user.TaskListInBox)+"', "
-				+ "'"+POut.Long  (user.AnesthProvType)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else{
- 				user.UserNum=Db.NonQ(command,true);
-			}
-			return user.UserNum;
+			//No need to check RemotingRole because it is checked in InsertOrUpdate before calling this.
+			return Crud.UserodCrud.Insert(user);
 		}
 
 		///<summary>Surround with try/catch because it can throw exceptions.</summary>

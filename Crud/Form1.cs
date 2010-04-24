@@ -533,8 +533,72 @@ namespace OpenDentBusiness.Crud{
 			strb.Append(rn+t5+"INDEX(?)");
 			strb.Append(rn+t5+") DEFAULT CHARSET=utf8\";");
 			strb.Append(rn+t4+"*/");
-			strb.Append(rn);
+			//ALTER TABLE (for any new columns)-----------------------------------------------------------------------------
+			List<FieldInfo> newColumns=CrudGenHelper.GetNewFields(fields,typeClass,textDb.Text);
+			if(newColumns.Count>0){
+				strb.Append(rn+rn+t4+"/*");
+				for(int f=0;f<newColumns.Count;f++) {
+					strb.Append(rn+t4+"command=\"ALTER TABLE "+tablename+" ADD "+newColumns[f].Name+" ");
+					specialType=CrudGenHelper.GetSpecialType(newColumns[f]);
+					if(specialType==EnumCrudSpecialColType.DateEntry) {
+						strb.Append("date NOT NULL default '0001-01-01'");
+						continue;
+					}
+					if(specialType==EnumCrudSpecialColType.TimeStamp) {
+						strb.Append("timestamp");
+						continue;
+					}
+					if(specialType==EnumCrudSpecialColType.DateT) {
+						strb.Append("datetime NOT NULL default '0001-01-01 00:00:00'");//untested
+						continue;
+					}
+					if(newColumns[f].FieldType.IsEnum) {
+						strb.Append("tinyint NOT NULL");
+					}
+					else switch(newColumns[f].FieldType.Name) {
+						default:
+							throw new ApplicationException("Type not yet supported: "+newColumns[f].FieldType.Name);
+						case "Boolean":
+							strb.Append("tinyint NOT NULL");
+							break;
+						case "Byte":
+							strb.Append("tinyint NOT NULL");
+							break;
+						case "Color":
+							strb.Append("int NOT NULL");
+							break;
+						case "DateTime"://This is only for date, not dateT
+							strb.Append("date NOT NULL default '0001-01-01' (if this is actually supposed to be a datetime, timestamp, or dateentry column, add the missing attribute, then rerun the crud generator)");
+							break;
+						case "Double":
+							strb.Append("double NOT NULL");
+							break;
+						case "Interval":
+							strb.Append("int NOT NULL");
+							break;
+						case "Int64":
+							strb.Append("bigint NOT NULL");
+							break;
+						case "Int32":
+							strb.Append("int NOT NULL");
+							break;
+						case "Single":
+							strb.Append("float NOT NULL");
+							break;
+						case "String":
+							strb.Append("varchar(255) NOT NULL  (or text NOT NULL)");
+							break;
+						case "TimeSpan":
+							strb.Append("time NOT NULL");
+							break;
+					}
+					strb.Append("\";");
+					strb.Append(rn+t4+"Db.NonQ(command);");
+				}
+				strb.Append(rn+t4+"*/");
+			}
 			//Footer
+			strb.Append(rn);
 			strb.Append(@"
 	}
 }");

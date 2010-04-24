@@ -58,11 +58,13 @@ namespace OpenDental {
 			}
 		}
 
+		///<summary>And resets the tabs if the user changes.</summary>
 		public void InitializeOnStartup(){
 			if(Security.CurUser==null) {
 				return;
 			}
 			tabUser.Text=Lan.g(this,"for ")+Security.CurUser.UserName;
+			tabNew.Text=Lan.g(this,"New for ")+Security.CurUser.UserName;
 			LayoutToolBar();
 			if(Tasks.LastOpenList==null) {//first time openning
 				TreeHistory=new List<TaskList>();
@@ -77,14 +79,8 @@ namespace OpenDental {
 				cal.SelectionStart=Tasks.LastOpenDate;
 			}
 			FillTree();
-			//FillMain();
 			FillGrid();
 			SetMenusEnabled();
-		}
-
-		public void ResetUser(){
-			//tabContr.TabPages[
-			tabUser.Text=Lan.g(this,"for ")+Security.CurUser.UserName;
 		}
 
 		private void UserControlTasks_Load(object sender,System.EventArgs e) {
@@ -114,6 +110,7 @@ namespace OpenDental {
 			button.Text=Lan.g(this,"BlockPopups");
 			button.ToolTipText=Lan.g(this,"Sounds will still play, but popups will be blocked.");
 			button.Tag="Block";
+			button.Pushed=Security.CurUser.DefaultHidePopups;
 			ToolBarMain.Buttons.Add(button);
 			ToolBarMain.Invalidate();
 		}
@@ -125,7 +122,7 @@ namespace OpenDental {
 			string nodedesc;
 			for(int i=0;i<TreeHistory.Count;i++) {
 				nodedesc=TreeHistory[i].Descript;
-				if(tabContr.SelectedIndex==0){//user tab
+				if(tabContr.SelectedTab==tabUser) {
 					nodedesc=TreeHistory[i].ParentDesc+nodedesc;
 				}
 				node=new TreeNode(nodedesc);
@@ -146,17 +143,16 @@ namespace OpenDental {
 			Tasks.LastOpenGroup=tabContr.SelectedIndex;
 			Tasks.LastOpenDate=cal.SelectionStart;
 			//layout
-
-			if(tabContr.SelectedIndex==0) {//user
+			if(tabContr.SelectedTab==tabUser) {
 				tree.Top=tabContr.Bottom;
 			}
-			else if(tabContr.SelectedIndex==1) {//main
+			else if(tabContr.SelectedTab==tabMain) {
 				tree.Top=tabContr.Bottom;
 			}
-			else if(tabContr.SelectedIndex==2) {//repeating
+			else if(tabContr.SelectedTab==tabRepeating) {
 				tree.Top=tabContr.Bottom;
 			}
-			else {//by date
+			else if(tabContr.SelectedTab==tabDate || tabContr.SelectedTab==tabWeek || tabContr.SelectedTab==tabMonth) {
 				tree.Top=cal.Bottom+1;
 			}
 			tree.Height=TreeHistory.Count*tree.ItemHeight+8;
@@ -194,7 +190,7 @@ namespace OpenDental {
 			#region dated trunk automation
 			//dated trunk automation-----------------------------------------------------------------------------
 			if(TreeHistory.Count==0//main trunk
-				&& (tabContr.SelectedIndex==3	|| tabContr.SelectedIndex==4 || tabContr.SelectedIndex==5))//any of the dated groups
+				&& (tabContr.SelectedTab==tabDate || tabContr.SelectedTab==tabWeek || tabContr.SelectedTab==tabMonth))
 			{
 				//clear any lists which are derived from a repeating list and which do not have any itmes checked off
 				bool changeMade=false;
@@ -225,19 +221,17 @@ namespace OpenDental {
 				//Get lists of all repeating lists and tasks of one type.  We will pick items from these two lists.
 				List<TaskList> repeatingLists=new List<TaskList>();
 				List<Task> repeatingTasks=new List<Task>();
-				switch(tabContr.SelectedIndex) {
-					case 3:
-						repeatingLists=TaskLists.RefreshRepeating(TaskDateType.Day);
+				if(tabContr.SelectedTab==tabDate){
+					repeatingLists=TaskLists.RefreshRepeating(TaskDateType.Day);
 						repeatingTasks=Tasks.RefreshRepeating(TaskDateType.Day);
-						break;
-					case 4:
-						repeatingLists=TaskLists.RefreshRepeating(TaskDateType.Week);
-						repeatingTasks=Tasks.RefreshRepeating(TaskDateType.Week);
-						break;
-					case 5:
-						repeatingLists=TaskLists.RefreshRepeating(TaskDateType.Month);
-						repeatingTasks=Tasks.RefreshRepeating(TaskDateType.Month);
-						break;
+				}
+				if(tabContr.SelectedTab==tabWeek){
+					repeatingLists=TaskLists.RefreshRepeating(TaskDateType.Week);
+					repeatingTasks=Tasks.RefreshRepeating(TaskDateType.Week);
+				}
+				if(tabContr.SelectedTab==tabMonth) {
+					repeatingLists=TaskLists.RefreshRepeating(TaskDateType.Month);
+					repeatingTasks=Tasks.RefreshRepeating(TaskDateType.Month);
 				}
 				//loop through list and add back any that meet criteria.
 				changeMade=false;
@@ -305,7 +299,7 @@ namespace OpenDental {
 			for(int i=0;i<TaskListsList.Count;i++) {
 				dateStr="";
 				if(TaskListsList[i].DateTL.Year>1880
-					&& (tabContr.SelectedIndex==0 || tabContr.SelectedIndex==1))//user or main
+					&& (tabContr.SelectedTab==tabUser || tabContr.SelectedTab==tabMain))
 				{
 					if(TaskListsList[i].DateType==TaskDateType.Day) {
 						dateStr=TaskListsList[i].DateTL.ToShortDateString()+" - ";
@@ -318,7 +312,7 @@ namespace OpenDental {
 					}
 				}
 				objDesc="";
-				if(tabContr.SelectedIndex==0){//user tab
+				if(tabContr.SelectedTab==tabUser){
 					objDesc=TaskListsList[i].ParentDesc;
 				}
 				tasklistdescript=TaskListsList[i].Descript;
@@ -334,7 +328,7 @@ namespace OpenDental {
 			}
 			for(int i=0;i<TasksList.Count;i++) {
 				dateStr="";
-				if(tabContr.SelectedIndex==0 || tabContr.SelectedIndex==1) {//user or main
+				if(tabContr.SelectedTab==tabUser || tabContr.SelectedTab==tabMain) {
 					if(TasksList[i].DateTask.Year>1880) {
 						if(TasksList[i].DateType==TaskDateType.Day) {
 							dateStr=TasksList[i].DateTask.ToShortDateString()+" - ";
@@ -436,35 +430,35 @@ namespace OpenDental {
 				TasksList=new List<Task>();
 				return;
 			}
-			if(tabContr.SelectedIndex==0){//user
+			if(tabContr.SelectedTab==tabUser) {//user
 				//TaskListsAllGeneral=TaskLists.GetAllGeneral();
 			}
 			if(parent!=0){//not a trunk
 				TaskListsList=TaskLists.RefreshChildren(parent);
 				TasksList=Tasks.RefreshChildren(parent,checkShowFinished.Checked,startDate);
 			}
-			else if(tabContr.SelectedIndex==0) {//user
+			else if(tabContr.SelectedTab==tabUser) {
 				TaskListsList=TaskLists.RefreshUserTrunk(Security.CurUser.UserNum);
 				TasksList=new List<Task>();//no tasks in the user trunk
 					//Tasks.RefreshUserTrunk(Security.CurUser.UserNum);
 			}
-			else if(tabContr.SelectedIndex==1) {//main
+			else if(tabContr.SelectedTab==tabMain) {
 				TaskListsList=TaskLists.RefreshMainTrunk();
 				TasksList=Tasks.RefreshMainTrunk(checkShowFinished.Checked,startDate);
 			}
-			else if(tabContr.SelectedIndex==2) {//repeating
+			else if(tabContr.SelectedTab==tabRepeating) {
 				TaskListsList=TaskLists.RefreshRepeatingTrunk();
 				TasksList=Tasks.RefreshRepeatingTrunk();
 			}
-			else if(tabContr.SelectedIndex==3) {//date
+			else if(tabContr.SelectedTab==tabDate) {
 				TaskListsList=TaskLists.RefreshDatedTrunk(date,TaskDateType.Day);
 				TasksList=Tasks.RefreshDatedTrunk(date,TaskDateType.Day,checkShowFinished.Checked,startDate);
 			}
-			else if(tabContr.SelectedIndex==4) {//week
+			else if(tabContr.SelectedTab==tabWeek) {
 				TaskListsList=TaskLists.RefreshDatedTrunk(date,TaskDateType.Week);
 				TasksList=Tasks.RefreshDatedTrunk(date,TaskDateType.Week,checkShowFinished.Checked,startDate);
 			}
-			else if(tabContr.SelectedIndex==5) {//month
+			else if(tabContr.SelectedTab==tabMonth) {
 				TaskListsList=TaskLists.RefreshDatedTrunk(date,TaskDateType.Month);
 				TasksList=Tasks.RefreshDatedTrunk(date,TaskDateType.Month,checkShowFinished.Checked,startDate);
 			}
@@ -510,7 +504,7 @@ namespace OpenDental {
 		}
 
 		private void OnAddList_Click() {
-			if(tabContr.SelectedIndex==0 && TreeHistory.Count==0){//trunk of user tab
+			if(tabContr.SelectedTab==tabUser && TreeHistory.Count==0) {//trunk of user tab
 				MsgBox.Show(this,"Not allowed to add a task list to the trunk of the user tab.  Either use the subscription feature, or add it to a child list.");
 				return;
 			}
@@ -521,20 +515,20 @@ namespace OpenDental {
 			}
 			else {
 				cur.Parent=0;
-				if(tabContr.SelectedIndex==3) {//by date
+				if(tabContr.SelectedTab==tabDate) {
 					cur.DateTL=cal.SelectionStart;
 					cur.DateType=TaskDateType.Day;
 				}
-				else if(tabContr.SelectedIndex==4) {//by week
+				else if(tabContr.SelectedTab==tabWeek) {
 					cur.DateTL=cal.SelectionStart;
 					cur.DateType=TaskDateType.Week;
 				}
-				else if(tabContr.SelectedIndex==5) {//by month
+				else if(tabContr.SelectedTab==tabMonth) {
 					cur.DateTL=cal.SelectionStart;
 					cur.DateType=TaskDateType.Month;
 				}
 			}
-			if(tabContr.SelectedIndex==2) {//repeating
+			if(tabContr.SelectedTab==tabRepeating) {
 				cur.IsRepeating=true;
 			}
 			FormTaskListEdit FormT=new FormTaskListEdit(cur);
@@ -544,7 +538,7 @@ namespace OpenDental {
 		}
 
 		private void OnAddTask_Click() {
-			if(tabContr.SelectedIndex==0 && TreeHistory.Count==0) {//trunk of user tab
+			if(tabContr.SelectedTab==tabUser && TreeHistory.Count==0) {//trunk of user tab
 				MsgBox.Show(this,"Not allowed to add a task to the trunk of the user tab.  Add it to a child list instead.");
 				return;
 			}
@@ -555,20 +549,20 @@ namespace OpenDental {
 			}
 			else {
 				cur.TaskListNum=0;
-				if(tabContr.SelectedIndex==3) {//by date
+				if(tabContr.SelectedTab==tabDate) {
 					cur.DateTask=cal.SelectionStart;
 					cur.DateType=TaskDateType.Day;
 				}
-				else if(tabContr.SelectedIndex==4) {//by week
+				else if(tabContr.SelectedTab==tabWeek) {
 					cur.DateTask=cal.SelectionStart;
 					cur.DateType=TaskDateType.Week;
 				}
-				else if(tabContr.SelectedIndex==5) {//by month
+				else if(tabContr.SelectedTab==tabMonth) {
 					cur.DateTask=cal.SelectionStart;
 					cur.DateType=TaskDateType.Month;
 				}
 			}
-			if(tabContr.SelectedIndex==2) {//repeating
+			if(tabContr.SelectedTab==tabRepeating) {
 				cur.IsRepeating=true;
 			}
 			cur.UserNum=Security.CurUser.UserNum;
@@ -592,11 +586,15 @@ namespace OpenDental {
 		private void OnBlock_Click() {
 			if(ToolBarMain.Buttons["Block"].Pushed) {
 				PopupsAreBlocked=true;
-				MsgBox.Show(this,"Try not to block popups for too long.  Remember to unblock after a while.");
+				//MsgBox.Show(this,"Try not to block popups for too long.  Remember to unblock after a while.");
+				Security.CurUser.DefaultHidePopups=true;
 			}
 			else {
 				PopupsAreBlocked=false;
+				Security.CurUser.DefaultHidePopups=false;
 			}
+			Userods.InsertOrUpdate(false,Security.CurUser);
+			DataValid.SetInvalid(InvalidType.Security);
 		}
 
 		private void OnEdit_Click() {
@@ -647,63 +645,61 @@ namespace OpenDental {
 				TaskList newTL=ClipTaskList.Copy();
 				if(TreeHistory.Count>0) {//not on main trunk
 					newTL.Parent=TreeHistory[TreeHistory.Count-1].TaskListNum;
-					switch(tabContr.SelectedIndex) {
-						case 0://user
-							//treat pasting just like it's the main tab, because not on the trunk.
-							break;
-						case 1://main
-							//even though usually only trunks are dated, we will leave the date alone in main
-							//category since user may wish to preserve it. All other children get date cleared.
-							break;
-						case 2://repeating
-							newTL.DateTL=DateTime.MinValue;//never a date
-							//leave dateType alone, since that affects how it repeats
-							break;
-						case 3://day
-						case 4://week
-						case 5://month
-							newTL.DateTL=DateTime.MinValue;//children do not get dated
-							newTL.DateType=TaskDateType.None;//this doesn't matter either for children
-							break;
+					if(tabContr.SelectedTab==tabUser){
+						//treat pasting just like it's the main tab, because not on the trunk.
+					}
+					else if(tabContr.SelectedTab==tabMain){
+						//even though usually only trunks are dated, we will leave the date alone in main
+						//category since user may wish to preserve it. All other children get date cleared.
+					}
+					else if(tabContr.SelectedTab==tabRepeating){
+						newTL.DateTL=DateTime.MinValue;//never a date
+						//leave dateType alone, since that affects how it repeats
+					}
+					else if(tabContr.SelectedTab==tabDate
+						|| tabContr.SelectedTab==tabWeek
+						|| tabContr.SelectedTab==tabMonth) 
+					{
+						newTL.DateTL=DateTime.MinValue;//children do not get dated
+						newTL.DateType=TaskDateType.None;//this doesn't matter either for children
 					}
 				}
 				else {//one of the main trunks
 					newTL.Parent=0;
-					switch(tabContr.SelectedIndex) {
-						case 0://user
-							//maybe we should treat this like a subscription rather than a paste.  Implement later.  For now:
-							MsgBox.Show(this,"Not allowed to paste directly to the trunk of this tab.  Try using the subscription feature instead.");
-							return;
-						case 1://main
-							newTL.DateTL=DateTime.MinValue;
-							newTL.DateType=TaskDateType.None;
-							break;
-						case 2://repeating
-							newTL.DateTL=DateTime.MinValue;//never a date
-							//newTL.DateType=TaskDateType.None;//leave alone
-							break;
-						case 3://day
-							newTL.DateTL=cal.SelectionStart;
-							newTL.DateType=TaskDateType.Day;
-							break;
-						case 4://week
-							newTL.DateTL=cal.SelectionStart;
-							newTL.DateType=TaskDateType.Week;
-							break;
-						case 5://month
-							newTL.DateTL=cal.SelectionStart;
-							newTL.DateType=TaskDateType.Month;
-							break;
+					if(tabContr.SelectedTab==tabUser) {
+						//maybe we should treat this like a subscription rather than a paste.  Implement later.  For now:
+						MsgBox.Show(this,"Not allowed to paste directly to the trunk of this tab.  Try using the subscription feature instead.");
+						return;
+					}
+					else if(tabContr.SelectedTab==tabMain) {
+						newTL.DateTL=DateTime.MinValue;
+						newTL.DateType=TaskDateType.None;
+					}
+					else if(tabContr.SelectedTab==tabRepeating) {
+						newTL.DateTL=DateTime.MinValue;//never a date
+						//newTL.DateType=TaskDateType.None;//leave alone
+					}
+					else if(tabContr.SelectedTab==tabDate){
+						newTL.DateTL=cal.SelectionStart;
+						newTL.DateType=TaskDateType.Day;
+					}
+					else if(tabContr.SelectedTab==tabWeek) {
+						newTL.DateTL=cal.SelectionStart;
+						newTL.DateType=TaskDateType.Week;
+					}
+					else if(tabContr.SelectedTab==tabMonth) {
+						newTL.DateTL=cal.SelectionStart;
+						newTL.DateType=TaskDateType.Month;
 					}
 				}
-				if(tabContr.SelectedIndex==2) {//repeating
+				if(tabContr.SelectedTab==tabRepeating) {
 					newTL.IsRepeating=true;
 				}
 				else {
 					newTL.IsRepeating=false;
 				}
 				newTL.FromNum=0;//always
-				if(tabContr.SelectedIndex==0 || tabContr.SelectedIndex==1) {//user or main
+				if(tabContr.SelectedTab==tabUser || tabContr.SelectedTab==tabMain) {
 					DuplicateExistingList(newTL,true);
 				}
 				else {
@@ -714,56 +710,54 @@ namespace OpenDental {
 				Task newT=ClipTask.Copy();
 				if(TreeHistory.Count>0) {//not on main trunk
 					newT.TaskListNum=TreeHistory[TreeHistory.Count-1].TaskListNum;
-					switch(tabContr.SelectedIndex) {
-						case 0://user
-							//treat pasting just like it's the main tab, because not on the trunk.
-							break;
-						case 1://main
-							//even though usually only trunks are dated, we will leave the date alone in main
-							//category since user may wish to preserve it. All other children get date cleared.
-							break;
-						case 2://repeating
-							newT.DateTask=DateTime.MinValue;//never a date
-							//leave dateType alone, since that affects how it repeats
-							break;
-						case 3://day
-						case 4://week
-						case 5://month
-							newT.DateTask=DateTime.MinValue;//children do not get dated
-							newT.DateType=TaskDateType.None;//this doesn't matter either for children
-							break;
+					if(tabContr.SelectedTab==tabUser) {
+						//treat pasting just like it's the main tab, because not on the trunk.
+					}
+					else if(tabContr.SelectedTab==tabMain) {
+						//even though usually only trunks are dated, we will leave the date alone in main
+						//category since user may wish to preserve it. All other children get date cleared.
+					}
+					else if(tabContr.SelectedTab==tabRepeating) {
+						newT.DateTask=DateTime.MinValue;//never a date
+						//leave dateType alone, since that affects how it repeats
+					}
+					else if(tabContr.SelectedTab==tabDate
+						|| tabContr.SelectedTab==tabWeek
+						|| tabContr.SelectedTab==tabMonth) 
+					{
+						newT.DateTask=DateTime.MinValue;//children do not get dated
+						newT.DateType=TaskDateType.None;//this doesn't matter either for children
 					}
 				}
 				else {//one of the main trunks
 					newT.TaskListNum=0;
-					switch(tabContr.SelectedIndex) {
-						case 0://user
-							//never allowed to have a task on the user trunk.
-							MsgBox.Show(this,"Tasks may not be pasted directly to the trunk of this tab.  Try pasting within a list instead.");
-							return;
-						case 1://main
-							newT.DateTask=DateTime.MinValue;
-							newT.DateType=TaskDateType.None;
-							break;
-						case 2://repeating
-							newT.DateTask=DateTime.MinValue;//never a date
-							//newTL.DateType=TaskDateType.None;//leave alone
-							break;
-						case 3://day
-							newT.DateTask=cal.SelectionStart;
-							newT.DateType=TaskDateType.Day;
-							break;
-						case 4://week
-							newT.DateTask=cal.SelectionStart;
-							newT.DateType=TaskDateType.Week;
-							break;
-						case 5://month
-							newT.DateTask=cal.SelectionStart;
-							newT.DateType=TaskDateType.Month;
-							break;
+					if(tabContr.SelectedTab==tabUser) {
+						//never allowed to have a task on the user trunk.
+						MsgBox.Show(this,"Tasks may not be pasted directly to the trunk of this tab.  Try pasting within a list instead.");
+						return;
+					}
+					else if(tabContr.SelectedTab==tabMain) {
+						newT.DateTask=DateTime.MinValue;
+						newT.DateType=TaskDateType.None;
+					}
+					else if(tabContr.SelectedTab==tabRepeating) {
+						newT.DateTask=DateTime.MinValue;//never a date
+						//newTL.DateType=TaskDateType.None;//leave alone
+					}
+					else if(tabContr.SelectedTab==tabDate) {
+						newT.DateTask=cal.SelectionStart;
+						newT.DateType=TaskDateType.Day;
+					}
+					else if(tabContr.SelectedTab==tabWeek) {
+						newT.DateTask=cal.SelectionStart;
+						newT.DateType=TaskDateType.Week;
+					}
+					else if(tabContr.SelectedTab==tabMonth) {
+						newT.DateTask=cal.SelectionStart;
+						newT.DateType=TaskDateType.Month;
 					}
 				}
-				if(tabContr.SelectedIndex==2) {//repeating
+				if(tabContr.SelectedTab==tabRepeating) {
 					newT.IsRepeating=true;
 				}
 				else {
@@ -881,33 +875,7 @@ namespace OpenDental {
 			}
 		}
 
-		//private void listMain_Click(object sender,System.EventArgs e) {
-			
-		//}
-
-		/*private void listMain_DoubleClick(object sender,System.EventArgs e) {
-			if(clickedI==-1) {
-				return;
-			}
-			if(clickedI >= TaskListsList.Count) {//is task
-				FormTaskEdit FormT=new FormTaskEdit(TasksList[clickedI-TaskListsList.Count]);
-				FormT.ShowDialog();
-				if(FormT.GotoType!=TaskObjectType.None) {
-					GotoType=FormT.GotoType;
-					GotoKeyNum=FormT.GotoKeyNum;
-					OnGoToChanged();
-					//DialogResult=DialogResult.OK;
-					return;
-				}
-			}
-			FillMain();
-			FillGrid();
-		}*/
-
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			//if(clickedI==-1) {
-			//	return;
-			//}
 			if(e.Col==0){
 				//no longer allow double click on checkbox, because it's annoying.
 				return;
@@ -986,7 +954,7 @@ namespace OpenDental {
 				menuItemCopy.Enabled=true;
 				menuItemDelete.Enabled=true;
 			}
-			if(tabContr.SelectedIndex==0 && TreeHistory.Count==0) {//not allowed to paste into the trunk of a user tab
+			if(tabContr.SelectedTab==tabUser && TreeHistory.Count==0) {//not allowed to paste into the trunk of a user tab
 				menuItemPaste.Enabled=false;
 			}
 			else if(ClipTaskList==null && ClipTask==null) {
@@ -1000,11 +968,11 @@ namespace OpenDental {
 				menuItemSubscribe.Enabled=false;
 				menuItemUnsubscribe.Enabled=false;
 			}
-			else if(tabContr.SelectedIndex==0){//user
+			else if(tabContr.SelectedTab==tabUser) {//user
 				menuItemSubscribe.Enabled=false;
 				menuItemUnsubscribe.Enabled=true;
 			}
-			else if(tabContr.SelectedIndex==1 && clickedI < TaskListsList.Count) {//main and tasklist
+			else if(tabContr.SelectedTab==tabMain && clickedI < TaskListsList.Count) {//main and tasklist
 				menuItemSubscribe.Enabled=true;
 				menuItemUnsubscribe.Enabled=false;
 			}
