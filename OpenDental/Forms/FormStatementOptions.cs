@@ -1295,7 +1295,12 @@ namespace OpenDental{
 				}
 				StmtCur.Note=textNote.Text;
 				StmtCur.NoteBold=textNoteBold.Text;
-				Statements.WriteObject(StmtCur);
+				if(StmtCur.IsNew) {
+					Statements.Insert(StmtCur);
+				}
+				else {
+					Statements.Update(StmtCur);
+				}
 			}
 			else{
 				for(int i=0;i<StmtList.Count;i++){
@@ -1334,7 +1339,7 @@ namespace OpenDental{
 					if(textNoteBold.Text!="?"){
 						StmtList[i].NoteBold=textNoteBold.Text;
 					}
-					Statements.WriteObject(StmtList[i]);
+					Statements.Update(StmtList[i]);//never new
 				}
 			}
 			return true;

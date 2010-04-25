@@ -32,10 +32,10 @@ namespace OpenDentBusiness{
 			if(!sheet.IsNew) {
 				throw new Exception("Only new sheets allowed");
 			}
-			WriteObject(sheet);
+			Insert(sheet);
 			foreach(SheetField fld in sheet.SheetFields) {
 				fld.SheetNum=sheet.SheetNum;
-				SheetFields.WriteObject(fld);
+				SheetFields.Insert(fld);
 			}
 		}
 
@@ -79,18 +79,21 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static long WriteObject(Sheet sheet) {
+		public static long Insert(Sheet sheet) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				sheet.SheetNum=Meth.GetLong(MethodBase.GetCurrentMethod(),sheet);
 				return sheet.SheetNum;
 			}
-			if(sheet.IsNew){
-				return Crud.SheetCrud.Insert(sheet);
+			return Crud.SheetCrud.Insert(sheet);
+		}
+
+		///<summary></summary>
+		public static void Update(Sheet sheet) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),sheet);
+				return;
 			}
-			else{
-				Crud.SheetCrud.Update(sheet);
-				return sheet.SheetNum;
-			}
+			Crud.SheetCrud.Update(sheet);
 		}
 
 		///<summary></summary>
@@ -127,7 +130,7 @@ namespace OpenDentBusiness{
 				field.Height=0;
 				field.GrowthBehavior=GrowthBehaviorEnum.None;
 				field.RadioButtonValue="";
-				SheetFields.WriteObject(field);
+				SheetFields.Insert(field);
 			}
 		}
 

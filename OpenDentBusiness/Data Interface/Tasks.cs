@@ -155,7 +155,7 @@ namespace OpenDentBusiness{
 			return RefreshAndFill(Db.GetTable(command));
 		}
 
-		///<summary>Only used once when first synching all the tasks for taskAncestors.  Then, never used again.</summary>
+		///<summary>The full refresh is only used once when first synching all the tasks for taskAncestors.</summary>
 		public static List<Task> RefreshAll(){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Task>>(MethodBase.GetCurrentMethod());

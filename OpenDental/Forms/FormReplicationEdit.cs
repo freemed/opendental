@@ -80,7 +80,12 @@ namespace OpenDental {
 			RepServ.RangeEnd=rangeEnd;
 			RepServ.AtoZpath=textAtoZpath.Text;
 			RepServ.UpdateBlocked=checkUpdateBlocked.Checked;
-			ReplicationServers.WriteObject(RepServ);
+			if(RepServ.IsNew) {
+				ReplicationServers.Insert(RepServ);
+			}
+			else {
+				ReplicationServers.Update(RepServ);
+			}
 			DialogResult=DialogResult.OK;
 		}
 

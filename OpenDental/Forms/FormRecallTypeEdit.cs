@@ -708,7 +708,12 @@ namespace OpenDental{
 			}
 			//otherwise, already taken care of.
 			try{
-				RecallTypes.WriteObject(RecallCur);
+				if(RecallCur.IsNew) {
+					RecallTypes.Insert(RecallCur);
+				}
+				else {
+					RecallTypes.Update(RecallCur);
+				}
 			}
 			catch(Exception ex){
 				MessageBox.Show(ex.Message);

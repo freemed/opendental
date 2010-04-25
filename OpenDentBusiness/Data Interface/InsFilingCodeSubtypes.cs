@@ -11,8 +11,8 @@ namespace OpenDentBusiness {
 		///<summary></summary>
 		public static DataTable RefreshCache() {
 			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
-			string c="SELECT * FROM insfilingcodesubtype ORDER BY Descript";
-			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),c);
+			string command="SELECT * FROM insfilingcodesubtype ORDER BY Descript";
+			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="InsFilingCodeSubtype";
 			FillCache(table);
 			return table;
@@ -20,16 +20,7 @@ namespace OpenDentBusiness {
 
 		public static void FillCache(DataTable table) {
 			//No need to check RemotingRole; no call to db.
-			InsFilingCodeSubtypeC.Listt=new List<InsFilingCodeSubtype>();
-			InsFilingCodeSubtype insFilingCodeSubtype;
-			for(int i=0;i<table.Rows.Count;i++) {
-				insFilingCodeSubtype=new InsFilingCodeSubtype();
-				insFilingCodeSubtype.IsNew=false;
-				insFilingCodeSubtype.InsFilingCodeSubtypeNum=PIn.Long(table.Rows[i][0].ToString());
-				insFilingCodeSubtype.InsFilingCodeNum=PIn.Long(table.Rows[i][1].ToString());
-				insFilingCodeSubtype.Descript=PIn.String(table.Rows[i][2].ToString());
-				InsFilingCodeSubtypeC.Listt.Add(insFilingCodeSubtype);
-			}
+			InsFilingCodeSubtypeC.Listt=Crud.InsFilingCodeSubtypeCrud.TableToList(table);
 		}
 
 		///<Summary>Gets one InsFilingCodeSubtype from the database.</Summary>
@@ -46,8 +37,7 @@ namespace OpenDentBusiness {
 				insFilingCodeSubtype.InsFilingCodeSubtypeNum=Meth.GetLong(MethodBase.GetCurrentMethod(),insFilingCodeSubtype);
 				return insFilingCodeSubtype.InsFilingCodeSubtypeNum;
 			}
-			insFilingCodeSubtype.InsFilingCodeSubtypeNum=Crud.InsFilingCodeSubtypeCrud.Insert(insFilingCodeSubtype);
-			return insFilingCodeSubtype.InsFilingCodeSubtypeNum;
+			return Crud.InsFilingCodeSubtypeCrud.Insert(insFilingCodeSubtype);
 		}
 
 		///<summary></summary>

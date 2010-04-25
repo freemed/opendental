@@ -33,15 +33,23 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static long WriteObject(RecallTrigger trigger) {
+		public static long Insert(RecallTrigger trigger) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				trigger.RecallTriggerNum=Meth.GetLong(MethodBase.GetCurrentMethod(),trigger);
 				return trigger.RecallTriggerNum;
 			}
-//DataObjectFactory<RecallTrigger>.WriteObject(trigger);
-//return trigger.RecallTriggerNum;
-			return 0;
+			return Crud.RecallTriggerCrud.Insert(trigger);
 		}
+
+		/*
+		///<summary></summary>
+		public static void Update(RecallTrigger trigger) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),trigger);
+				return;
+			}
+			Crud.RecallTriggerCrud.Update(trigger);
+		}*/
 
 		public static List<RecallTrigger> GetForType(long recallTypeNum) {
 			//No need to check RemotingRole; no call to db.
@@ -65,9 +73,8 @@ namespace OpenDentBusiness{
 			string command="DELETE FROM recalltrigger WHERE RecallTypeNum="+POut.Long(recallTypeNum);
 			Db.NonQ(command);
 			for(int i=0;i<triggerList.Count;i++){
-				triggerList[i].IsNew=true;
 				triggerList[i].RecallTypeNum=recallTypeNum;
-				WriteObject(triggerList[i]);
+				Insert(triggerList[i]);
 			}
 		}
 

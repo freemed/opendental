@@ -123,8 +123,6 @@ namespace OpenDentBusiness{
 			string command="SELECT * FROM patient WHERE DateTStamp > "+POut.DateT(changedSince);
 				//+" LIMIT 1000";
 			return Crud.PatientCrud.SelectMany(command);
-			//List<Patient> retVal=new List<Patient>(DataObjectFactory<Patient>.CreateObjects(command));
-			//return retVal;
 		}
 
 		///<summary>ONLY for new patients. Set includePatNum to true for use the patnum from the import function.  Used in HL7.  Otherwise, uses InsertID to fill PatNum.</summary>

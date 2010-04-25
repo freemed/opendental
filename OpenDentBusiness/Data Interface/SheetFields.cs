@@ -40,18 +40,21 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static long WriteObject(SheetField sheetField) {
+		public static long Insert(SheetField sheetField) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				sheetField.SheetFieldNum=Meth.GetLong(MethodBase.GetCurrentMethod(),sheetField);
 				return sheetField.SheetFieldNum;
 			}
-			if(sheetField.IsNew){
-				return Crud.SheetFieldCrud.Insert(sheetField);
+			return Crud.SheetFieldCrud.Insert(sheetField);
+		}
+
+		///<summary></summary>
+		public static void Update(SheetField sheetField) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),sheetField);
+				return;
 			}
-			else{
-				Crud.SheetFieldCrud.Update(sheetField);
-				return sheetField.SheetFieldNum;
-			}
+			Crud.SheetFieldCrud.Update(sheetField);
 		}
 
 		///<summary></summary>
@@ -73,7 +76,7 @@ namespace OpenDentBusiness{
 				+" AND FieldType="+POut.Long((int)SheetFieldType.Drawing);
 			Db.NonQ(command);
 			foreach(SheetField field in drawingList){
-				WriteObject(field);
+				Insert(field);
 			}
 		}
 

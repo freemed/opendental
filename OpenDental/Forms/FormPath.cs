@@ -535,7 +535,7 @@ namespace OpenDental{
 			if(ReplicationServers.GetAtoZpath()!=textServerPath.Text) {
 				ReplicationServer server=ReplicationServers.GetForLocalComputer();
 				server.AtoZpath=textServerPath.Text;
-				ReplicationServers.WriteObject(server);
+				ReplicationServers.Update(server);
 				DataValid.SetInvalid(InvalidType.ReplicationServers);
 			}
 			DialogResult=DialogResult.OK;

@@ -750,7 +750,7 @@ namespace OpenDental {
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
-			SheetDefs.WriteObject(SheetDefCur);
+			SheetDefs.InsertOrUpdate(SheetDefCur);
 			DialogResult=DialogResult.OK;
 		}
 

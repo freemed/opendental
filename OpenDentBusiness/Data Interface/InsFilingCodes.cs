@@ -41,8 +41,7 @@ namespace OpenDentBusiness{
 				insFilingCode.InsFilingCodeNum=Meth.GetLong(MethodBase.GetCurrentMethod(),insFilingCode);
 				return insFilingCode.InsFilingCodeNum;
 			}
-			insFilingCode.InsFilingCodeNum=Crud.InsFilingCodeCrud.Insert(insFilingCode);
-			return insFilingCode.InsFilingCodeNum;
+			return Crud.InsFilingCodeCrud.Insert(insFilingCode);
 		}
 
 		///<summary></summary>

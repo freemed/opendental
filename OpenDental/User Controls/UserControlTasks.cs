@@ -111,6 +111,7 @@ namespace OpenDental {
 			button.ToolTipText=Lan.g(this,"Sounds will still play, but popups will be blocked.");
 			button.Tag="Block";
 			button.Pushed=Security.CurUser.DefaultHidePopups;
+			PopupsAreBlocked=button.Pushed;
 			ToolBarMain.Buttons.Add(button);
 			ToolBarMain.Invalidate();
 		}
@@ -386,7 +387,7 @@ namespace OpenDental {
 						break;
 				}
 				if(tabContr.SelectedTab==tabNew) {
-					row.Cells.Add("click");
+					row.Cells.Add("read");
 				}
 				row.Cells.Add(dateStr+objDesc+TasksList[i].Descript);
 				gridMain.Rows.Add(row);

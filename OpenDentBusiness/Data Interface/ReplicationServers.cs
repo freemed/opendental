@@ -45,31 +45,25 @@ namespace OpenDentBusiness{
 
 		public static void FillCache(DataTable table){
 			//No need to check RemotingRole; no call to db.
-			listt=new List<ReplicationServer>();
-			ReplicationServer serv;
-			for(int i=0;i<table.Rows.Count;i++){
-				serv=new ReplicationServer();
-				serv.IsNew=false;
-				serv.ReplicationServerNum= PIn.Long  (table.Rows[i][0].ToString());
-				serv.Descript            = PIn.String(table.Rows[i][1].ToString());
-				serv.ServerId            = PIn.Int   (table.Rows[i][2].ToString());
-				serv.RangeStart          = PIn.Long  (table.Rows[i][3].ToString());
-				serv.RangeEnd            = PIn.Long  (table.Rows[i][4].ToString());
-				serv.AtoZpath            = PIn.String(table.Rows[i][5].ToString());
-				serv.UpdateBlocked       = PIn.Bool  (table.Rows[i][6].ToString());
-				listt.Add(serv);
-			}
+			listt=Crud.ReplicationServerCrud.TableToList(table);
 		}
 
 		///<summary></summary>
-		public static long WriteObject(ReplicationServer serv) {
+		public static long Insert(ReplicationServer serv) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				serv.ReplicationServerNum=Meth.GetLong(MethodBase.GetCurrentMethod(),serv);
 				return serv.ReplicationServerNum;
 			}
-//DataObjectFactory<ReplicationServer>.WriteObject(serv);
-//return serv.ReplicationServerNum;
-			return 0;
+			return Crud.ReplicationServerCrud.Insert(serv);
+		}
+
+		///<summary></summary>
+		public static void Update(ReplicationServer serv) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),serv);
+				return;
+			}
+			Crud.ReplicationServerCrud.Update(serv);
 		}
 
 		public static void DeleteObject(long replicationServerNum){
@@ -77,7 +71,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),replicationServerNum);
 				return;
 			}
-//DataObjectFactory<ReplicationServer>.DeleteObject(replicationServerNum);
+			Crud.ReplicationServerCrud.Delete(replicationServerNum);
 		}
 
 		public static int GetServer_id() {

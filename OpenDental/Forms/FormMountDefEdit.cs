@@ -174,8 +174,6 @@ namespace OpenDental{
 				return;
 			}
 			MountDefCur.Description=textDescription.Text;
-			
-
 			try{
 				if(IsNew){
 					MountDefs.Insert(MountDefCur);

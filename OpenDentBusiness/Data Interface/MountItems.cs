@@ -16,14 +16,14 @@ namespace OpenDentBusiness {
 			}
 			return Crud.MountItemCrud.Insert(mountItem);
 		}
-
+		/*
 		public static void Update(MountItem mountItem) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),mountItem);
 				return;
 			}
 			Crud.MountItemCrud.Update(mountItem);
-		}
+		}*/
 
 		public static void Delete(MountItem mountItem) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {

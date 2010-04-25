@@ -1619,7 +1619,8 @@ namespace OpenDental{
 					mount.DocCategory=destinationCategory;
 					Mounts.Update(mount);
 					id=MakeIdentifier("0",mount.MountNum.ToString());
-				}else{//Document object.
+				}
+				else{//Document object.
 					Document doc=Documents.GetByNum(docNum);
 					doc.DocCategory=destinationCategory;
 					Documents.Update(doc);
@@ -1692,7 +1693,8 @@ namespace OpenDental{
 				settingFlags=InvalidatedSettingsFlag;
 				if(docNum!=0){									
 					settingMount=null;					
-				}else{//Mount
+				}
+				else{//Mount
 					settingMount=selectionMount.Copy();
 				}
 			}
@@ -1834,9 +1836,9 @@ namespace OpenDental{
 			if(clickedNode==null || GetNodeIdentifier(clickedNode)==""){
 				return;
 			}
-			DataRow obj=(DataRow)clickedNode.Tag;
-			long mountNum=Convert.ToInt64(obj["MountNum"].ToString());
-			long docNum=Convert.ToInt64(obj["DocNum"].ToString());
+			DataRow row=(DataRow)clickedNode.Tag;
+			long mountNum=PIn.Long(row["MountNum"].ToString());
+			long docNum=PIn.Long(row["DocNum"].ToString());
 			if(mountNum!=0){//Is this object a mount object?
 				FormMountEdit fme=new FormMountEdit(selectionMount);
 				fme.ShowDialog();//Edits the selectionMount object directly and updates and changes to the database as well.
@@ -1864,14 +1866,15 @@ namespace OpenDental{
 			if(GetNodeIdentifier(TreeDocuments.SelectedNode)=="") {
 				return;
 			}
-			DataRow obj=(DataRow)TreeDocuments.SelectedNode.Tag;
-			long mountNum=Convert.ToInt64(obj["MountNum"].ToString());
-			long docNum=Convert.ToInt64(obj["DocNum"].ToString());
+			DataRow row=(DataRow)TreeDocuments.SelectedNode.Tag;
+			long mountNum=PIn.Long(row["MountNum"].ToString());
+			long docNum=PIn.Long(row["DocNum"].ToString());
 			if(mountNum!=0) {//The current selection is a mount.
-				FormMountEdit fme=new FormMountEdit(selectionMount);
-				fme.ShowDialog();//Edits the selectionMount object directly and updates and changes to the database as well.
+				FormMountEdit form=new FormMountEdit(selectionMount);
+				form.ShowDialog();//Edits the selectionMount object directly and updates and changes to the database as well.
 				FillDocList(true);//Refresh tree in case description for the mount changed.}
-			}else if(docNum!=0){//A document is currently selected.
+			}
+			else if(docNum!=0){//A document is currently selected.
 				//The FormDocInfo object updates the selectionDoc and stores the changes in the database as well.
 				FormDocInfo formDocInfo2=new FormDocInfo(PatCur,selectionDoc,GetCurrentFolderName(TreeDocuments.SelectedNode));
 				formDocInfo2.ShowDialog();
@@ -2193,7 +2196,8 @@ namespace OpenDental{
 					SelectTreeNode(GetNodeById(MakeIdentifier("0",mount.MountNum.ToString())));
 					brightnessContrastSlider.MinVal=PrefC.GetInt(PrefName.ImageWindowingMin);
 					brightnessContrastSlider.MaxVal=PrefC.GetInt(PrefName.ImageWindowingMax);
-				}else {//A mount is currently selected. We must allow the user to insert new images into partially complete mounts.
+				}
+				else {//A mount is currently selected. We must allow the user to insert new images into partially complete mounts.
 					//Clear the visible selection so that the user will know when the device is ready for xray exposure.
 					ImageHelper.RenderMountFrames(renderImage,selectionMountItems,-1);
 					RenderCurrentImage(new Document(),renderImage.Width,renderImage.Height,imageZoom*zoomFactor,imageTranslation);

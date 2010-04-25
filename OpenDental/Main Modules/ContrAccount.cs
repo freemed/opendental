@@ -3133,6 +3133,7 @@ namespace OpenDental {
 			stmt.NoteBold="";
 			//All printing and emailing will be done from within the form:
 			FormStatementOptions FormSO=new FormStatementOptions();
+			stmt.IsNew=true;
 			FormSO.StmtCur=stmt;
 			FormSO.ShowDialog();
 			ModuleSelected(PatCur.PatNum);
@@ -3141,7 +3142,7 @@ namespace OpenDental {
 		/// <summary>Saves the statement.  Attaches a pdf to it by creating a doc object.  Prints it or emails it.  </summary>
 		private void PrintStatement(Statement stmt){
 			Cursor=Cursors.WaitCursor;
-			Statements.WriteObject(stmt);
+			Statements.Insert(stmt);
 			FormRpStatement FormST=new FormRpStatement();
 			DataSet dataSet=AccountModules.GetStatement(stmt.PatNum,stmt.SinglePatient,stmt.DateRangeFrom,stmt.DateRangeTo,stmt.Intermingled);
 			FormST.CreateStatementPdf(stmt,PatCur,FamCur,dataSet);

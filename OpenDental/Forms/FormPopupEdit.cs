@@ -187,7 +187,7 @@ namespace OpenDental{
 			}
 			PopupCur.Description=textDescription.Text;
 			PopupCur.IsDisabled=checkIsDisabled.Checked;
-			Popups.WriteObject(PopupCur);
+			Popups.InsertOrUpdate(PopupCur);
 			DialogResult=DialogResult.OK;
 		}
 
@@ -206,7 +206,7 @@ namespace OpenDental{
 			}
 			PopupCur.Description=textDescription.Text;
 			PopupCur.IsDisabled=checkIsDisabled.Checked;
-			Popups.WriteObject(PopupCur);
+			Popups.InsertOrUpdate(PopupCur);
 			MinutesDisabled=minutes;
 			DialogResult=DialogResult.OK;
 		}
@@ -226,7 +226,7 @@ namespace OpenDental{
 			}
 			PopupCur.Description=textDescription.Text;
 			PopupCur.IsDisabled=checkIsDisabled.Checked;
-			Popups.WriteObject(PopupCur);
+			Popups.InsertOrupdate(PopupCur);
 			MinutesDisabled=hours*60;
 			DialogResult=DialogResult.OK;
 		}*/

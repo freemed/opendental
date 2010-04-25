@@ -20,18 +20,7 @@ namespace OpenDentBusiness{
 
 		public static void FillCache(DataTable table){
 			//No need to check RemotingRole; no call to db.
-			List<RecallType> list=new List<RecallType>();
-			RecallType rtype;
-			for(int i=0;i<table.Rows.Count;i++){
-				rtype=new RecallType();
-				rtype.IsNew=false;
-				rtype.RecallTypeNum  = PIn.Long   (table.Rows[i][0].ToString());
-				rtype.Description    = PIn.String(table.Rows[i][1].ToString());
-				rtype.DefaultInterval= new Interval(PIn.Int(table.Rows[i][2].ToString()));
-				rtype.TimePattern    = PIn.String(table.Rows[i][3].ToString());
-				rtype.Procedures     = PIn.String(table.Rows[i][4].ToString());
-				list.Add(rtype);
-			}
+			List<RecallType> list=Crud.RecallTypeCrud.TableToList(table);
 			//reorder rows for better usability
 			RecallTypeC.Listt=new List<RecallType>();
 			for(int i=0;i<list.Count;i++){
@@ -60,14 +49,21 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static long WriteObject(RecallType recallType) {
+		public static long Insert(RecallType recallType) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				recallType.RecallTypeNum=Meth.GetLong(MethodBase.GetCurrentMethod(),recallType);
 				return recallType.RecallTypeNum;
 			}
-//DataObjectFactory<RecallType>.WriteObject(recallType);
-//return recallType.RecallTypeNum;
-			return 0;
+			return Crud.RecallTypeCrud.Insert(recallType);
+		}
+
+		///<summary></summary>
+		public static void Update(RecallType recallType) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),recallType);
+				return;
+			}
+			Crud.RecallTypeCrud.Update(recallType);
 		}
 
 		public static string GetDescription(long recallTypeNum) {

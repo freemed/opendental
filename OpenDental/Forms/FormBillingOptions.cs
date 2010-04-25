@@ -917,7 +917,7 @@ namespace OpenDental{
 				}
 				stmt.PatNum=agingList[i].PatNum;
 				stmt.SinglePatient=false;
-				Statements.WriteObject(stmt);
+				Statements.Insert(stmt);
 			}
 			DialogResult=DialogResult.OK;
 		}

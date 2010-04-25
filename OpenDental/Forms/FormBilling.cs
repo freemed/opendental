@@ -814,8 +814,6 @@ namespace OpenDental{
 						Application.DoEvents();
 					}
 					catch(Exception ex){
-						//stmt.IsSent=false;
-						//Statements.WriteObject(stmt);
 						Cursor=Cursors.Default;
 						MessageBox.Show(ex.Message);
 						return;

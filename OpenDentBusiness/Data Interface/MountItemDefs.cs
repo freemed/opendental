@@ -36,6 +36,7 @@ namespace OpenDentBusiness {
 			}
 		}*/
 
+		/*
 		///<summary></summary>
 		public static void Update(MountItemDef def) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
@@ -51,7 +52,7 @@ namespace OpenDentBusiness {
 				return def.MountItemDefNum;
 			}
 			return Crud.MountItemDefCrud.Insert(def);
-		}
+		}*/
 
 		///<summary>No need to surround with try/catch, because all deletions are allowed.</summary>
 		public static void Delete(long mountItemDefNum) {

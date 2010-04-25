@@ -644,7 +644,12 @@ namespace OpenDental {
 			SheetCur.ShowInTerminal=PIn.Byte(textShowInTerminal.Text);
 			FillFieldsFromControls();//But SheetNums will still be 0 for a new sheet.
 			bool isNew=SheetCur.IsNew;
-			Sheets.WriteObject(SheetCur);
+			if(isNew) {
+				Sheets.Insert(SheetCur);
+			}
+			else {
+				Sheets.Update(SheetCur);
+			}
 			List<SheetField> drawingList=new List<SheetField>();
 			foreach(SheetField fld in SheetCur.SheetFields){
 				if(fld.FieldType==SheetFieldType.SigBox){
@@ -664,7 +669,12 @@ namespace OpenDental {
 					drawingList.Add(fld);
 				}
 				else{
-					SheetFields.WriteObject(fld);
+					if(fld.IsNew) {
+						SheetFields.Insert(fld);
+					}
+					else {
+						SheetFields.Update(fld);
+					}
 				}
 			}
 			if(drawingsAltered){
@@ -700,7 +710,12 @@ namespace OpenDental {
 					}
 				}
 				field.SheetNum=SheetCur.SheetNum;//whether or not isnew
-				SheetFields.WriteObject(field);
+				if(isNew) {//is this really testing the proper object?
+					SheetFields.Insert(field);
+				}
+				else {
+					SheetFields.Update(field);
+				}
 			}
 			if(isNew) {
 				Sheets.SaveParameters(SheetCur);

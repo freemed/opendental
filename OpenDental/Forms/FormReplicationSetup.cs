@@ -102,6 +102,7 @@ namespace OpenDental {
 		private void butAdd_Click(object sender,EventArgs e) {
 			FormReplicationEdit FormR=new FormReplicationEdit();
 			FormR.RepServ=new ReplicationServer();
+			FormR.RepServ.IsNew=true;
 			FormR.ShowDialog();
 			if(FormR.DialogResult!=DialogResult.OK) {
 				return;
@@ -129,7 +130,7 @@ namespace OpenDental {
 					ReplicationServers.Listt[i].RangeEnd=counter;
 					counter+=1;
 				}
-				ReplicationServers.WriteObject(ReplicationServers.Listt[i]);
+				ReplicationServers.Update(ReplicationServers.Listt[i]);
 			}
 			changed=true;
 			FillGrid();

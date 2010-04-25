@@ -23,8 +23,7 @@ namespace OpenDentBusiness{
 				hL7Msg.HL7MsgNum=Meth.GetLong(MethodBase.GetCurrentMethod(),hL7Msg);
 				return hL7Msg.HL7MsgNum;
 			}
-			hL7Msg.HL7MsgNum=Crud.HL7MsgCrud.Insert(hL7Msg);
-			return hL7Msg.HL7MsgNum;
+			return Crud.HL7MsgCrud.Insert(hL7Msg);
 		}
 
 		///<summary></summary>
