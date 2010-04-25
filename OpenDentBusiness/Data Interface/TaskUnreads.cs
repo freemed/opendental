@@ -7,23 +7,6 @@ using System.Text;
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class TaskUnreads{
-		/*
-		///<summary></summary>
-		public static List<TaskUnread> Refresh(long patNum){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<TaskUnread>>(MethodBase.GetCurrentMethod(),patNum);
-			}
-			string command="SELECT * FROM taskunread WHERE PatNum = "+POut.Long(patNum);
-			return Crud.TaskUnreadCrud.SelectMany(command);
-		}
-
-		///<summary>Gets one TaskUnread from the db.</summary>
-		public static TaskUnread GetOne(long taskUnreadNum){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				return Meth.GetObject<TaskUnread>(MethodBase.GetCurrentMethod(),taskUnreadNum);
-			}
-			return Crud.TaskUnreadCrud.SelectOne(taskUnreadNum);
-		}
 
 		///<summary></summary>
 		public static long Insert(TaskUnread taskUnread){
@@ -34,16 +17,35 @@ namespace OpenDentBusiness{
 			return Crud.TaskUnreadCrud.Insert(taskUnread);
 		}
 
-		///<summary></summary>
-		public static void Update(TaskUnread taskUnread){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),taskUnread);
+		public static void SetRead(long userNum,long taskNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),userNum,taskNum);
 				return;
 			}
-			Crud.TaskUnreadCrud.Update(taskUnread);
-		}*/
+			string command="DELETE FROM taskunread WHERE userNum = "+POut.Long(userNum)+" "
+				+"AND taskNum = "+POut.Long(taskNum);
+			Db.NonQ(command);
+		}
 
-
+		public static void AddUnreads(long taskNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),taskNum);
+				return;
+			}
+			TaskUnread taskUnread;
+			//task subscriptions are not cached yet, so we use a query.
+			string command="SELECT tasksubscription.UserNum FROM tasksubscription,taskancestor,tasklist "
+				+"WHERE taskancestor.TaskListNum=tasklist.TaskListNum "
+				+"AND taskancestor.TaskNum = "+POut.Long(taskNum)+" "
+				+"AND tasksubscription.TaskListNum=tasklist.TaskListNum";
+			DataTable table=Db.GetTable(command);//Crud.TaskSubscriptionCrud.SelectMany(
+			for(int i=0;i<table.Rows.Count;i++) {
+				taskUnread=new TaskUnread();
+				taskUnread.TaskNum=taskNum;
+				taskUnread.UserNum=PIn.Long(table.Rows[i]["UserNum"].ToString());
+				Insert(taskUnread);
+			}
+		}
 
 
 	}

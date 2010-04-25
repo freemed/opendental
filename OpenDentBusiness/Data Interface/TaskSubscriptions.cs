@@ -37,6 +37,7 @@ namespace OpenDentBusiness{
 				throw new ApplicationException(Lans.g("TaskSubscriptions","User already subscribed."));
 			}
 			TaskSubscription subsc=new TaskSubscription();
+			subsc.IsNew=true;
 			subsc.UserNum=userNum;
 			subsc.TaskListNum=taskListNum;
 			WriteObject(subsc);

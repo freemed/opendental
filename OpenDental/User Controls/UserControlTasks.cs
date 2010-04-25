@@ -291,6 +291,11 @@ namespace OpenDental {
 			ODGridColumn col=new ODGridColumn("",17);
 			col.ImageList=imageListTree;
 			gridMain.Columns.Add(col);
+			if(tabContr.SelectedTab==tabNew) {
+				col=new ODGridColumn(Lan.g("TableTasks","Read"),35,HorizontalAlignment.Center);
+				//col.ImageList=imageListTree;
+				gridMain.Columns.Add(col);
+			}
 			col=new ODGridColumn(Lan.g("TableTasks","Description"),200);//any width
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
@@ -379,6 +384,9 @@ namespace OpenDental {
 					case TaskStatusEnum.Done:
 						row.Cells.Add("1");
 						break;
+				}
+				if(tabContr.SelectedTab==tabNew) {
+					row.Cells.Add("click");
 				}
 				row.Cells.Add(dateStr+objDesc+TasksList[i].Descript);
 				gridMain.Rows.Add(row);
@@ -484,21 +492,21 @@ namespace OpenDental {
 			//standard predefined button
 			switch(e.Button.Tag.ToString()) {
 				case "Setup":
-					OnSetup_Click();
+					Setup_Clicked();
 					break;
 				case "AddList":
-					OnAddList_Click();
+					AddList_Clicked();
 					break;
 				case "AddTask":
-					OnAddTask_Click();
+					AddTask_Clicked();
 					break;
 				case "Block":
-					OnBlock_Click();
+					Block_Clicked();
 					break;
 			}
 		}
 
-		private void OnSetup_Click() {
+		private void Setup_Clicked() {
 			if(!Security.IsAuthorized(Permissions.Setup)) {
 				return;
 			}
@@ -506,9 +514,13 @@ namespace OpenDental {
 			FormT.ShowDialog();
 		}
 
-		private void OnAddList_Click() {
+		private void AddList_Clicked() {
 			if(tabContr.SelectedTab==tabUser && TreeHistory.Count==0) {//trunk of user tab
 				MsgBox.Show(this,"Not allowed to add a task list to the trunk of the user tab.  Either use the subscription feature, or add it to a child list.");
+				return;
+			}
+			if(tabContr.SelectedTab==tabNew) {//new tab
+				MsgBox.Show(this,"Not allowed to add items to the 'New' tab.");
 				return;
 			}
 			TaskList cur=new TaskList();
@@ -540,9 +552,13 @@ namespace OpenDental {
 			FillGrid();
 		}
 
-		private void OnAddTask_Click() {
+		private void AddTask_Clicked() {
 			if(tabContr.SelectedTab==tabUser && TreeHistory.Count==0) {//trunk of user tab
 				MsgBox.Show(this,"Not allowed to add a task to the trunk of the user tab.  Add it to a child list instead.");
+				return;
+			}
+			if(tabContr.SelectedTab==tabNew) {//new tab
+				MsgBox.Show(this,"Not allowed to add items to the 'New' tab.");
 				return;
 			}
 			Task cur=new Task();
@@ -586,7 +602,7 @@ namespace OpenDental {
 			FillGrid();
 		}
 
-		private void OnBlock_Click() {
+		private void Block_Clicked() {
 			if(ToolBarMain.Buttons["Block"].Pushed) {
 				PopupsAreBlocked=true;
 				//MsgBox.Show(this,"Try not to block popups for too long.  Remember to unblock after a while.");
@@ -600,7 +616,7 @@ namespace OpenDental {
 			DataValid.SetInvalid(InvalidType.Security);
 		}
 
-		private void OnEdit_Click() {
+		private void Edit_Clicked() {
 			if(clickedI < TaskListsList.Count) {//is list
 				FormTaskListEdit FormT=new FormTaskListEdit(TaskListsList[clickedI]);
 				FormT.ShowDialog();
@@ -619,7 +635,7 @@ namespace OpenDental {
 			FillGrid();
 		}
 
-		private void OnCut_Click() {
+		private void Cut_Clicked() {
 			if(clickedI < TaskListsList.Count) {//is list
 				ClipTaskList=TaskListsList[clickedI].Copy();
 				ClipTask=null;
@@ -631,7 +647,7 @@ namespace OpenDental {
 			WasCut=true;
 		}
 
-		private void OnCopy_Click() {
+		private void Copy_Clicked() {
 			if(clickedI < TaskListsList.Count) {//is list
 				ClipTaskList=TaskListsList[clickedI].Copy();
 				ClipTask=null;
@@ -643,7 +659,7 @@ namespace OpenDental {
 			WasCut=false;
 		}
 
-		private void OnPaste_Click() {
+		private void Paste_Clicked() {
 			if(ClipTaskList!=null) {//a taskList is on the clipboard
 				TaskList newTL=ClipTaskList.Copy();
 				if(TreeHistory.Count>0) {//not on main trunk
@@ -786,7 +802,7 @@ namespace OpenDental {
 			FillGrid();
 		}
 
-		private void OnGoto_Click() {
+		private void Goto_Clicked() {
 			//not even allowed to get to this point unless a valid task
 			Task task=TasksList[clickedI-TaskListsList.Count];
 			GotoType=task.ObjectType;
@@ -835,7 +851,7 @@ namespace OpenDental {
 			}
 		}
 
-		private void OnDelete_Click() {
+		private void Delete_Clicked() {
 			if(clickedI < TaskListsList.Count) {//is list
 				//check to make sure the list is empty.
 				List<Task> tsks=Tasks.RefreshChildren(TaskListsList[clickedI].TaskListNum,true,DateTime.MinValue);
@@ -912,32 +928,34 @@ namespace OpenDental {
 				FillGrid();
 				return;
 			}
-			//check tasks off
-			if(clickedCol!=0){//e.X>ClickedItem.Position.X+16) {
-				return;
+			if(clickedCol==0){//check tasks off
+				Task task=TasksList[clickedI-TaskListsList.Count].Copy();
+				Task taskOld=task.Copy();
+				if(task.TaskStatus==TaskStatusEnum.New) {
+					task.TaskStatus=TaskStatusEnum.Viewed;
+				}
+				else if(task.TaskStatus==TaskStatusEnum.Viewed) {
+					task.TaskStatus=TaskStatusEnum.Done;
+					task.DateTimeFinished=DateTime.Now;
+				}
+				else if(task.TaskStatus==TaskStatusEnum.Done) {
+					//I guess just leave the date finished in place. It will reset if they mark it complete again.
+					task.TaskStatus=TaskStatusEnum.New;
+				}
+				try {
+					Tasks.Update(task,taskOld);
+					DataValid.SetInvalidTask(task.TaskNum,false);
+				}
+				catch(Exception ex) {
+					MessageBox.Show(ex.Message);
+					return;
+				}
+				FillGrid();
 			}
-			Task task=TasksList[clickedI-TaskListsList.Count].Copy();
-			Task taskOld=task.Copy();
-			if(task.TaskStatus==TaskStatusEnum.New){
-				task.TaskStatus=TaskStatusEnum.Viewed;
+			if(tabContr.SelectedTab==tabNew && clickedCol==1) {
+				TaskUnreads.SetRead(Security.CurUser.UserNum,TasksList[clickedI-TaskListsList.Count].TaskNum);
+				FillGrid();
 			}
-			else if(task.TaskStatus==TaskStatusEnum.Viewed){
-				task.TaskStatus=TaskStatusEnum.Done;
-				task.DateTimeFinished=DateTime.Now;
-			}
-			else if(task.TaskStatus==TaskStatusEnum.Done){
-				//I guess just leave the date finished in place. It will reset if they mark it complete again.
-				task.TaskStatus=TaskStatusEnum.New;
-			}
-			try {
-				Tasks.Update(task,taskOld);
-				DataValid.SetInvalidTask(task.TaskNum,false);
-			}
-			catch(Exception ex) {
-				MessageBox.Show(ex.Message);
-				return;
-			}
-			FillGrid();
 		}
 
 		private void menuEdit_Popup(object sender,System.EventArgs e) {
@@ -966,6 +984,11 @@ namespace OpenDental {
 			else {//there is an item on our clipboard
 				menuItemPaste.Enabled=true;
 			}
+			if(tabContr.SelectedTab==tabNew) {//overrides for the new tab
+				menuItemCut.Enabled=false;
+				menuItemDelete.Enabled=false;
+				menuItemPaste.Enabled=false;
+			}
 			//Subscriptions----------------------------------------------------------
 			if(gridMain.SelectedIndices.Length==0) {
 				menuItemSubscribe.Enabled=false;
@@ -984,9 +1007,7 @@ namespace OpenDental {
 				menuItemUnsubscribe.Enabled=false;
 			}
 			//Goto---------------------------------------------------------------
-			if(gridMain.SelectedIndices.Length>0
-				&& clickedI >= TaskListsList.Count)//is task
-			{
+			if(gridMain.SelectedIndices.Length>0 && clickedI >= TaskListsList.Count){//is task
 				Task task=TasksList[clickedI-TaskListsList.Count];
 				if(task.ObjectType==TaskObjectType.None) {
 					menuItemGoto.Enabled=false;
@@ -1019,23 +1040,23 @@ namespace OpenDental {
 		}
 
 		private void menuItemEdit_Click(object sender,System.EventArgs e) {
-			OnEdit_Click();
+			Edit_Clicked();
 		}
 
 		private void menuItemCut_Click(object sender,System.EventArgs e) {
-			OnCut_Click();
+			Cut_Clicked();
 		}
 
 		private void menuItemCopy_Click(object sender,System.EventArgs e) {
-			OnCopy_Click();
+			Copy_Clicked();
 		}
 
 		private void menuItemPaste_Click(object sender,System.EventArgs e) {
-			OnPaste_Click();
+			Paste_Clicked();
 		}
 
 		private void menuItemDelete_Click(object sender,System.EventArgs e) {
-			OnDelete_Click();
+			Delete_Clicked();
 		}
 
 		private void menuItemSubscribe_Click(object sender,EventArgs e) {
@@ -1047,7 +1068,7 @@ namespace OpenDental {
 		}
 
 		private void menuItemGoto_Click(object sender,System.EventArgs e) {
-			OnGoto_Click();
+			Goto_Clicked();
 		}
 
 		//private void listMain_SelectedIndexChanged(object sender,System.EventArgs e) {
