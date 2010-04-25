@@ -1794,7 +1794,7 @@ namespace OpenDental {
 			FamCur=Patients.GetFamily(patNum);//for now, have to get family after dataset due to aging calc.
 			PatCur=FamCur.GetPatient(patNum);
 			PatientNoteCur=PatientNotes.Refresh(PatCur.PatNum,PatCur.Guarantor);
-			Plugins.HookAddCode(this,"ContrAccount.RefreshModuleData_end",FamCur,PatCur,DataSetMain,isSelectingFamily);
+			Plugins.HookAddCode(this,"ContrAccount.RefreshModuleData_end",FamCur,PatCur,DataSetMain,PPBalanceTotal,isSelectingFamily);
 		}
 
 		private void RefreshModuleScreen(bool isSelectingFamily) {
