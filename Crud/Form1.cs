@@ -61,6 +61,7 @@ namespace Crud {
 				WriteAll(strb,className,typeClass);
 				File.WriteAllText(Path.Combine(crudDir,className+".cs"),strb.ToString());
 				CrudQueries.Write(convertDbFile,typeClass,textDb.Text);
+				CrudGenDataInterface.Create(convertDbFile,typeClass,textDb.Text);
 			}
 			Cursor=Cursors.Default;
 			MessageBox.Show("Done");
