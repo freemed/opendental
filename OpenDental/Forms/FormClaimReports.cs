@@ -259,6 +259,13 @@ namespace OpenDental{
 					MessageBox.Show("Could not locate the file.");
 					return;
 				}
+			} 
+			else if(Clearinghouses.List[comboClearhouse.SelectedIndex].CommBridge==EclaimsCommBridge.MercuryDE){
+				if(!MercuryDE.Launch(Clearinghouses.List[comboClearhouse.SelectedIndex],0)) {
+					Cursor=Cursors.Default;
+					MessageBox.Show(Lan.g(this,"Error retrieving."));
+					return;
+				}
 			}
 			Cursor=Cursors.Default;
 			if(!AutomaticMode){

@@ -121,6 +121,11 @@ namespace OpenDental.Eclaims
 						continue;
 					}
 				}*/
+				else if(Clearinghouses.List[i].CommBridge==EclaimsCommBridge.MercuryDE){
+					if(!MercuryDE.Launch(Clearinghouses.List[i],batchNum)){
+						MsgBox.Show("Eclaims","Error sending.");
+					}
+				}
 				//----------------------------------------------------------------------------------------
 				//finally, mark the claims sent. (only if not Canadian)
 				EtransType etype=EtransType.ClaimSent;

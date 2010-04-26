@@ -2049,9 +2049,18 @@ DROP TABLE IF EXISTS etAck";
 					INDEX(TaskNum),
 					INDEX(UserNum)
 					) DEFAULT CHARSET=utf8";
-				
-				
-
+				Db.NonQ32(command);
+				//MercuryDE clearinghouse.
+				command="INSERT INTO clearinghouse(Description,ExportPath,IsDefault,Payors,Eformat,"
+					+"Password,ResponsePath,CommBridge,ClientProgram,ISA05,ISA07,"
+					+"ISA08,"
+					+"ISA15,"
+					+"GS03) "
+					+@"VALUES('MercuryDE','','0','','1','','','11','','ZZ','ZZ',"
+					+"'ZZ',"//TODO: Set to develper number provided by MercuryDE when it is available.
+					+"'T',"//TODO: Change to "P" when development is completed in order to change from T='test' to P='production' mode.
+					+"'')";//TODO: Set to develper number provided by MercuryDE when it is available.
+				Db.NonQ32(command);
 
 				command="UPDATE preference SET ValueString = '7.1.0.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
