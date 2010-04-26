@@ -180,10 +180,10 @@ namespace OpenDental {
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++){//loop from the top down
 				//move the one above it down
 				listSupply[gridMain.SelectedIndices[i]-1].ItemOrder++;
-				Supplies.WriteObject(listSupply[gridMain.SelectedIndices[i]-1]);
+				Supplies.Update(listSupply[gridMain.SelectedIndices[i]-1]);
 				//move this one up
 				listSupply[gridMain.SelectedIndices[i]].ItemOrder--;
-				Supplies.WriteObject(listSupply[gridMain.SelectedIndices[i]]);
+				Supplies.Update(listSupply[gridMain.SelectedIndices[i]]);
 				//keep the list uptodate
 				listSupply.Reverse(gridMain.SelectedIndices[i]-1,2);
 			}
@@ -234,10 +234,10 @@ namespace OpenDental {
 			for(int i=gridMain.SelectedIndices.Length-1;i>=0;i--) {//loop from the bottom up
 				//move the one below it up
 				listSupply[gridMain.SelectedIndices[i]+1].ItemOrder--;
-				Supplies.WriteObject(listSupply[gridMain.SelectedIndices[i]+1]);
+				Supplies.Update(listSupply[gridMain.SelectedIndices[i]+1]);
 				//move this one down
 				listSupply[gridMain.SelectedIndices[i]].ItemOrder++;
-				Supplies.WriteObject(listSupply[gridMain.SelectedIndices[i]]);
+				Supplies.Update(listSupply[gridMain.SelectedIndices[i]]);
 				//keep the list uptodate
 				listSupply.Reverse(gridMain.SelectedIndices[i],2);
 			}

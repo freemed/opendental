@@ -171,7 +171,7 @@ namespace OpenDental {
 			order.IsNew=true;
 			order.DatePlaced=new DateTime(2500,1,1);
 			order.Note="";
-			SupplyOrders.WriteObject(order);
+			SupplyOrders.Insert(order);
 			FillGridOrder();
 			gridOrder.SetSelected(listOrder.Count-1,true);
 		}
@@ -224,7 +224,7 @@ namespace OpenDental {
 			{
 				SupplyOrder order=listOrder[gridOrder.GetSelectedIndex()].Copy();
 				order.AmountTotal=total;
-				SupplyOrders.WriteObject(order);
+				SupplyOrders.Update(order);
 				FillGridOrder();
 				for(int i=0;i<listOrder.Count;i++){
 					if(listOrder[i].SupplyOrderNum==order.SupplyOrderNum){
@@ -384,7 +384,7 @@ namespace OpenDental {
 				item.SupplyNum=listSupply[gridSupplyMain.SelectedIndices[i]].SupplyNum;
 				item.Qty=1;
 				item.Price=listSupply[gridSupplyMain.SelectedIndices[i]].Price;
-				SupplyOrderItems.WriteObject(item);
+				SupplyOrderItems.Insert(item);
 				itemNums.Add(item.SupplyOrderItemNum);
 			}
 			if(gridSupplyMain.SelectedIndices.Length==1 && skippedSupplies.Count==1){
@@ -442,10 +442,10 @@ namespace OpenDental {
 			for(int i=0;i<gridSupplyMain.SelectedIndices.Length;i++) {//loop from the top down
 				//move the one above it down
 				listSupply[gridSupplyMain.SelectedIndices[i]-1].ItemOrder++;
-				Supplies.WriteObject(listSupply[gridSupplyMain.SelectedIndices[i]-1]);
+				Supplies.Update(listSupply[gridSupplyMain.SelectedIndices[i]-1]);
 				//move this one up
 				listSupply[gridSupplyMain.SelectedIndices[i]].ItemOrder--;
-				Supplies.WriteObject(listSupply[gridSupplyMain.SelectedIndices[i]]);
+				Supplies.Update(listSupply[gridSupplyMain.SelectedIndices[i]]);
 				listSupply.Reverse(gridSupplyMain.SelectedIndices[i]-1,2);
 			}
 			FillGridSupplyMain();
@@ -494,10 +494,10 @@ namespace OpenDental {
 			for(int i=gridSupplyMain.SelectedIndices.Length-1;i>=0;i--) {//loop from the bottom up
 				//move the one below it up
 				listSupply[gridSupplyMain.SelectedIndices[i]+1].ItemOrder--;
-				Supplies.WriteObject(listSupply[gridSupplyMain.SelectedIndices[i]+1]);
+				Supplies.Update(listSupply[gridSupplyMain.SelectedIndices[i]+1]);
 				//move this one down
 				listSupply[gridSupplyMain.SelectedIndices[i]].ItemOrder++;
-				Supplies.WriteObject(listSupply[gridSupplyMain.SelectedIndices[i]]);
+				Supplies.Update(listSupply[gridSupplyMain.SelectedIndices[i]]);
 				listSupply.Reverse(gridSupplyMain.SelectedIndices[i],2);
 			}
 			FillGridSupplyMain();

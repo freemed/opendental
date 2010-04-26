@@ -74,7 +74,7 @@ namespace OpenDental {
 			}
 			ItemCur.Qty=PIn.Int(textQty.Text);
 			ItemCur.Price=PIn.Double(textPrice.Text);
-			SupplyOrderItems.WriteObject(ItemCur);
+			SupplyOrderItems.Update(ItemCur);//never new
 			DialogResult=DialogResult.OK;
 		}
 

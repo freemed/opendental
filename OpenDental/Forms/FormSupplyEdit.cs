@@ -85,7 +85,12 @@ namespace OpenDental {
 					Supp.ItemOrder=Supplies.GetLastItemOrder(Supp.SupplierNum,Supp.Category)+1;
 				}
 			}
-			Supplies.WriteObject(Supp);
+			if(Supp.IsNew) {
+				Supplies.Insert(Supp);
+			}
+			else {
+				Supplies.Update(Supp);
+			}
 			if(Supp.IsHidden != isHiddenInitialVal || Supp.Category != categoryInitialVal){
 				List<Supply> listSupply=Supplies.CreateObjects(false,Supp.SupplierNum,"");
 				Supplies.CleanupItemOrders(listSupply);

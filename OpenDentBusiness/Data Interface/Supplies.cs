@@ -36,18 +36,21 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static long WriteObject(Supply supp){
+		public static long Insert(Supply supp){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				supp.SupplyNum=Meth.GetLong(MethodBase.GetCurrentMethod(),supp);
 				return supp.SupplyNum;
 			}
-			if(supp.IsNew){
-				return Crud.SupplyCrud.Insert(supp);
+			return Crud.SupplyCrud.Insert(supp);
+		}
+
+		///<summary></summary>
+		public static void Update(Supply supp) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),supp);
+				return;
 			}
-			else{
-				Crud.SupplyCrud.Update(supp);
-				return supp.SupplyNum;
-			}
+			Crud.SupplyCrud.Update(supp);
 		}
 
 		///<summary>Surround with try-catch.</summary>
@@ -78,7 +81,7 @@ namespace OpenDentBusiness{
 				}
 				if(listSupply[i].ItemOrder!=previousOrder+1){
 					listSupply[i].ItemOrder=previousOrder+1;
-					WriteObject(listSupply[i]);
+					Update(listSupply[i]);
 					retVal=true;
 				}
 				previousOrder++;

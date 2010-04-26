@@ -32,18 +32,21 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static long WriteObject(SupplyOrderItem supp){
+		public static long Insert(SupplyOrderItem supp){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				supp.SupplyOrderItemNum=Meth.GetLong(MethodBase.GetCurrentMethod(),supp);
 				return supp.SupplyOrderItemNum;
 			}
-			if(supp.IsNew){
-				return Crud.SupplyOrderItemCrud.Insert(supp);
+			return Crud.SupplyOrderItemCrud.Insert(supp);
+		}
+
+		///<summary></summary>
+		public static void Update(SupplyOrderItem supp) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),supp);
+				return;
 			}
-			else{
-				Crud.SupplyOrderItemCrud.Update(supp);
-				return supp.SupplyOrderItemNum;
-			}
+			Crud.SupplyOrderItemCrud.Update(supp);
 		}
 
 		///<summary>Surround with try-catch.</summary>

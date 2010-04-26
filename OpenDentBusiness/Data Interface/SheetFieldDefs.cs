@@ -40,6 +40,7 @@ namespace OpenDentBusiness{
 			return Crud.SheetFieldDefCrud.Insert(sheetFieldDef);
 		}
 
+		/*
 		///<summary></summary>
 		public static void Update(SheetFieldDef sheetFieldDef) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
@@ -47,7 +48,7 @@ namespace OpenDentBusiness{
 				return;
 			}
 			Crud.SheetFieldDefCrud.Update(sheetFieldDef);
-		}
+		}*/
 
 		///<summary></summary>
 		public static void DeleteObject(long sheetFieldDefNum) {

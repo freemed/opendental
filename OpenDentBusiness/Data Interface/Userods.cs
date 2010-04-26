@@ -296,7 +296,7 @@ namespace OpenDentBusiness {
 			return Crud.UserodCrud.Insert(user);
 		}
 
-		///<summary>Surround with try/catch because it can throw exceptions.</summary>
+		///<summary>Surround with try/catch because it can throw exceptions.  The user object will not have the new primary key in this case.</summary>
 		public static void InsertOrUpdate(bool isNew,Userod user){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),isNew,user);

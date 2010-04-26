@@ -10,19 +10,23 @@ namespace OpenDentBusiness{
 	public class TaskSubscriptions {
 	
 		///<summary></summary>
-		public static long WriteObject(TaskSubscription subsc){
+		public static long Insert(TaskSubscription subsc){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				subsc.TaskSubscriptionNum=Meth.GetLong(MethodBase.GetCurrentMethod(),subsc);
 				return subsc.TaskSubscriptionNum;
 			}
-			if(subsc.IsNew){
-				return Crud.TaskSubscriptionCrud.Insert(subsc);
-			}
-			else{
-				Crud.TaskSubscriptionCrud.Update(subsc);
-				return subsc.TaskSubscriptionNum;
-			}
+			return Crud.TaskSubscriptionCrud.Insert(subsc);
 		}
+
+		/*
+		///<summary></summary>
+		public static void Update(TaskSubscription subsc) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),subsc);
+				return;
+			}
+			Crud.TaskSubscriptionCrud.Update(subsc);
+		}*/
 
 		///<summary>Creates a subscription to a list.</summary>
 		public static void SubscList(long taskListNum,long userNum) {
@@ -40,7 +44,7 @@ namespace OpenDentBusiness{
 			subsc.IsNew=true;
 			subsc.UserNum=userNum;
 			subsc.TaskListNum=taskListNum;
-			WriteObject(subsc);
+			Insert(subsc);
 		}
 
 		///<summary>Removes a subscription to a list.</summary>

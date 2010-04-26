@@ -203,7 +203,12 @@ namespace OpenDental{
 			SiteCur.Description=textDescription.Text;
 			SiteCur.Note=textNote.Text;
 			try{
-				Sites.WriteObject(SiteCur);
+				if(SiteCur.IsNew) {
+					Sites.Insert(SiteCur);
+				}
+				else {
+					Sites.Update(SiteCur);
+				}
 			}
 			catch(Exception ex){
 				MessageBox.Show(ex.Message);

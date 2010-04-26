@@ -64,7 +64,7 @@ namespace OpenDental {
 			}
 			Order.AmountTotal=PIn.Double(textAmountTotal.Text);
 			Order.Note=textNote.Text;
-			SupplyOrders.WriteObject(Order);
+			SupplyOrders.Update(Order);//never new
 			DialogResult=DialogResult.OK;
 		}
 

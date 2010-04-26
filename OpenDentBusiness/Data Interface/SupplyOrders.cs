@@ -21,18 +21,21 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static long WriteObject(SupplyOrder order) {
+		public static long Insert(SupplyOrder order) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				order.SupplyOrderNum=Meth.GetLong(MethodBase.GetCurrentMethod(),order);
 				return order.SupplyOrderNum;
 			}
-			if(order.IsNew){
-				return Crud.SupplyOrderCrud.Insert(order);
+			return Crud.SupplyOrderCrud.Insert(order);
+		}
+
+		///<summary></summary>
+		public static void Update(SupplyOrder order) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),order);
+				return;
 			}
-			else{
-				Crud.SupplyOrderCrud.Update(order);
-				return order.SupplyOrderNum;
-			}
+			Crud.SupplyOrderCrud.Update(order);
 		}
 
 		///<summary>No need to surround with try-catch.</summary>

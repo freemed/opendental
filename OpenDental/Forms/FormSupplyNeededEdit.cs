@@ -39,7 +39,12 @@ namespace OpenDental {
 			}
 			Supp.DateAdded=PIn.Date(textDate.Text);
 			Supp.Description=textDescription.Text;
-			SupplyNeededs.WriteObject(Supp);
+			if(Supp.IsNew) {
+				SupplyNeededs.Insert(Supp);
+			}
+			else {
+				SupplyNeededs.Update(Supp);
+			}
 			DialogResult=DialogResult.OK;
 		}
 

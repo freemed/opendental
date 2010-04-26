@@ -19,18 +19,21 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static long WriteObject(Supplier supp) {
+		public static long Insert(Supplier supp) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				supp.SupplierNum=Meth.GetLong(MethodBase.GetCurrentMethod(),supp);
 				return supp.SupplierNum;
 			}
-			if(supp.IsNew){
-				return Crud.SupplierCrud.Insert(supp);
+			return Crud.SupplierCrud.Insert(supp);
+		}
+
+		///<summary></summary>
+		public static void Update(Supplier supp) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),supp);
+				return;
 			}
-			else{
-				Crud.SupplierCrud.Update(supp);
-				return supp.SupplierNum;
-			}
+			Crud.SupplierCrud.Update(supp);
 		}
 
 		///<summary>Surround with try-catch.</summary>

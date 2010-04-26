@@ -59,18 +59,18 @@ namespace OpenDental {
 			Supp.UserName=textUserName.Text;
 			Supp.Password=textPassword.Text;
 			Supp.Note=textNote.Text;
-			Suppliers.WriteObject(Supp);
+			if(Supp.IsNew) {
+				Suppliers.Insert(Supp);
+			}
+			else {
+				Suppliers.Update(Supp);
+			}
 			DialogResult=DialogResult.OK;
 		}
 
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
-
-        private void textName_TextChanged(object sender, EventArgs e)
-        {
-
-        }
 
 		
 	}

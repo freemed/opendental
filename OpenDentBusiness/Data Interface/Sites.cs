@@ -32,18 +32,21 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static long WriteObject(Site site) {
+		public static long Insert(Site site) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				site.SiteNum=Meth.GetLong(MethodBase.GetCurrentMethod(),site);
 				return site.SiteNum;
 			}
-			if(site.IsNew){
-				return Crud.SiteCrud.Insert(site);
+			return Crud.SiteCrud.Insert(site);
+		}
+
+		///<summary></summary>
+		public static void Update(Site site) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),site);
+				return;
 			}
-			else{
-				Crud.SiteCrud.Update(site);
-				return site.SiteNum;
-			}
+			Crud.SiteCrud.Update(site);
 		}
 
 		///<summary></summary>

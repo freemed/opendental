@@ -10,19 +10,23 @@ namespace OpenDentBusiness{
 	public class TaskAncestors {
 	
 		///<summary></summary>
-		public static long WriteObject(TaskAncestor ancestor) {
+		public static long Insert(TaskAncestor ancestor) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				ancestor.TaskAncestorNum=Meth.GetLong(MethodBase.GetCurrentMethod(),ancestor);
 				return ancestor.TaskAncestorNum;
 			}
-			if(ancestor.IsNew){
-				return Crud.TaskAncestorCrud.Insert(ancestor);
-			}
-			else{
-				Crud.TaskAncestorCrud.Update(ancestor);
-				return ancestor.TaskAncestorNum;
-			}
+			return Crud.TaskAncestorCrud.Insert(ancestor);
 		}
+
+		/*
+		///<summary></summary>
+		public static void Update(TaskAncestor ancestor) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),ancestor);
+				return;
+			}
+			Crud.TaskAncestorCrud.Update(ancestor);
+		}*/
 
 		public static void Synch(Task task){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
@@ -50,7 +54,7 @@ namespace OpenDentBusiness{
 				ancestor=new TaskAncestor();
 				ancestor.TaskNum=task.TaskNum;
 				ancestor.TaskListNum=taskListNum;
-				WriteObject(ancestor);
+				Insert(ancestor);
 			}
 		}
 		
