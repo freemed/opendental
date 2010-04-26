@@ -4031,7 +4031,7 @@ namespace OpenDental{
 						else {
 							user.Password=passHash;
 						}
-						Userods.InsertOrUpdate(true,user);//probably no need to try/catch
+						Userods.Insert(user);//probably no need to try/catch
 						DataValid.SetInvalid(InvalidType.Security);
 					}
 					else {//not using eCW in tight integration mode

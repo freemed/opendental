@@ -5924,7 +5924,7 @@ namespace OpenDental{
 				if(table.Rows[i]["ItemOrder"].ToString()!=i.ToString()) {
 					PlannedAppt planned=PlannedAppts.CreateObject(PIn.PLong(table.Rows[i]["PlannedApptNum"].ToString()));
 					planned.ItemOrder=i;
-					PlannedAppts.WriteObject(planned);
+					PlannedAppts.InsertOrUpdate(planned);
 					iochanged=true;
 				}
 			}

@@ -376,7 +376,12 @@ namespace OpenDental{
 				UserCur.ClinicNum=Clinics.List[listClinic.SelectedIndex-1].ClinicNum;
 			}
 			try{
-				Userods.InsertOrUpdate(IsNew,UserCur);
+				if(IsNew){
+					Userods.Insert(UserCur);
+				}
+				else{
+					Userods.Update(UserCur);
+				}
 			}
 			catch(Exception ex){
 				MessageBox.Show(ex.Message);

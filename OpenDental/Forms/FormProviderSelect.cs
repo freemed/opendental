@@ -496,7 +496,7 @@ namespace OpenDental{
 					table.Rows[gridMain.SelectedIndices[i]]["FName"].ToString());
 				user.Password=user.UserName;//this will be enhanced later.
 				try{
-					Userods.InsertOrUpdate(true,user);
+					Userods.Insert(user);
 				}
 				catch(ApplicationException ex){
 					MessageBox.Show(ex.Message);

@@ -284,20 +284,28 @@ namespace OpenDentBusiness {
 			return Db.GetTable(command);
 		}
 
-		///<summary></summary>
-		private static void Update(Userod user){
-			//No need to check RemotingRole because it is checked in InsertOrUpdate before calling this.
-			Crud.UserodCrud.Update(user);
+		///<summary>Surround with try/catch because it can throw exceptions.</summary>
+		public static void Update(Userod userod){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),userod);
+				return;
+			}
+			Validate(false,userod);
+			Crud.UserodCrud.Update(userod);
 		}
 
-		///<summary></summary>
-		private static long Insert(Userod user){
-			//No need to check RemotingRole because it is checked in InsertOrUpdate before calling this.
-			return Crud.UserodCrud.Insert(user);
+		///<summary>Surround with try/catch because it can throw exceptions.</summary>
+		public static long Insert(Userod userod){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
+				userod.UserNum=Meth.GetLong(MethodBase.GetCurrentMethod(),userod);
+				return userod.UserNum;
+			}
+			Validate(true,userod);
+			return Crud.UserodCrud.Insert(userod);
 		}
 
-		///<summary>Surround with try/catch because it can throw exceptions.  The user object will not have the new primary key in this case.</summary>
-		public static void InsertOrUpdate(bool isNew,Userod user){
+		///<summary>Surround with try/catch because it can throw exceptions.  We don't really need to make this public, but it's required in order to follow the RemotingRole pattern.</summary>
+		public static void Validate(bool isNew,Userod user){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),isNew,user);
 				return;
@@ -340,12 +348,6 @@ namespace OpenDentBusiness {
 				&& user.IsHidden)//and hidden
 			{
 				throw new Exception(Lans.g("Userods","Admins cannot be hidden."));
-			}
-			if(isNew){
-				Insert(user);
-			}
-			else{
-				Update(user);
 			}
 		}
 

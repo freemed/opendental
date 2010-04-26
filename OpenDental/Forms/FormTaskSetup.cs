@@ -84,7 +84,7 @@ namespace OpenDental {
 			bool changed=false;
 			for(int i=0;i<UserList.Count;i++){
 				if(UserList[i].TaskListInBox!=UserListOld[i].TaskListInBox){
-					Userods.InsertOrUpdate(false,UserList[i]);
+					Userods.Update(UserList[i]);
 					changed=true;
 				}
 			}
