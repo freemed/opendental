@@ -4,7 +4,7 @@ using System.Text;
 
 namespace OpenDentBusiness.HL7 {
 	public class SIU {
-		public static void ProcessMessage(MessageHL7 message){
+		public static void ProcessMessage(MessageHL7 message,bool isStandalone) {
 			SegmentHL7 seg=message.GetSegment(SegmentName.PID,true);
 			long patNum=PIn.Long(seg.GetFieldFullText(2));
 			Patient pat=Patients.GetPat(patNum);
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.HL7 {
 			else {
 				patOld=pat.Copy();
 			}
-			SegmentPID.ProcessPID(pat,seg);
+			SegmentPID.ProcessPID(pat,seg,isStandalone);
 			//PV1-patient visit---------------------------
 			seg=message.GetSegment(SegmentName.PV1,false);
 			if(seg!=null) {

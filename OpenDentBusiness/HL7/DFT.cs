@@ -19,7 +19,7 @@ namespace OpenDentBusiness.HL7 {
 			seg=new SegmentHL7(SegmentName.PID);
 			seg.SetField(0,"PID");
 			seg.SetField(1,"1");
-			seg.SetField(2,pat.PatNum.ToString());
+			seg.SetField(2,pat.ChartNumber);//Account number.  eCW requires this to be the same # as came in on PID.4.
 			seg.SetField(3,pat.PatNum.ToString());//??what is this MRN?
 			seg.SetField(5,pat.LName,pat.FName,pat.MiddleI);
 			//we assume that dob is always valid because eCW should always pass us a dob.

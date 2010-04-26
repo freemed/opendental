@@ -5,8 +5,8 @@ using System.Text;
 namespace OpenDentBusiness.HL7 {
 	/// <summary>(and GT1 and PV1)</summary>
 	public class SegmentPID {
-		///<summary>PatNum will not be altered here.  The pat passed in must either have PatNum=0, or must have a PatNum matching the segment.</summary>
-		public static void ProcessPID(Patient pat,SegmentHL7 seg) {
+		///<summary>PatNum will not be altered here.  The pat passed in must either have PatNum=0, or must have a PatNum matching the segment.  The reason that isStandalone is passed in is because if using tight integration mode (isStandalone=false), then we need to store the "alternate patient id" that comes in on PID.4 in the ChartNumber field so we can pass it back in PID.2 of the DFT charge message.  However, if not using tight integration (isStandalone=true), the ChartNumber field is already occupied by the eCW patient ID, and we do not want to overwrite it.</summary>
+		public static void ProcessPID(Patient pat,SegmentHL7 seg,bool isStandalone) {
 			long patNum=PIn.Long(seg.GetFieldFullText(2));
 			//if(pat.PatNum==0) {
 			//	pat.PatNum=patNum;
@@ -14,6 +14,9 @@ namespace OpenDentBusiness.HL7 {
 			//else 
 			if(pat.PatNum!=0 && pat.PatNum != patNum) {
 				throw new ApplicationException("Invalid patNum");
+			}
+			if(!isStandalone) {
+				pat.ChartNumber=seg.GetFieldFullText(4);
 			}
 			pat.LName=seg.GetFieldComponent(5,0);
 			pat.FName=seg.GetFieldComponent(5,1);
