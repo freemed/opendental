@@ -882,7 +882,9 @@ namespace OpenDentBusiness{
 		///<summary>9 Canada</summary>
 		CDAnet,
 		///<summary>10</summary>
-		Tesia
+		Tesia,
+		///<summary>11</summary>
+		MercuryDE
 	}
 
 	///<summary></summary>
