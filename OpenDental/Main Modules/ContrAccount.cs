@@ -1810,6 +1810,7 @@ namespace OpenDental {
 				textFinNotes.Enabled=false;
 				//butComm.Enabled=false;
 				tabControlShow.Enabled=false;
+				Plugins.HookAddCode(this,"ContrAccount.RefreshModuleScreen_null");
 			}
 			else{
 				gridAccount.Enabled=true;
@@ -1846,6 +1847,7 @@ namespace OpenDental {
 				panelProgNotes.Visible = false;
 				FillComm();
 			}
+			Plugins.HookAddCode(this,"ContrAccount.RefreshModuleScreen_end",FamCur,PatCur,DataSetMain,PPBalanceTotal,isSelectingFamily);
 		}
 
 		//private void FillPatientButton() {
