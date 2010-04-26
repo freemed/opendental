@@ -2071,6 +2071,7 @@ namespace OpenDental {
 		}
 
 		private void FillPaymentPlans(){
+			PPBalanceTotal=0;
 			if(PatCur==null) {
 				gridPayPlan.Visible=false;
 				return;
@@ -2115,7 +2116,6 @@ namespace OpenDental {
 			gridPayPlan.Rows.Clear();
 			UI.ODGridRow row;
 			UI.ODGridCell cell;
-			PPBalanceTotal=0;
 			double PPDueTotal=0;
 			for(int i=0;i<table.Rows.Count;i++) {
 				row=new ODGridRow();
