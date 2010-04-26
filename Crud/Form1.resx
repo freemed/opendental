@@ -118,9 +118,6 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="label1.Text" xml:space="preserve">
-    <value>Set this project as the startup project.  Use Debug.  Push the run button.  It will erase all files in OpenDentBusiness.Crud except CrudBase, and recreate them from scratch.  It will then compare all files contained within the Validate folder against the generated files.</value>
-  </data>
-  <data name="checkOne.Text" xml:space="preserve">
-    <value>AccountCrud.cs  only.  Usually, when making changes, you will need to see if the result still compiles.  When this box is checked, the changes will only be made to AccountCrud.cs so that it's easy to fix compile errors.</value>
+    <value>Set this project as the startup project.  Use Debug.  Push the run button.  It will recreate all files in OpenDentBusiness.Crud.  If, after running this tool, all the crud files fail to compile, you can either exclude OpenDentBusiness from compiling in the Config Manager, or you can revert all the crud files.</value>
   </data>
 </root>

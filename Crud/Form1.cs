@@ -20,6 +20,7 @@ namespace Crud {
 		private const string t3="\t\t\t";
 		private const string t4="\t\t\t\t";
 		private const string t5="\t\t\t\t\t";
+		private List<Type> tableTypes;
 
 		public Form1() {
 			InitializeComponent();
@@ -32,7 +33,28 @@ namespace Crud {
 				MessageBox.Show(crudDir+" is an invalid path.");
 				Application.Exit();
 			}
+			tableTypes=new List<Type>();
+			Type typeTableBase=typeof(TableBase);
+			Assembly assembly=Assembly.GetAssembly(typeTableBase);
+			foreach(Type typeClass in assembly.GetTypes()){
+				if(typeClass.BaseType==typeTableBase) {
+					tableTypes.Add(typeClass);	
+				}
+			}
+			tableTypes.Sort(CompareTypesByName);
+			for(int i=0;i<tableTypes.Count;i++){
+				listClass.Items.Add(tableTypes[i].Name);
+			}
+			for(int i=0;i<Enum.GetNames(typeof(SnippetType)).Length;i++){
+				comboType.Items.Add(Enum.GetNames(typeof(SnippetType))[i].ToString());
+			}
+			comboType.SelectedIndex=(int)SnippetType.EntireSclass;
 		}
+
+		private static int CompareTypesByName(Type x, Type y){
+			return x.Name.CompareTo(y.Name);
+		}
+
 
 		private void butRun_Click(object sender,EventArgs e) {
 			Cursor=Cursors.WaitCursor;
@@ -44,24 +66,23 @@ namespace Crud {
 			//	}
 				//File.WriteAllText(files[i],"");
 			//}
-			Type typeTableBase=typeof(TableBase);
-			Assembly assembly=Assembly.GetAssembly(typeTableBase);
 			StringBuilder strb;
 			CrudGenHelper.ConnectToDatabase(textDb.Text);
-			foreach(Type typeClass in assembly.GetTypes()){
-				if(typeClass.BaseType!=typeTableBase) {
-					continue;
-				}
-				if(checkOne.Checked && typeClass.Name!="Account") {
-					continue;
-				}
-				string className=typeClass.Name+"Crud";
+			for(int i=0;i<tableTypes.Count;i++){
+			//foreach(Type typeClass in assembly.GetTypes()){
+				//if(typeClass.BaseType!=typeTableBase) {
+				//	continue;
+				//}
+				//if(checkOne.Checked && typeClass.Name!="Account") {
+				//	continue;
+				//}
+				string className=tableTypes[i].Name+"Crud";
 				strb=new StringBuilder();
-				CrudGenHelper.ValidateTypes(typeClass,textDb.Text);
-				WriteAll(strb,className,typeClass);
+				CrudGenHelper.ValidateTypes(tableTypes[i],textDb.Text);
+				WriteAll(strb,className,tableTypes[i]);
 				File.WriteAllText(Path.Combine(crudDir,className+".cs"),strb.ToString());
-				CrudQueries.Write(convertDbFile,typeClass,textDb.Text);
-				CrudGenDataInterface.Create(convertDbFile,typeClass,textDb.Text);
+				CrudQueries.Write(convertDbFile,tableTypes[i],textDb.Text);
+				CrudGenDataInterface.Create(convertDbFile,tableTypes[i],textDb.Text);
 			}
 			Cursor=Cursors.Default;
 			MessageBox.Show("Done");
@@ -476,6 +497,22 @@ namespace OpenDentBusiness.Crud{
 			strb.Append(@"
 	}
 }");
+		}
+
+		private void butSnippet_Click(object sender,EventArgs e) {
+			if(listClass.SelectedIndex==-1){
+				MessageBox.Show("Please select a class.");
+				return;
+			}
+			//if(comboType.SelectedIndex==-1){
+			//	MessageBox.Show("Please select a type.");
+			//	return;
+			//}
+			Type type=tableTypes[listClass.SelectedIndex];
+			SnippetType snipType=(SnippetType)comboType.SelectedIndex;
+			string snippet=CrudGenDataInterface.GetSnippet(type,snipType);
+			textSnippet.Text=snippet;
+			Clipboard.SetText(snippet);
 		}
 
 
