@@ -2056,10 +2056,10 @@ DROP TABLE IF EXISTS etAck";
 					+"ISA08,"
 					+"ISA15,"
 					+"GS03) "
-					+@"VALUES('MercuryDE','','0','','1','','','11','','ZZ','ZZ',"
-					+"'ZZ',"//TODO: Set to develper number provided by MercuryDE when it is available.
+					+@"VALUES('MercuryDE','C:\MercuryDE\Temp\','0','','1','','','11','','ZZ','ZZ',"
+					+"'204203105      ',"
 					+"'T',"//TODO: Change to "P" when development is completed in order to change from T='test' to P='production' mode.
-					+"'')";//TODO: Set to develper number provided by MercuryDE when it is available.
+					+"'204203105      ')";
 				Db.NonQ32(command);
 
 				command="UPDATE preference SET ValueString = '7.1.0.0' WHERE PrefName = 'DataBaseVersion'";

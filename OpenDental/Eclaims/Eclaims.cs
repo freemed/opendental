@@ -124,6 +124,7 @@ namespace OpenDental.Eclaims
 				else if(Clearinghouses.List[i].CommBridge==EclaimsCommBridge.MercuryDE){
 					if(!MercuryDE.Launch(Clearinghouses.List[i],batchNum)){
 						MsgBox.Show("Eclaims","Error sending.");
+						continue;
 					}
 				}
 				//----------------------------------------------------------------------------------------
