@@ -97,6 +97,7 @@ namespace UnitTests {
 			this.textSpecificTest.Name = "textSpecificTest";
 			this.textSpecificTest.Size = new System.Drawing.Size(74,20);
 			this.textSpecificTest.TabIndex = 9;
+			this.textSpecificTest.Text = "3";
 			// 
 			// FormUnitTests
 			// 

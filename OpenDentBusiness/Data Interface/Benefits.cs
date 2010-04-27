@@ -787,6 +787,12 @@ namespace OpenDentBusiness {
 				if(procCodeStr!=ProcedureCodes.GetStringProcCode(listShort[i].CodeNum)) {
 					continue;
 				}
+				if(listShort[i].QuantityQualifier==BenefitQuantity.NumberOfServices
+					|| listShort[i].QuantityQualifier==BenefitQuantity.Months
+					|| listShort[i].QuantityQualifier==BenefitQuantity.Years) 
+				{
+					continue;//exclude frequencies
+				}
 				//if it's an age based limitation, then make sure the patient age matches.
 				//If we have an age match, then we exit the method right here.
 				if(listShort[i].QuantityQualifier==BenefitQuantity.AgeLimit && listShort[i].Quantity > 0){

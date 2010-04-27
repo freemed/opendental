@@ -6,6 +6,135 @@ using OpenDentBusiness;
 
 namespace UnitTests {
 	class ClaimProcT {
+		///<summary>Test 3</summary>
+		public static string TestThree(int specificTest) {
+			if(specificTest != 0 && specificTest !=3){
+				return"";
+			}
+			//Patient
+			Patient pat=new Patient();
+			pat.IsNew=true;
+			pat.LName="Kirk";
+			pat.FName="Jim";
+			pat.BillingType=PrefC.GetLong(PrefName.PracticeDefaultBillType);
+			pat.PriProv=PrefC.GetLong(PrefName.PracticeDefaultProv);//This causes standard fee sched to be 53.
+			long patNum=Patients.Insert(pat,false);
+			//Carrier
+			Carrier carrier=new Carrier();
+			carrier.CarrierName="CarrierThree";
+			long carrierNum=Carriers.Insert(carrier);
+			//InsPlans
+			InsPlan plan=new InsPlan();
+			plan.Subscriber=patNum;
+			plan.CarrierNum=carrierNum;
+			plan.SubscriberID="1234";
+			plan.PlanType="";
+			plan.FeeSched=53;
+			long planNum1=InsPlans.Insert(plan);
+			//Benefits.  Annual max.
+			Benefit ben=new Benefit();
+			ben.PlanNum=planNum1;
+			ben.BenefitType=InsBenefitType.Limitations;
+			ben.CovCatNum=0;
+			ben.CoverageLevel=BenefitCoverageLevel.Individual;
+			ben.Percent=-1;
+			ben.MonetaryAmt=1000;
+			ben.TimePeriod=BenefitTimePeriod.CalendarYear;
+			Benefits.Insert(ben);
+			//100% crowns
+			ben=new Benefit();
+			ben.PlanNum=planNum1;
+			ben.BenefitType=InsBenefitType.CoInsurance;
+			ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.Crowns).CovCatNum;
+			ben.CoverageLevel=BenefitCoverageLevel.None;
+			ben.Percent=100;
+			ben.MonetaryAmt=-1;
+			ben.TimePeriod=BenefitTimePeriod.CalendarYear;
+			Benefits.Insert(ben);
+			//100% diaganostic
+			ben=new Benefit();
+			ben.PlanNum=planNum1;
+			ben.BenefitType=InsBenefitType.CoInsurance;
+			ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.Diagnostic).CovCatNum;
+			ben.CoverageLevel=BenefitCoverageLevel.None;
+			ben.Percent=100;
+			ben.MonetaryAmt=-1;
+			ben.TimePeriod=BenefitTimePeriod.CalendarYear;
+			Benefits.Insert(ben);
+			//BW frequency every 1 year
+			ben=new Benefit();
+			ben.PlanNum=planNum1;
+			ben.BenefitType=InsBenefitType.Limitations;
+			ben.CovCatNum=0;
+			ben.CodeNum=ProcedureCodes.GetCodeNum("D0274");
+			ben.CoverageLevel=BenefitCoverageLevel.None;
+			ben.Percent=-1;
+			ben.MonetaryAmt=-1;
+			ben.TimePeriod=BenefitTimePeriod.None;
+			ben.Quantity=1;
+			ben.QuantityQualifier=BenefitQuantity.Years;
+			Benefits.Insert(ben);
+			//PatPlans
+			PatPlan patPlan=new PatPlan();
+			patPlan.Ordinal=1;
+			patPlan.PatNum=patNum;
+			patPlan.PlanNum=planNum1;
+			PatPlans.Insert(patPlan);
+			//Procedure- crown
+			Procedure proc=new Procedure();
+			proc.CodeNum=ProcedureCodes.GetCodeNum("D2750");
+			proc.PatNum=patNum;
+			proc.ProcDate=DateTime.Today;
+			proc.ProcStatus=ProcStat.TP;
+			proc.ProvNum=pat.PriProv;
+			proc.ToothNum="8";
+			proc.ProcFee=1100;
+			proc.Priority=DefC.Short[(int)DefCat.TxPriorities][0].DefNum;
+			long procNum1=Procedures.Insert(proc);
+			//Proc 4BW
+			proc=new Procedure();
+			proc.CodeNum=ProcedureCodes.GetCodeNum("D0274");
+			proc.PatNum=patNum;
+			proc.ProcDate=DateTime.Today;
+			proc.ProcStatus=ProcStat.TP;
+			proc.ProvNum=pat.PriProv;
+			proc.ProcFee=50;
+			proc.Priority=DefC.Short[(int)DefCat.TxPriorities][1].DefNum;
+			long procNum2=Procedures.Insert(proc);
+			//ClaimProcs
+			List<ClaimProc> claimProcs=ClaimProcs.Refresh(patNum);
+			List<ClaimProc> claimProcListOld=new List<ClaimProc>();
+			Family fam=Patients.GetFamily(patNum);
+			List<InsPlan> planList=InsPlans.Refresh(fam);
+			List<PatPlan> patPlans=PatPlans.Refresh(patNum);
+			List<Benefit> benefitList=Benefits.Refresh(patPlans);
+			List<ClaimProcHist> histList=new List<ClaimProcHist>();
+			List<ClaimProcHist> loopList=new List<ClaimProcHist>();
+			List<Procedure>	ProcList=Procedures.Refresh(pat.PatNum);
+			Procedure[] ProcListTP=Procedures.GetListTP(ProcList);//sorted by priority, then toothnum
+			//Validate
+			string retVal="";
+			//ClaimProc claimProc;
+			//if(specificTest==0 || specificTest==1){
+			for(int i=0;i<ProcListTP.Length;i++){
+				Procedures.ComputeEstimates(ProcListTP[i],pat.PatNum,ref claimProcs,false,planList,patPlans,benefitList,
+					histList,loopList,false,pat.Age);
+				//then, add this information to loopList so that the next procedure is aware of it.
+				loopList.AddRange(ClaimProcs.GetHistForProc(claimProcs,ProcListTP[i].ProcNum,ProcListTP[i].CodeNum));
+			}
+			//save changes in the list to the database
+			ClaimProcs.Synch(ref claimProcs,claimProcListOld);
+			claimProcs=ClaimProcs.Refresh(patNum);
+			ClaimProc claimProc=ClaimProcs.GetEstimate(claimProcs,procNum2,planNum1);
+			//I don't think allowed can be easily tested on the fly, and it's not that important.
+			if(claimProc.InsEstTotal!=0) {//Insurance should not cover because over annual max.
+				throw new Exception("Should be 0");
+			}
+			retVal+="3: Passed.\r\n";
+			//}*/
+			return retVal;
+		}
+
 		/// <summary>Tests 1,2</summary>
 		public static string TestDualPPO(int specificTest) {
 			if(specificTest != 0 && specificTest != 1 && specificTest != 2){
