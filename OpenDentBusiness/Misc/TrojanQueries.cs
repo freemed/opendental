@@ -125,37 +125,79 @@ namespace OpenDentBusiness {
 			return Db.GetTable(command);
 		}
 
-		///<summary></summary>
-		public static int GetPlanNums(InsPlan plan,ArrayList benefitList) {
+		///<summary>This returns the number of plans affected.</summary>
+		public static int UpdatePlans(TrojanObject troj,bool updateBenefits) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetInt(MethodBase.GetCurrentMethod(),plan);
+				return Meth.GetInt(MethodBase.GetCurrentMethod(),troj);
 			}
-			string command="SELECT PlanNum FROM insplan WHERE TrojanID='"+POut.String(plan.TrojanID)+"'"; 
+			string command="SELECT PlanNum FROM insplan WHERE TrojanID = '"+POut.String(troj.TROJANID)+"'"; 
 			DataTable table=Db.GetTable(command);
 			long planNum;
+			long employerNum=Employers.GetEmployerNum(troj.ENAME);
 			for(int i=0;i<table.Rows.Count;i++) {
-				planNum=PIn.Long(table.Rows[i][0].ToString());
+				planNum=PIn.Long(table.Rows[i]["PlanNum"].ToString());
 				//update plan
 				command="UPDATE insplan SET "
-					+"EmployerNum='"+POut.Long(plan.EmployerNum)+"', "
-					+"GroupName='"  +POut.String(plan.GroupName)+"', "
-					+"GroupNum='"   +POut.String(plan.GroupNum)+"', "
-					+"CarrierNum='" +POut.Long(plan.CarrierNum)+"', "
-					+"BenefitNotes='"+POut.String(plan.BenefitNotes)+"' "
-					+"WHERE PlanNum="+POut.Long(planNum);
+					+"EmployerNum="  +POut.Long  (employerNum)+", "
+					+"GroupName='"   +POut.String(troj.PLANDESC)+"', "
+					+"GroupNum='"    +POut.String(troj.POLICYNO)+"', "
+					+"CarrierNum= "  +POut.Long  (troj.CarrierNum)+", "
+					+"BenefitNotes='"+POut.String(troj.BenefitNotes)+"' "
+					+"WHERE PlanNum="+POut.Long  (planNum);
 				Db.NonQ(command);
 				//clear benefits
-				command="DELETE FROM benefit WHERE PlanNum="+POut.Long(planNum);
-				Db.NonQ(command);
-				//benefitList
-				for(int j=0;j<benefitList.Count;j++) {
-					((Benefit)benefitList[j]).PlanNum=planNum;
-					Benefits.Insert((Benefit)benefitList[j]);
+				if(updateBenefits) {
+					command="DELETE FROM benefit WHERE PlanNum="+POut.Long(planNum);
+					Db.NonQ(command);
+					//benefitList
+					for(int j=0;j<troj.BenefitList.Count;j++) {
+						troj.BenefitList[j].PlanNum=planNum;
+						Benefits.Insert(troj.BenefitList[j]);
+					}
+					InsPlans.ComputeEstimatesForPlan(planNum);
 				}
-				InsPlans.ComputeEstimatesForPlan(planNum);
 			}
 			return table.Rows.Count;
 		}
 
 	}
+
+	///<summary>This is used as a container for plan and benefit info coming in from Trojan.</summary>
+	[Serializable()]
+	public class TrojanObject {
+		///<summary>TrojanID</summary>
+		public string TROJANID;
+		///<summary>Employer name</summary>
+		public string ENAME;
+		///<summary>GroupName</summary>
+		public string PLANDESC;
+		///<summary>Carrier phone</summary>
+		public string ELIGPHONE;
+		///<summary>GroupNum</summary>
+		public string POLICYNO;
+		///<summary>Accepts eclaims</summary>
+		public bool ECLAIMS;
+		///<summary>ElectID</summary>
+		public string PAYERID;
+		///<summary>CarrierName</summary>
+		public string MAILTO;
+		///<summary>Address</summary>
+		public string MAILTOST;
+		///<summary>City</summary>
+		public string MAILCITYONLY;
+		///<summary>State</summary>
+		public string MAILSTATEONLY;
+		///<summary>Zip</summary>
+		public string MAILZIPONLY;
+		///<summary>The only thing that will be missing from these benefits is the PlanNum.</summary>
+		public List<Benefit> BenefitList;
+		///<summary>This can be filled at some point based on the carrier fields.</summary>
+		public long CarrierNum;
+		///<summary></summary>
+		public string BenefitNotes;
+		///<summary>Haven't made use of this yet.</summary>
+		public string PlanNote;
+	}
+
+
 }

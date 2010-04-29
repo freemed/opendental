@@ -2302,307 +2302,41 @@ namespace OpenDental{
 				MessageBox.Show(file+" not found.  You should export from Trojan first.");
 				return;
 			}
-			usesAnnivers=false;
-			//bool resetFeeSched=false;//This will be set to true if a FeeSched was imported.
-			//int feeSchedNum=0;//and if resetFeeSched, then this is the new feesched.
-			Benefit ben;
+			TrojanObject troj=Trojan.ProcessTextToObject(File.ReadAllText(file));
+			textTrojanID.Text=troj.TROJANID;
+			textEmployer.Text=troj.ENAME;
+			textGroupName.Text=troj.PLANDESC;
+			textPhone.Text=troj.ELIGPHONE;
+			textGroupNum.Text=troj.POLICYNO;
+			checkNoSendElect.Checked=!troj.ECLAIMS;
+			textElectID.Text=troj.PAYERID;
+			textCarrier.Text=troj.MAILTO;
+			textAddress.Text=troj.MAILTOST;
+			textCity.Text=troj.MAILCITYONLY;
+			textState.Text=troj.MAILSTATEONLY;
+			textZip.Text=troj.MAILZIPONLY;
+			if(PlanCur.BenefitNotes!="") {
+				PlanCur.BenefitNotes+="\r\n--------------------------------\r\n";
+			}
+			PlanCur.BenefitNotes+=troj.BenefitNotes;
+			if(troj.PlanNote!=""){
+				if(textPlanNote.Text!=""){
+					textPlanNote.Text+="\r\n";
+				}
+				textPlanNote.Text+=troj.PlanNote;
+			}
 			//clear exising benefits from screen, not db:
 			benefitList=new List<Benefit>();
-			try {
-				using(StreamReader sr=new StreamReader(file)) {
-					string line;
-					string[] fields;
-					int percent;
-					double amt;
-					string[] splitField;//if a field is a sentence with more than one word, we can split it for analysis
-					while((line=sr.ReadLine())!=null) {
-						fields=line.Split(new char[] { '\t' });
-						if(fields.Length!=3 && fields.Length!=4) {
-							continue;
-						}
-						//remove any trailing or leading spaces:
-						fields[0]=fields[0].Trim();
-						fields[1]=fields[1].Trim();
-						fields[2]=fields[2].Trim();
-						if(fields.Length==4){
-							fields[3]=fields[3].Trim();
-						}
-						if(fields[2]=="") {
-							continue;
-						}
-						else {//as long as there is data, add it to the notes
-							if(PlanCur.BenefitNotes!="") {
-								PlanCur.BenefitNotes+="\r\n";
-							}
-							PlanCur.BenefitNotes+=fields[1]+": "+fields[2];
-							if(fields.Length==4){
-								PlanCur.BenefitNotes+=" "+fields[3];
-							}
-							//if(BenefitNotes!="") {
-							//	BenefitNotes+="\r\n";
-							//}
-							//BenefitNotes+=fields[1]+": "+fields[2];
-						}
-						switch(fields[0]) {
-							//default://for all rows that are not handled below
-							case "TROJANID":
-								textTrojanID.Text=fields[2];
-								break;
-							case "ENAME":
-								textEmployer.Text=fields[2];
-								break;
-							case "PLANDESC":
-								textGroupName.Text=fields[2];
-								break;
-							case "ELIGPHONE":
-								textPhone.Text=fields[2];
-								break;
-							case "POLICYNO":
-								textGroupNum.Text=fields[2];
-								break;
-							case "ECLAIMS":
-								if(fields[2]=="YES") {//accepts eclaims
-									checkNoSendElect.Checked=false;
-								}
-								else {
-									checkNoSendElect.Checked=true;
-								}
-								break;
-							case "PAYERID":
-								textElectID.Text=fields[2];
-								break;
-							case "MAILTO":
-								textCarrier.Text=fields[2];
-								break;
-							case "MAILTOST":
-								textAddress.Text=fields[2];
-								break;
-							case "MAILCITYONLY":
-								textCity.Text=fields[2];
-								break;
-							case "MAILSTATEONLY":
-								textState.Text=fields[2];
-								break;
-							case "MAILZIPONLY":
-								textZip.Text=fields[2];
-								break;
-							case "PLANMAX"://eg $3000 per person per year
-								if(!fields[2].StartsWith("$"))
-									break;
-								fields[2]=fields[2].Remove(0,1);
-								fields[2]=fields[2].Split(new char[] { ' ' })[0];
-								if(CovCatC.ListShort.Count>0) {
-									ben=new Benefit();
-									ben.BenefitType=InsBenefitType.Limitations;
-									ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.General).CovCatNum;
-									ben.MonetaryAmt=PIn.Double(fields[2]);
-									ben.PlanNum=PlanCur.PlanNum;
-									ben.TimePeriod=BenefitTimePeriod.CalendarYear;
-									ben.CoverageLevel=BenefitCoverageLevel.Individual;
-									benefitList.Add(ben.Copy());
-								}
-								break;
-							case "PLANYR"://eg Calendar year or Anniversary year
-								if(fields[2]=="Anniversary year") {
-									usesAnnivers=true;
-									MessageBox.Show("Warning.  Plan uses Anniversary year rather than Calendar year.  Please verify the Plan Start Date.");
-								}
-								break;
-							case "DEDUCT"://eg There is no deductible
-								if(!fields[2].StartsWith("$")) {
-									amt=0;
-								}
-								else {
-									fields[2]=fields[2].Remove(0,1);
-									fields[2]=fields[2].Split(new char[] { ' ' })[0];
-									amt=PIn.Double(fields[2]);
-								}
-								ben=new Benefit();
-								ben.BenefitType=InsBenefitType.Deductible;
-								ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.General).CovCatNum;
-								ben.PlanNum=PlanCur.PlanNum;
-								ben.TimePeriod=BenefitTimePeriod.CalendarYear;
-								ben.MonetaryAmt=amt;
-								ben.CoverageLevel=BenefitCoverageLevel.Individual;
-								benefitList.Add(ben.Copy());
-								ben=new Benefit();
-								ben.BenefitType=InsBenefitType.Deductible;
-								ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.Diagnostic).CovCatNum;
-								ben.PlanNum=PlanCur.PlanNum;
-								ben.TimePeriod=BenefitTimePeriod.CalendarYear;
-								ben.MonetaryAmt=0;//amt;
-								ben.CoverageLevel=BenefitCoverageLevel.Individual;
-								benefitList.Add(ben.Copy());
-								ben=new Benefit();
-								ben.BenefitType=InsBenefitType.Deductible;
-								ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.RoutinePreventive).CovCatNum;
-								ben.PlanNum=PlanCur.PlanNum;
-								ben.TimePeriod=BenefitTimePeriod.CalendarYear;
-								ben.MonetaryAmt=0;//amt;
-								ben.CoverageLevel=BenefitCoverageLevel.Individual;
-								benefitList.Add(ben.Copy());
-								break;
-							case "PREV"://eg 100%
-								splitField=fields[2].Split(new char[] { ' ' });
-								if(splitField.Length==0 || !splitField[0].EndsWith("%")) {
-									break;
-								}
-								splitField[0]=splitField[0].Remove(splitField[0].Length-1,1);//remove %
-								percent=PIn.Int(splitField[0]);
-								if(percent<0 || percent>100) {
-									break;
-								}
-								ben=new Benefit();
-								ben.BenefitType=InsBenefitType.CoInsurance;
-								ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.Diagnostic).CovCatNum;
-								ben.Percent=percent;
-								ben.PlanNum=PlanCur.PlanNum;
-								ben.TimePeriod=BenefitTimePeriod.CalendarYear;
-								benefitList.Add(ben.Copy());
-								ben=new Benefit();
-								ben.BenefitType=InsBenefitType.CoInsurance;
-								ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.RoutinePreventive).CovCatNum;
-								ben.Percent=percent;
-								ben.PlanNum=PlanCur.PlanNum;
-								ben.TimePeriod=BenefitTimePeriod.CalendarYear;
-								benefitList.Add(ben.Copy());
-								break;
-							case "BASIC":
-								splitField=fields[2].Split(new char[] { ' ' });
-								if(splitField.Length==0 || !splitField[0].EndsWith("%")) {
-									break;
-								}
-								splitField[0]=splitField[0].Remove(splitField[0].Length-1,1);//remove %
-								percent=PIn.Int(splitField[0]);
-								if(percent<0 || percent>100) {
-									break;
-								}
-								ben=new Benefit();
-								ben.BenefitType=InsBenefitType.CoInsurance;
-								ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.Restorative).CovCatNum;
-								ben.Percent=percent;
-								ben.PlanNum=PlanCur.PlanNum;
-								ben.TimePeriod=BenefitTimePeriod.CalendarYear;
-								benefitList.Add(ben.Copy());
-								ben=new Benefit();
-								ben.BenefitType=InsBenefitType.CoInsurance;
-								ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.Endodontics).CovCatNum;
-								ben.Percent=percent;
-								ben.PlanNum=PlanCur.PlanNum;
-								ben.TimePeriod=BenefitTimePeriod.CalendarYear;
-								benefitList.Add(ben.Copy());
-								ben=new Benefit();
-								ben.BenefitType=InsBenefitType.CoInsurance;
-								ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.Periodontics).CovCatNum;
-								ben.Percent=percent;
-								ben.PlanNum=PlanCur.PlanNum;
-								ben.TimePeriod=BenefitTimePeriod.CalendarYear;
-								benefitList.Add(ben.Copy());
-								ben=new Benefit();
-								ben.BenefitType=InsBenefitType.CoInsurance;
-								ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.OralSurgery).CovCatNum;
-								ben.Percent=percent;
-								ben.PlanNum=PlanCur.PlanNum;
-								ben.TimePeriod=BenefitTimePeriod.CalendarYear;
-								benefitList.Add(ben.Copy());
-								break;
-							case "MAJOR":
-								splitField=fields[2].Split(new char[] { ' ' });
-								if(splitField.Length==0 || !splitField[0].EndsWith("%")) {
-									break;
-								}
-								splitField[0]=splitField[0].Remove(splitField[0].Length-1,1);//remove %
-								percent=PIn.Int(splitField[0]);
-								if(percent<0 || percent>100) {
-									break;
-								}
-								ben=new Benefit();
-								ben.BenefitType=InsBenefitType.CoInsurance;
-								ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.Prosthodontics).CovCatNum;
-								ben.Percent=percent;
-								ben.PlanNum=PlanCur.PlanNum;
-								ben.TimePeriod=BenefitTimePeriod.CalendarYear;
-								benefitList.Add(ben.Copy());
-								ben=new Benefit();
-								ben.BenefitType=InsBenefitType.CoInsurance;
-								ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.Crowns).CovCatNum;
-								ben.Percent=percent;
-								ben.PlanNum=PlanCur.PlanNum;
-								ben.TimePeriod=BenefitTimePeriod.CalendarYear;
-								benefitList.Add(ben.Copy());
-								break;
-							case "ORMAX"://eg $3500 lifetime
-								if(!fields[2].StartsWith("$")){
-									break;
-								}
-								fields[2]=fields[2].Remove(0,1);
-								fields[2]=fields[2].Split(new char[] { ' ' })[0];
-								if(CovCatC.ListShort.Count>0) {
-									ben=new Benefit();
-									ben.BenefitType=InsBenefitType.Limitations;
-									ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.Orthodontics).CovCatNum;
-									ben.MonetaryAmt=PIn.Double(fields[2]);
-									ben.PlanNum=PlanCur.PlanNum;
-									ben.TimePeriod=BenefitTimePeriod.CalendarYear;
-									benefitList.Add(ben.Copy());
-								}
-								break;
-							case "ORPCT":
-								splitField=fields[2].Split(new char[] { ' ' });
-								if(splitField.Length==0 || !splitField[0].EndsWith("%")) {
-									break;
-								}
-								splitField[0]=splitField[0].Remove(splitField[0].Length-1,1);//remove %
-								percent=PIn.Int(splitField[0]);
-								if(percent<0 || percent>100) {
-									break;
-								}
-								ben=new Benefit();
-								ben.BenefitType=InsBenefitType.CoInsurance;
-								ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.Orthodontics).CovCatNum;
-								ben.Percent=percent;
-								ben.PlanNum=PlanCur.PlanNum;
-								ben.TimePeriod=BenefitTimePeriod.CalendarYear;
-								benefitList.Add(ben.Copy());
-								break;
-							/*case "FEE":
-								if(!ProcedureCodes.IsValidCode(fields[1])) {
-									break;//skip
-								}
-								if(textTrojanID.Text==""){
-									break;
-								}
-								feeSchedNum=Fees.ImportTrojan(fields[1],PIn.PDouble(fields[3]),textTrojanID.Text);
-								//the step above probably created a new feeschedule, requiring a reset of the three listboxes.
-								resetFeeSched=true;
-								break;*/
-							case "NOTES"://typically multiple instances
-								if(textPlanNote.Text!=""){
-									textPlanNote.Text+="\r\n";
-								}
-								textPlanNote.Text+=fields[2];
-								break;
-						}
-					}
-				}
-				File.Delete(file);
-				butBenefitNotes.Enabled=true;
+			for(int i=0;i<troj.BenefitList.Count;i++){
+				//if(fields[2]=="Anniversary year") {
+				//	usesAnnivers=true;
+				//	MessageBox.Show("Warning.  Plan uses Anniversary year rather than Calendar year.  Please verify the Plan Start Date.");
+				//}
+				troj.BenefitList[i].PlanNum=PlanCur.PlanNum;
+				benefitList.Add(troj.BenefitList[i].Copy());
 			}
-			catch(Exception ex) {
-				MessageBox.Show("Error: "+ex.Message);
-			}
-			if(usesAnnivers) {
-				for(int i=0;i<benefitList.Count;i++) {
-					if(benefitList[i].TimePeriod==BenefitTimePeriod.CalendarYear) {
-						benefitList[i].TimePeriod=BenefitTimePeriod.ServiceYear;
-					}
-				}
-			}
-			//if there is no deductible, add one for $0
-			//bool deductExists=false;
-			//for(int i=0;i<benefitList.Count;i++) {
-				//if(benefitList[i].
-			//}
+			File.Delete(file);
+			butBenefitNotes.Enabled=true;
 			FillBenefits();
 			/*if(resetFeeSched){
 				FeeSchedsStandard=FeeScheds.GetListForType(FeeScheduleType.Normal,false);

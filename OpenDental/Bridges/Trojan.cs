@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
@@ -27,6 +28,11 @@ namespace OpenDental.Bridges {
 			}
 			//Ensure that Trojan has a sane install.
 			RegistryKey regKey=Registry.LocalMachine.OpenSubKey("Software\\TROJAN BENEFIT SERVICE");
+			string file="";
+#if DEBUG
+			file=@"C:\ETW\ALLPLANS.TXT";
+			ProcessTrojanPlanUpdates(file);
+#else
 			if(regKey==null || regKey.GetValue("INSTALLDIR")==null) {
 				//jsparks: The below is wrong.  The user should create a registry key manually.
 				return;
@@ -37,11 +43,13 @@ namespace OpenDental.Bridges {
 				//}
 			}
 			//Process DELETEDPLANS.TXT for recently deleted insurance plans.
-			string file=regKey.GetValue("INSTALLDIR").ToString()+@"\DELETEDPLANS.TXT";//C:\ETW\DELETEDPLANS.TXT
+			file=regKey.GetValue("INSTALLDIR").ToString()+@"\DELETEDPLANS.TXT";//C:\ETW\DELETEDPLANS.TXT
+
 			ProcessDeletedPlans(file);
 			//Process ALLPLANS.TXT for new insurance plan information.
 			file=regKey.GetValue("INSTALLDIR").ToString()+@"\ALLPLANS.TXT";//C:\ETW\ALLPLANS.TXT
 			ProcessTrojanPlanUpdates(file);
+#endif
 		}
 
 		///<summary>Process the deletion of existing insurance plans.</summary>
@@ -113,7 +121,8 @@ namespace OpenDental.Bridges {
 								PatPlans.Delete(patplans[k].PatPlanNum);
 							}
 						}
-					} catch(ApplicationException ex) {
+					} 
+					catch(ApplicationException ex) {
 						MessageBox.Show(ex.Message);
 						return;
 					}
@@ -375,7 +384,7 @@ namespace OpenDental.Bridges {
 				//Nothing to process.
 				return;
 			}
-			MessageBox.Show("Trojan update found.  Please print the text file when it opens, then close it.  You will be given a chance to cancel the update after that.");
+			MessageBox.Show("Trojan update found.  Please print or save the text file when it opens, then close it.  You will be given a chance to cancel the update after that.");
 			Process.Start(file);
 			if(!MsgBox.Show("Trojan",true,"Trojan update found.  All plans will now be updated.")) {
 				return;
@@ -388,11 +397,12 @@ namespace OpenDental.Bridges {
 				MessageBox.Show("Could not read file contents: "+file);
 				return;
 			}
+			bool updateBenefits=MsgBox.Show("Trojan",MsgBoxButtons.YesNo,"Also update benefits?  Any customized benefits will be overwritten.");
 			string[] trojanplans=allplantext.Split(new string[] { "TROJANID" },StringSplitOptions.RemoveEmptyEntries);
 			int plansAffected=0;
 			for(int i=0;i<trojanplans.Length;i++) {
 				trojanplans[i]="TROJANID"+trojanplans[i];
-				plansAffected+=ProcessTrojanPlan(trojanplans[i]);
+				plansAffected+=ProcessTrojanPlan(trojanplans[i],updateBenefits);
 			}
 			MessageBox.Show(plansAffected.ToString()+" plans updated.");
 			try{
@@ -404,18 +414,37 @@ namespace OpenDental.Bridges {
 		}
 
 		///<summary>Returns the number of plans updated.</summary>
-		private static int ProcessTrojanPlan(string trojanPlan){
-			//MessageBox.Show(trojanPlan);
-			string[] lines=trojanPlan.Split(new string[] {"\r\n"},StringSplitOptions.RemoveEmptyEntries);
-			//MessageBox.Show(lines[0]);
-			//MessageBox.Show(lines.Length.ToString());
+		private static int ProcessTrojanPlan(string trojanPlan,bool updateBenefits){
+			TrojanObject troj=ProcessTextToObject(trojanPlan);
+			Carrier carrier=new Carrier();
+			carrier.Phone=troj.ELIGPHONE;
+			carrier.ElectID=troj.PAYERID;
+			carrier.CarrierName=troj.MAILTO;
+			carrier.Address=troj.MAILTOST;
+			carrier.City=troj.MAILCITYONLY;
+			carrier.State=troj.MAILSTATEONLY;
+			carrier.Zip=troj.MAILZIPONLY;
+			if(carrier.CarrierName==null || carrier.CarrierName=="") {
+				//if, for some reason, carrier is absent from the file, we can't do a thing with it.
+				return 0;
+			}
+			carrier=Carriers.GetIndentical(carrier);
+			//now, save this all to the database.
+			troj.CarrierNum=carrier.CarrierNum;
+			return TrojanQueries.UpdatePlans(troj,updateBenefits);
+		}
+
+		///<summary>Converts the text for one plan into an object which will then be processed as needed.</summary>
+		public static TrojanObject ProcessTextToObject(string text){
+			string[] lines=text.Split(new string[] { "\r\n" },StringSplitOptions.RemoveEmptyEntries);
 			string line;
 			string[] fields;
 			int percent;
+			double amt;
 			string[] splitField;//if a field is a sentence with more than one word, we can split it for analysis
-			InsPlan plan=new InsPlan();//many fields will be absent.  This is a conglomerate.
-			Carrier carrier=new Carrier();
-			ArrayList benefitList=new ArrayList();
+			TrojanObject troj=new TrojanObject();
+			troj.BenefitList=new List<Benefit>();
+			troj.BenefitNotes="";
 			bool usesAnnivers=false;
 			Benefit ben;
       for(int i=0;i<lines.Length;i++){
@@ -432,53 +461,56 @@ namespace OpenDental.Bridges {
 					continue;
 				}
 				else{//as long as there is data, add it to the notes
-					if(plan.BenefitNotes!=""){
-						plan.BenefitNotes+="\r\n";
+					if(troj.BenefitNotes!="") {
+						troj.BenefitNotes+="\r\n";
 					}
-					plan.BenefitNotes+=fields[1]+": "+fields[2];
+					troj.BenefitNotes+=fields[1]+": "+fields[2];
+					if(fields.Length==4) {
+						troj.BenefitNotes+=" "+fields[3];
+					}
 				}
 				switch(fields[0]){
 					//default://for all rows that are not handled below
 					case "TROJANID":
-						plan.TrojanID=fields[2];
+						troj.TROJANID=fields[2];
 						break;
 					case "ENAME":
-						plan.EmployerNum=Employers.GetEmployerNum(fields[2]);
+						troj.ENAME=fields[2];
 						break;
 					case "PLANDESC":
-						plan.GroupName=fields[2];
+						troj.PLANDESC=fields[2];
 						break;
 					case "ELIGPHONE":
-						carrier.Phone=fields[2];
+						troj.ELIGPHONE=fields[2];
 						break;
 					case "POLICYNO":
-						plan.GroupNum=fields[2];
+						troj.POLICYNO=fields[2];
 						break;
 					case "ECLAIMS":
 						if(fields[2]=="YES") {//accepts eclaims
-							carrier.NoSendElect=false;
+							troj.ECLAIMS=true;
 						}
 						else {
-							carrier.NoSendElect=true;
+							troj.ECLAIMS=false;
 						}
 						break;
 					case "PAYERID":
-						carrier.ElectID=fields[2];
+						troj.PAYERID=fields[2];
 						break;
 					case "MAILTO":
-						carrier.CarrierName=fields[2];
+						troj.MAILTO=fields[2];
 						break;
 					case "MAILTOST":
-						carrier.Address=fields[2];
+						troj.MAILTOST=fields[2];
 						break;
 					case "MAILCITYONLY":
-						carrier.City=fields[2];
+						troj.MAILCITYONLY=fields[2];
 						break;
 					case "MAILSTATEONLY":
-						carrier.State=fields[2];
+						troj.MAILSTATEONLY=fields[2];
 						break;
 					case "MAILZIPONLY":
-						carrier.Zip=fields[2];
+						troj.MAILZIPONLY=fields[2];
 						break;
 					case "PLANMAX"://eg $3000 per person per year
 						if(!fields[2].StartsWith("$"))
@@ -491,7 +523,8 @@ namespace OpenDental.Bridges {
 							ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.General).CovCatNum;
 							ben.MonetaryAmt=PIn.Double(fields[2]);
 							ben.TimePeriod=BenefitTimePeriod.CalendarYear;
-							benefitList.Add(ben.Copy());
+							ben.CoverageLevel=BenefitCoverageLevel.Individual;
+							troj.BenefitList.Add(ben.Copy());
 						}
 						break;
 					case "PLANYR"://eg Calendar year or Anniversary year
@@ -501,19 +534,35 @@ namespace OpenDental.Bridges {
 						}
 						break;
 					case "DEDUCT"://eg There is no deductible
-						ben=new Benefit();
-						ben.BenefitType=InsBenefitType.Deductible;
-						ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.General).CovCatNum;
-						ben.TimePeriod=BenefitTimePeriod.CalendarYear;
 						if(!fields[2].StartsWith("$")) {
-							ben.MonetaryAmt=0;
+							amt=0;
 						}
 						else {
 							fields[2]=fields[2].Remove(0,1);
 							fields[2]=fields[2].Split(new char[] { ' ' })[0];
-							ben.MonetaryAmt=PIn.Double(fields[2]);
+							amt=PIn.Double(fields[2]);
 						}
-						benefitList.Add(ben.Copy());
+						ben=new Benefit();
+						ben.BenefitType=InsBenefitType.Deductible;
+						ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.General).CovCatNum;
+						ben.TimePeriod=BenefitTimePeriod.CalendarYear;
+						ben.MonetaryAmt=amt;
+						ben.CoverageLevel=BenefitCoverageLevel.Individual;
+						troj.BenefitList.Add(ben.Copy());
+						ben=new Benefit();
+						ben.BenefitType=InsBenefitType.Deductible;
+						ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.Diagnostic).CovCatNum;
+						ben.TimePeriod=BenefitTimePeriod.CalendarYear;
+						ben.MonetaryAmt=0;//amt;
+						ben.CoverageLevel=BenefitCoverageLevel.Individual;
+						troj.BenefitList.Add(ben.Copy());
+						ben=new Benefit();
+						ben.BenefitType=InsBenefitType.Deductible;
+						ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.RoutinePreventive).CovCatNum;
+						ben.TimePeriod=BenefitTimePeriod.CalendarYear;
+						ben.MonetaryAmt=0;//amt;
+						ben.CoverageLevel=BenefitCoverageLevel.Individual;
+						troj.BenefitList.Add(ben.Copy());
 						break;
 					case "PREV"://eg 100%
 						splitField=fields[2].Split(new char[] { ' ' });
@@ -527,10 +576,16 @@ namespace OpenDental.Bridges {
 						}
 						ben=new Benefit();
 						ben.BenefitType=InsBenefitType.CoInsurance;
+						ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.Diagnostic).CovCatNum;
+						ben.Percent=percent;
+						ben.TimePeriod=BenefitTimePeriod.CalendarYear;
+						troj.BenefitList.Add(ben.Copy());
+						ben=new Benefit();
+						ben.BenefitType=InsBenefitType.CoInsurance;
 						ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.RoutinePreventive).CovCatNum;
 						ben.Percent=percent;
 						ben.TimePeriod=BenefitTimePeriod.CalendarYear;
-						benefitList.Add(ben.Copy());
+						troj.BenefitList.Add(ben.Copy());
 						break;
 					case "BASIC":
 						splitField=fields[2].Split(new char[] { ' ' });
@@ -547,19 +602,25 @@ namespace OpenDental.Bridges {
 						ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.Restorative).CovCatNum;
 						ben.Percent=percent;
 						ben.TimePeriod=BenefitTimePeriod.CalendarYear;
-						benefitList.Add(ben.Copy());
+						troj.BenefitList.Add(ben.Copy());
 						ben=new Benefit();
 						ben.BenefitType=InsBenefitType.CoInsurance;
 						ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.Endodontics).CovCatNum;
 						ben.Percent=percent;
 						ben.TimePeriod=BenefitTimePeriod.CalendarYear;
-						benefitList.Add(ben.Copy());
+						troj.BenefitList.Add(ben.Copy());
 						ben=new Benefit();
 						ben.BenefitType=InsBenefitType.CoInsurance;
 						ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.Periodontics).CovCatNum;
 						ben.Percent=percent;
 						ben.TimePeriod=BenefitTimePeriod.CalendarYear;
-						benefitList.Add(ben.Copy());
+						troj.BenefitList.Add(ben.Copy());
+						ben=new Benefit();
+						ben.BenefitType=InsBenefitType.CoInsurance;
+						ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.OralSurgery).CovCatNum;
+						ben.Percent=percent;
+						ben.TimePeriod=BenefitTimePeriod.CalendarYear;
+						troj.BenefitList.Add(ben.Copy());
 						break;
 					case "MAJOR":
 						splitField=fields[2].Split(new char[] { ' ' });
@@ -576,29 +637,89 @@ namespace OpenDental.Bridges {
 						ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.Prosthodontics).CovCatNum;
 						ben.Percent=percent;
 						ben.TimePeriod=BenefitTimePeriod.CalendarYear;
-						benefitList.Add(ben.Copy());
-						//does prosthodontics include crowns?
+						troj.BenefitList.Add(ben.Copy());
+						ben=new Benefit();
+						ben.BenefitType=InsBenefitType.CoInsurance;
+						ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.Crowns).CovCatNum;
+						ben.Percent=percent;
+						ben.TimePeriod=BenefitTimePeriod.CalendarYear;
+						troj.BenefitList.Add(ben.Copy());
+						break;
+					case "CROWNS"://Examples: Paid Major, or 80%.  We will only process percentages.
+						splitField=fields[2].Split(new char[] { ' ' });
+						if(splitField.Length==0 || !splitField[0].EndsWith("%")) {
+							break;
+						}
+						splitField[0]=splitField[0].Remove(splitField[0].Length-1,1);//remove %
+						percent=PIn.Int(splitField[0]);
+						if(percent<0 || percent>100) {
+							break;
+						}
+						ben=new Benefit();
+						ben.BenefitType=InsBenefitType.CoInsurance;
+						ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.Crowns).CovCatNum;
+						ben.Percent=percent;
+						ben.TimePeriod=BenefitTimePeriod.CalendarYear;
+						troj.BenefitList.Add(ben.Copy());
+						break;
+					case "ORMAX"://eg $3500 lifetime
+						if(!fields[2].StartsWith("$")) {
+							break;
+						}
+						fields[2]=fields[2].Remove(0,1);
+						fields[2]=fields[2].Split(new char[] { ' ' })[0];
+						if(CovCatC.ListShort.Count>0) {
+							ben=new Benefit();
+							ben.BenefitType=InsBenefitType.Limitations;
+							ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.Orthodontics).CovCatNum;
+							ben.MonetaryAmt=PIn.Double(fields[2]);
+							ben.TimePeriod=BenefitTimePeriod.CalendarYear;
+							troj.BenefitList.Add(ben.Copy());
+						}
+						break;
+					case "ORPCT":
+						splitField=fields[2].Split(new char[] { ' ' });
+						if(splitField.Length==0 || !splitField[0].EndsWith("%")) {
+							break;
+						}
+						splitField[0]=splitField[0].Remove(splitField[0].Length-1,1);//remove %
+						percent=PIn.Int(splitField[0]);
+						if(percent<0 || percent>100) {
+							break;
+						}
+						ben=new Benefit();
+						ben.BenefitType=InsBenefitType.CoInsurance;
+						ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.Orthodontics).CovCatNum;
+						ben.Percent=percent;
+						ben.TimePeriod=BenefitTimePeriod.CalendarYear;
+						troj.BenefitList.Add(ben.Copy());
+						break;
+					/*case "FEE":
+						if(!ProcedureCodes.IsValidCode(fields[1])) {
+							break;//skip
+						}
+						if(textTrojanID.Text==""){
+							break;
+						}
+						feeSchedNum=Fees.ImportTrojan(fields[1],PIn.PDouble(fields[3]),textTrojanID.Text);
+						//the step above probably created a new feeschedule, requiring a reset of the three listboxes.
+						resetFeeSched=true;
+						break;*/
+					case "NOTES"://typically multiple instances
+						if(troj.PlanNote!="") {
+							troj.PlanNote+="\r\n";
+						}
+						troj.PlanNote+=fields[2];
 						break;
 				}//switch
 			}//for
-			//now, save this all to the database.
-			//carrier
-			if(carrier.CarrierName==null || carrier.CarrierName==""){
-				//if, for some reason, carrier is absent from the file, we can't do a thing with it.
-				return 0;
-			}
-			//Carriers.Cur=carrier;
-			carrier=Carriers.GetIndentical(carrier);
 			//set calendar vs serviceyear
-			if(usesAnnivers){
-				for(int i=0;i<benefitList.Count;i++) {
-					((Benefit)benefitList[i]).TimePeriod=BenefitTimePeriod.ServiceYear;
+			if(usesAnnivers) {
+				for(int i=0;i<troj.BenefitList.Count;i++) {
+					troj.BenefitList[i].TimePeriod=BenefitTimePeriod.ServiceYear;
 				}
 			}
-			//plan
-			plan.CarrierNum=carrier.CarrierNum;
-			return TrojanQueries.GetPlanNums(plan,benefitList);
-			//MessageBox.Show(plan.BenefitNotes);
+			return troj;
 		}
 
 
@@ -606,4 +727,6 @@ namespace OpenDental.Bridges {
 
 
 	}
+
+	
 }
