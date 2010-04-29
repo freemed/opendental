@@ -30,7 +30,7 @@ namespace OpenDental.Bridges {
 			RegistryKey regKey=Registry.LocalMachine.OpenSubKey("Software\\TROJAN BENEFIT SERVICE");
 			string file="";
 #if DEBUG
-			file=@"C:\ETW\ALLPLANS.TXT";
+			file=@"E:\My Documents\Bridge Info\Trojan\ETW\ALLPLANS.TXT";
 			ProcessTrojanPlanUpdates(file);
 #else
 			if(regKey==null || regKey.GetValue("INSTALLDIR")==null) {
@@ -447,6 +447,8 @@ namespace OpenDental.Bridges {
 			troj.BenefitNotes="";
 			bool usesAnnivers=false;
 			Benefit ben;
+			Benefit benCrownMajor=null;
+			Benefit benCrownOnly=null;
       for(int i=0;i<lines.Length;i++){
 				line=lines[i];
 				fields=line.Split(new char[] {'\t'});
@@ -638,12 +640,12 @@ namespace OpenDental.Bridges {
 						ben.Percent=percent;
 						ben.TimePeriod=BenefitTimePeriod.CalendarYear;
 						troj.BenefitList.Add(ben.Copy());
-						ben=new Benefit();
-						ben.BenefitType=InsBenefitType.CoInsurance;
-						ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.Crowns).CovCatNum;
-						ben.Percent=percent;
-						ben.TimePeriod=BenefitTimePeriod.CalendarYear;
-						troj.BenefitList.Add(ben.Copy());
+						benCrownMajor=new Benefit();
+						benCrownMajor.BenefitType=InsBenefitType.CoInsurance;
+						benCrownMajor.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.Crowns).CovCatNum;
+						benCrownMajor.Percent=percent;
+						benCrownMajor.TimePeriod=BenefitTimePeriod.CalendarYear;
+						//troj.BenefitList.Add(ben.Copy());//later
 						break;
 					case "CROWNS"://Examples: Paid Major, or 80%.  We will only process percentages.
 						splitField=fields[2].Split(new char[] { ' ' });
@@ -655,12 +657,12 @@ namespace OpenDental.Bridges {
 						if(percent<0 || percent>100) {
 							break;
 						}
-						ben=new Benefit();
-						ben.BenefitType=InsBenefitType.CoInsurance;
-						ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.Crowns).CovCatNum;
-						ben.Percent=percent;
-						ben.TimePeriod=BenefitTimePeriod.CalendarYear;
-						troj.BenefitList.Add(ben.Copy());
+						benCrownOnly=new Benefit();
+						benCrownOnly.BenefitType=InsBenefitType.CoInsurance;
+						benCrownOnly.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.Crowns).CovCatNum;
+						benCrownOnly.Percent=percent;
+						benCrownOnly.TimePeriod=BenefitTimePeriod.CalendarYear;
+						//troj.BenefitList.Add(ben.Copy());
 						break;
 					case "ORMAX"://eg $3500 lifetime
 						if(!fields[2].StartsWith("$")) {
@@ -713,6 +715,13 @@ namespace OpenDental.Bridges {
 						break;
 				}//switch
 			}//for
+			//Set crowns
+			if(benCrownOnly!=null){
+				troj.BenefitList.Add(benCrownOnly.Copy());
+			}
+			else if(benCrownMajor!=null){
+				troj.BenefitList.Add(benCrownMajor.Copy());
+			}
 			//set calendar vs serviceyear
 			if(usesAnnivers) {
 				for(int i=0;i<troj.BenefitList.Count;i++) {
