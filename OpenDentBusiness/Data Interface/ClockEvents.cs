@@ -6,17 +6,17 @@ using System.Reflection;
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class ClockEvents {
-		///<summary>isBreaks is ignored if getAll is true.</summary>
-		public static ClockEvent[] Refresh(long empNum,DateTime fromDate,DateTime toDate,bool getAll,bool isBreaks) {
+		///<summary></summary>
+		public static List<ClockEvent> Refresh(long empNum,DateTime fromDate,DateTime toDate,bool getAll,bool isBreaks){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<ClockEvent[]>(MethodBase.GetCurrentMethod(),empNum,fromDate,toDate,getAll,isBreaks);
+				return Meth.GetObject<List<ClockEvent>>(MethodBase.GetCurrentMethod(),empNum,fromDate,toDate,getAll,isBreaks);
 			}
 			string command=
-				"SELECT * from clockevent WHERE"
+				"SELECT * FROM clockevent WHERE"
 				+" EmployeeNum = '"+POut.Long(empNum)+"'"
-				+" AND TimeDisplayed >= "+POut.Date(fromDate)
+				+" AND TimeDisplayedIn >= "+POut.Date(fromDate)
 				//adding a day takes it to midnight of the specified toDate
-				+" AND TimeDisplayed <= "+POut.Date(toDate.AddDays(1));
+				+" AND TimeDisplayedIn <= "+POut.Date(toDate.AddDays(1));
 			if(!getAll) {
 				if(isBreaks)
 					command+=" AND ClockStatus = '2'";
@@ -24,72 +24,40 @@ namespace OpenDentBusiness{
 					command+=" AND (ClockStatus = '0' OR ClockStatus = '1')";
 			}
 			command+=" ORDER BY TimeDisplayed";
-			DataTable table=Db.GetTable(command);
-			ClockEvent[] List=new ClockEvent[table.Rows.Count];
-			for(int i=0;i<List.Length;i++) {
-				List[i]=new ClockEvent();
-				List[i].ClockEventNum = PIn.Long(table.Rows[i][0].ToString());
-				List[i].EmployeeNum   = PIn.Long(table.Rows[i][1].ToString());
-				List[i].TimeEntered   = PIn.DateT(table.Rows[i][2].ToString());
-				List[i].TimeDisplayed = PIn.DateT(table.Rows[i][3].ToString());
-				List[i].ClockIn       = PIn.Bool(table.Rows[i][4].ToString());
-				List[i].ClockStatus   =(TimeClockStatus)PIn.Long(table.Rows[i][5].ToString());
-				List[i].Note          = PIn.String(table.Rows[i][6].ToString());
+			return Crud.ClockEventCrud.SelectMany(command);
+		}
+
+		///<summary>Gets one ClockEvent from the db.</summary>
+		public static ClockEvent GetOne(long clockEventNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
+				return Meth.GetObject<ClockEvent>(MethodBase.GetCurrentMethod(),clockEventNum);
 			}
-			return List;
+			return Crud.ClockEventCrud.SelectOne(clockEventNum);
 		}
 
 		///<summary></summary>
-		public static long Insert(ClockEvent ce) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				ce.ClockEventNum=Meth.GetLong(MethodBase.GetCurrentMethod(),ce);
-				return ce.ClockEventNum;
+		public static long Insert(ClockEvent clockEvent){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
+				clockEvent.ClockEventNum=Meth.GetLong(MethodBase.GetCurrentMethod(),clockEvent);
+				return clockEvent.ClockEventNum;
 			}
-			DateTime serverTime=MiscData.GetNowDateTime();
-			if(PrefC.RandomKeys) {
-				ce.ClockEventNum=ReplicationServers.GetKey("clockevent","ClockEventNum");
-			}
-			string command="INSERT INTO clockevent (";
-			if(PrefC.RandomKeys) {
-				command+="ClockEventNum,";
-			}
-			command+="EmployeeNum,TimeEntered,TimeDisplayed,ClockIn"
-				+",ClockStatus,Note) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+="'"+POut.Long(ce.ClockEventNum)+"', ";
-			}
-			command+=
-				 "'"+POut.Long   (ce.EmployeeNum)+"', "
-				+POut.DateT (serverTime)+", "
-				+POut.DateT (serverTime)+", "
-				+"'"+POut.Bool  (ce.ClockIn)+"', "
-				+"'"+POut.Long   ((int)ce.ClockStatus)+"', "
-				+"'"+POut.String(ce.Note)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				ce.ClockEventNum=Db.NonQ(command,true);
-			}
-			return ce.ClockEventNum;
+			return Crud.ClockEventCrud.Insert(clockEvent);
 		}
 
 		///<summary></summary>
-		public static void Update(ClockEvent ce) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),ce);
+		public static void Update(ClockEvent clockEvent){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),clockEvent);
 				return;
 			}
-			string command= "UPDATE clockevent SET "
-				+"EmployeeNum = '"    +POut.Long   (ce.EmployeeNum)+"' "
-				+",TimeEntered = "   +POut.DateT (ce.TimeEntered)+" "
-				+",TimeDisplayed = " +POut.DateT (ce.TimeDisplayed)+" "
-				+",ClockIn = '"       +POut.Bool  (ce.ClockIn)+"' "
-				+",ClockStatus = '"   +POut.Long   ((int)ce.ClockStatus)+"' "
-				+",Note = '"          +POut.String(ce.Note)+"' "
-				+"WHERE ClockEventNum = '"+POut.Long(ce.ClockEventNum)+"'";
-			Db.NonQ(command);
+			Crud.ClockEventCrud.Update(clockEvent);
 		}
+
+
+
+
+
+	
 
 		///<summary></summary>
 		public static void Delete(ClockEvent ce) {
@@ -153,11 +121,11 @@ namespace OpenDentBusiness{
 			//eg, if this is Thursday, then we are getting last Friday through this Wed.
 			TimeSpan retVal=new TimeSpan(0);
 			for(int i=0;i<events.Length;i++){
-				if(events[i].TimeDisplayed.DayOfWeek > date.DayOfWeek){//eg, Friday > Thursday, so ignore
+				if(events[i].TimeDisplayedIn.DayOfWeek > date.DayOfWeek){//eg, Friday > Thursday, so ignore
 					continue;
 				}
 				if(i>0 && !events[i].ClockIn){
-					retVal+=events[i].TimeDisplayed-events[i-1].TimeDisplayed;
+					retVal+=events[i].TimeDisplayedIn-events[i-1].TimeDisplayedIn;
 				}
 			}
 			//now, adjustments

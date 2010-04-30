@@ -32,11 +32,15 @@ namespace OpenDentBusiness {
 
 	public enum EnumCrudSpecialColType {
 		None,
-		///<summary>User not allowed to change.  Insert must use NOW().</summary>
+		///<summary>User not allowed to change.  Insert uses NOW(), Update exludes this column, Select treats this like a date.</summary>
 		DateEntry,
 		///<summary>Gets set and updated by MySQL.  Leave these columns completely out of Insert and Update statements.</summary>
 		TimeStamp,
 		///<summary>Same C# type as Date, but the MySQL database uses datetime instead of date.</summary>
-		DateT
+		DateT,
+		///<summary>User not allowed to change.  Insert uses NOW(), Update exludes this column, Select treats this like a DateT.</summary>
+		DateTEntry,
+		///<summary>Insert uses NOW(), Update and Select treat this like a DateT.</summary>
+		DateTEntryEditable,
 	}
 }

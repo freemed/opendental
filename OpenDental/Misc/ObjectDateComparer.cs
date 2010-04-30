@@ -22,7 +22,7 @@ namespace OpenDental {
 				datex=((Commlog)x).CommDateTime;
 			}
 			else if(typex==typeof(ClockEvent)) {
-				datex=((ClockEvent)x).TimeDisplayed;
+				datex=((ClockEvent)x).TimeDisplayedIn;
 			}
 			else if(typex==typeof(TimeAdjust)) {
 				datex=((TimeAdjust)x).TimeEntry;
@@ -40,7 +40,7 @@ namespace OpenDental {
 				datey=((Commlog)y).CommDateTime;
 			}
 			else if(typey==typeof(ClockEvent)) {
-				datey=((ClockEvent)y).TimeDisplayed;
+				datey=((ClockEvent)y).TimeDisplayedIn;
 			}
 			else if(typey==typeof(TimeAdjust)) {
 				datey=((TimeAdjust)y).TimeEntry;

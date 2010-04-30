@@ -166,6 +166,16 @@ namespace OpenDentBusiness{
 "+GetInsert(typeClassName,obj,priKeyName)+@"
 
 "+GetUpdate(typeClassName,obj)+@"
+
+		///<summary></summary>
+		public static void Delete(long "+priKeyParam+@") {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),"+priKeyParam+@");
+				return;
+			}
+			string command= ""DELETE FROM "+tablename+@" WHERE "+priKeyName+@" = ""+POut.Long("+priKeyParam+@");
+			Db.NonQ(command);
+		}
 		*/
 
 

@@ -173,6 +173,12 @@ namespace Crud {
 			else if(specialColType==EnumCrudSpecialColType.DateT) {
 				dataTypeExpected="datetime";
 			}
+			else if(specialColType==EnumCrudSpecialColType.DateTEntry) {
+				dataTypeExpected="datetime";
+			}
+			else if(specialColType==EnumCrudSpecialColType.DateTEntryEditable) {
+				dataTypeExpected="datetime";
+			}
 			else if(field.FieldType.IsEnum) {
 				dataTypeExpected="tinyint";
 				dataTypeExpected2="int";

@@ -356,8 +356,8 @@ namespace OpenDental {
 			//clock employee out
 			ClockEvent ce=new ClockEvent();
 			ce.EmployeeNum=employeeNum;
-			//ce.TimeEntered=DateTime.Now+TimeDelta;
-			//ce.TimeDisplayed=DateTime.Now+TimeDelta;
+			//ce.TimeEnteredIn=DateTime.Now+TimeDelta;
+			//ce.TimeDisplayedIn=DateTime.Now+TimeDelta;
 			ce.ClockIn=false;
 			ce.ClockStatus=TimeClockStatus.Lunch;
 			ClockEvents.Insert(ce);
@@ -385,8 +385,8 @@ namespace OpenDental {
 			//clock employee out
 			ClockEvent ce=new ClockEvent();
 			ce.EmployeeNum=employeeNum;
-			//ce.TimeEntered=DateTime.Now+TimeDelta;
-			//ce.TimeDisplayed=DateTime.Now+TimeDelta;
+			//ce.TimeEnteredIn=DateTime.Now+TimeDelta;
+			//ce.TimeDisplayedIn=DateTime.Now+TimeDelta;
 			ce.ClockIn=false;
 			ce.ClockStatus=TimeClockStatus.Home;
 			ClockEvents.Insert(ce);
@@ -414,8 +414,8 @@ namespace OpenDental {
 			//clock employee out
 			ClockEvent ce=new ClockEvent();
 			ce.EmployeeNum=employeeNum;
-			//ce.TimeEntered=DateTime.Now+TimeDelta;
-			//ce.TimeDisplayed=DateTime.Now+TimeDelta;
+			//ce.TimeEnteredIn=DateTime.Now+TimeDelta;
+			//ce.TimeDisplayedIn=DateTime.Now+TimeDelta;
 			ce.ClockIn=false;
 			ce.ClockStatus=TimeClockStatus.Break;
 			ClockEvents.Insert(ce);
@@ -448,8 +448,8 @@ namespace OpenDental {
 			//clock employee in
 			ClockEvent ce=new ClockEvent();
 			ce.EmployeeNum=employeeNum;
-			//ce.TimeEntered=DateTime.Now+TimeDelta;
-			//ce.TimeDisplayed=DateTime.Now+TimeDelta;
+			//ce.TimeEnteredIn=DateTime.Now+TimeDelta;
+			//ce.TimeDisplayedIn=DateTime.Now+TimeDelta;
 			ce.ClockIn=true;
 			ce.ClockStatus=ClockEvents.GetLastStatus(employeeNum);
 			ClockEvents.Insert(ce);

@@ -2061,6 +2061,15 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 'P',
 '204203105')";
 				Db.NonQ(command);
+				command="ALTER TABLE clockevent CHANGE TimeEntered TimeEnteredIn datetime NOT NULL default '0001-01-01 00:00:00'";
+				Db.NonQ(command);
+				command="ALTER TABLE clockevent CHANGE TimeDisplayed TimeDisplayedIn datetime NOT NULL default '0001-01-01 00:00:00'";
+				Db.NonQ(command);
+				command="ALTER TABLE clockevent ADD TimeEnteredOut datetime NOT NULL default '0001-01-01 00:00:00'";
+				Db.NonQ(command);
+				command="ALTER TABLE clockevent ADD TimeDisplayedOut datetime NOT NULL default '0001-01-01 00:00:00'";
+				Db.NonQ(command);
+
 
 
 
@@ -2077,7 +2086,10 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 }
 
 
-
 				/*
+				command="ALTER TABLE clockevent ADD TimeEnteredIn datetime NOT NULL default '0001-01-01 00:00:00'";
+				Db.NonQ(command);
+				command="ALTER TABLE clockevent ADD TimeDisplayedIn datetime NOT NULL default '0001-01-01 00:00:00'";
+				Db.NonQ(command);
 				
 				*/

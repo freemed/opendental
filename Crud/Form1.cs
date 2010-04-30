@@ -169,7 +169,9 @@ namespace OpenDentBusiness.Crud{
 				specialType=CrudGenHelper.GetSpecialType(fieldsInDb[f]);
 				strb.Append(rn+t4+obj+"."+fieldsInDb[f].Name.PadRight(longestField,' ')+"= ");
 				if(specialType==EnumCrudSpecialColType.DateT
-					|| specialType==EnumCrudSpecialColType.TimeStamp)
+					|| specialType==EnumCrudSpecialColType.TimeStamp
+					|| specialType==EnumCrudSpecialColType.DateTEntry
+					|| specialType==EnumCrudSpecialColType.DateTEntryEditable)
 				{
 					//specialTypes.DateEntry is handled fine by the normal DateTime (date) below.
 					strb.Append("PIn.DateT (");
@@ -268,7 +270,10 @@ namespace OpenDentBusiness.Crud{
 				else {
 					strb.Append("+");
 				}
-				if(specialType==EnumCrudSpecialColType.DateEntry) {
+				if(specialType==EnumCrudSpecialColType.DateEntry
+					|| specialType==EnumCrudSpecialColType.DateTEntry
+					|| specialType==EnumCrudSpecialColType.DateTEntryEditable) 
+				{
 					strb.Append("\"NOW()");
 				}
 				else if(specialType==EnumCrudSpecialColType.DateT) {
@@ -345,12 +350,19 @@ namespace OpenDentBusiness.Crud{
 					strb.Append(rn+t4+"//"+fieldsExceptPri[f].Name+" not allowed to change");
 					continue;
 				}
+				if(specialType==EnumCrudSpecialColType.DateTEntry) {
+					strb.Append(rn+t4+"//"+fieldsExceptPri[f].Name+" not allowed to change");
+					continue;
+				}
 				if(specialType==EnumCrudSpecialColType.TimeStamp) {
 					strb.Append(rn+t4+"//"+fieldsExceptPri[f].Name+" can only be set by MySQL");
 					continue;
 				}
 				strb.Append(rn+t4+"+\""+fieldsExceptPri[f].Name.PadRight(longestField,' ')+"= ");
 				if(specialType==EnumCrudSpecialColType.DateT){
+					strb.Append(" \"+POut.DateT ("+obj+"."+fieldsExceptPri[f].Name+")+\"");
+				}
+				else if(specialType==EnumCrudSpecialColType.DateTEntryEditable){
 					strb.Append(" \"+POut.DateT ("+obj+"."+fieldsExceptPri[f].Name+")+\"");
 				}
 				else if(fieldsExceptPri[f].FieldType.IsEnum) {
@@ -417,6 +429,10 @@ namespace OpenDentBusiness.Crud{
 					strb.Append(rn+t3+"//"+fieldsExceptPri[f].Name+" not allowed to change");
 					continue;
 				}
+				if(specialType==EnumCrudSpecialColType.DateTEntry) {
+					strb.Append(rn+t3+"//"+fieldsExceptPri[f].Name+" not allowed to change");
+					continue;
+				}
 				if(specialType==EnumCrudSpecialColType.TimeStamp) {
 					strb.Append(rn+t3+"//"+fieldsExceptPri[f].Name+" can only be set by MySQL");
 					continue;
@@ -425,6 +441,9 @@ namespace OpenDentBusiness.Crud{
 				strb.Append(rn+t4+"if(command!=\"\"){ command+=\",\";}");
 				strb.Append(rn+t4+"command+=\""+fieldsExceptPri[f].Name+" = ");
 				if(specialType==EnumCrudSpecialColType.DateT){
+					strb.Append("\"+POut.DateT("+obj+"."+fieldsExceptPri[f].Name+")+\"");
+				}
+				else if(specialType==EnumCrudSpecialColType.DateTEntryEditable){
 					strb.Append("\"+POut.DateT("+obj+"."+fieldsExceptPri[f].Name+")+\"");
 				}
 				else if(fieldsExceptPri[f].FieldType.IsEnum) {

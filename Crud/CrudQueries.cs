@@ -50,7 +50,10 @@ namespace Crud {
 						strb.Append("timestamp,");
 						continue;
 					}
-					if(specialType==EnumCrudSpecialColType.DateT) {
+					if(specialType==EnumCrudSpecialColType.DateT
+						|| specialType==EnumCrudSpecialColType.DateTEntry
+						|| specialType==EnumCrudSpecialColType.DateTEntryEditable) 
+					{
 						strb.Append("datetime NOT NULL default '0001-01-01 00:00:00',");//untested
 						continue;
 					}
@@ -70,7 +73,7 @@ namespace Crud {
 								strb.Append("int NOT NULL,");
 								break;
 							case "DateTime"://This is only for date, not dateT
-								strb.Append("date NOT NULL default '0001-01-01',");
+								strb.Append("date NOT NULL default '0001-01-01',  (if this is actually supposed to be a datetime, timestamp, DateEntry, DateTEntry, or DateTEntryEditable column, add the missing attribute, then rerun the crud generator)");
 								break;
 							case "Double":
 								strb.Append("double NOT NULL,");
@@ -124,56 +127,65 @@ namespace Crud {
 					specialType=CrudGenHelper.GetSpecialType(newColumns[f]);
 					if(specialType==EnumCrudSpecialColType.DateEntry) {
 						strb.Append("date NOT NULL default '0001-01-01'");
+						strb.Append("\";");
+						strb.Append(rn+t4+"Db.NonQ(command);");
 						continue;
 					}
 					if(specialType==EnumCrudSpecialColType.TimeStamp) {
 						strb.Append("timestamp");
+						strb.Append("\";");
+						strb.Append(rn+t4+"Db.NonQ(command);");
 						continue;
 					}
-					if(specialType==EnumCrudSpecialColType.DateT) {
-						strb.Append("datetime NOT NULL default '0001-01-01 00:00:00'");//untested
+					if(specialType==EnumCrudSpecialColType.DateT
+						|| specialType==EnumCrudSpecialColType.DateTEntry
+						|| specialType==EnumCrudSpecialColType.DateTEntryEditable) 
+					{
+						strb.Append("datetime NOT NULL default '0001-01-01 00:00:00'");
+						strb.Append("\";");
+						strb.Append(rn+t4+"Db.NonQ(command);");
 						continue;
 					}
 					if(newColumns[f].FieldType.IsEnum) {
 						strb.Append("tinyint NOT NULL");
 					}
 					else switch(newColumns[f].FieldType.Name) {
-							default:
-								throw new ApplicationException("Type not yet supported: "+newColumns[f].FieldType.Name);
-							case "Boolean":
-								strb.Append("tinyint NOT NULL");
-								break;
-							case "Byte":
-								strb.Append("tinyint NOT NULL");
-								break;
-							case "Color":
-								strb.Append("int NOT NULL");
-								break;
-							case "DateTime"://This is only for date, not dateT
-								strb.Append("date NOT NULL default '0001-01-01' (if this is actually supposed to be a datetime, timestamp, or dateentry column, add the missing attribute, then rerun the crud generator)");
-								break;
-							case "Double":
-								strb.Append("double NOT NULL");
-								break;
-							case "Interval":
-								strb.Append("int NOT NULL");
-								break;
-							case "Int64":
-								strb.Append("bigint NOT NULL");
-								break;
-							case "Int32":
-								strb.Append("int NOT NULL");
-								break;
-							case "Single":
-								strb.Append("float NOT NULL");
-								break;
-							case "String":
-								strb.Append("varchar(255) NOT NULL  (or text NOT NULL)");
-								break;
-							case "TimeSpan":
-								strb.Append("time NOT NULL");
-								break;
-						}
+						default:
+							throw new ApplicationException("Type not yet supported: "+newColumns[f].FieldType.Name);
+						case "Boolean":
+							strb.Append("tinyint NOT NULL");
+							break;
+						case "Byte":
+							strb.Append("tinyint NOT NULL");
+							break;
+						case "Color":
+							strb.Append("int NOT NULL");
+							break;
+						case "DateTime"://This is only for date, not dateT
+							strb.Append("date NOT NULL default '0001-01-01' (if this is actually supposed to be a datetime, timestamp, DateEntry, DateTEntry, or DateTEntryEditable column, add the missing attribute, then rerun the crud generator)");
+							break;
+						case "Double":
+							strb.Append("double NOT NULL");
+							break;
+						case "Interval":
+							strb.Append("int NOT NULL");
+							break;
+						case "Int64":
+							strb.Append("bigint NOT NULL");
+							break;
+						case "Int32":
+							strb.Append("int NOT NULL");
+							break;
+						case "Single":
+							strb.Append("float NOT NULL");
+							break;
+						case "String":
+							strb.Append("varchar(255) NOT NULL  (or text NOT NULL)");
+							break;
+						case "TimeSpan":
+							strb.Append("time NOT NULL");
+							break;
+					}
 					strb.Append("\";");
 					strb.Append(rn+t4+"Db.NonQ(command);");
 				}

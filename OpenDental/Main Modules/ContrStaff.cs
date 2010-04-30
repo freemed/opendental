@@ -916,8 +916,8 @@ namespace OpenDental{
 		private void butClockIn_Click(object sender, System.EventArgs e) {
 			ClockEvent ce=new ClockEvent();
 			ce.EmployeeNum=EmployeeCur.EmployeeNum;
-			//ce.TimeEntered=DateTime.Now+TimeDelta;
-			//ce.TimeDisplayed=DateTime.Now+TimeDelta;
+			//ce.TimeEnteredIn=DateTime.Now+TimeDelta;
+			//ce.TimeDisplayedIn=DateTime.Now+TimeDelta;
 			ce.ClockIn=true;
 			ce.ClockStatus=(TimeClockStatus)listStatus.SelectedIndex;
 			ClockEvents.Insert(ce);
@@ -936,8 +936,8 @@ namespace OpenDental{
 			}
 			ClockEvent ce=new ClockEvent();
 			ce.EmployeeNum=EmployeeCur.EmployeeNum;
-			//ce.TimeEntered=DateTime.Now+TimeDelta;
-			//ce.TimeDisplayed=DateTime.Now+TimeDelta;
+			//ce.TimeEnteredIn=DateTime.Now+TimeDelta;
+			//ce.TimeDisplayedIn=DateTime.Now+TimeDelta;
 			ce.ClockIn=false;
 			ce.ClockStatus=(TimeClockStatus)listStatus.SelectedIndex;
 			ClockEvents.Insert(ce);

@@ -476,7 +476,7 @@ namespace OpenDental{
 
 		private DateTime GetDateForRow(int i){
 			if(mergedAL[i].GetType()==typeof(ClockEvent)){
-				return ((ClockEvent)mergedAL[i]).TimeDisplayed.Date;
+				return ((ClockEvent)mergedAL[i]).TimeDisplayedIn.Date;
 			}
 			else if(mergedAL[i].GetType()==typeof(TimeAdjust)){
 				return ((TimeAdjust)mergedAL[i]).TimeEntry.Date;
@@ -565,7 +565,7 @@ namespace OpenDental{
 				//clock event row---------------------------------------------------------------------------------------------
 				if(type==typeof(ClockEvent)){
 					clock=(ClockEvent)mergedAL[i];
-					curDate=clock.TimeDisplayed.Date;
+					curDate=clock.TimeDisplayedIn.Date;
 					if(curDate==previousDate){
 						row.Cells.Add("");
 						row.Cells.Add("");
@@ -575,8 +575,8 @@ namespace OpenDental{
 						row.Cells.Add(curDate.DayOfWeek.ToString());
 					}
 					//altered--------------------------------------
-					if(clock.TimeEntered!=clock.TimeDisplayed){
-						alteredSpan=clock.TimeDisplayed-clock.TimeEntered;
+					if(clock.TimeEnteredIn!=clock.TimeDisplayedIn){
+						alteredSpan=clock.TimeDisplayedIn-clock.TimeEnteredIn;
 						if(IsBreaks){
 							row.Cells.Add(alteredSpan.TotalMinutes.ToString("n"));
 						}
@@ -595,7 +595,7 @@ namespace OpenDental{
 					else
 						row.Cells.Add(Lan.g(this,"Out"));
 					//time-----------------------------
-					row.Cells.Add(clock.TimeDisplayed.ToShortTimeString());
+					row.Cells.Add(clock.TimeDisplayedIn.ToShortTimeString());
 					//minutes or hours-------------------------------
 					if(IsBreaks){ //breaks
 						if(!clock.ClockIn){//clocking out
@@ -607,7 +607,7 @@ namespace OpenDental{
 								row.Cells.Add("");
 							}
 							else{
-								pairSpan=clock.TimeDisplayed-pairFirst.TimeDisplayed;
+								pairSpan=clock.TimeDisplayedIn-pairFirst.TimeDisplayedIn;
 								row.Cells.Add(pairSpan.TotalMinutes.ToString("n"));
 								daySpan+=pairSpan;
 								//weekSpan+=pairSpan;
@@ -625,7 +625,7 @@ namespace OpenDental{
 								row.Cells.Add("");
 							}
 							else{
-								pairSpan=clock.TimeDisplayed-pairFirst.TimeDisplayed;
+								pairSpan=clock.TimeDisplayedIn-pairFirst.TimeDisplayedIn;
 								row.Cells.Add(pairSpan.TotalHours.ToString("n"));
 								daySpan+=pairSpan;
 								weekSpan+=pairSpan;
@@ -643,7 +643,7 @@ namespace OpenDental{
 						if(IsBreaks){
 							if(!clock.ClockIn){//if they have not clocked back in yet from break
 								//display the timespan of pairSpan using current time as the other number.
-								pairSpan=DateTime.Now-clock.TimeDisplayed+TimeDelta;
+								pairSpan=DateTime.Now-clock.TimeDisplayedIn+TimeDelta;
 								row.Cells.Add(pairSpan.TotalMinutes.ToString("n"));
 								daySpan+=pairSpan;
 							}
@@ -667,7 +667,7 @@ namespace OpenDental{
 					//if this is the last entry for a given week
 					else if(i==mergedAL.Count-1//if this is the last row 
 						|| cal.GetWeekOfYear(GetDateForRow(i+1),rule,DayOfWeek.Sunday)//or the next row has a
-						!= cal.GetWeekOfYear(clock.TimeDisplayed.Date,rule,DayOfWeek.Sunday))//different week of year
+						!= cal.GetWeekOfYear(clock.TimeDisplayedIn.Date,rule,DayOfWeek.Sunday))//different week of year
 					{
 						row.Cells.Add(weekSpan.TotalHours.ToString("n"));
 						weekSpan=new TimeSpan(0);

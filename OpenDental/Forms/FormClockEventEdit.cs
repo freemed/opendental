@@ -243,12 +243,12 @@ namespace OpenDental{
 		#endregion
 
 		private void FormClockEventEdit_Load(object sender, System.EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.TimecardDeleteEntry,ClockEventCur.TimeEntered,true)) {
+			if(!Security.IsAuthorized(Permissions.TimecardDeleteEntry,ClockEventCur.TimeEnteredIn,true)) {
 				butDelete.Enabled=false;
 				return;
 			}
-			textTimeEntered.Text=ClockEventCur.TimeEntered.ToString();
-			textTimeDisplayed.Text=ClockEventCur.TimeDisplayed.ToString();
+			textTimeEntered.Text=ClockEventCur.TimeEnteredIn.ToString();
+			textTimeDisplayed.Text=ClockEventCur.TimeDisplayedIn.ToString();
 			if(ClockEventCur.ClockIn){
 				radioClockIn.Checked=true;
 			}
@@ -276,7 +276,7 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Date cannot be a future date."));
 				e.Cancel=true;
 			}
-			ClockEventCur.TimeDisplayed=timeDisplayed;
+			ClockEventCur.TimeDisplayedIn=timeDisplayed;
 		}
 
 		private void butDelete_Click(object sender, System.EventArgs e) {
@@ -285,12 +285,12 @@ namespace OpenDental{
 			}
 			ClockEvents.Delete(ClockEventCur);
 			SecurityLogs.MakeLogEntry(Permissions.TimecardDeleteEntry,0,
-				"Original entry: "+ClockEventCur.TimeEntered.ToString());
+				"Original entry: "+ClockEventCur.TimeEnteredIn.ToString());
 			DialogResult=DialogResult.OK;
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
-			//TimeDisplayed already handled
+			//TimeDisplayedIn already handled
 			ClockEventCur.ClockIn=radioClockIn.Checked;
 			ClockEventCur.ClockStatus=(TimeClockStatus)listStatus.SelectedIndex;
 			ClockEventCur.Note=textNote.Text;
