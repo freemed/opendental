@@ -477,7 +477,7 @@ namespace OpenDental{
 
 		private DateTime GetDateForRow(int i){
 			if(mergedAL[i].GetType()==typeof(ClockEvent)){
-				return ((ClockEvent)mergedAL[i]).TimeDisplayedIn.Date;
+				return ((ClockEvent)mergedAL[i]).TimeDisplayed1.Date;
 			}
 			else if(mergedAL[i].GetType()==typeof(TimeAdjust)){
 				return ((TimeAdjust)mergedAL[i]).TimeEntry.Date;
@@ -517,9 +517,9 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Status"),50);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"In/Out"),60,HorizontalAlignment.Right);
+			col=new ODGridColumn(Lan.g(this,"In"),60,HorizontalAlignment.Right);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Time"),60,HorizontalAlignment.Right);
+			col=new ODGridColumn(Lan.g(this,"Out"),60,HorizontalAlignment.Right);
 			gridMain.Columns.Add(col);
 			if(IsBreaks){
 				col=new ODGridColumn(Lan.g(this,"Minutes"),50,HorizontalAlignment.Right);
@@ -538,17 +538,15 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
-			//TimeSpan weeklyTotalPrevious=
 			WeeklyTotals=new TimeSpan[mergedAL.Count];
 			TimeSpan alteredSpan=new TimeSpan(0);//used to display altered times
-			TimeSpan pairSpan=new TimeSpan(0);//used to sum one pair of clockevents
-			ClockEvent pairFirst=null;//the first of a pair of clockevents
+			TimeSpan oneSpan=new TimeSpan(0);//used to sum one pair of clock-in/clock-out
+			//ClockEvent pairFirst=null;//the first of a pair of clockevents
 			TimeSpan daySpan=new TimeSpan(0);//used for daily totals.
 			TimeSpan weekSpan=new TimeSpan(0);//used for weekly totals.
 			if(mergedAL.Count>0){
 				weekSpan=ClockEvents.GetWeekTotal(EmployeeCur.EmployeeNum,GetDateForRow(0));
 			}
-			//MessageBox.Show(weekSpan.TotalHours.ToString());
 			TimeSpan periodSpan=new TimeSpan(0);//used to add up totals for entire page.
 			TimeSpan otspan=new TimeSpan(0);//overtime for the entire period
       Calendar cal=CultureInfo.CurrentCulture.Calendar;
@@ -566,7 +564,7 @@ namespace OpenDental{
 				//clock event row---------------------------------------------------------------------------------------------
 				if(type==typeof(ClockEvent)){
 					clock=(ClockEvent)mergedAL[i];
-					curDate=clock.TimeDisplayedIn.Date;
+					curDate=clock.TimeDisplayed1.Date;
 					if(curDate==previousDate){
 						row.Cells.Add("");
 						row.Cells.Add("");
@@ -576,8 +574,8 @@ namespace OpenDental{
 						row.Cells.Add(curDate.DayOfWeek.ToString());
 					}
 					//altered--------------------------------------
-					if(clock.TimeEnteredIn!=clock.TimeDisplayedIn){
-						alteredSpan=clock.TimeDisplayedIn-clock.TimeEnteredIn;
+					if(clock.TimeEntered1!=clock.TimeDisplayed1){
+						alteredSpan=clock.TimeDisplayed1-clock.TimeEntered1;
 						if(IsBreaks){
 							row.Cells.Add(alteredSpan.TotalMinutes.ToString("n"));
 						}
@@ -590,48 +588,37 @@ namespace OpenDental{
 					}
 					//status--------------------------------------
 					row.Cells.Add(clock.ClockStatus.ToString());
-					//in/out------------------------------------------
-					if(clock.ClockIn)
-						row.Cells.Add(Lan.g(this,"In"));
-					else
-						row.Cells.Add(Lan.g(this,"Out"));
-					//time-----------------------------
-					row.Cells.Add(clock.TimeDisplayedIn.ToShortTimeString());
+					//in------------------------------------------
+					row.Cells.Add(clock.TimeDisplayed1.ToShortTimeString());
+					//out-----------------------------
+					if(clock.TimeDisplayed2.Year<1880){
+						row.Cells.Add("");//not clocked out yet
+					}
+					else{
+						row.Cells.Add(clock.TimeDisplayed2.ToShortTimeString());
+					}
 					//minutes or hours-------------------------------
 					if(IsBreaks){ //breaks
-						if(!clock.ClockIn){//clocking out
-							pairFirst=clock.Copy();
+						if(clock.TimeDisplayed2.Year<1880){
 							row.Cells.Add("");
 						}
-						else{//clocking in
-							if(pairFirst==null){
-								row.Cells.Add("");
-							}
-							else{
-								pairSpan=clock.TimeDisplayedIn-pairFirst.TimeDisplayedIn;
-								row.Cells.Add(pairSpan.TotalMinutes.ToString("n"));
-								daySpan+=pairSpan;
-								//weekSpan+=pairSpan;
-								periodSpan+=pairSpan;
-							}
+						else{
+							oneSpan=clock.TimeDisplayed2-clock.TimeDisplayed1;
+							row.Cells.Add(oneSpan.TotalMinutes.ToString("n"));
+							daySpan+=oneSpan;
+							periodSpan+=oneSpan;
 						}
 					}
 					else{//regular hours
-						if(clock.ClockIn){//clocking in
-							pairFirst=clock.Copy();
+						if(clock.TimeDisplayed2.Year<1880){
 							row.Cells.Add("");
 						}
-						else{//clocking out
-							if(pairFirst==null){
-								row.Cells.Add("");
-							}
-							else{
-								pairSpan=clock.TimeDisplayedIn-pairFirst.TimeDisplayedIn;
-								row.Cells.Add(pairSpan.TotalHours.ToString("n"));
-								daySpan+=pairSpan;
-								weekSpan+=pairSpan;
-								periodSpan+=pairSpan;
-							}
+						else{
+							oneSpan=clock.TimeDisplayed2-clock.TimeDisplayed1;
+							row.Cells.Add(oneSpan.TotalHours.ToString("n"));
+							daySpan+=oneSpan;
+							weekSpan+=oneSpan;
+							periodSpan+=oneSpan;
 						}
 					}
 					//Overtime------------------------------
@@ -642,11 +629,11 @@ namespace OpenDental{
 						|| GetDateForRow(i+1) != curDate)//or the next row is a different date
 					{
 						if(IsBreaks){
-							if(!clock.ClockIn){//if they have not clocked back in yet from break
-								//display the timespan of pairSpan using current time as the other number.
-								pairSpan=DateTime.Now-clock.TimeDisplayedIn+TimeDelta;
-								row.Cells.Add(pairSpan.TotalMinutes.ToString("n"));
-								daySpan+=pairSpan;
+							if(clock.TimeDisplayed2.Year<1880){//if they have not clocked back in yet from break
+								//display the timespan of oneSpan using current time as the other number.
+								oneSpan=DateTime.Now-clock.TimeDisplayed1+TimeDelta;
+								row.Cells.Add(oneSpan.TotalMinutes.ToString("n"));
+								daySpan+=oneSpan;
 							}
 							else{
 								row.Cells.Add(daySpan.TotalMinutes.ToString("n"));
@@ -668,7 +655,7 @@ namespace OpenDental{
 					//if this is the last entry for a given week
 					else if(i==mergedAL.Count-1//if this is the last row 
 						|| cal.GetWeekOfYear(GetDateForRow(i+1),rule,DayOfWeek.Sunday)//or the next row has a
-						!= cal.GetWeekOfYear(clock.TimeDisplayedIn.Date,rule,DayOfWeek.Sunday))//different week of year
+						!= cal.GetWeekOfYear(clock.TimeDisplayed1.Date,rule,DayOfWeek.Sunday))//different week of year
 					{
 						row.Cells.Add(weekSpan.TotalHours.ToString("n"));
 						weekSpan=new TimeSpan(0);

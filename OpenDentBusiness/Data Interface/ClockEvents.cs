@@ -15,16 +15,16 @@ namespace OpenDentBusiness{
 			string command=
 				"SELECT * FROM clockevent WHERE"
 				+" EmployeeNum = '"+POut.Long(empNum)+"'"
-				+" AND TimeDisplayedIn >= "+POut.Date(fromDate)
+				+" AND TimeDisplayed1 >= "+POut.Date(fromDate)
 				//adding a day takes it to midnight of the specified toDate
-				+" AND TimeDisplayedIn <= "+POut.Date(toDate.AddDays(1));
+				+" AND TimeDisplayed1 <= "+POut.Date(toDate.AddDays(1));
 			if(!getAll) {
 				if(isBreaks)
 					command+=" AND ClockStatus = '2'";
 				else
 					command+=" AND (ClockStatus = '0' OR ClockStatus = '1')";
 			}
-			command+=" ORDER BY TimeDisplayed";
+			command+=" ORDER BY TimeDisplayed1";
 			return Crud.ClockEventCrud.SelectMany(command);
 		}
 
@@ -54,19 +54,13 @@ namespace OpenDentBusiness{
 			Crud.ClockEventCrud.Update(clockEvent);
 		}
 
-
-
-
-
-	
-
 		///<summary></summary>
-		public static void Delete(ClockEvent ce) {
+		public static void Delete(long clockEventNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),ce);
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),clockEventNum);
 				return;
 			}
-			string command= "DELETE FROM clockevent WHERE ClockEventNum = "+POut.Long(ce.ClockEventNum);
+			string command= "DELETE FROM clockevent WHERE ClockEventNum = "+POut.Long(clockEventNum);
 			Db.NonQ(command);
 		}
 
@@ -76,7 +70,7 @@ namespace OpenDentBusiness{
 				return Meth.GetBool(MethodBase.GetCurrentMethod(),employeeNum);
 			}
 			string command="SELECT ClockIn FROM clockevent WHERE EmployeeNum="+POut.Long(employeeNum)
-				+" ORDER BY TimeDisplayed DESC ";
+				+" ORDER BY TimeDisplayed1 DESC ";
 			if(DataConnection.DBtype==DatabaseType.Oracle){
 				command="SELECT * FROM ("+command+") WHERE ROWNUM<=1";
 			}else{//Assume MySQL
@@ -97,15 +91,12 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<TimeClockStatus>(MethodBase.GetCurrentMethod(),employeeNum);
 			}
 			string command="SELECT ClockStatus FROM clockevent WHERE EmployeeNum="+POut.Long(employeeNum)
-				+" ORDER BY TimeDisplayed DESC ";
-			if(DataConnection.DBtype==DatabaseType.Oracle){
-				command="SELECT * FROM ("+command+") WHERE ROWNUM<=1";
-			}else{//Assum MySQL
-				command+="LIMIT 1";
-			}
+				+" ORDER BY TimeDisplayed1 DESC "
+				+"LIMIT 1";
 			DataTable table=Db.GetTable(command);
-			if(table.Rows.Count==0)//if this employee has never clocked in or out.
+			if(table.Rows.Count==0){//if this employee has never clocked in or out.
 				return TimeClockStatus.Home;
+			}
 			return (TimeClockStatus)PIn.Long(table.Rows[0][0].ToString());
 		}
 
@@ -122,11 +113,11 @@ namespace OpenDentBusiness{
 			//eg, if this is Thursday, then we are getting last Friday through this Wed.
 			TimeSpan retVal=new TimeSpan(0);
 			for(int i=0;i<events.Count;i++){
-				if(events[i].TimeDisplayedIn.DayOfWeek > date.DayOfWeek){//eg, Friday > Thursday, so ignore
+				if(events[i].TimeDisplayed1.DayOfWeek > date.DayOfWeek){//eg, Friday > Thursday, so ignore
 					continue;
 				}
 				if(i>0 && !events[i].ClockIn){
-					retVal+=events[i].TimeDisplayedIn-events[i-1].TimeDisplayedIn;
+					retVal+=events[i].TimeDisplayed1-events[i-1].TimeDisplayed1;
 				}
 			}
 			//now, adjustments

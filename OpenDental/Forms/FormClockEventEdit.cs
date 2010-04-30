@@ -12,21 +12,28 @@ namespace OpenDental{
 	public class FormClockEventEdit : System.Windows.Forms.Form{
 		private OpenDental.UI.Button butCancel;
 		private OpenDental.UI.Button butOK;
-		private System.Windows.Forms.TextBox textTimeEntered;
+		private System.Windows.Forms.TextBox textTimeEntered1;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Label label2;
-		private System.Windows.Forms.RadioButton radioClockIn;
-		private System.Windows.Forms.RadioButton radioClockOut;
 		private System.Windows.Forms.ListBox listStatus;
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.Label label4;
 		private System.Windows.Forms.TextBox textNote;
-		private System.Windows.Forms.TextBox textTimeDisplayed;
+		private System.Windows.Forms.TextBox textTimeDisplayed1;
 		private OpenDental.UI.Button butDelete;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
 		private System.ComponentModel.Container components = null;
+		private GroupBox groupBox1;
+		private GroupBox groupBox2;
+		private TextBox textTimeEntered2;
+		private Label label5;
+		private Label label6;
+		private TextBox textTimeDisplayed2;
+		private OpenDental.UI.Button butNow2;
+		private OpenDental.UI.Button butClear;
+		private OpenDental.UI.Button butNow1;
 		private ClockEvent ClockEventCur;
 
 		///<summary></summary>
@@ -63,103 +70,62 @@ namespace OpenDental{
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormClockEventEdit));
-			this.butCancel = new OpenDental.UI.Button();
-			this.butOK = new OpenDental.UI.Button();
-			this.textTimeEntered = new System.Windows.Forms.TextBox();
+			this.textTimeEntered1 = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
-			this.textTimeDisplayed = new System.Windows.Forms.TextBox();
-			this.radioClockIn = new System.Windows.Forms.RadioButton();
-			this.radioClockOut = new System.Windows.Forms.RadioButton();
+			this.textTimeDisplayed1 = new System.Windows.Forms.TextBox();
 			this.listStatus = new System.Windows.Forms.ListBox();
 			this.label3 = new System.Windows.Forms.Label();
 			this.label4 = new System.Windows.Forms.Label();
 			this.textNote = new System.Windows.Forms.TextBox();
+			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.textTimeEntered2 = new System.Windows.Forms.TextBox();
+			this.label5 = new System.Windows.Forms.Label();
+			this.label6 = new System.Windows.Forms.Label();
+			this.textTimeDisplayed2 = new System.Windows.Forms.TextBox();
+			this.butNow1 = new OpenDental.UI.Button();
+			this.butClear = new OpenDental.UI.Button();
+			this.butNow2 = new OpenDental.UI.Button();
 			this.butDelete = new OpenDental.UI.Button();
+			this.butOK = new OpenDental.UI.Button();
+			this.butCancel = new OpenDental.UI.Button();
+			this.groupBox1.SuspendLayout();
+			this.groupBox2.SuspendLayout();
 			this.SuspendLayout();
 			// 
-			// butCancel
+			// textTimeEntered1
 			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCancel.CornerRadius = 4F;
-			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(555,266);
-			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,24);
-			this.butCancel.TabIndex = 0;
-			this.butCancel.Text = "&Cancel";
-			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
-			// 
-			// butOK
-			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(555,225);
-			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,24);
-			this.butOK.TabIndex = 1;
-			this.butOK.Text = "&OK";
-			this.butOK.Click += new System.EventHandler(this.butOK_Click);
-			// 
-			// textTimeEntered
-			// 
-			this.textTimeEntered.Location = new System.Drawing.Point(179,21);
-			this.textTimeEntered.Name = "textTimeEntered";
-			this.textTimeEntered.ReadOnly = true;
-			this.textTimeEntered.Size = new System.Drawing.Size(156,20);
-			this.textTimeEntered.TabIndex = 2;
+			this.textTimeEntered1.Location = new System.Drawing.Point(101,19);
+			this.textTimeEntered1.Name = "textTimeEntered1";
+			this.textTimeEntered1.ReadOnly = true;
+			this.textTimeEntered1.Size = new System.Drawing.Size(156,20);
+			this.textTimeEntered1.TabIndex = 2;
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(24,23);
+			this.label1.Location = new System.Drawing.Point(6,21);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(154,16);
+			this.label1.Size = new System.Drawing.Size(94,16);
 			this.label1.TabIndex = 3;
-			this.label1.Text = "Date and Time Entered";
+			this.label1.Text = "Entered";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(14,53);
+			this.label2.Location = new System.Drawing.Point(6,45);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(163,16);
+			this.label2.Size = new System.Drawing.Size(93,16);
 			this.label2.TabIndex = 5;
-			this.label2.Text = "Date and Time Displayed";
+			this.label2.Text = "Displayed";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textTimeDisplayed
+			// textTimeDisplayed1
 			// 
-			this.textTimeDisplayed.Location = new System.Drawing.Point(179,51);
-			this.textTimeDisplayed.Name = "textTimeDisplayed";
-			this.textTimeDisplayed.Size = new System.Drawing.Size(155,20);
-			this.textTimeDisplayed.TabIndex = 4;
-			this.textTimeDisplayed.Validating += new System.ComponentModel.CancelEventHandler(this.textTimeDisplayed_Validating);
-			// 
-			// radioClockIn
-			// 
-			this.radioClockIn.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.radioClockIn.Location = new System.Drawing.Point(178,85);
-			this.radioClockIn.Name = "radioClockIn";
-			this.radioClockIn.Size = new System.Drawing.Size(104,16);
-			this.radioClockIn.TabIndex = 6;
-			this.radioClockIn.Text = "Clock In";
-			// 
-			// radioClockOut
-			// 
-			this.radioClockOut.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.radioClockOut.Location = new System.Drawing.Point(178,105);
-			this.radioClockOut.Name = "radioClockOut";
-			this.radioClockOut.Size = new System.Drawing.Size(104,16);
-			this.radioClockOut.TabIndex = 7;
-			this.radioClockOut.Text = "Clock Out";
+			this.textTimeDisplayed1.Location = new System.Drawing.Point(101,43);
+			this.textTimeDisplayed1.Name = "textTimeDisplayed1";
+			this.textTimeDisplayed1.Size = new System.Drawing.Size(156,20);
+			this.textTimeDisplayed1.TabIndex = 4;
 			// 
 			// listStatus
 			// 
@@ -174,7 +140,7 @@ namespace OpenDental{
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(105,16);
 			this.label3.TabIndex = 9;
-			this.label3.Text = "Status";
+			this.label3.Text = "Out Status";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// label4
@@ -194,6 +160,109 @@ namespace OpenDental{
 			this.textNote.Size = new System.Drawing.Size(317,110);
 			this.textNote.TabIndex = 11;
 			// 
+			// groupBox1
+			// 
+			this.groupBox1.Controls.Add(this.textTimeEntered1);
+			this.groupBox1.Controls.Add(this.label1);
+			this.groupBox1.Controls.Add(this.label2);
+			this.groupBox1.Controls.Add(this.textTimeDisplayed1);
+			this.groupBox1.Location = new System.Drawing.Point(79,12);
+			this.groupBox1.Name = "groupBox1";
+			this.groupBox1.Size = new System.Drawing.Size(267,72);
+			this.groupBox1.TabIndex = 13;
+			this.groupBox1.TabStop = false;
+			this.groupBox1.Text = "Clock In Date and Time";
+			// 
+			// groupBox2
+			// 
+			this.groupBox2.Controls.Add(this.textTimeEntered2);
+			this.groupBox2.Controls.Add(this.label5);
+			this.groupBox2.Controls.Add(this.label6);
+			this.groupBox2.Controls.Add(this.textTimeDisplayed2);
+			this.groupBox2.Location = new System.Drawing.Point(363,12);
+			this.groupBox2.Name = "groupBox2";
+			this.groupBox2.Size = new System.Drawing.Size(267,72);
+			this.groupBox2.TabIndex = 14;
+			this.groupBox2.TabStop = false;
+			this.groupBox2.Text = "Clock Out Date and Time";
+			// 
+			// textTimeEntered2
+			// 
+			this.textTimeEntered2.Location = new System.Drawing.Point(101,19);
+			this.textTimeEntered2.Name = "textTimeEntered2";
+			this.textTimeEntered2.ReadOnly = true;
+			this.textTimeEntered2.Size = new System.Drawing.Size(156,20);
+			this.textTimeEntered2.TabIndex = 2;
+			// 
+			// label5
+			// 
+			this.label5.Location = new System.Drawing.Point(6,21);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(94,16);
+			this.label5.TabIndex = 3;
+			this.label5.Text = "Entered";
+			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label6
+			// 
+			this.label6.Location = new System.Drawing.Point(6,45);
+			this.label6.Name = "label6";
+			this.label6.Size = new System.Drawing.Size(93,16);
+			this.label6.TabIndex = 5;
+			this.label6.Text = "Displayed";
+			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textTimeDisplayed2
+			// 
+			this.textTimeDisplayed2.Location = new System.Drawing.Point(101,43);
+			this.textTimeDisplayed2.Name = "textTimeDisplayed2";
+			this.textTimeDisplayed2.Size = new System.Drawing.Size(156,20);
+			this.textTimeDisplayed2.TabIndex = 4;
+			// 
+			// butNow1
+			// 
+			this.butNow1.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butNow1.Autosize = true;
+			this.butNow1.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butNow1.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butNow1.CornerRadius = 4F;
+			this.butNow1.Location = new System.Drawing.Point(180,88);
+			this.butNow1.Name = "butNow1";
+			this.butNow1.Size = new System.Drawing.Size(70,24);
+			this.butNow1.TabIndex = 17;
+			this.butNow1.Text = "Now";
+			this.butNow1.Click += new System.EventHandler(this.butNow1_Click);
+			// 
+			// butClear
+			// 
+			this.butClear.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butClear.Autosize = true;
+			this.butClear.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butClear.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butClear.CornerRadius = 4F;
+			this.butClear.Image = global::OpenDental.Properties.Resources.deleteX;
+			this.butClear.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butClear.Location = new System.Drawing.Point(540,88);
+			this.butClear.Name = "butClear";
+			this.butClear.Size = new System.Drawing.Size(80,24);
+			this.butClear.TabIndex = 16;
+			this.butClear.Text = "Clear";
+			this.butClear.Click += new System.EventHandler(this.butClear_Click);
+			// 
+			// butNow2
+			// 
+			this.butNow2.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butNow2.Autosize = true;
+			this.butNow2.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butNow2.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butNow2.CornerRadius = 4F;
+			this.butNow2.Location = new System.Drawing.Point(464,88);
+			this.butNow2.Name = "butNow2";
+			this.butNow2.Size = new System.Drawing.Size(70,24);
+			this.butNow2.TabIndex = 15;
+			this.butNow2.Text = "Now";
+			this.butNow2.Click += new System.EventHandler(this.butNow2_Click);
+			// 
 			// butDelete
 			// 
 			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -211,21 +280,51 @@ namespace OpenDental{
 			this.butDelete.Text = "Delete";
 			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
 			// 
+			// butOK
+			// 
+			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butOK.Autosize = true;
+			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butOK.CornerRadius = 4F;
+			this.butOK.Location = new System.Drawing.Point(555,225);
+			this.butOK.Name = "butOK";
+			this.butOK.Size = new System.Drawing.Size(75,24);
+			this.butOK.TabIndex = 1;
+			this.butOK.Text = "&OK";
+			this.butOK.Click += new System.EventHandler(this.butOK_Click);
+			// 
+			// butCancel
+			// 
+			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butCancel.Autosize = true;
+			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.CornerRadius = 4F;
+			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this.butCancel.Location = new System.Drawing.Point(555,266);
+			this.butCancel.Name = "butCancel";
+			this.butCancel.Size = new System.Drawing.Size(75,24);
+			this.butCancel.TabIndex = 0;
+			this.butCancel.Text = "&Cancel";
+			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
+			// 
 			// FormClockEventEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(669,319);
+			this.Controls.Add(this.butNow1);
+			this.Controls.Add(this.butClear);
+			this.Controls.Add(this.butNow2);
+			this.Controls.Add(this.groupBox2);
+			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.textNote);
-			this.Controls.Add(this.textTimeDisplayed);
-			this.Controls.Add(this.textTimeEntered);
 			this.Controls.Add(this.label4);
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.listStatus);
-			this.Controls.Add(this.radioClockOut);
-			this.Controls.Add(this.radioClockIn);
-			this.Controls.Add(this.label2);
-			this.Controls.Add(this.label1);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -236,6 +335,10 @@ namespace OpenDental{
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Edit Clock Event";
 			this.Load += new System.EventHandler(this.FormClockEventEdit_Load);
+			this.groupBox1.ResumeLayout(false);
+			this.groupBox1.PerformLayout();
+			this.groupBox2.ResumeLayout(false);
+			this.groupBox2.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -243,17 +346,24 @@ namespace OpenDental{
 		#endregion
 
 		private void FormClockEventEdit_Load(object sender, System.EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.TimecardDeleteEntry,ClockEventCur.TimeEnteredIn,true)) {
+			if(!Security.IsAuthorized(Permissions.TimecardDeleteEntry,ClockEventCur.TimeEntered1,true)) {
 				butDelete.Enabled=false;
+				butClear.Enabled=false;
+				butNow1.Enabled=false;
+				butNow2.Enabled=false;
 				return;
 			}
-			textTimeEntered.Text=ClockEventCur.TimeEnteredIn.ToString();
-			textTimeDisplayed.Text=ClockEventCur.TimeDisplayedIn.ToString();
-			if(ClockEventCur.ClockIn){
-				radioClockIn.Checked=true;
+			if(ClockEventCur.ClockStatus==TimeClockStatus.Break){
+				groupBox1.Text=Lan.g(this,"Clock Out Date and Time");
+				groupBox2.Text=Lan.g(this,"Clock In Date and Time");
 			}
-			else{
-				radioClockOut.Checked=true;
+			textTimeEntered1.Text=ClockEventCur.TimeEntered1.ToString();
+			textTimeDisplayed1.Text=ClockEventCur.TimeDisplayed1.ToString();
+			if(ClockEventCur.TimeEntered2.Year>1880){
+				textTimeEntered2.Text=ClockEventCur.TimeEntered2.ToString();
+			}
+			if(ClockEventCur.TimeDisplayed2.Year>1880){
+				textTimeDisplayed2.Text=ClockEventCur.TimeDisplayed2.ToString();
 			}
 			listStatus.Items.Clear();
 			for(int i=0;i<Enum.GetNames(typeof(TimeClockStatus)).Length;i++){
@@ -263,35 +373,77 @@ namespace OpenDental{
 			textNote.Text=ClockEventCur.Note;
 		}
 
-		private void textTimeDisplayed_Validating(object sender, System.ComponentModel.CancelEventArgs e) {
-			DateTime timeDisplayed=DateTime.Now;
-			try{
-				timeDisplayed=DateTime.Parse(textTimeDisplayed.Text);
-			}
-			catch{
-				MessageBox.Show(Lan.g(this,"Please enter a valid date and time."));
-				e.Cancel=true;
-			}
-			if(timeDisplayed.Date > DateTime.Today) {
-				MessageBox.Show(Lan.g(this,"Date cannot be a future date."));
-				e.Cancel=true;
-			}
-			ClockEventCur.TimeDisplayedIn=timeDisplayed;
+		private void butNow1_Click(object sender,EventArgs e) {
+
+		}
+
+		private void butNow2_Click(object sender,EventArgs e) {
+
+		}
+
+		private void butClear_Click(object sender,EventArgs e) {
+
 		}
 
 		private void butDelete_Click(object sender, System.EventArgs e) {
 			if(!MsgBox.Show(this,true,"Delete this clock event?")){
 				return;
 			}
-			ClockEvents.Delete(ClockEventCur);
+			ClockEvents.Delete(ClockEventCur.ClockEventNum);
 			SecurityLogs.MakeLogEntry(Permissions.TimecardDeleteEntry,0,
-				"Original entry: "+ClockEventCur.TimeEnteredIn.ToString());
+				"Original entry: "+ClockEventCur.TimeEntered1.ToString());
 			DialogResult=DialogResult.OK;
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
-			//TimeDisplayedIn already handled
-			ClockEventCur.ClockIn=radioClockIn.Checked;
+			DateTime timeDisplayed1=DateTime.MinValue;
+			try{
+				timeDisplayed1=DateTime.Parse(textTimeDisplayed1.Text);//because this must always be valid
+			}
+			catch{
+				if(ClockEventCur.ClockStatus==TimeClockStatus.Break){
+					MsgBox.Show(this,"Please enter a valid clock-out date and time.");
+				}
+				else{
+					MsgBox.Show(this,"Please enter a valid clock-in date and time.");
+				}
+				return;
+			}
+			if(timeDisplayed1.Date > DateTime.Today) {
+				if(ClockEventCur.ClockStatus==TimeClockStatus.Break){
+					MsgBox.Show(this,"Clock-out date cannot be a future date.");
+				}
+				else{
+					MsgBox.Show(this,"Clock-in date cannot be a future date.");
+				}
+				return;
+			}
+			DateTime timeDisplayed2=DateTime.MinValue;
+			if(textTimeDisplayed2.Text!=""){//it can be empty
+				try{
+					timeDisplayed2=DateTime.Parse(textTimeDisplayed2.Text);
+				}
+				catch{
+					if(ClockEventCur.ClockStatus==TimeClockStatus.Break){
+						MsgBox.Show(this,"Please enter a valid clock-in date and time.");
+					}
+					else{
+						MsgBox.Show(this,"Please enter a valid clock-out date and time.");
+					}
+					return;
+				}
+			}
+			if(timeDisplayed2.Date > DateTime.Today) {
+				if(ClockEventCur.ClockStatus==TimeClockStatus.Break){
+					MsgBox.Show(this,"Clock-in date cannot be a future date.");
+				}
+				else{
+					MsgBox.Show(this,"Clock-out date cannot be a future date.");
+				}
+				return;
+			}
+			ClockEventCur.TimeDisplayed1=timeDisplayed1;
+			ClockEventCur.TimeDisplayed2=timeDisplayed2;
 			ClockEventCur.ClockStatus=(TimeClockStatus)listStatus.SelectedIndex;
 			ClockEventCur.Note=textNote.Text;
 			ClockEvents.Update(ClockEventCur);
@@ -301,6 +453,9 @@ namespace OpenDental{
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
+	
 
 		
 

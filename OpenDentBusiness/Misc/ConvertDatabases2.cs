@@ -2061,14 +2061,77 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 'P',
 '204203105')";
 				Db.NonQ(command);
-				command="ALTER TABLE clockevent CHANGE TimeEntered TimeEnteredIn datetime NOT NULL default '0001-01-01 00:00:00'";
+				command="ALTER TABLE clockevent CHANGE TimeEntered TimeEntered1 datetime NOT NULL default '0001-01-01 00:00:00'";
 				Db.NonQ(command);
-				command="ALTER TABLE clockevent CHANGE TimeDisplayed TimeDisplayedIn datetime NOT NULL default '0001-01-01 00:00:00'";
+				command="ALTER TABLE clockevent CHANGE TimeDisplayed TimeDisplayed1 datetime NOT NULL default '0001-01-01 00:00:00'";
 				Db.NonQ(command);
-				command="ALTER TABLE clockevent ADD TimeEnteredOut datetime NOT NULL default '0001-01-01 00:00:00'";
+				command="ALTER TABLE clockevent ADD TimeEntered2 datetime NOT NULL default '0001-01-01 00:00:00'";
 				Db.NonQ(command);
-				command="ALTER TABLE clockevent ADD TimeDisplayedOut datetime NOT NULL default '0001-01-01 00:00:00'";
+				command="ALTER TABLE clockevent ADD TimeDisplayed2 datetime NOT NULL default '0001-01-01 00:00:00'";
 				Db.NonQ(command);
+				command="SELECT * FROM clockevent WHERE ClockStatus != 2 ORDER BY EmployeeNum,TimeDisplayed1";
+				DataTable table=Db.GetTable(command);
+				DateTime timeEntered2;
+				DateTime timeDisplayed2;
+				string note;
+				int clockStatus;
+				for(int i=0;i<table.Rows.Count;i++){
+					if(table.Rows[i]["ClockIn"].ToString()=="0"){//false
+						continue;//only stop on clock-in rows, not clock-out.
+					}
+					if(i==table.Rows.Count-1){//if this is the last row
+						break;//because we always need the next clock-out to actually do anything.
+					}
+					if(table.Rows[i+1]["ClockIn"].ToString()=="1"){//true
+						continue;//if the next row is also a clock-in, then we have two clock-ins in a row.  Can't do anything.
+					}
+					if(table.Rows[i]["EmployeeNum"].ToString()!=table.Rows[i+1]["EmployeeNum"].ToString()){//employeeNums don't match
+						continue;
+					}
+					timeEntered2=PIn.DateT(table.Rows[i+1]["TimeEntered1"].ToString());//The time of the second row
+					timeDisplayed2=PIn.DateT(table.Rows[i+1]["TimeDisplayed1"].ToString());
+					clockStatus=PIn.Int(table.Rows[i+1]["ClockStatus"].ToString());
+					note=PIn.String(table.Rows[i+1]["Note"].ToString());
+					command="UPDATE clockevent SET "
+						+"TimeEntered2 = "+POut.DateT(timeEntered2)+", "
+						+"TimeDisplayed2 = "+POut.DateT(timeEntered2)+", "
+						+"ClockStatus = "+POut.Int(clockStatus)+", "
+						+"Note = CONCAT(Note,'"+POut.String(note)+"') "
+						+"WHERE ClockEventNum = "+table.Rows[i]["ClockEventNum"].ToString();
+					Db.NonQ(command);
+					command="DELETE FROM clockevent WHERE ClockEventNum = "+table.Rows[i+1]["ClockEventNum"].ToString();
+					Db.NonQ(command);
+				}
+				//now, breaks, which are out/in instead of in/out.
+				command="SELECT * FROM clockevent WHERE ClockStatus = 2 ORDER BY EmployeeNum,TimeDisplayed1";
+				table=Db.GetTable(command);
+				for(int i=0;i<table.Rows.Count;i++){
+					if(table.Rows[i]["ClockIn"].ToString()=="1"){//true
+						continue;//only stop on clock-out rows, not clock-in.
+					}
+					if(i==table.Rows.Count-1){//if this is the last row
+						break;//because we always need the next clock-in to actually do anything.
+					}
+					if(table.Rows[i+1]["ClockIn"].ToString()=="0"){//false
+						continue;//if the next row is also a clock-out, then we have two clock-outs in a row.  Can't do anything.
+					}
+					if(table.Rows[i]["EmployeeNum"].ToString()!=table.Rows[i+1]["EmployeeNum"].ToString()){//employeeNums don't match
+						continue;
+					}
+					timeEntered2=PIn.DateT(table.Rows[i+1]["TimeEntered1"].ToString());//The time of the second row
+					timeDisplayed2=PIn.DateT(table.Rows[i+1]["TimeDisplayed1"].ToString());
+					//clockStatus=PIn.Int(table.Rows[i+1]["ClockStatus"].ToString());
+					note=PIn.String(table.Rows[i+1]["Note"].ToString());
+					command="UPDATE clockevent SET "
+						+"TimeEntered2 = "+POut.DateT(timeEntered2)+", "
+						+"TimeDisplayed2 = "+POut.DateT(timeEntered2)+", "
+						//+"ClockStatus = "+POut.Int(clockStatus)+", "
+						+"Note = CONCAT(Note,'"+POut.String(note)+"') "
+						+"WHERE ClockEventNum = "+table.Rows[i]["ClockEventNum"].ToString();
+					Db.NonQ(command);
+					command="DELETE FROM clockevent WHERE ClockEventNum = "+table.Rows[i+1]["ClockEventNum"].ToString();
+					Db.NonQ(command);
+				}
 
 
 
@@ -2092,4 +2155,15 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="ALTER TABLE clockevent ADD TimeDisplayedIn datetime NOT NULL default '0001-01-01 00:00:00'";
 				Db.NonQ(command);
 				
+				*/
+
+				/*
+				command="ALTER TABLE clockevent ADD TimeEntered1 datetime NOT NULL default '0001-01-01 00:00:00'";
+				Db.NonQ(command);
+				command="ALTER TABLE clockevent ADD TimeDisplayed1 datetime NOT NULL default '0001-01-01 00:00:00'";
+				Db.NonQ(command);
+				command="ALTER TABLE clockevent ADD TimeEntered2 datetime NOT NULL default '0001-01-01 00:00:00'";
+				Db.NonQ(command);
+				command="ALTER TABLE clockevent ADD TimeDisplayed2 datetime NOT NULL default '0001-01-01 00:00:00'";
+				Db.NonQ(command);
 				*/
