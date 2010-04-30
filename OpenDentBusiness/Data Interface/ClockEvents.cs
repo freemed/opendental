@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Reflection;
 
@@ -117,10 +118,10 @@ namespace OpenDentBusiness{
 		///<summary>Used in the timecard to track hours worked per week when the week started in a previous time period.  This gets all the hours of the first week before the date listed.  Also adds in any adjustments for that week.</summary>
 		public static TimeSpan GetWeekTotal(long empNum,DateTime date) {
 			//No need to check RemotingRole; no call to db.
-			ClockEvent[] events=Refresh(empNum,date.AddDays(-6),date.AddDays(-1),false,false);
+			List<ClockEvent> events=Refresh(empNum,date.AddDays(-6),date.AddDays(-1),false,false);
 			//eg, if this is Thursday, then we are getting last Friday through this Wed.
 			TimeSpan retVal=new TimeSpan(0);
-			for(int i=0;i<events.Length;i++){
+			for(int i=0;i<events.Count;i++){
 				if(events[i].TimeDisplayedIn.DayOfWeek > date.DayOfWeek){//eg, Friday > Thursday, so ignore
 					continue;
 				}

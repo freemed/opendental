@@ -2,6 +2,7 @@ using System;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Windows.Forms;
@@ -32,7 +33,7 @@ namespace OpenDental{
 		private TextBox textDateStart;
 		private TextBox textDatePaycheck;
 		private TextBox textDateStop;
-		private ClockEvent[] ClockEventList;
+		private List<ClockEvent> ClockEventList;
 		private OpenDental.UI.Button butAdj;
 		private int SelectedPayPeriod;
 		private Label labelOvertime;
@@ -498,7 +499,7 @@ namespace OpenDental{
 				}
 			}
 			mergedAL=new ArrayList();
-			for(int i=0;i<ClockEventList.Length;i++) {
+			for(int i=0;i<ClockEventList.Count;i++) {
 				mergedAL.Add(ClockEventList[i]);
 			}
 			for(int i=0;i<TimeAdjustList.Length;i++) {
