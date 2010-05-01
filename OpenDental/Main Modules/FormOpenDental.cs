@@ -284,6 +284,7 @@ namespace OpenDental{
 			this.Controls.Add(phonePanel);
 			phonePanel.GoToChanged += new System.EventHandler(this.phonePanel_GoToChanged);
 			Logger.openlog.Log("Open Dental initialization complete.",Logger.Severity.INFO);
+			//Plugins.HookAddCode(this,"FormOpenDental.Constructor_end");//Can't do this because no plugins loaded.
 		}
 
 		///<summary></summary>
@@ -1398,6 +1399,7 @@ namespace OpenDental{
 				Computers.UpdateHeartBeat(Environment.MachineName);
 			}
 			catch { }
+			Plugins.HookAddCode(this,"FormOpenDental.Load_end");
 		}
 
 		///<summary>Returns false if it can't complete a conversion, find datapath, or validate registration key.</summary>
