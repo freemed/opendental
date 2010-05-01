@@ -50,7 +50,6 @@ namespace OpenDentBusiness.Crud{
 				clockEvent.EmployeeNum   = PIn.Long  (table.Rows[i]["EmployeeNum"].ToString());
 				clockEvent.TimeEntered1  = PIn.DateT (table.Rows[i]["TimeEntered1"].ToString());
 				clockEvent.TimeDisplayed1= PIn.DateT (table.Rows[i]["TimeDisplayed1"].ToString());
-				clockEvent.ClockIn       = PIn.Bool  (table.Rows[i]["ClockIn"].ToString());
 				clockEvent.ClockStatus   = (TimeClockStatus)PIn.Int(table.Rows[i]["ClockStatus"].ToString());
 				clockEvent.Note          = PIn.String(table.Rows[i]["Note"].ToString());
 				clockEvent.TimeEntered2  = PIn.DateT (table.Rows[i]["TimeEntered2"].ToString());
@@ -74,7 +73,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="ClockEventNum,";
 			}
-			command+="EmployeeNum,TimeEntered1,TimeDisplayed1,ClockIn,ClockStatus,Note,TimeEntered2,TimeDisplayed2) VALUES(";
+			command+="EmployeeNum,TimeEntered1,TimeDisplayed1,ClockStatus,Note,TimeEntered2,TimeDisplayed2) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(clockEvent.ClockEventNum)+",";
 			}
@@ -82,7 +81,6 @@ namespace OpenDentBusiness.Crud{
 				     POut.Long  (clockEvent.EmployeeNum)+","
 				+"NOW(),"
 				+"NOW(),"
-				+    POut.Bool  (clockEvent.ClockIn)+","
 				+    POut.Int   ((int)clockEvent.ClockStatus)+","
 				+"'"+POut.String(clockEvent.Note)+"',"
 				+    POut.DateT (clockEvent.TimeEntered2)+","
@@ -102,7 +100,6 @@ namespace OpenDentBusiness.Crud{
 				+"EmployeeNum   =  "+POut.Long  (clockEvent.EmployeeNum)+", "
 				//TimeEntered1 not allowed to change
 				+"TimeDisplayed1=  "+POut.DateT (clockEvent.TimeDisplayed1)+", "
-				+"ClockIn       =  "+POut.Bool  (clockEvent.ClockIn)+", "
 				+"ClockStatus   =  "+POut.Int   ((int)clockEvent.ClockStatus)+", "
 				+"Note          = '"+POut.String(clockEvent.Note)+"', "
 				+"TimeEntered2  =  "+POut.DateT (clockEvent.TimeEntered2)+", "
@@ -122,10 +119,6 @@ namespace OpenDentBusiness.Crud{
 			if(clockEvent.TimeDisplayed1 != oldClockEvent.TimeDisplayed1) {
 				if(command!=""){ command+=",";}
 				command+="TimeDisplayed1 = "+POut.DateT(clockEvent.TimeDisplayed1)+"";
-			}
-			if(clockEvent.ClockIn != oldClockEvent.ClockIn) {
-				if(command!=""){ command+=",";}
-				command+="ClockIn = "+POut.Bool(clockEvent.ClockIn)+"";
 			}
 			if(clockEvent.ClockStatus != oldClockEvent.ClockStatus) {
 				if(command!=""){ command+=",";}

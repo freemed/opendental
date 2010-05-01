@@ -374,15 +374,21 @@ namespace OpenDental{
 		}
 
 		private void butNow1_Click(object sender,EventArgs e) {
-
+			textTimeDisplayed1.Text=DateTime.Now.ToString();
 		}
 
 		private void butNow2_Click(object sender,EventArgs e) {
-
+			textTimeDisplayed2.Text=DateTime.Now.ToString();
+			if(textTimeEntered2.Text=="") {//only set the time entered if it's blank
+				textTimeEntered2.Text=MiscData.GetNowDateTime().ToString();
+				ClockEventCur.TimeEntered2=MiscData.GetNowDateTime();
+			}
 		}
 
 		private void butClear_Click(object sender,EventArgs e) {
-
+			textTimeDisplayed2.Text="";
+			textTimeEntered2.Text="";
+			ClockEventCur.TimeEntered2=DateTime.MinValue;
 		}
 
 		private void butDelete_Click(object sender, System.EventArgs e) {
@@ -441,6 +447,24 @@ namespace OpenDental{
 					MsgBox.Show(this,"Clock-out date cannot be a future date.");
 				}
 				return;
+			}
+			if(textTimeDisplayed2.Text!="" && timeDisplayed1 > timeDisplayed2){
+				if(ClockEventCur.ClockStatus==TimeClockStatus.Break) {
+					MsgBox.Show(this,"Break end time cannot be earlier than break start time.");
+					return;
+				}
+				else {
+					MsgBox.Show(this,"Clock out time cannot be earlier than clock in time.");
+					return;
+				}
+			}
+			if(textTimeDisplayed2.Text=="" && textTimeEntered2.Text!="") {//user is trying to clear the time manually
+				MsgBox.Show(this,"A date and time must be entered in the second box, or use the Clear button.");
+				return;
+			}
+			//timeEntered2 is largely taken care of, except for this one situation
+			if(textTimeDisplayed2.Text!="" && textTimeEntered2.Text=="") {
+				ClockEventCur.TimeEntered2=MiscData.GetNowDateTime();
 			}
 			ClockEventCur.TimeDisplayed1=timeDisplayed1;
 			ClockEventCur.TimeDisplayed2=timeDisplayed2;

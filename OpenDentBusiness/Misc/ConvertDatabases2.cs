@@ -2132,6 +2132,9 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="DELETE FROM clockevent WHERE ClockEventNum = "+table.Rows[i+1]["ClockEventNum"].ToString();
 					Db.NonQ(command);
 				}
+				command="ALTER TABLE clockevent DROP ClockIn";
+				Db.NonQ(command);
+
 
 
 

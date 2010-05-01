@@ -684,7 +684,7 @@ namespace OpenDental{
 		}
 
 		private void RefreshModuleData(long patNum) {
-			TimeDelta=ClockEvents.GetServerTime()-DateTime.Now;
+			TimeDelta=MiscData.GetNowDateTime()-DateTime.Now;
 			Employees.RefreshCache();
 			//RefreshModulePatient(patNum);
 		}
@@ -880,20 +880,40 @@ namespace OpenDental{
 			}
 			gridEmp.SetSelected(index,true);
 			EmployeeCur=Employees.ListShort[index];
-			if(ClockEvents.IsClockedIn(EmployeeCur.EmployeeNum)){
-				butClockIn.Enabled=false;
-				butClockOut.Enabled=true;
-				butTimeCard.Enabled=true;
-				butBreaks.Enabled=true;
-				listStatus.Enabled=true;
-			}
-			else{
+			ClockEvent clockEvent=ClockEvents.GetLastEvent(EmployeeCur.EmployeeNum);
+			if(clockEvent==null) {//new employee.  They need to clock in.
 				butClockIn.Enabled=true;
 				butClockOut.Enabled=false;
 				butTimeCard.Enabled=true;
 				butBreaks.Enabled=true;
-				listStatus.SelectedIndex=(int)ClockEvents.GetLastStatus(EmployeeCur.EmployeeNum);
+				listStatus.SelectedIndex=(int)TimeClockStatus.Home;
 				listStatus.Enabled=false;
+			}
+			else if(clockEvent.ClockStatus==TimeClockStatus.Break) {//only incomplete breaks will have been returned.
+				//clocked out for break, but not clocked back in
+				butClockIn.Enabled=true;
+				butClockOut.Enabled=false;
+				butTimeCard.Enabled=true;
+				butBreaks.Enabled=true;
+				listStatus.SelectedIndex=(int)TimeClockStatus.Break;
+				listStatus.Enabled=false;
+			}
+			else {//normal clock in/out
+				if(clockEvent.TimeDisplayed2.Year<1880) {//clocked in to work, but not clocked back out.
+					butClockIn.Enabled=false;
+					butClockOut.Enabled=true;
+					butTimeCard.Enabled=true;
+					butBreaks.Enabled=true;
+					listStatus.Enabled=true;
+				}
+				else {//clocked out for home or lunch.  Need to clock back in.
+					butClockIn.Enabled=true;
+					butClockOut.Enabled=false;
+					butTimeCard.Enabled=true;
+					butBreaks.Enabled=true;
+					listStatus.SelectedIndex=(int)clockEvent.ClockStatus;
+					listStatus.Enabled=false;
+				}
 			}
 		}
 
@@ -914,13 +934,32 @@ namespace OpenDental{
 		}
 
 		private void butClockIn_Click(object sender, System.EventArgs e) {
-			ClockEvent ce=new ClockEvent();
-			ce.EmployeeNum=EmployeeCur.EmployeeNum;
-			//ce.TimeEnteredIn=DateTime.Now+TimeDelta;
-			//ce.TimeDisplayedIn=DateTime.Now+TimeDelta;
-			ce.ClockIn=true;
-			ce.ClockStatus=(TimeClockStatus)listStatus.SelectedIndex;
-			ClockEvents.Insert(ce);
+			//we'll get this again, because it may have been a while and may be out of date
+			ClockEvent clockEvent=ClockEvents.GetLastEvent(EmployeeCur.EmployeeNum);
+			if(clockEvent==null) {//new employee clocking in
+				clockEvent=new ClockEvent();
+				clockEvent.EmployeeNum=EmployeeCur.EmployeeNum;
+				clockEvent.ClockStatus=TimeClockStatus.Home;
+				ClockEvents.Insert(clockEvent);//times handled
+			}
+			else if(clockEvent.ClockStatus==TimeClockStatus.Break) {//only incomplete breaks will have been returned.
+				//clocking back in from break
+				clockEvent.TimeEntered2=MiscData.GetNowDateTime();
+				clockEvent.TimeDisplayed2=clockEvent.TimeEntered2;
+				ClockEvents.Update(clockEvent);
+			}
+			else {//normal clock in/out
+				if(clockEvent.TimeDisplayed2.Year<1880) {//already clocked in
+					MsgBox.Show(this,"Error.  Already clocked in.");
+				}
+				else {//clocked out for home or lunch.  Need to clock back in by starting a new row.
+					TimeClockStatus tcs=clockEvent.ClockStatus;
+					clockEvent=new ClockEvent();
+					clockEvent.EmployeeNum=EmployeeCur.EmployeeNum;
+					clockEvent.ClockStatus=tcs;
+					ClockEvents.Insert(clockEvent);//times handled
+				}
+			}
 			EmployeeCur.ClockStatus=Lan.g(this,"Working");;
 			Employees.Update(EmployeeCur);
 			ModuleSelected(PatCurNum);
@@ -931,21 +970,44 @@ namespace OpenDental{
 
 		private void butClockOut_Click(object sender, System.EventArgs e) {
 			if(listStatus.SelectedIndex==-1){
-				MessageBox.Show(Lan.g(this,"Please select a status first."));
+				MsgBox.Show(this,"Please select a status first.");
 				return;
 			}
-			ClockEvent ce=new ClockEvent();
-			ce.EmployeeNum=EmployeeCur.EmployeeNum;
-			//ce.TimeEnteredIn=DateTime.Now+TimeDelta;
-			//ce.TimeDisplayedIn=DateTime.Now+TimeDelta;
-			ce.ClockIn=false;
-			ce.ClockStatus=(TimeClockStatus)listStatus.SelectedIndex;
-			ClockEvents.Insert(ce);
-			EmployeeCur.ClockStatus=Lan.g("enumTimeClockStatus",ce.ClockStatus.ToString());
+			ClockEvent clockEvent=ClockEvents.GetLastEvent(EmployeeCur.EmployeeNum);
+			if(clockEvent==null) {//new employee never clocked in
+				MsgBox.Show(this,"Error.  New employee never clocked in.");
+				return;
+			}
+			else if(clockEvent.ClockStatus==TimeClockStatus.Break) {//only incomplete breaks will have been returned.
+				MsgBox.Show(this,"Error.  Already clocked out for break.");
+				return;
+			}
+			else {//normal clock in/out
+				if(clockEvent.TimeDisplayed2.Year<1880) {//clocked in.
+					if(listStatus.SelectedIndex==(int)TimeClockStatus.Break) {//clocking out on break
+						//leave the half-finished event alone and start a new one
+						clockEvent=new ClockEvent();
+						clockEvent.EmployeeNum=EmployeeCur.EmployeeNum;
+						clockEvent.ClockStatus=TimeClockStatus.Break;
+						ClockEvents.Insert(clockEvent);//times handled
+					}
+					else {//finish the existing event
+						clockEvent.TimeEntered2=MiscData.GetNowDateTime();
+						clockEvent.TimeDisplayed2=clockEvent.TimeEntered2;
+						clockEvent.ClockStatus=(TimeClockStatus)listStatus.SelectedIndex;//whatever the user selected
+						ClockEvents.Update(clockEvent);
+					}
+				}
+				else {//clocked out for home or lunch. 
+					MsgBox.Show(this,"Error.  Already clocked out.");
+					return;
+				}
+			}
+			EmployeeCur.ClockStatus=Lan.g("enumTimeClockStatus",clockEvent.ClockStatus.ToString());
 			Employees.Update(EmployeeCur);
 			ModuleSelected(PatCurNum);
 			if(PrefC.GetBool(PrefName.DockPhonePanelShow)){
-				Employees.SetPhoneClockStatus(EmployeeCur.EmployeeNum,ce.ClockStatus.ToString());
+				Employees.SetPhoneClockStatus(EmployeeCur.EmployeeNum,clockEvent.ClockStatus.ToString());
 			}
 		}
 
