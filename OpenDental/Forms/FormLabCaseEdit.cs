@@ -54,7 +54,10 @@ namespace OpenDental{
 		private Label label12;
 		private List<Laboratory> ListLabs;
 		private TextBox textWeekday;
+		private OpenDental.UI.Button butSlip;
 		private List<LabTurnaround> turnaroundList;
+		///<summary>The lab slip, if one exists.</summary>
+		private Sheet sheet;
 
 		///<summary></summary>
 		public FormLabCaseEdit()
@@ -112,13 +115,14 @@ namespace OpenDental{
 			this.label11 = new System.Windows.Forms.Label();
 			this.listLab = new System.Windows.Forms.ListBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.listTurnaround = new System.Windows.Forms.ListBox();
+			this.label12 = new System.Windows.Forms.Label();
+			this.textWeekday = new System.Windows.Forms.TextBox();
+			this.butSlip = new OpenDental.UI.Button();
 			this.butCheckedNow = new OpenDental.UI.Button();
 			this.butRecdNow = new OpenDental.UI.Button();
 			this.butSentNow = new OpenDental.UI.Button();
 			this.butCreatedNow = new OpenDental.UI.Button();
-			this.listTurnaround = new System.Windows.Forms.ListBox();
-			this.label12 = new System.Windows.Forms.Label();
-			this.textWeekday = new System.Windows.Forms.TextBox();
 			this.butDetachPlanned = new OpenDental.UI.Button();
 			this.butDetach = new OpenDental.UI.Button();
 			this.butDelete = new OpenDental.UI.Button();
@@ -335,6 +339,48 @@ namespace OpenDental{
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Tracking";
 			// 
+			// listTurnaround
+			// 
+			this.listTurnaround.FormattingEnabled = true;
+			this.listTurnaround.Location = new System.Drawing.Point(296,136);
+			this.listTurnaround.Name = "listTurnaround";
+			this.listTurnaround.Size = new System.Drawing.Size(198,121);
+			this.listTurnaround.TabIndex = 124;
+			this.listTurnaround.Click += new System.EventHandler(this.listTurnaround_Click);
+			// 
+			// label12
+			// 
+			this.label12.Location = new System.Drawing.Point(293,116);
+			this.label12.Name = "label12";
+			this.label12.Size = new System.Drawing.Size(89,17);
+			this.label12.TabIndex = 125;
+			this.label12.Text = "Set Due Date";
+			this.label12.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			// 
+			// textWeekday
+			// 
+			this.textWeekday.BackColor = System.Drawing.Color.White;
+			this.textWeekday.Location = new System.Drawing.Point(296,261);
+			this.textWeekday.Name = "textWeekday";
+			this.textWeekday.ReadOnly = true;
+			this.textWeekday.Size = new System.Drawing.Size(40,20);
+			this.textWeekday.TabIndex = 126;
+			// 
+			// butSlip
+			// 
+			this.butSlip.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butSlip.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butSlip.Autosize = true;
+			this.butSlip.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butSlip.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSlip.CornerRadius = 4F;
+			this.butSlip.Location = new System.Drawing.Point(433,443);
+			this.butSlip.Name = "butSlip";
+			this.butSlip.Size = new System.Drawing.Size(85,24);
+			this.butSlip.TabIndex = 127;
+			this.butSlip.Text = "New Slip";
+			this.butSlip.Click += new System.EventHandler(this.butSlip_Click);
+			// 
 			// butCheckedNow
 			// 
 			this.butCheckedNow.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -391,33 +437,6 @@ namespace OpenDental{
 			this.butCreatedNow.Text = "Now";
 			this.butCreatedNow.Click += new System.EventHandler(this.butCreatedNow_Click);
 			// 
-			// listTurnaround
-			// 
-			this.listTurnaround.FormattingEnabled = true;
-			this.listTurnaround.Location = new System.Drawing.Point(296,136);
-			this.listTurnaround.Name = "listTurnaround";
-			this.listTurnaround.Size = new System.Drawing.Size(198,121);
-			this.listTurnaround.TabIndex = 124;
-			this.listTurnaround.Click += new System.EventHandler(this.listTurnaround_Click);
-			// 
-			// label12
-			// 
-			this.label12.Location = new System.Drawing.Point(293,116);
-			this.label12.Name = "label12";
-			this.label12.Size = new System.Drawing.Size(89,17);
-			this.label12.TabIndex = 125;
-			this.label12.Text = "Set Due Date";
-			this.label12.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-			// 
-			// textWeekday
-			// 
-			this.textWeekday.BackColor = System.Drawing.Color.White;
-			this.textWeekday.Location = new System.Drawing.Point(296,261);
-			this.textWeekday.Name = "textWeekday";
-			this.textWeekday.ReadOnly = true;
-			this.textWeekday.Size = new System.Drawing.Size(40,20);
-			this.textWeekday.TabIndex = 126;
-			// 
 			// butDetachPlanned
 			// 
 			this.butDetachPlanned.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -458,7 +477,7 @@ namespace OpenDental{
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butDelete.Location = new System.Drawing.Point(27,443);
 			this.butDelete.Name = "butDelete";
-			this.butDelete.Size = new System.Drawing.Size(81,26);
+			this.butDelete.Size = new System.Drawing.Size(81,24);
 			this.butDelete.TabIndex = 4;
 			this.butDelete.Text = "Delete";
 			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
@@ -473,7 +492,7 @@ namespace OpenDental{
 			this.butOK.CornerRadius = 4F;
 			this.butOK.Location = new System.Drawing.Point(686,443);
 			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,26);
+			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 2;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
@@ -488,7 +507,7 @@ namespace OpenDental{
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.Location = new System.Drawing.Point(777,443);
 			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,26);
+			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 9;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
@@ -497,6 +516,7 @@ namespace OpenDental{
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(878,487);
+			this.Controls.Add(this.butSlip);
 			this.Controls.Add(this.textWeekday);
 			this.Controls.Add(this.listTurnaround);
 			this.Controls.Add(this.label12);
@@ -528,6 +548,7 @@ namespace OpenDental{
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Edit Lab Case";
 			this.Load += new System.EventHandler(this.FormLabCaseEdit_Load);
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormLabCaseEdit_FormClosing);
 			this.groupBox1.ResumeLayout(false);
 			this.groupBox1.PerformLayout();
 			this.ResumeLayout(false);
@@ -584,6 +605,13 @@ namespace OpenDental{
 				textDateDue.Text=CaseCur.DateTimeDue.ToShortDateString()+" "+CaseCur.DateTimeDue.ToShortTimeString();
 			}
 			textInstructions.Text=CaseCur.Instructions;
+			sheet=Sheets.GetLabSlip(CaseCur.PatNum,CaseCur.LabCaseNum);
+			if(sheet==null) {
+				butSlip.Text=Lan.g(this,"New Slip");
+			}
+			else {
+				butSlip.Text=Lan.g(this,"Edit Slip");
+			}
 		}
 
 		private void textDateDue_TextChanged(object sender,EventArgs e) {
@@ -656,6 +684,49 @@ namespace OpenDental{
 			FormE.ShowDialog();
 
 		}*/
+
+		private void butSlip_Click(object sender,EventArgs e) {
+			if(sheet==null) {//create new
+				Laboratory lab=null;
+				if(listLab.SelectedIndex>-1) {
+					lab=ListLabs[listLab.SelectedIndex];
+				}
+				SheetDef sheetDef;
+				if(lab.Slip==0){
+					sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.LabSlip);
+				}
+				else{
+					sheetDef=SheetDefs.GetSheetDef(lab.Slip);
+				}
+				sheet=SheetUtil.CreateSheet(sheetDef,CaseCur.PatNum);
+				SheetParameter.SetParameter(sheet,"PatNum",CaseCur.PatNum);
+				SheetParameter.SetParameter(sheet,"LabCaseNum",CaseCur.LabCaseNum);
+				SheetFiller.FillFields(sheet);
+				SheetUtil.CalculateHeights(sheet,this.CreateGraphics());
+				FormSheetFillEdit FormS=new FormSheetFillEdit(sheet);
+				FormS.ShowDialog();
+				//if(FormS.DialogResult!=DialogResult.OK) {
+				//	sheet=null;
+				//	return;
+				//}
+			}
+			else {//edit existing
+				SheetFields.GetFieldsAndParameters(sheet);
+				FormSheetFillEdit FormS=new FormSheetFillEdit(sheet);
+				FormS.ShowDialog();
+				//if(FormS.DialogResult!=DialogResult.OK) {
+				//	return;
+				//}
+			}
+			//refresh
+			sheet=Sheets.GetLabSlip(CaseCur.PatNum,CaseCur.LabCaseNum);
+			if(sheet==null) {
+				butSlip.Text=Lan.g(this,"New Slip");
+			}
+			else {
+				butSlip.Text=Lan.g(this,"Edit Slip");
+			}
+		}
 
 		private void butDelete_Click(object sender, System.EventArgs e) {
 			if(IsNew){
@@ -764,12 +835,8 @@ namespace OpenDental{
 			}
 			CaseCur.Instructions=textInstructions.Text;
 			try{
-				if(IsNew){
-					LabCases.Insert(CaseCur);
-				}
-				else{
-					LabCases.Update(CaseCur);
-				}
+				//if(IsNew){//No.  Always created ahead of time
+				LabCases.Update(CaseCur);
 			}
 			catch(ApplicationException ex){
 				MessageBox.Show(ex.Message);
@@ -781,6 +848,20 @@ namespace OpenDental{
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		private void FormLabCaseEdit_FormClosing(object sender,FormClosingEventArgs e) {
+			if(DialogResult==DialogResult.OK) {
+				return;
+			}
+			if(IsNew) {
+				if(sheet!=null) {
+					Sheets.DeleteObject(sheet.SheetNum);	
+				}
+				LabCases.Delete(CaseCur.LabCaseNum);
+			}
+		}
+
+		
 
 		
 

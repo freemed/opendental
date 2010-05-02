@@ -24,6 +24,7 @@ namespace OpenDental {
 		private void FormSheetFieldRect_Load(object sender,EventArgs e) {
 			if(IsReadOnly){
 				butOK.Enabled=false;
+				butDelete.Enabled=false;
 			}
 			textXPos.Text=SheetFieldDefCur.XPos.ToString();
 			textYPos.Text=SheetFieldDefCur.YPos.ToString();

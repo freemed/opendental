@@ -64,6 +64,10 @@ namespace OpenDentBusiness{
 			if(sheetType==SheetTypeEnum.MedicalHistory) {
 				list.Add(new SheetParameter(true,"PatNum"));
 			}
+			if(sheetType==SheetTypeEnum.LabSlip) {
+				list.Add(new SheetParameter(true,"PatNum"));
+				list.Add(new SheetParameter(true,"LabCaseNum"));
+			}
 			return list;
 		}
 

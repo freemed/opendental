@@ -28,10 +28,11 @@ namespace OpenDentBusiness {
 		///<Summary>10-Requires SheetParameter for AptNum.  Does not get saved to db.</Summary>
 		RoutingSlip,
 		///<Summary>11-Requires SheetParameter for PatNum.</Summary>
-		MedicalHistory
+		MedicalHistory,
+		///<Summary>12-Requires SheetParameter for PatNum, LabCaseNum.</Summary>
+		LabSlip
 		/*StatementHeader,
 		TxPlanHeader,
-		LabSlip,
 		Postcard*/
 	}
 
@@ -94,7 +95,8 @@ namespace OpenDentBusiness {
 		PatientRegistration,
 		FinancialAgreement,
 		HIPAA,
-		MedicalHistory
+		MedicalHistory,
+		LabSlip
 	}
 
 	public enum OutInCheck{

@@ -25,6 +25,7 @@ namespace OpenDental {
 		private void FormSheetFieldStatic_Load(object sender,EventArgs e) {
 			if(IsReadOnly){
 				butOK.Enabled=false;
+				butDelete.Enabled=false;
 			}
 			textFieldValue.Text=SheetFieldDefCur.FieldValue;
 			InstalledFontCollection fColl=new InstalledFontCollection();
@@ -77,6 +78,7 @@ namespace OpenDental {
 				"dateToday",
 				"Email",
 				"famFinUrgNote",
+				"gender",
 				"HmPhone",
 				"guarantorNameFL",
 				"insAnnualMax",

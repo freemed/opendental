@@ -139,8 +139,7 @@ namespace OpenDentBusiness{
 				+"AND (appointment.AptStatus=1 OR appointment.AptStatus=2 OR appointment.AptStatus=4) "//scheduled,complete,or ASAP
 				+"AND AptDateTime >= "+POut.Date(startDate)
 				+" AND AptDateTime < "+POut.Date(endDate.AddDays(1));//midnight of the next morning.
-			DataTable table=Db.GetTable(command);
-			return FillFromTable(table);
+			return Crud.LabCaseCrud.SelectMany(command);
 		}
 
 		///<summary>Used when drawing the planned appointment.</summary>
@@ -150,12 +149,7 @@ namespace OpenDentBusiness{
 			}
 			string command="SELECT labcase.* FROM labcase,appointment "
 				+"WHERE labcase.PlannedAptNum="+POut.Long(aptNum);
-			DataTable table=Db.GetTable(command);
-			List<LabCase> list=FillFromTable(table);
-			if(list.Count==0){
-				return null;
-			}
-			return list[0];
+			return Crud.LabCaseCrud.SelectOne(command);
 		}
 
 		///<summary>Gets one labcase from database.</summary>
@@ -164,8 +158,7 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<LabCase>(MethodBase.GetCurrentMethod(),labCaseNum);
 			}
 			string command="SELECT * FROM labcase WHERE LabCaseNum="+POut.Long(labCaseNum);
-			DataTable table=Db.GetTable(command);
-			return FillFromTable(table)[0];
+			return Crud.LabCaseCrud.SelectOne(command);
 		}
 
 		///<summary>Gets all labcases for a patient which have not been attached to an appointment.  Usually one or none.  Only used when attaching a labcase from within an appointment.</summary>
@@ -180,93 +173,26 @@ namespace OpenDentBusiness{
 			else{
 				command+="AptNum=0";
 			}
-			DataTable table=Db.GetTable(command);
-			return FillFromTable(table);
-		}
-
-		public static List<LabCase> FillFromTable(DataTable table){
-			LabCase lab;
-			List<LabCase> retVal=new List<LabCase>();
-			for(int i=0;i<table.Rows.Count;i++) {
-				lab=new LabCase();
-				lab.LabCaseNum     = PIn.Long   (table.Rows[i][0].ToString());
-				lab.PatNum         = PIn.Long   (table.Rows[i][1].ToString());
-				lab.LaboratoryNum  = PIn.Long   (table.Rows[i][2].ToString());
-				lab.AptNum         = PIn.Long   (table.Rows[i][3].ToString());
-				lab.PlannedAptNum  = PIn.Long   (table.Rows[i][4].ToString());
-				lab.DateTimeDue    = PIn.DateT (table.Rows[i][5].ToString());
-				lab.DateTimeCreated= PIn.DateT (table.Rows[i][6].ToString());
-				lab.DateTimeSent   = PIn.DateT (table.Rows[i][7].ToString());
-				lab.DateTimeRecd   = PIn.DateT (table.Rows[i][8].ToString());
-				lab.DateTimeChecked= PIn.DateT (table.Rows[i][9].ToString());
-				lab.ProvNum        = PIn.Long   (table.Rows[i][10].ToString());
-				lab.Instructions   = PIn.String(table.Rows[i][11].ToString());
-				retVal.Add(lab);
-			}
-			return retVal;
+			return Crud.LabCaseCrud.SelectMany(command);
 		}
 
 		///<summary></summary>
-		public static long Insert(LabCase lab){
+		public static long Insert(LabCase labCase) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				lab.LabCaseNum=Meth.GetLong(MethodBase.GetCurrentMethod(),lab);
-				return lab.LabCaseNum;
+				labCase.LabCaseNum=Meth.GetLong(MethodBase.GetCurrentMethod(),labCase);
+				return labCase.LabCaseNum;
 			}
-			if(PrefC.RandomKeys) {
-				lab.LabCaseNum=ReplicationServers.GetKey("labcase","LabCaseNum");
-			}
-			string command="INSERT INTO labcase (";
-			if(PrefC.RandomKeys) {
-				command+="LabCaseNum,";
-			}
-			command+="PatNum,LaboratoryNum,AptNum,PlannedAptNum,DateTimeDue,DateTimeCreated,"
-				+"DateTimeSent,DateTimeRecd,DateTimeChecked,ProvNum,Instructions) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+="'"+POut.Long(lab.LabCaseNum)+"', ";
-			}
-			command+=
-				 "'"+POut.Long   (lab.PatNum)+"', "
-				+"'"+POut.Long   (lab.LaboratoryNum)+"', "
-				+"'"+POut.Long   (lab.AptNum)+"', "
-				+"'"+POut.Long   (lab.PlannedAptNum)+"', "
-				    +POut.DateT (lab.DateTimeDue)+", "
-				    +POut.DateT (lab.DateTimeCreated)+", "
-				    +POut.DateT (lab.DateTimeSent)+", "
-				    +POut.DateT (lab.DateTimeRecd)+", "
-				    +POut.DateT (lab.DateTimeChecked)+", "
-				+"'"+POut.Long   (lab.ProvNum)+"', "
-				+"'"+POut.String(lab.Instructions)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				lab.LabCaseNum=Db.NonQ(command,true);
-			}
-			return lab.LabCaseNum;
+			return Crud.LabCaseCrud.Insert(labCase);
 		}
 
 		///<summary></summary>
-		public static void Update(LabCase lab){
+		public static void Update(LabCase labCase) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),lab);
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),labCase);
 				return;
 			}
-			string command= "UPDATE labcase SET " 
-				+ "PatNum = '"          +POut.Long   (lab.PatNum)+"'"
-				+ ",LaboratoryNum = '"  +POut.Long   (lab.LaboratoryNum)+"'"
-				+ ",AptNum = '"         +POut.Long   (lab.AptNum)+"'"
-				+ ",PlannedAptNum = '"  +POut.Long   (lab.PlannedAptNum)+"'"
-				+ ",DateTimeDue = "     +POut.DateT (lab.DateTimeDue)
-				+ ",DateTimeCreated = " +POut.DateT (lab.DateTimeCreated)
-				+ ",DateTimeSent = "    +POut.DateT (lab.DateTimeSent)
-				+ ",DateTimeRecd = "    +POut.DateT (lab.DateTimeRecd)
-				+ ",DateTimeChecked = " +POut.DateT (lab.DateTimeChecked)
-				+ ",ProvNum = '"        +POut.Long   (lab.ProvNum)+"'"
-				+ ",Instructions = '"   +POut.String(lab.Instructions)+"'"
-				+" WHERE LabCaseNum = '"+POut.Long(lab.LabCaseNum)+"'";
- 			Db.NonQ(command);
+			Crud.LabCaseCrud.Update(labCase);
 		}
-
 
 		///<summary>Checks dependencies first.  Throws exception if can't delete.</summary>
 		public static void Delete(long labCaseNum) {

@@ -43,6 +43,8 @@ namespace OpenDentBusiness{
 					return GetRoutingSlip(outInCheck);
 				case SheetTypeEnum.MedicalHistory:
 					return GetMedicalHistory(outInCheck);
+				case SheetTypeEnum.LabSlip:
+					return GetLabSlip(outInCheck);
 			}
 			return new List<SheetFieldDef>();
 		}
@@ -334,6 +336,30 @@ namespace OpenDentBusiness{
 			}
 			else if(outInCheck==OutInCheck.In) {
 				list.Add(NewInput("misc"));
+			}
+			else if(outInCheck==OutInCheck.Check) {
+				list.Add(NewCheck("misc"));
+			}
+			return list;
+		}
+
+		private static List<SheetFieldDef> GetLabSlip(OutInCheck outInCheck) {
+			List<SheetFieldDef> list=new List<SheetFieldDef>();
+			if(outInCheck==OutInCheck.Out) {
+				list.Add(NewOutput("lab.Description"));
+				list.Add(NewOutput("lab.Phone"));
+				list.Add(NewOutput("lab.Notes"));
+				list.Add(NewOutput("appt.DateTime"));
+				list.Add(NewOutput("labcase.DateTimeDue"));
+				list.Add(NewOutput("labcase.DateTimeCreated"));
+				list.Add(NewOutput("labcase.Instructions"));
+				list.Add(NewOutput("prov.nameFormal"));
+				list.Add(NewOutput("prov.stateLicence"));
+				//patient fields already handled with static text: name,age,gender.
+				//other fields already handled: dateToday, practice address and phone.
+			}
+			else if(outInCheck==OutInCheck.In) {
+				list.Add(NewInput("notes"));
 			}
 			else if(outInCheck==OutInCheck.Check) {
 				list.Add(NewCheck("misc"));

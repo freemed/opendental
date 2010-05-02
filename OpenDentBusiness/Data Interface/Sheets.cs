@@ -54,6 +54,20 @@ namespace OpenDentBusiness{
 			return Crud.SheetCrud.SelectMany(command);
 		}
 
+		///<summary>Used in FormLabCaseEdit to view an existing lab slip.  Will return null if none exist.</summary>
+		public static Sheet GetLabSlip(long patNum,long labCaseNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Sheet>(MethodBase.GetCurrentMethod(),patNum,labCaseNum);
+			}
+			string command="SELECT sheet.* FROM sheet,sheetfield "
+				+"WHERE sheet.PatNum="+POut.Long(patNum)
+				+" AND sheet.SheetType="+POut.Long((int)SheetTypeEnum.LabSlip)
+				+" AND sheetfield.FieldType="+POut.Long((int)SheetFieldType.Parameter)
+				+" AND sheetfield.FieldName='LabCaseNum' "
+				+"AND sheetfield.FieldValue='"+POut.Long(labCaseNum)+"'";
+			return Crud.SheetCrud.SelectOne(command);
+		}
+
 		///<summary>Used in FormRxEdit to view an existing rx.  Will return null if none exist.</summary>
 		public static Sheet GetRx(long patNum,long rxNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {

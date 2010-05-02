@@ -2140,7 +2140,12 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);
 				command="INSERT INTO preference(PrefName,ValueString) VALUES('SecurityLockDays','0')";
 				Db.NonQ(command);
+				command="ALTER TABLE laboratory DROP LabSlip";
+				Db.NonQ(command);
+				command="ALTER TABLE laboratory ADD Slip bigint NOT NULL";
+				Db.NonQ(command);
 				
+
 
 				
 
@@ -2158,4 +2163,27 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 			
-				
+		
+
+
+				/*
+				command="ALTER TABLE clockevent ADD TimeEntered1 datetime NOT NULL default '0001-01-01 00:00:00'";
+				Db.NonQ(command);
+				command="ALTER TABLE clockevent ADD TimeDisplayed1 datetime NOT NULL default '0001-01-01 00:00:00'";
+				Db.NonQ(command);
+				command="ALTER TABLE clockevent ADD TimeEntered2 datetime NOT NULL default '0001-01-01 00:00:00'";
+				Db.NonQ(command);
+				command="ALTER TABLE clockevent ADD TimeDisplayed2 datetime NOT NULL default '0001-01-01 00:00:00'";
+				Db.NonQ(command);
+				*/
+
+				/*
+				command="ALTER TABLE clockevent ADD TimeEntered1 datetime NOT NULL default '0001-01-01 00:00:00'";
+				Db.NonQ(command);
+				command="ALTER TABLE clockevent ADD TimeDisplayed1 datetime NOT NULL default '0001-01-01 00:00:00'";
+				Db.NonQ(command);
+				command="ALTER TABLE clockevent ADD TimeEntered2 datetime NOT NULL default '0001-01-01 00:00:00'";
+				Db.NonQ(command);
+				command="ALTER TABLE clockevent ADD TimeDisplayed2 datetime NOT NULL default '0001-01-01 00:00:00'";
+				Db.NonQ(command);
+				*/

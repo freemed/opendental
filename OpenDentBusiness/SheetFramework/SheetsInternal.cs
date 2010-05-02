@@ -46,9 +46,8 @@ namespace OpenDentBusiness{
 					return HIPAA();
 				case SheetInternalType.MedicalHistory:
 					return MedicalHistory();
-
-
-
+				case SheetInternalType.LabSlip:
+					return LabSlip();
 				default:
 					throw new ApplicationException("Invalid SheetInternalType.");
 			}
@@ -865,6 +864,24 @@ Fam Urgent Fin Note: [famFinUrgNote]"
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Date: [dateToday]",sheet.FontSize,sheet.FontName,false,x,y,120,rowH));
 			y+=40;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewSigBox(261,y,364,81));
+			return sheet;
+		}
+
+		public static SheetDef LabSlip() {
+			SheetDef sheet=new SheetDef(SheetTypeEnum.LabSlip);
+			sheet.Description="Lab Slip";
+			sheet.FontName="Microsoft Sans Serif";
+			sheet.FontSize=10f;
+			sheet.Width=850;
+			sheet.Height=1100;
+			int rowH=18;
+			int x=75;
+			int y=50;
+			//Title----------------------------------------------------------------------------------------------------------
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Lab Slip",12f,sheet.FontName,true,373,y,200,22));
+			y+=35;
+			//-----------------------------------------------------------------------
+			
 			return sheet;
 		}
 

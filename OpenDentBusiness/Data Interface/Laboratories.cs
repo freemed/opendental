@@ -14,7 +14,7 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<List<Laboratory>>(MethodBase.GetCurrentMethod());
 			}
 			string command="SELECT * FROM laboratory ORDER BY Description";
-			return FillFromTable(Db.GetTable(command));
+			return Crud.LaboratoryCrud.SelectMany(command);
 		}
 
 		///<summary>Gets one laboratory from database</summary>
@@ -23,82 +23,38 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<Laboratory>(MethodBase.GetCurrentMethod(),laboratoryNum);
 			}
 			string command="SELECT * FROM laboratory WHERE LaboratoryNum="+POut.Long(laboratoryNum);
-			return FillFromTable(Db.GetTable(command))[0];
-		}
-
-		private static List<Laboratory> FillFromTable(DataTable table){
-			//No need to check RemotingRole; no call to db.
-			List<Laboratory> ListLabs=new List<Laboratory>();
-			Laboratory lab;
-			for(int i=0;i<table.Rows.Count;i++) {
-				lab=new Laboratory();
-				lab.LaboratoryNum= PIn.Long   (table.Rows[i][0].ToString());
-				lab.Description  = PIn.String(table.Rows[i][1].ToString());
-				lab.Phone        = PIn.String(table.Rows[i][2].ToString());
-				lab.Notes        = PIn.String(table.Rows[i][3].ToString());
-				lab.LabSlip      = PIn.String(table.Rows[i][4].ToString());
-				ListLabs.Add(lab);
-			}
-			return ListLabs;
+			return Crud.LaboratoryCrud.SelectOne(command);
 		}
 
 		///<summary></summary>
-		public static long Insert(Laboratory lab) {
+		public static long Insert(Laboratory laboratory) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				lab.LaboratoryNum=Meth.GetLong(MethodBase.GetCurrentMethod(),lab);
-				return lab.LaboratoryNum;
+				laboratory.LaboratoryNum=Meth.GetLong(MethodBase.GetCurrentMethod(),laboratory);
+				return laboratory.LaboratoryNum;
 			}
-			if(PrefC.RandomKeys) {
-				lab.LaboratoryNum=ReplicationServers.GetKey("laboratory","LaboratoryNum");
-			}
-			string command="INSERT INTO laboratory (";
-			if(PrefC.RandomKeys) {
-				command+="LaboratoryNum,";
-			}
-			command+="Description,Phone,Notes,LabSlip) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+="'"+POut.Long(lab.LaboratoryNum)+"', ";
-			}
-			command+=
-				 "'"+POut.String(lab.Description)+"', "
-				+"'"+POut.String(lab.Phone)+"', "
-				+"'"+POut.String(lab.Notes)+"', "
-				+"'"+POut.String(lab.LabSlip)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				lab.LaboratoryNum=Db.NonQ(command,true);
-			}
-			return lab.LaboratoryNum;
+			return Crud.LaboratoryCrud.Insert(laboratory);
 		}
 
 		///<summary></summary>
-		public static void Update(Laboratory lab){
+		public static void Update(Laboratory laboratory) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),lab);
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),laboratory);
 				return;
 			}
-			string command= "UPDATE laboratory SET " 
-				+ "Description = '"    +POut.String(lab.Description)+"'"
-				+ ",Phone = '"         +POut.String(lab.Phone)+"'"
-				+ ",Notes = '"         +POut.String(lab.Notes)+"'"
-				+ ",LabSlip = '"       +POut.String(lab.LabSlip)+"'"
-				+" WHERE LaboratoryNum = '" +POut.Long(lab.LaboratoryNum)+"'";
- 			Db.NonQ(command);
+			Crud.LaboratoryCrud.Update(laboratory);
 		}
 
 		///<summary>Checks dependencies first.  Throws exception if can't delete.</summary>
-		public static void Delete(long labNum) {
+		public static void Delete(long laboratoryNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),labNum);
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),laboratoryNum);
 				return;
 			}
 			string command;
 			//check lab cases for dependencies
 			command="SELECT LName,FName FROM patient,labcase "
 				+"WHERE patient.PatNum=labcase.PatNum "
-				+"AND LaboratoryNum ="+POut.Long(labNum)+" "
+				+"AND LaboratoryNum ="+POut.Long(laboratoryNum)+" "
 				+"LIMIT 30";
 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count>0){
@@ -110,30 +66,11 @@ namespace OpenDentBusiness{
 				throw new Exception(Lans.g("Laboratories","Cannot delete Laboratory because cases exist for")+pats);
 			}
 			//delete
-			command= "DELETE FROM laboratory WHERE LaboratoryNum = "+POut.Long(labNum);
+			command= "DELETE FROM laboratory WHERE LaboratoryNum = "+POut.Long(laboratoryNum);
  			Db.NonQ(command);
 		}
 
-		/*
-		///<summary>Returns null if Laboratory not found.</summary>
-		public static Laboratory GetLaboratory(int LaboratoryNum){
-			for(int i=0;i<ListLabs.Count;i++){
-				if(ListLabs[i].LaboratoryNum==LaboratoryNum){
-					return ListLabs[i].Clone();
-				}
-			}
-			return null;
-		}
-
-		///<summary>Returns an empty string for invalid LaboratoryNum.</summary>
-		public static string GetDesc(int LaboratoryNum){
-			for(int i=0;i<ListLabs.Count;i++){
-				if(ListLabs[i].LaboratoryNum==LaboratoryNum){
-					return ListLabs[i].Description;
-				}
-			}
-			return "";
-		}*/
+		
 	
 		
 

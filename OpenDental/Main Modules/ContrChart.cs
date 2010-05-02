@@ -3355,6 +3355,8 @@ namespace OpenDental{
 			lab.PatNum=PatCur.PatNum;
 			lab.ProvNum=Patients.GetProvNum(PatCur);
 			lab.DateTimeCreated=MiscData.GetNowDateTime();
+			LabCases.Insert(lab);//it will be deleted inside the form if user clicks cancel.
+			//We need the primary key in order to attach lab slip.
 			FormLabCaseEdit FormL=new FormLabCaseEdit();
 			FormL.CaseCur=lab;
 			FormL.IsNew=true;

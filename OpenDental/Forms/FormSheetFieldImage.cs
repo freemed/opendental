@@ -26,6 +26,7 @@ namespace OpenDental {
 		private void FormSheetFieldImage_Load(object sender,EventArgs e) {
 			if(IsReadOnly){
 				butOK.Enabled=false;
+				butDelete.Enabled=false;
 			}
 			FillCombo();
 			comboFieldName.Text=SheetFieldDefCur.FieldName;

@@ -31,7 +31,11 @@ namespace OpenDental{
 		public Laboratory LabCur;
 		private OpenDental.UI.ODGrid gridMain;
 		private OpenDental.UI.Button butDeleteTurnaround;
+		private ComboBox comboSlip;
+		private Label label21;
+		private Label label4;
 		private List<LabTurnaround> turnaroundList;
+		private List<SheetDef> SlipList;
 
 		///<summary></summary>
 		public FormLaboratoryEdit()
@@ -78,6 +82,9 @@ namespace OpenDental{
 			this.butCancel = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butDeleteTurnaround = new OpenDental.UI.Button();
+			this.comboSlip = new System.Windows.Forms.ComboBox();
+			this.label21 = new System.Windows.Forms.Label();
+			this.label4 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -141,7 +148,7 @@ namespace OpenDental{
 			this.butAdd.CornerRadius = 4F;
 			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(17,111);
+			this.butAdd.Location = new System.Drawing.Point(17,139);
 			this.butAdd.Name = "butAdd";
 			this.butAdd.Size = new System.Drawing.Size(81,24);
 			this.butAdd.TabIndex = 127;
@@ -158,7 +165,7 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(17,423);
+			this.butDelete.Location = new System.Drawing.Point(17,431);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(81,24);
 			this.butDelete.TabIndex = 4;
@@ -173,7 +180,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(606,423);
+			this.butOK.Location = new System.Drawing.Point(606,431);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 8;
@@ -188,7 +195,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(697,423);
+			this.butCancel.Location = new System.Drawing.Point(697,431);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 9;
@@ -198,7 +205,7 @@ namespace OpenDental{
 			// gridMain
 			// 
 			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(104,111);
+			this.gridMain.Location = new System.Drawing.Point(104,139);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
 			this.gridMain.Size = new System.Drawing.Size(561,261);
@@ -210,24 +217,53 @@ namespace OpenDental{
 			// butDeleteTurnaround
 			// 
 			this.butDeleteTurnaround.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butDeleteTurnaround.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.butDeleteTurnaround.Autosize = true;
 			this.butDeleteTurnaround.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butDeleteTurnaround.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butDeleteTurnaround.CornerRadius = 4F;
 			this.butDeleteTurnaround.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDeleteTurnaround.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDeleteTurnaround.Location = new System.Drawing.Point(17,143);
+			this.butDeleteTurnaround.Location = new System.Drawing.Point(17,171);
 			this.butDeleteTurnaround.Name = "butDeleteTurnaround";
 			this.butDeleteTurnaround.Size = new System.Drawing.Size(81,24);
 			this.butDeleteTurnaround.TabIndex = 129;
 			this.butDeleteTurnaround.Text = "Delete";
 			this.butDeleteTurnaround.Click += new System.EventHandler(this.butDeleteTurnaround_Click);
 			// 
+			// comboSlip
+			// 
+			this.comboSlip.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboSlip.Location = new System.Drawing.Point(104,111);
+			this.comboSlip.MaxDropDownItems = 30;
+			this.comboSlip.Name = "comboSlip";
+			this.comboSlip.Size = new System.Drawing.Size(275,21);
+			this.comboSlip.TabIndex = 131;
+			// 
+			// label21
+			// 
+			this.label21.Location = new System.Drawing.Point(382,113);
+			this.label21.Name = "label21";
+			this.label21.Size = new System.Drawing.Size(283,16);
+			this.label21.TabIndex = 130;
+			this.label21.Text = "(custom lab slips may be added in Sheets)";
+			this.label21.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			// 
+			// label4
+			// 
+			this.label4.Location = new System.Drawing.Point(-1,114);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(102,17);
+			this.label4.TabIndex = 132;
+			this.label4.Text = "Lab Slip";
+			this.label4.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
 			// FormLaboratoryEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(798,467);
+			this.ClientSize = new System.Drawing.Size(798,475);
+			this.Controls.Add(this.label4);
+			this.Controls.Add(this.comboSlip);
+			this.Controls.Add(this.label21);
 			this.Controls.Add(this.butDeleteTurnaround);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.butAdd);
@@ -259,6 +295,15 @@ namespace OpenDental{
 			textPhone.Text=LabCur.Phone;
 			textNotes.Text=LabCur.Notes;
 			turnaroundList=LabTurnarounds.GetForLab(LabCur.LaboratoryNum);
+			comboSlip.Items.Add(Lan.g(this,"Default"));
+			comboSlip.SelectedIndex=0;
+			SlipList=SheetDefs.GetCustomForType(SheetTypeEnum.LabSlip);
+			for(int i=0;i<SlipList.Count;i++) {
+				comboSlip.Items.Add(SlipList[i].Description);
+				if(LabCur.Slip==SlipList[i].SheetDefNum) {
+					comboSlip.SelectedIndex=i+1;
+				}
+			}
 			FillGrid();
 		}
 
@@ -351,6 +396,10 @@ namespace OpenDental{
 			LabCur.Description=textDescription.Text;
 			LabCur.Phone=textPhone.Text;
 			LabCur.Notes=textNotes.Text;
+			LabCur.Slip=0;
+			if(comboSlip.SelectedIndex>0) {
+				LabCur.Slip=SlipList[comboSlip.SelectedIndex-1].SheetDefNum;
+			}
 			try{
 				if(IsNew){
 					Laboratories.Insert(LabCur);

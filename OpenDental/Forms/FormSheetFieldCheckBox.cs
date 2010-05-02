@@ -26,6 +26,7 @@ namespace OpenDental {
 		private void FormSheetFieldCheckBox_Load(object sender,EventArgs e) {
 			if(IsReadOnly){
 				butOK.Enabled=false;
+				butDelete.Enabled=false;
 			}
 			//not allowed to change sheettype or fieldtype once created.  So get all avail fields for this sheettype
 			AvailFields=SheetFieldsAvailable.GetList(SheetDefCur.SheetType,OutInCheck.Check);

@@ -5,8 +5,10 @@ using System.Text.RegularExpressions;
 namespace OpenDentBusiness{
 
 	///<summary>A dental laboratory. Will be attached to lab cases.</summary>
-	public class Laboratory{
+	[Serializable()]
+	public class Laboratory:TableBase{
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long LaboratoryNum;
 		///<summary>Description of lab.</summary>
 		public string Description;
@@ -14,17 +16,11 @@ namespace OpenDentBusiness{
 		public string Phone;
 		///<summary>Any notes.  No practical limit to amount of text.</summary>
 		public string Notes;
-		///<summary>Not used yet.  The text base64 representation of the background scanned labslip.  Will be converted to an image at the last minute as needed.  Limit of image size will be about 16 MB.  Typical image size will be about 200 KB.</summary>
-		public string LabSlip;
+		///<summary>FK to sheetdef.SheetDefNum.  Lab slips can be set for individual laboratories.  If zero, then the default internal lab slip will be used instead of a custom lab slip.</summary>
+		public long Slip;
 
 		public Laboratory Copy(){
-			Laboratory l=new Laboratory();
-			l.LaboratoryNum=LaboratoryNum;
-			l.Description=Description;
-			l.Phone=Phone;
-			l.Notes=Notes;
-			l.LabSlip=LabSlip;
-			return l;
+			return (Laboratory)this.MemberwiseClone();
 		}
 		
 	}

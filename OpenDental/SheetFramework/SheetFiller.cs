@@ -291,20 +291,35 @@ namespace OpenDental{
 				}
 			}
 			Provider priProv=Providers.GetProv(Patients.GetProvNum(pat));//guaranteed to work
-			Clinic clinic=new Clinic();
+			Clinic clinic=Clinics.GetClinic(pat.ClinicNum);
+			string clinicDescription="";
 			string clinicAddress="";
+			string clinicCityStZip="";
+			string phone;
 			string clinicPhone="";
-			if(pat.ClinicNum != 0){
-				clinic=Clinics.GetClinic(pat.ClinicNum);
+			if(clinic==null){
+				clinicDescription=PrefC.GetString(PrefName.PracticeTitle);
+				clinicAddress=PrefC.GetString(PrefName.PracticeAddress);
+				if(PrefC.GetString(PrefName.PracticeAddress2)!="") {
+					clinicAddress+=", "+PrefC.GetString(PrefName.PracticeAddress2);
+				}
+				clinicCityStZip=PrefC.GetString(PrefName.PracticeCity)+", "+PrefC.GetString(PrefName.PracticeST)+"  "+PrefC.GetString(PrefName.PracticeZip);
+				phone=PrefC.GetString(PrefName.PracticePhone);
+			}
+			else{
+				clinicDescription=clinic.Description;
 				clinicAddress=clinic.Address;
 				if(clinic.Address2!=""){
 					clinicAddress+=", "+clinic.Address2;
 				}
-				if(clinic.Phone.Length==10){
-					clinicPhone="("+clinic.Phone.Substring(0,3)+")"
-						+clinic.Phone.Substring(3,3)+"-"
-						+clinic.Phone.Substring(6);
-				}
+				clinicCityStZip=clinic.City+", "+clinic.State+"  "+clinic.Zip;
+				phone=clinic.Phone;
+			}
+			if(phone.Length==10 && System.Globalization.CultureInfo.CurrentCulture.Name=="en-US") {
+				clinicPhone="("+phone.Substring(0,3)+")"+phone.Substring(3,3)+"-"+phone.Substring(6);
+			}
+			else {
+				clinicPhone=phone;
 			}
 			foreach(SheetField field in sheet.SheetFields) {
 				if(field.FieldType!=SheetFieldType.StaticText) {
@@ -328,9 +343,9 @@ namespace OpenDental{
 				fldval=fldval.Replace("[carrierAddress]",carrierAddress);
 				fldval=fldval.Replace("[carrierCityStZip]",carrierCityStZip);
 				fldval=fldval.Replace("[cityStateZip]",pat.City+", "+pat.State+"  "+pat.Zip);
-				fldval=fldval.Replace("[clinicDescription]",clinic.Description);
+				fldval=fldval.Replace("[clinicDescription]",clinicDescription);
 				fldval=fldval.Replace("[clinicAddress]",clinicAddress);
-				fldval=fldval.Replace("[clinicCityStZip]",clinic.City+", "+clinic.State+"  "+clinic.Zip);
+				fldval=fldval.Replace("[clinicCityStZip]",clinicCityStZip);
 				fldval=fldval.Replace("[clinicPhone]",clinicPhone);
 				fldval=fldval.Replace("[DateFirstVisit]",dateFirstVisit);
 				fldval=fldval.Replace("[dateOfLastSavedTP]",dateOfLastSavedTP);
@@ -339,6 +354,7 @@ namespace OpenDental{
 				fldval=fldval.Replace("[dateToday]",DateTime.Today.ToShortDateString());
 				fldval=fldval.Replace("[Email]",pat.Email);
 				fldval=fldval.Replace("[famFinUrgNote]",fam.ListPats[0].FamFinUrgNote);
+				fldval=fldval.Replace("[gender]",Lan.g("enumPatientGender",pat.Gender.ToString()));
 				fldval=fldval.Replace("[guarantorNameFL]",fam.ListPats[0].GetNameFL());
 				fldval=fldval.Replace("[HmPhone]",StripPhoneBeyondSpace(pat.HmPhone));
 				fldval=fldval.Replace("[insAnnualMax]",insAnnualMax);
