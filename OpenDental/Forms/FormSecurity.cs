@@ -34,6 +34,8 @@ namespace OpenDental{
 		private TextBox textDateLock;
 		private OpenDental.UI.Button butChange;
 		private CheckBox checkPasswordsMustBeStrong;
+		private TextBox textDaysLock;
+		private Label label2;
 		//private DataTable table;
 		private List<Userod> ListUser;
 
@@ -88,6 +90,8 @@ namespace OpenDental{
 			this.butAddUser = new OpenDental.UI.Button();
 			this.butAddGroup = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
+			this.textDaysLock = new System.Windows.Forms.TextBox();
+			this.label2 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// treePermissions
@@ -129,7 +133,7 @@ namespace OpenDental{
 			this.checkTimecardSecurityEnabled.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.checkTimecardSecurityEnabled.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkTimecardSecurityEnabled.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkTimecardSecurityEnabled.Location = new System.Drawing.Point(8,639);
+			this.checkTimecardSecurityEnabled.Location = new System.Drawing.Point(8,615);
 			this.checkTimecardSecurityEnabled.Name = "checkTimecardSecurityEnabled";
 			this.checkTimecardSecurityEnabled.Size = new System.Drawing.Size(224,16);
 			this.checkTimecardSecurityEnabled.TabIndex = 57;
@@ -171,7 +175,7 @@ namespace OpenDental{
 			this.checkCannotEditOwn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.checkCannotEditOwn.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkCannotEditOwn.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkCannotEditOwn.Location = new System.Drawing.Point(8,657);
+			this.checkCannotEditOwn.Location = new System.Drawing.Point(8,633);
 			this.checkCannotEditOwn.Name = "checkCannotEditOwn";
 			this.checkCannotEditOwn.Size = new System.Drawing.Size(224,16);
 			this.checkCannotEditOwn.TabIndex = 92;
@@ -181,7 +185,7 @@ namespace OpenDental{
 			// label1
 			// 
 			this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.label1.Location = new System.Drawing.Point(95,675);
+			this.label1.Location = new System.Drawing.Point(95,656);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(123,18);
 			this.label1.TabIndex = 93;
@@ -191,7 +195,7 @@ namespace OpenDental{
 			// textDateLock
 			// 
 			this.textDateLock.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.textDateLock.Location = new System.Drawing.Point(219,675);
+			this.textDateLock.Location = new System.Drawing.Point(219,656);
 			this.textDateLock.Name = "textDateLock";
 			this.textDateLock.ReadOnly = true;
 			this.textDateLock.Size = new System.Drawing.Size(82,20);
@@ -202,7 +206,7 @@ namespace OpenDental{
 			this.checkPasswordsMustBeStrong.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.checkPasswordsMustBeStrong.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkPasswordsMustBeStrong.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkPasswordsMustBeStrong.Location = new System.Drawing.Point(8,621);
+			this.checkPasswordsMustBeStrong.Location = new System.Drawing.Point(8,597);
 			this.checkPasswordsMustBeStrong.Name = "checkPasswordsMustBeStrong";
 			this.checkPasswordsMustBeStrong.Size = new System.Drawing.Size(224,16);
 			this.checkPasswordsMustBeStrong.TabIndex = 96;
@@ -218,7 +222,7 @@ namespace OpenDental{
 			this.butChange.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butChange.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butChange.CornerRadius = 4F;
-			this.butChange.Location = new System.Drawing.Point(304,672);
+			this.butChange.Location = new System.Drawing.Point(304,664);
 			this.butChange.Name = "butChange";
 			this.butChange.Size = new System.Drawing.Size(70,24);
 			this.butChange.TabIndex = 95;
@@ -233,7 +237,7 @@ namespace OpenDental{
 			this.gridMain.Location = new System.Drawing.Point(8,29);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(511,552);
+			this.gridMain.Size = new System.Drawing.Size(511,528);
 			this.gridMain.TabIndex = 59;
 			this.gridMain.Title = "Users";
 			this.gridMain.TranslationName = "TableSecurity";
@@ -263,7 +267,7 @@ namespace OpenDental{
 			this.butAddUser.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butAddUser.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butAddUser.CornerRadius = 4F;
-			this.butAddUser.Location = new System.Drawing.Point(118,587);
+			this.butAddUser.Location = new System.Drawing.Point(118,563);
 			this.butAddUser.Name = "butAddUser";
 			this.butAddUser.Size = new System.Drawing.Size(75,24);
 			this.butAddUser.TabIndex = 0;
@@ -278,7 +282,7 @@ namespace OpenDental{
 			this.butAddGroup.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butAddGroup.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butAddGroup.CornerRadius = 4F;
-			this.butAddGroup.Location = new System.Drawing.Point(8,587);
+			this.butAddGroup.Location = new System.Drawing.Point(8,563);
 			this.butAddGroup.Name = "butAddGroup";
 			this.butAddGroup.Size = new System.Drawing.Size(75,24);
 			this.butAddGroup.TabIndex = 1;
@@ -300,10 +304,31 @@ namespace OpenDental{
 			this.butClose.Text = "Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
+			// textDaysLock
+			// 
+			this.textDaysLock.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.textDaysLock.Location = new System.Drawing.Point(219,677);
+			this.textDaysLock.Name = "textDaysLock";
+			this.textDaysLock.ReadOnly = true;
+			this.textDaysLock.Size = new System.Drawing.Size(82,20);
+			this.textDaysLock.TabIndex = 98;
+			// 
+			// label2
+			// 
+			this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.label2.Location = new System.Drawing.Point(95,677);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(123,18);
+			this.label2.TabIndex = 97;
+			this.label2.Text = "Lock Days";
+			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// FormSecurity
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(894,700);
+			this.Controls.Add(this.textDaysLock);
+			this.Controls.Add(this.label2);
 			this.Controls.Add(this.checkPasswordsMustBeStrong);
 			this.Controls.Add(this.treePermissions);
 			this.Controls.Add(this.butChange);
@@ -358,6 +383,9 @@ namespace OpenDental{
 			checkTimecardSecurityEnabled.Checked=PrefC.GetBool(PrefName.TimecardSecurityEnabled);
 			checkCannotEditOwn.Checked=PrefC.GetBool(PrefName.TimecardUsersDontEditOwnCard);
 			checkCannotEditOwn.Enabled=checkTimecardSecurityEnabled.Checked;
+			if(PrefC.GetInt(PrefName.SecurityLockDays)>0) {
+				textDaysLock.Text=PrefC.GetInt(PrefName.SecurityLockDays).ToString();
+			}
 			if(PrefC.GetDate(PrefName.SecurityLockDate).Year>1880){
 				textDateLock.Text=PrefC.GetDate(PrefName.SecurityLockDate).ToShortDateString();
 			}
@@ -787,10 +815,16 @@ namespace OpenDental{
 		private void butChange_Click(object sender,EventArgs e) {
 			FormSecurityLock FormS=new FormSecurityLock();
 			FormS.ShowDialog();//prefs are set invalid within that form if needed.
-			if(PrefC.GetDate(PrefName.SecurityLockDate).Year>1880){
-				textDateLock.Text=PrefC.GetDate(PrefName.SecurityLockDate).ToShortDateString();
+			if(PrefC.GetInt(PrefName.SecurityLockDays)>0){
+				textDaysLock.Text=PrefC.GetInt(PrefName.SecurityLockDays).ToString();
 			}
 			else{
+				textDaysLock.Text="";
+			}
+			if(PrefC.GetDate(PrefName.SecurityLockDate).Year>1880) {
+				textDateLock.Text=PrefC.GetDate(PrefName.SecurityLockDate).ToShortDateString();
+			}
+			else {
 				textDateLock.Text="";
 			}
 		}

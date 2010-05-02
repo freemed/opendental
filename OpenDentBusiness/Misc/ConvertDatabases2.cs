@@ -2138,8 +2138,9 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);
 				command="ALTER TABLE userod ADD PasswordIsStrong tinyint NOT NULL";
 				Db.NonQ(command);
-
-
+				command="INSERT INTO preference(PrefName,ValueString) VALUES('SecurityLockDays','0')";
+				Db.NonQ(command);
+				
 
 				
 

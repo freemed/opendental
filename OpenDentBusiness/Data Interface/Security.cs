@@ -95,7 +95,6 @@ namespace OpenDentBusiness{
 				|| perm==Permissions.InsPayEdit
 				)
 			{
-				//SecurityLockIncludesAdmin
 				if(date.Year>1//if a valid date was passed in
 					&& date <= PrefC.GetDate(PrefName.SecurityLockDate))//and that date is earlier than the lock
 				{
@@ -106,6 +105,19 @@ namespace OpenDentBusiness{
 							throw new Exception(Lans.g("Security","Locked by Administrator before ")+PrefC.GetDate(PrefName.SecurityLockDate).ToShortDateString());
 						}
 						return false;	
+					}
+				}
+				if(date.Year>1//if a valid date was passed in
+					&& PrefC.GetInt(PrefName.SecurityLockDays) > 0
+					&& date <= DateTime.Today.AddDays(-PrefC.GetInt(PrefName.SecurityLockDays)))//and that date is earlier than the lock
+				{
+					if(PrefC.GetBool(PrefName.SecurityLockIncludesAdmin)//if admins are locked out too
+						|| !GroupPermissions.HasPermission(userGroupNum,Permissions.SecurityAdmin))//or is not an admin
+					{
+						if(!suppressMessage) {
+							throw new Exception(Lans.g("Security","Locked by Administrator before ")+PrefC.GetInt(PrefName.SecurityLockDays).ToString()+" days.");
+						}
+						return false;
 					}
 				}
 			}

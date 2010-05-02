@@ -13,9 +13,11 @@ namespace OpenDental{
 		private OpenDental.UI.Button butCancel;
 		private OpenDental.UI.Button butOK;
 		private Label label1;
-		private ODR.ValidDate textDate;
-		private Label label2;
 		private CheckBox checkAdmin;
+		private ValidDate textDate;
+		private TextBox textDays;
+		private Label label3;
+		private Label label4;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -55,11 +57,13 @@ namespace OpenDental{
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormSecurityLock));
 			this.label1 = new System.Windows.Forms.Label();
-			this.textDate = new ODR.ValidDate();
-			this.label2 = new System.Windows.Forms.Label();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.checkAdmin = new System.Windows.Forms.CheckBox();
+			this.textDate = new OpenDental.ValidDate();
+			this.textDays = new System.Windows.Forms.TextBox();
+			this.label3 = new System.Windows.Forms.Label();
+			this.label4 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -70,22 +74,6 @@ namespace OpenDental{
 			this.label1.TabIndex = 2;
 			this.label1.Text = resources.GetString("label1.Text");
 			// 
-			// textDate
-			// 
-			this.textDate.Location = new System.Drawing.Point(15,177);
-			this.textDate.Name = "textDate";
-			this.textDate.Size = new System.Drawing.Size(100,20);
-			this.textDate.TabIndex = 3;
-			// 
-			// label2
-			// 
-			this.label2.Location = new System.Drawing.Point(12,157);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(101,18);
-			this.label2.TabIndex = 4;
-			this.label2.Text = "Date";
-			this.label2.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-			// 
 			// butOK
 			// 
 			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -94,7 +82,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(310,220);
+			this.butOK.Location = new System.Drawing.Point(298,239);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 1;
@@ -109,7 +97,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(391,220);
+			this.butCancel.Location = new System.Drawing.Point(379,239);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 0;
@@ -119,19 +107,55 @@ namespace OpenDental{
 			// checkAdmin
 			// 
 			this.checkAdmin.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkAdmin.Location = new System.Drawing.Point(15,203);
+			this.checkAdmin.Location = new System.Drawing.Point(15,198);
 			this.checkAdmin.Name = "checkAdmin";
 			this.checkAdmin.Size = new System.Drawing.Size(224,16);
 			this.checkAdmin.TabIndex = 58;
 			this.checkAdmin.Text = "Lock includes administrators";
 			// 
+			// textDate
+			// 
+			this.textDate.Location = new System.Drawing.Point(88,142);
+			this.textDate.Name = "textDate";
+			this.textDate.Size = new System.Drawing.Size(100,20);
+			this.textDate.TabIndex = 62;
+			this.textDate.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textDate_KeyDown);
+			// 
+			// textDays
+			// 
+			this.textDays.Location = new System.Drawing.Point(88,168);
+			this.textDays.Name = "textDays";
+			this.textDays.Size = new System.Drawing.Size(46,20);
+			this.textDays.TabIndex = 59;
+			this.textDays.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textDays_KeyDown);
+			// 
+			// label3
+			// 
+			this.label3.Location = new System.Drawing.Point(21,142);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(65,18);
+			this.label3.TabIndex = 60;
+			this.label3.Text = "Date";
+			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label4
+			// 
+			this.label4.Location = new System.Drawing.Point(17,169);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(70,16);
+			this.label4.TabIndex = 61;
+			this.label4.Text = "Days";
+			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// FormSecurityLock
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(482,260);
-			this.Controls.Add(this.checkAdmin);
-			this.Controls.Add(this.label2);
+			this.ClientSize = new System.Drawing.Size(470,279);
 			this.Controls.Add(this.textDate);
+			this.Controls.Add(this.textDays);
+			this.Controls.Add(this.label3);
+			this.Controls.Add(this.label4);
+			this.Controls.Add(this.checkAdmin);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
@@ -153,7 +177,19 @@ namespace OpenDental{
 			if(PrefC.GetDate(PrefName.SecurityLockDate).Year>1880){
 				textDate.Text=PrefC.GetDate(PrefName.SecurityLockDate).ToShortDateString();
 			}
+			if(PrefC.GetInt(PrefName.SecurityLockDays)>0) {
+				textDays.Text=PrefC.GetInt(PrefName.SecurityLockDays).ToString();
+			}
 			checkAdmin.Checked=PrefC.GetBool(PrefName.SecurityLockIncludesAdmin);
+		}
+
+		private void textDate_KeyDown(object sender,System.Windows.Forms.KeyEventArgs e) {
+			textDays.Text="";
+		}
+
+		private void textDays_KeyDown(object sender,System.Windows.Forms.KeyEventArgs e) {
+			textDate.Text="";
+			textDate.errorProvider1.SetError(textDate,"");
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
@@ -161,7 +197,10 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please fix error first.");
 				return;
 			}
-			if(Prefs.UpdateString(PrefName.SecurityLockDate,POut.Date(PIn.Date(textDate.Text),false))
+			int days=PIn.Int(textDays.Text);
+			DateTime date=PIn.Date(textDate.Text);
+			if(Prefs.UpdateString(PrefName.SecurityLockDate,POut.Date(date,false))
+				|| Prefs.UpdateInt(PrefName.SecurityLockDays,days)
 				|| Prefs.UpdateBool(PrefName.SecurityLockIncludesAdmin,checkAdmin.Checked)  )
 			{
 				DataValid.SetInvalid(InvalidType.Prefs);
