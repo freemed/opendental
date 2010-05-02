@@ -1067,7 +1067,7 @@ namespace OpenDental{
 			// textEmployer
 			// 
 			this.textEmployer.Location = new System.Drawing.Point(135,379);
-			this.textEmployer.MaxLength = 30;
+			this.textEmployer.MaxLength = 255;
 			this.textEmployer.Name = "textEmployer";
 			this.textEmployer.Size = new System.Drawing.Size(226,20);
 			this.textEmployer.TabIndex = 14;
