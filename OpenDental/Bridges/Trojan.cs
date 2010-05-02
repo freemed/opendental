@@ -424,6 +424,7 @@ namespace OpenDental.Bridges {
 			carrier.City=troj.MAILCITYONLY;
 			carrier.State=troj.MAILSTATEONLY;
 			carrier.Zip=troj.MAILZIPONLY;
+			carrier.NoSendElect=false;//regardless of what Trojan says.  Nobody sends paper anymore.
 			if(carrier.CarrierName==null || carrier.CarrierName=="") {
 				//if, for some reason, carrier is absent from the file, we can't do a thing with it.
 				return 0;

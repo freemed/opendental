@@ -2308,7 +2308,7 @@ namespace OpenDental{
 			textGroupName.Text=troj.PLANDESC;
 			textPhone.Text=troj.ELIGPHONE;
 			textGroupNum.Text=troj.POLICYNO;
-			checkNoSendElect.Checked=!troj.ECLAIMS;
+			//checkNoSendElect.Checked=!troj.ECLAIMS;//Ignore this.  Even if Trojan says paper, most offices still send by clearinghouse.
 			textElectID.Text=troj.PAYERID;
 			textCarrier.Text=troj.MAILTO;
 			textAddress.Text=troj.MAILTOST;
