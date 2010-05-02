@@ -4058,6 +4058,9 @@ namespace OpenDental{
 						case "Signed":
 							row.Cells.Add(table.Rows[i]["signature"].ToString());
 							break;
+						case "Priority":
+							row.Cells.Add(table.Rows[i]["priority"].ToString());
+							break;
 					}
 				}				
 				if(checkNotes.Checked){

@@ -43,7 +43,8 @@ namespace OpenDentBusiness {
 			table.Columns.Add("LabCaseNum");
 			table.Columns.Add("note");
 			table.Columns.Add("PatNum");//only used for Commlog and Task
-			table.Columns.Add("Priority");
+			table.Columns.Add("Priority");//for sorting
+			table.Columns.Add("priority");
 			table.Columns.Add("ProcCode");
 			table.Columns.Add("procDate");
 			table.Columns.Add("ProcDate",typeof(DateTime));
@@ -177,6 +178,7 @@ namespace OpenDentBusiness {
 				}
 				row["PatNum"]="";
 				row["Priority"]=rawProcs.Rows[i]["Priority"].ToString();
+				row["priority"]=DefC.GetName(DefCat.TxPriorities,PIn.Long(rawProcs.Rows[i]["Priority"].ToString()));
 				row["ProcCode"]=rawProcs.Rows[i]["ProcCode"].ToString();
 				dateT=PIn.DateT(rawProcs.Rows[i]["ProcDate"].ToString());
 				if(dateT.Year<1880) {
@@ -250,6 +252,7 @@ namespace OpenDentBusiness {
 				row["note"]=rawComm.Rows[i]["Note"].ToString();
 				row["PatNum"]=rawComm.Rows[i]["PatNum"].ToString();
 				row["Priority"]="";
+				row["priority"]="";
 				row["ProcCode"]="";
 				dateT=PIn.DateT(rawComm.Rows[i]["CommDateTime"].ToString());
 				if(dateT.Year<1880) {
@@ -302,6 +305,7 @@ namespace OpenDentBusiness {
 				row["note"] = "";
 				row["PatNum"] = "";
 				row["Priority"] = "";
+				row["priority"]="";
 				row["ProcCode"] = "";
 				dateT = PIn.DateT(rawForm.Rows[i]["FormDateTime"].ToString());
 				row["ProcDate"] = dateT.ToShortDateString();
@@ -377,6 +381,7 @@ namespace OpenDentBusiness {
 				row["note"]=rawRx.Rows[i]["Notes"].ToString();
 				row["PatNum"]="";
 				row["Priority"]="";
+				row["priority"]="";
 				row["ProcCode"]="";
 				dateT=PIn.Date(rawRx.Rows[i]["RxDate"].ToString());
 				if(dateT.Year<1880) {
@@ -445,6 +450,7 @@ namespace OpenDentBusiness {
 				row["note"]=rawLab.Rows[i]["Instructions"].ToString();
 				row["PatNum"]="";
 				row["Priority"]="";
+				row["priority"]="";
 				row["ProcCode"]="";
 				dateT=PIn.DateT(rawLab.Rows[i]["DateTimeCreated"].ToString());
 				if(dateT.Year<1880) {
@@ -518,6 +524,7 @@ namespace OpenDentBusiness {
 				row["note"]=rawTask.Rows[i]["Descript"].ToString();
 				row["PatNum"]=rawTask.Rows[i]["KeyNum"].ToString();
 				row["Priority"]="";
+				row["priority"]="";
 				row["ProcCode"]="";
 				dateT = PIn.DateT(rawTask.Rows[i]["DateTask"].ToString());
 				row["procTime"]="";
@@ -626,6 +633,7 @@ namespace OpenDentBusiness {
 				row["note"]=rawApt.Rows[i]["Note"].ToString();
 				row["PatNum"]="";
 				row["Priority"]="";
+				row["priority"]="";
 				row["ProcCode"]="";
 				if(dateT.Year<1880) {
 					row["procDate"]="";
@@ -683,6 +691,7 @@ namespace OpenDentBusiness {
 				row["note"]=rawEmail.Rows[i]["BodyText"].ToString();
 				row["PatNum"]="";
 				row["Priority"]="";
+				row["priority"]="";
 				row["ProcCode"]="";
 				//row["PatNum"]=rawEmail.Rows[i]["PatNum"].ToString();
 				dateT=PIn.DateT(rawEmail.Rows[i]["msgDateTime"].ToString());
@@ -741,6 +750,7 @@ namespace OpenDentBusiness {
 				row["note"]="";
 				row["PatNum"]="";
 				row["Priority"]="";
+				row["priority"]="";
 				row["ProcCode"]="";
 				dateT=PIn.DateT(rawSheet.Rows[i]["DateTimeSheet"].ToString());
 				if(dateT.Year<1880) {

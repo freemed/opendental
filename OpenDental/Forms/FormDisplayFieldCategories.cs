@@ -10,7 +10,6 @@ using OpenDentBusiness;
 namespace OpenDental{
 	/// <summary></summary>
 	public class FormDisplayFieldCategories:System.Windows.Forms.Form {
-		private OpenDental.UI.Button butCancel;
 		private Label label1;
 		/// <summary>
 		/// Required designer variable.
@@ -18,6 +17,7 @@ namespace OpenDental{
 		private System.ComponentModel.Container components = null;
 		//private bool changed;
 		private OpenDental.UI.Button butOK;
+		private OpenDental.UI.Button butCancel;
 		private ListBox listCategory;
 		//private List<DisplayField> ListShowing;
 		//private List<DisplayField> ListAvailable;
@@ -106,7 +106,7 @@ namespace OpenDental{
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 0;
-			this.butCancel.Text = "Close";
+			this.butCancel.Text = "Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
 			// FormDisplayFieldCategories
@@ -142,13 +142,14 @@ namespace OpenDental{
 			FormDisplayFields FormF=new FormDisplayFields();
 			FormF.category=(DisplayFieldCategory)listCategory.SelectedIndex;
 			FormF.ShowDialog();
+			Close();
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
 			FormDisplayFields FormF=new FormDisplayFields();
 			FormF.category=(DisplayFieldCategory)listCategory.SelectedIndex;
 			FormF.ShowDialog();
-			//we'll always just come back to this window
+			Close();
 		}
 
 		private void butCancel_Click(object sender, System.EventArgs e) {

@@ -110,6 +110,7 @@ namespace OpenDentBusiness {
 				list.Add(new DisplayField("ADA Code",62,category));
 				list.Add(new DisplayField("User",62,category));
 				list.Add(new DisplayField("Signed",55,category));
+				//list.Add(new DisplayField("Priority",65,category));
 			}
 			else if(category==DisplayFieldCategory.PatientSelect){
 				list.Add(new DisplayField("LastName",75,category));
@@ -212,6 +213,7 @@ namespace OpenDentBusiness {
 				list.Add(new DisplayField("ADA Code",62,category));
 				list.Add(new DisplayField("User",62,category));
 				list.Add(new DisplayField("Signed",55,category));
+				list.Add(new DisplayField("Priority",65,category));
 			}
 			else if(category==DisplayFieldCategory.PatientSelect){
 				list.Add(new DisplayField("LastName",75,category));
