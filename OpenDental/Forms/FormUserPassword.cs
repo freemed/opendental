@@ -19,10 +19,11 @@ namespace OpenDental{
 		/// </summary>
 		private System.ComponentModel.Container components = null;
 		private bool IsCreate;
-		private TextBox textPasswordAgain;
-		private Label label2;
 		private TextBox textUserName;
 		private Label label3;
+		private TextBox textCurrent;
+		private Label labelCurrent;
+		private CheckBox checkShow;
 		///<summary></summary>
 		public string hashedResult;
 
@@ -61,30 +62,79 @@ namespace OpenDental{
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormUserPassword));
-			this.butCancel = new OpenDental.UI.Button();
-			this.butOK = new OpenDental.UI.Button();
 			this.label1 = new System.Windows.Forms.Label();
 			this.textPassword = new System.Windows.Forms.TextBox();
-			this.textPasswordAgain = new System.Windows.Forms.TextBox();
-			this.label2 = new System.Windows.Forms.Label();
 			this.textUserName = new System.Windows.Forms.TextBox();
 			this.label3 = new System.Windows.Forms.Label();
+			this.textCurrent = new System.Windows.Forms.TextBox();
+			this.labelCurrent = new System.Windows.Forms.Label();
+			this.checkShow = new System.Windows.Forms.CheckBox();
+			this.butOK = new OpenDental.UI.Button();
+			this.butCancel = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
-			// butCancel
+			// label1
 			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(357,122);
-			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,26);
-			this.butCancel.TabIndex = 2;
-			this.butCancel.Text = "&Cancel";
-			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
+			this.label1.Location = new System.Drawing.Point(13,80);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(157,18);
+			this.label1.TabIndex = 2;
+			this.label1.Text = "New Password";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textPassword
+			// 
+			this.textPassword.Location = new System.Drawing.Point(172,79);
+			this.textPassword.Name = "textPassword";
+			this.textPassword.PasswordChar = '*';
+			this.textPassword.Size = new System.Drawing.Size(203,20);
+			this.textPassword.TabIndex = 0;
+			// 
+			// textUserName
+			// 
+			this.textUserName.Location = new System.Drawing.Point(172,23);
+			this.textUserName.Name = "textUserName";
+			this.textUserName.ReadOnly = true;
+			this.textUserName.Size = new System.Drawing.Size(203,20);
+			this.textUserName.TabIndex = 5;
+			// 
+			// label3
+			// 
+			this.label3.Location = new System.Drawing.Point(13,24);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(157,18);
+			this.label3.TabIndex = 6;
+			this.label3.Text = "User";
+			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textCurrent
+			// 
+			this.textCurrent.Location = new System.Drawing.Point(172,51);
+			this.textCurrent.Name = "textCurrent";
+			this.textCurrent.PasswordChar = '*';
+			this.textCurrent.Size = new System.Drawing.Size(203,20);
+			this.textCurrent.TabIndex = 7;
+			// 
+			// labelCurrent
+			// 
+			this.labelCurrent.Location = new System.Drawing.Point(13,52);
+			this.labelCurrent.Name = "labelCurrent";
+			this.labelCurrent.Size = new System.Drawing.Size(157,18);
+			this.labelCurrent.TabIndex = 8;
+			this.labelCurrent.Text = "Current Password";
+			this.labelCurrent.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// checkShow
+			// 
+			this.checkShow.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkShow.Location = new System.Drawing.Point(82,107);
+			this.checkShow.Name = "checkShow";
+			this.checkShow.Size = new System.Drawing.Size(104,18);
+			this.checkShow.TabIndex = 9;
+			this.checkShow.Text = "Show";
+			this.checkShow.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkShow.UseVisualStyleBackColor = true;
+			this.checkShow.Click += new System.EventHandler(this.checkShow_Click);
 			// 
 			// butOK
 			// 
@@ -94,72 +144,37 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(264,122);
+			this.butOK.Location = new System.Drawing.Point(264,158);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,26);
 			this.butOK.TabIndex = 1;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
-			// label1
+			// butCancel
 			// 
-			this.label1.Location = new System.Drawing.Point(28,42);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(157,18);
-			this.label1.TabIndex = 2;
-			this.label1.Text = "New Password";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textPassword
-			// 
-			this.textPassword.Location = new System.Drawing.Point(187,41);
-			this.textPassword.Name = "textPassword";
-			this.textPassword.PasswordChar = '*';
-			this.textPassword.Size = new System.Drawing.Size(245,20);
-			this.textPassword.TabIndex = 0;
-			// 
-			// textPasswordAgain
-			// 
-			this.textPasswordAgain.Location = new System.Drawing.Point(187,71);
-			this.textPasswordAgain.Name = "textPasswordAgain";
-			this.textPasswordAgain.PasswordChar = '*';
-			this.textPasswordAgain.Size = new System.Drawing.Size(245,20);
-			this.textPasswordAgain.TabIndex = 3;
-			// 
-			// label2
-			// 
-			this.label2.Location = new System.Drawing.Point(9,72);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(176,18);
-			this.label2.TabIndex = 4;
-			this.label2.Text = "New Password Again";
-			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textUserName
-			// 
-			this.textUserName.Location = new System.Drawing.Point(187,12);
-			this.textUserName.Name = "textUserName";
-			this.textUserName.ReadOnly = true;
-			this.textUserName.Size = new System.Drawing.Size(245,20);
-			this.textUserName.TabIndex = 5;
-			// 
-			// label3
-			// 
-			this.label3.Location = new System.Drawing.Point(28,13);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(157,18);
-			this.label3.TabIndex = 6;
-			this.label3.Text = "User";
-			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butCancel.Autosize = true;
+			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.CornerRadius = 4F;
+			this.butCancel.Location = new System.Drawing.Point(357,158);
+			this.butCancel.Name = "butCancel";
+			this.butCancel.Size = new System.Drawing.Size(75,26);
+			this.butCancel.TabIndex = 2;
+			this.butCancel.Text = "&Cancel";
+			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
 			// FormUserPassword
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(484,173);
+			this.ClientSize = new System.Drawing.Size(484,209);
+			this.Controls.Add(this.checkShow);
+			this.Controls.Add(this.textCurrent);
+			this.Controls.Add(this.labelCurrent);
 			this.Controls.Add(this.textUserName);
 			this.Controls.Add(this.label3);
-			this.Controls.Add(this.textPasswordAgain);
-			this.Controls.Add(this.label2);
 			this.Controls.Add(this.textPassword);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
@@ -182,12 +197,33 @@ namespace OpenDental{
 			if(IsCreate){
 				Text=Lan.g(this,"Create Password");
 			}
+			if(Security.IsAuthorized(Permissions.SecurityAdmin,true)) {
+				labelCurrent.Visible=false;
+				textCurrent.Visible=false;
+			}
+		}
+
+		private void checkShow_Click(object sender,EventArgs e) {
+			//char ch=textPassword.PasswordChar;
+			if(checkShow.Checked) {
+				textPassword.PasswordChar='\0';
+			}
+			else {
+				textPassword.PasswordChar='*';
+			}
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
-			if(textPassword.Text!=textPasswordAgain.Text){
-				MsgBox.Show(this,"Passwords do not match.");
-				return;
+			//if(textPassword.Text!=textPasswordAgain.Text){
+			//	MsgBox.Show(this,"Passwords do not match.");
+			//	return;
+			//}
+			if(PrefC.GetBool(PrefName.PasswordsMustBeStrong)) {
+				string explanation=Userods.IsPasswordStrong(textPassword.Text);
+				if(explanation!="") {
+					MessageBox.Show(explanation);
+					return;
+				}
 			}
 			if(textPassword.Text==""){
 				hashedResult="";
@@ -202,6 +238,8 @@ namespace OpenDental{
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 		
 

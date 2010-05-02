@@ -31,9 +31,11 @@ namespace OpenDental{
 		private Label labelSchoolClass;
 		private CheckBox checkCannotEditOwn;
 		private Label label1;
-		private TextBox textDate;
+		private TextBox textDateLock;
 		private OpenDental.UI.Button butChange;
-		private DataTable table;
+		private CheckBox checkPasswordsMustBeStrong;
+		//private DataTable table;
+		private List<Userod> ListUser;
 
 		///<summary></summary>
 		public FormSecurity()
@@ -78,7 +80,8 @@ namespace OpenDental{
 			this.labelSchoolClass = new System.Windows.Forms.Label();
 			this.checkCannotEditOwn = new System.Windows.Forms.CheckBox();
 			this.label1 = new System.Windows.Forms.Label();
-			this.textDate = new System.Windows.Forms.TextBox();
+			this.textDateLock = new System.Windows.Forms.TextBox();
+			this.checkPasswordsMustBeStrong = new System.Windows.Forms.CheckBox();
 			this.butChange = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butSetAll = new OpenDental.UI.Button();
@@ -93,12 +96,12 @@ namespace OpenDental{
 			this.treePermissions.ImageIndex = 0;
 			this.treePermissions.ImageList = this.imageListPerm;
 			this.treePermissions.ItemHeight = 15;
-			this.treePermissions.Location = new System.Drawing.Point(471,29);
+			this.treePermissions.Location = new System.Drawing.Point(525,29);
 			this.treePermissions.Name = "treePermissions";
 			this.treePermissions.SelectedImageIndex = 0;
 			this.treePermissions.ShowPlusMinus = false;
 			this.treePermissions.ShowRootLines = false;
-			this.treePermissions.Size = new System.Drawing.Size(416,637);
+			this.treePermissions.Size = new System.Drawing.Size(362,637);
 			this.treePermissions.TabIndex = 6;
 			this.treePermissions.DoubleClick += new System.EventHandler(this.treePermissions_DoubleClick);
 			this.treePermissions.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treePermissions_AfterSelect);
@@ -114,7 +117,7 @@ namespace OpenDental{
 			// 
 			// labelPerm
 			// 
-			this.labelPerm.Location = new System.Drawing.Point(468,5);
+			this.labelPerm.Location = new System.Drawing.Point(522,7);
 			this.labelPerm.Name = "labelPerm";
 			this.labelPerm.Size = new System.Drawing.Size(285,19);
 			this.labelPerm.TabIndex = 5;
@@ -185,14 +188,27 @@ namespace OpenDental{
 			this.label1.Text = "Lock Date";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textDate
+			// textDateLock
 			// 
-			this.textDate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.textDate.Location = new System.Drawing.Point(219,675);
-			this.textDate.Name = "textDate";
-			this.textDate.ReadOnly = true;
-			this.textDate.Size = new System.Drawing.Size(82,20);
-			this.textDate.TabIndex = 94;
+			this.textDateLock.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.textDateLock.Location = new System.Drawing.Point(219,675);
+			this.textDateLock.Name = "textDateLock";
+			this.textDateLock.ReadOnly = true;
+			this.textDateLock.Size = new System.Drawing.Size(82,20);
+			this.textDateLock.TabIndex = 94;
+			// 
+			// checkPasswordsMustBeStrong
+			// 
+			this.checkPasswordsMustBeStrong.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.checkPasswordsMustBeStrong.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkPasswordsMustBeStrong.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkPasswordsMustBeStrong.Location = new System.Drawing.Point(8,621);
+			this.checkPasswordsMustBeStrong.Name = "checkPasswordsMustBeStrong";
+			this.checkPasswordsMustBeStrong.Size = new System.Drawing.Size(224,16);
+			this.checkPasswordsMustBeStrong.TabIndex = 96;
+			this.checkPasswordsMustBeStrong.Text = "Passwords must be strong";
+			this.checkPasswordsMustBeStrong.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkPasswordsMustBeStrong.Click += new System.EventHandler(this.checkPasswordsMustBeStrong_Click);
 			// 
 			// butChange
 			// 
@@ -217,7 +233,7 @@ namespace OpenDental{
 			this.gridMain.Location = new System.Drawing.Point(8,29);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(456,578);
+			this.gridMain.Size = new System.Drawing.Size(511,552);
 			this.gridMain.TabIndex = 59;
 			this.gridMain.Title = "Users";
 			this.gridMain.TranslationName = "TableSecurity";
@@ -232,7 +248,7 @@ namespace OpenDental{
 			this.butSetAll.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butSetAll.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butSetAll.CornerRadius = 4F;
-			this.butSetAll.Location = new System.Drawing.Point(470,672);
+			this.butSetAll.Location = new System.Drawing.Point(525,672);
 			this.butSetAll.Name = "butSetAll";
 			this.butSetAll.Size = new System.Drawing.Size(79,24);
 			this.butSetAll.TabIndex = 58;
@@ -247,7 +263,7 @@ namespace OpenDental{
 			this.butAddUser.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butAddUser.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butAddUser.CornerRadius = 4F;
-			this.butAddUser.Location = new System.Drawing.Point(118,610);
+			this.butAddUser.Location = new System.Drawing.Point(118,587);
 			this.butAddUser.Name = "butAddUser";
 			this.butAddUser.Size = new System.Drawing.Size(75,24);
 			this.butAddUser.TabIndex = 0;
@@ -262,7 +278,7 @@ namespace OpenDental{
 			this.butAddGroup.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butAddGroup.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butAddGroup.CornerRadius = 4F;
-			this.butAddGroup.Location = new System.Drawing.Point(8,610);
+			this.butAddGroup.Location = new System.Drawing.Point(8,587);
 			this.butAddGroup.Name = "butAddGroup";
 			this.butAddGroup.Size = new System.Drawing.Size(75,24);
 			this.butAddGroup.TabIndex = 1;
@@ -288,9 +304,10 @@ namespace OpenDental{
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(894,700);
+			this.Controls.Add(this.checkPasswordsMustBeStrong);
 			this.Controls.Add(this.treePermissions);
 			this.Controls.Add(this.butChange);
-			this.Controls.Add(this.textDate);
+			this.Controls.Add(this.textDateLock);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.checkCannotEditOwn);
 			this.Controls.Add(this.comboSchoolClass);
@@ -337,11 +354,12 @@ namespace OpenDental{
 			FillTreePermissionsInitial();
 			FillUsers();
 			FillTreePerm();
+			checkPasswordsMustBeStrong.Checked=PrefC.GetBool(PrefName.PasswordsMustBeStrong);
 			checkTimecardSecurityEnabled.Checked=PrefC.GetBool(PrefName.TimecardSecurityEnabled);
 			checkCannotEditOwn.Checked=PrefC.GetBool(PrefName.TimecardUsersDontEditOwnCard);
 			checkCannotEditOwn.Enabled=checkTimecardSecurityEnabled.Checked;
 			if(PrefC.GetDate(PrefName.SecurityLockDate).Year>1880){
-				textDate.Text=PrefC.GetDate(PrefName.SecurityLockDate).ToShortDateString();
+				textDateLock.Text=PrefC.GetDate(PrefName.SecurityLockDate).ToShortDateString();
 			}
 		}
 
@@ -478,7 +496,9 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableSecurity","Provider"),90);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableSecurity","Clinic"),90);
+			col=new ODGridColumn(Lan.g("TableSecurity","Clinic"),80);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableSecurity","Strong"),90,HorizontalAlignment.Center);
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
@@ -496,29 +516,34 @@ namespace OpenDental{
 			if(comboSchoolClass.Visible && comboSchoolClass.SelectedIndex>0){
 				classNum=SchoolClasses.List[comboSchoolClass.SelectedIndex-1].SchoolClassNum;
 			}
-			table=Userods.RefreshSecurity(usertype,classNum);
+			ListUser=Userods.RefreshSecurity(usertype,classNum);
 			string userdesc;
-			for(int i=0;i<table.Rows.Count;i++){
+			for(int i=0;i<ListUser.Count;i++) {
 				row=new ODGridRow();
-				userdesc=table.Rows[i]["UserName"].ToString();
-				if(table.Rows[i]["IsHidden"].ToString()=="1"){
+				userdesc=ListUser[i].UserName;
+				if(ListUser[i].IsHidden){
 					userdesc+=Lan.g(this,"(hidden)");
 				}
 				row.Cells.Add(userdesc);
-				row.Cells.Add(UserGroups.GetGroup(PIn.Long(table.Rows[i]["UserGroupNum"].ToString())).Description);
-				row.Cells.Add(Employees.GetNameFL(PIn.Long(table.Rows[i]["EmployeeNum"].ToString())));
-				row.Cells.Add(Providers.GetLongDesc(PIn.Long(table.Rows[i]["ProvNum"].ToString())));
-				row.Cells.Add(Clinics.GetDesc(PIn.Long(table.Rows[i]["ClinicNum"].ToString())));
+				row.Cells.Add(UserGroups.GetGroup(ListUser[i].UserGroupNum).Description);
+				row.Cells.Add(Employees.GetNameFL(ListUser[i].EmployeeNum));
+				row.Cells.Add(Providers.GetLongDesc(ListUser[i].ProvNum));
+				row.Cells.Add(Clinics.GetDesc(ListUser[i].ClinicNum));
+				if(ListUser[i].PasswordIsStrong) {
+					row.Cells.Add("X");
+				}
+				else {
+					row.Cells.Add("");
+				}
 				gridMain.Rows.Add(row);
 			}
-			gridMain.EndUpdate();
-			
+			gridMain.EndUpdate();	
 		}
 
 		private void gridMain_CellClick(object sender,ODGridClickEventArgs e) {
-			SelectedGroupNum=PIn.Long(table.Rows[e.Row]["UserGroupNum"].ToString());
-			for(int i=0;i<table.Rows.Count;i++){
-				if(table.Rows[i]["UserGroupNum"].ToString()==SelectedGroupNum.ToString()){
+			SelectedGroupNum=ListUser[e.Row].UserGroupNum;
+			for(int i=0;i<ListUser.Count;i++) {
+				if(ListUser[i].UserGroupNum==SelectedGroupNum) {
 					gridMain.Rows[i].ColorText=Color.Red;
 				}
 				else{
@@ -562,7 +587,7 @@ namespace OpenDental{
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			Userod user=Userods.GetUser(PIn.Long(table.Rows[e.Row]["UserNum"].ToString()));
+			Userod user=Userods.GetUser(ListUser[e.Row].UserNum);
 			FormUserEdit FormU=new FormUserEdit(user);
 			FormU.ShowDialog();
 			if(FormU.DialogResult==DialogResult.Cancel){
@@ -572,8 +597,8 @@ namespace OpenDental{
 				Security.CurUser=FormU.UserCur;//if user changed their own password, this keeps the CurUser synched.  Needed for eCW bridge.
 			}
 			FillUsers();
-			for(int i=0;i<table.Rows.Count;i++){
-				if(table.Rows[i]["UserNum"].ToString()==FormU.UserCur.UserNum.ToString()){
+			for(int i=0;i<ListUser.Count;i++) {
+				if(ListUser[i].UserNum==FormU.UserCur.UserNum) {
 					gridMain.SetSelected(i,true);
 					SelectedGroupNum=FormU.UserCur.UserGroupNum;
 				}
@@ -741,14 +766,32 @@ namespace OpenDental{
 			checkCannotEditOwn.Enabled=checkTimecardSecurityEnabled.Checked;
 		}
 
+		private void checkPasswordsMustBeStrong_Click(object sender,EventArgs e) {
+			if(checkPasswordsMustBeStrong.Checked) {
+				Prefs.UpdateBool(PrefName.PasswordsMustBeStrong,true);
+				DataValid.SetInvalid(InvalidType.Prefs);
+			}
+			else{//unchecking the box
+				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Warning.  If this box is unchecked, the strong password flag on all users will be reset.  If strong passwords are again turned on later, then each users will have to edit their password in order to cause the strong password flag to be set again.")) {
+					checkPasswordsMustBeStrong.Checked=true;//recheck it.
+					return;
+				}
+				Userods.ResetStrongPasswordFlags();
+				Prefs.UpdateBool(PrefName.PasswordsMustBeStrong,false);
+				DataValid.SetInvalid(InvalidType.Security,InvalidType.Prefs);
+				FillUsers();
+				FillTreePerm();
+			}
+		}
+
 		private void butChange_Click(object sender,EventArgs e) {
 			FormSecurityLock FormS=new FormSecurityLock();
 			FormS.ShowDialog();//prefs are set invalid within that form if needed.
 			if(PrefC.GetDate(PrefName.SecurityLockDate).Year>1880){
-				textDate.Text=PrefC.GetDate(PrefName.SecurityLockDate).ToShortDateString();
+				textDateLock.Text=PrefC.GetDate(PrefName.SecurityLockDate).ToShortDateString();
 			}
 			else{
-				textDate.Text="";
+				textDateLock.Text="";
 			}
 		}
 
@@ -756,13 +799,16 @@ namespace OpenDental{
 			if(changed){
 				DataValid.SetInvalid(InvalidType.Security);
 			}
-			if(	Prefs.UpdateBool(PrefName.TimecardSecurityEnabled,checkTimecardSecurityEnabled.Checked) ||
-					Prefs.UpdateBool(PrefName.TimecardUsersDontEditOwnCard,checkCannotEditOwn.Checked))
+			if(	//Prefs.UpdateBool(PrefName.PasswordsMustBeStrong,checkPasswordsMustBeStrong.Checked) //handled when box clicked.
+				Prefs.UpdateBool(PrefName.TimecardSecurityEnabled,checkTimecardSecurityEnabled.Checked) ||
+				Prefs.UpdateBool(PrefName.TimecardUsersDontEditOwnCard,checkCannotEditOwn.Checked))
 			{
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}
 			Close();
 		}
+
+		
 
 		
 

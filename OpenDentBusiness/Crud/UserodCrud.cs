@@ -57,6 +57,7 @@ namespace OpenDentBusiness.Crud{
 				userod.TaskListInBox    = PIn.Long  (table.Rows[i]["TaskListInBox"].ToString());
 				userod.AnesthProvType   = PIn.Int   (table.Rows[i]["AnesthProvType"].ToString());
 				userod.DefaultHidePopups= PIn.Bool  (table.Rows[i]["DefaultHidePopups"].ToString());
+				userod.PasswordIsStrong = PIn.Bool  (table.Rows[i]["PasswordIsStrong"].ToString());
 				retVal.Add(userod);
 			}
 			return retVal;
@@ -76,7 +77,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="UserNum,";
 			}
-			command+="UserName,Password,UserGroupNum,EmployeeNum,ClinicNum,ProvNum,IsHidden,TaskListInBox,AnesthProvType,DefaultHidePopups) VALUES(";
+			command+="UserName,Password,UserGroupNum,EmployeeNum,ClinicNum,ProvNum,IsHidden,TaskListInBox,AnesthProvType,DefaultHidePopups,PasswordIsStrong) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(userod.UserNum)+",";
 			}
@@ -90,7 +91,8 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Bool  (userod.IsHidden)+","
 				+    POut.Long  (userod.TaskListInBox)+","
 				+    POut.Int   (userod.AnesthProvType)+","
-				+    POut.Bool  (userod.DefaultHidePopups)+")";
+				+    POut.Bool  (userod.DefaultHidePopups)+","
+				+    POut.Bool  (userod.PasswordIsStrong)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -112,7 +114,8 @@ namespace OpenDentBusiness.Crud{
 				+"IsHidden         =  "+POut.Bool  (userod.IsHidden)+", "
 				+"TaskListInBox    =  "+POut.Long  (userod.TaskListInBox)+", "
 				+"AnesthProvType   =  "+POut.Int   (userod.AnesthProvType)+", "
-				+"DefaultHidePopups=  "+POut.Bool  (userod.DefaultHidePopups)+" "
+				+"DefaultHidePopups=  "+POut.Bool  (userod.DefaultHidePopups)+", "
+				+"PasswordIsStrong =  "+POut.Bool  (userod.PasswordIsStrong)+" "
 				+"WHERE UserNum = "+POut.Long(userod.UserNum);
 			Db.NonQ(command);
 		}
@@ -159,6 +162,10 @@ namespace OpenDentBusiness.Crud{
 			if(userod.DefaultHidePopups != oldUserod.DefaultHidePopups) {
 				if(command!=""){ command+=",";}
 				command+="DefaultHidePopups = "+POut.Bool(userod.DefaultHidePopups)+"";
+			}
+			if(userod.PasswordIsStrong != oldUserod.PasswordIsStrong) {
+				if(command!=""){ command+=",";}
+				command+="PasswordIsStrong = "+POut.Bool(userod.PasswordIsStrong)+"";
 			}
 			if(command==""){
 				return;

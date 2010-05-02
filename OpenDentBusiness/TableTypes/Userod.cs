@@ -29,12 +29,14 @@ namespace OpenDentBusiness{
 		public int AnesthProvType;
 		///<summary>If set to true, the hide popups button will start out pressed for this user.</summary>
 		public bool DefaultHidePopups;
+		///<summary>Gets set to true if strong passwords are turned on, and this user changes their password to a strong password.  We don't store actual passwords, so this flag is the only way to tell.</summary>
+		public bool PasswordIsStrong;
 
 		public Userod(){
 
 		}
 
-		public Userod(long userNum,string userName,string password,long userGroupNum,long employeeNum,long clinicNum,long provNum,bool isHidden,int anesthProvType,bool defaultHidePopups)
+		public Userod(long userNum,string userName,string password,long userGroupNum,long employeeNum,long clinicNum,long provNum,bool isHidden,int anesthProvType,bool defaultHidePopups,bool passwordIsStrong)
 		{ 
 			UserNum=userNum;
 			UserName=userName;
@@ -46,6 +48,7 @@ namespace OpenDentBusiness{
 			IsHidden=isHidden;
 			AnesthProvType=anesthProvType;
 			DefaultHidePopups=defaultHidePopups;
+			PasswordIsStrong=passwordIsStrong;
 		}
 		
 		///<summary></summary>

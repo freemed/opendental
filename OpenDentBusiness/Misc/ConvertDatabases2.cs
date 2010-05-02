@@ -2134,10 +2134,14 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				}
 				command="ALTER TABLE clockevent DROP ClockIn";
 				Db.NonQ(command);
+				command="INSERT INTO preference(PrefName,ValueString) VALUES('PasswordsMustBeStrong','0')";
+				Db.NonQ(command);
+				command="ALTER TABLE userod ADD PasswordIsStrong tinyint NOT NULL";
+				Db.NonQ(command);
 
 
 
-
+				
 
 				command="UPDATE preference SET ValueString = '7.1.0.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
@@ -2152,21 +2156,5 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 }
 
 
-				/*
-				command="ALTER TABLE clockevent ADD TimeEnteredIn datetime NOT NULL default '0001-01-01 00:00:00'";
-				Db.NonQ(command);
-				command="ALTER TABLE clockevent ADD TimeDisplayedIn datetime NOT NULL default '0001-01-01 00:00:00'";
-				Db.NonQ(command);
+			
 				
-				*/
-
-				/*
-				command="ALTER TABLE clockevent ADD TimeEntered1 datetime NOT NULL default '0001-01-01 00:00:00'";
-				Db.NonQ(command);
-				command="ALTER TABLE clockevent ADD TimeDisplayed1 datetime NOT NULL default '0001-01-01 00:00:00'";
-				Db.NonQ(command);
-				command="ALTER TABLE clockevent ADD TimeEntered2 datetime NOT NULL default '0001-01-01 00:00:00'";
-				Db.NonQ(command);
-				command="ALTER TABLE clockevent ADD TimeDisplayed2 datetime NOT NULL default '0001-01-01 00:00:00'";
-				Db.NonQ(command);
-				*/

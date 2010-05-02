@@ -255,9 +255,9 @@ namespace OpenDentBusiness {
 		}		
 
 		///<summary>usertype can be 'all', 'prov', 'emp', or 'other'.</summary>
-		public static DataTable RefreshSecurity(string usertype,long schoolClassNum) {
+		public static List<Userod> RefreshSecurity(string usertype,long schoolClassNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetTable(MethodBase.GetCurrentMethod(),usertype,schoolClassNum);
+				return Meth.GetObject<List<Userod>>(MethodBase.GetCurrentMethod(),usertype,schoolClassNum);
 			}
 			string command;
 			if(usertype=="prov" && schoolClassNum>0){
@@ -265,7 +265,7 @@ namespace OpenDentBusiness {
 					+"WHERE userod.ProvNum=provider.ProvNum "
 					+"AND SchoolClassNum="+POut.Long(schoolClassNum)
 					+" ORDER BY UserName";
-				return Db.GetTable(command);
+				return Crud.UserodCrud.SelectMany(command);
 			}
 			command="SELECT * FROM userod ";
 			if(usertype=="emp"){
@@ -281,7 +281,7 @@ namespace OpenDentBusiness {
 				command+="WHERE ProvNum=0 AND EmployeeNum=0 ";
 			}
 			command+="ORDER BY UserName";
-			return Db.GetTable(command);
+			return Crud.UserodCrud.SelectMany(command);
 		}
 
 		///<summary>Surround with try/catch because it can throw exceptions.</summary>
@@ -433,6 +433,56 @@ namespace OpenDentBusiness {
 				}
 			}
 			return 3;
+		}
+
+		///<summary>Returns empty string if password is strong enough.  Otherwise, returns explanation of why it's not strong enough.</summary>
+		public static string IsPasswordStrong(string pass) {
+			//No need to check RemotingRole; no call to db.
+			if(pass=="") {
+				return Lans.g("FormUserPassword","Password may not be blank when the strong password feature is turned on.");
+			}
+			if(pass.Length<8) {
+				return Lans.g("FormUserPassword","Password must be at least eight characters long when the strong password feature is turned on.");
+			}
+			bool containsCap=false;
+			for(int i=0;i<pass.Length;i++) {
+				if(Char.IsUpper(pass[i])) {
+					containsCap=true;
+				}
+			}
+			if(!containsCap) {
+				return Lans.g("FormUserPassword","Password must contain at least one capital letter when the strong password feature is turned on.");
+			}
+			/*
+			bool containsPunct=false;
+			for(int i=0;i<pass.Length;i++) {
+				if(!Char.IsLetterOrDigit(pass[i])) {
+					containsPunct=true;
+				}
+			}
+			if(!containsPunct) {
+				return Lans.g("FormUserPassword","Password must contain at least one punctuation or symbol character when the strong password feature is turned on.");
+			}*/
+			bool containsNum=false;
+			for(int i=0;i<pass.Length;i++) {
+				if(Char.IsNumber(pass[i])) {
+					containsNum=true;
+				}
+			}
+			if(!containsNum) {
+				return Lans.g("FormUserPassword","Password must contain at least one number when the strong password feature is turned on.");
+			}
+			return "";
+		}
+
+		///<summary>This resets the strong password flag on all users after an admin turns off pref PasswordsMustBeStrong.  If strong passwords are again turned on later, then each user will have to edit their password in order set the strong password flag again.</summary>
+		public static void ResetStrongPasswordFlags() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod());
+				return;
+			}
+			string command="UPDATE userod SET PasswordIsStrong=0";
+			Db.NonQ(command);
 		}
 
 

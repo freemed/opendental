@@ -148,6 +148,7 @@ namespace OpenDentBusiness {
 		MobileSyncPath,
 		OpenDentalVendor,
 		OracleInsertId,
+		PasswordsMustBeStrong,
 		PatientSelectUsesSearchButton,
 		PayPlansBillInAdvanceDays,
 		PerioColorCAL,

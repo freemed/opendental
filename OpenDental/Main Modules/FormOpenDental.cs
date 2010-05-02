@@ -209,6 +209,8 @@ namespace OpenDental{
 		private MenuItem menuItemMergePatients;
 		private MenuItem menuItemDuplicateBlockouts;
 		private OpenDental.UI.ODToolBar ToolBarMain;
+		private MenuItem menuItemPassword;
+		private MenuItem menuItem3;
 		private FormTerminalManager formTerminalManager;
 
 		///<summary></summary>
@@ -417,6 +419,8 @@ namespace OpenDental{
 			this.lightSignalGrid1 = new OpenDental.UI.LightSignalGrid();
 			this.smartCardWatcher1 = new OpenDental.SmartCards.SmartCardWatcher();
 			this.timerHeartBeat = new System.Windows.Forms.Timer(this.components);
+			this.menuItemPassword = new System.Windows.Forms.MenuItem();
+			this.menuItem3 = new System.Windows.Forms.MenuItem();
 			this.SuspendLayout();
 			// 
 			// timerTimeIndic
@@ -446,6 +450,8 @@ namespace OpenDental{
 			// 
 			this.menuItemFile.Index = 1;
 			this.menuItemFile.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItemPassword,
+            this.menuItem3,
             this.menuItemPrinter,
             this.menuItemGraphics,
             this.menuItem6,
@@ -457,35 +463,35 @@ namespace OpenDental{
 			// 
 			// menuItemPrinter
 			// 
-			this.menuItemPrinter.Index = 0;
+			this.menuItemPrinter.Index = 2;
 			this.menuItemPrinter.Text = "&Printers";
 			this.menuItemPrinter.Click += new System.EventHandler(this.menuItemPrinter_Click);
 			// 
 			// menuItemGraphics
 			// 
-			this.menuItemGraphics.Index = 1;
+			this.menuItemGraphics.Index = 3;
 			this.menuItemGraphics.Text = "Graphics";
 			this.menuItemGraphics.Click += new System.EventHandler(this.menuItemGraphics_Click);
 			// 
 			// menuItem6
 			// 
-			this.menuItem6.Index = 2;
+			this.menuItem6.Index = 4;
 			this.menuItem6.Text = "-";
 			// 
 			// menuItemConfig
 			// 
-			this.menuItemConfig.Index = 3;
+			this.menuItemConfig.Index = 5;
 			this.menuItemConfig.Text = "&Choose Database";
 			this.menuItemConfig.Click += new System.EventHandler(this.menuItemConfig_Click);
 			// 
 			// menuItem7
 			// 
-			this.menuItem7.Index = 4;
+			this.menuItem7.Index = 6;
 			this.menuItem7.Text = "-";
 			// 
 			// menuItemExit
 			// 
-			this.menuItemExit.Index = 5;
+			this.menuItemExit.Index = 7;
 			this.menuItemExit.ShowShortcut = false;
 			this.menuItemExit.Text = "E&xit";
 			this.menuItemExit.Click += new System.EventHandler(this.menuItemExit_Click);
@@ -1214,6 +1220,17 @@ namespace OpenDental{
 			this.timerHeartBeat.Enabled = true;
 			this.timerHeartBeat.Interval = 180000;
 			this.timerHeartBeat.Tick += new System.EventHandler(this.timerHeartBeat_Tick);
+			// 
+			// menuItemPassword
+			// 
+			this.menuItemPassword.Index = 0;
+			this.menuItemPassword.Text = "Change Password";
+			this.menuItemPassword.Click += new System.EventHandler(this.menuItemPassword_Click);
+			// 
+			// menuItem3
+			// 
+			this.menuItem3.Index = 1;
+			this.menuItem3.Text = "-";
 			// 
 			// FormOpenDental
 			// 
@@ -3041,6 +3058,21 @@ namespace OpenDental{
 		}
 
 		//File
+		private void menuItemPassword_Click(object sender,EventArgs e) {
+			//no security blocking because everyone is allowed to change their own password.
+			FormUserPassword FormU=new FormUserPassword(false,Security.CurUser.UserName);
+			FormU.ShowDialog();
+			if(FormU.DialogResult==DialogResult.Cancel) {
+				return;
+			}
+			Security.CurUser.Password=FormU.hashedResult;
+			if(PrefC.GetBool(PrefName.PasswordsMustBeStrong)) {
+				Security.CurUser.PasswordIsStrong=true;
+			}
+			Userods.Update(Security.CurUser);
+			DataValid.SetInvalid(InvalidType.Security);
+		}
+
 		private void menuItemPrinter_Click(object sender, System.EventArgs e) {
 			if(!Security.IsAuthorized(Permissions.Setup)){
 				return;
@@ -4148,6 +4180,8 @@ namespace OpenDental{
 			//This step is necessary so that graphics memory does not fill up.
 			Dispose();
 		}
+
+		
 
 		
 

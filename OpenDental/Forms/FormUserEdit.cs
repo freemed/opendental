@@ -322,6 +322,9 @@ namespace OpenDental{
 				return;
 			}
 			UserCur.Password=FormU.hashedResult;
+			if(PrefC.GetBool(PrefName.PasswordsMustBeStrong)) {
+				UserCur.PasswordIsStrong=true;
+			}
 			if(UserCur.Password==""){
 				butPassword.Text=Lan.g(this,"Create Password");
 			}
