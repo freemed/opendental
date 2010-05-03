@@ -1,9 +1,62 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using OpenDentBusiness;
 
 namespace UnitTests {
-	class BenefitT {
+	public class BenefitT {
+		public static void CreateAnnualMax(long planNum,double amt){
+			Benefit ben=new Benefit();
+			ben.PlanNum=planNum;
+			ben.BenefitType=InsBenefitType.Limitations;
+			ben.CovCatNum=0;
+			ben.CoverageLevel=BenefitCoverageLevel.Individual;
+			ben.Percent=-1;
+			ben.MonetaryAmt=amt;
+			ben.TimePeriod=BenefitTimePeriod.CalendarYear;
+			Benefits.Insert(ben);
+		}
+
+		public static void CreateAnnualMaxFamily(long planNum,double amt){
+			Benefit ben=new Benefit();
+			ben.PlanNum=planNum;
+			ben.BenefitType=InsBenefitType.Limitations;
+			ben.CovCatNum=0;
+			ben.CoverageLevel=BenefitCoverageLevel.Family;
+			ben.Percent=-1;
+			ben.MonetaryAmt=amt;
+			ben.TimePeriod=BenefitTimePeriod.CalendarYear;
+			Benefits.Insert(ben);
+		}
+
+		public static void CreateCategoryPercent(long planNum,EbenefitCategory category,int percent){
+			Benefit ben=new Benefit();
+			ben.PlanNum=planNum;
+			ben.BenefitType=InsBenefitType.CoInsurance;
+			ben.CovCatNum=CovCats.GetForEbenCat(category).CovCatNum;
+			ben.CoverageLevel=BenefitCoverageLevel.None;
+			ben.Percent=percent;
+			ben.MonetaryAmt=-1;
+			ben.TimePeriod=BenefitTimePeriod.CalendarYear;
+			Benefits.Insert(ben);
+		}
+
+		public static void CreateFrequency(long planNum,string procCodeStr,BenefitQuantity quantityQualifier,int quantity){
+			Benefit ben=new Benefit();
+			ben.PlanNum=planNum;
+			ben.BenefitType=InsBenefitType.Limitations;
+			ben.CovCatNum=0;
+			ben.CodeNum=ProcedureCodes.GetCodeNum(procCodeStr);
+			ben.CoverageLevel=BenefitCoverageLevel.None;
+			ben.Percent=-1;
+			ben.MonetaryAmt=-1;
+			ben.TimePeriod=BenefitTimePeriod.None;
+			ben.Quantity=quantity;
+			ben.QuantityQualifier=quantityQualifier;
+			Benefits.Insert(ben);
+		}
+
+
 		/*
 		private void BenefitComputeRenewDate(){
 			DateTime asofDate=new DateTime(2006,3,19);

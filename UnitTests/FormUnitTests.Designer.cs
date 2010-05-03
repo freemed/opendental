@@ -67,9 +67,10 @@ namespace UnitTests {
 			// 
 			this.label2.Location = new System.Drawing.Point(92,37);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(360,18);
+			this.label2.Size = new System.Drawing.Size(505,18);
 			this.label2.TabIndex = 6;
-			this.label2.Text = "The scripts are all designed so that this will not normally be necessary.";
+			this.label2.Text = "The scripts are all designed so that this will not normally be necessary except f" +
+    "or new versions.";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// butRun
@@ -97,7 +98,7 @@ namespace UnitTests {
 			this.textSpecificTest.Name = "textSpecificTest";
 			this.textSpecificTest.Size = new System.Drawing.Size(74,20);
 			this.textSpecificTest.TabIndex = 9;
-			this.textSpecificTest.Text = "3";
+			this.textSpecificTest.Text = "4";
 			// 
 			// FormUnitTests
 			// 

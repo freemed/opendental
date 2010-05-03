@@ -1091,7 +1091,9 @@ namespace OpenDentBusiness {
 				}
 				return 0;//then no coverage, regardless of what we computed for individual
 			}
+			//This section was causing a bug. I'm really not even sure what it was attempting to do, since it's common for family max to be greater than indiv max
 			if(maxFam > maxInd) {//restrict by maxInd
+				/*
 				//which we already calculated
 				if(benInd.TimePeriod==BenefitTimePeriod.Lifetime) {
 					note+=Lans.g("Benefits","Over lifetime max");
@@ -1100,7 +1102,7 @@ namespace OpenDentBusiness {
 					|| benInd.TimePeriod==BenefitTimePeriod.ServiceYear) {
 					note+=Lans.g("Benefits","Over annual max");
 				}
-				return retVal;
+				return retVal;*/
 			}
 			else {//restrict by maxFam
 				if(maxFam < retVal) {//if there's not enough left in the annual max to cover this proc.

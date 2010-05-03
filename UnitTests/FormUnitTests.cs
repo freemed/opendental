@@ -55,11 +55,12 @@ namespace UnitTests {
 			}
 			Application.DoEvents();
 			int specificTest=PIn.Int(textSpecificTest.Text);//typically zero
-			textResults.Text+=ClaimProcT.TestDualPPO(specificTest);
+			textResults.Text+=AllTests.TestOneTwo(specificTest);
 			Application.DoEvents();
-			textResults.Text+=ClaimProcT.TestThree(specificTest);
+			textResults.Text+=AllTests.TestThree(specificTest);
 			Application.DoEvents();
-
+			textResults.Text+=AllTests.TestFour(specificTest);
+			Application.DoEvents();
 			Cursor=Cursors.Default;
 
 

@@ -77,7 +77,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AllTests.cs" />
     <Compile Include="BenefitT.cs" />
+    <Compile Include="CarrierT.cs" />
+    <Compile Include="FeeSchedT.cs" />
+    <Compile Include="ProcedureT.cs" />
+    <Compile Include="PatPlanT.cs" />
+    <Compile Include="InsPlanT.cs" />
     <Compile Include="DatabaseTools.cs" />
     <Compile Include="FormUnitTests.cs">
       <SubType>Form</SubType>
@@ -85,6 +91,7 @@
     <Compile Include="FormUnitTests.Designer.cs">
       <DependentUpon>FormUnitTests.cs</DependentUpon>
     </Compile>
+    <Compile Include="PatientT.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="FormUnitTests.resx">

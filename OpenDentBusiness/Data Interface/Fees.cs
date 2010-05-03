@@ -41,7 +41,8 @@ namespace OpenDentBusiness{
 					//if fee was already loaded for this code, delete this duplicate.
 					string command="DELETE FROM fee WHERE FeeNum ="+POut.Long(fee.FeeNum);
 					Db.NonQ(command);
-				} else {
+				} 
+				else {
 					Dict.Add(key,fee);
 					Listt.Add(fee);
 				}
