@@ -238,6 +238,8 @@ namespace OpenDentBusiness{
 				list.Add(NewOutput("PracticeTitle"));
 				list.Add(NewOutput("PracticeAddress"));
 				list.Add(NewOutput("practiceCityStateZip"));
+				list.Add(NewOutput("referral.phone"));
+				list.Add(NewOutput("referral.phone2"));
 				list.Add(NewOutput("referral.nameFL"));
 				list.Add(NewOutput("referral.address"));
 				list.Add(NewOutput("referral.cityStateZip"));

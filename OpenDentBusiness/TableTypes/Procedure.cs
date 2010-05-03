@@ -4,8 +4,11 @@ using System.Text;
 
 namespace OpenDentBusiness {
 	///<summary>Database table is procedurelog.  A procedure for a patient.  Can be treatment planned or completed.  Once it's completed, it gets tracked more closely be the security portion of the program.  A procedure can NEVER be deleted.  Status can just be changed to "deleted".</summary>
-	public class Procedure{
+	[Serializable()]
+	[CrudTable(TableName="procedurelog",IsDeleteForbidden=true)]
+	public class Procedure:TableBase{
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long ProcNum;
 		///<summary>FK to patient.PatNum</summary>
 		public long PatNum;
@@ -14,6 +17,7 @@ namespace OpenDentBusiness {
 		///<summary>No longer used.</summary>
 		public string OldCode;
 		///<summary>Procedure date/time that will show in the account as the date performed.  If just treatment planned, the date can be the date it was tp'd, or the date can be min val if we don't care.</summary>
+		[CrudColumn(SpecialType=EnumCrudSpecialColType.DateT)]
 		public DateTime ProcDate;
 		///<summary>Procedure fee.</summary>
 		public double ProcFee;
@@ -42,6 +46,7 @@ namespace OpenDentBusiness {
 		///<summary>This note will go on e-claim. For By Report, prep dates, or initial endo date.</summary>
 		public string ClaimNote;
 		///<summary>This is the date this procedure was entered or set complete.  If not status C, then the value is ignored, so it might be minValue 0001-01-01 or any other date.  It gets updated when set complete.  User never allowed to edit.  This will be enhanced later.</summary>
+		[CrudColumn(SpecialType=EnumCrudSpecialColType.DateEntryEditable)]
 		public DateTime DateEntryC;
 		///<summary>FK to clinic.ClinicNum.  0 if no clinic.</summary>
 		public long ClinicNum;
@@ -51,10 +56,6 @@ namespace OpenDentBusiness {
 		public string DiagnosticCode;
 		///<summary>Set true if this medical diagnostic code is the principal diagnosis for the visit.  If no principal diagnosis is marked for any procedures on a medical e-claim, then it won't be allowed to be sent.  If more than one is marked, then it will just use one at random.</summary>
 		public bool IsPrincDiag;
-		//<summary>This is only used in Canada because their insurance companies require this number.</summary>
-		//public double LabFee;//need to delete.
-		//<summary>FK to procedurecode.ProcCode.  Only used in Canada.</summary>
-		//public string LabProcCode;//need to delete.
 		///<summary>FK to procedurelog.ProcNum. Only used in Canada. If not zero, then this proc is a lab fee and this indicates to which actual procedure the lab fee is attached.  For ordinary use, they are treated like two separate procedures.  It's only for insurance claims that we need to know which lab fee belongs to which procedure.  For now, we limit one fee attached to one procedure.</summary>
 		public long ProcNumLab;
 		///<summary>FK to definition.DefNum. Lets some users track charges for certain types of reports.  For example, a Medicaid billing type could be assigned to a procedure, flagging it for inclusion in a report mandated by goverment.  Would be more useful if it was automated to flow down based on insurance plan type, but that can be added later.  Not visible if prefs.EasyHideMedicaid is true.</summary>
@@ -87,14 +88,20 @@ namespace OpenDentBusiness {
 		public DateTime DateTP;
 		///<summary>FK to site.SiteNum.</summary>
 		public long SiteNum;
+		///<summary>Set to true to hide the chart graphics for this procedure.  For example, a crown was done, but then tooth extracted.</summary>
+		public bool HideGraphics;
 
 		///<summary>Not a database column.  Saved in database in the procnote table.  This note is only the most recent note from that table.  If user changes it, then the business layer handles it by adding another procnote to that table.</summary>
+		[CrudColumn(IsNotDbColumn=true)]
 		public string Note;
 		///<summary>Not a database column.  Just used for now to set the user so that it can be saved with the ProcNote.</summary>
+		[CrudColumn(IsNotDbColumn=true)]
 		public long UserNum;
 		///<summary>Not a database column.  If viewing an individual procedure, then this will contain the encrypted signature.  If viewing a procedure list, this will typically just contain an "X" if a signature is present.  If user signs note, the signature will be encrypted before placing into this field.  Then it will be passed down and saved directly as is.</summary>
+		[CrudColumn(IsNotDbColumn=true)]
 		public string Signature;
 		///<summary>Not a database column.</summary>
+		[CrudColumn(IsNotDbColumn=true)]
 		public bool SigIsTopaz;
 
 		public Procedure(){

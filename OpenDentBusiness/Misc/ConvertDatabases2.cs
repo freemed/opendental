@@ -2156,6 +2156,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);
 				command="ALTER TABLE laboratory ADD WirelessPhone varchar(255) NOT NULL";
 				Db.NonQ(command);
+				command="ALTER TABLE procedurelog ADD HideGraphics tinyint NOT NULL";
+				Db.NonQ(command);
 				
 
 
@@ -2176,5 +2178,3 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 			
 		
-
-

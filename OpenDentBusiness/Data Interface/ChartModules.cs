@@ -40,6 +40,7 @@ namespace OpenDentBusiness {
 			table.Columns.Add("Dx");
 			table.Columns.Add("EmailMessageNum");
 			table.Columns.Add("FormPatNum");
+			table.Columns.Add("HideGraphics");
 			table.Columns.Add("LabCaseNum");
 			table.Columns.Add("note");
 			table.Columns.Add("PatNum");//only used for Commlog and Task
@@ -68,9 +69,9 @@ namespace OpenDentBusiness {
 			//but we won't actually fill this table with rows until the very end.  It's more useful to use a List<> for now.
 			List<DataRow> rows=new List<DataRow>();
 			//Procedures-----------------------------------------------------------------------------------------------------
-			string command="SELECT procedurelog.ClinicNum,LaymanTerm,ProcDate,ProcStatus,ToothNum,Surf,Dx,UnitQty,procedurelog.BaseUnits,"
-				+"procedurecode.ProcCode,ProcNum,procedurecode.Descript,"
-				+"provider.Abbr,ProcFee,ProcNumLab,appointment.AptDateTime,Priority,ToothRange,procedurelog.CodeNum "
+			string command="SELECT provider.Abbr,appointment.AptDateTime,procedurelog.BaseUnits,"
+				+"procedurelog.ClinicNum,procedurelog.CodeNum,procedurecode.Descript,Dx,HideGraphics,LaymanTerm,"
+				+"Priority,procedurecode.ProcCode,ProcDate,ProcFee,ProcNum,ProcNumLab,ProcStatus,Surf,ToothNum,ToothRange,UnitQty "
 				+"FROM procedurelog "
 				+"LEFT JOIN procedurecode ON procedurecode.CodeNum=procedurelog.CodeNum "
 				+"LEFT JOIN provider ON provider.ProvNum=procedurelog.ProvNum "
@@ -139,6 +140,7 @@ namespace OpenDentBusiness {
 				row["Dx"]=rawProcs.Rows[i]["Dx"].ToString();
 				row["EmailMessageNum"]=0;
 				row["FormPatNum"]=0;
+				row["HideGraphics"]=rawProcs.Rows[i]["HideGraphics"].ToString();
 				row["LabCaseNum"]=0;
 				//note-----------------------------------------------------------------------------------------------------------
 				row["user"]="";
@@ -248,6 +250,7 @@ namespace OpenDentBusiness {
 				row["Dx"]="";
 				row["EmailMessageNum"]=0;
 				row["FormPatNum"]=0;
+				row["HideGraphics"]="";
 				row["LabCaseNum"]=0;
 				row["note"]=rawComm.Rows[i]["Note"].ToString();
 				row["PatNum"]=rawComm.Rows[i]["PatNum"].ToString();
@@ -301,6 +304,7 @@ namespace OpenDentBusiness {
 				row["Dx"] = "";
 				row["EmailMessageNum"] = 0;
 				row["FormPatNum"] = rawForm.Rows[i]["FormPatNum"].ToString();
+				row["HideGraphics"]="";
 				row["LabCaseNum"] = 0;
 				row["note"] = "";
 				row["PatNum"] = "";
@@ -377,6 +381,7 @@ namespace OpenDentBusiness {
 				row["Dx"]="";
 				row["EmailMessageNum"]=0;
 				row["FormPatNum"]=0;
+				row["HideGraphics"]="";
 				row["LabCaseNum"]=0;
 				row["note"]=rawRx.Rows[i]["Notes"].ToString();
 				row["PatNum"]="";
@@ -446,6 +451,7 @@ namespace OpenDentBusiness {
 				row["Dx"]="";
 				row["EmailMessageNum"]=0;
 				row["FormPatNum"]=0;
+				row["HideGraphics"]="";
 				row["LabCaseNum"]=rawLab.Rows[i]["LabCaseNum"].ToString();
 				row["note"]=rawLab.Rows[i]["Instructions"].ToString();
 				row["PatNum"]="";
@@ -520,6 +526,7 @@ namespace OpenDentBusiness {
 				row["Dx"]="";
 				row["EmailMessageNum"]=0;
 				row["FormPatNum"]=0;
+				row["HideGraphics"]="";
 				row["LabCaseNum"]=0;
 				row["note"]=rawTask.Rows[i]["Descript"].ToString();
 				row["PatNum"]=rawTask.Rows[i]["KeyNum"].ToString();
@@ -629,6 +636,7 @@ namespace OpenDentBusiness {
 				row["Dx"]="";
 				row["EmailMessageNum"]=0;
 				row["FormPatNum"]=0;
+				row["HideGraphics"]="";
 				row["LabCaseNum"]=0;
 				row["note"]=rawApt.Rows[i]["Note"].ToString();
 				row["PatNum"]="";
@@ -687,6 +695,7 @@ namespace OpenDentBusiness {
 				row["Dx"]="";
 				row["EmailMessageNum"]=rawEmail.Rows[i]["EmailMessageNum"].ToString();
 				row["FormPatNum"]=0;
+				row["HideGraphics"]="";
 				row["LabCaseNum"]=0;
 				row["note"]=rawEmail.Rows[i]["BodyText"].ToString();
 				row["PatNum"]="";
@@ -747,6 +756,7 @@ namespace OpenDentBusiness {
 				row["Dx"]="";
 				row["EmailMessageNum"]=0;
 				row["FormPatNum"]=0;
+				row["HideGraphics"]="";
 				row["LabCaseNum"]=0;
 				row["note"]="";
 				row["PatNum"]="";

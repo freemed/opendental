@@ -3757,7 +3757,7 @@ namespace OpenDental{
 			}
 		}
 
-		///<summary>The supplied procedure row must include these columns: ProcDate,ProcStatus,ProcCode,Surf,ToothNum, and ToothRange, all in raw database format.</summary>
+		///<summary>The supplied procedure row must include these columns: HideGraphics,ProcDate,ProcStatus,ProcCode,Surf,ToothNum, and ToothRange, all in raw database format.</summary>
 		private bool ShouldDisplayProc(DataRow row){
 			//if printing for hospital
 			if(hospitalDate.Year > 1880) {
@@ -3767,6 +3767,9 @@ namespace OpenDental{
 				if(row["ProcStatus"].ToString() != ((int)ProcStat.C).ToString()) {
 					return false;
 				}
+			}
+			if(row["HideGraphics"].ToString()=="1"){
+				return false;
 			}
 			if(checkShowTeeth.Checked) {
 				bool showProc = false;

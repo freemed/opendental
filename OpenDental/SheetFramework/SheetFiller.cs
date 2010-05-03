@@ -783,6 +783,17 @@ namespace OpenDental{
 							+PrefC.GetString(PrefName.PracticeST)+"  "
 							+PrefC.GetString(PrefName.PracticeZip);
 						break;
+					case "referral.phone":
+						field.FieldValue="";
+						if(refer.Telephone.Length==10) {
+							field.FieldValue="("+refer.Telephone.Substring(0,3)+")"
+								+refer.Telephone.Substring(3,3)+"-"
+								+refer.Telephone.Substring(6);
+						}
+						break;
+					case "referral.phone2":
+						field.FieldValue=refer.Phone2;
+						break;
 					case "referral.nameFL":
 						field.FieldValue=Referrals.GetNameFL(refer.ReferralNum);
 						break;
@@ -1137,14 +1148,14 @@ namespace OpenDental{
 						break;
 					case "appt.DateTime":
 						if(appt!=null) {
-							field.FieldValue=appt.AptDateTime.ToShortDateString()+" "+appt.AptDateTime.ToShortTimeString();
+							field.FieldValue=appt.AptDateTime.ToShortDateString()+"  "+appt.AptDateTime.ToShortTimeString();
 						}
 						break;
 					case "labcase.DateTimeDue":
-						field.FieldValue=labcase.DateTimeDue.ToShortDateString()+" "+labcase.DateTimeDue.ToShortTimeString();
+						field.FieldValue=labcase.DateTimeDue.ToShortDateString()+"  "+labcase.DateTimeDue.ToShortTimeString();
 						break;
 					case "labcase.DateTimeCreated":
-						field.FieldValue=labcase.DateTimeCreated.ToShortDateString()+" "+labcase.DateTimeCreated.ToShortTimeString();
+						field.FieldValue=labcase.DateTimeCreated.ToShortDateString()+"  "+labcase.DateTimeCreated.ToShortTimeString();
 						break;
 					case "labcase.Instructions":
 						field.FieldValue=labcase.Instructions;

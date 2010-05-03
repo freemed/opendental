@@ -173,7 +173,7 @@ namespace OpenDentBusiness.Crud{
 					|| specialType==EnumCrudSpecialColType.DateTEntry
 					|| specialType==EnumCrudSpecialColType.DateTEntryEditable)
 				{
-					//specialTypes.DateEntry is handled fine by the normal DateTime (date) below.
+					//specialTypes.DateEntry and DateEntryEditable is handled fine by the normal DateTime (date) below.
 					strb.Append("PIn.DateT (");
 				}
 				else if(fieldsInDb[f].FieldType.IsEnum) {
@@ -271,6 +271,7 @@ namespace OpenDentBusiness.Crud{
 					strb.Append("+");
 				}
 				if(specialType==EnumCrudSpecialColType.DateEntry
+					|| specialType==EnumCrudSpecialColType.DateEntryEditable
 					|| specialType==EnumCrudSpecialColType.DateTEntry
 					|| specialType==EnumCrudSpecialColType.DateTEntryEditable) 
 				{
@@ -362,6 +363,9 @@ namespace OpenDentBusiness.Crud{
 				if(specialType==EnumCrudSpecialColType.DateT){
 					strb.Append(" \"+POut.DateT ("+obj+"."+fieldsExceptPri[f].Name+")+\"");
 				}
+				else if(specialType==EnumCrudSpecialColType.DateEntryEditable){
+					strb.Append(" \"+POut.Date  ("+obj+"."+fieldsExceptPri[f].Name+")+\"");
+				}
 				else if(specialType==EnumCrudSpecialColType.DateTEntryEditable){
 					strb.Append(" \"+POut.DateT ("+obj+"."+fieldsExceptPri[f].Name+")+\"");
 				}
@@ -442,6 +446,9 @@ namespace OpenDentBusiness.Crud{
 				strb.Append(rn+t4+"command+=\""+fieldsExceptPri[f].Name+" = ");
 				if(specialType==EnumCrudSpecialColType.DateT){
 					strb.Append("\"+POut.DateT("+obj+"."+fieldsExceptPri[f].Name+")+\"");
+				}
+				else if(specialType==EnumCrudSpecialColType.DateEntryEditable){
+					strb.Append("\"+POut.Date("+obj+"."+fieldsExceptPri[f].Name+")+\"");
 				}
 				else if(specialType==EnumCrudSpecialColType.DateTEntryEditable){
 					strb.Append("\"+POut.DateT("+obj+"."+fieldsExceptPri[f].Name+")+\"");

@@ -42,7 +42,9 @@ namespace Crud {
 				for(int f=0;f<fieldsExceptPri.Count;f++) {
 					strb.Append(rn+t5+fieldsExceptPri[f].Name+" ");
 					specialType=CrudGenHelper.GetSpecialType(fieldsExceptPri[f]);
-					if(specialType==EnumCrudSpecialColType.DateEntry) {
+					if(specialType==EnumCrudSpecialColType.DateEntry
+						|| specialType==EnumCrudSpecialColType.DateEntryEditable) 
+					{
 						strb.Append("date NOT NULL default '0001-01-01',");
 						continue;
 					}
@@ -125,7 +127,9 @@ namespace Crud {
 				for(int f=0;f<newColumns.Count;f++) {
 					strb.Append(rn+t4+"command=\"ALTER TABLE "+tablename+" ADD "+newColumns[f].Name+" ");
 					specialType=CrudGenHelper.GetSpecialType(newColumns[f]);
-					if(specialType==EnumCrudSpecialColType.DateEntry) {
+					if(specialType==EnumCrudSpecialColType.DateEntry
+						|| specialType==EnumCrudSpecialColType.DateEntryEditable) 
+					{
 						strb.Append("date NOT NULL default '0001-01-01'");
 						strb.Append("\";");
 						strb.Append(rn+t4+"Db.NonQ(command);");

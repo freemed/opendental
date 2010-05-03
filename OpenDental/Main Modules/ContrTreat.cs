@@ -2000,6 +2000,9 @@ namespace OpenDental{
 			ProcAL=new ArrayList();
 			//first, add all completed work. C,EC,EO, and Referred
 			for(int i=0;i<ProcList.Count;i++) {
+				if(ProcList[i].HideGraphics){
+					continue;
+				}
 				if(ProcList[i].ProcStatus==ProcStat.C
 					|| ProcList[i].ProcStatus==ProcStat.EC
 					|| ProcList[i].ProcStatus==ProcStat.EO)
@@ -2015,6 +2018,9 @@ namespace OpenDental{
 			//then add whatever is showing on the selected TP
 			if(gridPlans.SelectedIndices[0]==0) {//current plan
 				for(int i=0;i<ProcListTP.Length;i++) {
+					if(ProcListTP[i].HideGraphics){
+						continue;
+					}
 					ProcAL.Add(ProcListTP[i]);
 				}
 			}

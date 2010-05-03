@@ -7,328 +7,46 @@ using System.Text;
 
 namespace OpenDentBusiness {
 	public class Procedures {
+		
 		///<summary></summary>
-		public static long Insert(Procedure proc) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				proc.ProcNum=Meth.GetLong(MethodBase.GetCurrentMethod(),proc);
-				return proc.ProcNum;
+		public static long Insert(Procedure procedure){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
+				procedure.ProcNum=Meth.GetLong(MethodBase.GetCurrentMethod(),procedure);
+				return procedure.ProcNum;
 			}
-			if(PrefC.RandomKeys) {
-				proc.ProcNum=ReplicationServers.GetKey("procedurelog","ProcNum");
-			}
-			string command= "INSERT INTO procedurelog (";
-			if(PrefC.RandomKeys) {
-				command+="ProcNum,";
-			}
-			command+="PatNum, AptNum, OldCode, ProcDate,ProcFee,Surf,"
-				+"ToothNum,ToothRange,Priority,ProcStatus,ProvNum,"
-				+"Dx,PlannedAptNum,PlaceService,Prosthesis,DateOriginalProsth,ClaimNote,"
-				+"DateEntryC,ClinicNum,MedicalCode,DiagnosticCode,IsPrincDiag,ProcNumLab,"
-				+"BillingTypeOne,BillingTypeTwo,CodeNum,CodeMod1,CodeMod2,CodeMod3,CodeMod4,RevCode,UnitCode,"
-				+"UnitQty,BaseUnits,StartTime,StopTime,DateTP,SiteNum) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+="'"+POut.Long(proc.ProcNum)+"', ";
-			}
-			command+=
-				 "'"+POut.Long(proc.PatNum)+"', "
-				+"'"+POut.Long(proc.AptNum)+"', "
-				+"'"+POut.String(proc.OldCode)+"', "
-				+POut.Date(proc.ProcDate)+", "
-				+"'"+POut.Double(proc.ProcFee)+"', "
-				+"'"+POut.String(proc.Surf)+"', "
-				+"'"+POut.String(proc.ToothNum)+"', "
-				+"'"+POut.String(proc.ToothRange)+"', "
-				+"'"+POut.Long(proc.Priority)+"', "
-				+"'"+POut.Long((int)proc.ProcStatus)+"', "
-				+"'"+POut.Long(proc.ProvNum)+"', "
-				+"'"+POut.Long(proc.Dx)+"', "
-				+"'"+POut.Long(proc.PlannedAptNum)+"', "
-				+"'"+POut.Long((int)proc.PlaceService)+"', "
-				+"'"+POut.String(proc.Prosthesis)+"', "
-				+POut.Date(proc.DateOriginalProsth)+", "
-				+"'"+POut.String(proc.ClaimNote)+"', "
-				+"NOW(), "//DateEntryC
-				+"'"+POut.Long(proc.ClinicNum)+"', "
-				+"'"+POut.String(proc.MedicalCode)+"', "
-				+"'"+POut.String(proc.DiagnosticCode)+"', "
-				+"'"+POut.Bool(proc.IsPrincDiag)+"', "
-				+"'"+POut.Long(proc.ProcNumLab)+"', "
-				+"'"+POut.Long(proc.BillingTypeOne)+"', "
-				+"'"+POut.Long(proc.BillingTypeTwo)+"', "
-				+"'"+POut.Long(proc.CodeNum)+"', "
-				+"'"+POut.String(proc.CodeMod1)+"', "
-				+"'"+POut.String(proc.CodeMod2)+"', "
-				+"'"+POut.String(proc.CodeMod3)+"', "
-				+"'"+POut.String(proc.CodeMod4)+"', "
-				+"'"+POut.String(proc.RevCode)+"', "
-				+"'"+POut.String(proc.UnitCode)+"', "
-				+"'"+POut.Long(proc.UnitQty)+"', "
-				+"'"+POut.Long(proc.BaseUnits)+"', "
-				+"'"+POut.Long(proc.StartTime)+"', "
-				+"'"+POut.Long(proc.StopTime)+"', "
-				+POut.Date(proc.DateTP)+", "
-				+"'"+POut.Long(proc.SiteNum)+"')";
-			//MessageBox.Show(cmd.CommandText);
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				proc.ProcNum=Db.NonQ(command,true);
-			}
-			if(proc.Note!="") {
+			Crud.ProcedureCrud.Insert(procedure);
+			if(procedure.Note!="") {
 				ProcNote note=new ProcNote();
-				note.PatNum=proc.PatNum;
-				note.ProcNum=proc.ProcNum;
-				note.UserNum=proc.UserNum;
-				note.Note=proc.Note;
+				note.PatNum=procedure.PatNum;
+				note.ProcNum=procedure.ProcNum;
+				note.UserNum=procedure.UserNum;
+				note.Note=procedure.Note;
 				ProcNotes.Insert(note);
 			}
-			return proc.ProcNum;
+			return procedure.ProcNum;
 		}
 
 		///<summary>Updates only the changed columns.</summary>
-		public static long Update(Procedure proc,Procedure oldProc) {
+		public static void Update(Procedure procedure,Procedure oldProcedure) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetLong(MethodBase.GetCurrentMethod(),proc,oldProc);
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),procedure,oldProcedure);
+				return;
 			}
-			bool comma=false;
-			string c = "UPDATE procedurelog SET ";
-			if(proc.PatNum!=oldProc.PatNum) {
-				c+="PatNum = '"     +POut.Long(proc.PatNum)+"'";
-				comma=true;
-			}
-			if(proc.AptNum!=oldProc.AptNum) {
-				if(comma) c+=",";
-				c+="AptNum = '"		+POut.Long(proc.AptNum)+"'";
-				comma=true;
-			}
-			if(proc.OldCode!=oldProc.OldCode) {
-				if(comma) c+=",";
-				c+="OldCode = '"		+POut.String(proc.OldCode)+"'";
-				comma=true;
-			}
-			if(proc.ProcDate!=oldProc.ProcDate) {
-				if(comma) c+=",";
-				c+="ProcDate = "	+POut.Date(proc.ProcDate);
-				comma=true;
-			}
-			if(proc.ProcFee!=oldProc.ProcFee) {
-				if(comma) c+=",";
-				c+="ProcFee = '"		+POut.Double(proc.ProcFee)+"'";
-				comma=true;
-			}
-			if(proc.Surf!=oldProc.Surf) {
-				if(comma) c+=",";
-				c+="Surf = '"			+POut.String(proc.Surf)+"'";
-				comma=true;
-			}
-			if(proc.ToothNum!=oldProc.ToothNum) {
-				if(comma) c+=",";
-				c+="ToothNum = '"	+POut.String(proc.ToothNum)+"'";
-				comma=true;
-			}
-			if(proc.ToothRange!=oldProc.ToothRange) {
-				if(comma) c+=",";
-				c+="ToothRange = '"+POut.String(proc.ToothRange)+"'";
-				comma=true;
-			}
-			if(proc.Priority!=oldProc.Priority) {
-				if(comma) c+=",";
-				c+="Priority = '"	+POut.Long(proc.Priority)+"'";
-				comma=true;
-			}
-			if(proc.ProcStatus!=oldProc.ProcStatus) {
-				if(comma) c+=",";
-				c+="ProcStatus = '"+POut.Long((int)proc.ProcStatus)+"'";
-				comma=true;
-			}
-			if(proc.ProvNum!=oldProc.ProvNum) {
-				if(comma) c+=",";
-				c+="ProvNum = '"		+POut.Long(proc.ProvNum)+"'";
-				comma=true;
-			}
-			if(proc.Dx!=oldProc.Dx) {
-				if(comma) c+=",";
-				c+="Dx = '"				+POut.Long(proc.Dx)+"'";
-				comma=true;
-			}
-			if(proc.PlannedAptNum!=oldProc.PlannedAptNum) {
-				if(comma) c+=",";
-				c+="PlannedAptNum = '"+POut.Long(proc.PlannedAptNum)+"'";
-				comma=true;
-			}
-			if(proc.PlaceService!=oldProc.PlaceService) {
-				if(comma) c+=",";
-				c+="PlaceService = '"	+POut.Long((int)proc.PlaceService)+"'";
-				comma=true;
-			}
-			if(proc.Prosthesis!=oldProc.Prosthesis) {
-				if(comma) c+=",";
-				c+="Prosthesis = '"+POut.String(proc.Prosthesis)+"'";
-				comma=true;
-			}
-			if(proc.DateOriginalProsth!=oldProc.DateOriginalProsth) {
-				if(comma) c+=",";
-				c+="DateOriginalProsth = "+POut.Date(proc.DateOriginalProsth);
-				comma=true;
-			}
-			if(proc.ClaimNote!=oldProc.ClaimNote) {
-				if(comma) c+=",";
-				c+="ClaimNote = '"+POut.String(proc.ClaimNote)+"'";
-				comma=true;
-			}
-			if(proc.DateEntryC!=oldProc.DateEntryC) {
-				if(comma) c+=",";
-				c+="DateEntryC = ";
-				if(DataConnection.DBtype==DatabaseType.Oracle) {
-					c+=POut.DateT(MiscData.GetNowDateTime());
-				}
-				else {//Assume MySQL
-					c+="NOW()";
-				}
-				comma=true;
-			}
-			if(proc.ClinicNum!=oldProc.ClinicNum) {
-				if(comma) c+=",";
-				c+="ClinicNum = '"+POut.Long(proc.ClinicNum)+"'";
-				comma=true;
-			}
-			if(proc.MedicalCode!=oldProc.MedicalCode) {
-				if(comma) c+=",";
-				c+="MedicalCode = '"+POut.String(proc.MedicalCode)+"'";
-				comma=true;
-			}
-			if(proc.DiagnosticCode!=oldProc.DiagnosticCode) {
-				if(comma) c+=",";
-				c+="DiagnosticCode = '"+POut.String(proc.DiagnosticCode)+"'";
-				comma=true;
-			}
-			if(proc.IsPrincDiag!=oldProc.IsPrincDiag) {
-				if(comma) c+=",";
-				c+="IsPrincDiag = '"+POut.Bool(proc.IsPrincDiag)+"'";
-				comma=true;
-			}
-			if(proc.ProcNumLab!=oldProc.ProcNumLab) {
-				if(comma) c+=",";
-				c+="ProcNumLab = '"+POut.Long(proc.ProcNumLab)+"'";
-				comma=true;
-			}
-			if(proc.BillingTypeOne!=oldProc.BillingTypeOne) {
-				if(comma)
-					c+=",";
-				c+="BillingTypeOne = '"+POut.Long(proc.BillingTypeOne)+"'";
-				comma=true;
-			}
-			if(proc.BillingTypeTwo!=oldProc.BillingTypeTwo) {
-				if(comma)
-					c+=",";
-				c+="BillingTypeTwo = '"+POut.Long(proc.BillingTypeTwo)+"'";
-				comma=true;
-			}
-			if(proc.CodeNum!=oldProc.CodeNum) {
-				if(comma)
-					c+=",";
-				c+="CodeNum = '"+POut.Long(proc.CodeNum)+"'";
-				comma=true;
-			}
-			if(proc.CodeMod1!=oldProc.CodeMod1) {
-				if(comma) c+= ",";
-				c+="CodeMod1 = '"+POut.String(proc.CodeMod1)+"'";
-				comma=true;
-			}
-			if(proc.CodeMod2!=oldProc.CodeMod2) {
-				if(comma) c+= ",";
-				c+="CodeMod2 = '"+POut.String(proc.CodeMod2)+"'";
-				comma=true;
-			}
-			if(proc.CodeMod3!=oldProc.CodeMod3) {
-				if(comma) c+= ",";
-				c+="CodeMod3 = '"+POut.String(proc.CodeMod3)+"'";
-				comma=true;
-			}
-			if(proc.CodeMod4!=oldProc.CodeMod4) {
-				if(comma) c+= ",";
-				c+="CodeMod4 = '"+POut.String(proc.CodeMod4)+"'";
-				comma=true;
-			}
-			if(proc.RevCode!=oldProc.RevCode) {
-				if(comma) c+=",";
-				c+="RevCode = '"+POut.String(proc.RevCode)+"'";
-				comma=true;
-			}
-			if(proc.UnitCode!=oldProc.UnitCode) {
-				if(comma) c+=",";
-				c+="UnitCode = '"+POut.String(proc.UnitCode)+"'";
-				comma=true;
-			}
-			if(proc.UnitQty!=oldProc.UnitQty) {
-				if(comma) c+=",";
-				c+="UnitQty = '"+POut.Long(proc.UnitQty)+"'";
-				comma=true;
-			}
-			if(proc.BaseUnits!=oldProc.BaseUnits) {
-				if(comma) c+=",";
-				c+="BaseUnits = '"+POut.Long(proc.BaseUnits)+"'";
-				comma=true;
-			}
-			if(proc.StartTime != oldProc.StartTime) {
-				if(comma) c += ",";
-				c += "StartTime = '" + POut.Long(proc.StartTime) + "'";
-				comma = true;
-			}
-			if(proc.StopTime != oldProc.StopTime) {
-				if(comma) c += ",";
-				c += "StopTime = '" + POut.Long(proc.StopTime) + "'";
-				comma = true;
-			}
-			if(proc.DateTP != oldProc.DateTP) {
-				if(comma) c += ",";
-				c += "DateTP = " + POut.Date(proc.DateTP);
-				comma = true;
-			}
-			if(proc.SiteNum != oldProc.SiteNum) {
-				if(comma) c += ",";
-				c += "SiteNum = '" + POut.Long(proc.SiteNum)+"'";
-				comma = true;
-			}
-			long rowsChanged=0;
-			if(comma) {
-				c+=" WHERE ProcNum = '"+POut.Long(proc.ProcNum)+"'";
-				//DataConnection dcon=new DataConnection();
-				rowsChanged=Db.NonQ(c);
-			}
-			else {
-				//rowsChanged=0;//this means no change is actually required.
-			}
-			if(proc.Note!=oldProc.Note
-				|| proc.UserNum!=oldProc.UserNum
-				|| proc.SigIsTopaz!=oldProc.SigIsTopaz
-				|| proc.Signature!=oldProc.Signature) {
+			Crud.ProcedureCrud.Update(procedure,oldProcedure);
+			if(procedure.Note!=oldProcedure.Note
+				|| procedure.UserNum!=oldProcedure.UserNum
+				|| procedure.SigIsTopaz!=oldProcedure.SigIsTopaz
+				|| procedure.Signature!=oldProcedure.Signature) 
+			{
 				ProcNote note=new ProcNote();
-				note.PatNum=proc.PatNum;
-				note.ProcNum=proc.ProcNum;
-				note.UserNum=proc.UserNum;
-				note.Note=proc.Note;
-				note.SigIsTopaz=proc.SigIsTopaz;
-				note.Signature=proc.Signature;
+				note.PatNum=procedure.PatNum;
+				note.ProcNum=procedure.ProcNum;
+				note.UserNum=procedure.UserNum;
+				note.Note=procedure.Note;
+				note.SigIsTopaz=procedure.SigIsTopaz;
+				note.Signature=procedure.Signature;
 				ProcNotes.Insert(note);
 			}
-			return rowsChanged;
-			/*
-			try{
-				if(RemotingClient.OpenDentBusinessIsLocal) {
-					ProcedureB.Update(proc,procOld);
-				}
-				else {
-					DtoProcedureUpdate dto=new DtoProcedureUpdate();
-					dto.Proc=proc;
-					dto.OldProc=procOld;
-					RemotingClient.ProcessCommand(dto);
-				}
-			}
-			catch(Exception e) {
-				MessageBox.Show(e.Message);
-			}*/
 		}
 
 		///<summary>Also deletes any claimProcs. Must test to make sure claimProcs are not part of a payment first.  This does not actually delete the procedure, but just changes the status to deleted.  If not allowed to delete, then it throws an exception.</summary>
@@ -441,9 +159,7 @@ namespace OpenDentBusiness {
 			string command="SELECT * FROM procedurelog WHERE PatNum="+POut.Long(patNum)
 				+" AND ProcStatus !=6"//don't include deleted
 				+" ORDER BY ProcDate";
-			DataTable table=Db.GetTable(command);
-			List<Procedure> procList=ConvertToList(table);
-			return procList;
+			return Crud.ProcedureCrud.SelectMany(command);
 		}
 
 		///<summary>Gets one procedure directly from the db.  Option to include the note.</summary>
@@ -454,24 +170,12 @@ namespace OpenDentBusiness {
 			string command=
 				"SELECT * FROM procedurelog "
 				+"WHERE ProcNum="+procNum.ToString();
-			DataTable table=Db.GetTable(command);
-			List<Procedure> procList=ConvertToList(table);
-			if(procList.Count==0) {
-				//MessageBox.Show(Lans.g("Procedures","Error. Procedure not found")+": "+procNum.ToString());
+			Procedure proc=Crud.ProcedureCrud.SelectOne(procNum);
+			if(proc==null){
 				return new Procedure();
 			}
-			Procedure proc=procList[0];
-			if(!includeNote) {
-				return proc;
-			}
-			command="SELECT * FROM procnote WHERE ProcNum="+POut.Long(procNum)+" ORDER BY EntryDateTime DESC ";
-			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				command="SELECT * FROM ("+command+") WHERE ROWNUM<=1";
-			}
-			else {//Assume MySQL
-				command+="LIMIT 1";
-			}
-			table=Db.GetTable(command);
+			command="SELECT * FROM procnote WHERE ProcNum="+POut.Long(procNum)+" ORDER BY EntryDateTime DESC LIMIT 1";
+			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0) {
 				return proc;
 			}
@@ -480,91 +184,6 @@ namespace OpenDentBusiness {
 			proc.SigIsTopaz=PIn.Bool(table.Rows[0]["SigIsTopaz"].ToString());
 			proc.Signature =PIn.String(table.Rows[0]["Signature"].ToString());
 			return proc;
-		}
-
-		/*
-		///<summary>Gets many procedure directly from the db all at once.  Never include the notes.</summary>
-		public static List<Procedure> GetManyProcs(List<int> procNums){
-			string command="SELECT * FROM procedurelog WHERE ";
-			for(int i=0;i<procNums.Count;i++){
-				if(i>0){
-					command+="OR ";
-				}
-				command+="ProcNum="+POut.PInt(procNums[i])+" ";
-			}
-			return RefreshAndFill(command);
-		}*/
-
-		/*
-		///<summary>Gets all procedures from the database for the given plan/patient combo.  Used once when creating claims.</summary>
-		public static Procedure[] GetProcsForPlan(int planNum,int patNum){
-			string command="SELECT * FROM procedurelog WHERE "
-				+"PatNum="+POut.PInt(patNum)+" "
-				+"AND PlanNum="+POut.PInt(patNum)+" "
-			return RefreshAndFill(command).ToArray();
-		}*/
-
-		/*
-		private static List<Procedure> RefreshAndFill(string command) {
-			DataTable table=Db.GetTable(command);
-			return ConvertToList(table);
-		}*/
-
-		private static List<Procedure> ConvertToList(DataTable table) {
-			//No need to check RemotingRole; no call to db.
-			List<Procedure> retVal=new List<Procedure>();
-			Procedure proc;
-			for(int i=0;i<table.Rows.Count;i++) {
-				proc=new Procedure();
-				proc.ProcNum				= PIn.Long(table.Rows[i][0].ToString());
-				proc.PatNum					= PIn.Long(table.Rows[i][1].ToString());
-				proc.AptNum					= PIn.Long(table.Rows[i][2].ToString());
-				proc.OldCode				= PIn.String(table.Rows[i][3].ToString());
-				proc.ProcDate				= PIn.Date(table.Rows[i][4].ToString());
-				proc.ProcFee				= PIn.Double(table.Rows[i][5].ToString());
-				proc.Surf						= PIn.String(table.Rows[i][6].ToString());
-				proc.ToothNum				= PIn.String(table.Rows[i][7].ToString());
-				proc.ToothRange			= PIn.String(table.Rows[i][8].ToString());
-				proc.Priority				= PIn.Long(table.Rows[i][9].ToString());
-				proc.ProcStatus			= (ProcStat)PIn.Long(table.Rows[i][10].ToString());
-				proc.ProvNum				= PIn.Long(table.Rows[i][11].ToString());
-				proc.Dx							= PIn.Long(table.Rows[i][12].ToString());
-				proc.PlannedAptNum	= PIn.Long(table.Rows[i][13].ToString());
-				proc.PlaceService		= (PlaceOfService)PIn.Long(table.Rows[i][14].ToString());
-				proc.Prosthesis		  = PIn.String(table.Rows[i][15].ToString());
-				proc.DateOriginalProsth= PIn.Date(table.Rows[i][16].ToString());
-				proc.ClaimNote		    = PIn.String(table.Rows[i][17].ToString());
-				proc.DateEntryC      = PIn.Date(table.Rows[i][18].ToString());
-				proc.ClinicNum       = PIn.Long(table.Rows[i][19].ToString());
-				proc.MedicalCode     = PIn.String(table.Rows[i][20].ToString());
-				proc.DiagnosticCode  = PIn.String(table.Rows[i][21].ToString());
-				proc.IsPrincDiag     = PIn.Bool(table.Rows[i][22].ToString());
-				proc.ProcNumLab      = PIn.Long(table.Rows[i][23].ToString());
-				proc.BillingTypeOne  = PIn.Long(table.Rows[i][24].ToString());
-				proc.BillingTypeTwo  = PIn.Long(table.Rows[i][25].ToString());
-				proc.CodeNum         = PIn.Long(table.Rows[i][26].ToString());
-				proc.CodeMod1        = PIn.String(table.Rows[i][27].ToString());
-				proc.CodeMod2        = PIn.String(table.Rows[i][28].ToString());
-				proc.CodeMod3        = PIn.String(table.Rows[i][29].ToString());
-				proc.CodeMod4        = PIn.String(table.Rows[i][30].ToString());
-				proc.RevCode         = PIn.String(table.Rows[i][31].ToString());
-				proc.UnitCode        = PIn.String(table.Rows[i][32].ToString());
-				proc.UnitQty         = PIn.Int(table.Rows[i][33].ToString());
-				proc.BaseUnits       = PIn.Int(table.Rows[i][34].ToString());
-				proc.StartTime       = PIn.Int(table.Rows[i][35].ToString());
-				proc.StopTime        = PIn.Int(table.Rows[i][36].ToString());
-				proc.DateTP          = PIn.Date(table.Rows[i][37].ToString());
-				proc.SiteNum         = PIn.Long(table.Rows[i][38].ToString());
-				//only used sometimes:
-				/*if(table.Columns.Count>24){
-					List[i].UserNum       = PIn.PInt   (table.Rows[i][24].ToString());
-					List[i].Note          = PIn.PString(table.Rows[i][25].ToString());
-					List[i].SigIsTopaz    = PIn.PBool  (table.Rows[i][26].ToString());
-					List[i].Signature     = PIn.PString(table.Rows[i][27].ToString());
-				}*/
-				retVal.Add(proc);
-			}
-			return retVal;
 		}
 
 		///<summary>Gets Procedures for a single appointment directly from the database</summary>
@@ -579,8 +198,7 @@ namespace OpenDentBusiness {
 			else {
 				command = "SELECT * from procedurelog WHERE AptNum = '"+POut.Long(aptNum)+"'";
 			}
-			DataTable table=Db.GetTable(command);
-			return ConvertToList(table);
+			return Crud.ProcedureCrud.SelectMany(command);
 		}
 
 		///<summary>Gets a list (procsMultApts is a struct of type ProcDesc(aptNum, string[], and production) of all the procedures attached to the specified appointments.  Then, use GetProcsOneApt to pull procedures for one appointment from this list.  This process requires only one call to the database. "myAptNums" is the list of appointments to get procedures for.</summary>
@@ -610,8 +228,7 @@ namespace OpenDentBusiness {
 				}
 			}
 			string command = "SELECT * FROM procedurelog WHERE"+strAptNums;
-			DataTable table=Db.GetTable(command);
-			return ConvertToList(table);
+			return Crud.ProcedureCrud.SelectMany(command);
 		}
 
 		///<summary>Gets procedures for one appointment by looping through the procsMultApts which was filled previously from GetProcsMultApts.</summary>
@@ -654,25 +271,6 @@ namespace OpenDentBusiness {
 			//MessageBox.Show("Error. Procedure not found");
 			return new Procedure();
 		}
-
-		/*
-		///<summary>Does not make any calls to db.</summary>
-		public static double ComputeBal(Procedure[] List){
-			double retVal=0;
-			double procFee=0;
-			double qty=0;
-			for(int i=0;i<List.Length;i++) {
-				if(List[i].ProcStatus==ProcStat.C) {//complete
-					procFee=List[i].ProcFee;
-					qty=List[i].UnitQty+List[i].BaseUnits;
-					if(qty > 0) {
-						procFee*=qty;
-					}
-					retVal+=procFee;//List[i].ProcFee;
-				}
-			}
-			return retVal;
-		}*/
 
 		///<summary>Sets the patient.DateFirstVisit if necessary. A visitDate is required to be passed in because it may not be today's date. This is triggered by:
 		///1. When any procedure is inserted regardless of status. From Chart or appointment. If no C procs and date blank, changes date.
