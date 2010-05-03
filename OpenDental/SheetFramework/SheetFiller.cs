@@ -71,6 +71,11 @@ namespace OpenDental{
 					pat=Patients.GetPat((long)GetParamByName(sheet,"PatNum").ParamValue);
 					FillFieldsForMedicalHistory(sheet,pat);
 					break;
+				case SheetTypeEnum.LabSlip:
+					pat=Patients.GetPat((long)GetParamByName(sheet,"PatNum").ParamValue);
+					LabCase lab=LabCases.GetOne((long)GetParamByName(sheet,"LabCaseNum").ParamValue);
+					FillFieldsForLabCase(sheet,pat,lab);
+					break;
 			}
 			FillFieldsInStaticText(sheet,pat);
 			FillPatientImages(sheet,pat);
@@ -1089,7 +1094,70 @@ namespace OpenDental{
 			}*/
 		}
 
-
+		private static void FillFieldsForLabCase(Sheet sheet,Patient pat,LabCase labcase) {
+			Laboratory lab=Laboratories.GetOne(labcase.LaboratoryNum);//might possibly be null
+			Provider prov=Providers.GetProv(labcase.ProvNum);
+			Appointment appt=Appointments.GetOneApt(labcase.AptNum);//might be null
+			foreach(SheetField field in sheet.SheetFields) {
+				switch(field.FieldName) {
+					case "lab.Description":
+						if(lab!=null){
+							field.FieldValue=lab.Description;
+						}
+						break;
+					case "lab.Phone":
+						if(lab!=null){
+							field.FieldValue=lab.Phone;
+						}
+						break;
+					case "lab.Notes":
+						if(lab!=null){
+							field.FieldValue=lab.Notes;
+						}
+						break;
+					case "lab.WirelessPhone":
+						if(lab!=null){
+							field.FieldValue=lab.WirelessPhone;
+						}
+						break;
+					case "lab.Address":
+						if(lab!=null){
+							field.FieldValue=lab.Address;
+						}
+						break;
+					case "lab.CityStZip":
+						if(lab!=null){
+							field.FieldValue=lab.City+", "+lab.State+" "+lab.Zip;
+						}
+						break;
+					case "lab.Email":
+						if(lab!=null){
+							field.FieldValue=lab.Email;
+						}
+						break;
+					case "appt.DateTime":
+						if(appt!=null) {
+							field.FieldValue=appt.AptDateTime.ToShortDateString()+" "+appt.AptDateTime.ToShortTimeString();
+						}
+						break;
+					case "labcase.DateTimeDue":
+						field.FieldValue=labcase.DateTimeDue.ToShortDateString()+" "+labcase.DateTimeDue.ToShortTimeString();
+						break;
+					case "labcase.DateTimeCreated":
+						field.FieldValue=labcase.DateTimeCreated.ToShortDateString()+" "+labcase.DateTimeCreated.ToShortTimeString();
+						break;
+					case "labcase.Instructions":
+						field.FieldValue=labcase.Instructions;
+						break;
+					case "prov.nameFormal":
+						field.FieldValue=prov.GetFormalName();
+						break;
+					case "prov.stateLicence":
+						field.FieldValue=prov.StateLicense;
+						break;
+				}
+			}
+		}
 
 
 	}

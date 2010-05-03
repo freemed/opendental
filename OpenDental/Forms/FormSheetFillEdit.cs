@@ -681,6 +681,9 @@ namespace OpenDental {
 				//drawings get saved as a group rather than with the other fields.
 				SheetFields.SetDrawings(drawingList,SheetCur.SheetNum);
 			}
+			if(isNew) {
+				Sheets.SaveParameters(SheetCur);
+			}
 			//SigBoxes must come after ALL other types in order for the keyData to be in the right order.
 			SheetField field;
 			foreach(Control control in panelMain.Controls){
@@ -716,9 +719,6 @@ namespace OpenDental {
 				else {
 					SheetFields.Update(field);
 				}
-			}
-			if(isNew) {
-				Sheets.SaveParameters(SheetCur);
 			}
 			return true;
 		}

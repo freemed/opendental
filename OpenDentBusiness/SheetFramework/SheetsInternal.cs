@@ -878,10 +878,50 @@ Fam Urgent Fin Note: [famFinUrgNote]"
 			int x=75;
 			int y=50;
 			//Title----------------------------------------------------------------------------------------------------------
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Lab Slip",12f,sheet.FontName,true,373,y,200,22));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Lab Slip",12f,sheet.FontName,true,270,y,200,22));
 			y+=35;
-			//-----------------------------------------------------------------------
-			
+			//Lab-----------------------------------------------------------------------
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("lab.Description",sheet.FontSize,sheet.FontName,true,x,y,300,rowH));
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("lab.Address",sheet.FontSize,sheet.FontName,false,x,y,300,rowH));
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("lab.CityStZip",sheet.FontSize,sheet.FontName,false,x,y,300,rowH));
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("lab.Phone",sheet.FontSize,sheet.FontName,false,x,y,300,rowH));
+			y+=rowH;
+			y+=15;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Date:  [dateToday]",sheet.FontSize,sheet.FontName,false,x,y,140,rowH));
+			y+=rowH;
+			//Prov-----------------------------------------------------------------------
+			y+=15;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Doctor:",sheet.FontSize,sheet.FontName,false,x,y,50,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("prov.nameFormal",sheet.FontSize,sheet.FontName,false,x+50,y,300,rowH));
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("License No:",sheet.FontSize,sheet.FontName,false,x,y,78,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("prov.stateLicence",sheet.FontSize,sheet.FontName,false,x+78,y,200,rowH));
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Address:  [clinicAddress],  [clinicCityStZip]",sheet.FontSize,sheet.FontName,false,x,y,600,rowH));
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Phone:  [clinicPhone]",sheet.FontSize,sheet.FontName,false,x,y,300,rowH));
+			y+=rowH;
+			//Patient-----------------------------------------------------------------------
+			y+=15;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Patient:  [nameFL]",sheet.FontSize,sheet.FontName,false,x,y,300,rowH));
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Age: [age]      Gender: [gender]",sheet.FontSize,sheet.FontName,false,x,y,200,rowH));
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Due Date/Time:",sheet.FontSize,sheet.FontName,false,x,y,100,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("labcase.DateTimeDue",sheet.FontSize,sheet.FontName,false,x+100,y,200,rowH));
+			y+=rowH;
+			//Instructions-----------------------------------------------------------------------
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Instructions:",sheet.FontSize,sheet.FontName,false,x,y,200,rowH));
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("labcase.Instructions",sheet.FontSize,sheet.FontName,false,x,y,600,200));
+			y+=220;
+			//sig-------------------------------------------------------------------------------
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Dr. Signature:",sheet.FontSize,sheet.FontName,false,x,y,200,rowH));
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewSigBox(x,y,364,81));
 			return sheet;
 		}
 

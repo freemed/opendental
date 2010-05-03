@@ -349,10 +349,13 @@ namespace OpenDentBusiness{
 				list.Add(NewOutput("lab.Description"));
 				list.Add(NewOutput("lab.Phone"));
 				list.Add(NewOutput("lab.Notes"));
+				list.Add(NewOutput("lab.WirelessPhone"));
+				list.Add(NewOutput("lab.Address"));
+				list.Add(NewOutput("lab.CityStZip"));
+				list.Add(NewOutput("lab.Email"));
 				list.Add(NewOutput("appt.DateTime"));
 				list.Add(NewOutput("labcase.DateTimeDue"));
 				list.Add(NewOutput("labcase.DateTimeCreated"));
-				list.Add(NewOutput("labcase.Instructions"));
 				list.Add(NewOutput("prov.nameFormal"));
 				list.Add(NewOutput("prov.stateLicence"));
 				//patient fields already handled with static text: name,age,gender.
@@ -360,6 +363,7 @@ namespace OpenDentBusiness{
 			}
 			else if(outInCheck==OutInCheck.In) {
 				list.Add(NewInput("notes"));
+				list.Add(NewInput("labcase.Instructions"));
 			}
 			else if(outInCheck==OutInCheck.Check) {
 				list.Add(NewCheck("misc"));

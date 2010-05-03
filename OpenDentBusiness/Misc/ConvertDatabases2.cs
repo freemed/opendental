@@ -2144,6 +2144,18 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);
 				command="ALTER TABLE laboratory ADD Slip bigint NOT NULL";
 				Db.NonQ(command);
+				command="ALTER TABLE laboratory ADD Address varchar(255) NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE laboratory ADD City varchar(255) NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE laboratory ADD State varchar(255) NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE laboratory ADD Zip varchar(255) NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE laboratory ADD Email varchar(255) NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE laboratory ADD WirelessPhone varchar(255) NOT NULL";
+				Db.NonQ(command);
 				
 
 
@@ -2166,24 +2178,3 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 		
 
 
-				/*
-				command="ALTER TABLE clockevent ADD TimeEntered1 datetime NOT NULL default '0001-01-01 00:00:00'";
-				Db.NonQ(command);
-				command="ALTER TABLE clockevent ADD TimeDisplayed1 datetime NOT NULL default '0001-01-01 00:00:00'";
-				Db.NonQ(command);
-				command="ALTER TABLE clockevent ADD TimeEntered2 datetime NOT NULL default '0001-01-01 00:00:00'";
-				Db.NonQ(command);
-				command="ALTER TABLE clockevent ADD TimeDisplayed2 datetime NOT NULL default '0001-01-01 00:00:00'";
-				Db.NonQ(command);
-				*/
-
-				/*
-				command="ALTER TABLE clockevent ADD TimeEntered1 datetime NOT NULL default '0001-01-01 00:00:00'";
-				Db.NonQ(command);
-				command="ALTER TABLE clockevent ADD TimeDisplayed1 datetime NOT NULL default '0001-01-01 00:00:00'";
-				Db.NonQ(command);
-				command="ALTER TABLE clockevent ADD TimeEntered2 datetime NOT NULL default '0001-01-01 00:00:00'";
-				Db.NonQ(command);
-				command="ALTER TABLE clockevent ADD TimeDisplayed2 datetime NOT NULL default '0001-01-01 00:00:00'";
-				Db.NonQ(command);
-				*/

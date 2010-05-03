@@ -51,6 +51,12 @@ namespace OpenDentBusiness.Crud{
 				laboratory.Phone        = PIn.String(table.Rows[i]["Phone"].ToString());
 				laboratory.Notes        = PIn.String(table.Rows[i]["Notes"].ToString());
 				laboratory.Slip         = PIn.Long  (table.Rows[i]["Slip"].ToString());
+				laboratory.Address      = PIn.String(table.Rows[i]["Address"].ToString());
+				laboratory.City         = PIn.String(table.Rows[i]["City"].ToString());
+				laboratory.State        = PIn.String(table.Rows[i]["State"].ToString());
+				laboratory.Zip          = PIn.String(table.Rows[i]["Zip"].ToString());
+				laboratory.Email        = PIn.String(table.Rows[i]["Email"].ToString());
+				laboratory.WirelessPhone= PIn.String(table.Rows[i]["WirelessPhone"].ToString());
 				retVal.Add(laboratory);
 			}
 			return retVal;
@@ -70,7 +76,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="LaboratoryNum,";
 			}
-			command+="Description,Phone,Notes,Slip) VALUES(";
+			command+="Description,Phone,Notes,Slip,Address,City,State,Zip,Email,WirelessPhone) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(laboratory.LaboratoryNum)+",";
 			}
@@ -78,7 +84,13 @@ namespace OpenDentBusiness.Crud{
 				 "'"+POut.String(laboratory.Description)+"',"
 				+"'"+POut.String(laboratory.Phone)+"',"
 				+"'"+POut.String(laboratory.Notes)+"',"
-				+    POut.Long  (laboratory.Slip)+")";
+				+    POut.Long  (laboratory.Slip)+","
+				+"'"+POut.String(laboratory.Address)+"',"
+				+"'"+POut.String(laboratory.City)+"',"
+				+"'"+POut.String(laboratory.State)+"',"
+				+"'"+POut.String(laboratory.Zip)+"',"
+				+"'"+POut.String(laboratory.Email)+"',"
+				+"'"+POut.String(laboratory.WirelessPhone)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -94,7 +106,13 @@ namespace OpenDentBusiness.Crud{
 				+"Description  = '"+POut.String(laboratory.Description)+"', "
 				+"Phone        = '"+POut.String(laboratory.Phone)+"', "
 				+"Notes        = '"+POut.String(laboratory.Notes)+"', "
-				+"Slip         =  "+POut.Long  (laboratory.Slip)+" "
+				+"Slip         =  "+POut.Long  (laboratory.Slip)+", "
+				+"Address      = '"+POut.String(laboratory.Address)+"', "
+				+"City         = '"+POut.String(laboratory.City)+"', "
+				+"State        = '"+POut.String(laboratory.State)+"', "
+				+"Zip          = '"+POut.String(laboratory.Zip)+"', "
+				+"Email        = '"+POut.String(laboratory.Email)+"', "
+				+"WirelessPhone= '"+POut.String(laboratory.WirelessPhone)+"' "
 				+"WHERE LaboratoryNum = "+POut.Long(laboratory.LaboratoryNum);
 			Db.NonQ(command);
 		}
@@ -117,6 +135,30 @@ namespace OpenDentBusiness.Crud{
 			if(laboratory.Slip != oldLaboratory.Slip) {
 				if(command!=""){ command+=",";}
 				command+="Slip = "+POut.Long(laboratory.Slip)+"";
+			}
+			if(laboratory.Address != oldLaboratory.Address) {
+				if(command!=""){ command+=",";}
+				command+="Address = '"+POut.String(laboratory.Address)+"'";
+			}
+			if(laboratory.City != oldLaboratory.City) {
+				if(command!=""){ command+=",";}
+				command+="City = '"+POut.String(laboratory.City)+"'";
+			}
+			if(laboratory.State != oldLaboratory.State) {
+				if(command!=""){ command+=",";}
+				command+="State = '"+POut.String(laboratory.State)+"'";
+			}
+			if(laboratory.Zip != oldLaboratory.Zip) {
+				if(command!=""){ command+=",";}
+				command+="Zip = '"+POut.String(laboratory.Zip)+"'";
+			}
+			if(laboratory.Email != oldLaboratory.Email) {
+				if(command!=""){ command+=",";}
+				command+="Email = '"+POut.String(laboratory.Email)+"'";
+			}
+			if(laboratory.WirelessPhone != oldLaboratory.WirelessPhone) {
+				if(command!=""){ command+=",";}
+				command+="WirelessPhone = '"+POut.String(laboratory.WirelessPhone)+"'";
 			}
 			if(command==""){
 				return;

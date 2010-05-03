@@ -18,6 +18,13 @@ namespace OpenDentBusiness{
 		public string Notes;
 		///<summary>FK to sheetdef.SheetDefNum.  Lab slips can be set for individual laboratories.  If zero, then the default internal lab slip will be used instead of a custom lab slip.</summary>
 		public long Slip;
+		public string Address;
+		public string City;
+		public string State;
+		public string Zip;
+		public string Email;
+		public string WirelessPhone;
+
 
 		public Laboratory Copy(){
 			return (Laboratory)this.MemberwiseClone();

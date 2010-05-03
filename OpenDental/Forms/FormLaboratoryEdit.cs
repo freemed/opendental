@@ -35,6 +35,16 @@ namespace OpenDental{
 		private Label label21;
 		private Label label4;
 		private List<LabTurnaround> turnaroundList;
+		private TextBox textWirelessPhone;
+		private Label label5;
+		private TextBox textAddress;
+		private Label label6;
+		private TextBox textCity;
+		private Label label7;
+		private TextBox textState;
+		private TextBox textZip;
+		private TextBox textEmail;
+		private Label label8;
 		private List<SheetDef> SlipList;
 
 		///<summary></summary>
@@ -76,15 +86,25 @@ namespace OpenDental{
 			this.textPhone = new System.Windows.Forms.TextBox();
 			this.label3 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
+			this.comboSlip = new System.Windows.Forms.ComboBox();
+			this.label21 = new System.Windows.Forms.Label();
+			this.label4 = new System.Windows.Forms.Label();
+			this.butDeleteTurnaround = new OpenDental.UI.Button();
+			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butAdd = new OpenDental.UI.Button();
 			this.butDelete = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.gridMain = new OpenDental.UI.ODGrid();
-			this.butDeleteTurnaround = new OpenDental.UI.Button();
-			this.comboSlip = new System.Windows.Forms.ComboBox();
-			this.label21 = new System.Windows.Forms.Label();
-			this.label4 = new System.Windows.Forms.Label();
+			this.textWirelessPhone = new System.Windows.Forms.TextBox();
+			this.label5 = new System.Windows.Forms.Label();
+			this.textAddress = new System.Windows.Forms.TextBox();
+			this.label6 = new System.Windows.Forms.Label();
+			this.textCity = new System.Windows.Forms.TextBox();
+			this.label7 = new System.Windows.Forms.Label();
+			this.textState = new System.Windows.Forms.TextBox();
+			this.textZip = new System.Windows.Forms.TextBox();
+			this.textEmail = new System.Windows.Forms.TextBox();
+			this.label8 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -105,7 +125,7 @@ namespace OpenDental{
 			// 
 			// textNotes
 			// 
-			this.textNotes.Location = new System.Drawing.Point(104,53);
+			this.textNotes.Location = new System.Drawing.Point(104,146);
 			this.textNotes.MaxLength = 255;
 			this.textNotes.Multiline = true;
 			this.textNotes.Name = "textNotes";
@@ -123,7 +143,7 @@ namespace OpenDental{
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(0,55);
+			this.label3.Location = new System.Drawing.Point(0,148);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(102,17);
 			this.label3.TabIndex = 101;
@@ -139,6 +159,61 @@ namespace OpenDental{
 			this.label2.Text = "Phone";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
+			// comboSlip
+			// 
+			this.comboSlip.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboSlip.Location = new System.Drawing.Point(104,204);
+			this.comboSlip.MaxDropDownItems = 30;
+			this.comboSlip.Name = "comboSlip";
+			this.comboSlip.Size = new System.Drawing.Size(275,21);
+			this.comboSlip.TabIndex = 131;
+			// 
+			// label21
+			// 
+			this.label21.Location = new System.Drawing.Point(382,206);
+			this.label21.Name = "label21";
+			this.label21.Size = new System.Drawing.Size(283,16);
+			this.label21.TabIndex = 130;
+			this.label21.Text = "(custom lab slips may be added in Sheets)";
+			this.label21.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			// 
+			// label4
+			// 
+			this.label4.Location = new System.Drawing.Point(-1,207);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(102,17);
+			this.label4.TabIndex = 132;
+			this.label4.Text = "Lab Slip";
+			this.label4.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// butDeleteTurnaround
+			// 
+			this.butDeleteTurnaround.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDeleteTurnaround.Autosize = true;
+			this.butDeleteTurnaround.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDeleteTurnaround.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDeleteTurnaround.CornerRadius = 4F;
+			this.butDeleteTurnaround.Image = global::OpenDental.Properties.Resources.deleteX;
+			this.butDeleteTurnaround.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butDeleteTurnaround.Location = new System.Drawing.Point(17,264);
+			this.butDeleteTurnaround.Name = "butDeleteTurnaround";
+			this.butDeleteTurnaround.Size = new System.Drawing.Size(81,24);
+			this.butDeleteTurnaround.TabIndex = 129;
+			this.butDeleteTurnaround.Text = "Delete";
+			this.butDeleteTurnaround.Click += new System.EventHandler(this.butDeleteTurnaround_Click);
+			// 
+			// gridMain
+			// 
+			this.gridMain.HScrollVisible = false;
+			this.gridMain.Location = new System.Drawing.Point(104,232);
+			this.gridMain.Name = "gridMain";
+			this.gridMain.ScrollValue = 0;
+			this.gridMain.Size = new System.Drawing.Size(561,261);
+			this.gridMain.TabIndex = 128;
+			this.gridMain.Title = "Turnaround Times";
+			this.gridMain.TranslationName = "TableLabTurnaround";
+			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			// 
 			// butAdd
 			// 
 			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -148,7 +223,7 @@ namespace OpenDental{
 			this.butAdd.CornerRadius = 4F;
 			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(17,139);
+			this.butAdd.Location = new System.Drawing.Point(17,232);
 			this.butAdd.Name = "butAdd";
 			this.butAdd.Size = new System.Drawing.Size(81,24);
 			this.butAdd.TabIndex = 127;
@@ -165,7 +240,7 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(17,431);
+			this.butDelete.Location = new System.Drawing.Point(17,594);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(81,24);
 			this.butDelete.TabIndex = 4;
@@ -180,7 +255,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(606,431);
+			this.butOK.Location = new System.Drawing.Point(606,594);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 8;
@@ -195,72 +270,111 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(697,431);
+			this.butCancel.Location = new System.Drawing.Point(697,594);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 9;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// gridMain
+			// textWirelessPhone
 			// 
-			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(104,139);
-			this.gridMain.Name = "gridMain";
-			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(561,261);
-			this.gridMain.TabIndex = 128;
-			this.gridMain.Title = "Turnaround Times";
-			this.gridMain.TranslationName = "TableLabTurnaround";
-			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			this.textWirelessPhone.Location = new System.Drawing.Point(104,53);
+			this.textWirelessPhone.MaxLength = 255;
+			this.textWirelessPhone.Name = "textWirelessPhone";
+			this.textWirelessPhone.Size = new System.Drawing.Size(157,20);
+			this.textWirelessPhone.TabIndex = 133;
 			// 
-			// butDeleteTurnaround
+			// label5
 			// 
-			this.butDeleteTurnaround.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butDeleteTurnaround.Autosize = true;
-			this.butDeleteTurnaround.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDeleteTurnaround.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDeleteTurnaround.CornerRadius = 4F;
-			this.butDeleteTurnaround.Image = global::OpenDental.Properties.Resources.deleteX;
-			this.butDeleteTurnaround.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDeleteTurnaround.Location = new System.Drawing.Point(17,171);
-			this.butDeleteTurnaround.Name = "butDeleteTurnaround";
-			this.butDeleteTurnaround.Size = new System.Drawing.Size(81,24);
-			this.butDeleteTurnaround.TabIndex = 129;
-			this.butDeleteTurnaround.Text = "Delete";
-			this.butDeleteTurnaround.Click += new System.EventHandler(this.butDeleteTurnaround_Click);
+			this.label5.Location = new System.Drawing.Point(1,56);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(102,17);
+			this.label5.TabIndex = 134;
+			this.label5.Text = "Wireless Phone";
+			this.label5.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
-			// comboSlip
+			// textAddress
 			// 
-			this.comboSlip.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboSlip.Location = new System.Drawing.Point(104,111);
-			this.comboSlip.MaxDropDownItems = 30;
-			this.comboSlip.Name = "comboSlip";
-			this.comboSlip.Size = new System.Drawing.Size(275,21);
-			this.comboSlip.TabIndex = 131;
+			this.textAddress.Location = new System.Drawing.Point(104,76);
+			this.textAddress.MaxLength = 255;
+			this.textAddress.Name = "textAddress";
+			this.textAddress.Size = new System.Drawing.Size(241,20);
+			this.textAddress.TabIndex = 135;
 			// 
-			// label21
+			// label6
 			// 
-			this.label21.Location = new System.Drawing.Point(382,113);
-			this.label21.Name = "label21";
-			this.label21.Size = new System.Drawing.Size(283,16);
-			this.label21.TabIndex = 130;
-			this.label21.Text = "(custom lab slips may be added in Sheets)";
-			this.label21.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			this.label6.Location = new System.Drawing.Point(1,79);
+			this.label6.Name = "label6";
+			this.label6.Size = new System.Drawing.Size(102,17);
+			this.label6.TabIndex = 136;
+			this.label6.Text = "Address";
+			this.label6.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
-			// label4
+			// textCity
 			// 
-			this.label4.Location = new System.Drawing.Point(-1,114);
-			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(102,17);
-			this.label4.TabIndex = 132;
-			this.label4.Text = "Lab Slip";
-			this.label4.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.textCity.Location = new System.Drawing.Point(104,99);
+			this.textCity.MaxLength = 255;
+			this.textCity.Name = "textCity";
+			this.textCity.Size = new System.Drawing.Size(157,20);
+			this.textCity.TabIndex = 137;
+			// 
+			// label7
+			// 
+			this.label7.Location = new System.Drawing.Point(1,102);
+			this.label7.Name = "label7";
+			this.label7.Size = new System.Drawing.Size(102,17);
+			this.label7.TabIndex = 138;
+			this.label7.Text = "City, ST Zip";
+			this.label7.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// textState
+			// 
+			this.textState.Location = new System.Drawing.Point(267,99);
+			this.textState.MaxLength = 255;
+			this.textState.Name = "textState";
+			this.textState.Size = new System.Drawing.Size(47,20);
+			this.textState.TabIndex = 139;
+			// 
+			// textZip
+			// 
+			this.textZip.Location = new System.Drawing.Point(320,99);
+			this.textZip.MaxLength = 255;
+			this.textZip.Name = "textZip";
+			this.textZip.Size = new System.Drawing.Size(82,20);
+			this.textZip.TabIndex = 140;
+			// 
+			// textEmail
+			// 
+			this.textEmail.Location = new System.Drawing.Point(104,122);
+			this.textEmail.MaxLength = 255;
+			this.textEmail.Name = "textEmail";
+			this.textEmail.Size = new System.Drawing.Size(275,20);
+			this.textEmail.TabIndex = 141;
+			// 
+			// label8
+			// 
+			this.label8.Location = new System.Drawing.Point(-1,125);
+			this.label8.Name = "label8";
+			this.label8.Size = new System.Drawing.Size(102,17);
+			this.label8.TabIndex = 142;
+			this.label8.Text = "Email";
+			this.label8.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// FormLaboratoryEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(798,475);
+			this.ClientSize = new System.Drawing.Size(798,638);
+			this.Controls.Add(this.label8);
+			this.Controls.Add(this.textEmail);
+			this.Controls.Add(this.textZip);
+			this.Controls.Add(this.textState);
+			this.Controls.Add(this.textCity);
+			this.Controls.Add(this.label7);
+			this.Controls.Add(this.textAddress);
+			this.Controls.Add(this.label6);
+			this.Controls.Add(this.textWirelessPhone);
+			this.Controls.Add(this.label5);
 			this.Controls.Add(this.label4);
 			this.Controls.Add(this.comboSlip);
 			this.Controls.Add(this.label21);
@@ -293,6 +407,12 @@ namespace OpenDental{
 		private void FormLaboratoryEdit_Load(object sender, System.EventArgs e) {
 			textDescription.Text=LabCur.Description;
 			textPhone.Text=LabCur.Phone;
+			textWirelessPhone.Text=LabCur.WirelessPhone;
+			textAddress.Text=LabCur.Address;
+			textCity.Text=LabCur.City;
+			textState.Text=LabCur.State;
+			textZip.Text=LabCur.Zip;
+			textEmail.Text=LabCur.Email;
 			textNotes.Text=LabCur.Notes;
 			turnaroundList=LabTurnarounds.GetForLab(LabCur.LaboratoryNum);
 			comboSlip.Items.Add(Lan.g(this,"Default"));
@@ -395,6 +515,12 @@ namespace OpenDental{
 			}
 			LabCur.Description=textDescription.Text;
 			LabCur.Phone=textPhone.Text;
+			LabCur.WirelessPhone=textWirelessPhone.Text;
+			LabCur.Address=textAddress.Text;
+			LabCur.City=textCity.Text;
+			LabCur.State=textState.Text;
+			LabCur.Zip=textZip.Text;
+			LabCur.Email=textEmail.Text;
 			LabCur.Notes=textNotes.Text;
 			LabCur.Slip=0;
 			if(comboSlip.SelectedIndex>0) {
