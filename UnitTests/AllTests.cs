@@ -207,6 +207,48 @@ namespace UnitTests {
 			return "4: Passed.  When family benefits, does not show 'over annual max' until max reached.\r\n";
 		}
 
+		///<summary></summary>
+		public static string TestFive(int specificTest) {
+			if(specificTest != 0 && specificTest !=5){
+				return"";
+			}
+			string suffix="5";
+			Patient pat=PatientT.CreatePatient(suffix);
+			long patNum=pat.PatNum;
+			Patient pat2=PatientT.CreatePatient(suffix);
+			PatientT.SetGuarantor(pat2,pat.PatNum);
+			Carrier carrier=CarrierT.CreateCarrier(suffix);
+			InsPlan plan=InsPlanT.CreateInsPlan(pat.PatNum,carrier.CarrierNum);//guarantor is subscriber
+			long planNum=plan.PlanNum;
+			PatPlanT.CreatePatPlan(1,pat.PatNum,planNum);
+			PatPlanT.CreatePatPlan(1,pat2.PatNum,planNum);//both patients have the same plan
+			BenefitT.CreateAnnualMax(planNum,1000);	
+			BenefitT.CreateAnnualMaxFamily(planNum,2500);	
+			BenefitT.CreateCategoryPercent(planNum,EbenefitCategory.Crowns,100);
+			ClaimProcT.AddInsUsedAdjustment(pat2.PatNum,planNum,2000);//Adjustment goes on the second patient
+			Procedure proc=ProcedureT.CreateProcedure(pat2,"D2750",ProcStat.TP,"8",830);//crown and testing is for the first patient
+			long procNum=proc.ProcNum;
+			//Lists
+			List<ClaimProc> claimProcs=ClaimProcs.Refresh(patNum);
+			Family fam=Patients.GetFamily(patNum);
+			List<InsPlan> planList=InsPlans.Refresh(fam);
+			List<PatPlan> patPlans=PatPlans.Refresh(patNum);
+			List<Benefit> benefitList=Benefits.Refresh(patPlans);
+			List<ClaimProcHist> histList=ClaimProcs.GetHistList(patNum,benefitList,patPlans,planList,DateTime.Today);
+			List<ClaimProcHist> loopList=new List<ClaimProcHist>();
+			//Validate
+			Procedures.ComputeEstimates(proc,patNum,ref claimProcs,false,planList,patPlans,benefitList,histList,loopList,true,pat.Age);
+			claimProcs=ClaimProcs.Refresh(patNum);
+			ClaimProc claimProc=ClaimProcs.GetEstimate(claimProcs,procNum,planNum);
+			if(claimProc.InsEstTotal!=500) {
+				throw new Exception("Should be 500.");
+			}
+			if(claimProc.EstimateNote!="Over family annual max") {//this explains estimate was reduced.
+				throw new Exception("EstimateNote not matching expected.");
+			}
+			return "5: Passed.  Both individual and family max taken into account.\r\n"; 
+		}
+
 
 
 

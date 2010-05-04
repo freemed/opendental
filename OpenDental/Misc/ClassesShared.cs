@@ -28,6 +28,15 @@ namespace OpenDental{
 
 		///<summary>Converts numbers to ordinals.  For example, 120 to 120th, 73 to 73rd.  Probably doesn't work too well with foreign language translations.  Used in the Birthday postcards.</summary>
 		public static string NumberToOrdinal(int number){
+			if(number==11) {
+				return "11th";
+			}
+			if(number==12) {
+				return "12th";
+			}
+			if(number==13) {
+				return "13th";
+			}
 			string str=number.ToString();
 			string last=str.Substring(str.Length-1);
 			switch(last){
