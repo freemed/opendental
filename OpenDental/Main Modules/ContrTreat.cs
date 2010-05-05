@@ -2193,6 +2193,9 @@ namespace OpenDental{
 					case ToothPaintingType.Sealant:
 						toothChart.SetSealant(proc.ToothNum,cDark);
 						break;
+					case ToothPaintingType.Veneer:
+						toothChart.SetVeneer(proc.ToothNum,cLight);
+						break;
 				}
 			}
 		}
