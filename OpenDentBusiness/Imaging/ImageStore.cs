@@ -97,7 +97,7 @@ namespace OpenDentBusiness {
 			FileInfo[] fiList = di.GetFiles();
 			List<string> fileList = new List<string>();
 			for(int i = 0;i < fiList.Length;i++) {
-				fileList.Add(fiList[i].Name);
+				fileList.Add(fiList[i].FullName);
 			}
 			int countAdded = Documents.InsertMissing(pat,fileList);
 		//should notify user
@@ -221,7 +221,7 @@ namespace OpenDentBusiness {
 			Document doc = new Document();
 			//Document.Insert will use this extension when naming:
 			doc.FileName = Path.GetExtension(path);
-			doc.DateCreated = DateTime.Today;
+			doc.DateCreated = File.GetLastWriteTime(path);
 			doc.PatNum = pat.PatNum;
 			doc.ImgType = (HasImageExtension(path) || Path.GetExtension(path) == "") ? ImageType.Photo : ImageType.Document;
 			doc.DocCategory = docCategory;

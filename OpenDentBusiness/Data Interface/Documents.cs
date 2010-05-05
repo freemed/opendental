@@ -289,19 +289,20 @@ namespace OpenDentBusiness {
 			string command="SELECT FileName FROM document WHERE PatNum='"+patient.PatNum+"' ORDER BY FileName";
 			DataTable table=Db.GetTable(command);
 			for(int j=0;j<fileList.Count;j++){
-				if(!IsAcceptableFileName(fileList[j])){
+				string fileName=Path.GetFileName(fileList[j]);
+				if(!IsAcceptableFileName(fileName)){
 					continue;
 				}
 				bool inList=false;
 				for(int i=0;i<table.Rows.Count && !inList;i++){
-					inList=(table.Rows[i]["FileName"].ToString()==fileList[j]);
+					inList=(table.Rows[i]["FileName"].ToString()==fileName);
 				}
 				if(!inList){
 					Document doc=new Document();
-					doc.DateCreated=DateTime.Today;
-					doc.Description=fileList[j];
+					doc.DateCreated=File.GetLastWriteTime(fileList[j]);
+					doc.Description=fileName;
 					doc.DocCategory=DefC.GetList(DefCat.ImageCats)[0].DefNum;//First category.
-					doc.FileName=fileList[j];
+					doc.FileName=fileName;
 					doc.PatNum=patient.PatNum;
 					Insert(doc,patient);
 					countAdded++;
