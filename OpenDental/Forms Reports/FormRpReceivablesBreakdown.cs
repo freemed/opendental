@@ -285,7 +285,7 @@ namespace OpenDental {
 			//
 			for(int j = 0;j <= 1;j++) {
 				if(j == 0) {
-					bDate = "1800-01-01";
+					bDate = "0001-01-01";
 					eDate = wDate;
 				}
 				else {
