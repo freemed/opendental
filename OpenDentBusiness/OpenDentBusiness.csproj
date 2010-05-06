@@ -139,6 +139,7 @@
     <Compile Include="Crud\PlannedApptCrud.cs" />
     <Compile Include="Crud\PopupCrud.cs" />
     <Compile Include="Crud\ProcedureCrud.cs" />
+    <Compile Include="Crud\ProviderCrud.cs" />
     <Compile Include="Crud\RecallTriggerCrud.cs" />
     <Compile Include="Crud\RecallTypeCrud.cs" />
     <Compile Include="Crud\ReplicationServerCrud.cs" />

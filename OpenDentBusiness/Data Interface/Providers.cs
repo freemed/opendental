@@ -23,143 +23,32 @@ namespace OpenDentBusiness{
 
 		public static void FillCache(DataTable table){
 			//No need to check RemotingRole; no call to db.
-			ArrayList AL=new ArrayList();
-			ProviderC.ListLong=new Provider[table.Rows.Count];
-			List<Provider> provList=TableToList(table);
-			for(int i=0;i<provList.Count;i++){
-				ProviderC.ListLong[i]=provList[i];
+			ProviderC.ListLong=Crud.ProviderCrud.TableToList(table).ToArray();
+			List<Provider> listShort=new List<Provider>();
+			for(int i=0;i<ProviderC.ListLong.Length;i++){
 				if(!ProviderC.ListLong[i].IsHidden){
-					AL.Add(ProviderC.ListLong[i]);	
+					listShort.Add(ProviderC.ListLong[i]);	
 				}
 			}
-			ProviderC.List=new Provider[AL.Count];
-			AL.CopyTo(ProviderC.List);
+			ProviderC.List=listShort.ToArray();
 		}
 
-		private static List<Provider> TableToList(DataTable table){
-			//No need to check RemotingRole; no call to db.
-			List<Provider> retVal=new List<Provider>();
-			Provider prov;
-			for(int i=0;i<table.Rows.Count;i++){
-				prov=new Provider();
-				prov.ProvNum       = PIn.Long   (table.Rows[i][0].ToString());
-				prov.Abbr          = PIn.String(table.Rows[i][1].ToString());
-				prov.ItemOrder     = PIn.Int   (table.Rows[i][2].ToString());
-				prov.LName         = PIn.String(table.Rows[i][3].ToString());
-				prov.FName         = PIn.String(table.Rows[i][4].ToString());
-				prov.MI            = PIn.String(table.Rows[i][5].ToString());
-				prov.Suffix        = PIn.String(table.Rows[i][6].ToString());
-				prov.FeeSched      = PIn.Long   (table.Rows[i][7].ToString());
-				prov.Specialty     =(DentalSpecialty)PIn.Long (table.Rows[i][8].ToString());
-				prov.SSN           = PIn.String(table.Rows[i][9].ToString());
-				prov.StateLicense  = PIn.String(table.Rows[i][10].ToString());
-				prov.DEANum        = PIn.String(table.Rows[i][11].ToString());
-				prov.IsSecondary   = PIn.Bool  (table.Rows[i][12].ToString());
-				prov.ProvColor     = Color.FromArgb(PIn.Int(table.Rows[i][13].ToString()));
-				prov.IsHidden      = PIn.Bool  (table.Rows[i][14].ToString());
-				prov.UsingTIN      = PIn.Bool  (table.Rows[i][15].ToString());
-				//prov.BlueCrossID = PIn.PString(table.Rows[i][16].ToString());
-				prov.SigOnFile     = PIn.Bool  (table.Rows[i][17].ToString());
-				prov.MedicaidID    = PIn.String(table.Rows[i][18].ToString());
-				prov.OutlineColor  = Color.FromArgb(PIn.Int(table.Rows[i][19].ToString()));
-				prov.SchoolClassNum= PIn.Long   (table.Rows[i][20].ToString());
-				prov.NationalProvID= PIn.String(table.Rows[i][21].ToString());
-				prov.CanadianOfficeNum= PIn.String(table.Rows[i][22].ToString());
-				//DateTStamp
-				prov.AnesthProvType = PIn.Long(table.Rows[i][24].ToString());
-				retVal.Add(prov);
-			}
-			return retVal;
-		}
-	
 		///<summary></summary>
-		public static void Update(Provider prov){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),prov);
+		public static void Update(Provider provider){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),provider);
 				return;
 			}
-			string command="UPDATE provider SET "
-				+ "Abbr = '"          +POut.String(prov.Abbr)+"'"
-				+",ItemOrder = '"     +POut.Long   (prov.ItemOrder)+"'"
-				+",LName = '"         +POut.String(prov.LName)+"'"
-				+",FName = '"         +POut.String(prov.FName)+"'"
-				+",MI = '"            +POut.String(prov.MI)+"'"
-				+",Suffix = '"        +POut.String(prov.Suffix)+"'"
-				+",FeeSched = '"      +POut.Long   (prov.FeeSched)+"'"
-				+",Specialty = '"     +POut.Long   ((int)prov.Specialty)+"'"
-				+",SSN = '"           +POut.String(prov.SSN)+"'"
-				+",StateLicense = '"  +POut.String(prov.StateLicense)+"'"
-				+",DEANum = '"        +POut.String(prov.DEANum)+"'"
-				+",IsSecondary = '"   +POut.Bool  (prov.IsSecondary)+"'"
-				+",ProvColor = '"     +POut.Long   (prov.ProvColor.ToArgb())+"'"
-				+",IsHidden = '"      +POut.Bool  (prov.IsHidden)+"'"
-				+",UsingTIN = '"      +POut.Bool  (prov.UsingTIN)+"'"
-				//+",bluecrossid = '" +POut.PString(BlueCrossID)+"'"
-				+",SigOnFile = '"     +POut.Bool  (prov.SigOnFile)+"'"
-				+",MedicaidID = '"    +POut.String(prov.MedicaidID)+"'"
-				+",OutlineColor = '"  +POut.Long   (prov.OutlineColor.ToArgb())+"'"
-				+",SchoolClassNum = '"+POut.Long   (prov.SchoolClassNum)+"'"
-				+",NationalProvID = '"+POut.String(prov.NationalProvID)+"'"
-				+",CanadianOfficeNum = '"+POut.String(prov.CanadianOfficeNum)+"'"
-				//DateTStamp
-				+ ",AnesthProvType = '"+POut.Long(prov.AnesthProvType)+ "'"
-				+" WHERE provnum = '" +POut.Long(prov.ProvNum)+"'";
- 			Db.NonQ(command);
+			Crud.ProviderCrud.Update(provider);
 		}
 
 		///<summary></summary>
-		public static long Insert(Provider prov){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				prov.ProvNum=Meth.GetLong(MethodBase.GetCurrentMethod(),prov);
-				return prov.ProvNum;
+		public static long Insert(Provider provider){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
+				provider.ProvNum=Meth.GetLong(MethodBase.GetCurrentMethod(),provider);
+				return provider.ProvNum;
 			}
-			if(PrefC.RandomKeys) {
-				prov.ProvNum=ReplicationServers.GetKey("provider","ProvNum");
-			}
-			string command="INSERT INTO provider (";
-			if(PrefC.RandomKeys) {
-				command+="ProvNum,";
-			}
-			command+="Abbr,ItemOrder,LName,FName,MI,Suffix,"
-				+"FeeSched,Specialty,SSN,StateLicense,DEANum,IsSecondary,ProvColor,IsHidden,"
-				+"UsingTIN,SigOnFile,MedicaidID,OutlineColor,SchoolClassNum,"
-				+"NationalProvID,CanadianOfficeNum,AnesthProvType"//DateTStamp
-				+") VALUES(";
-			if(PrefC.RandomKeys) {
-				command+=POut.Long(prov.ProvNum)+", ";
-			}
-			command+=
-				 "'"+POut.String(prov.Abbr)+"', "
-				+"'"+POut.Long   (prov.ItemOrder)+"', "
-				+"'"+POut.String(prov.LName)+"', "
-				+"'"+POut.String(prov.FName)+"', "
-				+"'"+POut.String(prov.MI)+"', "
-				+"'"+POut.String(prov.Suffix)+"', "
-				+"'"+POut.Long   (prov.FeeSched)+"', "
-				+"'"+POut.Long   ((int)prov.Specialty)+"', "
-				+"'"+POut.String(prov.SSN)+"', "
-				+"'"+POut.String(prov.StateLicense)+"', "
-				+"'"+POut.String(prov.DEANum)+"', "
-				+"'"+POut.Bool  (prov.IsSecondary)+"', "
-				+"'"+POut.Long   (prov.ProvColor.ToArgb())+"', "
-				+"'"+POut.Bool  (prov.IsHidden)+"', "
-				+"'"+POut.Bool  (prov.UsingTIN)+"', "
-				//+"'"+POut.PString(BlueCrossID)+"', "
-				+"'"+POut.Bool  (prov.SigOnFile)+"', "
-				+"'"+POut.String(prov.MedicaidID)+"', "
-				+"'"+POut.Long   (prov.OutlineColor.ToArgb())+"', "
-				+"'"+POut.Long   (prov.SchoolClassNum)+"', "
-				+"'"+POut.String(prov.NationalProvID)+"', "
-				+"'"+POut.String(prov.CanadianOfficeNum)+"', "
-				//DateTStamp
-				+ "'"+POut.Long(prov.AnesthProvType)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else{
- 				prov.ProvNum=Db.NonQ(command,true);
-			}
-			return prov.ProvNum;
+			return Crud.ProviderCrud.Insert(provider);
 		}
 
 		///<summary>Only used from FormProvEdit if user clicks cancel before finishing entering a new provider.</summary>
@@ -198,8 +87,9 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<List<Provider>>(MethodBase.GetCurrentMethod(),changedSince);
 			}
 			string command="SELECT * FROM provider WHERE DateTStamp > "+POut.DateT(changedSince);
-			DataTable table=Db.GetTable(command);
-			return TableToList(table);
+			//DataTable table=Db.GetTable(command);
+			//return TableToList(table);
+			return Crud.ProviderCrud.SelectMany(command);
 		}
 
 		///<summary></summary>

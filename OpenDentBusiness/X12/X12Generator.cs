@@ -26,10 +26,13 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Returns the Provider Taxonomy code for the given specialty.</summary>
-		public static string GetTaxonomy(DentalSpecialty specialty) {
+		public static string GetTaxonomy(Provider provider){
 			//must return a string with length of at least one char.
+			if(provider.TaxonomyCodeOverride!=""){
+				return provider.TaxonomyCodeOverride;
+			}
 			string spec=" ";
-			switch(specialty) {
+			switch(provider.Specialty) {
 				case DentalSpecialty.General: spec="1223G0001X"; break;
 				case DentalSpecialty.Hygienist: spec="124Q00000X"; break;//?
 				case DentalSpecialty.PublicHealth: spec="1223D0001X"; break;

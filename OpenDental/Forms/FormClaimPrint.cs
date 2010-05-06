@@ -1468,7 +1468,7 @@ namespace OpenDental{
 						break;
 					case "TreatingProviderSpecialty":
 						displayStrings[i]=X12Generator.GetTaxonomy
-							(ProviderC.ListLong[Providers.GetIndexLong(ClaimCur.ProvTreat)].Specialty);
+							(ProviderC.ListLong[Providers.GetIndexLong(ClaimCur.ProvTreat)]);
 						break;
 					case "TotalPages":
 						displayStrings[i]=totalPages.ToString();

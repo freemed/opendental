@@ -267,7 +267,7 @@ namespace OpenDental.Eclaims
 						seg++;
 						sw.WriteLine("PRV*BI*"//PRV01: Provider Code. BI=Billing
 							+"PXC*"//PRV02: taxonomy code
-							+X12Generator.GetTaxonomy(billProv.Specialty)+"~");//PRV03: Provider taxonomy code
+							+X12Generator.GetTaxonomy(billProv)+"~");//PRV03: Provider taxonomy code
 					}
 					else{//dental
 						//2000A PRV: Provider Specialty Information (Optional Rendering prov for all claims in this HL)
@@ -275,7 +275,7 @@ namespace OpenDental.Eclaims
 						seg++;
 						sw.WriteLine("PRV*PT*"//PRV01: Provider Code. BI=Billing, PT=Pay-To
 							+"ZZ*"//PRV02: mutually defined taxonomy codes
-							+X12Generator.GetTaxonomy(billProv.Specialty)+"~");//PRV03: Provider taxonomy code
+							+X12Generator.GetTaxonomy(billProv)+"~");//PRV03: Provider taxonomy code
 					}
 					//2010AA NM1: Billing provider
 					seg++;
@@ -944,14 +944,14 @@ namespace OpenDental.Eclaims
 					sw.WriteLine("PRV*"
 						+"PE*"//PRV01: PE=Performing
 						+"PXC*"//PRV02: PXC=Health Care Provider Taxonomy Code
-						+X12Generator.GetTaxonomy(provTreat.Specialty)+"~");//PRV03: Taxonomy code
+						+X12Generator.GetTaxonomy(provTreat)+"~");//PRV03: Taxonomy code
 				}
 				else{//dental
 					seg++;
 					sw.WriteLine("PRV*"
 						+"PE*"//PRV01: PE=Performing
 						+"ZZ*"//PRV02: ZZ=mutually defined taxonomy code
-						+X12Generator.GetTaxonomy(provTreat.Specialty)+"~");//PRV03: Taxonomy code
+						+X12Generator.GetTaxonomy(provTreat)+"~");//PRV03: Taxonomy code
 				}
 				//2310B REF: Rendering provider secondary ID
 					//All of these will be eliminated when NPI is mandated.
@@ -1300,7 +1300,7 @@ namespace OpenDental.Eclaims
 						else{
 							sw.Write("ZZ*");//PRV02: ZZ=mutually defined taxonomy code
 						}
-						sw.WriteLine(X12Generator.GetTaxonomy(provTreat.Specialty)+"~");//PRV03: Taxonomy code
+						sw.WriteLine(X12Generator.GetTaxonomy(provTreat)+"~");//PRV03: Taxonomy code
 						//2420A REF: Rendering provider secondary ID. 
 						//2420A REF: (medical)Required before NPI date. We already enforce NPI in NM109.  Less allowed values.
 						seg++;

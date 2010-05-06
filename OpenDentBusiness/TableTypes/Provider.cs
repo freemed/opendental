@@ -1,4 +1,3 @@
-
 using System;
 using System.Collections;
 using System.Drawing;
@@ -6,8 +5,10 @@ using System.Drawing;
 namespace OpenDentBusiness{
 	
 	///<summary>A provider is usually a dentist or a hygienist.  But a provider might also be a denturist, a dental student, or a dental hygiene student.  A provider might also be a 'dummy', used only for billing purposes or for notes in the Appointments module.  There is no limit to the number of providers that can be added.</summary>
-	public class Provider{
+	[Serializable()]
+	public class Provider:TableBase{
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long ProvNum;
 		///<summary>Abbreviation.  There was a limit of 5 char before version 5.4.  The new limit is 255 char.  This will allow more elegant solutions to various problems.  Providers will no longer be referred to by FName and LName.  Abbr is used as a human readable primary key.</summary>
 		public string Abbr;
@@ -53,9 +54,13 @@ namespace OpenDentBusiness{
 		public string NationalProvID;
 		///<summary>Canadian field required for e-claims.  Assigned by CDA.  It's OK to have multiple providers with the same OfficeNum.  Max length should be 4.</summary>
 		public string CanadianOfficeNum;
-		//DateTStamp
+		/// <summary></summary>
+		[CrudColumn(SpecialType=EnumCrudSpecialColType.TimeStamp)]
+		public DateTime DateTStamp;
 		/// <summary> FK to ??. Field used to set the Anesthesia Provider type. Used to filter the provider dropdowns on FormAnestheticRecord</summary>
 		public long AnesthProvType;
+		///<summary>If none of the supplied taxonomies works.  This will show on claims.</summary>
+		public string TaxonomyCodeOverride;
 
 		///<summary>Returns a copy of this Provider.</summary>
 		public Provider Copy(){

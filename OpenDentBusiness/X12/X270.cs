@@ -158,7 +158,7 @@ namespace OpenDentBusiness
 			//PRV*PE*ZZ*1223G0001X~
 			strb.AppendLine("PRV*PE*"//PRV01: Provider Code. PE=Performing.  There are many other choices.
 				+"ZZ*"//PRV02: ZZ=Mutually defined = health care provider taxonomy code
-				+X12Generator.GetTaxonomy(billProv.Specialty)+"~");//PRV03: Specialty code
+				+X12Generator.GetTaxonomy(billProv)+"~");//PRV03: Specialty code
 			HLcount++;
 			//2000C HL: Subscriber-----------------------------------------------------------------------------------
 			seg++;
