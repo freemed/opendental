@@ -2020,11 +2020,11 @@ DROP TABLE IF EXISTS etAck";
 				command="UPDATE preference SET ValueString = '7.0.1.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ32(command);
 			}
-			To7_1_0();
+			To7_1_1();
 		}
 
-		private static void To7_1_0() {
-			if(FromVersion<new Version("7.1.0.0")) {
+		private static void To7_1_1() {
+			if(FromVersion<new Version("7.1.1.0")) {
 				string command;
 				try {
 					command="ALTER TABLE refattach ADD INDEX (PatNum)";
@@ -2158,15 +2158,25 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);
 				command="ALTER TABLE procedurelog ADD HideGraphics tinyint NOT NULL";
 				Db.NonQ(command);
-				
-
-
-				
-
-				command="UPDATE preference SET ValueString = '7.1.0.0' WHERE PrefName = 'DataBaseVersion'";
+				command="UPDATE preference SET ValueString = '7.1.1.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
-			//To7_2_0();
+			To7_2_0();
+		}
+
+		private static void To7_2_0() {
+			if(FromVersion<new Version("7.2.0.0")) {
+				string command;
+
+
+
+
+
+
+				command="UPDATE preference SET ValueString = '7.2.0.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
+			//To7_3_0();
 		}
 
 
