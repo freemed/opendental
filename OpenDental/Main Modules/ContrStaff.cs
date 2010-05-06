@@ -934,31 +934,12 @@ namespace OpenDental{
 		}
 
 		private void butClockIn_Click(object sender, System.EventArgs e) {
-			//we'll get this again, because it may have been a while and may be out of date
-			ClockEvent clockEvent=ClockEvents.GetLastEvent(EmployeeCur.EmployeeNum);
-			if(clockEvent==null) {//new employee clocking in
-				clockEvent=new ClockEvent();
-				clockEvent.EmployeeNum=EmployeeCur.EmployeeNum;
-				clockEvent.ClockStatus=TimeClockStatus.Home;
-				ClockEvents.Insert(clockEvent);//times handled
+			try{
+				ClockEvents.ClockIn(EmployeeCur.EmployeeNum);
 			}
-			else if(clockEvent.ClockStatus==TimeClockStatus.Break) {//only incomplete breaks will have been returned.
-				//clocking back in from break
-				clockEvent.TimeEntered2=MiscData.GetNowDateTime();
-				clockEvent.TimeDisplayed2=clockEvent.TimeEntered2;
-				ClockEvents.Update(clockEvent);
-			}
-			else {//normal clock in/out
-				if(clockEvent.TimeDisplayed2.Year<1880) {//already clocked in
-					MsgBox.Show(this,"Error.  Already clocked in.");
-				}
-				else {//clocked out for home or lunch.  Need to clock back in by starting a new row.
-					TimeClockStatus tcs=clockEvent.ClockStatus;
-					clockEvent=new ClockEvent();
-					clockEvent.EmployeeNum=EmployeeCur.EmployeeNum;
-					clockEvent.ClockStatus=tcs;
-					ClockEvents.Insert(clockEvent);//times handled
-				}
+			catch(Exception ex){
+				MessageBox.Show(ex.Message);
+				return;
 			}
 			EmployeeCur.ClockStatus=Lan.g(this,"Working");;
 			Employees.Update(EmployeeCur);
@@ -973,41 +954,18 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please select a status first.");
 				return;
 			}
-			ClockEvent clockEvent=ClockEvents.GetLastEvent(EmployeeCur.EmployeeNum);
-			if(clockEvent==null) {//new employee never clocked in
-				MsgBox.Show(this,"Error.  New employee never clocked in.");
+			try{
+				ClockEvents.ClockOut(EmployeeCur.EmployeeNum,(TimeClockStatus)listStatus.SelectedIndex);
+			}
+			catch(Exception ex){
+				MessageBox.Show(ex.Message);
 				return;
 			}
-			else if(clockEvent.ClockStatus==TimeClockStatus.Break) {//only incomplete breaks will have been returned.
-				MsgBox.Show(this,"Error.  Already clocked out for break.");
-				return;
-			}
-			else {//normal clock in/out
-				if(clockEvent.TimeDisplayed2.Year<1880) {//clocked in.
-					if(listStatus.SelectedIndex==(int)TimeClockStatus.Break) {//clocking out on break
-						//leave the half-finished event alone and start a new one
-						clockEvent=new ClockEvent();
-						clockEvent.EmployeeNum=EmployeeCur.EmployeeNum;
-						clockEvent.ClockStatus=TimeClockStatus.Break;
-						ClockEvents.Insert(clockEvent);//times handled
-					}
-					else {//finish the existing event
-						clockEvent.TimeEntered2=MiscData.GetNowDateTime();
-						clockEvent.TimeDisplayed2=clockEvent.TimeEntered2;
-						clockEvent.ClockStatus=(TimeClockStatus)listStatus.SelectedIndex;//whatever the user selected
-						ClockEvents.Update(clockEvent);
-					}
-				}
-				else {//clocked out for home or lunch. 
-					MsgBox.Show(this,"Error.  Already clocked out.");
-					return;
-				}
-			}
-			EmployeeCur.ClockStatus=Lan.g("enumTimeClockStatus",clockEvent.ClockStatus.ToString());
+			EmployeeCur.ClockStatus=Lan.g("enumTimeClockStatus",((TimeClockStatus)listStatus.SelectedIndex).ToString());
 			Employees.Update(EmployeeCur);
 			ModuleSelected(PatCurNum);
 			if(PrefC.GetBool(PrefName.DockPhonePanelShow)){
-				Employees.SetPhoneClockStatus(EmployeeCur.EmployeeNum,clockEvent.ClockStatus.ToString());
+				Employees.SetPhoneClockStatus(EmployeeCur.EmployeeNum,((TimeClockStatus)listStatus.SelectedIndex).ToString());
 			}
 		}
 

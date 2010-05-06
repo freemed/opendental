@@ -352,19 +352,17 @@ namespace OpenDental {
 					}
 				}
 			}
+			try{
+				ClockEvents.ClockOut(employeeNum,TimeClockStatus.Lunch);
+			}
+			catch(Exception ex){
+				MessageBox.Show(ex.Message);//This message will tell user that they are already clocked out.
+				return;
+			}
 			PhoneOverrides.SetAvailable(extension,employeeNum);
-			//clock employee out
-			ClockEvent ce=new ClockEvent();
-			ce.EmployeeNum=employeeNum;
-			//ce.TimeEnteredIn=DateTime.Now+TimeDelta;
-			//ce.TimeDisplayedIn=DateTime.Now+TimeDelta;
-//ce.ClockIn=false;
-			ce.ClockStatus=TimeClockStatus.Lunch;
-			ClockEvents.Insert(ce);
 			Employee EmpCur=Employees.GetEmp(employeeNum);
-			EmpCur.ClockStatus=Lan.g("enumTimeClockStatus",ce.ClockStatus.ToString());
+			EmpCur.ClockStatus=Lan.g("enumTimeClockStatus",TimeClockStatus.Lunch.ToString());
 			Employees.Update(EmpCur);
-			//ModuleSelected(PatCurNum);
 			Employees.SetPhoneStatus("Lunch",extension);
 			FillEmps();
 		}
@@ -381,17 +379,16 @@ namespace OpenDental {
 					}
 				}
 			}
+			try{
+				ClockEvents.ClockOut(employeeNum,TimeClockStatus.Home);
+			}
+			catch(Exception ex){
+				MessageBox.Show(ex.Message);//This message will tell user that they are already clocked out.
+				return;
+			}
 			PhoneOverrides.SetAvailable(extension,employeeNum);
-			//clock employee out
-			ClockEvent ce=new ClockEvent();
-			ce.EmployeeNum=employeeNum;
-			//ce.TimeEnteredIn=DateTime.Now+TimeDelta;
-			//ce.TimeDisplayedIn=DateTime.Now+TimeDelta;
-//ce.ClockIn=false;
-			ce.ClockStatus=TimeClockStatus.Home;
-			ClockEvents.Insert(ce);
 			Employee EmpCur=Employees.GetEmp(employeeNum);
-			EmpCur.ClockStatus=Lan.g("enumTimeClockStatus",ce.ClockStatus.ToString());
+			EmpCur.ClockStatus=Lan.g("enumTimeClockStatus",TimeClockStatus.Home.ToString());
 			Employees.Update(EmpCur);
 			//ModuleSelected(PatCurNum);
 			Employees.SetPhoneStatus("Home",extension);
@@ -410,33 +407,27 @@ namespace OpenDental {
 					}
 				}
 			}
+			try{
+				ClockEvents.ClockOut(employeeNum,TimeClockStatus.Break);
+			}
+			catch(Exception ex){
+				MessageBox.Show(ex.Message);//This message will tell user that they are already clocked out.
+				return;
+			}
 			PhoneOverrides.SetAvailable(extension,employeeNum);
-			//clock employee out
-			ClockEvent ce=new ClockEvent();
-			ce.EmployeeNum=employeeNum;
-			//ce.TimeEnteredIn=DateTime.Now+TimeDelta;
-			//ce.TimeDisplayedIn=DateTime.Now+TimeDelta;
-//ce.ClockIn=false;
-			ce.ClockStatus=TimeClockStatus.Break;
-			ClockEvents.Insert(ce);
 			Employee EmpCur=Employees.GetEmp(employeeNum);
-			EmpCur.ClockStatus=Lan.g("enumTimeClockStatus",ce.ClockStatus.ToString());
+			EmpCur.ClockStatus=Lan.g("enumTimeClockStatus",TimeClockStatus.Break.ToString());
 			Employees.Update(EmpCur);
-			//ModuleSelected(PatCurNum);
 			Employees.SetPhoneStatus("Break",extension);
 			FillEmps();
 		}
 
 		///<summary>If already clocked in, this does nothing.  Returns false if not able to clock in due to security, or true if successful.</summary>
 		private bool ClockIn(){
-			/*
 			long employeeNum=PIn.Long(tablePhone.Rows[rowI]["EmployeeNum"].ToString());
 			if(employeeNum==0){
 				MsgBox.Show(this,"No employee at that extension.");
 				return false;
-			}
-			if(ClockEvents.IsClockedIn(employeeNum)){
-				return true;//if employee is already clocked in, then return
 			}
 			if(PrefC.GetBool(PrefName.TimecardSecurityEnabled)){
 				if(Security.CurUser.EmployeeNum!=employeeNum){
@@ -446,17 +437,16 @@ namespace OpenDental {
 					}
 				}
 			}
-			//clock employee in
-			ClockEvent ce=new ClockEvent();
-			ce.EmployeeNum=employeeNum;
-			//ce.TimeEnteredIn=DateTime.Now+TimeDelta;
-			//ce.TimeDisplayedIn=DateTime.Now+TimeDelta;
-//ce.ClockIn=true;
-			ce.ClockStatus=ClockEvents.GetLastStatus(employeeNum);
-			ClockEvents.Insert(ce);
+			try{
+				ClockEvents.ClockIn(employeeNum);
+			}
+			catch{
+				//the only reason this will throw an exception is if already clocked in.  Fail silently.
+				return true;
+			}
 			Employee EmpCur=Employees.GetEmp(employeeNum);
 			EmpCur.ClockStatus=Lan.g(this,"Working");;
-			Employees.Update(EmpCur);*/
+			Employees.Update(EmpCur);
 			return true;
 		}
 
