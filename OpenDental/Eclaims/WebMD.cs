@@ -89,10 +89,8 @@ namespace OpenDental.Eclaims
 		private static void SubmitBatch(Clearinghouse clearhouse,int batchNum){
 			string[] files=Directory.GetFiles(clearhouse.ExportPath);
 			for(int i=0;i<files.Length;i++){
-				FileStream fs=null;
 				ZipFile zip=null;
 				try{
-					fs=new FileStream(files[i],FileMode.Open,FileAccess.Read);
 					zip=new ZipFile();
 					zip.AddFile(files[i]);
 					MemoryStream ms=new MemoryStream();
@@ -133,9 +131,6 @@ namespace OpenDental.Eclaims
 				}finally{
 					if(zip!=null){
 						zip.Dispose();
-					}
-					if(fs!=null){
-						fs.Dispose();
 					}
 				}
 			}
