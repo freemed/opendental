@@ -312,17 +312,22 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
-		///<summary>Gets a count of New tasks to notify user when first logging in.</summary>
+		///<summary>Gets a count of unread tasks to notify user when first logging in.</summary>
 		public static int UserTasksCount(long userNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetInt(MethodBase.GetCurrentMethod(),userNum);
 			}
+			string command="SELECT COUNT(*) FROM task,taskunread "
+				+"WHERE task.TaskNum=taskunread.TaskNum "
+				+"AND taskunread.UserNum = "+POut.Long(userNum)
+				+" GROUP BY task.TaskNum";//this handles duplicate taskunread entries.";
+			/*
 			string command="SELECT COUNT(*) FROM taskancestor,task,tasklist,tasksubscription "
 				+"WHERE taskancestor.TaskListNum=tasklist.TaskListNum "
 				+"AND task.TaskNum=taskancestor.TaskNum "
 				+"AND tasksubscription.TaskListNum=tasklist.TaskListNum "
 				+"AND tasksubscription.UserNum="+POut.Long(userNum)
-				+" AND task.TaskStatus="+POut.Long((int)TaskStatusEnum.New);
+				+" AND task.TaskStatus="+POut.Long((int)TaskStatusEnum.New);*/
 			return PIn.Int(Db.GetCount(command));
 		}
 

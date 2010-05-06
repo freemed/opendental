@@ -219,7 +219,7 @@ namespace OpenDental{
 			if(PrefC.GetBool(PrefName.TasksCheckOnStartup)){
 				int taskcount=Tasks.UserTasksCount(Security.CurUser.UserNum);
 				if(taskcount>0){
-					MessageBox.Show(Lan.g(this,"There are ")+taskcount+Lan.g(this," unfinished tasks on your tasklists."));
+					MessageBox.Show(Lan.g(this,"There are ")+taskcount+Lan.g(this," unread tasks on your tasklists."));
 				}
 			}
 			Plugins.HookAddCode(this,"FormLogOn.butOK_Click_end");

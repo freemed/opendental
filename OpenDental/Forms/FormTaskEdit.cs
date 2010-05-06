@@ -432,9 +432,9 @@ namespace OpenDental{
 			this.butAppendAndPop.CornerRadius = 4F;
 			this.butAppendAndPop.Location = new System.Drawing.Point(585,442);
 			this.butAppendAndPop.Name = "butAppendAndPop";
-			this.butAppendAndPop.Size = new System.Drawing.Size(106,24);
+			this.butAppendAndPop.Size = new System.Drawing.Size(68,24);
 			this.butAppendAndPop.TabIndex = 151;
-			this.butAppendAndPop.Text = "Append and Popup";
+			this.butAppendAndPop.Text = "Append";
 			this.butAppendAndPop.Click += new System.EventHandler(this.butAppendAndPop_Click);
 			// 
 			// butAppendNoPop

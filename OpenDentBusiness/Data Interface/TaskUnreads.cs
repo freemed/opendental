@@ -34,6 +34,7 @@ namespace OpenDentBusiness{
 			}
 			TaskUnread taskUnread;
 			//task subscriptions are not cached yet, so we use a query.
+			//Get a list of all subscribers to this task
 			string command="SELECT tasksubscription.UserNum FROM tasksubscription,taskancestor,tasklist "
 				+"WHERE taskancestor.TaskListNum=tasklist.TaskListNum "
 				+"AND taskancestor.TaskNum = "+POut.Long(taskNum)+" "
@@ -43,7 +44,7 @@ namespace OpenDentBusiness{
 				taskUnread=new TaskUnread();
 				taskUnread.TaskNum=taskNum;
 				taskUnread.UserNum=PIn.Long(table.Rows[i]["UserNum"].ToString());
-				Insert(taskUnread);
+				Insert(taskUnread);//Yes, this will frequently create duplicates in this table, but the query to show tasks in the New tab handles the duplicates just fine.
 			}
 		}
 
