@@ -17,7 +17,18 @@ namespace UnitTests {
 			ClaimProcs.Insert(cp);
 		}
 
-
+		///<summary>This tells the calculating logic that insurance paid on a procedure.  It avoids the creation of an actual claim.</summary>
+		public static void AddInsPaid(long patNum,long planNum,long procNum,double amtPaid) {
+			ClaimProc cp=new ClaimProc();
+			cp.ProcNum=procNum;
+			cp.PatNum=patNum;
+			cp.PlanNum=planNum;
+			cp.InsPayAmt=amtPaid;
+			cp.Status=ClaimProcStatus.Received;
+			cp.DateCP=DateTime.Today;
+			cp.ProcDate=DateTime.Today;
+			ClaimProcs.Insert(cp);
+		}
 
 
 

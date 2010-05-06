@@ -265,123 +265,74 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Only for display purposes rather than any calculations.  Gets an annual max from the supplied list of benefits.  Ignores benefits that do not match either the planNum or the patPlanNum.  Because it starts at the top of the benefit list, it will get the most general limitation first.  Returns -1 if none found.  It does not discriminate between family and individual because it doesn't need to.</summary>
-		public static double GetAnnualMaxDisplay(List<Benefit> list,long planNum,long patPlanNum) {
+		public static double GetAnnualMaxDisplay(List<Benefit> benList,long planNum,long patPlanNum) {
 			//No need to check RemotingRole; no call to db.
-			for(int i=0;i<list.Count;i++) {
-				if(list[i].PlanNum==0 && list[i].PatPlanNum!=patPlanNum) {
+			for(int i=0;i<benList.Count;i++) {
+				if(benList[i].PlanNum==0 && benList[i].PatPlanNum!=patPlanNum) {
 					continue;
 				}
-				if(list[i].PatPlanNum==0 && list[i].PlanNum!=planNum) {
+				if(benList[i].PatPlanNum==0 && benList[i].PlanNum!=planNum) {
 					continue;
 				}
-				if(list[i].BenefitType!=InsBenefitType.Limitations) {
+				if(benList[i].BenefitType!=InsBenefitType.Limitations) {
 					continue;
 				}
-				if(list[i].QuantityQualifier!=BenefitQuantity.None) {
+				if(benList[i].QuantityQualifier!=BenefitQuantity.None) {
 					continue;
 				}
-				if(list[i].TimePeriod!=BenefitTimePeriod.CalendarYear && list[i].TimePeriod!=BenefitTimePeriod.ServiceYear) {
+				if(benList[i].TimePeriod!=BenefitTimePeriod.CalendarYear && benList[i].TimePeriod!=BenefitTimePeriod.ServiceYear) {
 					continue;
 				}
 				//coverage level?
-				if(list[i].CodeNum != 0) {
+				if(benList[i].CodeNum != 0) {
 					continue;
 				}
-				if(list[i].CovCatNum != 0) {
-					EbenefitCategory eben=CovCats.GetEbenCat(list[i].CovCatNum);
+				if(benList[i].CovCatNum != 0) {
+					EbenefitCategory eben=CovCats.GetEbenCat(benList[i].CovCatNum);
 					if(eben != EbenefitCategory.General && eben != EbenefitCategory.None) {
 						continue;
 					}
 				}
-				return list[i].MonetaryAmt;
+				return benList[i].MonetaryAmt;
 			}
 			return -1;
 		}
-		/*
-		///<Summary>Returns true if there is a family max for the given plan.</Summary>
-		public static bool GetIsFamMax(List <Benefit> list,int planNum) {
-			//No need to check RemotingRole; no call to db.
-			for(int i=0;i<list.Count;i++) {
-				if(list[i].PlanNum!=planNum) {
-					continue;
-				}
-				if(list[i].BenefitType!=InsBenefitType.Limitations) {
-					continue;
-				}
-				if(list[i].QuantityQualifier!=BenefitQuantity.None) {
-					continue;
-				}
-				if(list[i].TimePeriod!=BenefitTimePeriod.CalendarYear && list[i].TimePeriod!=BenefitTimePeriod.ServiceYear) {
-					continue;
-				}
-				if(list[i].CoverageLevel!=BenefitCoverageLevel.Family){
-					continue;
-				}
-				return true;
-			}
-			return false;
-		}*/
 
 		///<summary>Only for display purposes rather than any calculations.  Gets a general deductible from the supplied list of benefits.  Ignores benefits that do not match either the planNum or the patPlanNum.</summary>
-		public static double GetDeductGeneralDisplay(List<Benefit> list,long planNum,long patPlanNum,BenefitCoverageLevel level) {
+		public static double GetDeductGeneralDisplay(List<Benefit> benList,long planNum,long patPlanNum,BenefitCoverageLevel level) {
 			//No need to check RemotingRole; no call to db.
-			for(int i=0;i<list.Count;i++) {
-				if(list[i].PlanNum==0 && list[i].PatPlanNum!=patPlanNum) {
+			for(int i=0;i<benList.Count;i++) {
+				if(benList[i].PlanNum==0 && benList[i].PatPlanNum!=patPlanNum) {
 					continue;
 				}
-				if(list[i].PatPlanNum==0 && list[i].PlanNum!=planNum) {
+				if(benList[i].PatPlanNum==0 && benList[i].PlanNum!=planNum) {
 					continue;
 				}
-				if(list[i].BenefitType!=InsBenefitType.Deductible) {
+				if(benList[i].BenefitType!=InsBenefitType.Deductible) {
 					continue;
 				}
-				if(list[i].QuantityQualifier!=BenefitQuantity.None) {
+				if(benList[i].QuantityQualifier!=BenefitQuantity.None) {
 					continue;
 				}
-				if(list[i].TimePeriod!=BenefitTimePeriod.CalendarYear && list[i].TimePeriod!=BenefitTimePeriod.ServiceYear) {
+				if(benList[i].TimePeriod!=BenefitTimePeriod.CalendarYear && benList[i].TimePeriod!=BenefitTimePeriod.ServiceYear) {
 					continue;
 				}
-				if(list[i].CoverageLevel != level) {
+				if(benList[i].CoverageLevel != level) {
 					continue;
 				}
-				if(list[i].CodeNum != 0) {
+				if(benList[i].CodeNum != 0) {
 					continue;
 				}
-				if(list[i].CovCatNum != 0) {
-					EbenefitCategory eben=CovCats.GetEbenCat(list[i].CovCatNum);
+				if(benList[i].CovCatNum != 0) {
+					EbenefitCategory eben=CovCats.GetEbenCat(benList[i].CovCatNum);
 					if(eben != EbenefitCategory.General && eben != EbenefitCategory.None) {
 						continue;
 					}
 				}
-				return list[i].MonetaryAmt;
+				return benList[i].MonetaryAmt;
 			}
 			return -1;
 		}
-
-		/*
-		///<Summary>Returns true if there is a family deductible for the given plan.</Summary>
-		public static bool GetIsFamDed(List <Benefit> list,int planNum) {
-			//No need to check RemotingRole; no call to db.
-			for(int i=0;i<list.Count;i++) {
-				if(list[i].PlanNum!=planNum) {
-					continue;
-				}
-				if(list[i].BenefitType!=InsBenefitType.Deductible) {
-					continue;
-				}
-				if(list[i].QuantityQualifier!=BenefitQuantity.None) {
-					continue;
-				}
-				if(list[i].TimePeriod!=BenefitTimePeriod.CalendarYear && list[i].TimePeriod!=BenefitTimePeriod.ServiceYear) {
-					continue;
-				}
-				if(list[i].CoverageLevel!=BenefitCoverageLevel.Family) {
-					continue;
-				}
-				return true;
-			}
-			return false;
-		}*/
 
 		///<summary>Used only in ClaimProcs.ComputeBaseEst.  Gets a deductible amount from the supplied list of benefits.  Ignores benefits that do not match either the planNum or the patPlanNum.  It figures out how much was already used and reduces the returned value by that amount.  Both individual and family deductibles will reduce the returned value independently.  Works for individual procs, categories, and general.</summary>
 		public static double GetDeductibleByCode(List<Benefit> benList,long planNum,long patPlanNum,DateTime procDate,string procCode,List<ClaimProcHist> histList,List<ClaimProcHist> loopList,InsPlan plan,long patNum) {
@@ -1127,6 +1078,47 @@ namespace OpenDentBusiness {
 				}
 			}
 			return retVal;
+		}
+
+		///<summary>Only used from InsPlans.GetInsUsedDisplay.  If a procedure is handled by some limitation other than a general annual max, then we don't want it to count towards the annual max.</summary>
+		public static bool LimitationExistsNotGeneral(List<Benefit> benList,long planNum,long patPlanNum,string strProcCode) {
+			EbenefitCategory eben;
+			CovSpan[] covSpanArray;
+			//No need to check RemotingRole; no call to db.
+			for(int i=0;i<benList.Count;i++) {
+				if(benList[i].PlanNum==0 && benList[i].PatPlanNum!=patPlanNum) {
+					continue;
+				}
+				if(benList[i].PatPlanNum==0 && benList[i].PlanNum!=planNum) {
+					continue;
+				}
+				if(benList[i].BenefitType!=InsBenefitType.Limitations) {
+					continue;
+				}
+				if(benList[i].QuantityQualifier!=BenefitQuantity.None) {
+					continue;
+				}
+				if(benList[i].TimePeriod!=BenefitTimePeriod.CalendarYear && benList[i].TimePeriod!=BenefitTimePeriod.ServiceYear) {
+					continue;
+				}
+				//coverage level?
+				if(benList[i].CodeNum != 0) {
+					if(benList[i].CodeNum==ProcedureCodes.GetCodeNum(strProcCode)) {
+						return true;//a limitation benefit exists for this specific procedure code.
+					}
+				}
+				if(benList[i].CovCatNum != 0) {
+					eben=CovCats.GetEbenCat(benList[i].CovCatNum);
+					if(eben==EbenefitCategory.General || eben==EbenefitCategory.None) {
+						continue;//ignore this general benefit
+					}
+					covSpanArray=CovSpans.GetForCat(benList[i].CovCatNum);
+					if(CovSpans.IsCodeInSpans(strProcCode,covSpanArray)) {
+						return true;//a limitation benefit exists for a category that contains this procedure code.
+					}
+				}
+			}
+			return false;
 		}
 
 		///<summary>Used from ClaimProc.ComputeBaseEst and in sheet output. This is a low level function to get the percent to store in a claimproc.  It does not consider any percentOverride.  Always returns a number between 0 and 100.  Handles general, category, or procedure level.  Does not handle pat vs family coveragelevel.  Does handle patient override by using patplan.  Does not need to be aware of procedure history or loop history.</summary>

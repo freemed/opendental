@@ -17,6 +17,18 @@ namespace UnitTests {
 			Benefits.Insert(ben);
 		}
 
+		public static void CreateLimitation(long planNum,EbenefitCategory category,double amt){
+			Benefit ben=new Benefit();
+			ben.PlanNum=planNum;
+			ben.BenefitType=InsBenefitType.Limitations;
+			ben.CovCatNum=CovCats.GetForEbenCat(category).CovCatNum;
+			ben.CoverageLevel=BenefitCoverageLevel.Individual;
+			ben.Percent=-1;
+			ben.MonetaryAmt=amt;
+			ben.TimePeriod=BenefitTimePeriod.CalendarYear;
+			Benefits.Insert(ben);
+		}
+
 		public static void CreateAnnualMaxFamily(long planNum,double amt){
 			Benefit ben=new Benefit();
 			ben.PlanNum=planNum;

@@ -5,7 +5,7 @@ using OpenDentBusiness;
 
 namespace UnitTests {
 	public class AllTests {
-		/// <summary>Tests 1,2</summary>
+		/// <summary></summary>
 		public static string TestOneTwo(int specificTest) {
 			if(specificTest != 0 && specificTest != 1 && specificTest != 2){
 				return"";
@@ -115,7 +115,7 @@ namespace UnitTests {
 			return retVal;
 		}
 
-		///<summary>Test 3</summary>
+		///<summary></summary>
 		public static string TestThree(int specificTest) {
 			if(specificTest != 0 && specificTest !=3){
 				return"";
@@ -249,7 +249,39 @@ namespace UnitTests {
 			return "5: Passed.  Both individual and family max taken into account.\r\n"; 
 		}
 
-
+		///<summary></summary>
+		public static string TestSix(int specificTest) {
+			if(specificTest != 0 && specificTest !=6){
+				return"";
+			}
+			string suffix="6";
+			Patient pat=PatientT.CreatePatient(suffix);
+			long patNum=pat.PatNum;
+			Carrier carrier=CarrierT.CreateCarrier(suffix);
+			InsPlan plan=InsPlanT.CreateInsPlan(pat.PatNum,carrier.CarrierNum);//guarantor is subscriber
+			long planNum=plan.PlanNum;
+			long patPlanNum=PatPlanT.CreatePatPlan(1,pat.PatNum,planNum).PatPlanNum;
+			BenefitT.CreateAnnualMax(planNum,1000);	
+			BenefitT.CreateLimitation(planNum,EbenefitCategory.Diagnostic,1000);	
+			Procedure proc=ProcedureT.CreateProcedure(pat,"D0120",ProcStat.C,"",50);//An exam
+			long procNum=proc.ProcNum;
+			Procedure proc2=ProcedureT.CreateProcedure(pat,"D2750",ProcStat.C,"8",830);//create a crown
+			ClaimProcT.AddInsPaid(patNum,planNum,procNum,50);
+			ClaimProcT.AddInsPaid(patNum,planNum,proc2.ProcNum,400);
+			//Lists
+			Family fam=Patients.GetFamily(patNum);
+			List<InsPlan> planList=InsPlans.Refresh(fam);
+			List<PatPlan> patPlans=PatPlans.Refresh(patNum);
+			List<Benefit> benefitList=Benefits.Refresh(patPlans);
+			List<ClaimProcHist> histList=ClaimProcs.GetHistList(patNum,benefitList,patPlans,planList,DateTime.Today);
+			//Validate
+			double insUsed=InsPlans.GetInsUsedDisplay(histList,DateTime.Today,planNum,patPlanNum,-1,planList,benefitList);
+			if(insUsed!=400){
+				throw new Exception("Should be 400.");
+			}
+			//Patient has one insurance plan, subscriber self. Benefits: annual max 1000, diagnostic max 1000. One completed procedure, an exam for $50. Sent to insurance and insurance paid $50. Ins used should still show 0 because the ins used value should only be concerned with annual max . 
+			return "6: Passed.  Limitations override more general limitations.\r\n"; 
+		}
 
 
 

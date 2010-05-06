@@ -437,7 +437,7 @@ namespace OpenDental {
 				PlanCur = InsPlans.GetPlan(PatPlanList[0].PlanNum,InsPlanList);
 				pend = InsPlans.GetPendingDisplay(histList,DateTime.Today,PlanCur,PatPlanList[0].PatPlanNum,-1,PatNum);
 				PriPend = pend;
-				used = InsPlans.GetInsUsedDisplay(histList,DateTime.Today,PlanCur.PlanNum,PatPlanList[0].PatPlanNum,-1,InsPlanList);
+				used = InsPlans.GetInsUsedDisplay(histList,DateTime.Today,PlanCur.PlanNum,PatPlanList[0].PatPlanNum,-1,InsPlanList,BenefitList);
 				PriUsed = used;
 				max = Benefits.GetAnnualMaxDisplay(BenefitList,PlanCur.PlanNum,PatPlanList[0].PatPlanNum);
 				if(max == -1) {//if annual max is blank
@@ -464,7 +464,7 @@ namespace OpenDental {
 				PlanCur = InsPlans.GetPlan(PatPlanList[1].PlanNum,InsPlanList);
 				pend = InsPlans.GetPendingDisplay(histList,DateTime.Today,PlanCur,PatPlanList[1].PatPlanNum,-1,PatNum);
 				SecPend = pend;
-				used = InsPlans.GetInsUsedDisplay(histList,DateTime.Today,PlanCur.PlanNum,PatPlanList[1].PatPlanNum,-1,InsPlanList);
+				used = InsPlans.GetInsUsedDisplay(histList,DateTime.Today,PlanCur.PlanNum,PatPlanList[1].PatPlanNum,-1,InsPlanList,BenefitList);
 				SecUsed = used;
 				max = Benefits.GetAnnualMaxDisplay(BenefitList,PlanCur.PlanNum,PatPlanList[1].PatPlanNum);
 				if(max == -1) {
