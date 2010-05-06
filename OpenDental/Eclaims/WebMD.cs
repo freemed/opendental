@@ -1,9 +1,13 @@
 using System;
 using System.Diagnostics;
+using System.Text;
 using System.IO;
+using System.IO.Compression;
+using System.Net;
 using System.Windows.Forms;
 using OpenDentBusiness;
 using CodeBase;
+using Ionic.Zip;
 
 namespace OpenDental.Eclaims
 {
@@ -77,6 +81,66 @@ namespace OpenDental.Eclaims
 			}
 			return retVal;
 		}*/
+
+		private const string vendorId="";//TODO: Get from Emdeon!
+		private const string testMode="true";//TODO: Set to 'false' on release.
+		private const string emdeonServerUrl="";//TODO: Get from Emdeon!
+
+		private static void SubmitBatch(Clearinghouse clearhouse,int batchNum){
+			string[] files=Directory.GetFiles(clearhouse.ExportPath);
+			for(int i=0;i<files.Length;i++){
+				FileStream fs=null;
+				ZipFile zip=null;
+				try{
+					fs=new FileStream(files[i],FileMode.Open,FileAccess.Read);
+					zip=new ZipFile();
+					zip.AddFile(files[i]);
+					MemoryStream ms=new MemoryStream();
+					zip.Save(ms);
+					string fileTextZippedBase64=Convert.ToBase64String(ms.GetBuffer());
+					FileInfo fi=new FileInfo(files[i]);
+					string claimXML="<?xml version=\"1.0\" ?>"
+						+"<claim_submission_api xmlns=\"Emdeon_claim_submission_api\" revision=\"001\">"
+							+"<authentication>"
+								+"<vendor_id>"+vendorId+"</vendor_id>"
+								+"<user_id>"+clearhouse.LoginID+"</user_id>"
+								+"<password>"+clearhouse.Password+"</password>"
+							+"</authentication>"
+							+"<transaction>"
+							+"<trace_id>"+batchNum+"</trace_id>"//TODO: Is this the right number to use?
+							+"<trx_type>submit_claim_file_request</trx_type>"
+							+"<test_mode>"+testMode+"</test_mode>"
+							+"<trx_data>"
+								+"<claim_file>"
+									+"<file_name>"+Path.GetFileName(files[i])+"</file_name>"
+									+"<file_format>DCDS2</file_format>"
+									+"<file_size>"+fi.Length+"</file_size>"
+									+"<file_compression>pkzip</file_compression>"
+									+"<file_encoding>base64</file_encoding>"
+									+"<file_data>"+fileTextZippedBase64+"</file_data>"
+								+"</claim_file>"
+							+"</trx_data>"
+						+"</transaction>"
+					+"</claim_submission_api>";
+					byte[] claimXMLbytes=Encoding.UTF8.GetBytes(claimXML);
+					WebClient myWebClient=new WebClient();
+					myWebClient.Headers.Add("Content-Type","text/xml");
+					byte[] responseBytes=myWebClient.UploadData(emdeonServerUrl,claimXMLbytes);
+
+
+
+
+				}finally{
+					if(zip!=null){
+						zip.Dispose();
+					}
+					if(fs!=null){
+						fs.Dispose();
+					}
+				}
+			}
+		}
+
 
 
 
