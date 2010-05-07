@@ -382,6 +382,9 @@ namespace OpenDentBusiness{
 			{
 				colorBar=Color.FromArgb(255,255,145);//yellow
 			}
+			else if(clockStatus=="Backup") {
+				colorBar=Color.FromArgb(217,255,217);//pale green
+			}
 			return colorBar;
 		}
 

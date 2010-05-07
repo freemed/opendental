@@ -302,6 +302,17 @@ namespace OpenDental {
 			FillEmps();
 		}
 
+		private void menuItemBackup_Click(object sender,EventArgs e) {
+			if(!ClockIn()) {
+				return;
+			}
+			int extension=PIn.Int(tablePhone.Rows[rowI]["Extension"].ToString());
+			long employeeNum=PIn.Long(tablePhone.Rows[rowI]["EmployeeNum"].ToString());
+			PhoneOverrides.SetAvailable(extension,employeeNum);
+			Employees.SetPhoneStatus("Backup",extension);
+			FillEmps();
+		}
+
 		private void menuItemUnavailable_Click(object sender,EventArgs e) {
 			if(!ClockIn()){
 				return;
@@ -449,6 +460,8 @@ namespace OpenDental {
 			Employees.Update(EmpCur);
 			return true;
 		}
+
+		
 
 		
 

@@ -42,6 +42,7 @@
 			this.timerMsgs = new System.Windows.Forms.Timer(this.components);
 			this.butOverride = new OpenDental.UI.Button();
 			this.gridEmp = new OpenDental.UI.ODGrid();
+			this.menuItemBackup = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuNumbers.SuspendLayout();
 			this.menuStatus.SuspendLayout();
 			this.SuspendLayout();
@@ -81,73 +82,74 @@
             this.menuItemTeamAssist,
             this.menuItemWrapUp,
             this.menuItemOfflineAssist,
+            this.menuItemBackup,
             this.menuItemUnavailable,
             this.menuItemLunch,
             this.menuItemHome,
             this.menuItemBreak});
 			this.menuStatus.Name = "menuStatus";
-			this.menuStatus.Size = new System.Drawing.Size(141,202);
+			this.menuStatus.Size = new System.Drawing.Size(153,246);
 			// 
 			// menuItemAvailable
 			// 
 			this.menuItemAvailable.Name = "menuItemAvailable";
-			this.menuItemAvailable.Size = new System.Drawing.Size(140,22);
+			this.menuItemAvailable.Size = new System.Drawing.Size(152,22);
 			this.menuItemAvailable.Text = "Available";
 			this.menuItemAvailable.Click += new System.EventHandler(this.menuItemAvailable_Click);
 			// 
 			// menuItemTraining
 			// 
 			this.menuItemTraining.Name = "menuItemTraining";
-			this.menuItemTraining.Size = new System.Drawing.Size(140,22);
+			this.menuItemTraining.Size = new System.Drawing.Size(152,22);
 			this.menuItemTraining.Text = "Training";
 			this.menuItemTraining.Click += new System.EventHandler(this.menuItemTraining_Click);
 			// 
 			// menuItemTeamAssist
 			// 
 			this.menuItemTeamAssist.Name = "menuItemTeamAssist";
-			this.menuItemTeamAssist.Size = new System.Drawing.Size(140,22);
+			this.menuItemTeamAssist.Size = new System.Drawing.Size(152,22);
 			this.menuItemTeamAssist.Text = "TeamAssist";
 			this.menuItemTeamAssist.Click += new System.EventHandler(this.menuItemTeamAssist_Click);
 			// 
 			// menuItemWrapUp
 			// 
 			this.menuItemWrapUp.Name = "menuItemWrapUp";
-			this.menuItemWrapUp.Size = new System.Drawing.Size(140,22);
+			this.menuItemWrapUp.Size = new System.Drawing.Size(152,22);
 			this.menuItemWrapUp.Text = "WrapUp";
 			this.menuItemWrapUp.Click += new System.EventHandler(this.menuItemWrapUp_Click);
 			// 
 			// menuItemOfflineAssist
 			// 
 			this.menuItemOfflineAssist.Name = "menuItemOfflineAssist";
-			this.menuItemOfflineAssist.Size = new System.Drawing.Size(140,22);
+			this.menuItemOfflineAssist.Size = new System.Drawing.Size(152,22);
 			this.menuItemOfflineAssist.Text = "OfflineAssist";
 			this.menuItemOfflineAssist.Click += new System.EventHandler(this.menuItemOfflineAssist_Click);
 			// 
 			// menuItemUnavailable
 			// 
 			this.menuItemUnavailable.Name = "menuItemUnavailable";
-			this.menuItemUnavailable.Size = new System.Drawing.Size(140,22);
+			this.menuItemUnavailable.Size = new System.Drawing.Size(152,22);
 			this.menuItemUnavailable.Text = "Unavailable";
 			this.menuItemUnavailable.Click += new System.EventHandler(this.menuItemUnavailable_Click);
 			// 
 			// menuItemLunch
 			// 
 			this.menuItemLunch.Name = "menuItemLunch";
-			this.menuItemLunch.Size = new System.Drawing.Size(140,22);
+			this.menuItemLunch.Size = new System.Drawing.Size(152,22);
 			this.menuItemLunch.Text = "Lunch";
 			this.menuItemLunch.Click += new System.EventHandler(this.menuItemLunch_Click);
 			// 
 			// menuItemHome
 			// 
 			this.menuItemHome.Name = "menuItemHome";
-			this.menuItemHome.Size = new System.Drawing.Size(140,22);
+			this.menuItemHome.Size = new System.Drawing.Size(152,22);
 			this.menuItemHome.Text = "Home";
 			this.menuItemHome.Click += new System.EventHandler(this.menuItemHome_Click);
 			// 
 			// menuItemBreak
 			// 
 			this.menuItemBreak.Name = "menuItemBreak";
-			this.menuItemBreak.Size = new System.Drawing.Size(140,22);
+			this.menuItemBreak.Size = new System.Drawing.Size(152,22);
 			this.menuItemBreak.Text = "Break";
 			this.menuItemBreak.Click += new System.EventHandler(this.menuItemBreak_Click);
 			// 
@@ -196,6 +198,13 @@
 			this.gridEmp.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridEmp_CellClick);
 			this.gridEmp.MouseUp += new System.Windows.Forms.MouseEventHandler(this.gridEmp_MouseUp);
 			// 
+			// menuItemBackup
+			// 
+			this.menuItemBackup.Name = "menuItemBackup";
+			this.menuItemBackup.Size = new System.Drawing.Size(152,22);
+			this.menuItemBackup.Text = "Backup";
+			this.menuItemBackup.Click += new System.EventHandler(this.menuItemBackup_Click);
+			// 
 			// UserControlPhonePanel
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
@@ -232,5 +241,6 @@
 		private System.Windows.Forms.ToolStripMenuItem menuItemHome;
 		private System.Windows.Forms.Label labelMsg;
 		private System.Windows.Forms.Timer timerMsgs;
+		private System.Windows.Forms.ToolStripMenuItem menuItemBackup;
 	}
 }
