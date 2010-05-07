@@ -2000,9 +2000,6 @@ namespace OpenDental{
 			ProcAL=new ArrayList();
 			//first, add all completed work. C,EC,EO, and Referred
 			for(int i=0;i<ProcList.Count;i++) {
-				if(ProcList[i].HideGraphics){
-					continue;
-				}
 				if(ProcList[i].ProcStatus==ProcStat.C
 					|| ProcList[i].ProcStatus==ProcStat.EC
 					|| ProcList[i].ProcStatus==ProcStat.EO)
@@ -2060,10 +2057,9 @@ namespace OpenDental{
 				if(proc.ProcStatus!=procStat) {
 					continue;
 				}
-				//if(proc.HideGraphical) {
-					//We don't care about HideGraphical anymore.  It will be enhanced later to a 3-state.
-					//continue;
-				//}
+				if(proc.HideGraphics) {
+					continue;
+				}
 				if(ProcedureCodes.GetProcCode(proc.CodeNum).PaintType==ToothPaintingType.Extraction && (
 					proc.ProcStatus==ProcStat.C
 					|| proc.ProcStatus==ProcStat.EC

@@ -3757,7 +3757,7 @@ namespace OpenDental{
 			}
 		}
 
-		///<summary>The supplied procedure row must include these columns: HideGraphics,ProcDate,ProcStatus,ProcCode,Surf,ToothNum, and ToothRange, all in raw database format.</summary>
+		///<summary>The supplied procedure row must include these columns: ProcDate,ProcStatus,ProcCode,Surf,ToothNum, and ToothRange, all in raw database format.</summary>
 		private bool ShouldDisplayProc(DataRow row){
 			//if printing for hospital
 			if(hospitalDate.Year > 1880) {
@@ -3767,9 +3767,6 @@ namespace OpenDental{
 				if(row["ProcStatus"].ToString() != ((int)ProcStat.C).ToString()) {
 					return false;
 				}
-			}
-			if(row["HideGraphics"].ToString()=="1"){
-				return false;
 			}
 			if(checkShowTeeth.Checked) {
 				bool showProc = false;
@@ -4175,11 +4172,14 @@ namespace OpenDental{
 		}
 
 		private void DrawProcGraphics(){
-			//this requires: ProcStatus, ProcCode, ToothNum, Surf, and ToothRange.  All need to be raw database values.
+			//this requires: ProcStatus, ProcCode, ToothNum, HideGraphics, Surf, and ToothRange.  All need to be raw database values.
 			string[] teeth;
 			Color cLight=Color.White;
 			Color cDark=Color.White;
 			for(int i=0;i<ProcList.Count;i++) {
+				if(ProcList[i]["HideGraphics"].ToString()=="1") {
+					continue;
+				}
 				if(ProcedureCodes.GetProcCode(ProcList[i]["ProcCode"].ToString()).PaintType==ToothPaintingType.Extraction && (
 					PIn.Long(ProcList[i]["ProcStatus"].ToString())==(int)ProcStat.C
 					|| PIn.Long(ProcList[i]["ProcStatus"].ToString())==(int)ProcStat.EC
