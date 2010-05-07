@@ -125,39 +125,48 @@ namespace OpenDentBusiness {
 			return Db.GetTable(command);
 		}
 
-		///<summary>This returns the number of plans affected.</summary>
-		public static int UpdatePlans(TrojanObject troj,bool updateBenefits) {
+		public static List<long> GetPlanNumsWithTrojanID(string trojanID){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetInt(MethodBase.GetCurrentMethod(),troj);
+				return Meth.GetObject<List<long>>(MethodBase.GetCurrentMethod(),trojanID);
 			}
-			string command="SELECT PlanNum FROM insplan WHERE TrojanID = '"+POut.String(troj.TROJANID)+"'"; 
+			string command="SELECT PlanNum FROM insplan WHERE TrojanID = '"+POut.String(trojanID)+"'"; 
 			DataTable table=Db.GetTable(command);
-			long planNum;
+			List<long> retVal=new List<long>();
+			for(int i=0;i<table.Rows.Count;i++){
+				retVal.Add(PIn.Long(table.Rows[i]["PlanNum"].ToString()));
+			}
+			return retVal;
+		}
+
+		///<summary>This returns the number of plans affected.</summary>
+		public static int UpdatePlans(TrojanObject troj,List<long> planNums,bool updateBenefits) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetInt(MethodBase.GetCurrentMethod(),troj,planNums,updateBenefits);
+			}
 			long employerNum=Employers.GetEmployerNum(troj.ENAME);
-			for(int i=0;i<table.Rows.Count;i++) {
-				planNum=PIn.Long(table.Rows[i]["PlanNum"].ToString());
-				//update plan
+			string command;
+			for(int i=0;i<planNums.Count;i++) {
 				command="UPDATE insplan SET "
 					+"EmployerNum="  +POut.Long  (employerNum)+", "
 					+"GroupName='"   +POut.String(troj.PLANDESC)+"', "
 					+"GroupNum='"    +POut.String(troj.POLICYNO)+"', "
 					+"CarrierNum= "  +POut.Long  (troj.CarrierNum)+", "
 					+"BenefitNotes='"+POut.String(troj.BenefitNotes)+"' "
-					+"WHERE PlanNum="+POut.Long  (planNum);
+					+"WHERE PlanNum="+POut.Long  (planNums[i]);
 				Db.NonQ(command);
-				//clear benefits
 				if(updateBenefits) {
-					command="DELETE FROM benefit WHERE PlanNum="+POut.Long(planNum);
+					//clear benefits
+					command="DELETE FROM benefit WHERE PlanNum="+POut.Long(planNums[i]);
 					Db.NonQ(command);
 					//benefitList
 					for(int j=0;j<troj.BenefitList.Count;j++) {
-						troj.BenefitList[j].PlanNum=planNum;
+						troj.BenefitList[j].PlanNum=planNums[i];
 						Benefits.Insert(troj.BenefitList[j]);
 					}
-					InsPlans.ComputeEstimatesForPlan(planNum);
+					InsPlans.ComputeEstimatesForPlan(planNums[i]);
 				}
 			}
-			return table.Rows.Count;
+			return planNums.Count;
 		}
 
 	}
@@ -195,7 +204,7 @@ namespace OpenDentBusiness {
 		public long CarrierNum;
 		///<summary></summary>
 		public string BenefitNotes;
-		///<summary>Haven't made use of this yet.</summary>
+		///<summary></summary>
 		public string PlanNote;
 	}
 

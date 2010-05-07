@@ -252,6 +252,7 @@
     <Compile Include="Data Interface\AppointmentL.cs" />
     <Compile Include="Data Interface\ApptViewItemL.cs" />
     <Compile Include="Data Interface\FeeL.cs" />
+    <Compile Include="Data Interface\InsPlanL.cs" />
     <Compile Include="Data Interface\Lan.cs">
       <SubType>Code</SubType>
     </Compile>

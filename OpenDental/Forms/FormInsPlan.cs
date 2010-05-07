@@ -2287,6 +2287,9 @@ namespace OpenDental{
 				MsgBox.Show(this,"You must first set up your insurance categories with corresponding electronic benefit categories: Diagnostic,RoutinePreventive, Restorative, Endodontics, Periodontics, Crowns, OralSurgery, Orthodontics, and Prosthodontics");
 				return;
 			}
+#if DEBUG
+			string file=@"E:\My Documents\Bridge Info\Trojan\ETW\Planout.txt";
+#else
 			RegistryKey regKey=Registry.LocalMachine.OpenSubKey("Software\\TROJAN BENEFIT SERVICE");
 			if(regKey==null) {//dmg Unix OS will exit here.
 				MessageBox.Show("Trojan not installed properly.");
@@ -2298,6 +2301,7 @@ namespace OpenDental{
 				return;
 			}
 			string file=ODFileUtils.CombinePaths(regKey.GetValue("INSTALLDIR").ToString(),"Planout.txt");
+#endif
 			if(!File.Exists(file)) {
 				MessageBox.Show(file+" not found.  You should export from Trojan first.");
 				return;
@@ -2320,10 +2324,10 @@ namespace OpenDental{
 			}
 			PlanCur.BenefitNotes+=troj.BenefitNotes;
 			if(troj.PlanNote!=""){
-				if(textPlanNote.Text!=""){
-					textPlanNote.Text+="\r\n";
-				}
-				textPlanNote.Text+=troj.PlanNote;
+				//if(textPlanNote.Text!=""){
+				//	textPlanNote.Text+="\r\n";
+				//}
+				textPlanNote.Text=troj.PlanNote;
 			}
 			//clear exising benefits from screen, not db:
 			benefitList=new List<Benefit>();
@@ -2335,7 +2339,9 @@ namespace OpenDental{
 				troj.BenefitList[i].PlanNum=PlanCur.PlanNum;
 				benefitList.Add(troj.BenefitList[i].Copy());
 			}
+#if !DEBUG
 			File.Delete(file);
+#endif
 			butBenefitNotes.Enabled=true;
 			FillBenefits();
 			/*if(resetFeeSched){

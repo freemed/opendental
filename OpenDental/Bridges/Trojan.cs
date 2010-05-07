@@ -386,7 +386,7 @@ namespace OpenDental.Bridges {
 			}
 			MessageBox.Show("Trojan update found.  Please print or save the text file when it opens, then close it.  You will be given a chance to cancel the update after that.");
 			Process.Start(file);
-			if(!MsgBox.Show("Trojan",true,"Trojan update found.  All plans will now be updated.")) {
+			if(!MsgBox.Show("Trojan",true,"Trojan plans will now be updated.")) {
 				return;
 			}
 			string allplantext="";
@@ -398,11 +398,17 @@ namespace OpenDental.Bridges {
 				return;
 			}
 			bool updateBenefits=MsgBox.Show("Trojan",MsgBoxButtons.YesNo,"Also update benefits?  Any customized benefits will be overwritten.");
+			bool updateNote=MsgBox.Show("Trojan",MsgBoxButtons.YesNo,"Automatically update plan notes?  Any existing notes will be overwritten.  If you click No, you will be presented with each change for each plan so that you can edit the notes as needed.");
 			string[] trojanplans=allplantext.Split(new string[] { "TROJANID" },StringSplitOptions.RemoveEmptyEntries);
 			int plansAffected=0;
-			for(int i=0;i<trojanplans.Length;i++) {
-				trojanplans[i]="TROJANID"+trojanplans[i];
-				plansAffected+=ProcessTrojanPlan(trojanplans[i],updateBenefits);
+			try{
+				for(int i=0;i<trojanplans.Length;i++) {
+					trojanplans[i]="TROJANID"+trojanplans[i];
+					plansAffected+=ProcessTrojanPlan(trojanplans[i],updateBenefits,updateNote);
+				}
+			}
+			catch{//this will happen if user clicks cancel in a note box.
+				return;
 			}
 			MessageBox.Show(plansAffected.ToString()+" plans updated.");
 			try{
@@ -413,8 +419,8 @@ namespace OpenDental.Bridges {
 			}
 		}
 
-		///<summary>Returns the number of plans updated.</summary>
-		private static int ProcessTrojanPlan(string trojanPlan,bool updateBenefits){
+		///<summary>Returns the number of plans updated.  Can throw an exception if user clicks cancel in a note box.</summary>
+		private static int ProcessTrojanPlan(string trojanPlan,bool updateBenefits,bool updateNote){
 			TrojanObject troj=ProcessTextToObject(trojanPlan);
 			Carrier carrier=new Carrier();
 			carrier.Phone=troj.ELIGPHONE;
@@ -432,7 +438,17 @@ namespace OpenDental.Bridges {
 			carrier=Carriers.GetIndentical(carrier);
 			//now, save this all to the database.
 			troj.CarrierNum=carrier.CarrierNum;
-			return TrojanQueries.UpdatePlans(troj,updateBenefits);
+			List<long> planNums=TrojanQueries.GetPlanNumsWithTrojanID(troj.TROJANID);
+			int retVal=TrojanQueries.UpdatePlans(troj,planNums,updateBenefits);
+			if(updateNote){//update note without asking
+				InsPlans.UpdateNoteForPlans(planNums,troj.PlanNote);
+			}
+			else{//let user pick note
+				if(!InsPlanL.SynchronizePlanNote(planNums,0,troj.PlanNote,"",true)){//user clicked cancel
+					throw new Exception("FormNotePick.Cancel");//this exception will bubble up.
+				}
+			}
+			return retVal;
 		}
 
 		///<summary>Converts the text for one plan into an object which will then be processed as needed.</summary>
@@ -709,7 +725,7 @@ namespace OpenDental.Bridges {
 						resetFeeSched=true;
 						break;*/
 					case "NOTES"://typically multiple instances
-						if(troj.PlanNote!="") {
+						if(troj.PlanNote!=null && troj.PlanNote!="") {
 							troj.PlanNote+="\r\n";
 						}
 						troj.PlanNote+=fields[2];
