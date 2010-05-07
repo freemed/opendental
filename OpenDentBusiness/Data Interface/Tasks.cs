@@ -317,7 +317,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetInt(MethodBase.GetCurrentMethod(),userNum);
 			}
-			string command="SELECT COUNT(*) FROM task,taskunread "
+			string command="SELECT task.TaskNum FROM task,taskunread "
 				+"WHERE task.TaskNum=taskunread.TaskNum "
 				+"AND taskunread.UserNum = "+POut.Long(userNum)
 				+" GROUP BY task.TaskNum";//this handles duplicate taskunread entries.";
@@ -328,7 +328,9 @@ namespace OpenDentBusiness{
 				+"AND tasksubscription.TaskListNum=tasklist.TaskListNum "
 				+"AND tasksubscription.UserNum="+POut.Long(userNum)
 				+" AND task.TaskStatus="+POut.Long((int)TaskStatusEnum.New);*/
-			return PIn.Int(Db.GetCount(command));
+			DataTable table=Db.GetTable(command);
+			return table.Rows.Count;
+			//return PIn.Int(Db.GetScalar(command));//GetCount failed if no new tasks.
 		}
 
 		///<summary>Appends a carriage return as well as the text to any task.  If a taskListNum is specified, then it also changes the taskList.</summary>
