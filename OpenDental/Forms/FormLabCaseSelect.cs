@@ -200,6 +200,7 @@ namespace OpenDental{
 			Patient pat=Patients.GetPat(PatNum);
 			lab.ProvNum=Patients.GetProvNum(pat);
 			lab.DateTimeCreated=MiscData.GetNowDateTime();
+			LabCases.Insert(lab);
 			FormLabCaseEdit FormL=new FormLabCaseEdit();
 			FormL.CaseCur=lab;
 			FormL.IsNew=true;

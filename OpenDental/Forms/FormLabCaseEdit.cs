@@ -687,10 +687,10 @@ namespace OpenDental{
 
 		private void butSlip_Click(object sender,EventArgs e) {
 			if(sheet==null) {//create new
-				Laboratory lab=null;
-				if(listLab.SelectedIndex>-1) {
-					lab=ListLabs[listLab.SelectedIndex];
+				if(!SaveToDb()) {
+					return;
 				}
+				Laboratory lab=ListLabs[listLab.SelectedIndex];
 				SheetDef sheetDef;
 				if(lab.Slip==0){
 					sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.LabSlip);
@@ -745,14 +745,15 @@ namespace OpenDental{
 			}
 		}
 
-		private void butOK_Click(object sender, System.EventArgs e) {
+		/// <summary>Returns false if not able to save.</summary>
+		private bool SaveToDb() {
 			if(listLab.SelectedIndex==-1){
 				MsgBox.Show(this,"Please select a lab first.");
-				return;
+				return false;
 			}
 			if(comboProv.SelectedIndex==-1){
 				MsgBox.Show(this,"Please select a provider first.");
-				return;
+				return false;
 			}
 			if(textDateCreated.Text!=""){
 				try{
@@ -760,7 +761,7 @@ namespace OpenDental{
 				}
 				catch{
 					MsgBox.Show(this,"Date Time Created is invalid.");
-					return;
+					return false;
 				}
 			}
 			if(textDateSent.Text!="") {
@@ -769,7 +770,7 @@ namespace OpenDental{
 				}
 				catch {
 					MsgBox.Show(this,"Date Time Sent is invalid.");
-					return;
+					return false;
 				}
 			}
 			if(textDateRecd.Text!="") {
@@ -778,7 +779,7 @@ namespace OpenDental{
 				}
 				catch {
 					MsgBox.Show(this,"Date Time Received is invalid.");
-					return;
+					return false;
 				}
 			}
 			if(textDateChecked.Text!="") {
@@ -787,7 +788,7 @@ namespace OpenDental{
 				}
 				catch {
 					MsgBox.Show(this,"Date Time Checked is invalid.");
-					return;
+					return false;
 				}
 			}
 			if(textDateDue.Text!="") {
@@ -796,7 +797,7 @@ namespace OpenDental{
 				}
 				catch {
 					MsgBox.Show(this,"Date Time Due is invalid.");
-					return;
+					return false;
 				}
 			}
 			CaseCur.LaboratoryNum=ListLabs[listLab.SelectedIndex].LaboratoryNum;
@@ -840,6 +841,13 @@ namespace OpenDental{
 			}
 			catch(ApplicationException ex){
 				MessageBox.Show(ex.Message);
+				return false;
+			}
+			return true;
+		}
+
+		private void butOK_Click(object sender,System.EventArgs e) {
+			if(!SaveToDb()) {
 				return;
 			}
 			DialogResult=DialogResult.OK;
