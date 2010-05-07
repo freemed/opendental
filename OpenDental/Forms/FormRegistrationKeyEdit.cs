@@ -34,7 +34,6 @@ namespace OpenDental{
 		private Label label9;
 		private Label label10;
 		private CheckBox checkTesting;
-		private CheckBox checkServerVersion;
 		public RegistrationKey RegKey;
 
 		///<summary></summary>
@@ -91,7 +90,6 @@ namespace OpenDental{
 			this.label9 = new System.Windows.Forms.Label();
 			this.label10 = new System.Windows.Forms.Label();
 			this.checkTesting = new System.Windows.Forms.CheckBox();
-			this.checkServerVersion = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
 			// 
 			// textKey
@@ -316,22 +314,10 @@ namespace OpenDental{
 			this.checkTesting.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkTesting.UseVisualStyleBackColor = true;
 			// 
-			// checkServerVersion
-			// 
-			this.checkServerVersion.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkServerVersion.Location = new System.Drawing.Point(12,97);
-			this.checkServerVersion.Name = "checkServerVersion";
-			this.checkServerVersion.Size = new System.Drawing.Size(136,18);
-			this.checkServerVersion.TabIndex = 22;
-			this.checkServerVersion.Text = "Server Version";
-			this.checkServerVersion.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkServerVersion.UseVisualStyleBackColor = true;
-			// 
 			// FormRegistrationKeyEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(817,474);
-			this.Controls.Add(this.checkServerVersion);
 			this.Controls.Add(this.label10);
 			this.Controls.Add(this.checkTesting);
 			this.Controls.Add(this.label9);
@@ -379,7 +365,7 @@ namespace OpenDental{
 			checkForeign.Checked=RegKey.IsForeign;
 			checkFree.Checked=RegKey.IsFreeVersion;
 			checkTesting.Checked=RegKey.IsOnlyForTesting;
-			checkServerVersion.Checked=RegKey.UsesServerVersion;
+			//checkServerVersion.Checked=RegKey.UsesServerVersion;
 			textDateStarted.Text=RegKey.DateStarted.ToShortDateString();
 			if(RegKey.DateDisabled.Year>1880){
 				textDateDisabled.Text=RegKey.DateDisabled.ToShortDateString();
@@ -423,7 +409,7 @@ namespace OpenDental{
 			RegKey.DateEnded=PIn.Date(textDateEnded.Text);
 			RegKey.IsFreeVersion=checkFree.Checked;
 			RegKey.IsOnlyForTesting=checkTesting.Checked;
-			RegKey.UsesServerVersion=checkServerVersion.Checked;
+			//RegKey.UsesServerVersion=checkServerVersion.Checked;
 			RegKey.Note=textNote.Text;
 			RegistrationKeys.Update(RegKey);
 			DialogResult=DialogResult.OK;
