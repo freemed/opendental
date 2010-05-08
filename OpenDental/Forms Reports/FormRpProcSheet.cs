@@ -401,7 +401,7 @@ namespace OpenDental{
 				row[0]=PIn.Date(table.Rows[i][0].ToString()).ToShortDateString();
 				row[1]=table.Rows[i][1].ToString();//name
 				row[2]=table.Rows[i][2].ToString();//adacode
-				row[3]=table.Rows[i][3].ToString();//tooth
+				row[3]=Tooth.ToInternat(table.Rows[i][3].ToString());//tooth
 				row[4]=table.Rows[i][4].ToString();//descript
 				row[5]=table.Rows[i][5].ToString();//prov
 				if(!PrefC.GetBool(PrefName.EasyNoClinics)) {
