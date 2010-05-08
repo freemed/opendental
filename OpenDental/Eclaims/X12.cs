@@ -676,7 +676,7 @@ namespace OpenDental.Eclaims
 				//2300 CLM: Claim
 				seg++;
 				sw.Write("CLM*"
-					+claim.PatNum.ToString()+"*"//CLM01: A unique id. Can support 20 char.  We used to use ClaimNum, but by using PatNum, it is now possible to search for a patient.
+					+Sout(claim.PatNum.ToString()+"/"+claim.ClaimNum.ToString(),20)+"*"//CLM01: A unique id. Can support 20 char.  By using both PatNum and ClaimNum, it is possible to search for a patient as well as to ensure uniqueness. We might need to allow user to override for claims based on preauths.
 					+claim.ClaimFee.ToString()+"*"//CLM02: Claim Fee
 					+"**"//CLM03 & 04 not used
 					+GetPlaceService(claim.PlaceService)+"::1*"//CLM05: place+1. 1=Original claim
