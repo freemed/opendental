@@ -2552,6 +2552,7 @@ namespace OpenDental{
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.AutoScroll = true;
 			this.ClientSize = new System.Drawing.Size(984,956);
+			this.ControlBox = false;
 			this.Controls.Add(this.textReasonUnder);
 			this.Controls.Add(this.label7);
 			this.Controls.Add(this.label4);
@@ -2638,6 +2639,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormClaimEdit_Shown(object sender,EventArgs e) {
+			//the control box (x to close window) is not shown in this form because new users are temped to use it as an OK button, causing errors.
 			if(!IsNew) {
 				return;
 			}
