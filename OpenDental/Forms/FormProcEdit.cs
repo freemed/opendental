@@ -2597,6 +2597,9 @@ namespace OpenDental{
 		}
 
 		private void butEditAnyway_Click(object sender, System.EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.ClaimSentEdit)) {
+				return;
+			}
 			panel1.Enabled=true;
 			listProcStatus.Enabled=true;
 			checkNoBillIns.Enabled=true;

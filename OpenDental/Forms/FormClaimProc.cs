@@ -1208,6 +1208,10 @@ namespace OpenDental
 				butOK.Enabled=false;
 				butDelete.Enabled=false;
 			}
+			if(ClaimProcCur.ClaimNum>0 && !Security.IsAuthorized(Permissions.ClaimSentEdit,true)) {//attached to claim, no permission for claims.
+				butOK.Enabled=false;
+				butDelete.Enabled=false;
+			}
 			Plan=InsPlans.GetPlan(ClaimProcCur.PlanNum,PlanList);
 			PatPlanNum=PatPlans.GetPatPlanNum(PatPlanList,Plan.PlanNum);
 			BenefitList=null;//only fill it if proc
