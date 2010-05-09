@@ -774,7 +774,7 @@ namespace OpenDental{
 			if(IsNew){//never allowed to change or attach more checks after initial creation of deposit slip
 				for(int i=0;i<gridPat.SelectedIndices.Length;i++){
 					PatPayList[gridPat.SelectedIndices[i]].DepositNum=DepositCur.DepositNum;
-					Payments.Update(PatPayList[gridPat.SelectedIndices[i]]);
+					Payments.Update(PatPayList[gridPat.SelectedIndices[i]],false);
 				}
 				for(int i=0;i<gridIns.SelectedIndices.Length;i++){
 					ClaimPayList[gridIns.SelectedIndices[i]].DepositNum=DepositCur.DepositNum;

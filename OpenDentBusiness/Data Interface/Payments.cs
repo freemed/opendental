@@ -112,8 +112,8 @@ namespace OpenDentBusiness{
 		}
 
 
-		///<summary>Updates this payment.  Must make sure to update the datePay of all attached paysplits so that they are always in synch.  Also need to manually set IsSplit before here.  Will throw an exception if bad date, so surround by try-catch.</summary>
-		public static void Update(Payment pay){
+		///<summary>Updates this payment.  Must make sure to update the datePay of all attached paysplits so that they are always in synch.  Also need to manually set IsSplit before here.  Will throw an exception if bad date, so surround by try-catch.  Set excludeDepositNum to true from FormPayment to prevent collision from another worksation that just deleted a deposit.</summary>
+		public static void Update(Payment pay,bool excludeDepositNum){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),pay);
 				return;
@@ -137,18 +137,20 @@ namespace OpenDentBusiness{
 				throw new ApplicationException(Lans.g("Payments","Not allowed to change the amount on payments attached to deposits."));
 			}*/
 			string command="UPDATE payment SET " 
-				+ "paytype = '"      +POut.Long   (pay.PayType)+"'"
-				+ ",paydate = "     +POut.Date  (pay.PayDate)
+				+ "paytype = '"      +POut.Long(pay.PayType)+"'"
+				+ ",paydate = "     +POut.Date(pay.PayDate)
 				+ ",payamt = '"      +POut.Double(pay.PayAmt)+"'"
 				+ ",checknum = '"    +POut.String(pay.CheckNum)+"'"
 				+ ",bankbranch = '"  +POut.String(pay.BankBranch)+"'"
 				+ ",paynote = '"     +POut.String(pay.PayNote)+"'"
-				+ ",issplit = '"     +POut.Bool  (pay.IsSplit)+"'"
-				+ ",patnum = '"      +POut.Long   (pay.PatNum)+"'"
-				+ ",ClinicNum = '"   +POut.Long   (pay.ClinicNum)+"'"
+				+ ",issplit = '"     +POut.Bool(pay.IsSplit)+"'"
+				+ ",patnum = '"      +POut.Long(pay.PatNum)+"'"
+				+ ",ClinicNum = '"   +POut.Long(pay.ClinicNum)+"'";
 				//DateEntry not allowed to change
-				+ ",DepositNum = '"  +POut.Long   (pay.DepositNum)+"'"
-				+" WHERE payNum = '" +POut.Long   (pay.PayNum)+"'";
+			if(!excludeDepositNum){
+				command+= ",DepositNum = '"  +POut.Long(pay.DepositNum)+"'";
+			}
+			command+=" WHERE payNum = '" +POut.Long(pay.PayNum)+"'";
 			//MessageBox.Show(string command);
  			Db.NonQ(command);
 			/*

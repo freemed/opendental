@@ -1386,7 +1386,7 @@ namespace OpenDental{
 				PaymentCur.IsSplit=false;
 			}
 			try{
-				Payments.Update(PaymentCur);
+				Payments.Update(PaymentCur,true);
 			}
 			catch(ApplicationException ex){//this catches bad dates.
 				MessageBox.Show(ex.Message);
