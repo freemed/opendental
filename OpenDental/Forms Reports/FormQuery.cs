@@ -380,11 +380,11 @@ namespace OpenDental{
 			// labelTotPages
 			// 
 			this.labelTotPages.Font = new System.Drawing.Font("Microsoft Sans Serif",9F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.labelTotPages.Location = new System.Drawing.Point(145,10);
+			this.labelTotPages.Location = new System.Drawing.Point(143,10);
 			this.labelTotPages.Name = "labelTotPages";
-			this.labelTotPages.Size = new System.Drawing.Size(42,18);
+			this.labelTotPages.Size = new System.Drawing.Size(52,18);
 			this.labelTotPages.TabIndex = 11;
-			this.labelTotPages.Text = "1 / 2";
+			this.labelTotPages.Text = "25 / 26";
 			this.labelTotPages.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			// 
 			// butZoomIn
@@ -515,9 +515,9 @@ namespace OpenDental{
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Query";
 			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+			this.Load += new System.EventHandler(this.FormQuery_Load);
 			this.Layout += new System.Windows.Forms.LayoutEventHandler(this.FormQuery_Layout);
 			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormQuery_Closing);
-			this.Load += new System.EventHandler(this.FormQuery_Load);
 			((System.ComponentModel.ISupportInitialize)(this.grid2)).EndInit();
 			this.panelTop.ResumeLayout(false);
 			this.panelTop.PerformLayout();
