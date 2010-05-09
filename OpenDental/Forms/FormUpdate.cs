@@ -1052,6 +1052,7 @@ namespace OpenDental{
 			if(showShutdownWindow) {
 				//Even if updating multiple databases, extra shutdown signals are not needed.
 				FormShutdown FormSD=new FormShutdown();
+				FormSD.IsUpdate=true;
 				FormSD.ShowDialog();
 				if(FormSD.DialogResult==DialogResult.OK) {
 					//turn off signal reception for 5 seconds so this workstation will not shut down.
