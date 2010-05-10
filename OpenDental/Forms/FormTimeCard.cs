@@ -878,18 +878,18 @@ namespace OpenDental{
 			g.DrawString(str,fontTitle,brush,xPos,yPos);
 			yPos+=30;
 			//define columns
-			int[] colW=new int[11];
+			int[] colW=new int[10];
 			colW[0]=70;//date
 			colW[1]=70;//weekday
 			colW[2]=50;//altered
-			colW[3]=50;//status
-			colW[4]=60;//in/out
-			colW[5]=60;//time
-			colW[6]=50;//minutes/hours
-			colW[7]=55;//overtime
-			colW[8]=50;//daily
-			colW[9]=50;//weekly
-			colW[10]=200;//note
+			colW[3]=60;//in
+			colW[4]=60;//out
+			//colW[5]=60;//time
+			colW[5]=50;//total
+			colW[6]=55;//overtime
+			colW[7]=50;//daily
+			colW[8]=50;//weekly
+			colW[9]=200;//note
 			int[] colPos=new int[colW.Length+1];
 			colPos[0]=55;
 			for(int i=1;i<colPos.Length;i++) {
@@ -899,14 +899,14 @@ namespace OpenDental{
 			ColCaption[0]=Lan.g(this,"Date");
 			ColCaption[1]=Lan.g(this,"Weekday");
 			ColCaption[2]=Lan.g(this,"Altered");
-			ColCaption[3]=Lan.g(this,"Status");
-			ColCaption[4]=Lan.g(this,"In/Out");
-			ColCaption[5]=Lan.g(this,"Time");
-			ColCaption[6]=Lan.g(this,"Hours");//or minutes
-			ColCaption[7]=Lan.g(this,"Overtime");
-			ColCaption[8]=Lan.g(this,"Daily");
-			ColCaption[9]=Lan.g(this,"Weekly");
-			ColCaption[10]=Lan.g(this,"Note");
+			ColCaption[3]=Lan.g(this,"In");
+			ColCaption[4]=Lan.g(this,"Out");
+			//ColCaption[5]=Lan.g(this,"Time");
+			ColCaption[5]=Lan.g(this,"Total");
+			ColCaption[6]=Lan.g(this,"Overtime");
+			ColCaption[7]=Lan.g(this,"Daily");
+			ColCaption[8]=Lan.g(this,"Weekly");
+			ColCaption[9]=Lan.g(this,"Note");
 			//column headers-----------------------------------------------------------------------------------------
 			e.Graphics.FillRectangle(Brushes.LightGray,colPos[0],yPos,colPos[colPos.Length-1]-colPos[0],18);
 			e.Graphics.DrawRectangle(pen,colPos[0],yPos,colPos[colPos.Length-1]-colPos[0],18);

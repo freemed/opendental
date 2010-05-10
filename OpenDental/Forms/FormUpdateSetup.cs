@@ -307,9 +307,9 @@ namespace OpenDental{
 			// 
 			this.label10.Location = new System.Drawing.Point(212,309);
 			this.label10.Name = "label10";
-			this.label10.Size = new System.Drawing.Size(210,19);
+			this.label10.Size = new System.Drawing.Size(246,19);
 			this.label10.TabIndex = 52;
-			this.label10.Text = "the buttons would just confuse most offices";
+			this.label10.Text = "(most users will not check this option)";
 			this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// FormUpdateSetup
