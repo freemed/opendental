@@ -142,11 +142,13 @@ namespace OpenDental{
 			string insDeductibleUsed="";
 			string insPending="";
 			string insPercentages="";
+			string insRemaining="";
 			string insUsed="";
 			double doubAnnualMax;
 			double doubDeductible;
 			double doubDeductibleUsed;
 			double doubPending;
+			double doubRemain;
 			double doubUsed;
 			if(plan!=null){
 				carrier=Carriers.GetCarrier(plan.CarrierNum);
@@ -159,8 +161,10 @@ namespace OpenDental{
 				subscriberId=plan.SubscriberID;
 				subscriberNameFL=Patients.GetLim(plan.Subscriber).GetNameFL();
 				doubAnnualMax=Benefits.GetAnnualMaxDisplay(benefitList,plan.PlanNum,patPlanNum);
+				doubRemain=-1;
 				if(doubAnnualMax!=-1){
 					insAnnualMax=doubAnnualMax.ToString("c");
+					doubRemain=doubAnnualMax;
 				}
 				doubDeductible=Benefits.GetDeductGeneralDisplay(benefitList,plan.PlanNum,patPlanNum,BenefitCoverageLevel.Individual);
 				if(doubDeductible!=-1){
@@ -173,10 +177,19 @@ namespace OpenDental{
 				doubPending=InsPlans.GetPendingDisplay(histList,DateTime.Today,plan,patPlanNum,-1,pat.PatNum);
 				if(doubPending!=-1) {
 					insPending=doubPending.ToString("c");
+					if(doubRemain!=-1){
+						doubRemain-=doubPending;
+					}
 				}
 				doubUsed=InsPlans.GetInsUsedDisplay(histList,DateTime.Today,plan.PlanNum,patPlanNum,-1,planList,benefitList);
 				if(doubUsed!=-1) {
 					insUsed=doubUsed.ToString("c");
+					if(doubRemain!=-1){
+						doubRemain-=doubUsed;
+					}
+				}
+				if(doubRemain!=-1){
+					insRemaining=doubRemain.ToString("c");
 				}
 				for(int j=0;j<benefitList.Count;j++) {
 					if(benefitList[j].PlanNum != plan.PlanNum) {
@@ -201,6 +214,7 @@ namespace OpenDental{
 			string ins2DeductibleUsed="";
 			string ins2Pending="";
 			string ins2Percentages="";
+			string ins2Remaining="";
 			string ins2Used="";
 			if(plan!=null) {
 				carrier=Carriers.GetCarrier(plan.CarrierNum);
@@ -213,8 +227,10 @@ namespace OpenDental{
 				//subscriberId=plan.SubscriberID;
 				subscriber2NameFL=Patients.GetLim(plan.Subscriber).GetNameFL();
 				doubAnnualMax=Benefits.GetAnnualMaxDisplay(benefitList,plan.PlanNum,patPlanNum);
+				doubRemain=-1;
 				if(doubAnnualMax!=-1) {
 					ins2AnnualMax=doubAnnualMax.ToString("c");
+					doubRemain=doubAnnualMax;
 				}
 				doubDeductible=Benefits.GetDeductGeneralDisplay(benefitList,plan.PlanNum,patPlanNum,BenefitCoverageLevel.Individual);
 				if(doubDeductible!=-1) {
@@ -227,10 +243,19 @@ namespace OpenDental{
 				doubPending=InsPlans.GetPendingDisplay(histList,DateTime.Today,plan,patPlanNum,-1,pat.PatNum);
 				if(doubPending!=-1) {
 					ins2Pending=doubPending.ToString("c");
+					if(doubRemain!=-1){
+						doubRemain-=doubPending;
+					}
 				}
 				doubUsed=InsPlans.GetInsUsedDisplay(histList,DateTime.Today,plan.PlanNum,patPlanNum,-1,planList,benefitList);
 				if(doubUsed!=-1) {
 					ins2Used=doubUsed.ToString("c");
+					if(doubRemain!=-1){
+						doubRemain-=doubUsed;
+					}
+				}
+				if(doubRemain!=-1){
+					ins2Remaining=doubRemain.ToString("c");
 				}
 				for(int j=0;j<benefitList.Count;j++) {
 					if(benefitList[j].PlanNum != plan.PlanNum) {
@@ -367,12 +392,14 @@ namespace OpenDental{
 				fldval=fldval.Replace("[insDeductibleUsed]",insDeductibleUsed);
 				fldval=fldval.Replace("[insPending]",insPending);
 				fldval=fldval.Replace("[insPercentages]",insPercentages);
+				fldval=fldval.Replace("[insRemaining]",insRemaining);
 				fldval=fldval.Replace("[insUsed]",insUsed);
 				fldval=fldval.Replace("[ins2AnnualMax]",ins2AnnualMax);
 				fldval=fldval.Replace("[ins2Deductible]",ins2Deductible);
 				fldval=fldval.Replace("[ins2DeductibleUsed]",ins2DeductibleUsed);
 				fldval=fldval.Replace("[ins2Pending]",ins2Pending);
 				fldval=fldval.Replace("[ins2Percentages]",ins2Percentages);
+				fldval=fldval.Replace("[ins2Remaining]",insRemaining);
 				fldval=fldval.Replace("[ins2Used]",ins2Used);
 				fldval=fldval.Replace("[MedUrgNote]",pat.MedUrgNote);
 				fldval=fldval.Replace("[nameF]",pat.FName);
