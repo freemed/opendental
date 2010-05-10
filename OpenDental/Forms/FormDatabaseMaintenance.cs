@@ -296,11 +296,13 @@ namespace OpenDental {
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.PatientUnDeleteWithBalance(verbose);
 			Application.DoEvents();
+			textLog.Text+=DatabaseMaintenance.PatPlanOrdinalTwoToOne(verbose);
+			Application.DoEvents();
+			textLog.Text+=DatabaseMaintenance.PaymentDetachMissingDeposit(verbose);
+			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.PayPlanChargeGuarantorMatch(verbose);
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.PayPlanChargeProvNum(verbose);
-			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.PatPlanOrdinalTwoToOne(verbose);
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.PayPlanSetGuarantorToPatForIns(verbose);
 			Application.DoEvents();

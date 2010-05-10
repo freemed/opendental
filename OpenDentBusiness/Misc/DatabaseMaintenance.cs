@@ -593,11 +593,7 @@ HAVING cnt>1";
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
 			string log="";
-			command=@"UPDATE clockevent SET TimeDisplayed=TimeEntered WHERE TimeDisplayed > NOW()";
-			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				command=@"UPDATE clockevent SET TimeDisplayed=TimeEntered WHERE TimeDisplayed > "
-					+POut.DateT(MiscData.GetNowDateTime());
-			}
+			command=@"UPDATE clockevent SET TimeDisplayed1=TimeEntered1 WHERE TimeDisplayed1 > NOW()";
 			int numberFixed=Db.NonQ32(command);
 			if(numberFixed>0 || verbose) {
 				log+=Lans.g("FormDatabaseMaintenance","Timecard entries fixed: ")+numberFixed.ToString()+"\r\n";
@@ -776,6 +772,22 @@ HAVING cnt>1";
 			int numberFixed=table.Rows.Count;
 			if(numberFixed>0 || verbose) {
 				log+=Lans.g("FormDatabaseMaintenance","PatPlan ordinals changed from 2 to 1 if no primary ins: ")+numberFixed.ToString()+"\r\n";
+			}
+			return log;
+		}
+
+		public static string PaymentDetachMissingDeposit(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
+			string log="";
+			command="UPDATE payment SET DepositNum=0 "
+				+"WHERE DepositNum != 0 " 
+				+"AND NOT EXISTS(SELECT * FROM deposit WHERE deposit.DepositNum=payment.DepositNum)";
+			int numberFixed=Db.NonQ32(command);
+			if(numberFixed>0 || verbose) {
+				log+=Lans.g("FormDatabaseMaintenance","Payments detached from deposits that no longer exist: ")
+					+numberFixed.ToString()+"\r\n";
 			}
 			return log;
 		}
