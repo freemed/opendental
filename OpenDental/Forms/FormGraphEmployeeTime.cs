@@ -75,6 +75,7 @@ namespace OpenDental {
 				}
 				if(scheds[i].EmployeeNum==15//Derek
 					|| scheds[i].EmployeeNum==17//Nathan
+					|| scheds[i].EmployeeNum==22//Jordan
 					|| scheds[i].EmployeeNum==18)//Spike
 				{
 					continue;
@@ -146,13 +147,18 @@ namespace OpenDental {
 				e.Graphics.DrawString(str,Font,Brushes.Black,x1,y1);
 			}
 			//find the biggest bar
-			float biggest=1;
-			for(int i=0;i<buckets.Length;i++){
+			//hard code to 9 staff being max so that each day looks the same.
+			float peak=9;//The ideal peak
+			if(dateShowing.DayOfWeek==DayOfWeek.Friday){
+				peak=7.5f;//The Friday graph is actually smaller than the other graphs.
+			}
+			float superPeak=11;//the most staff possible to schedule
+			/*for(int i=0;i<buckets.Length;i++){
 				if(buckets[i]>biggest){
 					biggest=buckets[i];
 				}
-			}
-			float hOne=rec.Height/biggest;
+			}*/
+			float hOne=rec.Height/superPeak;
 			//draw bars
 			float x;
 			float y;
@@ -163,7 +169,7 @@ namespace OpenDental {
 			float barW=barspacing / 2f;
 			SolidBrush blueBrush=new SolidBrush(Color.FromArgb(162,193,222));
 			for(int i=0;i<buckets.Length;i++){
-				h=(float)buckets[i]*rec.Height/biggest;
+				h=(float)buckets[i]*rec.Height/superPeak;
 				x=rec.X + firstbar + (float)i*barspacing - barW/2f;
 				y=rec.Y+rec.Height-h;
 				w=barW;
@@ -178,12 +184,13 @@ namespace OpenDental {
 				}
 			}
 			//Line graph in red
+			float peakH=rec.Height * peak / superPeak;
 			Pen redPen=new Pen(Brushes.Red,2f);
 			for(int i=0;i<listCalls.Count-1;i++){
 				x1=rec.X + ( (listCalls[i].X-5f) * rec.Width / totalhrs );
-				y1=rec.Y+rec.Height - (listCalls[i].Y / highcall * rec.Height);
+				y1=rec.Y+rec.Height - (listCalls[i].Y / highcall * peakH);
 				x2=rec.X + ( (listCalls[i+1].X-5f) * rec.Width / totalhrs );
-				y2=rec.Y+rec.Height - (listCalls[i+1].Y / highcall * rec.Height);
+				y2=rec.Y+rec.Height - (listCalls[i+1].Y / highcall * peakH);
 				e.Graphics.DrawLine(redPen,x1,y1,x2,y2);
 			}
 			redPen.Dispose();
