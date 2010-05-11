@@ -146,6 +146,7 @@ namespace OpenDental{
 		private bool InitializedOnStartup;
 		private Patient PatCur;
 		private FormRecallList FormRecallL;
+		private OpenDental.UI.Button butGraph;
 		private Timer timerTests;
 		//private int stressCounter;
 
@@ -255,6 +256,7 @@ namespace OpenDental{
 			this.timerTests = new System.Windows.Forms.Timer(this.components);
 			this.butOther = new OpenDental.UI.Button();
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
+			this.butGraph = new OpenDental.UI.Button();
 			this.panelArrows.SuspendLayout();
 			this.panelSheet.SuspendLayout();
 			this.panelAptInfo.SuspendLayout();
@@ -466,6 +468,7 @@ namespace OpenDental{
 			// 
 			// panelAptInfo
 			// 
+			this.panelAptInfo.Controls.Add(this.butGraph);
 			this.panelAptInfo.Controls.Add(this.listConfirmed);
 			this.panelAptInfo.Controls.Add(this.butComplete);
 			this.panelAptInfo.Controls.Add(this.butUnsched);
@@ -1057,6 +1060,23 @@ namespace OpenDental{
 			this.ToolBarMain.TabIndex = 73;
 			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
 			// 
+			// butGraph
+			// 
+			this.butGraph.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butGraph.Autosize = true;
+			this.butGraph.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butGraph.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butGraph.CornerRadius = 4F;
+			this.butGraph.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butGraph.Location = new System.Drawing.Point(41,42);
+			this.butGraph.Name = "butGraph";
+			this.butGraph.Size = new System.Drawing.Size(92,24);
+			this.butGraph.TabIndex = 78;
+			this.butGraph.TabStop = false;
+			this.butGraph.Text = "Graph Emp";
+			this.butGraph.Visible = false;
+			this.butGraph.Click += new System.EventHandler(this.butGraph_Click);
+			// 
 			// ContrAppt
 			// 
 			this.Controls.Add(this.groupSearch);
@@ -1615,6 +1635,9 @@ namespace OpenDental{
 			toolTip1.SetToolTip(butComplete, Lan.g(this,"Set Complete"));
 			toolTip1.SetToolTip(butDelete, Lan.g(this,"Delete"));
 			toolTip1.SetToolTip(butOther, Lan.g(this,"Other Appointments"));
+			if(PrefC.GetString(PrefName.RegistrationKey).StartsWith("UPR6J92T29")) {
+				butGraph.Visible=true;
+			}
 			SetWeeklyView(false);
 		}
 
@@ -4531,6 +4554,10 @@ namespace OpenDental{
 			//if(PatCur!=null) {
 			//	this.ModuleSelected(PatCur.PatNum);
 			//}
+		}
+
+		private void butGraph_Click(object sender,EventArgs e) {
+
 		}
 
 		//private void butTest_Click(object sender,EventArgs e) {
