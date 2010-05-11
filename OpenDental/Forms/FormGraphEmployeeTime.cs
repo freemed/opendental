@@ -15,6 +15,7 @@ namespace OpenDental {
 		private float[] buckets;//a bucket can hold partial people.
 		private bool[] usedLunch;
 		private DateTime dateShowing;
+		private int[] missedCalls;
 
 		public FormGraphEmployeeTime() {
 			InitializeComponent();
@@ -45,7 +46,8 @@ namespace OpenDental {
 				listCalls.Add(new PointF(14.5f,277));
 				listCalls.Add(new PointF(15.5f,185));
 				listCalls.Add(new PointF(16.5f,141));
-				listCalls.Add(new PointF(16.5f,0));
+				listCalls.Add(new PointF(17f,50));
+				listCalls.Add(new PointF(17.0f,0));
 			}
 			else {
 				listCalls.Add(new PointF(5f,0));
@@ -69,6 +71,9 @@ namespace OpenDental {
 			buckets=new float[28];//every 30 minutes, starting at 5:15
 			usedLunch=new bool[28];
 			List<Schedule> scheds=Schedules.GetDayList(dateShowing);
+			TimeSpan time1;
+			TimeSpan time2;
+			TimeSpan delta;
 			for(int i=0;i<scheds.Count;i++){
 				if(scheds[i].SchedType!=ScheduleType.Employee){
 					continue;
@@ -76,29 +81,61 @@ namespace OpenDental {
 				if(scheds[i].EmployeeNum==15//Derek
 					|| scheds[i].EmployeeNum==17//Nathan
 					|| scheds[i].EmployeeNum==22//Jordan
-					|| scheds[i].EmployeeNum==18)//Spike
+					|| scheds[i].EmployeeNum==18//Spike
+					|| scheds[i].EmployeeNum==28)//Stacey
 				{
 					continue;
 				}
-				TimeSpan time;
 				TimeSpan lunch=(scheds[i].StartTime + new TimeSpan((scheds[i].StopTime-scheds[i].StartTime).Ticks/2) - new TimeSpan(0,37,0)).TimeOfDay;//subtract 37 minutes to make it fall within a bucket, and because people seem to like to take lunch early, and because the logic will bump it forward if lunch already used.
 				for(int b=0;b<buckets.Length;b++){
-					time=new TimeSpan(5,15,0) + new TimeSpan(0,b*30,0);
-					if(time<scheds[i].StartTime.TimeOfDay || time>scheds[i].StopTime.TimeOfDay){
+					time1=new TimeSpan(5,0,0) + new TimeSpan(0,b*30,0);
+					time2=new TimeSpan(5,30,0) + new TimeSpan(0,b*30,0);
+					//if the lunchtime is within this bucket
+					if(lunch >= time1 && lunch < time2){
+						if(usedLunch[b]){//can't use this bucket for lunch because someone else already did.
+							lunch+=new TimeSpan(0,30,0);//move lunch forward half an hour
+						}
+						else{
+							usedLunch[b]=true;
+							continue;//used this bucket for lunch (don't add a drop to the bucket)
+						}
+					}
+					//situation 1: this bucket is completely within the start and stop times.
+					if(scheds[i].StartTime.TimeOfDay <= time1 && scheds[i].StopTime.TimeOfDay >= time2){
+						buckets[b]+=1;
+					}
+					//situation 2: the start time is after this bucket
+					else if(scheds[i].StartTime.TimeOfDay >= time2){
 						continue;
 					}
-					//if the lunch time is within 15 minutes of this, then don't add to the bucket
-					if((lunch-time).Duration() < new TimeSpan(0,15,0)){
-						if(usedLunch[b]){//can't use this bucket for lunch because someone else already did.
-							lunch+=new TimeSpan(0,30,0);//use the next one
-							buckets[b]+=1;
-						}
-						usedLunch[b]=true;
-						continue;//use this bucket for lunch (don't add a drop to the bucket)
+					//situation 3: the stop time is before this bucket
+					else if(scheds[i].StopTime.TimeOfDay <= time1){
+						continue;
 					}
-					buckets[b]+=1;
+					//situation 4: start time falls within this bucket
+					if(scheds[i].StartTime.TimeOfDay > time1){
+						delta=scheds[i].StartTime.TimeOfDay - time1;
+						buckets[b]+= (float)delta.TotalHours * 2f;//example, .5 hours would add 1 to the bucket
+					}
+					//situation 5: stop time falls within this bucket
+					if(scheds[i].StopTime.TimeOfDay < time2){
+						delta= time2 - scheds[i].StopTime.TimeOfDay;
+						buckets[b]+= (float)delta.TotalHours * 2f;
+					}
 				}
 				//break;//just show one sched for debugging.
+			}
+			//missed calls
+			missedCalls=new int[28];
+			List<DateTime> callTimes=Employees.GetAsteriskMissedCalls(dateShowing);
+			for(int i=0;i<callTimes.Count;i++){
+				for(int b=0;b<missedCalls.Length;b++){
+					time1=new TimeSpan(5,0,0) + new TimeSpan(0,b*30,0);
+					time2=new TimeSpan(5,30,0) + new TimeSpan(0,b*30,0);
+					if(callTimes[i].TimeOfDay >= time1 && callTimes[i].TimeOfDay < time2){
+						missedCalls[b]++;
+					}
+				}
 			}
 			this.Invalidate();
 		}
@@ -143,7 +180,7 @@ namespace OpenDental {
 				}
 				strW=e.Graphics.MeasureString(str,Font).Width;
 				x1=rec.X + ( (float)i * rec.Width / totalhrs ) - strW / 2f;
-				y1=y1=rec.Y+rec.Height+3;
+				y1=rec.Y+rec.Height+3;
 				e.Graphics.DrawString(str,Font,Brushes.Black,x1,y1);
 			}
 			//find the biggest bar
@@ -175,7 +212,7 @@ namespace OpenDental {
 				w=barW;
 				e.Graphics.FillRectangle(Brushes.LightBlue,x,y,w,h);
 				//draw bar increments
-				for(int o=1;o<(int)buckets[i];o++){
+				for(int o=1;o<buckets[i];o++){
 					x1=x;
 					y1=rec.Y+rec.Height-(o*hOne);
 					x2=x+barW;
@@ -192,6 +229,27 @@ namespace OpenDental {
 				x2=rec.X + ( (listCalls[i+1].X-5f) * rec.Width / totalhrs );
 				y2=rec.Y+rec.Height - (listCalls[i+1].Y / highcall * peakH);
 				e.Graphics.DrawLine(redPen,x1,y1,x2,y2);
+			}
+			//Missed call numbers
+			for(int i=0;i<missedCalls.Length;i++){
+				if(missedCalls[i]==0){
+					continue;
+				}
+				str=missedCalls[i].ToString();
+				strW=e.Graphics.MeasureString(str,Font).Width;
+				x1=rec.X + barW + ( (float)i * rec.Width / totalhrs / 2) - strW / 2f;
+				y1=rec.Y+rec.Height-17;
+				e.Graphics.DrawString(str,Font,Brushes.Red,x1,y1);
+			}
+			//Vertical red line for current time
+			if(DateTime.Today.Date==dateShowing.Date){
+				TimeSpan now=DateTime.Now.AddHours(-5).TimeOfDay;
+				float shift=(float)now.TotalHours * rec.Width / totalhrs;
+				x1=rec.X + shift;
+				y1=rec.Y+rec.Height;
+				x2=rec.X + shift;
+				y2=rec.Y;
+				e.Graphics.DrawLine(Pens.Red,x1,y1,x2,y2);
 			}
 			redPen.Dispose();
 			blueBrush.Dispose();
