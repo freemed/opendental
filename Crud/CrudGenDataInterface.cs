@@ -35,6 +35,8 @@ namespace Crud {
 					return GetUpdate(typeClass.Name,obj);
 				case SnippetType.EntireSclass:
 					return GetEntireSclass(typeClass.Name,obj,priKey.Name,Sname,tablename,priKeyParam);
+				case SnippetType.CreateTable:
+					return GetCreateTable(tablename,priKey.Name,fieldsExceptPri);
 			}
 		}
 
@@ -184,5 +186,19 @@ namespace OpenDentBusiness{
 }";
 			return str;			
 		}
+
+		private static string GetCreateTable(string tablename,string priKeyName,List<FieldInfo> fieldsExceptPri) {
+			StringBuilder strb=new StringBuilder();
+			CrudQueries.GetCreateTable(strb,tablename,priKeyName,fieldsExceptPri);
+			return strb.ToString();
+		}
+
+
+
+
+
+
+
+
 	}
 }

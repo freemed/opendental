@@ -7,6 +7,7 @@ namespace Crud {
 	public enum SnippetType {
 		EntireSclass,
 		Insert,
-		Update
+		Update,
+		CreateTable
 	}
 }

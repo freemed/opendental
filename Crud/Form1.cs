@@ -140,7 +140,7 @@ namespace OpenDentBusiness.Crud{
 			strb.Append(rn+t3+"return list[0];");
 			strb.Append(rn+t2+"}");
 			//SelectMany-----------------------------------------------------------------------------------------
-			strb.Append(rn+rn+t2+"///<summary>Gets one "+typeClass.Name+" object from the database using a query.</summary>");
+			strb.Append(rn+rn+t2+"///<summary>Gets a list of "+typeClass.Name+" objects from the database using a query.</summary>");
 			strb.Append(rn+t2+"internal static List<"+typeClass.Name+"> SelectMany(string command){");
 			strb.Append(rn+t3+@"if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException(""Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n""+command);
