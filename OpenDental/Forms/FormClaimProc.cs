@@ -1408,14 +1408,20 @@ namespace OpenDental
 			if(IsProc){
 				textFee.Text=proc.ProcFee.ToString("f");
 				InsPlan plan=InsPlans.GetPlan(ClaimProcCur.PlanNum,PlanList);
-				if(plan.PlanType=="p"){//if ppo, then show the standard fee schedule
-					long standardFeeSched=Providers.GetProv(Patients.GetProvNum(PatCur)).FeeSched;
-					textFeeSched.Text=FeeScheds.GetDescription(standardFeeSched);
+				long insFeeSch = Fees.GetFeeSched(PatCur, PlanList, PatPlanList);
+				long standFeeSch = Providers.GetProv(Patients.GetProvNum(PatCur)).FeeSched;
+				if(plan.PlanType=="p"){//if ppo
+					double insFee = Fees.GetAmount0(proc.CodeNum, insFeeSch);
+					double standardfee=Fees.GetAmount0(proc.CodeNum,Providers.GetProv(Patients.GetProvNum(PatCur)).FeeSched);
+					if(insFee>standardfee) {//if ppo fee is higher than the standard fee (unusual)
+						textFeeSched.Text=FeeScheds.GetDescription(insFeeSch);
+					}
+					else{// show the standard fee schedule
+						textFeeSched.Text=FeeScheds.GetDescription(standFeeSch);
+					}
 				}
 				else{//otherwise, show the plan fee schedule
-					List <PatPlan> patPlanList=PatPlans.Refresh(PatCur.PatNum);
-					long feeSched=Fees.GetFeeSched(PatCur,PlanList,patPlanList);
-					textFeeSched.Text=FeeScheds.GetDescription(feeSched);
+					textFeeSched.Text=FeeScheds.GetDescription(insFeeSch);
 				}
 				string stringProcCode=ProcedureCodes.GetStringProcCode(proc.CodeNum);
 				//int codeNum=proc.CodeNum;
