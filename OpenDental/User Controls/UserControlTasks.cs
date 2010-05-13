@@ -929,6 +929,13 @@ namespace OpenDental {
 				FillGrid();
 				return;
 			}
+			if(tabContr.SelectedTab==tabNew){
+				if(clickedCol==1) {
+					TaskUnreads.SetRead(Security.CurUser.UserNum,TasksList[clickedI-TaskListsList.Count].TaskNum);
+					FillGrid();
+				}
+				return;//but ignore column 0 for now.  We would need to add that as a new feature.
+			}
 			if(clickedCol==0){//check tasks off
 				Task task=TasksList[clickedI-TaskListsList.Count].Copy();
 				Task taskOld=task.Copy();
@@ -951,10 +958,6 @@ namespace OpenDental {
 					MessageBox.Show(ex.Message);
 					return;
 				}
-				FillGrid();
-			}
-			if(tabContr.SelectedTab==tabNew && clickedCol==1) {
-				TaskUnreads.SetRead(Security.CurUser.UserNum,TasksList[clickedI-TaskListsList.Count].TaskNum);
 				FillGrid();
 			}
 		}
