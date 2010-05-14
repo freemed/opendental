@@ -2456,7 +2456,12 @@ namespace OpenDental{
 						lightSignalGrid1.SetButtonActive(row-1,color,sigListButs[i]);
 						butDef=SigButDefs.GetByIndex(row-1,SigButDefList);
 						if(butDef!=null){
-							PaintOnIcon(butDef.SynchIcon,color);
+							try{
+								PaintOnIcon(butDef.SynchIcon,color);
+							}
+							catch{
+								MessageBox.Show("Error painting on program icon.  Probably too many non-ack'd messages.");
+							}
 						}
 					}
 				}
