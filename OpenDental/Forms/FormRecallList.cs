@@ -1345,7 +1345,7 @@ namespace OpenDental{
 		private void pdLabels_PrintPage(object sender, PrintPageEventArgs ev){
 			int totalPages=(int)Math.Ceiling((double)AddrTable.Rows.Count/30);
 			Graphics g=ev.Graphics;
-			float yPos=75;
+			float yPos=63;//75;
 			float xPos=50;
 			string text="";
 			while(yPos<1000 && patientsPrinted<AddrTable.Rows.Count){
