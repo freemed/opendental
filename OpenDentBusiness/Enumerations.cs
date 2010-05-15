@@ -315,7 +315,9 @@ namespace OpenDentBusiness{
 		///<summary>48</summary>
 		ReplicationServers,
 		///<summary>49</summary>
-		Automation
+		Automation,
+		///<summary>50. This is used internally by OD, Inc with the phone server to trigger the phone system to reload after changing which call groups users are in.</summary>
+		PhoneAsteriskReload
 	}
 	//<summary></summary>
 	/*public enum ButtonType{

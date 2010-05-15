@@ -280,7 +280,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>this code is similar to code in the phone tracking server.  But here, we frequently only change clockStatus and ColorBar by setting employeeNum=-1.  If employeeNum is not -1, then EmployeeName also gets set.  If employeeNum==0, then clears employee from that row.</summary>
-		public static void SetPhoneStatus(string clockStatus,int extens,long employeeNum){
+		public static void SetPhoneStatus(string clockStatus,int extens,long employeeNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),clockStatus,extens);
 				return;
@@ -351,13 +351,7 @@ namespace OpenDentBusiness{
 			else if(overridden && !isAvailable){
 				//no colors
 			}
-			else if(!overridden
-				&& (empNum==22//jordan
-				|| empNum==15//derek
-				|| empNum==18//spike
-				|| empNum==17//nathan
-				))
-			{
+			else if(!overridden && PhoneExclusions.IsNoColor(empNum)){
 				//no colors
 			}
 			else if(isInUse){
@@ -388,18 +382,7 @@ namespace OpenDentBusiness{
 			return colorBar;
 		}
 
-		///<summary>For a given date, gets a list of dateTimes of missed calls.  Gets directly from the Asterisk database, hard-coded.</summary>
-		public static List<DateTime> GetAsteriskMissedCalls(DateTime date){
-			DataConnection dcon=new DataConnection("Asterisk","asteriskcdrdb","opendentalui","secret",DatabaseType.MySql);
-			string command="SELECT calldate FROM cdr WHERE DATE(calldate) = "+POut.Date(date)+" "
-				+"AND (dcontext='ext-group' OR dcontext='ext-local') AND dst='vmu998'";
-			List<DateTime> retVal=new List<DateTime>();
-			DataTable table=dcon.GetTable(command);
-			for(int i=0;i<table.Rows.Count;i++){
-				retVal.Add(PIn.DateT(table.Rows[i][0].ToString()));
-			}
-			return retVal;
-		}
+		
 
 
 	}

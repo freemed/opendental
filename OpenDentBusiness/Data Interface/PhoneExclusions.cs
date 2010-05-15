@@ -7,14 +7,29 @@ using System.Reflection;
 
 namespace OpenDentBusiness {
 	public class PhoneExclusions {
+		private static List<PhoneExclusion> listt;
 
-		public static List<PhoneExclusion> Refresh() {
+		///<summary>This list will get refreshed only once on startup and then not again.</summary>
+		public static List<PhoneExclusion> Listt {
+			get {
+				if(listt==null) {
+					Refresh();
+				}
+				return listt;
+			}
+			set { 
+				listt=Listt; 
+			}
+		}
+
+		public static void Refresh() {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<PhoneExclusion>>(MethodBase.GetCurrentMethod());
+				Meth.GetVoid(MethodBase.GetCurrentMethod());
+				return;
 			}
 			string command="SELECT * FROM phoneexclusion";
 			DataTable table=Db.GetTable(command);
-			List<PhoneExclusion> retVal=new List<PhoneExclusion>();
+			listt=new List<PhoneExclusion>();
 			PhoneExclusion phoneExclusion;
 			for(int i=0;i<table.Rows.Count;i++) {
 				phoneExclusion=new PhoneExclusion();
@@ -22,19 +37,29 @@ namespace OpenDentBusiness {
 				phoneExclusion.EmployeeNum      = PIn.Long(table.Rows[i]["EmployeeNum"].ToString());
 				phoneExclusion.NoGraph          = PIn.Bool(table.Rows[i]["NoGraph"].ToString());
 				phoneExclusion.NoColor          = PIn.Bool(table.Rows[i]["NoColor"].ToString());
-				retVal.Add(phoneExclusion);
+				listt.Add(phoneExclusion);
 			}
-			return retVal;
 		}
 
-		public static bool IsNoGraph(List<PhoneExclusion> exclusionList,long employeeNum) {
-			for(int i=0;i<exclusionList.Count;i++) {
-				if(exclusionList[i].EmployeeNum==employeeNum) {
-					return exclusionList[i].NoGraph;
+		public static bool IsNoGraph(long employeeNum) {
+			for(int i=0;i<Listt.Count;i++) {
+				if(Listt[i].EmployeeNum==employeeNum) {
+					return Listt[i].NoGraph;
 				}
 			}
 			return false;
 		}
+
+		public static bool IsNoColor(long employeeNum) {
+			for(int i=0;i<Listt.Count;i++) {
+				if(Listt[i].EmployeeNum==employeeNum) {
+					return Listt[i].NoColor;
+				}
+			}
+			return false;
+		}
+
+
 	}
 
 

@@ -16,7 +16,6 @@ namespace OpenDental {
 		private bool[] usedLunch;
 		private DateTime dateShowing;
 		private int[] missedCalls;
-		private List<PhoneExclusion> exclusionList;
 
 		public FormGraphEmployeeTime() {
 			InitializeComponent();
@@ -71,7 +70,6 @@ namespace OpenDental {
 			}
 			buckets=new float[28];//every 30 minutes, starting at 5:15
 			usedLunch=new bool[28];
-			exclusionList=PhoneExclusions.Refresh();
 			List<Schedule> scheds=Schedules.GetDayList(dateShowing);
 			TimeSpan time1;
 			TimeSpan time2;
@@ -80,7 +78,7 @@ namespace OpenDental {
 				if(scheds[i].SchedType!=ScheduleType.Employee) {
 					continue;
 				}
-				if(PhoneExclusions.IsNoGraph(exclusionList,scheds[i].EmployeeNum)) {
+				if(PhoneExclusions.IsNoGraph(scheds[i].EmployeeNum)) {
 					continue;
 				}
 				TimeSpan lunch=(scheds[i].StartTime + new TimeSpan((scheds[i].StopTime-scheds[i].StartTime).Ticks/2) - new TimeSpan(0,37,0)).TimeOfDay;//subtract 37 minutes to make it fall within a bucket, and because people seem to like to take lunch early, and because the logic will bump it forward if lunch already used.
@@ -124,7 +122,7 @@ namespace OpenDental {
 			}
 			//missed calls
 			missedCalls=new int[28];
-			List<DateTime> callTimes=Employees.GetAsteriskMissedCalls(dateShowing);
+			List<DateTime> callTimes=PhoneAsterisks.GetMissedCalls(dateShowing);
 			for(int i=0;i<callTimes.Count;i++) {
 				for(int b=0;b<missedCalls.Length;b++) {
 					time1=new TimeSpan(5,0,0) + new TimeSpan(0,b*30,0);

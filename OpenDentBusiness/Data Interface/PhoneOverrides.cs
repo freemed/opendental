@@ -183,16 +183,12 @@ namespace OpenDentBusiness{
 				return;//no override exists.
 			}
 			Employee emp=Employees.GetEmp(empNum);
-			if(empNum==22//jordan
-				|| empNum==15//derek
-				|| empNum==18//spike
-				|| empNum==17//nathan
-			){
-				phoneOR.IsAvailable=true;
-				phoneOR.Explanation="";
-				Update(phoneOR);
-				return;
-			}
+			//if(PhoneExclusions.IsNoColor(phoneExclusionList,empNum)){
+			//	phoneOR.IsAvailable=true;
+			//	phoneOR.Explanation="";
+			//	Update(phoneOR);
+			//	return;
+			//}
 			if(emp.PhoneExt==extension){
 				Delete(phoneOR);
 				return;
