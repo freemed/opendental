@@ -6,11 +6,11 @@ using System.Drawing;
 using System.Reflection;
 
 namespace OpenDentBusiness {
-	public class PhoneExclusions {
-		private static List<PhoneExclusion> listt;
+	public class PhoneEmpDefaults {
+		private static List<PhoneEmpDefault> listt;
 
 		///<summary>This list will get refreshed only once on startup and then not again.</summary>
-		public static List<PhoneExclusion> Listt {
+		public static List<PhoneEmpDefault> Listt {
 			get {
 				if(listt==null) {
 					Refresh();
@@ -27,17 +27,16 @@ namespace OpenDentBusiness {
 				Meth.GetVoid(MethodBase.GetCurrentMethod());
 				return;
 			}
-			string command="SELECT * FROM phoneexclusion";
+			string command="SELECT * FROM phoneempdefault";
 			DataTable table=Db.GetTable(command);
-			listt=new List<PhoneExclusion>();
-			PhoneExclusion phoneExclusion;
+			listt=new List<PhoneEmpDefault>();
+			PhoneEmpDefault phoneEmpDefault;
 			for(int i=0;i<table.Rows.Count;i++) {
-				phoneExclusion=new PhoneExclusion();
-				phoneExclusion.PhoneExclusionNum= PIn.Long(table.Rows[i]["PhoneExclusionNum"].ToString());
-				phoneExclusion.EmployeeNum      = PIn.Long(table.Rows[i]["EmployeeNum"].ToString());
-				phoneExclusion.NoGraph          = PIn.Bool(table.Rows[i]["NoGraph"].ToString());
-				phoneExclusion.NoColor          = PIn.Bool(table.Rows[i]["NoColor"].ToString());
-				listt.Add(phoneExclusion);
+				phoneEmpDefault=new PhoneEmpDefault();
+				phoneEmpDefault.EmployeeNum      = PIn.Long(table.Rows[i]["EmployeeNum"].ToString());
+				phoneEmpDefault.NoGraph          = PIn.Bool(table.Rows[i]["NoGraph"].ToString());
+				phoneEmpDefault.NoColor          = PIn.Bool(table.Rows[i]["NoColor"].ToString());
+				listt.Add(phoneEmpDefault);
 			}
 		}
 

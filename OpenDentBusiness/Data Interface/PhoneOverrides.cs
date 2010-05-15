@@ -183,7 +183,7 @@ namespace OpenDentBusiness{
 				return;//no override exists.
 			}
 			Employee emp=Employees.GetEmp(empNum);
-			//if(PhoneExclusions.IsNoColor(phoneExclusionList,empNum)){
+			//if(PhoneEmpDefaults.IsNoColor(phoneExclusionList,empNum)){
 			//	phoneOR.IsAvailable=true;
 			//	phoneOR.Explanation="";
 			//	Update(phoneOR);

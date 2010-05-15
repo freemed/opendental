@@ -351,7 +351,7 @@ namespace OpenDentBusiness{
 			else if(overridden && !isAvailable){
 				//no colors
 			}
-			else if(!overridden && PhoneExclusions.IsNoColor(empNum)){
+			else if(!overridden && PhoneEmpDefaults.IsNoColor(empNum)){
 				//no colors
 			}
 			else if(isInUse){

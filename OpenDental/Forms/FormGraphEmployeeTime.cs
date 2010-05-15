@@ -78,7 +78,7 @@ namespace OpenDental {
 				if(scheds[i].SchedType!=ScheduleType.Employee) {
 					continue;
 				}
-				if(PhoneExclusions.IsNoGraph(scheds[i].EmployeeNum)) {
+				if(PhoneEmpDefaults.IsNoGraph(scheds[i].EmployeeNum)) {
 					continue;
 				}
 				TimeSpan lunch=(scheds[i].StartTime + new TimeSpan((scheds[i].StopTime-scheds[i].StartTime).Ticks/2) - new TimeSpan(0,37,0)).TimeOfDay;//subtract 37 minutes to make it fall within a bucket, and because people seem to like to take lunch early, and because the logic will bump it forward if lunch already used.

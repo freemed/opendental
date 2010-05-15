@@ -161,7 +161,7 @@
     <Compile Include="Data Interface\Automations.cs" />
     <Compile Include="Data Interface\PhoneAsterisks.cs" />
     <Compile Include="Data Interface\Equipments.cs" />
-    <Compile Include="Data Interface\PhoneExclusions.cs" />
+    <Compile Include="Data Interface\PhoneEmpDefaults.cs" />
     <Compile Include="Data Interface\ReplicationServers.cs" />
     <Compile Include="Data Interface\InsFilingCodes.cs" />
     <Compile Include="Data Interface\EtransMessageTexts.cs" />
@@ -402,7 +402,7 @@
     <Compile Include="Plugins\PluginContainer.cs" />
     <Compile Include="Plugins\Plugins.cs" />
     <Compile Include="TableTypes\Automation.cs" />
-    <Compile Include="TableTypes\PhoneExclusion.cs" />
+    <Compile Include="TableTypes\PhoneEmpDefault.cs" />
     <Compile Include="TableTypes\TaskUnread.cs" />
     <Compile Include="TableTypes\Equipment.cs" />
     <Compile Include="TableTypes\ReplicationServer.cs" />

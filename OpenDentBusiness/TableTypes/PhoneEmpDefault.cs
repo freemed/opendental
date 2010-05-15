@@ -4,9 +4,7 @@ using System.Drawing;
 
 namespace OpenDentBusiness{
 	///<summary>This table is not part of the general release.  User would have to add it manually.</summary>
-	public class PhoneExclusion{
-		///<summary></summary>
-		public long PhoneExclusionNum;
+	public class PhoneEmpDefault{
 		///<summary></summary>
 		public long EmployeeNum;
 		///<summary></summary>
@@ -15,12 +13,11 @@ namespace OpenDentBusiness{
 		public bool NoColor;
 	}
 
-	/*CREATE TABLE phoneexclusion (
-					PhoneExclusionNum bigint NOT NULL auto_increment,
+	/*CREATE TABLE phoneempdefault (
 					EmployeeNum bigint NOT NULL,
 					NoGraph tinyint NOT NULL,
 					NoColor tinyint NOT NULL,
-					PRIMARY KEY (PhoneExclusionNum)
+					PRIMARY KEY (EmployeeNum)
 					) DEFAULT CHARSET=utf8*/
 
 	
