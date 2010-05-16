@@ -36,6 +36,8 @@ namespace OpenDentBusiness {
 				phoneEmpDefault.EmployeeNum      = PIn.Long(table.Rows[i]["EmployeeNum"].ToString());
 				phoneEmpDefault.NoGraph          = PIn.Bool(table.Rows[i]["NoGraph"].ToString());
 				phoneEmpDefault.NoColor          = PIn.Bool(table.Rows[i]["NoColor"].ToString());
+				phoneEmpDefault.RingGroups       = (AsteriskRingGroups)PIn.Int(table.Rows[i]["RingGroups"].ToString());
+				phoneEmpDefault.EmpName          = PIn.String(table.Rows[i]["EmpName"].ToString());
 				listt.Add(phoneEmpDefault);
 			}
 		}
@@ -56,6 +58,15 @@ namespace OpenDentBusiness {
 				}
 			}
 			return false;
+		}
+
+		public static AsteriskRingGroups GetRingGroup(long employeeNum) {
+			for(int i=0;i<Listt.Count;i++) {
+				if(Listt[i].EmployeeNum==employeeNum) {
+					return Listt[i].RingGroups;
+				}
+			}
+			return AsteriskRingGroups.All;
 		}
 
 

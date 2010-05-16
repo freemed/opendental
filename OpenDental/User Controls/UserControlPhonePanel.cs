@@ -265,7 +265,7 @@ namespace OpenDental {
 			int extension=PIn.Int(tablePhone.Rows[rowI]["Extension"].ToString());
 			long employeeNum=PIn.Long(tablePhone.Rows[rowI]["EmployeeNum"].ToString());
 			PhoneOverrides.SetAvailable(extension,employeeNum);
-			PhoneAsterisks.RemoveFromRingGroups(extension,employeeNum);
+			PhoneAsterisks.SetRingGroups(extension,employeeNum,AsteriskRingGroups.None);
 			Employees.SetPhoneStatus("Training",extension);
 			FillEmps();
 		}
@@ -277,7 +277,7 @@ namespace OpenDental {
 			int extension=PIn.Int(tablePhone.Rows[rowI]["Extension"].ToString());
 			long employeeNum=PIn.Long(tablePhone.Rows[rowI]["EmployeeNum"].ToString());
 			PhoneOverrides.SetAvailable(extension,employeeNum);
-			PhoneAsterisks.RemoveFromRingGroups(extension,employeeNum);
+			PhoneAsterisks.SetRingGroups(extension,employeeNum,AsteriskRingGroups.None);
 			Employees.SetPhoneStatus("TeamAssist",extension);
 			FillEmps();
 		}
@@ -289,7 +289,7 @@ namespace OpenDental {
 			int extension=PIn.Int(tablePhone.Rows[rowI]["Extension"].ToString());
 			long employeeNum=PIn.Long(tablePhone.Rows[rowI]["EmployeeNum"].ToString());
 			PhoneOverrides.SetAvailable(extension,employeeNum);
-			PhoneAsterisks.RemoveFromRingGroups(extension,employeeNum);
+			PhoneAsterisks.SetRingGroups(extension,employeeNum,AsteriskRingGroups.None);
 			Employees.SetPhoneStatus("WrapUp",extension);
 			//this is usually an automatic status
 			FillEmps();
@@ -302,25 +302,13 @@ namespace OpenDental {
 			int extension=PIn.Int(tablePhone.Rows[rowI]["Extension"].ToString());
 			long employeeNum=PIn.Long(tablePhone.Rows[rowI]["EmployeeNum"].ToString());
 			PhoneOverrides.SetAvailable(extension,employeeNum);
-			PhoneAsterisks.RemoveFromRingGroups(extension,employeeNum);
+			PhoneAsterisks.SetRingGroups(extension,employeeNum,AsteriskRingGroups.None);
 			Employees.SetPhoneStatus("OfflineAssist",extension);
 			FillEmps();
 		}
 
-		private void menuItemBackup_Click(object sender,EventArgs e) {
-			if(!ClockIn()) {
-				return;
-			}
-			int extension=PIn.Int(tablePhone.Rows[rowI]["Extension"].ToString());
-			long employeeNum=PIn.Long(tablePhone.Rows[rowI]["EmployeeNum"].ToString());
-			PhoneOverrides.SetAvailable(extension,employeeNum);
-			PhoneAsterisks.BackupRingGroupOnly(extension,employeeNum);
-			Employees.SetPhoneStatus("Backup",extension);
-			FillEmps();
-		}
-
 		private void menuItemUnavailable_Click(object sender,EventArgs e) {
-			if(!ClockIn()){
+			if(!ClockIn()) {
 				return;
 			}
 			int extension=PIn.Int(tablePhone.Rows[rowI]["Extension"].ToString());
@@ -328,7 +316,7 @@ namespace OpenDental {
 			//Employees.SetUnavailable(extension,employeeNum);
 			//Get an override if it exists
 			PhoneOverride phoneOR=PhoneOverrides.GetByExtAndEmp(extension,employeeNum);
-			if(phoneOR==null){//there is no override for that extension/emp combo.
+			if(phoneOR==null) {//there is no override for that extension/emp combo.
 				phoneOR=new PhoneOverride();
 				phoneOR.EmpCurrent=employeeNum;
 				phoneOR.Extension=extension;
@@ -338,25 +326,61 @@ namespace OpenDental {
 				FormO.IsNew=true;
 				FormO.ForceUnAndExplanation=true;
 				FormO.ShowDialog();
-				if(FormO.DialogResult!=DialogResult.OK){
+				if(FormO.DialogResult!=DialogResult.OK) {
 					return;
 				}
 			}
-			else{
+			else {
 				phoneOR.IsAvailable=false;
 				FormPhoneOverrideEdit FormO=new FormPhoneOverrideEdit();
 				FormO.phoneCur=phoneOR;
 				FormO.ForceUnAndExplanation=true;
 				FormO.ShowDialog();
-				if(FormO.DialogResult!=DialogResult.OK){
+				if(FormO.DialogResult!=DialogResult.OK) {
 					return;
 				}
 			}
 			//this is now handled within PhoneOverrides.Insert or PhoneOverrides.Update
 			//Employees.SetPhoneStatus("Unavailable",extension);
-			PhoneAsterisks.RemoveFromRingGroups(extension,employeeNum);
+			PhoneAsterisks.SetRingGroups(extension,employeeNum,AsteriskRingGroups.None);
 			FillEmps();
 		}
+
+		//RingGroups---------------------------------------------------
+
+		private void menuItemRinggroupAll_Click(object sender,EventArgs e) {
+			//This even works if the person is still clocked out.
+			int extension=PIn.Int(tablePhone.Rows[rowI]["Extension"].ToString());
+			long employeeNum=PIn.Long(tablePhone.Rows[rowI]["EmployeeNum"].ToString());
+			PhoneAsterisks.SetRingGroups(extension,employeeNum,AsteriskRingGroups.All);
+		}
+
+		private void menuItemRinggroupNone_Click(object sender,EventArgs e) {
+			//This even works if the person is still clocked in.
+			int extension=PIn.Int(tablePhone.Rows[rowI]["Extension"].ToString());
+			long employeeNum=PIn.Long(tablePhone.Rows[rowI]["EmployeeNum"].ToString());
+			PhoneAsterisks.SetRingGroups(extension,employeeNum,AsteriskRingGroups.None);
+		}
+
+		private void menuItemRinggroupsDefault_Click(object sender,EventArgs e) {
+			int extension=PIn.Int(tablePhone.Rows[rowI]["Extension"].ToString());
+			long employeeNum=PIn.Long(tablePhone.Rows[rowI]["EmployeeNum"].ToString());
+			PhoneAsterisks.SetToDefaultRingGroups(extension,employeeNum);
+		}
+
+		private void menuItemBackup_Click(object sender,EventArgs e) {
+			if(!ClockIn()) {
+				return;
+			}
+			int extension=PIn.Int(tablePhone.Rows[rowI]["Extension"].ToString());
+			long employeeNum=PIn.Long(tablePhone.Rows[rowI]["EmployeeNum"].ToString());
+			PhoneOverrides.SetAvailable(extension,employeeNum);
+			PhoneAsterisks.SetRingGroups(extension,employeeNum,AsteriskRingGroups.Backup);
+			Employees.SetPhoneStatus("Backup",extension);
+			FillEmps();
+		}
+
+		//Timecard---------------------------------------------------
 
 		private void menuItemLunch_Click(object sender,EventArgs e) {
 			//verify that employee is logged in as user
@@ -381,7 +405,7 @@ namespace OpenDental {
 			Employee EmpCur=Employees.GetEmp(employeeNum);
 			EmpCur.ClockStatus=Lan.g("enumTimeClockStatus",TimeClockStatus.Lunch.ToString());
 			Employees.Update(EmpCur);
-			PhoneAsterisks.RemoveFromRingGroups(extension,employeeNum);
+			PhoneAsterisks.SetRingGroups(extension,employeeNum,AsteriskRingGroups.None);
 			Employees.SetPhoneStatus("Lunch",extension);
 			FillEmps();
 		}
@@ -410,7 +434,7 @@ namespace OpenDental {
 			EmpCur.ClockStatus=Lan.g("enumTimeClockStatus",TimeClockStatus.Home.ToString());
 			Employees.Update(EmpCur);
 			//ModuleSelected(PatCurNum);
-			PhoneAsterisks.RemoveFromRingGroups(extension,employeeNum);
+			PhoneAsterisks.SetRingGroups(extension,employeeNum,AsteriskRingGroups.None);
 			Employees.SetPhoneStatus("Home",extension);
 			FillEmps();
 		}
@@ -438,7 +462,7 @@ namespace OpenDental {
 			Employee EmpCur=Employees.GetEmp(employeeNum);
 			EmpCur.ClockStatus=Lan.g("enumTimeClockStatus",TimeClockStatus.Break.ToString());
 			Employees.Update(EmpCur);
-			PhoneAsterisks.RemoveFromRingGroups(extension,employeeNum);
+			PhoneAsterisks.SetRingGroups(extension,employeeNum,AsteriskRingGroups.None);
 			Employees.SetPhoneStatus("Break",extension);
 			FillEmps();
 		}
@@ -470,6 +494,10 @@ namespace OpenDental {
 			Employees.Update(EmpCur);
 			return true;
 		}
+
+	
+
+	
 
 		
 
