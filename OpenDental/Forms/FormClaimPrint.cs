@@ -888,10 +888,13 @@ namespace OpenDental{
 							displayStrings[i]="X";
 						break;
 					case "PatientSSN":
-						if(PatCur.SSN.Length==9){
+						if(PatCur.SSN.Length==9) {
 							displayStrings[i]=PatCur.SSN.Substring(0,3)
 								+"-"+PatCur.SSN.Substring(3,2)
 								+"-"+PatCur.SSN.Substring(5);
+						}
+						else {
+							displayStrings[i]=PatCur.SSN;
 						}
 						break;
 					case "PatientMedicaidID":
