@@ -2614,8 +2614,11 @@ namespace OpenDental{
 						if(tasksPopup[i].UserNum==Security.CurUser.UserNum) {
 							continue;
 						}
-						if(userControlTasks1.PopupsAreBlocked) {
-							break;//no sound or popup
+						if(tasksPopup[i].TaskListNum!=Security.CurUser.TaskListInBox//if not my inbox
+							&& userControlTasks1.PopupsAreBlocked)//and popups blocked
+						{
+							continue;//no sound or popup
+							//in other words, popups will always show for my inbox even if popups blocked.
 						}
 						System.Media.SoundPlayer soundplay=new SoundPlayer(Properties.Resources.notify);
 						soundplay.Play();
