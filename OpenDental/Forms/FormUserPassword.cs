@@ -26,6 +26,7 @@ namespace OpenDental{
 		private CheckBox checkShow;
 		///<summary></summary>
 		public string hashedResult;
+		public bool IsInSecurityWindow;
 
 		///<summary>Set true if creating rather than changing a password.</summary>
 		public FormUserPassword(bool isCreate,string username)
@@ -197,7 +198,7 @@ namespace OpenDental{
 			if(IsCreate){
 				Text=Lan.g(this,"Create Password");
 			}
-			if(Security.IsAuthorized(Permissions.SecurityAdmin,true)) {
+			if(IsInSecurityWindow) {
 				labelCurrent.Visible=false;
 				textCurrent.Visible=false;
 			}
@@ -214,10 +215,12 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
-			//if(textPassword.Text!=textPasswordAgain.Text){
-			//	MsgBox.Show(this,"Passwords do not match.");
-			//	return;
-			//}
+			if(!IsInSecurityWindow
+				&& Userods.EncryptPassword(textCurrent.Text)!=Security.CurUser.Password)
+			{
+				MsgBox.Show(this,"Current password incorrect.");
+				return;
+			}
 			if(PrefC.GetBool(PrefName.PasswordsMustBeStrong)) {
 				string explanation=Userods.IsPasswordStrong(textPassword.Text);
 				if(explanation!="") {

@@ -317,6 +317,7 @@ namespace OpenDental{
 		private void butPassword_Click(object sender, System.EventArgs e) {
 			bool isCreate=UserCur.Password=="";
 			FormUserPassword FormU=new FormUserPassword(isCreate,UserCur.UserName);
+			FormU.IsInSecurityWindow=true;
 			FormU.ShowDialog();
 			if(FormU.DialogResult==DialogResult.Cancel){
 				return;
