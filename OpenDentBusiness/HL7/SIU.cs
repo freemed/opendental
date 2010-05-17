@@ -68,7 +68,7 @@ namespace OpenDentBusiness.HL7 {
 				Patients.Update(pat,patOld);
 			}	
 			if(isNewApt){
-				Appointments.Insert(apt,true);
+				Appointments.InsertIncludeAptNum(apt,true);
 			}
 			else{
 				Appointments.Update(apt,aptOld);

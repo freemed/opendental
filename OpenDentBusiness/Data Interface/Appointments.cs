@@ -321,11 +321,11 @@ namespace OpenDentBusiness{
 		}*/
 
 		public static void Insert(Appointment appt) {
-			Insert(appt,false);
+			InsertIncludeAptNum(appt,false);
 		}
 
 		///<summary>Set includeAptNum to true only in rare situations.  Like when we are inserting for eCW.</summary>
-		public static long Insert(Appointment appt,bool includeAptNum) {
+		public static long InsertIncludeAptNum(Appointment appt,bool includeAptNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				appt.AptNum=Meth.GetLong(MethodBase.GetCurrentMethod(),appt,includeAptNum);
 				return appt.AptNum;
