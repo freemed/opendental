@@ -31,6 +31,8 @@ namespace UnitTests {
 			this.butRun = new System.Windows.Forms.Button();
 			this.label3 = new System.Windows.Forms.Label();
 			this.textSpecificTest = new System.Windows.Forms.TextBox();
+			this.butWebService = new System.Windows.Forms.Button();
+			this.label4 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// textResults
@@ -38,24 +40,24 @@ namespace UnitTests {
 			this.textResults.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.textResults.Location = new System.Drawing.Point(12,96);
+			this.textResults.Location = new System.Drawing.Point(12,115);
 			this.textResults.Multiline = true;
 			this.textResults.Name = "textResults";
-			this.textResults.Size = new System.Drawing.Size(663,699);
+			this.textResults.Size = new System.Drawing.Size(663,680);
 			this.textResults.TabIndex = 1;
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(10,9);
+			this.label1.Location = new System.Drawing.Point(10,34);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(347,18);
 			this.label1.TabIndex = 3;
-			this.label1.Text = "Before running, make sure \'unittest\' database exists.";
+			this.label1.Text = "Before running the tests below, make sure \'unittest\' database exists.";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// butNewDb
 			// 
-			this.butNewDb.Location = new System.Drawing.Point(12,35);
+			this.butNewDb.Location = new System.Drawing.Point(12,57);
 			this.butNewDb.Name = "butNewDb";
 			this.butNewDb.Size = new System.Drawing.Size(75,23);
 			this.butNewDb.TabIndex = 0;
@@ -65,7 +67,7 @@ namespace UnitTests {
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(92,37);
+			this.label2.Location = new System.Drawing.Point(92,59);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(505,18);
 			this.label2.TabIndex = 6;
@@ -75,7 +77,7 @@ namespace UnitTests {
 			// 
 			// butRun
 			// 
-			this.butRun.Location = new System.Drawing.Point(12,64);
+			this.butRun.Location = new System.Drawing.Point(12,86);
 			this.butRun.Name = "butRun";
 			this.butRun.Size = new System.Drawing.Size(75,23);
 			this.butRun.TabIndex = 7;
@@ -85,7 +87,7 @@ namespace UnitTests {
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(92,66);
+			this.label3.Location = new System.Drawing.Point(92,88);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(90,18);
 			this.label3.TabIndex = 8;
@@ -94,17 +96,39 @@ namespace UnitTests {
 			// 
 			// textSpecificTest
 			// 
-			this.textSpecificTest.Location = new System.Drawing.Point(177,66);
+			this.textSpecificTest.Location = new System.Drawing.Point(177,88);
 			this.textSpecificTest.Name = "textSpecificTest";
 			this.textSpecificTest.Size = new System.Drawing.Size(74,20);
 			this.textSpecificTest.TabIndex = 9;
 			this.textSpecificTest.Text = "6";
+			// 
+			// butWebService
+			// 
+			this.butWebService.Location = new System.Drawing.Point(13,5);
+			this.butWebService.Name = "butWebService";
+			this.butWebService.Size = new System.Drawing.Size(75,23);
+			this.butWebService.TabIndex = 10;
+			this.butWebService.Text = "WebService";
+			this.butWebService.UseVisualStyleBackColor = true;
+			this.butWebService.Click += new System.EventHandler(this.butWebService_Click);
+			// 
+			// label4
+			// 
+			this.label4.Location = new System.Drawing.Point(92,7);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(571,18);
+			this.label4.TabIndex = 11;
+			this.label4.Text = "This does not require a database, but does require setting both this project and " +
+    "OpenDentBusiness as startup.";
+			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// FormUnitTests
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(687,807);
+			this.Controls.Add(this.label4);
+			this.Controls.Add(this.butWebService);
 			this.Controls.Add(this.textSpecificTest);
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.butRun);
@@ -131,6 +155,8 @@ namespace UnitTests {
 		private System.Windows.Forms.Button butRun;
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.TextBox textSpecificTest;
+		private System.Windows.Forms.Button butWebService;
+		private System.Windows.Forms.Label label4;
 	}
 }
 

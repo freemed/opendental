@@ -25,8 +25,24 @@ namespace UnitTests {
 			//if(!DatabaseTools.DbExists()){
 			//	MessageBox.Show("Database does not exist: "+DatabaseTools.dbName);
 			//}
-			
+		}
 
+		private void butWebService_Click(object sender,EventArgs e) {
+			RemotingClient.ServerURI="http://localhost:49262/ServiceMain.asmx";
+			try{
+				Userod user=Security.LogInWeb("Admin",Userods.EncryptPassword("pass",true),"",Application.ProductVersion);
+				Security.CurUser=user;
+				RemotingClient.RemotingRole=RemotingRole.ClientWeb;
+			}
+			catch(Exception ex){
+				MessageBox.Show(ex.Message);
+				return;
+			}
+			textResults.Text="";
+			Application.DoEvents();
+			Cursor=Cursors.WaitCursor;
+			textResults.Text+=WebServiceT.RunAll();
+			Cursor=Cursors.Default;
 		}
 
 		private void butNewDb_Click(object sender,EventArgs e) {
@@ -77,6 +93,7 @@ namespace UnitTests {
 			*/
 		}
 
+	
 
 
 

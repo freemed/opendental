@@ -20,18 +20,18 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>This is the constructor that should be used normally because it automatically creates the TypeName.</summary>
-		public DtoObject(object obj) {
+		public DtoObject(object obj,Type objType) {
 			Obj=obj;
-			Type type=obj.GetType();
+			//Type type=obj.GetType();
 			//This will eventually become much more complex:
 			//Arrays automatically become "ArrayOf..." and serialize just fine, with TypeName=...[]
 			//Lists:
-			if(type.IsGenericType) {
-				Type listType=type.GetGenericArguments()[0];
+			if(objType.IsGenericType) {
+				Type listType=objType.GetGenericArguments()[0];
 				TypeName="List<"+listType.FullName+">";
 			}
 			else {
-				TypeName=type.FullName;
+				TypeName=objType.FullName;
 			}
 		}
 
@@ -50,8 +50,8 @@ namespace OpenDentBusiness {
 			writer.WriteString(TypeName);
 			writer.WriteEndElement();//TypeName
 			writer.WriteStartElement("Obj");
-			Type type=null;
-			type=Obj.GetType();
+			string assemb=Assembly.GetAssembly(typeof(Db)).FullName;
+			Type type=ConvertNameToType(TypeName,assemb);
 			XmlSerializer serializer = new XmlSerializer(type);
 			serializer.Serialize(writer,Obj);
 			writer.WriteEndElement();//Obj
@@ -101,10 +101,11 @@ namespace OpenDentBusiness {
 			return (null);
 		}
 
-		public static DtoObject[] ConstructArray(object[] objArray) {
+		///<summary>We must pass in a matching array of types for situations where nulls are used in parameters.  Otherwise, we won't know the parameter type.</summary>
+		public static DtoObject[] ConstructArray(object[] objArray,Type[] objTypes) {
 			DtoObject[] retVal=new DtoObject[objArray.Length];
 			for(int i=0;i<objArray.Length;i++) {
-				retVal[i]=new DtoObject(objArray[i]);
+				retVal[i]=new DtoObject(objArray[i],objTypes[i]);
 			}
 			return retVal;
 		}

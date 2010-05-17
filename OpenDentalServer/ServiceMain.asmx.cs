@@ -121,7 +121,7 @@ namespace OpenDentalServer {
 					MethodInfo methodInfo=classType.GetMethod(methodName,paramTypes);
 					if(className=="Security" && methodName=="LogInWeb") {
 						string mappedPath=Server.MapPath(".");
-						parameters[2]=new DtoObject(mappedPath);//because we can't access this variable from within OpenDentBusiness.
+						parameters[2]=new DtoObject(mappedPath,typeof(string));//because we can't access this variable from within OpenDentBusiness.
 						RemotingClient.RemotingRole=RemotingRole.ServerWeb;
 					}
 					object[] paramObjs=DtoObject.GenerateObjects(parameters);

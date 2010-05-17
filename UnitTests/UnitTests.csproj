@@ -121,6 +121,7 @@
     <Compile Include="ClaimProcT.cs" />
     <Compile Include="Sandbox.cs" />
     <Compile Include="ToothT.cs" />
+    <Compile Include="WebServiceT.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CodeBase\xCodeBase.csproj">
