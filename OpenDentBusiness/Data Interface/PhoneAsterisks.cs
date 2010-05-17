@@ -26,7 +26,7 @@ namespace OpenDentBusiness {
 
 		public static void SetRingGroups(int extension,long employeeNum,AsteriskRingGroups ringGroups) {
 			DataConnection dcon=new DataConnection("asterisk","asterisk","opendental","secret",DatabaseType.MySql);
-			string command="SELECT grpnum,grplist FROM ringroups WHERE grpnum = '601' OR grpnum = '609'";
+			string command="SELECT grpnum,grplist FROM ringgroups WHERE grpnum = '601' OR grpnum = '609'";
 			DataTable table=dcon.GetTable(command);
 			string rawExtensions601="";
 			string rawExtensions609="";
@@ -84,6 +84,7 @@ namespace OpenDentBusiness {
 					AddToRingGroup("609",extension.ToString(),rawExtensions609);
 				}
 			}
+			Signals.SetInvalid(InvalidType.PhoneAsteriskReload);
 		}
 
 		private static void AddToRingGroup(string ringGroup,string extension,string rawExtensions) {
