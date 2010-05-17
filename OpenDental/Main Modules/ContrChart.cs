@@ -3496,7 +3496,7 @@ namespace OpenDental{
 			MsgBox.Show(this,"Done.");
 		}
 
-		private void FillPtInfo(){
+		public void FillPtInfo(){
 			if(Plugins.Active && Plugins.HookMethod(this,"ContrChart.FillPtInfo",PatCur)) {
 				return;
 			}
