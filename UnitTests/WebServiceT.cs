@@ -83,7 +83,13 @@ namespace UnitTests {
 				throw new Exception("Should be nullOK");
 			}
 			retVal+="SendNullParam: Passed.\r\n";
-			
+			//GetObjectNull
+			Patient pat2=WebServiceTests.GetObjectNull();
+			if(pat2!=null){
+				throw new Exception("Should be null");
+			}
+			retVal+="GetObjectNull: Passed.\r\n";
+		
 			
 
 			

@@ -111,6 +111,13 @@ namespace OpenDentBusiness {
 			}
 		}
 
+		public static Patient GetObjectNull(){ 
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Patient>(MethodBase.GetCurrentMethod());
+			}
+			return null;
+		}
+
 
 	}
 }

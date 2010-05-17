@@ -214,7 +214,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Only loads one plan from db. Can return null.</summary>
-		private static InsPlan Refresh(long planNum) {
+		public static InsPlan Refresh(long planNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<InsPlan>(MethodBase.GetCurrentMethod(),planNum);
 			} 

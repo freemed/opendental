@@ -153,7 +153,7 @@ namespace OpenDental.Eclaims
 			for(int i=0;i<queueItems.Count;i++) {
 				claimNums.Add(queueItems[i].ClaimNum);
 			}
-			object[,] claimAr=Claims.GetX12TransactionInfo(claimNums);
+			List<X12TransactionItem> claimItems=Claims.GetX12TransactionInfo(claimNums);
 			bool newTrans;//true if this loop has transaction header
 			bool hasFooter;//true if this loop has transaction footer(if the Next loop is a newTrans)
 			int HLcount=1;
@@ -178,10 +178,10 @@ namespace OpenDental.Eclaims
 			Provider billProv=null;
 			Clinic clinic=null;
 			int seg=0;//segments for a particular ST-SE transaction
-			for(int i=0;i<claimAr.GetLength(1);i++){
+			for(int i=0;i<claimItems.Count;i++){
 				#region Transaction Set Header
 				if(i==0//if this is the first claim
-					|| claimAr[0,i].ToString() != claimAr[0,i-1].ToString())//or the payorID has changed
+					|| claimItems[i].PayorId0 != claimItems[i-1].PayorId0)//or the payorID has changed
 				{
 					newTrans=true;
 					seg=0;
@@ -245,13 +245,13 @@ namespace OpenDental.Eclaims
 				#region Billing Provider
 				if(i==0//if first claim
 					|| newTrans //or new Transaction set
-					|| claimAr[1,i].ToString() != claimAr[1,i-1].ToString())//or prov has changed
+					|| claimItems[i].ProvBill1 != claimItems[i-1].ProvBill1)//or prov has changed
 				{
 					//this is a workaround for finding clinic address.  In OD, address is not a provider level field.  All we have access to is the claim.
 					//So providers shouldn't move between clinics.  We will use the clinic of the first claim, which is arbitrary.
 					//An improvement would be to generate another loop if provider changes address for different claims.  Complicated.
 					if(!PrefC.GetBool(PrefName.EasyNoClinics)){//if using clinics
-						Claim clm=Claims.GetClaim((long)claimAr[4,i]);
+						Claim clm=Claims.GetClaim(claimItems[i].ClaimNum4);
 						long clinicNum=clm.ClinicNum;
 						clinic=Clinics.GetClinic(clinicNum);
 					}
@@ -261,7 +261,7 @@ namespace OpenDental.Eclaims
 						+"*"//HL02: No parent. Not used
 						+"20*"//HL03: Heirarchical level code. 20=Information source
 						+"1~");//HL04: Heirarchical child code. 1=child HL present
-					billProv=ProviderC.ListLong[Providers.GetIndexLong((long)claimAr[1,i])];
+					billProv=ProviderC.ListLong[Providers.GetIndexLong(claimItems[i].ProvBill1)];
 					if(isMedical){
 						//2000A PRV: Provider Specialty Information
 						seg++;
@@ -369,7 +369,7 @@ namespace OpenDental.Eclaims
 						sw.WriteLine("REF*0B*"//REF01: 0B=state license #.
 							+Sout(billProv.StateLicense,30)+"~");
 						//2010AA REF: Secondary ID number(s). Only required by some carriers.
-						seg+=WriteProv_REF(sw,billProv,(string)claimAr[0,i]);
+						seg+=WriteProv_REF(sw,billProv,claimItems[i].PayorId0);
 					}
 					//It's after the NPI date, now.  So either TIN or SSN (EI or SY) is required here.
 					seg++;
@@ -402,7 +402,7 @@ namespace OpenDental.Eclaims
 					HLcount++;
 				}
 				#endregion Billing Provider
-				claim=Claims.GetClaim((long)claimAr[4,i]);				
+				claim=Claims.GetClaim(claimItems[i].ClaimNum4);				
 				insPlan=InsPlans.GetPlan(claim.PlanNum,new List <InsPlan> ());
 				//insPlan could be null if db corruption. No error checking for that
 				if(claim.PlanNum2>0){
@@ -432,11 +432,10 @@ namespace OpenDental.Eclaims
 				}*/
 				#endregion
 				#region Subscriber
-				//if(i==0 || claimAr[2,i].ToString() != claimAr[2,i-1].ToString()){//if subscriber changed
-				if(i==0 || claimAr[3,i].ToString() != claimAr[3,i-1].ToString()//if patient changed
-					|| claimAr[1,i].ToString() != claimAr[1,i-1].ToString())//or prov has changed
+				if(i==0 || claimItems[i].PatNum3 != claimItems[i-1].PatNum3//if patient changed
+					|| claimItems[i].ProvBill1 != claimItems[i-1].ProvBill1)//or prov has changed
 				{
-					if(claimAr[3,i].ToString()==claimAr[2,i].ToString()){//if patient is the subscriber
+					if(claimItems[i].PatNum3==claimItems[i].Subscriber2){//if patient is the subscriber
 						hasSubord="0";//-claim level will follow
 						//subordinate patients will not follow in this loop.  The subscriber loop will be duplicated for them.
 					}
@@ -462,7 +461,7 @@ namespace OpenDental.Eclaims
 						sw.Write("T*");//T=Tertiary
 					}
 //todo: what about Cap?
-					if(claimAr[3,i].ToString()==claimAr[2,i].ToString()){//if patient is the subscriber
+					if(claimItems[i].PatNum3==claimItems[i].Subscriber2){//if patient is the subscriber
 						sw.Write("18*");//SBR02: Relationship. 18=self
 					}
 					else{
@@ -584,7 +583,7 @@ namespace OpenDental.Eclaims
 				//if((i==0 || claimAr[3,i].ToString() != claimAr[3,i-1].ToString())//if patient changed
 				//	&& claimAr[3,i].ToString() != claimAr[2,i].ToString())//AND patient is not subscriber
 				//{
-				if(claimAr[3,i].ToString() != claimAr[2,i].ToString())//if patient is not subscriber
+				if(claimItems[i].PatNum3 != claimItems[i].Subscriber2)//if patient is not subscriber
 				{
 					//2000C Patient HL loop
 					seg++;
@@ -962,7 +961,7 @@ namespace OpenDental.Eclaims
 					+Sout(provTreat.StateLicense,30)+"~");
 				if(!isMedical){//we can't support these numbers very well yet for medical
 					//2310B REF: Rendering Provider Secondary ID number(s). Only required by some carriers.
-					seg+=WriteProv_REF(sw,provTreat,(string)claimAr[0,i]);
+					seg+=WriteProv_REF(sw,provTreat,claimItems[i].PayorId0);
 				}
 				//2310C (medical)Purchased Service provider secondary ID. We don't support this for medical
 				//2310C (not medical)NM1: Service facility location.  Only required if PlaceService is 21,22,31, or 35. 35 does not exist in CPT, so we assume 33
@@ -1314,8 +1313,8 @@ namespace OpenDental.Eclaims
 					}
 				}//for int i claimProcs
 				#endregion
-				if(i==claimAr.GetLength(1)-1//if this is the last loop
-					|| claimAr[0,i].ToString() != claimAr[0,i+1].ToString())//or the payorID will change
+				if(i==claimItems.Count-1//if this is the last loop
+					|| claimItems[i].PayorId0 != claimItems[i+1].PayorId0)//or the payorID will change
 				{
 					hasFooter=true;
 				}
@@ -1328,7 +1327,7 @@ namespace OpenDental.Eclaims
 					sw.WriteLine("SE*"
 						+seg.ToString()+"*"//SE01: Total segments, including ST & SE
 						+transactionNum.ToString().PadLeft(4,'0')+"~");
-					if(i<claimAr.GetLength(1)-1){//if this is not the last loop
+					if(i<claimItems.Count-1){//if this is not the last loop
 						transactionNum++;
 					}
 					//sw.WriteLine();
@@ -1672,8 +1671,8 @@ namespace OpenDental.Eclaims
 				}
 				strb.Append("Clearinghouse GS03");
 			}
-			object[,] claimAr=Claims.GetX12TransactionInfo(((ClaimSendQueueItem)queueItem).ClaimNum);//just to get prov. Needs work.
-			Provider billProv=ProviderC.ListLong[Providers.GetIndexLong((long)claimAr[1,0])];
+			List<X12TransactionItem> claimItems=Claims.GetX12TransactionInfo(((ClaimSendQueueItem)queueItem).ClaimNum);//just to get prov. Needs work.
+			Provider billProv=ProviderC.ListLong[Providers.GetIndexLong(claimItems[0].ProvBill1)];
 			Provider treatProv=ProviderC.ListLong[Providers.GetIndexLong(claim.ProvTreat)];
 			InsPlan insPlan=InsPlans.GetPlan(claim.PlanNum,new List <InsPlan> ());
 			if(insPlan.IsMedical && !PrefC.GetBool(PrefName.MedicalEclaimsEnabled)) {

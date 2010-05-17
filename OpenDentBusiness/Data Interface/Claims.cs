@@ -357,18 +357,18 @@ namespace OpenDentBusiness{
 			return listQueue;
 		}
 
-		///<summary>Supply claimnums. Called from X12 to begin the sorting process on claims going to one clearinghouse. Returns an array with Carrier,ProvBill,Subscriber,PatNum,ClaimNum, all in the correct order. Carrier is a string, the rest are int.</summary>
-		public static object[,] GetX12TransactionInfo(long claimNum) {
+		///<summary>Supply claimnums. Called from X12 to begin the sorting process on claims going to one clearinghouse.</summary>
+		public static List<X12TransactionItem> GetX12TransactionInfo(long claimNum) {
 			//No need to check RemotingRole; no call to db.
 			List<long> claimNums=new List<long>();
 			claimNums.Add(claimNum);
 			return GetX12TransactionInfo(claimNums);
 		}
 
-		///<summary>Supply claimnums. Called from X12 to begin the sorting process on claims going to one clearinghouse. Returns an array with Carrier,ProvBill,Subscriber,PatNum,ClaimNum, all in the correct order. Carrier is a string, the rest are int.</summary>
-		public static object[,] GetX12TransactionInfo(List<long> claimNums) {//ArrayList queueItemss){
+		///<summary>Supply claimnums. Called from X12 to begin the sorting process on claims going to one clearinghouse.</summary>
+		public static List<X12TransactionItem> GetX12TransactionInfo(List<long> claimNums) {//ArrayList queueItemss){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<object[,]>(MethodBase.GetCurrentMethod(),claimNums);
+				return Meth.GetObject<List<X12TransactionItem>>(MethodBase.GetCurrentMethod(),claimNums);
 			}
 			StringBuilder str=new StringBuilder();
 			for(int i=0;i<claimNums.Count;i++){
@@ -378,38 +378,39 @@ namespace OpenDentBusiness{
 				str.Append(" claim.ClaimNum="+POut.Long(claimNums[i]));//((ClaimSendQueueItem)queueItems[i]).ClaimNum.ToString());
 			}
 			string command;
-			if(DataConnection.DBtype==DatabaseType.Oracle){//FIXME:ORDER-BY. Probably Fixed.  ??
-				command="SELECT carrier.ElectID,claim.ProvBill,insplan.Subscriber,"
-				+"claim.PatNum,claim.ClaimNum, "
-				+"CASE WHEN claim.PatNum=insplan.Subscriber THEN 0 ELSE 1 END AS issubscriber "
-				+"FROM claim,insplan,carrier "
-				+"WHERE claim.PlanNum=insplan.PlanNum "
-				+"AND carrier.CarrierNum=insplan.CarrierNum "
-				+"AND ("+str.ToString()+") "
-				+"ORDER BY carrier.ElectID,claim.ProvBill,insplan.Subscriber,6,claim.PatNum";
-			}
-			else{
-				command="SELECT carrier.ElectID,claim.ProvBill,insplan.Subscriber,"
+			command="SELECT carrier.ElectID,claim.ProvBill,insplan.Subscriber,"
 				+"claim.PatNum,claim.ClaimNum "
 				+"FROM claim,insplan,carrier "
 				+"WHERE claim.PlanNum=insplan.PlanNum "
 				+"AND carrier.CarrierNum=insplan.CarrierNum "
 				+"AND ("+str.ToString()+") "
 				+"ORDER BY carrier.ElectID,claim.ProvBill,insplan.Subscriber,insplan.Subscriber!=claim.PatNum,claim.PatNum";
-			}
 			DataTable table=Db.GetTable(command);
-			object[,] myA=new object[5,table.Rows.Count];
+			List<X12TransactionItem> retVal=new List<X12TransactionItem>();
+			//object[,] myA=new object[5,table.Rows.Count];
+			X12TransactionItem item;
 			for(int i=0;i<table.Rows.Count;i++){
-				myA[0,i]=PIn.String(table.Rows[i][0].ToString());
-				myA[1,i]=PIn.Long   (table.Rows[i][1].ToString());
-				myA[2,i]=PIn.Long   (table.Rows[i][2].ToString());
-				myA[3,i]=PIn.Long   (table.Rows[i][3].ToString());
-				myA[4,i]=PIn.Long   (table.Rows[i][4].ToString());
+				item=new X12TransactionItem();
+				item.PayorId0=PIn.String(table.Rows[i][0].ToString());
+				item.ProvBill1=PIn.Long   (table.Rows[i][1].ToString());
+				item.Subscriber2=PIn.Long   (table.Rows[i][2].ToString());
+				item.PatNum3=PIn.Long   (table.Rows[i][3].ToString());
+				item.ClaimNum4=PIn.Long   (table.Rows[i][4].ToString());
+				retVal.Add(item);
 			}
-			return myA;
+			return retVal;
 		}
 
 	}//end class Claims
+
+	///<summary>This is an odd class.  It holds data for the X12 generation process.  It replaces an older multi-dimensional array, so the names are funny, but helpful to prevent bugs.</summary>
+	public class X12TransactionItem{
+		public string PayorId0;
+		public long ProvBill1;
+		public long Subscriber2;
+		public long PatNum3;
+		public long ClaimNum4;
+	}
 
 	///<summary>Holds a list of claims to show in the claims 'queue' waiting to be sent.</summary>
 	public class ClaimSendQueueItem{
