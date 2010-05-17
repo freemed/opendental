@@ -310,7 +310,7 @@ namespace OpenDentBusiness{
 				row["billingType"]=DefC.GetName(DefCat.BillingTypes,PIn.Long(rawtable.Rows[i]["BillingType"].ToString()));
 				contmeth=(ContactMethod)PIn.Long(rawtable.Rows[i]["PreferRecallMethod"].ToString());
 				if(contmeth==ContactMethod.None){
-					if(groupByFamilies){
+					/*if(groupByFamilies){
 						if(rawtable.Rows[i]["_guarEmail"].ToString() != "") {//since there is an email,
 							row["contactMethod"]=rawtable.Rows[i]["_guarEmail"].ToString();
 						}
@@ -325,7 +325,8 @@ namespace OpenDentBusiness{
 						else{
 							row["contactMethod"]=Lans.g("FormRecallList","Hm:")+rawtable.Rows[i]["HmPhone"].ToString();
 						}
-					}
+					}*/
+					row["contactMethod"]=Lans.g("FormRecallList","Hm:")+rawtable.Rows[i]["HmPhone"].ToString();
 				}
 				if(contmeth==ContactMethod.HmPhone){
 					row["contactMethod"]=Lans.g("FormRecallList","Hm:")+rawtable.Rows[i]["HmPhone"].ToString();
@@ -389,7 +390,7 @@ namespace OpenDentBusiness{
 				pat.Preferred=rawtable.Rows[i]["Preferred"].ToString();
 				row["patientName"]=pat.GetNameLF();
 				row["PatNum"]=rawtable.Rows[i]["PatNum"].ToString();
-				if(contmeth==ContactMethod.None){
+				/*if(contmeth==ContactMethod.None){
 					if(groupByFamilies) {
 						if(rawtable.Rows[i]["_guarEmail"].ToString() != "") {//since there is an email,
 							row["PreferRecallMethod"]=((int)ContactMethod.Email).ToString();
@@ -407,9 +408,9 @@ namespace OpenDentBusiness{
 						}
 					}
 				}
-				else{
-					row["PreferRecallMethod"]=rawtable.Rows[i]["PreferRecallMethod"].ToString();
-				}
+				else{*/
+				row["PreferRecallMethod"]=rawtable.Rows[i]["PreferRecallMethod"].ToString();
+				//}
 				interv=new Interval(PIn.Int(rawtable.Rows[i]["RecallInterval"].ToString()));
 				row["recallInterval"]=interv.ToString();
 				row["RecallNum"]=rawtable.Rows[i]["RecallNum"].ToString();
