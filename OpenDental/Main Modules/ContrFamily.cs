@@ -355,19 +355,19 @@ namespace OpenDental{
 				//standard predefined button
 				switch(e.Button.Tag.ToString()){
 					//case "Recall":
-					//	OnRecall_Click();
+					//	ToolButRecall_Click();
 					//	break;
 					case "Add":
-						OnAdd_Click();
+						ToolButAdd_Click();
 						break;
 					case "Delete":
-						OnDelete_Click();
+						ToolButDelete_Click();
 						break;
 					case "Guarantor":
-						OnGuarantor_Click();
+						ToolButGuarantor_Click();
 						break;
 					case "Move":
-						OnMove_Click();
+						ToolButMove_Click();
 						break;
 					case "Ins":
 						ToolButIns_Click();
@@ -806,7 +806,7 @@ namespace OpenDental{
 		}
 
 		//private void butAddPt_Click(object sender, System.EventArgs e) {
-		private void OnAdd_Click(){
+		private void ToolButAdd_Click(){
 			Patient tempPat=new Patient();
 			tempPat.LName      =PatCur.LName;
 			tempPat.PatStatus  =PatientStatus.Patient;
@@ -838,7 +838,7 @@ namespace OpenDental{
 		}
 
 		//private void butDeletePt_Click(object sender, System.EventArgs e) {
-		private void OnDelete_Click(){
+		private void ToolButDelete_Click(){
 			//this doesn't actually delete the patient, just changes their status
 			//and they will never show again in the patient selection list.
 			//check for plans, appointments, procedures, etc.
@@ -938,7 +938,7 @@ namespace OpenDental{
 		}
 
 		//private void butSetGuar_Click(object sender,System.EventArgs e){
-    private void OnGuarantor_Click(){
+    private void ToolButGuarantor_Click(){
 			//Patient tempPat=PatCur;
 			if(PatCur.PatNum==PatCur.Guarantor){
 				MessageBox.Show(Lan.g(this
@@ -954,7 +954,7 @@ namespace OpenDental{
 		}
 
 		//private void butMovePat_Click(object sender, System.EventArgs e) {
-		private void OnMove_Click(){
+		private void ToolButMove_Click(){
 			Patient PatOld=PatCur.Copy();
 			//Patient PatCur;
 			if(PatCur.PatNum==PatCur.Guarantor){//if guarantor selected
@@ -1206,6 +1206,28 @@ namespace OpenDental{
 					ben.CodeNum=0;
 					Benefits.Insert(ben);
 				}
+				//Zero deductible diagnostic
+				ben=new Benefit();
+				ben.CodeNum=0;
+				ben.BenefitType=InsBenefitType.Deductible;
+				ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.Diagnostic).CovCatNum;
+				ben.PlanNum=plan.PlanNum;
+				ben.TimePeriod=BenefitTimePeriod.CalendarYear;
+				ben.MonetaryAmt=0;
+				ben.Percent=-1;
+				ben.CoverageLevel=BenefitCoverageLevel.Individual;
+				Benefits.Insert(ben);
+				//Zero deductible preventive
+				ben=new Benefit();
+				ben.CodeNum=0;
+				ben.BenefitType=InsBenefitType.Deductible;
+				ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.RoutinePreventive).CovCatNum;
+				ben.PlanNum=plan.PlanNum;
+				ben.TimePeriod=BenefitTimePeriod.CalendarYear;
+				ben.MonetaryAmt=0;
+				ben.Percent=-1;
+				ben.CoverageLevel=BenefitCoverageLevel.Individual;
+				Benefits.Insert(ben);
 			}
 			//Then attach plan------------------------------------------------------------------------------------------------
 			PatPlan patplan=new PatPlan();
