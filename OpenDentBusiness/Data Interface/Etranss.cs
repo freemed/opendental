@@ -505,9 +505,9 @@ namespace OpenDentBusiness{
 						for(int i=0;i<transNums.Count;i++) {
 							ack=x997.GetAckForTrans(transNums[i]);
 							if(ack=="A"||ack=="R") {//accepted or rejected
-								command="UPDATE etrans SET AckCode='"+ack+"' "
+								command="UPDATE etrans SET AckCode='"+ack+"', "
 									+"AckEtransNum="+POut.Long(etrans.EtransNum)
-									+"WHERE BatchNumber="+POut.Long(etrans.BatchNumber)
+									+" WHERE BatchNumber="+POut.Long(etrans.BatchNumber)
 									+" AND TransSetNum="+POut.Long(transNums[i])
 									+" AND ClearinghouseNum="+POut.Long(clearinghouseNum)
 									+" AND DateTimeTrans > "+POut.DateT(dateTimeTrans.AddDays(-14))
