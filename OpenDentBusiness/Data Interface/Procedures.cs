@@ -1100,6 +1100,7 @@ namespace OpenDentBusiness {
 				//This was a longstanding bug. I hope there are not other consequences for commenting it out.
 				//claimProcs[i].DateCP=proc.ProcDate;
 				claimProcs[i].ProcDate=proc.ProcDate;
+				claimProcs[i].ClinicNum=proc.ClinicNum;
 				//capitation estimates are always forced to follow the status of the procedure
 				if(PlanCur.PlanType=="c"
 					&& (claimProcs[i].Status==ClaimProcStatus.CapComplete	|| claimProcs[i].Status==ClaimProcStatus.CapEstimate)) 

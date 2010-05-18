@@ -6418,8 +6418,10 @@ namespace OpenDental{
 		#endregion Draw
 
 		private void gridPtInfo_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			if(Plugins.Active && Plugins.HookMethod(this,"ContrChart.gridPtInfo_CellDoubleClick",PatCur,FamCur,e,PatientNoteCur)) {
+				return;
+			}
 			if(gridPtInfo.Rows[e.Row].Tag==null){//pt info
-			
 				return;
 			}
 			if(gridPtInfo.Rows[e.Row].Tag.ToString()=="med"){
