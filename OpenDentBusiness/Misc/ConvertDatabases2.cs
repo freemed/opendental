@@ -2172,6 +2172,17 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="UPDATE preference SET ValueString = '7.1.2.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To7_1_16();
+		}
+
+		private static void To7_1_16() {
+			if(FromVersion<new Version("7.1.16.0")) {
+				string command;
+				command="ALTER TABLE etransmessagetext CHANGE MessageText MessageText mediumtext NOT NULL";
+				Db.NonQ(command);
+				command="UPDATE preference SET ValueString = '7.1.16.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
 			To7_2_0();
 		}
 
