@@ -2259,8 +2259,15 @@ namespace OpenDental{
 						}
 						string calcPattern=Appointments.CalculatePattern(aptCur.ProvNum,aptCur.ProvHyg,codeNums,true);
 						if(aptCur.Pattern != calcPattern) {
-							if(!aptCur.TimeLocked || MsgBox.Show(this,MsgBoxButtons.YesNo,"Appointment length is locked.  Change length for new provider anyway?")) {
-								aptCur.Pattern=calcPattern;
+							if(aptCur.TimeLocked){
+								if(MsgBox.Show(this,MsgBoxButtons.YesNo,"Appointment length is locked.  Change length for new provider anyway?")) {
+									aptCur.Pattern=calcPattern;
+								}
+							}
+							else{//appt time not locked
+								if(MsgBox.Show(this,MsgBoxButtons.YesNo,"Change length for new provider?")) {
+									aptCur.Pattern=calcPattern;
+								}
 							}
 						}
 					}
@@ -2889,8 +2896,15 @@ namespace OpenDental{
 						}
 						string calcPattern=Appointments.CalculatePattern(apt.ProvNum,apt.ProvHyg,codeNums,true);
 						if(apt.Pattern != calcPattern){
-							if(!apt.TimeLocked || MsgBox.Show(this,MsgBoxButtons.YesNo,"Appointment length is locked.  Change length for new provider anyway?")) {
-								apt.Pattern=calcPattern;
+							if(apt.TimeLocked){
+								if(MsgBox.Show(this,MsgBoxButtons.YesNo,"Appointment length is locked.  Change length for new provider anyway?")) {
+									apt.Pattern=calcPattern;
+								}
+							}
+							else{//appt time not locked
+								if(MsgBox.Show(this,MsgBoxButtons.YesNo,"Change length for new provider?")) {
+									apt.Pattern=calcPattern;
+								}
 							}
 						}
 					}
