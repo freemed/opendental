@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Drawing;
+using System.Xml.Serialization;
 
 namespace OpenDentBusiness{
 	
@@ -35,6 +36,7 @@ namespace OpenDentBusiness{
 		///<summary>True if hygienist.</summary>
 		public bool IsSecondary;//
 		///<summary>Color that shows in appointments</summary>
+		[XmlIgnore]
 		public Color ProvColor;
 		///<summary>If true, provider will not show on any lists</summary>
 		public bool IsHidden;
@@ -47,6 +49,7 @@ namespace OpenDentBusiness{
 		///<summary>.</summary>
 		public string MedicaidID;
 		///<summary>Color that shows in appointments as outline when highlighted.</summary>
+		[XmlIgnore]
 		public Color OutlineColor;
 		///<summary>FK to schoolclass.SchoolClassNum Used in dental schools.  Each student is a provider.  This keeps track of which class they are in.</summary>
 		public long SchoolClassNum;
@@ -61,6 +64,28 @@ namespace OpenDentBusiness{
 		public long AnesthProvType;
 		///<summary>If none of the supplied taxonomies works.  This will show on claims.</summary>
 		public string TaxonomyCodeOverride;
+
+		///<summary>Used only for serialization purposes</summary>
+		[XmlElement("ProvColor",typeof(int))]
+		public int ProvColorXml {
+			get {
+				return ProvColor.ToArgb();
+			}
+			set {
+				ProvColor = Color.FromArgb(value);
+			}
+		}
+
+		///<summary>Used only for serialization purposes</summary>
+		[XmlElement("OutlineColor",typeof(int))]
+		public int OutlineColorXml {
+			get {
+				return OutlineColor.ToArgb();
+			}
+			set {
+				OutlineColor = Color.FromArgb(value);
+			}
+		}
 
 		///<summary>Returns a copy of this Provider.</summary>
 		public Provider Copy(){

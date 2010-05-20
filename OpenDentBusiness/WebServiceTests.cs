@@ -128,6 +128,18 @@ namespace OpenDentBusiness {
 			}
 			return Color.Red;//indicates error
 		}
+
+		public static string SendProviderColor(Provider prov){ 
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),prov);
+			}
+			if(prov.ProvColor.ToArgb()==Color.Fuchsia.ToArgb()) {
+				return "fuchsiaOK";
+			}
+			return "error";
+		}
+
+		
 		
 
 

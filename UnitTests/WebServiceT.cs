@@ -96,7 +96,14 @@ namespace UnitTests {
 				throw new Exception("Should be green.");
 			}
 			retVal+="SendColorParam: Passed.\r\n";
-
+			//SendProviderColor
+			Provider prov=new Provider();
+			prov.ProvColor=Color.Fuchsia;
+			strResult=WebServiceTests.SendProviderColor(prov);
+			if(strResult!="fuchsiaOK") {
+				throw new Exception("Should be fuchsiaOK.");
+			}
+			retVal+="SendProviderColor: Passed.\r\n";
 
 
 
