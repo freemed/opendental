@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
 using System.Text;
 using OpenDentBusiness;
 
@@ -89,7 +90,16 @@ namespace UnitTests {
 				throw new Exception("Should be null");
 			}
 			retVal+="GetObjectNull: Passed.\r\n";
-		
+			//SendColorParam
+			Color colorResult=WebServiceTests.SendColorParam(Color.Fuchsia);
+			if(colorResult.ToArgb()!=Color.Green.ToArgb()) {
+				throw new Exception("Should be green.");
+			}
+			retVal+="SendColorParam: Passed.\r\n";
+
+
+
+
 			
 
 			

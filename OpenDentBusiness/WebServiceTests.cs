@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
 using System.Reflection;
 using System.Text;
 
@@ -117,6 +118,17 @@ namespace OpenDentBusiness {
 			}
 			return null;
 		}
+
+		public static Color SendColorParam(Color color){ 
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Color>(MethodBase.GetCurrentMethod(),color);
+			}
+			if(color.ToArgb()==Color.Fuchsia.ToArgb()) {
+				return Color.Green;
+			}
+			return Color.Red;//indicates error
+		}
+		
 
 
 	}
