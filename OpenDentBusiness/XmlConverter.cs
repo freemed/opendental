@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
 using System.IO;
 using System.Reflection;
 using System.Text;
@@ -42,8 +43,15 @@ namespace OpenDentBusiness {
 			#else
 				XmlWriter writer=XmlWriter.Create(strBuild);
 			#endif
-			XmlSerializer serializer = new XmlSerializer(classType);
-			serializer.Serialize(writer,obj);
+			XmlSerializer serializer;
+			if(classType==typeof(Color)) {
+				serializer = new XmlSerializer(typeof(int));
+				serializer.Serialize(writer,((Color)obj).ToArgb());
+			}
+			else {
+				serializer = new XmlSerializer(classType);
+				serializer.Serialize(writer,obj);
+			}
 			writer.Close();
 			return strBuild.ToString();
 		}
@@ -67,8 +75,16 @@ namespace OpenDentBusiness {
 			}
 			StringReader strReader=new StringReader(xmlData);
 			XmlReader reader=XmlReader.Create(strReader);
-			XmlSerializer serializer = new XmlSerializer(type);
-			T retVal=(T)serializer.Deserialize(reader);
+			XmlSerializer serializer;
+			T retVal;
+			if(type==typeof(Color)) {
+				serializer = new XmlSerializer(typeof(int));
+				retVal=(T)((object)Color.FromArgb((int)serializer.Deserialize(reader)));
+			}
+			else {
+				serializer = new XmlSerializer(type);
+				retVal=(T)serializer.Deserialize(reader);
+			}
 			strReader.Close();
 			reader.Close();
 			return retVal;

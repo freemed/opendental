@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Reflection;
 using System.Text;
@@ -50,10 +51,16 @@ namespace OpenDentBusiness {
 			writer.WriteString(TypeName);
 			writer.WriteEndElement();//TypeName
 			writer.WriteStartElement("Obj");
-			string assemb=Assembly.GetAssembly(typeof(Db)).FullName;
-			Type type=ConvertNameToType(TypeName,assemb);
-			XmlSerializer serializer = new XmlSerializer(type);
-			serializer.Serialize(writer,Obj);
+			if(TypeName=="System.Drawing.Color") {
+				XmlSerializer serializer = new XmlSerializer(typeof(int));
+				serializer.Serialize(writer,((Color)Obj).ToArgb());
+			}
+			else {
+				string assemb=Assembly.GetAssembly(typeof(Db)).FullName;
+				Type type=ConvertNameToType(TypeName,assemb);
+				XmlSerializer serializer = new XmlSerializer(type);
+				serializer.Serialize(writer,Obj);
+			}
 			writer.WriteEndElement();//Obj
 		}
 
@@ -85,6 +92,9 @@ namespace OpenDentBusiness {
 				Type typeList=typeof(List<>);
 				type=typeList.MakeGenericType(typeGen);
 			}
+			else if(TypeName=="System.Drawing.Color") {
+				type=typeof(int);
+			}
 			else {
 				//This works fine for non-system types as well without specifying the assembly,
 				//because we are already in the OpenDentBusiness assembly.
@@ -92,7 +102,12 @@ namespace OpenDentBusiness {
 			}
 			XmlSerializer serializer = new XmlSerializer(type);
 			XmlReader reader2=XmlReader.Create(new StringReader(strObj));
-			Obj=serializer.Deserialize(reader2);
+			if(TypeName=="System.Drawing.Color") {
+				Obj=Color.FromArgb((int)serializer.Deserialize(reader2));
+			}
+			else {
+				Obj=serializer.Deserialize(reader2);
+			}
 				//Convert.ChangeType(serializer.Deserialize(reader2),type);
 		}
 
@@ -142,6 +157,9 @@ namespace OpenDentBusiness {
 			}
 			else if(FullName.StartsWith("OpenDentBusiness")) {
 				typeObj=Type.GetType(FullName+","+assemb);
+			}
+			else if(FullName=="System.Drawing.Color") {
+				typeObj=typeof(Color);
 			}
 			else {//system types
 				typeObj=Type.GetType(FullName);
