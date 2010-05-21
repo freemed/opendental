@@ -21,10 +21,10 @@ namespace OpenDentBusiness {
 			if(ringGroup==AsteriskRingGroups.Backup) {
 				SetToBackupRingGroupOnly(extension,employeeNum);
 			}*/
-			SetRingGroups(extension,employeeNum,ringGroups);
+			SetRingGroups(extension,ringGroups);
 		}
 
-		public static void SetRingGroups(int extension,long employeeNum,AsteriskRingGroups ringGroups) {
+		public static void SetRingGroups(int extension,AsteriskRingGroups ringGroups) {
 			DataConnection dcon=new DataConnection("asterisk","asterisk","opendental","secret",DatabaseType.MySql);
 			string command="SELECT grpnum,grplist FROM ringgroups WHERE grpnum = '601' OR grpnum = '609'";
 			DataTable table=dcon.GetTable(command);
