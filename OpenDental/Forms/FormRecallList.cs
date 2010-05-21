@@ -949,8 +949,9 @@ namespace OpenDental{
 			//	return;
 			//}
 			planList=InsPlans.Refresh(fam);
+			long recallNum=PIn.Long(table.Rows[gridMain.SelectedIndices[0]]["RecallNum"].ToString());
 			try{
-				apt=AppointmentL.CreateRecallApt(pat,procList,planList);
+				apt=AppointmentL.CreateRecallApt(pat,procList,planList,recallNum);
 			}
 			catch(Exception ex){
 				MessageBox.Show(ex.Message);
@@ -991,7 +992,7 @@ namespace OpenDental{
 				//patNums.Add(fam.ListPats[i].PatNum);
 				planList=InsPlans.Refresh(fam);
 				try{
-					apt=AppointmentL.CreateRecallApt(fam.ListPats[i],procList,planList);
+					apt=AppointmentL.CreateRecallApt(fam.ListPats[i],procList,planList,-1);
 				}
 				catch{//(Exception ex){
 					continue;

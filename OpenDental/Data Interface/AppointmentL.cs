@@ -154,16 +154,21 @@ namespace OpenDental{
 				/ContrApptSheet.Lh;//rounds down
 		}
 
-		///<summary>Used by UI when it needs a recall appointment placed on the pinboard ready to schedule.  This method creates the appointment and attaches all appropriate procedures.  It's up to the calling class to then place the appointment on the pinboard.  If the appointment doesn't get scheduled, it's important to delete it.</summary>
-		public static Appointment CreateRecallApt(Patient patCur,List<Procedure> procList,List<InsPlan> planList){
+		///<summary>Used by UI when it needs a recall appointment placed on the pinboard ready to schedule.  This method creates the appointment and attaches all appropriate procedures.  It's up to the calling class to then place the appointment on the pinboard.  If the appointment doesn't get scheduled, it's important to delete it.  If a recallNum is not 0 or -1, then it will create an appt of that recalltype.</summary>
+		public static Appointment CreateRecallApt(Patient patCur,List<Procedure> procList,List<InsPlan> planList,long recallNum){
 			List<Recall> recallList=Recalls.GetList(patCur.PatNum);
 			Recall recallCur=null;
-			for(int i=0;i<recallList.Count;i++){
-				if(recallList[i].RecallTypeNum==RecallTypes.PerioType || recallList[i].RecallTypeNum==RecallTypes.ProphyType){
-					if(!recallList[i].IsDisabled){
-						recallCur=recallList[i];
+			if(recallNum>0) {
+				recallCur=Recalls.GetRecall(recallNum);
+			}
+			else{
+				for(int i=0;i<recallList.Count;i++){
+					if(recallList[i].RecallTypeNum==RecallTypes.PerioType || recallList[i].RecallTypeNum==RecallTypes.ProphyType){
+						if(!recallList[i].IsDisabled){
+							recallCur=recallList[i];
+						}
+						break;
 					}
-					break;
 				}
 			}
 			if(recallCur==null || recallCur.DateDue.Year<1880){
@@ -186,15 +191,17 @@ namespace OpenDental{
 			//whether perio or prophy:
 			List<string> procs=RecallTypes.GetProcs(recallCur.RecallTypeNum);
 			string recallPattern=RecallTypes.GetTimePattern(recallCur.RecallTypeNum);
-			if(patCur.Birthdate.AddYears(12) > recallCur.DateDue) {//if pt's 12th birthday falls after recall date. ie younger than 12.
-				for(int i=0;i<RecallTypeC.Listt.Count;i++){
-					if(RecallTypeC.Listt[i].RecallTypeNum==RecallTypes.ChildProphyType){
+			if(RecallTypes.IsSpecialRecallType(recallCur.RecallTypeNum)
+				&& patCur.Birthdate.AddYears(12) > recallCur.DateDue) //if pt's 12th birthday falls after recall date. ie younger than 12.
+			{
+				for(int i=0;i<RecallTypeC.Listt.Count;i++) {
+					if(RecallTypeC.Listt[i].RecallTypeNum==RecallTypes.ChildProphyType) {
 						List<string> childprocs=RecallTypes.GetProcs(RecallTypeC.Listt[i].RecallTypeNum);
-						if(childprocs.Count>0){
+						if(childprocs.Count>0) {
 							procs=childprocs;//overrides adult procs.
 						}
 						string childpattern=RecallTypes.GetTimePattern(RecallTypeC.Listt[i].RecallTypeNum);
-						if(childpattern!=""){
+						if(childpattern!="") {
 							recallPattern=childpattern;//overrides adult pattern.
 						}
 					}
@@ -219,22 +226,25 @@ namespace OpenDental{
 			}
 			AptCur.Pattern=savePattern.ToString();
 			//Add films------------------------------------------------------------------------------------------------------
-			for(int i=0;i<recallList.Count;i++){
-				if(recallCur.RecallNum==recallList[i].RecallNum){
-					continue;//already handled.
+			if(RecallTypes.IsSpecialRecallType(recallCur.RecallTypeNum)){//if this is a prophy or perio
+				for(int i=0;i<recallList.Count;i++){
+					if(recallCur.RecallNum==recallList[i].RecallNum){
+						continue;//already handled.
+					}
+					if(recallList[i].IsDisabled){
+						continue;
+					}
+					if(recallList[i].DateDue.Year<1880){
+						continue;
+					}
+					if(recallList[i].DateDue>recallCur.DateDue//if film due date is after prophy due date
+						&& recallList[i].DateDue>DateTime.Today)//and not overdue
+					{
+						continue;
+					}
+					//incomplete: exclude manual recall types
+					procs.AddRange(RecallTypes.GetProcs(recallList[i].RecallTypeNum));
 				}
-				if(recallList[i].IsDisabled){
-					continue;
-				}
-				if(recallList[i].DateDue.Year<1880){
-					continue;
-				}
-				if(recallList[i].DateDue>recallCur.DateDue//if film due date is after prophy due date
-					&& recallList[i].DateDue>DateTime.Today)//and not overdue
-				{
-					continue;
-				}
-				procs.AddRange(RecallTypes.GetProcs(recallList[i].RecallTypeNum));
 			}
 			AptCur.ProcDescript="";
 			for(int i=0;i<procs.Count;i++) {

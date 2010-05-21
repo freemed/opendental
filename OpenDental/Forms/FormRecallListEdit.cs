@@ -737,7 +737,7 @@ namespace OpenDental{
 			SaveRecall();
 			Appointment apt;
 			try{
-				apt=AppointmentL.CreateRecallApt(PatCur,ProcList,PlanList);
+				apt=AppointmentL.CreateRecallApt(PatCur,ProcList,PlanList,-1);
 			}
 			catch(Exception ex){
 				MessageBox.Show(ex.Message);
