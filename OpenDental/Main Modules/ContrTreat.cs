@@ -1935,7 +1935,8 @@ namespace OpenDental{
 				note=PlanList[gridPlans.SelectedIndices[0]-1].Note;
 			}
 			char nbsp='\u00A0';
-			note=note.Replace(' ',nbsp);//otherwise, it collapses multiple spaces to single spaces
+			//to prevent collapsing of multiple spaces to single spaces.  We only do double spaces to leave single spaces in place.
+			note=note.Replace("  ",nbsp.ToString()+nbsp.ToString());
 			MigraDocHelper.InsertSpacer(section,20);
 			par=section.AddParagraph(note);
 			par.Format.Font=bodyFontx;
