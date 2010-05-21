@@ -11,7 +11,28 @@ namespace UnitTests {
 			ben.BenefitType=InsBenefitType.Limitations;
 			ben.CovCatNum=0;
 			ben.CoverageLevel=BenefitCoverageLevel.Individual;
-			ben.Percent=-1;
+			ben.MonetaryAmt=amt;
+			ben.TimePeriod=BenefitTimePeriod.CalendarYear;
+			Benefits.Insert(ben);
+		}
+
+		public static void CreateDeductibleGeneral(long planNum,double amt){
+			Benefit ben=new Benefit();
+			ben.PlanNum=planNum;
+			ben.BenefitType=InsBenefitType.Deductible;
+			ben.CovCatNum=0;
+			ben.CoverageLevel=BenefitCoverageLevel.Individual;
+			ben.MonetaryAmt=amt;
+			ben.TimePeriod=BenefitTimePeriod.CalendarYear;
+			Benefits.Insert(ben);
+		}
+
+		public static void CreateDeductible(long planNum,EbenefitCategory category,double amt){
+			Benefit ben=new Benefit();
+			ben.PlanNum=planNum;
+			ben.BenefitType=InsBenefitType.Deductible;
+			ben.CovCatNum=CovCats.GetForEbenCat(category).CovCatNum;
+			ben.CoverageLevel=BenefitCoverageLevel.Individual;
 			ben.MonetaryAmt=amt;
 			ben.TimePeriod=BenefitTimePeriod.CalendarYear;
 			Benefits.Insert(ben);
@@ -23,7 +44,6 @@ namespace UnitTests {
 			ben.BenefitType=InsBenefitType.Limitations;
 			ben.CovCatNum=CovCats.GetForEbenCat(category).CovCatNum;
 			ben.CoverageLevel=BenefitCoverageLevel.Individual;
-			ben.Percent=-1;
 			ben.MonetaryAmt=amt;
 			ben.TimePeriod=BenefitTimePeriod.CalendarYear;
 			Benefits.Insert(ben);
@@ -35,7 +55,6 @@ namespace UnitTests {
 			ben.BenefitType=InsBenefitType.Limitations;
 			ben.CovCatNum=0;
 			ben.CoverageLevel=BenefitCoverageLevel.Family;
-			ben.Percent=-1;
 			ben.MonetaryAmt=amt;
 			ben.TimePeriod=BenefitTimePeriod.CalendarYear;
 			Benefits.Insert(ben);
@@ -48,7 +67,6 @@ namespace UnitTests {
 			ben.CovCatNum=CovCats.GetForEbenCat(category).CovCatNum;
 			ben.CoverageLevel=BenefitCoverageLevel.None;
 			ben.Percent=percent;
-			ben.MonetaryAmt=-1;
 			ben.TimePeriod=BenefitTimePeriod.CalendarYear;
 			Benefits.Insert(ben);
 		}
@@ -60,8 +78,6 @@ namespace UnitTests {
 			ben.CovCatNum=0;
 			ben.CodeNum=ProcedureCodes.GetCodeNum(procCodeStr);
 			ben.CoverageLevel=BenefitCoverageLevel.None;
-			ben.Percent=-1;
-			ben.MonetaryAmt=-1;
 			ben.TimePeriod=BenefitTimePeriod.None;
 			ben.Quantity=quantity;
 			ben.QuantityQualifier=quantityQualifier;

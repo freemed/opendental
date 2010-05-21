@@ -283,6 +283,60 @@ namespace UnitTests {
 			return "6: Passed.  Limitations override more general limitations.\r\n"; 
 		}
 
+		///<summary></summary>
+		public static string TestSeven(int specificTest) {
+			if(specificTest != 0 && specificTest !=7){
+				return"";
+			}
+			string suffix="7";
+			Patient pat=PatientT.CreatePatient(suffix);
+			Carrier carrier=CarrierT.CreateCarrier(suffix);
+			InsPlan plan=InsPlanT.CreateInsPlan(pat.PatNum,carrier.CarrierNum);
+			BenefitT.CreateAnnualMax(plan.PlanNum,1000);	
+			BenefitT.CreateCategoryPercent(plan.PlanNum,EbenefitCategory.RoutinePreventive,100);
+			BenefitT.CreateCategoryPercent(plan.PlanNum,EbenefitCategory.Diagnostic,100);
+			BenefitT.CreateDeductibleGeneral(plan.PlanNum,50);
+			BenefitT.CreateDeductible(plan.PlanNum,EbenefitCategory.RoutinePreventive,25);
+			BenefitT.CreateDeductible(plan.PlanNum,EbenefitCategory.Diagnostic,25);
+			PatPlanT.CreatePatPlan(1,pat.PatNum,plan.PlanNum);
+			//proc1 - PerExam
+			Procedure proc1=ProcedureT.CreateProcedure(pat,"D0120",ProcStat.TP,"",60);
+			ProcedureT.SetPriority(proc1,0);
+			//proc2 - Prophy
+			Procedure proc2=ProcedureT.CreateProcedure(pat,"D1110",ProcStat.TP,"",70);
+			ProcedureT.SetPriority(proc2,1);
+			//Lists:
+			List<ClaimProc> claimProcs=ClaimProcs.Refresh(pat.PatNum);
+			List<ClaimProc> claimProcListOld=new List<ClaimProc>();
+			Family fam=Patients.GetFamily(pat.PatNum);
+			List<InsPlan> planList=InsPlans.Refresh(fam);
+			List<PatPlan> patPlans=PatPlans.Refresh(pat.PatNum);
+			List<Benefit> benefitList=Benefits.Refresh(patPlans);
+			List<ClaimProcHist> histList=new List<ClaimProcHist>();
+			List<ClaimProcHist> loopList=new List<ClaimProcHist>();
+			List<Procedure>	ProcList=Procedures.Refresh(pat.PatNum);
+			Procedure[] ProcListTP=Procedures.GetListTP(ProcList);//sorted by priority, then toothnum
+			//Validate
+			string retVal="";
+			for(int i=0;i<ProcListTP.Length;i++){
+				Procedures.ComputeEstimates(ProcListTP[i],pat.PatNum,ref claimProcs,false,planList,patPlans,benefitList,
+					histList,loopList,false,pat.Age);
+				//then, add this information to loopList so that the next procedure is aware of it.
+				loopList.AddRange(ClaimProcs.GetHistForProc(claimProcs,ProcListTP[i].ProcNum,ProcListTP[i].CodeNum));
+			}
+			//save changes in the list to the database
+			ClaimProcs.Synch(ref claimProcs,claimProcListOld);
+			claimProcs=ClaimProcs.Refresh(pat.PatNum);
+			ClaimProc claimProc=ClaimProcs.GetEstimate(claimProcs,proc2.ProcNum,plan.PlanNum);
+			if(claimProc.DedEst!=0) {//Second procedure should show no deductible.
+				throw new Exception("Should be 0");
+			}
+			retVal+="7: Passed.  A deductible for preventive/diagnostic is only included once.\r\n";
+			return retVal;
+		}
+
+
+
 
 
 	}

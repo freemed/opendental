@@ -529,6 +529,35 @@ namespace OpenDentBusiness {
 				retVal-=histList[i].Deduct;
 			}
 			//now, do a similar thing with loopList, individ-----------------------------------------------------------------------
+			//There is a kludgey workaround in the loop below.
+			//It handles the very specific problem of a single diagnostic/preventive deductible even though we have two separate benefits for it.
+			//The better solution will be benefits with multiple categories or spans.
+			//This workaround is only applied if there are both a diagnostic and a preventive deductible for the same amount.
+			//If the benefit is diagnostic, then also check the spans of the preventive category
+			CovSpan[] otherSpans=null;
+			if(CovCats.GetEbenCat(benInd.CovCatNum)==EbenefitCategory.Diagnostic){
+				for(int i=0;i<listShort.Count;i++){//look through the benefits again
+					if(listShort[i].CoverageLevel!=BenefitCoverageLevel.Individual){
+						continue;
+					}
+					if(CovCats.GetEbenCat(listShort[i].CovCatNum)!=EbenefitCategory.RoutinePreventive){
+						continue;
+					}
+					otherSpans=CovSpans.GetForCat(listShort[i].CovCatNum);
+				}
+			}
+			//if the benefit is preventive, then also check the spans of the diagnostic category
+			if(CovCats.GetEbenCat(benInd.CovCatNum)==EbenefitCategory.RoutinePreventive){
+				for(int i=0;i<listShort.Count;i++){//look through the benefits again
+					if(listShort[i].CoverageLevel!=BenefitCoverageLevel.Individual){
+						continue;
+					}
+					if(CovCats.GetEbenCat(listShort[i].CovCatNum)!=EbenefitCategory.Diagnostic){
+						continue;
+					}
+					otherSpans=CovSpans.GetForCat(listShort[i].CovCatNum);
+				}
+			}
 			for(int i=0;i<loopList.Count;i++) {
 				//no date restriction, since all TP or part of current claim
 				//if(histList[i].ProcDate<dateStart || histList[i].ProcDate>dateEnd) {
@@ -553,6 +582,15 @@ namespace OpenDentBusiness {
 							&& String.Compare(loopList[i].StrProcCode,spansForCat[j].ToCode)<=0) {
 							isMatch=true;
 							break;
+						}
+					}
+					if(otherSpans!=null){
+						for(int j=0;j<otherSpans.Length;j++) {
+							if(String.Compare(loopList[i].StrProcCode,otherSpans[j].FromCode)>=0 
+								&& String.Compare(loopList[i].StrProcCode,otherSpans[j].ToCode)<=0) {
+								isMatch=true;
+								break;
+							}
 						}
 					}
 					if(!isMatch) {
