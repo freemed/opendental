@@ -3107,6 +3107,17 @@ namespace OpenDental{
 			}
 			if(ToolButItems.List!=null){
 				LayoutToolBar();
+				if(PatCur==null) {
+					ToolBarMain.Buttons["Rx"].Enabled=false;
+					ToolBarMain.Buttons["LabCase"].Enabled=false;
+					ToolBarMain.Buttons["Perio"].Enabled = false;
+					ToolBarMain.Buttons["Consent"].Enabled = false;
+					ToolBarMain.Buttons["ToothChart"].Enabled = false;
+					if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") {
+						ToolBarMain.Buttons["Commlog"].Enabled=false;
+						webBrowserEcw.Url=null;
+					}
+				}
 			}
 		}
 
@@ -3121,6 +3132,9 @@ namespace OpenDental{
 			button.Style=ODToolBarButtonStyle.DropDownButton;
 			button.DropDownMenu=menuConsent;
 			ToolBarMain.Buttons.Add(button);
+			if(PrefC.GetBool(PrefName.ToothChartMoveMenuToRight)) {
+				ToolBarMain.Buttons.Add(new ODToolBarButton("                                .",-1,"",""));
+			}
 			button=new ODToolBarButton(Lan.g(this,"Tooth Chart"),-1,"","ToothChart");
 			button.Style=ODToolBarButtonStyle.DropDownButton;
 			button.DropDownMenu=menuToothChart;

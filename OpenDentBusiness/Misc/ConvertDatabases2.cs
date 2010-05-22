@@ -2183,6 +2183,17 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="UPDATE preference SET ValueString = '7.1.16.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To7_1_18();
+		}
+
+		private static void To7_1_18() {
+			if(FromVersion<new Version("7.1.18.0")) {
+				string command;
+				command="INSERT INTO preference(PrefName,ValueString) VALUES('ToothChartMoveMenuToRight','0')";
+				Db.NonQ(command);
+				command="UPDATE preference SET ValueString = '7.1.18.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
 			To7_2_0();
 		}
 

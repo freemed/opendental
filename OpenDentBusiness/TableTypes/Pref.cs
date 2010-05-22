@@ -255,6 +255,7 @@ namespace OpenDentBusiness {
 		TimecardSecurityEnabled,
 		TimecardUsersDontEditOwnCard,
 		TitleBarShowSite,
+		ToothChartMoveMenuToRight,
 		TreatmentPlanNote,
 		TreatPlanPriorityForDeclined,
 		TreatPlanShowCompleted,

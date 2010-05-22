@@ -75,6 +75,7 @@ namespace OpenDental{
 		private CheckBox checkStatementShowNotes;
 		private CheckBox checkClaimsValidateACN;
 		private CheckBox checkInsDefaultShowUCRonClaims;
+		private CheckBox checkToothChartMoveMenuToRight;
 		private List<Def> posAdjTypes;
 
 		///<summary></summary>
@@ -156,11 +157,12 @@ namespace OpenDental{
 			this.checkAutoClearEntryStatus = new System.Windows.Forms.CheckBox();
 			this.checkPPOpercentage = new System.Windows.Forms.CheckBox();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.checkInsDefaultShowUCRonClaims = new System.Windows.Forms.CheckBox();
 			this.checkCoPayFeeScheduleBlankLikeZero = new System.Windows.Forms.CheckBox();
 			this.checkAllowedFeeSchedsAutomate = new System.Windows.Forms.CheckBox();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
-			this.checkInsDefaultShowUCRonClaims = new System.Windows.Forms.CheckBox();
+			this.checkToothChartMoveMenuToRight = new System.Windows.Forms.CheckBox();
 			this.groupBox1.SuspendLayout();
 			this.groupBox5.SuspendLayout();
 			this.groupBox4.SuspendLayout();
@@ -729,6 +731,7 @@ namespace OpenDental{
 			// 
 			// groupBox3
 			// 
+			this.groupBox3.Controls.Add(this.checkToothChartMoveMenuToRight);
 			this.groupBox3.Controls.Add(this.checkChartQuickAddHideAmalgam);
 			this.groupBox3.Controls.Add(this.label11);
 			this.groupBox3.Controls.Add(this.checkAllowSettingProcsComplete);
@@ -736,7 +739,7 @@ namespace OpenDental{
 			this.groupBox3.Controls.Add(this.checkAutoClearEntryStatus);
 			this.groupBox3.Location = new System.Drawing.Point(454,444);
 			this.groupBox3.Name = "groupBox3";
-			this.groupBox3.Size = new System.Drawing.Size(422,98);
+			this.groupBox3.Size = new System.Drawing.Size(422,115);
 			this.groupBox3.TabIndex = 191;
 			this.groupBox3.TabStop = false;
 			this.groupBox3.Text = "Chart module";
@@ -821,6 +824,18 @@ namespace OpenDental{
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Family module";
 			// 
+			// checkInsDefaultShowUCRonClaims
+			// 
+			this.checkInsDefaultShowUCRonClaims.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkInsDefaultShowUCRonClaims.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkInsDefaultShowUCRonClaims.Location = new System.Drawing.Point(3,130);
+			this.checkInsDefaultShowUCRonClaims.Name = "checkInsDefaultShowUCRonClaims";
+			this.checkInsDefaultShowUCRonClaims.Size = new System.Drawing.Size(413,17);
+			this.checkInsDefaultShowUCRonClaims.TabIndex = 196;
+			this.checkInsDefaultShowUCRonClaims.Text = "Insurance plans default to show UCR fee on claims.";
+			this.checkInsDefaultShowUCRonClaims.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkInsDefaultShowUCRonClaims.Click += new System.EventHandler(this.checkInsDefaultShowUCRonClaims_Click);
+			// 
 			// checkCoPayFeeScheduleBlankLikeZero
 			// 
 			this.checkCoPayFeeScheduleBlankLikeZero.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -853,7 +868,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(768,562);
+			this.butCancel.Location = new System.Drawing.Point(788,576);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 8;
@@ -868,29 +883,29 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(663,562);
+			this.butOK.Location = new System.Drawing.Point(683,576);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 7;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
-			// checkInsDefaultShowUCRonClaims
+			// checkToothChartMoveMenuToRight
 			// 
-			this.checkInsDefaultShowUCRonClaims.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkInsDefaultShowUCRonClaims.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkInsDefaultShowUCRonClaims.Location = new System.Drawing.Point(3,130);
-			this.checkInsDefaultShowUCRonClaims.Name = "checkInsDefaultShowUCRonClaims";
-			this.checkInsDefaultShowUCRonClaims.Size = new System.Drawing.Size(413,17);
-			this.checkInsDefaultShowUCRonClaims.TabIndex = 196;
-			this.checkInsDefaultShowUCRonClaims.Text = "Insurance plans default to show UCR fee on claims.";
-			this.checkInsDefaultShowUCRonClaims.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkInsDefaultShowUCRonClaims.Click += new System.EventHandler(this.checkInsDefaultShowUCRonClaims_Click);
+			this.checkToothChartMoveMenuToRight.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkToothChartMoveMenuToRight.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkToothChartMoveMenuToRight.Location = new System.Drawing.Point(35,95);
+			this.checkToothChartMoveMenuToRight.Name = "checkToothChartMoveMenuToRight";
+			this.checkToothChartMoveMenuToRight.Size = new System.Drawing.Size(381,15);
+			this.checkToothChartMoveMenuToRight.TabIndex = 196;
+			this.checkToothChartMoveMenuToRight.Text = "Button for tooth chart, move to the right to prevent overlap when saving";
+			this.checkToothChartMoveMenuToRight.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkToothChartMoveMenuToRight.UseVisualStyleBackColor = true;
 			// 
 			// FormModuleSetup
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(890,602);
+			this.ClientSize = new System.Drawing.Size(890,613);
 			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.groupBox3);
 			this.Controls.Add(this.groupBox4);
@@ -1013,6 +1028,7 @@ namespace OpenDental{
 			checkAutoClearEntryStatus.Checked=PrefC.GetBool(PrefName.AutoResetTPEntryStatus);
 			checkAllowSettingProcsComplete.Checked=PrefC.GetBool(PrefName.AllowSettingProcsComplete);
 			checkChartQuickAddHideAmalgam.Checked=PrefC.GetBool(PrefName.ChartQuickAddHideAmalgam);
+			checkToothChartMoveMenuToRight.Checked=PrefC.GetBool(PrefName.ToothChartMoveMenuToRight);
 		}
 
 		private void checkAllowedFeeSchedsAutomate_Click(object sender,EventArgs e) {
@@ -1100,6 +1116,7 @@ namespace OpenDental{
 				| Prefs.UpdateBool(PrefName.CoPay_FeeSchedule_BlankLikeZero,checkCoPayFeeScheduleBlankLikeZero.Checked)
 				| Prefs.UpdateBool(PrefName.InsDefaultShowUCRonClaims,checkInsDefaultShowUCRonClaims.Checked)
 				| Prefs.UpdateBool(PrefName.ClaimsValidateACN,checkClaimsValidateACN.Checked)
+				| Prefs.UpdateBool(PrefName.ToothChartMoveMenuToRight,checkToothChartMoveMenuToRight.Checked)
 				)
 			{
 				changed=true;
