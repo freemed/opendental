@@ -692,7 +692,7 @@ namespace OpenDentBusiness{
 				}
 				command+="appointment.AptNum="+aptNums[i].ToString();
 			}
-			command+=") ORDER BY patient.LName,patient.FName";
+			command+=") ORDER BY appointment.AptDateTime";
 			return Db.GetTable(command);
 		}
 
