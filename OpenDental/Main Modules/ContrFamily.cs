@@ -1207,27 +1207,31 @@ namespace OpenDental{
 					Benefits.Insert(ben);
 				}
 				//Zero deductible diagnostic
-				ben=new Benefit();
-				ben.CodeNum=0;
-				ben.BenefitType=InsBenefitType.Deductible;
-				ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.Diagnostic).CovCatNum;
-				ben.PlanNum=plan.PlanNum;
-				ben.TimePeriod=BenefitTimePeriod.CalendarYear;
-				ben.MonetaryAmt=0;
-				ben.Percent=-1;
-				ben.CoverageLevel=BenefitCoverageLevel.Individual;
-				Benefits.Insert(ben);
+				if(CovCats.GetForEbenCat(EbenefitCategory.Diagnostic)!=null) {
+					ben=new Benefit();
+					ben.CodeNum=0;
+					ben.BenefitType=InsBenefitType.Deductible;
+					ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.Diagnostic).CovCatNum;
+					ben.PlanNum=plan.PlanNum;
+					ben.TimePeriod=BenefitTimePeriod.CalendarYear;
+					ben.MonetaryAmt=0;
+					ben.Percent=-1;
+					ben.CoverageLevel=BenefitCoverageLevel.Individual;
+					Benefits.Insert(ben);
+				}
 				//Zero deductible preventive
-				ben=new Benefit();
-				ben.CodeNum=0;
-				ben.BenefitType=InsBenefitType.Deductible;
-				ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.RoutinePreventive).CovCatNum;
-				ben.PlanNum=plan.PlanNum;
-				ben.TimePeriod=BenefitTimePeriod.CalendarYear;
-				ben.MonetaryAmt=0;
-				ben.Percent=-1;
-				ben.CoverageLevel=BenefitCoverageLevel.Individual;
-				Benefits.Insert(ben);
+				if(CovCats.GetForEbenCat(EbenefitCategory.RoutinePreventive)!=null) {
+					ben=new Benefit();
+					ben.CodeNum=0;
+					ben.BenefitType=InsBenefitType.Deductible;
+					ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.RoutinePreventive).CovCatNum;
+					ben.PlanNum=plan.PlanNum;
+					ben.TimePeriod=BenefitTimePeriod.CalendarYear;
+					ben.MonetaryAmt=0;
+					ben.Percent=-1;
+					ben.CoverageLevel=BenefitCoverageLevel.Individual;
+					Benefits.Insert(ben);
+				}
 			}
 			//Then attach plan------------------------------------------------------------------------------------------------
 			PatPlan patplan=new PatPlan();
