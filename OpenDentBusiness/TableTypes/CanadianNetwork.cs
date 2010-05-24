@@ -6,8 +6,10 @@ using System.Drawing;
 namespace OpenDentBusiness{
 
 	///<summary></summary>
-	public class CanadianNetwork{
+	[Serializable()]
+	public class CanadianNetwork:TableBase{
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long CanadianNetworkNum;
 		///<summary>This will also be the folder name</summary>
 		public string Abbrev;
@@ -16,11 +18,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public CanadianNetwork Copy() {
-			CanadianNetwork c=new CanadianNetwork();
-			c.CanadianNetworkNum=CanadianNetworkNum;
-			c.Abbrev=Abbrev;
-			c.Descript=Descript;
-			return c;
+			return (CanadianNetwork)this.MemberwiseClone();
 		}
 	}
 

@@ -992,10 +992,10 @@ namespace OpenDental{
 				CanCur.SecondaryCoverage="X";
 			}
 			CanCur.ReferralProviderNum=textReferralProvider.Text;
-			CanCur.ReferralReason=comboReferralReason.SelectedIndex;
-			CanCur.EligibilityCode=listEligibilityCode.SelectedIndex+1;
+			CanCur.ReferralReason=(byte)comboReferralReason.SelectedIndex;
+			CanCur.EligibilityCode=(byte)(listEligibilityCode.SelectedIndex+1);
 			CanCur.SchoolName=textSchoolName.Text;
-			CanCur.PayeeCode=listPayeeCode.SelectedIndex+1;
+			CanCur.PayeeCode=(byte)(listPayeeCode.SelectedIndex+1);
 			ClaimCur.AccidentDate=PIn.Date(textAccidentDate.Text);
 			//CanCur.CardSequenceNumber=PIn.PInt(textCardSequenceNumber.Text);
 			//max prosth-----------------------------------------------------------------------------------------------------
@@ -1009,7 +1009,7 @@ namespace OpenDental{
 				CanCur.IsInitialUpper="X";
 			}
 			CanCur.DateInitialUpper=PIn.Date(textDateInitialUpper.Text);
-			CanCur.MaxProsthMaterial=comboMaxProsthMaterial.SelectedIndex;
+			CanCur.MaxProsthMaterial=(byte)comboMaxProsthMaterial.SelectedIndex;
 			//mand prosth-----------------------------------------------------------------------------------------------------
 			if(radioMandProsthYes.Checked) {
 				CanCur.IsInitialLower="Y";
@@ -1021,7 +1021,7 @@ namespace OpenDental{
 				CanCur.IsInitialLower="X";
 			}
 			CanCur.DateInitialLower=PIn.Date(textDateInitialLower.Text);
-			CanCur.MandProsthMaterial=comboMandProsthMaterial.SelectedIndex;
+			CanCur.MandProsthMaterial=(byte)comboMandProsthMaterial.SelectedIndex;
 			CanadianExtracts.UpdateForClaim(ClaimCur.ClaimNum,MissingList);
 			CanadianClaims.Update(CanCur);
 			DialogResult=DialogResult.OK;

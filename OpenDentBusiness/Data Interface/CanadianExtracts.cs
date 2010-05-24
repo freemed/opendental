@@ -15,18 +15,7 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<List<CanadianExtract>>(MethodBase.GetCurrentMethod(),claimNum);
 			}
 			string command="SELECT * FROM canadianextract WHERE ClaimNum="+POut.Long(claimNum);
-			DataTable table=Db.GetTable(command);
-			List<CanadianExtract> retVal=new List<CanadianExtract>();
-			CanadianExtract extract;
-			for(int i=0;i<table.Rows.Count;i++){
-				extract=new CanadianExtract();
-				extract.CanadianExtractNum=PIn.Long   (table.Rows[i][0].ToString());
-				extract.ClaimNum          =PIn.Long   (table.Rows[i][1].ToString());
-				extract.ToothNum          =PIn.String(table.Rows[i][2].ToString());
-				extract.DateExtraction    =PIn.Date  (table.Rows[i][3].ToString());
-				retVal.Add(extract);
-			}
-			return retVal;
+			return Crud.CanadianExtractCrud.SelectMany(command);
 		}
 
 		public static int CompareByToothNum(CanadianExtract x1,CanadianExtract x2) {
@@ -63,33 +52,12 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		private static long Insert(CanadianExtract cur) {
+		private static long Insert(CanadianExtract canadianExtract) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				cur.CanadianExtractNum=Meth.GetLong(MethodBase.GetCurrentMethod(),cur);
-				return cur.CanadianExtractNum;
+				canadianExtract.CanadianExtractNum=Meth.GetLong(MethodBase.GetCurrentMethod(),canadianExtract);
+				return canadianExtract.CanadianExtractNum;
 			}
-			if(PrefC.RandomKeys) {
-				cur.CanadianExtractNum=ReplicationServers.GetKey("canadianextract","CanadianExtractNum");
-			}
-			string command="INSERT INTO canadianextract (";
-			if(PrefC.RandomKeys) {
-				command+="CanadianExtractNum,";
-			}
-			command+="ClaimNum,ToothNum,DateExtraction) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+="'"+POut.Long(cur.CanadianExtractNum)+"', ";
-			}
-			command+=
-				 "'"+POut.Long   (cur.ClaimNum)+"', "
-				+"'"+POut.String(cur.ToothNum)+"', "
-				+POut.Date  (cur.DateExtraction)+")";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				cur.CanadianExtractNum=Db.NonQ(command,true);
-			}
-			return cur.CanadianExtractNum;
+			return Crud.CanadianExtractCrud.Insert(canadianExtract);
 		}
 
 /*update never used*/

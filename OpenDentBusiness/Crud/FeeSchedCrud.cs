@@ -31,7 +31,7 @@ namespace OpenDentBusiness.Crud{
 			return list[0];
 		}
 
-		///<summary>Gets one FeeSched object from the database using a query.</summary>
+		///<summary>Gets a list of FeeSched objects from the database using a query.</summary>
 		internal static List<FeeSched> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);

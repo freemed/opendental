@@ -1113,7 +1113,7 @@ namespace OpenDental{
 				dontAllowSimplified=true;
 				checkSimplified.Checked=false;
 				panelSimple.Visible=false;
-				gridBenefits.Location=new Point(gridBenefits.Left,checkSimplified.Bottom+3);
+				gridBenefits.Location=new Point(gridBenefits.Left,groupYear.Bottom+3);
 				gridBenefits.Height=butAdd.Top-gridBenefits.Top-5;
 			}
 			FillCalendarYear();
@@ -1142,7 +1142,7 @@ namespace OpenDental{
 				}
 				gridBenefits.Title=Lan.g(this,"Benefits");
 				panelSimple.Visible=false;
-				gridBenefits.Location=new Point(gridBenefits.Left,checkSimplified.Bottom+3);
+				gridBenefits.Location=new Point(gridBenefits.Left,groupYear.Bottom+3);
 				gridBenefits.Height=butAdd.Top-gridBenefits.Top-5;
 			}
 			FillSimple();

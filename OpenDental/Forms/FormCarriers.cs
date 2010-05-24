@@ -204,12 +204,13 @@ namespace OpenDental{
 		#endregion
 
 		private void FormCarriers_Load(object sender, System.EventArgs e) {
-			if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="CA"){
-				checkCDAnet.Checked=true;
-			}
-			else{
-				checkCDAnet.Visible=false;
-			}
+			//if(CultureInfo.CurrentCulture.Name.EndsWith("CA")){
+			//No.  Even Canadian users will want to see all their carriers and only use the checkbox for special situations.
+			//	checkCDAnet.Checked=true;
+			//}
+			//else{
+			//	checkCDAnet.Visible=false;
+			//}
 			Carriers.RefreshCache();
 			FillGrid();
 		}
@@ -227,7 +228,7 @@ namespace OpenDental{
 				//gridMain.Size=new Size(745,gridMain.Height);
 				col=new ODGridColumn(Lan.g("TableCarriers","Carrier Name"),160);
 				gridMain.Columns.Add(col);
-				col=new ODGridColumn(Lan.g("TableCarriers","ElectID"),60);
+				col=new ODGridColumn(Lan.g("TableCarriers","EDI Code"),60);
 				gridMain.Columns.Add(col);
 				col=new ODGridColumn(Lan.g("TableCarriers","PMP"),50,HorizontalAlignment.Center);
 				gridMain.Columns.Add(col);
@@ -274,6 +275,10 @@ namespace OpenDental{
 				gridMain.Columns.Add(col);
 				col=new ODGridColumn(Lan.g("TableCarriers","Plans"),50);
 				gridMain.Columns.Add(col);
+				if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {
+					col=new ODGridColumn(Lan.g("TableCarriers","CDAnet"),50);
+					gridMain.Columns.Add(col);
+				}
 			}
 			gridMain.Rows.Clear();
 			ODGridRow row;
@@ -306,6 +311,9 @@ namespace OpenDental{
 					row.Cells.Add(table.Rows[i]["ElectID"].ToString());
 					row.Cells.Add(table.Rows[i]["isHidden"].ToString());
 					row.Cells.Add(table.Rows[i]["insPlanCount"].ToString());
+					if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {
+						row.Cells.Add(table.Rows[i]["isCDA"].ToString());
+					}
 				}
 				gridMain.Rows.Add(row);
 			}
@@ -346,6 +354,10 @@ namespace OpenDental{
 		private void butAdd_Click(object sender, System.EventArgs e) {
 			FormCarrierEdit FormCE=new FormCarrierEdit();
 			FormCE.IsNew=true;
+			Carrier carrier=new Carrier();
+			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {
+				carrier.IsCDA=true;
+			}
 			FormCE.CarrierCur=new Carrier();
 			FormCE.ShowDialog();
 			if(FormCE.DialogResult!=DialogResult.OK){

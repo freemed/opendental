@@ -61,6 +61,7 @@ namespace OpenDental{
 		private CheckBox check05;
 		private CheckBox check02;
 		private CheckBox checkIsHidden;
+		private Label label11;
 		public Carrier CarrierCur;
 
 		///<summary></summary>
@@ -139,6 +140,7 @@ namespace OpenDental{
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.checkIsHidden = new System.Windows.Forms.CheckBox();
+			this.label11 = new System.Windows.Forms.Label();
 			this.groupBox1.SuspendLayout();
 			this.groupCDAnet.SuspendLayout();
 			this.groupBox3.SuspendLayout();
@@ -218,7 +220,7 @@ namespace OpenDental{
 			// 
 			// labelElectID
 			// 
-			this.labelElectID.Location = new System.Drawing.Point(27,125);
+			this.labelElectID.Location = new System.Drawing.Point(27,124);
 			this.labelElectID.Name = "labelElectID";
 			this.labelElectID.Size = new System.Drawing.Size(151,17);
 			this.labelElectID.TabIndex = 20;
@@ -328,6 +330,7 @@ namespace OpenDental{
 			// 
 			// groupCDAnet
 			// 
+			this.groupCDAnet.Controls.Add(this.label11);
 			this.groupCDAnet.Controls.Add(this.groupBox3);
 			this.groupCDAnet.Controls.Add(this.textModemReconcile);
 			this.groupCDAnet.Controls.Add(this.label10);
@@ -584,6 +587,15 @@ namespace OpenDental{
 			this.checkIsHidden.Text = "Hidden";
 			this.checkIsHidden.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// label11
+			// 
+			this.label11.Location = new System.Drawing.Point(235,44);
+			this.label11.Name = "label11";
+			this.label11.Size = new System.Drawing.Size(92,17);
+			this.label11.TabIndex = 112;
+			this.label11.Text = "(2, 3, or 4)";
+			this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
 			// FormCarrierEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
@@ -652,9 +664,9 @@ namespace OpenDental{
 			}
 			//textTemplates.Text=Carriers.DependentTemplates().ToString();
 			checkIsCDAnet.Checked=CarrierCur.IsCDA;//Can be checked but not visible.
-			if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="CA"){//en-CA or fr-CA
+			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")){//en-CA or fr-CA
 				labelCitySt.Text="City,Province,PostalCode";
-				labelElectID.Text="Carrier ID";
+				labelElectID.Text="EDI Code";//"Carrier ID";
 				groupCDAnet.Visible=checkIsCDAnet.Checked;
 			}
 			else{//everyone but Canada

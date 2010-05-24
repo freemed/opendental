@@ -120,6 +120,10 @@
     <Compile Include="CrudFramework\CrudColumnAttribute.cs" />
     <Compile Include="Crud\AccountCrud.cs" />
     <Compile Include="Crud\AdjustmentCrud.cs" />
+    <Compile Include="Crud\CanadianClaimCrud.cs" />
+    <Compile Include="Crud\CanadianExtractCrud.cs" />
+    <Compile Include="Crud\CanadianNetworkCrud.cs" />
+    <Compile Include="Crud\CarrierCrud.cs" />
     <Compile Include="Crud\ClockEventCrud.cs" />
     <Compile Include="Crud\DeletedObjectCrud.cs" />
     <Compile Include="Crud\DocumentCrud.cs" />

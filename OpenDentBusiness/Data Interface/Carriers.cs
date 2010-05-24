@@ -9,19 +9,19 @@ using System.Text.RegularExpressions;
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class Carriers{
-		private static Carrier[] list;
+		private static Carrier[] listt;
 		private static Hashtable hList;
 
-		public static Carrier[] List {
+		public static Carrier[] Listt {
 			//No need to check RemotingRole; no call to db.
 			get {
-				if(list==null) {
+				if(listt==null) {
 					RefreshCache();
 				}
-				return list;
+				return listt;
 			}
 			set {
-				list=value;
+				listt=value;
 			}
 		}
 
@@ -51,26 +51,10 @@ namespace OpenDentBusiness{
 		
 		public static void FillCache(DataTable table){
 			//No need to check RemotingRole; no call to db.
-			List=new Carrier[table.Rows.Count];
+			Listt=Crud.CarrierCrud.TableToList(table).ToArray();
 			HList=new Hashtable();
-			for(int i=0;i<table.Rows.Count;i++){
-				List[i]=new Carrier();
-				List[i].CarrierNum  =PIn.Long   (table.Rows[i][0].ToString());
-				List[i].CarrierName =PIn.String(table.Rows[i][1].ToString());
-				List[i].Address     =PIn.String(table.Rows[i][2].ToString());
-				List[i].Address2    =PIn.String(table.Rows[i][3].ToString());
-				List[i].City        =PIn.String(table.Rows[i][4].ToString());
-				List[i].State       =PIn.String(table.Rows[i][5].ToString());
-				List[i].Zip         =PIn.String(table.Rows[i][6].ToString());
-				List[i].Phone       =PIn.String(table.Rows[i][7].ToString());
-				List[i].ElectID     =PIn.String(table.Rows[i][8].ToString());
-				List[i].NoSendElect =PIn.Bool  (table.Rows[i][9].ToString());
-				List[i].IsCDA       =PIn.Bool  (table.Rows[i][10].ToString());
-				List[i].IsPMP       =PIn.Bool(table.Rows[i][11].ToString());
-				List[i].CDAnetVersion=PIn.String(table.Rows[i][12].ToString());
-				List[i].CanadianNetworkNum=PIn.Long(table.Rows[i][13].ToString());
-				List[i].IsHidden     =PIn.Bool(table.Rows[i][14].ToString());
-				HList.Add(List[i].CarrierNum,List[i]);
+			for(int i=0;i<Listt.Length;i++){
+				HList.Add(Listt[i].CarrierNum,Listt[i]);
 			}
 		}
 
@@ -85,7 +69,7 @@ namespace OpenDentBusiness{
 			//if(isCanadian){
 			command="SELECT Address,Address2,canadiannetwork.Abbrev,carrier.CarrierNum,"
 				+"CarrierName,CDAnetVersion,City,ElectID,"
-				+"COUNT(insplan.PlanNum) insPlanCount,"
+				+"COUNT(insplan.PlanNum) insPlanCount,IsCDA,"
 				+"carrier.IsHidden,IsPMP,Phone,State,Zip "
 				+"FROM carrier "
 				+"LEFT JOIN canadiannetwork ON canadiannetwork.CanadianNetworkNum=carrier.CanadianNetworkNum "
@@ -109,6 +93,7 @@ namespace OpenDentBusiness{
 			table.Columns.Add("City");
 			table.Columns.Add("ElectID");
 			table.Columns.Add("insPlanCount");
+			table.Columns.Add("isCDA");
 			table.Columns.Add("isHidden");
 			table.Columns.Add("Phone");
 			table.Columns.Add("pMP");
@@ -132,6 +117,12 @@ namespace OpenDentBusiness{
 				row["CarrierName"]=tableRaw.Rows[i]["CarrierName"].ToString();
 				row["City"]=tableRaw.Rows[i]["City"].ToString();
 				row["ElectID"]=tableRaw.Rows[i]["ElectID"].ToString();
+				if(PIn.Bool(tableRaw.Rows[i]["IsCDA"].ToString())) {
+					row["isCDA"]="X";
+				}
+				else {
+					row["isCDA"]="";
+				}
 				if(PIn.Bool(tableRaw.Rows[i]["IsHidden"].ToString())){
 					row["isHidden"]="X";
 				}
@@ -163,21 +154,22 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Surround with try/catch.</summary>
-		public static void Update(Carrier Cur){
+		public static void Update(Carrier carrier){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),carrier);
 				return;
 			}
 			string command;
 			DataTable table;
-			if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="CA") {//en-CA or fr-CA
-				if(Cur.IsCDA) {
-					if(Cur.ElectID=="") {
+			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//en-CA or fr-CA
+				if(carrier.IsCDA) {
+					if(carrier.ElectID=="") {
 						throw new ApplicationException(Lans.g("Carriers","EDI Code required."));
 					}
-					if(!Regex.IsMatch(Cur.ElectID,"^[0-9]{6}$")) {
+					if(!Regex.IsMatch(carrier.ElectID,"^[0-9]{6}$")) {
 						throw new ApplicationException(Lans.g("Carriers","EDI Code must be exactly 6 numbers."));
 					}
+					/*Duplication is allowed
 					command="SELECT CarrierNum FROM carrier WHERE "
 						+"ElectID = '"+POut.String(Cur.ElectID)+"' "
 						+"AND IsCDA=1 "
@@ -186,98 +178,51 @@ namespace OpenDentBusiness{
 					if(table.Rows.Count>0) {//if there already exists a Canadian carrier with that ElectID
 						throw new ApplicationException(Lans.g("Carriers","EDI Code already in use."));
 					}
+					*/
 				}
 				//so the edited carrier looks good, but now we need to make sure that the original was allowed to be changed.
-				command="SELECT ElectID,IsCDA FROM carrier WHERE CarrierNum = '"+POut.Long(Cur.CarrierNum)+"'";
+				command="SELECT ElectID,IsCDA FROM carrier WHERE CarrierNum = '"+POut.Long(carrier.CarrierNum)+"'";
 				table=Db.GetTable(command);
 				if(PIn.Bool(table.Rows[0][1].ToString())//if original carrier IsCDA
-					&& PIn.String(table.Rows[0][0].ToString()) !=Cur.ElectID)//and the ElectID was changed
+					&& PIn.String(table.Rows[0][0].ToString()) !=carrier.ElectID)//and the ElectID was changed
 				{
-					command="SELECT COUNT(*) FROM etrans WHERE CarrierNum= "+POut.Long(Cur.CarrierNum)
-						+" OR CarrierNum2="+POut.Long(Cur.CarrierNum);
+					command="SELECT COUNT(*) FROM etrans WHERE CarrierNum= "+POut.Long(carrier.CarrierNum)
+						+" OR CarrierNum2="+POut.Long(carrier.CarrierNum);
 					if(Db.GetCount(command)!="0"){
 						throw new ApplicationException(Lans.g("Carriers","Not allowed to change EDI Code because it's in use in the claim history."));
 					}
 				}
 			}
-			command="UPDATE carrier SET "
-				+ "CarrierName= '" +POut.String(Cur.CarrierName)+"' "
-				+ ",Address= '"    +POut.String(Cur.Address)+"' "
-				+ ",Address2= '"   +POut.String(Cur.Address2)+"' "
-				+ ",City= '"       +POut.String(Cur.City)+"' "
-				+ ",State= '"      +POut.String(Cur.State)+"' "
-				+ ",Zip= '"        +POut.String(Cur.Zip)+"' "
-				+ ",Phone= '"      +POut.String(Cur.Phone)+"' "
-				+ ",ElectID= '"    +POut.String(Cur.ElectID)+"' "
-				+ ",NoSendElect= '"+POut.Bool  (Cur.NoSendElect)+"' "
-				+ ",IsCDA= '"      +POut.Bool  (Cur.IsCDA)+"' "
-				+ ",IsPMP= '"      +POut.Bool  (Cur.IsPMP)+"' "
-				+ ",CDAnetVersion= '"+POut.String(Cur.CDAnetVersion)+"' "
-				+ ",CanadianNetworkNum= '"+POut.Long(Cur.CanadianNetworkNum)+"' "
-				+ ",IsHidden= '"     +POut.Bool(Cur.IsHidden)+"' "
-				+"WHERE CarrierNum = '"+POut.Long(Cur.CarrierNum)+"'";
-			//MessageBox.Show(string command);
-			Db.NonQ(command);
+			Crud.CarrierCrud.Update(carrier);
 		}
 
 		///<summary>Surround with try/catch if possibly adding a Canadian carrier.</summary>
-		public static long Insert(Carrier Cur){
+		public static long Insert(Carrier carrier){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Cur.CarrierNum=Meth.GetLong(MethodBase.GetCurrentMethod(),Cur);
-				return Cur.CarrierNum;
+				carrier.CarrierNum=Meth.GetLong(MethodBase.GetCurrentMethod(),carrier);
+				return carrier.CarrierNum;
 			}
 			string command;
-			if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="CA"){//en-CA or fr-CA
-				if(Cur.IsCDA){
-					if(Cur.ElectID==""){
+			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")){//en-CA or fr-CA
+				if(carrier.IsCDA){
+					if(carrier.ElectID==""){
 						throw new ApplicationException(Lans.g("Carriers","EDI Code required."));
 					}
-					if(!Regex.IsMatch(Cur.ElectID,"^[0-9]{6}$")) {
+					if(!Regex.IsMatch(carrier.ElectID,"^[0-9]{6}$")) {
 						throw new ApplicationException(Lans.g("Carriers","EDI Code must be exactly 6 numbers."));
 					}
+					/*Duplication actually seems to be allowed
 					command="SELECT CarrierNum FROM carrier WHERE "
-						+"ElectID = '"+POut.String(Cur.ElectID)+"' "
-						+"AND IsCDA=1";
+						+"ElectID = '"+POut.String(Cur.ElectID)+"' ";
+						//+"AND IsCDA=1";//no duplication allowed regardless.
 					DataTable table=Db.GetTable(command);
 					if(table.Rows.Count>0){//if there already exists a Canadian carrier with that ElectID
 						throw new ApplicationException(Lans.g("Carriers","EDI Code already in use."));
 					}
+					*/
 				}
 			}
-			if(PrefC.RandomKeys){
-				Cur.CarrierNum=ReplicationServers.GetKey("carrier","CarrierNum");
-			}
-			command="INSERT INTO carrier (";
-			if(PrefC.RandomKeys){
-				command+="CarrierNum,";
-			}
-			command+="CarrierName,Address,Address2,City,State,Zip,Phone,ElectID,NoSendElect,"
-				+"IsCDA,IsPMP,CDAnetVersion,CanadianNetworkNum,IsHidden) VALUES(";
-			if(PrefC.RandomKeys){
-				command+="'"+POut.Long(Cur.CarrierNum)+"', ";
-			}
-			command+=
-				 "'"+POut.String(Cur.CarrierName)+"', "
-				+"'"+POut.String(Cur.Address)+"', "
-				+"'"+POut.String(Cur.Address2)+"', "
-				+"'"+POut.String(Cur.City)+"', "
-				+"'"+POut.String(Cur.State)+"', "
-				+"'"+POut.String(Cur.Zip)+"', "
-				+"'"+POut.String(Cur.Phone)+"', "
-				+"'"+POut.String(Cur.ElectID)+"', "
-				+"'"+POut.Bool  (Cur.NoSendElect)+"', "
-				+"'"+POut.Bool  (Cur.IsCDA)+"', "
-				+"'"+POut.Bool  (Cur.IsPMP)+"', "
-				+"'"+POut.String(Cur.CDAnetVersion)+"', "
-				+"'"+POut.Long   (Cur.CanadianNetworkNum)+"', "
-				+"'"+POut.Bool  (Cur.IsHidden)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				Cur.CarrierNum=Db.NonQ(command,true);
-			}
-			return Cur.CarrierNum;
+			return Crud.CarrierCrud.Insert(carrier);
 		}
 
 		///<summary>Surround with try/catch.  If there are any dependencies, then this will throw an exception.  This is currently only called from FormCarrierEdit.</summary>
@@ -402,8 +347,9 @@ namespace OpenDentBusiness{
 			}
 			//No match found.  Decide what to do.  Usually add carrier.--------------------------------------------------------------
 			//Canada:
-			if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="CA"){//en-CA or fr-CA
-				if(carrier.ElectID!=""){
+			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")){//en-CA or fr-CA
+				throw new ApplicationException(Lans.g("Carriers","Carrier not found."));
+				/*if(carrier.ElectID!=""){
 					command="SELECT CarrierNum FROM carrier WHERE "
 						+"ElectID = '"+POut.String(carrier.ElectID)+"' "
 						+"AND IsCDA=1";
@@ -414,7 +360,7 @@ namespace OpenDentBusiness{
 						//throw new ApplicationException(Lans.g("Carriers","The carrier information was changed based on the EDI Code provided."));
 						return retVal;
 					}
-				}
+				}*/
 				//Notice that if inserting a carrier, it's never possible to create a canadian carrier.
 			}
 			Insert(carrier);
@@ -426,16 +372,16 @@ namespace OpenDentBusiness{
 		public static List<Carrier> GetSimilarNames(string carrierName){
 			//No need to check RemotingRole; no call to db.
 			List<Carrier> retVal=new List<Carrier>();
-			for(int i=0;i<List.Length;i++){
+			for(int i=0;i<Listt.Length;i++){
 				//if(i>0 && List[i].CarrierName==List[i-1].CarrierName){
 				//	continue;//ignore all duplicate names
 				//}
 				//if(Regex.IsMatch(List[i].CarrierName,"^"+carrierName,RegexOptions.IgnoreCase))
-				if(List[i].IsHidden){
+				if(Listt[i].IsHidden){
 					continue;
 				}
-				if(List[i].CarrierName.ToUpper().IndexOf(carrierName.ToUpper())==0){
-					retVal.Add(List[i]);
+				if(Listt[i].CarrierName.ToUpper().IndexOf(carrierName.ToUpper())==0){
+					retVal.Add(Listt[i]);
 				}
 			}
 			return retVal;
@@ -490,10 +436,10 @@ namespace OpenDentBusiness{
 		public static List<Carrier> GetCarriers(List<long> carrierNums) {
 			//No need to check RemotingRole; no call to db.
 			List<Carrier> retVal=new List<Carrier>();
-			for(int i=0;i<List.Length;i++){
+			for(int i=0;i<Listt.Length;i++){
 				for(int j=0;j<carrierNums.Count;j++){
-					if(List[i].CarrierNum==carrierNums[j]){
-						retVal.Add(List[i]);
+					if(Listt[i].CarrierNum==carrierNums[j]){
+						retVal.Add(Listt[i]);
 						break;
 					}
 				}
@@ -507,8 +453,8 @@ namespace OpenDentBusiness{
 			if(electID==""){
 				return true;
 			}
-			for(int i=0;i<List.Length;i++){
-				if(List[i].ElectID==electID){
+			for(int i=0;i<Listt.Length;i++){
+				if(Listt[i].ElectID==electID){
 					return true;
 				}
 			}
@@ -518,9 +464,9 @@ namespace OpenDentBusiness{
 		///<summary>Used from insplan window when requesting benefits.  Gets carrier based on electID.</summary>
 		public static Carrier GetCanadian(string electID){
 			//No need to check RemotingRole; no call to db.
-			for(int i=0;i<List.Length;i++){
-				if(List[i].ElectID==electID){
-					return List[i];
+			for(int i=0;i<Listt.Length;i++){
+				if(Listt[i].ElectID==electID){
+					return Listt[i];
 				}
 			}
 			return null;
@@ -531,9 +477,9 @@ namespace OpenDentBusiness{
 			if(carrierName==""){
 				throw new ApplicationException("Carrier cannot be blank");
 			}
-			for(int i=0;i<List.Length;i++){
-				if(carrierName==List[i].CarrierName && phone==List[i].Phone){
-					return List[i].Copy();
+			for(int i=0;i<Listt.Length;i++){
+				if(carrierName==Listt[i].CarrierName && phone==Listt[i].Phone){
+					return Listt[i].Copy();
 				}
 			}
 			Carrier carrier=new Carrier();

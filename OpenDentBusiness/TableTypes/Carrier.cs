@@ -5,8 +5,10 @@ using System.Text.RegularExpressions;
 namespace OpenDentBusiness{
 
 	///<summary>Every InsPlan has a Carrier.  The carrier stores the name and address.</summary>
-	public class Carrier{
+	[Serializable()]
+	public class Carrier:TableBase{
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long CarrierNum;
 		///<summary>Name of the carrier.</summary>
 		public string CarrierName;
@@ -39,6 +41,10 @@ namespace OpenDentBusiness{
 
 		public Carrier Copy(){
 			return (Carrier)this.MemberwiseClone();
+		}
+
+		public Carrier() {
+
 		}
 
 

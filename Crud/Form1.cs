@@ -86,7 +86,7 @@ namespace Crud {
 			}
 			Cursor=Cursors.Default;
 			MessageBox.Show("Done");
-			Application.Exit();
+			//Application.Exit();
 		}
 
 		private void butClear_Click(object sender,EventArgs e) {

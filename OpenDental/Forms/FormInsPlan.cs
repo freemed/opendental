@@ -161,6 +161,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butHistoryElect;
 		private ComboBox comboFilingCodeSubtype;
 		private Label label15;
+		private OpenDental.UI.Button butPickCarrier;
 		private CheckBox checkIsHidden;
 		//<summary>This is a field that is accessed only by clicking on the button because there's not room for it otherwise.  This variable should be treated just as if it was a visible textBox.</summary>
 		//private string BenefitNotes;
@@ -345,6 +346,7 @@ namespace OpenDental{
 			this.butLabel = new OpenDental.UI.Button();
 			this.butDelete = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.butPickCarrier = new OpenDental.UI.Button();
 			this.groupSubscriber.SuspendLayout();
 			this.groupCoPay.SuspendLayout();
 			this.groupRequestBen.SuspendLayout();
@@ -442,7 +444,7 @@ namespace OpenDental{
 			this.textCarrier.MaxLength = 50;
 			this.textCarrier.Multiline = true;
 			this.textCarrier.Name = "textCarrier";
-			this.textCarrier.Size = new System.Drawing.Size(291,20);
+			this.textCarrier.Size = new System.Drawing.Size(273,20);
 			this.textCarrier.TabIndex = 0;
 			this.textCarrier.Leave += new System.EventHandler(this.textCarrier_Leave);
 			this.textCarrier.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textCarrier_KeyUp);
@@ -1239,6 +1241,7 @@ namespace OpenDental{
 			// 
 			// groupCarrier
 			// 
+			this.groupCarrier.Controls.Add(this.butPickCarrier);
 			this.groupCarrier.Controls.Add(this.textPhone);
 			this.groupCarrier.Controls.Add(this.textAddress);
 			this.groupCarrier.Controls.Add(this.comboElectIDdescript);
@@ -1258,7 +1261,7 @@ namespace OpenDental{
 			this.groupCarrier.Controls.Add(this.labelCitySTZip);
 			this.groupCarrier.Location = new System.Drawing.Point(10,44);
 			this.groupCarrier.Name = "groupCarrier";
-			this.groupCarrier.Size = new System.Drawing.Size(399,155);
+			this.groupCarrier.Size = new System.Drawing.Size(402,155);
 			this.groupCarrier.TabIndex = 154;
 			this.groupCarrier.TabStop = false;
 			this.groupCarrier.Text = "Carrier";
@@ -1493,6 +1496,20 @@ namespace OpenDental{
 			this.butCancel.TabIndex = 14;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
+			// 
+			// butPickCarrier
+			// 
+			this.butPickCarrier.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butPickCarrier.Autosize = true;
+			this.butPickCarrier.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butPickCarrier.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPickCarrier.CornerRadius = 3F;
+			this.butPickCarrier.Location = new System.Drawing.Point(376,11);
+			this.butPickCarrier.Name = "butPickCarrier";
+			this.butPickCarrier.Size = new System.Drawing.Size(17,20);
+			this.butPickCarrier.TabIndex = 153;
+			this.butPickCarrier.Text = "...";
+			this.butPickCarrier.Click += new System.EventHandler(this.butPickCarrier_Click);
 			// 
 			// FormInsPlan
 			// 
@@ -2069,6 +2086,21 @@ namespace OpenDental{
 
 		private void listEmps_MouseLeave(object sender,System.EventArgs e) {
 			mouseIsInListEmps=false;
+		}
+
+		private void butPickCarrier_Click(object sender,EventArgs e) {
+			FormCarriers formc=new FormCarriers();
+			//formc.
+				/*
+			if(comboProvNum.SelectedIndex > -1) {
+				formp.SelectedProvNum=ProviderC.List[comboProvNum.SelectedIndex].ProvNum;
+			}
+			formp.ShowDialog();
+			if(formp.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			comboProvNum.SelectedIndex=Providers.GetIndex(formp.SelectedProvNum);
+			ProcCur.ProvNum=formp.SelectedProvNum;*/
 		}
 
 		private void textCarrier_KeyUp(object sender,System.Windows.Forms.KeyEventArgs e) {
@@ -2881,7 +2913,6 @@ namespace OpenDental{
 			if(!PrinterL.SetPrinter(pd,PrintSituation.LabelSingle)) {
 				return;
 			}
-			//this is useless code. Revisit later.
 			Carrier carrier=new Carrier();
 			carrier.CarrierName=textCarrier.Text;
 			carrier.Phone=textPhone.Text;
@@ -2890,6 +2921,15 @@ namespace OpenDental{
 			carrier.City=textCity.Text;
 			carrier.State=textState.Text;
 			carrier.Zip=textZip.Text;
+			carrier.ElectID=textElectID.Text;
+			carrier.NoSendElect=checkNoSendElect.Checked;
+			try {
+				carrier=Carriers.GetIndentical(carrier);
+			}
+			catch(ApplicationException ex) {
+				//the catch is just to display a message to the user.  It doesn't affect the success of the function.
+				MessageBox.Show(ex.Message);
+			}	
 			LabelSingle.PrintCarrier(carrier.CarrierNum);//,pd.PrinterSettings.PrinterName);
 		}
 
@@ -3544,13 +3584,35 @@ namespace OpenDental{
 			CarrierCur.Zip=textZip.Text;
 			CarrierCur.ElectID=textElectID.Text;
 			CarrierCur.NoSendElect=checkNoSendElect.Checked;
-			try{
+			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {
+				MessageBox.Show("Error.  Incomplete.  Unresolved issue with how to handle duplicate carrier id's.  CDAnet seems to allow duplicates.");
+				return false;
+				/*
+				bool carrierFound=true;
+				try {
+					CarrierCur=Carriers.GetIndentical(CarrierCur);
+				}
+				catch {//match not found
+					carrierFound=false;
+				}
+				if(!carrierFound) {
+					if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Carrier not found.  Create new carrier?")) {
+						return false;
+					}
+					FormCarrierEdit formCE=new FormCarrierEdit();
+					formCE.IsNew
+					try {
+						Carriers.Insert(CarrierCur);
+					}
+					catch(ApplicationException ex){
+						MessageBox.Show(ex.Message);//insert failed for some reason.
+						return false;
+					}
+				}*/
+			}
+			else {
 				CarrierCur=Carriers.GetIndentical(CarrierCur);
 			}
-			catch(ApplicationException ex){
-				//the catch is just to display a message to the user.  It doesn't affect the success of the function.
-				MessageBox.Show(ex.Message);
-			}	
 			PlanCur.CarrierNum=CarrierCur.CarrierNum;
 			//plantype already handled.
 			if(comboClaimForm.SelectedIndex!=-1){
@@ -3743,6 +3805,8 @@ namespace OpenDental{
 				PatPlans.Delete(PatPlanCur.PatPlanNum);//no need to check dependencies.  Maintains ordinals and recomputes estimates.
 			}
 		}
+
+		
 
 		
 

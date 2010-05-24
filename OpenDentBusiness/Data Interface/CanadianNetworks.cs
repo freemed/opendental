@@ -28,57 +28,25 @@ namespace OpenDentBusiness{
 			}
 			string command="SELECT * FROM canadiannetwork";
 			DataTable table=Db.GetTable(command);
-			listt=new List<CanadianNetwork>();
-			CanadianNetwork network;
-			for(int i=0;i<table.Rows.Count;i++){
-				network=new CanadianNetwork();
-				network.CanadianNetworkNum=PIn.Long   (table.Rows[i][0].ToString());
-				network.Abbrev            =PIn.String(table.Rows[i][1].ToString());
-				network.Descript          =PIn.String(table.Rows[i][2].ToString());
-				listt.Add(network);
-			}
+			listt=Crud.CanadianNetworkCrud.SelectMany(command);
 		}
 
 		///<summary></summary>
-		public static long Insert(CanadianNetwork network) {
+		public static long Insert(CanadianNetwork canadianNetwork) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				network.CanadianNetworkNum=Meth.GetLong(MethodBase.GetCurrentMethod(),network);
-				return network.CanadianNetworkNum;
+				canadianNetwork.CanadianNetworkNum=Meth.GetLong(MethodBase.GetCurrentMethod(),canadianNetwork);
+				return canadianNetwork.CanadianNetworkNum;
 			}
-			if(PrefC.RandomKeys) {
-				network.CanadianNetworkNum=ReplicationServers.GetKey("canadiannetwork","CanadianNetworkNum");
-			}
-			string command="INSERT INTO canadiannetwork (";
-			if(PrefC.RandomKeys) {
-				command+="CanadianNetworkNum,";
-			}
-			command+="Abbrev, Descript) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+="'"+POut.Long(network.CanadianNetworkNum)+"', ";
-			}
-			command+=
-				 "'"+POut.String(network.Abbrev)+"', "
-				+"'"+POut.String(network.Descript)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				network.CanadianNetworkNum=Db.NonQ(command,true);
-			}
-			return network.CanadianNetworkNum;
+			return Crud.CanadianNetworkCrud.Insert(canadianNetwork);
 		}
 
 		///<summary></summary>
-		public static void Update(CanadianNetwork Cur){
+		public static void Update(CanadianNetwork canadianNetwork){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),canadianNetwork);
 				return;
 			}
-			string command="UPDATE canadiannetwork SET "
-				+ "Abbrev = '"+POut.String(Cur.Abbrev)+"' "
-				+ ",Descript='"+POut.String(Cur.Descript)+"' "
-				+"WHERE CanadianNetworkNum = '"+POut.Long(Cur.CanadianNetworkNum)+"'";
-			Db.NonQ(command);
+			Crud.CanadianNetworkCrud.Update(canadianNetwork);
 		}
 
 		///<summary></summary>
