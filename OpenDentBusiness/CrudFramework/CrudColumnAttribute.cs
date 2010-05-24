@@ -36,7 +36,7 @@ namespace OpenDentBusiness {
 		DateEntry,
 		///<summary>Insert uses NOW(), Update and Select treat this like a Date.</summary>
 		DateEntryEditable,
-		///<summary>Gets set and updated by MySQL.  Leave these columns completely out of Insert and Update statements.</summary>
+		///<summary>Is set and updated by MySQL.  Leave these columns completely out of Insert and Update statements.</summary>
 		TimeStamp,
 		///<summary>Same C# type as Date, but the MySQL database uses datetime instead of date.</summary>
 		DateT,
@@ -44,5 +44,7 @@ namespace OpenDentBusiness {
 		DateTEntry,
 		///<summary>Insert uses NOW(), Update and Select treat this like a DateT.</summary>
 		DateTEntryEditable,
+		///<summary>Database type is tinyint unsigned.  C# type is int.  Range -128 to 128.  The validation does not check to make sure the db is unsigned.  The programmer must do that.</summary>
+		TinyIntUnsigned
 	}
 }

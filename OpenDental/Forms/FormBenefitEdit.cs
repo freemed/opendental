@@ -534,7 +534,7 @@ namespace OpenDental{
 			else{*/
 			BenCur.TimePeriod=(BenefitTimePeriod)listTimePeriod.SelectedIndex;
 			//}
-			BenCur.Quantity=PIn.Int(textQuantity.Text);
+			BenCur.Quantity=PIn.Byte(textQuantity.Text);
 			BenCur.QuantityQualifier=(BenefitQuantity)listQuantityQualifier.SelectedIndex;
 			BenCur.CoverageLevel=(BenefitCoverageLevel)listCoverageLevel.SelectedIndex;
 			//if(IsNew){

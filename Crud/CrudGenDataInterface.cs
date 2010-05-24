@@ -48,6 +48,9 @@ namespace Crud {
 			else if(Sname.EndsWith("ch")){
 				Sname=Sname+"es";
 			}
+			else if(Sname.EndsWith("ay")) {
+				Sname=Sname+"s";
+			}
 			else if(Sname.EndsWith("y")) {
 				Sname=Sname.TrimEnd('y')+"ies";
 			}

@@ -399,7 +399,7 @@ namespace OpenDentBusiness{
 				absOld=-oldAmt;
 			}
 			for(int i=0;i<jeL.Count;i++) {//we make sure down below that this count is exactly 2.
-				if(AccountC.GetAccount(jeL[i].AccountNum).AcctType==AccountType.Asset) {
+				if(Accounts.GetAccount(jeL[i].AccountNum).AcctType==AccountType.Asset) {
 					oldAcct=jeL[i].AccountNum;
 				}
 				if(jeL[i].DebitAmt==absOld) {
@@ -470,7 +470,7 @@ namespace OpenDentBusiness{
 					je.CreditAmt=absNew;
 				}
 				je.Memo=Lans.g("Payments","Payment -")+" "+patName;
-				je.Splits=AccountC.GetDescript(PrefC.GetLong(PrefName.AccountingCashIncomeAccount));
+				je.Splits=Accounts.GetDescript(PrefC.GetLong(PrefName.AccountingCashIncomeAccount));
 				je.TransactionNum=trans.TransactionNum;
 				JournalEntries.Insert(je);
 				//then, the income entry
@@ -485,7 +485,7 @@ namespace OpenDentBusiness{
 					je.DebitAmt=absNew;
 				}
 				je.Memo=Lans.g("Payments","Payment -")+" "+patName;
-				je.Splits=AccountC.GetDescript(newAcct);
+				je.Splits=Accounts.GetDescript(newAcct);
 				je.TransactionNum=trans.TransactionNum;
 				JournalEntries.Insert(je);
 				return;
@@ -507,7 +507,7 @@ namespace OpenDentBusiness{
 				signChanged=true;
 			}
 			for(int i=0;i<2;i++){
-				if(AccountC.GetAccount(jeL[i].AccountNum).AcctType==AccountType.Asset) {
+				if(Accounts.GetAccount(jeL[i].AccountNum).AcctType==AccountType.Asset) {
 					oldAcct=jeL[i].AccountNum;
 				}
 				if(jeL[i].DebitAmt==absOld) {

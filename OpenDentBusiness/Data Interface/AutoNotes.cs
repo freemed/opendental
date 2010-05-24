@@ -23,15 +23,7 @@ namespace OpenDentBusiness {
 
 		public static void FillCache(DataTable table){
 			//No need to check RemotingRole; no call to db.
-			Listt=new List<AutoNote>();
-			AutoNote note;
-			for(int i=0;i<table.Rows.Count;i++){
-				note = new AutoNote();
-				note.AutoNoteNum = PIn.Long(table.Rows[i][0].ToString());
-				note.AutoNoteName = PIn.String(table.Rows[i][1].ToString());
-				note.MainText = PIn.String(table.Rows[i][2].ToString());
-				Listt.Add(note);
-			}
+			Listt=Crud.AutoNoteCrud.TableToList(table);
 		}
 
 		///<summary></summary>
@@ -40,27 +32,7 @@ namespace OpenDentBusiness {
 				autonote.AutoNoteNum=Meth.GetLong(MethodBase.GetCurrentMethod(),autonote);
 				return autonote.AutoNoteNum;
 			}
-			if(PrefC.RandomKeys) {
-				autonote.AutoNoteNum=ReplicationServers.GetKey("autonote","AutoNoteNum");
-			}
-			string command="INSERT INTO autonote (";
-			if(PrefC.RandomKeys) {
-				command+="AutoNoteNum,";
-			}
-			command+="AutoNoteName, MainText) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+=POut.Long(autonote.AutoNoteNum)+", ";
-			}
-			command+=			
-				 "'"+POut.String(autonote.AutoNoteName)+"'," 
-				+"'"+POut.String(autonote.MainText)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				autonote.AutoNoteNum=Db.NonQ(command,true);
-			}
-			return autonote.AutoNoteNum;
+			return Crud.AutoNoteCrud.Insert(autonote);
 		}
 
 		///<summary></summary>
@@ -69,11 +41,7 @@ namespace OpenDentBusiness {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),autonote);
 				return;
 			}
-			string command="UPDATE autonote SET "
-				+"AutoNoteName = '"+POut.String(autonote.AutoNoteName)+"', "
-				+"MainText = '"+POut.String(autonote.MainText)+"' "
-				+"WHERE AutoNoteNum = '"+POut.Long(autonote.AutoNoteNum)+"'";
-			Db.NonQ(command);
+			Crud.AutoNoteCrud.Update(autonote);
 		}
 
 		///<summary></summary>
@@ -87,32 +55,6 @@ namespace OpenDentBusiness {
 			Db.NonQ(command);
 		}
 
-		/*
-		public static bool AutoNoteNameUsed(string AutoNoteName, string OriginalAutoNoteName) {
-			string command="SELECT AutoNoteName FROM autonote WHERE "
-			+"AutoNoteName = '"+AutoNoteName+"'"+" AND AutoNoteName != '"+OriginalAutoNoteName+"'";
-			DataTable table=Db.GetTable(command);
-			bool IsUsed=false;
-			if (table.Rows.Count!=0) {//found duplicate control name				
-				IsUsed=true;
-			}
-			return IsUsed;
-		}*/
-
-		/*
-		/// <summary></summary>
-		public static List<AutoNote> AutoNoteEdit(string AutoNoteName) { 
-			string command="SELECT AutoNoteName, AutoNoteNum, ControlsToInc FROM autonote "
-				+"WHERE AutoNoteName = "+"'"+AutoNoteName+"'";
-			DataTable table=Db.GetTable(command);
-			List<AutoNote> Listt=new List<AutoNote>();
-			//List = new AutoNote[table.Rows.Count];
-			AutoNote note= new AutoNote();
-			note.AutoNoteNum=PIn.PInt(table.Rows[0]["AutoNoteNum"].ToString());
-			note.AutoNoteName=PIn.PString(table.Rows[0]["AutoNoteName"].ToString());
-			note.ControlsToInc=PIn.PString(table.Rows[0]["ControlsToInc"].ToString());
-			Listt.Add(note);			
-			return Listt;
-		}*/
+	
 	}
 }

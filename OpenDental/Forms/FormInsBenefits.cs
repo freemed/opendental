@@ -1912,7 +1912,7 @@ namespace OpenDental{
 				ben.CovCatNum=0;
 				ben.PlanNum=PlanNum;
 				ben.QuantityQualifier=BenefitQuantity.AgeLimit;
-				ben.Quantity=PIn.Int(textFlo.Text);
+				ben.Quantity=PIn.Byte(textFlo.Text);
 				benefitListAll.Add(ben);
 			}
 			//frequency BW
@@ -1937,7 +1937,7 @@ namespace OpenDental{
 				else if(comboBW.SelectedIndex==2){
 					ben.QuantityQualifier=BenefitQuantity.Months;
 				}
-				ben.Quantity=PIn.Int(textBW.Text);
+				ben.Quantity=PIn.Byte(textBW.Text);
 				//ben.TimePeriod is none for years or months, although calYear, or ServiceYear, or Years might work too
 				benefitListAll.Add(ben);
 			}
@@ -1963,7 +1963,7 @@ namespace OpenDental{
 				else if(comboPano.SelectedIndex==2) {
 					ben.QuantityQualifier=BenefitQuantity.Months;
 				}
-				ben.Quantity=PIn.Int(textPano.Text);
+				ben.Quantity=PIn.Byte(textPano.Text);
 				//ben.TimePeriod is none for years or months, although calYear, or ServiceYear, or Years might work too
 				benefitListAll.Add(ben);
 			}
@@ -1989,7 +1989,7 @@ namespace OpenDental{
 				else if(comboExams.SelectedIndex==2) {
 					ben.QuantityQualifier=BenefitQuantity.Months;
 				}
-				ben.Quantity=PIn.Int(textExams.Text);
+				ben.Quantity=PIn.Byte(textExams.Text);
 				//ben.TimePeriod is none for years or months, although calYear, or ServiceYear, or Years might work too
 				benefitListAll.Add(ben);
 			}

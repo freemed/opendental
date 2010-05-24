@@ -713,7 +713,7 @@ namespace OpenDental{
 				ApptViewItems.Insert(ApptViewItemCur);
 			}
 			ApptViewCur.Description=textDescription.Text;
-			ApptViewCur.RowsPerIncr=PIn.Int(textRowsPerIncr.Text);
+			ApptViewCur.RowsPerIncr=PIn.Byte(textRowsPerIncr.Text);
 			ApptViewCur.OnlyScheduledProvs=checkOnlyScheduledProvs.Checked;
 			ApptViewCur.OnlySchedBeforeTime=timeBefore.TimeOfDay;
 			ApptViewCur.OnlySchedAfterTime=timeAfter.TimeOfDay;

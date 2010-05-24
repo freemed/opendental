@@ -4,8 +4,10 @@ using System.Text;
 namespace OpenDentBusiness {
 
 	///<summary>In the program, this is now called an autonote prompt.</summary>
-	public class AutoNoteControl {
+	[Serializable()]
+	public class AutoNoteControl:TableBase {
 		///<summary>Primary key</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long AutoNoteControlNum;
 		///<summary>The description of the prompt as it will be referred to from other windows.</summary>
 		public string Descript;

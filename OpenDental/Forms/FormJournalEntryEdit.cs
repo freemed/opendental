@@ -274,7 +274,7 @@ namespace OpenDental{
 			if(EntryCur==null){
 				MessageBox.Show("Entry cannot be null.");
 			}
-			AccountPicked=AccountC.GetAccount(EntryCur.AccountNum);//might be null
+			AccountPicked=Accounts.GetAccount(EntryCur.AccountNum);//might be null
 			/*
 			for(int i=0;i<Accounts.ListShort.Length;i++) {
 				comboAccount.Items.Add(Accounts.ListShort[i].Description);

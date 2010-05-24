@@ -182,6 +182,9 @@ namespace Crud {
 			else if(specialColType==EnumCrudSpecialColType.DateTEntryEditable) {
 				dataTypeExpected="datetime";
 			}
+			else if(specialColType==EnumCrudSpecialColType.TinyIntUnsigned) {
+				dataTypeExpected="tinyint";
+			}
 			else if(field.FieldType.IsEnum) {
 				dataTypeExpected="tinyint";
 				dataTypeExpected2="int";
@@ -216,7 +219,8 @@ namespace Crud {
 					//tinyint not allowed.  Change C# type to byte.
 					break;
 				case "Single":
-					dataTypeExpected="float";
+					dataTypeExpected="float";//not 1:1, but we never use the full range anyway.
+					dataTypeExpected2="float unsigned";
 					break;
 				case "String":
 					dataTypeExpected="varchar";

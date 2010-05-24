@@ -760,7 +760,7 @@ namespace OpenDental{
 					//add only the description based on PaymentCur attached to transaction
 					List<JournalEntry> jeL=JournalEntries.GetForTrans(trans.TransactionNum);
 					for(int i=0;i<jeL.Count;i++) {
-						if(AccountC.GetAccount(jeL[i].AccountNum).AcctType==AccountType.Asset) {
+						if(Accounts.GetAccount(jeL[i].AccountNum).AcctType==AccountType.Asset) {
 							textDepositAccount.Text=jeL[i].DateDisplayed.ToShortDateString();
 							if(jeL[i].DebitAmt>0){
 								textDepositAccount.Text+=" "+jeL[i].DebitAmt.ToString("c");
@@ -1070,7 +1070,7 @@ namespace OpenDental{
 				DepositAccounts=AccountingAutoPays.GetPickListAccounts(autoPay);
 				comboDepositAccount.Items.Clear();
 				for(int i=0;i<DepositAccounts.Length;i++) {
-					comboDepositAccount.Items.Add(AccountC.GetDescript(DepositAccounts[i]));
+					comboDepositAccount.Items.Add(Accounts.GetDescript(DepositAccounts[i]));
 				}
 				if(comboDepositAccount.Items.Count>0){
 					comboDepositAccount.SelectedIndex=0;

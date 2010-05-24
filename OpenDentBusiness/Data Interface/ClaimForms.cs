@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Reflection;
 using System.Windows.Forms;
@@ -52,27 +53,14 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static void FillCache(DataTable table) {
 			//No need to check RemotingRole; no call to db.
-			ListLong=new ClaimForm[table.Rows.Count];
-			ArrayList tempAL=new ArrayList();
-			for(int i=0;i<table.Rows.Count;i++) {
-				ListLong[i]=new ClaimForm();
-				ListLong[i].ClaimFormNum=PIn.Long(table.Rows[i][0].ToString());
-				ListLong[i].Description=PIn.String(table.Rows[i][1].ToString());
-				ListLong[i].IsHidden=PIn.Bool(table.Rows[i][2].ToString());
-				ListLong[i].FontName=PIn.String(table.Rows[i][3].ToString());
-				ListLong[i].FontSize=PIn.Float(table.Rows[i][4].ToString());
-				ListLong[i].UniqueID=PIn.String(table.Rows[i][5].ToString());
-				ListLong[i].PrintImages=PIn.Bool(table.Rows[i][6].ToString());
-				ListLong[i].OffsetX=PIn.Int(table.Rows[i][7].ToString());
-				ListLong[i].OffsetY=PIn.Int(table.Rows[i][8].ToString());
-				ListLong[i].Items=ClaimFormItems.GetListForForm(ListLong[i].ClaimFormNum);
-				if(!ListLong[i].IsHidden)
-					tempAL.Add(ListLong[i]);
+			listLong=Crud.ClaimFormCrud.TableToList(table).ToArray();
+			List<ClaimForm> ls=new List<ClaimForm>();
+			for(int i=0;i<listLong.Length;i++) {
+				if(!listLong[i].IsHidden){
+					ls.Add(ListLong[i]);
+				}
 			}
-			ListShort=new ClaimForm[tempAL.Count];
-			for(int i=0;i<ListShort.Length;i++) {
-				ListShort[i]=(ClaimForm)tempAL[i];
-			}
+			listShort=ls.ToArray();
 		}
 
 		///<summary>Inserts this claimform into database and retrieves the new primary key.</summary>
@@ -81,34 +69,7 @@ namespace OpenDentBusiness{
 				cf.ClaimFormNum=Meth.GetLong(MethodBase.GetCurrentMethod(),cf);
 				return cf.ClaimFormNum;
 			}
-			if(PrefC.RandomKeys) {
-				cf.ClaimFormNum=ReplicationServers.GetKey("claimform","ClaimFormNum");
-			}
-			string command="INSERT INTO claimform (";
-			if(PrefC.RandomKeys) {
-				command+="ClaimFormNum,";
-			}
-			command+="Description,IsHidden,FontName,FontSize"
-				+",UniqueId,PrintImages,OffsetX,OffsetY) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+=POut.Long(cf.ClaimFormNum)+", ";
-			}
-			command+=
-				 "'"+POut.String(cf.Description)+"', "
-				+"'"+POut.Bool  (cf.IsHidden)+"', "
-				+"'"+POut.String(cf.FontName)+"', "
-				+"'"+POut.Float (cf.FontSize)+"', "
-				+"'"+POut.String(cf.UniqueID)+"', "
-				+"'"+POut.Bool  (cf.PrintImages)+"', "
-				+"'"+POut.Long   (cf.OffsetX)+"', "
-				+"'"+POut.Long   (cf.OffsetY)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				cf.ClaimFormNum=Db.NonQ(command,true);
-			}
-			return cf.ClaimFormNum;
+			return Crud.ClaimFormCrud.Insert(cf);
 		}
 
 		///<summary></summary>
@@ -117,17 +78,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),cf);
 				return;
 			}
-			string command="UPDATE claimform SET "
-				+"Description = '" +POut.String(cf.Description)+"' "
-				+",IsHidden = '"    +POut.Bool  (cf.IsHidden)+"' "
-				+",FontName = '"    +POut.String(cf.FontName)+"' "
-				+",FontSize = '"    +POut.Float (cf.FontSize)+"' "
-				+",UniqueID = '"    +POut.String(cf.UniqueID)+"' "
-				+",PrintImages = '" +POut.Bool  (cf.PrintImages)+"' "
-				+",OffsetX = '"     +POut.Long   (cf.OffsetX)+"' "
-				+",OffsetY = '"     +POut.Long   (cf.OffsetY)+"' "
-				+"WHERE ClaimFormNum = '"+POut.Long   (cf.ClaimFormNum)+"'";
- 			Db.NonQ(command);
+			Crud.ClaimFormCrud.Update(cf);
 		}
 
 		///<summary> Called when cancelling out of creating a new claimform, and from the claimform window when clicking delete. Returns true if successful or false if dependencies found.</summary>

@@ -19,8 +19,7 @@ namespace OpenDentBusiness{
 				+"WHERE AptDateTime BETWEEN '"+POut.Date(startDate,false)+"' AND '"+POut.Date(endDate.AddDays(1),false)+"'"
 				+"AND aptstatus != '"+(int)ApptStatus.UnschedList+"' "
 				+"AND aptstatus != '"+(int)ApptStatus.Planned+"'";
-			DataTable table=Db.GetTable(command);
-			return TableToObjects(table).ToArray();
+			return Crud.AppointmentCrud.SelectMany(command).ToArray();
 		}
 
 		///<summary>Gets list of unscheduled appointments.  Allowed orderby: status, alph, date</summary>
@@ -47,8 +46,7 @@ namespace OpenDentBusiness{
 			else { //if(orderby=="date"){
 				command+="ORDER BY AptDateTime";
 			}
-			DataTable table=Db.GetTable(command);
-			return TableToObjects(table).ToArray();
+			return Crud.AppointmentCrud.SelectMany(command).ToArray();
 		}
 
 		///<summary>Gets list of asap appointments.</summary>
@@ -80,8 +78,7 @@ namespace OpenDentBusiness{
 				command+="ORDER BY AptDateTime";
 			}*/
 			command+="ORDER BY AptDateTime";
-			DataTable table=Db.GetTable(command);
-			return TableToObjects(table);
+			return Crud.AppointmentCrud.SelectMany(command);
 		}
 
 		///<summary>Allowed orderby: status, alph, date</summary>
@@ -120,8 +117,7 @@ namespace OpenDentBusiness{
 			command+=") tplanned "
 				+"LEFT JOIN appointment tregular ON tplanned.AptNum=tregular.NextAptNum "
 				+"WHERE tregular.AptNum IS NULL";
-			DataTable table=Db.GetTable(command);
-			return TableToObjects(table);
+			return Crud.AppointmentCrud.SelectMany(command);
 		}
 
 		///<summary>Returns all appointments for the given patient, ordered from earliest to latest.  Used in statements, appt cards, OtherAppts window, etc.</summary>
@@ -133,8 +129,7 @@ namespace OpenDentBusiness{
 				"SELECT * FROM appointment "
 				+"WHERE patnum = '"+patNum.ToString()+"' "
 				+"ORDER BY AptDateTime";
-			DataTable table=Db.GetTable(command);
-			return TableToObjects(table).ToArray();
+			return Crud.AppointmentCrud.SelectMany(command).ToArray();
 		}
 
 		public static List<Appointment> GetListForPat(long patNum) {
@@ -145,8 +140,7 @@ namespace OpenDentBusiness{
 				"SELECT * FROM appointment "
 				+"WHERE patnum = '"+patNum.ToString()+"' "
 				+"ORDER BY AptDateTime";
-			DataTable table=Db.GetTable(command);
-			return TableToObjects(table);
+			return Crud.AppointmentCrud.SelectMany(command);
 		}
 
 		///<summary>Gets one appointment from db.  Returns null if not found.</summary>
@@ -159,12 +153,7 @@ namespace OpenDentBusiness{
 			}
 			string command="SELECT * FROM appointment "
 				+"WHERE AptNum = '"+POut.Long(aptNum)+"'";
-			DataTable table=Db.GetTable(command);
-			List<Appointment> list=TableToObjects(table);
-			if(list.Count==0) {
-				return null;
-			}
-			return list[0];
+			return Crud.AppointmentCrud.SelectOne(command);
 		}
 
 		///<summary></summary>
@@ -177,12 +166,7 @@ namespace OpenDentBusiness{
 			}
 			string command="SELECT * FROM appointment "
 				+"WHERE NextAptNum = '"+POut.Long(nextAptNum)+"'";
-			DataTable table=Db.GetTable(command);
-			List<Appointment> list=TableToObjects(table);
-			if(list.Count==0) {
-				return null;
-			}
-			return list[0];
+			return Crud.AppointmentCrud.SelectOne(command);
 		}
 
 		///<summary>Gets a list of all future appointments which are either sched or ASAP.  Ordered by dateTime</summary>
@@ -196,8 +180,7 @@ namespace OpenDentBusiness{
 				+"AND (aptstatus = "+(int)ApptStatus.Scheduled+" "
 				+"OR aptstatus = "+(int)ApptStatus.ASAP+") "
 				+"ORDER BY AptDateTime";
-			DataTable table=Db.GetTable(command);
-			return TableToObjects(table);
+			return Crud.AppointmentCrud.SelectMany(command);
 		}
 
 		///<summary>Gets a list of aptNums for one day in the schedule for a given set of providers.</summary>
@@ -234,8 +217,7 @@ namespace OpenDentBusiness{
 			}
 			string command="SELECT * FROM appointment WHERE DateTStamp > "+POut.DateT(changedSince)
 				+" AND AptDateTime > "+POut.DateT(excludeOlderThan);
-			DataTable table=Db.GetTable(command);
-			return TableToObjects(table);
+			return Crud.AppointmentCrud.SelectMany(command);
 		}
 
 		///<summary>A list of strings.  Each string corresponds to one appointment in the supplied list.  Each string is a comma delimited list of codenums of the procedures attached to the appointment.</summary>
@@ -272,62 +254,14 @@ namespace OpenDentBusiness{
 			return retVal;
 		}
 
-		/*
-		///<summary>Returns a list of Appointments using the supplied SQL command.</summary>
-		private static List<Appointment> FillList(string command) {
-			DataTable table=Db.GetTable(command);
-			return TableToObjects(table);
-		}*/
-
-		/*//<summary>Called when closing FormApptEdit with an OK in order to reattach the procedures to the appointment.</summary>
-		public static void UpdateAttached(int aptNum,int[] procNums,bool isPlanned){
-			//detach all procs from this appt.
-			string command;
-			if(isPlanned){
-				command="UPDATE procedurelog SET PlannedAptNum=0 WHERE PlannedAptNum="+POut.PInt(aptNum);
-			}
-			else{
-				command="UPDATE procedurelog SET AptNum=0 WHERE AptNum="+POut.PInt(aptNum);
-			}
-			Db.NonQ(command);
-			//now, attach all
-			for(int i=0;i<procNums.Length;i++){
-				if(isPlanned) {
-					command="UPDATE procedurelog SET PlannedAptNum="+POut.PInt(aptNum)+" WHERE ProcNum="+POut.PInt(procNums[i]);
-				}
-				else {
-					command="UPDATE procedurelog SET AptNum="+POut.PInt(aptNum)+" WHERE ProcNum="+POut.PInt(procNums[i]);
-				}
-				Db.NonQ(command);
-			}
-		}*/
-
-		/*
-
-		///<summary></summary>
-		public static void InsertOrUpdate(Appointment appt,Appointment oldApt,bool IsNew) {
-			//if(){
-			//throw new Exception(Lans.g(this,""));
-			//}
-			if(IsNew) {
-				Insert(appt);
-			}
-			else {
-				if(oldApt==null) {
-					throw new ApplicationException("oldApt cannot be null if updating.");
-				}
-				Update(appt,oldApt);
-			}
-		}*/
-
 		public static void Insert(Appointment appt) {
 			InsertIncludeAptNum(appt,false);
 		}
 
 		///<summary>Set includeAptNum to true only in rare situations.  Like when we are inserting for eCW.</summary>
-		public static long InsertIncludeAptNum(Appointment appt,bool includeAptNum) {
+		public static long InsertIncludeAptNum(Appointment appt,bool useExistingPK) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				appt.AptNum=Meth.GetLong(MethodBase.GetCurrentMethod(),appt,includeAptNum);
+				appt.AptNum=Meth.GetLong(MethodBase.GetCurrentMethod(),appt,useExistingPK);
 				return appt.AptNum;
 			}
 			//make sure all fields are properly filled:
@@ -337,208 +271,16 @@ namespace OpenDentBusiness{
 			if(appt.ProvNum==0){
 				appt.ProvNum=ProviderC.List[0].ProvNum;
 			}
-			//now, save to db----------------------------------------------------------------------------------------
-			if(!includeAptNum && PrefC.RandomKeys) {
-				appt.AptNum=ReplicationServers.GetKey("appointment","AptNum");
-			}
-			string command="INSERT INTO appointment (";
-			if(includeAptNum || PrefC.RandomKeys) {
-				command+="AptNum,";
-			}
-			command+="patnum,aptstatus, "
-				+"pattern,confirmed,TimeLocked,op,note,provnum,"
-				+"provhyg,aptdatetime,nextaptnum,unschedstatus,isnewpatient,procdescript,"
-				+"Assistant,ClinicNum,IsHygiene,"//DateTStamp
-				+"DateTimeArrived,DateTimeSeated,DateTimeDismissed,InsPlan1,InsPlan2) VALUES(";
-			if(includeAptNum || PrefC.RandomKeys) {
-				command+="'"+POut.Long(appt.AptNum)+"', ";
-			}
-			command+=
-				 "'"+POut.Long   (appt.PatNum)+"', "
-				+"'"+POut.Long   ((int)appt.AptStatus)+"', "
-				+"'"+POut.String(appt.Pattern)+"', "
-				+"'"+POut.Long   (appt.Confirmed)+"', "
-				+"'"+POut.Bool  (appt.TimeLocked)+"', "
-				+"'"+POut.Long   (appt.Op)+"', "
-				+"'"+POut.String(appt.Note)+"', "
-				+"'"+POut.Long   (appt.ProvNum)+"', "
-				+"'"+POut.Long   (appt.ProvHyg)+"', "
-				+POut.DateT (appt.AptDateTime)+", "
-				+"'"+POut.Long   (appt.NextAptNum)+"', "
-				+"'"+POut.Long   (appt.UnschedStatus)+"', "
-				+"'"+POut.Bool  (appt.IsNewPatient)+"', "
-				+"'"+POut.String(appt.ProcDescript)+"', "
-				+"'"+POut.Long   (appt.Assistant)+"', "
-				+"'"+POut.Long   (appt.ClinicNum)+"', "
-				+"'"+POut.Bool  (appt.IsHygiene)+"', "
-				    +POut.DateT (appt.DateTimeArrived)+", "
-				    +POut.DateT (appt.DateTimeSeated)+", "
-				    +POut.DateT (appt.DateTimeDismissed)+", "
-				+"'"+POut.Long		(appt.InsPlan1)+"', "
-				+"'"+POut.Long		(appt.InsPlan2)+"')";
-				//DateTStamp
-			if(includeAptNum || PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				appt.AptNum=Db.NonQ(command,true);
-			}
-			return appt.AptNum;
+			return Crud.AppointmentCrud.Insert(appt,useExistingPK);
 		}
 
-		//public static void SaveData(Appointment apt) {
-
-		//}
-
 		///<summary>Updates only the changed columns and returns the number of rows affected.  Supply an oldApt for comparison.</summary>
-		public static long Update(Appointment appt,Appointment oldApt) {
+		public static void Update(Appointment appointment,Appointment oldAppointment) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetLong(MethodBase.GetCurrentMethod(),appt,oldApt);
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),appointment,oldAppointment);
+				return;
 			}
-			bool comma=false;
-			string c = "UPDATE appointment SET ";
-			if(appt.PatNum!=oldApt.PatNum){
-				c+="PatNum = '"      +POut.Long   (appt.PatNum)+"'";
-				comma=true;
-			}
-			if(appt.AptStatus!=oldApt.AptStatus){
-				if(comma) c+=",";
-				c+="AptStatus = '"   +POut.Long   ((int)appt.AptStatus)+"'";
-				comma=true;
-			}
-			if(appt.Pattern!=oldApt.Pattern){
-				if(comma) c+=",";
-				c+="Pattern = '"     +POut.String(appt.Pattern)+"'";
-				comma=true;
-			}
-			if(appt.Confirmed!=oldApt.Confirmed){
-				if(comma) c+=",";
-				c+="Confirmed = '"   +POut.Long   (appt.Confirmed)+"'";
-				comma=true;
-			}
-			if(appt.TimeLocked!=oldApt.TimeLocked){
-				if(comma) c+=",";
-				c+="TimeLocked = '"     +POut.Bool (appt.TimeLocked)+"'";
-				comma=true;
-			}
-			if(appt.Op!=oldApt.Op){
-				if(comma) c+=",";
-				c+="Op = '"          +POut.Long   (appt.Op)+"'";
-				comma=true;
-			}
-			if(appt.Note!=oldApt.Note){
-				if(comma) c+=",";
-				c+="Note = '"        +POut.String(appt.Note)+"'";
-				comma=true;
-			}
-			if(appt.ProvNum!=oldApt.ProvNum){
-				if(comma) c+=",";
-				c+="ProvNum = '"     +POut.Long   (appt.ProvNum)+"'";
-				comma=true;
-			}
-			if(appt.ProvHyg!=oldApt.ProvHyg){
-				if(comma) c+=",";
-				c+="ProvHyg = '"     +POut.Long   (appt.ProvHyg)+"'";
-				comma=true;
-			}
-			if(appt.AptDateTime!=oldApt.AptDateTime){
-				if(comma) c+=",";
-				c+="AptDateTime = " +POut.DateT (appt.AptDateTime)+"";
-				comma=true;
-			}
-			if(appt.NextAptNum!=oldApt.NextAptNum){
-				if(comma) c+=",";
-				c+="NextAptNum = '"  +POut.Long   (appt.NextAptNum)+"'";
-				comma=true;
-			}
-			if(appt.UnschedStatus!=oldApt.UnschedStatus){
-				if(comma) c+=",";
-				c+="UnschedStatus = '" +POut.Long(appt.UnschedStatus)+"'";
-				comma=true;
-			}
-			//if(appt.Lab!=oldApt.Lab){
-			//	if(comma) c+=",";
-			//	c+="Lab = '"         +POut.PInt   ((int)appt.Lab)+"'";
-			//	comma=true;
-			//}
-			if(appt.IsNewPatient!=oldApt.IsNewPatient){
-				if(comma) c+=",";
-				c+="IsNewPatient = '"+POut.Bool  (appt.IsNewPatient)+"'";
-				comma=true;
-			}
-			if(appt.ProcDescript!=oldApt.ProcDescript){
-				if(comma) c+=",";
-				c+="ProcDescript = '"+POut.String(appt.ProcDescript)+"'";
-				comma=true;
-			}
-			if(appt.Assistant!=oldApt.Assistant){
-				if(comma) c+=",";
-				c+="Assistant = '"   +POut.Long   (appt.Assistant)+"'";
-				comma=true;
-			}
-			/*
-			if(appt.InstructorNum!=oldApt.InstructorNum){
-				if(comma) c+=",";
-				c+="InstructorNum = '"   +POut.PInt   (appt.InstructorNum)+"'";
-				comma=true;
-			}
-			if(appt.SchoolClassNum!=oldApt.SchoolClassNum){
-				if(comma) c+=",";
-				c+="SchoolClassNum = '"   +POut.PInt   (appt.SchoolClassNum)+"'";
-				comma=true;
-			}
-			if(appt.SchoolCourseNum!=oldApt.SchoolCourseNum){
-				if(comma) c+=",";
-				c+="SchoolCourseNum = '"   +POut.PInt   (appt.SchoolCourseNum)+"'";
-				comma=true;
-			}
-			if(appt.GradePoint!=oldApt.GradePoint){
-				if(comma) c+=",";
-				c+="GradePoint = '"   +POut.PFloat  (appt.GradePoint)+"'";
-				comma=true;
-			}*/
-			if(appt.ClinicNum!=oldApt.ClinicNum){
-				if(comma) c+=",";
-				c+="ClinicNum = '"   +POut.Long  (appt.ClinicNum)+"'";
-				comma=true;
-			}
-			if(appt.IsHygiene!=oldApt.IsHygiene){
-				if(comma) c+=",";
-				c+="IsHygiene = '"   +POut.Bool (appt.IsHygiene)+"'";
-				comma=true;
-			}
-			//DateTStamp
-			if(appt.DateTimeArrived!=oldApt.DateTimeArrived){
-				if(comma) c+=",";
-				c+="DateTimeArrived = "   +POut.DateT(appt.DateTimeArrived);
-				comma=true;
-			}
-			if(appt.DateTimeSeated!=oldApt.DateTimeSeated){
-				if(comma) c+=",";
-				c+="DateTimeSeated = "   +POut.DateT(appt.DateTimeSeated);
-				comma=true;
-			}
-			if(appt.DateTimeDismissed!=oldApt.DateTimeDismissed){
-				if(comma) c+=",";
-				c+="DateTimeDismissed = "   +POut.DateT(appt.DateTimeDismissed);
-				comma=true;
-			}
-			if(appt.InsPlan1!=oldApt.InsPlan1){
-				if(comma) c+=",";
-				c+="InsPlan1 = "+POut.Long(appt.InsPlan1);
-				comma=true;
-			}
-			if(appt.InsPlan2!=oldApt.InsPlan1) {
-				if(comma) c+=",";
-				c+="InsPlan2 = "+POut.Long(appt.InsPlan2);
-				comma=true;
-			}
-			if(!comma)
-				return 0;//this means no change is actually required.
-			c+=" WHERE AptNum = '"+POut.Long(appt.AptNum)+"'";
- 			long rowsChanged=Db.NonQ(c);
-			//MessageBox.Show(c);
-			return rowsChanged;
+			Crud.AppointmentCrud.Update(appointment,oldAppointment);
 		}
 
 		///<summary>Used in Chart module to test whether a procedure is attached to an appointment with today's date. The procedure might have a different date if still TP status.  ApptList should include all appointments for this patient. Does not make a call to db.</summary>
@@ -750,52 +492,13 @@ namespace OpenDentBusiness{
 				+"WHERE AptNum="+POut.Long(aptNum);
 			Db.NonQ(command);
 		}
-
+		
 		public static Appointment TableToObject(DataTable table) {
 			//No need to check RemotingRole; no call to db.
 			if(table.Rows.Count==0) {
 				return null;
 			}
-			return TableToObjects(table)[0];
-		}
-
-		public static List<Appointment> TableToObjects(DataTable table) {
-			//No need to check RemotingRole; no call to db.
-			List<Appointment> list=new List<Appointment>();
-			Appointment apt;
-			for(int i=0;i<table.Rows.Count;i++) {
-				apt=new Appointment();
-				apt.AptNum         =PIn.Long(table.Rows[i][0].ToString());
-				apt.PatNum         =PIn.Long(table.Rows[i][1].ToString());
-				apt.AptStatus      =(ApptStatus)PIn.Long(table.Rows[i][2].ToString());
-				apt.Pattern        =PIn.String(table.Rows[i][3].ToString());
-				apt.Confirmed      =PIn.Long(table.Rows[i][4].ToString());
-				apt.TimeLocked     =PIn.Bool(table.Rows[i][5].ToString());
-				apt.Op             =PIn.Long(table.Rows[i][6].ToString());
-				apt.Note           =PIn.String(table.Rows[i][7].ToString());
-				apt.ProvNum        =PIn.Long(table.Rows[i][8].ToString());
-				apt.ProvHyg        =PIn.Long(table.Rows[i][9].ToString());
-				apt.AptDateTime    =PIn.DateT(table.Rows[i][10].ToString());
-				apt.NextAptNum     =PIn.Long(table.Rows[i][11].ToString());
-				apt.UnschedStatus  =PIn.Long(table.Rows[i][12].ToString());
-				apt.IsNewPatient   =PIn.Bool(table.Rows[i][13].ToString());
-				apt.ProcDescript   =PIn.String(table.Rows[i][14].ToString());
-				apt.Assistant      =PIn.Long(table.Rows[i][15].ToString());
-				//apt.InstructorNum  =PIn.PInt(table.Rows[i][16].ToString());
-				//apt.SchoolClassNum =PIn.PInt(table.Rows[i][17].ToString());
-				//apt.SchoolCourseNum=PIn.PInt(table.Rows[i][18].ToString());
-				//apt.GradePoint     =PIn.PFloat(table.Rows[i][19].ToString());
-				apt.ClinicNum      =PIn.Long(table.Rows[i][16].ToString());
-				apt.IsHygiene      =PIn.Bool(table.Rows[i][17].ToString());
-				//DateTStamp
-				apt.DateTimeArrived=PIn.DateT(table.Rows[i][19].ToString());
-				apt.DateTimeSeated =PIn.DateT(table.Rows[i][20].ToString());
-				apt.DateTimeDismissed=PIn.DateT(table.Rows[i][21].ToString());
-				apt.InsPlan1=PIn.Long(table.Rows[i][22].ToString());
-				apt.InsPlan2=PIn.Long(table.Rows[i][23].ToString());
-				list.Add(apt);
-			}
-			return list;
+			return Crud.AppointmentCrud.TableToList(table)[0];
 		}
 
 		///<summary></summary>

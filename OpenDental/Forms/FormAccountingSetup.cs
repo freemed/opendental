@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDental.UI;
@@ -39,7 +40,7 @@ namespace OpenDental{
 		private long PickedPayAccountNum;
 		private OpenDental.UI.ODGrid gridMain;
 		///<summary>Arraylist of AccountingAutoPays.</summary>
-		private ArrayList payAL;
+		private List<AccountingAutoPay> payList;
 
 		///<summary></summary>
 		public FormAccountingSetup()
@@ -347,18 +348,19 @@ namespace OpenDental{
 			}
 			FillDepList();
 			PickedDepAccountNum=PrefC.GetLong(PrefName.AccountingIncomeAccount);
-			textAccountInc.Text=AccountC.GetDescript(PickedDepAccountNum);
+			textAccountInc.Text=Accounts.GetDescript(PickedDepAccountNum);
 			//pay----------------------------------------------------------
-			payAL=AccountingAutoPayC.AList;//Count might be 0
+			payList=new List<AccountingAutoPay>();
+			payList.AddRange(AccountingAutoPays.Listt);//Count might be 0
 			FillPayGrid();
 			PickedPayAccountNum=PrefC.GetLong(PrefName.AccountingCashIncomeAccount);
-			textAccountCashInc.Text=AccountC.GetDescript(PickedPayAccountNum);
+			textAccountCashInc.Text=Accounts.GetDescript(PickedPayAccountNum);
 		}
 
 		private void FillDepList(){
 			listAccountsDep.Items.Clear();
 			for(int i=0;i<depAL.Count;i++){
-				listAccountsDep.Items.Add(AccountC.GetDescript((long)depAL[i]));
+				listAccountsDep.Items.Add(Accounts.GetDescript((long)depAL[i]));
 			}
 		}
 
@@ -371,10 +373,10 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
-			for(int i=0;i<payAL.Count;i++){
+			for(int i=0;i<payList.Count;i++){
 				row=new ODGridRow();
-				row.Cells.Add(DefC.GetName(DefCat.PaymentTypes,((AccountingAutoPay)payAL[i]).PayType));
-				row.Cells.Add(AccountingAutoPays.GetPickListDesc((AccountingAutoPay)payAL[i]));
+				row.Cells.Add(DefC.GetName(DefCat.PaymentTypes,payList[i].PayType));
+				row.Cells.Add(AccountingAutoPays.GetPickListDesc(payList[i]));
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
@@ -406,15 +408,15 @@ namespace OpenDental{
 				return;
 			}
 			PickedDepAccountNum=FormA.SelectedAccount.AccountNum;
-			textAccountInc.Text=AccountC.GetDescript(PickedDepAccountNum);
+			textAccountInc.Text=Accounts.GetDescript(PickedDepAccountNum);
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			FormAccountingAutoPayEdit FormA=new FormAccountingAutoPayEdit();
-			FormA.AutoPayCur=(AccountingAutoPay)payAL[e.Row];
+			FormA.AutoPayCur=payList[e.Row];
 			FormA.ShowDialog();
 			if(FormA.AutoPayCur==null){//user deleted
-				payAL.RemoveAt(e.Row);
+				payList.RemoveAt(e.Row);
 			}
 			FillPayGrid();
 		}
@@ -427,7 +429,7 @@ namespace OpenDental{
 			if(FormA.ShowDialog()!=DialogResult.OK) {
 				return;
 			}
-			payAL.Add(autoPay);
+			payList.Add(autoPay);
 			FillPayGrid();
 		}
 
@@ -438,7 +440,7 @@ namespace OpenDental{
 				return;
 			}
 			PickedPayAccountNum=FormA.SelectedAccount.AccountNum;
-			textAccountCashInc.Text=AccountC.GetDescript(PickedPayAccountNum);
+			textAccountCashInc.Text=Accounts.GetDescript(PickedPayAccountNum);
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
@@ -456,7 +458,7 @@ namespace OpenDental{
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}
 			//pay------------------------------------------------------------------------------------------
-			AccountingAutoPays.SaveList(payAL);//just deletes them all and starts over
+			AccountingAutoPays.SaveList(payList);//just deletes them all and starts over
 			DataValid.SetInvalid(InvalidType.AccountingAutoPays);
 			if(Prefs.UpdateLong(PrefName.AccountingCashIncomeAccount,PickedPayAccountNum)) {
 				DataValid.SetInvalid(InvalidType.Prefs);

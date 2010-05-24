@@ -10,11 +10,40 @@ using System.Windows.Forms;
 namespace OpenDentBusiness{
 	
 	public class Accounts {
+		private static Account[] listLong;
+		private static Account[] listShort;
+
+		///<summary></summary>
+		public static Account[] ListLong {
+			get {
+				if(listLong==null) {
+					RefreshCache();
+				}
+				return listLong;
+			}
+			set {
+				listLong=value;
+			}
+		}
+
+		///<summary>Used for display. Does not include inactive</summary>
+		public static Account[] ListShort {
+			get {
+				if(listShort==null) {
+					RefreshCache();
+				}
+				return listShort;
+			}
+			set {
+				listShort=value;
+			}
+		}
+
 		///<summary></summary>
 		public static DataTable RefreshCache() {
 			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
 			string command=
-				"SELECT * from account "
+				"SELECT * FROM account "
 				+" ORDER BY AcctType,Description";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="Account";
@@ -24,22 +53,14 @@ namespace OpenDentBusiness{
 
 		private static void FillCache(DataTable table){
 			//No need to check RemotingRole; no call to db.
-			AccountC.ListLong=new Account[table.Rows.Count];
-			ArrayList AL=new ArrayList();
-			for(int i=0;i<AccountC.ListLong.Length;i++) {
-				AccountC.ListLong[i]=new Account();
-				AccountC.ListLong[i].AccountNum  = PIn.Long(table.Rows[i][0].ToString());
-				AccountC.ListLong[i].Description = PIn.String(table.Rows[i][1].ToString());
-				AccountC.ListLong[i].AcctType    = (AccountType)PIn.Int(table.Rows[i][2].ToString());
-				AccountC.ListLong[i].BankNumber  = PIn.String(table.Rows[i][3].ToString());
-				AccountC.ListLong[i].Inactive    = PIn.Bool(table.Rows[i][4].ToString());
-				AccountC.ListLong[i].AccountColor= Color.FromArgb(PIn.Int(table.Rows[i][5].ToString()));
-				if(!AccountC.ListLong[i].Inactive) {
-					AL.Add(AccountC.ListLong[i].Clone());
+			listLong=Crud.AccountCrud.TableToList(table).ToArray();
+			List<Account> list=new List<Account>();
+			for(int i=0;i<listLong.Length;i++){
+				if(!listLong[i].Inactive) {
+					list.Add(listLong[i].Clone());
 				}
 			}
-			AccountC.ListShort=new Account[AL.Count];
-			AL.CopyTo(AccountC.ListShort);
+			listShort=list.ToArray();
 		}
 
 		///<summary></summary>
@@ -58,6 +79,32 @@ namespace OpenDentBusiness{
 				return;
 			}
 			Crud.AccountCrud.Update(acct);
+		}
+
+		///<summary>Loops through listLong to find a description for the specified account.  0 returns an empty string.</summary>
+		public static string GetDescript(long accountNum){
+			if(accountNum==0) {
+				return "";
+			}
+			for(int i=0;i<ListLong.Length;i++){
+				if(ListLong[i].AccountNum==accountNum){
+					return ListLong[i].Description;
+				}
+			}
+			return "";
+		}
+
+		///<summary>Loops through listLong to find an account.  Will return null if accountNum is 0.</summary>
+		public static Account GetAccount(long accountNum) {
+			if(accountNum==0){
+				return null;
+			}
+			for(int i=0;i<ListLong.Length;i++) {
+				if(ListLong[i].AccountNum==accountNum) {
+					return ListLong[i].Clone();
+				}
+			}
+			return null;//just in case
 		}
 
 		///<summary>Throws exception if account is in use.</summary>
@@ -92,8 +139,8 @@ namespace OpenDentBusiness{
 				throw new ApplicationException(Lans.g("FormAccountEdit","Account is in use in the setup section."));
 			}
 			//check AccountingAutoPay entries
-			for(int i=0;i<AccountingAutoPayC.AList.Count;i++){
-				strArray=((AccountingAutoPay)AccountingAutoPayC.AList[i]).PickList.Split(new char[] { ',' });
+			for(int i=0;i<AccountingAutoPays.Listt.Count;i++){
+				strArray=AccountingAutoPays.Listt[i].PickList.Split(new char[] { ',' });
 				for(int s=0;s<strArray.Length;s++){
 					if(strArray[s]==acct.AccountNum.ToString()){
 						throw new ApplicationException(Lans.g("FormAccountEdit","Account is in use in the setup section."));
@@ -165,7 +212,7 @@ namespace OpenDentBusiness{
 		///<summary>Checks the loaded prefs and accountingAutoPays to see if user has setup auto pay linking.  Returns true if so.</summary>
 		public static bool PaymentsLinked() {
 			//No need to check RemotingRole; no call to db.
-			if(AccountingAutoPayC.AList.Count==0){
+			if(AccountingAutoPays.Listt.Count==0){
 				return false;
 			}
 			if(PrefC.GetLong(PrefName.AccountingIncomeAccount)==0) {

@@ -4095,7 +4095,7 @@ namespace OpenDental{
 				ClaimCur.ProvBill=ProviderC.List[comboProvBill.SelectedIndex].ProvNum;
 			}
 			ClaimCur.IsOrtho=checkIsOrtho.Checked;
-			ClaimCur.OrthoRemainM=PIn.Int(textOrthoRemainM.Text);
+			ClaimCur.OrthoRemainM=PIn.Byte(textOrthoRemainM.Text);
 			ClaimCur.OrthoDate=PIn.Date(textOrthoDate.Text);
 			ClaimCur.RefNumString=textRefNum.Text;
 			ClaimCur.PlaceService=(PlaceOfService)comboPlaceService.SelectedIndex;
@@ -4123,7 +4123,7 @@ namespace OpenDental{
 				ClaimCur.ClinicNum=Clinics.List[comboClinic.SelectedIndex-1].ClinicNum;
 			}
 			//attachments
-			ClaimCur.Radiographs=PIn.Int(textRadiographs.Text);
+			ClaimCur.Radiographs=PIn.Byte(textRadiographs.Text);
 			ClaimCur.AttachedImages=PIn.Int(textAttachImages.Text);
 			ClaimCur.AttachedModels=PIn.Int(textAttachModels.Text);
 			List<string> flags=new List<string>();

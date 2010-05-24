@@ -6,14 +6,16 @@ using System.Text;
 
 namespace OpenDentBusiness{
 
-		///<summary>The claim table holds information about individual claims.  Each row represents one claim.</summary>
-	public class Claim{
+	///<summary>The claim table holds information about individual claims.  Each row represents one claim.</summary>
+	[Serializable()]
+	public class Claim:TableBase{
 		///<summary>Primary key</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long ClaimNum;
 		///<summary>FK to patient.PatNum</summary>
 		public long PatNum;//
 		///<summary>Usually the same date as the procedures, but it can be changed if you wish.</summary>
-		public DateTime DateService;//
+		public DateTime DateService;
 		///<summary>Usually the date it was created.  It might be sent a few days later if you don't send your e-claims every day.</summary>
 		public DateTime DateSent;
 		///<summary>Single char: U,H,W,P,S,or R.  U=Unsent, H=Hold until pri received, W=Waiting in queue, S=Sent, R=Received.  A(adj) is no longer used.  P(prob sent) is no longer used.</summary>
@@ -63,7 +65,7 @@ namespace OpenDentBusiness{
 		///<summary>True if is ortho.</summary>
 		public bool IsOrtho;
 		///<summary>Remaining months of ortho. Valid values are 1-36.</summary>
-		public int OrthoRemainM;
+		public byte OrthoRemainM;
 		///<summary>Date ortho appliance placed.</summary>
 		public DateTime OrthoDate;
 		///<summary>Enum:Relat  Relationship to subscriber.  The relationship is copied from InsPlan when the claim is created.  It might need to be changed in both places.</summary>
@@ -75,7 +77,7 @@ namespace OpenDentBusiness{
 		///<summary>Sum of ClaimProc.Writeoff for this claim.</summary>
 		public double WriteOff;
 		///<summary>The number of x-rays enclosed.</summary>
-		public int Radiographs;
+		public byte Radiographs;
 		///<summary>FK to clinic.ClinicNum.  0 if no clinic.  Since one claim cannot have procs from multiple clinics, the clinicNum is set when creating the claim and then cannot be changed.  The claim would have to be deleted and recreated.  Otherwise, if changing at the claim level, a feature would have to be added that synched all procs, claimprocs, and probably some other tables.</summary>
 		public long ClinicNum;
 		///<summary>FK to claimform.ClaimFormNum.  0 if not assigned to use the claimform for the insplan.</summary>
@@ -92,6 +94,7 @@ namespace OpenDentBusiness{
 		public string AttachmentID;
 
 		///<summary>Not a data column.</summary>
+		[CrudColumn(IsNotDbColumn=true)]
 		public List<ClaimAttach> Attachments;
 
 		public Claim(){

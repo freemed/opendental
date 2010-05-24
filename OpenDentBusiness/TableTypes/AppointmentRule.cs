@@ -4,8 +4,10 @@ using System.Collections;
 namespace OpenDentBusiness{
 	
 	///<summary>For now, the rule is simple. It simply blocks all double booking of the specified code range.  The double booking would have to be for the same provider.  This can later be extended to provide more complex rules, such as partial double booking, time limitations, etc.</summary>
-	public class AppointmentRule{
+	[Serializable()]
+	public class AppointmentRule:TableBase{
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long AppointmentRuleNum;
 		///<summary>The description of the rule which will be displayed to the user.</summary>
 		public string RuleDesc;
@@ -18,13 +20,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Returns a copy of this AppointmentRule.</summary>
 		public AppointmentRule Clone(){
-			AppointmentRule a=new AppointmentRule();
-			a.AppointmentRuleNum=AppointmentRuleNum;
-			a.RuleDesc=RuleDesc;
-			a.CodeStart=CodeStart;
-			a.CodeEnd=CodeEnd;
-			a.IsEnabled=IsEnabled;
-			return a;
+			return (AppointmentRule)this.MemberwiseClone();
 		}
 
 	}

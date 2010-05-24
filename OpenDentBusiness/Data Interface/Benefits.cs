@@ -28,26 +28,7 @@ namespace OpenDentBusiness {
 			}
 			string command="SELECT * FROM benefit"
 				+" WHERE"+s;
-			//Debug.WriteLine(command);
-			DataTable table=Db.GetTable(command);
-			List<Benefit> list=new List<Benefit>();
-			Benefit ben;
-			for(int i=0;i<table.Rows.Count;i++) {
-				ben=new Benefit();
-				ben.BenefitNum       = PIn.Long(table.Rows[i][0].ToString());
-				ben.PlanNum          = PIn.Long(table.Rows[i][1].ToString());
-				ben.PatPlanNum       = PIn.Long(table.Rows[i][2].ToString());
-				ben.CovCatNum        = PIn.Long(table.Rows[i][3].ToString());
-				ben.BenefitType      = (InsBenefitType)PIn.Long(table.Rows[i][4].ToString());
-				ben.Percent          = PIn.Int(table.Rows[i][5].ToString());
-				ben.MonetaryAmt      = PIn.Double(table.Rows[i][6].ToString());
-				ben.TimePeriod       = (BenefitTimePeriod)PIn.Long(table.Rows[i][7].ToString());
-				ben.QuantityQualifier= (BenefitQuantity)PIn.Long(table.Rows[i][8].ToString());
-				ben.Quantity         = PIn.Int(table.Rows[i][9].ToString());
-				ben.CodeNum          = PIn.Long(table.Rows[i][10].ToString());
-				ben.CoverageLevel    = (BenefitCoverageLevel)PIn.Long(table.Rows[i][11].ToString());
-				list.Add(ben);
-			}
+			List<Benefit> list=Crud.BenefitCrud.SelectMany(command);
 			list.Sort();
 			return list;
 		}
@@ -64,26 +45,7 @@ namespace OpenDentBusiness {
 			if(patPlanNum!=0) {
 				command+=" OR PatPlanNum = "+POut.Long(patPlanNum);
 			}
-			DataTable table=Db.GetTable(command);
-			List<Benefit> retVal=new List<Benefit>();
-			Benefit ben;
-			for(int i=0;i<table.Rows.Count;i++) {
-				ben=new Benefit();
-				ben.BenefitNum       = PIn.Long(table.Rows[i][0].ToString());
-				ben.PlanNum          = PIn.Long(table.Rows[i][1].ToString());
-				ben.PatPlanNum       = PIn.Long(table.Rows[i][2].ToString());
-				ben.CovCatNum        = PIn.Long(table.Rows[i][3].ToString());
-				ben.BenefitType      = (InsBenefitType)PIn.Long(table.Rows[i][4].ToString());
-				ben.Percent          = PIn.Int(table.Rows[i][5].ToString());
-				ben.MonetaryAmt      = PIn.Double(table.Rows[i][6].ToString());
-				ben.TimePeriod       = (BenefitTimePeriod)PIn.Long(table.Rows[i][7].ToString());
-				ben.QuantityQualifier= (BenefitQuantity)PIn.Long(table.Rows[i][8].ToString());
-				ben.Quantity         = PIn.Int(table.Rows[i][9].ToString());
-				ben.CodeNum          = PIn.Long(table.Rows[i][10].ToString());
-				ben.CoverageLevel    = (BenefitCoverageLevel)PIn.Long(table.Rows[i][11].ToString());
-				retVal.Add(ben);
-			}
-			return retVal;
+			return Crud.BenefitCrud.SelectMany(command);
 		}
 
 
@@ -95,7 +57,6 @@ namespace OpenDentBusiness {
 			if(like.CarrierNum==0){
 				return new List<Benefit>();
 			}
-
 			//We might try creating a temporary table out of the matched insurance plans, then join with
 			//the benefits table so that the query could be sped up.
 			//Get benefits for all identical plans
@@ -110,23 +71,7 @@ namespace OpenDentBusiness {
 				+"AND i.DivisionNo = '"+POut.String(like.DivisionNo)+"'"
 				+"AND i.CarrierNum = '"+POut.Long(like.CarrierNum)+"' "
 				+"AND i.IsMedical = '"+POut.Bool(like.IsMedical)+"' ";
-			DataTable table=Db.GetTable(command);
-			Benefit[] benList=new Benefit[table.Rows.Count];
-			for(int i=0;i<table.Rows.Count;i++) {
-				benList[i]=new Benefit();
-				benList[i].BenefitNum=PIn.Long(table.Rows[i][0].ToString());
-				benList[i].PlanNum=PIn.Long(table.Rows[i][1].ToString());
-				benList[i].PatPlanNum=PIn.Long(table.Rows[i][2].ToString());
-				benList[i].CovCatNum=PIn.Long(table.Rows[i][3].ToString());
-				benList[i].BenefitType=(InsBenefitType)PIn.Long(table.Rows[i][4].ToString());
-				benList[i].Percent=PIn.Int(table.Rows[i][5].ToString());
-				benList[i].MonetaryAmt=PIn.Double(table.Rows[i][6].ToString());
-				benList[i].TimePeriod=(BenefitTimePeriod)PIn.Long(table.Rows[i][7].ToString());
-				benList[i].QuantityQualifier=(BenefitQuantity)PIn.Long(table.Rows[i][8].ToString());
-				benList[i].Quantity=PIn.Int(table.Rows[i][9].ToString());
-				benList[i].CodeNum=PIn.Long(table.Rows[i][10].ToString());
-				benList[i].CoverageLevel=(BenefitCoverageLevel)PIn.Long(table.Rows[i][11].ToString());
-			}
+			Benefit[] benList=Crud.BenefitCrud.SelectMany(command).ToArray();
 			////Get planNums for all identical plans
 			//string command="SELECT PlanNum FROM insplan "
 			//  //+"WHERE PlanNum != "   +POut.PInt(like.PlanNum)+" "
@@ -199,20 +144,7 @@ namespace OpenDentBusiness {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),ben);
 				return;
 			}
-			string command="UPDATE benefit SET " 
-				+"PlanNum = '"          +POut.Long   (ben.PlanNum)+"'"
-				+",PatPlanNum = '"      +POut.Long   (ben.PatPlanNum)+"'"
-				+",CovCatNum = '"       +POut.Long   (ben.CovCatNum)+"'"
-				+",BenefitType = '"     +POut.Long   ((int)ben.BenefitType)+"'"
-				+",Percent = '"         +POut.Long   (ben.Percent)+"'"
-				+",MonetaryAmt = '"     +POut.Double(ben.MonetaryAmt)+"'"
-				+",TimePeriod = '"      +POut.Long   ((int)ben.TimePeriod)+"'"
-				+",QuantityQualifier ='"+POut.Long   ((int)ben.QuantityQualifier)+"'"
-				+",Quantity = '"        +POut.Long   (ben.Quantity)+"'"
-				+",CodeNum = '"         +POut.Long   (ben.CodeNum)+"'"
-				+",CoverageLevel = '"   +POut.Long   ((int)ben.CoverageLevel)+"'"
-				+" WHERE BenefitNum  ='"+POut.Long   (ben.BenefitNum)+"'";
-			Db.NonQ(command);
+			Crud.BenefitCrud.Update(ben);
 		}
 
 		///<summary></summary>
@@ -221,37 +153,7 @@ namespace OpenDentBusiness {
 				ben.BenefitNum=Meth.GetLong(MethodBase.GetCurrentMethod(),ben);
 				return ben.BenefitNum;
 			}
-			if(PrefC.RandomKeys) {
-				ben.BenefitNum=ReplicationServers.GetKey("benefit","BenefitNum");
-			}
-			string command="INSERT INTO benefit (";
-			if(PrefC.RandomKeys) {
-				command+="BenefitNum,";
-			}
-			command+="PlanNum,PatPlanNum,CovCatNum,BenefitType,Percent,MonetaryAmt,TimePeriod,"
-				+"QuantityQualifier,Quantity,CodeNum,CoverageLevel) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+="'"+POut.Long(ben.BenefitNum)+"', ";
-			}
-			command+=
-				 "'"+POut.Long(ben.PlanNum)+"', "
-				+"'"+POut.Long(ben.PatPlanNum)+"', "
-				+"'"+POut.Long(ben.CovCatNum)+"', "
-				+"'"+POut.Long((int)ben.BenefitType)+"', "
-				+"'"+POut.Long(ben.Percent)+"', "
-				+"'"+POut.Double(ben.MonetaryAmt)+"', "
-				+"'"+POut.Long((int)ben.TimePeriod)+"', "
-				+"'"+POut.Long((int)ben.QuantityQualifier)+"', "
-				+"'"+POut.Long(ben.Quantity)+"', "
-				+"'"+POut.Long(ben.CodeNum)+"', "
-				+"'"+POut.Long((int)ben.CoverageLevel)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				ben.BenefitNum=Db.NonQ(command,true);
-			}
-			return ben.BenefitNum;
+			return Crud.BenefitCrud.Insert(ben);
 		}
 
 		///<summary></summary>

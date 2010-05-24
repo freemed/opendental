@@ -20,13 +20,7 @@ namespace OpenDentBusiness{
 
 		public static void FillCache(DataTable table){
 			//No need to check RemotingRole; no call to db.
-			AutoCodeCondC.List=new AutoCodeCond[table.Rows.Count];
-			for(int i=0;i<AutoCodeCondC.List.Length;i++){
-				AutoCodeCondC.List[i]=new AutoCodeCond();
-				AutoCodeCondC.List[i].AutoCodeCondNum= PIn.Long        (table.Rows[i][0].ToString());
-				AutoCodeCondC.List[i].AutoCodeItemNum= PIn.Long        (table.Rows[i][1].ToString());
-				AutoCodeCondC.List[i].Cond=(AutoCondition)PIn.Long(table.Rows[i][2].ToString());	
-			}
+			AutoCodeCondC.List=Crud.AutoCodeCondCrud.TableToList(table).ToArray();
 		}
 
 		///<summary></summary>
@@ -35,27 +29,7 @@ namespace OpenDentBusiness{
 				Cur.AutoCodeCondNum=Meth.GetLong(MethodBase.GetCurrentMethod(),Cur);
 				return Cur.AutoCodeCondNum;
 			}
-			if(PrefC.RandomKeys) {
-				Cur.AutoCodeCondNum=ReplicationServers.GetKey("autocodecond","AutoCodeCondNum");
-			}
-			string command="INSERT INTO autocodecond (";
-			if(PrefC.RandomKeys) {
-				command+="AutoCodeCondNum,";
-			}
-			command+="AutoCodeItemNum,Cond) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+=POut.Long(Cur.AutoCodeCondNum)+", ";
-			}
-			command+=
-				 "'"+POut.Long(Cur.AutoCodeItemNum)+"', "
-				+"'"+POut.Long((int)Cur.Cond)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				Cur.AutoCodeCondNum=Db.NonQ(command,true);
-			}
-			return Cur.AutoCodeCondNum;
+			return Crud.AutoCodeCondCrud.Insert(Cur);
 		}
 
 		///<summary></summary>
@@ -64,11 +38,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
 				return;
 			}
-			string command = "UPDATE autocodecond SET "
-				+"autocodeitemnum='"+POut.Long(Cur.AutoCodeItemNum)+"'"
-				+",cond ='"     +POut.Long((int)Cur.Cond)+"'"
-				+" WHERE autocodecondnum = '"+POut.Long(Cur.AutoCodeCondNum)+"'";
-			Db.NonQ(command);
+			Crud.AutoCodeCondCrud.Update(Cur);
 		}
 
 		///<summary></summary>

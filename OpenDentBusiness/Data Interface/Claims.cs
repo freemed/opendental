@@ -60,10 +60,9 @@ namespace OpenDentBusiness{
 			}
 			string command="SELECT * FROM claim"
 				+" WHERE ClaimNum = "+claimNum.ToString();
-			DataTable table=Db.GetTable(command);
-			Claim retClaim=SubmitAndFill(table)[0];
+			Claim retClaim=Crud.ClaimCrud.SelectOne(command);
 			command="SELECT * FROM claimattach WHERE ClaimNum = "+POut.Long(claimNum);
-			table=Db.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			retClaim.Attachments=new List<ClaimAttach>();
 			ClaimAttach attach;
 			for(int i=0;i<table.Rows.Count;i++){
@@ -86,10 +85,9 @@ namespace OpenDentBusiness{
 				"SELECT * FROM claim"
 				+" WHERE PatNum = "+patNum.ToString()
 				+" ORDER BY dateservice";
-			DataTable table=Db.GetTable(command);
-			return SubmitAndFill(table);
+			return Crud.ClaimCrud.SelectMany(command);
 		}
-
+		/*
 		private static List<Claim> SubmitAndFill(DataTable table){
 			//No need to check RemotingRole; no call to db.
 			Claim tempClaim;
@@ -123,13 +121,13 @@ namespace OpenDentBusiness{
 				tempClaim.AccidentST    =		PIn.String(table.Rows[i][24].ToString());
 				tempClaim.EmployRelated=(YN)PIn.Long   (table.Rows[i][25].ToString());
 				tempClaim.IsOrtho       =		PIn.Bool  (table.Rows[i][26].ToString());
-				tempClaim.OrthoRemainM  =		PIn.Int   (table.Rows[i][27].ToString());
+				tempClaim.OrthoRemainM  =		PIn.Byte   (table.Rows[i][27].ToString());
 				tempClaim.OrthoDate     =		PIn.Date  (table.Rows[i][28].ToString());
 				tempClaim.PatRelat      =(Relat)PIn.Long(table.Rows[i][29].ToString());
 				tempClaim.PlanNum2      =   PIn.Long   (table.Rows[i][30].ToString());
 				tempClaim.PatRelat2     =(Relat)PIn.Long(table.Rows[i][31].ToString());
 				tempClaim.WriteOff      =   PIn.Double(table.Rows[i][32].ToString());
-				tempClaim.Radiographs   =   PIn.Int   (table.Rows[i][33].ToString());
+				tempClaim.Radiographs   =   PIn.Byte   (table.Rows[i][33].ToString());
 				tempClaim.ClinicNum     =   PIn.Long   (table.Rows[i][34].ToString());
 				tempClaim.ClaimForm     =   PIn.Long   (table.Rows[i][35].ToString());
 				tempClaim.EFormat       =(EtransType)PIn.Long(table.Rows[i][36].ToString());
@@ -140,7 +138,7 @@ namespace OpenDentBusiness{
 				claims.Add(tempClaim);
 			}
 			return claims;
-		}
+		}*/
 
 		public static Claim GetFromList(List<Claim> list,long claimNum) {
 			//No need to check RemotingRole; no call to db.
@@ -153,134 +151,27 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static long Insert(Claim Cur) {
+		public static long Insert(Claim claim) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Cur.ClaimNum=Meth.GetLong(MethodBase.GetCurrentMethod(),Cur);
-				return Cur.ClaimNum;
+				claim.ClaimNum=Meth.GetLong(MethodBase.GetCurrentMethod(),claim);
+				return claim.ClaimNum;
 			}
-			if(PrefC.RandomKeys){
-				Cur.ClaimNum=ReplicationServers.GetKey("claim","ClaimNum");
-			}
-			string command="INSERT INTO claim (";
-			if(PrefC.RandomKeys){
-				command+="ClaimNum,";
-			}
-			command+="patnum,dateservice,datesent,claimstatus,datereceived"
-				+",plannum,provtreat,claimfee,inspayest,inspayamt,dedapplied"
-				+",preauthstring,isprosthesis,priordate,reasonunderpaid,claimnote"
-				+",claimtype,provbill,referringprov"
-				+",refnumstring,placeservice,accidentrelated,accidentdate,accidentst"
-				+",employrelated,isortho,orthoremainm,orthodate,patrelat,plannum2"
-				+",patrelat2,writeoff,Radiographs,ClinicNum,ClaimForm,EFormat,"
-				+"AttachedImages,AttachedModels,AttachedFlags,AttachmentID) VALUES(";
-			if(PrefC.RandomKeys){
-				command+="'"+POut.Long(Cur.ClaimNum)+"', ";
-			}
-			command+=
-				 "'"+POut.Long   (Cur.PatNum)+"', "
-				+POut.Date  (Cur.DateService)+", "
-				+POut.Date  (Cur.DateSent)+", "
-				+"'"+POut.String(Cur.ClaimStatus)+"', "
-				+POut.Date  (Cur.DateReceived)+", "
-				+"'"+POut.Long   (Cur.PlanNum)+"', "
-				+"'"+POut.Long   (Cur.ProvTreat)+"', "
-				+"'"+POut.Double(Cur.ClaimFee)+"', "
-				+"'"+POut.Double(Cur.InsPayEst)+"', "
-				+"'"+POut.Double(Cur.InsPayAmt)+"', "
-				+"'"+POut.Double(Cur.DedApplied)+"', "
-				+"'"+POut.String(Cur.PreAuthString)+"', "
-				+"'"+POut.String(Cur.IsProsthesis)+"', "
-				+POut.Date  (Cur.PriorDate)+", "
-				+"'"+POut.String(Cur.ReasonUnderPaid)+"', "
-				+"'"+POut.String(Cur.ClaimNote)+"', "
-				+"'"+POut.String(Cur.ClaimType)+"', "
-				+"'"+POut.Long   (Cur.ProvBill)+"', "
-				+"'"+POut.Long   (Cur.ReferringProv)+"', "
-				+"'"+POut.String(Cur.RefNumString)+"', "
-				+"'"+POut.Long   ((int)Cur.PlaceService)+"', "
-				+"'"+POut.String(Cur.AccidentRelated)+"', "
-				+POut.Date  (Cur.AccidentDate)+", "
-				+"'"+POut.String(Cur.AccidentST)+"', "
-				+"'"+POut.Long   ((int)Cur.EmployRelated)+"', "
-				+"'"+POut.Bool  (Cur.IsOrtho)+"', "
-				+"'"+POut.Long   (Cur.OrthoRemainM)+"', "
-				+POut.Date  (Cur.OrthoDate)+", "
-				+"'"+POut.Long   ((int)Cur.PatRelat)+"', "
-				+"'"+POut.Long   (Cur.PlanNum2)+"', "
-				+"'"+POut.Long   ((int)Cur.PatRelat2)+"', "
-				+"'"+POut.Double(Cur.WriteOff)+"', "
-				+"'"+POut.Long   (Cur.Radiographs)+"', "
-				+"'"+POut.Long   (Cur.ClinicNum)+"', "
-				+"'"+POut.Long   (Cur.ClaimForm)+"', "
-				+"'"+POut.Long   ((int)Cur.EFormat)+"', "
-				+"'"+POut.Long   (Cur.AttachedImages)+"', "
-				+"'"+POut.Long   (Cur.AttachedModels)+"', "
-				+"'"+POut.String(Cur.AttachedFlags)+"', "
-				+"'"+POut.String(Cur.AttachmentID)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				Cur.ClaimNum=Db.NonQ(command,true);
-			}
-			return Cur.ClaimNum;
+			return Crud.ClaimCrud.Insert(claim);
 		}
 
 		///<summary></summary>
-		public static void Update(Claim Cur){
+		public static void Update(Claim claim){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),claim);
 				return;
 			}
-			string command= "UPDATE claim SET "
-				+"patnum = '"          +POut.Long   (Cur.PatNum)+"' "
-				+",dateservice = "    +POut.Date  (Cur.DateService)+" "
-				+",datesent = "       +POut.Date  (Cur.DateSent)+" "
-				+",claimstatus = '"    +POut.String(Cur.ClaimStatus)+"' "
-				+",datereceived = "   +POut.Date  (Cur.DateReceived)+" "
-				+",plannum = '"        +POut.Long   (Cur.PlanNum)+"' "
-				+",provtreat = '"      +POut.Long   (Cur.ProvTreat)+"' "
-				+",claimfee = '"       +POut.Double(Cur.ClaimFee)+"' "
-				+",inspayest = '"      +POut.Double(Cur.InsPayEst)+"' "
-				+",inspayamt = '"      +POut.Double(Cur.InsPayAmt)+"' "
-				+",dedapplied = '"   +  POut.Double(Cur.DedApplied)+"' "
-				+",preauthstring = '"+	POut.String(Cur.PreAuthString)+"' "
-				+",isprosthesis = '" +	POut.String(Cur.IsProsthesis)+"' "
-				+",priordate = "    +	POut.Date  (Cur.PriorDate)+" "
-				+",reasonunderpaid = '"+POut.String(Cur.ReasonUnderPaid)+"' "
-				+",claimnote = '"    +	POut.String(Cur.ClaimNote)+"' "
-				+",claimtype='"      +	POut.String(Cur.ClaimType)+"' "
-				+",provbill = '"     +	POut.Long   (Cur.ProvBill)+"' "
-				+",referringprov = '"+	POut.Long   (Cur.ReferringProv)+"' "
-				+",refnumstring = '" +	POut.String(Cur.RefNumString)+"' "
-				+",placeservice = '" +	POut.Long   ((int)Cur.PlaceService)+"' "
-				+",accidentrelated = '"+POut.String(Cur.AccidentRelated)+"' "//ask Derek why this was out of order.
-				+",accidentdate = "   +	POut.Date  (Cur.AccidentDate)+" "
-				+",accidentst = '"    +	POut.String(Cur.AccidentST)+"' "
-				+",employrelated = '" +	POut.Long   ((int)Cur.EmployRelated)+"' "
-				+",isortho = '"       +	POut.Bool  (Cur.IsOrtho)+"' "
-				+",orthoremainm = '"  +	POut.Long   (Cur.OrthoRemainM)+"' "
-				+",orthodate = "      +	POut.Date  (Cur.OrthoDate)+" "
-				+",patrelat = '"      +	POut.Long   ((int)Cur.PatRelat)+"' "
-				+",plannum2 = '"      +	POut.Long   (Cur.PlanNum2)+"' "
-				+",patrelat2 = '"     +	POut.Long   ((int)Cur.PatRelat2)+"' "
-				+",writeoff = '"      +	POut.Double(Cur.WriteOff)+"' "
-				+",Radiographs = '"   + POut.Long   (Cur.Radiographs)+"' "
-				+",ClinicNum = '"     + POut.Long   (Cur.ClinicNum)+"' "
-				+",ClaimForm = '"     + POut.Long   (Cur.ClaimForm)+"' "
-				+",EFormat = '"       + POut.Long   ((int)Cur.EFormat)+"' "
-				+",AttachedImages = '"+ POut.Long   (Cur.AttachedImages)+"' "
-				+",AttachedModels = '"+ POut.Long   (Cur.AttachedModels)+"' "
-				+",AttachedFlags = '" + POut.String(Cur.AttachedFlags)+"' "
-				+",AttachmentID = '"  + POut.String(Cur.AttachmentID)+"' "
-				+"WHERE claimnum = '"+	POut.Long   (Cur.ClaimNum)+"'";
-			Db.NonQ(command);
+			Crud.ClaimCrud.Update(claim);
 			//now, delete all attachments and recreate.
-			command="DELETE FROM claimattach WHERE ClaimNum="+POut.Long(Cur.ClaimNum);
+			string command="DELETE FROM claimattach WHERE ClaimNum="+POut.Long(claim.ClaimNum);
 			Db.NonQ(command);
-			for(int i=0;i<Cur.Attachments.Count;i++) {
-				Cur.Attachments[i].ClaimNum=Cur.ClaimNum;
-				ClaimAttaches.Insert(Cur.Attachments[i]);
+			for(int i=0;i<claim.Attachments.Count;i++) {
+				claim.Attachments[i].ClaimNum=claim.ClaimNum;
+				ClaimAttaches.Insert(claim.Attachments[i]);
 			}
 		}
 

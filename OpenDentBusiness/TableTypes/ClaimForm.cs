@@ -4,9 +4,11 @@ using System.Xml.Serialization;
 
 namespace OpenDentBusiness{
 	///<summary>Stores the information for printing different types of claim forms.  Each claimform has many claimformitems attached to it, one for each field on the claimform.  This table has nothing to do with the actual claims.  It just describes how to print them.</summary>
-	public class ClaimForm{
+	[Serializable()]
+	public class ClaimForm:TableBase{
 		///<summary>Primary key.</summary>
 		//[XmlIgnore]
+		[CrudColumn(IsPriKey=true)]
 		public long ClaimFormNum;
 		///<summary>eg. ADA2002 or CA Medicaid</summary>
 		public string Description;
@@ -28,36 +30,16 @@ namespace OpenDentBusiness{
 		//[XmlIgnore]
 		public int OffsetY;
 		///<summary>This is not a database column.  It is an array of all claimformItems that are attached to this ClaimForm.</summary>
+		[CrudColumn(IsNotDbColumn=true)]
 		public ClaimFormItem[] Items;
 
 		///<summary>Returns a copy of the claimform including the Items.  Only used in FormClaimForms.butCopy_Click.</summary>
     public ClaimForm Copy(){
-			ClaimForm cf=new ClaimForm();
-			cf.ClaimFormNum=ClaimFormNum;
-			cf.Description=Description;
-			cf.IsHidden=IsHidden;
-			cf.FontName=FontName;
-			cf.FontSize=FontSize;
-			cf.UniqueID=UniqueID;
-			cf.PrintImages=PrintImages;
-			cf.OffsetX=OffsetX;
-			cf.OffsetY=OffsetY;
+			ClaimForm cf=(ClaimForm)this.MemberwiseClone();
 			cf.Items=(ClaimFormItem[])Items.Clone();
-			//Items.CopyTo(cf.Items,0);
 			return cf;
 		}
 
-		/*
-		public long ClaimFormKey {
-			get {
-				return ClaimFormNum;
-			}
-		}
-		public string ClaimFormDescription {
-			get {
-					return Description;
-			}
-		}*/
 
 	}
 

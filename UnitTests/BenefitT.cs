@@ -71,7 +71,7 @@ namespace UnitTests {
 			Benefits.Insert(ben);
 		}
 
-		public static void CreateFrequency(long planNum,string procCodeStr,BenefitQuantity quantityQualifier,int quantity){
+		public static void CreateFrequency(long planNum,string procCodeStr,BenefitQuantity quantityQualifier,Byte quantity){
 			Benefit ben=new Benefit();
 			ben.PlanNum=planNum;
 			ben.BenefitType=InsBenefitType.Limitations;

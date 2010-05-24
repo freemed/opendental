@@ -5,9 +5,11 @@ using System.Text;
 namespace OpenDentBusiness {
 
 	///<summary>There is either one or zero per claim.</summary>
-	public class ClaimCondCodeLog {
+	[Serializable()]
+	public class ClaimCondCodeLog:TableBase {
 		///<summary>Primary key.</summary>
-		public long ClaimCondCodeNum;
+		[CrudColumn(IsPriKey=true)]
+		public long ClaimCondCodeLogNum;
 		///<summary>FK to claim.ClaimNum.</summary>
 		public long ClaimNum;
 		public string Code0;

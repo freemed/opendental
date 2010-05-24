@@ -387,7 +387,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"This account is generated automatically, and cannot be edited.");
 				return;
 			}
-			Account acct=AccountC.GetAccount(acctNum);
+			Account acct=Accounts.GetAccount(acctNum);
 			FormAccountEdit FormA=new FormAccountEdit(acct);
 			FormA.ShowDialog();
 			FillGrid();
@@ -411,7 +411,7 @@ namespace OpenDental{
 			else{
 				asofDate=PIn.Date(textDate.Text);
 			}
-			Account acct=AccountC.GetAccount(acctNum);
+			Account acct=Accounts.GetAccount(acctNum);
 			FormJournal FormJ=new FormJournal(acct);
 			FormJ.InitialAsOfDate=asofDate;
 			FormJ.ShowDialog();

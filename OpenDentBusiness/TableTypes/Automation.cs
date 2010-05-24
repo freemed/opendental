@@ -4,8 +4,10 @@ using System.Collections;
 namespace OpenDentBusiness{
 	
 	///<summary>A trigger event causes one or more actions.</summary>
-	public class Automation{
+	[Serializable()]
+	public class Automation:TableBase{
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long AutomationNum;
 		///<summary></summary>
 		public string Description;

@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Reflection;
 using System.Windows.Forms;
@@ -7,6 +8,21 @@ using System.Windows.Forms;
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class AccountingAutoPays {
+		///<summary></summary>
+		private static List<AccountingAutoPay> listt;
+
+		public static List<AccountingAutoPay> Listt {
+			get {
+				if(listt==null) {
+					RefreshCache();
+				}
+				return listt;
+			}
+			set {
+				listt=value;
+			}
+		}
+
 		///<summary>Gets a list of all AccountingAutoPays.</summary>
 		public static DataTable RefreshCache(){
 			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
@@ -19,17 +35,7 @@ namespace OpenDentBusiness{
 
 		public static void FillCache(DataTable table){
 			//No need to check RemotingRole; no call to db.
-			AccountingAutoPay[] List=new AccountingAutoPay[table.Rows.Count];
-			for(int i=0;i<table.Rows.Count;i++) {
-				List[i]=new AccountingAutoPay();
-				List[i].AccountingAutoPayNum = PIn.Long(table.Rows[i][0].ToString());
-				List[i].PayType              = PIn.Long(table.Rows[i][1].ToString());
-				List[i].PickList             = PIn.String(table.Rows[i][2].ToString());
-			}
-			AccountingAutoPayC.AList=new ArrayList();
-			for(int i=0;i<List.Length;i++){
-				AccountingAutoPayC.AList.Add(List[i]);
-			}
+			listt=Crud.AccountingAutoPayCrud.TableToList(table);
 		}
 		
 		///<summary></summary>
@@ -73,7 +79,7 @@ namespace OpenDentBusiness{
 				if(retVal!=""){
 					retVal+="\r\n";
 				}
-				retVal+=AccountC.GetDescript(PIn.Long(numArray[i]));
+				retVal+=Accounts.GetDescript(PIn.Long(numArray[i]));
 			}
 			return retVal;
 		}
@@ -97,24 +103,24 @@ namespace OpenDentBusiness{
 		///<summary>Loops through the AList to find one with the specified payType (defNum).  If none is found, then it returns null.</summary>
 		public static AccountingAutoPay GetForPayType(long payType) {
 			//No need to check RemotingRole; no call to db.
-			for(int i=0;i<AccountingAutoPayC.AList.Count;i++){
-				if(((AccountingAutoPay)AccountingAutoPayC.AList[i]).PayType==payType){
-					return (AccountingAutoPay)AccountingAutoPayC.AList[i];
+			for(int i=0;i<AccountingAutoPays.Listt.Count;i++){
+				if(AccountingAutoPays.Listt[i].PayType==payType){
+					return AccountingAutoPays.Listt[i];
 				}
 			}
 			return null;
 		}
 
 		///<summary>Saves the list of accountingAutoPays to the database.  Deletes all existing ones first.</summary>
-		public static void SaveList(ArrayList AL) {
+		public static void SaveList(List<AccountingAutoPay> list) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),AL);
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),list);
 				return;
 			}
 			string command="DELETE FROM accountingautopay";
 			Db.NonQ(command);
-			for(int i=0;i<AL.Count;i++){
-				Insert((AccountingAutoPay)AL[i]);
+			for(int i=0;i<list.Count;i++){
+				Insert(list[i]);
 			}
 		}
 

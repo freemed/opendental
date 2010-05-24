@@ -430,7 +430,7 @@ namespace OpenDental{
 				if(Accounts.DepositsLinked()) {
 					DepositAccounts=Accounts.GetDepositAccounts();
 					for(int i=0;i<DepositAccounts.Length;i++){
-						comboDepositAccount.Items.Add(AccountC.GetDescript(DepositAccounts[i]));
+						comboDepositAccount.Items.Add(Accounts.GetDescript(DepositAccounts[i]));
 					}
 					comboDepositAccount.SelectedIndex=0;
 				}
@@ -457,8 +457,8 @@ namespace OpenDental{
 					labelDepositAccount.Text=Lan.g(this,"Deposited into Account");
 					List<JournalEntry> jeL=JournalEntries.GetForTrans(trans.TransactionNum);
 					for(int i=0;i<jeL.Count;i++){
-						if(AccountC.GetAccount(jeL[i].AccountNum).AcctType==AccountType.Asset){
-							comboDepositAccount.Items.Add(AccountC.GetDescript(jeL[i].AccountNum));
+						if(Accounts.GetAccount(jeL[i].AccountNum).AcctType==AccountType.Asset){
+							comboDepositAccount.Items.Add(Accounts.GetDescript(jeL[i].AccountNum));
 							comboDepositAccount.SelectedIndex=0;
 							textDepositAccount.Text=jeL[i].DateDisplayed.ToShortDateString()
 								+" "+jeL[i].DebitAmt.ToString("c");
@@ -753,7 +753,7 @@ namespace OpenDental{
 					je.DateDisplayed=DepositCur.DateDeposit;//it would be nice to add security here.
 					je.DebitAmt=DepositCur.Amount;
 					je.Memo=Lan.g(this,"Deposit");
-					je.Splits=AccountC.GetDescript(PrefC.GetLong(PrefName.AccountingIncomeAccount));
+					je.Splits=Accounts.GetDescript(PrefC.GetLong(PrefName.AccountingIncomeAccount));
 					je.TransactionNum=trans.TransactionNum;
 					JournalEntries.Insert(je);
 					//then, the income entry
@@ -763,7 +763,7 @@ namespace OpenDental{
 					je.DateDisplayed=DepositCur.DateDeposit;//it would be nice to add security here.
 					je.CreditAmt=DepositCur.Amount;
 					je.Memo=Lan.g(this,"Deposit");
-					je.Splits=AccountC.GetDescript(DepositAccounts[comboDepositAccount.SelectedIndex]);
+					je.Splits=Accounts.GetDescript(DepositAccounts[comboDepositAccount.SelectedIndex]);
 					je.TransactionNum=trans.TransactionNum;
 					JournalEntries.Insert(je);
 				}

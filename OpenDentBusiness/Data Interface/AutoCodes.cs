@@ -21,14 +21,9 @@ namespace OpenDentBusiness{
 		public static void FillCache(DataTable table){
 			//No need to check RemotingRole; no call to db.
 			AutoCodeC.HList=new Hashtable();
-			AutoCodeC.List=new AutoCode[table.Rows.Count];
+			AutoCodeC.List=Crud.AutoCodeCrud.TableToList(table).ToArray();
 			ArrayList ALshort=new ArrayList();//int of indexes of short list
 			for(int i = 0;i<AutoCodeC.List.Length;i++){
-				AutoCodeC.List[i]=new AutoCode();
-				AutoCodeC.List[i].AutoCodeNum  = PIn.Long   (table.Rows[i][0].ToString());
-				AutoCodeC.List[i].Description  = PIn.String(table.Rows[i][1].ToString());
-				AutoCodeC.List[i].IsHidden     = PIn.Bool  (table.Rows[i][2].ToString());	
-				AutoCodeC.List[i].LessIntrusive= PIn.Bool  (table.Rows[i][3].ToString());	
 				AutoCodeC.HList.Add(AutoCodeC.List[i].AutoCodeNum,AutoCodeC.List[i]);
 				if(!AutoCodeC.List[i].IsHidden){
 					ALshort.Add(i);
@@ -46,28 +41,7 @@ namespace OpenDentBusiness{
 				Cur.AutoCodeNum=Meth.GetLong(MethodBase.GetCurrentMethod(),Cur);
 				return Cur.AutoCodeNum;
 			}
-			if(PrefC.RandomKeys) {
-				Cur.AutoCodeNum=ReplicationServers.GetKey("autocode","AutoCodeNum");
-			}
-			string command="INSERT INTO autocode (";
-			if(PrefC.RandomKeys) {
-				command+="AutoCodeNum,";
-			}
-			command+="Description,IsHidden,LessIntrusive) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+=POut.Long(Cur.AutoCodeNum)+", ";
-			}
-			command+=
-				 "'"+POut.String(Cur.Description)+"', "
-				+"'"+POut.Bool  (Cur.IsHidden)+"', "
-				+"'"+POut.Bool  (Cur.LessIntrusive)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				Cur.AutoCodeNum=Db.NonQ(command,true);
-			}
-			return Cur.AutoCodeNum;
+			return Crud.AutoCodeCrud.Insert(Cur);
 		}
 
 		///<summary></summary>
@@ -76,12 +50,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
 				return;
 			}
-			string command= "UPDATE autocode SET "
-				+"Description='"      +POut.String(Cur.Description)+"'"
-				+",IsHidden = '"      +POut.Bool  (Cur.IsHidden)+"'"
-				+",LessIntrusive = '" +POut.Bool  (Cur.LessIntrusive)+"'"
-				+" WHERE autocodenum = '"+POut.Long (Cur.AutoCodeNum)+"'";
-			Db.NonQ(command);
+			Crud.AutoCodeCrud.Update(Cur);
 		}
 
 		///<summary>This could be improved since it does not delete any autocode items.</summary>

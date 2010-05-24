@@ -20,61 +20,25 @@ namespace OpenDentBusiness{
 
 		private static void FillCache(DataTable table){
 			//No need to check RemotingRole; no call to db.
-			AppointmentRuleC.List=new AppointmentRule[table.Rows.Count];
-			for(int i=0;i<table.Rows.Count;i++) {
-				AppointmentRuleC.List[i]=new AppointmentRule();
-				AppointmentRuleC.List[i].AppointmentRuleNum = PIn.Long(table.Rows[i][0].ToString());
-				AppointmentRuleC.List[i].RuleDesc           = PIn.String(table.Rows[i][1].ToString());
-				AppointmentRuleC.List[i].CodeStart          = PIn.String(table.Rows[i][2].ToString());
-				AppointmentRuleC.List[i].CodeEnd            = PIn.String(table.Rows[i][3].ToString());
-				AppointmentRuleC.List[i].IsEnabled          = PIn.Bool(table.Rows[i][4].ToString());
-			}
+			AppointmentRuleC.List=Crud.AppointmentRuleCrud.TableToList(table).ToArray();
 		}
 
 		///<summary></summary>
-		public static long Insert(AppointmentRule rule) {
+		public static long Insert(AppointmentRule appointmentRule) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				rule.AppointmentRuleNum=Meth.GetLong(MethodBase.GetCurrentMethod(),rule);
-				return rule.AppointmentRuleNum;
+				appointmentRule.AppointmentRuleNum=Meth.GetLong(MethodBase.GetCurrentMethod(),appointmentRule);
+				return appointmentRule.AppointmentRuleNum;
 			}
-			if(PrefC.RandomKeys) {
-				rule.AppointmentRuleNum=ReplicationServers.GetKey("appointmentrule","AppointmentRuleNum");
-			}
-			string command="INSERT INTO appointmentrule (";
-			if(PrefC.RandomKeys) {
-				command+="AppointmentRuleNum,";
-			}
-			command+="RuleDesc,CodeStart,CodeEnd,IsEnabled) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+=POut.Long(rule.AppointmentRuleNum)+", ";
-			}
-			command+=
-				 "'"+POut.String(rule.RuleDesc)+"', "
-				+"'"+POut.String(rule.CodeStart)+"', "
-				+"'"+POut.String(rule.CodeEnd)+"', "
-				+"'"+POut.Bool  (rule.IsEnabled)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				rule.AppointmentRuleNum=Db.NonQ(command,true);
-			}
-			return rule.AppointmentRuleNum;
+			return Crud.AppointmentRuleCrud.Insert(appointmentRule);
 		}
 
 		///<summary></summary>
-		public static void Update(AppointmentRule rule){
+		public static void Update(AppointmentRule appointmentRule){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),rule);
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),appointmentRule);
 				return;
 			}
-			string command= "UPDATE appointmentrule SET " 
-				+ "RuleDesc = '"      +POut.String(rule.RuleDesc)+"'"
-				+ ",CodeStart = '" +POut.String(rule.CodeStart)+"'"
-				+ ",CodeEnd = '"   +POut.String(rule.CodeEnd)+"'"
-				+ ",IsEnabled = '"    +POut.Bool  (rule.IsEnabled)+"'"
-				+" WHERE AppointmentRuleNum = '" +POut.Long   (rule.AppointmentRuleNum)+"'";
- 			Db.NonQ(command);
+			Crud.AppointmentRuleCrud.Update(appointmentRule);
 		}
 
 		///<summary></summary>
