@@ -30,7 +30,7 @@ namespace UnitTests {
 		private void butWebService_Click(object sender,EventArgs e) {
 			RemotingClient.ServerURI="http://localhost:49262/ServiceMain.asmx";
 			try{
-				Userod user=Security.LogInWeb("Admin",Userods.EncryptPassword("pass",true),"",Application.ProductVersion);
+				Userod user=Security.LogInWeb("Admin",Userods.EncryptPassword("pass",false),"",Application.ProductVersion);
 				Security.CurUser=user;
 				RemotingClient.RemotingRole=RemotingRole.ClientWeb;
 			}

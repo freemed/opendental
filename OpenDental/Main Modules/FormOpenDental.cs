@@ -1257,7 +1257,21 @@ namespace OpenDental{
 		private void FormOpenDental_Load(object sender, System.EventArgs e){
 			Splash.Dispose();
 			allNeutral();
+			string odUser="";
+			string odPassHash="";
+			if(CommandLineArgs.Length!=0) {
+				for(int i=0;i<CommandLineArgs.Length;i++) {
+					if(CommandLineArgs[i].StartsWith("UserName=") && CommandLineArgs[i].Length>9) {
+						odUser=CommandLineArgs[i].Substring(9).Trim('"');
+					}
+					if(CommandLineArgs[i].StartsWith("PassHash=") && CommandLineArgs[i].Length>9) {
+						odPassHash=CommandLineArgs[i].Substring(9).Trim('"');
+					}
+				}
+			}
 			FormChooseDatabase formChooseDb=new FormChooseDatabase();
+			formChooseDb.OdUser=odUser;
+			formChooseDb.OdPassHash=odPassHash;
 			formChooseDb.GetConfig();
 			if(formChooseDb.NoShow) {
 				if(!formChooseDb.TryToConnect()) {

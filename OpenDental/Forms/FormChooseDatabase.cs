@@ -44,14 +44,16 @@ namespace OpenDental{
 		private Label label10;
 		private Label label11;
 		private CheckBox checkConnectServer;
+		///<summary>When silently running GetConfig() without showing UI, this gets set to true if either NoShowOnStartup or UsingEcw is found in config file.</summary>
 		public bool NoShow;
 		private Label label7;
 		private ListBox listType;
 		private Label label8;
 		private TextBox textURI;
+		private CheckBox checkUsingEcw;
 		private TextBox textConnectionString;
-		//<summary>There are notes about only using this variable for the client, and DataConnection.DBtype only if in the business layer.  Well, we are now going to get rid of this, and use DataConnection.DBtype no matter where we are.  We just have to remember to set it even if we are not going to use the same DataConnection.  In other words, we have to set both DataConnections.</summary>
-		//public static DatabaseType DBtype;
+		public string OdUser;
+		public string OdPassHash;
 
 		///<summary></summary>
 		public FormChooseDatabase(){
@@ -106,6 +108,7 @@ namespace OpenDental{
 			this.textConnectionString = new System.Windows.Forms.TextBox();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
+			this.checkUsingEcw = new System.Windows.Forms.CheckBox();
 			this.groupDirect.SuspendLayout();
 			this.groupServer.SuspendLayout();
 			this.SuspendLayout();
@@ -217,6 +220,7 @@ namespace OpenDental{
 			// 
 			// groupServer
 			// 
+			this.groupServer.Controls.Add(this.checkUsingEcw);
 			this.groupServer.Controls.Add(this.textURI);
 			this.groupServer.Controls.Add(this.textUser2);
 			this.groupServer.Controls.Add(this.textPassword2);
@@ -233,21 +237,21 @@ namespace OpenDental{
 			// 
 			// textURI
 			// 
-			this.textURI.Location = new System.Drawing.Point(13,73);
+			this.textURI.Location = new System.Drawing.Point(13,65);
 			this.textURI.Name = "textURI";
 			this.textURI.Size = new System.Drawing.Size(309,20);
 			this.textURI.TabIndex = 15;
 			// 
 			// textUser2
 			// 
-			this.textUser2.Location = new System.Drawing.Point(13,116);
+			this.textUser2.Location = new System.Drawing.Point(13,108);
 			this.textUser2.Name = "textUser2";
 			this.textUser2.Size = new System.Drawing.Size(309,20);
 			this.textUser2.TabIndex = 2;
 			// 
 			// textPassword2
 			// 
-			this.textPassword2.Location = new System.Drawing.Point(13,157);
+			this.textPassword2.Location = new System.Drawing.Point(13,149);
 			this.textPassword2.Name = "textPassword2";
 			this.textPassword2.PasswordChar = '*';
 			this.textPassword2.Size = new System.Drawing.Size(309,20);
@@ -256,7 +260,7 @@ namespace OpenDental{
 			// 
 			// label10
 			// 
-			this.label10.Location = new System.Drawing.Point(11,138);
+			this.label10.Location = new System.Drawing.Point(11,130);
 			this.label10.Name = "label10";
 			this.label10.Size = new System.Drawing.Size(281,18);
 			this.label10.TabIndex = 11;
@@ -265,7 +269,7 @@ namespace OpenDental{
 			// 
 			// label11
 			// 
-			this.label11.Location = new System.Drawing.Point(11,97);
+			this.label11.Location = new System.Drawing.Point(11,89);
 			this.label11.Name = "label11";
 			this.label11.Size = new System.Drawing.Size(295,18);
 			this.label11.TabIndex = 14;
@@ -274,7 +278,7 @@ namespace OpenDental{
 			// 
 			// label9
 			// 
-			this.label9.Location = new System.Drawing.Point(10,52);
+			this.label9.Location = new System.Drawing.Point(10,44);
 			this.label9.Name = "label9";
 			this.label9.Size = new System.Drawing.Size(283,18);
 			this.label9.TabIndex = 9;
@@ -285,7 +289,7 @@ namespace OpenDental{
 			// 
 			this.label6.Location = new System.Drawing.Point(9,25);
 			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(297,32);
+			this.label6.Size = new System.Drawing.Size(297,18);
 			this.label6.TabIndex = 0;
 			this.label6.Text = "Read the manual to learn how to install the web service.";
 			// 
@@ -365,6 +369,16 @@ namespace OpenDental{
 			this.butOK.TabIndex = 3;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
+			// 
+			// checkUsingEcw
+			// 
+			this.checkUsingEcw.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkUsingEcw.Location = new System.Drawing.Point(13,176);
+			this.checkUsingEcw.Name = "checkUsingEcw";
+			this.checkUsingEcw.Size = new System.Drawing.Size(317,18);
+			this.checkUsingEcw.TabIndex = 16;
+			this.checkUsingEcw.Text = "Using eClinicalWorks";
+			this.checkUsingEcw.UseVisualStyleBackColor = true;
 			// 
 			// FormChooseDatabase
 			// 
@@ -614,15 +628,19 @@ namespace OpenDental{
 					checkConnectServer.Checked=true;
 					groupDirect.Enabled=false;
 					textURI.Text=nav.SelectSingleNode("URI").Value;
-					//XPathNavigator navport=nav.SelectSingleNode("ServerPort");
-					//if(navport!=null) {
-					//	textPort.Text=navport.Value;
-					//}
-					//comboDatabase2.Text=nav.SelectSingleNode("Database").Value;
+					XPathNavigator ecwnav=nav.SelectSingleNode("UsingEcw");
+					if(ecwnav!=null){
+						string usingecw=ecwnav.Value;
+						if(usingecw=="True"){
+							NoShow=true;
+							checkUsingEcw.Checked=true;
+						}
+					}
 					textUser2.Select();
 					return;
 				}
-			}catch(Exception) {
+			}
+			catch(Exception) {
 				//Common error: root element is missing
 				//MessageBox.Show(e.Message);
 			}
@@ -640,6 +658,18 @@ namespace OpenDental{
 
 		///<summary>Only called at startup if this dialog is not supposed to be shown.  Must call GetConfig first.</summary>
 		public bool TryToConnect(){
+			if(checkConnectServer.Checked && checkUsingEcw.Checked){
+				RemotingClient.ServerURI=textURI.Text;
+				try{
+					Userod user=Security.LogInWeb(OdUser,OdPassHash,"",Application.ProductVersion);
+					Security.CurUser=user;
+					RemotingClient.RemotingRole=RemotingRole.ClientWeb;
+					return true;
+				}
+				catch{
+					return false;
+				}
+			}
 			OpenDentBusiness.DataConnection dcon=new OpenDentBusiness.DataConnection();
 			//Try to connect to the database directly
 			try {
@@ -662,9 +692,10 @@ namespace OpenDental{
 			if(checkConnectServer.Checked){
 				string originalURI=RemotingClient.ServerURI;
 				RemotingClient.ServerURI=textURI.Text;
+				bool useEcwAlgorithm=checkUsingEcw.Checked;
 				try{
-					//if we want to support eCW here, we will have to make the user indicate it.  No way to tell from the database yet.
-					Userod user=Security.LogInWeb(textUser2.Text,Userods.EncryptPassword(textPassword2.Text,true),"",Application.ProductVersion);
+					string passhash=Userods.EncryptPassword(textPassword2.Text,useEcwAlgorithm);
+					Userod user=Security.LogInWeb(textUser2.Text,passhash,"",Application.ProductVersion);
 					Security.CurUser=user;
 					RemotingClient.RemotingRole=RemotingRole.ClientWeb;
 				}
@@ -733,12 +764,14 @@ namespace OpenDental{
 						writer.WriteStartElement("URI");
 						writer.WriteString(textURI.Text);
 						writer.WriteEndElement();
-						//writer.WriteStartElement("ServerPort");
-						//writer.WriteString(textPort.Text);
-						//writer.WriteEndElement();
-						//writer.WriteStartElement("Database");
-						//writer.WriteString(comboDatabase2.Text);
-						//writer.WriteEndElement();
+						writer.WriteStartElement("UsingEcw");
+						if(checkUsingEcw.Checked) {
+							writer.WriteString("True");
+						}
+						else {
+							writer.WriteString("False");
+						}
+						writer.WriteEndElement();
 						writer.WriteEndElement();
 					}
 					writer.WriteStartElement("DatabaseType");

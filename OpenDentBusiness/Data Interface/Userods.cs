@@ -178,17 +178,18 @@ namespace OpenDentBusiness {
 		///<summary></summary>
 		public static string EncryptPassword(string inputPass) {
 			//No need to check RemotingRole; no call to db.
-			return EncryptPassword(inputPass,false);
+			bool useEcwAlgorithm=Programs.IsEnabled("eClinicalWorks");
+			return EncryptPassword(inputPass,useEcwAlgorithm);
 		}
 
 		///<summary></summary>
-		public static string EncryptPassword(string inputPass,bool skipECW) {
+		public static string EncryptPassword(string inputPass,bool useEcwAlgorithm) {
 			//No need to check RemotingRole; no call to db.
 			if(inputPass=="") {
 				return "";
 			}
 			HashAlgorithm algorithm=HashAlgorithm.Create("MD5");
-			if(!skipECW && Programs.IsEnabled("eClinicalWorks")) {
+			if(useEcwAlgorithm){// && Programs.IsEnabled("eClinicalWorks")) {
 				byte[] asciiBytes=Encoding.ASCII.GetBytes(inputPass);
 				byte[] hashbytes=algorithm.ComputeHash(asciiBytes);//length=16
 				byte digit1;
