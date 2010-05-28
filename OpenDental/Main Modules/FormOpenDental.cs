@@ -1287,7 +1287,7 @@ namespace OpenDental{
 				return;
 			}
 			if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") {
-				Splash.Dispose();
+				Splash.Dispose();//We don't show splash screen when bridging to eCW.
 			}
 			//We no longer do this shotgun approach because it can slow the loading time.
 			//RefreshLocalData(InvalidType.AllLocal);
@@ -1354,25 +1354,30 @@ namespace OpenDental{
 				MsgBox.Show(this,"Done optimizing tooth chart graphics.");
 			}
 			Plugins.LoadAllPlugins(this);
-			if(Security.CurUser==null) {
-				Userod adminUser=Userods.GetAdminUser();
-				if(adminUser.Password=="") {
-					Security.CurUser=adminUser.Copy();
+			if(Security.CurUser==null) {//It could already be set if using web service because login from ChooseDatabase window.
+				if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") {
+					//leave user as null
 				}
 				else {
-					FormLogOn FormL=new FormLogOn();
-					FormL.ShowDialog();
-					if(FormL.DialogResult==DialogResult.Cancel) {
-						Cursor=Cursors.Default;
-						Application.Exit();
-						return;
+					Userod adminUser=Userods.GetAdminUser();
+					if(adminUser.Password=="") {
+						Security.CurUser=adminUser.Copy();
+					}
+					else {
+						FormLogOn FormL=new FormLogOn();
+						FormL.ShowDialog();
+						if(FormL.DialogResult==DialogResult.Cancel) {
+							Cursor=Cursors.Default;
+							Application.Exit();
+							return;
+						}
 					}
 				}
 			}
 			if(userControlTasks1.Visible) {
 				userControlTasks1.InitializeOnStartup();
 			}
-			myOutlookBar.SelectedIndex=Security.GetModule(0);
+			myOutlookBar.SelectedIndex=Security.GetModule(0);//for eCW, this fails silently.
 			if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") {
 				myOutlookBar.SelectedIndex=4;//Chart module
 				ToolBarMain.Height=0;//this should force the modules further up on the screen
@@ -4053,7 +4058,7 @@ namespace OpenDental{
 			Bridges.ECW.UserId=userId;
 			//Username and password-----------------------------------------------------
 			if(userName!=""//if a username was passed in
-				&& Security.CurUser.UserName != userName)//and it's different from the current user
+				&& (Security.CurUser==null || Security.CurUser.UserName != userName))//and it's different from the current user
 			{
 				//log out------------------------------------
 				LastModule=myOutlookBar.SelectedIndex;
