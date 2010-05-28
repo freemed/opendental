@@ -2,10 +2,12 @@ using System;
 using System.Collections;
 
 namespace OpenDentBusiness{
-	
+
 	///<summary>Each row represents a single check from the insurance company.  The amount may be split between patients using claimprocs.  The amount of the check must always exactly equal the sum of all the claimprocs attached to it.  There might be only one claimproc.</summary>
-	public class ClaimPayment{
+	[Serializable()]
+	public class ClaimPayment:TableBase {
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long ClaimPaymentNum;
 		///<summary>Date the check was entered into this system, not the date on the check.</summary>
 		public DateTime CheckDate;
@@ -26,17 +28,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Returns a copy of this ClaimPayment.</summary>
 		public ClaimPayment Copy(){
-			ClaimPayment cp=new ClaimPayment();
-			cp.ClaimPaymentNum =ClaimPaymentNum;
-			cp.CheckDate=CheckDate;
-			cp.CheckAmt=CheckAmt;
-			cp.CheckNum=CheckNum;
-			cp.BankBranch=BankBranch;
-			cp.Note=Note;
-			cp.ClinicNum=ClinicNum;
-			cp.DepositNum=DepositNum;
-			cp.CarrierName=CarrierName;
-			return cp;
+			return (ClaimPayment)this.MemberwiseClone();
 		}
 
 		

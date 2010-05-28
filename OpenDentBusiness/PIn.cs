@@ -10,7 +10,7 @@ namespace OpenDentBusiness{
 	
 	/*=========================================================================================
 	=================================== class PIn ===========================================*/
-	///<summary>Converts strings coming in from the database into the appropriate type. "P" was originally short for Parameter because this class was written specifically to replace parameters in the mysql queries. Using strings instead of parameters is much easier to debug.  This will later be rewritten as a System.IConvertible interface on custom mysql types.  I would rather not ever depend on the mysql connector for this so that this program remains very db independent.</summary>
+	///<summary>Converts strings coming in from the database into the appropriate type. "P" is short for Parameter because this class was written specifically to replace parameters in the mysql queries.</summary>
 	public class PIn{
 		///<summary></summary>
 		public static bool Bool (string myString){

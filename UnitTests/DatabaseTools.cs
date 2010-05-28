@@ -66,6 +66,7 @@ namespace UnitTests {
 		public static string ClearDb() {
 			string command=@"
 				DELETE FROM carrier;
+				/*claim not used yet*/
 				DELETE FROM claimproc;
 				DELETE FROM fee;
 				DELETE FROM feesched WHERE FeeSchedNum !=53; /*because this is the default fee schedule for providers*/

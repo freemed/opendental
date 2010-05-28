@@ -17,7 +17,7 @@ namespace OpenDentBusiness {
 		///<summary>No longer used.</summary>
 		public string OldCode;
 		///<summary>Procedure date/time that will show in the account as the date performed.  If just treatment planned, the date can be the date it was tp'd, or the date can be min val if we don't care.</summary>
-		[CrudColumn(SpecialType=EnumCrudSpecialColType.DateT)]
+		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime ProcDate;
 		///<summary>Procedure fee.</summary>
 		public double ProcFee;
@@ -46,7 +46,7 @@ namespace OpenDentBusiness {
 		///<summary>This note will go on e-claim. For By Report, prep dates, or initial endo date.</summary>
 		public string ClaimNote;
 		///<summary>This is the date this procedure was entered or set complete.  If not status C, then the value is ignored, so it might be minValue 0001-01-01 or any other date.  It gets updated when set complete.  User never allowed to edit.  This will be enhanced later.</summary>
-		[CrudColumn(SpecialType=EnumCrudSpecialColType.DateEntryEditable)]
+		[CrudColumn(SpecialType=CrudSpecialColType.DateEntryEditable)]
 		public DateTime DateEntryC;
 		///<summary>FK to clinic.ClinicNum.  0 if no clinic.</summary>
 		public long ClinicNum;

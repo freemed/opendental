@@ -3,10 +3,12 @@ using System.Collections;
 
 
 namespace OpenDentBusiness{
-	
+
 	///<summary>Since we can send e-claims to multiple clearinghouses, this table keeps track of each clearinghouse.  Will eventually be used for individual carriers as well if they accept </summary>
-	public class Clearinghouse{
+	[Serializable()]
+	public class Clearinghouse:TableBase {
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long ClearinghouseNum;
 		///<summary>Description of this clearinghouse</summary>
 		public string Description;
@@ -36,10 +38,11 @@ namespace OpenDentBusiness{
 		public EclaimsCommBridge CommBridge;
 		///<summary>If applicable, this is the name of the client program to launch.  It is even used by the hard-coded comm bridges, because the user may have changed the installation directory or exe name.</summary>
 		public string ClientProgram;
-		///<summary>Each clearinghouse increments their batch numbers by one each time a claim file is sent.  User never sees this number.  Maxes out at 999, then loops back to 1.  This field is skipped during all update and retreival except if specifically looking for this one field.  Defaults to 0 for brand new clearinghouses, which causes the first batch to go out as #1.</summary>
+		///<summary>Each clearinghouse increments their batch numbers by one each time a claim file is sent.  User never sees this number.  Maxes out at 999, then loops back to 1.  This field must NOT be cached and must be ignored in the code except where it explicitly retrieves it from the db.  Defaults to 0 for brand new clearinghouses, which causes the first batch to go out as #1.</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.ExcludeFromUpdate)]
 		public int LastBatchNumber;
-		///<summary>1,2,3,or 4. The port that the modem is connected to if applicable. Always uses 9600 baud and standard settings. Will crash if port or modem not valid.</summary>
-		public int ModemPort;
+		///<summary>Was not used.  1,2,3,or 4. The port that the modem is connected to if applicable. Always uses 9600 baud and standard settings. Will crash if port or modem not valid.</summary>
+		public byte ModemPort;
 		///<summary>A clearinghouse usually has a login ID that is used with the password in order to access the remote server.  This value is not usualy used within the actual claim.</summary>
 		public string LoginID;
 		///<summary>Used in 1000A NM1 and 1000A PER.  But if SenderTIN is blank, then OPEN DENTAL SOFTWARE is used instead.</summary>
@@ -49,22 +52,10 @@ namespace OpenDentBusiness{
 		///<summary>Usually the same as ISA08, but at least one clearinghouse uses a different number here.</summary>
 		public string GS03;
 
-		/*//<summary>Returns a copy of the clearinghouse.</summary>
-    public ClaimForm Clone(){
-			ClaimForm cf=new ClaimForm();
-			cf.ClaimFormNum=ClaimFormNum;
-			cf.Description=Description;
-			cf.IsHidden=IsHidden;
-			cf.FontName=FontName;
-			cf.FontSize=FontSize;
-			cf.UniqueID=UniqueID;
-			cf.PrintImages=PrintImages;
-			cf.OffsetX=OffsetX;
-			cf.OffsetY=OffsetY;
-			return cf;
-		}*/
 
+		public Clearinghouse() {
 
+		}
 
 	}
 

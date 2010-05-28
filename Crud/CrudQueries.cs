@@ -27,7 +27,7 @@ namespace Crud {
 			string obj=typeClass.Name.Substring(0,1).ToLower()+typeClass.Name.Substring(1);//lowercase initial letter.  Example feeSched
 			string tablename=CrudGenHelper.GetTableName(typeClass);//in lowercase now.
 			List<FieldInfo> fieldsExceptPri=CrudGenHelper.GetFieldsExceptPriKey(fields,priKey);
-			EnumCrudSpecialColType specialType;
+			CrudSpecialColType specialType;
 			string command="SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE table_schema = '"+dbName+"' AND table_name = '"+tablename+"'";
 			if(DataCore.GetScalar(command)!="1") {
 				MessageBox.Show("This table was not found in the database:"
@@ -55,22 +55,22 @@ namespace Crud {
 				for(int f=0;f<newColumns.Count;f++) {
 					strb.Append(rn+t4+"command=\"ALTER TABLE "+tablename+" ADD "+newColumns[f].Name+" ");
 					specialType=CrudGenHelper.GetSpecialType(newColumns[f]);
-					if(specialType==EnumCrudSpecialColType.DateEntry
-						|| specialType==EnumCrudSpecialColType.DateEntryEditable) {
+					if(specialType==CrudSpecialColType.DateEntry
+						|| specialType==CrudSpecialColType.DateEntryEditable) {
 						strb.Append("date NOT NULL default '0001-01-01'");
 						strb.Append("\";");
 						strb.Append(rn+t4+"Db.NonQ(command);");
 						continue;
 					}
-					if(specialType==EnumCrudSpecialColType.TimeStamp) {
+					if(specialType==CrudSpecialColType.TimeStamp) {
 						strb.Append("timestamp");
 						strb.Append("\";");
 						strb.Append(rn+t4+"Db.NonQ(command);");
 						continue;
 					}
-					if(specialType==EnumCrudSpecialColType.DateT
-						|| specialType==EnumCrudSpecialColType.DateTEntry
-						|| specialType==EnumCrudSpecialColType.DateTEntryEditable) {
+					if(specialType==CrudSpecialColType.DateT
+						|| specialType==CrudSpecialColType.DateTEntry
+						|| specialType==CrudSpecialColType.DateTEntryEditable) {
 						strb.Append("datetime NOT NULL default '0001-01-01 00:00:00'");
 						strb.Append("\";");
 						strb.Append(rn+t4+"Db.NonQ(command);");
@@ -125,25 +125,25 @@ namespace Crud {
 		}
 
 		public static void GetCreateTable(StringBuilder strb,string tablename,string priKeyName,List<FieldInfo> fieldsExceptPri){
-			EnumCrudSpecialColType specialType;
+			CrudSpecialColType specialType;
 			strb.Append(rn+t4+"command=@\"CREATE TABLE "+tablename+" (");
 			strb.Append(rn+t5+priKeyName+" bigint NOT NULL auto_increment,");
 			for(int f=0;f<fieldsExceptPri.Count;f++) {
 				strb.Append(rn+t5+fieldsExceptPri[f].Name+" ");
 				specialType=CrudGenHelper.GetSpecialType(fieldsExceptPri[f]);
-				if(specialType==EnumCrudSpecialColType.DateEntry
-					|| specialType==EnumCrudSpecialColType.DateEntryEditable) 
+				if(specialType==CrudSpecialColType.DateEntry
+					|| specialType==CrudSpecialColType.DateEntryEditable) 
 				{
 					strb.Append("date NOT NULL default '0001-01-01',");
 					continue;
 				}
-				if(specialType==EnumCrudSpecialColType.TimeStamp) {
+				if(specialType==CrudSpecialColType.TimeStamp) {
 					strb.Append("timestamp,");
 					continue;
 				}
-				if(specialType==EnumCrudSpecialColType.DateT
-					|| specialType==EnumCrudSpecialColType.DateTEntry
-					|| specialType==EnumCrudSpecialColType.DateTEntryEditable) 
+				if(specialType==CrudSpecialColType.DateT
+					|| specialType==CrudSpecialColType.DateTEntry
+					|| specialType==CrudSpecialColType.DateTEntryEditable) 
 				{
 					strb.Append("datetime NOT NULL default '0001-01-01 00:00:00',");//untested
 					continue;

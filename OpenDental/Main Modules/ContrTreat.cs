@@ -2459,7 +2459,7 @@ namespace OpenDental{
 						ClaimProcCur.CodeSent=ClaimProcCur.CodeSent.Substring(0,5);
 					}
 				}
-				ClaimProcCur.LineNumber=i+1;
+				ClaimProcCur.LineNumber=(byte)(i+1);
         ClaimProcs.Insert(ClaimProcCur);
 				//ProcCur.Update(ProcOld);
 			}

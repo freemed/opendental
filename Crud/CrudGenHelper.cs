@@ -107,10 +107,10 @@ namespace Crud {
 			return retVal;
 		}
 
-		public static EnumCrudSpecialColType GetSpecialType(FieldInfo field) {
+		public static CrudSpecialColType GetSpecialType(FieldInfo field) {
 			object[] attributes = field.GetCustomAttributes(typeof(CrudColumnAttribute),true);
 			if(attributes.Length==0) {
-				return EnumCrudSpecialColType.None;
+				return CrudSpecialColType.None;
 			}
 			return ((CrudColumnAttribute)attributes[0]).SpecialType;
 		}
@@ -160,29 +160,29 @@ namespace Crud {
 			if(dataTypeInDb==""){
 				return;//can't validate
 			}
-			EnumCrudSpecialColType specialColType=GetSpecialType(field);
+			CrudSpecialColType specialColType=GetSpecialType(field);
 			string dataTypeExpected="";
 			string dataTypeExpected2="";//if an alternate datatype is allowed
 			string dataTypeExpected3="";
-			if(specialColType==EnumCrudSpecialColType.TimeStamp) {
+			if(specialColType==CrudSpecialColType.TimeStamp) {
 				dataTypeExpected="timestamp";
 			}
-			else if(specialColType==EnumCrudSpecialColType.DateEntry) {
+			else if(specialColType==CrudSpecialColType.DateEntry) {
 				dataTypeExpected="date";
 			}
-			else if(specialColType==EnumCrudSpecialColType.DateEntryEditable) {
+			else if(specialColType==CrudSpecialColType.DateEntryEditable) {
 				dataTypeExpected="date";
 			}
-			else if(specialColType==EnumCrudSpecialColType.DateT) {
+			else if(specialColType==CrudSpecialColType.DateT) {
 				dataTypeExpected="datetime";
 			}
-			else if(specialColType==EnumCrudSpecialColType.DateTEntry) {
+			else if(specialColType==CrudSpecialColType.DateTEntry) {
 				dataTypeExpected="datetime";
 			}
-			else if(specialColType==EnumCrudSpecialColType.DateTEntryEditable) {
+			else if(specialColType==CrudSpecialColType.DateTEntryEditable) {
 				dataTypeExpected="datetime";
 			}
-			else if(specialColType==EnumCrudSpecialColType.TinyIntUnsigned) {
+			else if(specialColType==CrudSpecialColType.TinyIntUnsigned) {
 				dataTypeExpected="tinyint";
 			}
 			else if(field.FieldType.IsEnum) {

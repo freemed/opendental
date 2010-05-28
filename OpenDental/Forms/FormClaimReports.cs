@@ -135,9 +135,9 @@ namespace OpenDental{
 		#endregion
 
 		private void FormClaimReports_Load(object sender, System.EventArgs e) {
-			for(int i=0;i<Clearinghouses.List.Length;i++){
-				comboClearhouse.Items.Add(Clearinghouses.List[i].Description);
-				if(Clearinghouses.List[i].IsDefault){
+			for(int i=0;i<Clearinghouses.Listt.Length;i++){
+				comboClearhouse.Items.Add(Clearinghouses.Listt[i].Description);
+				if(Clearinghouses.Listt[i].IsDefault){
 					comboClearhouse.SelectedIndex=i;
 				}
 			}
@@ -160,14 +160,14 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please select a clearinghouse first.");
 				return;
 			}
-			if(!Directory.Exists(Clearinghouses.List[comboClearhouse.SelectedIndex].ResponsePath)) {
+			if(!Directory.Exists(Clearinghouses.Listt[comboClearhouse.SelectedIndex].ResponsePath)) {
 				MsgBox.Show(this,"Clearinghouse does not have a valid Report Path set.");
 				return;
 			}
 			//For Tesia, user wouldn't normally manually retrieve.
-			if(Clearinghouses.List[comboClearhouse.SelectedIndex].ISA08=="113504607") {
+			if(Clearinghouses.Listt[comboClearhouse.SelectedIndex].ISA08=="113504607") {
 				if((PrefC.RandomKeys && !PrefC.GetBool(PrefName.EasyNoClinics))//See FormClaimsSend_Load
-					|| !Clearinghouses.List[comboClearhouse.SelectedIndex].IsDefault) 
+					|| !Clearinghouses.Listt[comboClearhouse.SelectedIndex].IsDefault) 
 				{
 					//But they might need to in these situations.
 					ImportReportFiles();
@@ -178,9 +178,9 @@ namespace OpenDental{
 				}
 				return;
 			}
-			if(Clearinghouses.List[comboClearhouse.SelectedIndex].CommBridge==EclaimsCommBridge.None
-				|| Clearinghouses.List[comboClearhouse.SelectedIndex].CommBridge==EclaimsCommBridge.Renaissance
-				|| Clearinghouses.List[comboClearhouse.SelectedIndex].CommBridge==EclaimsCommBridge.RECS) {
+			if(Clearinghouses.Listt[comboClearhouse.SelectedIndex].CommBridge==EclaimsCommBridge.None
+				|| Clearinghouses.Listt[comboClearhouse.SelectedIndex].CommBridge==EclaimsCommBridge.Renaissance
+				|| Clearinghouses.Listt[comboClearhouse.SelectedIndex].CommBridge==EclaimsCommBridge.RECS) {
 				MsgBox.Show(this,"No built-in functionality for retrieving reports from this clearinghouse.");
 				return;
 			}
@@ -195,13 +195,13 @@ namespace OpenDental{
 		}
 
 		private void RetrieveReports() {
-			if(Clearinghouses.List[comboClearhouse.SelectedIndex].ISA08=="113504607") {//TesiaLink
+			if(Clearinghouses.Listt[comboClearhouse.SelectedIndex].ISA08=="113504607") {//TesiaLink
 				//But the import will still happen
 				return;
 			}
-			if(Clearinghouses.List[comboClearhouse.SelectedIndex].CommBridge==EclaimsCommBridge.None
-				|| Clearinghouses.List[comboClearhouse.SelectedIndex].CommBridge==EclaimsCommBridge.Renaissance
-				|| Clearinghouses.List[comboClearhouse.SelectedIndex].CommBridge==EclaimsCommBridge.RECS)
+			if(Clearinghouses.Listt[comboClearhouse.SelectedIndex].CommBridge==EclaimsCommBridge.None
+				|| Clearinghouses.Listt[comboClearhouse.SelectedIndex].CommBridge==EclaimsCommBridge.Renaissance
+				|| Clearinghouses.Listt[comboClearhouse.SelectedIndex].CommBridge==EclaimsCommBridge.RECS)
 			{
 				return;
 			}
@@ -221,21 +221,21 @@ namespace OpenDental{
 					return;
 				}
 			}*/
-			if(Clearinghouses.List[comboClearhouse.SelectedIndex].CommBridge==EclaimsCommBridge.WebMD){
-				if(!WebMD.Launch(Clearinghouses.List[comboClearhouse.SelectedIndex],0)){
+			if(Clearinghouses.Listt[comboClearhouse.SelectedIndex].CommBridge==EclaimsCommBridge.WebMD){
+				if(!WebMD.Launch(Clearinghouses.Listt[comboClearhouse.SelectedIndex],0)){
 					Cursor=Cursors.Default;
 					MessageBox.Show(Lan.g(this,"Error retrieving."));
 					return;
 				}
 			}
-			else if(Clearinghouses.List[comboClearhouse.SelectedIndex].CommBridge==EclaimsCommBridge.BCBSGA){
-				if(!BCBSGA.Retrieve(Clearinghouses.List[comboClearhouse.SelectedIndex])){
+			else if(Clearinghouses.Listt[comboClearhouse.SelectedIndex].CommBridge==EclaimsCommBridge.BCBSGA){
+				if(!BCBSGA.Retrieve(Clearinghouses.Listt[comboClearhouse.SelectedIndex])){
 					Cursor=Cursors.Default;
 					MessageBox.Show(Lan.g(this,"Error retrieving."));
 					return;
 				}
 			}
-			else if(Clearinghouses.List[comboClearhouse.SelectedIndex].CommBridge==EclaimsCommBridge.ClaimConnect){
+			else if(Clearinghouses.Listt[comboClearhouse.SelectedIndex].CommBridge==EclaimsCommBridge.ClaimConnect){
 				if(AutomaticMode){
 					Cursor=Cursors.Default;
 					return;
@@ -249,7 +249,7 @@ namespace OpenDental{
 				Cursor=Cursors.Default;
 				return;
 			}
-			else if(Clearinghouses.List[comboClearhouse.SelectedIndex].CommBridge==EclaimsCommBridge.AOS){
+			else if(Clearinghouses.Listt[comboClearhouse.SelectedIndex].CommBridge==EclaimsCommBridge.AOS){
 				try{
 					//his path would never exist on Unix, so no need to handle back slashes.
 					Process.Start(@"C:\Program files\AOS\AOSCommunicator\AOSCommunicator.exe");
@@ -260,8 +260,8 @@ namespace OpenDental{
 					return;
 				}
 			} 
-			else if(Clearinghouses.List[comboClearhouse.SelectedIndex].CommBridge==EclaimsCommBridge.MercuryDE){
-				if(!MercuryDE.Launch(Clearinghouses.List[comboClearhouse.SelectedIndex],0)) {
+			else if(Clearinghouses.Listt[comboClearhouse.SelectedIndex].CommBridge==EclaimsCommBridge.MercuryDE){
+				if(!MercuryDE.Launch(Clearinghouses.Listt[comboClearhouse.SelectedIndex],0)) {
 					Cursor=Cursors.Default;
 					MessageBox.Show(Lan.g(this,"Error retrieving."));
 					return;
@@ -275,19 +275,19 @@ namespace OpenDental{
 
 		///<summary>Takes any files found in the reports folder for the clearinghouse, and imports them into the database.  Deletes the original files.  No longer any such thing as archive.</summary>
 		private void ImportReportFiles() {
-			if(!Directory.Exists(Clearinghouses.List[comboClearhouse.SelectedIndex].ResponsePath)) {
+			if(!Directory.Exists(Clearinghouses.Listt[comboClearhouse.SelectedIndex].ResponsePath)) {
 				//MsgBox.Show(this,"Clearinghouse does not have a valid Report Path set.");
 				return;
 			}
-			string[] files=Directory.GetFiles(Clearinghouses.List[comboClearhouse.SelectedIndex].ResponsePath);
-			string archiveDir=ODFileUtils.CombinePaths(Clearinghouses.List[comboClearhouse.SelectedIndex].ResponsePath,"Archive");
+			string[] files=Directory.GetFiles(Clearinghouses.Listt[comboClearhouse.SelectedIndex].ResponsePath);
+			string archiveDir=ODFileUtils.CombinePaths(Clearinghouses.Listt[comboClearhouse.SelectedIndex].ResponsePath,"Archive");
 			if(!Directory.Exists(archiveDir)){
 				Directory.CreateDirectory(archiveDir);
 			}
 			for(int i=0;i<files.Length;i++) {
 				Etranss.ProcessIncomingReport(
 					File.GetCreationTime(files[i]),
-					Clearinghouses.List[comboClearhouse.SelectedIndex].ClearinghouseNum,
+					Clearinghouses.Listt[comboClearhouse.SelectedIndex].ClearinghouseNum,
 					File.ReadAllText(files[i]));
 				try{
 					File.Copy(files[i],ODFileUtils.CombinePaths(archiveDir,Path.GetFileName(files[i])));

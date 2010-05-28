@@ -13,7 +13,7 @@ namespace OpenDentBusiness{
 		///<summary>Enum:DeletedObjectType </summary>
 		public DeletedObjectType ObjectType;
 		///<summary>Updated any time the row is altered in any way.</summary>
-		[CrudColumn(SpecialType=EnumCrudSpecialColType.TimeStamp)]
+		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime DateTStamp;
 		
 		public DeletedObject Clone(){

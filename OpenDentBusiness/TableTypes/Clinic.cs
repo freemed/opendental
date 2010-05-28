@@ -2,10 +2,12 @@ using System;
 using System.Collections;
 
 namespace OpenDentBusiness{
-	
+
 	///<summary>A clinic is usually a separate physical office location.  If multiple clinics are sharing one database, then this is used.  Patients, Operatories, Claims, and many other types of objects can be assigned to a clinic.</summary>
-	public class Clinic{
-		///<summary>Primary key.  Used in patient,payment,claimpayment,appointment,procedurelog</summary>
+	[Serializable()]
+	public class Clinic:TableBase {
+		///<summary>Primary key.  Used in patient,payment,claimpayment,appointment,procedurelog, etc.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long ClinicNum;
 		///<summary>.</summary>
 		public string Description;

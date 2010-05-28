@@ -20,7 +20,7 @@ namespace OpenDental.Eclaims
 
 		///<summary>Supply a list of ClaimSendQueueItems. Called from FormClaimSend.  Can send to multiple clearinghouses simultaneously or can also just send one claim.</summary>
 		public static void SendBatches(List<ClaimSendQueueItem> queueItems){
-			List<ClaimSendQueueItem>[] claimsByCHouse=new List<ClaimSendQueueItem>[Clearinghouses.List.Length];
+			List<ClaimSendQueueItem>[] claimsByCHouse=new List<ClaimSendQueueItem>[Clearinghouses.Listt.Length];
 			//ArrayList[Clearinghouses.List.Length];
 			for(int i=0;i<claimsByCHouse.Length;i++){
 				claimsByCHouse[i]=new List<ClaimSendQueueItem>();
@@ -39,23 +39,23 @@ namespace OpenDental.Eclaims
 					continue;
 				}
 				//get next batch number for this clearinghouse
-				batchNum=Clearinghouses.GetNextBatchNumber(Clearinghouses.List[i]);
+				batchNum=Clearinghouses.GetNextBatchNumber(Clearinghouses.Listt[i]);
 				//---------------------------------------------------------------------------------------
 				//Create the claim file(s) for this clearinghouse
-				if(Clearinghouses.List[i].Eformat==ElectronicClaimFormat.X12){
+				if(Clearinghouses.Listt[i].Eformat==ElectronicClaimFormat.X12){
 					messageText=X12.SendBatch(claimsByCHouse[i],batchNum);
 				}
-				else if(Clearinghouses.List[i].Eformat==ElectronicClaimFormat.Renaissance){
+				else if(Clearinghouses.Listt[i].Eformat==ElectronicClaimFormat.Renaissance){
 					messageText=Renaissance.SendBatch(claimsByCHouse[i],batchNum);
 				}
-				else if(Clearinghouses.List[i].Eformat==ElectronicClaimFormat.Canadian) {
+				else if(Clearinghouses.Listt[i].Eformat==ElectronicClaimFormat.Canadian) {
 					//Canadian is a little different because we need the sequence numbers.
 					//So all programs are launched and statuses changed from within Canadian.SendBatch()
 					//We don't care what the result is.
 					Canadian.SendBatch(claimsByCHouse[i],batchNum);
 					continue;
 				}
-				else if(Clearinghouses.List[i].Eformat==ElectronicClaimFormat.Dutch) {
+				else if(Clearinghouses.Listt[i].Eformat==ElectronicClaimFormat.Dutch) {
 					messageText=Dutch.SendBatch(claimsByCHouse[i],batchNum);
 				}
 				else{
@@ -66,50 +66,50 @@ namespace OpenDental.Eclaims
 				}
 				//----------------------------------------------------------------------------------------
 				//Launch Client Program for this clearinghouse if applicable
-				if(Clearinghouses.List[i].CommBridge==EclaimsCommBridge.None){
-					AttemptLaunch(Clearinghouses.List[i],batchNum);
+				if(Clearinghouses.Listt[i].CommBridge==EclaimsCommBridge.None){
+					AttemptLaunch(Clearinghouses.Listt[i],batchNum);
 				}
-				else if(Clearinghouses.List[i].CommBridge==EclaimsCommBridge.WebMD){
-					if(!WebMD.Launch(Clearinghouses.List[i],batchNum)){
+				else if(Clearinghouses.Listt[i].CommBridge==EclaimsCommBridge.WebMD){
+					if(!WebMD.Launch(Clearinghouses.Listt[i],batchNum)){
 						MessageBox.Show(Lan.g("Eclaims","Error sending."));
 						continue;
 					}
 				}
-				else if(Clearinghouses.List[i].CommBridge==EclaimsCommBridge.BCBSGA){
-					if(!BCBSGA.Launch(Clearinghouses.List[i],batchNum)){
+				else if(Clearinghouses.Listt[i].CommBridge==EclaimsCommBridge.BCBSGA){
+					if(!BCBSGA.Launch(Clearinghouses.Listt[i],batchNum)){
 						MessageBox.Show(Lan.g("Eclaims","Error sending."));
 						continue;
 					}
 				}
-				else if(Clearinghouses.List[i].CommBridge==EclaimsCommBridge.Renaissance){
-					AttemptLaunch(Clearinghouses.List[i],batchNum);
+				else if(Clearinghouses.Listt[i].CommBridge==EclaimsCommBridge.Renaissance){
+					AttemptLaunch(Clearinghouses.Listt[i],batchNum);
 				}
-				else if(Clearinghouses.List[i].CommBridge==EclaimsCommBridge.ClaimConnect){
-					if(!ClaimConnect.Launch(Clearinghouses.List[i],batchNum)){
+				else if(Clearinghouses.Listt[i].CommBridge==EclaimsCommBridge.ClaimConnect){
+					if(!ClaimConnect.Launch(Clearinghouses.Listt[i],batchNum)){
 						MessageBox.Show(Lan.g("Eclaims","Error sending."));
 						continue;
 					}
 				}
-				else if(Clearinghouses.List[i].CommBridge==EclaimsCommBridge.RECS){
-					if(!RECS.Launch(Clearinghouses.List[i],batchNum)){
+				else if(Clearinghouses.Listt[i].CommBridge==EclaimsCommBridge.RECS){
+					if(!RECS.Launch(Clearinghouses.Listt[i],batchNum)){
 						MessageBox.Show("Claim file created, but could not launch RECS client.");
 						//continue;
 					}
 				}
-				else if(Clearinghouses.List[i].CommBridge==EclaimsCommBridge.Inmediata){
-					if(!Inmediata.Launch(Clearinghouses.List[i],batchNum)){
+				else if(Clearinghouses.Listt[i].CommBridge==EclaimsCommBridge.Inmediata){
+					if(!Inmediata.Launch(Clearinghouses.Listt[i],batchNum)){
 						MessageBox.Show("Claim file created, but could not launch Inmediata client.");
 						//continue;
 					}
 				}
-				else if(Clearinghouses.List[i].CommBridge==EclaimsCommBridge.AOS){ // added by SPK 7/13/05
-					if(!AOS.Launch(Clearinghouses.List[i],batchNum)){
+				else if(Clearinghouses.Listt[i].CommBridge==EclaimsCommBridge.AOS){ // added by SPK 7/13/05
+					if(!AOS.Launch(Clearinghouses.Listt[i],batchNum)){
 						MessageBox.Show("Claim file created, but could not launch AOS Communicator.");
 						//continue;
 					}
 				}
-				else if(Clearinghouses.List[i].CommBridge==EclaimsCommBridge.PostnTrack){
-					AttemptLaunch(Clearinghouses.List[i],batchNum);
+				else if(Clearinghouses.Listt[i].CommBridge==EclaimsCommBridge.PostnTrack){
+					AttemptLaunch(Clearinghouses.Listt[i],batchNum);
 					//if(!PostnTrack.Launch(Clearinghouses.List[i],batchNum)){
 					//	MessageBox.Show("Claim file created, but could not launch AOS Communicator.");
 						//continue;
@@ -121,8 +121,8 @@ namespace OpenDental.Eclaims
 						continue;
 					}
 				}*/
-				else if(Clearinghouses.List[i].CommBridge==EclaimsCommBridge.MercuryDE){
-					if(!MercuryDE.Launch(Clearinghouses.List[i],batchNum)){
+				else if(Clearinghouses.Listt[i].CommBridge==EclaimsCommBridge.MercuryDE){
+					if(!MercuryDE.Launch(Clearinghouses.Listt[i],batchNum)){
 						MsgBox.Show("Eclaims","Error sending.");
 						continue;
 					}
@@ -130,13 +130,13 @@ namespace OpenDental.Eclaims
 				//----------------------------------------------------------------------------------------
 				//finally, mark the claims sent. (only if not Canadian)
 				EtransType etype=EtransType.ClaimSent;
-				if(Clearinghouses.List[i].Eformat==ElectronicClaimFormat.Renaissance){
+				if(Clearinghouses.Listt[i].Eformat==ElectronicClaimFormat.Renaissance){
 					etype=EtransType.Claim_Ren;
 				}
-				if(Clearinghouses.List[i].Eformat!=ElectronicClaimFormat.Canadian){
+				if(Clearinghouses.Listt[i].Eformat!=ElectronicClaimFormat.Canadian){
 					for(int j=0;j<claimsByCHouse[i].Count;j++){
 						Etranss.SetClaimSentOrPrinted(claimsByCHouse[i][j].ClaimNum,claimsByCHouse[i][j].PatNum,
-							Clearinghouses.List[i].ClearinghouseNum,etype,messageText,batchNum);
+							Clearinghouses.Listt[i].ClearinghouseNum,etype,messageText,batchNum);
 					}
 				}
 			}//for(int i=0;i<claimsByCHouse.Length;i++){

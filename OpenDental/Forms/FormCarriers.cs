@@ -224,7 +224,7 @@ namespace OpenDental{
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col;
-			if(checkCDAnet.Checked){
+			/*if(checkCDAnet.Checked){
 				//gridMain.Size=new Size(745,gridMain.Height);
 				col=new ODGridColumn(Lan.g("TableCarriers","Carrier Name"),160);
 				gridMain.Columns.Add(col);
@@ -253,39 +253,39 @@ namespace OpenDental{
 				col=new ODGridColumn(Lan.g("TableCarriers","Hidden"),50,HorizontalAlignment.Center);
 				gridMain.Columns.Add(col);
 			}
-			else{
+			else{*/
 				//gridMain.Size=new Size(839,gridMain.Height);
-				col=new ODGridColumn(Lan.g("TableCarriers","Carrier Name"),160);
+			col=new ODGridColumn(Lan.g("TableCarriers","Carrier Name"),160);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableCarriers","Phone"),90);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableCarriers","Address"),130);
+			gridMain.Columns.Add(col);
+			//col=new ODGridColumn(Lan.g("TableCarriers","Address2"),120);
+			//gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableCarriers","City"),90);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableCarriers","ST"),50);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableCarriers","Zip"),70);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableCarriers","ElectID"),50);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableCarriers","Hidden"),50,HorizontalAlignment.Center);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableCarriers","Plans"),50);
+			gridMain.Columns.Add(col);
+			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {
+				col=new ODGridColumn(Lan.g("TableCarriers","CDAnet"),50);
 				gridMain.Columns.Add(col);
-				col=new ODGridColumn(Lan.g("TableCarriers","Phone"),90);
-				gridMain.Columns.Add(col);
-				col=new ODGridColumn(Lan.g("TableCarriers","Address"),130);
-				gridMain.Columns.Add(col);
-				//col=new ODGridColumn(Lan.g("TableCarriers","Address2"),120);
-				//gridMain.Columns.Add(col);
-				col=new ODGridColumn(Lan.g("TableCarriers","City"),90);
-				gridMain.Columns.Add(col);
-				col=new ODGridColumn(Lan.g("TableCarriers","ST"),50);
-				gridMain.Columns.Add(col);
-				col=new ODGridColumn(Lan.g("TableCarriers","Zip"),70);
-				gridMain.Columns.Add(col);
-				col=new ODGridColumn(Lan.g("TableCarriers","ElectID"),50);
-				gridMain.Columns.Add(col);
-				col=new ODGridColumn(Lan.g("TableCarriers","Hidden"),50,HorizontalAlignment.Center);
-				gridMain.Columns.Add(col);
-				col=new ODGridColumn(Lan.g("TableCarriers","Plans"),50);
-				gridMain.Columns.Add(col);
-				if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {
-					col=new ODGridColumn(Lan.g("TableCarriers","CDAnet"),50);
-					gridMain.Columns.Add(col);
-				}
 			}
+			//}
 			gridMain.Rows.Clear();
 			ODGridRow row;
 			table=Carriers.GetBigList(checkCDAnet.Checked,checkShowHidden.Checked,textCarrier.Text);
 			for(int i=0;i<table.Rows.Count;i++){
 				row=new ODGridRow();
-				if(checkCDAnet.Checked){
+				/*if(checkCDAnet.Checked){
 					row.Cells.Add(table.Rows[i]["CarrierName"].ToString());
 					row.Cells.Add(table.Rows[i]["ElectID"].ToString());
 					row.Cells.Add(table.Rows[i]["pMP"].ToString());
@@ -300,21 +300,21 @@ namespace OpenDental{
 					row.Cells.Add(table.Rows[i]["trans08"].ToString());
 					row.Cells.Add(table.Rows[i]["isHidden"].ToString());
 				}
-				else{
-					row.Cells.Add(table.Rows[i]["CarrierName"].ToString());
-					row.Cells.Add(table.Rows[i]["Phone"].ToString());
-					row.Cells.Add(table.Rows[i]["Address"].ToString());
-					//row.Cells.Add(table.Rows[i]["Address2"].ToString());
-					row.Cells.Add(table.Rows[i]["City"].ToString());
-					row.Cells.Add(table.Rows[i]["State"].ToString());
-					row.Cells.Add(table.Rows[i]["Zip"].ToString());
-					row.Cells.Add(table.Rows[i]["ElectID"].ToString());
-					row.Cells.Add(table.Rows[i]["isHidden"].ToString());
-					row.Cells.Add(table.Rows[i]["insPlanCount"].ToString());
-					if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {
-						row.Cells.Add(table.Rows[i]["isCDA"].ToString());
-					}
+				else{*/
+				row.Cells.Add(table.Rows[i]["CarrierName"].ToString());
+				row.Cells.Add(table.Rows[i]["Phone"].ToString());
+				row.Cells.Add(table.Rows[i]["Address"].ToString());
+				//row.Cells.Add(table.Rows[i]["Address2"].ToString());
+				row.Cells.Add(table.Rows[i]["City"].ToString());
+				row.Cells.Add(table.Rows[i]["State"].ToString());
+				row.Cells.Add(table.Rows[i]["Zip"].ToString());
+				row.Cells.Add(table.Rows[i]["ElectID"].ToString());
+				row.Cells.Add(table.Rows[i]["isHidden"].ToString());
+				row.Cells.Add(table.Rows[i]["insPlanCount"].ToString());
+				if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {
+					row.Cells.Add(table.Rows[i]["isCDA"].ToString());
 				}
+				//}
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();

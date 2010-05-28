@@ -53,12 +53,12 @@ namespace OpenDentBusiness{
 		public Color OutlineColor;
 		///<summary>FK to schoolclass.SchoolClassNum Used in dental schools.  Each student is a provider.  This keeps track of which class they are in.</summary>
 		public long SchoolClassNum;
-		///<summary>Used for Canadian claims right now as CDA number.  Will be required in US within a year.  Goes out on e-claims if available.</summary>
+		///<summary>US NPI, and Canadian CDA provider number.</summary>
 		public string NationalProvID;
 		///<summary>Canadian field required for e-claims.  Assigned by CDA.  It's OK to have multiple providers with the same OfficeNum.  Max length should be 4.</summary>
 		public string CanadianOfficeNum;
 		/// <summary></summary>
-		[CrudColumn(SpecialType=EnumCrudSpecialColType.TimeStamp)]
+		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime DateTStamp;
 		/// <summary> FK to ??. Field used to set the Anesthesia Provider type. Used to filter the provider dropdowns on FormAnestheticRecord</summary>
 		public long AnesthProvType;

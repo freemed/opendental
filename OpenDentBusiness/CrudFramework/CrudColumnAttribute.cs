@@ -7,7 +7,7 @@ namespace OpenDentBusiness {
 	public class CrudColumnAttribute : Attribute {
 		public CrudColumnAttribute() {
 			this.isPriKey=false;
-			this.specialType=EnumCrudSpecialColType.None;
+			this.specialType=CrudSpecialColType.None;
 			this.isNotDbColumn=false;
 		}
 
@@ -17,8 +17,8 @@ namespace OpenDentBusiness {
 			set { isPriKey=value; }
 		}
 
-		private EnumCrudSpecialColType specialType;
-		public EnumCrudSpecialColType SpecialType {
+		private CrudSpecialColType specialType;
+		public CrudSpecialColType SpecialType {
 			get { return specialType; }
 			set { specialType=value; }
 		}
@@ -30,7 +30,7 @@ namespace OpenDentBusiness {
 		}
 	}
 
-	public enum EnumCrudSpecialColType {
+	public enum CrudSpecialColType {
 		None,
 		///<summary>User not allowed to change.  Insert uses NOW(), Update exludes this column, Select treats this like a date.</summary>
 		DateEntry,
@@ -45,6 +45,8 @@ namespace OpenDentBusiness {
 		///<summary>Insert uses NOW(), Update and Select treat this like a DateT.</summary>
 		DateTEntryEditable,
 		///<summary>Database type is tinyint unsigned.  C# type is int.  Range -128 to 128.  The validation does not check to make sure the db is unsigned.  The programmer must do that.</summary>
-		TinyIntUnsigned
+		TinyIntUnsigned,
+		///<summary>We do not want this column updated except as part of a separate routine.</summary>
+		ExcludeFromUpdate
 	}
 }

@@ -447,7 +447,7 @@ namespace OpenDental{
 				ClaimForms.Insert(tempClaimForm);//now we have a primary key.
 				retVal=tempClaimForm.ClaimFormNum;
 				for(int j=0;j<tempClaimForm.Items.Length;j++){
-					tempClaimForm.Items[j].ClaimFormNum=tempClaimForm.ClaimFormNum;
+					tempClaimForm.Items[j].ClaimFormNum=tempClaimForm.ClaimFormNum;//so even though the ClaimFormNum is wrong, this line fixes it.
 					ClaimFormItems.Insert(tempClaimForm.Items[j]);
 				}
 			}

@@ -2765,7 +2765,7 @@ namespace OpenDental {
 						claimProcs[i].CodeSent=claimProcs[i].CodeSent.Substring(0,5);
 					}
 				}
-				claimProcs[i].LineNumber=i+1;
+				claimProcs[i].LineNumber=(byte)(i+1);
 				ClaimProcs.Update(claimProcs[i]);
 			}//for claimProc
 			return ClaimCur;

@@ -4,14 +4,16 @@ using System.Text;
 
 namespace OpenDentBusiness {
 	///<summary>Not well documented.  Has something to do with medical claims.</summary>
-	public class ClaimValCodeLog {
+	[Serializable()]
+	public class ClaimValCodeLog:TableBase {
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long ClaimValCodeLogNum;
 		///<summary>FK to claim.ClaimNum.</summary>
 		public long ClaimNum;
 		///<summary>Descriptive abbreviation to help place field on form (Ex: "FL55" for field 55).</summary>
 		public string ClaimField;
-		///<summary>Value Code.</summary>
+		///<summary>Value Code. 2 char.</summary>
 		public string ValCode;
 		///<summary>Value Code Amount.</summary>
 		public double ValAmount;

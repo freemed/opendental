@@ -34,7 +34,7 @@ namespace OpenDentBusiness{
 		///<summary>FK to patient.PatNum.  A saved sheet is always attached to a patient.  There are a few sheets that are so minor that they don't get saved, such as a Carrier label.</summary>
 		public long PatNum;
 		///<summary>The date and time of the sheet as it will be displayed in the commlog.</summary>
-		[CrudColumn(SpecialType=EnumCrudSpecialColType.DateT)]
+		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTimeSheet;
 		///<summary>The default fontSize for the sheet.  The actual font must still be saved with each sheetField.</summary>
 		public float FontSize;

@@ -96,17 +96,10 @@ namespace OpenDentBusiness{
 			table.Columns.Add("isCDA");
 			table.Columns.Add("isHidden");
 			table.Columns.Add("Phone");
-			table.Columns.Add("pMP");
-			table.Columns.Add("network");
+			//table.Columns.Add("pMP");
+			//table.Columns.Add("network");
 			table.Columns.Add("State");
-			table.Columns.Add("trans02");
-			table.Columns.Add("trans03");
-			table.Columns.Add("trans04");
-			table.Columns.Add("trans05");
-			table.Columns.Add("trans06");
-			table.Columns.Add("trans07");
-			table.Columns.Add("trans08");
-			table.Columns.Add("version");
+			//table.Columns.Add("version");
 			table.Columns.Add("Zip");
 			DataRow row;
 			for(int i=0;i<tableRaw.Rows.Count;i++){
@@ -131,22 +124,15 @@ namespace OpenDentBusiness{
 				}
 				row["insPlanCount"]=tableRaw.Rows[i]["insPlanCount"].ToString();
 				row["Phone"]=tableRaw.Rows[i]["Phone"].ToString();
-				if(PIn.Bool(tableRaw.Rows[i]["IsPMP"].ToString())){
-					row["pMP"]="X";
-				}
-				else{
-					row["pMP"]="";
-				}
-				row["network"]=tableRaw.Rows[i]["Abbrev"].ToString();
+				//if(PIn.Bool(tableRaw.Rows[i]["IsPMP"].ToString())){
+				//	row["pMP"]="X";
+				//}
+				//else{
+				//	row["pMP"]="";
+				//}
+				//row["network"]=tableRaw.Rows[i]["Abbrev"].ToString();
 				row["State"]=tableRaw.Rows[i]["State"].ToString();
-				row["trans02"]="X";
-				row["trans03"]="X";
-				row["trans04"]="X";
-				row["trans05"]="X";
-				row["trans06"]="X";
-				row["trans07"]="X";
-				row["trans08"]="X";
-				row["version"]=tableRaw.Rows[i]["CDAnetVersion"].ToString();
+				//row["version"]=tableRaw.Rows[i]["CDAnetVersion"].ToString();
 				row["Zip"]=tableRaw.Rows[i]["Zip"].ToString();
 				table.Rows.Add(row);
 			}
@@ -164,10 +150,10 @@ namespace OpenDentBusiness{
 			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//en-CA or fr-CA
 				if(carrier.IsCDA) {
 					if(carrier.ElectID=="") {
-						throw new ApplicationException(Lans.g("Carriers","EDI Code required."));
+						throw new ApplicationException(Lans.g("Carriers","Carrier Identification Number required."));
 					}
 					if(!Regex.IsMatch(carrier.ElectID,"^[0-9]{6}$")) {
-						throw new ApplicationException(Lans.g("Carriers","EDI Code must be exactly 6 numbers."));
+						throw new ApplicationException(Lans.g("Carriers","Carrier Identification Number must be exactly 6 numbers."));
 					}
 					/*Duplication is allowed
 					command="SELECT CarrierNum FROM carrier WHERE "
@@ -189,7 +175,7 @@ namespace OpenDentBusiness{
 					command="SELECT COUNT(*) FROM etrans WHERE CarrierNum= "+POut.Long(carrier.CarrierNum)
 						+" OR CarrierNum2="+POut.Long(carrier.CarrierNum);
 					if(Db.GetCount(command)!="0"){
-						throw new ApplicationException(Lans.g("Carriers","Not allowed to change EDI Code because it's in use in the claim history."));
+						throw new ApplicationException(Lans.g("Carriers","Not allowed to change Carrier Identification Number because it's in use in the claim history."));
 					}
 				}
 			}
@@ -206,10 +192,10 @@ namespace OpenDentBusiness{
 			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")){//en-CA or fr-CA
 				if(carrier.IsCDA){
 					if(carrier.ElectID==""){
-						throw new ApplicationException(Lans.g("Carriers","EDI Code required."));
+						throw new ApplicationException(Lans.g("Carriers","Carrier Identification Number required."));
 					}
 					if(!Regex.IsMatch(carrier.ElectID,"^[0-9]{6}$")) {
-						throw new ApplicationException(Lans.g("Carriers","EDI Code must be exactly 6 numbers."));
+						throw new ApplicationException(Lans.g("Carriers","Carrier Identification Number must be exactly 6 numbers."));
 					}
 					/*Duplication actually seems to be allowed
 					command="SELECT CarrierNum FROM carrier WHERE "

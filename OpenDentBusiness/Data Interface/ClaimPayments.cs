@@ -64,7 +64,7 @@ namespace OpenDentBusiness{
 				command+=" AND ClinicNum="+POut.Long(clinicNum);
 			}
 			command+=" ORDER BY CheckDate";
-			return RefreshAndFill(Db.GetTable(command));
+			return Crud.ClaimPaymentCrud.SelectMany(command).ToArray();
 		}
 
 		///<summary>Gets all claimpayments for one specific deposit.</summary>
@@ -79,7 +79,7 @@ namespace OpenDentBusiness{
 				+"FROM claimpayment "
 				+"WHERE DepositNum = "+POut.Long(depositNum)
 				+" ORDER BY CheckDate";
-			return RefreshAndFill(Db.GetTable(command));
+			return Crud.ClaimPaymentCrud.SelectMany(command).ToArray();
 		}
 
 		///<summary>Gets one claimpayment directly from database.</summary>
@@ -90,27 +90,8 @@ namespace OpenDentBusiness{
 			string command=
 				"SELECT * FROM claimpayment "
 				+"WHERE ClaimPaymentNum = "+POut.Long(claimPaymentNum);
-			return RefreshAndFill(Db.GetTable(command))[0];
+			return Crud.ClaimPaymentCrud.SelectOne(command);
 		}
-
-		private static ClaimPayment[] RefreshAndFill(DataTable table) {
-			//No need to check RemotingRole; no call to db.
-			ClaimPayment[] List=new ClaimPayment[table.Rows.Count];
-			for(int i=0;i<table.Rows.Count;i++) {
-				List[i]=new ClaimPayment();
-				List[i].ClaimPaymentNum= PIn.Long(table.Rows[i][0].ToString());
-				List[i].CheckDate      = PIn.Date(table.Rows[i][1].ToString());
-				List[i].CheckAmt       = PIn.Double(table.Rows[i][2].ToString());
-				List[i].CheckNum       = PIn.String(table.Rows[i][3].ToString());
-				List[i].BankBranch     = PIn.String(table.Rows[i][4].ToString());
-				List[i].Note           = PIn.String(table.Rows[i][5].ToString());
-				List[i].ClinicNum      = PIn.Long(table.Rows[i][6].ToString());
-				List[i].DepositNum     = PIn.Long(table.Rows[i][7].ToString());
-				List[i].CarrierName    = PIn.String(table.Rows[i][8].ToString());
-			}
-			return List;
-		}
-
 
 		///<summary></summary>
 		public static long Insert(ClaimPayment cp) {
@@ -118,34 +99,7 @@ namespace OpenDentBusiness{
 				cp.ClaimPaymentNum=Meth.GetLong(MethodBase.GetCurrentMethod(),cp);
 				return cp.ClaimPaymentNum;
 			}
-			if(PrefC.RandomKeys){
-				cp.ClaimPaymentNum=ReplicationServers.GetKey("claimpayment","ClaimPaymentNum");
-			}
-			string command= "INSERT INTO claimpayment (";
-			if(PrefC.RandomKeys){
-				command+="ClaimPaymentNum,";
-			}
-			command+="CheckDate,CheckAmt,CheckNum,"
-				+"BankBranch,Note,ClinicNum,DepositNum,CarrierName) VALUES(";
-			if(PrefC.RandomKeys){
-				command+="'"+POut.Long(cp.ClaimPaymentNum)+"', ";
-			}
-			command+=
-				 POut.Date  (cp.CheckDate)+", "
-				+"'"+POut.Double(cp.CheckAmt)+"', "
-				+"'"+POut.String(cp.CheckNum)+"', "
-				+"'"+POut.String(cp.BankBranch)+"', "
-				+"'"+POut.String(cp.Note)+"', "
-				+"'"+POut.Long   (cp.ClinicNum)+"', "
-				+"'"+POut.Long   (cp.DepositNum)+"', "
-				+"'"+POut.String(cp.CarrierName)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				cp.ClaimPaymentNum=Db.NonQ(command,true);
-			}
-			return cp.ClaimPaymentNum;
+			return Crud.ClaimPaymentCrud.Insert(cp);
 		}
 
 		///<summary>If trying to change the amount and attached to a deposit, it will throw an error, so surround with try catch.</summary>
@@ -165,18 +119,7 @@ namespace OpenDentBusiness{
 			{
 				throw new ApplicationException(Lans.g("ClaimPayments","Not allowed to change the amount on checks attached to deposits."));
 			}
-			command="UPDATE claimpayment SET "
-				+"checkdate = "   +POut.Date  (cp.CheckDate)+" "
-				+",checkamt = '"   +POut.Double(cp.CheckAmt)+"' "
-				+",checknum = '"   +POut.String(cp.CheckNum)+"' "
-				+",bankbranch = '" +POut.String(cp.BankBranch)+"' "
-				+",note = '"       +POut.String(cp.Note)+"' "
-				+",ClinicNum = '"  +POut.Long   (cp.ClinicNum)+"' "
-				+",DepositNum = '" +POut.Long   (cp.DepositNum)+"' "
-				+",CarrierName = '"+POut.String(cp.CarrierName)+"' "
-				+"WHERE ClaimPaymentnum = '"+POut.Long   (cp.ClaimPaymentNum)+"'";
-			//MessageBox.Show(string command);
- 			Db.NonQ(command);
+			Crud.ClaimPaymentCrud.Update(cp);
 		}
 
 		///<summary>Surround by try catch, because it will throw an exception if trying to delete a claimpayment attached to a deposit.</summary>

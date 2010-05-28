@@ -73,7 +73,7 @@ namespace OpenDental{
 			InitializeComponent();// Required for Windows Form Designer support
 			Lan.F(this);
 			//ProvCur=provCur;
-			if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="CA"){//en-CA or fr-CA
+			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")){//en-CA or fr-CA
 				labelNPI.Text=Lan.g(this,"CDA Number");
 			}
 			else{

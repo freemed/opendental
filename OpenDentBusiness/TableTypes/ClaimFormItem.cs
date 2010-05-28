@@ -3,14 +3,16 @@ using System.Collections;
 using System.Xml.Serialization;
 
 namespace OpenDentBusiness{
-	
+
 	///<summary>One item is needed for each field on a claimform.</summary>
-	public class ClaimFormItem{
+	[Serializable()]
+	public class ClaimFormItem:TableBase {
 		///<summary>Primary key.</summary>
-		[XmlIgnore]
+		//[XmlIgnore]
+		[CrudColumn(IsPriKey=true)]
 		public long ClaimFormItemNum;
 		///<summary>FK to claimform.ClaimFormNum</summary>
-		[XmlIgnore]
+		//[XmlIgnore]
 		public long ClaimFormNum;
 		///<summary>If this item is an image.  Usually only one per claimform.  eg ADA2002.emf.  Otherwise it MUST be left blank, or it will trigger an error that the image cannot be found.</summary>
 		public string ImageFileName;
@@ -29,17 +31,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Returns a copy of the claimformitem.</summary>
     public ClaimFormItem Copy(){
-			ClaimFormItem cfi=new ClaimFormItem();
-			cfi.ClaimFormItemNum=ClaimFormItemNum;
-			cfi.ClaimFormNum=ClaimFormNum;
-			cfi.ImageFileName=ImageFileName;
-			cfi.FieldName=FieldName;
-			cfi.FormatString=FormatString;
-			cfi.XPos=XPos;
-			cfi.YPos=YPos;
-			cfi.Width=Width;
-			cfi.Height=Height;
-			return cfi;
+			return (ClaimFormItem)this.MemberwiseClone(); 
 		}
 
 	}

@@ -56,7 +56,7 @@ namespace OpenDental{
 		//private Claim[] ClaimsArray;
 		//private Claim[] MedClaimsArray;
 		private ArrayList MedClaimsArrayList;
-		private ArrayList MedValueCodes;
+		private List<ClaimValCodeLog> MedValueCodes;
 		private Referral ClaimReferral;
 
 		///<summary></summary>
@@ -2442,7 +2442,7 @@ namespace OpenDental{
 		}
 
 		private void FillMedValueCodes(){
-			MedValueCodes = ClaimValCodeLogs.GetValCodes(ClaimCur);
+			MedValueCodes = ClaimValCodeLogs.GetValCodes(ClaimCur.ClaimNum);
 			if(MedValueCodes.Count>0){
 				ClaimValCodeLog[] vcA;
 				vcA = new ClaimValCodeLog[12];

@@ -352,8 +352,8 @@ namespace OpenDental{
 			//contextMenuHist=new ContextMenu();
 			//contextMenuHist.MenuItems.Add(Lan.g(this,"Show Raw Message"),new EventHandler(ShowRawMessage_Clicked));
 			//gridHistory.ContextMenu=contextMenuHist;
-			for(int i=0;i<Clearinghouses.List.Length;i++){
-				contextMenuEclaims.MenuItems.Add(Clearinghouses.List[i].Description,new EventHandler(Clearinghouse_Clicked));
+			for(int i=0;i<Clearinghouses.Listt.Length;i++){
+				contextMenuEclaims.MenuItems.Add(Clearinghouses.Listt[i].Description,new EventHandler(Clearinghouse_Clicked));
 			}
 			LayoutToolBars();
 			if(PrefC.GetBool(PrefName.EasyNoClinics)) {
@@ -439,7 +439,7 @@ namespace OpenDental{
 
 		private void Clearinghouse_Clicked(object sender, System.EventArgs e){
 			MenuItem menuitem=(MenuItem)sender;
-			OnEclaims_Click(Clearinghouses.List[menuitem.Index].ClearinghouseNum);
+			OnEclaims_Click(Clearinghouses.Listt[menuitem.Index].ClearinghouseNum);
 		}
 
 		private void FillGrid(){

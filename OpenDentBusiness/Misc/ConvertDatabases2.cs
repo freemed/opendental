@@ -23,7 +23,7 @@ namespace OpenDentBusiness {
 	//The other file was simply getting too big.  It was bogging down VS speed.
 	///<summary></summary>
 	public partial class ConvertDatabases {
-		public static System.Version LatestVersion=new Version("7.1.0.0");//This value must be changed when a new conversion is to be triggered.
+		public static System.Version LatestVersion=new Version("7.2.0.0");//This value must be changed when a new conversion is to be triggered.
 
 		private static void To6_2_9() {
 			if(FromVersion<new Version("6.2.9.0")) {
@@ -2200,8 +2200,15 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 		private static void To7_2_0() {
 			if(FromVersion<new Version("7.2.0.0")) {
 				string command;
-
-
+				//this column was a varchar holding currency amounts.
+				command="ALTER TABLE claimvalcodelog CHANGE ValAmount ValAmount double not null";
+				Db.NonQ(command);
+				command="ALTER TABLE carrier ADD CanadianEncryptionMethod tinyint NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE carrier ADD CanadianTransactionPrefix varchar(255) NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE carrier ADD CanadianSupportedTypes tinyint NOT NULL";
+				Db.NonQ(command);
 
 
 
@@ -2221,3 +2228,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 			
 		
+
+
+			

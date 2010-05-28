@@ -426,14 +426,14 @@ namespace OpenDental.Eclaims {
 
 		///<summary>Since this is only used for Canadian messages, it will always use the default clearinghouse if it's Canadian.  Otherwise, it uses the first Canadian clearinghouse that it can find.</summary>
 		public static Clearinghouse GetClearinghouse(){
-			for(int i=0;i<Clearinghouses.List.Length;i++) {
-				if(Clearinghouses.List[i].IsDefault && Clearinghouses.List[i].CommBridge==EclaimsCommBridge.CDAnet) {
-					return Clearinghouses.List[i];
+			for(int i=0;i<Clearinghouses.Listt.Length;i++) {
+				if(Clearinghouses.Listt[i].IsDefault && Clearinghouses.Listt[i].CommBridge==EclaimsCommBridge.CDAnet) {
+					return Clearinghouses.Listt[i];
 				}
 			}
-			for(int i=0;i<Clearinghouses.List.Length;i++) {
-				if(Clearinghouses.List[i].CommBridge==EclaimsCommBridge.CDAnet) {
-					return Clearinghouses.List[i];
+			for(int i=0;i<Clearinghouses.Listt.Length;i++) {
+				if(Clearinghouses.Listt[i].CommBridge==EclaimsCommBridge.CDAnet) {
+					return Clearinghouses.Listt[i];
 				}
 			}
 			return null;

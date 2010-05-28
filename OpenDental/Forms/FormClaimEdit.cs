@@ -218,7 +218,7 @@ namespace OpenDental{
 		private Label label52;
 		private Label label51;
 		private Label label50;
-		private ArrayList ClaimValCodes;
+		private List<ClaimValCodeLog> ClaimValCodes;
 		private GroupBox groupBox4;
 		private GroupBox groupAttachments;
 		private OpenDental.UI.Button butAttachAdd;
@@ -255,7 +255,7 @@ namespace OpenDental{
 			ClaimCur=claimCur;
 			if(ClaimCur.ClaimForm != 0){
 				ClaimFormCur=ClaimForms.GetClaimForm(ClaimCur.ClaimForm);
-				ClaimValCodes=ClaimValCodeLogs.GetValCodes(ClaimCur);
+				ClaimValCodes=ClaimValCodeLogs.GetValCodes(ClaimCur.ClaimNum);
 				CurCondCodeLog=ClaimCondCodeLogs.GetOne(ClaimCur.ClaimNum);
 			}
 			InitializeComponent();// Required for Windows Form Designer support
@@ -4180,7 +4180,7 @@ namespace OpenDental{
 						ClaimValCodes.Add(vc);
 					}
 				}
-				ClaimValCodeLogs.Update(ClaimValCodes);
+				ClaimValCodeLogs.UpdateList(ClaimValCodes);
 			}
 			if(wasSentOrReceived){
 				SecurityLogs.MakeLogEntry(Permissions.ClaimSentEdit,ClaimCur.PatNum,

@@ -26,7 +26,7 @@ namespace OpenDentBusiness{
 		///<summary>FK to procedurelog.ProcNum.  Only used if attached to a procedure.  Otherwise, 0.</summary>
 		public long ProcNum;
 		///<summary>Timestamp automatically generated and user not allowed to change.  The actual date of entry.</summary>
-		[CrudColumn(SpecialType=EnumCrudSpecialColType.DateEntry)]
+		[CrudColumn(SpecialType=CrudSpecialColType.DateEntry)]
 		public DateTime DateEntry;
 		///<summary>FK to clinic.ClinicNum.</summary>
 		public long ClinicNum;

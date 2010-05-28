@@ -139,6 +139,12 @@
     <Compile Include="Crud\ClaimCondCodeLogCrud.cs" />
     <Compile Include="Crud\ClaimCrud.cs" />
     <Compile Include="Crud\ClaimFormCrud.cs" />
+    <Compile Include="Crud\ClaimFormItemCrud.cs" />
+    <Compile Include="Crud\ClaimPaymentCrud.cs" />
+    <Compile Include="Crud\ClaimProcCrud.cs" />
+    <Compile Include="Crud\ClaimValCodeLogCrud.cs" />
+    <Compile Include="Crud\ClearinghouseCrud.cs" />
+    <Compile Include="Crud\ClinicCrud.cs" />
     <Compile Include="Crud\ClockEventCrud.cs" />
     <Compile Include="Crud\DeletedObjectCrud.cs" />
     <Compile Include="Crud\DocumentCrud.cs" />

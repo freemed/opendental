@@ -19,19 +19,19 @@ namespace OpenDentBusiness{
 		///<summary>FK to appointment.AptNum.  This is how a lab case is attached to a planned appointment in addition to the scheduled appointment.</summary>
 		public long PlannedAptNum;
 		///<summary>The due date that is put on the labslip.  NOT when you really need the labcase back, which is usually a day or two later and is the date of the appointment this case is attached to.</summary>
-		[CrudColumn(SpecialType=EnumCrudSpecialColType.DateT)]
+		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTimeDue;
 		///<summary>When this lab case was created. User can edit.</summary>
-		[CrudColumn(SpecialType=EnumCrudSpecialColType.DateT)]
+		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTimeCreated;
 		///<summary>Time that it actually went out to the lab.</summary>
-		[CrudColumn(SpecialType=EnumCrudSpecialColType.DateT)]
+		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTimeSent;
 		///<summary>Date/time received back from the lab.  If this is filled, then the case is considered received.</summary>
-		[CrudColumn(SpecialType=EnumCrudSpecialColType.DateT)]
+		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTimeRecd;
 		///<summary>Date/time that quality was checked.  It is now completely ready for the patient.</summary>
-		[CrudColumn(SpecialType=EnumCrudSpecialColType.DateT)]
+		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTimeChecked;
 		///<summary>FK to provider.ProvNum.</summary>
 		public long ProvNum;

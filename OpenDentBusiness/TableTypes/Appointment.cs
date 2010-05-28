@@ -28,7 +28,7 @@ namespace OpenDentBusiness{
 		///<summary>FK to provider.ProvNum.  Optional.  Only used if a hygienist is assigned to this appt.</summary>
 		public long ProvHyg;
 		///<summary>Appointment Date and time.  If you need just the date or time for an SQL query, you can use DATE(AptDateTime) and TIME(AptDateTime) in your query.</summary>
-		[CrudColumn(SpecialType=EnumCrudSpecialColType.DateT)]
+		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime AptDateTime;
 		///<summary>FK to appointment.AptNum.  A better description of this field would be PlannedAptNum.  Only used to show that this apt is derived from specified planned apt. Otherwise, 0.</summary>
 		public long NextAptNum;
@@ -45,16 +45,16 @@ namespace OpenDentBusiness{
 		///<summary>Set true if this is a hygiene appt.  The hygiene provider's color will show.</summary>
 		public bool IsHygiene;
 		///<summary>Automatically updated by MySQL every time a row is added or changed.</summary>
-		[CrudColumn(SpecialType=EnumCrudSpecialColType.TimeStamp)]
+		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime DateTStamp;
 		///<summary>The date and time that the patient checked in.  Date is largely ignored since it should be the same as the appt.</summary>
-		[CrudColumn(SpecialType=EnumCrudSpecialColType.DateT)]
+		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTimeArrived;
 		///<summary>The date and time that the patient was seated in the chair in the operatory.</summary>
-		[CrudColumn(SpecialType=EnumCrudSpecialColType.DateT)]
+		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTimeSeated;
 		///<summary>The date and time that the patient got up out of the chair</summary>
-		[CrudColumn(SpecialType=EnumCrudSpecialColType.DateT)]
+		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTimeDismissed;
 		///<summary>FK to insplan.PlanNum for the primary insurance plan at the time the appointment is set complete. May be 0.</summary>
 		public long InsPlan1;

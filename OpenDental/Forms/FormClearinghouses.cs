@@ -147,24 +147,24 @@ namespace OpenDental{
 
 		private void FillGrid(){
 			Clearinghouses.RefreshCache();
-			gridMain.ResetRows(Clearinghouses.List.Length);
+			gridMain.ResetRows(Clearinghouses.Listt.Length);
 			gridMain.SetGridColor(Color.Gray);
 			gridMain.SetBackGColor(Color.White);
-			for(int i=0;i<Clearinghouses.List.Length;i++){
-				gridMain.Cell[0,i]=Clearinghouses.List[i].Description;
-				gridMain.Cell[1,i]=Clearinghouses.List[i].ExportPath;
-				gridMain.Cell[2,i]=Clearinghouses.List[i].Eformat.ToString();
-				if(Clearinghouses.List[i].IsDefault){
+			for(int i=0;i<Clearinghouses.Listt.Length;i++){
+				gridMain.Cell[0,i]=Clearinghouses.Listt[i].Description;
+				gridMain.Cell[1,i]=Clearinghouses.Listt[i].ExportPath;
+				gridMain.Cell[2,i]=Clearinghouses.Listt[i].Eformat.ToString();
+				if(Clearinghouses.Listt[i].IsDefault){
 					gridMain.Cell[3,i]="X";
 				}
-				gridMain.Cell[4,i]=Clearinghouses.List[i].Payors;
+				gridMain.Cell[4,i]=Clearinghouses.Listt[i].Payors;
 			}
 			gridMain.LayoutTables();
 		}
 
 		private void gridMain_CellDoubleClicked(object sender, OpenDental.CellEventArgs e) {
 			FormClearinghouseEdit FormCE=new FormClearinghouseEdit();
-			FormCE.ClearinghouseCur=Clearinghouses.List[e.Row];
+			FormCE.ClearinghouseCur=Clearinghouses.Listt[e.Row];
 			FormCE.ShowDialog();
 			if(FormCE.DialogResult!=DialogResult.OK)
 				return;
@@ -189,12 +189,12 @@ namespace OpenDental{
 
 		private void FormClearinghouses_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
 			int defaultsSelected=0;
-			for(int i=0;i<Clearinghouses.List.Length;i++){
-				if(Clearinghouses.List[i].IsDefault){
+			for(int i=0;i<Clearinghouses.Listt.Length;i++){
+				if(Clearinghouses.Listt[i].IsDefault){
 					defaultsSelected++;
 				}
 			}
-			if(defaultsSelected==0 && Clearinghouses.List.Length>0){
+			if(defaultsSelected==0 && Clearinghouses.Listt.Length>0){
 				if(!MsgBox.Show(this,true,"At least one clearinghouse should be selected as the default. Continue anyway?")){
 					e.Cancel=true;
 					return;

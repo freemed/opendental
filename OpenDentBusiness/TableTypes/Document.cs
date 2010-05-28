@@ -48,7 +48,7 @@ namespace OpenDentBusiness{
 		/// <summary>FK to mountitem.MountItemNum. If set to 0, then no mount item is associated with this document.</summary>
 		public long MountItemNum;
 		/// <summary>Date/time last altered.</summary>
-		[CrudColumn(SpecialType=EnumCrudSpecialColType.TimeStamp)]
+		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime DateTStamp;
 
 		///<summary>Returns a copy of this Document.</summary>
