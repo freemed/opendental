@@ -328,6 +328,7 @@ namespace OpenDental{
 			this.label18 = new System.Windows.Forms.Label();
 			this.groupPlan = new System.Windows.Forms.GroupBox();
 			this.groupCarrier = new System.Windows.Forms.GroupBox();
+			this.butPickCarrier = new OpenDental.UI.Button();
 			this.butSearch = new OpenDental.UI.Button();
 			this.panelPlan = new System.Windows.Forms.Panel();
 			this.comboFilingCodeSubtype = new System.Windows.Forms.ComboBox();
@@ -346,7 +347,6 @@ namespace OpenDental{
 			this.butLabel = new OpenDental.UI.Button();
 			this.butDelete = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.butPickCarrier = new OpenDental.UI.Button();
 			this.groupSubscriber.SuspendLayout();
 			this.groupCoPay.SuspendLayout();
 			this.groupRequestBen.SuspendLayout();
@@ -367,7 +367,7 @@ namespace OpenDental{
 			// 
 			// label6
 			// 
-			this.label6.Location = new System.Drawing.Point(187,53);
+			this.label6.Location = new System.Drawing.Point(182,53);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(36,15);
 			this.label6.TabIndex = 6;
@@ -567,18 +567,18 @@ namespace OpenDental{
 			// checkAssign
 			// 
 			this.checkAssign.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkAssign.Location = new System.Drawing.Point(320,50);
+			this.checkAssign.Location = new System.Drawing.Point(300,50);
 			this.checkAssign.Name = "checkAssign";
-			this.checkAssign.Size = new System.Drawing.Size(177,20);
+			this.checkAssign.Size = new System.Drawing.Size(199,20);
 			this.checkAssign.TabIndex = 4;
-			this.checkAssign.Text = "Assignment of Benefits";
+			this.checkAssign.Text = "Assignment of Benefits (pay dentist)";
 			// 
 			// checkRelease
 			// 
 			this.checkRelease.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkRelease.Location = new System.Drawing.Point(320,32);
+			this.checkRelease.Location = new System.Drawing.Point(300,32);
 			this.checkRelease.Name = "checkRelease";
-			this.checkRelease.Size = new System.Drawing.Size(177,20);
+			this.checkRelease.Size = new System.Drawing.Size(199,20);
 			this.checkRelease.TabIndex = 3;
 			this.checkRelease.Text = "Release of Information";
 			// 
@@ -692,7 +692,7 @@ namespace OpenDental{
 			// 
 			// textDateTerm
 			// 
-			this.textDateTerm.Location = new System.Drawing.Point(227,50);
+			this.textDateTerm.Location = new System.Drawing.Point(221,50);
 			this.textDateTerm.Name = "textDateTerm";
 			this.textDateTerm.Size = new System.Drawing.Size(72,20);
 			this.textDateTerm.TabIndex = 2;
@@ -758,7 +758,7 @@ namespace OpenDental{
 			// 
 			// textDivisionNo
 			// 
-			this.textDivisionNo.Location = new System.Drawing.Point(259,220);
+			this.textDivisionNo.Location = new System.Drawing.Point(296,220);
 			this.textDivisionNo.MaxLength = 20;
 			this.textDivisionNo.Name = "textDivisionNo";
 			this.textDivisionNo.Size = new System.Drawing.Size(107,20);
@@ -766,11 +766,12 @@ namespace OpenDental{
 			// 
 			// labelDivisionDash
 			// 
-			this.labelDivisionDash.Location = new System.Drawing.Point(244,224);
+			this.labelDivisionDash.Location = new System.Drawing.Point(242,224);
 			this.labelDivisionDash.Name = "labelDivisionDash";
-			this.labelDivisionDash.Size = new System.Drawing.Size(31,16);
+			this.labelDivisionDash.Size = new System.Drawing.Size(53,16);
 			this.labelDivisionDash.TabIndex = 111;
-			this.labelDivisionDash.Text = "--";
+			this.labelDivisionDash.Text = "Div. No.";
+			this.labelDivisionDash.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// comboClaimForm
 			// 
@@ -1219,14 +1220,14 @@ namespace OpenDental{
 			// 
 			// groupPlan
 			// 
+			this.groupPlan.Controls.Add(this.textDivisionNo);
+			this.groupPlan.Controls.Add(this.textGroupName);
 			this.groupPlan.Controls.Add(this.textEmployer);
 			this.groupPlan.Controls.Add(this.groupCarrier);
-			this.groupPlan.Controls.Add(this.textDivisionNo);
 			this.groupPlan.Controls.Add(this.checkIsMedical);
 			this.groupPlan.Controls.Add(this.textGroupNum);
 			this.groupPlan.Controls.Add(this.labelGroupNum);
 			this.groupPlan.Controls.Add(this.label8);
-			this.groupPlan.Controls.Add(this.textGroupName);
 			this.groupPlan.Controls.Add(this.comboLinked);
 			this.groupPlan.Controls.Add(this.textLinkedNum);
 			this.groupPlan.Controls.Add(this.label16);
@@ -1265,6 +1266,20 @@ namespace OpenDental{
 			this.groupCarrier.TabIndex = 154;
 			this.groupCarrier.TabStop = false;
 			this.groupCarrier.Text = "Carrier";
+			// 
+			// butPickCarrier
+			// 
+			this.butPickCarrier.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butPickCarrier.Autosize = true;
+			this.butPickCarrier.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butPickCarrier.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPickCarrier.CornerRadius = 3F;
+			this.butPickCarrier.Location = new System.Drawing.Point(376,11);
+			this.butPickCarrier.Name = "butPickCarrier";
+			this.butPickCarrier.Size = new System.Drawing.Size(19,20);
+			this.butPickCarrier.TabIndex = 153;
+			this.butPickCarrier.Text = "...";
+			this.butPickCarrier.Click += new System.EventHandler(this.butPickCarrier_Click);
 			// 
 			// butSearch
 			// 
@@ -1496,20 +1511,6 @@ namespace OpenDental{
 			this.butCancel.TabIndex = 14;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
-			// 
-			// butPickCarrier
-			// 
-			this.butPickCarrier.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butPickCarrier.Autosize = true;
-			this.butPickCarrier.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butPickCarrier.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butPickCarrier.CornerRadius = 3F;
-			this.butPickCarrier.Location = new System.Drawing.Point(376,11);
-			this.butPickCarrier.Name = "butPickCarrier";
-			this.butPickCarrier.Size = new System.Drawing.Size(17,20);
-			this.butPickCarrier.TabIndex = 153;
-			this.butPickCarrier.Text = "...";
-			this.butPickCarrier.Click += new System.EventHandler(this.butPickCarrier_Click);
 			// 
 			// FormInsPlan
 			// 

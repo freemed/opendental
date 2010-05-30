@@ -20,7 +20,8 @@ namespace OpenDental.Eclaims {
 					frMessages=Properties.Resources.CDAErrorMessagesFr;
 				}
 				sbytes=frMessages;
-			}else{
+			}
+			else{
 				if(enMessages==null){//Attempt to load the binary resource file.
 					enMessages=Properties.Resources.CDAErrorMessagesEn;
 				}

@@ -23,7 +23,7 @@ namespace OpenDentBusiness{
 		public long FeeSched;
 		///<summary>Release of information signature is on file.</summary>
 		public bool ReleaseInfo;
-		///<summary>Assignment of benefits signature is on file.</summary>
+		///<summary>Assignment of benefits signature is on file.  For Canada, this handles Payee Code, F01.  Option to pay other third party is not included.</summary>
 		public bool AssignBen;
 		///<summary>""=percentage(the default),"p"=ppo_percentage,"f"=flatCopay,"c"=capitation.</summary>
 		public string PlanType;

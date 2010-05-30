@@ -131,8 +131,6 @@
     <Compile Include="Crud\AutoNoteControlCrud.cs" />
     <Compile Include="Crud\AutoNoteCrud.cs" />
     <Compile Include="Crud\BenefitCrud.cs" />
-    <Compile Include="Crud\CanadianClaimCrud.cs" />
-    <Compile Include="Crud\CanadianExtractCrud.cs" />
     <Compile Include="Crud\CanadianNetworkCrud.cs" />
     <Compile Include="Crud\CarrierCrud.cs" />
     <Compile Include="Crud\ClaimAttachCrud.cs" />
@@ -238,8 +236,6 @@
     <Compile Include="Data Interface\AutoNoteControls.cs" />
     <Compile Include="Data Interface\AutoNotes.cs" />
     <Compile Include="Data Interface\Benefits.cs" />
-    <Compile Include="Data Interface\CanadianClaims.cs" />
-    <Compile Include="Data Interface\CanadianExtracts.cs" />
     <Compile Include="Data Interface\CanadianNetworks.cs" />
     <Compile Include="Data Interface\Carriers.cs" />
     <Compile Include="Data Interface\ClaimAttaches.cs" />
@@ -508,8 +504,6 @@
     <Compile Include="TableTypes\Computer.cs" />
     <Compile Include="TableTypes\ComputerPref.cs" />
     <Compile Include="TableTypes\Contact.cs" />
-    <Compile Include="TableTypes\CanadianClaim.cs" />
-    <Compile Include="TableTypes\CanadianExtract.cs" />
     <Compile Include="TableTypes\CanadianNetwork.cs" />
     <Compile Include="TableTypes\ClaimAttach.cs" />
     <Compile Include="TableTypes\SheetField.cs" />

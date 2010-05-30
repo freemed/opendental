@@ -75,7 +75,7 @@ namespace OpenDentBusiness{
 		public string ApptModNote;
 		/// <summary>Single char for Nonstudent, Parttime, or Fulltime.  Blank also=Nonstudent</summary>
 		public string StudentStatus;
-		/// <summary>College name.</summary>
+		/// <summary>College name.  If Canadian, then this is field C10 and must be filled if C9 (patient.CanadianEligibilityCode) is 1 and patient is 18 or older.</summary>
 		public string SchoolName;
 		/// <summary>Max 15 char.  Used for reference to previous programs.</summary>
 		public string ChartNumber;
@@ -146,6 +146,11 @@ namespace OpenDentBusiness{
 		public DateTime DateTStamp;
 		///<summary>FK to patient.PatNum. Can be zero.  Person responsible for medical decisions rather than finances.  Guarantor is still responsible for finances.  This is useful for nursing home residents.  Part of public health.</summary>
 		public long ResponsParty;
+		///<summary>C09.  Eligibility Exception Code.  A single digit 1-4.  0 is not acceptable for e-claims. 1=FT student, 2=disabled, 3=disabled student, 4=code not applicable.</summary>
+		public byte CanadianEligibilityCode;
+		
+
+
 		//<summary>Decided not to add since this data is already available and synchronizing would take too much time.  Will add later.  Not editable. If the patient happens to have a future appointment, this will contain the date of that appointment.  Once appointment is set complete, this date is deleted.  If there is more than one appointment scheduled, this will only contain the earliest one.  Used mostly to exclude patients from recall lists.  If you want all future appointments, use Appointments.GetForPat() instead. You can loop through that list and exclude appointments with dates earlier than today.</summary>
 		//public DateTime DateScheduled;
 

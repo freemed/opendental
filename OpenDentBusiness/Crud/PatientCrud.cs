@@ -46,74 +46,75 @@ namespace OpenDentBusiness.Crud{
 			Patient patient;
 			for(int i=0;i<table.Rows.Count;i++) {
 				patient=new Patient();
-				patient.PatNum             = PIn.Long  (table.Rows[i]["PatNum"].ToString());
-				patient.LName              = PIn.String(table.Rows[i]["LName"].ToString());
-				patient.FName              = PIn.String(table.Rows[i]["FName"].ToString());
-				patient.MiddleI            = PIn.String(table.Rows[i]["MiddleI"].ToString());
-				patient.Preferred          = PIn.String(table.Rows[i]["Preferred"].ToString());
-				patient.PatStatus          = (PatientStatus)PIn.Int(table.Rows[i]["PatStatus"].ToString());
-				patient.Gender             = (PatientGender)PIn.Int(table.Rows[i]["Gender"].ToString());
-				patient.Position           = (PatientPosition)PIn.Int(table.Rows[i]["Position"].ToString());
-				patient.Birthdate          = PIn.Date  (table.Rows[i]["Birthdate"].ToString());
-				patient.SSN                = PIn.String(table.Rows[i]["SSN"].ToString());
-				patient.Address            = PIn.String(table.Rows[i]["Address"].ToString());
-				patient.Address2           = PIn.String(table.Rows[i]["Address2"].ToString());
-				patient.City               = PIn.String(table.Rows[i]["City"].ToString());
-				patient.State              = PIn.String(table.Rows[i]["State"].ToString());
-				patient.Zip                = PIn.String(table.Rows[i]["Zip"].ToString());
-				patient.HmPhone            = PIn.String(table.Rows[i]["HmPhone"].ToString());
-				patient.WkPhone            = PIn.String(table.Rows[i]["WkPhone"].ToString());
-				patient.WirelessPhone      = PIn.String(table.Rows[i]["WirelessPhone"].ToString());
-				patient.Guarantor          = PIn.Long  (table.Rows[i]["Guarantor"].ToString());
-				patient.CreditType         = PIn.String(table.Rows[i]["CreditType"].ToString());
-				patient.Email              = PIn.String(table.Rows[i]["Email"].ToString());
-				patient.Salutation         = PIn.String(table.Rows[i]["Salutation"].ToString());
-				patient.EstBalance         = PIn.Double(table.Rows[i]["EstBalance"].ToString());
-				patient.PriProv            = PIn.Long  (table.Rows[i]["PriProv"].ToString());
-				patient.SecProv            = PIn.Long  (table.Rows[i]["SecProv"].ToString());
-				patient.FeeSched           = PIn.Long  (table.Rows[i]["FeeSched"].ToString());
-				patient.BillingType        = PIn.Long  (table.Rows[i]["BillingType"].ToString());
-				patient.ImageFolder        = PIn.String(table.Rows[i]["ImageFolder"].ToString());
-				patient.AddrNote           = PIn.String(table.Rows[i]["AddrNote"].ToString());
-				patient.FamFinUrgNote      = PIn.String(table.Rows[i]["FamFinUrgNote"].ToString());
-				patient.MedUrgNote         = PIn.String(table.Rows[i]["MedUrgNote"].ToString());
-				patient.ApptModNote        = PIn.String(table.Rows[i]["ApptModNote"].ToString());
-				patient.StudentStatus      = PIn.String(table.Rows[i]["StudentStatus"].ToString());
-				patient.SchoolName         = PIn.String(table.Rows[i]["SchoolName"].ToString());
-				patient.ChartNumber        = PIn.String(table.Rows[i]["ChartNumber"].ToString());
-				patient.MedicaidID         = PIn.String(table.Rows[i]["MedicaidID"].ToString());
-				patient.Bal_0_30           = PIn.Double(table.Rows[i]["Bal_0_30"].ToString());
-				patient.Bal_31_60          = PIn.Double(table.Rows[i]["Bal_31_60"].ToString());
-				patient.Bal_61_90          = PIn.Double(table.Rows[i]["Bal_61_90"].ToString());
-				patient.BalOver90          = PIn.Double(table.Rows[i]["BalOver90"].ToString());
-				patient.InsEst             = PIn.Double(table.Rows[i]["InsEst"].ToString());
-				patient.BalTotal           = PIn.Double(table.Rows[i]["BalTotal"].ToString());
-				patient.EmployerNum        = PIn.Long  (table.Rows[i]["EmployerNum"].ToString());
-				patient.EmploymentNote     = PIn.String(table.Rows[i]["EmploymentNote"].ToString());
-				patient.Race               = (PatientRace)PIn.Int(table.Rows[i]["Race"].ToString());
-				patient.County             = PIn.String(table.Rows[i]["County"].ToString());
-				patient.GradeLevel         = (PatientGrade)PIn.Int(table.Rows[i]["GradeLevel"].ToString());
-				patient.Urgency            = (TreatmentUrgency)PIn.Int(table.Rows[i]["Urgency"].ToString());
-				patient.DateFirstVisit     = PIn.Date  (table.Rows[i]["DateFirstVisit"].ToString());
-				patient.ClinicNum          = PIn.Long  (table.Rows[i]["ClinicNum"].ToString());
-				patient.HasIns             = PIn.String(table.Rows[i]["HasIns"].ToString());
-				patient.TrophyFolder       = PIn.String(table.Rows[i]["TrophyFolder"].ToString());
-				patient.PlannedIsDone      = PIn.Bool  (table.Rows[i]["PlannedIsDone"].ToString());
-				patient.Premed             = PIn.Bool  (table.Rows[i]["Premed"].ToString());
-				patient.Ward               = PIn.String(table.Rows[i]["Ward"].ToString());
-				patient.PreferConfirmMethod= (ContactMethod)PIn.Int(table.Rows[i]["PreferConfirmMethod"].ToString());
-				patient.PreferContactMethod= (ContactMethod)PIn.Int(table.Rows[i]["PreferContactMethod"].ToString());
-				patient.PreferRecallMethod = (ContactMethod)PIn.Int(table.Rows[i]["PreferRecallMethod"].ToString());
-				patient.SchedBeforeTime    = PIn.TimeSpan(table.Rows[i]["SchedBeforeTime"].ToString());
-				patient.SchedAfterTime     = PIn.TimeSpan(table.Rows[i]["SchedAfterTime"].ToString());
-				patient.SchedDayOfWeek     = PIn.Byte  (table.Rows[i]["SchedDayOfWeek"].ToString());
-				patient.Language           = PIn.String(table.Rows[i]["Language"].ToString());
-				patient.AdmitDate          = PIn.Date  (table.Rows[i]["AdmitDate"].ToString());
-				patient.Title              = PIn.String(table.Rows[i]["Title"].ToString());
-				patient.PayPlanDue         = PIn.Double(table.Rows[i]["PayPlanDue"].ToString());
-				patient.SiteNum            = PIn.Long  (table.Rows[i]["SiteNum"].ToString());
-				patient.DateTStamp         = PIn.DateT (table.Rows[i]["DateTStamp"].ToString());
-				patient.ResponsParty       = PIn.Long  (table.Rows[i]["ResponsParty"].ToString());
+				patient.PatNum                 = PIn.Long  (table.Rows[i]["PatNum"].ToString());
+				patient.LName                  = PIn.String(table.Rows[i]["LName"].ToString());
+				patient.FName                  = PIn.String(table.Rows[i]["FName"].ToString());
+				patient.MiddleI                = PIn.String(table.Rows[i]["MiddleI"].ToString());
+				patient.Preferred              = PIn.String(table.Rows[i]["Preferred"].ToString());
+				patient.PatStatus              = (PatientStatus)PIn.Int(table.Rows[i]["PatStatus"].ToString());
+				patient.Gender                 = (PatientGender)PIn.Int(table.Rows[i]["Gender"].ToString());
+				patient.Position               = (PatientPosition)PIn.Int(table.Rows[i]["Position"].ToString());
+				patient.Birthdate              = PIn.Date  (table.Rows[i]["Birthdate"].ToString());
+				patient.SSN                    = PIn.String(table.Rows[i]["SSN"].ToString());
+				patient.Address                = PIn.String(table.Rows[i]["Address"].ToString());
+				patient.Address2               = PIn.String(table.Rows[i]["Address2"].ToString());
+				patient.City                   = PIn.String(table.Rows[i]["City"].ToString());
+				patient.State                  = PIn.String(table.Rows[i]["State"].ToString());
+				patient.Zip                    = PIn.String(table.Rows[i]["Zip"].ToString());
+				patient.HmPhone                = PIn.String(table.Rows[i]["HmPhone"].ToString());
+				patient.WkPhone                = PIn.String(table.Rows[i]["WkPhone"].ToString());
+				patient.WirelessPhone          = PIn.String(table.Rows[i]["WirelessPhone"].ToString());
+				patient.Guarantor              = PIn.Long  (table.Rows[i]["Guarantor"].ToString());
+				patient.CreditType             = PIn.String(table.Rows[i]["CreditType"].ToString());
+				patient.Email                  = PIn.String(table.Rows[i]["Email"].ToString());
+				patient.Salutation             = PIn.String(table.Rows[i]["Salutation"].ToString());
+				patient.EstBalance             = PIn.Double(table.Rows[i]["EstBalance"].ToString());
+				patient.PriProv                = PIn.Long  (table.Rows[i]["PriProv"].ToString());
+				patient.SecProv                = PIn.Long  (table.Rows[i]["SecProv"].ToString());
+				patient.FeeSched               = PIn.Long  (table.Rows[i]["FeeSched"].ToString());
+				patient.BillingType            = PIn.Long  (table.Rows[i]["BillingType"].ToString());
+				patient.ImageFolder            = PIn.String(table.Rows[i]["ImageFolder"].ToString());
+				patient.AddrNote               = PIn.String(table.Rows[i]["AddrNote"].ToString());
+				patient.FamFinUrgNote          = PIn.String(table.Rows[i]["FamFinUrgNote"].ToString());
+				patient.MedUrgNote             = PIn.String(table.Rows[i]["MedUrgNote"].ToString());
+				patient.ApptModNote            = PIn.String(table.Rows[i]["ApptModNote"].ToString());
+				patient.StudentStatus          = PIn.String(table.Rows[i]["StudentStatus"].ToString());
+				patient.SchoolName             = PIn.String(table.Rows[i]["SchoolName"].ToString());
+				patient.ChartNumber            = PIn.String(table.Rows[i]["ChartNumber"].ToString());
+				patient.MedicaidID             = PIn.String(table.Rows[i]["MedicaidID"].ToString());
+				patient.Bal_0_30               = PIn.Double(table.Rows[i]["Bal_0_30"].ToString());
+				patient.Bal_31_60              = PIn.Double(table.Rows[i]["Bal_31_60"].ToString());
+				patient.Bal_61_90              = PIn.Double(table.Rows[i]["Bal_61_90"].ToString());
+				patient.BalOver90              = PIn.Double(table.Rows[i]["BalOver90"].ToString());
+				patient.InsEst                 = PIn.Double(table.Rows[i]["InsEst"].ToString());
+				patient.BalTotal               = PIn.Double(table.Rows[i]["BalTotal"].ToString());
+				patient.EmployerNum            = PIn.Long  (table.Rows[i]["EmployerNum"].ToString());
+				patient.EmploymentNote         = PIn.String(table.Rows[i]["EmploymentNote"].ToString());
+				patient.Race                   = (PatientRace)PIn.Int(table.Rows[i]["Race"].ToString());
+				patient.County                 = PIn.String(table.Rows[i]["County"].ToString());
+				patient.GradeLevel             = (PatientGrade)PIn.Int(table.Rows[i]["GradeLevel"].ToString());
+				patient.Urgency                = (TreatmentUrgency)PIn.Int(table.Rows[i]["Urgency"].ToString());
+				patient.DateFirstVisit         = PIn.Date  (table.Rows[i]["DateFirstVisit"].ToString());
+				patient.ClinicNum              = PIn.Long  (table.Rows[i]["ClinicNum"].ToString());
+				patient.HasIns                 = PIn.String(table.Rows[i]["HasIns"].ToString());
+				patient.TrophyFolder           = PIn.String(table.Rows[i]["TrophyFolder"].ToString());
+				patient.PlannedIsDone          = PIn.Bool  (table.Rows[i]["PlannedIsDone"].ToString());
+				patient.Premed                 = PIn.Bool  (table.Rows[i]["Premed"].ToString());
+				patient.Ward                   = PIn.String(table.Rows[i]["Ward"].ToString());
+				patient.PreferConfirmMethod    = (ContactMethod)PIn.Int(table.Rows[i]["PreferConfirmMethod"].ToString());
+				patient.PreferContactMethod    = (ContactMethod)PIn.Int(table.Rows[i]["PreferContactMethod"].ToString());
+				patient.PreferRecallMethod     = (ContactMethod)PIn.Int(table.Rows[i]["PreferRecallMethod"].ToString());
+				patient.SchedBeforeTime        = PIn.TimeSpan(table.Rows[i]["SchedBeforeTime"].ToString());
+				patient.SchedAfterTime         = PIn.TimeSpan(table.Rows[i]["SchedAfterTime"].ToString());
+				patient.SchedDayOfWeek         = PIn.Byte  (table.Rows[i]["SchedDayOfWeek"].ToString());
+				patient.Language               = PIn.String(table.Rows[i]["Language"].ToString());
+				patient.AdmitDate              = PIn.Date  (table.Rows[i]["AdmitDate"].ToString());
+				patient.Title                  = PIn.String(table.Rows[i]["Title"].ToString());
+				patient.PayPlanDue             = PIn.Double(table.Rows[i]["PayPlanDue"].ToString());
+				patient.SiteNum                = PIn.Long  (table.Rows[i]["SiteNum"].ToString());
+				patient.DateTStamp             = PIn.DateT (table.Rows[i]["DateTStamp"].ToString());
+				patient.ResponsParty           = PIn.Long  (table.Rows[i]["ResponsParty"].ToString());
+				patient.CanadianEligibilityCode= PIn.Byte  (table.Rows[i]["CanadianEligibilityCode"].ToString());
 				retVal.Add(patient);
 			}
 			return retVal;
@@ -133,7 +134,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="PatNum,";
 			}
-			command+="LName,FName,MiddleI,Preferred,PatStatus,Gender,Position,Birthdate,SSN,Address,Address2,City,State,Zip,HmPhone,WkPhone,WirelessPhone,Guarantor,CreditType,Email,Salutation,EstBalance,PriProv,SecProv,FeeSched,BillingType,ImageFolder,AddrNote,FamFinUrgNote,MedUrgNote,ApptModNote,StudentStatus,SchoolName,ChartNumber,MedicaidID,Bal_0_30,Bal_31_60,Bal_61_90,BalOver90,InsEst,BalTotal,EmployerNum,EmploymentNote,Race,County,GradeLevel,Urgency,DateFirstVisit,ClinicNum,HasIns,TrophyFolder,PlannedIsDone,Premed,Ward,PreferConfirmMethod,PreferContactMethod,PreferRecallMethod,SchedBeforeTime,SchedAfterTime,SchedDayOfWeek,Language,AdmitDate,Title,PayPlanDue,SiteNum,ResponsParty) VALUES(";
+			command+="LName,FName,MiddleI,Preferred,PatStatus,Gender,Position,Birthdate,SSN,Address,Address2,City,State,Zip,HmPhone,WkPhone,WirelessPhone,Guarantor,CreditType,Email,Salutation,EstBalance,PriProv,SecProv,FeeSched,BillingType,ImageFolder,AddrNote,FamFinUrgNote,MedUrgNote,ApptModNote,StudentStatus,SchoolName,ChartNumber,MedicaidID,Bal_0_30,Bal_31_60,Bal_61_90,BalOver90,InsEst,BalTotal,EmployerNum,EmploymentNote,Race,County,GradeLevel,Urgency,DateFirstVisit,ClinicNum,HasIns,TrophyFolder,PlannedIsDone,Premed,Ward,PreferConfirmMethod,PreferContactMethod,PreferRecallMethod,SchedBeforeTime,SchedAfterTime,SchedDayOfWeek,Language,AdmitDate,Title,PayPlanDue,SiteNum,ResponsParty,CanadianEligibilityCode) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(patient.PatNum)+",";
 			}
@@ -204,7 +205,8 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.Double(patient.PayPlanDue)+"',"
 				+    POut.Long  (patient.SiteNum)+","
 				//DateTStamp can only be set by MySQL
-				+    POut.Long  (patient.ResponsParty)+")";
+				+    POut.Long  (patient.ResponsParty)+","
+				+    POut.Byte  (patient.CanadianEligibilityCode)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -217,73 +219,74 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one Patient in the database.</summary>
 		internal static void Update(Patient patient){
 			string command="UPDATE patient SET "
-				+"LName              = '"+POut.String(patient.LName)+"', "
-				+"FName              = '"+POut.String(patient.FName)+"', "
-				+"MiddleI            = '"+POut.String(patient.MiddleI)+"', "
-				+"Preferred          = '"+POut.String(patient.Preferred)+"', "
-				+"PatStatus          =  "+POut.Int   ((int)patient.PatStatus)+", "
-				+"Gender             =  "+POut.Int   ((int)patient.Gender)+", "
-				+"Position           =  "+POut.Int   ((int)patient.Position)+", "
-				+"Birthdate          =  "+POut.Date  (patient.Birthdate)+", "
-				+"SSN                = '"+POut.String(patient.SSN)+"', "
-				+"Address            = '"+POut.String(patient.Address)+"', "
-				+"Address2           = '"+POut.String(patient.Address2)+"', "
-				+"City               = '"+POut.String(patient.City)+"', "
-				+"State              = '"+POut.String(patient.State)+"', "
-				+"Zip                = '"+POut.String(patient.Zip)+"', "
-				+"HmPhone            = '"+POut.String(patient.HmPhone)+"', "
-				+"WkPhone            = '"+POut.String(patient.WkPhone)+"', "
-				+"WirelessPhone      = '"+POut.String(patient.WirelessPhone)+"', "
-				+"Guarantor          =  "+POut.Long  (patient.Guarantor)+", "
-				+"CreditType         = '"+POut.String(patient.CreditType)+"', "
-				+"Email              = '"+POut.String(patient.Email)+"', "
-				+"Salutation         = '"+POut.String(patient.Salutation)+"', "
-				+"EstBalance         = '"+POut.Double(patient.EstBalance)+"', "
-				+"PriProv            =  "+POut.Long  (patient.PriProv)+", "
-				+"SecProv            =  "+POut.Long  (patient.SecProv)+", "
-				+"FeeSched           =  "+POut.Long  (patient.FeeSched)+", "
-				+"BillingType        =  "+POut.Long  (patient.BillingType)+", "
-				+"ImageFolder        = '"+POut.String(patient.ImageFolder)+"', "
-				+"AddrNote           = '"+POut.String(patient.AddrNote)+"', "
-				+"FamFinUrgNote      = '"+POut.String(patient.FamFinUrgNote)+"', "
-				+"MedUrgNote         = '"+POut.String(patient.MedUrgNote)+"', "
-				+"ApptModNote        = '"+POut.String(patient.ApptModNote)+"', "
-				+"StudentStatus      = '"+POut.String(patient.StudentStatus)+"', "
-				+"SchoolName         = '"+POut.String(patient.SchoolName)+"', "
-				+"ChartNumber        = '"+POut.String(patient.ChartNumber)+"', "
-				+"MedicaidID         = '"+POut.String(patient.MedicaidID)+"', "
-				+"Bal_0_30           = '"+POut.Double(patient.Bal_0_30)+"', "
-				+"Bal_31_60          = '"+POut.Double(patient.Bal_31_60)+"', "
-				+"Bal_61_90          = '"+POut.Double(patient.Bal_61_90)+"', "
-				+"BalOver90          = '"+POut.Double(patient.BalOver90)+"', "
-				+"InsEst             = '"+POut.Double(patient.InsEst)+"', "
-				+"BalTotal           = '"+POut.Double(patient.BalTotal)+"', "
-				+"EmployerNum        =  "+POut.Long  (patient.EmployerNum)+", "
-				+"EmploymentNote     = '"+POut.String(patient.EmploymentNote)+"', "
-				+"Race               =  "+POut.Int   ((int)patient.Race)+", "
-				+"County             = '"+POut.String(patient.County)+"', "
-				+"GradeLevel         =  "+POut.Int   ((int)patient.GradeLevel)+", "
-				+"Urgency            =  "+POut.Int   ((int)patient.Urgency)+", "
-				+"DateFirstVisit     =  "+POut.Date  (patient.DateFirstVisit)+", "
-				+"ClinicNum          =  "+POut.Long  (patient.ClinicNum)+", "
-				+"HasIns             = '"+POut.String(patient.HasIns)+"', "
-				+"TrophyFolder       = '"+POut.String(patient.TrophyFolder)+"', "
-				+"PlannedIsDone      =  "+POut.Bool  (patient.PlannedIsDone)+", "
-				+"Premed             =  "+POut.Bool  (patient.Premed)+", "
-				+"Ward               = '"+POut.String(patient.Ward)+"', "
-				+"PreferConfirmMethod=  "+POut.Int   ((int)patient.PreferConfirmMethod)+", "
-				+"PreferContactMethod=  "+POut.Int   ((int)patient.PreferContactMethod)+", "
-				+"PreferRecallMethod =  "+POut.Int   ((int)patient.PreferRecallMethod)+", "
-				+"SchedBeforeTime    =  "+POut.TimeSpan(patient.SchedBeforeTime)+", "
-				+"SchedAfterTime     =  "+POut.TimeSpan(patient.SchedAfterTime)+", "
-				+"SchedDayOfWeek     =  "+POut.Byte  (patient.SchedDayOfWeek)+", "
-				+"Language           = '"+POut.String(patient.Language)+"', "
-				+"AdmitDate          =  "+POut.Date  (patient.AdmitDate)+", "
-				+"Title              = '"+POut.String(patient.Title)+"', "
-				+"PayPlanDue         = '"+POut.Double(patient.PayPlanDue)+"', "
-				+"SiteNum            =  "+POut.Long  (patient.SiteNum)+", "
+				+"LName                  = '"+POut.String(patient.LName)+"', "
+				+"FName                  = '"+POut.String(patient.FName)+"', "
+				+"MiddleI                = '"+POut.String(patient.MiddleI)+"', "
+				+"Preferred              = '"+POut.String(patient.Preferred)+"', "
+				+"PatStatus              =  "+POut.Int   ((int)patient.PatStatus)+", "
+				+"Gender                 =  "+POut.Int   ((int)patient.Gender)+", "
+				+"Position               =  "+POut.Int   ((int)patient.Position)+", "
+				+"Birthdate              =  "+POut.Date  (patient.Birthdate)+", "
+				+"SSN                    = '"+POut.String(patient.SSN)+"', "
+				+"Address                = '"+POut.String(patient.Address)+"', "
+				+"Address2               = '"+POut.String(patient.Address2)+"', "
+				+"City                   = '"+POut.String(patient.City)+"', "
+				+"State                  = '"+POut.String(patient.State)+"', "
+				+"Zip                    = '"+POut.String(patient.Zip)+"', "
+				+"HmPhone                = '"+POut.String(patient.HmPhone)+"', "
+				+"WkPhone                = '"+POut.String(patient.WkPhone)+"', "
+				+"WirelessPhone          = '"+POut.String(patient.WirelessPhone)+"', "
+				+"Guarantor              =  "+POut.Long  (patient.Guarantor)+", "
+				+"CreditType             = '"+POut.String(patient.CreditType)+"', "
+				+"Email                  = '"+POut.String(patient.Email)+"', "
+				+"Salutation             = '"+POut.String(patient.Salutation)+"', "
+				+"EstBalance             = '"+POut.Double(patient.EstBalance)+"', "
+				+"PriProv                =  "+POut.Long  (patient.PriProv)+", "
+				+"SecProv                =  "+POut.Long  (patient.SecProv)+", "
+				+"FeeSched               =  "+POut.Long  (patient.FeeSched)+", "
+				+"BillingType            =  "+POut.Long  (patient.BillingType)+", "
+				+"ImageFolder            = '"+POut.String(patient.ImageFolder)+"', "
+				+"AddrNote               = '"+POut.String(patient.AddrNote)+"', "
+				+"FamFinUrgNote          = '"+POut.String(patient.FamFinUrgNote)+"', "
+				+"MedUrgNote             = '"+POut.String(patient.MedUrgNote)+"', "
+				+"ApptModNote            = '"+POut.String(patient.ApptModNote)+"', "
+				+"StudentStatus          = '"+POut.String(patient.StudentStatus)+"', "
+				+"SchoolName             = '"+POut.String(patient.SchoolName)+"', "
+				+"ChartNumber            = '"+POut.String(patient.ChartNumber)+"', "
+				+"MedicaidID             = '"+POut.String(patient.MedicaidID)+"', "
+				+"Bal_0_30               = '"+POut.Double(patient.Bal_0_30)+"', "
+				+"Bal_31_60              = '"+POut.Double(patient.Bal_31_60)+"', "
+				+"Bal_61_90              = '"+POut.Double(patient.Bal_61_90)+"', "
+				+"BalOver90              = '"+POut.Double(patient.BalOver90)+"', "
+				+"InsEst                 = '"+POut.Double(patient.InsEst)+"', "
+				+"BalTotal               = '"+POut.Double(patient.BalTotal)+"', "
+				+"EmployerNum            =  "+POut.Long  (patient.EmployerNum)+", "
+				+"EmploymentNote         = '"+POut.String(patient.EmploymentNote)+"', "
+				+"Race                   =  "+POut.Int   ((int)patient.Race)+", "
+				+"County                 = '"+POut.String(patient.County)+"', "
+				+"GradeLevel             =  "+POut.Int   ((int)patient.GradeLevel)+", "
+				+"Urgency                =  "+POut.Int   ((int)patient.Urgency)+", "
+				+"DateFirstVisit         =  "+POut.Date  (patient.DateFirstVisit)+", "
+				+"ClinicNum              =  "+POut.Long  (patient.ClinicNum)+", "
+				+"HasIns                 = '"+POut.String(patient.HasIns)+"', "
+				+"TrophyFolder           = '"+POut.String(patient.TrophyFolder)+"', "
+				+"PlannedIsDone          =  "+POut.Bool  (patient.PlannedIsDone)+", "
+				+"Premed                 =  "+POut.Bool  (patient.Premed)+", "
+				+"Ward                   = '"+POut.String(patient.Ward)+"', "
+				+"PreferConfirmMethod    =  "+POut.Int   ((int)patient.PreferConfirmMethod)+", "
+				+"PreferContactMethod    =  "+POut.Int   ((int)patient.PreferContactMethod)+", "
+				+"PreferRecallMethod     =  "+POut.Int   ((int)patient.PreferRecallMethod)+", "
+				+"SchedBeforeTime        =  "+POut.TimeSpan(patient.SchedBeforeTime)+", "
+				+"SchedAfterTime         =  "+POut.TimeSpan(patient.SchedAfterTime)+", "
+				+"SchedDayOfWeek         =  "+POut.Byte  (patient.SchedDayOfWeek)+", "
+				+"Language               = '"+POut.String(patient.Language)+"', "
+				+"AdmitDate              =  "+POut.Date  (patient.AdmitDate)+", "
+				+"Title                  = '"+POut.String(patient.Title)+"', "
+				+"PayPlanDue             = '"+POut.Double(patient.PayPlanDue)+"', "
+				+"SiteNum                =  "+POut.Long  (patient.SiteNum)+", "
 				//DateTStamp can only be set by MySQL
-				+"ResponsParty       =  "+POut.Long  (patient.ResponsParty)+" "
+				+"ResponsParty           =  "+POut.Long  (patient.ResponsParty)+", "
+				+"CanadianEligibilityCode=  "+POut.Byte  (patient.CanadianEligibilityCode)+" "
 				+"WHERE PatNum = "+POut.Long(patient.PatNum);
 			Db.NonQ(command);
 		}
@@ -555,6 +558,10 @@ namespace OpenDentBusiness.Crud{
 			if(patient.ResponsParty != oldPatient.ResponsParty) {
 				if(command!=""){ command+=",";}
 				command+="ResponsParty = "+POut.Long(patient.ResponsParty)+"";
+			}
+			if(patient.CanadianEligibilityCode != oldPatient.CanadianEligibilityCode) {
+				if(command!=""){ command+=",";}
+				command+="CanadianEligibilityCode = "+POut.Byte(patient.CanadianEligibilityCode)+"";
 			}
 			if(command==""){
 				return;

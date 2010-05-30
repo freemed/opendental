@@ -29,7 +29,6 @@ namespace OpenDental.Eclaims {
 			}
 			Etrans etrans;
 			Claim claim;
-			CanadianClaim canClaim;
 			Clinic clinic;
 			Provider billProv;
 			Provider treatProv;
@@ -43,19 +42,16 @@ namespace OpenDental.Eclaims {
 			List<ClaimProc> claimProcList;//all claimProcs for a patient.
 			List<ClaimProc> claimProcsClaim;
 			List<Procedure> procListAll;
-			//List<Procedure> extracted;
+			List<Procedure> extracted;
 			Patient subscriber2=null;
 			Procedure proc;
 			ProcedureCode procCode;
-			List<CanadianExtract> missingListAll;
-			List<CanadianExtract> missingListDates;
-			string txt;
+			StringBuilder str;
 			for(int i=0;i<queueItems.Count;i++){
 				etrans=Etranss.SetClaimSentOrPrinted(queueItems[i].ClaimNum,queueItems[i].PatNum,
 					clearhouse.ClearinghouseNum,EtransType.Claim_CA,"",0);
-				txt="";
+				str=new StringBuilder();
 				claim=Claims.GetClaim(queueItems[i].ClaimNum);
-				canClaim=CanadianClaims.GetForClaim(claim.ClaimNum);//already validated to not=null
 				clinic=Clinics.GetClinic(claim.ClinicNum);
 				billProv=ProviderC.ListLong[Providers.GetIndexLong(claim.ProvBill)];
 				treatProv=ProviderC.ListLong[Providers.GetIndexLong(claim.ProvTreat)];
@@ -72,63 +68,61 @@ namespace OpenDental.Eclaims {
 				claimProcList=ClaimProcs.Refresh(patient.PatNum);
 				claimProcsClaim=ClaimProcs.GetForSendClaim(claimProcList,claim.ClaimNum);
 				procListAll=Procedures.Refresh(claim.PatNum);
-				missingListAll=CanadianExtracts.GetForClaim(claim.ClaimNum);
-				missingListDates=CanadianExtracts.GetWithDates(missingListAll);
-				//extracted=Procedures.GetExtractedTeeth(procListAll);
+				extracted=Procedures.GetCanadianExtractedTeeth(procListAll);
 				//A01 transaction prefix 12 AN
 	//todo
-				txt+="123456789012";//To be later provided by the individual network.
+				str.Append("123456789012");//To be later provided by the individual network.
 				//A02 office sequence number 6 N
-				txt+=TidyN(etrans.OfficeSequenceNumber,6);
+				str.Append(TidyN(etrans.OfficeSequenceNumber,6));
 				//A03 format version number 2 N
-				txt+="04";
+				str.Append("04");
 				//A04 transaction code 2 N
-				txt+="01";//claim
+				str.Append("01");//claim
 				//A05 carrier id number 6 N
-				txt+=carrier.ElectID;//already validated as 6 digit number.
+				str.Append(carrier.ElectID);//already validated as 6 digit number.
 				//A06 software system id 3 AN  The third character is for version of OD.
 	//todo
-				txt+="OD1";//To be later supplied by CDAnet staff to uniquely identify OD.
+				str.Append("OD1");//To be later supplied by CDAnet staff to uniquely identify OD.
 				//A10 encryption method 1 N
 	//todo
-				txt+="1";
+				str.Append("1");
 				//A07 message length 5 N
 				int len=344;
 				if(claim.PlanNum2!=0){//if there is secondary coverage
 					len+=192;
 				}
 				len+=44;//for the F section after the secondary coverage section
-				len+=10*missingListDates.Count;
+				len+=10*extracted.Count;
 				len+=56*claimProcsClaim.Count;
 				//if(C19 is used, Plan Record){
-					//len+=30;
+					//len+=30);
 				//}
-				txt+=TidyN(len,5);
+				str.Append(TidyN(len,5));
 				//A08 materials forwarded 1 AN
-				txt+=GetMaterialsForwarded(canClaim.MaterialsForwarded);
+				str.Append(GetMaterialsForwarded(claim.CanadianMaterialsForwarded));
 				//A09 carrier transaction counter 5 N
 				int carrierTransCount=etrans.CarrierTransCounter;
-				txt+=TidyN(carrierTransCount,5);
+				str.Append(TidyN(carrierTransCount,5));
 				//B01 CDA provider number 9 AN
-				txt+=TidyAN(treatProv.NationalProvID,9);//already validated
+				str.Append(TidyAN(treatProv.NationalProvID,9));//already validated
 				//B02 (treating) provider office number 4 AN
-				txt+=TidyAN(treatProv.CanadianOfficeNum,4);//already validated	
+				str.Append(TidyAN(treatProv.CanadianOfficeNum,4));//already validated	
 				//B03 billing provider number 9 AN
 	//todo, need to account for possible 5 digit prov id assigned by carrier
-				txt+=TidyAN(billProv.NationalProvID,9);//already validated
+				str.Append(TidyAN(billProv.NationalProvID,9));//already validated
 				//B04 billing provider office number 4 AN
-				txt+=TidyAN(billProv.CanadianOfficeNum,4);//already validated	
+				str.Append(TidyAN(billProv.CanadianOfficeNum,4));//already validated	
 				//B05 referring provider 10 AN
-				txt+=TidyAN(canClaim.ReferralProviderNum,10);
+				str.Append(TidyAN(claim.CanadianReferralProviderNum,10));
 				//B06 referral reason 2 N
-				txt+=TidyN(canClaim.ReferralReason,2);
+				str.Append(TidyN(claim.CanadianReferralReason,2));
 				//C01 primary policy/plan number 12 AN
 				//only validated to ensure that it's not blank and is less than 12. Also that no spaces.
-				txt+=TidyAN(insPlan.GroupNum,12);
+				str.Append(TidyAN(insPlan.GroupNum,12));
 				//C11 primary division/section number 10 AN
-				txt+=TidyAN(insPlan.DivisionNo,10);
+				str.Append(TidyAN(insPlan.DivisionNo,10));
 				//C02 subscriber id number 12 AN
-				txt+=TidyAN(insPlan.SubscriberID.Replace("-",""),12);//validated
+				str.Append(TidyAN(insPlan.SubscriberID.Replace("-",""),12));//validated
 				//C17 primary dependant code 2 N
 				string patID="";
 				for(int p=0;p<patPlansForPatient.Count;p++){
@@ -136,97 +130,103 @@ namespace OpenDental.Eclaims {
 						patID=patPlansForPatient[p].PatID;
 					}
 				}
-				txt+=TidyN(patID,2);
+				str.Append(TidyN(patID,2));
 				//C03 relationship code 1 N
 				//User interface does not only show Canadian options, but all options are handled.
-				txt+=GetRelationshipCode(claim.PatRelat);
+				str.Append(GetRelationshipCode(claim.PatRelat));
 				//C04 patient's sex 1 A
 				//validated to not include "unknown"
 				if(patient.Gender==PatientGender.Male){
-					txt+="M";
+					str.Append("M");
 				}
 				else{
-					txt+="F";
+					str.Append("F");
 				}
 				//C05 patient birthday 8 N
-				txt+=patient.Birthdate.ToString("yyyyMMdd");//validated
+				str.Append(patient.Birthdate.ToString("yyyyMMdd"));//validated
 				//C06 patient last name 25 AE
-				txt+=TidyAE(patient.LName,25,true);//validated
+				str.Append(TidyAE(patient.LName,25,true));//validated
 				//C07 patient first name 15 AE
-				txt+=TidyAE(patient.FName,15,true);//validated
+				str.Append(TidyAE(patient.FName,15,true));//validated
 				//C08 patient middle initial 1 AE
-				txt+=TidyAE(patient.MiddleI,1);
+				str.Append(TidyAE(patient.MiddleI,1));
 				//C09 eligibility exception code 1 N
-				txt+=TidyN(canClaim.EligibilityCode,1);//validated
+				str.Append(TidyN(patient.CanadianEligibilityCode,1));//validated
 				//C10 name of school 25 AEN
 				//validated if patient 18yrs or older and full-time student (or disabled student)
-				txt+=TidyAEN(patient.SchoolName,25);
+				str.Append(TidyAEN(patient.SchoolName,25));
 				//C12 plan flag 1 A
 	//todo
 				//might not be carrier.IsPMP.  Might have to do with plan, not carrier. See F17.
-				txt+=" ";
+				str.Append(" ");
 				//C18 plan record count 1 N
 	//todo
-				txt+="0";
+				str.Append("0");
 				//D01 subscriber birthday 8 N
-				txt+=subscriber.Birthdate.ToString("yyyyMMdd");//validated
+				str.Append(subscriber.Birthdate.ToString("yyyyMMdd"));//validated
 				//D02 subscriber last name 25 AE
-				txt+=TidyAE(subscriber.LName,25,true);//validated
+				str.Append(TidyAE(subscriber.LName,25,true));//validated
 				//D03 subscriber first name 15 AE
-				txt+=TidyAE(subscriber.FName,15,true);//validated
+				str.Append(TidyAE(subscriber.FName,15,true));//validated
 				//D04 subscriber middle initial 1 AE
-				txt+=TidyAE(subscriber.MiddleI,1);
+				str.Append(TidyAE(subscriber.MiddleI,1));
 				//D05 subscriber address line one 30 AEN
-				txt+=TidyAEN(subscriber.Address,30,true);//validated
+				str.Append(TidyAEN(subscriber.Address,30,true));//validated
 				//D06 subscriber address line two 30 AEN
-				txt+=TidyAEN(subscriber.Address2,30,true);
+				str.Append(TidyAEN(subscriber.Address2,30,true));
 				//D07 subscriber city 20 AEN
-				txt+=TidyAEN(subscriber.City,20,true);//validated
+				str.Append(TidyAEN(subscriber.City,20,true));//validated
 				//D08 subscriber province/state 2 A
-				txt+=subscriber.State;//very throroughly validated previously
+				str.Append(subscriber.State);//very throroughly validated previously
 				//D09 subscriber postal/zip code 9 AN
-				txt+=TidyAN(subscriber.Zip.Replace("-",""),9);//validated.
+				str.Append(TidyAN(subscriber.Zip.Replace("-",""),9));//validated.
 				//D10 language of insured 1 A
 				if(subscriber.Language=="fr"){
-					txt+="F";
+					str.Append("F");
 				}
 				else{
-					txt+="E";
+					str.Append("E");
 				}
 				//D11 card sequence/version number 2 N
 	//todo: Not validated against type of carrier yet.  Need to check if Dentaide.
-				txt+=TidyN(insPlan.DentaideCardSequence,2);
+				str.Append(TidyN(insPlan.DentaideCardSequence,2));
 				//E18 secondary coverage flag 1 A
-				txt+=canClaim.SecondaryCoverage;//validated
+				if(claim.PlanNum2>0) {
+					str.Append("Y");
+				}
+				else {
+					str.Append("N");
+				}
 				//E20 secondary record count 1 N
 				if(claim.PlanNum2==0){
-					txt+="0";
+					str.Append("0");
 				}
 				else{
-					txt+="1";
+					str.Append("1");
 				}
 				//F06 number of procedures performed 1 N. Must be between 1 and 7.
 	//todo User interface incomplete.  Must not allow attaching more than 7 procs to a claim
-				txt+=TidyN(claimProcsClaim.Count,1);//number validated
+				str.Append(TidyN(claimProcsClaim.Count,1));//number validated
 				//F22 extracted teeth count 2 N
-				txt+=TidyN(missingListDates.Count,2);//validated against matching prosthesis
+	//todo: check validation
+				str.Append(TidyN(extracted.Count,2));//validated against matching prosthesis
 				//Secondary carrier fields (E19 to E07) ONLY included if E20=1----------------------------------------------------
 				if(claim.PlanNum2!=0){
 	//todo We still need to write the business logic for COB
 	//Sometimes, a secondary claim also needs to be created:
 					//E19 secondary carrier transaction number 6 N
-					txt+="00000";//Must always be zero-filled, since this field is for "future" use only.
-					//txt+=TidyN(etrans.CarrierTransCounter2,5));
+					str.Append("00000");//Must always be zero-filled, since this field is for "future" use only.
+					//str.Append(TidyN(etrans.CarrierTransCounter2,5)));
 					//E01 sec carrier id number 6 N
-					txt+=carrier2.ElectID;//already validated as 6 digit number.
+					str.Append(carrier2.ElectID);//already validated as 6 digit number.
 					//E02 sec carrier policy/plan num 12 AN
 					//only validated to ensure that it's not blank and is less than 12. Also that no spaces.
 					//We might later allow 999999 if sec carrier is unlisted or unknown.
-					txt+=TidyAN(insPlan2.GroupNum,12);
+					str.Append(TidyAN(insPlan2.GroupNum,12));
 					//E05 sec division/section num 10 AN
-					txt+=TidyAN(insPlan2.DivisionNo,10);
+					str.Append(TidyAN(insPlan2.DivisionNo,10));
 					//E03 sec plan subscriber id 12 AN
-					txt+=TidyAN(insPlan2.SubscriberID.Replace("-",""),12);//validated
+					str.Append(TidyAN(insPlan2.SubscriberID.Replace("-",""),12));//validated
 					//E17 sec dependent code 2 N
 					patID="";
 					for(int p=0;p<patPlansForPatient.Count;p++) {
@@ -234,132 +234,139 @@ namespace OpenDental.Eclaims {
 							patID=patPlansForPatient[p].PatID;
 						}
 					}
-					txt+=TidyN(patID,2);
+					str.Append(TidyN(patID,2));
 					//E06 sec relationship code 1 N
 					//User interface does not only show Canadian options, but all options are handled.
-					txt+=GetRelationshipCode(claim.PatRelat2);
+					str.Append(GetRelationshipCode(claim.PatRelat2));
 					//E04 sec subscriber birthday 8 N
-					txt+=subscriber2.Birthdate.ToString("yyyyMMdd");//validated
+					str.Append(subscriber2.Birthdate.ToString("yyyyMMdd"));//validated
 					//E08 sec subscriber last name 25 AE
-					txt+=TidyAE(subscriber2.LName,25,true);//validated
+					str.Append(TidyAE(subscriber2.LName,25,true));//validated
 					//E09 sec subscriber first name 15 AE
-					txt+=TidyAE(subscriber2.FName,15,true);//validated
+					str.Append(TidyAE(subscriber2.FName,15,true));//validated
 					//E10 sec subscriber middle initial 1 AE
-					txt+=TidyAE(subscriber2.MiddleI,1);
+					str.Append(TidyAE(subscriber2.MiddleI,1));
 					//E11 sec subscriber address one 30 AEN
-					txt+=TidyAEN(subscriber2.Address,30,true);//validated
+					str.Append(TidyAEN(subscriber2.Address,30,true));//validated
 					//E12 sec subscriber address two 30 AEN
-					txt+=TidyAEN(subscriber2.Address2,30,true);
+					str.Append(TidyAEN(subscriber2.Address2,30,true));
 					//E13 sec subscriber city 20 AEN
-					txt+=TidyAEN(subscriber2.City,20,true);//validated
+					str.Append(TidyAEN(subscriber2.City,20,true));//validated
 					//E14 sec subscriber province/state 2 A
-					txt+=subscriber2.State;//very throroughly validated previously
+					str.Append(subscriber2.State);//very throroughly validated previously
 					//E15 sec subscriber postal/zip code 9 AN
-					txt+=TidyAN(subscriber2.Zip.Replace("-",""),9);//validated
+					str.Append(TidyAN(subscriber2.Zip.Replace("-",""),9));//validated
 					//E16 sec language 1 A
 					if(subscriber2.Language=="fr") {
-						txt+="F";
+						str.Append("F");
 					}
 					else {
-						txt+="E";
+						str.Append("E");
 					}
 					//E07 sec card sequence/version num 2 N
 		//todo Not validated yet.
-					txt+=TidyN(insPlan2.DentaideCardSequence,2);
+					str.Append(TidyN(insPlan2.DentaideCardSequence,2));
 					//End of secondary subscriber fields---------------------------------------------------------------------------
 				}
 				//F01 payee code 1 N
-				txt+=TidyN(canClaim.PayeeCode,1);//validated
-				//F02 accident date 8 N
-				if(claim.AccidentDate.Year>1900){//if accident related
-					txt+=claim.AccidentDate.ToString("yyyyMMdd");//validated
-				}
-				else{
-					txt+=TidyN(0,8);
-				}
-				//F03 predetermination number 14 AN
-				txt+=TidyAN(claim.PreAuthString,14);
-				//F15 initial placement upper 1 A  Y or N or X
-				txt+=canClaim.IsInitialUpper;//validated
-				//F04 date of initial placement upper 8 N
-				if(canClaim.DateInitialUpper.Year>1900){
-					txt+=canClaim.DateInitialUpper.ToString("yyyyMMdd");
-				}
-				else{
-					txt+="00000000";
-				}
-				//F18 initial placement lower 1 A
-				txt+=canClaim.IsInitialLower;//validated
-				//F19 date of initial placement lower 8 N
-				if(canClaim.DateInitialLower.Year>1900) {
-					txt+=canClaim.DateInitialLower.ToString("yyyyMMdd");
+				if(insPlan.AssignBen) {
+					str.Append("4");//pay dentist
 				}
 				else {
-					txt+="00000000";
+					str.Append("1");//pay subscriber
+				}
+				//F02 accident date 8 N
+				if(claim.AccidentDate.Year>1900){//if accident related
+					str.Append(claim.AccidentDate.ToString("yyyyMMdd"));//validated
+				}
+				else{
+					str.Append(TidyN(0,8));
+				}
+				//F03 predetermination number 14 AN
+				str.Append(TidyAN(claim.PreAuthString,14));
+				//F15 initial placement upper 1 A  Y or N or X
+				str.Append(claim.CanadianIsInitialUpper);//validated
+				//F04 date of initial placement upper 8 N
+				if(claim.CanadianDateInitialUpper.Year>1900) {
+					str.Append(claim.CanadianDateInitialUpper.ToString("yyyyMMdd"));
+				}
+				else{
+					str.Append("00000000");
+				}
+				//F18 initial placement lower 1 A
+				str.Append(claim.CanadianIsInitialLower);//validated
+				//F19 date of initial placement lower 8 N
+				if(claim.CanadianDateInitialLower.Year>1900) {
+					str.Append(claim.CanadianDateInitialLower.ToString("yyyyMMdd"));
+				}
+				else {
+					str.Append("00000000");
 				}
 				//F05 tx req'd for ortho purposes 1 A
 				if(claim.IsOrtho){
-					txt+="Y";
+					str.Append("Y");
 				}
 				else{
-					txt+="N";
+					str.Append("N");
 				}
 				//F20 max prosth material 1 N
-				if(canClaim.MaxProsthMaterial==7){//our fake crown code
-					txt+="0";
+				if(claim.CanadianMaxProsthMaterial==7) {//our fake crown code
+					str.Append("0");
 				}
 				else{
-					txt+=canClaim.MaxProsthMaterial.ToString();//validated
+					str.Append(claim.CanadianMaxProsthMaterial.ToString());//validated
 				}
 				//F21 mand prosth material 1 N
-				if(canClaim.MandProsthMaterial==7) {//our fake crown code
-					txt+="0";
+				if(claim.CanadianMandProsthMaterial==7) {//our fake crown code
+					str.Append("0");
 				}
 				else {
-					txt+=canClaim.MandProsthMaterial.ToString();//validated
+					str.Append(claim.CanadianMandProsthMaterial.ToString());//validated
 				}
 				//If F22 is non-zero. Repeat for the number of times specified by F22.----------------------------------------------
-				for(int t=0;t<missingListDates.Count;t++){
+				for(int t=0;t<extracted.Count;t++){
 					//F23 extracted tooth num 2 N
-					txt+=TidyN(Tooth.ToInternat(missingListDates[t].ToothNum),2);//validated
+//todo: check validation
+					str.Append(TidyN(Tooth.ToInternat(extracted[t].ToothNum),2));//validated
 					//F24 extraction date 8 N
-					txt+=missingListDates[t].DateExtraction.ToString("yyyyMMdd");//validated
+//todo: check validation
+					str.Append(extracted[t].ProcDate.ToString("yyyyMMdd"));//validated
 				}
 				//Procedures: Repeat for number of times specified by F06.----------------------------------------------------------
 				for(int p=0;p<claimProcsClaim.Count;p++) {
 					proc=Procedures.GetProcFromList(procListAll,claimProcsClaim[i].ProcNum);
 					procCode=ProcedureCodes.GetProcCode(proc.CodeNum);
 					//F07 proc line number 1 N
-					txt+=(p+1).ToString();
+					str.Append((p+1).ToString());
 					//F08 procedure code 5 AN
-					txt+=TidyAN(claimProcsClaim[p].CodeSent,5).Trim().PadLeft(5,'0');
+					str.Append(TidyAN(claimProcsClaim[p].CodeSent,5).Trim().PadLeft(5,'0'));
 					//F09 date of service 8 N
-					txt+=claimProcsClaim[p].ProcDate.ToString("yyyyMMdd");//validated
+					str.Append(claimProcsClaim[p].ProcDate.ToString("yyyyMMdd"));//validated
 					//F10 international tooth, sextant, quad, or arch 2 N
-					txt+=GetToothQuadOrArch(proc,procCode);
+					str.Append(GetToothQuadOrArch(proc,procCode));
 					//F11 tooth surface 5 A
 					//the SurfTidy function is very thorough, so it's OK to use TidyAN
-					txt+=TidyAN(Tooth.SurfTidy(proc.Surf,proc.ToothNum,true),5);
+					str.Append(TidyAN(Tooth.SurfTidy(proc.Surf,proc.ToothNum,true),5));
 					//F12 dentist's fee claimed 6 D
-					txt+=TidyD(claimProcsClaim[i].FeeBilled,6);
+					str.Append(TidyD(claimProcsClaim[i].FeeBilled,6));
 					//F34 lab procedure code #1 5 AN
 	//todo
-					txt+="     ";
+					str.Append("     ");
 					//F13 lab procedure fee #1 6 D
 	//incomplete
-					txt+="000000";
+					str.Append("000000");
 					//F35 lab procedure code #2 5 AN
 	//incomplete
-					txt+="     ";
+					str.Append("     ");
 					//F36 lab procedure fee #2 6 D
 	//incomplete
-					txt+="000000";
+					str.Append("000000");
 					//F16 procedure type codes 5 A
 	//incomplete
-					txt+=TidyA("X",5);
+					str.Append(TidyA("X",5));
 					//F17 remarks code 2 N
 	//incomplete.  PMP field.  See C12.
-					txt+="00";
+					str.Append("00");
 				}
 //todo If C18=1, then the following field would appear
 				//C19 plan record 30 AN
@@ -368,7 +375,7 @@ namespace OpenDental.Eclaims {
 				//this is where we attempt the actual sending:
 				string ccdResult="";
 				try{
-					ccdResult=PassToCCD(txt,carrier.CanadianNetworkNum,clearhouse);
+					ccdResult=PassToCCD(str.ToString(),carrier.CanadianNetworkNum,clearhouse);
 				}
 				catch(ApplicationException ex){
 					//if unsuccessful, then the saveFile needs to be deleted?
@@ -376,7 +383,7 @@ namespace OpenDental.Eclaims {
 					return false;
 				}
 				//continue if successful
-				Etranss.SetMessage(etrans.EtransNum,txt);
+				Etranss.SetMessage(etrans.EtransNum,str.ToString());
 			}//for i. Loop claims
 			return true;
 		}
@@ -761,7 +768,6 @@ namespace OpenDental.Eclaims {
 			string retVal="";
 			Clearinghouse clearhouse=ClearinghouseL.GetClearinghouse(queueItem.ClearinghouseNum);
 			Claim claim=Claims.GetClaim(queueItem.ClaimNum);
-			CanadianClaim canClaim=CanadianClaims.GetForClaim(claim.ClaimNum);
 			Clinic clinic=Clinics.GetClinic(claim.ClinicNum);
 			Provider billProv=ProviderC.ListLong[Providers.GetIndexLong(claim.ProvBill)];
 			Provider treatProv=ProviderC.ListLong[Providers.GetIndexLong(claim.ProvTreat)];
@@ -782,8 +788,7 @@ namespace OpenDental.Eclaims {
 			List<Procedure> procListAll=Procedures.Refresh(claim.PatNum);
 			Procedure proc;
 			ProcedureCode procCode;
-			List<CanadianExtract> missingListAll=CanadianExtracts.GetForClaim(claim.ClaimNum);
-			List<CanadianExtract> missingListDates=CanadianExtracts.GetWithDates(missingListAll);
+			List<Procedure> extracted=Procedures.GetCanadianExtractedTeeth(procListAll);
 			if(!Regex.IsMatch(carrier.ElectID,@"^[0-9]{6}$")) {
 				if(retVal!="")
 					retVal+=", ";
@@ -844,6 +849,18 @@ namespace OpenDental.Eclaims {
 				if(retVal!="")
 					retVal+=", ";
 				retVal+="Patient firstname";
+			}
+			if(patient.CanadianEligibilityCode==0) {
+				if(retVal!="")
+					retVal+=", ";
+				retVal+="Patient eligibility code";
+			}
+			if(patient.Age>=18 && patient.CanadianEligibilityCode==1){//fulltimeStudent
+				if(patient.SchoolName=="") {
+					if(retVal!="")
+						retVal+=", ";
+					retVal+="Patient school name";
+				}
 			}
 			if(subscriber.Birthdate.Year<1880 || subscriber.Birthdate>DateTime.Today) {
 				if(retVal!="")
@@ -950,127 +967,88 @@ namespace OpenDental.Eclaims {
 					retVal+="Sec Subscriber Postalcode";
 				}
 			}
-			if(canClaim==null){
+			if(claim.CanadianReferralProviderNum!="" && claim.CanadianReferralReason==0) {
 				if(retVal!="")
 					retVal+=", ";
-				retVal+="Supplemental Claim Info";
+				retVal+="Referral reason";
 			}
-			else{
-				if(canClaim.SecondaryCoverage==""){
-					if(retVal!="")
-						retVal+=", ";
-					retVal+="Secondary Cov";
-				}
-				if(canClaim.SecondaryCoverage=="Y" && claim.PlanNum2==0) {
-					if(retVal!="")
-						retVal+=", ";
-					retVal+="Secondary Cov mismatch";
-				}
-				if((canClaim.SecondaryCoverage=="N" || canClaim.SecondaryCoverage=="X")  && claim.PlanNum2>0) {
-					if(retVal!="")
-						retVal+=", ";
-					retVal+="Secondary Cov mismatch";
-				}
-	//check: we might not have to be this strict.  It might truly be optional
-				if(canClaim.ReferralProviderNum!="" && canClaim.ReferralReason==0) {
-					if(retVal!="")
-						retVal+=", ";
-					retVal+="Referral reason";
-				}
-				if(canClaim.ReferralProviderNum=="" && canClaim.ReferralReason!=0) {
-					if(retVal!="")
-						retVal+=", ";
-					retVal+="Referral provider";
-				}
-				if(canClaim.EligibilityCode==0){
-					if(retVal!="")
-						retVal+=", ";
-					retVal+="Eligibility code";
-				}
-				if(patient.Age>=18 && canClaim.EligibilityCode==1 ) {//fulltimeStudent
-					if(canClaim.SchoolName=="") {
-						if(retVal!="")
-							retVal+=", ";
-						retVal+="School name";
-					}
-				}
-				if(canClaim.PayeeCode==0) {
-					if(retVal!="")
-						retVal+=", ";
-					retVal+="Payee code";
-				}
-				//Max Prosth--------------------------------------------------------------------------------------------------
-				if(canClaim.IsInitialUpper=="") {
-					if(retVal!="")
-						retVal+=", ";
-					retVal+="Max prosth";
-				}
-				if(canClaim.DateInitialUpper>DateTime.MinValue) {
-					if(canClaim.DateInitialUpper.Year<1900 || canClaim.DateInitialUpper>=DateTime.Today){
-						if(retVal!="")
-							retVal+=", ";
-						retVal+="Date initial upper";
-					}
-				}
-				if(canClaim.IsInitialUpper=="N" && canClaim.DateInitialUpper.Year<1900) {//missing date
+			if(claim.CanadianReferralProviderNum=="" && claim.CanadianReferralReason!=0) {
+				if(retVal!="")
+					retVal+=", ";
+				retVal+="Referral provider";
+			}
+			//Max Prosth--------------------------------------------------------------------------------------------------
+			if(claim.CanadianIsInitialUpper=="") {
+				if(retVal!="")
+					retVal+=", ";
+				retVal+="Max prosth";
+			}
+			if(claim.CanadianDateInitialUpper>DateTime.MinValue) {
+				if(claim.CanadianDateInitialUpper.Year<1900 || claim.CanadianDateInitialUpper>=DateTime.Today) {
 					if(retVal!="")
 						retVal+=", ";
 					retVal+="Date initial upper";
 				}
-				if(canClaim.IsInitialUpper=="N" && canClaim.MaxProsthMaterial==0) {
-					if(retVal!="")
-						retVal+=", ";
-					retVal+="Max prosth material";
-				}
-				if(canClaim.IsInitialUpper=="X" && canClaim.MaxProsthMaterial!=0) {
-					if(retVal!="")
-						retVal+=", ";
-					retVal+="Max prosth material";
-				}
-				//Mand prosth--------------------------------------------------------------------------------------------------
-				if(canClaim.IsInitialLower=="") {
-					if(retVal!="")
-						retVal+=", ";
-					retVal+="Mand prosth";
-				}
-				if(canClaim.DateInitialLower>DateTime.MinValue) {
-					if(canClaim.DateInitialLower.Year<1900 || canClaim.DateInitialLower>=DateTime.Today){
-						if(retVal!="")
-							retVal+=", ";
-						retVal+="Date initial lower";
-					}
-				}
-				if(canClaim.IsInitialLower=="N" && canClaim.DateInitialLower.Year<1900) {//missing date
+			}
+			if(claim.CanadianIsInitialUpper=="N" && claim.CanadianDateInitialUpper.Year<1900) {//missing date
+				if(retVal!="")
+					retVal+=", ";
+				retVal+="Date initial upper";
+			}
+			if(claim.CanadianIsInitialUpper=="N" && claim.CanadianMaxProsthMaterial==0) {
+				if(retVal!="")
+					retVal+=", ";
+				retVal+="Max prosth material";
+			}
+			if(claim.CanadianIsInitialUpper=="X" && claim.CanadianMaxProsthMaterial!=0) {
+				if(retVal!="")
+					retVal+=", ";
+				retVal+="Max prosth material";
+			}
+			//Mand prosth--------------------------------------------------------------------------------------------------
+			if(claim.CanadianIsInitialLower=="") {
+				if(retVal!="")
+					retVal+=", ";
+				retVal+="Mand prosth";
+			}
+			if(claim.CanadianDateInitialLower>DateTime.MinValue) {
+				if(claim.CanadianDateInitialLower.Year<1900 || claim.CanadianDateInitialLower>=DateTime.Today) {
 					if(retVal!="")
 						retVal+=", ";
 					retVal+="Date initial lower";
 				}
-				if(canClaim.IsInitialLower=="N" && canClaim.MandProsthMaterial==0) {
+			}
+			if(claim.CanadianIsInitialLower=="N" && claim.CanadianDateInitialLower.Year<1900) {//missing date
+				if(retVal!="")
+					retVal+=", ";
+				retVal+="Date initial lower";
+			}
+			if(claim.CanadianIsInitialLower=="N" && claim.CanadianMandProsthMaterial==0) {
+				if(retVal!="")
+					retVal+=", ";
+				retVal+="Mand prosth material";
+			}
+			if(claim.CanadianIsInitialLower=="X" && claim.CanadianMandProsthMaterial!=0) {
+				if(retVal!="")
+					retVal+=", ";
+				retVal+="Mand prosth material";
+			}
+			//missing teeth---------------------------------------------------------------------------------------------------
+			if(claim.CanadianIsInitialLower=="Y" && claim.CanadianMandProsthMaterial!=7) {//initial lower, but not crown
+				if(extracted.Count==0) {
 					if(retVal!="")
 						retVal+=", ";
-					retVal+="Mand prosth material";
+					retVal+="Missing teeth not entered";
 				}
-				if(canClaim.IsInitialLower=="X" && canClaim.MandProsthMaterial!=0) {
+			}
+			if(claim.CanadianIsInitialUpper=="Y" && claim.CanadianMaxProsthMaterial!=7) {//initial upper, but not crown
+				if(extracted.Count==0) {
 					if(retVal!="")
 						retVal+=", ";
-					retVal+="Mand prosth material";
+					retVal+="Missing teeth not entered";
 				}
-				//missing teeth---------------------------------------------------------------------------------------------------
-				if(canClaim.IsInitialLower=="Y" && canClaim.MandProsthMaterial!=7){//initial lower, but not crown
-					if(missingListDates.Count==0) {
-						if(retVal!="")
-							retVal+=", ";
-						retVal+="Missing teeth not entered";
-					}
-				}
-				if(canClaim.IsInitialUpper=="Y" && canClaim.MaxProsthMaterial!=7) {//initial upper, but not crown
-					if(missingListDates.Count==0) {
-						if(retVal!="")
-							retVal+=", ";
-						retVal+="Missing teeth not entered";
-					}
-				}
-			}//else canClaim!=null
+			}
+			
 			if(claim.AccidentDate>DateTime.MinValue){
 				if(claim.AccidentDate.Year<1900 || claim.AccidentDate>DateTime.Today){
 					if(retVal!="")

@@ -59,6 +59,8 @@ namespace TestCanada {
 			Application.DoEvents();
 			textResults.Text+=CarrierTC.SetInitialCarriers();
 			Application.DoEvents();
+			textResults.Text+=PatientTC.SetInitialPatients();
+			Application.DoEvents();
 
 
 

@@ -22,6 +22,9 @@ namespace OpenDentalServer {
 		/// <summary>Pass in a serialized dto.  It returns a dto which must be deserialized by the client.</summary>
 		[WebMethod]
 		public string ProcessRequest(string dtoString) {
+			#if DEBUG
+				//System.Threading.Thread.Sleep(100);//to test slowness issues with web service.
+			#endif
 			DataTransferObject dto=DataTransferObject.Deserialize(dtoString);
 			//XmlSerializer serializer;
 			try {

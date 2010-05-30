@@ -92,6 +92,24 @@ namespace OpenDentBusiness{
 		public string AttachedFlags;
 		///<summary>Example: NEA#1234567.  If present, and if the claim note does not already start with this Id, then it will be prepended to the claim note for both e-claims and mail.  If using e-claims, this same ID will be used for all PWK segements.</summary>
 		public string AttachmentID;
+		///<summary>A08.  Any combination of E(email), C(correspondence), M(models), X(x-rays), and I(images).  So up to 5 char.  Gets converted to a single char A-Z for e-claims.</summary>
+		public string CanadianMaterialsForwarded;
+		///<summary>B05.  Optional. The 9-digit CDA number of the referring provider, or identifier of referring party up to 10 characters in length.</summary>
+		public string CanadianReferralProviderNum;
+		///<summary>B06.  A number 0(none) through 13.</summary>
+		public byte CanadianReferralReason;
+		///<summary>F18.  Y, N, or X(not a lower denture, crown, or bridge).</summary>
+		public string CanadianIsInitialLower;
+		///<summary>F19.  Mandatory if F18 is N.</summary>
+		public DateTime CanadianDateInitialLower;
+		///<summary>F21.  If crown, not required.  If denture or bridge, required if F18 is N.  Single digit number code, 0-6.  We added type 7, which is crown.</summary>
+		public byte CanadianMandProsthMaterial;
+		///<summary>F15.  Y, N, or X(not an upper denture, crown, or bridge).</summary>
+		public string CanadianIsInitialUpper;
+		///<summary>F04.  Mandatory if F15 is N.</summary>
+		public DateTime CanadianDateInitialUpper;
+		///<summary>F20.  If crown, not required.  If denture or bridge, required if F15 is N.  0 indicates empty response.  Single digit number code, 1-6.  We added type 7, which is crown.</summary>
+		public byte CanadianMaxProsthMaterial;
 
 		///<summary>Not a data column.</summary>
 		[CrudColumn(IsNotDbColumn=true)]

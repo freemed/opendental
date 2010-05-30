@@ -2209,6 +2209,33 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);
 				command="ALTER TABLE carrier ADD CanadianSupportedTypes tinyint NOT NULL";
 				Db.NonQ(command);
+				command="ALTER TABLE canadianclaim DROP EligibilityCode";
+				Db.NonQ(command);
+				command="ALTER TABLE canadianclaim DROP SchoolName";
+				Db.NonQ(command);
+				command="ALTER TABLE patient ADD CanadianEligibilityCode tinyint NOT NULL";
+				Db.NonQ(command);
+				command="DROP TABLE canadianextract";
+				Db.NonQ(command);
+				command="ALTER TABLE claim ADD CanadianMaterialsForwarded varchar(10) NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE claim ADD CanadianReferralProviderNum varchar(20) NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE claim ADD CanadianReferralReason tinyint NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE claim ADD CanadianIsInitialLower varchar(5) NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE claim ADD CanadianDateInitialLower date NOT NULL default '0001-01-01'";
+				Db.NonQ(command);
+				command="ALTER TABLE claim ADD CanadianMandProsthMaterial tinyint NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE claim ADD CanadianIsInitialUpper varchar(5) NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE claim ADD CanadianDateInitialUpper date NOT NULL default '0001-01-01'";
+				Db.NonQ(command);
+				command="ALTER TABLE claim ADD CanadianMaxProsthMaterial tinyint NOT NULL";
+				Db.NonQ(command);
+
 
 
 

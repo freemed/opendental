@@ -1056,13 +1056,7 @@
     <Compile Include="Forms\FormCanadianEligibility.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\FormCanadianExtract.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Forms\FormLanguagesUsed.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormClaimCanadian.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\FormAbout.cs">
@@ -2205,10 +2199,6 @@
       <DependentUpon>FormCanadianEligibility.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormCanadianExtract.resx">
-      <DependentUpon>FormCanadianExtract.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormLanguagesUsed.resx">
       <DependentUpon>FormLanguagesUsed.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -2328,10 +2318,6 @@
     <EmbeddedResource Include="Forms\FormChooseDatabase.resx">
       <DependentUpon>FormChooseDatabase.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormClaimCanadian.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>FormClaimCanadian.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormClaimEdit.resx">
       <DependentUpon>FormClaimEdit.cs</DependentUpon>

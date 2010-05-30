@@ -42,7 +42,7 @@ namespace TestCanada {
 			//The billing provider for both is Dr. A.
 			Prefs.UpdateLong(PrefName.InsBillingProv,0);//since Dr. A is also the default practice provider.
 			Prefs.RefreshCache();
-			return "Dentist objects set.";
+			return "Dentist objects set.\r\n";
 		}
 
 	}

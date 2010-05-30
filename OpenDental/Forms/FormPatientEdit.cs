@@ -148,6 +148,8 @@ namespace OpenDental{
 		private TextBox textResponsParty;
 		private Label label34;
 		private OpenDental.UI.Button butClearResponsParty;
+		private Label labelCanadianEligibilityCode;
+		private ComboBox comboCanadianEligibilityCode;
 		///<summary>Will include the languages setup in the settings, and also the language of this patient if that language is not on the selection list.</summary>
 		private List<CultureInfo> languageList;
 
@@ -188,13 +190,18 @@ namespace OpenDental{
 			Controls.Add(listSites);
 			listSites.BringToFront();
 			Lan.F(this);
-			if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="CA"){//en-CA or fr-CA
+			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")){//en-CA or fr-CA
 				labelSSN.Text="SIN";
 				labelZip.Text="Postal Code";
 				labelST.Text="Province";
 				butEditZip.Text="Edit Postal Code";
+				labelCanadianEligibilityCode.Visible=true;
+				comboCanadianEligibilityCode.Visible=true;
+				radioStudentN.Visible=false;
+				radioStudentP.Visible=false;
+				radioStudentF.Visible=false;
 			}
-			if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="GB"){//en-GB
+			if(CultureInfo.CurrentCulture.Name.EndsWith("GB")){//en-GB
 				//labelSSN.Text="?";
 				labelZip.Text="Postcode";
 				labelST.Text="";//no such thing as state in GB
@@ -329,6 +336,8 @@ namespace OpenDental{
 			this.labelAdmitDate = new System.Windows.Forms.Label();
 			this.textTitle = new System.Windows.Forms.TextBox();
 			this.label26 = new System.Windows.Forms.Label();
+			this.comboCanadianEligibilityCode = new System.Windows.Forms.ComboBox();
+			this.labelCanadianEligibilityCode = new System.Windows.Forms.Label();
 			this.groupBox2.SuspendLayout();
 			this.groupBox1.SuspendLayout();
 			this.groupNotes.SuspendLayout();
@@ -708,15 +717,17 @@ namespace OpenDental{
 			// 
 			// groupBox2
 			// 
+			this.groupBox2.Controls.Add(this.labelCanadianEligibilityCode);
+			this.groupBox2.Controls.Add(this.comboCanadianEligibilityCode);
 			this.groupBox2.Controls.Add(this.textSchool);
 			this.groupBox2.Controls.Add(this.radioStudentN);
 			this.groupBox2.Controls.Add(this.radioStudentP);
 			this.groupBox2.Controls.Add(this.radioStudentF);
 			this.groupBox2.Controls.Add(this.label30);
 			this.groupBox2.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox2.Location = new System.Drawing.Point(440,418);
+			this.groupBox2.Location = new System.Drawing.Point(440,409);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(382,65);
+			this.groupBox2.Size = new System.Drawing.Size(382,87);
 			this.groupBox2.TabIndex = 24;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Student Status if Dependent Over 19 (for Ins)";
@@ -1450,6 +1461,26 @@ namespace OpenDental{
 			this.label26.Text = "Title (Mr., Ms.)";
 			this.label26.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
+			// comboCanadianEligibilityCode
+			// 
+			this.comboCanadianEligibilityCode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboCanadianEligibilityCode.FormattingEnabled = true;
+			this.comboCanadianEligibilityCode.Location = new System.Drawing.Point(124,60);
+			this.comboCanadianEligibilityCode.Name = "comboCanadianEligibilityCode";
+			this.comboCanadianEligibilityCode.Size = new System.Drawing.Size(223,21);
+			this.comboCanadianEligibilityCode.TabIndex = 10;
+			this.comboCanadianEligibilityCode.Visible = false;
+			// 
+			// labelCanadianEligibilityCode
+			// 
+			this.labelCanadianEligibilityCode.Location = new System.Drawing.Point(1,63);
+			this.labelCanadianEligibilityCode.Name = "labelCanadianEligibilityCode";
+			this.labelCanadianEligibilityCode.Size = new System.Drawing.Size(121,16);
+			this.labelCanadianEligibilityCode.TabIndex = 11;
+			this.labelCanadianEligibilityCode.Text = "Eligibility Excep. Code";
+			this.labelCanadianEligibilityCode.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.labelCanadianEligibilityCode.Visible = false;
+			// 
 			// FormPatientEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
@@ -1729,6 +1760,14 @@ namespace OpenDental{
 					break;
 			}
 			textSchool.Text=PatCur.SchoolName;
+			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")){
+				comboCanadianEligibilityCode.Items.Add("0 - Please Choose");
+				comboCanadianEligibilityCode.Items.Add("1 - Full-time student");
+				comboCanadianEligibilityCode.Items.Add("2 - Disabled");
+				comboCanadianEligibilityCode.Items.Add("3 - Disabled student");
+				comboCanadianEligibilityCode.Items.Add("4 - Code not applicable");
+				comboCanadianEligibilityCode.SelectedIndex=PatCur.CanadianEligibilityCode;
+			}
 			textAddrNotes.Text=PatCur.AddrNote;
 			if(PrefC.GetBool(PrefName.EasyHidePublicHealth)){
 				groupPH.Visible=false;
@@ -2467,6 +2506,18 @@ namespace OpenDental{
 					PatCur.SiteNum=matchingSite;
 				}
 			}
+			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")){
+				if(comboCanadianEligibilityCode.SelectedIndex==0) {
+					MsgBox.Show(this,"Please enter Eligibility Exception Code.");
+					return;
+				}
+				if(comboCanadianEligibilityCode.SelectedIndex==1//FT student
+					&& textSchool.Text=="")
+				{
+					MsgBox.Show(this,"School should be entered if full-time student.");
+					return;
+				}
+			}
 			PatCur.LName=textLName.Text;
 			PatCur.FName=textFName.Text;
 			PatCur.MiddleI=textMiddleI.Text;
@@ -2568,6 +2619,9 @@ namespace OpenDental{
 			PatCur.PreferConfirmMethod=(ContactMethod)comboConfirm.SelectedIndex;
 			PatCur.PreferRecallMethod=(ContactMethod)comboRecall.SelectedIndex;
 			PatCur.AdmitDate=PIn.Date(textAdmitDate.Text);
+			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {
+				PatCur.CanadianEligibilityCode=(byte)comboCanadianEligibilityCode.SelectedIndex;
+			}
 			if(PatCur.Guarantor==0){
 				PatCur.Guarantor=PatCur.PatNum;
 			}
