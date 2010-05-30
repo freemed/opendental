@@ -57,7 +57,6 @@ namespace OpenDentBusiness.Crud{
 				carrier.ElectID                  = PIn.String(table.Rows[i]["ElectID"].ToString());
 				carrier.NoSendElect              = PIn.Bool  (table.Rows[i]["NoSendElect"].ToString());
 				carrier.IsCDA                    = PIn.Bool  (table.Rows[i]["IsCDA"].ToString());
-				carrier.IsPMP                    = PIn.Bool  (table.Rows[i]["IsPMP"].ToString());
 				carrier.CDAnetVersion            = PIn.String(table.Rows[i]["CDAnetVersion"].ToString());
 				carrier.CanadianNetworkNum       = PIn.Long  (table.Rows[i]["CanadianNetworkNum"].ToString());
 				carrier.IsHidden                 = PIn.Bool  (table.Rows[i]["IsHidden"].ToString());
@@ -83,7 +82,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="CarrierNum,";
 			}
-			command+="CarrierName,Address,Address2,City,State,Zip,Phone,ElectID,NoSendElect,IsCDA,IsPMP,CDAnetVersion,CanadianNetworkNum,IsHidden,CanadianEncryptionMethod,CanadianTransactionPrefix,CanadianSupportedTypes) VALUES(";
+			command+="CarrierName,Address,Address2,City,State,Zip,Phone,ElectID,NoSendElect,IsCDA,CDAnetVersion,CanadianNetworkNum,IsHidden,CanadianEncryptionMethod,CanadianTransactionPrefix,CanadianSupportedTypes) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(carrier.CarrierNum)+",";
 			}
@@ -98,7 +97,6 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(carrier.ElectID)+"',"
 				+    POut.Bool  (carrier.NoSendElect)+","
 				+    POut.Bool  (carrier.IsCDA)+","
-				+    POut.Bool  (carrier.IsPMP)+","
 				+"'"+POut.String(carrier.CDAnetVersion)+"',"
 				+    POut.Long  (carrier.CanadianNetworkNum)+","
 				+    POut.Bool  (carrier.IsHidden)+","
@@ -127,7 +125,6 @@ namespace OpenDentBusiness.Crud{
 				+"ElectID                  = '"+POut.String(carrier.ElectID)+"', "
 				+"NoSendElect              =  "+POut.Bool  (carrier.NoSendElect)+", "
 				+"IsCDA                    =  "+POut.Bool  (carrier.IsCDA)+", "
-				+"IsPMP                    =  "+POut.Bool  (carrier.IsPMP)+", "
 				+"CDAnetVersion            = '"+POut.String(carrier.CDAnetVersion)+"', "
 				+"CanadianNetworkNum       =  "+POut.Long  (carrier.CanadianNetworkNum)+", "
 				+"IsHidden                 =  "+POut.Bool  (carrier.IsHidden)+", "
@@ -180,10 +177,6 @@ namespace OpenDentBusiness.Crud{
 			if(carrier.IsCDA != oldCarrier.IsCDA) {
 				if(command!=""){ command+=",";}
 				command+="IsCDA = "+POut.Bool(carrier.IsCDA)+"";
-			}
-			if(carrier.IsPMP != oldCarrier.IsPMP) {
-				if(command!=""){ command+=",";}
-				command+="IsPMP = "+POut.Bool(carrier.IsPMP)+"";
 			}
 			if(carrier.CDAnetVersion != oldCarrier.CDAnetVersion) {
 				if(command!=""){ command+=",";}

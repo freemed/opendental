@@ -3674,7 +3674,7 @@ namespace OpenDental{
 			if(comboFilingCodeSubtype.SelectedIndex != -1 && comboFilingCodeSubtype.SelectedIndex < subtypeList.Count) {
 				PlanCur.FilingCodeSubtype=subtypeList[comboFilingCodeSubtype.SelectedIndex].InsFilingCodeSubtypeNum;
 			}
-			PlanCur.DentaideCardSequence=PIn.Int(textDentaide.Text);
+			PlanCur.DentaideCardSequence=PIn.Byte(textDentaide.Text);
 			PlanCur.TrojanID=textTrojanID.Text;
 			PlanCur.PlanNote=textPlanNote.Text;
 			PlanCur.ReleaseInfo=checkRelease.Checked;

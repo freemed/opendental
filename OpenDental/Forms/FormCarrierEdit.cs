@@ -41,7 +41,6 @@ namespace OpenDental{
 		public bool IsNew;
 		private CheckBox checkIsCDAnet;
 		private GroupBox groupCDAnet;
-		private CheckBox checkPMP;
 		private TextBox textModemReconcile;
 		private Label label10;
 		private TextBox textModemSummary;
@@ -169,7 +168,6 @@ namespace OpenDental{
 			this.label5 = new System.Windows.Forms.Label();
 			this.textVersion = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();
-			this.checkPMP = new System.Windows.Forms.CheckBox();
 			this.checkIsHidden = new System.Windows.Forms.CheckBox();
 			this.label15 = new System.Windows.Forms.Label();
 			this.butDelete = new OpenDental.UI.Button();
@@ -381,7 +379,6 @@ namespace OpenDental{
 			this.groupCDAnet.Controls.Add(this.label5);
 			this.groupCDAnet.Controls.Add(this.textVersion);
 			this.groupCDAnet.Controls.Add(this.label1);
-			this.groupCDAnet.Controls.Add(this.checkPMP);
 			this.groupCDAnet.Location = new System.Drawing.Point(29,234);
 			this.groupCDAnet.Name = "groupCDAnet";
 			this.groupCDAnet.Size = new System.Drawing.Size(664,402);
@@ -391,14 +388,14 @@ namespace OpenDental{
 			// 
 			// textTransactionPrefix
 			// 
-			this.textTransactionPrefix.Location = new System.Drawing.Point(191,113);
+			this.textTransactionPrefix.Location = new System.Drawing.Point(191,91);
 			this.textTransactionPrefix.Name = "textTransactionPrefix";
 			this.textTransactionPrefix.Size = new System.Drawing.Size(121,20);
 			this.textTransactionPrefix.TabIndex = 116;
 			// 
 			// label14
 			// 
-			this.label14.Location = new System.Drawing.Point(38,118);
+			this.label14.Location = new System.Drawing.Point(38,96);
 			this.label14.Name = "label14";
 			this.label14.Size = new System.Drawing.Size(151,17);
 			this.label14.TabIndex = 117;
@@ -407,7 +404,7 @@ namespace OpenDental{
 			// 
 			// label12
 			// 
-			this.label12.Location = new System.Drawing.Point(235,90);
+			this.label12.Location = new System.Drawing.Point(235,68);
 			this.label12.Name = "label12";
 			this.label12.Size = new System.Drawing.Size(92,17);
 			this.label12.TabIndex = 115;
@@ -416,14 +413,14 @@ namespace OpenDental{
 			// 
 			// textEncryptionMethod
 			// 
-			this.textEncryptionMethod.Location = new System.Drawing.Point(191,87);
+			this.textEncryptionMethod.Location = new System.Drawing.Point(191,65);
 			this.textEncryptionMethod.Name = "textEncryptionMethod";
 			this.textEncryptionMethod.Size = new System.Drawing.Size(42,20);
 			this.textEncryptionMethod.TabIndex = 113;
 			// 
 			// label13
 			// 
-			this.label13.Location = new System.Drawing.Point(38,92);
+			this.label13.Location = new System.Drawing.Point(38,70);
 			this.label13.Name = "label13";
 			this.label13.Size = new System.Drawing.Size(151,17);
 			this.label13.TabIndex = 114;
@@ -716,17 +713,6 @@ namespace OpenDental{
 			this.label1.Text = "Version Number";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
-			// checkPMP
-			// 
-			this.checkPMP.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkPMP.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkPMP.Location = new System.Drawing.Point(37,66);
-			this.checkPMP.Name = "checkPMP";
-			this.checkPMP.Size = new System.Drawing.Size(168,17);
-			this.checkPMP.TabIndex = 99;
-			this.checkPMP.Text = "Provincial Medical Plan";
-			this.checkPMP.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
 			// checkIsHidden
 			// 
 			this.checkIsHidden.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -883,7 +869,6 @@ namespace OpenDental{
 				}
 			}
 			textVersion.Text=CarrierCur.CDAnetVersion;
-			checkPMP.Checked=CarrierCur.IsPMP;
 			if(CarrierCur.CanadianEncryptionMethod==(byte)0) {
 				textEncryptionMethod.Text="";
 			}
@@ -1025,7 +1010,6 @@ namespace OpenDental{
 					CarrierCur.CanadianNetworkNum=CanadianNetworks.Listt[comboNetwork.SelectedIndex-1].CanadianNetworkNum;
 				}
 				CarrierCur.CDAnetVersion=textVersion.Text;
-				CarrierCur.IsPMP=checkPMP.Checked;
 				CarrierCur.CanadianEncryptionMethod=PIn.Byte(textEncryptionMethod.Text);//validated.
 				CarrierCur.CanadianTransactionPrefix=textTransactionPrefix.Text;
 				CarrierCur.CanadianSupportedTypes=CanSupTransTypes.None;
@@ -1088,7 +1072,6 @@ namespace OpenDental{
 				CarrierCur.IsCDA=false;
 				CarrierCur.CanadianNetworkNum=0;
 				CarrierCur.CDAnetVersion="";
-				CarrierCur.IsPMP=false;
 				CarrierCur.CanadianEncryptionMethod=0;
 				CarrierCur.CanadianTransactionPrefix="";
 				CarrierCur.CanadianSupportedTypes=CanSupTransTypes.None;

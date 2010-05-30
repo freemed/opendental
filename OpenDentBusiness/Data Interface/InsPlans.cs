@@ -15,62 +15,7 @@ namespace OpenDentBusiness {
 				plan.PlanNum=Meth.GetLong(MethodBase.GetCurrentMethod(),plan);
 				return plan.PlanNum;
 			}
-			if(PrefC.RandomKeys) {
-				plan.PlanNum=ReplicationServers.GetKey("insplan","PlanNum");
-			}
-			string command= "INSERT INTO insplan (";
-			if(PrefC.RandomKeys) {
-				command+="PlanNum,";
-			}
-			command+="Subscriber,"
-				+"DateEffective,DateTerm,GroupName,GroupNum,PlanNote,"
-				+"FeeSched,ReleaseInfo,AssignBen,PlanType,ClaimFormNum,UseAltCode,"
-				+"ClaimsUseUCR,CopayFeeSched,SubscriberID,"
-				+"EmployerNum,CarrierNum,AllowedFeeSched,TrojanID,DivisionNo,BenefitNotes,IsMedical,SubscNote,FilingCode,"
-				+"DentaideCardSequence,ShowBaseUnits,CodeSubstNone,IsHidden,MonthRenew,FilingCodeSubtype"
-				+") VALUES(";
-			if(PrefC.RandomKeys) {
-				command+="'"+POut.Long(plan.PlanNum)+"', ";
-			}
-			command+=
-				 "'"+POut.Long(plan.Subscriber)+"', "
-				+POut.Date(plan.DateEffective)+", "
-				+POut.Date(plan.DateTerm)+", "
-				+"'"+POut.String(plan.GroupName)+"', "
-				+"'"+POut.String(plan.GroupNum)+"', "
-				+"'"+POut.String(plan.PlanNote)+"', "
-				+"'"+POut.Long(plan.FeeSched)+"', "
-				+"'"+POut.Bool(plan.ReleaseInfo)+"', "
-				+"'"+POut.Bool(plan.AssignBen)+"', "
-				+"'"+POut.String(plan.PlanType)+"', "
-				+"'"+POut.Long(plan.ClaimFormNum)+"', "
-				+"'"+POut.Bool(plan.UseAltCode)+"', "
-				+"'"+POut.Bool(plan.ClaimsUseUCR)+"', "
-				+"'"+POut.Long(plan.CopayFeeSched)+"', "
-				+"'"+POut.String(plan.SubscriberID)+"', "
-				+"'"+POut.Long(plan.EmployerNum)+"', "
-				+"'"+POut.Long(plan.CarrierNum)+"', "
-				+"'"+POut.Long(plan.AllowedFeeSched)+"', "
-				+"'"+POut.String(plan.TrojanID)+"', "
-				+"'"+POut.String(plan.DivisionNo)+"', "
-				+"'"+POut.String(plan.BenefitNotes)+"', "
-				+"'"+POut.Bool(plan.IsMedical)+"', "
-				+"'"+POut.String(plan.SubscNote)+"', "
-				+"'"+POut.Long(plan.FilingCode)+"', "
-				+"'"+POut.Long((int)plan.DentaideCardSequence)+"', "
-				+"'"+POut.Bool(plan.ShowBaseUnits)+"', "
-				//+"'"+POut.PBool(plan.DedBeforePercOld)+"', "
-				+"'"+POut.Bool(plan.CodeSubstNone)+"', "
-				+"'"+POut.Bool(plan.IsHidden)+"', "
-				+"'"+POut.Long(plan.MonthRenew)+"',"
-				+"'"+POut.Long(plan.FilingCodeSubtype)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				plan.PlanNum=Db.NonQ(command,true);
-			}
-			return plan.PlanNum;
+			return Crud.InsPlanCrud.Insert(plan);
 		}
 
 		///<summary></summary>
@@ -79,40 +24,7 @@ namespace OpenDentBusiness {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),plan);
 				return;
 			}
-			string command="UPDATE insplan SET "
-				+"Subscriber = '"    +POut.Long   (plan.Subscriber)+"'"
-				+",DateEffective = "+POut.Date  (plan.DateEffective)
-				+",DateTerm = "     +POut.Date  (plan.DateTerm)
-				+",GroupName = '"    +POut.String(plan.GroupName)+"'"
-				+",GroupNum = '"     +POut.String(plan.GroupNum)+"'"
-				+",PlanNote = '"     +POut.String(plan.PlanNote)+"'"
-				+",FeeSched = '"     +POut.Long   (plan.FeeSched)+"'"
-				+",ReleaseInfo = '"  +POut.Bool  (plan.ReleaseInfo)+"'"
-				+",AssignBen = '"    +POut.Bool  (plan.AssignBen)+"'"
-				+",PlanType = '"     +POut.String(plan.PlanType)+"'"
-				+",ClaimFormNum = '" +POut.Long   (plan.ClaimFormNum)+"'"
-				+",UseAltcode = '"   +POut.Bool  (plan.UseAltCode)+"'"
-				+",ClaimsUseUCR = '" +POut.Bool  (plan.ClaimsUseUCR)+"'"
-				+",CopayFeeSched = '"+POut.Long   (plan.CopayFeeSched)+"'"
-				+",SubscriberID = '" +POut.String(plan.SubscriberID)+"'"
-				+",EmployerNum = '"  +POut.Long   (plan.EmployerNum)+"'"
-				+",CarrierNum = '"   +POut.Long   (plan.CarrierNum)+"'"
-				+",AllowedFeeSched='"+POut.Long   (plan.AllowedFeeSched)+"'"
-				+",TrojanID='"       +POut.String(plan.TrojanID)+"'"
-				+",DivisionNo='"     +POut.String(plan.DivisionNo)+"'"
-				+",BenefitNotes='"   +POut.String(plan.BenefitNotes)+"'"
-				+",IsMedical='"      +POut.Bool  (plan.IsMedical)+"'"
-				+",SubscNote='"      +POut.String(plan.SubscNote)+"'"
-				+",FilingCode='"     +POut.Long(plan.FilingCode)+"'"
-				+",DentaideCardSequence='" +POut.Long(plan.DentaideCardSequence)+"'"
-				+",ShowBaseUnits='"  +POut.Bool(plan.ShowBaseUnits)+"'"
-				//+",DedBeforePerc='"  +POut.PBool(plan.DedBeforePerc)+"'"
-				+",CodeSubstNone='"  +POut.Bool(plan.CodeSubstNone)+"'"
-				+",IsHidden='"       +POut.Bool(plan.IsHidden)+"'"
-				+",MonthRenew='"     +POut.Long(plan.MonthRenew)+"'"
-				+",FilingCodeSubtype='"		+POut.Long(plan.FilingCodeSubtype)+"'"
-				+" WHERE PlanNum = '"+POut.Long   (plan.PlanNum)+"'";
-			Db.NonQ(command);
+			Crud.InsPlanCrud.Update(plan);
 		}
 
 		///<summary>Called from FormInsPlan when applying changes to all identical insurance plans. This updates the synchronized fields for all plans like the specified insPlan.  Current InsPlan must be set to the new values that we want.  BenefitNotes and SubscNote are specific to subscriber and are not changed.  PlanNotes are handled separately in a different function after this one is complete.</summary>
@@ -199,8 +111,7 @@ namespace OpenDentBusiness {
 				return Meth.GetObject<InsPlan[]>(MethodBase.GetCurrentMethod(),trojanID);
 			} 
 			string command="SELECT * FROM insplan WHERE TrojanID = '"+POut.String(trojanID)+"'";
-			DataTable table=Db.GetTable(command);
-			return RefreshFill(table).ToArray();
+			return Crud.InsPlanCrud.SelectMany(command).ToArray();
 		}
 
 		///<summary>Used in FormInsSelectSubscr to get a list of insplans for one subscriber directly from the database.</summary>
@@ -209,8 +120,7 @@ namespace OpenDentBusiness {
 				return MiscUtils.ArrayToList(Meth.GetObject<InsPlan[]>(MethodBase.GetCurrentMethod(),subscriber));
 			} 
 			string command="SELECT * FROM insplan WHERE Subscriber="+POut.Long(subscriber);
-			DataTable table=Db.GetTable(command);
-			return RefreshFill(table);
+			return Crud.InsPlanCrud.SelectMany(command);
 		}
 
 		///<summary>Only loads one plan from db. Can return null.</summary>
@@ -221,14 +131,7 @@ namespace OpenDentBusiness {
 			if(planNum==0)
 				return null;
 			string command="SELECT * FROM insplan WHERE plannum = '"+planNum+"'";
-			DataTable table=Db.GetTable(command);
-			List<InsPlan> planList=RefreshFill(table);
-			if(planList.Count>0) {
-				return planList[0].Copy();
-			}
-			else {
-				return null;
-			}
+			return Crud.InsPlanCrud.SelectOne(command);
 		}
 
 		///<summary>Gets new List for the specified family.  The only plans it misses are for claims with no current coverage.  These are handled as needed.</summary>
@@ -256,52 +159,7 @@ namespace OpenDentBusiness {
 			}
 			//command+=")) ORDER BY DateEffective";//FIXME:UNION-ORDER-BY
 			command+=")) ORDER BY 3";//***ORACLE ORDINAL
-			//Debug.WriteLine(command);
-			DataTable table=Db.GetTable(command);
-			return RefreshFill(table);
-		}
-
-		private static List<InsPlan> RefreshFill(DataTable table) {
-			//No need to check RemotingRole; no call to db.
-			List<InsPlan> planList=new List<InsPlan>();
-			InsPlan plan;
-			for(int i=0;i<table.Rows.Count;i++) {
-				plan=new InsPlan();
-				plan.PlanNum        = PIn.Long   (table.Rows[i][0].ToString());
-				plan.Subscriber     = PIn.Long   (table.Rows[i][1].ToString());
-				plan.DateEffective  = PIn.Date  (table.Rows[i][2].ToString());
-				plan.DateTerm       = PIn.Date  (table.Rows[i][3].ToString());
-				plan.GroupName      = PIn.String(table.Rows[i][4].ToString());
-				plan.GroupNum       = PIn.String(table.Rows[i][5].ToString());
-				plan.PlanNote       = PIn.String(table.Rows[i][6].ToString());
-				plan.FeeSched       = PIn.Long   (table.Rows[i][7].ToString());
-				plan.ReleaseInfo    = PIn.Bool  (table.Rows[i][8].ToString());
-				plan.AssignBen      = PIn.Bool  (table.Rows[i][9].ToString());
-				plan.PlanType       = PIn.String(table.Rows[i][10].ToString());
-				plan.ClaimFormNum   = PIn.Long   (table.Rows[i][11].ToString());
-				plan.UseAltCode     = PIn.Bool  (table.Rows[i][12].ToString());
-				plan.ClaimsUseUCR   = PIn.Bool  (table.Rows[i][13].ToString());
-				plan.CopayFeeSched  = PIn.Long   (table.Rows[i][14].ToString());
-				plan.SubscriberID   = PIn.String(table.Rows[i][15].ToString());
-				plan.EmployerNum    = PIn.Long   (table.Rows[i][16].ToString());
-				plan.CarrierNum     = PIn.Long   (table.Rows[i][17].ToString());
-				plan.AllowedFeeSched= PIn.Long   (table.Rows[i][18].ToString());
-				plan.TrojanID       = PIn.String(table.Rows[i][19].ToString());
-				plan.DivisionNo     = PIn.String(table.Rows[i][20].ToString());
-				plan.BenefitNotes   = PIn.String(table.Rows[i][21].ToString());
-				plan.IsMedical      = PIn.Bool  (table.Rows[i][22].ToString());
-				plan.SubscNote      = PIn.String(table.Rows[i][23].ToString());
-				plan.FilingCode     = PIn.Long   (table.Rows[i][24].ToString());
-				plan.DentaideCardSequence= PIn.Int(table.Rows[i][25].ToString());
-				plan.ShowBaseUnits  = PIn.Bool  (table.Rows[i][26].ToString());
-				//plan.DedBeforePerc  = PIn.PBool  (table.Rows[i][27].ToString());
-				plan.CodeSubstNone  = PIn.Bool  (table.Rows[i][28].ToString());
-				plan.IsHidden       = PIn.Bool(table.Rows[i][29].ToString());
-				plan.MonthRenew     = PIn.Int(table.Rows[i][30].ToString());
-				plan.FilingCodeSubtype = PIn.Long(table.Rows[i][31].ToString());
-				planList.Add(plan);
-			}
-			return planList;
+			return Crud.InsPlanCrud.SelectMany(command);
 		}
 
 		///<summary>Gets a description of the specified plan, including carrier name and subscriber. It's fastest if you supply a plan list that contains the plan, but it also works just fine if it can't initally locate the plan in the list.  You can supply an array of length 0 for both family and planlist.</summary>

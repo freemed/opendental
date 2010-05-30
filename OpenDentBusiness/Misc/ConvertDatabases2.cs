@@ -2235,7 +2235,14 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);
 				command="ALTER TABLE claim ADD CanadianMaxProsthMaterial tinyint NOT NULL";
 				Db.NonQ(command);
-
+				command="ALTER TABLE carrier DROP IsPMP";
+				Db.NonQ(command);
+				command="ALTER TABLE insplan ADD CanadianPlanFlag varchar(5) NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE insplan ADD CanadianBandNumber int NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE insplan ADD CanadianFamilyNumber int NOT NULL";
+				Db.NonQ(command);
 
 
 
@@ -2258,3 +2265,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 			
+
+			
+
+				

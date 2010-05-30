@@ -17,7 +17,7 @@ namespace OpenDentBusiness{
 		public bool IsPending;
 		///<summary>Enum:Relat Remember that this may need to be changed in the Claim also, if already created.</summary>
 		public Relat Relationship;
-		///<summary>An optional patient ID which will override the SSN on eclaims if present.  Subscriber ID is part of the insplan.</summary>
+		///<summary>An optional patient ID which will override the insplan.SubscriberID on eclaims.  For Canada, this holds the Dependent Code, C17 and E17, and in that use it doesn't override subscriber id, but instead supplements it.</summary>
 		public string PatID;
 
 		///<summary></summary>

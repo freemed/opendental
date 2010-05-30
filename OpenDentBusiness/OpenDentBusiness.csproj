@@ -150,6 +150,7 @@
     <Compile Include="Crud\HL7MsgCrud.cs" />
     <Compile Include="Crud\InsFilingCodeCrud.cs" />
     <Compile Include="Crud\InsFilingCodeSubtypeCrud.cs" />
+    <Compile Include="Crud\InsPlanCrud.cs" />
     <Compile Include="Crud\LabCaseCrud.cs" />
     <Compile Include="Crud\LaboratoryCrud.cs" />
     <Compile Include="Crud\MountCrud.cs" />

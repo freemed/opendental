@@ -108,7 +108,7 @@ namespace OpenDental{
 		private GroupBox groupYear;
 		private CheckBox checkCalendarYear;
 		///<summary>Set this externally before opening the form.  0 indicates calendar year, otherwise 1-12.  This forces all benefits to conform to this setting.  User can change as a whole.</summary>
-		public int MonthRenew;
+		public byte MonthRenew;
 
 		///<summary></summary>
 		public FormInsBenefits(long planNum,long patPlanNum)
@@ -2350,7 +2350,7 @@ namespace OpenDental{
 				MonthRenew=0;
 			}
 			else {
-				MonthRenew=PIn.Int(textMonth.Text);
+				MonthRenew=PIn.Byte(textMonth.Text);
 			}
 			Note=textSubscNote.Text;
 			DialogResult=DialogResult.OK;
