@@ -334,7 +334,7 @@ namespace OpenDentBusiness{
 			//No match found.  Decide what to do.  Usually add carrier.--------------------------------------------------------------
 			//Canada:
 			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")){//en-CA or fr-CA
-				throw new ApplicationException(Lans.g("Carriers","Carrier not found."));
+				throw new ApplicationException(Lans.g("Carriers","Carrier not found."));//gives user a chance to add manually.
 				/*if(carrier.ElectID!=""){
 					command="SELECT CarrierNum FROM carrier WHERE "
 						+"ElectID = '"+POut.String(carrier.ElectID)+"' "

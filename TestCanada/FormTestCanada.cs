@@ -43,6 +43,11 @@ namespace TestCanada {
 		}
 
 		private void butObjects_Click(object sender,EventArgs e) {
+			FillObjects();
+			Cursor=Cursors.Default;
+		}
+
+		private void FillObjects(){
 			textResults.Text="";
 			Application.DoEvents();
 			Cursor=Cursors.WaitCursor;
@@ -59,21 +64,27 @@ namespace TestCanada {
 			Application.DoEvents();
 			textResults.Text+=CarrierTC.SetInitialCarriers();
 			Application.DoEvents();
-			textResults.Text+=PatientTC.SetInitialPatients();
-			Application.DoEvents();
-
-
-
-
-			Cursor=Cursors.Default;
+			textResults.Text+=PatientTC.SetInitialPatients();			
 		}
 
 		private void butProcedures_Click(object sender,EventArgs e) {
-
+			FillObjects();
+			textResults.Text+="---------------------------------------\r\n";
+			Application.DoEvents();
+			textResults.Text+="(procs not implemented yet)\r\n";
+			Cursor=Cursors.Default;
 		}
 
 		private void butScripts_Click(object sender,EventArgs e) {
-
+			FillObjects();
+			textResults.Text+="---------------------------------------\r\n";
+			Application.DoEvents();
+			textResults.Text+="(procs not implemented yet)\r\n";
+			Application.DoEvents();
+			textResults.Text+="---------------------------------------\r\n";
+			Application.DoEvents();
+			textResults.Text+=Eligibility.RunOne();
+			Cursor=Cursors.Default;
 		}
 	}
 }

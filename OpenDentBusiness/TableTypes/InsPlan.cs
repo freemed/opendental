@@ -57,7 +57,7 @@ namespace OpenDentBusiness{
 		public string SubscNote;
 		///<summary>FK to insfilingcode.InsFilingCodeNum.  Used for e-claims.  Also used for some complex reports in public health.  The e-claim usage might become obsolete when PlanID implemented by HIPAA.  Can be 0 to indicate none.  Then 'CI' will go out on claims.</summary>
 		public long FilingCode;
-		///<summary>Canadian e-claim field. D11 and E07.  Mandatory for Dentaide.  Value must be greater than 0.  Not used for all others.  2 digit.</summary>
+		///<summary>Canadian e-claim field. D11 and E07.  Zero indicates empty.  Mandatory value for Dentaide.  Not used for all others.  2 digit.</summary>
 		public byte DentaideCardSequence;
 		///<summary>If checked, the units Qty will show the base units assigned to a procedure on the claim form.</summary>
 		public bool ShowBaseUnits;
@@ -69,11 +69,11 @@ namespace OpenDentBusiness{
 		public byte MonthRenew;
 		///<summary>FK to insfilingcodesubtype.insfilingcodesubtypenum</summary>
 		public long FilingCodeSubtype;
-		///<summary>Canadian C12.  Single char, usually blank.  A=Newfoundland MCP Plan - Provincial Medical Plan.  V=Veteran's Affairs Plan.  N=no?</summary>
+		///<summary>Canadian C12.  Single char, usually blank.  A=Newfoundland MCP Plan - Provincial Medical Plan.  V=Veteran's Affairs Plan.  N=NIHB(poorly documented)</summary>
 		public string CanadianPlanFlag;
-		///<summary>Canadian C13.  Used when NIHB. 3 digit.</summary>
+		///<summary>Canadian C13.  Used when NIHB. 3 digit.  0 means blank.</summary>
 		public int CanadianBandNumber;
-		///<summary>Canadian C14.  Used when NIHB. 5 digit.</summary>
+		///<summary>Canadian C14.  Used when NIHB. 5 digit.  0 means blank.</summary>
 		public int CanadianFamilyNumber;
 		///<summary>This is not a database column.  It is just used to display the number of plans with the same info.</summary>
 		[CrudColumn(IsNotDbColumn=true)]

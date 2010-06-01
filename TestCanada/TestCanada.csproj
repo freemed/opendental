@@ -66,6 +66,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CarrierTC.cs" />
+    <Compile Include="PatPlanTC.cs" />
+    <Compile Include="Eligibility.cs" />
     <Compile Include="ToothInitialTC.cs" />
     <Compile Include="ProcTC.cs" />
     <Compile Include="PatientTC.cs" />

@@ -281,7 +281,7 @@ namespace OpenDentBusiness{
 			if(etype==EtransType.Eligibility_CA){
 				//find the next CarrierTransCounter------------------------------------------------------------------------------------
 				etrans.CarrierTransCounter=0;
-				command="SELECT MAX(CarrierTransCounter) FROM etrans"
+				command="SELECT MAX(CarrierTransCounter) FROM etrans "
 					+"WHERE CarrierNum="+POut.Long(etrans.CarrierNum);
 				table=Db.GetTable(command);
 				int tempcounter=0;

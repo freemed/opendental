@@ -9,65 +9,54 @@ using OpenDentBusiness;
 namespace OpenDental.Eclaims {
 	public class CanadianOutput {
 		///<summary>The result is a string which can be dropped into the insplan.BenefitNotes.  Or it might throw an exception if invalid data.  This class is also responsible for saving the returned message to the etrans table and printing out the required form.</summary>
-		public static string SendElegibility(string electID,long patNum,string groupNumber,string divisionNo,
-			string subscriberID,string patID,Relat patRelat,long subscNum,string dentaideCardSequence)
-		{
+		public static string SendElegibility(long patNum,InsPlan plan,DateTime date,Relat relat,string patID){
+			//string electID,long patNum,string groupNumber,string divisionNo,
+			//string subscriberID,string patID,Relat patRelat,long subscNum,string dentaideCardSequence)
 			//Note: This might be the only class of this kind that returns a string.  It's a special situation.
 			//We are simply not going to bother with language translation here.
-			//determine carrier.
-			Carrier carrier=Carriers.GetCanadian(electID);//this also happens to validate missing or short value
+			Carrier carrier=Carriers.GetCarrier(plan.CarrierNum);
 			if(carrier==null){
-				throw new ApplicationException("Invalid carrier EDI code.");
+				throw new ApplicationException("Invalid carrier.");
 			}
+			Patient patient=Patients.GetPat(patNum);
+			Patient subscriber=Patients.GetPat(plan.Subscriber);
+			Provider prov=Providers.GetProv(Patients.GetProvNum(patient));
 			Clearinghouse clearhouse=Canadian.GetClearinghouse();
 			if(clearhouse==null){
 				throw new ApplicationException("Canadian clearinghouse not found.");
 			}
-//warning, might not work if trailing slash is missing.
 			string saveFolder=clearhouse.ExportPath;
 			if(!Directory.Exists(saveFolder)) {
 				throw new ApplicationException(saveFolder+" not found.");
 			}
-			//Initialize objects-----------------------------------------------------------------------------------------------
-			Patient patient=Patients.GetPat(patNum);
-			Patient subscriber=Patients.GetPat(subscNum);
-			Provider treatProv=Providers.GetProv(Patients.GetProvNum(patient));
-			//int clinicInsBillingProv=0;
-			//bool useClinic=false;
-			Provider billProv=Providers.GetProv(Providers.GetBillingProvNum(treatProv.ProvNum,0));//useClinic,clinicInsBillingProv));
-			//I had to use a dialog box to get the eligibility code.
-
-			//validate any missing info----------------------------------------------------------------------------------
+			//validate----------------------------------------------------------------------------------------------------
 			string error="";
-			if(carrier.CanadianNetworkNum==0){
-				if(error!="") error+=", ";
-				error+="Carrier does not have network specified";
-			}
+			//if(carrier.CanadianNetworkNum==0){
+			//	if(error!="") error+=", ";
+			//	error+="Carrier does not have network specified";
+			//}
 			if(!Regex.IsMatch(carrier.ElectID,@"^[0-9]{6}$")){//not necessary, but nice
 				if(error!="") error+=", ";
 				error+="CarrierId 6 digits";
 			}
-			if(treatProv.NationalProvID.Length!=9) {
+
+			if(prov.NationalProvID.Length!=9) {
 				if(error!="")	error+=", ";
-				error+="TreatingProv CDA num 9 digits";
+				error+="Prov CDA num 9 digits";
 			}
-			if(treatProv.CanadianOfficeNum.Length!=4) {
+			if(prov.CanadianOfficeNum.Length!=4) {
 				if(error!="") error+=", ";
-				error+="TreatingProv office num 4 char";
+				error+="Prov office num 4 char";
 			}
-			if(billProv.NationalProvID.Length!=9) {
-				if(error!="") error+=", ";
-				error+="BillingProv CDA num 9 digits";
-			}
-			if(groupNumber.Length==0 || groupNumber.Length>12 || groupNumber.Contains(" ")){
-				if(error!="") error+=", ";
-				error+="Plan Number";
-			}
-			if(subscriberID==""){
-				if(error!="") error+=", ";
-				error+="SubscriberID";
-			}
-			if(patNum != subscNum && patRelat==Relat.Self) {//if patient is not subscriber, and relat is self
+			//if(plan.GroupNum.Length==0 || groupNumber.Length>12 || groupNumber.Contains(" ")){
+			//	if(error!="") error+=", ";
+			//	error+="Plan Number";
+			//}
+			//if(subscriberID==""){//already validated.  And it's allowed to be blank sometimes
+			//	if(error!="") error+=", ";
+			//	error+="SubscriberID";
+			//}
+			if(patNum != plan.Subscriber && relat==Relat.Self) {//if patient is not subscriber, and relat is self
 				if(error!="") error+=", ";
 				error+="Relationship cannot be self";
 			}
@@ -87,6 +76,10 @@ namespace OpenDental.Eclaims {
 				if(error!="") error+=", ";
 				error+="Patient firstname";
 			}
+			if(patient.CanadianEligibilityCode==0) {
+				if(error!="") error+=", ";
+				error+="Patient eligibility exception code";
+			}
 			if(subscriber.Birthdate.Year<1880 || subscriber.Birthdate>DateTime.Today) {
 				if(error!="") error+=", ";
 				error+="Subscriber birthdate";
@@ -102,120 +95,128 @@ namespace OpenDental.Eclaims {
 			if(error!="") {
 				throw new ApplicationException(error);
 			}
-			FormCanadianEligibility FormElig=new FormCanadianEligibility();
-			FormElig.ShowDialog();
-			if(FormElig.DialogResult!=DialogResult.OK){
-				throw new ApplicationException("Eligibility Code or Date missing.");
-			}
-			//eligiblity code guaranteed to not be 0 at this point.  Also date will be between 1980 and 10 years from now.
 			Etrans etrans=Etranss.CreateCanadianOutput(patNum,carrier.CarrierNum,carrier.CanadianNetworkNum,
 				clearhouse.ClearinghouseNum,EtransType.Eligibility_CA);
-			string txt="";
+			StringBuilder strb=new StringBuilder();
 			//create message----------------------------------------------------------------------------------------------
 			//A01 transaction prefix 12 AN
-//todo
-			txt+="123456789012";//To be later provided by the individual network.
+			strb.Append(Canadian.TidyAN(carrier.CanadianTransactionPrefix,12));
 			//A02 office sequence number 6 N
-			txt+=Canadian.TidyN(etrans.OfficeSequenceNumber,6);
+#if DEBUG
+			strb.Append(Canadian.TidyN(1,6));
+#else
+			strb.Append(Canadian.TidyN(etrans.OfficeSequenceNumber,6));
+#endif
 			//A03 format version number 2 N
-			txt+="04";
+			strb.Append(carrier.CDAnetVersion);//eg. "04", validated in UI
 			//A04 transaction code 2 N
-			txt+="08";//eligibility
+			strb.Append("08");//eligibility
 			//A05 carrier id number 6 N
-			txt+=carrier.ElectID;//already validated as 6 digit number.
+			strb.Append(carrier.ElectID);//already validated as 6 digit number.
 			//A06 software system id 3 AN  The third character is for version of OD.
 //todo
-			txt+="OD1";//To be later supplied by CDAnet staff to uniquely identify OD.
+#if DEBUG
+			strb.Append("TS1");
+#else
+			strb.Append("OD1");//To be later supplied by CDAnet staff to uniquely identify OD.
+#endif
 			//A10 encryption method 1 N
-//todo
-			txt+="1";
+			strb.Append(carrier.CanadianEncryptionMethod);//validated in UI
 			//A07 message length 5 N
 			int len=214;
-//todo does not account for C19. Possibly 30 more.
-			//if(C19 is used, Plan Record){
-			//len+=30;
-			//}
-			txt+=Canadian.TidyN(len,5);
+			bool C19PlanRecordPresent=false;
+			if(plan.CanadianPlanFlag=="A" || plan.CanadianPlanFlag=="N"){
+				C19PlanRecordPresent=true;
+			}
+			if(C19PlanRecordPresent){
+				len+=30;
+			}
+			strb.Append(Canadian.TidyN(len,5));
 			//A09 carrier transaction counter 5 N
-			txt+=Canadian.TidyN(etrans.CarrierTransCounter,5);
+			strb.Append(Canadian.TidyN(etrans.CarrierTransCounter,5));
 			//B01 CDA provider number 9 AN
-			txt+=Canadian.TidyAN(treatProv.NationalProvID,9);//already validated
-			//B02 (treating) provider office number 4 AN
-			txt+=Canadian.TidyAN(treatProv.CanadianOfficeNum,4);//already validated	
+			strb.Append(Canadian.TidyAN(prov.NationalProvID,9));//already validated
+			//B02 provider office number 4 AN
+			strb.Append(Canadian.TidyAN(prov.CanadianOfficeNum,4));//already validated	
 			//B03 billing provider number 9 AN
-//todo, need to account for possible 5 digit prov id assigned by carrier
-			txt+=Canadian.TidyAN(billProv.NationalProvID,9);//already validated
+			//Might need to account for possible 5 digit prov id assigned by carrier
+			//But the testing scripts do not supply any billing provider numbers, so we'll ignore this for now.
+			strb.Append(Canadian.TidyAN(prov.NationalProvID,9));//already validated
 			//C01 primary policy/plan number 12 AN (group number)
 			//only validated to ensure that it's not blank and is less than 12. Also that no spaces.
-			txt+=Canadian.TidyAN(groupNumber,12);
+			strb.Append(Canadian.TidyAN(plan.GroupNum,12));
 			//C11 primary division/section number 10 AN
-			txt+=Canadian.TidyAN(divisionNo,10);
+			strb.Append(Canadian.TidyAN(plan.DivisionNo,10));
 			//C02 subscriber id number 12 AN
-			txt+=Canadian.TidyAN(subscriberID.Replace("-",""),12);//validated
+			strb.Append(Canadian.TidyAN(plan.SubscriberID.Replace("-",""),12));//validated
 			//C17 primary dependant code 2 N. Optional
-			txt+=Canadian.TidyN(patID,2);
+			strb.Append(Canadian.TidyN(patID,2));
 			//C03 relationship code 1 N
 			//User interface does not only show Canadian options, but all options are handled.
-			txt+=Canadian.GetRelationshipCode(patRelat);
+			strb.Append(Canadian.GetRelationshipCode(relat));
 			//C04 patient's sex 1 A
 			//validated to not include "unknown"
 			if(patient.Gender==PatientGender.Male) {
-				txt+="M";
+				strb.Append("M");
 			}
 			else {
-				txt+="F";
+				strb.Append("F");
 			}
 			//C05 patient birthday 8 N
-			txt+=patient.Birthdate.ToString("yyyyMMdd");//validated
+			strb.Append(patient.Birthdate.ToString("yyyyMMdd"));//validated
 			//C06 patient last name 25 AE
-			txt+=Canadian.TidyAE(patient.LName,25,true);//validated
+			strb.Append(Canadian.TidyAE(patient.LName,25,true));//validated
 			//C07 patient first name 15 AE
-			txt+=Canadian.TidyAE(patient.FName,15,true);//validated
+			strb.Append(Canadian.TidyAE(patient.FName,15,true));//validated
 			//C08 patient middle initial 1 AE
-			txt+=Canadian.TidyAE(patient.MiddleI,1);
+			strb.Append(Canadian.TidyAE(patient.MiddleI,1));
 			//C09 eligibility exception code 1 N
-			txt+=Canadian.TidyN(FormElig.EligibilityCode,1);//validated
+			strb.Append(Canadian.TidyN(patient.CanadianEligibilityCode,1));//validated
 			//C12 plan flag 1 A
-//todo
-			//might not be carrier.IsPMP.  Might have to do with plan, not carrier. See F17.
-			txt+=" ";
+			strb.Append(Canadian.TidyA(plan.CanadianPlanFlag,1));
 			//C18 plan record count 1 N
-//todo
-			txt+="0";
+			if(C19PlanRecordPresent){
+				strb.Append("1");
+			}
+			else{
+				strb.Append("0");
+			}
 			//C16 Eligibility date. 8 N.
-			DateTime asofdate=FormElig.AsOfDate;
-			txt+=asofdate.ToString("yyyyMMdd");//validated
+			strb.Append(date.ToString("yyyyMMdd"));
 			//D01 subscriber birthday 8 N
-			txt+=subscriber.Birthdate.ToString("yyyyMMdd");//validated
+			strb.Append(subscriber.Birthdate.ToString("yyyyMMdd"));//validated
 			//D02 subscriber last name 25 AE
-			txt+=Canadian.TidyAE(subscriber.LName,25,true);//validated
+			strb.Append(Canadian.TidyAE(subscriber.LName,25,true));//validated
 			//D03 subscriber first name 15 AE
-			txt+=Canadian.TidyAE(subscriber.FName,15,true);//validated
+			strb.Append(Canadian.TidyAE(subscriber.FName,15,true));//validated
 			//D04 subscriber middle initial 1 AE
-			txt+=Canadian.TidyAE(subscriber.MiddleI,1);
+			strb.Append(Canadian.TidyAE(subscriber.MiddleI,1));
 			//D10 language of insured 1 A
 			if(subscriber.Language=="fr") {
-				txt+="F";
+				strb.Append("F");
 			}
 			else {
-				txt+="E";
+				strb.Append("E");
 			}
 			//D11 card sequence/version number 2 N
-//todo: Not validated against type of carrier yet.  Need to check if Dentaide.
-			txt+=Canadian.TidyN(dentaideCardSequence,2);
-//todo If C18=1, then the following field would appear
+			//Not validated against type of carrier.  Might need to check if Dentaide.
+			strb.Append(Canadian.TidyN(plan.DentaideCardSequence,2));
 			//C19 plan record 30 AN
+			if(C19PlanRecordPresent){
+//todo: what text goes here?  Not documented
+				strb.Append(Canadian.TidyAN("",30));
+			}
 			string result="";
 			try {
-				result=Canadian.PassToCCD(txt,carrier.CanadianNetworkNum,clearhouse);
+				result=Canadian.PassToIca(strb.ToString(),carrier.CanadianNetworkNum,clearhouse);
 			}
 			catch(ApplicationException ex) {
 				Etranss.Delete(etrans.EtransNum);
 				throw new ApplicationException(ex.Message);
 			}
-			Etranss.SetMessage(etrans.EtransNum,txt);
-			//etrans.MessageText=txt;
-			FormCCDPrint FormP=new FormCCDPrint(etrans,txt);//Print the form.
+			//result="4,1001,000,"
+			Etranss.SetMessage(etrans.EtransNum,strb.ToString());
+			FormCCDPrint FormP=new FormCCDPrint(etrans,strb.ToString());//Print the form.
 			FormP.ShowDialog();
 			//Now we will process the 'result' here to extract the important data.  Basically Yes or No on the eligibility.
 			//We might not do this for any other trans type besides eligibility.

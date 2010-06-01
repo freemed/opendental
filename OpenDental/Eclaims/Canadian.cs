@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -375,7 +376,7 @@ namespace OpenDental.Eclaims {
 				//this is where we attempt the actual sending:
 				string ccdResult="";
 				try{
-					ccdResult=PassToCCD(str.ToString(),carrier.CanadianNetworkNum,clearhouse);
+					ccdResult=PassToIca(str.ToString(),carrier.CanadianNetworkNum,clearhouse);
 				}
 				catch(ApplicationException ex){
 					//if unsuccessful, then the saveFile needs to be deleted?
@@ -388,47 +389,61 @@ namespace OpenDental.Eclaims {
 			return true;
 		}
 
-		///<summary>Takes a string, creates a file, and drops it into the correct CCD folder.  Waits for the response, and then returns it as a string.  Will throw an exception if response not received in a reasonable amount of time.  </summary>
-		public static string PassToCCD(string msgText,long networkNum,Clearinghouse clearhouse) {
+		///<summary>Takes a string, creates a file, and drops it into the iCA folder.  Waits for the response, and then returns it as a string.  Will throw an exception if response not received in a reasonable amount of time.  </summary>
+		public static string PassToIca(string msgText,long networkNum,Clearinghouse clearhouse) {
 			if(clearhouse==null){
 				throw new ApplicationException(Lan.g("Canadian","CDAnet Clearinghouse could not be found."));
 			}
-//warning: folder will not work unless trailing slash is included.
 			string saveFolder=clearhouse.ExportPath;
 			if(!Directory.Exists(saveFolder)) {
 				throw new ApplicationException(saveFolder+" not found.");
 			}
-			//todo: add validation to make sure claims have a valid network.
-			CanadianNetwork network=CanadianNetworks.GetNetwork(networkNum);
-			if(network==null){
-				throw new ApplicationException("Invalid network.");
-			}
-			saveFolder=ODFileUtils.CombinePaths(saveFolder,network.Abbrev);
-			if(!Directory.Exists(saveFolder)) {
-				Directory.CreateDirectory(saveFolder);
-			}
-			string readFile=ODFileUtils.CombinePaths(saveFolder,"OUTPUT.000");
-			File.Delete(readFile);//no exception thrown if file does not exist.
-			string saveFile=saveFolder+Path.DirectorySeparatorChar+"INPUT.000";
-			using(StreamWriter sw=new StreamWriter(saveFile,false,Encoding.GetEncoding(850))) {
-				sw.Write(msgText);
-			}
-			return "";//for now
-			/*
+			Process.Start(clearhouse.ClientProgram);
+			//Form iCAform=(Form)Form.FromHandle(process.MainWindowHandle);
+			//iCAform.WindowState=FormWindowState.Minimized;
+			//process.Dispose();
+			//CanadianNetwork network=CanadianNetworks.GetNetwork(networkNum);
+			//if(network==null){
+			//	throw new ApplicationException("Invalid network.");
+			//}
+			//saveFolder=ODFileUtils.CombinePaths(saveFolder,network.Abbrev);
+			//if(!Directory.Exists(saveFolder)) {
+			//	Directory.CreateDirectory(saveFolder);
+			//}
+			//first, delete the result file just in case.
+			string outputFile=ODFileUtils.CombinePaths(saveFolder,"output.000");
+			File.Delete(outputFile);//no exception thrown if file does not exist.
+			//create the input file with data:
+			string inputFile=ODFileUtils.CombinePaths(saveFolder,"input.000");
+			/* //For testing
+			Encoding encoding=Encoding.GetEncoding(850);
+			Byte[] bytes=encoding.GetBytes(msgText);
+			Byte[] comparebytes=File.ReadAllBytes(@"E:\My Documents\Standards\Canada\Certification\vendor_test_transactions\E1.NET");
+			for(int i=0;i<bytes.Length;i++) {
+				if(bytes[i]!=comparebytes[i]) {
+					MessageBox.Show("Position "+i.ToString()+", byte="+bytes[i].ToString()+", comparebyte="+comparebytes[i].ToString());
+				}
+			}*/
+			File.WriteAllText(inputFile,msgText,Encoding.GetEncoding(850));
 			DateTime start=DateTime.Now;
 			while(DateTime.Now<start.AddSeconds(10)){//wait for max of 10 seconds. We can increase it later.
-				if(File.Exists(readFile)){
+				if(File.Exists(outputFile)){
 					break;
 				}
-				Thread.Sleep(500);//1/2 second
+				Thread.Sleep(200);//1/10 second
 				Application.DoEvents();
 			}
-			if(!File.Exists(readFile)){
+			if(!File.Exists(outputFile)) {
+				File.Delete(inputFile);
 				throw new ApplicationException("No response.");
-				File.Delete(saveFile);
 			}
-			//read file here, and return it as a string.
-			*/
+			string result=File.ReadAllText(outputFile,Encoding.GetEncoding(850));
+			File.Delete(outputFile);
+			File.Delete(inputFile);//although this will always have been removed by iCA.exe
+			if(result.Length<50) {//can't be a valid message
+				throw new ApplicationException("Invalid response: "+result);
+			}
+			return result;
 		}
 
 		///<summary>Since this is only used for Canadian messages, it will always use the default clearinghouse if it's Canadian.  Otherwise, it uses the first Canadian clearinghouse that it can find.</summary>
@@ -510,7 +525,7 @@ namespace OpenDental.Eclaims {
 			return text.PadRight(width,' ');
 		}
 
-		///<summary>Alphabetic/Numeric, no extended characters.</summary>
+		///<summary>Alphabetic/Numeric, no extended characters.  Caps only.</summary>
 		public static string TidyAN(string text,int width) {
 			return TidyAN(text,width,false);
 		}
