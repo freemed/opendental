@@ -398,7 +398,9 @@ namespace OpenDental.Eclaims {
 			if(!Directory.Exists(saveFolder)) {
 				throw new ApplicationException(saveFolder+" not found.");
 			}
-			Process.Start(clearhouse.ClientProgram);
+			if(Process.GetProcessesByName("iCA*").Length==0){
+				Process.Start(clearhouse.ClientProgram);
+			}
 			//Form iCAform=(Form)Form.FromHandle(process.MainWindowHandle);
 			//iCAform.WindowState=FormWindowState.Minimized;
 			//process.Dispose();
@@ -438,10 +440,22 @@ namespace OpenDental.Eclaims {
 				throw new ApplicationException("No response.");
 			}
 			string result=File.ReadAllText(outputFile,Encoding.GetEncoding(850));
+			//strip the prefix.  Example prefix: 123456,0,000,
+			//Find position of third comma
+			Match match=Regex.Match(result,@"^\d+,\d+,\d+,");
+			if(match.Success){
+				result=result.Substring(match.Length);
+			}
+			//result.IndexOf(",",0,
 			File.Delete(outputFile);
 			File.Delete(inputFile);//although this will always have been removed by iCA.exe
 			if(result.Length<50) {//can't be a valid message
-				throw new ApplicationException("Invalid response: "+result);
+				string errorFile=ODFileUtils.CombinePaths(Path.GetDirectoryName(clearhouse.ClientProgram),"ica.log");
+				string errorlog="";
+				if(File.Exists(errorFile)){
+					errorlog=File.ReadAllText(errorFile);
+				}
+				throw new ApplicationException("Invalid response: "+result+"\r\nError log:\r\n"+errorlog+"\r\n\r\nPlease see http://goitrans.com/itrans_support/itrans_claim_support_error_codes.htm for more details.");
 			}
 			return result;
 		}

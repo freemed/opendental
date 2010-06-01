@@ -53,7 +53,7 @@ namespace OpenDentBusiness{
 			return splits;
 		}
 
-		///<summary>Gets the specified claim from the database.</summary>
+		///<summary>Gets the specified claim from the database.  Can be null.</summary>
 		public static Claim GetClaim(long claimNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Claim>(MethodBase.GetCurrentMethod(),claimNum);
@@ -61,6 +61,9 @@ namespace OpenDentBusiness{
 			string command="SELECT * FROM claim"
 				+" WHERE ClaimNum = "+claimNum.ToString();
 			Claim retClaim=Crud.ClaimCrud.SelectOne(command);
+			if(retClaim==null){
+				return null;
+			}
 			command="SELECT * FROM claimattach WHERE ClaimNum = "+POut.Long(claimNum);
 			DataTable table=Db.GetTable(command);
 			retClaim.Attachments=new List<ClaimAttach>();

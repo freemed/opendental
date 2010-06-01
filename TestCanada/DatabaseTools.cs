@@ -76,6 +76,7 @@ namespace TestCanada {
 				DELETE FROM patient;
 				DELETE FROM patplan;
 				DELETE FROM procedurelog;
+				DELETE FROM etrans;
 				";
 			DataCore.NonQ(command);
 			return "Database cleared of old data.\r\n";

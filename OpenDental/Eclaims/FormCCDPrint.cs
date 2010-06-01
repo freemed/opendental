@@ -134,7 +134,7 @@ namespace OpenDental.Eclaims {
 			Init();
 		}
 
-		///<summary>Accepts an etrans entry for Canadian claims only. After the constructor completes, only the secondary insurance db structures can be null.</summary>
+		///<summary>Accepts an etrans entry for Canadian claims only. After the constructor completes, only the secondary insurance db structures can be null.  Claim can be null if eligibility request or response.</summary>
 		public FormCCDPrint(Etrans pEtrans,string messageText) {
 			etrans=pEtrans;
 			MessageText=messageText;
@@ -144,10 +144,16 @@ namespace OpenDental.Eclaims {
 		private void Init(){
 			InitializeComponent();
 			breakLinePen.Width=2;
-			try {
-				patient=Patients.GetPat(etrans.PatNum);
-				primaryCarrier=Carriers.GetCarrier(etrans.CarrierNum);
-				claim=Claims.GetClaim(etrans.ClaimNum);
+			//try {
+			patient=Patients.GetPat(etrans.PatNum);
+			primaryCarrier=Carriers.GetCarrier(etrans.CarrierNum);
+			claim=Claims.GetClaim(etrans.ClaimNum);
+			if(claim==null){//for eligibility
+				provTreat=Providers.GetProv(Patients.GetProvNum(patient));
+				provBill=Providers.GetProv(Patients.GetProvNum(patient));
+				insplan=InsPlans.GetPlan(etrans.PlanNum,new List<InsPlan>());
+			}
+			else{
 				provTreat=Providers.GetProv(claim.ProvTreat);
 				provBill=Providers.GetProv(claim.ProvBill);
 				insplan=InsPlans.GetPlan(claim.PlanNum,new List <InsPlan> ());
@@ -159,25 +165,28 @@ namespace OpenDental.Eclaims {
 						throw new Exception(this.ToString()+".FormCCDPrint: failed to load secondary insurance info!");
 					}
 				}
-				List<ClaimProc> claimprocs=ClaimProcs.RefreshForClaim(claim.ClaimNum);
-				patPlansForPatient=PatPlans.Refresh(claim.PatNum);
-				subscriber=Patients.GetPat(insplan.Subscriber);
-				if(subscriber.Language=="fr") {
-					isFrench=true;
-					culture=new CultureInfo("fr-CA");
-				}
-				List<Procedure> procsAll=Procedures.Refresh(claim.PatNum);
-				extracted=Procedures.GetCanadianExtractedTeeth(procsAll);
-				//Test previously untested structures for existence, so that we do not need to check repeatedly later.
-				if(primaryCarrier==null || provTreat==null || provBill==null || insplan==null || claimprocs == null ||
-					patPlansForPatient==null || extracted==null) {
-					throw new Exception(this.ToString()+".FormCCDPrint: failed to load primary insurance info!");
-				}
+				//List<ClaimProc> claimprocs=ClaimProcs.RefreshForClaim(claim.ClaimNum);
 			}
-			catch(Exception e) {
-				Logger.openlog.LogMB(e.ToString(),Logger.Severity.ERROR);
-				printable=false;
+			patPlansForPatient=PatPlans.Refresh(etrans.PatNum);
+			subscriber=Patients.GetPat(insplan.Subscriber);
+			if(subscriber.Language=="fr") {
+				isFrench=true;
+				culture=new CultureInfo("fr-CA");
 			}
+			List<Procedure> procsAll=Procedures.Refresh(etrans.PatNum);
+			extracted=Procedures.GetCanadianExtractedTeeth(procsAll);
+			//Test previously untested structures for existence, so that we do not need to check repeatedly later.
+			//
+			if(primaryCarrier==null || provTreat==null || provBill==null || insplan==null || //claimprocs == null ||
+				patPlansForPatient==null || extracted==null) 
+			{
+				throw new Exception(this.ToString()+".FormCCDPrint: failed to load primary insurance info!");
+			}
+			//}
+			//catch(Exception e) {
+			//	Logger.openlog.LogMB(e.ToString(),Logger.Severity.ERROR);
+			//	printable=false;
+			//}
 		}
 
 		///<summary>This is the function that must be called to properly print the form.</summary>
@@ -218,7 +227,8 @@ namespace OpenDental.Eclaims {
 					}
 					numCopies--;
 				}
-			}catch(Exception ex){
+			}
+			catch(Exception ex){
 				Logger.openlog.Log(ex.ToString(),Logger.Severity.ERROR);
 			}
 		}
@@ -242,7 +252,8 @@ namespace OpenDental.Eclaims {
 					pd.Print();
 					DialogResult=DialogResult.OK;
 				#endif
-			}catch(Exception ex){
+			}
+			catch(Exception ex){
 				Logger.openlog.Log(ex.ToString(),Logger.Severity.ERROR);
 			}
 		}
@@ -269,9 +280,11 @@ namespace OpenDental.Eclaims {
 					}
 					if(status=="R"){//Claim Rejection
 						PrintClaimRejection(e.Graphics);
-					}else if(status=="M" || formId.valuestr=="05"){//Paper Claim
+					}
+					else if(status=="M" || formId.valuestr=="05"){//Paper Claim
 						PrintPaperClaim(e.Graphics);
-					}else{
+					}
+					else{
 						switch(msgType){
 							case "11":
 								PrintClaimAck_11(e.Graphics);
@@ -315,7 +328,8 @@ namespace OpenDental.Eclaims {
 				}
 				if(pagesPrinted<totalPages){					
 					e.HasMorePages=true;
-				}else{
+				}
+				else{
 					e.HasMorePages=false;
 					labelPage.Text=(printPreviewControl1.StartPage+1).ToString()+" / "+totalPages.ToString();
 				}
@@ -1606,6 +1620,9 @@ namespace OpenDental.Eclaims {
 
 		///<summary>Prints the list of procedures performed for the patient on the document in question.</summary>
 		private void PrintProcedureListAck(Graphics g,string payableToStr) {
+			if(claimprocs==null){//for eligibility response which is a claim ack.
+				return;
+			}
 			float procedureCodeCol=x;
 			float procedureDescriptionCol=procedureCodeCol+100;
 			float procedureToothCol=procedureDescriptionCol+350;
@@ -1972,7 +1989,7 @@ namespace OpenDental.Eclaims {
 		private SizeF PrintDependantNo(Graphics g,float X,float Y,bool primary,string fieldText,string frenchFieldText){
 			text="";
 			if(primary) {
-				text=PatPlans.GetPatID(patPlansForPatient,claim.PlanNum);//Field C17
+				text=PatPlans.GetPatID(patPlansForPatient,insplan.PlanNum);//Field C17.  Can't use claim.PlanNum, because that fails on eligibility response which is claim ack.
 			}
 			else {
 				if(claim.PlanNum2>0) {

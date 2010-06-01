@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Reflection;
 using OpenDentBusiness;
 
@@ -32,6 +33,9 @@ namespace OpenDentBusiness{
 				+"AND Etype!="+POut.Long((int)EtransType.Acknowledge_997)+" "
 				+"AND Etype!="+POut.Long((int)EtransType.BenefitInquiry270)+" "
 				+"AND Etype!="+POut.Long((int)EtransType.BenefitResponse271)+" "
+				+"AND Etype!="+POut.Long((int)EtransType.AckError)+" "
+				+"AND Etype!="+POut.Long((int)EtransType.ClaimAck_CA)+" "
+				+"AND Etype!="+POut.Long((int)EtransType.ClaimEOB_CA)+" "
 				+"ORDER BY DateTimeTrans";
 			DataTable table=Db.GetTable(command);
 			DataTable tHist=new DataTable("Table");
@@ -233,9 +237,9 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Not for claim types, just other types, including Eligibility. This function gets run first.  Then, the messagetext is created and an attempt is made to send the message.  Finally, the messagetext is added to the etrans.  This is necessary because the transaction numbers must be incremented and assigned to each message before creating the message and attempting to send.  If it fails, we will need to roll back.  Provide EITHER a carrierNum OR a canadianNetworkNum.  Many transactions can be sent to a carrier or to a network.</summary>
-		public static Etrans CreateCanadianOutput(long patNum,long carrierNum,long canadianNetworkNum,long clearinghouseNum,EtransType etype) {
+		public static Etrans CreateCanadianOutput(long patNum,long carrierNum,long canadianNetworkNum,long clearinghouseNum,EtransType etype,long planNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<Etrans>(MethodBase.GetCurrentMethod(),patNum,carrierNum,canadianNetworkNum,clearinghouseNum,etype);
+				return Meth.GetObject<Etrans>(MethodBase.GetCurrentMethod(),patNum,carrierNum,canadianNetworkNum,clearinghouseNum,etype,planNum);
 			}
 			//validation of carrier vs network
 			if(etype==EtransType.Eligibility_CA){
@@ -255,7 +259,7 @@ namespace OpenDentBusiness{
 			etrans.PatNum=patNum;
 			//CanadianNetworkNum?
 			etrans.CarrierNum=carrierNum;
-			//InsPlanNum? (for eligibility)
+			etrans.PlanNum=planNum;
 			//Get next OfficeSequenceNumber-----------------------------------------------------------------------------------------
 			etrans.OfficeSequenceNumber=0;
 			string command="SELECT MAX(OfficeSequenceNumber) FROM etrans";
@@ -276,7 +280,11 @@ namespace OpenDentBusiness{
 					}*/
 					throw new ApplicationException("OfficeSequenceNumber has maxed out at 999999.  This program will need to be enhanced.");
 				}
-			}			
+			}
+			#if DEBUG
+				etrans.OfficeSequenceNumber=PIn.Int(File.ReadAllText(@"..\..\LastOfficeSequenceNumber.txt"));
+				File.WriteAllText(@"..\..\LastOfficeSequenceNumber.txt",(etrans.OfficeSequenceNumber+1).ToString());
+			#endif
 			etrans.OfficeSequenceNumber++;
 			if(etype==EtransType.Eligibility_CA){
 				//find the next CarrierTransCounter------------------------------------------------------------------------------------

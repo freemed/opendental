@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Drawing.Printing;
 using System.Collections;
 using System.ComponentModel;
+using System.Globalization;
 using System.Windows.Forms;
 using OpenDentBusiness;
 using OpenDental.Eclaims;
@@ -44,6 +45,7 @@ namespace OpenDental{
 		//private bool headingPrinted;
 		private CheckBox checkAttachments;
 		private int linesPrinted;
+		private OpenDental.UI.Button butPrintAck;
 		private string MessageText;
 
 		///<summary></summary>
@@ -102,6 +104,7 @@ namespace OpenDental{
 			this.butPrint = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.butPrintAck = new OpenDental.UI.Button();
 			this.groupAck.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -212,6 +215,7 @@ namespace OpenDental{
 			// 
 			// groupAck
 			// 
+			this.groupAck.Controls.Add(this.butPrintAck);
 			this.groupAck.Controls.Add(this.label9);
 			this.groupAck.Controls.Add(this.textAckDateTime);
 			this.groupAck.Controls.Add(this.label7);
@@ -297,9 +301,9 @@ namespace OpenDental{
 			this.butPrint.CornerRadius = 4F;
 			this.butPrint.Image = global::OpenDental.Properties.Resources.butPrint;
 			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPrint.Location = new System.Drawing.Point(260,20);
+			this.butPrint.Location = new System.Drawing.Point(386,440);
 			this.butPrint.Name = "butPrint";
-			this.butPrint.Size = new System.Drawing.Size(81,26);
+			this.butPrint.Size = new System.Drawing.Size(81,24);
 			this.butPrint.TabIndex = 18;
 			this.butPrint.Text = "Print";
 			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
@@ -314,7 +318,7 @@ namespace OpenDental{
 			this.butOK.CornerRadius = 4F;
 			this.butOK.Location = new System.Drawing.Point(802,593);
 			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,26);
+			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 1;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
@@ -329,10 +333,27 @@ namespace OpenDental{
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.Location = new System.Drawing.Point(802,634);
 			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,26);
+			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 0;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
+			// 
+			// butPrintAck
+			// 
+			this.butPrintAck.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butPrintAck.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butPrintAck.Autosize = true;
+			this.butPrintAck.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butPrintAck.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPrintAck.CornerRadius = 4F;
+			this.butPrintAck.Image = global::OpenDental.Properties.Resources.butPrint;
+			this.butPrintAck.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butPrintAck.Location = new System.Drawing.Point(317,425);
+			this.butPrintAck.Name = "butPrintAck";
+			this.butPrintAck.Size = new System.Drawing.Size(81,24);
+			this.butPrintAck.TabIndex = 19;
+			this.butPrintAck.Text = "Print";
+			this.butPrintAck.Click += new System.EventHandler(this.butPrintAck_Click);
 			// 
 			// FormEtransEdit
 			// 
@@ -387,15 +408,21 @@ namespace OpenDental{
 					X837 x837=new X837(MessageText);
 					checkAttachments.Checked=x837.AttachmentsWereSent(EtransCur.ClaimNum);
 				}
+			}
+			if(EtransCur.AckEtransNum>0){
 				AckCur=Etranss.GetEtrans(EtransCur.AckEtransNum);
 				if(AckCur!=null){
 					textAckMessage.Text=EtransMessageTexts.GetMessageText(AckCur.EtransMessageTextNum);
 					textAckDateTime.Text=AckCur.DateTimeTrans.ToString();
 				}
+				groupAck.Text=Lan.g(this,"Acknowledgement");
 			}
 			else{
 				AckCur=null;
 				groupAck.Visible=false;
+			}
+			if(!CultureInfo.CurrentCulture.Name.EndsWith("CA")){
+				butPrintAck.Visible=false;
 			}
 		}
 
@@ -452,6 +479,12 @@ namespace OpenDental{
 			g.Dispose();
 		}
 
+		private void butPrintAck_Click(object sender,EventArgs e) {
+			//only visible if Canadian
+			FormCCDPrint FormP=new FormCCDPrint(AckCur,textAckMessage.Text);//Print the form.
+			FormP.Print();
+		}
+
 		//private void butDelete_Click(object sender,EventArgs e) {
 			//if(!MsgBox.Show(this,true,"Permanently delete the data for this transaction?  This does not alter actual claims.")){
 			//	return;
@@ -469,6 +502,8 @@ namespace OpenDental{
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+	
 
 		
 

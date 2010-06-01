@@ -96,17 +96,13 @@ namespace OpenDental.Eclaims {
 				throw new ApplicationException(error);
 			}
 			Etrans etrans=Etranss.CreateCanadianOutput(patNum,carrier.CarrierNum,carrier.CanadianNetworkNum,
-				clearhouse.ClearinghouseNum,EtransType.Eligibility_CA);
+				clearhouse.ClearinghouseNum,EtransType.Eligibility_CA,plan.PlanNum);
 			StringBuilder strb=new StringBuilder();
 			//create message----------------------------------------------------------------------------------------------
 			//A01 transaction prefix 12 AN
 			strb.Append(Canadian.TidyAN(carrier.CanadianTransactionPrefix,12));
 			//A02 office sequence number 6 N
-#if DEBUG
-			strb.Append(Canadian.TidyN(1,6));
-#else
 			strb.Append(Canadian.TidyN(etrans.OfficeSequenceNumber,6));
-#endif
 			//A03 format version number 2 N
 			strb.Append(carrier.CDAnetVersion);//eg. "04", validated in UI
 			//A04 transaction code 2 N
@@ -207,17 +203,39 @@ namespace OpenDental.Eclaims {
 				strb.Append(Canadian.TidyAN("",30));
 			}
 			string result="";
+			bool resultIsError=false;
 			try {
 				result=Canadian.PassToIca(strb.ToString(),carrier.CanadianNetworkNum,clearhouse);
 			}
 			catch(ApplicationException ex) {
-				Etranss.Delete(etrans.EtransNum);
-				throw new ApplicationException(ex.Message);
+				result=ex.Message;
+				resultIsError=true;
+				//Etranss.Delete(etrans.EtransNum);//we don't want to do this, because we want the incremented etrans.OfficeSequenceNumber to be saved
+				//Attach an ack indicating failure.
 			}
-			//result="4,1001,000,"
+			//Attach an ack to the etrans
+			Etrans etransAck=new Etrans();
+			etransAck.PatNum=etrans.PatNum;
+			etransAck.PlanNum=etrans.PlanNum;
+			etransAck.CarrierNum=etrans.CarrierNum;
+			etransAck.DateTimeTrans=DateTime.Now;
+			if(resultIsError){
+				etransAck.Etype=EtransType.AckError;
+				etrans.Note="failed";
+			}
+			else{
+				etransAck.Etype=EtransType.ClaimAck_CA;//for now
+			}
+			Etranss.Insert(etransAck);
+			Etranss.SetMessage(etransAck.EtransNum,result);
+			etrans.AckEtransNum=etransAck.EtransNum;
+			Etranss.Update(etrans);
 			Etranss.SetMessage(etrans.EtransNum,strb.ToString());
+			if(resultIsError){
+				throw new ApplicationException(result);
+			}
 			FormCCDPrint FormP=new FormCCDPrint(etrans,strb.ToString());//Print the form.
-			FormP.ShowDialog();
+			FormP.Print();
 			//Now we will process the 'result' here to extract the important data.  Basically Yes or No on the eligibility.
 			//We might not do this for any other trans type besides eligibility.
 			string retVal="Eligibility check on "+DateTime.Today.ToShortDateString()+"\r\n";

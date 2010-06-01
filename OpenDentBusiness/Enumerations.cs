@@ -1347,7 +1347,9 @@ namespace OpenDentBusiness{
 		///<summary>24 X12-270.</summary>
 		BenefitInquiry270,
 		///<summary>25 X12-271</summary>
-		BenefitResponse271
+		BenefitResponse271,
+		///<summary>When a Canadian message is sent, and an error comes back instead of a message.  This store information about the error.  The etrans with this type is attached it to the original etrans as an ack.</summary>
+		AckError
 	}
 
 	///<summary></summary>
