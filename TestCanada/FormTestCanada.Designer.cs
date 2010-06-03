@@ -23,16 +23,23 @@
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormTestCanada));
 			this.butObjects = new System.Windows.Forms.Button();
 			this.label2 = new System.Windows.Forms.Label();
 			this.butNewDb = new System.Windows.Forms.Button();
 			this.butClear = new System.Windows.Forms.Button();
 			this.label1 = new System.Windows.Forms.Label();
 			this.butProcedures = new System.Windows.Forms.Button();
-			this.label3 = new System.Windows.Forms.Label();
 			this.butScripts = new System.Windows.Forms.Button();
 			this.textResults = new System.Windows.Forms.TextBox();
+			this.checkEligibility = new System.Windows.Forms.CheckBox();
+			this.checkClaims = new System.Windows.Forms.CheckBox();
+			this.checkClaimReversals = new System.Windows.Forms.CheckBox();
+			this.checkOutstanding = new System.Windows.Forms.CheckBox();
+			this.checkPredeterm = new System.Windows.Forms.CheckBox();
+			this.checkPayReconcil = new System.Windows.Forms.CheckBox();
+			this.checkSumReconcil = new System.Windows.Forms.CheckBox();
+			this.checkShowForms = new System.Windows.Forms.CheckBox();
+			this.checkAll = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
 			// 
 			// butObjects
@@ -94,14 +101,6 @@
 			this.butProcedures.UseVisualStyleBackColor = true;
 			this.butProcedures.Click += new System.EventHandler(this.butProcedures_Click);
 			// 
-			// label3
-			// 
-			this.label3.Location = new System.Drawing.Point(105,118);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(650,31);
-			this.label3.TabIndex = 13;
-			this.label3.Text = resources.GetString("label3.Text");
-			// 
 			// butScripts
 			// 
 			this.butScripts.Location = new System.Drawing.Point(12,116);
@@ -117,19 +116,133 @@
 			this.textResults.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.textResults.Location = new System.Drawing.Point(12,149);
+			this.textResults.Location = new System.Drawing.Point(12,291);
 			this.textResults.Multiline = true;
 			this.textResults.Name = "textResults";
-			this.textResults.Size = new System.Drawing.Size(759,456);
+			this.textResults.Size = new System.Drawing.Size(759,564);
 			this.textResults.TabIndex = 16;
+			// 
+			// checkEligibility
+			// 
+			this.checkEligibility.Checked = true;
+			this.checkEligibility.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkEligibility.Location = new System.Drawing.Point(13,145);
+			this.checkEligibility.Name = "checkEligibility";
+			this.checkEligibility.Size = new System.Drawing.Size(161,18);
+			this.checkEligibility.TabIndex = 17;
+			this.checkEligibility.Text = "Eligibility 1-6";
+			this.checkEligibility.UseVisualStyleBackColor = true;
+			this.checkEligibility.Click += new System.EventHandler(this.checkEligibility_Click);
+			// 
+			// checkClaims
+			// 
+			this.checkClaims.Checked = true;
+			this.checkClaims.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkClaims.Location = new System.Drawing.Point(13,163);
+			this.checkClaims.Name = "checkClaims";
+			this.checkClaims.Size = new System.Drawing.Size(161,18);
+			this.checkClaims.TabIndex = 18;
+			this.checkClaims.Text = "Claims 1-12";
+			this.checkClaims.UseVisualStyleBackColor = true;
+			this.checkClaims.Click += new System.EventHandler(this.checkClaims_Click);
+			// 
+			// checkClaimReversals
+			// 
+			this.checkClaimReversals.Checked = true;
+			this.checkClaimReversals.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkClaimReversals.Location = new System.Drawing.Point(13,181);
+			this.checkClaimReversals.Name = "checkClaimReversals";
+			this.checkClaimReversals.Size = new System.Drawing.Size(161,18);
+			this.checkClaimReversals.TabIndex = 19;
+			this.checkClaimReversals.Text = "ClaimReversals 1-4";
+			this.checkClaimReversals.UseVisualStyleBackColor = true;
+			this.checkClaimReversals.Click += new System.EventHandler(this.checkClaimReversals_Click);
+			// 
+			// checkOutstanding
+			// 
+			this.checkOutstanding.Checked = true;
+			this.checkOutstanding.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkOutstanding.Location = new System.Drawing.Point(13,199);
+			this.checkOutstanding.Name = "checkOutstanding";
+			this.checkOutstanding.Size = new System.Drawing.Size(202,18);
+			this.checkOutstanding.TabIndex = 20;
+			this.checkOutstanding.Text = "Outstanding Transactions 1-3";
+			this.checkOutstanding.UseVisualStyleBackColor = true;
+			this.checkOutstanding.Click += new System.EventHandler(this.checkOutstanding_Click);
+			// 
+			// checkPredeterm
+			// 
+			this.checkPredeterm.Checked = true;
+			this.checkPredeterm.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkPredeterm.Location = new System.Drawing.Point(13,217);
+			this.checkPredeterm.Name = "checkPredeterm";
+			this.checkPredeterm.Size = new System.Drawing.Size(152,18);
+			this.checkPredeterm.TabIndex = 21;
+			this.checkPredeterm.Text = "Predeterminations 1-8";
+			this.checkPredeterm.UseVisualStyleBackColor = true;
+			this.checkPredeterm.Click += new System.EventHandler(this.checkPredeterm_Click);
+			// 
+			// checkPayReconcil
+			// 
+			this.checkPayReconcil.Checked = true;
+			this.checkPayReconcil.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkPayReconcil.Location = new System.Drawing.Point(13,235);
+			this.checkPayReconcil.Name = "checkPayReconcil";
+			this.checkPayReconcil.Size = new System.Drawing.Size(215,18);
+			this.checkPayReconcil.TabIndex = 22;
+			this.checkPayReconcil.Text = "PaymentReconciliations 1-3";
+			this.checkPayReconcil.UseVisualStyleBackColor = true;
+			this.checkPayReconcil.Click += new System.EventHandler(this.checkPayReconcil_Click);
+			// 
+			// checkSumReconcil
+			// 
+			this.checkSumReconcil.Checked = true;
+			this.checkSumReconcil.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkSumReconcil.Location = new System.Drawing.Point(13,253);
+			this.checkSumReconcil.Name = "checkSumReconcil";
+			this.checkSumReconcil.Size = new System.Drawing.Size(189,18);
+			this.checkSumReconcil.TabIndex = 23;
+			this.checkSumReconcil.Text = "Summary Reconciliations 1-3";
+			this.checkSumReconcil.UseVisualStyleBackColor = true;
+			this.checkSumReconcil.Click += new System.EventHandler(this.checkSumReconcil_Click);
+			// 
+			// checkShowForms
+			// 
+			this.checkShowForms.Location = new System.Drawing.Point(109,119);
+			this.checkShowForms.Name = "checkShowForms";
+			this.checkShowForms.Size = new System.Drawing.Size(185,18);
+			this.checkShowForms.TabIndex = 24;
+			this.checkShowForms.Text = "Show each form on screen";
+			this.checkShowForms.UseVisualStyleBackColor = true;
+			// 
+			// checkAll
+			// 
+			this.checkAll.Checked = true;
+			this.checkAll.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkAll.Location = new System.Drawing.Point(12,271);
+			this.checkAll.Name = "checkAll";
+			this.checkAll.Size = new System.Drawing.Size(189,18);
+			this.checkAll.TabIndex = 25;
+			this.checkAll.Text = "Uncheck / Check All";
+			this.checkAll.ThreeState = true;
+			this.checkAll.UseVisualStyleBackColor = true;
+			this.checkAll.Click += new System.EventHandler(this.checkAll_Click);
 			// 
 			// FormTestCanada
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(783,617);
+			this.ClientSize = new System.Drawing.Size(783,867);
+			this.Controls.Add(this.checkAll);
+			this.Controls.Add(this.checkShowForms);
+			this.Controls.Add(this.checkSumReconcil);
+			this.Controls.Add(this.checkPayReconcil);
+			this.Controls.Add(this.checkPredeterm);
+			this.Controls.Add(this.checkOutstanding);
+			this.Controls.Add(this.checkClaimReversals);
+			this.Controls.Add(this.checkClaims);
+			this.Controls.Add(this.checkEligibility);
 			this.Controls.Add(this.textResults);
-			this.Controls.Add(this.label3);
 			this.Controls.Add(this.butScripts);
 			this.Controls.Add(this.butProcedures);
 			this.Controls.Add(this.label1);
@@ -153,9 +266,17 @@
 		private System.Windows.Forms.Button butClear;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Button butProcedures;
-		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.Button butScripts;
 		private System.Windows.Forms.TextBox textResults;
+		private System.Windows.Forms.CheckBox checkEligibility;
+		private System.Windows.Forms.CheckBox checkClaims;
+		private System.Windows.Forms.CheckBox checkClaimReversals;
+		private System.Windows.Forms.CheckBox checkOutstanding;
+		private System.Windows.Forms.CheckBox checkPredeterm;
+		private System.Windows.Forms.CheckBox checkPayReconcil;
+		private System.Windows.Forms.CheckBox checkSumReconcil;
+		private System.Windows.Forms.CheckBox checkShowForms;
+		private System.Windows.Forms.CheckBox checkAll;
 	}
 }
 

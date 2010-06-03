@@ -2207,7 +2207,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);
 				command="ALTER TABLE carrier ADD CanadianTransactionPrefix varchar(255) NOT NULL";
 				Db.NonQ(command);
-				command="ALTER TABLE carrier ADD CanadianSupportedTypes tinyint NOT NULL";
+				command="ALTER TABLE carrier ADD CanadianSupportedTypes int NOT NULL";
 				Db.NonQ(command);
 				command="ALTER TABLE canadianclaim DROP EligibilityCode";
 				Db.NonQ(command);

@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace OpenDental.Eclaims {
 	/// <summary> The idea is to make reading a CCD message in each of the different forms a smaller amount of overall typing, to save time and reduce bugs.</summary>
-	class CCDFieldInputter{
+	public class CCDFieldInputter{
 		private List<CCDField> fieldList = new List<CCDField>();//List of fields that make up the message
 
 		public CCDFieldInputter(){
@@ -157,6 +157,18 @@ namespace OpenDental.Eclaims {
 				return null;
 			}
 			return fields[0];
+		}
+
+		public string GetValue(string fieldId) {
+			CCDField[] fields=GetFieldsById(fieldId);
+			if(fields==null || fields.Length==0) {
+				return "";//Doesn't exist, return with empty value, so at least some information can be used.
+			}
+			if(fields.Length>1) {
+				MessageBox.Show("Internal error, invalid use of ambiguous CCD field id"+((fieldId==null)?"":(": "+fieldId)));
+				return "";
+			}
+			return fields[0].valuestr;
 		}
 
 		private void ParseClaimAck_11(string message) {

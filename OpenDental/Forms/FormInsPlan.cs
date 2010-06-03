@@ -152,7 +152,6 @@ namespace OpenDental{
 		private GroupBox groupCarrier;
 		private Label labelDentaide;
 		private ValidNumber textDentaide;
-		private OpenDental.UI.Button butCanadaEligibility;
 		private OpenDental.UI.Button butGetElectronic;
 		private CheckBox checkShowBaseUnits;
 		private CheckBox checkCodeSubst;
@@ -218,7 +217,6 @@ namespace OpenDental{
 				labelDivisionDash.Visible=false;
 				textDivisionNo.Visible=false;
 				groupCanadian.Visible=false;
-				butCanadaEligibility.Visible=false;
 			}
 			if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="GB"){//en-GB
 				labelCitySTZip.Text=Lan.g(this,"City,Postcode");
@@ -306,7 +304,6 @@ namespace OpenDental{
 			this.butImportTrojan = new OpenDental.UI.Button();
 			this.butGetElectronic = new OpenDental.UI.Button();
 			this.butBenefitNotes = new OpenDental.UI.Button();
-			this.butCanadaEligibility = new OpenDental.UI.Button();
 			this.butIapFind = new OpenDental.UI.Button();
 			this.labelDrop = new System.Windows.Forms.Label();
 			this.groupRequestBen = new System.Windows.Forms.GroupBox();
@@ -936,21 +933,6 @@ namespace OpenDental{
 			this.toolTip1.SetToolTip(this.butBenefitNotes,"Edit all the similar plans at once");
 			this.butBenefitNotes.Click += new System.EventHandler(this.butBenefitNotes_Click);
 			// 
-			// butCanadaEligibility
-			// 
-			this.butCanadaEligibility.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butCanadaEligibility.Autosize = true;
-			this.butCanadaEligibility.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCanadaEligibility.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCanadaEligibility.CornerRadius = 4F;
-			this.butCanadaEligibility.Location = new System.Drawing.Point(190,17);
-			this.butCanadaEligibility.Name = "butCanadaEligibility";
-			this.butCanadaEligibility.Size = new System.Drawing.Size(79,21);
-			this.butCanadaEligibility.TabIndex = 76;
-			this.butCanadaEligibility.Text = "CDAnet";
-			this.toolTip1.SetToolTip(this.butCanadaEligibility,"Edit all the similar plans at once");
-			this.butCanadaEligibility.Click += new System.EventHandler(this.butCanadaEligibility_Click);
-			// 
 			// butIapFind
 			// 
 			this.butIapFind.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -985,7 +967,6 @@ namespace OpenDental{
 			this.groupRequestBen.Controls.Add(this.butImportTrojan);
 			this.groupRequestBen.Controls.Add(this.butGetElectronic);
 			this.groupRequestBen.Controls.Add(this.butBenefitNotes);
-			this.groupRequestBen.Controls.Add(this.butCanadaEligibility);
 			this.groupRequestBen.Controls.Add(this.butIapFind);
 			this.groupRequestBen.Controls.Add(this.labelTrojanID);
 			this.groupRequestBen.Controls.Add(this.textTrojanID);
@@ -1672,8 +1653,6 @@ namespace OpenDental{
 				butIapFind.Visible=false;
 				textTrojanID.Enabled=false;//view only
 				butBenefitNotes.Visible=false;
-				//labelCanadaEligibility.Visible=false;
-				butCanadaEligibility.Visible=false;
 				//end of groupRequestBen
 				groupSubscriber.Visible=false;
 				checkApplyAll.Checked=true;
@@ -2942,29 +2921,47 @@ namespace OpenDental{
 			FillBenefits();
 		}
 
-		///<summary>Only visible if Computer set to Canada.</summary>
-		private void butCanadaEligibility_Click(object sender,EventArgs e) {
+		private void EligibilityCheckCanada() {
 			if(!FillPlanCurFromForm()) {
 				return;
 			}
-			string result="";
+			Carrier carrier=Carriers.GetCarrier(PlanCur.CarrierNum);
+			if(!carrier.IsCDA){
+				MsgBox.Show(this,"Eligibility only supported for CDAnet carriers.");
+				return;
+			}
+			if((carrier.CanadianSupportedTypes & CanSupTransTypes.EligibilityTransaction_08) != CanSupTransTypes.EligibilityTransaction_08) {
+				MsgBox.Show(this,"Eligibility not supported by this carrier.");
+				return;
+			}
+			Cursor=Cursors.WaitCursor;
+			//string result="";
 			DateTime date=DateTime.Today;
 #if DEBUG
 			date=new DateTime(1999,1,1);
 #endif
 			Relat relat=(Relat)comboRelationship.SelectedIndex;
 			string patID=textPatID.Text;
-			try{
-				result=Eclaims.CanadianOutput.SendElegibility(PatPlanCur.PatNum,PlanCur,date,relat,patID);//   textElectID.Text,PatPlanCur.PatNum,textGroupNum.Text,textDivisionNo.Text,
-					//textSubscriberID.Text,textPatID.Text,(Relat)comboRelationship.SelectedIndex,PlanCur.Subscriber,textDentaide.Text);
+			try {
+				Eclaims.CanadianOutput.SendElegibility(PatPlanCur.PatNum,PlanCur,date,relat,patID,true);//   textElectID.Text,PatPlanCur.PatNum,textGroupNum.Text,textDivisionNo.Text,
+				//textSubscriberID.Text,textPatID.Text,(Relat)comboRelationship.SelectedIndex,PlanCur.Subscriber,textDentaide.Text);
 				//printout will happen in the line above.
 			}
-			catch(ApplicationException ex){
+			catch(ApplicationException ex) {
+				Cursor=Cursors.Default;
 				MessageBox.Show(ex.Message);
 				return;
 			}
-			PlanCur.BenefitNotes+=result;
-			butBenefitNotes.Enabled=true;
+			//PlanCur.BenefitNotes+=result;
+			//butBenefitNotes.Enabled=true;
+			Cursor=Cursors.Default;
+			DateTime dateLast270=Etranss.GetLastDate270(PlanCur.PlanNum);
+			if(dateLast270.Year<1880) {
+				textElectBenLastDate.Text="";
+			}
+			else {
+				textElectBenLastDate.Text=dateLast270.ToShortDateString();
+			}
 		}
 
 		///<summary>This button is only visible if Trojan or IAP is enabled.  Always active.</summary>
@@ -3208,14 +3205,20 @@ namespace OpenDental{
 				EligibilityCheckDentalXchange();
 				return;
 			}
-			//Visible for everyone.  Only works with ClaimConnect so far.
+			//Visible for everyone.
 			Clearinghouse clearhouse=Clearinghouses.GetDefault();
 			if(clearhouse==null){
 				MsgBox.Show(this,"No clearinghouse is set as default.");
 				return;
 			}
-			if(clearhouse.CommBridge!=EclaimsCommBridge.ClaimConnect) {
-				MsgBox.Show(this,"So far, eligibility checks only work with ClaimConnect.");
+			if(clearhouse.CommBridge!=EclaimsCommBridge.ClaimConnect
+				&& clearhouse.CommBridge!=EclaimsCommBridge.CDAnet) 
+			{
+				MsgBox.Show(this,"So far, eligibility checks only work with ClaimConnect and CDAnet.");
+				return;
+			}
+			if(clearhouse.CommBridge==EclaimsCommBridge.CDAnet) {
+				EligibilityCheckCanada();
 				return;
 			}
 			if(!FillPlanCurFromForm()) {

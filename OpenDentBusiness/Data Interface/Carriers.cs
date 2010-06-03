@@ -70,7 +70,7 @@ namespace OpenDentBusiness{
 			command="SELECT Address,Address2,canadiannetwork.Abbrev,carrier.CarrierNum,"
 				+"CarrierName,CDAnetVersion,City,ElectID,"
 				+"COUNT(insplan.PlanNum) insPlanCount,IsCDA,"
-				+"carrier.IsHidden,IsPMP,Phone,State,Zip "
+				+"carrier.IsHidden,Phone,State,Zip "
 				+"FROM carrier "
 				+"LEFT JOIN canadiannetwork ON canadiannetwork.CanadianNetworkNum=carrier.CanadianNetworkNum "
 				+"LEFT JOIN insplan ON insplan.CarrierNum=carrier.CarrierNum "

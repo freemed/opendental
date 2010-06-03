@@ -8,8 +8,8 @@ using OpenDentBusiness;
 
 namespace OpenDental.Eclaims {
 	public class CanadianOutput {
-		///<summary>The result is a string which can be dropped into the insplan.BenefitNotes.  Or it might throw an exception if invalid data.  This class is also responsible for saving the returned message to the etrans table and printing out the required form.</summary>
-		public static string SendElegibility(long patNum,InsPlan plan,DateTime date,Relat relat,string patID){
+		///<summary>The result is the etransNum of the response message.  Or it might throw an exception if invalid data.  This class is also responsible for saving the returned message to the etrans table, and for printing out the required form.</summary>
+		public static long SendElegibility(long patNum,InsPlan plan,DateTime date,Relat relat,string patID,bool doPrint){
 			//string electID,long patNum,string groupNumber,string divisionNo,
 			//string subscriberID,string patID,Relat patRelat,long subscNum,string dentaideCardSequence)
 			//Note: This might be the only class of this kind that returns a string.  It's a special situation.
@@ -234,25 +234,32 @@ namespace OpenDental.Eclaims {
 			if(resultIsError){
 				throw new ApplicationException(result);
 			}
-			FormCCDPrint FormP=new FormCCDPrint(etrans,strb.ToString());//Print the form.
-			FormP.Print();
+			if(doPrint) {
+				FormCCDPrint FormP=new FormCCDPrint(etrans,result);//Print the form.
+				FormP.Print();
+			}
 			//Now we will process the 'result' here to extract the important data.  Basically Yes or No on the eligibility.
 			//We might not do this for any other trans type besides eligibility.
-			string retVal="Eligibility check on "+DateTime.Today.ToShortDateString()+"\r\n";
+			string strResponse="";//"Eligibility check on "+DateTime.Today.ToShortDateString()+"\r\n";
 			CCDFieldInputter fieldInputter=new CCDFieldInputter(result);
-			CCDField field=fieldInputter.GetFieldById("G05");//response status
-			//CCDFieldInputter could really use a GetValue(string fieldId) method so I don't have to use a field object.
-			switch(field.valuestr){
+			//CCDField field=fieldInputter.GetFieldById("G05");//response status
+			string valuestr=fieldInputter.GetValue("G05");//response status
+			switch(valuestr){
 				case "E":
-					retVal+="Patient is eligible.";
+					strResponse+="Patient is eligible.";
 					break;
 				case "R":
-					retVal+="Patient not eligible, or error in data.";
+					strResponse+="Patient not eligible, or error in data.";
 					break;
 				case "M":
-					retVal+="Manual claimform should be submitted for employer certified plan.";
+					strResponse+="Manual claimform should be submitted for employer certified plan.";
 					break;
 			}
+			etrans=Etranss.GetEtrans(etrans.EtransNum);
+			etrans.Note=strResponse;
+			Etranss.Update(etrans);
+			return etransAck.EtransNum;
+			/*
 			CCDField[] fields=fieldInputter.GetFieldsById("G08");//Error Codes
 			for(int i=0;i<fields.Length;i++){
 				retVal+="\r\n";
@@ -263,7 +270,7 @@ namespace OpenDental.Eclaims {
 				retVal+="\r\n";
 				retVal+=fields[i].valuestr;
 			}
-			return retVal;
+			return retVal;*/
 		}
 
 		///<summary></summary>

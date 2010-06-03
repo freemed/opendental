@@ -95,13 +95,14 @@ namespace OpenDentBusiness{
 			return list[0];
 		}
 
-		///<summary>Gets a list of all 270's for this plan.</summary>
+		///<summary>Gets a list of all 270's and Canadian eligibilities for this plan.</summary>
 		public static List<Etrans> GetList270ForPlan(long planNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Etrans>>(MethodBase.GetCurrentMethod(),planNum);
 			}
 			string command="SELECT * FROM etrans WHERE PlanNum="+POut.Long(planNum)
-				+" AND Etype="+POut.Long((int)EtransType.BenefitInquiry270);
+				+" AND (Etype="+POut.Long((int)EtransType.BenefitInquiry270)
+				+" OR Etype="+POut.Long((int)EtransType.Eligibility_CA)+")";
 			DataTable table=Db.GetTable(command);
 			return SubmitAndFill(table);
 		}
@@ -282,8 +283,8 @@ namespace OpenDentBusiness{
 				}
 			}
 			#if DEBUG
-				etrans.OfficeSequenceNumber=PIn.Int(File.ReadAllText(@"..\..\LastOfficeSequenceNumber.txt"));
-				File.WriteAllText(@"..\..\LastOfficeSequenceNumber.txt",(etrans.OfficeSequenceNumber+1).ToString());
+				etrans.OfficeSequenceNumber=PIn.Int(File.ReadAllText(@"..\..\..\TestCanada\LastOfficeSequenceNumber.txt"));
+				File.WriteAllText(@"..\..\..\TestCanada\LastOfficeSequenceNumber.txt",(etrans.OfficeSequenceNumber+1).ToString());
 			#endif
 			etrans.OfficeSequenceNumber++;
 			if(etype==EtransType.Eligibility_CA){
@@ -318,7 +319,7 @@ namespace OpenDentBusiness{
 			return etrans;
 		}
 
-		///<summary>Only used by Canadian code right now.</summary>
+		///<summary>Only used by Canadian code right now.  CAUTION!  This does not update the EtransMessageTextNum field of an object in memory without a refresh.</summary>
 		public static void SetMessage(long etransNum,string messageText) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),etransNum,messageText);
@@ -543,12 +544,14 @@ namespace OpenDentBusiness{
 			}
 		}
 
+		/// <summary>Or Canadian elig.</summary>
 		public static DateTime GetLastDate270(long planNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<DateTime>(MethodBase.GetCurrentMethod(),planNum);
 			}
 			string command="SELECT MAX(DateTimeTrans) FROM etrans "
-				+"WHERE Etype="+POut.Long((int)EtransType.BenefitInquiry270)
+				+"WHERE (Etype="+POut.Int((int)EtransType.BenefitInquiry270)+" "
+				+"OR Etype="+POut.Int((int)EtransType.Eligibility_CA)+") "
 				+" AND PlanNum="+POut.Long(planNum);
 			return PIn.Date(Db.GetScalar(command));
 		}

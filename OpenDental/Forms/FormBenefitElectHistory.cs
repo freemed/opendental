@@ -48,10 +48,18 @@ namespace OpenDental {
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			FormEtrans270Edit formE=new FormEtrans270Edit(PatPlanNum,PlanNum);
-			formE.EtransCur=list[e.Row];
-			formE.benList=BenList;
-			formE.ShowDialog();
+			Etrans etrans=list[e.Row];
+			if(etrans.Etype==EtransType.Eligibility_CA) {
+				FormEtransEdit formETE=new FormEtransEdit();
+				formETE.EtransCur=etrans;
+				formETE.ShowDialog();
+			}
+			else {
+				FormEtrans270Edit formE=new FormEtrans270Edit(PatPlanNum,PlanNum);
+				formE.EtransCur=etrans;
+				formE.benList=BenList;
+				formE.ShowDialog();
+			}
 			FillGrid();
 		}
 

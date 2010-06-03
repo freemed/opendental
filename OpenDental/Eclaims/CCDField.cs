@@ -5,7 +5,7 @@ using System.Windows.Forms;
 using System.Text.RegularExpressions;
 
 namespace OpenDental.Eclaims {
-	class CCDField{
+	public class CCDField{
 
 		///<summary>Returns the length requirement for this field, possibly based on other fields.</summary>
 		private abstract class LengthRequirement{

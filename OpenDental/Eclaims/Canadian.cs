@@ -398,9 +398,25 @@ namespace OpenDental.Eclaims {
 			if(!Directory.Exists(saveFolder)) {
 				throw new ApplicationException(saveFolder+" not found.");
 			}
-			if(Process.GetProcessesByName("iCA*").Length==0){
-				Process.Start(clearhouse.ClientProgram);
+			Process[] processes=Process.GetProcesses();
+			bool isRunning=false;
+			for(int i=0;i<processes.Length;i++) {
+				if(processes[i].ProcessName.StartsWith("iCA")) {
+					isRunning=true;
+					break;
+				}
 			}
+			if(!isRunning) {
+				ProcessStartInfo startInfo=new ProcessStartInfo(clearhouse.ClientProgram);
+				startInfo.WindowStyle=ProcessWindowStyle.Minimized;
+				startInfo.WorkingDirectory=Path.GetDirectoryName(clearhouse.ClientProgram);
+				Process process=Process.Start(startInfo);
+				
+				//IntPtr=process.MainWindowHandle
+			}
+			//if(Process.GetProcessesByName("iCA*").Length==0){
+			//	Process.Start(clearhouse.ClientProgram);
+			//}
 			//Form iCAform=(Form)Form.FromHandle(process.MainWindowHandle);
 			//iCAform.WindowState=FormWindowState.Minimized;
 			//process.Dispose();
@@ -428,7 +444,7 @@ namespace OpenDental.Eclaims {
 			}*/
 			File.WriteAllText(inputFile,msgText,Encoding.GetEncoding(850));
 			DateTime start=DateTime.Now;
-			while(DateTime.Now<start.AddSeconds(10)){//wait for max of 10 seconds. We can increase it later.
+			while(DateTime.Now<start.AddSeconds(20)){//wait for max of 20 seconds. We can increase it later.
 				if(File.Exists(outputFile)){
 					break;
 				}
