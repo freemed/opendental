@@ -28,11 +28,11 @@ namespace TestCanada {
 
 		public static string RunTwo(bool showForms) {
 			string retVal="";
-					/*Provider prov=ProviderC.List[0];//dentist#1
+			Provider prov=ProviderC.List[0];//dentist#1
 			PatPlan patplan=PatPlans.GetPatPlan(PatientTC.PatNum7,1);
 			InsPlan plan=InsPlans.GetPlan(patplan.PlanNum,new List<InsPlan>());
-			long etransNum=CanadianOutput.SendElegibility(PatientTC.PatNum1,plan,new DateTime(1999,1,1),patplan.Relationship,patplan.PatID,true);
-			//should print Dentaide Form
+			long etransNum=CanadianOutput.SendElegibility(PatientTC.PatNum7,plan,new DateTime(1999,1,1),patplan.Relationship,patplan.PatID,true);
+			//should print Eligibility response on Dentaide Form
 			Etrans etrans=Etranss.GetEtrans(etransNum);
 			string message=EtransMessageTexts.GetMessageText(etrans.EtransMessageTextNum);
 			CCDFieldInputter formData=new CCDFieldInputter(message);
@@ -40,8 +40,7 @@ namespace TestCanada {
 			if(responseStatus!="E") {//no errors
 				throw new Exception("Should be E");
 			}
-			retVal+="Eligibility #2 successful.\r\n";*/
-			retVal+="Eligibility #2 (not yet implemented).\r\n";
+			retVal+="Eligibility #2 successful.\r\n";
 			return retVal;
 		}
 

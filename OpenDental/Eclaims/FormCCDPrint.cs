@@ -92,6 +92,7 @@ namespace OpenDental.Eclaims {
 		List<PatPlan> patPlansForPatient;
 		List<Procedure> extracted;
 		private string MessageText;
+		PatPlan patPlanPri;
 
 		#endregion
 
@@ -168,6 +169,7 @@ namespace OpenDental.Eclaims {
 				//List<ClaimProc> claimprocs=ClaimProcs.RefreshForClaim(claim.ClaimNum);
 			}
 			patPlansForPatient=PatPlans.Refresh(etrans.PatNum);
+			patPlanPri=PatPlans.GetFromList(patPlansForPatient,insplan.PlanNum);
 			subscriber=Patients.GetPat(insplan.Subscriber);
 			if(subscriber.Language=="fr") {
 				isFrench=true;
@@ -177,8 +179,8 @@ namespace OpenDental.Eclaims {
 			extracted=Procedures.GetCanadianExtractedTeeth(procsAll);
 			//Test previously untested structures for existence, so that we do not need to check repeatedly later.
 			//
-			if(primaryCarrier==null || provTreat==null || provBill==null || insplan==null || //claimprocs == null ||
-				patPlansForPatient==null || extracted==null) 
+			if(primaryCarrier==null || provTreat==null || provBill==null || insplan==null || patPlanPri==null //claimprocs == null ||
+				|| patPlansForPatient==null || extracted==null) 
 			{
 				throw new Exception(this.ToString()+".FormCCDPrint: failed to load primary insurance info!");
 			}
@@ -191,7 +193,7 @@ namespace OpenDental.Eclaims {
 
 		///<summary>This is the function that must be called to properly print the form.</summary>
 		public void Print(){
-			try{
+			//try{  The try/catch is just annoying while debugging.  We can uncomment it later.
 				//string msgText=EtransMessageTexts.GetMessageText(etrans.EtransMessageTextNum);
 				if(MessageText==null || MessageText.Length<23) {
 					throw new Exception((embedded?"Embedded":"")+"CCD message format too short: "+MessageText);
@@ -218,7 +220,7 @@ namespace OpenDental.Eclaims {
 						if(printable){
 							this.ShowDialog();//Trigger the actual printing process, which calls FormCCDPrint_Load.
 							CCDField embeddedTransaction=formData.GetFieldById("G40");
-							if(embeddedTransaction!=null){
+							if(embeddedTransaction.valuestr!=null){//js not sure about this.  Trying to prevent crash of Eligib script #2.
 								Etrans embTrans=etrans.Copy();
 								FormCCDPrint embeddedForm=new FormCCDPrint(embTrans,assigned,embeddedTransaction.valuestr);
 								embeddedForm.Print();
@@ -227,10 +229,10 @@ namespace OpenDental.Eclaims {
 					}
 					numCopies--;
 				}
-			}
+			/*}
 			catch(Exception ex){
 				Logger.openlog.Log(ex.ToString(),Logger.Severity.ERROR);
-			}
+			}*/
 		}
 
 		///<summary>Prints the Canadian form.</summary>
@@ -260,7 +262,7 @@ namespace OpenDental.Eclaims {
 
 		///<summary>Called for each page to be printed.</summary>
 		private void pd_PrintPage(object sender,System.Drawing.Printing.PrintPageEventArgs e){
-			try{
+			//try{
 				string code850Chars="1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"+
 						"¡¢£¥|§¨©ª«¬-®±²³´μ¶¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿ_";
 				for(int i=0;i<code850Chars.Length;i++){
@@ -333,9 +335,10 @@ namespace OpenDental.Eclaims {
 					e.HasMorePages=false;
 					labelPage.Text=(printPreviewControl1.StartPage+1).ToString()+" / "+totalPages.ToString();
 				}
-			}catch(Exception ex){
+			/*}
+			catch(Exception ex){
 				Logger.openlog.LogMB(ex.ToString(),Logger.Severity.ERROR);
-			}
+			}*/
 		}
 
 		#endregion
@@ -995,7 +998,7 @@ namespace OpenDental.Eclaims {
 			text=isFrench?"PREMIER ASSUREUR":"PRIMARY COVERAGE";
 			float leftMidCol=center-g.MeasureString(text,doc.standardFont).Width/2;
 			doc.DrawString(g,text,leftMidCol,0);
-			if(claim.PlanNum2>0) {
+			if(claim!=null && claim.PlanNum2>0) {//claim can be null for eligibility response
 				text=isFrench?"SECOND ASSUREUR":"SECONDARY COVERAGE";
 				doc.DrawString(g,text,rightCol,0);
 			}
@@ -1004,7 +1007,7 @@ namespace OpenDental.Eclaims {
 			doc.DrawString(g,text,x,0);
 			text=primaryCarrier.CarrierName.ToUpper();//Field A05
 			doc.DrawString(g,text,leftMidCol,0);
-			if(claim.PlanNum2>0) {
+			if(claim!=null && claim.PlanNum2>0) {
 				text=secondaryCarrier.CarrierName.ToUpper();
 				doc.DrawString(g,text,rightCol,0);
 			}
@@ -1013,7 +1016,7 @@ namespace OpenDental.Eclaims {
 			doc.DrawString(g,text,x,0);
 			text=insplan.GroupNum;//Field C01
 			doc.DrawString(g,text,leftMidCol,0);
-			if(claim.PlanNum2>0) {
+			if(claim!=null && claim.PlanNum2>0) {
 				text=insplan2.GroupNum;//Field E02
 				doc.DrawString(g,text,rightCol,0);
 			}
@@ -1022,7 +1025,7 @@ namespace OpenDental.Eclaims {
 				doc.DrawString(g,isFrench?"NO DE DIVISION/SECTION:":"DIV/SECTION NO:",x,0);
 				doc.DrawString(g,insplan.DivisionNo,leftMidCol,0);
 			}
-			if(claim.PlanNum2>0 && insplan2.DivisionNo.Length>0) {
+			if(claim!=null && claim.PlanNum2>0 && insplan2.DivisionNo.Length>0) {
 				doc.DrawString(g,isFrench?"NO DE DIVISION/SECTION:":"DIV/SECTION NO:",x,0);
 				doc.DrawString(g,insplan2.DivisionNo,rightCol,0);
 			}
@@ -1031,7 +1034,7 @@ namespace OpenDental.Eclaims {
 			doc.DrawString(g,text,x,0);
 			text=subscriber.GetNameFLFormal();
 			doc.DrawString(g,text,leftMidCol,0);
-			if(claim.PlanNum2>0) {
+			if(claim!=null && claim.PlanNum2>0) {
 				text=subscriber2.GetNameFLFormal();
 				doc.DrawString(g,text,rightCol,0);
 			}
@@ -1060,7 +1063,14 @@ namespace OpenDental.Eclaims {
 			x=doc.StartElement();
 			doc.DrawString(g,isFrench?"PARENTÉ AVEC PATIENT:":"RELATIONSHIP TO PATIENT:",x,0);
 			text="";
-			switch(Canadian.GetRelationshipCode(claim.PatRelat)){//Field C03
+			Relat relatPri;
+			if(claim==null){
+				relatPri=patPlanPri.Relationship;
+			}
+			else{
+				relatPri=claim.PatRelat;
+			}
+			switch(Canadian.GetRelationshipCode(relatPri)){//Field C03
 				case "1":
 					text=isFrench?"Soi-même":"Self";
 					break;
@@ -1080,7 +1090,7 @@ namespace OpenDental.Eclaims {
 					break;
 			}
 			doc.DrawString(g,text,leftMidCol,0);
-			if(claim.PlanNum2>0) {
+			if(claim!=null && claim.PlanNum2>0) {
 				text="";
 				switch(Canadian.GetRelationshipCode(claim.PatRelat2)){//Field E06
 					case "1":
@@ -1107,7 +1117,7 @@ namespace OpenDental.Eclaims {
 			string isStudent="   ";
 			string isHandicapped="   ";
 			bool stud=false;
-			if(claim.PatRelat==Relat.Child){
+			if(relatPri==Relat.Child){
 				text="";
 				switch(patient.CanadianEligibilityCode){//Field C09
 					case 1://Patient is a full-time student.
@@ -1167,7 +1177,7 @@ namespace OpenDental.Eclaims {
 			bullet=1;
 			PrintAccidentBullet(g,isFrench?"Le traitement résulte-t-il d'un accident?":"Is treatment resulting from an accident?");
 			x=doc.StartElement();
-			if(claim.CanadianIsInitialLower!="X" || claim.CanadianIsInitialUpper!="X") {//Don't show this bullet if it does not apply.
+			if(claim!=null && (claim.CanadianIsInitialLower!="X" || claim.CanadianIsInitialUpper!="X")) {//Don't show this bullet if it does not apply.
 				x+=doc.DrawString(g,bullet.ToString()+". ",x,0).Width;
 				bullet++;
 				doc.PushX(x);//Begin indentation.
@@ -1219,11 +1229,13 @@ namespace OpenDental.Eclaims {
 			size1=doc.DrawString(g,bullet.ToString()+". "+(isFrench?"S'agit-il d'un traitement en vue de soins d'orthodontie?":
 				"Is treatment for orthodontic purposes? "),x,0);
 			bullet++;
-			if(claim.IsOrtho){//Field F05
-				doc.DrawString(g,isFrench?"Oui":"Yes",x+size1.Width,0);
-			}
-			else{
-				doc.DrawString(g,isFrench?"Non":"No",x+size1.Width,0);
+			if(claim!=null){
+				if(claim.IsOrtho){//Field F05
+					doc.DrawString(g,isFrench?"Oui":"Yes",x+size1.Width,0);
+				}
+				else{
+					doc.DrawString(g,isFrench?"Non":"No",x+size1.Width,0);
+				}
 			}
 			x=doc.StartElement();
 			if(predetermination){
@@ -1393,32 +1405,34 @@ namespace OpenDental.Eclaims {
 				//The following code assumes that procedures and associated labs were sent out in the
 				//same order that they were returned from the query.
 				//Print info for procedure i if it exists.
-				for(int k=0,n=0;k<claimprocs.Count;k++){
-					Procedure proc;
-					ClaimProc claimproc=claimprocs[k];
-					if(claimproc.ProcNum!=0){//Is this a valid claim procedure?
-						proc=Procedures.GetOneProc(claimproc.ProcNum,true);
-						if(proc.ProcNumLab==0){//We are only looking for non-lab procedures.
-							n++;
-							if(n==i){//Procedure found.
-								text=claimproc.CodeSent.PadLeft(5,'0');//Field F08
-								doc.DrawString(g,text,procedureCol,0);
-								text=Tooth.ToInternat(proc.ToothNum);//Field F10
-								doc.DrawString(g,text,toothCol,0);
-								text=Tooth.SurfTidy(proc.Surf,proc.ToothNum,true);//Field F11
-								doc.DrawString(g,text,surfaceCol,0);
-								text=proc.ProcFee.ToString("F");//Field F12
-								doc.DrawString(g,text,feeCol,0);
-								totalFee+=proc.ProcFee;
-								//Find the lab fee associated with the above procedure.
-								for(int m=0;m<claimprocs.Count;m++) {
-									ClaimProc claimlab=claimprocs[m];
-									if(claimlab.ProcNum!=0){//Is this a valid claim procedure/lab fee?
-										Procedure lab=Procedures.GetOneProc(claimlab.ProcNum,true);
-										if(lab.ProcNumLab==proc.ProcNum){//This lab fee is for the above procedure.
-											text=lab.ProcFee.ToString("F");//Field F13
-											doc.DrawString(g,text,labCol,0);
-											totalLab+=lab.ProcFee;
+				if(claimprocs!=null){
+					for(int k=0,n=0;k<claimprocs.Count;k++){
+						Procedure proc;
+						ClaimProc claimproc=claimprocs[k];
+						if(claimproc.ProcNum!=0){//Is this a valid claim procedure?
+							proc=Procedures.GetOneProc(claimproc.ProcNum,true);
+							if(proc.ProcNumLab==0){//We are only looking for non-lab procedures.
+								n++;
+								if(n==i){//Procedure found.
+									text=claimproc.CodeSent.PadLeft(5,'0');//Field F08
+									doc.DrawString(g,text,procedureCol,0);
+									text=Tooth.ToInternat(proc.ToothNum);//Field F10
+									doc.DrawString(g,text,toothCol,0);
+									text=Tooth.SurfTidy(proc.Surf,proc.ToothNum,true);//Field F11
+									doc.DrawString(g,text,surfaceCol,0);
+									text=proc.ProcFee.ToString("F");//Field F12
+									doc.DrawString(g,text,feeCol,0);
+									totalFee+=proc.ProcFee;
+									//Find the lab fee associated with the above procedure.
+									for(int m=0;m<claimprocs.Count;m++) {
+										ClaimProc claimlab=claimprocs[m];
+										if(claimlab.ProcNum!=0){//Is this a valid claim procedure/lab fee?
+											Procedure lab=Procedures.GetOneProc(claimlab.ProcNum,true);
+											if(lab.ProcNumLab==proc.ProcNum){//This lab fee is for the above procedure.
+												text=lab.ProcFee.ToString("F");//Field F13
+												doc.DrawString(g,text,labCol,0);
+												totalLab+=lab.ProcFee;
+											}
 										}
 									}
 								}
@@ -2168,7 +2182,7 @@ namespace OpenDental.Eclaims {
 			bullet++;
 			doc.PushX(x);//Begin indentation.
 			x+=doc.DrawString(g,questionStr+" ",x,0).Width;
-			if(!IsValidDate(claim.AccidentDate)) {//Field F02 - No accident claimed.
+			if(claim==null || !IsValidDate(claim.AccidentDate)) {//Field F02 - No accident claimed.
 				doc.DrawString(g,isFrench?"Non":"No",x,0);
 			}
 			else {

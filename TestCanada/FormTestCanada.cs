@@ -104,7 +104,7 @@ namespace TestCanada {
 				textResults.Text+="Claim Reversals not implemented yet.\r\n";
 			}
 			if(checkOutstanding.Checked){
-				textResults.Text+="Outstanding Transactions not implemented yet\r\n.";
+				textResults.Text+="Outstanding Transactions not implemented yet.\r\n";
 			}
 			if(checkPredeterm.Checked){
 				textResults.Text+="Predeterminations not implemented yet.\r\n";
