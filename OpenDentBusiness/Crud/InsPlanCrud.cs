@@ -78,8 +78,6 @@ namespace OpenDentBusiness.Crud{
 				insPlan.MonthRenew          = PIn.Byte  (table.Rows[i]["MonthRenew"].ToString());
 				insPlan.FilingCodeSubtype   = PIn.Long  (table.Rows[i]["FilingCodeSubtype"].ToString());
 				insPlan.CanadianPlanFlag    = PIn.String(table.Rows[i]["CanadianPlanFlag"].ToString());
-				insPlan.CanadianBandNumber  = PIn.Int   (table.Rows[i]["CanadianBandNumber"].ToString());
-				insPlan.CanadianFamilyNumber= PIn.Int   (table.Rows[i]["CanadianFamilyNumber"].ToString());
 				retVal.Add(insPlan);
 			}
 			return retVal;
@@ -99,7 +97,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="PlanNum,";
 			}
-			command+="Subscriber,DateEffective,DateTerm,GroupName,GroupNum,PlanNote,FeeSched,ReleaseInfo,AssignBen,PlanType,ClaimFormNum,UseAltCode,ClaimsUseUCR,CopayFeeSched,SubscriberID,EmployerNum,CarrierNum,AllowedFeeSched,TrojanID,DivisionNo,BenefitNotes,IsMedical,SubscNote,FilingCode,DentaideCardSequence,ShowBaseUnits,CodeSubstNone,IsHidden,MonthRenew,FilingCodeSubtype,CanadianPlanFlag,CanadianBandNumber,CanadianFamilyNumber) VALUES(";
+			command+="Subscriber,DateEffective,DateTerm,GroupName,GroupNum,PlanNote,FeeSched,ReleaseInfo,AssignBen,PlanType,ClaimFormNum,UseAltCode,ClaimsUseUCR,CopayFeeSched,SubscriberID,EmployerNum,CarrierNum,AllowedFeeSched,TrojanID,DivisionNo,BenefitNotes,IsMedical,SubscNote,FilingCode,DentaideCardSequence,ShowBaseUnits,CodeSubstNone,IsHidden,MonthRenew,FilingCodeSubtype,CanadianPlanFlag) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(insPlan.PlanNum)+",";
 			}
@@ -134,9 +132,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Bool  (insPlan.IsHidden)+","
 				+    POut.Byte  (insPlan.MonthRenew)+","
 				+    POut.Long  (insPlan.FilingCodeSubtype)+","
-				+"'"+POut.String(insPlan.CanadianPlanFlag)+"',"
-				+    POut.Int   (insPlan.CanadianBandNumber)+","
-				+    POut.Int   (insPlan.CanadianFamilyNumber)+")";
+				+"'"+POut.String(insPlan.CanadianPlanFlag)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -179,9 +175,7 @@ namespace OpenDentBusiness.Crud{
 				+"IsHidden            =  "+POut.Bool  (insPlan.IsHidden)+", "
 				+"MonthRenew          =  "+POut.Byte  (insPlan.MonthRenew)+", "
 				+"FilingCodeSubtype   =  "+POut.Long  (insPlan.FilingCodeSubtype)+", "
-				+"CanadianPlanFlag    = '"+POut.String(insPlan.CanadianPlanFlag)+"', "
-				+"CanadianBandNumber  =  "+POut.Int   (insPlan.CanadianBandNumber)+", "
-				+"CanadianFamilyNumber=  "+POut.Int   (insPlan.CanadianFamilyNumber)+" "
+				+"CanadianPlanFlag    = '"+POut.String(insPlan.CanadianPlanFlag)+"' "
 				+"WHERE PlanNum = "+POut.Long(insPlan.PlanNum);
 			Db.NonQ(command);
 		}
@@ -312,14 +306,6 @@ namespace OpenDentBusiness.Crud{
 			if(insPlan.CanadianPlanFlag != oldInsPlan.CanadianPlanFlag) {
 				if(command!=""){ command+=",";}
 				command+="CanadianPlanFlag = '"+POut.String(insPlan.CanadianPlanFlag)+"'";
-			}
-			if(insPlan.CanadianBandNumber != oldInsPlan.CanadianBandNumber) {
-				if(command!=""){ command+=",";}
-				command+="CanadianBandNumber = "+POut.Int(insPlan.CanadianBandNumber)+"";
-			}
-			if(insPlan.CanadianFamilyNumber != oldInsPlan.CanadianFamilyNumber) {
-				if(command!=""){ command+=",";}
-				command+="CanadianFamilyNumber = "+POut.Int(insPlan.CanadianFamilyNumber)+"";
 			}
 			if(command==""){
 				return;

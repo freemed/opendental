@@ -51,8 +51,6 @@ namespace TestCanada {
 			plan.Subscriber=pat.PatNum;
 			plan.DentaideCardSequence=3;
 			plan.CanadianPlanFlag="";
-			plan.CanadianBandNumber=0;
-			plan.CanadianFamilyNumber=0;
 			InsPlans.Insert(plan);
 			patplan=new PatPlan();
 			patplan.PatNum=pat.PatNum;
@@ -91,8 +89,6 @@ namespace TestCanada {
 			plan.DivisionNo="1542B";
 			plan.DentaideCardSequence=0;
 			plan.CanadianPlanFlag="";
-			plan.CanadianBandNumber=0;
-			plan.CanadianFamilyNumber=0;
 			InsPlans.Insert(plan);
 			long planNum_pat2_pri=plan.PlanNum;
 			patplan=new PatPlan();
@@ -111,8 +107,6 @@ namespace TestCanada {
 			plan.DivisionNo="";
 			plan.DentaideCardSequence=0;
 			plan.CanadianPlanFlag="";
-			plan.CanadianBandNumber=0;
-			plan.CanadianFamilyNumber=0;
 			InsPlans.Insert(plan);
 			//long planNum_pat2_sec=plan.PlanNum;//won't need this
 			patplan=new PatPlan();
@@ -159,8 +153,6 @@ namespace TestCanada {
 			plan.DivisionNo="";
 			plan.DentaideCardSequence=0;
 			plan.CanadianPlanFlag="";
-			plan.CanadianBandNumber=0;
-			plan.CanadianFamilyNumber=0;
 			InsPlans.Insert(plan);
 			patplan=new PatPlan();
 			patplan.PatNum=pat.PatNum;
@@ -206,8 +198,6 @@ namespace TestCanada {
 			plan.DivisionNo="";
 			plan.DentaideCardSequence=0;
 			plan.CanadianPlanFlag="";
-			plan.CanadianBandNumber=0;
-			plan.CanadianFamilyNumber=0;
 			InsPlans.Insert(plan);
 			patplan=new PatPlan();
 			patplan.PatNum=pat.PatNum;
@@ -244,13 +234,11 @@ namespace TestCanada {
 			plan=new InsPlan();
 			plan.CarrierNum=CarrierTC.GetCarrierNumById("888888");
 			plan.GroupNum="17542";
-			plan.SubscriberID="";
+			plan.SubscriberID="30322145";//concat bandNumber(303) and familyNumber(22145)
 			plan.Subscriber=pat.PatNum;
 			plan.DivisionNo="";
 			plan.DentaideCardSequence=0;
 			plan.CanadianPlanFlag="N";
-			plan.CanadianBandNumber=303;
-			plan.CanadianFamilyNumber=22145;
 			InsPlans.Insert(plan);
 			patplan=new PatPlan();
 			patplan.PatNum=pat.PatNum;
@@ -261,7 +249,6 @@ namespace TestCanada {
 			PatPlans.Insert(patplan);
 			//PATIENT 6=========================================================================
 			pat=new Patient();
-			pat.PriProv=ProviderC.List[1].ProvNum;//dentist 2 for eligibility #4
 			pat.PatStatus=PatientStatus.Patient;
 			pat.Position=PatientPosition.Married;
 			pat.Gender=PatientGender.Female;
@@ -286,7 +273,7 @@ namespace TestCanada {
 			pat.PatStatus=PatientStatus.NonPatient;
 			pat.Position=PatientPosition.Married;
 			pat.Gender=PatientGender.Male;
-			pat.Birthdate=new DateTime(1954,12,25);
+			pat.Birthdate=new DateTime(1952,06,25);
 			pat.LName="West";
 			pat.FName="Henry";
 			pat.MiddleI="B";
@@ -308,8 +295,6 @@ namespace TestCanada {
 			plan.DivisionNo="BA1765";
 			plan.DentaideCardSequence=0;
 			plan.CanadianPlanFlag="";
-			plan.CanadianBandNumber=0;
-			plan.CanadianFamilyNumber=0;
 			InsPlans.Insert(plan);
 			patplan=new PatPlan();
 			patplan.PatNum=PatNum6;
@@ -327,14 +312,12 @@ namespace TestCanada {
 			plan.DivisionNo="15476";
 			plan.DentaideCardSequence=0;
 			plan.CanadianPlanFlag="";
-			plan.CanadianBandNumber=0;
-			plan.CanadianFamilyNumber=0;
 			InsPlans.Insert(plan);
 			patplan=new PatPlan();
 			patplan.PatNum=PatNum6;
 			patplan.PlanNum=plan.PlanNum;
 			patplan.Relationship=Relat.Spouse;//2
-			patplan.PatID="00";
+			patplan.PatID="01";
 			patplan.Ordinal=2;
 			PatPlans.Insert(patplan);
 			//PATIENT 7=========================================================================
@@ -385,8 +368,6 @@ namespace TestCanada {
 			plan.DivisionNo="887B3";
 			plan.DentaideCardSequence=22;
 			plan.CanadianPlanFlag="";
-			plan.CanadianBandNumber=0;
-			plan.CanadianFamilyNumber=0;
 			InsPlans.Insert(plan);
 			patplan=new PatPlan();
 			patplan.PatNum=PatNum7;
@@ -404,8 +385,6 @@ namespace TestCanada {
 			plan.DivisionNo="";
 			plan.DentaideCardSequence=0;
 			plan.CanadianPlanFlag="";
-			plan.CanadianBandNumber=0;
-			plan.CanadianFamilyNumber=0;
 			InsPlans.Insert(plan);
 			patplan=new PatPlan();
 			patplan.PatNum=PatNum7;
@@ -462,8 +441,6 @@ namespace TestCanada {
 			plan.DivisionNo="887OP";
 			plan.DentaideCardSequence=03;
 			plan.CanadianPlanFlag="";
-			plan.CanadianBandNumber=0;
-			plan.CanadianFamilyNumber=0;
 			InsPlans.Insert(plan);
 			patplan=new PatPlan();
 			patplan.PatNum=PatNum8;
@@ -481,8 +458,6 @@ namespace TestCanada {
 			plan.DivisionNo="";
 			plan.DentaideCardSequence=0;
 			plan.CanadianPlanFlag="";
-			plan.CanadianBandNumber=0;
-			plan.CanadianFamilyNumber=0;
 			InsPlans.Insert(plan);
 			patplan=new PatPlan();
 			patplan.PatNum=PatNum8;
@@ -521,8 +496,6 @@ namespace TestCanada {
 			plan.DivisionNo="9914";
 			plan.DentaideCardSequence=0;
 			plan.CanadianPlanFlag="";
-			plan.CanadianBandNumber=0;
-			plan.CanadianFamilyNumber=0;
 			InsPlans.Insert(plan);
 			patplan=new PatPlan();
 			patplan.PatNum=pat.PatNum;

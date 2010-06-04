@@ -163,10 +163,6 @@ namespace OpenDental{
 		private OpenDental.UI.Button butPickCarrier;
 		private GroupBox groupCanadian;
 		private TextBox textPlanFlag;
-		private ValidNumber textFamilyNumber;
-		private Label label20;
-		private ValidNumber textBandNumber;
-		private Label label19;
 		private Label label22;
 		private Label label24;
 		private CheckBox checkIsHidden;
@@ -339,10 +335,6 @@ namespace OpenDental{
 			this.label24 = new System.Windows.Forms.Label();
 			this.label22 = new System.Windows.Forms.Label();
 			this.textPlanFlag = new System.Windows.Forms.TextBox();
-			this.textFamilyNumber = new OpenDental.ValidNumber();
-			this.label20 = new System.Windows.Forms.Label();
-			this.textBandNumber = new OpenDental.ValidNumber();
-			this.label19 = new System.Windows.Forms.Label();
 			this.textDentaide = new OpenDental.ValidNumber();
 			this.labelDentaide = new System.Windows.Forms.Label();
 			this.comboFilingCodeSubtype = new System.Windows.Forms.ComboBox();
@@ -1325,15 +1317,11 @@ namespace OpenDental{
 			this.groupCanadian.Controls.Add(this.label24);
 			this.groupCanadian.Controls.Add(this.label22);
 			this.groupCanadian.Controls.Add(this.textPlanFlag);
-			this.groupCanadian.Controls.Add(this.textFamilyNumber);
-			this.groupCanadian.Controls.Add(this.label20);
-			this.groupCanadian.Controls.Add(this.textBandNumber);
-			this.groupCanadian.Controls.Add(this.label19);
 			this.groupCanadian.Controls.Add(this.textDentaide);
 			this.groupCanadian.Controls.Add(this.labelDentaide);
 			this.groupCanadian.Location = new System.Drawing.Point(5,574);
 			this.groupCanadian.Name = "groupCanadian";
-			this.groupCanadian.Size = new System.Drawing.Size(404,104);
+			this.groupCanadian.Size = new System.Drawing.Size(404,62);
 			this.groupCanadian.TabIndex = 168;
 			this.groupCanadian.TabStop = false;
 			this.groupCanadian.Text = "Canadian";
@@ -1363,42 +1351,6 @@ namespace OpenDental{
 			this.textPlanFlag.Name = "textPlanFlag";
 			this.textPlanFlag.Size = new System.Drawing.Size(37,20);
 			this.textPlanFlag.TabIndex = 166;
-			// 
-			// textFamilyNumber
-			// 
-			this.textFamilyNumber.Location = new System.Drawing.Point(181,80);
-			this.textFamilyNumber.MaxVal = 99999;
-			this.textFamilyNumber.MinVal = 0;
-			this.textFamilyNumber.Name = "textFamilyNumber";
-			this.textFamilyNumber.Size = new System.Drawing.Size(65,20);
-			this.textFamilyNumber.TabIndex = 165;
-			// 
-			// label20
-			// 
-			this.label20.Location = new System.Drawing.Point(37,83);
-			this.label20.Name = "label20";
-			this.label20.Size = new System.Drawing.Size(140,19);
-			this.label20.TabIndex = 164;
-			this.label20.Text = "Family Number";
-			this.label20.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// textBandNumber
-			// 
-			this.textBandNumber.Location = new System.Drawing.Point(181,59);
-			this.textBandNumber.MaxVal = 999;
-			this.textBandNumber.MinVal = 0;
-			this.textBandNumber.Name = "textBandNumber";
-			this.textBandNumber.Size = new System.Drawing.Size(55,20);
-			this.textBandNumber.TabIndex = 163;
-			// 
-			// label19
-			// 
-			this.label19.Location = new System.Drawing.Point(37,62);
-			this.label19.Name = "label19";
-			this.label19.Size = new System.Drawing.Size(140,19);
-			this.label19.TabIndex = 162;
-			this.label19.Text = "Band Number";
-			this.label19.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// textDentaide
 			// 
@@ -1878,18 +1830,6 @@ namespace OpenDental{
 				textDentaide.Text=PlanCur.DentaideCardSequence.ToString();
 			}
 			textPlanFlag.Text=PlanCur.CanadianPlanFlag;
-			if(PlanCur.CanadianBandNumber==0) {
-				textBandNumber.Text="";
-			}
-			else {
-				textBandNumber.Text=PlanCur.CanadianBandNumber.ToString();
-			}
-			if(PlanCur.CanadianFamilyNumber==0) {
-				textFamilyNumber.Text="";
-			}
-			else {
-				textFamilyNumber.Text=PlanCur.CanadianFamilyNumber.ToString();
-			}
 			//if(PlanCur.BenefitNotes==""){
 			//	butBenefitNotes.Enabled=false;
 			//}
@@ -3667,29 +3607,19 @@ namespace OpenDental{
 			if(textDateEffect.errorProvider1.GetError(textDateEffect)!=""
 				||textDateTerm.errorProvider1.GetError(textDateTerm)!=""
 				||textDentaide.errorProvider1.GetError(textDentaide)!=""
-				||textBandNumber.errorProvider1.GetError(textBandNumber)!=""
-				||textFamilyNumber.errorProvider1.GetError(textFamilyNumber)!=""
 				) {
 				MsgBox.Show(this,"Please fix data entry errors first.");
 				return false;
 			}
 			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {
-				if(textSubscriberID.Text=="" && !IsForAll 
-					&& (textPlanFlag.Text!="N" || textBandNumber.Text=="" || textFamilyNumber.Text=="")) 
-				{
-					MsgBox.Show(this,"Subscriber ID not allowed to be blank unless Plan Flag is 'N', and Band Number and Family Number are filled in.");
-					return false;
-				}
 				if(textPlanFlag.Text!="" && textPlanFlag.Text!="A" && textPlanFlag.Text!="V" && textPlanFlag.Text!="N") {
 					MsgBox.Show(this,"Plan Flag must be A, V, N, or blank.");
 					return false;
 				}
 			}
-			else {
-				if(textSubscriberID.Text=="" && !IsForAll) {
-					MsgBox.Show(this,"Subscriber ID not allowed to be blank.");
-					return false;
-				}
+			if(textSubscriberID.Text=="" && !IsForAll) {
+				MsgBox.Show(this,"Subscriber ID not allowed to be blank.");
+				return false;
 			}
 			if(textCarrier.Text=="") {
 				MsgBox.Show(this,"Carrier not allowed to be blank.");
@@ -3804,8 +3734,6 @@ namespace OpenDental{
 			//Canadian------------------------------------------------------------------------------------------
 			PlanCur.DentaideCardSequence=PIn.Byte(textDentaide.Text);
 			PlanCur.CanadianPlanFlag=textPlanFlag.Text;//validated
-			PlanCur.CanadianBandNumber=PIn.Int(textBandNumber.Text);
-			PlanCur.CanadianFamilyNumber=PIn.Int(textFamilyNumber.Text);
 			//Canadian end---------------------------------------------------------------------------------------
 			PlanCur.TrojanID=textTrojanID.Text;
 			PlanCur.PlanNote=textPlanNote.Text;

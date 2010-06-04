@@ -711,7 +711,7 @@ namespace OpenDental.Eclaims {
 			text=isFrench?"PREMIER ASSUREUR":"PRIMARY COVERAGE";
 			float leftMidCol=center-g.MeasureString(text,doc.standardFont).Width/2;
 			doc.DrawString(g,text,leftMidCol,0);
-			if(claim.PlanNum2>0) {
+			if(claim!=null && claim.PlanNum2>0) {
 				text=isFrench?"SECOND ASSUREUR":"SECONDARY COVERAGE";
 				doc.DrawString(g,text,rightMidCol,0);
 			}
@@ -720,14 +720,14 @@ namespace OpenDental.Eclaims {
 			doc.DrawString(g,text,x,0);
 			text=primaryCarrier.CarrierName.ToUpper();//Field A05
 			doc.DrawString(g,text,leftMidCol,0);
-			if(claim.PlanNum2>0) {
+			if(claim!=null && claim.PlanNum2>0) {
 				text=secondaryCarrier.CarrierName.ToUpper();
 				doc.DrawString(g,text,rightMidCol,0);
 			}
 			x=doc.StartElement();
 			doc.DrawString(g,isFrench?"ADRESSE DE PORTEUR:":"CARRIER ADDRESS:",x,0);
 			PrintAddress(g,leftMidCol,0,primaryCarrier.Address,primaryCarrier.Address2,primaryCarrier.City+" "+primaryCarrier.State+" "+primaryCarrier.Zip);
-			if(claim.PlanNum2>0) {
+			if(claim!=null && claim.PlanNum2>0) {
 				PrintAddress(g,rightMidCol,0,secondaryCarrier.Address,secondaryCarrier.Address2,
 					secondaryCarrier.City+" "+secondaryCarrier.State+" "+secondaryCarrier.Zip);
 			}
@@ -736,7 +736,7 @@ namespace OpenDental.Eclaims {
 			doc.DrawString(g,text,x,0);
 			text=insplan.GroupNum;//Field C01
 			doc.DrawString(g,text,leftMidCol,0);
-			if(claim.PlanNum2>0) {
+			if(claim!=null && claim.PlanNum2>0) {
 				text=insplan2.GroupNum;//Field E02
 				doc.DrawString(g,text,rightMidCol,0);
 			}
@@ -745,7 +745,7 @@ namespace OpenDental.Eclaims {
 			doc.DrawString(g,text,x,0);
 			text=subscriber.GetNameFLFormal();
 			doc.DrawString(g,text,leftMidCol,0);
-			if(claim.PlanNum2>0) {
+			if(claim!=null && claim.PlanNum2>0) {
 				text=subscriber2.GetNameFLFormal();
 				doc.DrawString(g,text,rightMidCol,0);
 			}
@@ -764,7 +764,7 @@ namespace OpenDental.Eclaims {
 			x=doc.StartElement();
 			doc.DrawString(g,isFrench?"EMPLOYEUR:":"EMPLOYER:",x,0);
 			doc.DrawString(g,subscriber.EmployerNum==0?"":Employers.GetName(subscriber.EmployerNum),leftMidCol,0);
-			if(claim.PlanNum2>0) {
+			if(claim!=null && claim.PlanNum2>0) {
 				doc.DrawString(g,subscriber2.EmployerNum==0?"":Employers.GetName(subscriber2.EmployerNum),rightMidCol,0);
 			}
 			x=doc.StartElement();
@@ -774,7 +774,8 @@ namespace OpenDental.Eclaims {
 			x=doc.StartElement();
 			doc.DrawString(g,isFrench?"PARENTÉ AVEC PATIENT:":"RELATIONSHIP TO PATIENT:",x,0);
 			text="";
-			switch(Canadian.GetRelationshipCode(claim.PatRelat)) {//Field C03
+			Relat relat=patPlanPri.Relationship;
+			switch(Canadian.GetRelationshipCode(relat)) {//Field C03
 				case "1":
 					text=isFrench?"Soi-même":"Self";
 					break;
@@ -794,7 +795,7 @@ namespace OpenDental.Eclaims {
 					break;
 			}
 			doc.DrawString(g,text,leftMidCol,0);
-			if(claim.PlanNum2>0) {
+			if(claim!=null && claim.PlanNum2>0) {
 				text="";
 				switch(Canadian.GetRelationshipCode(claim.PatRelat2)) {//Field E06
 					case "1":

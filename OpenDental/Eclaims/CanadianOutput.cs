@@ -121,7 +121,7 @@ namespace OpenDental.Eclaims {
 			//A07 message length 5 N
 			int len=214;
 			bool C19PlanRecordPresent=false;
-			if(plan.CanadianPlanFlag=="A" || plan.CanadianPlanFlag=="N"){
+			if(plan.CanadianPlanFlag=="A"){// || plan.CanadianPlanFlag=="N"){
 				C19PlanRecordPresent=true;
 			}
 			if(C19PlanRecordPresent){
@@ -137,7 +137,9 @@ namespace OpenDental.Eclaims {
 			//B03 billing provider number 9 AN
 			//Might need to account for possible 5 digit prov id assigned by carrier
 			//But the testing scripts do not supply any billing provider numbers, so we'll ignore this for now.
-			strb.Append(Canadian.TidyAN(prov.NationalProvID,9));//already validated
+			//The testing scripts seem to indicate that the billing provider is always the default practice provider.
+			Provider provBilling=Providers.GetProv(Providers.GetBillingProvNum(prov.ProvNum,patient.ClinicNum));
+			strb.Append(Canadian.TidyAN(provBilling.NationalProvID,9));//already validated
 			//C01 primary policy/plan number 12 AN (group number)
 			//only validated to ensure that it's not blank and is less than 12. Also that no spaces.
 			strb.Append(Canadian.TidyAN(plan.GroupNum,12));
@@ -169,7 +171,7 @@ namespace OpenDental.Eclaims {
 			//C09 eligibility exception code 1 N
 			strb.Append(Canadian.TidyN(patient.CanadianEligibilityCode,1));//validated
 			//C12 plan flag 1 A
-			strb.Append(Canadian.TidyA(plan.CanadianPlanFlag,1));
+			strb.Append(Canadian.GetPlanFlag(plan.CanadianPlanFlag));
 			//C18 plan record count 1 N
 			if(C19PlanRecordPresent){
 				strb.Append("1");

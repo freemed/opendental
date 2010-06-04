@@ -452,7 +452,7 @@ namespace OpenDental.Eclaims {
 				Application.DoEvents();
 			}
 			if(!File.Exists(outputFile)) {
-				File.Delete(inputFile);
+				//File.Delete(inputFile);
 				throw new ApplicationException("No response.");
 			}
 			string result=File.ReadAllText(outputFile,Encoding.GetEncoding(850));
@@ -693,6 +693,13 @@ namespace OpenDental.Eclaims {
 				default:
 					return "5";
 			}
+		}
+
+		public static string GetPlanFlag(string planFlag){
+			if(planFlag=="A" || planFlag=="V"){
+				return planFlag;
+			}
+			return " ";
 		}
 
 		///<summary>Checks for either valid USA state or valid Canadian territory.</summary>

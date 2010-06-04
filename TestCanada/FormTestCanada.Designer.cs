@@ -40,6 +40,8 @@
 			this.checkSumReconcil = new System.Windows.Forms.CheckBox();
 			this.checkShowForms = new System.Windows.Forms.CheckBox();
 			this.checkAll = new System.Windows.Forms.CheckBox();
+			this.label3 = new System.Windows.Forms.Label();
+			this.textSingleScript = new System.Windows.Forms.TextBox();
 			this.SuspendLayout();
 			// 
 			// butObjects
@@ -116,10 +118,10 @@
 			this.textResults.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.textResults.Location = new System.Drawing.Point(12,291);
+			this.textResults.Location = new System.Drawing.Point(12,219);
 			this.textResults.Multiline = true;
 			this.textResults.Name = "textResults";
-			this.textResults.Size = new System.Drawing.Size(759,564);
+			this.textResults.Size = new System.Drawing.Size(759,636);
 			this.textResults.TabIndex = 16;
 			// 
 			// checkEligibility
@@ -136,8 +138,6 @@
 			// 
 			// checkClaims
 			// 
-			this.checkClaims.Checked = true;
-			this.checkClaims.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.checkClaims.Location = new System.Drawing.Point(13,163);
 			this.checkClaims.Name = "checkClaims";
 			this.checkClaims.Size = new System.Drawing.Size(161,18);
@@ -148,8 +148,6 @@
 			// 
 			// checkClaimReversals
 			// 
-			this.checkClaimReversals.Checked = true;
-			this.checkClaimReversals.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.checkClaimReversals.Location = new System.Drawing.Point(13,181);
 			this.checkClaimReversals.Name = "checkClaimReversals";
 			this.checkClaimReversals.Size = new System.Drawing.Size(161,18);
@@ -160,11 +158,9 @@
 			// 
 			// checkOutstanding
 			// 
-			this.checkOutstanding.Checked = true;
-			this.checkOutstanding.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.checkOutstanding.Location = new System.Drawing.Point(13,199);
 			this.checkOutstanding.Name = "checkOutstanding";
-			this.checkOutstanding.Size = new System.Drawing.Size(202,18);
+			this.checkOutstanding.Size = new System.Drawing.Size(182,18);
 			this.checkOutstanding.TabIndex = 20;
 			this.checkOutstanding.Text = "Outstanding Transactions 1-3";
 			this.checkOutstanding.UseVisualStyleBackColor = true;
@@ -172,9 +168,7 @@
 			// 
 			// checkPredeterm
 			// 
-			this.checkPredeterm.Checked = true;
-			this.checkPredeterm.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkPredeterm.Location = new System.Drawing.Point(13,217);
+			this.checkPredeterm.Location = new System.Drawing.Point(207,145);
 			this.checkPredeterm.Name = "checkPredeterm";
 			this.checkPredeterm.Size = new System.Drawing.Size(152,18);
 			this.checkPredeterm.TabIndex = 21;
@@ -184,9 +178,7 @@
 			// 
 			// checkPayReconcil
 			// 
-			this.checkPayReconcil.Checked = true;
-			this.checkPayReconcil.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkPayReconcil.Location = new System.Drawing.Point(13,235);
+			this.checkPayReconcil.Location = new System.Drawing.Point(207,163);
 			this.checkPayReconcil.Name = "checkPayReconcil";
 			this.checkPayReconcil.Size = new System.Drawing.Size(215,18);
 			this.checkPayReconcil.TabIndex = 22;
@@ -196,9 +188,7 @@
 			// 
 			// checkSumReconcil
 			// 
-			this.checkSumReconcil.Checked = true;
-			this.checkSumReconcil.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkSumReconcil.Location = new System.Drawing.Point(13,253);
+			this.checkSumReconcil.Location = new System.Drawing.Point(207,181);
 			this.checkSumReconcil.Name = "checkSumReconcil";
 			this.checkSumReconcil.Size = new System.Drawing.Size(189,18);
 			this.checkSumReconcil.TabIndex = 23;
@@ -208,7 +198,7 @@
 			// 
 			// checkShowForms
 			// 
-			this.checkShowForms.Location = new System.Drawing.Point(109,119);
+			this.checkShowForms.Location = new System.Drawing.Point(300,119);
 			this.checkShowForms.Name = "checkShowForms";
 			this.checkShowForms.Size = new System.Drawing.Size(185,18);
 			this.checkShowForms.TabIndex = 24;
@@ -218,8 +208,8 @@
 			// checkAll
 			// 
 			this.checkAll.Checked = true;
-			this.checkAll.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkAll.Location = new System.Drawing.Point(12,271);
+			this.checkAll.CheckState = System.Windows.Forms.CheckState.Indeterminate;
+			this.checkAll.Location = new System.Drawing.Point(207,199);
 			this.checkAll.Name = "checkAll";
 			this.checkAll.Size = new System.Drawing.Size(189,18);
 			this.checkAll.TabIndex = 25;
@@ -228,11 +218,30 @@
 			this.checkAll.UseVisualStyleBackColor = true;
 			this.checkAll.Click += new System.EventHandler(this.checkAll_Click);
 			// 
+			// label3
+			// 
+			this.label3.Location = new System.Drawing.Point(106,118);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(99,18);
+			this.label3.TabIndex = 26;
+			this.label3.Text = "Single Script #";
+			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textSingleScript
+			// 
+			this.textSingleScript.Location = new System.Drawing.Point(207,118);
+			this.textSingleScript.Name = "textSingleScript";
+			this.textSingleScript.Size = new System.Drawing.Size(49,20);
+			this.textSingleScript.TabIndex = 27;
+			this.textSingleScript.Text = "5";
+			// 
 			// FormTestCanada
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(783,867);
+			this.Controls.Add(this.textSingleScript);
+			this.Controls.Add(this.label3);
 			this.Controls.Add(this.checkAll);
 			this.Controls.Add(this.checkShowForms);
 			this.Controls.Add(this.checkSumReconcil);
@@ -277,6 +286,8 @@
 		private System.Windows.Forms.CheckBox checkSumReconcil;
 		private System.Windows.Forms.CheckBox checkShowForms;
 		private System.Windows.Forms.CheckBox checkAll;
+		private System.Windows.Forms.Label label3;
+		private System.Windows.Forms.TextBox textSingleScript;
 	}
 }
 

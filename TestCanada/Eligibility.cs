@@ -10,11 +10,17 @@ namespace TestCanada {
 		
 		public static string RunOne(bool showForms) {
 			string retVal="";
-			Provider prov=ProviderC.List[0];
-			PatPlan patplan=PatPlans.GetPatPlan(PatientTC.PatNum1,1);
+			long provNum=ProviderC.List[0].ProvNum;//dentist #1
+			Patient pat=Patients.GetPat(PatientTC.PatNum1);//patient#1
+			if(pat.PriProv!=provNum){
+				Patient oldPat=pat.Copy();
+				pat.PriProv=provNum;//this script uses the primary provider for the patient
+				Patients.Update(pat,oldPat);
+			}
+			PatPlan patplan=PatPlans.GetPatPlan(pat.PatNum,1);
 			InsPlan plan=InsPlans.GetPlan(patplan.PlanNum,new List<InsPlan>());
 			//the UI would block this due to carrier not supporting this transaction type.
-			long etransNum=CanadianOutput.SendElegibility(PatientTC.PatNum1,plan,new DateTime(1999,1,1),patplan.Relationship,patplan.PatID,showForms);
+			long etransNum=CanadianOutput.SendElegibility(pat.PatNum,plan,new DateTime(1999,1,1),patplan.Relationship,patplan.PatID,showForms);
 			Etrans etrans=Etranss.GetEtrans(etransNum);
 			string message=EtransMessageTexts.GetMessageText(etrans.EtransMessageTextNum);
 			CCDFieldInputter formData=new CCDFieldInputter(message);
@@ -28,10 +34,16 @@ namespace TestCanada {
 
 		public static string RunTwo(bool showForms) {
 			string retVal="";
-			Provider prov=ProviderC.List[0];//dentist#1
-			PatPlan patplan=PatPlans.GetPatPlan(PatientTC.PatNum7,1);
+			long provNum=ProviderC.List[0].ProvNum;//dentist #1
+			Patient pat=Patients.GetPat(PatientTC.PatNum7);//patient#7
+			if(pat.PriProv!=provNum){
+				Patient oldPat=pat.Copy();
+				pat.PriProv=provNum;//this script uses the primary provider for the patient
+				Patients.Update(pat,oldPat);
+			}
+			PatPlan patplan=PatPlans.GetPatPlan(pat.PatNum,1);
 			InsPlan plan=InsPlans.GetPlan(patplan.PlanNum,new List<InsPlan>());
-			long etransNum=CanadianOutput.SendElegibility(PatientTC.PatNum7,plan,new DateTime(1999,1,1),patplan.Relationship,patplan.PatID,true);
+			long etransNum=CanadianOutput.SendElegibility(pat.PatNum,plan,new DateTime(1999,1,1),patplan.Relationship,patplan.PatID,true);
 			//should print Eligibility response on Dentaide Form
 			Etrans etrans=Etranss.GetEtrans(etransNum);
 			string message=EtransMessageTexts.GetMessageText(etrans.EtransMessageTextNum);
@@ -46,22 +58,70 @@ namespace TestCanada {
 
 		public static string RunThree(bool showForms) {
 			string retVal="";
-
-			retVal+="Eligibility #3 (not yet implemented).\r\n";
+			long provNum=ProviderC.List[0].ProvNum;//dentist #1
+			Patient pat=Patients.GetPat(PatientTC.PatNum6);//patient#6
+			if(pat.PriProv!=provNum){
+				Patient oldPat=pat.Copy();
+				pat.PriProv=provNum;//this script uses the primary provider for the patient
+				Patients.Update(pat,oldPat);
+			}
+			PatPlan patplan=PatPlans.GetPatPlan(pat.PatNum,2);
+			InsPlan plan=InsPlans.GetPlan(patplan.PlanNum,new List<InsPlan>());
+			long etransNum=CanadianOutput.SendElegibility(pat.PatNum,plan,new DateTime(1999,1,1),patplan.Relationship,patplan.PatID,true);
+			Etrans etrans=Etranss.GetEtrans(etransNum);
+			string message=EtransMessageTexts.GetMessageText(etrans.EtransMessageTextNum);
+			CCDFieldInputter formData=new CCDFieldInputter(message);
+			string responseStatus=formData.GetValue("G05");
+			if(responseStatus!="R") {
+				throw new Exception("Should be R");
+			}
+			retVal+="Eligibility #3 successful.\r\n";
 			return retVal;
 		}
 
 		public static string RunFour(bool showForms) {
 			string retVal="";
-
-			retVal+="Eligibility #4 (not yet implemented).\r\n";
+			long provNum=ProviderC.List[1].ProvNum;//dentist #2
+			Patient pat=Patients.GetPat(PatientTC.PatNum6);//patient#6
+			if(pat.PriProv!=provNum){
+				Patient oldPat=pat.Copy();
+				pat.PriProv=provNum;//this script uses the primary provider for the patient
+				Patients.Update(pat,oldPat);
+			}
+			PatPlan patplan=PatPlans.GetPatPlan(pat.PatNum,1);
+			InsPlan plan=InsPlans.GetPlan(patplan.PlanNum,new List<InsPlan>());
+			long etransNum=CanadianOutput.SendElegibility(pat.PatNum,plan,new DateTime(1999,1,1),patplan.Relationship,patplan.PatID,true);
+			Etrans etrans=Etranss.GetEtrans(etransNum);
+			string message=EtransMessageTexts.GetMessageText(etrans.EtransMessageTextNum);
+			CCDFieldInputter formData=new CCDFieldInputter(message);
+			string responseStatus=formData.GetValue("G05");
+			if(responseStatus!="M") {
+				throw new Exception("Should be M");
+			}
+			retVal+="Eligibility #4 successful.\r\n";
 			return retVal;
 		}
 
 		public static string RunFive(bool showForms) {
 			string retVal="";
-
-			retVal+="Eligibility #5 (not yet implemented).\r\n";
+			long provNum=ProviderC.List[0].ProvNum;//dentist #1
+			Patient pat=Patients.GetPat(PatientTC.PatNum5);//patient#5
+			if(pat.PriProv!=provNum){
+				Patient oldPat=pat.Copy();
+				pat.PriProv=provNum;//this script uses the primary provider for the patient
+				Patients.Update(pat,oldPat);
+			}
+			PatPlan patplan=PatPlans.GetPatPlan(pat.PatNum,1);
+			InsPlan plan=InsPlans.GetPlan(patplan.PlanNum,new List<InsPlan>());
+			long etransNum=CanadianOutput.SendElegibility(pat.PatNum,plan,new DateTime(1999,1,1),patplan.Relationship,patplan.PatID,true);
+			Etrans etrans=Etranss.GetEtrans(etransNum);
+			string message=EtransMessageTexts.GetMessageText(etrans.EtransMessageTextNum);
+			CCDFieldInputter formData=new CCDFieldInputter(message);
+			string responseStatus=formData.GetValue("G05");
+			if(responseStatus!="E") {
+				throw new Exception("Should be E");
+			}
+			retVal+="Eligibility #5 successful.\r\n";
 			return retVal;
 		}
 

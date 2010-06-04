@@ -76,6 +76,50 @@ namespace TestCanada {
 		}
 
 		private void butScripts_Click(object sender,EventArgs e) {
+			int singleScript=0;
+			if(textSingleScript.Text!=""){
+				int checkedCount=0;
+				if(checkEligibility.Checked) {
+					checkedCount++;
+				}
+				if(checkClaims.Checked){
+					checkedCount++;
+				}
+				if(checkClaimReversals.Checked){
+					checkedCount++;
+				}
+				if(checkOutstanding.Checked){
+					checkedCount++;
+				}
+				if(checkPredeterm.Checked){
+					checkedCount++;
+				}
+				if(checkPayReconcil.Checked){
+					checkedCount++;
+				}
+				if(checkSumReconcil.Checked){
+					checkedCount++;
+				}
+				if(checkedCount>1){
+					MessageBox.Show("When running a single script, only one category can be checked.");
+					return;
+				}
+				if(checkedCount==0){
+					MessageBox.Show("Please select a category.");
+					return;
+				}
+				try{
+					singleScript=PIn.Int(textSingleScript.Text);
+					if(singleScript==0){
+						MessageBox.Show("Invalid number.");
+						return;
+					}
+				}
+				catch{
+					MessageBox.Show("Invalid number.");
+					return;
+				}
+			}
 			FillObjects();
 			textResults.Text+="---------------------------------------\r\n";
 			Application.DoEvents();
@@ -84,17 +128,29 @@ namespace TestCanada {
 			textResults.Text+="---------------------------------------\r\n";
 			Application.DoEvents();
 			if(checkEligibility.Checked) {
-				textResults.Text+=Eligibility.RunOne(checkShowForms.Checked);
+				if(singleScript==0 || singleScript==1){
+					textResults.Text+=Eligibility.RunOne(checkShowForms.Checked);
+				}
 				Application.DoEvents();
-				textResults.Text+=Eligibility.RunTwo(checkShowForms.Checked);
+				if(singleScript==0 || singleScript==2){
+					textResults.Text+=Eligibility.RunTwo(checkShowForms.Checked);
+				}
 				Application.DoEvents();
-				textResults.Text+=Eligibility.RunThree(checkShowForms.Checked);
+				if(singleScript==0 || singleScript==3){
+					textResults.Text+=Eligibility.RunThree(checkShowForms.Checked);
+				}
 				Application.DoEvents();
-				textResults.Text+=Eligibility.RunFour(checkShowForms.Checked);
+				if(singleScript==0 || singleScript==4){
+					textResults.Text+=Eligibility.RunFour(checkShowForms.Checked);
+				}
 				Application.DoEvents();
-				textResults.Text+=Eligibility.RunFive(checkShowForms.Checked);
+				if(singleScript==0 || singleScript==5){
+					textResults.Text+=Eligibility.RunFive(checkShowForms.Checked);
+				}
 				Application.DoEvents();
-				textResults.Text+=Eligibility.RunSix(checkShowForms.Checked);
+				if(singleScript==0 || singleScript==6){
+					textResults.Text+=Eligibility.RunSix(checkShowForms.Checked);
+				}
 				Application.DoEvents();
 			}
 			if(checkClaims.Checked){

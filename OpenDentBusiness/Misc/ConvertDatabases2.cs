@@ -2239,10 +2239,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);
 				command="ALTER TABLE insplan ADD CanadianPlanFlag varchar(5) NOT NULL";
 				Db.NonQ(command);
-				command="ALTER TABLE insplan ADD CanadianBandNumber int NOT NULL";
-				Db.NonQ(command);
-				command="ALTER TABLE insplan ADD CanadianFamilyNumber int NOT NULL";
-				Db.NonQ(command);
+	
 
 
 
