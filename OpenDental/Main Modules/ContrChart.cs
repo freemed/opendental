@@ -274,9 +274,13 @@ namespace OpenDental{
 			InitializeComponent();
 			tabControlImages.DrawItem += new DrawItemEventHandler(OnDrawItem);
 			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canada
+				panelQuickButtons.Enabled=false;
+				butBF.Text=Lan.g(this,"B/V");//vestibular instead of facial
+				butV.Text=Lan.g(this,"5");
+			}
+			else{
 				menuItemLabFee.Visible=false;
 				menuItemLabFeeDetach.Visible=false;
-				panelQuickButtons.Enabled=false;
 			}
 		}
 
@@ -3182,7 +3186,7 @@ namespace OpenDental{
 			}
 			FamCur=Patients.GetFamily(patNum);
 			PatCur=FamCur.GetPatient(patNum);
-			PlanList=InsPlans.Refresh(FamCur);
+			PlanList=InsPlans.RefreshForFam(FamCur);
 			PatPlanList=PatPlans.Refresh(patNum);
 			BenefitList=Benefits.Refresh(PatPlanList);
 			PatientNoteCur=PatientNotes.Refresh(patNum,PatCur.Guarantor);
@@ -4049,7 +4053,7 @@ namespace OpenDental{
 							row.Cells.Add(table.Rows[i]["toothNum"].ToString());
 							break;
 						case "Surf":
-							row.Cells.Add(table.Rows[i]["Surf"].ToString());
+							row.Cells.Add(table.Rows[i]["surf"].ToString());
 							break;
 						case "Dx":
 							row.Cells.Add(table.Rows[i]["dx"].ToString());
@@ -4515,11 +4519,21 @@ namespace OpenDental{
 				textSurf.AppendText("D");
 			}
 			if(butV.BackColor==Color.White){
-				textSurf.AppendText("V");
+				if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {
+					textSurf.AppendText("5");
+				}
+				else {
+					textSurf.AppendText("V");
+				}
 			}
 			if(butBF.BackColor==Color.White){
 				if(ToothGraphic.IsAnterior(toothChart.SelectedTeeth[0])) {
-					textSurf.AppendText("F");
+					if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {
+						textSurf.AppendText("V");//vestibular
+					}
+					else {
+						textSurf.AppendText("F");
+					}
 				}
 				else {
 					textSurf.AppendText("B");
@@ -4836,16 +4850,19 @@ namespace OpenDental{
 					MessageBox.Show(ex.Message);
 				}
 			}
+			else if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") {
+				//do not synch recall.  Too slow
+			}
 			else{
 				Recalls.Synch(PatCur.PatNum);
 			}
 		}
 			
+		///<summary>No user dialog is shown.  This only works for some kinds of procedures.  Set the codeNum first.</summary>
 		private void AddQuick(Procedure ProcCur){
 			//procnum
 			ProcCur.PatNum=PatCur.PatNum;
 			//aptnum
-			//proccode
 			//ProcCur.CodeNum=ProcedureCodes.GetProcCode(ProcCur.OldCode).CodeNum;//already set
 			if(newStatus==ProcStat.EO){
 				ProcCur.ProcDate=DateTime.MinValue;
@@ -4893,12 +4910,9 @@ namespace OpenDental{
 					ProcCur.ProcFee=insfee;
 				}
 			}
-			//ProcCur.OverridePri=-1;
-			//ProcCur.OverrideSec=-1;
 			//surf
 			//toothnum
 			//ToothRange
-			//ProcCur.NoBillIns=ProcedureCodes.GetProcCode(ProcCur.ProcCode).NoBillIns;
 			if(comboPriority.SelectedIndex==0) {
 				ProcCur.Priority=0;
 			}
@@ -4935,20 +4949,6 @@ namespace OpenDental{
 			ProcCur.BaseUnits=ProcedureCodes.GetProcCode(ProcCur.CodeNum).BaseUnits;
 			ProcCur.SiteNum=PatCur.SiteNum;
 			//nextaptnum
-			//ProcCur.CapCoPay=-1;
-			//if(Patients.Cur.PriPlanNum!=0){//if patient has insurance
-			//ProcCur.IsCovIns=true;
-				//InsPlans.GetCur(Patients.Cur.PriPlanNum);
-				//if(InsPlans.Cur.PlanType=="c"){
-					//also handles fine if copayfeesched=0:
-				//ProcCur.CapCoPay=Fees.GetAmount(ProcCur.ProcCode,InsPlans.Cur.CopayFeeSched);
-				//}
-			//}
-			//MessageBox.Show(Procedures.NewProcedure.ProcFee.ToString());
-			//MessageBox.Show(Procedures.NewProcedure.ProcDate);
-			//if(Procedures.Cur.ProcStatus==ProcStat.C){
-			//	Procedures.PutBal(Procedures.Cur.ProcDate,Procedures.Cur.ProcFee);
-			//}
 			Procedures.Insert(ProcCur);
 			if((ProcCur.ProcStatus==ProcStat.C || ProcCur.ProcStatus==ProcStat.EC || ProcCur.ProcStatus==ProcStat.EO)
 				&& ProcedureCodes.GetProcCode(ProcCur.CodeNum).PaintType==ToothPaintingType.Extraction) {
@@ -4956,7 +4956,12 @@ namespace OpenDental{
 				//Procedures.SetHideGraphical(ProcCur);//might not matter anymore
 				ToothInitials.SetValue(PatCur.PatNum,ProcCur.ToothNum,ToothInitialType.Missing);
 			}
-			Recalls.Synch(PatCur.PatNum);
+			if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") {
+				//do not synch recall.  Too slow
+			}
+			else{
+				Recalls.Synch(PatCur.PatNum);
+			}
 			Procedures.ComputeEstimates(ProcCur,PatCur.PatNum,new List<ClaimProc>(),true,PlanList,PatPlanList,BenefitList,PatCur.Age);
 		}
 
@@ -4974,7 +4979,6 @@ namespace OpenDental{
 			if(FormP.DialogResult!=DialogResult.OK) return;
 			Procedures.SetDateFirstVisit(DateTime.Today,1,PatCur);
 			Procedure ProcCur;
-			
 			for(int n=0;n==0 || n<toothChart.SelectedTeeth.Count;n++){
 				isValid=true;
 				ProcCur=new Procedure();//going to be an insert, so no need to set Procedures.CurOld
@@ -5004,18 +5008,18 @@ namespace OpenDental{
 					AddProcedure(ProcCur);
 				}
 				else if(tArea==TreatmentArea.Surf){
-					if(textSurf.Text=="") {
-						isValid=false;
-					}
-					else {
-						ProcCur.Surf=textSurf.Text;
-					}
 					if(toothChart.SelectedTeeth.Count==0) {
 						isValid=false;
 					}
 					else {
 						ProcCur.ToothNum=toothChart.SelectedTeeth[n];
 						//Procedures.Cur=ProcCur;
+					}
+					if(textSurf.Text=="") {
+						isValid=false;
+					}
+					else {
+						ProcCur.Surf=Tooth.SurfTidyFromDisplayToDb(textSurf.Text,ProcCur.ToothNum);
 					}
 					if(isValid) {
 						AddQuick(ProcCur);
@@ -5236,18 +5240,24 @@ namespace OpenDental{
 						AddQuick(ProcCur);
 					}
 					else if(tArea==TreatmentArea.Surf){
-						if(textSurf.Text=="")
+						if(toothChart.SelectedTeeth.Count==0){
 							isValid=false;
-						else
-							ProcCur.Surf=textSurf.Text;
-						if(toothChart.SelectedTeeth.Count==0)
-							isValid=false;
-						else
+						}
+						else{
 							ProcCur.ToothNum=toothChart.SelectedTeeth[n];
-						if(isValid)
+						}
+						if(textSurf.Text==""){
+							isValid=false;
+						}
+						else{
+							ProcCur.Surf=Tooth.SurfTidyFromDisplayToDb(textSurf.Text,ProcCur.ToothNum);//it's ok if toothnum is not valid.
+						}
+						if(isValid){
 							AddQuick(ProcCur);
-						else
+						}
+						else{
 							AddProcedure(ProcCur);
+						}
 					}
 					else if(tArea==TreatmentArea.Tooth){
 						if(toothChart.SelectedTeeth.Count==0) {
@@ -5327,18 +5337,25 @@ namespace OpenDental{
 						AddQuick(ProcCur);
 					}
 					else if(tArea==TreatmentArea.Surf){
-						if(textSurf.Text=="")
+						if(toothChart.SelectedTeeth.Count==0){
 							isValid=false;
-						else
-							ProcCur.Surf=textSurf.Text;
-						if(toothChart.SelectedTeeth.Count==0)
-							isValid=false;
-						else
+						}
+						else{
 							ProcCur.ToothNum=toothChart.SelectedTeeth[n];
-						if(isValid)
+						}
+						if(textSurf.Text==""){
+							isValid=false;
+						}
+						else{
+							ProcCur.Surf=Tooth.SurfTidyFromDisplayToDb(textSurf.Text,ProcCur.ToothNum);//it's ok if toothnum is invalid
+						}
+						
+						if(isValid){
 							AddQuick(ProcCur);
-						else
+						}
+						else{
 							AddProcedure(ProcCur);
+						}
 					}
 					else if(tArea==TreatmentArea.Tooth){
 						if(toothChart.SelectedTeeth.Count==0) {
@@ -5461,18 +5478,24 @@ namespace OpenDental{
 					AddQuick(ProcCur);
 				}
 				else if(tArea==TreatmentArea.Surf) {
-					if(textSurf.Text=="")
+					if(toothChart.SelectedTeeth.Count==0){
 						isValid=false;
-					else
-						ProcCur.Surf=textSurf.Text;
-					if(toothChart.SelectedTeeth.Count==0)
-						isValid=false;
-					else
+					}
+					else{
 						ProcCur.ToothNum=toothChart.SelectedTeeth[n];
-					if(isValid)
+					}
+					if(textSurf.Text==""){
+						isValid=false;
+					}
+					else{
+						ProcCur.Surf=Tooth.SurfTidyFromDisplayToDb(textSurf.Text,ProcCur.ToothNum);//it's ok if toothnum is invalid
+					}
+					if(isValid){
 						AddQuick(ProcCur);
-					else
+					}
+					else{
 						AddProcedure(ProcCur);
+					}
 				}
 				else if(tArea==TreatmentArea.Tooth) {
 					if(toothChart.SelectedTeeth.Count==0) {
@@ -6727,35 +6750,60 @@ namespace OpenDental{
 		}
 
 		private void menuItemLabFee_Click(object sender,EventArgs e) {
-			if(gridProg.SelectedIndices.Length!=2){
-				MsgBox.Show(this,"Please select exactly two procedures, one regular and one lab.");
+			if(gridProg.SelectedIndices.Length<2 || gridProg.SelectedIndices.Length>3) {
+				MsgBox.Show(this,"Please select two or three procedures, one regular and the other one or two lab.");
 				return;
 			}
+			//One check that is not made is whether a lab proc is already attached to a different proc.
 			DataRow row1=DataSetMain.Tables["ProgNotes"].Rows[gridProg.SelectedIndices[0]];
 			DataRow row2=DataSetMain.Tables["ProgNotes"].Rows[gridProg.SelectedIndices[1]];
-			if(row1["ProcNum"].ToString()=="0" || row2["ProcNum"].ToString()=="0"){
-				MsgBox.Show(this,"Both selected items must be procedures.");
+			DataRow row3=null;
+			if(gridProg.SelectedIndices.Length==3) {
+				row3=DataSetMain.Tables["ProgNotes"].Rows[gridProg.SelectedIndices[2]];
+			}
+			if(row1["ProcNum"].ToString()=="0" || row2["ProcNum"].ToString()=="0" || (row3!=null && row3["ProcNum"].ToString()=="0")) {
+				MsgBox.Show(this,"All selected items must be procedures.");
 				return;
 			}
-			bool isLab1=ProcedureCodes.GetProcCode(row1["ProcCode"].ToString()).IsCanadianLab;
-			bool isLab2=ProcedureCodes.GetProcCode(row2["ProcCode"].ToString()).IsCanadianLab;
-			if((isLab1 && isLab2) || (!isLab1 && !isLab2)) {
-				MsgBox.Show(this,"One of the procedures must be a lab procedure as defined in Procedure Codes.");
+			List<long> procNumsReg=new List<long>();
+			List<long> procNumsLab=new List<long>();
+			if(ProcedureCodes.GetProcCode(row1["ProcCode"].ToString()).IsCanadianLab) {
+				procNumsLab.Add(PIn.Long(row1["ProcNum"].ToString()));
+			}
+			else {
+				procNumsReg.Add(PIn.Long(row1["ProcNum"].ToString()));
+			}
+			if(ProcedureCodes.GetProcCode(row2["ProcCode"].ToString()).IsCanadianLab) {
+				procNumsLab.Add(PIn.Long(row2["ProcNum"].ToString()));
+			}
+			else {
+				procNumsReg.Add(PIn.Long(row2["ProcNum"].ToString()));
+			}
+			if(row3!=null) {
+				if(ProcedureCodes.GetProcCode(row3["ProcCode"].ToString()).IsCanadianLab) {
+					procNumsLab.Add(PIn.Long(row3["ProcNum"].ToString()));
+				}
+				else {
+					procNumsReg.Add(PIn.Long(row3["ProcNum"].ToString()));
+				}
+			}
+			if(procNumsReg.Count==0) {
+				MsgBox.Show(this,"One of the selected procedures must be a regular non-lab procedure as defined in Procedure Codes.");
 				return;
 			}
+			if(procNumsReg.Count>1) {
+				MsgBox.Show(this,"Only one of the selected procedures may be a regular non-lab procedure as defined in Procedure Codes.");
+				return;
+			}
+			//We only alter the lab procedure(s), not the regular procedure.
 			Procedure procLab;
 			Procedure procOld;
-			if(isLab1){
-				procLab=Procedures.GetOneProc(PIn.Long(row1["ProcNum"].ToString()),false);
+			for(int i=0;i<procNumsLab.Count;i++) {
+				procLab=Procedures.GetOneProc(procNumsLab[i],false);
 				procOld=procLab.Copy();
-				procLab.ProcNumLab=PIn.Long(row2["ProcNum"].ToString());
+				procLab.ProcNumLab=procNumsReg[0];
+				Procedures.Update(procLab,procOld);
 			}
-			else{
-				procLab=Procedures.GetOneProc(PIn.Long(row2["ProcNum"].ToString()),false);
-				procOld=procLab.Copy();
-				procLab.ProcNumLab=PIn.Long(row1["ProcNum"].ToString());
-			}
-			Procedures.Update(procLab,procOld);
 			ModuleSelected(PatCur.PatNum);
 		}
 
