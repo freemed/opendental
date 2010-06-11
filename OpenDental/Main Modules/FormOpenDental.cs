@@ -1305,10 +1305,19 @@ namespace OpenDental{
 			}
 			//We no longer do this shotgun approach because it can slow the loading time.
 			//RefreshLocalData(InvalidType.AllLocal);
-			RefreshLocalData(InvalidType.Prefs,InvalidType.Defs,InvalidType.Providers,//obviously heavily used
-				InvalidType.Signals,//so when mouse moves over light buttons, it won't crash
-				InvalidType.Programs,//already done above, but needs to be done explicitly to trigger the PostCleanup 
-				InvalidType.ToolBut);//so program buttons will show in all the toolbars
+			List<InvalidType> invalidTypes=new List<InvalidType>();
+			invalidTypes.Add(InvalidType.Prefs);
+			invalidTypes.Add(InvalidType.Defs);
+			invalidTypes.Add(InvalidType.Providers);//obviously heavily used
+			invalidTypes.Add(InvalidType.Programs);//already done above, but needs to be done explicitly to trigger the PostCleanup 
+			invalidTypes.Add(InvalidType.ToolBut);//so program buttons will show in all the toolbars
+			if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") {
+				lightSignalGrid1.Visible=false;
+			}
+			else{
+				invalidTypes.Add(InvalidType.Signals);//so when mouse moves over light buttons, it won't crash
+			}
+			RefreshLocalData(invalidTypes.ToArray());
 			FillSignalButtons(null);
 			ContrManage2.InitializeOnStartup();//so that when a signal is received, it can handle it.
 			//Lan.Refresh();//automatically skips if current culture is en-US
@@ -2112,7 +2121,7 @@ namespace OpenDental{
 			//Carriers---------------------------------------------------------------------------------------
 			Family fam=Patients.GetFamily(CurPatNum);
 			List <PatPlan> PatPlanList=PatPlans.Refresh(CurPatNum);
-			List <InsPlan> PlanList=InsPlans.Refresh(fam);
+			List <InsPlan> PlanList=InsPlans.RefreshForFam(fam);
 			Carrier carrier;
 			InsPlan plan;
 			for(int i=0;i<PatPlanList.Count;i++) {
@@ -2440,6 +2449,9 @@ namespace OpenDental{
 
 		///<summary>If this is initial call when opening program, then set sigListButs=null.  This will cause a call to be made to database to get current status of buttons.  Otherwise, it adds the signals passed in to the current state, then paints.</summary>
 		private void FillSignalButtons(List <Signal> sigListButs){
+			if(!lightSignalGrid1.Visible){//for faster eCW loading
+				return;
+			}
 			if(sigListButs==null){
 				SigButDefList=SigButDefs.GetByComputer(SystemInformation.ComputerName);
 				lightSignalGrid1.SetButtons(SigButDefList);

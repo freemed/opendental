@@ -35,8 +35,11 @@ namespace OpenDentBusiness {
 		public static DataTable RefreshCache() {
 			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
 			string command="SELECT * FROM language";
-			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
-			table.TableName="Language";
+			DataTable table=null;
+			if(CultureInfo.CurrentCulture.Name!="en-US") {
+				table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
+				table.TableName="Language";
+			}
 			FillCache(table);
 			return table;
 		}
