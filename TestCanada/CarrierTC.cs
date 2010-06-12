@@ -136,5 +136,16 @@ namespace TestCanada {
 			return 0;
 		}
 
+		///<summary>encryptionMethod should be 1 or 2.</summary>
+		public static void SetEncryptionMethod(long planNum,byte encryptionMethod) {
+			InsPlan plan=InsPlans.RefreshOne(planNum);
+			Carrier carrier=Carriers.GetCarrier(plan.CarrierNum);
+			if(carrier.CanadianEncryptionMethod!=encryptionMethod) {
+				carrier.CanadianEncryptionMethod=encryptionMethod;
+				Carriers.Update(carrier);
+				Carriers.RefreshCache();
+			}
+		}
+
 	}
 }

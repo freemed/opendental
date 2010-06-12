@@ -641,7 +641,7 @@ namespace OpenDentBusiness {
 			ProcedureCode code=ProcedureCodes.GetProcCode(codeNum);
 			switch(code.TreatArea) {
 				case TreatmentArea.Surf:
-					strLine+="#"+Tooth.ToInternat(toothNum)+"-"+surf+"-";//""#12-MOD-"
+					strLine+="#"+Tooth.ToInternat(toothNum)+"-"+Tooth.SurfTidyFromDbToDisplay(surf,toothNum)+"-";//""#12-MOD-"
 					break;
 				case TreatmentArea.Tooth:
 					strLine+="#"+Tooth.ToInternat(toothNum)+"-";//"#12-"
@@ -729,6 +729,18 @@ namespace OpenDentBusiness {
 				extracted.Add(procList[i].Copy());
 			}
 			return extracted;
+		}
+
+		///<summary>Takes the list of all procedures for the patient, and finds any that are attaches as lab procs to that proc.</summary>
+		public static List<Procedure> GetCanadianLabFees(long procNum,List<Procedure> procList){
+			//No need to check RemotingRole; no call to db.
+			List<Procedure> retVal=new List<Procedure>();
+			for(int i=0;i<procList.Count;i++) {
+				if(procList[i].ProcNumLab==procNum) {
+					retVal.Add(procList[i]);
+				}
+			}
+			return retVal;
 		}
 
 		/*

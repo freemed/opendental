@@ -759,7 +759,7 @@ namespace OpenDental{
 			if(patNum!=0){
 				FamCur=Patients.GetFamily(patNum);
 				PatCur=FamCur.GetPatient(patNum);
-				InsPlanList=InsPlans.Refresh(FamCur);
+				InsPlanList=InsPlans.RefreshForFam(FamCur);
 				PatPlanList=PatPlans.Refresh(patNum);
 				BenefitList=Benefits.Refresh(PatPlanList);
 				ClaimList=Claims.Refresh(PatCur.PatNum);
@@ -993,7 +993,12 @@ namespace OpenDental{
 					row.Cells.Add("");//never done
 					row.Cells.Add(DefC.GetName(DefCat.TxPriorities,ProcListTP[i].Priority));
 					row.Cells.Add(Tooth.ToInternat(ProcListTP[i].ToothNum));
-					row.Cells.Add(ProcListTP[i].Surf);
+					if(ProcedureCodes.GetProcCode(ProcListTP[i].CodeNum).TreatArea==TreatmentArea.Surf){
+						row.Cells.Add(Tooth.SurfTidyFromDbToDisplay(ProcListTP[i].Surf,ProcListTP[i].ToothNum));
+					}
+					else{
+						row.Cells.Add(ProcListTP[i].Surf);//I think this will properly allow UR, L, etc.
+					}
 					row.Cells.Add(ProcedureCodes.GetProcCode(ProcListTP[i].CodeNum).ProcCode);
 					descript=ProcedureCodes.GetLaymanTerm(ProcListTP[i].CodeNum);
 					if(ProcListTP[i].ToothRange!=""){
@@ -2038,7 +2043,12 @@ namespace OpenDental{
 					if(Tooth.IsValidEntry(ProcTPSelectList[i].ToothNumTP)) {
 						procDummy.ToothNum=Tooth.FromInternat(ProcTPSelectList[i].ToothNumTP);
 					}
-					procDummy.Surf=ProcTPSelectList[i].Surf;
+					if(ProcedureCodes.GetProcCode(ProcTPSelectList[i].ProcCode).TreatArea==TreatmentArea.Surf){
+						procDummy.Surf=Tooth.SurfTidyFromDisplayToDb(ProcTPSelectList[i].Surf,procDummy.ToothNum);
+					}
+					else{
+						procDummy.Surf=ProcTPSelectList[i].Surf;//for quad, arch, etc.
+					}
 					if(procDummy.ToothRange==null){
 						procDummy.ToothRange="";
 					}
@@ -2284,7 +2294,12 @@ namespace OpenDental{
 				procTP.ItemOrder=itemNo;
 				procTP.Priority=proc.Priority;
 				procTP.ToothNumTP=Tooth.ToInternat(proc.ToothNum);
-				procTP.Surf=proc.Surf;
+				if(ProcedureCodes.GetProcCode(proc.CodeNum).TreatArea==TreatmentArea.Surf){
+					procTP.Surf=Tooth.SurfTidyFromDbToDisplay(proc.Surf,proc.ToothNum);
+				}
+				else{
+					procTP.Surf=proc.Surf;//for UR, L, etc.
+				}
 				procTP.ProcCode=ProcedureCodes.GetStringProcCode(proc.CodeNum);
 				procTP.Descript=gridMain.Rows[gridMain.SelectedIndices[i]]
 					.Cells[gridMain.Columns.GetIndex(Lan.g("TableTP","Description"))].Text;

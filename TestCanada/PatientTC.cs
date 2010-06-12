@@ -504,7 +504,7 @@ namespace TestCanada {
 			patplan.PatID="";
 			patplan.Ordinal=1;
 			PatPlans.Insert(patplan);
-			return "Patient objects set.\r\n";
+			return "Patient objects set.\r\nInsPlan objects set.\r\n";
 		}
 
 	}

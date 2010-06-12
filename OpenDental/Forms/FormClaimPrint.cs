@@ -436,7 +436,7 @@ namespace OpenDental{
 			List<Claim> ClaimList=Claims.Refresh(PatCur.PatNum);
 			ClaimCur=Claims.GetFromList(ClaimList,ThisClaimNum);
 				//((Claim)Claims.HList[ThisClaimNum]).Clone();
-			PlanList=InsPlans.Refresh(FamCur);
+			PlanList=InsPlans.RefreshForFam(FamCur);
 			InsPlan otherPlan=InsPlans.GetPlan(ClaimCur.PlanNum2,PlanList);
 			if(otherPlan==null){
 				otherPlan=new InsPlan();//easier than leaving it null
@@ -3074,7 +3074,7 @@ namespace OpenDental{
 				case TreatmentArea.Surf:
 					//area blank
 					toothNum=Tooth.ToInternat(ProcCur.ToothNum);
-					surf=Tooth.SurfTidy(ProcCur.Surf,ProcCur.ToothNum,true);
+					surf=Tooth.SurfTidyForClaims(ProcCur.Surf,ProcCur.ToothNum);
 					break;
 				case TreatmentArea.Tooth:
 					//area blank
@@ -3168,7 +3168,7 @@ namespace OpenDental{
 
 		private void butPrint_Click(object sender, System.EventArgs e){
 			if(PrintClaim()){
-				Etranss.SetClaimSentOrPrinted(ThisClaimNum,ClaimCur.PatNum,0,EtransType.ClaimPrinted,"",0);
+				Etranss.SetClaimSentOrPrinted(ThisClaimNum,ClaimCur.PatNum,0,EtransType.ClaimPrinted);
 				//Claims.UpdateStatus(ThisClaimNum,"P");
 				DialogResult=DialogResult.OK;
 			}

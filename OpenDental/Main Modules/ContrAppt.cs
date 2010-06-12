@@ -3915,7 +3915,7 @@ namespace OpenDental{
 			//Procedures.SetDateFirstVisit(Appointments.Cur.AptDateTime.Date);//done when making appt instead
 			Family fam = Patients.GetFamily(apt.PatNum);
 			Patient pat = fam.GetPatient(apt.PatNum);
-			List<InsPlan> PlanList = InsPlans.Refresh(fam);
+			List<InsPlan> PlanList = InsPlans.RefreshForFam(fam);
 			List<PatPlan> PatPlanList = PatPlans.Refresh(apt.PatNum);
 			if (apt.AptStatus == ApptStatus.PtNote) {
 				Appointments.SetAptStatus(apt.AptNum,ApptStatus.PtNoteCompleted);

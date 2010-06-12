@@ -256,7 +256,7 @@ namespace OpenDental.Eclaims {
 		}
 
 		///<summary>Create a CCD field using the field id. A field id uniquely identifies the field type, contents, etc...</summary>
-		public CCDField(string pFieldId){
+		public CCDField(string pFieldId,bool isVersion02){
 			pFieldId=pFieldId.ToUpper();
 			if(!IsValidId(pFieldId)){
 				MessageBox.Show("Cannot construct field with invalid field id: "+pFieldId);
@@ -291,15 +291,20 @@ namespace OpenDental.Eclaims {
 					frenchFieldName="Nombre de version de format";
 					format="N";
 					lengthRequirement=new ConstLengthRequirement(2);
-					valueRequirements.Add(new DiscreteValueRequirement(new string[] {"04"}));
+					valueRequirements.Add(new DiscreteValueRequirement(new string[] {"02","04"}));
 					break;
 				case "A04":
 					fieldName="Transaction Code";
 					frenchFieldName="Code de transaction";
 					format="N";
 					lengthRequirement=new ConstLengthRequirement(2);
-					valueRequirements.Add(new DiscreteValueRequirement(new string[] {	"01","11","21","02","12","03","13","23","04","14",
+					if(isVersion02) {
+						valueRequirements.Add(new DiscreteValueRequirement(new string[] { "00","10","01","11","21","31","02","12","03","13","23","04" }));
+					}
+					else {
+						valueRequirements.Add(new DiscreteValueRequirement(new string[] {	"01","11","21","02","12","03","13","23","04","14",
 																																						"24","05","15","06","16","07","08","18"}));
+					}
 					break;
 				case "A05":
 					fieldName="Carrier Identification Number";
@@ -317,7 +322,12 @@ namespace OpenDental.Eclaims {
 					fieldName="Message Length";
 					frenchFieldName="Longueur de message";
 					format="N";
-					lengthRequirement=new ConstLengthRequirement(5);
+					if(isVersion02) {
+						lengthRequirement=new ConstLengthRequirement(4);
+					}
+					else {
+						lengthRequirement=new ConstLengthRequirement(5);
+					}
 					break;
 				case "A08":
 					fieldName="Materials Forwarded";
@@ -1056,10 +1066,19 @@ namespace OpenDental.Eclaims {
 					lengthRequirement=new ConstLengthRequirement(14);
 					break;
 				case "G02":
-					fieldName="Eligible Amount for Lab Procedure Code #2";
-					frenchFieldName="Quantité éligible pour le code #2 de procédé de laboratoire";
-					format="D";
-					lengthRequirement=new ConstLengthRequirement(6);
+					if(isVersion02) {
+						fieldName="Employer Certified Flag";
+						frenchFieldName="";
+						format="A";
+						lengthRequirement=new ConstLengthRequirement(1);
+						valueRequirements.Add(new DiscreteValueRequirement(new string[] {"Y","N" }));
+					}
+					else {
+						fieldName="Eligible Amount for Lab Procedure Code #2";
+						frenchFieldName="Quantité éligible pour le code #2 de procédé de laboratoire";
+						format="D";
+						lengthRequirement=new ConstLengthRequirement(6);
+					}
 					break;
 				case "G03":
 					fieldName="Expected Payment Date";

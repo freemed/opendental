@@ -107,7 +107,7 @@ namespace OpenDental{
 			PatCur=patCur.Copy();
 			PayPlanCur=payPlanCur.Copy();
 			FamCur=Patients.GetFamily(PatCur.PatNum);
-			InsPlanList=InsPlans.Refresh(FamCur);
+			InsPlanList=InsPlans.RefreshForFam(FamCur);
 			Lan.F(this);
 		}
 

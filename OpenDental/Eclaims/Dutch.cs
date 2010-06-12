@@ -78,7 +78,7 @@ namespace OpenDental.Eclaims {
 				strb.Append(strProcCode+t);
 				strb.Append(GetUL(proc,procCode)+t);//414. U/L.
 				strb.Append(Tooth.ToInternat(proc.ToothNum)+t);
-				strb.Append(proc.Surf+t);//needs validation
+				strb.Append(Tooth.SurfTidyForClaims(proc.Surf,proc.ToothNum)+t);//needs validation
 				strb.Append(t);
 				if(claim.AccidentRelated=="") {//not accident
 					strb.Append("N"+t);

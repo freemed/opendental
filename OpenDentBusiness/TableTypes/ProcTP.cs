@@ -19,7 +19,7 @@ namespace OpenDentBusiness{
 		public long Priority;
 		///<summary>A simple string displaying the tooth number.  If international tooth numbers are used, then this will be in international format already.</summary>
 		public string ToothNumTP;
-		///<summary>Tooth surfaces or area.</summary>
+		///<summary>Tooth surfaces or area.  This is already converted for international use.  If arch or quad, then it will have U,LR, etc.</summary>
 		public string Surf;
 		///<summary>Not a foreign key.  Simply display text.  Can be changed by user at any time.</summary>
 		public string ProcCode;

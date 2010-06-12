@@ -447,6 +447,7 @@ namespace OpenDentBusiness {
 			table.Columns.Add("PayPlanChargeNum");
 			table.Columns.Add("ProcCode");
 			table.Columns.Add("ProcNum");
+			table.Columns.Add("ProcNumLab");
 			table.Columns.Add("procsOnObj");//for a claim or payment, the ProcNums, comma delimited.
 			table.Columns.Add("prov");
 			table.Columns.Add("StatementNum");
@@ -531,6 +532,7 @@ namespace OpenDentBusiness {
 				row["PayPlanChargeNum"]="0";
 				row["ProcCode"]=Lans.g("AccountModule","InsPay");
 				row["ProcNum"]="0";
+				row["ProcNumLab"]="";
 				row["procsOnObj"]="";
 				row["prov"]=Providers.GetAbbr(PIn.Long(rawClaimPay.Rows[i]["provNum_"].ToString()));
 				row["StatementNum"]="0";
@@ -559,8 +561,8 @@ namespace OpenDentBusiness {
 				+"LaymanTerm,procedurelog.MedicalCode,MAX(cp1.NoBillIns) noBillIns_,procedurelog.PatNum,"
 				+"(SELECT SUM(paysplit.SplitAmt) FROM paysplit WHERE procedurelog.ProcNum=paysplit.ProcNum "
 				+"AND paysplit.PatNum IN ("+familyPatNums+")) patPay_,"
-				+"ProcCode,"
-				+"procedurelog.ProcDate,ProcFee,procedurelog.ProcNum,procedurelog.ProvNum,ToothNum,ToothRange,UnitQty,"
+				+"ProcCode,procedurelog.ProcDate,ProcFee,procedurelog.ProcNum,procedurelog.ProcNumLab,"
+				+"procedurelog.ProvNum,ToothNum,ToothRange,UnitQty,"
 				+"SUM(cp1.WriteOff) writeOff_, "
 				+"(SELECT MIN(ClaimNum) FROM claimproc cp3,insplan WHERE procedurelog.ProcNum=cp3.ProcNum "
 				+"AND insplan.PlanNum=cp3.PlanNum AND insplan.IsMedical=0 AND cp3.Status!=7) unsent_,"
@@ -584,6 +586,7 @@ namespace OpenDentBusiness {
 			bool isNoBill;
 			double adjAmt;
 			string extraDetail;
+			List<DataRow> labRows=new List<DataRow>();//Canadian lab procs, which must be added in a loop at the very end.
 			for(int i=0;i<rawProc.Rows.Count;i++){
 				row=table.NewRow();
 				row["AdjNum"]="0";
@@ -675,13 +678,20 @@ namespace OpenDentBusiness {
 				row["PayPlanChargeNum"]="0";
 				row["ProcCode"]=rawProc.Rows[i]["ProcCode"].ToString();
 				row["ProcNum"]=rawProc.Rows[i]["ProcNum"].ToString();
+				row["ProcNumLab"]=rawProc.Rows[i]["ProcNumLab"].ToString();
 				row["procsOnObj"]="";
 				row["prov"]=Providers.GetAbbr(PIn.Long(rawProc.Rows[i]["ProvNum"].ToString()));
 				row["StatementNum"]="0";
 				row["ToothNum"]=rawProc.Rows[i]["ToothNum"].ToString();
 				row["ToothRange"]=rawProc.Rows[i]["ToothRange"].ToString();
 				row["tth"]=Tooth.GetToothLabel(rawProc.Rows[i]["ToothNum"].ToString());
-				rows.Add(row);
+				if(rawProc.Rows[i]["ProcNumLab"].ToString()=="0") {//normal proc
+					rows.Add(row);
+				}
+				else {
+					row["description"]="^ ^ "+row["description"].ToString();
+					labRows.Add(row);//these will be added in the loop at the end
+				}
 			}
 			//Adjustments---------------------------------------------------------------------------------------
 			command="SELECT AdjAmt,AdjDate,AdjNum,AdjType,ClinicNum,PatNum,ProvNum,AdjNote "
@@ -732,6 +742,7 @@ namespace OpenDentBusiness {
 				row["PayPlanChargeNum"]="0";
 				row["ProcCode"]=Lans.g("AccountModule","Adjust");
 				row["ProcNum"]="0";
+				row["ProcNumLab"]="";
 				row["procsOnObj"]="";
 				row["prov"]=Providers.GetAbbr(PIn.Long(rawAdj.Rows[i]["ProvNum"].ToString()));
 				row["StatementNum"]="0";
@@ -817,6 +828,7 @@ namespace OpenDentBusiness {
 					row["ProcCode"]=Lans.g("AccountModule","Pay");
 				}
 				row["ProcNum"]="0";
+				row["ProcNumLab"]="";
 				row["procsOnObj"]=PIn.ByteArray(rawPay.Rows[i]["ProcNums_"]);
 				row["prov"]=Providers.GetAbbr(PIn.Long(rawPay.Rows[i]["ProvNum"].ToString()));
 				row["StatementNum"]="0";
@@ -964,6 +976,7 @@ namespace OpenDentBusiness {
 				row["PayPlanChargeNum"]="0";
 				row["ProcCode"]=Lans.g("AccountModule","Claim");
 				row["ProcNum"]="0";
+				row["ProcNumLab"]="";
 				row["procsOnObj"]=PIn.ByteArray(rawClaim.Rows[i]["ProcNums_"]);
 				row["prov"]=Providers.GetAbbr(PIn.Long(rawClaim.Rows[i]["ProvTreat"].ToString()));
 				row["StatementNum"]="0";
@@ -1028,6 +1041,7 @@ namespace OpenDentBusiness {
 				row["PayPlanChargeNum"]="0";
 				row["ProcCode"]=Lans.g("AccountModule","Stmt");
 				row["ProcNum"]="0";
+				row["ProcNumLab"]="";
 				row["procsOnObj"]="";
 				row["prov"]="";
 				row["StatementNum"]=rawState.Rows[i]["StatementNum"].ToString();
@@ -1101,6 +1115,7 @@ namespace OpenDentBusiness {
 				row["PayPlanChargeNum"]="0";
 				row["ProcCode"]=Lans.g("AccountModule","PayPln");
 				row["ProcNum"]="0";
+				row["ProcNumLab"]="";
 				row["procsOnObj"]="";
 				row["prov"]="";
 				row["StatementNum"]="0";
@@ -1117,6 +1132,15 @@ namespace OpenDentBusiness {
 			}
 			//Sorting-----------------------------------------------------------------------------------------
 			rows.Sort(new AccountLineComparer());
+			//Canadian lab procedures need to come immediately after their corresponding proc---------------------------------
+			for(int i=0;i<labRows.Count;i++) {
+				for(int r=0;r<rows.Count;r++) {
+					if(rows[r]["ProcNum"].ToString()==labRows[i]["ProcNumLab"].ToString()) {
+						rows.Insert(r+1,labRows[i]);
+						break;
+					}
+				}
+			}
 			//rows.Sort(CompareCommRows);
 			//Pass off all the rows for the whole family in order to compute the patient balances----------------
 			GetPatientTable(fam,rows);

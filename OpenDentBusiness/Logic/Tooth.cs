@@ -574,22 +574,14 @@ namespace OpenDentBusiness{
 			return false;
 		}
 
-		///<summary>Setting forClaims to true converts V surfaces to either F or B.  toothNum might be empty, and a tidy should still be attempted.  Otherwise, toothNum must be valid.</summary>
-		public static string SurfTidy(string surf,string toothNum,bool forClaims){
-			//yes... this might be a little more elegant with a regex
-			bool isCanadian=CultureInfo.CurrentCulture.Name.Substring(3)=="CA";//en-CA or fr-CA
+		///<summary>Handles direct user input and tidies according to rules.  ToothNum might be empty, and a tidy should still be attempted.  Otherwise, toothNum must be valid.</summary>
+		public static string SurfTidyForDisplay(string surf,string toothNum){
+			bool isCanadian=CultureInfo.CurrentCulture.Name.EndsWith("CA");
 			//Canadian valid=MOIDBLV
 			if(surf==null){
-				//MessageBox.Show("null");
 				surf="";
 			}
       string surfTidy="";
-			//bool isPosterior=false;
-			//if(toothNum=="" || !IsAnterior(toothNum))
-			//	isPosterior=true;
-			//bool isAnterior=false;
-			//if(toothNum=="" || !IsPosterior(toothNum))
-			//	isAnterior=true;
       ArrayList al=new ArrayList();
       for(int i=0;i<surf.Length;i++){
         al.Add(surf.Substring(i,1).ToUpper());
@@ -614,57 +606,36 @@ namespace OpenDentBusiness{
       if(al.Contains((string)"D")){
         surfTidy+="D";
       }
-			//B/F/V------------------------------------------------
-			if(toothNum==""){
+			//B------------------------------------------------
+			if(toothNum=="" || IsPosterior(toothNum)) {
 				if(al.Contains("B")) {
 					surfTidy+="B";
 				}
-				if(al.Contains("F")) {
-					surfTidy+="F";
-				}
-				if(al.Contains("V")) {
-					surfTidy+="V";
-				}
-			}				
-			else if(forClaims){
-				if(isCanadian){
-					if(IsPosterior(toothNum)) {
-						if(al.Contains("B") || al.Contains("V")) {
-							surfTidy+="B";
-						}
-					}
-					if(IsAnterior(toothNum)) {
-						if(al.Contains("F") || al.Contains("V")) {
-							surfTidy+="V";//vestibular
-						}
-					}
-				}
-				else{//not Canadian
-					if(IsPosterior(toothNum)){
-						if(al.Contains("B") || al.Contains("V")) {
-							surfTidy+="B";
-						}
-					}
-					if(IsAnterior(toothNum)){
-						if(al.Contains("F") || al.Contains("V")) {
-							surfTidy+="F";
-						}
+			}
+			//F-----------------------------------------
+			if(isCanadian) {
+				if(toothNum=="" || IsAnterior(toothNum)){
+					if(al.Contains("V")) {//Canadian equivalent of F
+						surfTidy+="V";
 					}
 				}
 			}
-			else{
-				if(al.Contains("V")) {
-					surfTidy+="V";
-				}
-				if(IsPosterior(toothNum)) {
-					if(al.Contains("B")) {
-						surfTidy+="B";
-					}
-				}
-				if(IsAnterior(toothNum)) {
+			else {
+				if(toothNum=="" || IsAnterior(toothNum)) {
 					if(al.Contains("F")) {
 						surfTidy+="F";
 					}
+				}
+			}
+			//V-----------------------------------------
+			if(isCanadian) {
+				if(al.Contains("5")) {//Canadian equivalent of V
+					surfTidy+="5";
+				}
+			}
+			else {
+				if(al.Contains("V")) {
+					surfTidy+="V";
 				}
 			}
 			//L-----------------------------------------
@@ -673,6 +644,150 @@ namespace OpenDentBusiness{
       }
       return surfTidy;      
     }
+
+		///<summary>Converts the database value to a claim value.  Special handling for V surfaces.  ToothNum must be valid.</summary>
+		public static string SurfTidyForClaims(string surf,string toothNum) {
+			bool isCanadian=CultureInfo.CurrentCulture.Name.EndsWith("CA");
+			//Canadian valid=MOIDBLV
+			if(surf==null) {
+				surf="";
+			}
+			string surfTidy="";
+			ArrayList al=new ArrayList();
+			for(int i=0;i<surf.Length;i++) {
+				al.Add(surf.Substring(i,1).ToUpper());
+			}
+			//M----------------------------------------
+			if(al.Contains("M")) {
+				surfTidy+="M";
+			}
+			//O-------------------------------------------
+			if(IsPosterior(toothNum)) {
+				if(al.Contains("O")) {
+					surfTidy+="O";
+				}
+			}
+			//I---------------------------------
+			if(IsAnterior(toothNum)) {
+				if(al.Contains("I")) {
+					surfTidy+="I";
+				}
+			}
+			//D---------------------------------------
+			if(al.Contains((string)"D")) {
+				surfTidy+="D";
+			}
+			//B------------------------------------------------
+			//if(isCanadian) {//not needed because db to claim behavior is identical.  It's only in the UI where the V would show as 5
+			if(IsPosterior(toothNum)) {
+				if(al.Contains("B") || al.Contains("V")) {
+					surfTidy+="B";
+				}
+			}
+			//F-----------------------------------------
+			if(IsAnterior(toothNum)) {
+				if(al.Contains("F") || al.Contains("V")) {
+					if(isCanadian) {
+						surfTidy+="V";//Vestibular
+					}
+					else {
+						surfTidy+="F";
+					}
+				}
+			}
+			//L-----------------------------------------
+			if(al.Contains((string)"L")) {
+				surfTidy+="L";
+			}
+			return surfTidy;
+		}
+
+		///<summary>Takes display string and converts it into Db string.  ToothNum does not need to be valid.</summary>
+		public static string SurfTidyFromDisplayToDb(string surf,string toothNum) {
+			bool isCanadian=CultureInfo.CurrentCulture.Name.EndsWith("CA");
+			//Canadian valid=MOIDBLV
+			if(surf==null) {
+				surf="";
+			}
+			string surfTidy="";
+			ArrayList al=new ArrayList();
+			for(int i=0;i<surf.Length;i++) {
+				al.Add(surf.Substring(i,1).ToUpper());
+			}
+			//M----------------------------------------
+			if(al.Contains("M")) {
+				surfTidy+="M";
+			}
+			//O-------------------------------------------
+			if(toothNum=="" || IsPosterior(toothNum)) {
+				if(al.Contains("O")) {
+					surfTidy+="O";
+				}
+			}
+			//I---------------------------------
+			if(toothNum=="" || IsAnterior(toothNum)) {
+				if(al.Contains("I")) {
+					surfTidy+="I";
+				}
+			}
+			//D---------------------------------------
+			if(al.Contains((string)"D")) {
+				surfTidy+="D";
+			}
+			//B------------------------------------------------
+			if(toothNum=="" || IsPosterior(toothNum)) {
+				if(al.Contains("B")) {
+					surfTidy+="B";
+				}
+			}
+			//F-----------------------------------------
+			if(isCanadian) {
+				if(toothNum=="" || IsAnterior(toothNum)) {
+					if(al.Contains("V")) {//Canadian equivalent of F
+						surfTidy+="F";//for db
+					}
+				}
+			}
+			else {
+				if(toothNum=="" || IsAnterior(toothNum)) {
+					if(al.Contains("F")) {
+						surfTidy+="F";
+					}
+				}
+			}
+			//V-----------------------------------------
+			if(isCanadian) {
+				if(al.Contains("5")) {//Canadian equivalent of V
+					surfTidy+="V";//for db
+				}
+			}
+			else {
+				if(al.Contains("V")) {
+					surfTidy+="V";
+				}
+			}
+			//L-----------------------------------------
+			if(al.Contains((string)"L")) {
+				surfTidy+="L";
+			}
+			return surfTidy;
+		}
+
+		///<summary>Takes surfaces from Db and converts them to appropriate culture for display.  Only Canada supported so far.  ToothNum does not need to be valid since minimal manipulation here.</summary>
+		public static string SurfTidyFromDbToDisplay(string surf,string toothNum) {
+			bool isCanadian=CultureInfo.CurrentCulture.Name.EndsWith("CA");
+			//Canadian valid=MOIDBLV
+			if(!isCanadian) {
+				return surf;
+			}
+			//Canadian:
+			if(surf==null) {
+				return "";
+			}
+			string surfTidy=surf.Replace("V","5");//USA classV becomes 5 for Canadian display
+			surfTidy=surfTidy.Replace("F","V");//USA Facial becomes Vestibular for Canadian display
+			return surfTidy;
+		}
 
 		/// <summary>This will be deleted as soon as it's no longer in use by DirectX chart.</summary>
 		public static float PerioShiftMm(string tooth_id) {

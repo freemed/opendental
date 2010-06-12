@@ -127,7 +127,7 @@ namespace OpenDental{
 			List <PatPlan> patPlanList=PatPlans.Refresh(pat.PatNum);
 			long planNum=PatPlans.GetPlanNum(patPlanList,1);
 			long patPlanNum=PatPlans.GetPatPlanNum(patPlanList,planNum);
-			List<InsPlan> planList=InsPlans.Refresh(fam);
+			List<InsPlan> planList=InsPlans.RefreshForFam(fam);
 			InsPlan plan=InsPlans.GetPlan(planNum,planList);
 			Carrier carrier=null;
 			List<Benefit> benefitList=Benefits.Refresh(patPlanList);
@@ -852,7 +852,7 @@ namespace OpenDental{
 		private static void FillFieldsForPatientForm(Sheet sheet,Patient pat) {
 			Family fam=Patients.GetFamily(pat.PatNum);
 			List<PatPlan> patPlanList=PatPlans.Refresh(pat.PatNum);
-			List<InsPlan> planList=InsPlans.Refresh(fam);
+			List<InsPlan> planList=InsPlans.RefreshForFam(fam);
 			InsPlan insplan1=null;
 			Carrier carrier1=null;
 			if(patPlanList.Count>0){

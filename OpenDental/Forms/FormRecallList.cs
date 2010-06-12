@@ -948,7 +948,7 @@ namespace OpenDental{
 			//	MsgBox.Show(this,"This patient does not have any recall due.");
 			//	return;
 			//}
-			planList=InsPlans.Refresh(fam);
+			planList=InsPlans.RefreshForFam(fam);
 			long recallNum=PIn.Long(table.Rows[gridMain.SelectedIndices[0]]["RecallNum"].ToString());
 			try{
 				apt=AppointmentL.CreateRecallApt(pat,procList,planList,recallNum);
@@ -990,7 +990,7 @@ namespace OpenDental{
 				procList=Procedures.Refresh(fam.ListPats[i].PatNum);
 				//patNums=new List<long>();
 				//patNums.Add(fam.ListPats[i].PatNum);
-				planList=InsPlans.Refresh(fam);
+				planList=InsPlans.RefreshForFam(fam);
 				try{
 					apt=AppointmentL.CreateRecallApt(fam.ListPats[i],procList,planList,-1);
 				}

@@ -28,7 +28,6 @@
 			this.butNewDb = new System.Windows.Forms.Button();
 			this.butClear = new System.Windows.Forms.Button();
 			this.label1 = new System.Windows.Forms.Label();
-			this.butProcedures = new System.Windows.Forms.Button();
 			this.butScripts = new System.Windows.Forms.Button();
 			this.textResults = new System.Windows.Forms.TextBox();
 			this.checkEligibility = new System.Windows.Forms.CheckBox();
@@ -39,9 +38,10 @@
 			this.checkPayReconcil = new System.Windows.Forms.CheckBox();
 			this.checkSumReconcil = new System.Windows.Forms.CheckBox();
 			this.checkShowForms = new System.Windows.Forms.CheckBox();
-			this.checkAll = new System.Windows.Forms.CheckBox();
 			this.label3 = new System.Windows.Forms.Label();
 			this.textSingleScript = new System.Windows.Forms.TextBox();
+			this.label4 = new System.Windows.Forms.Label();
+			this.butShowEtrans = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// butObjects
@@ -90,26 +90,16 @@
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(505,18);
 			this.label1.TabIndex = 12;
-			this.label1.Text = "Dentists, Carriers, Patients, InsPlans.";
+			this.label1.Text = "Dentists, Carriers, Patients, InsPlans, Procedures, Claims";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// butProcedures
-			// 
-			this.butProcedures.Location = new System.Drawing.Point(12,90);
-			this.butProcedures.Name = "butProcedures";
-			this.butProcedures.Size = new System.Drawing.Size(87,23);
-			this.butProcedures.TabIndex = 13;
-			this.butProcedures.Text = "+ Procedures";
-			this.butProcedures.UseVisualStyleBackColor = true;
-			this.butProcedures.Click += new System.EventHandler(this.butProcedures_Click);
 			// 
 			// butScripts
 			// 
-			this.butScripts.Location = new System.Drawing.Point(12,116);
+			this.butScripts.Location = new System.Drawing.Point(12,90);
 			this.butScripts.Name = "butScripts";
 			this.butScripts.Size = new System.Drawing.Size(87,23);
 			this.butScripts.TabIndex = 15;
-			this.butScripts.Text = "+ Scripts";
+			this.butScripts.Text = "+ Script";
 			this.butScripts.UseVisualStyleBackColor = true;
 			this.butScripts.Click += new System.EventHandler(this.butScripts_Click);
 			// 
@@ -118,17 +108,15 @@
 			this.textResults.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.textResults.Location = new System.Drawing.Point(12,219);
+			this.textResults.Location = new System.Drawing.Point(12,211);
 			this.textResults.Multiline = true;
 			this.textResults.Name = "textResults";
-			this.textResults.Size = new System.Drawing.Size(759,636);
+			this.textResults.Size = new System.Drawing.Size(759,644);
 			this.textResults.TabIndex = 16;
 			// 
 			// checkEligibility
 			// 
-			this.checkEligibility.Checked = true;
-			this.checkEligibility.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkEligibility.Location = new System.Drawing.Point(13,145);
+			this.checkEligibility.Location = new System.Drawing.Point(13,136);
 			this.checkEligibility.Name = "checkEligibility";
 			this.checkEligibility.Size = new System.Drawing.Size(161,18);
 			this.checkEligibility.TabIndex = 17;
@@ -138,7 +126,9 @@
 			// 
 			// checkClaims
 			// 
-			this.checkClaims.Location = new System.Drawing.Point(13,163);
+			this.checkClaims.Checked = true;
+			this.checkClaims.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkClaims.Location = new System.Drawing.Point(13,154);
 			this.checkClaims.Name = "checkClaims";
 			this.checkClaims.Size = new System.Drawing.Size(161,18);
 			this.checkClaims.TabIndex = 18;
@@ -148,7 +138,7 @@
 			// 
 			// checkClaimReversals
 			// 
-			this.checkClaimReversals.Location = new System.Drawing.Point(13,181);
+			this.checkClaimReversals.Location = new System.Drawing.Point(13,172);
 			this.checkClaimReversals.Name = "checkClaimReversals";
 			this.checkClaimReversals.Size = new System.Drawing.Size(161,18);
 			this.checkClaimReversals.TabIndex = 19;
@@ -158,7 +148,7 @@
 			// 
 			// checkOutstanding
 			// 
-			this.checkOutstanding.Location = new System.Drawing.Point(13,199);
+			this.checkOutstanding.Location = new System.Drawing.Point(13,190);
 			this.checkOutstanding.Name = "checkOutstanding";
 			this.checkOutstanding.Size = new System.Drawing.Size(182,18);
 			this.checkOutstanding.TabIndex = 20;
@@ -168,7 +158,7 @@
 			// 
 			// checkPredeterm
 			// 
-			this.checkPredeterm.Location = new System.Drawing.Point(207,145);
+			this.checkPredeterm.Location = new System.Drawing.Point(207,136);
 			this.checkPredeterm.Name = "checkPredeterm";
 			this.checkPredeterm.Size = new System.Drawing.Size(152,18);
 			this.checkPredeterm.TabIndex = 21;
@@ -178,7 +168,7 @@
 			// 
 			// checkPayReconcil
 			// 
-			this.checkPayReconcil.Location = new System.Drawing.Point(207,163);
+			this.checkPayReconcil.Location = new System.Drawing.Point(207,154);
 			this.checkPayReconcil.Name = "checkPayReconcil";
 			this.checkPayReconcil.Size = new System.Drawing.Size(215,18);
 			this.checkPayReconcil.TabIndex = 22;
@@ -188,7 +178,7 @@
 			// 
 			// checkSumReconcil
 			// 
-			this.checkSumReconcil.Location = new System.Drawing.Point(207,181);
+			this.checkSumReconcil.Location = new System.Drawing.Point(207,172);
 			this.checkSumReconcil.Name = "checkSumReconcil";
 			this.checkSumReconcil.Size = new System.Drawing.Size(189,18);
 			this.checkSumReconcil.TabIndex = 23;
@@ -198,51 +188,58 @@
 			// 
 			// checkShowForms
 			// 
-			this.checkShowForms.Location = new System.Drawing.Point(300,119);
+			this.checkShowForms.Location = new System.Drawing.Point(122,116);
 			this.checkShowForms.Name = "checkShowForms";
 			this.checkShowForms.Size = new System.Drawing.Size(185,18);
 			this.checkShowForms.TabIndex = 24;
-			this.checkShowForms.Text = "Show each form on screen";
+			this.checkShowForms.Text = "Show form on screen";
 			this.checkShowForms.UseVisualStyleBackColor = true;
-			// 
-			// checkAll
-			// 
-			this.checkAll.Checked = true;
-			this.checkAll.CheckState = System.Windows.Forms.CheckState.Indeterminate;
-			this.checkAll.Location = new System.Drawing.Point(207,199);
-			this.checkAll.Name = "checkAll";
-			this.checkAll.Size = new System.Drawing.Size(189,18);
-			this.checkAll.TabIndex = 25;
-			this.checkAll.Text = "Uncheck / Check All";
-			this.checkAll.ThreeState = true;
-			this.checkAll.UseVisualStyleBackColor = true;
-			this.checkAll.Click += new System.EventHandler(this.checkAll_Click);
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(106,118);
+			this.label3.Location = new System.Drawing.Point(9,115);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(99,18);
+			this.label3.Size = new System.Drawing.Size(56,18);
 			this.label3.TabIndex = 26;
-			this.label3.Text = "Single Script #";
+			this.label3.Text = "Script #";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textSingleScript
 			// 
-			this.textSingleScript.Location = new System.Drawing.Point(207,118);
+			this.textSingleScript.Location = new System.Drawing.Point(67,115);
 			this.textSingleScript.Name = "textSingleScript";
 			this.textSingleScript.Size = new System.Drawing.Size(49,20);
 			this.textSingleScript.TabIndex = 27;
-			this.textSingleScript.Text = "5";
+			this.textSingleScript.Text = "3";
+			// 
+			// label4
+			// 
+			this.label4.Location = new System.Drawing.Point(106,92);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(648,18);
+			this.label4.TabIndex = 28;
+			this.label4.Text = "Their test environment is underpowered and can only handle one script at a time.";
+			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// butShowEtrans
+			// 
+			this.butShowEtrans.Location = new System.Drawing.Point(684,90);
+			this.butShowEtrans.Name = "butShowEtrans";
+			this.butShowEtrans.Size = new System.Drawing.Size(87,23);
+			this.butShowEtrans.TabIndex = 29;
+			this.butShowEtrans.Text = "Show Etrans";
+			this.butShowEtrans.UseVisualStyleBackColor = true;
+			this.butShowEtrans.Click += new System.EventHandler(this.butShowEtrans_Click);
 			// 
 			// FormTestCanada
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(783,867);
+			this.Controls.Add(this.butShowEtrans);
+			this.Controls.Add(this.label4);
 			this.Controls.Add(this.textSingleScript);
 			this.Controls.Add(this.label3);
-			this.Controls.Add(this.checkAll);
 			this.Controls.Add(this.checkShowForms);
 			this.Controls.Add(this.checkSumReconcil);
 			this.Controls.Add(this.checkPayReconcil);
@@ -253,7 +250,6 @@
 			this.Controls.Add(this.checkEligibility);
 			this.Controls.Add(this.textResults);
 			this.Controls.Add(this.butScripts);
-			this.Controls.Add(this.butProcedures);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.butClear);
 			this.Controls.Add(this.butObjects);
@@ -274,7 +270,6 @@
 		private System.Windows.Forms.Button butNewDb;
 		private System.Windows.Forms.Button butClear;
 		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.Button butProcedures;
 		private System.Windows.Forms.Button butScripts;
 		private System.Windows.Forms.TextBox textResults;
 		private System.Windows.Forms.CheckBox checkEligibility;
@@ -285,9 +280,10 @@
 		private System.Windows.Forms.CheckBox checkPayReconcil;
 		private System.Windows.Forms.CheckBox checkSumReconcil;
 		private System.Windows.Forms.CheckBox checkShowForms;
-		private System.Windows.Forms.CheckBox checkAll;
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.TextBox textSingleScript;
+		private System.Windows.Forms.Label label4;
+		private System.Windows.Forms.Button butShowEtrans;
 	}
 }
 

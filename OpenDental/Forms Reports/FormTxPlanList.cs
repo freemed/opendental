@@ -426,7 +426,7 @@ namespace OpenDental {
 			double pend = 0;
 			double used = 0;
 			FamCur = Patients.GetFamily(PatNum);
-			InsPlanList = InsPlans.Refresh(FamCur);
+			InsPlanList = InsPlans.RefreshForFam(FamCur);
 			PatPlanList = PatPlans.Refresh(PatNum);
 			BenefitList = Benefits.Refresh(PatPlanList);
 			//Claims.Refresh(PatNum);

@@ -2217,6 +2217,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);
 				command="DROP TABLE canadianextract";
 				Db.NonQ(command);
+				command="DROP TABLE canadianclaim";
+				Db.NonQ(command);
 				command="ALTER TABLE claim ADD CanadianMaterialsForwarded varchar(10) NOT NULL";
 				Db.NonQ(command);
 				command="ALTER TABLE claim ADD CanadianReferralProviderNum varchar(20) NOT NULL";
@@ -2238,6 +2240,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="ALTER TABLE carrier DROP IsPMP";
 				Db.NonQ(command);
 				command="ALTER TABLE insplan ADD CanadianPlanFlag varchar(5) NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE procedurelog ADD CanadianTypeCodes varchar(20) NOT NULL";
 				Db.NonQ(command);
 	
 

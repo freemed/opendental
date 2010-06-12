@@ -367,7 +367,7 @@ namespace OpenDental{
 				}
 			}
 			textToothNumTP.Text=ProcCur.ToothNumTP;
-			textSurf.Text=ProcCur.Surf;
+			textSurf.Text=ProcCur.Surf;//already converted to international format before saved to db.
 			textCode.Text=ProcCur.ProcCode;
 			textDescript.Text=ProcCur.Descript;
 			textFeeAmt.Text=ProcCur.FeeAmt.ToString("F");

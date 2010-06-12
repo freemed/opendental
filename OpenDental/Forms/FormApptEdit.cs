@@ -984,7 +984,7 @@ namespace OpenDental{
 			//The four objects below are needed when adding procs to this appt.
 			fam=Patients.GetFamily(AptCur.PatNum);
 			pat=fam.GetPatient(AptCur.PatNum);
-			PlanList=InsPlans.Refresh(fam);
+			PlanList=InsPlans.RefreshForFam(fam);
 			if(PrefC.GetBool(PrefName.EasyHideDentalSchools)) {
 				butRequirement.Visible=false;
 				textRequirement.Visible=false;

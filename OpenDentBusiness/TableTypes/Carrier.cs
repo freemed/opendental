@@ -30,7 +30,7 @@ namespace OpenDentBusiness{
 		public bool NoSendElect;
 		///<summary>Canada: True if a CDAnet carrier.  This has significant implications:  1. It can be filtered for in the list of carriers.  2. An ElectID is required.  3. The ElectID can never be used by another carrier.  4. If the carrier is attached to any etrans, then the ElectID cannot be changed (and, of course, the carrier cannot be deleted or combined).</summary>
 		public bool IsCDA;
-		///<summary>The version of CDAnet supported.  Either 02, 03, or 04.</summary>
+		///<summary>The version of CDAnet supported.  Either 02 or 04.</summary>
 		public string CDAnetVersion;
 		///<summary>FK to canadiannetwork.CanadianNetworkNum.  Only used in Canada.</summary>
 		public long CanadianNetworkNum;

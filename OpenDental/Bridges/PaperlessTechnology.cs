@@ -445,7 +445,7 @@ namespace OpenDental.Bridges{
 				sw.Write(",");//PAT_LSTUPD Internal PT logical, it can be ignored.
 				List <PatPlan> patPlanList=PatPlans.Refresh(pat.PatNum);
 				Family fam=Patients.GetFamily(pat.PatNum);
-				List <InsPlan> planList=InsPlans.Refresh(fam);
+				List <InsPlan> planList=InsPlans.RefreshForFam(fam);
 				PatPlan patplan=null;
 				InsPlan plan=null;
 				Carrier carrier=null;

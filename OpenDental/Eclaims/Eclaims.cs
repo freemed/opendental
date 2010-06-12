@@ -18,7 +18,7 @@ namespace OpenDental.Eclaims
 			
 		}
 
-		///<summary>Supply a list of ClaimSendQueueItems. Called from FormClaimSend.  Can send to multiple clearinghouses simultaneously or can also just send one claim.</summary>
+		///<summary>Supply a list of ClaimSendQueueItems. Called from FormClaimSend.  Can send to multiple clearinghouses simultaneously or can also just send one claim.  Cannot include Canadian.</summary>
 		public static void SendBatches(List<ClaimSendQueueItem> queueItems){
 			List<ClaimSendQueueItem>[] claimsByCHouse=new List<ClaimSendQueueItem>[Clearinghouses.Listt.Length];
 			//ArrayList[Clearinghouses.List.Length];
@@ -38,6 +38,10 @@ namespace OpenDental.Eclaims
 				if(claimsByCHouse[i].Count==0){
 					continue;
 				}
+				if(Clearinghouses.Listt[i].Eformat==ElectronicClaimFormat.Canadian){
+					MsgBox.Show("Eclaims","Cannot send Canadian claims as part of SendBatches.");
+					continue;
+				}
 				//get next batch number for this clearinghouse
 				batchNum=Clearinghouses.GetNextBatchNumber(Clearinghouses.Listt[i]);
 				//---------------------------------------------------------------------------------------
@@ -48,13 +52,13 @@ namespace OpenDental.Eclaims
 				else if(Clearinghouses.Listt[i].Eformat==ElectronicClaimFormat.Renaissance){
 					messageText=Renaissance.SendBatch(claimsByCHouse[i],batchNum);
 				}
-				else if(Clearinghouses.Listt[i].Eformat==ElectronicClaimFormat.Canadian) {
+				//else if(Clearinghouses.Listt[i].Eformat==ElectronicClaimFormat.Canadian) {
 					//Canadian is a little different because we need the sequence numbers.
 					//So all programs are launched and statuses changed from within Canadian.SendBatch()
 					//We don't care what the result is.
-					Canadian.SendBatch(claimsByCHouse[i],batchNum);
-					continue;
-				}
+				//	Canadian.SendBatch(claimsByCHouse[i],batchNum);
+				//	continue;
+				//}
 				else if(Clearinghouses.Listt[i].Eformat==ElectronicClaimFormat.Dutch) {
 					messageText=Dutch.SendBatch(claimsByCHouse[i],batchNum);
 				}
@@ -133,12 +137,12 @@ namespace OpenDental.Eclaims
 				if(Clearinghouses.Listt[i].Eformat==ElectronicClaimFormat.Renaissance){
 					etype=EtransType.Claim_Ren;
 				}
-				if(Clearinghouses.Listt[i].Eformat!=ElectronicClaimFormat.Canadian){
-					for(int j=0;j<claimsByCHouse[i].Count;j++){
-						Etranss.SetClaimSentOrPrinted(claimsByCHouse[i][j].ClaimNum,claimsByCHouse[i][j].PatNum,
-							Clearinghouses.Listt[i].ClearinghouseNum,etype,messageText,batchNum);
-					}
-				}
+				//if(Clearinghouses.Listt[i].Eformat!=ElectronicClaimFormat.Canadian){
+				//	for(int j=0;j<claimsByCHouse[i].Count;j++){
+				//		Etranss.SetClaimSentOrPrinted(claimsByCHouse[i][j].ClaimNum,claimsByCHouse[i][j].PatNum,
+				//			Clearinghouses.Listt[i].ClearinghouseNum,etype,messageText,batchNum);
+				//	}
+				//}
 			}//for(int i=0;i<claimsByCHouse.Length;i++){
 		}
 

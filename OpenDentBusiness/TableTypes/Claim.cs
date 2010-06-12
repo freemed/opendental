@@ -117,6 +117,9 @@ namespace OpenDentBusiness{
 
 		public Claim(){
 			AttachedFlags="";
+			CanadianMaterialsForwarded="";
+			CanadianIsInitialLower="";
+			CanadianIsInitialUpper="";
 			Attachments=new List<ClaimAttach>();
 		}
 

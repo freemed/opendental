@@ -563,7 +563,7 @@ namespace OpenDental{
 				//paysplits,covpats and patientnotes.
 			FamCur=Patients.GetFamily(RecallCur.PatNum);
 			PatCur=FamCur.GetPatient(RecallCur.PatNum);
-			PlanList=InsPlans.Refresh(FamCur);
+			PlanList=InsPlans.RefreshForFam(FamCur);
 			ProcList=Procedures.Refresh(PatCur.PatNum);
 			PatPlanList=PatPlans.Refresh(PatCur.PatNum);
 			Text="Recall for "+PatCur.GetNameLF();

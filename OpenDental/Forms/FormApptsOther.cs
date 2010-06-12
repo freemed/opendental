@@ -584,7 +584,7 @@ namespace OpenDental{
 			//	return;
 			//}
 			//Recall recallCur=recallList[0];
-			List <InsPlan> planList=InsPlans.Refresh(FamCur);
+			List <InsPlan> planList=InsPlans.RefreshForFam(FamCur);
 			Appointment apt=null;
 			try{
 				apt=AppointmentL.CreateRecallApt(PatCur,procList,planList,-1);
@@ -655,7 +655,7 @@ namespace OpenDental{
 					alreadySched++;
 					continue;
 				}
-				planList=InsPlans.Refresh(FamCur);
+				planList=InsPlans.RefreshForFam(FamCur);
 				try{
 					apt=AppointmentL.CreateRecallApt(FamCur.ListPats[i],procList,planList,-1);
 				}

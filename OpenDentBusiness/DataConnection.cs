@@ -48,7 +48,8 @@ namespace OpenDentBusiness{
 		///<summary>If this is used, then none of the fields above will be set.</summary>
 		private static string ConnectionString="";
 		///<summary>milliseconds.</summary>
-		private static int delayForTesting=0;
+		private static int delayForTesting=400;
+		private static bool logDebugQueries=true;
 
 		//For queries that do not use this flag, all queries are split into single commands. For those SQL commands which
 		//are a single command but contain multiple semi-colons, then this string should be set to false before the 
@@ -223,6 +224,9 @@ namespace OpenDentBusiness{
 		///<summary>Fills table with data from the database.</summary>
 		public DataTable GetTable(string command){
 			#if DEBUG
+				if(logDebugQueries){
+					Debug.WriteLine(command);
+				}
 				Thread.Sleep(delayForTesting);
 			#endif
 			DataTable table=new DataTable();
@@ -236,6 +240,9 @@ namespace OpenDentBusiness{
 		///<summary>Fills dataset with data from the database.</summary>
 		public DataSet GetDs(string commands) {
 			#if DEBUG
+				if(logDebugQueries){
+					Debug.WriteLine(commands);
+				}
 				Thread.Sleep(delayForTesting);
 			#endif
 			DataSet ds=new DataSet();
@@ -249,6 +256,9 @@ namespace OpenDentBusiness{
 		///<summary>Sends a non query command to the database and returns the number of rows affected. If true, then InsertID will be set to the value of the primary key of the newly inserted row.</summary>
 		public long NonQ(string commands,bool getInsertID){
 			#if DEBUG
+				if(logDebugQueries){
+					Debug.WriteLine(commands);
+				}
 				Thread.Sleep(delayForTesting);
 			#endif
 			long rowsChanged=0;
@@ -274,6 +284,9 @@ namespace OpenDentBusiness{
 		///<summary>Use this for count(*) queries.  They are always guaranteed to return one and only one value.  Uses datareader instead of datatable, so faster.  Can also be used when retrieving prefs manually, since they will also return exactly one value</summary>
 		public string GetCount(string command){
 			#if DEBUG
+				if(logDebugQueries){
+					Debug.WriteLine(command);
+				}
 				Thread.Sleep(delayForTesting);
 			#endif
 			string retVal="";
@@ -289,6 +302,9 @@ namespace OpenDentBusiness{
 		///<summary>Get one value.</summary>
 		public string GetScalar(string command) {
 			#if DEBUG
+				if(logDebugQueries){
+					Debug.WriteLine(command);
+				}
 				Thread.Sleep(delayForTesting);
 			#endif
 			string retVal="";

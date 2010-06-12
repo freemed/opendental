@@ -216,7 +216,7 @@ namespace OpenDental{
 			}
 			FamCur=Patients.GetFamily(patNum);
 			PatCur=FamCur.GetPatient(patNum);
-			PlanList=InsPlans.Refresh(FamCur);
+			PlanList=InsPlans.RefreshForFam(FamCur);
 			PatPlanList=PatPlans.Refresh(patNum);
 			BenefitList=Benefits.Refresh(PatPlanList);
 			RecallList=Recalls.GetList(MiscUtils.ArrayToList<Patient>(FamCur.ListPats));
@@ -849,7 +849,7 @@ namespace OpenDental{
 			List<ClaimProc> claimProcList=ClaimProcs.Refresh(PatCur.PatNum);
 			Commlog[] commlogList=Commlogs.Refresh(PatCur.PatNum);
 			int payPlanCount=PayPlans.GetDependencyCount(PatCur.PatNum);
-			List<InsPlan> planList=InsPlans.Refresh(FamCur);
+			List<InsPlan> planList=InsPlans.RefreshForFam(FamCur);
 			List<MedicationPat> medList=MedicationPats.GetList(PatCur.PatNum);
 			PatPlanList=PatPlans.Refresh(PatCur.PatNum);
 			//CovPats.Refresh(planList,PatPlanList);

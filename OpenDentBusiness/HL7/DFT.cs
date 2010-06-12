@@ -61,8 +61,11 @@ namespace OpenDentBusiness.HL7 {
 				if(procCode.TreatArea==TreatmentArea.ToothRange){
 					seg.SetField(26,procs[i].ToothRange,"");
 				}
+				else if(procCode.TreatArea==TreatmentArea.Surf){//probably not necessary
+					seg.SetField(26,Tooth.ToInternat(procs[i].ToothNum),Tooth.SurfTidyForClaims(procs[i].Surf,procs[i].ToothNum));
+				}
 				else{
-					seg.SetField(26,procs[i].ToothNum,procs[i].Surf);
+					seg.SetField(26,Tooth.ToInternat(procs[i].ToothNum),procs[i].Surf);
 				}
 				msg.Segments.Add(seg);
 			}

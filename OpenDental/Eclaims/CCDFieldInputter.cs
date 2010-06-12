@@ -5,58 +5,78 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
+using OpenDentBusiness;
 
 namespace OpenDental.Eclaims {
 	/// <summary> The idea is to make reading a CCD message in each of the different forms a smaller amount of overall typing, to save time and reduce bugs.</summary>
 	public class CCDFieldInputter{
 		private List<CCDField> fieldList = new List<CCDField>();//List of fields that make up the message
+		public bool isVersion2;
 
 		public CCDFieldInputter(){
 		}
 
 		public CCDFieldInputter(string message){
 			string version=message.Substring(18,2);
-			if(version!="04") {
-				MessageBox.Show(this.ToString()+
-					".CCDFieldInputter: invalid CCD message format version number: "+version);
-				return;//error
-			}
 			string msgType=message.Substring(20,2);
-			switch(msgType) {
-				case "11":
-					ParseClaimAck_11(message);
-					break;
-				case "21":
-					ParseEOB_21(message);
-					break;
-				case "12":
-					ParseClaimReversalResponse_12(message);
-					break;
-				case "18":
-					ParseResponseToElegibility_18(message);
-					break;
-				case "24":
-					ParseEmailResponse_24(message);
-					break;
-				case "14":
-					ParseOutstandingTransactionsAck_14(message);
-					break;
-				case "23":
-					ParsePredeterminationEOB_23(message);
-					break;
-				case "13":
-					ParsePredeterminationAck_13(message);
-					break;
-				case "16":
-					ParsePaymentReconciliation_16(message);
-					break;
-				case "15":
-					ParseReconciliaiton_15(message);
-					break;
-				default:
-					MessageBox.Show(this.ToString()+
-						".CCDFieldInputter: CCD Message type not recognized: "+msgType);
-					return;
+			if(version=="04") {
+				switch(msgType) {
+					case "11":
+						ParseClaimAck_11(message);
+						break;
+					case "21":
+						ParseEOB_21(message);
+						break;
+					case "12":
+						ParseClaimReversalResponse_12(message);
+						break;
+					case "18":
+						ParseResponseToElegibility_18(message);
+						break;
+					case "24":
+						ParseEmailResponse_24(message);
+						break;
+					case "14":
+						ParseOutstandingTransactionsAck_14(message);
+						break;
+					case "23":
+						ParsePredeterminationEOB_23(message);
+						break;
+					case "13":
+						ParsePredeterminationAck_13(message);
+						break;
+					case "16":
+						ParsePaymentReconciliation_16(message);
+						break;
+					case "15":
+						ParseReconciliaiton_15(message);
+						break;
+					default:
+						throw new ApplicationException(this.ToString()+".CCDFieldInputter: CCD Message type not recognized: "+msgType);
+						return;
+				}
+			}
+			else {//version 02
+				isVersion2=true;
+				switch(msgType) {
+					case "10"://eligibility response
+						ParseElegibilityResponse_v2_10(message);
+						break;
+					case "11"://claim response
+
+						break;
+					case "21"://eob
+
+						break;
+					case "12"://reversal response
+
+						break;
+					case "13"://response to predetermination
+
+						break;
+					default:
+						throw new ApplicationException(this.ToString()+".CCDFieldInputter: CCD Message type not recognized: "+msgType);
+				}
 			}
 		}
 
@@ -68,7 +88,7 @@ namespace OpenDental.Eclaims {
 
 		/// <summary>Input a single field.<summary>
 		public string InputField(string message,string fieldId){
-			CCDField field=new CCDField(fieldId);
+			CCDField field=new CCDField(fieldId,isVersion2);
 			int len=field.GetRequiredLength(this);
 			if(len<0 || message==null || message.Length<len){
 				return null;
@@ -78,8 +98,7 @@ namespace OpenDental.Eclaims {
 			}
 			string substr=message.Substring(0,len);
 			if(!field.CheckValue(this,substr)){
-				MessageBox.Show("Invalid value for CCD message field '"+field.fieldName+"'"+((substr==null)?"":(": "+substr)));
-				return null;
+				throw new ApplicationException("Invalid value for CCD message field '"+field.fieldName+"'"+((substr==null)?"":(": "+substr)));
 			}
 			field.valuestr=substr;
 			fieldList.Add(field);
@@ -93,8 +112,7 @@ namespace OpenDental.Eclaims {
 		public string InputFields(string message,string fieldOrderStr) {
 			fieldOrderStr=fieldOrderStr.ToUpper();
 			if(fieldOrderStr.Length%3!=0) {
-				MessageBox.Show("Internal error, invalid field order string (not divisible by 3): "+fieldOrderStr);
-				return null;
+				throw new ApplicationException("Internal error, invalid field order string (not divisible by 3): "+fieldOrderStr);
 			}
 			if(fieldOrderStr.Length<1){
 				return message;
@@ -104,22 +122,18 @@ namespace OpenDental.Eclaims {
 				if(token=="###") {//Input field value by field id, then input the value number of fields with the next template.
 					string valueFieldId=fieldOrderStr.Substring(i+3,3);
 					if(valueFieldId==null||valueFieldId.Length!=3) {
-						MessageBox.Show("Internal error, invalid value field id in: "+fieldOrderStr);
-						return null;
+						throw new ApplicationException("Internal error, invalid value field id in: "+fieldOrderStr);
 					}
 					CCDField valueField=GetFieldById(valueFieldId);
 					if(valueField==null) {
-						MessageBox.Show(this.ToString()+".InputCCDFields: Internal error, could not locate value field '"+valueFieldId+"'");
-						return null;
+						throw new ApplicationException(this.ToString()+".InputCCDFields: Internal error, could not locate value field '"+valueFieldId+"'");
 					}
 					if(valueField.format!="N") {
-						MessageBox.Show(this.ToString()+".InputCCDFields: Internal error, value field '"+valueFieldId+"' is not an integer");
-						return null;
+						throw new ApplicationException(this.ToString()+".InputCCDFields: Internal error, value field '"+valueFieldId+"' is not an integer");
 					}
 					string listFieldId=fieldOrderStr.Substring(i+6,3);
 					if(listFieldId==null||listFieldId.Length!=3) {
-						MessageBox.Show("Internal error, invalid field list id in: "+fieldOrderStr);
-						return null;
+						throw new ApplicationException("Internal error, invalid field list id in: "+fieldOrderStr);
 					}
 					i+=6;
 					for(int p=0;p<Convert.ToInt32(valueField.valuestr);p++) {
@@ -134,27 +148,25 @@ namespace OpenDental.Eclaims {
 		}
 
 		///<summary>Get a list of loaded fields by a common field id.<summary>
-		public CCDField[] GetFieldsById(string fieldId)
-		{
+		public CCDField[] GetFieldsById(string fieldId){
 			//lists are short, so just use a simple list search.
 			List<CCDField> fields=new List<CCDField>();
 			foreach(CCDField field in fieldList){
 				if(field.fieldId==fieldId){
-					fields.Add(new CCDField(field));
+					fields.Add(field);//(new CCDField(field,isVersion2));
 				}
 			}
 			return fields.ToArray();
 		}
 
-		///<summary>Same as GetFieldsById, but gets only a single field, or returns null if there are multiple this.</summary>
+		///<summary>Same as GetFieldsById, but gets only a single field, or returns field with empty value if there are multiple.</summary>
 		public CCDField GetFieldById(string fieldId){
 			CCDField[] fields=GetFieldsById(fieldId);
-			if(fields==null||fields.Length==0) {
-				return new CCDField(fieldId);//Doesn't exist, return with empty value, so at least some information can be used.
+			if(fields==null || fields.Length==0) {
+				return new CCDField(fieldId,isVersion2);//Doesn't exist, return with empty value, so at least some information can be used.
 			}
 			if(fields.Length>1) {
-				MessageBox.Show("Internal error, invalid use of ambiguous CCD field id"+((fieldId==null)?"":(": "+fieldId)));
-				return null;
+				throw new ApplicationException("Internal error, invalid use of ambiguous CCD field id"+((fieldId==null)?"":(": "+fieldId)));
 			}
 			return fields[0];
 		}
@@ -165,8 +177,7 @@ namespace OpenDental.Eclaims {
 				return "";//Doesn't exist, return with empty value, so at least some information can be used.
 			}
 			if(fields.Length>1) {
-				MessageBox.Show("Internal error, invalid use of ambiguous CCD field id"+((fieldId==null)?"":(": "+fieldId)));
-				return "";
+				throw new ApplicationException("Internal error, invalid use of ambiguous CCD field id"+((fieldId==null)?"":(": "+fieldId)));
 			}
 			return fields[0].valuestr;
 		}
@@ -243,7 +254,6 @@ namespace OpenDental.Eclaims {
 		}
 
 		private void ParseResponseToElegibility_18(string message) {
-			
 			message=this.InputFields(message,"A01A02A03A04A05A07A11B01B02G01G05G06G07G31G42"+
 																					"###G06G08"+
 																					"###G31G32");
@@ -265,7 +275,6 @@ namespace OpenDental.Eclaims {
 		}
 
 		private void ParsePredeterminationEOB_23(string message) {
-			
 			message=this.InputFields(message,"A01A02A03A04A05A07A11B01B02G01G04G27F06G10G11G28G29G30G39G42G46G47");
 			CCDField fieldF06=this.GetFieldById("F06");
 			if(fieldF06==null) {
@@ -380,6 +389,59 @@ namespace OpenDental.Eclaims {
 			}
 			message=this.InputFields(message,"###G06G08");
 			return;
+		}
+
+		private void ParseElegibilityResponse_v2_10(string message) {
+			message=this.InputFields(message,"A01A02A03A04A05A07B01B02G01G05G06G07G02"+
+																				"###G06G08");
+			return;
+		}
+
+		///<summary>Probably some missing types.  Mostly focussed on response types.</summary>
+		public EtransType GetEtransType() {
+			string msgType=GetValue("A04");
+			if(!isVersion2) {//version 4
+				switch(msgType) {
+					case "11":
+						return EtransType.ClaimAck_CA;
+					case "21":
+						return EtransType.ClaimEOB_CA;
+					case "12":
+						return EtransType.ReverseResponse_CA;
+					case "18":
+						return EtransType.EligResponse_CA;
+					case "24":
+						return EtransType.EmailResponse_CA;
+					case "14":
+						return EtransType.OutstandingAck_CA;
+					case "23":
+						return EtransType.PredetermEOB_CA;
+					case "13":
+						return EtransType.PredetermAck_CA;
+					case "16":
+						return EtransType.PaymentResponse_CA;
+					case "15":
+						return EtransType.SummaryResponse_CA;
+					default:
+						throw new ApplicationException("Message type not recognized: "+msgType);
+				}
+			}
+			else {//version 02
+				switch(msgType) {
+					case "10"://eligibility response
+						return EtransType.EligResponse_CA;
+					case "11"://claim response
+						return EtransType.ClaimAck_CA;
+					case "21"://eob
+						return EtransType.ClaimEOB_CA;
+					case "12"://reversal response
+						return EtransType.ReverseResponse_CA;
+					case "13"://response to predetermination
+						return EtransType.PredetermAck_CA;
+					default:
+						throw new ApplicationException("Message type not recognized: "+msgType);
+				}
+			}
 		}
 
 	}

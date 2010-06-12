@@ -90,16 +90,20 @@ namespace OpenDentBusiness{
 			int batchNum=PIn.Int(table.Rows[0][0].ToString());
 			//and increment it by one
 			if(clearhouse.Eformat==ElectronicClaimFormat.Canadian){
-				if(batchNum==999999)
+				if(batchNum==999999){
 					batchNum=1;
-				else
+				}
+				else{
 					batchNum++;
+				}
 			}
 			else{
-				if(batchNum==999)
+				if(batchNum==999){
 					batchNum=1;
-				else
+				}
+				else{
 					batchNum++;
+				}
 			}
 			//save the new batch number. Even if user cancels, it will have incremented.
 			command="UPDATE clearinghouse SET LastBatchNumber="+batchNum.ToString()

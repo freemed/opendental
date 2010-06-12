@@ -60,6 +60,7 @@ namespace OpenDentBusiness {
 			table.Columns.Add("SheetNum");
 			table.Columns.Add("signature");
 			table.Columns.Add("Surf");
+			table.Columns.Add("surf");
 			table.Columns.Add("TaskNum");
 			table.Columns.Add("toothNum");
 			table.Columns.Add("ToothNum");
@@ -208,6 +209,12 @@ namespace OpenDentBusiness {
 				row["RxNum"]=0;
 				row["SheetNum"]=0;
 				row["Surf"]=rawProcs.Rows[i]["Surf"].ToString();
+				if(ProcedureCodes.GetProcCode(PIn.Long(row["CodeNum"].ToString())).TreatArea==TreatmentArea.Surf){
+					row["surf"]=Tooth.SurfTidyFromDbToDisplay(rawProcs.Rows[i]["Surf"].ToString(),rawProcs.Rows[i]["ToothNum"].ToString());
+				}
+				else{
+					row["surf"]=rawProcs.Rows[i]["Surf"].ToString();
+				}
 				row["TaskNum"]=0;
 				row["toothNum"]=Tooth.GetToothLabel(rawProcs.Rows[i]["ToothNum"].ToString());
 				row["ToothNum"]=rawProcs.Rows[i]["ToothNum"].ToString();
@@ -216,7 +223,7 @@ namespace OpenDentBusiness {
 					rows.Add(row);
 				}
 				else {
-					row["description"]="-----"+row["description"].ToString();
+					row["description"]="^ ^ "+row["description"].ToString();
 					labRows.Add(row);//these will be added in the loop at the end
 				}
 			}

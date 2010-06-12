@@ -578,8 +578,7 @@ namespace OpenDental{
 				if(!FormCP.PrintImmediate(pd.PrinterSettings.PrinterName,1)){
 					return;
 				}
-				Etranss.SetClaimSentOrPrinted(listQueue[gridMain.SelectedIndices[i]].ClaimNum,
-					listQueue[gridMain.SelectedIndices[i]].PatNum,0,EtransType.ClaimPrinted,"",0);
+				Etranss.SetClaimSentOrPrinted(listQueue[gridMain.SelectedIndices[i]].ClaimNum,listQueue[gridMain.SelectedIndices[i]].PatNum,0,EtransType.ClaimPrinted);
 			}
 			FillGrid();
 			FillHistory();

@@ -1205,7 +1205,7 @@ namespace OpenDental.Eclaims
 							seg++;
 							sw.Write("TOO*JP*"//TOO01: JP=National tooth numbering
 								+proc.ToothNum+"*");//TOO02: Tooth number
-							string validSurfaces=Tooth.SurfTidy(proc.Surf,proc.ToothNum,true);
+							string validSurfaces=Tooth.SurfTidyForClaims(proc.Surf,proc.ToothNum);
 							for(int k=0;k<validSurfaces.Length;k++){
 								if(k>0){
 									sw.Write(":");

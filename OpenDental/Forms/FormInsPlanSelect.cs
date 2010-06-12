@@ -170,7 +170,7 @@ namespace OpenDental{
 			//usage: eg. from coverage.  Since can be totally new subscriber, get all plans for them.
 			FamCur=Patients.GetFamily(PatNum);
 			PatCur=FamCur.GetPatient(PatNum);
-      PlanList=InsPlans.Refresh(FamCur);
+      PlanList=InsPlans.RefreshForFam(FamCur);
 			FillPlanData();
 			if(!ShowNoneButton) {
 				butNone.Visible=false;

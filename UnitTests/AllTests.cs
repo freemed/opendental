@@ -55,7 +55,7 @@ namespace UnitTests {
 			//Lists
 			List<ClaimProc> claimProcs=ClaimProcs.Refresh(patNum);
 			Family fam=Patients.GetFamily(patNum);
-			List<InsPlan> planList=InsPlans.Refresh(fam);
+			List<InsPlan> planList=InsPlans.RefreshForFam(fam);
 			List<PatPlan> patPlans=PatPlans.Refresh(patNum);
 			List<Benefit> benefitList=Benefits.Refresh(patPlans);
 			List<ClaimProcHist> histList=new List<ClaimProcHist>();
@@ -139,7 +139,7 @@ namespace UnitTests {
 			List<ClaimProc> claimProcs=ClaimProcs.Refresh(pat.PatNum);
 			List<ClaimProc> claimProcListOld=new List<ClaimProc>();
 			Family fam=Patients.GetFamily(pat.PatNum);
-			List<InsPlan> planList=InsPlans.Refresh(fam);
+			List<InsPlan> planList=InsPlans.RefreshForFam(fam);
 			List<PatPlan> patPlans=PatPlans.Refresh(pat.PatNum);
 			List<Benefit> benefitList=Benefits.Refresh(patPlans);
 			List<ClaimProcHist> histList=new List<ClaimProcHist>();
@@ -189,7 +189,7 @@ namespace UnitTests {
 			//Lists
 			List<ClaimProc> claimProcs=ClaimProcs.Refresh(patNum);
 			Family fam=Patients.GetFamily(patNum);
-			List<InsPlan> planList=InsPlans.Refresh(fam);
+			List<InsPlan> planList=InsPlans.RefreshForFam(fam);
 			List<PatPlan> patPlans=PatPlans.Refresh(patNum);
 			List<Benefit> benefitList=Benefits.Refresh(patPlans);
 			List<ClaimProcHist> histList=new List<ClaimProcHist>();
@@ -231,7 +231,7 @@ namespace UnitTests {
 			//Lists
 			List<ClaimProc> claimProcs=ClaimProcs.Refresh(patNum);
 			Family fam=Patients.GetFamily(patNum);
-			List<InsPlan> planList=InsPlans.Refresh(fam);
+			List<InsPlan> planList=InsPlans.RefreshForFam(fam);
 			List<PatPlan> patPlans=PatPlans.Refresh(patNum);
 			List<Benefit> benefitList=Benefits.Refresh(patPlans);
 			List<ClaimProcHist> histList=ClaimProcs.GetHistList(patNum,benefitList,patPlans,planList,DateTime.Today);
@@ -270,7 +270,7 @@ namespace UnitTests {
 			ClaimProcT.AddInsPaid(patNum,planNum,proc2.ProcNum,400);
 			//Lists
 			Family fam=Patients.GetFamily(patNum);
-			List<InsPlan> planList=InsPlans.Refresh(fam);
+			List<InsPlan> planList=InsPlans.RefreshForFam(fam);
 			List<PatPlan> patPlans=PatPlans.Refresh(patNum);
 			List<Benefit> benefitList=Benefits.Refresh(patPlans);
 			List<ClaimProcHist> histList=ClaimProcs.GetHistList(patNum,benefitList,patPlans,planList,DateTime.Today);
@@ -309,7 +309,7 @@ namespace UnitTests {
 			List<ClaimProc> claimProcs=ClaimProcs.Refresh(pat.PatNum);
 			List<ClaimProc> claimProcListOld=new List<ClaimProc>();
 			Family fam=Patients.GetFamily(pat.PatNum);
-			List<InsPlan> planList=InsPlans.Refresh(fam);
+			List<InsPlan> planList=InsPlans.RefreshForFam(fam);
 			List<PatPlan> patPlans=PatPlans.Refresh(pat.PatNum);
 			List<Benefit> benefitList=Benefits.Refresh(patPlans);
 			List<ClaimProcHist> histList=new List<ClaimProcHist>();

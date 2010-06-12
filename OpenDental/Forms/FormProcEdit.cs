@@ -181,6 +181,14 @@ namespace OpenDental{
 		public List<ClaimProcHist> HistList;
 		private OpenDental.UI.Button butPickProv;
 		private CheckBox checkHideGraphics;
+		private GroupBox groupCanadianProcType;
+		private CheckBox checkTypeCodeC;
+		private CheckBox checkTypeCodeB;
+		private CheckBox checkTypeCodeA;
+		private CheckBox checkTypeCodeX;
+		private CheckBox checkTypeCodeL;
+		private CheckBox checkTypeCodeE;
+		private CheckBox checkTypeCodeS;
 		public List<ClaimProcHist> LoopList;
 
 		///<summary>Inserts are no longer done within this dialog, but must be done ahead of time from outside.You must specify a procedure to edit, and only the changes that are made in this dialog get saved.  Only used when double click in Account, Chart, TP, and in ContrChart.AddProcedure().  The procedure may be deleted if new, and user hits Cancel.</summary>
@@ -189,7 +197,7 @@ namespace OpenDental{
 			ProcOld=proc.Copy();
 			PatCur=patCur;
 			FamCur=famCur;
-			PlanList=InsPlans.Refresh(FamCur);
+			PlanList=InsPlans.RefreshForFam(FamCur);
 			//HistList=null;
 			//LoopList=null;
 			InitializeComponent();
@@ -304,6 +312,10 @@ namespace OpenDental{
 			this.label13 = new System.Windows.Forms.Label();
 			this.checkNoBillIns = new System.Windows.Forms.CheckBox();
 			this.groupProsth = new System.Windows.Forms.GroupBox();
+			this.groupCanadianProcType = new System.Windows.Forms.GroupBox();
+			this.checkTypeCodeC = new System.Windows.Forms.CheckBox();
+			this.checkTypeCodeB = new System.Windows.Forms.CheckBox();
+			this.checkTypeCodeA = new System.Windows.Forms.CheckBox();
 			this.listProsth = new System.Windows.Forms.ListBox();
 			this.textDateOriginalProsth = new OpenDental.ValidDate();
 			this.label4 = new System.Windows.Forms.Label();
@@ -347,6 +359,10 @@ namespace OpenDental{
 			this.tbAdj = new OpenDental.TableProcAdj();
 			this.butPickProv = new OpenDental.UI.Button();
 			this.checkHideGraphics = new System.Windows.Forms.CheckBox();
+			this.checkTypeCodeE = new System.Windows.Forms.CheckBox();
+			this.checkTypeCodeL = new System.Windows.Forms.CheckBox();
+			this.checkTypeCodeX = new System.Windows.Forms.CheckBox();
+			this.checkTypeCodeS = new System.Windows.Forms.CheckBox();
 			this.groupQuadrant.SuspendLayout();
 			this.panelSurfaces.SuspendLayout();
 			this.groupArch.SuspendLayout();
@@ -354,6 +370,7 @@ namespace OpenDental{
 			this.panel1.SuspendLayout();
 			this.groupMedical.SuspendLayout();
 			this.groupProsth.SuspendLayout();
+			this.groupCanadianProcType.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -1271,6 +1288,50 @@ namespace OpenDental{
 			this.groupProsth.TabStop = false;
 			this.groupProsth.Text = "Prosthesis Replacement";
 			// 
+			// groupCanadianProcType
+			// 
+			this.groupCanadianProcType.Controls.Add(this.checkTypeCodeS);
+			this.groupCanadianProcType.Controls.Add(this.checkTypeCodeX);
+			this.groupCanadianProcType.Controls.Add(this.checkTypeCodeL);
+			this.groupCanadianProcType.Controls.Add(this.checkTypeCodeE);
+			this.groupCanadianProcType.Controls.Add(this.checkTypeCodeC);
+			this.groupCanadianProcType.Controls.Add(this.checkTypeCodeB);
+			this.groupCanadianProcType.Controls.Add(this.checkTypeCodeA);
+			this.groupCanadianProcType.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.groupCanadianProcType.Location = new System.Drawing.Point(96,300);
+			this.groupCanadianProcType.Name = "groupCanadianProcType";
+			this.groupCanadianProcType.Size = new System.Drawing.Size(316,124);
+			this.groupCanadianProcType.TabIndex = 163;
+			this.groupCanadianProcType.TabStop = false;
+			this.groupCanadianProcType.Text = "Procedure Type Code";
+			// 
+			// checkTypeCodeC
+			// 
+			this.checkTypeCodeC.Location = new System.Drawing.Point(10,50);
+			this.checkTypeCodeC.Name = "checkTypeCodeC";
+			this.checkTypeCodeC.Size = new System.Drawing.Size(239,17);
+			this.checkTypeCodeC.TabIndex = 2;
+			this.checkTypeCodeC.Text = "Correction of TMJ";
+			this.checkTypeCodeC.UseVisualStyleBackColor = true;
+			// 
+			// checkTypeCodeB
+			// 
+			this.checkTypeCodeB.Location = new System.Drawing.Point(10,33);
+			this.checkTypeCodeB.Name = "checkTypeCodeB";
+			this.checkTypeCodeB.Size = new System.Drawing.Size(239,17);
+			this.checkTypeCodeB.TabIndex = 1;
+			this.checkTypeCodeB.Text = "Temporary placement or service.";
+			this.checkTypeCodeB.UseVisualStyleBackColor = true;
+			// 
+			// checkTypeCodeA
+			// 
+			this.checkTypeCodeA.Location = new System.Drawing.Point(10,16);
+			this.checkTypeCodeA.Name = "checkTypeCodeA";
+			this.checkTypeCodeA.Size = new System.Drawing.Size(268,17);
+			this.checkTypeCodeA.TabIndex = 0;
+			this.checkTypeCodeA.Text = "Not initial placement.  Repair of a prior service.";
+			this.checkTypeCodeA.UseVisualStyleBackColor = true;
+			// 
 			// listProsth
 			// 
 			this.listProsth.Location = new System.Drawing.Point(91,14);
@@ -1744,10 +1805,47 @@ namespace OpenDental{
 			this.checkHideGraphics.Text = "HideGraphics";
 			this.checkHideGraphics.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// checkTypeCodeE
+			// 
+			this.checkTypeCodeE.Location = new System.Drawing.Point(10,67);
+			this.checkTypeCodeE.Name = "checkTypeCodeE";
+			this.checkTypeCodeE.Size = new System.Drawing.Size(268,17);
+			this.checkTypeCodeE.TabIndex = 3;
+			this.checkTypeCodeE.Text = "Implant, or in conjunction with implants";
+			this.checkTypeCodeE.UseVisualStyleBackColor = true;
+			// 
+			// checkTypeCodeL
+			// 
+			this.checkTypeCodeL.Location = new System.Drawing.Point(10,84);
+			this.checkTypeCodeL.Name = "checkTypeCodeL";
+			this.checkTypeCodeL.Size = new System.Drawing.Size(113,17);
+			this.checkTypeCodeL.TabIndex = 4;
+			this.checkTypeCodeL.Text = "Appliance lost";
+			this.checkTypeCodeL.UseVisualStyleBackColor = true;
+			// 
+			// checkTypeCodeX
+			// 
+			this.checkTypeCodeX.Location = new System.Drawing.Point(10,101);
+			this.checkTypeCodeX.Name = "checkTypeCodeX";
+			this.checkTypeCodeX.Size = new System.Drawing.Size(239,17);
+			this.checkTypeCodeX.TabIndex = 5;
+			this.checkTypeCodeX.Text = "None of the above are applicable";
+			this.checkTypeCodeX.UseVisualStyleBackColor = true;
+			// 
+			// checkTypeCodeS
+			// 
+			this.checkTypeCodeS.Location = new System.Drawing.Point(127,84);
+			this.checkTypeCodeS.Name = "checkTypeCodeS";
+			this.checkTypeCodeS.Size = new System.Drawing.Size(113,17);
+			this.checkTypeCodeS.TabIndex = 6;
+			this.checkTypeCodeS.Text = "Appliance stolen";
+			this.checkTypeCodeS.UseVisualStyleBackColor = true;
+			// 
 			// FormProcEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(962,707);
+			this.Controls.Add(this.groupCanadianProcType);
 			this.Controls.Add(this.comboProvNum);
 			this.Controls.Add(this.checkHideGraphics);
 			this.Controls.Add(this.butPickProv);
@@ -1784,7 +1882,6 @@ namespace OpenDental{
 			this.Controls.Add(this.label14);
 			this.Controls.Add(this.listProcStatus);
 			this.Controls.Add(this.butAddAdjust);
-			this.Controls.Add(this.textClaimNote);
 			this.Controls.Add(this.butAddEstimate);
 			this.Controls.Add(this.butSetComplete);
 			this.Controls.Add(this.butEditAnyway);
@@ -1793,11 +1890,12 @@ namespace OpenDental{
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.tbPay);
 			this.Controls.Add(this.tbAdj);
-			this.Controls.Add(this.labelClaimNote);
 			this.Controls.Add(this.checkNoBillIns);
 			this.Controls.Add(this.label13);
 			this.Controls.Add(this.labelClaim);
 			this.Controls.Add(this.panel1);
+			this.Controls.Add(this.textClaimNote);
+			this.Controls.Add(this.labelClaimNote);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
@@ -1817,6 +1915,7 @@ namespace OpenDental{
 			this.groupMedical.PerformLayout();
 			this.groupProsth.ResumeLayout(false);
 			this.groupProsth.PerformLayout();
+			this.groupCanadianProcType.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -1900,16 +1999,16 @@ namespace OpenDental{
 				comboBillingTypeTwo.Visible=false;
 				labelBillingTypeTwo.Visible=false;
 			}
-			/*if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="CA"){//en-CA or fr-CA
-				textLabFee.Text=ProcCur.LabFee.ToString("n");
-				textLabCode.Text=ProcCur.LabProcCode;
+			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {
+				groupProsth.Visible=false;
+				labelClaimNote.Visible=false;
+				textClaimNote.Visible=false;
+				butBF.Text=Lan.g(this,"B/V");//vestibular instead of facial
+				butV.Text=Lan.g(this,"5");
 			}
-			else{
-				labelLabFee.Visible=false;
-				textLabFee.Visible=false;
-				labelLabCode.Visible=false;
-				textLabCode.Visible=false;
-			}*/
+			else {
+				groupCanadianProcType.Visible=false;
+			}
 			IsStartingUp=true;
 			FillControls();
 			SetControls();
@@ -2029,27 +2128,52 @@ namespace OpenDental{
 				}
 			}
 			textSite.Text=Sites.GetDescription(ProcCur.SiteNum);
-			if(ProcedureCode2.IsProsth){
-				listProsth.Items.Add(Lan.g(this,"No"));
-				listProsth.Items.Add(Lan.g(this,"Initial"));
-				listProsth.Items.Add(Lan.g(this,"Replacement"));
-				switch(ProcCur.Prosthesis){
-					case "":
-						listProsth.SelectedIndex=0;
-						break;
-					case "I":
-						listProsth.SelectedIndex=1;
-						break;
-					case "R":
-						listProsth.SelectedIndex=2;
-						break;
+			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")){
+				if(ProcCur.CanadianTypeCodes.Contains("A")) {
+					checkTypeCodeA.Checked=true;
 				}
-				if(ProcCur.DateOriginalProsth.Year>1880){
-					textDateOriginalProsth.Text=ProcCur.DateOriginalProsth.ToShortDateString();
+				if(ProcCur.CanadianTypeCodes.Contains("B")) {
+					checkTypeCodeB.Checked=true;
+				}
+				if(ProcCur.CanadianTypeCodes.Contains("C")) {
+					checkTypeCodeC.Checked=true;
+				}
+				if(ProcCur.CanadianTypeCodes.Contains("E")) {
+					checkTypeCodeE.Checked=true;
+				}
+				if(ProcCur.CanadianTypeCodes.Contains("L")) {
+					checkTypeCodeL.Checked=true;
+				}
+				if(ProcCur.CanadianTypeCodes.Contains("S")) {
+					checkTypeCodeS.Checked=true;
+				}
+				if(ProcCur.CanadianTypeCodes.Contains("X")) {
+					checkTypeCodeX.Checked=true;
 				}
 			}
 			else{
-				groupProsth.Visible=false;
+				if(ProcedureCode2.IsProsth){
+					listProsth.Items.Add(Lan.g(this,"No"));
+					listProsth.Items.Add(Lan.g(this,"Initial"));
+					listProsth.Items.Add(Lan.g(this,"Replacement"));
+					switch(ProcCur.Prosthesis){
+						case "":
+							listProsth.SelectedIndex=0;
+							break;
+						case "I":
+							listProsth.SelectedIndex=1;
+							break;
+						case "R":
+							listProsth.SelectedIndex=2;
+							break;
+					}
+					if(ProcCur.DateOriginalProsth.Year>1880){
+						textDateOriginalProsth.Text=ProcCur.DateOriginalProsth.ToShortDateString();
+					}
+				}
+				else{
+					groupProsth.Visible=false;
+				}
 			}
 			textClaimNote.Text=ProcCur.ClaimNote;
 			textUser.Text=Userods.GetName(ProcCur.UserNum);//might be blank. Will change automatically if user changes note or alters sig.
@@ -2111,12 +2235,20 @@ namespace OpenDental{
 		}
 
 		private void SetSurfButtons(){
-			if(textSurfaces.Text.Contains("B") | textSurfaces.Text.Contains("F")) butBF.BackColor=Color.White;
-			if(textSurfaces.Text.Contains("O") | textSurfaces.Text.Contains("I")) butOI.BackColor=Color.White;
+			if(textSurfaces.Text.Contains("B") || textSurfaces.Text.Contains("F")) butBF.BackColor=Color.White;
+			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")){
+				if(textSurfaces.Text.Contains("V")) butBF.BackColor=Color.White;
+			}
+			if(textSurfaces.Text.Contains("O") || textSurfaces.Text.Contains("I")) butOI.BackColor=Color.White;
 			if(textSurfaces.Text.Contains("M")) butM.BackColor=Color.White;
 			if(textSurfaces.Text.Contains("D")) butD.BackColor=Color.White;
 			if(textSurfaces.Text.Contains("L")) butL.BackColor=Color.White;
-			if(textSurfaces.Text.Contains("V")) butV.BackColor=Color.White;
+			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")){
+				if(textSurfaces.Text.Contains("5")) butV.BackColor=Color.White;
+			}
+			else{
+				if(textSurfaces.Text.Contains("V")) butV.BackColor=Color.White;
+			}
 		}
 		///<summary>Called on open and after changing code.  Sets the visibilities and the data of all the fields in the upper left panel.</summary>
 		private void SetControls(){
@@ -2148,7 +2280,7 @@ namespace OpenDental{
 					if(Tooth.IsValidDB(ProcCur.ToothNum)) {
 						errorProvider2.SetError(textTooth,"");
 						textTooth.Text=Tooth.ToInternat(ProcCur.ToothNum);
-						textSurfaces.Text=Tooth.SurfTidy(ProcCur.Surf,ProcCur.ToothNum,false);
+						textSurfaces.Text=Tooth.SurfTidyFromDbToDisplay(ProcCur.Surf,ProcCur.ToothNum);
 						SetSurfButtons();
 					}
 					else{
@@ -2526,10 +2658,10 @@ namespace OpenDental{
 
 		private void textSurfaces_Validating(object sender, System.ComponentModel.CancelEventArgs e) {
 			if(Tooth.IsValidEntry(textTooth.Text)){
-				textSurfaces.Text=Tooth.SurfTidy(textSurfaces.Text,Tooth.FromInternat(textTooth.Text),false);
+				textSurfaces.Text=Tooth.SurfTidyForDisplay(textSurfaces.Text,Tooth.FromInternat(textTooth.Text));
 			}
 			else{
-				textSurfaces.Text=Tooth.SurfTidy(textSurfaces.Text,"",false);
+				textSurfaces.Text=Tooth.SurfTidyForDisplay(textSurfaces.Text,"");
 			}
 			if(textSurfaces.Text=="")
 				errorProvider2.SetError(textSurfaces,"No surfaces selected.");
@@ -2914,11 +3046,21 @@ namespace OpenDental{
 				textSurfaces.AppendText("D");
 			}
 			if(butV.BackColor==Color.White) {
-				textSurfaces.AppendText("V");
+				if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {
+					textSurfaces.AppendText("5");
+				}
+				else {
+					textSurfaces.AppendText("V");
+				}
 			}
 			if(butBF.BackColor==Color.White) {
 				if(ToothGraphic.IsAnterior(Tooth.FromInternat(textTooth.Text))) {
-					textSurfaces.AppendText("F");
+					if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {
+						textSurfaces.AppendText("V");//vestibular
+					}
+					else {
+						textSurfaces.AppendText("F");
+					}
 				}
 				else {
 					textSurfaces.AppendText("B");
@@ -3093,16 +3235,6 @@ namespace OpenDental{
 				MsgBox.Show(this,"Invalid medical code.  It must refer to an existing procedure code.");
 				return false;
 			}
-			/*if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="CA"){//en-CA or fr-CA
-				if(textLabCode.Text!="" && !ProcedureCodes.HList.Contains(textLabCode.Text)) {
-					MsgBox.Show(this,"Invalid lab code.  It must refer to an existing procedure code.");
-					return false;
-				}
-				if(PIn.PDouble(textLabFee.Text) >0 && textLabCode.Text=="") {
-					MsgBox.Show(this,"Must enter a lab code if a lab fee is entered.");
-					return false;
-				}
-			}*/
 			if(ProcOld.ProcStatus!=ProcStat.C && ProcCur.ProcStatus==ProcStat.C){//if status was changed to complete
 				if(ProcCur.AptNum!=0) {//if attached to an appointment
 					Appointment apt=Appointments.GetOneApt(ProcCur.AptNum);
@@ -3133,14 +3265,40 @@ namespace OpenDental{
 					}
 				}
 			}
-			if(ProcedureCode2.IsProsth){
-				if(listProsth.SelectedIndex==0
-					|| (listProsth.SelectedIndex==2 && textDateOriginalProsth.Text==""))
-				{
-					if(MessageBox.Show(Lan.g(this,"Prosthesis date not entered. Continue anyway?")
-						,"",MessageBoxButtons.OKCancel)!=DialogResult.OK)
+			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {
+				if(checkTypeCodeX.Checked) {
+					if(checkTypeCodeA.Checked
+						|| checkTypeCodeB.Checked
+						|| checkTypeCodeC.Checked
+						|| checkTypeCodeE.Checked
+						|| checkTypeCodeL.Checked
+						|| checkTypeCodeS.Checked) 
 					{
+						MsgBox.Show(this,"If type code 'none' is checked, no other type codes may be checked.");
 						return false;
+					}
+				}
+				if(ProcedureCode2.IsProsth
+					&& !checkTypeCodeA.Checked
+					&& !checkTypeCodeB.Checked
+					&& !checkTypeCodeC.Checked
+					&& !checkTypeCodeE.Checked
+					&& !checkTypeCodeL.Checked
+					&& !checkTypeCodeS.Checked
+					&& !checkTypeCodeX.Checked) 
+				{
+					if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"At least one type code should be checked for prosthesis.  Continue anyway?")) {
+						return false;
+					}
+				}
+			}
+			else {
+				if(ProcedureCode2.IsProsth) {
+					if(listProsth.SelectedIndex==0
+					|| (listProsth.SelectedIndex==2 && textDateOriginalProsth.Text=="")) {
+						if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Prosthesis date not entered. Continue anyway?")){
+							return false;
+						}
 					}
 				}
 			}
@@ -3180,8 +3338,8 @@ namespace OpenDental{
 			//Dx taken care of when radio pushed
 			switch(ProcedureCode2.TreatArea){
 				case TreatmentArea.Surf:
-					ProcCur.Surf=textSurfaces.Text;
 					ProcCur.ToothNum=Tooth.FromInternat(textTooth.Text);
+					ProcCur.Surf=Tooth.SurfTidyFromDisplayToDb(textSurfaces.Text,ProcCur.ToothNum);
 					break;
 				case TreatmentArea.Tooth:
 					ProcCur.Surf="";
@@ -3275,23 +3433,49 @@ namespace OpenDental{
 				ProcCur.BillingTypeTwo=DefC.Short[(int)DefCat.BillingTypes][comboBillingTypeTwo.SelectedIndex-1].DefNum;
 			}
 			//ProcCur.HideGraphical=checkHideGraphical.Checked;
-			if(ProcedureCode2.IsProsth){
-				switch(listProsth.SelectedIndex){
-					case 0:
-						ProcCur.Prosthesis="";
-						break;
-					case 1:
-						ProcCur.Prosthesis="I";
-						break;
-					case 2:
-						ProcCur.Prosthesis="R";
-						break;
+			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {
+				ProcCur.CanadianTypeCodes="";
+				if(checkTypeCodeA.Checked) {
+					ProcCur.CanadianTypeCodes+="A";
 				}
-				ProcCur.DateOriginalProsth=PIn.Date(textDateOriginalProsth.Text);
+				if(checkTypeCodeB.Checked) {
+					ProcCur.CanadianTypeCodes+="B";
+				}
+				if(checkTypeCodeC.Checked) {
+					ProcCur.CanadianTypeCodes+="C";
+				}
+				if(checkTypeCodeE.Checked) {
+					ProcCur.CanadianTypeCodes+="E";
+				}
+				if(checkTypeCodeL.Checked) {
+					ProcCur.CanadianTypeCodes+="L";
+				}
+				if(checkTypeCodeS.Checked) {
+					ProcCur.CanadianTypeCodes+="S";
+				}
+				if(checkTypeCodeX.Checked) {
+					ProcCur.CanadianTypeCodes+="X";
+				}
 			}
-			else{
-				ProcCur.Prosthesis="";
-				ProcCur.DateOriginalProsth=DateTime.MinValue;
+			else {
+				if(ProcedureCode2.IsProsth) {
+					switch(listProsth.SelectedIndex) {
+						case 0:
+							ProcCur.Prosthesis="";
+							break;
+						case 1:
+							ProcCur.Prosthesis="I";
+							break;
+						case 2:
+							ProcCur.Prosthesis="R";
+							break;
+					}
+					ProcCur.DateOriginalProsth=PIn.Date(textDateOriginalProsth.Text);
+				}
+				else {
+					ProcCur.Prosthesis="";
+					ProcCur.DateOriginalProsth=DateTime.MinValue;
+				}
 			}
 			ProcCur.ClaimNote=textClaimNote.Text;
 			Procedures.Update(ProcCur,ProcOld);

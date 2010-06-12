@@ -82,6 +82,19 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
+		public static List<Etrans> GetHistoryOneClaim(long claimNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Etrans>>(MethodBase.GetCurrentMethod(),claimNum);
+			}
+			string command="SELECT * FROM etrans WHERE ClaimNum="+POut.Long(claimNum)+" "
+				+"AND (Etype="+POut.Int((int)EtransType.Claim_CA)+" "
+				+"OR Etype="+POut.Int((int)EtransType.ClaimSent)+")";
+			DataTable table=Db.GetTable(command);
+			List<Etrans> list=SubmitAndFill(table);
+			return list;
+		}
+
+		///<summary></summary>
 		public static Etrans GetEtrans(long etransNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Etrans>(MethodBase.GetCurrentMethod(),etransNum);
@@ -373,11 +386,10 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
-		///<summary>Sets the status of the claim to sent.  Also makes an entry in etrans.  If this is canadian eclaims, then this function gets run first.  Then, the messagetext is created and an attempt is made to send the claim.  Finally, the messagetext and added to the etrans.  This is necessary because the transaction numbers must be incremented and assigned to each claim before creating the message and attempting to send.  If it fails, Canadians will need to delete the etrans entries (or we will need to roll back the changes).</summary>
-		public static Etrans SetClaimSentOrPrinted(long claimNum,long patNum,long clearinghouseNum,EtransType etype,
-			string messageText,int batchNumber) {
+		///<summary>Sets the status of the claim to sent, usually as part of printing.  Also makes an entry in etrans.  If this is canadian eclaims, then this function gets run first.  Then the messagetext is created and an attempt is made to send the claim.  Finally, the messagetext and added to the etrans.  This is necessary because the transaction numbers must be incremented and assigned to each claim before creating the message and attempting to send.  If it fails, Canadians will need to delete the etrans entries (or we will need to roll back the changes).</summary>
+		public static Etrans SetClaimSentOrPrinted(long claimNum,long patNum,long clearinghouseNum,EtransType etype) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<Etrans>(MethodBase.GetCurrentMethod(),claimNum,patNum,clearinghouseNum,etype,messageText,batchNumber);
+				return Meth.GetObject<Etrans>(MethodBase.GetCurrentMethod(),claimNum,patNum,clearinghouseNum,etype);
 			}
 			string command="UPDATE claim SET ClaimStatus = 'S',"
 				+"DateSent= "+POut.Date(MiscData.GetNowDateTime())
@@ -399,11 +411,11 @@ namespace OpenDentBusiness{
 			DataTable table=Db.GetTable(command);
 			etrans.CarrierNum=PIn.Long(table.Rows[0][0].ToString());
 			etrans.CarrierNum2=PIn.Long(table.Rows[0][1].ToString());//might be 0 if no secondary on this claim
-			etrans.BatchNumber=batchNumber;
-			if(X837.IsX12(messageText)) {
-				X837 x837=new X837(messageText);
-				etrans.TransSetNum=x837.GetTransNum(claimNum);
-			}
+			etrans.BatchNumber=0;
+			//if(X837.IsX12(messageText)) {
+			//	X837 x837=new X837(messageText);
+			//	etrans.TransSetNum=x837.GetTransNum(claimNum);
+			//}
 			if(etype==EtransType.Claim_CA) {
 				etrans.OfficeSequenceNumber=0;
 				//find the next officeSequenceNumber
@@ -416,6 +428,10 @@ namespace OpenDentBusiness{
 							("OfficeSequenceNumber has maxed out at 999999.  This program will need to be enhanced.");
 					}
 				}
+				#if DEBUG
+					etrans.OfficeSequenceNumber=PIn.Int(File.ReadAllText(@"..\..\..\TestCanada\LastOfficeSequenceNumber.txt"));
+					File.WriteAllText(@"..\..\..\TestCanada\LastOfficeSequenceNumber.txt",(etrans.OfficeSequenceNumber+1).ToString());
+				#endif
 				etrans.OfficeSequenceNumber++;
 				//find the next CarrierTransCounter for the primary carrier
 				etrans.CarrierTransCounter=0;
@@ -469,7 +485,7 @@ namespace OpenDentBusiness{
 				}
 			}
 			EtransMessageText etransMessageText=new EtransMessageText();
-			etransMessageText.MessageText=messageText;
+			etransMessageText.MessageText="";
 			EtransMessageTexts.Insert(etransMessageText);
 			etrans.EtransMessageTextNum=etransMessageText.EtransMessageTextNum;
 			Etranss.Insert(etrans);

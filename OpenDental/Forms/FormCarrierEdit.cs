@@ -140,6 +140,7 @@ namespace OpenDental{
 			this.label13 = new System.Windows.Forms.Label();
 			this.label11 = new System.Windows.Forms.Label();
 			this.groupBox3 = new System.Windows.Forms.GroupBox();
+			this.label15 = new System.Windows.Forms.Label();
 			this.check16 = new System.Windows.Forms.CheckBox();
 			this.check15 = new System.Windows.Forms.CheckBox();
 			this.check24 = new System.Windows.Forms.CheckBox();
@@ -169,7 +170,6 @@ namespace OpenDental{
 			this.textVersion = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.checkIsHidden = new System.Windows.Forms.CheckBox();
-			this.label15 = new System.Windows.Forms.Label();
 			this.butDelete = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
@@ -433,7 +433,7 @@ namespace OpenDental{
 			this.label11.Name = "label11";
 			this.label11.Size = new System.Drawing.Size(92,17);
 			this.label11.TabIndex = 112;
-			this.label11.Text = "(02, 03, or 04)";
+			this.label11.Text = "(02 or 04)";
 			this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// groupBox3
@@ -463,6 +463,15 @@ namespace OpenDental{
 			this.groupBox3.TabIndex = 111;
 			this.groupBox3.TabStop = false;
 			this.groupBox3.Text = "Supported Transaction Types";
+			// 
+			// label15
+			// 
+			this.label15.Location = new System.Drawing.Point(12,15);
+			this.label15.Name = "label15";
+			this.label15.Size = new System.Drawing.Size(284,17);
+			this.label15.TabIndex = 118;
+			this.label15.Text = "(in addition to Claim, Ack, and Eob)";
+			this.label15.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// check16
 			// 
@@ -724,15 +733,6 @@ namespace OpenDental{
 			this.checkIsHidden.Text = "Hidden";
 			this.checkIsHidden.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// label15
-			// 
-			this.label15.Location = new System.Drawing.Point(12,15);
-			this.label15.Name = "label15";
-			this.label15.Size = new System.Drawing.Size(284,17);
-			this.label15.TabIndex = 118;
-			this.label15.Text = "(in addition to Claim, Ack, and Eob)";
-			this.label15.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
 			// butDelete
 			// 
 			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -978,8 +978,8 @@ namespace OpenDental{
 				return;
 			}
 			if(CultureInfo.CurrentCulture.Name.EndsWith("CA") && checkIsCDAnet.Checked) {//if Canadian computer and Canadian carrier
-				if(textVersion.Text!="02" && textVersion.Text!="03" && textVersion.Text!="04") {
-					MsgBox.Show(this,"Version Number must be 02, 03, or 04.");
+				if(textVersion.Text!="02" && textVersion.Text!="04") {
+					MsgBox.Show(this,"Version Number must be 02 or 04.");
 					return;
 				}
 				if(textEncryptionMethod.Text!="1" && textEncryptionMethod.Text!="2" && textEncryptionMethod.Text!="3") {

@@ -186,10 +186,10 @@ namespace OpenDentBusiness{
 			}
 			string command = "DELETE FROM claim WHERE ClaimNum = '"+POut.Long(Cur.ClaimNum)+"'";
 			Db.NonQ(command);
-			command = "DELETE FROM canadianclaim WHERE ClaimNum = '"+POut.Long(Cur.ClaimNum)+"'";
-			Db.NonQ(command);
-			command = "DELETE FROM canadianextract WHERE ClaimNum = '"+POut.Long(Cur.ClaimNum)+"'";
-			Db.NonQ(command);
+			//command = "DELETE FROM canadianclaim WHERE ClaimNum = '"+POut.Long(Cur.ClaimNum)+"'";
+			//Db.NonQ(command);
+			//command = "DELETE FROM canadianextract WHERE ClaimNum = '"+POut.Long(Cur.ClaimNum)+"'";
+			//Db.NonQ(command);
 		}
 
 		///<summary></summary>

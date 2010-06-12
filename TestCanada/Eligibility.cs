@@ -43,7 +43,7 @@ namespace TestCanada {
 			}
 			PatPlan patplan=PatPlans.GetPatPlan(pat.PatNum,1);
 			InsPlan plan=InsPlans.GetPlan(patplan.PlanNum,new List<InsPlan>());
-			long etransNum=CanadianOutput.SendElegibility(pat.PatNum,plan,new DateTime(1999,1,1),patplan.Relationship,patplan.PatID,true);
+			long etransNum=CanadianOutput.SendElegibility(pat.PatNum,plan,new DateTime(1999,1,1),patplan.Relationship,patplan.PatID,showForms);
 			//should print Eligibility response on Dentaide Form
 			Etrans etrans=Etranss.GetEtrans(etransNum);
 			string message=EtransMessageTexts.GetMessageText(etrans.EtransMessageTextNum);
@@ -67,7 +67,7 @@ namespace TestCanada {
 			}
 			PatPlan patplan=PatPlans.GetPatPlan(pat.PatNum,2);
 			InsPlan plan=InsPlans.GetPlan(patplan.PlanNum,new List<InsPlan>());
-			long etransNum=CanadianOutput.SendElegibility(pat.PatNum,plan,new DateTime(1999,1,1),patplan.Relationship,patplan.PatID,true);
+			long etransNum=CanadianOutput.SendElegibility(pat.PatNum,plan,new DateTime(1999,1,1),patplan.Relationship,patplan.PatID,showForms);
 			Etrans etrans=Etranss.GetEtrans(etransNum);
 			string message=EtransMessageTexts.GetMessageText(etrans.EtransMessageTextNum);
 			CCDFieldInputter formData=new CCDFieldInputter(message);
@@ -90,7 +90,7 @@ namespace TestCanada {
 			}
 			PatPlan patplan=PatPlans.GetPatPlan(pat.PatNum,1);
 			InsPlan plan=InsPlans.GetPlan(patplan.PlanNum,new List<InsPlan>());
-			long etransNum=CanadianOutput.SendElegibility(pat.PatNum,plan,new DateTime(1999,1,1),patplan.Relationship,patplan.PatID,true);
+			long etransNum=CanadianOutput.SendElegibility(pat.PatNum,plan,new DateTime(1999,1,1),patplan.Relationship,patplan.PatID,showForms);
 			Etrans etrans=Etranss.GetEtrans(etransNum);
 			string message=EtransMessageTexts.GetMessageText(etrans.EtransMessageTextNum);
 			CCDFieldInputter formData=new CCDFieldInputter(message);
@@ -113,7 +113,7 @@ namespace TestCanada {
 			}
 			PatPlan patplan=PatPlans.GetPatPlan(pat.PatNum,1);
 			InsPlan plan=InsPlans.GetPlan(patplan.PlanNum,new List<InsPlan>());
-			long etransNum=CanadianOutput.SendElegibility(pat.PatNum,plan,new DateTime(1999,1,1),patplan.Relationship,patplan.PatID,true);
+			long etransNum=CanadianOutput.SendElegibility(pat.PatNum,plan,new DateTime(1999,1,1),patplan.Relationship,patplan.PatID,showForms);
 			Etrans etrans=Etranss.GetEtrans(etransNum);
 			string message=EtransMessageTexts.GetMessageText(etrans.EtransMessageTextNum);
 			CCDFieldInputter formData=new CCDFieldInputter(message);
@@ -127,8 +127,24 @@ namespace TestCanada {
 
 		public static string RunSix(bool showForms) {
 			string retVal="";
-
-			retVal+="Eligibility #6 (not yet implemented).\r\n";
+			long provNum=ProviderC.List[0].ProvNum;//dentist #1
+			Patient pat=Patients.GetPat(PatientTC.PatNum9);//patient#9
+			if(pat.PriProv!=provNum){
+				Patient oldPat=pat.Copy();
+				pat.PriProv=provNum;//this script uses the primary provider for the patient
+				Patients.Update(pat,oldPat);
+			}
+			PatPlan patplan=PatPlans.GetPatPlan(pat.PatNum,1);
+			InsPlan plan=InsPlans.GetPlan(patplan.PlanNum,new List<InsPlan>());
+			long etransNum=CanadianOutput.SendElegibility(pat.PatNum,plan,new DateTime(1999,1,1),patplan.Relationship,patplan.PatID,showForms);
+			Etrans etrans=Etranss.GetEtrans(etransNum);
+			string message=EtransMessageTexts.GetMessageText(etrans.EtransMessageTextNum);
+			CCDFieldInputter formData=new CCDFieldInputter(message);
+			string responseStatus=formData.GetValue("G05");
+			if(responseStatus!="E") {
+				throw new Exception("Should be E");
+			}
+			retVal+="Eligibility #6 successful.\r\n";
 			return retVal;
 		}
 

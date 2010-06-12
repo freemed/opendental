@@ -7,9 +7,12 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
+using OpenDental;
 
 namespace TestCanada {
 	public partial class FormTestCanada:Form {
+		private static string dbname="canadatest";
+
 		public FormTestCanada() {
 			InitializeComponent();
 		}
@@ -31,19 +34,19 @@ namespace TestCanada {
 			textResults.Text="";
 			Application.DoEvents();
 			Cursor=Cursors.WaitCursor;
-			if(!DatabaseTools.SetDbConnection("canadatest")) {//if database doesn't exist
+			if(!DatabaseTools.SetDbConnection(dbname)) {//if database doesn't exist
 				//MessageBox.Show("Database canadatest does not exist.");
 				DatabaseTools.SetDbConnection("");
 				textResults.Text+=DatabaseTools.FreshFromDump();//this also sets database to be unittest.
 			}
-			else {
-				textResults.Text+=DatabaseTools.ClearDb();
-			}
+			textResults.Text+=DatabaseTools.ClearDb();
+			textResults.Text+="Done.";
 			Cursor=Cursors.Default;
 		}
 
 		private void butObjects_Click(object sender,EventArgs e) {
 			FillObjects();
+			textResults.Text+="Done.";
 			Cursor=Cursors.Default;
 		}
 
@@ -64,97 +67,122 @@ namespace TestCanada {
 			Application.DoEvents();
 			textResults.Text+=CarrierTC.SetInitialCarriers();
 			Application.DoEvents();
-			textResults.Text+=PatientTC.SetInitialPatients();			
-		}
-
-		private void butProcedures_Click(object sender,EventArgs e) {
-			FillObjects();
-			textResults.Text+="---------------------------------------\r\n";
+			textResults.Text+=PatientTC.SetInitialPatients(); 
 			Application.DoEvents();
-			textResults.Text+="(procs not implemented yet)\r\n";
-			Cursor=Cursors.Default;
+			textResults.Text+=ClaimTC.CreateAllClaims();
 		}
 
 		private void butScripts_Click(object sender,EventArgs e) {
+			if(textSingleScript.Text==""){
+				MessageBox.Show("Please enter a script number first.");
+				return;
+			}
 			int singleScript=0;
-			if(textSingleScript.Text!=""){
-				int checkedCount=0;
-				if(checkEligibility.Checked) {
-					checkedCount++;
-				}
-				if(checkClaims.Checked){
-					checkedCount++;
-				}
-				if(checkClaimReversals.Checked){
-					checkedCount++;
-				}
-				if(checkOutstanding.Checked){
-					checkedCount++;
-				}
-				if(checkPredeterm.Checked){
-					checkedCount++;
-				}
-				if(checkPayReconcil.Checked){
-					checkedCount++;
-				}
-				if(checkSumReconcil.Checked){
-					checkedCount++;
-				}
-				if(checkedCount>1){
-					MessageBox.Show("When running a single script, only one category can be checked.");
-					return;
-				}
-				if(checkedCount==0){
-					MessageBox.Show("Please select a category.");
-					return;
-				}
-				try{
-					singleScript=PIn.Int(textSingleScript.Text);
-					if(singleScript==0){
-						MessageBox.Show("Invalid number.");
-						return;
-					}
-				}
-				catch{
+			try{
+				singleScript=PIn.Int(textSingleScript.Text);
+				if(singleScript==0){
 					MessageBox.Show("Invalid number.");
 					return;
 				}
 			}
+			catch{
+				MessageBox.Show("Invalid number.");
+				return;
+			}
+			int checkedCount=0;
+			if(checkEligibility.Checked) {
+				checkedCount++;
+			}
+			if(checkClaims.Checked){
+				checkedCount++;
+			}
+			if(checkClaimReversals.Checked){
+				checkedCount++;
+			}
+			if(checkOutstanding.Checked){
+				checkedCount++;
+			}
+			if(checkPredeterm.Checked){
+				checkedCount++;
+			}
+			if(checkPayReconcil.Checked){
+				checkedCount++;
+			}
+			if(checkSumReconcil.Checked){
+				checkedCount++;
+			}
+			if(checkedCount==0){
+				MessageBox.Show("Please select a category.");
+				return;
+			}
 			FillObjects();
 			textResults.Text+="---------------------------------------\r\n";
 			Application.DoEvents();
-			textResults.Text+="(procs not implemented yet)\r\n";
-			Application.DoEvents();
-			textResults.Text+="---------------------------------------\r\n";
-			Application.DoEvents();
 			if(checkEligibility.Checked) {
-				if(singleScript==0 || singleScript==1){
+				if(singleScript==1){
 					textResults.Text+=Eligibility.RunOne(checkShowForms.Checked);
 				}
-				Application.DoEvents();
-				if(singleScript==0 || singleScript==2){
+				else if(singleScript==2){
 					textResults.Text+=Eligibility.RunTwo(checkShowForms.Checked);
 				}
-				Application.DoEvents();
-				if(singleScript==0 || singleScript==3){
+				else if(singleScript==3){
 					textResults.Text+=Eligibility.RunThree(checkShowForms.Checked);
 				}
-				Application.DoEvents();
-				if(singleScript==0 || singleScript==4){
+				else if(singleScript==4){
 					textResults.Text+=Eligibility.RunFour(checkShowForms.Checked);
 				}
-				Application.DoEvents();
-				if(singleScript==0 || singleScript==5){
+				else if(singleScript==5){
 					textResults.Text+=Eligibility.RunFive(checkShowForms.Checked);
 				}
-				Application.DoEvents();
-				if(singleScript==0 || singleScript==6){
+				else if(singleScript==6){
 					textResults.Text+=Eligibility.RunSix(checkShowForms.Checked);
 				}
-				Application.DoEvents();
+				else{
+					MessageBox.Show("Script number not found.");
+					return;
+				}
 			}
 			if(checkClaims.Checked){
-				textResults.Text+="Claims not implemented yet.\r\n";
+				if(singleScript==1){
+					textResults.Text+=ClaimTC.RunOne(checkShowForms.Checked);
+				}
+				else if(singleScript==2) {
+					textResults.Text+=ClaimTC.RunTwo(checkShowForms.Checked);
+				}
+				else if(singleScript==3) {
+					textResults.Text+=ClaimTC.RunThree(checkShowForms.Checked);
+				}
+				else if(singleScript==4) {
+					textResults.Text+=ClaimTC.RunFour(checkShowForms.Checked);
+				}
+				else if(singleScript==5) {
+					textResults.Text+=ClaimTC.RunFive(checkShowForms.Checked);
+				}
+				else if(singleScript==6) {
+					textResults.Text+=ClaimTC.RunSix(checkShowForms.Checked);
+				}
+				else if(singleScript==7) {
+					textResults.Text+=ClaimTC.RunSeven(checkShowForms.Checked);
+				}
+				else if(singleScript==8) {
+					textResults.Text+=ClaimTC.RunEight(checkShowForms.Checked);
+				}
+				else if(singleScript==9) {
+					textResults.Text+=ClaimTC.RunNine(checkShowForms.Checked);
+				}
+				else if(singleScript==10) {
+					textResults.Text+=ClaimTC.RunTen(checkShowForms.Checked);
+				}
+				else if(singleScript==11) {
+					textResults.Text+=ClaimTC.RunEleven(checkShowForms.Checked);
+				}
+				else if(singleScript==12) {
+					textResults.Text+=ClaimTC.RunTwelve(checkShowForms.Checked);
+				}
+				else{
+					MessageBox.Show("Script number not found (not implemented yet).");
+					return;
+				}
 			}
 			if(checkClaimReversals.Checked){
 				textResults.Text+="Claim Reversals not implemented yet.\r\n";
@@ -176,33 +204,103 @@ namespace TestCanada {
 		}
 
 		private void checkEligibility_Click(object sender,EventArgs e) {
-			SetCheckAll();
+			UncheckAllExcept(checkEligibility);
 		}
 
 		private void checkClaims_Click(object sender,EventArgs e) {
-			SetCheckAll();
+			UncheckAllExcept(checkClaims);
 		}
 
 		private void checkClaimReversals_Click(object sender,EventArgs e) {
-			SetCheckAll();
+			UncheckAllExcept(checkClaimReversals);
 		}
 
 		private void checkOutstanding_Click(object sender,EventArgs e) {
-			SetCheckAll();
+			UncheckAllExcept(checkOutstanding);
 		}
 
 		private void checkPredeterm_Click(object sender,EventArgs e) {
-			SetCheckAll();
+			UncheckAllExcept(checkPredeterm);
 		}
 
 		private void checkPayReconcil_Click(object sender,EventArgs e) {
-			SetCheckAll();
+			UncheckAllExcept(checkPayReconcil);
 		}
 
 		private void checkSumReconcil_Click(object sender,EventArgs e) {
-			SetCheckAll();
+			UncheckAllExcept(checkSumReconcil);
 		}
 
+		private void UncheckAllExcept(CheckBox checkbox) {
+			if(checkbox!=checkEligibility){
+				checkEligibility.Checked=false;
+			}
+			if(checkbox!=checkClaims){
+				checkClaims.Checked=false;
+			}
+			if(checkbox!=checkClaimReversals){
+				checkClaimReversals.Checked=false;
+			}
+			if(checkbox!=checkOutstanding){
+				checkOutstanding.Checked=false;
+			}
+			if(checkbox!=checkPredeterm){
+				checkPredeterm.Checked=false;
+			}
+			if(checkbox!=checkPayReconcil){
+				checkPayReconcil.Checked=false;
+			}
+			if(checkbox!=checkSumReconcil){
+				checkSumReconcil.Checked=false;
+			}
+		}
+
+		private void butShowEtrans_Click(object sender,EventArgs e) {
+			if(!checkClaims.Checked){
+				MessageBox.Show("Only works for claims right now.");
+				return;
+			}
+			//In case the form was just opened
+			DatabaseTools.SetDbConnection(dbname);
+			int scriptNum=PIn.Int(textSingleScript.Text);
+			long patNum=0;
+			double claimFee=0;
+			switch(scriptNum){
+				case 1:
+					patNum=Patients.GetPatNumByNameAndBirthday("Fête","Lisa",new DateTime(1960,4,12));
+					claimFee=222.35;
+					break;
+				case 2:
+					patNum=Patients.GetPatNumByNameAndBirthday("Fête","Lisa",new DateTime(1960,4,12));
+					claimFee=1254.85;
+					break;
+				case 3:
+					patNum=Patients.GetPatNumByNameAndBirthday("Smith","John",new DateTime(1948,3,2));
+					claimFee=439.55;
+					break;
+			}
+			List<Claim> claimList=Claims.Refresh(patNum);
+			Claim claim=null;
+			for(int i=0;i<claimList.Count;i++){
+				if(claimList[i].ClaimFee==claimFee){
+					claim=claimList[i];
+				}
+			}
+			if(claim==null){
+				MessageBox.Show("Claim not found.");
+				return;
+			}
+			List<Etrans> etransList=Etranss.GetHistoryOneClaim(claim.ClaimNum);
+			if(etransList.Count==0) {
+				MessageBox.Show("No history found of sent e-claim.");
+				return;
+			}
+			FormEtransEdit FormE=new FormEtransEdit();
+			FormE.EtransCur=etransList[0];
+			FormE.ShowDialog();
+		}
+
+		/*
 		private void SetCheckAll() {
 			bool someChecked=false;
 			if(checkEligibility.Checked
@@ -259,6 +357,6 @@ namespace TestCanada {
 				checkPayReconcil.Checked=false;
 				checkSumReconcil.Checked=false;
 			}
-		}
+		}*/
 	}
 }

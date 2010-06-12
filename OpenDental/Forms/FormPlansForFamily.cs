@@ -123,7 +123,7 @@ namespace OpenDental{
 		}
 
 		private void FillGrid(){
-			PlanList=InsPlans.Refresh(FamCur);
+			PlanList=InsPlans.RefreshForFam(FamCur);
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col;

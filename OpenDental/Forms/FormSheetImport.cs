@@ -122,7 +122,7 @@ namespace OpenDental {
 				}
 			}
 			patPlanList=PatPlans.Refresh(pat.PatNum);
-			planList=InsPlans.Refresh(fam);
+			planList=InsPlans.RefreshForFam(fam);
 			if(patPlanList.Count==0) {
 				patPlan1=null;
 				plan1=null;

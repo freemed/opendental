@@ -1419,7 +1419,7 @@ namespace OpenDental.Eclaims {
 									doc.DrawString(g,text,procedureCol,0);
 									text=Tooth.ToInternat(proc.ToothNum);//Field F10
 									doc.DrawString(g,text,toothCol,0);
-									text=Tooth.SurfTidy(proc.Surf,proc.ToothNum,true);//Field F11
+									text=Tooth.SurfTidyForClaims(proc.Surf,proc.ToothNum);//Field F11
 									doc.DrawString(g,text,surfaceCol,0);
 									text=proc.ProcFee.ToString("F");//Field F12
 									doc.DrawString(g,text,feeCol,0);
@@ -1668,7 +1668,7 @@ namespace OpenDental.Eclaims {
 					doc.DrawString(g,text,procedureDescriptionCol,0);
 					text=Tooth.ToInternat(proc.ToothNum);//Field F10
 					doc.DrawString(g,text,procedureToothCol,0);
-					text=Tooth.SurfTidy(proc.Surf,proc.ToothNum,true);//Field F11
+					text=Tooth.SurfTidyForClaims(proc.Surf,proc.ToothNum);//Field F11
 					doc.DrawString(g,text,procedureSurfaceCol,0);
 					if(!predetermination) {//Used to remove service dates in a predetermination ack.
 						text=proc.ProcDate.ToShortDateString();//Field F09

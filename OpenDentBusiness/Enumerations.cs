@@ -1310,7 +1310,7 @@ namespace OpenDentBusiness{
 		ClaimEOB_CA,
 		///<summary>6 Canada. Type 08</summary>
 		Eligibility_CA,
-		///<summary>7 Canada. Type 18</summary>
+		///<summary>7 Canada. Type 18. V02 type 10.</summary>
 		EligResponse_CA,
 		///<summary>8 Canada. Type 02</summary>
 		ClaimReversal_CA,

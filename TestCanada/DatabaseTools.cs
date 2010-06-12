@@ -67,7 +67,7 @@ namespace TestCanada {
 
 		public static string ClearDb() {
 			string command=@"
-				DELETE FROM carrier; /*for now*/
+				DELETE FROM carrier;
 				DELETE FROM claim;
 				DELETE FROM claimproc;
 				DELETE FROM fee;
@@ -79,6 +79,40 @@ namespace TestCanada {
 				DELETE FROM etrans;
 				";
 			DataCore.NonQ(command);
+			ProcedureCodes.RefreshCache();
+			ProcedureCode procCode;
+			if(!ProcedureCodes.IsValidCode("99222")) {
+				procCode=new ProcedureCode();
+				procCode.ProcCode="99222";
+				procCode.Descript="Lab2";
+				procCode.AbbrDesc="Lab2";
+				procCode.IsCanadianLab=true;
+				procCode.ProcCat=256;
+				procCode.ProcTime="/X/";
+				procCode.TreatArea=TreatmentArea.Mouth;
+				ProcedureCodes.Insert(procCode);
+				ProcedureCodes.RefreshCache();
+			}
+			procCode=ProcedureCodes.GetProcCode("99111");
+			procCode.IsCanadianLab=true;
+			ProcedureCodes.Update(procCode);
+			ProcedureCodes.RefreshCache();
+			if(!ProcedureCodes.IsValidCode("27213")) {
+				procCode=new ProcedureCode();
+				procCode.ProcCode="27213";
+				procCode.Descript="Crown";
+				procCode.AbbrDesc="Crn";
+				procCode.ProcCat=250;
+				procCode.ProcTime="/X/";
+				procCode.TreatArea=TreatmentArea.Tooth;
+				procCode.PaintType=ToothPaintingType.CrownLight;
+				ProcedureCodes.Insert(procCode);
+				ProcedureCodes.RefreshCache();
+			}
+
+
+
+
 			return "Database cleared of old data.\r\n";
 		}
 	}

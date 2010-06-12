@@ -146,7 +146,7 @@ namespace OpenDentBusiness{
 		public DateTime DateTStamp;
 		///<summary>FK to patient.PatNum. Can be zero.  Person responsible for medical decisions rather than finances.  Guarantor is still responsible for finances.  This is useful for nursing home residents.  Part of public health.</summary>
 		public long ResponsParty;
-		///<summary>C09.  Eligibility Exception Code.  A single digit 1-4.  0 is not acceptable for e-claims. 1=FT student, 2=disabled, 3=disabled student, 4=code not applicable.</summary>
+		///<summary>C09.  Eligibility Exception Code.  A single digit 1-4.  0 is not acceptable for e-claims. 1=FT student, 2=disabled, 3=disabled student, 4=code not applicable.  Warning.  4 is a 0 if using CDAnet version 02.</summary>
 		public byte CanadianEligibilityCode;
 		
 

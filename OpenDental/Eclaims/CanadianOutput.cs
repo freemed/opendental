@@ -106,7 +106,12 @@ namespace OpenDental.Eclaims {
 			//A03 format version number 2 N
 			strb.Append(carrier.CDAnetVersion);//eg. "04", validated in UI
 			//A04 transaction code 2 N
-			strb.Append("08");//eligibility
+			if(carrier.CDAnetVersion=="02"){
+				strb.Append("00");//eligibility
+			}
+			else{
+				strb.Append("08");//eligibility
+			}
 			//A05 carrier id number 6 N
 			strb.Append(carrier.ElectID);//already validated as 6 digit number.
 			//A06 software system id 3 AN  The third character is for version of OD.
@@ -116,39 +121,65 @@ namespace OpenDental.Eclaims {
 #else
 			strb.Append("OD1");//To be later supplied by CDAnet staff to uniquely identify OD.
 #endif
-			//A10 encryption method 1 N
-			strb.Append(carrier.CanadianEncryptionMethod);//validated in UI
+			if(carrier.CDAnetVersion=="04") {
+				//A10 encryption method 1 N
+				strb.Append(carrier.CanadianEncryptionMethod);//validated in UI
+			}
 			//A07 message length 5 N
-			int len=214;
+			int len;
 			bool C19PlanRecordPresent=false;
-			if(plan.CanadianPlanFlag=="A"){// || plan.CanadianPlanFlag=="N"){
-				C19PlanRecordPresent=true;
+			if(carrier.CDAnetVersion=="02"){
+				len=178;
+				strb.Append(Canadian.TidyN(len,4));
 			}
-			if(C19PlanRecordPresent){
-				len+=30;
+			else{
+				len=214;
+				if(plan.CanadianPlanFlag=="A"){// || plan.CanadianPlanFlag=="N"){
+					C19PlanRecordPresent=true;
+				}
+				if(C19PlanRecordPresent){
+					len+=30;
+				}
+				strb.Append(Canadian.TidyN(len,5));
+				//A09 carrier transaction counter 5 N, only version 04
+				strb.Append(Canadian.TidyN(etrans.CarrierTransCounter,5));
 			}
-			strb.Append(Canadian.TidyN(len,5));
-			//A09 carrier transaction counter 5 N
-			strb.Append(Canadian.TidyN(etrans.CarrierTransCounter,5));
 			//B01 CDA provider number 9 AN
 			strb.Append(Canadian.TidyAN(prov.NationalProvID,9));//already validated
 			//B02 provider office number 4 AN
-			strb.Append(Canadian.TidyAN(prov.CanadianOfficeNum,4));//already validated	
-			//B03 billing provider number 9 AN
-			//Might need to account for possible 5 digit prov id assigned by carrier
-			//But the testing scripts do not supply any billing provider numbers, so we'll ignore this for now.
-			//The testing scripts seem to indicate that the billing provider is always the default practice provider.
-			Provider provBilling=Providers.GetProv(Providers.GetBillingProvNum(prov.ProvNum,patient.ClinicNum));
-			strb.Append(Canadian.TidyAN(provBilling.NationalProvID,9));//already validated
-			//C01 primary policy/plan number 12 AN (group number)
-			//only validated to ensure that it's not blank and is less than 12. Also that no spaces.
-			strb.Append(Canadian.TidyAN(plan.GroupNum,12));
+			strb.Append(Canadian.TidyAN(prov.CanadianOfficeNum,4));//already validated
+			if(carrier.CDAnetVersion=="04"){
+				//B03 billing provider number 9 AN
+				//Might need to account for possible 5 digit prov id assigned by carrier
+				//But the testing scripts do not supply any billing provider numbers, so we'll ignore this for now.
+				//The testing scripts seem to indicate that the billing provider is always the default practice provider.
+				Provider provBilling=Providers.GetProv(Providers.GetBillingProvNum(prov.ProvNum,patient.ClinicNum));
+				strb.Append(Canadian.TidyAN(provBilling.NationalProvID,9));//already validated
+			}
+			if(carrier.CDAnetVersion=="02") {
+				//C01 primary policy/plan number 8 AN (group number)
+				//No special validation for version 02
+				strb.Append(Canadian.TidyAN(plan.GroupNum,8));
+			}
+			else {
+				//C01 primary policy/plan number 12 AN (group number)
+				//only validated to ensure that it's not blank and is less than 12. Also that no spaces.
+				strb.Append(Canadian.TidyAN(plan.GroupNum,12));
+			}
 			//C11 primary division/section number 10 AN
 			strb.Append(Canadian.TidyAN(plan.DivisionNo,10));
-			//C02 subscriber id number 12 AN
-			strb.Append(Canadian.TidyAN(plan.SubscriberID.Replace("-",""),12));//validated
-			//C17 primary dependant code 2 N. Optional
-			strb.Append(Canadian.TidyN(patID,2));
+			if(carrier.CDAnetVersion=="02") {
+				//C02 subscriber id number 11 AN
+				strb.Append(Canadian.TidyAN(plan.SubscriberID.Replace("-",""),11));//no extra validation for version 02
+			}
+			else{
+				//C02 subscriber id number 12 AN
+				strb.Append(Canadian.TidyAN(plan.SubscriberID.Replace("-",""),12));//validated
+			}
+			if(carrier.CDAnetVersion=="04") {
+				//C17 primary dependant code 2 N. Optional
+				strb.Append(Canadian.TidyN(patID,2));
+			}
 			//C03 relationship code 1 N
 			//User interface does not only show Canadian options, but all options are handled.
 			strb.Append(Canadian.GetRelationshipCode(relat));
@@ -169,18 +200,20 @@ namespace OpenDental.Eclaims {
 			//C08 patient middle initial 1 AE
 			strb.Append(Canadian.TidyAE(patient.MiddleI,1));
 			//C09 eligibility exception code 1 N
-			strb.Append(Canadian.TidyN(patient.CanadianEligibilityCode,1));//validated
-			//C12 plan flag 1 A
-			strb.Append(Canadian.GetPlanFlag(plan.CanadianPlanFlag));
-			//C18 plan record count 1 N
-			if(C19PlanRecordPresent){
-				strb.Append("1");
+			strb.Append(Canadian.GetEligibilityCode(patient.CanadianEligibilityCode,carrier.CDAnetVersion=="02"));//validated
+			if(carrier.CDAnetVersion=="04") {
+				//C12 plan flag 1 A
+				strb.Append(Canadian.GetPlanFlag(plan.CanadianPlanFlag));
+				//C18 plan record count 1 N
+				if(C19PlanRecordPresent) {
+					strb.Append("1");
+				}
+				else {
+					strb.Append("0");
+				}
+				//C16 Eligibility date. 8 N.
+				strb.Append(date.ToString("yyyyMMdd"));
 			}
-			else{
-				strb.Append("0");
-			}
-			//C16 Eligibility date. 8 N.
-			strb.Append(date.ToString("yyyyMMdd"));
 			//D01 subscriber birthday 8 N
 			strb.Append(subscriber.Birthdate.ToString("yyyyMMdd"));//validated
 			//D02 subscriber last name 25 AE
@@ -189,20 +222,22 @@ namespace OpenDental.Eclaims {
 			strb.Append(Canadian.TidyAE(subscriber.FName,15,true));//validated
 			//D04 subscriber middle initial 1 AE
 			strb.Append(Canadian.TidyAE(subscriber.MiddleI,1));
-			//D10 language of insured 1 A
-			if(subscriber.Language=="fr") {
-				strb.Append("F");
-			}
-			else {
-				strb.Append("E");
-			}
-			//D11 card sequence/version number 2 N
-			//Not validated against type of carrier.  Might need to check if Dentaide.
-			strb.Append(Canadian.TidyN(plan.DentaideCardSequence,2));
-			//C19 plan record 30 AN
-			if(C19PlanRecordPresent){
-//todo: what text goes here?  Not documented
-				strb.Append(Canadian.TidyAN("",30));
+			if(carrier.CDAnetVersion=="04") {
+				//D10 language of insured 1 A
+				if(subscriber.Language=="fr") {
+					strb.Append("F");
+				}
+				else {
+					strb.Append("E");
+				}
+				//D11 card sequence/version number 2 N
+				//Not validated against type of carrier.  Might need to check if Dentaide.
+				strb.Append(Canadian.TidyN(plan.DentaideCardSequence,2));
+				//C19 plan record 30 AN
+				if(C19PlanRecordPresent) {
+					//todo: what text goes here?  Not documented
+					strb.Append(Canadian.TidyAN("",30));
+				}
 			}
 			string result="";
 			bool resultIsError=false;
@@ -221,12 +256,14 @@ namespace OpenDental.Eclaims {
 			etransAck.PlanNum=etrans.PlanNum;
 			etransAck.CarrierNum=etrans.CarrierNum;
 			etransAck.DateTimeTrans=DateTime.Now;
+			CCDFieldInputter fieldInputter=null;
 			if(resultIsError){
 				etransAck.Etype=EtransType.AckError;
 				etrans.Note="failed";
 			}
 			else{
-				etransAck.Etype=EtransType.ClaimAck_CA;//for now
+				fieldInputter=new CCDFieldInputter(result);
+				etransAck.Etype=fieldInputter.GetEtransType();
 			}
 			Etranss.Insert(etransAck);
 			Etranss.SetMessage(etransAck.EtransNum,result);
@@ -243,7 +280,6 @@ namespace OpenDental.Eclaims {
 			//Now we will process the 'result' here to extract the important data.  Basically Yes or No on the eligibility.
 			//We might not do this for any other trans type besides eligibility.
 			string strResponse="";//"Eligibility check on "+DateTime.Today.ToShortDateString()+"\r\n";
-			CCDFieldInputter fieldInputter=new CCDFieldInputter(result);
 			//CCDField field=fieldInputter.GetFieldById("G05");//response status
 			string valuestr=fieldInputter.GetValue("G05");//response status
 			switch(valuestr){

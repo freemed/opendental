@@ -84,7 +84,7 @@ namespace OpenDentBusiness {
 				}
 			}
 			if(!found) {
-				retPlan=Refresh(planNum);//retPlan will now be null if not found
+				retPlan=RefreshOne(planNum);//retPlan will now be null if not found
 			}
 			if(retPlan==null) {
 				//MessageBox.Show(Lans.g("InsPlans","Database is inconsistent.  Please run the database maintenance tool."));
@@ -124,18 +124,19 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Only loads one plan from db. Can return null.</summary>
-		public static InsPlan Refresh(long planNum) {
+		public static InsPlan RefreshOne(long planNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<InsPlan>(MethodBase.GetCurrentMethod(),planNum);
 			} 
-			if(planNum==0)
+			if(planNum==0){
 				return null;
+			}
 			string command="SELECT * FROM insplan WHERE plannum = '"+planNum+"'";
 			return Crud.InsPlanCrud.SelectOne(command);
 		}
 
 		///<summary>Gets new List for the specified family.  The only plans it misses are for claims with no current coverage.  These are handled as needed.</summary>
-		public static List<InsPlan> Refresh(Family Fam) {
+		public static List<InsPlan> RefreshForFam(Family Fam) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<InsPlan>>(MethodBase.GetCurrentMethod(),Fam);
 			} 
@@ -894,7 +895,7 @@ namespace OpenDentBusiness {
 				Patient pat=fam.GetPatient(patNum);
 				List<ClaimProc> claimProcs=ClaimProcs.Refresh(patNum);
 				List<Procedure> procs=Procedures.Refresh(patNum);
-				List<InsPlan> plans=InsPlans.Refresh(fam);
+				List<InsPlan> plans=InsPlans.RefreshForFam(fam);
 				List<PatPlan> patPlans=PatPlans.Refresh(patNum);
 				List<Benefit> benefitList=Benefits.Refresh(patPlans);
 				Procedures.ComputeEstimatesForAll(patNum,claimProcs,procs,plans,patPlans,benefitList,pat.Age);
