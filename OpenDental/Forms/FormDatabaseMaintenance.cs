@@ -219,18 +219,13 @@ namespace OpenDental {
 			strB.Append('-',90);
 			textLog.Text=DateTime.Now.ToString()+strB.ToString()+"\r\n";
 			Application.DoEvents();
+			/*
 			textLog.Text+=DatabaseMaintenance.MySQLTables(verbose);
 			if(!DatabaseMaintenance.GetSuccess()) {
 				Cursor=Cursors.Default;
 				return;
 			}
 			Application.DoEvents();
-			//textLog.Text+=DatabaseMaintenance.OracleSequences(verbose);
-			//if(!DatabaseMaintenance.GetSuccess()) {
-			//	Cursor=Cursors.Default;
-			//	return;
-			//}
-			//Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.DatesNoZeros(verbose);
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.DecimalValues(verbose);
@@ -243,10 +238,10 @@ namespace OpenDental {
 			textLog.Text+=DatabaseMaintenance.AutoCodesDeleteWithNoItems(verbose);
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.ClaimPlanNum2NotValid(verbose);
-			Application.DoEvents();
+			Application.DoEvents();*/
 			textLog.Text+=DatabaseMaintenance.ClaimDeleteWithInvalidPlanNums(verbose);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.ClaimDeleteWithNoClaimProcs(verbose);
+			/*textLog.Text+=DatabaseMaintenance.ClaimDeleteWithNoClaimProcs(verbose);
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.ClaimWriteoffSum(verbose);
 			Application.DoEvents();
@@ -349,7 +344,7 @@ namespace OpenDental {
 			textLog.Text+=DatabaseMaintenance.SignalInFuture(verbose);
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.StatementDateRangeMax(verbose);
-			Application.DoEvents();
+			Application.DoEvents();*/
 			textLog.Text+=Lan.g("FormDatabaseMaintenance","Done");
 			SaveLogToFile();
 			//textLog.ScrollToCaret

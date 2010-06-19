@@ -48,8 +48,8 @@ namespace OpenDentBusiness{
 		///<summary>If this is used, then none of the fields above will be set.</summary>
 		private static string ConnectionString="";
 		///<summary>milliseconds.</summary>
-		private static int delayForTesting=400;
-		private static bool logDebugQueries=true;
+		private static int delayForTesting=0;
+		private static bool logDebugQueries=false;
 
 		//For queries that do not use this flag, all queries are split into single commands. For those SQL commands which
 		//are a single command but contain multiple semi-colons, then this string should be set to false before the 

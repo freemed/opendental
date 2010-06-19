@@ -54,7 +54,8 @@ namespace UnitTests {
 			}
 			ProcedureCodes.TcodesClear();
 			//FormProcCodes.ImportProcCodes("",null,OpenDental.Properties.Resources.NoFeeProcCodes);
-			FormProcCodes.ImportProcCodes("",CDT.Class1.GetADAcodes(),"");//Yes, this will be broken if not on a specially configured development machine.
+			FormProcCodes.ImportProcCodes("",CDT.Class1.GetADAcodes(),"");//IF THIS LINE CRASHES:
+			//Go to Solution, Configuration Manager.  Exclude UnitTest project from build.
 			AutoCodes.SetToDefault();
 			ProcButtons.SetToDefault();
 			ProcedureCodes.ResetApptProcsQuickAdd();
