@@ -78,6 +78,7 @@ namespace OpenDental.Eclaims
 				ch.chmod((((7<<3)|7)<<3)|7,remoteTempFilePath);//Read, Write and Execute permissions for everyone.
 				string remoteFilePath="Testing/In/837D/"+remoteFileName;
 				ch.rename(remoteTempFilePath,remoteFilePath);
+				File.Delete(files[i]);//Remove the processed file.
 			}
 			channel.disconnect();
 			ch.disconnect();
