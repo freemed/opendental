@@ -491,7 +491,7 @@ namespace OpenDental{
 			}
 			//Patients.ResetAging();
 			//Ledgers.UpdateFinanceCharges(PIn.PDate(textDate.Text));
-			PatAging[] AgingList = Patients.GetAgingList();
+			PatAging[] AgingList = Patients.GetAgingListArray();
 			double OverallBalance;
 			int rowsAffected = 0;
 			bool billingMatch;

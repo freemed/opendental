@@ -771,14 +771,14 @@ namespace OpenDentBusiness{
 			else {
 				command+="(BalTotal - InsEst";
 			}
-			command+=" > '"+(excludeLessThan+.005).ToString()+"'"//add half a penny for rounding error
+			command+=" > '"+POut.Double(excludeLessThan+.005)+"'"//add half a penny for rounding error
 				+" OR PayPlanDue > 0";
 			if(!excludeNeg){
 				if(PrefC.GetBool(PrefName.BalancesDontSubtractIns)) {
-					command+=" OR BalTotal < '0')";
+					command+=" OR BalTotal < '-.005')";
 				}
 				else {
-					command+=" OR BalTotal - InsEst < '0')";
+					command+=" OR BalTotal - InsEst < '-.005')";
 				}
 			}
 			else{
@@ -884,7 +884,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Used only to run finance charges, so it ignores negative balances.</summary>
-		public static PatAging[] GetAgingList(){
+		public static PatAging[] GetAgingListArray(){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<PatAging[]>(MethodBase.GetCurrentMethod());
 			}
