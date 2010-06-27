@@ -51,6 +51,8 @@ namespace OpenDental{
 		private ArrayList mergedAL;
 		///<summary>The running weekly total, whether it gets displayed or not.</summary>
 		private TimeSpan[] WeeklyTotals;
+		private TextBox textOvertime2;
+		private TextBox textTotal2;
 		public Employee EmployeeCur;
 
 		///<summary></summary>
@@ -109,6 +111,8 @@ namespace OpenDental{
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.radioBreaks = new System.Windows.Forms.RadioButton();
 			this.radioTimeCard = new System.Windows.Forms.RadioButton();
+			this.textOvertime2 = new System.Windows.Forms.TextBox();
+			this.textTotal2 = new System.Windows.Forms.TextBox();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.SuspendLayout();
@@ -362,10 +366,30 @@ namespace OpenDental{
 			this.radioTimeCard.UseVisualStyleBackColor = true;
 			this.radioTimeCard.Click += new System.EventHandler(this.radioTimeCard_Click);
 			// 
+			// textOvertime2
+			// 
+			this.textOvertime2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.textOvertime2.Location = new System.Drawing.Point(563,662);
+			this.textOvertime2.Name = "textOvertime2";
+			this.textOvertime2.Size = new System.Drawing.Size(66,20);
+			this.textOvertime2.TabIndex = 22;
+			this.textOvertime2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			// 
+			// textTotal2
+			// 
+			this.textTotal2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.textTotal2.Location = new System.Drawing.Point(563,642);
+			this.textTotal2.Name = "textTotal2";
+			this.textTotal2.Size = new System.Drawing.Size(66,20);
+			this.textTotal2.TabIndex = 21;
+			this.textTotal2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			// 
 			// FormTimeCard
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(891,686);
+			this.Controls.Add(this.textOvertime2);
+			this.Controls.Add(this.textTotal2);
 			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.butPrint);
 			this.Controls.Add(this.butCompute);
@@ -642,7 +666,7 @@ namespace OpenDental{
 							if(clock.TimeDisplayed2.Year<1880){//if they have not clocked back in yet from break
 								//display the timespan of oneSpan using current time as the other number.
 								oneSpan=DateTime.Now-clock.TimeDisplayed1+TimeDelta;
-								row.Cells.Add(ClockEvents.Format(oneSpan,true));
+								row.Cells.Add(ClockEvents.Format(false,oneSpan,true));
 								daySpan+=oneSpan;
 							}
 							else{
@@ -757,6 +781,8 @@ namespace OpenDental{
 			else{
 				textTotal.Text=ClockEvents.Format(periodSpan);
 				textOvertime.Text=ClockEvents.Format(otspan);
+				textTotal2.Text=ClockEvents.Format(true,periodSpan,false);
+				textOvertime2.Text=ClockEvents.Format(true,otspan,false);
 			}
 		}
 

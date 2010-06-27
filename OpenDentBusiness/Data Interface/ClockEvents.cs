@@ -168,25 +168,30 @@ namespace OpenDentBusiness{
 			return retVal;
 		}
 
-		///<summary>Normally hh:mm, unless isMinutes=true.  Then, it's mm.</summary>
+		///<summary>Normally hh:mm or hh.mm.</summary>
 		public static string Format(TimeSpan span) {
-			return Format(span,false);
+			return Format(false,span,false);
 		}
 
 		///<summary>(hh):mm</summary>
-		public static string Format(TimeSpan span,bool showSeconds) {
+		public static string Format(bool isDecimal,TimeSpan span,bool showSeconds) {
 			string retVal="";
 			if(span < TimeSpan.Zero) {
 				retVal+="-";
 				span=span.Negate();
 			}
-			int hours=span.Days*24+span.Hours;
-			if(hours>0) {
-				retVal+=hours.ToString();
+			if(isDecimal) {
+				retVal+=span.TotalHours.ToString("n");
 			}
-			retVal+=":"+span.Minutes.ToString().PadLeft(2,'0');
-			if(showSeconds) {
-				retVal+=":"+span.Seconds.ToString().PadLeft(2,'0');
+			else{
+				int hours=span.Days*24+span.Hours;
+				if(hours>0) {
+					retVal+=hours.ToString();
+				}
+				retVal+=":"+span.Minutes.ToString().PadLeft(2,'0');
+				if(showSeconds) {
+					retVal+=":"+span.Seconds.ToString().PadLeft(2,'0');
+				}
 			}
 			return retVal;
 		}
