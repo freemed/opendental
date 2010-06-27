@@ -2027,21 +2027,16 @@ namespace OpenDental{
 				listProcStatus.Items.Add(Lan.g(this,"Existing-Current Prov"));
 				listProcStatus.Items.Add(Lan.g(this,"Existing-Other Prov"));
 				listProcStatus.Items.Add(Lan.g(this,"Referred Out"));
+				//listProcStatus.Items.Add(Lan.g(this,"Deleted"));
+				listProcStatus.Items.Add(Lan.g(this,"Condition"));
 			}
-			listProcStatus.Items.Add(Lan.g(this,"Deleted"));
-			listProcStatus.Items.Add(Lan.g(this,"Condition"));
 			if(ProcCur.ProcStatus==ProcStat.TP){
 				listProcStatus.SelectedIndex=0;
 			}
 			if(ProcCur.ProcStatus==ProcStat.C) {
 				listProcStatus.SelectedIndex=1;
 			}
-			if(PrefC.GetBool(PrefName.EasyHideClinical)) {
-				if(ProcCur.ProcStatus==ProcStat.D) {
-					listProcStatus.SelectedIndex=2;
-				}
-			}
-			else{
+			if(!PrefC.GetBool(PrefName.EasyHideClinical)) {
 				if(ProcCur.ProcStatus==ProcStat.EC) {
 					listProcStatus.SelectedIndex=2;
 				}
@@ -2051,14 +2046,11 @@ namespace OpenDental{
 				if(ProcCur.ProcStatus==ProcStat.R) {
 					listProcStatus.SelectedIndex=4;
 				}
-				if(ProcCur.ProcStatus==ProcStat.D) {
+				if(ProcCur.ProcStatus==ProcStat.Cn) {
 					listProcStatus.SelectedIndex=5;
 				}
-				if(ProcCur.ProcStatus==ProcStat.Cn) {
-					listProcStatus.SelectedIndex=6;
-				}
 			}
-			if(ProcCur.ProcStatus==ProcStat.D){
+			if(ProcCur.ProcStatus==ProcStat.D){//although I think it's impossible to open a deleted procedure.
 				butOK.Enabled=false;
 				butDelete.Enabled=false;
 				butChange.Enabled=false;
@@ -2749,19 +2741,14 @@ namespace OpenDental{
 					textProcFee.Text=ProcCur.ProcFee.ToString("f");
 				}
 			}
-			if(listProcStatus.SelectedIndex==1){
+			if(listProcStatus.SelectedIndex==1){//C
 				if(!Security.IsAuthorized(Permissions.ProcComplCreate)) {
 					//set it back to whatever it was before
 					if(ProcCur.ProcStatus==ProcStat.TP) {
 						listProcStatus.SelectedIndex=0;
 					}
 					else if(PrefC.GetBool(PrefName.EasyHideClinical)) {
-						if(ProcCur.ProcStatus==ProcStat.D) {
-							listProcStatus.SelectedIndex=2;
-						}
-						else{
-							listProcStatus.SelectedIndex=-1;//original status must not be visible
-						}
+						listProcStatus.SelectedIndex=-1;//original status must not be visible
 					}
 					else {
 						if(ProcCur.ProcStatus==ProcStat.EO) {
@@ -2773,11 +2760,8 @@ namespace OpenDental{
 						if(ProcCur.ProcStatus==ProcStat.R) {
 							listProcStatus.SelectedIndex=4;
 						}
-						if(ProcCur.ProcStatus==ProcStat.D) {
-							listProcStatus.SelectedIndex=5;
-						}
 						if(ProcCur.ProcStatus==ProcStat.Cn) {
-							listProcStatus.SelectedIndex=6;
+							listProcStatus.SelectedIndex=5;
 						}
 					}
 					return;
@@ -2786,12 +2770,7 @@ namespace OpenDental{
 				ProcCur.ProcStatus=ProcStat.C;
 			}
 			if(listProcStatus.SelectedIndex==2) {
-				if(PrefC.GetBool(PrefName.EasyHideClinical)){
-					ProcCur.ProcStatus=ProcStat.D;
-				}
-				else{
-					ProcCur.ProcStatus=ProcStat.EC;
-				}
+				ProcCur.ProcStatus=ProcStat.EC;
 			}
 			if(listProcStatus.SelectedIndex==3) {
 				ProcCur.ProcStatus=ProcStat.EO;
@@ -2800,9 +2779,6 @@ namespace OpenDental{
 				ProcCur.ProcStatus=ProcStat.R;
 			}
 			if(listProcStatus.SelectedIndex==5) {
-				ProcCur.ProcStatus=ProcStat.D;
-			}
-			if(listProcStatus.SelectedIndex==6) {
 				ProcCur.ProcStatus=ProcStat.Cn;
 			}
 		}
