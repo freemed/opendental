@@ -1212,7 +1212,7 @@ namespace OpenDental{
 			}
 			//Add a UI managed row to display the total fee for the selected procedures in this appointment.
 			row=new ODGridRow();
-			row.Cells.Add("Fee This Appt");
+			row.Cells.Add(Lan.g(this,"Fee This Appt"));
 			row.Cells.Add("");//Calculated below
 			gridPatient.Rows.Add(row);
 			CalcPatientFeeThisAppt();

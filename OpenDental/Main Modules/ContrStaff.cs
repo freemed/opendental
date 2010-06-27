@@ -665,7 +665,16 @@ namespace OpenDental{
 				butTasks,
 				butBackup,
 				butAccounting,
-				butBreaks
+				butBreaks,
+				label3,
+				label4,
+				label5,
+				label7,
+				labelSending,
+				checkIncludeAck,
+				labelDays,
+				butAck,
+				label6
 				});
 			RefreshFullMessages();//after this, messages just get added to the list.
 			//But if checkIncludeAck is clicked,then it does RefreshMessages again.

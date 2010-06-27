@@ -1626,7 +1626,11 @@ namespace OpenDental{
 				butClearPin,
 				label2,
 				label7,
-				butOther
+				butOther,
+				radioDay,
+				radioWeek,
+				tabWaiting,
+				tabSched
 				});
 			LayoutToolBar();
 			//Appointment action buttons

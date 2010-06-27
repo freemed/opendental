@@ -1625,16 +1625,24 @@ namespace OpenDental {
 					label6,
 					label5,
 					label3,
-					//label8,
-					//labelAgeInsEst,
-					//label10,
 					labelUrgFinNote,
 					labelFamFinancial,
-					//butComm,
 					butRefresh,
 					gridAccount,
 					gridAcctPat,
-					gridComm
+					gridComm,
+					labelInsEst,
+					labelBalance,
+					labelPatEstBal,
+					labelUnearned,
+					labelInsRem,
+					tabMain,
+					tabShow,
+					butToday,
+					but45days,
+					but90days,
+					butDatesAll,
+					butRefresh
 				});
 			LayoutToolBar();
 			if(ViewingInRecall) {
