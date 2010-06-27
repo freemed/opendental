@@ -60,7 +60,8 @@ namespace UpdateFileCopier {
 				//if(appfiles[i].Name=="UpdateFileCopier.exe") {
 				//	continue;//skip this one.
 				//}
-				//any file exclusions will have happened when originally copying files into the AtoZ folder.
+				//Any file exclusions will have happened when originally copying files into the AtoZ folder.
+				//And that happens in OpenDental.PrefL.CheckProgramVersion().
 				try{
 					File.Copy(appfiles[i].FullName,Path.Combine(DestDirectory,appfiles[i].Name),true);
 				}

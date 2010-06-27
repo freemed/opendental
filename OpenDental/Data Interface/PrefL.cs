@@ -90,6 +90,9 @@ namespace OpenDental {
 						if(appfiles[i].Name.StartsWith("openlog")) {
 							continue;//these can be big and are irrelevant
 						}
+						if(appfiles[i].Name.Contains("__")) {//double underscore
+							continue;//So that plugin dlls can purposely skip the file copy.
+						}
 						//include UpdateFileCopier
 						File.Copy(appfiles[i].FullName,ODFileUtils.CombinePaths(folderUpdate,appfiles[i].Name));
 					}
