@@ -434,6 +434,10 @@ namespace OpenDental{
 		private void butOK_Click(object sender, System.EventArgs e) {
 			if(checkEnabled.Checked && textPluginDllName.Text!=""){
 				string dllPath=ODFileUtils.CombinePaths(Application.StartupPath,textPluginDllName.Text);
+				if(dllPath.Contains("[VersionMajMin]")) {
+					Version vers = new Version(Application.ProductVersion);
+					dllPath = dllPath.Replace("[VersionMajMin]",vers.Major.ToString() + "." + vers.Minor.ToString());
+				}
 				if(!File.Exists(dllPath)) {
 					MessageBox.Show(Lan.g(this,"Dll file not found:")+" "+dllPath);
 					return;
