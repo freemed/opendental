@@ -436,7 +436,7 @@ namespace OpenDental{
 				string dllPath=ODFileUtils.CombinePaths(Application.StartupPath,textPluginDllName.Text);
 				if(dllPath.Contains("[VersionMajMin]")) {
 					Version vers = new Version(Application.ProductVersion);
-					dllPath = dllPath.Replace("[VersionMajMin]",vers.Major.ToString() + "." + vers.Minor.ToString());
+					dllPath = dllPath.Replace("[VersionMajMin]","");//now stripped clean
 				}
 				if(!File.Exists(dllPath)) {
 					MessageBox.Show(Lan.g(this,"Dll file not found:")+" "+dllPath);

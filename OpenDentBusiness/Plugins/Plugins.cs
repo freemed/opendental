@@ -28,7 +28,11 @@ namespace OpenDentBusiness{
 				string dllPath=ODFileUtils.CombinePaths(Application.StartupPath,ProgramC.Listt[i].PluginDllName);
 				if(dllPath.Contains("[VersionMajMin]")) {
 					Version vers=new Version(Application.ProductVersion);
-					dllPath=dllPath.Replace("[VersionMajMin]",vers.Major.ToString()+"."+vers.Minor.ToString());
+					string dllPathWithVersion=dllPath.Replace("[VersionMajMin]",vers.Major.ToString()+"."+vers.Minor.ToString());
+					dllPath=dllPath.Replace("[VersionMajMin]","");//now stripped clean
+					if(File.Exists(dllPathWithVersion)){
+						File.Copy(dllPathWithVersion,dllPath,true);
+					}
 				}
 				if(!File.Exists(dllPath)) {
 					continue;
