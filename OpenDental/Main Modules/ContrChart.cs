@@ -6619,7 +6619,12 @@ namespace OpenDental{
 				if(!Security.IsAuthorized(Permissions.ProcComplCreate,apt.AptDateTime)) {
 					return;
 				}
-				if(!MsgBox.Show(this,true,"Set appointment complete?")){
+				if(apt.AptDateTime.Date>DateTime.Today) {
+					if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Appointment is in the future.  Set complete anyway?")){
+						return;
+					}
+				}
+				else if(!MsgBox.Show(this,true,"Set appointment complete?")){
 					return;
 				}
 				Appointments.SetAptStatusComplete(apt.AptNum,PatPlans.GetPlanNum(PatPlanList,1),PatPlans.GetPlanNum(PatPlanList,2));
