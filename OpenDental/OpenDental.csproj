@@ -4117,8 +4117,6 @@
     <None Include="app.config" />
     <None Include="Resources\ReportAccountingBalanceSheet.txt" />
     <None Include="Resources\ReportAccountingGenLedger.txt" />
-    <None Include="Resources\CDAErrorMessagesFr.txt" />
-    <None Include="Resources\CDAErrorMessagesEn.txt" />
     <None Include="Resources\canadiancarriers.txt" />
     <None Include="Resources\editPencil.gif" />
     <None Include="Resources\Add.gif" />

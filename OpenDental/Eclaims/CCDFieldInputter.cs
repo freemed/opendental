@@ -53,7 +53,6 @@ namespace OpenDental.Eclaims {
 						break;
 					default:
 						throw new ApplicationException(this.ToString()+".CCDFieldInputter: CCD Message type not recognized: "+msgType);
-						return;
 				}
 			}
 			else {//version 02
