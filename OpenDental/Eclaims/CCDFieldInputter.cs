@@ -62,16 +62,16 @@ namespace OpenDental.Eclaims {
 						ParseElegibilityResponse_v2_10(message);
 						break;
 					case "11"://claim response
-
+						ParseClaimResponse_v2_11(message);
 						break;
 					case "21"://eob
-
+						ParseEOB_v2_21(message);
 						break;
 					case "12"://reversal response
-
+						ParseClaimReversalResponse_v2_12(message);
 						break;
 					case "13"://response to predetermination
-
+						ParsePredeterminationAck_v2_13(message);
 						break;
 					default:
 						throw new ApplicationException(this.ToString()+".CCDFieldInputter: CCD Message type not recognized: "+msgType);
@@ -394,6 +394,67 @@ namespace OpenDental.Eclaims {
 			message=this.InputFields(message,"A01A02A03A04A05A07B01B02G01G05G06G07G02"+
 																				"###G06G08");
 			return;
+		}
+
+		private void ParseClaimResponse_v2_11(string message){
+			message=this.InputFields(message,"A01A02A03A04A05A07B01B02G01G05G06G07G02G04G27");
+			CCDField fieldG06=this.GetFieldById("G06");
+			if(fieldG06==null) {
+				return;//error
+			}
+			if(fieldG06.format!="N") {
+				MessageBox.Show(this.ToString()+".ParseClaimResponse_v2_11: Internal error, field G06 is not of integer type!");
+				return;//error
+			}
+			for(int i=0;i<Convert.ToInt32(fieldG06.valuestr);i++) {
+				message=this.InputFields(message,"F07G08");
+			}
+		}
+
+		private void ParseEOB_v2_21(string message){
+			message=this.InputFields(message,"A01A02A03A04A05A07B01B02G01G03G04G27G09F06G10G11G28G29G30");
+			CCDField fieldF06=this.GetFieldById("F06");
+			if(fieldF06==null) {
+				return;//error
+			}
+			if(fieldF06.format!="N") {
+				MessageBox.Show(this.ToString()+".ParseEOB_v2_21: Internal error, field F06 is not of integer type!");
+				return;//error
+			}
+			for(int i=0;i<Convert.ToInt32(fieldF06.valuestr);i++) {
+				message=this.InputFields(message,"F07G12G13G14G15G16G17");
+			}
+			CCDField fieldG10=this.GetFieldById("G10");
+			if(fieldG10==null) {
+				return;//error
+			}
+			if(fieldG10.format!="N") {
+				MessageBox.Show(this.ToString()+".ParseEOB_v2_21: Internal error, field G10 is not of integer type!");
+				return;//error
+			}
+			for(int i=0;i<Convert.ToInt32(fieldG10.valuestr);i++) {
+				message=this.InputFields(message,"G18G19G20G21G22G23G24G25");
+			}
+			message=this.InputFields(message,"###G11G26");
+		}
+
+		private void ParseClaimReversalResponse_v2_12(string message){
+			message=this.InputFields(message,"A01A02A03A04A05A07B01B02G01G05G06G07G04###G06G08");
+		}
+
+		private void ParsePredeterminationAck_v2_13(string message){
+			message=this.InputFields(message,"A01A02A03A04A05A07B01B02G01G05G06G07G02G04");
+			CCDField fieldG06=this.GetFieldById("G06");
+			if(fieldG06==null) {
+				return;//error
+			}
+			if(fieldG06.format!="N") {
+				MessageBox.Show(this.ToString()+".ParsePredeterminationAck_v2_13: Internal error, field G06 is not of integer type!");
+				return;//error
+			}
+			for(int i=0;i<Convert.ToInt32(fieldG06.valuestr);i++) {
+				message=this.InputFields(message,"F07G08");
+			}
 		}
 
 		///<summary>Probably some missing types.  Mostly focussed on response types.</summary>
