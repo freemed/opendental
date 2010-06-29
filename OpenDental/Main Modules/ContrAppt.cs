@@ -3889,6 +3889,7 @@ namespace OpenDental{
 				AdjustmentCur.ProvNum=provNum;
 				AdjustmentCur.PatNum=pat.PatNum;
 				AdjustmentCur.AdjType=PrefC.GetLong(PrefName.BrokenAppointmentAdjustmentType);
+				AdjustmentCur.ClinicNum=pat.ClinicNum;
 				FormAdjust FormA=new FormAdjust(pat,AdjustmentCur);
 				FormA.IsNew=true;
 				FormA.ShowDialog();
