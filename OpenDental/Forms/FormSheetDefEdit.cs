@@ -157,11 +157,11 @@ namespace OpenDental {
 				if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.Image){
 					string filePathAndName=ODFileUtils.CombinePaths(SheetUtil.GetImagePath(),SheetDefCur.SheetFieldDefs[i].FieldName);
 					Image img=null;
-					if(File.Exists(filePathAndName)){
-						img=Image.FromFile(filePathAndName);
-					}
-					else if(SheetDefCur.SheetFieldDefs[i].FieldName=="Patient Info.gif") {
+					if(SheetDefCur.SheetFieldDefs[i].FieldName=="Patient Info.gif") {
 						img=Properties.Resources.Patient_Info;
+					}
+					else if(File.Exists(filePathAndName)){
+						img=Image.FromFile(filePathAndName);
 					}
 					else{
 						continue;

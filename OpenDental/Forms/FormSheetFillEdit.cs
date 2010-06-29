@@ -103,11 +103,11 @@ namespace OpenDental {
 				}
 				string filePathAndName=ODFileUtils.CombinePaths(SheetUtil.GetImagePath(),field.FieldName);
 				Image img=null;
-				if(File.Exists(filePathAndName)){
-					img=Image.FromFile(filePathAndName);
-				}
-				else if(field.FieldName=="Patient Info.gif") {
+				if(field.FieldName=="Patient Info.gif") {
 					img=Properties.Resources.Patient_Info;
+				}
+				else if(File.Exists(filePathAndName)){
+					img=Image.FromFile(filePathAndName);
 				}
 				else{
 					continue;

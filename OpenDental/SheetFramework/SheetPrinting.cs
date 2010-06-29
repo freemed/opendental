@@ -289,11 +289,11 @@ namespace OpenDental {
 				}
 				string filePathAndName=ODFileUtils.CombinePaths(SheetUtil.GetImagePath(),field.FieldName);
 				XImage img=null;
-				if(File.Exists(filePathAndName)) {
-					img=XImage.FromFile(filePathAndName);
-				}
-				else if(field.FieldName=="Patient Info.gif") {
+				if(field.FieldName=="Patient Info.gif") {
 					img=XImage.FromGdiPlusImage(Properties.Resources.Patient_Info);
+				}
+				else if(File.Exists(filePathAndName)) {
+					img=XImage.FromFile(filePathAndName);
 				}
 				else {
 					continue;

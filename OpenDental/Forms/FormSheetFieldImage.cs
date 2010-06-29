@@ -101,6 +101,7 @@ namespace OpenDental {
 				pictureBox.Image=Properties.Resources.Patient_Info;
 				textWidth2.Text=pictureBox.Image.Width.ToString();
 				textHeight2.Text=pictureBox.Image.Height.ToString();
+				textFullPath.Text="Patient Info.gif (internal)";
 			}
 			else{
 				pictureBox.Image=null;
