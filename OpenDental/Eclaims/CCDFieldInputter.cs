@@ -52,7 +52,7 @@ namespace OpenDental.Eclaims {
 						ParseReconciliaiton_15(message);
 						break;
 					default:
-						throw new ApplicationException(this.ToString()+".CCDFieldInputter: CCD Message type not recognized: "+msgType);
+						throw new ApplicationException(this.ToString()+".CCDFieldInputter: Version 4 CCD Message type not recognized: "+msgType);
 				}
 			}
 			else {//version 02
@@ -74,7 +74,7 @@ namespace OpenDental.Eclaims {
 						ParsePredeterminationAck_v2_13(message);
 						break;
 					default:
-						throw new ApplicationException(this.ToString()+".CCDFieldInputter: CCD Message type not recognized: "+msgType);
+						throw new ApplicationException(this.ToString()+".CCDFieldInputter: Version 2 CCD Message type not recognized: "+msgType);
 				}
 			}
 		}
@@ -244,8 +244,7 @@ namespace OpenDental.Eclaims {
 			message=this.InputFields(message,"G40");
 		}
 
-		private void ParseClaimReversalResponse_12(string message) {
-			
+		private void ParseClaimReversalResponse_12(string message) {			
 			message=this.InputFields(message,"A01A02A03A04A05A07A11B01B02E19G01G05G06G07G04G31"+
 																					"###G31G32"+
 																					"###G06G08");
@@ -259,15 +258,13 @@ namespace OpenDental.Eclaims {
 			return;
 		}
 
-		private void ParseEmailResponse_24(string message) {
-			
+		private void ParseEmailResponse_24(string message) {			
 			message=this.InputFields(message,"A01A02A03A04A07A11G48G54G49G50G51G52"+
 																					"###G52G53");
 			return;
 		}
 
-		private void ParseOutstandingTransactionsAck_14(string message) {
-			
+		private void ParseOutstandingTransactionsAck_14(string message) {			
 			message=this.InputFields(message,"A01A02A03A04A05A07A11B01B02B03G05G06G07"+
 																					"###G06G08");
 			return;
@@ -312,8 +309,7 @@ namespace OpenDental.Eclaims {
 			return;
 		}
 
-		private void ParsePredeterminationAck_13(string message) {
-			
+		private void ParsePredeterminationAck_13(string message) {			
 			message=this.InputFields(message,"A01A02A03A04A05A07A11B01B02G01G05G06G07G04G27G31G39"+
 																					"###G31G32"+
 																					"G42G46G47");
@@ -332,8 +328,7 @@ namespace OpenDental.Eclaims {
 			return;
 		}
 
-		private void ParsePaymentReconciliation_16(string message) {
-			
+		private void ParsePaymentReconciliation_16(string message) {			
 			message=this.InputFields(message,"A01A02A03A04A07A11B04G01G05G06G11G34G35G36G37G33F38G62");
 			CCDField fieldG37=this.GetFieldById("G37");
 			if(fieldG37==null) {
@@ -361,8 +356,7 @@ namespace OpenDental.Eclaims {
 			return;
 		}
 
-		private void ParseReconciliaiton_15(string message) {
-			
+		private void ParseReconciliaiton_15(string message) {			
 			message=this.InputFields(message,"A01A02A03A04A07A11B02G01G05G06G11G34G35G36G37G33");
 			CCDField fieldG37=this.GetFieldById("G37");
 			if(fieldG37==null) {
@@ -483,7 +477,7 @@ namespace OpenDental.Eclaims {
 					case "15":
 						return EtransType.SummaryResponse_CA;
 					default:
-						throw new ApplicationException("Message type not recognized: "+msgType);
+						throw new ApplicationException("Version 4 message type not recognized: "+msgType);
 				}
 			}
 			else {//version 02
@@ -499,7 +493,7 @@ namespace OpenDental.Eclaims {
 					case "13"://response to predetermination
 						return EtransType.PredetermAck_CA;
 					default:
-						throw new ApplicationException("Message type not recognized: "+msgType);
+						throw new ApplicationException("Version 2 message type not recognized: "+msgType);
 				}
 			}
 		}

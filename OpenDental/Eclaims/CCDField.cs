@@ -289,10 +289,16 @@ namespace OpenDental.Eclaims {
 			pFieldId=pFieldId.ToUpper();
 			if(isVersion02){
 				if(!IsValidId_v2(pFieldId)){
-					MessageBox.Show("Cannot construct version 2 field with invalid field id: "+pFieldId);
-					return;
+					if(IsValidId_v4(pFieldId)){
+						SetValuesUsingFieldId_v4(pFieldId);
+					}
+					else{
+						MessageBox.Show("Cannot construct version 2 field with invalid field id: "+pFieldId);
+						return;
+					}
+				}else{
+					SetValuesUsingFieldId_v2(pFieldId);
 				}
-				SetValuesUsingFieldId_v2(pFieldId);
 			}
 			else{
 				if(!IsValidId_v4(pFieldId)){
@@ -332,7 +338,6 @@ namespace OpenDental.Eclaims {
 		}
 
 		private void SetValuesUsingFieldId_v2(string pFieldId){
-			//Values in the following table were taken from the data dictionary of the CCD doc (about page 70).
 			switch(pFieldId)
 			{
 				case "A01":
@@ -718,7 +723,7 @@ namespace OpenDental.Eclaims {
 					frenchFieldName="Statut de réponse";
 					format="A";
 					lengthRequirement=new ConstLengthRequirement(1);
-					valueRequirements.Add(new DiscreteValueRequirement(new string[] {"A","R","H","B","C","N","M"}));
+					valueRequirements.Add(new DiscreteValueRequirement(new string[] {"A","E","R","H","B","C","N","M","X"}));
 					break;
 				case "G06":
 					fieldName="Number of Error Codes";

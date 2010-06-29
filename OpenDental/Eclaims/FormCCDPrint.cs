@@ -288,29 +288,35 @@ namespace OpenDental.Eclaims {
 					}
 					else{
 						switch(msgType){
+							case "10"://Version 2.
+								PrintEligibility(e.Graphics);
+								break;
 							case "11":
 								PrintClaimAck_11(e.Graphics);
 								break;
-							case "21":
-								PrintEOB_21(e.Graphics);
-								break;
-							case "18":
-								PrintResponseToElegibility_18(e.Graphics);
-								break;
-							case "23":
-								PrintPredeterminationEOB_23(e.Graphics);
+							case "12":
+								DefaultPrint(e.Graphics);//TODO
 								break;
 							case "13":
 								PrintPredeterminationAck_13(e.Graphics);
-								break;
-							case "24":
-								PrintEmail_24(e.Graphics);
 								break;
 							case "15":
 								PrintSummaryReconciliation_15(e.Graphics);
 								break;
 							case "16":
 								PrintPaymentReconciliation_16(e.Graphics);
+								break;
+							case "18":
+								PrintResponseToElegibility_18(e.Graphics);
+								break;
+							case "21":
+								PrintEOB_21(e.Graphics);
+								break;							
+							case "23":
+								PrintPredeterminationEOB_23(e.Graphics);
+								break;							
+							case "24":
+								PrintEmail_24(e.Graphics);
 								break;
 							default:
 								DefaultPrint(e.Graphics);
