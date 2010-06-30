@@ -58,7 +58,7 @@ namespace OpenDental.Eclaims {
 		Font standardUnderline=new Font(FontFamily.GenericMonospace,10,FontStyle.Underline);
 		Font standardSmall=new Font(FontFamily.GenericMonospace,8);
 		DocumentGenerator doc=new DocumentGenerator();
-		string msgType;
+		string transactionCode;
 		///<summary>Used to represent a single line break (the maximum line hight for the standard font).</summary>
 		float verticalLine;
 		///<summary>Represents the maximum width of any character in our standard font.</summary>
@@ -76,7 +76,7 @@ namespace OpenDental.Eclaims {
 		///<summary>The parsed elements/fields of the etrans.MessageText string or embeded message.</summary>
 		CCDFieldInputter formData;
 		///<summary>Attained from field G42. Tells which form to print.</summary>
-		CCDField formId;
+		string formId;
 		Etrans etrans;
 		Patient patient;
 		Patient subscriber;
@@ -199,15 +199,36 @@ namespace OpenDental.Eclaims {
 					throw new Exception((embedded?"Embedded":"")+"CCD message format too short: "+MessageText);
 				}
 				formData=new CCDFieldInputter(MessageText);//Input the fields of the given message.
-				formId=formData.GetFieldById("G42");
-				CCDField transactionCode=formData.GetFieldById("A04");
-				msgType=((transactionCode==null || transactionCode.valuestr==null)?"00":transactionCode.valuestr);
-				predetermination=(msgType=="23"||msgType=="13");//Be sure to list all predetermination response types here!
+				string formatVersionNumber=formData.GetFieldById("A03").valuestr;//Must always exist so no error checking here.
+				transactionCode=formData.GetFieldById("A04").valuestr;//Must always exist so no error checking here.
+				//Check for embedded messages.
+				CCDField embeddedTransaction=formData.GetFieldById("G40");
+				if(embeddedTransaction!=null){
+					FormCCDPrint embeddedForm=new FormCCDPrint(etrans.Copy(),true,assigned,embeddedTransaction.valuestr);
+					embeddedForm.Print();
+				}
+				if(formatVersionNumber=="04"){//FormId field does not exist in version 02 in any of the message texts.
+					formId=formData.GetFieldById("G42").valuestr;//Always exists in version 04 message responses.
+				}else{//Version 02
+					//Since there is no FormID field in version 02, we figure out what the formId should be based on the transaction type.
+					if(transactionCode=="10"){//Eligibility Response.
+						formId="08";//Eligibility Form
+					}else if(transactionCode=="11"){//Claim Response.
+						formId="03";//Claim Acknowledgement Form
+					}else if(transactionCode=="21"){//EOB
+						formId="01";//EOB Form
+					}else if(transactionCode=="13"){//Response to Pre-Determination.
+						formId="06";//Pre-Determination Acknowledgement Form
+					}else{
+						throw new Exception("Unhandled transactionCode '"+transactionCode+"' for version 02 message.");
+					}
+				}
+				predetermination=(transactionCode=="23"||transactionCode=="13");//Be sure to list all predetermination response types here!
 				//We are required to print 2 copies of the Dentaide form when it is not a predetermination form.
 				//Everything else requires only 1 copy. Here we add the stipulation that only a patient form can print 2, copies,
 				//so that the dentist form does not create 2 copies of 2 dentist forms which also create 2 copies, resulting in
 				//4 total copies.
-				int numCopies=((formId.valuestr=="02" && !predetermination && patientCopy)?2:1);
+				int numCopies=((formId=="02" && !predetermination && patientCopy)?2:1);
 				while(numCopies>0){
 					if(!patientCopy){//A dentist copy is to be printed.
 						//We cannot simply print two copies of this form, because the dentist and patient forms are slightly different.
@@ -215,16 +236,9 @@ namespace OpenDental.Eclaims {
 						patientForm.Print();
 					}
 					//Always print a patient copy, but only print dentist copies for those forms to which it applies.
-					if(patientCopy || formId.valuestr=="01" || formId.valuestr=="03" || formId.valuestr=="04" || 
-						formId.valuestr=="06" || formId.valuestr=="07") {
+					if(patientCopy || formId=="01" || formId=="03" || formId=="04" || formId=="06" || formId=="07") {
 						if(printable){
 							this.ShowDialog();//Trigger the actual printing process, which calls FormCCDPrint_Load.
-							CCDField embeddedTransaction=formData.GetFieldById("G40");
-							if(embeddedTransaction.valuestr!=null){//js not sure about this.  Trying to prevent crash of Eligib script #2.
-								Etrans embTrans=etrans.Copy();
-								FormCCDPrint embeddedForm=new FormCCDPrint(embTrans,assigned,embeddedTransaction.valuestr);
-								embeddedForm.Print();
-							}
 						}
 					}
 					numCopies--;
@@ -281,45 +295,40 @@ namespace OpenDental.Eclaims {
 						status=responseStatus.valuestr.ToUpper();
 					}
 					if(status=="R"){//Claim Rejection
-						PrintClaimRejection(e.Graphics);
+					  PrintClaimRejection(e.Graphics);
 					}
-					else if(status=="M" || formId.valuestr=="05"){//Paper Claim
-						PrintPaperClaim(e.Graphics);
-					}
+					//else 
+					//if(status=="M" || formId=="05"){//Paper Claim
+						
+					//}
 					else{
-						switch(msgType){
-							case "10"://Version 2.
-								PrintEligibility(e.Graphics);
-								break;
-							case "11":
-								PrintClaimAck_11(e.Graphics);
-								break;
-							case "12":
-								DefaultPrint(e.Graphics);//TODO
-								break;
-							case "13":
-								PrintPredeterminationAck_13(e.Graphics);
-								break;
-							case "15":
-								PrintSummaryReconciliation_15(e.Graphics);
-								break;
-							case "16":
-								PrintPaymentReconciliation_16(e.Graphics);
-								break;
-							case "18":
-								PrintResponseToElegibility_18(e.Graphics);
-								break;
-							case "21":
-								PrintEOB_21(e.Graphics);
-								break;							
-							case "23":
-								PrintPredeterminationEOB_23(e.Graphics);
-								break;							
-							case "24":
-								PrintEmail_24(e.Graphics);
-								break;
+						switch(formId){
 							default:
 								DefaultPrint(e.Graphics);
+								break;
+							case "01":
+								PrintEOB(e.Graphics);
+								break;
+							case "02":
+								PrintDentaide(e.Graphics);
+								break;
+							case "03":
+								PrintClaimAck(e.Graphics);
+								break;
+							case "04":
+								PrintEmployerCertified(e.Graphics);
+								break;
+							case "05":
+								PrintPaperClaim(e.Graphics);
+								break;
+							case "06":
+								PrintPredeterminationAck(e.Graphics);
+								break;
+							case "07":
+								PrintEOB(e.Graphics);
+								break;
+							case "08":
+								PrintEligibility(e.Graphics);
 								break;
 						}
 					}
@@ -350,90 +359,6 @@ namespace OpenDental.Eclaims {
 		#endregion
 
 		#region Individual Form Printers
-
-		///<summary>Assumes that the given form is not a rejection or a manual form.</summary>
-		private void PrintClaimAck_11(Graphics g){
-			switch(formId.valuestr){
-				case "03"://Claim ack
-					PrintClaimAck(g);
-					break;
-				case "04"://Employer Certified
-					PrintEmployerCertified(g);
-					break;
-				case "02"://Dentaide
-					PrintDentaide(g);
-					break;
-				default:
-					DefaultPrint(g);
-					return;
-			}
-		}
-
-		///<summary>Assumes that the given form is not a rejection or a manual form.</summary>
-		private void PrintEOB_21(Graphics g){
-			switch(formId.valuestr) {
-				case "01"://EOB
-					PrintEOB(g);
-					break;
-				case "02"://Dentaide
-					PrintDentaide(g);
-					break;
-				default:
-					DefaultPrint(g);
-					break;
-			}
-		}
-
-		///<summary>Assumes that the given form is not a rejection or a manual form.</summary>
-		private void PrintPredeterminationAck_13(Graphics g){
-			switch(formId.valuestr){
-				case "06"://Predetermination Ack
-					PrintPredeterminationAck(g);
-					break;
-				case "02"://Dentaide
-					PrintDentaide(g);
-					break;
-				default:
-					DefaultPrint(g);
-					break;
-			}
-		}
-
-		///<summary>Assumes that the given form is not a rejection or a manual form.</summary>
-		private void PrintPredeterminationEOB_23(Graphics g){
-			switch(formId.valuestr){
-				case "07"://Predetermination EOB
-					PrintEOB(g);
-					break;
-				case "02"://Dentaide
-					PrintDentaide(g);
-					break;
-				default:
-					DefaultPrint(g);
-					break;
-			}
-		}
-
-		///<summary>Assumes that the given form is not a rejection or a manual form.</summary>
-		private void PrintResponseToElegibility_18(Graphics g){
-			switch(formId.valuestr){
-				case "03"://Claim ack
-					PrintClaimAck(g);
-					break;
-				case "04"://Employer Certified
-					PrintEmployerCertified(g);
-					break;
-				case "02"://Dentaide
-					PrintDentaide(g);
-					break;
-				case "08"://Eligibility form
-					PrintEligibility(g);
-					break;
-				default:
-					DefaultPrint(g);
-					return;
-			}
-		}
 
 		private void PrintEmail_24(Graphics g){
 			text=isFrench?"RÉPONSE PAR COURRIER ÉLECTRONIQUE":"E-MAIL";
@@ -969,7 +894,7 @@ namespace OpenDental.Eclaims {
 			CCDField fieldG01=formData.GetFieldById("G01");
 			float rightMidCol=400.0f;
 			if(fieldG01!=null && fieldG01.valuestr!=null) {
-				if(msgType=="23") {//Predetermination EOB
+				if(transactionCode=="23") {//Predetermination EOB
 					doc.DrawField(g,isFrench?"NO DU PLAN DE TRAITEMENT":"PREDETERMINATION NO",fieldG01.valuestr,true,rightMidCol,0);
 				}
 				else {
@@ -1320,7 +1245,7 @@ namespace OpenDental.Eclaims {
 			text=DateToString(etrans.DateTimeTrans,"yyyy MM dd");
 			doc.DrawString(g,text,x+size1.Width,0);
 			x=doc.StartElement(verticalLine);
-			bool isEOB=msgType=="21" || msgType=="23";
+			bool isEOB=transactionCode=="21" || transactionCode=="23";
 			CCDField[] noteNumbers=formData.GetFieldsById("G45");//Used to looking up note reference numbers.
 			CCDField[] noteTexts=formData.GetFieldsById("G26");
 			//The rest of the CCDField[] object should all be the same length, since they come bundled together as part 

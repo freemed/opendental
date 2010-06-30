@@ -162,7 +162,7 @@ namespace OpenDental.Eclaims {
 		public CCDField GetFieldById(string fieldId){
 			CCDField[] fields=GetFieldsById(fieldId);
 			if(fields==null || fields.Length==0) {
-				return new CCDField(fieldId,isVersion2);//Doesn't exist, return with empty value, so at least some information can be used.
+				return null;
 			}
 			if(fields.Length>1) {
 				throw new ApplicationException("Internal error, invalid use of ambiguous CCD field id"+((fieldId==null)?"":(": "+fieldId)));
