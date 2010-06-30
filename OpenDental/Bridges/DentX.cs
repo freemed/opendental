@@ -45,7 +45,8 @@ namespace OpenDental.Bridges{
 			}
 			//Make sure the program is running
 			string proimagePath=ReadValue(iniFile,"imagemgt","MainFile");
-			if(Process.GetProcessesByName("ProImage.exe").Length==0){
+			Process[] proImageInstances=Process.GetProcessesByName("ProImage");
+			if(proImageInstances.Length==0){
 				Process.Start(proimagePath);
 				Thread.Sleep(TimeSpan.FromSeconds(4));
 			}
