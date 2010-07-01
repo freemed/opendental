@@ -2243,6 +2243,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);
 				command="ALTER TABLE procedurelog ADD CanadianTypeCodes varchar(20) NOT NULL";
 				Db.NonQ(command);
+				command=@"UPDATE clearinghouse SET ResponsePath='C:\\MercuryDE\\Reports\\' WHERE ResponsePath='' AND Description='MercuryDE' LIMIT 1";
+				Db.NonQ(command);
 	
 
 
