@@ -163,7 +163,7 @@ SELECT benefit.PlanNum, benefit.MonetaryAmt
 FROM benefit, covcat
 WHERE covcat.CovCatNum = benefit.CovCatNum
 AND benefit.BenefitType = 5 /* limitation */
-AND covcat.EbenefitCat=1
+AND (covcat.EbenefitCat=1 OR ISNULL(covcat.EbenefitCat))
 AND benefit.MonetaryAmt <> 0
 GROUP BY benefit.PlanNum
 ORDER BY benefit.PlanNum;
