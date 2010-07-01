@@ -12,11 +12,13 @@ namespace OpenDental.Eclaims {
 	public class CCDFieldInputter{
 		private List<CCDField> fieldList = new List<CCDField>();//List of fields that make up the message
 		public bool isVersion2;
+		public string messageText="";
 
 		public CCDFieldInputter(){
 		}
 
 		public CCDFieldInputter(string message){
+			messageText=message;
 			string version=message.Substring(18,2);
 			string msgType=message.Substring(20,2);
 			if(version=="04") {

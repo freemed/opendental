@@ -166,7 +166,7 @@ namespace OpenDental.Eclaims {
 						throw new Exception(this.ToString()+".FormCCDPrint: failed to load secondary insurance info!");
 					}
 				}
-				//List<ClaimProc> claimprocs=ClaimProcs.RefreshForClaim(claim.ClaimNum);
+				claimprocs=ClaimProcs.RefreshForClaim(claim.ClaimNum);
 			}
 			patPlansForPatient=PatPlans.Refresh(etrans.PatNum);
 			patPlanPri=PatPlans.GetFromList(patPlansForPatient,insplan.PlanNum);
@@ -1595,7 +1595,10 @@ namespace OpenDental.Eclaims {
 					text=claimproc.CodeSent.PadLeft(5,'0');//Field F08 - TODO check padding needed
 					doc.DrawString(g,text,procedureCodeCol,0);
 					text=ProcedureCodes.GetProcCode(proc.CodeNum).Descript;
-					//TODO: clip description when too long.
+					const int maxDescLen=40;
+					if(text.Length>maxDescLen){
+						text=text.Substring(0,maxDescLen);
+					}
 					doc.DrawString(g,text,procedureDescriptionCol,0);
 					text=Tooth.ToInternat(proc.ToothNum);//Field F10
 					doc.DrawString(g,text,procedureToothCol,0);
@@ -1831,8 +1834,12 @@ namespace OpenDental.Eclaims {
 		}
 
 		private SizeF PrintComment(Graphics g,float X,float Y) {
-			CCDField comment=formData.GetFieldById("G07");
-			return doc.DrawField(g,isFrench?"COMMENTAIRES":"COMMENT",comment.valuestr,false,X,Y);
+			string comment="";
+			CCDField commentField=formData.GetFieldById("G07");
+			if(commentField!=null){//The disposition message is not always present.
+				comment=commentField.valuestr;
+			}
+			return doc.DrawField(g,isFrench?"COMMENTAIRES":"COMMENT",comment,false,X,Y);
 		}
 
 		private SizeF PrintDentistName(Graphics g,float X,float Y) {
