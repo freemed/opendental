@@ -1363,6 +1363,10 @@ namespace OpenDental{
 		}
 
 		private void butExport_Click(object sender, System.EventArgs e){
+			if(report==null || report.TableQ==null){
+				MessageBox.Show(Lan.g(this,"Please run query first"));
+				return;
+			}
 			saveFileDialog2=new SaveFileDialog();
       saveFileDialog2.AddExtension=true;
 			//saveFileDialog2.Title=Lan.g(this,"Select Folder to Save File To");
