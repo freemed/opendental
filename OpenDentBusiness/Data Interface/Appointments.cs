@@ -1387,6 +1387,9 @@ namespace OpenDentBusiness{
 			string command;
 			command="SELECT PatNum,IsNewPatient,AptStatus FROM appointment WHERE AptNum="+POut.Long(aptNum);
 			DataTable table=Db.GetTable(command);
+			if(table.Rows.Count<1){
+				return;//Already deleted or did not exist.
+			}
 			Patient pat=Patients.GetPat(PIn.Long(table.Rows[0]["PatNum"].ToString()));
 			if(table.Rows[0]["IsNewPatient"].ToString()=="1") {
 				Procedures.SetDateFirstVisit(DateTime.MinValue,3,pat);

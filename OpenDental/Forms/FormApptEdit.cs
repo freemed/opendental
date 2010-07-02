@@ -2079,7 +2079,13 @@ namespace OpenDental{
 				"Delete for patient: "
 				+pat.GetNameLF()+", "
 				+AptCur.AptDateTime.ToString());
-			DialogResult=DialogResult.OK;
+			if(IsNew){
+				//The dialog is considered cancelled when a new appointment is immediately deleted.
+			  DialogResult=DialogResult.Cancel;
+			}
+			else{
+				DialogResult=DialogResult.OK;
+			}
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
