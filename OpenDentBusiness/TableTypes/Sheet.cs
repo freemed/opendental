@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 
 namespace OpenDentBusiness{
 /*A better name for this object would be a Form, but that name is obviously too ambiguous and has been overused.  There are two different aspects of the database tables:
@@ -59,13 +60,47 @@ namespace OpenDentBusiness{
 
 		///<Summary>A collection of all parameters for this sheetdef.  There's usually only one parameter.  The first parameter will be a List long if it's a batch.  If a sheet has already been filled, saved to the database, and printed, then there is no longer any need for the parameters in order to fill the data.  So a retrieved sheet will have no parameters, signalling a skip in the fill phase.  There will still be parameters tucked away in the Field data in the database, but they won't become part of the sheet.</Summary>
 		[CrudColumn(IsNotDbColumn=true)]
+		[XmlIgnore]
 		public List<SheetParameter> Parameters;
 		///<Summary></Summary>
 		[CrudColumn(IsNotDbColumn=true)]
-		public List<SheetField> SheetFields;	
+		[XmlIgnore]
+		public List<SheetField> SheetFields;
 
+		/*Parameters are not serialized as part of a sheet because it causes serialization to fail.
+		///<summary>Used only for serialization purposes</summary>
+		[XmlElement("Parameters",typeof(SheetParameter[]))]
+		public SheetParameter[] ParametersXml {
+			get {
+				if(Parameters==null || Parameters.Count==0) {
+					return new SheetParameter[0];
+				}
+				return Parameters.ToArray();
+			}
+			set {
+				Parameters=new List<SheetParameter>();
+				for(int i=0;i<value.Length;i++) {
+					Parameters.Add(value[i]);
+				}
+			}
+		}*/
 
-
+		///<summary>Used only for serialization purposes</summary>
+		[XmlElement("SheetFields",typeof(SheetField[]))]
+		public SheetField[] SheetFieldsXml {
+			get {
+				if(SheetFields==null) {
+					return new SheetField[0];
+				}
+				return SheetFields.ToArray();
+			}
+			set {
+				SheetFields=new List<SheetField>();
+				for(int i=0;i<value.Length;i++) {
+					SheetFields.Add(value[i]);
+				}
+			}
+		}
 
 
 

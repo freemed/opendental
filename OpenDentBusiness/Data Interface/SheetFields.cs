@@ -17,15 +17,19 @@ namespace OpenDentBusiness{
 			return Crud.SheetFieldCrud.SelectOne(sheetFieldNum);
 		}
 
+		public static List<SheetField> GetListForSheet(long sheetNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<SheetField>>(MethodBase.GetCurrentMethod(),sheetNum);
+			}
+			string command="SELECT * FROM sheetfield WHERE SheetNum="+POut.Long(sheetNum)
+				+" ORDER BY SheetFieldNum";//the ordering is CRITICAL because the signature key is based on order.
+			return Crud.SheetFieldCrud.SelectMany(command);
+		}
+
 		///<summary>When we need to use a sheet, we must run this method to pull all the associated fields and parameters from the database.  Then it will be ready for printing, copying, etc.</summary>
 		public static void GetFieldsAndParameters(Sheet sheet){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),sheet);
-				return;
-			}
-			string command="SELECT * FROM sheetfield WHERE SheetNum="+POut.Long(sheet.SheetNum)
-				+" ORDER BY SheetFieldNum";//the ordering is CRITICAL because the signature key is based on order.
-			sheet.SheetFields=Crud.SheetFieldCrud.SelectMany(command);
+			//No need to check RemotingRole; no call to db.
+			sheet.SheetFields=GetListForSheet(sheet.SheetNum);
 			//so parameters will also be in the field list, but they will just be ignored from here on out.
 			//because we will have an explicit parameter list instead.
 			sheet.Parameters=new List<SheetParameter>();

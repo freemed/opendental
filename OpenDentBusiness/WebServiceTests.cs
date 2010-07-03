@@ -139,7 +139,26 @@ namespace OpenDentBusiness {
 			return "error";
 		}
 
-		
+		public static string SendSheetParameter(SheetParameter sheetParam) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),sheetParam);
+			}
+			if(sheetParam.ParamName=="ParamNameOK") {
+				return "paramNameOK";
+			}
+			return "error";
+		}
+
+		public static string SendSheetWithFields(Sheet sheet) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),sheet);
+			}
+			if(sheet.SheetFields[0].FieldName=="FieldNameGreen") {
+				return "fieldOK";
+			}
+			return "error";
+		}
+
 		
 
 

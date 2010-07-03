@@ -104,9 +104,26 @@ namespace UnitTests {
 				throw new Exception("Should be fuchsiaOK.");
 			}
 			retVal+="SendProviderColor: Passed.\r\n";
-
-
-
+			//SendSheetParameter
+			SheetParameter sheetParam=new SheetParameter(false,"ParamNameOK");
+			strResult=WebServiceTests.SendSheetParameter(sheetParam);
+			if(strResult!="paramNameOK") {
+				throw new Exception("Should be paramNameOK.");
+			}
+			retVal+="SendSheetParameter: Passed.\r\n";
+			//SendSheetWithFields
+			Sheet sheet=new Sheet();
+			sheet.SheetFields=new List<SheetField>();
+			sheet.Parameters=new List<SheetParameter>();
+			SheetField field=new SheetField();
+			field.FieldName="FieldNameGreen";
+			sheet.SheetFields.Add(field);
+			strResult=WebServiceTests.SendSheetWithFields(sheet);
+			if(strResult!="fieldOK") {
+				throw new Exception("Should be fieldOK.");
+			}
+			retVal+="SendSheetWithFields: Passed.\r\n";
+			
 			
 
 			

@@ -118,7 +118,7 @@ namespace UnitTests {
 			this.label4.Size = new System.Drawing.Size(571,18);
 			this.label4.TabIndex = 11;
 			this.label4.Text = "This does not require a database, but does require setting both this project and " +
-    "OpenDentBusiness as startup.";
+    "OpenDentalServer as startup.";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// FormUnitTests

@@ -4,6 +4,7 @@ using System.Text;
 
 namespace OpenDentBusiness{
 	///<Summary></Summary>
+	[Serializable()]
 	public class SheetParameter {
 		///<Summary></Summary>
 		public bool IsRequired;
@@ -11,6 +12,12 @@ namespace OpenDentBusiness{
 		public string ParamName;
 		///<Summary>This is the value which must be set in order to obtain data from the database. It is usually an int primary key.  If running a batch, this may be an array of int.</Summary>
 		public object ParamValue;
+		
+		///<summary>Do not directly use this constructor.</summary>
+		public SheetParameter() {
+			IsRequired=false;
+			ParamName="";
+		}
 
 		public SheetParameter(bool isRequired,string paramName) {
 			IsRequired=isRequired;
