@@ -2676,6 +2676,12 @@ namespace OpenDental{
       if(FormP.DialogResult!=DialogResult.OK){
 				return;
 			}
+			ProcedureCode procCodeOld=ProcedureCodes.GetProcCode(ProcCur.CodeNum);
+			ProcedureCode procCodeNew=ProcedureCodes.GetProcCode(FormP.SelectedCodeNum);
+			if(procCodeOld.TreatArea != procCodeNew.TreatArea) {
+				MsgBox.Show(this,"Not allowed due to treatment area mismatch.");
+				return;
+			}
       ProcCur.CodeNum=FormP.SelectedCodeNum;
       ProcedureCode2=ProcedureCodes.GetProcCode(FormP.SelectedCodeNum);
       textDesc.Text=ProcedureCode2.Descript;
