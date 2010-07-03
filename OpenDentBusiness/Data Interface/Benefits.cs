@@ -1255,27 +1255,14 @@ namespace OpenDentBusiness {
 			}
 		}
 
-		///<summary>Used in FormInsPlan when applying changes to all identical plans.  Also used when merging plans. It first compares the old benefit list with the new one.  If there are no changes, it does nothing.  But if there are any changes, then we no longer care what the old benefit list was.  We will just delete it for all similar plans and recreate it.  Returns true if a change was made, false if no change made.</summary>
+		///<summary>Used in FormInsPlan when applying changes to all identical plans.  Also used when merging plans. 1. Deletes any benefits where the benefitNum is not found in the new list.  2. Adds any new Benefits (BenefitNum=0) found in the new list.  It does not test to see whether any benefits with the same BenefitNum have changed, because FormInsBenefits never changes existing benefits.</summary>
 		public static void UpdateListForIdentical(List<Benefit> oldBenefitList,List<Benefit> newBenefitList,List<long> planNums) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),oldBenefitList,newBenefitList,planNums);
 				return;
 			}
+			string command;
 			Benefit newBenefit;
-			//bool changed=false;
-			for(int i=0;i<newBenefitList.Count;i++) {//loop through the new list
-				//look for new benefits
-				if(newBenefitList[i].BenefitNum==0 && newBenefitList[i].PlanNum!=0) {//the benefit is new, and it is a plan benefit rather than a patient benefit.
-					//changed=true;
-					//break;
-					for(int p=0;p<planNums.Count;p++){//loop through each plan
-						newBenefit=newBenefitList[i].Copy();//we need to leave the one in the list with BenefitNum=0 for testing further down.
-						newBenefit.PlanNum=planNums[p];
-						Insert(newBenefit);
-					}
-				}
-			}
-			//if(!changed){
 			string plansInString="";//comma delimited
 			for(int p=0;p<planNums.Count;p++){
 				if(p>0){
@@ -1283,7 +1270,7 @@ namespace OpenDentBusiness {
 				}
 				plansInString+=planNums[p].ToString();
 			}
-			string command;
+			//1. Delete any benefits where the benefitNum is not found in the new list.--------------------------------------------
 			for(int i=0;i<oldBenefitList.Count;i++) {//loop through the old list
 				newBenefit=null;
 				for(int j=0;j<newBenefitList.Count;j++) {
@@ -1291,15 +1278,13 @@ namespace OpenDentBusiness {
 						continue;
 					}
 					if(oldBenefitList[i].BenefitNum==newBenefitList[j].BenefitNum) {
-						newBenefit=newBenefitList[j];
+						newBenefit=newBenefitList[j];//a matching benefitNum was found in the new list
 						break;
 					}
 				}
 				if(newBenefit==null) {
 					//benefit with matching benefitNum was not found, so it must have been deleted
-					//changed=true;
-					//break;
-					//delete all identical benefits from other plans.
+					//delete all identical benefits from other plans and this plan
 					command="DELETE FROM benefit WHERE PlanNum IN("+plansInString+") "
 						+"AND CovCatNum="+POut.Long(oldBenefitList[i].CovCatNum)+" "
 						+"AND BenefitType="+POut.Int((int)oldBenefitList[i].BenefitType)+" "
@@ -1311,77 +1296,59 @@ namespace OpenDentBusiness {
 						+"AND CodeNum="+POut.Long(oldBenefitList[i].CodeNum)+" "
 						+"AND CoverageLevel="+POut.Int((int)oldBenefitList[i].CoverageLevel);
 					Db.NonQ(command);
-					continue;
 				}
-				//benefit was found with matching benefitNum, so check for changes
-				/*
-				if(//newBenefit.PlanNum             != oldBenefitList[i].PlanNum
-					//|| newBenefit.PatPlanNum        != oldBenefitList[i].PatPlanNum
-					   newBenefit.CovCatNum         != oldBenefitList[i].CovCatNum
-					|| newBenefit.BenefitType       != oldBenefitList[i].BenefitType
-					|| newBenefit.Percent           != oldBenefitList[i].Percent
-					|| newBenefit.MonetaryAmt       != oldBenefitList[i].MonetaryAmt
-					|| newBenefit.TimePeriod        != oldBenefitList[i].TimePeriod
-					|| newBenefit.QuantityQualifier != oldBenefitList[i].QuantityQualifier
-					|| newBenefit.Quantity          != oldBenefitList[i].Quantity
-					|| newBenefit.CodeNum           != oldBenefitList[i].CodeNum 
-					|| newBenefit.CoverageLevel     != oldBenefitList[i].CoverageLevel) 
-				{
-					//changed=true;
-					//break;
-					//change the identical benefit for all other plans
-					//because of the way FormInsBenefits works, this won't ever get called. Instead, a changed benefit results in a delete and insert.  Oh well.
-					command="UPDATE benefit SET " 
-						//+"PlanNum = '"          +POut.Long   (ben.PlanNum)+"'"
-						//+",PatPlanNum = '"      +POut.Long   (ben.PatPlanNum)+"'"
-						+"CovCatNum = '"        +POut.Long   (newBenefit.CovCatNum)+"'"
-						+",BenefitType = '"     +POut.Long   ((int)newBenefit.BenefitType)+"'"
-						+",Percent = '"         +POut.Long   (newBenefit.Percent)+"'"
-						+",MonetaryAmt = '"     +POut.Double(newBenefit.MonetaryAmt)+"'"
-						+",TimePeriod = '"      +POut.Long   ((int)newBenefit.TimePeriod)+"'"
-						+",QuantityQualifier ='"+POut.Long   ((int)newBenefit.QuantityQualifier)+"'"
-						+",Quantity = '"        +POut.Long   (newBenefit.Quantity)+"'"
-						+",CodeNum = '"         +POut.Long   (newBenefit.CodeNum)+"'"
-						+",CoverageLevel = '"   +POut.Long   ((int)newBenefit.CoverageLevel)+"' "
-						+"WHERE PlanNum IN("+plansInString+") "
-						+"AND CovCatNum="+POut.Long(oldBenefitList[i].CovCatNum)+" "
-						+"AND BenefitType="+POut.Int((int)oldBenefitList[i].BenefitType)+" "
-						+"AND Percent="+POut.Int(oldBenefitList[i].Percent)+" "
-						+"AND MonetaryAmt="+POut.Double(oldBenefitList[i].MonetaryAmt)+" "
-						+"AND TimePeriod="+POut.Int((int)oldBenefitList[i].TimePeriod)+" "
-						+"AND QuantityQualifier="+POut.Int((int)oldBenefitList[i].QuantityQualifier)+" "
-						+"AND Quantity="+POut.Int(oldBenefitList[i].Quantity)+" "
-						+"AND CodeNum="+POut.Long(oldBenefitList[i].CodeNum)+" "
-						+"AND CoverageLevel="+POut.Int((int)oldBenefitList[i].CoverageLevel);
-					Db.NonQ(command);
-				}*/
 			}
-			//}
+			//2. Add any new Benefits (BenefitNum=0) found in the new list.-------------------------------------------------------
+			for(int i=0;i<newBenefitList.Count;i++) {//loop through the new list
+				if(newBenefitList[i].BenefitNum==0 && newBenefitList[i].PlanNum!=0) {//the benefit is new, and it is a plan benefit rather than a patient benefit.
+					for(int p=0;p<planNums.Count;p++){//loop through each plan
+						newBenefit=newBenefitList[i].Copy();//we need to leave the one in the list with BenefitNum=0 for testing further down.
+						newBenefit.PlanNum=planNums[p];
+						Insert(newBenefit);
+					}
+				}
+			}
 			/*
-			if(!changed){
-				return false;
-			}
-			//List<int> planNums=new List<int>();
-			//planNums.AddRange(InsPlans.GetPlanNumsOfSamePlans(Employers.GetName(plan.EmployerNum),plan.GroupName,plan.GroupNum,
-			//	plan.DivisionNo,Carriers.GetName(plan.CarrierNum),plan.IsMedical,plan.PlanNum,true));
-			string command="";
-			for(int i=0;i<planNums.Count;i++){//loop through each plan
-				//delete all benefits for all identical plans
-				command="DELETE FROM benefit WHERE PlanNum="+POut.Long(planNums[i]);
+			if(//newBenefit.PlanNum             != oldBenefitList[i].PlanNum
+				//|| newBenefit.PatPlanNum        != oldBenefitList[i].PatPlanNum
+				   newBenefit.CovCatNum         != oldBenefitList[i].CovCatNum
+				|| newBenefit.BenefitType       != oldBenefitList[i].BenefitType
+				|| newBenefit.Percent           != oldBenefitList[i].Percent
+				|| newBenefit.MonetaryAmt       != oldBenefitList[i].MonetaryAmt
+				|| newBenefit.TimePeriod        != oldBenefitList[i].TimePeriod
+				|| newBenefit.QuantityQualifier != oldBenefitList[i].QuantityQualifier
+				|| newBenefit.Quantity          != oldBenefitList[i].Quantity
+				|| newBenefit.CodeNum           != oldBenefitList[i].CodeNum 
+				|| newBenefit.CoverageLevel     != oldBenefitList[i].CoverageLevel) 
+			{
+				//changed=true;
+				//break;
+				//change the identical benefit for all other plans
+				//because of the way FormInsBenefits works, this won't ever get called. Instead, a changed benefit results in a delete and insert.  Oh well.
+				command="UPDATE benefit SET " 
+					//+"PlanNum = '"          +POut.Long   (ben.PlanNum)+"'"
+					//+",PatPlanNum = '"      +POut.Long   (ben.PatPlanNum)+"'"
+					+"CovCatNum = '"        +POut.Long   (newBenefit.CovCatNum)+"'"
+					+",BenefitType = '"     +POut.Long   ((int)newBenefit.BenefitType)+"'"
+					+",Percent = '"         +POut.Long   (newBenefit.Percent)+"'"
+					+",MonetaryAmt = '"     +POut.Double(newBenefit.MonetaryAmt)+"'"
+					+",TimePeriod = '"      +POut.Long   ((int)newBenefit.TimePeriod)+"'"
+					+",QuantityQualifier ='"+POut.Long   ((int)newBenefit.QuantityQualifier)+"'"
+					+",Quantity = '"        +POut.Long   (newBenefit.Quantity)+"'"
+					+",CodeNum = '"         +POut.Long   (newBenefit.CodeNum)+"'"
+					+",CoverageLevel = '"   +POut.Long   ((int)newBenefit.CoverageLevel)+"' "
+					+"WHERE PlanNum IN("+plansInString+") "
+					+"AND CovCatNum="+POut.Long(oldBenefitList[i].CovCatNum)+" "
+					+"AND BenefitType="+POut.Int((int)oldBenefitList[i].BenefitType)+" "
+					+"AND Percent="+POut.Int(oldBenefitList[i].Percent)+" "
+					+"AND MonetaryAmt="+POut.Double(oldBenefitList[i].MonetaryAmt)+" "
+					+"AND TimePeriod="+POut.Int((int)oldBenefitList[i].TimePeriod)+" "
+					+"AND QuantityQualifier="+POut.Int((int)oldBenefitList[i].QuantityQualifier)+" "
+					+"AND Quantity="+POut.Int(oldBenefitList[i].Quantity)+" "
+					+"AND CodeNum="+POut.Long(oldBenefitList[i].CodeNum)+" "
+					+"AND CoverageLevel="+POut.Int((int)oldBenefitList[i].CoverageLevel);
 				Db.NonQ(command);
-				for(int j=0;j<newBenefitList.Count;j++){//loop through the new list
-					if(newBenefitList[j]==null) {
-						continue;
-					}
-					if(newBenefitList[j].PatPlanNum!=0) {
-						continue;//skip benefits attached to patients.  We are only concerned with ones attached to plans.
-					}
-					newBenefit=(newBenefitList[j].Clone();
-					newBenefit.PlanNum=planNums[i];
-					Insert(newBenefit);
-				}
-			}
-			return true;*/
+			}*/
 			//don't forget to compute estimates for each plan now.//that would be too slow
 		}
 
