@@ -55,12 +55,13 @@ namespace OpenDentBusiness.HL7 {
 				pat=new Patient();
 				if(isStandalone) {
 					pat.ChartNumber=patNum.ToString();
+					//this line does not work if isStandalone, so moved to end
+					//pat.Guarantor=patNum;
 				}
 				else {
 					pat.PatNum=patNum;
+					pat.Guarantor=patNum;
 				}
-				//this line does not work if isStandalone, so moved to end
-				//pat.Guarantor=patNum;
 				pat.PriProv=PrefC.GetLong(PrefName.PracticeDefaultProv);
 				pat.BillingType=PrefC.GetLong(PrefName.PracticeDefaultBillType);
 			}

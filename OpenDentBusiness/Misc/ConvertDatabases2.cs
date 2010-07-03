@@ -2197,6 +2197,28 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 			To7_2_0();
 		}
 
+		private static void To7_1_24() {
+			if(FromVersion<new Version("7.1.24.0")) {
+				string command;
+				command="UPDATE patient SET Guarantor=PatNum WHERE Guarantor=0;";
+				Db.NonQ(command);
+				command="UPDATE preference SET ValueString = '7.1.24.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
+			To7_1_24();
+		}
+
+		private static void To7_1_24() {
+			if(FromVersion<new Version("7.1.24.0")) {
+				string command;
+				command="UPDATE patient SET Guarantor=PatNum WHERE Guarantor=0;";
+				Db.NonQ(command);
+				command="UPDATE preference SET ValueString = '7.1.24.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
+			To7_2_0();
+		}
+
 		private static void To7_2_0() {
 			if(FromVersion<new Version("7.2.0.0")) {
 				string command;
@@ -2243,7 +2265,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);
 				command="ALTER TABLE procedurelog ADD CanadianTypeCodes varchar(20) NOT NULL";
 				Db.NonQ(command);
-				command=@"UPDATE clearinghouse SET ResponsePath='C:\\MercuryDE\\Reports\\' WHERE ResponsePath='' AND Description='MercuryDE' LIMIT 1";
+				command=POut.String(@"UPDATE clearinghouse SET ResponsePath='C:\\MercuryDE\\Reports\\' WHERE ResponsePath='' AND Description='MercuryDE' LIMIT 1");
 				Db.NonQ(command);
 	
 
