@@ -101,7 +101,7 @@ namespace TestCanada {
 			procList.Add(ProcTC.AddProc("01201",pat.PatNum,new DateTime(1999,1,1),"","",27.5,"X",provNum));
 			procList.Add(ProcTC.AddProc("02102",pat.PatNum,new DateTime(1999,1,1),"","",87.25,"X",provNum));
 			procList.Add(ProcTC.AddProc("21223",pat.PatNum,new DateTime(1999,1,1),"46","DOV",107.6,"X",provNum));
-			proc=ProcTC.AddProc("56112",pat.PatNum,new DateTime(1999,1,1),"","L",217.2,"X",provNum);//lower
+			proc=ProcTC.AddProc("56112",pat.PatNum,new DateTime(1999,1,1),"","L",217.2,"S",provNum);//lower
 			procList.Add(proc);
 			procLab=ProcTC.AddProc("99111",pat.PatNum,new DateTime(1999,1,1),"","",315,"",provNum);
 			ProcTC.AttachLabProc(proc.ProcNum,procLab);
@@ -251,7 +251,7 @@ namespace TestCanada {
 		public static string RunThree(bool showForms) {
 			Claim claim=Claims.GetClaim(ClaimNums[2]);
 			InsPlanTC.SetAssignBen(claim.PlanNum,true);
-			CarrierTC.SetEncryptionMethod(claim.PlanNum,1);//?
+			CarrierTC.SetEncryptionMethod(claim.PlanNum,2);//Even though the test says 1, the example message uses 2
 			return Run(3,"","21",claim,showForms);//expecting EOB
 		}
 

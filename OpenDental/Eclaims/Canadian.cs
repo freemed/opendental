@@ -225,8 +225,11 @@ namespace OpenDental.Eclaims {
 //todo We still need to write the business logic for COB
 //Sometimes, a secondary claim also needs to be created:
 				//E19 secondary carrier transaction number 6 N
-				strb.Append("000000");//Must always be zero-filled, since this field is for "future" use only.
-				//str.Append(TidyN(etrans.CarrierTransCounter2,5)));
+				#if DEBUG
+					strb.Append("000402");
+				#else
+					strb.Append(TidyN(etrans.CarrierTransCounter2,6));
+				#endif
 				//E01 sec carrier id number 6 N
 				strb.Append(carrier2.ElectID);//already validated as 6 digit number.
 				//E02 sec carrier policy/plan num 12 AN
@@ -357,12 +360,17 @@ namespace OpenDental.Eclaims {
 				strb.Append(GetToothQuadOrArch(proc,procCode));
 				//F11 tooth surface 5 A
 				//the SurfTidy function is very thorough, so it's OK to use TidyAN
+				if(procCode.TreatArea==TreatmentArea.Surf) {
 #if DEBUG
-				//since the scripts use impossible surfaces, we need to just use raw database here
-				strb.Append(TidyAN(proc.Surf,5));
+					//since the scripts use impossible surfaces, we need to just use raw database here
+					strb.Append(TidyAN(proc.Surf,5));
 #else
-				strb.Append(TidyAN(Tooth.SurfTidyForClaims(proc.Surf,proc.ToothNum),5));
+					strb.Append(TidyAN(Tooth.SurfTidyForClaims(proc.Surf,proc.ToothNum),5));
 #endif
+				}
+				else {
+					strb.Append("     ");
+				}
 				//F12 dentist's fee claimed 6 D
 				strb.Append(TidyD(claimProcsClaim[p].FeeBilled,6));
 				//F34 lab procedure code #1 5 AN
@@ -827,16 +835,15 @@ namespace OpenDental.Eclaims {
 			return false;
 		}
 
-//incomplete
 		private static string GetToothQuadOrArch(Procedure proc,ProcedureCode procCode){
 			switch(procCode.TreatArea){
 				case TreatmentArea.Arch:
-					if(proc.Surf=="U"){
-						return "00";
-					}
-					else{
-						return "01";
-					}
+					//if(proc.Surf=="U"){
+					return "00";
+					//}
+					//else{
+					//	return "01";
+					//}
 				case TreatmentArea.Mouth:
 				case TreatmentArea.None:
 					return "00";
