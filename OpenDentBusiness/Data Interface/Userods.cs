@@ -90,6 +90,9 @@ namespace OpenDentBusiness {
 		///<summary>Used by Server.  Throws exception if bad username or passhash or if either are blank.  It uses cached user list, refreshing it if null.  This is used everywhere except in the log on screen.</summary>
 		public static void CheckCredentials(Credentials cred){
 			//No need to check RemotingRole; no call to db.
+			#if DEBUG
+				return;//skip checking credentials when in debug for faster testing.
+			#endif
 			if(cred.Username=="" || cred.PassHash==""){
 				throw new ApplicationException("Invalid username or password.");
 			}

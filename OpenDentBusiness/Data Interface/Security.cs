@@ -237,12 +237,21 @@ namespace OpenDentBusiness{
 				//Environment.CurrentDirectory,"OpenDentalServerConfig.xml"));
 				//Then, check username and password
 				Userod user=Userods.CheckUserAndPassword(oduser,odpasshash);
+				#if DEBUG
+					if(oduser=="Admin"){
+						user=Userods.GetUserByName("Admin");//without checking password.  Makes debugging faster.
+					}
+				#endif
 				if(user==null) {
 					throw new Exception("Invalid username or password.");
 				}
 				string command="SELECT ValueString FROM preference WHERE PrefName='ProgramVersion'";
 				string dbVersionStr=Db.GetScalar(command);
 				string serverVersionStr=Assembly.GetAssembly(typeof(Db)).GetName().Version.ToString(4);
+				#if DEBUG
+					command="SELECT ValueString FROM preference WHERE PrefName='DataBaseVersion'";//Using this during debug in the head makes it open fast with less fiddling.
+					dbVersionStr=Db.GetScalar(command);
+				#endif
 				if(dbVersionStr!=serverVersionStr) {
 					throw new Exception("Version mismatch.  Server:"+serverVersionStr+"  Database:"+dbVersionStr);
 				}
