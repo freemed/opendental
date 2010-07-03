@@ -2205,17 +2205,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="UPDATE preference SET ValueString = '7.1.24.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
-			To7_1_24();
-		}
-
-		private static void To7_1_24() {
-			if(FromVersion<new Version("7.1.24.0")) {
-				string command;
-				command="UPDATE patient SET Guarantor=PatNum WHERE Guarantor=0;";
-				Db.NonQ(command);
-				command="UPDATE preference SET ValueString = '7.1.24.0' WHERE PrefName = 'DataBaseVersion'";
-				Db.NonQ(command);
-			}
 			To7_2_0();
 		}
 
