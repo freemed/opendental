@@ -225,11 +225,7 @@ namespace OpenDental.Eclaims {
 //todo We still need to write the business logic for COB
 //Sometimes, a secondary claim also needs to be created:
 				//E19 secondary carrier transaction number 6 N
-				#if DEBUG
-					strb.Append("000402");
-				#else
-					strb.Append(TidyN(etrans.CarrierTransCounter2,6));
-				#endif
+				strb.Append(TidyN(etrans.CarrierTransCounter2,6));
 				//E01 sec carrier id number 6 N
 				strb.Append(carrier2.ElectID);//already validated as 6 digit number.
 				//E02 sec carrier policy/plan num 12 AN
