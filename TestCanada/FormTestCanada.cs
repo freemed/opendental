@@ -282,6 +282,10 @@ namespace TestCanada {
 					patNum=Patients.GetPatNumByNameAndBirthday("Smith","John",new DateTime(1988,11,2));
 					claimFee=222.35;
 					break;
+				case 5:
+					patNum=Patients.GetPatNumByNameAndBirthday("Howard","Bob",new DateTime(1964,5,16));
+					claimFee=222.35;
+					break;
 			}
 			List<Claim> claimList=Claims.Refresh(patNum);
 			Claim claim=null;
