@@ -206,11 +206,61 @@ namespace TestCanada {
 		}
 
 		private static void CreateSeven() {
-
+			long provNum=ProviderC.List[0].ProvNum;//dentist#1
+			Patient pat=Patients.GetPat(PatientTC.PatNum5);//patient#5, Bob Howard
+			//Procedure proc;
+			List<Procedure> procList=new List<Procedure>();
+			procList.Add(ProcTC.AddProc("01202",pat.PatNum,new DateTime(1999,1,1),"","",37.5,"X",provNum));
+			procList.Add(ProcTC.AddProc("02102",pat.PatNum,new DateTime(1999,1,1),"","",87.25,"X",provNum));
+			procList.Add(ProcTC.AddProc("21213",pat.PatNum,new DateTime(1999,1,1),"22","DIV",107.6,"X",provNum));//wrong code in documentation
+			Claim claim=CreateClaim(pat,procList,provNum);
+			claim.CanadianMaterialsForwarded="";
+			//billing prov already handled
+			claim.CanadianReferralProviderNum="081234500";
+			claim.CanadianReferralReason=4;
+			pat.SchoolName="";
+			//assignBen can't be set here because it changes per claim in the scripts
+			claim.AccidentDate=DateTime.MinValue;
+			claim.PreAuthString="PD78901234";
+			claim.CanadianIsInitialUpper="X";
+			claim.CanadianDateInitialUpper=DateTime.MinValue;
+			claim.CanadianIsInitialLower="X";
+			claim.CanadianDateInitialLower=DateTime.MinValue;
+			//claim.CanadianMandProsthMaterial=4;
+			claim.IsOrtho=false;
+			Claims.Update(claim);
+			ClaimNums.Add(claim.ClaimNum);
 		}
 
 		private static void CreateEight() {
-
+			long provNum=ProviderC.List[0].ProvNum;//dentist#1
+			Patient pat=Patients.GetPat(PatientTC.PatNum6);//patient#6, Martha West
+			Procedure proc;
+			Procedure procLab;
+			List<Procedure> procList=new List<Procedure>();
+			procList.Add(ProcTC.AddProc("01201",pat.PatNum,new DateTime(1999,1,1),"","",27.5,"X",provNum));
+			procList.Add(ProcTC.AddProc("02102",pat.PatNum,new DateTime(1999,1,1),"","",87.25,"X",provNum));
+			proc=ProcTC.AddProc("67211",pat.PatNum,new DateTime(1999,1,1),"10","",450.6,"X",provNum);
+			procList.Add(proc);
+			procLab=ProcTC.AddProc("99111",pat.PatNum,new DateTime(1999,1,1),"","",487.3,"",provNum);
+			ProcTC.AttachLabProc(proc.ProcNum,procLab);
+			Claim claim=CreateClaim(pat,procList,provNum);
+			claim.CanadianMaterialsForwarded="";
+			//billing prov already handled
+			claim.CanadianReferralProviderNum="";
+			claim.CanadianReferralReason=0;
+			//pat.SchoolName
+			//assignBen can't be set here because it changes per claim in the scripts
+			claim.AccidentDate=DateTime.MinValue;
+			claim.PreAuthString="";
+			claim.CanadianIsInitialUpper="Y";
+			claim.CanadianDateInitialUpper=DateTime.MinValue;
+			claim.CanadianIsInitialLower="X";
+			claim.CanadianDateInitialLower=DateTime.MinValue;
+			//claim.CanadianMandProsthMaterial=4;
+			claim.IsOrtho=false;
+			Claims.Update(claim);
+			ClaimNums.Add(claim.ClaimNum);
 		}
 
 		private static void CreateNine() {
@@ -291,13 +341,13 @@ namespace TestCanada {
 			Etrans etrans=Etranss.GetEtrans(etransNum);
 			string message=EtransMessageTexts.GetMessageText(etrans.EtransMessageTextNum);
 			CCDFieldInputter formData=new CCDFieldInputter(message);
-			string responseStatus=formData.GetValue("G05");
-			if(responseStatus!=responseExpected) {
-				return "G05 should be "+responseExpected+"\r\n";
-			}
 			string responseType=formData.GetValue("A04");
 			if(responseType!=responseTypeExpected) {
 				return "Form type should be "+responseTypeExpected+"\r\n";
+			}
+			string responseStatus=formData.GetValue("G05");
+			if(responseStatus!=responseExpected) {
+				return "G05 should be "+responseExpected+"\r\n";
 			}
 			if(responseExpected=="R" && responseTypeExpected=="11") {
 				//so far, only for #6.  We need some other way to test if successful transaction
@@ -353,17 +403,17 @@ namespace TestCanada {
 		}
 
 		public static string RunSeven(bool showForms) {
-			string retVal="";
-
-			retVal+="Claim #7 not implemented.\r\n";
-			return retVal;
+			Claim claim=Claims.GetClaim(ClaimNums[6]);
+			InsPlanTC.SetAssignBen(claim.PlanNum,false);
+			CarrierTC.SetEncryptionMethod(claim.PlanNum,1);
+			return Run(7,"","21",claim,showForms);
 		}
 
 		public static string RunEight(bool showForms) {
-			string retVal="";
-
-			retVal+="Claim #8 not implemented.\r\n";
-			return retVal;
+			Claim claim=Claims.GetClaim(ClaimNums[7]);
+			InsPlanTC.SetAssignBen(claim.PlanNum,true);
+			CarrierTC.SetEncryptionMethod(claim.PlanNum,2);
+			return Run(8,"","21",claim,showForms);
 		}
 
 		public static string RunNine(bool showForms) {

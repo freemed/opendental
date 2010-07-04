@@ -265,6 +265,7 @@ namespace TestCanada {
 			int scriptNum=PIn.Int(textSingleScript.Text);
 			long patNum=0;
 			double claimFee=0;
+			string predeterm="";
 			switch(scriptNum){
 				case 1:
 					patNum=Patients.GetPatNumByNameAndBirthday("Fête","Lisa",new DateTime(1960,4,12));
@@ -290,11 +291,20 @@ namespace TestCanada {
 					patNum=Patients.GetPatNumByNameAndBirthday("Howard","Bob",new DateTime(1964,5,16));
 					claimFee=232.35;
 					break;
+				case 7:
+					patNum=Patients.GetPatNumByNameAndBirthday("Howard","Bob",new DateTime(1964,5,16));
+					claimFee=232.35;
+					predeterm="PD78901234";
+					break;
+				case 8:
+					patNum=Patients.GetPatNumByNameAndBirthday("West","Martha",new DateTime(1954,12,25));
+					claimFee=565.35;
+					break;
 			}
 			List<Claim> claimList=Claims.Refresh(patNum);
 			Claim claim=null;
 			for(int i=0;i<claimList.Count;i++){
-				if(claimList[i].ClaimFee==claimFee){
+				if(claimList[i].ClaimFee==claimFee && claimList[i].PreAuthString==predeterm){
 					claim=claimList[i];
 				}
 			}

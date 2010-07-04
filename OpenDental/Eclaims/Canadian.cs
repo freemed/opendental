@@ -845,16 +845,16 @@ namespace OpenDental.Eclaims {
 					return "00";
 				case TreatmentArea.Quad:
 					if(proc.Surf=="UR"){
-						return "00";
+						return "10";
 					}
 					else if(proc.Surf=="UL") {
-						return "00";
+						return "20";
 					}
 					else if(proc.Surf=="LR") {
-						return "00";
+						return "40";
 					}
 					else{//LL
-						return "00";
+						return "30";
 					}
 				case TreatmentArea.Sextant:
 					if(proc.Surf=="1") {
@@ -1162,6 +1162,7 @@ namespace OpenDental.Eclaims {
 				retVal+="Mand prosth material";
 			}
 			//missing teeth---------------------------------------------------------------------------------------------------
+			/*Can't do this because extracted teeth count is allowed to be zero
 			if(claim.CanadianIsInitialLower=="Y" && claim.CanadianMandProsthMaterial!=7) {//initial lower, but not crown
 				if(extracted.Count==0) {
 					if(retVal!="")
@@ -1176,7 +1177,7 @@ namespace OpenDental.Eclaims {
 					retVal+="Missing teeth not entered";
 				}
 			}
-			
+			*/			
 			if(claim.AccidentDate>DateTime.MinValue){
 				if(claim.AccidentDate.Year<1900 || claim.AccidentDate>DateTime.Today){
 					if(retVal!="")

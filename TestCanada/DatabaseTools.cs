@@ -109,7 +109,10 @@ namespace TestCanada {
 				ProcedureCodes.Insert(procCode);
 				ProcedureCodes.RefreshCache();
 			}
-
+			procCode=ProcedureCodes.GetProcCode("67211");
+			procCode.TreatArea=TreatmentArea.Quad;
+			ProcedureCodes.Update(procCode);
+			ProcedureCodes.RefreshCache();
 
 
 

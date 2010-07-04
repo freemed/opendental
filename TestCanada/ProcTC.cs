@@ -21,20 +21,40 @@ namespace TestCanada {
 		///<summary>Procedure will have a completed status.  For surfaces, since the scripts are faulty, pass in the exact surfaces that should be in the db, no validation will be done, and those exact same surfaces are what will go out on claim.</summary>
 		public static Procedure AddProc(string procCode,long patNum,DateTime procDate,string toothNum,string surf,double fee,string typeCodes,long provNum) {
 			Procedure proc=new Procedure();
+			ProcedureCode procedureCode=ProcedureCodes.GetProcCode(procCode);
 			//procnum
 			proc.PatNum=patNum;
 			//aptnum
-			proc.CodeNum=ProcedureCodes.GetCodeNum(procCode);
+			proc.CodeNum=procedureCode.CodeNum;
 			proc.ProcDate=procDate;
 			proc.DateTP=proc.ProcDate;
 			proc.ProcFee=fee;
-			if(toothNum=="") {
-				proc.ToothNum="";
+			switch(toothNum) {
+				case "":
+					proc.ToothNum="";
+					proc.Surf=surf;
+					break;
+				case "10":
+					proc.ToothNum="";
+					proc.Surf="UR";
+					break;
+				case "20":
+					proc.ToothNum="";
+					proc.Surf="UL";
+					break;
+				case "30":
+					proc.ToothNum="";
+					proc.Surf="LL";
+					break;
+				case "40":
+					proc.ToothNum="";
+					proc.Surf="LR";
+					break;
+				default:
+					proc.ToothNum=Tooth.FromInternat(toothNum);
+					proc.Surf=surf;//Tooth.SurfTidyFromDisplayToDb(surf,proc.ToothNum);
+					break;
 			}
-			else {
-				proc.ToothNum=Tooth.FromInternat(toothNum);
-			}
-			proc.Surf=surf;//Tooth.SurfTidyFromDisplayToDb(surf,proc.ToothNum);
 			//ToothRange
 			proc.Priority=0;
 			proc.ProcStatus=ProcStat.C;
