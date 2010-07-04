@@ -264,7 +264,34 @@ namespace TestCanada {
 		}
 
 		private static void CreateNine() {
-
+			long provNum=ProviderC.List[1].ProvNum;//dentist#2
+			Patient pat=Patients.GetPat(PatientTC.PatNum7);//patient#7, Madeleine Arpege
+			Procedure proc;
+			Procedure procLab;
+			List<Procedure> procList=new List<Procedure>();
+			procList.Add(ProcTC.AddProc("01201",pat.PatNum,new DateTime(1999,1,1),"","",27.5,"X",provNum));
+			procList.Add(ProcTC.AddProc("02102",pat.PatNum,new DateTime(1999,1,1),"","",87.25,"X",provNum));
+			proc=ProcTC.AddProc("67301",pat.PatNum,new DateTime(1999,1,1),"11","",412.6,"X",provNum);
+			procList.Add(proc);
+			procLab=ProcTC.AddProc("99111",pat.PatNum,new DateTime(1999,1,1),"","",380,"",provNum);
+			ProcTC.AttachLabProc(proc.ProcNum,procLab);
+			Claim claim=CreateClaim(pat,procList,provNum);
+			claim.CanadianMaterialsForwarded="";
+			//billing prov already handled
+			claim.CanadianReferralProviderNum="";
+			claim.CanadianReferralReason=0;
+			//pat.SchoolName
+			//assignBen can't be set here because it changes per claim in the scripts
+			claim.AccidentDate=DateTime.MinValue;
+			claim.PreAuthString="";
+			claim.CanadianIsInitialUpper="Y";
+			claim.CanadianDateInitialUpper=DateTime.MinValue;
+			claim.CanadianIsInitialLower="X";
+			claim.CanadianDateInitialLower=DateTime.MinValue;
+			//claim.CanadianMandProsthMaterial=4;
+			claim.IsOrtho=true;
+			Claims.Update(claim);
+			ClaimNums.Add(claim.ClaimNum);
 		}
 
 		private static void CreateTen() {
@@ -417,10 +444,10 @@ namespace TestCanada {
 		}
 
 		public static string RunNine(bool showForms) {
-			string retVal="";
-
-			retVal+="Claim #9 not implemented.\r\n";
-			return retVal;
+			Claim claim=Claims.GetClaim(ClaimNums[8]);
+			InsPlanTC.SetAssignBen(claim.PlanNum,false);
+			CarrierTC.SetEncryptionMethod(claim.PlanNum,1);
+			return Run(9,"","21",claim,showForms);
 		}
 
 		public static string RunTen(bool showForms) {
