@@ -158,7 +158,7 @@ namespace TestCanada {
 			List<Procedure> procList=new List<Procedure>();
 			procList.Add(ProcTC.AddProc("01201",pat.PatNum,new DateTime(1999,1,1),"","",27.5,"X",provNum));
 			procList.Add(ProcTC.AddProc("02102",pat.PatNum,new DateTime(1999,1,1),"","",87.25,"X",provNum));
-			procList.Add(ProcTC.AddProc("21223",pat.PatNum,new DateTime(1999,1,1),"26","MOD",107.6,"A",provNum));//the date in the script is a typo.
+			procList.Add(ProcTC.AddProc("21223",pat.PatNum,new DateTime(1999,1,1),"26","MOD",107.6,"A",provNum));
 			Claim claim=CreateClaim(pat,procList,provNum);
 			claim.CanadianMaterialsForwarded="";
 			//billing prov already handled
@@ -179,7 +179,30 @@ namespace TestCanada {
 		}
 
 		private static void CreateSix() {
-
+			long provNum=ProviderC.List[0].ProvNum;//dentist#1
+			Patient pat=Patients.GetPat(PatientTC.PatNum5);//patient#5, Bob Howard
+			//Procedure proc;
+			List<Procedure> procList=new List<Procedure>();
+			procList.Add(ProcTC.AddProc("01201",pat.PatNum,new DateTime(1999,1,1),"","",37.5,"X",provNum));//wrong code in documentation
+			procList.Add(ProcTC.AddProc("02102",pat.PatNum,new DateTime(1999,1,1),"","",87.25,"X",provNum));
+			procList.Add(ProcTC.AddProc("21213",pat.PatNum,new DateTime(1999,1,1),"22","DIV",107.6,"X",provNum));
+			Claim claim=CreateClaim(pat,procList,provNum);
+			claim.CanadianMaterialsForwarded="";
+			//billing prov already handled
+			claim.CanadianReferralProviderNum="081234500";
+			claim.CanadianReferralReason=4;
+			pat.SchoolName="";
+			//assignBen can't be set here because it changes per claim in the scripts
+			claim.AccidentDate=DateTime.MinValue;
+			claim.PreAuthString="";
+			claim.CanadianIsInitialUpper="X";
+			claim.CanadianDateInitialUpper=DateTime.MinValue;
+			claim.CanadianIsInitialLower="X";
+			claim.CanadianDateInitialLower=DateTime.MinValue;
+			//claim.CanadianMandProsthMaterial=4;
+			claim.IsOrtho=false;
+			Claims.Update(claim);
+			ClaimNums.Add(claim.ClaimNum);
 		}
 
 		private static void CreateSeven() {
@@ -262,7 +285,7 @@ namespace TestCanada {
 			string warnings;
 			string missingData=Eclaims.GetMissingData(queueItem,out warnings);
 			if(missingData!="") {
-				throw new ApplicationException("Cannot send claim until missing data is fixed:\r\n"+missingData);
+				return "Cannot send claim until missing data is fixed:\r\n"+missingData+"\r\n";
 			}
 			long etransNum=Canadian.SendClaim(queueItem,showForms);
 			Etrans etrans=Etranss.GetEtrans(etransNum);
@@ -270,11 +293,18 @@ namespace TestCanada {
 			CCDFieldInputter formData=new CCDFieldInputter(message);
 			string responseStatus=formData.GetValue("G05");
 			if(responseStatus!=responseExpected) {
-				throw new Exception("Should be "+responseExpected);
+				return "G05 should be "+responseExpected+"\r\n";
 			}
 			string responseType=formData.GetValue("A04");
 			if(responseType!=responseTypeExpected) {
-				throw new Exception("Should be "+responseTypeExpected);
+				return "Form type should be "+responseTypeExpected+"\r\n";
+			}
+			if(responseExpected=="R" && responseTypeExpected=="11") {
+				//so far, only for #6.  We need some other way to test if successful transaction
+				string errorMsgCount=formData.GetValue("G06");
+				if(errorMsgCount=="00") {
+					return "Wrong message count.\r\n";
+				}
 			}
 			retVal+="Claim #"+scriptNum.ToString()+" successful.\r\n";
 			return retVal;
@@ -316,10 +346,10 @@ namespace TestCanada {
 		}
 
 		public static string RunSix(bool showForms) {
-			string retVal="";
-
-			retVal+="Claim #6 not implemented.\r\n";
-			return retVal;
+			Claim claim=Claims.GetClaim(ClaimNums[5]);
+			InsPlanTC.SetAssignBen(claim.PlanNum,false);
+			CarrierTC.SetEncryptionMethod(claim.PlanNum,1);
+			return Run(6,"R","11",claim,showForms);
 		}
 
 		public static string RunSeven(bool showForms) {

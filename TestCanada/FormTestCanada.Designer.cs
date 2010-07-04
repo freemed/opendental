@@ -210,7 +210,7 @@
 			this.textSingleScript.Name = "textSingleScript";
 			this.textSingleScript.Size = new System.Drawing.Size(49,20);
 			this.textSingleScript.TabIndex = 27;
-			this.textSingleScript.Text = "5";
+			this.textSingleScript.Text = "6";
 			// 
 			// label4
 			// 
