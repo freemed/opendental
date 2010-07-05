@@ -1232,7 +1232,7 @@ namespace OpenDental
 			if((ClaimProcCur.Status==ClaimProcStatus.CapComplete
 				|| ClaimProcCur.Status==ClaimProcStatus.Received
 				|| ClaimProcCur.Status==ClaimProcStatus.Supplemental)
-				&& !Security.IsAuthorized(Permissions.InsPayEdit,ClaimProcCur.DateEntry))//
+				&& !Security.IsAuthorized(Permissions.InsPayEdit,ClaimProcCur.DateCP))//
 			{
 				textDateCP.ReadOnly=true;
 				butOK.Enabled=false;
