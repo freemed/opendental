@@ -1678,6 +1678,8 @@ namespace OpenDental.Eclaims {
 			x=doc.StartElement(verticalLine);
 			PrintProcedureListEOB(g,GetPayableToString(insplan.AssignBen));
 			x=doc.StartElement(verticalLine);
+			PrintPaymentSummary(g);
+			x=doc.StartElement(verticalLine);
 			doc.HorizontalLine(g,breakLinePen,doc.bounds.Left,doc.bounds.Right,0);
 			if(!predetermination){
 				x=doc.StartElement();
@@ -1766,17 +1768,28 @@ namespace OpenDental.Eclaims {
 			doc.DrawString(g,isFrench?"%":"AT",procedureAtCol,0);
 			doc.DrawString(g,isFrench?"PREST":"BENEFIT",procedureBenefitCol,0);
 			doc.DrawString(g,"NOTES",procedureNotesCol,0);
-			//TODO: Finish implementing when procedure number (different than code) is available.
+			//First start by listing the procedures originally attached to the claim.
+			CCDField[] procedureLineNumbers=formData.GetFieldsById("F07");
+			CCDField[] eligibleAmounts=formData.GetFieldsById("G12");
+			CCDField[] eligiblePercentage=formData.GetFieldsById("G14");
+			CCDField[] benefitAmountForTheProcedures=formData.GetFieldsById("G15");
+			CCDField[] explainationNotes1=formData.GetFieldsById("G16");
+			CCDField[] explainationNotes2=formData.GetFieldsById("G17");
 			Procedure proc;
-			for(int i=0;i<this.claimprocs.Count;i++) {
-				ClaimProc claimproc=claimprocs[i];
-				if(claimproc.ProcNum!=0) {//Is this a valid procedure?
+			const int maxDescriptLen=24;
+			for(int p=0;p<procedureLineNumbers.Length;p++){
+				int procedureLineNumber=Convert.ToInt32(procedureLineNumbers[p].valuestr);
+				int i=0;
+				while(i<claimprocs.Count && claimprocs[i].LineNumber!=procedureLineNumber){
+					i++;
+				}
+				if(i<claimprocs.Count){//Should always be true, but just to be sure.
+					ClaimProc claimproc=claimprocs[i];
 					x=doc.StartElement();
 					proc=Procedures.GetOneProc(claimproc.ProcNum,true);
 					text=claimproc.CodeSent.PadLeft(5,'0');//Field F08 - TODO check padding needed
 					doc.DrawString(g,text,procedureCodeCol,0);
-					text=ProcedureCodes.GetProcCode(proc.CodeNum).Descript;
-					const int maxDescriptLen=28;
+					text=ProcedureCodes.GetProcCode(proc.CodeNum).AbbrDesc;
 					if(text.Length>maxDescriptLen){
 						text=text.Substring(0,maxDescriptLen);
 					}
@@ -1789,16 +1802,78 @@ namespace OpenDental.Eclaims {
 					}
 					text=proc.ProcFee.ToString("F");//Field F12
 					doc.DrawString(g,text,procedureChargeCol,0);
-					//TODO: add remaining fields.
+					text=eligibleAmounts[p].valuestr.Substring(0,4).TrimStart(new char[] {'0'})+
+						"."+eligibleAmounts[p].valuestr.Substring(4,2);//Field G12
+					doc.DrawString(g,text,procedureEligibleCol,0);
+					doc.DrawString(g,text,procedureDeductCol,0);
+					text=eligiblePercentage[p].valuestr.TrimStart(new char[] {'0'})+"%";//Field G14
+					doc.DrawString(g,text,procedureAtCol,0);
+					text=benefitAmountForTheProcedures[p].valuestr.Substring(0,4).TrimStart(new char[] {'0'})+"."+
+						benefitAmountForTheProcedures[p].valuestr.Substring(4,2);//Field G15
+					doc.DrawString(g,text,procedureBenefitCol,0);
+					text="";
+					if(explainationNotes1[p].valuestr!="00"){
+						text+=explainationNotes1[p].valuestr;
+					}
+					if(explainationNotes2[p].valuestr!="00"){
+						if(text.Length>0){
+							text+=",";
+						}
+						text+=explainationNotes2[p].valuestr;
+					}
+					doc.DrawString(g,text,procedureNotesCol,0);
 				}
 			}
-			if(predetermination){
-			}else{
+			//Handle the unallocated deductible amount if it exists. 
+			//This happens when a carrier will not supply deductibles on a procedural basis.
+			string unallocatedDeductible=formData.GetFieldById("G29").valuestr;
+			if(unallocatedDeductible!="000000"){
+				x=doc.StartElement();
+				text=isFrench?"Total Franchise":"Total Deductible";
+				doc.DrawString(g,text,procedureDescriptionCol,0);
+				text=unallocatedDeductible.Substring(0,4).TrimStart(new char[] {'0'})+"."+unallocatedDeductible.Substring(4,2);
+				doc.DrawString(g,text,procedureDeductCol,0);
+				text="-"+text;
+				doc.DrawString(g,text,procedureBenefitCol,0);
 			}
-			/*doc.DrawField(g,"BENEFIT AMOUNT PAYABLE TO","DESTINATAIRE DU PAIEMENT",payableToStr,false,x,y);
-			doc.DrawString(g,isFrench?"TOTAL DEMANDÉ":"TOTAL SUBMITTED",x+490,y);
-			text=claim.ClaimFee.ToString("F");
-			doc.DrawString(g,text,procedureChargeCol,y);*/
+			//List the carrier inserted procedures into the procedure list.
+			CCDField[] carrierProcs=formData.GetFieldsById("G19");
+			CCDField[] carrierEligibleAmts=formData.GetFieldsById("G20");
+			CCDField[] carrierDeductAmts=formData.GetFieldsById("G21");
+			CCDField[] carrierAts=formData.GetFieldsById("G22");
+			CCDField[] carrierBenefitAmts=formData.GetFieldsById("G23");
+			CCDField[] carrierNotes1=formData.GetFieldsById("G24");
+			CCDField[] carrierNotes2=formData.GetFieldsById("G25");
+			for(int p=0;p<carrierProcs.Length;p++){
+				text=carrierProcs[p].valuestr;//Field G19
+				doc.DrawString(g,text,procedureCodeCol,0);
+				text=ProcedureCodes.GetLaymanTerm(ProcedureCodes.GetCodeNum(text));//Abbreviated procedure description.
+				if(text.Length>maxDescriptLen){
+					text=text.Substring(0,maxDescriptLen);
+				}
+				doc.DrawString(g,text,procedureDescriptionCol,0);
+				text=carrierEligibleAmts[p].valuestr.Substring(0,4).TrimStart(new char[] {'0'})+"."+
+					carrierEligibleAmts[p].valuestr.Substring(4,2);//Field G20
+				doc.DrawString(g,text,procedureEligibleCol,0);
+				text=carrierDeductAmts[p].valuestr.Substring(0,4).TrimStart(new char[] {'0'})+"."+
+					carrierDeductAmts[p].valuestr.Substring(4,2);//Field G21
+				doc.DrawString(g,text,procedureDeductCol,0);
+				text=carrierAts[p].valuestr.TrimStart(new char[] {'0'})+"%";//Field G22
+				doc.DrawString(g,text,procedureAtCol,0);
+				text=carrierBenefitAmts[p].valuestr.Substring(0,4).TrimStart(new char[] {'0'})+"."+
+					carrierBenefitAmts[p].valuestr.Substring(4,2);//Field G23
+				text="";
+				if(carrierNotes1[p].valuestr!="00"){
+					text+=carrierNotes1[p].valuestr;
+				}
+				if(carrierNotes2[p].valuestr!="00"){
+					if(text.Length>0){
+						text+=",";
+					}
+					text+=carrierNotes2[p].valuestr;
+				}
+				doc.DrawString(g,text,procedureNotesCol,0);
+			}
 			doc.standardFont=tempFont;
 		}
 
@@ -1890,7 +1965,7 @@ namespace OpenDental.Eclaims {
 		}
 
 		private SizeF PrintPatientBirthday(Graphics g,float X,float Y) {
-			text=IsValidDate(patient.Birthdate)?patient.Birthdate.ToString("MMM d, yyyy",culture):"";
+			text=IsValidDate(patient.Birthdate)?patient.Birthdate.ToString("MM dd, yyyy",culture):"";
 			return doc.DrawField(g,isFrench?"DATE DE NAISSANCE":"BIRTHDATE",text,true,X,Y);//Field C05
 		}
 
@@ -1993,7 +2068,7 @@ namespace OpenDental.Eclaims {
 		}
 
 		private SizeF PrintSubscriberBirthday(Graphics g,float X,float Y,bool useCaps) {
-			text=IsValidDate(subscriber.Birthdate)?subscriber.Birthdate.ToString("MMM d, yyyy",culture):"";
+			text=IsValidDate(subscriber.Birthdate)?subscriber.Birthdate.ToString("MM dd, yyyy",culture):"";
 			string engStr="BIRTHDATE";
 			string frStr="DATE DE NAISSANCE";
 			string label=isFrench?frStr:engStr;
@@ -2091,7 +2166,7 @@ namespace OpenDental.Eclaims {
 				x=doc.StartElement();
 				text="";
 				//if(canClaim.SecondaryCoverage=="Y"){
-				text=IsValidDate(subscriber2.Birthdate)?subscriber2.Birthdate.ToString("MMM d, yyyy"):"";//Field E04
+				text=IsValidDate(subscriber2.Birthdate)?subscriber2.Birthdate.ToString("MM dd, yyyy"):"";//Field E04
 				//}
 				doc.DrawField(g,isFrench?"Date de naissance du titulaire":"Insured/Member Date of Birth",text,true,x,0);
 				PrintCertificateNo(g,x+400,0,false);
@@ -2131,7 +2206,7 @@ namespace OpenDental.Eclaims {
 				doc.DrawString(g,isFrench?"Oui":"Yes",x,0);
 				x=doc.StartElement();
 				x+=doc.DrawField(g,isFrench?"Si Oui, donner date":"If yes, give date",
-					claim.AccidentDate.ToString("MMM d, yyyy",culture)+" ",true,x,0).Width;
+					claim.AccidentDate.ToString("MM dd, yyyy",culture)+" ",true,x,0).Width;
 				doc.DrawString(g,isFrench?"et détails à part:":"and details separately:",x,0);
 				x=doc.StartElement();
 				doc.DrawString(g,claim.ClaimNote,x,0);
@@ -2214,6 +2289,9 @@ namespace OpenDental.Eclaims {
 				doc.DrawString(g,isFrench?"Non":"No",x,0);
 			}
 			x=doc.PopX();//End indentation.
+		}
+
+		private void PrintPaymentSummary(Graphics g){
 		}
 
 		private void PrintMissingToothList(Graphics g){
