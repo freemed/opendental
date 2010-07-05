@@ -1030,7 +1030,7 @@ namespace OpenDentBusiness{
 		AnesthesiaControlMeds,
 		///<summary>36</summary>
 		InsPayCreate,
-		///<summary>37- Also includes completed claimprocs even if unattached to an insurance check.  Not even allowed to attach to a check, because that would change the date of a historical entry.</summary>
+		///<summary>37- Also includes completed claimprocs even if unattached to an insurance check.  However, it's not actually enforced when creating a check because it would be very complex.</summary>
 		InsPayEdit,
 		///<summary>38</summary>
 		TreatPlanEdit,
