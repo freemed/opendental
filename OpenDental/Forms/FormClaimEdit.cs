@@ -3089,36 +3089,15 @@ namespace OpenDental{
 		#endregion
 
 		private void FormClaimEdit_Shown(object sender,EventArgs e) {
-			//the control box (x to close window) is not shown in this form because new users are temped to use it as an OK button, causing errors.
-			if(!IsNew) {
-				return;
-			}
-			/*if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)!="CA") {//en-CA or fr-CA
-				return;
-			}
-			//The rest is just Canadian.
-			List<ToothInitial> ToothInitialList=ToothInitials.Refresh(PatCur.PatNum);
-			ArrayList missingAL=ToothInitials.GetMissingOrHiddenTeeth(ToothInitialList);
-			List<CanadianExtract> missingList=new List<CanadianExtract>();
-			CanadianExtract canext;
-			for(int i=0;i<missingAL.Count;i++) {
-				canext=new CanadianExtract();
-				canext.ClaimNum=ClaimCur.ClaimNum;//redundant
-				canext.ToothNum=(string)missingAL[i];
-				missingList.Add(canext);
-			}
-			CanadianClaim canclaim=CanadianClaims.Insert(ClaimCur.ClaimNum,missingList);
-			FormClaimCanadian FormC=new FormClaimCanadian();
-			FormC.ClaimCur=ClaimCur;
-			FormC.CanCur=canclaim;
-			FormC.ShowDialog();*/
+			//this needs to be removed.
 		}
 		
 		private void FormClaimEdit_Load(object sender, System.EventArgs e) {
+			//the control box (x to close window) is not shown in this form because new users are temped to use it as an OK button, causing errors.
 			if(System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height<this.Height){
-				this.Height=System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height;
+				this.Height=System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height;//make this window as tall as possible.
 			}
-			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//en-CA or fr-CA
+			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian
 				labelPreAuthNum.Text=Lan.g(this,"Predeterm Num");
 				groupProsth.Visible=false;
 				groupReferral.Visible=false;
@@ -3961,6 +3940,16 @@ namespace OpenDental{
 					return;
 				}
 			}
+			for(int i=0;i<gridProc.SelectedIndices.Length;i++) {
+				if(ClaimProcsForClaim[gridProc.SelectedIndices[i]].Status==ClaimProcStatus.Received
+					|| ClaimProcsForClaim[gridProc.SelectedIndices[i]].Status==ClaimProcStatus.Supplemental
+					|| ClaimProcsForClaim[gridProc.SelectedIndices[i]].Status==ClaimProcStatus.CapComplete) 
+				{
+					MessageBox.Show(Lan.g(this,"Procedures that are already received cannot be included."));
+					//This expanded security prevents making changes to historical entries of zero with a writeoff.
+					return;
+				}
+			}
 			List<ClaimProc> cpList=new List<ClaimProc>();
 			for(int i=0;i<gridProc.SelectedIndices.Length;i++) {
 				//copy selected claimprocs to temporary array for editing.
@@ -4408,9 +4397,14 @@ namespace OpenDental{
 				return;
 			}
 			Cursor=Cursors.WaitCursor;
-			List<ClaimSendQueueItem> queueItems=new List<ClaimSendQueueItem>();
-			queueItems.Add(listQueue[0]);
-			Eclaims.Eclaims.SendBatches(queueItems);//this also calls SetClaimSentOrPrinted which creates the etrans entry.
+			try {
+				Eclaims.Canadian.SendClaim(listQueue[0],true);//ignore the etransNum result
+			}
+			catch(Exception ex) {
+				Cursor=Cursors.Default;
+				MessageBox.Show(ex.Message);
+				return;
+			}
 			Cursor=Cursors.Default;
 			DialogResult=DialogResult.OK;
 		}
