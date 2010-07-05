@@ -1126,7 +1126,7 @@ namespace OpenDental.Eclaims {
 						text=GetMaterialDescription(claim.CanadianMaxProsthMaterial);//Field F20
 						doc.DrawField(g,isFrench?"Matériau":"Material",text,true,x,0);
 						x=doc.StartElement();
-						text=DateToString(claim.CanadianDateInitialUpper,"yyyy mm dd");//Field F04
+						text=DateToString(claim.CanadianDateInitialUpper,"yyyy MM dd");//Field F04
 						doc.DrawField(g,"Date",text,true,x,0);
 					}
 					else{
@@ -1145,7 +1145,7 @@ namespace OpenDental.Eclaims {
 						text=GetMaterialDescription(claim.CanadianMandProsthMaterial);//Field F21
 						doc.DrawField(g,isFrench?"Matériau":"Material",text,true,x,0);
 						x=doc.StartElement();
-						text=DateToString(claim.CanadianDateInitialLower,"yyyy mm dd");//Field F19
+						text=DateToString(claim.CanadianDateInitialLower,"yyyy MM dd");//Field F19
 						doc.DrawField(g,"Date",text,true,x,0);
 					}
 					else{
@@ -1271,7 +1271,7 @@ namespace OpenDental.Eclaims {
 			float eligibleFeeCol=feeCol+feeColWidth;
 			float eligibleFeeColWidth=(isEOB?75:0);
 			float labCol=eligibleFeeCol+eligibleFeeColWidth;
-			float labColWidth=75;
+			float labColWidth=80;
 			float eligibleLabCol=labCol+labColWidth;
 			float eligibleLabColWidth=(isEOB?75:0);
 			float deductibleCol=eligibleLabCol+eligibleLabColWidth;
@@ -1313,7 +1313,7 @@ namespace OpenDental.Eclaims {
 								}
 								noteIndex=Convert.ToInt32(explainationNoteNumbers2[j].valuestr);
 								if(noteIndex>0){
-									doc.DrawString(g," "+noteNumbers[noteIndex].valuestr,noteCol+size1.Width,0);
+									doc.DrawString(g,Environment.NewLine+noteNumbers[noteIndex].valuestr,noteCol+size1.Width,0);
 								}
 								text=eligibleAmounts[j].valuestr;
 								text=text.Substring(0,3).TrimStart('0')+text.Substring(3,1)+"."+text.Substring(4,2);
@@ -1776,7 +1776,10 @@ namespace OpenDental.Eclaims {
 					text=claimproc.CodeSent.PadLeft(5,'0');//Field F08 - TODO check padding needed
 					doc.DrawString(g,text,procedureCodeCol,0);
 					text=ProcedureCodes.GetProcCode(proc.CodeNum).Descript;
-					//TODO: clip description when too long.
+					const int maxDescriptLen=28;
+					if(text.Length>maxDescriptLen){
+						text=text.Substring(0,maxDescriptLen);
+					}
 					doc.DrawString(g,text,procedureDescriptionCol,0);
 					text=Tooth.ToInternat(proc.ToothNum);//Field F10
 					doc.DrawString(g,text,procedureToothCol,0);
@@ -2156,7 +2159,7 @@ namespace OpenDental.Eclaims {
 					text=GetMaterialDescription(claim.CanadianMaxProsthMaterial);//Field F20
 					doc.DrawField(g,isFrench?"Matériau initial":"Initial Material",text,true,x,0);
 					x=doc.StartElement();
-					text=claim.CanadianDateInitialUpper.ToString("yyyy mm dd",culture);//Field F04
+					text=claim.CanadianDateInitialUpper.ToString("yyyy MM dd",culture);//Field F04
 					doc.DrawField(g,isFrench?"Date de mise en bouche":"Placement Date",
 						IsValidDate(claim.CanadianDateInitialUpper)?text:"",true,x,0);
 					x=doc.StartElement();
@@ -2180,7 +2183,7 @@ namespace OpenDental.Eclaims {
 					text=GetMaterialDescription(claim.CanadianMandProsthMaterial);//Field F21
 					doc.DrawField(g,isFrench?"Matériau initial":"Initial Material",text,true,x,0);
 					x=doc.StartElement();
-					text=claim.CanadianDateInitialLower.ToString("yyyy mm dd",culture);//Field F19
+					text=claim.CanadianDateInitialLower.ToString("yyyy MM dd",culture);//Field F19
 					doc.DrawField(g,isFrench?"Date de mise en bouche":"Placement Date",
 						IsValidDate(claim.CanadianDateInitialLower)?text:"",true,x,0);
 					x=doc.StartElement();
