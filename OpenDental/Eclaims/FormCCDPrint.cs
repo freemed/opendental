@@ -93,6 +93,7 @@ namespace OpenDental.Eclaims {
 		List<Procedure> extracted;
 		private string MessageText;
 		PatPlan patPlanPri;
+		Clinic clinic;
 
 		#endregion
 
@@ -167,6 +168,18 @@ namespace OpenDental.Eclaims {
 					}
 				}
 				claimprocs=ClaimProcs.RefreshForClaim(claim.ClaimNum);
+				long clinicNum=0;
+				for(int i=0;i<claimprocs.Count;i++){
+					if(claimprocs[i].ClinicNum!=0){
+						clinicNum=claimprocs[i].ClinicNum;
+						break;
+					}
+				}
+				if(clinicNum!=0){
+					clinic=Clinics.GetClinic(clinicNum);
+				}else if(!PrefC.GetBool(PrefName.EasyNoClinics) && Clinics.List.Length>0){
+					clinic=Clinics.List[0];
+				}
 			}
 			patPlansForPatient=PatPlans.Refresh(etrans.PatNum);
 			patPlanPri=PatPlans.GetFromList(patPlansForPatient,insplan.PlanNum);
@@ -424,12 +437,12 @@ namespace OpenDental.Eclaims {
 			doc.StartElement();
 			field=formData.GetFieldById("G36");//Payment amount
 			if(field!=null && field.valuestr!=null){
-				doc.DrawString(g,field.GetFieldName(isFrench)+": "+NumStrToDollars(field.valuestr),x,0,headingFont);
+				doc.DrawString(g,field.GetFieldName(isFrench)+": "+RawMoneyStrToDisplayMoney(field.valuestr),x,0,headingFont);
 			}
 			doc.StartElement();
 			field=formData.GetFieldById("G33");//Payment adjustment amount
 			if(field!=null){
-				doc.DrawField(g,field.GetFieldName(isFrench),NumStrToDollars(field.valuestr),true,x,0);
+				doc.DrawField(g,field.GetFieldName(isFrench),RawMoneyStrToDisplayMoney(field.valuestr),true,x,0);
 			}
 			doc.StartElement();
 			doc.HorizontalLine(g,breakLinePen,doc.bounds.Left,doc.bounds.Right,0);
@@ -462,7 +475,7 @@ namespace OpenDental.Eclaims {
 				doc.DrawString(g,carrierIdentificationNumbers[i].valuestr,carrierIdentificationNumCol,0);
 				doc.DrawString(g,officeSequenceNumbers[i+1].valuestr,officeSequenceNumCol,0);
 				doc.DrawString(g,transactionReferenceNumbers[i+1].valuestr,transactionReferenceNumCol,0);
-				doc.DrawString(g,NumStrToDollars(transactionPayments[i].valuestr),transactionPaymentCol,0);
+				doc.DrawString(g,RawMoneyStrToDisplayMoney(transactionPayments[i].valuestr),transactionPaymentCol,0);
 			}
 			doc.StartElement();
 			doc.HorizontalLine(g,breakLinePen,doc.bounds.Left,doc.bounds.Right,0);
@@ -499,12 +512,12 @@ namespace OpenDental.Eclaims {
 			doc.StartElement();
 			field=formData.GetFieldById("G36");//Payment amount
 			if(field!=null && field.valuestr!=null) {
-				doc.DrawString(g,field.GetFieldName(isFrench)+": "+NumStrToDollars(field.valuestr),x,0,headingFont);
+				doc.DrawString(g,field.GetFieldName(isFrench)+": "+RawMoneyStrToDisplayMoney(field.valuestr),x,0,headingFont);
 			}
 			doc.StartElement();
 			field=formData.GetFieldById("G33");//Payment adjustment amount
 			if(field!=null) {
-				doc.DrawField(g,field.GetFieldName(isFrench),NumStrToDollars(field.valuestr),true,x,0);
+				doc.DrawField(g,field.GetFieldName(isFrench),RawMoneyStrToDisplayMoney(field.valuestr),true,x,0);
 			}
 			doc.StartElement();
 			doc.HorizontalLine(g,breakLinePen,doc.bounds.Left,doc.bounds.Right,0);
@@ -550,7 +563,7 @@ namespace OpenDental.Eclaims {
 				doc.DrawString(g,carrierIdentificationNumbers[i].valuestr,carrierIdentificationNumCol,0);
 				doc.DrawString(g,officeSequenceNumbers[i+1].valuestr,officeSequenceNumCol,0);
 				doc.DrawString(g,transactionReferenceNumbers[i+1].valuestr,transactionReferenceNumCol,0);
-				doc.DrawString(g,NumStrToDollars(transactionPayments[i].valuestr),transactionPaymentCol,0);
+				doc.DrawString(g,RawMoneyStrToDisplayMoney(transactionPayments[i].valuestr),transactionPaymentCol,0);
 			}
 			doc.standardFont=temp;
 			doc.StartElement();
@@ -682,9 +695,9 @@ namespace OpenDental.Eclaims {
 			}
 			x=doc.StartElement();
 			doc.DrawString(g,isFrench?"DATE DE NAISSANCE:":"BIRTHDATE:",x,0);
-			doc.DrawString(g,DateToString(subscriber.Birthdate,"MMM dd, yyyy"),leftMidCol,0);//Field D01
+			doc.DrawString(g,DateToString(subscriber.Birthdate),leftMidCol,0);//Field D01
 			if(subscriber2!=null) {
-				doc.DrawString(g,DateToString(subscriber2.Birthdate,"MMM dd, yyyy"),rightMidCol,0);//Field E04
+				doc.DrawString(g,DateToString(subscriber2.Birthdate),rightMidCol,0);//Field E04
 			}
 			x=doc.StartElement();
 			doc.DrawString(g,isFrench?"NO DU TITULAIRE/CERTIFICAT:":"INSURANCE/CERTIFICATE NO:",x,0);
@@ -888,7 +901,7 @@ namespace OpenDental.Eclaims {
 			doc.DrawString(g,text,center-g.MeasureString(text,headingFont).Width/2,0,headingFont);
 			float rightCol=x+625.0f;
 			x=doc.StartElement(verticalLine);
-			text=DateToString(etrans.DateTimeTrans,"yyyy MM dd");
+			text=DateToString(etrans.DateTimeTrans);
 			SizeF size1=doc.DrawString(g,isFrench?"DATE DE TRANSMISSION: ":"DATE SUBMITTED: ",x,0);
 			doc.DrawString(g,text,x+size1.Width,0);
 			CCDField fieldG01=formData.GetFieldById("G01");
@@ -976,9 +989,9 @@ namespace OpenDental.Eclaims {
 			PrintSubscriberAddress(g,rightMidCol,0,false);
 			x=doc.StartElement();
 			doc.DrawString(g,isFrench?"DATE DE NAISSANCE:":"BIRTHDATE:",x,0);
-			doc.DrawString(g,DateToString(subscriber.Birthdate,"yyyy MM dd"),leftMidCol,0);//Field D01
+			doc.DrawString(g,DateToString(subscriber.Birthdate),leftMidCol,0);//Field D01
 			if(subscriber2!=null){
-				doc.DrawString(g,DateToString(subscriber2.Birthdate,"yyyy MM dd"),rightMidCol,0);//Field E04
+				doc.DrawString(g,DateToString(subscriber2.Birthdate),rightMidCol,0);//Field E04
 			}
 			x=doc.StartElement();
 			doc.DrawString(g,isFrench?"NO DU TITULAIRE/CERTIFICAT:":"INSURANCE/CERTIFICATE NO:",x,0);
@@ -1126,7 +1139,7 @@ namespace OpenDental.Eclaims {
 						text=GetMaterialDescription(claim.CanadianMaxProsthMaterial);//Field F20
 						doc.DrawField(g,isFrench?"Matériau":"Material",text,true,x,0);
 						x=doc.StartElement();
-						text=DateToString(claim.CanadianDateInitialUpper,"yyyy MM dd");//Field F04
+						text=DateToString(claim.CanadianDateInitialUpper);//Field F04
 						doc.DrawField(g,"Date",text,true,x,0);
 					}
 					else{
@@ -1145,7 +1158,7 @@ namespace OpenDental.Eclaims {
 						text=GetMaterialDescription(claim.CanadianMandProsthMaterial);//Field F21
 						doc.DrawField(g,isFrench?"Matériau":"Material",text,true,x,0);
 						x=doc.StartElement();
-						text=DateToString(claim.CanadianDateInitialLower,"yyyy MM dd");//Field F19
+						text=DateToString(claim.CanadianDateInitialLower);//Field F19
 						doc.DrawField(g,"Date",text,true,x,0);
 					}
 					else{
@@ -1242,7 +1255,7 @@ namespace OpenDental.Eclaims {
 			yoff+=doc.HorizontalLine(g,breakLinePen,doc.bounds.Left,doc.bounds.Right,yoff).Height;
 			x=doc.StartElement();
 			size1=doc.DrawString(g,isFrench?"Date du traitement: ":"Date of Service: ",x,0);
-			text=DateToString(etrans.DateTimeTrans,"yyyy MM dd");
+			text=DateToString(etrans.DateTimeTrans);
 			doc.DrawString(g,text,x+size1.Width,0);
 			x=doc.StartElement(verticalLine);
 			bool isEOB=transactionCode=="21" || transactionCode=="23";
@@ -1315,19 +1328,15 @@ namespace OpenDental.Eclaims {
 								if(noteIndex>0){
 									doc.DrawString(g,Environment.NewLine+noteNumbers[noteIndex].valuestr,noteCol+size1.Width,0);
 								}
-								text=eligibleAmounts[j].valuestr;
-								text=text.Substring(0,3).TrimStart('0')+text.Substring(3,1)+"."+text.Substring(4,2);
+								text=RawMoneyStrToDisplayMoney(eligibleAmounts[j].valuestr);
 								doc.DrawString(g,text,eligibleFeeCol,0);
-								text=eligibleLabAmounts[j].valuestr;
-								text=text.Substring(0,3).TrimStart('0')+text.Substring(3,1)+"."+text.Substring(4,2);
+								text=RawMoneyStrToDisplayMoney(eligibleLabAmounts[j].valuestr);
 								doc.DrawString(g,text,eligibleLabCol,0);
-								text=deductibleAmounts[j].valuestr;
-								text=text.Substring(0,2).TrimStart('0')+text.Substring(2,1)+"."+text.Substring(3,2);
+								text=RawMoneyStrToDisplayMoney(deductibleAmounts[j].valuestr);
 								doc.DrawString(g,text,deductibleCol,0);
-								text=eligiblePercentages[j].valuestr.TrimStart('0')+"%";
+								text=RawPercentToDisplayPercent(eligiblePercentages[j].valuestr);
 								doc.DrawString(g,text,percentCoveredCol,0);
-								text=dentaidePayAmounts[j].valuestr;
-								text=text.Substring(0,3).TrimStart('0')+text.Substring(3,1)+"."+text.Substring(4,2);
+								text=RawMoneyStrToDisplayMoney(dentaidePayAmounts[j].valuestr);
 								doc.DrawString(g,text,dentaidePaysCol,0);
 								totalPaid+=Convert.ToDouble(text);
 							}
@@ -1802,14 +1811,12 @@ namespace OpenDental.Eclaims {
 					}
 					text=proc.ProcFee.ToString("F");//Field F12
 					doc.DrawString(g,text,procedureChargeCol,0);
-					text=eligibleAmounts[p].valuestr.Substring(0,4).TrimStart(new char[] {'0'})+
-						"."+eligibleAmounts[p].valuestr.Substring(4,2);//Field G12
+					text=RawMoneyStrToDisplayMoney(eligibleAmounts[p].valuestr);//Field G12
 					doc.DrawString(g,text,procedureEligibleCol,0);
 					doc.DrawString(g,text,procedureDeductCol,0);
-					text=eligiblePercentage[p].valuestr.TrimStart(new char[] {'0'})+"%";//Field G14
+					text=RawPercentToDisplayPercent(eligiblePercentage[p].valuestr);//Field G14
 					doc.DrawString(g,text,procedureAtCol,0);
-					text=benefitAmountForTheProcedures[p].valuestr.Substring(0,4).TrimStart(new char[] {'0'})+"."+
-						benefitAmountForTheProcedures[p].valuestr.Substring(4,2);//Field G15
+					text=RawMoneyStrToDisplayMoney(benefitAmountForTheProcedures[p].valuestr);//Field G15
 					doc.DrawString(g,text,procedureBenefitCol,0);
 					text="";
 					if(explainationNotes1[p].valuestr!="00"){
@@ -1831,7 +1838,7 @@ namespace OpenDental.Eclaims {
 				x=doc.StartElement();
 				text=isFrench?"Total Franchise":"Total Deductible";
 				doc.DrawString(g,text,procedureDescriptionCol,0);
-				text=unallocatedDeductible.Substring(0,4).TrimStart(new char[] {'0'})+"."+unallocatedDeductible.Substring(4,2);
+				text=RawMoneyStrToDisplayMoney(unallocatedDeductible);
 				doc.DrawString(g,text,procedureDeductCol,0);
 				text="-"+text;
 				doc.DrawString(g,text,procedureBenefitCol,0);
@@ -1852,16 +1859,13 @@ namespace OpenDental.Eclaims {
 					text=text.Substring(0,maxDescriptLen);
 				}
 				doc.DrawString(g,text,procedureDescriptionCol,0);
-				text=carrierEligibleAmts[p].valuestr.Substring(0,4).TrimStart(new char[] {'0'})+"."+
-					carrierEligibleAmts[p].valuestr.Substring(4,2);//Field G20
+				text=RawMoneyStrToDisplayMoney(carrierEligibleAmts[p].valuestr);//Field G20
 				doc.DrawString(g,text,procedureEligibleCol,0);
-				text=carrierDeductAmts[p].valuestr.Substring(0,4).TrimStart(new char[] {'0'})+"."+
-					carrierDeductAmts[p].valuestr.Substring(4,2);//Field G21
+				text=RawMoneyStrToDisplayMoney(carrierDeductAmts[p].valuestr);//Field G21
 				doc.DrawString(g,text,procedureDeductCol,0);
-				text=carrierAts[p].valuestr.TrimStart(new char[] {'0'})+"%";//Field G22
+				text=RawPercentToDisplayPercent(carrierAts[p].valuestr);//Field G22
 				doc.DrawString(g,text,procedureAtCol,0);
-				text=carrierBenefitAmts[p].valuestr.Substring(0,4).TrimStart(new char[] {'0'})+"."+
-					carrierBenefitAmts[p].valuestr.Substring(4,2);//Field G23
+				text=RawMoneyStrToDisplayMoney(carrierBenefitAmts[p].valuestr);//Field G23
 				text="";
 				if(carrierNotes1[p].valuestr!="00"){
 					text+=carrierNotes1[p].valuestr;
@@ -1894,7 +1898,7 @@ namespace OpenDental.Eclaims {
 		}
 
 		private SizeF PrintTransactionDate(Graphics g,float X,float Y){
-			text=IsValidDate(etrans.DateTimeTrans)?etrans.DateTimeTrans.ToString("MMM dd, yyyy",culture):"";
+			text=DateToString(etrans.DateTimeTrans);
 			return doc.DrawField(g,"DATE",text,true,X,Y);//Only print reasonable transaction dates.
 		}
 
@@ -1965,7 +1969,7 @@ namespace OpenDental.Eclaims {
 		}
 
 		private SizeF PrintPatientBirthday(Graphics g,float X,float Y) {
-			text=IsValidDate(patient.Birthdate)?patient.Birthdate.ToString("MM dd, yyyy",culture):"";
+			text=DateToString(patient.Birthdate);
 			return doc.DrawField(g,isFrench?"DATE DE NAISSANCE":"BIRTHDATE",text,true,X,Y);//Field C05
 		}
 
@@ -2064,15 +2068,15 @@ namespace OpenDental.Eclaims {
 			string engStr="Relationship to subscriber";
 			string frStr="Parenté avec titulaire";
 			string label=isFrench?frStr:engStr;
-			return doc.DrawField(g,useCaps?label.ToUpper():label.ToLower(),text,true,X,Y);
+			return doc.DrawField(g,useCaps?label.ToUpper():label,text,true,X,Y);
 		}
 
 		private SizeF PrintSubscriberBirthday(Graphics g,float X,float Y,bool useCaps) {
-			text=IsValidDate(subscriber.Birthdate)?subscriber.Birthdate.ToString("MM dd, yyyy",culture):"";
-			string engStr="BIRTHDATE";
-			string frStr="DATE DE NAISSANCE";
+			text=DateToString(subscriber.Birthdate);
+			string engStr="Birthdate";
+			string frStr="Date de naissance";
 			string label=isFrench?frStr:engStr;
-			return doc.DrawField(g,useCaps?label.ToUpper():label.ToLower(),text,true,X,Y);
+			return doc.DrawField(g,useCaps?label.ToUpper():label,text,true,X,Y);
 		}
 
 		///<summary>Prints a three-line address. Each line is underlined and the address is printed without a label.</summary>
@@ -2166,7 +2170,7 @@ namespace OpenDental.Eclaims {
 				x=doc.StartElement();
 				text="";
 				//if(canClaim.SecondaryCoverage=="Y"){
-				text=IsValidDate(subscriber2.Birthdate)?subscriber2.Birthdate.ToString("MM dd, yyyy"):"";//Field E04
+				text=DateToString(subscriber2.Birthdate);//Field E04
 				//}
 				doc.DrawField(g,isFrench?"Date de naissance du titulaire":"Insured/Member Date of Birth",text,true,x,0);
 				PrintCertificateNo(g,x+400,0,false);
@@ -2206,7 +2210,7 @@ namespace OpenDental.Eclaims {
 				doc.DrawString(g,isFrench?"Oui":"Yes",x,0);
 				x=doc.StartElement();
 				x+=doc.DrawField(g,isFrench?"Si Oui, donner date":"If yes, give date",
-					claim.AccidentDate.ToString("MM dd, yyyy",culture)+" ",true,x,0).Width;
+					DateToString(claim.AccidentDate)+" ",true,x,0).Width;
 				doc.DrawString(g,isFrench?"et détails à part:":"and details separately:",x,0);
 				x=doc.StartElement();
 				doc.DrawString(g,claim.ClaimNote,x,0);
@@ -2234,9 +2238,8 @@ namespace OpenDental.Eclaims {
 					text=GetMaterialDescription(claim.CanadianMaxProsthMaterial);//Field F20
 					doc.DrawField(g,isFrench?"Matériau initial":"Initial Material",text,true,x,0);
 					x=doc.StartElement();
-					text=claim.CanadianDateInitialUpper.ToString("yyyy MM dd",culture);//Field F04
-					doc.DrawField(g,isFrench?"Date de mise en bouche":"Placement Date",
-						IsValidDate(claim.CanadianDateInitialUpper)?text:"",true,x,0);
+					text=DateToString(claim.CanadianDateInitialUpper);//Field F04
+					doc.DrawField(g,isFrench?"Date de mise en bouche":"Placement Date",text,true,x,0);
 					x=doc.StartElement();
 					text="";//Remove later
 					//text=GetProcedureTypeDescription();//TODO: Field F16
@@ -2258,9 +2261,8 @@ namespace OpenDental.Eclaims {
 					text=GetMaterialDescription(claim.CanadianMandProsthMaterial);//Field F21
 					doc.DrawField(g,isFrench?"Matériau initial":"Initial Material",text,true,x,0);
 					x=doc.StartElement();
-					text=claim.CanadianDateInitialLower.ToString("yyyy MM dd",culture);//Field F19
-					doc.DrawField(g,isFrench?"Date de mise en bouche":"Placement Date",
-						IsValidDate(claim.CanadianDateInitialLower)?text:"",true,x,0);
+					text=DateToString(claim.CanadianDateInitialLower);//Field F19
+					doc.DrawField(g,isFrench?"Date de mise en bouche":"Placement Date",text,true,x,0);
 					x=doc.StartElement();
 					text="";//Remove later
 					//text=GetProcedureTypeDescription();//TODO: Field F16
@@ -2292,6 +2294,68 @@ namespace OpenDental.Eclaims {
 		}
 
 		private void PrintPaymentSummary(Graphics g){
+			const float valuesBlockOffset=300;
+			string expectedPaymentDateStr=formData.GetFieldById("G03").valuestr;
+			if(expectedPaymentDateStr!="00000000"){
+				text=isFrench?"DATE PRÉVUE DU PAIEMENT:":"EXPECTED PAYMENT DATE:";
+				doc.DrawString(g,text,x,0);
+				text=DateNumToPrintDate(expectedPaymentDateStr);
+				doc.DrawString(g,text,x+valuesBlockOffset,0);
+				x=doc.StartElement();
+			}
+			text=(isFrench?"TOTAL DES FRAIS SOUMIS:":"TOTAL DENTIST CHARGES:");
+			doc.DrawString(g,text,x,0);
+			text=RawMoneyStrToDisplayMoney(formData.GetFieldById("G04").valuestr);
+			doc.DrawString(g,text,x+valuesBlockOffset,0);
+			x=doc.StartElement();
+			text=isFrench?"TOTAL DEDUCTIBLES NON-ALLOCER:":"DEDUCTIBLE NOT ALLOCATED:";
+			doc.DrawString(g,text,x,0);
+			text=RawMoneyStrToDisplayMoney(formData.GetFieldById("G29").valuestr);
+			doc.DrawString(g,text,x+valuesBlockOffset,0);
+			x=doc.StartElement();
+			string payableTo=formData.GetFieldById("F01").valuestr;
+			if(payableTo=="1"){//Pay the subscriber.
+				text=isFrench?"TOTAL REMBOURSABLE AU TITULAIRE:":"TOTAL PAYABLE TO INSURED:";
+				doc.DrawString(g,text,x,0);
+				text=RawMoneyStrToDisplayMoney(formData.GetFieldById("G55").valuestr);
+				doc.DrawString(g,text,x+valuesBlockOffset,0);
+				x=doc.StartElement();
+				text=isFrench?"ADRESSE DU DESTINATAIRE DU PAIEMENT:":"PAYEE'S ADDRESS:";
+				doc.DrawString(g,text,x,0);
+				text=Patients.GetAddressFull(patient.Address,patient.Address2,patient.City,patient.State,patient.Zip);
+				doc.DrawString(g,text,x+valuesBlockOffset,0);
+			}else if(payableTo=="2"){//Pay other party.
+				text=isFrench?"TOTAL REMBOURSABLE AU AUTRES:":"TOTAL PAYABLE TO OTHER:";
+				doc.DrawString(g,text,x,0);
+				text=RawMoneyStrToDisplayMoney(formData.GetFieldById("G55").valuestr);
+				doc.DrawString(g,text,x+valuesBlockOffset,0);
+				x=doc.StartElement();
+			}else if(payableTo=="3"){//Reserved
+			}else if(payableTo=="4"){//Dentist
+				text=isFrench?"TOTAL REMBOURSABLE AU DENTISTE:":"TOTAL PAYABLE TO DENTIST:";
+				doc.DrawString(g,text,x,0);
+				text=RawMoneyStrToDisplayMoney(formData.GetFieldById("G55").valuestr);
+				doc.DrawString(g,text,x+valuesBlockOffset,0);
+				x=doc.StartElement();
+				text=isFrench?"ADRESSE DU DESTINATAIRE DU PAIEMENT:":"PAYEE'S ADDRESS:";
+				doc.DrawString(g,text,x,0);
+				PrintPracticeAddress(g,x+valuesBlockOffset);
+			}
+		}
+
+		private void PrintPracticeAddress(Graphics g,float xPos){
+			if(clinic==null){
+				if(PrefC.GetBool(PrefName.UseBillingAddressOnClaims)){
+					text=Patients.GetAddressFull(PrefC.GetString(PrefName.PracticeBillingAddress),PrefC.GetString(PrefName.PracticeBillingAddress2),
+						PrefC.GetString(PrefName.PracticeBillingCity),PrefC.GetString(PrefName.PracticeBillingST),PrefC.GetString(PrefName.PracticeBillingZip));
+				}else{
+					text=Patients.GetAddressFull(PrefC.GetString(PrefName.PracticeAddress),PrefC.GetString(PrefName.PracticeAddress2),
+						PrefC.GetString(PrefName.PracticeCity),PrefC.GetString(PrefName.PracticeST),PrefC.GetString(PrefName.PracticeZip));
+				}
+			}else{
+				text=Patients.GetAddressFull(clinic.Address,clinic.Address2,clinic.City,clinic.State,clinic.Zip);
+			}
+			doc.DrawString(g,text,xPos,0);
 		}
 
 		private void PrintMissingToothList(Graphics g){
@@ -2309,7 +2373,7 @@ namespace OpenDental.Eclaims {
 					}
 					if(IsValidDate(extracted[i].ProcDate)) {//Tooth is considered unextracted if it doesn't have a date.
 						float thWidth=doc.DrawString(g,Tooth.ToInternat(extracted[i].ToothNum).PadLeft(2,' ')+" ",x,0).Width;//Field F23
-						text=" "+extracted[i].ProcDate.ToString("yyyy MM dd",culture);
+						text=" "+DateToString(extracted[i].ProcDate);
 						doc.DrawString(g,text,x+thWidth,0);
 						x+=titleWidth;
 						j++;
@@ -2344,56 +2408,48 @@ namespace OpenDental.Eclaims {
 
 		#region Printing Information Translators
 
-		///<summary>Input string is expected to have the form 'YYYYMMDD'.</summary>
-		private string DateNumToPrintDate(string number){
-			DateTime dt=new DateTime(Convert.ToInt32(number.Substring(0,4)),Convert.ToInt32(number.Substring(4,2)),
-				Convert.ToInt32(number.Substring(6,2)));
-			return dt.ToShortDateString();
-		}
-
-		private string DateToString(DateTime dt,string format){
-			return(IsValidDate(dt)?dt.ToString(format,culture):"");
+		///<summary>The rawPercent string should be of length 3 and should be numerical digits only.</summary>
+		private string RawPercentToDisplayPercent(string rawPercent){
+			return rawPercent.TrimStart('0').PadLeft(1,'0')+"%";
 		}
 
 		private bool IsValidDate(DateTime dt){
-			return(//dt!=null && //no allowed
-				dt.Year>1900);
+			return (dt.Year>1880);
+		}
+
+		private string DateToString(DateTime dt){
+			if(IsValidDate(dt)){
+				return dt.ToShortDateString();
+			}
+			return "";//Invalid date.
+		}
+
+		///<summary>Input string is expected to have the form 'YYYYMMDD'.</summary>
+		private string DateNumToPrintDate(string number){
+			DateTime dt=DateTime.ParseExact(number,"yyyyMMdd",culture.DateTimeFormat);
+			return DateToString(dt);
 		}
 
 		///<summary>The given number must be in the format of: [+-]?[0-9]*</summary>
-		private string NumStrToDollars(string number){
+		private string RawMoneyStrToDisplayMoney(string number){
 			string sign="";
 			if(number.Length>0 && (number[0]=='+' || number[0]=='-')){
 				sign=number[0].ToString();
 				number=number.Substring(1,number.Length-1);
 			}
-			number=number.PadLeft(3,'0');//Guarantee at least 3 digits of length (1 for dollar, 2 for cents).
-			return sign+number.Substring(0,number.Length-3).TrimStart('0')+number.Substring(number.Length-3,1)+"."+
+			number=number.PadLeft(2,'0');//Guarantee at least 2 digits of length.
+			return sign+number.Substring(0,number.Length-2).TrimStart('0').PadLeft(1,'0')+"."+
 				number.Substring(number.Length-2,2);
 		}
 
 		///<summary>Convert a payee code from field F01 into a readable string.</summary>
 		private string GetPayableToString(bool assignBen) {
-			//TODO: check translations. English to french translations provided by google translator.
 			if(assignBen) {
 				return isFrench?"DENTISTE":"DENTIST";
 			}
 			else {
 				return isFrench?"TITULAIRE":"INSURED/MEMBER";
 			}
-			/*
-			switch(payeeCode) {
-				case "1":
-					return isFrench?"TITULAIRE":"INSURED/MEMBER";
-				case "2"
-					return isFrench?"TIERS":"OTHER THIRD PARTY";
-				//case "3": Reserved by CDA net.
-				case "4":
-					return isFrench?"DENTISTE":"DENTIST";
-				default:
-					break;
-			}
-			return "";*/
 		}
 
 		///<summary>Convert a patient relationship enum value into a human-readable, CDA required string.</summary>
