@@ -18,7 +18,7 @@ namespace OpenDental.Eclaims {
 			
 		//}
 
-		///<summary>Called directly instead of from Eclaims.SendBatches.  Includes one claim.  Sets claim status internally.  Returns the EtransNum of the ack.</summary>
+		///<summary>Called directly instead of from Eclaims.SendBatches.  Includes one claim.  Sets claim status internally if successfully sent.  Returns the EtransNum of the ack.  Includes various user interaction such as displaying of messages, printing, triggering of COB claims, etc.</summary>
 		public static long SendClaim(ClaimSendQueueItem queueItem,bool doPrint){//,int interchangeNum){
 			Clearinghouse clearhouse=GetClearinghouse();//clearinghouse must be valid to get to this point.
 				//ClearinghouseL.GetClearinghouse(((ClaimSendQueueItem)queueItems[0]).ClearinghouseNum);
@@ -48,7 +48,7 @@ namespace OpenDental.Eclaims {
 			Procedure proc;
 			ProcedureCode procCode;
 			StringBuilder strb;
-			//for(int i=0;i<queueItems.Count;i++){
+			//this no longer actually sets the claim as "sent".  Just creates the etrans without a message.
 			etrans=Etranss.SetClaimSentOrPrinted(queueItem.ClaimNum,queueItem.PatNum,clearhouse.ClearinghouseNum,EtransType.Claim_CA);
 			strb=new StringBuilder();
 			claim=Claims.GetClaim(queueItem.ClaimNum);
@@ -214,16 +214,14 @@ namespace OpenDental.Eclaims {
 			else{
 				strb.Append("1");
 			}
-			//F06 number of procedures performed 1 N. Must be between 1 and 7.
-//todo User interface incomplete.  Must not allow attaching more than 7 procs to a claim
+			//F06 number of procedures performed 1 N. Must be between 1 and 7.  UI prevents attaching more than 7.
 			strb.Append(TidyN(claimProcsClaim.Count,1));//number validated
 			//F22 extracted teeth count 2 N
-//todo: check validation
+//todo: check validation.  I don't think there actually is any validation to be done because zero is always an allowed value.
 			strb.Append(TidyN(extracted.Count,2));//validated against matching prosthesis
 			//Secondary carrier fields (E19 to E07) ONLY included if E20=1----------------------------------------------------
 			if(claim.PlanNum2!=0){
-//todo We still need to write the business logic for COB
-//Sometimes, a secondary claim also needs to be created:
+//todo We still need to write the business logic for COB further down in this method.  COB is triggered by EOB.
 				//E19 secondary carrier transaction number 6 N
 				strb.Append(TidyN(etrans.CarrierTransCounter2,6));
 				//E01 sec carrier id number 6 N
@@ -441,12 +439,41 @@ namespace OpenDental.Eclaims {
 			etrans.AckEtransNum=etransAck.EtransNum;
 			Etranss.Update(etrans);
 			Etranss.SetMessage(etrans.EtransNum,strb.ToString());
-			if(resultIsError){
+			if(resultIsError) {
 				throw new ApplicationException(result);
 			}
+			else {
+				Claims.SetCanadianClaimSent(queueItem.ClaimNum);//when called from ClaimEdit, that window will close immediately, so we're directly changing the db.
+			}
 			if(doPrint) {
-				FormCCDPrint FormP=new FormCCDPrint(etrans,result);//Print the form.
+				FormCCDPrint FormP=new FormCCDPrint(etrans,result);//Print the form. 
+				//todo: FormCCDPrint should also print any embedded transactions.  eg. an EOB with an embedded secondary EOB.
 				FormP.Print();
+			}
+			if(etransAck.Etype==EtransType.ClaimEOB_CA) {
+				//if an EOB is returned, there are two possibilities.
+				//1. The EOB contains an embedded EOB because the same carrier is both pri and sec.  Both got printed above.
+				//2. The EOB does not contain an embedded EOB, indicating that a COB claim needs to be created and sent.
+				//That is done here, automatically.
+				//UI already prevents the initial automatic creation of the secondary claim for Canada.
+				string embeddedLength=fieldInputter.GetValue("G39");
+				if(embeddedLength=="0000") {//no embedded message
+					//todo: create and send secondary here.
+
+
+
+
+
+
+
+
+				}
+				else{//an embedded message exists
+					string embeddedMsg=fieldInputter.GetValue("G40");
+					//MsgBoxCopyPaste msgbox=new MsgBoxCopyPaste(embeddedMsg);
+					//msgbox.Show();
+					//actually, nothing to do here because already printed above.
+				}
 			}
 			return etransAck.EtransNum;
 		}
@@ -473,23 +500,7 @@ namespace OpenDental.Eclaims {
 				startInfo.WindowStyle=ProcessWindowStyle.Minimized;
 				startInfo.WorkingDirectory=Path.GetDirectoryName(clearhouse.ClientProgram);
 				Process process=Process.Start(startInfo);
-				
-				//IntPtr=process.MainWindowHandle
 			}
-			//if(Process.GetProcessesByName("iCA*").Length==0){
-			//	Process.Start(clearhouse.ClientProgram);
-			//}
-			//Form iCAform=(Form)Form.FromHandle(process.MainWindowHandle);
-			//iCAform.WindowState=FormWindowState.Minimized;
-			//process.Dispose();
-			//CanadianNetwork network=CanadianNetworks.GetNetwork(networkNum);
-			//if(network==null){
-			//	throw new ApplicationException("Invalid network.");
-			//}
-			//saveFolder=ODFileUtils.CombinePaths(saveFolder,network.Abbrev);
-			//if(!Directory.Exists(saveFolder)) {
-			//	Directory.CreateDirectory(saveFolder);
-			//}
 			//first, delete the result file just in case.
 			string outputFile=ODFileUtils.CombinePaths(saveFolder,"output.000");
 			if(File.Exists(outputFile)) {
@@ -497,22 +508,9 @@ namespace OpenDental.Eclaims {
 			}
 			//create the input file with data:
 			string inputFile=ODFileUtils.CombinePaths(saveFolder,"input.000");
-			//if(File.Exists(inputFile){
-			//File.Delete(inputFile);
-			//string _nputFile=ODFileUtils.CombinePaths(saveFolder,"_nput.000"); 
-			//File.Delete(_nputFile);
-			/* //For testing
-			Encoding encoding=Encoding.GetEncoding(850);
-			Byte[] bytes=encoding.GetBytes(msgText);
-			Byte[] comparebytes=File.ReadAllBytes(@"E:\My Documents\Standards\Canada\Certification\vendor_test_transactions\E1.NET");
-			for(int i=0;i<bytes.Length;i++) {
-				if(bytes[i]!=comparebytes[i]) {
-					MessageBox.Show("Position "+i.ToString()+", byte="+bytes[i].ToString()+", comparebyte="+comparebytes[i].ToString());
-				}
-			}*/
 			File.WriteAllText(inputFile,msgText,Encoding.GetEncoding(850));
 			DateTime start=DateTime.Now;
-			while(DateTime.Now<start.AddSeconds(45)){//wait for max of 20 seconds. We can increase it later.
+			while(DateTime.Now<start.AddSeconds(45)){//wait for max of 45 seconds. We can increase it later.
 				if(File.Exists(outputFile)){
 					break;
 				}
@@ -520,7 +518,7 @@ namespace OpenDental.Eclaims {
 				Application.DoEvents();
 			}
 			if(!File.Exists(outputFile)) {
-				//File.Delete(inputFile);
+				//File.Delete(inputFile);//don't leave it sitting around
 				throw new ApplicationException("No response.");
 			}
 			string result=File.ReadAllText(outputFile,Encoding.GetEncoding(850));
@@ -530,10 +528,7 @@ namespace OpenDental.Eclaims {
 			if(match.Success){
 				result=result.Substring(match.Length);
 			}
-			//result.IndexOf(",",0,
 			File.Delete(outputFile);
-			//File.Delete(inputFile);//although this will always have been removed by iCA.exe
-			//File.Delete(_nputFile);
 			if(result.Length<50) {//can't be a valid message
 				string errorFile=ODFileUtils.CombinePaths(Path.GetDirectoryName(clearhouse.ClientProgram),"ica.log");
 				string errorlog="";

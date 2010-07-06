@@ -2526,7 +2526,7 @@ namespace OpenDental {
 				return;
 			}
 			int countSelected=0;
-			bool countIsOverMax=false;
+			bool countIsOverMaxCanadian=false;
 			DataTable table=DataSetMain.Tables["account"];
 			if(gridAccount.SelectedIndices.Length==0){
 				//autoselect procedures
@@ -2538,9 +2538,9 @@ namespace OpenDental {
 						continue;//ignore zero fee procedures, but user can explicitly select them
 					}
 					if(Procedures.NeedsSent(PIn.Long(table.Rows[i]["ProcNum"].ToString()),ClaimProcList,PatPlans.GetPlanNum(PatPlanList,1))){
-						if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="CA" && countSelected==7){//en-CA or fr-CA
-							countIsOverMax=true;
-							continue;//only send 7.
+						if(CultureInfo.CurrentCulture.Name.EndsWith("CA") && countSelected==7){//Canadian
+							countIsOverMaxCanadian=true;
+							continue;//only send 7.  
 						}
 						countSelected++;
 						gridAccount.SetSelected(i,true);
@@ -2561,8 +2561,8 @@ namespace OpenDental {
 				MsgBox.Show(this,"You can only select procedures.");
 				return;
 			}
-			if(countIsOverMax){
-				MsgBox.Show(this,"Only the first 7 procedures will be selected.  You will need to also create a second claim.");
+			if(countIsOverMaxCanadian) {
+				MsgBox.Show(this,"Only the first 7 procedures will be selected.  You will need to create a second claim for the remaining procedures.");
 			}
 			Claim ClaimCur=CreateClaim("P",PatPlanList,InsPlanList,ClaimProcList,procsForPat);
 			ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
@@ -2580,7 +2580,7 @@ namespace OpenDental {
 				ModuleSelected(PatCur.PatNum);
 				return;//will have already been deleted
 			}
-			if(PatPlans.GetPlanNum(PatPlanList,2)>0){
+			if(PatPlans.GetPlanNum(PatPlanList,2)>0 && CultureInfo.CurrentCulture.Name.EndsWith("CA")){//don't create secondary claim for Canada
 				InsPlan plan=InsPlans.GetPlan(PatPlans.GetPlanNum(PatPlanList,2),InsPlanList);
 				if(!plan.IsMedical){
 					ClaimCur=CreateClaim("S",PatPlanList,InsPlanList,ClaimProcList,procsForPat);

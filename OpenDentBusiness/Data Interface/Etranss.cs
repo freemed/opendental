@@ -386,15 +386,12 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
-		///<summary>Sets the status of the claim to sent, usually as part of printing.  Also makes an entry in etrans.  If this is canadian eclaims, then this function gets run first.  Then the messagetext is created and an attempt is made to send the claim.  Finally, the messagetext and added to the etrans.  This is necessary because the transaction numbers must be incremented and assigned to each claim before creating the message and attempting to send.  If it fails, Canadians will need to delete the etrans entries (or we will need to roll back the changes).</summary>
+		///<summary>Sets the status of the claim to sent, usually as part of printing.  Also makes an entry in etrans.  If this is Canadian eclaims, then this function gets run first, and it doesn't actually set the claim as sent.  If the claim is to be sent elecronically, then the messagetext is created after this method and an attempt is made to send the claim.  Finally, the messagetext is added to the etrans.  This is necessary because the transaction numbers must be incremented and assigned to each claim before creating the message and attempting to send.  For Canadians, it will always record the attempt as an etrans even if claim is not set to status of sent.</summary>
 		public static Etrans SetClaimSentOrPrinted(long claimNum,long patNum,long clearinghouseNum,EtransType etype) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Etrans>(MethodBase.GetCurrentMethod(),claimNum,patNum,clearinghouseNum,etype);
 			}
-			string command="UPDATE claim SET ClaimStatus = 'S',"
-				+"DateSent= "+POut.Date(MiscData.GetNowDateTime())
-				+" WHERE claimnum = "+POut.Long(claimNum);
-			Db.NonQ(command);
+			string command;
 			Etrans etrans=new Etrans();
 			//etrans.DateTimeTrans handled automatically
 			etrans.ClearinghouseNum=clearinghouseNum;
@@ -428,10 +425,10 @@ namespace OpenDentBusiness{
 							("OfficeSequenceNumber has maxed out at 999999.  This program will need to be enhanced.");
 					}
 				}
-				#if DEBUG
-					etrans.OfficeSequenceNumber=PIn.Int(File.ReadAllText(@"..\..\..\TestCanada\LastOfficeSequenceNumber.txt"));
-					File.WriteAllText(@"..\..\..\TestCanada\LastOfficeSequenceNumber.txt",(etrans.OfficeSequenceNumber+1).ToString());
-				#endif
+#if DEBUG
+				etrans.OfficeSequenceNumber=PIn.Int(File.ReadAllText(@"..\..\..\TestCanada\LastOfficeSequenceNumber.txt"));
+				File.WriteAllText(@"..\..\..\TestCanada\LastOfficeSequenceNumber.txt",(etrans.OfficeSequenceNumber+1).ToString());
+#endif
 				etrans.OfficeSequenceNumber++;
 				//find the next CarrierTransCounter for the primary carrier
 				etrans.CarrierTransCounter=0;
@@ -483,6 +480,12 @@ namespace OpenDentBusiness{
 					}
 					etrans.CarrierTransCounter2++;
 				}
+			}
+			else {//not Canadian
+				command="UPDATE claim SET ClaimStatus = 'S',"
+					+"DateSent= "+POut.Date(MiscData.GetNowDateTime())
+					+" WHERE claimnum = "+POut.Long(claimNum);
+				Db.NonQ(command);
 			}
 			EtransMessageText etransMessageText=new EtransMessageText();
 			etransMessageText.MessageText="";

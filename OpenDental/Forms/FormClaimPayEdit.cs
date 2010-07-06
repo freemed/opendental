@@ -91,7 +91,7 @@ namespace OpenDental{
 			this.textAmount.Name = "textAmount";
 			this.textAmount.ReadOnly = true;
 			this.textAmount.Size = new System.Drawing.Size(58,20);
-			this.textAmount.TabIndex = 44;
+			this.textAmount.TabIndex = 0;
 			this.textAmount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// textDate
@@ -99,7 +99,7 @@ namespace OpenDental{
 			this.textDate.Location = new System.Drawing.Point(668,36);
 			this.textDate.Name = "textDate";
 			this.textDate.Size = new System.Drawing.Size(68,20);
-			this.textDate.TabIndex = 0;
+			this.textDate.TabIndex = 3;
 			this.textDate.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// textBankBranch
@@ -475,6 +475,10 @@ namespace OpenDental{
 				if(!Security.IsAuthorized(Permissions.InsPayCreate,PIn.Date(textDate.Text))){
 					return;
 				}
+				//prevents attaching claimprocs with a date that is older than allowed by security.
+
+
+
 			}
 			else{
 				//Editing an old entry will already be blocked if the date was too old, and user will not be able to click OK button.

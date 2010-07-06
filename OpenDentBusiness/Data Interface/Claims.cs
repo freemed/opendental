@@ -295,6 +295,18 @@ namespace OpenDentBusiness{
 			return retVal;
 		}
 
+		///<summary>Also sets the DateSent to today.</summary>
+		public static void SetCanadianClaimSent(long claimNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),claimNum);
+				return;
+			}
+			string command="UPDATE claim SET ClaimStatus = 'S',"
+					+"DateSent= "+POut.Date(MiscData.GetNowDateTime())
+					+" WHERE ClaimNum = "+POut.Long(claimNum);
+			Db.NonQ(command);
+		}
+
 	}//end class Claims
 
 	///<summary>This is an odd class.  It holds data for the X12 generation process.  It replaces an older multi-dimensional array, so the names are funny, but helpful to prevent bugs.</summary>
