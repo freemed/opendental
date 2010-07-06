@@ -633,7 +633,7 @@ namespace OpenDental.Eclaims {
 			PrintPatientBirthday(g,rightCol,0);
 			x=doc.StartElement();
 			doc.DrawField(g,isFrench?"NO DE DIVISION/SECTION":"DIVISION/SECTION NO",insplan.DivisionNo,true,x,0);//Field C11
-			PrintDependantNo(g,rightCol,0,true);
+			PrintPrimaryDependantNo(g,rightCol,0);
 			doc.StartElement();
 			PrintInsuredAddress(g,x,0,true);
 			x=doc.StartElement(verticalLine);
@@ -923,7 +923,7 @@ namespace OpenDental.Eclaims {
 			PrintDentistAddress(g,x,0);
 			size1=PrintDentistPhone(g,rightMidCol,0);
 			//TODO: check that this is the correct patient number to be printing.
-			SizeF size2=PrintDependantNo(g,rightMidCol,size1.Height,true,"PATIENT'S OFFICE ACCOUNT NO","NO DE DOSSIER DU PATIENT");
+			SizeF size2=PrintPrimaryDependantNo(g,rightMidCol,size1.Height,"PATIENT'S OFFICE ACCOUNT NO","NO DE DOSSIER DU PATIENT");
 			PrintDentalOfficeClaimReferenceNo(g,rightMidCol,size1.Height+size2.Height);
 			x=doc.StartElement();
 			PrintPatientName(g,x,0);
@@ -1122,18 +1122,21 @@ namespace OpenDental.Eclaims {
 			bullet=1;
 			PrintAccidentBullet(g,isFrench?"Le traitement résulte-t-il d'un accident?":"Is treatment resulting from an accident?");
 			x=doc.StartElement();
-			if(claim!=null && (claim.CanadianIsInitialLower!="X" || claim.CanadianIsInitialUpper!="X")) {//Don't show this bullet if it does not apply.
+			CCDField initialPlacementUpperField=formData.GetFieldById("F15");
+			CCDField initialPlacementLowerField=formData.GetFieldById("F18");
+			if(initialPlacementUpperField!=null && initialPlacementLowerField!=null &&
+				(initialPlacementUpperField.valuestr!="X" || initialPlacementLowerField.valuestr!="X")) {//Don't show this bullet if it does not apply.
 				x+=doc.DrawString(g,bullet.ToString()+". ",x,0).Width;
 				bullet++;
 				doc.PushX(x);//Begin indentation.
 				doc.DrawString(g,isFrench?"S'agit-il de la première mise en bouche d'une couronne, prothèse ou pont?":
 					"Is this an initial placement for crown, denture or bridge?",x,0);
 				x=doc.StartElement();
-				if(claim.CanadianIsInitialUpper!="X") {//Field F15 - Avoid invalid upper initial placement data.
+				if(initialPlacementUpperField.valuestr!="X") {//Field F15 - Avoid invalid upper initial placement data.
 					doc.DrawString(g,isFrench?"Maxillaire: ":"Maxillary: ",x,0);
 					x+=120;
 					doc.PushX(x);//Begin second indentation.
-					if(claim.CanadianIsInitialUpper=="N") {
+					if(initialPlacementUpperField.valuestr=="N") {
 						doc.DrawString(g,isFrench?"Non":"No",x,0);
 						x=doc.StartElement();
 						text=GetMaterialDescription(claim.CanadianMaxProsthMaterial);//Field F20
@@ -1148,11 +1151,11 @@ namespace OpenDental.Eclaims {
 					x=doc.PopX();//End second indentation.
 				}
 				x=doc.StartElement();
-				if(claim.CanadianIsInitialLower!="X") {//Field F18 - Avoid invalid lower initial placement data.
+				if(initialPlacementLowerField.valuestr!="X") {//Field F18 - Avoid invalid lower initial placement data.
 					doc.DrawString(g,isFrench?"Mandibule: ":"Mandibular: ",x,0);
 					x+=120;
 					doc.PushX(x);//Begin second indentation.
-					if(claim.CanadianIsInitialLower=="N") {
+					if(initialPlacementLowerField.valuestr=="N") {
 						doc.DrawString(g,isFrench?"Non":"No",x,0);
 						x=doc.StartElement();
 						text=GetMaterialDescription(claim.CanadianMandProsthMaterial);//Field F21
@@ -1539,7 +1542,7 @@ namespace OpenDental.Eclaims {
 			x=doc.StartElement();
 			PrintCertificateNo(g,x,0,true);
 			PrintCardNo(g,x+250,0);
-			PrintDependantNo(g,x+400,0,true);
+			PrintPrimaryDependantNo(g,x+400,0);
 			x=doc.StartElement(verticalLine);
 			PrintInsuredMember(g,x,0);
 			x=doc.StartElement();
@@ -1666,7 +1669,7 @@ namespace OpenDental.Eclaims {
 			PrintCertificateNo(g,x,0,true);
 			float midCol=270;
 			PrintCardNo(g,x+midCol,0);
-			PrintDependantNo(g,x+rightCol,0,true);
+			PrintPrimaryDependantNo(g,x+rightCol,0);
 			x=doc.StartElement();
 			PrintInsuredMember(g,x,0);
 			PrintSubscriberBirthday(g,x+rightCol,0,true);
@@ -1887,7 +1890,7 @@ namespace OpenDental.Eclaims {
 
 		///<summary>Prints carrier name centered on current form row followed by a space.</summary>
 		private void PrintCarrier(Graphics g){
-			text=primaryCarrier.CarrierName.ToUpper();//Field A05
+			text=GetCarrier().CarrierName;
 			doc.DrawString(g,text,center-g.MeasureString(text,headingFont).Width/2,0,headingFont);
 		}
 
@@ -2004,7 +2007,7 @@ namespace OpenDental.Eclaims {
 			if(primary){
 				text=insplan.SubscriberID;//Field C02
 			}
-			else if(claim.PlanNum2>0) {
+			else if(insplan2!=null) {
 				text=insplan2.SubscriberID;//Field E03
 			}
 			return doc.DrawField(g,isFrench?"NO DE CERTIFICAT":"CERTIFICATE NO",text,true,X,Y);
@@ -2017,24 +2020,34 @@ namespace OpenDental.Eclaims {
 			return doc.DrawField(g,isFrench?"NO DE CARTE":"CARD NO",text=="0"?"":text,false,X,Y);
 		}
 
-		private SizeF PrintDependantNo(Graphics g,float X,float Y,bool primary) {
-			return PrintDependantNo(g,X,Y,primary,"DEPENDANT NO","NO DE PERSONNE À CHARGE");
+		private SizeF PrintPrimaryDependantNo(Graphics g,float X,float Y) {
+			return PrintPrimaryDependantNo(g,X,Y,"DEPENDANT NO","NO DE PERSONNE À CHARGE");
 		}
 
-		private SizeF PrintDependantNo(Graphics g,float X,float Y,bool primary,string fieldText,string frenchFieldText){
+		private SizeF PrintPrimaryDependantNo(Graphics g,float X,float Y,string fieldText,string frenchFieldText){
 			text="";
-			if(primary) {
-				text=PatPlans.GetPatID(patPlansForPatient,insplan.PlanNum);//Field C17.  Can't use claim.PlanNum, because that fails on eligibility response which is claim ack.
+			CCDField dependantNoField=formData.GetFieldById("C17");
+			if(dependantNoField==null){
+				text=isFrench?"INCONNU":"UNKNOWN";
+			}else{
+				text=dependantNoField.valuestr;
 			}
-			else {
-				if(claim.PlanNum2>0) {
-					text=PatPlans.GetPatID(patPlansForPatient,claim.PlanNum2);//Field E17
-				}
-				//else if(canClaim.SecondaryCoverage=="X") {
-				//	text=isFrench?"INCONNU":"UNKNOWN";
-				//}
+			return doc.DrawField(g,isFrench?frenchFieldText:fieldText,text,true,X,Y);
+		}
+
+		private SizeF PrintSecondaryDependantNo(Graphics g,float X,float Y) {
+			return PrintSecondaryDependantNo(g,X,Y,"DEPENDANT NO","NO DE PERSONNE À CHARGE");
+		}
+
+		private SizeF PrintSecondaryDependantNo(Graphics g,float X,float Y,string fieldText,string frenchFieldText){
+			text="";
+			CCDField dependantNoField=formData.GetFieldById("E17");
+			if(dependantNoField==null){
+				text=isFrench?"INCONNU":"UNKNOWN";
+			}else{
+				text=dependantNoField.valuestr;
 			}
-			return doc.DrawField(g,isFrench?frenchFieldText:fieldText,text,true,X,Y);//Field C17
+			return doc.DrawField(g,isFrench?frenchFieldText:fieldText,text,true,X,Y);
 		}
 
 		private SizeF PrintInsuredMember(Graphics g,float X,float Y){
@@ -2159,32 +2172,22 @@ namespace OpenDental.Eclaims {
 			text=isFrench?	"A-t-il droit à des prestations ou services dans un autre régime de soins dentaires,"+
 											"régime collectif ou gouvernemental? ":
 											"Are any Dental Benefits or services provided under any other group insurance or "+
-											"dental plan, WCB or government plan? ";
-			if(claim.PlanNum2>0){  //canClaim.SecondaryCoverage!="N"){//Field E18
-				//js this section originally used a three-state field called canadianClaim.SecondaryCoverage.
-				//We switched to a simpler two-state strategy.
+											"dental plan, WCB or government plan? ";			
+			//Only print secondary coverage information on the primary claim report.
+			if(ThisIsPrimary() && claim.PlanNum2!=0){
 				doc.DrawString(g,text+(isFrench?"Oui":"Yes"),x,0);
 				x=doc.StartElement();
 				PrintPolicyNo(g,x,0,false);
-				PrintDependantNo(g,x+400,0,false);
+				PrintSecondaryDependantNo(g,x+400,0);
 				x=doc.StartElement();
-				text="";
-				//if(canClaim.SecondaryCoverage=="Y"){
 				text=DateToString(subscriber2.Birthdate);//Field E04
-				//}
 				doc.DrawField(g,isFrench?"Date de naissance du titulaire":"Insured/Member Date of Birth",text,true,x,0);
 				PrintCertificateNo(g,x+400,0,false);
 				x=doc.StartElement();
-				text="";
-				//if(canClaim.SecondaryCoverage=="Y"){//Field E01
 				text=secondaryCarrier.CarrierName;
-				//}
 				doc.DrawField(g,isFrench?"Nom de l'assureur/administrateur":"Name of Insurer/Plan Administrator",text,true,x,0);
 				x=doc.StartElement();
-				text="";
-				//if(canClaim.SecondaryCoverage=="Y"){
 				text=GetPatientRelationshipString(claim.PatRelat2);//Field E06
-				//}
 				doc.DrawField(g,isFrench?"Parenté avec patient":"Relationship to Patient",text,true,x,0);
 			}
 			else{
@@ -2219,8 +2222,11 @@ namespace OpenDental.Eclaims {
 		}
 
 		private void PrintInitialPlacementBullet(Graphics g){
-			if(claim.CanadianIsInitialLower=="X" && claim.CanadianIsInitialUpper=="X") {//Don't show this bullet if it does not apply.
-				return;
+			CCDField initialPlacementUpperField=formData.GetFieldById("F15");
+			CCDField initialPlacementLowerField=formData.GetFieldById("F18");
+			if(initialPlacementUpperField==null || initialPlacementLowerField==null ||
+				(initialPlacementUpperField.valuestr=="X" && initialPlacementLowerField.valuestr=="X")) {
+				return;//Don't show this bullet if it does not apply.
 			}
 			x+=doc.DrawString(g,bullet.ToString()+". ",x,0).Width;
 			bullet++;
@@ -2228,11 +2234,11 @@ namespace OpenDental.Eclaims {
 			doc.DrawString(g,isFrench?"Prothèse, couronne ou pont: est-ce la première mise en bouche?":
 				"If Denture, crown or bridge, Is this the initial placement?",x,0);
 			x=doc.StartElement();
-			if(claim.CanadianIsInitialUpper!="X") {//Field F15 - Avoid invalid upper initial placement data.
+			if(initialPlacementUpperField.valuestr!="X") {//Field F15 - Avoid invalid upper initial placement data.
 				doc.DrawString(g,isFrench?"Maxillaire: ":"Upper: ",x,0);
 				x+=120;
 				doc.PushX(x);//Begin second indentation.
-				if(claim.CanadianIsInitialUpper=="N") {
+				if(initialPlacementUpperField.valuestr=="N") {
 					doc.DrawString(g,isFrench?"Non":"No",x,0);
 					x=doc.StartElement();
 					text=GetMaterialDescription(claim.CanadianMaxProsthMaterial);//Field F20
@@ -2241,8 +2247,7 @@ namespace OpenDental.Eclaims {
 					text=DateToString(claim.CanadianDateInitialUpper);//Field F04
 					doc.DrawField(g,isFrench?"Date de mise en bouche":"Placement Date",text,true,x,0);
 					x=doc.StartElement();
-					text="";//Remove later
-					//text=GetProcedureTypeDescription();//TODO: Field F16
+					text=GetAllProcedureTypeDescriptions();
 					doc.DrawField(g,isFrench?"Motif du remplacement":"Reason for replacement",text,true,x,0);
 				}
 				else {
@@ -2251,11 +2256,11 @@ namespace OpenDental.Eclaims {
 				x=doc.PopX();//End second indentation.
 			}
 			x=doc.StartElement();
-			if(claim.CanadianIsInitialLower!="X") {//Field F18 - Avoid invalid lower initial placement data.
+			if(initialPlacementLowerField.valuestr!="X") {//Field F18 - Avoid invalid lower initial placement data.
 				doc.DrawString(g,isFrench?"Mandibule: ":"Lower: ",x,0);
 				x+=120;
 				doc.PushX(x);//Begin second indentation.
-				if(claim.CanadianIsInitialLower=="N") {
+				if(initialPlacementLowerField.valuestr=="N") {
 					doc.DrawString(g,isFrench?"Non":"No",x,0);
 					x=doc.StartElement();
 					text=GetMaterialDescription(claim.CanadianMandProsthMaterial);//Field F21
@@ -2264,8 +2269,7 @@ namespace OpenDental.Eclaims {
 					text=DateToString(claim.CanadianDateInitialLower);//Field F19
 					doc.DrawField(g,isFrench?"Date de mise en bouche":"Placement Date",text,true,x,0);
 					x=doc.StartElement();
-					text="";//Remove later
-					//text=GetProcedureTypeDescription();//TODO: Field F16
+					text=GetAllProcedureTypeDescriptions();
 					doc.DrawField(g,isFrench?"Motif du remplacement":"Reason for replacement",text,true,x,0);
 				}
 				else {
@@ -2359,7 +2363,11 @@ namespace OpenDental.Eclaims {
 		}
 
 		private void PrintMissingToothList(Graphics g){
-			if(claim.CanadianIsInitialUpper=="Y" || claim.CanadianIsInitialLower=="Y") {//Only print extractions when F15 or F18 are "Yes"
+			CCDField initialPlacementUpperField=formData.GetFieldById("G15");
+			CCDField initialPlacementLowerField=formData.GetFieldById("G18");
+			if(initialPlacementUpperField!=null && initialPlacementLowerField!=null &&
+				(initialPlacementUpperField.valuestr=="Y" || initialPlacementUpperField.valuestr=="O") &&
+				(initialPlacementLowerField.valuestr=="Y" || initialPlacementLowerField.valuestr=="O")) {//Only print extractions when F15 or F18 are "Yes"
 				string title=(isFrench?"D#":"TH")+"  DATE(YYYYMMDD)\t";
 				float titleWidth=g.MeasureString(title,doc.standardFont).Width;
 				int cycleOrthoDateCount=(int)((doc.bounds.Right-x)/titleWidth);
@@ -2407,6 +2415,26 @@ namespace OpenDental.Eclaims {
 		#endregion
 
 		#region Printing Information Translators
+
+		private Carrier GetCarrier(){
+			string carrierIdentificationNumber=formData.GetFieldById("A05").valuestr;//Always exists in every possible message format.
+			if(primaryCarrier!=null && primaryCarrier.ElectID==carrierIdentificationNumber){
+				return primaryCarrier;
+			}else if(secondaryCarrier!=null && secondaryCarrier.ElectID==carrierIdentificationNumber){
+				return secondaryCarrier;
+			}
+			return primaryCarrier;//This return statement should never happen.
+		}
+
+		private bool ThisIsPrimary(){
+			string carrierIdentificationNumber=formData.GetFieldById("A05").valuestr;//Always exists in every possible message format.
+			return(primaryCarrier!=null && primaryCarrier.ElectID==carrierIdentificationNumber);
+		}
+
+		private bool ThisIsSecondary(){
+			string carrierIdentificationNumber=formData.GetFieldById("A05").valuestr;//Always exists in every possible message format.
+			return(secondaryCarrier!=null && secondaryCarrier.ElectID==carrierIdentificationNumber);
+		}
 
 		///<summary>The rawPercent string should be of length 3 and should be numerical digits only.</summary>
 		private string RawPercentToDisplayPercent(string rawPercent){
@@ -2495,30 +2523,47 @@ namespace OpenDental.Eclaims {
 			return "";
 		}
 
-		///<summary>Convert type code from field F16 into a human-readable string.</summary>
-		private string GetProcedureTypeDescription(string procedureTypeCode) {
+		///<summary>Convert one of the type codes from field F16 into a human-readable string.</summary>
+		private string GetProcedureTypeCodeDescription(char procedureTypeCode) {
 			//TODO: check translations. English to french translations provided by google translator.
 			switch(procedureTypeCode) {
-				case "A":
+				case 'A':
 					return isFrench?"Réparation d'un service ou d'une installation antérieur.":
 						"Repair of a prior service or installation.";
-				case "B":
+				case 'B':
 					return isFrench?"Placement ou service provisoire.":"Temporary placement or service.";
-				case "C":
+				case 'C':
 					return isFrench?"Service pour la correction de TMJ.":"Service for correction of TMJ.";
-				case "E":
+				case 'E':
 					return isFrench?"Le service est un implant ou est exécuté en même temps que des implants.":
 						"Service is an implant or is performed in conjunction with implants.";
-				case "L":
+				case 'L':
 					return isFrench?"Appareil perdu.":"Appliance lost.";
-				case "S":
+				case 'S':
 					return isFrench?"Appareil volé.":"Appliance stolen.";
-				case "X":
+				case 'X':
 					return isFrench?"Circonstances anormales.":"Abnormal circumstances.";
 				default:
 					break;
 			}
 			return "";
+		}
+
+		///<summary>If field F16 is defined for the current message, then the codes within it are transcribed into a paragraph of text.</summary>
+		private string GetAllProcedureTypeDescriptions(){
+			string text="";
+			CCDField procedureTypeCodes=formData.GetFieldById("F16");
+			if(procedureTypeCodes!=null){
+				for(int c=0;c<procedureTypeCodes.valuestr.Length;c++){
+					if(procedureTypeCodes.valuestr[c]!=' '){
+						if(text!=""){
+							text+=Environment.NewLine;
+						}
+						text+=GetProcedureTypeCodeDescription(procedureTypeCodes.valuestr[c]);
+					}
+				}
+			}
+			return text;
 		}
 
 		#endregion
