@@ -18,8 +18,8 @@ namespace OpenDental.Eclaims {
 			
 		//}
 
-		///<summary>Called directly instead of from Eclaims.SendBatches.  Includes one claim.  Sets claim status internally if successfully sent.  Returns the EtransNum of the ack.  Includes various user interaction such as displaying of messages, printing, triggering of COB claims, etc.</summary>
-		public static long SendClaim(ClaimSendQueueItem queueItem,bool doPrint){//,int interchangeNum){
+		///<summary>Called directly instead of from Eclaims.SendBatches.  Includes one claim.  Sets claim status internally if successfully sent.  Returns the EtransNum of the ack.  Includes various user interaction such as displaying of messages, printing, triggering of COB claims, etc.  For a normal claim, primaryEOB will be blank.  But if this is a COB(type7), then we need to embed the primary EOB by passing it in.</summary>
+		public static long SendClaim(ClaimSendQueueItem queueItem,bool doPrint,string primaryEOB){
 			Clearinghouse clearhouse=GetClearinghouse();//clearinghouse must be valid to get to this point.
 				//ClearinghouseL.GetClearinghouse(((ClaimSendQueueItem)queueItems[0]).ClearinghouseNum);
 //Warning: this path is not handled properly if trailing slash is missing:
@@ -49,7 +49,12 @@ namespace OpenDental.Eclaims {
 			ProcedureCode procCode;
 			StringBuilder strb;
 			//this no longer actually sets the claim as "sent".  Just creates the etrans without a message.
-			etrans=Etranss.SetClaimSentOrPrinted(queueItem.ClaimNum,queueItem.PatNum,clearhouse.ClearinghouseNum,EtransType.Claim_CA);
+			if(primaryEOB==""){
+				etrans=Etranss.SetClaimSentOrPrinted(queueItem.ClaimNum,queueItem.PatNum,clearhouse.ClearinghouseNum,EtransType.Claim_CA);
+			}
+			else{
+				etrans=Etranss.SetClaimSentOrPrinted(queueItem.ClaimNum,queueItem.PatNum,clearhouse.ClearinghouseNum,EtransType.ClaimCOB_CA);
+			}
 			strb=new StringBuilder();
 			claim=Claims.GetClaim(queueItem.ClaimNum);
 			clinic=Clinics.GetClinic(claim.ClinicNum);
@@ -219,6 +224,11 @@ namespace OpenDental.Eclaims {
 			//F22 extracted teeth count 2 N
 //todo: check validation.  I don't think there actually is any validation to be done because zero is always an allowed value.
 			strb.Append(TidyN(extracted.Count,2));//validated against matching prosthesis
+
+
+
+
+
 			//Secondary carrier fields (E19 to E07) ONLY included if E20=1----------------------------------------------------
 			if(claim.PlanNum2!=0){
 //todo We still need to write the business logic for COB further down in this method.  COB is triggered by EOB.
@@ -447,10 +457,9 @@ namespace OpenDental.Eclaims {
 			}
 			if(doPrint) {
 				FormCCDPrint FormP=new FormCCDPrint(etrans,result);//Print the form. 
-				//todo: FormCCDPrint should also print any embedded transactions.  eg. an EOB with an embedded secondary EOB.
 				FormP.Print();
 			}
-			if(etransAck.Etype==EtransType.ClaimEOB_CA) {
+			if(etransAck.Etype==EtransType.ClaimEOB_CA && claim.ClaimType=="P" && claim.PlanNum2>0) {//if an eob was returned and patient has secondary insurance.
 				//if an EOB is returned, there are two possibilities.
 				//1. The EOB contains an embedded EOB because the same carrier is both pri and sec.  Both got printed above.
 				//2. The EOB does not contain an embedded EOB, indicating that a COB claim needs to be created and sent.
@@ -458,15 +467,53 @@ namespace OpenDental.Eclaims {
 				//UI already prevents the initial automatic creation of the secondary claim for Canada.
 				string embeddedLength=fieldInputter.GetValue("G39");
 				if(embeddedLength=="0000") {//no embedded message
-					//todo: create and send secondary here.
-
-
-
-
-
-
-
-
+					Claim claim2=new Claim();
+					Claims.Insert(claim2);//to retreive a key for new Claim.ClaimNum
+					claim2.PatNum=claim.PatNum;
+					claim2.DateService=claim.DateService;
+					claim2.DateSent=DateTime.Today;
+					claim2.ClaimStatus="W";
+					claim2.PlanNum=claim.PlanNum2;
+					claim2.PlanNum2=claim.PlanNum;
+					claim2.PatRelat=claim.PatRelat2;
+					claim2.PatRelat2=claim.PatRelat;
+					claim2.ClaimType="S";
+					claim2.ProvTreat=claim.ProvTreat;
+					claim2.IsProsthesis="N";
+					claim2.ProvBill=claim.ProvBill;
+					claim2.EmployRelated=YN.No;
+					ClaimProc[] claimProcsClaim2=new ClaimProc[claimProcsClaim.Count];
+					long procNum;
+					for(int i=0;i<claimProcsClaim.Count;i++) {//loop through the procs from claim 1
+						//and try to find an estimate that can be used
+						procNum=claimProcsClaim[i].ProcNum;
+						claimProcsClaim2[i]=Procedures.GetClaimProcEstimate(procNum,claimProcList,insPlan2);
+					}
+					for(int i=0;i<claimProcsClaim2.Length;i++) {//loop through each claimProc
+						//and create any missing estimates just in case
+						if(claimProcsClaim2[i]==null) {
+							claimProcsClaim2[i]=new ClaimProc();
+							proc=Procedures.GetProcFromList(procListAll,claimProcsClaim[i].ProcNum);
+							ClaimProcs.CreateEst(claimProcsClaim2[i],proc,insPlan2);
+						}
+					}
+					for(int i=0;i<claimProcsClaim2.Length;i++) {
+						proc=Procedures.GetProcFromList(procListAll,claimProcsClaim2[i].ProcNum);//1:1
+						claimProcsClaim2[i].ClaimNum=claim2.ClaimNum;
+						claimProcsClaim2[i].Status=ClaimProcStatus.NotReceived;
+						claimProcsClaim2[i].CodeSent=claimProcsClaim[i].CodeSent;
+						claimProcsClaim2[i].LineNumber=(byte)(i+1);
+						ClaimProcs.Update(claimProcsClaim2[i]);
+					}
+					claimProcList=ClaimProcs.Refresh(claim2.PatNum);
+					Family fam=Patients.GetFamily(claim2.PatNum);
+					List<InsPlan> planList=InsPlans.RefreshForFam(fam);
+					List<Benefit> benefitList=Benefits.Refresh(patPlansForPatient);
+					ClaimL.CalculateAndUpdate(procListAll,planList,claim2,patPlansForPatient,benefitList,patient.Age);
+					ClaimSendQueueItem queueItem2=Claims.GetQueueList(claim2.ClaimNum,claim2.ClinicNum)[0];
+					//ok to skip validation
+					long etransNum=SendClaim(queueItem2,doPrint,result);//recursive
+					return etransNum;//for now, we'll return the etransnum of the secondary ack.
 				}
 				else{//an embedded message exists
 					string embeddedMsg=fieldInputter.GetValue("G40");

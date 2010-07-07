@@ -447,7 +447,7 @@ namespace TestCanada {
 			Claim claim=Claims.GetClaim(ClaimNums[8]);
 			InsPlanTC.SetAssignBen(claim.PlanNum,false);
 			CarrierTC.SetEncryptionMethod(claim.PlanNum,1);
-			return Run(9,"","21",claim,showForms);
+			return Run(9,"","21",claim,showForms);//test the result of the COB
 		}
 
 		public static string RunTen(bool showForms) {
