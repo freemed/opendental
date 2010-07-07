@@ -2448,12 +2448,12 @@ namespace OpenDental{
 			Benefit ben;
 			//clear exising benefits from screen, not db:
 			benefitList=new List<Benefit>();
-			string emp=FormI.selectedEmployer;
+			string plan=FormI.selectedPlan;
 			string field=null;
 			string[] splitField;//if a field is a sentence with more than one word, we can split it for analysis
 			int percent;
 			try {
-				Iap.ReadRecord(emp);
+				Iap.ReadRecord(plan);
 				for(int i=1;i<122;i++) {
 					field=Iap.ReadField(i);
 					if(field==null){

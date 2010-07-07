@@ -12,9 +12,9 @@ namespace OpenDental{
 	public class FormIap : System.Windows.Forms.Form{
 		private OpenDental.UI.Button butCancel;
 		private OpenDental.UI.Button butOK;
-		private System.Windows.Forms.ListBox listEmployers;
+		private System.Windows.Forms.ListBox listPlans;
 		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.TextBox textEmpSearch;
+		private System.Windows.Forms.TextBox textPlanSearch;
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.TextBox textCarrier;
 		private System.Windows.Forms.TextBox textEmp;
@@ -24,7 +24,10 @@ namespace OpenDental{
 		/// </summary>
 		private System.ComponentModel.Container components = null;
 		///<summary>The user will have selected an employer.  This will be the exact text representation of that employer as it is in the iap database.</summary>
-		public string selectedEmployer;
+		public string selectedPlan;
+		private Label label4;
+		private TextBox textPlanNum;
+		private ArrayList list=null;
 
 		///<summary></summary>
 		public FormIap()
@@ -59,21 +62,23 @@ namespace OpenDental{
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormIap));
-			this.listEmployers = new System.Windows.Forms.ListBox();
+			this.listPlans = new System.Windows.Forms.ListBox();
 			this.label1 = new System.Windows.Forms.Label();
-			this.textEmpSearch = new System.Windows.Forms.TextBox();
+			this.textPlanSearch = new System.Windows.Forms.TextBox();
 			this.textCarrier = new System.Windows.Forms.TextBox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.textEmp = new System.Windows.Forms.TextBox();
 			this.label3 = new System.Windows.Forms.Label();
+			this.label4 = new System.Windows.Forms.Label();
+			this.textPlanNum = new System.Windows.Forms.TextBox();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
-			// listEmployers
+			// listPlans
 			// 
-			this.listEmployers.HorizontalScrollbar = true;
-			this.listEmployers.Items.AddRange(new object[] {
+			this.listPlans.HorizontalScrollbar = true;
+			this.listPlans.Items.AddRange(new object[] {
             "1",
             "2",
             "3",
@@ -114,11 +119,11 @@ namespace OpenDental{
             "38",
             "39",
             "40"});
-			this.listEmployers.Location = new System.Drawing.Point(11,61);
-			this.listEmployers.Name = "listEmployers";
-			this.listEmployers.Size = new System.Drawing.Size(314,524);
-			this.listEmployers.TabIndex = 1;
-			this.listEmployers.SelectedIndexChanged += new System.EventHandler(this.listEmployers_SelectedIndexChanged);
+			this.listPlans.Location = new System.Drawing.Point(11,61);
+			this.listPlans.Name = "listPlans";
+			this.listPlans.Size = new System.Drawing.Size(314,524);
+			this.listPlans.TabIndex = 1;
+			this.listPlans.SelectedIndexChanged += new System.EventHandler(this.listPlans_SelectedIndexChanged);
 			// 
 			// label1
 			// 
@@ -129,17 +134,17 @@ namespace OpenDental{
 			this.label1.Text = "Search By IAP Number";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
-			// textEmpSearch
+			// textPlanSearch
 			// 
-			this.textEmpSearch.Location = new System.Drawing.Point(11,32);
-			this.textEmpSearch.Name = "textEmpSearch";
-			this.textEmpSearch.Size = new System.Drawing.Size(127,20);
-			this.textEmpSearch.TabIndex = 0;
-			this.textEmpSearch.TextChanged += new System.EventHandler(this.textEmpSearch_TextChanged);
+			this.textPlanSearch.Location = new System.Drawing.Point(11,32);
+			this.textPlanSearch.Name = "textPlanSearch";
+			this.textPlanSearch.Size = new System.Drawing.Size(127,20);
+			this.textPlanSearch.TabIndex = 0;
+			this.textPlanSearch.TextChanged += new System.EventHandler(this.textPlanSearch_TextChanged);
 			// 
 			// textCarrier
 			// 
-			this.textCarrier.Location = new System.Drawing.Point(361,126);
+			this.textCarrier.Location = new System.Drawing.Point(359,160);
 			this.textCarrier.Name = "textCarrier";
 			this.textCarrier.ReadOnly = true;
 			this.textCarrier.Size = new System.Drawing.Size(292,20);
@@ -147,7 +152,7 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(360,107);
+			this.label2.Location = new System.Drawing.Point(358,141);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(100,18);
 			this.label2.TabIndex = 5;
@@ -156,7 +161,7 @@ namespace OpenDental{
 			// 
 			// textEmp
 			// 
-			this.textEmp.Location = new System.Drawing.Point(361,77);
+			this.textEmp.Location = new System.Drawing.Point(359,118);
 			this.textEmp.Name = "textEmp";
 			this.textEmp.ReadOnly = true;
 			this.textEmp.Size = new System.Drawing.Size(292,20);
@@ -164,12 +169,29 @@ namespace OpenDental{
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(360,58);
+			this.label3.Location = new System.Drawing.Point(358,99);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(100,18);
 			this.label3.TabIndex = 7;
 			this.label3.Text = "Employer";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			// 
+			// label4
+			// 
+			this.label4.AutoSize = true;
+			this.label4.Location = new System.Drawing.Point(358,61);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(88,13);
+			this.label4.TabIndex = 8;
+			this.label4.Text = "IAP Plan Number";
+			// 
+			// textPlanNum
+			// 
+			this.textPlanNum.Location = new System.Drawing.Point(361,76);
+			this.textPlanNum.Name = "textPlanNum";
+			this.textPlanNum.ReadOnly = true;
+			this.textPlanNum.Size = new System.Drawing.Size(290,20);
+			this.textPlanNum.TabIndex = 9;
 			// 
 			// butOK
 			// 
@@ -205,13 +227,15 @@ namespace OpenDental{
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(693,605);
+			this.Controls.Add(this.textPlanNum);
+			this.Controls.Add(this.label4);
 			this.Controls.Add(this.textEmp);
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.textCarrier);
 			this.Controls.Add(this.label2);
-			this.Controls.Add(this.textEmpSearch);
+			this.Controls.Add(this.textPlanSearch);
 			this.Controls.Add(this.label1);
-			this.Controls.Add(this.listEmployers);
+			this.Controls.Add(this.listPlans);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -229,47 +253,53 @@ namespace OpenDental{
 		#endregion
 
 		private void FormIap_Load(object sender, System.EventArgs e) {
-			listEmployers.Items.Clear();
+			listPlans.Items.Clear();
 		}
 
-		private void textEmpSearch_TextChanged(object sender, System.EventArgs e) {
-			listEmployers.Items.Clear();
-			if(textEmpSearch.Text==""){
+		private void textPlanSearch_TextChanged(object sender, System.EventArgs e) {
+			listPlans.Items.Clear();
+			if(textPlanSearch.Text==""){
 				return;
 			}
-			ArrayList list=Bridges.Iap.GetList(textEmpSearch.Text.ToUpper());
-			for(int i=0;i<list.Count;i++){
-				listEmployers.Items.Add(list[i]);
+			textCarrier.Text="";
+			textEmp.Text="";
+			textPlanNum.Text="";
+			list=Bridges.Iap.GetList(textPlanSearch.Text);
+			for(int i=1;i<list.Count;i+=2){
+				listPlans.Items.Add(list[i]);
 			}
 		}
 
-		private void listEmployers_SelectedIndexChanged(object sender, System.EventArgs e) {
-			if(listEmployers.SelectedIndex==-1){
-				textCarrier.Text="";
-			}
-			else{
+		private void listPlans_SelectedIndexChanged(object sender, System.EventArgs e) {
+			textCarrier.Text="";
+			textEmp.Text="";
+			textPlanNum.Text="";
+			if(listPlans.SelectedIndex>=0){
+				textPlanNum.Text=list[listPlans.SelectedIndex*2].ToString();
 				try{
-					Iap.ReadRecord((string)listEmployers.SelectedItem);
+					Iap.ReadRecord(textPlanNum.Text);
+					textCarrier.Text=Iap.ReadField(Iap.Carrier);
+					textEmp.Text=Iap.ReadField(Iap.Employer);
 				}
 				catch(ApplicationException ex){
-					Iap.CloseDatabase();
 					MessageBox.Show(ex.Message);
 					textCarrier.Text="";
 					textEmp.Text="";
+					textPlanNum.Text="";
 					return;
 				}
-				textCarrier.Text=Iap.ReadField(Iap.Carrier);
-				textEmp.Text=Iap.ReadField(Iap.Employer);
-				Iap.CloseDatabase();
+				finally{
+					Iap.CloseDatabase();
+				}
 			}
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
-			if(listEmployers.SelectedIndex==-1){
+			if(listPlans.SelectedIndex==-1){
 				MessageBox.Show("Please select a plan first.");
 				return;
 			}
-			selectedEmployer=(string)listEmployers.SelectedItem;
+			selectedPlan=list[listPlans.SelectedIndex*2].ToString();
 			DialogResult=DialogResult.OK;
 		}
 
