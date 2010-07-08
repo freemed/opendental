@@ -1186,8 +1186,10 @@ namespace OpenDentBusiness{
 		DentureLight,
 		///<summary>13</summary>
 		Sealant,
-		///<summary>13</summary>
-		Veneer
+		///<summary>14</summary>
+		Veneer,
+		///<summary>15</summary>
+		Watch
 	}
 
 	///<summary></summary>
