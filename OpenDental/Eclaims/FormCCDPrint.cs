@@ -13,20 +13,13 @@ using CodeBase;
 
 /*
  * TODOS: (not in any particular order)
- * *Finish procedure table for EOB.
  * *Finish upper/lower placement notes for bullet 4.
  * *Print claim display messages.
- * *Be sure all fields have been processed in each form, either directory or indirectly.
- * *Merge forms into 1? (see pages 48 and 122 in message formats).
- * *Fix French accented characters which are modified on output. Could move error text to an in-code table, but that doesn't
- *  take care of the etrans.MessateText string.
+ * *Be sure all fields have been processed in each form, either directly or indirectly.
+ * *Merge predetermination forms into existing forms? (see pages 48 and 122 in message formats).
  * *Add option in UI to print dentist copy.
  * *Display multiple copies of each form when more than 7 procedures are present ((int)(numprocedures/7)+1 forms total).
  * *Finish the only unfinished Dentaide form bullet number.
- * *Handle embedded message text.
- * *Set first insurace info to second insurance and second insurance info to null when this form is 
- * handling an embedded transaction.
- * *Test embedded transactions. This should be first.
  */
 
 namespace OpenDental.Eclaims {
@@ -145,6 +138,7 @@ namespace OpenDental.Eclaims {
 
 		private void Init(){
 			InitializeComponent();
+			Encoding codePage850=Encoding.GetEncoding(850);
 			breakLinePen.Width=2;
 			//try {
 			patient=Patients.GetPat(etrans.PatNum);
@@ -290,10 +284,8 @@ namespace OpenDental.Eclaims {
 		///<summary>Called for each page to be printed.</summary>
 		private void pd_PrintPage(object sender,System.Drawing.Printing.PrintPageEventArgs e){
 			//try{
-				string code850Chars="1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"+
-						"¡¢£¥|§¨©ª«¬-®±²³´μ¶¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿ_";
-				for(int i=0;i<code850Chars.Length;i++){
-					SizeF size=e.Graphics.MeasureString(code850Chars[i].ToString(),doc.standardFont);
+				for(byte i=0;i<255;i++){
+					SizeF size=e.Graphics.MeasureString(""+Canadian.GetCanadianChar(i),doc.standardFont);
 					verticalLine=Math.Max(verticalLine,(float)Math.Ceiling(size.Height));
 					maxCharWidth=Math.Max(maxCharWidth,(float)Math.Ceiling(size.Width));
 				}
@@ -594,14 +586,7 @@ namespace OpenDental.Eclaims {
 			doc.StartElement(verticalLine);
 			doc.HorizontalLine(g,breakLinePen,doc.bounds.Left,doc.bounds.Right,0);
 			doc.StartElement();
-			CCDField[] displayMessages=formData.GetFieldsById("G32");
-			doc.DrawString(g,"MESSAGES ("+displayMessages.Length+")",x,0,headingFont);
-			doc.StartElement(verticalLine);
-			for(int i=0;i<displayMessages.Length;i++){//displayMessages.Length<=250
-				doc.StartElement();
-				doc.DrawString(g,(i+1).ToString().PadLeft(3,'0'),x,0);
-				doc.DrawString(g,displayMessages[i].valuestr,x+50,0);
-			}
+			PrintDisplayMessages(g);
 			doc.StartElement();
 			doc.HorizontalLine(g,breakLinePen,doc.bounds.Left,doc.bounds.Right,0);
 			PrintErrorList(g);
@@ -868,14 +853,12 @@ namespace OpenDental.Eclaims {
 			doc.DrawString(g,text,center-g.MeasureString(text,headingFont).Width/2,0,headingFont);
 			x=doc.StartElement(verticalLine);
 			PrintClaimAckBody(g,"",true);
-			CCDField[] errors=formData.GetFieldsById("G08");
-			if(errors!=null && errors.Length>0){
-				doc.DrawString(g,isFrench?"ERREURS":"ERRORS",x,0);
-				for(int i=0;i<errors.Length;i++){
-					x=doc.StartElement();
-					doc.DrawString(g,errors[i].valuestr.PadLeft(3,'0'),x,0);
-					doc.DrawString(g,CCDerror.message(Convert.ToInt32(errors[i].valuestr),isFrench),x+80,0);
-				}
+			if(PrintErrorList(g)>0){
+				x=doc.StartElement(verticalLine);
+				doc.HorizontalLine(g,breakLinePen,doc.bounds.Left,doc.bounds.Right,0);
+			}
+			x=doc.StartElement();
+			if(PrintDisplayMessages(g)>0){
 				x=doc.StartElement(verticalLine);
 				doc.HorizontalLine(g,breakLinePen,doc.bounds.Left,doc.bounds.Right,0);
 			}
@@ -2401,15 +2384,35 @@ namespace OpenDental.Eclaims {
 			}
 		}
 
-		private void PrintErrorList(Graphics g) {
-			CCDField[] errorCodes=formData.GetFieldsById("G08");
-			doc.DrawString(g,(isFrench?"ERREURS (":"ERRORS (")+errorCodes.Length.ToString()+")",x,0,headingFont);
-			doc.StartElement(verticalLine);
-			for(int i=0;i<errorCodes.Length;i++) {//errorCodes.Length<=10
-				doc.StartElement();
-				doc.DrawString(g,(i+1).ToString().PadLeft(2,'0'),x,0);
-				doc.DrawString(g,CCDerror.message(Convert.ToInt32(errorCodes[i].valuestr),isFrench),x+50,0);
+		///<summary>Returns the number of messages printed.</summary>
+		private int PrintDisplayMessages(Graphics g){
+			CCDField[] displayMessages=formData.GetFieldsById("G32");
+			if(displayMessages==null || displayMessages.Length<1){
+				return 0;
 			}
+			doc.DrawString(g,"MESSAGES ("+displayMessages.Length+")",x,0,headingFont);
+			doc.StartElement(verticalLine);
+			for(int i=0;i<displayMessages.Length;i++){
+				doc.StartElement();
+				doc.DrawString(g,(i+1).ToString().PadLeft(3,'0'),x,0);
+				doc.DrawString(g,displayMessages[i].valuestr,x+50,0);
+			}
+			return displayMessages.Length;
+		}
+
+		///<summary>Returns the number of errors displayed.</summary>
+		private int PrintErrorList(Graphics g) {
+			CCDField[] errors=formData.GetFieldsById("G08");
+			if(errors==null || errors.Length<1){
+				return 0;
+			}
+			doc.DrawString(g,(isFrench?"ERREURS (":"ERRORS (")+errors.Length+")",x,0,headingFont);
+			for(int i=0;i<errors.Length;i++){
+				x=doc.StartElement();
+				doc.DrawString(g,errors[i].valuestr.PadLeft(3,'0'),x,0);
+				doc.DrawString(g,CCDerror.message(Convert.ToInt32(errors[i].valuestr),isFrench),x+80,0);
+			}
+			return errors.Length;
 		}
 
 		#endregion
