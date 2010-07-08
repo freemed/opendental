@@ -1112,7 +1112,12 @@ namespace OpenDental{
 			textRequirement.Text=DS.Tables["Misc"].Rows[0]["requirements"].ToString();
 			//IsNewPatient is set well before opening this form.
 			checkIsNewPatient.Checked=AptCur.IsNewPatient;
-			if(ContrApptSheet.MinPerIncr==10) {
+			if(ContrApptSheet.MinPerIncr==5) {
+				tbTime.TopBorder[0,12]=Color.Black;
+				tbTime.TopBorder[0,24]=Color.Black;
+				tbTime.TopBorder[0,36]=Color.Black;
+			}
+			else if(ContrApptSheet.MinPerIncr==10) {
 				tbTime.TopBorder[0,6]=Color.Black;
 				tbTime.TopBorder[0,12]=Color.Black;
 				tbTime.TopBorder[0,18]=Color.Black;
@@ -1120,7 +1125,7 @@ namespace OpenDental{
 				tbTime.TopBorder[0,30]=Color.Black;
 				tbTime.TopBorder[0,36]=Color.Black;
 			}
-			else {
+			else if(ContrApptSheet.MinPerIncr==15){
 				tbTime.TopBorder[0,4]=Color.Black;
 				tbTime.TopBorder[0,8]=Color.Black;
 				tbTime.TopBorder[0,12]=Color.Black;
@@ -1571,8 +1576,7 @@ namespace OpenDental{
 				tbTime.BackGColor[0,i]=Color.FromName("Control");
 			}
 			tbTime.Refresh();
-			butSlider.Location=new Point(tbTime.Location.X+2
-				,(tbTime.Location.Y+strBTime.Length*14+1));
+			butSlider.Location=new Point(tbTime.Location.X+2,(tbTime.Location.Y+strBTime.Length*14+1));
 			textTime.Text=(strBTime.Length*ContrApptSheet.MinPerIncr).ToString();
 		}
 

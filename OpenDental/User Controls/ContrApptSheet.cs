@@ -33,7 +33,7 @@ namespace OpenDental{
 		public static int ProvCount;
 		///<summary>Based on the view.  If no view, then it is set to 1. Different computers can be showing different views.</summary>
 		public static int RowsPerIncr;
-		///<summary>Pulled from Prefs AppointmentTimeIncrement.  For now, either 10 or 15. An increment can be one or more rows.</summary>
+		///<summary>Pulled from Prefs AppointmentTimeIncrement.  Either 5, 10, or 15. An increment can be one or more rows.</summary>
 		public static int MinPerIncr;
 		///<summary>Typical values would be 10,15,5,or 7.5.</summary>
 		public static float MinPerRow;
@@ -590,7 +590,21 @@ namespace OpenDental{
 				g.DrawString(sTime,bfont,new SolidBrush(Color.Black),TimeWidth-sizef.Width-2,i*Lh*RowsPerHr+1);
 				g.DrawString(sTime,bfont,new SolidBrush(Color.Black)
 					,TimeWidth+ColWidth*ColCount+ProvWidth*ProvCount,i*Lh*RowsPerHr+1);
-				if(MinPerIncr==10){
+				if(MinPerIncr==5) {
+					g.DrawString(":15",font,new SolidBrush(Color.Black)
+						,TimeWidth-19,i*Lh*RowsPerHr+Lh*RowsPerIncr*3);
+					g.DrawString(":30",font,new SolidBrush(Color.Black)
+						,TimeWidth-19,i*Lh*RowsPerHr+Lh*RowsPerIncr*6);
+					g.DrawString(":45",font,new SolidBrush(Color.Black)
+						,TimeWidth-19,i*Lh*RowsPerHr+Lh*RowsPerIncr*9);
+					g.DrawString(":15",font,new SolidBrush(Color.Black)
+						,TimeWidth+ColWidth*ColCount+ProvWidth*ProvCount,i*Lh*RowsPerHr+Lh*RowsPerIncr*3);
+					g.DrawString(":30",font,new SolidBrush(Color.Black)
+						,TimeWidth+ColWidth*ColCount+ProvWidth*ProvCount,i*Lh*RowsPerHr+Lh*RowsPerIncr*6);
+					g.DrawString(":45",font,new SolidBrush(Color.Black)
+						,TimeWidth+ColWidth*ColCount+ProvWidth*ProvCount,i*Lh*RowsPerHr+Lh*RowsPerIncr*9);
+				}
+				else if(MinPerIncr==10){
 					g.DrawString(":10",font,new SolidBrush(Color.Black)
 						,TimeWidth-19,i*Lh*RowsPerHr+Lh*RowsPerIncr);
 					g.DrawString(":20",font,new SolidBrush(Color.Black)

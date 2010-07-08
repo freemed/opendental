@@ -1477,8 +1477,11 @@ namespace OpenDentBusiness{
 			StringBuilder savePattern=new StringBuilder();
 			for(int i=0;i<pattern.Length;i++) {
 				savePattern.Append(pattern.Substring(i,1));
-				savePattern.Append(pattern.Substring(i,1));
+				if(PrefC.GetLong(PrefName.AppointmentTimeIncrement)==10) {
+					savePattern.Append(pattern.Substring(i,1));
+				}
 				if(PrefC.GetLong(PrefName.AppointmentTimeIncrement)==15) {
+					savePattern.Append(pattern.Substring(i,1));
 					savePattern.Append(pattern.Substring(i,1));
 				}
 			}

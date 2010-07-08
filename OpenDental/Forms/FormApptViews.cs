@@ -20,12 +20,11 @@ namespace OpenDental{
 		private System.Windows.Forms.RadioButton radioFifteen;
 		private System.Windows.Forms.CheckBox checkTwoRows;
 		private OpenDental.UI.Button butCancel;
-		private OpenDental.UI.Button butOK;
-		private System.Windows.Forms.Label label2;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
 		private System.ComponentModel.Container components = null;
+		private RadioButton radioFive;
 		private bool viewChanged;
 
 		///<summary></summary>
@@ -68,11 +67,10 @@ namespace OpenDental{
 			this.butUp = new OpenDental.UI.Button();
 			this.butAdd = new OpenDental.UI.Button();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.radioFive = new System.Windows.Forms.RadioButton();
 			this.radioFifteen = new System.Windows.Forms.RadioButton();
 			this.radioTen = new System.Windows.Forms.RadioButton();
 			this.checkTwoRows = new System.Windows.Forms.CheckBox();
-			this.butOK = new OpenDental.UI.Button();
-			this.label2 = new System.Windows.Forms.Label();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -89,7 +87,7 @@ namespace OpenDental{
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,26);
 			this.butCancel.TabIndex = 0;
-			this.butCancel.Text = "&Cancel";
+			this.butCancel.Text = "&Close";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
 			// label1
@@ -159,20 +157,30 @@ namespace OpenDental{
 			// 
 			// groupBox1
 			// 
+			this.groupBox1.Controls.Add(this.radioFive);
 			this.groupBox1.Controls.Add(this.radioFifteen);
 			this.groupBox1.Controls.Add(this.radioTen);
 			this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.groupBox1.Location = new System.Drawing.Point(279,54);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(169,70);
+			this.groupBox1.Size = new System.Drawing.Size(169,82);
 			this.groupBox1.TabIndex = 40;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Time Increments";
 			// 
+			// radioFive
+			// 
+			this.radioFive.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.radioFive.Location = new System.Drawing.Point(23,19);
+			this.radioFive.Name = "radioFive";
+			this.radioFive.Size = new System.Drawing.Size(100,18);
+			this.radioFive.TabIndex = 2;
+			this.radioFive.Text = "5 Min";
+			// 
 			// radioFifteen
 			// 
 			this.radioFifteen.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.radioFifteen.Location = new System.Drawing.Point(23,42);
+			this.radioFifteen.Location = new System.Drawing.Point(23,57);
 			this.radioFifteen.Name = "radioFifteen";
 			this.radioFifteen.Size = new System.Drawing.Size(100,18);
 			this.radioFifteen.TabIndex = 1;
@@ -181,7 +189,7 @@ namespace OpenDental{
 			// radioTen
 			// 
 			this.radioTen.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.radioTen.Location = new System.Drawing.Point(23,21);
+			this.radioTen.Location = new System.Drawing.Point(23,38);
 			this.radioTen.Name = "radioTen";
 			this.radioTen.Size = new System.Drawing.Size(100,18);
 			this.radioTen.TabIndex = 0;
@@ -194,37 +202,11 @@ namespace OpenDental{
 			this.checkTwoRows.Size = new System.Drawing.Size(104,24);
 			this.checkTwoRows.TabIndex = 0;
 			// 
-			// butOK
-			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(447,394);
-			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,26);
-			this.butOK.TabIndex = 41;
-			this.butOK.Text = "&OK";
-			this.butOK.Click += new System.EventHandler(this.butOK_Click);
-			// 
-			// label2
-			// 
-			this.label2.Location = new System.Drawing.Point(299,413);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(126,44);
-			this.label2.TabIndex = 42;
-			this.label2.Text = "Changes to the Views will always be saved";
-			this.label2.TextAlign = System.Drawing.ContentAlignment.BottomRight;
-			// 
 			// FormApptViews
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(546,485);
-			this.Controls.Add(this.label2);
-			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.butDown);
 			this.Controls.Add(this.butUp);
@@ -239,8 +221,8 @@ namespace OpenDental{
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Appointment Views";
-			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormApptViews_Closing);
 			this.Load += new System.EventHandler(this.FormApptViews_Load);
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormApptViews_FormClosing);
 			this.groupBox1.ResumeLayout(false);
 			this.ResumeLayout(false);
 
@@ -249,7 +231,10 @@ namespace OpenDental{
 
 		private void FormApptViews_Load(object sender, System.EventArgs e) {
 			FillViewList();
-			if(PrefC.GetLong(PrefName.AppointmentTimeIncrement)==10){
+			if(PrefC.GetInt(PrefName.AppointmentTimeIncrement)==5){
+				radioFive.Checked=true;
+			}
+			else if(PrefC.GetInt(PrefName.AppointmentTimeIncrement)==10) {
 				radioTen.Checked=true;
 			}
 			else{
@@ -349,28 +334,21 @@ namespace OpenDental{
 			listViews.SelectedIndex=selected+1;
 		}
 
-		private void butOK_Click(object sender, System.EventArgs e) {
-			if(PrefC.GetLong(PrefName.AppointmentTimeIncrement)==15
-				&& radioTen.Checked)
-			{
-				Prefs.UpdateLong(PrefName.AppointmentTimeIncrement,10);
-				DataValid.SetInvalid(InvalidType.Prefs);
-			}
-			if(PrefC.GetLong(PrefName.AppointmentTimeIncrement)==10
-				&& radioFifteen.Checked)
-			{
-				Prefs.UpdateLong(PrefName.AppointmentTimeIncrement,15);
-				DataValid.SetInvalid(InvalidType.Prefs);
-			}
-			DialogResult=DialogResult.OK;
-		}
-
 		private void butCancel_Click(object sender, System.EventArgs e) {
-			//all this cancels is the 10 vs 15 selection
-			DialogResult=DialogResult.Cancel;
+			Close();
 		}
 
-		private void FormApptViews_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
+		private void FormApptViews_FormClosing(object sender,FormClosingEventArgs e) {
+			int newIncrement=15;
+			if(radioFive.Checked) {
+				newIncrement=5;
+			}
+			if(radioTen.Checked) {
+				newIncrement=10;
+			}
+			if(Prefs.UpdateInt(PrefName.AppointmentTimeIncrement,newIncrement)){
+				DataValid.SetInvalid(InvalidType.Prefs);
+			}
 			if(viewChanged){
 				DataValid.SetInvalid(InvalidType.Views);
 			}

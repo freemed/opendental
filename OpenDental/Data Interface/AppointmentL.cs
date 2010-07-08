@@ -211,9 +211,12 @@ namespace OpenDental{
 			StringBuilder savePattern=new StringBuilder();
 			for(int i=0;i<recallPattern.Length;i++){
 				savePattern.Append(recallPattern.Substring(i,1));
-				savePattern.Append(recallPattern.Substring(i,1));
+				if(PrefC.GetLong(PrefName.AppointmentTimeIncrement)==10) {
+					savePattern.Append(recallPattern.Substring(i,1));
+				}
 				if(PrefC.GetLong(PrefName.AppointmentTimeIncrement)==15){
-				savePattern.Append(recallPattern.Substring(i,1));
+					savePattern.Append(recallPattern.Substring(i,1));
+					savePattern.Append(recallPattern.Substring(i,1));
 				}
 			}
 			if(savePattern.ToString()==""){
