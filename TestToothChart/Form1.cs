@@ -16,6 +16,7 @@ namespace TestToothChart {
 			toothChart2D.DrawMode=DrawingMode.Simple2D;
 			toothChartOpenGL.PreferredPixelFormatNumber=7;
 			toothChartOpenGL.DrawMode=DrawingMode.OpenGL;
+			toothChartDirectX.DeviceFormat=new SparksToothChart.ToothChartDirectX.DirectXDeviceFormat("0;Hardware;32;D16;R5G6B5;FourSamples");
 			toothChartDirectX.DrawMode=DrawingMode.DirectX;
 		}
 
@@ -548,6 +549,18 @@ namespace TestToothChart {
 			toothChartDirectX.SetHidden("L");
 			toothChartDirectX.SetHidden("20");
 			toothChartDirectX.SetHidden("19");
+		}
+
+		private void butWatches_Click(object sender,EventArgs e) {
+			//toothChart2D.ResetTeeth();
+			//toothChartOpenGL.ResetTeeth();
+			//toothChartDirectX.ResetTeeth();
+			for(int i=1;i<=32;i++){
+				string toothNum=i.ToString();
+				toothChart2D.SetWatch(toothNum);
+				toothChartOpenGL.SetWatch(toothNum);
+				toothChartDirectX.SetWatch(toothNum);
+			}
 		}
 
 		private void butFillings_Click(object sender,EventArgs e) {

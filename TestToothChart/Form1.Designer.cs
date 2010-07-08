@@ -107,6 +107,8 @@
 			this.butFDI = new System.Windows.Forms.Button();
 			this.butHaderup = new System.Windows.Forms.Button();
 			this.butUniversal = new System.Windows.Forms.Button();
+			this.groupBox14 = new System.Windows.Forms.GroupBox();
+			this.butWatches = new System.Windows.Forms.Button();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupBox3.SuspendLayout();
@@ -120,6 +122,7 @@
 			this.groupBox11.SuspendLayout();
 			this.groupBox12.SuspendLayout();
 			this.groupBox13.SuspendLayout();
+			this.groupBox14.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -822,9 +825,11 @@
 			this.toothChartDirectX.ColorBackground = System.Drawing.Color.FromArgb(((int)(((byte)(150)))),((int)(((byte)(145)))),((int)(((byte)(152)))));
 			this.toothChartDirectX.Cursor = System.Windows.Forms.Cursors.Default;
 			this.toothChartDirectX.CursorTool = SparksToothChart.CursorTool.Pointer;
+			this.toothChartDirectX.DeviceFormat = null;
 			this.toothChartDirectX.DrawMode = OpenDentBusiness.DrawingMode.Simple2D;
 			this.toothChartDirectX.Location = new System.Drawing.Point(840,28);
 			this.toothChartDirectX.Name = "toothChartDirectX";
+			this.toothChartDirectX.PerioMode = false;
 			this.toothChartDirectX.PreferredPixelFormatNumber = 0;
 			this.toothChartDirectX.Size = new System.Drawing.Size(410,307);
 			this.toothChartDirectX.TabIndex = 197;
@@ -838,9 +843,11 @@
 			this.toothChartOpenGL.ColorBackground = System.Drawing.Color.FromArgb(((int)(((byte)(150)))),((int)(((byte)(145)))),((int)(((byte)(152)))));
 			this.toothChartOpenGL.Cursor = System.Windows.Forms.Cursors.Default;
 			this.toothChartOpenGL.CursorTool = SparksToothChart.CursorTool.Pointer;
+			this.toothChartOpenGL.DeviceFormat = null;
 			this.toothChartOpenGL.DrawMode = OpenDentBusiness.DrawingMode.Simple2D;
 			this.toothChartOpenGL.Location = new System.Drawing.Point(424,28);
 			this.toothChartOpenGL.Name = "toothChartOpenGL";
+			this.toothChartOpenGL.PerioMode = false;
 			this.toothChartOpenGL.PreferredPixelFormatNumber = 0;
 			this.toothChartOpenGL.Size = new System.Drawing.Size(410,307);
 			this.toothChartOpenGL.TabIndex = 196;
@@ -854,9 +861,11 @@
 			this.toothChart2D.ColorBackground = System.Drawing.Color.FromArgb(((int)(((byte)(150)))),((int)(((byte)(145)))),((int)(((byte)(152)))));
 			this.toothChart2D.Cursor = System.Windows.Forms.Cursors.Default;
 			this.toothChart2D.CursorTool = SparksToothChart.CursorTool.Pointer;
+			this.toothChart2D.DeviceFormat = null;
 			this.toothChart2D.DrawMode = OpenDentBusiness.DrawingMode.Simple2D;
 			this.toothChart2D.Location = new System.Drawing.Point(8,28);
 			this.toothChart2D.Name = "toothChart2D";
+			this.toothChart2D.PerioMode = false;
 			this.toothChart2D.PreferredPixelFormatNumber = 0;
 			this.toothChart2D.Size = new System.Drawing.Size(410,307);
 			this.toothChart2D.TabIndex = 195;
@@ -959,11 +968,32 @@
 			this.butUniversal.UseVisualStyleBackColor = true;
 			this.butUniversal.Click += new System.EventHandler(this.butUniversal_Click);
 			// 
+			// groupBox14
+			// 
+			this.groupBox14.Controls.Add(this.butWatches);
+			this.groupBox14.Location = new System.Drawing.Point(536,466);
+			this.groupBox14.Name = "groupBox14";
+			this.groupBox14.Size = new System.Drawing.Size(118,44);
+			this.groupBox14.TabIndex = 223;
+			this.groupBox14.TabStop = false;
+			this.groupBox14.Text = "Conditions";
+			// 
+			// butWatches
+			// 
+			this.butWatches.Location = new System.Drawing.Point(10,18);
+			this.butWatches.Name = "butWatches";
+			this.butWatches.Size = new System.Drawing.Size(75,23);
+			this.butWatches.TabIndex = 207;
+			this.butWatches.Text = "Watches";
+			this.butWatches.UseVisualStyleBackColor = true;
+			this.butWatches.Click += new System.EventHandler(this.butWatches_Click);
+			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(1258,737);
+			this.Controls.Add(this.groupBox14);
 			this.Controls.Add(this.groupBox5);
 			this.Controls.Add(this.textScreenshotBox);
 			this.Controls.Add(this.toothChartDirectX);
@@ -1002,6 +1032,7 @@
 			this.groupBox11.ResumeLayout(false);
 			this.groupBox12.ResumeLayout(false);
 			this.groupBox13.ResumeLayout(false);
+			this.groupBox14.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -1089,6 +1120,8 @@
 		private System.Windows.Forms.Button butHaderup;
 		private System.Windows.Forms.Button butUniversal;
 		private System.Windows.Forms.Button butPalmer;
+		private System.Windows.Forms.GroupBox groupBox14;
+		private System.Windows.Forms.Button butWatches;
 	}
 }
 

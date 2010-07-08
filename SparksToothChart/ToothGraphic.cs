@@ -62,6 +62,9 @@ namespace SparksToothChart {
 		public bool IsSealant;
 		///<summary>If sealant, then this will contain the color.</summary>
 		public Color colorSealant;
+		///<summary>This gets set to true if tooth has a watch on it.</summary>
+		public bool Watch;
+		public Color colorWatch=Color.Red;
 		///<summary>For perio, 1, 2, or 3.  It's a string because we'll later allow +.  The text gets drawn directly on the front of the tooth.</summary>
 		public string Mobility;
 		///<summary>If a mobility is set, the is the color.</summary>
@@ -216,6 +219,7 @@ namespace SparksToothChart {
 			IsCrown=false;
 			IsPontic=false;
 			IsSealant=false;
+			Watch=false;
 		}
 
 		public void SetSurfaceColors(string surfaces,Color color){
@@ -1064,6 +1068,14 @@ namespace SparksToothChart {
 			}
 		}
 
+		public LineSimple GetWatchLine(){
+			return new LineSimple(
+				0f,0f,0f,
+				.8f,-2.65f,0f,
+				1.6f,0f,0f,
+				2.4f,-2.65f,0f,
+				3.2f,0f,0f);
+		}
 
 		/*
 		///<summary></summary>

@@ -199,6 +199,7 @@ namespace SparksToothChart {
 			// 
 			//bitmapInPictBox=GetBitmapOfOpenGL();
 			//gg=Graphics.FromImage(bitmapInPictBox);
+			DrawWatches();
 			DrawNumbersAndLines();
 			DrawDrawingSegments();
 			//g.DrawImage(bitmapInPictBox,0,0);
@@ -448,6 +449,72 @@ namespace SparksToothChart {
 				Gl.glEnd();
 				Gl.glPopMatrix();
 			}
+		}
+
+		private void DrawWatches(){
+			Gl.glDisable(Gl.GL_LIGHTING);
+			Gl.glDisable(Gl.GL_BLEND);
+			Gl.glDisable(Gl.GL_DEPTH_TEST);
+			Hashtable watchTeeth=new Hashtable(TcData.ListToothGraphics.Count);
+			for(int t=0;t<TcData.ListToothGraphics.Count;t++) {//loop through each adult tooth
+			  ToothGraphic toothGraphic=TcData.ListToothGraphics[t];
+				//If a tooth is marked to be watched then it is always visible, even if the tooth is missing/hidden.
+			  if(toothGraphic.ToothID=="implant" || !toothGraphic.Watch || Tooth.IsPrimary(toothGraphic.ToothID)) {
+			    continue;
+			  }
+			  watchTeeth[toothGraphic.ToothID]=toothGraphic;
+			}
+			for(int t=0;t<TcData.ListToothGraphics.Count;t++) {//loop through each primary tooth
+			  ToothGraphic toothGraphic=TcData.ListToothGraphics[t];
+				//If a tooth is marked to be watched then it is always visible, even if the tooth is missing/hidden.
+			  if(toothGraphic.ToothID=="implant"|| !toothGraphic.Watch || !Tooth.IsPrimary(toothGraphic.ToothID) || !toothGraphic.Visible) {
+			    continue;
+			  }
+			  watchTeeth[Tooth.PriToPerm(toothGraphic.ToothID)]=toothGraphic;
+			}
+			foreach(DictionaryEntry toothGraphic in watchTeeth){
+			  RenderToothWatch((ToothGraphic)toothGraphic.Value);
+			}
+		}
+
+		private void RenderToothWatch(ToothGraphic toothGraphic){
+			Gl.glPushMatrix();
+			if(ToothGraphic.IsRight(toothGraphic.ToothID)) {
+				Gl.glTranslatef(TcData.GetTransX(toothGraphic.ToothID)+toothGraphic.ShiftM,0,0);
+			} 
+			else {
+				Gl.glTranslatef(TcData.GetTransX(toothGraphic.ToothID)-toothGraphic.ShiftM,0,0);
+			}
+			float toMm=1f/TcData.ScaleMmToPix;
+			Gl.glColor3f(
+				(float)toothGraphic.colorWatch.R/255f,
+				(float)toothGraphic.colorWatch.G/255f,
+				(float)toothGraphic.colorWatch.B/255f);
+			Gl.glLineWidth(0.6f*TcData.PixelScaleRatio);
+			Gl.glPointSize(0.4f*TcData.PixelScaleRatio);//point is slightly smaller since no antialiasing
+			LineSimple line=toothGraphic.GetWatchLine();
+			Gl.glBegin(Gl.GL_LINE_STRIP);
+			for(int j=0;j<line.Vertices.Count;j++) {//loop through each vertex
+				if(ToothGraphic.IsMaxillary(toothGraphic.ToothID)){
+					Gl.glVertex3f(line.Vertices[j].X+TcData.PixelScaleRatio*(-6f*toMm),line.Vertices[j].Y+TcData.PixelScaleRatio*(150f*toMm),line.Vertices[j].Z-6f);
+				}
+				else{
+					Gl.glVertex3f(line.Vertices[j].X+TcData.PixelScaleRatio*(-6f*toMm),line.Vertices[j].Y+TcData.PixelScaleRatio*(-140f*toMm),line.Vertices[j].Z-6f);
+				}
+			}
+			Gl.glEnd();
+			Gl.glDisable(Gl.GL_BLEND);
+			Gl.glBegin(Gl.GL_POINTS);
+			for(int j=0;j<line.Vertices.Count;j++) {//loop through each vertex
+			  if(ToothGraphic.IsMaxillary(toothGraphic.ToothID)){
+			    Gl.glVertex3f(line.Vertices[j].X+TcData.PixelScaleRatio*(-6f*toMm),line.Vertices[j].Y+TcData.PixelScaleRatio*(150f*toMm),line.Vertices[j].Z+6f);
+			  }
+			  else{
+			    Gl.glVertex3f(line.Vertices[j].X+TcData.PixelScaleRatio*(-6f*toMm),line.Vertices[j].Y+TcData.PixelScaleRatio*(-140f*toMm),line.Vertices[j].Z+6f);
+			  }
+			}
+			Gl.glEnd();
+			Gl.glPopMatrix();
 		}
 
 		private void DrawNumbersAndLines() {

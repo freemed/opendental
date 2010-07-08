@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -25,6 +26,7 @@ namespace SparksToothChart {
 		private float specularSharpness;
 		private Microsoft.DirectX.Direct3D.Font xfont;
 		private Microsoft.DirectX.Direct3D.Font xSealantFont;
+		private Microsoft.DirectX.Direct3D.Font xWatchFont;
 		private bool MouseIsDown=false;
 		[Category("Action"),Description("Occurs when the mouse goes up ending a drawing segment.")]
 		public event ToothChartDrawEventHandler SegmentDrawn=null;
@@ -358,6 +360,10 @@ namespace SparksToothChart {
 				xSealantFont.Dispose();
 				xSealantFont=null;
 			}
+			if(xWatchFont!=null){
+				xWatchFont.Dispose();
+				xWatchFont=null;
+			}
 			if(xfont!=null){
 				xfont.Dispose();
 				xfont=null;
@@ -380,6 +386,11 @@ namespace SparksToothChart {
 			xSealantFont=new Microsoft.DirectX.Direct3D.Font(device,
 				(int)Math.Round(25*TcData.PixelScaleRatio),
 				(int)Math.Round(9*TcData.PixelScaleRatio),
+				FontWeight.Regular,1,false,CharacterSet.Ansi,Precision.Device,
+				FontQuality.ClearType,PitchAndFamily.DefaultPitch,"Arial");
+			xWatchFont=new Microsoft.DirectX.Direct3D.Font(device,
+				(int)Math.Round(15*TcData.PixelScaleRatio),
+				(int)Math.Round(6*TcData.PixelScaleRatio),
 				FontWeight.Regular,1,false,CharacterSet.Ansi,Precision.Device,
 				FontQuality.ClearType,PitchAndFamily.DefaultPitch,"Arial");
 			TcData.PrepareForDirectX(device);
@@ -512,6 +523,7 @@ namespace SparksToothChart {
 				DrawOcclusalView(TcData.ListToothGraphics[t],defOrient);
 			}
 			//frameEndTime=DateTime.Now;
+			DrawWatches(defOrient);
 			DrawDrawingSegments();
 			DrawNumbersAndLines();//Numbers and center lines are top-most.			
 			device.EndScene();
@@ -861,7 +873,7 @@ namespace SparksToothChart {
 			toothTrans.Translate(GetTransX(toothGraphic.ToothID),
 				GetTransYfacial(toothGraphic.ToothID),
 				0);
-			Matrix rotAndTranUser=RotateAndTranslateUser(toothGraphic);
+			Matrix rotAndTranUser=ToothRotationAndTranslationMatrix(toothGraphic);
 			device.Transform.World=rotAndTranUser*toothTrans*defOrient;
 			if(toothGraphic.Visible
 				||(toothGraphic.IsCrown && toothGraphic.IsImplant)
@@ -1024,7 +1036,7 @@ namespace SparksToothChart {
 					toothRot.RotateX((float)((120f*Math.PI)/180f));
 				}
 			}
-			Matrix rotAndTranUser=RotateAndTranslateUser(toothGraphic);
+			Matrix rotAndTranUser=ToothRotationAndTranslationMatrix(toothGraphic);
 			device.Transform.World=rotAndTranUser*toothRot*toothTrans*defOrient;
 			if(!Tooth.IsPrimary(toothGraphic.ToothID)//if perm tooth
 				&&Tooth.IsValidDB(Tooth.PermToPri(toothGraphic.ToothID))
@@ -1159,43 +1171,63 @@ namespace SparksToothChart {
 			}
 		}
 
-		///<summary>Performs the rotations and translations entered by user for this tooth.  Usually, all numbers are just 0, resulting in no movement here. Returns the result as a Matrix that will need to be applied to any other movement and rotation matricies being applied to the tooth.</summary>
-		private Matrix RotateAndTranslateUser(ToothGraphic toothGraphic) {
-			//remembering that they actually show in the opposite order, so:
-			//1: translate
-			//2: tipM last
-			//3: tipB second
-			//4: rotate first
+		private Matrix ToothTranslationMatrix(ToothGraphic toothGraphic){
 			Matrix tran=Matrix.Identity;
+			if(ToothGraphic.IsRight(toothGraphic.ToothID)) {
+				if(ToothGraphic.IsMaxillary(toothGraphic.ToothID)) {//UR
+					tran.Translate(toothGraphic.ShiftM,-toothGraphic.ShiftO,toothGraphic.ShiftB);
+				} else {//LR
+					tran.Translate(toothGraphic.ShiftM,toothGraphic.ShiftO,toothGraphic.ShiftB);
+				}
+			} else {
+				if(ToothGraphic.IsMaxillary(toothGraphic.ToothID)) {//UL
+					tran.Translate(-toothGraphic.ShiftM,-toothGraphic.ShiftO,toothGraphic.ShiftB);
+				} else {//LL
+					tran.Translate(-toothGraphic.ShiftM,toothGraphic.ShiftO,toothGraphic.ShiftB);
+				}
+			}
+			return tran;
+		}
+
+		private Matrix ToothRotationMatrix(ToothGraphic toothGraphic){
+			//1: tipM last
+			//2: tipB second
+			//3: rotate first
 			Matrix rotM=Matrix.Identity;
 			Matrix rotB=Matrix.Identity;
 			Matrix rot=Matrix.Identity;
 			if(ToothGraphic.IsRight(toothGraphic.ToothID)) {
 				if(ToothGraphic.IsMaxillary(toothGraphic.ToothID)) {//UR
-					tran.Translate(toothGraphic.ShiftM,-toothGraphic.ShiftO,toothGraphic.ShiftB);					
 					rotM.RotateZ(((float)(toothGraphic.TipM*Math.PI)/180));//Converts angle to radians as required.
 					rotB.RotateX(((float)(-toothGraphic.TipB*Math.PI)/180));//Converts angle to radians as required.
 					rot.RotateY(((float)(toothGraphic.Rotate*Math.PI)/180));//Converts angle to radians as required.
 				} else {//LR
-					tran.Translate(toothGraphic.ShiftM,toothGraphic.ShiftO,toothGraphic.ShiftB);
 					rotM.RotateZ(((float)(-toothGraphic.TipM*Math.PI)/180));//Converts angle to radians as required.
 					rotB.RotateX(((float)(toothGraphic.TipB*Math.PI)/180));//Converts angle to radians as required.
 					rot.RotateY(((float)(-toothGraphic.Rotate*Math.PI)/180));//Converts angle to radians as required.
 				}
 			} else {
 				if(ToothGraphic.IsMaxillary(toothGraphic.ToothID)) {//UL
-					tran.Translate(-toothGraphic.ShiftM,-toothGraphic.ShiftO,toothGraphic.ShiftB);
 					rotM.RotateZ(((float)(-toothGraphic.TipM*Math.PI)/180));//Converts angle to radians as required.
 					rotB.RotateX(((float)(-toothGraphic.TipB*Math.PI)/180));//Converts angle to radians as required.
 					rot.RotateY(((float)(toothGraphic.Rotate*Math.PI)/180));//Converts angle to radians as required.
 				} else {//LL
-					tran.Translate(-toothGraphic.ShiftM,toothGraphic.ShiftO,toothGraphic.ShiftB);
 					rotM.RotateZ(((float)(toothGraphic.TipM*Math.PI)/180));//Converts angle to radians as required.
 					rotB.RotateX(((float)(toothGraphic.TipB*Math.PI)/180));//Converts angle to radians as required.
 					rot.RotateY(((float)(-toothGraphic.Rotate*Math.PI)/180));//Converts angle to radians as required.
 				}
 			}
-			return rot*rotB*rotM*tran;
+			return rot*rotB*rotM;
+		}
+
+		///<summary>Performs the rotations and translations entered by user for this tooth.  Usually, all numbers are just 0, resulting in no movement here. Returns the result as a Matrix that will need to be applied to any other movement and rotation matricies being applied to the tooth.</summary>
+		private Matrix ToothRotationAndTranslationMatrix(ToothGraphic toothGraphic) {
+			//remembering that they actually show in the opposite order, so:
+			//1: translate
+			//2: tipM last
+			//3: tipB second
+			//4: rotate first
+			return ToothRotationMatrix(toothGraphic)*ToothTranslationMatrix(toothGraphic);
 		}
 
 		///<summary>Pri or perm tooth numbers are valid.  Only locations of perm teeth are stored.</summary>
@@ -1346,6 +1378,49 @@ namespace SparksToothChart {
 			Vector3 screenPoint=new Vector3(x,y,z);
 			screenPoint.Project(device.Viewport,device.Transform.Projection,device.Transform.View,device.Transform.World);
 			printFont.DrawText(null,text,new Point((int)Math.Ceiling(screenPoint.X),(int)Math.Floor(screenPoint.Y)),color);
+		}
+
+		private void DrawWatches(Matrix defOrient){
+			device.RenderState.ZBufferEnable=false;
+			device.RenderState.Lighting=false;
+			Hashtable watchTeeth=new Hashtable(TcData.ListToothGraphics.Count);
+			for(int t=0;t<TcData.ListToothGraphics.Count;t++) {//loop through each adult tooth
+			  ToothGraphic toothGraphic=TcData.ListToothGraphics[t];
+				//If a tooth is marked to be watched then it is always visible, even if the tooth is missing/hidden.
+				if(toothGraphic.ToothID=="implant" || !toothGraphic.Watch || Tooth.IsPrimary(toothGraphic.ToothID)) {
+					continue;
+				}
+				watchTeeth[toothGraphic.ToothID]=toothGraphic;
+			}
+			for(int t=0;t<TcData.ListToothGraphics.Count;t++) {//loop through each primary tooth
+			  ToothGraphic toothGraphic=TcData.ListToothGraphics[t];
+				//If a tooth is marked to be watched then it is always visible, even if the tooth is missing/hidden.
+				if(toothGraphic.ToothID=="implant"|| !toothGraphic.Watch || !Tooth.IsPrimary(toothGraphic.ToothID) || !toothGraphic.Visible) {
+					continue;
+				}
+				watchTeeth[Tooth.PriToPerm(toothGraphic.ToothID)]=toothGraphic;
+			}
+			foreach(DictionaryEntry toothGraphic in watchTeeth){
+				RenderToothWatch((ToothGraphic)toothGraphic.Value,defOrient);
+			}
+		}
+
+		private void RenderToothWatch(ToothGraphic toothGraphic,Matrix defOrient){
+			Matrix toothTrans=Matrix.Identity;//Start with world transform defined by calling function.
+			if(ToothGraphic.IsRight(toothGraphic.ToothID)) {
+				toothTrans.Translate(GetTransX(toothGraphic.ToothID)+toothGraphic.ShiftM,0,0);
+			} 
+			else {
+				toothTrans.Translate(GetTransX(toothGraphic.ToothID)-toothGraphic.ShiftM,0,0);
+			}
+			device.Transform.World=toothTrans*defOrient;
+			float toMm=1f/TcData.ScaleMmToPix;			  
+	    if(ToothGraphic.IsMaxillary(toothGraphic.ToothID)){
+	      PrintString("W",TcData.PixelScaleRatio*(-6f*toMm),TcData.PixelScaleRatio*(153f*toMm),-6f,toothGraphic.colorWatch,xWatchFont);
+	    }
+			else{
+	      PrintString("W",TcData.PixelScaleRatio*(-6f*toMm),TcData.PixelScaleRatio*(-138f*toMm),-6f,toothGraphic.colorWatch,xWatchFont);
+	    }
 		}
 
 		private void DrawDrawingSegments() {

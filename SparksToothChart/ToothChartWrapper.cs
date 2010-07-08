@@ -615,6 +615,15 @@ namespace SparksToothChart {
 			Invalidate();
 		}
 
+		///<summary>Set this tooth to show a 'W' to indicate that the tooth is being watched.</summary>
+		public void SetWatch(string toothID) {
+			if(!ToothGraphic.IsValidToothID(toothID)) {
+				return;
+			}
+			tcData.ListToothGraphics[toothID].Watch=true;
+			Invalidate();
+		}
+
 		///<summary></summary>
 		public void AddDrawingSegment(ToothInitial drawingSegment) {
 			bool alreadyAdded=false;
