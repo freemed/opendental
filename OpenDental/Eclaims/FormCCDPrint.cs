@@ -13,13 +13,11 @@ using CodeBase;
 
 /*
  * TODOS: (not in any particular order)
- * *Finish upper/lower placement notes for bullet 4.
  * *Print claim display messages.
  * *Be sure all fields have been processed in each form, either directly or indirectly.
  * *Merge predetermination forms into existing forms? (see pages 48 and 122 in message formats).
  * *Add option in UI to print dentist copy.
  * *Display multiple copies of each form when more than 7 procedures are present ((int)(numprocedures/7)+1 forms total).
- * *Finish the only unfinished Dentaide form bullet number.
  */
 
 namespace OpenDental.Eclaims {
@@ -232,9 +230,8 @@ namespace OpenDental.Eclaims {
 				}
 				predetermination=(transactionCode=="23"||transactionCode=="13");//Be sure to list all predetermination response types here!
 				//We are required to print 2 copies of the Dentaide form when it is not a predetermination form.
-				//Everything else requires only 1 copy. Here we add the stipulation that only a patient form can print 2, copies,
-				//so that the dentist form does not create 2 copies of 2 dentist forms which also create 2 copies, resulting in
-				//4 total copies.
+				//Everything else requires only 1 copy. Here we add the stipulation that only a patient form can print 2 copies
+				//so that recursive calls to print other copies for the transaction do not also print extra copies.
 				int numCopies=((formId=="02" && !predetermination && patientCopy)?2:1);
 				while(numCopies>0){
 					if(!patientCopy){//A dentist copy is to be printed.
@@ -311,28 +308,28 @@ namespace OpenDental.Eclaims {
 							default:
 								DefaultPrint(e.Graphics);
 								break;
-							case "01":
+							case "01"://CDA EOB Form
 								PrintEOB(e.Graphics);
 								break;
-							case "02":
+							case "02"://Dentaide Form
 								PrintDentaide(e.Graphics);
 								break;
-							case "03":
+							case "03"://Claim Acknowledgement Form
 								PrintClaimAck(e.Graphics);
 								break;
-							case "04":
+							case "04"://Employer Certified Form
 								PrintEmployerCertified(e.Graphics);
 								break;
-							case "05":
+							case "05"://Plan Paper Claim Form
 								PrintPaperClaim(e.Graphics);
 								break;
-							case "06":
+							case "06"://Predetermination Acknowledgement Form
 								PrintPredeterminationAck(e.Graphics);
 								break;
-							case "07":
+							case "07"://Predetermination EOB Form
 								PrintEOB(e.Graphics);
 								break;
-							case "08":
+							case "08"://Eligibility Form
 								PrintEligibility(e.Graphics);
 								break;
 						}
@@ -873,9 +870,6 @@ namespace OpenDental.Eclaims {
 			int headerHeight=(int)verticalLine;
 			doc.bounds=new Rectangle(doc.bounds.X,doc.bounds.Y+headerHeight,doc.bounds.Width,
 				doc.bounds.Height-headerHeight);//Reset the doc.bounds so that the page numbers are on a row alone.
-			if(predetermination){
-				//TODO: Required to print a second copy.
-			}
 			//TODO: The first page of this form may contain seven (7) procedure codes. For predeterminations, if more
 			//than seven (7) procedures are to be performed, a second page must be printed containing only the
 			//details of the procedure codes in excess of the first seven (7) procedures.
@@ -1168,17 +1162,62 @@ namespace OpenDental.Eclaims {
 					doc.DrawString(g,isFrench?"Non":"No",x+size1.Width,0);
 				}
 			}
-			x=doc.StartElement();
-			if(predetermination){
+			CCDField orthodonticRecordFlagField=formData.GetFieldById("F25");
+			if(predetermination && orthodonticRecordFlagField!=null && orthodonticRecordFlagField.valuestr=="1"){
+				x=doc.StartElement();
 				x+=doc.DrawString(g,bullet.ToString()+". ",x,0).Width;
 				bullet++;
 				doc.PushX(x);//Begin indentation.
 				doc.DrawString(g,isFrench?"S'il s'agit d'un plan de traitement d'orthodontie, indiquer":
 					"For orthodontic treatment plan, please indicate:",x,0);
 				x=doc.StartElement();
-				text="";//TODO: Fill this with the data corresponding to field F30.
-				doc.DrawField(g,isFrench?"Durée du traitement":"Duration of treatment",text,false,x,0);
-				//TODO: finish the rest of this bullet right here.
+				text=formData.GetFieldById("F30").valuestr;//Duration of treatment in months.
+				if(text!="00"){
+					text=text.TrimStart('0');
+					doc.DrawField(g,isFrench?"Durée du traitement: ":"Duration of treatment: ",text,true,x,0);
+				}
+				text=formData.GetFieldById("F26").valuestr;//First examination fee in raw form.
+				if(text!="000000"){
+					text=RawMoneyStrToDisplayMoney(text);
+					doc.DrawField(g,isFrench?"Tarif du premier examen: ":"First examination fee: ",text,true,x,0);
+				}
+				text=formData.GetFieldById("F27").valuestr;//Diagnostic Phase Fee in raw form.
+				if(text!="000000"){
+					text=RawMoneyStrToDisplayMoney(text);
+					doc.DrawField(g,isFrench?"Tarif de la phase diagnostique: ":"Diagnostic phase fee: ",text,true,x,0);
+				}
+				text=formData.GetFieldById("F28").valuestr;//Initial fee in raw form.
+				if(text!="000000"){
+					text=RawMoneyStrToDisplayMoney(text);
+					doc.DrawField(g,isFrench?"Paiement initial: ":"Initial fee: ",text,true,x,0);
+				}
+				text=formData.GetFieldById("F29").valuestr;//Payment mode or expected payment cycle as an enumeration value.
+				if(text!="0"){
+					//No french translations were given for the values of this enumeration so google translator was used for the French text.
+					if(text=="1"){
+						text=isFrench?"Mensuel":"Monthly";
+					}
+					else if(text=="2"){
+						text=isFrench?"Bimensuel":"Bimonthly";
+					}
+					else if(text=="3"){
+						text=isFrench?"Trimestriel":"Quarterly";
+					}
+					else{//4
+						text=isFrench?"Tous les quatre mois":"Every four months";
+					}
+					doc.DrawField(g,isFrench?"Mode de paiement: ":"Payment mode: ",text,true,x,0);
+				}
+				text=formData.GetFieldById("F31").valuestr;//Number of anticipated payments
+				if(text!="00"){
+					text=text.TrimStart('0');
+					doc.DrawField(g,isFrench?"Nombre prévu de paiements: ":"Number of anticipated payments: ",text,true,x,0);
+				}
+				text=formData.GetFieldById("F32").valuestr;
+				if(text!="000000"){
+					text=RawMoneyStrToDisplayMoney(text);
+					doc.DrawField(g,isFrench?"Montant prévu du paiement: ":"Anticipated payment amount: ",text,true,x,0);
+				}				
 				x=doc.StartElement(verticalLine);
 				x=doc.PopX();//End indentation.
 			}
