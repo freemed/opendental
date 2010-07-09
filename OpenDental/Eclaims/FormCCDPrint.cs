@@ -13,11 +13,11 @@ using CodeBase;
 
 /*
  * TODOS: (not in any particular order)
+ * *Fix accented characters in returned messages. Examples: Claim Transaction #6, ...
  * *Print claim display messages.
  * *Be sure all fields have been processed in each form, either directly or indirectly.
  * *Merge predetermination forms into existing forms? (see pages 48 and 122 in message formats).
  * *Add option in UI to print dentist copy.
- * *Display multiple copies of each form when more than 7 procedures are present ((int)(numprocedures/7)+1 forms total).
  */
 
 namespace OpenDental.Eclaims {
@@ -38,6 +38,7 @@ namespace OpenDental.Eclaims {
 		bool printable=true;
 		///<summary>English by default (represented by false). Set to true later if using French.</summary>
 		bool isFrench=false;
+		string formatVersionNumber;
 		bool embedded;
 		bool assigned;
 		bool predetermination;
@@ -204,7 +205,7 @@ namespace OpenDental.Eclaims {
 					throw new Exception((embedded?"Embedded":"")+"CCD message format too short: "+MessageText);
 				}
 				formData=new CCDFieldInputter(MessageText);//Input the fields of the given message.
-				string formatVersionNumber=formData.GetFieldById("A03").valuestr;//Must always exist so no error checking here.
+				formatVersionNumber=formData.GetFieldById("A03").valuestr;//Must always exist so no error checking here.
 				transactionCode=formData.GetFieldById("A04").valuestr;//Must always exist so no error checking here.
 				//Check for embedded messages.
 				CCDField embeddedTransaction=formData.GetFieldById("G40");
@@ -870,9 +871,6 @@ namespace OpenDental.Eclaims {
 			int headerHeight=(int)verticalLine;
 			doc.bounds=new Rectangle(doc.bounds.X,doc.bounds.Y+headerHeight,doc.bounds.Width,
 				doc.bounds.Height-headerHeight);//Reset the doc.bounds so that the page numbers are on a row alone.
-			//TODO: The first page of this form may contain seven (7) procedure codes. For predeterminations, if more
-			//than seven (7) procedures are to be performed, a second page must be printed containing only the
-			//details of the procedure codes in excess of the first seven (7) procedures.
 			x=doc.StartElement();
 			text=isFrench?"FORMULAIRE DENTAIDE":"DENTAIDE FORM";
 			doc.DrawString(g,text,center-g.MeasureString(text,headingFont).Width/2,0,headingFont);
@@ -1321,29 +1319,35 @@ namespace OpenDental.Eclaims {
 			float endNoteCol=dentaidePaysCol+dentaidePaysColWidth;
 			Font tempFont=doc.standardFont;
 			doc.standardFont=standardSmall;
-			if(isEOB){
-				doc.DrawString(g,"Note",noteCol,0);
-				doc.DrawString(g,isFrench?"Admissible":"Eligible",eligibleFeeCol,0);
-				doc.DrawString(g,isFrench?"Admissible":"Eligible",eligibleLabCol,0);
-				doc.DrawString(g,isFrench?"Franchise":"Deductible",deductibleCol,0);
-				doc.DrawString(g,isFrench?"%Couvertrem.":"Percent\nCovered",percentCoveredCol,0);
-				doc.DrawString(g,isFrench?"Dentaide":"Detaide\nPays",dentaidePaysCol,0);
-			}
-			doc.DrawString(g,isFrench?"Acte":"Proc",procedureCol,0);
-			doc.DrawString(g,isFrench?"Dent":"Tooth",toothCol,0);
-			doc.DrawString(g,"Surface",surfaceCol,0);
-			doc.DrawString(g,isFrench?"Honoraires":"Fee",feeCol,0);
-			doc.DrawString(g,isFrench?"Labo.":"Lab",labCol,0);
 			double totalFee=0;
 			double totalLab=0;
 			double totalPaid=0;
-			for(int i=0;i<=7;i++){
-				x=doc.StartElement();
+			int numProcsPrinted=0;
+			do{
 				if(isEOB){
-					if(procedureLineNumbers!=null){
+					doc.DrawString(g,"Note",noteCol,0);
+					doc.DrawString(g,isFrench?"Admissible":"Eligible",eligibleFeeCol,0);
+					doc.DrawString(g,isFrench?"Admissible":"Eligible",eligibleLabCol,0);
+					doc.DrawString(g,isFrench?"Franchise":"Deductible",deductibleCol,0);
+					doc.DrawString(g,isFrench?"%Couvertrem.":"Percent\nCovered",percentCoveredCol,0);
+					doc.DrawString(g,isFrench?"Dentaide":"Detaide\nPays",dentaidePaysCol,0);
+				}
+				doc.DrawString(g,isFrench?"Acte":"Proc",procedureCol,0);
+				doc.DrawString(g,isFrench?"Dent":"Tooth",toothCol,0);
+				doc.DrawString(g,"Surface",surfaceCol,0);
+				doc.DrawString(g,isFrench?"Honoraires":"Fee",feeCol,0);
+				doc.DrawString(g,isFrench?"Labo.":"Lab",labCol,0);
+				for(int p=1;p<=7;p++){
+					int procLineNum=numProcsPrinted+p;
+					if(numProcsPrinted>0){
+						//Begin a new page.
+						doc.NextPage();
+					}
+					x=doc.StartElement();
+					if(isEOB){
 						for(int j=0;j<procedureLineNumbers.Length;j++){
-							if(Convert.ToInt32(procedureLineNumbers[j].valuestr)==i){
-								//For any i!=0, there will only be one matching carrier procedure, by definition.
+							if(Convert.ToInt32(procedureLineNumbers[j].valuestr)==procLineNum){
+								//For any procLineNum>0, there will only be one matching carrier procedure, by definition.
 								size1=new SizeF(0,0);
 								int noteIndex=Convert.ToInt32(explainationNoteNumbers1[j].valuestr);
 								if(noteIndex>0){
@@ -1367,37 +1371,37 @@ namespace OpenDental.Eclaims {
 							}
 						}
 					}
-				}
-				//The following code assumes that procedures and associated labs were sent out in the
-				//same order that they were returned from the query.
-				//Print info for procedure i if it exists.
-				if(claimprocs!=null){
-					for(int k=0,n=0;k<claimprocs.Count;k++){
-						Procedure proc;
-						ClaimProc claimproc=claimprocs[k];
-						if(claimproc.ProcNum!=0){//Is this a valid claim procedure?
-							proc=Procedures.GetOneProc(claimproc.ProcNum,true);
-							if(proc.ProcNumLab==0){//We are only looking for non-lab procedures.
-								n++;
-								if(n==i){//Procedure found.
-									text=claimproc.CodeSent.PadLeft(5,'0');//Field F08
-									doc.DrawString(g,text,procedureCol,0);
-									text=Tooth.ToInternat(proc.ToothNum);//Field F10
-									doc.DrawString(g,text,toothCol,0);
-									text=Tooth.SurfTidyForClaims(proc.Surf,proc.ToothNum);//Field F11
-									doc.DrawString(g,text,surfaceCol,0);
-									text=proc.ProcFee.ToString("F");//Field F12
-									doc.DrawString(g,text,feeCol,0);
-									totalFee+=proc.ProcFee;
-									//Find the lab fee associated with the above procedure.
-									for(int m=0;m<claimprocs.Count;m++) {
-										ClaimProc claimlab=claimprocs[m];
-										if(claimlab.ProcNum!=0){//Is this a valid claim procedure/lab fee?
-											Procedure lab=Procedures.GetOneProc(claimlab.ProcNum,true);
-											if(lab.ProcNumLab==proc.ProcNum){//This lab fee is for the above procedure.
-												text=lab.ProcFee.ToString("F");//Field F13
-												doc.DrawString(g,text,labCol,0);
-												totalLab+=lab.ProcFee;
+					//The following code assumes that procedures and associated labs were sent out in the
+					//same order that they were returned from the query.
+					//Print info for procedure procLineNum if it exists.
+					if(claimprocs!=null){
+						for(int k=0,n=0;k<claimprocs.Count;k++){
+							Procedure proc;
+							ClaimProc claimproc=claimprocs[k];
+							if(claimproc.ProcNum!=0){//Is this a valid claim procedure?
+								proc=Procedures.GetOneProc(claimproc.ProcNum,true);
+								if(proc.ProcNumLab==0){//We are only looking for non-lab procedures.
+									n++;
+									if(n==procLineNum){//Procedure found.
+										text=claimproc.CodeSent.PadLeft(5,'0');//Field F08
+										doc.DrawString(g,text,procedureCol,0);
+										text=Tooth.ToInternat(proc.ToothNum);//Field F10
+										doc.DrawString(g,text,toothCol,0);
+										text=Tooth.SurfTidyForClaims(proc.Surf,proc.ToothNum);//Field F11
+										doc.DrawString(g,text,surfaceCol,0);
+										text=proc.ProcFee.ToString("F");//Field F12
+										doc.DrawString(g,text,feeCol,0);
+										totalFee+=proc.ProcFee;
+										//Find the lab fee associated with the above procedure.
+										for(int m=0;m<claimprocs.Count;m++) {
+											ClaimProc claimlab=claimprocs[m];
+											if(claimlab.ProcNum!=0){//Is this a valid claim procedure/lab fee?
+												Procedure lab=Procedures.GetOneProc(claimlab.ProcNum,true);
+												if(lab.ProcNumLab==proc.ProcNum){//This lab fee is for the above procedure.
+													text=lab.ProcFee.ToString("F");//Field F13
+													doc.DrawString(g,text,labCol,0);
+													totalLab+=lab.ProcFee;
+												}
 											}
 										}
 									}
@@ -1406,7 +1410,8 @@ namespace OpenDental.Eclaims {
 						}
 					}
 				}
-			}
+				numProcsPrinted+=7;
+			}while(numProcsPrinted<procedureLineNumbers.Length);
 			doc.standardFont=new Font(doc.standardFont.FontFamily,doc.standardFont.Size+1,FontStyle.Bold);
 			x=doc.StartElement(verticalLine);
 			doc.DrawString(g,"TOTAL:",toothCol,0);
@@ -2343,7 +2348,7 @@ namespace OpenDental.Eclaims {
 			if(payableTo=="1"){//Pay the subscriber.
 				text=isFrench?"TOTAL REMBOURSABLE AU TITULAIRE:":"TOTAL PAYABLE TO INSURED:";
 				doc.DrawString(g,text,x,0);
-				text=RawMoneyStrToDisplayMoney(formData.GetFieldById("G55").valuestr);
+				text=RawMoneyStrToDisplayMoney(formData.GetFieldById(formatVersionNumber=="04"?"G55":"G28").valuestr);
 				doc.DrawString(g,text,x+valuesBlockOffset,0);
 				x=doc.StartElement();
 				text=isFrench?"ADRESSE DU DESTINATAIRE DU PAIEMENT:":"PAYEE'S ADDRESS:";
@@ -2353,14 +2358,14 @@ namespace OpenDental.Eclaims {
 			}else if(payableTo=="2"){//Pay other party.
 				text=isFrench?"TOTAL REMBOURSABLE AU AUTRES:":"TOTAL PAYABLE TO OTHER:";
 				doc.DrawString(g,text,x,0);
-				text=RawMoneyStrToDisplayMoney(formData.GetFieldById("G55").valuestr);
+				text=RawMoneyStrToDisplayMoney(formData.GetFieldById(formatVersionNumber=="04"?"G55":"G28").valuestr);
 				doc.DrawString(g,text,x+valuesBlockOffset,0);
 				x=doc.StartElement();
 			}else if(payableTo=="3"){//Reserved
 			}else if(payableTo=="4"){//Dentist
 				text=isFrench?"TOTAL REMBOURSABLE AU DENTISTE:":"TOTAL PAYABLE TO DENTIST:";
 				doc.DrawString(g,text,x,0);
-				text=RawMoneyStrToDisplayMoney(formData.GetFieldById("G55").valuestr);
+				text=RawMoneyStrToDisplayMoney(formData.GetFieldById(formatVersionNumber=="04"?"G55":"G28").valuestr);
 				doc.DrawString(g,text,x+valuesBlockOffset,0);
 				x=doc.StartElement();
 				text=isFrench?"ADRESSE DU DESTINATAIRE DU PAIEMENT:":"PAYEE'S ADDRESS:";

@@ -36,6 +36,19 @@ namespace OpenDental.Eclaims {
 				return (height>0);
 			}
 		}
+		private class PageBreak:RenderPrim{
+			public override float Height(Graphics g) {
+				return 0;//Has a height but depends on the final page rendering.
+			}
+			public override void Render(Graphics g,float Y) {
+			}
+			public override RenderPrim Clone() {
+				return new PageBreak();
+			}
+			public override bool HasDims() {
+				return false;
+			}
+		}
 		private class RenderStr:RenderPrim {
 			Font font;
 			Pen pen;
@@ -96,7 +109,7 @@ namespace OpenDental.Eclaims {
 		#region Internal Variables
 
 		private List<RenderPrim> renderContainer=new List<RenderPrim>();
-		///<summary>Contains an array of elements/render containers for the whole document. The idea </summary>
+		///<summary>Contains an array of elements/render containers for the whole document.</summary>
 		private List<List<RenderPrim>> documentContainer=new List<List<RenderPrim>>();
 		///<summary>Used to store indentation x-values</summary>
 		private List<float> xstack=new List<float>();
@@ -154,6 +167,14 @@ namespace OpenDental.Eclaims {
 			float maxy=0;
 			int i;
 			for(i=offset;i<documentContainer.Count;i++){
+				//Page breaks end the current page.
+				if(documentContainer[i].Count==1){
+					Type elementType=documentContainer[i][0].GetType();
+					if(elementType==typeof(PageBreak)){
+						numElements++;
+						break;
+					}
+				}
 				maxy=CalcElementHeight(g,documentContainer[i]);
 				if(totalY+maxy < bounds.Height){
 					numElements++;
@@ -240,10 +261,11 @@ namespace OpenDental.Eclaims {
 			foreach(RenderPrim prim in renderContainer) {
 				if(prim.HasDims()) {
 					hasDims=true;
+					break;
 				}
 			}
 			documentContainer.Add(ClonePrims());
-			if(hasDims || alwaysJump) {	//This prevents getting odd offsets for text rows near the beginning of a page, 
+			if((hasDims && extraJumpY>0) || alwaysJump) {	//This prevents getting odd offsets for text rows near the beginning of a page,
 				//or from creating a series of white-space.
 				renderContainer.Clear();
 				renderContainer.Add(new BlankPrim(extraJumpY));
@@ -253,14 +275,6 @@ namespace OpenDental.Eclaims {
 			return ResetX();
 		}
 
-		private List<RenderPrim> ClonePrims() {
-			List<RenderPrim> dup=new List<RenderPrim>();
-			foreach(RenderPrim prim in renderContainer) {
-				dup.Add(prim.Clone());
-			}
-			return dup;
-		}
-
 		public float StartElement(float extraJumpY) {
 			return StartElement(extraJumpY,false);
 		}
@@ -268,6 +282,21 @@ namespace OpenDental.Eclaims {
 		///<summary>Same as StartElement(0).</summary>
 		public float StartElement() {
 			return StartElement(0);
+		}
+
+		///<summary>Inserts a page break at the very end of the document to force proceeding elements to begin at the top of the next page.</summary>
+		public void NextPage(){
+			StartElement();
+			renderContainer.Add(new PageBreak());
+			StartElement();
+		}
+
+		private List<RenderPrim> ClonePrims() {
+			List<RenderPrim> dup=new List<RenderPrim>();
+			foreach(RenderPrim prim in renderContainer) {
+				dup.Add(prim.Clone());
+			}
+			return dup;
 		}
 
 		#endregion
