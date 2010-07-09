@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -53,6 +54,7 @@ namespace SparksToothChart {
 				DrawFacialView(TcData.ListToothGraphics[t],g);
 				DrawOcclusalView(TcData.ListToothGraphics[t],g);
 			}
+			DrawWatches(g);
 			DrawNumbers(g);
 			DrawDrawingSegments(g);
 			e.Graphics.DrawImage(bitmap,0,0);
@@ -268,6 +270,51 @@ namespace SparksToothChart {
 					break;
 			}
 			return path;
+		}
+
+		private void DrawWatches(Graphics g){
+			Hashtable watchTeeth=new Hashtable(TcData.ListToothGraphics.Count);
+			for(int t=0;t<TcData.ListToothGraphics.Count;t++) {//loop through each adult tooth
+			  ToothGraphic toothGraphic=TcData.ListToothGraphics[t];
+				//If a tooth is marked to be watched then it is always visible, even if the tooth is missing/hidden.
+				if(toothGraphic.ToothID=="implant" || !toothGraphic.Watch || Tooth.IsPrimary(toothGraphic.ToothID)) {
+					continue;
+				}
+				watchTeeth[toothGraphic.ToothID]=toothGraphic;
+			}
+			for(int t=0;t<TcData.ListToothGraphics.Count;t++) {//loop through each primary tooth
+			  ToothGraphic toothGraphic=TcData.ListToothGraphics[t];
+				//If a tooth is marked to be watched then it is always visible, even if the tooth is missing/hidden.
+				if(toothGraphic.ToothID=="implant"|| !toothGraphic.Watch || !Tooth.IsPrimary(toothGraphic.ToothID) || !toothGraphic.Visible) {
+					continue;
+				}
+				watchTeeth[Tooth.PriToPerm(toothGraphic.ToothID)]=toothGraphic;
+			}
+			foreach(DictionaryEntry toothGraphic in watchTeeth){
+				RenderToothWatch(g,(ToothGraphic)toothGraphic.Value);
+			}
+		}
+
+		private void RenderToothWatch(Graphics g,ToothGraphic toothGraphic){
+			float toMm=1f/TcData.ScaleMmToPix;
+			SolidBrush brush=new SolidBrush(toothGraphic.colorWatch);
+			if(ToothGraphic.IsRight(toothGraphic.ToothID)){
+				if(ToothGraphic.IsMaxillary(toothGraphic.ToothID)){
+					g.DrawString("W",Font,brush,new PointF(TcData.GetTransXpix(toothGraphic.ToothID)+toothGraphic.ShiftM-6f,0));
+				}
+				else{
+					g.DrawString("W",Font,brush,new PointF(TcData.GetTransXpix(toothGraphic.ToothID)+toothGraphic.ShiftM-7f,Height-Font.Size-8f));
+				}
+			}
+			else{
+				if(ToothGraphic.IsMaxillary(toothGraphic.ToothID)){
+					g.DrawString("W",Font,brush,new PointF(TcData.GetTransXpix(toothGraphic.ToothID)-toothGraphic.ShiftM-6f,0));
+				}
+				else{
+					g.DrawString("W",Font,brush,new PointF(TcData.GetTransXpix(toothGraphic.ToothID)-toothGraphic.ShiftM-7f,Height-Font.Size-8f));
+				}
+			}
+			brush.Dispose();
 		}
 
 		private void DrawNumbers(Graphics g) {
