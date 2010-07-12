@@ -31,14 +31,15 @@ namespace OpenDental{
 			this.label5 = new System.Windows.Forms.Label();
 			this.textRangeStart = new System.Windows.Forms.TextBox();
 			this.textRangeEnd = new System.Windows.Forms.TextBox();
-			this.butDelete = new OpenDental.UI.Button();
-			this.textServerId = new OpenDental.ValidNum();
-			this.butOK = new OpenDental.UI.Button();
-			this.butCancel = new OpenDental.UI.Button();
 			this.textAtoZpath = new System.Windows.Forms.TextBox();
 			this.label6 = new System.Windows.Forms.Label();
 			this.checkUpdateBlocked = new System.Windows.Forms.CheckBox();
 			this.label7 = new System.Windows.Forms.Label();
+			this.label8 = new System.Windows.Forms.Label();
+			this.butDelete = new OpenDental.UI.Button();
+			this.textServerId = new OpenDental.ValidNum();
+			this.butOK = new OpenDental.UI.Button();
+			this.butCancel = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -111,6 +112,54 @@ namespace OpenDental{
 			this.textRangeEnd.TabIndex = 69;
 			this.textRangeEnd.WordWrap = false;
 			// 
+			// textAtoZpath
+			// 
+			this.textAtoZpath.Location = new System.Drawing.Point(238,168);
+			this.textAtoZpath.Name = "textAtoZpath";
+			this.textAtoZpath.Size = new System.Drawing.Size(388,20);
+			this.textAtoZpath.TabIndex = 72;
+			this.textAtoZpath.WordWrap = false;
+			// 
+			// label6
+			// 
+			this.label6.Location = new System.Drawing.Point(10,168);
+			this.label6.Name = "label6";
+			this.label6.Size = new System.Drawing.Size(226,18);
+			this.label6.TabIndex = 71;
+			this.label6.Text = "A to Z images folder";
+			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// checkUpdateBlocked
+			// 
+			this.checkUpdateBlocked.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkUpdateBlocked.Location = new System.Drawing.Point(16,200);
+			this.checkUpdateBlocked.Name = "checkUpdateBlocked";
+			this.checkUpdateBlocked.Size = new System.Drawing.Size(236,18);
+			this.checkUpdateBlocked.TabIndex = 99;
+			this.checkUpdateBlocked.Text = "Update Blocked";
+			this.checkUpdateBlocked.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkUpdateBlocked.UseVisualStyleBackColor = true;
+			// 
+			// label7
+			// 
+			this.label7.Location = new System.Drawing.Point(258,200);
+			this.label7.Name = "label7";
+			this.label7.Size = new System.Drawing.Size(396,48);
+			this.label7.TabIndex = 100;
+			this.label7.Text = "Use this option carefully. It really will block the ability of the server to upda" +
+    "te database versions, and it\'s possible that this could prevent startup of the p" +
+    "rogram in certain situations.";
+			// 
+			// label8
+			// 
+			this.label8.AutoSize = true;
+			this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.label8.Location = new System.Drawing.Point(419,140);
+			this.label8.Name = "label8";
+			this.label8.Size = new System.Drawing.Size(258,13);
+			this.label8.TabIndex = 101;
+			this.label8.Text = "(Range must be at least 1,000,000 numbers)";
+			// 
 			// butDelete
 			// 
 			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -167,48 +216,11 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// textAtoZpath
-			// 
-			this.textAtoZpath.Location = new System.Drawing.Point(238,168);
-			this.textAtoZpath.Name = "textAtoZpath";
-			this.textAtoZpath.Size = new System.Drawing.Size(388,20);
-			this.textAtoZpath.TabIndex = 72;
-			this.textAtoZpath.WordWrap = false;
-			// 
-			// label6
-			// 
-			this.label6.Location = new System.Drawing.Point(10,168);
-			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(226,18);
-			this.label6.TabIndex = 71;
-			this.label6.Text = "A to Z images folder";
-			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// checkUpdateBlocked
-			// 
-			this.checkUpdateBlocked.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkUpdateBlocked.Location = new System.Drawing.Point(16,200);
-			this.checkUpdateBlocked.Name = "checkUpdateBlocked";
-			this.checkUpdateBlocked.Size = new System.Drawing.Size(236,18);
-			this.checkUpdateBlocked.TabIndex = 99;
-			this.checkUpdateBlocked.Text = "Update Blocked";
-			this.checkUpdateBlocked.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkUpdateBlocked.UseVisualStyleBackColor = true;
-			// 
-			// label7
-			// 
-			this.label7.Location = new System.Drawing.Point(258,200);
-			this.label7.Name = "label7";
-			this.label7.Size = new System.Drawing.Size(396,48);
-			this.label7.TabIndex = 100;
-			this.label7.Text = "Use this option carefully. It really will block the ability of the server to upda" +
-    "te database versions, and it\'s possible that this could prevent startup of the p" +
-    "rogram in certain situations.";
-			// 
 			// FormReplicationEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(678,309);
+			this.Controls.Add(this.label8);
 			this.Controls.Add(this.label7);
 			this.Controls.Add(this.checkUpdateBlocked);
 			this.Controls.Add(this.textAtoZpath);
@@ -252,5 +264,6 @@ namespace OpenDental{
 		private System.Windows.Forms.Label label6;
 		private System.Windows.Forms.CheckBox checkUpdateBlocked;
 		private System.Windows.Forms.Label label7;
+		private System.Windows.Forms.Label label8;
 	}
 }

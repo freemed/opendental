@@ -99,7 +99,7 @@ namespace OpenDentBusiness{
 					}
 				}
 				if(thisServer!=null) {//a ReplicationServer row was found for this server_id
-					if(thisServer.RangeEnd-thisServer.RangeStart > 1000000){//and a valid range was entered that was at least 1,000,000
+					if(thisServer.RangeEnd-thisServer.RangeStart >= 999999){//and a valid range was entered that was at least 1,000,000
 						rangeStart=thisServer.RangeStart;
 						rangeEnd=thisServer.RangeEnd;
 					}

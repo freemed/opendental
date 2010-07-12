@@ -74,6 +74,10 @@ namespace OpenDental {
 					return;
 				}
 			}
+			if(rangeEnd-rangeStart<999999){
+				MsgBox.Show(this,"The end of the range must be at least 999,999 greater than the start of the range");
+				return;
+			}
 			RepServ.Descript=textDescript.Text;
 			RepServ.ServerId=serverid;//will be valid and greater than 0.
 			RepServ.RangeStart=rangeStart;
