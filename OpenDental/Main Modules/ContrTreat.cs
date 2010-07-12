@@ -2207,7 +2207,7 @@ namespace OpenDental{
 						toothChart.SetVeneer(proc.ToothNum,cLight);
 						break;
 					case ToothPaintingType.Watch:
-						toothChart.SetWatch(proc.ToothNum);
+						toothChart.SetWatch(proc.ToothNum,cDark);
 						break;
 				}
 			}

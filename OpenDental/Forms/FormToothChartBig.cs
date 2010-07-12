@@ -339,7 +339,7 @@ namespace OpenDental{
 						toothChart.SetVeneer(ProcList[i]["ToothNum"].ToString(),cLight);
 						break;
 					case ToothPaintingType.Watch:
-						toothChart.SetWatch(ProcList[i]["ToothNum"].ToString());
+						toothChart.SetWatch(ProcList[i]["ToothNum"].ToString(),cDark);
 						break;
 				}
 			}

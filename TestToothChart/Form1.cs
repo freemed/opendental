@@ -557,9 +557,9 @@ namespace TestToothChart {
 			//toothChartDirectX.ResetTeeth();
 			for(int i=1;i<=32;i++){
 				string toothNum=i.ToString();
-				toothChart2D.SetWatch(toothNum);
-				toothChartOpenGL.SetWatch(toothNum);
-				toothChartDirectX.SetWatch(toothNum);
+				toothChart2D.SetWatch(toothNum,Color.Red);
+				toothChartOpenGL.SetWatch(toothNum,Color.Red);
+				toothChartDirectX.SetWatch(toothNum,Color.Red);
 			}
 		}
 
