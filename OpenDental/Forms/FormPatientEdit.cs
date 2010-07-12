@@ -150,8 +150,13 @@ namespace OpenDental{
 		private OpenDental.UI.Button butClearResponsParty;
 		private Label labelCanadianEligibilityCode;
 		private ComboBox comboCanadianEligibilityCode;
+		private Label label41;
+		private ListBox listRelationships;
+		private OpenDental.UI.Button butAddRelat;
+		private OpenDental.UI.Button butRemoveRelat;
 		///<summary>Will include the languages setup in the settings, and also the language of this patient if that language is not on the selection list.</summary>
 		private List<CultureInfo> languageList;
+		private List<DependantRelat> relationships;
 
 		///<summary></summary>
 		public FormPatientEdit(Patient patCur,Family famCur){
@@ -264,6 +269,8 @@ namespace OpenDental{
 			this.textCreditType = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.labelCanadianEligibilityCode = new System.Windows.Forms.Label();
+			this.comboCanadianEligibilityCode = new System.Windows.Forms.ComboBox();
 			this.textSchool = new System.Windows.Forms.TextBox();
 			this.radioStudentN = new System.Windows.Forms.RadioButton();
 			this.radioStudentP = new System.Windows.Forms.RadioButton();
@@ -336,8 +343,10 @@ namespace OpenDental{
 			this.labelAdmitDate = new System.Windows.Forms.Label();
 			this.textTitle = new System.Windows.Forms.TextBox();
 			this.label26 = new System.Windows.Forms.Label();
-			this.comboCanadianEligibilityCode = new System.Windows.Forms.ComboBox();
-			this.labelCanadianEligibilityCode = new System.Windows.Forms.Label();
+			this.label41 = new System.Windows.Forms.Label();
+			this.listRelationships = new System.Windows.Forms.ListBox();
+			this.butAddRelat = new OpenDental.UI.Button();
+			this.butRemoveRelat = new OpenDental.UI.Button();
 			this.groupBox2.SuspendLayout();
 			this.groupBox1.SuspendLayout();
 			this.groupNotes.SuspendLayout();
@@ -382,7 +391,7 @@ namespace OpenDental{
 			// 
 			// label6
 			// 
-			this.label6.Location = new System.Drawing.Point(62,160);
+			this.label6.Location = new System.Drawing.Point(12,159);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(114,17);
 			this.label6.TabIndex = 5;
@@ -391,7 +400,7 @@ namespace OpenDental{
 			// 
 			// label7
 			// 
-			this.label7.Location = new System.Drawing.Point(180,161);
+			this.label7.Location = new System.Drawing.Point(130,160);
 			this.label7.Name = "label7";
 			this.label7.Size = new System.Drawing.Size(106,16);
 			this.label7.TabIndex = 6;
@@ -400,7 +409,7 @@ namespace OpenDental{
 			// 
 			// label8
 			// 
-			this.label8.Location = new System.Drawing.Point(298,162);
+			this.label8.Location = new System.Drawing.Point(245,160);
 			this.label8.Name = "label8";
 			this.label8.Size = new System.Drawing.Size(100,16);
 			this.label8.TabIndex = 7;
@@ -614,7 +623,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(874,597);
+			this.butOK.Location = new System.Drawing.Point(906,597);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,26);
 			this.butOK.TabIndex = 26;
@@ -629,7 +638,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(874,637);
+			this.butCancel.Location = new System.Drawing.Point(906,637);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,26);
 			this.butCancel.TabIndex = 27;
@@ -725,12 +734,32 @@ namespace OpenDental{
 			this.groupBox2.Controls.Add(this.radioStudentF);
 			this.groupBox2.Controls.Add(this.label30);
 			this.groupBox2.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox2.Location = new System.Drawing.Point(440,409);
+			this.groupBox2.Location = new System.Drawing.Point(472,409);
 			this.groupBox2.Name = "groupBox2";
 			this.groupBox2.Size = new System.Drawing.Size(382,87);
 			this.groupBox2.TabIndex = 24;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Student Status if Dependent Over 19 (for Ins)";
+			// 
+			// labelCanadianEligibilityCode
+			// 
+			this.labelCanadianEligibilityCode.Location = new System.Drawing.Point(1,63);
+			this.labelCanadianEligibilityCode.Name = "labelCanadianEligibilityCode";
+			this.labelCanadianEligibilityCode.Size = new System.Drawing.Size(121,16);
+			this.labelCanadianEligibilityCode.TabIndex = 11;
+			this.labelCanadianEligibilityCode.Text = "Eligibility Excep. Code";
+			this.labelCanadianEligibilityCode.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.labelCanadianEligibilityCode.Visible = false;
+			// 
+			// comboCanadianEligibilityCode
+			// 
+			this.comboCanadianEligibilityCode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboCanadianEligibilityCode.FormattingEnabled = true;
+			this.comboCanadianEligibilityCode.Location = new System.Drawing.Point(124,60);
+			this.comboCanadianEligibilityCode.Name = "comboCanadianEligibilityCode";
+			this.comboCanadianEligibilityCode.Size = new System.Drawing.Size(223,21);
+			this.comboCanadianEligibilityCode.TabIndex = 10;
+			this.comboCanadianEligibilityCode.Visible = false;
 			// 
 			// textSchool
 			// 
@@ -833,7 +862,7 @@ namespace OpenDental{
 			this.groupBox1.Controls.Add(this.label11);
 			this.groupBox1.Controls.Add(this.label1);
 			this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox1.Location = new System.Drawing.Point(440,8);
+			this.groupBox1.Location = new System.Drawing.Point(472,8);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(424,278);
 			this.groupBox1.TabIndex = 25;
@@ -970,7 +999,7 @@ namespace OpenDental{
 			this.groupNotes.Controls.Add(this.textAddrNotes);
 			this.groupNotes.Controls.Add(this.checkNotesSame);
 			this.groupNotes.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupNotes.Location = new System.Drawing.Point(440,291);
+			this.groupNotes.Location = new System.Drawing.Point(472,291);
 			this.groupNotes.Name = "groupNotes";
 			this.groupNotes.Size = new System.Drawing.Size(424,107);
 			this.groupNotes.TabIndex = 26;
@@ -1056,24 +1085,25 @@ namespace OpenDental{
 			// 
 			// listStatus
 			// 
-			this.listStatus.Location = new System.Drawing.Point(62,177);
+			this.listStatus.Location = new System.Drawing.Point(12,177);
 			this.listStatus.Name = "listStatus";
 			this.listStatus.Size = new System.Drawing.Size(105,69);
 			this.listStatus.TabIndex = 5;
 			// 
 			// listGender
 			// 
-			this.listGender.Location = new System.Drawing.Point(180,177);
+			this.listGender.Location = new System.Drawing.Point(130,177);
 			this.listGender.Name = "listGender";
 			this.listGender.Size = new System.Drawing.Size(105,43);
 			this.listGender.TabIndex = 6;
 			// 
 			// listPosition
 			// 
-			this.listPosition.Location = new System.Drawing.Point(298,178);
+			this.listPosition.Location = new System.Drawing.Point(248,177);
 			this.listPosition.Name = "listPosition";
 			this.listPosition.Size = new System.Drawing.Size(105,69);
 			this.listPosition.TabIndex = 7;
+			this.listPosition.SelectedIndexChanged += new System.EventHandler(this.listPosition_SelectedIndexChanged);
 			// 
 			// textEmployer
 			// 
@@ -1112,7 +1142,7 @@ namespace OpenDental{
 			this.groupPH.Controls.Add(this.label13);
 			this.groupPH.Controls.Add(this.label10);
 			this.groupPH.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupPH.Location = new System.Drawing.Point(440,508);
+			this.groupPH.Location = new System.Drawing.Point(472,508);
 			this.groupPH.Name = "groupPH";
 			this.groupPH.Size = new System.Drawing.Size(424,151);
 			this.groupPH.TabIndex = 23;
@@ -1461,31 +1491,63 @@ namespace OpenDental{
 			this.label26.Text = "Title (Mr., Ms.)";
 			this.label26.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
-			// comboCanadianEligibilityCode
+			// label41
 			// 
-			this.comboCanadianEligibilityCode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboCanadianEligibilityCode.FormattingEnabled = true;
-			this.comboCanadianEligibilityCode.Location = new System.Drawing.Point(124,60);
-			this.comboCanadianEligibilityCode.Name = "comboCanadianEligibilityCode";
-			this.comboCanadianEligibilityCode.Size = new System.Drawing.Size(223,21);
-			this.comboCanadianEligibilityCode.TabIndex = 10;
-			this.comboCanadianEligibilityCode.Visible = false;
+			this.label41.AutoSize = true;
+			this.label41.Location = new System.Drawing.Point(364,163);
+			this.label41.Name = "label41";
+			this.label41.Size = new System.Drawing.Size(70,13);
+			this.label41.TabIndex = 105;
+			this.label41.Text = "Relationships";
 			// 
-			// labelCanadianEligibilityCode
+			// listRelationships
 			// 
-			this.labelCanadianEligibilityCode.Location = new System.Drawing.Point(1,63);
-			this.labelCanadianEligibilityCode.Name = "labelCanadianEligibilityCode";
-			this.labelCanadianEligibilityCode.Size = new System.Drawing.Size(121,16);
-			this.labelCanadianEligibilityCode.TabIndex = 11;
-			this.labelCanadianEligibilityCode.Text = "Eligibility Excep. Code";
-			this.labelCanadianEligibilityCode.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			this.labelCanadianEligibilityCode.Visible = false;
+			this.listRelationships.Enabled = false;
+			this.listRelationships.FormattingEnabled = true;
+			this.listRelationships.Location = new System.Drawing.Point(367,177);
+			this.listRelationships.Name = "listRelationships";
+			this.listRelationships.Size = new System.Drawing.Size(94,69);
+			this.listRelationships.TabIndex = 106;
+			// 
+			// butAddRelat
+			// 
+			this.butAddRelat.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butAddRelat.Autosize = true;
+			this.butAddRelat.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAddRelat.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAddRelat.CornerRadius = 4F;
+			this.butAddRelat.Enabled = false;
+			this.butAddRelat.Location = new System.Drawing.Point(367,249);
+			this.butAddRelat.Name = "butAddRelat";
+			this.butAddRelat.Size = new System.Drawing.Size(36,22);
+			this.butAddRelat.TabIndex = 107;
+			this.butAddRelat.Text = "Add";
+			this.butAddRelat.Click += new System.EventHandler(this.butAddRelat_Click);
+			// 
+			// butRemoveRelat
+			// 
+			this.butRemoveRelat.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butRemoveRelat.Autosize = true;
+			this.butRemoveRelat.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butRemoveRelat.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRemoveRelat.CornerRadius = 4F;
+			this.butRemoveRelat.Enabled = false;
+			this.butRemoveRelat.Location = new System.Drawing.Point(409,249);
+			this.butRemoveRelat.Name = "butRemoveRelat";
+			this.butRemoveRelat.Size = new System.Drawing.Size(52,22);
+			this.butRemoveRelat.TabIndex = 108;
+			this.butRemoveRelat.Text = "Remove";
+			this.butRemoveRelat.Click += new System.EventHandler(this.butRemoveRelat_Click);
 			// 
 			// FormPatientEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
-			this.ClientSize = new System.Drawing.Size(962,673);
+			this.ClientSize = new System.Drawing.Size(994,673);
+			this.Controls.Add(this.butRemoveRelat);
+			this.Controls.Add(this.butAddRelat);
+			this.Controls.Add(this.listRelationships);
+			this.Controls.Add(this.label41);
 			this.Controls.Add(this.textTitle);
 			this.Controls.Add(this.label26);
 			this.Controls.Add(this.textAdmitDate);
@@ -1636,6 +1698,9 @@ namespace OpenDental{
 				case PatientPosition.Child : listPosition.SelectedIndex=2; break;
 				case PatientPosition.Widowed : listPosition.SelectedIndex=3; break;
 				case PatientPosition.Divorced : listPosition.SelectedIndex=4; break;}
+			if(PatCur.Position==PatientPosition.Child){
+				FillRelationships();
+			}
 			if(PatCur.Birthdate.Year < 1880)
 				textBirthdate.Text="";
 			else
@@ -1835,6 +1900,20 @@ namespace OpenDental{
 			{
 				comboZip.Items.Add(((ZipCode)ZipCodes.ALFrequent[i]).ZipCodeDigits
 					+" ("+((ZipCode)ZipCodes.ALFrequent[i]).City+")");
+			}
+		}
+
+		private void FillRelationships(){
+			relationships=DependantRelats.Refresh(PatCur.PatNum);
+			for(int i=0;i<relationships.Count;i++){
+				string relatFName="";
+				for(int p=0;p<FamCur.ListPats.Length;p++){
+					if(FamCur.ListPats[p].PatNum==relationships[i].PatNumRelated){
+						relatFName=FamCur.ListPats[p].FName;
+						break;
+					}
+				}
+				listRelationships.Items.Add(relatFName+relationships[i].FamilyRelationshipStr());
 			}
 		}
 
@@ -2445,6 +2524,25 @@ namespace OpenDental{
 
 		private void listEmps_MouseLeave(object sender, System.EventArgs e){
 			mouseIsInListEmps=false;
+		}
+
+		private void listPosition_SelectedIndexChanged(object sender,EventArgs e) {
+			listRelationships.Enabled=(listPosition.SelectedIndex==2);//Position=Child
+			butAddRelat.Enabled=listRelationships.Enabled;
+			butRemoveRelat.Enabled=listRelationships.Enabled;
+		}
+
+		private void butAddRelat_Click(object sender,EventArgs e) {
+
+		}
+
+		private void butRemoveRelat_Click(object sender,EventArgs e) {
+			if(listRelationships.SelectedIndex<0){
+				MsgBox.Show(this,"Please select a relationship to remove");
+				return;
+			}
+			DependantRelats.Delete(relationships[listRelationships.SelectedIndex].DependantRelatNum);
+			FillRelationships();
 		}
 
 		///<summary>Gets an employerNum based on the name entered. Called from FillCur</summary>

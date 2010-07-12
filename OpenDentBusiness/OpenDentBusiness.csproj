@@ -145,6 +145,7 @@
     <Compile Include="Crud\ClinicCrud.cs" />
     <Compile Include="Crud\ClockEventCrud.cs" />
     <Compile Include="Crud\DeletedObjectCrud.cs" />
+    <Compile Include="Crud\DependantRelatCrud.cs" />
     <Compile Include="Crud\DocumentCrud.cs" />
     <Compile Include="Crud\FeeSchedCrud.cs" />
     <Compile Include="Crud\HL7MsgCrud.cs" />
@@ -183,6 +184,7 @@
     <Compile Include="Crud\TaskUnreadCrud.cs" />
     <Compile Include="Crud\UserodCrud.cs" />
     <Compile Include="Data Interface\Automations.cs" />
+    <Compile Include="Data Interface\DependantRelats.cs" />
     <Compile Include="Data Interface\PhoneAsterisks.cs" />
     <Compile Include="Data Interface\Equipments.cs" />
     <Compile Include="Data Interface\PhoneEmpDefaults.cs" />
@@ -421,6 +423,7 @@
     <Compile Include="Plugins\PluginContainer.cs" />
     <Compile Include="Plugins\Plugins.cs" />
     <Compile Include="TableTypes\Automation.cs" />
+    <Compile Include="TableTypes\DependantRelat.cs" />
     <Compile Include="TableTypes\PhoneEmpDefault.cs" />
     <Compile Include="TableTypes\TaskUnread.cs" />
     <Compile Include="TableTypes\Equipment.cs" />
