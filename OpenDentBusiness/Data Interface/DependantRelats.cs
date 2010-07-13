@@ -18,12 +18,31 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
+		public static long Insert(DependantRelat dependantRelat){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
+				dependantRelat.DependantRelatNum=Meth.GetLong(MethodBase.GetCurrentMethod(),dependantRelat);
+				return dependantRelat.DependantRelatNum;
+			}
+			return Crud.DependantRelatCrud.Insert(dependantRelat);
+		}
+
+		///<summary></summary>
 		public static void Delete(long dependantRelatNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),dependantRelatNum);
 				return;
 			}
-			string command= "DELETE FROM dependantrelat WHERE DependantRelatNum = "+POut.Long(dependantRelatNum);
+			Crud.DependantRelatCrud.Delete(dependantRelatNum);
+		}
+
+		///<summary></summary>
+		public static void DeleteForFamily(long PatNumGuar) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),PatNumGuar);
+				return;
+			}
+			string command="DELETE FROM dependantrelat "
+				+"WHERE PatNumRelated IN (SELECT p.PatNum FROM patient p WHERE p.Guarantor="+POut.Long(PatNumGuar)+")";
 			Db.NonQ(command);
 		}
 
@@ -36,15 +55,6 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<DependantRelat>(MethodBase.GetCurrentMethod(),dependantRelatNum);
 			}
 			return Crud.DependantRelatCrud.SelectOne(dependantRelatNum);
-		}
-
-		///<summary></summary>
-		public static long Insert(DependantRelat dependantRelat){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				dependantRelat.DependantRelatNum=Meth.GetLong(MethodBase.GetCurrentMethod(),dependantRelat);
-				return dependantRelat.DependantRelatNum;
-			}
-			return Crud.DependantRelatCrud.Insert(dependantRelat);
 		}
 
 		///<summary></summary>

@@ -156,6 +156,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butRemoveRelat;
 		///<summary>Will include the languages setup in the settings, and also the language of this patient if that language is not on the selection list.</summary>
 		private List<CultureInfo> languageList;
+		private OpenDental.UI.Button butRelationshipDefaults;
 		private List<DependantRelat> relationships;
 
 		///<summary></summary>
@@ -347,6 +348,7 @@ namespace OpenDental{
 			this.listRelationships = new System.Windows.Forms.ListBox();
 			this.butAddRelat = new OpenDental.UI.Button();
 			this.butRemoveRelat = new OpenDental.UI.Button();
+			this.butRelationshipDefaults = new OpenDental.UI.Button();
 			this.groupBox2.SuspendLayout();
 			this.groupBox1.SuspendLayout();
 			this.groupNotes.SuspendLayout();
@@ -1494,11 +1496,12 @@ namespace OpenDental{
 			// label41
 			// 
 			this.label41.AutoSize = true;
-			this.label41.Location = new System.Drawing.Point(364,163);
+			this.label41.Location = new System.Drawing.Point(365,162);
 			this.label41.Name = "label41";
-			this.label41.Size = new System.Drawing.Size(70,13);
+			this.label41.Size = new System.Drawing.Size(55,13);
 			this.label41.TabIndex = 105;
-			this.label41.Text = "Relationships";
+			this.label41.Text = "Guardians";
+			this.label41.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// listRelationships
 			// 
@@ -1539,11 +1542,27 @@ namespace OpenDental{
 			this.butRemoveRelat.Text = "Remove";
 			this.butRemoveRelat.Click += new System.EventHandler(this.butRemoveRelat_Click);
 			// 
+			// butRelationshipDefaults
+			// 
+			this.butRelationshipDefaults.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butRelationshipDefaults.Autosize = true;
+			this.butRelationshipDefaults.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butRelationshipDefaults.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRelationshipDefaults.CornerRadius = 4F;
+			this.butRelationshipDefaults.Enabled = false;
+			this.butRelationshipDefaults.Location = new System.Drawing.Point(367,274);
+			this.butRelationshipDefaults.Name = "butRelationshipDefaults";
+			this.butRelationshipDefaults.Size = new System.Drawing.Size(94,22);
+			this.butRelationshipDefaults.TabIndex = 109;
+			this.butRelationshipDefaults.Text = "Defaults";
+			this.butRelationshipDefaults.Click += new System.EventHandler(this.butRelationshipDefaults_Click);
+			// 
 			// FormPatientEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(994,673);
+			this.Controls.Add(this.butRelationshipDefaults);
 			this.Controls.Add(this.butRemoveRelat);
 			this.Controls.Add(this.butAddRelat);
 			this.Controls.Add(this.listRelationships);
@@ -1905,16 +1924,44 @@ namespace OpenDental{
 
 		private void FillRelationships(){
 			relationships=DependantRelats.Refresh(PatCur.PatNum);
+			listRelationships.Items.Clear();
 			for(int i=0;i<relationships.Count;i++){
-				string relatFName="";
+				Patient relatedPat=null;
 				for(int p=0;p<FamCur.ListPats.Length;p++){
 					if(FamCur.ListPats[p].PatNum==relationships[i].PatNumRelated){
-						relatFName=FamCur.ListPats[p].FName;
+						relatedPat=FamCur.ListPats[p];
 						break;
 					}
 				}
-				listRelationships.Items.Add(relatFName+relationships[i].FamilyRelationshipStr());
+				if(relatedPat!=null){
+					listRelationships.Items.Add(relatedPat.FName+relationships[i].FamilyRelationshipStr());
+				}
 			}
+			List <Patient> unrelatedElders=GetUnrelatedElders();
+			butAddRelat.Enabled=(unrelatedElders.Count>0);
+			butRelationshipDefaults.Enabled=(PatCur.Position==PatientPosition.Child);
+		}
+
+		///<summary>Returns a list of the patients within the family which are not marked as children and
+		///also do not already have a relationship defined.</summary>
+		private List <Patient> GetUnrelatedElders(){
+			List <Patient> unrelatedElders=new List<Patient>();
+			for(int p=0;p<FamCur.ListPats.Length;p++){
+				if(FamCur.ListPats[p].Position==PatientPosition.Child){
+					continue;
+				}
+				bool relatExists=false;
+				for(int r=0;r<relationships.Count;r++){
+					if(relationships[r].PatNumRelated==FamCur.ListPats[p].PatNum){
+						relatExists=true;
+						break;
+					}
+				}
+				if(!relatExists){
+					unrelatedElders.Add(FamCur.ListPats[p]);
+				}
+			}
+			return unrelatedElders;
 		}
 
 		//private void butSecClear_Click(object sender, System.EventArgs e) {
@@ -2533,7 +2580,11 @@ namespace OpenDental{
 		}
 
 		private void butAddRelat_Click(object sender,EventArgs e) {
-
+			List <Patient> unrelatedElders=GetUnrelatedElders();
+			FormDependantRelatEdit fdre=new FormDependantRelatEdit(PatCur,unrelatedElders);
+			if(fdre.ShowDialog()==DialogResult.OK){
+				FillRelationships();
+			}
 		}
 
 		private void butRemoveRelat_Click(object sender,EventArgs e) {
@@ -2542,6 +2593,44 @@ namespace OpenDental{
 				return;
 			}
 			DependantRelats.Delete(relationships[listRelationships.SelectedIndex].DependantRelatNum);
+			FillRelationships();
+		}
+
+		private void butRelationshipDefaults_Click(object sender,EventArgs e) {
+			if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"Replace existing relationships with default relationships for entire family?")){
+				return;
+			}
+			DependantRelats.DeleteForFamily(PatCur.Guarantor);
+			List <Patient> parents=new List<Patient>();
+			List <Patient> children=new List<Patient>();
+			for(int p=0;p<FamCur.ListPats.Length;p++){
+				if(FamCur.ListPats[p].Position==PatientPosition.Child){
+					children.Add(FamCur.ListPats[p]);
+				}
+				else{
+					parents.Add(FamCur.ListPats[p]);
+				}
+			}
+			if(parents.Count<1){
+				return;
+			}
+			for(int c=0;c<children.Count;c++){
+				for(int p=0;p<parents.Count;p++){
+					DependantRelat relat=new DependantRelat();
+					relat.PatNumChild=children[c].PatNum;
+					relat.PatNumRelated=parents[p].PatNum;
+					if(parents[p].Gender==PatientGender.Male){
+						relat.Relationship=FamilyRelationship.Father;
+					}
+					else if(parents[p].Gender==PatientGender.Female){
+						relat.Relationship=FamilyRelationship.Mother;
+					}
+					else{
+						break;
+					}
+					DependantRelats.Insert(relat);
+				}
+			}
 			FillRelationships();
 		}
 

@@ -120,7 +120,7 @@ namespace OpenDentBusiness.Crud{
 			strb.Append(rn+t2+"///<summary>Gets one "+typeClass.Name+" object from the database using the primary key.  Returns null if not found.</summary>");
 			strb.Append(rn+t2+"internal static "+typeClass.Name+" SelectOne(long "+priKeyParam+"){");
 			strb.Append(rn+t3+"string command=\"SELECT * FROM "+tablename+" \"");
-			strb.Append(rn+t4+"+\"WHERE "+priKey.Name+" = \"+POut.Long("+priKeyParam+");");
+			strb.Append(rn+t4+"+\"WHERE "+priKey.Name+" = \"+POut.Long("+priKeyParam+")+\" LIMIT 1\";");
 			strb.Append(rn+t3+"List<"+typeClass.Name+"> list=TableToList(Db.GetTable(command));");
 			strb.Append(rn+t3+"if(list.Count==0) {");
 			strb.Append(rn+t4+"return null;");
@@ -424,7 +424,7 @@ namespace OpenDentBusiness.Crud{
 				}
 				strb.Append(" \"");
 			}
-			strb.Append(rn+t4+"+\"WHERE "+priKey.Name+" = \"+POut.Long("+obj+"."+priKey.Name+");");
+			strb.Append(rn+t4+"+\"WHERE "+priKey.Name+" = \"+POut.Long("+obj+"."+priKey.Name+")+\" LIMIT 1\";");
 			strb.Append(rn+t3+"Db.NonQ(command);");
 			strb.Append(rn+t2+"}");
 			//Update, 2nd override-------------------------------------------------------------------------------
@@ -508,7 +508,7 @@ namespace OpenDentBusiness.Crud{
 			strb.Append(rn+t4+"return;");
 			strb.Append(rn+t3+"}");
 			strb.Append(rn+t3+"command=\"UPDATE "+tablename+" SET \"+command");
-			strb.Append(rn+t4+"+\" WHERE "+priKey.Name+" = \"+POut.Long("+obj+"."+priKey.Name+");");
+			strb.Append(rn+t4+"+\" WHERE "+priKey.Name+" = \"+POut.Long("+obj+"."+priKey.Name+")+\" LIMIT 1\";");
 			strb.Append(rn+t3+"Db.NonQ(command);");
 			strb.Append(rn+t2+"}");
 			//Delete---------------------------------------------------------------------------------------------
@@ -522,7 +522,7 @@ namespace OpenDentBusiness.Crud{
 				strb.Append(rn+rn+t2+"///<summary>Deletes one "+typeClass.Name+" from the database.</summary>");
 				strb.Append(rn+t2+"internal static void Delete(long "+priKeyParam+"){");
 				strb.Append(rn+t3+"string command=\"DELETE FROM "+tablename+" \"");
-				strb.Append(rn+t4+"+\"WHERE "+priKey.Name+" = \"+POut.Long("+priKeyParam+");");
+				strb.Append(rn+t4+"+\"WHERE "+priKey.Name+" = \"+POut.Long("+priKeyParam+")+\" LIMIT 1\";");
 				strb.Append(rn+t3+"Db.NonQ(command);");
 				strb.Append(rn+t2+"}");
 			}

@@ -92,7 +92,7 @@ namespace OpenDentBusiness.Crud{
 				+"PatNumChild      =  "+POut.Long  (dependantRelat.PatNumChild)+", "
 				+"PatNumRelated    =  "+POut.Long  (dependantRelat.PatNumRelated)+", "
 				+"Relationship     =  "+POut.Int   ((int)dependantRelat.Relationship)+" "
-				+"WHERE DependantRelatNum = "+POut.Long(dependantRelat.DependantRelatNum);
+				+"WHERE DependantRelatNum = "+POut.Long(dependantRelat.DependantRelatNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
@@ -115,7 +115,7 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE dependantrelat SET "+command
-				+" WHERE DependantRelatNum = "+POut.Long(dependantRelat.DependantRelatNum);
+				+" WHERE DependantRelatNum = "+POut.Long(dependantRelat.DependantRelatNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
