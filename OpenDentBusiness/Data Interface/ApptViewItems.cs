@@ -22,78 +22,35 @@ namespace OpenDentBusiness{
 
 		public static void FillCache(DataTable table){
 			//No need to check RemotingRole; no call to db.
-			ApptViewItemC.List=new ApptViewItem[table.Rows.Count];
-			for(int i=0;i<ApptViewItemC.List.Length;i++){
-				ApptViewItemC.List[i]=new ApptViewItem();
-				ApptViewItemC.List[i].ApptViewItemNum = PIn.Long   (table.Rows[i][0].ToString());
-				ApptViewItemC.List[i].ApptViewNum     = PIn.Long   (table.Rows[i][1].ToString());
-				ApptViewItemC.List[i].OpNum           = PIn.Long   (table.Rows[i][2].ToString());
-				ApptViewItemC.List[i].ProvNum         = PIn.Long   (table.Rows[i][3].ToString());
-				ApptViewItemC.List[i].ElementDesc     = PIn.String(table.Rows[i][4].ToString());
-				ApptViewItemC.List[i].ElementOrder    = PIn.Int   (table.Rows[i][5].ToString());
-				ApptViewItemC.List[i].ElementColor    = Color.FromArgb(PIn.Int(table.Rows[i][6].ToString()));
-			}
+			ApptViewItemC.List=Crud.ApptViewItemCrud.TableToList(table).ToArray();
 		}
 
 		///<summary></summary>
-		public static long Insert(ApptViewItem Cur){
+		public static long Insert(ApptViewItem apptViewItem){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Cur.ApptViewItemNum=Meth.GetLong(MethodBase.GetCurrentMethod(),Cur);
-				return Cur.ApptViewItemNum;
+				apptViewItem.ApptViewItemNum=Meth.GetLong(MethodBase.GetCurrentMethod(),apptViewItem);
+				return apptViewItem.ApptViewItemNum;
 			}
-			if(PrefC.RandomKeys) {
-				Cur.ApptViewItemNum=ReplicationServers.GetKey("apptviewitem","ApptViewItemNum");
-			}
-			string command="INSERT INTO apptviewitem (";
-			if(PrefC.RandomKeys) {
-				command+="ApptViewItemNum,";
-			}
-			command+="ApptViewNum,OpNum,ProvNum,ElementDesc,"
-				+"ElementOrder,ElementColor) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+=POut.Long(Cur.ApptViewItemNum)+", ";
-			}
-			command+=
-				 "'"+POut.Long   (Cur.ApptViewNum)+"', "
-				+"'"+POut.Long   (Cur.OpNum)+"', "
-				+"'"+POut.Long   (Cur.ProvNum)+"', "
-				+"'"+POut.String(Cur.ElementDesc)+"', "
-				+"'"+POut.Long   (Cur.ElementOrder)+"', "
-				+"'"+POut.Long   (Cur.ElementColor.ToArgb())+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				Cur.ApptViewItemNum=Db.NonQ(command,true);
-			}
-			return Cur.ApptViewItemNum;
+			return Crud.ApptViewItemCrud.Insert(apptViewItem);
 		}
 
 		///<summary></summary>
-		public static void Update(ApptViewItem Cur){
+		public static void Update(ApptViewItem apptViewItem) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),apptViewItem);
 				return;
 			}
-			string command= "UPDATE apptviewitem SET "
-				+"ApptViewNum='"    +POut.Long   (Cur.ApptViewNum)+"'"
-				+",OpNum = '"       +POut.Long   (Cur.OpNum)+"'"
-				+",ProvNum = '"     +POut.Long   (Cur.ProvNum)+"'"
-				+",ElementDesc = '" +POut.String(Cur.ElementDesc)+"'"
-				+",ElementOrder = '"+POut.Long   (Cur.ElementOrder)+"'"
-				+",ElementColor = '"+POut.Long   (Cur.ElementColor.ToArgb())+"'"
-				+" WHERE ApptViewItemNum = '"+POut.Long(Cur.ApptViewItemNum)+"'";
-			Db.NonQ(command);
+			Crud.ApptViewItemCrud.Update(apptViewItem);
 		}
 
 		///<summary></summary>
-		public static void Delete(ApptViewItem Cur){
+		public static void Delete(ApptViewItem apptViewItem) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),apptViewItem);
 				return;
 			}
 			string command="DELETE from apptviewitem WHERE ApptViewItemNum = '"
-				+POut.Long(Cur.ApptViewItemNum)+"'";
+				+POut.Long(apptViewItem.ApptViewItemNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -103,9 +60,9 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),view);
 				return;
 			}
-			string c="DELETE from apptviewitem WHERE ApptViewNum = '"
+			string command="DELETE from apptviewitem WHERE ApptViewNum = '"
 				+POut.Long(view.ApptViewNum)+"'";
-			Db.NonQ(c);
+			Db.NonQ(command);
 		}
 
 		public static List<long> GetOpsForView(long apptViewNum) {

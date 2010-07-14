@@ -2268,6 +2268,12 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					INDEX(PatNumRelated)
 					) DEFAULT CHARSET=utf8";
 				Db.NonQ(command);
+				command="ALTER TABLE apptviewitem ADD ElementArea tinyint NOT NULL";
+				Db.NonQ(command);
+
+
+
+
 
 
 				command="UPDATE preference SET ValueString = '7.2.0.0' WHERE PrefName = 'DataBaseVersion'";

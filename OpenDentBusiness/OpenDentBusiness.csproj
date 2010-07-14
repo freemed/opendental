@@ -124,6 +124,7 @@
     <Compile Include="Crud\AppointmentCrud.cs" />
     <Compile Include="Crud\AppointmentRuleCrud.cs" />
     <Compile Include="Crud\ApptViewCrud.cs" />
+    <Compile Include="Crud\ApptViewItemCrud.cs" />
     <Compile Include="Crud\AutoCodeCondCrud.cs" />
     <Compile Include="Crud\AutoCodeCrud.cs" />
     <Compile Include="Crud\AutoCodeItemCrud.cs" />
