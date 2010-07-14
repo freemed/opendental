@@ -157,7 +157,7 @@ namespace OpenDental{
 		///<summary>Will include the languages setup in the settings, and also the language of this patient if that language is not on the selection list.</summary>
 		private List<CultureInfo> languageList;
 		private OpenDental.UI.Button butRelationshipDefaults;
-		private List<DependantRelat> relationships;
+		private List<Guardian> relationships;
 
 		///<summary></summary>
 		public FormPatientEdit(Patient patCur,Family famCur){
@@ -1496,7 +1496,7 @@ namespace OpenDental{
 			// label41
 			// 
 			this.label41.AutoSize = true;
-			this.label41.Location = new System.Drawing.Point(365,162);
+			this.label41.Location = new System.Drawing.Point(364,162);
 			this.label41.Name = "label41";
 			this.label41.Size = new System.Drawing.Size(55,13);
 			this.label41.TabIndex = 105;
@@ -1923,45 +1923,54 @@ namespace OpenDental{
 		}
 
 		private void FillRelationships(){
-			relationships=DependantRelats.Refresh(PatCur.PatNum);
+			relationships=Guardians.Refresh(PatCur.PatNum);
 			listRelationships.Items.Clear();
 			for(int i=0;i<relationships.Count;i++){
 				Patient relatedPat=null;
 				for(int p=0;p<FamCur.ListPats.Length;p++){
-					if(FamCur.ListPats[p].PatNum==relationships[i].PatNumRelated){
+					if(FamCur.ListPats[p].PatNum==relationships[i].PatNumGuardian){
 						relatedPat=FamCur.ListPats[p];
 						break;
 					}
 				}
 				if(relatedPat!=null){
-					listRelationships.Items.Add(relatedPat.FName+relationships[i].FamilyRelationshipStr());
+					listRelationships.Items.Add(relatedPat.FName+relationships[i].GuardianRelationshipStr());
 				}
 			}
-			List <Patient> unrelatedElders=GetUnrelatedElders();
-			butAddRelat.Enabled=(unrelatedElders.Count>0);
-			butRelationshipDefaults.Enabled=(PatCur.Position==PatientPosition.Child);
+			CheckGuardianUiState();
 		}
 
-		///<summary>Returns a list of the patients within the family which are not marked as children and
-		///also do not already have a relationship defined.</summary>
-		private List <Patient> GetUnrelatedElders(){
-			List <Patient> unrelatedElders=new List<Patient>();
+		///<summary>Returns a list of the patients within the family which are not marked as children.</summary>
+		private List <Patient> GetElders(){
+			List <Patient> elders=new List<Patient>();
 			for(int p=0;p<FamCur.ListPats.Length;p++){
 				if(FamCur.ListPats[p].Position==PatientPosition.Child){
 					continue;
 				}
-				bool relatExists=false;
-				for(int r=0;r<relationships.Count;r++){
-					if(relationships[r].PatNumRelated==FamCur.ListPats[p].PatNum){
-						relatExists=true;
-						break;
-					}
-				}
-				if(!relatExists){
-					unrelatedElders.Add(FamCur.ListPats[p]);
+				elders.Add(FamCur.ListPats[p]);
+			}
+			return elders;
+		}
+
+		///<summary>Returns a list of the guardian patients within the given list which also 
+		///do not already have a relationship defined with the current patient.</summary>
+		private List <Patient> GetUnrelated(List <Patient> guardians){
+			List <Patient> unrelated=new List<Patient>();
+			if(relationships!=null){
+				for(int g=0;g<guardians.Count;g++){
+						bool relatExists=false;
+						for(int r=0;r<relationships.Count;r++){
+							if(relationships[r].PatNumGuardian==guardians[g].PatNum){
+								relatExists=true;
+								break;
+							}
+						}
+						if(!relatExists){
+							unrelated.Add(guardians[g]);
+						}
 				}
 			}
-			return unrelatedElders;
+			return unrelated;
 		}
 
 		//private void butSecClear_Click(object sender, System.EventArgs e) {
@@ -2574,14 +2583,22 @@ namespace OpenDental{
 		}
 
 		private void listPosition_SelectedIndexChanged(object sender,EventArgs e) {
-			listRelationships.Enabled=(listPosition.SelectedIndex==2);//Position=Child
-			butAddRelat.Enabled=listRelationships.Enabled;
-			butRemoveRelat.Enabled=listRelationships.Enabled;
+			CheckGuardianUiState();
+		}
+
+		private void CheckGuardianUiState(){
+			List <Patient> elders=GetElders();
+			List <Patient> unrelatedElders=GetUnrelated(elders);
+			listRelationships.Enabled=(listPosition.SelectedIndex==2 && elders.Count>0);//Position=Child
+			butAddRelat.Enabled=(listPosition.SelectedIndex==2 && unrelatedElders.Count>0);//Position=Child
+			butRemoveRelat.Enabled=(listRelationships.Enabled && listRelationships.Items.Count>0);
+			butRelationshipDefaults.Enabled=(elders.Count>0);
 		}
 
 		private void butAddRelat_Click(object sender,EventArgs e) {
-			List <Patient> unrelatedElders=GetUnrelatedElders();
-			FormDependantRelatEdit fdre=new FormDependantRelatEdit(PatCur,unrelatedElders);
+			List <Patient> elders=GetElders();
+			List <Patient> unrelatedElders=GetUnrelated(elders);
+			FormGuardianEdit fdre=new FormGuardianEdit(PatCur,unrelatedElders);
 			if(fdre.ShowDialog()==DialogResult.OK){
 				FillRelationships();
 			}
@@ -2592,7 +2609,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please select a relationship to remove");
 				return;
 			}
-			DependantRelats.Delete(relationships[listRelationships.SelectedIndex].DependantRelatNum);
+			Guardians.Delete(relationships[listRelationships.SelectedIndex].GuardianNum);
 			FillRelationships();
 		}
 
@@ -2600,35 +2617,35 @@ namespace OpenDental{
 			if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"Replace existing relationships with default relationships for entire family?")){
 				return;
 			}
-			DependantRelats.DeleteForFamily(PatCur.Guarantor);
-			List <Patient> parents=new List<Patient>();
+			Guardians.DeleteForFamily(PatCur.Guarantor);
+			List <Patient> guardians=new List<Patient>();
 			List <Patient> children=new List<Patient>();
 			for(int p=0;p<FamCur.ListPats.Length;p++){
 				if(FamCur.ListPats[p].Position==PatientPosition.Child){
 					children.Add(FamCur.ListPats[p]);
 				}
 				else{
-					parents.Add(FamCur.ListPats[p]);
+					guardians.Add(FamCur.ListPats[p]);
 				}
 			}
-			if(parents.Count<1){
+			if(guardians.Count<1){
 				return;
 			}
 			for(int c=0;c<children.Count;c++){
-				for(int p=0;p<parents.Count;p++){
-					DependantRelat relat=new DependantRelat();
+				for(int p=0;p<guardians.Count;p++){
+					Guardian relat=new Guardian();
 					relat.PatNumChild=children[c].PatNum;
-					relat.PatNumRelated=parents[p].PatNum;
-					if(parents[p].Gender==PatientGender.Male){
-						relat.Relationship=FamilyRelationship.Father;
+					relat.PatNumGuardian=guardians[p].PatNum;
+					if(guardians[p].Gender==PatientGender.Male){
+						relat.Relationship=GuardianRelationship.Father;
 					}
-					else if(parents[p].Gender==PatientGender.Female){
-						relat.Relationship=FamilyRelationship.Mother;
+					else if(guardians[p].Gender==PatientGender.Female){
+						relat.Relationship=GuardianRelationship.Mother;
 					}
 					else{
 						break;
 					}
-					DependantRelats.Insert(relat);
+					Guardians.Insert(relat);
 				}
 			}
 			FillRelationships();

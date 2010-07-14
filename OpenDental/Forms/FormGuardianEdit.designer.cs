@@ -1,5 +1,5 @@
 namespace OpenDental{
-	partial class FormDependantRelatEdit {
+	partial class FormGuardianEdit {
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -23,7 +23,7 @@ namespace OpenDental{
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormDependantRelatEdit));
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormGuardianEdit));
 			this.label1 = new System.Windows.Forms.Label();
 			this.textDependant = new System.Windows.Forms.TextBox();
 			this.listFamilyMembers = new System.Windows.Forms.ListBox();
@@ -65,9 +65,9 @@ namespace OpenDental{
 			this.label2.AutoSize = true;
 			this.label2.Location = new System.Drawing.Point(12,48);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(77,13);
+			this.label2.Size = new System.Drawing.Size(50,13);
 			this.label2.TabIndex = 7;
-			this.label2.Text = "Family Member";
+			this.label2.Text = "Guardian";
 			// 
 			// label3
 			// 
@@ -116,7 +116,7 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// FormDependantRelatEdit
+			// FormGuardianEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(397,371);
@@ -129,9 +129,9 @@ namespace OpenDental{
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.Name = "FormDependantRelatEdit";
+			this.Name = "FormGuardianEdit";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Edit Dependant Relationship";
+			this.Text = "Edit Guardians";
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

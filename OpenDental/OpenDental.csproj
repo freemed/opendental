@@ -362,13 +362,6 @@
     <Compile Include="Forms\BasicTemplate.designer.cs">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
     </Compile>
-
-    <Compile Include="Forms\FormDependantRelatEdit.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormDependantRelatEdit.designer.cs">
-      <DependentUpon>FormDependantRelatEdit.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\FormApptViewItemEdit.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -386,6 +379,12 @@
     </Compile>
     <Compile Include="Forms\FormGraphEmployeeTime.designer.cs">
       <DependentUpon>FormGraphEmployeeTime.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormGuardianEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormGuardianEdit.designer.cs">
+      <DependentUpon>FormGuardianEdit.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FormSheetImportEnumPicker.cs">
       <SubType>Form</SubType>
@@ -3693,10 +3692,6 @@
       <DependentUpon>BasicTemplate.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormDependantRelatEdit.resx">
-      <DependentUpon>FormDependantRelatEdit.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormApptViewItemEdit.resx">
       <DependentUpon>FormApptViewItemEdit.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -3707,6 +3702,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormGraphEmployeeTime.resx">
       <DependentUpon>FormGraphEmployeeTime.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormGuardianEdit.resx">
+      <DependentUpon>FormGuardianEdit.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormSheetImportEnumPicker.resx">

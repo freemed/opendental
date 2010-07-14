@@ -73,7 +73,7 @@ namespace OpenDentBusiness{
 		///<summary>8</summary>
 		Dependent}
 	///<summary>Relationship of a child to a parent/guardian.</summary>
-	public enum FamilyRelationship{
+	public enum GuardianRelationship{
 		///<summary>1</summary>
 		Father=1,
 		///<summary>2</summary>

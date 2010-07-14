@@ -8,12 +8,12 @@ using System.Windows.Forms;
 using OpenDentBusiness;
 
 namespace OpenDental {
-	public partial class FormDependantRelatEdit:Form {
+	public partial class FormGuardianEdit:Form {
 
 		private Patient PatCur;
 		private List <Patient> FamilyMembersToShow;
 
-		public FormDependantRelatEdit(Patient dependant,List <Patient> familyMembersToShow) {
+		public FormGuardianEdit(Patient dependant,List <Patient> familyMembersToShow) {
 			InitializeComponent();
 			PatCur=dependant;
 			FamilyMembersToShow=familyMembersToShow;
@@ -24,7 +24,7 @@ namespace OpenDental {
 				}
 				listFamilyMembers.Items.Add(FamilyMembersToShow[i].GetNameFLFormal());
 			}
-			string[] relationshipNames=Enum.GetNames(typeof(FamilyRelationship));
+			string[] relationshipNames=Enum.GetNames(typeof(GuardianRelationship));
 			for(int i=0;i<relationshipNames.Length;i++){
 				listRelationships.Items.Add(relationshipNames[i]);
 			}
@@ -40,11 +40,11 @@ namespace OpenDental {
 				MsgBox.Show(this,"You must first select a relationship");
 				return;
 			}
-			DependantRelat relat=new DependantRelat();
+			Guardian relat=new Guardian();
 			relat.PatNumChild=PatCur.PatNum;
-			relat.PatNumRelated=FamilyMembersToShow[listFamilyMembers.SelectedIndex].PatNum;
-			relat.Relationship=(FamilyRelationship)(listRelationships.SelectedIndex+1);
-			DependantRelats.Insert(relat);
+			relat.PatNumGuardian=FamilyMembersToShow[listFamilyMembers.SelectedIndex].PatNum;
+			relat.Relationship=(GuardianRelationship)(listRelationships.SelectedIndex+1);
+			Guardians.Insert(relat);
 			DialogResult=DialogResult.OK;
 			Close();
 		}

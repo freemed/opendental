@@ -2256,16 +2256,16 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);
 				command="UPDATE clearinghouse SET ResponsePath='"+POut.String(@"C:\MercuryDE\Reports\")+"' WHERE ResponsePath='' AND Description='MercuryDE' LIMIT 1";
 				Db.NonQ(command);
-				command="DROP TABLE IF EXISTS dependantrelat";
+				command="DROP TABLE IF EXISTS guardian";
 				Db.NonQ(command);
-				command=@"CREATE TABLE dependantrelat (
-					DependantRelatNum bigint NOT NULL auto_increment,
+				command=@"CREATE TABLE guardian (
+					GuardianNum bigint NOT NULL auto_increment,
 					PatNumChild bigint NOT NULL,
-					PatNumRelated bigint NOT NULL,
+					PatNumGuardian bigint NOT NULL,
 					Relationship tinyint NOT NULL,
-					PRIMARY KEY (DependantRelatNum),
+					PRIMARY KEY (GuardianNum),
 					INDEX(PatNumChild),
-					INDEX(PatNumRelated)
+					INDEX(PatNumGuardian)
 					) DEFAULT CHARSET=utf8";
 				Db.NonQ(command);
 				command="ALTER TABLE apptviewitem ADD ElementArea tinyint NOT NULL";
