@@ -14,11 +14,15 @@ namespace OpenDental {
 		public FormApptViewItemEdit() {
 			InitializeComponent();
 			Lan.F(this);
-
 		}
 
 		private void FormApptViewItemEdit_Load(object sender,EventArgs e) {
+			textDesc.Text=ApptVItem.ElementDesc;
 			panelColor.BackColor=ApptVItem.ElementColor;
+			for(int i=0;i<Enum.GetNames(typeof(ApptViewAlignment)).Length;i++) {
+				listAlignment.Items.Add(Enum.GetNames(typeof(ApptViewAlignment))[i]);
+			}
+			listAlignment.SelectedIndex=(int)ApptVItem.ElementAlignment;
 		}
 
 		private void butColor_Click(object sender,EventArgs e) {
@@ -32,6 +36,7 @@ namespace OpenDental {
 
 		private void butOK_Click(object sender,EventArgs e) {
 			ApptVItem.ElementColor=panelColor.BackColor;
+			ApptVItem.ElementAlignment=(ApptViewAlignment)listAlignment.SelectedIndex;
 			DialogResult=DialogResult.OK;
 		}
 

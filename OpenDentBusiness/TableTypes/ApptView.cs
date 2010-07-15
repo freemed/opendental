@@ -31,6 +31,11 @@ namespace OpenDentBusiness{
 
 	}
 
+	public enum ApptViewStackBehavior {
+		Vertical,
+		Horizontal
+	}
+
 
 }
 
