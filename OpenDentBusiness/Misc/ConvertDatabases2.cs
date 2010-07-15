@@ -2268,7 +2268,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					INDEX(PatNumGuardian)
 					) DEFAULT CHARSET=utf8";
 				Db.NonQ(command);
-				command="ALTER TABLE apptviewitem ADD ElementArea tinyint NOT NULL";
+				command="ALTER TABLE apptviewitem ADD ElementAlignment tinyint NOT NULL";
 				Db.NonQ(command);
 
 
