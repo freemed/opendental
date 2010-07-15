@@ -126,6 +126,7 @@ namespace OpenDental.Eclaims {
 			MessageText=messageText;
 			patientCopy=!pAssigned;
 			Init();
+			ShowDisplayMessages();
 		}
 
 		///<summary>Accepts an etrans entry for Canadian claims only. After the constructor completes, only the secondary insurance db structures can be null.  Claim can be null if eligibility request or response.</summary>
@@ -133,11 +134,11 @@ namespace OpenDental.Eclaims {
 			etrans=pEtrans;
 			MessageText=messageText;
 			Init();
+			ShowDisplayMessages();
 		}
 
 		private void Init(){
 			InitializeComponent();
-			Encoding codePage850=Encoding.GetEncoding(850);
 			breakLinePen.Width=2;
 			//try {
 			patient=Patients.GetPat(etrans.PatNum);
@@ -195,16 +196,32 @@ namespace OpenDental.Eclaims {
 			//	Logger.openlog.LogMB(e.ToString(),Logger.Severity.ERROR);
 			//	printable=false;
 			//}
+			if(MessageText==null || MessageText.Length<23) {
+				throw new Exception((embedded?"Embedded":"")+"CCD message format too short: "+MessageText);
+			}
+			formData=new CCDFieldInputter(MessageText);//Input the fields of the given message.
+		}
+
+		public void ShowDisplayMessages(){
+			StringBuilder message=new StringBuilder();
+			CCDField[] displayMessageFields=formData.GetFieldsById("G32");
+			for(int i=0;i<displayMessageFields.Length;i++){
+				if(i>0){
+					message.Append(Environment.NewLine+Environment.NewLine);
+				}
+				message.Append(displayMessageFields[i].valuestr);
+			}
+			string msg=message.ToString();
+			if(msg.Length>0){
+				MsgBoxCopyPaste msgBox=new MsgBoxCopyPaste(msg);
+				msgBox.Text="Messages";//Same in both english and french, according to translate.google.com.
+				msgBox.ShowDialog();
+			}
 		}
 
 		///<summary>This is the function that must be called to properly print the form.</summary>
 		public void Print(){
 			//try{  The try/catch is just annoying while debugging.  We can uncomment it later.
-				//string msgText=EtransMessageTexts.GetMessageText(etrans.EtransMessageTextNum);
-				if(MessageText==null || MessageText.Length<23) {
-					throw new Exception((embedded?"Embedded":"")+"CCD message format too short: "+MessageText);
-				}
-				formData=new CCDFieldInputter(MessageText);//Input the fields of the given message.
 				formatVersionNumber=formData.GetFieldById("A03").valuestr;//Must always exist so no error checking here.
 				transactionCode=formData.GetFieldById("A04").valuestr;//Must always exist so no error checking here.
 				//Check for embedded messages.
@@ -237,7 +254,7 @@ namespace OpenDental.Eclaims {
 				while(numCopies>0){
 					if(!patientCopy){//A dentist copy is to be printed.
 						//We cannot simply print two copies of this form, because the dentist and patient forms are slightly different.
-						FormCCDPrint patientForm=new FormCCDPrint(etrans.Copy(),MessageText);//Print out a patient copy seperately.
+						FormCCDPrint patientForm=new FormCCDPrint(etrans.Copy(),false,assigned,MessageText);//Print out a patient copy seperately.
 						patientForm.Print();
 					}
 					//Always print a patient copy, but only print dentist copies for those forms to which it applies.
@@ -583,10 +600,6 @@ namespace OpenDental.Eclaims {
 			PrintDisposition(g,x,0);
 			doc.StartElement(verticalLine);
 			doc.HorizontalLine(g,breakLinePen,doc.bounds.Left,doc.bounds.Right,0);
-			doc.StartElement();
-			PrintDisplayMessages(g);
-			doc.StartElement();
-			doc.HorizontalLine(g,breakLinePen,doc.bounds.Left,doc.bounds.Right,0);
 			PrintErrorList(g);
 		}
 
@@ -852,11 +865,6 @@ namespace OpenDental.Eclaims {
 			x=doc.StartElement(verticalLine);
 			PrintClaimAckBody(g,"",true);
 			if(PrintErrorList(g)>0){
-				x=doc.StartElement(verticalLine);
-				doc.HorizontalLine(g,breakLinePen,doc.bounds.Left,doc.bounds.Right,0);
-			}
-			x=doc.StartElement();
-			if(PrintDisplayMessages(g)>0){
 				x=doc.StartElement(verticalLine);
 				doc.HorizontalLine(g,breakLinePen,doc.bounds.Left,doc.bounds.Right,0);
 			}
@@ -2426,22 +2434,6 @@ namespace OpenDental.Eclaims {
 				doc.DrawString(g,(i+1).ToString().PadLeft(2,'0'),x,0);
 				doc.DrawString(g,noteTexts[i].valuestr,x+50,0);
 			}
-		}
-
-		///<summary>Returns the number of messages printed.</summary>
-		private int PrintDisplayMessages(Graphics g){
-			CCDField[] displayMessages=formData.GetFieldsById("G32");
-			if(displayMessages==null || displayMessages.Length<1){
-				return 0;
-			}
-			doc.DrawString(g,"MESSAGES ("+displayMessages.Length+")",x,0,headingFont);
-			doc.StartElement(verticalLine);
-			for(int i=0;i<displayMessages.Length;i++){
-				doc.StartElement();
-				doc.DrawString(g,(i+1).ToString().PadLeft(3,'0'),x,0);
-				doc.DrawString(g,displayMessages[i].valuestr,x+50,0);
-			}
-			return displayMessages.Length;
 		}
 
 		///<summary>Returns the number of errors displayed.</summary>
