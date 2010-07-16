@@ -1034,7 +1034,7 @@ namespace OpenDental{
 			this.textPatNum.MaxLength = 100;
 			this.textPatNum.Name = "textPatNum";
 			this.textPatNum.ReadOnly = true;
-			this.textPatNum.Size = new System.Drawing.Size(75,20);
+			this.textPatNum.Size = new System.Drawing.Size(228,20);
 			this.textPatNum.TabIndex = 71;
 			// 
 			// label19
