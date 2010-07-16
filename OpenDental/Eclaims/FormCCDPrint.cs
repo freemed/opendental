@@ -13,8 +13,6 @@ using CodeBase;
 
 /*
  * TODOS: (not in any particular order)
- * *Fix accented characters in returned messages. Examples: Claim Transaction #6, ...
- * *Print claim display messages.
  * *Be sure all fields have been processed in each form, either directly or indirectly.
  * *Merge predetermination forms into existing forms? (see pages 48 and 122 in message formats).
  * *Add option in UI to print dentist copy.
