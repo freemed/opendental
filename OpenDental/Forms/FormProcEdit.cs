@@ -2180,10 +2180,16 @@ namespace OpenDental{
 						CodeBase.TopazWrapper.SetTopazCompressionMode(sigBoxTopaz,0);
 						CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz,0);
 						CodeBase.TopazWrapper.SetTopazKeyString(sigBoxTopaz,"0000000000000000");
-						CodeBase.TopazWrapper.SetTopazAutoKeyData(sigBoxTopaz,ProcCur.Note+ProcCur.UserNum.ToString());
 						CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz,2);//high encryption
 						CodeBase.TopazWrapper.SetTopazCompressionMode(sigBoxTopaz,2);//high compression
 						CodeBase.TopazWrapper.SetTopazSigString(sigBoxTopaz,ProcCur.Signature);
+						//older notes may have been signed with zeros due to a bug.  We still want to show the sig in that case.
+						//but if a sig is not showing, then set the key string to try to get it to show.
+						if(CodeBase.TopazWrapper.GetTopazNumberOfTabletPoints(sigBoxTopaz)==0) {
+							CodeBase.TopazWrapper.SetTopazAutoKeyData(sigBoxTopaz,ProcCur.Note+ProcCur.UserNum.ToString());
+							CodeBase.TopazWrapper.SetTopazSigString(sigBoxTopaz,ProcCur.Signature);
+						}
+						//if still not showing, then it must be invalid
 						if(CodeBase.TopazWrapper.GetTopazNumberOfTabletPoints(sigBoxTopaz)==0) {
 							labelInvalidSig.Visible=true;
 						}

@@ -28,7 +28,9 @@ namespace CodeBase {
 		}
 
 		public static void SetTopazAutoKeyData(Control topaz,string data) {
+			((Topaz.SigPlusNET)topaz).AutoKeyStart();
 			((Topaz.SigPlusNET)topaz).SetAutoKeyData(data);
+			((Topaz.SigPlusNET)topaz).AutoKeyFinish();
 		}
 
 		public static void SetTopazSigString(Control topaz,string signature) {
