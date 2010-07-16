@@ -4863,6 +4863,9 @@ namespace OpenDental{
 			
 		///<summary>No user dialog is shown.  This only works for some kinds of procedures.  Set the codeNum first.</summary>
 		private void AddQuick(Procedure ProcCur){
+			if(Plugins.Active && Plugins.HookMethod(this,"ContrChart.AddQuick",ProcCur)) {
+				return;
+			}
 			//procnum
 			ProcCur.PatNum=PatCur.PatNum;
 			//aptnum
