@@ -359,7 +359,7 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
-			double sum=0;
+			decimal sum=0;//to avoid cumulative errors.
 			for(int i=0;i<JournalList.Count;i++) {
 				row=new ODGridRow();
 				row.Cells.Add(JournalList[i].CheckNumber);
@@ -372,7 +372,7 @@ namespace OpenDental{
 				else {
 					row.Cells.Add(JournalList[i].DebitAmt.ToString("n"));
 					if(JournalList[i].ReconcileNum!=0){
-						sum+=JournalList[i].DebitAmt;
+						sum+=(decimal)JournalList[i].DebitAmt;
 					}
 				}
 				if(JournalList[i].CreditAmt==0) {
@@ -381,7 +381,7 @@ namespace OpenDental{
 				else {
 					row.Cells.Add(JournalList[i].CreditAmt.ToString("n"));
 					if(JournalList[i].ReconcileNum!=0){
-						sum-=JournalList[i].CreditAmt;
+						sum-=(decimal)JournalList[i].CreditAmt;
 					}
 				}
 				if(JournalList[i].ReconcileNum==0){
