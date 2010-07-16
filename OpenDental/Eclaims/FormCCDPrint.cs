@@ -13,6 +13,7 @@ using CodeBase;
 
 /*
  * TODOS: (not in any particular order)
+ * *Fix bullets 18 through 22 on the Dentaide form to use the secondary information under the secondary inurance plan section.
  * *Be sure all fields have been processed in each form, either directly or indirectly.
  * *Merge predetermination forms into existing forms? (see pages 48 and 122 in message formats).
  * *Add option in UI to print dentist copy.
@@ -614,7 +615,7 @@ namespace OpenDental.Eclaims {
 			PrintDentistName(g,x,0);
 			PrintUniqueIdNo(g,rightCol,0);
 			x=doc.StartElement();
-			PrintDentistAddress(g,x,0);
+			PrintDentistAddress(g,x,0,0);
 			PrintOfficeNumber(g,rightCol,0);
 			PrintDentistPhone(g,rightCol,verticalLine);			
 			x=doc.StartElement();
@@ -629,7 +630,7 @@ namespace OpenDental.Eclaims {
 			doc.DrawField(g,isFrench?"NO DE DIVISION/SECTION":"DIVISION/SECTION NO",insplan.DivisionNo,true,x,0);//Field C11
 			PrintPrimaryDependantNo(g,rightCol,0);
 			doc.StartElement();
-			PrintInsuredAddress(g,x,0,true);
+			PrintInsuredAddress(g,x,0,true,0);
 			x=doc.StartElement(verticalLine);
 			doc.HorizontalLine(g,breakLinePen,doc.bounds.Left,doc.bounds.Right,0);
 			doc.StartElement();
@@ -664,10 +665,10 @@ namespace OpenDental.Eclaims {
 			}
 			x=doc.StartElement();
 			doc.DrawString(g,isFrench?"ADRESSE DE PORTEUR:":"CARRIER ADDRESS:",x,0);
-			PrintAddress(g,leftMidCol,0,primaryCarrier.Address,primaryCarrier.Address2,primaryCarrier.City+" "+primaryCarrier.State+" "+primaryCarrier.Zip);
+			PrintAddress(g,leftMidCol,0,primaryCarrier.Address,primaryCarrier.Address2,primaryCarrier.City+" "+primaryCarrier.State+" "+primaryCarrier.Zip,150f,0);
 			if(claim!=null && claim.PlanNum2>0) {
 				PrintAddress(g,rightMidCol,0,secondaryCarrier.Address,secondaryCarrier.Address2,
-					secondaryCarrier.City+" "+secondaryCarrier.State+" "+secondaryCarrier.Zip);
+					secondaryCarrier.City+" "+secondaryCarrier.State+" "+secondaryCarrier.Zip,150f,0);
 			}
 			x=doc.StartElement();
 			text=isFrench?"NO DE POLICE:":"POLICY NO:";
@@ -707,8 +708,8 @@ namespace OpenDental.Eclaims {
 			}
 			x=doc.StartElement();
 			doc.DrawString(g,isFrench?"ADRESSE:":"ADDRESS:",x,0);
-			PrintSubscriberAddress(g,leftMidCol,0,true);
-			PrintSubscriberAddress(g,rightMidCol,0,false);
+			PrintSubscriberAddress(g,leftMidCol,0,true,0);
+			PrintSubscriberAddress(g,rightMidCol,0,false,0);
 			x=doc.StartElement();
 			doc.DrawString(g,isFrench?"PARENTÉ AVEC PATIENT:":"RELATIONSHIP TO PATIENT:",x,0);
 			text="";
@@ -880,7 +881,6 @@ namespace OpenDental.Eclaims {
 			x=doc.StartElement();
 			text=isFrench?"FORMULAIRE DENTAIDE":"DENTAIDE FORM";
 			doc.DrawString(g,text,center-g.MeasureString(text,headingFont).Width/2,0,headingFont);
-			float rightCol=x+625.0f;
 			x=doc.StartElement(verticalLine);
 			text=DateToString(etrans.DateTimeTrans);
 			SizeF size1=doc.DrawString(g,isFrench?"DATE DE TRANSMISSION: ":"DATE SUBMITTED: ",x,0);
@@ -901,7 +901,7 @@ namespace OpenDental.Eclaims {
 			PrintDentistName(g,x,0);
 			PrintOfficeNumber(g,rightMidCol,0);
 			x=doc.StartElement();
-			PrintDentistAddress(g,x,0);
+			PrintDentistAddress(g,x,0,0);
 			size1=PrintDentistPhone(g,rightMidCol,0);
 			//TODO: check that this is the correct patient number to be printing.
 			SizeF size2=PrintPrimaryDependantNo(g,rightMidCol,size1.Height,"PATIENT'S OFFICE ACCOUNT NO","NO DE DOSSIER DU PATIENT");
@@ -909,7 +909,7 @@ namespace OpenDental.Eclaims {
 			x=doc.StartElement();
 			PrintPatientName(g,x,0);
 			PrintPatientBirthday(g,rightMidCol,0);
-			PrintPatientSex(g,rightCol,0);
+			PrintPatientSex(g,x+625.0f,0);
 			x=doc.StartElement(verticalLine);
 			doc.HorizontalLine(g,breakLinePen,doc.bounds.Left,doc.bounds.Right,0);
 			x=doc.StartElement();
@@ -922,7 +922,8 @@ namespace OpenDental.Eclaims {
 			text=isFrench?"RENSEIGNEMENTS SUR L'ASSURANCE":"INSURANCE INFORMATION";
 			doc.DrawString(g,text,x,0);
 			text=isFrench?"PREMIER ASSUREUR":"PRIMARY COVERAGE";
-			float leftMidCol=center-g.MeasureString(text,doc.standardFont).Width/2;
+			float leftMidCol=325f;
+			float rightCol=leftMidCol+250f;
 			doc.DrawString(g,text,leftMidCol,0);
 			if(claim!=null && claim.PlanNum2>0) {//claim can be null for eligibility response
 				text=isFrench?"SECOND ASSUREUR":"SECONDARY COVERAGE";
@@ -966,25 +967,25 @@ namespace OpenDental.Eclaims {
 			}
 			x=doc.StartElement();
 			doc.DrawString(g,isFrench?"ADRESSE:":"ADDRESS:",x,0);
-			PrintSubscriberAddress(g,leftMidCol,0,true);
-			PrintSubscriberAddress(g,rightMidCol,0,false);
+			PrintSubscriberAddress(g,leftMidCol,0,true,rightCol-leftMidCol-10f);
+			PrintSubscriberAddress(g,rightCol,0,false,220.0f);
 			x=doc.StartElement();
 			doc.DrawString(g,isFrench?"DATE DE NAISSANCE:":"BIRTHDATE:",x,0);
 			doc.DrawString(g,DateToString(subscriber.Birthdate),leftMidCol,0);//Field D01
 			if(subscriber2!=null){
-				doc.DrawString(g,DateToString(subscriber2.Birthdate),rightMidCol,0);//Field E04
+				doc.DrawString(g,DateToString(subscriber2.Birthdate),rightCol,0);//Field E04
 			}
 			x=doc.StartElement();
 			doc.DrawString(g,isFrench?"NO DU TITULAIRE/CERTIFICAT:":"INSURANCE/CERTIFICATE NO:",x,0);
 			doc.DrawString(g,insplan.SubscriberID,leftMidCol,0);//Fields D01 and D11
 			if(insplan2!=null){
-				doc.DrawString(g,insplan2.SubscriberID,rightMidCol,0);//Fields E04 and E07
+				doc.DrawString(g,insplan2.SubscriberID,rightCol,0);//Fields E04 and E07
 			}
 			x=doc.StartElement();
 			doc.DrawString(g,isFrench?"SÉQUENCE:":"SEQUENCE:",x,0);
 			doc.DrawString(g,insplan.DentaideCardSequence.ToString().PadLeft(2,'0'),leftMidCol,0);
 			if(insplan2!=null){
-				doc.DrawString(g,insplan2.DentaideCardSequence.ToString().PadLeft(2,'0'),rightMidCol,0);
+				doc.DrawString(g,insplan2.DentaideCardSequence.ToString().PadLeft(2,'0'),rightCol,0);
 			}
 			x=doc.StartElement();
 			doc.DrawString(g,isFrench?"PARENTÉ AVEC PATIENT:":"RELATIONSHIP TO PATIENT:",x,0);
@@ -1035,7 +1036,7 @@ namespace OpenDental.Eclaims {
 					default:
 						break;
 				}
-				doc.DrawString(g,text,rightMidCol,0);
+				doc.DrawString(g,text,rightCol,0);
 			}
 			//Spaces don't show up with underline, so we will have to underline manually.
 			float underlineWidth=g.MeasureString("***",doc.standardFont).Width;
@@ -1579,7 +1580,7 @@ namespace OpenDental.Eclaims {
 			x=doc.StartElement(verticalLine);
 			PrintInsuredMember(g,x,0);
 			x=doc.StartElement();
-			PrintInsuredAddress(g,x,0,true);
+			PrintInsuredAddress(g,x,0,true,0);
 			x=doc.StartElement(verticalLine);
 			doc.HorizontalLine(g,breakLinePen,doc.bounds.Left,doc.bounds.Right,0);
 			x=doc.StartElement();
@@ -1974,10 +1975,11 @@ namespace OpenDental.Eclaims {
 			return doc.DrawField(g,isFrench?"NO DE TÉLÉPHONE":"TELEPHONE",text,false,X,Y);
 		}
 
-		private SizeF PrintDentistAddress(Graphics g,float X,float Y){
+		///<summary>The output will be no wider than maxWidthInPixels, unless maxWidthInPixels<=0, in which case there is no maximum width.</summary>
+		private SizeF PrintDentistAddress(Graphics g,float X,float Y,float maxWidthInPixels){
 			SizeF size1=doc.DrawString(g,isFrench?"ADRESSE: ":"ADDRESS: ",X,Y);
 			SizeF size2=PrintAddress(g,X+size1.Width,Y,PrefC.GetString(PrefName.PracticeAddress),PrefC.GetString(PrefName.PracticeAddress2),
-				PrefC.GetString(PrefName.PracticeCity)+", "+PrefC.GetString(PrefName.PracticeST)+" "+PrefC.GetString(PrefName.PracticeZip));
+				PrefC.GetString(PrefName.PracticeCity)+", "+PrefC.GetString(PrefName.PracticeST)+" "+PrefC.GetString(PrefName.PracticeZip),150f,maxWidthInPixels);
 			return new SizeF(size1.Width+size2.Width,Math.Max(size1.Height,size2.Height));
 		}
 
@@ -2088,7 +2090,8 @@ namespace OpenDental.Eclaims {
 			return doc.DrawField(g,isFrench?"TITULAIRE":"INSURED/MEMBER",text,true,X,Y);//Fields D02,D03,D04
 		}
 
-		private SizeF PrintSubscriberAddress(Graphics g,float X,float Y,bool primary) {
+		///<summary>The output will be no wider than maxWidthInPixels, unless maxWidthInPixels<=0, in which case there is no maximum width.</summary>
+		private SizeF PrintSubscriberAddress(Graphics g,float X,float Y,bool primary,float maxWidthInPixels) {
 			string line1="";
 			string line2="";
 			string line3="";
@@ -2100,12 +2103,13 @@ namespace OpenDental.Eclaims {
 				line2=sub.Address2;
 				line3=sub.City+", "+sub.State+" "+sub.Zip;
 			}
-			return PrintAddress(g,X,Y,line1,line2,line3);
+			return PrintAddress(g,X,Y,line1,line2,line3,150f,maxWidthInPixels);
 		}
 
-		private SizeF PrintInsuredAddress(Graphics g,float X,float Y,bool primary) {
+		///<summary>If maxCharsPerLine>0, then the lines which are excess in length are truncated to the value specified.</summary>
+		private SizeF PrintInsuredAddress(Graphics g,float X,float Y,bool primary,int maxCharsPerLine) {
 			SizeF size1=doc.DrawString(g,isFrench?"ADRESSE: ":"ADDRESS: ",X,Y);
-			SizeF size2=PrintSubscriberAddress(g,X+size1.Width,Y,primary);
+			SizeF size2=PrintSubscriberAddress(g,X+size1.Width,Y,primary,maxCharsPerLine);
 			return new SizeF(size1.Width+size2.Width,Math.Max(size1.Height,size2.Height));
 		}
 
@@ -2125,10 +2129,14 @@ namespace OpenDental.Eclaims {
 			return doc.DrawField(g,useCaps?label.ToUpper():label,text,true,X,Y);
 		}
 
-		///<summary>Prints a three-line address. Each line is underlined and the address is printed without a label.</summary>
-		private SizeF PrintAddress(Graphics g,float X,float Y,string line1,string line2,string line3) {
+		///<summary>Prints a three-line address. Each line is underlined and the address is printed without a label. 
+		///The output will be no wider than maxWidthInPixels, unless maxWidthInPixels<=0, in which case there is no maximum width.</summary>
+		private SizeF PrintAddress(Graphics g,float X,float Y,string line1,string line2,string line3,float minWidthInPixels,float maxWidthInPixels) {
+			line1=GetTruncatedString(g,doc.standardFont,line1,maxWidthInPixels);
+			line2=GetTruncatedString(g,doc.standardFont,line2,maxWidthInPixels);
+			line3=GetTruncatedString(g,doc.standardFont,line3,maxWidthInPixels);
 			string address=line1+"\n"+line2+"\n"+line3;
-			float lineWidth=Math.Max(150.0f,g.MeasureString(address,doc.standardFont).Width);
+			float lineWidth=Math.Max(minWidthInPixels,g.MeasureString(address,doc.standardFont).Width);
 			float yoff=0;
 			doc.DrawString(g,line1,X,Y+yoff,doc.standardFont);
 			yoff+=verticalLine;
@@ -2140,6 +2148,29 @@ namespace OpenDental.Eclaims {
 			yoff+=verticalLine;
 			yoff+=doc.HorizontalLine(g,Pens.Black,X,X+lineWidth,yoff).Height;
 			return new SizeF(lineWidth,yoff);
+		}
+
+		///<summary>If the specified string is wider than maxWidthInPixels on graphics object g in the specified font, 
+		///then the longest substring of str is returned which is less than or equal to maxWidthInPixels in width, 
+		///starting from the first character in str. If maxWidthInPixels<=0 then str is returned without modification.
+		///In all other cases, str is returned without modification.</summary>
+		private string GetTruncatedString(Graphics g,Font font,string str,float maxWidthInPixels){
+			if(maxWidthInPixels<=0){
+				return str;
+			}
+			string result=str;
+			SizeF strSize=g.MeasureString(result,font);
+			//Reduce the size of the string until it fits within maxWidthInPixels.
+			while(result.Length>0 && strSize.Width>maxWidthInPixels){
+				//Remove the last character from the string.
+				result=result.Substring(0,result.Length-1);
+				//Set the last 3 characters in the string to '.' if possible.
+				int chrsToReplace=Math.Min(3,result.Length);
+				result=result.Substring(0,result.Length-chrsToReplace)+("".PadRight(chrsToReplace,'.'));
+				//Remeasure the new result and check again.
+				strSize=g.MeasureString(result,font);
+			}
+			return result;
 		}
 
 		private bool PrintDependencies(Graphics g,bool fillOut){
