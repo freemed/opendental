@@ -89,7 +89,7 @@ namespace OpenDental{
 			this.textPassword.Name = "textPassword";
 			this.textPassword.PasswordChar = '*';
 			this.textPassword.Size = new System.Drawing.Size(203,20);
-			this.textPassword.TabIndex = 0;
+			this.textPassword.TabIndex = 1;
 			// 
 			// textUserName
 			// 
@@ -114,7 +114,7 @@ namespace OpenDental{
 			this.textCurrent.Name = "textCurrent";
 			this.textCurrent.PasswordChar = '*';
 			this.textCurrent.Size = new System.Drawing.Size(203,20);
-			this.textCurrent.TabIndex = 7;
+			this.textCurrent.TabIndex = 0;
 			// 
 			// labelCurrent
 			// 
