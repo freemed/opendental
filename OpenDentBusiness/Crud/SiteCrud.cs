@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one Site object from the database using the primary key.  Returns null if not found.</summary>
 		internal static Site SelectOne(long siteNum){
 			string command="SELECT * FROM site "
-				+"WHERE SiteNum = "+POut.Long(siteNum);
+				+"WHERE SiteNum = "+POut.Long(siteNum)+" LIMIT 1";
 			List<Site> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
@@ -89,7 +89,7 @@ namespace OpenDentBusiness.Crud{
 			string command="UPDATE site SET "
 				+"Description= '"+POut.String(site.Description)+"', "
 				+"Note       = '"+POut.String(site.Note)+"' "
-				+"WHERE SiteNum = "+POut.Long(site.SiteNum);
+				+"WHERE SiteNum = "+POut.Long(site.SiteNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
@@ -108,14 +108,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE site SET "+command
-				+" WHERE SiteNum = "+POut.Long(site.SiteNum);
+				+" WHERE SiteNum = "+POut.Long(site.SiteNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Site from the database.</summary>
 		internal static void Delete(long siteNum){
 			string command="DELETE FROM site "
-				+"WHERE SiteNum = "+POut.Long(siteNum);
+				+"WHERE SiteNum = "+POut.Long(siteNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 

@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one ApptViewItem object from the database using the primary key.  Returns null if not found.</summary>
 		internal static ApptViewItem SelectOne(long apptViewItemNum){
 			string command="SELECT * FROM apptviewitem "
-				+"WHERE ApptViewItemNum = "+POut.Long(apptViewItemNum);
+				+"WHERE ApptViewItemNum = "+POut.Long(apptViewItemNum)+" LIMIT 1";
 			List<ApptViewItem> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
@@ -104,7 +104,7 @@ namespace OpenDentBusiness.Crud{
 				+"ElementOrder    =  "+POut.Byte  (apptViewItem.ElementOrder)+", "
 				+"ElementColor    =  "+POut.Int   (apptViewItem.ElementColor.ToArgb())+", "
 				+"ElementAlignment=  "+POut.Int   ((int)apptViewItem.ElementAlignment)+" "
-				+"WHERE ApptViewItemNum = "+POut.Long(apptViewItem.ApptViewItemNum);
+				+"WHERE ApptViewItemNum = "+POut.Long(apptViewItem.ApptViewItemNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
@@ -143,14 +143,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE apptviewitem SET "+command
-				+" WHERE ApptViewItemNum = "+POut.Long(apptViewItem.ApptViewItemNum);
+				+" WHERE ApptViewItemNum = "+POut.Long(apptViewItem.ApptViewItemNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one ApptViewItem from the database.</summary>
 		internal static void Delete(long apptViewItemNum){
 			string command="DELETE FROM apptviewitem "
-				+"WHERE ApptViewItemNum = "+POut.Long(apptViewItemNum);
+				+"WHERE ApptViewItemNum = "+POut.Long(apptViewItemNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 

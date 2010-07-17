@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one MountDef object from the database using the primary key.  Returns null if not found.</summary>
 		internal static MountDef SelectOne(long mountDefNum){
 			string command="SELECT * FROM mountdef "
-				+"WHERE MountDefNum = "+POut.Long(mountDefNum);
+				+"WHERE MountDefNum = "+POut.Long(mountDefNum)+" LIMIT 1";
 			List<MountDef> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
@@ -98,7 +98,7 @@ namespace OpenDentBusiness.Crud{
 				+"IsRadiograph=  "+POut.Bool  (mountDef.IsRadiograph)+", "
 				+"Width       =  "+POut.Int   (mountDef.Width)+", "
 				+"Height      =  "+POut.Int   (mountDef.Height)+" "
-				+"WHERE MountDefNum = "+POut.Long(mountDef.MountDefNum);
+				+"WHERE MountDefNum = "+POut.Long(mountDef.MountDefNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
@@ -129,14 +129,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE mountdef SET "+command
-				+" WHERE MountDefNum = "+POut.Long(mountDef.MountDefNum);
+				+" WHERE MountDefNum = "+POut.Long(mountDef.MountDefNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one MountDef from the database.</summary>
 		internal static void Delete(long mountDefNum){
 			string command="DELETE FROM mountdef "
-				+"WHERE MountDefNum = "+POut.Long(mountDefNum);
+				+"WHERE MountDefNum = "+POut.Long(mountDefNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 

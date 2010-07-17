@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one Automation object from the database using the primary key.  Returns null if not found.</summary>
 		internal static Automation SelectOne(long automationNum){
 			string command="SELECT * FROM automation "
-				+"WHERE AutomationNum = "+POut.Long(automationNum);
+				+"WHERE AutomationNum = "+POut.Long(automationNum)+" LIMIT 1";
 			List<Automation> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
@@ -104,7 +104,7 @@ namespace OpenDentBusiness.Crud{
 				+"SheetDefNum   =  "+POut.Long  (automation.SheetDefNum)+", "
 				+"CommType      =  "+POut.Long  (automation.CommType)+", "
 				+"MessageContent= '"+POut.String(automation.MessageContent)+"' "
-				+"WHERE AutomationNum = "+POut.Long(automation.AutomationNum);
+				+"WHERE AutomationNum = "+POut.Long(automation.AutomationNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
@@ -143,14 +143,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE automation SET "+command
-				+" WHERE AutomationNum = "+POut.Long(automation.AutomationNum);
+				+" WHERE AutomationNum = "+POut.Long(automation.AutomationNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Automation from the database.</summary>
 		internal static void Delete(long automationNum){
 			string command="DELETE FROM automation "
-				+"WHERE AutomationNum = "+POut.Long(automationNum);
+				+"WHERE AutomationNum = "+POut.Long(automationNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 

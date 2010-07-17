@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one AutoCode object from the database using the primary key.  Returns null if not found.</summary>
 		internal static AutoCode SelectOne(long autoCodeNum){
 			string command="SELECT * FROM autocode "
-				+"WHERE AutoCodeNum = "+POut.Long(autoCodeNum);
+				+"WHERE AutoCodeNum = "+POut.Long(autoCodeNum)+" LIMIT 1";
 			List<AutoCode> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
@@ -92,7 +92,7 @@ namespace OpenDentBusiness.Crud{
 				+"Description  = '"+POut.String(autoCode.Description)+"', "
 				+"IsHidden     =  "+POut.Bool  (autoCode.IsHidden)+", "
 				+"LessIntrusive=  "+POut.Bool  (autoCode.LessIntrusive)+" "
-				+"WHERE AutoCodeNum = "+POut.Long(autoCode.AutoCodeNum);
+				+"WHERE AutoCodeNum = "+POut.Long(autoCode.AutoCodeNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
@@ -115,14 +115,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE autocode SET "+command
-				+" WHERE AutoCodeNum = "+POut.Long(autoCode.AutoCodeNum);
+				+" WHERE AutoCodeNum = "+POut.Long(autoCode.AutoCodeNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one AutoCode from the database.</summary>
 		internal static void Delete(long autoCodeNum){
 			string command="DELETE FROM autocode "
-				+"WHERE AutoCodeNum = "+POut.Long(autoCodeNum);
+				+"WHERE AutoCodeNum = "+POut.Long(autoCodeNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 

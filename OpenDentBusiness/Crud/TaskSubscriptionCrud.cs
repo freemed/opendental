@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one TaskSubscription object from the database using the primary key.  Returns null if not found.</summary>
 		internal static TaskSubscription SelectOne(long taskSubscriptionNum){
 			string command="SELECT * FROM tasksubscription "
-				+"WHERE TaskSubscriptionNum = "+POut.Long(taskSubscriptionNum);
+				+"WHERE TaskSubscriptionNum = "+POut.Long(taskSubscriptionNum)+" LIMIT 1";
 			List<TaskSubscription> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
@@ -89,7 +89,7 @@ namespace OpenDentBusiness.Crud{
 			string command="UPDATE tasksubscription SET "
 				+"UserNum            =  "+POut.Long  (taskSubscription.UserNum)+", "
 				+"TaskListNum        =  "+POut.Long  (taskSubscription.TaskListNum)+" "
-				+"WHERE TaskSubscriptionNum = "+POut.Long(taskSubscription.TaskSubscriptionNum);
+				+"WHERE TaskSubscriptionNum = "+POut.Long(taskSubscription.TaskSubscriptionNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
@@ -108,14 +108,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE tasksubscription SET "+command
-				+" WHERE TaskSubscriptionNum = "+POut.Long(taskSubscription.TaskSubscriptionNum);
+				+" WHERE TaskSubscriptionNum = "+POut.Long(taskSubscription.TaskSubscriptionNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one TaskSubscription from the database.</summary>
 		internal static void Delete(long taskSubscriptionNum){
 			string command="DELETE FROM tasksubscription "
-				+"WHERE TaskSubscriptionNum = "+POut.Long(taskSubscriptionNum);
+				+"WHERE TaskSubscriptionNum = "+POut.Long(taskSubscriptionNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 

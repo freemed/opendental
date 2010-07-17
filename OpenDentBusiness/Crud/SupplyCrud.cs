@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one Supply object from the database using the primary key.  Returns null if not found.</summary>
 		internal static Supply SelectOne(long supplyNum){
 			string command="SELECT * FROM supply "
-				+"WHERE SupplyNum = "+POut.Long(supplyNum);
+				+"WHERE SupplyNum = "+POut.Long(supplyNum)+" LIMIT 1";
 			List<Supply> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
@@ -107,7 +107,7 @@ namespace OpenDentBusiness.Crud{
 				+"LevelDesired =  "+POut.Float (supply.LevelDesired)+", "
 				+"IsHidden     =  "+POut.Bool  (supply.IsHidden)+", "
 				+"Price        = '"+POut.Double(supply.Price)+"' "
-				+"WHERE SupplyNum = "+POut.Long(supply.SupplyNum);
+				+"WHERE SupplyNum = "+POut.Long(supply.SupplyNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
@@ -150,14 +150,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE supply SET "+command
-				+" WHERE SupplyNum = "+POut.Long(supply.SupplyNum);
+				+" WHERE SupplyNum = "+POut.Long(supply.SupplyNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Supply from the database.</summary>
 		internal static void Delete(long supplyNum){
 			string command="DELETE FROM supply "
-				+"WHERE SupplyNum = "+POut.Long(supplyNum);
+				+"WHERE SupplyNum = "+POut.Long(supplyNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 

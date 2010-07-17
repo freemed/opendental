@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one Sheet object from the database using the primary key.  Returns null if not found.</summary>
 		internal static Sheet SelectOne(long sheetNum){
 			string command="SELECT * FROM sheet "
-				+"WHERE SheetNum = "+POut.Long(sheetNum);
+				+"WHERE SheetNum = "+POut.Long(sheetNum)+" LIMIT 1";
 			List<Sheet> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
@@ -116,7 +116,7 @@ namespace OpenDentBusiness.Crud{
 				+"InternalNote  = '"+POut.String(sheet.InternalNote)+"', "
 				+"Description   = '"+POut.String(sheet.Description)+"', "
 				+"ShowInTerminal=  "+POut.Byte  (sheet.ShowInTerminal)+" "
-				+"WHERE SheetNum = "+POut.Long(sheet.SheetNum);
+				+"WHERE SheetNum = "+POut.Long(sheet.SheetNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
@@ -171,14 +171,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE sheet SET "+command
-				+" WHERE SheetNum = "+POut.Long(sheet.SheetNum);
+				+" WHERE SheetNum = "+POut.Long(sheet.SheetNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Sheet from the database.</summary>
 		internal static void Delete(long sheetNum){
 			string command="DELETE FROM sheet "
-				+"WHERE SheetNum = "+POut.Long(sheetNum);
+				+"WHERE SheetNum = "+POut.Long(sheetNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 

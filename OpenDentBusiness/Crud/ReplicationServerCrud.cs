@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one ReplicationServer object from the database using the primary key.  Returns null if not found.</summary>
 		internal static ReplicationServer SelectOne(long replicationServerNum){
 			string command="SELECT * FROM replicationserver "
-				+"WHERE ReplicationServerNum = "+POut.Long(replicationServerNum);
+				+"WHERE ReplicationServerNum = "+POut.Long(replicationServerNum)+" LIMIT 1";
 			List<ReplicationServer> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
@@ -101,7 +101,7 @@ namespace OpenDentBusiness.Crud{
 				+"RangeEnd            =  "+POut.Long  (replicationServer.RangeEnd)+", "
 				+"AtoZpath            = '"+POut.String(replicationServer.AtoZpath)+"', "
 				+"UpdateBlocked       =  "+POut.Bool  (replicationServer.UpdateBlocked)+" "
-				+"WHERE ReplicationServerNum = "+POut.Long(replicationServer.ReplicationServerNum);
+				+"WHERE ReplicationServerNum = "+POut.Long(replicationServer.ReplicationServerNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
@@ -136,14 +136,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE replicationserver SET "+command
-				+" WHERE ReplicationServerNum = "+POut.Long(replicationServer.ReplicationServerNum);
+				+" WHERE ReplicationServerNum = "+POut.Long(replicationServer.ReplicationServerNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one ReplicationServer from the database.</summary>
 		internal static void Delete(long replicationServerNum){
 			string command="DELETE FROM replicationserver "
-				+"WHERE ReplicationServerNum = "+POut.Long(replicationServerNum);
+				+"WHERE ReplicationServerNum = "+POut.Long(replicationServerNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 

@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one Guardian object from the database using the primary key.  Returns null if not found.</summary>
 		internal static Guardian SelectOne(long guardianNum){
 			string command="SELECT * FROM guardian "
-				+"WHERE GuardianNum = "+POut.Long(guardianNum);
+				+"WHERE GuardianNum = "+POut.Long(guardianNum)+" LIMIT 1";
 			List<Guardian> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
@@ -46,10 +46,10 @@ namespace OpenDentBusiness.Crud{
 			Guardian guardian;
 			for(int i=0;i<table.Rows.Count;i++) {
 				guardian=new Guardian();
-				guardian.GuardianNum= PIn.Long  (table.Rows[i]["GuardianNum"].ToString());
-				guardian.PatNumChild      = PIn.Long  (table.Rows[i]["PatNumChild"].ToString());
-				guardian.PatNumGuardian    = PIn.Long  (table.Rows[i]["PatNumGuardian"].ToString());
-				guardian.Relationship     = (GuardianRelationship)PIn.Int(table.Rows[i]["Relationship"].ToString());
+				guardian.GuardianNum   = PIn.Long  (table.Rows[i]["GuardianNum"].ToString());
+				guardian.PatNumChild   = PIn.Long  (table.Rows[i]["PatNumChild"].ToString());
+				guardian.PatNumGuardian= PIn.Long  (table.Rows[i]["PatNumGuardian"].ToString());
+				guardian.Relationship  = (GuardianRelationship)PIn.Int(table.Rows[i]["Relationship"].ToString());
 				retVal.Add(guardian);
 			}
 			return retVal;
@@ -89,9 +89,9 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one Guardian in the database.</summary>
 		internal static void Update(Guardian guardian){
 			string command="UPDATE guardian SET "
-				+"PatNumChild      =  "+POut.Long  (guardian.PatNumChild)+", "
-				+"PatNumGuardian    =  "+POut.Long  (guardian.PatNumGuardian)+", "
-				+"Relationship     =  "+POut.Int   ((int)guardian.Relationship)+" "
+				+"PatNumChild   =  "+POut.Long  (guardian.PatNumChild)+", "
+				+"PatNumGuardian=  "+POut.Long  (guardian.PatNumGuardian)+", "
+				+"Relationship  =  "+POut.Int   ((int)guardian.Relationship)+" "
 				+"WHERE GuardianNum = "+POut.Long(guardian.GuardianNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
@@ -122,7 +122,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Deletes one Guardian from the database.</summary>
 		internal static void Delete(long guardianNum){
 			string command="DELETE FROM guardian "
-				+"WHERE GuardianNum = "+POut.Long(guardianNum);
+				+"WHERE GuardianNum = "+POut.Long(guardianNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 

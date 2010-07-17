@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one InsFilingCode object from the database using the primary key.  Returns null if not found.</summary>
 		internal static InsFilingCode SelectOne(long insFilingCodeNum){
 			string command="SELECT * FROM insfilingcode "
-				+"WHERE InsFilingCodeNum = "+POut.Long(insFilingCodeNum);
+				+"WHERE InsFilingCodeNum = "+POut.Long(insFilingCodeNum)+" LIMIT 1";
 			List<InsFilingCode> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
@@ -92,7 +92,7 @@ namespace OpenDentBusiness.Crud{
 				+"Descript        = '"+POut.String(insFilingCode.Descript)+"', "
 				+"EclaimCode      = '"+POut.String(insFilingCode.EclaimCode)+"', "
 				+"ItemOrder       =  "+POut.Int   (insFilingCode.ItemOrder)+" "
-				+"WHERE InsFilingCodeNum = "+POut.Long(insFilingCode.InsFilingCodeNum);
+				+"WHERE InsFilingCodeNum = "+POut.Long(insFilingCode.InsFilingCodeNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
@@ -115,14 +115,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE insfilingcode SET "+command
-				+" WHERE InsFilingCodeNum = "+POut.Long(insFilingCode.InsFilingCodeNum);
+				+" WHERE InsFilingCodeNum = "+POut.Long(insFilingCode.InsFilingCodeNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one InsFilingCode from the database.</summary>
 		internal static void Delete(long insFilingCodeNum){
 			string command="DELETE FROM insfilingcode "
-				+"WHERE InsFilingCodeNum = "+POut.Long(insFilingCodeNum);
+				+"WHERE InsFilingCodeNum = "+POut.Long(insFilingCodeNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 

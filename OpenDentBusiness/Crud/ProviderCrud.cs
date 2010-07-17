@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one Provider object from the database using the primary key.  Returns null if not found.</summary>
 		internal static Provider SelectOne(long provNum){
 			string command="SELECT * FROM provider "
-				+"WHERE ProvNum = "+POut.Long(provNum);
+				+"WHERE ProvNum = "+POut.Long(provNum)+" LIMIT 1";
 			List<Provider> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
@@ -158,7 +158,7 @@ namespace OpenDentBusiness.Crud{
 				//DateTStamp can only be set by MySQL
 				+"AnesthProvType      =  "+POut.Long  (provider.AnesthProvType)+", "
 				+"TaxonomyCodeOverride= '"+POut.String(provider.TaxonomyCodeOverride)+"' "
-				+"WHERE ProvNum = "+POut.Long(provider.ProvNum);
+				+"WHERE ProvNum = "+POut.Long(provider.ProvNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
@@ -266,14 +266,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE provider SET "+command
-				+" WHERE ProvNum = "+POut.Long(provider.ProvNum);
+				+" WHERE ProvNum = "+POut.Long(provider.ProvNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Provider from the database.</summary>
 		internal static void Delete(long provNum){
 			string command="DELETE FROM provider "
-				+"WHERE ProvNum = "+POut.Long(provNum);
+				+"WHERE ProvNum = "+POut.Long(provNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 

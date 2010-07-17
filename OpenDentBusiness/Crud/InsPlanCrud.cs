@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one InsPlan object from the database using the primary key.  Returns null if not found.</summary>
 		internal static InsPlan SelectOne(long planNum){
 			string command="SELECT * FROM insplan "
-				+"WHERE PlanNum = "+POut.Long(planNum);
+				+"WHERE PlanNum = "+POut.Long(planNum)+" LIMIT 1";
 			List<InsPlan> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
@@ -176,7 +176,7 @@ namespace OpenDentBusiness.Crud{
 				+"MonthRenew          =  "+POut.Byte  (insPlan.MonthRenew)+", "
 				+"FilingCodeSubtype   =  "+POut.Long  (insPlan.FilingCodeSubtype)+", "
 				+"CanadianPlanFlag    = '"+POut.String(insPlan.CanadianPlanFlag)+"' "
-				+"WHERE PlanNum = "+POut.Long(insPlan.PlanNum);
+				+"WHERE PlanNum = "+POut.Long(insPlan.PlanNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
@@ -311,14 +311,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE insplan SET "+command
-				+" WHERE PlanNum = "+POut.Long(insPlan.PlanNum);
+				+" WHERE PlanNum = "+POut.Long(insPlan.PlanNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one InsPlan from the database.</summary>
 		internal static void Delete(long planNum){
 			string command="DELETE FROM insplan "
-				+"WHERE PlanNum = "+POut.Long(planNum);
+				+"WHERE PlanNum = "+POut.Long(planNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 

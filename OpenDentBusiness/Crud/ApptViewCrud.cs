@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one ApptView object from the database using the primary key.  Returns null if not found.</summary>
 		internal static ApptView SelectOne(long apptViewNum){
 			string command="SELECT * FROM apptview "
-				+"WHERE ApptViewNum = "+POut.Long(apptViewNum);
+				+"WHERE ApptViewNum = "+POut.Long(apptViewNum)+" LIMIT 1";
 			List<ApptView> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
@@ -53,6 +53,8 @@ namespace OpenDentBusiness.Crud{
 				apptView.OnlyScheduledProvs = PIn.Bool  (table.Rows[i]["OnlyScheduledProvs"].ToString());
 				apptView.OnlySchedBeforeTime= PIn.TimeSpan(table.Rows[i]["OnlySchedBeforeTime"].ToString());
 				apptView.OnlySchedAfterTime = PIn.TimeSpan(table.Rows[i]["OnlySchedAfterTime"].ToString());
+				apptView.StackBehavUR       = (ApptViewStackBehavior)PIn.Int(table.Rows[i]["StackBehavUR"].ToString());
+				apptView.StackBehavLR       = (ApptViewStackBehavior)PIn.Int(table.Rows[i]["StackBehavLR"].ToString());
 				retVal.Add(apptView);
 			}
 			return retVal;
@@ -72,7 +74,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="ApptViewNum,";
 			}
-			command+="Description,ItemOrder,RowsPerIncr,OnlyScheduledProvs,OnlySchedBeforeTime,OnlySchedAfterTime) VALUES(";
+			command+="Description,ItemOrder,RowsPerIncr,OnlyScheduledProvs,OnlySchedBeforeTime,OnlySchedAfterTime,StackBehavUR,StackBehavLR) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(apptView.ApptViewNum)+",";
 			}
@@ -82,7 +84,9 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Byte  (apptView.RowsPerIncr)+","
 				+    POut.Bool  (apptView.OnlyScheduledProvs)+","
 				+    POut.TimeSpan(apptView.OnlySchedBeforeTime)+","
-				+    POut.TimeSpan(apptView.OnlySchedAfterTime)+")";
+				+    POut.TimeSpan(apptView.OnlySchedAfterTime)+","
+				+    POut.Int   ((int)apptView.StackBehavUR)+","
+				+    POut.Int   ((int)apptView.StackBehavLR)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -100,8 +104,10 @@ namespace OpenDentBusiness.Crud{
 				+"RowsPerIncr        =  "+POut.Byte  (apptView.RowsPerIncr)+", "
 				+"OnlyScheduledProvs =  "+POut.Bool  (apptView.OnlyScheduledProvs)+", "
 				+"OnlySchedBeforeTime=  "+POut.TimeSpan(apptView.OnlySchedBeforeTime)+", "
-				+"OnlySchedAfterTime =  "+POut.TimeSpan(apptView.OnlySchedAfterTime)+" "
-				+"WHERE ApptViewNum = "+POut.Long(apptView.ApptViewNum);
+				+"OnlySchedAfterTime =  "+POut.TimeSpan(apptView.OnlySchedAfterTime)+", "
+				+"StackBehavUR       =  "+POut.Int   ((int)apptView.StackBehavUR)+", "
+				+"StackBehavLR       =  "+POut.Int   ((int)apptView.StackBehavLR)+" "
+				+"WHERE ApptViewNum = "+POut.Long(apptView.ApptViewNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
@@ -132,18 +138,26 @@ namespace OpenDentBusiness.Crud{
 				if(command!=""){ command+=",";}
 				command+="OnlySchedAfterTime = "+POut.TimeSpan(apptView.OnlySchedAfterTime)+"";
 			}
+			if(apptView.StackBehavUR != oldApptView.StackBehavUR) {
+				if(command!=""){ command+=",";}
+				command+="StackBehavUR = "+POut.Int   ((int)apptView.StackBehavUR)+"";
+			}
+			if(apptView.StackBehavLR != oldApptView.StackBehavLR) {
+				if(command!=""){ command+=",";}
+				command+="StackBehavLR = "+POut.Int   ((int)apptView.StackBehavLR)+"";
+			}
 			if(command==""){
 				return;
 			}
 			command="UPDATE apptview SET "+command
-				+" WHERE ApptViewNum = "+POut.Long(apptView.ApptViewNum);
+				+" WHERE ApptViewNum = "+POut.Long(apptView.ApptViewNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one ApptView from the database.</summary>
 		internal static void Delete(long apptViewNum){
 			string command="DELETE FROM apptview "
-				+"WHERE ApptViewNum = "+POut.Long(apptViewNum);
+				+"WHERE ApptViewNum = "+POut.Long(apptViewNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 

@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one AutoNote object from the database using the primary key.  Returns null if not found.</summary>
 		internal static AutoNote SelectOne(long autoNoteNum){
 			string command="SELECT * FROM autonote "
-				+"WHERE AutoNoteNum = "+POut.Long(autoNoteNum);
+				+"WHERE AutoNoteNum = "+POut.Long(autoNoteNum)+" LIMIT 1";
 			List<AutoNote> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
@@ -89,7 +89,7 @@ namespace OpenDentBusiness.Crud{
 			string command="UPDATE autonote SET "
 				+"AutoNoteName= '"+POut.String(autoNote.AutoNoteName)+"', "
 				+"MainText    = '"+POut.String(autoNote.MainText)+"' "
-				+"WHERE AutoNoteNum = "+POut.Long(autoNote.AutoNoteNum);
+				+"WHERE AutoNoteNum = "+POut.Long(autoNote.AutoNoteNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
@@ -108,14 +108,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE autonote SET "+command
-				+" WHERE AutoNoteNum = "+POut.Long(autoNote.AutoNoteNum);
+				+" WHERE AutoNoteNum = "+POut.Long(autoNote.AutoNoteNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one AutoNote from the database.</summary>
 		internal static void Delete(long autoNoteNum){
 			string command="DELETE FROM autonote "
-				+"WHERE AutoNoteNum = "+POut.Long(autoNoteNum);
+				+"WHERE AutoNoteNum = "+POut.Long(autoNoteNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 

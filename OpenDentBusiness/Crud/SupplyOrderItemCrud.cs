@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one SupplyOrderItem object from the database using the primary key.  Returns null if not found.</summary>
 		internal static SupplyOrderItem SelectOne(long supplyOrderItemNum){
 			string command="SELECT * FROM supplyorderitem "
-				+"WHERE SupplyOrderItemNum = "+POut.Long(supplyOrderItemNum);
+				+"WHERE SupplyOrderItemNum = "+POut.Long(supplyOrderItemNum)+" LIMIT 1";
 			List<SupplyOrderItem> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
@@ -95,7 +95,7 @@ namespace OpenDentBusiness.Crud{
 				+"SupplyNum         =  "+POut.Long  (supplyOrderItem.SupplyNum)+", "
 				+"Qty               =  "+POut.Int   (supplyOrderItem.Qty)+", "
 				+"Price             = '"+POut.Double(supplyOrderItem.Price)+"' "
-				+"WHERE SupplyOrderItemNum = "+POut.Long(supplyOrderItem.SupplyOrderItemNum);
+				+"WHERE SupplyOrderItemNum = "+POut.Long(supplyOrderItem.SupplyOrderItemNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
@@ -122,14 +122,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE supplyorderitem SET "+command
-				+" WHERE SupplyOrderItemNum = "+POut.Long(supplyOrderItem.SupplyOrderItemNum);
+				+" WHERE SupplyOrderItemNum = "+POut.Long(supplyOrderItem.SupplyOrderItemNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one SupplyOrderItem from the database.</summary>
 		internal static void Delete(long supplyOrderItemNum){
 			string command="DELETE FROM supplyorderitem "
-				+"WHERE SupplyOrderItemNum = "+POut.Long(supplyOrderItemNum);
+				+"WHERE SupplyOrderItemNum = "+POut.Long(supplyOrderItemNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 

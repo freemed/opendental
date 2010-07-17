@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one Procedure object from the database using the primary key.  Returns null if not found.</summary>
 		internal static Procedure SelectOne(long procNum){
 			string command="SELECT * FROM procedurelog "
-				+"WHERE ProcNum = "+POut.Long(procNum);
+				+"WHERE ProcNum = "+POut.Long(procNum)+" LIMIT 1";
 			List<Procedure> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
@@ -203,7 +203,7 @@ namespace OpenDentBusiness.Crud{
 				+"SiteNum           =  "+POut.Long  (procedure.SiteNum)+", "
 				+"HideGraphics      =  "+POut.Bool  (procedure.HideGraphics)+", "
 				+"CanadianTypeCodes = '"+POut.String(procedure.CanadianTypeCodes)+"' "
-				+"WHERE ProcNum = "+POut.Long(procedure.ProcNum);
+				+"WHERE ProcNum = "+POut.Long(procedure.ProcNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
@@ -374,7 +374,7 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE procedurelog SET "+command
-				+" WHERE ProcNum = "+POut.Long(procedure.ProcNum);
+				+" WHERE ProcNum = "+POut.Long(procedure.ProcNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 

@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one Document object from the database using the primary key.  Returns null if not found.</summary>
 		internal static Document SelectOne(long docNum){
 			string command="SELECT * FROM document "
-				+"WHERE DocNum = "+POut.Long(docNum);
+				+"WHERE DocNum = "+POut.Long(docNum)+" LIMIT 1";
 			List<Document> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
@@ -143,7 +143,7 @@ namespace OpenDentBusiness.Crud{
 				+"WindowingMax  =  "+POut.Int   (document.WindowingMax)+", "
 				+"MountItemNum  =  "+POut.Long  (document.MountItemNum)+" "
 				//DateTStamp can only be set by MySQL
-				+"WHERE DocNum = "+POut.Long(document.DocNum);
+				+"WHERE DocNum = "+POut.Long(document.DocNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
@@ -231,14 +231,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE document SET "+command
-				+" WHERE DocNum = "+POut.Long(document.DocNum);
+				+" WHERE DocNum = "+POut.Long(document.DocNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Document from the database.</summary>
 		internal static void Delete(long docNum){
 			string command="DELETE FROM document "
-				+"WHERE DocNum = "+POut.Long(docNum);
+				+"WHERE DocNum = "+POut.Long(docNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 

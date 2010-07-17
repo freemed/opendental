@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one InsFilingCodeSubtype object from the database using the primary key.  Returns null if not found.</summary>
 		internal static InsFilingCodeSubtype SelectOne(long insFilingCodeSubtypeNum){
 			string command="SELECT * FROM insfilingcodesubtype "
-				+"WHERE InsFilingCodeSubtypeNum = "+POut.Long(insFilingCodeSubtypeNum);
+				+"WHERE InsFilingCodeSubtypeNum = "+POut.Long(insFilingCodeSubtypeNum)+" LIMIT 1";
 			List<InsFilingCodeSubtype> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
@@ -89,7 +89,7 @@ namespace OpenDentBusiness.Crud{
 			string command="UPDATE insfilingcodesubtype SET "
 				+"InsFilingCodeNum       =  "+POut.Long  (insFilingCodeSubtype.InsFilingCodeNum)+", "
 				+"Descript               = '"+POut.String(insFilingCodeSubtype.Descript)+"' "
-				+"WHERE InsFilingCodeSubtypeNum = "+POut.Long(insFilingCodeSubtype.InsFilingCodeSubtypeNum);
+				+"WHERE InsFilingCodeSubtypeNum = "+POut.Long(insFilingCodeSubtype.InsFilingCodeSubtypeNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
@@ -108,14 +108,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE insfilingcodesubtype SET "+command
-				+" WHERE InsFilingCodeSubtypeNum = "+POut.Long(insFilingCodeSubtype.InsFilingCodeSubtypeNum);
+				+" WHERE InsFilingCodeSubtypeNum = "+POut.Long(insFilingCodeSubtype.InsFilingCodeSubtypeNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one InsFilingCodeSubtype from the database.</summary>
 		internal static void Delete(long insFilingCodeSubtypeNum){
 			string command="DELETE FROM insfilingcodesubtype "
-				+"WHERE InsFilingCodeSubtypeNum = "+POut.Long(insFilingCodeSubtypeNum);
+				+"WHERE InsFilingCodeSubtypeNum = "+POut.Long(insFilingCodeSubtypeNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 

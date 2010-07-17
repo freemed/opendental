@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one SupplyNeeded object from the database using the primary key.  Returns null if not found.</summary>
 		internal static SupplyNeeded SelectOne(long supplyNeededNum){
 			string command="SELECT * FROM supplyneeded "
-				+"WHERE SupplyNeededNum = "+POut.Long(supplyNeededNum);
+				+"WHERE SupplyNeededNum = "+POut.Long(supplyNeededNum)+" LIMIT 1";
 			List<SupplyNeeded> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
@@ -89,7 +89,7 @@ namespace OpenDentBusiness.Crud{
 			string command="UPDATE supplyneeded SET "
 				+"Description    = '"+POut.String(supplyNeeded.Description)+"', "
 				+"DateAdded      =  "+POut.Date  (supplyNeeded.DateAdded)+" "
-				+"WHERE SupplyNeededNum = "+POut.Long(supplyNeeded.SupplyNeededNum);
+				+"WHERE SupplyNeededNum = "+POut.Long(supplyNeeded.SupplyNeededNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
@@ -108,14 +108,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE supplyneeded SET "+command
-				+" WHERE SupplyNeededNum = "+POut.Long(supplyNeeded.SupplyNeededNum);
+				+" WHERE SupplyNeededNum = "+POut.Long(supplyNeeded.SupplyNeededNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one SupplyNeeded from the database.</summary>
 		internal static void Delete(long supplyNeededNum){
 			string command="DELETE FROM supplyneeded "
-				+"WHERE SupplyNeededNum = "+POut.Long(supplyNeededNum);
+				+"WHERE SupplyNeededNum = "+POut.Long(supplyNeededNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 

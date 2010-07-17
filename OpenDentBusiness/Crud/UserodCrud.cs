@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one Userod object from the database using the primary key.  Returns null if not found.</summary>
 		internal static Userod SelectOne(long userNum){
 			string command="SELECT * FROM userod "
-				+"WHERE UserNum = "+POut.Long(userNum);
+				+"WHERE UserNum = "+POut.Long(userNum)+" LIMIT 1";
 			List<Userod> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
@@ -116,7 +116,7 @@ namespace OpenDentBusiness.Crud{
 				+"AnesthProvType   =  "+POut.Int   (userod.AnesthProvType)+", "
 				+"DefaultHidePopups=  "+POut.Bool  (userod.DefaultHidePopups)+", "
 				+"PasswordIsStrong =  "+POut.Bool  (userod.PasswordIsStrong)+" "
-				+"WHERE UserNum = "+POut.Long(userod.UserNum);
+				+"WHERE UserNum = "+POut.Long(userod.UserNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
@@ -171,14 +171,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE userod SET "+command
-				+" WHERE UserNum = "+POut.Long(userod.UserNum);
+				+" WHERE UserNum = "+POut.Long(userod.UserNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Userod from the database.</summary>
 		internal static void Delete(long userNum){
 			string command="DELETE FROM userod "
-				+"WHERE UserNum = "+POut.Long(userNum);
+				+"WHERE UserNum = "+POut.Long(userNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 

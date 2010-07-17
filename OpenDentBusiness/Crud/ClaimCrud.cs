@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one Claim object from the database using the primary key.  Returns null if not found.</summary>
 		internal static Claim SelectOne(long claimNum){
 			string command="SELECT * FROM claim "
-				+"WHERE ClaimNum = "+POut.Long(claimNum);
+				+"WHERE ClaimNum = "+POut.Long(claimNum)+" LIMIT 1";
 			List<Claim> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
@@ -230,7 +230,7 @@ namespace OpenDentBusiness.Crud{
 				+"CanadianIsInitialUpper     = '"+POut.String(claim.CanadianIsInitialUpper)+"', "
 				+"CanadianDateInitialUpper   =  "+POut.Date  (claim.CanadianDateInitialUpper)+", "
 				+"CanadianMaxProsthMaterial  =  "+POut.Byte  (claim.CanadianMaxProsthMaterial)+" "
-				+"WHERE ClaimNum = "+POut.Long(claim.ClaimNum);
+				+"WHERE ClaimNum = "+POut.Long(claim.ClaimNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
@@ -437,14 +437,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE claim SET "+command
-				+" WHERE ClaimNum = "+POut.Long(claim.ClaimNum);
+				+" WHERE ClaimNum = "+POut.Long(claim.ClaimNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Claim from the database.</summary>
 		internal static void Delete(long claimNum){
 			string command="DELETE FROM claim "
-				+"WHERE ClaimNum = "+POut.Long(claimNum);
+				+"WHERE ClaimNum = "+POut.Long(claimNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 

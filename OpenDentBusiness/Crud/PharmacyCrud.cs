@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one Pharmacy object from the database using the primary key.  Returns null if not found.</summary>
 		internal static Pharmacy SelectOne(long pharmacyNum){
 			string command="SELECT * FROM pharmacy "
-				+"WHERE PharmacyNum = "+POut.Long(pharmacyNum);
+				+"WHERE PharmacyNum = "+POut.Long(pharmacyNum)+" LIMIT 1";
 			List<Pharmacy> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
@@ -113,7 +113,7 @@ namespace OpenDentBusiness.Crud{
 				+"State      = '"+POut.String(pharmacy.State)+"', "
 				+"Zip        = '"+POut.String(pharmacy.Zip)+"', "
 				+"Note       = '"+POut.String(pharmacy.Note)+"' "
-				+"WHERE PharmacyNum = "+POut.Long(pharmacy.PharmacyNum);
+				+"WHERE PharmacyNum = "+POut.Long(pharmacy.PharmacyNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
@@ -164,14 +164,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE pharmacy SET "+command
-				+" WHERE PharmacyNum = "+POut.Long(pharmacy.PharmacyNum);
+				+" WHERE PharmacyNum = "+POut.Long(pharmacy.PharmacyNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Pharmacy from the database.</summary>
 		internal static void Delete(long pharmacyNum){
 			string command="DELETE FROM pharmacy "
-				+"WHERE PharmacyNum = "+POut.Long(pharmacyNum);
+				+"WHERE PharmacyNum = "+POut.Long(pharmacyNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 

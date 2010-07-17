@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one FeeSched object from the database using the primary key.  Returns null if not found.</summary>
 		internal static FeeSched SelectOne(long feeSchedNum){
 			string command="SELECT * FROM feesched "
-				+"WHERE FeeSchedNum = "+POut.Long(feeSchedNum);
+				+"WHERE FeeSchedNum = "+POut.Long(feeSchedNum)+" LIMIT 1";
 			List<FeeSched> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
@@ -95,7 +95,7 @@ namespace OpenDentBusiness.Crud{
 				+"FeeSchedType=  "+POut.Int   ((int)feeSched.FeeSchedType)+", "
 				+"ItemOrder   =  "+POut.Int   (feeSched.ItemOrder)+", "
 				+"IsHidden    =  "+POut.Bool  (feeSched.IsHidden)+" "
-				+"WHERE FeeSchedNum = "+POut.Long(feeSched.FeeSchedNum);
+				+"WHERE FeeSchedNum = "+POut.Long(feeSched.FeeSchedNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
@@ -122,14 +122,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE feesched SET "+command
-				+" WHERE FeeSchedNum = "+POut.Long(feeSched.FeeSchedNum);
+				+" WHERE FeeSchedNum = "+POut.Long(feeSched.FeeSchedNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one FeeSched from the database.</summary>
 		internal static void Delete(long feeSchedNum){
 			string command="DELETE FROM feesched "
-				+"WHERE FeeSchedNum = "+POut.Long(feeSchedNum);
+				+"WHERE FeeSchedNum = "+POut.Long(feeSchedNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 

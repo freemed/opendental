@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one AccountingAutoPay object from the database using the primary key.  Returns null if not found.</summary>
 		internal static AccountingAutoPay SelectOne(long accountingAutoPayNum){
 			string command="SELECT * FROM accountingautopay "
-				+"WHERE AccountingAutoPayNum = "+POut.Long(accountingAutoPayNum);
+				+"WHERE AccountingAutoPayNum = "+POut.Long(accountingAutoPayNum)+" LIMIT 1";
 			List<AccountingAutoPay> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
@@ -89,7 +89,7 @@ namespace OpenDentBusiness.Crud{
 			string command="UPDATE accountingautopay SET "
 				+"PayType             =  "+POut.Long  (accountingAutoPay.PayType)+", "
 				+"PickList            = '"+POut.String(accountingAutoPay.PickList)+"' "
-				+"WHERE AccountingAutoPayNum = "+POut.Long(accountingAutoPay.AccountingAutoPayNum);
+				+"WHERE AccountingAutoPayNum = "+POut.Long(accountingAutoPay.AccountingAutoPayNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
@@ -108,14 +108,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE accountingautopay SET "+command
-				+" WHERE AccountingAutoPayNum = "+POut.Long(accountingAutoPay.AccountingAutoPayNum);
+				+" WHERE AccountingAutoPayNum = "+POut.Long(accountingAutoPay.AccountingAutoPayNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one AccountingAutoPay from the database.</summary>
 		internal static void Delete(long accountingAutoPayNum){
 			string command="DELETE FROM accountingautopay "
-				+"WHERE AccountingAutoPayNum = "+POut.Long(accountingAutoPayNum);
+				+"WHERE AccountingAutoPayNum = "+POut.Long(accountingAutoPayNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 

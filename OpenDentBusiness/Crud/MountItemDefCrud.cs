@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one MountItemDef object from the database using the primary key.  Returns null if not found.</summary>
 		internal static MountItemDef SelectOne(long mountItemDefNum){
 			string command="SELECT * FROM mountitemdef "
-				+"WHERE MountItemDefNum = "+POut.Long(mountItemDefNum);
+				+"WHERE MountItemDefNum = "+POut.Long(mountItemDefNum)+" LIMIT 1";
 			List<MountItemDef> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
@@ -98,7 +98,7 @@ namespace OpenDentBusiness.Crud{
 				+"Ypos           =  "+POut.Int   (mountItemDef.Ypos)+", "
 				+"Width          =  "+POut.Int   (mountItemDef.Width)+", "
 				+"Height         =  "+POut.Int   (mountItemDef.Height)+" "
-				+"WHERE MountItemDefNum = "+POut.Long(mountItemDef.MountItemDefNum);
+				+"WHERE MountItemDefNum = "+POut.Long(mountItemDef.MountItemDefNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
@@ -129,14 +129,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE mountitemdef SET "+command
-				+" WHERE MountItemDefNum = "+POut.Long(mountItemDef.MountItemDefNum);
+				+" WHERE MountItemDefNum = "+POut.Long(mountItemDef.MountItemDefNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one MountItemDef from the database.</summary>
 		internal static void Delete(long mountItemDefNum){
 			string command="DELETE FROM mountitemdef "
-				+"WHERE MountItemDefNum = "+POut.Long(mountItemDefNum);
+				+"WHERE MountItemDefNum = "+POut.Long(mountItemDefNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 

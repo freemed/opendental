@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one Statement object from the database using the primary key.  Returns null if not found.</summary>
 		internal static Statement SelectOne(long statementNum){
 			string command="SELECT * FROM statement "
-				+"WHERE StatementNum = "+POut.Long(statementNum);
+				+"WHERE StatementNum = "+POut.Long(statementNum)+" LIMIT 1";
 			List<Statement> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
@@ -119,7 +119,7 @@ namespace OpenDentBusiness.Crud{
 				+"Intermingled =  "+POut.Bool  (statement.Intermingled)+", "
 				+"IsSent       =  "+POut.Bool  (statement.IsSent)+", "
 				+"DocNum       =  "+POut.Long  (statement.DocNum)+" "
-				+"WHERE StatementNum = "+POut.Long(statement.StatementNum);
+				+"WHERE StatementNum = "+POut.Long(statement.StatementNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
@@ -178,14 +178,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE statement SET "+command
-				+" WHERE StatementNum = "+POut.Long(statement.StatementNum);
+				+" WHERE StatementNum = "+POut.Long(statement.StatementNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Statement from the database.</summary>
 		internal static void Delete(long statementNum){
 			string command="DELETE FROM statement "
-				+"WHERE StatementNum = "+POut.Long(statementNum);
+				+"WHERE StatementNum = "+POut.Long(statementNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 

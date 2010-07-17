@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one SheetFieldDef object from the database using the primary key.  Returns null if not found.</summary>
 		internal static SheetFieldDef SelectOne(long sheetFieldDefNum){
 			string command="SELECT * FROM sheetfielddef "
-				+"WHERE SheetFieldDefNum = "+POut.Long(sheetFieldDefNum);
+				+"WHERE SheetFieldDefNum = "+POut.Long(sheetFieldDefNum)+" LIMIT 1";
 			List<SheetFieldDef> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
@@ -122,7 +122,7 @@ namespace OpenDentBusiness.Crud{
 				+"Height          =  "+POut.Int   (sheetFieldDef.Height)+", "
 				+"GrowthBehavior  =  "+POut.Int   ((int)sheetFieldDef.GrowthBehavior)+", "
 				+"RadioButtonValue= '"+POut.String(sheetFieldDef.RadioButtonValue)+"' "
-				+"WHERE SheetFieldDefNum = "+POut.Long(sheetFieldDef.SheetFieldDefNum);
+				+"WHERE SheetFieldDefNum = "+POut.Long(sheetFieldDef.SheetFieldDefNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
@@ -185,14 +185,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE sheetfielddef SET "+command
-				+" WHERE SheetFieldDefNum = "+POut.Long(sheetFieldDef.SheetFieldDefNum);
+				+" WHERE SheetFieldDefNum = "+POut.Long(sheetFieldDef.SheetFieldDefNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one SheetFieldDef from the database.</summary>
 		internal static void Delete(long sheetFieldDefNum){
 			string command="DELETE FROM sheetfielddef "
-				+"WHERE SheetFieldDefNum = "+POut.Long(sheetFieldDefNum);
+				+"WHERE SheetFieldDefNum = "+POut.Long(sheetFieldDefNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 

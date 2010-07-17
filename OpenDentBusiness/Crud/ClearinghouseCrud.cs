@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one Clearinghouse object from the database using the primary key.  Returns null if not found.</summary>
 		internal static Clearinghouse SelectOne(long clearinghouseNum){
 			string command="SELECT * FROM clearinghouse "
-				+"WHERE ClearinghouseNum = "+POut.Long(clearinghouseNum);
+				+"WHERE ClearinghouseNum = "+POut.Long(clearinghouseNum)+" LIMIT 1";
 			List<Clearinghouse> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
@@ -143,7 +143,7 @@ namespace OpenDentBusiness.Crud{
 				+"SenderName      = '"+POut.String(clearinghouse.SenderName)+"', "
 				+"SenderTelephone = '"+POut.String(clearinghouse.SenderTelephone)+"', "
 				+"GS03            = '"+POut.String(clearinghouse.GS03)+"' "
-				+"WHERE ClearinghouseNum = "+POut.Long(clearinghouse.ClearinghouseNum);
+				+"WHERE ClearinghouseNum = "+POut.Long(clearinghouse.ClearinghouseNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
@@ -231,14 +231,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE clearinghouse SET "+command
-				+" WHERE ClearinghouseNum = "+POut.Long(clearinghouse.ClearinghouseNum);
+				+" WHERE ClearinghouseNum = "+POut.Long(clearinghouse.ClearinghouseNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Clearinghouse from the database.</summary>
 		internal static void Delete(long clearinghouseNum){
 			string command="DELETE FROM clearinghouse "
-				+"WHERE ClearinghouseNum = "+POut.Long(clearinghouseNum);
+				+"WHERE ClearinghouseNum = "+POut.Long(clearinghouseNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 

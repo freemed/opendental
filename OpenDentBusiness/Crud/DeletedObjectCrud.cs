@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one DeletedObject object from the database using the primary key.  Returns null if not found.</summary>
 		internal static DeletedObject SelectOne(long deletedObjectNum){
 			string command="SELECT * FROM deletedobject "
-				+"WHERE DeletedObjectNum = "+POut.Long(deletedObjectNum);
+				+"WHERE DeletedObjectNum = "+POut.Long(deletedObjectNum)+" LIMIT 1";
 			List<DeletedObject> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
@@ -92,7 +92,7 @@ namespace OpenDentBusiness.Crud{
 				+"ObjectNum       =  "+POut.Long  (deletedObject.ObjectNum)+", "
 				+"ObjectType      =  "+POut.Int   ((int)deletedObject.ObjectType)+" "
 				//DateTStamp can only be set by MySQL
-				+"WHERE DeletedObjectNum = "+POut.Long(deletedObject.DeletedObjectNum);
+				+"WHERE DeletedObjectNum = "+POut.Long(deletedObject.DeletedObjectNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
@@ -112,14 +112,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE deletedobject SET "+command
-				+" WHERE DeletedObjectNum = "+POut.Long(deletedObject.DeletedObjectNum);
+				+" WHERE DeletedObjectNum = "+POut.Long(deletedObject.DeletedObjectNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one DeletedObject from the database.</summary>
 		internal static void Delete(long deletedObjectNum){
 			string command="DELETE FROM deletedobject "
-				+"WHERE DeletedObjectNum = "+POut.Long(deletedObjectNum);
+				+"WHERE DeletedObjectNum = "+POut.Long(deletedObjectNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 

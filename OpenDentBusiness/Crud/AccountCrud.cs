@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one Account object from the database using the primary key.  Returns null if not found.</summary>
 		internal static Account SelectOne(long accountNum){
 			string command="SELECT * FROM account "
-				+"WHERE AccountNum = "+POut.Long(accountNum);
+				+"WHERE AccountNum = "+POut.Long(accountNum)+" LIMIT 1";
 			List<Account> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
@@ -98,7 +98,7 @@ namespace OpenDentBusiness.Crud{
 				+"BankNumber  = '"+POut.String(account.BankNumber)+"', "
 				+"Inactive    =  "+POut.Bool  (account.Inactive)+", "
 				+"AccountColor=  "+POut.Int   (account.AccountColor.ToArgb())+" "
-				+"WHERE AccountNum = "+POut.Long(account.AccountNum);
+				+"WHERE AccountNum = "+POut.Long(account.AccountNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
@@ -129,14 +129,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE account SET "+command
-				+" WHERE AccountNum = "+POut.Long(account.AccountNum);
+				+" WHERE AccountNum = "+POut.Long(account.AccountNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Account from the database.</summary>
 		internal static void Delete(long accountNum){
 			string command="DELETE FROM account "
-				+"WHERE AccountNum = "+POut.Long(accountNum);
+				+"WHERE AccountNum = "+POut.Long(accountNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 

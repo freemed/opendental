@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one HL7Msg object from the database using the primary key.  Returns null if not found.</summary>
 		internal static HL7Msg SelectOne(long hL7MsgNum){
 			string command="SELECT * FROM hl7msg "
-				+"WHERE HL7MsgNum = "+POut.Long(hL7MsgNum);
+				+"WHERE HL7MsgNum = "+POut.Long(hL7MsgNum)+" LIMIT 1";
 			List<HL7Msg> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
@@ -92,7 +92,7 @@ namespace OpenDentBusiness.Crud{
 				+"HL7Status=  "+POut.Int   ((int)hL7Msg.HL7Status)+", "
 				+"MsgText  = '"+POut.String(hL7Msg.MsgText)+"', "
 				+"AptNum   =  "+POut.Long  (hL7Msg.AptNum)+" "
-				+"WHERE HL7MsgNum = "+POut.Long(hL7Msg.HL7MsgNum);
+				+"WHERE HL7MsgNum = "+POut.Long(hL7Msg.HL7MsgNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
@@ -115,14 +115,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE hl7msg SET "+command
-				+" WHERE HL7MsgNum = "+POut.Long(hL7Msg.HL7MsgNum);
+				+" WHERE HL7MsgNum = "+POut.Long(hL7Msg.HL7MsgNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one HL7Msg from the database.</summary>
 		internal static void Delete(long hL7MsgNum){
 			string command="DELETE FROM hl7msg "
-				+"WHERE HL7MsgNum = "+POut.Long(hL7MsgNum);
+				+"WHERE HL7MsgNum = "+POut.Long(hL7MsgNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 

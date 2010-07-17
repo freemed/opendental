@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one RecallType object from the database using the primary key.  Returns null if not found.</summary>
 		internal static RecallType SelectOne(long recallTypeNum){
 			string command="SELECT * FROM recalltype "
-				+"WHERE RecallTypeNum = "+POut.Long(recallTypeNum);
+				+"WHERE RecallTypeNum = "+POut.Long(recallTypeNum)+" LIMIT 1";
 			List<RecallType> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
@@ -95,7 +95,7 @@ namespace OpenDentBusiness.Crud{
 				+"DefaultInterval=  "+POut.Int   (recallType.DefaultInterval.ToInt())+", "
 				+"TimePattern    = '"+POut.String(recallType.TimePattern)+"', "
 				+"Procedures     = '"+POut.String(recallType.Procedures)+"' "
-				+"WHERE RecallTypeNum = "+POut.Long(recallType.RecallTypeNum);
+				+"WHERE RecallTypeNum = "+POut.Long(recallType.RecallTypeNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
@@ -122,14 +122,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE recalltype SET "+command
-				+" WHERE RecallTypeNum = "+POut.Long(recallType.RecallTypeNum);
+				+" WHERE RecallTypeNum = "+POut.Long(recallType.RecallTypeNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one RecallType from the database.</summary>
 		internal static void Delete(long recallTypeNum){
 			string command="DELETE FROM recalltype "
-				+"WHERE RecallTypeNum = "+POut.Long(recallTypeNum);
+				+"WHERE RecallTypeNum = "+POut.Long(recallTypeNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 

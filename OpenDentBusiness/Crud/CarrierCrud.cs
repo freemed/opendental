@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one Carrier object from the database using the primary key.  Returns null if not found.</summary>
 		internal static Carrier SelectOne(long carrierNum){
 			string command="SELECT * FROM carrier "
-				+"WHERE CarrierNum = "+POut.Long(carrierNum);
+				+"WHERE CarrierNum = "+POut.Long(carrierNum)+" LIMIT 1";
 			List<Carrier> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
@@ -131,7 +131,7 @@ namespace OpenDentBusiness.Crud{
 				+"CanadianEncryptionMethod =  "+POut.Byte  (carrier.CanadianEncryptionMethod)+", "
 				+"CanadianTransactionPrefix= '"+POut.String(carrier.CanadianTransactionPrefix)+"', "
 				+"CanadianSupportedTypes   =  "+POut.Int   ((int)carrier.CanadianSupportedTypes)+" "
-				+"WHERE CarrierNum = "+POut.Long(carrier.CarrierNum);
+				+"WHERE CarrierNum = "+POut.Long(carrier.CarrierNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
@@ -206,14 +206,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE carrier SET "+command
-				+" WHERE CarrierNum = "+POut.Long(carrier.CarrierNum);
+				+" WHERE CarrierNum = "+POut.Long(carrier.CarrierNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Carrier from the database.</summary>
 		internal static void Delete(long carrierNum){
 			string command="DELETE FROM carrier "
-				+"WHERE CarrierNum = "+POut.Long(carrierNum);
+				+"WHERE CarrierNum = "+POut.Long(carrierNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 

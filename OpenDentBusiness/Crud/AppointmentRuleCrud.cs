@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one AppointmentRule object from the database using the primary key.  Returns null if not found.</summary>
 		internal static AppointmentRule SelectOne(long appointmentRuleNum){
 			string command="SELECT * FROM appointmentrule "
-				+"WHERE AppointmentRuleNum = "+POut.Long(appointmentRuleNum);
+				+"WHERE AppointmentRuleNum = "+POut.Long(appointmentRuleNum)+" LIMIT 1";
 			List<AppointmentRule> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
@@ -95,7 +95,7 @@ namespace OpenDentBusiness.Crud{
 				+"CodeStart         = '"+POut.String(appointmentRule.CodeStart)+"', "
 				+"CodeEnd           = '"+POut.String(appointmentRule.CodeEnd)+"', "
 				+"IsEnabled         =  "+POut.Bool  (appointmentRule.IsEnabled)+" "
-				+"WHERE AppointmentRuleNum = "+POut.Long(appointmentRule.AppointmentRuleNum);
+				+"WHERE AppointmentRuleNum = "+POut.Long(appointmentRule.AppointmentRuleNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
@@ -122,14 +122,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE appointmentrule SET "+command
-				+" WHERE AppointmentRuleNum = "+POut.Long(appointmentRule.AppointmentRuleNum);
+				+" WHERE AppointmentRuleNum = "+POut.Long(appointmentRule.AppointmentRuleNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one AppointmentRule from the database.</summary>
 		internal static void Delete(long appointmentRuleNum){
 			string command="DELETE FROM appointmentrule "
-				+"WHERE AppointmentRuleNum = "+POut.Long(appointmentRuleNum);
+				+"WHERE AppointmentRuleNum = "+POut.Long(appointmentRuleNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 

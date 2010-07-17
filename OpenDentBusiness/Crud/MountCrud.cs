@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one Mount object from the database using the primary key.  Returns null if not found.</summary>
 		internal static Mount SelectOne(long mountNum){
 			string command="SELECT * FROM mount "
-				+"WHERE MountNum = "+POut.Long(mountNum);
+				+"WHERE MountNum = "+POut.Long(mountNum)+" LIMIT 1";
 			List<Mount> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
@@ -107,7 +107,7 @@ namespace OpenDentBusiness.Crud{
 				+"ImgType    =  "+POut.Int   ((int)mount.ImgType)+", "
 				+"Width      =  "+POut.Int   (mount.Width)+", "
 				+"Height     =  "+POut.Int   (mount.Height)+" "
-				+"WHERE MountNum = "+POut.Long(mount.MountNum);
+				+"WHERE MountNum = "+POut.Long(mount.MountNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
@@ -150,14 +150,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE mount SET "+command
-				+" WHERE MountNum = "+POut.Long(mount.MountNum);
+				+" WHERE MountNum = "+POut.Long(mount.MountNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Mount from the database.</summary>
 		internal static void Delete(long mountNum){
 			string command="DELETE FROM mount "
-				+"WHERE MountNum = "+POut.Long(mountNum);
+				+"WHERE MountNum = "+POut.Long(mountNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 

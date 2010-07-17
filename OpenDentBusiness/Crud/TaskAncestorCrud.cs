@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one TaskAncestor object from the database using the primary key.  Returns null if not found.</summary>
 		internal static TaskAncestor SelectOne(long taskAncestorNum){
 			string command="SELECT * FROM taskancestor "
-				+"WHERE TaskAncestorNum = "+POut.Long(taskAncestorNum);
+				+"WHERE TaskAncestorNum = "+POut.Long(taskAncestorNum)+" LIMIT 1";
 			List<TaskAncestor> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
@@ -89,7 +89,7 @@ namespace OpenDentBusiness.Crud{
 			string command="UPDATE taskancestor SET "
 				+"TaskNum        =  "+POut.Long  (taskAncestor.TaskNum)+", "
 				+"TaskListNum    =  "+POut.Long  (taskAncestor.TaskListNum)+" "
-				+"WHERE TaskAncestorNum = "+POut.Long(taskAncestor.TaskAncestorNum);
+				+"WHERE TaskAncestorNum = "+POut.Long(taskAncestor.TaskAncestorNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
@@ -108,14 +108,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE taskancestor SET "+command
-				+" WHERE TaskAncestorNum = "+POut.Long(taskAncestor.TaskAncestorNum);
+				+" WHERE TaskAncestorNum = "+POut.Long(taskAncestor.TaskAncestorNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one TaskAncestor from the database.</summary>
 		internal static void Delete(long taskAncestorNum){
 			string command="DELETE FROM taskancestor "
-				+"WHERE TaskAncestorNum = "+POut.Long(taskAncestorNum);
+				+"WHERE TaskAncestorNum = "+POut.Long(taskAncestorNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 

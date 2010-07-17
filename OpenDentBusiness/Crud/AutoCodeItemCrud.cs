@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one AutoCodeItem object from the database using the primary key.  Returns null if not found.</summary>
 		internal static AutoCodeItem SelectOne(long autoCodeItemNum){
 			string command="SELECT * FROM autocodeitem "
-				+"WHERE AutoCodeItemNum = "+POut.Long(autoCodeItemNum);
+				+"WHERE AutoCodeItemNum = "+POut.Long(autoCodeItemNum)+" LIMIT 1";
 			List<AutoCodeItem> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
@@ -92,7 +92,7 @@ namespace OpenDentBusiness.Crud{
 				+"AutoCodeNum    =  "+POut.Long  (autoCodeItem.AutoCodeNum)+", "
 				+"OldCode        = '"+POut.String(autoCodeItem.OldCode)+"', "
 				+"CodeNum        =  "+POut.Long  (autoCodeItem.CodeNum)+" "
-				+"WHERE AutoCodeItemNum = "+POut.Long(autoCodeItem.AutoCodeItemNum);
+				+"WHERE AutoCodeItemNum = "+POut.Long(autoCodeItem.AutoCodeItemNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
@@ -115,14 +115,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE autocodeitem SET "+command
-				+" WHERE AutoCodeItemNum = "+POut.Long(autoCodeItem.AutoCodeItemNum);
+				+" WHERE AutoCodeItemNum = "+POut.Long(autoCodeItem.AutoCodeItemNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one AutoCodeItem from the database.</summary>
 		internal static void Delete(long autoCodeItemNum){
 			string command="DELETE FROM autocodeitem "
-				+"WHERE AutoCodeItemNum = "+POut.Long(autoCodeItemNum);
+				+"WHERE AutoCodeItemNum = "+POut.Long(autoCodeItemNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 

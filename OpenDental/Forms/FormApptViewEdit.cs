@@ -55,6 +55,11 @@ namespace OpenDental{
 		private OpenDental.UI.ODGrid gridUR;
 		private OpenDental.UI.ODGrid gridMain;
 		private ODGrid gridAvailable;
+		private ListBox listStackLR;
+		private Label label4;
+		private ListBox listStackUR;
+		private Label label1;
+		private GroupBox groupBox3;
 		///<summary>Set this value before opening the form.</summary>
 		public ApptView ApptViewCur;
 		//<summary>Tracks MouseIsDown on listOps.</summary>
@@ -116,11 +121,16 @@ namespace OpenDental{
 			this.textAfterTime = new System.Windows.Forms.TextBox();
 			this.labelBeforeTime = new System.Windows.Forms.Label();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.listStackLR = new System.Windows.Forms.ListBox();
+			this.label4 = new System.Windows.Forms.Label();
+			this.listStackUR = new System.Windows.Forms.ListBox();
+			this.label1 = new System.Windows.Forms.Label();
 			this.gridLR = new OpenDental.UI.ODGrid();
 			this.gridUR = new OpenDental.UI.ODGrid();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.label8 = new System.Windows.Forms.Label();
 			this.gridAvailable = new OpenDental.UI.ODGrid();
+			this.groupBox3 = new System.Windows.Forms.GroupBox();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.SuspendLayout();
@@ -359,6 +369,10 @@ namespace OpenDental{
 			// 
 			// groupBox2
 			// 
+			this.groupBox2.Controls.Add(this.listStackLR);
+			this.groupBox2.Controls.Add(this.label4);
+			this.groupBox2.Controls.Add(this.listStackUR);
+			this.groupBox2.Controls.Add(this.label1);
 			this.groupBox2.Controls.Add(this.gridLR);
 			this.groupBox2.Controls.Add(this.gridUR);
 			this.groupBox2.Controls.Add(this.gridMain);
@@ -371,6 +385,40 @@ namespace OpenDental{
 			this.groupBox2.TabIndex = 59;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Rows Displayed (double click to edit or to move to another corner)";
+			// 
+			// listStackLR
+			// 
+			this.listStackLR.FormattingEnabled = true;
+			this.listStackLR.Location = new System.Drawing.Point(192,254);
+			this.listStackLR.Name = "listStackLR";
+			this.listStackLR.Size = new System.Drawing.Size(176,30);
+			this.listStackLR.TabIndex = 66;
+			// 
+			// label4
+			// 
+			this.label4.Location = new System.Drawing.Point(190,235);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(175,17);
+			this.label4.TabIndex = 65;
+			this.label4.Text = "LR stack behavior";
+			this.label4.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			// 
+			// listStackUR
+			// 
+			this.listStackUR.FormattingEnabled = true;
+			this.listStackUR.Location = new System.Drawing.Point(192,177);
+			this.listStackUR.Name = "listStackUR";
+			this.listStackUR.Size = new System.Drawing.Size(176,30);
+			this.listStackUR.TabIndex = 64;
+			// 
+			// label1
+			// 
+			this.label1.Location = new System.Drawing.Point(190,158);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(175,17);
+			this.label1.TabIndex = 63;
+			this.label1.Text = "UR stack behavior";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// gridLR
 			// 
@@ -431,12 +479,22 @@ namespace OpenDental{
 			this.gridAvailable.Title = "Available Rows";
 			this.gridAvailable.TranslationName = null;
 			// 
+			// groupBox3
+			// 
+			this.groupBox3.Location = new System.Drawing.Point(253,596);
+			this.groupBox3.Name = "groupBox3";
+			this.groupBox3.Size = new System.Drawing.Size(175,42);
+			this.groupBox3.TabIndex = 62;
+			this.groupBox3.TabStop = false;
+			this.groupBox3.Text = "UR stack behavior";
+			// 
 			// FormApptViewEdit
 			// 
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(852,675);
+			this.Controls.Add(this.groupBox3);
 			this.Controls.Add(this.gridAvailable);
 			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.textRowsPerIncr);
@@ -495,12 +553,17 @@ namespace OpenDental{
 				}
 			}
 			for(int i=0;i<ProviderC.List.Length;i++){
-				listProv.Items.Add
-					(ProviderC.List[i].GetLongDesc());
+				listProv.Items.Add(ProviderC.List[i].GetLongDesc());
 				if(ApptViewItemL.ProvIsInView(ProviderC.List[i].ProvNum)){
 					listProv.SetSelected(i,true);
 				}
 			}
+			for(int i=0;i<Enum.GetNames(typeof(ApptViewStackBehavior)).Length;i++){
+				listStackUR.Items.Add(Lan.g("enumApptViewStackBehavior",Enum.GetNames(typeof(ApptViewStackBehavior))[i]));
+				listStackLR.Items.Add(Lan.g("enumApptViewStackBehavior",Enum.GetNames(typeof(ApptViewStackBehavior))[i]));
+			}
+			listStackUR.SelectedIndex=(int)ApptViewCur.StackBehavUR;
+			listStackLR.SelectedIndex=(int)ApptViewCur.StackBehavLR;
 			elementsAll=new List<String>();
 			elementsAll.Add("Address");
 			elementsAll.Add("AddrNote");
@@ -910,6 +973,8 @@ namespace OpenDental{
 					ApptViewItems.Insert(item);
 				}
 			}
+			ApptViewCur.StackBehavUR=(ApptViewStackBehavior)listStackUR.SelectedIndex;
+			ApptViewCur.StackBehavLR=(ApptViewStackBehavior)listStackLR.SelectedIndex;
 			for(int i=0;i<displayedElementsMain.Count;i++){
 				item=displayedElementsMain[i];
 				item.ApptViewNum=ApptViewCur.ApptViewNum;

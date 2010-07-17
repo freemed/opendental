@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one TaskUnread object from the database using the primary key.  Returns null if not found.</summary>
 		internal static TaskUnread SelectOne(long taskUnreadNum){
 			string command="SELECT * FROM taskunread "
-				+"WHERE TaskUnreadNum = "+POut.Long(taskUnreadNum);
+				+"WHERE TaskUnreadNum = "+POut.Long(taskUnreadNum)+" LIMIT 1";
 			List<TaskUnread> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
@@ -89,7 +89,7 @@ namespace OpenDentBusiness.Crud{
 			string command="UPDATE taskunread SET "
 				+"TaskNum      =  "+POut.Long  (taskUnread.TaskNum)+", "
 				+"UserNum      =  "+POut.Long  (taskUnread.UserNum)+" "
-				+"WHERE TaskUnreadNum = "+POut.Long(taskUnread.TaskUnreadNum);
+				+"WHERE TaskUnreadNum = "+POut.Long(taskUnread.TaskUnreadNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
@@ -108,14 +108,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE taskunread SET "+command
-				+" WHERE TaskUnreadNum = "+POut.Long(taskUnread.TaskUnreadNum);
+				+" WHERE TaskUnreadNum = "+POut.Long(taskUnread.TaskUnreadNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one TaskUnread from the database.</summary>
 		internal static void Delete(long taskUnreadNum){
 			string command="DELETE FROM taskunread "
-				+"WHERE TaskUnreadNum = "+POut.Long(taskUnreadNum);
+				+"WHERE TaskUnreadNum = "+POut.Long(taskUnreadNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 

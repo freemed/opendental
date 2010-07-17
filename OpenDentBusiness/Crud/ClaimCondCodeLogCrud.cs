@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one ClaimCondCodeLog object from the database using the primary key.  Returns null if not found.</summary>
 		internal static ClaimCondCodeLog SelectOne(long claimCondCodeLogNum){
 			string command="SELECT * FROM claimcondcodelog "
-				+"WHERE ClaimCondCodeLogNum = "+POut.Long(claimCondCodeLogNum);
+				+"WHERE ClaimCondCodeLogNum = "+POut.Long(claimCondCodeLogNum)+" LIMIT 1";
 			List<ClaimCondCodeLog> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
@@ -119,7 +119,7 @@ namespace OpenDentBusiness.Crud{
 				+"Code8              = '"+POut.String(claimCondCodeLog.Code8)+"', "
 				+"Code9              = '"+POut.String(claimCondCodeLog.Code9)+"', "
 				+"Code10             = '"+POut.String(claimCondCodeLog.Code10)+"' "
-				+"WHERE ClaimCondCodeLogNum = "+POut.Long(claimCondCodeLog.ClaimCondCodeLogNum);
+				+"WHERE ClaimCondCodeLogNum = "+POut.Long(claimCondCodeLog.ClaimCondCodeLogNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
@@ -178,14 +178,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE claimcondcodelog SET "+command
-				+" WHERE ClaimCondCodeLogNum = "+POut.Long(claimCondCodeLog.ClaimCondCodeLogNum);
+				+" WHERE ClaimCondCodeLogNum = "+POut.Long(claimCondCodeLog.ClaimCondCodeLogNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one ClaimCondCodeLog from the database.</summary>
 		internal static void Delete(long claimCondCodeLogNum){
 			string command="DELETE FROM claimcondcodelog "
-				+"WHERE ClaimCondCodeLogNum = "+POut.Long(claimCondCodeLogNum);
+				+"WHERE ClaimCondCodeLogNum = "+POut.Long(claimCondCodeLogNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 

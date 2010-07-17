@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one RecallTrigger object from the database using the primary key.  Returns null if not found.</summary>
 		internal static RecallTrigger SelectOne(long recallTriggerNum){
 			string command="SELECT * FROM recalltrigger "
-				+"WHERE RecallTriggerNum = "+POut.Long(recallTriggerNum);
+				+"WHERE RecallTriggerNum = "+POut.Long(recallTriggerNum)+" LIMIT 1";
 			List<RecallTrigger> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
@@ -89,7 +89,7 @@ namespace OpenDentBusiness.Crud{
 			string command="UPDATE recalltrigger SET "
 				+"RecallTypeNum   =  "+POut.Long  (recallTrigger.RecallTypeNum)+", "
 				+"CodeNum         =  "+POut.Long  (recallTrigger.CodeNum)+" "
-				+"WHERE RecallTriggerNum = "+POut.Long(recallTrigger.RecallTriggerNum);
+				+"WHERE RecallTriggerNum = "+POut.Long(recallTrigger.RecallTriggerNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
@@ -108,14 +108,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE recalltrigger SET "+command
-				+" WHERE RecallTriggerNum = "+POut.Long(recallTrigger.RecallTriggerNum);
+				+" WHERE RecallTriggerNum = "+POut.Long(recallTrigger.RecallTriggerNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one RecallTrigger from the database.</summary>
 		internal static void Delete(long recallTriggerNum){
 			string command="DELETE FROM recalltrigger "
-				+"WHERE RecallTriggerNum = "+POut.Long(recallTriggerNum);
+				+"WHERE RecallTriggerNum = "+POut.Long(recallTriggerNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 

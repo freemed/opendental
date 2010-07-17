@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one Popup object from the database using the primary key.  Returns null if not found.</summary>
 		internal static Popup SelectOne(long popupNum){
 			string command="SELECT * FROM popup "
-				+"WHERE PopupNum = "+POut.Long(popupNum);
+				+"WHERE PopupNum = "+POut.Long(popupNum)+" LIMIT 1";
 			List<Popup> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
@@ -92,7 +92,7 @@ namespace OpenDentBusiness.Crud{
 				+"PatNum     =  "+POut.Long  (popup.PatNum)+", "
 				+"Description= '"+POut.String(popup.Description)+"', "
 				+"IsDisabled =  "+POut.Bool  (popup.IsDisabled)+" "
-				+"WHERE PopupNum = "+POut.Long(popup.PopupNum);
+				+"WHERE PopupNum = "+POut.Long(popup.PopupNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
@@ -115,14 +115,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE popup SET "+command
-				+" WHERE PopupNum = "+POut.Long(popup.PopupNum);
+				+" WHERE PopupNum = "+POut.Long(popup.PopupNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Popup from the database.</summary>
 		internal static void Delete(long popupNum){
 			string command="DELETE FROM popup "
-				+"WHERE PopupNum = "+POut.Long(popupNum);
+				+"WHERE PopupNum = "+POut.Long(popupNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 

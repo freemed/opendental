@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one CanadianNetwork object from the database using the primary key.  Returns null if not found.</summary>
 		internal static CanadianNetwork SelectOne(long canadianNetworkNum){
 			string command="SELECT * FROM canadiannetwork "
-				+"WHERE CanadianNetworkNum = "+POut.Long(canadianNetworkNum);
+				+"WHERE CanadianNetworkNum = "+POut.Long(canadianNetworkNum)+" LIMIT 1";
 			List<CanadianNetwork> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
@@ -89,7 +89,7 @@ namespace OpenDentBusiness.Crud{
 			string command="UPDATE canadiannetwork SET "
 				+"Abbrev            = '"+POut.String(canadianNetwork.Abbrev)+"', "
 				+"Descript          = '"+POut.String(canadianNetwork.Descript)+"' "
-				+"WHERE CanadianNetworkNum = "+POut.Long(canadianNetwork.CanadianNetworkNum);
+				+"WHERE CanadianNetworkNum = "+POut.Long(canadianNetwork.CanadianNetworkNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
@@ -108,14 +108,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE canadiannetwork SET "+command
-				+" WHERE CanadianNetworkNum = "+POut.Long(canadianNetwork.CanadianNetworkNum);
+				+" WHERE CanadianNetworkNum = "+POut.Long(canadianNetwork.CanadianNetworkNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one CanadianNetwork from the database.</summary>
 		internal static void Delete(long canadianNetworkNum){
 			string command="DELETE FROM canadiannetwork "
-				+"WHERE CanadianNetworkNum = "+POut.Long(canadianNetworkNum);
+				+"WHERE CanadianNetworkNum = "+POut.Long(canadianNetworkNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 

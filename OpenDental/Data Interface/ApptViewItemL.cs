@@ -17,10 +17,11 @@ namespace OpenDental{
 		public static List<int> VisOps;
 		///<summary>Subset of ForCurView. Just items for rowElements. If no view is selected, then the elements are filled with default info.</summary>
 		public static List<ApptViewItem> ApptRows;
+		public static ApptView ApptViewCur;
 
 		public static void GetForCurView(int indexInList,bool isWeekly,List<Schedule> dailySched) {
 			if(indexInList<0){//might be -1 or -2
-				GetForCurView(new ApptView(),isWeekly,dailySched);
+				GetForCurView(null,isWeekly,dailySched);
 			}
 			else{
 				GetForCurView(ApptViewC.List[indexInList],isWeekly,dailySched);
@@ -28,12 +29,13 @@ namespace OpenDental{
 		}
 
 		///<summary>Gets (list)ForCurView, VisOps, VisProvs, and ApptRows.  Also sets TwoRows. Works even if supply -1 to indicate no apptview is selected.  Pass in null for the dailySched if this is a weekly view or if in FormApptViewEdit.</summary>
-		public static void GetForCurView(ApptView ApptViewCur,bool isWeekly,List<Schedule> dailySched){
+		public static void GetForCurView(ApptView av,bool isWeekly,List<Schedule> dailySched){
+			ApptViewCur=av;
 			ForCurView=new List<ApptViewItem>();
 			VisProvs=new List<int>();
 			VisOps=new List<int>();
 			ApptRows=new List<ApptViewItem>();
-			if(ApptViewCur.ApptViewNum==0){
+			if(ApptViewCur==null){
 				//MessageBox.Show("apptcategorynum:"+ApptCategories.Cur.ApptCategoryNum.ToString());
 				//make visible ops exactly the same as the short ops list (all except hidden)
 				for(int i=0;i<OperatoryC.ListShort.Count;i++){
@@ -80,7 +82,7 @@ namespace OpenDental{
 				}
 				ContrApptSheet.RowsPerIncr=ApptViewCur.RowsPerIncr;
 			}
-			if(ApptViewCur.OnlyScheduledProvs && !isWeekly) {
+			if(ApptViewCur!=null && ApptViewCur.OnlyScheduledProvs && !isWeekly) {
 				//intelligently decide what ops to show.  It's based on the schedule for the day.
 				List<long> listSchedOps;
 				bool opAdded;

@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one PlannedAppt object from the database using the primary key.  Returns null if not found.</summary>
 		internal static PlannedAppt SelectOne(long plannedApptNum){
 			string command="SELECT * FROM plannedappt "
-				+"WHERE PlannedApptNum = "+POut.Long(plannedApptNum);
+				+"WHERE PlannedApptNum = "+POut.Long(plannedApptNum)+" LIMIT 1";
 			List<PlannedAppt> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
@@ -92,7 +92,7 @@ namespace OpenDentBusiness.Crud{
 				+"PatNum        =  "+POut.Long  (plannedAppt.PatNum)+", "
 				+"AptNum        =  "+POut.Long  (plannedAppt.AptNum)+", "
 				+"ItemOrder     =  "+POut.Int   (plannedAppt.ItemOrder)+" "
-				+"WHERE PlannedApptNum = "+POut.Long(plannedAppt.PlannedApptNum);
+				+"WHERE PlannedApptNum = "+POut.Long(plannedAppt.PlannedApptNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
@@ -115,14 +115,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE plannedappt SET "+command
-				+" WHERE PlannedApptNum = "+POut.Long(plannedAppt.PlannedApptNum);
+				+" WHERE PlannedApptNum = "+POut.Long(plannedAppt.PlannedApptNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one PlannedAppt from the database.</summary>
 		internal static void Delete(long plannedApptNum){
 			string command="DELETE FROM plannedappt "
-				+"WHERE PlannedApptNum = "+POut.Long(plannedApptNum);
+				+"WHERE PlannedApptNum = "+POut.Long(plannedApptNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 

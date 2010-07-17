@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one Benefit object from the database using the primary key.  Returns null if not found.</summary>
 		internal static Benefit SelectOne(long benefitNum){
 			string command="SELECT * FROM benefit "
-				+"WHERE BenefitNum = "+POut.Long(benefitNum);
+				+"WHERE BenefitNum = "+POut.Long(benefitNum)+" LIMIT 1";
 			List<Benefit> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
@@ -116,7 +116,7 @@ namespace OpenDentBusiness.Crud{
 				+"Quantity         =  "+POut.Byte  (benefit.Quantity)+", "
 				+"CodeNum          =  "+POut.Long  (benefit.CodeNum)+", "
 				+"CoverageLevel    =  "+POut.Int   ((int)benefit.CoverageLevel)+" "
-				+"WHERE BenefitNum = "+POut.Long(benefit.BenefitNum);
+				+"WHERE BenefitNum = "+POut.Long(benefit.BenefitNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
@@ -171,14 +171,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE benefit SET "+command
-				+" WHERE BenefitNum = "+POut.Long(benefit.BenefitNum);
+				+" WHERE BenefitNum = "+POut.Long(benefit.BenefitNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Benefit from the database.</summary>
 		internal static void Delete(long benefitNum){
 			string command="DELETE FROM benefit "
-				+"WHERE BenefitNum = "+POut.Long(benefitNum);
+				+"WHERE BenefitNum = "+POut.Long(benefitNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 

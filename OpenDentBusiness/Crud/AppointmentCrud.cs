@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one Appointment object from the database using the primary key.  Returns null if not found.</summary>
 		internal static Appointment SelectOne(long aptNum){
 			string command="SELECT * FROM appointment "
-				+"WHERE AptNum = "+POut.Long(aptNum);
+				+"WHERE AptNum = "+POut.Long(aptNum)+" LIMIT 1";
 			List<Appointment> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
@@ -152,7 +152,7 @@ namespace OpenDentBusiness.Crud{
 				+"DateTimeDismissed=  "+POut.DateT (appointment.DateTimeDismissed)+", "
 				+"InsPlan1         =  "+POut.Long  (appointment.InsPlan1)+", "
 				+"InsPlan2         =  "+POut.Long  (appointment.InsPlan2)+" "
-				+"WHERE AptNum = "+POut.Long(appointment.AptNum);
+				+"WHERE AptNum = "+POut.Long(appointment.AptNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
@@ -252,14 +252,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE appointment SET "+command
-				+" WHERE AptNum = "+POut.Long(appointment.AptNum);
+				+" WHERE AptNum = "+POut.Long(appointment.AptNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Appointment from the database.</summary>
 		internal static void Delete(long aptNum){
 			string command="DELETE FROM appointment "
-				+"WHERE AptNum = "+POut.Long(aptNum);
+				+"WHERE AptNum = "+POut.Long(aptNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 

@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one ClaimForm object from the database using the primary key.  Returns null if not found.</summary>
 		internal static ClaimForm SelectOne(long claimFormNum){
 			string command="SELECT * FROM claimform "
-				+"WHERE ClaimFormNum = "+POut.Long(claimFormNum);
+				+"WHERE ClaimFormNum = "+POut.Long(claimFormNum)+" LIMIT 1";
 			List<ClaimForm> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
@@ -107,7 +107,7 @@ namespace OpenDentBusiness.Crud{
 				+"PrintImages =  "+POut.Bool  (claimForm.PrintImages)+", "
 				+"OffsetX     =  "+POut.Int   (claimForm.OffsetX)+", "
 				+"OffsetY     =  "+POut.Int   (claimForm.OffsetY)+" "
-				+"WHERE ClaimFormNum = "+POut.Long(claimForm.ClaimFormNum);
+				+"WHERE ClaimFormNum = "+POut.Long(claimForm.ClaimFormNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
@@ -150,14 +150,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE claimform SET "+command
-				+" WHERE ClaimFormNum = "+POut.Long(claimForm.ClaimFormNum);
+				+" WHERE ClaimFormNum = "+POut.Long(claimForm.ClaimFormNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one ClaimForm from the database.</summary>
 		internal static void Delete(long claimFormNum){
 			string command="DELETE FROM claimform "
-				+"WHERE ClaimFormNum = "+POut.Long(claimFormNum);
+				+"WHERE ClaimFormNum = "+POut.Long(claimFormNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 

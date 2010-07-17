@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one AutoCodeCond object from the database using the primary key.  Returns null if not found.</summary>
 		internal static AutoCodeCond SelectOne(long autoCodeCondNum){
 			string command="SELECT * FROM autocodecond "
-				+"WHERE AutoCodeCondNum = "+POut.Long(autoCodeCondNum);
+				+"WHERE AutoCodeCondNum = "+POut.Long(autoCodeCondNum)+" LIMIT 1";
 			List<AutoCodeCond> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
@@ -89,7 +89,7 @@ namespace OpenDentBusiness.Crud{
 			string command="UPDATE autocodecond SET "
 				+"AutoCodeItemNum=  "+POut.Long  (autoCodeCond.AutoCodeItemNum)+", "
 				+"Cond           =  "+POut.Int   ((int)autoCodeCond.Cond)+" "
-				+"WHERE AutoCodeCondNum = "+POut.Long(autoCodeCond.AutoCodeCondNum);
+				+"WHERE AutoCodeCondNum = "+POut.Long(autoCodeCond.AutoCodeCondNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
@@ -108,14 +108,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE autocodecond SET "+command
-				+" WHERE AutoCodeCondNum = "+POut.Long(autoCodeCond.AutoCodeCondNum);
+				+" WHERE AutoCodeCondNum = "+POut.Long(autoCodeCond.AutoCodeCondNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one AutoCodeCond from the database.</summary>
 		internal static void Delete(long autoCodeCondNum){
 			string command="DELETE FROM autocodecond "
-				+"WHERE AutoCodeCondNum = "+POut.Long(autoCodeCondNum);
+				+"WHERE AutoCodeCondNum = "+POut.Long(autoCodeCondNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 

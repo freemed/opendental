@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one Laboratory object from the database using the primary key.  Returns null if not found.</summary>
 		internal static Laboratory SelectOne(long laboratoryNum){
 			string command="SELECT * FROM laboratory "
-				+"WHERE LaboratoryNum = "+POut.Long(laboratoryNum);
+				+"WHERE LaboratoryNum = "+POut.Long(laboratoryNum)+" LIMIT 1";
 			List<Laboratory> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
@@ -113,7 +113,7 @@ namespace OpenDentBusiness.Crud{
 				+"Zip          = '"+POut.String(laboratory.Zip)+"', "
 				+"Email        = '"+POut.String(laboratory.Email)+"', "
 				+"WirelessPhone= '"+POut.String(laboratory.WirelessPhone)+"' "
-				+"WHERE LaboratoryNum = "+POut.Long(laboratory.LaboratoryNum);
+				+"WHERE LaboratoryNum = "+POut.Long(laboratory.LaboratoryNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
@@ -164,14 +164,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE laboratory SET "+command
-				+" WHERE LaboratoryNum = "+POut.Long(laboratory.LaboratoryNum);
+				+" WHERE LaboratoryNum = "+POut.Long(laboratory.LaboratoryNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Laboratory from the database.</summary>
 		internal static void Delete(long laboratoryNum){
 			string command="DELETE FROM laboratory "
-				+"WHERE LaboratoryNum = "+POut.Long(laboratoryNum);
+				+"WHERE LaboratoryNum = "+POut.Long(laboratoryNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 

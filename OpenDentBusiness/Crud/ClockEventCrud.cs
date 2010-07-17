@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one ClockEvent object from the database using the primary key.  Returns null if not found.</summary>
 		internal static ClockEvent SelectOne(long clockEventNum){
 			string command="SELECT * FROM clockevent "
-				+"WHERE ClockEventNum = "+POut.Long(clockEventNum);
+				+"WHERE ClockEventNum = "+POut.Long(clockEventNum)+" LIMIT 1";
 			List<ClockEvent> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
@@ -104,7 +104,7 @@ namespace OpenDentBusiness.Crud{
 				+"Note          = '"+POut.String(clockEvent.Note)+"', "
 				+"TimeEntered2  =  "+POut.DateT (clockEvent.TimeEntered2)+", "
 				+"TimeDisplayed2=  "+POut.DateT (clockEvent.TimeDisplayed2)+" "
-				+"WHERE ClockEventNum = "+POut.Long(clockEvent.ClockEventNum);
+				+"WHERE ClockEventNum = "+POut.Long(clockEvent.ClockEventNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
@@ -140,14 +140,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE clockevent SET "+command
-				+" WHERE ClockEventNum = "+POut.Long(clockEvent.ClockEventNum);
+				+" WHERE ClockEventNum = "+POut.Long(clockEvent.ClockEventNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one ClockEvent from the database.</summary>
 		internal static void Delete(long clockEventNum){
 			string command="DELETE FROM clockevent "
-				+"WHERE ClockEventNum = "+POut.Long(clockEventNum);
+				+"WHERE ClockEventNum = "+POut.Long(clockEventNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 
