@@ -17,7 +17,7 @@ namespace OpenDental {
 		///<summary>It's OK if AptCur is not completely up-to-date.  We are going to use PatNum, isPlanned, AptDateTime, AptStatus, and AptNum.</summary>
 		public Appointment AptCur;
 
-		///<summary>Specify AptCur before opening this form.</summary>
+		///<summary>Not currently used.  Might use again some day as a sub window of FormApptEdit.  Specify AptCur before opening this form.</summary>
 		public FormApptProcs() {
 			InitializeComponent();
 			Lan.F(this);

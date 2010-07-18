@@ -151,13 +151,12 @@ namespace OpenDental{
 		private Label labelCanadianEligibilityCode;
 		private ComboBox comboCanadianEligibilityCode;
 		private Label label41;
-		private ListBox listRelationships;
-		private OpenDental.UI.Button butAddRelat;
-		private OpenDental.UI.Button butRemoveRelat;
+		private ListBox listGuardians;
+		private OpenDental.UI.Button butAddGuardian;
 		///<summary>Will include the languages setup in the settings, and also the language of this patient if that language is not on the selection list.</summary>
 		private List<CultureInfo> languageList;
-		private OpenDental.UI.Button butRelationshipDefaults;
-		private List<Guardian> relationships;
+		private OpenDental.UI.Button butGuardianDefaults;
+		private List<Guardian> GuardianList;
 
 		///<summary></summary>
 		public FormPatientEdit(Patient patCur,Family famCur){
@@ -345,10 +344,9 @@ namespace OpenDental{
 			this.textTitle = new System.Windows.Forms.TextBox();
 			this.label26 = new System.Windows.Forms.Label();
 			this.label41 = new System.Windows.Forms.Label();
-			this.listRelationships = new System.Windows.Forms.ListBox();
-			this.butAddRelat = new OpenDental.UI.Button();
-			this.butRemoveRelat = new OpenDental.UI.Button();
-			this.butRelationshipDefaults = new OpenDental.UI.Button();
+			this.listGuardians = new System.Windows.Forms.ListBox();
+			this.butAddGuardian = new OpenDental.UI.Button();
+			this.butGuardianDefaults = new OpenDental.UI.Button();
 			this.groupBox2.SuspendLayout();
 			this.groupBox1.SuspendLayout();
 			this.groupNotes.SuspendLayout();
@@ -649,16 +647,16 @@ namespace OpenDental{
 			// 
 			// label20
 			// 
-			this.label20.Location = new System.Drawing.Point(215,257);
+			this.label20.Location = new System.Drawing.Point(209,257);
 			this.label20.Name = "label20";
-			this.label20.Size = new System.Drawing.Size(61,16);
+			this.label20.Size = new System.Drawing.Size(53,16);
 			this.label20.TabIndex = 40;
 			this.label20.Text = "Age";
 			this.label20.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// textAge
 			// 
-			this.textAge.Location = new System.Drawing.Point(276,253);
+			this.textAge.Location = new System.Drawing.Point(262,253);
 			this.textAge.Name = "textAge";
 			this.textAge.ReadOnly = true;
 			this.textAge.Size = new System.Drawing.Size(68,20);
@@ -1495,77 +1493,58 @@ namespace OpenDental{
 			// 
 			// label41
 			// 
-			this.label41.AutoSize = true;
-			this.label41.Location = new System.Drawing.Point(364,162);
+			this.label41.Location = new System.Drawing.Point(365,162);
 			this.label41.Name = "label41";
-			this.label41.Size = new System.Drawing.Size(55,13);
+			this.label41.Size = new System.Drawing.Size(73,13);
 			this.label41.TabIndex = 105;
 			this.label41.Text = "Guardians";
 			this.label41.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
-			// listRelationships
+			// listGuardians
 			// 
-			this.listRelationships.Enabled = false;
-			this.listRelationships.FormattingEnabled = true;
-			this.listRelationships.Location = new System.Drawing.Point(367,177);
-			this.listRelationships.Name = "listRelationships";
-			this.listRelationships.Size = new System.Drawing.Size(94,69);
-			this.listRelationships.TabIndex = 106;
+			this.listGuardians.FormattingEnabled = true;
+			this.listGuardians.Location = new System.Drawing.Point(367,177);
+			this.listGuardians.Name = "listGuardians";
+			this.listGuardians.Size = new System.Drawing.Size(94,69);
+			this.listGuardians.TabIndex = 106;
+			this.listGuardians.DoubleClick += new System.EventHandler(this.listGuardians_DoubleClick);
 			// 
-			// butAddRelat
+			// butAddGuardian
 			// 
-			this.butAddRelat.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butAddRelat.Autosize = true;
-			this.butAddRelat.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAddRelat.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAddRelat.CornerRadius = 4F;
-			this.butAddRelat.Enabled = false;
-			this.butAddRelat.Location = new System.Drawing.Point(367,249);
-			this.butAddRelat.Name = "butAddRelat";
-			this.butAddRelat.Size = new System.Drawing.Size(36,22);
-			this.butAddRelat.TabIndex = 107;
-			this.butAddRelat.Text = "Add";
-			this.butAddRelat.Click += new System.EventHandler(this.butAddRelat_Click);
+			this.butAddGuardian.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butAddGuardian.Autosize = true;
+			this.butAddGuardian.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAddGuardian.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAddGuardian.CornerRadius = 4F;
+			this.butAddGuardian.Location = new System.Drawing.Point(367,249);
+			this.butAddGuardian.Name = "butAddGuardian";
+			this.butAddGuardian.Size = new System.Drawing.Size(36,22);
+			this.butAddGuardian.TabIndex = 107;
+			this.butAddGuardian.Text = "Add";
+			this.butAddGuardian.Click += new System.EventHandler(this.butAddGuardian_Click);
 			// 
-			// butRemoveRelat
+			// butGuardianDefaults
 			// 
-			this.butRemoveRelat.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butRemoveRelat.Autosize = true;
-			this.butRemoveRelat.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butRemoveRelat.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butRemoveRelat.CornerRadius = 4F;
-			this.butRemoveRelat.Enabled = false;
-			this.butRemoveRelat.Location = new System.Drawing.Point(409,249);
-			this.butRemoveRelat.Name = "butRemoveRelat";
-			this.butRemoveRelat.Size = new System.Drawing.Size(52,22);
-			this.butRemoveRelat.TabIndex = 108;
-			this.butRemoveRelat.Text = "Remove";
-			this.butRemoveRelat.Click += new System.EventHandler(this.butRemoveRelat_Click);
-			// 
-			// butRelationshipDefaults
-			// 
-			this.butRelationshipDefaults.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butRelationshipDefaults.Autosize = true;
-			this.butRelationshipDefaults.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butRelationshipDefaults.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butRelationshipDefaults.CornerRadius = 4F;
-			this.butRelationshipDefaults.Enabled = false;
-			this.butRelationshipDefaults.Location = new System.Drawing.Point(367,274);
-			this.butRelationshipDefaults.Name = "butRelationshipDefaults";
-			this.butRelationshipDefaults.Size = new System.Drawing.Size(94,22);
-			this.butRelationshipDefaults.TabIndex = 109;
-			this.butRelationshipDefaults.Text = "Defaults";
-			this.butRelationshipDefaults.Click += new System.EventHandler(this.butRelationshipDefaults_Click);
+			this.butGuardianDefaults.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butGuardianDefaults.Autosize = true;
+			this.butGuardianDefaults.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butGuardianDefaults.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butGuardianDefaults.CornerRadius = 4F;
+			this.butGuardianDefaults.Location = new System.Drawing.Point(404,249);
+			this.butGuardianDefaults.Name = "butGuardianDefaults";
+			this.butGuardianDefaults.Size = new System.Drawing.Size(57,22);
+			this.butGuardianDefaults.TabIndex = 109;
+			this.butGuardianDefaults.Text = "Defaults";
+			this.butGuardianDefaults.Click += new System.EventHandler(this.butGuardianDefaults_Click);
 			// 
 			// FormPatientEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(994,673);
-			this.Controls.Add(this.butRelationshipDefaults);
-			this.Controls.Add(this.butRemoveRelat);
-			this.Controls.Add(this.butAddRelat);
-			this.Controls.Add(this.listRelationships);
+			this.Controls.Add(this.butGuardianDefaults);
+			this.Controls.Add(this.butAddGuardian);
+			this.Controls.Add(this.listGuardians);
 			this.Controls.Add(this.label41);
 			this.Controls.Add(this.textTitle);
 			this.Controls.Add(this.label26);
@@ -1717,9 +1696,7 @@ namespace OpenDental{
 				case PatientPosition.Child : listPosition.SelectedIndex=2; break;
 				case PatientPosition.Widowed : listPosition.SelectedIndex=3; break;
 				case PatientPosition.Divorced : listPosition.SelectedIndex=4; break;}
-			if(PatCur.Position==PatientPosition.Child){
-				FillRelationships();
-			}
+			FillGuardians();
 			if(PatCur.Birthdate.Year < 1880)
 				textBirthdate.Text="";
 			else
@@ -1922,55 +1899,13 @@ namespace OpenDental{
 			}
 		}
 
-		private void FillRelationships(){
-			relationships=Guardians.Refresh(PatCur.PatNum);
-			listRelationships.Items.Clear();
-			for(int i=0;i<relationships.Count;i++){
-				Patient relatedPat=null;
-				for(int p=0;p<FamCur.ListPats.Length;p++){
-					if(FamCur.ListPats[p].PatNum==relationships[i].PatNumGuardian){
-						relatedPat=FamCur.ListPats[p];
-						break;
-					}
-				}
-				if(relatedPat!=null){
-					listRelationships.Items.Add(relatedPat.FName+relationships[i].GuardianRelationshipStr());
-				}
+		private void FillGuardians(){
+			GuardianList=Guardians.Refresh(PatCur.PatNum);
+			listGuardians.Items.Clear();
+			for(int i=0;i<GuardianList.Count;i++){
+				listGuardians.Items.Add(FamCur.GetNameInFamFirst(GuardianList[i].PatNumGuardian)+" "
+					+Guardians.GetGuardianRelationshipStr(GuardianList[i].Relationship));
 			}
-			CheckGuardianUiState();
-		}
-
-		///<summary>Returns a list of the patients within the family which are not marked as children.</summary>
-		private List <Patient> GetElders(){
-			List <Patient> elders=new List<Patient>();
-			for(int p=0;p<FamCur.ListPats.Length;p++){
-				if(FamCur.ListPats[p].Position==PatientPosition.Child){
-					continue;
-				}
-				elders.Add(FamCur.ListPats[p]);
-			}
-			return elders;
-		}
-
-		///<summary>Returns a list of the guardian patients within the given list which also 
-		///do not already have a relationship defined with the current patient.</summary>
-		private List <Patient> GetUnrelated(List <Patient> guardians){
-			List <Patient> unrelated=new List<Patient>();
-			if(relationships!=null){
-				for(int g=0;g<guardians.Count;g++){
-						bool relatExists=false;
-						for(int r=0;r<relationships.Count;r++){
-							if(relationships[r].PatNumGuardian==guardians[g].PatNum){
-								relatExists=true;
-								break;
-							}
-						}
-						if(!relatExists){
-							unrelated.Add(guardians[g]);
-						}
-				}
-			}
-			return unrelated;
 		}
 
 		//private void butSecClear_Click(object sender, System.EventArgs e) {
@@ -2583,72 +2518,88 @@ namespace OpenDental{
 		}
 
 		private void listPosition_SelectedIndexChanged(object sender,EventArgs e) {
-			CheckGuardianUiState();
+			//CheckGuardianUiState();
 		}
 
-		private void CheckGuardianUiState(){
-			List <Patient> elders=GetElders();
-			List <Patient> unrelatedElders=GetUnrelated(elders);
-			listRelationships.Enabled=(listPosition.SelectedIndex==2 && elders.Count>0);//Position=Child
-			butAddRelat.Enabled=(listPosition.SelectedIndex==2 && unrelatedElders.Count>0);//Position=Child
-			butRemoveRelat.Enabled=(listRelationships.Enabled && listRelationships.Items.Count>0);
-			butRelationshipDefaults.Enabled=(elders.Count>0);
-		}
-
-		private void butAddRelat_Click(object sender,EventArgs e) {
-			List <Patient> elders=GetElders();
-			List <Patient> unrelatedElders=GetUnrelated(elders);
-			FormGuardianEdit fdre=new FormGuardianEdit(PatCur,unrelatedElders);
-			if(fdre.ShowDialog()==DialogResult.OK){
-				FillRelationships();
-			}
-		}
-
-		private void butRemoveRelat_Click(object sender,EventArgs e) {
-			if(listRelationships.SelectedIndex<0){
-				MsgBox.Show(this,"Please select a relationship to remove");
+		private void listGuardians_DoubleClick(object sender,EventArgs e) {
+			if(listGuardians.SelectedIndex==-1) {
 				return;
 			}
-			Guardians.Delete(relationships[listRelationships.SelectedIndex].GuardianNum);
-			FillRelationships();
+			FormGuardianEdit formG=new FormGuardianEdit(GuardianList[listGuardians.SelectedIndex],FamCur);
+			if(formG.ShowDialog()==DialogResult.OK) {
+				FillGuardians();
+			}
 		}
 
-		private void butRelationshipDefaults_Click(object sender,EventArgs e) {
-			if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"Replace existing relationships with default relationships for entire family?")){
-				return;
+		private void butAddGuardian_Click(object sender,EventArgs e) {
+			if(listPosition.SelectedIndex!=2) {
+				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Guardians are usually only added from a child window.  Continue anyway?")) {
+					return;
+				}
 			}
-			Guardians.DeleteForFamily(PatCur.Guarantor);
-			List <Patient> guardians=new List<Patient>();
-			List <Patient> children=new List<Patient>();
+			Guardian guardian=new Guardian();
+			guardian.IsNew=true;
+			guardian.PatNumChild=PatCur.PatNum;
+			//no patnumGuardian set
+			FormGuardianEdit formG=new FormGuardianEdit(guardian,FamCur);
+			if(formG.ShowDialog()==DialogResult.OK) {
+				FillGuardians();
+			}
+		}
+
+		private void butGuardianDefaults_Click(object sender,EventArgs e) {
+			if(Guardians.ExistForFamily(PatCur.Guarantor)) {
+				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Replace existing relationships with default relationships for entire family?")) {
+					return;
+				}
+				Guardians.DeleteForFamily(PatCur.Guarantor);
+			}
+			List<Patient> adults=new List<Patient>();
+			List<Patient> children=new List<Patient>();
+			PatientPosition pos;
 			for(int p=0;p<FamCur.ListPats.Length;p++){
-				if(FamCur.ListPats[p].Position==PatientPosition.Child){
+				if(FamCur.ListPats[p].PatNum==PatCur.PatNum) {
+					pos=(PatientPosition)listPosition.SelectedIndex;
+				}
+				else {
+					pos=FamCur.ListPats[p].Position;
+				}
+				if(pos==PatientPosition.Child){
 					children.Add(FamCur.ListPats[p]);
 				}
+				else if(pos==PatientPosition.Single) {
+					//ignore these family members completely.
+				}
 				else{
-					guardians.Add(FamCur.ListPats[p]);
+					adults.Add(FamCur.ListPats[p]);
 				}
 			}
-			if(guardians.Count<1){
+			if(adults.Count<1){
+				MsgBox.Show(this,"No adults found.");
+				return;
+			}
+			if(children.Count<1) {
+				MsgBox.Show(this,"No children found.");
 				return;
 			}
 			for(int c=0;c<children.Count;c++){
-				for(int p=0;p<guardians.Count;p++){
-					Guardian relat=new Guardian();
-					relat.PatNumChild=children[c].PatNum;
-					relat.PatNumGuardian=guardians[p].PatNum;
-					if(guardians[p].Gender==PatientGender.Male){
-						relat.Relationship=GuardianRelationship.Father;
+				for(int a=0;a<adults.Count;a++){
+					Guardian guardian=new Guardian();
+					guardian.PatNumChild=children[c].PatNum;
+					guardian.PatNumGuardian=adults[a].PatNum;
+					if(adults[a].Gender==PatientGender.Male){
+						guardian.Relationship=GuardianRelationship.Father;
 					}
-					else if(guardians[p].Gender==PatientGender.Female){
-						relat.Relationship=GuardianRelationship.Mother;
+					else if(adults[a].Gender==PatientGender.Female){
+						guardian.Relationship=GuardianRelationship.Mother;
 					}
 					else{
 						break;
 					}
-					Guardians.Insert(relat);
+					Guardians.Insert(guardian);
 				}
 			}
-			FillRelationships();
+			FillGuardians();
 		}
 
 		///<summary>Gets an employerNum based on the name entered. Called from FillCur</summary>
@@ -2889,6 +2840,8 @@ namespace OpenDental{
 				Patients.Delete(PatCur);
 			}
 		}
+
+		
 
 		
 

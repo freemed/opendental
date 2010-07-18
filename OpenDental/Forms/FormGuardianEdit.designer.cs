@@ -26,20 +26,21 @@ namespace OpenDental{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormGuardianEdit));
 			this.label1 = new System.Windows.Forms.Label();
 			this.textDependant = new System.Windows.Forms.TextBox();
-			this.listFamilyMembers = new System.Windows.Forms.ListBox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.label3 = new System.Windows.Forms.Label();
-			this.listRelationships = new System.Windows.Forms.ListBox();
+			this.listRelationship = new System.Windows.Forms.ListBox();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.textGuardian = new System.Windows.Forms.TextBox();
+			this.butPick = new OpenDental.UI.Button();
+			this.butDelete = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// label1
 			// 
-			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(12,9);
+			this.label1.Location = new System.Drawing.Point(13,10);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(60,13);
+			this.label1.Size = new System.Drawing.Size(76,13);
 			this.label1.TabIndex = 4;
 			this.label1.Text = "Dependant";
 			// 
@@ -51,40 +52,29 @@ namespace OpenDental{
 			this.textDependant.Size = new System.Drawing.Size(365,20);
 			this.textDependant.TabIndex = 5;
 			// 
-			// listFamilyMembers
-			// 
-			this.listFamilyMembers.FormattingEnabled = true;
-			this.listFamilyMembers.Location = new System.Drawing.Point(15,65);
-			this.listFamilyMembers.Name = "listFamilyMembers";
-			this.listFamilyMembers.ScrollAlwaysVisible = true;
-			this.listFamilyMembers.Size = new System.Drawing.Size(365,56);
-			this.listFamilyMembers.TabIndex = 6;
-			// 
 			// label2
 			// 
-			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(12,48);
+			this.label2.Location = new System.Drawing.Point(13,49);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(50,13);
+			this.label2.Size = new System.Drawing.Size(66,13);
 			this.label2.TabIndex = 7;
 			this.label2.Text = "Guardian";
 			// 
 			// label3
 			// 
-			this.label3.AutoSize = true;
-			this.label3.Location = new System.Drawing.Point(12,125);
+			this.label3.Location = new System.Drawing.Point(13,95);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(65,13);
+			this.label3.Size = new System.Drawing.Size(81,13);
 			this.label3.TabIndex = 8;
 			this.label3.Text = "Relationship";
 			// 
-			// listRelationships
+			// listRelationship
 			// 
-			this.listRelationships.FormattingEnabled = true;
-			this.listRelationships.Location = new System.Drawing.Point(15,142);
-			this.listRelationships.Name = "listRelationships";
-			this.listRelationships.Size = new System.Drawing.Size(365,95);
-			this.listRelationships.TabIndex = 9;
+			this.listRelationship.FormattingEnabled = true;
+			this.listRelationship.Location = new System.Drawing.Point(15,111);
+			this.listRelationship.Name = "listRelationship";
+			this.listRelationship.Size = new System.Drawing.Size(213,95);
+			this.listRelationship.TabIndex = 9;
 			// 
 			// butOK
 			// 
@@ -94,7 +84,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(297,279);
+			this.butOK.Location = new System.Drawing.Point(323,229);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 3;
@@ -109,21 +99,63 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(297,320);
+			this.butCancel.Location = new System.Drawing.Point(323,270);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 2;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// textGuardian
+			// 
+			this.textGuardian.Location = new System.Drawing.Point(15,64);
+			this.textGuardian.Name = "textGuardian";
+			this.textGuardian.ReadOnly = true;
+			this.textGuardian.Size = new System.Drawing.Size(334,20);
+			this.textGuardian.TabIndex = 10;
+			// 
+			// butPick
+			// 
+			this.butPick.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butPick.Autosize = true;
+			this.butPick.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butPick.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPick.CornerRadius = 4F;
+			this.butPick.Location = new System.Drawing.Point(353,63);
+			this.butPick.Name = "butPick";
+			this.butPick.Size = new System.Drawing.Size(27,21);
+			this.butPick.TabIndex = 67;
+			this.butPick.TabStop = false;
+			this.butPick.Text = "...";
+			this.butPick.Click += new System.EventHandler(this.butPick_Click);
+			// 
+			// butDelete
+			// 
+			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butDelete.Autosize = true;
+			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDelete.CornerRadius = 4F;
+			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
+			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butDelete.Location = new System.Drawing.Point(15,270);
+			this.butDelete.Name = "butDelete";
+			this.butDelete.Size = new System.Drawing.Size(75,24);
+			this.butDelete.TabIndex = 68;
+			this.butDelete.Text = "Delete";
+			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
+			// 
 			// FormGuardianEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(397,371);
-			this.Controls.Add(this.listRelationships);
+			this.ClientSize = new System.Drawing.Size(423,314);
+			this.Controls.Add(this.butDelete);
+			this.Controls.Add(this.butPick);
+			this.Controls.Add(this.textGuardian);
+			this.Controls.Add(this.listRelationship);
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.label2);
-			this.Controls.Add(this.listFamilyMembers);
 			this.Controls.Add(this.textDependant);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.butOK);
@@ -132,6 +164,7 @@ namespace OpenDental{
 			this.Name = "FormGuardianEdit";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Edit Guardians";
+			this.Load += new System.EventHandler(this.FormGuardianEdit_Load);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -143,9 +176,11 @@ namespace OpenDental{
 		private OpenDental.UI.Button butCancel;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.TextBox textDependant;
-		private System.Windows.Forms.ListBox listFamilyMembers;
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.Label label3;
-		private System.Windows.Forms.ListBox listRelationships;
+		private System.Windows.Forms.ListBox listRelationship;
+		private System.Windows.Forms.TextBox textGuardian;
+		private OpenDental.UI.Button butPick;
+		private OpenDental.UI.Button butDelete;
 	}
 }

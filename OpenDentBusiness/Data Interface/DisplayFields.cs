@@ -168,6 +168,7 @@ namespace OpenDentBusiness {
 				list.Add(new DisplayField("Referrals",0,category));
 				list.Add(new DisplayField("Addr/Ph Note",0,category));
 				list.Add(new DisplayField("PatFields",0,category));
+				//list.Add(new DisplayField("Guardians",0,category));
 			}
 			else if(category==DisplayFieldCategory.AccountModule) {
 				list.Add(new DisplayField("Date",65,category));
@@ -271,6 +272,7 @@ namespace OpenDentBusiness {
 				list.Add(new DisplayField("Referrals",0,category));
 				list.Add(new DisplayField("Addr/Ph Note",0,category));
 				list.Add(new DisplayField("PatFields",0,category));
+				list.Add(new DisplayField("Guardians",0,category));
 			}
 			else if(category==DisplayFieldCategory.AccountModule){
 				list.Add(new DisplayField("Date",65,category));

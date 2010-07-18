@@ -549,19 +549,25 @@ namespace OpenDentBusiness{
 			table.Columns.Add("AptNum");
 			table.Columns.Add("AptStatus");
 			table.Columns.Add("Assistant");
+			table.Columns.Add("assistantAbbr");
 			table.Columns.Add("billingType");
 			table.Columns.Add("chartNumber");
 			table.Columns.Add("chartNumAndName");
 			table.Columns.Add("confirmed");
 			table.Columns.Add("Confirmed");
 			table.Columns.Add("contactMethods");
-			table.Columns.Add("creditIns");
+			//table.Columns.Add("creditIns");
+			table.Columns.Add("CreditType");
 			table.Columns.Add("famFinUrgNote");
+			table.Columns.Add("guardians");
+			table.Columns.Add("hasIns[I]");
 			table.Columns.Add("hmPhone");
 			table.Columns.Add("ImageFolder");
 			table.Columns.Add("insurance");
+			table.Columns.Add("insToSend[!]");
 			table.Columns.Add("IsHygiene");
 			table.Columns.Add("lab");
+			table.Columns.Add("medOrPremed[+]");
 			table.Columns.Add("MedUrgNote");
 			table.Columns.Add("Note");
 			table.Columns.Add("Op");
@@ -666,11 +672,27 @@ namespace OpenDentBusiness{
 					+"AND procedurelog.ProcFee>0 "
 					+"AND claimproc.Status=6 "//estimate
 					+"AND procedurelog.procstatus=2 "
-					+"AND procedurelog.ProcDate >= "+POut.Date(DateTime.Now.AddYears(-1))+" "
+					+"AND procedurelog.ProcDate >= "+POut.Date(DateTime.Now.AddYears(-1))+" "//I'm sure this is the slow part.  Should be easy to make faster with less range
 					+"AND procedurelog.ProcDate <= "+POut.Date(DateTime.Now)+ " "
 					+"GROUP BY patient.Guarantor"; 
 				rawInsProc=dcon.GetTable(command);
 			}
+			//Guardians-----------------------------------------------------------------------
+			command="SELECT PatNumChild,PatNumGuardian,Relationship,patient.FName,patient.Preferred "
+				+"FROM guardian "
+				+"LEFT JOIN patient ON patient.PatNum=guardian.PatNumGuardian "
+				+"WHERE PatNumChild IN (";
+			if(raw.Rows.Count==0){
+				command+="0";
+			}
+			else for(int i=0;i<raw.Rows.Count;i++) {
+				if(i>0) {
+					command+=",";
+				}
+				command+=raw.Rows[i]["PatNum"].ToString();
+			}
+			command+=") ORDER BY Relationship";
+			DataTable rawGuardians=dcon.GetTable(command);
 			DateTime aptDate;
 			TimeSpan span;
 			int hours;
@@ -720,6 +742,10 @@ namespace OpenDentBusiness{
 				row["AptNum"]=raw.Rows[i]["AptNum"].ToString();
 				row["AptStatus"]=raw.Rows[i]["AptStatus"].ToString();
 				row["Assistant"]=raw.Rows[i]["Assistant"].ToString();
+				row["assistantAbbr"]="";
+				if(row["Assistant"].ToString()!="0") {
+					row["assistantAbbr"]=Employees.GetAbbr(PIn.Long(row["Assistant"].ToString()));
+				}
 				row["billingType"]=DefC.GetName(DefCat.BillingTypes,PIn.Long(raw.Rows[i]["BillingType"].ToString()));
 				row["chartNumber"]=raw.Rows[i]["ChartNumber"].ToString();
 				row["chartNumAndName"]="";
@@ -763,16 +789,26 @@ namespace OpenDentBusiness{
 						}
 					}
 				}
-				row["creditIns"]=raw.Rows[i]["CreditType"].ToString();
-				if(InsToSend) {
-					row["creditIns"]+="!";
-				}
-				else if(raw.Rows[i]["PlanNum"].ToString()!="" && raw.Rows[i]["PlanNum"].ToString()!="0") {
-					row["creditIns"]+="I";
-				}
+				row["CreditType"]=raw.Rows[i]["CreditType"].ToString();
 				row["famFinUrgNote"]="";
 				if(raw.Rows[i]["FamFinUrgNote"].ToString()!="") {
 					row["famFinUrgNote"]=Lans.g("Appointments","FamFinUrgNote: ")+raw.Rows[i]["FamFinUrgNote"].ToString();
+				}
+				row["guardians"]="";
+				GuardianRelationship guardRelat;
+				for(int g=0;g<rawGuardians.Rows.Count;g++) {
+					if(raw.Rows[i]["PatNum"].ToString()==rawGuardians.Rows[g]["PatNumChild"].ToString()) {
+						if(row["guardians"].ToString()!="") {
+							row["guardians"]+=",";
+						}
+						guardRelat=(GuardianRelationship)PIn.Int(rawGuardians.Rows[g]["Relationship"].ToString());
+						row["guardians"]+=Patients.GetNameFirst(rawGuardians.Rows[g]["FName"].ToString(),rawGuardians.Rows[g]["Preferred"].ToString())
+							+Guardians.GetGuardianRelationshipStr(guardRelat);
+					}
+				}
+				row["hasIns[I]"]="";
+				if(raw.Rows[i]["PlanNum"].ToString()!="" && raw.Rows[i]["PlanNum"].ToString()!="0") {
+					row["hasIns[I]"]+="I";
 				}
 				row["hmPhone"]=Lans.g("Appointments","Hm: ")+raw.Rows[i]["HmPhone"].ToString();
 				row["ImageFolder"]=raw.Rows[i]["ImageFolder"].ToString();
@@ -788,6 +824,10 @@ namespace OpenDentBusiness{
 				}
 				else if(raw.Rows[i]["PlanNum"].ToString()!="" && raw.Rows[i]["PlanNum"].ToString()!="0"){
 					row["insurance"]=Lans.g("Appointments","Insured");
+				}
+				row["insToSend[!]"]="";
+				if(InsToSend) {
+					row["insToSend[!]"]="!";
 				}
 				row["IsHygiene"]=raw.Rows[i]["IsHygiene"].ToString();
 				row["lab"]="";
@@ -816,6 +856,10 @@ namespace OpenDentBusiness{
 							}
 						}
 					}
+				}
+				row["medOrPremed[+]"]="";
+				if(raw.Rows[i]["MedUrgNote"].ToString()!="" || raw.Rows[i]["Premed"].ToString()=="1") {
+					row["medOrPremed[+]"]="+";
 				}
 				row["MedUrgNote"]=raw.Rows[i]["MedUrgNote"].ToString();
 				row["Note"]=raw.Rows[i]["Note"].ToString();

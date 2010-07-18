@@ -424,6 +424,7 @@
     <Compile Include="Plugins\PluginContainer.cs" />
     <Compile Include="Plugins\Plugins.cs" />
     <Compile Include="TableTypes\Automation.cs" />
+    <Compile Include="TableTypes\ApptFieldDef.cs" />
     <Compile Include="TableTypes\Guardian.cs" />
     <Compile Include="TableTypes\PhoneEmpDefault.cs" />
     <Compile Include="TableTypes\TaskUnread.cs" />

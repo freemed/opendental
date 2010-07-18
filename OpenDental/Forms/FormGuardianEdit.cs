@@ -9,48 +9,72 @@ using OpenDentBusiness;
 
 namespace OpenDental {
 	public partial class FormGuardianEdit:Form {
+		private Guardian GuardianCur;
+		private Family Fam;
 
-		private Patient PatCur;
-		private List <Patient> FamilyMembersToShow;
-
-		public FormGuardianEdit(Patient dependant,List <Patient> familyMembersToShow) {
+		public FormGuardianEdit(Guardian guardianCur,Family fam){
 			InitializeComponent();
-			PatCur=dependant;
-			FamilyMembersToShow=familyMembersToShow;
-			textDependant.Text=dependant.GetNameFLFormal();
-			for(int i=0;i<FamilyMembersToShow.Count;i++){
-				if(FamilyMembersToShow[i].Position==PatientPosition.Child){
-					continue;
-				}
-				listFamilyMembers.Items.Add(FamilyMembersToShow[i].GetNameFLFormal());
-			}
-			string[] relationshipNames=Enum.GetNames(typeof(GuardianRelationship));
-			for(int i=0;i<relationshipNames.Length;i++){
-				listRelationships.Items.Add(relationshipNames[i]);
-			}
+			GuardianCur=guardianCur;
+			Fam=fam;
 			Lan.F(this);
 		}
 
+		private void FormGuardianEdit_Load(object sender,EventArgs e) {
+			textDependant.Text=Fam.GetNameInFamFL(GuardianCur.PatNumChild);
+			textGuardian.Text=Fam.GetNameInFamFL(GuardianCur.PatNumGuardian);
+			string[] relationshipNames=Enum.GetNames(typeof(GuardianRelationship));
+			for(int i=0;i<relationshipNames.Length;i++){
+				listRelationship.Items.Add(relationshipNames[i]);
+			}
+			listRelationship.SelectedIndex=(int)GuardianCur.Relationship;
+		}
+
+		private void butPick_Click(object sender,EventArgs e) {
+			FormFamilyMemberSelect FormF=new FormFamilyMemberSelect(Fam);
+			FormF.ShowDialog();
+			if(FormF.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			GuardianCur.PatNumGuardian=FormF.SelectedPatNum;
+			textGuardian.Text=Fam.GetNameInFamFL(GuardianCur.PatNumGuardian);
+		}
+
+		private void butDelete_Click(object sender,EventArgs e) {
+			if(GuardianCur.IsNew) {
+				DialogResult=DialogResult.Cancel;
+			}
+			else {
+				Guardians.Delete(GuardianCur.GuardianNum);
+				DialogResult=DialogResult.OK;
+			}
+		}
+
 		private void butOK_Click(object sender,EventArgs e) {
-			if(listFamilyMembers.SelectedIndex<0){
-				MsgBox.Show(this,"You must first select a family member");
+			if(GuardianCur.PatNumGuardian==0) {
+				MsgBox.Show(this,"Please set a guardian first.");
 				return;
 			}
-			if(listRelationships.SelectedIndex<0){
-				MsgBox.Show(this,"You must first select a relationship");
-				return;
+			//PatNumChild already set
+			//PatNumGuardian already set
+			GuardianCur.Relationship=(GuardianRelationship)listRelationship.SelectedIndex;
+			if(GuardianCur.IsNew) {
+				Guardians.Insert(GuardianCur);
 			}
-			Guardian relat=new Guardian();
-			relat.PatNumChild=PatCur.PatNum;
-			relat.PatNumGuardian=FamilyMembersToShow[listFamilyMembers.SelectedIndex].PatNum;
-			relat.Relationship=(GuardianRelationship)(listRelationships.SelectedIndex+1);
-			Guardians.Insert(relat);
+			else {
+				Guardians.Update(GuardianCur);
+			}
 			DialogResult=DialogResult.OK;
-			Close();
 		}
 
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
+		
+
+		
+
+		
 	}
 }

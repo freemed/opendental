@@ -705,6 +705,17 @@ namespace OpenDental{
 							row.Bold=true;
 						}
 						break;
+					case "Guardians":
+						List<Guardian> guardianList=Guardians.Refresh(PatCur.PatNum);
+						string str="";
+						for(int g=0;g<guardianList.Count;g++) {
+							if(g>0) {
+								str+=",";
+							}
+							str+=FamCur.GetNameInFamFirst(guardianList[g].PatNumGuardian)+Guardians.GetGuardianRelationshipStr(guardianList[g].Relationship);
+						}
+						row.Cells.Add(str);
+						break;
 					case "PatFields":
 						PatField field;
 						for(int i=0;i<PatFieldDefs.List.Length;i++){

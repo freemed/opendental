@@ -569,17 +569,24 @@ namespace OpenDental{
 			elementsAll.Add("AddrNote");
 			elementsAll.Add("Age");
 			elementsAll.Add("ASAP");
+			elementsAll.Add("ASAP[A]");
+			elementsAll.Add("AssistantAbbr");
 			elementsAll.Add("ChartNumAndName");
 			elementsAll.Add("ChartNumber");
+			elementsAll.Add("CreditType");
+			elementsAll.Add("Guardians");
+			elementsAll.Add("HasIns[I]");
 			elementsAll.Add("HmPhone");
+			elementsAll.Add("InsToSend[!]");
 			elementsAll.Add("Lab");
+			elementsAll.Add("MedOrPremed[+]");
 			elementsAll.Add("MedUrgNote");
-			elementsAll.Add("PremedFlag");
 			elementsAll.Add("Note");
 			elementsAll.Add("PatientName");
 			elementsAll.Add("PatientNameF");
 			elementsAll.Add("PatNum");
 			elementsAll.Add("PatNumAndName");
+			elementsAll.Add("PremedFlag");
 			elementsAll.Add("Procs");
 			elementsAll.Add("Production");
 			elementsAll.Add("Provider");
@@ -702,10 +709,10 @@ namespace OpenDental{
 				displayedElementsAll.Remove(displayedElementsMain[gridMain.SelectedIndices[0]]);
 			}
 			else if(gridUR.SelectedIndices.Length>0) {
-				displayedElementsAll.Remove(displayedElementsMain[gridUR.SelectedIndices[0]]);
+				displayedElementsAll.Remove(displayedElementsUR[gridUR.SelectedIndices[0]]);
 			}
 			else if(gridLR.SelectedIndices.Length>0) {
-				displayedElementsAll.Remove(displayedElementsMain[gridLR.SelectedIndices[0]]);
+				displayedElementsAll.Remove(displayedElementsLR[gridLR.SelectedIndices[0]]);
 			}
 			FillElements();
 		}

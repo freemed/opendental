@@ -74,20 +74,20 @@ namespace OpenDentBusiness{
 		Dependent}
 	///<summary>Relationship of a child to a parent/guardian.</summary>
 	public enum GuardianRelationship{
+		///<summary>0</summary>
+		Father,
 		///<summary>1</summary>
-		Father=1,
+		Mother,
 		///<summary>2</summary>
-		Mother=2,
+		Stepfather,
 		///<summary>3</summary>
-		Stepfather=3,
+		Stepmother,
 		///<summary>4</summary>
-		Stepmother=4,
+		Grandfather,
 		///<summary>5</summary>
-		Grandfather=5,
+		Grandmother,
 		///<summary>6</summary>
-		Grandmother=6,
-		///<summary>7</summary>
-		Sitter=7
+		Sitter
 	}
 	///<summary></summary>
 	public enum Month{
