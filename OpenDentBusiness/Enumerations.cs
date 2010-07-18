@@ -307,7 +307,7 @@ namespace OpenDentBusiness{
 		Signals,
 		///<summary>36</summary>
 		DisplayFields,
-		///<summary>37</summary>
+		///<summary>37. And ApptFields.</summary>
 		PatFields,
 		///<summary>38</summary>
 		AccountingAutoPays,

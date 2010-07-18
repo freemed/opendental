@@ -123,6 +123,8 @@
     <Compile Include="Crud\AdjustmentCrud.cs" />
     <Compile Include="Crud\AppointmentCrud.cs" />
     <Compile Include="Crud\AppointmentRuleCrud.cs" />
+    <Compile Include="Crud\ApptFieldCrud.cs" />
+    <Compile Include="Crud\ApptFieldDefCrud.cs" />
     <Compile Include="Crud\ApptViewCrud.cs" />
     <Compile Include="Crud\ApptViewItemCrud.cs" />
     <Compile Include="Crud\AutoCodeCondCrud.cs" />
@@ -159,6 +161,8 @@
     <Compile Include="Crud\MountDefCrud.cs" />
     <Compile Include="Crud\MountItemCrud.cs" />
     <Compile Include="Crud\MountItemDefCrud.cs" />
+    <Compile Include="Crud\PatFieldCrud.cs" />
+    <Compile Include="Crud\PatFieldDefCrud.cs" />
     <Compile Include="Crud\PatientCrud.cs" />
     <Compile Include="Crud\PharmacyCrud.cs" />
     <Compile Include="Crud\PhoneNumberCrud.cs" />
@@ -184,6 +188,8 @@
     <Compile Include="Crud\TaskSubscriptionCrud.cs" />
     <Compile Include="Crud\TaskUnreadCrud.cs" />
     <Compile Include="Crud\UserodCrud.cs" />
+    <Compile Include="Data Interface\ApptFieldDefs.cs" />
+    <Compile Include="Data Interface\ApptFields.cs" />
     <Compile Include="Data Interface\Automations.cs" />
     <Compile Include="Data Interface\Guardians.cs" />
     <Compile Include="Data Interface\PhoneAsterisks.cs" />
@@ -425,6 +431,7 @@
     <Compile Include="Plugins\Plugins.cs" />
     <Compile Include="TableTypes\Automation.cs" />
     <Compile Include="TableTypes\ApptFieldDef.cs" />
+    <Compile Include="TableTypes\ApptField.cs" />
     <Compile Include="TableTypes\Guardian.cs" />
     <Compile Include="TableTypes\PhoneEmpDefault.cs" />
     <Compile Include="TableTypes\TaskUnread.cs" />

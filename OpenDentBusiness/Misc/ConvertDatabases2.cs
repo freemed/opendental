@@ -2274,6 +2274,31 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);
 				command="ALTER TABLE apptview ADD StackBehavLR tinyint NOT NULL";
 				Db.NonQ(command);
+				command="DROP TABLE IF EXISTS apptfield";
+				Db.NonQ(command);
+				command=@"CREATE TABLE apptfield (
+					ApptFieldNum bigint NOT NULL auto_increment,
+					AptNum bigint NOT NULL,
+					FieldName varchar(255) NOT NULL,
+					FieldValue text NOT NULL,
+					PRIMARY KEY (ApptFieldNum),
+					INDEX(AptNum)
+					) DEFAULT CHARSET=utf8";
+				command="DROP TABLE IF EXISTS apptfielddef";
+				Db.NonQ(command);
+				command=@"CREATE TABLE apptfielddef (
+					ApptFieldDefNum bigint NOT NULL auto_increment,
+					FieldName varchar(255) NOT NULL,
+					PRIMARY KEY (ApptFieldDefNum)
+					) DEFAULT CHARSET=utf8";
+				try {
+					command="ALTER TABLE patfield ADD INDEX (PatNum)";
+					Db.NonQ(command);
+				}
+				catch {
+					//in case the index already exists.
+				}
+
 
 
 
@@ -2297,6 +2322,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 
-				/*
 				
-				*/
+				
+				

@@ -131,6 +131,7 @@ namespace OpenDentBusiness {
 			}
 			if(itypes.Contains((int)InvalidType.PatFields) || isAll) {
 				ds.Tables.Add(PatFieldDefs.RefreshCache());
+				ds.Tables.Add(ApptFieldDefs.RefreshCache());
 			}
 			if(itypes.Contains((int)InvalidType.Pharmacies) || isAll){
 				ds.Tables.Add(Pharmacies.RefreshCache());
@@ -291,6 +292,7 @@ namespace OpenDentBusiness {
 			}
 			if(itypes.Contains((int)InvalidType.PatFields) || isAll) {
 				PatFieldDefs.FillCache(ds.Tables["PatFieldDef"]);
+				ApptFieldDefs.FillCache(ds.Tables["ApptFieldDef"]);
 			}
 			if(itypes.Contains((int)InvalidType.Pharmacies) || isAll) {
 				Pharmacies.FillCache(ds.Tables["Pharmacy"]);

@@ -4,8 +4,10 @@ using System.Collections;
 namespace OpenDentBusiness{
 
 	/// <summary>These are custom fields added and managed by the user.</summary>
-	public class PatField{
+	[Serializable]
+	public class PatField:TableBase {
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long PatFieldNum;
 		///<summary>FK to patient.PatNum</summary>
 		public long PatNum;
@@ -16,12 +18,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public PatField Copy() {
-			PatField p=new PatField();
-			p.PatFieldNum=PatFieldNum;
-			p.PatNum=PatNum;
-			p.FieldName=FieldName;
-			p.FieldValue=FieldValue;
-			return p;
+			return (PatField)this.MemberwiseClone();
 		}
 
 	}
