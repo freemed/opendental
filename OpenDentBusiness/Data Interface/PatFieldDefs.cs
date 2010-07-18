@@ -7,6 +7,7 @@ using System.Reflection;
 namespace OpenDentBusiness {
 	///<summary></summary>
 	public class PatFieldDefs {
+		#region CachePattern
 		private static PatFieldDef[] list;
 
 		///<summary>A list of all allowable patFields.</summary>
@@ -42,59 +43,38 @@ namespace OpenDentBusiness {
 				List[i].FieldName=PIn.String(table.Rows[i][1].ToString());
 			}
 		}
+		#endregion
 
 		///<summary>Must supply the old field name so that the patient lists can be updated.</summary>
-		public static void Update(PatFieldDef p, string oldFieldName) {
+		public static void Update(PatFieldDef patFieldDef, string oldFieldName) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),p,oldFieldName);
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),patFieldDef,oldFieldName);
 				return;
 			}
-			string command="UPDATE patfielddef SET " 
-				+"FieldName = '"        +POut.String(p.FieldName)+"'"
-				+" WHERE PatFieldDefNum  ='"+POut.Long   (p.PatFieldDefNum)+"'";
-			Db.NonQ(command);
-			command="UPDATE patfield SET FieldName='"+POut.String(p.FieldName)+"'"
-				+" WHERE FieldName='"+POut.String(oldFieldName)+"'";
+			Crud.PatFieldDefCrud.Update(patFieldDef);
+			string command="UPDATE patfield SET FieldName='"+POut.String(patFieldDef.FieldName)+"' "
+				+"WHERE FieldName='"+POut.String(oldFieldName)+"'";
 			Db.NonQ(command);
 		}
 
 		///<summary></summary>
-		public static long Insert(PatFieldDef p) {
+		public static long Insert(PatFieldDef patFieldDef) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				p.PatFieldDefNum=Meth.GetLong(MethodBase.GetCurrentMethod(),p);
-				return p.PatFieldDefNum;
+				patFieldDef.PatFieldDefNum=Meth.GetLong(MethodBase.GetCurrentMethod(),patFieldDef);
+				return patFieldDef.PatFieldDefNum;
 			}
-			if(PrefC.RandomKeys) {
-				p.PatFieldDefNum=ReplicationServers.GetKey("patfielddef","PatFieldDefNum");
-			}
-			string command="INSERT INTO patfielddef (";
-			if(PrefC.RandomKeys) {
-				command+="PatFieldDefNum,";
-			}
-			command+="FieldName) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+=POut.Long(p.PatFieldDefNum)+", ";
-			}
-			command+=
-				"'"+POut.String(p.FieldName)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				p.PatFieldDefNum=Db.NonQ(command,true);
-			}
-			return p.PatFieldDefNum;
+			return Crud.PatFieldDefCrud.Insert(patFieldDef);
 		}
 
 		///<summary>Surround with try/catch, because it will throw an exception if any patient is using this def.</summary>
-		public static void Delete(PatFieldDef p) {
+		public static void Delete(PatFieldDef patFieldDef) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),p);
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),patFieldDef);
 				return;
 			}
 			string command="SELECT LName,FName FROM patient,patfield WHERE "
 				+"patient.PatNum=patfield.PatNum "
-				+"AND FieldName='"+POut.String(p.FieldName)+"'";
+				+"AND FieldName='"+POut.String(patFieldDef.FieldName)+"'";
 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count>0){
 				string s=Lans.g("PatFieldDef","Not allowed to delete. Already in use by ")+table.Rows.Count.ToString()
@@ -107,7 +87,7 @@ namespace OpenDentBusiness {
 				}
 				throw new ApplicationException(s);
 			}
-			command="DELETE FROM patfielddef WHERE PatFieldDefNum ="+POut.Long(p.PatFieldDefNum);
+			command="DELETE FROM patfielddef WHERE PatFieldDefNum ="+POut.Long(patFieldDef.PatFieldDefNum);
 			Db.NonQ(command);
 		}
 				
