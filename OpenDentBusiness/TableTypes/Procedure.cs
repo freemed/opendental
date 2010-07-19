@@ -78,7 +78,7 @@ namespace OpenDentBusiness {
 		public string UnitCode;
 		///<summary>For certain CPT codes.  Default is now 1.  It was 0 in previous versions, causing all kinds of problems.</summary>
 		public int UnitQty;
-		///<summary>Base units used for some billing codes.  Default is 0.</summary>
+		///<summary>Base units used for some billing codes.  Default is 0.  No UI for this field.  It is only edited in the ProcedureCode window.  The database maint tool changes BaseUnits of all procedures to match that of the procCode.</summary>
 		public int BaseUnits;
 		///<summary>Start time in military</summary>
 		public int StartTime;

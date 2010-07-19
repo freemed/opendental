@@ -2298,6 +2298,10 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				catch {
 					//in case the index already exists.
 				}
+				command="ALTER TABLE labcase ADD LabFee double NOT NULL";
+				Db.NonQ(command);
+				
+
 
 
 
@@ -2325,3 +2329,5 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				
 				
 				
+
+			

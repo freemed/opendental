@@ -58,6 +58,7 @@ namespace OpenDentBusiness.Crud{
 				labCase.DateTimeChecked= PIn.DateT (table.Rows[i]["DateTimeChecked"].ToString());
 				labCase.ProvNum        = PIn.Long  (table.Rows[i]["ProvNum"].ToString());
 				labCase.Instructions   = PIn.String(table.Rows[i]["Instructions"].ToString());
+				labCase.LabFee         = PIn.Double(table.Rows[i]["LabFee"].ToString());
 				retVal.Add(labCase);
 			}
 			return retVal;
@@ -77,7 +78,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="LabCaseNum,";
 			}
-			command+="PatNum,LaboratoryNum,AptNum,PlannedAptNum,DateTimeDue,DateTimeCreated,DateTimeSent,DateTimeRecd,DateTimeChecked,ProvNum,Instructions) VALUES(";
+			command+="PatNum,LaboratoryNum,AptNum,PlannedAptNum,DateTimeDue,DateTimeCreated,DateTimeSent,DateTimeRecd,DateTimeChecked,ProvNum,Instructions,LabFee) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(labCase.LabCaseNum)+",";
 			}
@@ -92,7 +93,8 @@ namespace OpenDentBusiness.Crud{
 				+    POut.DateT (labCase.DateTimeRecd)+","
 				+    POut.DateT (labCase.DateTimeChecked)+","
 				+    POut.Long  (labCase.ProvNum)+","
-				+"'"+POut.String(labCase.Instructions)+"')";
+				+"'"+POut.String(labCase.Instructions)+"',"
+				+"'"+POut.Double(labCase.LabFee)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -115,7 +117,8 @@ namespace OpenDentBusiness.Crud{
 				+"DateTimeRecd   =  "+POut.DateT (labCase.DateTimeRecd)+", "
 				+"DateTimeChecked=  "+POut.DateT (labCase.DateTimeChecked)+", "
 				+"ProvNum        =  "+POut.Long  (labCase.ProvNum)+", "
-				+"Instructions   = '"+POut.String(labCase.Instructions)+"' "
+				+"Instructions   = '"+POut.String(labCase.Instructions)+"', "
+				+"LabFee         = '"+POut.Double(labCase.LabFee)+"' "
 				+"WHERE LabCaseNum = "+POut.Long(labCase.LabCaseNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
@@ -166,6 +169,10 @@ namespace OpenDentBusiness.Crud{
 			if(labCase.Instructions != oldLabCase.Instructions) {
 				if(command!=""){ command+=",";}
 				command+="Instructions = '"+POut.String(labCase.Instructions)+"'";
+			}
+			if(labCase.LabFee != oldLabCase.LabFee) {
+				if(command!=""){ command+=",";}
+				command+="LabFee = '"+POut.Double(labCase.LabFee)+"'";
 			}
 			if(command==""){
 				return;

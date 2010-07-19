@@ -37,6 +37,8 @@ namespace OpenDentBusiness{
 		public long ProvNum;
 		///<summary>The text instructions for this labcase.</summary>
 		public string Instructions;
+		///<summary>There is no UI built yet for this field.  Plugins might be making use of this field.</summary>
+		public double LabFee;
 
 
 		public LabCase Copy(){
