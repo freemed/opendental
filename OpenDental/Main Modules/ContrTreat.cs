@@ -2357,6 +2357,19 @@ namespace OpenDental{
 				itemNo++;*/
 				#endregion Canadian Lab Fees
 			}
+			//Send TP DFT HL7 message to ECW with embedded a PDF.
+			PrepImageForPrinting();
+			string pdfFilePath=Path.GetTempFileName();
+			MigraDoc.Rendering.PdfDocumentRenderer pdfRenderer=new MigraDoc.Rendering.PdfDocumentRenderer(true,PdfFontEmbedding.Always);
+			pdfRenderer.Document=CreateDocument();
+			pdfRenderer.RenderDocument();
+			pdfRenderer.PdfDocument.Save(pdfFilePath);
+			byte[] pdfBytes=File.ReadAllBytes(pdfFilePath);
+			string pdfDataStr=Convert.ToBase64String(pdfBytes);
+			File.Delete(pdfFilePath);
+			Appointment apt=Appointments.GetOneApt(Bridges.ECW.AptNum);
+			Bridges.ECW.SendHL7(apt,PatCur,pdfDataStr);
+			//Done sending HL7 to ECW.
 			ModuleSelected(PatCur.PatNum);
 			for(int i=0;i<PlanList.Length;i++){
 				if(PlanList[i].TreatPlanNum==tp.TreatPlanNum){

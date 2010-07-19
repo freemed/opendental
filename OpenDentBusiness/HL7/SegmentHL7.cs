@@ -36,6 +36,9 @@ namespace OpenDentBusiness.HL7 {
 			if(name==SegmentName.DG1) {
 				AddFields(5);
 			}
+			if(name==SegmentName.ZX1){
+				AddFields(5);
+			}
 		}
 
 		private void AddFields(int quantity) {
@@ -112,7 +115,10 @@ namespace OpenDentBusiness.HL7 {
 						break;
 					case "DG1":
 						Name=SegmentName.DG1;
-						break;		
+						break;
+					case "ZX1":
+						Name=SegmentName.ZX1;
+						break;
 				}
 			}
 		}
@@ -188,6 +194,8 @@ namespace OpenDentBusiness.HL7 {
 		///<summary>Financial Transaction Information</summary>
 		FT1,
 		///<summary>Diagnosis Information</summary>
-		DG1
+		DG1,
+		///<summary>PDF Data</summary>
+		ZX1,
 	}
 }
