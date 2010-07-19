@@ -3190,7 +3190,9 @@ namespace OpenDental{
 			PatPlanList=PatPlans.Refresh(patNum);
 			BenefitList=Benefits.Refresh(PatPlanList);
 			PatientNoteCur=PatientNotes.Refresh(patNum,PatCur.Guarantor);
-			patFolder=ImageStore.GetPatientFolder(PatCur);//GetImageFolder();
+			if(PrefC.UsingAtoZfolder) {
+				patFolder=ImageStore.GetPatientFolder(PatCur);//GetImageFolder();
+			}
 			DocumentList=Documents.GetAllWithPat(patNum);
 			ApptList=Appointments.GetForPat(patNum);
 			ToothInitialList=ToothInitials.Refresh(patNum);
