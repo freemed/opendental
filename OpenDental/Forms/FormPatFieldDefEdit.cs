@@ -21,6 +21,7 @@ namespace OpenDental{
 		public bool IsNew;
 		private OpenDental.UI.Button buttonDelete;
 		private PatFieldDef FieldDef;
+		private Label labelStatus;
 		private string OldFieldName;
 
 		///<summary></summary>
@@ -61,6 +62,7 @@ namespace OpenDental{
 			this.butOK = new OpenDental.UI.Button();
 			this.textName = new System.Windows.Forms.TextBox();
 			this.buttonDelete = new OpenDental.UI.Button();
+			this.labelStatus = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -118,12 +120,22 @@ namespace OpenDental{
 			this.buttonDelete.Text = "&Delete";
 			this.buttonDelete.Click += new System.EventHandler(this.buttonDelete_Click);
 			// 
+			// labelStatus
+			// 
+			this.labelStatus.Location = new System.Drawing.Point(17,33);
+			this.labelStatus.Name = "labelStatus";
+			this.labelStatus.Size = new System.Drawing.Size(143,15);
+			this.labelStatus.TabIndex = 81;
+			this.labelStatus.Text = "Field Name";
+			this.labelStatus.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			// 
 			// FormPatFieldDefEdit
 			// 
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(349,203);
+			this.Controls.Add(this.labelStatus);
 			this.Controls.Add(this.buttonDelete);
 			this.Controls.Add(this.textName);
 			this.Controls.Add(this.butOK);

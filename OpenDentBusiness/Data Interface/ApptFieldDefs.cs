@@ -27,7 +27,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static DataTable RefreshCache(){
 			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
-			string command="SELECT * FROM apptfielddef ORDER BY ItemOrder";
+			string command="SELECT * FROM apptfielddef";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="ApptFieldDef";
 			FillCache(table);
@@ -41,54 +41,56 @@ namespace OpenDentBusiness{
 		}
 		#endregion
 
-		/*
-		///<summary>Must supply the old field name so that the patient lists can be updated.</summary>
-		public static void Update(PatFieldDef patFieldDef,string oldFieldName) {
+		///<summary>Must supply the old field name so that the apptFields attached to appointments can be updated.</summary>
+		public static void Update(ApptFieldDef apptFieldDef,string oldFieldName) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),patFieldDef,oldFieldName);
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),apptFieldDef,oldFieldName);
 				return;
 			}
-			Crud.PatFieldDefCrud.Update(patFieldDef);
-			string command="UPDATE patfield SET FieldName='"+POut.String(patFieldDef.FieldName)+"' "
+			Crud.ApptFieldDefCrud.Update(apptFieldDef);
+			string command="UPDATE apptfield SET FieldName='"+POut.String(apptFieldDef.FieldName)+"' "
 				+"WHERE FieldName='"+POut.String(oldFieldName)+"'";
 			Db.NonQ(command);
 		}
 
 		///<summary></summary>
-		public static long Insert(PatFieldDef patFieldDef) {
+		public static long Insert(ApptFieldDef apptFieldDef) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				patFieldDef.PatFieldDefNum=Meth.GetLong(MethodBase.GetCurrentMethod(),patFieldDef);
-				return patFieldDef.PatFieldDefNum;
+				apptFieldDef.ApptFieldDefNum=Meth.GetLong(MethodBase.GetCurrentMethod(),apptFieldDef);
+				return apptFieldDef.ApptFieldDefNum;
 			}
-			return Crud.PatFieldDefCrud.Insert(patFieldDef);
+			return Crud.ApptFieldDefCrud.Insert(apptFieldDef);
 		}
 
-		///<summary>Surround with try/catch, because it will throw an exception if any patient is using this def.</summary>
-		public static void Delete(PatFieldDef patFieldDef) {
+		///<summary>Surround with try/catch, because it will throw an exception if any appointment is using this def.</summary>
+		public static void Delete(ApptFieldDef apptFieldDef) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),patFieldDef);
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),apptFieldDef);
 				return;
 			}
-			string command="SELECT LName,FName FROM patient,patfield WHERE "
-				+"patient.PatNum=patfield.PatNum "
-				+"AND FieldName='"+POut.String(patFieldDef.FieldName)+"'";
+			string command="SELECT LName,FName,AptDateTime "
+				+"FROM patient,apptfield,appointment WHERE "
+				+"patient.PatNum=appointment.PatNum "
+				+"AND appointment.AptNum=apptfield.AptNum "
+				+"AND FieldName='"+POut.String(apptFieldDef.FieldName)+"'";
 			DataTable table=Db.GetTable(command);
+			DateTime aptDateTime;
 			if(table.Rows.Count>0) {
-				string s=Lans.g("PatFieldDef","Not allowed to delete. Already in use by ")+table.Rows.Count.ToString()
-					+" "+Lans.g("PatFieldDef","patients, including")+" \r\n";
+				string s=Lans.g("FormApptFieldDefEdit","Not allowed to delete. Already in use by ")+table.Rows.Count.ToString()
+					+" "+Lans.g("FormApptFieldDefEdit","appointments, including")+" \r\n";
 				for(int i=0;i<table.Rows.Count;i++) {
 					if(i>5) {
 						break;
 					}
-					s+=table.Rows[i][0].ToString()+", "+table.Rows[i][1].ToString()+"\r\n";
+					aptDateTime=PIn.DateT(table.Rows[i]["AptDateTime"].ToString());
+					s+=table.Rows[i]["LName"].ToString()+", "+table.Rows[i]["FName"].ToString()+POut.DateT(aptDateTime,false)+"\r\n";
 				}
 				throw new ApplicationException(s);
 			}
-			command="DELETE FROM patfielddef WHERE PatFieldDefNum ="+POut.Long(patFieldDef.PatFieldDefNum);
+			command="DELETE FROM apptfielddef WHERE ApptFieldDefNum ="+POut.Long(apptFieldDef.ApptFieldDefNum);
 			Db.NonQ(command);
-		}*/
-
-
+		}
+		
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
 
@@ -109,33 +111,7 @@ namespace OpenDentBusiness{
 			return Crud.ApptFieldDefCrud.SelectOne(apptFieldDefNum);
 		}
 
-		///<summary></summary>
-		public static long Insert(ApptFieldDef apptFieldDef){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				apptFieldDef.ApptFieldDefNum=Meth.GetLong(MethodBase.GetCurrentMethod(),apptFieldDef);
-				return apptFieldDef.ApptFieldDefNum;
-			}
-			return Crud.ApptFieldDefCrud.Insert(apptFieldDef);
-		}
-
-		///<summary></summary>
-		public static void Update(ApptFieldDef apptFieldDef){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),apptFieldDef);
-				return;
-			}
-			Crud.ApptFieldDefCrud.Update(apptFieldDef);
-		}
-
-		///<summary></summary>
-		public static void Delete(long apptFieldDefNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),apptFieldDefNum);
-				return;
-			}
-			string command= "DELETE FROM apptfielddef WHERE ApptFieldDefNum = "+POut.Long(apptFieldDefNum);
-			Db.NonQ(command);
-		}
+		
 		*/
 
 

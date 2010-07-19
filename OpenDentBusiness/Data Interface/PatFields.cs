@@ -13,60 +13,25 @@ namespace OpenDentBusiness {
 				return Meth.GetObject<PatField[]>(MethodBase.GetCurrentMethod(),patNum);
 			}
 			string command="SELECT * FROM patfield WHERE PatNum="+POut.Long(patNum);
-			DataTable table=Db.GetTable(command);
-			PatField[] List=new PatField[table.Rows.Count];
-			for(int i=0;i<table.Rows.Count;i++) {
-				List[i]=new PatField();
-				List[i].PatFieldNum= PIn.Long(table.Rows[i][0].ToString());
-				List[i].PatNum     = PIn.Long(table.Rows[i][1].ToString());
-				List[i].FieldName  = PIn.String(table.Rows[i][2].ToString());
-				List[i].FieldValue = PIn.String(table.Rows[i][3].ToString());
-			}
-			return List;
+			return Crud.PatFieldCrud.SelectMany(command).ToArray();
 		}
 
 		///<summary></summary>
-		public static void Update(PatField pf) {
+		public static void Update(PatField patField) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),pf);
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),patField);
 				return;
 			}
-			string command="UPDATE patfield SET " 
-				+"PatNum = '"            +POut.Long   (pf.PatNum)+"'"
-				+",FieldName = '"        +POut.String(pf.FieldName)+"'"
-				+",FieldValue = '"       +POut.String(pf.FieldValue)+"'"
-				+" WHERE PatFieldNum  ='"+POut.Long   (pf.PatFieldNum)+"'";
-			Db.NonQ(command);
+			Crud.PatFieldCrud.Update(patField);
 		}
 
 		///<summary></summary>
-		public static long Insert(PatField pf) {
+		public static long Insert(PatField patField) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				pf.PatFieldNum=Meth.GetLong(MethodBase.GetCurrentMethod(),pf);
-				return pf.PatFieldNum;
+				patField.PatFieldNum=Meth.GetLong(MethodBase.GetCurrentMethod(),patField);
+				return patField.PatFieldNum;
 			}
-			if(PrefC.RandomKeys) {
-				pf.PatFieldNum=ReplicationServers.GetKey("patfield","PatFieldNum");
-			}
-			string command="INSERT INTO patfield (";
-			if(PrefC.RandomKeys) {
-				command+="PatFieldNum,";
-			}
-			command+="PatNum,FieldName,FieldValue) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+="'"+POut.Long(pf.PatFieldNum)+"', ";
-			}
-			command+=
-				 "'"+POut.Long   (pf.PatNum)+"', "
-				+"'"+POut.String(pf.FieldName)+"', "
-				+"'"+POut.String(pf.FieldValue)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				pf.PatFieldNum=Db.NonQ(command,true);
-			}
-			return pf.PatFieldNum;
+			return Crud.PatFieldCrud.Insert(patField);
 		}
 
 		///<summary></summary>

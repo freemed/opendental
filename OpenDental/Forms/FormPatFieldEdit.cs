@@ -12,7 +12,6 @@ namespace OpenDental{
 	public class FormPatFieldEdit : System.Windows.Forms.Form{
 		private OpenDental.UI.Button butCancel;
 		private OpenDental.UI.Button butOK;
-		private System.Windows.Forms.TextBox textName;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -20,8 +19,7 @@ namespace OpenDental{
 		///<summary></summary>
 		public bool IsNew;
 		private PatField Field;
-		private Label label1;
-		private Label label2;
+		private Label labelName;
 		private TextBox textValue;
 
 		///<summary></summary>
@@ -60,9 +58,7 @@ namespace OpenDental{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormPatFieldEdit));
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
-			this.textName = new System.Windows.Forms.TextBox();
-			this.label1 = new System.Windows.Forms.Label();
-			this.label2 = new System.Windows.Forms.Label();
+			this.labelName = new System.Windows.Forms.Label();
 			this.textValue = new System.Windows.Forms.TextBox();
 			this.SuspendLayout();
 			// 
@@ -75,7 +71,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(373,207);
+			this.butCancel.Location = new System.Drawing.Point(280,146);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,25);
 			this.butCancel.TabIndex = 2;
@@ -90,42 +86,25 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(373,166);
+			this.butOK.Location = new System.Drawing.Point(186,146);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,25);
 			this.butOK.TabIndex = 1;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
-			// textName
+			// labelName
 			// 
-			this.textName.Location = new System.Drawing.Point(115,37);
-			this.textName.Name = "textName";
-			this.textName.ReadOnly = true;
-			this.textName.Size = new System.Drawing.Size(333,20);
-			this.textName.TabIndex = 0;
-			// 
-			// label1
-			// 
-			this.label1.Location = new System.Drawing.Point(9,37);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(100,20);
-			this.label1.TabIndex = 3;
-			this.label1.Text = "Field Name";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label2
-			// 
-			this.label2.Location = new System.Drawing.Point(9,63);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(100,20);
-			this.label2.TabIndex = 5;
-			this.label2.Text = "Field Value";
-			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.labelName.Location = new System.Drawing.Point(19,17);
+			this.labelName.Name = "labelName";
+			this.labelName.Size = new System.Drawing.Size(335,20);
+			this.labelName.TabIndex = 3;
+			this.labelName.Text = "Field Name";
+			this.labelName.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// textValue
 			// 
-			this.textValue.Location = new System.Drawing.Point(115,63);
+			this.textValue.Location = new System.Drawing.Point(21,40);
 			this.textValue.Multiline = true;
 			this.textValue.Name = "textValue";
 			this.textValue.Size = new System.Drawing.Size(333,74);
@@ -136,11 +115,9 @@ namespace OpenDental{
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
-			this.ClientSize = new System.Drawing.Size(468,256);
-			this.Controls.Add(this.label2);
+			this.ClientSize = new System.Drawing.Size(375,193);
 			this.Controls.Add(this.textValue);
-			this.Controls.Add(this.label1);
-			this.Controls.Add(this.textName);
+			this.Controls.Add(this.labelName);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -150,8 +127,8 @@ namespace OpenDental{
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Edit Patient Field";
-			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormPatFieldDefEdit_FormClosing);
 			this.Load += new System.EventHandler(this.FormPatFieldEdit_Load);
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormPatFieldDefEdit_FormClosing);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -159,7 +136,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormPatFieldEdit_Load(object sender, System.EventArgs e) {
-			textName.Text=Field.FieldName;
+			labelName.Text=Field.FieldName;
 			textValue.Text=Field.FieldValue;
 		}
 

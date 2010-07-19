@@ -507,10 +507,12 @@ namespace OpenDentBusiness{
 				return Meth.GetDS(MethodBase.GetCurrentMethod(),dateStart,dateEnd);
 			} 
 			DataSet retVal=new DataSet();
-			retVal.Tables.Add(GetPeriodApptsTable(dateStart,dateEnd,0,false));//parameters[0],parameters[1],"0","0"));
+			DataTable tableAppt=GetPeriodApptsTable(dateStart,dateEnd,0,false);
+			retVal.Tables.Add(tableAppt);//parameters[0],parameters[1],"0","0"));
 			retVal.Tables.Add(GetPeriodEmployeeSchedTable(dateStart,dateEnd));
 			retVal.Tables.Add(GetPeriodWaitingRoomTable(dateStart,dateEnd));
 			retVal.Tables.Add(GetPeriodSchedule(dateStart,dateEnd));
+			retVal.Tables.Add(GetApptFields(tableAppt));
 			return retVal;
 		}
 
@@ -525,7 +527,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>If aptnum is specified, then the dates are ignored.  If getting data for one planned appt, then pass isPlanned=1.  This changes which procedures are retrieved.</summary>
-		private static DataTable GetPeriodApptsTable(DateTime dateStart,DateTime dateEnd,long aptNum,bool isPlanned) {
+		public static DataTable GetPeriodApptsTable(DateTime dateStart,DateTime dateEnd,long aptNum,bool isPlanned) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),dateStart,dateEnd,aptNum,isPlanned);
 			} 
@@ -944,7 +946,45 @@ namespace OpenDentBusiness{
 			return table;
 		}
 
-		private static DataTable GetPeriodEmployeeSchedTable(DateTime dateStart,DateTime dateEnd) {
+		///<summary>Pass in the appointments table so that we can search based on appointments.</summary>
+		public static DataTable GetApptFields(DataTable tableAppts) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),tableAppts);
+			}
+			string command="SELECT FieldName,FieldValue "
+				+"FROM apptfield "
+				+"WHERE AptNum IN (";
+			if(tableAppts.Rows.Count==0) {
+				command+="0";
+			}
+			else for(int i=0;i<tableAppts.Rows.Count;i++) {
+					if(i>0) {
+						command+=",";
+					}
+					command+=tableAppts.Rows[i]["PatNum"].ToString();
+				}
+			command+=")";
+			DataConnection dcon=new DataConnection();
+			DataTable table= dcon.GetTable(command);
+			table.TableName="ApptFields";
+			return table;
+		}
+
+		///<summary>Pass in one aptNum</summary>
+		public static DataTable GetApptFields(long aptNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),aptNum);
+			}
+			string command="SELECT FieldName,FieldValue "
+				+"FROM apptfield "
+				+"WHERE AptNum = "+POut.Long(aptNum);
+			DataConnection dcon=new DataConnection();
+			DataTable table= dcon.GetTable(command);
+			table.TableName="ApptFields";
+			return table;
+		}
+
+		public static DataTable GetPeriodEmployeeSchedTable(DateTime dateStart,DateTime dateEnd) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),dateStart,dateEnd);
 			}
@@ -987,7 +1027,7 @@ namespace OpenDentBusiness{
 			return table;
 		}
 
-		private static DataTable GetPeriodWaitingRoomTable(DateTime dateStart,DateTime dateEnd) {
+		public static DataTable GetPeriodWaitingRoomTable(DateTime dateStart,DateTime dateEnd) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),dateStart,dateEnd);
 			}
@@ -1039,7 +1079,7 @@ namespace OpenDentBusiness{
 			return table;
 		}
 
-		private static DataTable GetPeriodSchedule(DateTime dateStart,DateTime dateEnd){
+		public static DataTable GetPeriodSchedule(DateTime dateStart,DateTime dateEnd){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),dateStart,dateEnd);
 			}
@@ -1104,10 +1144,11 @@ namespace OpenDentBusiness{
 				isPlanned=true;
 			}
 			retVal.Tables.Add(GetMiscTable(aptNum.ToString(),isPlanned));
+			retVal.Tables.Add(GetApptFields(aptNum));
 			return retVal;
 		}
 
-		private static DataTable GetApptTable(long aptNum) {
+		public static DataTable GetApptTable(long aptNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),aptNum);
 			}
@@ -1117,7 +1158,7 @@ namespace OpenDentBusiness{
 			return table;
 		}
 
-		private static DataTable GetPatTable(string patNum) {
+		public static DataTable GetPatTable(string patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),patNum);
 			}
@@ -1210,7 +1251,7 @@ namespace OpenDentBusiness{
 			return table;
 		}
 
-		private static DataTable GetProcTable(string patNum,string aptNum,string apptStatus,string aptDateTime) {
+		public static DataTable GetProcTable(string patNum,string aptNum,string apptStatus,string aptDateTime) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),patNum,aptNum,apptStatus,aptDateTime);
 			}
@@ -1324,7 +1365,7 @@ namespace OpenDentBusiness{
 			return ProcedureLogic.CompareProcedures(x,y);//sort by priority, toothnum, procCode
 		}
 
-		private static DataTable GetCommTable(string patNum) {
+		public static DataTable GetCommTable(string patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),patNum);
 			}
@@ -1349,7 +1390,7 @@ namespace OpenDentBusiness{
 			return table;
 		}
 
-		private static DataTable GetMiscTable(string aptNum,bool isPlanned) {
+		public static DataTable GetMiscTable(string aptNum,bool isPlanned) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),aptNum,isPlanned);
 			}
