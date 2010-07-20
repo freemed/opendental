@@ -2284,6 +2284,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					PRIMARY KEY (ApptFieldNum),
 					INDEX(AptNum)
 					) DEFAULT CHARSET=utf8";
+				Db.NonQ(command);
 				command="DROP TABLE IF EXISTS apptfielddef";
 				Db.NonQ(command);
 				command=@"CREATE TABLE apptfielddef (
@@ -2291,6 +2292,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					FieldName varchar(255) NOT NULL,
 					PRIMARY KEY (ApptFieldDefNum)
 					) DEFAULT CHARSET=utf8";
+				Db.NonQ(command);
 				try {
 					command="ALTER TABLE patfield ADD INDEX (PatNum)";
 					Db.NonQ(command);
