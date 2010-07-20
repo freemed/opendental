@@ -378,10 +378,10 @@ namespace OpenDental{
 				+whereProv
 				+whereClin
 				+"AND procedurecode.ProcCode LIKE '%"+POut.String(textCode.Text)+"%' "
-				+"AND procedurelog.ProcDate >= " +POut.Date(date1.SelectionStart)+" "
-				+"AND procedurelog.ProcDate <= " +POut.Date(date2.SelectionStart)+" "
+				+"AND DATE(procedurelog.ProcDate) >= " +POut.Date(date1.SelectionStart)+" "
+				+"AND DATE(procedurelog.ProcDate) <= " +POut.Date(date2.SelectionStart)+" "
 				+"GROUP BY procedurelog.ProcNum "
-				+"ORDER BY procedurelog.ProcDate,plfname,procedurecode.ProcCode,ToothNum";
+				+"ORDER BY DATE(procedurelog.ProcDate),plfname,procedurecode.ProcCode,ToothNum";
 			FormQuery2=new FormQuery(report);
 			FormQuery2.IsReport=true;
 			DataTable table=report.GetTempTable();
@@ -482,8 +482,8 @@ namespace OpenDental{
 				+whereProv
 				+whereClin
 				+"AND procedurecode.ProcCode LIKE '%"+POut.String(textCode.Text)+"%' "
-				+"AND procedurelog.ProcDate >= '" + date1.SelectionStart.ToString("yyyy-MM-dd")+"' "
-				+"AND procedurelog.ProcDate <= '" + date2.SelectionStart.ToString("yyyy-MM-dd")+"' "
+				+"AND DATE(procedurelog.ProcDate) >= '" + date1.SelectionStart.ToString("yyyy-MM-dd")+"' "
+				+"AND DATE(procedurelog.ProcDate) <= '" + date2.SelectionStart.ToString("yyyy-MM-dd")+"' "
 				+"GROUP BY procedurecode.ProcCode "
 				+"ORDER BY definition.ItemOrder,procedurecode.ProcCode";
 			FormQuery2=new FormQuery(report);
