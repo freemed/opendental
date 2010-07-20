@@ -199,6 +199,7 @@ namespace Crud {
 			}
 			strb.Append(rn+t5+"(delete this comment as well as any INDEX rows above that do not apply.)");
 			strb.Append(rn+t5+") DEFAULT CHARSET=utf8\";");
+			strb.Append(rn+t4+"Db.NonQ(command);");
 		}
 				
 
