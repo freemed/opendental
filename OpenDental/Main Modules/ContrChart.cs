@@ -3518,7 +3518,7 @@ namespace OpenDental{
 		}
 
 		public void FillPtInfo(){
-			if(Plugins.Active && Plugins.HookMethod(this,"ContrChart.FillPtInfo",PatCur)) {
+			if(Plugins.HookMethod(this,"ContrChart.FillPtInfo",PatCur)) {
 				return;
 			}
 			gridPtInfo.Height=tabControlImages.Top-gridPtInfo.Top;
@@ -4865,9 +4865,7 @@ namespace OpenDental{
 			
 		///<summary>No user dialog is shown.  This only works for some kinds of procedures.  Set the codeNum first.</summary>
 		private void AddQuick(Procedure ProcCur){
-			if(Plugins.Active && Plugins.HookAddCode(this,"ContrChart.AddQuick_begin",ProcCur)) {
-				return;
-			}
+			Plugins.HookAddCode(this,"ContrChart.AddQuick_begin",ProcCur);
 			//procnum
 			ProcCur.PatNum=PatCur.PatNum;
 			//aptnum
@@ -6464,7 +6462,7 @@ namespace OpenDental{
 		#endregion Draw
 
 		private void gridPtInfo_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			if(Plugins.Active && Plugins.HookMethod(this,"ContrChart.gridPtInfo_CellDoubleClick",PatCur,FamCur,e,PatientNoteCur)) {
+			if(Plugins.HookMethod(this,"ContrChart.gridPtInfo_CellDoubleClick",PatCur,FamCur,e,PatientNoteCur)) {
 				return;
 			}
 			if(gridPtInfo.Rows[e.Row].Tag==null){//pt info

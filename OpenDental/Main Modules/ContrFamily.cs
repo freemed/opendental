@@ -390,7 +390,7 @@ namespace OpenDental{
 		#region gridPatient
 
 		private void gridPat_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			if(Plugins.Active && Plugins.HookMethod(this,"ContrFamily.gridPat_CellDoubleClick",PatCur)) {
+			if(Plugins.HookMethod(this,"ContrFamily.gridPat_CellDoubleClick",PatCur)) {
 				return;
 			}
 			if(TerminalActives.PatIsInUse(PatCur.PatNum)){

@@ -1970,7 +1970,7 @@ namespace OpenDental {
 		}
 
 		private void FillAging(bool isSelectingFamily) {
-			if(Plugins.Active && Plugins.HookMethod(this,"ContrAccount.FillAging",FamCur,PatCur,DataSetMain,isSelectingFamily)) {
+			if(Plugins.HookMethod(this,"ContrAccount.FillAging",FamCur,PatCur,DataSetMain,isSelectingFamily)) {
 				return;
 			}
 			if(PatCur!=null) {
