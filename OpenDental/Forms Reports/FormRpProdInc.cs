@@ -644,7 +644,7 @@ namespace OpenDental{
 			ReportSimpleGrid report=new ReportSimpleGrid();
 			//Procedures------------------------------------------------------------------------------
 			report.Query="(SELECT "
-				+"procedurelog.ProcDate AS procdate,"
+				+"DATE(procedurelog.ProcDate) AS procdate,"
 				+"CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName),' '),patient.MiddleI) AS namelf,"
 				+"procedurecode.Descript,"
 				+"provider.Abbr,"
@@ -664,8 +664,8 @@ namespace OpenDental{
 				+"AND provider.ProvNum=procedurelog.ProvNum "
 				+whereProv
 				+whereClin
-				+"AND procedurelog.ProcDate >= " +POut.Date(dateFrom)+" "
-				+"AND procedurelog.ProcDate <= " +POut.Date(dateTo)+" "
+				+"AND DATE(procedurelog.ProcDate) >= " +POut.Date(dateFrom)+" "
+				+"AND DATE(procedurelog.ProcDate) <= " +POut.Date(dateTo)+" "
 				+"GROUP BY procedurelog.ProcNum "
 				+") UNION ALL (";
 			//Adjustments-----------------------------------------------------------------------------
@@ -1113,16 +1113,16 @@ Group By procdate Order by procdate desc
 				}
 				whereClin+=") ";
 			}
-			report.Query="SELECT procedurelog.ProcDate, "
+			report.Query="SELECT DATE(procedurelog.ProcDate) ProcDate, "
 				+"SUM(procedurelog.ProcFee*(CASE procedurelog.UnitQty+procedurelog.BaseUnits WHEN 0 THEN 1 ELSE procedurelog.UnitQty+procedurelog.BaseUnits END)) "
 				+"FROM procedurelog "
-				+"WHERE procedurelog.ProcDate >= "+POut.Date(dateFrom)+" "
-				+"AND procedurelog.ProcDate <= "+POut.Date(dateTo)+" "
+				+"WHERE DATE(procedurelog.ProcDate) >= "+POut.Date(dateFrom)+" "
+				+"AND DATE(procedurelog.ProcDate) <= "+POut.Date(dateTo)+" "
 				+"AND procedurelog.ProcStatus = '2' "//complete
 				+whereProv
 				+whereClin
-				+"GROUP BY procedurelog.ProcDate "
-				+"ORDER BY procedurelog.ProcDate";
+				+"GROUP BY DATE(procedurelog.ProcDate) "
+				+"ORDER BY DATE(procedurelog.ProcDate)";
 			TableCharge=report.GetTempTable();
 
 //NEXT is TableCapWriteoff--------------------------------------------------------------------------
@@ -1673,7 +1673,7 @@ ORDER BY adjdate DESC
 				whereClin+=") ";
 			}
 			report.Query="SELECT "
-				+"procedurelog.ProcDate,"
+				+"DATE(procedurelog.ProcDate) ProcDate,"
 				+"SUM(procedurelog.ProcFee*(CASE procedurelog.UnitQty+procedurelog.BaseUnits WHEN 0 THEN 1 ELSE procedurelog.UnitQty+procedurelog.BaseUnits END))-IFNULL(SUM(claimproc.WriteOff),0) "
 				+"FROM procedurelog "
 				+"LEFT JOIN claimproc ON procedurelog.ProcNum=claimproc.ProcNum "
@@ -1681,8 +1681,8 @@ ORDER BY adjdate DESC
 				+"WHERE procedurelog.ProcStatus = '2' "
 				+whereProv
 				+whereClin
-				+"AND procedurelog.ProcDate >= " +POut.Date(dateFrom)+" "
-				+"AND procedurelog.ProcDate <= " +POut.Date(dateTo)+" "
+				+"AND DATE(procedurelog.ProcDate) >= " +POut.Date(dateFrom)+" "
+				+"AND DATE(procedurelog.ProcDate) <= " +POut.Date(dateTo)+" "
 				+"GROUP BY MONTH(procedurelog.ProcDate)";
 			//MessageBox.Show(report.Query);
 			TableProduction=report.GetTempTable();
