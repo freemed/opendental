@@ -4,11 +4,16 @@ using System.Drawing;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Text;
 using System.Windows.Forms;
+using MigraDoc.DocumentObjectModel;
+using MigraDoc.DocumentObjectModel.Shapes;
+using MigraDoc.DocumentObjectModel.Tables;
 using OpenDentBusiness;
 using OpenDental.UI;
-
+using PdfSharp.Drawing;
+using PdfSharp.Pdf;
 
 namespace OpenDental{
 	/// <summary>
@@ -175,6 +180,7 @@ namespace OpenDental{
 			this.menuItemSeatedNow = new System.Windows.Forms.MenuItem();
 			this.contextMenuTimeDismissed = new System.Windows.Forms.ContextMenu();
 			this.menuItemDismissedNow = new System.Windows.Forms.MenuItem();
+			this.gridFields = new OpenDental.UI.ODGrid();
 			this.butRequirement = new OpenDental.UI.Button();
 			this.butInsPlan2 = new OpenDental.UI.Button();
 			this.butPickHyg = new OpenDental.UI.Button();
@@ -197,7 +203,6 @@ namespace OpenDental{
 			this.butPin = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.gridFields = new OpenDental.UI.ODGrid();
 			this.SuspendLayout();
 			// 
 			// comboConfirmed
@@ -542,6 +547,17 @@ namespace OpenDental{
 			this.menuItemDismissedNow.Text = "Now";
 			this.menuItemDismissedNow.Click += new System.EventHandler(this.menuItemDismissedNow_Click);
 			// 
+			// gridFields
+			// 
+			this.gridFields.HScrollVisible = false;
+			this.gridFields.Location = new System.Drawing.Point(268,249);
+			this.gridFields.Name = "gridFields";
+			this.gridFields.ScrollValue = 0;
+			this.gridFields.Size = new System.Drawing.Size(239,134);
+			this.gridFields.TabIndex = 159;
+			this.gridFields.Title = "Appt Fields";
+			this.gridFields.TranslationName = "FormApptEdit";
+			// 
 			// butRequirement
 			// 
 			this.butRequirement.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -870,17 +886,6 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// gridFields
-			// 
-			this.gridFields.HScrollVisible = false;
-			this.gridFields.Location = new System.Drawing.Point(268,249);
-			this.gridFields.Name = "gridFields";
-			this.gridFields.ScrollValue = 0;
-			this.gridFields.Size = new System.Drawing.Size(239,134);
-			this.gridFields.TabIndex = 159;
-			this.gridFields.Title = "Appt Fields";
-			this.gridFields.TranslationName = "FormApptEdit";
-			// 
 			// FormApptEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
@@ -1110,28 +1115,28 @@ namespace OpenDental{
 			//IsNewPatient is set well before opening this form.
 			checkIsNewPatient.Checked=AptCur.IsNewPatient;
 			if(ContrApptSheet.MinPerIncr==5) {
-				tbTime.TopBorder[0,12]=Color.Black;
-				tbTime.TopBorder[0,24]=Color.Black;
-				tbTime.TopBorder[0,36]=Color.Black;
+				tbTime.TopBorder[0,12]=System.Drawing.Color.Black;
+				tbTime.TopBorder[0,24]=System.Drawing.Color.Black;
+				tbTime.TopBorder[0,36]=System.Drawing.Color.Black;
 			}
 			else if(ContrApptSheet.MinPerIncr==10) {
-				tbTime.TopBorder[0,6]=Color.Black;
-				tbTime.TopBorder[0,12]=Color.Black;
-				tbTime.TopBorder[0,18]=Color.Black;
-				tbTime.TopBorder[0,24]=Color.Black;
-				tbTime.TopBorder[0,30]=Color.Black;
-				tbTime.TopBorder[0,36]=Color.Black;
+				tbTime.TopBorder[0,6]=System.Drawing.Color.Black;
+				tbTime.TopBorder[0,12]=System.Drawing.Color.Black;
+				tbTime.TopBorder[0,18]=System.Drawing.Color.Black;
+				tbTime.TopBorder[0,24]=System.Drawing.Color.Black;
+				tbTime.TopBorder[0,30]=System.Drawing.Color.Black;
+				tbTime.TopBorder[0,36]=System.Drawing.Color.Black;
 			}
 			else if(ContrApptSheet.MinPerIncr==15){
-				tbTime.TopBorder[0,4]=Color.Black;
-				tbTime.TopBorder[0,8]=Color.Black;
-				tbTime.TopBorder[0,12]=Color.Black;
-				tbTime.TopBorder[0,16]=Color.Black;
-				tbTime.TopBorder[0,20]=Color.Black;
-				tbTime.TopBorder[0,24]=Color.Black;
-				tbTime.TopBorder[0,28]=Color.Black;
-				tbTime.TopBorder[0,32]=Color.Black;
-				tbTime.TopBorder[0,36]=Color.Black;
+				tbTime.TopBorder[0,4]=System.Drawing.Color.Black;
+				tbTime.TopBorder[0,8]=System.Drawing.Color.Black;
+				tbTime.TopBorder[0,12]=System.Drawing.Color.Black;
+				tbTime.TopBorder[0,16]=System.Drawing.Color.Black;
+				tbTime.TopBorder[0,20]=System.Drawing.Color.Black;
+				tbTime.TopBorder[0,24]=System.Drawing.Color.Black;
+				tbTime.TopBorder[0,28]=System.Drawing.Color.Black;
+				tbTime.TopBorder[0,32]=System.Drawing.Color.Black;
+				tbTime.TopBorder[0,36]=System.Drawing.Color.Black;
 			}
 			if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") {
 				butComplete.Visible=true;
@@ -1656,7 +1661,7 @@ namespace OpenDental{
 		}
 
 		private void FillTime() {
-			Color provColor=Color.Gray;
+			System.Drawing.Color provColor=System.Drawing.Color.Gray;
 			if(comboProvNum.SelectedIndex!=-1) {
 				provColor=ProviderC.List[comboProvNum.SelectedIndex].ProvColor;
 			}
@@ -1666,12 +1671,12 @@ namespace OpenDental{
 					//.Cell[0,i]=strBTime.ToString(i,1);
 				}
 				else {
-					tbTime.BackGColor[0,i]=Color.White;
+					tbTime.BackGColor[0,i]=System.Drawing.Color.White;
 				}
 			}
 			for(int i=strBTime.Length;i<tbTime.MaxRows;i++) {
 				//tbTime.Cell[0,i]="";
-				tbTime.BackGColor[0,i]=Color.FromName("Control");
+				tbTime.BackGColor[0,i]=System.Drawing.Color.FromName("Control");
 			}
 			tbTime.Refresh();
 			butSlider.Location=new Point(tbTime.Location.X+2,(tbTime.Location.Y+strBTime.Length*14+1));
@@ -2003,6 +2008,174 @@ namespace OpenDental{
 			return true;
 		}
 
+		///<summary>Creates a new .pdf file containing all of the procedures attached to this appointment and 
+		///returns the contents of the .pdf file as a base64 encoded string.</summary>
+		private string GenerateProceduresIntoPdf(){
+			MigraDoc.DocumentObjectModel.Document doc=new MigraDoc.DocumentObjectModel.Document();
+			doc.DefaultPageSetup.PageWidth=Unit.FromInch(8.5);
+			doc.DefaultPageSetup.PageHeight=Unit.FromInch(11);
+			doc.DefaultPageSetup.TopMargin=Unit.FromInch(.5);
+			doc.DefaultPageSetup.LeftMargin=Unit.FromInch(.5);
+			doc.DefaultPageSetup.RightMargin=Unit.FromInch(.5);
+			MigraDoc.DocumentObjectModel.Section section=doc.AddSection();
+			MigraDoc.DocumentObjectModel.Font headingFont=MigraDocHelper.CreateFont(13,true);
+			MigraDoc.DocumentObjectModel.Font bodyFontx=MigraDocHelper.CreateFont(9,false);
+			string text;
+			//Heading---------------------------------------------------------------------------------------------------------------
+			#region printHeading
+			Paragraph par=section.AddParagraph();
+			ParagraphFormat parformat=new ParagraphFormat();
+			parformat.Alignment=ParagraphAlignment.Center;
+			parformat.Font=MigraDocHelper.CreateFont(10,true);
+			par.Format=parformat;
+			text=Lan.g(this,"procedures").ToUpper();
+			par.AddFormattedText(text,headingFont);
+			par.AddLineBreak();
+			text=pat.GetNameFLFormal();
+			par.AddFormattedText(text,headingFont);
+			par.AddLineBreak();
+			text=DateTime.Now.ToShortDateString();
+			par.AddFormattedText(text,headingFont);
+			par.AddLineBreak();
+			par.AddLineBreak();
+			#endregion
+			//Procedure List--------------------------------------------------------------------------------------------------------
+			#region Procedure List
+			ODGrid gridProg=new ODGrid();
+			this.Controls.Add(gridProg);//Only added temporarily so that printing will work. Removed at end with Dispose().
+			gridProg.BeginUpdate();
+			gridProg.Columns.Clear();
+			ODGridColumn col;
+			List<DisplayField> fields=DisplayFields.GetForCategory(DisplayFieldCategory.ProgressNotes);
+			for(int i=0;i<fields.Count;i++){
+				if(fields[i].InternalName=="User" || fields[i].InternalName=="Signed"){
+					continue;
+				}
+				if(fields[i].Description==""){
+					col=new ODGridColumn(fields[i].InternalName,fields[i].ColumnWidth);
+				}
+				else{
+					col=new ODGridColumn(fields[i].Description,fields[i].ColumnWidth);
+				}
+				if(fields[i].InternalName=="Amount"){
+					col.TextAlign=HorizontalAlignment.Right;
+				}
+				if(fields[i].InternalName=="ADA Code")
+				{
+					col.TextAlign=HorizontalAlignment.Center;
+				}
+				gridProg.Columns.Add(col);
+			}
+			if(gridProg.Columns.Count<3){//0 wouldn't be possible.
+				gridProg.NoteSpanStart=0;
+				gridProg.NoteSpanStop=gridProg.Columns.Count-1;
+			}
+			else{
+				gridProg.NoteSpanStart=2;
+				if(gridProg.Columns.Count>7) {
+					gridProg.NoteSpanStop=7;
+				}
+				else{
+					gridProg.NoteSpanStop=gridProg.Columns.Count-1;
+				}
+			}
+			gridProg.Rows.Clear();
+			List <Procedure> procsForAppt=Procedures.GetProcsForSingle(AptCur.AptNum,(AptCur.AptStatus==ApptStatus.Planned));
+			for(int i=0;i<procsForAppt.Count;i++){
+				ProcedureCode procCode=ProcedureCodes.GetProcCodeFromDb(procsForAppt[i].CodeNum);
+				Provider prov=Providers.GetProv(procsForAppt[i].ProvNum);
+				Userod usr=Userods.GetUser(procsForAppt[i].UserNum);
+				ODGridRow row=new ODGridRow();
+				row.ColorLborder=System.Drawing.Color.Black;
+				for(int f=0;f<fields.Count;f++) {
+					switch(fields[f].InternalName){
+						case "Date":
+							row.Cells.Add(procsForAppt[i].ProcDate.Date.ToShortDateString());
+							break;
+						case "Time":
+							row.Cells.Add(procsForAppt[i].ProcDate.ToString("h:mm")+procsForAppt[i].ProcDate.ToString("%t").ToLower());
+							break;
+						case "Th":
+							row.Cells.Add(procsForAppt[i].ToothNum);
+							break;
+						case "Surf":
+							row.Cells.Add(procsForAppt[i].Surf);
+							break;
+						case "Dx":
+							row.Cells.Add(procsForAppt[i].Dx.ToString());
+							break;
+						case "Description":
+							row.Cells.Add((procCode.LaymanTerm!="")?procCode.LaymanTerm:procCode.Descript);
+							break;
+						case "Stat":
+							row.Cells.Add(Lans.g("enumProcStat",procsForAppt[i].ProcStatus.ToString()));
+							break;
+						case "Prov":
+							if(prov.Abbr.Length>5){
+								row.Cells.Add(prov.Abbr.Substring(0,5));
+							}
+							else{
+								row.Cells.Add(prov.Abbr);
+							}
+							break;
+						case "Amount":
+							row.Cells.Add(procsForAppt[i].ProcFee.ToString("F"));
+							break;
+						case "ADA Code":
+							row.Cells.Add(procCode.ProcCode);
+							break;
+						case "User":
+							row.Cells.Add(usr!=null?usr.UserName:"");
+						  break;
+					}
+				}
+				//Row text color.
+				switch(procsForAppt[i].ProcStatus) {
+					case ProcStat.TP:
+						row.ColorText=DefC.Long[(int)DefCat.ProgNoteColors][0].ItemColor;
+						break;
+					case ProcStat.C:
+						row.ColorText=DefC.Long[(int)DefCat.ProgNoteColors][1].ItemColor;
+						break;
+					case ProcStat.EC:
+						row.ColorText=DefC.Long[(int)DefCat.ProgNoteColors][2].ItemColor;
+						break;
+					case ProcStat.EO:
+						row.ColorText=DefC.Long[(int)DefCat.ProgNoteColors][3].ItemColor;
+						break;
+					case ProcStat.R:
+						row.ColorText=DefC.Long[(int)DefCat.ProgNoteColors][4].ItemColor;
+						break;
+					case ProcStat.D:
+						row.ColorText=System.Drawing.Color.Black;
+						break;
+					case ProcStat.Cn:
+						row.ColorText=DefC.Long[(int)DefCat.ProgNoteColors][22].ItemColor;
+						break;
+				}
+				row.ColorBackG=System.Drawing.Color.White;
+				if(procsForAppt[i].ProcDate.Date==DateTime.Today) {
+					row.ColorBackG=DefC.Long[(int)DefCat.MiscColors][6].ItemColor;
+				}				
+				gridProg.Rows.Add(row);
+			}
+			MigraDocHelper.DrawGrid(section,gridProg);
+			#endregion		
+			MigraDoc.Rendering.PdfDocumentRenderer pdfRenderer=new MigraDoc.Rendering.PdfDocumentRenderer(true,PdfFontEmbedding.Always);
+			pdfRenderer.Document=doc;
+			pdfRenderer.RenderDocument();
+			MemoryStream ms=new MemoryStream();
+			pdfRenderer.PdfDocument.Save(ms);
+			byte[] pdfBytes=ms.GetBuffer();
+			//#region Remove when testing is complete.
+			//string tempFilePath=Path.GetTempFileName();
+			//File.WriteAllBytes(tempFilePath,pdfBytes);
+			//#endregion
+			string pdfDataStr=Convert.ToBase64String(pdfBytes);
+			ms.Dispose();
+			return pdfDataStr;
+		}
+
 		private void butComplete_Click(object sender,EventArgs e) {
 			//This is only used with eCW.
 			if(butComplete.Text=="Complete") {
@@ -2014,6 +2187,9 @@ namespace OpenDental{
 					return;
 				}
 				Bridges.ECW.SendHL7(AptCur,pat);
+				//Send DFT to ECW containing the attached procedures for this appointment in a .pdf file.				
+				string pdfDataStr=GenerateProceduresIntoPdf();
+				Bridges.ECW.SendHL7(AptCur,pat,pdfDataStr);
 				CloseOD=true;
 				if(IsNew) {
 					SecurityLogs.MakeLogEntry(Permissions.AppointmentCreate,pat.PatNum,pat.GetNameLF()+", "
