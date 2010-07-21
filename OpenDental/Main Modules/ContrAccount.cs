@@ -1642,7 +1642,8 @@ namespace OpenDental {
 					but45days,
 					but90days,
 					butDatesAll,
-					butRefresh
+					butRefresh,
+					butComm
 				});
 			LayoutToolBar();
 			if(ViewingInRecall) {

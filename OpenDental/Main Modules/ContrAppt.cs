@@ -1630,7 +1630,12 @@ namespace OpenDental{
 				radioDay,
 				radioWeek,
 				tabWaiting,
-				tabSched
+				tabSched,
+				butLab,
+				butBackWeek,
+				butBackMonth,
+				butFwdWeek,
+				butFwdMonth
 				});
 			LayoutToolBar();
 			//Appointment action buttons
