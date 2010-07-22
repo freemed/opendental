@@ -125,23 +125,23 @@ namespace OpenDental{
 			this.butDownload = new OpenDental.UI.Button();
 			this.textConnectionMessage = new System.Windows.Forms.TextBox();
 			this.groupBuild = new System.Windows.Forms.GroupBox();
+			this.butDownloadMsiBuild = new OpenDental.UI.Button();
 			this.textBuild = new System.Windows.Forms.TextBox();
 			this.butInstallBuild = new OpenDental.UI.Button();
 			this.label2 = new System.Windows.Forms.Label();
 			this.groupBeta = new System.Windows.Forms.GroupBox();
+			this.butDownloadMsiBeta = new OpenDental.UI.Button();
 			this.textBeta = new System.Windows.Forms.TextBox();
 			this.butInstallBeta = new OpenDental.UI.Button();
 			this.label5 = new System.Windows.Forms.Label();
 			this.groupStable = new System.Windows.Forms.GroupBox();
+			this.butDownloadMsiStable = new OpenDental.UI.Button();
 			this.textStable = new System.Windows.Forms.TextBox();
 			this.butInstallStable = new OpenDental.UI.Button();
 			this.label11 = new System.Windows.Forms.Label();
 			this.butCheck2 = new OpenDental.UI.Button();
 			this.butLicense = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
-			this.butDownloadMsiBuild = new OpenDental.UI.Button();
-			this.butDownloadMsiStable = new OpenDental.UI.Button();
-			this.butDownloadMsiBeta = new OpenDental.UI.Button();
 			this.panelClassic.SuspendLayout();
 			this.groupBuild.SuspendLayout();
 			this.groupBeta.SuspendLayout();
@@ -354,6 +354,21 @@ namespace OpenDental{
 			this.groupBuild.Text = "A new build is available for the current version";
 			this.groupBuild.Visible = false;
 			// 
+			// butDownloadMsiBuild
+			// 
+			this.butDownloadMsiBuild.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDownloadMsiBuild.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butDownloadMsiBuild.Autosize = true;
+			this.butDownloadMsiBuild.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDownloadMsiBuild.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDownloadMsiBuild.CornerRadius = 4F;
+			this.butDownloadMsiBuild.Location = new System.Drawing.Point(220,80);
+			this.butDownloadMsiBuild.Name = "butDownloadMsiBuild";
+			this.butDownloadMsiBuild.Size = new System.Drawing.Size(83,25);
+			this.butDownloadMsiBuild.TabIndex = 52;
+			this.butDownloadMsiBuild.Text = "Download msi";
+			this.butDownloadMsiBuild.Click += new System.EventHandler(this.butDownMsiBuild_Click);
+			// 
 			// textBuild
 			// 
 			this.textBuild.AcceptsReturn = true;
@@ -403,6 +418,21 @@ namespace OpenDental{
 			this.groupBeta.Text = "A new beta version is available";
 			this.groupBeta.Visible = false;
 			// 
+			// butDownloadMsiBeta
+			// 
+			this.butDownloadMsiBeta.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDownloadMsiBeta.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butDownloadMsiBeta.Autosize = true;
+			this.butDownloadMsiBeta.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDownloadMsiBeta.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDownloadMsiBeta.CornerRadius = 4F;
+			this.butDownloadMsiBeta.Location = new System.Drawing.Point(220,88);
+			this.butDownloadMsiBeta.Name = "butDownloadMsiBeta";
+			this.butDownloadMsiBeta.Size = new System.Drawing.Size(83,25);
+			this.butDownloadMsiBeta.TabIndex = 53;
+			this.butDownloadMsiBeta.Text = "Download msi";
+			this.butDownloadMsiBeta.Click += new System.EventHandler(this.butDownloadMsiBeta_Click);
+			// 
 			// textBeta
 			// 
 			this.textBeta.AcceptsReturn = true;
@@ -451,6 +481,21 @@ namespace OpenDental{
 			this.groupStable.TabStop = false;
 			this.groupStable.Text = "A new stable version is available";
 			this.groupStable.Visible = false;
+			// 
+			// butDownloadMsiStable
+			// 
+			this.butDownloadMsiStable.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDownloadMsiStable.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butDownloadMsiStable.Autosize = true;
+			this.butDownloadMsiStable.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDownloadMsiStable.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDownloadMsiStable.CornerRadius = 4F;
+			this.butDownloadMsiStable.Location = new System.Drawing.Point(220,80);
+			this.butDownloadMsiStable.Name = "butDownloadMsiStable";
+			this.butDownloadMsiStable.Size = new System.Drawing.Size(83,25);
+			this.butDownloadMsiStable.TabIndex = 53;
+			this.butDownloadMsiStable.Text = "Download msi";
+			this.butDownloadMsiStable.Click += new System.EventHandler(this.butDownloadMsiStable_Click);
 			// 
 			// textStable
 			// 
@@ -530,51 +575,6 @@ namespace OpenDental{
 			this.butClose.TabIndex = 0;
 			this.butClose.Text = "&Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
-			// 
-			// butDownloadMsiBuild
-			// 
-			this.butDownloadMsiBuild.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butDownloadMsiBuild.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butDownloadMsiBuild.Autosize = true;
-			this.butDownloadMsiBuild.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDownloadMsiBuild.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDownloadMsiBuild.CornerRadius = 4F;
-			this.butDownloadMsiBuild.Location = new System.Drawing.Point(220,80);
-			this.butDownloadMsiBuild.Name = "butDownloadMsiBuild";
-			this.butDownloadMsiBuild.Size = new System.Drawing.Size(83,25);
-			this.butDownloadMsiBuild.TabIndex = 52;
-			this.butDownloadMsiBuild.Text = "Download msi";
-			this.butDownloadMsiBuild.Click += new System.EventHandler(this.butDownMsiBuild_Click);
-			// 
-			// butDownloadMsiStable
-			// 
-			this.butDownloadMsiStable.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butDownloadMsiStable.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butDownloadMsiStable.Autosize = true;
-			this.butDownloadMsiStable.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDownloadMsiStable.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDownloadMsiStable.CornerRadius = 4F;
-			this.butDownloadMsiStable.Location = new System.Drawing.Point(220,80);
-			this.butDownloadMsiStable.Name = "butDownloadMsiStable";
-			this.butDownloadMsiStable.Size = new System.Drawing.Size(83,25);
-			this.butDownloadMsiStable.TabIndex = 53;
-			this.butDownloadMsiStable.Text = "Download msi";
-			this.butDownloadMsiStable.Click += new System.EventHandler(this.butDownloadMsiStable_Click);
-			// 
-			// butDownloadMsiBeta
-			// 
-			this.butDownloadMsiBeta.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butDownloadMsiBeta.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butDownloadMsiBeta.Autosize = true;
-			this.butDownloadMsiBeta.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDownloadMsiBeta.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDownloadMsiBeta.CornerRadius = 4F;
-			this.butDownloadMsiBeta.Location = new System.Drawing.Point(220,88);
-			this.butDownloadMsiBeta.Name = "butDownloadMsiBeta";
-			this.butDownloadMsiBeta.Size = new System.Drawing.Size(83,25);
-			this.butDownloadMsiBeta.TabIndex = 53;
-			this.butDownloadMsiBeta.Text = "Download msi";
-			this.butDownloadMsiBeta.Click += new System.EventHandler(this.butDownloadMsiBeta_Click);
 			// 
 			// FormUpdate
 			// 
@@ -664,7 +664,7 @@ namespace OpenDental{
 				return;
 			}
 			if(PrefC.GetString(PrefName.WebServiceServerName)!="" //using web service
-				&&PrefC.GetString(PrefName.WebServiceServerName).ToLower()!=Environment.MachineName.ToLower())//and not on web server 
+				&&!ODEnvironment.IdIsThisComputer(PrefC.GetString(PrefName.WebServiceServerName).ToLower()))//and not on web server 
 			{
 				MessageBox.Show(Lan.g(this,"Updates are only allowed from the web server: ")+PrefC.GetString(PrefName.WebServiceServerName));
 				return;

@@ -2186,7 +2186,6 @@ namespace OpenDental{
 				if(!UpdateToDB()) {
 					return;
 				}
-				Bridges.ECW.SendHL7(AptCur,pat);
 				//Send DFT to ECW containing the attached procedures for this appointment in a .pdf file.				
 				string pdfDataStr=GenerateProceduresIntoPdf();
 				Bridges.ECW.SendHL7(AptCur,pat,pdfDataStr);
