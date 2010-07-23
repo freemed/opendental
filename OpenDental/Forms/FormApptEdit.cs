@@ -363,7 +363,7 @@ namespace OpenDental{
 			// 
 			// labelApptNote
 			// 
-			this.labelApptNote.Location = new System.Drawing.Point(22,264);
+			this.labelApptNote.Location = new System.Drawing.Point(263,264);
 			this.labelApptNote.Name = "labelApptNote";
 			this.labelApptNote.Size = new System.Drawing.Size(197,16);
 			this.labelApptNote.TabIndex = 141;
@@ -550,13 +550,14 @@ namespace OpenDental{
 			// gridFields
 			// 
 			this.gridFields.HScrollVisible = false;
-			this.gridFields.Location = new System.Drawing.Point(268,249);
+			this.gridFields.Location = new System.Drawing.Point(23,249);
 			this.gridFields.Name = "gridFields";
 			this.gridFields.ScrollValue = 0;
 			this.gridFields.Size = new System.Drawing.Size(239,134);
 			this.gridFields.TabIndex = 159;
 			this.gridFields.Title = "Appt Fields";
 			this.gridFields.TranslationName = "FormApptEdit";
+			this.gridFields.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridFields_CellDoubleClick);
 			// 
 			// butRequirement
 			// 
@@ -695,7 +696,7 @@ namespace OpenDental{
 			// textNote
 			// 
 			this.textNote.AcceptsReturn = true;
-			this.textNote.Location = new System.Drawing.Point(23,282);
+			this.textNote.Location = new System.Drawing.Point(264,282);
 			this.textNote.Multiline = true;
 			this.textNote.Name = "textNote";
 			this.textNote.QuickPasteType = OpenDentBusiness.QuickPasteType.Appointment;
@@ -1861,6 +1862,23 @@ namespace OpenDental{
 			textTimeDismissed.Text=DateTime.Now.ToShortTimeString();
 		}
 
+		private void gridFields_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			/*
+			ApptField field=ApptFields.GetOneForPatient(ApptFieldDefs.Listt[e.Row].FieldName,pat.PatNum);
+			if(field==null) {
+				field=new ApptField();
+				field.PatNum=pat.PatNum;
+				field.FieldName=ApptFieldDefs.List[e.Row].FieldName;
+				FormPatFieldEdit FormPF=new FormPatFieldEdit(field);
+				FormPF.IsNew=true;
+				FormPF.ShowDialog();
+			}
+			else {
+				FormPatFieldEdit FormPF=new FormPatFieldEdit(field);
+				FormPF.ShowDialog();
+			}*/
+		}
+
 		///<summary>Called from butOK_Click and butPin_Click</summary>
 		private bool UpdateToDB(){
 			DateTime dateTimeArrived=AptCur.AptDateTime.Date;
@@ -2309,6 +2327,8 @@ namespace OpenDental{
 				Appointments.Delete(AptCur.AptNum);
 			}
 		}
+
+		
 
 		
 

@@ -27,7 +27,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static DataTable RefreshCache(){
 			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
-			string command="SELECT * FROM apptfielddef";
+			string command="SELECT * FROM apptfielddef ORDER BY FieldName";//important to order so that listt matches order returned in other queries.
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="ApptFieldDef";
 			FillCache(table);

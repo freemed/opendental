@@ -975,9 +975,11 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),aptNum);
 			}
-			string command="SELECT FieldName,FieldValue "
-				+"FROM apptfield "
-				+"WHERE AptNum = "+POut.Long(aptNum);
+			string command="SELECT apptfielddef.FieldName,FieldValue "
+				+"FROM apptfielddef "
+				+"LEFT JOIN apptfield ON apptfielddef.FieldName=apptfield.FieldName "
+				+"AND AptNum = "+POut.Long(aptNum)+" "
+				+"ORDER BY apptfielddef.FieldName";
 			DataConnection dcon=new DataConnection();
 			DataTable table= dcon.GetTable(command);
 			table.TableName="ApptFields";
