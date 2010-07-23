@@ -2302,6 +2302,13 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				}
 				command="ALTER TABLE labcase ADD LabFee double NOT NULL";
 				Db.NonQ(command);
+				command="ALTER TABLE insplan CHANGE PlanNote PlanNote text NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE insplan CHANGE BenefitNotes BenefitNotes text NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE insplan CHANGE SubscNote SubscNote text NOT NULL";
+				Db.NonQ(command);
+
 				
 
 

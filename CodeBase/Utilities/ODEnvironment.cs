@@ -18,7 +18,7 @@ namespace CodeBase{
 			return retVal; 
     }
 
-		///<summary>Will return true if the provided id matches the local computer name or a local IPv4 or IPv6 address. Will return false if id is 'localhost' or '127.0.0.1'. Returns false in all other casees.</summary>
+		///<summary>Will return true if the provided id matches the local computer name or a local IPv4 or IPv6 address. Will return false if id is 'localhost' or '127.0.0.1'. Returns false in all other cases.</summary>
 		public static bool IdIsThisComputer(string id){
 			id=id.ToLower();
 			//Compare ID against the local host name.
