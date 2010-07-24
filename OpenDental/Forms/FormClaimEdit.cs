@@ -3521,13 +3521,13 @@ namespace OpenDental{
 			//Missing and Extracted Teeth--------------------------------------------------------------------------------------
 			SetCanadianExtractedTeeth();
 			List<ToothInitial> missingList=ToothInitials.Refresh(PatCur.PatNum);
-			ArrayList al=ToothInitials.GetMissingOrHiddenTeeth(missingList);
+			List<string> al=ToothInitials.GetMissingOrHiddenTeeth(missingList);
 			string missingstr="";
 			for(int i=0;i<al.Count;i++){
 				if(i>0){
 					missingstr+=", ";
 				}
-				missingstr+=Tooth.ToInternat(al[i].ToString());
+				missingstr+=Tooth.ToInternat(al[i]);
 			}
 			textMissingTeeth.Text=missingstr;
 		}

@@ -95,7 +95,7 @@ namespace OpenDental{
 		private bool TenIsDown;
 		private System.Windows.Forms.PrintPreviewDialog printPreviewDlg;
 		//private int pagesPrinted;
-		private ArrayList MissingTeeth;
+		private List<string> MissingTeeth;
 		private Patient PatCur;
 		private OpenDental.UI.Button butGraphical;
 		private OpenDental.UI.Button butSave;
@@ -1202,7 +1202,7 @@ namespace OpenDental{
 					if(((string)MissingTeeth[i]).CompareTo("A")<0//if a number
 						|| ((string)MissingTeeth[i]).CompareTo("Z")>0)
 					{
-						skippedTeeth.Add(PIn.Int((string)MissingTeeth[i]));
+						skippedTeeth.Add(PIn.Int(MissingTeeth[i]));
 					}
 				}
 			}

@@ -495,7 +495,7 @@ namespace OpenDental{
 					claimprocs.Add(ClaimProcsForClaim[i]);	
 				}
 			}
-			ArrayList missingTeeth=ToothInitials.GetMissingOrHiddenTeeth(initialList);
+			List<string> missingTeeth=ToothInitials.GetMissingOrHiddenTeeth(initialList);
 			Procedure proc;
 			ProcedureCode procCode;
 			for(int j=missingTeeth.Count-1;j>=0;j--) {//loop backwards to keep index accurate as items are removed
@@ -503,7 +503,7 @@ namespace OpenDental{
 				for(int p=0;p<claimprocs.Count;p++) {
 					proc=Procedures.GetProcFromList(ProcList,claimprocs[p].ProcNum);
 					procCode=ProcedureCodes.GetProcCode(proc.CodeNum);
-					if(procCode.PaintType==ToothPaintingType.Extraction && proc.ToothNum==(string)missingTeeth[j]) {
+					if(procCode.PaintType==ToothPaintingType.Extraction && proc.ToothNum==missingTeeth[j]) {
 						missingTeeth.RemoveAt(j);
 						break;
 					}

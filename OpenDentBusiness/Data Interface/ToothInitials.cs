@@ -172,13 +172,14 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets a list of missing teeth as strings. Includes "1"-"32", and "A"-"Z".</summary>
-		public static ArrayList GetMissingOrHiddenTeeth(List<ToothInitial> initialList) {
+		public static List<string> GetMissingOrHiddenTeeth(List<ToothInitial> initialList) {
 			//No need to check RemotingRole; no call to db.
-			ArrayList missing=new ArrayList();
+			List<string> missing=new List<string>();
 			for(int i=0;i<initialList.Count;i++) {
 				if((initialList[i].InitialType==ToothInitialType.Missing || initialList[i].InitialType==ToothInitialType.Hidden)
 					&& Tooth.IsValidDB(initialList[i].ToothNum)
-					&& !Tooth.IsSuperNum(initialList[i].ToothNum))
+					&& !Tooth.IsSuperNum(initialList[i].ToothNum)
+					&& !missing.Contains(initialList[i].ToothNum))
 				{
 					missing.Add(initialList[i].ToothNum);
 				}

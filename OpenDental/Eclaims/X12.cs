@@ -748,7 +748,7 @@ namespace OpenDental.Eclaims
 							+claim.OrthoRemainM.ToString()+"~");
 					}
 					//2300 DN2: Missing teeth
-					ArrayList missingTeeth=ToothInitials.GetMissingOrHiddenTeeth(initialList);
+					List<string> missingTeeth=ToothInitials.GetMissingOrHiddenTeeth(initialList);
 					bool doSkip;
 					for(int j=0;j<missingTeeth.Count;j++){
 						//if the missing tooth is missing because of an extraction being billed here, then exclude it
@@ -757,7 +757,7 @@ namespace OpenDental.Eclaims
 						for(int p=0;p<claimProcs.Count;p++){
 							proc=Procedures.GetProcFromList(procList,claimProcs[p].ProcNum);
 							procCode=ProcedureCodes.GetProcCode(proc.CodeNum);
-							if(procCode.PaintType==ToothPaintingType.Extraction && proc.ToothNum==(string)missingTeeth[j]){
+							if(procCode.PaintType==ToothPaintingType.Extraction && proc.ToothNum==missingTeeth[j]){
 								doSkip=true;
 								break;
 							}
