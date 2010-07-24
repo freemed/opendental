@@ -1324,7 +1324,11 @@ namespace OpenDental{
 				}
 				catch(Exception ex){
 					Cursor=Cursors.Default;
-					MessageBox.Show(ex.Message+"\r\nPatient:"+AddrTable.Rows[i]["patientNameFL"].ToString());
+					str=ex.Message+"\r\n";
+					if(ex.GetType()==typeof(System.ArgumentException)){
+						str+="Go to Setup, Recall.  The subject for an email may not be multiple lines.\r\n";
+					}
+					MessageBox.Show(str+"Patient:"+AddrTable.Rows[i]["patientNameFL"].ToString());
 					break;
 				}
 				message.MsgDateTime=DateTime.Now;
