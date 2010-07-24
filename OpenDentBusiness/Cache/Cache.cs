@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Reflection;
 using System.Text;
 
@@ -117,7 +118,9 @@ namespace OpenDentBusiness {
 				ds.Tables.Add(InsFilingCodeSubtypes.RefreshCache());
 			}
 			if(itypes.Contains((int)InvalidType.Languages) || isAll) {
-				ds.Tables.Add(Lans.RefreshCache());
+				if(CultureInfo.CurrentCulture.Name!="en-US") {
+					ds.Tables.Add(Lans.RefreshCache());
+				}
 			}
 			if(itypes.Contains((int)InvalidType.Letters) || isAll){
 				ds.Tables.Add(Letters.RefreshCache());
