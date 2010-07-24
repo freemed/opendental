@@ -750,6 +750,7 @@ namespace OpenDental.Eclaims
 					//2300 DN2: Missing teeth
 					List<string> missingTeeth=ToothInitials.GetMissingOrHiddenTeeth(initialList);
 					bool doSkip;
+					int countMissing=0;
 					for(int j=0;j<missingTeeth.Count;j++){
 						//if the missing tooth is missing because of an extraction being billed here, then exclude it
 						//still needed, even though missing teeth are not based on procedures any longer
@@ -763,6 +764,10 @@ namespace OpenDental.Eclaims
 							}
 						}
 						if(doSkip){
+							continue;
+						}
+						countMissing++;
+						if(countMissing>35){//segment max use 35
 							continue;
 						}
 						seg++;
