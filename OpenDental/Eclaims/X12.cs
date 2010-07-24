@@ -1632,6 +1632,7 @@ namespace OpenDental.Eclaims
 				"[^\\w!\"&'\\(\\)\\+,-\\./;\\?= #]",//[](any single char)^(that is not)\w(A-Z or 0-9) or one of the above chars.
 				"");
 			retStr=Regex.Replace(retStr,"[_]","");//replaces _
+			retStr=retStr.Trim();//removes leading and trailing spaces.
 			if(maxL!=-1){
 				if(retStr.Length>maxL){
 					retStr=retStr.Substring(0,maxL);
