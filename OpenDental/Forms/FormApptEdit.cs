@@ -1863,20 +1863,22 @@ namespace OpenDental{
 		}
 
 		private void gridFields_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			/*
-			ApptField field=ApptFields.GetOneForPatient(ApptFieldDefs.Listt[e.Row].FieldName,pat.PatNum);
+			ApptField field=ApptFields.GetOne(PIn.Long(DS.Tables["ApptFields"].Rows[e.Row]["ApptFieldNum"].ToString()));
 			if(field==null) {
 				field=new ApptField();
-				field.PatNum=pat.PatNum;
-				field.FieldName=ApptFieldDefs.List[e.Row].FieldName;
-				FormPatFieldEdit FormPF=new FormPatFieldEdit(field);
-				FormPF.IsNew=true;
-				FormPF.ShowDialog();
+				field.AptNum=AptCur.AptNum;
+				field.FieldName=DS.Tables["ApptFields"].Rows[e.Row]["FieldName"].ToString();
+				FormApptFieldEdit formAF=new FormApptFieldEdit(field);
+				formAF.IsNew=true;
+				formAF.ShowDialog();
 			}
 			else {
-				FormPatFieldEdit FormPF=new FormPatFieldEdit(field);
-				FormPF.ShowDialog();
-			}*/
+				FormApptFieldEdit formAF=new FormApptFieldEdit(field);
+				formAF.ShowDialog();
+			}
+			DS.Tables.Remove("ApptFields");
+			DS.Tables.Add(Appointments.GetApptEdit(AptCur.AptNum).Tables["ApptFields"].Copy());
+			FillFields();
 		}
 
 		///<summary>Called from butOK_Click and butPin_Click</summary>

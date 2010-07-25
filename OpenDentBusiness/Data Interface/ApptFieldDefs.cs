@@ -41,23 +41,32 @@ namespace OpenDentBusiness{
 		}
 		#endregion
 
-		///<summary>Must supply the old field name so that the apptFields attached to appointments can be updated.</summary>
+		///<summary>Must supply the old field name so that the apptFields attached to appointments can be updated.  Will throw exception if new FieldName is already in use.</summary>
 		public static void Update(ApptFieldDef apptFieldDef,string oldFieldName) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),apptFieldDef,oldFieldName);
 				return;
 			}
+			string command="SELECT COUNT(*) FROM apptfielddef WHERE FieldName='"+POut.String(apptFieldDef.FieldName)+"' "
+				+"AND ApptFieldDefNum != "+POut.Long(apptFieldDef.ApptFieldDefNum);
+			if(Db.GetCount(command)!="0"){
+				throw new ApplicationException(Lans.g("FormApptFieldDefEdit","Field name already in use."));
+			}
 			Crud.ApptFieldDefCrud.Update(apptFieldDef);
-			string command="UPDATE apptfield SET FieldName='"+POut.String(apptFieldDef.FieldName)+"' "
+			command="UPDATE apptfield SET FieldName='"+POut.String(apptFieldDef.FieldName)+"' "
 				+"WHERE FieldName='"+POut.String(oldFieldName)+"'";
 			Db.NonQ(command);
 		}
 
-		///<summary></summary>
+		///<summary>Surround with try/catch in case field name already in use.</summary>
 		public static long Insert(ApptFieldDef apptFieldDef) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				apptFieldDef.ApptFieldDefNum=Meth.GetLong(MethodBase.GetCurrentMethod(),apptFieldDef);
 				return apptFieldDef.ApptFieldDefNum;
+			}
+			string command="SELECT COUNT(*) FROM apptfielddef WHERE FieldName='"+POut.String(apptFieldDef.FieldName)+"'";
+			if(Db.GetCount(command)!="0") {
+				throw new ApplicationException(Lans.g("FormApptFieldDefEdit","Field name already in use."));
 			}
 			return Crud.ApptFieldDefCrud.Insert(apptFieldDef);
 		}

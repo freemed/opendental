@@ -9,7 +9,7 @@ namespace OpenDentBusiness{
 		///<summary>Primary key.</summary>
 		[CrudColumn(IsPriKey=true)]
 		public long ApptFieldDefNum;
-		///<summary>The name of the field that the user will be allowed to fill in the appt edit window.</summary>
+		///<summary>The name of the field that the user will be allowed to fill in the appt edit window.  Duplicates are prevented.</summary>
 		public string FieldName;
 	
 		///<summary></summary>

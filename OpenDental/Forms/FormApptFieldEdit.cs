@@ -144,14 +144,13 @@ namespace OpenDental{
 		}*/
 
 		private void butOK_Click(object sender, System.EventArgs e) {
-			/*
 			Field.FieldValue=textValue.Text;
 			if(Field.FieldValue==""){//if blank, then delete
 				if(IsNew) {
 					DialogResult=DialogResult.Cancel;
 					return;
 				}
-				ApptFields.Delete(Field);
+				ApptFields.Delete(Field.ApptFieldNum);
 				DialogResult=DialogResult.OK;
 				return;
 			}
@@ -161,7 +160,7 @@ namespace OpenDental{
 			else{
 				ApptFields.Update(Field);
 			}
-			DialogResult=DialogResult.OK;*/
+			DialogResult=DialogResult.OK;
 		}
 
 		private void butCancel_Click(object sender, System.EventArgs e) {

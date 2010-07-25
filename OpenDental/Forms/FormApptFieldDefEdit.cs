@@ -177,11 +177,17 @@ namespace OpenDental{
 
 		private void butOK_Click(object sender, System.EventArgs e) {
 			FieldDef.FieldName=textName.Text;
-			if(IsNew){
-				ApptFieldDefs.Insert(FieldDef);
+			try {
+				if(IsNew) {
+					ApptFieldDefs.Insert(FieldDef);
+				}
+				else {
+					ApptFieldDefs.Update(FieldDef,OldFieldName);
+				}
 			}
-			else{
-				ApptFieldDefs.Update(FieldDef,OldFieldName);
+			catch(ApplicationException ex) {
+				MessageBox.Show(ex.Message);
+				return;
 			}
 			DialogResult=DialogResult.OK;
 		}
