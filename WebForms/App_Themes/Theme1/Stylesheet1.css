@@ -1,0 +1,41 @@
+﻿
+.style1
+{	
+	font-family:Arial;
+	font-size:12px;
+	padding-top:0px;
+	margin-top:0px;
+	border-top:0px;
+	line-height:19px;
+}
+
+.style2
+{
+	background-color:#B2B2B2;
+	height:15px;
+	padding-bottom:3px;
+	border-style:outset;
+	border-width:1px;
+	border-color:#000000;
+}
+.style3
+{
+	line-height:17px;
+}
+
+
+.textboxstyle
+{
+	height:12px;
+	font-size:11px;
+}
+.buttonstyle{
+	background:#C1C4D3;
+	border-color:Gray;
+}
+
+.buttonstyle:hover{
+	background:#D9D7E4;
+	border-color:White;
+
+}
