@@ -74,8 +74,8 @@ namespace OpenDental {
 					return;
 				}
 			}
-			if(rangeEnd-rangeStart<999999){
-				MsgBox.Show(this,"The end of the range must be at least 999,999 greater than the start of the range");
+			if((textRangeStart.Text !="" || textRangeEnd.Text !="") && rangeEnd-rangeStart<999999){
+				MsgBox.Show(this,"The end of the range must be at least 999,999 greater than the start of the range.");
 				return;
 			}
 			RepServ.Descript=textDescript.Text;
