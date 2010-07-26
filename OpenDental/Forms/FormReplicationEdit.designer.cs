@@ -157,7 +157,7 @@ namespace OpenDental{
 			this.label8.Name = "label8";
 			this.label8.Size = new System.Drawing.Size(258,13);
 			this.label8.TabIndex = 101;
-			this.label8.Text = "Range must be at least 1,000,000 numbers";
+			this.label8.Text = "Range must be at least 1,000,000 numbers.";
 			// 
 			// butDelete
 			// 
