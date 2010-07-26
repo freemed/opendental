@@ -961,9 +961,9 @@ namespace OpenDental{
 			//e.Graphics.DrawLine(new Pen(Color.Gray),colPos[0],yPos,colPos[colPos.Length-1],yPos);
 			//totals will print on every page for simplicity
 			yPos+=10;
-			g.DrawString(Lan.g(this,"Regular Time")+": "+textTotal.Text,fontHeader,brush,xPos,yPos);
+			g.DrawString(Lan.g(this,"Regular Time")+": "+textTotal.Text+" ("+textTotal2.Text+")",fontHeader,brush,xPos,yPos);
 			yPos+=16;
-			g.DrawString(Lan.g(this,"Overtime")+": "+textOvertime.Text,fontHeader,brush,xPos,yPos);
+			g.DrawString(Lan.g(this,"Overtime")+": "+textOvertime.Text+" ("+textOvertime2.Text+")",fontHeader,brush,xPos,yPos);
 			if(linesPrinted==gridMain.Rows.Count) {
 				e.HasMorePages=false;
 			}
