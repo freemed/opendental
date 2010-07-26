@@ -44,6 +44,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xCrudGenerator", "Crud\xCru
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCanada", "TestCanada\TestCanada.csproj", "{00CBDC3A-0CC4-47DE-88A0-1579B9A66A0A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebForms", "WebForms\WebForms.csproj", "{099AC80B-E862-42F1-8109-87BF450DC3D9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -253,6 +255,15 @@ Global
 		{00CBDC3A-0CC4-47DE-88A0-1579B9A66A0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{00CBDC3A-0CC4-47DE-88A0-1579B9A66A0A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{00CBDC3A-0CC4-47DE-88A0-1579B9A66A0A}.Release|x86.ActiveCfg = Release|Any CPU
+		{099AC80B-E862-42F1-8109-87BF450DC3D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{099AC80B-E862-42F1-8109-87BF450DC3D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{099AC80B-E862-42F1-8109-87BF450DC3D9}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{099AC80B-E862-42F1-8109-87BF450DC3D9}.LinuxRelease|Any CPU.ActiveCfg = Release|Any CPU
+		{099AC80B-E862-42F1-8109-87BF450DC3D9}.LinuxRelease|Any CPU.Build.0 = Release|Any CPU
+		{099AC80B-E862-42F1-8109-87BF450DC3D9}.LinuxRelease|x86.ActiveCfg = Release|Any CPU
+		{099AC80B-E862-42F1-8109-87BF450DC3D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{099AC80B-E862-42F1-8109-87BF450DC3D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{099AC80B-E862-42F1-8109-87BF450DC3D9}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
