@@ -2716,7 +2716,7 @@ namespace OpenDental {
 					break;
 				case "Med":
 					ClaimCur.PlanNum=PlanCur.PlanNum;
-					ClaimCur.PatRelat=Relat.Self;
+					ClaimCur.PatRelat=PatPlans.GetFromList(PatPlanList,PlanCur.PlanNum).Relationship;
 					ClaimCur.ClaimType="Other";
 					break;
 				case "Other":
