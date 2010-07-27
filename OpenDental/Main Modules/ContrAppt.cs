@@ -1387,6 +1387,7 @@ namespace OpenDental{
 					}
 				}
 				ContrApptSingle3[i].DataRoww=row;
+				ContrApptSingle3[i].TableApptFields=DS.Tables["ApptFields"];
 				if(!ContrApptSheet.IsWeeklyView) {
 					//copy time pattern to provBar[]:
 					indexProv=-1;
@@ -2018,7 +2019,7 @@ namespace OpenDental{
 						row=Appointments.RefreshOneApt(aptNums[a],true).Tables["Appointments"].Rows[0];
 					}
 				}
-				pinBoard.AddAppointment(row);
+				pinBoard.AddAppointment(row,DS.Tables["ApptFields"]);
 			}
 			//deal with this later:
 			//try{
@@ -2063,6 +2064,7 @@ namespace OpenDental{
 			//ContrApptSingle.PinBoardIsSelected=true;
 			TempApptSingle=new ContrApptSingle();
 			TempApptSingle.DataRoww=pinBoard.SelectedAppt.DataRoww;
+			TempApptSingle.TableApptFields=pinBoard.SelectedAppt.TableApptFields;
 			TempApptSingle.Visible=false;
 			Controls.Add(TempApptSingle);
 			TempApptSingle.SetLocation();
@@ -2559,6 +2561,7 @@ namespace OpenDental{
 					TempApptSingle=new ContrApptSingle();
 					TempApptSingle.Visible=false;//otherwise I get a phantom appt while holding mouse down
 					TempApptSingle.DataRoww=ContrApptSingle3[thisIndex].DataRoww;
+					TempApptSingle.TableApptFields=ContrApptSingle3[thisIndex].TableApptFields;
 					Controls.Add(TempApptSingle);
 					TempApptSingle.SetLocation();
 					TempApptSingle.BringToFront();

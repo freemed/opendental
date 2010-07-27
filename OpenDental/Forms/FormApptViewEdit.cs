@@ -35,6 +35,8 @@ namespace OpenDental{
 		private List<String> elementsAll;
 		/// <summary>A list of indices to elementsAll.  Those elements which are showing in the list of available elements.  It must be done this way to support language translation.</summary>
 		private List<int> displayedAvailable;
+		///<summary>The actual ApptFieldDefNums of all available elements because no language translation is needed.</summary>
+		private List<long> displayedAvailableApptFieldDefs;
 		private System.Windows.Forms.ColorDialog colorDialog1;
 		private System.Windows.Forms.Label label6;
 		private System.Windows.Forms.TextBox textRowsPerIncr;
@@ -59,7 +61,7 @@ namespace OpenDental{
 		private Label label4;
 		private ListBox listStackUR;
 		private Label label1;
-		private GroupBox groupBox3;
+		private ODGrid gridApptFieldDefs;
 		///<summary>Set this value before opening the form.</summary>
 		public ApptView ApptViewCur;
 		//<summary>Tracks MouseIsDown on listOps.</summary>
@@ -130,7 +132,7 @@ namespace OpenDental{
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.label8 = new System.Windows.Forms.Label();
 			this.gridAvailable = new OpenDental.UI.ODGrid();
-			this.groupBox3 = new System.Windows.Forms.GroupBox();
+			this.gridApptFieldDefs = new OpenDental.UI.ODGrid();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.SuspendLayout();
@@ -144,7 +146,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(752,632);
+			this.butCancel.Location = new System.Drawing.Point(752,642);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 0;
@@ -159,7 +161,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(652,632);
+			this.butOK.Location = new System.Drawing.Point(652,642);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 1;
@@ -176,7 +178,7 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(32,632);
+			this.butDelete.Location = new System.Drawing.Point(32,642);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(87,24);
 			this.butDelete.TabIndex = 38;
@@ -242,7 +244,7 @@ namespace OpenDental{
 			this.butDown.CornerRadius = 4F;
 			this.butDown.Image = global::OpenDental.Properties.Resources.down;
 			this.butDown.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDown.Location = new System.Drawing.Point(297,420);
+			this.butDown.Location = new System.Drawing.Point(297,475);
 			this.butDown.Name = "butDown";
 			this.butDown.Size = new System.Drawing.Size(71,24);
 			this.butDown.TabIndex = 50;
@@ -258,7 +260,7 @@ namespace OpenDental{
 			this.butUp.CornerRadius = 4F;
 			this.butUp.Image = global::OpenDental.Properties.Resources.up;
 			this.butUp.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butUp.Location = new System.Drawing.Point(219,420);
+			this.butUp.Location = new System.Drawing.Point(219,475);
 			this.butUp.Name = "butUp";
 			this.butUp.Size = new System.Drawing.Size(71,24);
 			this.butUp.TabIndex = 51;
@@ -273,7 +275,7 @@ namespace OpenDental{
 			this.butLeft.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butLeft.CornerRadius = 4F;
 			this.butLeft.Image = global::OpenDental.Properties.Resources.Left;
-			this.butLeft.Location = new System.Drawing.Point(404,292);
+			this.butLeft.Location = new System.Drawing.Point(404,316);
 			this.butLeft.Name = "butLeft";
 			this.butLeft.Size = new System.Drawing.Size(35,26);
 			this.butLeft.TabIndex = 52;
@@ -287,7 +289,7 @@ namespace OpenDental{
 			this.butRight.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butRight.CornerRadius = 4F;
 			this.butRight.Image = global::OpenDental.Properties.Resources.Right;
-			this.butRight.Location = new System.Drawing.Point(404,258);
+			this.butRight.Location = new System.Drawing.Point(404,282);
 			this.butRight.Name = "butRight";
 			this.butRight.Size = new System.Drawing.Size(35,26);
 			this.butRight.TabIndex = 53;
@@ -379,9 +381,9 @@ namespace OpenDental{
 			this.groupBox2.Controls.Add(this.butUp);
 			this.groupBox2.Controls.Add(this.label8);
 			this.groupBox2.Controls.Add(this.butDown);
-			this.groupBox2.Location = new System.Drawing.Point(449,152);
+			this.groupBox2.Location = new System.Drawing.Point(449,128);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(378,457);
+			this.groupBox2.Size = new System.Drawing.Size(378,507);
 			this.groupBox2.TabIndex = 59;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Rows Displayed (double click to edit or to move to another corner)";
@@ -389,14 +391,14 @@ namespace OpenDental{
 			// listStackLR
 			// 
 			this.listStackLR.FormattingEnabled = true;
-			this.listStackLR.Location = new System.Drawing.Point(192,254);
+			this.listStackLR.Location = new System.Drawing.Point(192,315);
 			this.listStackLR.Name = "listStackLR";
-			this.listStackLR.Size = new System.Drawing.Size(176,30);
+			this.listStackLR.Size = new System.Drawing.Size(175,30);
 			this.listStackLR.TabIndex = 66;
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(190,235);
+			this.label4.Location = new System.Drawing.Point(190,296);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(175,17);
 			this.label4.TabIndex = 65;
@@ -408,7 +410,7 @@ namespace OpenDental{
 			this.listStackUR.FormattingEnabled = true;
 			this.listStackUR.Location = new System.Drawing.Point(192,177);
 			this.listStackUR.Name = "listStackUR";
-			this.listStackUR.Size = new System.Drawing.Size(176,30);
+			this.listStackUR.Size = new System.Drawing.Size(175,30);
 			this.listStackUR.TabIndex = 64;
 			// 
 			// label1
@@ -423,7 +425,7 @@ namespace OpenDental{
 			// gridLR
 			// 
 			this.gridLR.HScrollVisible = false;
-			this.gridLR.Location = new System.Drawing.Point(192,288);
+			this.gridLR.Location = new System.Drawing.Point(192,349);
 			this.gridLR.Name = "gridLR";
 			this.gridLR.ScrollValue = 0;
 			this.gridLR.Size = new System.Drawing.Size(175,120);
@@ -452,7 +454,7 @@ namespace OpenDental{
 			this.gridMain.Location = new System.Drawing.Point(11,18);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(175,390);
+			this.gridMain.Size = new System.Drawing.Size(175,451);
 			this.gridMain.TabIndex = 60;
 			this.gridMain.Title = "Main List";
 			this.gridMain.TranslationName = null;
@@ -461,7 +463,7 @@ namespace OpenDental{
 			// 
 			// label8
 			// 
-			this.label8.Location = new System.Drawing.Point(11,423);
+			this.label8.Location = new System.Drawing.Point(11,478);
 			this.label8.Name = "label8";
 			this.label8.Size = new System.Drawing.Size(209,17);
 			this.label8.TabIndex = 59;
@@ -471,22 +473,26 @@ namespace OpenDental{
 			// gridAvailable
 			// 
 			this.gridAvailable.HScrollVisible = false;
-			this.gridAvailable.Location = new System.Drawing.Point(222,170);
+			this.gridAvailable.Location = new System.Drawing.Point(222,146);
 			this.gridAvailable.Name = "gridAvailable";
 			this.gridAvailable.ScrollValue = 0;
-			this.gridAvailable.Size = new System.Drawing.Size(175,390);
+			this.gridAvailable.Size = new System.Drawing.Size(175,336);
 			this.gridAvailable.TabIndex = 61;
 			this.gridAvailable.Title = "Available Rows";
 			this.gridAvailable.TranslationName = null;
+			this.gridAvailable.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridAvailable_CellClick);
 			// 
-			// groupBox3
+			// gridApptFieldDefs
 			// 
-			this.groupBox3.Location = new System.Drawing.Point(253,596);
-			this.groupBox3.Name = "groupBox3";
-			this.groupBox3.Size = new System.Drawing.Size(175,42);
-			this.groupBox3.TabIndex = 62;
-			this.groupBox3.TabStop = false;
-			this.groupBox3.Text = "UR stack behavior";
+			this.gridApptFieldDefs.HScrollVisible = false;
+			this.gridApptFieldDefs.Location = new System.Drawing.Point(222,485);
+			this.gridApptFieldDefs.Name = "gridApptFieldDefs";
+			this.gridApptFieldDefs.ScrollValue = 0;
+			this.gridApptFieldDefs.Size = new System.Drawing.Size(175,112);
+			this.gridApptFieldDefs.TabIndex = 62;
+			this.gridApptFieldDefs.Title = "Appt Field Defs";
+			this.gridApptFieldDefs.TranslationName = null;
+			this.gridApptFieldDefs.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridApptFieldDefs_CellClick);
 			// 
 			// FormApptViewEdit
 			// 
@@ -494,7 +500,7 @@ namespace OpenDental{
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(852,675);
-			this.Controls.Add(this.groupBox3);
+			this.Controls.Add(this.gridApptFieldDefs);
 			this.Controls.Add(this.gridAvailable);
 			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.textRowsPerIncr);
@@ -624,7 +630,12 @@ namespace OpenDental{
 			ODGridRow row;
 			for(int i=0;i<displayedElementsMain.Count;i++){
 				row=new ODGridRow();
-				row.Cells.Add(displayedElementsMain[i].ElementDesc);
+				if(displayedElementsMain[i].ApptFieldDefNum>0){
+					row.Cells.Add(ApptFieldDefs.GetFieldName(displayedElementsMain[i].ApptFieldDefNum));
+				}
+				else{
+					row.Cells.Add(displayedElementsMain[i].ElementDesc);
+				}
 				row.ColorText=displayedElementsMain[i].ElementColor;
 				gridMain.Rows.Add(row);
 			}
@@ -637,7 +648,12 @@ namespace OpenDental{
 			gridUR.Rows.Clear();
 			for(int i=0;i<displayedElementsUR.Count;i++) {
 				row=new ODGridRow();
-				row.Cells.Add(displayedElementsUR[i].ElementDesc);
+				if(displayedElementsUR[i].ApptFieldDefNum>0) {
+					row.Cells.Add(ApptFieldDefs.GetFieldName(displayedElementsUR[i].ApptFieldDefNum));
+				}
+				else {
+					row.Cells.Add(displayedElementsUR[i].ElementDesc);
+				}
 				row.ColorText=displayedElementsUR[i].ElementColor;
 				gridUR.Rows.Add(row);
 			}
@@ -650,7 +666,12 @@ namespace OpenDental{
 			gridLR.Rows.Clear();
 			for(int i=0;i<displayedElementsLR.Count;i++) {
 				row=new ODGridRow();
-				row.Cells.Add(displayedElementsLR[i].ElementDesc);
+				if(displayedElementsLR[i].ApptFieldDefNum>0) {
+					row.Cells.Add(ApptFieldDefs.GetFieldName(displayedElementsLR[i].ApptFieldDefNum));
+				}
+				else {
+					row.Cells.Add(displayedElementsLR[i].ElementDesc);
+				}
 				row.ColorText=displayedElementsLR[i].ElementColor;
 				gridLR.Rows.Add(row);
 			}
@@ -671,12 +692,38 @@ namespace OpenDental{
 				}
 			}
 			gridAvailable.EndUpdate();
+			//gridApptFieldDefs-----------------------------------------------------------
+			gridApptFieldDefs.BeginUpdate();
+			gridApptFieldDefs.Columns.Clear();
+			col=new ODGridColumn("",100);
+			gridApptFieldDefs.Columns.Add(col);
+			gridApptFieldDefs.Rows.Clear();
+			displayedAvailableApptFieldDefs=new List<long>();
+			for(int i=0;i<ApptFieldDefs.Listt.Count;i++) {
+				if(!ApptFieldIsDisplayed(ApptFieldDefs.Listt[i].ApptFieldDefNum)) {
+					displayedAvailableApptFieldDefs.Add(ApptFieldDefs.Listt[i].ApptFieldDefNum);
+					row=new ODGridRow();
+					row.Cells.Add(ApptFieldDefs.Listt[i].FieldName);
+					gridApptFieldDefs.Rows.Add(row);
+				}
+			}
+			gridApptFieldDefs.EndUpdate();
 		}
 
-		///<summary>Called from FillElements. Used to determine whether a given element is already displayed. If not, then it is displayed in the available rows on the right.</summary>
+		///<summary>Called from FillElements. Used to determine whether a given element is already displayed. If not, then it is displayed in the available rows on the left.</summary>
 		private bool ElementIsDisplayed(string elementDesc){
 			for(int i=0;i<displayedElementsAll.Count;i++){
 				if(displayedElementsAll[i].ElementDesc==elementDesc){
+					return true;
+				}
+			}
+			return false;
+		}
+
+		///<summary>Called from FillElements. Used to determine whether a apptfield is already displayed. If not, then it is displayed in the available rows on the left.</summary>
+		private bool ApptFieldIsDisplayed(long apptFieldDefNum){
+			for(int i=0;i<displayedElementsAll.Count;i++){
+				if(displayedElementsAll[i].ApptFieldDefNum==apptFieldDefNum){
 					return true;
 				}
 			}
@@ -718,23 +765,41 @@ namespace OpenDental{
 		}
 
 		private void butRight_Click(object sender, System.EventArgs e) {
-			if(gridAvailable.GetSelectedIndex()==-1){
-				return;
+			if(gridAvailable.GetSelectedIndex()!=-1) {
+				//the item order is not used until saving to db.
+				ApptViewItem item=new ApptViewItem(elementsAll[displayedAvailable[gridAvailable.GetSelectedIndex()]],0,Color.Black);
+				if(gridMain.SelectedIndices.Length==1) {//insert
+					int newIdx=displayedElementsAll.IndexOf(displayedElementsMain[gridMain.GetSelectedIndex()]);
+					displayedElementsAll.Insert(newIdx,item);
+				}
+				else {//add to end
+					displayedElementsAll.Add(item);
+				}
+				FillElements();
+				for(int i=0;i<displayedElementsMain.Count;i++) {//the new item will always show first in the main list.
+					if(displayedElementsMain[i]==item) {
+						gridMain.SetSelected(i,true);//reselect the item
+						break;
+					}
+				}
 			}
-			//the item order is not used until saving to db.
-			ApptViewItem item=new ApptViewItem(elementsAll[displayedAvailable[gridAvailable.GetSelectedIndex()]],0,Color.Black);
-			if(gridMain.SelectedIndices.Length==1) {//insert
-				int newIdx=displayedElementsAll.IndexOf(displayedElementsMain[gridMain.GetSelectedIndex()]);
-				displayedElementsAll.Insert(newIdx,item);
-			}
-			else{//add to end
-				displayedElementsAll.Add(item);
-			}
-			FillElements();
-			for(int i=0;i<displayedElementsMain.Count;i++) {//the new item will always show first in the main list.
-				if(displayedElementsMain[i]==item) {
-					gridMain.SetSelected(i,true);//reselect the item
-					break;
+			else if(gridApptFieldDefs.GetSelectedIndex()!=-1) {
+				ApptViewItem item=new ApptViewItem();
+				item.ElementColor=Color.Black;
+				item.ApptFieldDefNum=displayedAvailableApptFieldDefs[gridApptFieldDefs.GetSelectedIndex()];
+				if(gridMain.SelectedIndices.Length==1) {//insert
+					int newIdx=displayedElementsAll.IndexOf(displayedElementsMain[gridMain.GetSelectedIndex()]);
+					displayedElementsAll.Insert(newIdx,item);
+				}
+				else {//add to end
+					displayedElementsAll.Add(item);
+				}
+				FillElements();
+				for(int i=0;i<displayedElementsMain.Count;i++) {//the new item will always show first in the main list.
+					if(displayedElementsMain[i]==item) {
+						gridMain.SetSelected(i,true);//reselect the item
+						break;
+					}
 				}
 			}
 		}
@@ -828,6 +893,18 @@ namespace OpenDental{
 				displayedElementsAll.Insert(newIdxAll,item);
 				FillElements();
 				gridLR.SetSelected(newIdx,true);
+			}
+		}
+
+		private void gridAvailable_CellClick(object sender,ODGridClickEventArgs e) {
+			if(gridAvailable.SelectedIndices.Length>0) {
+				gridApptFieldDefs.SetSelected(false);
+			}
+		}
+
+		private void gridApptFieldDefs_CellClick(object sender,ODGridClickEventArgs e) {
+			if(gridApptFieldDefs.SelectedIndices.Length>0) {
+				gridAvailable.SetSelected(false);
 			}
 		}
 
@@ -1023,6 +1100,8 @@ namespace OpenDental{
 				ApptViews.Delete(ApptViewCur);
 			}
 		}
+
+		
 
 		
 

@@ -119,10 +119,17 @@ namespace OpenDentBusiness{
 			}
 			return Crud.ApptFieldDefCrud.SelectOne(apptFieldDefNum);
 		}
-
-		
 		*/
 
+		public static string GetFieldName(long apptFieldDefNum) {
+			//No need to check RemotingRole; no call to db.
+			for(int i=0;i<Listt.Count;i++){
+				if(Listt[i].ApptFieldDefNum==apptFieldDefNum) {
+					return Listt[i].FieldName;
+				}
+			}
+			return "";
+		}
 
 
 	}

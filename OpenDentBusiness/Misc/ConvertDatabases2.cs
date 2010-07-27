@@ -2308,7 +2308,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);
 				command="ALTER TABLE insplan CHANGE SubscNote SubscNote text NOT NULL";
 				Db.NonQ(command);
-
+				command="ALTER TABLE apptviewitem ADD ApptFieldDefNum bigint NOT NULL";
+				Db.NonQ(command);
 				
 
 
@@ -2340,3 +2341,5 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				
 
 			
+
+				

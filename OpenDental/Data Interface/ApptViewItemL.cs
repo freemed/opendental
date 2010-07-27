@@ -15,7 +15,7 @@ namespace OpenDental{
 		public static List<int> VisProvs;
 		///<summary>Visible ops in appt module.  List of indices to Operatories.ListShort[ops].  Also see VisProvs.  This is a subset of the available ops.  You can't include a hidden op in this list.  If user has set View.OnlyScheduledProvs, and not isWeekly, then the only opsto show will be for providers that have schedules for the day and ops with no provs assigned.</summary>
 		public static List<int> VisOps;
-		///<summary>Subset of ForCurView. Just items for rowElements. If no view is selected, then the elements are filled with default info.</summary>
+		///<summary>Subset of ForCurView. Just items for rowElements, including apptfielddefs. If no view is selected, then the elements are filled with default info.</summary>
 		public static List<ApptViewItem> ApptRows;
 		public static ApptView ApptViewCur;
 
@@ -75,7 +75,7 @@ namespace OpenDental{
 								VisProvs.Add(index);
 							}
 						}
-						else{//element
+						else{//element or apptfielddef
 							ApptRows.Add(ApptViewItemC.List[i]);
 						}
 					}

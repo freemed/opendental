@@ -951,7 +951,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),tableAppts);
 			}
-			string command="SELECT FieldName,FieldValue "
+			string command="SELECT AptNum,FieldName,FieldValue "
 				+"FROM apptfield "
 				+"WHERE AptNum IN (";
 			if(tableAppts.Rows.Count==0) {
@@ -961,7 +961,7 @@ namespace OpenDentBusiness{
 					if(i>0) {
 						command+=",";
 					}
-					command+=tableAppts.Rows[i]["PatNum"].ToString();
+					command+=tableAppts.Rows[i]["AptNum"].ToString();
 				}
 			command+=")";
 			DataConnection dcon=new DataConnection();

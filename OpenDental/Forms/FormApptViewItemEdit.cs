@@ -17,7 +17,12 @@ namespace OpenDental {
 		}
 
 		private void FormApptViewItemEdit_Load(object sender,EventArgs e) {
-			textDesc.Text=ApptVItem.ElementDesc;
+			if(ApptVItem.ApptFieldDefNum>0) {
+				textDesc.Text=ApptFieldDefs.GetFieldName(ApptVItem.ApptFieldDefNum);
+			}
+			else {
+				textDesc.Text=ApptVItem.ElementDesc;
+			}
 			panelColor.BackColor=ApptVItem.ElementColor;
 			for(int i=0;i<Enum.GetNames(typeof(ApptViewAlignment)).Length;i++) {
 				listAlignment.Items.Add(Enum.GetNames(typeof(ApptViewAlignment))[i]);

@@ -5,7 +5,7 @@ using System.Xml.Serialization;
 using System.Text;
 
 namespace OpenDentBusiness {
-	///<summary>Each item is attached to a row in the apptview table.  Each item specifies ONE of: OpNum, ProvNum, or Element.  The other two will be 0 or "".</summary>
+	///<summary>Each item is attached to a row in the apptview table.  Each item specifies ONE of: OpNum, ProvNum, ElementDesc, or ApptFieldDefNum.  The other three will be 0 or "".</summary>
 	[Serializable]
 	public class ApptViewItem:TableBase {
 		///<summary>Primary key.</summary>
@@ -26,6 +26,8 @@ namespace OpenDentBusiness {
 		public Color ElementColor;
 		///<summary>Enum:ApptViewAlignment. If this is an element, then this is the alignment of the element within the appointment.</summary>
 		public ApptViewAlignment ElementAlignment;
+		///<summary>FK to apptfielddef.ApptFieldDefNum.  If this is an element, and the element is an appt field, then this tells us which one.</summary>
+		public long ApptFieldDefNum;
 
 		public ApptViewItem(){
 
