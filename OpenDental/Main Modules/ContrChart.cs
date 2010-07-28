@@ -3931,6 +3931,7 @@ namespace OpenDental{
 		}
 
 		private void FillProgNotes(){
+			Plugins.HookAddCode(this,"ContrChart.FillProgNotes_begin");
 			//ArrayList selectedTeeth=new ArrayList();//integers 1-32
 			//for(int i=0;i<toothChart.SelectedTeeth.Count;i++) {
 			//	selectedTeeth.Add(Tooth.ToInt(toothChart.SelectedTeeth[i]));
