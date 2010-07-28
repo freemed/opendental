@@ -1477,10 +1477,20 @@ namespace OpenDental{
 						displayStrings[i]=totalPages.ToString();
 						break;
 					case "ReferringProvNPI":
-						displayStrings[i]=ClaimReferral.NationalProvID;
+						if(ClaimReferral==null){
+							displayStrings[i]="";
+						}
+						else{
+							displayStrings[i]=ClaimReferral.NationalProvID;
+						}
 						break;
 					case "ReferringProvNameFL":
-						displayStrings[i]=ClaimReferral.GetNameFL();
+						if(ClaimReferral==null){
+							displayStrings[i]="";
+						}
+						else{
+							displayStrings[i]=ClaimReferral.GetNameFL();
+						}
 						break;
 				}//switch
 				if(CultureInfo.CurrentCulture.Name=="nl-BE"//Dutch Belgium
