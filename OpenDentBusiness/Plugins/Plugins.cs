@@ -10,7 +10,7 @@ using CodeBase;
 namespace OpenDentBusiness{
 	public class Plugins {
 		private static List<PluginContainer> PluginList;
-		public static bool Active=false;
+		//public static bool Active=false;
 
 		public static void LoadAllPlugins(Form host) {
 			//No need to check RemotingRole; no call to db.
@@ -53,7 +53,7 @@ namespace OpenDentBusiness{
 				container.Plugin=plugin;
 				container.ProgramNum=ProgramC.Listt[i].ProgramNum;
 				PluginList.Add(container);
-				Active=true;
+				//Active=true;
 			}
 		}
 
