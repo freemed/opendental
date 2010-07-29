@@ -201,6 +201,14 @@ namespace OpenDental{
 			OnModuleSelected(new ModuleEventArgs(DateTime.MinValue,new List<long>(),0,3,0,patNum,0));
 		}
 
+		public static void GotoChart(long patNum){
+			OnModuleSelected(new ModuleEventArgs(DateTime.MinValue, new List<long>(), 0, 4, 0, patNum, 0));
+		}
+
+		public static void GotoManage(long patNum){
+			OnModuleSelected(new ModuleEventArgs(DateTime.MinValue, new List<long>(), 0, 6, 0, patNum, 0));
+		}
+
 		///<summary>Puts appointment on pinboard, then jumps to Appointments module.  Sometimes, patient is selected some other way instead of being passed in here, so OK to pass in a patNum of zero.</summary>
 		public static void PinToAppt(List<long> pinAptNums,long patNum) {
 			OnModuleSelected(new ModuleEventArgs(DateTime.Today,pinAptNums,0,0,0,patNum,0));
