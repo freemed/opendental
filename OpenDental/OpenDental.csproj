@@ -137,10 +137,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Required dlls\NDde.dll</HintPath>
     </Reference>
-    <Reference Include="Oracle.DataAccess, Version=10.2.0.100, Culture=neutral, PublicKeyToken=89b483f429c47342">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Required dlls\Oracle.DataAccess.dll</HintPath>
-    </Reference>
     <Reference Include="Org.Mentalis.Security, Version=1.0.13.715, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Required dlls\Org.Mentalis.Security.dll</HintPath>

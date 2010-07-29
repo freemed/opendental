@@ -132,7 +132,7 @@ namespace OpenDental{
 		///<summary>This is the current benefit list that displays on the form.  It does not get saved to the database until this form closes.</summary>
 		private List<Benefit> benefitList;//each item is a Benefit
 		private List<Benefit> benefitListOld;
-		private bool usesAnnivers;
+		//private bool usesAnnivers;
 		private Label label17;
 		private OpenDental.UI.Button butPick;
 		private CheckBox checkApplyAll;

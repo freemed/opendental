@@ -265,7 +265,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod());
 			}
-			string command="SELECT * FROM phone";
+			string command="SELECT * FROM phone ORDER BY Extension";
 			try{
 				return Db.GetTable(command);
 			}

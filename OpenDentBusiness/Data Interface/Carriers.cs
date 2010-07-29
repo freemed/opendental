@@ -188,7 +188,7 @@ namespace OpenDentBusiness{
 				carrier.CarrierNum=Meth.GetLong(MethodBase.GetCurrentMethod(),carrier);
 				return carrier.CarrierNum;
 			}
-			string command;
+			//string command;
 			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")){//en-CA or fr-CA
 				if(carrier.IsCDA){
 					if(carrier.ElectID==""){

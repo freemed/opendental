@@ -47,9 +47,11 @@ namespace OpenDentBusiness{
 		private static string MysqlPassLow;
 		///<summary>If this is used, then none of the fields above will be set.</summary>
 		private static string ConnectionString="";
+#if DEBUG
 		///<summary>milliseconds.</summary>
 		private static int delayForTesting=0;
 		private static bool logDebugQueries=false;
+#endif
 
 		//For queries that do not use this flag, all queries are split into single commands. For those SQL commands which
 		//are a single command but contain multiple semi-colons, then this string should be set to false before the 
