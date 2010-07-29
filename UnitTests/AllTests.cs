@@ -335,9 +335,18 @@ namespace UnitTests {
 			return retVal;
 		}
 
+		///<summary></summary>
+		public static string TestEight(int specificTest) {
+			if(specificTest != 0 && specificTest !=8){
+				return"";
+			}
+			string suffix="8";
 
 
 
+			retVal+="8: Passed.  A deductible for preventive/diagnostic is only included once.\r\n";
+			return retVal;
+		}
 
 	}
 }
