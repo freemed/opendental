@@ -80,7 +80,22 @@ namespace OpenDentBusiness{
 					return 0;
 				}
 			}
+		}
 
+		///<summary>If blank or invalid, returns 0. Otherwise, parses.</summary>
+		public static decimal Decimal (string myString){
+			if(myString==""){
+				return 0;
+			}
+			else{
+				try{
+					return System.Convert.ToDecimal(myString);
+				}
+				catch{
+					//MessageBox.Show("Error converting "+myString+" to decimal");
+					return 0;
+				}
+			}
 		}
 
 		///<summary></summary>

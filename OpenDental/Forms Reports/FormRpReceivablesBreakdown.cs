@@ -460,22 +460,22 @@ namespace OpenDental {
 				//Finaly Generate Report showing the breakdown upto the date specified with totals for what is on the report
 				if(j == 0) {
 					for(int k = 0;k < TableCharge.Rows.Count;k++) {
-						rcvProd += (decimal)PIn.Double(TableCharge.Rows[k][1].ToString());
+						rcvProd += PIn.Decimal(TableCharge.Rows[k][1].ToString());
 					}
 					for(int k = 0;k < TableCapWriteoff.Rows.Count;k++) {
-						rcvWriteoff += (decimal)PIn.Double(TableCapWriteoff.Rows[k][1].ToString());
+						rcvWriteoff += PIn.Decimal(TableCapWriteoff.Rows[k][1].ToString());
 					}
 					for(int k = 0;k < TableInsWriteoff.Rows.Count;k++) {
-						rcvWriteoff += (decimal)PIn.Double(TableInsWriteoff.Rows[k][1].ToString());
+						rcvWriteoff += PIn.Decimal(TableInsWriteoff.Rows[k][1].ToString());
 					}
 					for(int k = 0;k < TablePay.Rows.Count;k++) {
-						rcvPayment += (decimal)PIn.Double(TablePay.Rows[k][1].ToString());
+						rcvPayment += PIn.Decimal(TablePay.Rows[k][1].ToString());
 					}
 					for(int k = 0;k < TableIns.Rows.Count;k++) {
-						rcvInsPayment += (decimal)PIn.Double(TableIns.Rows[k][1].ToString());
+						rcvInsPayment += PIn.Decimal(TableIns.Rows[k][1].ToString());
 					}
 					for(int k = 0;k < TableAdj.Rows.Count;k++) {
-						rcvAdj += (decimal)PIn.Double(TableAdj.Rows[k][1].ToString());
+						rcvAdj += PIn.Decimal(TableAdj.Rows[k][1].ToString());
 					}
 					TableCharge.Clear();
 					TableCapWriteoff.Clear();
@@ -507,43 +507,43 @@ namespace OpenDental {
 						row[0] = dates[i].ToShortDateString();
 						for(int k = 0;k < TableCharge.Rows.Count;k++) {
 							if(dates[i] == (PIn.Date(TableCharge.Rows[k][0].ToString()))) {
-								rcvProd += (decimal)PIn.Double(TableCharge.Rows[k][1].ToString());
+								rcvProd += PIn.Decimal(TableCharge.Rows[k][1].ToString());
 							}
 						}
 						for(int k = 0;k < TableCapWriteoff.Rows.Count;k++) {
 							if(dates[i] == (PIn.Date(TableCapWriteoff.Rows[k][0].ToString()))) {
-								rcvWriteoff += (decimal)PIn.Double(TableCapWriteoff.Rows[k][1].ToString());
+								rcvWriteoff += PIn.Decimal(TableCapWriteoff.Rows[k][1].ToString());
 							}
 						}
 						for(int k = 0;k < TableAdj.Rows.Count;k++) {
 							if(dates[i] == (PIn.Date(TableAdj.Rows[k][0].ToString()))) {
-								rcvAdj += (decimal)PIn.Double(TableAdj.Rows[k][1].ToString());
+								rcvAdj += PIn.Decimal(TableAdj.Rows[k][1].ToString());
 							}
 						}
 						for(int k = 0;k < TableInsWriteoff.Rows.Count;k++) {
 							if(dates[i] == (PIn.Date(TableInsWriteoff.Rows[k][0].ToString()))) {
-								rcvWriteoff += (decimal)PIn.Double(TableInsWriteoff.Rows[k][1].ToString());
+								rcvWriteoff += PIn.Decimal(TableInsWriteoff.Rows[k][1].ToString());
 							}
 						}
 						for(int k = 0;k < TablePay.Rows.Count;k++) {
 							if(dates[i] == (PIn.Date(TablePay.Rows[k][0].ToString()))) {
-								rcvPayment += (decimal)PIn.Double(TablePay.Rows[k][1].ToString());
+								rcvPayment += PIn.Decimal(TablePay.Rows[k][1].ToString());
 							}
 						}
 						for(int k = 0;k < TableIns.Rows.Count;k++) {
 							if(dates[i] == (PIn.Date(TableIns.Rows[k][0].ToString()))) {
-								rcvInsPayment += (decimal)PIn.Double(TableIns.Rows[k][1].ToString());
+								rcvInsPayment += PIn.Decimal(TableIns.Rows[k][1].ToString());
 							}
 						}
 						rcvDaily = (rcvProd + rcvAdj - rcvWriteoff) - (rcvPayment + rcvInsPayment);
 						runningRcv += (rcvProd + rcvAdj - rcvWriteoff) - (rcvPayment + rcvInsPayment);
-						row[1] = ((double)rcvProd).ToString("n");
-						row[2] = ((double)rcvAdj).ToString("n");
-						row[3] = ((double)rcvWriteoff).ToString("n");
-						row[4] = ((double)rcvPayment).ToString("n");
-						row[5] = ((double)rcvInsPayment).ToString("n");
-						row[6] = ((double)rcvDaily).ToString("n");
-						row[7] = ((double)runningRcv).ToString("n");
+						row[1] = rcvProd.ToString("n");
+						row[2] = rcvAdj.ToString("n");
+						row[3] = rcvWriteoff.ToString("n");
+						row[4] = rcvPayment.ToString("n");
+						row[5] = rcvInsPayment.ToString("n");
+						row[6] = rcvDaily.ToString("n");
+						row[7] = runningRcv.ToString("n");
 						ColTotal[1] += rcvProd;
 						ColTotal[2] += rcvAdj;
 						ColTotal[3] += rcvWriteoff;
@@ -558,13 +558,13 @@ namespace OpenDental {
 						rcvProd = 0;
 						rcvWriteoff = 0;
 					}
-					report.ColTotal[1]=(double)ColTotal[1];
-					report.ColTotal[2]=(double)ColTotal[2];
-					report.ColTotal[3]=(double)ColTotal[3];
-					report.ColTotal[4]=(double)ColTotal[4];
-					report.ColTotal[5]=(double)ColTotal[5];
-					report.ColTotal[6]=(double)ColTotal[6];
-					report.ColTotal[7]=(double)ColTotal[7];
+					report.ColTotal[1]=PIn.Double(ColTotal[1].ToString("n"));
+					report.ColTotal[2]=PIn.Double(ColTotal[2].ToString("n"));
+					report.ColTotal[3]=PIn.Double(ColTotal[3].ToString("n"));
+					report.ColTotal[4]=PIn.Double(ColTotal[4].ToString("n"));
+					report.ColTotal[5]=PIn.Double(ColTotal[5].ToString("n"));
+					report.ColTotal[6]=PIn.Double(ColTotal[6].ToString("n"));
+					report.ColTotal[7]=PIn.Double(ColTotal[7].ToString("n"));
 					FormQuery2 = new FormQuery(report);
 					FormQuery2.IsReport = true;
 					FormQuery2.ResetGrid();
