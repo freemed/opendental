@@ -252,6 +252,12 @@ namespace OpenDental{
 			pd.PrinterSettings.MaximumPage=viewer.PageCount;
 			pd.PrinterSettings.MinimumPage=1;
 			pd.DefaultPageSettings.Landscape=viewer.PageWidth>viewer.PageHeight;
+			pd.DefaultPageSettings.Margins=new Margins(50,50,50,50);//Half-inch all around.
+			//This prevents a bug caused by some printer drivers not reporting their papersize.
+			//But remember that other countries use A4 paper instead of 8 1/2 x 11.
+			if(pd.DefaultPageSettings.PaperSize.Height==0){
+				pd.DefaultPageSettings.PaperSize=new PaperSize("default",850,1100);
+			}
 			try{
 				if(PrinterL.SetPrinter(pd,PrintSituation.Default)){
 					if(pd.PrinterSettings.PrintRange==PrintRange.Selection) {
