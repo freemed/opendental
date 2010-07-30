@@ -2581,7 +2581,7 @@ namespace OpenDental {
 				ModuleSelected(PatCur.PatNum);
 				return;//will have already been deleted
 			}
-			if(PatPlans.GetPlanNum(PatPlanList,2)>0 && CultureInfo.CurrentCulture.Name.EndsWith("CA")){//don't create secondary claim for Canada
+			if(PatPlans.GetPlanNum(PatPlanList,2)>0 && !CultureInfo.CurrentCulture.Name.EndsWith("CA")){//don't create secondary claim for Canada
 				InsPlan plan=InsPlans.GetPlan(PatPlans.GetPlanNum(PatPlanList,2),InsPlanList);
 				if(!plan.IsMedical){
 					ClaimCur=CreateClaim("S",PatPlanList,InsPlanList,ClaimProcList,procsForPat);
