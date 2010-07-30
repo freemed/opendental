@@ -508,7 +508,7 @@ namespace OpenDental{
 
 	}
 
-	///<summary></summary>
+	/*///<summary></summary>
 	public struct Aging{
 		///<summary></summary>
 		public double Charges;
@@ -516,7 +516,7 @@ namespace OpenDental{
 		public double Payments;
 		///<summary></summary>
 		public double Aged;
-	}
+	}*/
 
 
 

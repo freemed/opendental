@@ -730,6 +730,7 @@ namespace OpenDental{
 				tableOut.Rows.Add(thisRow);
 			}
 			DateTime date;
+			decimal[] colTotals=new decimal[tableOut.Columns.Count];
 			for(int j=0;j<tableOut.Columns.Count;j++){
 				for(int i=0;i<tableOut.Rows.Count;i++){
 					try{
@@ -737,7 +738,7 @@ namespace OpenDental{
 						tableOut.Rows[i][j]=PIn.Double(tableOut.Rows[i][j].ToString()).ToString("F");
 						if(reportIn!=null) {
 							reportIn.ColAlign[j]=HorizontalAlignment.Right;
-							reportIn.ColTotal[j]+=PIn.Double(tableOut.Rows[i][j].ToString());
+							colTotals[j]+=PIn.Decimal(tableOut.Rows[i][j].ToString());
 						}
 					}
 					else if(tableOut.Columns[j].Caption.ToLower().StartsWith("date")){
@@ -847,7 +848,7 @@ namespace OpenDental{
 							tableOut.Rows[i][j]=PIn.Double(tableOut.Rows[i][j].ToString()).ToString("F");
 							if(reportIn!=null) {
 								reportIn.ColAlign[j]=HorizontalAlignment.Right;
-								reportIn.ColTotal[j]+=PIn.Double(tableOut.Rows[i][j].ToString());
+								colTotals[j]+=PIn.Decimal(tableOut.Rows[i][j].ToString());
 							}
 							break;
 						case "toothnum":
@@ -1042,6 +1043,9 @@ namespace OpenDental{
 					}
 				}//end for i rows
 			}//end for j cols
+			for(int k=0;k<colTotals.Length;k++){
+				reportIn.ColTotal[k]=PIn.Double(colTotals[k].ToString("n"));
+			}
 			return tableOut;
 		}
 
