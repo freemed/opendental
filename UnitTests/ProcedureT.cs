@@ -15,6 +15,7 @@ namespace UnitTests {
 			proc.ProvNum=pat.PriProv;
 			proc.ProcFee=procFee;
 			proc.ToothNum=toothNum;
+			proc.Prosthesis="I";
 			Procedures.Insert(proc);
 			return proc;
 		}
@@ -29,6 +30,16 @@ namespace UnitTests {
 			Procedure oldProcedure=procedure.Copy();
 			procedure.Priority=DefC.Short[(int)DefCat.TxPriorities][priority].DefNum;
 			Procedures.Update(procedure,oldProcedure);
+		}
+
+		public static void SetComplete(Procedure proc,Patient pat,List<InsPlan> planList,List<PatPlan> patPlanList,List<ClaimProc> claimProcList,List<Benefit> benefitList) {
+			Procedure procOld=proc.Copy();
+			ProcedureCode procCode=ProcedureCodes.GetProcCode(proc.CodeNum);
+			proc.DateEntryC=DateTime.Now;
+			proc.ProcStatus=ProcStat.C;
+			Procedures.Update(proc,procOld);
+			Procedures.ComputeEstimates(proc,proc.PatNum,claimProcList,false,planList,patPlanList,benefitList,pat.Age);
+
 		}
 
 

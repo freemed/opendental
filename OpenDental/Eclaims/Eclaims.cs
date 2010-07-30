@@ -167,6 +167,9 @@ namespace OpenDental.Eclaims
 		public static string GetMissingData(ClaimSendQueueItem queueItem, out string warnings){
 			warnings="";
 			Clearinghouse clearhouse=ClearinghouseL.GetClearinghouse(queueItem.ClearinghouseNum);
+			if(clearhouse==null){
+				return "";
+			}
 			if(clearhouse.Eformat==ElectronicClaimFormat.X12){
 				string retVal=X12.GetMissingData(queueItem,out warnings);
 				return retVal;

@@ -80,6 +80,7 @@
     <Compile Include="AllTests.cs" />
     <Compile Include="BenefitT.cs" />
     <Compile Include="CarrierT.cs" />
+    <Compile Include="ClaimT.cs" />
     <Compile Include="FeeSchedT.cs" />
     <Compile Include="ProcedureT.cs" />
     <Compile Include="PatPlanT.cs" />

@@ -341,10 +341,68 @@ namespace UnitTests {
 				return"";
 			}
 			string suffix="8";
-
-
-
-			retVal+="8: Passed.  A deductible for preventive/diagnostic is only included once.\r\n";
+			Patient pat=PatientT.CreatePatient(suffix);
+			long patNum=pat.PatNum;
+			long feeSchedNum1=FeeSchedT.CreateFeeSched(FeeScheduleType.Normal,suffix);
+			long feeSchedNum2=FeeSchedT.CreateFeeSched(FeeScheduleType.Normal,suffix+"b");
+			//Standard Fee
+			Fees.RefreshCache();
+			long codeNum=ProcedureCodes.GetCodeNum("D2750");
+			Fee fee=Fees.GetFee(codeNum,53);
+			if(fee==null) {
+				fee=new Fee();
+				fee.CodeNum=codeNum;
+				fee.FeeSched=53;
+				fee.Amount=1200;
+				Fees.Insert(fee);
+			}
+			else {
+				fee.Amount=1200;
+				Fees.Update(fee);
+			}
+			//PPO fees
+			fee=new Fee();
+			fee.CodeNum=codeNum;
+			fee.FeeSched=feeSchedNum1;
+			fee.Amount=600;
+			Fees.Insert(fee);
+			fee=new Fee();
+			fee.CodeNum=codeNum;
+			fee.FeeSched=feeSchedNum2;
+			fee.Amount=800;
+			Fees.Insert(fee);
+			Fees.RefreshCache();
+			//Carrier
+			Carrier carrier=CarrierT.CreateCarrier(suffix);
+			long planNum1=InsPlanT.CreateInsPlanPPO(pat.PatNum,carrier.CarrierNum,feeSchedNum1).PlanNum;
+			long planNum2=InsPlanT.CreateInsPlanPPO(pat.PatNum,carrier.CarrierNum,feeSchedNum2).PlanNum;
+			BenefitT.CreateCategoryPercent(planNum1,EbenefitCategory.Crowns,50);
+			BenefitT.CreateCategoryPercent(planNum2,EbenefitCategory.Crowns,50);
+			BenefitT.CreateAnnualMax(planNum1,1000);
+			BenefitT.CreateAnnualMax(planNum2,1000);
+			PatPlanT.CreatePatPlan(1,patNum,planNum1);
+			PatPlanT.CreatePatPlan(2,patNum,planNum2);
+			Procedure proc=ProcedureT.CreateProcedure(pat,"D2750",ProcStat.TP,"8",Fees.GetAmount0(codeNum,53));//crown on 8
+			long procNum=proc.ProcNum;
+			//Lists
+			List<ClaimProc> claimProcs=ClaimProcs.Refresh(patNum);
+			Family fam=Patients.GetFamily(patNum);
+			List<InsPlan> planList=InsPlans.RefreshForFam(fam);
+			List<PatPlan> patPlans=PatPlans.Refresh(patNum);
+			List<Benefit> benefitList=Benefits.Refresh(patPlans);
+			List<Procedure> procList=Procedures.Refresh(patNum);
+			//Set complete and attach to claim
+			ProcedureT.SetComplete(proc,pat,planList,patPlans,claimProcs,benefitList);
+			claimProcs=ClaimProcs.Refresh(patNum);
+			List<Procedure> procsForClaim=new List<Procedure>();
+			procsForClaim.Add(proc);
+			Claim claim=ClaimT.CreateClaim("P",patPlans,planList,claimProcs,procList,pat,procsForClaim,benefitList);
+			//Validate
+			string retVal="";
+			if(claim.WriteOff!=500) {
+				throw new Exception("Should be 500");
+			}
+			retVal+="8: Passed.  Completed writeoffs same as estimates for dual PPO ins when Allowed2 greater than Allowed1.\r\n";
 			return retVal;
 		}
 
