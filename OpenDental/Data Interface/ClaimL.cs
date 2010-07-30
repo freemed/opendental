@@ -48,6 +48,17 @@ namespace OpenDental{
 			List<ClaimProcHist> loopList=new List<ClaimProcHist>();
 			for(int i=0;i<ClaimProcsForClaim.Count;i++) {//loop through each proc
 				ProcCur=Procedures.GetProcFromList(procList,ClaimProcsForClaim[i].ProcNum);
+				//in order for ComputeEstimates to give accurate Writeoff when creating a claim, InsPayEst must be filled for the claimproc with status of NotReceived.
+				//So, we must set it here.  We need to set it in the claimProcsAll list.  Find the matching one.
+				for(int j=0;j<ClaimProcsAll.Count;j++){
+					if(ClaimProcsAll[j].ClaimProcNum==ClaimProcsForClaim[i].ClaimProcNum){//same claimproc in a different list
+						if(ClaimProcsForClaim[i].Status==ClaimProcStatus.NotReceived
+							&& ProcCur!=null)//ignores payments, etc
+						{
+							ClaimProcsAll[j].InsPayEst=ClaimProcs.GetInsEstTotal(ClaimProcsAll[j]);
+						}
+					}
+				}
 				Procedures.ComputeEstimates(ProcCur,claimCur.PatNum,ref ClaimProcsAll,false,planList,patPlans,benefitList,histList,loopList,false,patientAge);
 				//then, add this information to loopList so that the next procedure is aware of it.
 				loopList.AddRange(ClaimProcs.GetHistForProc(ClaimProcsAll,ProcCur.ProcNum,ProcCur.CodeNum));
@@ -98,7 +109,7 @@ namespace OpenDental{
 					continue;
 				}
 				//ClaimProcs.ComputeBaseEst(ClaimProcsForClaim[i],ProcCur.ProcFee,ProcCur.ToothNum,ProcCur.CodeNum,plan,patPlanNum,benefitList,histList,loopList);
-				ClaimProcsForClaim[i].InsPayEst=ClaimProcs.GetInsEstTotal(ClaimProcsForClaim[i]);
+				ClaimProcsForClaim[i].InsPayEst=ClaimProcs.GetInsEstTotal(ClaimProcsForClaim[i]);//Yes, this is duplicated from further up.
 				ClaimProcsForClaim[i].DedApplied=ClaimProcs.GetDedEst(ClaimProcsForClaim[i]);
 				if(ClaimProcsForClaim[i].Status==ClaimProcStatus.NotReceived){//(vs preauth)
 					ClaimProcsForClaim[i].WriteOff=ClaimProcs.GetWriteOffEstimate(ClaimProcsForClaim[i]);
