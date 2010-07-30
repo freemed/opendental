@@ -937,8 +937,9 @@ namespace OpenDental{
 				report.TableQ.Columns.Add(new System.Data.DataColumn());//blank columns
 			}
 			report.InitializeColumns();
+			decimal[] colTotals=new decimal[report.ColTotal.Length];
 			DataRow row;
-			Double dbl;
+			Decimal dbl;
 			for(int i=0;i<table.Rows.Count;i++) {
 				row = report.TableQ.NewRow();//create new row called 'row' based on structure of TableQ
 				row[0]=PIn.Date(table.Rows[i][0].ToString()).ToShortDateString();
@@ -950,28 +951,31 @@ namespace OpenDental{
 					row[colI]=Clinics.GetDesc(PIn.Long(table.Rows[i][4].ToString()));//clinic
 					colI++;
 				}
-				dbl=PIn.Double(table.Rows[i][5].ToString());//Prod
+				dbl=PIn.Decimal(table.Rows[i][5].ToString());//Prod
 				row[colI]=dbl.ToString("n");
-				report.ColTotal[colI]+=dbl;
+				colTotals[colI]+=dbl;
 				colI++;
-				dbl=PIn.Double(table.Rows[i][6].ToString());//Adj
+				dbl=PIn.Decimal(table.Rows[i][6].ToString());//Adj
 				row[colI]=dbl.ToString("n");
-				report.ColTotal[colI]+=dbl;
+				colTotals[colI]+=dbl;
 				colI++;
-				dbl=PIn.Double(table.Rows[i][7].ToString());//Writeoff
+				dbl=PIn.Decimal(table.Rows[i][7].ToString());//Writeoff
 				row[colI]=dbl.ToString("n");
-				report.ColTotal[colI]+=dbl;
+				colTotals[colI]+=dbl;
 				colI++;
-				dbl=PIn.Double(table.Rows[i][8].ToString());//PtInc
+				dbl=PIn.Decimal(table.Rows[i][8].ToString());//PtInc
 				row[colI]=dbl.ToString("n");
-				report.ColTotal[colI]+=dbl;
+				colTotals[colI]+=dbl;
 				colI++;
-				dbl=PIn.Double(table.Rows[i][9].ToString());//InsInc
+				dbl=PIn.Decimal(table.Rows[i][9].ToString());//InsInc
 				row[colI]=dbl.ToString("n");
-				report.ColTotal[colI]+=dbl;
+				colTotals[colI]+=dbl;
 				colI++;
 				row[colI]=table.Rows[i][10].ToString();
 				report.TableQ.Rows.Add(row);
+			}
+			for(int i=0;i<colTotals.Length;i++){
+				report.ColTotal[i]=PIn.Double(colTotals[i].ToString("n"));
 			}
 			FormQuery2.ResetGrid();
 			//FormQuery2.SubmitReportQuery();
@@ -1032,20 +1036,20 @@ namespace OpenDental{
 			report.SetColumn(this,colI,"Ins Income",65,HorizontalAlignment.Right);
 			colI++;
 			report.SetColumn(this,colI,"",540,HorizontalAlignment.Right);
-			double total;
+			decimal total;
 			if(PrefC.GetBool(PrefName.EasyNoClinics)) {
-				total=report.ColTotal[4]+report.ColTotal[5]+report.ColTotal[6];
+				total=colTotals[4]+colTotals[5]+colTotals[6];
 			}
 			else {
-				total=report.ColTotal[5]+report.ColTotal[6]+report.ColTotal[7];
+				total=colTotals[5]+colTotals[6]+colTotals[7];
 			}
 			report.Summary.Add(Lan.g(this,"Total Production (Production + Adjustments - Writeoffs):")+" "+total.ToString("c"));
 			report.Summary.Add("");
 			if(PrefC.GetBool(PrefName.EasyNoClinics)) {
-				total=report.ColTotal[7]+report.ColTotal[8];
+				total=colTotals[7]+colTotals[8];
 			}
 			else {
-				total=report.ColTotal[8]+report.ColTotal[9];
+				total=colTotals[8]+colTotals[9];
 			}
 			report.Summary.Add(Lan.g(this,"Total Income (Pt Income + Ins Income):")+" "+total.ToString("c"));
 			FormQuery2.ShowDialog();
@@ -1451,14 +1455,15 @@ ORDER BY adjdate DESC
 				report.TableQ.Columns.Add(new System.Data.DataColumn());//blank columns
 			}
 			report.InitializeColumns();
-			double production;
-			double scheduled;
-			double adjust;
-			double inswriteoff; //spk 5/19/05
-			double totalproduction;
-			double ptincome;
-			double insincome;
-			double totalincome;
+			decimal[] colTotals=new decimal[report.ColTotal.Length];
+			decimal production;
+			decimal scheduled;
+			decimal adjust;
+			decimal inswriteoff; //spk 5/19/05
+			decimal totalproduction;
+			decimal ptincome;
+			decimal insincome;
+			decimal totalincome;
 			DateTime[] dates=new DateTime[(dateTo-dateFrom).Days+1];
 			//MessageBox.Show(dates.Length.ToString());
 				//.ToString("yyyy-MM-dd")+"' "
@@ -1479,38 +1484,38 @@ ORDER BY adjdate DESC
 				totalincome=0;
 				for(int j=0;j<TableCharge.Rows.Count;j++)  {
 				  if(dates[i]==(PIn.Date(TableCharge.Rows[j][0].ToString()))){
-		 			  production+=PIn.Double(TableCharge.Rows[j][1].ToString());
+		 			  production+=PIn.Decimal(TableCharge.Rows[j][1].ToString());
 					}
    			}
 				for(int j=0;j<TableCapWriteoff.Rows.Count;j++)  {
 				  if(dates[i]==(PIn.Date(TableCapWriteoff.Rows[j][0].ToString()))){
-		 			  production-=PIn.Double(TableCapWriteoff.Rows[j][1].ToString());
+		 			  production-=PIn.Decimal(TableCapWriteoff.Rows[j][1].ToString());
 					}
    			}
 				for(int j=0; j<TableSched.Rows.Count; j++)  {
 				  if(dates[i]==(PIn.Date(TableSched.Rows[j][0].ToString()))){
-			 	    scheduled+=PIn.Double(TableSched.Rows[j][1].ToString());
+			 	    scheduled+=PIn.Decimal(TableSched.Rows[j][1].ToString());
 					}
    			}		
 				for(int j=0; j<TableAdj.Rows.Count; j++){
 				  if(dates[i]==(PIn.Date(TableAdj.Rows[j][0].ToString()))){
-						adjust+=PIn.Double(TableAdj.Rows[j][1].ToString());
+						adjust+=PIn.Decimal(TableAdj.Rows[j][1].ToString());
 					}
    			}
 				// ***** spk 5/19/05
 				for(int j=0; j<TableInsWriteoff.Rows.Count; j++) { // added for ins. writeoff, spk 5/19/05
 				  if(dates[i]==(PIn.Date(TableInsWriteoff.Rows[j][0].ToString()))){
-						inswriteoff-=PIn.Double(TableInsWriteoff.Rows[j][1].ToString());
+						inswriteoff-=PIn.Decimal(TableInsWriteoff.Rows[j][1].ToString());
 					}
 				}
 				for(int j=0; j<TablePay.Rows.Count; j++){
 				  if(dates[i]==(PIn.Date(TablePay.Rows[j][0].ToString()))){
-						ptincome+=PIn.Double(TablePay.Rows[j][1].ToString());
+						ptincome+=PIn.Decimal(TablePay.Rows[j][1].ToString());
 					}																																						 
    			}
 				for(int j=0; j<TableIns.Rows.Count; j++){// new TableIns, SPK
 					if(dates[i]==(PIn.Date(TableIns.Rows[j][0].ToString()))){
-						insincome+=PIn.Double(TableIns.Rows[j][1].ToString());
+						insincome+=PIn.Decimal(TableIns.Rows[j][1].ToString());
 					}																																						 
 				}
 				totalproduction=production+scheduled+adjust+inswriteoff;
@@ -1523,16 +1528,19 @@ ORDER BY adjdate DESC
 				row[7]=ptincome.ToString("n");				// spk
 				row[8]=insincome.ToString("n");				// spk
 				row[9]=totalincome.ToString("n");
-				report.ColTotal[2]+=production;
-				report.ColTotal[3]+=scheduled;
-				report.ColTotal[4]+=adjust;
-				report.ColTotal[5]+=inswriteoff; //spk 5/19/05
-				report.ColTotal[6]+=totalproduction;
-				report.ColTotal[7]+=ptincome;	// spk
-				report.ColTotal[8]+=insincome;	// spk
-				report.ColTotal[9]+=totalincome;
+				colTotals[2]+=production;
+				colTotals[3]+=scheduled;
+				colTotals[4]+=adjust;
+				colTotals[5]+=inswriteoff; //spk 5/19/05
+				colTotals[6]+=totalproduction;
+				colTotals[7]+=ptincome;	// spk
+				colTotals[8]+=insincome;	// spk
+				colTotals[9]+=totalincome;
 				report.TableQ.Rows.Add(row);  //adds row to table Q
       }
+			for(int i=0;i<colTotals.Length;i++){
+				report.ColTotal[i]=PIn.Double(colTotals[i].ToString("n"));
+			}
 			FormQuery2=new FormQuery(report);
 			FormQuery2.IsReport=true;
 			FormQuery2.ResetGrid();//necessary won't work without
@@ -1574,15 +1582,15 @@ ORDER BY adjdate DESC
 			}
 			report.Summary.Add(
 				//=Lan.g(this,"Total Production (Production + Scheduled + Adjustments):")+" "
-				//+(report.ColTotal[2]+report.ColTotal[3]
-				//+report.ColTotal[4]).ToString("c"); //spk 5/19/05
+				//+(colTotals[2]+colTotals[3]
+				//+colTotals[4]).ToString("c"); //spk 5/19/05
 				Lan.g(this,"Total Production (Production + Scheduled + Adj - Writeoff):")+" "
-				+(report.ColTotal[2]+report.ColTotal[3]+report.ColTotal[4]
-				+report.ColTotal[5]).ToString("c"));
+				+(colTotals[2]+colTotals[3]+colTotals[4]
+				+colTotals[5]).ToString("c"));
 			report.Summary.Add("");
 			report.Summary.Add(
 				Lan.g(this,"Total Income (Pt Income + Ins Income):")+" "
-				+(report.ColTotal[7]+report.ColTotal[8]).ToString("c"));
+				+(colTotals[7]+colTotals[8]).ToString("c"));
 			report.ColPos[0]=20;
 			report.ColPos[1]=110;
 			report.ColPos[2]=190;
@@ -1878,13 +1886,14 @@ ORDER BY adjdate DESC
 				report.TableQ.Columns.Add(new System.Data.DataColumn());//blank columns
 			}
 			report.InitializeColumns();
-			double production;
-			double adjust;
-			double inswriteoff;	//spk 5/19/05
-			double totalproduction;
-			double ptincome;
-			double insincome;
-			double totalincome;
+			decimal[] colTotals=new decimal[report.ColTotal.Length];
+			decimal production;
+			decimal adjust;
+			decimal inswriteoff;	//spk 5/19/05
+			decimal totalproduction;
+			decimal ptincome;
+			decimal insincome;
+			decimal totalincome;
 			//lenth of array is number of months between the two dates plus one.
 			//MessageBox.Show((dateTo.Year*12+dateTo.Month-dateFrom.Year*12-dateFrom.Month+1).ToString());
 			DateTime[] dates=new DateTime[dateTo.Year*12+dateTo.Month-dateFrom.Year*12-dateFrom.Month+1];//1st of each month
@@ -1906,31 +1915,31 @@ ORDER BY adjdate DESC
 				for(int j=0;j<TableProduction.Rows.Count;j++)  {
 				  if(dates[i].Year==PIn.Date(TableProduction.Rows[j][0].ToString()).Year
 						&& dates[i].Month==PIn.Date(TableProduction.Rows[j][0].ToString()).Month){
-		 			  production+=PIn.Double(TableProduction.Rows[j][1].ToString());
+		 			  production+=PIn.Decimal(TableProduction.Rows[j][1].ToString());
 					}
    			}
 				for(int j=0;j<TableAdj.Rows.Count; j++){
 				  if(dates[i].Year==PIn.Date(TableAdj.Rows[j][0].ToString()).Year
 						&& dates[i].Month==PIn.Date(TableAdj.Rows[j][0].ToString()).Month){
-						adjust+=PIn.Double(TableAdj.Rows[j][1].ToString());
+						adjust+=PIn.Decimal(TableAdj.Rows[j][1].ToString());
 					}
    			}
 				for(int j=0;j<TableInsWriteoff.Rows.Count; j++){
 					if(dates[i].Year==PIn.Date(TableInsWriteoff.Rows[j][0].ToString()).Year
 						&& dates[i].Month==PIn.Date(TableInsWriteoff.Rows[j][0].ToString()).Month){
-						inswriteoff-=PIn.Double(TableInsWriteoff.Rows[j][1].ToString());
+						inswriteoff-=PIn.Decimal(TableInsWriteoff.Rows[j][1].ToString());
 					}
 				}
 				for(int j=0;j<TablePay.Rows.Count; j++){
 				  if(dates[i].Year==PIn.Date(TablePay.Rows[j][0].ToString()).Year
 						&& dates[i].Month==PIn.Date(TablePay.Rows[j][0].ToString()).Month){
-						ptincome+=PIn.Double(TablePay.Rows[j][1].ToString());
+						ptincome+=PIn.Decimal(TablePay.Rows[j][1].ToString());
 					}																																						 
    			}
 				for(int j=0; j<TableIns.Rows.Count; j++){//
 					if(dates[i].Year==PIn.Date(TableIns.Rows[j][0].ToString()).Year
 						&& dates[i].Month==PIn.Date(TableIns.Rows[j][0].ToString()).Month){
-						insincome+=PIn.Double(TableIns.Rows[j][1].ToString());
+						insincome+=PIn.Decimal(TableIns.Rows[j][1].ToString());
 					}																																						 
 				}
 				totalproduction=production+adjust+inswriteoff;
@@ -1942,15 +1951,18 @@ ORDER BY adjdate DESC
 				row[5]=ptincome.ToString("n");
 				row[6]=insincome.ToString("n");		
 				row[7]=totalincome.ToString("n");
-				report.ColTotal[1]+=production;
-				report.ColTotal[2]+=adjust;	
-				report.ColTotal[3]+=inswriteoff;
-				report.ColTotal[4]+=totalproduction;	
-				report.ColTotal[5]+=ptincome;	
-				report.ColTotal[6]+=insincome;	
-				report.ColTotal[7]+=totalincome;
+				colTotals[1]+=production;
+				colTotals[2]+=adjust;	
+				colTotals[3]+=inswriteoff;
+				colTotals[4]+=totalproduction;	
+				colTotals[5]+=ptincome;	
+				colTotals[6]+=insincome;	
+				colTotals[7]+=totalincome;
 				report.TableQ.Rows.Add(row);  //adds row to table Q
       }
+			for(int i=0;i<colTotals.Length;i++){
+				report.ColTotal[i]=PIn.Double(colTotals[i].ToString("n"));
+			}
 			FormQuery2=new FormQuery(report);
 			FormQuery2.IsReport=true;
 			FormQuery2.ResetGrid();//necessary won't work without
