@@ -28,6 +28,8 @@ namespace OpenDentBusiness {
 		public ApptViewAlignment ElementAlignment;
 		///<summary>FK to apptfielddef.ApptFieldDefNum.  If this is an element, and the element is an appt field, then this tells us which one.</summary>
 		public long ApptFieldDefNum;
+		///<summary>FK to patfielddef.PatFieldDefNum.  If this is an element, and the element is an appt field, then this tells us which one.  Not implemented yet.</summary>
+		public long PatFieldDefNum;
 
 		public ApptViewItem(){
 

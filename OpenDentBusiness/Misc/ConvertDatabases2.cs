@@ -2313,6 +2313,17 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="UPDATE preference SET ValueString = '7.2.1.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To7_2_3();
+		}
+
+		private static void To7_2_3() {
+			if(FromVersion<new Version("7.2.3.0")) {
+				string command;
+				command="ALTER TABLE apptviewitem ADD PatFieldDefNum bigint NOT NULL";
+				Db.NonQ(command);
+				command="UPDATE preference SET ValueString = '7.2.3.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
 			To7_3_0();
 		}
 

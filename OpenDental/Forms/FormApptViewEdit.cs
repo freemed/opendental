@@ -579,6 +579,7 @@ namespace OpenDental{
 			elementsAll.Add("AssistantAbbr");
 			elementsAll.Add("ChartNumAndName");
 			elementsAll.Add("ChartNumber");
+			elementsAll.Add("ConfirmedColor");
 			elementsAll.Add("CreditType");
 			elementsAll.Add("Guardians");
 			elementsAll.Add("HasIns[I]");

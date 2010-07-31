@@ -55,6 +55,7 @@ namespace OpenDentBusiness.Crud{
 				apptViewItem.ElementColor    = Color.FromArgb(PIn.Int(table.Rows[i]["ElementColor"].ToString()));
 				apptViewItem.ElementAlignment= (ApptViewAlignment)PIn.Int(table.Rows[i]["ElementAlignment"].ToString());
 				apptViewItem.ApptFieldDefNum = PIn.Long  (table.Rows[i]["ApptFieldDefNum"].ToString());
+				apptViewItem.PatFieldDefNum  = PIn.Long  (table.Rows[i]["PatFieldDefNum"].ToString());
 				retVal.Add(apptViewItem);
 			}
 			return retVal;
@@ -74,7 +75,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="ApptViewItemNum,";
 			}
-			command+="ApptViewNum,OpNum,ProvNum,ElementDesc,ElementOrder,ElementColor,ElementAlignment,ApptFieldDefNum) VALUES(";
+			command+="ApptViewNum,OpNum,ProvNum,ElementDesc,ElementOrder,ElementColor,ElementAlignment,ApptFieldDefNum,PatFieldDefNum) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(apptViewItem.ApptViewItemNum)+",";
 			}
@@ -86,7 +87,8 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Byte  (apptViewItem.ElementOrder)+","
 				+    POut.Int   (apptViewItem.ElementColor.ToArgb())+","
 				+    POut.Int   ((int)apptViewItem.ElementAlignment)+","
-				+    POut.Long  (apptViewItem.ApptFieldDefNum)+")";
+				+    POut.Long  (apptViewItem.ApptFieldDefNum)+","
+				+    POut.Long  (apptViewItem.PatFieldDefNum)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -106,7 +108,8 @@ namespace OpenDentBusiness.Crud{
 				+"ElementOrder    =  "+POut.Byte  (apptViewItem.ElementOrder)+", "
 				+"ElementColor    =  "+POut.Int   (apptViewItem.ElementColor.ToArgb())+", "
 				+"ElementAlignment=  "+POut.Int   ((int)apptViewItem.ElementAlignment)+", "
-				+"ApptFieldDefNum =  "+POut.Long  (apptViewItem.ApptFieldDefNum)+" "
+				+"ApptFieldDefNum =  "+POut.Long  (apptViewItem.ApptFieldDefNum)+", "
+				+"PatFieldDefNum  =  "+POut.Long  (apptViewItem.PatFieldDefNum)+" "
 				+"WHERE ApptViewItemNum = "+POut.Long(apptViewItem.ApptViewItemNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
@@ -145,6 +148,10 @@ namespace OpenDentBusiness.Crud{
 			if(apptViewItem.ApptFieldDefNum != oldApptViewItem.ApptFieldDefNum) {
 				if(command!=""){ command+=",";}
 				command+="ApptFieldDefNum = "+POut.Long(apptViewItem.ApptFieldDefNum)+"";
+			}
+			if(apptViewItem.PatFieldDefNum != oldApptViewItem.PatFieldDefNum) {
+				if(command!=""){ command+=",";}
+				command+="PatFieldDefNum = "+POut.Long(apptViewItem.PatFieldDefNum)+"";
 			}
 			if(command==""){
 				return;
