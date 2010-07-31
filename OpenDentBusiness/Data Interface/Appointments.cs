@@ -713,7 +713,10 @@ namespace OpenDentBusiness{
 				aptDate=PIn.DateT(raw.Rows[i]["AptDateTime"].ToString());
 				row["AptDateTime"]=aptDate;
 				birthdate=PIn.Date(raw.Rows[i]["Birthdate"].ToString());
-				row["age"]=Lans.g("Appointments","Age: ");
+				row["age"]="";
+				if(birthdate.AddYears(18)<DateTime.Today) {
+					row["age"]=Lans.g("Appointments","Age: ");//only show if older than 18
+				}
 				if(birthdate.Year>1880){
 					row["age"]+=PatientLogic.DateToAgeString(birthdate);
 				}
