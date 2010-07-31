@@ -346,7 +346,7 @@ namespace OpenDental{
 					FormDefEdit.ValueText=Lan.g(this,"Abbrev");
 					FormDefEdit.EnableColor=true;
 					//tbDefs.Fields[2]="Color";
-					FormDefEdit.HelpText=Lan.g(this,"Color shows in bar on left of each appointment.  Changes affect all appointments.");
+					FormDefEdit.HelpText=Lan.g(this,"Color shows on each appointment if Appointment View is set to show ConfirmedColor.");
 					break;
 				case 4://"Appt Procs Quick Add":
 					//SelectedCat=3;
