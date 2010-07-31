@@ -807,7 +807,7 @@ namespace OpenDentBusiness{
 							row["guardians"]+=",";
 						}
 						guardRelat=(GuardianRelationship)PIn.Int(rawGuardians.Rows[g]["Relationship"].ToString());
-						row["guardians"]+=Patients.GetNameFirst(rawGuardians.Rows[g]["FName"].ToString(),rawGuardians.Rows[g]["Preferred"].ToString())
+						row["guardians"]+=Patients.GetNameFirstOrPreferred(rawGuardians.Rows[g]["FName"].ToString(),rawGuardians.Rows[g]["Preferred"].ToString())
 							+Guardians.GetGuardianRelationshipStr(guardRelat);
 					}
 				}
