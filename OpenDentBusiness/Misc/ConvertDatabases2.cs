@@ -23,7 +23,7 @@ namespace OpenDentBusiness {
 	//The other file was simply getting too big.  It was bogging down VS speed.
 	///<summary></summary>
 	public partial class ConvertDatabases {
-		public static System.Version LatestVersion=new Version("7.2.0.0");//This value must be changed when a new conversion is to be triggered.
+		public static System.Version LatestVersion=new Version("7.3.0.0");//This value must be changed when a new conversion is to be triggered.
 
 		private static void To6_2_9() {
 			if(FromVersion<new Version("6.2.9.0")) {
@@ -2194,7 +2194,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="UPDATE preference SET ValueString = '7.1.18.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
-			To7_2_0();
+			To7_1_24();
 		}
 
 		private static void To7_1_24() {
@@ -2205,11 +2205,11 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="UPDATE preference SET ValueString = '7.1.24.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
-			To7_2_0();
+			To7_2_1();
 		}
 
-		private static void To7_2_0() {
-			if(FromVersion<new Version("7.2.0.0")) {
+		private static void To7_2_1() {
+			if(FromVersion<new Version("7.2.1.0")) {
 				string command;
 				//this column was a varchar holding currency amounts.
 				command="ALTER TABLE claimvalcodelog CHANGE ValAmount ValAmount double not null";
@@ -2310,6 +2310,15 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);
 				command="ALTER TABLE apptviewitem ADD ApptFieldDefNum bigint NOT NULL";
 				Db.NonQ(command);
+				command="UPDATE preference SET ValueString = '7.2.1.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
+			To7_3_0();
+		}
+
+		private static void To7_3_0() {
+			if(FromVersion<new Version("7.3.0.0")) {
+				string command;
 				
 
 
@@ -2318,10 +2327,13 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 
-				command="UPDATE preference SET ValueString = '7.2.0.0' WHERE PrefName = 'DataBaseVersion'";
+
+
+
+				command="UPDATE preference SET ValueString = '7.3.0.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
-			//To7_3_0();
+			//To7_4_0();
 		}
 
 
