@@ -132,7 +132,7 @@ namespace OpenDental
 
 		///<summary>procCur can be null if not editing from within an actual procedure.</summary>
 		public FormClaimProc(ClaimProc claimProcCur,Procedure procCur,Family famCur,Patient patCur,List <InsPlan> planList,List<ClaimProcHist> histList,ref List<ClaimProcHist> loopList,List<PatPlan> patPlanList){
-			ClaimProcCur=claimProcCur;
+			ClaimProcCur=claimProcCur.Copy();
 			ClaimProcOld=ClaimProcCur.Copy();
 			proc=procCur;
 			FamCur=famCur;
