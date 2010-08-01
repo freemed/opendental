@@ -22,7 +22,7 @@ namespace OpenDental {
 		///<summary>This is the difference between server time and local computer time.  Used to ensure that times displayed are accurate to the second.  This value is usally just a few seconds, but possibly a few minutes.</summary>
 		private TimeSpan timeDelta;
 		private int msgCount;
-		string pathPhoneMsg=@"\\asterisk\Voicemail\default\998\INBOX";
+		string pathPhoneMsg=@"\\192.168.0.197\Voicemail\default\998\INBOX";
 
 		public UserControlPhonePanel() {
 			InitializeComponent();
