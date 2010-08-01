@@ -4030,6 +4030,8 @@ namespace OpenDental{
 				ClaimProcCur.Remarks="";
 				ClaimProcCur.Status=ClaimProcStatus.Supplemental;
 				ClaimProcCur.WriteOff=0;
+				ClaimProcCur.DateCP=DateTime.Today;
+				ClaimProcCur.DateEntry=DateTime.Today;
 				ClaimProcs.Insert(ClaimProcCur);//this inserts a copy of the original with the changes as above.
 			}
 //fix: need to debug the recalculation feature to take this status into account.
