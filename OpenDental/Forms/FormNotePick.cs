@@ -24,6 +24,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butCancel;
 		///<summary>Upon closing with OK, this will be the final note to save.</summary>
 		public string SelectedNote;
+		public bool UseTrojanImportDescription;
 
 		///<summary></summary>
 		public FormNotePick(string[] notes)
@@ -35,6 +36,10 @@ namespace OpenDental{
 			Lan.F(this);
 			Notes=new string[notes.Length];
 			notes.CopyTo(Notes,0);
+			if(UseTrojanImportDescription) {
+				label1.Text=Lan.g(this,"Multiple versions of the note exist.  Please pick or edit one version to retain. You can also pick multiple rows to combine notes.");
+				label2.Text=Lan.g(this,"This is the final note that will be used.");
+			}
 		}
 
 		/// <summary>

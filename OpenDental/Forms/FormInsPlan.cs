@@ -2385,10 +2385,20 @@ namespace OpenDental{
 			}
 			PlanCur.BenefitNotes+=troj.BenefitNotes;
 			if(troj.PlanNote!=""){
-				//if(textPlanNote.Text!=""){
-				//	textPlanNote.Text+="\r\n";
-				//}
-				textPlanNote.Text=troj.PlanNote;
+				if(textPlanNote.Text=="") {
+					textPlanNote.Text=troj.PlanNote;
+				}
+				else {//must let user pick final note
+					string[] noteArray=new string[2];
+					noteArray[0]=textPlanNote.Text;
+					noteArray[1]=troj.PlanNote;
+					FormNotePick FormN=new FormNotePick(noteArray);
+					FormN.UseTrojanImportDescription=true;
+					FormN.ShowDialog();
+					if(FormN.DialogResult==DialogResult.OK) {
+						textPlanNote.Text=FormN.SelectedNote;
+					}
+				}
 			}
 			//clear exising benefits from screen, not db:
 			benefitList=new List<Benefit>();
