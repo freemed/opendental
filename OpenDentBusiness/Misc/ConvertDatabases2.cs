@@ -2324,6 +2324,65 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="UPDATE preference SET ValueString = '7.2.3.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To7_2_4();
+		}
+
+		private static void To7_2_4() {
+			if(FromVersion<new Version("7.2.4.0")) {
+				string command;
+				command="UPDATE apptview SET StackBehavUR=1";//all horiz
+				Db.NonQ(command);
+				command="SELECT ApptViewNum FROM apptview";//all of them.
+				DataTable table=Db.GetTable(command);
+				for(int i=0;i<table.Rows.Count;i++) {
+					command="SELECT COUNT(*) FROM apptviewitem WHERE ApptViewNum="+table.Rows[i]["ApptViewNum"].ToString()
+						+" AND ElementDesc='AssistantAbbr'";
+					if(Db.GetCount(command)=="0") {
+						command="INSERT INTO apptviewitem (ApptViewNum,ElementDesc,ElementOrder,ElementColor,ElementAlignment) VALUES("
+							+table.Rows[i]["ApptViewNum"].ToString()+","
+							+"'AssistantAbbr',"
+							+"0,"
+							+"-16777216,"//black
+							+"2)";//LR
+						Db.NonQ(command);
+					}
+					command="SELECT COUNT(*) FROM apptviewitem WHERE ApptViewNum="+table.Rows[i]["ApptViewNum"].ToString()
+						+" AND ElementDesc='ConfirmedColor'";
+					if(Db.GetCount(command)=="0") {
+						command="INSERT INTO apptviewitem (ApptViewNum,ElementDesc,ElementOrder,ElementColor,ElementAlignment) VALUES("
+							+table.Rows[i]["ApptViewNum"].ToString()+","
+							+"'ConfirmedColor',"
+							+"0,"
+							+"-16777216,"
+							+"1)";//UR
+						Db.NonQ(command);
+					}
+					command="SELECT COUNT(*) FROM apptviewitem WHERE ApptViewNum="+table.Rows[i]["ApptViewNum"].ToString()
+						+" AND ElementDesc='HasIns[I]'";
+					if(Db.GetCount(command)=="0") {
+						command="INSERT INTO apptviewitem (ApptViewNum,ElementDesc,ElementOrder,ElementColor,ElementAlignment) VALUES("
+							+table.Rows[i]["ApptViewNum"].ToString()+","
+							+"'HasIns[I]',"
+							+"1,"
+							+"-16777216,"
+							+"1)";//UR
+						Db.NonQ(command);
+					}
+					command="SELECT COUNT(*) FROM apptviewitem WHERE ApptViewNum="+table.Rows[i]["ApptViewNum"].ToString()
+						+" AND ElementDesc='InsToSend[!]'";
+					if(Db.GetCount(command)=="0") {
+						command="INSERT INTO apptviewitem (ApptViewNum,ElementDesc,ElementOrder,ElementColor,ElementAlignment) VALUES("
+							+table.Rows[i]["ApptViewNum"].ToString()+","
+							+"'InsToSend[!]',"
+							+"2,"
+							+"-65536,"//red
+							+"1)";//UR
+						Db.NonQ(command);
+					}
+				}
+				command="UPDATE preference SET ValueString = '7.2.4.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
 			To7_3_0();
 		}
 
