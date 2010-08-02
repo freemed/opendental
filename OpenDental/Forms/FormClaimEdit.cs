@@ -4399,13 +4399,21 @@ namespace OpenDental{
 				return;
 			}
 			Cursor=Cursors.WaitCursor;
-			try {
-				Eclaims.Canadian.SendClaim(listQueue[0],true,"");//ignore the etransNum result
+			Clearinghouse clearhouse=ClearinghouseL.GetClearinghouse(listQueue[0].ClearinghouseNum);
+			if(clearhouse.Eformat==ElectronicClaimFormat.Canadian) {
+				try {
+					Eclaims.Canadian.SendClaim(listQueue[0],true,"");//ignore the etransNum result
+				}
+				catch(Exception ex) {
+					Cursor=Cursors.Default;
+					MessageBox.Show(ex.Message);
+					return;
+				}
 			}
-			catch(Exception ex) {
-				Cursor=Cursors.Default;
-				MessageBox.Show(ex.Message);
-				return;
+			else {
+				List<ClaimSendQueueItem> queueItems=new List<ClaimSendQueueItem>();
+				queueItems.Add(listQueue[0]);
+				Eclaims.Eclaims.SendBatches(queueItems);//this also calls SetClaimSentOrPrinted which creates the etrans entry.
 			}
 			Cursor=Cursors.Default;
 			DialogResult=DialogResult.OK;
