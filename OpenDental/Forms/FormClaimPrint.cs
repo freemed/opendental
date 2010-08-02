@@ -232,8 +232,8 @@ namespace OpenDental{
 			try{
 				pd2.Print();
 			}
-			catch{//(Exception ex){
-				MessageBox.Show(Lan.g("Printer","Printer not available"));
+			catch(Exception ex){
+				MessageBox.Show(ex.Message);//Lan.g("Printer","Printer not available"));
 				return false;
 			}
 			return true;

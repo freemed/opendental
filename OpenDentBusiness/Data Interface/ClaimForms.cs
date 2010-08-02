@@ -56,6 +56,7 @@ namespace OpenDentBusiness{
 			listLong=Crud.ClaimFormCrud.TableToList(table).ToArray();
 			List<ClaimForm> ls=new List<ClaimForm>();
 			for(int i=0;i<listLong.Length;i++) {
+				ListLong[i].Items=ClaimFormItems.GetListForForm(ListLong[i].ClaimFormNum);
 				if(!listLong[i].IsHidden){
 					ls.Add(ListLong[i]);
 				}
