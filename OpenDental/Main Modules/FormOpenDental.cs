@@ -2250,7 +2250,7 @@ namespace OpenDental{
 						phonePanel.Visible=true;
 						phonePanel.Location=new Point(position.X,panelSplitter.Bottom);
 						phonePanel.Width=428;
-						phonePanel.Height=this.ClientSize.Height-userControlTasks1.Top;
+						phonePanel.Height=this.ClientSize.Height-phonePanel.Top;
 						userControlTasks1.Location=new Point(position.X+phonePanel.Width,panelSplitter.Bottom);
 						userControlTasks1.Width=width-phonePanel.Width;
 					}
