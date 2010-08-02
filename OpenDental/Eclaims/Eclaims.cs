@@ -133,16 +133,16 @@ namespace OpenDental.Eclaims
 				}
 				//----------------------------------------------------------------------------------------
 				//finally, mark the claims sent. (only if not Canadian)
-				//EtransType etype=EtransType.ClaimSent;
-				//if(Clearinghouses.Listt[i].Eformat==ElectronicClaimFormat.Renaissance){
-				//	etype=EtransType.Claim_Ren;
-				//}
-				//if(Clearinghouses.Listt[i].Eformat!=ElectronicClaimFormat.Canadian){
-				//	for(int j=0;j<claimsByCHouse[i].Count;j++){
-				//		Etranss.SetClaimSentOrPrinted(claimsByCHouse[i][j].ClaimNum,claimsByCHouse[i][j].PatNum,
-				//			Clearinghouses.Listt[i].ClearinghouseNum,etype,messageText,batchNum);
-				//	}
-				//}
+				EtransType etype=EtransType.ClaimSent;
+				if(Clearinghouses.Listt[i].Eformat==ElectronicClaimFormat.Renaissance){
+					etype=EtransType.Claim_Ren;
+				}
+				if(Clearinghouses.Listt[i].Eformat!=ElectronicClaimFormat.Canadian){
+					for(int j=0;j<claimsByCHouse[i].Count;j++){
+						Etrans etrans=Etranss.SetClaimSentOrPrinted(claimsByCHouse[i][j].ClaimNum,claimsByCHouse[i][j].PatNum,Clearinghouses.Listt[i].ClearinghouseNum,etype,batchNum);
+						Etranss.SetMessage(etrans.EtransNum,messageText);
+					}
+				}
 			}//for(int i=0;i<claimsByCHouse.Length;i++){
 		}
 

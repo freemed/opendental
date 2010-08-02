@@ -387,9 +387,9 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Sets the status of the claim to sent, usually as part of printing.  Also makes an entry in etrans.  If this is Canadian eclaims, then this function gets run first, and it doesn't actually set the claim as sent.  If the claim is to be sent elecronically, then the messagetext is created after this method and an attempt is made to send the claim.  Finally, the messagetext is added to the etrans.  This is necessary because the transaction numbers must be incremented and assigned to each claim before creating the message and attempting to send.  For Canadians, it will always record the attempt as an etrans even if claim is not set to status of sent.</summary>
-		public static Etrans SetClaimSentOrPrinted(long claimNum,long patNum,long clearinghouseNum,EtransType etype) {
+		public static Etrans SetClaimSentOrPrinted(long claimNum,long patNum,long clearinghouseNum,EtransType etype,int batchNumber) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<Etrans>(MethodBase.GetCurrentMethod(),claimNum,patNum,clearinghouseNum,etype);
+				return Meth.GetObject<Etrans>(MethodBase.GetCurrentMethod(),claimNum,patNum,clearinghouseNum,etype,batchNumber);
 			}
 			string command;
 			Etrans etrans=new Etrans();
@@ -408,7 +408,7 @@ namespace OpenDentBusiness{
 			DataTable table=Db.GetTable(command);
 			etrans.CarrierNum=PIn.Long(table.Rows[0][0].ToString());
 			etrans.CarrierNum2=PIn.Long(table.Rows[0][1].ToString());//might be 0 if no secondary on this claim
-			etrans.BatchNumber=0;
+			etrans.BatchNumber=batchNumber;
 			//if(X837.IsX12(messageText)) {
 			//	X837 x837=new X837(messageText);
 			//	etrans.TransSetNum=x837.GetTransNum(claimNum);
