@@ -150,6 +150,7 @@ namespace OpenDental{
 			this.checkAppointmentBubblesDisabled = new System.Windows.Forms.CheckBox();
 			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
 			this.groupBox3 = new System.Windows.Forms.GroupBox();
+			this.checkToothChartMoveMenuToRight = new System.Windows.Forms.CheckBox();
 			this.checkChartQuickAddHideAmalgam = new System.Windows.Forms.CheckBox();
 			this.label11 = new System.Windows.Forms.Label();
 			this.checkAllowSettingProcsComplete = new System.Windows.Forms.CheckBox();
@@ -162,7 +163,6 @@ namespace OpenDental{
 			this.checkAllowedFeeSchedsAutomate = new System.Windows.Forms.CheckBox();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
-			this.checkToothChartMoveMenuToRight = new System.Windows.Forms.CheckBox();
 			this.groupBox1.SuspendLayout();
 			this.groupBox5.SuspendLayout();
 			this.groupBox4.SuspendLayout();
@@ -541,6 +541,7 @@ namespace OpenDental{
 			// checkMedicalEclaimsEnabled
 			// 
 			this.checkMedicalEclaimsEnabled.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkMedicalEclaimsEnabled.Enabled = false;
 			this.checkMedicalEclaimsEnabled.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.checkMedicalEclaimsEnabled.Location = new System.Drawing.Point(70,24);
 			this.checkMedicalEclaimsEnabled.Name = "checkMedicalEclaimsEnabled";
@@ -744,6 +745,18 @@ namespace OpenDental{
 			this.groupBox3.TabStop = false;
 			this.groupBox3.Text = "Chart module";
 			// 
+			// checkToothChartMoveMenuToRight
+			// 
+			this.checkToothChartMoveMenuToRight.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkToothChartMoveMenuToRight.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkToothChartMoveMenuToRight.Location = new System.Drawing.Point(35,95);
+			this.checkToothChartMoveMenuToRight.Name = "checkToothChartMoveMenuToRight";
+			this.checkToothChartMoveMenuToRight.Size = new System.Drawing.Size(381,15);
+			this.checkToothChartMoveMenuToRight.TabIndex = 196;
+			this.checkToothChartMoveMenuToRight.Text = "Button for tooth chart, move to the right to prevent overlap when saving";
+			this.checkToothChartMoveMenuToRight.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkToothChartMoveMenuToRight.UseVisualStyleBackColor = true;
+			// 
 			// checkChartQuickAddHideAmalgam
 			// 
 			this.checkChartQuickAddHideAmalgam.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -890,18 +903,6 @@ namespace OpenDental{
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
-			// checkToothChartMoveMenuToRight
-			// 
-			this.checkToothChartMoveMenuToRight.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkToothChartMoveMenuToRight.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkToothChartMoveMenuToRight.Location = new System.Drawing.Point(35,95);
-			this.checkToothChartMoveMenuToRight.Name = "checkToothChartMoveMenuToRight";
-			this.checkToothChartMoveMenuToRight.Size = new System.Drawing.Size(381,15);
-			this.checkToothChartMoveMenuToRight.TabIndex = 196;
-			this.checkToothChartMoveMenuToRight.Text = "Button for tooth chart, move to the right to prevent overlap when saving";
-			this.checkToothChartMoveMenuToRight.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkToothChartMoveMenuToRight.UseVisualStyleBackColor = true;
-			// 
 			// FormModuleSetup
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
@@ -981,7 +982,7 @@ namespace OpenDental{
 			}
 			checkApptRefreshEveryMinute.Checked=PrefC.GetBool(PrefName.ApptModuleRefreshesEveryMinute);
 			//Family module-----------------------------------------------------------------------
-			checkMedicalEclaimsEnabled.Checked=PrefC.GetBool(PrefName.MedicalEclaimsEnabled);
+			//checkMedicalEclaimsEnabled.Checked=PrefC.GetBool(PrefName.MedicalEclaimsEnabled);
 			checkInsurancePlansShared.Checked=PrefC.GetBool(PrefName.InsurancePlansShared);
 			checkPPOpercentage.Checked=PrefC.GetBool(PrefName.InsDefaultPPOpercent);
 			checkAllowedFeeSchedsAutomate.Checked=PrefC.GetBool(PrefName.AllowedFeeSchedsAutomate);

@@ -1681,7 +1681,7 @@ namespace OpenDental.Eclaims
 			Provider billProv=ProviderC.ListLong[Providers.GetIndexLong(claimItems[0].ProvBill1)];
 			Provider treatProv=ProviderC.ListLong[Providers.GetIndexLong(claim.ProvTreat)];
 			InsPlan insPlan=InsPlans.GetPlan(claim.PlanNum,new List <InsPlan> ());
-			if(insPlan.IsMedical && !PrefC.GetBool(PrefName.MedicalEclaimsEnabled)) {
+			if(insPlan.IsMedical){
 				return "Medical e-claims not allowed";
 			}
 			//billProv
