@@ -637,7 +637,15 @@ namespace OpenDental{
 				else{
 					row.Cells.Add(displayedElementsMain[i].ElementDesc);
 				}
-				row.ColorText=displayedElementsMain[i].ElementColor;
+				if(displayedElementsMain[i].ElementDesc=="MedOrPremed[+]"
+					|| displayedElementsMain[i].ElementDesc=="HasIns[I]"
+					|| displayedElementsMain[i].ElementDesc=="InsToSend[!]")
+				{
+					row.ColorBackG=displayedElementsMain[i].ElementColor;
+				}
+				else{
+					row.ColorText=displayedElementsMain[i].ElementColor;
+				}
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
@@ -655,7 +663,15 @@ namespace OpenDental{
 				else {
 					row.Cells.Add(displayedElementsUR[i].ElementDesc);
 				}
-				row.ColorText=displayedElementsUR[i].ElementColor;
+				if(displayedElementsUR[i].ElementDesc=="MedOrPremed[+]"
+					|| displayedElementsUR[i].ElementDesc=="HasIns[I]"
+					|| displayedElementsUR[i].ElementDesc=="InsToSend[!]")
+				{
+					row.ColorBackG=displayedElementsUR[i].ElementColor;
+				}
+				else{
+					row.ColorText=displayedElementsUR[i].ElementColor;
+				}
 				gridUR.Rows.Add(row);
 			}
 			gridUR.EndUpdate();
@@ -673,7 +689,15 @@ namespace OpenDental{
 				else {
 					row.Cells.Add(displayedElementsLR[i].ElementDesc);
 				}
-				row.ColorText=displayedElementsLR[i].ElementColor;
+				if(displayedElementsLR[i].ElementDesc=="MedOrPremed[+]"
+					|| displayedElementsLR[i].ElementDesc=="HasIns[I]"
+					|| displayedElementsLR[i].ElementDesc=="InsToSend[!]")
+				{
+					row.ColorBackG=displayedElementsLR[i].ElementColor;
+				}
+				else{
+					row.ColorText=displayedElementsLR[i].ElementColor;
+				}
 				gridLR.Rows.Add(row);
 			}
 			gridLR.EndUpdate();

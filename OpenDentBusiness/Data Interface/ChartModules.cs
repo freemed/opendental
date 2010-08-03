@@ -835,6 +835,8 @@ namespace OpenDentBusiness {
 			table.Columns.Add("PlannedApptNum");
 			//but we won't actually fill this table with rows until the very end.  It's more useful to use a List<> for now.
 			List<DataRow> rows=new List<DataRow>();
+			//The query below was causing a max join error for big offices.  It's fixed now, 
+			//but a better option for next time would be to put SET SQL_BIG_SELECTS=1; before the query.
 			string command="SELECT plannedappt.AptNum,ItemOrder,PlannedApptNum,appointment.AptDateTime,"
 				+"appointment.Pattern,appointment.AptStatus,"//COUNT(procedurelog.ProcNum) someAreComplete "//The count won't be accurate, but it will tell us if not zero.
 				+"(SELECT COUNT(*) FROM procedurelog WHERE procedurelog.PlannedAptNum=plannedappt.AptNum AND procedurelog.ProcStatus=2) someAreComplete "

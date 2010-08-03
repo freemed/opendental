@@ -2383,6 +2383,21 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="UPDATE preference SET ValueString = '7.2.4.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To7_2_7();
+		}
+
+		private static void To7_2_7() {
+			if(FromVersion<new Version("7.2.7.0")) {
+				string command;
+				command="UPDATE apptviewitem SET ElementColor=-1 WHERE ElementDesc='"+POut.String("MedOrPremed[+]")+"'";//white
+				Db.NonQ(command);
+				command="UPDATE apptviewitem SET ElementColor=-1 WHERE ElementDesc='"+POut.String("HasIns[I]")+"'";
+				Db.NonQ(command);
+				command="UPDATE apptviewitem SET ElementColor=-1 WHERE ElementDesc='"+POut.String("InsToSend[!]")+"'";
+				Db.NonQ(command);
+				command="UPDATE preference SET ValueString = '7.2.7.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
 			To7_3_0();
 		}
 
