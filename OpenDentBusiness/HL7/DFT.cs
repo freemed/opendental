@@ -176,11 +176,12 @@ namespace OpenDentBusiness.HL7 {
 		///<summary>PDF data segment.</summary>
 		private void ZX1(string pdfDataBase64){
 			seg=new SegmentHL7(SegmentName.ZX1);
-			seg.SetField(0,"6");
-			seg.SetField(1,"PDF");
-			seg.SetField(2,"PATHOLOGY^Pathology Report^L");
-			seg.SetField(3,"");
-			seg.SetField(4,pdfDataBase64);
+			seg.SetField(0,"ZX1");
+			seg.SetField(1,"6");
+			seg.SetField(2,"PDF");
+			seg.SetField(3,"PATHOLOGY^Pathology Report^L");
+			seg.SetField(4,"");
+			seg.SetField(5,pdfDataBase64);
 			msg.Segments.Add(seg);
 		}
 

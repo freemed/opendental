@@ -37,7 +37,7 @@ namespace OpenDentBusiness.HL7 {
 				AddFields(5);
 			}
 			if(name==SegmentName.ZX1){
-				AddFields(5);
+				AddFields(6);
 			}
 		}
 
