@@ -1043,8 +1043,10 @@ namespace OpenDental{
 					}
 				}//end for i rows
 			}//end for j cols
-			for(int k=0;k<colTotals.Length;k++){
-				reportIn.ColTotal[k]=PIn.Double(colTotals[k].ToString("n"));
+			if(reportIn!=null){
+				for(int k=0;k<colTotals.Length;k++){
+					reportIn.ColTotal[k]=PIn.Double(colTotals[k].ToString("n"));
+				}
 			}
 			return tableOut;
 		}
