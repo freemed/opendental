@@ -54,6 +54,7 @@ namespace OpenDental{
 		private TextBox textOvertime2;
 		private TextBox textTotal2;
 		public Employee EmployeeCur;
+		private bool cannotEdit;
 
 		///<summary></summary>
 		public FormTimeCard()
@@ -420,14 +421,13 @@ namespace OpenDental{
 
 		private void FormTimeCard_Load(object sender, System.EventArgs e){
 			//Check to see if the employee currently logged in can edit this time-card.
-			bool cannotEdit=Security.CurUser!=null &&
+			cannotEdit=Security.CurUser!=null &&
 				Security.CurUser.EmployeeNum==EmployeeCur.EmployeeNum &&
 				PrefC.GetBool(PrefName.TimecardSecurityEnabled) &&
 				PrefC.GetBool(PrefName.TimecardUsersDontEditOwnCard);
 			if(cannotEdit) {
 				butAdj.Enabled=false;
 				butCompute.Enabled=false;
-				gridMain.Enabled=false;
 			}
 			Text=Lan.g(this,"TimeCard for")+" "+EmployeeCur.FName+" "+EmployeeCur.LName
 				+(cannotEdit?" - You cannot modify your timecard":"");
@@ -781,6 +781,9 @@ namespace OpenDental{
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			if(cannotEdit) {
+				return;
+			}
 			timer1.Enabled=false;
 			if(gridMain.Rows[e.Row].Tag.GetType()==typeof(TimeAdjust)) {
 				if(!Security.IsAuthorized(Permissions.TimecardsEditAll)) {
