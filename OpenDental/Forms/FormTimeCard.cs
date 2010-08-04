@@ -425,8 +425,9 @@ namespace OpenDental{
 				PrefC.GetBool(PrefName.TimecardSecurityEnabled) &&
 				PrefC.GetBool(PrefName.TimecardUsersDontEditOwnCard);
 			if(cannotEdit) {
-				DisableAllSubControls(this);
-				butClose.Enabled=true;
+				butAdj.Enabled=false;
+				butCompute.Enabled=false;
+				gridMain.Enabled=false;
 			}
 			Text=Lan.g(this,"TimeCard for")+" "+EmployeeCur.FName+" "+EmployeeCur.LName
 				+(cannotEdit?" - You cannot modify your timecard":"");
@@ -442,13 +443,6 @@ namespace OpenDental{
 			radioBreaks.Checked=IsBreaks;
 			FillPayPeriod();
 			FillMain(true);
-		}
-
-		private void DisableAllSubControls(Control con){
-			for(int i=0;i<con.Controls.Count;i++){
-				DisableAllSubControls(con.Controls[i]);
-				con.Controls[i].Enabled=false;
-			}			
 		}
 
 		private void butLeft_Click(object sender,EventArgs e) {
