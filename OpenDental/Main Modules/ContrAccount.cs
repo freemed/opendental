@@ -1746,7 +1746,7 @@ namespace OpenDental {
 		public void ModuleSelected(long patNum,bool isSelectingFamily) {
 			RefreshModuleData(patNum,isSelectingFamily);
 			RefreshModuleScreen(isSelectingFamily);
-			Plugins.HookAddCode(this,"ContrAccount.ModuleSelected_end",patNum,isSelectingFamily);//Hook added to allow adding buttons to the toolbar.
+			Plugins.HookAddCode(this,"ContrAccount.ModuleSelected_end",patNum,isSelectingFamily);
 		}
 
 		///<summary>Used when jumping to this module and directly to a claim.</summary>
@@ -1789,7 +1789,7 @@ namespace OpenDental {
 			}
 			FamCur=null;
 			RepeatChargeList=null;
-			Plugins.HookAddCode(this,"ContrAccount.ModuleUnselected_end");//Hook added to allow adding buttons to the toolbar.
+			Plugins.HookAddCode(this,"ContrAccount.ModuleUnselected_end");
 		}
 
 		///<summary></summary>

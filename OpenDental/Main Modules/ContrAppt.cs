@@ -1137,7 +1137,7 @@ namespace OpenDental{
 			LayoutScrollOpProv();//can only call this as part of ModuleSelected.
 			RefreshModuleScreenPatient();
 			RefreshModuleScreenPeriod();
-			Plugins.HookAddCode(this,"ContrAppt.ModuleSelected_end",patNum);//Hook added to allow adding buttons to the toolbar.
+			Plugins.HookAddCode(this,"ContrAppt.ModuleSelected_end",patNum);
 		}
 
 		public void RefreshPeriod() {
@@ -1458,7 +1458,7 @@ namespace OpenDental{
 				}
 				ContrApptSingle3=null;
 			}
-			Plugins.HookAddCode(this,"ContrAppt.ModuleUnselected_end");//Hook added to allow adding buttons to the toolbar.
+			Plugins.HookAddCode(this,"ContrAppt.ModuleUnselected_end");
 		}
 		
 		/*

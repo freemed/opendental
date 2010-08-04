@@ -1750,7 +1750,7 @@ namespace OpenDental{
 				ToolBarMain.Buttons.Add(new ODToolBarButton(((ToolButItem)toolButItems[i]).ButtonText
 					,-1,"",((ToolButItem)toolButItems[i]).ProgramNum));
 			}
-			Plugins.HookAddCode(this,"FormOpenDental.LayoutToolBar_end");//Hook added to allow adding buttons to the toolbar.
+			Plugins.HookAddCode(this,"FormOpenDental.LayoutToolBar_end");
 			ToolBarMain.Invalidate();
 		}
 

@@ -740,7 +740,7 @@ namespace OpenDental{
 		public void ModuleSelected(long patNum) {
 			RefreshModuleData(patNum);
 			RefreshModuleScreen();
-			Plugins.HookAddCode(this,"ContrTreat.ModuleSelected_end",patNum);//Hook added to allow adding buttons to the toolbar.
+			Plugins.HookAddCode(this,"ContrTreat.ModuleSelected_end",patNum);
 		}
 
 		///<summary></summary>
@@ -755,7 +755,7 @@ namespace OpenDental{
 			ProcListTP=null;
 			//Procedures.HList=null;
 			//Procedures.MissingTeeth=null;
-			Plugins.HookAddCode(this,"ContrTreat.ModuleUnselected_end");//Hook added to allow adding buttons to the toolbar.
+			Plugins.HookAddCode(this,"ContrTreat.ModuleUnselected_end");
 		}
 
 		private void RefreshModuleData(long patNum) {
