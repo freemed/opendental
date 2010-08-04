@@ -3161,6 +3161,7 @@ namespace OpenDental{
 			EasyHideClinicalData();
 			RefreshModuleData(patNum);
 			RefreshModuleScreen();
+			Plugins.HookAddCode(this,"ContrChart.ModuleSelected_end",patNum);//Hook added to allow adding buttons to the toolbar.
 		}
 
 		///<summary></summary>
@@ -3176,6 +3177,7 @@ namespace OpenDental{
 			FamCur=null;
 			PatCur=null;
 			PlanList=null;
+			Plugins.HookAddCode(this,"ContrChart.ModuleUnselected_end");//Hook added to allow adding buttons to the toolbar.
 		}
 
 		private void RefreshModuleData(long patNum) {

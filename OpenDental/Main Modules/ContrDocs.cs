@@ -622,6 +622,7 @@ namespace OpenDental{
 			RefreshModuleData(patNum);
 			RefreshModuleScreen();
 			SelectTreeNode(GetNodeById(MakeIdentifier(docNum.ToString(),"0")));
+			Plugins.HookAddCode(this,"ContrDocs.ModuleSelected_end",patNum,docNum);//Hook added to allow adding buttons to the toolbar.
 		}
 
 		///<summary></summary>
@@ -629,6 +630,7 @@ namespace OpenDental{
 			FamCur=null;
 			//Cancel current image capture.
 			xRayImageController.KillXRayThread();
+			Plugins.HookAddCode(this,"ContrDocs.ModuleUnselected_end");//Hook added to allow adding buttons to the toolbar.
 		}
 
 		///<summary></summary>

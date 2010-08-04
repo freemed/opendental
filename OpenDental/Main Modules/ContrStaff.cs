@@ -685,11 +685,13 @@ namespace OpenDental{
 			PatCurNum=patNum;
 			RefreshModuleData(patNum);
 			RefreshModuleScreen();
+			Plugins.HookAddCode(this,"ContrStaff.ModuleSelected_end",patNum);//Hook added to allow adding buttons to the toolbar.
 		}
 
 		///<summary></summary>
 		public void ModuleUnselected(){
 			//this is not getting triggered yet.
+			Plugins.HookAddCode(this,"ContrStaff.ModuleUnselected_end");//Hook added to allow adding buttons to the toolbar. (So hook will work if it is triggered.)
 		}
 
 		private void RefreshModuleData(long patNum) {
