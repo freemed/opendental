@@ -4587,7 +4587,9 @@ namespace OpenDental{
 		}
 
 		private void butGraph_Click(object sender,EventArgs e) {
-
+			//only visible on computers at OD corporate.
+			FormGraphEmployeeTime form=new FormGraphEmployeeTime();
+			form.ShowDialog();
 		}
 
 		//private void butTest_Click(object sender,EventArgs e) {
