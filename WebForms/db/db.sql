@@ -2,7 +2,8 @@
 SQLyog Community Edition- MySQL GUI v8.0 
 MySQL - 5.1.30-community : Database - odwebservice
 *********************************************************************
-*/
+*/
+
 /*!40101 SET NAMES utf8 */;
 
 /*!40101 SET SQL_MODE=''*/;
@@ -10,17 +11,19 @@ MySQL - 5.1.30-community : Database - odwebservice
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
-/* Table for Open dental webservice*/
+CREATE DATABASE /*!32312 IF NOT EXISTS*/`odwebservice` /*!40100 DEFAULT CHARACTER SET latin1 */;
+
+USE `odwebservice`;
 
 /*Table structure for table `webforms_preference` */
 
 DROP TABLE IF EXISTS `webforms_preference`;
 
 CREATE TABLE `webforms_preference` (
-  `DentalOfficeID` bigint NOT NULL AUTO_INCREMENT,
-  `ColorBorder` int NOT NULL,
-  `Heading1` text,
-  `Heading2` text,
+  `DentalOfficeID` bigint(20) NOT NULL,
+  `ColorBorder` int(11) NOT NULL,
+  `Heading1` text NOT NULL,
+  `Heading2` text NOT NULL,
   PRIMARY KEY (`DentalOfficeID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -29,8 +32,8 @@ CREATE TABLE `webforms_preference` (
 DROP TABLE IF EXISTS `webforms_sheet`;
 
 CREATE TABLE `webforms_sheet` (
-  `SheetID` bigint NOT NULL AUTO_INCREMENT,
-  `DentalOfficeID` bigint NOT NULL,
+  `SheetID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `DentalOfficeID` bigint(20) NOT NULL,
   `DateTimeSubmitted` datetime NOT NULL,
   PRIMARY KEY (`SheetID`),
   KEY `FK_webforms_sheet_DentalOfficeID` (`DentalOfficeID`),
@@ -42,10 +45,10 @@ CREATE TABLE `webforms_sheet` (
 DROP TABLE IF EXISTS `webforms_sheetfield`;
 
 CREATE TABLE `webforms_sheetfield` (
-  `SheetFieldID` bigint NOT NULL AUTO_INCREMENT,
-  `SheetID` bigint NOT NULL,
+  `SheetFieldID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `SheetID` bigint(20) NOT NULL,
   `FieldName` varchar(255) NOT NULL,
-  `FieldValue` text,
+  `FieldValue` text NOT NULL,
   PRIMARY KEY (`SheetFieldID`),
   KEY `FK_webforms_sheetfield_SheetID` (`SheetID`),
   CONSTRAINT `FK_webforms_sheetfield_SheetID` FOREIGN KEY (`SheetID`) REFERENCES `webforms_sheet` (`SheetID`)
