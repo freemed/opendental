@@ -60,7 +60,8 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<Sheet>(MethodBase.GetCurrentMethod(),patNum,labCaseNum);
 			}
 			string command="SELECT sheet.* FROM sheet,sheetfield "
-				+"WHERE sheet.PatNum="+POut.Long(patNum)
+				+"WHERE sheet.SheetNum=sheetfield.SheetNum"
+				+" AND sheet.PatNum="+POut.Long(patNum)
 				+" AND sheet.SheetType="+POut.Long((int)SheetTypeEnum.LabSlip)
 				+" AND sheetfield.FieldType="+POut.Long((int)SheetFieldType.Parameter)
 				+" AND sheetfield.FieldName='LabCaseNum' "
