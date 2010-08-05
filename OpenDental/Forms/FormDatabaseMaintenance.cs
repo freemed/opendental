@@ -234,6 +234,8 @@ namespace OpenDental {
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.AppointmentsNoDateOrProcs(verbose);
 			Application.DoEvents();
+			textLog.Text+=DatabaseMaintenance.AppointmentsNoPatients(verbose);
+			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.AutoCodesDeleteWithNoItems(verbose);
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.ClaimPlanNum2NotValid(verbose);

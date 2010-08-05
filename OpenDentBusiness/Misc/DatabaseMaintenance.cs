@@ -187,6 +187,38 @@ namespace OpenDentBusiness {
 			return log;
 		}
 
+		public static string AppointmentsNoPatients(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
+			string log="";
+			command="SELECT Count(*) FROM appointment WHERE PatNum NOT IN(SELECT PatNum FROM patient)";
+			int numberFixed=Convert.ToInt32(Db.GetCount(command));
+			if(numberFixed!=0) {
+				long dummyPatNum=Patients.GetPatNumByNameAndBirthday("No Patient","",Convert.ToDateTime("01/01/0001"));
+				if(dummyPatNum==0) {
+					Patient dummyPatient=new Patient();
+					dummyPatient.LName="No Patient";
+					dummyPatient.Gender=PatientGender.Unknown;
+					dummyPatient.Position=PatientPosition.Single;
+					dummyPatient.Birthdate=Convert.ToDateTime("0001-01-01");
+					dummyPatient.BillingType=PrefC.GetLong(PrefName.PracticeDefaultBillType);
+					dummyPatient.PatStatus=PatientStatus.Archived;
+					dummyPatient.PriProv=PrefC.GetLong(PrefName.PracticeDefaultProv);
+					dummyPatNum=Patients.Insert(dummyPatient,false);
+					Patient oldDummyPatient=dummyPatient.Copy();
+					dummyPatient.Guarantor=dummyPatNum;
+					Patients.Update(dummyPatient,oldDummyPatient);
+				}
+				command="UPDATE appointment SET PatNum="+POut.Long(dummyPatNum)+" WHERE PatNum NOT IN(SELECT PatNum FROM patient)";
+				numberFixed=Db.NonQ32(command);
+			}
+			if(numberFixed!=0 || verbose) {
+				log+=Lans.g("FormDatabaseMaintenance","Appointments altered due to no patient: ")+numberFixed.ToString()+"\r\n";
+			}
+			return log;
+		}
+
 		public static string AutoCodesDeleteWithNoItems(bool verbose) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
