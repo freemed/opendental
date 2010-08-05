@@ -519,13 +519,15 @@ namespace OpenDental{
 						tbApts.SetBackColorRow(i,DefC.Long[(int)DefCat.ProgNoteColors][21].ItemColor);
 						tbApts.Cell[0,i] = Lan.g("enumApptStatus","PtNoteCompleted");
 					}
-					else if(ApptList[i].AptStatus == ApptStatus.Broken | ApptList[i].AptStatus == ApptStatus.UnschedList) {
-						if(ApptList[i].AptStatus == ApptStatus.Broken) {
-							tbApts.Cell[0,i] = Lan.g("enumApptStatus","Broken");
-						}
-						else {
-							tbApts.Cell[0,i] = Lan.g("enumApptStatus","UnschedList");
-						}
+					else if(ApptList[i].AptStatus == ApptStatus.Broken){
+						tbApts.Cell[0,i] = Lan.g("enumApptStatus","Broken");
+						tbApts.Cell[1,i] = ApptList[i].AptDateTime.ToString("d");
+						tbApts.Cell[2,i] = ApptList[i].AptDateTime.ToString("t");
+						tbApts.SetTextColorRow(i,DefC.Long[(int)DefCat.ProgNoteColors][14].ItemColor);
+						tbApts.SetBackColorRow(i,DefC.Long[(int)DefCat.ProgNoteColors][15].ItemColor);
+					}
+					else if(ApptList[i].AptStatus == ApptStatus.UnschedList) {
+						tbApts.Cell[0,i] = Lan.g("enumApptStatus","UnschedList");
 						tbApts.SetTextColorRow(i,DefC.Long[(int)DefCat.ProgNoteColors][14].ItemColor);
 						tbApts.SetBackColorRow(i,DefC.Long[(int)DefCat.ProgNoteColors][15].ItemColor);
 					}
