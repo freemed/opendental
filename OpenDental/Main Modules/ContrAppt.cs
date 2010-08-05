@@ -149,6 +149,8 @@ namespace OpenDental{
 		private OpenDental.UI.Button butGraph;
 		private Timer timerTests;
 		//private int stressCounter;
+		private int printPageHorizontal=1;
+		private int printPageVertical=1;
 
 		///<summary></summary>
 		public ContrAppt(){
@@ -3494,6 +3496,8 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public void PrintReport(){
+			printPageHorizontal=1;
+			printPageVertical=1;
 			pd2=new PrintDocument();
 			pd2.PrintPage += new PrintPageEventHandler(this.pd2_PrintPage);
 			//pd2.DefaultPageSettings.Margins= new Margins(10,40,40,60);
@@ -3515,6 +3519,12 @@ namespace OpenDental{
 	}
 
 		private void pd2_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e) {
+			PrintScreenShot(sender,e);
+			//e.HasMorePages=PrintSchedulePage(e.Graphics,e.MarginBounds);
+		}
+
+		///<summary>The old method for printing the appointment schedule. Being phased out.</summary>
+		private void PrintScreenShot(object sender, System.Drawing.Printing.PrintPageEventArgs e){
 			//MessageBox.Show(e.PageSettings.PrinterSettings.Copies.ToString());
       int xPos=0;//starting pos
 			int yPos=(int)27.5;//starting pos
@@ -3641,6 +3651,50 @@ namespace OpenDental{
       xPos=0;
 			yPos+=12;
       e.Graphics.DrawImage(imageTemp,xPos,yPos); 
+		}
+
+		///<summary>The new printing method for the appointment schedule. Will be phased in when complete.</summary>
+		private bool PrintSchedulePage(Graphics g,Rectangle margins) {
+			//Interesting
+			//TODO: Read variables from preferences in DB. Testing values used for now.
+			float printNumPagesHorizontal=1.5f;
+			float printNumPagesVertical=2.0f;
+			//Local variables.
+			const float printTimeWidth=37.0f;
+			SolidBrush timeBarBrush=new SolidBrush(Color.LightGray);
+			//REMOVE ME LATER: Code commented out below copied from ContrApptSheet.CreateShadow() around line 265.
+			//Code to draw a single appointment is contained in ContrApptSingle.cs.
+			//background
+			g.FillRectangle(timeBarBrush,margins.Left,margins.Top,printTimeWidth,margins.Height);//L time bar
+			//g.FillRectangle(new SolidBrush(Color.LightGray),TimeWidth+ColWidth*ColCount+ProvWidth*ProvCount,0,TimeWidth,Height);//R time bar
+			//try {
+			//  openBrush=new SolidBrush(DefC.Long[(int)DefCat.AppointmentColors][0].ItemColor);
+			//  closedBrush=new SolidBrush(DefC.Long[(int)DefCat.AppointmentColors][1].ItemColor);
+			//  holidayBrush=new SolidBrush(DefC.Long[(int)DefCat.AppointmentColors][4].ItemColor);
+			//}
+			//catch {//this is just for design-time
+			//  openBrush=new SolidBrush(Color.White);
+			//  closedBrush=new SolidBrush(Color.LightGray);
+			//  holidayBrush=new SolidBrush(Color.FromArgb(255,128,128));
+			//}
+			//DrawMainBackground(g);
+			//DrawBlockouts(g);
+			//if(!IsWeeklyView) {
+			//  DrawProvScheds(g);
+			//  DrawProvBars(g);
+			//}
+			//DrawGridLines(g);
+			//DrawRedTimeIndicator(g);
+			//DrawMinutes(g);
+
+			timeBarBrush.Dispose();
+			//Increment page numbers.
+			printPageHorizontal++;
+			if(printPageHorizontal>printNumPagesHorizontal){
+				printPageHorizontal=1;
+				printPageVertical++;
+			}
+			return (printPageVertical<=printNumPagesVertical);
 		}
 
 		///<summary>Clears the pinboard.</summary>

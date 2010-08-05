@@ -132,8 +132,7 @@ namespace CodeBase{
 			if(pd.DefaultPageSettings.PaperSize.Height==0){
 				pd.DefaultPageSettings.PaperSize=new PaperSize("default",850,1100);
 			}
-			pd.PrinterSettings.Duplex=Duplex.Horizontal;//Print double sided when possible, so that forms which are 1-2 pages will
-																									//have any signatures on the same piece of paper as the rest of the info.
+			pd.PrinterSettings.Duplex=Duplex.Horizontal;//Print double sided when possible.
 			pagesPrinted=0;
 			pd.Print();//No print previews, since this form is in and of itself a print preview.
 		}
