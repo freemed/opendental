@@ -1224,15 +1224,17 @@ namespace OpenDental
 			textInsPlan.Text=InsPlans.GetDescript(ClaimProcCur.PlanNum,FamCur,PlanList);
 			checkNoBillIns.Checked=ClaimProcCur.NoBillIns;
 			if(ClaimProcCur.ClaimPaymentNum>0){//attached to ins check
-				labelAttachedToCheck.Visible=false;
 				textDateCP.ReadOnly=true;//DateCP always the same as the payment date and can't be changed here
-			}
-			else{
-				labelAttachedToCheck.Visible=false;
+				if(!Security.IsAuthorized(Permissions.InsPayEdit,ClaimProcCur.DateCP)){
+					butOK.Enabled=false;
+				}
+				textInsPayAmt.ReadOnly=true;
+				labelAttachedToCheck.Visible=true;
+				butDelete.Enabled=false;
 			}
 			//This new expanded security prevents editing completed claimprocs, even if not attached to an ins check.
 			//For example, a zero payment with a writeoff amount.  Must prevent changing that date.
-			if((ClaimProcCur.Status==ClaimProcStatus.CapComplete
+			else if((ClaimProcCur.Status==ClaimProcStatus.CapComplete
 				|| ClaimProcCur.Status==ClaimProcStatus.Received
 				|| ClaimProcCur.Status==ClaimProcStatus.Supplemental)
 				&& !Security.IsAuthorized(Permissions.InsPayEdit,ClaimProcCur.DateCP))//
@@ -1240,8 +1242,12 @@ namespace OpenDental
 				textDateCP.ReadOnly=true;
 				butOK.Enabled=false;
 				textInsPayAmt.ReadOnly=true;
+				labelAttachedToCheck.Visible=false;
 				//listStatus.Enabled=false;//this is handled in the mousedown event
 				butDelete.Enabled=false;
+			}
+			else{
+				labelAttachedToCheck.Visible=false;
 			}
 			if(ClaimProcCur.ProcNum==0){//total payment for a claim
 				IsProc=false;
