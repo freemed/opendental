@@ -16,11 +16,9 @@ using Microsoft.Practices.EnterpriseLibrary.Logging.Formatters;
 using Microsoft.Practices.EnterpriseLibrary.Logging.TraceListeners;
 using Microsoft.Practices.EnterpriseLibrary.Logging.Filters;
 
-namespace WebForms
-{
+namespace WebForms {
 
-	public static class Logger
-	{
+	public static class Logger {
 		/// <summary>
 		/// Log writer
 		/// </summary>
@@ -29,8 +27,7 @@ namespace WebForms
 		/// <summary>
 		/// Static constructor
 		/// </summary>
-		static Logger()
-		{
+		static Logger() {
 			string LogFile = ConfigurationManager.AppSettings["LogFile"].ToString();
 
 			// formatter
@@ -88,8 +85,7 @@ namespace WebForms
 		/// Writes an Information to the log.
 		/// </summary>
 		/// <param name="message">Information Message</param>
-		public static void Information(string message)
-		{
+		public static void Information(string message) {
 			StackFrame stFrame = new StackFrame(1,true);
 			string Filename = " Filename: " + stFrame.GetFileName().Substring(stFrame.GetFileName().LastIndexOf(@"\")+1);
 			string MethodName =" Method: "+ stFrame.GetMethod();
@@ -103,8 +99,7 @@ namespace WebForms
 		/// </summary>
 		/// <param name="message"> Message to log</param>
 		/// <param name="category">Message category. e.g. 'Error','Warning','Information'</param>
-		private static void Write(string message,string category)
-		{
+		private static void Write(string message,string category) {
 			LogEntry entry = new LogEntry();
 
 			entry.Categories.Add(category);
@@ -119,8 +114,7 @@ namespace WebForms
 		/// </summary>
 		/// <param name="message"></param>
 		/// <param name="category"></param>
-		private static void Write(string message,TraceEventType severity)
-		{
+		private static void Write(string message,TraceEventType severity) {
 			LogEntry entry = new LogEntry();
 
 			entry.Categories.Add(severity.ToString());

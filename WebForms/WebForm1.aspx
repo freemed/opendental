@@ -17,7 +17,6 @@
 </head>
 <body id="bodytag" runat="server" class="style1">
 	<div style="padding-top: 3px;" align="center">
-	
 		<form id="form1" runat="server">
 		<div>
 			<asp:ToolkitScriptManager ID="ToolkitScriptManager1" runat="server" />
@@ -81,8 +80,18 @@
                     --%>
 					<asp:TextBox ID="TextBoxBirthdate" runat="server" Width="140px" CssClass="textboxstyle"></asp:TextBox>
 					<asp:CalendarExtender ID="calendarExtender" runat="server" Animated="true" PopupPosition="Right"
-						Format="MM/dd/yyyy" TargetControlID="TextBoxBirthdate" DefaultView="Years">
+						Format="MM/dd/yyyy" TargetControlID="TextBoxBirthdate" DefaultView="Years" BehaviorID="CalendarBehaviorID"
+						OnClientDateSelectionChanged="setCalendarModeToYears">
 					</asp:CalendarExtender>
+
+					<script type="text/javascript">
+						function setCalendarModeToYears() {
+
+							var CalendarBehavior = $find("CalendarBehaviorID");
+							CalendarBehavior._switchMode("years", true);
+						}
+					</script>
+
 					<asp:CompareValidator ID="CompareValidatorDOB" runat="server" ErrorMessage="Invalid Date of Birth."
 						ControlToValidate="TextBoxBirthdate" Type="Date" Display="None" Operator="DataTypeCheck">
 					</asp:CompareValidator>
@@ -274,8 +283,7 @@
 						</ProgressTemplate>
 					</asp:UpdateProgress>
 					<asp:Panel ID="Panel3" runat="server" Style="text-align: right; font-weight: bold;">
-						<asp:Button ID="Submit" runat="server" Text="SUBMIT" CssClass="buttonstyle" 
-							onclick="Submit_Click" />
+						<asp:Button ID="Submit" runat="server" Text="SUBMIT" CssClass="buttonstyle" OnClick="Submit_Click" />
 					</asp:Panel>
 					<br />
 				</asp:Panel>
