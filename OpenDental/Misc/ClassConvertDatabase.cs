@@ -88,6 +88,16 @@ namespace OpenDental{
 				MsgBox.Show(this,"This replication server is blocked from performing updates.");
 				return false;
 			}
+#if DEBUG
+			if(!silent && MessageBox.Show("You are in Debug mode.  Your database can now be converted"+"\r"
+				+"from version"+" "+FromVersion.ToString()+"\r"
+				+"to version"+" "+ToVersion.ToString()+"\r"
+				+"You can click Cancel to skip conversion and attempt to the newer code against the older database."
+				,"",MessageBoxButtons.OKCancel)!=DialogResult.OK)
+			{
+				return true;//If user clicks cancel, then do nothing
+			}
+#else
 			if(!silent && MessageBox.Show(Lan.g(this,"Your database will now be converted")+"\r"
 				+Lan.g(this,"from version")+" "+FromVersion.ToString()+"\r"
 				+Lan.g(this,"to version")+" "+ToVersion.ToString()+"\r"
@@ -96,6 +106,7 @@ namespace OpenDental{
 			{
 				return false;//If user clicks cancel, then close the program
 			}
+#endif
 			Cursor.Current=Cursors.WaitCursor;
 #if !DEBUG
 			if(DataConnection.DBtype!=DatabaseType.MySql

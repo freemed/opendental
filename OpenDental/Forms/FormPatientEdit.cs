@@ -764,7 +764,7 @@ namespace OpenDental{
 			// textSchool
 			// 
 			this.textSchool.Location = new System.Drawing.Point(123,37);
-			this.textSchool.MaxLength = 30;
+			this.textSchool.MaxLength = 255;
 			this.textSchool.Name = "textSchool";
 			this.textSchool.Size = new System.Drawing.Size(224,20);
 			this.textSchool.TabIndex = 3;

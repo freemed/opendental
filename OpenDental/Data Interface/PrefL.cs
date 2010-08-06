@@ -12,7 +12,7 @@ using CodeBase;
 namespace OpenDental {
 	public class PrefL{
 
-		///<summary>This ONLY runs when first opening the program.  It returns true if either no conversion is necessary, or if conversion was successful.  False for other situations like corrupt db, trying to convert to older version, etc.</summary>
+		///<summary>This ONLY runs when first opening the program.  It returns true if either no conversion is necessary, or if conversion was successful.  False for other situations like corrupt db, trying to convert to older version, etc.  Silent mode is ONLY used for internal tools, NEVER with the main program.</summary>
 		public static bool ConvertDB(bool silent,string toVersion) {
 			ClassConvertDatabase ClassConvertDatabase2=new ClassConvertDatabase();
 			string pref=PrefC.GetString(PrefName.DataBaseVersion);

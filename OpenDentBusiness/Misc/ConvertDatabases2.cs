@@ -2404,8 +2404,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 		private static void To7_3_0() {
 			if(FromVersion<new Version("7.3.0.0")) {
 				string command;
-				
-
+				command="ALTER TABLE patient CHANGE SchoolName SchoolName varchar(255) NOT NULL";
+				Db.NonQ(command);
 
 
 
