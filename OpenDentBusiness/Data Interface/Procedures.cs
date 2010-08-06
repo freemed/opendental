@@ -556,6 +556,31 @@ namespace OpenDentBusiness {
 			return false;
 		}
 
+		///<summary>Only called from FormProcEdit.  When attached  to a claim and user clicks Edit Anyway, we need to know the oldest claim date for security reasons.  The claimProcsForProc should only be claimprocs for this procedure.</summary>
+		public static DateTime GetOldestClaimDate(long procNum,List<ClaimProc> claimProcsForProc) {
+			//No need to check RemotingRole; no call to db.
+			Claim claim;
+			DateTime retVal=DateTime.Today;
+			for(int i=0;i<claimProcsForProc.Count;i++) {
+				if(claimProcsForProc[i].ClaimNum==0){
+					continue;
+				}
+				if(claimProcsForProc[i].Status==ClaimProcStatus.CapClaim
+					|| claimProcsForProc[i].Status==ClaimProcStatus.NotReceived
+					|| claimProcsForProc[i].Status==ClaimProcStatus.Preauth
+					|| claimProcsForProc[i].Status==ClaimProcStatus.Received
+					|| claimProcsForProc[i].Status==ClaimProcStatus.Supplemental
+					) 
+				{
+					claim=Claims.GetClaim(claimProcsForProc[i].ClaimNum);
+					if(claim.DateSent<retVal){
+						retVal=claim.DateSent;
+					}
+				}
+			}
+			return retVal;
+		}
+
 		///<summary>Only called from FormProcEditAll to signal when to disable much of the editing in that form. If the procedure is 'AttachedToClaim' then user should not change it very much.  The claimProcList can be all claimProcs for the patient or only those attached to this proc.</summary>
 		public static bool IsAttachedToClaim(List<Procedure> procList,List<ClaimProc> claimprocList) {
 			//No need to check RemotingRole; no call to db.

@@ -2733,7 +2733,8 @@ namespace OpenDental{
 		}
 
 		private void butEditAnyway_Click(object sender, System.EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.ClaimSentEdit)) {
+			DateTime dateOldestClaim=Procedures.GetOldestClaimDate(ProcCur.ProcNum,ClaimProcsForProc);
+			if(!Security.IsAuthorized(Permissions.ClaimSentEdit,dateOldestClaim)) {
 				return;
 			}
 			panel1.Enabled=true;

@@ -1208,9 +1208,12 @@ namespace OpenDental
 				butOK.Enabled=false;
 				butDelete.Enabled=false;
 			}
-			if(ClaimProcCur.ClaimNum>0 && !Security.IsAuthorized(Permissions.ClaimSentEdit,true)) {//attached to claim, no permission for claims.
-				butOK.Enabled=false;
-				butDelete.Enabled=false;
+			else if(ClaimProcCur.ClaimNum>0){
+				Claim claim=Claims.GetClaim(ClaimProcCur.ClaimNum);
+				if(!Security.IsAuthorized(Permissions.ClaimSentEdit,claim.DateSent,true)) {//attached to claim, no permission for claims.
+					butOK.Enabled=false;
+					butDelete.Enabled=false;
+				}
 			}
 			Plan=InsPlans.GetPlan(ClaimProcCur.PlanNum,PlanList);
 			PatPlanNum=PatPlans.GetPatPlanNum(PatPlanList,Plan.PlanNum);
