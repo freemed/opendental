@@ -105,6 +105,10 @@ namespace OpenDental{
 			if(CultureInfo.CurrentCulture.Name=="en-US") {
 				return;
 			}
+			if(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft) {
+				sender.RightToLeft=RightToLeft.Yes;
+				sender.RightToLeftLayout=true;
+			}
 			//first translate the main title Text on the form:
 			if(!Contains(exclusions,sender)) {
 				sender.Text=Lans.ConvertString(sender.GetType().Name,sender.Text);
