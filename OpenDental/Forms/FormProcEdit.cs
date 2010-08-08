@@ -2532,14 +2532,33 @@ namespace OpenDental{
 			if(FormIS.DialogResult==DialogResult.Cancel){
 				return;
 			}
+			InsPlan plan=FormIS.SelectedPlan;
 			List <Benefit> benList=Benefits.Refresh(PatPlanList);
 			ClaimProc cp=new ClaimProc();
-			ClaimProcs.CreateEst(cp,ProcCur,FormIS.SelectedPlan);
-			long patPlanNum=PatPlans.GetPatPlanNum(PatPlanList,FormIS.SelectedPlan.PlanNum);
+			ClaimProcs.CreateEst(cp,ProcCur,plan);
+			if(plan.PlanType=="c") {//capitation
+				double allowed=PIn.Double(textProcFee.Text);
+				cp.BaseEst=allowed;
+				cp.InsEstTotal=allowed;
+				cp.CopayAmt=InsPlans.GetCopay(ProcCur.CodeNum,plan.FeeSched,plan.CopayFeeSched);
+				if(cp.CopayAmt > allowed) {//if the copay is greater than the allowed fee calculated above
+					cp.CopayAmt=allowed;//reduce the copay
+				}
+				if(cp.CopayAmt==-1) {
+					cp.CopayAmt=0;
+				}
+				cp.WriteOffEst=cp.BaseEst-cp.CopayAmt;
+				if(cp.WriteOffEst<0) {
+					cp.WriteOffEst=0;
+				}
+				cp.WriteOff=cp.WriteOffEst;
+				ClaimProcs.Update(cp);
+			}
+			long patPlanNum=PatPlans.GetPatPlanNum(PatPlanList,plan.PlanNum);
 			if(patPlanNum > 0){
 				double paidOtherInsTotal=ClaimProcs.GetPaidOtherInsTotal(cp,PatPlanList);
 				double writeOffOtherIns=ClaimProcs.GetWriteOffOtherIns(cp,PatPlanList);
-				ClaimProcs.ComputeBaseEst(cp,ProcCur.ProcFee,ProcCur.ToothNum,ProcCur.CodeNum,FormIS.SelectedPlan,patPlanNum,benList,
+				ClaimProcs.ComputeBaseEst(cp,ProcCur.ProcFee,ProcCur.ToothNum,ProcCur.CodeNum,plan,patPlanNum,benList,
 					HistList,LoopList,PatPlanList,paidOtherInsTotal,paidOtherInsTotal,PatCur.Age,writeOffOtherIns);	
 			}
 			FormClaimProc FormC=new FormClaimProc(cp,ProcCur,FamCur,PatCur,PlanList,HistList,ref LoopList,PatPlanList);
