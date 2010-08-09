@@ -24,7 +24,7 @@
 		<asp:UpdatePanel ID="UpdatePanel1" runat="server">
 			<ContentTemplate>
 				<asp:Panel ID="Panel1" runat="server" Width="680px" HorizontalAlign="Left" BorderColor="White"
-					BorderWidth="60px" Style="border-bottom: 20px;">
+					BorderWidth="60px" Style="border-bottom: 20px;" BackColor="White">
 					<asp:Panel ID="PanelHeading1" runat="server" HorizontalAlign="Center">
 						<asp:Label ID="LabelHeading1" runat="server" Text="PATIENT INFORMATION" Font-Bold="True"></asp:Label>
 						<br />
@@ -43,15 +43,59 @@
 					</asp:Panel>
 					<div style="height: 10px">
 					</div>
-					<asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="TextBoxName"
-						ErrorMessage="Name is a required field" Display="None" SetFocusOnError="True"></asp:RequiredFieldValidator>
-					<asp:ValidatorCalloutExtender ID="RequiredFieldValidator2_ValidatorCalloutExtender"
-						runat="server" Enabled="True" TargetControlID="RequiredFieldValidator2">
+
+					<%-- validators start --%>
+					
+					<%-- name validators start --%>
+						<asp:RequiredFieldValidator ID="RequiredFieldValidatorTextBoxLastName" runat="server" ControlToValidate="TextBoxLastName"
+						ErrorMessage="Last Name is a required field" Display="None" SetFocusOnError="True"></asp:RequiredFieldValidator>
+					<asp:ValidatorCalloutExtender ID="RequiredFieldValidatorTextBoxLastName_ValidatorCalloutExtender"
+						runat="server" Enabled="True" TargetControlID="RequiredFieldValidatorTextBoxLastName">
 					</asp:ValidatorCalloutExtender>
+					
+					
+					<asp:RequiredFieldValidator ID="RequiredFieldValidatorTextBoxFirstName" runat="server" ControlToValidate="TextBoxFirstName"
+						ErrorMessage="First Name is a required field" Display="None" SetFocusOnError="True"></asp:RequiredFieldValidator>
+					<asp:ValidatorCalloutExtender ID="RequiredFieldValidatorTextBoxFirstName_ValidatorCalloutExtender"
+						runat="server" Enabled="True" TargetControlID="RequiredFieldValidatorTextBoxFirstName">
+					</asp:ValidatorCalloutExtender>
+					
+					<%-- name validators end --%>
+					
+					<%-- DOB validators start --%>
+					<asp:CompareValidator ID="CompareValidatorDOB" runat="server" ErrorMessage="Invalid Date of Birth."
+						ControlToValidate="TextBoxBirthdate" Type="Date" Display="None" Operator="DataTypeCheck">
+					</asp:CompareValidator>
+					
+					<asp:RequiredFieldValidator ID="RequiredFieldValidatorDOB" runat="server" ControlToValidate="TextBoxBirthdate"
+						ErrorMessage="Birth date is required" Display="None"></asp:RequiredFieldValidator>
+					
+					<asp:ValidatorCalloutExtender ID="ValidatorCalloutExtender1" runat="server" TargetControlID="RequiredFieldValidatorDOB"
+						Enabled="true">
+					</asp:ValidatorCalloutExtender>
+					
+					<asp:ValidatorCalloutExtender ID="valCalloutDOB" runat="server" TargetControlID="CompareValidatorDOB"
+						Enabled="true">
+					</asp:ValidatorCalloutExtender>
+					
+					<%-- DOB validators end --%>
+					
+					
+					<%-- Email validators start --%>
+					<asp:RequiredFieldValidator ID="RequiredFieldValidatorTextBoxEmail" runat="server" ControlToValidate="TextBoxEmail"
+						ErrorMessage="Email is a required field" Display="None" SetFocusOnError="True"></asp:RequiredFieldValidator>
+					<asp:ValidatorCalloutExtender ID="RequiredFieldValidatorTextBoxEmail_ValidatorCalloutExtender"
+						runat="server" Enabled="True" TargetControlID="RequiredFieldValidatorTextBoxEmail">
+					</asp:ValidatorCalloutExtender>
+					
+					
+					<%-- Email validators end --%>
+					
+					<%-- validators end --%>
 					<asp:Label ID="LabelName" runat="server" Text="Name" Width="50px"></asp:Label>
-					<asp:TextBox ID="TextBoxName" runat="server" Width="140px" CssClass="textboxstyle"></asp:TextBox>
+					<asp:TextBox ID="TextBoxLastName" runat="server" Width="140px" CssClass="textboxstyle"></asp:TextBox>
 					<span style="margin-left: 10px">
-						<asp:TextBox ID="TextBoxFirst" runat="server" Width="140px" CssClass="textboxstyle"></asp:TextBox></span>
+						<asp:TextBox ID="TextBoxFirstName" runat="server" Width="140px" CssClass="textboxstyle"></asp:TextBox></span>
 					<span style="margin-left: 10px">
 						<asp:TextBox ID="TextBoxMI" runat="server" Width="140px" CssClass="textboxstyle"></asp:TextBox></span>
 					<span style="margin-left: 10px">
@@ -92,17 +136,7 @@
 						}
 					</script>
 
-					<asp:CompareValidator ID="CompareValidatorDOB" runat="server" ErrorMessage="Invalid Date of Birth."
-						ControlToValidate="TextBoxBirthdate" Type="Date" Display="None" Operator="DataTypeCheck">
-					</asp:CompareValidator>
-					<asp:RequiredFieldValidator ID="RequiredFieldValidatorDOB" runat="server" ControlToValidate="TextBoxBirthdate"
-						ErrorMessage="Birth date is required" Display="None"></asp:RequiredFieldValidator>
-					<asp:ValidatorCalloutExtender ID="ValidatorCalloutExtender1" runat="server" TargetControlID="RequiredFieldValidatorDOB"
-						Enabled="true">
-					</asp:ValidatorCalloutExtender>
-					<asp:ValidatorCalloutExtender ID="valCalloutDOB" runat="server" TargetControlID="CompareValidatorDOB"
-						Enabled="true">
-					</asp:ValidatorCalloutExtender>
+				
 					<span style="margin-left: 15px">&nbsp;</span>
 					<asp:Label ID="LabelSS" runat="server" Text="SS#:" Width="30px"></asp:Label>
 					<asp:TextBox ID="TextBoxSS" runat="server" Width="135px" CssClass="textboxstyle"></asp:TextBox>
@@ -113,7 +147,7 @@
 						<asp:ListItem>M</asp:ListItem>
 						<asp:ListItem>F</asp:ListItem>
 					</asp:RadioButtonList>
-					<span style="margin-left: 50px">&nbsp;</span>
+					<span style="margin-left: 45px">&nbsp;</span>
 					<asp:Label ID="LabelMarried" runat="server" Text="Married:" Width="40px"></asp:Label>
 					<asp:RadioButtonList ID="RadioButtonListMarried" runat="server" RepeatDirection="Horizontal"
 						RepeatLayout="Flow">
@@ -130,8 +164,8 @@
 					<asp:Label ID="LabelWirelessCarrier" runat="server" Text="Wireless Carrier"></asp:Label>
 					<asp:TextBox ID="TextBoxWirelessCarrier" runat="server" Width="125px" CssClass="textboxstyle"></asp:TextBox>
 					<br />
-					<asp:Label ID="Email" runat="server" Text="Email"></asp:Label>
-					<asp:TextBox ID="EmailTextBox" runat="server" CssClass="textboxstyle" Width="300px"></asp:TextBox>
+					<asp:Label ID="LabelEmail" runat="server" Text="Email"></asp:Label>
+					<asp:TextBox ID="TextBoxEmail" runat="server" CssClass="textboxstyle" Width="300px"></asp:TextBox>
 					<br />
 					<asp:Label ID="LabelMethod1" runat="server" Text="Preferred contact method" Width="300px"></asp:Label>
 					<asp:RadioButtonList ID="RadioButtonListMethod1" runat="server" RepeatDirection="Horizontal"
@@ -173,7 +207,7 @@
 					<br />
 					<asp:Label ID="LabelHear" runat="server" Text="How did you hear about us?"></asp:Label>
 					<br />
-					<asp:TextBox ID="TextBoxHear" runat="server" Width="680px" CssClass="textboxstyle"></asp:TextBox>
+					<asp:TextBox ID="TextBoxHear" runat="server" Width="670px" CssClass="textboxstyle"></asp:TextBox>
 					<br />
 					<asp:Label ID="LabelReferred" runat="server" Text="(If someone referred you here, please write down their name so that we can thank them.)"></asp:Label>
 					<br />
@@ -232,7 +266,7 @@
 					<asp:TextBox ID="TextBoxPolicy1Employer" runat="server" Width="135px" CssClass="textboxstyle"></asp:TextBox>
 					<span style="margin-left: 5px">&nbsp;</span>
 					<asp:Label ID="LabelPolicy1GroupName" runat="server" Text="Group Name "></asp:Label>
-					<asp:TextBox ID="TextPolicy1BoxGroupName" runat="server" Width="135px" CssClass="textboxstyle"></asp:TextBox>
+					<asp:TextBox ID="TextBoxPolicy1GroupName" runat="server" Width="135px" CssClass="textboxstyle"></asp:TextBox>
 					<span style="margin-left: 5px">&nbsp;</span>
 					<asp:Label ID="LabelPolicy1GroupNumber" runat="server" Text="Group # "></asp:Label>
 					<asp:TextBox ID="TextBoxPolicy1GroupNumber" runat="server" Width="135px" CssClass="textboxstyle"></asp:TextBox>
@@ -266,16 +300,16 @@
 					<asp:TextBox ID="TextBoxPolicy2Employer" runat="server" Width="135px" CssClass="textboxstyle"></asp:TextBox>
 					<span style="margin-left: 5px">&nbsp;</span>
 					<asp:Label ID="LabelPolicy2GroupName" runat="server" Text="Group Name "></asp:Label>
-					<asp:TextBox ID="TextPolicy2BoxGroupName" runat="server" Width="135px" CssClass="textboxstyle"></asp:TextBox>
+					<asp:TextBox ID="TextBoxPolicy2GroupName" runat="server" Width="135px" CssClass="textboxstyle"></asp:TextBox>
 					<span style="margin-left: 5px">&nbsp;</span>
 					<asp:Label ID="LabelPolicy2GroupNumber" runat="server" Text="Group # "></asp:Label>
 					<asp:TextBox ID="TextBoxPolicy2GroupNumber" runat="server" Width="135px" CssClass="textboxstyle"></asp:TextBox>
 					<br />
 					<asp:Label ID="LabelComments" runat="server" Text="Comments:"></asp:Label>
 					<br />
-					<asp:TextBox ID="TextBoxComments" runat="server" TextMode="MultiLine" Rows="3" Width="680px"
+					<asp:TextBox ID="TextBoxComments" runat="server" TextMode="MultiLine" Rows="3" Width="670px"
 						CssClass="textboxstyle" Height="36px"></asp:TextBox>
-					<asp:Label ID="LabelSubmitMessage" runat="server" Text="  "></asp:Label>
+					
 					<br />
 					<asp:UpdateProgress ID="UpdateProgress1" runat="server" AssociatedUpdatePanelID="UpdatePanel1">
 						<ProgressTemplate>
@@ -286,10 +320,18 @@
 						<asp:Button ID="Submit" runat="server" Text="SUBMIT" CssClass="buttonstyle" OnClick="Submit_Click" />
 					</asp:Panel>
 					<br />
+					
 				</asp:Panel>
+				<asp:Panel ID="Panel2" runat="server" Width="680px" HorizontalAlign="Left" BorderColor="White"
+					BorderWidth="60px" Style="border-bottom: 20px;text-align: center;" BackColor="White" 
+					Visible="False" Height="300px">
+					<br /><br /><br /><br />
+						<asp:Label ID="LabelSubmitMessage" runat="server" Text=""></asp:Label>
+		</asp:Panel>
 			</ContentTemplate>
 		</asp:UpdatePanel>
 		</form>
+		
 	</div>
 </body>
 </html>

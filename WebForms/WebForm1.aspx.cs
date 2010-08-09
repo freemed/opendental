@@ -17,10 +17,10 @@ namespace WebForms {
 			try {
 				int DentalOfficeID = 0;
 				if(Request["DentalOfficeID"] != null) {
-					DentalOfficeID = Convert.ToInt32(Request["DentalOfficeID"].ToString().Trim());
+
 					Int32.TryParse(Request["DentalOfficeID"].ToString().Trim(),out DentalOfficeID);
 				}
-				//hard code for testing only
+				//hard coded for testing only
 				DentalOfficeID=1;
 				SetPagePreferences(DentalOfficeID);
 			}
@@ -36,7 +36,7 @@ namespace WebForms {
 		private void SetPagePreferences(int DentalOfficeID) {
 			try {
 				ODWebServiceEntities db = new ODWebServiceEntities();
-				int ColorCode = 16777215; // this is the code for white
+				int ColorCode = 3896686; // this is the Color Code for the default OpenDental color
 				string Heading1 = "";
 				string Heading2= "";
 				var PrefObj = from wp in db.webforms_preference where wp.DentalOfficeID==DentalOfficeID
@@ -48,7 +48,7 @@ namespace WebForms {
 				}
 				LabelHeading1.Text=Heading1;
 				LabelHeading2.Text =Heading2;
-				Panel1.BackColor = Color.FromArgb(ColorCode);
+				bodytag.Attributes.Add("bgcolor",ColorTranslator.ToHtml(Color.FromArgb(ColorCode)));
 			}
 			catch(Exception ex) {
 				Logger.Information(ex.Message.ToString());
@@ -106,34 +106,35 @@ namespace WebForms {
 		/// </summary>
 		/// <param name="c"></param>
 		private void ExtractValue(Control c) {
-
+			
 			try {
 				if(c.GetType() == typeof(TextBox)) {
-					TextBox tbox = ((TextBox)c);
+					TextBox tbox = ((TextBox)c); 
 					if(tbox.Text.Trim()!="") {
-						FormValuesHashTable.Add(tbox.ID,tbox.Text.Trim());
+						string FieldName = tbox.ID.Remove(0,"TextBox".Length);
+						FormValuesHashTable.Add(FieldName,tbox.Text.Trim());
 					}
 				}
 
 				if(c.GetType() == typeof(RadioButtonList)) {
-					RadioButtonList rbl = ((RadioButtonList)c);
+					RadioButtonList rbl = ((RadioButtonList)c); 
+					string FieldName = rbl.ID.Remove(0,"RadioButtonList".Length);
 					if(rbl.SelectedIndex!=-1) {
-						FormValuesHashTable.Add(rbl.ID,rbl.SelectedValue);
+						FormValuesHashTable.Add(FieldName,rbl.SelectedValue);
 					}
 				}
 
 				if(c.GetType() == typeof(CheckBox)) {
 					CheckBox cbox = ((CheckBox)c);
+					string FieldName = cbox.ID.Remove(0,"CheckBox".Length);
 					if(cbox.Checked == true) {
-						FormValuesHashTable.Add(cbox.ID,cbox.Checked.ToString());
+						FormValuesHashTable.Add(FieldName,cbox.Checked.ToString());
 					}
 				}
-
 			}
 			catch(Exception ex) {
 				Logger.Information(ex.Message.ToString());
 			}
-
 		}
 
 		private void SaveFieldValuesInDB(int DentalOfficeID) {
@@ -152,9 +153,15 @@ namespace WebForms {
 				if(PrefObj.Count() > 0) {
 					PrefObj.First().webforms_sheet.Add(NewSheetObj);
 				}
+				db.SaveChanges();
+				//Panel1.Visible=false;
+				LabelSubmitMessage.Text = "Your details have been successfully submited";
+				Panel2.Visible=true;
 			}
 			catch(Exception ex) {
 				Logger.Information(ex.Message.ToString());
+				Panel1.Visible=false;
+				LabelSubmitMessage.Text = "There has been a problem submitting your details. <br /> Please contact us at the phone number mentioned on the opendental website";
 			}
 		}
 	}

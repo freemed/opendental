@@ -122,22 +122,94 @@ namespace WebForms {
         protected global::System.Web.UI.WebControls.Label LabelPersonal;
         
         /// <summary>
-        /// RequiredFieldValidator2 control.
+        /// RequiredFieldValidatorTextBoxLastName control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator2;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidatorTextBoxLastName;
         
         /// <summary>
-        /// RequiredFieldValidator2_ValidatorCalloutExtender control.
+        /// RequiredFieldValidatorTextBoxLastName_ValidatorCalloutExtender control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::AjaxControlToolkit.ValidatorCalloutExtender RequiredFieldValidator2_ValidatorCalloutExtender;
+        protected global::AjaxControlToolkit.ValidatorCalloutExtender RequiredFieldValidatorTextBoxLastName_ValidatorCalloutExtender;
+        
+        /// <summary>
+        /// RequiredFieldValidatorTextBoxFirstName control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidatorTextBoxFirstName;
+        
+        /// <summary>
+        /// RequiredFieldValidatorTextBoxFirstName_ValidatorCalloutExtender control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.ValidatorCalloutExtender RequiredFieldValidatorTextBoxFirstName_ValidatorCalloutExtender;
+        
+        /// <summary>
+        /// CompareValidatorDOB control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CompareValidator CompareValidatorDOB;
+        
+        /// <summary>
+        /// RequiredFieldValidatorDOB control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidatorDOB;
+        
+        /// <summary>
+        /// ValidatorCalloutExtender1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.ValidatorCalloutExtender ValidatorCalloutExtender1;
+        
+        /// <summary>
+        /// valCalloutDOB control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.ValidatorCalloutExtender valCalloutDOB;
+        
+        /// <summary>
+        /// RequiredFieldValidatorTextBoxEmail control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidatorTextBoxEmail;
+        
+        /// <summary>
+        /// RequiredFieldValidatorTextBoxEmail_ValidatorCalloutExtender control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.ValidatorCalloutExtender RequiredFieldValidatorTextBoxEmail_ValidatorCalloutExtender;
         
         /// <summary>
         /// LabelName control.
@@ -149,22 +221,22 @@ namespace WebForms {
         protected global::System.Web.UI.WebControls.Label LabelName;
         
         /// <summary>
-        /// TextBoxName control.
+        /// TextBoxLastName control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBoxName;
+        protected global::System.Web.UI.WebControls.TextBox TextBoxLastName;
         
         /// <summary>
-        /// TextBoxFirst control.
+        /// TextBoxFirstName control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBoxFirst;
+        protected global::System.Web.UI.WebControls.TextBox TextBoxFirstName;
         
         /// <summary>
         /// TextBoxMI control.
@@ -246,42 +318,6 @@ namespace WebForms {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::AjaxControlToolkit.CalendarExtender calendarExtender;
-        
-        /// <summary>
-        /// CompareValidatorDOB control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CompareValidator CompareValidatorDOB;
-        
-        /// <summary>
-        /// RequiredFieldValidatorDOB control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidatorDOB;
-        
-        /// <summary>
-        /// ValidatorCalloutExtender1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::AjaxControlToolkit.ValidatorCalloutExtender ValidatorCalloutExtender1;
-        
-        /// <summary>
-        /// valCalloutDOB control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::AjaxControlToolkit.ValidatorCalloutExtender valCalloutDOB;
         
         /// <summary>
         /// LabelSS control.
@@ -392,22 +428,22 @@ namespace WebForms {
         protected global::System.Web.UI.WebControls.TextBox TextBoxWirelessCarrier;
         
         /// <summary>
-        /// Email control.
+        /// LabelEmail control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Email;
+        protected global::System.Web.UI.WebControls.Label LabelEmail;
         
         /// <summary>
-        /// EmailTextBox control.
+        /// TextBoxEmail control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox EmailTextBox;
+        protected global::System.Web.UI.WebControls.TextBox TextBoxEmail;
         
         /// <summary>
         /// LabelMethod1 control.
@@ -788,13 +824,13 @@ namespace WebForms {
         protected global::System.Web.UI.WebControls.Label LabelPolicy1GroupName;
         
         /// <summary>
-        /// TextPolicy1BoxGroupName control.
+        /// TextBoxPolicy1GroupName control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextPolicy1BoxGroupName;
+        protected global::System.Web.UI.WebControls.TextBox TextBoxPolicy1GroupName;
         
         /// <summary>
         /// LabelPolicy1GroupNumber control.
@@ -959,13 +995,13 @@ namespace WebForms {
         protected global::System.Web.UI.WebControls.Label LabelPolicy2GroupName;
         
         /// <summary>
-        /// TextPolicy2BoxGroupName control.
+        /// TextBoxPolicy2GroupName control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextPolicy2BoxGroupName;
+        protected global::System.Web.UI.WebControls.TextBox TextBoxPolicy2GroupName;
         
         /// <summary>
         /// LabelPolicy2GroupNumber control.
@@ -1004,15 +1040,6 @@ namespace WebForms {
         protected global::System.Web.UI.WebControls.TextBox TextBoxComments;
         
         /// <summary>
-        /// LabelSubmitMessage control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label LabelSubmitMessage;
-        
-        /// <summary>
         /// UpdateProgress1 control.
         /// </summary>
         /// <remarks>
@@ -1038,5 +1065,23 @@ namespace WebForms {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button Submit;
+        
+        /// <summary>
+        /// Panel2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel Panel2;
+        
+        /// <summary>
+        /// LabelSubmitMessage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label LabelSubmitMessage;
     }
 }

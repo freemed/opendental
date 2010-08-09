@@ -1,8 +1,12 @@
-﻿///The following code uses the of Enterprise Library 
-///Logging Application Block without he hassle of configuration 
+﻿///Dennis: There are far too many intricacies for the Enterprise library  all of which would be an overkill if througly explored.
+///At this stge all I needed was simple logging to a flat files. If needed the more features could be added later.
+/// The following code has being pieced together from the web uses the of Enterprise Library Logging Application Block without the hassle of configuration 
 ///setting in the config file. It shows two listeners, a flat file 
-///listener and the event log listener. Errors go to the Event Log 
-///and everything else to file:
+///listener and the event log listener. Errors go to the Event Log - i.e if the code pertaining to it is uncomented.
+///and everything else to file
+///To compile this code the Enterprise library should installed from http://www.microsoft.com/downloads/details.aspx?familyid=1643758B-2986-47F7-B529-3E41584B6CE5&displaylang=en
+
+
 
 using System;
 using System.Configuration;
@@ -61,7 +65,7 @@ namespace WebForms {
 
 
 		/// <summary>
-		/// Writes an Error to the log.dennis - uncomment method below to enable Error()
+		/// Writes an Error to the log. Dennis - uncomment method below to enable Error()
 		/// </summary>
 		/// <param name="message">Error Message</param>
 		/*
