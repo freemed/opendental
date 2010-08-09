@@ -2,9 +2,11 @@ using System;
 using System.Drawing;
 using System.Collections;
 using System.ComponentModel;
+using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using OpenDentBusiness;
+using CodeBase;
 
 namespace OpenDental{
 	/// <summary></summary>
@@ -31,6 +33,8 @@ namespace OpenDental{
 		private OpenDental.UI.Button butChange;
 		private CheckBox checkShowMsi;
 		private Label label10;
+		private Label label11;
+		private OpenDental.UI.Button butValidate;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -79,8 +83,6 @@ namespace OpenDental{
 			this.textMultiple = new System.Windows.Forms.TextBox();
 			this.label5 = new System.Windows.Forms.Label();
 			this.label6 = new System.Windows.Forms.Label();
-			this.butOK = new OpenDental.UI.Button();
-			this.butCancel = new OpenDental.UI.Button();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.textWebProxyPassword = new System.Windows.Forms.TextBox();
 			this.label9 = new System.Windows.Forms.Label();
@@ -88,22 +90,26 @@ namespace OpenDental{
 			this.label8 = new System.Windows.Forms.Label();
 			this.textWebProxyAddress = new System.Windows.Forms.TextBox();
 			this.label7 = new System.Windows.Forms.Label();
-			this.butChange = new OpenDental.UI.Button();
 			this.checkShowMsi = new System.Windows.Forms.CheckBox();
 			this.label10 = new System.Windows.Forms.Label();
+			this.label11 = new System.Windows.Forms.Label();
+			this.butValidate = new OpenDental.UI.Button();
+			this.butChange = new OpenDental.UI.Button();
+			this.butOK = new OpenDental.UI.Button();
+			this.butCancel = new OpenDental.UI.Button();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// textWebsitePath
 			// 
-			this.textWebsitePath.Location = new System.Drawing.Point(192,69);
+			this.textWebsitePath.Location = new System.Drawing.Point(249,69);
 			this.textWebsitePath.Name = "textWebsitePath";
 			this.textWebsitePath.Size = new System.Drawing.Size(434,20);
 			this.textWebsitePath.TabIndex = 36;
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(12,70);
+			this.label3.Location = new System.Drawing.Point(69,70);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(180,19);
 			this.label3.TabIndex = 37;
@@ -113,7 +119,7 @@ namespace OpenDental{
 			// textRegKey
 			// 
 			this.textRegKey.Font = new System.Drawing.Font("Courier New",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.textRegKey.Location = new System.Drawing.Point(192,211);
+			this.textRegKey.Location = new System.Drawing.Point(249,211);
 			this.textRegKey.Name = "textRegKey";
 			this.textRegKey.ReadOnly = true;
 			this.textRegKey.Size = new System.Drawing.Size(193,20);
@@ -123,7 +129,7 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(12,212);
+			this.label2.Location = new System.Drawing.Point(69,212);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(180,19);
 			this.label2.TabIndex = 41;
@@ -132,7 +138,7 @@ namespace OpenDental{
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(464,212);
+			this.label4.Location = new System.Drawing.Point(521,212);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(204,33);
 			this.label4.TabIndex = 42;
@@ -140,14 +146,14 @@ namespace OpenDental{
 			// 
 			// textUpdateServerAddress
 			// 
-			this.textUpdateServerAddress.Location = new System.Drawing.Point(192,31);
+			this.textUpdateServerAddress.Location = new System.Drawing.Point(249,31);
 			this.textUpdateServerAddress.Name = "textUpdateServerAddress";
 			this.textUpdateServerAddress.Size = new System.Drawing.Size(434,20);
 			this.textUpdateServerAddress.TabIndex = 43;
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(12,32);
+			this.label1.Location = new System.Drawing.Point(69,32);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(180,19);
 			this.label1.TabIndex = 44;
@@ -157,7 +163,7 @@ namespace OpenDental{
 			// textMultiple
 			// 
 			this.textMultiple.Font = new System.Drawing.Font("Courier New",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.textMultiple.Location = new System.Drawing.Point(192,248);
+			this.textMultiple.Location = new System.Drawing.Point(249,248);
 			this.textMultiple.Multiline = true;
 			this.textMultiple.Name = "textMultiple";
 			this.textMultiple.Size = new System.Drawing.Size(266,41);
@@ -165,7 +171,7 @@ namespace OpenDental{
 			// 
 			// label5
 			// 
-			this.label5.Location = new System.Drawing.Point(12,249);
+			this.label5.Location = new System.Drawing.Point(69,249);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(180,40);
 			this.label5.TabIndex = 46;
@@ -174,41 +180,11 @@ namespace OpenDental{
 			// 
 			// label6
 			// 
-			this.label6.Location = new System.Drawing.Point(464,248);
+			this.label6.Location = new System.Drawing.Point(521,248);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(210,41);
 			this.label6.TabIndex = 47;
 			this.label6.Text = "Separate with commas.  Do not include this database.";
-			// 
-			// butOK
-			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(553,341);
-			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,26);
-			this.butOK.TabIndex = 1;
-			this.butOK.Text = "&OK";
-			this.butOK.Click += new System.EventHandler(this.butOK_Click);
-			// 
-			// butCancel
-			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(553,382);
-			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,26);
-			this.butCancel.TabIndex = 0;
-			this.butCancel.Text = "&Cancel";
-			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
 			// groupBox1
 			// 
@@ -218,7 +194,7 @@ namespace OpenDental{
 			this.groupBox1.Controls.Add(this.label8);
 			this.groupBox1.Controls.Add(this.textWebProxyAddress);
 			this.groupBox1.Controls.Add(this.label7);
-			this.groupBox1.Location = new System.Drawing.Point(12,105);
+			this.groupBox1.Location = new System.Drawing.Point(69,105);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(614,100);
 			this.groupBox1.TabIndex = 48;
@@ -277,25 +253,10 @@ namespace OpenDental{
 			this.label7.Text = "Address";
 			this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// butChange
-			// 
-			this.butChange.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butChange.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butChange.Autosize = true;
-			this.butChange.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butChange.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butChange.CornerRadius = 4F;
-			this.butChange.Location = new System.Drawing.Point(391,209);
-			this.butChange.Name = "butChange";
-			this.butChange.Size = new System.Drawing.Size(67,23);
-			this.butChange.TabIndex = 50;
-			this.butChange.Text = "Change";
-			this.butChange.Click += new System.EventHandler(this.butChange_Click);
-			// 
 			// checkShowMsi
 			// 
 			this.checkShowMsi.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkShowMsi.Location = new System.Drawing.Point(12,307);
+			this.checkShowMsi.Location = new System.Drawing.Point(69,307);
 			this.checkShowMsi.Name = "checkShowMsi";
 			this.checkShowMsi.Size = new System.Drawing.Size(194,24);
 			this.checkShowMsi.TabIndex = 51;
@@ -305,17 +266,87 @@ namespace OpenDental{
 			// 
 			// label10
 			// 
-			this.label10.Location = new System.Drawing.Point(212,309);
+			this.label10.Location = new System.Drawing.Point(269,309);
 			this.label10.Name = "label10";
 			this.label10.Size = new System.Drawing.Size(246,19);
 			this.label10.TabIndex = 52;
 			this.label10.Text = "(most users will not check this option)";
 			this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
+			// label11
+			// 
+			this.label11.Location = new System.Drawing.Point(11,348);
+			this.label11.Name = "label11";
+			this.label11.Size = new System.Drawing.Size(237,47);
+			this.label11.TabIndex = 53;
+			this.label11.Text = "The AtoZ folder contains an UpdateFiles folder which should have current copies o" +
+    "f all the files from C:\\Program Files\\Open Dental\\\r\n";
+			this.label11.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// butValidate
+			// 
+			this.butValidate.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butValidate.Autosize = true;
+			this.butValidate.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butValidate.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butValidate.CornerRadius = 4F;
+			this.butValidate.Location = new System.Drawing.Point(249,355);
+			this.butValidate.Name = "butValidate";
+			this.butValidate.Size = new System.Drawing.Size(67,23);
+			this.butValidate.TabIndex = 54;
+			this.butValidate.Text = "Recopy";
+			this.butValidate.Click += new System.EventHandler(this.butValidate_Click);
+			// 
+			// butChange
+			// 
+			this.butChange.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butChange.Autosize = true;
+			this.butChange.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butChange.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butChange.CornerRadius = 4F;
+			this.butChange.Location = new System.Drawing.Point(448,209);
+			this.butChange.Name = "butChange";
+			this.butChange.Size = new System.Drawing.Size(67,23);
+			this.butChange.TabIndex = 50;
+			this.butChange.Text = "Change";
+			this.butChange.Click += new System.EventHandler(this.butChange_Click);
+			// 
+			// butOK
+			// 
+			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butOK.Autosize = true;
+			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butOK.CornerRadius = 4F;
+			this.butOK.Location = new System.Drawing.Point(607,341);
+			this.butOK.Name = "butOK";
+			this.butOK.Size = new System.Drawing.Size(75,26);
+			this.butOK.TabIndex = 1;
+			this.butOK.Text = "&OK";
+			this.butOK.Click += new System.EventHandler(this.butOK_Click);
+			// 
+			// butCancel
+			// 
+			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butCancel.Autosize = true;
+			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.CornerRadius = 4F;
+			this.butCancel.Location = new System.Drawing.Point(607,382);
+			this.butCancel.Name = "butCancel";
+			this.butCancel.Size = new System.Drawing.Size(75,26);
+			this.butCancel.TabIndex = 0;
+			this.butCancel.Text = "&Cancel";
+			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
+			// 
 			// FormUpdateSetup
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(680,433);
+			this.ClientSize = new System.Drawing.Size(734,433);
+			this.Controls.Add(this.butValidate);
+			this.Controls.Add(this.label11);
 			this.Controls.Add(this.label10);
 			this.Controls.Add(this.checkShowMsi);
 			this.Controls.Add(this.butChange);
@@ -403,6 +434,34 @@ namespace OpenDental{
 			}
 		}
 
+		private void butValidate_Click(object sender,EventArgs e) {
+			if(!PrefC.UsingAtoZfolder) {
+				MsgBox.Show(this,"Not using AtoZ folders, so UpdateFiles folder does not exist.");
+				return;
+			}
+			string folderUpdate=ODFileUtils.CombinePaths(ImageStore.GetPreferredImagePath(),"UpdateFiles");
+			Version currentVersion=new Version(Application.ProductVersion);
+			//identify the ideal situation where everything is already in place and no copy is needed.
+			if(Directory.Exists(folderUpdate)) {
+				string filePath=ODFileUtils.CombinePaths(folderUpdate,"Manifest.txt");
+				if(File.Exists(filePath)) {
+					string fileText=File.ReadAllText(filePath);
+					if(fileText==currentVersion.ToString(3)) {
+						if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"According to the information in UpdateFiles\\Manifest.txt, the UpdateFiles folder is current.  Recopy anyway?")) {
+							return;
+						}
+					}
+				}
+			}
+			Cursor=Cursors.WaitCursor;
+			if(!PrefL.CopyFromHereToUpdateFiles(currentVersion)) {
+				Cursor=Cursors.Default;
+				return;
+			}
+			Cursor=Cursors.Default;
+			MsgBox.Show(this,"Recopied.");
+		}
+
 		private void butOK_Click(object sender, System.EventArgs e) {
 			if(textRegKey.Text!="" 
 				&& !Regex.IsMatch(textRegKey.Text,@"^[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$")
@@ -442,6 +501,8 @@ namespace OpenDental{
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 		
 

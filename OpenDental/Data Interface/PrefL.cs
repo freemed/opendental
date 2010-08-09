@@ -33,6 +33,53 @@ namespace OpenDental {
 			return ConvertDB(false,Application.ProductVersion);
 		}
 
+		public static bool CopyFromHereToUpdateFiles(Version currentVersion) {
+			if(!PrefC.UsingAtoZfolder) {
+				return true;//not using AtoZ, so no place to stash the files.
+			}
+			string folderUpdate=ODFileUtils.CombinePaths(ImageStore.GetPreferredImagePath(),"UpdateFiles");
+			if(Directory.Exists(folderUpdate)) {
+				try {
+					Directory.Delete(folderUpdate,true);
+				}
+				catch {
+					MessageBox.Show(Lan.g("Prefs","Please delete this folder and then try again: ")+folderUpdate);
+					return false;
+				}
+				//wait a bit so that CreateDirectory won't malfunction.
+				DateTime now=DateTime.Now;
+				while(Directory.Exists(folderUpdate) && DateTime.Now < now.AddSeconds(10)) {//up to 10 seconds
+					Application.DoEvents();
+				}
+				if(Directory.Exists(folderUpdate)) {
+					MessageBox.Show(Lan.g("Prefs","Please delete this folder and then try again: ")+folderUpdate);
+					return false;
+				}
+			}
+			Directory.CreateDirectory(folderUpdate);
+			DirectoryInfo dirInfo=new DirectoryInfo(Application.StartupPath);
+			FileInfo[] appfiles=dirInfo.GetFiles();
+			for(int i=0;i<appfiles.Length;i++) {
+				if(appfiles[i].Name=="FreeDentalConfig.xml") {
+					continue;//skip this one.
+				}
+				if(appfiles[i].Name=="OpenDentalServerConfig.xml") {
+					continue;//skip also
+				}
+				if(appfiles[i].Name.StartsWith("openlog")) {
+					continue;//these can be big and are irrelevant
+				}
+				if(appfiles[i].Name.Contains("__")) {//double underscore
+					continue;//So that plugin dlls can purposely skip the file copy.
+				}
+				//include UpdateFileCopier
+				File.Copy(appfiles[i].FullName,ODFileUtils.CombinePaths(folderUpdate,appfiles[i].Name));
+			}
+			//Create a simple manifest file so that we know what version the files are for.
+			File.WriteAllText(ODFileUtils.CombinePaths(folderUpdate,"Manifest.txt"),currentVersion.ToString(3));
+			return true;
+		}
+
 		///<summary>Called in two places.  Once from FormOpenDental.PrefsStartup, and also from FormBackups after a restore.</summary>
 		public static bool CheckProgramVersion() {
 			if(PrefC.GetBool(PrefName.UpdateWindowShowsClassicView)) {
@@ -62,43 +109,10 @@ namespace OpenDental {
 				//In both 2a and 2b, we already downloaded Setup file to correct location for this db, so skip 1 above.
 				//This computer just performed an update, but none of the other computers has updated yet.
 				//So attempt to stash all files that are in the Application directory.
-				if(PrefC.UsingAtoZfolder) {
-					string folderUpdate=ODFileUtils.CombinePaths(ImageStore.GetPreferredImagePath(),"UpdateFiles");
-					if(Directory.Exists(folderUpdate)) {
-						Directory.Delete(folderUpdate,true);
-						//wait a bit so that CreateDirectory won't malfunction.
-						DateTime now=DateTime.Now;
-						while(Directory.Exists(folderUpdate) && DateTime.Now < now.AddSeconds(10)) {//up to 10 seconds
-							Application.DoEvents();
-						}
-						if(Directory.Exists(folderUpdate)){
-							MessageBox.Show("Please delete this folder and then try again: "+folderUpdate);
-							Application.Exit();
-							return false;
-						}
-					}
-					Directory.CreateDirectory(folderUpdate);
-					DirectoryInfo dirInfo=new DirectoryInfo(Application.StartupPath);
-					FileInfo[] appfiles=dirInfo.GetFiles();
-					for(int i=0;i<appfiles.Length;i++) {
-						if(appfiles[i].Name=="FreeDentalConfig.xml") {
-							continue;//skip this one.
-						}
-						if(appfiles[i].Name=="OpenDentalServerConfig.xml") {
-							continue;//skip also
-						}
-						if(appfiles[i].Name.StartsWith("openlog")) {
-							continue;//these can be big and are irrelevant
-						}
-						if(appfiles[i].Name.Contains("__")) {//double underscore
-							continue;//So that plugin dlls can purposely skip the file copy.
-						}
-						//include UpdateFileCopier
-						File.Copy(appfiles[i].FullName,ODFileUtils.CombinePaths(folderUpdate,appfiles[i].Name));
-					}
-					//Create a simple manifest file so that we know what version the files are for.
-					File.WriteAllText(ODFileUtils.CombinePaths(folderUpdate,"Manifest.txt"),currentVersion.ToString(3));
-				}//else if not used AtoZ, then no place to stash the files.
+				if(!CopyFromHereToUpdateFiles(currentVersion)) {
+					Application.Exit();
+					return false;
+				}
 				Prefs.UpdateString(PrefName.ProgramVersion,currentVersion.ToString());
 				Prefs.UpdateString(PrefName.UpdateInProgressOnComputerName,"");//now, other workstations will be allowed to update.
 				Cache.Refresh(InvalidType.Prefs);
