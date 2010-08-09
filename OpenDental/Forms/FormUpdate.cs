@@ -250,8 +250,7 @@ namespace OpenDental{
 			this.label10.Name = "label10";
 			this.label10.Size = new System.Drawing.Size(550,23);
 			this.label10.TabIndex = 44;
-			this.label10.Text = "This program Copyright 2003-2007, Jordan S. Sparks, D.M.D., Frederik Carlier, and" +
-    " others.";
+			this.label10.Text = "This program Copyright 2003-2007, Jordan S. Sparks, D.M.D.";
 			this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// label7
@@ -621,7 +620,7 @@ namespace OpenDental{
 			SetMsiVisibility();
 			labelVersion.Text=Lan.g(this,"Using Version:")+" "+Application.ProductVersion;
 			//keeps the trailing year up to date
-			this.label10.Text=Lan.g(this, "This program Copyright 2003-")+DateTime.Now.ToString("yyyy")+Lan.g(this,", Jordan S. Sparks, D.M.D., Frederik Carlier, and others.");
+			this.label10.Text=Lan.g(this, "This program Copyright 2003-")+DateTime.Now.ToString("yyyy")+Lan.g(this,", Jordan S. Sparks, D.M.D.");
 			this.label8.Text=Lan.g(this, "MySQL - Copyright 1995-")+DateTime.Now.ToString("yyyy")+Lan.g(this,", www.mysql.com");
 			if(PrefC.GetBool(PrefName.UpdateWindowShowsClassicView)){
 				panelClassic.Visible=true;
@@ -878,21 +877,22 @@ namespace OpenDental{
 			fileNameWithVers=fileNameWithVers.Replace(".","_");//6_9_23
 			fileNameWithVers="Setup_"+fileNameWithVers+".exe";//Setup_6_9_23.exe
 			string destDir=ImageStore.GetPreferredImagePath();
-			string destDir2=null;
+			string destPath2=null;
 			if(destDir==null) {//Not using A to Z folders?
 				destDir=Path.GetTempPath();
 				//destDir2=null;//already null
 			}
-			else {
-				destDir2=ODFileUtils.CombinePaths(destDir,"SetupFiles");
-				if(!Directory.Exists(destDir2)) {
-					Directory.CreateDirectory(destDir2);
+			else {//using A to Z folders.
+				destPath2=ODFileUtils.CombinePaths(destDir,"SetupFiles");
+				if(!Directory.Exists(destPath2)) {
+					Directory.CreateDirectory(destPath2);
 				}
+				destPath2=ODFileUtils.CombinePaths(destPath2,fileNameWithVers);
 			}
 			DownloadInstallPatchFromURI(PrefC.GetString(PrefName.UpdateWebsitePath)+buildAvailableCode+"/"+patchName,//Source URI
 				ODFileUtils.CombinePaths(destDir,patchName),//Local destination file.
 				true,true,
-				ODFileUtils.CombinePaths(destDir2,patchName));//second destination file.
+				destPath2);//second destination file.  Might be null.
 		}
 
 		private void butInstallStable_Click(object sender,EventArgs e) {
@@ -902,20 +902,21 @@ namespace OpenDental{
 			fileNameWithVers=fileNameWithVers.Replace(".","_");
 			fileNameWithVers="Setup_"+fileNameWithVers+".exe";
 			string destDir=ImageStore.GetPreferredImagePath();
-			string destDir2=null;
+			string destPath2=null;
 			if(destDir==null) {//Not using A to Z folders?
 				destDir=Path.GetTempPath();
 			}
 			else {
-				destDir2=ODFileUtils.CombinePaths(destDir,"SetupFiles");
-				if(!Directory.Exists(destDir2)) {
-					Directory.CreateDirectory(destDir2);
+				destPath2=ODFileUtils.CombinePaths(destDir,"SetupFiles");
+				if(!Directory.Exists(destPath2)) {
+					Directory.CreateDirectory(destPath2);
 				}
+				destPath2=ODFileUtils.CombinePaths(destPath2,fileNameWithVers);
 			}
 			DownloadInstallPatchFromURI(PrefC.GetString(PrefName.UpdateWebsitePath)+stableAvailableCode+"/"+patchName,//Source URI
 				ODFileUtils.CombinePaths(destDir,patchName),
 				true,true,
-				ODFileUtils.CombinePaths(destDir2,patchName));
+				destPath2);
 		}
 
 		private void butInstallBeta_Click(object sender,EventArgs e) {
@@ -925,20 +926,21 @@ namespace OpenDental{
 			fileNameWithVers=fileNameWithVers.Replace(".","_");
 			fileNameWithVers="Setup_"+fileNameWithVers+".exe";
 			string destDir=ImageStore.GetPreferredImagePath();
-			string destDir2=null;
+			string destPath2=null;
 			if(destDir==null) {//Not using A to Z folders?
 				destDir=Path.GetTempPath();
 			}
 			else {
-				destDir2=ODFileUtils.CombinePaths(destDir,"SetupFiles");
-				if(!Directory.Exists(destDir2)) {
-					Directory.CreateDirectory(destDir2);
+				destPath2=ODFileUtils.CombinePaths(destDir,"SetupFiles");
+				if(!Directory.Exists(destPath2)) {
+					Directory.CreateDirectory(destPath2);
 				}
+				destPath2=ODFileUtils.CombinePaths(destPath2,fileNameWithVers);
 			}
 			DownloadInstallPatchFromURI(PrefC.GetString(PrefName.UpdateWebsitePath)+betaAvailableCode+"/"+patchName,//Source URI
 				ODFileUtils.CombinePaths(destDir,patchName),
 				true,true,
-				ODFileUtils.CombinePaths(destDir2,patchName));
+				destPath2);
 		}
 
 		private void butDownMsiBuild_Click(object sender,EventArgs e) {
