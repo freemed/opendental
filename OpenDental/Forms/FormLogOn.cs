@@ -185,6 +185,9 @@ namespace OpenDental{
 		}*/
 
 		private void FillListBox(){
+			Userods.RefreshCache();
+			UserGroups.RefreshCache();
+			GroupPermissions.RefreshCache();
 			listUser.BeginUpdate();
 			listUser.Items.Clear();
 			shortList=new List<Userod>();
