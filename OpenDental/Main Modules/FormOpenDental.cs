@@ -212,6 +212,7 @@ namespace OpenDental{
 		private MenuItem menuItemPassword;
 		private MenuItem menuItem3;
 		private MenuItem menuApptFieldDefs;
+		private MenuItem menuItemWebForms;
 		private FormTerminalManager formTerminalManager;
 
 		///<summary></summary>
@@ -318,6 +319,7 @@ namespace OpenDental{
 			this.menuItem7 = new System.Windows.Forms.MenuItem();
 			this.menuItemExit = new System.Windows.Forms.MenuItem();
 			this.menuItemSettings = new System.Windows.Forms.MenuItem();
+			this.menuApptFieldDefs = new System.Windows.Forms.MenuItem();
 			this.menuItemApptRules = new System.Windows.Forms.MenuItem();
 			this.menuItemApptViews = new System.Windows.Forms.MenuItem();
 			this.menuItemAutoCodes = new System.Windows.Forms.MenuItem();
@@ -400,6 +402,7 @@ namespace OpenDental{
 			this.menuItemReqStudents = new System.Windows.Forms.MenuItem();
 			this.menuItemCustomerManage = new System.Windows.Forms.MenuItem();
 			this.menuItemMobileSync = new System.Windows.Forms.MenuItem();
+			this.menuItemWebForms = new System.Windows.Forms.MenuItem();
 			this.menuItemHelp = new System.Windows.Forms.MenuItem();
 			this.menuItemRemote = new System.Windows.Forms.MenuItem();
 			this.menuItemHelpWindows = new System.Windows.Forms.MenuItem();
@@ -422,7 +425,6 @@ namespace OpenDental{
 			this.lightSignalGrid1 = new OpenDental.UI.LightSignalGrid();
 			this.smartCardWatcher1 = new OpenDental.SmartCards.SmartCardWatcher();
 			this.timerHeartBeat = new System.Windows.Forms.Timer(this.components);
-			this.menuApptFieldDefs = new System.Windows.Forms.MenuItem();
 			this.SuspendLayout();
 			// 
 			// timerTimeIndic
@@ -554,6 +556,12 @@ namespace OpenDental{
             this.menuItemEasy});
 			this.menuItemSettings.Shortcut = System.Windows.Forms.Shortcut.CtrlS;
 			this.menuItemSettings.Text = "&Setup";
+			// 
+			// menuApptFieldDefs
+			// 
+			this.menuApptFieldDefs.Index = 0;
+			this.menuApptFieldDefs.Text = "Appointment Field Defs";
+			this.menuApptFieldDefs.Click += new System.EventHandler(this.menuItemApptFieldDefs_Click);
 			// 
 			// menuItemApptRules
 			// 
@@ -954,7 +962,8 @@ namespace OpenDental{
             this.menuItemTerminalManager,
             this.menuItemReqStudents,
             this.menuItemCustomerManage,
-            this.menuItemMobileSync});
+            this.menuItemMobileSync,
+            this.menuItemWebForms});
 			this.menuItemTools.Shortcut = System.Windows.Forms.Shortcut.CtrlU;
 			this.menuItemTools.Text = "&Tools";
 			// 
@@ -1088,6 +1097,12 @@ namespace OpenDental{
 			this.menuItemMobileSync.Index = 14;
 			this.menuItemMobileSync.Text = "Mobile Sync";
 			this.menuItemMobileSync.Click += new System.EventHandler(this.menuItemMobileSync_Click);
+			// 
+			// menuItemWebForms
+			// 
+			this.menuItemWebForms.Index = 15;
+			this.menuItemWebForms.Text = "WebForms";
+			this.menuItemWebForms.Click += new System.EventHandler(this.menuItemWebForms_Click);
 			// 
 			// menuItemHelp
 			// 
@@ -1234,12 +1249,6 @@ namespace OpenDental{
 			this.timerHeartBeat.Enabled = true;
 			this.timerHeartBeat.Interval = 180000;
 			this.timerHeartBeat.Tick += new System.EventHandler(this.timerHeartBeat_Tick);
-			// 
-			// menuApptFieldDefs
-			// 
-			this.menuApptFieldDefs.Index = 0;
-			this.menuApptFieldDefs.Text = "Appointment Field Defs";
-			this.menuApptFieldDefs.Click += new System.EventHandler(this.menuItemApptFieldDefs_Click);
 			// 
 			// FormOpenDental
 			// 
@@ -4237,6 +4246,13 @@ namespace OpenDental{
 			//This step is necessary so that graphics memory does not fill up.
 			Dispose();
 		}
+
+		private void menuItemWebForms_Click(object sender,EventArgs e) {
+			FormWebForms FormWF = new FormWebForms();
+			FormWF.ShowDialog();
+		}
+
+		
 
 		
 
