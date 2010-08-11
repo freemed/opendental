@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -144,8 +145,15 @@ namespace OpenDental{
 				if(contr.HasChildren) {
 					Fchildren(sender,contr,exclusions);
 				}
-				//ignore any controls except the types we are interested in
 				Type contrType=contr.GetType();
+				if(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft) {
+					if(contrType==typeof(GroupBox) || contrType==typeof(Panel)){
+						foreach(Control contrGb in contr.Controls){ 
+							contrGb.Location=new Point(contr.Width-contrGb.Width-contrGb.Left,contrGb.Top); 
+						} 
+					}
+				}
+				//ignore any controls except the types we are interested in
 				if(contrType!=typeof(TextBox)
 					&& contrType!=typeof(Button)
 					&& contrType!=typeof(OpenDental.UI.Button)
