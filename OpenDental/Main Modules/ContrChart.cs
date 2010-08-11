@@ -3933,6 +3933,10 @@ namespace OpenDental{
 		}
 
 		private void FillProgNotes(){
+			FillProgNotes(false);
+		}
+
+		private void FillProgNotes(bool retainSelection){
 			Plugins.HookAddCode(this,"ContrChart.FillProgNotes_begin");
 			//ArrayList selectedTeeth=new ArrayList();//integers 1-32
 			//for(int i=0;i<toothChart.SelectedTeeth.Count;i++) {
@@ -4120,7 +4124,7 @@ namespace OpenDental{
 				gridProg.ScrollValue=Chartscrollval;
 				Chartscrollval=0;
 			}
-			FillToothChart(false);
+			FillToothChart(retainSelection);
 		}
 
 		///<summary>This is, of course, called when module refreshed.  But it's also called when user sets missing teeth or tooth movements.  In that case, the Progress notes are not refreshed, so it's a little faster.  This also fills in the movement amounts.</summary>
@@ -6263,7 +6267,7 @@ namespace OpenDental{
 			}
 			checkShowOnlyFilmsAndExams.Checked = false;
 			checkShowOnlyHygieneProcs.Checked = false;
-			FillProgNotes();
+			FillProgNotes(true);
 		}
 
 		private void checkAudit_Click(object sender,EventArgs e) {
