@@ -314,35 +314,35 @@ namespace OpenDentBusiness{
 					//Perform the update of the patient table based on the family amounts summed into table 'f', and
 					//distribute the payments into the oldest balances first.
 					"SET "+
-					"p.BalOver90=CASE "+
+					"p.BalOver90=ROUND((CASE "+
 						//over 90 balance paid in full.
 						"WHEN f.TotalCredits>=f.ChargesOver90 THEN 0 "+
 						//over 90 balance partially paid or unpaid.
-						"ELSE f.ChargesOver90-f.TotalCredits END,"+			
-					"p.Bal_61_90=CASE "+
+						"ELSE f.ChargesOver90-f.TotalCredits END),2),"+
+					"p.Bal_61_90=ROUND((CASE "+
 						//61 to 90 day balance unpaid.
 						"WHEN f.TotalCredits<=f.ChargesOver90 THEN f.Charges_61_90 "+
 						//61 to 90 day balance paid in full.
 						"WHEN f.ChargesOver90+f.Charges_61_90<=f.TotalCredits THEN 0 "+
 						//61 to 90 day balance partially paid.
-						"ELSE f.ChargesOver90+f.Charges_61_90-f.TotalCredits END,"+
-					"p.Bal_31_60=CASE "+
+						"ELSE f.ChargesOver90+f.Charges_61_90-f.TotalCredits END),2),"+
+					"p.Bal_31_60=ROUND((CASE "+
 						//31 to 60 day balance unpaid.
 						"WHEN f.TotalCredits<f.ChargesOver90+f.Charges_61_90 THEN f.Charges_31_60 "+
 						//31 to 60 day balance paid in full.
 						"WHEN f.ChargesOver90+f.Charges_61_90+f.Charges_31_60<=f.TotalCredits THEN 0 "+
 						//31 to 60 day balance partially paid.
-						"ELSE f.ChargesOver90+f.Charges_61_90+f.Charges_31_60-f.TotalCredits END,"+
-					"p.Bal_0_30=CASE "+
+						"ELSE f.ChargesOver90+f.Charges_61_90+f.Charges_31_60-f.TotalCredits END),2),"+
+					"p.Bal_0_30=ROUND((CASE "+
 						//0 to 30 day balance unpaid.
 						"WHEN f.TotalCredits<f.ChargesOver90+f.Charges_61_90+f.Charges_31_60 THEN f.Charges_0_30 "+
 						//0 to 30 day balance paid in full.
 						"WHEN f.ChargesOver90+f.Charges_61_90+f.Charges_31_60+f.Charges_0_30<=f.TotalCredits THEN 0 "+
 						//0 to 30 day balance partially paid.
-						"ELSE f.ChargesOver90+f.Charges_61_90+f.Charges_31_60+f.Charges_0_30-f.TotalCredits END,"+
-					"p.BalTotal=f.BalTotal,"+
-					"p.InsEst=f.InsEst,"+
-					"p.PayPlanDue=f.PayPlanDue "+
+						"ELSE f.ChargesOver90+f.Charges_61_90+f.Charges_31_60+f.Charges_0_30-f.TotalCredits END),2),"+
+					"p.BalTotal=ROUND(f.BalTotal,2),"+
+					"p.InsEst=ROUND(f.InsEst,2),"+
+					"p.PayPlanDue=ROUND(f.PayPlanDue,2) "+
 				"WHERE p.PatNum=f.Guarantor;";//Aging calculations only apply to guarantors.
 			Db.NonQ(command);
 			command="DROP TEMPORARY TABLE IF EXISTS "+tempAgingTableName+", "+tempOdAgingTransTableName;
