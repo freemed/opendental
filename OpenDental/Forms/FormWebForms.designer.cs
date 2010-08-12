@@ -26,15 +26,15 @@ namespace OpenDental{
 			this.components = new System.ComponentModel.Container();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.label2 = new System.Windows.Forms.Label();
-			this.label3 = new System.Windows.Forms.Label();
 			this.textDateFrom = new OpenDental.ValidDate();
 			this.textDateTo = new OpenDental.ValidDate();
+			this.label3 = new System.Windows.Forms.Label();
+			this.mainMenu1 = new System.Windows.Forms.MainMenu(this.components);
+			this.menuItemSetup = new System.Windows.Forms.MenuItem();
 			this.butRetrieve = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.mainMenu1 = new System.Windows.Forms.MainMenu(this.components);
-			this.menuItemSetup = new System.Windows.Forms.MenuItem();
 			this.groupBox2.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -61,15 +61,6 @@ namespace OpenDental{
 			this.label2.Text = "From";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
-			// label3
-			// 
-			this.label3.Location = new System.Drawing.Point(201,39);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(53,18);
-			this.label3.TabIndex = 39;
-			this.label3.Text = "To";
-			this.label3.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
 			// textDateFrom
 			// 
 			this.textDateFrom.Location = new System.Drawing.Point(95,36);
@@ -84,6 +75,25 @@ namespace OpenDental{
 			this.textDateTo.Size = new System.Drawing.Size(100,20);
 			this.textDateTo.TabIndex = 44;
 			// 
+			// label3
+			// 
+			this.label3.Location = new System.Drawing.Point(201,39);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(53,18);
+			this.label3.TabIndex = 39;
+			this.label3.Text = "To";
+			this.label3.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// mainMenu1
+			// 
+			this.mainMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItemSetup});
+			// 
+			// menuItemSetup
+			// 
+			this.menuItemSetup.Index = 0;
+			this.menuItemSetup.Text = "Setup";
+			// 
 			// butRetrieve
 			// 
 			this.butRetrieve.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -92,7 +102,7 @@ namespace OpenDental{
 			this.butRetrieve.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butRetrieve.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butRetrieve.CornerRadius = 4F;
-			this.butRetrieve.Location = new System.Drawing.Point(593,48);
+			this.butRetrieve.Location = new System.Drawing.Point(593,27);
 			this.butRetrieve.Name = "butRetrieve";
 			this.butRetrieve.Size = new System.Drawing.Size(120,24);
 			this.butRetrieve.TabIndex = 5;
@@ -108,7 +118,7 @@ namespace OpenDental{
 			this.gridMain.Location = new System.Drawing.Point(24,124);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(595,383);
+			this.gridMain.Size = new System.Drawing.Size(595,362);
 			this.gridMain.TabIndex = 4;
 			this.gridMain.Title = "Patients";
 			this.gridMain.TranslationName = "TableChartOfAccounts";
@@ -121,7 +131,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(625,442);
+			this.butOK.Location = new System.Drawing.Point(625,421);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 3;
@@ -136,27 +146,17 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(625,483);
+			this.butCancel.Location = new System.Drawing.Point(625,462);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 2;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// mainMenu1
-			// 
-			this.mainMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.menuItemSetup});
-			// 
-			// menuItemSetup
-			// 
-			this.menuItemSetup.Index = 0;
-			this.menuItemSetup.Text = "Setup";
-			// 
 			// FormWebForms
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(725,534);
+			this.ClientSize = new System.Drawing.Size(725,513);
 			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.butRetrieve);
 			this.Controls.Add(this.gridMain);

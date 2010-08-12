@@ -29,6 +29,7 @@ namespace WebHostSynch {
 				Logger.Information("In correct registration key. DentalOfficeID = " + DentalOfficeID + "RegistrationKey = " + RegistrationKey);
 				DentalOfficeID=0;
 			}
+			EndDate=EndDate.AddDays(1);//if this is put in LINQ it will not work. so change date first
 			var wsfObj = from wsf in db.webforms_sheetfield 
 						 where wsf.webforms_sheet.webforms_preference.DentalOfficeID==DentalOfficeID
 						 && (StartDate <= wsf.webforms_sheet.DateTimeSubmitted && wsf.webforms_sheet.DateTimeSubmitted <= EndDate)

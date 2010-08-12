@@ -77,9 +77,9 @@ namespace OpenDental {
 								  select w;
 				ODGridRow row=new ODGridRow();
 				
-				string LastName=null;
-				string FirstName=null;
-				string BirthDate=null;
+				string LastName="";
+				string FirstName="";
+				string BirthDate="";
 
 				for(int LoopVariable1 = 0;LoopVariable1 < SingleSheet.Count();LoopVariable1++) {
 					
@@ -101,22 +101,148 @@ namespace OpenDental {
 					
 
 				}
-
+				FindPatientMatch(LastName,FirstName,BirthDate);
 				row.Cells.Add(LastName);
 				row.Cells.Add(FirstName);
 				row.Cells.Add(BirthDate);
 					
 				gridMain.Rows.Add(row);
 				gridMain.EndUpdate();
-
 			}
 
-			
+		}
 
-			string a = "You bozo!";
+
+		private void FindPatientMatch(string LastName,string FirstName,string BirthDate) {
+
+			//SaveData(ds);
+
+			//ifmatchfound
+			{
+				CreateSheet(LastName,FirstName,BirthDate);
+			}
+			//else
+			{
+				//CreatePatient
+			}
+		}
+		private void CreatePatient() {
+			Patient tempPat=new Patient();
+	/*
+			tempPat.LName      =PatCur.LName;
+			tempPat.PatStatus  =PatientStatus.Patient;
+			tempPat.Address    =PatCur.Address;
+			tempPat.Address2   =PatCur.Address2;
+			tempPat.City       =PatCur.City;
+			tempPat.State      =PatCur.State;
+			tempPat.Zip        =PatCur.Zip;
+			tempPat.HmPhone    =PatCur.HmPhone;
+			tempPat.Guarantor  =PatCur.Guarantor;
+			tempPat.CreditType =PatCur.CreditType;
+			tempPat.PriProv    =PatCur.PriProv;
+			tempPat.SecProv    =PatCur.SecProv;
+			tempPat.FeeSched   =PatCur.FeeSched;
+			tempPat.BillingType=PatCur.BillingType;
+			tempPat.AddrNote   =PatCur.AddrNote;
+			tempPat.ClinicNum  =PatCur.ClinicNum;
+			*/
+			Patients.Insert(tempPat,false);
+		}
+
+		private void CreateSheet(string LastName,string FirstName,string BirthDate) {
+
+			FormSheetPicker FormS = new FormSheetPicker();
+
+			int PatNum = 7;
+
+			SheetDef sheetDef;
+			Sheet sheet = null;//only useful if not Terminal
+
+
+				sheetDef = SheetsInternal.GetSheetDef(SheetInternalType.PatientRegistration);
+				sheet = SheetUtil.CreateSheet(sheetDef,PatNum);
+				SheetParameter.SetParameter(sheet,"PatNum",PatNum);
+				//SheetFiller.FillFields(sheet);
+				//SheetUtil.CalculateHeights(sheet, this.CreateGraphics());
+				// if (FormS.TerminalSend)
+				// {
+				sheet.InternalNote = "";//because null not ok
+				// sheet.ShowInTerminal = (byte)(Sheets.GetBiggestShowInTerminal(PatNum) + 1);
+
+				// }
+				
+				foreach(SheetField fld in sheet.SheetFields) {
+
+				
+					if(fld.FieldName == "LName") {
+						fld.FieldValue = LastName;
+					}
+						if(fld.FieldName == "FName") {
+						fld.FieldValue = FirstName;
+					}
+						if(fld.FieldName == "Birthdate") {
+						fld.FieldValue = BirthDate;
+					}
+
+				
+			}
+				Sheets.SaveNewSheet(sheet);//save each sheet.
+
+
+
+			}
+		
+	
+		private void CreateSheetsOld(DataSet ds) {
+
+			FormSheetPicker FormS = new FormSheetPicker();
+
+			int PatNum = 7;
+
+			SheetDef sheetDef;
+			Sheet sheet = null;//only useful if not Terminal
+
+			string[] columnNames = { "PatientId" };
+			DataTable dtDistinct = ds.Tables[0].DefaultView.ToTable(true,columnNames);
+
+
+			for(int i = 0;i < dtDistinct.Rows.Count;i++) {
+
+				sheetDef = SheetsInternal.GetSheetDef(SheetInternalType.PatientRegistration);
+				sheet = SheetUtil.CreateSheet(sheetDef,PatNum);
+				SheetParameter.SetParameter(sheet,"PatNum",PatNum);
+				//SheetFiller.FillFields(sheet);
+				//SheetUtil.CalculateHeights(sheet, this.CreateGraphics());
+				// if (FormS.TerminalSend)
+				// {
+				sheet.InternalNote = "";//because null not ok
+				// sheet.ShowInTerminal = (byte)(Sheets.GetBiggestShowInTerminal(PatNum) + 1);
+
+				// }
+				DataRow[] rows = ds.Tables[0].Select("PatientId=" + dtDistinct.Rows[i]["PatientId"]);
+				//FillSheetData(sheet,rows);
+				Sheets.SaveNewSheet(sheet);//save each sheet.
+
+
+
+			}
+		}
+		private void FillSheetDataOld(Sheet sheet,DataRow[] rows) {
+
+
+			foreach(SheetField fld in sheet.SheetFields) {
+				foreach(DataRow dr in rows) {
+					if(fld.FieldName == dr["FieldName"].ToString()) {
+						fld.FieldValue = dr["FieldValue"].ToString();
+					}
+
+				}
+			}
+
 
 
 		}
+
 		private void butOK_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.OK;
 		}
