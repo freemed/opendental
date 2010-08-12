@@ -2398,6 +2398,17 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="UPDATE preference SET ValueString = '7.2.7.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To7_2_12();
+		}
+
+		private static void To7_2_12() {
+			if(FromVersion<new Version("7.2.12.0")) {
+				string command;
+				command="INSERT INTO preference(PrefName,ValueString) VALUES('RecallUseEmailIfHasEmailAddress','0')";
+				Db.NonQ(command);
+				command="UPDATE preference SET ValueString = '7.2.12.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
 			To7_3_0();
 		}
 

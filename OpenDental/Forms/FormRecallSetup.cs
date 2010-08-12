@@ -44,6 +44,9 @@ namespace OpenDental{
 		private Label label4;
 		private ComboBox comboStatusEmailedConfirm;
 		private Label label5;
+		private GroupBox groupBox4;
+		private RadioButton radioUseEmailFalse;
+		private RadioButton radioUseEmailTrue;
 		private bool changed;
 
 		///<summary></summary>
@@ -106,9 +109,13 @@ namespace OpenDental{
 			this.butCancel = new OpenDental.UI.Button();
 			this.comboStatusEmailedConfirm = new System.Windows.Forms.ComboBox();
 			this.label5 = new System.Windows.Forms.Label();
+			this.groupBox4 = new System.Windows.Forms.GroupBox();
+			this.radioUseEmailFalse = new System.Windows.Forms.RadioButton();
+			this.radioUseEmailTrue = new System.Windows.Forms.RadioButton();
 			this.groupBox2.SuspendLayout();
 			this.groupBox3.SuspendLayout();
 			this.groupBox1.SuspendLayout();
+			this.groupBox4.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// textPostcardsPerSheet
@@ -144,23 +151,23 @@ namespace OpenDental{
 			this.groupBox2.Controls.Add(this.label12);
 			this.groupBox2.Controls.Add(this.textRight);
 			this.groupBox2.Controls.Add(this.label13);
-			this.groupBox2.Location = new System.Drawing.Point(687,441);
+			this.groupBox2.Location = new System.Drawing.Point(687,428);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(191,79);
+			this.groupBox2.Size = new System.Drawing.Size(191,67);
 			this.groupBox2.TabIndex = 48;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Adjust Postcard Position in Inches";
 			// 
 			// textDown
 			// 
-			this.textDown.Location = new System.Drawing.Point(110,46);
+			this.textDown.Location = new System.Drawing.Point(110,43);
 			this.textDown.Name = "textDown";
 			this.textDown.Size = new System.Drawing.Size(73,20);
 			this.textDown.TabIndex = 6;
 			// 
 			// label12
 			// 
-			this.label12.Location = new System.Drawing.Point(48,45);
+			this.label12.Location = new System.Drawing.Point(48,42);
 			this.label12.Name = "label12";
 			this.label12.Size = new System.Drawing.Size(60,20);
 			this.label12.TabIndex = 5;
@@ -169,14 +176,14 @@ namespace OpenDental{
 			// 
 			// textRight
 			// 
-			this.textRight.Location = new System.Drawing.Point(110,21);
+			this.textRight.Location = new System.Drawing.Point(110,18);
 			this.textRight.Name = "textRight";
 			this.textRight.Size = new System.Drawing.Size(73,20);
 			this.textRight.TabIndex = 4;
 			// 
 			// label13
 			// 
-			this.label13.Location = new System.Drawing.Point(48,20);
+			this.label13.Location = new System.Drawing.Point(48,17);
 			this.label13.Name = "label13";
 			this.label13.Size = new System.Drawing.Size(60,20);
 			this.label13.TabIndex = 4;
@@ -434,10 +441,40 @@ namespace OpenDental{
 			this.label5.Text = "Status for e-mailed confirmation";
 			this.label5.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
+			// groupBox4
+			// 
+			this.groupBox4.Controls.Add(this.radioUseEmailFalse);
+			this.groupBox4.Controls.Add(this.radioUseEmailTrue);
+			this.groupBox4.Location = new System.Drawing.Point(687,501);
+			this.groupBox4.Name = "groupBox4";
+			this.groupBox4.Size = new System.Drawing.Size(191,57);
+			this.groupBox4.TabIndex = 70;
+			this.groupBox4.TabStop = false;
+			this.groupBox4.Text = "Use e-mail if";
+			// 
+			// radioUseEmailFalse
+			// 
+			this.radioUseEmailFalse.Location = new System.Drawing.Point(7,34);
+			this.radioUseEmailFalse.Name = "radioUseEmailFalse";
+			this.radioUseEmailFalse.Size = new System.Drawing.Size(181,18);
+			this.radioUseEmailFalse.TabIndex = 1;
+			this.radioUseEmailFalse.Text = "E-mail is preferred recall method";
+			this.radioUseEmailFalse.UseVisualStyleBackColor = true;
+			// 
+			// radioUseEmailTrue
+			// 
+			this.radioUseEmailTrue.Location = new System.Drawing.Point(7,17);
+			this.radioUseEmailTrue.Name = "radioUseEmailTrue";
+			this.radioUseEmailTrue.Size = new System.Drawing.Size(181,18);
+			this.radioUseEmailTrue.TabIndex = 0;
+			this.radioUseEmailTrue.Text = "Has e-mail address";
+			this.radioUseEmailTrue.UseVisualStyleBackColor = true;
+			// 
 			// FormRecallSetup
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(886,649);
+			this.Controls.Add(this.groupBox4);
 			this.Controls.Add(this.comboStatusEmailedConfirm);
 			this.Controls.Add(this.label5);
 			this.Controls.Add(this.gridMain);
@@ -470,6 +507,7 @@ namespace OpenDental{
 			this.groupBox3.PerformLayout();
 			this.groupBox1.ResumeLayout(false);
 			this.groupBox1.PerformLayout();
+			this.groupBox4.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -542,6 +580,12 @@ namespace OpenDental{
 			}
 			else {
 				textMaxReminders.Text=PrefC.GetLong(PrefName.RecallMaxNumberReminders).ToString();
+			}
+			if(PrefC.GetBool(PrefName.RecallUseEmailIfHasEmailAddress)){
+				radioUseEmailTrue.Checked=true;
+			}
+			else{
+				radioUseEmailFalse.Checked=true;
 			}
 			FillGrid();
 		}
@@ -809,6 +853,12 @@ namespace OpenDental{
 			}
 			else {
 				Prefs.UpdateLong(PrefName.RecallMaxNumberReminders,PIn.Long(textMaxReminders.Text));
+			}
+			if(radioUseEmailTrue.Checked){
+				Prefs.UpdateBool(PrefName.RecallUseEmailIfHasEmailAddress,true);
+			}
+			else{
+				Prefs.UpdateBool(PrefName.RecallUseEmailIfHasEmailAddress,false);
 			}
 			changed=true;
 			DialogResult=DialogResult.OK;

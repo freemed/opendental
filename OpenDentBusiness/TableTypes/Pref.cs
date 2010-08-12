@@ -219,6 +219,8 @@ namespace OpenDentBusiness {
 		RecallTypeSpecialProphy,
 		///<summary>Comma-delimited list. FK to recalltype.RecallTypeNum.</summary>
 		RecallTypesShowingInList,
+		///<summary>If false, then it will only use email in the recall list if email is the preferred recall method.</summary>
+		RecallUseEmailIfHasEmailAddress,
 		RegistrationKey,
 		RegistrationKeyIsDisabled,
 		RegistrationNumberClaim,
