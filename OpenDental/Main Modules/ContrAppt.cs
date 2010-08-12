@@ -2015,15 +2015,20 @@ namespace OpenDental{
 						row=DS.Tables["Appointments"].Rows[i];
 						break;
 					}
-				}
-				if(row==null){
-					row=Appointments.RefreshOneApt(aptNums[a],false).Tables["Appointments"].Rows[0];
+				} 
+				DataTable tableApptFields=DS.Tables["ApptFields"];
+				if(row==null) {
+					DataTable tableAppts=Appointments.RefreshOneApt(aptNums[a],false).Tables["Appointments"];
+					row=tableAppts.Rows[0];
 					if(row["AptStatus"].ToString()=="6") {//planned
 						//then do it again the right way
-						row=Appointments.RefreshOneApt(aptNums[a],true).Tables["Appointments"].Rows[0];
+						tableAppts=Appointments.RefreshOneApt(aptNums[a],true).Tables["Appointments"];
+						row=tableAppts.Rows[0];
 					}
+					//The appt fields are not in DS.Tables["ApptFields"] since the appt is not visible on the schedule.
+					tableApptFields=Appointments.GetApptFields(tableAppts);
 				}
-				pinBoard.AddAppointment(row,DS.Tables["ApptFields"]);
+				pinBoard.AddAppointment(row,tableApptFields);
 			}
 			//deal with this later:
 			//try{
@@ -2330,6 +2335,13 @@ namespace OpenDental{
 				aptCur.AptStatus=ApptStatus.Scheduled;
 				try{
 					Appointments.Insert(aptCur);//now, aptnum is different.
+					for(int i=0;i<pinBoard.SelectedAppt.TableApptFields.Rows.Count;i++) {//Duplicate the appointment fields.
+						ApptField apptField=new ApptField();
+						apptField.AptNum=aptCur.AptNum;
+						apptField.FieldName=PIn.String(pinBoard.SelectedAppt.TableApptFields.Rows[i]["FieldName"].ToString());
+						apptField.FieldValue=PIn.String(pinBoard.SelectedAppt.TableApptFields.Rows[i]["FieldValue"].ToString());
+						ApptFields.Insert(apptField);
+					}
 				}
 				catch(ApplicationException ex){
 					MessageBox.Show(ex.Message);
