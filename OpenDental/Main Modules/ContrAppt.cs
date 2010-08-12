@@ -3633,6 +3633,7 @@ namespace OpenDental{
 			//recHeight+=ContrApptSheet.Lh*6;
       imageRect = new Rectangle(recX,recY,recWidth,recHeight);
 			imageTemp=ContrApptSheet2.Shadow.Clone(imageRect,PixelFormat.DontCare);  //clones image and sets size to only show the time open for that day
+			Clipboard.SetDataObject(imageTemp);
 			int horRes=100;
 			int vertRes=100;
 			if(imageTemp.Width>775)  {
