@@ -310,23 +310,27 @@ namespace OpenDentBusiness{
 				row["billingType"]=DefC.GetName(DefCat.BillingTypes,PIn.Long(rawtable.Rows[i]["BillingType"].ToString()));
 				contmeth=(ContactMethod)PIn.Long(rawtable.Rows[i]["PreferRecallMethod"].ToString());
 				if(contmeth==ContactMethod.None){
-					/*if(groupByFamilies){
-						if(rawtable.Rows[i]["_guarEmail"].ToString() != "") {//since there is an email,
-							row["contactMethod"]=rawtable.Rows[i]["_guarEmail"].ToString();
+					if(!PrefC.GetBool(PrefName.RecallUseEmailIfHasEmailAddress)){//if user only wants to use email if contact method is email (it isn't for this patient)
+						row["contactMethod"]=Lans.g("FormRecallList","Hm:")+rawtable.Rows[i]["HmPhone"].ToString();
+					}
+					else{//if user wants to use email if there is an email address
+						if(groupByFamilies){
+							if(rawtable.Rows[i]["_guarEmail"].ToString() != "") {//since there is an email,
+								row["contactMethod"]=rawtable.Rows[i]["_guarEmail"].ToString();
+							}
+							else{
+								row["contactMethod"]=Lans.g("FormRecallList","Hm:")+rawtable.Rows[i]["HmPhone"].ToString();
+							}
 						}
 						else{
-							row["contactMethod"]=Lans.g("FormRecallList","Hm:")+rawtable.Rows[i]["HmPhone"].ToString();
+							if(rawtable.Rows[i]["Email"].ToString() != "") {//since there is an email,
+								row["contactMethod"]=rawtable.Rows[i]["Email"].ToString();
+							}
+							else{
+								row["contactMethod"]=Lans.g("FormRecallList","Hm:")+rawtable.Rows[i]["HmPhone"].ToString();
+							}
 						}
 					}
-					else{
-						if(rawtable.Rows[i]["Email"].ToString() != "") {//since there is an email,
-							row["contactMethod"]=rawtable.Rows[i]["Email"].ToString();
-						}
-						else{
-							row["contactMethod"]=Lans.g("FormRecallList","Hm:")+rawtable.Rows[i]["HmPhone"].ToString();
-						}
-					}*/
-					row["contactMethod"]=Lans.g("FormRecallList","Hm:")+rawtable.Rows[i]["HmPhone"].ToString();
 				}
 				if(contmeth==ContactMethod.HmPhone){
 					row["contactMethod"]=Lans.g("FormRecallList","Hm:")+rawtable.Rows[i]["HmPhone"].ToString();
