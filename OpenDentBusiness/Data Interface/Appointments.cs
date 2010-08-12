@@ -1506,6 +1506,9 @@ namespace OpenDentBusiness{
 			//we will not reset item orders here
 			command="DELETE FROM appointment WHERE AptNum = "+POut.Long(aptNum);
 			Db.NonQ(command);
+			//apptfield
+			command="DELETE FROM apptfield WHERE AptNum = "+POut.Long(aptNum);
+			Db.NonQ(command);
 			DeletedObjects.SetDeleted(DeletedObjectType.Appointment,aptNum);
 		}
 
