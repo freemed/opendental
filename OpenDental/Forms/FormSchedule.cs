@@ -865,7 +865,7 @@ namespace OpenDental{
 				for(int i=0;i<SchedList.Count;i++) {
 					sched=SchedList[i].Copy();
 					if(isWeek) {
-						sched.SchedDate=sched.SchedDate.AddDays((weekDelta+r)*7);
+						sched.SchedDate=sched.SchedDate.AddDays((weekDelta+r)*7).AddHours(1).Date;
 					}
 					else {
 						sched.SchedDate=dateSelectedStart.AddDays(dayDelta);
