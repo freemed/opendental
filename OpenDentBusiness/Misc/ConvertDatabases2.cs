@@ -2406,9 +2406,14 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				string command;
 				command="ALTER TABLE patient CHANGE SchoolName SchoolName varchar(255) NOT NULL";
 				Db.NonQ(command);
-
-
-
+				command="ALTER TABLE sheet ADD IsWebForm tinyint NOT NULL";
+				Db.NonQ(command);
+				command="INSERT INTO preference(PrefName,ValueString) VALUES('WebFormsBorderColor','')";
+				Db.NonQ(command);
+				command="INSERT INTO preference(PrefName,ValueString) VALUES('WebFormsHeading1','')";
+				Db.NonQ(command);
+				command="INSERT INTO preference(PrefName,ValueString) VALUES('WebFormsHeading2','')";
+				Db.NonQ(command);
 
 
 
@@ -2435,8 +2440,4 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 				
 				
-				
-
 			
-
-				

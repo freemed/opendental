@@ -23,13 +23,15 @@ namespace WebHostSynch {
 
 
 		[WebMethod]
-		public List<webforms_sheetfield> GetSheetData(int DentalOfficeID,string RegistrationKey) {
+		public List<webforms_sheetfield> GetSheetData(int DentalOfficeID,string RegistrationKey,DateTime StartDate,DateTime EndDate) {
 			ODWebServiceEntities db = new ODWebServiceEntities();
-			if(CheckRegistrationKey(RegistrationKey)==true) {
-				//Logger.Information("In correct registration key. DentalOfficeID = " + DentalOfficeID + "RegistrationKey = " + RegistrationKey);
-				//DentalOfficeID=0;
+			if(CheckRegistrationKey(RegistrationKey)==false) {
+				Logger.Information("In correct registration key. DentalOfficeID = " + DentalOfficeID + "RegistrationKey = " + RegistrationKey);
+				DentalOfficeID=0;
 			}
-			var wsfObj = from wsf in db.webforms_sheetfield where wsf.webforms_sheet.webforms_preference.DentalOfficeID==DentalOfficeID
+			var wsfObj = from wsf in db.webforms_sheetfield 
+						 where wsf.webforms_sheet.webforms_preference.DentalOfficeID==DentalOfficeID
+						 && (StartDate <= wsf.webforms_sheet.DateTimeSubmitted && wsf.webforms_sheet.DateTimeSubmitted <= EndDate)
 						 select wsf;
 			return wsfObj.ToList();
 

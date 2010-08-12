@@ -3646,6 +3646,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
+    <Compile Include="Web References\WebHostSynch\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Bridges\FormTrophyNamePick.resx">
@@ -4133,6 +4138,14 @@
     <Content Include="ReportingForRdl\Allocators\MyAllocator1\Images\SnuffLight8.gif" />
     <Content Include="Resources\Anesth.gif" />
     <Content Include="Resources\arrowRightTriangle.gif" />
+    <None Include="Web References\WebHostSynch\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\WebHostSynch\webforms_sheetfield.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\WebHostSynch\WebHostSynch.disco" />
     <None Include="ReportingForRdl\Allocators\ClassDiagram_Allocators.cd" />
     <None Include="ReportingForRdl\Allocators\MyAllocator1\SupportingCode\EPP_ClassDiagram.cd" />
     <None Include="Resources\arrowDownTriangle.gif" />
@@ -4200,6 +4213,7 @@
     </None>
     <None Include="Web References\com.dentalxchange.webservices\wsdl.wsdl" />
     <None Include="Web References\localhost\Service1.wsdl" />
+    <None Include="Web References\WebHostSynch\WebHostSynch.wsdl" />
   </ItemGroup>
   <ItemGroup>
     <WebReferences Include="Web References\" />
@@ -4215,6 +4229,17 @@
       </CachedDynamicPropName>
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>OpenDental_customerUpdates_Service1</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="http://localhost:2923/WebHostSynch.asmx">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\WebHostSynch\</RelPath>
+      <UpdateFromURL>http://localhost:2923/WebHostSynch.asmx</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>OpenDental_WebHostSynch_WebHostSynch</CachedSettingsPropName>
     </WebReferenceUrl>
     <WebReferenceUrl Include="http://localhost:3824/Service1.asmx">
       <UrlBehavior>Static</UrlBehavior>

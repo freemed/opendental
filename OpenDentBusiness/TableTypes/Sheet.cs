@@ -53,6 +53,8 @@ namespace OpenDentBusiness{
 		public string Description;
 		///<summary>The order that this sheet will show in the patient terminal for the patient to fill out.  Or zero if not set.</summary>
 		public byte ShowInTerminal;
+		///<summary>True if this sheet was downloaded from the webforms service.</summary>
+		public bool IsWebForm;
 		
 		public Sheet Copy(){
 			return (Sheet)this.MemberwiseClone();
