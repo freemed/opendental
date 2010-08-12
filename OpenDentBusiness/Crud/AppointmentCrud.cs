@@ -70,6 +70,7 @@ namespace OpenDentBusiness.Crud{
 				appointment.DateTimeDismissed= PIn.DateT (table.Rows[i]["DateTimeDismissed"].ToString());
 				appointment.InsPlan1         = PIn.Long  (table.Rows[i]["InsPlan1"].ToString());
 				appointment.InsPlan2         = PIn.Long  (table.Rows[i]["InsPlan2"].ToString());
+				appointment.TimeAskedToArrive= PIn.DateT (table.Rows[i]["TimeAskedToArrive"].ToString());
 				retVal.Add(appointment);
 			}
 			return retVal;
@@ -89,7 +90,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="AptNum,";
 			}
-			command+="PatNum,AptStatus,Pattern,Confirmed,TimeLocked,Op,Note,ProvNum,ProvHyg,AptDateTime,NextAptNum,UnschedStatus,IsNewPatient,ProcDescript,Assistant,ClinicNum,IsHygiene,DateTimeArrived,DateTimeSeated,DateTimeDismissed,InsPlan1,InsPlan2) VALUES(";
+			command+="PatNum,AptStatus,Pattern,Confirmed,TimeLocked,Op,Note,ProvNum,ProvHyg,AptDateTime,NextAptNum,UnschedStatus,IsNewPatient,ProcDescript,Assistant,ClinicNum,IsHygiene,DateTimeArrived,DateTimeSeated,DateTimeDismissed,InsPlan1,InsPlan2,TimeAskedToArrive) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(appointment.AptNum)+",";
 			}
@@ -116,7 +117,8 @@ namespace OpenDentBusiness.Crud{
 				+    POut.DateT (appointment.DateTimeSeated)+","
 				+    POut.DateT (appointment.DateTimeDismissed)+","
 				+    POut.Long  (appointment.InsPlan1)+","
-				+    POut.Long  (appointment.InsPlan2)+")";
+				+    POut.Long  (appointment.InsPlan2)+","
+				+    POut.DateT (appointment.TimeAskedToArrive)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -151,7 +153,8 @@ namespace OpenDentBusiness.Crud{
 				+"DateTimeSeated   =  "+POut.DateT (appointment.DateTimeSeated)+", "
 				+"DateTimeDismissed=  "+POut.DateT (appointment.DateTimeDismissed)+", "
 				+"InsPlan1         =  "+POut.Long  (appointment.InsPlan1)+", "
-				+"InsPlan2         =  "+POut.Long  (appointment.InsPlan2)+" "
+				+"InsPlan2         =  "+POut.Long  (appointment.InsPlan2)+", "
+				+"TimeAskedToArrive=  "+POut.DateT (appointment.TimeAskedToArrive)+" "
 				+"WHERE AptNum = "+POut.Long(appointment.AptNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
@@ -247,6 +250,10 @@ namespace OpenDentBusiness.Crud{
 			if(appointment.InsPlan2 != oldAppointment.InsPlan2) {
 				if(command!=""){ command+=",";}
 				command+="InsPlan2 = "+POut.Long(appointment.InsPlan2)+"";
+			}
+			if(appointment.TimeAskedToArrive != oldAppointment.TimeAskedToArrive) {
+				if(command!=""){ command+=",";}
+				command+="TimeAskedToArrive = "+POut.DateT(appointment.TimeAskedToArrive)+"";
 			}
 			if(command==""){
 				return;

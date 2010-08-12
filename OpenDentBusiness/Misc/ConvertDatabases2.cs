@@ -2414,7 +2414,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);
 				command="INSERT INTO preference(PrefName,ValueString) VALUES('WebFormsHeading2','')";
 				Db.NonQ(command);
-
+				command="ALTER TABLE appointment ADD TimeAskedToArrive datetime NOT NULL default '0001-01-01 00:00:00'";
+				Db.NonQ(command);
 
 
 
@@ -2441,3 +2442,4 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				
 				
 			
+

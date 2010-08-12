@@ -60,6 +60,9 @@ namespace OpenDentBusiness{
 		public long InsPlan1;
 		///<summary>FK to insplan.PlanNum for the secoondary insurance plan at the time the appointment is set complete. May be 0.</summary>
 		public long InsPlan2;
+		///<summary>Time. Ignore date portion.</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		public DateTime TimeAskedToArrive;
 
 		///<summary>Returns a copy of the appointment.</summary>
     public Appointment Clone(){
