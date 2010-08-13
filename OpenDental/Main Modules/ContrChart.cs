@@ -266,6 +266,7 @@ namespace OpenDental{
 		private MenuItem menuItemChartSave;
 		private OpenDental.UI.Button butUp;
 		private OpenDental.UI.Button butDown;
+		private PatField[] PatFieldList;
 		private bool InitializedOnStartup;
 	
 		///<summary></summary>
@@ -3198,6 +3199,7 @@ namespace OpenDental{
 			DocumentList=Documents.GetAllWithPat(patNum);
 			ApptList=Appointments.GetForPat(patNum);
 			ToothInitialList=ToothInitials.Refresh(patNum);
+			PatFieldList=PatFields.Refresh(patNum);
 		}		
 
 		private void RefreshModuleScreen(){
@@ -3759,6 +3761,23 @@ namespace OpenDental{
 					row.Cells.Add(text);
 					row.ColorBackG=DefC.Long[(int)DefCat.MiscColors][3].ItemColor;
 					row.Tag="med";
+					gridPtInfo.Rows.Add(row);
+				}
+				//Patient info-------------------------------------------------------------------
+				row=new ODGridRow();
+				PatField field;
+				for(int i=0;i<PatFieldDefs.List.Length;i++) {
+					if(i>0) {
+						row=new ODGridRow();
+					}
+					row.Cells.Add(PatFieldDefs.List[i].FieldName);
+					field=PatFields.GetByName(PatFieldDefs.List[i].FieldName,PatFieldList);
+					if(field==null) {
+						row.Cells.Add("");
+					}
+					else {
+						row.Cells.Add(field.FieldValue);
+					}
 					gridPtInfo.Rows.Add(row);
 				}
 			}//if !eCW.enabled
