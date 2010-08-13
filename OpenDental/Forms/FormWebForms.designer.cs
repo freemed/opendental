@@ -26,12 +26,12 @@ namespace OpenDental{
 			this.components = new System.ComponentModel.Container();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.label2 = new System.Windows.Forms.Label();
-			this.textDateFrom = new OpenDental.ValidDate();
-			this.textDateTo = new OpenDental.ValidDate();
 			this.label3 = new System.Windows.Forms.Label();
 			this.mainMenu1 = new System.Windows.Forms.MainMenu(this.components);
 			this.menuItemSetup = new System.Windows.Forms.MenuItem();
 			this.butRetrieve = new OpenDental.UI.Button();
+			this.textDateFrom = new OpenDental.ValidDate();
+			this.textDateTo = new OpenDental.ValidDate();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
@@ -47,7 +47,7 @@ namespace OpenDental{
 			this.groupBox2.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.groupBox2.Location = new System.Drawing.Point(98,12);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(417,88);
+			this.groupBox2.Size = new System.Drawing.Size(418,88);
 			this.groupBox2.TabIndex = 44;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Date Range";
@@ -60,20 +60,6 @@ namespace OpenDental{
 			this.label2.TabIndex = 37;
 			this.label2.Text = "From";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// textDateFrom
-			// 
-			this.textDateFrom.Location = new System.Drawing.Point(95,36);
-			this.textDateFrom.Name = "textDateFrom";
-			this.textDateFrom.Size = new System.Drawing.Size(100,20);
-			this.textDateFrom.TabIndex = 43;
-			// 
-			// textDateTo
-			// 
-			this.textDateTo.Location = new System.Drawing.Point(260,36);
-			this.textDateTo.Name = "textDateTo";
-			this.textDateTo.Size = new System.Drawing.Size(100,20);
-			this.textDateTo.TabIndex = 44;
 			// 
 			// label3
 			// 
@@ -93,6 +79,7 @@ namespace OpenDental{
 			// 
 			this.menuItemSetup.Index = 0;
 			this.menuItemSetup.Text = "Setup";
+			this.menuItemSetup.Click += new System.EventHandler(this.menuItemSetup_Click);
 			// 
 			// butRetrieve
 			// 
@@ -102,12 +89,26 @@ namespace OpenDental{
 			this.butRetrieve.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butRetrieve.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butRetrieve.CornerRadius = 4F;
-			this.butRetrieve.Location = new System.Drawing.Point(593,27);
+			this.butRetrieve.Location = new System.Drawing.Point(580,6);
 			this.butRetrieve.Name = "butRetrieve";
 			this.butRetrieve.Size = new System.Drawing.Size(120,24);
-			this.butRetrieve.TabIndex = 5;
+			this.butRetrieve.TabIndex = 45;
 			this.butRetrieve.Text = "&Retrieve New Forms";
 			this.butRetrieve.Click += new System.EventHandler(this.butRetrieve_Click);
+			// 
+			// textDateFrom
+			// 
+			this.textDateFrom.Location = new System.Drawing.Point(95,36);
+			this.textDateFrom.Name = "textDateFrom";
+			this.textDateFrom.Size = new System.Drawing.Size(100,20);
+			this.textDateFrom.TabIndex = 43;
+			// 
+			// textDateTo
+			// 
+			this.textDateTo.Location = new System.Drawing.Point(260,36);
+			this.textDateTo.Name = "textDateTo";
+			this.textDateTo.Size = new System.Drawing.Size(100,20);
+			this.textDateTo.TabIndex = 44;
 			// 
 			// gridMain
 			// 
@@ -115,13 +116,14 @@ namespace OpenDental{
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(24,124);
+			this.gridMain.Location = new System.Drawing.Point(24,106);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(595,362);
+			this.gridMain.Size = new System.Drawing.Size(595,194);
 			this.gridMain.TabIndex = 4;
-			this.gridMain.Title = "Patients";
-			this.gridMain.TranslationName = "TableChartOfAccounts";
+			this.gridMain.Title = "Webforms";
+			this.gridMain.TranslationName = "TableWebforms";
+			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			// 
 			// butOK
 			// 
@@ -131,7 +133,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(625,421);
+			this.butOK.Location = new System.Drawing.Point(625,253);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 3;
@@ -146,7 +148,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(625,462);
+			this.butCancel.Location = new System.Drawing.Point(625,294);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 2;
@@ -156,9 +158,9 @@ namespace OpenDental{
 			// FormWebForms
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(725,513);
-			this.Controls.Add(this.groupBox2);
+			this.ClientSize = new System.Drawing.Size(725,345);
 			this.Controls.Add(this.butRetrieve);
+			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
@@ -177,7 +179,6 @@ namespace OpenDental{
 		private OpenDental.UI.Button butOK;
 		private OpenDental.UI.Button butCancel;
 		private OpenDental.UI.ODGrid gridMain;
-		private OpenDental.UI.Button butRetrieve;
 		private System.Windows.Forms.GroupBox groupBox2;
 		private System.Windows.Forms.Label label2;
 		private ValidDate textDateFrom;
@@ -185,5 +186,6 @@ namespace OpenDental{
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.MainMenu mainMenu1;
 		private System.Windows.Forms.MenuItem menuItemSetup;
+		private OpenDental.UI.Button butRetrieve;
 	}
 }

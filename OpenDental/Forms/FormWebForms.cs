@@ -18,17 +18,16 @@ namespace OpenDental {
 
 		}
 		private void FillGrid(){
-
-
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g(this,"Last Name"),100);
+			ODGridColumn col=new ODGridColumn(Lan.g("TableWebforms","Last Name"),100);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"First Name"),100);
+			col=new ODGridColumn(Lan.g("TableWebforms","First Name"),100);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Birth Date"),100);
+			col=new ODGridColumn(Lan.g("TableWebforms","Birth Date"),100);
 			gridMain.Columns.Add(col);
-
+			col=new ODGridColumn(Lan.g("TableWebforms","Status"),100);
+			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 
 
@@ -65,10 +64,6 @@ namespace OpenDental {
 			var SheetIdArray = wbs.ToArray();
 
 
-
-
-
-
 			// loop through each sheet
 			for(int LoopVariable = 0;LoopVariable < SheetIdArray.Length;LoopVariable++) {
 
@@ -98,14 +93,28 @@ namespace OpenDental {
 						BirthDate=FieldValue;
 					}
 
-					
-
 				}
-				FindPatientMatch(LastName,FirstName,BirthDate);
+				
+				DateTime birthDate = PIn.Date(BirthDate);
+				if(birthDate.Year==1) {
+					//log invalid birth date  format
+					
+				}
+				long PatNum=Patients.GetPatNumByNameAndBirthday(LastName,FirstName,birthDate);
+
 				row.Cells.Add(LastName);
 				row.Cells.Add(FirstName);
 				row.Cells.Add(BirthDate);
-					
+				if(PatNum==0) {
+					long NewPatNum = CreateNewPatient(LastName,FirstName,BirthDate);
+					row.Cells.Add("New Patient");
+					row.Tag=NewPatNum;
+				}
+				else {
+					CreateSheet(PatNum, LastName,FirstName,BirthDate);
+					row.Cells.Add("Imported");
+					row.Tag=PatNum;
+				}
 				gridMain.Rows.Add(row);
 				gridMain.EndUpdate();
 			}
@@ -113,52 +122,40 @@ namespace OpenDental {
 		}
 
 
-		private void FindPatientMatch(string LastName,string FirstName,string BirthDate) {
+		private long CreateNewPatient(string LastName,string FirstName,string BirthDate) {
+			Patient newPat=new Patient();
+			newPat.LName=LastName;
+			newPat.FName=FirstName;
+			newPat.Birthdate= PIn.Date(BirthDate);
 
-			//SaveData(ds);
-
-			//ifmatchfound
-			{
-				CreateSheet(LastName,FirstName,BirthDate);
-			}
-			//else
-			{
-				//CreatePatient
-			}
-		}
-		private void CreatePatient() {
-			Patient tempPat=new Patient();
 	/*
-			tempPat.LName      =PatCur.LName;
-			tempPat.PatStatus  =PatientStatus.Patient;
-			tempPat.Address    =PatCur.Address;
-			tempPat.Address2   =PatCur.Address2;
-			tempPat.City       =PatCur.City;
-			tempPat.State      =PatCur.State;
-			tempPat.Zip        =PatCur.Zip;
-			tempPat.HmPhone    =PatCur.HmPhone;
-			tempPat.Guarantor  =PatCur.Guarantor;
-			tempPat.CreditType =PatCur.CreditType;
-			tempPat.PriProv    =PatCur.PriProv;
-			tempPat.SecProv    =PatCur.SecProv;
-			tempPat.FeeSched   =PatCur.FeeSched;
-			tempPat.BillingType=PatCur.BillingType;
-			tempPat.AddrNote   =PatCur.AddrNote;
-			tempPat.ClinicNum  =PatCur.ClinicNum;
+			newPat.LName      =PatCur.LName;
+			newPat.PatStatus  =PatientStatus.Patient;
+			newPat.Address    =PatCur.Address;
+			newPat.Address2   =PatCur.Address2;
+			newPat.City       =PatCur.City;
+			newPat.State      =PatCur.State;
+			newPat.Zip        =PatCur.Zip;
+			newPat.HmPhone    =PatCur.HmPhone;
+			newPat.Guarantor  =PatCur.Guarantor;
+			newPat.CreditType =PatCur.CreditType;
+			newPat.PriProv    =PatCur.PriProv;
+			newPat.SecProv    =PatCur.SecProv;
+			newPat.FeeSched   =PatCur.FeeSched;
+			newPat.BillingType=PatCur.BillingType;
+			newPat.AddrNote   =PatCur.AddrNote;
+			newPat.ClinicNum  =PatCur.ClinicNum;
 			*/
-			Patients.Insert(tempPat,false);
+			Patients.Insert(newPat,false);
+			return newPat.PatNum;
+			
 		}
 
-		private void CreateSheet(string LastName,string FirstName,string BirthDate) {
+		private void CreateSheet(long PatNum, string LastName,string FirstName,string BirthDate) {
 
 			FormSheetPicker FormS = new FormSheetPicker();
-
-			int PatNum = 7;
-
 			SheetDef sheetDef;
 			Sheet sheet = null;//only useful if not Terminal
-
-
 				sheetDef = SheetsInternal.GetSheetDef(SheetInternalType.PatientRegistration);
 				sheet = SheetUtil.CreateSheet(sheetDef,PatNum);
 				SheetParameter.SetParameter(sheet,"PatNum",PatNum);
@@ -172,8 +169,6 @@ namespace OpenDental {
 				// }
 				
 				foreach(SheetField fld in sheet.SheetFields) {
-
-				
 					if(fld.FieldName == "LName") {
 						fld.FieldValue = LastName;
 					}
@@ -183,65 +178,10 @@ namespace OpenDental {
 						if(fld.FieldName == "Birthdate") {
 						fld.FieldValue = BirthDate;
 					}
-
 				
 			}
 				Sheets.SaveNewSheet(sheet);//save each sheet.
-
-
-
 			}
-		
-	
-		private void CreateSheetsOld(DataSet ds) {
-
-			FormSheetPicker FormS = new FormSheetPicker();
-
-			int PatNum = 7;
-
-			SheetDef sheetDef;
-			Sheet sheet = null;//only useful if not Terminal
-
-			string[] columnNames = { "PatientId" };
-			DataTable dtDistinct = ds.Tables[0].DefaultView.ToTable(true,columnNames);
-
-
-			for(int i = 0;i < dtDistinct.Rows.Count;i++) {
-
-				sheetDef = SheetsInternal.GetSheetDef(SheetInternalType.PatientRegistration);
-				sheet = SheetUtil.CreateSheet(sheetDef,PatNum);
-				SheetParameter.SetParameter(sheet,"PatNum",PatNum);
-				//SheetFiller.FillFields(sheet);
-				//SheetUtil.CalculateHeights(sheet, this.CreateGraphics());
-				// if (FormS.TerminalSend)
-				// {
-				sheet.InternalNote = "";//because null not ok
-				// sheet.ShowInTerminal = (byte)(Sheets.GetBiggestShowInTerminal(PatNum) + 1);
-
-				// }
-				DataRow[] rows = ds.Tables[0].Select("PatientId=" + dtDistinct.Rows[i]["PatientId"]);
-				//FillSheetData(sheet,rows);
-				Sheets.SaveNewSheet(sheet);//save each sheet.
-
-
-
-			}
-		}
-		private void FillSheetDataOld(Sheet sheet,DataRow[] rows) {
-
-
-			foreach(SheetField fld in sheet.SheetFields) {
-				foreach(DataRow dr in rows) {
-					if(fld.FieldName == dr["FieldName"].ToString()) {
-						fld.FieldValue = dr["FieldValue"].ToString();
-					}
-
-				}
-			}
-
-
-
-		}
 
 		private void butOK_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.OK;
@@ -266,10 +206,21 @@ namespace OpenDental {
 			FillGrid();
 		}
 		private void SetDates(){
-			
 				textDateFrom.Text=DateTime.Today.ToShortDateString();
 				textDateTo.Text=DateTime.Today.ToShortDateString();
-				
 			}
+
+		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			//MessageBox.Show("PatNum is " + (long)gridMain.Rows[e.Row].Tag);
+			long PatNum = (long)gridMain.Rows[e.Row].Tag;
+			FormPatientForms formP=new FormPatientForms();
+			formP.PatNum=PatNum;
+			formP.ShowDialog();
+		}
+
+		private void menuItemSetup_Click(object sender,EventArgs e) {
+			FormWebFormSetup formW= new FormWebFormSetup();
+			formW.ShowDialog();
+		}
 	}
 }

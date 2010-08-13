@@ -2419,11 +2419,11 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);
 				command="ALTER TABLE sheet ADD IsWebForm tinyint NOT NULL";
 				Db.NonQ(command);
-				command="INSERT INTO preference(PrefName,ValueString) VALUES('WebFormsBorderColor','')";
+				command="INSERT INTO preference(PrefName,ValueString) VALUES('WebFormsBorderColor','3896686')";
 				Db.NonQ(command);
-				command="INSERT INTO preference(PrefName,ValueString) VALUES('WebFormsHeading1','')";
+				command="INSERT INTO preference(PrefName,ValueString) VALUES('WebFormsHeading1','PATIENT INFORMATION')";
 				Db.NonQ(command);
-				command="INSERT INTO preference(PrefName,ValueString) VALUES('WebFormsHeading2','')";
+				command="INSERT INTO preference(PrefName,ValueString) VALUES('WebFormsHeading2','We are pleased to welcome you to our office. Please take a few minutes to fill out this form as completely as you can. if you have any questions we'll be glad to help you.')";
 				Db.NonQ(command);
 				command="ALTER TABLE appointment ADD TimeAskedToArrive datetime NOT NULL default '0001-01-01 00:00:00'";
 				Db.NonQ(command);
