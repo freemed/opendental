@@ -84,6 +84,26 @@ namespace OpenDentBusiness{
 			}
 		}
 
+		///<summary></summary>
+		public static bool IsClockedIn(long employeeNum) {
+			ClockEvent clockEvent=ClockEvents.GetLastEvent(employeeNum);
+			if(clockEvent==null) {//new employee
+				return false;
+			}
+			else if(clockEvent.ClockStatus==TimeClockStatus.Break) {//only incomplete breaks will have been returned.
+				//so currently on break
+				return false;
+			}
+			else {//normal clock in/out row found
+				if(clockEvent.TimeDisplayed2.Year<1880) {//already clocked in
+					return true;
+				}
+				else {//clocked out for home or lunch.
+					return false;
+				}
+			}
+		}
+
 		///<summary>Will throw an exception if already clocked in.</summary>
 		public static void ClockIn(long employeeNum) {
 			//we'll get this again, because it may have been a while and may be out of date

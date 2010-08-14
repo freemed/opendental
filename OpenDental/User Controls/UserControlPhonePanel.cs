@@ -252,7 +252,7 @@ namespace OpenDental {
 		}
 
 		private void menuItemAvailable_Click(object sender,EventArgs e) {
-			if(!ClockIn()){
+			if(!ClockIn()) {
 				return;
 			}
 			int extension=PIn.Int(tablePhone.Rows[rowI]["Extension"].ToString());
@@ -479,6 +479,9 @@ namespace OpenDental {
 				MsgBox.Show(this,"No employee at that extension.");
 				return false;
 			}
+			if(ClockEvents.IsClockedIn(employeeNum)) {
+				return true;
+			}
 			if(PrefC.GetBool(PrefName.TimecardSecurityEnabled)){
 				if(Security.CurUser.EmployeeNum!=employeeNum){
 					if(!Security.IsAuthorized(Permissions.TimecardsEditAll)){
@@ -491,7 +494,7 @@ namespace OpenDental {
 				ClockEvents.ClockIn(employeeNum);
 			}
 			catch{
-				//the only reason this will throw an exception is if already clocked in.  Fail silently.
+				//This should never happen.  Fail silently.
 				return true;
 			}
 			Employee EmpCur=Employees.GetEmp(employeeNum);
