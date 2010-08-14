@@ -232,6 +232,7 @@
     <Compile Include="InternalTools\Phones\PhoneEmpDefaults.cs" />
     <Compile Include="InternalTools\Phones\PhoneNumbers.cs" />
     <Compile Include="InternalTools\Phones\PhoneOverrides.cs" />
+    <Compile Include="InternalTools\Phones\Phones.cs" />
     <Compile Include="InternalTools\Phones\TableTypes\Phone.cs" />
     <Compile Include="InternalTools\Phones\TableTypes\PhoneEmpDefault.cs" />
     <Compile Include="InternalTools\Phones\TableTypes\PhoneNumber.cs" />

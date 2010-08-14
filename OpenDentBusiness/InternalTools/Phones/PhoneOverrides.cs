@@ -86,24 +86,21 @@ namespace OpenDentBusiness{
 				command="SELECT ClockStatus FROM employee WHERE EmployeeNum="+POut.Long(phoneCur.EmpCurrent);
 				DataTable tableEmp=Db.GetTable(command);
 				if(tableEmp.Rows.Count>0){
-					string status=tableEmp.Rows[0][0].ToString();
-					if(status=="Working"){
-						status="Available";
-					}
-					Employees.SetPhoneStatus(status,phoneCur.Extension,phoneCur.EmpCurrent);
+					ClockStatusEnum status=Phones.GetClockStatusFromEmp(tableEmp.Rows[0][0].ToString());
+					Phones.SetPhoneStatus(status,phoneCur.Extension,phoneCur.EmpCurrent);
 				}
 				//incomplete: there is no check here for whether person is already clocked out when they set this.
 				//but it's no big deal if their phone keeps ringing.
 				PhoneAsterisks.SetToDefaultRingGroups(phoneCur.Extension,phoneCur.EmpCurrent);
 			}
 			else{
-				Employees.SetPhoneStatus("Unavailable",phoneCur.Extension,phoneCur.EmpCurrent);
+				Phones.SetPhoneStatus(ClockStatusEnum.Unavailable,phoneCur.Extension,phoneCur.EmpCurrent);
 				PhoneAsterisks.SetRingGroups(phoneCur.Extension,AsteriskRingGroups.None);
 			}
 			//then the old extension for the emp.  But only if it's different.
 			long defaultExtension=Employees.GetEmp(phoneCur.EmpCurrent).PhoneExt;
 			if(defaultExtension > 0 && defaultExtension != phoneCur.Extension){
-				Employees.SetPhoneStatus("",(int)defaultExtension,0);//clear it out.
+				Phones.SetPhoneStatus(ClockStatusEnum.None,(int)defaultExtension,0);//clear it out.
 				PhoneAsterisks.SetRingGroups((int)defaultExtension,AsteriskRingGroups.None);
 			}
 			return phoneCur.PhoneOverrideNum;
@@ -128,16 +125,13 @@ namespace OpenDentBusiness{
 				command="SELECT ClockStatus FROM employee WHERE EmployeeNum="+POut.Long(phoneCur.EmpCurrent);
 				DataTable tableEmp=Db.GetTable(command);
 				if(tableEmp.Rows.Count>0){
-					string status=tableEmp.Rows[0][0].ToString();
-					if(status=="Working"){
-						status="Available";
-					}
-					Employees.SetPhoneStatus(status,phoneCur.Extension,phoneCur.EmpCurrent);
+					ClockStatusEnum status=Phones.GetClockStatusFromEmp(tableEmp.Rows[0][0].ToString());
+					Phones.SetPhoneStatus(status,phoneCur.Extension,phoneCur.EmpCurrent);
 				}
 				PhoneAsterisks.SetToDefaultRingGroups(phoneCur.Extension,phoneCur.EmpCurrent);
 			}
 			else{
-				Employees.SetPhoneStatus("Unavailable",phoneCur.Extension,phoneCur.EmpCurrent);
+				Phones.SetPhoneStatus(ClockStatusEnum.Unavailable,phoneCur.Extension,phoneCur.EmpCurrent);
 				PhoneAsterisks.SetRingGroups(phoneCur.Extension,AsteriskRingGroups.None);
 			}
 		}
@@ -156,17 +150,14 @@ namespace OpenDentBusiness{
 				command="SELECT ClockStatus FROM employee WHERE EmployeeNum="+POut.Long(empNumOriginal);
 				DataTable tableEmp=Db.GetTable(command);
 				if(tableEmp.Rows.Count>0){
-					string status=tableEmp.Rows[0][0].ToString();
-					if(status=="Working"){
-						status="Available";
-					}
-					Employees.SetPhoneStatus(status,phoneCur.Extension,empNumOriginal);
+					ClockStatusEnum status=Phones.GetClockStatusFromEmp(tableEmp.Rows[0][0].ToString());
+					Phones.SetPhoneStatus(status,phoneCur.Extension,empNumOriginal);
 					PhoneAsterisks.SetToDefaultRingGroups(phoneCur.Extension,phoneCur.EmpCurrent);
 				}
 			}
 			else{
 				//not sure what would happen here.  If no emp is assigned that extension by default, then, I guess clear it?
-				Employees.SetPhoneStatus("",phoneCur.Extension,0);
+				Phones.SetPhoneStatus(ClockStatusEnum.None,phoneCur.Extension,0);
 			}
 			//then reset the default extension for the emp.  But only if it's different.
 			long defaultExtension=Employees.GetEmp(phoneCur.EmpCurrent).PhoneExt;
@@ -174,11 +165,8 @@ namespace OpenDentBusiness{
 				command="SELECT ClockStatus FROM employee WHERE EmployeeNum="+POut.Long(phoneCur.EmpCurrent);
 				DataTable tableEmp=Db.GetTable(command);
 				if(tableEmp.Rows.Count>0){
-					string status=tableEmp.Rows[0][0].ToString();
-					if(status=="Working"){
-						status="Available";
-					}
-					Employees.SetPhoneStatus(status,(int)defaultExtension,phoneCur.EmpCurrent);
+					ClockStatusEnum status=Phones.GetClockStatusFromEmp(tableEmp.Rows[0][0].ToString());
+					Phones.SetPhoneStatus(status,(int)defaultExtension,phoneCur.EmpCurrent);
 					PhoneAsterisks.SetToDefaultRingGroups((int)defaultExtension,phoneCur.EmpCurrent);
 				}
 			}

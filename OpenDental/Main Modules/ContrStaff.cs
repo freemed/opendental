@@ -955,9 +955,9 @@ namespace OpenDental{
 			EmployeeCur.ClockStatus=Lan.g(this,"Working");;
 			Employees.Update(EmployeeCur);
 			ModuleSelected(PatCurNum);
-			if(PrefC.GetBool(PrefName.DockPhonePanelShow)){
-				Employees.SetPhoneClockStatus(EmployeeCur.EmployeeNum,"Available");
-			}
+			//if(PrefC.GetBool(PrefName.DockPhonePanelShow)){
+			//	Employees.SetPhoneClockStatus(EmployeeCur.EmployeeNum,ClockStatusEnum.Available);
+			//}
 		}
 
 		private void butClockOut_Click(object sender, System.EventArgs e) {
@@ -975,9 +975,9 @@ namespace OpenDental{
 			EmployeeCur.ClockStatus=Lan.g("enumTimeClockStatus",((TimeClockStatus)listStatus.SelectedIndex).ToString());
 			Employees.Update(EmployeeCur);
 			ModuleSelected(PatCurNum);
-			if(PrefC.GetBool(PrefName.DockPhonePanelShow)){
-				Employees.SetPhoneClockStatus(EmployeeCur.EmployeeNum,((TimeClockStatus)listStatus.SelectedIndex).ToString());
-			}
+			//if(PrefC.GetBool(PrefName.DockPhonePanelShow)){
+			//	Phones.SetPhoneClockStatus(EmployeeCur.EmployeeNum,((TimeClockStatus)listStatus.SelectedIndex).ToString());
+			//}
 		}
 
 		private void timer1_Tick(object sender, System.EventArgs e) {

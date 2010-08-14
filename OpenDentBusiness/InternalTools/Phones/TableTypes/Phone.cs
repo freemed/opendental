@@ -11,7 +11,7 @@ namespace OpenDentBusiness{
 		public int Extension;
 		///<summary></summary>
 		public string EmployeeName;
-		///<summary>This enum is stored in the db as a string, so it needs special handling.  In phoneTrackingServer initialize, this value is pulled from employee.ClockStatus as Home, Lunch, Break, or Working(which gets converted to Available).  After that, the phone server uses those 4 in addition to WrapUp, Off, Training, TeamAssist, OfflineAssist, and Backup.  The main program sets Unavailable sometimes.</summary>
+		///<summary>This enum is stored in the db as a string, so it needs special handling.  In phoneTrackingServer initialize, this value is pulled from employee.ClockStatus as Home, Lunch, Break, or Working(which gets converted to Available).  After that, the phone server uses those 4 in addition to WrapUp, Off, Training, TeamAssist, OfflineAssist, Backup, and None(which is stored and displayed as an empty string).  The main program sets Unavailable sometimes, and pulls from employee.ClockStatus sometimes.</summary>
 		public ClockStatusEnum ClockStatus;
 		///<summary>Either blank or 'In use'</summary>
 		public string Description;
@@ -34,6 +34,8 @@ namespace OpenDentBusiness{
 	}
 
 	public enum ClockStatusEnum {
+		///<summary>This should show in the UI as blank.  It also gets stored in the db as an empty string.</summary>
+		None,
 		Home,
 		Lunch,
 		Break,
