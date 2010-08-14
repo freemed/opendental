@@ -208,23 +208,28 @@ namespace OpenDental {
 		}
 
 		private void menuItemAdd_Click(object sender,EventArgs e) {
-			//if the current row already shows a name and has a patnum, then block user
-			if(tablePhone.Rows[rowI]["PatNum"].ToString()!="0"){
-				MsgBox.Show(this,"The current number is already attached to a patient.");
-				return;
-			}
 			if(FormOpenDental.CurPatNum==0){
 				MsgBox.Show(this,"Please select a patient in the main window first.");
 				return;
 			}
-			string patName=Patients.GetLim(FormOpenDental.CurPatNum).GetNameLF();
-			if(MessageBox.Show("Attach this phone number to "+patName+"?","",MessageBoxButtons.OKCancel)!=DialogResult.OK){
-				return;
+			if(tablePhone.Rows[rowI]["PatNum"].ToString()!="0") {
+				if(!MsgBox.Show(this,"The current number is already attached to a patient. Attach it to this patient instead?")) {
+					return;
+				}
+				PhoneNumber ph=PhoneNumbers.GetByVal(tablePhone.Rows[rowI]["CustomerNumber"].ToString());
+				ph.PatNum=FormOpenDental.CurPatNum;
+				PhoneNumbers.Update(ph);
 			}
-			PhoneNumber ph=new PhoneNumber();
-			ph.PatNum=FormOpenDental.CurPatNum;
-			ph.PhoneNumberVal=tablePhone.Rows[rowI]["CustomerNumber"].ToString();
-			PhoneNumbers.Insert(ph);
+			else {
+				string patName=Patients.GetLim(FormOpenDental.CurPatNum).GetNameLF();
+				if(MessageBox.Show("Attach this phone number to "+patName+"?","",MessageBoxButtons.OKCancel)!=DialogResult.OK) {
+					return;
+				}
+				PhoneNumber ph=new PhoneNumber();
+				ph.PatNum=FormOpenDental.CurPatNum;
+				ph.PhoneNumberVal=tablePhone.Rows[rowI]["CustomerNumber"].ToString();
+				PhoneNumbers.Insert(ph);
+			}
 			//tell the phone server to refresh this row with the patient name and patnum
 			DataValid.SetInvalid(InvalidType.PhoneNumbers);
 		}

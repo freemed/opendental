@@ -17,6 +17,14 @@ namespace OpenDentBusiness{
 			return Crud.PhoneNumberCrud.SelectMany(command);
 		}
 
+		public static PhoneNumber GetByVal(string phoneNumberVal) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<PhoneNumber>(MethodBase.GetCurrentMethod(),phoneNumberVal);
+			}
+			string command="SELECT * FROM phonenumber WHERE PhoneNumberVal='"+POut.String(phoneNumberVal)+"'";
+			return Crud.PhoneNumberCrud.SelectOne(command);
+		}
+
 		///<summary></summary>
 		public static long Insert(PhoneNumber phoneNumber) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
@@ -24,6 +32,15 @@ namespace OpenDentBusiness{
 				return phoneNumber.PhoneNumberNum;
 			}
 			return Crud.PhoneNumberCrud.Insert(phoneNumber);
+		}
+
+		///<summary></summary>
+		public static void Update(PhoneNumber phoneNumber) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),phoneNumber);
+				return;
+			}
+			Crud.PhoneNumberCrud.Update(phoneNumber);
 		}
 
 		public static void DeleteObject(long phoneNumberNum) {
