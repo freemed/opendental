@@ -11,7 +11,7 @@ using OpenDentBusiness;
 
 namespace OpenDental {
 	public partial class UserControlPhonePanel:UserControl {
-		DataTable tablePhone;
+		private List<Phone> PhoneList;
 		///<summary>When the GoToChanged event fires, this tells us which patnum.</summary>
 		public long GotoPatNum;
 		///<summary></summary>
@@ -110,39 +110,34 @@ namespace OpenDental {
 			gridEmp.Columns.Add(col);
 			gridEmp.Rows.Clear();
 			UI.ODGridRow row;
-			tablePhone=Phones.GetPhoneTable();
+			PhoneList=Phones.GetPhoneList();
 			DateTime dateTimeStart;
 			TimeSpan span;
 			DateTime timeOfDay;//because TimeSpan does not have good formatting.
-			for(int i=0;i<tablePhone.Rows.Count;i++){
+			for(int i=0;i<PhoneList.Count;i++){
 				row=new OpenDental.UI.ODGridRow();
-				row.Cells.Add(tablePhone.Rows[i]["Extension"].ToString());
-				row.Cells.Add(tablePhone.Rows[i]["EmployeeName"].ToString());
-				row.Cells.Add(tablePhone.Rows[i]["ClockStatus"].ToString());
-				row.Cells.Add(tablePhone.Rows[i]["Description"].ToString());
-				row.Cells.Add(tablePhone.Rows[i]["InOrOut"].ToString());
-				row.Cells.Add(tablePhone.Rows[i]["CustomerNumber"].ToString());
-				dateTimeStart=PIn.DateT(tablePhone.Rows[i]["DateTimeStart"].ToString());
+				row.Cells.Add(PhoneList[i].Extension.ToString());
+				row.Cells.Add(PhoneList[i].EmployeeName);
+				if(PhoneList[i].ClockStatus==ClockStatusEnum.None){
+					row.Cells.Add("");
+				}
+				else{
+					row.Cells.Add(PhoneList[i].ClockStatus.ToString());
+				}
+				row.Cells.Add(PhoneList[i].Description);
+				row.Cells.Add(PhoneList[i].InOrOut);
+				row.Cells.Add(PhoneList[i].CustomerNumber);
+				dateTimeStart=PhoneList[i].DateTimeStart;
 				if(dateTimeStart.Date==DateTime.Today){
 					span=DateTime.Now-dateTimeStart+timeDelta;
 					timeOfDay=DateTime.Today+span;
-					/*if(tablePhone.Rows[i]["Description"].ToString()==""){//Idle
-						if(span<TimeSpan.FromSeconds(30)){//if the phone has been idle for less than 30 seconds
-							row.Cells.Add(timeOfDay.ToString("H:mm:ss"));
-						}
-						else{
-							row.Cells.Add("");
-						}
-					}
-					else{*/
-						row.Cells.Add(timeOfDay.ToString("H:mm:ss"));
-					//}
+					row.Cells.Add(timeOfDay.ToString("H:mm:ss"));
 				}
 				else{
 					row.Cells.Add("");
 				}
-				row.ColorBackG=Color.FromArgb(PIn.Int(tablePhone.Rows[i]["ColorBar"].ToString()));
-				row.ColorText=Color.FromArgb(PIn.Int(tablePhone.Rows[i]["ColorText"].ToString()));
+				row.ColorBackG=PhoneList[i].ColorBar;
+				row.ColorText=PhoneList[i].ColorText;
 				gridEmp.Rows.Add(row);
 			}
 			gridEmp.EndUpdate();
@@ -191,13 +186,13 @@ namespace OpenDental {
 			if((e.Button & MouseButtons.Right)==MouseButtons.Right){
 				return;
 			}
-			long patNum=PIn.Long(tablePhone.Rows[e.Row]["PatNum"].ToString());
+			long patNum=PhoneList[e.Row].PatNum;
 			GotoPatNum=patNum;
 			OnGoToChanged();
 		}
 
 		private void menuItemManage_Click(object sender,EventArgs e) {
-			long patNum=PIn.Long(tablePhone.Rows[rowI]["PatNum"].ToString());
+			long patNum=PhoneList[rowI].PatNum;
 			if(patNum==0){
 				MsgBox.Show(this,"Please attach this number to a patient first.");
 				return;
@@ -208,15 +203,15 @@ namespace OpenDental {
 		}
 
 		private void menuItemAdd_Click(object sender,EventArgs e) {
-			if(FormOpenDental.CurPatNum==0){
+			if(FormOpenDental.CurPatNum==0) {
 				MsgBox.Show(this,"Please select a patient in the main window first.");
 				return;
 			}
-			if(tablePhone.Rows[rowI]["PatNum"].ToString()!="0") {
+			if(PhoneList[rowI].PatNum!=0) {
 				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"The current number is already attached to a patient. Attach it to this patient instead?")) {
 					return;
 				}
-				PhoneNumber ph=PhoneNumbers.GetByVal(tablePhone.Rows[rowI]["CustomerNumber"].ToString());
+				PhoneNumber ph=PhoneNumbers.GetByVal(PhoneList[rowI].CustomerNumber);
 				ph.PatNum=FormOpenDental.CurPatNum;
 				PhoneNumbers.Update(ph);
 			}
@@ -227,7 +222,7 @@ namespace OpenDental {
 				}
 				PhoneNumber ph=new PhoneNumber();
 				ph.PatNum=FormOpenDental.CurPatNum;
-				ph.PhoneNumberVal=tablePhone.Rows[rowI]["CustomerNumber"].ToString();
+				ph.PhoneNumberVal=PhoneList[rowI].CustomerNumber;
 				PhoneNumbers.Insert(ph);
 			}
 			//tell the phone server to refresh this row with the patient name and patnum
@@ -252,11 +247,11 @@ namespace OpenDental {
 		}
 
 		private void menuItemAvailable_Click(object sender,EventArgs e) {
-			if(!ClockIn()) {
+			if(!ClockIn()){
 				return;
 			}
-			int extension=PIn.Int(tablePhone.Rows[rowI]["Extension"].ToString());
-			long employeeNum=PIn.Long(tablePhone.Rows[rowI]["EmployeeNum"].ToString());
+			int extension=PhoneList[rowI].Extension;
+			long employeeNum=PhoneList[rowI].EmployeeNum;
 			PhoneOverrides.SetAvailable(extension,employeeNum);
 			PhoneAsterisks.SetToDefaultRingGroups(extension,employeeNum);
 			Phones.SetPhoneStatus(ClockStatusEnum.Available,extension);//green
@@ -267,8 +262,8 @@ namespace OpenDental {
 			if(!ClockIn()){
 				return;
 			}
-			int extension=PIn.Int(tablePhone.Rows[rowI]["Extension"].ToString());
-			long employeeNum=PIn.Long(tablePhone.Rows[rowI]["EmployeeNum"].ToString());
+			int extension=PhoneList[rowI].Extension;
+			long employeeNum=PhoneList[rowI].EmployeeNum;
 			PhoneOverrides.SetAvailable(extension,employeeNum);
 			PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.None);
 			Phones.SetPhoneStatus(ClockStatusEnum.Training,extension);
@@ -279,8 +274,8 @@ namespace OpenDental {
 			if(!ClockIn()){
 				return;
 			}
-			int extension=PIn.Int(tablePhone.Rows[rowI]["Extension"].ToString());
-			long employeeNum=PIn.Long(tablePhone.Rows[rowI]["EmployeeNum"].ToString());
+			int extension=PhoneList[rowI].Extension;
+			long employeeNum=PhoneList[rowI].EmployeeNum;
 			PhoneOverrides.SetAvailable(extension,employeeNum);
 			PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.None);
 			Phones.SetPhoneStatus(ClockStatusEnum.TeamAssist,extension);
@@ -291,8 +286,8 @@ namespace OpenDental {
 			if(!ClockIn()){
 				return;
 			}
-			int extension=PIn.Int(tablePhone.Rows[rowI]["Extension"].ToString());
-			long employeeNum=PIn.Long(tablePhone.Rows[rowI]["EmployeeNum"].ToString());
+			int extension=PhoneList[rowI].Extension;
+			long employeeNum=PhoneList[rowI].EmployeeNum;
 			PhoneOverrides.SetAvailable(extension,employeeNum);
 			PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.None);
 			Phones.SetPhoneStatus(ClockStatusEnum.WrapUp,extension);
@@ -304,8 +299,8 @@ namespace OpenDental {
 			if(!ClockIn()){
 				return;
 			}
-			int extension=PIn.Int(tablePhone.Rows[rowI]["Extension"].ToString());
-			long employeeNum=PIn.Long(tablePhone.Rows[rowI]["EmployeeNum"].ToString());
+			int extension=PhoneList[rowI].Extension;
+			long employeeNum=PhoneList[rowI].EmployeeNum;
 			PhoneOverrides.SetAvailable(extension,employeeNum);
 			PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.None);
 			Phones.SetPhoneStatus(ClockStatusEnum.OfflineAssist,extension);
@@ -316,8 +311,8 @@ namespace OpenDental {
 			if(!ClockIn()) {
 				return;
 			}
-			int extension=PIn.Int(tablePhone.Rows[rowI]["Extension"].ToString());
-			long employeeNum=PIn.Long(tablePhone.Rows[rowI]["EmployeeNum"].ToString());
+			int extension=PhoneList[rowI].Extension;
+			long employeeNum=PhoneList[rowI].EmployeeNum;
 			//Employees.SetUnavailable(extension,employeeNum);
 			//Get an override if it exists
 			PhoneOverride phoneOR=PhoneOverrides.GetByExtAndEmp(extension,employeeNum);
@@ -355,21 +350,21 @@ namespace OpenDental {
 
 		private void menuItemRinggroupAll_Click(object sender,EventArgs e) {
 			//This even works if the person is still clocked out.
-			int extension=PIn.Int(tablePhone.Rows[rowI]["Extension"].ToString());
-			long employeeNum=PIn.Long(tablePhone.Rows[rowI]["EmployeeNum"].ToString());
+			int extension=PhoneList[rowI].Extension;
+			long employeeNum=PhoneList[rowI].EmployeeNum;
 			PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.All);
 		}
 
 		private void menuItemRinggroupNone_Click(object sender,EventArgs e) {
 			//This even works if the person is still clocked in.
-			int extension=PIn.Int(tablePhone.Rows[rowI]["Extension"].ToString());
-			long employeeNum=PIn.Long(tablePhone.Rows[rowI]["EmployeeNum"].ToString());
+			int extension=PhoneList[rowI].Extension;
+			long employeeNum=PhoneList[rowI].EmployeeNum;
 			PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.None);
 		}
 
 		private void menuItemRinggroupsDefault_Click(object sender,EventArgs e) {
-			int extension=PIn.Int(tablePhone.Rows[rowI]["Extension"].ToString());
-			long employeeNum=PIn.Long(tablePhone.Rows[rowI]["EmployeeNum"].ToString());
+			int extension=PhoneList[rowI].Extension;
+			long employeeNum=PhoneList[rowI].EmployeeNum;
 			PhoneAsterisks.SetToDefaultRingGroups(extension,employeeNum);
 		}
 
@@ -377,8 +372,8 @@ namespace OpenDental {
 			if(!ClockIn()) {
 				return;
 			}
-			int extension=PIn.Int(tablePhone.Rows[rowI]["Extension"].ToString());
-			long employeeNum=PIn.Long(tablePhone.Rows[rowI]["EmployeeNum"].ToString());
+			int extension=PhoneList[rowI].Extension;
+			long employeeNum=PhoneList[rowI].EmployeeNum;
 			PhoneOverrides.SetAvailable(extension,employeeNum);
 			PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.Backup);
 			Phones.SetPhoneStatus(ClockStatusEnum.Backup,extension);
@@ -389,8 +384,8 @@ namespace OpenDental {
 
 		private void menuItemLunch_Click(object sender,EventArgs e) {
 			//verify that employee is logged in as user
-			int extension=PIn.Int(tablePhone.Rows[rowI]["Extension"].ToString());
-			long employeeNum=PIn.Long(tablePhone.Rows[rowI]["EmployeeNum"].ToString());
+			int extension=PhoneList[rowI].Extension;
+			long employeeNum=PhoneList[rowI].EmployeeNum;
 			if(PrefC.GetBool(PrefName.TimecardSecurityEnabled)){
 				if(Security.CurUser.EmployeeNum!=employeeNum){
 					if(!Security.IsAuthorized(Permissions.TimecardsEditAll)){
@@ -417,8 +412,8 @@ namespace OpenDental {
 
 		private void menuItemHome_Click(object sender,EventArgs e) {
 			//verify that employee is logged in as user
-			int extension=PIn.Int(tablePhone.Rows[rowI]["Extension"].ToString());
-			long employeeNum=PIn.Long(tablePhone.Rows[rowI]["EmployeeNum"].ToString());
+			int extension=PhoneList[rowI].Extension;
+			long employeeNum=PhoneList[rowI].EmployeeNum;
 			if(PrefC.GetBool(PrefName.TimecardSecurityEnabled)){
 				if(Security.CurUser.EmployeeNum!=employeeNum){
 					if(!Security.IsAuthorized(Permissions.TimecardsEditAll)){
@@ -446,8 +441,8 @@ namespace OpenDental {
 
 		private void menuItemBreak_Click(object sender,EventArgs e) {
 			//verify that employee is logged in as user
-			int extension=PIn.Int(tablePhone.Rows[rowI]["Extension"].ToString());
-			long employeeNum=PIn.Long(tablePhone.Rows[rowI]["EmployeeNum"].ToString());
+			int extension=PhoneList[rowI].Extension;
+			long employeeNum=PhoneList[rowI].EmployeeNum;
 			if(PrefC.GetBool(PrefName.TimecardSecurityEnabled)){
 				if(Security.CurUser.EmployeeNum!=employeeNum){
 					if(!Security.IsAuthorized(Permissions.TimecardsEditAll)){
@@ -474,7 +469,7 @@ namespace OpenDental {
 
 		///<summary>If already clocked in, this does nothing.  Returns false if not able to clock in due to security, or true if successful.</summary>
 		private bool ClockIn(){
-			long employeeNum=PIn.Long(tablePhone.Rows[rowI]["EmployeeNum"].ToString());
+			long employeeNum=PhoneList[rowI].EmployeeNum;
 			if(employeeNum==0){
 				MsgBox.Show(this,"No employee at that extension.");
 				return false;

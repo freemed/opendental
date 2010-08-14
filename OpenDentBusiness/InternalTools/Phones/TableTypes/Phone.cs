@@ -34,6 +34,8 @@ namespace OpenDentBusiness{
 		///<summary>The date/time that the phonecall started.  Used to calculate how long user has been on phone.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTimeStart;
+		///<summary></summary>
+		public Bitmap WebCamImage;
 		
 
 	}

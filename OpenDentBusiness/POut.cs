@@ -13,55 +13,6 @@ namespace OpenDentBusiness{
 
 	///<summary>Converts various datatypes into strings formatted correctly for MySQL. "P" was originally short for Parameter because this class was written specifically to replace parameters in the mysql queries. Using strings instead of parameters is much easier to debug. I would rather not ever depend on the mysql connector for this because the authors of the connector have been known to suddenly change its behavior.</summary>
 	public class POut{
-		public static string Object(object value) {
-			//if (value == null)
-			//	return string.Empty;//this would cause obvious bugs due to outgoing strings without quotes
-			//It's better to just have it crash here:
-			Type dataType = value.GetType();
-
-			if (dataType == typeof(string)) {
-				return "'"+POut.String((string)value)+"'";
-			}
-			else if (dataType.IsEnum) {
-				return ((int)value).ToString();
-			}
-			else if (dataType == typeof(Bitmap)) {
-				return "'"+POut.Bitmap((Bitmap)value)+"'";
-			}
-			else if (dataType == typeof(bool)) {
-				return POut.Bool((bool)value);
-			}
-			else if (dataType == typeof(Byte)) {
-				return POut.Byte((Byte)value);
-			}
-			else if (dataType == typeof(DateTime)) {
-				return POut.DateT((DateTime)value);
-			}
-			else if (dataType == typeof(TimeSpan)) {
-				return POut.TimeSpan((TimeSpan)value);
-			}
-			else if (dataType == typeof(double)) {
-				return "'"+POut.Double((double)value)+"'";
-			}
-			else if (dataType == typeof(float)) {
-				return POut.Float((float)value);
-			}
-			else if (dataType == typeof(long)) {
-				return POut.Long((long)value);
-			}
-			else if(dataType == typeof(int)) {
-				return POut.Int((int)value);
-			}
-			else if(dataType == typeof(short)) {
-				return POut.Short((short)value);
-			}
-			else if(dataType == typeof(Interval)) {
-				return POut.Long(((Interval)value).ToInt());
-			}
-			else {
-				throw new NotSupportedException(string.Format(Resources.DataTypeNotSupportedByPOut, dataType.Name));
-			}
-		}
 
 		///<summary></summary>
 		public static string Bool (bool myBool){
@@ -264,7 +215,7 @@ namespace OpenDentBusiness{
 				return "";
 			}
 			MemoryStream stream=new MemoryStream();
-			bitmap.Save(stream,ImageFormat.Bmp);
+			bitmap.Save(stream,ImageFormat.Png);//was Bmp, so there will be a mix of different kinds.
 			byte[] rawData=stream.ToArray();
 			return Convert.ToBase64String(rawData);
 		}

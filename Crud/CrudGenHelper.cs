@@ -221,6 +221,9 @@ namespace Crud {
 			else if(specialColType==CrudSpecialColType.TinyIntUnsigned) {
 				dataTypeExpected="tinyint";
 			}
+			else if(specialColType==CrudSpecialColType.EnumAsString) {
+				dataTypeExpected="varchar";
+			}
 			else if(field.FieldType.IsEnum) {
 				dataTypeExpected="tinyint";
 				dataTypeExpected2="int";
@@ -228,6 +231,9 @@ namespace Crud {
 			else switch(field.FieldType.Name) {
 				default:
 					throw new ApplicationException("Type not yet supported: "+field.FieldType.Name);
+				case "Bitmap":
+					dataTypeExpected="mediumtext";
+					break;
 				case "Boolean":
 					dataTypeExpected="tinyint";
 					break;

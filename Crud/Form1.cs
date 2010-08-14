@@ -171,6 +171,9 @@ namespace OpenDentBusiness.Crud{
 				else switch(fieldsInDb[f].FieldType.Name) {
 					default:
 						throw new ApplicationException("Type not yet supported: "+fieldsInDb[f].FieldType.Name);
+					case "Bitmap":
+						strb.Append("PIn.Bitmap(");
+						break;
 					case "Boolean":
 						strb.Append("PIn.Bool  (");
 						break;
@@ -278,6 +281,9 @@ namespace OpenDentBusiness.Crud{
 				else switch(fieldsExceptPri[f].FieldType.Name) {
 					default:
 						throw new ApplicationException("Type not yet supported: "+fieldsExceptPri[f].FieldType.Name);
+					case "Bitmap":
+						strb.Append("    POut.Bitmap("+obj+"."+fieldsExceptPri[f].Name+")+\"");
+						break;
 					case "Boolean":
 						strb.Append("    POut.Bool  ("+obj+"."+fieldsExceptPri[f].Name+")+\"");
 						break;
@@ -374,6 +380,9 @@ namespace OpenDentBusiness.Crud{
 				else switch(fieldsExceptPri[f].FieldType.Name) {
 					default:
 						throw new ApplicationException("Type not yet supported: "+fieldsExceptPri[f].FieldType.Name);
+					case "Bitmap":
+						strb.Append(" \"+POut.Bitmap("+obj+"."+fieldsExceptPri[f].Name+")+\"");
+						break;
 					case "Boolean":
 						strb.Append(" \"+POut.Bool  ("+obj+"."+fieldsExceptPri[f].Name+")+\"");
 						break;
@@ -467,6 +476,9 @@ namespace OpenDentBusiness.Crud{
 						throw new ApplicationException("Type not yet supported: "+fieldsExceptPri[f].FieldType.Name);
 					case "Boolean":
 						strb.Append("\"+POut.Bool("+obj+"."+fieldsExceptPri[f].Name+")+\"");
+						break;
+					case "Bitmap":
+						strb.Append("\"+POut.Bitmap("+obj+"."+fieldsExceptPri[f].Name+")+\"");
 						break;
 					case "Byte":
 						strb.Append("\"+POut.Byte("+obj+"."+fieldsExceptPri[f].Name+")+\"");

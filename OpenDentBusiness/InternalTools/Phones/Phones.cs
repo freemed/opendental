@@ -14,21 +14,17 @@ namespace OpenDentBusiness{
 		public static Color ColorYellow=Color.FromArgb(255,255,145);
 		public static Color ColorPaleGreen=Color.FromArgb(217,255,217);
 
-		public static DataTable GetPhoneTable() {
+		public static List<Phone> GetPhoneList() {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetTable(MethodBase.GetCurrentMethod());
+				return Meth.GetObject<List<Phone>>(MethodBase.GetCurrentMethod());
 			}
 			string command="SELECT * FROM phone ORDER BY Extension";
-			try {
-				return Db.GetTable(command);
-			}
-			catch {
-				return new DataTable();
-			}
+			return Crud.PhoneCrud.SelectMany(command);
 		}
 
 		///<summary>Converts from string to enum and also handles conversion of Working to Available</summary>
 		public static ClockStatusEnum GetClockStatusFromEmp(string empClockStatus) {
+			//No need to check RemotingRole; no call to db.
 			switch(empClockStatus) {
 				case "Home":
 					return ClockStatusEnum.Home;
@@ -45,6 +41,7 @@ namespace OpenDentBusiness{
 
 		///<summary>this code is similar to code in the phone tracking server.  But here, we frequently only change clockStatus and ColorBar by setting employeeNum=-1.  If employeeNum is not -1, then EmployeeName also gets set.</summary>
 		public static void SetPhoneStatus(ClockStatusEnum clockStatus,int extens) {
+			//No need to check RemotingRole; no call to db.
 			SetPhoneStatus(clockStatus,extens,-1);
 		}
 
@@ -93,27 +90,6 @@ namespace OpenDentBusiness{
 				+"WHERE Extension="+extens;
 			Db.NonQ(command);
 		}
-
-		/*No longer allowed to clock in and out anyplace but phone grid
-		///<summary>Used when clocking in and out, but not through the phone grid.  Keeps the phone grid current. Handles situations where employee is listed on two different extensions.</summary>
-		public static void SetPhoneClockStatus(long employeeNum,ClockStatusEnum clockStatus) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),employeeNum,clockStatus);
-				return;
-			}
-			string command="SELECT Extension,ClockStatus FROM phone WHERE employeeNum="+POut.Long(employeeNum);
-			DataTable table=Db.GetTable(command);
-			int extension;
-			string curClockStatus;
-			for(int i=0;i<table.Rows.Count;i++) {
-				extension=PIn.Int(table.Rows[i]["Extension"].ToString());
-				curClockStatus=table.Rows[i]["ClockStatus"].ToString();
-				if(curClockStatus=="Unavailable") {
-					continue;//don't change "Unavailable" to anything else.
-				}
-				SetPhoneStatus(clockStatus,extension);
-			}
-		}*/
 
 		public static Color GetColorBar(ClockStatusEnum clockStatus,bool overridden,bool isAvailable,long empNum,bool isInUse) {
 			//No need to check RemotingRole; no call to db.

@@ -58,6 +58,7 @@ namespace OpenDentBusiness.Crud{
 				phone.InOrOut       = PIn.String(table.Rows[i]["InOrOut"].ToString());
 				phone.PatNum        = PIn.Long  (table.Rows[i]["PatNum"].ToString());
 				phone.DateTimeStart = PIn.DateT (table.Rows[i]["DateTimeStart"].ToString());
+				phone.WebCamImage   = PIn.Bitmap(table.Rows[i]["WebCamImage"].ToString());
 				retVal.Add(phone);
 			}
 			return retVal;
@@ -77,7 +78,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="PhoneNum,";
 			}
-			command+="Extension,EmployeeName,ClockStatus,Description,ColorBar,ColorText,EmployeeNum,CustomerNumber,InOrOut,PatNum,DateTimeStart) VALUES(";
+			command+="Extension,EmployeeName,ClockStatus,Description,ColorBar,ColorText,EmployeeNum,CustomerNumber,InOrOut,PatNum,DateTimeStart,WebCamImage) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(phone.PhoneNum)+",";
 			}
@@ -92,7 +93,8 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(phone.CustomerNumber)+"',"
 				+"'"+POut.String(phone.InOrOut)+"',"
 				+    POut.Long  (phone.PatNum)+","
-				+    POut.DateT (phone.DateTimeStart)+")";
+				+    POut.DateT (phone.DateTimeStart)+","
+				+    POut.Bitmap(phone.WebCamImage)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -115,7 +117,8 @@ namespace OpenDentBusiness.Crud{
 				+"CustomerNumber= '"+POut.String(phone.CustomerNumber)+"', "
 				+"InOrOut       = '"+POut.String(phone.InOrOut)+"', "
 				+"PatNum        =  "+POut.Long  (phone.PatNum)+", "
-				+"DateTimeStart =  "+POut.DateT (phone.DateTimeStart)+" "
+				+"DateTimeStart =  "+POut.DateT (phone.DateTimeStart)+", "
+				+"WebCamImage   =  "+POut.Bitmap(phone.WebCamImage)+" "
 				+"WHERE PhoneNum = "+POut.Long(phone.PhoneNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
@@ -166,6 +169,10 @@ namespace OpenDentBusiness.Crud{
 			if(phone.DateTimeStart != oldPhone.DateTimeStart) {
 				if(command!=""){ command+=",";}
 				command+="DateTimeStart = "+POut.DateT(phone.DateTimeStart)+"";
+			}
+			if(phone.WebCamImage != oldPhone.WebCamImage) {
+				if(command!=""){ command+=",";}
+				command+="WebCamImage = "+POut.Bitmap(phone.WebCamImage)+"";
 			}
 			if(command==""){
 				return;

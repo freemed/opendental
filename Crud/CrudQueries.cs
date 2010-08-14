@@ -87,6 +87,9 @@ namespace Crud {
 					else switch(newColumns[f].FieldType.Name) {
 						default:
 							throw new ApplicationException("Type not yet supported: "+newColumns[f].FieldType.Name);
+						case "Bitmap":
+							strb.Append("mediumtext NOT NULL");
+							break;
 						case "Boolean":
 							strb.Append("tinyint NOT NULL");
 							break;
@@ -162,6 +165,9 @@ namespace Crud {
 				else switch(fieldsExceptPri[f].FieldType.Name) {
 					default:
 						throw new ApplicationException("Type not yet supported: "+fieldsExceptPri[f].FieldType.Name);
+					case "Bitmap":
+						strb.Append("mediumtext NOT NULL,");
+						break;
 					case "Boolean":
 						strb.Append("tinyint NOT NULL,");
 						break;
