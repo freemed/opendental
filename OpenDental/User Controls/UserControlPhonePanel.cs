@@ -213,7 +213,7 @@ namespace OpenDental {
 				return;
 			}
 			if(tablePhone.Rows[rowI]["PatNum"].ToString()!="0") {
-				if(!MsgBox.Show(this,"The current number is already attached to a patient. Attach it to this patient instead?")) {
+				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"The current number is already attached to a patient. Attach it to this patient instead?")) {
 					return;
 				}
 				PhoneNumber ph=PhoneNumbers.GetByVal(tablePhone.Rows[rowI]["CustomerNumber"].ToString());
