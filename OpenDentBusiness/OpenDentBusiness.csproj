@@ -192,9 +192,7 @@
     <Compile Include="Data Interface\ApptFields.cs" />
     <Compile Include="Data Interface\Automations.cs" />
     <Compile Include="Data Interface\Guardians.cs" />
-    <Compile Include="Data Interface\PhoneAsterisks.cs" />
     <Compile Include="Data Interface\Equipments.cs" />
-    <Compile Include="Data Interface\PhoneEmpDefaults.cs" />
     <Compile Include="Data Interface\ReplicationServers.cs" />
     <Compile Include="Data Interface\InsFilingCodes.cs" />
     <Compile Include="Data Interface\EtransMessageTexts.cs" />
@@ -230,6 +228,14 @@
     <Compile Include="Cache\EnumRemotingRole.cs" />
     <Compile Include="Cache\MountDefC.cs" />
     <Compile Include="Cache\PrefC.cs" />
+    <Compile Include="InternalTools\Phones\PhoneAsterisks.cs" />
+    <Compile Include="InternalTools\Phones\PhoneEmpDefaults.cs" />
+    <Compile Include="InternalTools\Phones\PhoneNumbers.cs" />
+    <Compile Include="InternalTools\Phones\PhoneOverrides.cs" />
+    <Compile Include="InternalTools\Phones\TableTypes\Phone.cs" />
+    <Compile Include="InternalTools\Phones\TableTypes\PhoneEmpDefault.cs" />
+    <Compile Include="InternalTools\Phones\TableTypes\PhoneNumber.cs" />
+    <Compile Include="InternalTools\Phones\TableTypes\PhoneOverride.cs" />
     <Compile Include="Misc\ConvertDatabases2.cs" />
     <Compile Include="Misc\ConvertDatabases1.cs" />
     <Compile Include="ClientSL.cs" />
@@ -300,8 +306,6 @@
     <Compile Include="Data Interface\PaySplits.cs" />
     <Compile Include="Data Interface\PerioExams.cs" />
     <Compile Include="Data Interface\PerioMeasures.cs" />
-    <Compile Include="Data Interface\PhoneNumbers.cs" />
-    <Compile Include="Data Interface\PhoneOverrides.cs" />
     <Compile Include="Data Interface\PlannedAppts.cs" />
     <Compile Include="Data Interface\Popups.cs" />
     <Compile Include="Data Interface\Printers.cs" />
@@ -433,7 +437,6 @@
     <Compile Include="TableTypes\ApptFieldDef.cs" />
     <Compile Include="TableTypes\ApptField.cs" />
     <Compile Include="TableTypes\Guardian.cs" />
-    <Compile Include="TableTypes\PhoneEmpDefault.cs" />
     <Compile Include="TableTypes\TaskUnread.cs" />
     <Compile Include="TableTypes\Equipment.cs" />
     <Compile Include="TableTypes\ReplicationServer.cs" />
@@ -477,8 +480,6 @@
     </Compile>
     <Compile Include="TableTypes\FeeSched.cs" />
     <Compile Include="TableTypes\HL7Msg.cs" />
-    <Compile Include="TableTypes\PhoneNumber.cs" />
-    <Compile Include="TableTypes\PhoneOverride.cs" />
     <Compile Include="TableTypes\ScheduleOp.cs" />
     <Compile Include="TableTypes\PlannedAppt.cs" />
     <Compile Include="TableTypes\RecallTrigger.cs" />

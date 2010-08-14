@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{8136317D-C936-49B6-9E31-D90F02D2F207}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -3607,10 +3607,10 @@
     <Compile Include="User Controls\OutlookBar.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="User Controls\UserControlPhonePanel.cs">
+    <Compile Include="InternalTools\Phones\UserControlPhonePanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="User Controls\UserControlPhonePanel.designer.cs">
+    <Compile Include="InternalTools\Phones\UserControlPhonePanel.designer.cs">
       <DependentUpon>UserControlPhonePanel.cs</DependentUpon>
     </Compile>
     <Compile Include="User Controls\UserControlTasks.cs">
@@ -4124,7 +4124,7 @@
       <DependentUpon>SignatureBoxWrapper.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="User Controls\UserControlPhonePanel.resx">
+    <EmbeddedResource Include="InternalTools\Phones\UserControlPhonePanel.resx">
       <DependentUpon>UserControlPhonePanel.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
