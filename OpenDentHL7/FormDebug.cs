@@ -7,6 +7,8 @@ using System.Text;
 using System.Windows.Forms;
 
 namespace OpenDentHL7 {
+	//WARNING!!  When run in debug from VS, must be run as admin.
+
 	public partial class FormDebug:Form {
 		public FormDebug() {
 			InitializeComponent();
@@ -16,5 +18,7 @@ namespace OpenDentHL7 {
 			ServiceHL7 service=new ServiceHL7();
 			service.StartManually();
 		}
+
+	
 	}
 }

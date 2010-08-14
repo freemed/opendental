@@ -34,9 +34,14 @@ namespace OpenDentHL7 {
 		public void StartManually() {
 			//connect to OD db.
 			XmlDocument document=new XmlDocument();
-			string appPath=Application.StartupPath;
-			//EventLog.WriteEntry(appPath);
-			document.Load(Path.Combine(appPath,"FreeDentalConfig.xml"));
+			string pathXml=Path.Combine(Application.StartupPath,"FreeDentalConfig.xml");
+			try{
+				document.Load(pathXml);
+			}
+			catch{
+				EventLog.WriteEntry("OpenDentHL7",DateTime.Now.ToLongTimeString()+" - Could not find "+pathXml,EventLogEntryType.Error);
+				throw new ApplicationException("Could not find "+pathXml);
+			}
 			XPathNavigator Navigator=document.CreateNavigator();
 			XPathNavigator nav;
 			DataConnection.DBtype=DatabaseType.MySql;
@@ -58,18 +63,20 @@ namespace OpenDentHL7 {
 			//check db version
 			string dbVersion=PrefC.GetString(PrefName.ProgramVersion);
 			if(Application.ProductVersion.ToString() != dbVersion) {
+				EventLog.WriteEntry("OpenDentHL7","Versions do not match.  Db version:"+dbVersion+".  Application version:"+Application.ProductVersion.ToString(),EventLogEntryType.Error);
 				throw new ApplicationException("Versions do not match.  Db version:"+dbVersion+".  Application version:"+Application.ProductVersion.ToString());
 			}
 			//inform od via signal that this service is running
-
 			IsStandalone=true;//and for Mountainside
 			if(Programs.IsEnabled("eClinicalWorks")
 				&& ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") 
 			{
 				IsStandalone=false;
 			}
+			//#if DEBUG//just so I don't forget to remove it later.
+			//IsStandalone=false;
+			//#endif
 			//start filewatcher
-
 			string hl7folderOut=PrefC.GetString(PrefName.HL7FolderOut);
 				//ProgramProperties.GetPropVal("eClinicalWorks","HL7FolderOut");
 				//HL7Msgs.GetHL7FolderOut();

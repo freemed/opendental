@@ -2675,7 +2675,8 @@ namespace OpenDental{
 						this.BringToFront();//don't know if this is doing anything.
 						FormTaskEdit FormT=new FormTaskEdit(tasksPopup[i]);
 						FormT.IsPopup=true;
-						FormT.ShowDialog();
+						FormT.ShowInTaskbar=true;
+						FormT.Show();//non-modal
 						TaskGoTo(FormT.GotoType,FormT.GotoKeyNum);
 					}
 				}
