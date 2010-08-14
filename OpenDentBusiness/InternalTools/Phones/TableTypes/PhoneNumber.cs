@@ -4,6 +4,7 @@ using System.Collections;
 namespace OpenDentBusiness{
 	///<summary>Only used internally by OpenDental, Inc.  Not used by anyone else.</summary>
 	[Serializable()]
+	[CrudTable(IsMissingInGeneral=true)]//It actually is present, but the s classs is in a wierd place.
 	public class PhoneNumber : TableBase{
 		///<summary>Primary key.</summary>
 		[CrudColumn(IsPriKey=true)]

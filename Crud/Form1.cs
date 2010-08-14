@@ -59,23 +59,9 @@ namespace Crud {
 		private void butRun_Click(object sender,EventArgs e) {
 			Cursor=Cursors.WaitCursor;
 			string[] files=Directory.GetFiles(crudDir);
-			//There is no reason to clear the files.  Each one will be cleared as needed.
-			//for(int i=0;i<files.Length;i++) {
-			//	if(checkOne.Checked && Path.GetFileNameWithoutExtension(files[i])!="Account") {
-			//		continue;
-			//	}
-				//File.WriteAllText(files[i],"");
-			//}
 			StringBuilder strb;
 			CrudGenHelper.ConnectToDatabase(textDb.Text);
 			for(int i=0;i<tableTypes.Count;i++){
-			//foreach(Type typeClass in assembly.GetTypes()){
-				//if(typeClass.BaseType!=typeTableBase) {
-				//	continue;
-				//}
-				//if(checkOne.Checked && typeClass.Name!="Account") {
-				//	continue;
-				//}
 				string className=tableTypes[i].Name+"Crud";
 				strb=new StringBuilder();
 				CrudGenHelper.ValidateTypes(tableTypes[i],textDb.Text);
@@ -176,10 +162,13 @@ namespace OpenDentBusiness.Crud{
 					//specialTypes.DateEntry and DateEntryEditable is handled fine by the normal DateTime (date) below.
 					strb.Append("PIn.DateT (");
 				}
+				else if(specialType==CrudSpecialColType.EnumAsString) {
+					strb.Append("("+fieldsInDb[f].FieldType.Name+")Enum.Parse(typeof("+fieldsInDb[f].FieldType.Name+"),");
+				}
 				else if(fieldsInDb[f].FieldType.IsEnum) {
 					strb.Append("("+fieldsInDb[f].FieldType.Name+")PIn.Int(");
 				}
-				else switch(fieldsInDb[f].FieldType.Name){
+				else switch(fieldsInDb[f].FieldType.Name) {
 					default:
 						throw new ApplicationException("Type not yet supported: "+fieldsInDb[f].FieldType.Name);
 					case "Boolean":
@@ -280,6 +269,9 @@ namespace OpenDentBusiness.Crud{
 				else if(specialType==CrudSpecialColType.DateT) {
 					strb.Append("    POut.DateT ("+obj+"."+fieldsExceptPri[f].Name+")+\"");
 				}
+				else if(specialType==CrudSpecialColType.EnumAsString) {
+					strb.Append("    POut.String("+obj+"."+fieldsExceptPri[f].Name+".ToString())+\"");
+				}
 				else if(fieldsExceptPri[f].FieldType.IsEnum) {
 					strb.Append("    POut.Int   ((int)"+obj+"."+fieldsExceptPri[f].Name+")+\"");
 				}
@@ -373,6 +365,9 @@ namespace OpenDentBusiness.Crud{
 				else if(specialType==CrudSpecialColType.DateTEntryEditable){
 					strb.Append(" \"+POut.DateT ("+obj+"."+fieldsExceptPri[f].Name+")+\"");
 				}
+				else if(specialType==CrudSpecialColType.EnumAsString) {
+					strb.Append(" \"+POut.String("+obj+"."+fieldsExceptPri[f].Name+".ToString())+\"");
+				}
 				else if(fieldsExceptPri[f].FieldType.IsEnum) {
 					strb.Append(" \"+POut.Int   ((int)"+obj+"."+fieldsExceptPri[f].Name+")+\"");
 				}
@@ -460,6 +455,9 @@ namespace OpenDentBusiness.Crud{
 				}
 				else if(specialType==CrudSpecialColType.DateTEntryEditable){
 					strb.Append("\"+POut.DateT("+obj+"."+fieldsExceptPri[f].Name+")+\"");
+				}
+				else if(specialType==CrudSpecialColType.EnumAsString) {
+					strb.Append("\"+POut.String("+obj+"."+fieldsExceptPri[f].Name+".ToString())+\"");
 				}
 				else if(fieldsExceptPri[f].FieldType.IsEnum) {
 					strb.Append("\"+POut.Int   ((int)"+obj+"."+fieldsExceptPri[f].Name+")+\"");

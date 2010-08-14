@@ -29,7 +29,16 @@ namespace Crud {
 			if(attributes.Length==0) {
 				return typeClass.Name.ToLower();
 			}
-			return((CrudTableAttribute)attributes[0]).TableName;
+			for(int i=0;i<attributes.Length;i++) {
+				if(attributes[i].GetType()!=typeof(CrudTableAttribute)) {
+					continue;
+				}
+				if(((CrudTableAttribute)attributes[i]).TableName!="") {
+					return((CrudTableAttribute)attributes[i]).TableName;
+				}
+			}
+			//couldn't find any override.
+			return typeClass.Name.ToLower();
 		}
 
 		///<summary></summary>
@@ -38,7 +47,34 @@ namespace Crud {
 			if(attributes.Length==0) {
 				return false;
 			}
-			return ((CrudTableAttribute)attributes[0]).IsDeleteForbidden;
+			for(int i=0;i<attributes.Length;i++) {
+				if(attributes[i].GetType()!=typeof(CrudTableAttribute)) {
+					continue;
+				}
+				if(((CrudTableAttribute)attributes[i]).IsDeleteForbidden) {
+					return true;
+				}
+			}
+			//couldn't find any.
+			return false;
+		}
+
+		///<summary></summary>
+		public static bool IsMissingInGeneral(Type typeClass) {
+			object[] attributes = typeClass.GetCustomAttributes(typeof(CrudTableAttribute),true);
+			if(attributes.Length==0) {
+				return false;
+			}
+			for(int i=0;i<attributes.Length;i++) {
+				if(attributes[i].GetType()!=typeof(CrudTableAttribute)) {
+					continue;
+				}
+				if(((CrudTableAttribute)attributes[i]).IsMissingInGeneral) {
+					return true;
+				}
+			}
+			//couldn't find any.
+			return false;
 		}
 
 		///<summary>This also excludes fields that are not in the database, like patient.Age.</summary>

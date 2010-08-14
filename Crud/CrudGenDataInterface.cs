@@ -67,7 +67,10 @@ namespace Crud {
 			if(File.Exists(fileName)) {
 				return;
 			}
-			if(MessageBox.Show("Create stub for "+fileName+"?","",MessageBoxButtons.OKCancel)!=DialogResult.OK) {
+			if(CrudGenHelper.IsMissingInGeneral(typeClass)) {
+				return;
+			}
+			if(MessageBox.Show("Create stub for "+fileName+"?","",MessageBoxButtons.YesNo)!=DialogResult.Yes) {
 				return;
 			}
 			string snippet=GetSnippet(typeClass,SnippetType.EntireSclass);

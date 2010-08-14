@@ -30,16 +30,18 @@ namespace Crud {
 			CrudSpecialColType specialType;
 			string command="SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE table_schema = '"+dbName+"' AND table_name = '"+tablename+"'";
 			if(DataCore.GetScalar(command)!="1") {
-				MessageBox.Show("This table was not found in the database:"
-					+rn+tablename
-					+rn+"Query will be found at the end of "+Path.GetFileName(convertDbFile));
-				strb=new StringBuilder();
-				strb.Append(rn+rn+t4+"/*");
-				strb.Append(rn+t4+"command=\"DROP TABLE IF EXISTS "+tablename+"\";");
-				strb.Append(rn+t4+"Db.NonQ(command);");
-				GetCreateTable(strb,tablename,priKey.Name,fieldsExceptPri);
-				strb.Append(rn+t4+"*/");
-				File.AppendAllText(convertDbFile,strb.ToString());
+				if(!CrudGenHelper.IsMissingInGeneral(typeClass)) {
+					MessageBox.Show("This table was not found in the database:"
+						+rn+tablename
+						+rn+"Query will be found at the end of "+Path.GetFileName(convertDbFile));
+					strb=new StringBuilder();
+					strb.Append(rn+rn+t4+"/*");
+					strb.Append(rn+t4+"command=\"DROP TABLE IF EXISTS "+tablename+"\";");
+					strb.Append(rn+t4+"Db.NonQ(command);");
+					GetCreateTable(strb,tablename,priKey.Name,fieldsExceptPri);
+					strb.Append(rn+t4+"*/");
+					File.AppendAllText(convertDbFile,strb.ToString());
+				}
 			}
 			List<FieldInfo> newColumns=CrudGenHelper.GetNewFields(fields,typeClass,dbName);
 			if(newColumns.Count>0) {
@@ -76,46 +78,49 @@ namespace Crud {
 						strb.Append(rn+t4+"Db.NonQ(command);");
 						continue;
 					}
-					if(newColumns[f].FieldType.IsEnum) {
+					if(specialType==CrudSpecialColType.EnumAsString) {
+						strb.Append("varchar(255) NOT NULL");
+					}
+					else if(newColumns[f].FieldType.IsEnum) {
 						strb.Append("tinyint NOT NULL");
 					}
 					else switch(newColumns[f].FieldType.Name) {
-							default:
-								throw new ApplicationException("Type not yet supported: "+newColumns[f].FieldType.Name);
-							case "Boolean":
-								strb.Append("tinyint NOT NULL");
-								break;
-							case "Byte":
-								strb.Append("tinyint NOT NULL");
-								break;
-							case "Color":
-								strb.Append("int NOT NULL");
-								break;
-							case "DateTime"://This is only for date, not dateT
-								strb.Append("date NOT NULL default '0001-01-01' (if this is actually supposed to be a datetime, timestamp, DateEntry, DateTEntry, or DateTEntryEditable column, add the missing attribute, then rerun the crud generator)");
-								break;
-							case "Double":
-								strb.Append("double NOT NULL");
-								break;
-							case "Interval":
-								strb.Append("int NOT NULL");
-								break;
-							case "Int64":
-								strb.Append("bigint NOT NULL");
-								break;
-							case "Int32":
-								strb.Append("int NOT NULL");
-								break;
-							case "Single":
-								strb.Append("float NOT NULL");
-								break;
-							case "String":
-								strb.Append("varchar(255) NOT NULL  (or text NOT NULL)");
-								break;
-							case "TimeSpan":
-								strb.Append("time NOT NULL");
-								break;
-						}
+						default:
+							throw new ApplicationException("Type not yet supported: "+newColumns[f].FieldType.Name);
+						case "Boolean":
+							strb.Append("tinyint NOT NULL");
+							break;
+						case "Byte":
+							strb.Append("tinyint NOT NULL");
+							break;
+						case "Color":
+							strb.Append("int NOT NULL");
+							break;
+						case "DateTime"://This is only for date, not dateT
+							strb.Append("date NOT NULL default '0001-01-01' (if this is actually supposed to be a datetime, timestamp, DateEntry, DateTEntry, or DateTEntryEditable column, add the missing attribute, then rerun the crud generator)");
+							break;
+						case "Double":
+							strb.Append("double NOT NULL");
+							break;
+						case "Interval":
+							strb.Append("int NOT NULL");
+							break;
+						case "Int64":
+							strb.Append("bigint NOT NULL");
+							break;
+						case "Int32":
+							strb.Append("int NOT NULL");
+							break;
+						case "Single":
+							strb.Append("float NOT NULL");
+							break;
+						case "String":
+							strb.Append("varchar(255) NOT NULL  (or text NOT NULL)");
+							break;
+						case "TimeSpan":
+							strb.Append("time NOT NULL");
+							break;
+					}
 					strb.Append("\";");
 					strb.Append(rn+t4+"Db.NonQ(command);");
 				}
@@ -148,46 +153,49 @@ namespace Crud {
 					strb.Append("datetime NOT NULL default '0001-01-01 00:00:00',");//untested
 					continue;
 				}
-				if(fieldsExceptPri[f].FieldType.IsEnum) {
+				if(specialType==CrudSpecialColType.EnumAsString) {
+					strb.Append("varchar(255) NOT NULL,");
+				}
+				else if(fieldsExceptPri[f].FieldType.IsEnum) {
 					strb.Append("tinyint NOT NULL,");
 				}
 				else switch(fieldsExceptPri[f].FieldType.Name) {
-						default:
-							throw new ApplicationException("Type not yet supported: "+fieldsExceptPri[f].FieldType.Name);
-						case "Boolean":
-							strb.Append("tinyint NOT NULL,");
-							break;
-						case "Byte":
-							strb.Append("tinyint NOT NULL,");
-							break;
-						case "Color":
-							strb.Append("int NOT NULL,");
-							break;
-						case "DateTime"://This is only for date, not dateT
-							strb.Append("date NOT NULL default '0001-01-01',  (if this is actually supposed to be a datetime, timestamp, DateEntry, DateTEntry, or DateTEntryEditable column, add the missing attribute, then rerun the crud generator)");
-							break;
-						case "Double":
-							strb.Append("double NOT NULL,");
-							break;
-						case "Interval":
-							strb.Append("int NOT NULL,");
-							break;
-						case "Int64":
-							strb.Append("bigint NOT NULL,");
-							break;
-						case "Int32":
-							strb.Append("int NOT NULL,");
-							break;
-						case "Single":
-							strb.Append("float NOT NULL,");
-							break;
-						case "String":
-							strb.Append("varchar(255) NOT NULL,");
-							break;
-						case "TimeSpan":
-							strb.Append("time NOT NULL,");
-							break;
-					}
+					default:
+						throw new ApplicationException("Type not yet supported: "+fieldsExceptPri[f].FieldType.Name);
+					case "Boolean":
+						strb.Append("tinyint NOT NULL,");
+						break;
+					case "Byte":
+						strb.Append("tinyint NOT NULL,");
+						break;
+					case "Color":
+						strb.Append("int NOT NULL,");
+						break;
+					case "DateTime"://This is only for date, not dateT
+						strb.Append("date NOT NULL default '0001-01-01',  (if this is actually supposed to be a datetime, timestamp, DateEntry, DateTEntry, or DateTEntryEditable column, add the missing attribute, then rerun the crud generator)");
+						break;
+					case "Double":
+						strb.Append("double NOT NULL,");
+						break;
+					case "Interval":
+						strb.Append("int NOT NULL,");
+						break;
+					case "Int64":
+						strb.Append("bigint NOT NULL,");
+						break;
+					case "Int32":
+						strb.Append("int NOT NULL,");
+						break;
+					case "Single":
+						strb.Append("float NOT NULL,");
+						break;
+					case "String":
+						strb.Append("varchar(255) NOT NULL,");
+						break;
+					case "TimeSpan":
+						strb.Append("time NOT NULL,");
+						break;
+				}
 			}
 			strb.Append(rn+t5+"PRIMARY KEY ("+priKeyName+"),");
 			List<FieldInfo> indexes=CrudGenHelper.GetBigIntFields(fieldsExceptPri);
