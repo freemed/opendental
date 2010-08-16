@@ -195,6 +195,18 @@ namespace OpenDentBusiness {
 				list.Add(new DisplayField("Note",215,category));
 				//list.Add(new DisplayField("BillingType",100,category));
 			}
+			else if(category==DisplayFieldCategory.ChartPatientInformation) {
+				list.Add(new DisplayField("Age",0,category));
+				list.Add(new DisplayField("ABC0",0,category));
+				list.Add(new DisplayField("Billing Type",0,category));
+				list.Add(new DisplayField("Referred From",0,category));
+				list.Add(new DisplayField("Date First Visit",0,category));
+				list.Add(new DisplayField("Primary Provider",0,category));
+				list.Add(new DisplayField("Sec. Provider",0,category));
+				list.Add(new DisplayField("Registration Key",0,category));
+				list.Add(new DisplayField("Medical Fields",0,category));
+				list.Add(new DisplayField("PatFields",0,category));
+			}
 			return list;
 		}
 
@@ -298,6 +310,18 @@ namespace OpenDentBusiness {
 				list.Add(new DisplayField("Status",130,category));
 				list.Add(new DisplayField("Note",215,category));
 				list.Add(new DisplayField("BillingType",100,category));
+			}
+			else if(category==DisplayFieldCategory.ChartPatientInformation) {
+				list.Add(new DisplayField("Age",0,category));
+				list.Add(new DisplayField("ABC0",0,category));
+				list.Add(new DisplayField("Billing Type",0,category));
+				list.Add(new DisplayField("Referred From",0,category));
+				list.Add(new DisplayField("Date First Visit",0,category));
+				list.Add(new DisplayField("Primary Provider",0,category));
+				list.Add(new DisplayField("Sec. Provider",0,category));
+				list.Add(new DisplayField("Registration Key",0,category));
+				list.Add(new DisplayField("Medical Fields",0,category));
+				list.Add(new DisplayField("PatFields",0,category));
 			}
 			return list;
 		}

@@ -1442,7 +1442,9 @@ namespace OpenDentBusiness{
 		///<summary>3</summary>
 		AccountModule,
 		///<summary>4</summary>
-		RecallList
+		RecallList,
+		///<summary>5</summary>
+		ChartPatientInformation
 	}
 
 	public enum DeletedObjectType{
