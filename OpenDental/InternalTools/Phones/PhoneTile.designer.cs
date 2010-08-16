@@ -47,6 +47,7 @@
 			// labelExtensionName
 			// 
 			this.labelExtensionName.BackColor = System.Drawing.SystemColors.Control;
+			this.labelExtensionName.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
 			this.labelExtensionName.Location = new System.Drawing.Point(37,105);
 			this.labelExtensionName.Name = "labelExtensionName";
 			this.labelExtensionName.Size = new System.Drawing.Size(113,16);

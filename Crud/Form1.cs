@@ -153,6 +153,18 @@ namespace OpenDentBusiness.Crud{
 			for(int f=0;f<fieldsInDb.Count;f++){
 				//Fields are not guaranteed to be in any particular order.
 				specialType=CrudGenHelper.GetSpecialType(fieldsInDb[f]);
+				if(specialType==CrudSpecialColType.EnumAsString) {
+					strb.Append(rn+t4+"try{");
+					strb.Append(rn+t5+obj+"."+fieldsInDb[f].Name.PadRight(longestField-2,' ')+"="
+						+"("+fieldsInDb[f].FieldType.Name+")Enum.Parse(typeof("+fieldsInDb[f].FieldType.Name+"),"
+						+"table.Rows[i][\""+fieldsInDb[f].Name+"\"].ToString());");
+					strb.Append(rn+t4+"}");
+					strb.Append(rn+t4+"catch{");
+					strb.Append(rn+t5+obj+"."+fieldsInDb[f].Name.PadRight(longestField-2,' ')+"="
+						+"("+fieldsInDb[f].FieldType.Name+")0;");
+					strb.Append(rn+t4+"}");
+					continue;
+				}
 				strb.Append(rn+t4+obj+"."+fieldsInDb[f].Name.PadRight(longestField,' ')+"= ");
 				if(specialType==CrudSpecialColType.DateT
 					|| specialType==CrudSpecialColType.TimeStamp
@@ -162,9 +174,7 @@ namespace OpenDentBusiness.Crud{
 					//specialTypes.DateEntry and DateEntryEditable is handled fine by the normal DateTime (date) below.
 					strb.Append("PIn.DateT (");
 				}
-				else if(specialType==CrudSpecialColType.EnumAsString) {
-					strb.Append("("+fieldsInDb[f].FieldType.Name+")Enum.Parse(typeof("+fieldsInDb[f].FieldType.Name+"),");
-				}
+				//else if(specialType==CrudSpecialColType.EnumAsString) {//moved up
 				else if(fieldsInDb[f].FieldType.IsEnum) {
 					strb.Append("("+fieldsInDb[f].FieldType.Name+")PIn.Int(");
 				}
