@@ -888,6 +888,7 @@ namespace OpenDental{
 			Tasks.Delete(Cur);
 			DataValid.SetInvalidTask(Cur.TaskNum,false);//no popup
 			DialogResult=DialogResult.OK;
+			Close();
 		}
 
 		private void butReply_Click(object sender,EventArgs e) {
@@ -924,6 +925,7 @@ namespace OpenDental{
 			}
 			DataValid.SetInvalidTask(Cur.TaskNum,true);//popup
 			DialogResult=DialogResult.OK;
+			Close();
 		}
 
 		///<summary>Send to another user.</summary>
@@ -952,6 +954,7 @@ namespace OpenDental{
 			}
 			DataValid.SetInvalidTask(Cur.TaskNum,true);//popup
 			DialogResult=DialogResult.OK;
+			Close();
 		}
 
 		private void butAppendAndPop_Click(object sender,EventArgs e) {
@@ -971,6 +974,7 @@ namespace OpenDental{
 			Tasks.Append(Cur.TaskNum,textAppend.Text);
 			DataValid.SetInvalidTask(Cur.TaskNum,true);
 			DialogResult=DialogResult.OK;
+			Close();
 		}
 
 		private void butAppendNoPop_Click(object sender,EventArgs e) {
@@ -990,6 +994,7 @@ namespace OpenDental{
 			Tasks.Append(Cur.TaskNum,textAppend.Text);
 			DataValid.SetInvalidTask(Cur.TaskNum,false);
 			DialogResult=DialogResult.OK;
+			Close();
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
@@ -1025,10 +1030,12 @@ namespace OpenDental{
 				DataValid.SetInvalidTask(Cur.TaskNum,false);//no popup
 			}
 			DialogResult=DialogResult.OK;
+			Close();
 		}
 
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
+			Close();
 		}
 
 		private void FormTaskEdit_FormClosing(object sender,FormClosingEventArgs e) {
