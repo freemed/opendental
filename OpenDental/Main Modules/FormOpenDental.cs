@@ -184,7 +184,7 @@ namespace OpenDental{
 		private MenuItem menuItemFeeScheds;
 		private MenuItem menuItemMobileSync;
 		private MenuItem menuItemLetters;
-		private UserControlPhonePanel phonePanel;
+		//private UserControlPhonePanel phonePanel;
 		///<summary>Command line args passed in when program starts.</summary>
 		public string[] CommandLineArgs;
 		private Thread ThreadCommandLine;
@@ -213,7 +213,10 @@ namespace OpenDental{
 		private MenuItem menuItem3;
 		private MenuItem menuApptFieldDefs;
 		private MenuItem menuItemWebForms;
+		private OpenDental.UI.Button butBigPhones;
+		private System.Windows.Forms.Timer timerPhoneWebCam;
 		private FormTerminalManager formTerminalManager;
+		private FormPhoneTiles formPhoneTiles;
 
 		///<summary></summary>
 		public FormOpenDental(string[] cla){
@@ -283,10 +286,10 @@ namespace OpenDental{
 			this.Controls.Add(userControlTasks1);
 			panelSplitter.ContextMenu=menuSplitter;
 			menuItemDockBottom.Checked=true;
-			phonePanel=new UserControlPhonePanel();
-			phonePanel.Visible=false;
-			this.Controls.Add(phonePanel);
-			phonePanel.GoToChanged += new System.EventHandler(this.phonePanel_GoToChanged);
+			//phonePanel=new UserControlPhonePanel();
+			//phonePanel.Visible=false;
+			//this.Controls.Add(phonePanel);
+			//phonePanel.GoToChanged += new System.EventHandler(this.phonePanel_GoToChanged);
 			Logger.openlog.Log("Open Dental initialization complete.",Logger.Severity.INFO);
 			//Plugins.HookAddCode(this,"FormOpenDental.Constructor_end");//Can't do this because no plugins loaded.
 		}
@@ -425,6 +428,8 @@ namespace OpenDental{
 			this.lightSignalGrid1 = new OpenDental.UI.LightSignalGrid();
 			this.smartCardWatcher1 = new OpenDental.SmartCards.SmartCardWatcher();
 			this.timerHeartBeat = new System.Windows.Forms.Timer(this.components);
+			this.butBigPhones = new OpenDental.UI.Button();
+			this.timerPhoneWebCam = new System.Windows.Forms.Timer(this.components);
 			this.SuspendLayout();
 			// 
 			// timerTimeIndic
@@ -1250,9 +1255,30 @@ namespace OpenDental{
 			this.timerHeartBeat.Interval = 180000;
 			this.timerHeartBeat.Tick += new System.EventHandler(this.timerHeartBeat_Tick);
 			// 
+			// butBigPhones
+			// 
+			this.butBigPhones.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butBigPhones.Autosize = true;
+			this.butBigPhones.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butBigPhones.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butBigPhones.CornerRadius = 4F;
+			this.butBigPhones.Location = new System.Drawing.Point(143,565);
+			this.butBigPhones.Name = "butBigPhones";
+			this.butBigPhones.Size = new System.Drawing.Size(75,24);
+			this.butBigPhones.TabIndex = 52;
+			this.butBigPhones.Text = "Big Phones";
+			this.butBigPhones.Visible = false;
+			this.butBigPhones.Click += new System.EventHandler(this.butBigPhones_Click);
+			// 
+			// timerPhoneWebCam
+			// 
+			this.timerPhoneWebCam.Interval = 1600;
+			this.timerPhoneWebCam.Tick += new System.EventHandler(this.timerPhoneWebCam_Tick);
+			// 
 			// FormOpenDental
 			// 
 			this.ClientSize = new System.Drawing.Size(982,626);
+			this.Controls.Add(this.butBigPhones);
 			this.Controls.Add(this.panelSplitter);
 			this.Controls.Add(this.lightSignalGrid1);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -2241,6 +2267,9 @@ namespace OpenDental{
 		///<summary>This used to be called much more frequently when it was an actual layout event.</summary>
 		private void LayoutControls(){
 			//Debug.WriteLine("layout");
+			if(this.WindowState==FormWindowState.Minimized) {
+				return;
+			}
 			if(Width<200){
 				Width=200;
 			}
@@ -2257,15 +2286,19 @@ namespace OpenDental{
 					panelSplitter.Width=width;
 					panelSplitter.Visible=true;
 					if(PrefC.GetBool(PrefName.DockPhonePanelShow)){
-						phonePanel.Visible=true;
-						phonePanel.Location=new Point(position.X,panelSplitter.Bottom);
-						phonePanel.Width=428;
-						phonePanel.Height=this.ClientSize.Height-phonePanel.Top;
-						userControlTasks1.Location=new Point(position.X+phonePanel.Width,panelSplitter.Bottom);
-						userControlTasks1.Width=width-phonePanel.Width;
+						//phonePanel.Visible=true;
+						//phonePanel.Location=new Point(position.X,panelSplitter.Bottom);
+						//phonePanel.Width=428;
+						//phonePanel.Height=this.ClientSize.Height-phonePanel.Top;
+						userControlTasks1.Location=new Point(position.X+428,panelSplitter.Bottom);
+						userControlTasks1.Width=width-428;
+						butBigPhones.Visible=true;
+						butBigPhones.Location=new Point(position.X+353,panelSplitter.Bottom);
+						butBigPhones.BringToFront();
 					}
 					else{
-						phonePanel.Visible=false;
+						//phonePanel.Visible=false;
+						butBigPhones.Visible=false;
 						userControlTasks1.Location=new Point(position.X,panelSplitter.Bottom);
 						userControlTasks1.Width=width;
 					}
@@ -2273,7 +2306,8 @@ namespace OpenDental{
 					height=ClientSize.Height-panelSplitter.Height-userControlTasks1.Height-ToolBarMain.Height;
 				}
 				else {//docked Right
-					phonePanel.Visible=false;
+					//phonePanel.Visible=false;
+					butBigPhones.Visible=false;
 					if(panelSplitter.Width>8) {//docking needs to be changed
 						panelSplitter.Width=7;
 						panelSplitter.Location=new Point(900,position.Y);
@@ -2290,7 +2324,8 @@ namespace OpenDental{
 				panelSplitter.Invalidate();
 			}
 			else {
-				phonePanel.Visible=false;
+				//phonePanel.Visible=false;
+				butBigPhones.Visible=false;
 				panelSplitter.Visible=false;
 			}
 			ContrAccount2.Location=position;
@@ -3056,9 +3091,24 @@ namespace OpenDental{
 			}
 		}
 
+		private void butBigPhones_Click(object sender,EventArgs e) {
+			if(formPhoneTiles==null || formPhoneTiles.IsDisposed) {
+				formPhoneTiles=new FormPhoneTiles();
+				formPhoneTiles.GoToChanged += new System.EventHandler(this.phonePanel_GoToChanged);
+				formPhoneTiles.Show();
+				Rectangle rect=System.Windows.Forms.Screen.PrimaryScreen.WorkingArea;
+				formPhoneTiles.Location=new Point((rect.Width-formPhoneTiles.Width)/2+rect.X,10);
+				formPhoneTiles.BringToFront();
+			}
+			else {
+				formPhoneTiles.Show();
+				formPhoneTiles.BringToFront();
+			}
+		}
+
 		private void phonePanel_GoToChanged(object sender,EventArgs e) {
-			if(phonePanel.GotoPatNum!=0) {
-				CurPatNum=phonePanel.GotoPatNum;
+			if(formPhoneTiles.GotoPatNum!=0) {
+				CurPatNum=formPhoneTiles.GotoPatNum;
 				Patient pat=Patients.GetPat(CurPatNum);
 				RefreshCurrentModule();
 				FillPatientButton(CurPatNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber,pat.SiteNum);
@@ -4228,6 +4278,10 @@ namespace OpenDental{
 			}
 		}
 
+		private void timerPhoneWebCam_Tick(object sender,EventArgs e) {
+
+		}
+
 		private void FormOpenDental_FormClosing(object sender,FormClosingEventArgs e) {
 			try {
 				Computers.ClearHeartBeat(Environment.MachineName);
@@ -4252,6 +4306,8 @@ namespace OpenDental{
 			FormWebForms FormWF = new FormWebForms();
 			FormWF.ShowDialog();
 		}
+
+		
 
 		
 

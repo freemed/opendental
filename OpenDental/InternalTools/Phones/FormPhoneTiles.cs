@@ -1,62 +1,82 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
 using System.Data;
+using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
-using OpenDental.UI;
 using OpenDentBusiness;
 
 namespace OpenDental {
-	public partial class UserControlPhonePanel:UserControl {
+	public partial class FormPhoneTiles:Form {
 		private List<Phone> PhoneList;
 		///<summary>When the GoToChanged event fires, this tells us which patnum.</summary>
 		public long GotoPatNum;
 		///<summary></summary>
 		[Category("Property Changed"),Description("Event raised when user wants to go to a patient or related object.")]
 		public event EventHandler GoToChanged=null;
-		private int rowI;
-		private int colI;
 		///<summary>This is the difference between server time and local computer time.  Used to ensure that times displayed are accurate to the second.  This value is usally just a few seconds, but possibly a few minutes.</summary>
 		private TimeSpan timeDelta;
 		private int msgCount;
 		string pathPhoneMsg=@"\\192.168.0.197\Voicemail\default\998\INBOX";
-
-		public UserControlPhonePanel() {
+		private PhoneTile selectedTile;
+		private Thread workerThread;
+		
+		public FormPhoneTiles() {
 			InitializeComponent();
 		}
 
-		private void UserControlPhonePanel_Load(object sender,EventArgs e) {
-			timer1.Enabled=true;
-			timerMsgs.Enabled=true;
-			SetLabelMsg();
+		private void FormPhoneTiles_Load(object sender,EventArgs e) {
+			timerMain.Enabled=true;
 			timeDelta=MiscData.GetNowDateTime()-DateTime.Now;
-			FillEmps();
+			PhoneTile tile;
+			for(int i=0;i<21;i++) {
+				tile=((PhoneTile)Controls.Find("phoneTile"+(i+1).ToString(),false)[0]);
+				tile.GoToChanged += new System.EventHandler(this.phoneTile_GoToChanged);
+				tile.SelectedTileChanged += new System.EventHandler(this.phoneTile_SelectedTileChanged);
+				tile.MenuNumbers=menuNumbers;
+				tile.MenuStatus=menuStatus;
+			}
+			FillTiles();
 		}
 
-		private void SetLabelMsg() {
-			#if DEBUG
+		private void FormPhoneTiles_Shown(object sender,EventArgs e) {
+			DateTime now=DateTime.Now;
+			while(now.AddSeconds(1)>DateTime.Now) {
+				Application.DoEvents();
+			}
+			timerMsgs.Enabled=true;
+			//SetLabelMsg();
+		}
+
+		private void FillTiles() {
+			PhoneList=Phones.GetPhoneList();
+			PhoneTile tile;
+			for(int i=0;i<21;i++) {
+				tile=((PhoneTile)Controls.Find("phoneTile"+(i+1).ToString(),false)[0]);
+				tile.TimeDelta=timeDelta;
+				if(PhoneList.Count>i){
+					tile.PhoneCur=PhoneList[i];
+				}
+				else{
+					tile.PhoneCur=null;
+				}
+			}			
+		}
+
+		private void phoneTile_GoToChanged(object sender,EventArgs e) {
+			PhoneTile tile=(PhoneTile)sender;
+			if(tile.PhoneCur==null) {
 				return;
-			#endif
-			if(!Directory.Exists(pathPhoneMsg)) {
-				labelMsg.Text="msg path not found";
-				labelMsg.Font=new Font(FontFamily.GenericSansSerif,8.5f,FontStyle.Regular);
-				labelMsg.ForeColor=Color.Black;
+			}
+			if(tile.PhoneCur.PatNum==0) {
 				return;
 			}
-			msgCount=Directory.GetFiles(pathPhoneMsg,"*.txt").Length;
-			if(msgCount==0) {
-				labelMsg.Text="Phone Messages: 0";
-				labelMsg.Font=new Font(FontFamily.GenericSansSerif,8.5f,FontStyle.Regular);
-				labelMsg.ForeColor=Color.Black;
-			}
-			else {
-				labelMsg.Text="Phone Messages: "+msgCount.ToString();
-				labelMsg.Font=new Font(FontFamily.GenericSansSerif,10f,FontStyle.Bold);
-				labelMsg.ForeColor=Color.Firebrick;
-			}
+			GotoPatNum=tile.PhoneCur.PatNum;
+			OnGoToChanged();
 		}
 
 		protected void OnGoToChanged() {
@@ -65,110 +85,82 @@ namespace OpenDental {
 			}
 		}
 
-		private void FillEmps(){
-			gridEmp.BeginUpdate();
-			gridEmp.Columns.Clear();
-			ODGridColumn col;
-			col=new ODGridColumn(Lan.g("TableEmpClock","Ext"),25);
-			gridEmp.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableEmpClock","Employee"),60);
-			gridEmp.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableEmpClock","Status"),80);
-			gridEmp.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableEmpClock","Phone"),50);
-			gridEmp.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableEmpClock","InOut"),35);
-			gridEmp.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableEmpClock","Customer"),90);
-			gridEmp.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableEmpClock","Time"),70);
-			gridEmp.Columns.Add(col);
-			gridEmp.Rows.Clear();
-			UI.ODGridRow row;
-			PhoneList=Phones.GetPhoneList();
-			DateTime dateTimeStart;
-			TimeSpan span;
-			DateTime timeOfDay;//because TimeSpan does not have good formatting.
-			for(int i=0;i<PhoneList.Count;i++){
-				row=new OpenDental.UI.ODGridRow();
-				row.Cells.Add(PhoneList[i].Extension.ToString());
-				row.Cells.Add(PhoneList[i].EmployeeName);
-				if(PhoneList[i].ClockStatus==ClockStatusEnum.None){
-					row.Cells.Add("");
-				}
-				else{
-					row.Cells.Add(PhoneList[i].ClockStatus.ToString());
-				}
-				row.Cells.Add(PhoneList[i].Description);
-				row.Cells.Add(PhoneList[i].InOrOut);
-				row.Cells.Add(PhoneList[i].CustomerNumber);
-				dateTimeStart=PhoneList[i].DateTimeStart;
-				if(dateTimeStart.Date==DateTime.Today){
-					span=DateTime.Now-dateTimeStart+timeDelta;
-					timeOfDay=DateTime.Today+span;
-					row.Cells.Add(timeOfDay.ToString("H:mm:ss"));
-				}
-				else{
-					row.Cells.Add("");
-				}
-				row.ColorBackG=PhoneList[i].ColorBar;
-				row.ColorText=PhoneList[i].ColorText;
-				gridEmp.Rows.Add(row);
-			}
-			gridEmp.EndUpdate();
-			gridEmp.SetSelected(false);
+
+		private void phoneTile_SelectedTileChanged(object sender,EventArgs e) {
+			selectedTile=(PhoneTile)sender;
 		}
 
-		/*private void FillMetrics(){
-			gridMetrics.BeginUpdate();
-			gridMetrics.Columns.Clear();
-			ODGridColumn col;
-			col=new ODGridColumn(Lan.g("TablePhoneMetrics","Description"),40);
-			gridMetrics.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TablePhoneMetrics","#"),60);
-			gridMetrics.Columns.Add(col);
-			gridMetrics.Rows.Clear();
-			UI.ODGridRow row;
-			tablePhone=Employees.GetPhoneMetricTable();
-			for(int i=0;i<tablePhone.Rows.Count;i++){
-				row=new OpenDental.UI.ODGridRow();
-				row.Cells.Add(tablePhone.Rows[i]["Description"].ToString());
-				row.Cells.Add(tablePhone.Rows[i]["MetricVal"].ToString());
-				row.ColorText=Color.FromArgb(PIn.PInt(tablePhone.Rows[i]["ColorText"].ToString()));
-				gridMetrics.Rows.Add(row);
-			}
-			gridMetrics.EndUpdate();
-			gridMetrics.SetSelected(false);
-		}*/
-
-		private void timer1_Tick(object sender,EventArgs e) {
-			//For now, happens once per 1.6 seconds regardless of phone activity.
-			//This might need improvement.
-			FillEmps();
+		private void timerMain_Tick(object sender,EventArgs e) {
+			//every 1.6 seconds
+			FillTiles();
 		}
 
-		private void timerMsgs_Tick(object sender,EventArgs e) {
-			//every 3 sec.
-			SetLabelMsg();
-		}
+		//Phones.SetWebCamImage(intTest+101,(Bitmap)pictureWebCam.Image,PhoneList);
 
 		private void butOverride_Click(object sender,EventArgs e) {
 			FormPhoneOverrides FormO=new FormPhoneOverrides();
 			FormO.ShowDialog();
 		}
 
-		private void gridEmp_CellClick(object sender,ODGridClickEventArgs e) {
-			if((e.Button & MouseButtons.Right)==MouseButtons.Right){
-				return;
+		private void timerMsgs_Tick(object sender,EventArgs e) {
+			//every 3 sec.
+			workerThread=new Thread(new ThreadStart(this.WorkerThread_SetLabelMsg));
+			workerThread.Start();//It's done this way because the file activity tends to lock the UI on slow connections.
+		}
+
+		private delegate void DelegateSetString(String str,bool isBold,Color color);//typically at namespace level rather than class level
+
+		///<summary>Always called using worker thread.</summary>
+		private void WorkerThread_SetLabelMsg() {
+			#if DEBUG
+				//return;
+			#endif
+			string s;
+			bool isBold;
+			Color color;
+			try {
+				if(!Directory.Exists(pathPhoneMsg)) {
+					s="msg path not found";
+					isBold=false;
+					color=Color.Black;
+					this.Invoke(new DelegateSetString(SetString),new Object[] { s,isBold,color });
+					return;
+				}
+				msgCount=Directory.GetFiles(pathPhoneMsg,"*.txt").Length;
+				if(msgCount==0) {
+					s="Phone Messages: 0";
+					isBold=false;
+					color=Color.Black;
+					this.Invoke(new DelegateSetString(SetString),new Object[] { s,isBold,color });
+				}
+				else {
+					s="Phone Messages: "+msgCount.ToString();
+					isBold=true;
+					color=Color.Firebrick;
+					this.Invoke(new DelegateSetString(SetString),new Object[] { s,isBold,color });
+				}
 			}
-			long patNum=PhoneList[e.Row].PatNum;
-			GotoPatNum=patNum;
-			OnGoToChanged();
+			catch {
+				//because this.Invoke will fail sometimes if the form is quickly closed and reopened because form handle has not yet been created.
+			}
+		}
+
+		///<summary>Called from worker thread using delegate and Control.Invoke</summary>
+		private void SetString(String str,bool isBold,Color color) {
+			labelMsg.Text=str;
+			if(isBold) {
+				labelMsg.Font=new Font(FontFamily.GenericSansSerif,10f,FontStyle.Bold);
+			}
+			else {
+				labelMsg.Font=new Font(FontFamily.GenericSansSerif,8.5f,FontStyle.Regular);
+			}
+			labelMsg.ForeColor=color;
 		}
 
 		private void menuItemManage_Click(object sender,EventArgs e) {
-			long patNum=PhoneList[rowI].PatNum;
-			if(patNum==0){
+			//if(selectedTile.PhoneCur==null) {//already validated
+			long patNum=selectedTile.PhoneCur.PatNum;
+			if(patNum==0) {
 				MsgBox.Show(this,"Please attach this number to a patient first.");
 				return;
 			}
@@ -178,15 +170,21 @@ namespace OpenDental {
 		}
 
 		private void menuItemAdd_Click(object sender,EventArgs e) {
+			//if(selectedTile.PhoneCur==null) {//already validated
+			if(selectedTile.PhoneCur.CustomerNumber=="") {
+				MsgBox.Show(this,"No phone number present.");
+				return;
+			}
+			long patNum=selectedTile.PhoneCur.PatNum;
 			if(FormOpenDental.CurPatNum==0) {
 				MsgBox.Show(this,"Please select a patient in the main window first.");
 				return;
 			}
-			if(PhoneList[rowI].PatNum!=0) {
+			if(patNum!=0) {
 				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"The current number is already attached to a patient. Attach it to this patient instead?")) {
 					return;
 				}
-				PhoneNumber ph=PhoneNumbers.GetByVal(PhoneList[rowI].CustomerNumber);
+				PhoneNumber ph=PhoneNumbers.GetByVal(selectedTile.PhoneCur.CustomerNumber);
 				ph.PatNum=FormOpenDental.CurPatNum;
 				PhoneNumbers.Update(ph);
 			}
@@ -197,97 +195,82 @@ namespace OpenDental {
 				}
 				PhoneNumber ph=new PhoneNumber();
 				ph.PatNum=FormOpenDental.CurPatNum;
-				ph.PhoneNumberVal=PhoneList[rowI].CustomerNumber;
+				ph.PhoneNumberVal=selectedTile.PhoneCur.CustomerNumber;
 				PhoneNumbers.Insert(ph);
 			}
 			//tell the phone server to refresh this row with the patient name and patnum
 			DataValid.SetInvalid(InvalidType.PhoneNumbers);
 		}
 
-		private void gridEmp_MouseUp(object sender,MouseEventArgs e) {
-			if(e.Button!=MouseButtons.Right) {
-				return;
-			}
-			rowI=gridEmp.PointToRow(e.Y);
-			colI=gridEmp.PointToCol(e.X);
-			if(rowI==-1){
-				return;
-			}
-			if(colI==5){
-				menuNumbers.Show(gridEmp,e.Location);
-			}
-			if(colI==2){
-				menuStatus.Show(gridEmp,e.Location);
-			}		
-		}
+		//Timecards-------------------------------------------------------------------------------------
 
 		private void menuItemAvailable_Click(object sender,EventArgs e) {
-			if(!ClockIn()){
+			if(!ClockIn()) {
 				return;
 			}
-			int extension=PhoneList[rowI].Extension;
-			long employeeNum=PhoneList[rowI].EmployeeNum;
+			int extension=selectedTile.PhoneCur.Extension;
+			long employeeNum=selectedTile.PhoneCur.EmployeeNum;
 			PhoneOverrides.SetAvailable(extension,employeeNum);
 			PhoneAsterisks.SetToDefaultRingGroups(extension,employeeNum);
 			Phones.SetPhoneStatus(ClockStatusEnum.Available,extension);//green
-			FillEmps();
+			FillTiles();
 		}
 
 		private void menuItemTraining_Click(object sender,EventArgs e) {
-			if(!ClockIn()){
+			if(!ClockIn()) {
 				return;
 			}
-			int extension=PhoneList[rowI].Extension;
-			long employeeNum=PhoneList[rowI].EmployeeNum;
+			int extension=selectedTile.PhoneCur.Extension;
+			long employeeNum=selectedTile.PhoneCur.EmployeeNum;
 			PhoneOverrides.SetAvailable(extension,employeeNum);
 			PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.None);
 			Phones.SetPhoneStatus(ClockStatusEnum.Training,extension);
-			FillEmps();
+			FillTiles();
 		}
 
 		private void menuItemTeamAssist_Click(object sender,EventArgs e) {
-			if(!ClockIn()){
+			if(!ClockIn()) {
 				return;
 			}
-			int extension=PhoneList[rowI].Extension;
-			long employeeNum=PhoneList[rowI].EmployeeNum;
+			int extension=selectedTile.PhoneCur.Extension;
+			long employeeNum=selectedTile.PhoneCur.EmployeeNum;
 			PhoneOverrides.SetAvailable(extension,employeeNum);
 			PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.None);
 			Phones.SetPhoneStatus(ClockStatusEnum.TeamAssist,extension);
-			FillEmps();
+			FillTiles();
 		}
 
 		private void menuItemWrapUp_Click(object sender,EventArgs e) {
-			if(!ClockIn()){
+			if(!ClockIn()) {
 				return;
 			}
-			int extension=PhoneList[rowI].Extension;
-			long employeeNum=PhoneList[rowI].EmployeeNum;
+			int extension=selectedTile.PhoneCur.Extension;
+			long employeeNum=selectedTile.PhoneCur.EmployeeNum;
 			PhoneOverrides.SetAvailable(extension,employeeNum);
 			PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.None);
 			Phones.SetPhoneStatus(ClockStatusEnum.WrapUp,extension);
 			//this is usually an automatic status
-			FillEmps();
+			FillTiles();
 		}
 
 		private void menuItemOfflineAssist_Click(object sender,EventArgs e) {
-			if(!ClockIn()){
+			if(!ClockIn()) {
 				return;
 			}
-			int extension=PhoneList[rowI].Extension;
-			long employeeNum=PhoneList[rowI].EmployeeNum;
+			int extension=selectedTile.PhoneCur.Extension;
+			long employeeNum=selectedTile.PhoneCur.EmployeeNum;
 			PhoneOverrides.SetAvailable(extension,employeeNum);
 			PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.None);
 			Phones.SetPhoneStatus(ClockStatusEnum.OfflineAssist,extension);
-			FillEmps();
+			FillTiles();
 		}
 
 		private void menuItemUnavailable_Click(object sender,EventArgs e) {
 			if(!ClockIn()) {
 				return;
 			}
-			int extension=PhoneList[rowI].Extension;
-			long employeeNum=PhoneList[rowI].EmployeeNum;
+			int extension=selectedTile.PhoneCur.Extension;
+			long employeeNum=selectedTile.PhoneCur.EmployeeNum;
 			//Employees.SetUnavailable(extension,employeeNum);
 			//Get an override if it exists
 			PhoneOverride phoneOR=PhoneOverrides.GetByExtAndEmp(extension,employeeNum);
@@ -318,28 +301,28 @@ namespace OpenDental {
 			//this is now handled within PhoneOverrides.Insert or PhoneOverrides.Update
 			//Employees.SetPhoneStatus("Unavailable",extension);
 			PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.None);
-			FillEmps();
+			FillTiles();
 		}
 
 		//RingGroups---------------------------------------------------
 
 		private void menuItemRinggroupAll_Click(object sender,EventArgs e) {
 			//This even works if the person is still clocked out.
-			int extension=PhoneList[rowI].Extension;
-			long employeeNum=PhoneList[rowI].EmployeeNum;
+			int extension=selectedTile.PhoneCur.Extension;
+			long employeeNum=selectedTile.PhoneCur.EmployeeNum;
 			PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.All);
 		}
 
 		private void menuItemRinggroupNone_Click(object sender,EventArgs e) {
 			//This even works if the person is still clocked in.
-			int extension=PhoneList[rowI].Extension;
-			long employeeNum=PhoneList[rowI].EmployeeNum;
+			int extension=selectedTile.PhoneCur.Extension;
+			long employeeNum=selectedTile.PhoneCur.EmployeeNum;
 			PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.None);
 		}
 
 		private void menuItemRinggroupsDefault_Click(object sender,EventArgs e) {
-			int extension=PhoneList[rowI].Extension;
-			long employeeNum=PhoneList[rowI].EmployeeNum;
+			int extension=selectedTile.PhoneCur.Extension;
+			long employeeNum=selectedTile.PhoneCur.EmployeeNum;
 			PhoneAsterisks.SetToDefaultRingGroups(extension,employeeNum);
 		}
 
@@ -347,32 +330,32 @@ namespace OpenDental {
 			if(!ClockIn()) {
 				return;
 			}
-			int extension=PhoneList[rowI].Extension;
-			long employeeNum=PhoneList[rowI].EmployeeNum;
+			int extension=selectedTile.PhoneCur.Extension;
+			long employeeNum=selectedTile.PhoneCur.EmployeeNum;
 			PhoneOverrides.SetAvailable(extension,employeeNum);
 			PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.Backup);
 			Phones.SetPhoneStatus(ClockStatusEnum.Backup,extension);
-			FillEmps();
+			FillTiles();
 		}
 
 		//Timecard---------------------------------------------------
 
 		private void menuItemLunch_Click(object sender,EventArgs e) {
 			//verify that employee is logged in as user
-			int extension=PhoneList[rowI].Extension;
-			long employeeNum=PhoneList[rowI].EmployeeNum;
-			if(PrefC.GetBool(PrefName.TimecardSecurityEnabled)){
-				if(Security.CurUser.EmployeeNum!=employeeNum){
-					if(!Security.IsAuthorized(Permissions.TimecardsEditAll)){
+			int extension=selectedTile.PhoneCur.Extension;
+			long employeeNum=selectedTile.PhoneCur.EmployeeNum;
+			if(PrefC.GetBool(PrefName.TimecardSecurityEnabled)) {
+				if(Security.CurUser.EmployeeNum!=employeeNum) {
+					if(!Security.IsAuthorized(Permissions.TimecardsEditAll)) {
 						MsgBox.Show(this,"Not authorized.");
 						return;
 					}
 				}
 			}
-			try{
+			try {
 				ClockEvents.ClockOut(employeeNum,TimeClockStatus.Lunch);
 			}
-			catch(Exception ex){
+			catch(Exception ex) {
 				MessageBox.Show(ex.Message);//This message will tell user that they are already clocked out.
 				return;
 			}
@@ -382,25 +365,25 @@ namespace OpenDental {
 			Employees.Update(EmpCur);
 			PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.None);
 			Phones.SetPhoneStatus(ClockStatusEnum.Lunch,extension);
-			FillEmps();
+			FillTiles();
 		}
 
 		private void menuItemHome_Click(object sender,EventArgs e) {
 			//verify that employee is logged in as user
-			int extension=PhoneList[rowI].Extension;
-			long employeeNum=PhoneList[rowI].EmployeeNum;
-			if(PrefC.GetBool(PrefName.TimecardSecurityEnabled)){
-				if(Security.CurUser.EmployeeNum!=employeeNum){
-					if(!Security.IsAuthorized(Permissions.TimecardsEditAll)){
+			int extension=selectedTile.PhoneCur.Extension;
+			long employeeNum=selectedTile.PhoneCur.EmployeeNum;
+			if(PrefC.GetBool(PrefName.TimecardSecurityEnabled)) {
+				if(Security.CurUser.EmployeeNum!=employeeNum) {
+					if(!Security.IsAuthorized(Permissions.TimecardsEditAll)) {
 						MsgBox.Show(this,"Not authorized.");
 						return;
 					}
 				}
 			}
-			try{
+			try {
 				ClockEvents.ClockOut(employeeNum,TimeClockStatus.Home);
 			}
-			catch(Exception ex){
+			catch(Exception ex) {
 				MessageBox.Show(ex.Message);//This message will tell user that they are already clocked out.
 				return;
 			}
@@ -411,25 +394,25 @@ namespace OpenDental {
 			//ModuleSelected(PatCurNum);
 			PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.None);
 			Phones.SetPhoneStatus(ClockStatusEnum.Home,extension);
-			FillEmps();
+			FillTiles();
 		}
 
 		private void menuItemBreak_Click(object sender,EventArgs e) {
 			//verify that employee is logged in as user
-			int extension=PhoneList[rowI].Extension;
-			long employeeNum=PhoneList[rowI].EmployeeNum;
-			if(PrefC.GetBool(PrefName.TimecardSecurityEnabled)){
-				if(Security.CurUser.EmployeeNum!=employeeNum){
-					if(!Security.IsAuthorized(Permissions.TimecardsEditAll)){
+			int extension=selectedTile.PhoneCur.Extension;
+			long employeeNum=selectedTile.PhoneCur.EmployeeNum;
+			if(PrefC.GetBool(PrefName.TimecardSecurityEnabled)) {
+				if(Security.CurUser.EmployeeNum!=employeeNum) {
+					if(!Security.IsAuthorized(Permissions.TimecardsEditAll)) {
 						MsgBox.Show(this,"Not authorized.");
 						return;
 					}
 				}
 			}
-			try{
+			try {
 				ClockEvents.ClockOut(employeeNum,TimeClockStatus.Break);
 			}
-			catch(Exception ex){
+			catch(Exception ex) {
 				MessageBox.Show(ex.Message);//This message will tell user that they are already clocked out.
 				return;
 			}
@@ -439,51 +422,50 @@ namespace OpenDental {
 			Employees.Update(EmpCur);
 			PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.None);
 			Phones.SetPhoneStatus(ClockStatusEnum.Break,extension);
-			FillEmps();
+			FillTiles();
 		}
 
 		///<summary>If already clocked in, this does nothing.  Returns false if not able to clock in due to security, or true if successful.</summary>
-		private bool ClockIn(){
-			long employeeNum=PhoneList[rowI].EmployeeNum;
-			if(employeeNum==0){
+		private bool ClockIn() {
+			long employeeNum=selectedTile.PhoneCur.EmployeeNum;
+			if(employeeNum==0) {
 				MsgBox.Show(this,"No employee at that extension.");
 				return false;
 			}
 			if(ClockEvents.IsClockedIn(employeeNum)) {
 				return true;
 			}
-			if(PrefC.GetBool(PrefName.TimecardSecurityEnabled)){
-				if(Security.CurUser.EmployeeNum!=employeeNum){
-					if(!Security.IsAuthorized(Permissions.TimecardsEditAll)){
+			if(PrefC.GetBool(PrefName.TimecardSecurityEnabled)) {
+				if(Security.CurUser.EmployeeNum!=employeeNum) {
+					if(!Security.IsAuthorized(Permissions.TimecardsEditAll)) {
 						MsgBox.Show(this,"Not authorized.");
 						return false;
 					}
 				}
 			}
-			try{
+			try {
 				ClockEvents.ClockIn(employeeNum);
 			}
-			catch{
+			catch {
 				//This should never happen.  Fail silently.
 				return true;
 			}
 			Employee EmpCur=Employees.GetEmp(employeeNum);
-			EmpCur.ClockStatus=Lan.g(this,"Working");;
+			EmpCur.ClockStatus=Lan.g(this,"Working"); ;
 			Employees.Update(EmpCur);
 			return true;
 		}
 
+		private void FormPhoneTiles_FormClosing(object sender,FormClosingEventArgs e) {
+			if(workerThread!=null){
+				workerThread.Abort();
+			}
+		}
+		
 		
 
-	
-
-	
-
-		
-
-		
-
-		
 
 	}
+
+	
 }

@@ -29,15 +29,19 @@ namespace OpenDentBusiness{
 		public string CustomerNumber;
 		///<summary>Blank or 'in' or 'out'.</summary>
 		public string InOrOut;
-		///<summary>FK to patient.PatNum</summary>
+		///<summary>FK to patient.PatNum.  The customer.</summary>
 		public long PatNum;
 		///<summary>The date/time that the phonecall started.  Used to calculate how long user has been on phone.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTimeStart;
-		///<summary></summary>
-		public Bitmap WebCamImage;
-		
+		///<summary>The base64 representation of a bitmap.</summary>
+		public string WebCamImage;
 
+		public Phone Copy() {
+			return (Phone)this.MemberwiseClone();
+		}
+		
+		
 	}
 
 	public enum ClockStatusEnum {

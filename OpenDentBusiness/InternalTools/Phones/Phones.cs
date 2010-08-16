@@ -130,6 +130,21 @@ namespace OpenDentBusiness{
 			return colorBar;
 		}
 
+		public static void SetWebCamImage(int extens,Bitmap bitmap,List<Phone> phoneList) {
+			Phone phone=null;
+			for(int i=0;i<phoneList.Count;i++) {
+				if(phoneList[i].Extension==extens) {
+					phone=phoneList[i];
+				}
+			}
+			if(phone==null) {
+				return;
+			}
+			Phone oldPhone=phone.Copy();
+			phone.WebCamImage=POut.Bitmap(bitmap);
+			Crud.PhoneCrud.Update(phone,oldPhone);
+		}
+
 
 	}
 }

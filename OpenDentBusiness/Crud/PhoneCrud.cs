@@ -58,7 +58,7 @@ namespace OpenDentBusiness.Crud{
 				phone.InOrOut       = PIn.String(table.Rows[i]["InOrOut"].ToString());
 				phone.PatNum        = PIn.Long  (table.Rows[i]["PatNum"].ToString());
 				phone.DateTimeStart = PIn.DateT (table.Rows[i]["DateTimeStart"].ToString());
-				phone.WebCamImage   = PIn.Bitmap(table.Rows[i]["WebCamImage"].ToString());
+				phone.WebCamImage   = PIn.String(table.Rows[i]["WebCamImage"].ToString());
 				retVal.Add(phone);
 			}
 			return retVal;
@@ -94,7 +94,7 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(phone.InOrOut)+"',"
 				+    POut.Long  (phone.PatNum)+","
 				+    POut.DateT (phone.DateTimeStart)+","
-				+    POut.Bitmap(phone.WebCamImage)+")";
+				+"'"+POut.String(phone.WebCamImage)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -118,7 +118,7 @@ namespace OpenDentBusiness.Crud{
 				+"InOrOut       = '"+POut.String(phone.InOrOut)+"', "
 				+"PatNum        =  "+POut.Long  (phone.PatNum)+", "
 				+"DateTimeStart =  "+POut.DateT (phone.DateTimeStart)+", "
-				+"WebCamImage   =  "+POut.Bitmap(phone.WebCamImage)+" "
+				+"WebCamImage   = '"+POut.String(phone.WebCamImage)+"' "
 				+"WHERE PhoneNum = "+POut.Long(phone.PhoneNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
@@ -172,7 +172,7 @@ namespace OpenDentBusiness.Crud{
 			}
 			if(phone.WebCamImage != oldPhone.WebCamImage) {
 				if(command!=""){ command+=",";}
-				command+="WebCamImage = "+POut.Bitmap(phone.WebCamImage)+"";
+				command+="WebCamImage = '"+POut.String(phone.WebCamImage)+"'";
 			}
 			if(command==""){
 				return;

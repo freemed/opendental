@@ -1739,6 +1739,18 @@
     <Compile Include="Forms\FormTPsign.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="InternalTools\Phones\FormPhoneTiles.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="InternalTools\Phones\FormPhoneTiles.designer.cs">
+      <DependentUpon>FormPhoneTiles.cs</DependentUpon>
+    </Compile>
+    <Compile Include="InternalTools\Phones\PhoneTile.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="InternalTools\Phones\PhoneTile.designer.cs">
+      <DependentUpon>PhoneTile.cs</DependentUpon>
+    </Compile>
     <Compile Include="Main Modules\ContrAccount.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -4074,6 +4086,14 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormPatientAddAll.resx">
       <DependentUpon>FormPatientAddAll.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="InternalTools\Phones\FormPhoneTiles.resx">
+      <DependentUpon>FormPhoneTiles.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="InternalTools\Phones\PhoneTile.resx">
+      <DependentUpon>PhoneTile.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Main Modules\FormCommandLinePassOff.resx">

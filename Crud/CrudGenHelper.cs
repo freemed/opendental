@@ -200,6 +200,7 @@ namespace Crud {
 			string dataTypeExpected="";
 			string dataTypeExpected2="";//if an alternate datatype is allowed
 			string dataTypeExpected3="";
+			string dataTypeExpected4="";
 			if(specialColType==CrudSpecialColType.TimeStamp) {
 				dataTypeExpected="timestamp";
 			}
@@ -268,12 +269,13 @@ namespace Crud {
 					dataTypeExpected="varchar";
 					dataTypeExpected2="text";
 					dataTypeExpected3="char";
+					dataTypeExpected4="mediumtext";
 					break;
 				case "TimeSpan":
 					dataTypeExpected="time";
 					break;
 			}
-			if(dataTypeInDb!=dataTypeExpected && dataTypeInDb!=dataTypeExpected2 && dataTypeInDb!=dataTypeExpected3){
+			if(dataTypeInDb!=dataTypeExpected && dataTypeInDb!=dataTypeExpected2 && dataTypeInDb!=dataTypeExpected3 && dataTypeInDb!=dataTypeExpected4) {
 				throw new Exception(tablename+"."+field.Name+" type mismatch for type "+field.FieldType.Name+".  Found "+dataTypeInDb+", but expecting "+dataTypeExpected);
 			}
 		}
