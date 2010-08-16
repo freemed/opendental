@@ -26,12 +26,12 @@ namespace OpenDental{
 			this.components = new System.ComponentModel.Container();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.label2 = new System.Windows.Forms.Label();
+			this.textDateFrom = new OpenDental.ValidDate();
+			this.textDateTo = new OpenDental.ValidDate();
 			this.label3 = new System.Windows.Forms.Label();
 			this.mainMenu1 = new System.Windows.Forms.MainMenu(this.components);
 			this.menuItemSetup = new System.Windows.Forms.MenuItem();
 			this.butRetrieve = new OpenDental.UI.Button();
-			this.textDateFrom = new OpenDental.ValidDate();
-			this.textDateTo = new OpenDental.ValidDate();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
@@ -60,6 +60,20 @@ namespace OpenDental{
 			this.label2.TabIndex = 37;
 			this.label2.Text = "From";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// textDateFrom
+			// 
+			this.textDateFrom.Location = new System.Drawing.Point(95,36);
+			this.textDateFrom.Name = "textDateFrom";
+			this.textDateFrom.Size = new System.Drawing.Size(100,20);
+			this.textDateFrom.TabIndex = 43;
+			// 
+			// textDateTo
+			// 
+			this.textDateTo.Location = new System.Drawing.Point(260,36);
+			this.textDateTo.Name = "textDateTo";
+			this.textDateTo.Size = new System.Drawing.Size(100,20);
+			this.textDateTo.TabIndex = 44;
 			// 
 			// label3
 			// 
@@ -95,20 +109,6 @@ namespace OpenDental{
 			this.butRetrieve.TabIndex = 45;
 			this.butRetrieve.Text = "&Retrieve New Forms";
 			this.butRetrieve.Click += new System.EventHandler(this.butRetrieve_Click);
-			// 
-			// textDateFrom
-			// 
-			this.textDateFrom.Location = new System.Drawing.Point(95,36);
-			this.textDateFrom.Name = "textDateFrom";
-			this.textDateFrom.Size = new System.Drawing.Size(100,20);
-			this.textDateFrom.TabIndex = 43;
-			// 
-			// textDateTo
-			// 
-			this.textDateTo.Location = new System.Drawing.Point(260,36);
-			this.textDateTo.Name = "textDateTo";
-			this.textDateTo.Size = new System.Drawing.Size(100,20);
-			this.textDateTo.TabIndex = 44;
 			// 
 			// gridMain
 			// 

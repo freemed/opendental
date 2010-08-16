@@ -38,6 +38,13 @@ namespace WebHostSynch {
 
 		}
 
+
+		[WebMethod]
+		public void DeleteSheetData(List<long> SheetsForDeletion) {
+
+			int a = 3;
+		}
+
 		[WebMethod]
 		public bool CheckRegistrationKey(string RegistrationKey) {
 

@@ -37,6 +37,8 @@ namespace OpenDental.WebHostSynch {
         
         private System.Threading.SendOrPostCallback GetSheetDataOperationCompleted;
         
+        private System.Threading.SendOrPostCallback DeleteSheetDataOperationCompleted;
+        
         private System.Threading.SendOrPostCallback CheckRegistrationKeyOperationCompleted;
         
         private bool useDefaultCredentialsSetExplicitly;
@@ -82,6 +84,9 @@ namespace OpenDental.WebHostSynch {
         
         /// <remarks/>
         public event GetSheetDataCompletedEventHandler GetSheetDataCompleted;
+        
+        /// <remarks/>
+        public event DeleteSheetDataCompletedEventHandler DeleteSheetDataCompleted;
         
         /// <remarks/>
         public event CheckRegistrationKeyCompletedEventHandler CheckRegistrationKeyCompleted;
@@ -145,6 +150,34 @@ namespace OpenDental.WebHostSynch {
             if ((this.GetSheetDataCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.GetSheetDataCompleted(this, new GetSheetDataCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/DeleteSheetData", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public void DeleteSheetData(long[] SheetsForDeletion) {
+            this.Invoke("DeleteSheetData", new object[] {
+                        SheetsForDeletion});
+        }
+        
+        /// <remarks/>
+        public void DeleteSheetDataAsync(long[] SheetsForDeletion) {
+            this.DeleteSheetDataAsync(SheetsForDeletion, null);
+        }
+        
+        /// <remarks/>
+        public void DeleteSheetDataAsync(long[] SheetsForDeletion, object userState) {
+            if ((this.DeleteSheetDataOperationCompleted == null)) {
+                this.DeleteSheetDataOperationCompleted = new System.Threading.SendOrPostCallback(this.OnDeleteSheetDataOperationCompleted);
+            }
+            this.InvokeAsync("DeleteSheetData", new object[] {
+                        SheetsForDeletion}, this.DeleteSheetDataOperationCompleted, userState);
+        }
+        
+        private void OnDeleteSheetDataOperationCompleted(object arg) {
+            if ((this.DeleteSheetDataCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.DeleteSheetDataCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
         
@@ -457,6 +490,10 @@ namespace OpenDental.WebHostSynch {
             }
         }
     }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "2.0.50727.3053")]
+    public delegate void DeleteSheetDataCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "2.0.50727.3053")]

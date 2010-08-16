@@ -6,6 +6,8 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.Linq;
+using System.Net;
+using System.Security.Cryptography.X509Certificates;
 using OpenDental.UI;
 using OpenDentBusiness;
 
@@ -18,6 +20,7 @@ namespace OpenDental {
 
 		}
 		private void FillGrid(){
+			try{
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableWebforms","Last Name"),100);
@@ -33,11 +36,26 @@ namespace OpenDental {
 
 			DateTime dateFrom=PIn.Date(textDateFrom.Text);
 			DateTime dateTo=PIn.Date(textDateTo.Text);
+				
+			/* this line will continue and accept the security certificate if there is
+			 *  a problem with the security certiicate. An exception will not be thrown in this case.
+			 * */
 
+
+			System.Net.ServicePointManager.ServerCertificateValidationCallback +=
+    delegate(object sender,System.Security.Cryptography.X509Certificates.X509Certificate certificate,
+						System.Security.Cryptography.X509Certificates.X509Chain chain,
+						System.Net.Security.SslPolicyErrors sslPolicyErrors) {
+		/*do stuff here in necessary and return true or false accordingly.
+		 * In this particular case it always returns true i/e accepts any certificate.
+		 * */
+
+					return true;
+				};
 			WebHostSynch.WebHostSynch wh = new WebHostSynch.WebHostSynch();
 
 			//The url  is to be obtained from the preferenes table in the db
-			//wh.Url ="";
+			//wh.Url ="https://localhost/WebHostSynch/WebHostSynch.asmx";
 			string RegistrationKey = PrefC.GetString(PrefName.RegistrationKey);
 			if(wh.CheckRegistrationKey(RegistrationKey)==false) {
 				
@@ -63,6 +81,7 @@ namespace OpenDental {
 
 			var SheetIdArray = wbs.ToArray();
 
+			List<long> SheetsForDeletion = new List<long>();
 
 			// loop through each sheet
 			for(int LoopVariable = 0;LoopVariable < SheetIdArray.Length;LoopVariable++) {
@@ -101,29 +120,78 @@ namespace OpenDental {
 					
 				}
 				long PatNum=Patients.GetPatNumByNameAndBirthday(LastName,FirstName,birthDate);
+				long NewPatNum = 0;
+				Patient newPat= null;
+				Sheet newSheet= null;
 
 				row.Cells.Add(LastName);
 				row.Cells.Add(FirstName);
 				row.Cells.Add(BirthDate);
 				if(PatNum==0) {
-					long NewPatNum = CreateNewPatient(LastName,FirstName,BirthDate);
+					newPat= CreateNewPatient(LastName,FirstName,BirthDate);
+					NewPatNum = newPat.PatNum;
 					row.Cells.Add("New Patient");
 					row.Tag=NewPatNum;
 				}
 				else {
-					CreateSheet(PatNum, LastName,FirstName,BirthDate);
+					newSheet = CreateSheet(PatNum,LastName,FirstName,BirthDate);
 					row.Cells.Add("Imported");
 					row.Tag=PatNum;
 				}
 				gridMain.Rows.Add(row);
 				gridMain.EndUpdate();
+
+		#region deleting sheets from server
+
+				
+				if(CompareData(newPat,newSheet)==true) {
+				
+					SheetsForDeletion.Add(SheetID);
+				}
+		#endregion
+
+
+			}// end of for loop
+
+			wh.DeleteSheetData(SheetsForDeletion.ToArray());
+
+				}
+			catch(Exception e){
+				MessageBox.Show(e.Message);
 			}
 
 		}
 
+	
+		private bool CompareData(Patient newPat, Sheet newSheet) {
 
-		private long CreateNewPatient(string LastName,string FirstName,string BirthDate) {
-			Patient newPat=new Patient();
+			bool dataExistsInDb=false;
+			if(newPat!=null) {
+				long PatNum = newPat.PatNum;
+				Patient patientFromDb = Patients.GetPat(PatNum);
+				if(patientFromDb!=null) {
+					// do steps for comparing each variable
+				}
+
+				
+			}
+
+			if(newSheet!=null) {
+				long SheetNum = newSheet.SheetNum;
+				Sheet sheetFromDb = Sheets.GetSheet(SheetNum);
+
+				if(sheetFromDb!=null) {
+					// do steps for comparing each variable
+				}
+			}
+			dataExistsInDb=true;
+			return dataExistsInDb;
+		}
+
+		private Patient CreateNewPatient(string LastName,string FirstName,string BirthDate) {
+			Patient newPat=null;
+			try{
+			newPat=new Patient();
 			newPat.LName=LastName;
 			newPat.FName=FirstName;
 			newPat.Birthdate= PIn.Date(BirthDate);
@@ -147,12 +215,17 @@ namespace OpenDental {
 			newPat.ClinicNum  =PatCur.ClinicNum;
 			*/
 			Patients.Insert(newPat,false);
-			return newPat.PatNum;
+				}
+			catch(Exception e){
+				MessageBox.Show(e.Message);
+			}
+			return newPat;
 			
 		}
 
-		private void CreateSheet(long PatNum, string LastName,string FirstName,string BirthDate) {
+		private Sheet CreateSheet(long PatNum,string LastName,string FirstName,string BirthDate) {
 
+			try {
 			FormSheetPicker FormS = new FormSheetPicker();
 			SheetDef sheetDef;
 			Sheet sheet = null;//only useful if not Terminal
@@ -180,7 +253,12 @@ namespace OpenDental {
 					}
 				
 			}
-				Sheets.SaveNewSheet(sheet);//save each sheet.
+				Sheets.SaveNewSheet(sheet);
+				return sheet;
+	}
+			catch(Exception e){
+				MessageBox.Show(e.Message);
+			}
 			}
 
 		private void butOK_Click(object sender,EventArgs e) {
@@ -224,3 +302,4 @@ namespace OpenDental {
 		}
 	}
 }
+
