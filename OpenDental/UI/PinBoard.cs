@@ -68,7 +68,7 @@ namespace OpenDental.UI {
 		}
 
 		///<Summary>Supply a datarow that contains all the database values needed for the appointment that is being added.</Summary>
-		public void AddAppointment(DataRow row,DataTable tableApptFields){
+		public void AddAppointment(DataRow row,DataTable tableApptFields,DataTable tablePatFields){
 			//if appointment is already on the pinboard, just select it.
 			for(int i=0;i<apptList.Count;i++){
 				if(apptList[i].DataRoww["AptNum"].ToString()==row["AptNum"].ToString()){
@@ -83,6 +83,7 @@ namespace OpenDental.UI {
 			PinApptSingle.ThisIsPinBoard=true;
 			PinApptSingle.DataRoww=row;
 			PinApptSingle.TableApptFields=tableApptFields;
+			PinApptSingle.TablePatFields=tablePatFields;
 			PinApptSingle.SetSize();
 			PinApptSingle.Width=Width-2;
 			PinApptSingle.IsSelected=true;

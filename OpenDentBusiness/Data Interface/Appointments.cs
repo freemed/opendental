@@ -513,6 +513,7 @@ namespace OpenDentBusiness{
 			retVal.Tables.Add(GetPeriodWaitingRoomTable(dateStart,dateEnd));
 			retVal.Tables.Add(GetPeriodSchedule(dateStart,dateEnd));
 			retVal.Tables.Add(GetApptFields(tableAppt));
+			retVal.Tables.Add(GetPatFields(tableAppt));
 			return retVal;
 		}
 
@@ -970,6 +971,30 @@ namespace OpenDentBusiness{
 			DataConnection dcon=new DataConnection();
 			DataTable table= dcon.GetTable(command);
 			table.TableName="ApptFields";
+			return table;
+		}
+
+		///<summary>Pass in the appointments table so that we can search based on appointments.</summary>
+		public static DataTable GetPatFields(DataTable tableAppts) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),tableAppts);
+			}
+			string command="SELECT PatNum,FieldName,FieldValue "
+				+"FROM patfield "
+				+"WHERE PatNum IN (";
+			if(tableAppts.Rows.Count==0) {
+				command+="0";
+			}
+			else for(int i=0;i<tableAppts.Rows.Count;i++) {
+					if(i>0) {
+						command+=",";
+					}
+					command+=tableAppts.Rows[i]["PatNum"].ToString();
+				}
+			command+=")";
+			DataConnection dcon=new DataConnection();
+			DataTable table= dcon.GetTable(command);
+			table.TableName="PatFields";
 			return table;
 		}
 

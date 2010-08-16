@@ -37,6 +37,8 @@ namespace OpenDental{
 		private List<int> displayedAvailable;
 		///<summary>The actual ApptFieldDefNums of all available elements because no language translation is needed.</summary>
 		private List<long> displayedAvailableApptFieldDefs;
+		///<summary>The actual PatFieldDefNums of all available elements because no language translation is needed.</summary>
+		private List<long> displayedAvailablePatFieldDefs;
 		private System.Windows.Forms.ColorDialog colorDialog1;
 		private System.Windows.Forms.Label label6;
 		private System.Windows.Forms.TextBox textRowsPerIncr;
@@ -62,6 +64,7 @@ namespace OpenDental{
 		private ListBox listStackUR;
 		private Label label1;
 		private ODGrid gridApptFieldDefs;
+		private ODGrid gridPatFieldDefs;
 		///<summary>Set this value before opening the form.</summary>
 		public ApptView ApptViewCur;
 		//<summary>Tracks MouseIsDown on listOps.</summary>
@@ -133,6 +136,7 @@ namespace OpenDental{
 			this.label8 = new System.Windows.Forms.Label();
 			this.gridAvailable = new OpenDental.UI.ODGrid();
 			this.gridApptFieldDefs = new OpenDental.UI.ODGrid();
+			this.gridPatFieldDefs = new OpenDental.UI.ODGrid();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.SuspendLayout();
@@ -275,7 +279,7 @@ namespace OpenDental{
 			this.butLeft.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butLeft.CornerRadius = 4F;
 			this.butLeft.Image = global::OpenDental.Properties.Resources.Left;
-			this.butLeft.Location = new System.Drawing.Point(404,316);
+			this.butLeft.Location = new System.Drawing.Point(404,296);
 			this.butLeft.Name = "butLeft";
 			this.butLeft.Size = new System.Drawing.Size(35,26);
 			this.butLeft.TabIndex = 52;
@@ -289,7 +293,7 @@ namespace OpenDental{
 			this.butRight.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butRight.CornerRadius = 4F;
 			this.butRight.Image = global::OpenDental.Properties.Resources.Right;
-			this.butRight.Location = new System.Drawing.Point(404,282);
+			this.butRight.Location = new System.Drawing.Point(404,262);
 			this.butRight.Name = "butRight";
 			this.butRight.Size = new System.Drawing.Size(35,26);
 			this.butRight.TabIndex = 53;
@@ -476,7 +480,7 @@ namespace OpenDental{
 			this.gridAvailable.Location = new System.Drawing.Point(222,146);
 			this.gridAvailable.Name = "gridAvailable";
 			this.gridAvailable.ScrollValue = 0;
-			this.gridAvailable.Size = new System.Drawing.Size(175,336);
+			this.gridAvailable.Size = new System.Drawing.Size(175,269);
 			this.gridAvailable.TabIndex = 61;
 			this.gridAvailable.Title = "Available Rows";
 			this.gridAvailable.TranslationName = null;
@@ -485,14 +489,26 @@ namespace OpenDental{
 			// gridApptFieldDefs
 			// 
 			this.gridApptFieldDefs.HScrollVisible = false;
-			this.gridApptFieldDefs.Location = new System.Drawing.Point(222,485);
+			this.gridApptFieldDefs.Location = new System.Drawing.Point(222,418);
 			this.gridApptFieldDefs.Name = "gridApptFieldDefs";
 			this.gridApptFieldDefs.ScrollValue = 0;
-			this.gridApptFieldDefs.Size = new System.Drawing.Size(175,112);
+			this.gridApptFieldDefs.Size = new System.Drawing.Size(175,88);
 			this.gridApptFieldDefs.TabIndex = 62;
 			this.gridApptFieldDefs.Title = "Appt Field Defs";
 			this.gridApptFieldDefs.TranslationName = null;
 			this.gridApptFieldDefs.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridApptFieldDefs_CellClick);
+			//
+			// gridPatFieldDefs
+			//
+			this.gridPatFieldDefs.HScrollVisible = false;
+			this.gridPatFieldDefs.Location = new System.Drawing.Point(222,509);
+			this.gridPatFieldDefs.Name = "gridPatFieldDefs";
+			this.gridPatFieldDefs.ScrollValue = 0;
+			this.gridPatFieldDefs.Size = new System.Drawing.Size(175,88);
+			this.gridPatFieldDefs.TabIndex = 63;
+			this.gridPatFieldDefs.Title = "Patient Field Defs";
+			this.gridPatFieldDefs.TranslationName = null;
+			this.gridPatFieldDefs.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPatFieldDefs_CellClick);
 			// 
 			// FormApptViewEdit
 			// 
@@ -500,6 +516,7 @@ namespace OpenDental{
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(852,675);
+			this.Controls.Add(this.gridPatFieldDefs);
 			this.Controls.Add(this.gridApptFieldDefs);
 			this.Controls.Add(this.gridAvailable);
 			this.Controls.Add(this.groupBox2);
@@ -634,6 +651,9 @@ namespace OpenDental{
 				if(displayedElementsMain[i].ApptFieldDefNum>0){
 					row.Cells.Add(ApptFieldDefs.GetFieldName(displayedElementsMain[i].ApptFieldDefNum));
 				}
+				else if(displayedElementsMain[i].PatFieldDefNum>0){
+					row.Cells.Add(PatFieldDefs.GetFieldName(displayedElementsMain[i].PatFieldDefNum));
+				}
 				else{
 					row.Cells.Add(displayedElementsMain[i].ElementDesc);
 				}
@@ -733,6 +753,22 @@ namespace OpenDental{
 				}
 			}
 			gridApptFieldDefs.EndUpdate();
+			//gridPatFieldDefs-----------------------------------------------------------
+			gridPatFieldDefs.BeginUpdate();
+			gridPatFieldDefs.Columns.Clear();
+			col=new ODGridColumn("",100);
+			gridPatFieldDefs.Columns.Add(col);
+			gridPatFieldDefs.Rows.Clear();
+			displayedAvailablePatFieldDefs=new List<long>();
+			for(int i=0;i<PatFieldDefs.List.Length;i++) {
+				if(!PatFieldIsDisplayed(PatFieldDefs.List[i].PatFieldDefNum)) {
+					displayedAvailablePatFieldDefs.Add(PatFieldDefs.List[i].PatFieldDefNum);
+					row=new ODGridRow();
+					row.Cells.Add(PatFieldDefs.List[i].FieldName);
+					gridPatFieldDefs.Rows.Add(row);
+				}
+			}
+			gridPatFieldDefs.EndUpdate();
 		}
 
 		///<summary>Called from FillElements. Used to determine whether a given element is already displayed. If not, then it is displayed in the available rows on the left.</summary>
@@ -745,10 +781,20 @@ namespace OpenDental{
 			return false;
 		}
 
-		///<summary>Called from FillElements. Used to determine whether a apptfield is already displayed. If not, then it is displayed in the available rows on the left.</summary>
+		///<summary>Called from FillElements. Used to determine whether a apptfield is already displayed. If not, then it is displayed in the apptFieldDef rows on the left.</summary>
 		private bool ApptFieldIsDisplayed(long apptFieldDefNum){
 			for(int i=0;i<displayedElementsAll.Count;i++){
 				if(displayedElementsAll[i].ApptFieldDefNum==apptFieldDefNum){
+					return true;
+				}
+			}
+			return false;
+		}
+
+		///<summary>Called from FillElements. Used to determine whether a PatFieldDef is already displayed. If not, then it is displayed in the patFieldDef rows on the left.</summary>
+		private bool PatFieldIsDisplayed(long patFieldDefNum){
+			for(int i=0;i<displayedElementsAll.Count;i++){
+				if(displayedElementsAll[i].PatFieldDefNum==patFieldDefNum){
 					return true;
 				}
 			}
@@ -812,6 +858,25 @@ namespace OpenDental{
 				ApptViewItem item=new ApptViewItem();
 				item.ElementColor=Color.Black;
 				item.ApptFieldDefNum=displayedAvailableApptFieldDefs[gridApptFieldDefs.GetSelectedIndex()];
+				if(gridMain.SelectedIndices.Length==1) {//insert
+					int newIdx=displayedElementsAll.IndexOf(displayedElementsMain[gridMain.GetSelectedIndex()]);
+					displayedElementsAll.Insert(newIdx,item);
+				}
+				else {//add to end
+					displayedElementsAll.Add(item);
+				}
+				FillElements();
+				for(int i=0;i<displayedElementsMain.Count;i++) {//the new item will always show first in the main list.
+					if(displayedElementsMain[i]==item) {
+						gridMain.SetSelected(i,true);//reselect the item
+						break;
+					}
+				}
+			}
+			else if(gridPatFieldDefs.GetSelectedIndex()!=-1) {
+				ApptViewItem item=new ApptViewItem();
+				item.ElementColor=Color.Black;
+				item.PatFieldDefNum=displayedAvailablePatFieldDefs[gridPatFieldDefs.GetSelectedIndex()]; 
 				if(gridMain.SelectedIndices.Length==1) {//insert
 					int newIdx=displayedElementsAll.IndexOf(displayedElementsMain[gridMain.GetSelectedIndex()]);
 					displayedElementsAll.Insert(newIdx,item);
@@ -924,12 +989,21 @@ namespace OpenDental{
 		private void gridAvailable_CellClick(object sender,ODGridClickEventArgs e) {
 			if(gridAvailable.SelectedIndices.Length>0) {
 				gridApptFieldDefs.SetSelected(false);
+				gridPatFieldDefs.SetSelected(false);
 			}
 		}
 
 		private void gridApptFieldDefs_CellClick(object sender,ODGridClickEventArgs e) {
 			if(gridApptFieldDefs.SelectedIndices.Length>0) {
 				gridAvailable.SetSelected(false);
+				gridPatFieldDefs.SetSelected(false);
+			}
+		}
+
+		private void gridPatFieldDefs_CellClick(object sender,ODGridClickEventArgs e) {
+			if(gridPatFieldDefs.SelectedIndices.Length>0) {
+				gridAvailable.SetSelected(false);
+				gridApptFieldDefs.SetSelected(false);
 			}
 		}
 

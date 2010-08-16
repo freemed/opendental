@@ -204,6 +204,7 @@ namespace OpenDental{
 			this.vScrollBar1 = new System.Windows.Forms.VScrollBar();
 			this.ContrApptSheet2 = new OpenDental.ContrApptSheet();
 			this.panelAptInfo = new System.Windows.Forms.Panel();
+			this.butGraph = new OpenDental.UI.Button();
 			this.listConfirmed = new System.Windows.Forms.ListBox();
 			this.butComplete = new System.Windows.Forms.Button();
 			this.butUnsched = new System.Windows.Forms.Button();
@@ -258,7 +259,6 @@ namespace OpenDental{
 			this.timerTests = new System.Windows.Forms.Timer(this.components);
 			this.butOther = new OpenDental.UI.Button();
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
-			this.butGraph = new OpenDental.UI.Button();
 			this.panelArrows.SuspendLayout();
 			this.panelSheet.SuspendLayout();
 			this.panelAptInfo.SuspendLayout();
@@ -480,6 +480,23 @@ namespace OpenDental{
 			this.panelAptInfo.Name = "panelAptInfo";
 			this.panelAptInfo.Size = new System.Drawing.Size(219,116);
 			this.panelAptInfo.TabIndex = 45;
+			// 
+			// butGraph
+			// 
+			this.butGraph.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butGraph.Autosize = true;
+			this.butGraph.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butGraph.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butGraph.CornerRadius = 4F;
+			this.butGraph.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butGraph.Location = new System.Drawing.Point(41,42);
+			this.butGraph.Name = "butGraph";
+			this.butGraph.Size = new System.Drawing.Size(92,24);
+			this.butGraph.TabIndex = 78;
+			this.butGraph.TabStop = false;
+			this.butGraph.Text = "Graph Emp";
+			this.butGraph.Visible = false;
+			this.butGraph.Click += new System.EventHandler(this.butGraph_Click);
 			// 
 			// listConfirmed
 			// 
@@ -1062,23 +1079,6 @@ namespace OpenDental{
 			this.ToolBarMain.TabIndex = 73;
 			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
 			// 
-			// butGraph
-			// 
-			this.butGraph.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butGraph.Autosize = true;
-			this.butGraph.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butGraph.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butGraph.CornerRadius = 4F;
-			this.butGraph.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butGraph.Location = new System.Drawing.Point(41,42);
-			this.butGraph.Name = "butGraph";
-			this.butGraph.Size = new System.Drawing.Size(92,24);
-			this.butGraph.TabIndex = 78;
-			this.butGraph.TabStop = false;
-			this.butGraph.Text = "Graph Emp";
-			this.butGraph.Visible = false;
-			this.butGraph.Click += new System.EventHandler(this.butGraph_Click);
-			// 
 			// ContrAppt
 			// 
 			this.Controls.Add(this.groupSearch);
@@ -1391,6 +1391,7 @@ namespace OpenDental{
 				}
 				ContrApptSingle3[i].DataRoww=row;
 				ContrApptSingle3[i].TableApptFields=DS.Tables["ApptFields"];
+				ContrApptSingle3[i].TablePatFields=DS.Tables["PatFields"];
 				if(!ContrApptSheet.IsWeeklyView) {
 					//copy time pattern to provBar[]:
 					indexProv=-1;
@@ -2017,6 +2018,7 @@ namespace OpenDental{
 					}
 				} 
 				DataTable tableApptFields=DS.Tables["ApptFields"];
+				DataTable tablePatFields=DS.Tables["PatFields"];
 				if(row==null) {
 					DataTable tableAppts=Appointments.RefreshOneApt(aptNums[a],false).Tables["Appointments"];
 					row=tableAppts.Rows[0];
@@ -2028,7 +2030,7 @@ namespace OpenDental{
 					//The appt fields are not in DS.Tables["ApptFields"] since the appt is not visible on the schedule.
 					tableApptFields=Appointments.GetApptFields(tableAppts);
 				}
-				pinBoard.AddAppointment(row,tableApptFields);
+				pinBoard.AddAppointment(row,tableApptFields,tablePatFields);
 			}
 			//deal with this later:
 			//try{
@@ -2074,6 +2076,7 @@ namespace OpenDental{
 			TempApptSingle=new ContrApptSingle();
 			TempApptSingle.DataRoww=pinBoard.SelectedAppt.DataRoww;
 			TempApptSingle.TableApptFields=pinBoard.SelectedAppt.TableApptFields;
+			TempApptSingle.TablePatFields=pinBoard.SelectedAppt.TablePatFields;
 			TempApptSingle.Visible=false;
 			Controls.Add(TempApptSingle);
 			TempApptSingle.SetLocation();
@@ -2342,6 +2345,13 @@ namespace OpenDental{
 						apptField.FieldValue=PIn.String(pinBoard.SelectedAppt.TableApptFields.Rows[i]["FieldValue"].ToString());
 						ApptFields.Insert(apptField);
 					}
+					for(int i=0;i<pinBoard.SelectedAppt.TablePatFields.Rows.Count;i++) {//Duplicate the patient fields.
+						PatField patField=new PatField();
+						patField.PatNum=aptCur.PatNum;
+						patField.FieldName=PIn.String(pinBoard.SelectedAppt.TablePatFields.Rows[i]["FieldName"].ToString());
+						patField.FieldValue=PIn.String(pinBoard.SelectedAppt.TablePatFields.Rows[i]["FieldValue"].ToString());
+						PatFields.Insert(patField);
+					}
 				}
 				catch(ApplicationException ex){
 					MessageBox.Show(ex.Message);
@@ -2578,6 +2588,7 @@ namespace OpenDental{
 					TempApptSingle.Visible=false;//otherwise I get a phantom appt while holding mouse down
 					TempApptSingle.DataRoww=ContrApptSingle3[thisIndex].DataRoww;
 					TempApptSingle.TableApptFields=ContrApptSingle3[thisIndex].TableApptFields;
+					TempApptSingle.TablePatFields=ContrApptSingle3[thisIndex].TablePatFields;
 					Controls.Add(TempApptSingle);
 					TempApptSingle.SetLocation();
 					TempApptSingle.BringToFront();

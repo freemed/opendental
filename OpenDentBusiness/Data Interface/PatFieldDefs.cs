@@ -91,5 +91,15 @@ namespace OpenDentBusiness {
 			Db.NonQ(command);
 		}
 				
+		/// <summary>GetFieldName returns the field name identified by the field definition number passed as a parameter.</summary>
+		public static string GetFieldName(long patFieldDefNum) {
+			//No need to check RemotingRole; no call to db.
+			for(int i=0;i<List.Length;i++){
+				if(List[i].PatFieldDefNum==patFieldDefNum) {
+					return List[i].FieldName;
+				}
+			}
+			return "";
+		}
 	}
 }
