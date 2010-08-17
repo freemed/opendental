@@ -148,6 +148,8 @@ namespace OpenDentBusiness{
 		public long ResponsParty;
 		///<summary>C09.  Eligibility Exception Code.  A single digit 1-4.  0 is not acceptable for e-claims. 1=FT student, 2=disabled, 3=disabled student, 4=code not applicable.  Warning.  4 is a 0 if using CDAnet version 02.</summary>
 		public byte CanadianEligibilityCode;
+		///<summary>Number of minutes patient is asked to come early to appointments.</summary>
+		public int AskToArriveEarly;
 		
 
 

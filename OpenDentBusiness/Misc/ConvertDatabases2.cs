@@ -2442,6 +2442,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					+"'"+POut.Int((int)ToolBarsAvail.ChartModule)+"', "
 					+"'OrthoPlex')";
 				Db.NonQ32(command);
+				command="ALTER TABLE patient ADD AskToArriveEarly int NOT NULL";
+				Db.NonQ(command);
 
 
 
@@ -2467,5 +2469,3 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 				
 				
-			
-

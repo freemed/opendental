@@ -614,6 +614,7 @@ namespace OpenDental{
 			elementsAll.Add("Procs");
 			elementsAll.Add("Production");
 			elementsAll.Add("Provider");
+			elementsAll.Add("TimeAskedToArrive");
 			elementsAll.Add("WirelessPhone");
 			elementsAll.Add("WkPhone");
 			displayedElementsAll=new List<ApptViewItem>();

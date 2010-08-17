@@ -132,7 +132,7 @@
   <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="butPin.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
-        R0lGODlhFgAWAPcAAAAAAAAAMwAAZgAAmQAAzAAA/wAzAAAzMwAzZgAzmQAzzAAz/wBmAABmMwBmZgBm
+        R0lGODlhFgAWAIcAAAAAAAAAMwAAZgAAmQAAzAAA/wAzAAAzMwAzZgAzmQAzzAAz/wBmAABmMwBmZgBm
         mQBmzABm/wCZAACZMwCZZgCZmQCZzACZ/wDMAADMMwDMZgDMmQDMzADM/wD/AAD/MwD/ZgD/mQD/zAD/
         /zMAADMAMzMAZjMAmTMAzDMA/zMzADMzMzMzZjMzmTMzzDMz/zNmADNmMzNmZjNmmTNmzDNm/zOZADOZ
         MzOZZjOZmTOZzDOZ/zPMADPMMzPMZjPMmTPMzDPM/zP/ADP/MzP/ZjP/mTP/zDP//2YAAGYAM2YAZmYA
@@ -145,9 +145,10 @@
         mf9mzP9m//+ZAP+ZM/+ZZv+Zmf+ZzP+Z///MAP/MM//MZv/Mmf/MzP/M////AP//M///Zv//mf//zP//
         /w0NDRoaGigoKDU1NUNDQ1BQUF1dXWtra3h4eIaGhpOTk6Ghoa6urru7u8nJydbW1uTk5PHx8QAAAAAA
         AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-        ACwAAAAAFgAWAAAIjwDRkRtIsKDBgtfQCQTHsKHDhwzTJVx4raLFixivSVRIDlzGjxY3UgT5UWRHkqMy
-        mvQIclTKiytbVqv2smLMjKNmSpNW82ZFlzmr7eT50udPnTtrapx4EuOooUqXcmRp8du3p1Gljqxo9ac0
-        lUypdrWY9eZYklqbooUZdi1Go27hrjWZrq7du3jtTnQLEl1AADs=
+        ACH/C05FVFNDQVBFMi4wAwEBAAAh+QQAAAAAACwAAAAAFgAWAAAIjwDRkRtIsKDBgtfQCQTHsKHDhwzT
+        JVx4raLFixivSVRIDlzGjxY3UgT5UWRHkqMymvQIclTKiytbVqv2smLMjKNmSpNW82ZFlzmr7eT50udP
+        nTtrapx4EuOooUqXcmRp8du3p1Gljqxo9ac0lUypdrWY9eZYklqbooUZdi1Go27hrjWZrq7du3jtTnQL
+        El1AADs=
 </value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">

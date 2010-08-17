@@ -588,6 +588,7 @@ namespace OpenDentBusiness{
 			table.Columns.Add("provider");
 			table.Columns.Add("ProvHyg");
 			table.Columns.Add("ProvNum");
+			table.Columns.Add("TimeAskedToArrive");
 			table.Columns.Add("wkPhone");
 			table.Columns.Add("wirelessPhone");
 			string command="SELECT p1.Abbr ProvAbbr,p2.Abbr HygAbbr,patient.Address,patient.Address2,patient.AddrNote,"
@@ -606,7 +607,7 @@ namespace OpenDentBusiness{
 			else{
 				command+="WHERE procedurelog.AptNum=appointment.AptNum AND procedurelog.AptNum!=0) Production, ";
 			}
-			command+="ProvHyg,appointment.ProvNum,patient.State,patient.WirelessPhone,patient.WkPhone,patient.Zip "
+			command+="ProvHyg,appointment.ProvNum,patient.State,appointment.TimeAskedToArrive,patient.WirelessPhone,patient.WkPhone,patient.Zip "
 				+"FROM appointment LEFT JOIN patient ON patient.PatNum=appointment.PatNum "
 				+"LEFT JOIN provider p1 ON p1.ProvNum=appointment.ProvNum "
 				+"LEFT JOIN provider p2 ON p2.ProvNum=appointment.ProvHyg ";
@@ -943,6 +944,7 @@ namespace OpenDentBusiness{
 				}
 				row["ProvNum"]=raw.Rows[i]["ProvNum"].ToString();
 				row["ProvHyg"]=raw.Rows[i]["ProvHyg"].ToString();
+				row["TimeAskedToArrive"]=PIn.DateT(raw.Rows[i]["TimeAskedToArrive"].ToString()).ToShortTimeString();
 				row["wirelessPhone"]=Lans.g("Appointments","Cell: ")+raw.Rows[i]["WirelessPhone"].ToString();
 				row["wkPhone"]=Lans.g("Appointments","Wk: ")+raw.Rows[i]["WkPhone"].ToString();
 				table.Rows.Add(row);

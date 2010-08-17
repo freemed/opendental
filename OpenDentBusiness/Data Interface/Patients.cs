@@ -616,6 +616,18 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
+		public static void UpdateArriveEarlyForFam(Patient pat){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),pat);
+				return;
+			}
+			string command= "UPDATE patient SET " 
+				+"AskToArriveEarly = '"   +POut.Int(pat.AskToArriveEarly)+"'"
+				+" WHERE guarantor = '"+POut.Double(pat.Guarantor)+"'";
+			DataTable table=Db.GetTable(command);
+		}
+
+		///<summary></summary>
 		public static void UpdateNotesForFam(Patient pat){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),pat);
@@ -624,7 +636,7 @@ namespace OpenDentBusiness{
 			string command= "UPDATE patient SET " 
 				+"addrnote = '"   +POut.String(pat.AddrNote)+"'"
 				+" WHERE guarantor = '"+POut.Double(pat.Guarantor)+"'";
-			DataTable table=Db.GetTable(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>Only used from FormRecallListEdit.  Updates two fields for family if they are already the same for the entire family.  If they start out different for different family members, then it only changes the two fields for the single patient.</summary>
