@@ -12,7 +12,6 @@ using OpenDentBusiness;
 
 namespace OpenDental {
 	public partial class FormPhoneTiles:Form {
-		private List<Phone> PhoneList;
 		///<summary>When the GoToChanged event fires, this tells us which patnum.</summary>
 		public long GotoPatNum;
 		///<summary></summary>
@@ -24,6 +23,14 @@ namespace OpenDental {
 		string pathPhoneMsg=@"\\192.168.0.197\Voicemail\default\998\INBOX";
 		private PhoneTile selectedTile;
 		private Thread workerThread;
+		private List<Phone> phoneList;
+
+		public List<Phone> PhoneList {
+			set { 
+				phoneList = value;
+				Invalidate();
+			}
+		}
 		
 		public FormPhoneTiles() {
 			InitializeComponent();
@@ -40,6 +47,7 @@ namespace OpenDental {
 				tile.MenuNumbers=menuNumbers;
 				tile.MenuStatus=menuStatus;
 			}
+			phoneList=Phones.GetPhoneList();//initial fast load.  After this, pumped in from main form.
 			FillTiles();
 		}
 
@@ -53,13 +61,15 @@ namespace OpenDental {
 		}
 
 		private void FillTiles() {
-			PhoneList=Phones.GetPhoneList();
+			if(phoneList==null){
+				return;
+			}
 			PhoneTile tile;
 			for(int i=0;i<21;i++) {
 				tile=((PhoneTile)Controls.Find("phoneTile"+(i+1).ToString(),false)[0]);
 				tile.TimeDelta=timeDelta;
-				if(PhoneList.Count>i){
-					tile.PhoneCur=PhoneList[i];
+				if(phoneList.Count>i){
+					tile.PhoneCur=phoneList[i];
 				}
 				else{
 					tile.PhoneCur=null;

@@ -1751,6 +1751,12 @@
     <Compile Include="InternalTools\Phones\PhoneTile.designer.cs">
       <DependentUpon>PhoneTile.cs</DependentUpon>
     </Compile>
+    <Compile Include="InternalTools\Phones\UserControlPhoneSmall.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="InternalTools\Phones\UserControlPhoneSmall.designer.cs">
+      <DependentUpon>UserControlPhoneSmall.cs</DependentUpon>
+    </Compile>
     <Compile Include="Main Modules\ContrAccount.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -4094,6 +4100,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="InternalTools\Phones\PhoneTile.resx">
       <DependentUpon>PhoneTile.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="InternalTools\Phones\UserControlPhoneSmall.resx">
+      <DependentUpon>UserControlPhoneSmall.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Main Modules\FormCommandLinePassOff.resx">

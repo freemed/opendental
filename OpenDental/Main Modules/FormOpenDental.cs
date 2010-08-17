@@ -217,6 +217,7 @@ namespace OpenDental{
 		private System.Windows.Forms.Timer timerPhoneWebCam;
 		private FormTerminalManager formTerminalManager;
 		private FormPhoneTiles formPhoneTiles;
+		private UserControlPhoneSmall phoneSmall;
 
 		///<summary></summary>
 		public FormOpenDental(string[] cla){
@@ -286,6 +287,9 @@ namespace OpenDental{
 			this.Controls.Add(userControlTasks1);
 			panelSplitter.ContextMenu=menuSplitter;
 			menuItemDockBottom.Checked=true;
+			phoneSmall=new UserControlPhoneSmall();
+			phoneSmall.Visible=false;
+			this.Controls.Add(phoneSmall);
 			//phonePanel=new UserControlPhonePanel();
 			//phonePanel.Visible=false;
 			//this.Controls.Add(phonePanel);
@@ -2286,17 +2290,21 @@ namespace OpenDental{
 					panelSplitter.Width=width;
 					panelSplitter.Visible=true;
 					if(PrefC.GetBool(PrefName.DockPhonePanelShow)){
+						timerPhoneWebCam.Enabled=true;//the only place this happens
+						phoneSmall.Visible=true;
+						phoneSmall.Location=new Point(position.X,panelSplitter.Bottom+butBigPhones.Height);
 						//phonePanel.Visible=true;
 						//phonePanel.Location=new Point(position.X,panelSplitter.Bottom);
 						//phonePanel.Width=428;
 						//phonePanel.Height=this.ClientSize.Height-phonePanel.Top;
-						userControlTasks1.Location=new Point(position.X+428,panelSplitter.Bottom);
-						userControlTasks1.Width=width-428;
+						userControlTasks1.Location=new Point(position.X+phoneSmall.Width,panelSplitter.Bottom);
+						userControlTasks1.Width=width-phoneSmall.Width;
 						butBigPhones.Visible=true;
-						butBigPhones.Location=new Point(position.X+353,panelSplitter.Bottom);
+						butBigPhones.Location=new Point(position.X+phoneSmall.Width-butBigPhones.Width,panelSplitter.Bottom);
 						butBigPhones.BringToFront();
 					}
 					else{
+						phoneSmall.Visible=false;
 						//phonePanel.Visible=false;
 						butBigPhones.Visible=false;
 						userControlTasks1.Location=new Point(position.X,panelSplitter.Bottom);
@@ -2306,6 +2314,7 @@ namespace OpenDental{
 					height=ClientSize.Height-panelSplitter.Height-userControlTasks1.Height-ToolBarMain.Height;
 				}
 				else {//docked Right
+					phoneSmall.Visible=false;
 					//phonePanel.Visible=false;
 					butBigPhones.Visible=false;
 					if(panelSplitter.Width>8) {//docking needs to be changed
@@ -4279,7 +4288,11 @@ namespace OpenDental{
 		}
 
 		private void timerPhoneWebCam_Tick(object sender,EventArgs e) {
-
+			List<Phone> phoneList=Phones.GetPhoneList();
+			phoneSmall.PhoneList=phoneList;
+			if(formPhoneTiles!=null && !formPhoneTiles.IsDisposed) {
+				formPhoneTiles.PhoneList=phoneList;
+			}
 		}
 
 		private void FormOpenDental_FormClosing(object sender,FormClosingEventArgs e) {
