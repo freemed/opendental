@@ -2423,10 +2423,25 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);
 				command="INSERT INTO preference(PrefName,ValueString) VALUES('WebFormsHeading1','PATIENT INFORMATION')";
 				Db.NonQ(command);
-				command="INSERT INTO preference(PrefName,ValueString) VALUES('WebFormsHeading2','We are pleased to welcome you to our office. Please take a few minutes to fill out this form as completely as you can. if you have any questions we'll be glad to help you.')";
+				command="INSERT INTO preference(PrefName,ValueString) VALUES('WebFormsHeading2','"+POut.String("We are pleased to welcome you to our office. Please take a few minutes to fill out this form as completely as you can. If you have any questions we'll be glad to help you.")+"')";
 				Db.NonQ(command);
 				command="ALTER TABLE appointment ADD TimeAskedToArrive datetime NOT NULL default '0001-01-01 00:00:00'";
 				Db.NonQ(command);
+				command="INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
+					+") VALUES("
+					+"'OrthoPlex', "
+					+"'OrthoPlex from Dentsply GAC', "
+					+"'0', "
+					+"'"+POut.String(@"C:\\Program Files\\GAC\\OrthoPlex v3.20\\OrthoPlex.exe")+"', "
+					+"'-E [PatNum]', "
+					+"'')";
+				int programNum=Db.NonQ32(command,true);//we now have a ProgramNum to work with
+				command="INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
+					+"VALUES ("
+					+"'"+POut.Int(programNum)+"', "
+					+"'"+POut.Int((int)ToolBarsAvail.ChartModule)+"', "
+					+"'OrthoPlex')";
+				Db.NonQ32(command);
 
 
 
