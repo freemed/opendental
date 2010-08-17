@@ -944,7 +944,11 @@ namespace OpenDental{
 			//
 		}
 
-		private void butClockIn_Click(object sender, System.EventArgs e) {
+		private void butClockIn_Click(object sender,System.EventArgs e) {
+			if(PrefC.GetBool(PrefName.DockPhonePanelShow)) {
+				MessageBox.Show("Not allowed");
+				return;
+			}
 			try{
 				ClockEvents.ClockIn(EmployeeCur.EmployeeNum);
 			}
@@ -960,7 +964,11 @@ namespace OpenDental{
 			//}
 		}
 
-		private void butClockOut_Click(object sender, System.EventArgs e) {
+		private void butClockOut_Click(object sender,System.EventArgs e) {
+			if(PrefC.GetBool(PrefName.DockPhonePanelShow)) {
+				MessageBox.Show("Not allowed");
+				return;
+			}
 			if(listStatus.SelectedIndex==-1){
 				MsgBox.Show(this,"Please select a status first.");
 				return;
