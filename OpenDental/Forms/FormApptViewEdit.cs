@@ -680,6 +680,9 @@ namespace OpenDental{
 				if(displayedElementsUR[i].ApptFieldDefNum>0) {
 					row.Cells.Add(ApptFieldDefs.GetFieldName(displayedElementsUR[i].ApptFieldDefNum));
 				}
+				else if(displayedElementsUR[i].PatFieldDefNum>0) {
+					row.Cells.Add(PatFieldDefs.GetFieldName(displayedElementsUR[i].PatFieldDefNum));
+				}
 				else {
 					row.Cells.Add(displayedElementsUR[i].ElementDesc);
 				}
@@ -705,6 +708,9 @@ namespace OpenDental{
 				row=new ODGridRow();
 				if(displayedElementsLR[i].ApptFieldDefNum>0) {
 					row.Cells.Add(ApptFieldDefs.GetFieldName(displayedElementsLR[i].ApptFieldDefNum));
+				}
+				else if(displayedElementsLR[i].PatFieldDefNum>0) {
+					row.Cells.Add(PatFieldDefs.GetFieldName(displayedElementsLR[i].PatFieldDefNum));
 				}
 				else {
 					row.Cells.Add(displayedElementsLR[i].ElementDesc);
