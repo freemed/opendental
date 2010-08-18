@@ -2121,26 +2121,28 @@ namespace OpenDental{
 			}
 			textSite.Text=Sites.GetDescription(ProcCur.SiteNum);
 			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")){
-				if(ProcCur.CanadianTypeCodes.Contains("A")) {
-					checkTypeCodeA.Checked=true;
-				}
-				if(ProcCur.CanadianTypeCodes.Contains("B")) {
-					checkTypeCodeB.Checked=true;
-				}
-				if(ProcCur.CanadianTypeCodes.Contains("C")) {
-					checkTypeCodeC.Checked=true;
-				}
-				if(ProcCur.CanadianTypeCodes.Contains("E")) {
-					checkTypeCodeE.Checked=true;
-				}
-				if(ProcCur.CanadianTypeCodes.Contains("L")) {
-					checkTypeCodeL.Checked=true;
-				}
-				if(ProcCur.CanadianTypeCodes.Contains("S")) {
-					checkTypeCodeS.Checked=true;
-				}
-				if(ProcCur.CanadianTypeCodes.Contains("X")) {
-					checkTypeCodeX.Checked=true;
+				if(ProcCur.CanadianTypeCodes!=null){
+					if(ProcCur.CanadianTypeCodes.Contains("A")) {
+						checkTypeCodeA.Checked=true;
+					}
+					if(ProcCur.CanadianTypeCodes.Contains("B")) {
+						checkTypeCodeB.Checked=true;
+					}
+					if(ProcCur.CanadianTypeCodes.Contains("C")) {
+						checkTypeCodeC.Checked=true;
+					}
+					if(ProcCur.CanadianTypeCodes.Contains("E")) {
+						checkTypeCodeE.Checked=true;
+					}
+					if(ProcCur.CanadianTypeCodes.Contains("L")) {
+						checkTypeCodeL.Checked=true;
+					}
+					if(ProcCur.CanadianTypeCodes.Contains("S")) {
+						checkTypeCodeS.Checked=true;
+					}
+					if(ProcCur.CanadianTypeCodes.Contains("X")) {
+						checkTypeCodeX.Checked=true;
+					}
 				}
 			}
 			else{
