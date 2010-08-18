@@ -46,26 +46,21 @@ namespace OpenDental {
 
 
 				System.Net.ServicePointManager.ServerCertificateValidationCallback +=
-    delegate(object sender,System.Security.Cryptography.X509Certificates.X509Certificate certificate,
-							System.Security.Cryptography.X509Certificates.X509Chain chain,
-							System.Net.Security.SslPolicyErrors sslPolicyErrors) {
-			/*do stuff here in necessary and return true or false accordingly.
-			 * In this particular case it always returns true i/e accepts any certificate.
-			 * */
-
-			return true;
-		};
+				delegate(object sender,System.Security.Cryptography.X509Certificates.X509Certificate certificate,
+										System.Security.Cryptography.X509Certificates.X509Chain chain,
+										System.Net.Security.SslPolicyErrors sslPolicyErrors) {
+					/*do stuff here in necessary and return true or false accordingly.
+					 * In this particular case it always returns true i/e accepts any certificate.
+					 * */
+					return true;
+				};
 				WebHostSynch.WebHostSynch wh = new WebHostSynch.WebHostSynch();
-
 				//The url  is to be obtained from the preferenes table in the db
 				//wh.Url ="https://localhost/WebHostSynch/WebHostSynch.asmx";
 				string RegistrationKey = PrefC.GetString(PrefName.RegistrationKey);
 				if(wh.CheckRegistrationKey(RegistrationKey)==false) {
-
 					MessageBox.Show(Lan.g(this,"Registration key provided by the dental office is incorrect"));
-
 					return;
-
 				}
 
 
@@ -73,39 +68,27 @@ namespace OpenDental {
 				OpenDental.WebHostSynch.webforms_sheetfield[] wbsf = wh.GetSheetData(1,"RegistrationKeyxxxxx",dateFrom,dateTo);
 
 				if(wbsf.Count()==0) {
-
 					MessageBox.Show(Lan.g(this,"No Patient Forms retrieved"));
 					return;
-
 				}
 
 				// Select distinct Web sheet ids
 				var wbs = (from w in wbsf select w.webforms_sheetReference.EntityKey.EntityKeyValues.First().Value).Distinct();
-
 				var SheetIdArray = wbs.ToArray();
-
 				List<long> SheetsForDeletion = new List<long>();
-
 				// loop through each sheet
 				for(int LoopVariable = 0;LoopVariable < SheetIdArray.Length;LoopVariable++) {
-
 					long SheetID=(long)SheetIdArray[LoopVariable];
 					var SingleSheet = from w in wbsf where (long)w.webforms_sheetReference.EntityKey.EntityKeyValues.First().Value ==  SheetID
 									  select w;
 					ODGridRow row=new ODGridRow();
-
 					string LastName="";
 					string FirstName="";
 					string BirthDate="";
-
 					for(int LoopVariable1 = 0;LoopVariable1 < SingleSheet.Count();LoopVariable1++) {
-
 						String FieldName = SingleSheet.ElementAt(LoopVariable1).FieldName;
 						String FieldValue = SingleSheet.ElementAt(LoopVariable1).FieldValue;
-
-
 						if(FieldName.ToLower().Contains("lastname")) {
-
 							LastName=FieldValue;
 						}
 						if(FieldName.ToLower().Contains("firstname")) {
@@ -114,19 +97,16 @@ namespace OpenDental {
 						if(FieldName.ToLower().Contains("birthdate")) {
 							BirthDate=FieldValue;
 						}
-
 					}
 
 					DateTime birthDate = PIn.Date(BirthDate);
 					if(birthDate.Year==1) {
 						//log invalid birth date  format
-
 					}
 					long PatNum=Patients.GetPatNumByNameAndBirthday(LastName,FirstName,birthDate);
 					long NewPatNum = 0;
 					Patient newPat= null;
 					Sheet newSheet= null;
-
 					row.Cells.Add(LastName);
 					row.Cells.Add(FirstName);
 					row.Cells.Add(BirthDate);
@@ -143,21 +123,11 @@ namespace OpenDental {
 					}
 					gridMain.Rows.Add(row);
 					gridMain.EndUpdate();
-
-					#region deleting sheets from server
-
-
-					if(CompareData(newPat,newSheet)==true) {
-
+					if(DataExistsInDb(newPat,newSheet)==true) {
 						SheetsForDeletion.Add(SheetID);
 					}
-					#endregion
-
-
 				}// end of for loop
-
 				wh.DeleteSheetData(SheetsForDeletion.ToArray());
-
 			}
 			catch(Exception e) {
 				MessageBox.Show(e.Message);
@@ -166,19 +136,15 @@ namespace OpenDental {
 		}
 
 
-		private bool CompareData(Patient newPat,Sheet newSheet) {
+		private bool DataExistsInDb(Patient newPat,Sheet newSheet) {
 
-			bool dataExistsInDb=false;
+			bool dataExistsInDb=true;
 			if(newPat!=null) {
 				long PatNum = newPat.PatNum;
 				Patient patientFromDb = Patients.GetPat(PatNum);
 				if(patientFromDb!=null) {
-					// do steps for comparing each variable
-
-					//dataExistsInDb=IsEqualTo(patientFromDb,newPat);
+					dataExistsInDb=ComparePatients(patientFromDb,newPat);
 				}
-
-
 			}
 
 			if(newSheet!=null) {
@@ -186,11 +152,10 @@ namespace OpenDental {
 				Sheet sheetFromDb = Sheets.GetSheet(SheetNum);
 
 				if(sheetFromDb!=null) {
-					// do steps for comparing each variable
-					dataExistsInDb=IsEqualTo(sheetFromDb,newSheet);
+					dataExistsInDb=CompareSheets(sheetFromDb,newSheet);
 				}
 			}
-			dataExistsInDb=true;
+
 			return dataExistsInDb;
 		}
 
@@ -234,7 +199,7 @@ namespace OpenDental {
 			try {
 				FormSheetPicker FormS = new FormSheetPicker();
 				SheetDef sheetDef;
-				
+
 				sheetDef = SheetsInternal.GetSheetDef(SheetInternalType.PatientRegistration);
 				sheet = SheetUtil.CreateSheet(sheetDef,PatNum);
 				SheetParameter.SetParameter(sheet,"PatNum",PatNum);
@@ -268,28 +233,49 @@ namespace OpenDental {
 			return sheet;
 		}
 
-		private bool IsEqualTo(Sheet dbObj,Sheet currentObj) {
+		private bool ComparePatients(Patient patientFromDb,Patient newPat) {
 
 			bool isEqual = true;
+			foreach(FieldInfo fieldinfo in patientFromDb.GetType().GetFields()) {
 
-		
 
-				 for (int i = 0; i < dbObj.SheetFields.Count; i++) // Loop through List with for
-        {
-					 if(dbObj.SheetFields[i].FieldValue.ToString()!=currentObj.SheetFields[i].FieldValue.ToString()) {
-						  isEqual = false;
-					 }
-        }
+				/* these field are to be ignored while comparing because they have 
+				 * different values when extracted from the db
+				*/
+					if(fieldinfo.Name=="DateTStamp" || 
+						fieldinfo.Name=="Age") {
+					continue; // code below this line will not be executed for this loop.
+					}
+					
+				
+				string dbPatientFieldValue="";
+				string newPatientFieldValue="";
 
-			/*
-			foreach(PropertyInfo property in dbObj.GetType().GetProperties()) {
-				if(property.GetValue(dbObj,null).Equals(property.GetValue(currentObj,null))) {
-					isEqual = true;
+				//.ToString() works for Int64, Int32, Enum, DateTime(bithdate), Boolean, Double
+				if(fieldinfo.GetValue(patientFromDb)!=null) {
+					dbPatientFieldValue=fieldinfo.GetValue(patientFromDb).ToString();
+				}
+				if(fieldinfo.GetValue(newPat)!=null) {
+					newPatientFieldValue=fieldinfo.GetValue(newPat).ToString();
+				}
+				if( dbPatientFieldValue!=newPatientFieldValue) {
+					isEqual = false;
 				}
 			}
-			*/
 			return isEqual;
+		}
 
+
+		private bool CompareSheets(Sheet sheetFromDb,Sheet newSheet) {
+			bool isEqual = true;
+			for(int LoopVariable = 0;LoopVariable < sheetFromDb.SheetFields.Count;LoopVariable++){
+				string dbSheetFieldValue=sheetFromDb.SheetFields[LoopVariable].FieldValue.ToString();
+				string newSheetFieldValue=newSheet.SheetFields[LoopVariable].FieldValue.ToString();
+				if(dbSheetFieldValue!=newSheetFieldValue) {
+					isEqual = false;
+				}
+			}
+			return isEqual;
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
@@ -320,7 +306,6 @@ namespace OpenDental {
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			//MessageBox.Show("PatNum is " + (long)gridMain.Rows[e.Row].Tag);
 			long PatNum = (long)gridMain.Rows[e.Row].Tag;
 			FormPatientForms formP=new FormPatientForms();
 			formP.PatNum=PatNum;
