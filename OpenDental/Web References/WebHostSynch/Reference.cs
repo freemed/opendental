@@ -37,6 +37,8 @@ namespace OpenDental.WebHostSynch {
         
         private System.Threading.SendOrPostCallback GetSheetDataOperationCompleted;
         
+        private System.Threading.SendOrPostCallback testmethOperationCompleted;
+        
         private System.Threading.SendOrPostCallback DeleteSheetDataOperationCompleted;
         
         private System.Threading.SendOrPostCallback CheckRegistrationKeyOperationCompleted;
@@ -84,6 +86,9 @@ namespace OpenDental.WebHostSynch {
         
         /// <remarks/>
         public event GetSheetDataCompletedEventHandler GetSheetDataCompleted;
+        
+        /// <remarks/>
+        public event testmethCompletedEventHandler testmethCompleted;
         
         /// <remarks/>
         public event DeleteSheetDataCompletedEventHandler DeleteSheetDataCompleted;
@@ -150,6 +155,33 @@ namespace OpenDental.WebHostSynch {
             if ((this.GetSheetDataCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.GetSheetDataCompleted(this, new GetSheetDataCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/testmeth", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public webforms_sheet[] testmeth() {
+            object[] results = this.Invoke("testmeth", new object[0]);
+            return ((webforms_sheet[])(results[0]));
+        }
+        
+        /// <remarks/>
+        public void testmethAsync() {
+            this.testmethAsync(null);
+        }
+        
+        /// <remarks/>
+        public void testmethAsync(object userState) {
+            if ((this.testmethOperationCompleted == null)) {
+                this.testmethOperationCompleted = new System.Threading.SendOrPostCallback(this.OntestmethOperationCompleted);
+            }
+            this.InvokeAsync("testmeth", new object[0], this.testmethOperationCompleted, userState);
+        }
+        
+        private void OntestmethOperationCompleted(object arg) {
+            if ((this.testmethCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.testmethCompleted(this, new testmethCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
         
@@ -296,6 +328,7 @@ namespace OpenDental.WebHostSynch {
     }
     
     /// <remarks/>
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(EntityReferenceOfwebforms_preference))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(EntityReferenceOfwebforms_sheet))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "2.0.50727.3053")]
     [System.SerializableAttribute()]
@@ -397,6 +430,7 @@ namespace OpenDental.WebHostSynch {
     
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(EntityReference))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(EntityReferenceOfwebforms_preference))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(EntityReferenceOfwebforms_sheet))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "2.0.50727.3053")]
     [System.SerializableAttribute()]
@@ -408,6 +442,7 @@ namespace OpenDental.WebHostSynch {
     
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(EntityObject))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(webforms_sheet))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(webforms_sheetfield))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "2.0.50727.3053")]
     [System.SerializableAttribute()]
@@ -418,6 +453,7 @@ namespace OpenDental.WebHostSynch {
     }
     
     /// <remarks/>
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(webforms_sheet))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(webforms_sheetfield))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "2.0.50727.3053")]
     [System.SerializableAttribute()]
@@ -437,6 +473,60 @@ namespace OpenDental.WebHostSynch {
                 this.entityKeyField = value;
             }
         }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "2.0.50727.3053")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://tempuri.org/")]
+    public partial class webforms_sheet : EntityObject {
+        
+        private System.DateTime dateTimeSubmittedField;
+        
+        private long sheetIDField;
+        
+        private EntityReferenceOfwebforms_preference webforms_preferenceReferenceField;
+        
+        /// <remarks/>
+        public System.DateTime DateTimeSubmitted {
+            get {
+                return this.dateTimeSubmittedField;
+            }
+            set {
+                this.dateTimeSubmittedField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public long SheetID {
+            get {
+                return this.sheetIDField;
+            }
+            set {
+                this.sheetIDField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public EntityReferenceOfwebforms_preference webforms_preferenceReference {
+            get {
+                return this.webforms_preferenceReferenceField;
+            }
+            set {
+                this.webforms_preferenceReferenceField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "2.0.50727.3053")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://tempuri.org/")]
+    public partial class EntityReferenceOfwebforms_preference : EntityReference {
     }
     
     /// <remarks/>
@@ -487,6 +577,32 @@ namespace OpenDental.WebHostSynch {
             get {
                 this.RaiseExceptionIfNecessary();
                 return ((webforms_sheetfield[])(this.results[0]));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "2.0.50727.3053")]
+    public delegate void testmethCompletedEventHandler(object sender, testmethCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "2.0.50727.3053")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class testmethCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal testmethCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        /// <remarks/>
+        public webforms_sheet[] Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((webforms_sheet[])(this.results[0]));
             }
         }
     }

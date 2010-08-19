@@ -14,9 +14,9 @@ namespace OpenDental {
 			Lan.F(this);
 
 			butWebformBorderColor.BackColor=PrefC.GetColor(PrefName.WebFormsBorderColor);
-			textBoxWebformsHeading1.Text = PrefC.GetStringSilent(PrefName.WebFormsHeading1);
-			textBoxWebformsHeading2.Text = PrefC.GetStringSilent(PrefName.WebFormsHeading2);
-			textboxWebHostAddress.Text = PrefC.GetString(PrefName.WebHostSynchServerURL);
+			textBoxWebformsHeading1.Text=PrefC.GetStringSilent(PrefName.WebFormsHeading1);
+			textBoxWebformsHeading2.Text=PrefC.GetStringSilent(PrefName.WebFormsHeading2);
+			textboxWebHostAddress.Text=PrefC.GetString(PrefName.WebHostSynchServerURL);
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
@@ -24,10 +24,7 @@ namespace OpenDental {
 			Prefs.UpdateString(PrefName.WebFormsHeading1,textBoxWebformsHeading1.Text.Trim());
 			Prefs.UpdateString(PrefName.WebFormsHeading2,textBoxWebformsHeading2.Text.Trim());
 			Prefs.UpdateString(PrefName.WebHostSynchServerURL,textboxWebHostAddress.Text.Trim());
-			
-
 			DialogResult=DialogResult.OK;
-			
 		}
 
 		private void butCancel_Click(object sender,EventArgs e) {
@@ -35,14 +32,11 @@ namespace OpenDental {
 		}
 
 		private void butWebformBorderColor_Click(object sender,EventArgs e) {
-
 			colorDialog1.Color=butWebformBorderColor.BackColor;
-			if(colorDialog1.ShowDialog()!=DialogResult.OK){
+			if(colorDialog1.ShowDialog()!=DialogResult.OK) {
 				return;
 			}
 			butWebformBorderColor.BackColor=colorDialog1.Color;
-			
-
 			/*
 			Def DefCur=DefC.Short[(int)DefCat.MiscColors][4].Copy();
 			DefCur.ItemColor=colorDialog1.Color;
@@ -53,7 +47,6 @@ namespace OpenDental {
 			gridP.Invalidate();
 			gridP.Focus();
 			*/
-		
 		}
 	}
 }
