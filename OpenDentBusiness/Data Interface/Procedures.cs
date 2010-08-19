@@ -207,7 +207,7 @@ namespace OpenDentBusiness {
 				return Meth.GetObject<List<Procedure>>(MethodBase.GetCurrentMethod(),patNum,date);
 			}
 			string command="SELECT * FROM procedurelog "+
-				"WHERE PatNum='"+POut.Long(patNum)+"' AND (ProcDate="+POut.Date(date)+" OR DateEntryC="+POut.Date(date)+" OR DateTP="+POut.Date(date)+")";
+				"WHERE PatNum='"+POut.Long(patNum)+"' AND (ProcDate="+POut.Date(date)+" OR DateEntryC="+POut.Date(date)+")";
 			return Crud.ProcedureCrud.SelectMany(command);
 		}
 
