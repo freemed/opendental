@@ -2122,49 +2122,39 @@ namespace OpenDental{
 				}
 				gridProg.Columns.Add(col);
 			}
-			if(gridProg.Columns.Count<3){//0 wouldn't be possible.
-				gridProg.NoteSpanStart=0;
-				gridProg.NoteSpanStop=gridProg.Columns.Count-1;
-			}
-			else{
-				gridProg.NoteSpanStart=2;
-				if(gridProg.Columns.Count>7) {
-					gridProg.NoteSpanStop=7;
-				}
-				else{
-					gridProg.NoteSpanStop=gridProg.Columns.Count-1;
-				}
-			}
+			gridProg.NoteSpanStart=2;
+			gridProg.NoteSpanStop=7;
 			gridProg.Rows.Clear();
-			List <Procedure> procsForAppt=Procedures.GetProcsForSingle(AptCur.AptNum,(AptCur.AptStatus==ApptStatus.Planned));
-			for(int i=0;i<procsForAppt.Count;i++){
-				ProcedureCode procCode=ProcedureCodes.GetProcCodeFromDb(procsForAppt[i].CodeNum);
-				Provider prov=Providers.GetProv(procsForAppt[i].ProvNum);
-				Userod usr=Userods.GetUser(procsForAppt[i].UserNum);
+			List <Procedure> procsForDay=Procedures.GetProcsForPatByDate(AptCur.PatNum,AptCur.AptDateTime);
+			for(int i=0;i<procsForDay.Count;i++){
+				Procedure proc=procsForDay[i];
+				ProcedureCode procCode=ProcedureCodes.GetProcCodeFromDb(proc.CodeNum);
+				Provider prov=Providers.GetProv(proc.ProvNum);
+				Userod usr=Userods.GetUser(proc.UserNum);
 				ODGridRow row=new ODGridRow();
 				row.ColorLborder=System.Drawing.Color.Black;
 				for(int f=0;f<fields.Count;f++) {
 					switch(fields[f].InternalName){
 						case "Date":
-							row.Cells.Add(procsForAppt[i].ProcDate.Date.ToShortDateString());
+							row.Cells.Add(proc.ProcDate.Date.ToShortDateString());
 							break;
 						case "Time":
-							row.Cells.Add(procsForAppt[i].ProcDate.ToString("h:mm")+procsForAppt[i].ProcDate.ToString("%t").ToLower());
+							row.Cells.Add(proc.ProcDate.ToString("h:mm")+proc.ProcDate.ToString("%t").ToLower());
 							break;
 						case "Th":
-							row.Cells.Add(procsForAppt[i].ToothNum);
+							row.Cells.Add(proc.ToothNum);
 							break;
 						case "Surf":
-							row.Cells.Add(procsForAppt[i].Surf);
+							row.Cells.Add(proc.Surf);
 							break;
 						case "Dx":
-							row.Cells.Add(procsForAppt[i].Dx.ToString());
+							row.Cells.Add(proc.Dx.ToString());
 							break;
 						case "Description":
 							row.Cells.Add((procCode.LaymanTerm!="")?procCode.LaymanTerm:procCode.Descript);
 							break;
 						case "Stat":
-							row.Cells.Add(Lans.g("enumProcStat",procsForAppt[i].ProcStatus.ToString()));
+							row.Cells.Add(Lans.g("enumProcStat",proc.ProcStatus.ToString()));
 							break;
 						case "Prov":
 							if(prov.Abbr.Length>5){
@@ -2175,7 +2165,7 @@ namespace OpenDental{
 							}
 							break;
 						case "Amount":
-							row.Cells.Add(procsForAppt[i].ProcFee.ToString("F"));
+							row.Cells.Add(proc.ProcFee.ToString("F"));
 							break;
 						case "ADA Code":
 							row.Cells.Add(procCode.ProcCode);
@@ -2185,8 +2175,9 @@ namespace OpenDental{
 						  break;
 					}
 				}
+				row.Note=proc.Note;
 				//Row text color.
-				switch(procsForAppt[i].ProcStatus) {
+				switch(proc.ProcStatus) {
 					case ProcStat.TP:
 						row.ColorText=DefC.Long[(int)DefCat.ProgNoteColors][0].ItemColor;
 						break;
@@ -2210,7 +2201,7 @@ namespace OpenDental{
 						break;
 				}
 				row.ColorBackG=System.Drawing.Color.White;
-				if(procsForAppt[i].ProcDate.Date==DateTime.Today) {
+				if(proc.ProcDate.Date==DateTime.Today) {
 					row.ColorBackG=DefC.Long[(int)DefCat.MiscColors][6].ItemColor;
 				}				
 				gridProg.Rows.Add(row);

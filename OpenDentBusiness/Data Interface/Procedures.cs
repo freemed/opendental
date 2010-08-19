@@ -201,6 +201,16 @@ namespace OpenDentBusiness {
 			return Crud.ProcedureCrud.SelectMany(command);
 		}
 
+		///<summary>Gets all Procedures for a single date for the specified patient directly from the database</summary>
+		public static List<Procedure> GetProcsForPatByDate(long patNum,DateTime date) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Procedure>>(MethodBase.GetCurrentMethod(),patNum,date);
+			}
+			string command="SELECT * FROM procedurelog "+
+				"WHERE PatNum='"+POut.Long(patNum)+"' AND (ProcDate="+POut.Date(date)+" OR DateEntryC="+POut.Date(date)+" OR DateTP="+POut.Date(date)+")";
+			return Crud.ProcedureCrud.SelectMany(command);
+		}
+
 		///<summary>Gets a list (procsMultApts is a struct of type ProcDesc(aptNum, string[], and production) of all the procedures attached to the specified appointments.  Then, use GetProcsOneApt to pull procedures for one appointment from this list.  This process requires only one call to the database. "myAptNums" is the list of appointments to get procedures for.</summary>
 		public static List<Procedure> GetProcsMultApts(List<long> myAptNums) {
 			//No need to check RemotingRole; no call to db.

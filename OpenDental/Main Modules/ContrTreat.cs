@@ -2362,14 +2362,17 @@ namespace OpenDental{
 			//Send TP DFT HL7 message to ECW with embedded PDF when using tight integration only.
 			if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0"){
 				PrepImageForPrinting();
-				string pdfFilePath=Path.GetTempFileName();
 				MigraDoc.Rendering.PdfDocumentRenderer pdfRenderer=new MigraDoc.Rendering.PdfDocumentRenderer(true,PdfFontEmbedding.Always);
 				pdfRenderer.Document=CreateDocument();
 				pdfRenderer.RenderDocument();
-				pdfRenderer.PdfDocument.Save(pdfFilePath);
-				byte[] pdfBytes=File.ReadAllBytes(pdfFilePath);
+				MemoryStream ms=new MemoryStream();
+				pdfRenderer.PdfDocument.Save(ms);
+				byte[] pdfBytes=ms.GetBuffer();
+				//#region Remove when testing is complete.
+				//string tempFilePath=Path.GetTempFileName();
+				//File.WriteAllBytes(tempFilePath,pdfBytes);
+				//#endregion
 				string pdfDataStr=Convert.ToBase64String(pdfBytes);
-				File.Delete(pdfFilePath);
 				Appointment apt=Appointments.GetOneApt(Bridges.ECW.AptNum);
 				Bridges.ECW.SendHL7(apt,PatCur,pdfDataStr);
 			}
