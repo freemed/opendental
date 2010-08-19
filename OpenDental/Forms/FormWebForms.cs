@@ -17,11 +17,13 @@ using OpenDentBusiness;
 
 namespace OpenDental {
 	public partial class FormWebForms:Form {
+
 		public FormWebForms() {
 			InitializeComponent();
 			Lan.F(this);
 
 		}
+
 		private void FillGrid() {
 			try {
 				gridMain.BeginUpdate();
@@ -40,11 +42,9 @@ namespace OpenDental {
 				DateTime dateFrom=PIn.Date(textDateFrom.Text);
 				DateTime dateTo=PIn.Date(textDateTo.Text);
 
-				/* this line will continue and accept the security certificate if there is
-				 *  a problem with the security certiicate. An exception will not be thrown in this case.
+				/* the line below will allow the code continue by not throwing an exception.
+				 * It will accept the security certificate if there is a problem with the security certiicate.
 				 * */
-
-
 				System.Net.ServicePointManager.ServerCertificateValidationCallback +=
 				delegate(object sender,System.Security.Cryptography.X509Certificates.X509Certificate certificate,
 										System.Security.Cryptography.X509Certificates.X509Chain chain,
@@ -54,9 +54,10 @@ namespace OpenDental {
 					 * */
 					return true;
 				};
+
 				WebHostSynch.WebHostSynch wh = new WebHostSynch.WebHostSynch();
 	
-				// Ask Jordan if this will work well in a release version.
+				// Ask Jordan if 'DEBUG' will work well in a release version.
 				#if DEBUG
 				#else
 				wh.Url =PrefC.GetString(PrefName.WebHostSynchServerURL);
@@ -67,10 +68,9 @@ namespace OpenDental {
 					return;
 				}
 
-
 				OpenDental.WebHostSynch.webforms_sheetfield[] wbsf = wh.GetSheetData(1,"RegistrationKeyxxxxx",dateFrom,dateTo);
-
 				if(wbsf.Count()==0) {
+					gridMain.EndUpdate();
 					MessageBox.Show(Lan.g(this,"No Patient Forms retrieved"));
 					return;
 				}
@@ -128,7 +128,7 @@ namespace OpenDental {
 					gridMain.EndUpdate();
 					if(DataExistsInDb(newPat,newSheet)==true) {
 						SheetsForDeletion.Add(SheetID);
-					}
+					} 
 				}// end of for loop
 				wh.DeleteSheetData(SheetsForDeletion.ToArray());
 			}
@@ -137,8 +137,12 @@ namespace OpenDental {
 			}
 
 		}
-
-
+		/// <summary>
+		/// compare values of the new patient or the new sheet with value that have been inserted into the db
+		/// </summary>
+		/// <param name="newPat"></param>
+		/// <param name="newSheet"></param>
+		/// <returns></returns>
 		private bool DataExistsInDb(Patient newPat,Sheet newSheet) {
 
 			bool dataExistsInDb=true;
@@ -158,7 +162,6 @@ namespace OpenDental {
 					dataExistsInDb=CompareSheets(sheetFromDb,newSheet);
 				}
 			}
-
 			return dataExistsInDb;
 		}
 
@@ -189,6 +192,10 @@ namespace OpenDental {
 						newPat.ClinicNum  =PatCur.ClinicNum;
 						*/
 				Patients.Insert(newPat,false);
+				//set Guarantor field the same as PatNum
+				Patient patOld=newPat.Copy();
+				newPat.Guarantor=newPat.PatNum;
+				Patients.Update(newPat,patOld); 
 			}
 			catch(Exception e) {
 				MessageBox.Show(e.Message);
@@ -202,19 +209,10 @@ namespace OpenDental {
 			try {
 				FormSheetPicker FormS = new FormSheetPicker();
 				SheetDef sheetDef;
-
 				sheetDef = SheetsInternal.GetSheetDef(SheetInternalType.PatientRegistration);
 				sheet = SheetUtil.CreateSheet(sheetDef,PatNum);
 				SheetParameter.SetParameter(sheet,"PatNum",PatNum);
-				//SheetFiller.FillFields(sheet);
-				//SheetUtil.CalculateHeights(sheet, this.CreateGraphics());
-				// if (FormS.TerminalSend)
-				// {
 				sheet.InternalNote = "";//because null not ok
-				// sheet.ShowInTerminal = (byte)(Sheets.GetBiggestShowInTerminal(PatNum) + 1);
-
-				// }
-
 				foreach(SheetField fld in sheet.SheetFields) {
 					if(fld.FieldName == "LName") {
 						fld.FieldValue = LastName;
@@ -225,11 +223,9 @@ namespace OpenDental {
 					if(fld.FieldName == "Birthdate") {
 						fld.FieldValue = BirthDate;
 					}
-
 				}
 
 				sheet.IsWebForm=true;
-
 				Sheets.SaveNewSheet(sheet);
 				return sheet;
 			}
@@ -240,11 +236,9 @@ namespace OpenDental {
 		}
 
 		private bool ComparePatients(Patient patientFromDb,Patient newPat) {
-
+			
 			bool isEqual = true;
 			foreach(FieldInfo fieldinfo in patientFromDb.GetType().GetFields()) {
-
-
 				/* these field are to be ignored while comparing because they have 
 				 * different values when extracted from the db
 				*/
@@ -252,11 +246,8 @@ namespace OpenDental {
 						fieldinfo.Name=="Age") {
 					continue; // code below this line will not be executed for this loop.
 					}
-					
-				
 				string dbPatientFieldValue="";
 				string newPatientFieldValue="";
-
 				//.ToString() works for Int64, Int32, Enum, DateTime(bithdate), Boolean, Double
 				if(fieldinfo.GetValue(patientFromDb)!=null) {
 					dbPatientFieldValue=fieldinfo.GetValue(patientFromDb).ToString();
@@ -270,8 +261,7 @@ namespace OpenDental {
 			}
 			return isEqual;
 		}
-
-
+		
 		private bool CompareSheets(Sheet sheetFromDb,Sheet newSheet) {
 			bool isEqual = true;
 			for(int LoopVariable = 0;LoopVariable < sheetFromDb.SheetFields.Count;LoopVariable++){
@@ -306,6 +296,7 @@ namespace OpenDental {
 
 			FillGrid();
 		}
+
 		private void SetDates() {
 			textDateFrom.Text=DateTime.Today.ToShortDateString();
 			textDateTo.Text=DateTime.Today.ToShortDateString();
