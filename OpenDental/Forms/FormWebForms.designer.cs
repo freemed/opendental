@@ -103,7 +103,7 @@ namespace OpenDental{
 			this.butRetrieve.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butRetrieve.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butRetrieve.CornerRadius = 4F;
-			this.butRetrieve.Location = new System.Drawing.Point(580,6);
+			this.butRetrieve.Location = new System.Drawing.Point(580,12);
 			this.butRetrieve.Name = "butRetrieve";
 			this.butRetrieve.Size = new System.Drawing.Size(120,24);
 			this.butRetrieve.TabIndex = 45;
@@ -119,7 +119,7 @@ namespace OpenDental{
 			this.gridMain.Location = new System.Drawing.Point(24,106);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(595,194);
+			this.gridMain.Size = new System.Drawing.Size(595,173);
 			this.gridMain.TabIndex = 4;
 			this.gridMain.Title = "Webforms";
 			this.gridMain.TranslationName = "TableWebforms";
@@ -133,7 +133,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(625,253);
+			this.butOK.Location = new System.Drawing.Point(625,232);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 3;
@@ -148,7 +148,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(625,294);
+			this.butCancel.Location = new System.Drawing.Point(625,273);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 2;
@@ -158,7 +158,7 @@ namespace OpenDental{
 			// FormWebForms
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(725,345);
+			this.ClientSize = new System.Drawing.Size(725,324);
 			this.Controls.Add(this.butRetrieve);
 			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.gridMain);

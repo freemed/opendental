@@ -17,7 +17,6 @@ namespace WebHostSynch {
 
 		[WebMethod]
 		public string HelloWorld() {
-			ODWebServiceEntities db = new ODWebServiceEntities();
 			return "Hello World";
 		}
 
@@ -26,7 +25,7 @@ namespace WebHostSynch {
 		public List<webforms_sheetfield> GetSheetData(int DentalOfficeID,string RegistrationKey,DateTime StartDate,DateTime EndDate) {
 			ODWebServiceEntities db = new ODWebServiceEntities();
 			if(CheckRegistrationKey(RegistrationKey)==false) {
-				Logger.Information("In correct registration key. DentalOfficeID = " + DentalOfficeID + "RegistrationKey = " + RegistrationKey);
+				Logger.Information("Incorrect registration key. DentalOfficeID = " + DentalOfficeID + "RegistrationKey = " + RegistrationKey);
 				DentalOfficeID=0;
 			}
 			EndDate=EndDate.AddDays(1);//if this is put in LINQ it will not work. so change date first
@@ -41,7 +40,12 @@ namespace WebHostSynch {
 
 		[WebMethod]
 		public void DeleteSheetData(List<long> SheetsForDeletion) {
-
+			ODWebServiceEntities db = new ODWebServiceEntities();
+			/*
+			var wsObj = from ws in db.webforms_sheet.Where( wbi => wbi.SheetID in SheetsForDeletion)
+						 //where SheetsForDeletion.Contains conta in SheetsForDeletion
+							//select ws;
+			*/
 			int a = 3;
 		}
 

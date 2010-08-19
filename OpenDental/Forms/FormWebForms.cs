@@ -49,20 +49,23 @@ namespace OpenDental {
 				delegate(object sender,System.Security.Cryptography.X509Certificates.X509Certificate certificate,
 										System.Security.Cryptography.X509Certificates.X509Chain chain,
 										System.Net.Security.SslPolicyErrors sslPolicyErrors) {
-					/*do stuff here in necessary and return true or false accordingly.
-					 * In this particular case it always returns true i/e accepts any certificate.
+					/*do stuff here and return true or false accordingly.
+					 * In this particular case it always returns true i.e accepts any certificate.
 					 * */
 					return true;
 				};
 				WebHostSynch.WebHostSynch wh = new WebHostSynch.WebHostSynch();
-				//The url  is to be obtained from the preferenes table in the db
-				//wh.Url ="https://localhost/WebHostSynch/WebHostSynch.asmx";
+	
+				// Ask Jordan if this will work well in a release version.
+				#if DEBUG
+				#else
+				wh.Url =PrefC.GetString(PrefName.WebHostSynchServerURL);
+				#endif
 				string RegistrationKey = PrefC.GetString(PrefName.RegistrationKey);
 				if(wh.CheckRegistrationKey(RegistrationKey)==false) {
 					MessageBox.Show(Lan.g(this,"Registration key provided by the dental office is incorrect"));
 					return;
 				}
-
 
 
 				OpenDental.WebHostSynch.webforms_sheetfield[] wbsf = wh.GetSheetData(1,"RegistrationKeyxxxxx",dateFrom,dateTo);
@@ -224,6 +227,9 @@ namespace OpenDental {
 					}
 
 				}
+
+				sheet.IsWebForm=true;
+
 				Sheets.SaveNewSheet(sheet);
 				return sheet;
 			}
