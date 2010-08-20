@@ -218,6 +218,10 @@ namespace OpenDental{
 		private FormTerminalManager formTerminalManager;
 		private FormPhoneTiles formPhoneTiles;
 		private UserControlPhoneSmall phoneSmall;
+		private VideoCapture vidCapt;
+		///<summary>A hidden control where video stream is sent.</summary>
+		private System.Windows.Forms.PictureBox pictBoxVideo;
+		private IntPtr intPtrVideo;
 
 		///<summary></summary>
 		public FormOpenDental(string[] cla){
@@ -288,6 +292,7 @@ namespace OpenDental{
 			panelSplitter.ContextMenu=menuSplitter;
 			menuItemDockBottom.Checked=true;
 			phoneSmall=new UserControlPhoneSmall();
+			phoneSmall.GoToChanged += new System.EventHandler(this.phoneSmall_GoToChanged);
 			phoneSmall.Visible=false;
 			this.Controls.Add(phoneSmall);
 			//phonePanel=new UserControlPhonePanel();
@@ -303,6 +308,13 @@ namespace OpenDental{
 			if( disposing ){
 				if(components != null){
 					components.Dispose();
+				}
+				if(vidCapt!=null){
+					vidCapt.Dispose();
+				}
+				if (intPtrVideo != IntPtr.Zero){
+					Marshal.FreeCoTaskMem(intPtrVideo);
+					intPtrVideo = IntPtr.Zero;
 				}
 			}
 			base.Dispose( disposing );
@@ -2291,6 +2303,15 @@ namespace OpenDental{
 					panelSplitter.Visible=true;
 					if(PrefC.GetBool(PrefName.DockPhonePanelShow)){
 						timerPhoneWebCam.Enabled=true;//the only place this happens
+						if(pictBoxVideo==null){
+							intPtrVideo=IntPtr.Zero;
+							pictBoxVideo=new System.Windows.Forms.PictureBox();
+							pictBoxVideo.Visible=false;
+							this.Controls.Add(pictBoxVideo);
+						}
+						if(vidCapt==null){
+							vidCapt=new VideoCapture(0,640,480,24,pictBoxVideo);
+						}
 						phoneSmall.Visible=true;
 						phoneSmall.Location=new Point(position.X,panelSplitter.Bottom+butBigPhones.Height);
 						//phonePanel.Visible=true;
@@ -2333,6 +2354,7 @@ namespace OpenDental{
 				panelSplitter.Invalidate();
 			}
 			else {
+				phoneSmall.Visible=false;
 				//phonePanel.Visible=false;
 				butBigPhones.Visible=false;
 				panelSplitter.Visible=false;
@@ -3118,6 +3140,15 @@ namespace OpenDental{
 		private void phonePanel_GoToChanged(object sender,EventArgs e) {
 			if(formPhoneTiles.GotoPatNum!=0) {
 				CurPatNum=formPhoneTiles.GotoPatNum;
+				Patient pat=Patients.GetPat(CurPatNum);
+				RefreshCurrentModule();
+				FillPatientButton(CurPatNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber,pat.SiteNum);
+			}
+		}
+
+		private void phoneSmall_GoToChanged(object sender,EventArgs e) {
+			if(phoneSmall.GotoPatNum!=0) {
+				CurPatNum=phoneSmall.GotoPatNum;
 				Patient pat=Patients.GetPat(CurPatNum);
 				RefreshCurrentModule();
 				FillPatientButton(CurPatNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber,pat.SiteNum);
@@ -4292,6 +4323,42 @@ namespace OpenDental{
 			phoneSmall.PhoneList=phoneList;
 			if(formPhoneTiles!=null && !formPhoneTiles.IsDisposed) {
 				formPhoneTiles.PhoneList=phoneList;
+			}
+			if(vidCapt!=null){
+				if(intPtrVideo != IntPtr.Zero){// Release any previous buffer
+					Marshal.FreeCoTaskMem(intPtrVideo);
+					intPtrVideo=IntPtr.Zero;
+				}
+				intPtrVideo = vidCapt.Click();
+				Bitmap bitmap= new Bitmap(vidCapt.Width, vidCapt.Height, vidCapt.Stride, PixelFormat.Format24bppRgb, intPtrVideo);
+				bitmap.RotateFlip(RotateFlipType.RotateNoneFlipY);// If the image is upsidedown
+				int w=50;
+				int h=(int)(((float)w)/640f*480f);
+				Bitmap bitmapSmall = new Bitmap(w,h);
+				using(Graphics g = Graphics.FromImage(bitmapSmall)){
+					g.DrawImage(bitmap,new Rectangle(0,0,bitmapSmall.Width,bitmapSmall.Height));
+				}
+				IPHostEntry iphostentry=Dns.GetHostEntry(Environment.MachineName);
+				Phone phone=null;
+				int extension=0;
+				foreach(IPAddress ipaddress in iphostentry.AddressList){
+					if(ipaddress.ToString().Contains("192.168.0.1")){
+						extension=PIn.Int(ipaddress.ToString().Substring(10));//eg 104
+					}
+					if(ipaddress.ToString()=="192.168.0.186") {//hard code Jordans for no
+						extension=104;
+					}
+				}
+				if(extension>0) {
+					phone=Phones.GetPhoneForExtension(phoneList,extension);
+				}
+				if(phone!=null){//found entry in phone table matching this machine ip.
+					Phones.SetWebCamImage(phone,bitmapSmall);
+				}
+				phoneSmall.Extension=extension;
+				phoneSmall.PhoneCur=phone;
+				bitmap.Dispose();
+				bitmapSmall.Dispose();
 			}
 		}
 
