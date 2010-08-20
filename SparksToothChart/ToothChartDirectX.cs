@@ -27,6 +27,7 @@ namespace SparksToothChart {
 		private Microsoft.DirectX.Direct3D.Font xfont;
 		private Microsoft.DirectX.Direct3D.Font xSealantFont;
 		private Microsoft.DirectX.Direct3D.Font xWatchFont;
+		private Microsoft.DirectX.Direct3D.Font xWatchFontBig;
 		private bool MouseIsDown=false;
 		[Category("Action"),Description("Occurs when the mouse goes up ending a drawing segment.")]
 		public event ToothChartDrawEventHandler SegmentDrawn=null;
@@ -364,6 +365,10 @@ namespace SparksToothChart {
 				xWatchFont.Dispose();
 				xWatchFont=null;
 			}
+			if(xWatchFontBig!=null){
+				xWatchFontBig.Dispose();
+				xWatchFontBig=null;
+			}
 			if(xfont!=null){
 				xfont.Dispose();
 				xfont=null;
@@ -393,6 +398,11 @@ namespace SparksToothChart {
 				(int)Math.Round(6*TcData.PixelScaleRatio),
 				FontWeight.Regular,1,false,CharacterSet.Ansi,Precision.Device,
 				FontQuality.ClearType,PitchAndFamily.DefaultPitch,"Arial");
+			xWatchFontBig=new Microsoft.DirectX.Direct3D.Font(device,
+				(int)Math.Round(19*TcData.PixelScaleRatio),
+				(int)Math.Round(7.4*TcData.PixelScaleRatio),
+				FontWeight.UltraBold,1,false,CharacterSet.Ansi,Precision.Device,
+				FontQuality.ClearType,PitchAndFamily.DefaultPitch,"Times New Roman");
 			TcData.PrepareForDirectX(device);
 		}
 
@@ -1416,10 +1426,12 @@ namespace SparksToothChart {
 			device.Transform.World=toothTrans*defOrient;
 			float toMm=1f/TcData.ScaleMmToPix;			  
 	    if(ToothGraphic.IsMaxillary(toothGraphic.ToothID)){
-	      PrintString("W",TcData.PixelScaleRatio*(-6f*toMm),TcData.PixelScaleRatio*(153f*toMm),-6f,toothGraphic.colorWatch,xWatchFont);
+	      PrintString("W",TcData.PixelScaleRatio*(-8f*toMm),TcData.PixelScaleRatio*(155f*toMm),-6f,Color.White,xWatchFontBig);//Just white for now.
+				PrintString("W",TcData.PixelScaleRatio*(-6f*toMm),TcData.PixelScaleRatio*(153f*toMm),-6f,toothGraphic.colorWatch,xWatchFont);
 	    }
 			else{
-	      PrintString("W",TcData.PixelScaleRatio*(-6f*toMm),TcData.PixelScaleRatio*(-138f*toMm),-6f,toothGraphic.colorWatch,xWatchFont);
+	      PrintString("W",TcData.PixelScaleRatio*(-8f*toMm),TcData.PixelScaleRatio*(-136f*toMm),-6f,Color.White,xWatchFontBig);//Just white for now.
+				PrintString("W",TcData.PixelScaleRatio*(-6f*toMm),TcData.PixelScaleRatio*(-138f*toMm),-6f,toothGraphic.colorWatch,xWatchFont);
 	    }
 		}
 

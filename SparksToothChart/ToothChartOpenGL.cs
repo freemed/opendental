@@ -486,15 +486,26 @@ namespace SparksToothChart {
 				Gl.glTranslatef(TcData.GetTransX(toothGraphic.ToothID)-toothGraphic.ShiftM,0,0);
 			}
 			float toMm=1f/TcData.ScaleMmToPix;
+			LineSimple line=toothGraphic.GetWatchLine();
+			Gl.glLineWidth(3f*TcData.PixelScaleRatio);
+			Gl.glColor3f(1.0f,1.0f,1.0f);//White
+			Gl.glBegin(Gl.GL_LINE_STRIP);
+			for(int j=0;j<line.Vertices.Count;j++) {//loop through each vertex and render the white W lines.
+				if(ToothGraphic.IsMaxillary(toothGraphic.ToothID)){
+					Gl.glVertex3f(line.Vertices[j].X+TcData.PixelScaleRatio*(-6f*toMm),line.Vertices[j].Y+TcData.PixelScaleRatio*(150f*toMm),line.Vertices[j].Z-7f);
+				}
+				else{
+					Gl.glVertex3f(line.Vertices[j].X+TcData.PixelScaleRatio*(-6f*toMm),line.Vertices[j].Y+TcData.PixelScaleRatio*(-140f*toMm),line.Vertices[j].Z-7f);
+				}
+			}
+			Gl.glEnd();
+			Gl.glLineWidth(0.6f*TcData.PixelScaleRatio);
 			Gl.glColor3f(
 				(float)toothGraphic.colorWatch.R/255f,
 				(float)toothGraphic.colorWatch.G/255f,
 				(float)toothGraphic.colorWatch.B/255f);
-			Gl.glLineWidth(0.6f*TcData.PixelScaleRatio);
-			Gl.glPointSize(0.4f*TcData.PixelScaleRatio);//point is slightly smaller since no antialiasing
-			LineSimple line=toothGraphic.GetWatchLine();
 			Gl.glBegin(Gl.GL_LINE_STRIP);
-			for(int j=0;j<line.Vertices.Count;j++) {//loop through each vertex
+			for(int j=0;j<line.Vertices.Count;j++) {//loop through each vertex and render the colored W lines.
 				if(ToothGraphic.IsMaxillary(toothGraphic.ToothID)){
 					Gl.glVertex3f(line.Vertices[j].X+TcData.PixelScaleRatio*(-6f*toMm),line.Vertices[j].Y+TcData.PixelScaleRatio*(150f*toMm),line.Vertices[j].Z-6f);
 				}
@@ -504,8 +515,25 @@ namespace SparksToothChart {
 			}
 			Gl.glEnd();
 			Gl.glDisable(Gl.GL_BLEND);
+			Gl.glPointSize(2f*TcData.PixelScaleRatio);
+			Gl.glColor3f(1.0f,1.0f,1.0f);//White
 			Gl.glBegin(Gl.GL_POINTS);
-			for(int j=0;j<line.Vertices.Count;j++) {//loop through each vertex
+			for(int j=0;j<line.Vertices.Count;j++) {//loop through each vertex and render the colored W points.
+			  if(ToothGraphic.IsMaxillary(toothGraphic.ToothID)){
+			    Gl.glVertex3f(line.Vertices[j].X+TcData.PixelScaleRatio*(-6f*toMm),line.Vertices[j].Y+TcData.PixelScaleRatio*(150f*toMm),line.Vertices[j].Z+7f);
+			  }
+			  else{
+			    Gl.glVertex3f(line.Vertices[j].X+TcData.PixelScaleRatio*(-6f*toMm),line.Vertices[j].Y+TcData.PixelScaleRatio*(-140f*toMm),line.Vertices[j].Z+7f);
+			  }
+			}
+			Gl.glEnd();
+			Gl.glPointSize(0.4f*TcData.PixelScaleRatio);//point is slightly smaller since no antialiasing
+			Gl.glColor3f(
+				(float)toothGraphic.colorWatch.R/255f,
+				(float)toothGraphic.colorWatch.G/255f,
+				(float)toothGraphic.colorWatch.B/255f);
+			Gl.glBegin(Gl.GL_POINTS);
+			for(int j=0;j<line.Vertices.Count;j++) {//loop through each vertex and render the colored W points.
 			  if(ToothGraphic.IsMaxillary(toothGraphic.ToothID)){
 			    Gl.glVertex3f(line.Vertices[j].X+TcData.PixelScaleRatio*(-6f*toMm),line.Vertices[j].Y+TcData.PixelScaleRatio*(150f*toMm),line.Vertices[j].Z+6f);
 			  }

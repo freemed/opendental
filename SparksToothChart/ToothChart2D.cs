@@ -298,6 +298,7 @@ namespace SparksToothChart {
 		private void RenderToothWatch(Graphics g,ToothGraphic toothGraphic){
 			float toMm=1f/TcData.ScaleMmToPix;
 			SolidBrush brush=new SolidBrush(toothGraphic.colorWatch);
+			//Drawing a white silhouette around the colored watch W doesn't make sense here because unerupted teeth do not change color in this chart.
 			if(ToothGraphic.IsRight(toothGraphic.ToothID)){
 				if(ToothGraphic.IsMaxillary(toothGraphic.ToothID)){
 					g.DrawString("W",Font,brush,new PointF(TcData.GetTransXpix(toothGraphic.ToothID)+toothGraphic.ShiftM-6f,0));
