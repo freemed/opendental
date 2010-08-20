@@ -367,10 +367,11 @@ namespace OpenDental {
 				cell.Borders.Color=Colors.Black;
 				cell.Shading.Color=Colors.LightGray;
 			}
-			MigraDoc.DocumentObjectModel.Font fontBody;//=new MigraDoc.DocumentObjectModel.Font("Arial",Unit.FromPoint(8.5));
+			MigraDoc.DocumentObjectModel.Font fontBody=null;//=new MigraDoc.DocumentObjectModel.Font("Arial",Unit.FromPoint(8.5));
 			bool isBold;
 			System.Drawing.Color color;
-			for(int i=0;i<grid.Rows.Count;i++){
+			int edgeRows=1;
+			for(int i=0;i<grid.Rows.Count;i++,edgeRows++){
 				row=table.AddRow();
 				row.TopPadding=Unit.FromInch(.01);
 				row.BottomPadding=Unit.FromInch(0);
@@ -408,8 +409,20 @@ namespace OpenDental {
 						cell.Borders.Bottom.Color=ConvertColor(grid.Rows[i].ColorLborder);
 					}
 				}
+				if(grid.Rows[i].Note!=null && grid.Rows[i].Note!="" && grid.NoteSpanStop>0 && grid.NoteSpanStart<grid.Columns.Count){
+					row=table.AddRow();
+					row.TopPadding=Unit.FromInch(.01);
+					row.BottomPadding=Unit.FromInch(0);
+					cell=row.Cells[grid.NoteSpanStart+1];
+					par=cell.AddParagraph();
+				  par.AddFormattedText(grid.Rows[i].Note,fontBody);
+				  cell.Format.Alignment=ParagraphAlignment.Left;
+					cell.Borders.Color=new MigraDoc.DocumentObjectModel.Color(180,180,180);
+					cell.MergeRight=grid.Columns.Count-1-grid.NoteSpanStart;
+					edgeRows++;
+				}
 			}
-			table.SetEdge(1,0,grid.Columns.Count,grid.Rows.Count+1,Edge.Box,MigraDoc.DocumentObjectModel.BorderStyle.Single,1,Colors.Black);
+			table.SetEdge(1,0,grid.Columns.Count,edgeRows,Edge.Box,MigraDoc.DocumentObjectModel.BorderStyle.Single,1,Colors.Black);
 			section.Add(table);
 		}
 	}

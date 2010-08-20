@@ -208,7 +208,19 @@ namespace OpenDentBusiness {
 			}
 			string command="SELECT * FROM procedurelog "+
 				"WHERE PatNum='"+POut.Long(patNum)+"' AND (ProcDate="+POut.Date(date)+" OR DateEntryC="+POut.Date(date)+")";
-			return Crud.ProcedureCrud.SelectMany(command);
+			List<Procedure> result=Crud.ProcedureCrud.SelectMany(command);
+			for(int i=0;i<result.Count;i++){
+				command="SELECT * FROM procnote WHERE ProcNum="+POut.Long(result[i].ProcNum)+" ORDER BY EntryDateTime DESC LIMIT 1";
+				DataTable table=Db.GetTable(command);
+				if(table.Rows.Count==0) {
+					continue;
+				}
+				result[i].UserNum   =PIn.Long(table.Rows[0]["UserNum"].ToString());
+				result[i].Note      =PIn.String(table.Rows[0]["Note"].ToString());
+				result[i].SigIsTopaz=PIn.Bool(table.Rows[0]["SigIsTopaz"].ToString());
+				result[i].Signature =PIn.String(table.Rows[0]["Signature"].ToString());
+			}
+			return result;
 		}
 
 		///<summary>Gets a list (procsMultApts is a struct of type ProcDesc(aptNum, string[], and production) of all the procedures attached to the specified appointments.  Then, use GetProcsOneApt to pull procedures for one appointment from this list.  This process requires only one call to the database. "myAptNums" is the list of appointments to get procedures for.</summary>
