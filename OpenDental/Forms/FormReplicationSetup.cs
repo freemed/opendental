@@ -183,7 +183,7 @@ namespace OpenDental {
 						if(ex.Number==1042) {//The error 1042 is issued when the connection could not be made. 
 							throw ex;//Pass the exception along.
 						}
-						dc.cmd.Connection.Close();
+						DataConnection.cmd.Connection.Close();
 					}
 					//Connection is considered to be successfull at this point. Now restart the slave process to force replication.
 					string command="SLAVE STOP; START SLAVE; SHOW SLAVE STATUS;";

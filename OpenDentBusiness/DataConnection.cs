@@ -34,8 +34,8 @@ namespace OpenDentBusiness{
 		private static MySqlConnection con;
 		///<summary>Used to get very small bits of data from the db when the data adapter would be overkill.  For instance retrieving the response after a command is sent.</summary>
 		private MySqlDataReader dr;
-		///<summary>Stores the string of the command that will be sent to the database.</summary>
-		public MySqlCommand cmd;
+		///<summary>Stores the string of the command that will be sent to the database.  8/20/10 jsparks- changed to static so that cmd.con would not be lost.  But only seems to affect phoneserver and FormReplicationSetup.  This change has the potential to cause a bug.</summary>
+		public static MySqlCommand cmd;
 		///<summary>After inserting a row, this variable will contain the primary key for the newly inserted row.  This can frequently save an additional query to the database.</summary>
 		public long InsertID;
 		private static string Database;
