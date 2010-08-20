@@ -24,7 +24,6 @@
 		/// </summary>
 		private void InitializeComponent() {
 			this.components = new System.ComponentModel.Container();
-			this.timerMain = new System.Windows.Forms.Timer(this.components);
 			this.labelMsg = new System.Windows.Forms.Label();
 			this.timerMsgs = new System.Windows.Forms.Timer(this.components);
 			this.menuNumbers = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -71,11 +70,6 @@
 			this.menuNumbers.SuspendLayout();
 			this.menuStatus.SuspendLayout();
 			this.SuspendLayout();
-			// 
-			// timerMain
-			// 
-			this.timerMain.Interval = 1600;
-			this.timerMain.Tick += new System.EventHandler(this.timerMain_Tick);
 			// 
 			// labelMsg
 			// 
@@ -253,18 +247,18 @@
 			// 
 			// phoneTile21
 			// 
-			this.phoneTile21.Location = new System.Drawing.Point(900,403);
+			this.phoneTile21.Location = new System.Drawing.Point(900,283);
 			this.phoneTile21.Name = "phoneTile21";
 			this.phoneTile21.PhoneCur = null;
-			this.phoneTile21.Size = new System.Drawing.Size(150,181);
+			this.phoneTile21.Size = new System.Drawing.Size(150,122);
 			this.phoneTile21.TabIndex = 20;
 			// 
 			// phoneTile14
 			// 
-			this.phoneTile14.Location = new System.Drawing.Point(900,216);
+			this.phoneTile14.Location = new System.Drawing.Point(900,156);
 			this.phoneTile14.Name = "phoneTile14";
 			this.phoneTile14.PhoneCur = null;
-			this.phoneTile14.Size = new System.Drawing.Size(150,181);
+			this.phoneTile14.Size = new System.Drawing.Size(150,122);
 			this.phoneTile14.TabIndex = 19;
 			// 
 			// phoneTile7
@@ -272,23 +266,23 @@
 			this.phoneTile7.Location = new System.Drawing.Point(900,29);
 			this.phoneTile7.Name = "phoneTile7";
 			this.phoneTile7.PhoneCur = null;
-			this.phoneTile7.Size = new System.Drawing.Size(150,181);
+			this.phoneTile7.Size = new System.Drawing.Size(150,122);
 			this.phoneTile7.TabIndex = 18;
 			// 
 			// phoneTile20
 			// 
-			this.phoneTile20.Location = new System.Drawing.Point(750,403);
+			this.phoneTile20.Location = new System.Drawing.Point(750,283);
 			this.phoneTile20.Name = "phoneTile20";
 			this.phoneTile20.PhoneCur = null;
-			this.phoneTile20.Size = new System.Drawing.Size(150,181);
+			this.phoneTile20.Size = new System.Drawing.Size(150,122);
 			this.phoneTile20.TabIndex = 17;
 			// 
 			// phoneTile13
 			// 
-			this.phoneTile13.Location = new System.Drawing.Point(750,216);
+			this.phoneTile13.Location = new System.Drawing.Point(750,156);
 			this.phoneTile13.Name = "phoneTile13";
 			this.phoneTile13.PhoneCur = null;
-			this.phoneTile13.Size = new System.Drawing.Size(150,181);
+			this.phoneTile13.Size = new System.Drawing.Size(150,122);
 			this.phoneTile13.TabIndex = 16;
 			// 
 			// phoneTile6
@@ -296,23 +290,23 @@
 			this.phoneTile6.Location = new System.Drawing.Point(750,29);
 			this.phoneTile6.Name = "phoneTile6";
 			this.phoneTile6.PhoneCur = null;
-			this.phoneTile6.Size = new System.Drawing.Size(150,181);
+			this.phoneTile6.Size = new System.Drawing.Size(150,122);
 			this.phoneTile6.TabIndex = 15;
 			// 
 			// phoneTile19
 			// 
-			this.phoneTile19.Location = new System.Drawing.Point(600,403);
+			this.phoneTile19.Location = new System.Drawing.Point(600,283);
 			this.phoneTile19.Name = "phoneTile19";
 			this.phoneTile19.PhoneCur = null;
-			this.phoneTile19.Size = new System.Drawing.Size(150,181);
+			this.phoneTile19.Size = new System.Drawing.Size(150,122);
 			this.phoneTile19.TabIndex = 14;
 			// 
 			// phoneTile12
 			// 
-			this.phoneTile12.Location = new System.Drawing.Point(600,216);
+			this.phoneTile12.Location = new System.Drawing.Point(600,156);
 			this.phoneTile12.Name = "phoneTile12";
 			this.phoneTile12.PhoneCur = null;
-			this.phoneTile12.Size = new System.Drawing.Size(150,181);
+			this.phoneTile12.Size = new System.Drawing.Size(150,122);
 			this.phoneTile12.TabIndex = 13;
 			// 
 			// phoneTile5
@@ -320,71 +314,71 @@
 			this.phoneTile5.Location = new System.Drawing.Point(600,29);
 			this.phoneTile5.Name = "phoneTile5";
 			this.phoneTile5.PhoneCur = null;
-			this.phoneTile5.Size = new System.Drawing.Size(150,181);
+			this.phoneTile5.Size = new System.Drawing.Size(150,122);
 			this.phoneTile5.TabIndex = 12;
 			// 
 			// phoneTile18
 			// 
-			this.phoneTile18.Location = new System.Drawing.Point(450,403);
+			this.phoneTile18.Location = new System.Drawing.Point(450,283);
 			this.phoneTile18.Name = "phoneTile18";
 			this.phoneTile18.PhoneCur = null;
-			this.phoneTile18.Size = new System.Drawing.Size(150,181);
+			this.phoneTile18.Size = new System.Drawing.Size(150,122);
 			this.phoneTile18.TabIndex = 11;
 			// 
 			// phoneTile17
 			// 
-			this.phoneTile17.Location = new System.Drawing.Point(300,403);
+			this.phoneTile17.Location = new System.Drawing.Point(300,283);
 			this.phoneTile17.Name = "phoneTile17";
 			this.phoneTile17.PhoneCur = null;
-			this.phoneTile17.Size = new System.Drawing.Size(150,181);
+			this.phoneTile17.Size = new System.Drawing.Size(150,122);
 			this.phoneTile17.TabIndex = 10;
 			// 
 			// phoneTile16
 			// 
-			this.phoneTile16.Location = new System.Drawing.Point(150,403);
+			this.phoneTile16.Location = new System.Drawing.Point(150,283);
 			this.phoneTile16.Name = "phoneTile16";
 			this.phoneTile16.PhoneCur = null;
-			this.phoneTile16.Size = new System.Drawing.Size(150,181);
+			this.phoneTile16.Size = new System.Drawing.Size(150,122);
 			this.phoneTile16.TabIndex = 9;
 			// 
 			// phoneTile15
 			// 
-			this.phoneTile15.Location = new System.Drawing.Point(0,403);
+			this.phoneTile15.Location = new System.Drawing.Point(0,283);
 			this.phoneTile15.Name = "phoneTile15";
 			this.phoneTile15.PhoneCur = null;
-			this.phoneTile15.Size = new System.Drawing.Size(150,181);
+			this.phoneTile15.Size = new System.Drawing.Size(150,122);
 			this.phoneTile15.TabIndex = 8;
 			// 
 			// phoneTile11
 			// 
-			this.phoneTile11.Location = new System.Drawing.Point(450,216);
+			this.phoneTile11.Location = new System.Drawing.Point(450,156);
 			this.phoneTile11.Name = "phoneTile11";
 			this.phoneTile11.PhoneCur = null;
-			this.phoneTile11.Size = new System.Drawing.Size(150,181);
+			this.phoneTile11.Size = new System.Drawing.Size(150,122);
 			this.phoneTile11.TabIndex = 7;
 			// 
 			// phoneTile10
 			// 
-			this.phoneTile10.Location = new System.Drawing.Point(300,216);
+			this.phoneTile10.Location = new System.Drawing.Point(300,156);
 			this.phoneTile10.Name = "phoneTile10";
 			this.phoneTile10.PhoneCur = null;
-			this.phoneTile10.Size = new System.Drawing.Size(150,181);
+			this.phoneTile10.Size = new System.Drawing.Size(150,122);
 			this.phoneTile10.TabIndex = 6;
 			// 
 			// phoneTile9
 			// 
-			this.phoneTile9.Location = new System.Drawing.Point(150,216);
+			this.phoneTile9.Location = new System.Drawing.Point(150,156);
 			this.phoneTile9.Name = "phoneTile9";
 			this.phoneTile9.PhoneCur = null;
-			this.phoneTile9.Size = new System.Drawing.Size(150,181);
+			this.phoneTile9.Size = new System.Drawing.Size(150,122);
 			this.phoneTile9.TabIndex = 5;
 			// 
 			// phoneTile8
 			// 
-			this.phoneTile8.Location = new System.Drawing.Point(0,216);
+			this.phoneTile8.Location = new System.Drawing.Point(0,156);
 			this.phoneTile8.Name = "phoneTile8";
 			this.phoneTile8.PhoneCur = null;
-			this.phoneTile8.Size = new System.Drawing.Size(150,181);
+			this.phoneTile8.Size = new System.Drawing.Size(150,122);
 			this.phoneTile8.TabIndex = 4;
 			// 
 			// phoneTile4
@@ -392,7 +386,7 @@
 			this.phoneTile4.Location = new System.Drawing.Point(450,29);
 			this.phoneTile4.Name = "phoneTile4";
 			this.phoneTile4.PhoneCur = null;
-			this.phoneTile4.Size = new System.Drawing.Size(150,181);
+			this.phoneTile4.Size = new System.Drawing.Size(150,122);
 			this.phoneTile4.TabIndex = 3;
 			// 
 			// phoneTile3
@@ -400,7 +394,7 @@
 			this.phoneTile3.Location = new System.Drawing.Point(300,29);
 			this.phoneTile3.Name = "phoneTile3";
 			this.phoneTile3.PhoneCur = null;
-			this.phoneTile3.Size = new System.Drawing.Size(150,181);
+			this.phoneTile3.Size = new System.Drawing.Size(150,122);
 			this.phoneTile3.TabIndex = 2;
 			// 
 			// phoneTile2
@@ -408,7 +402,7 @@
 			this.phoneTile2.Location = new System.Drawing.Point(150,29);
 			this.phoneTile2.Name = "phoneTile2";
 			this.phoneTile2.PhoneCur = null;
-			this.phoneTile2.Size = new System.Drawing.Size(150,181);
+			this.phoneTile2.Size = new System.Drawing.Size(150,122);
 			this.phoneTile2.TabIndex = 1;
 			// 
 			// phoneTile1
@@ -416,14 +410,14 @@
 			this.phoneTile1.Location = new System.Drawing.Point(0,29);
 			this.phoneTile1.Name = "phoneTile1";
 			this.phoneTile1.PhoneCur = null;
-			this.phoneTile1.Size = new System.Drawing.Size(150,181);
+			this.phoneTile1.Size = new System.Drawing.Size(150,122);
 			this.phoneTile1.TabIndex = 0;
 			// 
 			// FormPhoneTiles
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(1054,591);
+			this.ClientSize = new System.Drawing.Size(1054,412);
 			this.Controls.Add(this.labelMsg);
 			this.Controls.Add(this.butOverride);
 			this.Controls.Add(this.phoneTile21);
@@ -482,7 +476,6 @@
 		private PhoneTile phoneTile21;
 		private PhoneTile phoneTile14;
 		private PhoneTile phoneTile7;
-		private System.Windows.Forms.Timer timerMain;
 		private System.Windows.Forms.Label labelMsg;
 		private OpenDental.UI.Button butOverride;
 		private System.Windows.Forms.Timer timerMsgs;

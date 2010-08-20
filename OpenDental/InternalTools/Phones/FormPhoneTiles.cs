@@ -22,13 +22,15 @@ namespace OpenDental {
 		private int msgCount;
 		string pathPhoneMsg=@"\\192.168.0.197\Voicemail\default\998\INBOX";
 		private PhoneTile selectedTile;
+		///<summary>This thread fills labelMsg</summary>
 		private Thread workerThread;
 		private List<Phone> phoneList;
 
 		public List<Phone> PhoneList {
 			set { 
 				phoneList = value;
-				Invalidate();
+				FillTiles(false);
+				//Invalidate();
 			}
 		}
 		
@@ -37,7 +39,6 @@ namespace OpenDental {
 		}
 
 		private void FormPhoneTiles_Load(object sender,EventArgs e) {
-			timerMain.Enabled=true;
 			timeDelta=MiscData.GetNowDateTime()-DateTime.Now;
 			PhoneTile tile;
 			for(int i=0;i<21;i++) {
@@ -47,8 +48,7 @@ namespace OpenDental {
 				tile.MenuNumbers=menuNumbers;
 				tile.MenuStatus=menuStatus;
 			}
-			phoneList=Phones.GetPhoneList();//initial fast load.  After this, pumped in from main form.
-			FillTiles();
+			FillTiles(true);//initial fast load and anytime data changes.  After this, pumped in from main form.
 		}
 
 		private void FormPhoneTiles_Shown(object sender,EventArgs e) {
@@ -60,7 +60,10 @@ namespace OpenDental {
 			//SetLabelMsg();
 		}
 
-		private void FillTiles() {
+		private void FillTiles(bool refreshList) {
+			if(refreshList) {
+				phoneList=Phones.GetPhoneList();
+			}
 			if(phoneList==null){
 				return;
 			}
@@ -95,15 +98,14 @@ namespace OpenDental {
 			}
 		}
 
-
 		private void phoneTile_SelectedTileChanged(object sender,EventArgs e) {
 			selectedTile=(PhoneTile)sender;
 		}
 
-		private void timerMain_Tick(object sender,EventArgs e) {
+		//private void timerMain_Tick(object sender,EventArgs e) {
 			//every 1.6 seconds
-			FillTiles();
-		}
+			//FillTiles(false);
+		//}
 
 		//Phones.SetWebCamImage(intTest+101,(Bitmap)pictureWebCam.Image,PhoneList);
 
@@ -168,302 +170,79 @@ namespace OpenDental {
 		}
 
 		private void menuItemManage_Click(object sender,EventArgs e) {
-			//if(selectedTile.PhoneCur==null) {//already validated
-			long patNum=selectedTile.PhoneCur.PatNum;
-			if(patNum==0) {
-				MsgBox.Show(this,"Please attach this number to a patient first.");
-				return;
-			}
-			FormPhoneNumbersManage FormM=new FormPhoneNumbersManage();
-			FormM.PatNum=patNum;
-			FormM.ShowDialog();
+			PhoneUI.Manage(selectedTile);
 		}
 
 		private void menuItemAdd_Click(object sender,EventArgs e) {
-			//if(selectedTile.PhoneCur==null) {//already validated
-			if(selectedTile.PhoneCur.CustomerNumber=="") {
-				MsgBox.Show(this,"No phone number present.");
-				return;
-			}
-			long patNum=selectedTile.PhoneCur.PatNum;
-			if(FormOpenDental.CurPatNum==0) {
-				MsgBox.Show(this,"Please select a patient in the main window first.");
-				return;
-			}
-			if(patNum!=0) {
-				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"The current number is already attached to a patient. Attach it to this patient instead?")) {
-					return;
-				}
-				PhoneNumber ph=PhoneNumbers.GetByVal(selectedTile.PhoneCur.CustomerNumber);
-				ph.PatNum=FormOpenDental.CurPatNum;
-				PhoneNumbers.Update(ph);
-			}
-			else {
-				string patName=Patients.GetLim(FormOpenDental.CurPatNum).GetNameLF();
-				if(MessageBox.Show("Attach this phone number to "+patName+"?","",MessageBoxButtons.OKCancel)!=DialogResult.OK) {
-					return;
-				}
-				PhoneNumber ph=new PhoneNumber();
-				ph.PatNum=FormOpenDental.CurPatNum;
-				ph.PhoneNumberVal=selectedTile.PhoneCur.CustomerNumber;
-				PhoneNumbers.Insert(ph);
-			}
-			//tell the phone server to refresh this row with the patient name and patnum
-			DataValid.SetInvalid(InvalidType.PhoneNumbers);
+			PhoneUI.Add(selectedTile);
 		}
 
 		//Timecards-------------------------------------------------------------------------------------
 
 		private void menuItemAvailable_Click(object sender,EventArgs e) {
-			if(!ClockIn()) {
-				return;
-			}
-			int extension=selectedTile.PhoneCur.Extension;
-			long employeeNum=selectedTile.PhoneCur.EmployeeNum;
-			PhoneOverrides.SetAvailable(extension,employeeNum);
-			PhoneAsterisks.SetToDefaultRingGroups(extension,employeeNum);
-			Phones.SetPhoneStatus(ClockStatusEnum.Available,extension);//green
-			FillTiles();
+			PhoneUI.Available(selectedTile);
+			FillTiles(true);
 		}
 
 		private void menuItemTraining_Click(object sender,EventArgs e) {
-			if(!ClockIn()) {
-				return;
-			}
-			int extension=selectedTile.PhoneCur.Extension;
-			long employeeNum=selectedTile.PhoneCur.EmployeeNum;
-			PhoneOverrides.SetAvailable(extension,employeeNum);
-			PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.None);
-			Phones.SetPhoneStatus(ClockStatusEnum.Training,extension);
-			FillTiles();
+			PhoneUI.Training(selectedTile);
+			FillTiles(true);
 		}
 
 		private void menuItemTeamAssist_Click(object sender,EventArgs e) {
-			if(!ClockIn()) {
-				return;
-			}
-			int extension=selectedTile.PhoneCur.Extension;
-			long employeeNum=selectedTile.PhoneCur.EmployeeNum;
-			PhoneOverrides.SetAvailable(extension,employeeNum);
-			PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.None);
-			Phones.SetPhoneStatus(ClockStatusEnum.TeamAssist,extension);
-			FillTiles();
+			PhoneUI.TeamAssist(selectedTile);
+			FillTiles(true);
 		}
 
 		private void menuItemWrapUp_Click(object sender,EventArgs e) {
-			if(!ClockIn()) {
-				return;
-			}
-			int extension=selectedTile.PhoneCur.Extension;
-			long employeeNum=selectedTile.PhoneCur.EmployeeNum;
-			PhoneOverrides.SetAvailable(extension,employeeNum);
-			PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.None);
-			Phones.SetPhoneStatus(ClockStatusEnum.WrapUp,extension);
-			//this is usually an automatic status
-			FillTiles();
+			PhoneUI.WrapUp(selectedTile);
+			FillTiles(true);
 		}
 
 		private void menuItemOfflineAssist_Click(object sender,EventArgs e) {
-			if(!ClockIn()) {
-				return;
-			}
-			int extension=selectedTile.PhoneCur.Extension;
-			long employeeNum=selectedTile.PhoneCur.EmployeeNum;
-			PhoneOverrides.SetAvailable(extension,employeeNum);
-			PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.None);
-			Phones.SetPhoneStatus(ClockStatusEnum.OfflineAssist,extension);
-			FillTiles();
+			PhoneUI.OfflineAssist(selectedTile);
+			FillTiles(true);
 		}
 
 		private void menuItemUnavailable_Click(object sender,EventArgs e) {
-			if(!ClockIn()) {
-				return;
-			}
-			int extension=selectedTile.PhoneCur.Extension;
-			long employeeNum=selectedTile.PhoneCur.EmployeeNum;
-			//Employees.SetUnavailable(extension,employeeNum);
-			//Get an override if it exists
-			PhoneOverride phoneOR=PhoneOverrides.GetByExtAndEmp(extension,employeeNum);
-			if(phoneOR==null) {//there is no override for that extension/emp combo.
-				phoneOR=new PhoneOverride();
-				phoneOR.EmpCurrent=employeeNum;
-				phoneOR.Extension=extension;
-				phoneOR.IsAvailable=false;
-				FormPhoneOverrideEdit FormO=new FormPhoneOverrideEdit();
-				FormO.phoneCur=phoneOR;
-				FormO.IsNew=true;
-				FormO.ForceUnAndExplanation=true;
-				FormO.ShowDialog();
-				if(FormO.DialogResult!=DialogResult.OK) {
-					return;
-				}
-			}
-			else {
-				phoneOR.IsAvailable=false;
-				FormPhoneOverrideEdit FormO=new FormPhoneOverrideEdit();
-				FormO.phoneCur=phoneOR;
-				FormO.ForceUnAndExplanation=true;
-				FormO.ShowDialog();
-				if(FormO.DialogResult!=DialogResult.OK) {
-					return;
-				}
-			}
-			//this is now handled within PhoneOverrides.Insert or PhoneOverrides.Update
-			//Employees.SetPhoneStatus("Unavailable",extension);
-			PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.None);
-			FillTiles();
+			PhoneUI.Unavailable(selectedTile);
+			FillTiles(true);
 		}
 
 		//RingGroups---------------------------------------------------
 
 		private void menuItemRinggroupAll_Click(object sender,EventArgs e) {
-			//This even works if the person is still clocked out.
-			int extension=selectedTile.PhoneCur.Extension;
-			long employeeNum=selectedTile.PhoneCur.EmployeeNum;
-			PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.All);
+			PhoneUI.RinggroupAll(selectedTile);
 		}
 
 		private void menuItemRinggroupNone_Click(object sender,EventArgs e) {
-			//This even works if the person is still clocked in.
-			int extension=selectedTile.PhoneCur.Extension;
-			long employeeNum=selectedTile.PhoneCur.EmployeeNum;
-			PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.None);
+			PhoneUI.RinggroupNone(selectedTile);
 		}
 
 		private void menuItemRinggroupsDefault_Click(object sender,EventArgs e) {
-			int extension=selectedTile.PhoneCur.Extension;
-			long employeeNum=selectedTile.PhoneCur.EmployeeNum;
-			PhoneAsterisks.SetToDefaultRingGroups(extension,employeeNum);
+			PhoneUI.RinggroupsDefault(selectedTile);
 		}
 
 		private void menuItemBackup_Click(object sender,EventArgs e) {
-			if(!ClockIn()) {
-				return;
-			}
-			int extension=selectedTile.PhoneCur.Extension;
-			long employeeNum=selectedTile.PhoneCur.EmployeeNum;
-			PhoneOverrides.SetAvailable(extension,employeeNum);
-			PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.Backup);
-			Phones.SetPhoneStatus(ClockStatusEnum.Backup,extension);
-			FillTiles();
+			PhoneUI.Backup(selectedTile);
+			FillTiles(true);
 		}
 
 		//Timecard---------------------------------------------------
 
 		private void menuItemLunch_Click(object sender,EventArgs e) {
-			//verify that employee is logged in as user
-			int extension=selectedTile.PhoneCur.Extension;
-			long employeeNum=selectedTile.PhoneCur.EmployeeNum;
-			if(PrefC.GetBool(PrefName.TimecardSecurityEnabled)) {
-				if(Security.CurUser.EmployeeNum!=employeeNum) {
-					if(!Security.IsAuthorized(Permissions.TimecardsEditAll)) {
-						MsgBox.Show(this,"Not authorized.");
-						return;
-					}
-				}
-			}
-			try {
-				ClockEvents.ClockOut(employeeNum,TimeClockStatus.Lunch);
-			}
-			catch(Exception ex) {
-				MessageBox.Show(ex.Message);//This message will tell user that they are already clocked out.
-				return;
-			}
-			PhoneOverrides.SetAvailable(extension,employeeNum);
-			Employee EmpCur=Employees.GetEmp(employeeNum);
-			EmpCur.ClockStatus=Lan.g("enumTimeClockStatus",TimeClockStatus.Lunch.ToString());
-			Employees.Update(EmpCur);
-			PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.None);
-			Phones.SetPhoneStatus(ClockStatusEnum.Lunch,extension);
-			FillTiles();
+			PhoneUI.Lunch(selectedTile);
+			FillTiles(true);
 		}
 
 		private void menuItemHome_Click(object sender,EventArgs e) {
-			//verify that employee is logged in as user
-			int extension=selectedTile.PhoneCur.Extension;
-			long employeeNum=selectedTile.PhoneCur.EmployeeNum;
-			if(PrefC.GetBool(PrefName.TimecardSecurityEnabled)) {
-				if(Security.CurUser.EmployeeNum!=employeeNum) {
-					if(!Security.IsAuthorized(Permissions.TimecardsEditAll)) {
-						MsgBox.Show(this,"Not authorized.");
-						return;
-					}
-				}
-			}
-			try {
-				ClockEvents.ClockOut(employeeNum,TimeClockStatus.Home);
-			}
-			catch(Exception ex) {
-				MessageBox.Show(ex.Message);//This message will tell user that they are already clocked out.
-				return;
-			}
-			PhoneOverrides.SetAvailable(extension,employeeNum);
-			Employee EmpCur=Employees.GetEmp(employeeNum);
-			EmpCur.ClockStatus=Lan.g("enumTimeClockStatus",TimeClockStatus.Home.ToString());
-			Employees.Update(EmpCur);
-			//ModuleSelected(PatCurNum);
-			PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.None);
-			Phones.SetPhoneStatus(ClockStatusEnum.Home,extension);
-			FillTiles();
+			PhoneUI.Home(selectedTile);
+			FillTiles(true);
 		}
 
 		private void menuItemBreak_Click(object sender,EventArgs e) {
-			//verify that employee is logged in as user
-			int extension=selectedTile.PhoneCur.Extension;
-			long employeeNum=selectedTile.PhoneCur.EmployeeNum;
-			if(PrefC.GetBool(PrefName.TimecardSecurityEnabled)) {
-				if(Security.CurUser.EmployeeNum!=employeeNum) {
-					if(!Security.IsAuthorized(Permissions.TimecardsEditAll)) {
-						MsgBox.Show(this,"Not authorized.");
-						return;
-					}
-				}
-			}
-			try {
-				ClockEvents.ClockOut(employeeNum,TimeClockStatus.Break);
-			}
-			catch(Exception ex) {
-				MessageBox.Show(ex.Message);//This message will tell user that they are already clocked out.
-				return;
-			}
-			PhoneOverrides.SetAvailable(extension,employeeNum);
-			Employee EmpCur=Employees.GetEmp(employeeNum);
-			EmpCur.ClockStatus=Lan.g("enumTimeClockStatus",TimeClockStatus.Break.ToString());
-			Employees.Update(EmpCur);
-			PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.None);
-			Phones.SetPhoneStatus(ClockStatusEnum.Break,extension);
-			FillTiles();
-		}
-
-		///<summary>If already clocked in, this does nothing.  Returns false if not able to clock in due to security, or true if successful.</summary>
-		private bool ClockIn() {
-			long employeeNum=selectedTile.PhoneCur.EmployeeNum;
-			if(employeeNum==0) {
-				MsgBox.Show(this,"No employee at that extension.");
-				return false;
-			}
-			if(ClockEvents.IsClockedIn(employeeNum)) {
-				return true;
-			}
-			if(PrefC.GetBool(PrefName.TimecardSecurityEnabled)) {
-				if(Security.CurUser.EmployeeNum!=employeeNum) {
-					if(!Security.IsAuthorized(Permissions.TimecardsEditAll)) {
-						MsgBox.Show(this,"Not authorized.");
-						return false;
-					}
-				}
-			}
-			try {
-				ClockEvents.ClockIn(employeeNum);
-			}
-			catch {
-				//This should never happen.  Fail silently.
-				return true;
-			}
-			Employee EmpCur=Employees.GetEmp(employeeNum);
-			EmpCur.ClockStatus=Lan.g(this,"Working"); ;
-			Employees.Update(EmpCur);
-			return true;
+			PhoneUI.Break(selectedTile);
+			FillTiles(true);
 		}
 
 		private void FormPhoneTiles_FormClosing(object sender,FormClosingEventArgs e) {

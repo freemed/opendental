@@ -38,9 +38,9 @@
 			// 
 			this.pictureWebCam.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.pictureWebCam.Image = ((System.Drawing.Image)(resources.GetObject("pictureWebCam.Image")));
-			this.pictureWebCam.Location = new System.Drawing.Point(25,3);
+			this.pictureWebCam.Location = new System.Drawing.Point(51,3);
 			this.pictureWebCam.Name = "pictureWebCam";
-			this.pictureWebCam.Size = new System.Drawing.Size(100,100);
+			this.pictureWebCam.Size = new System.Drawing.Size(50,37);
 			this.pictureWebCam.TabIndex = 0;
 			this.pictureWebCam.TabStop = false;
 			// 
@@ -48,7 +48,7 @@
 			// 
 			this.labelExtensionName.BackColor = System.Drawing.SystemColors.Control;
 			this.labelExtensionName.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.labelExtensionName.Location = new System.Drawing.Point(37,105);
+			this.labelExtensionName.Location = new System.Drawing.Point(37,43);
 			this.labelExtensionName.Name = "labelExtensionName";
 			this.labelExtensionName.Size = new System.Drawing.Size(113,16);
 			this.labelExtensionName.TabIndex = 1;
@@ -57,7 +57,7 @@
 			// 
 			// labelStatusAndNote
 			// 
-			this.labelStatusAndNote.Location = new System.Drawing.Point(0,123);
+			this.labelStatusAndNote.Location = new System.Drawing.Point(0,61);
 			this.labelStatusAndNote.Name = "labelStatusAndNote";
 			this.labelStatusAndNote.Size = new System.Drawing.Size(150,16);
 			this.labelStatusAndNote.TabIndex = 2;
@@ -68,7 +68,7 @@
 			// pictureInUse
 			// 
 			this.pictureInUse.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureInUse.BackgroundImage")));
-			this.pictureInUse.Location = new System.Drawing.Point(14,105);
+			this.pictureInUse.Location = new System.Drawing.Point(14,43);
 			this.pictureInUse.Name = "pictureInUse";
 			this.pictureInUse.Size = new System.Drawing.Size(21,17);
 			this.pictureInUse.TabIndex = 3;
@@ -76,7 +76,7 @@
 			// 
 			// labelCustomer
 			// 
-			this.labelCustomer.Location = new System.Drawing.Point(0,161);
+			this.labelCustomer.Location = new System.Drawing.Point(0,99);
 			this.labelCustomer.Name = "labelCustomer";
 			this.labelCustomer.Size = new System.Drawing.Size(150,16);
 			this.labelCustomer.TabIndex = 4;
@@ -88,7 +88,7 @@
 			// labelTime
 			// 
 			this.labelTime.BackColor = System.Drawing.Color.Lime;
-			this.labelTime.Location = new System.Drawing.Point(25,143);
+			this.labelTime.Location = new System.Drawing.Point(25,81);
 			this.labelTime.Name = "labelTime";
 			this.labelTime.Size = new System.Drawing.Size(100,16);
 			this.labelTime.TabIndex = 5;
@@ -107,7 +107,7 @@
 			this.Controls.Add(this.pictureWebCam);
 			this.DoubleBuffered = true;
 			this.Name = "PhoneTile";
-			this.Size = new System.Drawing.Size(150,181);
+			this.Size = new System.Drawing.Size(150,122);
 			((System.ComponentModel.ISupportInitialize)(this.pictureWebCam)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.pictureInUse)).EndInit();
 			this.ResumeLayout(false);

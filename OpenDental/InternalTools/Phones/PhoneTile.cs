@@ -45,7 +45,37 @@ namespace OpenDental {
 					labelCustomer.Text="";
 				}
 				else {
-					pictureWebCam.Image=PIn.Bitmap(phoneCur.WebCamImage);
+					if(phoneCur.ClockStatus==ClockStatusEnum.Home
+						|| phoneCur.ClockStatus==ClockStatusEnum.None
+						|| phoneCur.ClockStatus==ClockStatusEnum.Off)
+					{
+						pictureWebCam.Image=null;
+					}
+					else if(phoneCur.ClockStatus==ClockStatusEnum.Break
+						|| phoneCur.ClockStatus==ClockStatusEnum.Lunch)
+					{
+						Bitmap bmp=new Bitmap(pictureWebCam.Width,pictureWebCam.Height);
+						Graphics g=Graphics.FromImage(bmp);
+						try{
+							g.FillRectangle(Brushes.Black,0,0,bmp.Width,bmp.Height);
+							string strStat=phoneCur.ClockStatus.ToString();
+							if(phoneCur.ClockStatus==ClockStatusEnum.None){
+								strStat="";
+							}
+							SizeF sizef=g.MeasureString(strStat,labelStatusAndNote.Font);
+							g.DrawString(strStat,labelStatusAndNote.Font,Brushes.White,(bmp.Width-sizef.Width)/2,(bmp.Height-sizef.Height)/2);
+							pictureWebCam.Image=(Image)bmp.Clone();
+						}
+						finally{
+							g.Dispose();
+							g=null;
+							bmp.Dispose();
+							bmp=null;
+						}
+					}
+					else{
+						pictureWebCam.Image=PIn.Bitmap(phoneCur.WebCamImage);
+					}
 					if(phoneCur.Description=="") {
 						pictureInUse.Visible=false;
 					}
