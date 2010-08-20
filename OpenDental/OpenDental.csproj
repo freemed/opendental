@@ -102,6 +102,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Required dlls\DiffieHellman.dll</HintPath>
     </Reference>
+    <Reference Include="DirectShowLib-2005, Version=2.1.0.0, Culture=neutral, PublicKeyToken=67e7b740cdfc2d3f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Required dlls\DirectShowLib-2005.dll</HintPath>
+    </Reference>
     <Reference Include="Interop.Microsoft.Office.Core, Version=2.2.0.0, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Required dlls\Interop.Microsoft.Office.Core.dll</HintPath>
@@ -1739,6 +1743,7 @@
     <Compile Include="Forms\FormTPsign.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="InternalTools\Phones\VideoCapture.cs" />
     <Compile Include="InternalTools\Phones\FormPhoneTiles.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1757,6 +1762,7 @@
     <Compile Include="InternalTools\Phones\UserControlPhoneSmall.designer.cs">
       <DependentUpon>UserControlPhoneSmall.cs</DependentUpon>
     </Compile>
+    <Compile Include="InternalTools\Phones\PhoneUI.cs" />
     <Compile Include="Main Modules\ContrAccount.cs">
       <SubType>UserControl</SubType>
     </Compile>

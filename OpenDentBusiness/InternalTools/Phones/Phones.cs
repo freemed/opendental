@@ -130,13 +130,18 @@ namespace OpenDentBusiness{
 			return colorBar;
 		}
 
-		public static void SetWebCamImage(int extens,Bitmap bitmap,List<Phone> phoneList) {
-			Phone phone=null;
+		public static Phone GetPhoneForExtension(List<Phone> phoneList,int extens){
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<phoneList.Count;i++) {
 				if(phoneList[i].Extension==extens) {
-					phone=phoneList[i];
+					return phoneList[i];
 				}
 			}
+			return null;
+		}
+		
+		public static void SetWebCamImage(Phone phone,Bitmap bitmap) {
+			//No need to check RemotingRole; no call to db.
 			if(phone==null) {
 				return;
 			}
