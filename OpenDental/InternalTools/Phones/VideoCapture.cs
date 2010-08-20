@@ -55,6 +55,10 @@ namespace OpenDental
         private static extern void CopyMemory(IntPtr Destination, IntPtr Source, [MarshalAs(UnmanagedType.U4)] int Length);
         #endregion
 
+				public static int GetDeviceCount(){
+					return DsDevice.GetDevicesOfCat(FilterCategory.VideoInputDevice).Length;
+				}
+
         // Zero based device index and device params and output window
         public VideoCapture(int iDeviceNum, int iWidth, int iHeight, short iBPP, Control hControl)
         {

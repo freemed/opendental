@@ -2310,7 +2310,10 @@ namespace OpenDental{
 							this.Controls.Add(pictBoxVideo);
 						}
 						if(vidCapt==null){
-							vidCapt=new VideoCapture(0,640,480,24,pictBoxVideo);
+							int deviceCount=VideoCapture.GetDeviceCount();
+							if(deviceCount>0){
+								vidCapt=new VideoCapture(0,640,480,24,pictBoxVideo);
+							}
 						}
 						phoneSmall.Visible=true;
 						phoneSmall.Location=new Point(position.X,panelSplitter.Bottom+butBigPhones.Height);
