@@ -41,12 +41,24 @@ namespace OpenDental {
 		private void FormPhoneTiles_Load(object sender,EventArgs e) {
 			timeDelta=MiscData.GetNowDateTime()-DateTime.Now;
 			PhoneTile tile;
-			for(int i=0;i<21;i++) {
-				tile=((PhoneTile)Controls.Find("phoneTile"+(i+1).ToString(),false)[0]);
+			int x=0;
+			int y=0;
+			for(int i=0;i<20;i++) {
+				tile=new PhoneTile();
+				tile.Name="phoneTile"+(i+1).ToString();
+				tile.LayoutHorizontal=true;
+				tile.Location=new Point(tile.Width*x,26+(tile.Height*y));
+				//((PhoneTile)Controls.Find("phoneTile"+(i+1).ToString(),false)[0]);
 				tile.GoToChanged += new System.EventHandler(this.phoneTile_GoToChanged);
 				tile.SelectedTileChanged += new System.EventHandler(this.phoneTile_SelectedTileChanged);
 				tile.MenuNumbers=menuNumbers;
 				tile.MenuStatus=menuStatus;
+				this.Controls.Add(tile);
+				y++;
+				if(y==10){
+					y=0;
+					x++;
+				}
 			}
 			FillTiles(true);//initial fast load and anytime data changes.  After this, pumped in from main form.
 		}
@@ -68,7 +80,7 @@ namespace OpenDental {
 				return;
 			}
 			PhoneTile tile;
-			for(int i=0;i<21;i++) {
+			for(int i=0;i<20;i++) {
 				tile=((PhoneTile)Controls.Find("phoneTile"+(i+1).ToString(),false)[0]);
 				tile.TimeDelta=timeDelta;
 				if(phoneList.Count>i){

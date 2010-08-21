@@ -21,6 +21,7 @@ namespace OpenDental {
 		public ContextMenuStrip MenuNumbers;
 		///<summary>Object passed in from parent form.  Event will be fired from that form.</summary>
 		public ContextMenuStrip MenuStatus;
+		private bool layoutHorizontal;
 
 		public PhoneTile() {
 			InitializeComponent();
@@ -57,13 +58,13 @@ namespace OpenDental {
 						Bitmap bmp=new Bitmap(pictureWebCam.Width,pictureWebCam.Height);
 						Graphics g=Graphics.FromImage(bmp);
 						try{
-							g.FillRectangle(Brushes.Black,0,0,bmp.Width,bmp.Height);
+							g.FillRectangle(SystemBrushes.Control,0,0,bmp.Width,bmp.Height);
 							string strStat=phoneCur.ClockStatus.ToString();
 							if(phoneCur.ClockStatus==ClockStatusEnum.None){
 								strStat="";
 							}
 							SizeF sizef=g.MeasureString(strStat,labelStatusAndNote.Font);
-							g.DrawString(strStat,labelStatusAndNote.Font,Brushes.White,(bmp.Width-sizef.Width)/2,(bmp.Height-sizef.Height)/2);
+							g.DrawString(strStat,labelStatusAndNote.Font,SystemBrushes.GrayText,(bmp.Width-sizef.Width)/2,(bmp.Height-sizef.Height)/2);
 							pictureWebCam.Image=(Image)bmp.Clone();
 						}
 						finally{
@@ -99,6 +100,53 @@ namespace OpenDental {
 					}
 					labelTime.BackColor=phoneCur.ColorBar;
 					labelCustomer.Text=phoneCur.CustomerNumber;
+				}
+			}
+		}
+
+		[Category("Layout"),Description("Set true for horizontal layout and false for vertical.")]
+		public bool LayoutHorizontal{
+			get{
+				return layoutHorizontal;
+			}
+			set{
+				layoutHorizontal=value;
+				if(layoutHorizontal){
+					pictureWebCam.Location=new Point(0,0);
+					pictureInUse.Location=new Point(52,10);
+					labelExtensionName.Location=new Point(73,11);
+					labelStatusAndNote.Location=new Point(182,4);
+					labelStatusAndNote.TextAlign=ContentAlignment.MiddleLeft;
+					labelStatusAndNote.Height=31;
+					labelTime.Location=new Point(273,11);
+					labelTime.Size=new Size(56,16);
+					labelCustomer.Location=new Point(331,11);
+					labelCustomer.Size=new Size(147,16);
+					labelCustomer.TextAlign=ContentAlignment.MiddleLeft;
+				}
+				else{//vertical
+					pictureWebCam.Location=new Point(51,3);
+					pictureInUse.Location=new Point(14,43);
+					labelExtensionName.Location=new Point(37,43);
+					labelStatusAndNote.Location=new Point(0,61);
+					labelStatusAndNote.TextAlign=ContentAlignment.MiddleCenter;
+					labelStatusAndNote.Size=new Size(150,16);
+					labelTime.Location=new Point(0,81);
+					labelTime.Size=new Size(150,16);
+					labelCustomer.Location=new Point(0,99);
+					labelCustomer.Size=new Size(150,16);
+					labelCustomer.TextAlign=ContentAlignment.MiddleCenter;
+				}
+			}
+		}
+
+		protected override Size DefaultSize {
+			get {
+				if(layoutHorizontal){
+					return new Size(595,37);
+				}
+				else{//vertical
+					return new Size(150,122);
 				}
 			}
 		}
