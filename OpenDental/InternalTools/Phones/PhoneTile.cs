@@ -22,6 +22,7 @@ namespace OpenDental {
 		///<summary>Object passed in from parent form.  Event will be fired from that form.</summary>
 		public ContextMenuStrip MenuStatus;
 		private bool layoutHorizontal;
+		public bool ShowImageForced;
 
 		public PhoneTile() {
 			InitializeComponent();
@@ -46,7 +47,10 @@ namespace OpenDental {
 					labelCustomer.Text="";
 				}
 				else {
-					if(phoneCur.ClockStatus==ClockStatusEnum.Home
+					if(ShowImageForced) {
+						pictureWebCam.Image=PIn.Bitmap(phoneCur.WebCamImage);
+					}
+					else if(phoneCur.ClockStatus==ClockStatusEnum.Home
 						|| phoneCur.ClockStatus==ClockStatusEnum.None
 						|| phoneCur.ClockStatus==ClockStatusEnum.Off)
 					{

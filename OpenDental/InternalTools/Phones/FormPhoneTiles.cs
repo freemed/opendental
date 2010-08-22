@@ -39,6 +39,11 @@ namespace OpenDental {
 		}
 
 		private void FormPhoneTiles_Load(object sender,EventArgs e) {
+			#if !DEBUG
+				if(Environment.MachineName.ToLower()!="jordans") {
+					checkBoxAll.Visible=false;//so this will also be visible in debug
+				}
+			#endif
 			timeDelta=MiscData.GetNowDateTime()-DateTime.Now;
 			PhoneTile tile;
 			int x=0;
@@ -83,6 +88,7 @@ namespace OpenDental {
 			for(int i=0;i<20;i++) {
 				tile=((PhoneTile)Controls.Find("phoneTile"+(i+1).ToString(),false)[0]);
 				tile.TimeDelta=timeDelta;
+				tile.ShowImageForced=checkBoxAll.Checked;
 				if(phoneList.Count>i){
 					tile.PhoneCur=phoneList[i];
 				}
@@ -181,6 +187,10 @@ namespace OpenDental {
 			labelMsg.ForeColor=color;
 		}
 
+		private void checkBoxAll_Click(object sender,EventArgs e) {
+			FillTiles(false);
+		}
+
 		private void menuItemManage_Click(object sender,EventArgs e) {
 			PhoneUI.Manage(selectedTile);
 		}
@@ -262,6 +272,8 @@ namespace OpenDental {
 				workerThread.Abort();
 			}
 		}
+
+	
 		
 		
 

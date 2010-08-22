@@ -4348,7 +4348,7 @@ namespace OpenDental{
 					if(ipaddress.ToString().Contains("192.168.0.1")){
 						extension=PIn.Int(ipaddress.ToString().Substring(10));//eg 104
 					}
-					if(ipaddress.ToString()=="192.168.0.186") {//hard code Jordans for no
+					if(ipaddress.ToString()=="192.168.0.186") {//hard code Jordans
 						extension=104;
 					}
 				}

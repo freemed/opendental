@@ -303,7 +303,7 @@ namespace OpenDental{
 		private void InitializeComponent(){
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ContrChart));
-			SparksToothChart.ToothChartData toothChartData3 = new SparksToothChart.ToothChartData();
+			SparksToothChart.ToothChartData toothChartData1 = new SparksToothChart.ToothChartData();
 			this.textSurf = new System.Windows.Forms.TextBox();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.radioEntryCn = new System.Windows.Forms.RadioButton();
@@ -435,6 +435,8 @@ namespace OpenDental{
 			this.butAllPrimary = new OpenDental.UI.Button();
 			this.butAllPerm = new OpenDental.UI.Button();
 			this.tabPlanned = new System.Windows.Forms.TabPage();
+			this.butDown = new OpenDental.UI.Button();
+			this.butUp = new OpenDental.UI.Button();
 			this.gridPlanned = new OpenDental.UI.ODGrid();
 			this.butPin = new OpenDental.UI.Button();
 			this.butClear = new OpenDental.UI.Button();
@@ -496,8 +498,6 @@ namespace OpenDental{
 			this.menuToothChart = new System.Windows.Forms.ContextMenu();
 			this.menuItemChartBig = new System.Windows.Forms.MenuItem();
 			this.menuItemChartSave = new System.Windows.Forms.MenuItem();
-			this.butUp = new OpenDental.UI.Button();
-			this.butDown = new OpenDental.UI.Button();
 			this.groupBox2.SuspendLayout();
 			this.tabControlImages.SuspendLayout();
 			this.panelImages.SuspendLayout();
@@ -2125,7 +2125,7 @@ namespace OpenDental{
 			this.butAllPerm.Name = "butAllPerm";
 			this.butAllPerm.Size = new System.Drawing.Size(107,23);
 			this.butAllPerm.TabIndex = 18;
-			this.butAllPerm.Text = "Set All Permament";
+			this.butAllPerm.Text = "Set All Permanent";
 			this.butAllPerm.Click += new System.EventHandler(this.butAllPerm_Click);
 			// 
 			// tabPlanned
@@ -2144,6 +2144,38 @@ namespace OpenDental{
 			this.tabPlanned.TabIndex = 4;
 			this.tabPlanned.Text = "Planned Appts";
 			this.tabPlanned.UseVisualStyleBackColor = true;
+			// 
+			// butDown
+			// 
+			this.butDown.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDown.Autosize = true;
+			this.butDown.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDown.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDown.CornerRadius = 4F;
+			this.butDown.Image = global::OpenDental.Properties.Resources.down;
+			this.butDown.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butDown.Location = new System.Drawing.Point(325,1);
+			this.butDown.Name = "butDown";
+			this.butDown.Size = new System.Drawing.Size(75,23);
+			this.butDown.TabIndex = 195;
+			this.butDown.Text = "&Down";
+			this.butDown.Click += new System.EventHandler(this.butDown_Click);
+			// 
+			// butUp
+			// 
+			this.butUp.AdjustImageLocation = new System.Drawing.Point(0,1);
+			this.butUp.Autosize = true;
+			this.butUp.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butUp.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butUp.CornerRadius = 4F;
+			this.butUp.Image = global::OpenDental.Properties.Resources.up;
+			this.butUp.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butUp.Location = new System.Drawing.Point(244,1);
+			this.butUp.Name = "butUp";
+			this.butUp.Size = new System.Drawing.Size(75,23);
+			this.butUp.TabIndex = 194;
+			this.butUp.Text = "&Up";
+			this.butUp.Click += new System.EventHandler(this.butUp_Click);
 			// 
 			// gridPlanned
 			// 
@@ -2675,9 +2707,10 @@ namespace OpenDental{
 			// toothChart
 			// 
 			this.toothChart.AutoFinish = false;
-			this.toothChart.ColorBackground = System.Drawing.Color.Empty;
+			this.toothChart.ColorBackground = System.Drawing.Color.FromArgb(((int)(((byte)(150)))),((int)(((byte)(145)))),((int)(((byte)(152)))));
 			this.toothChart.Cursor = System.Windows.Forms.Cursors.Default;
 			this.toothChart.CursorTool = SparksToothChart.CursorTool.Pointer;
+			this.toothChart.DeviceFormat = null;
 			this.toothChart.DrawMode = OpenDentBusiness.DrawingMode.Simple2D;
 			this.toothChart.Location = new System.Drawing.Point(0,26);
 			this.toothChart.Name = "toothChart";
@@ -2685,8 +2718,8 @@ namespace OpenDental{
 			this.toothChart.PreferredPixelFormatNumber = 0;
 			this.toothChart.Size = new System.Drawing.Size(410,307);
 			this.toothChart.TabIndex = 194;
-			toothChartData3.SizeControl = new System.Drawing.Size(410,307);
-			this.toothChart.TcData = toothChartData3;
+			toothChartData1.SizeControl = new System.Drawing.Size(410,307);
+			this.toothChart.TcData = toothChartData1;
 			this.toothChart.UseHardware = false;
 			this.toothChart.SegmentDrawn += new SparksToothChart.ToothChartDrawEventHandler(this.toothChart_SegmentDrawn);
 			// 
@@ -2876,38 +2909,6 @@ namespace OpenDental{
 			this.menuItemChartSave.Index = 1;
 			this.menuItemChartSave.Text = "Save to Images";
 			this.menuItemChartSave.Click += new System.EventHandler(this.menuItemChartSave_Click);
-			// 
-			// butUp
-			// 
-			this.butUp.AdjustImageLocation = new System.Drawing.Point(0,1);
-			this.butUp.Autosize = true;
-			this.butUp.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butUp.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butUp.CornerRadius = 4F;
-			this.butUp.Image = global::OpenDental.Properties.Resources.up;
-			this.butUp.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butUp.Location = new System.Drawing.Point(244,1);
-			this.butUp.Name = "butUp";
-			this.butUp.Size = new System.Drawing.Size(75,23);
-			this.butUp.TabIndex = 194;
-			this.butUp.Text = "&Up";
-			this.butUp.Click += new System.EventHandler(this.butUp_Click);
-			// 
-			// butDown
-			// 
-			this.butDown.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butDown.Autosize = true;
-			this.butDown.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDown.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDown.CornerRadius = 4F;
-			this.butDown.Image = global::OpenDental.Properties.Resources.down;
-			this.butDown.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDown.Location = new System.Drawing.Point(325,1);
-			this.butDown.Name = "butDown";
-			this.butDown.Size = new System.Drawing.Size(75,23);
-			this.butDown.TabIndex = 195;
-			this.butDown.Text = "&Down";
-			this.butDown.Click += new System.EventHandler(this.butDown_Click);
 			// 
 			// ContrChart
 			// 
