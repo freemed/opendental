@@ -10,6 +10,7 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.XPath;
+using CodeBase;
 using OpenDentBusiness;
 using OpenDentBusiness.HL7;
 
@@ -173,7 +174,11 @@ namespace OpenDentHL7 {
 			//}
 			string filename;
 			for(int i=0;i<list.Count;i++) {
-				filename=Path.Combine(inFolder,list[i].AptNum.ToString()+".txt");
+				if(list[i].AptNum==0){
+					filename=ODFileUtils.CreateRandomFile(inFolder,".txt");
+				}else{
+					filename=Path.Combine(inFolder,list[i].AptNum.ToString()+".txt");
+				}
 				//EventLog.WriteEntry("Attempting to create file: "+filename);
 				File.WriteAllText(filename,list[i].MsgText);
 				list[i].HL7Status=HL7MessageStatus.OutSent;

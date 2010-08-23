@@ -50,5 +50,32 @@ namespace CodeBase {
 				return Application.ExecutablePath.Substring(0,endPos+1);
 		}
 
+		///<summary>Creates a new randomly named file in the given directory path with the given extension and returns the full path to the new file.</summary>
+		public static string CreateRandomFile(string dir,string ext){
+			if(ext.Length>0 && ext[0]!='.'){
+				ext='.'+ext;
+			}
+			bool fileCreated=false;
+			string filePath="";
+			const string randChrs="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+			Random rand=new Random();
+			do{
+				string fileName="";
+				for(int i=0;i<6;i++){
+					fileName+=randChrs[rand.Next(0,randChrs.Length-1)];
+				}
+				fileName+=DateTime.Now.ToString("yyyyMMddhhmmss");
+				filePath=CombinePaths(dir,fileName+ext);
+				FileStream fs=null;
+				try{
+					fs=File.Create(filePath);
+					fs.Dispose();
+					fileCreated=true;
+				}catch{
+				}
+			}while(!fileCreated);
+			return filePath;
+		}
+
 	}
 }

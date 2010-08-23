@@ -8,25 +8,25 @@ namespace OpenDentBusiness.HL7 {
 		private MessageHL7 msg;
 		private SegmentHL7 seg;
 
-		///<summary>The constructor has all the info necessary to create the Message object.</summary>
-		public DFT(Appointment apt,Patient pat) {
-			msg=new MessageHL7(MessageType.DFT);
-			MSH();
-			EVN();
-			PID(pat);
-			PV1(apt);
-			FT1(apt);
-			DG1();
-		}
+		/////<summary>The constructor has all the info necessary to create the Message object.</summary>
+		//public DFT(Appointment apt,Patient pat) {
+		//  msg=new MessageHL7(MessageType.DFT);
+		//  MSH();
+		//  EVN();
+		//  PID(pat);
+		//  PV1(apt);
+		//  FT1(apt);
+		//  DG1();
+		//}
 
 		///<summary>The constructor has all the info necessary to create the Message object.</summary>
-		public DFT(Appointment apt,Patient pat,string pdfDataBase64){
+		public DFT(Appointment apt,Patient pat,string pdfDataBase64,bool justPDF){
 			msg=new MessageHL7(MessageType.DFT);
 			MSH();
 			EVN();
 			PID(pat);
 			PV1(apt);
-			FT1(apt);
+			FT1(apt,justPDF);
 			DG1();
 			ZX1(pdfDataBase64);
 		}
@@ -112,7 +112,25 @@ namespace OpenDentBusiness.HL7 {
 		}
 
 		///<summary>Financial transaction segment.</summary>
-		private void FT1(Appointment apt){
+		private void FT1(Appointment apt,bool justPDF){
+			if(justPDF){
+				seg=new SegmentHL7(SegmentName.FT1);
+				seg.SetField(0,"FT1");
+				seg.SetField(1,"0");
+				seg.SetField(4,DateTime.Now.ToString("yyyyMMddHHmmss"));
+				seg.SetField(5,DateTime.Now.ToString("yyyyMMddHHmmss"));
+				seg.SetField(6,"CG");
+				seg.SetField(10,"1.0");
+				seg.SetField(16,"");//location code and description???
+				Provider prov=Providers.GetProv(apt.ProvNum);
+				seg.SetField(20,prov.Abbr,prov.LName,prov.FName,prov.MI);//performed by provider.
+				seg.SetField(21,prov.Abbr,prov.LName,prov.FName,prov.MI);//ordering provider.
+				seg.SetField(22,"0.00");//fee
+				seg.SetField(25,"D0999");
+				seg.SetField(26,"","");//no tooth ranges
+				msg.Segments.Add(seg);
+				return;
+			}
 			List<Procedure> procs=Procedures.GetProcsForSingle(apt.AptNum,false);
 			ProcedureCode procCode;
 			for(int i=0;i<procs.Count;i++) {

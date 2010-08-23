@@ -13,19 +13,23 @@ namespace OpenDental.Bridges {
 
 		//OD accepts commandline arguments from eCW.  That's handled in FormOpenDental.
 
-		public static void SendHL7(Appointment apt,Patient pat) {
-			OpenDentBusiness.HL7.DFT dft=new OpenDentBusiness.HL7.DFT(apt,pat);
-			HL7Msg msg=new HL7Msg();
-			msg.AptNum=apt.AptNum;
-			msg.HL7Status=HL7MessageStatus.OutPending;//it will be marked outSent by the HL7 service.
-			msg.MsgText=dft.GenerateMessage();
-			HL7Msgs.Insert(msg);
-		}
+		//public static void SendHL7(Appointment apt,Patient pat) {
+		//  OpenDentBusiness.HL7.DFT dft=new OpenDentBusiness.HL7.DFT(apt,pat);
+		//  HL7Msg msg=new HL7Msg();
+		//  msg.AptNum=apt.AptNum;
+		//  msg.HL7Status=HL7MessageStatus.OutPending;//it will be marked outSent by the HL7 service.
+		//  msg.MsgText=dft.GenerateMessage();
+		//  HL7Msgs.Insert(msg);
+		//}
 
-		public static void SendHL7(Appointment apt,Patient pat,string pdfDataBase64) {
-			OpenDentBusiness.HL7.DFT dft=new OpenDentBusiness.HL7.DFT(apt,pat,pdfDataBase64);
+		public static void SendHL7(Appointment apt,Patient pat,string pdfDataBase64,bool justPDF) {
+			OpenDentBusiness.HL7.DFT dft=new OpenDentBusiness.HL7.DFT(apt,pat,pdfDataBase64,justPDF);
 			HL7Msg msg=new HL7Msg();
-			msg.AptNum=apt.AptNum;
+			if(justPDF){
+				msg.AptNum=0;//Prevents the appt complete button from changing to the "Revise" button prematurely.
+			}else{
+				msg.AptNum=apt.AptNum;
+			}
 			msg.HL7Status=HL7MessageStatus.OutPending;//it will be marked outSent by the HL7 service.
 			msg.MsgText=dft.GenerateMessage();
 			HL7Msgs.Insert(msg);

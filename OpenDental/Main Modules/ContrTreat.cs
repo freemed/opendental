@@ -2374,7 +2374,7 @@ namespace OpenDental{
 				//#endregion
 				string pdfDataStr=Convert.ToBase64String(pdfBytes);
 				Appointment apt=Appointments.GetOneApt(Bridges.ECW.AptNum);
-				Bridges.ECW.SendHL7(apt,PatCur,pdfDataStr);
+				Bridges.ECW.SendHL7(apt,PatCur,pdfDataStr,true);
 			}
 			ModuleSelected(PatCur.PatNum);
 			for(int i=0;i<PlanList.Length;i++){

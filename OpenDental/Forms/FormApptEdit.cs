@@ -101,6 +101,7 @@ namespace OpenDental{
 		private ODGrid gridFields;
 		private TextBox textTimeAskedToArrive;
 		private Label label8;
+		private OpenDental.UI.Button butPDF;
 		///<summary>This is the way to pass a "signal" up to the parent form that OD is to close.</summary>
 		public bool CloseOD;
 
@@ -207,6 +208,7 @@ namespace OpenDental{
 			this.butPin = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.butPDF = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// comboConfirmed
@@ -673,7 +675,7 @@ namespace OpenDental{
 			this.butComplete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butComplete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butComplete.CornerRadius = 4F;
-			this.butComplete.Location = new System.Drawing.Point(871,470);
+			this.butComplete.Location = new System.Drawing.Point(871,494);
 			this.butComplete.Name = "butComplete";
 			this.butComplete.Size = new System.Drawing.Size(92,24);
 			this.butComplete.TabIndex = 155;
@@ -807,7 +809,7 @@ namespace OpenDental{
 			this.butAudit.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butAudit.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butAudit.CornerRadius = 4F;
-			this.butAudit.Location = new System.Drawing.Point(871,500);
+			this.butAudit.Location = new System.Drawing.Point(871,520);
 			this.butAudit.Name = "butAudit";
 			this.butAudit.Size = new System.Drawing.Size(92,24);
 			this.butAudit.TabIndex = 125;
@@ -836,7 +838,7 @@ namespace OpenDental{
 			this.butTask.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butTask.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butTask.CornerRadius = 4F;
-			this.butTask.Location = new System.Drawing.Point(871,530);
+			this.butTask.Location = new System.Drawing.Point(871,546);
 			this.butTask.Name = "butTask";
 			this.butTask.Size = new System.Drawing.Size(92,24);
 			this.butTask.TabIndex = 124;
@@ -853,7 +855,7 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(871,590);
+			this.butDelete.Location = new System.Drawing.Point(871,598);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(92,24);
 			this.butDelete.TabIndex = 123;
@@ -870,7 +872,7 @@ namespace OpenDental{
 			this.butPin.CornerRadius = 4F;
 			this.butPin.Image = ((System.Drawing.Image)(resources.GetObject("butPin.Image")));
 			this.butPin.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPin.Location = new System.Drawing.Point(871,560);
+			this.butPin.Location = new System.Drawing.Point(871,572);
 			this.butPin.Name = "butPin";
 			this.butPin.Size = new System.Drawing.Size(92,24);
 			this.butPin.TabIndex = 122;
@@ -885,7 +887,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(871,620);
+			this.butOK.Location = new System.Drawing.Point(871,624);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(92,24);
 			this.butOK.TabIndex = 1;
@@ -907,10 +909,27 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// butPDF
+			// 
+			this.butPDF.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butPDF.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butPDF.Autosize = true;
+			this.butPDF.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butPDF.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPDF.CornerRadius = 4F;
+			this.butPDF.Location = new System.Drawing.Point(871,468);
+			this.butPDF.Name = "butPDF";
+			this.butPDF.Size = new System.Drawing.Size(92,24);
+			this.butPDF.TabIndex = 161;
+			this.butPDF.Text = "Notes PDF";
+			this.butPDF.Visible = false;
+			this.butPDF.Click += new System.EventHandler(this.butPDF_Click);
+			// 
 			// FormApptEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(975,682);
+			this.Controls.Add(this.butPDF);
 			this.Controls.Add(this.textTimeAskedToArrive);
 			this.Controls.Add(this.label8);
 			this.Controls.Add(this.gridFields);
@@ -1166,6 +1185,7 @@ namespace OpenDental{
 			}
 			if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") {
 				butComplete.Visible=true;
+				butPDF.Visible=true;
 				//for eCW, we need to hide some things--------------------
 				butDelete.Visible=false;
 				butPin.Visible=false;
@@ -1175,6 +1195,7 @@ namespace OpenDental{
 					butComplete.Text="Revise";
 					if(!Security.IsAuthorized(Permissions.Setup,true)) {
 						butComplete.Enabled=false;
+						butPDF.Enabled=false;
 					}
 					butOK.Enabled=false;
 					gridProc.Enabled=false;
@@ -1187,10 +1208,12 @@ namespace OpenDental{
 					if(Bridges.ECW.AptNum != AptCur.AptNum) {
 						butComplete.Enabled=false;
 					}
+					butPDF.Enabled=false;
 				}
 			}
 			else {
 				butComplete.Visible=false;
+				butPDF.Visible=false;
 			}
 			FillProcedures();
 			FillPatient();//Must be after FillProcedures(), so that the initial amount for the appointment can be calculated.
@@ -2064,6 +2087,13 @@ namespace OpenDental{
 			return true;
 		}
 
+		private void butPDF_Click(object sender,EventArgs e) {
+			//Send DFT to eCW containing a dummy procedure with this appointment in a .pdf file.				
+			string pdfDataStr=GenerateProceduresIntoPdf();
+			Bridges.ECW.SendHL7(AptCur,pat,pdfDataStr,true);
+			MsgBox.Show(this,"Notes PDF sent.");
+		}
+
 		///<summary>Creates a new .pdf file containing all of the procedures attached to this appointment and 
 		///returns the contents of the .pdf file as a base64 encoded string.</summary>
 		private string GenerateProceduresIntoPdf(){
@@ -2233,9 +2263,9 @@ namespace OpenDental{
 				if(!UpdateToDB()) {
 					return;
 				}
-				//Send DFT to ECW containing the attached procedures for this appointment in a .pdf file.				
+				//Send DFT to eCW containing the attached procedures for this appointment in a .pdf file.				
 				string pdfDataStr=GenerateProceduresIntoPdf();
-				Bridges.ECW.SendHL7(AptCur,pat,pdfDataStr);
+				Bridges.ECW.SendHL7(AptCur,pat,pdfDataStr,false);
 				CloseOD=true;
 				if(IsNew) {
 					SecurityLogs.MakeLogEntry(Permissions.AppointmentCreate,pat.PatNum,pat.GetNameLF()+", "
