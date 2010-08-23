@@ -1215,7 +1215,9 @@ namespace OpenDental{
 				}
 			}
 			if(vScrollBar1.Value>vScrollBar1.Maximum-vScrollBar1.LargeChange) {
-				vScrollBar1.Value=vScrollBar1.Maximum-vScrollBar1.LargeChange;
+				if(vScrollBar1.Maximum-vScrollBar1.LargeChange>=0) {//but don't allow setting negative number
+					vScrollBar1.Value=vScrollBar1.Maximum-vScrollBar1.LargeChange;
+				}
 			}
 			ContrApptSheet2.MouseWheel+=new MouseEventHandler(ContrApptSheet2_MouseWheel);
 			ContrApptSheet2.Location=new Point(0,-vScrollBar1.Value);
