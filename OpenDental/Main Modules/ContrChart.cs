@@ -6512,7 +6512,7 @@ namespace OpenDental{
 				FillPtInfo();
 				return;
 			}
-			else {//patfield
+			/*else {//editing patfield
 				string tag=gridPtInfo.Rows[e.Row].Tag.ToString();
 				tag=tag.Substring(8);//strips off all but the number: PatField1
 				int index=PIn.Int(tag);
@@ -6529,7 +6529,7 @@ namespace OpenDental{
 					FormPatFieldEdit FormPF=new FormPatFieldEdit(field);
 					FormPF.ShowDialog();
 				}
-			}
+			}*/
 		}
 
 		private void toothChart_Click(object sender,EventArgs e) {
