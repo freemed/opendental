@@ -116,13 +116,13 @@ namespace OpenDental {
 					row.Cells.Add(FirstName);
 					row.Cells.Add(BirthDate);
 					if(PatNum==0) {
-						newPat=CreateNewPatient(LastName,FirstName,BirthDate,SingleSheet.ToList());
+						newPat=CreateNewPatient(SingleSheet.ToList());
 						NewPatNum=newPat.PatNum;
 						row.Cells.Add("New Patient");
 						row.Tag=NewPatNum;
 					}
 					else {
-						newSheet=CreateSheet(PatNum,LastName,FirstName,BirthDate);
+						newSheet=CreateSheet(PatNum,SingleSheet.ToList());
 						row.Cells.Add("Imported");
 						row.Tag=PatNum;
 					}
@@ -167,50 +167,47 @@ namespace OpenDental {
 		/// <summary>
 		/// 
 		/// </summary>
-		private Patient CreateNewPatient(string LastName,string FirstName,string BirthDate,List<OpenDental.WebHostSynch.webforms_sheetfield> SingleSheet) {
+		private Patient CreateNewPatient(List<OpenDental.WebHostSynch.webforms_sheetfield> SingleSheet) {
 			Patient newPat=null;
+			newPat=new Patient();
+			//PatFields must have a one to one mapping with the SheetFormFields
+			String[] PatFields = { "LName","FName","Birthdate","Preferred", "Email",
+									 "Address","Address2","City","State","Zip",
+									 "HmPhone"};
+			//other PatFields = "PatStatus","Guarantor","CreditType","PriProv","SecProv","FeeSched","BillingType","AddrNote","ClinicNum" };
+			String[] SheetFormFields = {"LastName","FirstName","Birthdate","Preferred","Email",
+									"WholeFamily","Address2","City","State","Zip",
+									"HomePhone"};
+			/*other SheetFormFields ="Policy1SubscriberID","Method1","Policy1SubscriberName","WirelessPhone","MethodRecall","Policy1Relationship","Policy2Relationship","Policy2SubscriberID","Policy2InsuranceCompany","WirelessCarrier","MethodConf","SS","Hear","Policy2SubscriberName","Comments","Policy1Employer","Policy2GroupNumber","StudentStatus","Address1","MI","Policy1GroupName","Gender","Policy1InsuranceCompany","Policy1Phone","Policy2GroupName","Married","WorkPhone","Policy1GroupNumber","Policy2Phone","Policy2Employer" };
+
+			*/
+			Type t = newPat.GetType();
+			FieldInfo[] fi = t.GetFields();
 			try {
-
-
-				for(int j=0;j<SingleSheet.Count();j++) {
-					String FieldName=SingleSheet.ElementAt(j).FieldName;
-					String FieldValue=SingleSheet.ElementAt(j).FieldValue;
-					if(FieldName.ToLower().Contains("lastname")) {
-						LastName=FieldValue;
+				for(int i=0;i<SingleSheet.Count();i++) {
+					String SheetFieldName=SingleSheet.ElementAt(i).FieldName;
+					String SheetFieldValue=SingleSheet.ElementAt(i).FieldValue;
+					for(int j=0;j<SheetFormFields.Length;j++) {
+						if(SheetFieldName==SheetFormFields[j]) {// SheetFormFields[j] and PatFields[j] should have a one to one correspondence
+											foreach(FieldInfo field in fi) {
+												if(field.Name==PatFields[j]) {
+														try {
+															if(field.Name=="Birthdate") {
+																DateTime birthDate=PIn.Date(SheetFieldValue);
+																field.SetValue(newPat,birthDate);
+															}
+															else {
+																field.SetValue(newPat,SheetFieldValue);
+															}
+														}
+														catch(Exception e) {
+															//MessageBox.Show(field.Name + e.Message);
+														}
+												}
+											}// foreach loop
+						} // j loop
 					}
-					if(FieldName.ToLower().Contains("firstname")) {
-						FirstName=FieldValue;
-					}
-					if(FieldName.ToLower().Contains("birthdate")) {
-						BirthDate=FieldValue;
-					}
-				}
-
-
-
-				newPat=new Patient();
-				newPat.LName=LastName;
-				newPat.FName=FirstName;
-				newPat.Birthdate=PIn.Date(BirthDate);
-
-				/*
-						newPat.LName      =PatCur.LName;
-						newPat.PatStatus  =PatientStatus.Patient;
-						newPat.Address    =PatCur.Address;
-						newPat.Address2   =PatCur.Address2;
-						newPat.City       =PatCur.City;
-						newPat.State      =PatCur.State;
-						newPat.Zip        =PatCur.Zip;
-						newPat.HmPhone    =PatCur.HmPhone;
-						newPat.Guarantor  =PatCur.Guarantor;
-						newPat.CreditType =PatCur.CreditType;
-						newPat.PriProv    =PatCur.PriProv;
-						newPat.SecProv    =PatCur.SecProv;
-						newPat.FeeSched   =PatCur.FeeSched;
-						newPat.BillingType=PatCur.BillingType;
-						newPat.AddrNote   =PatCur.AddrNote;
-						newPat.ClinicNum  =PatCur.ClinicNum;
-						*/
+				}// i loop
 				Patients.Insert(newPat,false);
 				//set Guarantor field the same as PatNum
 				Patient patOld=newPat.Copy();
@@ -227,7 +224,7 @@ namespace OpenDental {
 		/// <summary>
 		/// 
 		/// </summary>
-		private Sheet CreateSheet(long PatNum,string LastName,string FirstName,string BirthDate) {
+		private Sheet CreateSheet(long PatNum,List<OpenDental.WebHostSynch.webforms_sheetfield> SingleSheet) {
 			Sheet sheet=null;//only useful if not Terminal
 			try {
 				FormSheetPicker FormS=new FormSheetPicker();
@@ -236,6 +233,8 @@ namespace OpenDental {
 				sheet=SheetUtil.CreateSheet(sheetDef,PatNum);
 				SheetParameter.SetParameter(sheet,"PatNum",PatNum);
 				sheet.InternalNote="";//because null not ok
+				/*
+
 				foreach(SheetField fld in sheet.SheetFields) {
 					if(fld.FieldName=="LName") {
 						fld.FieldValue=LastName;
@@ -247,6 +246,43 @@ namespace OpenDental {
 						fld.FieldValue=BirthDate;
 					}
 				}
+				*/
+
+				//PatFields must have a one to one mapping with the SheetFormFields
+			String[] PatFields = { "LName","FName","Birthdate","Preferred", "Email",
+									 "Address","Address2","City","State","Zip",
+									 "HmPhone"};
+			//other PatFields = "PatStatus","Guarantor","CreditType","PriProv","SecProv","FeeSched","BillingType","AddrNote","ClinicNum" };
+			String[] SheetFormFields = {"LastName","FirstName","Birthdate","Preferred","Email",
+									"WholeFamily","Address2","City","State","Zip",
+									"HomePhone"};
+			/*other SheetFormFields ="Policy1SubscriberID","Method1","Policy1SubscriberName","WirelessPhone","MethodRecall","Policy1Relationship","Policy2Relationship","Policy2SubscriberID","Policy2InsuranceCompany","WirelessCarrier","MethodConf","SS","Hear","Policy2SubscriberName","Comments","Policy1Employer","Policy2GroupNumber","StudentStatus","Address1","MI","Policy1GroupName","Gender","Policy1InsuranceCompany","Policy1Phone","Policy2GroupName","Married","WorkPhone","Policy1GroupNumber","Policy2Phone","Policy2Employer" };
+
+			*/
+
+			
+			
+				for(int i=0;i<SingleSheet.Count();i++) {
+					String SheetFieldName=SingleSheet.ElementAt(i).FieldName;
+					String SheetFieldValue=SingleSheet.ElementAt(i).FieldValue;
+					for(int j=0;j<SheetFormFields.Length;j++) {
+						if(SheetFieldName==SheetFormFields[j]) {// SheetFormFields[j] and PatFields[j] should have a one to one correspondence
+											foreach(SheetField fld in sheet.SheetFields) {
+												if(fld.FieldName==PatFields[j]) {
+														try {
+													
+																fld.FieldValue=SheetFieldValue;
+															
+														}
+														catch(Exception e) {
+															//MessageBox.Show(field.Name + e.Message);
+														}
+												}
+											}// foreach loop
+						} // j loop
+					}
+				}// i loop
+
 
 				sheet.IsWebForm=true;
 				Sheets.SaveNewSheet(sheet);

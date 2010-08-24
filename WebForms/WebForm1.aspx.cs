@@ -81,7 +81,7 @@ namespace WebForms {
 
 
 		/// <summary>
-		/// This is a recursive function which serches through nested controls
+		/// This is a recursive function which searches through nested controls on a  webpage
 		/// </summary>
 		/// <param name="c"></param>
 		private void FindControls(Control c) {
