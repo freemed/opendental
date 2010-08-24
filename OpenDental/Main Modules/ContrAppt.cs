@@ -2352,13 +2352,13 @@ namespace OpenDental{
 						apptField.FieldValue=PIn.String(pinBoard.SelectedAppt.TableApptFields.Rows[i]["FieldValue"].ToString());
 						ApptFields.Insert(apptField);
 					}
-					for(int i=0;i<pinBoard.SelectedAppt.TablePatFields.Rows.Count;i++) {//Duplicate the patient fields.
-						PatField patField=new PatField();
-						patField.PatNum=aptCur.PatNum;
-						patField.FieldName=PIn.String(pinBoard.SelectedAppt.TablePatFields.Rows[i]["FieldName"].ToString());
-						patField.FieldValue=PIn.String(pinBoard.SelectedAppt.TablePatFields.Rows[i]["FieldValue"].ToString());
-						PatFields.Insert(patField);
-					}
+					//for(int i=0;i<pinBoard.SelectedAppt.TablePatFields.Rows.Count;i++) {//Duplicate the patient fields.
+					//	PatField patField=new PatField();
+					//	patField.PatNum=aptCur.PatNum;
+					//	patField.FieldName=PIn.String(pinBoard.SelectedAppt.TablePatFields.Rows[i]["FieldName"].ToString());
+					//	patField.FieldValue=PIn.String(pinBoard.SelectedAppt.TablePatFields.Rows[i]["FieldValue"].ToString());
+					//	PatFields.Insert(patField);
+					//}
 				}
 				catch(ApplicationException ex){
 					MessageBox.Show(ex.Message);
