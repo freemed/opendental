@@ -2346,6 +2346,7 @@ namespace OpenDental{
 				try{
 					Appointments.Insert(aptCur);//now, aptnum is different.
 					for(int i=0;i<pinBoard.SelectedAppt.TableApptFields.Rows.Count;i++) {//Duplicate the appointment fields.
+						//in SendToPinboard, TableApptFields is refreshed for just the one planned appt instead of all appts for day.
 						ApptField apptField=new ApptField();
 						apptField.AptNum=aptCur.AptNum;
 						apptField.FieldName=PIn.String(pinBoard.SelectedAppt.TableApptFields.Rows[i]["FieldName"].ToString());

@@ -867,6 +867,13 @@ namespace OpenDental.Eclaims
 					sw.WriteLine("REF*G1*"//REF01: G1=prior auth number
 						+Sout(claim.PreAuthString,30)+"~");//REF02: Prior Auth Identifier
 				}
+				//2300 REF: Original Reference Number
+					//aka Original Document Control Number/Internal Control Number (DCN/ICN).
+					//aka Transaction Control Number (TCN).  
+					//aka Claim Reference Number. 
+					//Seems to be required by Medicaid when voiding a claim or resubmitting a claim by setting the CLM05-3.
+//todo: Implement 
+
 				//2300 REF: Referral number
 				if(claim.RefNumString!=""){
 					seg++;
