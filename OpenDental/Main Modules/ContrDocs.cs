@@ -560,7 +560,7 @@ namespace OpenDental{
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Import"),5,Lan.g(this,"Import From File"),"Import"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Copy"),17,Lan.g(this,"Copy displayed image to clipboard"),"Copy"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Paste"),6,Lan.g(this,"Paste From Clipboard"),"Paste"));
-			button=new ODToolBarButton(Lan.g(this,"Forms"),-1,"","Forms");
+			button=new ODToolBarButton(Lan.g(this,"Templates"),-1,"","Forms");
 			button.Style=ODToolBarButtonStyle.DropDownButton;
 			menuForms=new ContextMenu();
 			string formDir=ODFileUtils.CombinePaths(ImageStore.GetPreferredImagePath(),"Forms");
