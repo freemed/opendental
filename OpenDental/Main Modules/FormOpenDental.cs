@@ -221,6 +221,7 @@ namespace OpenDental{
 		private VideoCapture vidCapt;
 		///<summary>A hidden control where video stream is sent.</summary>
 		private System.Windows.Forms.PictureBox pictBoxVideo;
+		private MenuItem menuItemClearDuplicatePatFields;
 		private IntPtr intPtrVideo;
 
 		///<summary></summary>
@@ -446,6 +447,7 @@ namespace OpenDental{
 			this.timerHeartBeat = new System.Windows.Forms.Timer(this.components);
 			this.butBigPhones = new OpenDental.UI.Button();
 			this.timerPhoneWebCam = new System.Windows.Forms.Timer(this.components);
+			this.menuItemClearDuplicatePatFields = new System.Windows.Forms.MenuItem();
 			this.SuspendLayout();
 			// 
 			// timerTimeIndic
@@ -1003,7 +1005,8 @@ namespace OpenDental{
             this.menuItemImportXML,
             this.menuItemMergePatients,
             this.menuItemDuplicateBlockouts,
-            this.menuItemShutdown});
+            this.menuItemShutdown,
+            this.menuItemClearDuplicatePatFields});
 			this.menuItem1.Text = "Misc Tools";
 			// 
 			// menuTelephone
@@ -1290,6 +1293,12 @@ namespace OpenDental{
 			// 
 			this.timerPhoneWebCam.Interval = 1600;
 			this.timerPhoneWebCam.Tick += new System.EventHandler(this.timerPhoneWebCam_Tick);
+			// 
+			// menuItemClearDuplicatePatFields
+			// 
+			this.menuItemClearDuplicatePatFields.Index = 6;
+			this.menuItemClearDuplicatePatFields.Text = "Clear Duplicate Patient Fields";
+			this.menuItemClearDuplicatePatFields.Click += new System.EventHandler(this.menuItemClearDuplicatePatFields_Click);
 			// 
 			// FormOpenDental
 			// 
@@ -4388,6 +4397,15 @@ namespace OpenDental{
 		private void menuItemWebForms_Click(object sender,EventArgs e) {
 			FormWebForms FormWF = new FormWebForms();
 			FormWF.ShowDialog();
+		}
+
+		private void menuItemClearDuplicatePatFields_Click(object sender,EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.Setup)) {
+				return;
+			}
+			FormPatFieldDuplicatesFix form=new FormPatFieldDuplicatesFix();
+			form.ShowDialog();
+			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Clear duplicate patient fields.");
 		}
 
 		

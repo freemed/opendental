@@ -54,8 +54,51 @@ namespace OpenDentBusiness {
 			}
 			return null;
 		}
-		
-		
+
+		public static int GetDuplicatePatFieldCount() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetInt(MethodBase.GetCurrentMethod());
+			}
+			string command=@"SELECT COUNT(*) countDup
+				FROM patfield
+					WHERE PatNum IN(
+					SELECT PatNum
+					FROM patfield
+					GROUP BY PatNum,FieldName
+					HAVING COUNT(*)>1)";
+			DataTable table=Db.GetTable(command);
+			int retVal=0;
+			for(int i=0;i<table.Rows.Count;i++) {
+				retVal+=PIn.Int(table.Rows[i][0].ToString());
+			}
+			return retVal;
+		}
+
+		public static void ClearDuplicatePatField() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod());
+				return;
+			}
+			//Create a temp table with duplicated patfields
+			string command="DROP TABLE IF EXISTS temppatfieldstodelete";
+			Db.NonQ(command);
+			command=@"CREATE TABLE temppatfieldstodelete (
+				SELECT PatFieldNum
+				FROM patfield
+				WHERE PatNum IN(
+				SELECT PatNum
+				FROM patfield
+				GROUP BY PatNum,FieldName
+				HAVING COUNT(*)>1))";
+			Db.NonQ(command);
+			command=@"DELETE FROM patfield 
+				WHERE PatFieldNum IN(
+				SELECT PatFieldNum 
+				FROM temppatfieldstodelete)";
+			Db.NonQ(command);
+			command="DROP TABLE IF EXISTS temppatfieldstodelete";
+			Db.NonQ(command);
+		}
 	}
 
 		
