@@ -167,8 +167,8 @@
 					<asp:Label ID="LabelEmail" runat="server" Text="Email"></asp:Label>
 					<asp:TextBox ID="TextBoxEmail" runat="server" CssClass="textboxstyle" Width="300px"></asp:TextBox>
 					<br />
-					<asp:Label ID="LabelMethod1" runat="server" Text="Preferred contact method" Width="300px"></asp:Label>
-					<asp:RadioButtonList ID="RadioButtonListMethod1" runat="server" RepeatDirection="Horizontal"
+					<asp:Label ID="LabelMethodContact" runat="server" Text="Preferred contact method" Width="300px"></asp:Label>
+					<asp:RadioButtonList ID="RadioButtonListMethodContact" runat="server" RepeatDirection="Horizontal"
 						RepeatLayout="Flow">
 						<asp:ListItem Value="HmPhone" Text="HmPhone&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"></asp:ListItem>
 						<asp:ListItem Value="WkPhone" Text="WkPhone&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"></asp:ListItem>

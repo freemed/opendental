@@ -38,13 +38,6 @@ namespace WebHostSynch {
 		}
 
 		[WebMethod]
-		public List<webforms_sheet> testmeth() {
-			ODWebServiceEntities db=new ODWebServiceEntities();
-			var wsObj = from ws in db.webforms_sheet select ws;
-			return wsObj.ToList();
-		}
-
-		[WebMethod]
 		public void DeleteSheetData(List<long> SheetsForDeletion) {
 			ODWebServiceEntities db=new ODWebServiceEntities();
 			for(int i=0;i<SheetsForDeletion.Count();i++) {

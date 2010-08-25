@@ -170,15 +170,17 @@ namespace OpenDental {
 		private Patient CreateNewPatient(List<OpenDental.WebHostSynch.webforms_sheetfield> SingleSheet) {
 			Patient newPat=null;
 			newPat=new Patient();
-			//PatFields must have a one to one mapping with the SheetFormFields
+			//PatFields must have a one to one mapping with the SheetWebFields
 			String[] PatFields = { "LName","FName","Birthdate","Preferred", "Email",
 									 "Address","Address2","City","State","Zip",
-									 "HmPhone"};
+									  "HmPhone","Gender","Position","PreferContactMethod","PreferConfirmMethod",
+									  "PreferRecallMethod","StudentStatus","ins1Relat","ins2Relat"};
 			//other PatFields = "PatStatus","Guarantor","CreditType","PriProv","SecProv","FeeSched","BillingType","AddrNote","ClinicNum" };
-			String[] SheetFormFields = {"LastName","FirstName","Birthdate","Preferred","Email",
+			String[] SheetWebFields = {"LastName","FirstName","Birthdate","Preferred","Email",
 									"WholeFamily","Address2","City","State","Zip",
-									"HomePhone"};
-			/*other SheetFormFields ="Policy1SubscriberID","Method1","Policy1SubscriberName","WirelessPhone","MethodRecall","Policy1Relationship","Policy2Relationship","Policy2SubscriberID","Policy2InsuranceCompany","WirelessCarrier","MethodConf","SS","Hear","Policy2SubscriberName","Comments","Policy1Employer","Policy2GroupNumber","StudentStatus","Address1","MI","Policy1GroupName","Gender","Policy1InsuranceCompany","Policy1Phone","Policy2GroupName","Married","WorkPhone","Policy1GroupNumber","Policy2Phone","Policy2Employer" };
+									"HomePhone","Gender","Married","MethodContact","MethodConf",
+									  "MethodRecall","StudentStatus","Policy1Relationship","Policy2Relationship"};
+			/*other SheetWebFields ="Policy1SubscriberID","Method1","Policy1SubscriberName","WirelessPhone","MethodRecall","Policy1Relationship","Policy2Relationship","Policy2SubscriberID","Policy2InsuranceCompany","WirelessCarrier","MethodConf","SS","Hear","Policy2SubscriberName","Comments","Policy1Employer","Policy2GroupNumber","StudentStatus","Address1","MI","Policy1GroupName","Gender","Policy1InsuranceCompany","Policy1Phone","Policy2GroupName","Married","WorkPhone","Policy1GroupNumber","Policy2Phone","Policy2Employer" };
 
 			*/
 			Type t = newPat.GetType();
@@ -187,14 +189,17 @@ namespace OpenDental {
 				for(int i=0;i<SingleSheet.Count();i++) {
 					String SheetFieldName=SingleSheet.ElementAt(i).FieldName;
 					String SheetFieldValue=SingleSheet.ElementAt(i).FieldValue;
-					for(int j=0;j<SheetFormFields.Length;j++) {
-						if(SheetFieldName==SheetFormFields[j]) {// SheetFormFields[j] and PatFields[j] should have a one to one correspondence
+					for(int j=0;j<SheetWebFields.Length;j++) {
+						if(SheetFieldName==SheetWebFields[j]) {// SheetWebFields[j] and PatFields[j] should have a one to one correspondence
 											foreach(FieldInfo field in fi) {
 												if(field.Name==PatFields[j]) {
 														try {
 															if(field.Name=="Birthdate") {
 																DateTime birthDate=PIn.Date(SheetFieldValue);
 																field.SetValue(newPat,birthDate);
+															}
+															else if(field.Name=="PreferContactMethod") {
+																//pat.PreferContactMethod=(ContactMethod)rows[i].ImpValObj;
 															}
 															else {
 																field.SetValue(newPat,SheetFieldValue);
@@ -233,30 +238,19 @@ namespace OpenDental {
 				sheet=SheetUtil.CreateSheet(sheetDef,PatNum);
 				SheetParameter.SetParameter(sheet,"PatNum",PatNum);
 				sheet.InternalNote="";//because null not ok
-				/*
 
-				foreach(SheetField fld in sheet.SheetFields) {
-					if(fld.FieldName=="LName") {
-						fld.FieldValue=LastName;
-					}
-					if(fld.FieldName=="FName") {
-						fld.FieldValue=FirstName;
-					}
-					if(fld.FieldName=="Birthdate") {
-						fld.FieldValue=BirthDate;
-					}
-				}
-				*/
 
-				//PatFields must have a one to one mapping with the SheetFormFields
-			String[] PatFields = { "LName","FName","Birthdate","Preferred", "Email",
+				//SheetFields must have a one to one mapping with the SheetWebFields
+			String[] SheetFields = { "LName","FName","Birthdate","Preferred", "Email",
 									 "Address","Address2","City","State","Zip",
-									 "HmPhone"};
-			//other PatFields = "PatStatus","Guarantor","CreditType","PriProv","SecProv","FeeSched","BillingType","AddrNote","ClinicNum" };
-			String[] SheetFormFields = {"LastName","FirstName","Birthdate","Preferred","Email",
+									 "HmPhone","Gender","Position","PreferContactMethod","PreferConfirmMethod",
+									  "PreferRecallMethod","StudentStatus","ins1Relat","ins2Relat"};
+			//other SheetFields = "PatStatus","Guarantor","CreditType","PriProv","SecProv","FeeSched","BillingType","AddrNote","ClinicNum" };
+			String[] SheetWebFields = {"LastName","FirstName","Birthdate","Preferred","Email",
 									"WholeFamily","Address2","City","State","Zip",
-									"HomePhone"};
-			/*other SheetFormFields ="Policy1SubscriberID","Method1","Policy1SubscriberName","WirelessPhone","MethodRecall","Policy1Relationship","Policy2Relationship","Policy2SubscriberID","Policy2InsuranceCompany","WirelessCarrier","MethodConf","SS","Hear","Policy2SubscriberName","Comments","Policy1Employer","Policy2GroupNumber","StudentStatus","Address1","MI","Policy1GroupName","Gender","Policy1InsuranceCompany","Policy1Phone","Policy2GroupName","Married","WorkPhone","Policy1GroupNumber","Policy2Phone","Policy2Employer" };
+									"HomePhone","Gender","Married","MethodContact","MethodConf",
+									  "MethodRecall","StudentStatus","Policy1Relationship","Policy2Relationship"};
+			/*other SheetWebFields ="Policy1SubscriberID","","Policy1SubscriberName","WirelessPhone",,"Policy2Relationship","Policy2SubscriberID","Policy2InsuranceCompany","WirelessCarrier","","SS","Hear","Policy2SubscriberName","Comments","Policy1Employer","Policy2GroupNumber","Address1","MI","Policy1GroupName","Gender","Policy1InsuranceCompany","Policy1Phone","Policy2GroupName","Married","WorkPhone","Policy1GroupNumber","Policy2Phone","Policy2Employer" };
 
 			*/
 
@@ -265,19 +259,120 @@ namespace OpenDental {
 				for(int i=0;i<SingleSheet.Count();i++) {
 					String SheetFieldName=SingleSheet.ElementAt(i).FieldName;
 					String SheetFieldValue=SingleSheet.ElementAt(i).FieldValue;
-					for(int j=0;j<SheetFormFields.Length;j++) {
-						if(SheetFieldName==SheetFormFields[j]) {// SheetFormFields[j] and PatFields[j] should have a one to one correspondence
+					for(int j=0;j<SheetWebFields.Length;j++) {
+						if(SheetFieldName==SheetWebFields[j]) {// SheetWebFields[j] and SheetFields[j] should have a one to one correspondence
 											foreach(SheetField fld in sheet.SheetFields) {
-												if(fld.FieldName==PatFields[j]) {
-														try {
+
+												if(fld.FieldName==SheetFields[j]) {
+
+												switch(fld.FieldName) {
+
+														//try{
+
+													case "Gender":
+														if(fld.RadioButtonValue=="Male") {
+															if(SheetFieldValue=="M") {
+																fld.FieldValue="X";
+															}
+														}
+														if(fld.RadioButtonValue=="Female") {
+															if(SheetFieldValue=="F") {
+																fld.FieldValue="X";
+															}
+														}
+														break;
+
+													case "Position":
+														if(fld.RadioButtonValue=="Married") {
+															if(SheetFieldValue=="Y") {
+																fld.FieldValue="X";
+															}
+														}
+														if(fld.RadioButtonValue=="Single") {
+															if(SheetFieldValue=="N") {
+																fld.FieldValue="X";
+															}
+														}
+														break;
+													case "PreferContactMethod":
+													case "PreferConfirmMethod":
+													case "PreferRecallMethod":
+														if(fld.RadioButtonValue=="HmPhone") {
+															if(SheetFieldValue=="HmPhone") {
+																fld.FieldValue="X";
+															}
+														}
+														if(fld.RadioButtonValue=="WkPhone") {
+															if(SheetFieldValue=="WkPhone") {
+																fld.FieldValue="X";
+															}
+														}
+																																											if(fld.RadioButtonValue=="WirelessPh") {
+															if(SheetFieldValue=="WirelessPh") {
+																fld.FieldValue="X";
+															}
+														}
+																																											if(fld.RadioButtonValue=="Email") {
+															if(SheetFieldValue=="Email") {
+																fld.FieldValue="X";
+															}
+														}
+														break;
 													
-																fld.FieldValue=SheetFieldValue;
+														
+													
+													
+													case "StudentStatus":
+
+													if(fld.RadioButtonValue=="Nonstudent") {
+															if(SheetFieldValue=="Nonstudent") {
+																fld.FieldValue="X";
+															}
+														}
+														if(fld.RadioButtonValue=="Fulltime") {
+															if(SheetFieldValue=="Fulltime") {
+																fld.FieldValue="X";
+															}
+														}
+
+														if(fld.RadioButtonValue=="Parttime") {
+															if(SheetFieldValue=="Parttime") {
+																fld.FieldValue="X";
+															}
+														}
+														break;
+
+													case "ins1Relat":
+													case "ins2Relat":
+														if(fld.RadioButtonValue=="Self") {
+															if(SheetFieldValue=="Self") {
+																fld.FieldValue="X";
+															}
+														}
+														if(fld.RadioButtonValue=="Spouse") {
+															if(SheetFieldValue=="Spouse") {
+																fld.FieldValue="X";
+															}
+														}
+														if(fld.RadioButtonValue=="Child") {
+															if(SheetFieldValue=="Child") {
+																fld.FieldValue="X";
+															}
+														}
+														break;
+													
+													default:
+														fld.FieldValue=SheetFieldValue;
+														break;
+												}//switch case
+
+											}//if
 															
-														}
-														catch(Exception e) {
+														//}
+														//catch(Exception e) {
 															//MessageBox.Show(field.Name + e.Message);
-														}
-												}
+														//}
+												
 											}// foreach loop
 						} // j loop
 					}

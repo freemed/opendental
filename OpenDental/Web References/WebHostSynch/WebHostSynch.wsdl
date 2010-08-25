@@ -89,37 +89,6 @@
         </s:complexContent>
       </s:complexType>
       <s:complexType name="RelatedEnd" abstract="true" />
-      <s:element name="testmeth">
-        <s:complexType />
-      </s:element>
-      <s:complexType name="ArrayOfWebforms_sheet">
-        <s:sequence>
-          <s:element minOccurs="0" maxOccurs="unbounded" name="webforms_sheet" nillable="true" type="tns:webforms_sheet" />
-        </s:sequence>
-      </s:complexType>
-      <s:complexType name="webforms_sheet">
-        <s:complexContent mixed="false">
-          <s:extension base="tns:EntityObject">
-            <s:sequence>
-              <s:element minOccurs="1" maxOccurs="1" name="DateTimeSubmitted" type="s:dateTime" />
-              <s:element minOccurs="1" maxOccurs="1" name="SheetID" type="s:long" />
-              <s:element minOccurs="0" maxOccurs="1" name="webforms_preferenceReference" type="tns:EntityReferenceOfwebforms_preference" />
-            </s:sequence>
-          </s:extension>
-        </s:complexContent>
-      </s:complexType>
-      <s:complexType name="EntityReferenceOfwebforms_preference">
-        <s:complexContent mixed="false">
-          <s:extension base="tns:EntityReference" />
-        </s:complexContent>
-      </s:complexType>
-      <s:element name="testmethResponse">
-        <s:complexType>
-          <s:sequence>
-            <s:element minOccurs="0" maxOccurs="1" name="testmethResult" type="tns:ArrayOfWebforms_sheet" />
-          </s:sequence>
-        </s:complexType>
-      </s:element>
       <s:element name="DeleteSheetData">
         <s:complexType>
           <s:sequence>
@@ -163,12 +132,6 @@
   <wsdl:message name="GetSheetDataSoapOut">
     <wsdl:part name="parameters" element="tns:GetSheetDataResponse" />
   </wsdl:message>
-  <wsdl:message name="testmethSoapIn">
-    <wsdl:part name="parameters" element="tns:testmeth" />
-  </wsdl:message>
-  <wsdl:message name="testmethSoapOut">
-    <wsdl:part name="parameters" element="tns:testmethResponse" />
-  </wsdl:message>
   <wsdl:message name="DeleteSheetDataSoapIn">
     <wsdl:part name="parameters" element="tns:DeleteSheetData" />
   </wsdl:message>
@@ -189,10 +152,6 @@
     <wsdl:operation name="GetSheetData">
       <wsdl:input message="tns:GetSheetDataSoapIn" />
       <wsdl:output message="tns:GetSheetDataSoapOut" />
-    </wsdl:operation>
-    <wsdl:operation name="testmeth">
-      <wsdl:input message="tns:testmethSoapIn" />
-      <wsdl:output message="tns:testmethSoapOut" />
     </wsdl:operation>
     <wsdl:operation name="DeleteSheetData">
       <wsdl:input message="tns:DeleteSheetDataSoapIn" />
@@ -216,15 +175,6 @@
     </wsdl:operation>
     <wsdl:operation name="GetSheetData">
       <soap:operation soapAction="http://tempuri.org/GetSheetData" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="testmeth">
-      <soap:operation soapAction="http://tempuri.org/testmeth" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -264,15 +214,6 @@
     </wsdl:operation>
     <wsdl:operation name="GetSheetData">
       <soap12:operation soapAction="http://tempuri.org/GetSheetData" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="testmeth">
-      <soap12:operation soapAction="http://tempuri.org/testmeth" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
