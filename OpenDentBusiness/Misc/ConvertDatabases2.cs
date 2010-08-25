@@ -2094,7 +2094,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					note=PIn.String(table.Rows[i+1]["Note"].ToString());
 					command="UPDATE clockevent SET "
 						+"TimeEntered2 = "+POut.DateT(timeEntered2)+", "
-						+"TimeDisplayed2 = "+POut.DateT(timeEntered2)+", "
+						+"TimeDisplayed2 = "+POut.DateT(timeDisplayed2)+", "
 						+"ClockStatus = "+POut.Int(clockStatus)+", "
 						+"Note = CONCAT(Note,'"+POut.String(note)+"') "
 						+"WHERE ClockEventNum = "+table.Rows[i]["ClockEventNum"].ToString();
@@ -2124,7 +2124,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					note=PIn.String(table.Rows[i+1]["Note"].ToString());
 					command="UPDATE clockevent SET "
 						+"TimeEntered2 = "+POut.DateT(timeEntered2)+", "
-						+"TimeDisplayed2 = "+POut.DateT(timeEntered2)+", "
+						+"TimeDisplayed2 = "+POut.DateT(timeDisplayed2)+", "
 						//+"ClockStatus = "+POut.Int(clockStatus)+", "
 						+"Note = CONCAT(Note,'"+POut.String(note)+"') "
 						+"WHERE ClockEventNum = "+table.Rows[i]["ClockEventNum"].ToString();
