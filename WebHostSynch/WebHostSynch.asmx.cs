@@ -20,9 +20,39 @@ namespace WebHostSynch {
 			return "Hello World";
 		}
 
+		[WebMethod]
+		public bool SetPreferences(long DentalOfficeID,string RegistrationKey,int ColorBorder,string Heading1,string Heading2) {
+
+			ODWebServiceEntities db=new ODWebServiceEntities();
+			if(CheckRegistrationKey(RegistrationKey)==false) {
+				Logger.Information("Incorrect registration key. DentalOfficeID = "+DentalOfficeID+"RegistrationKey = "+RegistrationKey);
+				DentalOfficeID=0;
+			}
+			var wspObj = from wsp in db.webforms_preference
+						 where wsp.DentalOfficeID==DentalOfficeID
+						 select wsp;
+
+			//insert code
+			if(wspObj.Count()>0) {
+				wspObj.First().ColorBorder=ColorBorder;
+				wspObj.First().Heading1=Heading1;
+				wspObj.First().Heading2=Heading2;
+			}
+			if(wspObj.Count()==0) {
+				webforms_preference wspNewObj = new webforms_preference();
+				wspNewObj.DentalOfficeID=DentalOfficeID;
+				wspNewObj.ColorBorder=ColorBorder;
+				wspNewObj.Heading1=Heading1;
+				wspNewObj.Heading2=Heading2;
+				db.AddTowebforms_preference(wspNewObj);
+
+			}
+			db.SaveChanges();
+			return true;
+		}
 
 		[WebMethod]
-		public List<webforms_sheetfield> GetSheetData(int DentalOfficeID,string RegistrationKey,DateTime StartDate,DateTime EndDate) {
+		public List<webforms_sheetfield> GetSheetData(long DentalOfficeID,string RegistrationKey,DateTime StartDate,DateTime EndDate) {
 			ODWebServiceEntities db=new ODWebServiceEntities();
 			if(CheckRegistrationKey(RegistrationKey)==false) {
 				Logger.Information("Incorrect registration key. DentalOfficeID = "+DentalOfficeID+"RegistrationKey = "+RegistrationKey);
@@ -38,7 +68,7 @@ namespace WebHostSynch {
 		}
 
 		[WebMethod]
-		public void DeleteSheetData(List<long> SheetsForDeletion) {
+		public void DeleteSheetData(long DentalOfficeID,string RegistrationKey,List<long> SheetsForDeletion) {
 			ODWebServiceEntities db=new ODWebServiceEntities();
 			for(int i=0;i<SheetsForDeletion.Count();i++) {
 				long SheetID=SheetsForDeletion.ElementAt(i);// LINQ throws an error if this is directly put into the selectexpression

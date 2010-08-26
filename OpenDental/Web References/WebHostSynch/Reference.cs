@@ -35,6 +35,8 @@ namespace OpenDental.WebHostSynch {
         
         private System.Threading.SendOrPostCallback HelloWorldOperationCompleted;
         
+        private System.Threading.SendOrPostCallback SetPreferencesOperationCompleted;
+        
         private System.Threading.SendOrPostCallback GetSheetDataOperationCompleted;
         
         private System.Threading.SendOrPostCallback DeleteSheetDataOperationCompleted;
@@ -83,6 +85,9 @@ namespace OpenDental.WebHostSynch {
         public event HelloWorldCompletedEventHandler HelloWorldCompleted;
         
         /// <remarks/>
+        public event SetPreferencesCompletedEventHandler SetPreferencesCompleted;
+        
+        /// <remarks/>
         public event GetSheetDataCompletedEventHandler GetSheetDataCompleted;
         
         /// <remarks/>
@@ -119,8 +124,45 @@ namespace OpenDental.WebHostSynch {
         }
         
         /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/SetPreferences", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public bool SetPreferences(long DentalOfficeID, string RegistrationKey, int ColorBorder, string Heading1, string Heading2) {
+            object[] results = this.Invoke("SetPreferences", new object[] {
+                        DentalOfficeID,
+                        RegistrationKey,
+                        ColorBorder,
+                        Heading1,
+                        Heading2});
+            return ((bool)(results[0]));
+        }
+        
+        /// <remarks/>
+        public void SetPreferencesAsync(long DentalOfficeID, string RegistrationKey, int ColorBorder, string Heading1, string Heading2) {
+            this.SetPreferencesAsync(DentalOfficeID, RegistrationKey, ColorBorder, Heading1, Heading2, null);
+        }
+        
+        /// <remarks/>
+        public void SetPreferencesAsync(long DentalOfficeID, string RegistrationKey, int ColorBorder, string Heading1, string Heading2, object userState) {
+            if ((this.SetPreferencesOperationCompleted == null)) {
+                this.SetPreferencesOperationCompleted = new System.Threading.SendOrPostCallback(this.OnSetPreferencesOperationCompleted);
+            }
+            this.InvokeAsync("SetPreferences", new object[] {
+                        DentalOfficeID,
+                        RegistrationKey,
+                        ColorBorder,
+                        Heading1,
+                        Heading2}, this.SetPreferencesOperationCompleted, userState);
+        }
+        
+        private void OnSetPreferencesOperationCompleted(object arg) {
+            if ((this.SetPreferencesCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.SetPreferencesCompleted(this, new SetPreferencesCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetSheetData", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-        public webforms_sheetfield[] GetSheetData(int DentalOfficeID, string RegistrationKey, System.DateTime StartDate, System.DateTime EndDate) {
+        public webforms_sheetfield[] GetSheetData(long DentalOfficeID, string RegistrationKey, System.DateTime StartDate, System.DateTime EndDate) {
             object[] results = this.Invoke("GetSheetData", new object[] {
                         DentalOfficeID,
                         RegistrationKey,
@@ -130,12 +172,12 @@ namespace OpenDental.WebHostSynch {
         }
         
         /// <remarks/>
-        public void GetSheetDataAsync(int DentalOfficeID, string RegistrationKey, System.DateTime StartDate, System.DateTime EndDate) {
+        public void GetSheetDataAsync(long DentalOfficeID, string RegistrationKey, System.DateTime StartDate, System.DateTime EndDate) {
             this.GetSheetDataAsync(DentalOfficeID, RegistrationKey, StartDate, EndDate, null);
         }
         
         /// <remarks/>
-        public void GetSheetDataAsync(int DentalOfficeID, string RegistrationKey, System.DateTime StartDate, System.DateTime EndDate, object userState) {
+        public void GetSheetDataAsync(long DentalOfficeID, string RegistrationKey, System.DateTime StartDate, System.DateTime EndDate, object userState) {
             if ((this.GetSheetDataOperationCompleted == null)) {
                 this.GetSheetDataOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetSheetDataOperationCompleted);
             }
@@ -155,22 +197,26 @@ namespace OpenDental.WebHostSynch {
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/DeleteSheetData", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-        public void DeleteSheetData(long[] SheetsForDeletion) {
+        public void DeleteSheetData(long DentalOfficeID, string RegistrationKey, long[] SheetsForDeletion) {
             this.Invoke("DeleteSheetData", new object[] {
+                        DentalOfficeID,
+                        RegistrationKey,
                         SheetsForDeletion});
         }
         
         /// <remarks/>
-        public void DeleteSheetDataAsync(long[] SheetsForDeletion) {
-            this.DeleteSheetDataAsync(SheetsForDeletion, null);
+        public void DeleteSheetDataAsync(long DentalOfficeID, string RegistrationKey, long[] SheetsForDeletion) {
+            this.DeleteSheetDataAsync(DentalOfficeID, RegistrationKey, SheetsForDeletion, null);
         }
         
         /// <remarks/>
-        public void DeleteSheetDataAsync(long[] SheetsForDeletion, object userState) {
+        public void DeleteSheetDataAsync(long DentalOfficeID, string RegistrationKey, long[] SheetsForDeletion, object userState) {
             if ((this.DeleteSheetDataOperationCompleted == null)) {
                 this.DeleteSheetDataOperationCompleted = new System.Threading.SendOrPostCallback(this.OnDeleteSheetDataOperationCompleted);
             }
             this.InvokeAsync("DeleteSheetData", new object[] {
+                        DentalOfficeID,
+                        RegistrationKey,
                         SheetsForDeletion}, this.DeleteSheetDataOperationCompleted, userState);
         }
         
@@ -461,6 +507,32 @@ namespace OpenDental.WebHostSynch {
             get {
                 this.RaiseExceptionIfNecessary();
                 return ((string)(this.results[0]));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "2.0.50727.3053")]
+    public delegate void SetPreferencesCompletedEventHandler(object sender, SetPreferencesCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "2.0.50727.3053")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class SetPreferencesCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal SetPreferencesCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        /// <remarks/>
+        public bool Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((bool)(this.results[0]));
             }
         }
     }

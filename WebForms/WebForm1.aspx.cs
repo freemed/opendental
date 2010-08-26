@@ -20,8 +20,6 @@ namespace WebForms {
 
 					Int32.TryParse(Request["DentalOfficeID"].ToString().Trim(),out DentalOfficeID);
 				}
-				//hard coded for testing only
-				DentalOfficeID=1;
 				SetPagePreferences(DentalOfficeID);
 			}
 			catch(Exception ex) {
@@ -32,7 +30,6 @@ namespace WebForms {
 		/// <summary>
 		/// sets page specifics like colour etc based on the Dental office preferences form the db
 		/// </summary>
-		/// <param name="DentalOfficeID"></param>
 		private void SetPagePreferences(int DentalOfficeID) {
 			try {
 				ODWebServiceEntities db = new ODWebServiceEntities();
@@ -83,7 +80,6 @@ namespace WebForms {
 		/// <summary>
 		/// This is a recursive function which searches through nested controls on a  webpage
 		/// </summary>
-		/// <param name="c"></param>
 		private void FindControls(Control c) {
 			try {
 				foreach(Control ctl in c.Controls) {

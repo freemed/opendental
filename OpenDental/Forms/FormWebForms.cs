@@ -29,6 +29,7 @@ namespace OpenDental {
 		/// </summary>
 		private void FillGrid() {
 			try {
+				long DentalOfficeID=4;
 				gridMain.BeginUpdate();
 				gridMain.Columns.Clear();
 				ODGridColumn col=new ODGridColumn(Lan.g("TableWebforms","Last Name"),100);
@@ -59,17 +60,17 @@ namespace OpenDental {
 				WebHostSynch.WebHostSynch wh=new WebHostSynch.WebHostSynch();
 
 				// Ask Jordan if 'DEBUG' will work well in a release version.
-				#if DEBUG
-				#else
+#if DEBUG
+#else
 				wh.Url =PrefC.GetString(PrefName.WebHostSynchServerURL);
-				#endif
+#endif
 				string RegistrationKey=PrefC.GetString(PrefName.RegistrationKey);
 				if(wh.CheckRegistrationKey(RegistrationKey)==false) {
 					MessageBox.Show(Lan.g(this,"Registration key provided by the dental office is incorrect"));
 					return;
 				}
-
-				OpenDental.WebHostSynch.webforms_sheetfield[] wbsf=wh.GetSheetData(1,"RegistrationKeyxxxxx",dateFrom,dateTo);
+				wh.SetPreferences(DentalOfficeID,RegistrationKey,PrefC.GetColor(PrefName.WebFormsBorderColor).ToArgb(),PrefC.GetStringSilent(PrefName.WebFormsHeading1),PrefC.GetStringSilent(PrefName.WebFormsHeading2));
+				OpenDental.WebHostSynch.webforms_sheetfield[] wbsf=wh.GetSheetData(DentalOfficeID,RegistrationKey,dateFrom,dateTo);
 				if(wbsf.Count()==0) {
 					gridMain.EndUpdate();
 					MessageBox.Show(Lan.g(this,"No Patient Forms retrieved"));
@@ -132,13 +133,13 @@ namespace OpenDental {
 						SheetsForDeletion.Add(SheetID);
 					}
 				}// end of for loop
-				wh.DeleteSheetData(SheetsForDeletion.ToArray());
+				wh.DeleteSheetData(DentalOfficeID,RegistrationKey,SheetsForDeletion.ToArray());
 			}
 			catch(Exception e) {
 				MessageBox.Show(e.Message);
 			}
 		}
-		
+
 		/// <summary>
 		/// compare values of the new patient or the new sheet with values that have been inserted into the db if false is returned then there is a mismatch.
 		/// </summary>
@@ -171,45 +172,35 @@ namespace OpenDental {
 			Patient newPat=null;
 			newPat=new Patient();
 			//PatFields must have a one to one mapping with the SheetWebFields
-			String[] PatFields = { "LName","FName","Birthdate","Preferred", "Email",
+			String[] PatFields = { "LName","FName","MiddleI","Birthdate","Preferred", "Email","SSN",
 									 "Address","Address2","City","State","Zip",
-									  "HmPhone","Gender","Position","PreferContactMethod","PreferConfirmMethod",
-									  "PreferRecallMethod","StudentStatus","ins1Relat","ins2Relat"};
-			//other PatFields = "PatStatus","Guarantor","CreditType","PriProv","SecProv","FeeSched","BillingType","AddrNote","ClinicNum" };
-			String[] SheetWebFields = {"LastName","FirstName","Birthdate","Preferred","Email",
-									"WholeFamily","Address2","City","State","Zip",
-									"HomePhone","Gender","Married","MethodContact","MethodConf",
-									  "MethodRecall","StudentStatus","Policy1Relationship","Policy2Relationship"};
-			/*other SheetWebFields ="Policy1SubscriberID","Method1","Policy1SubscriberName","WirelessPhone","MethodRecall","Policy1Relationship","Policy2Relationship","Policy2SubscriberID","Policy2InsuranceCompany","WirelessCarrier","MethodConf","SS","Hear","Policy2SubscriberName","Comments","Policy1Employer","Policy2GroupNumber","StudentStatus","Address1","MI","Policy1GroupName","Gender","Policy1InsuranceCompany","Policy1Phone","Policy2GroupName","Married","WorkPhone","Policy1GroupNumber","Policy2Phone","Policy2Employer" };
+									 "HmPhone","Gender","Position","PreferContactMethod","PreferConfirmMethod",
+									  "PreferRecallMethod","StudentStatus",
+									  "WirelessPhone","WkPhone"
+									  };
+			//other PatFields = "PatStatus","Guarantor","CreditType","PriProv","SecProv","FeeSched","BillingType","AddrNote","ClinicNum" EmployerNum, EmploymentNote, GradeLevel, HasIns, InsEst, };
 
-			*/
-			Type t = newPat.GetType();
+				String[] SheetWebFields = {"LastName","FirstName","MI","Birthdate","Preferred","Email","SS",
+									"Address1","Address2","City","State","Zip",
+									"HomePhone","Gender","Married","MethodContact","MethodConf",
+									  "MethodRecall","StudentStatus",
+									  "WirelessPhone","WorkPhone"
+									   };
+				/*Other SheetWebFields ="WholeFamily","WirelessCarrier","Hear","Policy1GroupName","Policy1GroupNumber","Policy1Relationship","Policy1SubscriberName","Policy1SubscriberID","Policy1InsuranceCompany", "Policy1Phone","Policy1Employer","Policy2GroupName","Policy2GroupNumber","Policy2Relationship","Policy2SubscriberName","Policy2SubscriberID","Policy2InsuranceCompany", "Policy2Phone","Policy2Employer","Comments"
+				 * */
+				Type t = newPat.GetType();
 			FieldInfo[] fi = t.GetFields();
 			try {
 				for(int i=0;i<SingleSheet.Count();i++) {
-					String SheetFieldName=SingleSheet.ElementAt(i).FieldName;
-					String SheetFieldValue=SingleSheet.ElementAt(i).FieldValue;
+					String SheetWebFieldName=SingleSheet.ElementAt(i).FieldName;
+					String SheetWebFieldValue=SingleSheet.ElementAt(i).FieldValue;
 					for(int j=0;j<SheetWebFields.Length;j++) {
-						if(SheetFieldName==SheetWebFields[j]) {// SheetWebFields[j] and PatFields[j] should have a one to one correspondence
-											foreach(FieldInfo field in fi) {
-												if(field.Name==PatFields[j]) {
-														try {
-															if(field.Name=="Birthdate") {
-																DateTime birthDate=PIn.Date(SheetFieldValue);
-																field.SetValue(newPat,birthDate);
-															}
-															else if(field.Name=="PreferContactMethod") {
-																//pat.PreferContactMethod=(ContactMethod)rows[i].ImpValObj;
-															}
-															else {
-																field.SetValue(newPat,SheetFieldValue);
-															}
-														}
-														catch(Exception e) {
-															//MessageBox.Show(field.Name + e.Message);
-														}
-												}
-											}// foreach loop
+						if(SheetWebFieldName==SheetWebFields[j]) {// SheetWebFields[j] and PatFields[j] should have a one to one correspondence
+							foreach(FieldInfo field in fi) {
+								if(field.Name==PatFields[j]) {
+									FillPatientFields(newPat,field,SheetWebFieldValue);
+								}
+							}// foreach loop
 						} // j loop
 					}
 				}// i loop
@@ -239,146 +230,38 @@ namespace OpenDental {
 				SheetParameter.SetParameter(sheet,"PatNum",PatNum);
 				sheet.InternalNote="";//because null not ok
 
-
 				//SheetFields must have a one to one mapping with the SheetWebFields
-			String[] SheetFields = { "LName","FName","Birthdate","Preferred", "Email",
-									 "Address","Address2","City","State","Zip",
+				String[] SheetFields = { "LName","FName","MiddleI","Birthdate","Preferred", "Email","SSN",
+									 "addressAndHmPhoneIsSameEntireFamily","Address","Address2","City","State","Zip",
 									 "HmPhone","Gender","Position","PreferContactMethod","PreferConfirmMethod",
-									  "PreferRecallMethod","StudentStatus","ins1Relat","ins2Relat"};
-			//other SheetFields = "PatStatus","Guarantor","CreditType","PriProv","SecProv","FeeSched","BillingType","AddrNote","ClinicNum" };
-			String[] SheetWebFields = {"LastName","FirstName","Birthdate","Preferred","Email",
-									"WholeFamily","Address2","City","State","Zip",
+									  "PreferRecallMethod","StudentStatus","referredFrom",
+									  "WirelessPhone","wirelessCarrier","WkPhone",
+									  "ins1GroupName","ins1GroupNum","ins1Relat","ins1SubscriberNameF","ins1SubscriberID","ins1CarrierName","ins1CarrierPhone","ins1EmployerName",
+									  "ins2GroupName","ins2GroupNum","ins2Relat","ins2SubscriberNameF","ins2SubscriberID","ins2CarrierName","ins2CarrierPhone","ins2EmployerName",
+									  "misc"};
+				//other SheetFields = "PatStatus", "Patient Info.gif","Guarantor","CreditType","PriProv","SecProv","FeeSched","BillingType","AddrNote","ClinicNum" };
+				String[] SheetWebFields = {"LastName","FirstName","MI","Birthdate","Preferred","Email","SS",
+									"WholeFamily","Address1","Address2","City","State","Zip",
 									"HomePhone","Gender","Married","MethodContact","MethodConf",
-									  "MethodRecall","StudentStatus","Policy1Relationship","Policy2Relationship"};
-			/*other SheetWebFields ="Policy1SubscriberID","","Policy1SubscriberName","WirelessPhone",,"Policy2Relationship","Policy2SubscriberID","Policy2InsuranceCompany","WirelessCarrier","","SS","Hear","Policy2SubscriberName","Comments","Policy1Employer","Policy2GroupNumber","Address1","MI","Policy1GroupName","Gender","Policy1InsuranceCompany","Policy1Phone","Policy2GroupName","Married","WorkPhone","Policy1GroupNumber","Policy2Phone","Policy2Employer" };
-
-			*/
-
-			
-			
+									  "MethodRecall","StudentStatus","Hear",
+									  "WirelessPhone","WirelessCarrier","WorkPhone",
+									  "Policy1GroupName","Policy1GroupNumber","Policy1Relationship","Policy1SubscriberName","Policy1SubscriberID","Policy1InsuranceCompany", "Policy1Phone","Policy1Employer",
+									  "Policy2GroupName","Policy2GroupNumber","Policy2Relationship","Policy2SubscriberName","Policy2SubscriberID","Policy2InsuranceCompany", "Policy2Phone","Policy2Employer",
+									  "Comments",
+									   };
 				for(int i=0;i<SingleSheet.Count();i++) {
-					String SheetFieldName=SingleSheet.ElementAt(i).FieldName;
-					String SheetFieldValue=SingleSheet.ElementAt(i).FieldValue;
+					String SheetWebFieldName=SingleSheet.ElementAt(i).FieldName;
+					String SheetWebFieldValue=SingleSheet.ElementAt(i).FieldValue;
 					for(int j=0;j<SheetWebFields.Length;j++) {
-						if(SheetFieldName==SheetWebFields[j]) {// SheetWebFields[j] and SheetFields[j] should have a one to one correspondence
-											foreach(SheetField fld in sheet.SheetFields) {
-
-												if(fld.FieldName==SheetFields[j]) {
-
-												switch(fld.FieldName) {
-
-														//try{
-
-													case "Gender":
-														if(fld.RadioButtonValue=="Male") {
-															if(SheetFieldValue=="M") {
-																fld.FieldValue="X";
-															}
-														}
-														if(fld.RadioButtonValue=="Female") {
-															if(SheetFieldValue=="F") {
-																fld.FieldValue="X";
-															}
-														}
-														break;
-
-													case "Position":
-														if(fld.RadioButtonValue=="Married") {
-															if(SheetFieldValue=="Y") {
-																fld.FieldValue="X";
-															}
-														}
-														if(fld.RadioButtonValue=="Single") {
-															if(SheetFieldValue=="N") {
-																fld.FieldValue="X";
-															}
-														}
-														break;
-													case "PreferContactMethod":
-													case "PreferConfirmMethod":
-													case "PreferRecallMethod":
-														if(fld.RadioButtonValue=="HmPhone") {
-															if(SheetFieldValue=="HmPhone") {
-																fld.FieldValue="X";
-															}
-														}
-														if(fld.RadioButtonValue=="WkPhone") {
-															if(SheetFieldValue=="WkPhone") {
-																fld.FieldValue="X";
-															}
-														}
-																																											if(fld.RadioButtonValue=="WirelessPh") {
-															if(SheetFieldValue=="WirelessPh") {
-																fld.FieldValue="X";
-															}
-														}
-																																											if(fld.RadioButtonValue=="Email") {
-															if(SheetFieldValue=="Email") {
-																fld.FieldValue="X";
-															}
-														}
-														break;
-													
-														
-													
-													
-													case "StudentStatus":
-
-													if(fld.RadioButtonValue=="Nonstudent") {
-															if(SheetFieldValue=="Nonstudent") {
-																fld.FieldValue="X";
-															}
-														}
-														if(fld.RadioButtonValue=="Fulltime") {
-															if(SheetFieldValue=="Fulltime") {
-																fld.FieldValue="X";
-															}
-														}
-
-														if(fld.RadioButtonValue=="Parttime") {
-															if(SheetFieldValue=="Parttime") {
-																fld.FieldValue="X";
-															}
-														}
-														break;
-
-													case "ins1Relat":
-													case "ins2Relat":
-														if(fld.RadioButtonValue=="Self") {
-															if(SheetFieldValue=="Self") {
-																fld.FieldValue="X";
-															}
-														}
-														if(fld.RadioButtonValue=="Spouse") {
-															if(SheetFieldValue=="Spouse") {
-																fld.FieldValue="X";
-															}
-														}
-														if(fld.RadioButtonValue=="Child") {
-															if(SheetFieldValue=="Child") {
-																fld.FieldValue="X";
-															}
-														}
-														break;
-													
-													default:
-														fld.FieldValue=SheetFieldValue;
-														break;
-												}//switch case
-
-											}//if
-															
-														//}
-														//catch(Exception e) {
-															//MessageBox.Show(field.Name + e.Message);
-														//}
-												
-											}// foreach loop
+						if(SheetWebFieldName==SheetWebFields[j]) {// SheetWebFields[j] and SheetFields[j] should have a one to one correspondence
+							foreach(SheetField fld in sheet.SheetFields) {
+								if(fld.FieldName==SheetFields[j]) {
+									FillSheetFields(fld,SheetWebFieldValue);
+								}//if
+							}// foreach loop
 						} // j loop
 					}
 				}// i loop
-
-
 				sheet.IsWebForm=true;
 				Sheets.SaveNewSheet(sheet);
 				return sheet;
@@ -387,6 +270,197 @@ namespace OpenDental {
 				MessageBox.Show(e.Message);
 			}
 			return sheet;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		private void FillSheetFields(SheetField fld,string SheetWebFieldValue) {
+			try {
+				switch(fld.FieldName) {
+					case "Gender":
+						if(fld.RadioButtonValue=="Male") {
+							if(SheetWebFieldValue=="M") {
+								fld.FieldValue="X";
+							}
+						}
+						if(fld.RadioButtonValue=="Female") {
+							if(SheetWebFieldValue=="F") {
+								fld.FieldValue="X";
+							}
+						}
+						break;
+
+					case "Position":
+						if(fld.RadioButtonValue=="Married") {
+							if(SheetWebFieldValue=="Y") {
+								fld.FieldValue="X";
+							}
+						}
+						if(fld.RadioButtonValue=="Single") {
+							if(SheetWebFieldValue=="N") {
+								fld.FieldValue="X";
+							}
+						}
+						break;
+
+					case "PreferContactMethod":
+					case "PreferConfirmMethod":
+					case "PreferRecallMethod":
+						if(fld.RadioButtonValue=="HmPhone") {
+							if(SheetWebFieldValue=="HmPhone") {
+								fld.FieldValue="X";
+							}
+						}
+						if(fld.RadioButtonValue=="WkPhone") {
+							if(SheetWebFieldValue=="WkPhone") {
+								fld.FieldValue="X";
+							}
+						}
+						if(fld.RadioButtonValue=="WirelessPh") {
+							if(SheetWebFieldValue=="WirelessPh") {
+								fld.FieldValue="X";
+							}
+						}
+						if(fld.RadioButtonValue=="Email") {
+							if(SheetWebFieldValue=="Email") {
+								fld.FieldValue="X";
+							}
+						}
+						break;
+
+					case "StudentStatus":
+						if(fld.RadioButtonValue=="Nonstudent") {
+							if(SheetWebFieldValue=="Nonstudent") {
+								fld.FieldValue="X";
+							}
+						}
+						if(fld.RadioButtonValue=="Fulltime") {
+							if(SheetWebFieldValue=="Fulltime") {
+								fld.FieldValue="X";
+							}
+						}
+
+						if(fld.RadioButtonValue=="Parttime") {
+							if(SheetWebFieldValue=="Parttime") {
+								fld.FieldValue="X";
+							}
+						}
+						break;
+
+					case "ins1Relat":
+					case "ins2Relat":
+						if(fld.RadioButtonValue=="Self") {
+							if(SheetWebFieldValue=="Self") {
+								fld.FieldValue="X";
+							}
+						}
+						if(fld.RadioButtonValue=="Spouse") {
+							if(SheetWebFieldValue=="Spouse") {
+								fld.FieldValue="X";
+							}
+						}
+						if(fld.RadioButtonValue=="Child") {
+							if(SheetWebFieldValue=="Child") {
+								fld.FieldValue="X";
+							}
+						}
+						break;
+
+					default:
+						fld.FieldValue=SheetWebFieldValue;
+						break;
+				}//switch case
+
+			}
+			catch(Exception e) {
+				MessageBox.Show(fld.FieldName + e.Message);
+			}
+
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		private void FillPatientFields(Patient newPat,FieldInfo field,string SheetWebFieldValue) {
+
+			try {
+				switch(field.Name) {
+					case "Birthdate":
+						DateTime birthDate=PIn.Date(SheetWebFieldValue);
+						field.SetValue(newPat,birthDate);
+						break;
+
+					case "Gender":
+						if(SheetWebFieldValue=="M") {
+							field.SetValue(newPat,PatientGender.Male);
+						}
+						if(SheetWebFieldValue=="F") {
+							field.SetValue(newPat,PatientGender.Female);
+						}
+						break;
+
+					case "Position":
+						if(SheetWebFieldValue=="Y") {
+							field.SetValue(newPat,PatientPosition.Married);
+						}
+						if(SheetWebFieldValue=="N") {
+							field.SetValue(newPat,PatientPosition.Single);
+						}
+						break;
+
+					case "PreferContactMethod":
+					case "PreferConfirmMethod":
+					case "PreferRecallMethod":
+						if(SheetWebFieldValue=="HmPhone") {
+							field.SetValue(newPat,ContactMethod.HmPhone);
+						}
+						if(SheetWebFieldValue=="WkPhone") {
+							field.SetValue(newPat,ContactMethod.WkPhone);
+						}
+						if(SheetWebFieldValue=="WirelessPh") {
+							field.SetValue(newPat,ContactMethod.WirelessPh);
+						}
+						if(SheetWebFieldValue=="Email") {
+							field.SetValue(newPat,ContactMethod.Email);
+						}
+						break;
+
+					case "StudentStatus":
+						if(SheetWebFieldValue=="Nonstudent") {
+							field.SetValue(newPat,"");
+						}
+						if(SheetWebFieldValue=="Fulltime") {
+							field.SetValue(newPat,"F");
+						}
+						if(SheetWebFieldValue=="Parttime") {
+							field.SetValue(newPat,"P");
+						}
+						break;
+
+					case "ins1Relat":
+					case "ins2Relat":
+						if(SheetWebFieldValue=="Self") {
+							field.SetValue(newPat,Relat.Self);
+						}
+						if(SheetWebFieldValue=="Spouse") {
+							field.SetValue(newPat,Relat.Spouse);
+						}
+						if(SheetWebFieldValue=="Child") {
+							field.SetValue(newPat,Relat.Child);
+						}
+						break;
+
+					default:
+						field.SetValue(newPat,SheetWebFieldValue);
+						break;
+				}//switch case
+
+			}
+			catch(Exception e) {
+				MessageBox.Show(field.Name + e.Message);
+			}
+
 		}
 
 		/// <summary>
