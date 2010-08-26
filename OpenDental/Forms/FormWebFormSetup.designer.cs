@@ -47,9 +47,9 @@ namespace OpenDental{
 			// 
 			// labelWebhostURL
 			// 
-			this.labelWebhostURL.Location = new System.Drawing.Point(46,50);
+			this.labelWebhostURL.Location = new System.Drawing.Point(24,50);
 			this.labelWebhostURL.Name = "labelWebhostURL";
-			this.labelWebhostURL.Size = new System.Drawing.Size(147,19);
+			this.labelWebhostURL.Size = new System.Drawing.Size(169,19);
 			this.labelWebhostURL.TabIndex = 46;
 			this.labelWebhostURL.Text = "Server Address for WebHost";
 			this.labelWebhostURL.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
