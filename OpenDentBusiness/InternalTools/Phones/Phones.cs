@@ -140,13 +140,14 @@ namespace OpenDentBusiness{
 			return null;
 		}
 		
+		///<summary>Can handle null for either parameter.</summary>
 		public static void SetWebCamImage(Phone phone,Bitmap bitmap) {
 			//No need to check RemotingRole; no call to db.
 			if(phone==null) {
 				return;
 			}
 			Phone oldPhone=phone.Copy();
-			phone.WebCamImage=POut.Bitmap(bitmap);
+			phone.WebCamImage=POut.Bitmap(bitmap);//handles null
 			Crud.PhoneCrud.Update(phone,oldPhone);
 		}
 

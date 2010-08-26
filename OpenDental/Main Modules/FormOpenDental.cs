@@ -2309,18 +2309,8 @@ namespace OpenDental{
 							pictBoxVideo.Visible=false;
 							this.Controls.Add(pictBoxVideo);
 						}
-						if(vidCapt==null){
-							int deviceCount=VideoCapture.GetDeviceCount();
-							if(deviceCount>0){
-								vidCapt=new VideoCapture(0,640,480,24,pictBoxVideo);
-							}
-						}
 						phoneSmall.Visible=true;
 						phoneSmall.Location=new Point(position.X,panelSplitter.Bottom+butBigPhones.Height);
-						//phonePanel.Visible=true;
-						//phonePanel.Location=new Point(position.X,panelSplitter.Bottom);
-						//phonePanel.Width=428;
-						//phonePanel.Height=this.ClientSize.Height-phonePanel.Top;
 						userControlTasks1.Location=new Point(position.X+phoneSmall.Width,panelSplitter.Bottom);
 						userControlTasks1.Width=width-phoneSmall.Width;
 						butBigPhones.Visible=true;
@@ -4322,50 +4312,88 @@ namespace OpenDental{
 		}
 
 		private void timerPhoneWebCam_Tick(object sender,EventArgs e) {
+			//This won't even happen unless PrefName.DockPhonePanelShow==true
 			List<Phone> phoneList=Phones.GetPhoneList();
 			phoneSmall.PhoneList=phoneList;
 			if(formPhoneTiles!=null && !formPhoneTiles.IsDisposed) {
 				formPhoneTiles.PhoneList=phoneList;
+			}
+			Phone phone=null;
+			int extension=0;
+			IPHostEntry iphostentry=Dns.GetHostEntry(Environment.MachineName);
+			foreach(IPAddress ipaddress in iphostentry.AddressList){
+				if(ipaddress.ToString().Contains("192.168.0.1")){
+					extension=PIn.Int(ipaddress.ToString().Substring(10));//eg 104
+				}
+				if(ipaddress.ToString()=="192.168.0.186") {//hard code Jordans
+					extension=104;
+				}
+			}
+			if(extension>0) {
+				phone=Phones.GetPhoneForExtension(phoneList,extension);
+			}
+			phoneSmall.Extension=extension;
+			phoneSmall.PhoneCur=phone;
+			if(vidCapt==null){
+				if(intPtrVideo != IntPtr.Zero){// Release any previous buffer
+					Marshal.FreeCoTaskMem(intPtrVideo);
+					intPtrVideo=IntPtr.Zero;
+				}
+				int deviceCount=VideoCapture.GetDeviceCount();
+				if(deviceCount>0){
+					try{
+						vidCapt=new VideoCapture(0,640,480,24,pictBoxVideo);
+						//image capture will now continue below if successful
+					}
+					catch{
+						Phones.SetWebCamImage(phone,null);
+						return;//haven't actually seen this happen since we started properly disposing of vidCapt
+					}
+				}
+				Phones.SetWebCamImage(phone,null);
 			}
 			if(vidCapt!=null){
 				if(intPtrVideo != IntPtr.Zero){// Release any previous buffer
 					Marshal.FreeCoTaskMem(intPtrVideo);
 					intPtrVideo=IntPtr.Zero;
 				}
-				intPtrVideo = vidCapt.Click();
-				Bitmap bitmap= new Bitmap(vidCapt.Width, vidCapt.Height, vidCapt.Stride, PixelFormat.Format24bppRgb, intPtrVideo);
-				bitmap.RotateFlip(RotateFlipType.RotateNoneFlipY);// If the image is upsidedown
-				int w=50;
-				int h=(int)(((float)w)/640f*480f);
-				Bitmap bitmapSmall = new Bitmap(w,h);
-				using(Graphics g = Graphics.FromImage(bitmapSmall)){
-					g.DrawImage(bitmap,new Rectangle(0,0,bitmapSmall.Width,bitmapSmall.Height));
-				}
-				IPHostEntry iphostentry=Dns.GetHostEntry(Environment.MachineName);
-				Phone phone=null;
-				int extension=0;
-				foreach(IPAddress ipaddress in iphostentry.AddressList){
-					if(ipaddress.ToString().Contains("192.168.0.1")){
-						extension=PIn.Int(ipaddress.ToString().Substring(10));//eg 104
+				Bitmap bitmapSmall=null;
+				try{
+					intPtrVideo = vidCapt.Click();//will fail if camera unplugged
+					Bitmap bitmap= new Bitmap(vidCapt.Width, vidCapt.Height, vidCapt.Stride, PixelFormat.Format24bppRgb, intPtrVideo);
+					bitmap.RotateFlip(RotateFlipType.RotateNoneFlipY);// If the image is upsidedown
+					int w=50;
+					int h=(int)(((float)w)/640f*480f);
+					bitmapSmall = new Bitmap(w,h);
+					using(Graphics g = Graphics.FromImage(bitmapSmall)){
+						g.DrawImage(bitmap,new Rectangle(0,0,bitmapSmall.Width,bitmapSmall.Height));
 					}
-					if(ipaddress.ToString()=="192.168.0.186") {//hard code Jordans
-						extension=104;
-					}
+					bitmap.Dispose();
 				}
-				if(extension>0) {
-					phone=Phones.GetPhoneForExtension(phoneList,extension);
+				catch{
+					//bitmapSmall will remain null
+					vidCapt.Dispose();
+					vidCapt=null;//To prevent the above slow try/catch from happening again and again.
 				}
 				if(phone!=null){//found entry in phone table matching this machine ip.
 					Phones.SetWebCamImage(phone,bitmapSmall);
 				}
-				phoneSmall.Extension=extension;
-				phoneSmall.PhoneCur=phone;
-				bitmap.Dispose();
-				bitmapSmall.Dispose();
+				if(bitmapSmall!=null){
+					bitmapSmall.Dispose();
+				}
 			}
 		}
 
 		private void FormOpenDental_FormClosing(object sender,FormClosingEventArgs e) {
+			if(e.CloseReason==CloseReason.UserClosing 
+				&& PrefC.GetBoolSilent(PrefName.DockPhonePanelShow,false)
+				&& DataConnection.GetDatabaseName()=="customers")
+			{
+				if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"Jordan would like one copy of Open Dental to continue running at night, connected to the Customers database.  Close anyway?")){
+					e.Cancel=true;
+					return;
+				}
+			}
 			try {
 				Computers.ClearHeartBeat(Environment.MachineName);
 			}
