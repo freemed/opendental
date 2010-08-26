@@ -15,7 +15,7 @@ namespace WebForms {
 
 		protected void Page_Load(object sender,EventArgs e) {
 			try {
-				int DentalOfficeID = 0;
+				
 				if(Request["DentalOfficeID"] != null) {
 
 					Int32.TryParse(Request["DentalOfficeID"].ToString().Trim(),out DentalOfficeID);
@@ -54,7 +54,7 @@ namespace WebForms {
 		}
 
 		protected void Submit_Click(object sender,EventArgs e) {
-			DentalOfficeID=1;
+			
 			LoopThroughControls(this.Page);
 			SaveFieldValuesInDB(DentalOfficeID);
 		}
@@ -111,7 +111,6 @@ namespace WebForms {
 						FormValuesHashTable.Add(FieldName,tbox.Text.Trim());
 					}
 				}
-
 				if(c.GetType() == typeof(RadioButtonList)) {
 					RadioButtonList rbl = ((RadioButtonList)c); 
 					string FieldName = rbl.ID.Remove(0,"RadioButtonList".Length);
@@ -119,7 +118,6 @@ namespace WebForms {
 						FormValuesHashTable.Add(FieldName,rbl.SelectedValue);
 					}
 				}
-
 				if(c.GetType() == typeof(CheckBox)) {
 					CheckBox cbox = ((CheckBox)c);
 					string FieldName = cbox.ID.Remove(0,"CheckBox".Length);
@@ -150,7 +148,7 @@ namespace WebForms {
 					PrefObj.First().webforms_sheet.Add(NewSheetObj);
 				}
 				db.SaveChanges();
-				//Panel1.Visible=false;
+				Panel1.Visible=false;
 				LabelSubmitMessage.Text = "Your details have been successfully submited";
 				Panel2.Visible=true;
 			}

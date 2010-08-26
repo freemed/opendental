@@ -20,11 +20,24 @@ namespace OpenDental {
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
-			Prefs.UpdateLong(PrefName.WebFormsBorderColor,this.butWebformBorderColor.BackColor.ToArgb());
-			Prefs.UpdateString(PrefName.WebFormsHeading1,textBoxWebformsHeading1.Text.Trim());
-			Prefs.UpdateString(PrefName.WebFormsHeading2,textBoxWebformsHeading2.Text.Trim());
-			Prefs.UpdateString(PrefName.WebHostSynchServerURL,textboxWebHostAddress.Text.Trim());
-			DialogResult=DialogResult.OK;
+			try {
+				Prefs.UpdateLong(PrefName.WebFormsBorderColor,this.butWebformBorderColor.BackColor.ToArgb());
+				Prefs.UpdateString(PrefName.WebFormsHeading1,textBoxWebformsHeading1.Text.Trim());
+				Prefs.UpdateString(PrefName.WebFormsHeading2,textBoxWebformsHeading2.Text.Trim());
+				Prefs.UpdateString(PrefName.WebHostSynchServerURL,textboxWebHostAddress.Text.Trim());
+
+				// update preferences on server
+				long DentalOfficeID=4;
+				string RegistrationKey=PrefC.GetString(PrefName.RegistrationKey);
+				WebHostSynch.WebHostSynch wh=new WebHostSynch.WebHostSynch();
+				wh.Url =PrefC.GetString(PrefName.WebHostSynchServerURL);
+				wh.SetPreferences(DentalOfficeID,RegistrationKey,PrefC.GetColor(PrefName.WebFormsBorderColor).ToArgb(),PrefC.GetStringSilent(PrefName.WebFormsHeading1),PrefC.GetStringSilent(PrefName.WebFormsHeading2));
+
+
+				DialogResult=DialogResult.OK;
+			}catch(Exception ex) {
+				MessageBox.Show(ex.Message);
+			}
 		}
 
 		private void butCancel_Click(object sender,EventArgs e) {

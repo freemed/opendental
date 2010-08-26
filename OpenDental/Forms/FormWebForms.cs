@@ -58,12 +58,7 @@ namespace OpenDental {
 				};
 
 				WebHostSynch.WebHostSynch wh=new WebHostSynch.WebHostSynch();
-
-				// Ask Jordan if 'DEBUG' will work well in a release version.
-#if DEBUG
-#else
 				wh.Url =PrefC.GetString(PrefName.WebHostSynchServerURL);
-#endif
 				string RegistrationKey=PrefC.GetString(PrefName.RegistrationKey);
 				if(wh.CheckRegistrationKey(RegistrationKey)==false) {
 					MessageBox.Show(Lan.g(this,"Registration key provided by the dental office is incorrect"));
@@ -120,13 +115,12 @@ namespace OpenDental {
 						newPat=CreateNewPatient(SingleSheet.ToList());
 						NewPatNum=newPat.PatNum;
 						row.Cells.Add("New Patient");
-						row.Tag=NewPatNum;
 					}
 					else {
 						newSheet=CreateSheet(PatNum,SingleSheet.ToList());
-						row.Cells.Add("Imported");
-						row.Tag=PatNum;
+						row.Cells.Add("Double Click to import this sheet");
 					}
+					row.Tag=PatNum;
 					gridMain.Rows.Add(row);
 					gridMain.EndUpdate();
 					if(DataExistsInDb(newPat,newSheet)==true) {
@@ -526,7 +520,6 @@ namespace OpenDental {
 				MessageBox.Show(Lan.g(this,"Please fix data entry errors first."));
 				return;
 			}
-
 			FillGrid();
 		}
 
@@ -537,9 +530,11 @@ namespace OpenDental {
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			long PatNum=(long)gridMain.Rows[e.Row].Tag;
-			FormPatientForms formP=new FormPatientForms();
-			formP.PatNum=PatNum;
-			formP.ShowDialog();
+			if(PatNum!=0) {
+				FormPatientForms formP=new FormPatientForms();
+				formP.PatNum=PatNum;
+				formP.ShowDialog();
+			}
 		}
 
 		private void menuItemSetup_Click(object sender,EventArgs e) {

@@ -32,12 +32,13 @@ namespace WebHostSynch {
 						 where wsp.DentalOfficeID==DentalOfficeID
 						 select wsp;
 
-			//insert code
+			//update preference
 			if(wspObj.Count()>0) {
 				wspObj.First().ColorBorder=ColorBorder;
 				wspObj.First().Heading1=Heading1;
 				wspObj.First().Heading2=Heading2;
 			}
+			// if there is no entry for that dental office make a new entry.
 			if(wspObj.Count()==0) {
 				webforms_preference wspNewObj = new webforms_preference();
 				wspNewObj.DentalOfficeID=DentalOfficeID;
