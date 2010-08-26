@@ -362,12 +362,6 @@
     <Compile Include="Forms\BasicTemplate.designer.cs">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\FormPatFieldDuplicatesFix.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormPatFieldDuplicatesFix.designer.cs">
-      <DependentUpon>FormPatFieldDuplicatesFix.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\FormWebFormSetup.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -3748,10 +3742,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormPatFieldDuplicatesFix.resx">
-      <DependentUpon>FormPatFieldDuplicatesFix.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormWebFormSetup.resx">

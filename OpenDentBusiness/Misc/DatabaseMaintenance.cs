@@ -726,6 +726,45 @@ HAVING cnt>1";
 			return log;
 		}
 
+		public static string PatFieldsDeleteDuplicates(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
+			string log="";
+			string command=@"SELECT COUNT(*) countDups
+				FROM patfield
+					WHERE PatNum IN(
+					SELECT PatNum
+					FROM patfield
+					GROUP BY PatNum,FieldName
+					HAVING COUNT(*)>1)";
+			int val=Convert.ToInt32(Db.GetCount(command));
+			if(val>0) {
+				int numberFixed=0;
+				//Create a temp table with duplicated patfields
+				command="DROP TABLE IF EXISTS temppatfieldstodelete";
+				Db.NonQ(command);
+				command=@"CREATE TABLE temppatfieldstodelete (
+					SELECT PatFieldNum
+					FROM patfield
+					WHERE PatNum IN(
+					SELECT PatNum
+					FROM patfield
+					GROUP BY PatNum,FieldName
+					HAVING COUNT(*)>1))";
+				Db.NonQ(command);
+				command=@"DELETE FROM patfield 
+					WHERE PatFieldNum IN(
+					SELECT PatFieldNum 
+					FROM temppatfieldstodelete)";
+				numberFixed+=Db.NonQ32(command);
+				command="DROP TABLE IF EXISTS temppatfieldstodelete";
+				Db.NonQ(command);
+				log+=Lans.g("FormDatabaseMaintenance","Patient Field duplicate entries deleted: ")+numberFixed.ToString()+".\r\n";
+			}
+			return log;
+		}
+
 		public static string PatientBadGuarantor(bool verbose) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
@@ -1606,6 +1645,12 @@ HAVING cnt>1";
 			log+="Missing claimpayments added back: "+numberFixed2.ToString()+".\r\n";
 			return log;
 		}
+
+		
+
+		
+
+
 		
 		
 

@@ -286,6 +286,8 @@ namespace OpenDental {
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.MedicationPatDeleteWithInvalidMedNum(verbose);
 			Application.DoEvents();
+			textLog.Text+=DatabaseMaintenance.PatFieldsDeleteDuplicates(verbose);
+			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.PatientBadGuarantor(verbose);
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.PatientPriProvMissing(verbose);
