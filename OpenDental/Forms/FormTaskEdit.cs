@@ -1008,7 +1008,6 @@ namespace OpenDental{
 				textChanged=true;
 			}
 			if(!SaveCur(true)){//If user clicked OK without changing anything, then this will have no effect.
-				Close();
 				return;
 			}
 			if(Cur.Equals(CurOld)){//if there were no changes, then don't bother with the signal
