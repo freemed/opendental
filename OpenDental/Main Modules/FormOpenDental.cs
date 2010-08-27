@@ -4322,7 +4322,7 @@ namespace OpenDental{
 			int extension=0;
 			IPHostEntry iphostentry=Dns.GetHostEntry(Environment.MachineName);
 			foreach(IPAddress ipaddress in iphostentry.AddressList){
-				if(ipaddress.ToString().Contains("192.168.0.1")){
+				if(ipaddress.ToString().Contains("192.168.0.2")){
 					extension=PIn.Int(ipaddress.ToString().Substring(10))-100;//eg 205-100=105
 				}
 				if(ipaddress.ToString()=="192.168.0.186") {//hard code Jordans
