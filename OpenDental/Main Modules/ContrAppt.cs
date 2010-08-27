@@ -1154,9 +1154,9 @@ namespace OpenDental{
 				PatCur=null;
 				return;
 			}
-			if(PatCur !=null && PatCur.PatNum==patNum) {//if patient has not changed
-				return;//don't do anything
-			}
+			//if(PatCur !=null && PatCur.PatNum==patNum) {//if patient has not changed
+			//  return;//don't do anything
+			//}
 			PatCur=Patients.GetPat(patNum);
 		}
 
