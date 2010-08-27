@@ -733,9 +733,6 @@ HAVING cnt>1";
 			string log="";
 			string command=@"DROP TABLE IF EXISTS tempduplicatepatfields";
 			Db.NonQ(command);
-			//command="DROP TABLE IF EXISTS temppatfieldstodelete";
-			//Db.NonQ(command);
-			//Create temp table for patients with any duplicating patfields
 			//This query run very fast on a db with no corruption.
 			command=@"CREATE TABLE tempduplicatepatfields
 				SELECT DISTINCT PatNum
@@ -762,19 +759,9 @@ HAVING cnt>1";
 			for(int i=0;i<table.Rows.Count;i++) {
 				log+="#"+table.Rows[i]["PatNum"].ToString()+" "+table.Rows[i]["LName"]+", "+table.Rows[i]["FName"]+".\r\n";
 			}
-			//command=@"CREATE TABLE temppatfieldstodelete
-			//	SELECT p.PatFieldNum
-			//	FROM patfield p,  tempduplicatepatfields t
-			//	WHERE p.PatNum=t.PatNum";
-			//Db.NonQ(command);
 			//Without this index the delete process takes too long.
-			//command=@"ALTER TABLE temppatfieldstodelete 
-			//	ADD INDEX idx_temppatfield_patfieldnum(PatFieldNum)";
-			//Db.NonQ(command);
-			//command=@"DELETE FROM patfield 
-			//	WHERE PatFieldNum IN(
-			//	SELECT PatFieldNum 
-			//	FROM temppatfieldstodelete)";
+			command=@"ALTER TABLE tempduplicatepatfields 
+				ADD INDEX idx_temppatfield_patnum(PatNum)";
 			command="DELETE FROM patfield "
 				+"WHERE PatNum IN(SELECT PatNum FROM tempduplicatepatfields)";
 			int numberFixed=Db.NonQ32(command);
@@ -783,8 +770,6 @@ HAVING cnt>1";
 			}
 			command=@"DROP TABLE IF EXISTS tempduplicatepatfields";
 			Db.NonQ(command);
-			//command="DROP TABLE IF EXISTS temppatfieldstodelete";
-			//Db.NonQ(command);
 			return log;
 		}
 
