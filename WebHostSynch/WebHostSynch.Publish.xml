@@ -1,0 +1,26 @@
+<publishData>
+  <publishTarget publishUrl="C:\Inetpub\ftproot\Jordan\WebHostSynch\">
+    <file relUrl="bin/WebHostSynch.pdb" publishTime="08/26/2010 12:49:52" />
+    <file relUrl="bin/Microsoft.Practices.ObjectBuilder2.dll" publishTime="10/24/2008 17:03:22" />
+    <file relUrl="bin/Microsoft.Practices.EnterpriseLibrary.Logging.dll" publishTime="10/27/2008 10:11:50" />
+    <file relUrl="Web.config" publishTime="08/09/2010 16:09:25" />
+    <file relUrl="bin/Microsoft.Practices.Unity.dll" publishTime="10/24/2008 17:03:22" />
+    <file relUrl="bin/WebHostSynch.dll" publishTime="08/26/2010 12:49:52" />
+    <file relUrl="WebHostSynch.asmx" publishTime="08/09/2010 12:35:22" />
+    <file relUrl="bin/Microsoft.Practices.EnterpriseLibrary.Common.xml" publishTime="10/27/2008 10:04:34" />
+    <file relUrl="bin/Microsoft.Practices.EnterpriseLibrary.Common.dll" publishTime="10/27/2008 10:11:50" />
+    <file relUrl="bin/Microsoft.Practices.EnterpriseLibrary.Logging.xml" publishTime="10/27/2008 10:05:06" />
+  </publishTarget>
+  <publishTarget publishUrl="C:\Documents and Settings\dennis1\My Documents\dennis\work\Jordan\test\WebHostSynch\">
+    <file relUrl="bin/WebHostSynch.pdb" publishTime="08/16/2010 11:06:19" />
+    <file relUrl="bin/Microsoft.Practices.ObjectBuilder2.dll" publishTime="10/24/2008 17:03:22" />
+    <file relUrl="bin/Microsoft.Practices.EnterpriseLibrary.Common.dll" publishTime="10/27/2008 10:11:50" />
+    <file relUrl="Web.config" publishTime="08/09/2010 16:09:25" />
+    <file relUrl="bin/Microsoft.Practices.Unity.dll" publishTime="10/24/2008 17:03:22" />
+    <file relUrl="bin/WebHostSynch.dll" publishTime="08/16/2010 11:06:19" />
+    <file relUrl="WebHostSynch.asmx" publishTime="08/09/2010 12:35:22" />
+    <file relUrl="bin/Microsoft.Practices.EnterpriseLibrary.Common.xml" publishTime="10/27/2008 10:04:34" />
+    <file relUrl="bin/Microsoft.Practices.EnterpriseLibrary.Logging.dll" publishTime="10/27/2008 10:11:50" />
+    <file relUrl="bin/Microsoft.Practices.EnterpriseLibrary.Logging.xml" publishTime="10/27/2008 10:05:06" />
+  </publishTarget>
+</publishData>

@@ -194,24 +194,6 @@ namespace WebForms {
         protected global::AjaxControlToolkit.ValidatorCalloutExtender valCalloutDOB;
         
         /// <summary>
-        /// RequiredFieldValidatorTextBoxEmail control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidatorTextBoxEmail;
-        
-        /// <summary>
-        /// RequiredFieldValidatorTextBoxEmail_ValidatorCalloutExtender control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::AjaxControlToolkit.ValidatorCalloutExtender RequiredFieldValidatorTextBoxEmail_ValidatorCalloutExtender;
-        
-        /// <summary>
         /// LabelName control.
         /// </summary>
         /// <remarks>

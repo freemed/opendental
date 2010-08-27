@@ -125,9 +125,8 @@ namespace OpenDental.WebHostSynch {
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/SetPreferences", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-        public bool SetPreferences(long DentalOfficeID, string RegistrationKey, int ColorBorder, string Heading1, string Heading2) {
+        public bool SetPreferences(string RegistrationKey, int ColorBorder, string Heading1, string Heading2) {
             object[] results = this.Invoke("SetPreferences", new object[] {
-                        DentalOfficeID,
                         RegistrationKey,
                         ColorBorder,
                         Heading1,
@@ -136,17 +135,16 @@ namespace OpenDental.WebHostSynch {
         }
         
         /// <remarks/>
-        public void SetPreferencesAsync(long DentalOfficeID, string RegistrationKey, int ColorBorder, string Heading1, string Heading2) {
-            this.SetPreferencesAsync(DentalOfficeID, RegistrationKey, ColorBorder, Heading1, Heading2, null);
+        public void SetPreferencesAsync(string RegistrationKey, int ColorBorder, string Heading1, string Heading2) {
+            this.SetPreferencesAsync(RegistrationKey, ColorBorder, Heading1, Heading2, null);
         }
         
         /// <remarks/>
-        public void SetPreferencesAsync(long DentalOfficeID, string RegistrationKey, int ColorBorder, string Heading1, string Heading2, object userState) {
+        public void SetPreferencesAsync(string RegistrationKey, int ColorBorder, string Heading1, string Heading2, object userState) {
             if ((this.SetPreferencesOperationCompleted == null)) {
                 this.SetPreferencesOperationCompleted = new System.Threading.SendOrPostCallback(this.OnSetPreferencesOperationCompleted);
             }
             this.InvokeAsync("SetPreferences", new object[] {
-                        DentalOfficeID,
                         RegistrationKey,
                         ColorBorder,
                         Heading1,
@@ -162,9 +160,8 @@ namespace OpenDental.WebHostSynch {
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetSheetData", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-        public webforms_sheetfield[] GetSheetData(long DentalOfficeID, string RegistrationKey, System.DateTime StartDate, System.DateTime EndDate) {
+        public webforms_sheetfield[] GetSheetData(string RegistrationKey, System.DateTime StartDate, System.DateTime EndDate) {
             object[] results = this.Invoke("GetSheetData", new object[] {
-                        DentalOfficeID,
                         RegistrationKey,
                         StartDate,
                         EndDate});
@@ -172,17 +169,16 @@ namespace OpenDental.WebHostSynch {
         }
         
         /// <remarks/>
-        public void GetSheetDataAsync(long DentalOfficeID, string RegistrationKey, System.DateTime StartDate, System.DateTime EndDate) {
-            this.GetSheetDataAsync(DentalOfficeID, RegistrationKey, StartDate, EndDate, null);
+        public void GetSheetDataAsync(string RegistrationKey, System.DateTime StartDate, System.DateTime EndDate) {
+            this.GetSheetDataAsync(RegistrationKey, StartDate, EndDate, null);
         }
         
         /// <remarks/>
-        public void GetSheetDataAsync(long DentalOfficeID, string RegistrationKey, System.DateTime StartDate, System.DateTime EndDate, object userState) {
+        public void GetSheetDataAsync(string RegistrationKey, System.DateTime StartDate, System.DateTime EndDate, object userState) {
             if ((this.GetSheetDataOperationCompleted == null)) {
                 this.GetSheetDataOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetSheetDataOperationCompleted);
             }
             this.InvokeAsync("GetSheetData", new object[] {
-                        DentalOfficeID,
                         RegistrationKey,
                         StartDate,
                         EndDate}, this.GetSheetDataOperationCompleted, userState);
@@ -197,25 +193,23 @@ namespace OpenDental.WebHostSynch {
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/DeleteSheetData", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-        public void DeleteSheetData(long DentalOfficeID, string RegistrationKey, long[] SheetsForDeletion) {
+        public void DeleteSheetData(string RegistrationKey, long[] SheetsForDeletion) {
             this.Invoke("DeleteSheetData", new object[] {
-                        DentalOfficeID,
                         RegistrationKey,
                         SheetsForDeletion});
         }
         
         /// <remarks/>
-        public void DeleteSheetDataAsync(long DentalOfficeID, string RegistrationKey, long[] SheetsForDeletion) {
-            this.DeleteSheetDataAsync(DentalOfficeID, RegistrationKey, SheetsForDeletion, null);
+        public void DeleteSheetDataAsync(string RegistrationKey, long[] SheetsForDeletion) {
+            this.DeleteSheetDataAsync(RegistrationKey, SheetsForDeletion, null);
         }
         
         /// <remarks/>
-        public void DeleteSheetDataAsync(long DentalOfficeID, string RegistrationKey, long[] SheetsForDeletion, object userState) {
+        public void DeleteSheetDataAsync(string RegistrationKey, long[] SheetsForDeletion, object userState) {
             if ((this.DeleteSheetDataOperationCompleted == null)) {
                 this.DeleteSheetDataOperationCompleted = new System.Threading.SendOrPostCallback(this.OnDeleteSheetDataOperationCompleted);
             }
             this.InvokeAsync("DeleteSheetData", new object[] {
-                        DentalOfficeID,
                         RegistrationKey,
                         SheetsForDeletion}, this.DeleteSheetDataOperationCompleted, userState);
         }
@@ -229,24 +223,24 @@ namespace OpenDental.WebHostSynch {
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/CheckRegistrationKey", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-        public bool CheckRegistrationKey(string RegistrationKey) {
+        public bool CheckRegistrationKey(string RegistrationKeyFromDentalOffice) {
             object[] results = this.Invoke("CheckRegistrationKey", new object[] {
-                        RegistrationKey});
+                        RegistrationKeyFromDentalOffice});
             return ((bool)(results[0]));
         }
         
         /// <remarks/>
-        public void CheckRegistrationKeyAsync(string RegistrationKey) {
-            this.CheckRegistrationKeyAsync(RegistrationKey, null);
+        public void CheckRegistrationKeyAsync(string RegistrationKeyFromDentalOffice) {
+            this.CheckRegistrationKeyAsync(RegistrationKeyFromDentalOffice, null);
         }
         
         /// <remarks/>
-        public void CheckRegistrationKeyAsync(string RegistrationKey, object userState) {
+        public void CheckRegistrationKeyAsync(string RegistrationKeyFromDentalOffice, object userState) {
             if ((this.CheckRegistrationKeyOperationCompleted == null)) {
                 this.CheckRegistrationKeyOperationCompleted = new System.Threading.SendOrPostCallback(this.OnCheckRegistrationKeyOperationCompleted);
             }
             this.InvokeAsync("CheckRegistrationKey", new object[] {
-                        RegistrationKey}, this.CheckRegistrationKeyOperationCompleted, userState);
+                        RegistrationKeyFromDentalOffice}, this.CheckRegistrationKeyOperationCompleted, userState);
         }
         
         private void OnCheckRegistrationKeyOperationCompleted(object arg) {

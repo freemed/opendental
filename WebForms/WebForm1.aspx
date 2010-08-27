@@ -81,16 +81,6 @@
 					<%-- DOB validators end --%>
 					
 					
-					<%-- Email validators start --%>
-					<asp:RequiredFieldValidator ID="RequiredFieldValidatorTextBoxEmail" runat="server" ControlToValidate="TextBoxEmail"
-						ErrorMessage="Email is a required field" Display="None" SetFocusOnError="True"></asp:RequiredFieldValidator>
-					<asp:ValidatorCalloutExtender ID="RequiredFieldValidatorTextBoxEmail_ValidatorCalloutExtender"
-						runat="server" Enabled="True" TargetControlID="RequiredFieldValidatorTextBoxEmail">
-					</asp:ValidatorCalloutExtender>
-					
-					
-					<%-- Email validators end --%>
-					
 					<%-- validators end --%>
 					<asp:Label ID="LabelName" runat="server" Text="Name" Width="50px"></asp:Label>
 					<asp:TextBox ID="TextBoxLastName" runat="server" Width="140px" CssClass="textboxstyle"></asp:TextBox>

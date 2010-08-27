@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Services;
 
+
 namespace WebHostSynch {
 	/// <summary>
 	/// Summary description for WebHostSynch
@@ -15,23 +16,23 @@ namespace WebHostSynch {
 	// [System.Web.Script.Services.ScriptService]
 	public class WebHostSynch:System.Web.Services.WebService {
 
+
 		[WebMethod]
 		public string HelloWorld() {
 			return "Hello World";
 		}
-
 		[WebMethod]
-		public bool SetPreferences(long DentalOfficeID,string RegistrationKey,int ColorBorder,string Heading1,string Heading2) {
+		public bool SetPreferences(string RegistrationKey,int ColorBorder,string Heading1,string Heading2) {
 
 			ODWebServiceEntities db=new ODWebServiceEntities();
-			if(CheckRegistrationKey(RegistrationKey)==false) {
-				Logger.Information("Incorrect registration key. DentalOfficeID = "+DentalOfficeID+"RegistrationKey = "+RegistrationKey);
-				DentalOfficeID=0;
+			long DentalOfficeID=GetDentalOfficeID(RegistrationKey);
+			if(DentalOfficeID==0) {
+			Logger.Information("Incorrect registration key. IpAddress = "+HttpContext.Current.Request.UserHostAddress+" RegistrationKey = "+RegistrationKey);
+				return false;
 			}
 			var wspObj = from wsp in db.webforms_preference
 						 where wsp.DentalOfficeID==DentalOfficeID
 						 select wsp;
-
 			//update preference
 			if(wspObj.Count()>0) {
 				wspObj.First().ColorBorder=ColorBorder;
@@ -46,19 +47,19 @@ namespace WebHostSynch {
 				wspNewObj.Heading1=Heading1;
 				wspNewObj.Heading2=Heading2;
 				db.AddTowebforms_preference(wspNewObj);
-
 			}
 			db.SaveChanges();
 			return true;
 		}
 
 		[WebMethod]
-		public List<webforms_sheetfield> GetSheetData(long DentalOfficeID,string RegistrationKey,DateTime StartDate,DateTime EndDate) {
+		public List<webforms_sheetfield> GetSheetData(string RegistrationKey,DateTime StartDate,DateTime EndDate) {
+			long DentalOfficeID=GetDentalOfficeID(RegistrationKey);
+			if(DentalOfficeID==0) {
+				Logger.Information("Incorrect registration key. IPAddress = "+HttpContext.Current.Request.UserHostAddress+" RegistrationKey = "+RegistrationKey);
+			} 
 			ODWebServiceEntities db=new ODWebServiceEntities();
-			if(CheckRegistrationKey(RegistrationKey)==false) {
-				Logger.Information("Incorrect registration key. DentalOfficeID = "+DentalOfficeID+"RegistrationKey = "+RegistrationKey);
-				DentalOfficeID=0;
-			}
+
 			EndDate=EndDate.AddDays(1);//if this is put in LINQ it will not work. so change date first
 			var wsfObj=from wsf in db.webforms_sheetfield
 					   where wsf.webforms_sheet.webforms_preference.DentalOfficeID==DentalOfficeID
@@ -69,7 +70,11 @@ namespace WebHostSynch {
 		}
 
 		[WebMethod]
-		public void DeleteSheetData(long DentalOfficeID,string RegistrationKey,List<long> SheetsForDeletion) {
+		public void DeleteSheetData(string RegistrationKey,List<long> SheetsForDeletion) {
+			long DentalOfficeID=GetDentalOfficeID(RegistrationKey);
+			if(DentalOfficeID==0) {
+				Logger.Information("Incorrect registration key. IPAddress = "+HttpContext.Current.Request.UserHostAddress+" RegistrationKey = "+RegistrationKey);
+			}
 			ODWebServiceEntities db=new ODWebServiceEntities();
 			for(int i=0;i<SheetsForDeletion.Count();i++) {
 				long SheetID=SheetsForDeletion.ElementAt(i);// LINQ throws an error if this is directly put into the selectexpression
@@ -91,8 +96,29 @@ namespace WebHostSynch {
 		}
 
 		[WebMethod]
-		public bool CheckRegistrationKey(string RegistrationKey) {
+		public bool CheckRegistrationKey(string RegistrationKeyFromDentalOffice) {
+			RegistrationKey RegistrationKeyFromDb=null;
+			try {
+				RegistrationKeyFromDb=RegistrationKeys.GetByKey(RegistrationKeyFromDentalOffice);
+			}
+			catch(ApplicationException ex) {
+				Logger.Information(ex.Message.ToString());
+				return false;
+			}
+			int patNum=RegistrationKeyFromDb.PatNum;
 			return true;
+		}
+
+		private long GetDentalOfficeID(string RegistrationKeyFromDentalOffice) {
+			RegistrationKey RegistrationKeyFromDb=null;
+			try {
+				RegistrationKeyFromDb=RegistrationKeys.GetByKey(RegistrationKeyFromDentalOffice);
+			}
+			catch(ApplicationException ex) {
+				Logger.Information(ex.Message.ToString());
+				return 0;
+			}
+			return RegistrationKeyFromDb.PatNum;
 		}
 
 

@@ -10,7 +10,7 @@
           <NativeDebugging>False</NativeDebugging>
           <SQLDebugging>False</SQLDebugging>
           <PublishCopyOption>RunFiles</PublishCopyOption>
-          <PublishTargetLocation>C:\Documents and Settings\dennis1\My Documents\dennis\work\Jordan\test\WebHostSynch\</PublishTargetLocation>
+          <PublishTargetLocation>C:\Inetpub\ftproot\Jordan\WebHostSynch\</PublishTargetLocation>
           <PublishDeleteAllFiles>False</PublishDeleteAllFiles>
           <PublishCopyAppData>True</PublishCopyAppData>
           <ExternalProgram>

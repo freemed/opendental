@@ -15,7 +15,6 @@
       <s:element name="SetPreferences">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="1" maxOccurs="1" name="DentalOfficeID" type="s:long" />
             <s:element minOccurs="0" maxOccurs="1" name="RegistrationKey" type="s:string" />
             <s:element minOccurs="1" maxOccurs="1" name="ColorBorder" type="s:int" />
             <s:element minOccurs="0" maxOccurs="1" name="Heading1" type="s:string" />
@@ -33,7 +32,6 @@
       <s:element name="GetSheetData">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="1" maxOccurs="1" name="DentalOfficeID" type="s:long" />
             <s:element minOccurs="0" maxOccurs="1" name="RegistrationKey" type="s:string" />
             <s:element minOccurs="1" maxOccurs="1" name="StartDate" type="s:dateTime" />
             <s:element minOccurs="1" maxOccurs="1" name="EndDate" type="s:dateTime" />
@@ -110,7 +108,6 @@
       <s:element name="DeleteSheetData">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="1" maxOccurs="1" name="DentalOfficeID" type="s:long" />
             <s:element minOccurs="0" maxOccurs="1" name="RegistrationKey" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="SheetsForDeletion" type="tns:ArrayOfLong" />
           </s:sequence>
@@ -127,7 +124,7 @@
       <s:element name="CheckRegistrationKey">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="0" maxOccurs="1" name="RegistrationKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="RegistrationKeyFromDentalOffice" type="s:string" />
           </s:sequence>
         </s:complexType>
       </s:element>

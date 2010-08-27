@@ -29,7 +29,6 @@ namespace OpenDental {
 		/// </summary>
 		private void FillGrid() {
 			try {
-				long DentalOfficeID=4;
 				gridMain.BeginUpdate();
 				gridMain.Columns.Clear();
 				ODGridColumn col=new ODGridColumn(Lan.g("TableWebforms","Last Name"),100);
@@ -64,8 +63,8 @@ namespace OpenDental {
 					MessageBox.Show(Lan.g(this,"Registration key provided by the dental office is incorrect"));
 					return;
 				}
-				wh.SetPreferences(DentalOfficeID,RegistrationKey,PrefC.GetColor(PrefName.WebFormsBorderColor).ToArgb(),PrefC.GetStringSilent(PrefName.WebFormsHeading1),PrefC.GetStringSilent(PrefName.WebFormsHeading2));
-				OpenDental.WebHostSynch.webforms_sheetfield[] wbsf=wh.GetSheetData(DentalOfficeID,RegistrationKey,dateFrom,dateTo);
+				wh.SetPreferences(RegistrationKey,PrefC.GetColor(PrefName.WebFormsBorderColor).ToArgb(),PrefC.GetStringSilent(PrefName.WebFormsHeading1),PrefC.GetStringSilent(PrefName.WebFormsHeading2));
+				OpenDental.WebHostSynch.webforms_sheetfield[] wbsf=wh.GetSheetData(RegistrationKey,dateFrom,dateTo);
 				if(wbsf.Count()==0) {
 					gridMain.EndUpdate();
 					MessageBox.Show(Lan.g(this,"No Patient Forms retrieved"));
@@ -127,9 +126,10 @@ namespace OpenDental {
 						SheetsForDeletion.Add(SheetID);
 					}
 				}// end of for loop
-				wh.DeleteSheetData(DentalOfficeID,RegistrationKey,SheetsForDeletion.ToArray());
+				wh.DeleteSheetData(RegistrationKey,SheetsForDeletion.ToArray());
 			}
 			catch(Exception e) {
+				gridMain.EndUpdate();
 				MessageBox.Show(e.Message);
 			}
 		}
