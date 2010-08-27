@@ -733,9 +733,10 @@ HAVING cnt>1";
 			string log="";
 			string command=@"DROP TABLE IF EXISTS tempduplicatepatfields";
 			Db.NonQ(command);
-			command="DROP TABLE IF EXISTS temppatfieldstodelete";
-			Db.NonQ(command);
+			//command="DROP TABLE IF EXISTS temppatfieldstodelete";
+			//Db.NonQ(command);
 			//Create temp table for patients with any duplicating patfields
+			//This query run very fast on a db with no corruption.
 			command=@"CREATE TABLE tempduplicatepatfields
 				SELECT DISTINCT PatNum
 				FROM patfield
@@ -750,39 +751,40 @@ HAVING cnt>1";
 				if(verbose) {
 					log+=Lans.g("FormDatabaseMaintenance","Patient Field duplicate entries deleted")+": 0\r\n";
 				}
-				command=@"DROP TABLE IF EXISTS tempduplicatepatfields;
-				DROP TABLE IF EXISTS temppatfieldstodelete;";
+				command=@"DROP TABLE IF EXISTS tempduplicatepatfields";
+				//DROP TABLE IF EXISTS temppatfieldstodelete;";
 				Db.NonQ(command);
 				return log;
 			}
 			else {
-				log+=Lans.g("FormDatabaseMaintenance","The following patients had duplicated patient fields and will be cleaned up. !!!WRITE SOMETHING HERE ABOUT CALLING OR HOW TO TAKE FOLLOW UP CHECKING PT DATA!!!")+"\r\n";
+				log+=Lans.g("FormDatabaseMaintenance","The following patients had corrupted 'Patient Fields'.  Compare the Patient Fields of each patient in the list against a backup from before the most recent version upgrade.")+"\r\n";
 			}
 			for(int i=0;i<table.Rows.Count;i++) {
-				log+="#"+table.Rows[i][0].ToString()+" ";
-				log+=table.Rows[i][1]+", "+table.Rows[i][2]+".\r\n";
+				log+="#"+table.Rows[i]["PatNum"].ToString()+" "+table.Rows[i]["LName"]+", "+table.Rows[i]["FName"]+".\r\n";
 			}
-			command=@"CREATE TABLE temppatfieldstodelete
-				SELECT p.PatFieldNum
-				FROM patfield p,  tempduplicatepatfields t
-				WHERE p.PatNum=t.PatNum";
-			Db.NonQ(command);
+			//command=@"CREATE TABLE temppatfieldstodelete
+			//	SELECT p.PatFieldNum
+			//	FROM patfield p,  tempduplicatepatfields t
+			//	WHERE p.PatNum=t.PatNum";
+			//Db.NonQ(command);
 			//Without this index the delete process takes too long.
-			command=@"ALTER TABLE temppatfieldstodelete 
-				ADD INDEX idx_temppatfield_patfieldnum(PatFieldNum)";
-			Db.NonQ(command);
-			command=@"DELETE FROM patfield 
-				WHERE PatFieldNum IN(
-				SELECT PatFieldNum 
-				FROM temppatfieldstodelete)";
+			//command=@"ALTER TABLE temppatfieldstodelete 
+			//	ADD INDEX idx_temppatfield_patfieldnum(PatFieldNum)";
+			//Db.NonQ(command);
+			//command=@"DELETE FROM patfield 
+			//	WHERE PatFieldNum IN(
+			//	SELECT PatFieldNum 
+			//	FROM temppatfieldstodelete)";
+			command="DELETE FROM patfield "
+				+"WHERE PatNum IN(SELECT PatNum FROM tempduplicatepatfields)";
 			int numberFixed=Db.NonQ32(command);
 			if(numberFixed>0) {
 				log+=Lans.g("FormDatabaseMaintenance","Patient Field duplicate entries deleted: ")+numberFixed.ToString()+".\r\n";
 			}
 			command=@"DROP TABLE IF EXISTS tempduplicatepatfields";
 			Db.NonQ(command);
-			command="DROP TABLE IF EXISTS temppatfieldstodelete";
-			Db.NonQ(command);
+			//command="DROP TABLE IF EXISTS temppatfieldstodelete";
+			//Db.NonQ(command);
 			return log;
 		}
 
