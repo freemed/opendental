@@ -2733,10 +2733,10 @@ namespace OpenDental{
 						soundplay.Play();
 						this.BringToFront();//don't know if this is doing anything.
 						FormTaskEdit FormT=new FormTaskEdit(tasksPopup[i]);
+						FormT.Closing+=new CancelEventHandler(TaskGoToEvent);
 						FormT.IsPopup=true;
 						FormT.ShowInTaskbar=true;
 						FormT.Show();//non-modal
-						TaskGoTo(FormT.GotoType,FormT.GotoKeyNum);
 					}
 				}
 				if(areAnySignalsTasks || tasksPopup.Count>0) {
@@ -2766,6 +2766,11 @@ namespace OpenDental{
 			catch {
 				signalLastRefreshed=DateTime.Now;
 			}
+		}
+
+		public void TaskGoToEvent(object sender, CancelEventArgs e){
+			FormTaskEdit FormT=(FormTaskEdit)sender;
+			TaskGoTo(FormT.GotoType,FormT.GotoKeyNum);
 		}
 
 		private void KillThread() {

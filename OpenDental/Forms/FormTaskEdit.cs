@@ -810,6 +810,7 @@ namespace OpenDental{
 			GotoType=Cur.ObjectType;
 			GotoKeyNum=Cur.KeyNum;
 			DialogResult=DialogResult.OK;
+			Close();
 		}
 
 		private bool SaveCur(bool resetUser){
@@ -999,7 +1000,7 @@ namespace OpenDental{
 
 		private void butOK_Click(object sender, System.EventArgs e) {
 			if(textAppend.Text!="") {
-				MsgBox.Show(this,"Either use an Append button, or clear that text box before clicking OK.");
+				MsgBox.Show(this,"Either use the Append button, or clear that text box before clicking OK.");
 				return;
 			}
 			bool textChanged=false;//irrelevant if IsNew
@@ -1007,10 +1008,12 @@ namespace OpenDental{
 				textChanged=true;
 			}
 			if(!SaveCur(true)){//If user clicked OK without changing anything, then this will have no effect.
+				Close();
 				return;
 			}
 			if(Cur.Equals(CurOld)){//if there were no changes, then don't bother with the signal
 				DialogResult=DialogResult.OK;
+				Close();
 				return;
 			}
 			if(IsNew){
