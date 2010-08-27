@@ -48,7 +48,7 @@
 			// 
 			this.labelExtensionName.BackColor = System.Drawing.SystemColors.Control;
 			this.labelExtensionName.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.labelExtensionName.Location = new System.Drawing.Point(48,20);
+			this.labelExtensionName.Location = new System.Drawing.Point(48,2);
 			this.labelExtensionName.Name = "labelExtensionName";
 			this.labelExtensionName.Size = new System.Drawing.Size(105,16);
 			this.labelExtensionName.TabIndex = 1;
@@ -57,7 +57,7 @@
 			// 
 			// labelStatusAndNote
 			// 
-			this.labelStatusAndNote.Location = new System.Drawing.Point(76,4);
+			this.labelStatusAndNote.Location = new System.Drawing.Point(76,18);
 			this.labelStatusAndNote.Name = "labelStatusAndNote";
 			this.labelStatusAndNote.Size = new System.Drawing.Size(77,16);
 			this.labelStatusAndNote.TabIndex = 2;
@@ -68,7 +68,7 @@
 			// pictureInUse
 			// 
 			this.pictureInUse.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureInUse.BackgroundImage")));
-			this.pictureInUse.Location = new System.Drawing.Point(51,3);
+			this.pictureInUse.Location = new System.Drawing.Point(51,18);
 			this.pictureInUse.Name = "pictureInUse";
 			this.pictureInUse.Size = new System.Drawing.Size(21,17);
 			this.pictureInUse.TabIndex = 3;

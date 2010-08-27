@@ -117,9 +117,9 @@ namespace OpenDental {
 				layoutHorizontal=value;
 				if(layoutHorizontal){
 					pictureWebCam.Location=new Point(0,0);
-					pictureInUse.Location=new Point(51,3);
-					labelExtensionName.Location=new Point(48,20);
-					labelStatusAndNote.Location=new Point(76,4);
+					pictureInUse.Location=new Point(51,18);
+					labelExtensionName.Location=new Point(48,2);
+					labelStatusAndNote.Location=new Point(76,18);
 					labelStatusAndNote.TextAlign=ContentAlignment.MiddleLeft;
 					labelStatusAndNote.Size=new Size(77,16);
 					labelTime.Location=new Point(156,4);
