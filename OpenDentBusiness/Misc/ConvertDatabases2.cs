@@ -2446,8 +2446,28 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ32(command);
 				command="ALTER TABLE patient ADD AskToArriveEarly int NOT NULL";
 				Db.NonQ(command);
-
-
+				//add Sopro bridge:
+				command="INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
+					+") VALUES("
+					+"'Sopro', "
+					+"'Sopro by Acteon www.acteongroup.com', "
+					+"'0', "
+					+"'"+POut.String(@"C:\Program Files\Sopro Imaging\SOPRO Imaging.exe")+"', "
+					+"'', "
+					+"'')";
+				programNum=Db.NonQ32(command,true);//we now have a ProgramNum to work with
+				command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+					+") VALUES("
+					+"'"+programNum.ToString()+"', "
+					+"'Enter 0 to use PatientNum, or 1 to use ChartNum', "
+					+"'0')";
+				Db.NonQ32(command);
+				command="INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
+					+"VALUES ("
+					+"'"+programNum.ToString()+"', "
+					+"'"+((int)ToolBarsAvail.ChartModule).ToString()+"', "
+					+"'Sopro')";
+				Db.NonQ32(command);
 
 
 

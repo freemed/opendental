@@ -1761,6 +1761,7 @@ namespace OpenDental{
 				DrawProcsOfStatus(ProcStat.C);
 				DrawProcsOfStatus(ProcStat.R);
 				DrawProcsOfStatus(ProcStat.TP);
+				DrawProcsOfStatus(ProcStat.Cn);
 				toothChart.AutoFinish=true;
 				chartBitmap=toothChart.GetBitmap();
 				toothChart.Dispose();
@@ -2009,7 +2010,7 @@ namespace OpenDental{
 		///<summary>Just used for printing the 3D chart.</summary>
 		private void ComputeProcAL() {
 			ProcAL=new ArrayList();
-			//first, add all completed work. C,EC,EO, and Referred
+			//first, add all completed work and conditions. C,EC,EO, and Referred
 			for(int i=0;i<ProcList.Count;i++) {
 				if(ProcList[i].ProcStatus==ProcStat.C
 					|| ProcList[i].ProcStatus==ProcStat.EC
@@ -2020,6 +2021,9 @@ namespace OpenDental{
 					}
 				}
 				if(ProcList[i].ProcStatus==ProcStat.R){//always show all referred
+					ProcAL.Add(ProcList[i]);
+				}
+				if(ProcList[i].ProcStatus==ProcStat.Cn){//always show all conditions.
 					ProcAL.Add(ProcList[i]);
 				}
 			}
@@ -2104,6 +2108,10 @@ namespace OpenDental{
 						case ProcStat.R:
 							cDark=DefC.Short[(int)DefCat.ChartGraphicColors][4].ItemColor;
 							cLight=DefC.Short[(int)DefCat.ChartGraphicColors][9].ItemColor;
+							break;
+						case ProcStat.Cn:
+							cDark=DefC.Short[(int)DefCat.ChartGraphicColors][16].ItemColor;
+							cLight=DefC.Short[(int)DefCat.ChartGraphicColors][17].ItemColor;
 							break;
 					}
 				}

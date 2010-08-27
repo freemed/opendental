@@ -210,6 +210,7 @@
     <Compile Include="Bridges\Cliniview.cs" />
     <Compile Include="Bridges\ICat.cs" />
     <Compile Include="Bridges\ECW.cs" />
+    <Compile Include="Bridges\Sopro.cs" />
     <Compile Include="Bridges\Tesia_statements.cs" />
     <Compile Include="Bridges\Dolphin.cs" />
     <Compile Include="Bridges\Digora.cs" />

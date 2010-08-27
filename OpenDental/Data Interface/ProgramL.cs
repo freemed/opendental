@@ -146,6 +146,10 @@ namespace OpenDental{
 				Sirona.SendData(prog,pat);
 				return;
 			}
+			else if(prog.ProgName=="Sopro"){
+				Sopro.SendData(prog,pat);
+				return;
+			}
 			else if(prog.ProgName=="TigerView"){
 				TigerView.SendData(prog,pat);
 				return;
