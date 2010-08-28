@@ -430,9 +430,9 @@ By signing below you acknowledge that you understand the information presented, 
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("patient.salutation",sheet.FontSize,sheet.FontName,false,x,y,280,rowH));
 			y+=rowH;
 			y+=rowH;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("letter text",sheet.FontSize,sheet.FontName,false,x,y,650,rowH,
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("letter text",sheet.FontSize,sheet.FontName,false,x,y,650,200,
 				GrowthBehaviorEnum.DownGlobal));
-			y+=rowH;
+			y+=200;
 			y+=rowH;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Sincerely,",sheet.FontSize,sheet.FontName,false,x,y,100,rowH));
 			y+=rowH;
