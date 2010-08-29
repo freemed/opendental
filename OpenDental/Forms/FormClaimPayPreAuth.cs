@@ -219,7 +219,7 @@ namespace OpenDental
 			}
 			List<ClaimProcHist> histList=null;
 			List<ClaimProcHist> loopList=null;
-			FormClaimProc FormCP=new FormClaimProc(ClaimProcsToEdit[e.Row],null,FamCur,PatCur,PlanList,histList,ref loopList,PatPlanList);
+			FormClaimProc FormCP=new FormClaimProc(ClaimProcsToEdit[e.Row],null,FamCur,PatCur,PlanList,histList,ref loopList,PatPlanList,false);
 			FormCP.IsInClaim=true;
 			//no need to worry about permissions here
 			FormCP.ShowDialog();

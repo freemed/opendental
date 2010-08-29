@@ -129,10 +129,11 @@ namespace OpenDental
 		private ComboBox comboStatus;
 		///<summary>This value is obtained by a query when this window first opens.  It includes both actual writeoffs and estimated writeoffs.  Will be 0 if this is a primary estimate.</summary>
 		private double WriteOffOtherIns;
+		private bool SaveToDb;
 
-		///<summary>procCur can be null if not editing from within an actual procedure.</summary>
-		public FormClaimProc(ClaimProc claimProcCur,Procedure procCur,Family famCur,Patient patCur,List <InsPlan> planList,List<ClaimProcHist> histList,ref List<ClaimProcHist> loopList,List<PatPlan> patPlanList){
-			ClaimProcCur=claimProcCur.Copy();
+		///<summary>procCur can be null if not editing from within an actual procedure.  If the save is to happen within this window, then set saveToDb true.  If the object is to be altered here, but saved in a different window, then saveToDb=false.</summary>
+		public FormClaimProc(ClaimProc claimProcCur,Procedure procCur,Family famCur,Patient patCur,List<InsPlan> planList,List<ClaimProcHist> histList,ref List<ClaimProcHist> loopList,List<PatPlan> patPlanList,bool saveToDb) {
+			ClaimProcCur=claimProcCur;//always work directly with the original object.  Revert if we change our mind.
 			ClaimProcOld=ClaimProcCur.Copy();
 			proc=procCur;
 			FamCur=famCur;
@@ -141,6 +142,7 @@ namespace OpenDental
 			HistList=histList;
 			LoopList=loopList;
 			PatPlanList=patPlanList;
+			SaveToDb=saveToDb;
 			InitializeComponent();// Required for Windows Form Designer support
 			//can't use Lan.F because of complexity of label use
 			Lan.C(this, new System.Windows.Forms.Control[]
@@ -1188,6 +1190,7 @@ namespace OpenDental
 			this.Text = "Edit Claim Procedure";
 			this.Load += new System.EventHandler(this.FormClaimProcEdit_Load);
 			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormClaimProc_Closing);
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormClaimProc_FormClosing);
 			this.groupClaim.ResumeLayout(false);
 			this.panelClaimExtras.ResumeLayout(false);
 			this.panelClaimExtras.PerformLayout();
@@ -1928,7 +1931,9 @@ namespace OpenDental
 					ClaimProcCur.DateEntry=DateTime.Now;
 				}
 			}
-			ClaimProcs.Update(ClaimProcCur);
+			if(SaveToDb) {
+				ClaimProcs.Update(ClaimProcCur);
+			}//otherwise, the change to db will be made by calling class
 			//there is no functionality here for insert cur, because all claimprocs are
 			//created before editing.
 			if(ClaimProcCur.ClaimPaymentNum>0){//attached to ins check
@@ -1945,10 +1950,14 @@ namespace OpenDental
 		}
 
 		private void FormClaimProc_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
+			
+		}
+
+		private void FormClaimProc_FormClosing(object sender,FormClosingEventArgs e) {
 			if(DialogResult==DialogResult.OK){
 				return;
 			}
-			ClaimProcCur=ClaimProcOld.Copy();//revert back to the old ClaimProc
+			ClaimProcCur=ClaimProcOld.Copy();//revert back to the old ClaimProc.  Only important if not SaveToDb
 		}
 
 		

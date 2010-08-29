@@ -2520,7 +2520,7 @@ namespace OpenDental{
 		}
 
 		private void gridIns_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			FormClaimProc FormC=new FormClaimProc(ClaimProcsForProc[e.Row],ProcCur,FamCur,PatCur,PlanList,HistList,ref LoopList,PatPlanList);
+			FormClaimProc FormC=new FormClaimProc(ClaimProcsForProc[e.Row],ProcCur,FamCur,PatCur,PlanList,HistList,ref LoopList,PatPlanList,true);
 			if(!butOK.Enabled){
 				FormC.NoPermissionProc=true;
 			}
@@ -2563,7 +2563,7 @@ namespace OpenDental{
 				ClaimProcs.ComputeBaseEst(cp,ProcCur.ProcFee,ProcCur.ToothNum,ProcCur.CodeNum,plan,patPlanNum,benList,
 					HistList,LoopList,PatPlanList,paidOtherInsTotal,paidOtherInsTotal,PatCur.Age,writeOffOtherIns);	
 			}
-			FormClaimProc FormC=new FormClaimProc(cp,ProcCur,FamCur,PatCur,PlanList,HistList,ref LoopList,PatPlanList);
+			FormClaimProc FormC=new FormClaimProc(cp,ProcCur,FamCur,PatCur,PlanList,HistList,ref LoopList,PatPlanList,true);
 			//FormC.NoPermission not needed because butAddEstimate not enabled
 			FormC.ShowDialog();
 			if(FormC.DialogResult==DialogResult.Cancel){

@@ -3763,7 +3763,7 @@ namespace OpenDental{
 			}
 			List<ClaimProcHist> histList=null;
 			List<ClaimProcHist> loopList=null;
-			FormClaimProc FormCP=new FormClaimProc(ClaimProcsForClaim[e.Row],null,FamCur,PatCur,PlanList,histList,ref loopList,PatPlanList);
+			FormClaimProc FormCP=new FormClaimProc(ClaimProcsForClaim[e.Row],null,FamCur,PatCur,PlanList,histList,ref loopList,PatPlanList,true);
 			FormCP.IsInClaim=true;
 			FormCP.ShowDialog();
 			if(FormCP.DialogResult!=DialogResult.OK){
@@ -3867,7 +3867,7 @@ namespace OpenDental{
 			ClaimProcCur.DateEntry=DateTime.Now;//will get set anyway
 			ClaimProcs.Insert(ClaimProcCur);
 			List<ClaimProcHist> loopList=null;
-			FormClaimProc FormCP=new FormClaimProc(ClaimProcCur,null,FamCur,PatCur,PlanList,null,ref loopList,PatPlanList);
+			FormClaimProc FormCP=new FormClaimProc(ClaimProcCur,null,FamCur,PatCur,PlanList,null,ref loopList,PatPlanList,true);
 			FormCP.IsInClaim=true;
 			FormCP.ShowDialog();
 			if(FormCP.DialogResult!=DialogResult.OK){
