@@ -561,7 +561,7 @@ namespace OpenDentBusiness {
 				+"LaymanTerm,procedurelog.MedicalCode,MAX(cp1.NoBillIns) noBillIns_,procedurelog.PatNum,"
 				+"(SELECT SUM(paysplit.SplitAmt) FROM paysplit WHERE procedurelog.ProcNum=paysplit.ProcNum "
 				+"AND paysplit.PatNum IN ("+familyPatNums+")) patPay_,"
-				+"ProcCode,procedurelog.ProcDate,ProcFee,procedurelog.ProcNum,procedurelog.ProcNumLab,"
+				+"ProcCode,DATE(procedurelog.ProcDate) procDate_,ProcFee,procedurelog.ProcNum,procedurelog.ProcNumLab,"
 				+"procedurelog.ProvNum,ToothNum,ToothRange,UnitQty,"
 				+"SUM(cp1.WriteOff) writeOff_, "
 				+"(SELECT MIN(ClaimNum) FROM claimproc cp3,insplan WHERE procedurelog.ProcNum=cp3.ProcNum "
@@ -575,7 +575,7 @@ namespace OpenDentBusiness {
 				+"AND procedurelog.PatNum IN ("
 				+familyPatNums
 				+") GROUP BY procedurelog.ProcNum ";
-			command+="ORDER BY ProcDate";
+			command+="ORDER BY procDate_";
 			DataTable rawProc=dcon.GetTable(command);
 			double insPayAmt;
 			double insPayEst;
@@ -607,7 +607,7 @@ namespace OpenDentBusiness {
 				row["colorText"]=DefC.Long[(int)DefCat.AccountColors][0].ItemColor.ToArgb().ToString();
 				row["creditsDouble"]=0;
 				row["credits"]="";
-				dateT=PIn.DateT(rawProc.Rows[i]["ProcDate"].ToString());
+				dateT=PIn.DateT(rawProc.Rows[i]["procDate_"].ToString());
 				row["DateTime"]=dateT;
 				row["date"]=dateT.ToString(Lans.GetShortDateTimeFormat());
 				row["description"]="";
