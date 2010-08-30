@@ -2432,13 +2432,13 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					+"'"+POut.Long(programNum)+"', "
 					+"'Enter 0 to use PatientNum, or 1 to use ChartNum', "
 					+"'0')";
-				Db.NonQ32(command);
+				Db.NonQ(command);
 				command="INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
 					+"VALUES ("
 					+"'"+POut.Long(programNum)+"', "
 					+"'"+POut.Int(((int)ToolBarsAvail.ChartModule))+"', "
 					+"'Sopro')";
-				Db.NonQ32(command);
+				Db.NonQ(command);
 				command="UPDATE preference SET ValueString = '7.2.31.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
@@ -2483,6 +2483,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);
 				command="ALTER TABLE appointment ADD ProcsColored text NOT NULL";
 				Db.NonQ(command);
+
+
 
 
 

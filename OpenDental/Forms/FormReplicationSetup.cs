@@ -176,15 +176,15 @@ namespace OpenDental {
 				string compName=ReplicationServers.Listt[i].Descript;
 				DataConnection dc=new DataConnection();
 				try {
-					try {
-						dc.SetDb(compName,currentDatabaseName,textUsername.Text,textPassword.Text,"","",DataConnection.DBtype);
-					}
-					catch(MySql.Data.MySqlClient.MySqlException ex) {
-						if(ex.Number==1042) {//The error 1042 is issued when the connection could not be made. 
-							throw ex;//Pass the exception along.
-						}
-						DataConnection.cmd.Connection.Close();
-					}
+					//try {
+					dc.SetDb(compName,currentDatabaseName,textUsername.Text,textPassword.Text,"","",DataConnection.DBtype);
+					//}
+					//catch(MySql.Data.MySqlClient.MySqlException ex) {
+					//	if(ex.Number==1042) {//The error 1042 is issued when the connection could not be made. 
+					//		throw ex;//Pass the exception along.
+					//	}
+					//	DataConnection.cmd.Connection.Close();
+					//}
 					//Connection is considered to be successfull at this point. Now restart the slave process to force replication.
 					string command="SLAVE STOP; START SLAVE; SHOW SLAVE STATUS;";
 					DataTable slaveStatus=dc.GetTable(command);

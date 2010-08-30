@@ -4318,6 +4318,7 @@ namespace OpenDental{
 
 		private void timerPhoneWebCam_Tick(object sender,EventArgs e) {
 			//This won't even happen unless PrefName.DockPhonePanelShow==true
+			//DateTime time=DateTime.Now;
 			List<Phone> phoneList=Phones.GetPhoneList();
 			phoneSmall.PhoneList=phoneList;
 			if(formPhoneTiles!=null && !formPhoneTiles.IsDisposed) {
@@ -4332,6 +4333,9 @@ namespace OpenDental{
 				}
 				if(ipaddress.ToString()=="192.168.0.186") {//hard code Jordans
 					extension=104;
+				}
+				if(ipaddress.ToString()=="192.168.0.204") {//hard code Jordans
+					extension=0;
 				}
 			}
 			if(extension>0) {
@@ -4381,12 +4385,14 @@ namespace OpenDental{
 					vidCapt=null;//To prevent the above slow try/catch from happening again and again.
 				}
 				if(phone!=null){//found entry in phone table matching this machine ip.
-					Phones.SetWebCamImage(phone,bitmapSmall);
+					Phones.SetWebCamImage(phone,bitmapSmall);//asynch
 				}
 				if(bitmapSmall!=null){
 					bitmapSmall.Dispose();
 				}
 			}
+			//TimeSpan span=DateTime.Now-time;
+			//Debug.WriteLine("Delta="+span.Milliseconds.ToString()+" ms");
 		}
 
 		private void FormOpenDental_FormClosing(object sender,FormClosingEventArgs e) {
