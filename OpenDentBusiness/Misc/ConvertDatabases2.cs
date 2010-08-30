@@ -2481,6 +2481,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);
 				command="ALTER TABLE patient ADD AskToArriveEarly int NOT NULL";
 				Db.NonQ(command);
+				command="ALTER TABLE appointment ADD ProcsColored text NOT NULL";
+				Db.NonQ(command);
 
 
 
@@ -2504,3 +2506,5 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 				
 				
+
+
