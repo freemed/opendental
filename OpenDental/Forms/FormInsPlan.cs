@@ -3761,6 +3761,11 @@ namespace OpenDental{
 			if(!FillPlanCurFromForm()) {
 				return;
 			}
+			if(IsForAll && textGroupName.Text=="" && textGroupNum.Text=="") {
+				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Changes will be applied to all similar plans.  Because no group name or group number is entered, more plans may be affected than intended.  Continue anyway?")) {
+					return;
+				}
+			}
 			Cursor=Cursors.WaitCursor;
 			if(PatPlanCur!=null) {
 				if(PIn.Long(textOrdinal.Text)!=PatPlanCur.Ordinal){//if ordinal changed
