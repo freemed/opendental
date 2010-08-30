@@ -2409,6 +2409,39 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="UPDATE preference SET ValueString = '7.2.12.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To7_2_31();
+		}
+
+		private static void To7_2_31() {
+			if(FromVersion<new Version("7.2.31.0")) {
+				string command;
+				//add Sopro bridge:
+				command="INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
+					+") VALUES("
+					+"'Sopro', "
+					+"'Sopro by Acteon www.acteongroup.com', "
+					+"'0', "
+					+"'"+POut.String(@"C:\Program Files\Sopro Imaging\SOPRO Imaging.exe")+"', "
+					+"'', "
+					+"'')";
+				Db.NonQ(command);
+				command="SELECT ProgramNum FROM program WHERE ProgName='Sopro' LIMIT 1";
+				long programNum=PIn.Long(Db.GetScalar(command));
+				command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+					+") VALUES("
+					+"'"+POut.Long(programNum)+"', "
+					+"'Enter 0 to use PatientNum, or 1 to use ChartNum', "
+					+"'0')";
+				Db.NonQ32(command);
+				command="INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
+					+"VALUES ("
+					+"'"+POut.Long(programNum)+"', "
+					+"'"+POut.Int(((int)ToolBarsAvail.ChartModule))+"', "
+					+"'Sopro')";
+				Db.NonQ32(command);
+				command="UPDATE preference SET ValueString = '7.2.31.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
 			To7_3_0();
 		}
 
@@ -2437,37 +2470,17 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					+"'"+POut.String(@"C:\\Program Files\\GAC\\OrthoPlex v3.20\\OrthoPlex.exe")+"', "
 					+"'-E [PatNum]', "
 					+"'')";
-				int programNum=Db.NonQ32(command,true);//we now have a ProgramNum to work with
+				Db.NonQ(command);
+				command="SELECT ProgramNum FROM program WHERE ProgName='OrthoPlex' LIMIT 1";
+				long programNum=PIn.Long(Db.GetScalar(command));
 				command="INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
 					+"VALUES ("
-					+"'"+POut.Int(programNum)+"', "
+					+"'"+POut.Long(programNum)+"', "
 					+"'"+POut.Int((int)ToolBarsAvail.ChartModule)+"', "
 					+"'OrthoPlex')";
-				Db.NonQ32(command);
+				Db.NonQ(command);
 				command="ALTER TABLE patient ADD AskToArriveEarly int NOT NULL";
 				Db.NonQ(command);
-				//add Sopro bridge:
-				command="INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
-					+") VALUES("
-					+"'Sopro', "
-					+"'Sopro by Acteon www.acteongroup.com', "
-					+"'0', "
-					+"'"+POut.String(@"C:\Program Files\Sopro Imaging\SOPRO Imaging.exe")+"', "
-					+"'', "
-					+"'')";
-				programNum=Db.NonQ32(command,true);//we now have a ProgramNum to work with
-				command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
-					+") VALUES("
-					+"'"+programNum.ToString()+"', "
-					+"'Enter 0 to use PatientNum, or 1 to use ChartNum', "
-					+"'0')";
-				Db.NonQ32(command);
-				command="INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
-					+"VALUES ("
-					+"'"+programNum.ToString()+"', "
-					+"'"+((int)ToolBarsAvail.ChartModule).ToString()+"', "
-					+"'Sopro')";
-				Db.NonQ32(command);
 
 
 
