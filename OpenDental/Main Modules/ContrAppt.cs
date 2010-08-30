@@ -151,6 +151,8 @@ namespace OpenDental{
 		//private int stressCounter;
 		private int printPageHorizontal=1;
 		private int printPageVertical=1;
+		///<summary>When a popup happens durring attempted drag off pinboard, this helps cancel the drag.</summary>
+		private bool CancelPinMouseDown;
 
 		///<summary></summary>
 		public ContrAppt(){
@@ -2055,7 +2057,9 @@ namespace OpenDental{
 		private void pinBoard_SelectedIndexChanged(object sender,EventArgs e) {
 			RefreshModuleDataPatient(PIn.Long(pinBoard.ApptList[pinBoard.SelectedIndex].DataRoww["PatNum"].ToString()));
 			RefreshModuleScreenPatient();
+			CancelPinMouseDown=false;
 			OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
+			//The line above can trigger a popup dialog which can cause the tempAppt to get stuck to the mouse
 			//RefreshModulePatient(PIn.PInt(pinBoard.ApptList[pinBoard.SelectedIndex].DataRoww["PatNum"].ToString()));
 			//Since this is usually caused by user mouse, then it goes right into pinBoard_MouseDown().
 		}
@@ -2071,6 +2075,13 @@ namespace OpenDental{
 				menuItemProv.Click+=new EventHandler(menuItemProv_Click);
 				cmen.MenuItems.Add(menuItemProv);
 				cmen.Show(pinBoard,e.Location);
+				return;
+			}
+			if(CancelPinMouseDown) {//I'm worried that setting this to false in pinBoard_SelectedIndexChanged is not frequent enough,
+				//because a mouse down could happen without the selected index changing.
+				//But in that case, a popup would already have happened.
+				//Worst case scenario is that user would have to try again.
+				CancelPinMouseDown=false;
 				return;
 			}
 			mouseIsDown = true;
@@ -2710,12 +2721,16 @@ namespace OpenDental{
 
 		///<summary>Used by parent form when a dialog needs to be displayed on the mouse down.</summary>
 		public void MouseUpForced(){
+			if(pinBoard.SelectedIndex!=-1) {
+				CancelPinMouseDown=true;
+			}
 			if(!mouseIsDown){
 				return;
 			}
 			mouseIsDown=false;
 			if(TempApptSingle!=null){
 				TempApptSingle.Dispose();
+				TempApptSingle=null;
 			}
 		}
 
