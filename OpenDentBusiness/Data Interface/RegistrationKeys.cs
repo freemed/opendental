@@ -234,5 +234,41 @@ namespace OpenDentBusiness {
 			return table;
 		}
 
+	
+		public static RegistrationKey GetByKey(string regKey) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<RegistrationKey>(MethodBase.GetCurrentMethod(),regKey);
+			}
+			if(!Regex.IsMatch(regKey,@"^[A-Z0-9]{16}$")) {
+				throw new ApplicationException("Invalid registration key format.");
+			}
+			string command="SELECT * FROM  registrationkey WHERE RegKey='"+POut.String(regKey)+"'";
+			DataTable table=Db.GetTable(command);
+			if(table.Rows.Count==0) {
+				throw new ApplicationException("Invalid registration key.");
+			}
+			RegistrationKey key=null;
+			for(int i=0;i<table.Rows.Count;i++) {
+				key=new RegistrationKey();
+				key.RegistrationKeyNum	=PIn.Int(table.Rows[i][0].ToString());
+				key.PatNum							=PIn.Int(table.Rows[i][1].ToString());
+				key.RegKey							=PIn.String(table.Rows[i][2].ToString());
+				key.Note								=PIn.String(table.Rows[i][3].ToString());
+				key.DateStarted 				=PIn.Date(table.Rows[i][4].ToString());
+				key.DateDisabled				=PIn.Date(table.Rows[i][5].ToString());
+				key.DateEnded   				=PIn.Date(table.Rows[i][6].ToString());
+				key.IsForeign   				=PIn.Bool(table.Rows[i][7].ToString());
+				//key.UsesServerVersion  	=PIn.PBool(table.Rows[i][8].ToString());
+				key.IsFreeVersion  			=PIn.Bool(table.Rows[i][9].ToString());
+				key.IsOnlyForTesting  	=PIn.Bool(table.Rows[i][10].ToString());
+				//key.VotesAllotted     	=PIn.PInt(table.Rows[i][11].ToString());
+			}
+			//if(key.DateDisabled.Year>1880){
+			//	throw new ApplicationException("This key has been disabled.  Please call for assistance.");
+			//}
+			return key;
+		}
+	
+
 	}
 }

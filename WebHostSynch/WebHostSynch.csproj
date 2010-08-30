@@ -50,7 +50,7 @@
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.Logging, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="MySql.Data, Version=1.0.9.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>.\MySql.Data.dll</HintPath>
+      <HintPath>..\Required dlls\MySql.Data.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -86,18 +86,15 @@
     <Content Include="WebHostSynch.asmx" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataConnection.cs" />
-    <Compile Include="GeneralB.cs" />
-    <Compile Include="Logger.cs" />
+    <Compile Include="Logger.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="ODWebServiceModel.Designer.cs">
       <DependentUpon>ODWebServiceModel.edmx</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="PIn.cs" />
-    <Compile Include="POut.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RegistrationKey.cs" />
     <Compile Include="WebHostSynch.asmx.cs">
       <DependentUpon>WebHostSynch.asmx</DependentUpon>
       <SubType>Component</SubType>
@@ -108,6 +105,12 @@
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>ODWebServiceModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\OpenDentBusiness\OpenDentBusiness.csproj">
+      <Project>{3D0FC76E-803C-4DE2-BDB1-47D63A4E2357}</Project>
+      <Name>OpenDentBusiness</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

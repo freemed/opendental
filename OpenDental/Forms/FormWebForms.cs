@@ -59,6 +59,7 @@ namespace OpenDental {
 				WebHostSynch.WebHostSynch wh=new WebHostSynch.WebHostSynch();
 				wh.Url =PrefC.GetString(PrefName.WebHostSynchServerURL);
 				string RegistrationKey=PrefC.GetString(PrefName.RegistrationKey);
+				
 				if(wh.CheckRegistrationKey(RegistrationKey)==false) {
 					MessageBox.Show(Lan.g(this,"Registration key provided by the dental office is incorrect"));
 					return;

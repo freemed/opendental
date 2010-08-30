@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Services;
+using System.Configuration;
+using OpenDentBusiness;
+
 
 
 namespace WebHostSynch {
@@ -27,7 +30,7 @@ namespace WebHostSynch {
 			ODWebServiceEntities db=new ODWebServiceEntities();
 			long DentalOfficeID=GetDentalOfficeID(RegistrationKey);
 			if(DentalOfficeID==0) {
-			Logger.Information("Incorrect registration key. IpAddress = "+HttpContext.Current.Request.UserHostAddress+" RegistrationKey = "+RegistrationKey);
+				Logger.Information("Incorrect registration key. IpAddress = "+HttpContext.Current.Request.UserHostAddress+" RegistrationKey = "+RegistrationKey);
 				return false;
 			}
 			var wspObj = from wsp in db.webforms_preference
@@ -57,7 +60,7 @@ namespace WebHostSynch {
 			long DentalOfficeID=GetDentalOfficeID(RegistrationKey);
 			if(DentalOfficeID==0) {
 				Logger.Information("Incorrect registration key. IPAddress = "+HttpContext.Current.Request.UserHostAddress+" RegistrationKey = "+RegistrationKey);
-			} 
+			}
 			ODWebServiceEntities db=new ODWebServiceEntities();
 
 			EndDate=EndDate.AddDays(1);//if this is put in LINQ it will not work. so change date first
@@ -97,15 +100,19 @@ namespace WebHostSynch {
 
 		[WebMethod]
 		public bool CheckRegistrationKey(string RegistrationKeyFromDentalOffice) {
-			RegistrationKey RegistrationKeyFromDb=null;
-			try {
-				RegistrationKeyFromDb=RegistrationKeys.GetByKey(RegistrationKeyFromDentalOffice);
-			}
-			catch(ApplicationException ex) {
-				Logger.Information(ex.Message.ToString());
-				return false;
-			}
-			int patNum=RegistrationKeyFromDb.PatNum;
+			string connectStr= ConfigurationManager.ConnectionStrings["DBRegKey"].ConnectionString;
+			OpenDentBusiness.DataConnection dc = new OpenDentBusiness.DataConnection();
+			// sets a static variable
+			dc.SetDb(connectStr,"",DatabaseType.MySql,true);
+			
+		RegistrationKey RegistrationKeyFromDb=null;
+		try {
+			RegistrationKeyFromDb=RegistrationKeys.GetByKey(RegistrationKeyFromDentalOffice);
+		}
+		catch(ApplicationException ex) {
+			Logger.Information(ex.Message.ToString());
+			return false;
+		}
 			return true;
 		}
 
@@ -118,10 +125,8 @@ namespace WebHostSynch {
 				Logger.Information(ex.Message.ToString());
 				return 0;
 			}
-			return RegistrationKeyFromDb.PatNum;
+		return RegistrationKeyFromDb.PatNum;
 		}
-
-
 	}
 
 
