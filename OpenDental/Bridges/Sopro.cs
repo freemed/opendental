@@ -26,8 +26,6 @@ namespace OpenDental.Bridges {
 				//We remove double-quotes from the first and last name of the patient so extra double-quotes don't
 				//cause confusion in the command line parameters for Sopro.
 				info+=" "+pat.LName.Replace("\"","")+" "+pat.FName.Replace("\"","");
-				//Birthdate
-				info+=" "+pat.Birthdate.ToShortDateString();
 				try{
 					Process.Start(ProgramCur.Path,ProgramCur.CommandLine+info);
 				}
