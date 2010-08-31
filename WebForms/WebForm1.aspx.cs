@@ -148,7 +148,7 @@ namespace WebForms {
 					PrefObj.First().webforms_sheet.Add(NewSheetObj);
 				}
 				db.SaveChanges();
-				Panel1.Visible=false;
+				//Panel1.Visible=false;
 				LabelSubmitMessage.Text = "Your details have been successfully submited";
 				Panel2.Visible=true;
 			}

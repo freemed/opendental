@@ -21,7 +21,6 @@ namespace OpenDental {
 		public FormWebForms() {
 			InitializeComponent();
 			Lan.F(this);
-
 		}
 
 		/// <summary>
@@ -114,6 +113,7 @@ namespace OpenDental {
 					if(PatNum==0) {
 						newPat=CreateNewPatient(SingleSheet.ToList());
 						NewPatNum=newPat.PatNum;
+						newSheet=CreateSheet(NewPatNum,SingleSheet.ToList());
 						row.Cells.Add("New Patient");
 					}
 					else {
@@ -195,9 +195,9 @@ namespace OpenDental {
 								if(field.Name==PatFields[j]) {
 									FillPatientFields(newPat,field,SheetWebFieldValue);
 								}
-							}// foreach loop
-						} // j loop
-					}
+							}
+						} 
+					}// j loop
 				}// i loop
 				Patients.Insert(newPat,false);
 				//set Guarantor field the same as PatNum
@@ -206,6 +206,7 @@ namespace OpenDental {
 				Patients.Update(newPat,patOld);
 			}
 			catch(Exception e) {
+				gridMain.EndUpdate();
 				MessageBox.Show(e.Message);
 			}
 			return newPat;
@@ -252,16 +253,17 @@ namespace OpenDental {
 							foreach(SheetField fld in sheet.SheetFields) {
 								if(fld.FieldName==SheetFields[j]) {
 									FillSheetFields(fld,SheetWebFieldValue);
-								}//if
-							}// foreach loop
-						} // j loop
-					}
+								}
+							}
+						} 
+					}// j loop
 				}// i loop
 				sheet.IsWebForm=true;
 				Sheets.SaveNewSheet(sheet);
 				return sheet;
 			}
 			catch(Exception e) {
+				gridMain.EndUpdate();
 				MessageBox.Show(e.Message);
 			}
 			return sheet;
@@ -369,6 +371,7 @@ namespace OpenDental {
 
 			}
 			catch(Exception e) {
+				gridMain.EndUpdate();
 				MessageBox.Show(fld.FieldName + e.Message);
 			}
 
@@ -453,6 +456,7 @@ namespace OpenDental {
 
 			}
 			catch(Exception e) {
+				gridMain.EndUpdate();
 				MessageBox.Show(field.Name + e.Message);
 			}
 
@@ -539,6 +543,7 @@ namespace OpenDental {
 		}
 
 		private void menuItemSetup_Click(object sender,EventArgs e) {
+			gridMain.EndUpdate();
 			FormWebFormSetup formW=new FormWebFormSetup();
 			formW.ShowDialog();
 		}
