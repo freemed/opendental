@@ -48,7 +48,7 @@ namespace OpenDental.Bridges{
 			Process[] proImageInstances=Process.GetProcessesByName("ProImage");
 			if(proImageInstances.Length==0){
 				Process.Start(proimagePath);
-				Thread.Sleep(TimeSpan.FromSeconds(4));
+				Thread.Sleep(TimeSpan.FromSeconds(10));
 			}
 			//command="Xray,PatientNo,FirstName,LastName,Birth Date,Sex,Address,City,State,Code"(zip)
 			string command="Xray,";
