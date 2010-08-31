@@ -149,25 +149,25 @@ namespace OpenDentBusiness{
 			}
 			Phone oldPhone=phone.Copy();
 			phone.WebCamImage=POut.Bitmap(bitmap);//handles null
-			Crud.PhoneCrud.Update(phone,oldPhone);
-			//Thread workerThread=new Thread(new ParameterizedThreadStart(AsynchSetWebCamImage));
-			//WebCamDataContainer dataContainer=new WebCamDataContainer();
-			//dataContainer.Phone1=phone;
-			//dataContainer.OldPhone=oldPhone;
-			//workerThread.Start(dataContainer);
+			//Crud.PhoneCrud.Update(phone,oldPhone);
+			Thread workerThread=new Thread(new ParameterizedThreadStart(AsynchSetWebCamImage));
+			WebCamDataContainer dataContainer=new WebCamDataContainer();
+			dataContainer.Phone1=phone;
+			dataContainer.OldPhone=oldPhone;
+			workerThread.Start(dataContainer);
 		}
 
-		//private static void AsynchSetWebCamImage(object data){
+		private static void AsynchSetWebCamImage(object data){
 			//No need to check RemotingRole; no call to db.
-		//	WebCamDataContainer dataContainer=(WebCamDataContainer)data;
-		//	Crud.PhoneCrud.Update(dataContainer.Phone1,dataContainer.OldPhone);
-		//}
+			WebCamDataContainer dataContainer=(WebCamDataContainer)data;
+			Crud.PhoneCrud.Update(dataContainer.Phone1,dataContainer.OldPhone);
+		}
 
 
 	}
 
-	//internal class WebCamDataContainer{
-	//	internal Phone Phone1;
-	//	internal Phone OldPhone;
-	//}
+	internal class WebCamDataContainer{
+		internal Phone Phone1;
+		internal Phone OldPhone;
+	}
 }
