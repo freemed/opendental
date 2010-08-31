@@ -154,10 +154,15 @@ namespace OpenDentBusiness.Crud{
 				//Fields are not guaranteed to be in any particular order.
 				specialType=CrudGenHelper.GetSpecialType(fieldsInDb[f]);
 				if(specialType==CrudSpecialColType.EnumAsString) {
-					strb.Append(rn+t4+"try{");
+					string fieldLower=fieldsInDb[f].Name.Substring(0,1).ToLower()+fieldsInDb[f].Name.Substring(1);//lowercase initial letter.  Example clockStatus
+					strb.Append(rn+t4+"string "+fieldLower+"=table.Rows[i][\""+fieldsInDb[f].Name+"\"].ToString();");
+					strb.Append(rn+t4+"if("+fieldLower+"==\"\"){");
 					strb.Append(rn+t5+obj+"."+fieldsInDb[f].Name.PadRight(longestField-2,' ')+"="
-						+"("+fieldsInDb[f].FieldType.Name+")Enum.Parse(typeof("+fieldsInDb[f].FieldType.Name+"),"
-						+"table.Rows[i][\""+fieldsInDb[f].Name+"\"].ToString());");
+						+"("+fieldsInDb[f].FieldType.Name+")0;");
+					strb.Append(rn+t4+"}");
+					strb.Append(rn+t4+"else try{");
+					strb.Append(rn+t5+obj+"."+fieldsInDb[f].Name.PadRight(longestField-2,' ')+"="
+						+"("+fieldsInDb[f].FieldType.Name+")Enum.Parse(typeof("+fieldsInDb[f].FieldType.Name+"),"+fieldLower+");");
 					strb.Append(rn+t4+"}");
 					strb.Append(rn+t4+"catch{");
 					strb.Append(rn+t5+obj+"."+fieldsInDb[f].Name.PadRight(longestField-2,' ')+"="

@@ -4318,7 +4318,6 @@ namespace OpenDental{
 
 		private void timerPhoneWebCam_Tick(object sender,EventArgs e) {
 			//This won't even happen unless PrefName.DockPhonePanelShow==true
-			//DateTime time=DateTime.Now;
 			List<Phone> phoneList=Phones.GetPhoneList();
 			phoneSmall.PhoneList=phoneList;
 			if(formPhoneTiles!=null && !formPhoneTiles.IsDisposed) {
@@ -4391,8 +4390,6 @@ namespace OpenDental{
 					bitmapSmall.Dispose();
 				}
 			}
-			//TimeSpan span=DateTime.Now-time;
-			//Debug.WriteLine("Delta="+span.Milliseconds.ToString()+" ms");
 		}
 
 		private void FormOpenDental_FormClosing(object sender,FormClosingEventArgs e) {
