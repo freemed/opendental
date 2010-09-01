@@ -193,7 +193,6 @@ namespace OpenDental{
 			FormProcApptColorEdit FormPACE=new FormProcApptColorEdit();
 			FormPACE.ShowDialog();
 			FillGrid();
-			changed=true;
 		}
 
 		//private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
