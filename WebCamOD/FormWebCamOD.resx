@@ -120,4 +120,9 @@
   <metadata name="timerPhoneWebCam.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
+  <data name="label1.Text" xml:space="preserve">
+    <value>Please leave this window open at night.  Use 'Switch User' to lock out of Windows without shutting this window down.  Video will continue to be captured for security purposes.  To make it easier to start this window without having to launch OD, I recommend placing a shortcut to it on your desktop.    It's in the OD folder.
+
+Thanks, Jordan</value>
+  </data>
 </root>

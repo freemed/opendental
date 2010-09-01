@@ -27,6 +27,7 @@
 		/// </summary>
 		private void InitializeComponent() {
 			this.components = new System.ComponentModel.Container();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormWebCamOD));
 			this.pictBoxVideo = new System.Windows.Forms.PictureBox();
 			this.timerPhoneWebCam = new System.Windows.Forms.Timer(this.components);
 			this.label1 = new System.Windows.Forms.Label();
@@ -35,7 +36,7 @@
 			// 
 			// pictBoxVideo
 			// 
-			this.pictBoxVideo.Location = new System.Drawing.Point(133,66);
+			this.pictBoxVideo.Location = new System.Drawing.Point(153,116);
 			this.pictBoxVideo.Name = "pictBoxVideo";
 			this.pictBoxVideo.Size = new System.Drawing.Size(64,48);
 			this.pictBoxVideo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -49,21 +50,19 @@
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(10,1);
+			this.label1.Location = new System.Drawing.Point(12,9);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(313,58);
-			this.label1.TabIndex = 1;
-			this.label1.Text = "Please leave this window open at night.  Use \'Switch User\' to lock out of Windows" +
-    " without shutting this window down.  Video will continue to be captured for secu" +
-    "rity purposes.\r\nThanks, Jordan";
+			this.label1.Size = new System.Drawing.Size(362,106);
+			this.label1.TabIndex = 2;
+			this.label1.Text = resources.GetString("label1.Text");
 			// 
 			// FormWebCamOD
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(335,123);
-			this.Controls.Add(this.label1);
+			this.ClientSize = new System.Drawing.Size(378,177);
 			this.Controls.Add(this.pictBoxVideo);
+			this.Controls.Add(this.label1);
 			this.Name = "FormWebCamOD";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "WebCamOD";

@@ -1468,7 +1468,9 @@ namespace OpenDental{
 			Bridges.ICat.StartFileWatcher();
 			if(PrefC.GetBool(PrefName.DockPhonePanelShow)){
 				#if !DEBUG
-					Process.Start("WebCamOD.exe");
+					if(Process.GetProcessesByName("WebCamOD").Length==0) {
+						Process.Start("WebCamOD.exe");
+					}
 				#endif
 			}
 			#if !TRIALONLY
@@ -2670,6 +2672,13 @@ namespace OpenDental{
 				for(int i=0;i<sigList.Count;i++) {
 					if(sigList[i].ITypes==((int)InvalidType.ShutDownNow).ToString()) {
 						timerSignals.Enabled=false;//quit receiving signals.
+						//close the webcam if present so that it can be updated too.
+						if(PrefC.GetBool(PrefName.DockPhonePanelShow)) {
+							Process[] processes=Process.GetProcessesByName("WebCamOD");
+							for(int p=0;p<processes.Length;p++) {
+								processes[p].Kill();
+							}
+						}
 						//start the thread that will kill the application
 						Thread killThread=new Thread(new ThreadStart(KillThread));
 						killThread.Start();

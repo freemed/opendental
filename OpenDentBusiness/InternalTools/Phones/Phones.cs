@@ -140,34 +140,35 @@ namespace OpenDentBusiness{
 			}
 			return null;
 		}
-		
+
+		/*
+		///<summary>Gets the phoneNum which is the primary key, not the phone number.</summary>
+		public static long GetPhoneNum(int extension){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetLong(MethodBase.GetCurrentMethod(),extension);
+			}
+			string command="SELECT PhoneNum FROM phone WHERE Extension ="+POut.Long(extension);
+			string result= Db.GetScalar(command);
+			return PIn.Long(result);
+		}*/
+
 		///<summary>Can handle null for either parameter.</summary>
-		public static void SetWebCamImage(Phone phone,Bitmap bitmap) {
-			//No need to check RemotingRole; no call to db.
-			if(phone==null) {
+		public static void SetWebCamImage(long extension,Bitmap bitmap) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),extension,bitmap);
 				return;
 			}
-			Phone oldPhone=phone.Copy();
-			phone.WebCamImage=POut.Bitmap(bitmap);//handles null
-			//Crud.PhoneCrud.Update(phone,oldPhone);
-			Thread workerThread=new Thread(new ParameterizedThreadStart(AsynchSetWebCamImage));
-			WebCamDataContainer dataContainer=new WebCamDataContainer();
-			dataContainer.Phone1=phone;
-			dataContainer.OldPhone=oldPhone;
-			workerThread.Start(dataContainer);
-		}
-
-		private static void AsynchSetWebCamImage(object data){
-			//No need to check RemotingRole; no call to db.
-			WebCamDataContainer dataContainer=(WebCamDataContainer)data;
-			Crud.PhoneCrud.Update(dataContainer.Phone1,dataContainer.OldPhone);
+			if(extension==0) {
+				return;
+			}
+			string command="UPDATE phone SET "
+				+"WebCamImage   = '"+POut.Bitmap(bitmap)+"' "//handles null
+				+"WHERE Extension = "+POut.Long(extension);
+			Db.NonQ(command);
 		}
 
 
 	}
 
-	internal class WebCamDataContainer{
-		internal Phone Phone1;
-		internal Phone OldPhone;
-	}
+	
 }

@@ -87,7 +87,11 @@ namespace OpenDental {
 			PhoneTile tile;
 			for(int i=0;i<20;i++) {
 				Application.DoEvents();
-				tile=((PhoneTile)Controls.Find("phoneTile"+(i+1).ToString(),false)[0]);
+				Control[] controlMatches=Controls.Find("phoneTile"+(i+1).ToString(),false);
+				if(controlMatches.Length==0) {//no match found for some reason.
+					continue;
+				}
+				tile=((PhoneTile)controlMatches[0]);
 				tile.TimeDelta=timeDelta;
 				tile.ShowImageForced=checkBoxAll.Checked;
 				if(phoneList.Count>i){

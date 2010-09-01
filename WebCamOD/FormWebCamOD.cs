@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
@@ -21,6 +22,16 @@ namespace WebCamOD {
 		}
 
 		private void FormWebCamOD_Load(object sender,EventArgs e) {
+			Process[] processes=Process.GetProcessesByName("WebCamOD");
+			for(int p=0;p<processes.Length;p++) {
+				if(Process.GetCurrentProcess().Id==processes[p].Id) {
+					continue;
+				}
+				//another process was found
+				MessageBox.Show("WebCamOD is already running.");
+				Application.Exit();
+				return;
+			}
 			//since this tool is only used at HQ, we hard code everything
 			DataConnection dbcon=new DataConnection();
 			try{
