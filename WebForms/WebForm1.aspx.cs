@@ -10,13 +10,13 @@ using System.Collections;
 
 namespace WebForms {
 	public partial class WebForm1:System.Web.UI.Page {
-		private Hashtable FormValuesHashTable = new Hashtable();
-		private int DentalOfficeID = 0;
+		private Hashtable FormValuesHashTable=new Hashtable();
+		private int DentalOfficeID=0;
 
 		protected void Page_Load(object sender,EventArgs e) {
 			try {
 				
-				if(Request["DentalOfficeID"] != null) {
+				if(Request["DentalOfficeID"]!=null) {
 
 					Int32.TryParse(Request["DentalOfficeID"].ToString().Trim(),out DentalOfficeID);
 				}
@@ -32,15 +32,15 @@ namespace WebForms {
 		/// </summary>
 		private void SetPagePreferences(int DentalOfficeID) {
 			try {
-				ODWebServiceEntities db = new ODWebServiceEntities();
-				int ColorCode = 3896686; // this is the Color Code for the default OpenDental color
-				string Heading1 = "";
+				ODWebServiceEntities db=new ODWebServiceEntities();
+				int ColorCode=3896686; // this is the Color Code for the default OpenDental color
+				string Heading1="";
 				string Heading2= "";
-				var PrefObj = from wp in db.webforms_preference where wp.DentalOfficeID==DentalOfficeID
+				var PrefObj=from wp in db.webforms_preference where wp.DentalOfficeID==DentalOfficeID
 							  select wp;
 				if(PrefObj.Count() > 0) {
 					ColorCode =PrefObj.First().ColorBorder;
-					Heading1 = PrefObj.First().Heading1;
+					Heading1=PrefObj.First().Heading1;
 					Heading2= PrefObj.First().Heading2;
 				}
 				LabelHeading1.Text=Heading1;
@@ -104,24 +104,24 @@ namespace WebForms {
 		private void ExtractValue(Control c) {
 			
 			try {
-				if(c.GetType() == typeof(TextBox)) {
-					TextBox tbox = ((TextBox)c); 
+				if(c.GetType()==typeof(TextBox)) {
+					TextBox tbox=((TextBox)c); 
 					if(tbox.Text.Trim()!="") {
-						string FieldName = tbox.ID.Remove(0,"TextBox".Length);
+						string FieldName=tbox.ID.Remove(0,"TextBox".Length);
 						FormValuesHashTable.Add(FieldName,tbox.Text.Trim());
 					}
 				}
-				if(c.GetType() == typeof(RadioButtonList)) {
-					RadioButtonList rbl = ((RadioButtonList)c); 
-					string FieldName = rbl.ID.Remove(0,"RadioButtonList".Length);
+				if(c.GetType()==typeof(RadioButtonList)) {
+					RadioButtonList rbl=((RadioButtonList)c); 
+					string FieldName=rbl.ID.Remove(0,"RadioButtonList".Length);
 					if(rbl.SelectedIndex!=-1) {
 						FormValuesHashTable.Add(FieldName,rbl.SelectedValue);
 					}
 				}
-				if(c.GetType() == typeof(CheckBox)) {
-					CheckBox cbox = ((CheckBox)c);
-					string FieldName = cbox.ID.Remove(0,"CheckBox".Length);
-					if(cbox.Checked == true) {
+				if(c.GetType()==typeof(CheckBox)) {
+					CheckBox cbox=((CheckBox)c);
+					string FieldName=cbox.ID.Remove(0,"CheckBox".Length);
+					if(cbox.Checked==true) {
 						FormValuesHashTable.Add(FieldName,cbox.Checked.ToString());
 					}
 				}
@@ -133,13 +133,13 @@ namespace WebForms {
 
 		private void SaveFieldValuesInDB(int DentalOfficeID) {
 			try {
-				ODWebServiceEntities db = new ODWebServiceEntities();
-				webforms_sheet NewSheetObj = new webforms_sheet();
-				var PrefObj = from wp in db.webforms_preference where wp.DentalOfficeID==DentalOfficeID
+				ODWebServiceEntities db=new ODWebServiceEntities();
+				webforms_sheet NewSheetObj=new webforms_sheet();
+				var PrefObj=from wp in db.webforms_preference where wp.DentalOfficeID==DentalOfficeID
 							  select wp;
 				NewSheetObj.DateTimeSubmitted= DateTime.Now;
 				foreach(string key in FormValuesHashTable.Keys) {
-					webforms_sheetfield NewSheetfieldObj = new webforms_sheetfield();
+					webforms_sheetfield NewSheetfieldObj=new webforms_sheetfield();
 					NewSheetfieldObj.FieldName=key;
 					NewSheetfieldObj.FieldValue=FormValuesHashTable[key].ToString();
 					NewSheetObj.webforms_sheetfield.Add(NewSheetfieldObj);
@@ -149,13 +149,13 @@ namespace WebForms {
 				}
 				db.SaveChanges();
 				//Panel1.Visible=false;
-				LabelSubmitMessage.Text = "Your details have been successfully submited";
+				LabelSubmitMessage.Text="Your details have been successfully submited";
 				Panel2.Visible=true;
 			}
 			catch(Exception ex) {
 				Logger.Information(ex.Message.ToString());
 				Panel1.Visible=false;
-				LabelSubmitMessage.Text = "There has been a problem submitting your details. <br /> Please contact us at the phone number mentioned on the opendental website";
+				LabelSubmitMessage.Text="There has been a problem submitting your details. <br /> Please contact us at the phone number mentioned on the opendental website";
 			}
 		}
 	}

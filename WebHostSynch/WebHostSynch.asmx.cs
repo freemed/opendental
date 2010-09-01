@@ -30,10 +30,10 @@ namespace WebHostSynch {
 			ODWebServiceEntities db=new ODWebServiceEntities();
 			long DentalOfficeID=GetDentalOfficeID(RegistrationKey);
 			if(DentalOfficeID==0) {
-				Logger.Information("Incorrect registration key. IpAddress = "+HttpContext.Current.Request.UserHostAddress+" RegistrationKey = "+RegistrationKey);
+				Logger.Information("Incorrect registration key. IpAddress="+HttpContext.Current.Request.UserHostAddress+" RegistrationKey="+RegistrationKey);
 				return false;
 			}
-			var wspObj = from wsp in db.webforms_preference
+			var wspObj=from wsp in db.webforms_preference
 						 where wsp.DentalOfficeID==DentalOfficeID
 						 select wsp;
 			//update preference
@@ -44,7 +44,7 @@ namespace WebHostSynch {
 			}
 			// if there is no entry for that dental office make a new entry.
 			if(wspObj.Count()==0) {
-				webforms_preference wspNewObj = new webforms_preference();
+				webforms_preference wspNewObj=new webforms_preference();
 				wspNewObj.DentalOfficeID=DentalOfficeID;
 				wspNewObj.ColorBorder=ColorBorder;
 				wspNewObj.Heading1=Heading1;
@@ -59,7 +59,7 @@ namespace WebHostSynch {
 		public List<webforms_sheetfield> GetSheetData(string RegistrationKey,DateTime StartDate,DateTime EndDate) {
 			long DentalOfficeID=GetDentalOfficeID(RegistrationKey);
 			if(DentalOfficeID==0) {
-				Logger.Information("Incorrect registration key. IPAddress = "+HttpContext.Current.Request.UserHostAddress+" RegistrationKey = "+RegistrationKey);
+				Logger.Information("Incorrect registration key. IPAddress="+HttpContext.Current.Request.UserHostAddress+" RegistrationKey="+RegistrationKey);
 			}
 			ODWebServiceEntities db=new ODWebServiceEntities();
 
@@ -76,7 +76,7 @@ namespace WebHostSynch {
 		public void DeleteSheetData(string RegistrationKey,List<long> SheetsForDeletion) {
 			long DentalOfficeID=GetDentalOfficeID(RegistrationKey);
 			if(DentalOfficeID==0) {
-				Logger.Information("Incorrect registration key. IPAddress = "+HttpContext.Current.Request.UserHostAddress+" RegistrationKey = "+RegistrationKey);
+				Logger.Information("Incorrect registration key. IPAddress="+HttpContext.Current.Request.UserHostAddress+" RegistrationKey="+RegistrationKey);
 			}
 			ODWebServiceEntities db=new ODWebServiceEntities();
 			for(int i=0;i<SheetsForDeletion.Count();i++) {
@@ -101,7 +101,7 @@ namespace WebHostSynch {
 		[WebMethod]
 		public bool CheckRegistrationKey(string RegistrationKeyFromDentalOffice) {
 			string connectStr= ConfigurationManager.ConnectionStrings["DBRegKey"].ConnectionString;
-			OpenDentBusiness.DataConnection dc = new OpenDentBusiness.DataConnection();
+			OpenDentBusiness.DataConnection dc=new OpenDentBusiness.DataConnection();
 			// sets a static variable
 			dc.SetDb(connectStr,"",DatabaseType.MySql,true);
 			
@@ -127,6 +127,18 @@ namespace WebHostSynch {
 			}
 		return RegistrationKeyFromDb.PatNum;
 		}
+		/// <summary>
+		/// Ignore this method - this is for the 'next' version of the Webforms.
+		/// Here sheetDef can be uploaded to the webhostsync from Open Dental
+		/// </summary>
+		[WebMethod]
+		public void ReadSheetDef(SheetDef sheetDef) {
+
+		
+			//string a=sheetDef.ToString();
+			
+		}
+
 	}
 
 

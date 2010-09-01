@@ -12,7 +12,6 @@ namespace OpenDental {
 		public FormWebFormSetup() {
 			InitializeComponent();
 			Lan.F(this);
-
 			butWebformBorderColor.BackColor=PrefC.GetColor(PrefName.WebFormsBorderColor);
 			textBoxWebformsHeading1.Text=PrefC.GetStringSilent(PrefName.WebFormsHeading1);
 			textBoxWebformsHeading2.Text=PrefC.GetStringSilent(PrefName.WebFormsHeading2);
@@ -25,13 +24,12 @@ namespace OpenDental {
 				Prefs.UpdateString(PrefName.WebFormsHeading1,textBoxWebformsHeading1.Text.Trim());
 				Prefs.UpdateString(PrefName.WebFormsHeading2,textBoxWebformsHeading2.Text.Trim());
 				Prefs.UpdateString(PrefName.WebHostSynchServerURL,textboxWebHostAddress.Text.Trim());
-
 				// update preferences on server
 				string RegistrationKey=PrefC.GetString(PrefName.RegistrationKey);
 				WebHostSynch.WebHostSynch wh=new WebHostSynch.WebHostSynch();
 				wh.Url =PrefC.GetString(PrefName.WebHostSynchServerURL);
 				wh.SetPreferences(RegistrationKey,PrefC.GetColor(PrefName.WebFormsBorderColor).ToArgb(),PrefC.GetStringSilent(PrefName.WebFormsHeading1),PrefC.GetStringSilent(PrefName.WebFormsHeading2));
-
+				//TestSheetUpload();
 				DialogResult=DialogResult.OK;
 			}catch(Exception ex) {
 				MessageBox.Show(ex.Message);
@@ -48,16 +46,25 @@ namespace OpenDental {
 				return;
 			}
 			butWebformBorderColor.BackColor=colorDialog1.Color;
-			/*
-			Def DefCur=DefC.Short[(int)DefCat.MiscColors][4].Copy();
-			DefCur.ItemColor=colorDialog1.Color;
-			Defs.Update(DefCur);
-			Cache.Refresh(InvalidType.Defs);
-			localDefsChanged=true;
-			gridP.SetColors();
-			gridP.Invalidate();
-			gridP.Focus();
-			*/
+
 		}
+
+		/// <summary>
+		/// Ignore this method - this is for the 'next' version of the Webforms.
+		/// Here sheetDef can be uploaded to the web form Open Dental
+		/// </summary>
+		private void TestSheetUpload(object sender,EventArgs e) {
+			
+//pass sheet to webservice
+			string RegistrationKey=PrefC.GetString(PrefName.RegistrationKey);
+				WebHostSynch.WebHostSynch wh=new WebHostSynch.WebHostSynch();
+				wh.Url =PrefC.GetString(PrefName.WebHostSynchServerURL);
+
+				OpenDentBusiness.SheetDef sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.PatientRegistration);
+				// for this line to compile one must modify the Reference.cs file in to the Web references folder. The SheetDef and related classes with namespaces of WebHostSync must be removed so that the SheetDef Class of OpenDentBusiness is used
+				wh.ReadSheetDef(sheetDef);
+
+		}
+		
 	}
 }

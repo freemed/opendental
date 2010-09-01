@@ -56,7 +56,7 @@ namespace OpenDental {
 				};
 
 				WebHostSynch.WebHostSynch wh=new WebHostSynch.WebHostSynch();
-				wh.Url =PrefC.GetString(PrefName.WebHostSynchServerURL);
+				wh.Url=PrefC.GetString(PrefName.WebHostSynchServerURL);
 				string RegistrationKey=PrefC.GetString(PrefName.RegistrationKey);
 				
 				if(wh.CheckRegistrationKey(RegistrationKey)==false) {
@@ -70,7 +70,6 @@ namespace OpenDental {
 					MessageBox.Show(Lan.g(this,"No Patient Forms retrieved"));
 					return;
 				}
-
 				// Select distinct Web sheet ids
 				var wbs=(from w in wbsf select w.webforms_sheetReference.EntityKey.EntityKeyValues.First().Value).Distinct();
 				var SheetIdArray=wbs.ToArray();
@@ -167,24 +166,24 @@ namespace OpenDental {
 			Patient newPat=null;
 			newPat=new Patient();
 			//PatFields must have a one to one mapping with the SheetWebFields
-			String[] PatFields = { "LName","FName","MiddleI","Birthdate","Preferred", "Email","SSN",
+			String[] PatFields={ "LName","FName","MiddleI","Birthdate","Preferred", "Email","SSN",
 									 "Address","Address2","City","State","Zip",
 									 "HmPhone","Gender","Position","PreferContactMethod","PreferConfirmMethod",
 									  "PreferRecallMethod","StudentStatus",
 									  "WirelessPhone","WkPhone"
 									  };
-			//other PatFields = "PatStatus","Guarantor","CreditType","PriProv","SecProv","FeeSched","BillingType","AddrNote","ClinicNum" EmployerNum, EmploymentNote, GradeLevel, HasIns, InsEst, };
+			//other PatFields="PatStatus","Guarantor","CreditType","PriProv","SecProv","FeeSched","BillingType","AddrNote","ClinicNum" EmployerNum, EmploymentNote, GradeLevel, HasIns, InsEst, };
 
-				String[] SheetWebFields = {"LastName","FirstName","MI","Birthdate","Preferred","Email","SS",
+				String[] SheetWebFields={"LastName","FirstName","MI","Birthdate","Preferred","Email","SS",
 									"Address1","Address2","City","State","Zip",
 									"HomePhone","Gender","Married","MethodContact","MethodConf",
 									  "MethodRecall","StudentStatus",
 									  "WirelessPhone","WorkPhone"
 									   };
-				/*Other SheetWebFields ="WholeFamily","WirelessCarrier","Hear","Policy1GroupName","Policy1GroupNumber","Policy1Relationship","Policy1SubscriberName","Policy1SubscriberID","Policy1InsuranceCompany", "Policy1Phone","Policy1Employer","Policy2GroupName","Policy2GroupNumber","Policy2Relationship","Policy2SubscriberName","Policy2SubscriberID","Policy2InsuranceCompany", "Policy2Phone","Policy2Employer","Comments"
+				/*Other SheetWebFields="WholeFamily","WirelessCarrier","Hear","Policy1GroupName","Policy1GroupNumber","Policy1Relationship","Policy1SubscriberName","Policy1SubscriberID","Policy1InsuranceCompany", "Policy1Phone","Policy1Employer","Policy2GroupName","Policy2GroupNumber","Policy2Relationship","Policy2SubscriberName","Policy2SubscriberID","Policy2InsuranceCompany", "Policy2Phone","Policy2Employer","Comments"
 				 * */
-				Type t = newPat.GetType();
-			FieldInfo[] fi = t.GetFields();
+				Type t=newPat.GetType();
+			FieldInfo[] fi=t.GetFields();
 			try {
 				for(int i=0;i<SingleSheet.Count();i++) {
 					String SheetWebFieldName=SingleSheet.ElementAt(i).FieldName;
@@ -219,7 +218,6 @@ namespace OpenDental {
 		private Sheet CreateSheet(long PatNum,List<OpenDental.WebHostSynch.webforms_sheetfield> SingleSheet) {
 			Sheet sheet=null;//only useful if not Terminal
 			try {
-				FormSheetPicker FormS=new FormSheetPicker();
 				SheetDef sheetDef;
 				sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.PatientRegistration);
 				sheet=SheetUtil.CreateSheet(sheetDef,PatNum);
@@ -227,7 +225,7 @@ namespace OpenDental {
 				sheet.InternalNote="";//because null not ok
 
 				//SheetFields must have a one to one mapping with the SheetWebFields
-				String[] SheetFields = { "LName","FName","MiddleI","Birthdate","Preferred", "Email","SSN",
+				String[] SheetFields={"LName","FName","MiddleI","Birthdate","Preferred", "Email","SSN",
 									 "addressAndHmPhoneIsSameEntireFamily","Address","Address2","City","State","Zip",
 									 "HmPhone","Gender","Position","PreferContactMethod","PreferConfirmMethod",
 									  "PreferRecallMethod","StudentStatus","referredFrom",
@@ -235,8 +233,8 @@ namespace OpenDental {
 									  "ins1GroupName","ins1GroupNum","ins1Relat","ins1SubscriberNameF","ins1SubscriberID","ins1CarrierName","ins1CarrierPhone","ins1EmployerName",
 									  "ins2GroupName","ins2GroupNum","ins2Relat","ins2SubscriberNameF","ins2SubscriberID","ins2CarrierName","ins2CarrierPhone","ins2EmployerName",
 									  "misc"};
-				//other SheetFields = "PatStatus", "Patient Info.gif","Guarantor","CreditType","PriProv","SecProv","FeeSched","BillingType","AddrNote","ClinicNum" };
-				String[] SheetWebFields = {"LastName","FirstName","MI","Birthdate","Preferred","Email","SS",
+				//other SheetFields="PatStatus", "Patient Info.gif","Guarantor","CreditType","PriProv","SecProv","FeeSched","BillingType","AddrNote","ClinicNum" };
+				String[] SheetWebFields={"LastName","FirstName","MI","Birthdate","Preferred","Email","SS",
 									"WholeFamily","Address1","Address2","City","State","Zip",
 									"HomePhone","Gender","Married","MethodContact","MethodConf",
 									  "MethodRecall","StudentStatus","Hear",
