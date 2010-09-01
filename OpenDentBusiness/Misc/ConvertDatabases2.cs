@@ -2483,6 +2483,18 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);
 				command="ALTER TABLE appointment ADD ProcsColored text NOT NULL";
 				Db.NonQ(command);
+				command="DROP TABLE IF EXISTS procapptcolor";
+				Db.NonQ(command);
+				command=@"CREATE TABLE procapptcolor (
+					ProcApptColorNum bigint NOT NULL auto_increment,
+					CodeRange varchar(255) NOT NULL,
+					ColorText int NOT NULL,
+					PRIMARY KEY (ProcApptColorNum)
+					) DEFAULT CHARSET=utf8";
+				Db.NonQ(command);
+
+
+
 
 
 
@@ -2510,3 +2522,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				
 
 
+
+
+			

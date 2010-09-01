@@ -25,6 +25,7 @@ namespace OpenDental{
 		/// </summary>
 		private System.ComponentModel.Container components = null;
 		private RadioButton radioFive;
+		private OpenDental.UI.Button butProcColors;
 		private bool viewChanged;
 
 		///<summary></summary>
@@ -71,6 +72,7 @@ namespace OpenDental{
 			this.radioFifteen = new System.Windows.Forms.RadioButton();
 			this.radioTen = new System.Windows.Forms.RadioButton();
 			this.checkTwoRows = new System.Windows.Forms.CheckBox();
+			this.butProcColors = new OpenDental.UI.Button();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -85,7 +87,7 @@ namespace OpenDental{
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.butCancel.Location = new System.Drawing.Point(447,433);
 			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,26);
+			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 0;
 			this.butCancel.Text = "&Close";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
@@ -118,7 +120,7 @@ namespace OpenDental{
 			this.butDown.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butDown.Location = new System.Drawing.Point(151,437);
 			this.butDown.Name = "butDown";
-			this.butDown.Size = new System.Drawing.Size(89,26);
+			this.butDown.Size = new System.Drawing.Size(89,24);
 			this.butDown.TabIndex = 38;
 			this.butDown.Text = "&Down";
 			this.butDown.Click += new System.EventHandler(this.butDown_Click);
@@ -134,7 +136,7 @@ namespace OpenDental{
 			this.butUp.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butUp.Location = new System.Drawing.Point(151,399);
 			this.butUp.Name = "butUp";
-			this.butUp.Size = new System.Drawing.Size(89,26);
+			this.butUp.Size = new System.Drawing.Size(89,24);
 			this.butUp.TabIndex = 39;
 			this.butUp.Text = "&Up";
 			this.butUp.Click += new System.EventHandler(this.butUp_Click);
@@ -150,7 +152,7 @@ namespace OpenDental{
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butAdd.Location = new System.Drawing.Point(55,399);
 			this.butAdd.Name = "butAdd";
-			this.butAdd.Size = new System.Drawing.Size(89,26);
+			this.butAdd.Size = new System.Drawing.Size(89,24);
 			this.butAdd.TabIndex = 36;
 			this.butAdd.Text = "&Add";
 			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
@@ -202,11 +204,27 @@ namespace OpenDental{
 			this.checkTwoRows.Size = new System.Drawing.Size(104,24);
 			this.checkTwoRows.TabIndex = 0;
 			// 
+			// butProcColors
+			// 
+			this.butProcColors.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butProcColors.Autosize = true;
+			this.butProcColors.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butProcColors.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butProcColors.CornerRadius = 4F;
+			this.butProcColors.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this.butProcColors.Location = new System.Drawing.Point(279,159);
+			this.butProcColors.Name = "butProcColors";
+			this.butProcColors.Size = new System.Drawing.Size(82,24);
+			this.butProcColors.TabIndex = 41;
+			this.butProcColors.Text = "Proc Colors";
+			this.butProcColors.Click += new System.EventHandler(this.butProcColors_Click);
+			// 
 			// FormApptViews
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(546,485);
+			this.Controls.Add(this.butProcColors);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.butDown);
 			this.Controls.Add(this.butUp);
@@ -334,6 +352,11 @@ namespace OpenDental{
 			listViews.SelectedIndex=selected+1;
 		}
 
+		private void butProcColors_Click(object sender,EventArgs e) {
+			FormProcApptColors formProcColors=new FormProcApptColors();
+			formProcColors.ShowDialog();
+		}
+
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			Close();
 		}
@@ -353,6 +376,8 @@ namespace OpenDental{
 				DataValid.SetInvalid(InvalidType.Views);
 			}
 		}
+
+		
 
 
 	

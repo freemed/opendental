@@ -612,6 +612,7 @@ namespace OpenDental{
 			elementsAll.Add("PatNumAndName");
 			elementsAll.Add("PremedFlag");
 			elementsAll.Add("Procs");
+			elementsAll.Add("ProcsColored");
 			elementsAll.Add("Production");
 			elementsAll.Add("Provider");
 			elementsAll.Add("TimeAskedToArrive");

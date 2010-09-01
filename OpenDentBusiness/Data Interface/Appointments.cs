@@ -583,6 +583,7 @@ namespace OpenDentBusiness{
 			table.Columns.Add("Pattern");
 			table.Columns.Add("preMedFlag");
 			table.Columns.Add("procs");
+			table.Columns.Add("procsColored");
 			table.Columns.Add("production");
 			table.Columns.Add("productionVal");
 			table.Columns.Add("provider");
@@ -600,6 +601,7 @@ namespace OpenDentBusiness{
 				+"LabCaseNum,patient.LName,patient.MedUrgNote,patient.MiddleI,Note,Op,appointment.PatNum,"
 				+"Pattern,patplan.PlanNum,patient.PreferConfirmMethod,patient.PreferContactMethod,patient.Preferred,"
 				+"patient.PreferRecallMethod,patient.Premed,"
+				+"ProcDescript,ProcsColored,"
 				+"(SELECT SUM(ProcFee) FROM procedurelog ";
 			if(isPlanned){
 				command+="WHERE procedurelog.PlannedAptNum=appointment.AptNum AND procedurelog.PlannedAptNum!=0) Production, ";
@@ -892,42 +894,8 @@ namespace OpenDentBusiness{
 				if(raw.Rows[i]["Premed"].ToString()=="1"){
 					row["preMedFlag"]=Lans.g("Appointments","Premedicate");
 				}
-				row["procs"]="";
-				for(int p=0;p<rawProc.Rows.Count;p++){
-					if(!isPlanned && rawProc.Rows[p]["AptNum"].ToString()!=raw.Rows[i]["AptNum"].ToString()){
-						continue;
-					}
-					if(isPlanned && rawProc.Rows[p]["PlannedAptNum"].ToString()!=raw.Rows[i]["AptNum"].ToString()) {
-						continue;
-					}
-					if(row["procs"].ToString()!=""){
-						row["procs"]+=", ";
-					}
-					switch(rawProc.Rows[p]["TreatArea"].ToString()) {
-						case "1"://TreatmentArea.Surf:
-							row["procs"]+="#"+Tooth.GetToothLabel(rawProc.Rows[p]["ToothNum"].ToString())+"-"
-								+rawProc.Rows[p]["Surf"].ToString()+"-";//""#12-MOD-"
-							break;
-						case "2"://TreatmentArea.Tooth:
-							row["procs"]+="#"+Tooth.GetToothLabel(rawProc.Rows[p]["ToothNum"].ToString())+"-";//"#12-"
-							break;
-						default://area 3 or 0 (mouth)
-							break;
-						case "4"://TreatmentArea.Quad:
-							row["procs"]+=rawProc.Rows[p]["Surf"].ToString()+"-";//"UL-"
-							break;
-						case "5"://TreatmentArea.Sextant:
-							row["procs"]+="S"+rawProc.Rows[p]["Surf"].ToString()+"-";//"S2-"
-							break;
-						case "6"://TreatmentArea.Arch:
-							row["procs"]+=rawProc.Rows[p]["Surf"].ToString()+"-";//"U-"
-							break;
-						case "7"://TreatmentArea.ToothRange:
-							//strLine+=table.Rows[j][13].ToString()+" ";//don't show range
-							break;
-					}
-					row["procs"]+=rawProc.Rows[p]["AbbrDesc"].ToString();	
-				}
+				row["procs"]=raw.Rows[i]["ProcDescript"].ToString();
+				row["procsColored"]+=raw.Rows[i]["ProcsColored"].ToString();
 				row["production"]=PIn.Double(raw.Rows[i]["Production"].ToString()).ToString("c");
 				row["productionVal"]=raw.Rows[i]["Production"].ToString();
 				if(raw.Rows[i]["IsHygiene"].ToString()=="1"){
@@ -1290,6 +1258,7 @@ namespace OpenDentBusiness{
 			DataTable table=new DataTable("Procedure");
 			DataRow row;
 			//columns that start with lowercase are altered for display rather than being raw data.
+			table.Columns.Add("AbbrDesc");
 			table.Columns.Add("attached");//0 or 1
 			table.Columns.Add("CodeNum");
 			table.Columns.Add("descript");
@@ -1301,15 +1270,16 @@ namespace OpenDentBusiness{
 			table.Columns.Add("ProcStatus");
 			table.Columns.Add("ProvNum");
 			table.Columns.Add("status");
+			table.Columns.Add("Surf");
 			table.Columns.Add("toothNum");
 			table.Columns.Add("ToothNum");
 			table.Columns.Add("ToothRange");
-			table.Columns.Add("Surf");
+			table.Columns.Add("TreatArea");
 			//but we won't actually fill this table with rows until the very end.  It's more useful to use a List<> for now.
 			List<DataRow> rows=new List<DataRow>();
-			string command="SELECT procedurecode.ProcCode,AptNum,LaymanTerm,"
-				+"PlannedAptNum,Priority,ProcFee,ProcNum,ProcStatus,Surf,ToothNum, "
-				+"ToothRange,procedurecode.Descript,procedurelog.CodeNum,procedurelog.ProvNum,ToothRange "
+			string command="SELECT AbbrDesc,procedurecode.ProcCode,AptNum,LaymanTerm,"
+				+"PlannedAptNum,Priority,ProcFee,ProcNum,ProcStatus, "
+				+"procedurecode.Descript,procedurelog.CodeNum,procedurelog.ProvNum,Surf,ToothNum,ToothRange,TreatArea "
 				+"FROM procedurelog LEFT JOIN procedurecode ON procedurelog.CodeNum=procedurecode.CodeNum "
 				+"WHERE PatNum="+patNum//sort later
 			//1. All TP procs
@@ -1334,6 +1304,7 @@ namespace OpenDentBusiness{
 			DataTable rawProc=Db.GetTable(command);
 			for(int i=0;i<rawProc.Rows.Count;i++) {
 				row=table.NewRow();
+				row["AbbrDesc"]=rawProc.Rows[i]["AbbrDesc"].ToString();
 				if(apptStatus=="6"){//planned
 					row["attached"]=(rawProc.Rows[i]["PlannedAptNum"].ToString()==aptNum) ? "1" : "0";
 				}
@@ -1369,10 +1340,11 @@ namespace OpenDentBusiness{
 				row["ProcStatus"]=rawProc.Rows[i]["ProcStatus"].ToString();
 				row["ProvNum"]=rawProc.Rows[i]["ProvNum"].ToString();
 				row["status"]=((ProcStat)PIn.Long(rawProc.Rows[i]["ProcStatus"].ToString())).ToString();
+				row["Surf"]=rawProc.Rows[i]["Surf"].ToString();
 				row["toothNum"]=Tooth.GetToothLabel(rawProc.Rows[i]["ToothNum"].ToString());
 				row["ToothNum"]=rawProc.Rows[i]["ToothNum"].ToString();
 				row["ToothRange"]=rawProc.Rows[i]["ToothRange"].ToString();
-				row["Surf"]=rawProc.Rows[i]["Surf"].ToString();
+				row["TreatArea"]=rawProc.Rows[i]["TreatArea"].ToString();
 				rows.Add(row);
 			}
 			//Sorting

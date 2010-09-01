@@ -245,7 +245,7 @@ namespace OpenDentBusiness{
 		ProcCodes,
 		///<summary>5</summary>
 		Prefs,
-		///<summary>6 Also includes appt rules</summary>
+		///<summary>6 ApptViews, ApptViewItems, AppointmentRules, ProcApptColors.</summary>
 		Views,
 		///<summary></summary>
 		AutoCodes,

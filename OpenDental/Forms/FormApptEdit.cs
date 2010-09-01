@@ -2041,12 +2041,39 @@ namespace OpenDental{
 			AptCur.DateTimeDismissed=dateTimeDismissed;
 			//AptCur.InsPlan1 and InsPlan2 already handled 
 			AptCur.ProcDescript="";
+			int argColor=System.Drawing.Color.Black.ToArgb();
 			for(int i=0;i<gridProc.SelectedIndices.Length;i++) {
+				string procDescOne="";
 				if(i>0){
 					AptCur.ProcDescript+=", ";
 				}
-				AptCur.ProcDescript+=ProcedureCodes.GetProcCode(
-					PIn.Long(DS.Tables["Procedure"].Rows[gridProc.SelectedIndices[i]]["CodeNum"].ToString())).AbbrDesc;
+				switch(DS.Tables["Procedure"].Rows[gridProc.SelectedIndices[i]]["TreatArea"].ToString()) {
+				  case "1"://TreatmentArea.Surf:
+				    procDescOne+="#"+Tooth.GetToothLabel(DS.Tables["Procedure"].Rows[gridProc.SelectedIndices[i]]["ToothNum"].ToString())+"-"
+				      +DS.Tables["Procedure"].Rows[gridProc.SelectedIndices[i]]["Surf"].ToString()+"-";//""#12-MOD-"
+				    break;
+				  case "2"://TreatmentArea.Tooth:
+				    procDescOne+="#"+Tooth.GetToothLabel(DS.Tables["Procedure"].Rows[gridProc.SelectedIndices[i]]["ToothNum"].ToString())+"-";//"#12-"
+				    break;
+				  default://area 3 or 0 (mouth)
+				    break;
+				  case "4"://TreatmentArea.Quad:
+				    procDescOne+=DS.Tables["Procedure"].Rows[gridProc.SelectedIndices[i]]["Surf"].ToString()+"-";//"UL-"
+				    break;
+				  case "5"://TreatmentArea.Sextant:
+				    procDescOne+="S"+DS.Tables["Procedure"].Rows[gridProc.SelectedIndices[i]]["Surf"].ToString()+"-";//"S2-"
+				    break;
+				  case "6"://TreatmentArea.Arch:
+				    procDescOne+=DS.Tables["Procedure"].Rows[gridProc.SelectedIndices[i]]["Surf"].ToString()+"-";//"U-"
+				    break;
+				  case "7"://TreatmentArea.ToothRange:
+				    //strLine+=table.Rows[j][13].ToString()+" ";//don't show range
+				    break;
+				}
+				procDescOne+=DS.Tables["Procedure"].Rows[gridProc.SelectedIndices[i]]["AbbrDesc"].ToString();//procCode.;
+				AptCur.ProcDescript+=procDescOne;
+				AptCur.ProcsColored+="<span color=\""+argColor+"\">"+procDescOne+"</span>";
+				argColor+=1000;
 			}
 			//int[] procNums=new int[gridProc.SelectedIndices.Length];
 			//for(int i=0;i<procNums.Length;i++){

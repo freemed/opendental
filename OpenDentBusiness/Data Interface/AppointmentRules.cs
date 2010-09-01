@@ -18,7 +18,7 @@ namespace OpenDentBusiness{
 			return table;
 		}
 
-		private static void FillCache(DataTable table){
+		public static void FillCache(DataTable table){
 			//No need to check RemotingRole; no call to db.
 			AppointmentRuleC.List=Crud.AppointmentRuleCrud.TableToList(table).ToArray();
 		}

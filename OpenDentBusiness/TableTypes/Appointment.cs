@@ -63,6 +63,8 @@ namespace OpenDentBusiness{
 		///<summary>Time. Ignore date portion.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime TimeAskedToArrive;
+		///<summary>Stores XML for the procs colors</summary>
+		public String ProcsColored;
 
 		///<summary>Returns a copy of the appointment.</summary>
     public Appointment Clone(){

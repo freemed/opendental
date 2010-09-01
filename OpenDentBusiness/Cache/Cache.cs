@@ -193,6 +193,8 @@ namespace OpenDentBusiness {
 			if(itypes.Contains((int)InvalidType.Views) || isAll){
 				ds.Tables.Add(ApptViews.RefreshCache());
 				ds.Tables.Add(ApptViewItems.RefreshCache());
+				ds.Tables.Add(AppointmentRules.RefreshCache());
+				ds.Tables.Add(ProcApptColors.RefreshCache());
 			}
 			if(itypes.Contains((int)InvalidType.ZipCodes) || isAll){
 				ds.Tables.Add(ZipCodes.RefreshCache());
@@ -354,6 +356,8 @@ namespace OpenDentBusiness {
 			if(itypes.Contains((int)InvalidType.Views) || isAll) {
 				ApptViews.FillCache(ds.Tables["ApptView"]);
 				ApptViewItems.FillCache(ds.Tables["ApptViewItem"]);
+				AppointmentRules.FillCache(ds.Tables["AppointmentRule"]);
+				ProcApptColors.FillCache(ds.Tables["ProcApptColor"]);
 			}
 			if(itypes.Contains((int)InvalidType.ZipCodes) || isAll) {
 				ZipCodes.FillCache(ds.Tables["ZipCode"]);
