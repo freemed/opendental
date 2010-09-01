@@ -1,7 +1,15 @@
+<<<<<<< .mine
+<?xml version="1.0" encoding="utf-8"?>
+<DiscoveryClientResultsFile xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Results>
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.ContractReference" url="http://localhost:1089/WebHostSynch.asmx?wsdl" filename="WebHostSynch.wsdl" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.DiscoveryDocumentReference" url="http://localhost:1089/WebHostSynch.asmx?disco" filename="WebHostSynch.disco" />
+  </Results>
+</DiscoveryClientResultsFile>=======
 <?xml version="1.0" encoding="utf-8"?>
 <DiscoveryClientResultsFile xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Results>
     <DiscoveryClientResult referenceType="System.Web.Services.Discovery.ContractReference" url="http://localhost:2923/WebHostSynch.asmx?wsdl" filename="WebHostSynch.wsdl" />
     <DiscoveryClientResult referenceType="System.Web.Services.Discovery.DiscoveryDocumentReference" url="http://localhost:2923/WebHostSynch.asmx?disco" filename="WebHostSynch.disco" />
   </Results>
-</DiscoveryClientResultsFile>
+</DiscoveryClientResultsFile>>>>>>>> .r4331
