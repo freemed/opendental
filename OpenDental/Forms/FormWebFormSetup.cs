@@ -54,7 +54,6 @@ namespace OpenDental {
 		/// Here sheetDef can be uploaded to the web form Open Dental
 		/// </summary>
 		private void TestSheetUpload(object sender,EventArgs e) {
-			
 //pass sheet to webservice
 			string RegistrationKey=PrefC.GetString(PrefName.RegistrationKey);
 				WebHostSynch.WebHostSynch wh=new WebHostSynch.WebHostSynch();
@@ -62,7 +61,7 @@ namespace OpenDental {
 
 				OpenDentBusiness.SheetDef sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.PatientRegistration);
 				// for this line to compile one must modify the Reference.cs file in to the Web references folder. The SheetDef and related classes with namespaces of WebHostSync must be removed so that the SheetDef Class of OpenDentBusiness is used
-				wh.ReadSheetDef(sheetDef);
+				//wh.ReadSheetDef(sheetDef);
 
 		}
 		
