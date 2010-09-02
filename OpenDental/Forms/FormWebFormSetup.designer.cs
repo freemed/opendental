@@ -35,19 +35,21 @@ namespace OpenDental{
 			this.colorDialog1 = new System.Windows.Forms.ColorDialog();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.label1 = new System.Windows.Forms.Label();
+			this.textBoxWebFormAddress = new System.Windows.Forms.TextBox();
 			this.groupBox2.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// textboxWebHostAddress
 			// 
-			this.textboxWebHostAddress.Location = new System.Drawing.Point(195,50);
+			this.textboxWebHostAddress.Location = new System.Drawing.Point(195,34);
 			this.textboxWebHostAddress.Name = "textboxWebHostAddress";
 			this.textboxWebHostAddress.Size = new System.Drawing.Size(320,20);
 			this.textboxWebHostAddress.TabIndex = 45;
 			// 
 			// labelWebhostURL
 			// 
-			this.labelWebhostURL.Location = new System.Drawing.Point(24,50);
+			this.labelWebhostURL.Location = new System.Drawing.Point(24,35);
 			this.labelWebhostURL.Name = "labelWebhostURL";
 			this.labelWebhostURL.Size = new System.Drawing.Size(169,19);
 			this.labelWebhostURL.TabIndex = 46;
@@ -105,9 +107,9 @@ namespace OpenDental{
 			this.groupBox2.Controls.Add(this.labelWebformsHeading1);
 			this.groupBox2.Controls.Add(this.textBoxWebformsHeading1);
 			this.groupBox2.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox2.Location = new System.Drawing.Point(24,86);
+			this.groupBox2.Location = new System.Drawing.Point(24,57);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(515,171);
+			this.groupBox2.Size = new System.Drawing.Size(515,160);
 			this.groupBox2.TabIndex = 53;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Web Form Preferences";
@@ -131,7 +133,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(550,211);
+			this.butOK.Location = new System.Drawing.Point(550,166);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 3;
@@ -146,17 +148,35 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(550,252);
+			this.butCancel.Location = new System.Drawing.Point(550,196);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 2;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// label1
+			// 
+			this.label1.Location = new System.Drawing.Point(21,8);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(169,19);
+			this.label1.TabIndex = 54;
+			this.label1.Text = "Browser address for web form";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textBoxWebFormAddress
+			// 
+			this.textBoxWebFormAddress.Location = new System.Drawing.Point(195,8);
+			this.textBoxWebFormAddress.Name = "textBoxWebFormAddress";
+			this.textBoxWebFormAddress.Size = new System.Drawing.Size(320,20);
+			this.textBoxWebFormAddress.TabIndex = 55;
+			// 
 			// FormWebFormSetup
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(650,303);
+			this.ClientSize = new System.Drawing.Size(650,225);
+			this.Controls.Add(this.textBoxWebFormAddress);
+			this.Controls.Add(this.label1);
 			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.textboxWebHostAddress);
 			this.Controls.Add(this.labelWebhostURL);
@@ -185,5 +205,7 @@ namespace OpenDental{
 		private System.Windows.Forms.GroupBox groupBox2;
 		private System.Windows.Forms.Button butWebformBorderColor;
 		private System.Windows.Forms.ColorDialog colorDialog1;
+		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.TextBox textBoxWebFormAddress;
 	}
 }

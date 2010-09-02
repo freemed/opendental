@@ -45,7 +45,7 @@ namespace OpenDental{
 			this.groupBox2.Controls.Add(this.textDateTo);
 			this.groupBox2.Controls.Add(this.label3);
 			this.groupBox2.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox2.Location = new System.Drawing.Point(98,12);
+			this.groupBox2.Location = new System.Drawing.Point(98,8);
 			this.groupBox2.Name = "groupBox2";
 			this.groupBox2.Size = new System.Drawing.Size(418,53);
 			this.groupBox2.TabIndex = 44;
@@ -101,10 +101,10 @@ namespace OpenDental{
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(24,71);
+			this.gridMain.Location = new System.Drawing.Point(24,67);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(595,255);
+			this.gridMain.Size = new System.Drawing.Size(595,259);
 			this.gridMain.TabIndex = 4;
 			this.gridMain.Title = "Webforms";
 			this.gridMain.TranslationName = "TableWebforms";

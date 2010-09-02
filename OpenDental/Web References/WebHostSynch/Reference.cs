@@ -44,6 +44,8 @@ namespace OpenDental.WebHostSynch {
         
         private System.Threading.SendOrPostCallback CheckRegistrationKeyOperationCompleted;
         
+        private System.Threading.SendOrPostCallback GetDentalOfficeIDOperationCompleted;
+        
         private System.Threading.SendOrPostCallback ReadSheetDefOperationCompleted;
         
         private bool useDefaultCredentialsSetExplicitly;
@@ -98,6 +100,9 @@ namespace OpenDental.WebHostSynch {
         
         /// <remarks/>
         public event CheckRegistrationKeyCompletedEventHandler CheckRegistrationKeyCompleted;
+        
+        /// <remarks/>
+        public event GetDentalOfficeIDCompletedEventHandler GetDentalOfficeIDCompleted;
         
         /// <remarks/>
         public event ReadSheetDefCompletedEventHandler ReadSheetDefCompleted;
@@ -253,6 +258,35 @@ namespace OpenDental.WebHostSynch {
             if ((this.CheckRegistrationKeyCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.CheckRegistrationKeyCompleted(this, new CheckRegistrationKeyCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetDentalOfficeID", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public long GetDentalOfficeID(string RegistrationKeyFromDentalOffice) {
+            object[] results = this.Invoke("GetDentalOfficeID", new object[] {
+                        RegistrationKeyFromDentalOffice});
+            return ((long)(results[0]));
+        }
+        
+        /// <remarks/>
+        public void GetDentalOfficeIDAsync(string RegistrationKeyFromDentalOffice) {
+            this.GetDentalOfficeIDAsync(RegistrationKeyFromDentalOffice, null);
+        }
+        
+        /// <remarks/>
+        public void GetDentalOfficeIDAsync(string RegistrationKeyFromDentalOffice, object userState) {
+            if ((this.GetDentalOfficeIDOperationCompleted == null)) {
+                this.GetDentalOfficeIDOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetDentalOfficeIDOperationCompleted);
+            }
+            this.InvokeAsync("GetDentalOfficeID", new object[] {
+                        RegistrationKeyFromDentalOffice}, this.GetDentalOfficeIDOperationCompleted, userState);
+        }
+        
+        private void OnGetDentalOfficeIDOperationCompleted(object arg) {
+            if ((this.GetDentalOfficeIDCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.GetDentalOfficeIDCompleted(this, new GetDentalOfficeIDCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
         
@@ -1093,6 +1127,32 @@ namespace OpenDental.WebHostSynch {
             get {
                 this.RaiseExceptionIfNecessary();
                 return ((bool)(this.results[0]));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "2.0.50727.3053")]
+    public delegate void GetDentalOfficeIDCompletedEventHandler(object sender, GetDentalOfficeIDCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "2.0.50727.3053")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class GetDentalOfficeIDCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal GetDentalOfficeIDCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        /// <remarks/>
+        public long Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((long)(this.results[0]));
             }
         }
     }

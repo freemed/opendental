@@ -19,14 +19,8 @@ namespace WebHostSynch {
 	// [System.Web.Script.Services.ScriptService]
 	public class WebHostSynch:System.Web.Services.WebService {
 
-
-		[WebMethod]
-		public string HelloWorld() {
-			return "Hello World";
-		}
 		[WebMethod]
 		public bool SetPreferences(string RegistrationKey,int ColorBorder,string Heading1,string Heading2) {
-
 			ODWebServiceEntities db=new ODWebServiceEntities();
 			long DentalOfficeID=GetDentalOfficeID(RegistrationKey);
 			if(DentalOfficeID==0) {
@@ -62,7 +56,6 @@ namespace WebHostSynch {
 				Logger.Information("Incorrect registration key. IPAddress="+HttpContext.Current.Request.UserHostAddress+" RegistrationKey="+RegistrationKey);
 			}
 			ODWebServiceEntities db=new ODWebServiceEntities();
-
 			EndDate=EndDate.AddDays(1);//if this is put in LINQ it will not work. so change date first
 			var wsfObj=from wsf in db.webforms_sheetfield
 					   where wsf.webforms_sheet.webforms_preference.DentalOfficeID==DentalOfficeID
@@ -85,7 +78,6 @@ namespace WebHostSynch {
 				var delSheetField=from wsf in db.webforms_sheetfield where
 								  wsf.webforms_sheet.SheetID==SheetID
 								  select wsf;
-
 				for(int j=0;j<delSheetField.Count();j++) {
 					// the ElementAt operator only works with lists. Hence ToList()
 					db.DeleteObject(delSheetField.ToList().ElementAt(j));
@@ -104,7 +96,6 @@ namespace WebHostSynch {
 			OpenDentBusiness.DataConnection dc=new OpenDentBusiness.DataConnection();
 			// sets a static variable
 			dc.SetDb(connectStr,"",DatabaseType.MySql,true);
-			
 		RegistrationKey RegistrationKeyFromDb=null;
 		try {
 			RegistrationKeyFromDb=RegistrationKeys.GetByKey(RegistrationKeyFromDentalOffice);
@@ -116,7 +107,12 @@ namespace WebHostSynch {
 			return true;
 		}
 
-		private long GetDentalOfficeID(string RegistrationKeyFromDentalOffice) {
+		[WebMethod]
+		public long GetDentalOfficeID(string RegistrationKeyFromDentalOffice) {
+			string connectStr= ConfigurationManager.ConnectionStrings["DBRegKey"].ConnectionString;
+			OpenDentBusiness.DataConnection dc=new OpenDentBusiness.DataConnection();
+			// sets a static variable
+			dc.SetDb(connectStr,"",DatabaseType.MySql,true);
 			RegistrationKey RegistrationKeyFromDb=null;
 			try {
 				RegistrationKeyFromDb=RegistrationKeys.GetByKey(RegistrationKeyFromDentalOffice);
@@ -133,10 +129,7 @@ namespace WebHostSynch {
 		/// </summary>
 		[WebMethod]
 		public void ReadSheetDef(SheetDef sheetDef) {
-
-		
 			//string a=sheetDef.ToString();
-			
 		}
 
 	}

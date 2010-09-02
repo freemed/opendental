@@ -9,11 +9,8 @@ using System.Linq;
 using System.Net;
 using System.Security.Cryptography.X509Certificates;
 using System.Reflection;
-
 using OpenDental.UI;
 using OpenDentBusiness;
-
-
 
 namespace OpenDental {
 	public partial class FormWebForms:Form {
@@ -39,12 +36,9 @@ namespace OpenDental {
 				col=new ODGridColumn(Lan.g("TableWebforms","Status"),100);
 				gridMain.Columns.Add(col);
 				gridMain.Rows.Clear();
-
-
 				DateTime dateFrom=PIn.Date(textDateFrom.Text);
 				DateTime dateTo=PIn.Date(textDateTo.Text);
-
-				///the line below will allow the code continue by not throwing an exception.
+				///the line below will allow the to code continue by not throwing an exception.
 				///It will accept the security certificate if there is a problem with the security certificate.
 				System.Net.ServicePointManager.ServerCertificateValidationCallback+=
 				delegate(object sender,System.Security.Cryptography.X509Certificates.X509Certificate certificate,
@@ -54,12 +48,11 @@ namespace OpenDental {
 					///In this particular case it always returns true i.e accepts any certificate.
 					return true;
 				};
-
 				WebHostSynch.WebHostSynch wh=new WebHostSynch.WebHostSynch();
 				wh.Url=PrefC.GetString(PrefName.WebHostSynchServerURL);
 				string RegistrationKey=PrefC.GetString(PrefName.RegistrationKey);
-				
 				if(wh.CheckRegistrationKey(RegistrationKey)==false) {
+					gridMain.EndUpdate();
 					MessageBox.Show(Lan.g(this,"Registration key provided by the dental office is incorrect"));
 					return;
 				}
@@ -97,7 +90,6 @@ namespace OpenDental {
 							BirthDate=FieldValue;
 						}
 					}
-
 					DateTime birthDate=PIn.Date(BirthDate);
 					if(birthDate.Year==1) {
 						//log invalid birth date  format
@@ -138,7 +130,6 @@ namespace OpenDental {
 		/// compare values of the new patient or the new sheet with values that have been inserted into the db if false is returned then there is a mismatch.
 		/// </summary>
 		private bool DataExistsInDb(Patient newPat,Sheet newSheet) {
-
 			bool dataExistsInDb=true;
 			if(newPat!=null) {
 				long PatNum=newPat.PatNum;
@@ -147,11 +138,9 @@ namespace OpenDental {
 					dataExistsInDb=ComparePatients(patientFromDb,newPat);
 				}
 			}
-
 			if(newSheet!=null) {
 				long SheetNum=newSheet.SheetNum;
 				Sheet sheetFromDb=Sheets.GetSheet(SheetNum);
-
 				if(sheetFromDb!=null) {
 					dataExistsInDb=CompareSheets(sheetFromDb,newSheet);
 				}
@@ -173,7 +162,6 @@ namespace OpenDental {
 									  "WirelessPhone","WkPhone"
 									  };
 			//other PatFields="PatStatus","Guarantor","CreditType","PriProv","SecProv","FeeSched","BillingType","AddrNote","ClinicNum" EmployerNum, EmploymentNote, GradeLevel, HasIns, InsEst, };
-
 				String[] SheetWebFields={"LastName","FirstName","MI","Birthdate","Preferred","Email","SS",
 									"Address1","Address2","City","State","Zip",
 									"HomePhone","Gender","Married","MethodContact","MethodConf",
@@ -209,7 +197,6 @@ namespace OpenDental {
 				MessageBox.Show(e.Message);
 			}
 			return newPat;
-
 		}
 
 		/// <summary>
@@ -386,7 +373,6 @@ namespace OpenDental {
 						DateTime birthDate=PIn.Date(SheetWebFieldValue);
 						field.SetValue(newPat,birthDate);
 						break;
-
 					case "Gender":
 						if(SheetWebFieldValue=="M") {
 							field.SetValue(newPat,PatientGender.Male);
@@ -395,7 +381,6 @@ namespace OpenDental {
 							field.SetValue(newPat,PatientGender.Female);
 						}
 						break;
-
 					case "Position":
 						if(SheetWebFieldValue=="Y") {
 							field.SetValue(newPat,PatientPosition.Married);
@@ -404,7 +389,6 @@ namespace OpenDental {
 							field.SetValue(newPat,PatientPosition.Single);
 						}
 						break;
-
 					case "PreferContactMethod":
 					case "PreferConfirmMethod":
 					case "PreferRecallMethod":
@@ -421,7 +405,6 @@ namespace OpenDental {
 							field.SetValue(newPat,ContactMethod.Email);
 						}
 						break;
-
 					case "StudentStatus":
 						if(SheetWebFieldValue=="Nonstudent") {
 							field.SetValue(newPat,"");
@@ -433,7 +416,6 @@ namespace OpenDental {
 							field.SetValue(newPat,"P");
 						}
 						break;
-
 					case "ins1Relat":
 					case "ins2Relat":
 						if(SheetWebFieldValue=="Self") {
@@ -446,25 +428,21 @@ namespace OpenDental {
 							field.SetValue(newPat,Relat.Child);
 						}
 						break;
-
 					default:
 						field.SetValue(newPat,SheetWebFieldValue);
 						break;
 				}//switch case
-
 			}
 			catch(Exception e) {
 				gridMain.EndUpdate();
 				MessageBox.Show(field.Name + e.Message);
 			}
-
 		}
 
 		/// <summary>
 		/// 
 		/// </summary>
 		private bool ComparePatients(Patient patientFromDb,Patient newPat) {
-
 			bool isEqual=true;
 			foreach(FieldInfo fieldinfo in patientFromDb.GetType().GetFields()) {
 				/* these field are to be ignored while comparing because they have different values when extracted from the db */
@@ -547,4 +525,3 @@ namespace OpenDental {
 		}
 	}
 }
-

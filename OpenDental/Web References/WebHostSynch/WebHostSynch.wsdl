@@ -135,6 +135,20 @@
           </s:sequence>
         </s:complexType>
       </s:element>
+      <s:element name="GetDentalOfficeID">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RegistrationKeyFromDentalOffice" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDentalOfficeIDResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="GetDentalOfficeIDResult" type="s:long" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
       <s:element name="ReadSheetDef">
         <s:complexType>
           <s:sequence>
@@ -278,6 +292,12 @@
   <wsdl:message name="CheckRegistrationKeySoapOut">
     <wsdl:part name="parameters" element="tns:CheckRegistrationKeyResponse" />
   </wsdl:message>
+  <wsdl:message name="GetDentalOfficeIDSoapIn">
+    <wsdl:part name="parameters" element="tns:GetDentalOfficeID" />
+  </wsdl:message>
+  <wsdl:message name="GetDentalOfficeIDSoapOut">
+    <wsdl:part name="parameters" element="tns:GetDentalOfficeIDResponse" />
+  </wsdl:message>
   <wsdl:message name="ReadSheetDefSoapIn">
     <wsdl:part name="parameters" element="tns:ReadSheetDef" />
   </wsdl:message>
@@ -304,6 +324,10 @@
     <wsdl:operation name="CheckRegistrationKey">
       <wsdl:input message="tns:CheckRegistrationKeySoapIn" />
       <wsdl:output message="tns:CheckRegistrationKeySoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDentalOfficeID">
+      <wsdl:input message="tns:GetDentalOfficeIDSoapIn" />
+      <wsdl:output message="tns:GetDentalOfficeIDSoapOut" />
     </wsdl:operation>
     <wsdl:operation name="ReadSheetDef">
       <wsdl:input message="tns:ReadSheetDefSoapIn" />
@@ -350,6 +374,15 @@
     </wsdl:operation>
     <wsdl:operation name="CheckRegistrationKey">
       <soap:operation soapAction="http://tempuri.org/CheckRegistrationKey" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDentalOfficeID">
+      <soap:operation soapAction="http://tempuri.org/GetDentalOfficeID" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -407,6 +440,15 @@
     </wsdl:operation>
     <wsdl:operation name="CheckRegistrationKey">
       <soap12:operation soapAction="http://tempuri.org/CheckRegistrationKey" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDentalOfficeID">
+      <soap12:operation soapAction="http://tempuri.org/GetDentalOfficeID" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

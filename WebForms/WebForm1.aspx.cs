@@ -7,17 +7,13 @@ using System.Web.UI.WebControls;
 using System.Drawing;
 using System.Collections;
 
-
 namespace WebForms {
 	public partial class WebForm1:System.Web.UI.Page {
 		private Hashtable FormValuesHashTable=new Hashtable();
 		private int DentalOfficeID=0;
 
 		protected void Page_Load(object sender,EventArgs e) {
-			try {
-				
-				if(Request["DentalOfficeID"]!=null) {
-
+			try {if(Request["DentalOfficeID"]!=null) {
 					Int32.TryParse(Request["DentalOfficeID"].ToString().Trim(),out DentalOfficeID);
 				}
 				SetPagePreferences(DentalOfficeID);
@@ -54,7 +50,6 @@ namespace WebForms {
 		}
 
 		protected void Submit_Click(object sender,EventArgs e) {
-			
 			LoopThroughControls(this.Page);
 			SaveFieldValuesInDB(DentalOfficeID);
 		}
@@ -86,8 +81,7 @@ namespace WebForms {
 					if(ctl.HasControls()) {
 						ExtractValue(ctl);
 						FindControls(ctl);
-					}
-					else {
+					}else {
 						ExtractValue(ctl);
 					}
 				}
@@ -148,7 +142,7 @@ namespace WebForms {
 					PrefObj.First().webforms_sheet.Add(NewSheetObj);
 				}
 				db.SaveChanges();
-				//Panel1.Visible=false;
+				Panel1.Visible=false;
 				LabelSubmitMessage.Text="Your details have been successfully submited";
 				Panel2.Visible=true;
 			}
