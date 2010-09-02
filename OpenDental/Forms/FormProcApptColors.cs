@@ -19,10 +19,6 @@ namespace OpenDental{
 		private System.ComponentModel.Container components = null;
 		private OpenDental.UI.ODGrid gridMain;
 		private OpenDental.UI.Button butOK;
-		//private bool changed;
-		public bool IsSelectionMode;
-		///<summary>Only used if IsSelectionMode.  On OK, contains selected pharmacyNum.  Can be 0.  Can also be set ahead of time externally.</summary>
-		public long SelectedPharmacyNum;
 
 		///<summary></summary>
 		public FormProcApptColors()
@@ -71,7 +67,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(283,442);
+			this.butOK.Location = new System.Drawing.Point(140,312);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 15;
@@ -84,10 +80,11 @@ namespace OpenDental{
 			this.gridMain.Location = new System.Drawing.Point(17,12);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(313,417);
+			this.gridMain.Size = new System.Drawing.Size(279,289);
 			this.gridMain.TabIndex = 11;
 			this.gridMain.Title = "Proc Code Ranges";
-			this.gridMain.TranslationName = "TableProcedureCodes";
+			this.gridMain.TranslationName = "FormProcApptColors";
+			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			// 
 			// butAdd
 			// 
@@ -99,9 +96,9 @@ namespace OpenDental{
 			this.butAdd.CornerRadius = 4F;
 			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(361,91);
+			this.butAdd.Location = new System.Drawing.Point(17,312);
 			this.butAdd.Name = "butAdd";
-			this.butAdd.Size = new System.Drawing.Size(80,24);
+			this.butAdd.Size = new System.Drawing.Size(75,24);
 			this.butAdd.TabIndex = 10;
 			this.butAdd.Text = "&Add";
 			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
@@ -114,17 +111,17 @@ namespace OpenDental{
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(364,442);
+			this.butClose.Location = new System.Drawing.Point(221,312);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75,24);
 			this.butClose.TabIndex = 0;
-			this.butClose.Text = "&Close";
+			this.butClose.Text = "&Cancel";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
 			// FormProcApptColors
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(467,482);
+			this.ClientSize = new System.Drawing.Size(314,352);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.butAdd);
@@ -136,104 +133,55 @@ namespace OpenDental{
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Proc Code Colors";
-			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormPharmacies_FormClosing);
+			this.Load += new System.EventHandler(this.FormProcApptColors_Load);
 			this.ResumeLayout(false);
 
 		}
 		#endregion
 
 		private void FormProcApptColors_Load(object sender,System.EventArgs e) {
-			//if(IsSelectionMode){
-			//  butClose.Text=Lan.g(this,"Cancel");
-			//}
-			//else{
-			//  butOK.Visible=false;
-			//  butNone.Visible=false;
-			//}
-			//FillGrid();
-			//if(SelectedPharmacyNum!=0){
-			//  for(int i=0;i<PharmacyC.Listt.Count;i++){
-			//    if(PharmacyC.Listt[i].PharmacyNum==SelectedPharmacyNum){
-			//      gridMain.SetSelected(i,true);
-			//      break;
-			//    }
-			//  }
-			//}
+			FillGrid();
 		}
 
 		private void FillGrid(){
-			//ProcApptColors.Refresh();
-			//gridMain.BeginUpdate();
-			//gridMain.Columns.Clear();
-			//ODGridColumn col=new ODGridColumn(Lan.g("FormProcApptColor","Range"),130);
-			//gridMain.Columns.Add(col);
-			//col=new ODGridColumn(Lan.g("FormProcApptColor","Color"),120);
-			//gridMain.Columns.Add(col);
-			//gridMain.Rows.Clear();
-			//ODGridRow row;
-			//string txt;
-			//for(int i=0;i<PharmacyC.Listt.Count;i++){
-			//  row=new ODGridRow();
-			//  row.Cells.Add(PharmacyC.Listt[i].StoreName);
-			//  row.Cells.Add(PharmacyC.Listt[i].Phone);
-			//  row.Cells.Add(PharmacyC.Listt[i].Fax);
-			//  txt=PharmacyC.Listt[i].Address;
-			//  if(PharmacyC.Listt[i].Address2!=""){
-			//    txt+="\r\n"+PharmacyC.Listt[i].Address2;
-			//  }
-			//  row.Cells.Add(txt);
-			//  row.Cells.Add(PharmacyC.Listt[i].City);
-			//  row.Cells.Add(PharmacyC.Listt[i].Note);
-			//  gridMain.Rows.Add(row);
-			//}
-			//gridMain.EndUpdate();
+			ProcApptColors.RefreshCache();
+			gridMain.BeginUpdate();
+			gridMain.Columns.Clear();
+			ODGridColumn col=new ODGridColumn(Lan.g("FormProcApptColors","Code Range"),0);
+			gridMain.Columns.Add(col);
+			gridMain.Rows.Clear();
+			ODGridRow row;
+			for(int i=0;i<ProcApptColors.Listt.Count;i++) {
+				row=new ODGridRow();
+				row.Cells.Add(ProcApptColors.Listt[i].CodeRange);
+				row.ColorText=ProcApptColors.Listt[i].ColorText;
+				gridMain.Rows.Add(row);
+			}
+			gridMain.EndUpdate();
 		}
 
 		private void butAdd_Click(object sender, System.EventArgs e) {
 			FormProcApptColorEdit FormPACE=new FormProcApptColorEdit();
+			FormPACE.ProcApptColorCur=new ProcApptColor();
+			FormPACE.ProcApptColorCur.IsNew=true;
 			FormPACE.ShowDialog();
 			FillGrid();
 		}
 
-		//private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-		//  if(IsSelectionMode){
-		//    SelectedPharmacyNum=PharmacyC.Listt[e.Row].PharmacyNum;
-		//    DialogResult=DialogResult.OK;
-		//    return;
-		//  }
-		//  else{
-		//    FormPharmacyEdit FormP=new FormPharmacyEdit();
-		//    FormP.PharmCur=PharmacyC.Listt[e.Row];
-		//    FormP.ShowDialog();
-		//    FillGrid();
-		//    changed=true;
-		//  }
-		//}
+		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+				FormProcApptColorEdit FormP=new FormProcApptColorEdit();
+				FormP.ProcApptColorCur=ProcApptColors.Listt[e.Row];
+				FormP.ShowDialog();
+				FillGrid();
+		}
 
 		private void butOK_Click(object sender,EventArgs e) {
-		//  //not even visible unless is selection mode
-		//  if(gridMain.GetSelectedIndex()==-1){
-		//  //	MsgBox.Show(this,"Please select an item first.");
-		//  //	return;
-		//    SelectedPharmacyNum=0;
-		//  }
-		//  else{
-		//    SelectedPharmacyNum=PharmacyC.Listt[gridMain.GetSelectedIndex()].PharmacyNum;
-		//  }
-		//  DialogResult=DialogResult.OK;
+			DialogResult=DialogResult.OK;
 		}
 
 		private void butClose_Click(object sender, System.EventArgs e) {
-			Close();
+			DialogResult=DialogResult.Cancel;
 		}
-
-		private void FormPharmacies_FormClosing(object sender,FormClosingEventArgs e) {
-			//if(changed){
-			//  DataValid.SetInvalid(InvalidType.Pharmacies);
-			//}
-		}
-
-	
 
 		
 

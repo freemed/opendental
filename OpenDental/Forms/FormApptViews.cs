@@ -355,6 +355,7 @@ namespace OpenDental{
 		private void butProcColors_Click(object sender,EventArgs e) {
 			FormProcApptColors formProcColors=new FormProcApptColors();
 			formProcColors.ShowDialog();
+			DialogResult=DialogResult.None;//This is required to prevent FormApptViews from closing.
 		}
 
 		private void butCancel_Click(object sender, System.EventArgs e) {

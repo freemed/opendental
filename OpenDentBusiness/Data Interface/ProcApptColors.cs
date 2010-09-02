@@ -42,7 +42,6 @@ namespace OpenDentBusiness{
 		}
 		#endregion
 
-
 		///<summary></summary>
 		public static List<ProcApptColor> Refresh(long patNum){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
@@ -88,6 +87,9 @@ namespace OpenDentBusiness{
 			}
 			return Crud.ProcApptColorCrud.SelectOne(procApptColorNum);
 		}*/
+
+
+
 
 
 

@@ -2041,9 +2041,10 @@ namespace OpenDental{
 			AptCur.DateTimeDismissed=dateTimeDismissed;
 			//AptCur.InsPlan1 and InsPlan2 already handled 
 			AptCur.ProcDescript="";
-			int argColor=System.Drawing.Color.Black.ToArgb();
+			AptCur.ProcsColored="";
 			for(int i=0;i<gridProc.SelectedIndices.Length;i++) {
 				string procDescOne="";
+				string procCode=DS.Tables["Procedure"].Rows[gridProc.SelectedIndices[i]]["ProcCode"].ToString();
 				if(i>0){
 					AptCur.ProcDescript+=", ";
 				}
@@ -2072,8 +2073,7 @@ namespace OpenDental{
 				}
 				procDescOne+=DS.Tables["Procedure"].Rows[gridProc.SelectedIndices[i]]["AbbrDesc"].ToString();//procCode.;
 				AptCur.ProcDescript+=procDescOne;
-				AptCur.ProcsColored+="<span color=\""+argColor+"\">"+procDescOne+"</span>";
-				argColor+=1000;
+				AptCur.ProcsColored+="<span color=\""+GetProcColor(procCode)+"\">"+procDescOne+"</span>";
 			}
 			//int[] procNums=new int[gridProc.SelectedIndices.Length];
 			//for(int i=0;i<procNums.Length;i++){
@@ -2112,6 +2112,58 @@ namespace OpenDental{
 				Procedures.SetProvidersInAppointment(AptCur,Procedures.GetProcsForSingle(AptCur.AptNum,false));
 			}
 			return true;
+		}
+
+		public static string GetProcColor(string code) {
+			string code1="";
+			string code2="";
+			List<ProcApptColor> colorList=ProcApptColors.Listt;
+			for(int i=0;i<colorList.Count;i++) {
+				int hyphen=colorList[i].CodeRange.IndexOf("-");
+				if(hyphen==-1) {
+					code1=colorList[i].CodeRange.Trim();
+					code2=colorList[i].CodeRange.Trim();
+				}
+				else {
+					string[] codeSplit = colorList[i].CodeRange.Split(new string[] { "-" },StringSplitOptions.RemoveEmptyEntries);
+					code1=codeSplit[0].Trim();
+					code2=codeSplit[1].Trim();
+				}
+				if(code==code1 || code==code2) {
+					return colorList[i].ColorText.ToArgb().ToString();
+				}
+				else if(code.Length==code1.Length && code1.Length==code2.Length) {
+					char[] indexCode=code.ToCharArray();
+					char[] indexCode1=code1.ToCharArray();
+					char[] indexCode2=code2.ToCharArray();
+					string c0="0",c1="0",c2="0";
+					int num0=0,num1=0,num2=0;
+					for(int p=0;p<indexCode.Length;p++) {
+						if((Char.IsDigit(indexCode[p])) && (Char.IsDigit(indexCode1[p])) && (Char.IsDigit(indexCode2[p]))) {
+							c0+=(indexCode[p].ToString());
+							c1+=(indexCode1[p].ToString());
+							c2+=(indexCode2[p].ToString());
+							continue;
+						}
+						else if(indexCode[p]==indexCode1[p] && indexCode[p]==indexCode2[p]) {
+							continue;
+						}
+						else {
+							break;
+						}
+					}
+					num0=Convert.ToInt32(c0);
+					num1=Convert.ToInt32(c1);
+					num2=Convert.ToInt32(c2);
+					if(num0!=0) {
+						if(num1<=num0 && num0<=num2 || num2<=num0 && num0<=num1) {
+							return colorList[i].ColorText.ToArgb().ToString();
+						}
+					}
+					continue;
+				}
+			}
+			return System.Drawing.Color.Black.ToArgb().ToString();
 		}
 
 		private void butPDF_Click(object sender,EventArgs e) {
