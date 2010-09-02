@@ -125,7 +125,7 @@ namespace OpenDentBusiness
 			}
 			//10-Quantity
 			if(Segment.Get(10)!="") {
-				Benefitt.Quantity=PIn.Byte(Segment.Get(10));
+				Benefitt.Quantity=(byte)PIn.Double(Segment.Get(10));//Example: "19.0" with Quantity qualifier "S7" (age).
 			}
 			//11-Authorization. Ignored.
 			//12-In network. Ignored.
