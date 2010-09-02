@@ -2453,6 +2453,39 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="UPDATE preference SET ValueString = '7.2.36.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To7_2_38();
+		}
+
+		private static void To7_2_38() {
+			if(FromVersion<new Version("7.2.38.0")) {
+				string command;
+				//add Progeny bridge:
+				command="INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
+					+") VALUES("
+					+"'Progeny', "
+					+"'Progeny from www.progenydental.com', "
+					+"'0', "
+					+"'"+POut.String(@"C:\Program Files\Progeny\Progeny Imaging\PIBridge.exe")+"', "
+					+"'', "
+					+"'')";
+				Db.NonQ(command);
+				command="SELECT ProgramNum FROM program WHERE ProgName='Progeny' LIMIT 1";
+				long programNum=PIn.Long(Db.GetScalar(command));
+				command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+					+") VALUES("
+					+"'"+POut.Long(programNum)+"', "
+					+"'Enter 0 to use PatientNum, or 1 to use ChartNum', "
+					+"'0')";
+				Db.NonQ32(command);
+				command="INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
+					+"VALUES ("
+					+"'"+POut.Long(programNum)+"', "
+					+"'"+POut.Int(((int)ToolBarsAvail.ChartModule))+"', "
+					+"'Progeny')";
+				Db.NonQ32(command);
+				command="UPDATE preference SET ValueString = '7.2.38.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
 			To7_3_0();
 		}
 

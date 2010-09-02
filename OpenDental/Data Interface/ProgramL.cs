@@ -128,6 +128,10 @@ namespace OpenDental{
 				Planmeca.SendData(prog,pat);
 				return;
 			}
+			else if(prog.ProgName=="Progeny"){
+				Progeny.SendData(prog,pat);
+				return;
+			}
 			else if(prog.ProgName=="PT") {
 				PaperlessTechnology.SendData(prog,pat,false);
 				return;
