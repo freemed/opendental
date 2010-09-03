@@ -2126,7 +2126,7 @@ namespace OpenDental{
 					code2=colorList[i].CodeRange.Trim();
 				}
 				else {
-					string[] codeSplit = colorList[i].CodeRange.Split(new string[] { "-" },StringSplitOptions.RemoveEmptyEntries);
+					string[] codeSplit = colorList[i].CodeRange.Split(new char[] { '-' });
 					code1=codeSplit[0].Trim();
 					code2=codeSplit[1].Trim();
 				}
