@@ -46,6 +46,16 @@ namespace OpenDental {
 										System.Net.Security.SslPolicyErrors sslPolicyErrors) {
 					///do stuff here and return true or false accordingly.
 					///In this particular case it always returns true i.e accepts any certificate.
+					/* sample code 
+					if(sslPolicyErrors == System.Net.Security.SslPolicyErrors.None) return true;
+					// the sample below allows expired certificates
+					foreach(X509ChainStatus s in chain.ChainStatus) {
+						// allows expired certificates
+						if(string.Equals(s.Status.ToString(),"NotTimeValid",
+							StringComparison.OrdinalIgnoreCase)) {
+							return true;
+						}						
+					}*/
 					return true;
 				};
 				WebHostSynch.WebHostSynch wh=new WebHostSynch.WebHostSynch();

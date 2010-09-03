@@ -94,7 +94,6 @@ namespace WebForms {
 		/// <summary>
 		/// Fill the FormValuesHashTable here.
 		/// </summary>
-		/// <param name="c"></param>
 		private void ExtractValue(Control c) {
 			
 			try {
