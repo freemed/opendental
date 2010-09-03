@@ -2115,6 +2115,7 @@ namespace OpenDental{
 		}
 
 		public static string GetProcColor(string code) {
+			string defaultColor="";
 			string code1="";
 			string code2="";
 			List<ProcApptColor> colorList=ProcApptColors.Listt;
@@ -2163,7 +2164,7 @@ namespace OpenDental{
 					continue;
 				}
 			}
-			return System.Drawing.Color.Black.ToArgb().ToString();
+			return defaultColor;
 		}
 
 		private void butPDF_Click(object sender,EventArgs e) {

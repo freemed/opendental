@@ -19,12 +19,14 @@ namespace OpenDental{
 		/// </summary>
 		private System.ComponentModel.Container components = null;
 		private ColorDialog colorDialog1;
-		private OpenDental.UI.Button butColor;
 		private TextBox textCodeRange;
 		private Label label2;
 		private OpenDental.UI.Button butDelete;
-		private OpenDental.UI.PanelOD panelODColor;
+		private OpenDental.UI.Button button1;
+		private Panel panelColor;
+		private Label labelBeforeTime;
 		public ProcApptColor ProcApptColorCur;
+		public ApptViewItem ApptVItem;
 
 		///<summary></summary>
 		public FormProcApptColorEdit()
@@ -63,16 +65,17 @@ namespace OpenDental{
 			this.colorDialog1 = new System.Windows.Forms.ColorDialog();
 			this.textCodeRange = new System.Windows.Forms.TextBox();
 			this.label2 = new System.Windows.Forms.Label();
-			this.panelODColor = new OpenDental.UI.PanelOD();
+			this.panelColor = new System.Windows.Forms.Panel();
+			this.labelBeforeTime = new System.Windows.Forms.Label();
+			this.button1 = new OpenDental.UI.Button();
 			this.butDelete = new OpenDental.UI.Button();
-			this.butColor = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(6,23);
+			this.label1.Location = new System.Drawing.Point(11,23);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(148,17);
 			this.label1.TabIndex = 2;
@@ -81,7 +84,7 @@ namespace OpenDental{
 			// 
 			// textCodeRange
 			// 
-			this.textCodeRange.Location = new System.Drawing.Point(156,23);
+			this.textCodeRange.Location = new System.Drawing.Point(161,23);
 			this.textCodeRange.Name = "textCodeRange";
 			this.textCodeRange.Size = new System.Drawing.Size(200,20);
 			this.textCodeRange.TabIndex = 15;
@@ -89,18 +92,42 @@ namespace OpenDental{
 			// label2
 			// 
 			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(160,45);
+			this.label2.Location = new System.Drawing.Point(165,45);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(92,13);
 			this.label2.TabIndex = 16;
 			this.label2.Text = "Ex: D1050-D1060";
 			// 
-			// panelODColor
+			// panelColor
 			// 
-			this.panelODColor.Location = new System.Drawing.Point(377,50);
-			this.panelODColor.Name = "panelODColor";
-			this.panelODColor.Size = new System.Drawing.Size(38,17);
-			this.panelODColor.TabIndex = 125;
+			this.panelColor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))),((int)(((byte)(64)))),((int)(((byte)(64)))));
+			this.panelColor.Location = new System.Drawing.Point(168,72);
+			this.panelColor.Name = "panelColor";
+			this.panelColor.Size = new System.Drawing.Size(24,24);
+			this.panelColor.TabIndex = 127;
+			// 
+			// labelBeforeTime
+			// 
+			this.labelBeforeTime.Location = new System.Drawing.Point(42,72);
+			this.labelBeforeTime.Name = "labelBeforeTime";
+			this.labelBeforeTime.Size = new System.Drawing.Size(117,17);
+			this.labelBeforeTime.TabIndex = 126;
+			this.labelBeforeTime.Text = "Text Color";
+			this.labelBeforeTime.TextAlign = System.Drawing.ContentAlignment.BottomRight;
+			// 
+			// button1
+			// 
+			this.button1.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.button1.Autosize = true;
+			this.button1.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.button1.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.button1.CornerRadius = 4F;
+			this.button1.Location = new System.Drawing.Point(209,72);
+			this.button1.Name = "button1";
+			this.button1.Size = new System.Drawing.Size(75,24);
+			this.button1.TabIndex = 128;
+			this.button1.Text = "Change";
+			this.button1.Click += new System.EventHandler(this.button1_Click);
 			// 
 			// butDelete
 			// 
@@ -112,27 +139,12 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(54,97);
+			this.butDelete.Location = new System.Drawing.Point(45,132);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(92,24);
 			this.butDelete.TabIndex = 124;
 			this.butDelete.Text = "&Delete";
 			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
-			// 
-			// butColor
-			// 
-			this.butColor.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butColor.Autosize = true;
-			this.butColor.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butColor.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butColor.CornerRadius = 4F;
-			this.butColor.Location = new System.Drawing.Point(360,20);
-			this.butColor.Name = "butColor";
-			this.butColor.Size = new System.Drawing.Size(75,24);
-			this.butColor.TabIndex = 13;
-			this.butColor.Text = "Color";
-			this.butColor.UseVisualStyleBackColor = true;
-			this.butColor.Click += new System.EventHandler(this.butColor_Click);
 			// 
 			// butOK
 			// 
@@ -142,7 +154,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(269,97);
+			this.butOK.Location = new System.Drawing.Point(360,102);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 9;
@@ -157,7 +169,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(360,97);
+			this.butCancel.Location = new System.Drawing.Point(360,132);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 10;
@@ -167,12 +179,13 @@ namespace OpenDental{
 			// FormProcApptColorEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(464,144);
-			this.Controls.Add(this.panelODColor);
+			this.ClientSize = new System.Drawing.Size(464,179);
+			this.Controls.Add(this.button1);
+			this.Controls.Add(this.panelColor);
+			this.Controls.Add(this.labelBeforeTime);
 			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.textCodeRange);
-			this.Controls.Add(this.butColor);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
 			this.Controls.Add(this.label1);
@@ -183,7 +196,7 @@ namespace OpenDental{
 			this.Padding = new System.Windows.Forms.Padding(3);
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Edit ProcApptColor";
+			this.Text = "Edit Proc Appt Color";
 			this.Load += new System.EventHandler(this.FormProcApptColorEdit_Load);
 			this.ResumeLayout(false);
 			this.PerformLayout();
@@ -194,10 +207,21 @@ namespace OpenDental{
 		private void FormProcApptColorEdit_Load(object sender,System.EventArgs e) {
 			textCodeRange.Text=ProcApptColorCur.CodeRange;
 			if(!ProcApptColorCur.IsNew) {
-				panelODColor.BackColor=ProcApptColorCur.ColorText;
+				panelColor.BackColor=ProcApptColorCur.ColorText;
 			}
-			else { panelODColor.BackColor=Color.Black; }
+			else { panelColor.BackColor=System.Drawing.Color.Black; }
 			textCodeRange.Focus();
+		}
+
+		private void button1_Click(object sender,EventArgs e) {
+			ColorDialog colorDlg=new ColorDialog();
+			colorDlg.AllowFullOpen=true;
+			colorDlg.AnyColor=true;
+			colorDlg.SolidColorOnly=false;
+			colorDlg.Color=panelColor.BackColor;
+			if(colorDlg.ShowDialog()==DialogResult.OK) {
+				panelColor.BackColor=colorDlg.Color;
+			}
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
@@ -205,7 +229,7 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Code range cannot be blank."));
 				return;
 			}
-			ProcApptColorCur.ColorText=panelODColor.BackColor;
+			ProcApptColorCur.ColorText=panelColor.BackColor;
 			ProcApptColorCur.CodeRange=textCodeRange.Text;
 			try {
 				if(ProcApptColorCur.IsNew) {
@@ -226,17 +250,6 @@ namespace OpenDental{
 			DialogResult=DialogResult.Cancel;
 		}
 
-		private void butColor_Click(object sender,EventArgs e) {
-			ColorDialog colorDlg=new ColorDialog();
-			colorDlg.AllowFullOpen=true;
-			colorDlg.AnyColor=true;
-			colorDlg.SolidColorOnly=false;
-			colorDlg.Color=panelODColor.BackColor;
-			if(colorDlg.ShowDialog()==DialogResult.OK) {
-				panelODColor.BackColor=colorDlg.Color;
-			}
-		}
-
 		private void butDelete_Click(object sender,EventArgs e) {
 			if(ProcApptColorCur.IsNew) {
 				DialogResult=DialogResult.Cancel;
@@ -253,6 +266,7 @@ namespace OpenDental{
 				MessageBox.Show(ex.Message);
 			}
 		}
+
 	}
 }
 
