@@ -9,6 +9,7 @@ using OpenDentBusiness;
 
 namespace OpenDental {
 	public partial class FormWebFormSetup:Form {
+
 		public FormWebFormSetup() {
 			InitializeComponent();
 			Lan.F(this);
@@ -27,19 +28,20 @@ namespace OpenDental {
 				return true;
 			};
 			// hard coded for now
-			textBoxWebFormAddress.Text = "https://192.168.0.196/WebForms/WebForm1.aspx?DentalOfficeID=" + GetDentalOfficeID();
+			textBoxWebFormAddress.Text="https://192.168.0.196/WebForms/WebForm1.aspx?DentalOfficeID="+GetDentalOfficeID();
 			textBoxWebFormAddress.ReadOnly=true;
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
-			try {Prefs.UpdateLong(PrefName.WebFormsBorderColor,this.butWebformBorderColor.BackColor.ToArgb());
+			try {
+				Prefs.UpdateLong(PrefName.WebFormsBorderColor,this.butWebformBorderColor.BackColor.ToArgb());
 				Prefs.UpdateString(PrefName.WebFormsHeading1,textBoxWebformsHeading1.Text.Trim());
 				Prefs.UpdateString(PrefName.WebFormsHeading2,textBoxWebformsHeading2.Text.Trim());
 				Prefs.UpdateString(PrefName.WebHostSynchServerURL,textboxWebHostAddress.Text.Trim());
 				// update preferences on server
 				string RegistrationKey=PrefC.GetString(PrefName.RegistrationKey);
 				WebHostSynch.WebHostSynch wh=new WebHostSynch.WebHostSynch();
-				wh.Url =PrefC.GetString(PrefName.WebHostSynchServerURL);
+				wh.Url=PrefC.GetString(PrefName.WebHostSynchServerURL);
 				if(wh.CheckRegistrationKey(RegistrationKey)==false){
 					MessageBox.Show(Lan.g(this,"Registration key provided by the dental office is incorrect"));
 					return;
@@ -69,7 +71,7 @@ namespace OpenDental {
 			try{
 			string RegistrationKey=PrefC.GetString(PrefName.RegistrationKey);
 			WebHostSynch.WebHostSynch wh=new WebHostSynch.WebHostSynch();
-			wh.Url =PrefC.GetString(PrefName.WebHostSynchServerURL);
+			wh.Url=PrefC.GetString(PrefName.WebHostSynchServerURL);
 			if(wh.CheckRegistrationKey(RegistrationKey)==false) {
 				MessageBox.Show(Lan.g(this,"Registration key provided by the dental office is incorrect"));
 			}
@@ -88,10 +90,13 @@ namespace OpenDental {
 //pass sheet to webservice
 			string RegistrationKey=PrefC.GetString(PrefName.RegistrationKey);
 				WebHostSynch.WebHostSynch wh=new WebHostSynch.WebHostSynch();
-				wh.Url =PrefC.GetString(PrefName.WebHostSynchServerURL);
+				wh.Url=PrefC.GetString(PrefName.WebHostSynchServerURL);
 				OpenDentBusiness.SheetDef sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.PatientRegistration);
 				// for this line to compile one must modify the Reference.cs file in to the Web references folder. The SheetDef and related classes with namespaces of WebHostSync must be removed so that the SheetDef Class of OpenDentBusiness is used
 				//wh.ReadSheetDef(sheetDef);
 		}
+
+
+
 	}
 }

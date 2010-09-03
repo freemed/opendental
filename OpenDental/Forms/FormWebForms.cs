@@ -21,7 +21,6 @@ namespace OpenDental {
 		}
 
 		/// <summary>
-		/// 
 		/// </summary>
 		private void FillGrid() {
 			try {
@@ -47,7 +46,7 @@ namespace OpenDental {
 					///do stuff here and return true or false accordingly.
 					///In this particular case it always returns true i.e accepts any certificate.
 					/* sample code 
-					if(sslPolicyErrors == System.Net.Security.SslPolicyErrors.None) return true;
+					if(sslPolicyErrors==System.Net.Security.SslPolicyErrors.None) return true;
 					// the sample below allows expired certificates
 					foreach(X509ChainStatus s in chain.ChainStatus) {
 						// allows expired certificates
@@ -70,7 +69,7 @@ namespace OpenDental {
 				OpenDental.WebHostSynch.webforms_sheetfield[] wbsf=wh.GetSheetData(RegistrationKey,dateFrom,dateTo);
 				if(wbsf.Count()==0) {
 					gridMain.EndUpdate();
-					MessageBox.Show(Lan.g(this,"No Patient Forms retrieved"));
+					MessageBox.Show(Lan.g(this,"No Patient forms retrieved"));
 					return;
 				}
 				// Select distinct Web sheet ids
@@ -159,7 +158,6 @@ namespace OpenDental {
 		}
 
 		/// <summary>
-		/// 
 		/// </summary>
 		private Patient CreateNewPatient(List<OpenDental.WebHostSynch.webforms_sheetfield> SingleSheet) {
 			Patient newPat=null;
@@ -210,7 +208,6 @@ namespace OpenDental {
 		}
 
 		/// <summary>
-		/// 
 		/// </summary>
 		private Sheet CreateSheet(long PatNum,List<OpenDental.WebHostSynch.webforms_sheetfield> SingleSheet) {
 			Sheet sheet=null;//only useful if not Terminal
@@ -220,7 +217,6 @@ namespace OpenDental {
 				sheet=SheetUtil.CreateSheet(sheetDef,PatNum);
 				SheetParameter.SetParameter(sheet,"PatNum",PatNum);
 				sheet.InternalNote="";//because null not ok
-
 				//SheetFields must have a one to one mapping with the SheetWebFields
 				String[] SheetFields={"LName","FName","MiddleI","Birthdate","Preferred", "Email","SSN",
 									 "addressAndHmPhoneIsSameEntireFamily","Address","Address2","City","State","Zip",
@@ -265,7 +261,6 @@ namespace OpenDental {
 		}
 
 		/// <summary>
-		/// 
 		/// </summary>
 		private void FillSheetFields(SheetField fld,string SheetWebFieldValue) {
 			try {
@@ -358,25 +353,20 @@ namespace OpenDental {
 							}
 						}
 						break;
-
 					default:
 						fld.FieldValue=SheetWebFieldValue;
 						break;
 				}//switch case
-
 			}
 			catch(Exception e) {
 				gridMain.EndUpdate();
 				MessageBox.Show(fld.FieldName + e.Message);
 			}
-
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
+	/// <summary>
+	/// </summary>
 		private void FillPatientFields(Patient newPat,FieldInfo field,string SheetWebFieldValue) {
-
 			try {
 				switch(field.Name) {
 					case "Birthdate":
@@ -450,7 +440,6 @@ namespace OpenDental {
 		}
 
 		/// <summary>
-		/// 
 		/// </summary>
 		private bool ComparePatients(Patient patientFromDb,Patient newPat) {
 			bool isEqual=true;
@@ -477,7 +466,6 @@ namespace OpenDental {
 		}
 
 		/// <summary>
-		/// 
 		/// </summary>
 		private bool CompareSheets(Sheet sheetFromDb,Sheet newSheet) {
 			bool isEqual=true;
@@ -533,5 +521,8 @@ namespace OpenDental {
 			FormWebFormSetup formW=new FormWebFormSetup();
 			formW.ShowDialog();
 		}
+
+
+
 	}
 }

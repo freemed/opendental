@@ -9,11 +9,13 @@ using System.Collections;
 
 namespace WebForms {
 	public partial class WebForm1:System.Web.UI.Page {
+
 		private Hashtable FormValuesHashTable=new Hashtable();
 		private int DentalOfficeID=0;
 
 		protected void Page_Load(object sender,EventArgs e) {
-			try {if(Request["DentalOfficeID"]!=null) {
+			try {
+				if(Request["DentalOfficeID"]!=null) {
 					Int32.TryParse(Request["DentalOfficeID"].ToString().Trim(),out DentalOfficeID);
 				}
 				SetPagePreferences(DentalOfficeID);
@@ -31,22 +33,21 @@ namespace WebForms {
 				ODWebServiceEntities db=new ODWebServiceEntities();
 				int ColorCode=3896686; // this is the Color Code for the default OpenDental color
 				string Heading1="";
-				string Heading2= "";
+				string Heading2="";
 				var PrefObj=from wp in db.webforms_preference where wp.DentalOfficeID==DentalOfficeID
 							  select wp;
 				if(PrefObj.Count() > 0) {
-					ColorCode =PrefObj.First().ColorBorder;
+					ColorCode=PrefObj.First().ColorBorder;
 					Heading1=PrefObj.First().Heading1;
-					Heading2= PrefObj.First().Heading2;
+					Heading2=PrefObj.First().Heading2;
 				}
 				LabelHeading1.Text=Heading1;
-				LabelHeading2.Text =Heading2;
+				LabelHeading2.Text=Heading2;
 				bodytag.Attributes.Add("bgcolor",ColorTranslator.ToHtml(Color.FromArgb(ColorCode)));
 			}
 			catch(Exception ex) {
 				Logger.Information(ex.Message.ToString());
 			}
-
 		}
 
 		protected void Submit_Click(object sender,EventArgs e) {
@@ -60,8 +61,7 @@ namespace WebForms {
 					if(c.HasControls()) {
 						ExtractValue(c);
 						FindControls(c);
-					}
-					else {
+					}else {
 						ExtractValue(c);
 					}
 				}
@@ -70,7 +70,6 @@ namespace WebForms {
 				Logger.Information(ex.Message.ToString());
 			}
 		}
-
 
 		/// <summary>
 		/// This is a recursive function which searches through nested controls on a  webpage
@@ -95,7 +94,6 @@ namespace WebForms {
 		/// Fill the FormValuesHashTable here.
 		/// </summary>
 		private void ExtractValue(Control c) {
-			
 			try {
 				if(c.GetType()==typeof(TextBox)) {
 					TextBox tbox=((TextBox)c); 
@@ -130,7 +128,7 @@ namespace WebForms {
 				webforms_sheet NewSheetObj=new webforms_sheet();
 				var PrefObj=from wp in db.webforms_preference where wp.DentalOfficeID==DentalOfficeID
 							  select wp;
-				NewSheetObj.DateTimeSubmitted= DateTime.Now;
+				NewSheetObj.DateTimeSubmitted=DateTime.Now;
 				foreach(string key in FormValuesHashTable.Keys) {
 					webforms_sheetfield NewSheetfieldObj=new webforms_sheetfield();
 					NewSheetfieldObj.FieldName=key;
@@ -151,5 +149,8 @@ namespace WebForms {
 				LabelSubmitMessage.Text="There has been a problem submitting your details. <br /> Please contact us at the phone number mentioned on the opendental website";
 			}
 		}
+
+
+
 	}
 }

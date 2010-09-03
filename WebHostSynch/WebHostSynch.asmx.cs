@@ -62,7 +62,6 @@ namespace WebHostSynch {
 					   &&(StartDate<=wsf.webforms_sheet.DateTimeSubmitted&&wsf.webforms_sheet.DateTimeSubmitted<=EndDate)
 					   select wsf;
 			return wsfObj.ToList();
-
 		}
 
 		[WebMethod]
@@ -75,8 +74,7 @@ namespace WebHostSynch {
 			for(int i=0;i<SheetsForDeletion.Count();i++) {
 				long SheetID=SheetsForDeletion.ElementAt(i);// LINQ throws an error if this is directly put into the selectexpression
 				// first delete all sheet field then delete the sheet so that a foreign key error is not thrown
-				var delSheetField=from wsf in db.webforms_sheetfield where
-								  wsf.webforms_sheet.SheetID==SheetID
+				var delSheetField=from wsf in db.webforms_sheetfield where wsf.webforms_sheet.SheetID==SheetID
 								  select wsf;
 				for(int j=0;j<delSheetField.Count();j++) {
 					// the ElementAt operator only works with lists. Hence ToList()
@@ -87,29 +85,28 @@ namespace WebHostSynch {
 				db.DeleteObject(delSheet.First());
 			}
 			db.SaveChanges();
-
 		}
 
 		[WebMethod]
 		public bool CheckRegistrationKey(string RegistrationKeyFromDentalOffice) {
-			string connectStr= ConfigurationManager.ConnectionStrings["DBRegKey"].ConnectionString;
+			string connectStr=ConfigurationManager.ConnectionStrings["DBRegKey"].ConnectionString;
 			OpenDentBusiness.DataConnection dc=new OpenDentBusiness.DataConnection();
 			// sets a static variable
 			dc.SetDb(connectStr,"",DatabaseType.MySql,true);
-		RegistrationKey RegistrationKeyFromDb=null;
-		try {
-			RegistrationKeyFromDb=RegistrationKeys.GetByKey(RegistrationKeyFromDentalOffice);
-		}
-		catch(ApplicationException ex) {
-			Logger.Information(ex.Message.ToString());
-			return false;
-		}
+			RegistrationKey RegistrationKeyFromDb=null;
+			try {
+				RegistrationKeyFromDb=RegistrationKeys.GetByKey(RegistrationKeyFromDentalOffice);
+			}
+			catch(ApplicationException ex) {
+				Logger.Information(ex.Message.ToString());
+				return false;
+			}
 			return true;
 		}
 
 		[WebMethod]
 		public long GetDentalOfficeID(string RegistrationKeyFromDentalOffice) {
-			string connectStr= ConfigurationManager.ConnectionStrings["DBRegKey"].ConnectionString;
+			string connectStr=ConfigurationManager.ConnectionStrings["DBRegKey"].ConnectionString;
 			OpenDentBusiness.DataConnection dc=new OpenDentBusiness.DataConnection();
 			// sets a static variable
 			dc.SetDb(connectStr,"",DatabaseType.MySql,true);
@@ -121,8 +118,9 @@ namespace WebHostSynch {
 				Logger.Information(ex.Message.ToString());
 				return 0;
 			}
-		return RegistrationKeyFromDb.PatNum;
+			return RegistrationKeyFromDb.PatNum;
 		}
+
 		/// <summary>
 		/// Ignore this method - this is for the 'next' version of the Webforms.
 		/// Here sheetDef can be uploaded to the webhostsync from Open Dental
@@ -132,7 +130,7 @@ namespace WebHostSynch {
 			//string a=sheetDef.ToString();
 		}
 
+
+
 	}
-
-
 }
