@@ -21,8 +21,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butOK;
 
 		///<summary></summary>
-		public FormProcApptColors()
-		{
+		public FormProcApptColors()	{
 			//
 			// Required for Windows Form Designer support
 			//
@@ -33,8 +32,7 @@ namespace OpenDental{
 		/// <summary>
 		/// Clean up any resources being used.
 		/// </summary>
-		protected override void Dispose( bool disposing )
-		{
+		protected override void Dispose( bool disposing )	{
 			if( disposing )
 			{
 				if(components != null)
