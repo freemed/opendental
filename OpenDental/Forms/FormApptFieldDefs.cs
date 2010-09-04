@@ -72,8 +72,8 @@ namespace OpenDental{
 			this.label1.Size = new System.Drawing.Size(373,51);
 			this.label1.TabIndex = 8;
 			this.label1.Text = "This is only for advanced users.  This is a list of extra fields that you can set" +
-    " up for appointmentss.  After adding fields to this list, you can set the values" +
-    " in an appointment edit window.";
+    " up for appointments.  After adding fields to this list, you can set the values " +
+    "in an appointment edit window.";
 			// 
 			// butClose
 			// 

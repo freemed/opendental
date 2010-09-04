@@ -1308,47 +1308,62 @@ namespace OpenDentBusiness {
 					}
 				}
 			}
-			/*
-			if(//newBenefit.PlanNum             != oldBenefitList[i].PlanNum
-				//|| newBenefit.PatPlanNum        != oldBenefitList[i].PatPlanNum
-				   newBenefit.CovCatNum         != oldBenefitList[i].CovCatNum
-				|| newBenefit.BenefitType       != oldBenefitList[i].BenefitType
-				|| newBenefit.Percent           != oldBenefitList[i].Percent
-				|| newBenefit.MonetaryAmt       != oldBenefitList[i].MonetaryAmt
-				|| newBenefit.TimePeriod        != oldBenefitList[i].TimePeriod
-				|| newBenefit.QuantityQualifier != oldBenefitList[i].QuantityQualifier
-				|| newBenefit.Quantity          != oldBenefitList[i].Quantity
-				|| newBenefit.CodeNum           != oldBenefitList[i].CodeNum 
-				|| newBenefit.CoverageLevel     != oldBenefitList[i].CoverageLevel) 
-			{
-				//changed=true;
-				//break;
-				//change the identical benefit for all other plans
-				//because of the way FormInsBenefits works, this won't ever get called. Instead, a changed benefit results in a delete and insert.  Oh well.
-				command="UPDATE benefit SET " 
-					//+"PlanNum = '"          +POut.Long   (ben.PlanNum)+"'"
-					//+",PatPlanNum = '"      +POut.Long   (ben.PatPlanNum)+"'"
-					+"CovCatNum = '"        +POut.Long   (newBenefit.CovCatNum)+"'"
-					+",BenefitType = '"     +POut.Long   ((int)newBenefit.BenefitType)+"'"
-					+",Percent = '"         +POut.Long   (newBenefit.Percent)+"'"
-					+",MonetaryAmt = '"     +POut.Double(newBenefit.MonetaryAmt)+"'"
-					+",TimePeriod = '"      +POut.Long   ((int)newBenefit.TimePeriod)+"'"
-					+",QuantityQualifier ='"+POut.Long   ((int)newBenefit.QuantityQualifier)+"'"
-					+",Quantity = '"        +POut.Long   (newBenefit.Quantity)+"'"
-					+",CodeNum = '"         +POut.Long   (newBenefit.CodeNum)+"'"
-					+",CoverageLevel = '"   +POut.Long   ((int)newBenefit.CoverageLevel)+"' "
-					+"WHERE PlanNum IN("+plansInString+") "
-					+"AND CovCatNum="+POut.Long(oldBenefitList[i].CovCatNum)+" "
-					+"AND BenefitType="+POut.Int((int)oldBenefitList[i].BenefitType)+" "
-					+"AND Percent="+POut.Int(oldBenefitList[i].Percent)+" "
-					+"AND MonetaryAmt="+POut.Double(oldBenefitList[i].MonetaryAmt)+" "
-					+"AND TimePeriod="+POut.Int((int)oldBenefitList[i].TimePeriod)+" "
-					+"AND QuantityQualifier="+POut.Int((int)oldBenefitList[i].QuantityQualifier)+" "
-					+"AND Quantity="+POut.Int(oldBenefitList[i].Quantity)+" "
-					+"AND CodeNum="+POut.Long(oldBenefitList[i].CodeNum)+" "
-					+"AND CoverageLevel="+POut.Int((int)oldBenefitList[i].CoverageLevel);
-				Db.NonQ(command);
-			}*/
+			//3. Alter any changed benefits.----------------------------------------------------------------------------------------
+			//These will only be from the Other Benefits list, because the normal benefits are changed by using a delete and insert.
+			for(int i=0;i<oldBenefitList.Count;i++) {//loop through the old list
+				newBenefit=null;
+				for(int j=0;j<newBenefitList.Count;j++) {
+					if(newBenefitList[j]==null || newBenefitList[j].BenefitNum==0) {
+						continue;
+					}
+					if(oldBenefitList[i].BenefitNum==newBenefitList[j].BenefitNum) {
+						newBenefit=newBenefitList[j];//a matching benefitNum was found in the new list
+						break;
+					}
+				}
+				if(newBenefit==null){
+					continue;//no match found
+				}
+				if(//newBenefit.PlanNum             != oldBenefitList[i].PlanNum
+					//|| newBenefit.PatPlanNum        != oldBenefitList[i].PatPlanNum
+						 newBenefit.CovCatNum         != oldBenefitList[i].CovCatNum
+					|| newBenefit.BenefitType       != oldBenefitList[i].BenefitType
+					|| newBenefit.Percent           != oldBenefitList[i].Percent
+					|| newBenefit.MonetaryAmt       != oldBenefitList[i].MonetaryAmt
+					|| newBenefit.TimePeriod        != oldBenefitList[i].TimePeriod
+					|| newBenefit.QuantityQualifier != oldBenefitList[i].QuantityQualifier
+					|| newBenefit.Quantity          != oldBenefitList[i].Quantity
+					|| newBenefit.CodeNum           != oldBenefitList[i].CodeNum 
+					|| newBenefit.CoverageLevel     != oldBenefitList[i].CoverageLevel) 
+				{
+					//changed=true;
+					//break;
+					//change the identical benefit for all other plans
+					command="UPDATE benefit SET " 
+						//+"PlanNum = '"          +POut.Long   (ben.PlanNum)+"'"
+						//+",PatPlanNum = '"      +POut.Long   (ben.PatPlanNum)+"'"
+						+"CovCatNum = '"        +POut.Long   (newBenefit.CovCatNum)+"'"
+						+",BenefitType = '"     +POut.Long   ((int)newBenefit.BenefitType)+"'"
+						+",Percent = '"         +POut.Long   (newBenefit.Percent)+"'"
+						+",MonetaryAmt = '"     +POut.Double (newBenefit.MonetaryAmt)+"'"
+						+",TimePeriod = '"      +POut.Long   ((int)newBenefit.TimePeriod)+"'"
+						+",QuantityQualifier ='"+POut.Long   ((int)newBenefit.QuantityQualifier)+"'"
+						+",Quantity = '"        +POut.Long   (newBenefit.Quantity)+"'"
+						+",CodeNum = '"         +POut.Long   (newBenefit.CodeNum)+"'"
+						+",CoverageLevel = '"   +POut.Long   ((int)newBenefit.CoverageLevel)+"' "
+						+"WHERE PlanNum IN("+plansInString+") "
+						+"AND CovCatNum="+POut.Long(oldBenefitList[i].CovCatNum)+" "
+						+"AND BenefitType="+POut.Int((int)oldBenefitList[i].BenefitType)+" "
+						+"AND Percent="+POut.Int(oldBenefitList[i].Percent)+" "
+						+"AND MonetaryAmt="+POut.Double(oldBenefitList[i].MonetaryAmt)+" "
+						+"AND TimePeriod="+POut.Int((int)oldBenefitList[i].TimePeriod)+" "
+						+"AND QuantityQualifier="+POut.Int((int)oldBenefitList[i].QuantityQualifier)+" "
+						+"AND Quantity="+POut.Int(oldBenefitList[i].Quantity)+" "
+						+"AND CodeNum="+POut.Long(oldBenefitList[i].CodeNum)+" "
+						+"AND CoverageLevel="+POut.Int((int)oldBenefitList[i].CoverageLevel);
+					Db.NonQ(command);
+				}
+			}
 			//don't forget to compute estimates for each plan now.//that would be too slow
 		}
 
