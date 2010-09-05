@@ -27,8 +27,8 @@ namespace OpenDental {
 				///In this particular case it always returns true i.e accepts any certificate.
 				return true;
 			};
-			// hard coded for now
-			textBoxWebFormAddress.Text="https://192.168.0.196/WebForms/WebForm1.aspx?DentalOfficeID="+GetDentalOfficeID();
+			// hard coded for now. Ideally it should be provided by the WebHostSynch webservice
+			textBoxWebFormAddress.Text="https://opendentalsoft.com/WebForms/WebForm1.aspx?DentalOfficeID="+GetDentalOfficeID();
 			textBoxWebFormAddress.ReadOnly=true;
 		}
 

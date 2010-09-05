@@ -37,7 +37,7 @@ namespace OpenDental {
 				gridMain.Rows.Clear();
 				DateTime dateFrom=PIn.Date(textDateFrom.Text);
 				DateTime dateTo=PIn.Date(textDateTo.Text);
-				///the line below will allow the to code continue by not throwing an exception.
+				///the line below will allow the code to continue by not throwing an exception.
 				///It will accept the security certificate if there is a problem with the security certificate.
 				System.Net.ServicePointManager.ServerCertificateValidationCallback+=
 				delegate(object sender,System.Security.Cryptography.X509Certificates.X509Certificate certificate,
@@ -118,7 +118,7 @@ namespace OpenDental {
 					}
 					else {
 						newSheet=CreateSheet(PatNum,SingleSheet.ToList());
-						row.Cells.Add("Double Click to import this sheet");
+						row.Cells.Add("Double Click to import this sheet");// this message should be changed to something more elegent.
 					}
 					row.Tag=PatNum;
 					gridMain.Rows.Add(row);
