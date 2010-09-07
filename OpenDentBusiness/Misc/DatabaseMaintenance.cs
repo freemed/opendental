@@ -1350,7 +1350,8 @@ HAVING cnt>1";
 					continue;//closed and holiday statuses do not use starttime and stoptime
 				}
 				if(schedList[i].StopTime.TimeOfDay-schedList[i].StartTime.TimeOfDay<new TimeSpan(0,5,0)) {//Schedule items less than five minutes won't show up. Remove them.
-					if(schedList[i].StopTime.TimeOfDay!=new TimeSpan(0,0,0) || schedList[i].StartTime.TimeOfDay!=new TimeSpan(0,0,0)){//Don't remove notes. They have start/stop time of 00:00:00.
+					//But we don't want to remove provider notes, employee notes, or pratice notes.
+					if(schedList[i].Note==""){
 						Schedules.Delete(schedList[i]);
 						numberFixed++;
 					}
