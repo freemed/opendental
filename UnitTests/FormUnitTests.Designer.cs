@@ -115,10 +115,10 @@ namespace UnitTests {
 			// 
 			this.label4.Location = new System.Drawing.Point(92,7);
 			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(571,18);
+			this.label4.Size = new System.Drawing.Size(600,18);
 			this.label4.TabIndex = 11;
-			this.label4.Text = "This does not require a database, but does require setting both this project and " +
-    "OpenDentalServer as startup.";
+			this.label4.Text = "Set both this project and OpenDentalServer as startup.  Edit OpenDentalServer.Ope" +
+    "nDentalServerConfig.xml to be valid.";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// FormUnitTests

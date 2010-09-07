@@ -123,7 +123,18 @@ namespace UnitTests {
 				throw new Exception("Should be fieldOK.");
 			}
 			retVal+="SendSheetWithFields: Passed.\r\n";
-			
+			//SendSheetDefWithFields
+			SheetDef sheetdef=new SheetDef();
+			sheetdef.SheetFieldDefs=new List<SheetFieldDef>();
+			sheetdef.Parameters=new List<SheetParameter>();
+			SheetFieldDef fielddef=new SheetFieldDef();
+			fielddef.FieldName="FieldNameTeal";
+			sheetdef.SheetFieldDefs.Add(fielddef);
+			strResult=WebServiceTests.SendSheetDefWithFieldDefs(sheetdef);
+			if(strResult!="fielddefOK") {
+				throw new Exception("Should be fielddefOK.");
+			}
+			retVal+="SendSheetDefWithFieldDefs: Passed.\r\n";
 			
 
 			

@@ -29,18 +29,19 @@ namespace UnitTests {
 
 		private void butWebService_Click(object sender,EventArgs e) {
 			RemotingClient.ServerURI="http://localhost:49262/ServiceMain.asmx";
+			Cursor=Cursors.WaitCursor;
 			try{
 				Userod user=Security.LogInWeb("Admin","","",Application.ProductVersion);//Userods.EncryptPassword("pass",false)
 				Security.CurUser=user;
 				RemotingClient.RemotingRole=RemotingRole.ClientWeb;
 			}
 			catch(Exception ex){
+				Cursor=Cursors.Default;
 				MessageBox.Show(ex.Message);
 				return;
 			}
 			textResults.Text="";
 			Application.DoEvents();
-			Cursor=Cursors.WaitCursor;
 			textResults.Text+=WebServiceT.RunAll();
 			Cursor=Cursors.Default;
 		}

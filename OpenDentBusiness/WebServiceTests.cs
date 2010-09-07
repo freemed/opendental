@@ -159,6 +159,15 @@ namespace OpenDentBusiness {
 			return "error";
 		}
 
+		public static string SendSheetDefWithFieldDefs(SheetDef sheetdef) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),sheetdef);
+			}
+			if(sheetdef.SheetFieldDefs[0].FieldName=="FieldNameTeal") {
+				return "fielddefOK";
+			}
+			return "error";
+		}
 		
 
 
