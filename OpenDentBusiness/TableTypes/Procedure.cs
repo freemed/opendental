@@ -16,8 +16,7 @@ namespace OpenDentBusiness {
 		public long AptNum;
 		///<summary>No longer used.</summary>
 		public string OldCode;
-		///<summary>Procedure date/time that will show in the account as the date performed.  If just treatment planned, the date can be the date it was tp'd, or the date can be min val if we don't care.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		///<summary>Procedure date that will show in the account as the date performed.  If just treatment planned, the date can be the date it was tp'd, or the date can be min val if we don't care.  Also see ProcTime column.</summary>
 		public DateTime ProcDate;
 		///<summary>Procedure fee.</summary>
 		public double ProcFee;
@@ -92,6 +91,8 @@ namespace OpenDentBusiness {
 		public bool HideGraphics;
 		///<summary>F16, up to 5 char. One or more of the following: A=Repair of a prior service, B=Temporary placement, C=TMJ, E=Implant, L=Appliance lost, S=Appliance stolen, X=none of the above.  Blank is equivalent to X for claim output, but one value will not be automatically converted to the other in this table.  That will allow us to track user entry for procedurecode.IsProsth.</summary>
 		public string CanadianTypeCodes;
+		///<summary>Used to be part of the ProcDate, but that was causing reporting issues.</summary>
+		public TimeSpan ProcTime;
 
 		///<summary>Not a database column.  Saved in database in the procnote table.  This note is only the most recent note from that table.  If user changes it, then the business layer handles it by adding another procnote to that table.</summary>
 		[CrudColumn(IsNotDbColumn=true)]

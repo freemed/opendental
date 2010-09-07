@@ -50,7 +50,7 @@ namespace OpenDentBusiness.Crud{
 				procedure.PatNum            = PIn.Long  (table.Rows[i]["PatNum"].ToString());
 				procedure.AptNum            = PIn.Long  (table.Rows[i]["AptNum"].ToString());
 				procedure.OldCode           = PIn.String(table.Rows[i]["OldCode"].ToString());
-				procedure.ProcDate          = PIn.DateT (table.Rows[i]["ProcDate"].ToString());
+				procedure.ProcDate          = PIn.Date  (table.Rows[i]["ProcDate"].ToString());
 				procedure.ProcFee           = PIn.Double(table.Rows[i]["ProcFee"].ToString());
 				procedure.Surf              = PIn.String(table.Rows[i]["Surf"].ToString());
 				procedure.ToothNum          = PIn.String(table.Rows[i]["ToothNum"].ToString());
@@ -87,6 +87,7 @@ namespace OpenDentBusiness.Crud{
 				procedure.SiteNum           = PIn.Long  (table.Rows[i]["SiteNum"].ToString());
 				procedure.HideGraphics      = PIn.Bool  (table.Rows[i]["HideGraphics"].ToString());
 				procedure.CanadianTypeCodes = PIn.String(table.Rows[i]["CanadianTypeCodes"].ToString());
+				procedure.ProcTime          = PIn.TimeSpan(table.Rows[i]["ProcTime"].ToString());
 				retVal.Add(procedure);
 			}
 			return retVal;
@@ -106,7 +107,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="ProcNum,";
 			}
-			command+="PatNum,AptNum,OldCode,ProcDate,ProcFee,Surf,ToothNum,ToothRange,Priority,ProcStatus,ProvNum,Dx,PlannedAptNum,PlaceService,Prosthesis,DateOriginalProsth,ClaimNote,DateEntryC,ClinicNum,MedicalCode,DiagnosticCode,IsPrincDiag,ProcNumLab,BillingTypeOne,BillingTypeTwo,CodeNum,CodeMod1,CodeMod2,CodeMod3,CodeMod4,RevCode,UnitCode,UnitQty,BaseUnits,StartTime,StopTime,DateTP,SiteNum,HideGraphics,CanadianTypeCodes) VALUES(";
+			command+="PatNum,AptNum,OldCode,ProcDate,ProcFee,Surf,ToothNum,ToothRange,Priority,ProcStatus,ProvNum,Dx,PlannedAptNum,PlaceService,Prosthesis,DateOriginalProsth,ClaimNote,DateEntryC,ClinicNum,MedicalCode,DiagnosticCode,IsPrincDiag,ProcNumLab,BillingTypeOne,BillingTypeTwo,CodeNum,CodeMod1,CodeMod2,CodeMod3,CodeMod4,RevCode,UnitCode,UnitQty,BaseUnits,StartTime,StopTime,DateTP,SiteNum,HideGraphics,CanadianTypeCodes,ProcTime) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(procedure.ProcNum)+",";
 			}
@@ -114,7 +115,7 @@ namespace OpenDentBusiness.Crud{
 				     POut.Long  (procedure.PatNum)+","
 				+    POut.Long  (procedure.AptNum)+","
 				+"'"+POut.String(procedure.OldCode)+"',"
-				+    POut.DateT (procedure.ProcDate)+","
+				+    POut.Date  (procedure.ProcDate)+","
 				+"'"+POut.Double(procedure.ProcFee)+"',"
 				+"'"+POut.String(procedure.Surf)+"',"
 				+"'"+POut.String(procedure.ToothNum)+"',"
@@ -150,7 +151,8 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Date  (procedure.DateTP)+","
 				+    POut.Long  (procedure.SiteNum)+","
 				+    POut.Bool  (procedure.HideGraphics)+","
-				+"'"+POut.String(procedure.CanadianTypeCodes)+"')";
+				+"'"+POut.String(procedure.CanadianTypeCodes)+"',"
+				+    POut.TimeSpan(procedure.ProcTime)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -166,7 +168,7 @@ namespace OpenDentBusiness.Crud{
 				+"PatNum            =  "+POut.Long  (procedure.PatNum)+", "
 				+"AptNum            =  "+POut.Long  (procedure.AptNum)+", "
 				+"OldCode           = '"+POut.String(procedure.OldCode)+"', "
-				+"ProcDate          =  "+POut.DateT (procedure.ProcDate)+", "
+				+"ProcDate          =  "+POut.Date  (procedure.ProcDate)+", "
 				+"ProcFee           = '"+POut.Double(procedure.ProcFee)+"', "
 				+"Surf              = '"+POut.String(procedure.Surf)+"', "
 				+"ToothNum          = '"+POut.String(procedure.ToothNum)+"', "
@@ -202,7 +204,8 @@ namespace OpenDentBusiness.Crud{
 				+"DateTP            =  "+POut.Date  (procedure.DateTP)+", "
 				+"SiteNum           =  "+POut.Long  (procedure.SiteNum)+", "
 				+"HideGraphics      =  "+POut.Bool  (procedure.HideGraphics)+", "
-				+"CanadianTypeCodes = '"+POut.String(procedure.CanadianTypeCodes)+"' "
+				+"CanadianTypeCodes = '"+POut.String(procedure.CanadianTypeCodes)+"', "
+				+"ProcTime          =  "+POut.TimeSpan(procedure.ProcTime)+" "
 				+"WHERE ProcNum = "+POut.Long(procedure.ProcNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
@@ -224,7 +227,7 @@ namespace OpenDentBusiness.Crud{
 			}
 			if(procedure.ProcDate != oldProcedure.ProcDate) {
 				if(command!=""){ command+=",";}
-				command+="ProcDate = "+POut.DateT(procedure.ProcDate)+"";
+				command+="ProcDate = "+POut.Date(procedure.ProcDate)+"";
 			}
 			if(procedure.ProcFee != oldProcedure.ProcFee) {
 				if(command!=""){ command+=",";}
@@ -369,6 +372,10 @@ namespace OpenDentBusiness.Crud{
 			if(procedure.CanadianTypeCodes != oldProcedure.CanadianTypeCodes) {
 				if(command!=""){ command+=",";}
 				command+="CanadianTypeCodes = '"+POut.String(procedure.CanadianTypeCodes)+"'";
+			}
+			if(procedure.ProcTime != oldProcedure.ProcTime) {
+				if(command!=""){ command+=",";}
+				command+="ProcTime = "+POut.TimeSpan(procedure.ProcTime)+"";
 			}
 			if(command==""){
 				return;

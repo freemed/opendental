@@ -2483,6 +2483,13 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					+"'"+POut.Int(((int)ToolBarsAvail.ChartModule))+"', "
 					+"'Progeny')";
 				Db.NonQ32(command);
+				//ProcDate, split off time component-----------------------------------------------------------------------
+				command="ALTER TABLE procedurelog ADD ProcTime time NOT NULL";
+				Db.NonQ(command);
+				command="UPDATE procedurelog SET ProcTime = time(ProcDate)";
+				Db.NonQ(command);
+				command="ALTER TABLE procedurelog CHANGE ProcDate ProcDate date NOT NULL default '0001-01-01'";
+				Db.NonQ(command);
 				command="UPDATE preference SET ValueString = '7.2.38.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
@@ -2567,5 +2574,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 
+
+			
 
 			

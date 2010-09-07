@@ -49,8 +49,12 @@ namespace OpenDentBusiness.Crud{
 				phone.PhoneNum      = PIn.Long  (table.Rows[i]["PhoneNum"].ToString());
 				phone.Extension     = PIn.Int   (table.Rows[i]["Extension"].ToString());
 				phone.EmployeeName  = PIn.String(table.Rows[i]["EmployeeName"].ToString());
-				try{
-					phone.ClockStatus =(ClockStatusEnum)Enum.Parse(typeof(ClockStatusEnum),table.Rows[i]["ClockStatus"].ToString());
+				string clockStatus=table.Rows[i]["ClockStatus"].ToString();
+				if(clockStatus==""){
+					phone.ClockStatus =(ClockStatusEnum)0;
+				}
+				else try{
+					phone.ClockStatus =(ClockStatusEnum)Enum.Parse(typeof(ClockStatusEnum),clockStatus);
 				}
 				catch{
 					phone.ClockStatus =(ClockStatusEnum)0;
