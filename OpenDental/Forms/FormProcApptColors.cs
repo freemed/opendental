@@ -173,12 +173,12 @@ namespace OpenDental{
 				FillGrid();
 		}
 
-		private void butOK_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.OK;
+		private void butClose_Click(object sender,System.EventArgs e) {
+			DialogResult=DialogResult.Cancel;
 		}
 
-		private void butClose_Click(object sender, System.EventArgs e) {
-			DialogResult=DialogResult.Cancel;
+		private void butOK_Click(object sender,EventArgs e) {
+			DialogResult=DialogResult.OK;
 		}
 
 		

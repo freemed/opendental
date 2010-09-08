@@ -18,16 +18,7 @@ namespace OpenDentBusiness{
 		[XmlIgnore]
 		public Color ColorText;
 
-		///<summary>Used only for serialization purposes</summary>
-		[XmlElement("ColorText",typeof(int))]
-		public int ColorTextXml {
-			get {
-				return ColorText.ToArgb();
-			}
-			set {
-				ColorText = Color.FromArgb(value);
-			}
-		}
+
 
 		public ProcApptColor Copy() {
 			return (ProcApptColor)this.MemberwiseClone();

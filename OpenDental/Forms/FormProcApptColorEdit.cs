@@ -22,7 +22,7 @@ namespace OpenDental{
 		private TextBox textCodeRange;
 		private Label label2;
 		private OpenDental.UI.Button butDelete;
-		private OpenDental.UI.Button button1;
+		private OpenDental.UI.Button butChange;
 		private Panel panelColor;
 		private Label labelBeforeTime;
 		public ProcApptColor ProcApptColorCur;
@@ -69,7 +69,7 @@ namespace OpenDental{
 			this.panelColor = new System.Windows.Forms.Panel();
 			this.labelBeforeTime = new System.Windows.Forms.Label();
 			this.checkPrevDate = new System.Windows.Forms.CheckBox();
-			this.button1 = new OpenDental.UI.Button();
+			this.butChange = new OpenDental.UI.Button();
 			this.butDelete = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
@@ -89,7 +89,7 @@ namespace OpenDental{
 			this.textCodeRange.Location = new System.Drawing.Point(136,20);
 			this.textCodeRange.Name = "textCodeRange";
 			this.textCodeRange.Size = new System.Drawing.Size(200,20);
-			this.textCodeRange.TabIndex = 15;
+			this.textCodeRange.TabIndex = 1;
 			// 
 			// label2
 			// 
@@ -123,23 +123,23 @@ namespace OpenDental{
 			this.checkPrevDate.Location = new System.Drawing.Point(136,102);
 			this.checkPrevDate.Name = "checkPrevDate";
 			this.checkPrevDate.Size = new System.Drawing.Size(120,17);
-			this.checkPrevDate.TabIndex = 129;
+			this.checkPrevDate.TabIndex = 3;
 			this.checkPrevDate.Text = "Show previous date";
 			this.checkPrevDate.UseVisualStyleBackColor = true;
 			// 
-			// button1
+			// butChange
 			// 
-			this.button1.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.button1.Autosize = true;
-			this.button1.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.button1.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.button1.CornerRadius = 4F;
-			this.button1.Location = new System.Drawing.Point(170,64);
-			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(75,24);
-			this.button1.TabIndex = 128;
-			this.button1.Text = "Change";
-			this.button1.Click += new System.EventHandler(this.button1_Click);
+			this.butChange.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butChange.Autosize = true;
+			this.butChange.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butChange.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butChange.CornerRadius = 4F;
+			this.butChange.Location = new System.Drawing.Point(170,64);
+			this.butChange.Name = "butChange";
+			this.butChange.Size = new System.Drawing.Size(75,24);
+			this.butChange.TabIndex = 2;
+			this.butChange.Text = "Change";
+			this.butChange.Click += new System.EventHandler(this.butChange_Click);
 			// 
 			// butDelete
 			// 
@@ -154,7 +154,7 @@ namespace OpenDental{
 			this.butDelete.Location = new System.Drawing.Point(20,162);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(92,24);
-			this.butDelete.TabIndex = 124;
+			this.butDelete.TabIndex = 6;
 			this.butDelete.Text = "&Delete";
 			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
 			// 
@@ -169,7 +169,7 @@ namespace OpenDental{
 			this.butOK.Location = new System.Drawing.Point(335,131);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
-			this.butOK.TabIndex = 9;
+			this.butOK.TabIndex = 4;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
@@ -184,7 +184,7 @@ namespace OpenDental{
 			this.butCancel.Location = new System.Drawing.Point(335,162);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
-			this.butCancel.TabIndex = 10;
+			this.butCancel.TabIndex = 5;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
@@ -193,7 +193,7 @@ namespace OpenDental{
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(433,208);
 			this.Controls.Add(this.checkPrevDate);
-			this.Controls.Add(this.button1);
+			this.Controls.Add(this.butChange);
 			this.Controls.Add(this.panelColor);
 			this.Controls.Add(this.labelBeforeTime);
 			this.Controls.Add(this.butDelete);
@@ -223,11 +223,12 @@ namespace OpenDental{
 			if(!ProcApptColorCur.IsNew) {
 				panelColor.BackColor=ProcApptColorCur.ColorText;
 			}
-			else { panelColor.BackColor=System.Drawing.Color.Black; }
-			textCodeRange.Focus();
+			else { 
+				panelColor.BackColor=System.Drawing.Color.Black; 
+			}
 		}
 
-		private void button1_Click(object sender,EventArgs e) {
+		private void butChange_Click(object sender,EventArgs e) {
 			ColorDialog colorDlg=new ColorDialog();
 			colorDlg.AllowFullOpen=true;
 			colorDlg.AnyColor=true;
@@ -236,6 +237,27 @@ namespace OpenDental{
 			if(colorDlg.ShowDialog()==DialogResult.OK) {
 				panelColor.BackColor=colorDlg.Color;
 			}
+		}
+
+		private void butDelete_Click(object sender,EventArgs e) {
+			if(ProcApptColorCur.IsNew) {
+				DialogResult=DialogResult.Cancel;
+				return;
+			}
+			if(!MsgBox.Show(this,true,"Delete this procedure color range?")) {
+				return;
+			}
+			try {
+				ProcApptColors.Delete(ProcApptColorCur.ProcApptColorNum);
+				DialogResult=DialogResult.OK;
+			}
+			catch(Exception ex) {
+				MessageBox.Show(ex.Message);
+			}
+		}
+
+		private void butCancel_Click(object sender,System.EventArgs e) {
+			DialogResult=DialogResult.Cancel;
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
@@ -259,27 +281,6 @@ namespace OpenDental{
 				return;
 			}
 			DialogResult=DialogResult.OK;
-		}
-
-		private void butCancel_Click(object sender, System.EventArgs e) {
-			DialogResult=DialogResult.Cancel;
-		}
-
-		private void butDelete_Click(object sender,EventArgs e) {
-			if(ProcApptColorCur.IsNew) {
-				DialogResult=DialogResult.Cancel;
-				return;
-			}
-			if(!MsgBox.Show(this,true,"Delete this procedure color range?")) {
-				return;
-			}
-			try {
-				ProcApptColors.Delete(ProcApptColorCur.ProcApptColorNum);
-				DialogResult=DialogResult.OK;
-			}
-			catch(Exception ex) {
-				MessageBox.Show(ex.Message);
-			}
 		}
 
 	}

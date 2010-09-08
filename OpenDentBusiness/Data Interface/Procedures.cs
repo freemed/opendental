@@ -233,14 +233,14 @@ namespace OpenDentBusiness {
 				if(i>0) {
 					procStatus+=" OR ";
 				}
-				procStatus+="ProcStatus="+POut.Int(statuses[i].GetHashCode());
+				procStatus+="ProcStatus="+POut.Int((int)statuses[i]);
 			}
-			string command="SELECT * FROM procedurelog "+
-				"WHERE PatNum='"+POut.Long(patNum)+"'"+
-				"AND CodeNum='"+POut.Long(codeNum)+"'"+
-				"AND ProcDate<"+POut.Date(ceilDate)+
-				"AND ("+procStatus+")"+
-				"ORDER BY ProcDate DESC";
+			string command="SELECT * FROM procedurelog "
+				+"WHERE PatNum='"+POut.Long(patNum)+"'"
+				+"AND CodeNum='"+POut.Long(codeNum)+"'"
+				+"AND ProcDate<"+POut.Date(ceilDate)
+				+"AND ("+procStatus+")"
+				+"ORDER BY ProcDate DESC";
 			List<Procedure> result=Crud.ProcedureCrud.SelectMany(command);
 			return result;
 		}

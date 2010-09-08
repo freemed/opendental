@@ -2077,8 +2077,13 @@ namespace OpenDental{
 				string pColor=GetProcColor(procCode);
 				string prevDate="";
 				if(pColor!="" && procColorShowDate) {
+					DateTime maxDate=new DateTime();
+					maxDate=AptCur.AptDateTime;
+					if(maxDate.Year<1880) {
+						maxDate=DateTime.Today;
+					}
 					ProcedureCode pc=ProcedureCodes.GetProcCode(procCode);//used to get codenum
-					List<Procedure> procs=Procedures.GetProcsForPatByStatusBeforeDate(AptCur.PatNum,new ProcStat[] { ProcStat.C,ProcStat.EC,ProcStat.EO },AptCur.AptDateTime,pc.CodeNum);
+					List<Procedure> procs=Procedures.GetProcsForPatByStatusBeforeDate(AptCur.PatNum,new ProcStat[] { ProcStat.C,ProcStat.EC,ProcStat.EO },maxDate,pc.CodeNum);
 					if(procs.Count>0) {
 						prevDate=" ("+procs[0].ProcDate.ToShortDateString()+")";
 					}
@@ -2137,7 +2142,7 @@ namespace OpenDental{
 					code2=colorList[i].CodeRange.Trim();
 				}
 				else {
-					string[] codeSplit = colorList[i].CodeRange.Split(new char[] { '-' });
+					string[] codeSplit=colorList[i].CodeRange.Split(new char[] { '-' });
 					code1=codeSplit[0].Trim();
 					code2=codeSplit[1].Trim();
 				}
