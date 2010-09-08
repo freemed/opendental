@@ -121,6 +121,22 @@ namespace WebHostSynch {
 			return RegistrationKeyFromDb.PatNum;
 		}
 
+		[WebMethod]
+		public string GetWebFormAddress(string RegistrationKeyFromDentalOffice) {
+			string connectStr=ConfigurationManager.ConnectionStrings["DBRegKey"].ConnectionString;
+			string WebFormAddress="";
+			try {
+				WebFormAddress="https://opendentalsoft.com/WebForms/WebForm1.aspx?DentalOfficeID="+GetDentalOfficeID(RegistrationKeyFromDentalOffice);
+			}
+			catch(ApplicationException ex) {
+				Logger.Information(ex.Message.ToString());
+				
+			}
+			return WebFormAddress;
+		}
+
+
+
 		/// <summary>
 		/// Ignore this method - this is for the 'next' version of the Webforms.
 		/// Here sheetDef can be uploaded to the webhostsync from Open Dental

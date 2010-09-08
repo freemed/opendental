@@ -28,7 +28,7 @@ namespace OpenDental {
 				return true;
 			};
 			// hard coded for now. Ideally it should be provided by the WebHostSynch webservice
-			textBoxWebFormAddress.Text="https://opendentalsoft.com/WebForms/WebForm1.aspx?DentalOfficeID="+GetDentalOfficeID();
+			textBoxWebFormAddress.Text=GetWebFormAddress();
 			textBoxWebFormAddress.ReadOnly=true;
 		}
 
@@ -67,8 +67,8 @@ namespace OpenDental {
 			butWebformBorderColor.BackColor=colorDialog1.Color;
 		}
 
-		private long GetDentalOfficeID() {
-			long DentalOfficeID=0;
+		private string GetWebFormAddress() {
+			string WebFormAddress="";
 			try{
 				string RegistrationKey=PrefC.GetString(PrefName.RegistrationKey);
 				WebHostSynch.WebHostSynch wh=new WebHostSynch.WebHostSynch();
@@ -76,12 +76,12 @@ namespace OpenDental {
 				if(wh.CheckRegistrationKey(RegistrationKey)==false) {
 					MsgBox.Show(this,"Registration key provided by the dental office is incorrect");
 				}
-				DentalOfficeID=wh.GetDentalOfficeID(RegistrationKey);
+				WebFormAddress=wh.GetWebFormAddress(RegistrationKey);
 			}
 			catch(Exception ex) {
 				MessageBox.Show(ex.Message);
 			}
-			return DentalOfficeID;
+			return WebFormAddress;
 		}
 
 		/// <summary>

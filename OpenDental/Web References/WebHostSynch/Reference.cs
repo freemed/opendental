@@ -34,8 +34,6 @@ namespace OpenDental.WebHostSynch {
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(EntityKeyMember[]))]
     public partial class WebHostSynch : System.Web.Services.Protocols.SoapHttpClientProtocol {
         
-        private System.Threading.SendOrPostCallback HelloWorldOperationCompleted;
-        
         private System.Threading.SendOrPostCallback SetPreferencesOperationCompleted;
         
         private System.Threading.SendOrPostCallback GetSheetDataOperationCompleted;
@@ -45,6 +43,8 @@ namespace OpenDental.WebHostSynch {
         private System.Threading.SendOrPostCallback CheckRegistrationKeyOperationCompleted;
         
         private System.Threading.SendOrPostCallback GetDentalOfficeIDOperationCompleted;
+        
+        private System.Threading.SendOrPostCallback GetWebFormAddressOperationCompleted;
         
         private System.Threading.SendOrPostCallback ReadSheetDefOperationCompleted;
         
@@ -87,9 +87,6 @@ namespace OpenDental.WebHostSynch {
         }
         
         /// <remarks/>
-        public event HelloWorldCompletedEventHandler HelloWorldCompleted;
-        
-        /// <remarks/>
         public event SetPreferencesCompletedEventHandler SetPreferencesCompleted;
         
         /// <remarks/>
@@ -105,34 +102,10 @@ namespace OpenDental.WebHostSynch {
         public event GetDentalOfficeIDCompletedEventHandler GetDentalOfficeIDCompleted;
         
         /// <remarks/>
+        public event GetWebFormAddressCompletedEventHandler GetWebFormAddressCompleted;
+        
+        /// <remarks/>
         public event ReadSheetDefCompletedEventHandler ReadSheetDefCompleted;
-        
-        /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/HelloWorld", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-        public string HelloWorld() {
-            object[] results = this.Invoke("HelloWorld", new object[0]);
-            return ((string)(results[0]));
-        }
-        
-        /// <remarks/>
-        public void HelloWorldAsync() {
-            this.HelloWorldAsync(null);
-        }
-        
-        /// <remarks/>
-        public void HelloWorldAsync(object userState) {
-            if ((this.HelloWorldOperationCompleted == null)) {
-                this.HelloWorldOperationCompleted = new System.Threading.SendOrPostCallback(this.OnHelloWorldOperationCompleted);
-            }
-            this.InvokeAsync("HelloWorld", new object[0], this.HelloWorldOperationCompleted, userState);
-        }
-        
-        private void OnHelloWorldOperationCompleted(object arg) {
-            if ((this.HelloWorldCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-                this.HelloWorldCompleted(this, new HelloWorldCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-            }
-        }
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/SetPreferences", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
@@ -287,6 +260,35 @@ namespace OpenDental.WebHostSynch {
             if ((this.GetDentalOfficeIDCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.GetDentalOfficeIDCompleted(this, new GetDentalOfficeIDCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetWebFormAddress", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public string GetWebFormAddress(string RegistrationKeyFromDentalOffice) {
+            object[] results = this.Invoke("GetWebFormAddress", new object[] {
+                        RegistrationKeyFromDentalOffice});
+            return ((string)(results[0]));
+        }
+        
+        /// <remarks/>
+        public void GetWebFormAddressAsync(string RegistrationKeyFromDentalOffice) {
+            this.GetWebFormAddressAsync(RegistrationKeyFromDentalOffice, null);
+        }
+        
+        /// <remarks/>
+        public void GetWebFormAddressAsync(string RegistrationKeyFromDentalOffice, object userState) {
+            if ((this.GetWebFormAddressOperationCompleted == null)) {
+                this.GetWebFormAddressOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetWebFormAddressOperationCompleted);
+            }
+            this.InvokeAsync("GetWebFormAddress", new object[] {
+                        RegistrationKeyFromDentalOffice}, this.GetWebFormAddressOperationCompleted, userState);
+        }
+        
+        private void OnGetWebFormAddressOperationCompleted(object arg) {
+            if ((this.GetWebFormAddressCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.GetWebFormAddressCompleted(this, new GetWebFormAddressCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
         
@@ -499,51 +501,6 @@ namespace OpenDental.WebHostSynch {
             }
             set {
                 this.valueField = value;
-            }
-        }
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "2.0.50727.3053")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://tempuri.org/")]
-    public partial class SheetParameter {
-        
-        private bool isRequiredField;
-        
-        private string paramNameField;
-        
-        private object paramValueField;
-        
-        /// <remarks/>
-        public bool IsRequired {
-            get {
-                return this.isRequiredField;
-            }
-            set {
-                this.isRequiredField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string ParamName {
-            get {
-                return this.paramNameField;
-            }
-            set {
-                this.paramNameField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public object ParamValue {
-            get {
-                return this.paramValueField;
-            }
-            set {
-                this.paramValueField = value;
             }
         }
     }
@@ -828,8 +785,6 @@ namespace OpenDental.WebHostSynch {
         
         private bool isLandscapeField;
         
-        private SheetParameter[] parametersField;
-        
         private SheetFieldDef[] sheetFieldDefsField;
         
         /// <remarks/>
@@ -909,16 +864,6 @@ namespace OpenDental.WebHostSynch {
             }
             set {
                 this.isLandscapeField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public SheetParameter[] Parameters {
-            get {
-                return this.parametersField;
-            }
-            set {
-                this.parametersField = value;
             }
         }
         
@@ -1019,32 +964,6 @@ namespace OpenDental.WebHostSynch {
             }
             set {
                 this.entityKeyField = value;
-            }
-        }
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "2.0.50727.3053")]
-    public delegate void HelloWorldCompletedEventHandler(object sender, HelloWorldCompletedEventArgs e);
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "2.0.50727.3053")]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class HelloWorldCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
-        private object[] results;
-        
-        internal HelloWorldCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
-            this.results = results;
-        }
-        
-        /// <remarks/>
-        public string Result {
-            get {
-                this.RaiseExceptionIfNecessary();
-                return ((string)(this.results[0]));
             }
         }
     }
@@ -1153,6 +1072,32 @@ namespace OpenDental.WebHostSynch {
             get {
                 this.RaiseExceptionIfNecessary();
                 return ((long)(this.results[0]));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "2.0.50727.3053")]
+    public delegate void GetWebFormAddressCompletedEventHandler(object sender, GetWebFormAddressCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "2.0.50727.3053")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class GetWebFormAddressCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal GetWebFormAddressCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        /// <remarks/>
+        public string Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((string)(this.results[0]));
             }
         }
     }

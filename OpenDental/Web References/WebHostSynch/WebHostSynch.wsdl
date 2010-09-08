@@ -2,16 +2,6 @@
 <wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsdl:types>
     <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
-      <s:element name="HelloWorld">
-        <s:complexType />
-      </s:element>
-      <s:element name="HelloWorldResponse">
-        <s:complexType>
-          <s:sequence>
-            <s:element minOccurs="0" maxOccurs="1" name="HelloWorldResult" type="s:string" />
-          </s:sequence>
-        </s:complexType>
-      </s:element>
       <s:element name="SetPreferences">
         <s:complexType>
           <s:sequence>
@@ -149,6 +139,20 @@
           </s:sequence>
         </s:complexType>
       </s:element>
+      <s:element name="GetWebFormAddress">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RegistrationKeyFromDentalOffice" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetWebFormAddressResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetWebFormAddressResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
       <s:element name="ReadSheetDef">
         <s:complexType>
           <s:sequence>
@@ -168,7 +172,6 @@
               <s:element minOccurs="1" maxOccurs="1" name="Width" type="s:int" />
               <s:element minOccurs="1" maxOccurs="1" name="Height" type="s:int" />
               <s:element minOccurs="1" maxOccurs="1" name="IsLandscape" type="s:boolean" />
-              <s:element minOccurs="0" maxOccurs="1" name="Parameters" type="tns:ArrayOfSheetParameter" />
               <s:element minOccurs="0" maxOccurs="1" name="SheetFieldDefs" type="tns:ArrayOfSheetFieldDef" />
             </s:sequence>
           </s:extension>
@@ -240,18 +243,6 @@
           <s:enumeration value="LabSlip" />
         </s:restriction>
       </s:simpleType>
-      <s:complexType name="ArrayOfSheetParameter">
-        <s:sequence>
-          <s:element minOccurs="0" maxOccurs="unbounded" name="SheetParameter" nillable="true" type="tns:SheetParameter" />
-        </s:sequence>
-      </s:complexType>
-      <s:complexType name="SheetParameter">
-        <s:sequence>
-          <s:element minOccurs="1" maxOccurs="1" name="IsRequired" type="s:boolean" />
-          <s:element minOccurs="0" maxOccurs="1" name="ParamName" type="s:string" />
-          <s:element minOccurs="0" maxOccurs="1" name="ParamValue" />
-        </s:sequence>
-      </s:complexType>
       <s:complexType name="ArrayOfSheetFieldDef">
         <s:sequence>
           <s:element minOccurs="0" maxOccurs="unbounded" name="SheetFieldDef" nillable="true" type="tns:SheetFieldDef" />
@@ -262,12 +253,6 @@
       </s:element>
     </s:schema>
   </wsdl:types>
-  <wsdl:message name="HelloWorldSoapIn">
-    <wsdl:part name="parameters" element="tns:HelloWorld" />
-  </wsdl:message>
-  <wsdl:message name="HelloWorldSoapOut">
-    <wsdl:part name="parameters" element="tns:HelloWorldResponse" />
-  </wsdl:message>
   <wsdl:message name="SetPreferencesSoapIn">
     <wsdl:part name="parameters" element="tns:SetPreferences" />
   </wsdl:message>
@@ -298,6 +283,12 @@
   <wsdl:message name="GetDentalOfficeIDSoapOut">
     <wsdl:part name="parameters" element="tns:GetDentalOfficeIDResponse" />
   </wsdl:message>
+  <wsdl:message name="GetWebFormAddressSoapIn">
+    <wsdl:part name="parameters" element="tns:GetWebFormAddress" />
+  </wsdl:message>
+  <wsdl:message name="GetWebFormAddressSoapOut">
+    <wsdl:part name="parameters" element="tns:GetWebFormAddressResponse" />
+  </wsdl:message>
   <wsdl:message name="ReadSheetDefSoapIn">
     <wsdl:part name="parameters" element="tns:ReadSheetDef" />
   </wsdl:message>
@@ -305,10 +296,6 @@
     <wsdl:part name="parameters" element="tns:ReadSheetDefResponse" />
   </wsdl:message>
   <wsdl:portType name="WebHostSynchSoap">
-    <wsdl:operation name="HelloWorld">
-      <wsdl:input message="tns:HelloWorldSoapIn" />
-      <wsdl:output message="tns:HelloWorldSoapOut" />
-    </wsdl:operation>
     <wsdl:operation name="SetPreferences">
       <wsdl:input message="tns:SetPreferencesSoapIn" />
       <wsdl:output message="tns:SetPreferencesSoapOut" />
@@ -329,6 +316,10 @@
       <wsdl:input message="tns:GetDentalOfficeIDSoapIn" />
       <wsdl:output message="tns:GetDentalOfficeIDSoapOut" />
     </wsdl:operation>
+    <wsdl:operation name="GetWebFormAddress">
+      <wsdl:input message="tns:GetWebFormAddressSoapIn" />
+      <wsdl:output message="tns:GetWebFormAddressSoapOut" />
+    </wsdl:operation>
     <wsdl:operation name="ReadSheetDef">
       <wsdl:input message="tns:ReadSheetDefSoapIn" />
       <wsdl:output message="tns:ReadSheetDefSoapOut" />
@@ -336,15 +327,6 @@
   </wsdl:portType>
   <wsdl:binding name="WebHostSynchSoap" type="tns:WebHostSynchSoap">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
-    <wsdl:operation name="HelloWorld">
-      <soap:operation soapAction="http://tempuri.org/HelloWorld" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="SetPreferences">
       <soap:operation soapAction="http://tempuri.org/SetPreferences" style="document" />
       <wsdl:input>
@@ -390,6 +372,15 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="GetWebFormAddress">
+      <soap:operation soapAction="http://tempuri.org/GetWebFormAddress" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="ReadSheetDef">
       <soap:operation soapAction="http://tempuri.org/ReadSheetDef" style="document" />
       <wsdl:input>
@@ -402,15 +393,6 @@
   </wsdl:binding>
   <wsdl:binding name="WebHostSynchSoap12" type="tns:WebHostSynchSoap">
     <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
-    <wsdl:operation name="HelloWorld">
-      <soap12:operation soapAction="http://tempuri.org/HelloWorld" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="SetPreferences">
       <soap12:operation soapAction="http://tempuri.org/SetPreferences" style="document" />
       <wsdl:input>
@@ -449,6 +431,15 @@
     </wsdl:operation>
     <wsdl:operation name="GetDentalOfficeID">
       <soap12:operation soapAction="http://tempuri.org/GetDentalOfficeID" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetWebFormAddress">
+      <soap12:operation soapAction="http://tempuri.org/GetWebFormAddress" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
