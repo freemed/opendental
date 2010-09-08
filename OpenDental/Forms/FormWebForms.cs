@@ -69,7 +69,7 @@ namespace OpenDental {
 				OpenDental.WebHostSynch.webforms_sheetfield[] wbsf=wh.GetSheetData(RegistrationKey,dateFrom,dateTo);
 				if(wbsf.Count()==0) {
 					gridMain.EndUpdate();
-					MsgBox.Show(this,"No Patient forms retrieved"));
+					MsgBox.Show(this,"No Patient forms retrieved");
 					return;
 				}
 				// Select distinct Web sheet ids
