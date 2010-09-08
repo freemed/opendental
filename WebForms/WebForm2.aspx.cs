@@ -39,8 +39,8 @@ namespace WebForms {
 				form1.Style["background-image"]="url('Patient Info.gif')";
 				form1.Style["background-repeat"]="no-repeat";
 				form1.Style["background-position"]=xoffset + "px "+ yoffset + "px";
-				opendental73Entities db=new opendental73Entities();
-				var sfdObj = (from sfd in db.sheetfielddef where sfd.SheetDefNum==5
+				ODWebServiceEntities db=new ODWebServiceEntities();
+				var sfdObj = (from sfd in db.webforms_sheetfielddef where sfd.SheetDefNum==5
 							  select sfd).ToList();
 				for(int j=0;j<sfdObj.Count();j++) {
 					String FieldName=sfdObj.ElementAt(j).FieldName;

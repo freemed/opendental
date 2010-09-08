@@ -43,7 +43,7 @@ namespace OpenDental {
 				WebHostSynch.WebHostSynch wh=new WebHostSynch.WebHostSynch();
 				wh.Url=PrefC.GetString(PrefName.WebHostSynchServerURL);
 				if(wh.CheckRegistrationKey(RegistrationKey)==false){
-					MessageBox.Show(Lan.g(this,"Registration key provided by the dental office is incorrect"));
+					MsgBox.Show(this,"Registration key provided by the dental office is incorrect");
 					return;
 				}
 				wh.SetPreferences(RegistrationKey,PrefC.GetColor(PrefName.WebFormsBorderColor).ToArgb(),PrefC.GetStringSilent(PrefName.WebFormsHeading1),PrefC.GetStringSilent(PrefName.WebFormsHeading2));
@@ -74,7 +74,7 @@ namespace OpenDental {
 				WebHostSynch.WebHostSynch wh=new WebHostSynch.WebHostSynch();
 				wh.Url=PrefC.GetString(PrefName.WebHostSynchServerURL);
 				if(wh.CheckRegistrationKey(RegistrationKey)==false) {
-					MessageBox.Show(Lan.g(this,"Registration key provided by the dental office is incorrect"));
+					MsgBox.Show(this,"Registration key provided by the dental office is incorrect");
 				}
 				DentalOfficeID=wh.GetDentalOfficeID(RegistrationKey);
 			}

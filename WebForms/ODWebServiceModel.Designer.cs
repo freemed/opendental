@@ -11,9 +11,11 @@
 [assembly: global::System.Data.Objects.DataClasses.EdmSchemaAttribute()]
 [assembly: global::System.Data.Objects.DataClasses.EdmRelationshipAttribute("odwebserviceModel", "FK_webforms_sheet_DentalOfficeID", "webforms_preference", global::System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(WebForms.webforms_preference), "webforms_sheet", global::System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(WebForms.webforms_sheet))]
 [assembly: global::System.Data.Objects.DataClasses.EdmRelationshipAttribute("odwebserviceModel", "FK_webforms_sheetfield_SheetID", "webforms_sheet", global::System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(WebForms.webforms_sheet), "webforms_sheetfield", global::System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(WebForms.webforms_sheetfield))]
+[assembly: global::System.Data.Objects.DataClasses.EdmRelationshipAttribute("odwebserviceModel", "FK_webforms_sheetdef_DentalOfficeID", "webforms_preference", global::System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(WebForms.webforms_preference), "webforms_sheetdef", global::System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(WebForms.webforms_sheetdef))]
+[assembly: global::System.Data.Objects.DataClasses.EdmRelationshipAttribute("odwebserviceModel", "FK_webforms_sheetfielddef_WebSheetDefNum", "webforms_sheetdef", global::System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(WebForms.webforms_sheetdef), "webforms_sheetfielddef", global::System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(WebForms.webforms_sheetfielddef))]
 
 // Original file name:
-// Generation date: 8/4/2010 10:58:37 AM
+// Generation date: 9/8/2010 11:36:21 AM
 namespace WebForms
 {
     
@@ -93,6 +95,36 @@ namespace WebForms
         }
         private global::System.Data.Objects.ObjectQuery<webforms_sheetfield> _webforms_sheetfield;
         /// <summary>
+        /// There are no comments for webforms_sheetdef in the schema.
+        /// </summary>
+        public global::System.Data.Objects.ObjectQuery<webforms_sheetdef> webforms_sheetdef
+        {
+            get
+            {
+                if ((this._webforms_sheetdef == null))
+                {
+                    this._webforms_sheetdef = base.CreateQuery<webforms_sheetdef>("[webforms_sheetdef]");
+                }
+                return this._webforms_sheetdef;
+            }
+        }
+        private global::System.Data.Objects.ObjectQuery<webforms_sheetdef> _webforms_sheetdef;
+        /// <summary>
+        /// There are no comments for webforms_sheetfielddef in the schema.
+        /// </summary>
+        public global::System.Data.Objects.ObjectQuery<webforms_sheetfielddef> webforms_sheetfielddef
+        {
+            get
+            {
+                if ((this._webforms_sheetfielddef == null))
+                {
+                    this._webforms_sheetfielddef = base.CreateQuery<webforms_sheetfielddef>("[webforms_sheetfielddef]");
+                }
+                return this._webforms_sheetfielddef;
+            }
+        }
+        private global::System.Data.Objects.ObjectQuery<webforms_sheetfielddef> _webforms_sheetfielddef;
+        /// <summary>
         /// There are no comments for webforms_preference in the schema.
         /// </summary>
         public void AddTowebforms_preference(webforms_preference webforms_preference)
@@ -112,6 +144,20 @@ namespace WebForms
         public void AddTowebforms_sheetfield(webforms_sheetfield webforms_sheetfield)
         {
             base.AddObject("webforms_sheetfield", webforms_sheetfield);
+        }
+        /// <summary>
+        /// There are no comments for webforms_sheetdef in the schema.
+        /// </summary>
+        public void AddTowebforms_sheetdef(webforms_sheetdef webforms_sheetdef)
+        {
+            base.AddObject("webforms_sheetdef", webforms_sheetdef);
+        }
+        /// <summary>
+        /// There are no comments for webforms_sheetfielddef in the schema.
+        /// </summary>
+        public void AddTowebforms_sheetfielddef(webforms_sheetfielddef webforms_sheetfielddef)
+        {
+            base.AddObject("webforms_sheetfielddef", webforms_sheetfielddef);
         }
     }
     /// <summary>
@@ -251,6 +297,27 @@ namespace WebForms
                 if ((value != null))
                 {
                     ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.InitializeRelatedCollection<webforms_sheet>("odwebserviceModel.FK_webforms_sheet_DentalOfficeID", "webforms_sheet", value);
+                }
+            }
+        }
+        /// <summary>
+        /// There are no comments for webforms_sheetdef in the schema.
+        /// </summary>
+        [global::System.Data.Objects.DataClasses.EdmRelationshipNavigationPropertyAttribute("odwebserviceModel", "FK_webforms_sheetdef_DentalOfficeID", "webforms_sheetdef")]
+        [global::System.Xml.Serialization.XmlIgnoreAttribute()]
+        [global::System.Xml.Serialization.SoapIgnoreAttribute()]
+        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        public global::System.Data.Objects.DataClasses.EntityCollection<webforms_sheetdef> webforms_sheetdef
+        {
+            get
+            {
+                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedCollection<webforms_sheetdef>("odwebserviceModel.FK_webforms_sheetdef_DentalOfficeID", "webforms_sheetdef");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.InitializeRelatedCollection<webforms_sheetdef>("odwebserviceModel.FK_webforms_sheetdef_DentalOfficeID", "webforms_sheetdef", value);
                 }
             }
         }
@@ -511,6 +578,741 @@ namespace WebForms
                 if ((value != null))
                 {
                     ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.InitializeRelatedReference<webforms_sheet>("odwebserviceModel.FK_webforms_sheetfield_SheetID", "webforms_sheet", value);
+                }
+            }
+        }
+    }
+    /// <summary>
+    /// There are no comments for odwebserviceModel.webforms_sheetdef in the schema.
+    /// </summary>
+    /// <KeyProperties>
+    /// WebSheetDefNum
+    /// </KeyProperties>
+    [global::System.Data.Objects.DataClasses.EdmEntityTypeAttribute(NamespaceName="odwebserviceModel", Name="webforms_sheetdef")]
+    [global::System.Runtime.Serialization.DataContractAttribute(IsReference=true)]
+    [global::System.Serializable()]
+    public partial class webforms_sheetdef : global::System.Data.Objects.DataClasses.EntityObject
+    {
+        /// <summary>
+        /// Create a new webforms_sheetdef object.
+        /// </summary>
+        /// <param name="description">Initial value of Description.</param>
+        /// <param name="fontName">Initial value of FontName.</param>
+        /// <param name="fontSize">Initial value of FontSize.</param>
+        /// <param name="height">Initial value of Height.</param>
+        /// <param name="isLandscape">Initial value of IsLandscape.</param>
+        /// <param name="sheetDefNum">Initial value of SheetDefNum.</param>
+        /// <param name="sheetType">Initial value of SheetType.</param>
+        /// <param name="webSheetDefNum">Initial value of WebSheetDefNum.</param>
+        /// <param name="width">Initial value of Width.</param>
+        public static webforms_sheetdef Createwebforms_sheetdef(string description, string fontName, float fontSize, int height, sbyte isLandscape, long sheetDefNum, int sheetType, long webSheetDefNum, int width)
+        {
+            webforms_sheetdef webforms_sheetdef = new webforms_sheetdef();
+            webforms_sheetdef.Description = description;
+            webforms_sheetdef.FontName = fontName;
+            webforms_sheetdef.FontSize = fontSize;
+            webforms_sheetdef.Height = height;
+            webforms_sheetdef.IsLandscape = isLandscape;
+            webforms_sheetdef.SheetDefNum = sheetDefNum;
+            webforms_sheetdef.SheetType = sheetType;
+            webforms_sheetdef.WebSheetDefNum = webSheetDefNum;
+            webforms_sheetdef.Width = width;
+            return webforms_sheetdef;
+        }
+        /// <summary>
+        /// There are no comments for Property Description in the schema.
+        /// </summary>
+        [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(IsNullable=false)]
+        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        public string Description
+        {
+            get
+            {
+                return this._Description;
+            }
+            set
+            {
+                this.OnDescriptionChanging(value);
+                this.ReportPropertyChanging("Description");
+                this._Description = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value, false);
+                this.ReportPropertyChanged("Description");
+                this.OnDescriptionChanged();
+            }
+        }
+        private string _Description;
+        partial void OnDescriptionChanging(string value);
+        partial void OnDescriptionChanged();
+        /// <summary>
+        /// There are no comments for Property FontName in the schema.
+        /// </summary>
+        [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(IsNullable=false)]
+        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        public string FontName
+        {
+            get
+            {
+                return this._FontName;
+            }
+            set
+            {
+                this.OnFontNameChanging(value);
+                this.ReportPropertyChanging("FontName");
+                this._FontName = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value, false);
+                this.ReportPropertyChanged("FontName");
+                this.OnFontNameChanged();
+            }
+        }
+        private string _FontName;
+        partial void OnFontNameChanging(string value);
+        partial void OnFontNameChanged();
+        /// <summary>
+        /// There are no comments for Property FontSize in the schema.
+        /// </summary>
+        [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(IsNullable=false)]
+        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        public float FontSize
+        {
+            get
+            {
+                return this._FontSize;
+            }
+            set
+            {
+                this.OnFontSizeChanging(value);
+                this.ReportPropertyChanging("FontSize");
+                this._FontSize = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value);
+                this.ReportPropertyChanged("FontSize");
+                this.OnFontSizeChanged();
+            }
+        }
+        private float _FontSize;
+        partial void OnFontSizeChanging(float value);
+        partial void OnFontSizeChanged();
+        /// <summary>
+        /// There are no comments for Property Height in the schema.
+        /// </summary>
+        [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(IsNullable=false)]
+        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        public int Height
+        {
+            get
+            {
+                return this._Height;
+            }
+            set
+            {
+                this.OnHeightChanging(value);
+                this.ReportPropertyChanging("Height");
+                this._Height = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value);
+                this.ReportPropertyChanged("Height");
+                this.OnHeightChanged();
+            }
+        }
+        private int _Height;
+        partial void OnHeightChanging(int value);
+        partial void OnHeightChanged();
+        /// <summary>
+        /// There are no comments for Property IsLandscape in the schema.
+        /// </summary>
+        [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(IsNullable=false)]
+        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        public sbyte IsLandscape
+        {
+            get
+            {
+                return this._IsLandscape;
+            }
+            set
+            {
+                this.OnIsLandscapeChanging(value);
+                this.ReportPropertyChanging("IsLandscape");
+                this._IsLandscape = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value);
+                this.ReportPropertyChanged("IsLandscape");
+                this.OnIsLandscapeChanged();
+            }
+        }
+        private sbyte _IsLandscape;
+        partial void OnIsLandscapeChanging(sbyte value);
+        partial void OnIsLandscapeChanged();
+        /// <summary>
+        /// There are no comments for Property SheetDefNum in the schema.
+        /// </summary>
+        [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(IsNullable=false)]
+        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        public long SheetDefNum
+        {
+            get
+            {
+                return this._SheetDefNum;
+            }
+            set
+            {
+                this.OnSheetDefNumChanging(value);
+                this.ReportPropertyChanging("SheetDefNum");
+                this._SheetDefNum = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value);
+                this.ReportPropertyChanged("SheetDefNum");
+                this.OnSheetDefNumChanged();
+            }
+        }
+        private long _SheetDefNum;
+        partial void OnSheetDefNumChanging(long value);
+        partial void OnSheetDefNumChanged();
+        /// <summary>
+        /// There are no comments for Property SheetType in the schema.
+        /// </summary>
+        [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(IsNullable=false)]
+        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        public int SheetType
+        {
+            get
+            {
+                return this._SheetType;
+            }
+            set
+            {
+                this.OnSheetTypeChanging(value);
+                this.ReportPropertyChanging("SheetType");
+                this._SheetType = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value);
+                this.ReportPropertyChanged("SheetType");
+                this.OnSheetTypeChanged();
+            }
+        }
+        private int _SheetType;
+        partial void OnSheetTypeChanging(int value);
+        partial void OnSheetTypeChanged();
+        /// <summary>
+        /// There are no comments for Property WebSheetDefNum in the schema.
+        /// </summary>
+        [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        public long WebSheetDefNum
+        {
+            get
+            {
+                return this._WebSheetDefNum;
+            }
+            set
+            {
+                this.OnWebSheetDefNumChanging(value);
+                this.ReportPropertyChanging("WebSheetDefNum");
+                this._WebSheetDefNum = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value);
+                this.ReportPropertyChanged("WebSheetDefNum");
+                this.OnWebSheetDefNumChanged();
+            }
+        }
+        private long _WebSheetDefNum;
+        partial void OnWebSheetDefNumChanging(long value);
+        partial void OnWebSheetDefNumChanged();
+        /// <summary>
+        /// There are no comments for Property Width in the schema.
+        /// </summary>
+        [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(IsNullable=false)]
+        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        public int Width
+        {
+            get
+            {
+                return this._Width;
+            }
+            set
+            {
+                this.OnWidthChanging(value);
+                this.ReportPropertyChanging("Width");
+                this._Width = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value);
+                this.ReportPropertyChanged("Width");
+                this.OnWidthChanged();
+            }
+        }
+        private int _Width;
+        partial void OnWidthChanging(int value);
+        partial void OnWidthChanged();
+        /// <summary>
+        /// There are no comments for webforms_preference in the schema.
+        /// </summary>
+        [global::System.Data.Objects.DataClasses.EdmRelationshipNavigationPropertyAttribute("odwebserviceModel", "FK_webforms_sheetdef_DentalOfficeID", "webforms_preference")]
+        [global::System.Xml.Serialization.XmlIgnoreAttribute()]
+        [global::System.Xml.Serialization.SoapIgnoreAttribute()]
+        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        public webforms_preference webforms_preference
+        {
+            get
+            {
+                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedReference<webforms_preference>("odwebserviceModel.FK_webforms_sheetdef_DentalOfficeID", "webforms_preference").Value;
+            }
+            set
+            {
+                ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedReference<webforms_preference>("odwebserviceModel.FK_webforms_sheetdef_DentalOfficeID", "webforms_preference").Value = value;
+            }
+        }
+        /// <summary>
+        /// There are no comments for webforms_preference in the schema.
+        /// </summary>
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        public global::System.Data.Objects.DataClasses.EntityReference<webforms_preference> webforms_preferenceReference
+        {
+            get
+            {
+                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedReference<webforms_preference>("odwebserviceModel.FK_webforms_sheetdef_DentalOfficeID", "webforms_preference");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.InitializeRelatedReference<webforms_preference>("odwebserviceModel.FK_webforms_sheetdef_DentalOfficeID", "webforms_preference", value);
+                }
+            }
+        }
+        /// <summary>
+        /// There are no comments for webforms_sheetfielddef in the schema.
+        /// </summary>
+        [global::System.Data.Objects.DataClasses.EdmRelationshipNavigationPropertyAttribute("odwebserviceModel", "FK_webforms_sheetfielddef_WebSheetDefNum", "webforms_sheetfielddef")]
+        [global::System.Xml.Serialization.XmlIgnoreAttribute()]
+        [global::System.Xml.Serialization.SoapIgnoreAttribute()]
+        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        public global::System.Data.Objects.DataClasses.EntityCollection<webforms_sheetfielddef> webforms_sheetfielddef
+        {
+            get
+            {
+                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedCollection<webforms_sheetfielddef>("odwebserviceModel.FK_webforms_sheetfielddef_WebSheetDefNum", "webforms_sheetfielddef");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.InitializeRelatedCollection<webforms_sheetfielddef>("odwebserviceModel.FK_webforms_sheetfielddef_WebSheetDefNum", "webforms_sheetfielddef", value);
+                }
+            }
+        }
+    }
+    /// <summary>
+    /// There are no comments for odwebserviceModel.webforms_sheetfielddef in the schema.
+    /// </summary>
+    /// <KeyProperties>
+    /// WebSheetFieldDefNum
+    /// </KeyProperties>
+    [global::System.Data.Objects.DataClasses.EdmEntityTypeAttribute(NamespaceName="odwebserviceModel", Name="webforms_sheetfielddef")]
+    [global::System.Runtime.Serialization.DataContractAttribute(IsReference=true)]
+    [global::System.Serializable()]
+    public partial class webforms_sheetfielddef : global::System.Data.Objects.DataClasses.EntityObject
+    {
+        /// <summary>
+        /// Create a new webforms_sheetfielddef object.
+        /// </summary>
+        /// <param name="fieldName">Initial value of FieldName.</param>
+        /// <param name="fieldType">Initial value of FieldType.</param>
+        /// <param name="fieldValue">Initial value of FieldValue.</param>
+        /// <param name="fontIsBold">Initial value of FontIsBold.</param>
+        /// <param name="fontName">Initial value of FontName.</param>
+        /// <param name="fontSize">Initial value of FontSize.</param>
+        /// <param name="growthBehavior">Initial value of GrowthBehavior.</param>
+        /// <param name="height">Initial value of Height.</param>
+        /// <param name="radioButtonValue">Initial value of RadioButtonValue.</param>
+        /// <param name="sheetDefNum">Initial value of SheetDefNum.</param>
+        /// <param name="sheetFieldDefNum">Initial value of SheetFieldDefNum.</param>
+        /// <param name="webSheetFieldDefNum">Initial value of WebSheetFieldDefNum.</param>
+        /// <param name="width">Initial value of Width.</param>
+        /// <param name="xPos">Initial value of XPos.</param>
+        /// <param name="yPos">Initial value of YPos.</param>
+        public static webforms_sheetfielddef Createwebforms_sheetfielddef(string fieldName, int fieldType, string fieldValue, sbyte fontIsBold, string fontName, float fontSize, int growthBehavior, int height, string radioButtonValue, long sheetDefNum, long sheetFieldDefNum, long webSheetFieldDefNum, int width, int xPos, int yPos)
+        {
+            webforms_sheetfielddef webforms_sheetfielddef = new webforms_sheetfielddef();
+            webforms_sheetfielddef.FieldName = fieldName;
+            webforms_sheetfielddef.FieldType = fieldType;
+            webforms_sheetfielddef.FieldValue = fieldValue;
+            webforms_sheetfielddef.FontIsBold = fontIsBold;
+            webforms_sheetfielddef.FontName = fontName;
+            webforms_sheetfielddef.FontSize = fontSize;
+            webforms_sheetfielddef.GrowthBehavior = growthBehavior;
+            webforms_sheetfielddef.Height = height;
+            webforms_sheetfielddef.RadioButtonValue = radioButtonValue;
+            webforms_sheetfielddef.SheetDefNum = sheetDefNum;
+            webforms_sheetfielddef.SheetFieldDefNum = sheetFieldDefNum;
+            webforms_sheetfielddef.WebSheetFieldDefNum = webSheetFieldDefNum;
+            webforms_sheetfielddef.Width = width;
+            webforms_sheetfielddef.XPos = xPos;
+            webforms_sheetfielddef.YPos = yPos;
+            return webforms_sheetfielddef;
+        }
+        /// <summary>
+        /// There are no comments for Property FieldName in the schema.
+        /// </summary>
+        [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(IsNullable=false)]
+        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        public string FieldName
+        {
+            get
+            {
+                return this._FieldName;
+            }
+            set
+            {
+                this.OnFieldNameChanging(value);
+                this.ReportPropertyChanging("FieldName");
+                this._FieldName = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value, false);
+                this.ReportPropertyChanged("FieldName");
+                this.OnFieldNameChanged();
+            }
+        }
+        private string _FieldName;
+        partial void OnFieldNameChanging(string value);
+        partial void OnFieldNameChanged();
+        /// <summary>
+        /// There are no comments for Property FieldType in the schema.
+        /// </summary>
+        [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(IsNullable=false)]
+        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        public int FieldType
+        {
+            get
+            {
+                return this._FieldType;
+            }
+            set
+            {
+                this.OnFieldTypeChanging(value);
+                this.ReportPropertyChanging("FieldType");
+                this._FieldType = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value);
+                this.ReportPropertyChanged("FieldType");
+                this.OnFieldTypeChanged();
+            }
+        }
+        private int _FieldType;
+        partial void OnFieldTypeChanging(int value);
+        partial void OnFieldTypeChanged();
+        /// <summary>
+        /// There are no comments for Property FieldValue in the schema.
+        /// </summary>
+        [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(IsNullable=false)]
+        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        public string FieldValue
+        {
+            get
+            {
+                return this._FieldValue;
+            }
+            set
+            {
+                this.OnFieldValueChanging(value);
+                this.ReportPropertyChanging("FieldValue");
+                this._FieldValue = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value, false);
+                this.ReportPropertyChanged("FieldValue");
+                this.OnFieldValueChanged();
+            }
+        }
+        private string _FieldValue;
+        partial void OnFieldValueChanging(string value);
+        partial void OnFieldValueChanged();
+        /// <summary>
+        /// There are no comments for Property FontIsBold in the schema.
+        /// </summary>
+        [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(IsNullable=false)]
+        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        public sbyte FontIsBold
+        {
+            get
+            {
+                return this._FontIsBold;
+            }
+            set
+            {
+                this.OnFontIsBoldChanging(value);
+                this.ReportPropertyChanging("FontIsBold");
+                this._FontIsBold = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value);
+                this.ReportPropertyChanged("FontIsBold");
+                this.OnFontIsBoldChanged();
+            }
+        }
+        private sbyte _FontIsBold;
+        partial void OnFontIsBoldChanging(sbyte value);
+        partial void OnFontIsBoldChanged();
+        /// <summary>
+        /// There are no comments for Property FontName in the schema.
+        /// </summary>
+        [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(IsNullable=false)]
+        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        public string FontName
+        {
+            get
+            {
+                return this._FontName;
+            }
+            set
+            {
+                this.OnFontNameChanging(value);
+                this.ReportPropertyChanging("FontName");
+                this._FontName = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value, false);
+                this.ReportPropertyChanged("FontName");
+                this.OnFontNameChanged();
+            }
+        }
+        private string _FontName;
+        partial void OnFontNameChanging(string value);
+        partial void OnFontNameChanged();
+        /// <summary>
+        /// There are no comments for Property FontSize in the schema.
+        /// </summary>
+        [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(IsNullable=false)]
+        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        public float FontSize
+        {
+            get
+            {
+                return this._FontSize;
+            }
+            set
+            {
+                this.OnFontSizeChanging(value);
+                this.ReportPropertyChanging("FontSize");
+                this._FontSize = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value);
+                this.ReportPropertyChanged("FontSize");
+                this.OnFontSizeChanged();
+            }
+        }
+        private float _FontSize;
+        partial void OnFontSizeChanging(float value);
+        partial void OnFontSizeChanged();
+        /// <summary>
+        /// There are no comments for Property GrowthBehavior in the schema.
+        /// </summary>
+        [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(IsNullable=false)]
+        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        public int GrowthBehavior
+        {
+            get
+            {
+                return this._GrowthBehavior;
+            }
+            set
+            {
+                this.OnGrowthBehaviorChanging(value);
+                this.ReportPropertyChanging("GrowthBehavior");
+                this._GrowthBehavior = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value);
+                this.ReportPropertyChanged("GrowthBehavior");
+                this.OnGrowthBehaviorChanged();
+            }
+        }
+        private int _GrowthBehavior;
+        partial void OnGrowthBehaviorChanging(int value);
+        partial void OnGrowthBehaviorChanged();
+        /// <summary>
+        /// There are no comments for Property Height in the schema.
+        /// </summary>
+        [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(IsNullable=false)]
+        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        public int Height
+        {
+            get
+            {
+                return this._Height;
+            }
+            set
+            {
+                this.OnHeightChanging(value);
+                this.ReportPropertyChanging("Height");
+                this._Height = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value);
+                this.ReportPropertyChanged("Height");
+                this.OnHeightChanged();
+            }
+        }
+        private int _Height;
+        partial void OnHeightChanging(int value);
+        partial void OnHeightChanged();
+        /// <summary>
+        /// There are no comments for Property RadioButtonValue in the schema.
+        /// </summary>
+        [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(IsNullable=false)]
+        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        public string RadioButtonValue
+        {
+            get
+            {
+                return this._RadioButtonValue;
+            }
+            set
+            {
+                this.OnRadioButtonValueChanging(value);
+                this.ReportPropertyChanging("RadioButtonValue");
+                this._RadioButtonValue = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value, false);
+                this.ReportPropertyChanged("RadioButtonValue");
+                this.OnRadioButtonValueChanged();
+            }
+        }
+        private string _RadioButtonValue;
+        partial void OnRadioButtonValueChanging(string value);
+        partial void OnRadioButtonValueChanged();
+        /// <summary>
+        /// There are no comments for Property SheetDefNum in the schema.
+        /// </summary>
+        [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(IsNullable=false)]
+        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        public long SheetDefNum
+        {
+            get
+            {
+                return this._SheetDefNum;
+            }
+            set
+            {
+                this.OnSheetDefNumChanging(value);
+                this.ReportPropertyChanging("SheetDefNum");
+                this._SheetDefNum = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value);
+                this.ReportPropertyChanged("SheetDefNum");
+                this.OnSheetDefNumChanged();
+            }
+        }
+        private long _SheetDefNum;
+        partial void OnSheetDefNumChanging(long value);
+        partial void OnSheetDefNumChanged();
+        /// <summary>
+        /// There are no comments for Property SheetFieldDefNum in the schema.
+        /// </summary>
+        [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(IsNullable=false)]
+        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        public long SheetFieldDefNum
+        {
+            get
+            {
+                return this._SheetFieldDefNum;
+            }
+            set
+            {
+                this.OnSheetFieldDefNumChanging(value);
+                this.ReportPropertyChanging("SheetFieldDefNum");
+                this._SheetFieldDefNum = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value);
+                this.ReportPropertyChanged("SheetFieldDefNum");
+                this.OnSheetFieldDefNumChanged();
+            }
+        }
+        private long _SheetFieldDefNum;
+        partial void OnSheetFieldDefNumChanging(long value);
+        partial void OnSheetFieldDefNumChanged();
+        /// <summary>
+        /// There are no comments for Property WebSheetFieldDefNum in the schema.
+        /// </summary>
+        [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        public long WebSheetFieldDefNum
+        {
+            get
+            {
+                return this._WebSheetFieldDefNum;
+            }
+            set
+            {
+                this.OnWebSheetFieldDefNumChanging(value);
+                this.ReportPropertyChanging("WebSheetFieldDefNum");
+                this._WebSheetFieldDefNum = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value);
+                this.ReportPropertyChanged("WebSheetFieldDefNum");
+                this.OnWebSheetFieldDefNumChanged();
+            }
+        }
+        private long _WebSheetFieldDefNum;
+        partial void OnWebSheetFieldDefNumChanging(long value);
+        partial void OnWebSheetFieldDefNumChanged();
+        /// <summary>
+        /// There are no comments for Property Width in the schema.
+        /// </summary>
+        [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(IsNullable=false)]
+        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        public int Width
+        {
+            get
+            {
+                return this._Width;
+            }
+            set
+            {
+                this.OnWidthChanging(value);
+                this.ReportPropertyChanging("Width");
+                this._Width = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value);
+                this.ReportPropertyChanged("Width");
+                this.OnWidthChanged();
+            }
+        }
+        private int _Width;
+        partial void OnWidthChanging(int value);
+        partial void OnWidthChanged();
+        /// <summary>
+        /// There are no comments for Property XPos in the schema.
+        /// </summary>
+        [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(IsNullable=false)]
+        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        public int XPos
+        {
+            get
+            {
+                return this._XPos;
+            }
+            set
+            {
+                this.OnXPosChanging(value);
+                this.ReportPropertyChanging("XPos");
+                this._XPos = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value);
+                this.ReportPropertyChanged("XPos");
+                this.OnXPosChanged();
+            }
+        }
+        private int _XPos;
+        partial void OnXPosChanging(int value);
+        partial void OnXPosChanged();
+        /// <summary>
+        /// There are no comments for Property YPos in the schema.
+        /// </summary>
+        [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(IsNullable=false)]
+        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        public int YPos
+        {
+            get
+            {
+                return this._YPos;
+            }
+            set
+            {
+                this.OnYPosChanging(value);
+                this.ReportPropertyChanging("YPos");
+                this._YPos = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value);
+                this.ReportPropertyChanged("YPos");
+                this.OnYPosChanged();
+            }
+        }
+        private int _YPos;
+        partial void OnYPosChanging(int value);
+        partial void OnYPosChanged();
+        /// <summary>
+        /// There are no comments for webforms_sheetdef in the schema.
+        /// </summary>
+        [global::System.Data.Objects.DataClasses.EdmRelationshipNavigationPropertyAttribute("odwebserviceModel", "FK_webforms_sheetfielddef_WebSheetDefNum", "webforms_sheetdef")]
+        [global::System.Xml.Serialization.XmlIgnoreAttribute()]
+        [global::System.Xml.Serialization.SoapIgnoreAttribute()]
+        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        public webforms_sheetdef webforms_sheetdef
+        {
+            get
+            {
+                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedReference<webforms_sheetdef>("odwebserviceModel.FK_webforms_sheetfielddef_WebSheetDefNum", "webforms_sheetdef").Value;
+            }
+            set
+            {
+                ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedReference<webforms_sheetdef>("odwebserviceModel.FK_webforms_sheetfielddef_WebSheetDefNum", "webforms_sheetdef").Value = value;
+            }
+        }
+        /// <summary>
+        /// There are no comments for webforms_sheetdef in the schema.
+        /// </summary>
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        public global::System.Data.Objects.DataClasses.EntityReference<webforms_sheetdef> webforms_sheetdefReference
+        {
+            get
+            {
+                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedReference<webforms_sheetdef>("odwebserviceModel.FK_webforms_sheetfielddef_WebSheetDefNum", "webforms_sheetdef");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.InitializeRelatedReference<webforms_sheetdef>("odwebserviceModel.FK_webforms_sheetfielddef_WebSheetDefNum", "webforms_sheetdef", value);
                 }
             }
         }

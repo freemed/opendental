@@ -62,14 +62,14 @@ namespace OpenDental {
 				string RegistrationKey=PrefC.GetString(PrefName.RegistrationKey);
 				if(wh.CheckRegistrationKey(RegistrationKey)==false) {
 					gridMain.EndUpdate();
-					MessageBox.Show(Lan.g(this,"Registration key provided by the dental office is incorrect"));
+					MsgBox.Show(this,"Registration key provided by the dental office is incorrect");
 					return;
 				}
 				wh.SetPreferences(RegistrationKey,PrefC.GetColor(PrefName.WebFormsBorderColor).ToArgb(),PrefC.GetStringSilent(PrefName.WebFormsHeading1),PrefC.GetStringSilent(PrefName.WebFormsHeading2));
 				OpenDental.WebHostSynch.webforms_sheetfield[] wbsf=wh.GetSheetData(RegistrationKey,dateFrom,dateTo);
 				if(wbsf.Count()==0) {
 					gridMain.EndUpdate();
-					MessageBox.Show(Lan.g(this,"No Patient forms retrieved"));
+					MsgBox.Show(this,"No Patient forms retrieved"));
 					return;
 				}
 				// Select distinct Web sheet ids
@@ -217,24 +217,24 @@ namespace OpenDental {
 				sheet=SheetUtil.CreateSheet(sheetDef,PatNum);
 				SheetParameter.SetParameter(sheet,"PatNum",PatNum);
 				sheet.InternalNote="";//because null not ok
-				//SheetFields must have a one to one mapping with the SheetWebFields
+				//SheetFields elements must have a one to one mapping with the SheetWebFields elements.
 				String[] SheetFields={"LName","FName","MiddleI","Birthdate","Preferred", "Email","SSN",
-									 "addressAndHmPhoneIsSameEntireFamily","Address","Address2","City","State","Zip",
-									 "HmPhone","Gender","Position","PreferContactMethod","PreferConfirmMethod",
-									  "PreferRecallMethod","StudentStatus","referredFrom",
-									  "WirelessPhone","wirelessCarrier","WkPhone",
-									  "ins1GroupName","ins1GroupNum","ins1Relat","ins1SubscriberNameF","ins1SubscriberID","ins1CarrierName","ins1CarrierPhone","ins1EmployerName",
-									  "ins2GroupName","ins2GroupNum","ins2Relat","ins2SubscriberNameF","ins2SubscriberID","ins2CarrierName","ins2CarrierPhone","ins2EmployerName",
+									"addressAndHmPhoneIsSameEntireFamily","Address","Address2","City","State","Zip",
+									"HmPhone","Gender","Position","PreferContactMethod","PreferConfirmMethod",
+									"PreferRecallMethod","StudentStatus","referredFrom",
+									"WirelessPhone","wirelessCarrier","WkPhone",
+									"ins1GroupName","ins1GroupNum","ins1Relat","ins1SubscriberNameF","ins1SubscriberID","ins1CarrierName","ins1CarrierPhone","ins1EmployerName",
+									"ins2GroupName","ins2GroupNum","ins2Relat","ins2SubscriberNameF","ins2SubscriberID","ins2CarrierName","ins2CarrierPhone","ins2EmployerName",
 									  "misc"};
 				//other SheetFields="PatStatus", "Patient Info.gif","Guarantor","CreditType","PriProv","SecProv","FeeSched","BillingType","AddrNote","ClinicNum" };
 				String[] SheetWebFields={"LastName","FirstName","MI","Birthdate","Preferred","Email","SS",
 									"WholeFamily","Address1","Address2","City","State","Zip",
 									"HomePhone","Gender","Married","MethodContact","MethodConf",
-									  "MethodRecall","StudentStatus","Hear",
-									  "WirelessPhone","WirelessCarrier","WorkPhone",
-									  "Policy1GroupName","Policy1GroupNumber","Policy1Relationship","Policy1SubscriberName","Policy1SubscriberID","Policy1InsuranceCompany", "Policy1Phone","Policy1Employer",
-									  "Policy2GroupName","Policy2GroupNumber","Policy2Relationship","Policy2SubscriberName","Policy2SubscriberID","Policy2InsuranceCompany", "Policy2Phone","Policy2Employer",
-									  "Comments",
+									"MethodRecall","StudentStatus","Hear",
+									"WirelessPhone","WirelessCarrier","WorkPhone",
+									"Policy1GroupName","Policy1GroupNumber","Policy1Relationship","Policy1SubscriberName","Policy1SubscriberID","Policy1InsuranceCompany", "Policy1Phone","Policy1Employer",
+									"Policy2GroupName","Policy2GroupNumber","Policy2Relationship","Policy2SubscriberName","Policy2SubscriberID","Policy2InsuranceCompany", "Policy2Phone","Policy2Employer",
+									"Comments",
 									   };
 				for(int i=0;i<SingleSheet.Count();i++) {
 					String SheetWebFieldName=SingleSheet.ElementAt(i).FieldName;
@@ -496,7 +496,7 @@ namespace OpenDental {
 			if(textDateFrom.errorProvider1.GetError(textDateFrom)!=""
 				||textDateTo.errorProvider1.GetError(textDateTo)!=""
 				) {
-				MessageBox.Show(Lan.g(this,"Please fix data entry errors first."));
+				MsgBox.Show(this,"Please fix data entry errors first.");
 				return;
 			}
 			FillGrid();
