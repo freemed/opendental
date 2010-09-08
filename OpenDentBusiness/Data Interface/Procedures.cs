@@ -223,6 +223,28 @@ namespace OpenDentBusiness {
 			return result;
 		}
 
+		///<summary>Get all procedures by statuses for the specified patient directly from the database</summary>
+		public static List<Procedure> GetProcsForPatByStatusBeforeDate(long patNum,ProcStat[] statuses,DateTime ceilDate,long codeNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Procedure>>(MethodBase.GetCurrentMethod(),patNum,statuses,ceilDate,codeNum);
+			}
+			string procStatus="";
+			for(int i=0;i<statuses.Length;i++) {
+				if(i>0) {
+					procStatus+=" OR ";
+				}
+				procStatus+="ProcStatus="+POut.Int(statuses[i].GetHashCode());
+			}
+			string command="SELECT * FROM procedurelog "+
+				"WHERE PatNum='"+POut.Long(patNum)+"'"+
+				"AND CodeNum='"+POut.Long(codeNum)+"'"+
+				"AND ProcDate<"+POut.Date(ceilDate)+
+				"AND ("+procStatus+")"+
+				"ORDER BY ProcDate DESC";
+			List<Procedure> result=Crud.ProcedureCrud.SelectMany(command);
+			return result;
+		}
+
 		///<summary>Gets a list (procsMultApts is a struct of type ProcDesc(aptNum, string[], and production) of all the procedures attached to the specified appointments.  Then, use GetProcsOneApt to pull procedures for one appointment from this list.  This process requires only one call to the database. "myAptNums" is the list of appointments to get procedures for.</summary>
 		public static List<Procedure> GetProcsMultApts(List<long> myAptNums) {
 			//No need to check RemotingRole; no call to db.

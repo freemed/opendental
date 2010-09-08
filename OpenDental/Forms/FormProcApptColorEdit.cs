@@ -26,6 +26,7 @@ namespace OpenDental{
 		private Panel panelColor;
 		private Label labelBeforeTime;
 		public ProcApptColor ProcApptColorCur;
+		private CheckBox checkPrevDate;
 		public ApptViewItem ApptVItem;
 
 		///<summary></summary>
@@ -67,6 +68,7 @@ namespace OpenDental{
 			this.label2 = new System.Windows.Forms.Label();
 			this.panelColor = new System.Windows.Forms.Panel();
 			this.labelBeforeTime = new System.Windows.Forms.Label();
+			this.checkPrevDate = new System.Windows.Forms.CheckBox();
 			this.button1 = new OpenDental.UI.Button();
 			this.butDelete = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
@@ -75,16 +77,16 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(11,23);
+			this.label1.Location = new System.Drawing.Point(51,20);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(148,17);
+			this.label1.Size = new System.Drawing.Size(83,17);
 			this.label1.TabIndex = 2;
 			this.label1.Text = "Code Range";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textCodeRange
 			// 
-			this.textCodeRange.Location = new System.Drawing.Point(161,23);
+			this.textCodeRange.Location = new System.Drawing.Point(136,20);
 			this.textCodeRange.Name = "textCodeRange";
 			this.textCodeRange.Size = new System.Drawing.Size(200,20);
 			this.textCodeRange.TabIndex = 15;
@@ -92,7 +94,7 @@ namespace OpenDental{
 			// label2
 			// 
 			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(165,45);
+			this.label2.Location = new System.Drawing.Point(140,42);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(92,13);
 			this.label2.TabIndex = 16;
@@ -101,19 +103,29 @@ namespace OpenDental{
 			// panelColor
 			// 
 			this.panelColor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))),((int)(((byte)(64)))),((int)(((byte)(64)))));
-			this.panelColor.Location = new System.Drawing.Point(168,72);
+			this.panelColor.Location = new System.Drawing.Point(136,64);
 			this.panelColor.Name = "panelColor";
 			this.panelColor.Size = new System.Drawing.Size(24,24);
 			this.panelColor.TabIndex = 127;
 			// 
 			// labelBeforeTime
 			// 
-			this.labelBeforeTime.Location = new System.Drawing.Point(42,72);
+			this.labelBeforeTime.Location = new System.Drawing.Point(54,65);
 			this.labelBeforeTime.Name = "labelBeforeTime";
-			this.labelBeforeTime.Size = new System.Drawing.Size(117,17);
+			this.labelBeforeTime.Size = new System.Drawing.Size(80,20);
 			this.labelBeforeTime.TabIndex = 126;
 			this.labelBeforeTime.Text = "Text Color";
-			this.labelBeforeTime.TextAlign = System.Drawing.ContentAlignment.BottomRight;
+			this.labelBeforeTime.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// checkPrevDate
+			// 
+			this.checkPrevDate.AutoSize = true;
+			this.checkPrevDate.Location = new System.Drawing.Point(136,102);
+			this.checkPrevDate.Name = "checkPrevDate";
+			this.checkPrevDate.Size = new System.Drawing.Size(120,17);
+			this.checkPrevDate.TabIndex = 129;
+			this.checkPrevDate.Text = "Show previous date";
+			this.checkPrevDate.UseVisualStyleBackColor = true;
 			// 
 			// button1
 			// 
@@ -122,7 +134,7 @@ namespace OpenDental{
 			this.button1.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.button1.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.button1.CornerRadius = 4F;
-			this.button1.Location = new System.Drawing.Point(209,72);
+			this.button1.Location = new System.Drawing.Point(170,64);
 			this.button1.Name = "button1";
 			this.button1.Size = new System.Drawing.Size(75,24);
 			this.button1.TabIndex = 128;
@@ -139,7 +151,7 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(45,132);
+			this.butDelete.Location = new System.Drawing.Point(20,162);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(92,24);
 			this.butDelete.TabIndex = 124;
@@ -154,7 +166,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(360,102);
+			this.butOK.Location = new System.Drawing.Point(335,131);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 9;
@@ -169,7 +181,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(360,132);
+			this.butCancel.Location = new System.Drawing.Point(335,162);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 10;
@@ -179,7 +191,8 @@ namespace OpenDental{
 			// FormProcApptColorEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(464,179);
+			this.ClientSize = new System.Drawing.Size(433,208);
+			this.Controls.Add(this.checkPrevDate);
 			this.Controls.Add(this.button1);
 			this.Controls.Add(this.panelColor);
 			this.Controls.Add(this.labelBeforeTime);
@@ -205,6 +218,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormProcApptColorEdit_Load(object sender,System.EventArgs e) {
+			checkPrevDate.Checked=ProcApptColorCur.ShowPreviousDate;
 			textCodeRange.Text=ProcApptColorCur.CodeRange;
 			if(!ProcApptColorCur.IsNew) {
 				panelColor.BackColor=ProcApptColorCur.ColorText;
@@ -231,6 +245,7 @@ namespace OpenDental{
 			}
 			ProcApptColorCur.ColorText=panelColor.BackColor;
 			ProcApptColorCur.CodeRange=textCodeRange.Text;
+			ProcApptColorCur.ShowPreviousDate=checkPrevDate.Checked;
 			try {
 				if(ProcApptColorCur.IsNew) {
 					ProcApptColors.Insert(ProcApptColorCur);

@@ -2543,7 +2543,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					PRIMARY KEY (ProcApptColorNum)
 					) DEFAULT CHARSET=utf8";
 				Db.NonQ(command);
-
+				command="ALTER TABLE procapptcolor ADD ShowPreviousDate tinyint NOT NULL";
+				Db.NonQ(command);
 
 
 

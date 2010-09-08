@@ -104,6 +104,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butPDF;
 		///<summary>This is the way to pass a "signal" up to the parent form that OD is to close.</summary>
 		public bool CloseOD;
+		private bool procColorShowDate;
 
 		///<summary></summary>
 		public FormApptEdit(long aptNum)
@@ -2071,9 +2072,19 @@ namespace OpenDental{
 				    //strLine+=table.Rows[j][13].ToString()+" ";//don't show range
 				    break;
 				}
-				procDescOne+=DS.Tables["Procedure"].Rows[gridProc.SelectedIndices[i]]["AbbrDesc"].ToString();//procCode.;
+				procDescOne+=DS.Tables["Procedure"].Rows[gridProc.SelectedIndices[i]]["AbbrDesc"].ToString();//procCode
 				AptCur.ProcDescript+=procDescOne;
-				AptCur.ProcsColored+="<span color=\""+GetProcColor(procCode)+"\">"+procDescOne+"</span>";
+				string pColor=GetProcColor(procCode);
+				string prevDate="";
+				if(pColor!="" && procColorShowDate) {
+					ProcedureCode pc=ProcedureCodes.GetProcCode(procCode);//used to get codenum
+					List<Procedure> procs=Procedures.GetProcsForPatByStatusBeforeDate(AptCur.PatNum,new ProcStat[] { ProcStat.C,ProcStat.EC,ProcStat.EO },AptCur.AptDateTime,pc.CodeNum);
+					if(procs.Count>0) {
+						prevDate=" ("+procs[0].ProcDate.ToShortDateString()+")";
+					}
+				}
+				AptCur.ProcsColored+="<span color=\""+pColor+"\">"+procDescOne+prevDate+"</span>";
+				procColorShowDate=false;
 			}
 			//int[] procNums=new int[gridProc.SelectedIndices.Length];
 			//for(int i=0;i<procNums.Length;i++){
@@ -2114,7 +2125,7 @@ namespace OpenDental{
 			return true;
 		}
 
-		public static string GetProcColor(string code) {
+		private string GetProcColor(string code) {
 			string defaultColor="";
 			string code1="";
 			string code2="";
@@ -2131,6 +2142,9 @@ namespace OpenDental{
 					code2=codeSplit[1].Trim();
 				}
 				if(code==code1 || code==code2) {
+					if(colorList[i].ShowPreviousDate) {
+						procColorShowDate=true;
+					}
 					return colorList[i].ColorText.ToArgb().ToString();
 				}
 				else if(code.Length==code1.Length && code1.Length==code2.Length) {
@@ -2158,6 +2172,9 @@ namespace OpenDental{
 					num2=Convert.ToInt32(c2);
 					if(num0!=0) {
 						if(num1<=num0 && num0<=num2 || num2<=num0 && num0<=num1) {
+							if(colorList[i].ShowPreviousDate) {
+								procColorShowDate=true;
+							}
 							return colorList[i].ColorText.ToArgb().ToString();
 						}
 					}

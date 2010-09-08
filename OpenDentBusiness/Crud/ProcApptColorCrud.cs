@@ -48,6 +48,7 @@ namespace OpenDentBusiness.Crud{
 				procApptColor=new ProcApptColor();
 				procApptColor.ProcApptColorNum= PIn.Long  (table.Rows[i]["ProcApptColorNum"].ToString());
 				procApptColor.CodeRange       = PIn.String(table.Rows[i]["CodeRange"].ToString());
+				procApptColor.ShowPreviousDate= PIn.Bool  (table.Rows[i]["ShowPreviousDate"].ToString());
 				procApptColor.ColorText       = Color.FromArgb(PIn.Int(table.Rows[i]["ColorText"].ToString()));
 				retVal.Add(procApptColor);
 			}
@@ -68,12 +69,13 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="ProcApptColorNum,";
 			}
-			command+="CodeRange,ColorText) VALUES(";
+			command+="CodeRange,ShowPreviousDate,ColorText) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(procApptColor.ProcApptColorNum)+",";
 			}
 			command+=
 				 "'"+POut.String(procApptColor.CodeRange)+"',"
+				+    POut.Bool  (procApptColor.ShowPreviousDate)+","
 				+    POut.Int   (procApptColor.ColorText.ToArgb())+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
@@ -88,6 +90,7 @@ namespace OpenDentBusiness.Crud{
 		internal static void Update(ProcApptColor procApptColor){
 			string command="UPDATE procapptcolor SET "
 				+"CodeRange       = '"+POut.String(procApptColor.CodeRange)+"', "
+				+"ShowPreviousDate=  "+POut.Bool  (procApptColor.ShowPreviousDate)+", "
 				+"ColorText       =  "+POut.Int   (procApptColor.ColorText.ToArgb())+" "
 				+"WHERE ProcApptColorNum = "+POut.Long(procApptColor.ProcApptColorNum)+" LIMIT 1";
 			Db.NonQ(command);
@@ -99,6 +102,10 @@ namespace OpenDentBusiness.Crud{
 			if(procApptColor.CodeRange != oldProcApptColor.CodeRange) {
 				if(command!=""){ command+=",";}
 				command+="CodeRange = '"+POut.String(procApptColor.CodeRange)+"'";
+			}
+			if(procApptColor.ShowPreviousDate != oldProcApptColor.ShowPreviousDate) {
+				if(command!=""){ command+=",";}
+				command+="ShowPreviousDate = "+POut.Bool(procApptColor.ShowPreviousDate)+"";
 			}
 			if(procApptColor.ColorText != oldProcApptColor.ColorText) {
 				if(command!=""){ command+=",";}
