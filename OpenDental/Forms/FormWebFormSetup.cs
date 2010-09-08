@@ -49,7 +49,8 @@ namespace OpenDental {
 				wh.SetPreferences(RegistrationKey,PrefC.GetColor(PrefName.WebFormsBorderColor).ToArgb(),PrefC.GetStringSilent(PrefName.WebFormsHeading1),PrefC.GetStringSilent(PrefName.WebFormsHeading2));
 				//TestSheetUpload();
 				DialogResult=DialogResult.OK;
-			}catch(Exception ex) {
+			}
+			catch(Exception ex) {
 				MessageBox.Show(ex.Message);
 			}
 		}
@@ -69,14 +70,15 @@ namespace OpenDental {
 		private long GetDentalOfficeID() {
 			long DentalOfficeID=0;
 			try{
-			string RegistrationKey=PrefC.GetString(PrefName.RegistrationKey);
-			WebHostSynch.WebHostSynch wh=new WebHostSynch.WebHostSynch();
-			wh.Url=PrefC.GetString(PrefName.WebHostSynchServerURL);
-			if(wh.CheckRegistrationKey(RegistrationKey)==false) {
-				MessageBox.Show(Lan.g(this,"Registration key provided by the dental office is incorrect"));
+				string RegistrationKey=PrefC.GetString(PrefName.RegistrationKey);
+				WebHostSynch.WebHostSynch wh=new WebHostSynch.WebHostSynch();
+				wh.Url=PrefC.GetString(PrefName.WebHostSynchServerURL);
+				if(wh.CheckRegistrationKey(RegistrationKey)==false) {
+					MessageBox.Show(Lan.g(this,"Registration key provided by the dental office is incorrect"));
+				}
+				DentalOfficeID=wh.GetDentalOfficeID(RegistrationKey);
 			}
-			 DentalOfficeID=wh.GetDentalOfficeID(RegistrationKey);
-			}catch(Exception ex) {
+			catch(Exception ex) {
 				MessageBox.Show(ex.Message);
 			}
 			return DentalOfficeID;
@@ -87,13 +89,13 @@ namespace OpenDental {
 		/// Here sheetDef can be uploaded to the web form Open Dental
 		/// </summary>
 		private void TestSheetUpload(object sender,EventArgs e) {
-//pass sheet to webservice
+			//pass sheet to webservice
 			string RegistrationKey=PrefC.GetString(PrefName.RegistrationKey);
-				WebHostSynch.WebHostSynch wh=new WebHostSynch.WebHostSynch();
-				wh.Url=PrefC.GetString(PrefName.WebHostSynchServerURL);
-				OpenDentBusiness.SheetDef sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.PatientRegistration);
-				// for this line to compile one must modify the Reference.cs file in to the Web references folder. The SheetDef and related classes with namespaces of WebHostSync must be removed so that the SheetDef Class of OpenDentBusiness is used
-				//wh.ReadSheetDef(sheetDef);
+			WebHostSynch.WebHostSynch wh=new WebHostSynch.WebHostSynch();
+			wh.Url=PrefC.GetString(PrefName.WebHostSynchServerURL);
+			OpenDentBusiness.SheetDef sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.PatientRegistration);
+			// for this line to compile one must modify the Reference.cs file in to the Web references folder. The SheetDef and related classes with namespaces of WebHostSync must be removed so that the SheetDef Class of OpenDentBusiness is used
+			//wh.ReadSheetDef(sheetDef);
 		}
 
 

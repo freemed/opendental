@@ -107,7 +107,7 @@ namespace OpenDental{
 			this.groupBox2.Controls.Add(this.labelWebformsHeading1);
 			this.groupBox2.Controls.Add(this.textBoxWebformsHeading1);
 			this.groupBox2.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox2.Location = new System.Drawing.Point(24,57);
+			this.groupBox2.Location = new System.Drawing.Point(24,61);
 			this.groupBox2.Name = "groupBox2";
 			this.groupBox2.Size = new System.Drawing.Size(515,160);
 			this.groupBox2.TabIndex = 53;
@@ -118,9 +118,9 @@ namespace OpenDental{
 			// 
 			this.butWebformBorderColor.BackColor = System.Drawing.Color.RoyalBlue;
 			this.butWebformBorderColor.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-			this.butWebformBorderColor.Location = new System.Drawing.Point(175,24);
+			this.butWebformBorderColor.Location = new System.Drawing.Point(171,24);
 			this.butWebformBorderColor.Name = "butWebformBorderColor";
-			this.butWebformBorderColor.Size = new System.Drawing.Size(12,24);
+			this.butWebformBorderColor.Size = new System.Drawing.Size(18,20);
 			this.butWebformBorderColor.TabIndex = 71;
 			this.butWebformBorderColor.UseVisualStyleBackColor = false;
 			this.butWebformBorderColor.Click += new System.EventHandler(this.butWebformBorderColor_Click);
@@ -133,7 +133,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(550,166);
+			this.butOK.Location = new System.Drawing.Point(563,175);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 3;
@@ -148,7 +148,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(550,196);
+			this.butCancel.Location = new System.Drawing.Point(563,205);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 2;
@@ -157,7 +157,7 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(21,8);
+			this.label1.Location = new System.Drawing.Point(24,8);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(169,19);
 			this.label1.TabIndex = 54;
@@ -174,7 +174,7 @@ namespace OpenDental{
 			// FormWebFormSetup
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(650,225);
+			this.ClientSize = new System.Drawing.Size(663,234);
 			this.Controls.Add(this.textBoxWebFormAddress);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.groupBox2);
@@ -184,6 +184,7 @@ namespace OpenDental{
 			this.Controls.Add(this.butCancel);
 			this.Name = "FormWebFormSetup";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+			this.Text = "Web Form Setup";
 			this.groupBox2.ResumeLayout(false);
 			this.groupBox2.PerformLayout();
 			this.ResumeLayout(false);

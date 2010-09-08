@@ -54,5 +54,49 @@ CREATE TABLE `webforms_sheetfield` (
   CONSTRAINT `FK_webforms_sheetfield_SheetID` FOREIGN KEY (`SheetID`) REFERENCES `webforms_sheet` (`SheetID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `webforms_sheetdef`;
+DROP TABLE IF EXISTS `webforms_sheetfielddef`;
+
+
+CREATE TABLE `webforms_sheetdef` (
+  `WebSheetDefNum` bigint(20) NOT NULL AUTO_INCREMENT, /*added this column*/
+  `DentalOfficeID` bigint(20) NOT NULL,/*added this column*/
+  `SheetDefNum` bigint(20) NOT NULL,/* this was the primary key  AUTO_INCREMENT removed - this column will hold the exact same value as in OpenDental*/
+  `Description` varchar(255) DEFAULT NULL,
+  `SheetType` int(11) NOT NULL,
+  `FontSize` float NOT NULL,
+  `FontName` varchar(255) DEFAULT NULL,
+  `Width` int(11) NOT NULL,
+  `Height` int(11) NOT NULL,
+  `IsLandscape` tinyint(4) NOT NULL,
+  PRIMARY KEY (`WebSheetDefNum`),
+  KEY `FK_webforms_sheetdef_DentalOfficeID` (`DentalOfficeID`),
+  CONSTRAINT `FK_webforms_sheetdef_DentalOfficeID` FOREIGN KEY (`DentalOfficeID`) REFERENCES `webforms_preference` (`DentalOfficeID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+CREATE TABLE `webforms_sheetfielddef` (
+  `WebSheetFieldDefNum` bigint(20) NOT NULL AUTO_INCREMENT,
+  `SheetFieldDefNum` bigint(20) NOT NULL,/*AUTO_INCREMENT removed - this column will hold the exact same value as in OpenDental*/
+  `WebSheetDefNum` bigint(20) NOT NULL,/* new foreign key*/ 
+  `SheetDefNum` bigint(20) NOT NULL,/* was foreign key*/
+  `FieldType` int(11) NOT NULL,
+  `FieldName` varchar(255) DEFAULT NULL,
+  `FieldValue` text NOT NULL,
+  `FontSize` float NOT NULL,
+  `FontName` varchar(255) DEFAULT NULL,
+  `FontIsBold` tinyint(4) NOT NULL,
+  `XPos` int(11) NOT NULL,
+  `YPos` int(11) NOT NULL,
+  `Width` int(11) NOT NULL,
+  `Height` int(11) NOT NULL,
+  `GrowthBehavior` int(11) NOT NULL,
+  `RadioButtonValue` varchar(255) NOT NULL,
+  PRIMARY KEY (`WebSheetFieldDefNum`),/*changed this from SheetFieldDefNum to WebSheetFieldDefNum*/
+  KEY `FK_webforms_sheetfielddef_WebSheetDefNum` (`WebSheetDefNum`),
+  CONSTRAINT `FK_webforms_sheetfielddef_WebSheetDefNum` FOREIGN KEY (`WebSheetDefNum`) REFERENCES `webforms_sheetdef` (`WebSheetDefNum`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

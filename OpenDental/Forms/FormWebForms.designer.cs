@@ -26,12 +26,12 @@ namespace OpenDental{
 			this.components = new System.ComponentModel.Container();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.label2 = new System.Windows.Forms.Label();
+			this.textDateFrom = new OpenDental.ValidDate();
+			this.textDateTo = new OpenDental.ValidDate();
 			this.label3 = new System.Windows.Forms.Label();
 			this.mainMenu1 = new System.Windows.Forms.MainMenu(this.components);
 			this.menuItemSetup = new System.Windows.Forms.MenuItem();
 			this.butRetrieve = new OpenDental.UI.Button();
-			this.textDateFrom = new OpenDental.ValidDate();
-			this.textDateTo = new OpenDental.ValidDate();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
@@ -60,6 +60,20 @@ namespace OpenDental{
 			this.label2.TabIndex = 37;
 			this.label2.Text = "From";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// textDateFrom
+			// 
+			this.textDateFrom.Location = new System.Drawing.Point(95,19);
+			this.textDateFrom.Name = "textDateFrom";
+			this.textDateFrom.Size = new System.Drawing.Size(100,20);
+			this.textDateFrom.TabIndex = 43;
+			// 
+			// textDateTo
+			// 
+			this.textDateTo.Location = new System.Drawing.Point(261,19);
+			this.textDateTo.Name = "textDateTo";
+			this.textDateTo.Size = new System.Drawing.Size(100,20);
+			this.textDateTo.TabIndex = 44;
 			// 
 			// label3
 			// 
@@ -96,20 +110,6 @@ namespace OpenDental{
 			this.butRetrieve.Text = "&Retrieve New Forms";
 			this.butRetrieve.Click += new System.EventHandler(this.butRetrieve_Click);
 			// 
-			// textDateFrom
-			// 
-			this.textDateFrom.Location = new System.Drawing.Point(95,19);
-			this.textDateFrom.Name = "textDateFrom";
-			this.textDateFrom.Size = new System.Drawing.Size(100,20);
-			this.textDateFrom.TabIndex = 43;
-			// 
-			// textDateTo
-			// 
-			this.textDateTo.Location = new System.Drawing.Point(261,19);
-			this.textDateTo.Name = "textDateTo";
-			this.textDateTo.Size = new System.Drawing.Size(100,20);
-			this.textDateTo.TabIndex = 44;
-			// 
 			// gridMain
 			// 
 			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -119,7 +119,7 @@ namespace OpenDental{
 			this.gridMain.Location = new System.Drawing.Point(24,67);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(595,175);
+			this.gridMain.Size = new System.Drawing.Size(595,154);
 			this.gridMain.TabIndex = 4;
 			this.gridMain.Title = "Webforms";
 			this.gridMain.TranslationName = "TableWebforms";
@@ -133,7 +133,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(638,176);
+			this.butOK.Location = new System.Drawing.Point(638,155);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 3;
@@ -148,7 +148,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(638,218);
+			this.butCancel.Location = new System.Drawing.Point(638,197);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 2;
@@ -158,7 +158,7 @@ namespace OpenDental{
 			// FormWebForms
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(725,254);
+			this.ClientSize = new System.Drawing.Size(725,233);
 			this.Controls.Add(this.butRetrieve);
 			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.gridMain);
@@ -167,6 +167,7 @@ namespace OpenDental{
 			this.Menu = this.mainMenu1;
 			this.Name = "FormWebForms";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+			this.Text = "Web Forms";
 			this.Load += new System.EventHandler(this.FormWebForms_Load);
 			this.groupBox2.ResumeLayout(false);
 			this.groupBox2.PerformLayout();
