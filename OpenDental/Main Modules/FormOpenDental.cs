@@ -4017,6 +4017,11 @@ namespace OpenDental{
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Mobile Sync");
 		}
 
+		private void menuItemWebForms_Click(object sender,EventArgs e) {
+			FormWebForms FormWF = new FormWebForms();
+			FormWF.ShowDialog();
+		}
+
 		//Help
 		private void menuItemRemote_Click(object sender,System.EventArgs e) {
 			try {
@@ -4361,10 +4366,6 @@ namespace OpenDental{
 			Dispose();
 		}
 
-		private void menuItemWebForms_Click(object sender,EventArgs e) {
-			FormWebForms FormWF = new FormWebForms();
-			FormWF.ShowDialog();
-		}
 
 		
 
