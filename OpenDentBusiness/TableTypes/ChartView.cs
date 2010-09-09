@@ -1,0 +1,79 @@
+﻿using System;
+using System.Collections;
+using System.Drawing;
+
+namespace OpenDentBusiness{
+	///<summary>Enables viewing a variety of views in chart module.</summary>
+	[Serializable]
+	public class ChartView:TableBase{
+		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
+		public long ChartViewNum;
+		///<summary>Description of this view.  Gets displayed at top of Progress Notes grid.</summary>
+		public string Description;
+		///<summary>0-based order to display in lists.</summary>
+		public int ItemOrder;
+		///<summary>Enum:ChartViewProcStat None=0,TP=1,Complete=2,Existing Cur Prov=4,Existing Other Prov=8,Referred=16,Deleted=32,Condition=64,All=127.</summary>
+		public ChartViewProcStat ProcStatuses;
+		///<summary>Enum:ChartViewObjs None=0,Appointments=1,Comm Log=2,Comm Log Family=4,Tasks=8,Email=16,LabCases=32,Rx=64,Sheets=128,All=255.</summary>
+		public ChartViewObjs ObjectTypes;
+		///<summary>Set true to show procedure notes.</summary>
+		public bool ShowProcNotes;
+		///<summary>Set true to enable audit mode.</summary>
+		public bool IsAudit;
+		///<summary>Set true to only show information regarding the selected teeth.</summary>
+		public bool SelectedTeethOnly;
+
+
+		public ChartView Copy() {
+			return (ChartView)this.MemberwiseClone();
+		}	
+	}
+
+	[Flags]
+	public enum ChartViewObjs {
+		///<summary>0- None</summary>
+		None=0,
+		///<summary>1- Appointments</summary>
+		Appointments=1,
+		///<summary>2- Comm Log</summary>
+		CommLog=2,
+		///<summary>4- Comm Log Family</summary>
+		CommLogFamily=4,
+		///<summary>8- Tasks</summary>
+		Tasks=8,
+		///<summary>16- Email</summary>
+		Email=16,
+		///<summary>32- Lab Cases</summary>
+		LabCases=32,
+		///<summary>64- Rx</summary>
+		Rx=64,
+		///<summary>128- Sheets</summary>
+		Sheets=128,
+		///<summary>255- All</summary>
+		All=255
+	}
+
+	[Flags]
+	public enum ChartViewProcStat {
+		///<summary>0- None.</summary>
+		None=0,
+		///<summary>1- Treatment Plan.</summary>
+		TP=1,
+		///<summary>2- Complete.</summary>
+		C=2,
+		///<summary>4- Existing Current Provider.</summary>
+		EC=4,
+		///<summary>8- Existing Other Provider.</summary>
+		EO=8,
+		///<summary>16- Referred Out.</summary>
+		R=16,
+		///<summary>32- Deleted.</summary>
+		D=32,
+		///<summary>64- Condition.</summary>
+		Cn=64,
+		///<summary>127- All.</summary>
+		All=127
+	}
+}
+
