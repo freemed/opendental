@@ -20,6 +20,10 @@ namespace OpenDental {
 			Lan.F(this);
 		}
 
+		private void FormWebForms_Load(object sender,EventArgs e) {
+			SetDates();
+		}
+
 		/// <summary>
 		/// </summary>
 		private void FillGrid() {
@@ -35,8 +39,8 @@ namespace OpenDental {
 				col=new ODGridColumn(Lan.g("TableWebforms","Status"),100);
 				gridMain.Columns.Add(col);
 				gridMain.Rows.Clear();
-				DateTime dateFrom=PIn.Date(textDateFrom.Text);
-				DateTime dateTo=PIn.Date(textDateTo.Text);
+				DateTime dateFrom=PIn.Date(textDateStart.Text);
+				DateTime dateTo=PIn.Date(textDateEnd.Text);
 				///the line below will allow the code to continue by not throwing an exception.
 				///It will accept the security certificate if there is a problem with the security certificate.
 				System.Net.ServicePointManager.ServerCertificateValidationCallback+=
@@ -80,7 +84,7 @@ namespace OpenDental {
 				for(int i=0;i<SheetIdArray.Length;i++) {
 					long SheetID=(long)SheetIdArray[i];
 					var SingleSheet=from w in wbsf where (long)w.webforms_sheetReference.EntityKey.EntityKeyValues.First().Value==SheetID
-									select w;
+						select w;
 					ODGridRow row=new ODGridRow();
 					string LastName="";
 					string FirstName="";
@@ -164,21 +168,17 @@ namespace OpenDental {
 			newPat=new Patient();
 			//PatFields must have a one to one mapping with the SheetWebFields
 			String[] PatFields={ "LName","FName","MiddleI","Birthdate","Preferred", "Email","SSN",
-									 "Address","Address2","City","State","Zip",
-									 "HmPhone","Gender","Position","PreferContactMethod","PreferConfirmMethod",
-									  "PreferRecallMethod","StudentStatus",
-									  "WirelessPhone","WkPhone"
-									  };
+				 "Address","Address2","City","State","Zip",
+				 "HmPhone","Gender","Position","PreferContactMethod","PreferConfirmMethod",
+				  "PreferRecallMethod","StudentStatus","WirelessPhone","WkPhone"};
 			//other PatFields="PatStatus","Guarantor","CreditType","PriProv","SecProv","FeeSched","BillingType","AddrNote","ClinicNum" EmployerNum, EmploymentNote, GradeLevel, HasIns, InsEst, };
-				String[] SheetWebFields={"LastName","FirstName","MI","Birthdate","Preferred","Email","SS",
-									"Address1","Address2","City","State","Zip",
-									"HomePhone","Gender","Married","MethodContact","MethodConf",
-									  "MethodRecall","StudentStatus",
-									  "WirelessPhone","WorkPhone"
-									   };
+			String[] SheetWebFields={"LastName","FirstName","MI","Birthdate","Preferred","Email","SS",
+			"Address1","Address2","City","State","Zip",
+			"HomePhone","Gender","Married","MethodContact","MethodConf",
+			"MethodRecall","StudentStatus","WirelessPhone","WorkPhone"};
 				/*Other SheetWebFields="WholeFamily","WirelessCarrier","Hear","Policy1GroupName","Policy1GroupNumber","Policy1Relationship","Policy1SubscriberName","Policy1SubscriberID","Policy1InsuranceCompany", "Policy1Phone","Policy1Employer","Policy2GroupName","Policy2GroupNumber","Policy2Relationship","Policy2SubscriberName","Policy2SubscriberID","Policy2InsuranceCompany", "Policy2Phone","Policy2Employer","Comments"
-				 * */
-				Type t=newPat.GetType();
+				 */
+			Type t=newPat.GetType();
 			FieldInfo[] fi=t.GetFields();
 			try {
 				for(int i=0;i<SingleSheet.Count();i++) {
@@ -221,8 +221,7 @@ namespace OpenDental {
 				String[] SheetFields={"LName","FName","MiddleI","Birthdate","Preferred", "Email","SSN",
 									"addressAndHmPhoneIsSameEntireFamily","Address","Address2","City","State","Zip",
 									"HmPhone","Gender","Position","PreferContactMethod","PreferConfirmMethod",
-									"PreferRecallMethod","StudentStatus","referredFrom",
-									"WirelessPhone","wirelessCarrier","WkPhone",
+									"PreferRecallMethod","StudentStatus","referredFrom","WirelessPhone","wirelessCarrier","WkPhone",
 									"ins1GroupName","ins1GroupNum","ins1Relat","ins1SubscriberNameF","ins1SubscriberID","ins1CarrierName","ins1CarrierPhone","ins1EmployerName",
 									"ins2GroupName","ins2GroupNum","ins2Relat","ins2SubscriberNameF","ins2SubscriberID","ins2CarrierName","ins2CarrierPhone","ins2EmployerName",
 									  "misc"};
@@ -230,8 +229,7 @@ namespace OpenDental {
 				String[] SheetWebFields={"LastName","FirstName","MI","Birthdate","Preferred","Email","SS",
 									"WholeFamily","Address1","Address2","City","State","Zip",
 									"HomePhone","Gender","Married","MethodContact","MethodConf",
-									"MethodRecall","StudentStatus","Hear",
-									"WirelessPhone","WirelessCarrier","WorkPhone",
+									"MethodRecall","StudentStatus","Hear","WirelessPhone","WirelessCarrier","WorkPhone",
 									"Policy1GroupName","Policy1GroupNumber","Policy1Relationship","Policy1SubscriberName","Policy1SubscriberID","Policy1InsuranceCompany", "Policy1Phone","Policy1Employer",
 									"Policy2GroupName","Policy2GroupNumber","Policy2Relationship","Policy2SubscriberName","Policy2SubscriberID","Policy2InsuranceCompany", "Policy2Phone","Policy2Employer",
 									"Comments",
@@ -277,7 +275,6 @@ namespace OpenDental {
 							}
 						}
 						break;
-
 					case "Position":
 						if(fld.RadioButtonValue=="Married") {
 							if(SheetWebFieldValue=="Y") {
@@ -290,7 +287,6 @@ namespace OpenDental {
 							}
 						}
 						break;
-
 					case "PreferContactMethod":
 					case "PreferConfirmMethod":
 					case "PreferRecallMethod":
@@ -315,7 +311,6 @@ namespace OpenDental {
 							}
 						}
 						break;
-
 					case "StudentStatus":
 						if(fld.RadioButtonValue=="Nonstudent") {
 							if(SheetWebFieldValue=="Nonstudent") {
@@ -334,7 +329,6 @@ namespace OpenDental {
 							}
 						}
 						break;
-
 					case "ins1Relat":
 					case "ins2Relat":
 						if(fld.RadioButtonValue=="Self") {
@@ -445,7 +439,7 @@ namespace OpenDental {
 			bool isEqual=true;
 			foreach(FieldInfo fieldinfo in patientFromDb.GetType().GetFields()) {
 				/* these field are to be ignored while comparing because they have different values when extracted from the db */
-				if(fieldinfo.Name=="DateTStamp"||
+				if(fieldinfo.Name=="DateTStamp" ||
 					fieldinfo.Name=="Age") {
 					continue; // code below this line will not be executed for this loop.
 				}
@@ -479,22 +473,14 @@ namespace OpenDental {
 			return isEqual;
 		}
 
-
-		private void butOK_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.OK;
+		private void SetDates() {
+			textDateStart.Text=DateTime.Today.ToShortDateString();
+			textDateEnd.Text=DateTime.Today.ToShortDateString();
 		}
 
-		private void butCancel_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.Cancel;
-		}
-
-		private void FormWebForms_Load(object sender,EventArgs e) {
-			SetDates();
-		}
-
-		private void butRetrieve_Click(object sender,EventArgs e) {
-			if(textDateFrom.errorProvider1.GetError(textDateFrom)!=""
-				||textDateTo.errorProvider1.GetError(textDateTo)!=""
+		private void butRetrieve_Click(object sender,System.EventArgs e) {
+			if(textDateStart.errorProvider1.GetError(textDateStart)!=""
+				|| textDateEnd.errorProvider1.GetError(textDateEnd)!=""
 				) {
 				MsgBox.Show(this,"Please fix data entry errors first.");
 				return;
@@ -502,9 +488,24 @@ namespace OpenDental {
 			FillGrid();
 		}
 
-		private void SetDates() {
-			textDateFrom.Text=DateTime.Today.ToShortDateString();
-			textDateTo.Text=DateTime.Today.ToShortDateString();
+		private void but30days_Click(object sender,EventArgs e) {
+			textDateStart.Text=DateTime.Today.AddDays(-30).ToShortDateString();
+			textDateEnd.Text=DateTime.Today.ToShortDateString();
+		}
+
+		private void but45days_Click(object sender,EventArgs e) {
+			textDateStart.Text=DateTime.Today.AddDays(-45).ToShortDateString();
+			textDateEnd.Text=DateTime.Today.ToShortDateString();
+		}
+
+		private void but90days_Click(object sender,EventArgs e) {
+			textDateStart.Text=DateTime.Today.AddDays(-90).ToShortDateString();
+			textDateEnd.Text=DateTime.Today.ToShortDateString();
+		}
+
+		private void butDatesAll_Click(object sender,EventArgs e) {
+			textDateStart.Text="";
+			textDateEnd.Text=DateTime.Today.ToShortDateString();
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
@@ -520,6 +521,14 @@ namespace OpenDental {
 			gridMain.EndUpdate();
 			FormWebFormSetup formW=new FormWebFormSetup();
 			formW.ShowDialog();
+		}
+
+		private void butOK_Click(object sender,EventArgs e) {
+			DialogResult=DialogResult.OK;
+		}
+
+		private void butCancel_Click(object sender,EventArgs e) {
+			DialogResult=DialogResult.Cancel;
 		}
 
 

@@ -8,6 +8,7 @@ using OpenDentBusiness;
 
 
 
+
 namespace WebHostSynch {
 	/// <summary>
 	/// Summary description for WebHostSynch
@@ -130,22 +131,26 @@ namespace WebHostSynch {
 			}
 			catch(ApplicationException ex) {
 				Logger.Information(ex.Message.ToString());
-				
 			}
 			return WebFormAddress;
 		}
-
-
-
 		/// <summary>
 		/// Ignore this method - this is for the 'next' version of the Webforms.
 		/// Here sheetDef can be uploaded to the webhostsync from Open Dental
 		/// </summary>
 		[WebMethod]
 		public void ReadSheetDef(SheetDef sheetDef) {
-			//string a=sheetDef.ToString();
-		}
 
+			string a=sheetDef.ToString();
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		[WebMethod]
+		public void SheetsInternalMeth(SheetsInternal sheetInt) {
+			OpenDentBusiness.SheetDef sheetDef1= SheetsInternal.GetSheetDef(SheetInternalType.PatientRegistration);
+			
+		}
 
 
 	}

@@ -35,7 +35,7 @@ namespace WebForms {
 				string Heading1="";
 				string Heading2="";
 				var PrefObj=from wp in db.webforms_preference where wp.DentalOfficeID==DentalOfficeID
-							  select wp;
+					select wp;
 				if(PrefObj.Count() > 0) {
 					ColorCode=PrefObj.First().ColorBorder;
 					Heading1=PrefObj.First().Heading1;
@@ -127,7 +127,7 @@ namespace WebForms {
 				ODWebServiceEntities db=new ODWebServiceEntities();
 				webforms_sheet NewSheetObj=new webforms_sheet();
 				var PrefObj=from wp in db.webforms_preference where wp.DentalOfficeID==DentalOfficeID
-							  select wp;
+					select wp;
 				NewSheetObj.DateTimeSubmitted=DateTime.Now;
 				foreach(string key in FormValuesHashTable.Keys) {
 					webforms_sheetfield NewSheetfieldObj=new webforms_sheetfield();

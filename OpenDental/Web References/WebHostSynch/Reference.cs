@@ -48,6 +48,8 @@ namespace OpenDental.WebHostSynch {
         
         private System.Threading.SendOrPostCallback ReadSheetDefOperationCompleted;
         
+        private System.Threading.SendOrPostCallback SheetsInternalMethOperationCompleted;
+        
         private bool useDefaultCredentialsSetExplicitly;
         
         /// <remarks/>
@@ -106,6 +108,9 @@ namespace OpenDental.WebHostSynch {
         
         /// <remarks/>
         public event ReadSheetDefCompletedEventHandler ReadSheetDefCompleted;
+        
+        /// <remarks/>
+        public event SheetsInternalMethCompletedEventHandler SheetsInternalMethCompleted;
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/SetPreferences", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
@@ -321,6 +326,34 @@ namespace OpenDental.WebHostSynch {
         }
         
         /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/SheetsInternalMeth", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public void SheetsInternalMeth(SheetsInternal sheetInt) {
+            this.Invoke("SheetsInternalMeth", new object[] {
+                        sheetInt});
+        }
+        
+        /// <remarks/>
+        public void SheetsInternalMethAsync(SheetsInternal sheetInt) {
+            this.SheetsInternalMethAsync(sheetInt, null);
+        }
+        
+        /// <remarks/>
+        public void SheetsInternalMethAsync(SheetsInternal sheetInt, object userState) {
+            if ((this.SheetsInternalMethOperationCompleted == null)) {
+                this.SheetsInternalMethOperationCompleted = new System.Threading.SendOrPostCallback(this.OnSheetsInternalMethOperationCompleted);
+            }
+            this.InvokeAsync("SheetsInternalMeth", new object[] {
+                        sheetInt}, this.SheetsInternalMethOperationCompleted, userState);
+        }
+        
+        private void OnSheetsInternalMethOperationCompleted(object arg) {
+            if ((this.SheetsInternalMethCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.SheetsInternalMethCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
         public new void CancelAsync(object userState) {
             base.CancelAsync(userState);
         }
@@ -503,6 +536,15 @@ namespace OpenDental.WebHostSynch {
                 this.valueField = value;
             }
         }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "2.0.50727.3053")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://tempuri.org/")]
+    public partial class SheetsInternal {
     }
     
     /// <remarks/>
@@ -1105,6 +1147,10 @@ namespace OpenDental.WebHostSynch {
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "2.0.50727.3053")]
     public delegate void ReadSheetDefCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "2.0.50727.3053")]
+    public delegate void SheetsInternalMethCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
 }
 
 #pragma warning restore 1591
