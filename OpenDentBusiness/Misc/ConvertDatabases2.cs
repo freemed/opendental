@@ -2545,6 +2545,23 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);
 				command="ALTER TABLE procapptcolor ADD ShowPreviousDate tinyint NOT NULL";
 				Db.NonQ(command);
+				command="DROP TABLE IF EXISTS chartview";
+				Db.NonQ(command);
+				command=@"CREATE TABLE chartview (
+					ChartViewNum bigint NOT NULL auto_increment,
+					Description varchar(255) NOT NULL,
+					ItemOrder int NOT NULL,
+					ProcStatuses tinyint NOT NULL,
+					ObjectTypes tinyint NOT NULL,
+					ShowProcNotes tinyint NOT NULL,
+					IsAudit tinyint NOT NULL,
+					SelectedTeethOnly tinyint NOT NULL,
+					PRIMARY KEY (ChartViewNum)
+					) DEFAULT CHARSET=utf8";
+				Db.NonQ(command);
+
+
+
 
 
 
@@ -2579,3 +2596,5 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 			
 
 			
+
+				

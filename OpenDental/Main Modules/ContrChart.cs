@@ -206,7 +206,6 @@ namespace OpenDental{
 		private OpenDental.UI.Button buttonCMODL;
 		private OpenDental.UI.Button buttonCMODB;
 		private OpenDental.UI.Button butAddKey;
-		private CheckBox checkExtraNotes;
 		//private MenuItem menuItemDeleteSelected;
 		private CheckBox checkCommFamily;
 		private OpenDental.UI.Button butForeignKey;
@@ -268,6 +267,8 @@ namespace OpenDental{
 		private OpenDental.UI.Button butDown;
 		private PatField[] PatFieldList;
 		private bool InitializedOnStartup;
+		//<summary>Can be null if user has not set up any views.  Defaults to first in list when starting up.</summary>
+		//private ChartView ChartViewCur;
 	
 		///<summary></summary>
 		public ContrChart(){
@@ -451,7 +452,6 @@ namespace OpenDental{
 			this.checkCommFamily = new System.Windows.Forms.CheckBox();
 			this.checkAppt = new System.Windows.Forms.CheckBox();
 			this.checkLabCase = new System.Windows.Forms.CheckBox();
-			this.checkExtraNotes = new System.Windows.Forms.CheckBox();
 			this.groupBox6 = new System.Windows.Forms.GroupBox();
 			this.checkShowCn = new System.Windows.Forms.CheckBox();
 			this.butShowAll = new OpenDental.UI.Button();
@@ -2246,7 +2246,6 @@ namespace OpenDental{
 			this.tabShow.Controls.Add(this.checkShowOnlyFilmsAndExams);
 			this.tabShow.Controls.Add(this.checkShowOnlyHygieneProcs);
 			this.tabShow.Controls.Add(this.groupBox7);
-			this.tabShow.Controls.Add(this.checkExtraNotes);
 			this.tabShow.Controls.Add(this.groupBox6);
 			this.tabShow.Controls.Add(this.checkShowTeeth);
 			this.tabShow.Controls.Add(this.checkNotes);
@@ -2369,19 +2368,6 @@ namespace OpenDental{
 			this.checkLabCase.TabIndex = 17;
 			this.checkLabCase.Text = "Lab Cases";
 			this.checkLabCase.Click += new System.EventHandler(this.checkLabCase_Click);
-			// 
-			// checkExtraNotes
-			// 
-			this.checkExtraNotes.AllowDrop = true;
-			this.checkExtraNotes.Checked = true;
-			this.checkExtraNotes.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkExtraNotes.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkExtraNotes.Location = new System.Drawing.Point(155,155);
-			this.checkExtraNotes.Name = "checkExtraNotes";
-			this.checkExtraNotes.Size = new System.Drawing.Size(102,13);
-			this.checkExtraNotes.TabIndex = 216;
-			this.checkExtraNotes.Text = "Extra Notes";
-			this.checkExtraNotes.Visible = false;
 			// 
 			// groupBox6
 			// 

@@ -440,6 +440,7 @@
     <Compile Include="TableTypes\Automation.cs" />
     <Compile Include="TableTypes\ApptFieldDef.cs" />
     <Compile Include="TableTypes\ApptField.cs" />
+    <Compile Include="TableTypes\ChartView.cs" />
     <Compile Include="TableTypes\ProcApptColor.cs" />
     <Compile Include="TableTypes\Guardian.cs" />
     <Compile Include="TableTypes\TaskUnread.cs" />

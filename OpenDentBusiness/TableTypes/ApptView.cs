@@ -11,7 +11,7 @@ namespace OpenDentBusiness{
 		public long ApptViewNum;
 		///<summary>Description of this view.  Gets displayed in Appt module.</summary>
 		public string Description;
-		///<summary>Order to display in lists. Every view must have a unique itemorder, but it is acceptable to have some missing itemorders in the sequence.</summary>
+		///<summary>0-based order to display in lists. Every view must have a unique itemorder, but it is acceptable to have some missing itemorders in the sequence.</summary>
 		public int ItemOrder;
 		///<summary>Number of rows per time increment.  Usually 1 or 2.  Programming note: Value updated to ContrApptSheet.RowsPerIncr to track current state.</summary>
 		public byte RowsPerIncr;
