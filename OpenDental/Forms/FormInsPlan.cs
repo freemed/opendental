@@ -3184,8 +3184,14 @@ namespace OpenDental{
 			catch(Exception ex) {//although many errors will be caught and result in a response etrans.
 				//this also catches validation errors such as missing info.
 				Cursor=Cursors.Default;
-				CodeBase.MsgBoxCopyPaste msgbox=new CodeBase.MsgBoxCopyPaste(ex.Message);
-				msgbox.ShowDialog();
+				if(ex.Message.Contains("AAA*N**79*")){
+					MsgBox.Show(this,"There is a problem with your benefits request. The clearing house you are using (typically Claim Connect) may not support Real Time Eligibility "
+						+"for this carrier. Please ensure the carrier's electronic ID is correct and that your clearing house supports Real Time Eligibility for this carrier.");
+				}
+				else{
+					CodeBase.MsgBoxCopyPaste msgbox=new CodeBase.MsgBoxCopyPaste(ex.Message);
+					msgbox.ShowDialog();
+				}
 			}
 			Cursor=Cursors.Default;
 			DateTime dateLast270=Etranss.GetLastDate270(PlanCur.PlanNum);
