@@ -1602,16 +1602,16 @@ ORDER BY adjdate DESC
 			report.ColPos[8]=630;
 			report.ColPos[9]=700;
 			report.ColPos[10]=770;
-			report.ColCaption[0]="Date";
-			report.ColCaption[1]="Weekday";
-			report.ColCaption[2]="Production";
-			report.ColCaption[3]="Sched";
-			report.ColCaption[4]="Adj";
-			report.ColCaption[5]="Writeoff";		//spk 5/19/05
-			report.ColCaption[6]="Tot Prod";
-			report.ColCaption[7]="Pt Income";		// spk
-			report.ColCaption[8]="Ins Income";		// spk
-			report.ColCaption[9]="Tot Income";
+			report.ColCaption[0]=Lan.g(this,"Date");
+			report.ColCaption[1]=Lan.g(this,"Weekday");
+			report.ColCaption[2]=Lan.g(this,"Production");
+			report.ColCaption[3]=Lan.g(this,"Sched");
+			report.ColCaption[4]=Lan.g(this,"Adj");
+			report.ColCaption[5]=Lan.g(this,"Writeoff");		//spk 5/19/05
+			report.ColCaption[6]=Lan.g(this,"Tot Prod");
+			report.ColCaption[7]=Lan.g(this,"Pt Income");		// spk
+			report.ColCaption[8]=Lan.g(this,"Ins Income");		// spk
+			report.ColCaption[9]=Lan.g(this,"Tot Income");
       report.ColAlign[2]=HorizontalAlignment.Right;
 			report.ColAlign[3]=HorizontalAlignment.Right;
 			report.ColAlign[4]=HorizontalAlignment.Right;
@@ -1966,7 +1966,7 @@ ORDER BY adjdate DESC
 			FormQuery2=new FormQuery(report);
 			FormQuery2.IsReport=true;
 			FormQuery2.ResetGrid();//necessary won't work without
-			report.Title="Annual Production and Income";
+			report.Title=Lan.g(this,"Annual Production and Income");
 			report.SubTitle.Add(PrefC.GetString(PrefName.PracticeTitle));
 			report.SubTitle.Add(textDateFrom.Text+" - "+textDateTo.Text);
 			if(checkAllProv.Checked) {
@@ -2018,14 +2018,14 @@ ORDER BY adjdate DESC
 			//Pt Income
 			//Ins Income
 			//Total Income
-			report.ColCaption[0]="Month";
-			report.ColCaption[1]="Production";
-			report.ColCaption[2]="Adjustments";
-			report.ColCaption[3]="Writeoff";	//spk
-			report.ColCaption[4]="Tot Prod";
-			report.ColCaption[5]="Pt Income";
-			report.ColCaption[6]="Ins Income";
-			report.ColCaption[7]="Total Income";
+			report.ColCaption[0]=Lan.g(this,"Month");
+			report.ColCaption[1]=Lan.g(this,"Production");
+			report.ColCaption[2]=Lan.g(this,"Adjustments");
+			report.ColCaption[3]=Lan.g(this,"Writeoff");	//spk
+			report.ColCaption[4]=Lan.g(this,"Tot Prod");
+			report.ColCaption[5]=Lan.g(this,"Pt Income");
+			report.ColCaption[6]=Lan.g(this,"Ins Income");
+			report.ColCaption[7]=Lan.g(this,"Total Income");
 			report.ColAlign[1]=HorizontalAlignment.Right;
       report.ColAlign[2]=HorizontalAlignment.Right;
 			report.ColAlign[3]=HorizontalAlignment.Right;
