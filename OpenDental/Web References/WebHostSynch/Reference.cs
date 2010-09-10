@@ -149,28 +149,24 @@ namespace OpenDental.WebHostSynch {
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetSheetData", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-        public webforms_sheetfield[] GetSheetData(string RegistrationKey, System.DateTime StartDate, System.DateTime EndDate) {
+        public webforms_sheetfield[] GetSheetData(string RegistrationKey) {
             object[] results = this.Invoke("GetSheetData", new object[] {
-                        RegistrationKey,
-                        StartDate,
-                        EndDate});
+                        RegistrationKey});
             return ((webforms_sheetfield[])(results[0]));
         }
         
         /// <remarks/>
-        public void GetSheetDataAsync(string RegistrationKey, System.DateTime StartDate, System.DateTime EndDate) {
-            this.GetSheetDataAsync(RegistrationKey, StartDate, EndDate, null);
+        public void GetSheetDataAsync(string RegistrationKey) {
+            this.GetSheetDataAsync(RegistrationKey, null);
         }
         
         /// <remarks/>
-        public void GetSheetDataAsync(string RegistrationKey, System.DateTime StartDate, System.DateTime EndDate, object userState) {
+        public void GetSheetDataAsync(string RegistrationKey, object userState) {
             if ((this.GetSheetDataOperationCompleted == null)) {
                 this.GetSheetDataOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetSheetDataOperationCompleted);
             }
             this.InvokeAsync("GetSheetData", new object[] {
-                        RegistrationKey,
-                        StartDate,
-                        EndDate}, this.GetSheetDataOperationCompleted, userState);
+                        RegistrationKey}, this.GetSheetDataOperationCompleted, userState);
         }
         
         private void OnGetSheetDataOperationCompleted(object arg) {

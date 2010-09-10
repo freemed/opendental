@@ -28,6 +28,7 @@ namespace OpenDental {
 		/// </summary>
 		private void FillGrid() {
 			try {
+				/*
 				gridMain.BeginUpdate();
 				gridMain.Columns.Clear();
 				ODGridColumn col=new ODGridColumn(Lan.g("TableWebforms","Last Name"),100);
@@ -38,9 +39,71 @@ namespace OpenDental {
 				gridMain.Columns.Add(col);
 				col=new ODGridColumn(Lan.g("TableWebforms","Status"),100);
 				gridMain.Columns.Add(col);
+				*/
+
+				ODGridColumn col=new ODGridColumn(Lan.g(this,"Date"),70);
+				gridMain.Columns.Add(col);
+				col=new ODGridColumn(Lan.g(this,"Time"),42);
+				gridMain.Columns.Add(col);
+				col=new ODGridColumn(Lan.g(this,"Kiosk"),55,HorizontalAlignment.Center);
+				gridMain.Columns.Add(col);
+				col=new ODGridColumn(Lan.g(this,"Description"),210);
+				gridMain.Columns.Add(col);
+				col=new ODGridColumn(Lan.g(this,"Image Category"),120);
+				gridMain.Columns.Add(col);
+
 				gridMain.Rows.Clear();
 				DateTime dateFrom=PIn.Date(textDateStart.Text);
 				DateTime dateTo=PIn.Date(textDateEnd.Text);
+
+				DataTable table=Sheets.GetAllPatientFormsTable(dateFrom,dateTo);
+
+				ODGridRow row=new ODGridRow();
+				
+				//row.Cells.Add(LastName);
+				//row.Cells.Add(FirstName);
+				//row.Cells.Add(BirthDate);
+				//row.Tag=PatNum;
+				gridMain.Rows.Add(row);
+				
+				for(int i=0;i<table.Rows.Count;i++) {
+					row=new ODGridRow();
+					row.Cells.Add(table.Rows[i]["date"].ToString());
+					row.Cells.Add(table.Rows[i]["time"].ToString());
+					row.Cells.Add(table.Rows[i]["showInTerminal"].ToString()); //this should show iswebform
+					row.Cells.Add(table.Rows[i]["description"].ToString());
+					row.Cells.Add(table.Rows[i]["imageCat"].ToString());
+					gridMain.Rows.Add(row);
+				}
+				gridMain.EndUpdate();
+				if(table.Rows.Count==0) {
+					//gridMain.EndUpdate();
+					MsgBox.Show(this,"No Patient forms available");
+					return;
+				}
+
+				gridMain.EndUpdate();
+
+				//ODGridRow row=new ODGridRow();
+				//row.Cells.Add(LastName);
+				//row.Cells.Add(FirstName);
+				//row.Cells.Add(BirthDate);
+				//row.Tag=PatNum;
+				//gridMain.Rows.Add(row);
+				//gridMain.EndUpdate()
+
+				
+				gridMain.EndUpdate();
+				}
+				catch(Exception e) {
+					gridMain.EndUpdate();
+					MessageBox.Show(e.Message);
+				}
+			
+		}
+
+		private void RetrieveAndSaveData() {
+			try {
 				///the line below will allow the code to continue by not throwing an exception.
 				///It will accept the security certificate if there is a problem with the security certificate.
 				System.Net.ServicePointManager.ServerCertificateValidationCallback+=
@@ -65,15 +128,15 @@ namespace OpenDental {
 				wh.Url=PrefC.GetString(PrefName.WebHostSynchServerURL);
 				string RegistrationKey=PrefC.GetString(PrefName.RegistrationKey);
 				if(wh.CheckRegistrationKey(RegistrationKey)==false) {
-					gridMain.EndUpdate();
+					
 					MsgBox.Show(this,"Registration key provided by the dental office is incorrect");
 					return;
 				}
 				wh.SetPreferences(RegistrationKey,PrefC.GetColor(PrefName.WebFormsBorderColor).ToArgb(),PrefC.GetStringSilent(PrefName.WebFormsHeading1),PrefC.GetStringSilent(PrefName.WebFormsHeading2));
-				OpenDental.WebHostSynch.webforms_sheetfield[] wbsf=wh.GetSheetData(RegistrationKey,dateFrom,dateTo);
+				OpenDental.WebHostSynch.webforms_sheetfield[] wbsf=wh.GetSheetData(RegistrationKey);
 				if(wbsf.Count()==0) {
-					gridMain.EndUpdate();
-					MsgBox.Show(this,"No Patient forms retrieved");
+					//gridMain.EndUpdate();
+					MsgBox.Show(this,"No Patient forms retrieved from server");
 					return;
 				}
 				// Select distinct Web sheet ids
@@ -84,12 +147,12 @@ namespace OpenDental {
 				for(int i=0;i<SheetIdArray.Length;i++) {
 					long SheetID=(long)SheetIdArray[i];
 					var SingleSheet=from w in wbsf where (long)w.webforms_sheetReference.EntityKey.EntityKeyValues.First().Value==SheetID
-						select w;
-					ODGridRow row=new ODGridRow();
+									select w;
+					//ODGridRow row=new ODGridRow();
 					string LastName="";
 					string FirstName="";
 					string BirthDate="";
-					//loop through each variable in s single sheet
+					//loop through each variable in a single sheet
 					for(int j=0;j<SingleSheet.Count();j++) {
 						String FieldName=SingleSheet.ElementAt(j).FieldName;
 						String FieldValue=SingleSheet.ElementAt(j).FieldValue;
@@ -111,22 +174,22 @@ namespace OpenDental {
 					long NewPatNum=0;
 					Patient newPat=null;
 					Sheet newSheet=null;
-					row.Cells.Add(LastName);
-					row.Cells.Add(FirstName);
-					row.Cells.Add(BirthDate);
+					//row.Cells.Add(LastName);
+					//row.Cells.Add(FirstName);
+					//row.Cells.Add(BirthDate);
 					if(PatNum==0) {
 						newPat=CreateNewPatient(SingleSheet.ToList());
 						NewPatNum=newPat.PatNum;
 						newSheet=CreateSheet(NewPatNum,SingleSheet.ToList());
-						row.Cells.Add("New Patient");
+						///row.Cells.Add("New Patient");
 					}
 					else {
 						newSheet=CreateSheet(PatNum,SingleSheet.ToList());
-						row.Cells.Add("Double Click to import this sheet");// this message should be changed to something more elegent.
+						//row.Cells.Add("Double Click to import this sheet");// this message should be changed to something more elegent.
 					}
-					row.Tag=PatNum;
-					gridMain.Rows.Add(row);
-					gridMain.EndUpdate();
+					//row.Tag=PatNum;
+					//gridMain.Rows.Add(row);
+					//gridMain.EndUpdate();
 					if(DataExistsInDb(newPat,newSheet)==true) {
 						SheetsForDeletion.Add(SheetID);
 					}
@@ -134,11 +197,10 @@ namespace OpenDental {
 				wh.DeleteSheetData(RegistrationKey,SheetsForDeletion.ToArray());
 			}
 			catch(Exception e) {
-				gridMain.EndUpdate();
+				//gridMain.EndUpdate();
 				MessageBox.Show(e.Message);
 			}
 		}
-
 		/// <summary>
 		/// compare values of the new patient or the new sheet with values that have been inserted into the db if false is returned then there is a mismatch.
 		/// </summary>
@@ -486,6 +548,7 @@ namespace OpenDental {
 				return;
 			}
 			FillGrid();
+			RetrieveAndSaveData();
 		}
 
 		private void but30days_Click(object sender,EventArgs e) {

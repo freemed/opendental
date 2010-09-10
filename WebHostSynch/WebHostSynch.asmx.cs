@@ -51,17 +51,22 @@ namespace WebHostSynch {
 		}
 
 		[WebMethod]
-		public List<webforms_sheetfield> GetSheetData(string RegistrationKey,DateTime StartDate,DateTime EndDate) {
+		public List<webforms_sheetfield> GetSheetData(string RegistrationKey) {
 			long DentalOfficeID=GetDentalOfficeID(RegistrationKey);
 			if(DentalOfficeID==0) {
 				Logger.Information("Incorrect registration key. IPAddress="+HttpContext.Current.Request.UserHostAddress+" RegistrationKey="+RegistrationKey);
 			}
 			ODWebServiceEntities db=new ODWebServiceEntities();
+			/*
 			EndDate=EndDate.AddDays(1);//if this is put in LINQ it will not work. so change date first
 			var wsfObj=from wsf in db.webforms_sheetfield
 					   where wsf.webforms_sheet.webforms_preference.DentalOfficeID==DentalOfficeID
 					   &&(StartDate<=wsf.webforms_sheet.DateTimeSubmitted&&wsf.webforms_sheet.DateTimeSubmitted<=EndDate)
 					   select wsf;
+			*/
+			var wsfObj=from wsf in db.webforms_sheetfield
+				where wsf.webforms_sheet.webforms_preference.DentalOfficeID==DentalOfficeID
+				select wsf;
 			return wsfObj.ToList();
 		}
 
