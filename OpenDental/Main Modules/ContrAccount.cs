@@ -1691,7 +1691,7 @@ namespace OpenDental {
 					,-1,"",((ToolButItem)toolButItems[i]).ProgramNum));
 			}
 			ToolBarMain.Invalidate();
-			Plugins.HookAddCode(this,"LayoutToolBar_end",PatCur.PatNum);
+			Plugins.HookAddCode(this,"ContrAccount.LayoutToolBar_end",PatCur.PatNum);
 		}
 
 		private void ContrAccount_Layout(object sender,System.Windows.Forms.LayoutEventArgs e) {
