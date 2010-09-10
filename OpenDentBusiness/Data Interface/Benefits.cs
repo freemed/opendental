@@ -166,8 +166,8 @@ namespace OpenDentBusiness {
 			Db.NonQ(command);
 		}
 
-		///<summary>Only for display purposes rather than any calculations.  Gets an annual max from the supplied list of benefits.  Ignores benefits that do not match either the planNum or the patPlanNum.  Because it starts at the top of the benefit list, it will get the most general limitation first.  Returns -1 if none found.  It does not discriminate between family and individual because it doesn't need to.</summary>
-		public static double GetAnnualMaxDisplay(List<Benefit> benList,long planNum,long patPlanNum) {
+		///<summary>Only for display purposes rather than any calculations.  Gets an annual max from the supplied list of benefits.  Ignores benefits that do not match either the planNum or the patPlanNum.  Because it starts at the top of the benefit list, it will get the most general limitation first.  Returns -1 if none found.  Usually, set isFam to false unless we are specifically interested in that value.</summary>
+		public static double GetAnnualMaxDisplay(List<Benefit> benList,long planNum,long patPlanNum,bool isFam) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<benList.Count;i++) {
 				if(benList[i].PlanNum==0 && benList[i].PatPlanNum!=patPlanNum) {
@@ -184,6 +184,16 @@ namespace OpenDentBusiness {
 				}
 				if(benList[i].TimePeriod!=BenefitTimePeriod.CalendarYear && benList[i].TimePeriod!=BenefitTimePeriod.ServiceYear) {
 					continue;
+				}
+				if(isFam){
+					if(benList[i].CoverageLevel!=BenefitCoverageLevel.Family){//individ or none
+						continue;
+					}
+				}
+				else{
+					if(benList[i].CoverageLevel==BenefitCoverageLevel.Family){
+						continue;
+					}
 				}
 				//coverage level?
 				if(benList[i].CodeNum != 0) {

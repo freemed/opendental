@@ -217,7 +217,12 @@ namespace OpenDentBusiness {
 			double insUsed=GetInsUsedDisplay(histList,asofDate,planNum,patPlanNum,excludeClaim,planList,benList);
 			InsPlan plan=InsPlans.GetPlan(planNum,planList);
 			double insPending=GetPendingDisplay(histList,asofDate,plan,patPlanNum,excludeClaim,patNum);
-			double annualMax=Benefits.GetAnnualMaxDisplay(benList,planNum,patPlanNum);
+			double annualMaxFam=Benefits.GetAnnualMaxDisplay(benList,planNum,patPlanNum,true);
+			double annualMaxInd=Benefits.GetAnnualMaxDisplay(benList,planNum,patPlanNum,false);
+			double annualMax=annualMaxInd;
+			if(annualMaxFam>annualMaxInd){
+				annualMax=annualMaxFam;
+			}
 			if(annualMax<0) {
 				return 999999;
 			}

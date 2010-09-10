@@ -160,7 +160,7 @@ namespace OpenDental{
 				carrierCityStZip=carrier.City+", "+carrier.State+"  "+carrier.Zip;
 				subscriberId=plan.SubscriberID;
 				subscriberNameFL=Patients.GetLim(plan.Subscriber).GetNameFL();
-				doubAnnualMax=Benefits.GetAnnualMaxDisplay(benefitList,plan.PlanNum,patPlanNum);
+				doubAnnualMax=Benefits.GetAnnualMaxDisplay(benefitList,plan.PlanNum,patPlanNum,false);
 				doubRemain=-1;
 				if(doubAnnualMax!=-1){
 					insAnnualMax=doubAnnualMax.ToString("c");
@@ -226,7 +226,7 @@ namespace OpenDental{
 				//carrierCityStZip=carrier.City+", "+carrier.State+"  "+carrier.Zip;
 				//subscriberId=plan.SubscriberID;
 				subscriber2NameFL=Patients.GetLim(plan.Subscriber).GetNameFL();
-				doubAnnualMax=Benefits.GetAnnualMaxDisplay(benefitList,plan.PlanNum,patPlanNum);
+				doubAnnualMax=Benefits.GetAnnualMaxDisplay(benefitList,plan.PlanNum,patPlanNum,false);
 				doubRemain=-1;
 				if(doubAnnualMax!=-1) {
 					ins2AnnualMax=doubAnnualMax.ToString("c");

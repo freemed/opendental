@@ -3853,7 +3853,7 @@ namespace OpenDental {
 				used = InsPlans.GetInsUsedDisplay(HistList,DateTime.Today,PlanCur.PlanNum,PatPlanList[0].PatPlanNum,-1,InsPlanList,BenefitList);
 				textPriPend.Text = pend.ToString("F");
 				textPriUsed.Text = used.ToString("F");
-				max = Benefits.GetAnnualMaxDisplay(BenefitList,PlanCur.PlanNum,PatPlanList[0].PatPlanNum);
+				max = Benefits.GetAnnualMaxDisplay(BenefitList,PlanCur.PlanNum,PatPlanList[0].PatPlanNum,false);
 				if(max == -1) {//if annual max is blank
 					textPriMax.Text = "";
 					textPriRem.Text = "";
@@ -3885,7 +3885,7 @@ namespace OpenDental {
 				textSecPend.Text = pend.ToString("F");
 				used = InsPlans.GetInsUsedDisplay(HistList,DateTime.Today,PlanCur.PlanNum,PatPlanList[1].PatPlanNum,-1,InsPlanList,BenefitList);
 				textSecUsed.Text = used.ToString("F");
-				max = Benefits.GetAnnualMaxDisplay(BenefitList,PlanCur.PlanNum,PatPlanList[1].PatPlanNum);
+				max = Benefits.GetAnnualMaxDisplay(BenefitList,PlanCur.PlanNum,PatPlanList[1].PatPlanNum,false);
 				if(max == -1) {
 					textSecMax.Text = "";
 					textSecRem.Text = "";
