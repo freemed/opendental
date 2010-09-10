@@ -60,6 +60,8 @@ namespace OpenDentBusiness.Crud{
 				sheetField.Height          = PIn.Int   (table.Rows[i]["Height"].ToString());
 				sheetField.GrowthBehavior  = (GrowthBehaviorEnum)PIn.Int(table.Rows[i]["GrowthBehavior"].ToString());
 				sheetField.RadioButtonValue= PIn.String(table.Rows[i]["RadioButtonValue"].ToString());
+				sheetField.RadioButtonGroup= PIn.String(table.Rows[i]["RadioButtonGroup"].ToString());
+				sheetField.IsRequired      = PIn.Bool  (table.Rows[i]["IsRequired"].ToString());
 				retVal.Add(sheetField);
 			}
 			return retVal;
@@ -79,7 +81,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="SheetFieldNum,";
 			}
-			command+="SheetNum,FieldType,FieldName,FieldValue,FontSize,FontName,FontIsBold,XPos,YPos,Width,Height,GrowthBehavior,RadioButtonValue) VALUES(";
+			command+="SheetNum,FieldType,FieldName,FieldValue,FontSize,FontName,FontIsBold,XPos,YPos,Width,Height,GrowthBehavior,RadioButtonValue,RadioButtonGroup,IsRequired) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(sheetField.SheetFieldNum)+",";
 			}
@@ -96,7 +98,9 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Int   (sheetField.Width)+","
 				+    POut.Int   (sheetField.Height)+","
 				+    POut.Int   ((int)sheetField.GrowthBehavior)+","
-				+"'"+POut.String(sheetField.RadioButtonValue)+"')";
+				+"'"+POut.String(sheetField.RadioButtonValue)+"',"
+				+"'"+POut.String(sheetField.RadioButtonGroup)+"',"
+				+    POut.Bool  (sheetField.IsRequired)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -121,7 +125,9 @@ namespace OpenDentBusiness.Crud{
 				+"Width           =  "+POut.Int   (sheetField.Width)+", "
 				+"Height          =  "+POut.Int   (sheetField.Height)+", "
 				+"GrowthBehavior  =  "+POut.Int   ((int)sheetField.GrowthBehavior)+", "
-				+"RadioButtonValue= '"+POut.String(sheetField.RadioButtonValue)+"' "
+				+"RadioButtonValue= '"+POut.String(sheetField.RadioButtonValue)+"', "
+				+"RadioButtonGroup= '"+POut.String(sheetField.RadioButtonGroup)+"', "
+				+"IsRequired      =  "+POut.Bool  (sheetField.IsRequired)+" "
 				+"WHERE SheetFieldNum = "+POut.Long(sheetField.SheetFieldNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
@@ -180,6 +186,14 @@ namespace OpenDentBusiness.Crud{
 			if(sheetField.RadioButtonValue != oldSheetField.RadioButtonValue) {
 				if(command!=""){ command+=",";}
 				command+="RadioButtonValue = '"+POut.String(sheetField.RadioButtonValue)+"'";
+			}
+			if(sheetField.RadioButtonGroup != oldSheetField.RadioButtonGroup) {
+				if(command!=""){ command+=",";}
+				command+="RadioButtonGroup = '"+POut.String(sheetField.RadioButtonGroup)+"'";
+			}
+			if(sheetField.IsRequired != oldSheetField.IsRequired) {
+				if(command!=""){ command+=",";}
+				command+="IsRequired = "+POut.Bool(sheetField.IsRequired)+"";
 			}
 			if(command==""){
 				return;

@@ -3106,6 +3106,7 @@ namespace OpenDental{
 					ToolBarMain.Buttons["Perio"].Enabled = false;
 					ToolBarMain.Buttons["Consent"].Enabled = false;
 					ToolBarMain.Buttons["ToothChart"].Enabled = false;
+					ToolBarMain.Buttons["ExamSheet"].Enabled=false;
 					if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") {
 						ToolBarMain.Buttons["Commlog"].Enabled=false;
 						webBrowserEcw.Url=null;
@@ -3131,6 +3132,9 @@ namespace OpenDental{
 			button=new ODToolBarButton(Lan.g(this,"Tooth Chart"),-1,"","ToothChart");
 			button.Style=ODToolBarButtonStyle.DropDownButton;
 			button.DropDownMenu=menuToothChart;
+			ToolBarMain.Buttons.Add(button);
+			button=new ODToolBarButton(Lan.g(this,"Exam Sheet"),-1,"","ExamSheet");
+			button.Style=ODToolBarButtonStyle.PushButton;
 			ToolBarMain.Buttons.Add(button);
 			if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") {
 				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Commlog"),4,Lan.g(this,"New Commlog Entry"),"Commlog"));
@@ -3203,6 +3207,7 @@ namespace OpenDental{
 				ToolBarMain.Buttons["Perio"].Enabled = false;
 				ToolBarMain.Buttons["Consent"].Enabled = false;
 				ToolBarMain.Buttons["ToothChart"].Enabled = false;
+				ToolBarMain.Buttons["ExamSheet"].Enabled=false;
 				if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") {
 					ToolBarMain.Buttons["Commlog"].Enabled=false;
 					webBrowserEcw.Url=null;
@@ -3222,6 +3227,7 @@ namespace OpenDental{
 				ToolBarMain.Buttons["Perio"].Enabled = true;
 				ToolBarMain.Buttons["Consent"].Enabled = true;
 				ToolBarMain.Buttons["ToothChart"].Enabled =true;
+				ToolBarMain.Buttons["ExamSheet"].Enabled=true;
 				if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") {
 					ToolBarMain.Buttons["Commlog"].Enabled=true;
 					//the following sequence also gets repeated after exiting the Rx window to refresh.
@@ -3318,6 +3324,9 @@ namespace OpenDental{
 						break;
 					case "ToothChart":
 						OnToothChart_Click();
+						break;
+					case "ExamSheet":
+						OnExamSheet_Click();
 						break;
 				}
 			}
@@ -3419,6 +3428,13 @@ namespace OpenDental{
 		private void OnToothChart_Click() {
 			MsgBox.Show(this,"Please use dropdown list.");
 			return;
+		}
+
+		private void OnExamSheet_Click(){
+			FormExamSheets fes=new FormExamSheets();
+			fes.PatNum=PatCur.PatNum;
+			fes.ShowDialog();
+			RefreshModuleScreen();
 		}
 
 		///<summary>Only used for eCW.  Everyone else has the commlog button up in the main toolbar.</summary>

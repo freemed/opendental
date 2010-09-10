@@ -251,6 +251,52 @@ namespace OpenDentBusiness{
 			return table;
 		}
 
+		public static DataTable GetExamSheetsTable(long patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),patNum);
+			}
+			DataTable table=new DataTable("");
+			DataRow row;
+			//columns that start with lowercase are altered for display rather than being raw data.
+			table.Columns.Add("date");
+			table.Columns.Add("dateOnly",typeof(DateTime));//to help with sorting
+			table.Columns.Add("dateTime",typeof(DateTime));
+			table.Columns.Add("description");
+			table.Columns.Add("SheetNum");
+			table.Columns.Add("time");
+			table.Columns.Add("timeOnly",typeof(TimeSpan));//to help with sorting
+			//but we won't actually fill this table with rows until the very end.  It's more useful to use a List<> for now.
+			List<DataRow> rows=new List<DataRow>();
+			//sheet---------------------------------------------------------------------------------------
+			string command="SELECT DateTimeSheet,SheetNum,Description "
+				+"FROM sheet WHERE PatNum ="+POut.Long(patNum)+" "
+				+"AND SheetType="+POut.Long((int)SheetTypeEnum.ExamSheet);
+			DataTable rawSheet=Db.GetTable(command);
+			DateTime dateT;
+			for(int i=0;i<rawSheet.Rows.Count;i++) {
+				row=table.NewRow();
+				dateT=PIn.DateT(rawSheet.Rows[i]["DateTimeSheet"].ToString());
+				row["date"]=dateT.ToShortDateString();
+				row["dateOnly"]=dateT.Date;
+				row["dateTime"]=dateT;
+				row["description"]=rawSheet.Rows[i]["Description"].ToString();
+				row["SheetNum"]=rawSheet.Rows[i]["SheetNum"].ToString();
+				if(dateT.TimeOfDay!=TimeSpan.Zero) {
+					row["time"]=dateT.ToString("h:mm")+dateT.ToString("%t").ToLower();
+				}
+				row["timeOnly"]=dateT.TimeOfDay;
+				rows.Add(row);
+			}
+			//Sorting
+			for(int i=0;i<rows.Count;i++) {
+				table.Rows.Add(rows[i]);
+			}
+			DataView view=table.DefaultView;
+			view.Sort="dateOnly,timeOnly";
+			table=view.ToTable();
+			return table;
+		}
+
 		///<summary>Used to get sheets filled via the web.</summary>
 		public static DataTable GetAllPatientFormsTable(DateTime dateFrom,DateTime dateTo) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {

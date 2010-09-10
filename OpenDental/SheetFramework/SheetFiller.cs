@@ -76,6 +76,10 @@ namespace OpenDental{
 					LabCase lab=LabCases.GetOne((long)GetParamByName(sheet,"LabCaseNum").ParamValue);
 					FillFieldsForLabCase(sheet,pat,lab);
 					break;
+				case SheetTypeEnum.ExamSheet:
+					pat=Patients.GetPat((long)GetParamByName(sheet,"PatNum").ParamValue);
+					FillFieldsForExamSheet(sheet,pat);
+					break;
 			}
 			FillFieldsInStaticText(sheet,pat);
 			FillPatientImages(sheet,pat);
@@ -1195,6 +1199,10 @@ namespace OpenDental{
 						break;
 				}
 			}
+		}
+
+		private static void FillFieldsForExamSheet(Sheet sheet,Patient pat) {
+			//TODO:
 		}
 
 

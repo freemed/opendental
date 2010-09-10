@@ -30,7 +30,9 @@ namespace OpenDentBusiness {
 		///<Summary>11-Requires SheetParameter for PatNum.</Summary>
 		MedicalHistory,
 		///<Summary>12-Requires SheetParameter for PatNum, LabCaseNum.</Summary>
-		LabSlip
+		LabSlip,
+		///<Summary>13-Requires SheetParameter for PatNum.</Summary>
+		ExamSheet
 		/*StatementHeader,
 		TxPlanHeader,
 		Postcard*/
@@ -96,7 +98,10 @@ namespace OpenDentBusiness {
 		FinancialAgreement,
 		HIPAA,
 		MedicalHistory,
-		LabSlip
+		LabSlip,
+		ExamSheetOralCancerScreening,
+		ExamSheetPlaqueIndex,
+		ExamSheetPSR
 	}
 
 	public enum OutInCheck{

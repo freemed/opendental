@@ -35,6 +35,10 @@ namespace OpenDentBusiness{
 		public GrowthBehaviorEnum GrowthBehavior;
 		///<summary>This is only used for checkboxes that you want to behave like radiobuttons.  Set the FieldName the same for each Checkbox in the group.  The FieldValue will likely be X for one of them and empty string for the others.  Each of them will have a different RadioButtonValue.  Whichever box has X, the RadioButtonValue for that box will be used when importing..</summary>
 		public string RadioButtonValue;
+		///<summary>Name which identifies the group within which the radio button belongs. FieldName must be set to "misc" in order for the group to take effect.</summary>
+		public string RadioButtonGroup;
+		///<summary>Set to true if this field is required to have a value before the sheet is closed.</summary>
+		public bool IsRequired;
 				
 		public SheetField Copy(){
 			return (SheetField)this.MemberwiseClone();

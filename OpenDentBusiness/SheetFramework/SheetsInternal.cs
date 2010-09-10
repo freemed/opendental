@@ -48,6 +48,12 @@ namespace OpenDentBusiness{
 					return MedicalHistory();
 				case SheetInternalType.LabSlip:
 					return LabSlip();
+				case SheetInternalType.ExamSheetOralCancerScreening:
+					return ExamSheetOralCancerScreening();
+				case SheetInternalType.ExamSheetPlaqueIndex:
+					return ExamSheetPlaqueIndex();
+				case SheetInternalType.ExamSheetPSR:
+					return ExamSheetPSR();
 				default:
 					throw new ApplicationException("Invalid SheetInternalType.");
 			}
@@ -922,6 +928,56 @@ Fam Urgent Fin Note: [famFinUrgNote]"
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Dr. Signature:",sheet.FontSize,sheet.FontName,false,x,y,200,rowH));
 			y+=rowH;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewSigBox(x,y,364,81));
+			return sheet;
+		}
+
+		public static SheetDef ExamSheetOralCancerScreening(){
+			SheetDef sheet=new SheetDef(SheetTypeEnum.ExamSheet);
+			sheet.Description="Oral Cancer Screening";
+			sheet.FontName="Microsoft Sans Serif";
+			sheet.FontSize=11f;
+			sheet.Width=850;
+			sheet.Height=1100;
+			//int rowH=19;
+			//int x=100;
+			int y=100;
+			//Title----------------------------------------------------------------------------------------------------------
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Oral Cancer Screening",12f,sheet.FontName,true,270,y,200,22));
+			//TODO:
+			return sheet;
+		}
+
+		public static SheetDef ExamSheetPlaqueIndex(){
+			SheetDef sheet=new SheetDef(SheetTypeEnum.ExamSheet);
+			sheet.Description="Plaque Index";
+			sheet.FontName="Microsoft Sans Serif";
+			sheet.FontSize=11f;
+			sheet.Width=850;
+			sheet.Height=1100;
+			//int rowH=19;
+			//int x=100;
+			int y=100;
+			//Title----------------------------------------------------------------------------------------------------------
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Plaque Index",12f,sheet.FontName,true,270,y,200,22));
+			//TODO:
+			return sheet;
+		}
+
+		public static SheetDef ExamSheetPSR(){
+			SheetDef sheet=new SheetDef(SheetTypeEnum.ExamSheet);
+			sheet.Description="PSR";
+			sheet.FontName="Microsoft Sans Serif";
+			sheet.FontSize=11f;
+			sheet.Width=850;
+			sheet.Height=1100;
+			//int rowH=19;
+			//int x=100;
+			int y=100;
+			//Title----------------------------------------------------------------------------------------------------------
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("PSR",12f,sheet.FontName,true,270,y,200,22));
+
+
+			//TODO:
 			return sheet;
 		}
 

@@ -2559,8 +2559,14 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					PRIMARY KEY (ChartViewNum)
 					) DEFAULT CHARSET=utf8";
 				Db.NonQ(command);
-
-
+				command="ALTER TABLE sheetfield ADD RadioButtonGroup varchar(255) NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE sheetfield ADD IsRequired tinyint NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE sheetfielddef ADD RadioButtonGroup varchar(255) NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE sheetfielddef ADD IsRequired tinyint NOT NULL";
+				Db.NonQ(command);
 
 
 
@@ -2597,4 +2603,3 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 			
 
-				

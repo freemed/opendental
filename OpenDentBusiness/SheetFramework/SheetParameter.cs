@@ -75,6 +75,9 @@ namespace OpenDentBusiness{
 				list.Add(new SheetParameter(true,"PatNum"));
 				list.Add(new SheetParameter(true,"LabCaseNum"));
 			}
+			if(sheetType==SheetTypeEnum.ExamSheet) {
+				list.Add(new SheetParameter(true,"PatNum"));
+			}
 			return list;
 		}
 
