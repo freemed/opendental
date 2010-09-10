@@ -1677,7 +1677,7 @@ namespace OpenDental{
 					,-1,"",((ToolButItem)toolButItems[i]).ProgramNum));
 			}
 			ToolBarMain.Invalidate();
-			Plugins.HookAddCode(this,"ContrAppt.LayoutToolBar_end",PatCur.PatNum);
+			Plugins.HookAddCode(this,"ContrAppt.LayoutToolBar_end",PatCur);
 		}
 
 		///<summary>Not in use.  See InstantClasses instead.</summary>

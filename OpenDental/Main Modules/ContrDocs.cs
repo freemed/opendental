@@ -604,7 +604,7 @@ namespace OpenDental{
 			}
 			ToolBarMain.Invalidate();
 			paintTools.Invalidate();
-			Plugins.HookAddCode(this,"ContrDocs.LayoutToolBar_end",PatCur.PatNum);
+			Plugins.HookAddCode(this,"ContrDocs.LayoutToolBar_end",PatCur);
 		}
 
 		///<summary>One of two overloads.</summary>

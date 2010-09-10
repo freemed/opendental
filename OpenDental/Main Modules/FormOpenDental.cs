@@ -1366,6 +1366,7 @@ namespace OpenDental{
 			else{
 				invalidTypes.Add(InvalidType.Signals);//so when mouse moves over light buttons, it won't crash
 			}
+			Plugins.LoadAllPlugins(this);//moved up from right after toothchart optimize.  New position might cause problems.
 			RefreshLocalData(invalidTypes.ToArray());
 			FillSignalButtons(null);
 			ContrManage2.InitializeOnStartup();//so that when a signal is received, it can handle it.
@@ -1425,7 +1426,6 @@ namespace OpenDental{
 				ContrChart2.InitializeOnStartup();
 				MsgBox.Show(this,"Done optimizing tooth chart graphics.");
 			}
-			Plugins.LoadAllPlugins(this);
 			if(Security.CurUser==null) {//It could already be set if using web service because login from ChooseDatabase window.
 				if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") {
 					//leave user as null
