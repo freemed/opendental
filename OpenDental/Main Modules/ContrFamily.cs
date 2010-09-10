@@ -326,6 +326,7 @@ namespace OpenDental{
 					,-1,"",((ToolButItem)toolButItems[i]).ProgramNum));
 			}
 			ToolBarMain.Invalidate();
+			Plugins.HookAddCode(this,"LayoutToolBar_end",PatCur.PatNum);
 		}
 
 		private void ContrFamily_Layout(object sender, System.Windows.Forms.LayoutEventArgs e) {
