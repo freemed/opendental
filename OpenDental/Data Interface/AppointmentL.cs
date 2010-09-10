@@ -126,6 +126,7 @@ namespace OpenDental{
 						}
 						//match found
 						ALresults.Add(dayEvaluating+timeFound);
+						Plugins.HookAddCode(null,"GetSearchResults_postfilter",ALresults,providers[p],apt);
 					}//for p	
 					if(aptIsMatch){//if a match found in this day
 						break;//don't add any more matches for this day
