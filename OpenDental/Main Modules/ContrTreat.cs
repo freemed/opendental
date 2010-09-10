@@ -814,7 +814,7 @@ namespace OpenDental{
 					,-1,"",((ToolButItem)toolButItems[i]).ProgramNum));
 			}
 			ToolBarMain.Invalidate();
-			Plugins.HookAddCode(this,"LayoutToolBar_end",PatCur.PatNum);
+			Plugins.HookAddCode(this,"ContrTreat.LayoutToolBar_end",PatCur.PatNum);
 		}
 
 		///<summary></summary>
