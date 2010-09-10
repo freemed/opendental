@@ -127,8 +127,8 @@ namespace OpenDental{
 						//match found
 						ALresults.Add(dayEvaluating+timeFound);
 					}//for p	
-					if(aptIsMatch){
-						break;
+					if(aptIsMatch){//if a match found in this day
+						break;//don't add any more matches for this day
 					}
 				}
 				dayEvaluating=dayEvaluating.AddDays(1);//move to the next day
