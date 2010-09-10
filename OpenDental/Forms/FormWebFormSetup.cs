@@ -5,10 +5,13 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using System.Threading;
 using OpenDentBusiness;
 
 namespace OpenDental {
 	public partial class FormWebFormSetup:Form {
+
+		private string WebFormAddress="";
 
 		public FormWebFormSetup() {
 			InitializeComponent();
@@ -24,6 +27,7 @@ namespace OpenDental {
 			textBoxWebformsHeading1.Text=PrefC.GetStringSilent(PrefName.WebFormsHeading1);
 			textBoxWebformsHeading2.Text=PrefC.GetStringSilent(PrefName.WebFormsHeading2);
 			textboxWebHostAddress.Text=PrefC.GetString(PrefName.WebHostSynchServerURL);
+			textBoxWebFormAddress.ReadOnly=true;
 			///the line below will allow the code to continue by not throwing an exception.
 			///It will accept the security certificate if there is a problem with the security certificate.
 			System.Net.ServicePointManager.ServerCertificateValidationCallback+=
@@ -34,8 +38,8 @@ namespace OpenDental {
 					///In this particular case it always returns true i.e accepts any certificate.
 					return true;
 				};
-			textBoxWebFormAddress.Text=GetWebFormAddress();
-			textBoxWebFormAddress.ReadOnly=true;
+			//if a thread is not used, the GetWebFormAddress() Method will freeze the application if the web is slow 
+			this.backgroundWorker1.RunWorkerAsync();
 		}
 
 		private void butWebformBorderColor_Click(object sender,EventArgs e) {
@@ -76,23 +80,31 @@ namespace OpenDental {
 			}
 		}
 
-		private string GetWebFormAddress() {
-			string WebFormAddress="";
+		private void backgroundWorker1_RunWorkerCompleted(object sender,RunWorkerCompletedEventArgs e) {
+			textBoxWebFormAddress.Text=WebFormAddress; //the textbox is set here because it will thow an error if put under _Dowork
+		}
+
+		private void backgroundWorker1_DoWork(object sender,DoWorkEventArgs e) {
+			GetWebFormAddress();
+		}
+
+		private void GetWebFormAddress() {
 			try{
 				string RegistrationKey=PrefC.GetString(PrefName.RegistrationKey);
 				WebHostSynch.WebHostSynch wh=new WebHostSynch.WebHostSynch();
 				wh.Url=PrefC.GetString(PrefName.WebHostSynchServerURL);
 				if(wh.CheckRegistrationKey(RegistrationKey)==false) {
 					MsgBox.Show(this,"Registration key provided by the dental office is incorrect");
-					return "";
+					return;
 				}
 				WebFormAddress=wh.GetWebFormAddress(RegistrationKey);
 			}
 			catch(Exception ex) {
 				MessageBox.Show(ex.Message);
 			}
-			return WebFormAddress;
+			
 		}
+		
 
 		/// <summary>
 		/// Ignore this method - this is for the 'next' version of the Webforms.
@@ -123,6 +135,7 @@ namespace OpenDental {
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
 
 
 

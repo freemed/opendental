@@ -38,6 +38,7 @@ namespace OpenDental{
 			this.textBoxWebFormAddress = new System.Windows.Forms.TextBox();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
 			this.groupBox2.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -187,6 +188,11 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// backgroundWorker1
+			// 
+			this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
+			this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
+			// 
 			// FormWebFormSetup
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -227,5 +233,6 @@ namespace OpenDental{
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.TextBox textBoxWebFormAddress;
 		private OpenDental.UI.Button butChange;
+		private System.ComponentModel.BackgroundWorker backgroundWorker1;
 	}
 }

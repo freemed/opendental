@@ -264,6 +264,7 @@ namespace OpenDentBusiness{
 			table.Columns.Add("dateOnly",typeof(DateTime));//to help with sorting
 			table.Columns.Add("dateTime",typeof(DateTime));
 			table.Columns.Add("description");
+			table.Columns.Add("PatNum");
 			table.Columns.Add("DocNum");
 			table.Columns.Add("imageCat");
 			table.Columns.Add("SheetNum");
@@ -273,8 +274,8 @@ namespace OpenDentBusiness{
 			//but we won't actually fill this table with rows until the very end.  It's more useful to use a List<> for now.
 			List<DataRow> rows=new List<DataRow>();
 			//sheet---------------------------------------------------------------------------------------
-			string command="SELECT DateTimeSheet,SheetNum,Description,ShowInTerminal "
-				+"FROM sheet WHERE " //PatNum ="+POut.Long(patNum)+" "
+			string command="SELECT DateTimeSheet,SheetNum,Description,ShowInTerminal,PatNum "
+				+"FROM sheet WHERE " 
 				+"DateTimeSheet >= "+POut.Date(dateFrom)+" AND DateTimeSheet <= "+POut.Date(dateTo.AddDays(1))+ " "
 				+"AND IsWebForm = "+POut.Bool(true)+ " "
 				+"AND (SheetType="+POut.Long((int)SheetTypeEnum.PatientForm)+" OR SheetType="+POut.Long((int)SheetTypeEnum.MedicalHistory)+") ";
@@ -288,6 +289,7 @@ namespace OpenDentBusiness{
 				row["dateOnly"]=dateT.Date;
 				row["dateTime"]=dateT;
 				row["description"]=rawSheet.Rows[i]["Description"].ToString();
+				row["PatNum"]=rawSheet.Rows[i]["PatNum"].ToString();
 				row["DocNum"]="0";
 				row["imageCat"]="";
 				row["SheetNum"]=rawSheet.Rows[i]["SheetNum"].ToString();

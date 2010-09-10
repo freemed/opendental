@@ -27,10 +27,10 @@ namespace OpenDental{
 			this.mainMenu1 = new System.Windows.Forms.MainMenu(this.components);
 			this.menuItemSetup = new System.Windows.Forms.MenuItem();
 			this.groupDateRange = new System.Windows.Forms.GroupBox();
-			this.but30days = new OpenDental.UI.Button();
-			this.textDateStart = new OpenDental.ValidDate();
 			this.labelStartDate = new System.Windows.Forms.Label();
 			this.labelEndDate = new System.Windows.Forms.Label();
+			this.but30days = new OpenDental.UI.Button();
+			this.textDateStart = new OpenDental.ValidDate();
 			this.textDateEnd = new OpenDental.ValidDate();
 			this.but45days = new OpenDental.UI.Button();
 			this.but90days = new OpenDental.UI.Button();
@@ -70,6 +70,24 @@ namespace OpenDental{
 			this.groupDateRange.TabStop = false;
 			this.groupDateRange.Text = "Date Range";
 			// 
+			// labelStartDate
+			// 
+			this.labelStartDate.Location = new System.Drawing.Point(6,19);
+			this.labelStartDate.Name = "labelStartDate";
+			this.labelStartDate.Size = new System.Drawing.Size(69,14);
+			this.labelStartDate.TabIndex = 221;
+			this.labelStartDate.Text = "Start Date";
+			this.labelStartDate.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// labelEndDate
+			// 
+			this.labelEndDate.Location = new System.Drawing.Point(6,42);
+			this.labelEndDate.Name = "labelEndDate";
+			this.labelEndDate.Size = new System.Drawing.Size(69,14);
+			this.labelEndDate.TabIndex = 222;
+			this.labelEndDate.Text = "End Date";
+			this.labelEndDate.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
 			// but30days
 			// 
 			this.but30days.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -92,24 +110,7 @@ namespace OpenDental{
 			this.textDateStart.Name = "textDateStart";
 			this.textDateStart.Size = new System.Drawing.Size(77,20);
 			this.textDateStart.TabIndex = 223;
-			// 
-			// labelStartDate
-			// 
-			this.labelStartDate.Location = new System.Drawing.Point(6,19);
-			this.labelStartDate.Name = "labelStartDate";
-			this.labelStartDate.Size = new System.Drawing.Size(69,14);
-			this.labelStartDate.TabIndex = 221;
-			this.labelStartDate.Text = "Start Date";
-			this.labelStartDate.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// labelEndDate
-			// 
-			this.labelEndDate.Location = new System.Drawing.Point(6,42);
-			this.labelEndDate.Name = "labelEndDate";
-			this.labelEndDate.Size = new System.Drawing.Size(69,14);
-			this.labelEndDate.TabIndex = 222;
-			this.labelEndDate.Text = "End Date";
-			this.labelEndDate.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.textDateStart.Validated += new System.EventHandler(this.textDateStart_Validated);
 			// 
 			// textDateEnd
 			// 
@@ -117,6 +118,7 @@ namespace OpenDental{
 			this.textDateEnd.Name = "textDateEnd";
 			this.textDateEnd.Size = new System.Drawing.Size(77,20);
 			this.textDateEnd.TabIndex = 224;
+			this.textDateEnd.Validated += new System.EventHandler(this.textDateEnd_Validated);
 			// 
 			// but45days
 			// 
@@ -184,7 +186,7 @@ namespace OpenDental{
 			this.gridMain.Location = new System.Drawing.Point(24,87);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(557,448);
+			this.gridMain.Size = new System.Drawing.Size(557,259);
 			this.gridMain.TabIndex = 4;
 			this.gridMain.Title = "Webforms";
 			this.gridMain.TranslationName = "TableWebforms";
@@ -198,7 +200,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(616,475);
+			this.butOK.Location = new System.Drawing.Point(616,286);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 3;
@@ -213,7 +215,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(616,511);
+			this.butCancel.Location = new System.Drawing.Point(616,322);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 2;
@@ -223,7 +225,7 @@ namespace OpenDental{
 			// FormWebForms
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(725,547);
+			this.ClientSize = new System.Drawing.Size(725,358);
 			this.Controls.Add(this.groupDateRange);
 			this.Controls.Add(this.butRetrieve);
 			this.Controls.Add(this.gridMain);

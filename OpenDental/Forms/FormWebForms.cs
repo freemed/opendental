@@ -11,6 +11,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Reflection;
 using OpenDental.UI;
 using OpenDentBusiness;
+using System.Threading;
 
 namespace OpenDental {
 	public partial class FormWebForms:Form {
@@ -21,78 +22,46 @@ namespace OpenDental {
 		}
 
 		private void FormWebForms_Load(object sender,EventArgs e) {
+			//if a thread is not used, the RetrieveAndSaveData() Method will freeze the application if the web is slow 
+			Thread t = new Thread(RetrieveAndSaveData); 
+			t.Start();
 			SetDates();
+			FillGrid();
 		}
 
 		/// <summary>
 		/// </summary>
 		private void FillGrid() {
 			try {
-				/*
-				gridMain.BeginUpdate();
 				gridMain.Columns.Clear();
-				ODGridColumn col=new ODGridColumn(Lan.g("TableWebforms","Last Name"),100);
+				ODGridColumn col=new ODGridColumn(Lan.g(this,"PatNum"),50);
 				gridMain.Columns.Add(col);
-				col=new ODGridColumn(Lan.g("TableWebforms","First Name"),100);
-				gridMain.Columns.Add(col);
-				col=new ODGridColumn(Lan.g("TableWebforms","Birth Date"),100);
-				gridMain.Columns.Add(col);
-				col=new ODGridColumn(Lan.g("TableWebforms","Status"),100);
-				gridMain.Columns.Add(col);
-				*/
-
-				ODGridColumn col=new ODGridColumn(Lan.g(this,"Date"),70);
+				col=new ODGridColumn(Lan.g(this,"Date"),70);
 				gridMain.Columns.Add(col);
 				col=new ODGridColumn(Lan.g(this,"Time"),42);
 				gridMain.Columns.Add(col);
-				col=new ODGridColumn(Lan.g(this,"Kiosk"),55,HorizontalAlignment.Center);
-				gridMain.Columns.Add(col);
 				col=new ODGridColumn(Lan.g(this,"Description"),210);
-				gridMain.Columns.Add(col);
-				col=new ODGridColumn(Lan.g(this,"Image Category"),120);
 				gridMain.Columns.Add(col);
 
 				gridMain.Rows.Clear();
 				DateTime dateFrom=PIn.Date(textDateStart.Text);
 				DateTime dateTo=PIn.Date(textDateEnd.Text);
-
 				DataTable table=Sheets.GetAllPatientFormsTable(dateFrom,dateTo);
-
-				ODGridRow row=new ODGridRow();
-				
-				//row.Cells.Add(LastName);
-				//row.Cells.Add(FirstName);
-				//row.Cells.Add(BirthDate);
-				//row.Tag=PatNum;
-				gridMain.Rows.Add(row);
-				
 				for(int i=0;i<table.Rows.Count;i++) {
-					row=new ODGridRow();
+					ODGridRow row=new ODGridRow(); Console.WriteLine("In main thread");
+					row.Cells.Add(table.Rows[i]["PatNum"].ToString());
 					row.Cells.Add(table.Rows[i]["date"].ToString());
 					row.Cells.Add(table.Rows[i]["time"].ToString());
-					row.Cells.Add(table.Rows[i]["showInTerminal"].ToString()); //this should show iswebform
 					row.Cells.Add(table.Rows[i]["description"].ToString());
-					row.Cells.Add(table.Rows[i]["imageCat"].ToString());
+					long PatNum = 0;
+					Int64.TryParse(table.Rows[i]["PatNum"].ToString(),out PatNum);
+					row.Tag=PatNum;
 					gridMain.Rows.Add(row);
 				}
-				gridMain.EndUpdate();
 				if(table.Rows.Count==0) {
-					//gridMain.EndUpdate();
 					MsgBox.Show(this,"No Patient forms available");
 					return;
 				}
-
-				gridMain.EndUpdate();
-
-				//ODGridRow row=new ODGridRow();
-				//row.Cells.Add(LastName);
-				//row.Cells.Add(FirstName);
-				//row.Cells.Add(BirthDate);
-				//row.Tag=PatNum;
-				//gridMain.Rows.Add(row);
-				//gridMain.EndUpdate()
-
-				
 				gridMain.EndUpdate();
 				}
 				catch(Exception e) {
@@ -128,14 +97,12 @@ namespace OpenDental {
 				wh.Url=PrefC.GetString(PrefName.WebHostSynchServerURL);
 				string RegistrationKey=PrefC.GetString(PrefName.RegistrationKey);
 				if(wh.CheckRegistrationKey(RegistrationKey)==false) {
-					
 					MsgBox.Show(this,"Registration key provided by the dental office is incorrect");
 					return;
 				}
 				wh.SetPreferences(RegistrationKey,PrefC.GetColor(PrefName.WebFormsBorderColor).ToArgb(),PrefC.GetStringSilent(PrefName.WebFormsHeading1),PrefC.GetStringSilent(PrefName.WebFormsHeading2));
 				OpenDental.WebHostSynch.webforms_sheetfield[] wbsf=wh.GetSheetData(RegistrationKey);
 				if(wbsf.Count()==0) {
-					//gridMain.EndUpdate();
 					MsgBox.Show(this,"No Patient forms retrieved from server");
 					return;
 				}
@@ -147,7 +114,7 @@ namespace OpenDental {
 				for(int i=0;i<SheetIdArray.Length;i++) {
 					long SheetID=(long)SheetIdArray[i];
 					var SingleSheet=from w in wbsf where (long)w.webforms_sheetReference.EntityKey.EntityKeyValues.First().Value==SheetID
-									select w;
+						select w;
 					//ODGridRow row=new ODGridRow();
 					string LastName="";
 					string FirstName="";
@@ -174,30 +141,23 @@ namespace OpenDental {
 					long NewPatNum=0;
 					Patient newPat=null;
 					Sheet newSheet=null;
-					//row.Cells.Add(LastName);
-					//row.Cells.Add(FirstName);
-					//row.Cells.Add(BirthDate);
 					if(PatNum==0) {
 						newPat=CreateNewPatient(SingleSheet.ToList());
 						NewPatNum=newPat.PatNum;
 						newSheet=CreateSheet(NewPatNum,SingleSheet.ToList());
-						///row.Cells.Add("New Patient");
 					}
 					else {
 						newSheet=CreateSheet(PatNum,SingleSheet.ToList());
-						//row.Cells.Add("Double Click to import this sheet");// this message should be changed to something more elegent.
 					}
-					//row.Tag=PatNum;
-					//gridMain.Rows.Add(row);
-					//gridMain.EndUpdate();
 					if(DataExistsInDb(newPat,newSheet)==true) {
 						SheetsForDeletion.Add(SheetID);
 					}
 				}// end of for loop
 				wh.DeleteSheetData(RegistrationKey,SheetsForDeletion.ToArray());
+				FillGrid(); 
+
 			}
 			catch(Exception e) {
-				//gridMain.EndUpdate();
 				MessageBox.Show(e.Message);
 			}
 		}
@@ -230,14 +190,14 @@ namespace OpenDental {
 			newPat=new Patient();
 			//PatFields must have a one to one mapping with the SheetWebFields
 			String[] PatFields={ "LName","FName","MiddleI","Birthdate","Preferred", "Email","SSN",
-				 "Address","Address2","City","State","Zip",
-				 "HmPhone","Gender","Position","PreferContactMethod","PreferConfirmMethod",
-				  "PreferRecallMethod","StudentStatus","WirelessPhone","WkPhone"};
+				"Address","Address2","City","State","Zip",
+				"HmPhone","Gender","Position","PreferContactMethod","PreferConfirmMethod",
+				"PreferRecallMethod","StudentStatus","WirelessPhone","WkPhone"};
 			//other PatFields="PatStatus","Guarantor","CreditType","PriProv","SecProv","FeeSched","BillingType","AddrNote","ClinicNum" EmployerNum, EmploymentNote, GradeLevel, HasIns, InsEst, };
 			String[] SheetWebFields={"LastName","FirstName","MI","Birthdate","Preferred","Email","SS",
-			"Address1","Address2","City","State","Zip",
-			"HomePhone","Gender","Married","MethodContact","MethodConf",
-			"MethodRecall","StudentStatus","WirelessPhone","WorkPhone"};
+				"Address1","Address2","City","State","Zip",
+				"HomePhone","Gender","Married","MethodContact","MethodConf",
+				"MethodRecall","StudentStatus","WirelessPhone","WorkPhone"};
 				/*Other SheetWebFields="WholeFamily","WirelessCarrier","Hear","Policy1GroupName","Policy1GroupNumber","Policy1Relationship","Policy1SubscriberName","Policy1SubscriberID","Policy1InsuranceCompany", "Policy1Phone","Policy1Employer","Policy2GroupName","Policy2GroupNumber","Policy2Relationship","Policy2SubscriberName","Policy2SubscriberID","Policy2InsuranceCompany", "Policy2Phone","Policy2Employer","Comments"
 				 */
 			Type t=newPat.GetType();
@@ -420,7 +380,7 @@ namespace OpenDental {
 			}
 		}
 
-	/// <summary>
+		/// <summary>
 	/// </summary>
 		private void FillPatientFields(Patient newPat,FieldInfo field,string SheetWebFieldValue) {
 			try {
@@ -547,28 +507,41 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please fix data entry errors first.");
 				return;
 			}
-			FillGrid();
-			RetrieveAndSaveData();
+			//if a thread is not used, the RetrieveAndSaveData() Method will freeze the application if the web is slow 
+			Thread t = new Thread(RetrieveAndSaveData);
+			t.Start();
 		}
 
 		private void but30days_Click(object sender,EventArgs e) {
 			textDateStart.Text=DateTime.Today.AddDays(-30).ToShortDateString();
 			textDateEnd.Text=DateTime.Today.ToShortDateString();
+			FillGrid();
 		}
 
 		private void but45days_Click(object sender,EventArgs e) {
 			textDateStart.Text=DateTime.Today.AddDays(-45).ToShortDateString();
 			textDateEnd.Text=DateTime.Today.ToShortDateString();
+			FillGrid();
 		}
 
 		private void but90days_Click(object sender,EventArgs e) {
 			textDateStart.Text=DateTime.Today.AddDays(-90).ToShortDateString();
 			textDateEnd.Text=DateTime.Today.ToShortDateString();
+			FillGrid();
 		}
 
 		private void butDatesAll_Click(object sender,EventArgs e) {
 			textDateStart.Text="";
 			textDateEnd.Text=DateTime.Today.ToShortDateString();
+			FillGrid();
+		}
+
+		private void textDateStart_Validated(object sender,EventArgs e) {
+			FillGrid();
+		}
+
+		private void textDateEnd_Validated(object sender,EventArgs e) {
+			FillGrid();
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
@@ -581,7 +554,6 @@ namespace OpenDental {
 		}
 
 		private void menuItemSetup_Click(object sender,EventArgs e) {
-			gridMain.EndUpdate();
 			FormWebFormSetup formW=new FormWebFormSetup();
 			formW.ShowDialog();
 		}
@@ -593,6 +565,8 @@ namespace OpenDental {
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+
 
 
 
