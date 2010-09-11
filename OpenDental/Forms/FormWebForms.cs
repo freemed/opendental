@@ -21,9 +21,12 @@ namespace OpenDental {
 			Lan.F(this);
 		}
 
-		private void FormWebForms_Load(object sender,EventArgs e) {
+		/// <summary>
+		/// Code in this method was not put into the Form load event because often the "No Patient forms available" Meassage would popup even before a form is loaded - which could confuse the user.
+		/// </summary>
+		private void FormWebForms_Shown(object sender,EventArgs e) {
 			//if a thread is not used, the RetrieveAndSaveData() Method will freeze the application if the web is slow 
-			Thread t = new Thread(RetrieveAndSaveData); 
+			Thread t = new Thread(RetrieveAndSaveData);
 			t.Start();
 			SetDates();
 			FillGrid();
@@ -34,41 +37,45 @@ namespace OpenDental {
 		private void FillGrid() {
 			try {
 				gridMain.Columns.Clear();
-				ODGridColumn col=new ODGridColumn(Lan.g(this,"PatNum"),50);
-				gridMain.Columns.Add(col);
-				col=new ODGridColumn(Lan.g(this,"Date"),70);
+				ODGridColumn col=new ODGridColumn(Lan.g(this,"Date"),70);
 				gridMain.Columns.Add(col);
 				col=new ODGridColumn(Lan.g(this,"Time"),42);
 				gridMain.Columns.Add(col);
+				col=new ODGridColumn(Lan.g(this,"Patient Last Name"),110);
+				gridMain.Columns.Add(col);
+				col=new ODGridColumn(Lan.g(this,"Patient Fist Name"),110);
+				gridMain.Columns.Add(col);
 				col=new ODGridColumn(Lan.g(this,"Description"),210);
 				gridMain.Columns.Add(col);
-
 				gridMain.Rows.Clear();
 				DateTime dateFrom=PIn.Date(textDateStart.Text);
 				DateTime dateTo=PIn.Date(textDateEnd.Text);
-				DataTable table=Sheets.GetAllPatientFormsTable(dateFrom,dateTo);
+				DataTable table=Sheets.GetWebFormSheetsTable(dateFrom,dateTo);
 				for(int i=0;i<table.Rows.Count;i++) {
-					ODGridRow row=new ODGridRow(); Console.WriteLine("In main thread");
-					row.Cells.Add(table.Rows[i]["PatNum"].ToString());
-					row.Cells.Add(table.Rows[i]["date"].ToString());
-					row.Cells.Add(table.Rows[i]["time"].ToString());
-					row.Cells.Add(table.Rows[i]["description"].ToString());
 					long PatNum = 0;
 					Int64.TryParse(table.Rows[i]["PatNum"].ToString(),out PatNum);
-					row.Tag=PatNum;
-					gridMain.Rows.Add(row);
-				}
+					Patient pat = Patients.GetPat(PatNum);
+					if(pat!=null) {
+						ODGridRow row=new ODGridRow();
+						row.Cells.Add(table.Rows[i]["date"].ToString());
+						row.Cells.Add(table.Rows[i]["time"].ToString());
+						row.Tag=PatNum;
+						row.Cells.Add(pat.LName);
+						row.Cells.Add(pat.FName);
+						row.Cells.Add(table.Rows[i]["description"].ToString());
+						gridMain.Rows.Add(row);
+					}
+				} 
+				gridMain.EndUpdate();
 				if(table.Rows.Count==0) {
 					MsgBox.Show(this,"No Patient forms available");
 					return;
 				}
+			}
+			catch(Exception e) {
 				gridMain.EndUpdate();
-				}
-				catch(Exception e) {
-					gridMain.EndUpdate();
-					MessageBox.Show(e.Message);
-				}
-			
+				MessageBox.Show(e.Message);
+			}
 		}
 
 		private void RetrieveAndSaveData() {
@@ -565,6 +572,8 @@ namespace OpenDental {
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+
 
 
 

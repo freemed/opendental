@@ -29,8 +29,8 @@ namespace WebHostSynch {
 				return false;
 			}
 			var wspObj=from wsp in db.webforms_preference
-						 where wsp.DentalOfficeID==DentalOfficeID
-						 select wsp;
+				where wsp.DentalOfficeID==DentalOfficeID
+				select wsp;
 			//update preference
 			if(wspObj.Count()>0) {
 				wspObj.First().ColorBorder=ColorBorder;
@@ -67,6 +67,7 @@ namespace WebHostSynch {
 			var wsfObj=from wsf in db.webforms_sheetfield
 				where wsf.webforms_sheet.webforms_preference.DentalOfficeID==DentalOfficeID
 				select wsf;
+
 			return wsfObj.ToList();
 		}
 
