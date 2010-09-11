@@ -1381,7 +1381,7 @@ namespace OpenDental{
 								displayStrings[i]="Signature on File";
 							}
 							else{
-								displayStrings[i]=treatDent.FName+" "+treatDent.MI+" "+treatDent.LName;//+" "+treatDent.Suffix;
+								displayStrings[i]=treatDent.FName+" "+treatDent.MI+" "+treatDent.LName+" "+treatDent.Suffix;
 							}
 						}
 						break;
