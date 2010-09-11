@@ -406,5 +406,54 @@ namespace UnitTests {
 			return retVal;
 		}
 
+		///<summary></summary>
+		public static string TestNine(int specificTest) {
+			if(specificTest != 0 && specificTest !=9) {
+				return "";
+			}
+			string suffix="9";
+			Patient pat=PatientT.CreatePatient(suffix);
+			Carrier carrier=CarrierT.CreateCarrier(suffix);
+			InsPlan plan=InsPlanT.CreateInsPlan(pat.PatNum,carrier.CarrierNum);
+			BenefitT.CreateAnnualMax(plan.PlanNum,200);
+			BenefitT.CreateLimitationProc(plan.PlanNum,"D2161",2000);
+			BenefitT.CreateCategoryPercent(plan.PlanNum,EbenefitCategory.Restorative,80);
+			PatPlanT.CreatePatPlan(1,pat.PatNum,plan.PlanNum);
+			//proc1 - D2161 (4-surf amalgam)
+			Procedure proc1=ProcedureT.CreateProcedure(pat,"D2161",ProcStat.TP,"3",300);
+			ProcedureT.SetPriority(proc1,0);
+			//proc2 - D2160 (3-surf amalgam)
+			Procedure proc2=ProcedureT.CreateProcedure(pat,"D2160",ProcStat.TP,"4",300);
+			ProcedureT.SetPriority(proc2,1);
+			//Lists
+			List<ClaimProc> claimProcs=ClaimProcs.Refresh(pat.PatNum);
+			List<ClaimProc> claimProcListOld=new List<ClaimProc>();
+			Family fam=Patients.GetFamily(pat.PatNum);
+			List<InsPlan> planList=InsPlans.RefreshForFam(fam);
+			List<PatPlan> patPlans=PatPlans.Refresh(pat.PatNum);
+			List<Benefit> benefitList=Benefits.Refresh(patPlans);
+			List<ClaimProcHist> histList=new List<ClaimProcHist>();
+			List<ClaimProcHist> loopList=new List<ClaimProcHist>();
+			List<Procedure> ProcList=Procedures.Refresh(pat.PatNum);
+			Procedure[] ProcListTP=Procedures.GetListTP(ProcList);//sorted by priority, then toothnum
+			//Validate
+			string retVal="";
+			for(int i=0;i<ProcListTP.Length;i++) {
+				Procedures.ComputeEstimates(ProcListTP[i],pat.PatNum,ref claimProcs,false,planList,patPlans,benefitList,
+					histList,loopList,false,pat.Age);
+				//then, add this information to loopList so that the next procedure is aware of it.
+				loopList.AddRange(ClaimProcs.GetHistForProc(claimProcs,ProcListTP[i].ProcNum,ProcListTP[i].CodeNum));
+			}
+			//save changes in the list to the database
+			ClaimProcs.Synch(ref claimProcs,claimProcListOld);
+			claimProcs=ClaimProcs.Refresh(pat.PatNum);
+			ClaimProc claimProc=ClaimProcs.GetEstimate(claimProcs,proc2.ProcNum,plan.PlanNum);
+			if(claimProc.InsEstTotal!=200) {//Insurance should cover.
+				throw new Exception("Should be 200");
+			}
+			retVal+="9: Passed.  Limitations should override more general limitations for any benefit.\r\n";
+			return retVal;
+		}
+
 	}
 }

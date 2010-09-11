@@ -49,6 +49,17 @@ namespace UnitTests {
 			Benefits.Insert(ben);
 		}
 
+		public static void CreateLimitationProc(long planNum,string procCodeStr,double amt) {
+			Benefit ben=new Benefit();
+			ben.PlanNum=planNum;
+			ben.BenefitType=InsBenefitType.Limitations;
+			ben.CodeNum=ProcedureCodes.GetCodeNum(procCodeStr);
+			ben.CoverageLevel=BenefitCoverageLevel.Individual;
+			ben.MonetaryAmt=amt;
+			ben.TimePeriod=BenefitTimePeriod.CalendarYear;
+			Benefits.Insert(ben);
+		}
+
 		public static void CreateAnnualMaxFamily(long planNum,double amt){
 			Benefit ben=new Benefit();
 			ben.PlanNum=planNum;

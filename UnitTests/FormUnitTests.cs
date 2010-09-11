@@ -85,6 +85,8 @@ namespace UnitTests {
 			textResults.Text+=AllTests.TestSeven(specificTest);
 			Application.DoEvents();
 			textResults.Text+=AllTests.TestEight(specificTest);
+			Application.DoEvents();
+			textResults.Text+=AllTests.TestNine(specificTest);
 			Cursor=Cursors.Default;
 
 

@@ -166,7 +166,7 @@ namespace OpenDentBusiness {
 			return retVal;	
 		}
 
-		///<summary></summary>
+		///<summary>Returns -1 if not in ListShort.</summary>
 		public static int GetOrderShort(long CovCatNum) {
 			//No need to check RemotingRole; no call to db.
 			int retVal=-1;
