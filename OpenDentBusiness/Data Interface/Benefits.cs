@@ -791,6 +791,7 @@ namespace OpenDentBusiness {
 					continue;//this is for someone else in the family
 				}
 				if(benInd.CodeNum!=0) {//specific code
+					//Enhance this later when code spans are supported.
 					if(ProcedureCodes.GetStringProcCode(benInd.CodeNum)!=histList[i].StrProcCode) {
 						continue;
 					}
@@ -804,7 +805,7 @@ namespace OpenDentBusiness {
 							isMatch=true;
 						}
 					}
-					else {
+					else {//If the payment was attached to a proc, then the proc must be in the coderange of this annual max benefit
 						for(int j=0;j<spansForCat.Length;j++) {
 							if(String.Compare(histList[i].StrProcCode,spansForCat[j].FromCode)>=0 
 							&& String.Compare(histList[i].StrProcCode,spansForCat[j].ToCode)<=0) {
@@ -819,6 +820,11 @@ namespace OpenDentBusiness {
 				}
 				//if no category, then benefits are not restricted by proc code.
 				//In other words, the benefit applies to all codes.
+				//At this point, we know that the proc in the loopList falls within this max benefit.
+				//But it may also fall within a more restrictive benefit which would take precedence over this one.
+				if(TighterLimitExists(listShort,benInd,histList[i])) {
+					continue;
+				}
 				maxInd-=histList[i].Amount;
 			}
 			//reduce individual max by amount in loop ------------------------------------------------------------------
@@ -834,6 +840,7 @@ namespace OpenDentBusiness {
 					continue;//this is for someone else in the family
 				}
 				if(benInd.CodeNum!=0) {//specific code
+					//Enhance this later when code spans are supported.
 					if(ProcedureCodes.GetStringProcCode(benInd.CodeNum)!=loopList[i].StrProcCode) {
 						continue;
 					}
@@ -847,7 +854,7 @@ namespace OpenDentBusiness {
 							isMatch=true;
 						}
 					}
-					else {
+					else {//If the payment was attached to a proc, then the proc must be in the coderange of this annual max benefit
 						for(int j=0;j<spansForCat.Length;j++) {
 							if(String.Compare(loopList[i].StrProcCode,spansForCat[j].FromCode)>=0 
 							&& String.Compare(loopList[i].StrProcCode,spansForCat[j].ToCode)<=0) {
@@ -870,6 +877,11 @@ namespace OpenDentBusiness {
 							continue;
 						}
 					}
+				}
+				//At this point, we know that the proc in the loopList falls within this max benefit.
+				//But it may also fall within a more restrictive benefit which would take precedence over this one.
+				if(TighterLimitExists(listShort,benInd,loopList[i])) {
+					continue;
 				}
 				maxInd-=loopList[i].Amount;
 			}
@@ -1030,6 +1042,56 @@ namespace OpenDentBusiness {
 			return retVal;
 		}
 
+		private static bool TighterLimitExists(List<Benefit> listShort,Benefit benefit,ClaimProcHist claimProcHist){
+			if(claimProcHist.StrProcCode=="") {//If this was a 'total' payment that was not attached to a procedure
+				//there won't be anything more restrictive.
+				return false;
+			}
+			//The list is not in order by restrictive/broad, so tests will need to be done.
+			if(benefit.CodeNum!=0) {//The benefit is already restrictive.  There isn't currently a way to have a more restrictive benefit, although in the future when code ranges are supported, a tighter code range would be more restrictive.
+				return false;
+			}
+			for(int b=0;b<listShort.Count;b++) {
+				if(listShort[b].BenefitNum==benefit.BenefitNum) {
+					continue;//skip self.
+				}
+				if(listShort[b].CodeNum != 0) {
+					if(listShort[b].CodeNum==ProcedureCodes.GetCodeNum(claimProcHist.StrProcCode)) {//Enhance later for code ranges when supported by program
+						return true;//a tighter limitation benefit exists for this specific procedure code.
+					}
+				}
+				else if(listShort[b].CovCatNum!=0) {//specific category
+					if(benefit.CovCatNum!=0) {//If benefit is a category limitation,
+						//then we can only consider categories that are more restrictive (further down on list).
+						//either of these could be -1 if isHidden
+						int orderBenefit=CovCats.GetOrderShort(benefit.CovCatNum);
+						int orderTest=CovCats.GetOrderShort(listShort[b].CovCatNum);
+						if(orderBenefit==-1) {
+							//nothing to do here.  Treat it like a general limitation 
+						}
+						else if(orderTest<orderBenefit) {//the CovCat of listShort is further up in the list and less restrictive, so should not be considered.
+							//this handles orderTest=-1, skipping the hidden category
+							continue;
+						}
+					}
+					else {//But if this is a general limitation,
+						//then we don't need to do the above check because any match can be considered more restrictive.
+					}
+					//see if the claimProcHist is in this more restrictive category
+					CovSpan[] spansForCat=CovSpans.GetForCat(listShort[b].CovCatNum);//get the spans 
+					//This must be a payment that was attached to a proc, so test the proc to be in the coderange of this annual max benefit
+					for(int j=0;j<spansForCat.Length;j++) {
+						if(String.Compare(claimProcHist.StrProcCode,spansForCat[j].FromCode)>=0 
+							&& String.Compare(claimProcHist.StrProcCode,spansForCat[j].ToCode)<=0) 
+						{
+							return true;
+						}
+					}
+				}
+			}
+			return false;
+		}
+
 		///<summary>Only used from InsPlans.GetInsUsedDisplay.  If a procedure is handled by some limitation other than a general annual max, then we don't want it to count towards the annual max.</summary>
 		public static bool LimitationExistsNotGeneral(List<Benefit> benList,long planNum,long patPlanNum,string strProcCode) {
 			EbenefitCategory eben;
@@ -1053,7 +1115,7 @@ namespace OpenDentBusiness {
 				}
 				//coverage level?
 				if(benList[i].CodeNum != 0) {
-					if(benList[i].CodeNum==ProcedureCodes.GetCodeNum(strProcCode)) {
+					if(benList[i].CodeNum==ProcedureCodes.GetCodeNum(strProcCode)) {//Enhance later for code ranges when supported by program
 						return true;//a limitation benefit exists for this specific procedure code.
 					}
 				}
