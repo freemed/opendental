@@ -9,6 +9,7 @@ namespace OpenDental {
 		public static void SetCompleteInAppt(Appointment apt,List<InsPlan> PlanList,List<PatPlan> patPlans,long siteNum,int patientAge) {
 			List<Procedure> procsInAppt=Procedures.GetProcsForSingle(apt.AptNum,false);
 			Procedures.SetCompleteInAppt(apt,PlanList,patPlans,siteNum,patientAge,procsInAppt);
+			//automation
 			List<string> procCodes=new List<string>();
 			for(int i=0;i<procsInAppt.Count;i++){
 				procCodes.Add(ProcedureCodes.GetStringProcCode(procsInAppt[i].CodeNum));

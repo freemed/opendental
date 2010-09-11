@@ -1110,6 +1110,24 @@ namespace OpenDentBusiness{
 			return retVal;
 		}
 
+		///<summary>Does not make call to db unless necessary.</summary>
+		public static void SetProvForProc(Procedure proc,List<ClaimProc> ClaimProcList) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),proc,ClaimProcList);
+				return;
+			}
+			for(int i=0;i<ClaimProcList.Count;i++) {
+				if(ClaimProcList[i].ProcNum!=proc.ProcNum) {
+					continue;
+				}
+				if(ClaimProcList[i].ProvNum==proc.ProvNum) {
+					continue;//no change needed
+				}
+				ClaimProcList[i].ProvNum=proc.ProvNum;
+				Update(ClaimProcList[i]);
+			}
+		}
+
 
 	}
 

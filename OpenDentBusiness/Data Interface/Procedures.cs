@@ -1182,7 +1182,9 @@ namespace OpenDentBusiness {
 				//claimProcs[i].DateCP=proc.ProcDate;
 				claimProcs[i].ProcDate=proc.ProcDate;
 				claimProcs[i].ClinicNum=proc.ClinicNum;
-				claimProcs[i].ProvNum=proc.ProvNum;//must always be the same.  No exceptions.
+				//Wish we could do this, but it might change history.  It's needed when changing a completed proc to a different provider.
+				//Can't do it here, though, because some people intentionally set provider different on claimprocs.
+				//claimProcs[i].ProvNum=proc.ProvNum;
 				//capitation estimates are always forced to follow the status of the procedure
 				if(PlanCur.PlanType=="c"
 					&& (claimProcs[i].Status==ClaimProcStatus.CapComplete	|| claimProcs[i].Status==ClaimProcStatus.CapEstimate)) 
@@ -1227,7 +1229,7 @@ namespace OpenDentBusiness {
 			}
 		}
 
-		///<summary>Loops through each proc. Does not add notes to a procedure that already has notes. Used three times, security checked in all three places before calling this.  Also sets provider for each proc.</summary>
+		///<summary>Loops through each proc. Does not add notes to a procedure that already has notes. Used three times, security checked in all three places before calling this.  Also sets provider for each proc and claimproc.</summary>
 		public static void SetCompleteInAppt(Appointment apt,List<InsPlan> PlanList,List<PatPlan> patPlans,long siteNum,int patientAge,List<Procedure> procsInAppt) { 
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),apt,PlanList,patPlans,siteNum,patientAge,procsInAppt);
@@ -1297,6 +1299,7 @@ namespace OpenDentBusiness {
 				}
 				Procedures.Update(ProcList[i],oldProc);
 				Procedures.ComputeEstimates(ProcList[i],apt.PatNum,ClaimProcList,false,PlanList,patPlans,benefitList,patientAge);
+				ClaimProcs.SetProvForProc(ProcList[i],ClaimProcList);
 			}
 			//if(doResetRecallStatus){
 			//	Recalls.Reset(apt.PatNum);//this also synchs recall
