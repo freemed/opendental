@@ -27,12 +27,12 @@ namespace OpenDental{
 			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
 			this.setupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuItemSheets = new System.Windows.Forms.ToolStripMenuItem();
-			this.checkShowOralCancerExams = new System.Windows.Forms.CheckBox();
-			this.checkShowPlaqueIndexExams = new System.Windows.Forms.CheckBox();
-			this.checkShowPsrExams = new System.Windows.Forms.CheckBox();
+			this.listShow = new System.Windows.Forms.ListBox();
+			this.label1 = new System.Windows.Forms.Label();
 			this.butAdd = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butCancel = new OpenDental.UI.Button();
+			this.label2 = new System.Windows.Forms.Label();
 			this.menuStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -57,45 +57,27 @@ namespace OpenDental{
 			// menuItemSheets
 			// 
 			this.menuItemSheets.Name = "menuItemSheets";
-			this.menuItemSheets.Size = new System.Drawing.Size(108,22);
+			this.menuItemSheets.Size = new System.Drawing.Size(152,22);
 			this.menuItemSheets.Text = "Sheets";
 			this.menuItemSheets.Click += new System.EventHandler(this.menuItemSheets_Click);
 			// 
-			// checkShowOralCancerExams
+			// listShow
 			// 
-			this.checkShowOralCancerExams.AutoSize = true;
-			this.checkShowOralCancerExams.Checked = true;
-			this.checkShowOralCancerExams.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkShowOralCancerExams.Location = new System.Drawing.Point(23,38);
-			this.checkShowOralCancerExams.Name = "checkShowOralCancerExams";
-			this.checkShowOralCancerExams.Size = new System.Drawing.Size(197,17);
-			this.checkShowOralCancerExams.TabIndex = 9;
-			this.checkShowOralCancerExams.Text = "Show Oral Cancer Screening Exams";
-			this.checkShowOralCancerExams.UseVisualStyleBackColor = true;
+			this.listShow.FormattingEnabled = true;
+			this.listShow.Location = new System.Drawing.Point(11,52);
+			this.listShow.Name = "listShow";
+			this.listShow.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+			this.listShow.Size = new System.Drawing.Size(120,134);
+			this.listShow.TabIndex = 9;
 			// 
-			// checkShowPlaqueIndexExams
+			// label1
 			// 
-			this.checkShowPlaqueIndexExams.AutoSize = true;
-			this.checkShowPlaqueIndexExams.Checked = true;
-			this.checkShowPlaqueIndexExams.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkShowPlaqueIndexExams.Location = new System.Drawing.Point(23,61);
-			this.checkShowPlaqueIndexExams.Name = "checkShowPlaqueIndexExams";
-			this.checkShowPlaqueIndexExams.Size = new System.Drawing.Size(152,17);
-			this.checkShowPlaqueIndexExams.TabIndex = 10;
-			this.checkShowPlaqueIndexExams.Text = "Show Plaque Index Exams";
-			this.checkShowPlaqueIndexExams.UseVisualStyleBackColor = true;
-			// 
-			// checkShowPsrExams
-			// 
-			this.checkShowPsrExams.AutoSize = true;
-			this.checkShowPsrExams.Checked = true;
-			this.checkShowPsrExams.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkShowPsrExams.Location = new System.Drawing.Point(23,84);
-			this.checkShowPsrExams.Name = "checkShowPsrExams";
-			this.checkShowPsrExams.Size = new System.Drawing.Size(112,17);
-			this.checkShowPsrExams.TabIndex = 11;
-			this.checkShowPsrExams.Text = "Show PSR Exams";
-			this.checkShowPsrExams.UseVisualStyleBackColor = true;
+			this.label1.Location = new System.Drawing.Point(10,32);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(100,18);
+			this.label1.TabIndex = 10;
+			this.label1.Text = "Show";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// butAdd
 			// 
@@ -120,10 +102,10 @@ namespace OpenDental{
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(11,116);
+			this.gridMain.Location = new System.Drawing.Point(11,192);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(392,368);
+			this.gridMain.Size = new System.Drawing.Size(392,292);
 			this.gridMain.TabIndex = 4;
 			this.gridMain.Title = "Exam Sheets";
 			this.gridMain.TranslationName = "FormPatientForms";
@@ -144,13 +126,22 @@ namespace OpenDental{
 			this.butCancel.Text = "Close";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// label2
+			// 
+			this.label2.Location = new System.Drawing.Point(185,99);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(197,18);
+			this.label2.TabIndex = 11;
+			this.label2.Text = "Need a date range filter";
+			this.label2.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			// 
 			// FormExamSheets
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(415,523);
-			this.Controls.Add(this.checkShowPsrExams);
-			this.Controls.Add(this.checkShowPlaqueIndexExams);
-			this.Controls.Add(this.checkShowOralCancerExams);
+			this.Controls.Add(this.label2);
+			this.Controls.Add(this.label1);
+			this.Controls.Add(this.listShow);
 			this.Controls.Add(this.butAdd);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.butCancel);
@@ -177,8 +168,8 @@ namespace OpenDental{
 		private System.Windows.Forms.MenuStrip menuStrip1;
 		private System.Windows.Forms.ToolStripMenuItem setupToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem menuItemSheets;
-		private System.Windows.Forms.CheckBox checkShowOralCancerExams;
-		private System.Windows.Forms.CheckBox checkShowPlaqueIndexExams;
-		private System.Windows.Forms.CheckBox checkShowPsrExams;
+		private System.Windows.Forms.ListBox listShow;
+		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.Label label2;
 	}
 }

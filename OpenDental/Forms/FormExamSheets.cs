@@ -21,7 +21,9 @@ namespace OpenDental {
 
 		private void FormExamSheets_Load(object sender,EventArgs e) {
 			Patient pat=Patients.GetLim(PatNum);
-			Text=Lan.g(this,"Patient Exam Sheets for")+" "+pat.GetNameFL();
+			Text=Lan.g(this,"Exam Sheets for")+" "+pat.GetNameFL();
+			//fill listShow
+			//select all rows in listShow
 			FillGrid();
 		}
 
