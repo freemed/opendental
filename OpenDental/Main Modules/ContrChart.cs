@@ -3556,11 +3556,12 @@ namespace OpenDental{
 			List<DisplayField> fields=DisplayFields.GetForCategory(DisplayFieldCategory.ChartPatientInformation);
 			for(int f=0;f<fields.Count;f++){
 				row=new ODGridRow();
-				if(fields[f].InternalName=="PatFields"){
-					//don't add a cell
-				}
-				else{
+				//within a case statement, the row may be re-instantiated if needed, effectively removing the first cell added here:
+				if(fields[f].Description=="") {
 					row.Cells.Add(fields[f].InternalName);
+				}
+				else {
+					row.Cells.Add(fields[f].Description);
 				}
 				switch(fields[f].InternalName){
 					case "Age":
@@ -3575,22 +3576,17 @@ namespace OpenDental{
 					case "Referrals":
 						RefAttach[] RefList=RefAttaches.Refresh(PatCur.PatNum);
 						if(RefList.Length==0) {
-							row.Cells.Add(Lan.g("TablePatient","None"));
+							row.Cells.Add(Lan.g("TableChartPtInfo","None"));
 							row.Tag="Referral";
 							row.ColorBackG=DefC.Short[(int)DefCat.MiscColors][8].ItemColor;
 						}
-						//else{
-						//	row.Cells.Add("");
-						//	row.Tag="Referral";
-						//	row.ColorBackG=DefC.Short[(int)DefCat.MiscColors][8].ItemColor;
-						//}
 						for(int i=0;i<RefList.Length;i++) {
 							row=new ODGridRow();
 							if(RefList[i].IsFrom) {
-								row.Cells.Add(Lan.g("TablePatient","Referred From"));
+								row.Cells.Add(Lan.g("TableChartPtInfo","Referred From"));
 							}
 							else {
-								row.Cells.Add(Lan.g("TablePatient","Referred To"));
+								row.Cells.Add(Lan.g("TableChartPtInfo","Referred To"));
 							}
 							try {
 								string refInfo=Referrals.GetNameLF(RefList[i].ReferralNum);
@@ -3608,62 +3604,84 @@ namespace OpenDental{
 							if(i<RefList.Length-1) {
 								gridPtInfo.Rows.Add(row);
 							}
+							//The last row will be added after the switch statement
 						}
 						break;
 					case "Date First Visit":
-						if(PatCur.DateFirstVisit.Year<1880)
+						if(PatCur.DateFirstVisit.Year<1880) {
 							row.Cells.Add("??");
-						else if(PatCur.DateFirstVisit==DateTime.Today)
+						}
+						else if(PatCur.DateFirstVisit==DateTime.Today) {
 							row.Cells.Add(Lan.g("TableChartPtInfo","NEW PAT"));
-						else
-							row.Cells.Add(PatCur.DateFirstVisit.ToShortDateString());
-						row.Tag=null;
-						break;
-					case "Primary Provider":
-						row.Cells.Add(Providers.GetLongDesc(Patients.GetProvNum(PatCur)));
-						break;
-					case "Sec. Provider":
-						if(PatCur.SecProv != 0) {
-							row.Cells.Add(Providers.GetLongDesc(PatCur.SecProv));
 						}
 						else {
-							row.Cells.Add("None");
+							row.Cells.Add(PatCur.DateFirstVisit.ToShortDateString());
 						}
+						row.Tag=null;
 						break;
-					case "Registration Key":
-						if(PrefC.GetBool(PrefName.DistributorKey)) {
-							RegistrationKey[] keys=RegistrationKeys.GetForPatient(PatCur.PatNum);
-							for(int i=0;i<keys.Length;i++) {
-								row=new ODGridRow();
-								row.Cells.Add(Lan.g("TableChartPtInfo","Registration Key"));
-								string str=keys[i].RegKey.Substring(0,4)+"-"+keys[i].RegKey.Substring(4,4)+"-"+
-						keys[i].RegKey.Substring(8,4)+"-"+keys[i].RegKey.Substring(12,4);
-								if(keys[i].IsForeign) {
-									str+="\r\nForeign";
-								}
-								else {
-									str+="\r\nUSA";
-								}
-								str+="\r\nStarted: "+keys[i].DateStarted.ToShortDateString();
-								if(keys[i].DateDisabled.Year>1880) {
-									str+="\r\nDisabled: "+keys[i].DateDisabled.ToShortDateString();
-								}
-								if(keys[i].DateEnded.Year>1880) {
-									str+="\r\nEnded: "+keys[i].DateEnded.ToShortDateString();
-								}
-								if(keys[i].Note!="") {
-									str+=keys[i].Note;
-								}
-								row.Cells.Add(str);
-								row.Tag=keys[i].Copy();
-								gridPtInfo.Rows.Add(row);
+					case "Prov. (Pri, Sec)":
+						if(PatCur.SecProv != 0) {
+							row.Cells.Add(Providers.GetAbbr(PatCur.PriProv) + ", " + Providers.GetAbbr(PatCur.SecProv));
+						}
+						else {
+							row.Cells.Add(Providers.GetAbbr(PatCur.PriProv) + ", " + Lan.g("TableChartPtInfo","None"));
+						}
+						row.Tag = null;
+						break;
+					case "Pri Ins":
+//Implement
+						break;
+					case "Sec Ins":
+//Implement
+						break;
+					case "Registration Keys":
+						//Not even available to most users.
+						RegistrationKey[] keys=RegistrationKeys.GetForPatient(PatCur.PatNum);
+						for(int i=0;i<keys.Length;i++) {
+							row=new ODGridRow();
+							row.Cells.Add(Lan.g("TableChartPtInfo","Registration Key"));
+							string str=keys[i].RegKey.Substring(0,4)+"-"+keys[i].RegKey.Substring(4,4)+"-"
+								+keys[i].RegKey.Substring(8,4)+"-"+keys[i].RegKey.Substring(12,4);
+							if(keys[i].IsForeign) {
+								str+="\r\nForeign";
 							}
+							else {
+								str+="\r\nUSA";
+							}
+							str+="\r\nStarted: "+keys[i].DateStarted.ToShortDateString();
+							if(keys[i].DateDisabled.Year>1880) {
+								str+="\r\nDisabled: "+keys[i].DateDisabled.ToShortDateString();
+							}
+							if(keys[i].DateEnded.Year>1880) {
+								str+="\r\nEnded: "+keys[i].DateEnded.ToShortDateString();
+							}
+							if(keys[i].Note!="") {
+								str+=keys[i].Note;
+							}
+							row.Cells.Add(str);
+							row.Tag=keys[i].Copy();
+							gridPtInfo.Rows.Add(row);
 						}
 						break;
-					case "Medical Fields":
-						if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0"){
+					case "Premedicate":
+//Implement.  This one is odd.  No row if flag is false.  If flag is true, first cell blank, and second cell shows either InternalName or Description.  Because there might not be a row, see special handling after the end of the switch clause.
 						break;
-						}
+					case "Diseases":
+//Implement.  This is a list.  So if list is empty, one row says Diseases | none, similar to the way Referrals is handled.
+						break;
+					case "Med Urgent":
+//Implement
+						break;
+					case "Medical Summary":
+//Implement
+						break;
+					case "Service Notes":
+//Implement
+						break;
+					case "Medications":
+//Implement.  Another list, just like Diseases.
+						break;
+					/*case "Medical Fields"://Too broad. See above
 						ODGridCell cell;
 						//premed flag.
 						if(PatCur.Premed) {
@@ -3762,7 +3780,7 @@ namespace OpenDental{
 							row.Tag="med";
 							gridPtInfo.Rows.Add(row);
 						}
-						break;
+						break;*/
 					case "PatFields":
 						PatField field;
 						for(int i=0;i<PatFieldDefs.List.Length;i++) {
@@ -3782,8 +3800,13 @@ namespace OpenDental{
 						}
 						break;
 				}
-				if(fields[f].InternalName=="PatFields") {
-					//don't add the row here
+				if(fields[f].InternalName=="PatFields"
+					|| fields[f].InternalName=="Premedicate"
+					|| fields[f].InternalName=="Registration Keys") 
+				{
+					//For fields that might have zero rows, we can't add the row here.  Adding rows is instead done in the case clause.
+					//But some fields that are based on lists will always have one row, even if there are no items in the list.
+					//Do not add those kinds here.
 				}
 				else {
 					gridPtInfo.Rows.Add(row);

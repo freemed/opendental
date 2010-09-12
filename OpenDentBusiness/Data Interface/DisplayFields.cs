@@ -201,11 +201,22 @@ namespace OpenDentBusiness {
 				list.Add(new DisplayField("Billing Type",0,category));
 				list.Add(new DisplayField("Referred From",0,category));
 				list.Add(new DisplayField("Date First Visit",0,category));
-				list.Add(new DisplayField("Primary Provider",0,category));
-				list.Add(new DisplayField("Sec. Provider",0,category));
-				list.Add(new DisplayField("Registration Key",0,category));
-				list.Add(new DisplayField("Medical Fields",0,category));
-				list.Add(new DisplayField("PatFields",0,category));
+				list.Add(new DisplayField("Prov. (Pri, Sec)",0,category));
+				list.Add(new DisplayField("Pri Ins",0,category));
+				list.Add(new DisplayField("Sec Ins",0,category));
+				if(PrefC.GetBool(PrefName.DistributorKey)) {
+					list.Add(new DisplayField("Registration Keys",0,category));
+				}
+				//different default list for eCW:
+				if(!Programs.IsEnabled("eClinicalWorks") || ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") {
+					list.Add(new DisplayField("Premedicate",0,category));
+					list.Add(new DisplayField("Diseases",0,category));
+					list.Add(new DisplayField("Med Urgent",0,category));
+					list.Add(new DisplayField("Medical Summary",0,category));
+					list.Add(new DisplayField("Service Notes",0,category));
+					list.Add(new DisplayField("Medications",0,category));
+				}
+				//list.Add(new DisplayField("PatFields",0,category));
 			}
 			return list;
 		}
@@ -317,10 +328,18 @@ namespace OpenDentBusiness {
 				list.Add(new DisplayField("Billing Type",0,category));
 				list.Add(new DisplayField("Referred From",0,category));
 				list.Add(new DisplayField("Date First Visit",0,category));
-				list.Add(new DisplayField("Primary Provider",0,category));
-				list.Add(new DisplayField("Sec. Provider",0,category));
-				list.Add(new DisplayField("Registration Key",0,category));
-				list.Add(new DisplayField("Medical Fields",0,category));
+				list.Add(new DisplayField("Prov. (Pri, Sec)",0,category));
+				list.Add(new DisplayField("Pri Ins",0,category));
+				list.Add(new DisplayField("Sec Ins",0,category));
+				if(PrefC.GetBool(PrefName.DistributorKey)) {
+					list.Add(new DisplayField("Registration Keys",0,category));
+				}
+				list.Add(new DisplayField("Premedicate",0,category));
+				list.Add(new DisplayField("Diseases",0,category));
+				list.Add(new DisplayField("Med Urgent",0,category));
+				list.Add(new DisplayField("Medical Summary",0,category));
+				list.Add(new DisplayField("Service Notes",0,category));
+				list.Add(new DisplayField("Medications",0,category));
 				list.Add(new DisplayField("PatFields",0,category));
 			}
 			return list;
