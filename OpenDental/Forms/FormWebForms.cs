@@ -539,12 +539,16 @@ namespace OpenDental {
 			FillGrid();
 		}
 
-		private void textDateStart_Validated(object sender,EventArgs e) {
+		private void butRefresh_Click(object sender,EventArgs e) {
 			FillGrid();
 		}
 
+		private void textDateStart_Validated(object sender,EventArgs e) {
+			
+		}
+
 		private void textDateEnd_Validated(object sender,EventArgs e) {
-			FillGrid();
+			//FillGrid();
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
@@ -576,6 +580,8 @@ namespace OpenDental {
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 	
 
