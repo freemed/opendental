@@ -3525,7 +3525,7 @@ namespace OpenDental{
 			MsgBox.Show(this,"Done.");
 		}
 
-		public void FillPtInfo(){
+		public void FillPtInfo() {
 			if(Plugins.HookMethod(this,"ContrChart.FillPtInfo",PatCur)) {
 				return;
 			}
@@ -3538,7 +3538,7 @@ namespace OpenDental{
 				gridPtInfo.EndUpdate();
 				return;
 			}
-			else{
+			else {
 				textTreatmentNotes.Text=PatientNoteCur.Treatment;
 				textTreatmentNotes.Enabled=true;
 				textTreatmentNotes.Select(textTreatmentNotes.Text.Length+2,1);
@@ -3552,9 +3552,10 @@ namespace OpenDental{
 			col=new ODGridColumn("",300);
 			gridPtInfo.Columns.Add(col);
 			gridPtInfo.Rows.Clear();
+			ODGridCell cell;
 			ODGridRow row;
 			List<DisplayField> fields=DisplayFields.GetForCategory(DisplayFieldCategory.ChartPatientInformation);
-			for(int f=0;f<fields.Count;f++){
+			for(int f=0;f<fields.Count;f++) {
 				row=new ODGridRow();
 				//within a case statement, the row may be re-instantiated if needed, effectively removing the first cell added here:
 				if(fields[f].Description=="") {
@@ -3563,7 +3564,7 @@ namespace OpenDental{
 				else {
 					row.Cells.Add(fields[f].Description);
 				}
-				switch(fields[f].InternalName){
+				switch(fields[f].InternalName) {
 					case "Age":
 						row.Cells.Add(PatientLogic.DateToAgeString(PatCur.Birthdate));
 						break;
@@ -3573,39 +3574,20 @@ namespace OpenDental{
 					case "Billing Type":
 						row.Cells.Add(DefC.GetName(DefCat.BillingTypes,PatCur.BillingType));
 						break;
-					case "Referrals":
-						RefAttach[] RefList=RefAttaches.Refresh(PatCur.PatNum);
-						if(RefList.Length==0) {
-							row.Cells.Add(Lan.g("TableChartPtInfo","None"));
-							row.Tag="Referral";
-							row.ColorBackG=DefC.Short[(int)DefCat.MiscColors][8].ItemColor;
+					case "Referred From":
+						RefAttach[] RefAttachList=RefAttaches.Refresh(PatCur.PatNum);
+						string referral="";
+						for(int i=0;i<RefAttachList.Length;i++) {
+							if(RefAttachList[i].IsFrom) {
+								referral=Referrals.GetNameLF(RefAttachList[i].ReferralNum);
+								break;
+							}
 						}
-						for(int i=0;i<RefList.Length;i++) {
-							row=new ODGridRow();
-							if(RefList[i].IsFrom) {
-								row.Cells.Add(Lan.g("TableChartPtInfo","Referred From"));
-							}
-							else {
-								row.Cells.Add(Lan.g("TableChartPtInfo","Referred To"));
-							}
-							try {
-								string refInfo=Referrals.GetNameLF(RefList[i].ReferralNum);
-								string phoneInfo=Referrals.GetPhone(RefList[i].ReferralNum);
-								if(phoneInfo!="" || RefList[i].Note!="") {
-									refInfo+="\r\n"+phoneInfo+" "+RefList[i].Note;
-								}
-								row.Cells.Add(refInfo);
-							}
-							catch {
-								row.Cells.Add("");//if referral is null because using random keys and had bug.
-							}
-							row.Tag="Referral";
-							row.ColorBackG=DefC.Short[(int)DefCat.MiscColors][8].ItemColor;
-							if(i<RefList.Length-1) {
-								gridPtInfo.Rows.Add(row);
-							}
-							//The last row will be added after the switch statement
+						if(referral=="") {
+							referral="??";
 						}
+						row.Cells.Add(referral);
+						row.Tag=null;
 						break;
 					case "Date First Visit":
 						if(PatCur.DateFirstVisit.Year<1880) {
@@ -3629,10 +3611,31 @@ namespace OpenDental{
 						row.Tag = null;
 						break;
 					case "Pri Ins":
-//Implement
+						string name;
+						if(PatPlanList.Count>0) {
+							name=InsPlans.GetCarrierName(PatPlans.GetPlanNum(PatPlanList,1),PlanList);
+							if(PatPlanList[0].IsPending) {
+								name+=Lan.g("TableChartPtInfo"," (pending)");
+							}
+							row.Cells.Add(name);
+						}
+						else {
+							row.Cells.Add("");
+						}
+						row.Tag=null;
 						break;
 					case "Sec Ins":
-//Implement
+						if(PatPlanList.Count>1) {
+							name=InsPlans.GetCarrierName(PatPlans.GetPlanNum(PatPlanList,2),PlanList);
+							if(PatPlanList[1].IsPending) {
+								name+=Lan.g("TableChartPtInfo"," (pending)");
+							}
+							row.Cells.Add(name);
+						}
+						else {
+							row.Cells.Add("");
+						}
+						row.Tag=null;
 						break;
 					case "Registration Keys":
 						//Not even available to most users.
@@ -3664,31 +3667,16 @@ namespace OpenDental{
 						}
 						break;
 					case "Premedicate":
-//Implement.  This one is odd.  No row if flag is false.  If flag is true, first cell blank, and second cell shows either InternalName or Description.  Because there might not be a row, see special handling after the end of the switch clause.
-						break;
-					case "Diseases":
-//Implement.  This is a list.  So if list is empty, one row says Diseases | none, similar to the way Referrals is handled.
-						break;
-					case "Med Urgent":
-//Implement
-						break;
-					case "Medical Summary":
-//Implement
-						break;
-					case "Service Notes":
-//Implement
-						break;
-					case "Medications":
-//Implement.  Another list, just like Diseases.
-						break;
-					/*case "Medical Fields"://Too broad. See above
-						ODGridCell cell;
-						//premed flag.
 						if(PatCur.Premed) {
 							row=new ODGridRow();
 							row.Cells.Add("");
 							cell=new ODGridCell();
-							cell.Text=Lan.g("TableChartPtInfo","Premedicate");
+							if(fields[f].Description=="") {
+								cell.Text=fields[f].InternalName;
+							}
+							else {
+								cell.Text=fields[f].Description;
+							}
 							cell.ColorText=Color.Red;
 							cell.Bold=YN.Yes;
 							row.Cells.Add(cell);
@@ -3696,21 +3684,29 @@ namespace OpenDental{
 							row.Tag="med";
 							gridPtInfo.Rows.Add(row);
 						}
-						//diseases
+						break;
+					case "Diseases":
 						Disease[] DiseaseList=Diseases.Refresh(PatCur.PatNum);
 						row=new ODGridRow();
-						cell=new ODGridCell(Lan.g("TableChartPtInfo","Diseases"));
+						cell=new ODGridCell();
+						if(fields[f].Description=="") {
+							cell.Text=fields[f].InternalName;
+						}
+						else {
+							cell.Text=fields[f].Description;
+						}
 						cell.Bold=YN.Yes;
 						row.Cells.Add(cell);
+						row.ColorBackG=DefC.Long[(int)DefCat.MiscColors][3].ItemColor;
+						row.Tag="med";
 						if(DiseaseList.Length>0) {
 							row.Cells.Add("");
+							gridPtInfo.Rows.Add(row);
 						}
 						else {
 							row.Cells.Add(Lan.g("TableChartPtInfo","none"));
 						}
-						row.ColorBackG=DefC.Long[(int)DefCat.MiscColors][3].ItemColor;
-						row.Tag="med";
-						gridPtInfo.Rows.Add(row);
+						//Add a new row for each med.
 						for(int i=0;i<DiseaseList.Length;i++) {
 							row=new ODGridRow();
 							cell=new ODGridCell(DiseaseDefs.GetName(DiseaseList[i].DiseaseDefNum));
@@ -3720,11 +3716,12 @@ namespace OpenDental{
 							row.Cells.Add(DiseaseList[i].PatNote);
 							row.ColorBackG=DefC.Long[(int)DefCat.MiscColors][3].ItemColor;
 							row.Tag="med";
-							gridPtInfo.Rows.Add(row);
+							if(i!=DiseaseList.Length-1) {
+								gridPtInfo.Rows.Add(row);
+							}
 						}
-						//MedUrgNote 
-						row=new ODGridRow();
-						row.Cells.Add(Lan.g("TableChartPtInfo","Med Urgent"));
+						break;
+					case "Med Urgent":
 						cell=new ODGridCell();
 						cell.Text=PatCur.MedUrgNote;
 						cell.ColorText=Color.Red;
@@ -3732,37 +3729,39 @@ namespace OpenDental{
 						row.Cells.Add(cell);
 						row.ColorBackG=DefC.Long[(int)DefCat.MiscColors][3].ItemColor;
 						row.Tag="med";
-						gridPtInfo.Rows.Add(row);
-						//Medical
-						row=new ODGridRow();
-						row.Cells.Add(Lan.g("TableChartPtInfo","Medical Summary"));
+						break;
+					case "Medical Summary":
 						row.Cells.Add(PatientNoteCur.Medical);
 						row.ColorBackG=DefC.Long[(int)DefCat.MiscColors][3].ItemColor;
 						row.Tag="med";
-						gridPtInfo.Rows.Add(row);
-						//Service
-						row=new ODGridRow();
-						row.Cells.Add(Lan.g("TableChartPtInfo","Service Notes"));
+						break;
+					case "Service Notes":
 						row.Cells.Add(PatientNoteCur.Service);
 						row.ColorBackG=DefC.Long[(int)DefCat.MiscColors][3].ItemColor;
 						row.Tag="med";
-						gridPtInfo.Rows.Add(row);
-						//medications
+						break;
+					case "Medications":
 						Medications.Refresh();
 						MedicationPats.Refresh(PatCur.PatNum);
 						row=new ODGridRow();
-						cell=new ODGridCell(Lan.g("TableChartPtInfo","Medications"));
+						cell=new ODGridCell();
+						if(fields[f].Description=="") {
+							cell.Text=fields[f].InternalName;
+						}
+						else {
+							cell.Text=fields[f].Description;
+						}
 						cell.Bold=YN.Yes;
 						row.Cells.Add(cell);
+						row.ColorBackG=DefC.Long[(int)DefCat.MiscColors][3].ItemColor;
+						row.Tag="med";
 						if(MedicationPats.List.Length>0) {
 							row.Cells.Add("");
+							gridPtInfo.Rows.Add(row);
 						}
 						else {
 							row.Cells.Add(Lan.g("TableChartPtInfo","none"));
 						}
-						row.ColorBackG=DefC.Long[(int)DefCat.MiscColors][3].ItemColor;
-						row.Tag="med";
-						gridPtInfo.Rows.Add(row);
 						string text;
 						Medication med;
 						for(int i=0;i<MedicationPats.List.Length;i++) {
@@ -3778,15 +3777,15 @@ namespace OpenDental{
 							row.Cells.Add(text);
 							row.ColorBackG=DefC.Long[(int)DefCat.MiscColors][3].ItemColor;
 							row.Tag="med";
-							gridPtInfo.Rows.Add(row);
+							if(i!=MedicationPats.List.Length-1) {
+								gridPtInfo.Rows.Add(row);
+							}
 						}
-						break;*/
+						break;
 					case "PatFields":
 						PatField field;
 						for(int i=0;i<PatFieldDefs.List.Length;i++) {
-							if(i>0) {
-								row=new ODGridRow();
-							}
+							row=new ODGridRow();
 							row.Cells.Add(PatFieldDefs.List[i].FieldName);
 							field=PatFields.GetByName(PatFieldDefs.List[i].FieldName,PatFieldList);
 							if(field==null) {
@@ -3802,8 +3801,7 @@ namespace OpenDental{
 				}
 				if(fields[f].InternalName=="PatFields"
 					|| fields[f].InternalName=="Premedicate"
-					|| fields[f].InternalName=="Registration Keys") 
-				{
+					|| fields[f].InternalName=="Registration Keys") {
 					//For fields that might have zero rows, we can't add the row here.  Adding rows is instead done in the case clause.
 					//But some fields that are based on lists will always have one row, even if there are no items in the list.
 					//Do not add those kinds here.
