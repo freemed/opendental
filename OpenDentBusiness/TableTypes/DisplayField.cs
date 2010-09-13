@@ -15,8 +15,10 @@ namespace OpenDentBusiness{
 		public string Description;
 		///<summary>For grid columns, this lets user override the column width.  Especially useful for foreign languages.</summary>
 		public int ColumnWidth;
-		///<summary>Enum:DisplayFieldCategory</summary>
+		///<summary>Enum:DisplayFieldCategory.  If category is 0, then this is attached to a ChartView.</summary>
 		public DisplayFieldCategory Category;
+		///<summary>FK to chartview.ChartViewNum.  0 if attached to a category.</summary>
+		public long ChartViewNum;
 
 
 		public DisplayField(){

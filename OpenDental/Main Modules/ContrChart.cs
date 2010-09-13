@@ -266,9 +266,14 @@ namespace OpenDental{
 		private OpenDental.UI.Button butUp;
 		private OpenDental.UI.Button butDown;
 		private PatField[] PatFieldList;
+		private OpenDental.UI.Button butChartViewDown;
+		private OpenDental.UI.Button butChartViewUp;
+		private OpenDental.UI.Button butChartViewAdd;
+		private Label labelCustView;
+		private ODGrid gridChartViews;
 		private bool InitializedOnStartup;
 		//<summary>Can be null if user has not set up any views.  Defaults to first in list when starting up.</summary>
-		//private ChartView ChartViewCur;
+		private ChartView ChartViewCur;
 	
 		///<summary></summary>
 		public ContrChart(){
@@ -438,11 +443,16 @@ namespace OpenDental{
 			this.tabPlanned = new System.Windows.Forms.TabPage();
 			this.butDown = new OpenDental.UI.Button();
 			this.butUp = new OpenDental.UI.Button();
-			this.gridPlanned = new OpenDental.UI.ODGrid();
 			this.butPin = new OpenDental.UI.Button();
 			this.butClear = new OpenDental.UI.Button();
 			this.butNew = new OpenDental.UI.Button();
+			this.gridPlanned = new OpenDental.UI.ODGrid();
 			this.tabShow = new System.Windows.Forms.TabPage();
+			this.gridChartViews = new OpenDental.UI.ODGrid();
+			this.labelCustView = new System.Windows.Forms.Label();
+			this.butChartViewDown = new OpenDental.UI.Button();
+			this.butChartViewUp = new OpenDental.UI.Button();
+			this.butChartViewAdd = new OpenDental.UI.Button();
 			this.checkShowOnlyFilmsAndExams = new System.Windows.Forms.CheckBox();
 			this.checkShowOnlyHygieneProcs = new System.Windows.Forms.CheckBox();
 			this.groupBox7 = new System.Windows.Forms.GroupBox();
@@ -482,12 +492,15 @@ namespace OpenDental{
 			this.radioPen = new System.Windows.Forms.RadioButton();
 			this.radioPointer = new System.Windows.Forms.RadioButton();
 			this.menuConsent = new System.Windows.Forms.ContextMenu();
-			this.toothChart = new SparksToothChart.ToothChartWrapper();
 			this.panelEcw = new System.Windows.Forms.Panel();
 			this.labelECWerror = new System.Windows.Forms.Label();
 			this.webBrowserEcw = new System.Windows.Forms.WebBrowser();
 			this.butECWdown = new OpenDental.UI.Button();
 			this.butECWup = new OpenDental.UI.Button();
+			this.menuToothChart = new System.Windows.Forms.ContextMenu();
+			this.menuItemChartBig = new System.Windows.Forms.MenuItem();
+			this.menuItemChartSave = new System.Windows.Forms.MenuItem();
+			this.toothChart = new SparksToothChart.ToothChartWrapper();
 			this.butForeignKey = new OpenDental.UI.Button();
 			this.butAddKey = new OpenDental.UI.Button();
 			this.gridProg = new OpenDental.UI.ODGrid();
@@ -495,9 +508,6 @@ namespace OpenDental{
 			this.button1 = new OpenDental.UI.Button();
 			this.textTreatmentNotes = new OpenDental.ODtextBox();
 			this.gridPtInfo = new OpenDental.UI.ODGrid();
-			this.menuToothChart = new System.Windows.Forms.ContextMenu();
-			this.menuItemChartBig = new System.Windows.Forms.MenuItem();
-			this.menuItemChartSave = new System.Windows.Forms.MenuItem();
 			this.groupBox2.SuspendLayout();
 			this.tabControlImages.SuspendLayout();
 			this.panelImages.SuspendLayout();
@@ -736,7 +746,7 @@ namespace OpenDental{
 			// checkAudit
 			// 
 			this.checkAudit.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkAudit.Location = new System.Drawing.Point(295,69);
+			this.checkAudit.Location = new System.Drawing.Point(170,187);
 			this.checkAudit.Name = "checkAudit";
 			this.checkAudit.Size = new System.Drawing.Size(73,13);
 			this.checkAudit.TabIndex = 17;
@@ -758,7 +768,7 @@ namespace OpenDental{
 			// checkShowTeeth
 			// 
 			this.checkShowTeeth.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkShowTeeth.Location = new System.Drawing.Point(295,53);
+			this.checkShowTeeth.Location = new System.Drawing.Point(170,168);
 			this.checkShowTeeth.Name = "checkShowTeeth";
 			this.checkShowTeeth.Size = new System.Drawing.Size(104,13);
 			this.checkShowTeeth.TabIndex = 15;
@@ -2133,11 +2143,11 @@ namespace OpenDental{
 			this.tabPlanned.BackColor = System.Drawing.Color.White;
 			this.tabPlanned.Controls.Add(this.butDown);
 			this.tabPlanned.Controls.Add(this.butUp);
-			this.tabPlanned.Controls.Add(this.gridPlanned);
 			this.tabPlanned.Controls.Add(this.butPin);
 			this.tabPlanned.Controls.Add(this.butClear);
 			this.tabPlanned.Controls.Add(this.butNew);
 			this.tabPlanned.Controls.Add(this.checkDone);
+			this.tabPlanned.Controls.Add(this.gridPlanned);
 			this.tabPlanned.Location = new System.Drawing.Point(4,22);
 			this.tabPlanned.Name = "tabPlanned";
 			this.tabPlanned.Size = new System.Drawing.Size(516,233);
@@ -2176,22 +2186,6 @@ namespace OpenDental{
 			this.butUp.TabIndex = 194;
 			this.butUp.Text = "&Up";
 			this.butUp.Click += new System.EventHandler(this.butUp_Click);
-			// 
-			// gridPlanned
-			// 
-			this.gridPlanned.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.gridPlanned.HScrollVisible = false;
-			this.gridPlanned.Location = new System.Drawing.Point(0,25);
-			this.gridPlanned.Name = "gridPlanned";
-			this.gridPlanned.ScrollValue = 0;
-			this.gridPlanned.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridPlanned.Size = new System.Drawing.Size(516,208);
-			this.gridPlanned.TabIndex = 193;
-			this.gridPlanned.Title = "Planned Appointments";
-			this.gridPlanned.TranslationName = "TablePlannedAppts";
-			this.gridPlanned.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPlanned_CellDoubleClick);
 			// 
 			// butPin
 			// 
@@ -2240,9 +2234,30 @@ namespace OpenDental{
 			this.butNew.Text = "Add";
 			this.butNew.Click += new System.EventHandler(this.butNew_Click);
 			// 
+			// gridPlanned
+			// 
+			this.gridPlanned.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.gridPlanned.HScrollVisible = false;
+			this.gridPlanned.Location = new System.Drawing.Point(0,25);
+			this.gridPlanned.Name = "gridPlanned";
+			this.gridPlanned.ScrollValue = 0;
+			this.gridPlanned.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridPlanned.Size = new System.Drawing.Size(516,208);
+			this.gridPlanned.TabIndex = 193;
+			this.gridPlanned.Title = "Planned Appointments";
+			this.gridPlanned.TranslationName = "TablePlannedAppts";
+			this.gridPlanned.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPlanned_CellDoubleClick);
+			// 
 			// tabShow
 			// 
 			this.tabShow.BackColor = System.Drawing.Color.White;
+			this.tabShow.Controls.Add(this.gridChartViews);
+			this.tabShow.Controls.Add(this.labelCustView);
+			this.tabShow.Controls.Add(this.butChartViewDown);
+			this.tabShow.Controls.Add(this.butChartViewUp);
+			this.tabShow.Controls.Add(this.butChartViewAdd);
 			this.tabShow.Controls.Add(this.checkShowOnlyFilmsAndExams);
 			this.tabShow.Controls.Add(this.checkShowOnlyHygieneProcs);
 			this.tabShow.Controls.Add(this.groupBox7);
@@ -2258,6 +2273,79 @@ namespace OpenDental{
 			this.tabShow.TabIndex = 5;
 			this.tabShow.Text = "Show";
 			this.tabShow.UseVisualStyleBackColor = true;
+			// 
+			// gridChartViews
+			// 
+			this.gridChartViews.HScrollVisible = false;
+			this.gridChartViews.Location = new System.Drawing.Point(303,8);
+			this.gridChartViews.Name = "gridChartViews";
+			this.gridChartViews.ScrollValue = 0;
+			this.gridChartViews.Size = new System.Drawing.Size(191,173);
+			this.gridChartViews.TabIndex = 44;
+			this.gridChartViews.Title = "Chart Views";
+			this.gridChartViews.TranslationName = "GridChartViews";
+			this.gridChartViews.MouseClick += new System.Windows.Forms.MouseEventHandler(this.gridChartViews_MouseClick);
+			this.gridChartViews.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridChartViews_DoubleClick);
+			// 
+			// labelCustView
+			// 
+			this.labelCustView.AutoSize = true;
+			this.labelCustView.Font = new System.Drawing.Font("Microsoft Sans Serif",9.75F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.labelCustView.ForeColor = System.Drawing.Color.Red;
+			this.labelCustView.Location = new System.Drawing.Point(20,217);
+			this.labelCustView.Name = "labelCustView";
+			this.labelCustView.Size = new System.Drawing.Size(96,16);
+			this.labelCustView.TabIndex = 43;
+			this.labelCustView.Text = "Custom View";
+			this.labelCustView.Visible = false;
+			// 
+			// butChartViewDown
+			// 
+			this.butChartViewDown.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butChartViewDown.Autosize = true;
+			this.butChartViewDown.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butChartViewDown.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butChartViewDown.CornerRadius = 4F;
+			this.butChartViewDown.Image = global::OpenDental.Properties.Resources.down;
+			this.butChartViewDown.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butChartViewDown.Location = new System.Drawing.Point(426,195);
+			this.butChartViewDown.Name = "butChartViewDown";
+			this.butChartViewDown.Size = new System.Drawing.Size(68,24);
+			this.butChartViewDown.TabIndex = 41;
+			this.butChartViewDown.Text = "&Down";
+			this.butChartViewDown.Click += new System.EventHandler(this.butChartViewDown_Click);
+			// 
+			// butChartViewUp
+			// 
+			this.butChartViewUp.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butChartViewUp.Autosize = true;
+			this.butChartViewUp.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butChartViewUp.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butChartViewUp.CornerRadius = 4F;
+			this.butChartViewUp.Image = global::OpenDental.Properties.Resources.up;
+			this.butChartViewUp.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butChartViewUp.Location = new System.Drawing.Point(367,195);
+			this.butChartViewUp.Name = "butChartViewUp";
+			this.butChartViewUp.Size = new System.Drawing.Size(54,24);
+			this.butChartViewUp.TabIndex = 42;
+			this.butChartViewUp.Text = "&Up";
+			this.butChartViewUp.Click += new System.EventHandler(this.butChartViewUp_Click);
+			// 
+			// butChartViewAdd
+			// 
+			this.butChartViewAdd.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butChartViewAdd.Autosize = true;
+			this.butChartViewAdd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butChartViewAdd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butChartViewAdd.CornerRadius = 4F;
+			this.butChartViewAdd.Image = global::OpenDental.Properties.Resources.Add;
+			this.butChartViewAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butChartViewAdd.Location = new System.Drawing.Point(303,195);
+			this.butChartViewAdd.Name = "butChartViewAdd";
+			this.butChartViewAdd.Size = new System.Drawing.Size(59,24);
+			this.butChartViewAdd.TabIndex = 40;
+			this.butChartViewAdd.Text = "&Add";
+			this.butChartViewAdd.Click += new System.EventHandler(this.butChartViewAdd_Click);
 			// 
 			// checkShowOnlyFilmsAndExams
 			// 
@@ -2275,7 +2363,7 @@ namespace OpenDental{
 			this.checkShowOnlyHygieneProcs.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.checkShowOnlyHygieneProcs.Location = new System.Drawing.Point(15,121);
 			this.checkShowOnlyHygieneProcs.Name = "checkShowOnlyHygieneProcs";
-			this.checkShowOnlyHygieneProcs.Size = new System.Drawing.Size(129,13);
+			this.checkShowOnlyHygieneProcs.Size = new System.Drawing.Size(120,13);
 			this.checkShowOnlyHygieneProcs.TabIndex = 20;
 			this.checkShowOnlyHygieneProcs.Text = "Show Only Hygiene";
 			this.checkShowOnlyHygieneProcs.Click += new System.EventHandler(this.checkShowHygieneProcs_Click);
@@ -2290,7 +2378,7 @@ namespace OpenDental{
 			this.groupBox7.Controls.Add(this.checkLabCase);
 			this.groupBox7.Controls.Add(this.checkRx);
 			this.groupBox7.Controls.Add(this.checkComm);
-			this.groupBox7.Location = new System.Drawing.Point(145,4);
+			this.groupBox7.Location = new System.Drawing.Point(144,4);
 			this.groupBox7.Name = "groupBox7";
 			this.groupBox7.Size = new System.Drawing.Size(125,148);
 			this.groupBox7.TabIndex = 19;
@@ -2402,7 +2490,7 @@ namespace OpenDental{
 			this.butShowAll.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butShowAll.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butShowAll.CornerRadius = 4F;
-			this.butShowAll.Location = new System.Drawing.Point(14,176);
+			this.butShowAll.Location = new System.Drawing.Point(9,177);
 			this.butShowAll.Name = "butShowAll";
 			this.butShowAll.Size = new System.Drawing.Size(53,23);
 			this.butShowAll.TabIndex = 12;
@@ -2416,7 +2504,7 @@ namespace OpenDental{
 			this.butShowNone.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butShowNone.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butShowNone.CornerRadius = 4F;
-			this.butShowNone.Location = new System.Drawing.Point(86,176);
+			this.butShowNone.Location = new System.Drawing.Point(68,177);
 			this.butShowNone.Name = "butShowNone";
 			this.butShowNone.Size = new System.Drawing.Size(58,23);
 			this.butShowNone.TabIndex = 13;
@@ -2690,25 +2778,6 @@ namespace OpenDental{
 			// 
 			this.menuConsent.Popup += new System.EventHandler(this.menuConsent_Popup);
 			// 
-			// toothChart
-			// 
-			this.toothChart.AutoFinish = false;
-			this.toothChart.ColorBackground = System.Drawing.Color.FromArgb(((int)(((byte)(150)))),((int)(((byte)(145)))),((int)(((byte)(152)))));
-			this.toothChart.Cursor = System.Windows.Forms.Cursors.Default;
-			this.toothChart.CursorTool = SparksToothChart.CursorTool.Pointer;
-			this.toothChart.DeviceFormat = null;
-			this.toothChart.DrawMode = OpenDentBusiness.DrawingMode.Simple2D;
-			this.toothChart.Location = new System.Drawing.Point(0,26);
-			this.toothChart.Name = "toothChart";
-			this.toothChart.PerioMode = false;
-			this.toothChart.PreferredPixelFormatNumber = 0;
-			this.toothChart.Size = new System.Drawing.Size(410,307);
-			this.toothChart.TabIndex = 194;
-			toothChartData1.SizeControl = new System.Drawing.Size(410,307);
-			this.toothChart.TcData = toothChartData1;
-			this.toothChart.UseHardware = false;
-			this.toothChart.SegmentDrawn += new SparksToothChart.ToothChartDrawEventHandler(this.toothChart_SegmentDrawn);
-			// 
 			// panelEcw
 			// 
 			this.panelEcw.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -2776,6 +2845,44 @@ namespace OpenDental{
 			this.butECWup.TabIndex = 196;
 			this.butECWup.UseVisualStyleBackColor = true;
 			this.butECWup.Click += new System.EventHandler(this.butECWup_Click);
+			// 
+			// menuToothChart
+			// 
+			this.menuToothChart.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItemChartBig,
+            this.menuItemChartSave});
+			this.menuToothChart.Popup += new System.EventHandler(this.menuToothChart_Popup);
+			// 
+			// menuItemChartBig
+			// 
+			this.menuItemChartBig.Index = 0;
+			this.menuItemChartBig.Text = "Show Big";
+			this.menuItemChartBig.Click += new System.EventHandler(this.menuItemChartBig_Click);
+			// 
+			// menuItemChartSave
+			// 
+			this.menuItemChartSave.Index = 1;
+			this.menuItemChartSave.Text = "Save to Images";
+			this.menuItemChartSave.Click += new System.EventHandler(this.menuItemChartSave_Click);
+			// 
+			// toothChart
+			// 
+			this.toothChart.AutoFinish = false;
+			this.toothChart.ColorBackground = System.Drawing.Color.FromArgb(((int)(((byte)(150)))),((int)(((byte)(145)))),((int)(((byte)(152)))));
+			this.toothChart.Cursor = System.Windows.Forms.Cursors.Default;
+			this.toothChart.CursorTool = SparksToothChart.CursorTool.Pointer;
+			this.toothChart.DeviceFormat = null;
+			this.toothChart.DrawMode = OpenDentBusiness.DrawingMode.Simple2D;
+			this.toothChart.Location = new System.Drawing.Point(0,26);
+			this.toothChart.Name = "toothChart";
+			this.toothChart.PerioMode = false;
+			this.toothChart.PreferredPixelFormatNumber = 0;
+			this.toothChart.Size = new System.Drawing.Size(410,307);
+			this.toothChart.TabIndex = 194;
+			toothChartData1.SizeControl = new System.Drawing.Size(410,307);
+			this.toothChart.TcData = toothChartData1;
+			this.toothChart.UseHardware = false;
+			this.toothChart.SegmentDrawn += new SparksToothChart.ToothChartDrawEventHandler(this.toothChart_SegmentDrawn);
 			// 
 			// butForeignKey
 			// 
@@ -2876,25 +2983,6 @@ namespace OpenDental{
 			this.gridPtInfo.Title = "Patient Info";
 			this.gridPtInfo.TranslationName = "TableChartPtInfo";
 			this.gridPtInfo.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPtInfo_CellDoubleClick);
-			// 
-			// menuToothChart
-			// 
-			this.menuToothChart.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.menuItemChartBig,
-            this.menuItemChartSave});
-			this.menuToothChart.Popup += new System.EventHandler(this.menuToothChart_Popup);
-			// 
-			// menuItemChartBig
-			// 
-			this.menuItemChartBig.Index = 0;
-			this.menuItemChartBig.Text = "Show Big";
-			this.menuItemChartBig.Click += new System.EventHandler(this.menuItemChartBig_Click);
-			// 
-			// menuItemChartSave
-			// 
-			this.menuItemChartSave.Index = 1;
-			this.menuItemChartSave.Text = "Save to Images";
-			this.menuItemChartSave.Click += new System.EventHandler(this.menuItemChartSave_Click);
 			// 
 			// ContrChart
 			// 
@@ -3264,6 +3352,7 @@ namespace OpenDental{
 			FillPtInfo();
 			FillDxProcImage();
 			FillImages();
+			FillChartGrid();
 		}
 
 		private void EasyHideClinicalData(){
@@ -6224,63 +6313,78 @@ namespace OpenDental{
 			//sometimes used for testing purposes
 		}
 
-		private void checkShowTP_Click(object sender, System.EventArgs e) {
+		private void checkShowTP_Click(object sender,System.EventArgs e) {
+			labelCustView.Visible=true;
 			FillProgNotes();
 		}
 
-		private void checkShowC_Click(object sender, System.EventArgs e) {
+		private void checkShowC_Click(object sender,System.EventArgs e) {
+			labelCustView.Visible=true;
 			FillProgNotes();
 		}
 
-		private void checkShowE_Click(object sender, System.EventArgs e) {
+		private void checkShowE_Click(object sender,System.EventArgs e) {
+			labelCustView.Visible=true;
 			FillProgNotes();
 		}
 
-		private void checkShowR_Click(object sender, System.EventArgs e) {
+		private void checkShowR_Click(object sender,System.EventArgs e) {
+			labelCustView.Visible=true;
 			FillProgNotes();
 		}
 
 		private void checkShowCn_Click(object sender,EventArgs e) {
+			labelCustView.Visible=true;
 			FillProgNotes();
 		}
 
-		private void checkNotes_Click(object sender, System.EventArgs e) {
+		private void checkNotes_Click(object sender,System.EventArgs e) {
+			labelCustView.Visible=true;
 			FillProgNotes();
 		}
 
 		private void checkAppt_Click(object sender,EventArgs e) {
+			labelCustView.Visible=true;
 			FillProgNotes();
 		}
 
 		private void checkComm_Click(object sender,EventArgs e) {
+			labelCustView.Visible=true;
 			FillProgNotes();
 		}
 
 		private void checkCommFamily_Click(object sender,EventArgs e) {
-			FillProgNotes();
-		}	
-
-		private void checkLabCase_Click(object sender,EventArgs e) {
+			labelCustView.Visible=true;
 			FillProgNotes();
 		}
 
-		private void checkRx_Click(object sender, System.EventArgs e) {
+		private void checkLabCase_Click(object sender,EventArgs e) {
+			labelCustView.Visible=true;
+			FillProgNotes();
+		}
+
+		private void checkRx_Click(object sender,System.EventArgs e) {
+			labelCustView.Visible=true;
 			FillProgNotes();
 		}
 
 		private void checkTasks_Click(object sender,EventArgs e) {
+			labelCustView.Visible=true;
 			FillProgNotes();
 		}
 
 		private void checkEmail_Click(object sender,EventArgs e) {
+			labelCustView.Visible=true;
 			FillProgNotes();
 		}
 
-		private void checkSheets_Click(object sender, System.EventArgs e) {
+		private void checkSheets_Click(object sender,System.EventArgs e) {
+			labelCustView.Visible=true;
 			FillProgNotes();
 		}
 
-		private void checkShowTeeth_Click(object sender, System.EventArgs e) {
+		private void checkShowTeeth_Click(object sender,System.EventArgs e) {
+			labelCustView.Visible=true;
 			if(checkShowTeeth.Checked) {
 				checkShowTP.Checked=true;
 				checkShowC.Checked=true;
@@ -6319,10 +6423,12 @@ namespace OpenDental{
 		}
 
 		private void checkAudit_Click(object sender,EventArgs e) {
+			labelCustView.Visible=true;
 			FillProgNotes();
 		}
 
-		private void butShowAll_Click(object sender, System.EventArgs e) {
+		private void butShowAll_Click(object sender,System.EventArgs e) {
+			labelCustView.Visible=true;
 			checkShowTP.Checked=true;
 			checkShowC.Checked=true;
 			checkShowE.Checked=true;
@@ -6343,7 +6449,8 @@ namespace OpenDental{
 			FillProgNotes();
 		}
 
-		private void butShowNone_Click(object sender, System.EventArgs e) {
+		private void butShowNone_Click(object sender,System.EventArgs e) {
+			labelCustView.Visible=true;
 			checkShowTP.Checked=false;
 			checkShowC.Checked=false;
 			checkShowE.Checked=false;
@@ -6362,7 +6469,8 @@ namespace OpenDental{
 			FillProgNotes();
 		}
 
-		private void checkShowHygieneProcs_Click(object sender, EventArgs e){
+		private void checkShowHygieneProcs_Click(object sender,EventArgs e) {
+			labelCustView.Visible=true;
 			checkComm.Checked = false;
 			checkCommFamily.Checked = false;
 			checkLabCase.Checked = false;
@@ -6375,7 +6483,8 @@ namespace OpenDental{
 			FillProgNotes();
 		}
 
-		private void checkShowOnlyFilmsAndExams_Click(object sender, EventArgs e){
+		private void checkShowOnlyFilmsAndExams_Click(object sender,EventArgs e) {
+			labelCustView.Visible=true;
 			checkComm.Checked = false;
 			checkCommFamily.Checked = false;
 			checkLabCase.Checked = false;
@@ -7227,6 +7336,127 @@ namespace OpenDental{
 				+DocCur.DateCreated.ToShortDateString()+": "+DocCur.Description);
 		}
 
+		private void FillChartGrid() {
+			if(PatCur==null) {
+				butChartViewAdd.Enabled=false;
+				butChartViewDown.Enabled=false;
+				butChartViewUp.Enabled=false;
+				gridChartViews.Enabled=false;
+				return;
+			}
+			else {
+				butChartViewAdd.Enabled=true;
+				butChartViewDown.Enabled=true;
+				butChartViewUp.Enabled=true;
+				gridChartViews.Enabled=true;
+			}
+			ChartViews.RefreshCache();
+			gridChartViews.BeginUpdate();
+			gridChartViews.Columns.Clear();
+			ODGridColumn col=new ODGridColumn(Lan.g("GridChartViews","F#"),25);
+			gridChartViews.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("GridChartViews","View"),0);
+			gridChartViews.Columns.Add(col);
+			gridChartViews.Rows.Clear();
+			ODGridRow row;
+			for(int i=0;i<ChartViews.Listt.Count;i++) {
+				ChartViewCur=ChartViews.Listt[i];
+				ChartViewCur.ItemOrder=i;
+				ChartViews.Update(ChartViewCur);
+				row=new ODGridRow();
+				row.Cells.Add("F"+(i+1));
+				row.Cells.Add(ChartViewCur.Description);
+				gridChartViews.Rows.Add(row);
+			}
+			gridChartViews.EndUpdate();
+		}
+
+		private void gridChartViews_DoubleClick(object sender,ODGridClickEventArgs e) {
+			FormChartView FormC=new FormChartView(); 
+			FormC.ChartViewCur=ChartViews.Listt[e.Row];
+			FormC.ShowDialog();
+		}
+
+		private void butChartViewAdd_Click(object sender,EventArgs e) {
+			FormChartView FormChartAdd=new FormChartView();
+			FormChartAdd.ChartViewCur=new ChartView();
+			FormChartAdd.ChartViewCur.IsNew=true;
+			FormChartAdd.ShowDialog();
+		}
+
+		private void butChartViewUp_Click(object sender,EventArgs e) {
+			if(gridChartViews.SelectedIndices.Length==0) {
+				MsgBox.Show(this,"Please select a view first.");
+				return;
+			}
+			int oldIdx;
+			int newIdx;
+			ChartView oldItem;
+			ChartView newItem;
+			if(gridChartViews.GetSelectedIndex()!=-1) {
+				oldIdx=gridChartViews.GetSelectedIndex();
+				if(oldIdx==0) {
+					return;//can't move up any more
+				}
+				newIdx=oldIdx-1; 
+				for(int i=0;i<ChartViews.Listt.Count;i++) {
+					ChartViewCur=ChartViews.Listt[i];
+					if(ChartViewCur.ItemOrder==oldIdx) {
+						oldItem=ChartViewCur;
+						newItem=ChartViews.Listt[newIdx];
+						oldItem.ItemOrder=newItem.ItemOrder;
+						newItem.ItemOrder+=1;
+						ChartViews.Update(oldItem);
+						ChartViews.Update(newItem);
+					}
+				}
+				FillChartGrid();
+				gridChartViews.SetSelected(newIdx,true);
+			}
+		}
+
+		private void butChartViewDown_Click(object sender,EventArgs e) {
+			if(gridChartViews.SelectedIndices.Length==0) {
+				MsgBox.Show(this,"Please select a view first.");
+				return;
+			}
+			int oldIdx;
+			int newIdx;
+			ChartView oldItem;
+			ChartView newItem;
+			if(gridChartViews.GetSelectedIndex()!=-1) {
+				oldIdx=gridChartViews.GetSelectedIndex();
+				if(oldIdx==ChartViews.Listt.Count-1) {
+					return;//can't move down any more
+				}
+				newIdx=oldIdx+1;
+				for(int i=0;i<ChartViews.Listt.Count;i++) {
+					ChartViewCur=ChartViews.Listt[i];
+					if(ChartViewCur.ItemOrder==newIdx) {
+						newItem=ChartViewCur;
+						oldItem=ChartViews.Listt[oldIdx];
+						newItem.ItemOrder=oldItem.ItemOrder;
+						oldItem.ItemOrder+=1;
+						ChartViews.Update(oldItem);
+						ChartViews.Update(newItem);
+					}
+				}
+				FillChartGrid();
+				gridChartViews.SetSelected(newIdx,true);
+			}
+		}
+
+		private void gridChartViews_MouseClick(object sender,MouseEventArgs e) {
+			//if(gridChartViews.SelectedIndex==0) {
+			//  return;
+			//}
+			labelCustView.Visible=false;
+		}
+
+		private void gridChartViews_SelectedIndexChanged(object sender,EventArgs e) {
+			labelCustView.Visible=false;
+		}
+
 		private void butBig_Click(object sender,EventArgs e) {
 			
 		}
@@ -7388,6 +7618,14 @@ namespace OpenDental{
 		private void butLoadDirectX_Click(object sender,EventArgs e) {
 			//toothChart.LoadDirectX();
 		}
+
+		
+
+
+		
+
+		
+
 
 		
 

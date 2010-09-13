@@ -45,6 +45,25 @@ namespace OpenDentBusiness{
 		}
 		#endregion
 
+		///<summary></summary>
+		public static void Update(ChartView chartView) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),chartView);
+				return;
+			}
+			Crud.ChartViewCrud.Update(chartView);
+		}
+
+		///<summary></summary>
+		public static void Delete(long chartViewNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),chartViewNum);
+				return;
+			}
+			string command= "DELETE FROM chartview WHERE ChartViewNum = "+POut.Long(chartViewNum);
+			Db.NonQ(command);
+		}
+
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
 
@@ -72,25 +91,6 @@ namespace OpenDentBusiness{
 				return chartView.ChartViewNum;
 			}
 			return Crud.ChartViewCrud.Insert(chartView);
-		}
-
-		///<summary></summary>
-		public static void Update(ChartView chartView){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),chartView);
-				return;
-			}
-			Crud.ChartViewCrud.Update(chartView);
-		}
-
-		///<summary></summary>
-		public static void Delete(long chartViewNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),chartViewNum);
-				return;
-			}
-			string command= "DELETE FROM chartview WHERE ChartViewNum = "+POut.Long(chartViewNum);
-			Db.NonQ(command);
 		}
 		*/
 

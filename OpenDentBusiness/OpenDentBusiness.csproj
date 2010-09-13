@@ -136,6 +136,7 @@
     <Compile Include="Crud\BenefitCrud.cs" />
     <Compile Include="Crud\CanadianNetworkCrud.cs" />
     <Compile Include="Crud\CarrierCrud.cs" />
+    <Compile Include="Crud\ChartViewCrud.cs" />
     <Compile Include="Crud\ClaimAttachCrud.cs" />
     <Compile Include="Crud\ClaimCondCodeLogCrud.cs" />
     <Compile Include="Crud\ClaimCrud.cs" />
@@ -193,6 +194,7 @@
     <Compile Include="Data Interface\ApptFieldDefs.cs" />
     <Compile Include="Data Interface\ApptFields.cs" />
     <Compile Include="Data Interface\Automations.cs" />
+    <Compile Include="Data Interface\ChartViews.cs" />
     <Compile Include="Data Interface\Guardians.cs" />
     <Compile Include="Data Interface\Equipments.cs" />
     <Compile Include="Data Interface\ProcApptColors.cs" />
