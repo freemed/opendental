@@ -15,7 +15,12 @@ using System.Threading;
 
 namespace OpenDental {
 	public partial class FormWebForms:Form {
-
+		
+		/// <summary>
+		/// This Form does 2 things: 
+		/// 1) Retrieve data of filled out web forms from a web service and convert them into sheets and patients. Using the first name, last name and birth date it will check for existing patients. If an existing patient is found a new sheet is created. If no patient is found, a  patient and a sheet is created.
+		/// 2) Show all the sheets that have been created in 1) using a date filter. 
+		/// </summary>
 		public FormWebForms() {
 			InitializeComponent();
 			Lan.F(this);
@@ -28,7 +33,6 @@ namespace OpenDental {
 			//if a thread is not used, the RetrieveAndSaveData() Method will freeze the application if the web is slow 
 			this.backgroundWorker1.RunWorkerAsync();
 			SetDates();
-			FillGrid();
 		}
 
 		/// <summary>
@@ -146,26 +150,20 @@ namespace OpenDental {
 						//log invalid birth date  format
 					}
 					long PatNum=Patients.GetPatNumByNameAndBirthday(LastName,FirstName,birthDate);
-					long NewPatNum=0;
 					Patient newPat=null;
 					Sheet newSheet=null;
 					DateTime SheetDateTimeSubmitted= (from s in SheetDetails where s.SheetID==SheetID
 						select s.DateTimeSubmitted).First();
 					if(PatNum==0) {
-						newPat=CreateNewPatient(SingleSheet.ToList());
-						NewPatNum=newPat.PatNum;
-						newSheet=CreateSheet(NewPatNum,SheetDateTimeSubmitted,SingleSheet.ToList());
+						newPat=CreatePatient(SingleSheet.ToList());
+						PatNum=newPat.PatNum;
 					}
-					else {
-						newSheet=CreateSheet(PatNum,SheetDateTimeSubmitted,SingleSheet.ToList());
-					}
-					if(DataExistsInDb(newPat,newSheet)==true) {
+					newSheet=CreateSheet(PatNum,SheetDateTimeSubmitted,SingleSheet.ToList());
+					if(DataExistsInDb(newSheet)==true) {
 						SheetsForDeletion.Add(SheetID);
 					}
 				}// end of for loop
 				wh.DeleteSheetData(RegistrationKey,SheetsForDeletion.ToArray());
-				
-
 			}
 			catch(Exception e) {
 				MessageBox.Show(e.Message);
@@ -174,15 +172,8 @@ namespace OpenDental {
 		/// <summary>
 		/// compare values of the new patient or the new sheet with values that have been inserted into the db if false is returned then there is a mismatch.
 		/// </summary>
-		private bool DataExistsInDb(Patient newPat,Sheet newSheet) {
+		private bool DataExistsInDb(Sheet newSheet) {
 			bool dataExistsInDb=true;
-			if(newPat!=null) {
-				long PatNum=newPat.PatNum;
-				Patient patientFromDb=Patients.GetPat(PatNum);
-				if(patientFromDb!=null) {
-					dataExistsInDb=ComparePatients(patientFromDb,newPat);
-				}
-			}
 			if(newSheet!=null) {
 				long SheetNum=newSheet.SheetNum;
 				Sheet sheetFromDb=Sheets.GetSheet(SheetNum);
@@ -195,7 +186,7 @@ namespace OpenDental {
 
 		/// <summary>
 		/// </summary>
-		private Patient CreateNewPatient(List<OpenDental.WebHostSynch.webforms_sheetfield> SingleSheet) {
+		private Patient CreatePatient(List<OpenDental.WebHostSynch.webforms_sheetfield> SingleSheet) {
 			Patient newPat=null;
 			newPat=new Patient();
 			//PatFields must have a one to one mapping with the SheetWebFields
@@ -379,9 +370,14 @@ namespace OpenDental {
 							}
 						}
 						break;
+					case "addressAndHmPhoneIsSameEntireFamily":
+					if(SheetWebFieldValue=="True") {
+						fld.FieldValue="X";
+					}
+					break;
 					default:
 						fld.FieldValue=SheetWebFieldValue;
-						break;
+					break;
 				}//switch case
 			}
 			catch(Exception e) {
@@ -465,7 +461,7 @@ namespace OpenDental {
 			}
 		}
 
-		/// <summary>
+		/// <summary> Dennis: This function is not being used - delete later.
 		/// </summary>
 		private bool ComparePatients(Patient patientFromDb,Patient newPat) {
 			bool isEqual=true;

@@ -9,6 +9,10 @@ using System.Threading;
 using OpenDentBusiness;
 
 namespace OpenDental {
+
+	/// <summary>
+	/// This Form is primarily used by the dental office to set various UI parameters of a webform: eg. border colors and heading text.
+	/// </summary>
 	public partial class FormWebFormSetup:Form {
 
 		private string WebFormAddress="";
