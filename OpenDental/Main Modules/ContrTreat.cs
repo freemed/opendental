@@ -1480,20 +1480,26 @@ namespace OpenDental{
 				//max=Benefits.GetAnnualMaxDisplay(BenefitList,PlanCur.PlanNum,PatPlanList[1].PatPlanNum);
 				maxFam=Benefits.GetAnnualMaxDisplay(BenefitList,PlanCur.PlanNum,PatPlanList[1].PatPlanNum,true);
 				maxInd=Benefits.GetAnnualMaxDisplay(BenefitList,PlanCur.PlanNum,PatPlanList[1].PatPlanNum,false);
-				//if(maxFam
-//todo: finish secondary, using primary as an example.
-				if(maxInd==-1){
+				if(maxFam==-1){
+					textFamSecMax.Text="";
+				}
+				else{
+					textFamSecMax.Text=maxFam.ToString("F");
+				}
+				if(maxInd==-1){//if annual max is blank
 					textSecMax.Text="";
 					textSecRem.Text="";
 				}
 				else{
 					remain=maxInd-used-pend;
-					if(remain<0) {
+					if(remain<0){
 						remain=0;
 					}
+					//textFamSecMax.Text=max.ToString("F");
 					textSecMax.Text=maxInd.ToString("F");
 					textSecRem.Text=remain.ToString("F");
 				}
+				//deductible:
 				ded=Benefits.GetDeductGeneralDisplay(BenefitList,PlanCur.PlanNum,PatPlanList[1].PatPlanNum,BenefitCoverageLevel.Individual);
 				dedFam=Benefits.GetDeductGeneralDisplay(BenefitList,PlanCur.PlanNum,PatPlanList[1].PatPlanNum,BenefitCoverageLevel.Family);
 				if(ded!=-1){
