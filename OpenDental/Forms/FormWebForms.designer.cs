@@ -35,6 +35,7 @@ namespace OpenDental{
 			this.but45days = new OpenDental.UI.Button();
 			this.but90days = new OpenDental.UI.Button();
 			this.butDatesAll = new OpenDental.UI.Button();
+			this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
 			this.butRetrieve = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butOK = new OpenDental.UI.Button();
@@ -162,6 +163,11 @@ namespace OpenDental{
 			this.butDatesAll.Text = "All Dates";
 			this.butDatesAll.Click += new System.EventHandler(this.butDatesAll_Click);
 			// 
+			// backgroundWorker1
+			// 
+			this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
+			this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
+			// 
 			// butRetrieve
 			// 
 			this.butRetrieve.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -186,7 +192,7 @@ namespace OpenDental{
 			this.gridMain.Location = new System.Drawing.Point(12,87);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(647,461);
+			this.gridMain.Size = new System.Drawing.Size(647,419);
 			this.gridMain.TabIndex = 4;
 			this.gridMain.Title = "Webforms";
 			this.gridMain.TranslationName = "TableWebforms";
@@ -200,7 +206,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(669,488);
+			this.butOK.Location = new System.Drawing.Point(669,446);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 3;
@@ -215,7 +221,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(669,524);
+			this.butCancel.Location = new System.Drawing.Point(669,482);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 2;
@@ -225,7 +231,7 @@ namespace OpenDental{
 			// FormWebForms
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(755,560);
+			this.ClientSize = new System.Drawing.Size(755,518);
 			this.Controls.Add(this.groupDateRange);
 			this.Controls.Add(this.butRetrieve);
 			this.Controls.Add(this.gridMain);
@@ -260,5 +266,6 @@ namespace OpenDental{
 		private OpenDental.UI.Button but45days;
 		private OpenDental.UI.Button but90days;
 		private OpenDental.UI.Button butDatesAll;
+		private System.ComponentModel.BackgroundWorker backgroundWorker1;
 	}
 }

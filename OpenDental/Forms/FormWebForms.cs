@@ -26,8 +26,7 @@ namespace OpenDental {
 		/// </summary>
 		private void FormWebForms_Shown(object sender,EventArgs e) {
 			//if a thread is not used, the RetrieveAndSaveData() Method will freeze the application if the web is slow 
-			Thread t = new Thread(RetrieveAndSaveData);
-			t.Start();
+			this.backgroundWorker1.RunWorkerAsync();
 			SetDates();
 			FillGrid();
 		}
@@ -108,7 +107,9 @@ namespace OpenDental {
 					return;
 				}
 				wh.SetPreferences(RegistrationKey,PrefC.GetColor(PrefName.WebFormsBorderColor).ToArgb(),PrefC.GetStringSilent(PrefName.WebFormsHeading1),PrefC.GetStringSilent(PrefName.WebFormsHeading2));
-				OpenDental.WebHostSynch.webforms_sheetfield[] wbsf=wh.GetSheetData(RegistrationKey);
+				OpenDental.WebHostSynch.webforms_sheetfield[] wbsf=wh.GetSheetFieldData(RegistrationKey);
+				// The second call GetSheetData is used to retrieve the Datetime the sheet was submitted because as of now I don't quite know how to get it elegently by calling a single method.
+				OpenDental.WebHostSynch.webforms_sheet[] SheetDetails=wh.GetSheetData(RegistrationKey);
 				if(wbsf.Count()==0) {
 					MsgBox.Show(this,"No Patient forms retrieved from server");
 					return;
@@ -148,20 +149,22 @@ namespace OpenDental {
 					long NewPatNum=0;
 					Patient newPat=null;
 					Sheet newSheet=null;
+					DateTime SheetDateTimeSubmitted= (from s in SheetDetails where s.SheetID==SheetID
+						select s.DateTimeSubmitted).First();
 					if(PatNum==0) {
 						newPat=CreateNewPatient(SingleSheet.ToList());
 						NewPatNum=newPat.PatNum;
-						newSheet=CreateSheet(NewPatNum,SingleSheet.ToList());
+						newSheet=CreateSheet(NewPatNum,SheetDateTimeSubmitted,SingleSheet.ToList());
 					}
 					else {
-						newSheet=CreateSheet(PatNum,SingleSheet.ToList());
+						newSheet=CreateSheet(PatNum,SheetDateTimeSubmitted,SingleSheet.ToList());
 					}
 					if(DataExistsInDb(newPat,newSheet)==true) {
 						SheetsForDeletion.Add(SheetID);
 					}
 				}// end of for loop
 				wh.DeleteSheetData(RegistrationKey,SheetsForDeletion.ToArray());
-				FillGrid(); 
+				
 
 			}
 			catch(Exception e) {
@@ -238,7 +241,7 @@ namespace OpenDental {
 
 		/// <summary>
 		/// </summary>
-		private Sheet CreateSheet(long PatNum,List<OpenDental.WebHostSynch.webforms_sheetfield> SingleSheet) {
+		private Sheet CreateSheet(long PatNum,DateTime SheetDateTimeSubmitted, List<OpenDental.WebHostSynch.webforms_sheetfield> SingleSheet) {
 			Sheet sheet=null;//only useful if not Terminal
 			try {
 				SheetDef sheetDef;
@@ -277,6 +280,7 @@ namespace OpenDental {
 					}// j loop
 				}// i loop
 				sheet.IsWebForm=true;
+				sheet.DateTimeSheet=SheetDateTimeSubmitted;
 				Sheets.SaveNewSheet(sheet);
 				return sheet;
 			}
@@ -351,7 +355,6 @@ namespace OpenDental {
 								fld.FieldValue="X";
 							}
 						}
-
 						if(fld.RadioButtonValue=="Parttime") {
 							if(SheetWebFieldValue=="Parttime") {
 								fld.FieldValue="X";
@@ -515,8 +518,7 @@ namespace OpenDental {
 				return;
 			}
 			//if a thread is not used, the RetrieveAndSaveData() Method will freeze the application if the web is slow 
-			Thread t = new Thread(RetrieveAndSaveData);
-			t.Start();
+			this.backgroundWorker1.RunWorkerAsync();
 		}
 
 		private void but30days_Click(object sender,EventArgs e) {
@@ -565,6 +567,14 @@ namespace OpenDental {
 			formW.ShowDialog();
 		}
 
+		private void backgroundWorker1_RunWorkerCompleted(object sender,RunWorkerCompletedEventArgs e) {
+			FillGrid(); 
+		}
+
+		private void backgroundWorker1_DoWork(object sender,DoWorkEventArgs e) {
+			RetrieveAndSaveData();
+		}
+
 		private void butOK_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.OK;
 		}
@@ -572,6 +582,10 @@ namespace OpenDental {
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+
+
+
 
 
 

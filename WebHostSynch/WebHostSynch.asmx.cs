@@ -6,9 +6,6 @@ using System.Web.Services;
 using System.Configuration;
 using OpenDentBusiness;
 
-
-
-
 namespace WebHostSynch {
 	/// <summary>
 	/// Summary description for WebHostSynch
@@ -51,24 +48,29 @@ namespace WebHostSynch {
 		}
 
 		[WebMethod]
-		public List<webforms_sheetfield> GetSheetData(string RegistrationKey) {
+		public List<webforms_sheetfield> GetSheetFieldData(string RegistrationKey) {
 			long DentalOfficeID=GetDentalOfficeID(RegistrationKey);
 			if(DentalOfficeID==0) {
 				Logger.Information("Incorrect registration key. IPAddress="+HttpContext.Current.Request.UserHostAddress+" RegistrationKey="+RegistrationKey);
 			}
 			ODWebServiceEntities db=new ODWebServiceEntities();
-			/*
-			EndDate=EndDate.AddDays(1);//if this is put in LINQ it will not work. so change date first
-			var wsfObj=from wsf in db.webforms_sheetfield
-					   where wsf.webforms_sheet.webforms_preference.DentalOfficeID==DentalOfficeID
-					   &&(StartDate<=wsf.webforms_sheet.DateTimeSubmitted&&wsf.webforms_sheet.DateTimeSubmitted<=EndDate)
-					   select wsf;
-			*/
 			var wsfObj=from wsf in db.webforms_sheetfield
 				where wsf.webforms_sheet.webforms_preference.DentalOfficeID==DentalOfficeID
 				select wsf;
-
 			return wsfObj.ToList();
+		}
+
+		[WebMethod]
+		public List<webforms_sheet> GetSheetData(string RegistrationKey) {
+			long DentalOfficeID=GetDentalOfficeID(RegistrationKey);
+			if(DentalOfficeID==0) {
+				Logger.Information("Incorrect registration key. IPAddress="+HttpContext.Current.Request.UserHostAddress+" RegistrationKey="+RegistrationKey);
+			}
+			ODWebServiceEntities db=new ODWebServiceEntities();
+			var wsObj=from wsf in db.webforms_sheet
+				where wsf.webforms_preference.DentalOfficeID==DentalOfficeID
+				select wsf;
+			return wsObj.ToList();
 		}
 
 		[WebMethod]
@@ -76,10 +78,11 @@ namespace WebHostSynch {
 			long DentalOfficeID=GetDentalOfficeID(RegistrationKey);
 			if(DentalOfficeID==0) {
 				Logger.Information("Incorrect registration key. IPAddress="+HttpContext.Current.Request.UserHostAddress+" RegistrationKey="+RegistrationKey);
+				return;
 			}
 			ODWebServiceEntities db=new ODWebServiceEntities();
 			for(int i=0;i<SheetsForDeletion.Count();i++) {
-				long SheetID=SheetsForDeletion.ElementAt(i);// LINQ throws an error if this is directly put into the selectexpression
+				long SheetID=SheetsForDeletion.ElementAt(i);// LINQ throws an error if this is directly put into the select expression
 				// first delete all sheet field then delete the sheet so that a foreign key error is not thrown
 				var delSheetField=from wsf in db.webforms_sheetfield where wsf.webforms_sheet.SheetID==SheetID
 								  select wsf;
@@ -88,7 +91,7 @@ namespace WebHostSynch {
 					db.DeleteObject(delSheetField.ToList().ElementAt(j));
 				}
 				var delSheet=from ws in db.webforms_sheet where ws.SheetID==SheetID
-							 select ws;
+					select ws;
 				db.DeleteObject(delSheet.First());
 			}
 			db.SaveChanges();
@@ -146,7 +149,6 @@ namespace WebHostSynch {
 		/// </summary>
 		[WebMethod]
 		public void ReadSheetDef(SheetDef sheetDef) {
-
 			string a=sheetDef.ToString();
 		}
 		/// <summary>
