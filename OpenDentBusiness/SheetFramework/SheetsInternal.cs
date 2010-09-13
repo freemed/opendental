@@ -48,12 +48,8 @@ namespace OpenDentBusiness{
 					return MedicalHistory();
 				case SheetInternalType.LabSlip:
 					return LabSlip();
-				case SheetInternalType.ExamSheetOralCancerScreening:
-					return ExamSheetOralCancerScreening();
-				case SheetInternalType.ExamSheetPlaqueIndex:
-					return ExamSheetPlaqueIndex();
-				case SheetInternalType.ExamSheetPSR:
-					return ExamSheetPSR();
+				case SheetInternalType.ExamSheet:
+					return ExamSheet();
 				default:
 					throw new ApplicationException("Invalid SheetInternalType.");
 			}
@@ -931,53 +927,31 @@ Fam Urgent Fin Note: [famFinUrgNote]"
 			return sheet;
 		}
 
-		public static SheetDef ExamSheetOralCancerScreening(){
+		public static SheetDef ExamSheet(){
 			SheetDef sheet=new SheetDef(SheetTypeEnum.ExamSheet);
-			sheet.Description="Oral Cancer Screening";
+			sheet.Description="Exam";
 			sheet.FontName="Microsoft Sans Serif";
 			sheet.FontSize=11f;
 			sheet.Width=850;
 			sheet.Height=1100;
-			//int rowH=19;
-			//int x=100;
+			int rowH=25;
 			int y=100;
 			//Title----------------------------------------------------------------------------------------------------------
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Oral Cancer Screening",12f,sheet.FontName,true,270,y,200,22));
-			//TODO:
-			return sheet;
-		}
-
-		public static SheetDef ExamSheetPlaqueIndex(){
-			SheetDef sheet=new SheetDef(SheetTypeEnum.ExamSheet);
-			sheet.Description="Plaque Index";
-			sheet.FontName="Microsoft Sans Serif";
-			sheet.FontSize=11f;
-			sheet.Width=850;
-			sheet.Height=1100;
-			//int rowH=19;
-			//int x=100;
-			int y=100;
-			//Title----------------------------------------------------------------------------------------------------------
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Plaque Index",12f,sheet.FontName,true,270,y,200,22));
-			//TODO:
-			return sheet;
-		}
-
-		public static SheetDef ExamSheetPSR(){
-			SheetDef sheet=new SheetDef(SheetTypeEnum.ExamSheet);
-			sheet.Description="PSR";
-			sheet.FontName="Microsoft Sans Serif";
-			sheet.FontSize=11f;
-			sheet.Width=850;
-			sheet.Height=1100;
-			//int rowH=19;
-			//int x=100;
-			int y=100;
-			//Title----------------------------------------------------------------------------------------------------------
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("PSR",12f,sheet.FontName,true,270,y,200,22));
-
-
-			//TODO:
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Exam for [nameFL]",12f,sheet.FontName,true,275,y,325,20));
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("sheet.DateTimeSheet",12f,sheet.FontName,false,350,y,100,20));
+			y+=rowH;
+			int x=100;
+			string[] fieldText=new string[] {"TMJ","Neck","Tongue","Palate","Floor of Mouth"};
+			for(int i=0;i<fieldText.Length;i++){
+				sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText(fieldText[i],sheet.FontSize,sheet.FontName,false,x,y,100,20));
+				sheet.SheetFieldDefs.Add(SheetFieldDef.NewRect(x+120,y+2,15,15));
+				sheet.SheetFieldDefs.Add(SheetFieldDef.NewCheckBox("misc",x+121,y+4,13,13));
+				sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("WNL",sheet.FontSize,sheet.FontName,false,x+140,y,40,20));
+				sheet.SheetFieldDefs.Add(SheetFieldDef.NewLine(x+200,y+22,450,0));
+				sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("misc",sheet.FontSize,sheet.FontName,false,x+200,y,450,20));
+				y+=rowH;
+			}
 			return sheet;
 		}
 

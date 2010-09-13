@@ -377,7 +377,14 @@ namespace OpenDentBusiness{
 
 		public static List<SheetFieldDef> GetExamSheet(OutInCheck outInCheck){
 			List<SheetFieldDef> list=new List<SheetFieldDef>();
-			//TODO: Need to know what fields to add/include before this can be written.
+			if(outInCheck==OutInCheck.Out) {
+			}
+			else if(outInCheck==OutInCheck.In){
+				list.Add(NewInput("misc"));
+			}
+			else if(outInCheck==OutInCheck.Check){
+				list.Add(NewCheck("misc"));
+			}
 			return list;
 		}
 

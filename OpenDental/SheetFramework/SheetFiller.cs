@@ -1202,9 +1202,14 @@ namespace OpenDental{
 		}
 
 		private static void FillFieldsForExamSheet(Sheet sheet,Patient pat) {
-			//TODO:
+			foreach(SheetField field in sheet.SheetFields) {
+				switch(field.FieldName) {
+					case "sheet.DateTimeSheet":
+						field.FieldValue=sheet.DateTimeSheet.ToShortDateString();
+						break;
+				}
+			}
 		}
-
 
 	}
 }

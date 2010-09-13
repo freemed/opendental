@@ -99,9 +99,7 @@ namespace OpenDentBusiness {
 		HIPAA,
 		MedicalHistory,
 		LabSlip,
-		ExamSheetOralCancerScreening,
-		ExamSheetPlaqueIndex,
-		ExamSheetPSR
+		ExamSheet
 	}
 
 	public enum OutInCheck{

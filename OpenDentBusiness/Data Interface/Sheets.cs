@@ -251,9 +251,10 @@ namespace OpenDentBusiness{
 			return table;
 		}
 
-		public static DataTable GetExamSheetsTable(long patNum) {
+		///<summary>Returns all sheets for the given patient in the given date range which have a description matching the examDescript in a case insensitive manner. If examDescript is blank, then sheets with any description are returned.</summary>
+		public static DataTable GetExamSheetsTable(long patNum,DateTime startDate,DateTime endDate,string examDescript) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetTable(MethodBase.GetCurrentMethod(),patNum);
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),patNum,startDate,endDate,examDescript);
 			}
 			DataTable table=new DataTable("");
 			DataRow row;
@@ -269,8 +270,12 @@ namespace OpenDentBusiness{
 			List<DataRow> rows=new List<DataRow>();
 			//sheet---------------------------------------------------------------------------------------
 			string command="SELECT DateTimeSheet,SheetNum,Description "
-				+"FROM sheet WHERE PatNum ="+POut.Long(patNum)+" "
-				+"AND SheetType="+POut.Long((int)SheetTypeEnum.ExamSheet);
+				+"FROM sheet WHERE PatNum="+POut.Long(patNum)+" "
+				+"AND SheetType="+((int)SheetTypeEnum.ExamSheet)+" ";
+			if(examDescript!=""){
+				command+="AND Description LIKE '"+POut.String(examDescript)+"' ";//case insensitive text matches
+			}
+			command+="AND DATE(DateTimeSheet)>="+POut.Date(startDate)+" AND DATE(DateTimeSheet)<="+POut.Date(endDate);
 			DataTable rawSheet=Db.GetTable(command);
 			DateTime dateT;
 			for(int i=0;i<rawSheet.Rows.Count;i++) {

@@ -13,6 +13,7 @@ namespace OpenDental {
 	public partial class FormExamSheets:Form {
 		DataTable table;
 		public long PatNum;
+		private List <SheetDef> examSheets=null;
 
 		public FormExamSheets() {
 			InitializeComponent();
@@ -22,7 +23,11 @@ namespace OpenDental {
 		private void FormExamSheets_Load(object sender,EventArgs e) {
 			Patient pat=Patients.GetLim(PatNum);
 			Text=Lan.g(this,"Exam Sheets for")+" "+pat.GetNameFL();
-			//fill listShow
+			//fill show
+			examSheets=SheetDefs.GetCustomForType(SheetTypeEnum.ExamSheet);
+			for(int i=0;i<examSheets.Count;i++){
+				comboExamType.Items.Add(examSheets[i].Description);
+			}
 			//select all rows in listShow
 			FillGrid();
 		}
@@ -43,7 +48,7 @@ namespace OpenDental {
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
-			table=Sheets.GetExamSheetsTable(PatNum);
+			table=Sheets.GetExamSheetsTable(PatNum,DateTime.MinValue,DateTime.MaxValue,comboExamType.Text.ToString());
 			for(int i=0;i<table.Rows.Count;i++){
 				row=new ODGridRow();
 				row.Cells.Add(table.Rows[i]["date"].ToString());
@@ -83,6 +88,14 @@ namespace OpenDental {
 			FillGrid();
 		}
 
+		private void comboExamType_SelectedValueChanged(object sender,EventArgs e) {
+			FillGrid();
+		}
+
+		private void butRefreshList_Click(object sender,EventArgs e) {
+			FillGrid();
+		}
+
 		private void butAdd_Click(object sender,EventArgs e) {
 			FormSheetPicker FormS=new FormSheetPicker();
 			FormS.SheetType=SheetTypeEnum.ExamSheet;
@@ -103,21 +116,14 @@ namespace OpenDental {
 			FormSF.ShowDialog();
 			if(FormSF.DialogResult==DialogResult.OK) {
 				FillGrid();
+				gridMain.SetSelected(false);//unselect all rows
+				gridMain.SetSelected(gridMain.Rows.Count-1,true);//Select the newly added row. Always last, since ordered by date.
 			}
 		}
 
 		private void butCancel_Click(object sender,EventArgs e) {
 			Close();
 		}
-
-		
-
-		
-
-		
-
-		
-
 		
 
 		
