@@ -607,10 +607,10 @@ namespace OpenDental{
 				}
 				int minutes=(int)(ContrAppt.SheetClickedonMin/ContrApptSheet.MinPerIncr)*ContrApptSheet.MinPerIncr;
 				apt.AptDateTime=new DateTime(d.Year,d.Month,d.Day,ContrAppt.SheetClickedonHour,minutes,0);
-				apt.TimeAskedToArrive=apt.AptDateTime.AddMinutes(-PatCur.AskToArriveEarly);
+				apt.DateTimeAskedToArrive=apt.AptDateTime.AddMinutes(-PatCur.AskToArriveEarly);
 				if(PatCur.AskToArriveEarly>0){
 					MessageBox.Show(Lan.g(this,"Ask patient to arrive")+" "+PatCur.AskToArriveEarly
-						+" "+Lan.g(this,"minutes early at")+" "+apt.TimeAskedToArrive.ToShortTimeString()+".");
+						+" "+Lan.g(this,"minutes early at")+" "+apt.DateTimeAskedToArrive.ToShortTimeString()+".");
 				}
 				apt.AptStatus=ApptStatus.Scheduled;
 				apt.Op=ContrAppt.SheetClickedonOp;
@@ -792,10 +792,10 @@ namespace OpenDental{
 				int minutes=(int)(ContrAppt.SheetClickedonMin/ContrApptSheet.MinPerIncr)*ContrApptSheet.MinPerIncr;
 				AptCur.AptDateTime=new DateTime(d.Year,d.Month,d.Day
 					,ContrAppt.SheetClickedonHour,minutes,0);
-				AptCur.TimeAskedToArrive=AptCur.AptDateTime.AddMinutes(-PatCur.AskToArriveEarly);
+				AptCur.DateTimeAskedToArrive=AptCur.AptDateTime.AddMinutes(-PatCur.AskToArriveEarly);
 				if(PatCur.AskToArriveEarly>0){
 					MessageBox.Show(Lan.g(this,"Ask patient to arrive")+" "+PatCur.AskToArriveEarly
-						+" "+Lan.g(this,"minutes early at")+" "+AptCur.TimeAskedToArrive.ToShortTimeString()+".");
+						+" "+Lan.g(this,"minutes early at")+" "+AptCur.DateTimeAskedToArrive.ToShortTimeString()+".");
 				}
 				AptCur.Op=ContrAppt.SheetClickedonOp;
 				Operatory curOp=Operatories.GetOperatory(AptCur.Op);

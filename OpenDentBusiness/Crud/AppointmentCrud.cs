@@ -46,32 +46,32 @@ namespace OpenDentBusiness.Crud{
 			Appointment appointment;
 			for(int i=0;i<table.Rows.Count;i++) {
 				appointment=new Appointment();
-				appointment.AptNum           = PIn.Long  (table.Rows[i]["AptNum"].ToString());
-				appointment.PatNum           = PIn.Long  (table.Rows[i]["PatNum"].ToString());
-				appointment.AptStatus        = (ApptStatus)PIn.Int(table.Rows[i]["AptStatus"].ToString());
-				appointment.Pattern          = PIn.String(table.Rows[i]["Pattern"].ToString());
-				appointment.Confirmed        = PIn.Long  (table.Rows[i]["Confirmed"].ToString());
-				appointment.TimeLocked       = PIn.Bool  (table.Rows[i]["TimeLocked"].ToString());
-				appointment.Op               = PIn.Long  (table.Rows[i]["Op"].ToString());
-				appointment.Note             = PIn.String(table.Rows[i]["Note"].ToString());
-				appointment.ProvNum          = PIn.Long  (table.Rows[i]["ProvNum"].ToString());
-				appointment.ProvHyg          = PIn.Long  (table.Rows[i]["ProvHyg"].ToString());
-				appointment.AptDateTime      = PIn.DateT (table.Rows[i]["AptDateTime"].ToString());
-				appointment.NextAptNum       = PIn.Long  (table.Rows[i]["NextAptNum"].ToString());
-				appointment.UnschedStatus    = PIn.Long  (table.Rows[i]["UnschedStatus"].ToString());
-				appointment.IsNewPatient     = PIn.Bool  (table.Rows[i]["IsNewPatient"].ToString());
-				appointment.ProcDescript     = PIn.String(table.Rows[i]["ProcDescript"].ToString());
-				appointment.Assistant        = PIn.Long  (table.Rows[i]["Assistant"].ToString());
-				appointment.ClinicNum        = PIn.Long  (table.Rows[i]["ClinicNum"].ToString());
-				appointment.IsHygiene        = PIn.Bool  (table.Rows[i]["IsHygiene"].ToString());
-				appointment.DateTStamp       = PIn.DateT (table.Rows[i]["DateTStamp"].ToString());
-				appointment.DateTimeArrived  = PIn.DateT (table.Rows[i]["DateTimeArrived"].ToString());
-				appointment.DateTimeSeated   = PIn.DateT (table.Rows[i]["DateTimeSeated"].ToString());
-				appointment.DateTimeDismissed= PIn.DateT (table.Rows[i]["DateTimeDismissed"].ToString());
-				appointment.InsPlan1         = PIn.Long  (table.Rows[i]["InsPlan1"].ToString());
-				appointment.InsPlan2         = PIn.Long  (table.Rows[i]["InsPlan2"].ToString());
-				appointment.TimeAskedToArrive= PIn.DateT (table.Rows[i]["TimeAskedToArrive"].ToString());
-				appointment.ProcsColored     = PIn.String(table.Rows[i]["ProcsColored"].ToString());
+				appointment.AptNum               = PIn.Long  (table.Rows[i]["AptNum"].ToString());
+				appointment.PatNum               = PIn.Long  (table.Rows[i]["PatNum"].ToString());
+				appointment.AptStatus            = (ApptStatus)PIn.Int(table.Rows[i]["AptStatus"].ToString());
+				appointment.Pattern              = PIn.String(table.Rows[i]["Pattern"].ToString());
+				appointment.Confirmed            = PIn.Long  (table.Rows[i]["Confirmed"].ToString());
+				appointment.TimeLocked           = PIn.Bool  (table.Rows[i]["TimeLocked"].ToString());
+				appointment.Op                   = PIn.Long  (table.Rows[i]["Op"].ToString());
+				appointment.Note                 = PIn.String(table.Rows[i]["Note"].ToString());
+				appointment.ProvNum              = PIn.Long  (table.Rows[i]["ProvNum"].ToString());
+				appointment.ProvHyg              = PIn.Long  (table.Rows[i]["ProvHyg"].ToString());
+				appointment.AptDateTime          = PIn.DateT (table.Rows[i]["AptDateTime"].ToString());
+				appointment.NextAptNum           = PIn.Long  (table.Rows[i]["NextAptNum"].ToString());
+				appointment.UnschedStatus        = PIn.Long  (table.Rows[i]["UnschedStatus"].ToString());
+				appointment.IsNewPatient         = PIn.Bool  (table.Rows[i]["IsNewPatient"].ToString());
+				appointment.ProcDescript         = PIn.String(table.Rows[i]["ProcDescript"].ToString());
+				appointment.Assistant            = PIn.Long  (table.Rows[i]["Assistant"].ToString());
+				appointment.ClinicNum            = PIn.Long  (table.Rows[i]["ClinicNum"].ToString());
+				appointment.IsHygiene            = PIn.Bool  (table.Rows[i]["IsHygiene"].ToString());
+				appointment.DateTStamp           = PIn.DateT (table.Rows[i]["DateTStamp"].ToString());
+				appointment.DateTimeArrived      = PIn.DateT (table.Rows[i]["DateTimeArrived"].ToString());
+				appointment.DateTimeSeated       = PIn.DateT (table.Rows[i]["DateTimeSeated"].ToString());
+				appointment.DateTimeDismissed    = PIn.DateT (table.Rows[i]["DateTimeDismissed"].ToString());
+				appointment.InsPlan1             = PIn.Long  (table.Rows[i]["InsPlan1"].ToString());
+				appointment.InsPlan2             = PIn.Long  (table.Rows[i]["InsPlan2"].ToString());
+				appointment.DateTimeAskedToArrive= PIn.DateT (table.Rows[i]["DateTimeAskedToArrive"].ToString());
+				appointment.ProcsColored         = PIn.String(table.Rows[i]["ProcsColored"].ToString());
 				retVal.Add(appointment);
 			}
 			return retVal;
@@ -91,7 +91,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="AptNum,";
 			}
-			command+="PatNum,AptStatus,Pattern,Confirmed,TimeLocked,Op,Note,ProvNum,ProvHyg,AptDateTime,NextAptNum,UnschedStatus,IsNewPatient,ProcDescript,Assistant,ClinicNum,IsHygiene,DateTimeArrived,DateTimeSeated,DateTimeDismissed,InsPlan1,InsPlan2,TimeAskedToArrive,ProcsColored) VALUES(";
+			command+="PatNum,AptStatus,Pattern,Confirmed,TimeLocked,Op,Note,ProvNum,ProvHyg,AptDateTime,NextAptNum,UnschedStatus,IsNewPatient,ProcDescript,Assistant,ClinicNum,IsHygiene,DateTimeArrived,DateTimeSeated,DateTimeDismissed,InsPlan1,InsPlan2,DateTimeAskedToArrive,ProcsColored) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(appointment.AptNum)+",";
 			}
@@ -119,7 +119,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.DateT (appointment.DateTimeDismissed)+","
 				+    POut.Long  (appointment.InsPlan1)+","
 				+    POut.Long  (appointment.InsPlan2)+","
-				+    POut.DateT (appointment.TimeAskedToArrive)+","
+				+    POut.DateT (appointment.DateTimeAskedToArrive)+","
 				+"'"+POut.String(appointment.ProcsColored)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
@@ -133,31 +133,31 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one Appointment in the database.</summary>
 		internal static void Update(Appointment appointment){
 			string command="UPDATE appointment SET "
-				+"PatNum           =  "+POut.Long  (appointment.PatNum)+", "
-				+"AptStatus        =  "+POut.Int   ((int)appointment.AptStatus)+", "
-				+"Pattern          = '"+POut.String(appointment.Pattern)+"', "
-				+"Confirmed        =  "+POut.Long  (appointment.Confirmed)+", "
-				+"TimeLocked       =  "+POut.Bool  (appointment.TimeLocked)+", "
-				+"Op               =  "+POut.Long  (appointment.Op)+", "
-				+"Note             = '"+POut.String(appointment.Note)+"', "
-				+"ProvNum          =  "+POut.Long  (appointment.ProvNum)+", "
-				+"ProvHyg          =  "+POut.Long  (appointment.ProvHyg)+", "
-				+"AptDateTime      =  "+POut.DateT (appointment.AptDateTime)+", "
-				+"NextAptNum       =  "+POut.Long  (appointment.NextAptNum)+", "
-				+"UnschedStatus    =  "+POut.Long  (appointment.UnschedStatus)+", "
-				+"IsNewPatient     =  "+POut.Bool  (appointment.IsNewPatient)+", "
-				+"ProcDescript     = '"+POut.String(appointment.ProcDescript)+"', "
-				+"Assistant        =  "+POut.Long  (appointment.Assistant)+", "
-				+"ClinicNum        =  "+POut.Long  (appointment.ClinicNum)+", "
-				+"IsHygiene        =  "+POut.Bool  (appointment.IsHygiene)+", "
+				+"PatNum               =  "+POut.Long  (appointment.PatNum)+", "
+				+"AptStatus            =  "+POut.Int   ((int)appointment.AptStatus)+", "
+				+"Pattern              = '"+POut.String(appointment.Pattern)+"', "
+				+"Confirmed            =  "+POut.Long  (appointment.Confirmed)+", "
+				+"TimeLocked           =  "+POut.Bool  (appointment.TimeLocked)+", "
+				+"Op                   =  "+POut.Long  (appointment.Op)+", "
+				+"Note                 = '"+POut.String(appointment.Note)+"', "
+				+"ProvNum              =  "+POut.Long  (appointment.ProvNum)+", "
+				+"ProvHyg              =  "+POut.Long  (appointment.ProvHyg)+", "
+				+"AptDateTime          =  "+POut.DateT (appointment.AptDateTime)+", "
+				+"NextAptNum           =  "+POut.Long  (appointment.NextAptNum)+", "
+				+"UnschedStatus        =  "+POut.Long  (appointment.UnschedStatus)+", "
+				+"IsNewPatient         =  "+POut.Bool  (appointment.IsNewPatient)+", "
+				+"ProcDescript         = '"+POut.String(appointment.ProcDescript)+"', "
+				+"Assistant            =  "+POut.Long  (appointment.Assistant)+", "
+				+"ClinicNum            =  "+POut.Long  (appointment.ClinicNum)+", "
+				+"IsHygiene            =  "+POut.Bool  (appointment.IsHygiene)+", "
 				//DateTStamp can only be set by MySQL
-				+"DateTimeArrived  =  "+POut.DateT (appointment.DateTimeArrived)+", "
-				+"DateTimeSeated   =  "+POut.DateT (appointment.DateTimeSeated)+", "
-				+"DateTimeDismissed=  "+POut.DateT (appointment.DateTimeDismissed)+", "
-				+"InsPlan1         =  "+POut.Long  (appointment.InsPlan1)+", "
-				+"InsPlan2         =  "+POut.Long  (appointment.InsPlan2)+", "
-				+"TimeAskedToArrive=  "+POut.DateT (appointment.TimeAskedToArrive)+", "
-				+"ProcsColored     = '"+POut.String(appointment.ProcsColored)+"' "
+				+"DateTimeArrived      =  "+POut.DateT (appointment.DateTimeArrived)+", "
+				+"DateTimeSeated       =  "+POut.DateT (appointment.DateTimeSeated)+", "
+				+"DateTimeDismissed    =  "+POut.DateT (appointment.DateTimeDismissed)+", "
+				+"InsPlan1             =  "+POut.Long  (appointment.InsPlan1)+", "
+				+"InsPlan2             =  "+POut.Long  (appointment.InsPlan2)+", "
+				+"DateTimeAskedToArrive=  "+POut.DateT (appointment.DateTimeAskedToArrive)+", "
+				+"ProcsColored         = '"+POut.String(appointment.ProcsColored)+"' "
 				+"WHERE AptNum = "+POut.Long(appointment.AptNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
@@ -254,9 +254,9 @@ namespace OpenDentBusiness.Crud{
 				if(command!=""){ command+=",";}
 				command+="InsPlan2 = "+POut.Long(appointment.InsPlan2)+"";
 			}
-			if(appointment.TimeAskedToArrive != oldAppointment.TimeAskedToArrive) {
+			if(appointment.DateTimeAskedToArrive != oldAppointment.DateTimeAskedToArrive) {
 				if(command!=""){ command+=",";}
-				command+="TimeAskedToArrive = "+POut.DateT(appointment.TimeAskedToArrive)+"";
+				command+="DateTimeAskedToArrive = "+POut.DateT(appointment.DateTimeAskedToArrive)+"";
 			}
 			if(appointment.ProcsColored != oldAppointment.ProcsColored) {
 				if(command!=""){ command+=",";}

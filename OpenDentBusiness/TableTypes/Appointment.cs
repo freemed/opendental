@@ -60,9 +60,9 @@ namespace OpenDentBusiness{
 		public long InsPlan1;
 		///<summary>FK to insplan.PlanNum for the secoondary insurance plan at the time the appointment is set complete. May be 0.</summary>
 		public long InsPlan2;
-		///<summary>Time. Ignore date portion.</summary>
+		///<summary>Date and time patient asked to arrive, or minval if patient not asked to arrive at a different time than appt.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
-		public DateTime TimeAskedToArrive;
+		public DateTime DateTimeAskedToArrive;
 		///<summary>Stores XML for the procs colors</summary>
 		public String ProcsColored;
 

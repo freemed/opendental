@@ -2259,10 +2259,10 @@ namespace OpenDental{
 			long assignedHyg=Schedules.GetAssignedProvNumForSpot(SchedListPeriod,curOp,true,aptCur.AptDateTime);
 			List<Procedure> procsForSingleApt=null;
 			if(aptCur.AptStatus!=ApptStatus.PtNote && aptCur.AptStatus!=ApptStatus.PtNoteCompleted) {
-				aptCur.TimeAskedToArrive=aptCur.AptDateTime.AddMinutes(-PatCur.AskToArriveEarly);
+				aptCur.DateTimeAskedToArrive=aptCur.AptDateTime.AddMinutes(-PatCur.AskToArriveEarly);
 				if(PatCur.AskToArriveEarly>0){
 					MessageBox.Show(Lan.g(this,"Ask patient to arrive")+" "+PatCur.AskToArriveEarly
-						+" "+Lan.g(this,"minutes early at")+" "+aptCur.TimeAskedToArrive.ToShortTimeString()+".");
+						+" "+Lan.g(this,"minutes early at")+" "+aptCur.DateTimeAskedToArrive.ToShortTimeString()+".");
 				}
 				//if no dentist/hygienist is assigned to spot, then keep the original dentist/hygienist without prompt.  All appts must have prov.
 				if((assignedDent!=0 && assignedDent!=aptCur.ProvNum) || (assignedHyg!=0 && assignedHyg!=aptCur.ProvHyg)) {
@@ -2923,10 +2923,10 @@ namespace OpenDental{
 			long assignedHyg=Schedules.GetAssignedProvNumForSpot(SchedListPeriod,curOp,true,apt.AptDateTime);
 			List<Procedure> procsForSingleApt=null;
 			if(apt.AptStatus!=ApptStatus.PtNote && apt.AptStatus!=ApptStatus.PtNoteCompleted) {
-				apt.TimeAskedToArrive=apt.AptDateTime.AddMinutes(-PatCur.AskToArriveEarly);
+				apt.DateTimeAskedToArrive=apt.AptDateTime.AddMinutes(-PatCur.AskToArriveEarly);
 				if(PatCur.AskToArriveEarly>0){
 					MessageBox.Show(Lan.g(this,"Ask patient to arrive")+" "+PatCur.AskToArriveEarly
-						+" "+Lan.g(this,"minutes early at")+" "+apt.TimeAskedToArrive.ToShortTimeString()+".");
+						+" "+Lan.g(this,"minutes early at")+" "+apt.DateTimeAskedToArrive.ToShortTimeString()+".");
 				}
 				//if no dentist/hygenist is assigned to spot, then keep the original dentist/hygenist without prompt.  All appts must have prov.
 				if((assignedDent!=0 && assignedDent!=apt.ProvNum) || (assignedHyg!=0 && assignedHyg!=apt.ProvHyg)) {
@@ -3311,10 +3311,10 @@ namespace OpenDental{
 					//minutes always rounded down.
 					int minutes=(int)(ContrAppt.SheetClickedonMin/ContrApptSheet.MinPerIncr)*ContrApptSheet.MinPerIncr;
 					apt.AptDateTime=new DateTime(d.Year,d.Month,d.Day,ContrAppt.SheetClickedonHour,minutes,0);
-					apt.TimeAskedToArrive=apt.AptDateTime.AddMinutes(-PatCur.AskToArriveEarly);
+					apt.DateTimeAskedToArrive=apt.AptDateTime.AddMinutes(-PatCur.AskToArriveEarly);
 					if(PatCur.AskToArriveEarly>0){
 						MessageBox.Show(Lan.g(this,"Ask patient to arrive")+" "+PatCur.AskToArriveEarly
-							+" "+Lan.g(this,"minutes early at")+" "+apt.TimeAskedToArrive.ToShortTimeString()+".");
+							+" "+Lan.g(this,"minutes early at")+" "+apt.DateTimeAskedToArrive.ToShortTimeString()+".");
 					}
 					apt.Op=SheetClickedonOp;
 					Operatory curOp=Operatories.GetOperatory(apt.Op);

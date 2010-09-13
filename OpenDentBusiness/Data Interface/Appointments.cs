@@ -589,14 +589,15 @@ namespace OpenDentBusiness{
 			table.Columns.Add("provider");
 			table.Columns.Add("ProvHyg");
 			table.Columns.Add("ProvNum");
-			table.Columns.Add("TimeAskedToArrive");
+			table.Columns.Add("timeAskedToArrive");
 			table.Columns.Add("wkPhone");
 			table.Columns.Add("wirelessPhone");
 			string command="SELECT p1.Abbr ProvAbbr,p2.Abbr HygAbbr,patient.Address,patient.Address2,patient.AddrNote,"
 				+"patient.ApptModNote,AptDateTime,appointment.AptNum,AptStatus,Assistant,"
 				+"patient.BillingType,patient.BirthDate,"
 				+"carrier1.CarrierName carrierName1,carrier2.CarrierName carrierName2,"
-				+"patient.ChartNumber,patient.City,Confirmed,patient.CreditType,DateTimeChecked,DateTimeDue,DateTimeRecd,DateTimeSent,"
+				+"patient.ChartNumber,patient.City,Confirmed,patient.CreditType,DateTimeChecked,DateTimeDue,DateTimeRecd,DateTimeSent,DateTimeAskedToArrive,"
+				+"COUNT(DiseaseNum) hasDisease,"
 				+"guar.FamFinUrgNote,patient.FName,patient.Guarantor,patient.HmPhone,patient.ImageFolder,IsHygiene,IsNewPatient,"
 				+"LabCaseNum,patient.LName,patient.MedUrgNote,patient.MiddleI,Note,Op,appointment.PatNum,"
 				+"Pattern,patplan.PlanNum,patient.PreferConfirmMethod,patient.PreferContactMethod,patient.Preferred,"
@@ -609,7 +610,7 @@ namespace OpenDentBusiness{
 			else{
 				command+="WHERE procedurelog.AptNum=appointment.AptNum AND procedurelog.AptNum!=0) Production, ";
 			}
-			command+="ProvHyg,appointment.ProvNum,patient.State,appointment.TimeAskedToArrive,patient.WirelessPhone,patient.WkPhone,patient.Zip "
+			command+="ProvHyg,appointment.ProvNum,patient.State,patient.WirelessPhone,patient.WkPhone,patient.Zip "
 				+"FROM appointment LEFT JOIN patient ON patient.PatNum=appointment.PatNum "
 				+"LEFT JOIN provider p1 ON p1.ProvNum=appointment.ProvNum "
 				+"LEFT JOIN provider p2 ON p2.ProvNum=appointment.ProvHyg ";
@@ -624,7 +625,8 @@ namespace OpenDentBusiness{
 				+"LEFT JOIN insplan plan1 ON InsPlan1=plan1.PlanNum "
 				+"LEFT JOIN insplan plan2 ON InsPlan2=plan2.PlanNum "
 				+"LEFT JOIN carrier carrier1 ON plan1.CarrierNum=carrier1.CarrierNum "
-				+"LEFT JOIN carrier carrier2 ON plan2.CarrierNum=carrier2.CarrierNum ";
+				+"LEFT JOIN carrier carrier2 ON plan2.CarrierNum=carrier2.CarrierNum "
+				+"LEFT JOIN disease ON patient.PatNum=disease.PatNum ";
 			if(aptNum==0){
 				command+="WHERE AptDateTime >= "+POut.Date(dateStart)+" "
 					+"AND AptDateTime < "+POut.Date(dateEnd.AddDays(1))+" "
@@ -867,7 +869,7 @@ namespace OpenDentBusiness{
 					}
 				}
 				row["medOrPremed[+]"]="";
-				if(raw.Rows[i]["MedUrgNote"].ToString()!="" || raw.Rows[i]["Premed"].ToString()=="1") {
+				if(raw.Rows[i]["MedUrgNote"].ToString()!="" || raw.Rows[i]["Premed"].ToString()=="1" || raw.Rows[i]["hasDisease"].ToString()!="0") {
 					row["medOrPremed[+]"]="+";
 				}
 				row["MedUrgNote"]=raw.Rows[i]["MedUrgNote"].ToString();
@@ -912,7 +914,7 @@ namespace OpenDentBusiness{
 				}
 				row["ProvNum"]=raw.Rows[i]["ProvNum"].ToString();
 				row["ProvHyg"]=raw.Rows[i]["ProvHyg"].ToString();
-				row["TimeAskedToArrive"]=PIn.DateT(raw.Rows[i]["TimeAskedToArrive"].ToString()).ToShortTimeString();
+				row["timeAskedToArrive"]=PIn.DateT(raw.Rows[i]["DateTimeAskedToArrive"].ToString()).ToShortTimeString();
 				row["wirelessPhone"]=Lans.g("Appointments","Cell: ")+raw.Rows[i]["WirelessPhone"].ToString();
 				row["wkPhone"]=Lans.g("Appointments","Wk: ")+raw.Rows[i]["WkPhone"].ToString();
 				table.Rows.Add(row);

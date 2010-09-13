@@ -2511,7 +2511,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);
 				command="INSERT INTO preference(PrefName,ValueString) VALUES('WebFormsHeading2','"+POut.String("We are pleased to welcome you to our office. Please take a few minutes to fill out this form as completely as you can. If you have any questions we'll be glad to help you.")+"')";
 				Db.NonQ(command);
-				command="ALTER TABLE appointment ADD TimeAskedToArrive datetime NOT NULL default '0001-01-01 00:00:00'";
+				command="ALTER TABLE appointment ADD DateTimeAskedToArrive datetime NOT NULL default '0001-01-01 00:00:00'";
 				Db.NonQ(command);
 				command="INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
 					+") VALUES("
@@ -2603,3 +2603,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 			
 
+
+
+			

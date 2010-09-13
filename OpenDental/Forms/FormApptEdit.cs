@@ -1154,8 +1154,8 @@ namespace OpenDental{
 			textTimeArrived.ContextMenu=contextMenuTimeArrived;
 			textTimeSeated.ContextMenu=contextMenuTimeSeated;
 			textTimeDismissed.ContextMenu=contextMenuTimeDismissed;
-			if(AptCur.TimeAskedToArrive.TimeOfDay>TimeSpan.FromHours(0)){
-				textTimeAskedToArrive.Text=AptCur.TimeAskedToArrive.ToShortTimeString();
+			if(AptCur.DateTimeAskedToArrive.TimeOfDay>TimeSpan.FromHours(0)) {
+				textTimeAskedToArrive.Text=AptCur.DateTimeAskedToArrive.ToShortTimeString();
 			}
 			if(AptCur.DateTimeArrived.TimeOfDay>TimeSpan.FromHours(0)){
 				textTimeArrived.Text=AptCur.DateTimeArrived.ToShortTimeString();
@@ -2025,7 +2025,7 @@ namespace OpenDental{
 
 		///<summary>Called from butOK_Click and butPin_Click</summary>
 		private bool UpdateToDB(){
-			DateTime dateTimeAskedToArrive=AptCur.TimeAskedToArrive.Date;
+			DateTime dateTimeAskedToArrive=AptCur.DateTimeAskedToArrive.Date;
 			if(textTimeAskedToArrive.Text!=""){
 				try{
 					dateTimeAskedToArrive=AptCur.AptDateTime.Date+DateTime.Parse(textTimeAskedToArrive.Text).TimeOfDay;
@@ -2129,7 +2129,7 @@ namespace OpenDental{
 				AptCur.Assistant=Employees.ListShort[comboAssistant.SelectedIndex-1].EmployeeNum;
 			}
 			AptCur.IsNewPatient=checkIsNewPatient.Checked;
-			AptCur.TimeAskedToArrive=dateTimeAskedToArrive;
+			AptCur.DateTimeAskedToArrive=dateTimeAskedToArrive;
 			AptCur.DateTimeArrived=dateTimeArrived;
 			AptCur.DateTimeSeated=dateTimeSeated;
 			AptCur.DateTimeDismissed=dateTimeDismissed;
