@@ -26,59 +26,74 @@ namespace OpenDental {
 			Lan.F(this);
 		}
 
+		private void FormWebForms_Load(object sender,EventArgs e) {
+
+		}
+
 		/// <summary>
 		/// Code in this method was not put into the Form load event because often the "No Patient forms available" Meassage would popup even before a form is loaded - which could confuse the user.
 		/// </summary>
 		private void FormWebForms_Shown(object sender,EventArgs e) {
 			//if a thread is not used, the RetrieveAndSaveData() Method will freeze the application if the web is slow 
-			this.backgroundWorker1.RunWorkerAsync();
-			SetDates();
+			//this.backgroundWorker1.RunWorkerAsync();//should only run when click button.
+			//SetDates();
+			textDateStart.Text=DateTime.Today.ToShortDateString();
+			textDateEnd.Text=DateTime.Today.ToShortDateString();
+			FillGrid();
 		}
 
 		/// <summary>
 		/// </summary>
 		private void FillGrid() {
+			DateTime dateFrom=DateTime.Today;
+			DateTime dateTo=DateTime.Today;
 			try {
-				gridMain.Columns.Clear();
-				ODGridColumn col=new ODGridColumn(Lan.g(this,"Date"),70);
-				gridMain.Columns.Add(col);
-				col=new ODGridColumn(Lan.g(this,"Time"),42);
-				gridMain.Columns.Add(col);
-				col=new ODGridColumn(Lan.g(this,"Patient Last Name"),110);
-				gridMain.Columns.Add(col);
-				col=new ODGridColumn(Lan.g(this,"Patient Fist Name"),110);
-				gridMain.Columns.Add(col);
-				col=new ODGridColumn(Lan.g(this,"Description"),210);
-				gridMain.Columns.Add(col);
-				gridMain.Rows.Clear();
-				DateTime dateFrom=PIn.Date(textDateStart.Text);
-				DateTime dateTo=PIn.Date(textDateEnd.Text);
-				DataTable table=Sheets.GetWebFormSheetsTable(dateFrom,dateTo);
-				for(int i=0;i<table.Rows.Count;i++) {
-					long PatNum = 0;
-					Int64.TryParse(table.Rows[i]["PatNum"].ToString(),out PatNum);
-					Patient pat = Patients.GetPat(PatNum);
-					if(pat!=null) {
-						ODGridRow row=new ODGridRow();
-						row.Cells.Add(table.Rows[i]["date"].ToString());
-						row.Cells.Add(table.Rows[i]["time"].ToString());
-						row.Tag=PatNum;
-						row.Cells.Add(pat.LName);
-						row.Cells.Add(pat.FName);
-						row.Cells.Add(table.Rows[i]["description"].ToString());
-						gridMain.Rows.Add(row);
-					}
-				} 
-				gridMain.EndUpdate();
-				if(table.Rows.Count==0) {
-					MsgBox.Show(this,"No Patient forms available");
-					return;
+				dateFrom=PIn.Date(textDateStart.Text);//handles blank
+				if(textDateEnd.Text!=""){//if it is blank, default to today
+					dateTo=PIn.Date(textDateEnd.Text);
 				}
 			}
-			catch(Exception e) {
-				gridMain.EndUpdate();
-				MessageBox.Show(e.Message);
+			catch{
+				MsgBox.Show(this,"Invalid date");
+				return;
 			}
+			gridMain.Columns.Clear();
+			ODGridColumn col=new ODGridColumn(Lan.g(this,"Date"),70);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g(this,"Time"),42);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g(this,"Patient Last Name"),110);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g(this,"Patient Fist Name"),110);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g(this,"Description"),210);
+			gridMain.Columns.Add(col);
+			gridMain.Rows.Clear();
+			DataTable table=Sheets.GetWebFormSheetsTable(dateFrom,dateTo);
+			for(int i=0;i<table.Rows.Count;i++) {
+				long patNum = PIn.Long(table.Rows[i]["PatNum"].ToString());
+				Patient pat = Patients.GetPat(patNum);
+				if(pat!=null) {
+					ODGridRow row=new ODGridRow();
+					row.Cells.Add(table.Rows[i]["date"].ToString());
+					row.Cells.Add(table.Rows[i]["time"].ToString());
+					row.Tag=patNum;
+					row.Cells.Add(pat.LName);
+					row.Cells.Add(pat.FName);
+					row.Cells.Add(table.Rows[i]["description"].ToString());
+					gridMain.Rows.Add(row);
+				}
+			} 
+			gridMain.EndUpdate();
+				//if(table.Rows.Count==0) {
+				//	MsgBox.Show(this,"No Patient forms available");
+				//	return;
+				//}
+			//}
+			//catch(Exception e) {
+			//	gridMain.EndUpdate();
+			//	MessageBox.Show(e.Message);
+			//}
 		}
 
 		private void RetrieveAndSaveData() {
@@ -169,6 +184,7 @@ namespace OpenDental {
 				MessageBox.Show(e.Message);
 			}
 		}
+
 		/// <summary>
 		/// compare values of the new patient or the new sheet with values that have been inserted into the db if false is returned then there is a mismatch.
 		/// </summary>
@@ -387,7 +403,7 @@ namespace OpenDental {
 		}
 
 		/// <summary>
-	/// </summary>
+		/// </summary>
 		private void FillPatientFields(Patient newPat,FieldInfo field,string SheetWebFieldValue) {
 			try {
 				switch(field.Name) {
@@ -501,10 +517,10 @@ namespace OpenDental {
 			return isEqual;
 		}
 
-		private void SetDates() {
-			textDateStart.Text=DateTime.Today.ToShortDateString();
-			textDateEnd.Text=DateTime.Today.ToShortDateString();
-		}
+		//private void SetDates() {
+		//	textDateStart.Text=DateTime.Today.ToShortDateString();
+		//	textDateEnd.Text=DateTime.Today.ToShortDateString();
+		//}
 
 		private void butRetrieve_Click(object sender,System.EventArgs e) {
 			if(textDateStart.errorProvider1.GetError(textDateStart)!=""
@@ -517,26 +533,8 @@ namespace OpenDental {
 			this.backgroundWorker1.RunWorkerAsync();
 		}
 
-		private void but30days_Click(object sender,EventArgs e) {
-			textDateStart.Text=DateTime.Today.AddDays(-30).ToShortDateString();
-			textDateEnd.Text=DateTime.Today.ToShortDateString();
-			FillGrid();
-		}
-
-		private void but45days_Click(object sender,EventArgs e) {
-			textDateStart.Text=DateTime.Today.AddDays(-45).ToShortDateString();
-			textDateEnd.Text=DateTime.Today.ToShortDateString();
-			FillGrid();
-		}
-
-		private void but90days_Click(object sender,EventArgs e) {
-			textDateStart.Text=DateTime.Today.AddDays(-90).ToShortDateString();
-			textDateEnd.Text=DateTime.Today.ToShortDateString();
-			FillGrid();
-		}
-
-		private void butDatesAll_Click(object sender,EventArgs e) {
-			textDateStart.Text="";
+		private void butToday_Click(object sender,EventArgs e) {
+			textDateStart.Text=DateTime.Today.ToShortDateString();
 			textDateEnd.Text=DateTime.Today.ToShortDateString();
 			FillGrid();
 		}
@@ -578,6 +576,8 @@ namespace OpenDental {
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+	
 
 
 
