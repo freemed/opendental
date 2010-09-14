@@ -23,27 +23,22 @@ namespace OpenDental {
 		}
 
 		private void FormWebFormSetup_Load(object sender,EventArgs e) {
-			ShowPreferences();
-		}
-
-		private void ShowPreferences() {
-			butWebformBorderColor.BackColor=PrefC.GetColor(PrefName.WebFormsBorderColor);
-			textBoxWebformsHeading1.Text=PrefC.GetStringSilent(PrefName.WebFormsHeading1);
-			textBoxWebformsHeading2.Text=PrefC.GetStringSilent(PrefName.WebFormsHeading2);
-			textboxWebHostAddress.Text=PrefC.GetString(PrefName.WebHostSynchServerURL);
-			textBoxWebFormAddress.ReadOnly=true;
 			///the line below will allow the code to continue by not throwing an exception.
 			///It will accept the security certificate if there is a problem with the security certificate.
 			System.Net.ServicePointManager.ServerCertificateValidationCallback+=
-				delegate(object sender,System.Security.Cryptography.X509Certificates.X509Certificate certificate,
+				delegate(object sender2,System.Security.Cryptography.X509Certificates.X509Certificate certificate,
 				System.Security.Cryptography.X509Certificates.X509Chain chain,
 				System.Net.Security.SslPolicyErrors sslPolicyErrors) {
 					///do stuff here and return true or false accordingly.
 					///In this particular case it always returns true i.e accepts any certificate.
 					return true;
 				};
-			//if a thread is not used, the GetWebFormAddress() Method will freeze the application if the web is slow 
+			//The only function of the background thread is to fill the WebFormAddressBox from the web server.
 			this.backgroundWorker1.RunWorkerAsync();
+			textboxWebHostAddress.Text=PrefC.GetString(PrefName.WebHostSynchServerURL);
+			butWebformBorderColor.BackColor=PrefC.GetColor(PrefName.WebFormsBorderColor);
+			textBoxWebformsHeading1.Text=PrefC.GetStringSilent(PrefName.WebFormsHeading1);
+			textBoxWebformsHeading2.Text=PrefC.GetStringSilent(PrefName.WebFormsHeading2);
 		}
 
 		private void butWebformBorderColor_Click(object sender,EventArgs e) {
@@ -62,28 +57,6 @@ namespace OpenDental {
 			butWebformBorderColor.BackColor=colorDialog1.Color;
 		}
 
-		private void SavePreferences() {
-			try {
-				Prefs.UpdateLong(PrefName.WebFormsBorderColor,butWebformBorderColor.BackColor.ToArgb());
-				Prefs.UpdateString(PrefName.WebFormsHeading1,textBoxWebformsHeading1.Text.Trim());
-				Prefs.UpdateString(PrefName.WebFormsHeading2,textBoxWebformsHeading2.Text.Trim());
-				Prefs.UpdateString(PrefName.WebHostSynchServerURL,textboxWebHostAddress.Text.Trim());
-				// update preferences on server
-				string RegistrationKey=PrefC.GetString(PrefName.RegistrationKey);
-				WebHostSynch.WebHostSynch wh=new WebHostSynch.WebHostSynch();
-				wh.Url=PrefC.GetString(PrefName.WebHostSynchServerURL);
-				if(wh.CheckRegistrationKey(RegistrationKey)==false) {
-					MsgBox.Show(this,"Registration key provided by the dental office is incorrect");
-					return;
-				}
-				wh.SetPreferences(RegistrationKey,PrefC.GetColor(PrefName.WebFormsBorderColor).ToArgb(),PrefC.GetStringSilent(PrefName.WebFormsHeading1),PrefC.GetStringSilent(PrefName.WebFormsHeading2));
-				//TestSheetUpload();
-			}
-			catch(Exception ex) {
-				MessageBox.Show(ex.Message);
-			}
-		}
-
 		private void backgroundWorker1_RunWorkerCompleted(object sender,RunWorkerCompletedEventArgs e) {
 			textBoxWebFormAddress.Text=WebFormAddress; //the textbox is set here because it will thow an error if put under _Dowork
 		}
@@ -92,6 +65,7 @@ namespace OpenDental {
 			GetWebFormAddress();
 		}
 
+		/// <summary>Only called from worker thread.</summary>
 		private void GetWebFormAddress() {
 			try{
 				string RegistrationKey=PrefC.GetString(PrefName.RegistrationKey);
@@ -106,10 +80,8 @@ namespace OpenDental {
 			catch(Exception ex) {
 				MessageBox.Show(ex.Message);
 			}
-			
 		}
 		
-
 		/// <summary>
 		/// Ignore this method - this is for the 'next' version of the Webforms.
 		/// Here sheetDef can be uploaded to the web form Open Dental
@@ -132,7 +104,28 @@ namespace OpenDental {
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
-			SavePreferences();
+			Cursor=Cursors.WaitCursor;
+			try {
+				Prefs.UpdateLong(PrefName.WebFormsBorderColor,butWebformBorderColor.BackColor.ToArgb());
+				Prefs.UpdateString(PrefName.WebFormsHeading1,textBoxWebformsHeading1.Text.Trim());
+				Prefs.UpdateString(PrefName.WebFormsHeading2,textBoxWebformsHeading2.Text.Trim());
+				Prefs.UpdateString(PrefName.WebHostSynchServerURL,textboxWebHostAddress.Text.Trim());
+				// update preferences on server
+				string RegistrationKey=PrefC.GetString(PrefName.RegistrationKey);
+				WebHostSynch.WebHostSynch wh=new WebHostSynch.WebHostSynch();
+				wh.Url=PrefC.GetString(PrefName.WebHostSynchServerURL);
+				if(wh.CheckRegistrationKey(RegistrationKey)==false) {
+					Cursor=Cursors.Default;
+					MsgBox.Show(this,"Registration key provided by the dental office is incorrect");
+					return;
+				}
+				wh.SetPreferences(RegistrationKey,PrefC.GetColor(PrefName.WebFormsBorderColor).ToArgb(),PrefC.GetStringSilent(PrefName.WebFormsHeading1),PrefC.GetStringSilent(PrefName.WebFormsHeading2));
+				//TestSheetUpload();
+			}
+			catch(Exception ex) {
+				Cursor=Cursors.Default;
+				MessageBox.Show(ex.Message);
+			}
 			DialogResult=DialogResult.OK;
 		}
 

@@ -44,60 +44,60 @@ namespace OpenDental{
 			// 
 			// textboxWebHostAddress
 			// 
-			this.textboxWebHostAddress.Location = new System.Drawing.Point(195,34);
+			this.textboxWebHostAddress.Location = new System.Drawing.Point(171,35);
 			this.textboxWebHostAddress.Name = "textboxWebHostAddress";
 			this.textboxWebHostAddress.Size = new System.Drawing.Size(445,20);
 			this.textboxWebHostAddress.TabIndex = 45;
 			// 
 			// labelWebhostURL
 			// 
-			this.labelWebhostURL.Location = new System.Drawing.Point(24,35);
+			this.labelWebhostURL.Location = new System.Drawing.Point(0,36);
 			this.labelWebhostURL.Name = "labelWebhostURL";
 			this.labelWebhostURL.Size = new System.Drawing.Size(169,19);
 			this.labelWebhostURL.TabIndex = 46;
-			this.labelWebhostURL.Text = "Server Address for WebHost";
+			this.labelWebhostURL.Text = "Host Server Address";
 			this.labelWebhostURL.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// labelBorderColor
 			// 
-			this.labelBorderColor.Location = new System.Drawing.Point(28,24);
+			this.labelBorderColor.Location = new System.Drawing.Point(17,26);
 			this.labelBorderColor.Name = "labelBorderColor";
-			this.labelBorderColor.Size = new System.Drawing.Size(141,19);
+			this.labelBorderColor.Size = new System.Drawing.Size(111,19);
 			this.labelBorderColor.TabIndex = 48;
-			this.labelBorderColor.Text = "Border Color for Webforms";
+			this.labelBorderColor.Text = "Border Color";
 			this.labelBorderColor.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textBoxWebformsHeading1
 			// 
-			this.textBoxWebformsHeading1.Location = new System.Drawing.Point(171,54);
+			this.textBoxWebformsHeading1.Location = new System.Drawing.Point(130,52);
 			this.textBoxWebformsHeading1.Name = "textBoxWebformsHeading1";
-			this.textBoxWebformsHeading1.Size = new System.Drawing.Size(445,20);
+			this.textBoxWebformsHeading1.Size = new System.Drawing.Size(384,20);
 			this.textBoxWebformsHeading1.TabIndex = 49;
 			// 
 			// labelWebformsHeading1
 			// 
-			this.labelWebformsHeading1.Location = new System.Drawing.Point(55,54);
+			this.labelWebformsHeading1.Location = new System.Drawing.Point(14,52);
 			this.labelWebformsHeading1.Name = "labelWebformsHeading1";
 			this.labelWebformsHeading1.Size = new System.Drawing.Size(114,19);
 			this.labelWebformsHeading1.TabIndex = 50;
-			this.labelWebformsHeading1.Text = "Webforms Heading 1";
+			this.labelWebformsHeading1.Text = "Heading 1";
 			this.labelWebformsHeading1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textBoxWebformsHeading2
 			// 
-			this.textBoxWebformsHeading2.Location = new System.Drawing.Point(171,75);
+			this.textBoxWebformsHeading2.Location = new System.Drawing.Point(130,73);
 			this.textBoxWebformsHeading2.Multiline = true;
 			this.textBoxWebformsHeading2.Name = "textBoxWebformsHeading2";
-			this.textBoxWebformsHeading2.Size = new System.Drawing.Size(445,74);
+			this.textBoxWebformsHeading2.Size = new System.Drawing.Size(384,74);
 			this.textBoxWebformsHeading2.TabIndex = 51;
 			// 
 			// labelWebformsHeading2
 			// 
-			this.labelWebformsHeading2.Location = new System.Drawing.Point(55,75);
+			this.labelWebformsHeading2.Location = new System.Drawing.Point(14,73);
 			this.labelWebformsHeading2.Name = "labelWebformsHeading2";
 			this.labelWebformsHeading2.Size = new System.Drawing.Size(114,19);
 			this.labelWebformsHeading2.TabIndex = 52;
-			this.labelWebformsHeading2.Text = "Webforms Heading 2";
+			this.labelWebformsHeading2.Text = "Heading 2";
 			this.labelWebformsHeading2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// groupBox2
@@ -110,9 +110,9 @@ namespace OpenDental{
 			this.groupBox2.Controls.Add(this.labelWebformsHeading1);
 			this.groupBox2.Controls.Add(this.textBoxWebformsHeading1);
 			this.groupBox2.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox2.Location = new System.Drawing.Point(24,61);
+			this.groupBox2.Location = new System.Drawing.Point(41,67);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(625,160);
+			this.groupBox2.Size = new System.Drawing.Size(529,160);
 			this.groupBox2.TabIndex = 53;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Web Form Preferences";
@@ -124,7 +124,7 @@ namespace OpenDental{
 			this.butChange.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butChange.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butChange.CornerRadius = 4F;
-			this.butChange.Location = new System.Drawing.Point(210,24);
+			this.butChange.Location = new System.Drawing.Point(169,26);
 			this.butChange.Name = "butChange";
 			this.butChange.Size = new System.Drawing.Size(75,24);
 			this.butChange.TabIndex = 72;
@@ -135,7 +135,7 @@ namespace OpenDental{
 			// 
 			this.butWebformBorderColor.BackColor = System.Drawing.Color.RoyalBlue;
 			this.butWebformBorderColor.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-			this.butWebformBorderColor.Location = new System.Drawing.Point(171,24);
+			this.butWebformBorderColor.Location = new System.Drawing.Point(130,26);
 			this.butWebformBorderColor.Name = "butWebformBorderColor";
 			this.butWebformBorderColor.Size = new System.Drawing.Size(24,24);
 			this.butWebformBorderColor.TabIndex = 71;
@@ -144,17 +144,18 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(24,8);
+			this.label1.Location = new System.Drawing.Point(0,9);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(169,19);
 			this.label1.TabIndex = 54;
-			this.label1.Text = "Browser address for web form";
+			this.label1.Text = "Browser address for patients";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textBoxWebFormAddress
 			// 
-			this.textBoxWebFormAddress.Location = new System.Drawing.Point(195,8);
+			this.textBoxWebFormAddress.Location = new System.Drawing.Point(171,9);
 			this.textBoxWebFormAddress.Name = "textBoxWebFormAddress";
+			this.textBoxWebFormAddress.ReadOnly = true;
 			this.textBoxWebFormAddress.Size = new System.Drawing.Size(445,20);
 			this.textBoxWebFormAddress.TabIndex = 55;
 			// 
@@ -166,7 +167,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(681,158);
+			this.butOK.Location = new System.Drawing.Point(465,250);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 3;
@@ -181,7 +182,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(681,196);
+			this.butCancel.Location = new System.Drawing.Point(557,250);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 2;
@@ -196,7 +197,7 @@ namespace OpenDental{
 			// FormWebFormSetup
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(788,234);
+			this.ClientSize = new System.Drawing.Size(646,288);
 			this.Controls.Add(this.textBoxWebFormAddress);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.groupBox2);
