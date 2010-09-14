@@ -27,13 +27,14 @@ namespace OpenDental{
 			this.label6 = new System.Windows.Forms.Label();
 			this.label7 = new System.Windows.Forms.Label();
 			this.label8 = new System.Windows.Forms.Label();
+			this.checkRequired = new System.Windows.Forms.CheckBox();
+			this.butDelete = new OpenDental.UI.Button();
 			this.textHeight = new OpenDental.ValidNum();
 			this.textWidth = new OpenDental.ValidNum();
 			this.textYPos = new OpenDental.ValidNum();
 			this.textXPos = new OpenDental.ValidNum();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.butDelete = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// label5
@@ -71,6 +72,34 @@ namespace OpenDental{
 			this.label8.TabIndex = 96;
 			this.label8.Text = "Height";
 			this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// checkRequired
+			// 
+			this.checkRequired.AutoSize = true;
+			this.checkRequired.Location = new System.Drawing.Point(52,127);
+			this.checkRequired.Name = "checkRequired";
+			this.checkRequired.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+			this.checkRequired.Size = new System.Drawing.Size(69,17);
+			this.checkRequired.TabIndex = 101;
+			this.checkRequired.Text = "Required";
+			this.checkRequired.UseVisualStyleBackColor = true;
+			// 
+			// butDelete
+			// 
+			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butDelete.Autosize = true;
+			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDelete.CornerRadius = 4F;
+			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
+			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butDelete.Location = new System.Drawing.Point(15,164);
+			this.butDelete.Name = "butDelete";
+			this.butDelete.Size = new System.Drawing.Size(77,24);
+			this.butDelete.TabIndex = 100;
+			this.butDelete.Text = "Delete";
+			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
 			// 
 			// textHeight
 			// 
@@ -138,27 +167,11 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// butDelete
-			// 
-			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butDelete.Autosize = true;
-			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDelete.CornerRadius = 4F;
-			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
-			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(15,164);
-			this.butDelete.Name = "butDelete";
-			this.butDelete.Size = new System.Drawing.Size(77,24);
-			this.butDelete.TabIndex = 100;
-			this.butDelete.Text = "Delete";
-			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
-			// 
 			// FormSheetFieldSigBox
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(394,200);
+			this.Controls.Add(this.checkRequired);
 			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.textHeight);
 			this.Controls.Add(this.label8);
@@ -192,5 +205,6 @@ namespace OpenDental{
 		private ValidNum textHeight;
 		private System.Windows.Forms.Label label8;
 		private OpenDental.UI.Button butDelete;
+		private System.Windows.Forms.CheckBox checkRequired;
 	}
 }

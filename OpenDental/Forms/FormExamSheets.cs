@@ -71,6 +71,9 @@ namespace OpenDental {
 			//Sheets
 			long sheetNum=PIn.Long(table.Rows[e.Row]["SheetNum"].ToString());
 			Sheet sheet=Sheets.GetSheet(sheetNum);
+			if(!Security.IsAuthorized(Permissions.SheetEdit,sheet.DateTimeSheet)){
+				return;
+			}
 			FormSheetFillEdit FormSF=new FormSheetFillEdit(sheet);
 			FormSF.ShowDialog();
 			if(FormSF.DialogResult==DialogResult.OK) {
@@ -97,6 +100,9 @@ namespace OpenDental {
 		}
 
 		private void butAdd_Click(object sender,EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.SheetEdit)){//no date check, since no date for the sheet yet.
+				return;
+			}
 			FormSheetPicker FormS=new FormSheetPicker();
 			FormS.SheetType=SheetTypeEnum.ExamSheet;
 			FormS.ShowDialog();

@@ -1056,7 +1056,9 @@ namespace OpenDentBusiness{
 		///<summary>40</summary>
 		TimecardDeleteEntry,
 		///<summary>41 All other equipment functions are covered by .Setup.  Uses date restrictions.</summary>
-		EquipmentDelete
+		EquipmentDelete,
+		///<summary>42 Uses date restrictions</summary>
+		SheetEdit,
 	}
 
 	///<summary>The type of signal being sent.</summary>

@@ -44,6 +44,7 @@ namespace OpenDental{
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butDelete = new OpenDental.UI.Button();
+			this.checkRequired = new System.Windows.Forms.CheckBox();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -260,10 +261,22 @@ namespace OpenDental{
 			this.butDelete.Text = "Delete";
 			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
 			// 
+			// checkRequired
+			// 
+			this.checkRequired.AutoSize = true;
+			this.checkRequired.Location = new System.Drawing.Point(214,275);
+			this.checkRequired.Name = "checkRequired";
+			this.checkRequired.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+			this.checkRequired.Size = new System.Drawing.Size(69,17);
+			this.checkRequired.TabIndex = 101;
+			this.checkRequired.Text = "Required";
+			this.checkRequired.UseVisualStyleBackColor = true;
+			// 
 			// FormSheetFieldInput
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(507,386);
+			this.Controls.Add(this.checkRequired);
 			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.comboGrowthBehavior);
 			this.Controls.Add(this.label9);
@@ -314,5 +327,6 @@ namespace OpenDental{
 		private System.Windows.Forms.ComboBox comboGrowthBehavior;
 		private System.Windows.Forms.Label label9;
 		private OpenDental.UI.Button butDelete;
+		private System.Windows.Forms.CheckBox checkRequired;
 	}
 }

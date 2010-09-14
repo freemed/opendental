@@ -138,6 +138,19 @@ namespace OpenDental.UI {
 			labelInvalidSig.Visible=true;	
 		}
 
+		public bool IsValid{
+			get { return (!labelInvalidSig.Visible); }
+		}
+
+		public bool SigIsBlank{
+			get{ 
+				if(allowTopaz && sigBoxTopaz.Visible){
+					return(CodeBase.TopazWrapper.GetTopazNumberOfTabletPoints(sigBoxTopaz)==0);
+				}
+				return(sigBox.NumberOfTabletPoints()==0);
+			}
+		}
+
 		///<summary>This should NOT be used unless GetSigChanged returns true.</summary>
 		public string GetSignature(string keyData){
 			//Topaz boxes are written in Windows native code.

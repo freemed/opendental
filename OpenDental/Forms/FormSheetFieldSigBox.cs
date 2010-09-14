@@ -30,6 +30,7 @@ namespace OpenDental {
 			textYPos.Text=SheetFieldDefCur.YPos.ToString();
 			textWidth.Text=SheetFieldDefCur.Width.ToString();
 			textHeight.Text=SheetFieldDefCur.Height.ToString();
+			checkRequired.Checked=SheetFieldDefCur.IsRequired;
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
@@ -50,6 +51,7 @@ namespace OpenDental {
 			SheetFieldDefCur.YPos=PIn.Int(textYPos.Text);
 			SheetFieldDefCur.Width=PIn.Int(textWidth.Text);
 			SheetFieldDefCur.Height=PIn.Int(textHeight.Text);
+			SheetFieldDefCur.IsRequired=checkRequired.Checked;
 			//don't save to database here.
 			DialogResult=DialogResult.OK;
 		}

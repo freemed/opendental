@@ -162,6 +162,8 @@ namespace OpenDental{
 				field.Width=sheetFieldDefList[i].Width;
 				field.XPos=sheetFieldDefList[i].XPos;
 				field.YPos=sheetFieldDefList[i].YPos;
+				field.RadioButtonGroup=sheetFieldDefList[i].RadioButtonGroup;
+				field.IsRequired=sheetFieldDefList[i].IsRequired;
 				retVal.Add(field);
 			}
 			return retVal;

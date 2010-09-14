@@ -294,6 +294,10 @@ namespace OpenDental {
 					if(fieldThis.FieldName!=fieldOther.FieldName) {//different radio group
 						continue;
 					}
+					//If both checkbox field names are set to "misc" then we instead use the RadioButtonGroup as the actual radio button group name.
+					//if(fieldThis.FieldName=="misc" && fieldThis.RadioButtonGroup!=fieldOther.RadioButtonGroup){
+					//	continue;
+					//}
 					((SheetCheckBox)control).IsChecked=false;
 				}
 				return;
@@ -764,7 +768,41 @@ namespace OpenDental {
 				//or data saved to the field until it's time to actually save to the database.
 		}
 
+		///<summary>Returns true when all of the sheet fields with IsRequired set to true have a value set. Otherwise, a message box shows and false is returned.</summary>
+		private bool VerifyRequiredFields(){
+			foreach(Control control in panelMain.Controls){
+				if(control.Tag==null){
+					continue;
+				}
+				if(control.GetType()==typeof(RichTextBox)){
+					SheetField field=(SheetField)control.Tag;
+					if(field.FieldType!=SheetFieldType.InputField){
+						continue;
+					}
+					RichTextBox inputBox=(RichTextBox)control;
+					if(field.IsRequired && inputBox.Text.Trim()==""){
+						MessageBox.Show(Lan.g(this,"You must enter a value for")+" "+field.FieldName+" "+Lan.g(this,"before continuing."));
+						return false;			
+					}	
+				}else if(control.GetType()==typeof(OpenDental.UI.SignatureBoxWrapper)){
+					SheetField field=(SheetField)control.Tag;
+					if(field.FieldType!=SheetFieldType.SigBox){
+						continue;
+					}
+					OpenDental.UI.SignatureBoxWrapper sigBox=(OpenDental.UI.SignatureBoxWrapper)control;
+					if(!sigBox.IsValid || sigBox.SigIsBlank){
+						MsgBox.Show(this,"Signature required");
+						return false;
+					}
+				}//TODO: radio buttons.
+			}
+			return true;
+		}
+
 		private void butOK_Click(object sender,EventArgs e) {
+			if(!VerifyRequiredFields()){
+				return;
+			}
 			if(!TryToSaveData()){
 				return;
 			}

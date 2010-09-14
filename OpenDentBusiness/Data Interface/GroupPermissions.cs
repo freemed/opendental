@@ -213,6 +213,8 @@ namespace OpenDentBusiness{
 					return Lans.g("enumPermissions","Security Admin");
 				case Permissions.Setup:
 					return Lans.g("enumPermissions","Setup - Covers a wide variety of setup functions");
+				case Permissions.SheetEdit:
+					return Lans.g("enumPermissions","Sheet Edit");
 				case Permissions.TimecardDeleteEntry:
 					return Lans.g("enumPermissions","Timecard Delete Entry");
 				case Permissions.TimecardsEditAll:
