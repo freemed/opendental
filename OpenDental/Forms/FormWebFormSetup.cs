@@ -114,7 +114,7 @@ namespace OpenDental {
 		/// Ignore this method - this is for the 'next' version of the Webforms.
 		/// Here sheetDef can be uploaded to the web form Open Dental
 		/// </summary>
-		private void TestSheetUpload(object sender,EventArgs e) {
+		private void TestSheetUpload() {
 			//pass sheet to webservice
 			string RegistrationKey=PrefC.GetString(PrefName.RegistrationKey);
 			WebHostSynch.WebHostSynch wh=new WebHostSynch.WebHostSynch();

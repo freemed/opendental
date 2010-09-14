@@ -152,7 +152,7 @@ namespace WebHostSynch {
 			string a=sheetDef.ToString();
 		}
 		/// <summary>
-		/// 
+		/// Ignore this method - this is for the 'next' version of the Webforms.
 		/// </summary>
 		[WebMethod]
 		public void SheetsInternalMeth(SheetsInternal sheetInt) {

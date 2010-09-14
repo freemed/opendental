@@ -27,17 +27,17 @@ namespace OpenDental{
 			this.mainMenu1 = new System.Windows.Forms.MainMenu(this.components);
 			this.menuItemSetup = new System.Windows.Forms.MenuItem();
 			this.groupDateRange = new System.Windows.Forms.GroupBox();
-			this.labelStartDate = new System.Windows.Forms.Label();
-			this.labelEndDate = new System.Windows.Forms.Label();
-			this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+			this.butRefresh = new OpenDental.UI.Button();
 			this.butToday = new OpenDental.UI.Button();
 			this.textDateStart = new OpenDental.ValidDate();
+			this.labelStartDate = new System.Windows.Forms.Label();
+			this.labelEndDate = new System.Windows.Forms.Label();
 			this.textDateEnd = new OpenDental.ValidDate();
+			this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
 			this.butRetrieve = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.butRefresh = new OpenDental.UI.Button();
 			this.groupDateRange.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -67,28 +67,19 @@ namespace OpenDental{
 			this.groupDateRange.TabStop = false;
 			this.groupDateRange.Text = "Date Range";
 			// 
-			// labelStartDate
+			// butRefresh
 			// 
-			this.labelStartDate.Location = new System.Drawing.Point(6,19);
-			this.labelStartDate.Name = "labelStartDate";
-			this.labelStartDate.Size = new System.Drawing.Size(69,14);
-			this.labelStartDate.TabIndex = 221;
-			this.labelStartDate.Text = "Start Date";
-			this.labelStartDate.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// labelEndDate
-			// 
-			this.labelEndDate.Location = new System.Drawing.Point(6,44);
-			this.labelEndDate.Name = "labelEndDate";
-			this.labelEndDate.Size = new System.Drawing.Size(69,14);
-			this.labelEndDate.TabIndex = 222;
-			this.labelEndDate.Text = "End Date";
-			this.labelEndDate.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// backgroundWorker1
-			// 
-			this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
-			this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
+			this.butRefresh.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butRefresh.Autosize = true;
+			this.butRefresh.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butRefresh.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRefresh.CornerRadius = 4F;
+			this.butRefresh.Location = new System.Drawing.Point(158,39);
+			this.butRefresh.Name = "butRefresh";
+			this.butRefresh.Size = new System.Drawing.Size(77,24);
+			this.butRefresh.TabIndex = 243;
+			this.butRefresh.Text = "Refresh";
+			this.butRefresh.Click += new System.EventHandler(this.butRefresh_Click);
 			// 
 			// butToday
 			// 
@@ -114,6 +105,24 @@ namespace OpenDental{
 			this.textDateStart.TabIndex = 223;
 			this.textDateStart.Validated += new System.EventHandler(this.textDateStart_Validated);
 			// 
+			// labelStartDate
+			// 
+			this.labelStartDate.Location = new System.Drawing.Point(6,19);
+			this.labelStartDate.Name = "labelStartDate";
+			this.labelStartDate.Size = new System.Drawing.Size(69,14);
+			this.labelStartDate.TabIndex = 221;
+			this.labelStartDate.Text = "Start Date";
+			this.labelStartDate.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// labelEndDate
+			// 
+			this.labelEndDate.Location = new System.Drawing.Point(6,44);
+			this.labelEndDate.Name = "labelEndDate";
+			this.labelEndDate.Size = new System.Drawing.Size(69,14);
+			this.labelEndDate.TabIndex = 222;
+			this.labelEndDate.Text = "End Date";
+			this.labelEndDate.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
 			// textDateEnd
 			// 
 			this.textDateEnd.Location = new System.Drawing.Point(75,41);
@@ -121,6 +130,11 @@ namespace OpenDental{
 			this.textDateEnd.Size = new System.Drawing.Size(77,20);
 			this.textDateEnd.TabIndex = 224;
 			this.textDateEnd.Validated += new System.EventHandler(this.textDateEnd_Validated);
+			// 
+			// backgroundWorker1
+			// 
+			this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
+			this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
 			// 
 			// butRetrieve
 			// 
@@ -181,20 +195,6 @@ namespace OpenDental{
 			this.butCancel.TabIndex = 2;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
-			// 
-			// butRefresh
-			// 
-			this.butRefresh.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butRefresh.Autosize = true;
-			this.butRefresh.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butRefresh.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butRefresh.CornerRadius = 4F;
-			this.butRefresh.Location = new System.Drawing.Point(158,39);
-			this.butRefresh.Name = "butRefresh";
-			this.butRefresh.Size = new System.Drawing.Size(77,24);
-			this.butRefresh.TabIndex = 243;
-			this.butRefresh.Text = "Refresh";
-			this.butRefresh.Click += new System.EventHandler(this.butRefresh_Click);
 			// 
 			// FormWebForms
 			// 

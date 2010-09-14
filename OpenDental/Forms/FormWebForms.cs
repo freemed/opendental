@@ -17,9 +17,10 @@ namespace OpenDental {
 	public partial class FormWebForms:Form {
 		
 		/// <summary>
-		/// This Form does 2 things: 
+		/// This Form does 3 things: 
 		/// 1) Retrieve data of filled out web forms from a web service and convert them into sheets and patients. Using the first name, last name and birth date it will check for existing patients. If an existing patient is found a new sheet is created. If no patient is found, a  patient and a sheet is created.
-		/// 2) Show all the sheets that have been created in 1) using a date filter. 
+		/// 2) Send a list of the Sheets that have been created to the Server for deletion.
+		/// 3)Show all the sheets that have been created in 1) using a date filter.
 		/// </summary>
 		public FormWebForms() {
 			InitializeComponent();
