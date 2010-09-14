@@ -10,7 +10,7 @@ namespace WebHostSynch {
 	/// <summary>
 	/// Summary description for WebHostSynch
 	/// </summary>
-	[WebService(Namespace="http://tempuri.org/")]
+	[WebService(Namespace="http://opendental.com/")]
 	[WebServiceBinding(ConformsTo=WsiProfiles.BasicProfile1_1)]
 	[System.ComponentModel.ToolboxItem(false)]
 	// To allow this Web Service to be called from script, using ASP.NET AJAX, uncomment the following line. 
@@ -143,6 +143,7 @@ namespace WebHostSynch {
 			}
 			return WebFormAddress;
 		}
+
 		/// <summary>
 		/// Ignore this method - this is for the 'next' version of the Webforms.
 		/// Here sheetDef can be uploaded to the webhostsync from Open Dental
@@ -151,6 +152,7 @@ namespace WebHostSynch {
 		public void ReadSheetDef(SheetDef sheetDef) {
 			string a=sheetDef.ToString();
 		}
+
 		/// <summary>
 		/// Ignore this method - this is for the 'next' version of the Webforms.
 		/// </summary>
