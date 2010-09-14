@@ -275,7 +275,7 @@ namespace UnitTests {
 			List<Benefit> benefitList=Benefits.Refresh(patPlans);
 			List<ClaimProcHist> histList=ClaimProcs.GetHistList(patNum,benefitList,patPlans,planList,DateTime.Today);
 			//Validate
-			double insUsed=InsPlans.GetInsUsedDisplay(histList,DateTime.Today,planNum,patPlanNum,-1,planList,benefitList);
+			double insUsed=InsPlans.GetInsUsedDisplay(histList,DateTime.Today,planNum,patPlanNum,-1,planList,benefitList,patNum);
 			if(insUsed!=400){
 				throw new Exception("Should be 400.");
 			}

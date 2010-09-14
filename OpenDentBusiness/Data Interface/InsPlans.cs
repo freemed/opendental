@@ -214,7 +214,7 @@ namespace OpenDentBusiness {
 		/// <summary>Only used once in Claims.cs.  Gets insurance benefits remaining for one benefit year.  Returns actual remaining insurance based on ClaimProc data, taking into account inspaid and ins pending. Must supply all claimprocs for the patient.  Date used to determine which benefit year to calc.  Usually today's date.  The insplan.PlanNum is the plan to get value for.  ExcludeClaim is the ClaimNum to exclude, or enter -1 to include all.  This does not yet handle calculations where ortho max is different from regular max.  Just takes the most general annual max, and subtracts all benefits used from all categories.</summary>
 		public static double GetInsRem(List<ClaimProcHist> histList,DateTime asofDate,long planNum,long patPlanNum,long excludeClaim,List<InsPlan> planList,List<Benefit> benList,long patNum) {
 			//No need to check RemotingRole; no call to db.
-			double insUsed=GetInsUsedDisplay(histList,asofDate,planNum,patPlanNum,excludeClaim,planList,benList);
+			double insUsed=GetInsUsedDisplay(histList,asofDate,planNum,patPlanNum,excludeClaim,planList,benList,patNum);
 			InsPlan plan=InsPlans.GetPlan(planNum,planList);
 			double insPending=GetPendingDisplay(histList,asofDate,plan,patPlanNum,excludeClaim,patNum);
 			double annualMaxFam=Benefits.GetAnnualMaxDisplay(benList,planNum,patPlanNum,true);
@@ -270,7 +270,7 @@ namespace OpenDentBusiness {
 		}
 
 		/// <summary>Only for display purposes rather than for calculations.  Get insurance benefits used for one benefit year.  Must supply all relevant hist for the patient.  asofDate is used to determine which benefit year to calc.  Usually date of service for a claim.  The insplan.PlanNum is the plan to get value for.  ExcludeClaim is the ClaimNum to exclude, or enter -1 to include all.  The behavior of this changed in 7.1.  It now only includes values that apply towards annual max.  So if there is a limitation override for a category like ortho or preventive, then completed procedures in those categories will be excluded.  The benefitList passed in might very well have benefits from other insurance plans included.</summary>
-		public static double GetInsUsedDisplay(List<ClaimProcHist> histList,DateTime asofDate,long planNum,long patPlanNum,long excludeClaim,List<InsPlan> planList,List<Benefit> benefitList) {
+		public static double GetInsUsedDisplay(List<ClaimProcHist> histList,DateTime asofDate,long planNum,long patPlanNum,long excludeClaim,List<InsPlan> planList,List<Benefit> benefitList,long patNum) {
 			//No need to check RemotingRole; no call to db.
 			InsPlan curPlan=GetPlan(planNum,planList);
 			if(curPlan==null) {
@@ -289,7 +289,8 @@ namespace OpenDentBusiness {
 				if(histList[i].PlanNum!=planNum
 					|| histList[i].ClaimNum == excludeClaim
 					|| histList[i].ProcDate.Date >= stopDate
-					|| histList[i].ProcDate.Date < renewDate)
+					|| histList[i].ProcDate.Date < renewDate
+					|| histList[i].PatNum != patNum)
 				{
 					continue;
 				}

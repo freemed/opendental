@@ -185,7 +185,7 @@ namespace OpenDental{
 						doubRemain-=doubPending;
 					}
 				}
-				doubUsed=InsPlans.GetInsUsedDisplay(histList,DateTime.Today,plan.PlanNum,patPlanNum,-1,planList,benefitList);
+				doubUsed=InsPlans.GetInsUsedDisplay(histList,DateTime.Today,plan.PlanNum,patPlanNum,-1,planList,benefitList,pat.PatNum);
 				if(doubUsed!=-1) {
 					insUsed=doubUsed.ToString("c");
 					if(doubRemain!=-1){
@@ -251,7 +251,7 @@ namespace OpenDental{
 						doubRemain-=doubPending;
 					}
 				}
-				doubUsed=InsPlans.GetInsUsedDisplay(histList,DateTime.Today,plan.PlanNum,patPlanNum,-1,planList,benefitList);
+				doubUsed=InsPlans.GetInsUsedDisplay(histList,DateTime.Today,plan.PlanNum,patPlanNum,-1,planList,benefitList,pat.PatNum);
 				if(doubUsed!=-1) {
 					ins2Used=doubUsed.ToString("c");
 					if(doubRemain!=-1){
