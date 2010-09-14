@@ -2571,6 +2571,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);
 				command="ALTER TABLE displayfield ADD INDEX (ChartViewNum)";
 				Db.NonQ(command);
+				command="UPDATE displayfield SET Category = Category + 1";
+				Db.NonQ(command);
 
 
 

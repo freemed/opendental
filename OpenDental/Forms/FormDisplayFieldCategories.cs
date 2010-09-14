@@ -132,7 +132,8 @@ namespace OpenDental{
 		#endregion
 
 		private void FormDisplayFields_Load(object sender,EventArgs e) {
-			for(int i=0;i<Enum.GetNames(typeof(DisplayFieldCategory)).Length;i++){
+			//skip None because user not allowed to select that
+			for(int i=1;i<Enum.GetNames(typeof(DisplayFieldCategory)).Length;i++){
 				listCategory.Items.Add(Enum.GetNames(typeof(DisplayFieldCategory))[i]);
 			}
 			listCategory.SelectedIndex=0;
@@ -140,14 +141,14 @@ namespace OpenDental{
 
 		private void listCategory_DoubleClick(object sender,EventArgs e) {
 			FormDisplayFields FormF=new FormDisplayFields();
-			FormF.category=(DisplayFieldCategory)listCategory.SelectedIndex;
+			FormF.category=(DisplayFieldCategory)listCategory.SelectedIndex+1;
 			FormF.ShowDialog();
 			Close();
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
 			FormDisplayFields FormF=new FormDisplayFields();
-			FormF.category=(DisplayFieldCategory)listCategory.SelectedIndex;
+			FormF.category=(DisplayFieldCategory)listCategory.SelectedIndex+1;
 			FormF.ShowDialog();
 			Close();
 		}
