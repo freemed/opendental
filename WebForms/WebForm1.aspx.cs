@@ -61,7 +61,8 @@ namespace WebForms {
 					if(c.HasControls()) {
 						ExtractValue(c);
 						FindControls(c);
-					}else {
+					}
+					else {
 						ExtractValue(c);
 					}
 				}
@@ -80,7 +81,8 @@ namespace WebForms {
 					if(ctl.HasControls()) {
 						ExtractValue(ctl);
 						FindControls(ctl);
-					}else {
+					}
+					else {
 						ExtractValue(ctl);
 					}
 				}
@@ -146,7 +148,7 @@ namespace WebForms {
 			catch(Exception ex) {
 				Logger.Information(ex.Message.ToString());
 				Panel1.Visible=false;
-				LabelSubmitMessage.Text="There has been a problem submitting your details. <br /> Please contact us at the phone number mentioned on the opendental website";
+				LabelSubmitMessage.Text="There has been a problem submitting your details. <br /> We apologize for the inconvenience.";
 			}
 		}
 
