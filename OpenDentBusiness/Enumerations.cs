@@ -1423,32 +1423,6 @@ namespace OpenDentBusiness{
 		Electronic
 	}
 
-	/*
-	///<summary></summary>
-	public enum StatementFamilyMix{
-		///<summary>0- </summary>
-		OnePatient,
-		///<summary>1- </summary>
-		Separate,
-		///<summary>2</summary>
-		Intermingled
-	}*/
-
-	public enum DisplayFieldCategory{
-		///<summary>0</summary>
-		ProgressNotes,
-		///<summary>1</summary>
-		PatientSelect,
-		///<summary>2</summary>
-		PatientInformation,
-		///<summary>3</summary>
-		AccountModule,
-		///<summary>4</summary>
-		RecallList,
-		///<summary>5</summary>
-		ChartPatientInformation
-	}
-
 	public enum DeletedObjectType{
 		///<summary>0</summary>
 		Appointment,
