@@ -82,8 +82,11 @@ namespace OpenDental{
 				//step through day, one increment at a time, looking for a slot
 				pattern=ContrApptSingle.GetPatternShowing(apt.Pattern);
 				timeFound=new TimeSpan(0);
-				for(int i=0;i<provBar[0].Length;i++){//144 if using 10 minute increments
-					for(int p=0;p<providers.Length;p++){
+				//It's done this way for a plugin that wants to pull all matches for a given day.
+				List<bool> findMoreMatchesToday=new List<bool>(); 
+				findMoreMatchesToday.Add(true);
+				for(int i=0;findMoreMatchesToday[0] && i<provBar[0].Length;i++) {//144 if using 10 minute increments
+					for(int p=0;findMoreMatchesToday[0] && p<providers.Length;p++) {
 						//assume apt will be placed here
 						aptIsMatch=true;
 						//test all apt increments for prov closed. If any found, continue
@@ -126,11 +129,9 @@ namespace OpenDental{
 						}
 						//match found
 						ALresults.Add(dayEvaluating+timeFound);
-						Plugins.HookAddCode(null,"AppointmentL.GetSearchResults_postfilter",ALresults,providers[p],apt);
-					}//for p	
-					if(aptIsMatch){//if a match found in this day
-						break;//don't add any more matches for this day
-					}
+						findMoreMatchesToday[0]=false;
+						Plugins.HookAddCode(null,"AppointmentL.GetSearchResults_postfilter",ALresults,providers[p],apt,findMoreMatchesToday);
+					}//for p
 				}
 				dayEvaluating=dayEvaluating.AddDays(1);//move to the next day
 			}
