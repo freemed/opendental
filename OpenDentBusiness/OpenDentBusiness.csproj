@@ -149,6 +149,7 @@
     <Compile Include="Crud\ClinicCrud.cs" />
     <Compile Include="Crud\ClockEventCrud.cs" />
     <Compile Include="Crud\DeletedObjectCrud.cs" />
+    <Compile Include="Crud\DisplayFieldCrud.cs" />
     <Compile Include="Crud\DocumentCrud.cs" />
     <Compile Include="Crud\FeeSchedCrud.cs" />
     <Compile Include="Crud\GuardianCrud.cs" />
@@ -195,6 +196,9 @@
     <Compile Include="Data Interface\ApptFields.cs" />
     <Compile Include="Data Interface\Automations.cs" />
     <Compile Include="Data Interface\ChartViews.cs" />
+    <Compile Include="Data Interface\DisplayFields.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Data Interface\Guardians.cs" />
     <Compile Include="Data Interface\Equipments.cs" />
     <Compile Include="Data Interface\ProcApptColors.cs" />
@@ -359,7 +363,6 @@
     <Compile Include="Data Interface\CovCats.cs" />
     <Compile Include="Data Interface\CovSpans.cs" />
     <Compile Include="Data Interface\Defs.cs" />
-    <Compile Include="Data Interface\DisplayFields.cs" />
     <Compile Include="Data Interface\FamilyModules.cs" />
     <Compile Include="Data Interface\GroupPermissions.cs" />
     <Compile Include="Data Interface\Operatories.cs" />

@@ -4,8 +4,10 @@ using System.Collections;
 namespace OpenDentBusiness{
 	
 	///<summary>Allows customization of which fields display in various lists and grids.  For now, the only grid is ProgressNotes.  Will also eventually let users set column widths and translate titles.  For now, the selections are the same for all computers.</summary>
-	public class DisplayField{
+	[Serializable]
+	public class DisplayField:TableBase{
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long DisplayFieldNum;
 		///<summary>This is the internal name that OD uses to identify the field within this category.  This will be the default description if the user doesn't specify an alternate.</summary>
 		public string InternalName;
@@ -15,14 +17,14 @@ namespace OpenDentBusiness{
 		public string Description;
 		///<summary>For grid columns, this lets user override the column width.  Especially useful for foreign languages.</summary>
 		public int ColumnWidth;
-		///<summary>Enum:DisplayFieldCategory.  If category is 0, then this is attached to a ChartView.</summary>
+		///<summary>Enum:DisplayFieldCategory.  If category is progress notes, then this is attached to a ChartView.</summary>
 		public DisplayFieldCategory Category;
-		///<summary>FK to chartview.ChartViewNum.  0 if attached to a category.</summary>
+		///<summary>FK to chartview.ChartViewNum. Set to 0 if not progress notes category.</summary>
 		public long ChartViewNum;
 
 
 		public DisplayField(){
-
+			
 		}
 
 		public DisplayField(string internalName,int columnWidth,DisplayFieldCategory category){

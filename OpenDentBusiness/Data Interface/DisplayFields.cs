@@ -32,40 +32,14 @@ namespace OpenDentBusiness {
 				field.Description     = PIn.String(table.Rows[i][3].ToString());
 				field.ColumnWidth     = PIn.Int   (table.Rows[i][4].ToString());
 				field.Category        = (DisplayFieldCategory)PIn.Long(table.Rows[i][5].ToString());
+				field.ChartViewNum	  = PIn.Long(table.Rows[i][6].ToString());
 				DisplayFieldC.Listt.Add(field);
 			}
 		}
 
 		///<summary></summary>
-		public static long Insert(DisplayField field) {	
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				field.DisplayFieldNum=Meth.GetLong(MethodBase.GetCurrentMethod(),field);
-				return field.DisplayFieldNum;
-			}
-			if(PrefC.RandomKeys) {
-				field.DisplayFieldNum=ReplicationServers.GetKey("displayfield","DisplayFieldNum");
-			}
-			string command="INSERT INTO displayfield (";
-			if(PrefC.RandomKeys) {
-				command+="DisplayFieldNum,";
-			}
-			command+="InternalName,ItemOrder,Description,ColumnWidth,Category) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+=POut.Long(field.DisplayFieldNum)+", ";
-			}
-			command+=	
-				 "'"+POut.String(field.InternalName)+"'," 
-				+"'"+POut.Long   (field.ItemOrder)+"',"
-				+"'"+POut.String(field.Description)+"'," 
-				+"'"+POut.Long   (field.ColumnWidth)+"', "
-				+"'"+POut.Long   ((int)field.Category)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				field.DisplayFieldNum=Db.NonQ(command,true);
-			}
-			return field.DisplayFieldNum;
+		public static long Insert(DisplayField field) {
+			return Crud.DisplayFieldCrud.Insert(field);
 		}
 
 		/*

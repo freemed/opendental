@@ -2567,7 +2567,10 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);
 				command="ALTER TABLE sheetfielddef ADD IsRequired tinyint NOT NULL";
 				Db.NonQ(command);
-
+				command="ALTER TABLE displayfield ADD ChartViewNum bigint NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE displayfield ADD INDEX (ChartViewNum)";
+				Db.NonQ(command);
 
 
 
@@ -2605,4 +2608,4 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 
-			
+		
