@@ -261,6 +261,7 @@ namespace OpenDental{
 			FillFamilyData();
 			FillGridRecall();
 			FillInsData();
+			Plugins.HookAddCode(this,"ContrFamily.RefreshModuleScreen_end");
 		} 
 
 		private void FillPatientPicture(){
