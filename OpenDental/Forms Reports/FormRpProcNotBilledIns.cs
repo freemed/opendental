@@ -136,10 +136,12 @@ namespace OpenDental{
 			}
 			report.Query+="patient.LName,', ',patient.FName,' ',patient.MiddleI),"
 				+"procedurelog.ProcDate,procedurecode.Descript,procedurelog.ProcFee "
-				+"FROM patient,procedurecode,procedurelog,claimproc "
+				+"FROM patient,procedurecode,procedurelog,claimproc,insplan "
 				+"WHERE claimproc.procnum=procedurelog.procnum "
 				+"AND patient.PatNum=procedurelog.PatNum "
 				+"AND procedurelog.CodeNum=procedurecode.CodeNum "
+				+"AND claimproc.PlanNum=insplan.PlanNum "
+				+"AND insplan.IsMedical=0 "
 				+"AND claimproc.NoBillIns=0 "
 				+"AND procedurelog.ProcFee>0 "
 				+"AND claimproc.Status=6 "//estimate
