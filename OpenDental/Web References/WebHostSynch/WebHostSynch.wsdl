@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://opendental.com/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="http://opendental.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsdl:types>
-    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+    <s:schema elementFormDefault="qualified" targetNamespace="http://opendental.com/">
       <s:element name="SetPreferences">
         <s:complexType>
           <s:sequence>
@@ -395,7 +395,7 @@
   <wsdl:binding name="WebHostSynchSoap" type="tns:WebHostSynchSoap">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
     <wsdl:operation name="SetPreferences">
-      <soap:operation soapAction="http://tempuri.org/SetPreferences" style="document" />
+      <soap:operation soapAction="http://opendental.com/SetPreferences" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -404,7 +404,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="GetSheetFieldData">
-      <soap:operation soapAction="http://tempuri.org/GetSheetFieldData" style="document" />
+      <soap:operation soapAction="http://opendental.com/GetSheetFieldData" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -413,7 +413,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="GetSheetData">
-      <soap:operation soapAction="http://tempuri.org/GetSheetData" style="document" />
+      <soap:operation soapAction="http://opendental.com/GetSheetData" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -422,7 +422,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="DeleteSheetData">
-      <soap:operation soapAction="http://tempuri.org/DeleteSheetData" style="document" />
+      <soap:operation soapAction="http://opendental.com/DeleteSheetData" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -431,7 +431,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="CheckRegistrationKey">
-      <soap:operation soapAction="http://tempuri.org/CheckRegistrationKey" style="document" />
+      <soap:operation soapAction="http://opendental.com/CheckRegistrationKey" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -440,7 +440,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="GetDentalOfficeID">
-      <soap:operation soapAction="http://tempuri.org/GetDentalOfficeID" style="document" />
+      <soap:operation soapAction="http://opendental.com/GetDentalOfficeID" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -449,7 +449,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="GetWebFormAddress">
-      <soap:operation soapAction="http://tempuri.org/GetWebFormAddress" style="document" />
+      <soap:operation soapAction="http://opendental.com/GetWebFormAddress" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -458,7 +458,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="ReadSheetDef">
-      <soap:operation soapAction="http://tempuri.org/ReadSheetDef" style="document" />
+      <soap:operation soapAction="http://opendental.com/ReadSheetDef" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -467,7 +467,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="SheetsInternalMeth">
-      <soap:operation soapAction="http://tempuri.org/SheetsInternalMeth" style="document" />
+      <soap:operation soapAction="http://opendental.com/SheetsInternalMeth" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -479,7 +479,7 @@
   <wsdl:binding name="WebHostSynchSoap12" type="tns:WebHostSynchSoap">
     <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
     <wsdl:operation name="SetPreferences">
-      <soap12:operation soapAction="http://tempuri.org/SetPreferences" style="document" />
+      <soap12:operation soapAction="http://opendental.com/SetPreferences" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -488,7 +488,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="GetSheetFieldData">
-      <soap12:operation soapAction="http://tempuri.org/GetSheetFieldData" style="document" />
+      <soap12:operation soapAction="http://opendental.com/GetSheetFieldData" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -497,7 +497,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="GetSheetData">
-      <soap12:operation soapAction="http://tempuri.org/GetSheetData" style="document" />
+      <soap12:operation soapAction="http://opendental.com/GetSheetData" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -506,7 +506,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="DeleteSheetData">
-      <soap12:operation soapAction="http://tempuri.org/DeleteSheetData" style="document" />
+      <soap12:operation soapAction="http://opendental.com/DeleteSheetData" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -515,7 +515,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="CheckRegistrationKey">
-      <soap12:operation soapAction="http://tempuri.org/CheckRegistrationKey" style="document" />
+      <soap12:operation soapAction="http://opendental.com/CheckRegistrationKey" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -524,7 +524,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="GetDentalOfficeID">
-      <soap12:operation soapAction="http://tempuri.org/GetDentalOfficeID" style="document" />
+      <soap12:operation soapAction="http://opendental.com/GetDentalOfficeID" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -533,7 +533,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="GetWebFormAddress">
-      <soap12:operation soapAction="http://tempuri.org/GetWebFormAddress" style="document" />
+      <soap12:operation soapAction="http://opendental.com/GetWebFormAddress" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -542,7 +542,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="ReadSheetDef">
-      <soap12:operation soapAction="http://tempuri.org/ReadSheetDef" style="document" />
+      <soap12:operation soapAction="http://opendental.com/ReadSheetDef" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -551,7 +551,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="SheetsInternalMeth">
-      <soap12:operation soapAction="http://tempuri.org/SheetsInternalMeth" style="document" />
+      <soap12:operation soapAction="http://opendental.com/SheetsInternalMeth" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

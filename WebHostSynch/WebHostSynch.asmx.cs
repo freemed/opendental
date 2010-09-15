@@ -150,17 +150,66 @@ namespace WebHostSynch {
 		/// </summary>
 		[WebMethod]
 		public void ReadSheetDef(SheetDef sheetDef) {
+			ODWebServiceEntities db=new ODWebServiceEntities();
+			/*
+			String RegistrationKey="sdgsd";
+			long DentalOfficeID=GetDentalOfficeID(RegistrationKey);
+			if(DentalOfficeID==0) {
+				Logger.Information("Incorrect registration key. IpAddress="+HttpContext.Current.Request.UserHostAddress+" RegistrationKey="+RegistrationKey);
+			}
+			*/
+			long DentalOfficeID=4;
 			string a=sheetDef.ToString();
+			/*
+			var wsdResults=from wsd in db.webforms_sheetdef
+					   where wsd.webforms_preference.DentalOfficeID==DentalOfficeID && wsd.SheetDefNum==sheetDef.SheetDefNum
+					   select wsd;
+			*/
+
+			var wsdResults= db.webforms_sheetdef.Where(wsd => wsd.webforms_preference.DentalOfficeID==DentalOfficeID && wsd.SheetDefNum==sheetDef.SheetDefNum);
+
+			webforms_sheetdef wsdObj=null;
+
+			if(wsdResults.Count()>0) {
+				wsdObj =wsdResults.First();
+
+			}
+			// if there is no entry for that dental office make a new entry.
+			if(wsdResults.Count()==0) {
+				wsdObj=new webforms_sheetdef();
+				wsdObj.SheetDefNum=sheetDef.SheetDefNum;
+
+				// create associated SheetFieldDefs and add them to the SheetDef object.
+				for(int i=0;i<sheetDef.SheetFieldDefs.Count();i++) {
+					webforms_sheetfielddef sdfObj = new webforms_sheetfielddef();
+					sdfObj.SheetFieldDefNum=sheetDef.SheetFieldDefs[i].SheetFieldDefNum;
+					wsdObj.webforms_sheetfielddef.Add(sdfObj);
+				}
+				
+				db.AddTowebforms_sheetdef(wsdObj);
+			}
+			
+			wsdObj.Description=sheetDef.Description;
+			wsdObj.FontName = sheetDef.FontName;
+			// list all other properties.
+			
+
+			
+			for(int i=0;i<sheetDef.SheetFieldDefs.Count();i++) {
+				var sdfObj=wsdObj.webforms_sheetfielddef.Where(sfd => sfd.SheetFieldDefNum==sheetDef.SheetFieldDefs[i].SheetFieldDefNum).First();
+				sdfObj.FieldName = sheetDef.SheetFieldDefs[i].FieldName;
+				sdfObj.XPos = sheetDef.SheetFieldDefs[i].XPos;
+				sdfObj.YPos = sheetDef.SheetFieldDefs[i].YPos;
+				int ab=3;
+
+			}
+
+			int b=3;
+
+			//db.SaveChanges();
 		}
 
-		/// <summary>
-		/// Ignore this method - this is for the 'next' version of the Webforms.
-		/// </summary>
-		[WebMethod]
-		public void SheetsInternalMeth(SheetsInternal sheetInt) {
-			OpenDentBusiness.SheetDef sheetDef1= SheetsInternal.GetSheetDef(SheetInternalType.PatientRegistration);
-			
-		}
+
 
 
 	}

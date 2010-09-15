@@ -27,7 +27,7 @@ namespace OpenDental.WebHostSynch {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "2.0.50727.3053")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Web.Services.WebServiceBindingAttribute(Name="WebHostSynchSoap", Namespace="http://tempuri.org/")]
+    [System.Web.Services.WebServiceBindingAttribute(Name="WebHostSynchSoap", Namespace="http://opendental.com/")]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(TableBase))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(RelatedEnd))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(StructuralObject))]
@@ -119,7 +119,7 @@ namespace OpenDental.WebHostSynch {
         public event SheetsInternalMethCompletedEventHandler SheetsInternalMethCompleted;
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/SetPreferences", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://opendental.com/SetPreferences", RequestNamespace="http://opendental.com/", ResponseNamespace="http://opendental.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         public bool SetPreferences(string RegistrationKey, int ColorBorder, string Heading1, string Heading2) {
             object[] results = this.Invoke("SetPreferences", new object[] {
                         RegistrationKey,
@@ -154,7 +154,7 @@ namespace OpenDental.WebHostSynch {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetSheetFieldData", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://opendental.com/GetSheetFieldData", RequestNamespace="http://opendental.com/", ResponseNamespace="http://opendental.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         public webforms_sheetfield[] GetSheetFieldData(string RegistrationKey) {
             object[] results = this.Invoke("GetSheetFieldData", new object[] {
                         RegistrationKey});
@@ -183,7 +183,7 @@ namespace OpenDental.WebHostSynch {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetSheetData", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://opendental.com/GetSheetData", RequestNamespace="http://opendental.com/", ResponseNamespace="http://opendental.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         public webforms_sheet[] GetSheetData(string RegistrationKey) {
             object[] results = this.Invoke("GetSheetData", new object[] {
                         RegistrationKey});
@@ -212,7 +212,7 @@ namespace OpenDental.WebHostSynch {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/DeleteSheetData", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://opendental.com/DeleteSheetData", RequestNamespace="http://opendental.com/", ResponseNamespace="http://opendental.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         public void DeleteSheetData(string RegistrationKey, long[] SheetsForDeletion) {
             this.Invoke("DeleteSheetData", new object[] {
                         RegistrationKey,
@@ -242,7 +242,7 @@ namespace OpenDental.WebHostSynch {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/CheckRegistrationKey", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://opendental.com/CheckRegistrationKey", RequestNamespace="http://opendental.com/", ResponseNamespace="http://opendental.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         public bool CheckRegistrationKey(string RegistrationKeyFromDentalOffice) {
             object[] results = this.Invoke("CheckRegistrationKey", new object[] {
                         RegistrationKeyFromDentalOffice});
@@ -271,7 +271,7 @@ namespace OpenDental.WebHostSynch {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetDentalOfficeID", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://opendental.com/GetDentalOfficeID", RequestNamespace="http://opendental.com/", ResponseNamespace="http://opendental.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         public long GetDentalOfficeID(string RegistrationKeyFromDentalOffice) {
             object[] results = this.Invoke("GetDentalOfficeID", new object[] {
                         RegistrationKeyFromDentalOffice});
@@ -300,7 +300,7 @@ namespace OpenDental.WebHostSynch {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetWebFormAddress", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://opendental.com/GetWebFormAddress", RequestNamespace="http://opendental.com/", ResponseNamespace="http://opendental.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         public string GetWebFormAddress(string RegistrationKeyFromDentalOffice) {
             object[] results = this.Invoke("GetWebFormAddress", new object[] {
                         RegistrationKeyFromDentalOffice});
@@ -329,7 +329,7 @@ namespace OpenDental.WebHostSynch {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/ReadSheetDef", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://opendental.com/ReadSheetDef", RequestNamespace="http://opendental.com/", ResponseNamespace="http://opendental.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         public void ReadSheetDef(SheetDef sheetDef) {
             this.Invoke("ReadSheetDef", new object[] {
                         sheetDef});
@@ -357,7 +357,7 @@ namespace OpenDental.WebHostSynch {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/SheetsInternalMeth", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://opendental.com/SheetsInternalMeth", RequestNamespace="http://opendental.com/", ResponseNamespace="http://opendental.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         public void SheetsInternalMeth(SheetsInternal sheetInt) {
             this.Invoke("SheetsInternalMeth", new object[] {
                         sheetInt});
@@ -408,7 +408,7 @@ namespace OpenDental.WebHostSynch {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://tempuri.org/")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://opendental.com/")]
     public partial class webforms_sheetfield : EntityObject {
         
         private string fieldNameField;
@@ -465,7 +465,7 @@ namespace OpenDental.WebHostSynch {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://tempuri.org/")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://opendental.com/")]
     public partial class EntityReferenceOfwebforms_sheet : EntityReference {
     }
     
@@ -476,7 +476,7 @@ namespace OpenDental.WebHostSynch {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://tempuri.org/")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://opendental.com/")]
     public abstract partial class EntityReference : RelatedEnd {
         
         private EntityKey entityKeyField;
@@ -497,7 +497,7 @@ namespace OpenDental.WebHostSynch {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://tempuri.org/")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://opendental.com/")]
     public partial class EntityKey {
         
         private string entitySetNameField;
@@ -542,7 +542,7 @@ namespace OpenDental.WebHostSynch {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://tempuri.org/")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://opendental.com/")]
     public partial class EntityKeyMember {
         
         private string keyField;
@@ -575,7 +575,7 @@ namespace OpenDental.WebHostSynch {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://tempuri.org/")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://opendental.com/")]
     public partial class SheetsInternal {
     }
     
@@ -588,7 +588,7 @@ namespace OpenDental.WebHostSynch {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://tempuri.org/")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://opendental.com/")]
     public abstract partial class RelatedEnd {
     }
     
@@ -600,7 +600,7 @@ namespace OpenDental.WebHostSynch {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://tempuri.org/")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://opendental.com/")]
     public abstract partial class StructuralObject {
     }
     
@@ -611,7 +611,7 @@ namespace OpenDental.WebHostSynch {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://tempuri.org/")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://opendental.com/")]
     public abstract partial class EntityObject : StructuralObject {
         
         private EntityKey entityKeyField;
@@ -632,7 +632,7 @@ namespace OpenDental.WebHostSynch {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://tempuri.org/")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://opendental.com/")]
     public partial class webforms_sheet : EntityObject {
         
         private System.DateTime dateTimeSubmittedField;
@@ -677,7 +677,7 @@ namespace OpenDental.WebHostSynch {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://tempuri.org/")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://opendental.com/")]
     public partial class EntityReferenceOfwebforms_preference : EntityReference {
     }
     

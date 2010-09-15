@@ -39,6 +39,7 @@ namespace OpenDental {
 			butWebformBorderColor.BackColor=PrefC.GetColor(PrefName.WebFormsBorderColor);
 			textBoxWebformsHeading1.Text=PrefC.GetStringSilent(PrefName.WebFormsHeading1);
 			textBoxWebformsHeading2.Text=PrefC.GetStringSilent(PrefName.WebFormsHeading2);
+			//TestSheetUpload();
 		}
 
 		private void butWebformBorderColor_Click(object sender,EventArgs e) {
@@ -99,8 +100,9 @@ namespace OpenDental {
 			 * OpenDentBusiness.SheetDef sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.PatientRegistration);
 			 * for this line to compile one must modify the Reference.cs file in to the Web references folder. The SheetDef and related classes with namespaces of WebHostSync must be removed so that the SheetDef Class of OpenDentBusiness is used
 */
+			//sheetDef.
 
-			//wh.ReadSheetDef(sheetDef1);
+			wh.ReadSheetDef(sheetDef);
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
@@ -120,7 +122,6 @@ namespace OpenDental {
 					return;
 				}
 				wh.SetPreferences(RegistrationKey,PrefC.GetColor(PrefName.WebFormsBorderColor).ToArgb(),PrefC.GetStringSilent(PrefName.WebFormsHeading1),PrefC.GetStringSilent(PrefName.WebFormsHeading2));
-				//TestSheetUpload();
 			}
 			catch(Exception ex) {
 				Cursor=Cursors.Default;
