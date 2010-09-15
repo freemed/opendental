@@ -53,6 +53,16 @@ namespace OpenDentBusiness {
 		}
 		*/
 
+		///<summary></summary>
+		public static void DeleteForChartView(long chartViewNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),chartViewNum);
+				return;
+			}
+			string command="DELETE FROM displayfield WHERE ChartViewNum = "+POut.Long(chartViewNum);
+			Db.NonQ(command);
+		}
+
 		///<Summary>Returns an ordered list for just one category</Summary>
 		public static List<DisplayField> GetForCategory(DisplayFieldCategory category){
 			//No need to check RemotingRole; no call to db.
@@ -68,10 +78,40 @@ namespace OpenDentBusiness {
 			return retVal;
 		}
 
+		///<Summary>Returns an ordered list for just one chart view</Summary>
+		public static List<DisplayField> GetForChartView(long ChartViewNum) {
+			//No need to check RemotingRole; no call to db.
+			List<DisplayField> retVal=new List<DisplayField>();
+			for(int i=0;i<DisplayFieldC.Listt.Count;i++) {
+				if(DisplayFieldC.Listt[i].ChartViewNum==ChartViewNum && DisplayFieldC.Listt[i].Category==DisplayFieldCategory.None) {
+					retVal.Add(DisplayFieldC.Listt[i].Copy());
+				}
+			}
+			if(retVal.Count==0) {//default
+				return DisplayFields.GetDefaultList(DisplayFieldCategory.None);
+			}
+			return retVal;
+		}
+
 		public static List<DisplayField> GetDefaultList(DisplayFieldCategory category){
 			//No need to check RemotingRole; no call to db.
 			List<DisplayField> list=new List<DisplayField>();
-			if(category==DisplayFieldCategory.ProgressNotes){
+			if(category==DisplayFieldCategory.None) {
+				list.Add(new DisplayField("Date",67,category));
+				//list.Add(new DisplayField("Time",40));
+				list.Add(new DisplayField("Th",27,category));
+				list.Add(new DisplayField("Surf",40,category));
+				list.Add(new DisplayField("Dx",28,category));
+				list.Add(new DisplayField("Description",218,category));
+				list.Add(new DisplayField("Stat",25,category));
+				list.Add(new DisplayField("Prov",42,category));
+				list.Add(new DisplayField("Amount",48,category));
+				list.Add(new DisplayField("ADA Code",62,category));
+				list.Add(new DisplayField("User",62,category));
+				list.Add(new DisplayField("Signed",55,category));
+				//list.Add(new DisplayField("Priority",65,category));
+			}
+			else if(category==DisplayFieldCategory.ProgressNotes){
 				list.Add(new DisplayField("Date",67,category));
 				//list.Add(new DisplayField("Time",40));
 				list.Add(new DisplayField("Th",27,category));
@@ -198,7 +238,22 @@ namespace OpenDentBusiness {
 		public static List<DisplayField> GetAllAvailableList(DisplayFieldCategory category){
 			//No need to check RemotingRole; no call to db.
 			List<DisplayField> list=new List<DisplayField>();
-			if(category==DisplayFieldCategory.ProgressNotes){
+			if(category==DisplayFieldCategory.None) {
+				list.Add(new DisplayField("Date",67,category));
+				list.Add(new DisplayField("Time",40,category));
+				list.Add(new DisplayField("Th",27,category));
+				list.Add(new DisplayField("Surf",40,category));
+				list.Add(new DisplayField("Dx",28,category));
+				list.Add(new DisplayField("Description",218,category));
+				list.Add(new DisplayField("Stat",25,category));
+				list.Add(new DisplayField("Prov",42,category));
+				list.Add(new DisplayField("Amount",48,category));
+				list.Add(new DisplayField("ADA Code",62,category));
+				list.Add(new DisplayField("User",62,category));
+				list.Add(new DisplayField("Signed",55,category));
+				list.Add(new DisplayField("Priority",65,category));
+			}
+			else if(category==DisplayFieldCategory.ProgressNotes){
 				list.Add(new DisplayField("Date",67,category));
 				list.Add(new DisplayField("Time",40,category));
 				list.Add(new DisplayField("Th",27,category));
@@ -356,6 +411,20 @@ namespace OpenDentBusiness {
 			}
 		}
 
+		public static void SaveListForChartView(List<DisplayField> ListShowing,long ChartViewNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),ListShowing,ChartViewNum);
+				return;
+			}
+			//Odds are, that if they are creating a custom view, that the fields are not default. If they are default, this code still works.
+			string command="DELETE FROM displayfield WHERE ChartViewNum="+POut.Long((long)ChartViewNum);
+			Db.NonQ(command);
+			for(int i=0;i<ListShowing.Count;i++) {
+				ListShowing[i].ItemOrder=i;
+				ListShowing[i].ChartViewNum=ChartViewNum;
+				Insert(ListShowing[i]);
+			}
+		}
 		
 
 	}

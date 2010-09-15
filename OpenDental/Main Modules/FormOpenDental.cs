@@ -2977,10 +2977,13 @@ namespace OpenDental{
 			}
 		}
 
-		/// <summary>sends function key presses to the appointment module</summary>
+		/// <summary>sends function key presses to the appointment module and chart module</summary>
 		private void FormOpenDental_KeyDown(object sender, System.Windows.Forms.KeyEventArgs e) {
 			if(ContrAppt2.Visible && e.KeyCode>=Keys.F1 && e.KeyCode<=Keys.F12){
 				ContrAppt2.FunctionKeyPress(e.KeyCode);
+			}
+			if(ContrChart2.Visible && e.KeyCode>=Keys.F1 && e.KeyCode<=Keys.F12) {
+				ContrChart2.FunctionKeyPressContrChart(e.KeyCode);
 			}
 			Keys keys=e.KeyCode;
 			//Ctrl-Alt-R is supposed to show referral window, but it doesn't work on some computers.

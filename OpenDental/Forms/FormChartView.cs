@@ -52,8 +52,6 @@ namespace OpenDental{
 		private TextBox textBoxViewDesc;
 		private Label labelDescription;
 		private GroupBox groupBoxProperties;
-		//private List<DisplayField> ListAvailable;
-		public DisplayFieldCategory category;
 		private OpenDental.UI.Button butDelete;
 		public ChartView ChartViewCur;
 
@@ -93,14 +91,6 @@ namespace OpenDental{
 			this.label2 = new System.Windows.Forms.Label();
 			this.listAvailable = new System.Windows.Forms.ListBox();
 			this.label3 = new System.Windows.Forms.Label();
-			this.butOK = new OpenDental.UI.Button();
-			this.butRight = new OpenDental.UI.Button();
-			this.butLeft = new OpenDental.UI.Button();
-			this.butDown = new OpenDental.UI.Button();
-			this.butUp = new OpenDental.UI.Button();
-			this.butDefault = new OpenDental.UI.Button();
-			this.gridMain = new OpenDental.UI.ODGrid();
-			this.butCancel = new OpenDental.UI.Button();
 			this.checkShowOnlyFilmsAndExams = new System.Windows.Forms.CheckBox();
 			this.checkShowOnlyHygieneProcs = new System.Windows.Forms.CheckBox();
 			this.groupBox7 = new System.Windows.Forms.GroupBox();
@@ -121,12 +111,20 @@ namespace OpenDental{
 			this.checkShowTeeth = new System.Windows.Forms.CheckBox();
 			this.checkNotes = new System.Windows.Forms.CheckBox();
 			this.checkAudit = new System.Windows.Forms.CheckBox();
-			this.butShowAll = new OpenDental.UI.Button();
-			this.butShowNone = new OpenDental.UI.Button();
 			this.textBoxViewDesc = new System.Windows.Forms.TextBox();
 			this.labelDescription = new System.Windows.Forms.Label();
 			this.groupBoxProperties = new System.Windows.Forms.GroupBox();
 			this.butDelete = new OpenDental.UI.Button();
+			this.butShowNone = new OpenDental.UI.Button();
+			this.butShowAll = new OpenDental.UI.Button();
+			this.butOK = new OpenDental.UI.Button();
+			this.butRight = new OpenDental.UI.Button();
+			this.butLeft = new OpenDental.UI.Button();
+			this.butDown = new OpenDental.UI.Button();
+			this.butUp = new OpenDental.UI.Button();
+			this.butDefault = new OpenDental.UI.Button();
+			this.gridMain = new OpenDental.UI.ODGrid();
+			this.butCancel = new OpenDental.UI.Button();
 			this.groupBox7.SuspendLayout();
 			this.groupBox6.SuspendLayout();
 			this.groupBoxProperties.SuspendLayout();
@@ -158,6 +156,326 @@ namespace OpenDental{
 			this.label3.TabIndex = 16;
 			this.label3.Text = "Available Fields";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			// 
+			// checkShowOnlyFilmsAndExams
+			// 
+			this.checkShowOnlyFilmsAndExams.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkShowOnlyFilmsAndExams.Location = new System.Drawing.Point(16,151);
+			this.checkShowOnlyFilmsAndExams.Name = "checkShowOnlyFilmsAndExams";
+			this.checkShowOnlyFilmsAndExams.Size = new System.Drawing.Size(104,30);
+			this.checkShowOnlyFilmsAndExams.TabIndex = 66;
+			this.checkShowOnlyFilmsAndExams.Text = "Show Only Films and Exams";
+			this.checkShowOnlyFilmsAndExams.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+			this.checkShowOnlyFilmsAndExams.Click += new System.EventHandler(this.checkShowOnlyFilmsAndExams_Click);
+			// 
+			// checkShowOnlyHygieneProcs
+			// 
+			this.checkShowOnlyHygieneProcs.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkShowOnlyHygieneProcs.Location = new System.Drawing.Point(16,136);
+			this.checkShowOnlyHygieneProcs.Name = "checkShowOnlyHygieneProcs";
+			this.checkShowOnlyHygieneProcs.Size = new System.Drawing.Size(120,13);
+			this.checkShowOnlyHygieneProcs.TabIndex = 65;
+			this.checkShowOnlyHygieneProcs.Text = "Show Only Hygiene";
+			this.checkShowOnlyHygieneProcs.Click += new System.EventHandler(this.checkShowHygieneProcs_Click);
+			// 
+			// groupBox7
+			// 
+			this.groupBox7.Controls.Add(this.checkSheets);
+			this.groupBox7.Controls.Add(this.checkTasks);
+			this.groupBox7.Controls.Add(this.checkEmail);
+			this.groupBox7.Controls.Add(this.checkCommFamily);
+			this.groupBox7.Controls.Add(this.checkAppt);
+			this.groupBox7.Controls.Add(this.checkLabCase);
+			this.groupBox7.Controls.Add(this.checkRx);
+			this.groupBox7.Controls.Add(this.checkComm);
+			this.groupBox7.Location = new System.Drawing.Point(145,19);
+			this.groupBox7.Name = "groupBox7";
+			this.groupBox7.Size = new System.Drawing.Size(125,148);
+			this.groupBox7.TabIndex = 64;
+			this.groupBox7.TabStop = false;
+			this.groupBox7.Text = "Object Types";
+			// 
+			// checkSheets
+			// 
+			this.checkSheets.Checked = true;
+			this.checkSheets.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkSheets.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkSheets.Location = new System.Drawing.Point(10,130);
+			this.checkSheets.Name = "checkSheets";
+			this.checkSheets.Size = new System.Drawing.Size(102,13);
+			this.checkSheets.TabIndex = 219;
+			this.checkSheets.Text = "Sheets";
+			this.checkSheets.Click += new System.EventHandler(this.checkSheets_Click);
+			// 
+			// checkTasks
+			// 
+			this.checkTasks.Checked = true;
+			this.checkTasks.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkTasks.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkTasks.Location = new System.Drawing.Point(10,66);
+			this.checkTasks.Name = "checkTasks";
+			this.checkTasks.Size = new System.Drawing.Size(102,13);
+			this.checkTasks.TabIndex = 218;
+			this.checkTasks.Text = "Tasks";
+			this.checkTasks.Click += new System.EventHandler(this.checkTasks_Click);
+			// 
+			// checkEmail
+			// 
+			this.checkEmail.Checked = true;
+			this.checkEmail.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkEmail.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkEmail.Location = new System.Drawing.Point(10,82);
+			this.checkEmail.Name = "checkEmail";
+			this.checkEmail.Size = new System.Drawing.Size(102,13);
+			this.checkEmail.TabIndex = 217;
+			this.checkEmail.Text = "Email";
+			this.checkEmail.Click += new System.EventHandler(this.checkEmail_Click);
+			// 
+			// checkCommFamily
+			// 
+			this.checkCommFamily.Checked = true;
+			this.checkCommFamily.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkCommFamily.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkCommFamily.Location = new System.Drawing.Point(26,49);
+			this.checkCommFamily.Name = "checkCommFamily";
+			this.checkCommFamily.Size = new System.Drawing.Size(88,13);
+			this.checkCommFamily.TabIndex = 20;
+			this.checkCommFamily.Text = "Family";
+			this.checkCommFamily.Click += new System.EventHandler(this.checkCommFamily_Click);
+			// 
+			// checkAppt
+			// 
+			this.checkAppt.Checked = true;
+			this.checkAppt.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkAppt.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkAppt.Location = new System.Drawing.Point(10,17);
+			this.checkAppt.Name = "checkAppt";
+			this.checkAppt.Size = new System.Drawing.Size(102,13);
+			this.checkAppt.TabIndex = 20;
+			this.checkAppt.Text = "Appointments";
+			this.checkAppt.Click += new System.EventHandler(this.checkAppt_Click);
+			// 
+			// checkLabCase
+			// 
+			this.checkLabCase.Checked = true;
+			this.checkLabCase.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkLabCase.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkLabCase.Location = new System.Drawing.Point(10,98);
+			this.checkLabCase.Name = "checkLabCase";
+			this.checkLabCase.Size = new System.Drawing.Size(102,13);
+			this.checkLabCase.TabIndex = 17;
+			this.checkLabCase.Text = "Lab Cases";
+			this.checkLabCase.Click += new System.EventHandler(this.checkLabCase_Click);
+			// 
+			// checkRx
+			// 
+			this.checkRx.Checked = true;
+			this.checkRx.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkRx.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkRx.Location = new System.Drawing.Point(10,114);
+			this.checkRx.Name = "checkRx";
+			this.checkRx.Size = new System.Drawing.Size(102,13);
+			this.checkRx.TabIndex = 8;
+			this.checkRx.Text = "Rx";
+			this.checkRx.Click += new System.EventHandler(this.checkRx_Click);
+			// 
+			// checkComm
+			// 
+			this.checkComm.Checked = true;
+			this.checkComm.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkComm.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkComm.Location = new System.Drawing.Point(10,33);
+			this.checkComm.Name = "checkComm";
+			this.checkComm.Size = new System.Drawing.Size(102,13);
+			this.checkComm.TabIndex = 16;
+			this.checkComm.Text = "Comm Log";
+			this.checkComm.Click += new System.EventHandler(this.checkComm_Click);
+			// 
+			// groupBox6
+			// 
+			this.groupBox6.Controls.Add(this.checkShowCn);
+			this.groupBox6.Controls.Add(this.checkShowE);
+			this.groupBox6.Controls.Add(this.checkShowR);
+			this.groupBox6.Controls.Add(this.checkShowC);
+			this.groupBox6.Controls.Add(this.checkShowTP);
+			this.groupBox6.Location = new System.Drawing.Point(6,19);
+			this.groupBox6.Name = "groupBox6";
+			this.groupBox6.Size = new System.Drawing.Size(121,99);
+			this.groupBox6.TabIndex = 63;
+			this.groupBox6.TabStop = false;
+			this.groupBox6.Text = "Procedures";
+			// 
+			// checkShowCn
+			// 
+			this.checkShowCn.Checked = true;
+			this.checkShowCn.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkShowCn.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkShowCn.Location = new System.Drawing.Point(9,81);
+			this.checkShowCn.Name = "checkShowCn";
+			this.checkShowCn.Size = new System.Drawing.Size(101,13);
+			this.checkShowCn.TabIndex = 15;
+			this.checkShowCn.Text = "Conditions";
+			this.checkShowCn.Click += new System.EventHandler(this.checkShowCn_Click);
+			// 
+			// checkShowE
+			// 
+			this.checkShowE.Checked = true;
+			this.checkShowE.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkShowE.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkShowE.Location = new System.Drawing.Point(9,49);
+			this.checkShowE.Name = "checkShowE";
+			this.checkShowE.Size = new System.Drawing.Size(101,13);
+			this.checkShowE.TabIndex = 10;
+			this.checkShowE.Text = "Existing";
+			this.checkShowE.Click += new System.EventHandler(this.checkShowE_Click);
+			// 
+			// checkShowR
+			// 
+			this.checkShowR.Checked = true;
+			this.checkShowR.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkShowR.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkShowR.Location = new System.Drawing.Point(9,65);
+			this.checkShowR.Name = "checkShowR";
+			this.checkShowR.Size = new System.Drawing.Size(101,13);
+			this.checkShowR.TabIndex = 14;
+			this.checkShowR.Text = "Referred";
+			this.checkShowR.Click += new System.EventHandler(this.checkShowR_Click);
+			// 
+			// checkShowC
+			// 
+			this.checkShowC.Checked = true;
+			this.checkShowC.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkShowC.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkShowC.Location = new System.Drawing.Point(9,33);
+			this.checkShowC.Name = "checkShowC";
+			this.checkShowC.Size = new System.Drawing.Size(101,13);
+			this.checkShowC.TabIndex = 9;
+			this.checkShowC.Text = "Completed";
+			this.checkShowC.Click += new System.EventHandler(this.checkShowC_Click);
+			// 
+			// checkShowTP
+			// 
+			this.checkShowTP.Checked = true;
+			this.checkShowTP.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkShowTP.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkShowTP.Location = new System.Drawing.Point(28,17);
+			this.checkShowTP.Name = "checkShowTP";
+			this.checkShowTP.Size = new System.Drawing.Size(101,13);
+			this.checkShowTP.TabIndex = 8;
+			this.checkShowTP.Text = "Treat Plan";
+			this.checkShowTP.Click += new System.EventHandler(this.checkShowTP_Click);
+			// 
+			// checkShowTeeth
+			// 
+			this.checkShowTeeth.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkShowTeeth.Location = new System.Drawing.Point(171,183);
+			this.checkShowTeeth.Name = "checkShowTeeth";
+			this.checkShowTeeth.Size = new System.Drawing.Size(99,13);
+			this.checkShowTeeth.TabIndex = 61;
+			this.checkShowTeeth.Text = "Selected Teeth";
+			this.checkShowTeeth.Click += new System.EventHandler(this.checkShowTeeth_Click);
+			// 
+			// checkNotes
+			// 
+			this.checkNotes.AllowDrop = true;
+			this.checkNotes.Checked = true;
+			this.checkNotes.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkNotes.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkNotes.Location = new System.Drawing.Point(16,120);
+			this.checkNotes.Name = "checkNotes";
+			this.checkNotes.Size = new System.Drawing.Size(102,13);
+			this.checkNotes.TabIndex = 58;
+			this.checkNotes.Text = "Proc Notes";
+			this.checkNotes.Click += new System.EventHandler(this.checkNotes_Click);
+			// 
+			// checkAudit
+			// 
+			this.checkAudit.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkAudit.Location = new System.Drawing.Point(171,202);
+			this.checkAudit.Name = "checkAudit";
+			this.checkAudit.Size = new System.Drawing.Size(73,13);
+			this.checkAudit.TabIndex = 62;
+			this.checkAudit.Text = "Audit";
+			this.checkAudit.Click += new System.EventHandler(this.checkAudit_Click);
+			// 
+			// textBoxViewDesc
+			// 
+			this.textBoxViewDesc.Location = new System.Drawing.Point(164,12);
+			this.textBoxViewDesc.Name = "textBoxViewDesc";
+			this.textBoxViewDesc.Size = new System.Drawing.Size(367,20);
+			this.textBoxViewDesc.TabIndex = 1;
+			// 
+			// labelDescription
+			// 
+			this.labelDescription.Font = new System.Drawing.Font("Microsoft Sans Serif",10F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.labelDescription.Location = new System.Drawing.Point(12,9);
+			this.labelDescription.Name = "labelDescription";
+			this.labelDescription.Size = new System.Drawing.Size(146,25);
+			this.labelDescription.TabIndex = 57;
+			this.labelDescription.Text = "View Description";
+			this.labelDescription.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// groupBoxProperties
+			// 
+			this.groupBoxProperties.Controls.Add(this.groupBox6);
+			this.groupBoxProperties.Controls.Add(this.butShowNone);
+			this.groupBoxProperties.Controls.Add(this.checkShowOnlyFilmsAndExams);
+			this.groupBoxProperties.Controls.Add(this.butShowAll);
+			this.groupBoxProperties.Controls.Add(this.checkShowOnlyHygieneProcs);
+			this.groupBoxProperties.Controls.Add(this.checkAudit);
+			this.groupBoxProperties.Controls.Add(this.groupBox7);
+			this.groupBoxProperties.Controls.Add(this.checkNotes);
+			this.groupBoxProperties.Controls.Add(this.checkShowTeeth);
+			this.groupBoxProperties.Location = new System.Drawing.Point(27,37);
+			this.groupBoxProperties.Name = "groupBoxProperties";
+			this.groupBoxProperties.Size = new System.Drawing.Size(277,227);
+			this.groupBoxProperties.TabIndex = 67;
+			this.groupBoxProperties.TabStop = false;
+			// 
+			// butDelete
+			// 
+			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butDelete.Autosize = true;
+			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDelete.CornerRadius = 4F;
+			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
+			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butDelete.Location = new System.Drawing.Point(27,795);
+			this.butDelete.Name = "butDelete";
+			this.butDelete.Size = new System.Drawing.Size(99,24);
+			this.butDelete.TabIndex = 68;
+			this.butDelete.Text = "&Delete View";
+			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
+			// 
+			// butShowNone
+			// 
+			this.butShowNone.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butShowNone.Autosize = true;
+			this.butShowNone.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butShowNone.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butShowNone.CornerRadius = 4F;
+			this.butShowNone.Location = new System.Drawing.Point(69,192);
+			this.butShowNone.Name = "butShowNone";
+			this.butShowNone.Size = new System.Drawing.Size(58,23);
+			this.butShowNone.TabIndex = 60;
+			this.butShowNone.Text = "None";
+			this.butShowNone.Click += new System.EventHandler(this.butShowNone_Click);
+			// 
+			// butShowAll
+			// 
+			this.butShowAll.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butShowAll.Autosize = true;
+			this.butShowAll.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butShowAll.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butShowAll.CornerRadius = 4F;
+			this.butShowAll.Location = new System.Drawing.Point(10,192);
+			this.butShowAll.Name = "butShowAll";
+			this.butShowAll.Size = new System.Drawing.Size(53,23);
+			this.butShowAll.TabIndex = 59;
+			this.butShowAll.Text = "All";
+			this.butShowAll.Click += new System.EventHandler(this.butShowAll_Click);
 			// 
 			// butOK
 			// 
@@ -277,306 +595,6 @@ namespace OpenDental{
 			this.butCancel.Text = "Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// checkShowOnlyFilmsAndExams
-			// 
-			this.checkShowOnlyFilmsAndExams.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkShowOnlyFilmsAndExams.Location = new System.Drawing.Point(16,151);
-			this.checkShowOnlyFilmsAndExams.Name = "checkShowOnlyFilmsAndExams";
-			this.checkShowOnlyFilmsAndExams.Size = new System.Drawing.Size(104,30);
-			this.checkShowOnlyFilmsAndExams.TabIndex = 66;
-			this.checkShowOnlyFilmsAndExams.Text = "Show Only Films and Exams";
-			this.checkShowOnlyFilmsAndExams.TextAlign = System.Drawing.ContentAlignment.TopLeft;
-			// 
-			// checkShowOnlyHygieneProcs
-			// 
-			this.checkShowOnlyHygieneProcs.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkShowOnlyHygieneProcs.Location = new System.Drawing.Point(16,136);
-			this.checkShowOnlyHygieneProcs.Name = "checkShowOnlyHygieneProcs";
-			this.checkShowOnlyHygieneProcs.Size = new System.Drawing.Size(120,13);
-			this.checkShowOnlyHygieneProcs.TabIndex = 65;
-			this.checkShowOnlyHygieneProcs.Text = "Show Only Hygiene";
-			// 
-			// groupBox7
-			// 
-			this.groupBox7.Controls.Add(this.checkSheets);
-			this.groupBox7.Controls.Add(this.checkTasks);
-			this.groupBox7.Controls.Add(this.checkEmail);
-			this.groupBox7.Controls.Add(this.checkCommFamily);
-			this.groupBox7.Controls.Add(this.checkAppt);
-			this.groupBox7.Controls.Add(this.checkLabCase);
-			this.groupBox7.Controls.Add(this.checkRx);
-			this.groupBox7.Controls.Add(this.checkComm);
-			this.groupBox7.Location = new System.Drawing.Point(145,19);
-			this.groupBox7.Name = "groupBox7";
-			this.groupBox7.Size = new System.Drawing.Size(125,148);
-			this.groupBox7.TabIndex = 64;
-			this.groupBox7.TabStop = false;
-			this.groupBox7.Text = "Object Types";
-			// 
-			// checkSheets
-			// 
-			this.checkSheets.Checked = true;
-			this.checkSheets.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkSheets.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkSheets.Location = new System.Drawing.Point(10,130);
-			this.checkSheets.Name = "checkSheets";
-			this.checkSheets.Size = new System.Drawing.Size(102,13);
-			this.checkSheets.TabIndex = 219;
-			this.checkSheets.Text = "Sheets";
-			// 
-			// checkTasks
-			// 
-			this.checkTasks.Checked = true;
-			this.checkTasks.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkTasks.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkTasks.Location = new System.Drawing.Point(10,66);
-			this.checkTasks.Name = "checkTasks";
-			this.checkTasks.Size = new System.Drawing.Size(102,13);
-			this.checkTasks.TabIndex = 218;
-			this.checkTasks.Text = "Tasks";
-			// 
-			// checkEmail
-			// 
-			this.checkEmail.Checked = true;
-			this.checkEmail.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkEmail.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkEmail.Location = new System.Drawing.Point(10,82);
-			this.checkEmail.Name = "checkEmail";
-			this.checkEmail.Size = new System.Drawing.Size(102,13);
-			this.checkEmail.TabIndex = 217;
-			this.checkEmail.Text = "Email";
-			// 
-			// checkCommFamily
-			// 
-			this.checkCommFamily.Checked = true;
-			this.checkCommFamily.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkCommFamily.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkCommFamily.Location = new System.Drawing.Point(26,49);
-			this.checkCommFamily.Name = "checkCommFamily";
-			this.checkCommFamily.Size = new System.Drawing.Size(88,13);
-			this.checkCommFamily.TabIndex = 20;
-			this.checkCommFamily.Text = "Family";
-			// 
-			// checkAppt
-			// 
-			this.checkAppt.Checked = true;
-			this.checkAppt.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkAppt.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkAppt.Location = new System.Drawing.Point(10,17);
-			this.checkAppt.Name = "checkAppt";
-			this.checkAppt.Size = new System.Drawing.Size(102,13);
-			this.checkAppt.TabIndex = 20;
-			this.checkAppt.Text = "Appointments";
-			// 
-			// checkLabCase
-			// 
-			this.checkLabCase.Checked = true;
-			this.checkLabCase.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkLabCase.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkLabCase.Location = new System.Drawing.Point(10,98);
-			this.checkLabCase.Name = "checkLabCase";
-			this.checkLabCase.Size = new System.Drawing.Size(102,13);
-			this.checkLabCase.TabIndex = 17;
-			this.checkLabCase.Text = "Lab Cases";
-			// 
-			// checkRx
-			// 
-			this.checkRx.Checked = true;
-			this.checkRx.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkRx.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkRx.Location = new System.Drawing.Point(10,114);
-			this.checkRx.Name = "checkRx";
-			this.checkRx.Size = new System.Drawing.Size(102,13);
-			this.checkRx.TabIndex = 8;
-			this.checkRx.Text = "Rx";
-			// 
-			// checkComm
-			// 
-			this.checkComm.Checked = true;
-			this.checkComm.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkComm.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkComm.Location = new System.Drawing.Point(10,33);
-			this.checkComm.Name = "checkComm";
-			this.checkComm.Size = new System.Drawing.Size(102,13);
-			this.checkComm.TabIndex = 16;
-			this.checkComm.Text = "Comm Log";
-			// 
-			// groupBox6
-			// 
-			this.groupBox6.Controls.Add(this.checkShowCn);
-			this.groupBox6.Controls.Add(this.checkShowE);
-			this.groupBox6.Controls.Add(this.checkShowR);
-			this.groupBox6.Controls.Add(this.checkShowC);
-			this.groupBox6.Controls.Add(this.checkShowTP);
-			this.groupBox6.Location = new System.Drawing.Point(6,19);
-			this.groupBox6.Name = "groupBox6";
-			this.groupBox6.Size = new System.Drawing.Size(121,99);
-			this.groupBox6.TabIndex = 63;
-			this.groupBox6.TabStop = false;
-			this.groupBox6.Text = "Procedures";
-			// 
-			// checkShowCn
-			// 
-			this.checkShowCn.Checked = true;
-			this.checkShowCn.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkShowCn.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkShowCn.Location = new System.Drawing.Point(9,81);
-			this.checkShowCn.Name = "checkShowCn";
-			this.checkShowCn.Size = new System.Drawing.Size(101,13);
-			this.checkShowCn.TabIndex = 15;
-			this.checkShowCn.Text = "Conditions";
-			// 
-			// checkShowE
-			// 
-			this.checkShowE.Checked = true;
-			this.checkShowE.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkShowE.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkShowE.Location = new System.Drawing.Point(9,49);
-			this.checkShowE.Name = "checkShowE";
-			this.checkShowE.Size = new System.Drawing.Size(101,13);
-			this.checkShowE.TabIndex = 10;
-			this.checkShowE.Text = "Existing";
-			// 
-			// checkShowR
-			// 
-			this.checkShowR.Checked = true;
-			this.checkShowR.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkShowR.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkShowR.Location = new System.Drawing.Point(9,65);
-			this.checkShowR.Name = "checkShowR";
-			this.checkShowR.Size = new System.Drawing.Size(101,13);
-			this.checkShowR.TabIndex = 14;
-			this.checkShowR.Text = "Referred";
-			// 
-			// checkShowC
-			// 
-			this.checkShowC.Checked = true;
-			this.checkShowC.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkShowC.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkShowC.Location = new System.Drawing.Point(9,33);
-			this.checkShowC.Name = "checkShowC";
-			this.checkShowC.Size = new System.Drawing.Size(101,13);
-			this.checkShowC.TabIndex = 9;
-			this.checkShowC.Text = "Completed";
-			// 
-			// checkShowTP
-			// 
-			this.checkShowTP.Checked = true;
-			this.checkShowTP.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkShowTP.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkShowTP.Location = new System.Drawing.Point(28,17);
-			this.checkShowTP.Name = "checkShowTP";
-			this.checkShowTP.Size = new System.Drawing.Size(101,13);
-			this.checkShowTP.TabIndex = 8;
-			this.checkShowTP.Text = "Treat Plan";
-			// 
-			// checkShowTeeth
-			// 
-			this.checkShowTeeth.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkShowTeeth.Location = new System.Drawing.Point(171,183);
-			this.checkShowTeeth.Name = "checkShowTeeth";
-			this.checkShowTeeth.Size = new System.Drawing.Size(99,13);
-			this.checkShowTeeth.TabIndex = 61;
-			this.checkShowTeeth.Text = "Selected Teeth";
-			// 
-			// checkNotes
-			// 
-			this.checkNotes.AllowDrop = true;
-			this.checkNotes.Checked = true;
-			this.checkNotes.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkNotes.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkNotes.Location = new System.Drawing.Point(16,120);
-			this.checkNotes.Name = "checkNotes";
-			this.checkNotes.Size = new System.Drawing.Size(102,13);
-			this.checkNotes.TabIndex = 58;
-			this.checkNotes.Text = "Proc Notes";
-			// 
-			// checkAudit
-			// 
-			this.checkAudit.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkAudit.Location = new System.Drawing.Point(171,202);
-			this.checkAudit.Name = "checkAudit";
-			this.checkAudit.Size = new System.Drawing.Size(73,13);
-			this.checkAudit.TabIndex = 62;
-			this.checkAudit.Text = "Audit";
-			// 
-			// butShowAll
-			// 
-			this.butShowAll.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butShowAll.Autosize = true;
-			this.butShowAll.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butShowAll.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butShowAll.CornerRadius = 4F;
-			this.butShowAll.Location = new System.Drawing.Point(10,192);
-			this.butShowAll.Name = "butShowAll";
-			this.butShowAll.Size = new System.Drawing.Size(53,23);
-			this.butShowAll.TabIndex = 59;
-			this.butShowAll.Text = "All";
-			// 
-			// butShowNone
-			// 
-			this.butShowNone.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butShowNone.Autosize = true;
-			this.butShowNone.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butShowNone.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butShowNone.CornerRadius = 4F;
-			this.butShowNone.Location = new System.Drawing.Point(69,192);
-			this.butShowNone.Name = "butShowNone";
-			this.butShowNone.Size = new System.Drawing.Size(58,23);
-			this.butShowNone.TabIndex = 60;
-			this.butShowNone.Text = "None";
-			// 
-			// textBoxViewDesc
-			// 
-			this.textBoxViewDesc.Location = new System.Drawing.Point(164,12);
-			this.textBoxViewDesc.Name = "textBoxViewDesc";
-			this.textBoxViewDesc.Size = new System.Drawing.Size(367,20);
-			this.textBoxViewDesc.TabIndex = 1;
-			// 
-			// labelDescription
-			// 
-			this.labelDescription.Font = new System.Drawing.Font("Microsoft Sans Serif",10F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.labelDescription.Location = new System.Drawing.Point(12,9);
-			this.labelDescription.Name = "labelDescription";
-			this.labelDescription.Size = new System.Drawing.Size(146,25);
-			this.labelDescription.TabIndex = 57;
-			this.labelDescription.Text = "View Description";
-			this.labelDescription.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// groupBoxProperties
-			// 
-			this.groupBoxProperties.Controls.Add(this.groupBox6);
-			this.groupBoxProperties.Controls.Add(this.butShowNone);
-			this.groupBoxProperties.Controls.Add(this.checkShowOnlyFilmsAndExams);
-			this.groupBoxProperties.Controls.Add(this.butShowAll);
-			this.groupBoxProperties.Controls.Add(this.checkShowOnlyHygieneProcs);
-			this.groupBoxProperties.Controls.Add(this.checkAudit);
-			this.groupBoxProperties.Controls.Add(this.groupBox7);
-			this.groupBoxProperties.Controls.Add(this.checkNotes);
-			this.groupBoxProperties.Controls.Add(this.checkShowTeeth);
-			this.groupBoxProperties.Location = new System.Drawing.Point(27,37);
-			this.groupBoxProperties.Name = "groupBoxProperties";
-			this.groupBoxProperties.Size = new System.Drawing.Size(277,227);
-			this.groupBoxProperties.TabIndex = 67;
-			this.groupBoxProperties.TabStop = false;
-			// 
-			// butDelete
-			// 
-			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butDelete.Autosize = true;
-			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDelete.CornerRadius = 4F;
-			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
-			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(27,795);
-			this.butDelete.Name = "butDelete";
-			this.butDelete.Size = new System.Drawing.Size(99,24);
-			this.butDelete.TabIndex = 68;
-			this.butDelete.Text = "&Delete View";
-			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
-			// 
 			// FormChartView
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
@@ -604,7 +622,6 @@ namespace OpenDental{
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Setup Chart Views";
 			this.Load += new System.EventHandler(this.FormChartView_Load);
-			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormChartView_FormClosing);
 			this.groupBox7.ResumeLayout(false);
 			this.groupBox6.ResumeLayout(false);
 			this.groupBoxProperties.ResumeLayout(false);
@@ -615,24 +632,38 @@ namespace OpenDental{
 		#endregion
 
 		private void FormChartView_Load(object sender,EventArgs e) {
-			textBoxViewDesc.Text=ChartViewCur.Description;
-			//if(!ChartViewCur.IsNew) {
-			//}
-			//else {
-			//}
+			if(!ChartViewCur.IsNew) {
+				textBoxViewDesc.Text=ChartViewCur.Description;
+				checkSheets.Checked=(ChartViewCur.ObjectTypes&ChartViewObjs.Sheets)==ChartViewObjs.Sheets;
+				checkTasks.Checked=(ChartViewCur.ObjectTypes&ChartViewObjs.Tasks)==ChartViewObjs.Tasks;
+				checkEmail.Checked=(ChartViewCur.ObjectTypes&ChartViewObjs.Email)==ChartViewObjs.Email;
+				checkCommFamily.Checked=(ChartViewCur.ObjectTypes&ChartViewObjs.CommLogFamily)==ChartViewObjs.CommLogFamily;
+				checkAppt.Checked=(ChartViewCur.ObjectTypes&ChartViewObjs.Appointments)==ChartViewObjs.Appointments;
+				checkLabCase.Checked=(ChartViewCur.ObjectTypes&ChartViewObjs.LabCases)==ChartViewObjs.LabCases;
+				checkRx.Checked=(ChartViewCur.ObjectTypes&ChartViewObjs.Rx)==ChartViewObjs.Rx;
+				checkComm.Checked=(ChartViewCur.ObjectTypes&ChartViewObjs.CommLog)==ChartViewObjs.CommLog;
+				checkShowTP.Checked=(ChartViewCur.ProcStatuses&ChartViewProcStat.TP)==ChartViewProcStat.TP;
+				checkShowC.Checked=(ChartViewCur.ProcStatuses&ChartViewProcStat.C)==ChartViewProcStat.C;
+				checkShowE.Checked=(ChartViewCur.ProcStatuses&ChartViewProcStat.EC)==ChartViewProcStat.EC;
+				checkShowR.Checked=(ChartViewCur.ProcStatuses&ChartViewProcStat.R)==ChartViewProcStat.R;
+				checkShowCn.Checked=(ChartViewCur.ProcStatuses&ChartViewProcStat.Cn)==ChartViewProcStat.Cn;
+				checkShowTeeth.Checked=ChartViewCur.SelectedTeethOnly;
+				checkNotes.Checked=ChartViewCur.ShowProcNotes;
+				checkAudit.Checked=ChartViewCur.IsAudit;
+			}
 			DisplayFields.RefreshCache();
-			ListShowing=DisplayFields.GetForCategory(category);
+			ListShowing=DisplayFields.GetForChartView(ChartViewCur.ChartViewNum);
 			FillGrids();
 		}
 
 		private void FillGrids() {
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g("FormDisplayFields","FieldName"),110);
+			ODGridColumn col=new ODGridColumn(Lan.g("FormChartView","FieldName"),110);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("FormDisplayFields","New Descript"),110);
+			col=new ODGridColumn(Lan.g("FormChartView","New Descript"),110);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("FormDisplayFields","Width"),60);
+			col=new ODGridColumn(Lan.g("FormChartView","Width"),60);
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
@@ -644,7 +675,7 @@ namespace OpenDental{
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
-			List<DisplayField> availList=DisplayFields.GetAllAvailableList(category);
+			List<DisplayField> availList=DisplayFields.GetAllAvailableList(DisplayFieldCategory.None);
 			for(int i=0;i<ListShowing.Count;i++) {
 				for(int j=0;j<availList.Count;j++) {
 					if(ListShowing[i].InternalName==availList[j].InternalName) {
@@ -659,88 +690,255 @@ namespace OpenDental{
 			}
 		}
 
+		#region Show
+		private void checkShowTP_Click(object sender,System.EventArgs e) {
+			changed=true;
+		}
+
+		private void checkShowC_Click(object sender,System.EventArgs e) {
+			changed=true;
+		}
+
+		private void checkShowE_Click(object sender,System.EventArgs e) {
+			changed=true;
+		}
+
+		private void checkShowR_Click(object sender,System.EventArgs e) {
+			changed=true;
+		}
+
+		private void checkShowCn_Click(object sender,EventArgs e) {
+			changed=true;
+		}
+
+		private void checkNotes_Click(object sender,System.EventArgs e) {
+			changed=true;
+		}
+
+		private void checkAppt_Click(object sender,EventArgs e) {
+			changed=true;
+		}
+
+		private void checkComm_Click(object sender,EventArgs e) {
+			changed=true;
+		}
+
+		private void checkCommFamily_Click(object sender,EventArgs e) {
+			changed=true;
+		}
+
+		private void checkLabCase_Click(object sender,EventArgs e) {
+			changed=true;
+		}
+
+		private void checkRx_Click(object sender,System.EventArgs e) {
+			changed=true;
+		}
+
+		private void checkTasks_Click(object sender,EventArgs e) {
+			changed=true;
+		}
+
+		private void checkEmail_Click(object sender,EventArgs e) {
+			changed=true;
+		}
+
+		private void checkSheets_Click(object sender,System.EventArgs e) {
+			changed=true;
+		}
+
+		private void checkShowTeeth_Click(object sender,System.EventArgs e) {
+			if(checkShowTeeth.Checked) {
+				checkShowTP.Checked=true;
+				checkShowC.Checked=true;
+				checkShowE.Checked=true;
+				checkShowR.Checked=true;
+				checkShowCn.Checked=true;
+				checkNotes.Checked=true;
+				checkAppt.Checked=false;
+				checkComm.Checked=false;
+				checkCommFamily.Checked=false;
+				checkLabCase.Checked=false;
+				checkRx.Checked=false;
+				checkEmail.Checked=false;
+				checkTasks.Checked=false;
+				checkSheets.Checked=false;
+			}
+			else {
+				checkShowTP.Checked=true;
+				checkShowC.Checked=true;
+				checkShowE.Checked=true;
+				checkShowR.Checked=true;
+				checkShowCn.Checked=true;
+				checkNotes.Checked=true;
+				checkAppt.Checked=true;
+				checkComm.Checked=true;
+				checkCommFamily.Checked=true;
+				checkLabCase.Checked=true;
+				checkRx.Checked=true;
+				checkEmail.Checked=true;
+				checkTasks.Checked=true;
+				checkSheets.Checked=true;
+			}
+			checkShowOnlyFilmsAndExams.Checked = false;
+			checkShowOnlyHygieneProcs.Checked = false;
+			changed=true;
+		}
+
+		private void checkAudit_Click(object sender,EventArgs e) {
+			changed=true;
+		}
+
+
+		private void butShowAll_Click(object sender,EventArgs e) {
+			checkShowTP.Checked=true;
+			checkShowC.Checked=true;
+			checkShowE.Checked=true;
+			checkShowR.Checked=true;
+			checkShowCn.Checked=true;
+			checkNotes.Checked=true;
+			checkAppt.Checked=true;
+			checkComm.Checked=true;
+			checkCommFamily.Checked=true;
+			checkLabCase.Checked=true;
+			checkRx.Checked=true;
+			checkShowTeeth.Checked=false;
+			checkTasks.Checked=true;
+			checkEmail.Checked=true;
+			checkSheets.Checked=true;
+			checkShowOnlyFilmsAndExams.Checked=false;
+			checkShowOnlyHygieneProcs.Checked=false;
+			changed=true;
+		}
+
+		private void butShowNone_Click(object sender,EventArgs e) {
+			checkShowTP.Checked=false;
+			checkShowC.Checked=false;
+			checkShowE.Checked=false;
+			checkShowR.Checked=false;
+			checkShowCn.Checked=false;
+			checkNotes.Checked=false;
+			checkAppt.Checked=false;
+			checkComm.Checked=false;
+			checkCommFamily.Checked=false;
+			checkLabCase.Checked=false;
+			checkRx.Checked=false;
+			checkShowTeeth.Checked=false;
+			checkTasks.Checked=false;
+			checkEmail.Checked=false;
+			checkSheets.Checked=false;
+			changed=true;
+		}
+
+		private void checkShowHygieneProcs_Click(object sender,EventArgs e) {
+			checkComm.Checked=false;
+			checkCommFamily.Checked=false;
+			checkLabCase.Checked=false;
+			checkRx.Checked=false;
+			checkShowTeeth.Checked=false;
+			checkTasks.Checked=false;
+			checkEmail.Checked=false;
+			checkSheets.Checked=false;
+			checkShowOnlyFilmsAndExams.Checked = false;
+			changed=true;
+		}
+
+		private void checkShowOnlyFilmsAndExams_Click(object sender,EventArgs e) {
+			checkComm.Checked=false;
+			checkCommFamily.Checked=false;
+			checkLabCase.Checked=false;
+			checkRx.Checked=false;
+			checkShowTeeth.Checked=false;
+			checkTasks.Checked=false;
+			checkEmail.Checked=false;
+			checkSheets.Checked=false;
+			checkShowOnlyHygieneProcs.Checked = false;
+			changed=true;
+		}
+		#endregion Show
+
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-		//  FormDisplayFieldEdit formD=new FormDisplayFieldEdit();
-		//  formD.FieldCur=ListShowing[e.Row];
-		//  formD.ShowDialog();
-		//  FillGrids();
-		//  changed=true;
+			FormDisplayFieldEdit formD=new FormDisplayFieldEdit();
+			formD.FieldCur=ListShowing[e.Row];
+			formD.ShowDialog();
+			FillGrids();
+			changed=true;
 		}
 
 		private void butDefault_Click(object sender,EventArgs e) {
-		//  ListShowing=DisplayFields.GetDefaultList(category);
-		//  FillGrids();
-		//  changed=true;
+			ListShowing=DisplayFields.GetDefaultList(DisplayFieldCategory.None);
+			FillGrids();
+			changed=true;
 		}
 
 		private void butLeft_Click(object sender,EventArgs e) {
-		//  if(listAvailable.SelectedItems.Count==0){
-		//    MsgBox.Show(this,"Please select an item in the list on the right first.");
-		//    return;
-		//  }
-		//  DisplayField field;
-		//  for(int i=0;i<listAvailable.SelectedItems.Count;i++){
-		//    field=(DisplayField)listAvailable.SelectedItems[i];
-		//    ListShowing.Add(field);
-		//  }
-		//  FillGrids();
-		//  changed=true;
+			if(listAvailable.SelectedItems.Count==0) {
+				MsgBox.Show(this,"Please select an item in the list on the right first.");
+				return;
+			}
+			DisplayField field;
+			for(int i=0;i<listAvailable.SelectedItems.Count;i++) {
+				field=(DisplayField)listAvailable.SelectedItems[i];
+				ListShowing.Add(field);
+			}
+			FillGrids();
+			changed=true;
 		}
 
 		private void butRight_Click(object sender,EventArgs e) {
-		//  if(gridMain.SelectedIndices.Length==0) {
-		//    MsgBox.Show(this,"Please select an item in the grid on the left first.");
-		//    return;
-		//  }
-		//  for(int i=gridMain.SelectedIndices.Length-1;i>=0;i--){//go backwards
-		//    ListShowing.RemoveAt(gridMain.SelectedIndices[i]);
-		//  }
-		//  FillGrids();
-		//  changed=true;
+			if(gridMain.SelectedIndices.Length==0) {
+				MsgBox.Show(this,"Please select an item in the grid on the left first.");
+				return;
+			}
+			for(int i=gridMain.SelectedIndices.Length-1;i>=0;i--) {//go backwards
+				ListShowing.RemoveAt(gridMain.SelectedIndices[i]);
+			}
+			FillGrids();
+			changed=true;
 		}
 
 		private void butUp_Click(object sender,EventArgs e) {
-		//  if(gridMain.SelectedIndices.Length==0) {
-		//    MsgBox.Show(this,"Please select an item in the grid first.");
-		//    return;
-		//  }
-		//  int[] selected=new int[gridMain.SelectedIndices.Length];
-		//  for(int i=0;i<gridMain.SelectedIndices.Length;i++){
-		//    selected[i]=gridMain.SelectedIndices[i];
-		//  }
-		//  if(selected[0]==0){
-		//    return;
-		//  }
-		//  for(int i=0;i<selected.Length;i++){
-		//    ListShowing.Reverse(selected[i]-1,2);
-		//  }
-		//  FillGrids();
-		//  for(int i=0;i<selected.Length;i++){
-		//    gridMain.SetSelected(selected[i]-1,true);
-		//  }
-		//  changed=true;
+			if(gridMain.SelectedIndices.Length==0) {
+				MsgBox.Show(this,"Please select an item in the grid first.");
+				return;
+			}
+			int[] selected=new int[gridMain.SelectedIndices.Length];
+			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
+				selected[i]=gridMain.SelectedIndices[i];
+			}
+			if(selected[0]==0) {
+				return;
+			}
+			for(int i=0;i<selected.Length;i++) {
+				ListShowing.Reverse(selected[i]-1,2);
+			}
+			FillGrids();
+			for(int i=0;i<selected.Length;i++) {
+				gridMain.SetSelected(selected[i]-1,true);
+			}
+			changed=true;
 		}
 
 		private void butDown_Click(object sender,EventArgs e) {
-		//  if(gridMain.SelectedIndices.Length==0) {
-		//    MsgBox.Show(this,"Please select an item in the grid first.");
-		//    return;
-		//  }
-		//  int[] selected=new int[gridMain.SelectedIndices.Length];
-		//  for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
-		//    selected[i]=gridMain.SelectedIndices[i];
-		//  }
-		//  if(selected[selected.Length-1]==ListShowing.Count-1) {
-		//    return;
-		//  }
-		//  for(int i=selected.Length-1;i>=0;i--) {//go backwards
-		//    ListShowing.Reverse(selected[i],2);
-		//  }
-		//  FillGrids();
-		//  for(int i=0;i<selected.Length;i++) {
-		//    gridMain.SetSelected(selected[i]+1,true);
-		//  }
-		//  changed=true;
+			if(gridMain.SelectedIndices.Length==0) {
+				MsgBox.Show(this,"Please select an item in the grid first.");
+				return;
+			}
+			int[] selected=new int[gridMain.SelectedIndices.Length];
+			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
+				selected[i]=gridMain.SelectedIndices[i];
+			}
+			if(selected[selected.Length-1]==ListShowing.Count-1) {
+				return;
+			}
+			for(int i=selected.Length-1;i>=0;i--) {//go backwards
+				ListShowing.Reverse(selected[i],2);
+			}
+			FillGrids();
+			for(int i=0;i<selected.Length;i++) {
+				gridMain.SetSelected(selected[i]+1,true);
+			}
+			changed=true;
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
@@ -753,6 +951,7 @@ namespace OpenDental{
 			}
 			try {
 				ChartViews.Delete(ChartViewCur.ChartViewNum);
+				DisplayFields.DeleteForChartView(ChartViewCur.ChartViewNum);
 				DialogResult=DialogResult.OK;
 			}
 			catch(Exception ex) {
@@ -761,22 +960,86 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
+			if(ChartViewCur.Description!=textBoxViewDesc.Text) {
+				ChartViewCur.Description=textBoxViewDesc.Text;
+				changed=true;
+			}
+			if(textBoxViewDesc.Text.Trim()=="") {
+				MsgBox.Show(this,"View description cannot be blank.");
+				return;
+			}
 			if(!changed) {
 				DialogResult=DialogResult.OK;
 				return;
 			}
-		//  DisplayFields.SaveListForCategory(ListShowing,category);
-		//  DataValid.SetInvalid(InvalidType.DisplayFields);
-		//  DialogResult=DialogResult.OK;
+			ChartViewCur.Description=textBoxViewDesc.Text;
+			ChartViewCur.ObjectTypes=ChartViewObjs.None;
+			if(checkAppt.Checked) {
+				ChartViewCur.ObjectTypes|=ChartViewObjs.Appointments;
+			}
+			if(checkCommFamily.Checked) {
+				ChartViewCur.ObjectTypes|=ChartViewObjs.CommLogFamily;
+			}
+			if(checkTasks.Checked) {
+				ChartViewCur.ObjectTypes|=ChartViewObjs.Tasks;
+			}
+			if(checkEmail.Checked) {
+				ChartViewCur.ObjectTypes|=ChartViewObjs.Email;
+			}
+			if(checkLabCase.Checked) {
+				ChartViewCur.ObjectTypes|=ChartViewObjs.LabCases;
+			}
+			if(checkRx.Checked) {
+				ChartViewCur.ObjectTypes|=ChartViewObjs.Rx;
+			}
+			if(checkComm.Checked) {
+			ChartViewCur.ObjectTypes|=ChartViewObjs.CommLog;
+			}
+			if(checkSheets.Checked) {
+				ChartViewCur.ObjectTypes|=ChartViewObjs.Sheets;
+			}
+			ChartViewCur.ProcStatuses=ChartViewProcStat.None;
+			if(checkShowTP.Checked) {
+				ChartViewCur.ProcStatuses|=ChartViewProcStat.TP;
+			}
+			if(checkShowC.Checked) {
+				ChartViewCur.ProcStatuses|=ChartViewProcStat.C;
+			}
+			if(checkShowE.Checked) {
+				ChartViewCur.ProcStatuses|=ChartViewProcStat.EC;
+			}
+			if(checkShowR.Checked) {
+				ChartViewCur.ProcStatuses|=ChartViewProcStat.R;
+			}
+			if(checkShowCn.Checked) {
+				ChartViewCur.ProcStatuses|=ChartViewProcStat.Cn;
+			}	
+			//if(checkShowOnlyFilmsAndExams.Checked) {
+			//}
+			//if(checkShowOnlyHygieneProcs.Checked) {
+			//}
+			ChartViewCur.SelectedTeethOnly=checkShowTeeth.Checked;
+			ChartViewCur.ShowProcNotes=checkNotes.Checked;
+			ChartViewCur.IsAudit=checkAudit.Checked;
+			if(!ChartViewCur.IsNew) {
+				ChartViews.Update(ChartViewCur);
+			}
+			else {
+				ChartViewCur.ItemOrder=-1;
+				ChartViews.Insert(ChartViewCur);
+			}
+			DisplayFields.SaveListForChartView(ListShowing,ChartViewCur.ChartViewNum);
+			//DataValid.SetInvalid(InvalidType.DisplayFields);
+			DialogResult=DialogResult.OK;
 		}
 
 		private void butCancel_Click(object sender, System.EventArgs e) {
-		//  DialogResult=DialogResult.Cancel;
+			DialogResult=DialogResult.Cancel;
 		}
 
-		private void FormChartView_FormClosing(object sender,FormClosingEventArgs e) {
+		
 
-		}
+		
 
 
 		

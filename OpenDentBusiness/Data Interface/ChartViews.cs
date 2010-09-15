@@ -46,6 +46,15 @@ namespace OpenDentBusiness{
 		#endregion
 
 		///<summary></summary>
+		public static long Insert(ChartView chartView) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				chartView.ChartViewNum=Meth.GetLong(MethodBase.GetCurrentMethod(),chartView);
+				return chartView.ChartViewNum;
+			}
+			return Crud.ChartViewCrud.Insert(chartView);
+		}
+
+		///<summary></summary>
 		public static void Update(ChartView chartView) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),chartView);
@@ -84,14 +93,6 @@ namespace OpenDentBusiness{
 			return Crud.ChartViewCrud.SelectOne(chartViewNum);
 		}
 
-		///<summary></summary>
-		public static long Insert(ChartView chartView){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				chartView.ChartViewNum=Meth.GetLong(MethodBase.GetCurrentMethod(),chartView);
-				return chartView.ChartViewNum;
-			}
-			return Crud.ChartViewCrud.Insert(chartView);
-		}
 		*/
 
 
