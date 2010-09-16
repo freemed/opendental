@@ -790,6 +790,7 @@ namespace OpenDental {
 
 		///<summary>Returns true when all of the sheet fields with IsRequired set to true have a value set. Otherwise, a message box shows and false is returned.</summary>
 		private bool VerifyRequiredFields(){
+			FillFieldsFromControls();
 			foreach(Control control in panelMain.Controls){
 				if(control.Tag==null){
 					continue;
@@ -814,7 +815,33 @@ namespace OpenDental {
 						MsgBox.Show(this,"Signature required");
 						return false;
 					}
-				}//TODO: radio buttons.
+				}else if(control.GetType()==typeof(SheetCheckBox)){//Radio button groups.
+					SheetField field=(SheetField)control.Tag;
+					if(field.IsRequired && field.RadioButtonGroup!=""){
+						if(field.FieldValue!="X"){//This group is required but this radio button is not checked.
+							//All radio buttons within a group must either all be marked required or all be marked not required. 
+							//Not the most efficient check, but there won't usually be more than a few hundred items so the user will not ever notice. We can speed up later if needed.
+							bool valueSet=false;
+							int numGroupButtons=0;
+							foreach(Control control2 in panelMain.Controls){
+								if(control2.GetType()==typeof(SheetCheckBox)){
+									SheetField field2=(SheetField)control2.Tag;
+									if(field2.RadioButtonGroup.ToLower()==field.RadioButtonGroup.ToLower()){
+										numGroupButtons++;
+										if(field2.FieldValue=="X"){
+											valueSet=true;
+											break;
+										}
+									}
+								}
+							}
+							if(numGroupButtons>1 && !valueSet){
+								MessageBox.Show(Lan.g(this,"You must select a value for radio button group")+" '"+field.RadioButtonGroup+"' ");
+								return false;
+							}
+						}
+					}
+				}
 			}
 			return true;
 		}

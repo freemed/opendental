@@ -45,6 +45,7 @@ namespace OpenDental{
 			this.textXPos = new OpenDental.ValidNum();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.checkRequired = new System.Windows.Forms.CheckBox();
 			this.groupRadio.SuspendLayout();
 			this.groupRadioMisc.SuspendLayout();
 			this.SuspendLayout();
@@ -63,7 +64,7 @@ namespace OpenDental{
 			this.listFields.FormattingEnabled = true;
 			this.listFields.Location = new System.Drawing.Point(15,37);
 			this.listFields.Name = "listFields";
-			this.listFields.Size = new System.Drawing.Size(142,407);
+			this.listFields.Size = new System.Drawing.Size(142,433);
 			this.listFields.TabIndex = 85;
 			this.listFields.SelectedIndexChanged += new System.EventHandler(this.listFields_SelectedIndexChanged);
 			this.listFields.DoubleClick += new System.EventHandler(this.listFields_DoubleClick);
@@ -108,7 +109,7 @@ namespace OpenDental{
 			// 
 			this.groupRadio.Controls.Add(this.listRadio);
 			this.groupRadio.Controls.Add(this.label1);
-			this.groupRadio.Location = new System.Drawing.Point(182,268);
+			this.groupRadio.Location = new System.Drawing.Point(182,286);
 			this.groupRadio.Name = "groupRadio";
 			this.groupRadio.Size = new System.Drawing.Size(297,183);
 			this.groupRadio.TabIndex = 101;
@@ -168,6 +169,7 @@ namespace OpenDental{
 			// 
 			// groupRadioMisc
 			// 
+			this.groupRadioMisc.Controls.Add(this.checkRequired);
 			this.groupRadioMisc.Controls.Add(this.label9);
 			this.groupRadioMisc.Controls.Add(this.textRadioGroupName);
 			this.groupRadioMisc.Controls.Add(this.label4);
@@ -175,7 +177,7 @@ namespace OpenDental{
 			this.groupRadioMisc.Controls.Add(this.textRadioValue);
 			this.groupRadioMisc.Location = new System.Drawing.Point(182,142);
 			this.groupRadioMisc.Name = "groupRadioMisc";
-			this.groupRadioMisc.Size = new System.Drawing.Size(297,117);
+			this.groupRadioMisc.Size = new System.Drawing.Size(297,138);
 			this.groupRadioMisc.TabIndex = 106;
 			this.groupRadioMisc.TabStop = false;
 			this.groupRadioMisc.Text = "Radio Button";
@@ -200,7 +202,7 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(15,484);
+			this.butDelete.Location = new System.Drawing.Point(16,485);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(77,24);
 			this.butDelete.TabIndex = 100;
@@ -251,7 +253,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(353,484);
+			this.butOK.Location = new System.Drawing.Point(323,485);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 3;
@@ -266,17 +268,28 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(434,484);
+			this.butCancel.Location = new System.Drawing.Point(404,485);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 2;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// checkRequired
+			// 
+			this.checkRequired.AutoSize = true;
+			this.checkRequired.Location = new System.Drawing.Point(39,116);
+			this.checkRequired.Name = "checkRequired";
+			this.checkRequired.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+			this.checkRequired.Size = new System.Drawing.Size(69,17);
+			this.checkRequired.TabIndex = 107;
+			this.checkRequired.Text = "Required";
+			this.checkRequired.UseVisualStyleBackColor = true;
+			// 
 			// FormSheetFieldCheckBox
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(521,520);
+			this.ClientSize = new System.Drawing.Size(495,535);
 			this.Controls.Add(this.groupRadioMisc);
 			this.Controls.Add(this.groupRadio);
 			this.Controls.Add(this.butDelete);
@@ -328,5 +341,6 @@ namespace OpenDental{
 		private System.Windows.Forms.TextBox textRadioValue;
 		private System.Windows.Forms.GroupBox groupRadioMisc;
 		private System.Windows.Forms.Label label9;
+		private System.Windows.Forms.CheckBox checkRequired;
 	}
 }

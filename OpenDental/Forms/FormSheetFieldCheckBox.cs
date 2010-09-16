@@ -42,6 +42,9 @@ namespace OpenDental {
 			textYPos.Text=SheetFieldDefCur.YPos.ToString();
 			textWidth.Text=SheetFieldDefCur.Width.ToString();
 			textHeight.Text=SheetFieldDefCur.Height.ToString();
+			textRadioGroupName.Text=SheetFieldDefCur.RadioButtonGroup;
+			textRadioValue.Text=SheetFieldDefCur.RadioButtonValue;
+			checkRequired.Checked=SheetFieldDefCur.IsRequired;
 		}
 
 		private void listFields_SelectedIndexChanged(object sender,EventArgs e) {
@@ -116,6 +119,7 @@ namespace OpenDental {
 				SheetFieldDefCur.RadioButtonGroup=textRadioGroupName.Text;
 				SheetFieldDefCur.RadioButtonValue=textRadioValue.Text;
 			}
+			SheetFieldDefCur.IsRequired=checkRequired.Checked;
 			//don't save to database here.
 			DialogResult=DialogResult.OK;
 		}

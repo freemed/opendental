@@ -749,7 +749,31 @@ namespace OpenDental {
 			}
 		}
 
+		private bool VerifyDesign(){
+			//Verify radio button groups.
+			for(int i=0;i<SheetDefCur.SheetFieldDefs.Count;i++){
+				SheetFieldDef field=SheetDefCur.SheetFieldDefs[i];
+				if(field.FieldType==SheetFieldType.CheckBox && field.IsRequired && field.RadioButtonGroup!=""){
+					//All radio buttons within a group must either all be marked required or all be marked not required. 
+					//Not the most efficient check, but there won't usually be more than a few hundred items so the user will not ever notice. We can speed up later if needed.
+					for(int j=0;j<SheetDefCur.SheetFieldDefs.Count;j++){
+						SheetFieldDef field2=SheetDefCur.SheetFieldDefs[j];
+						if(field2.FieldType==SheetFieldType.CheckBox && !field2.IsRequired &&
+							field2.RadioButtonGroup.ToLower()==field.RadioButtonGroup.ToLower()){
+								MessageBox.Show(Lan.g(this,"Radio buttons in radio button group")+" '"+field.RadioButtonGroup+"' "
+									+Lan.g(this,"must all be marked required or all be marked not required."));
+								return false;
+						}
+					}
+				}
+			}
+			return true;
+		}
+
 		private void butOK_Click(object sender,EventArgs e) {
+			if(!VerifyDesign()){
+				return;
+			}
 			SheetDefs.InsertOrUpdate(SheetDefCur);
 			DialogResult=DialogResult.OK;
 		}
