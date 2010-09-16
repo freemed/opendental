@@ -9,6 +9,8 @@ using System.Text.RegularExpressions;
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class ProcedureCodes {
+		public const string GroupProcCode="~GRP~";
+
 		///<summary></summary>
 		public static DataTable RefreshCache() {
 			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().

@@ -7037,7 +7037,7 @@ namespace OpenDental{
 			DateTime procDate=proclist[0].ProcDate;
 			long clinicNum=proclist[0].ClinicNum;
 			long provNum=proclist[0].ProvNum;
-			for(int i=0;i<proclist.Count;i++){
+			for(int i=0;i<proclist.Count;i++){//starts at 0 to check procStatus
 				if(proclist[i].ProcDate!=procDate){
 					MsgBox.Show(this,"Only procedures with the same date may be grouped.");
 					return;
@@ -7056,6 +7056,13 @@ namespace OpenDental{
 				}
 			}
 			Procedure group=new Procedure();
+			group.ProcStatus=ProcStat.C;
+			//set:
+			//procDate
+			//provNum
+			//dateEntryC automatically set to NOW()
+			//clinicNum
+			group.CodeNum=ProcedureCodes.GetCodeNum(ProcedureCodes.GroupProcCode);
 			group.IsNew=true;
 
 			FormProcGroup FormP=new FormProcGroup();//proclist,PatCur,FamCur);

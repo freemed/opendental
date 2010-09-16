@@ -66,19 +66,17 @@ namespace OpenDentBusiness {
 			table.Columns.Add("ToothNum");
 			table.Columns.Add("ToothRange");
 			table.Columns.Add("user");
-			table.Columns.Add("procgroupnum");
 			//table.Columns.Add("");
 			//but we won't actually fill this table with rows until the very end.  It's more useful to use a List<> for now.
 			List<DataRow> rows=new List<DataRow>();
 			//Procedures-----------------------------------------------------------------------------------------------------
 			string command="SELECT provider.Abbr,appointment.AptDateTime,procedurelog.BaseUnits,"
 				+"procedurelog.ClinicNum,procedurelog.CodeNum,procedurecode.Descript,Dx,HideGraphics,LaymanTerm,"
-				+"Priority,procedurecode.ProcCode,ProcDate,ProcFee,ProcNum,ProcNumLab,ProcStatus,Surf,ToothNum,ToothRange,UnitQty,IFNULL(procgroupitem.GroupNum,0) "
+				+"Priority,procedurecode.ProcCode,ProcDate,ProcFee,ProcNum,ProcNumLab,ProcStatus,Surf,ToothNum,ToothRange,UnitQty "
 				+"FROM procedurelog "
 				+"LEFT JOIN procedurecode ON procedurecode.CodeNum=procedurelog.CodeNum "
 				+"LEFT JOIN provider ON provider.ProvNum=procedurelog.ProvNum "
 				+"LEFT JOIN appointment ON appointment.AptNum=procedurelog.AptNum "
-				+"LEFT OUTTER JOIN procgroupitem ON procgroupitem.GroupNum=procedurelog.ProcNum "
 				+"AND (appointment.AptStatus="+POut.Long((int)ApptStatus.Scheduled)
 				+" OR appointment.AptStatus="+POut.Long((int)ApptStatus.ASAP)
 				+" OR appointment.AptStatus="+POut.Long((int)ApptStatus.Broken)
@@ -228,7 +226,6 @@ namespace OpenDentBusiness {
 					row["description"]="^ ^ "+row["description"].ToString();
 					labRows.Add(row);//these will be added in the loop at the end
 				}
-				//row["procgroupnum"]=rawProcs["procgroupnum"];
 			}
 			//Commlog-----------------------------------------------------------------------------------------------------------
 			command="SELECT CommlogNum,CommDateTime,CommType,Note,commlog.PatNum,UserNum,p1.FName "

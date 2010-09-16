@@ -2584,9 +2584,12 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					INDEX(GroupNum)
 					) DEFAULT CHARSET=utf8";
 				Db.NonQ(command);
-				//command="ALTER TABLE procedurelog ADD IsGroup tinyint NOT NULL";
-				//Db.NonQ(command);
-
+				command="SELECT DefNum FROM definition WHERE Category=11 ORDER BY ItemOrder DESC LIMIT 1";
+				long procCat=PIn.Long(Db.GetScalar(command));
+				command=@"INSERT INTO procedurecode (ProcCode,Descript,AbbrDesc,ProcTime,ProcCat,
+					DefaultNote) VALUES('~GRP~','Group Note','GrpNote','"
+					+POut.String("/X/")+"',"+POut.Long(procCat)+",'')";
+				Db.NonQ(command);
 
 
 
