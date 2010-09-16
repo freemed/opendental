@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Services;
 using System.Configuration;
 using OpenDentBusiness;
+using System.Reflection;
 
 namespace WebHostSynch {
 	/// <summary>
@@ -160,53 +161,78 @@ namespace WebHostSynch {
 			*/
 			long DentalOfficeID=4;
 			string a=sheetDef.ToString();
-			/*
-			var wsdResults=from wsd in db.webforms_sheetdef
-					   where wsd.webforms_preference.DentalOfficeID==DentalOfficeID && wsd.SheetDefNum==sheetDef.SheetDefNum
-					   select wsd;
-			*/
+			var PrefObj = db.webforms_preference.Where(pref => pref.DentalOfficeID==DentalOfficeID);
+			var sdResults= db.webforms_sheetdef.Where(sd => sd.webforms_preference.DentalOfficeID==DentalOfficeID && sd.SheetDefNum==sheetDef.SheetDefNum);
 
-			var wsdResults= db.webforms_sheetdef.Where(wsd => wsd.webforms_preference.DentalOfficeID==DentalOfficeID && wsd.SheetDefNum==sheetDef.SheetDefNum);
+			webforms_sheetdef sdObj=null;
 
-			webforms_sheetdef wsdObj=null;
-
-			if(wsdResults.Count()>0) {
-				wsdObj =wsdResults.First();
-
-			}
-			// if there is no entry for that dental office make a new entry.
-			if(wsdResults.Count()==0) {
-				wsdObj=new webforms_sheetdef();
-				wsdObj.SheetDefNum=sheetDef.SheetDefNum;
-
-				// create associated SheetFieldDefs and add them to the SheetDef object.
-				for(int i=0;i<sheetDef.SheetFieldDefs.Count();i++) {
-					webforms_sheetfielddef sdfObj = new webforms_sheetfielddef();
-					sdfObj.SheetFieldDefNum=sheetDef.SheetFieldDefs[i].SheetFieldDefNum;
-					wsdObj.webforms_sheetfielddef.Add(sdfObj);
-				}
+			if(sdResults.Count()>0) {
+				sdObj =sdResults.First();
+				//sdObj.webforms_sheetfielddef.Load(); //Load associated SheetFieldDefs objects.
 				
-				db.AddTowebforms_sheetdef(wsdObj);
-			}
-			
-			wsdObj.Description=sheetDef.Description;
-			wsdObj.FontName = sheetDef.FontName;
-			// list all other properties.
-			
+				//delete old sheetfielddef
+				for(int i=0;i<sdObj.webforms_sheetfielddef.Count();i++) {
+					sdObj.webforms_sheetfielddef.Attach(sdObj.webforms_sheetfielddef.ElementAt(i));
+					sdObj.webforms_sheetfielddef.Remove(sdObj.webforms_sheetfielddef.ElementAt(i));
+				}
 
-			
-			for(int i=0;i<sheetDef.SheetFieldDefs.Count();i++) {
-				var sdfObj=wsdObj.webforms_sheetfielddef.Where(sfd => sfd.SheetFieldDefNum==sheetDef.SheetFieldDefs[i].SheetFieldDefNum).First();
-				sdfObj.FieldName = sheetDef.SheetFieldDefs[i].FieldName;
-				sdfObj.XPos = sheetDef.SheetFieldDefs[i].XPos;
-				sdfObj.YPos = sheetDef.SheetFieldDefs[i].YPos;
-				int ab=3;
+				db.SaveChanges();
 
 			}
+			// if there is no webforms_sheetdef entry for that dental office make a new entry.
+			if(sdResults.Count()==0) {
+				sdObj=new webforms_sheetdef();
+				sdObj.SheetDefNum=sheetDef.SheetDefNum;
+				PrefObj.First().webforms_sheetdef.Add(sdObj);
+			}
+			
+			sdObj.Description=sheetDef.Description;
+			sdObj.FontName = sheetDef.FontName;
+			sdObj.SheetType=(int)sheetDef.SheetType;
+			sdObj.FontSize=sheetDef.FontSize;
+			sdObj.Width=sheetDef.Width;
+			sdObj.Height=sheetDef.Height;
+			if(sheetDef.IsLandscape==true) {
+				sdObj.IsLandscape=(sbyte)1;
+			}
+			else {
+				sdObj.IsLandscape=(sbyte)0;
+			}
 
-			int b=3;
+			FillSheetDef(sheetDef,sdObj);
+			db.SaveChanges();
+		}
 
-			//db.SaveChanges();
+
+		private void FillSheetDef(SheetDef sheetDef,webforms_sheetdef sdObj) {
+
+
+
+			for(int i=0;i<sheetDef.SheetFieldDefs.Count();i++) {//assign several webforms_sheetfielddef
+					webforms_sheetfielddef sfdObj = new webforms_sheetfielddef();
+					sfdObj.SheetFieldDefNum=sheetDef.SheetFieldDefs[i].SheetFieldDefNum;
+					sdObj.webforms_sheetfielddef.Add(sfdObj);
+			
+
+				// assign each property of a single webforms_sheetfielddef with corresponding values.
+				foreach(FieldInfo fieldinfo in sheetDef.SheetFieldDefs[i].GetType().GetFields()) {
+					foreach(PropertyInfo propertyinfo in sfdObj.GetType().GetProperties()) {
+						if(fieldinfo.Name==propertyinfo.Name) {
+							if(propertyinfo.PropertyType==typeof(SByte)) {
+								if((bool)fieldinfo.GetValue(sheetDef.SheetFieldDefs[i])==true) {
+									propertyinfo.SetValue(sfdObj,(sbyte)1,null);
+								}
+								else {
+									propertyinfo.SetValue(sfdObj,(sbyte)0,null);
+								}
+							}
+							else {
+								propertyinfo.SetValue(sfdObj,fieldinfo.GetValue(sheetDef.SheetFieldDefs[i]),null);
+							}
+						}
+					}//foreach propertyinfo
+				}//foreach fieldinfo
+			}
 		}
 
 

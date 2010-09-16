@@ -39,7 +39,7 @@ namespace OpenDental {
 			butWebformBorderColor.BackColor=PrefC.GetColor(PrefName.WebFormsBorderColor);
 			textBoxWebformsHeading1.Text=PrefC.GetStringSilent(PrefName.WebFormsHeading1);
 			textBoxWebformsHeading2.Text=PrefC.GetStringSilent(PrefName.WebFormsHeading2);
-			//TestSheetUpload();
+			TestSheetUpload();
 		}
 
 		private void butWebformBorderColor_Click(object sender,EventArgs e) {
@@ -88,21 +88,23 @@ namespace OpenDental {
 		/// Here sheetDef can be uploaded to the web form Open Dental
 		/// </summary>
 		private void TestSheetUpload() {
-			//pass sheet to webservice
-			string RegistrationKey=PrefC.GetString(PrefName.RegistrationKey);
-			WebHostSynch.WebHostSynch wh=new WebHostSynch.WebHostSynch();
-			wh.Url=PrefC.GetString(PrefName.WebHostSynchServerURL);
-			
-			OpenDentBusiness.SheetDef sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.PatientRegistration);
+			try {
+				//pass sheet to webservice
+				string RegistrationKey=PrefC.GetString(PrefName.RegistrationKey);
+				WebHostSynch.WebHostSynch wh=new WebHostSynch.WebHostSynch();
+				wh.Url=PrefC.GetString(PrefName.WebHostSynchServerURL);
+				SheetDef sheetDef=SheetDefs.GetSheetDef(5);
 
-			//WebHostSynch.SheetDef sheetDef1= WebHostSynch.SheetsInternal.GetSheetDef(SheetInternalType.PatientRegistration);
-			/* It's important to note that this is not a new sheetdef class it's the same as in OpenDentBusiness.SheetDef
-			 * OpenDentBusiness.SheetDef sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.PatientRegistration);
-			 * for this line to compile one must modify the Reference.cs file in to the Web references folder. The SheetDef and related classes with namespaces of WebHostSync must be removed so that the SheetDef Class of OpenDentBusiness is used
-*/
-			//sheetDef.
+				/* for this line to compile one must modify the Reference.cs file in to the Web references folder. The SheetDef and related classes with namespaces of WebHostSync must be removed so that the SheetDef Class of OpenDentBusiness is used
+	*/
+				//sheetDef.
 
-			wh.ReadSheetDef(sheetDef);
+				wh.ReadSheetDef(sheetDef);
+			}
+			catch(Exception ex) {
+				
+				MessageBox.Show(ex.Message);
+			}
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
