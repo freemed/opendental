@@ -45,21 +45,26 @@ namespace OpenDental {
 		}
 
 		private void listFields_SelectedIndexChanged(object sender,EventArgs e) {
+			groupRadio.Visible=false;
+			groupRadioMisc.Visible=false;
 			if(listFields.SelectedIndex==-1){
-				groupRadio.Visible=false;
 				return;
 			}
-			radioButtonValues=SheetFieldsAvailable.GetRadio(AvailFields[listFields.SelectedIndex].FieldName);
-			if(radioButtonValues.Count==0) {
-				groupRadio.Visible=false;
-				return;
+			if(AvailFields[listFields.SelectedIndex].FieldName=="misc"){
+				groupRadioMisc.Visible=true;
 			}
-			groupRadio.Visible=true;
-			listRadio.Items.Clear();
-			for(int i=0;i<radioButtonValues.Count;i++) {
-				listRadio.Items.Add(radioButtonValues[i]);
-				if(SheetFieldDefCur.RadioButtonValue==radioButtonValues[i]) {
-					listRadio.SelectedIndex=i;
+			else{
+				radioButtonValues=SheetFieldsAvailable.GetRadio(AvailFields[listFields.SelectedIndex].FieldName);
+				if(radioButtonValues.Count==0) {
+					return;
+				}
+				groupRadio.Visible=true;
+				listRadio.Items.Clear();
+				for(int i=0;i<radioButtonValues.Count;i++) {
+					listRadio.Items.Add(radioButtonValues[i]);
+					if(SheetFieldDefCur.RadioButtonValue==radioButtonValues[i]) {
+						listRadio.SelectedIndex=i;
+					}
 				}
 			}
 		}
@@ -102,11 +107,14 @@ namespace OpenDental {
 			SheetFieldDefCur.YPos=PIn.Int(textYPos.Text);
 			SheetFieldDefCur.Width=PIn.Int(textWidth.Text);
 			SheetFieldDefCur.Height=PIn.Int(textHeight.Text);
-			if(!groupRadio.Visible || listRadio.SelectedIndex==-1) {
-				SheetFieldDefCur.RadioButtonValue="";
-			}
-			else {
+			SheetFieldDefCur.RadioButtonGroup="";
+			SheetFieldDefCur.RadioButtonValue="";
+			if(groupRadio.Visible && listRadio.SelectedIndex>=0) {
 				SheetFieldDefCur.RadioButtonValue=radioButtonValues[listRadio.SelectedIndex];
+			}
+			else if(groupRadioMisc.Visible){
+				SheetFieldDefCur.RadioButtonGroup=textRadioGroupName.Text;
+				SheetFieldDefCur.RadioButtonValue=textRadioValue.Text;
 			}
 			//don't save to database here.
 			DialogResult=DialogResult.OK;

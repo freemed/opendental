@@ -273,7 +273,7 @@ namespace OpenDentBusiness{
 				+"FROM sheet WHERE PatNum="+POut.Long(patNum)+" "
 				+"AND SheetType="+((int)SheetTypeEnum.ExamSheet)+" ";
 			if(examDescript!=""){
-				command+="AND Description LIKE '"+POut.String(examDescript)+"' ";//case insensitive text matches
+				command+="AND Description LIKE '"+POut.String(examDescript)+"%' ";//case insensitive text matches
 			}
 			command+="AND DATE(DateTimeSheet)>="+POut.Date(startDate)+" AND DATE(DateTimeSheet)<="+POut.Date(endDate);
 			DataTable rawSheet=Db.GetTable(command);

@@ -23,12 +23,27 @@ namespace OpenDental {
 		private void FormExamSheets_Load(object sender,EventArgs e) {
 			Patient pat=Patients.GetLim(PatNum);
 			Text=Lan.g(this,"Exam Sheets for")+" "+pat.GetNameFL();
-			//fill show
+			FillListExamTypes();
+			FillGrid();
+		}
+
+		private void FillListExamTypes(){
+			listExamTypes.Items.Clear();
 			examSheets=SheetDefs.GetCustomForType(SheetTypeEnum.ExamSheet);
 			for(int i=0;i<examSheets.Count;i++){
-				comboExamType.Items.Add(examSheets[i].Description);
+				listExamTypes.Items.Add(examSheets[i].Description);
 			}
-			//select all rows in listShow
+		}
+
+		private void listExamTypes_SelectedIndexChanged(object sender,EventArgs e) {
+			if(listExamTypes.SelectedIndex<0){
+				return;
+			}
+			textExamDescript.Text=listExamTypes.Items[listExamTypes.SelectedIndex].ToString();
+			FillGrid();
+		}
+
+		private void textExamDescript_TextChanged(object sender,EventArgs e) {
 			FillGrid();
 		}
 
@@ -48,7 +63,7 @@ namespace OpenDental {
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
-			table=Sheets.GetExamSheetsTable(PatNum,DateTime.MinValue,DateTime.MaxValue,comboExamType.Text.ToString());
+			table=Sheets.GetExamSheetsTable(PatNum,DateTime.MinValue,DateTime.MaxValue,textExamDescript.Text);
 			for(int i=0;i<table.Rows.Count;i++){
 				row=new ODGridRow();
 				row.Cells.Add(table.Rows[i]["date"].ToString());
@@ -85,14 +100,7 @@ namespace OpenDental {
 			FormSheetDefs FormSD=new FormSheetDefs();
 			FormSD.ShowDialog();
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Sheets");
-			FillGrid();
-		}
-
-		private void comboExamType_SelectedValueChanged(object sender,EventArgs e) {
-			FillGrid();
-		}
-
-		private void butRefreshList_Click(object sender,EventArgs e) {
+			FillListExamTypes();
 			FillGrid();
 		}
 

@@ -80,14 +80,12 @@ namespace OpenDental {
 				textShowInTerminal.Text=SheetCur.ShowInTerminal.ToString();
 			}
 			LayoutFields();
-			if(SheetCur.SheetType==SheetTypeEnum.ExamSheet){//Only check security on exam sheets for now
-				if(!Security.IsAuthorized(Permissions.SheetEdit,SheetCur.DateTimeSheet)){
-					DisableControls(this);
-					Enabled=true;
-					butCancel.Enabled=true;
-					butPDF.Enabled=true;
-					butPrint.Enabled=true;
-				}
+			if(!Security.IsAuthorized(Permissions.SheetEdit,SheetCur.DateTimeSheet)){
+				DisableControls(this);
+				Enabled=true;
+				butCancel.Enabled=true;
+				butPDF.Enabled=true;
+				butPrint.Enabled=true;
 			}
 		}
 
@@ -311,9 +309,9 @@ namespace OpenDental {
 						continue;
 					}
 					//If both checkbox field names are set to "misc" then we instead use the RadioButtonGroup as the actual radio button group name.
-					//if(fieldThis.FieldName=="misc" && fieldThis.RadioButtonGroup!=fieldOther.RadioButtonGroup){
-					//	continue;
-					//}
+					if(fieldThis.FieldName=="misc" && fieldThis.RadioButtonGroup!=fieldOther.RadioButtonGroup){
+						continue;
+					}
 					((SheetCheckBox)control).IsChecked=false;
 				}
 				return;
@@ -652,13 +650,19 @@ namespace OpenDental {
 		}
 
 		private bool TryToSaveData(){
-			if(textDateTime.errorProvider1.GetError(textDateTime)!=""
-				|| textShowInTerminal.errorProvider1.GetError(textShowInTerminal)!="")
-			{
+			if(textShowInTerminal.errorProvider1.GetError(textShowInTerminal)!=""){
 				MsgBox.Show(this,"Please fix data entry errors first.");
 				return false;
 			}
-			SheetCur.DateTimeSheet=PIn.DateT(textDateTime.Text);
+			DateTime dateTimeSheet=DateTime.MinValue;
+			try{
+				dateTimeSheet=DateTime.Parse(textDateTime.Text);
+			}
+			catch{
+				MsgBox.Show(this,"Please fix data entry errors first.");
+				return false;
+			}
+			SheetCur.DateTimeSheet=dateTimeSheet;
 			SheetCur.Description=textDescription.Text;
 			SheetCur.InternalNote=textNote.Text;
 			SheetCur.ShowInTerminal=PIn.Byte(textShowInTerminal.Text);

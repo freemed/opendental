@@ -34,10 +34,10 @@ namespace OpenDental{
 			this.labelDescription = new System.Windows.Forms.Label();
 			this.labelShowInTerminal = new System.Windows.Forms.Label();
 			this.timer1 = new System.Windows.Forms.Timer(this.components);
+			this.textDateTime = new System.Windows.Forms.TextBox();
 			this.textShowInTerminal = new OpenDental.ValidNumber();
 			this.butPDF = new OpenDental.UI.Button();
 			this.butDelete = new OpenDental.UI.Button();
-			this.textDateTime = new OpenDental.ValidDate();
 			this.butPrint = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
@@ -137,6 +137,14 @@ namespace OpenDental{
 			this.timer1.Interval = 4000;
 			this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
 			// 
+			// textDateTime
+			// 
+			this.textDateTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.textDateTime.Location = new System.Drawing.Point(635,25);
+			this.textDateTime.Name = "textDateTime";
+			this.textDateTime.Size = new System.Drawing.Size(144,20);
+			this.textDateTime.TabIndex = 88;
+			// 
 			// textShowInTerminal
 			// 
 			this.textShowInTerminal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -179,14 +187,6 @@ namespace OpenDental{
 			this.butDelete.TabIndex = 79;
 			this.butDelete.Text = "Delete";
 			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
-			// 
-			// textDateTime
-			// 
-			this.textDateTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.textDateTime.Location = new System.Drawing.Point(633,24);
-			this.textDateTime.Name = "textDateTime";
-			this.textDateTime.Size = new System.Drawing.Size(146,20);
-			this.textDateTime.TabIndex = 77;
 			// 
 			// butPrint
 			// 
@@ -238,6 +238,7 @@ namespace OpenDental{
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(790,672);
+			this.Controls.Add(this.textDateTime);
 			this.Controls.Add(this.textShowInTerminal);
 			this.Controls.Add(this.labelShowInTerminal);
 			this.Controls.Add(this.textDescription);
@@ -246,7 +247,6 @@ namespace OpenDental{
 			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.checkErase);
 			this.Controls.Add(this.panel1);
-			this.Controls.Add(this.textDateTime);
 			this.Controls.Add(this.butPrint);
 			this.Controls.Add(this.labelDateTime);
 			this.Controls.Add(this.textNote);
@@ -269,7 +269,6 @@ namespace OpenDental{
 		private OpenDental.UI.Button butCancel;
 		private System.Windows.Forms.TextBox textNote;
 		private System.Windows.Forms.Label labelNote;
-		private ValidDate textDateTime;
 		private System.Windows.Forms.Label labelDateTime;
 		private System.Windows.Forms.Panel panel1;
 		private System.Windows.Forms.Panel panelMain;
@@ -282,5 +281,6 @@ namespace OpenDental{
 		private System.Windows.Forms.Label labelShowInTerminal;
 		private ValidNumber textShowInTerminal;
 		private System.Windows.Forms.Timer timer1;
+		private System.Windows.Forms.TextBox textDateTime;
 	}
 }

@@ -27,9 +27,10 @@ namespace OpenDental{
 			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
 			this.setupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuItemSheets = new System.Windows.Forms.ToolStripMenuItem();
-			this.comboExamType = new System.Windows.Forms.ComboBox();
 			this.label1 = new System.Windows.Forms.Label();
-			this.butRefreshList = new OpenDental.UI.Button();
+			this.textExamDescript = new System.Windows.Forms.TextBox();
+			this.listExamTypes = new System.Windows.Forms.ListBox();
+			this.label2 = new System.Windows.Forms.Label();
 			this.butAdd = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butCancel = new OpenDental.UI.Button();
@@ -61,38 +62,40 @@ namespace OpenDental{
 			this.menuItemSheets.Text = "Sheets";
 			this.menuItemSheets.Click += new System.EventHandler(this.menuItemSheets_Click);
 			// 
-			// comboExamType
-			// 
-			this.comboExamType.FormattingEnabled = true;
-			this.comboExamType.Location = new System.Drawing.Point(11,53);
-			this.comboExamType.Name = "comboExamType";
-			this.comboExamType.Size = new System.Drawing.Size(259,21);
-			this.comboExamType.TabIndex = 45;
-			this.comboExamType.SelectedValueChanged += new System.EventHandler(this.comboExamType_SelectedValueChanged);
-			// 
 			// label1
 			// 
 			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(12,36);
+			this.label1.Location = new System.Drawing.Point(8,36);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(199,13);
 			this.label1.TabIndex = 46;
 			this.label1.Text = "Show Exam Type (blank shows all types)";
 			// 
-			// butRefreshList
+			// textExamDescript
 			// 
-			this.butRefreshList.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butRefreshList.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butRefreshList.Autosize = true;
-			this.butRefreshList.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butRefreshList.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butRefreshList.CornerRadius = 4F;
-			this.butRefreshList.Location = new System.Drawing.Point(279,50);
-			this.butRefreshList.Name = "butRefreshList";
-			this.butRefreshList.Size = new System.Drawing.Size(127,24);
-			this.butRefreshList.TabIndex = 47;
-			this.butRefreshList.Text = "Refresh List";
-			this.butRefreshList.Click += new System.EventHandler(this.butRefreshList_Click);
+			this.textExamDescript.Location = new System.Drawing.Point(11,53);
+			this.textExamDescript.Name = "textExamDescript";
+			this.textExamDescript.Size = new System.Drawing.Size(196,20);
+			this.textExamDescript.TabIndex = 47;
+			this.textExamDescript.TextChanged += new System.EventHandler(this.textExamDescript_TextChanged);
+			// 
+			// listExamTypes
+			// 
+			this.listExamTypes.FormattingEnabled = true;
+			this.listExamTypes.Location = new System.Drawing.Point(11,94);
+			this.listExamTypes.Name = "listExamTypes";
+			this.listExamTypes.Size = new System.Drawing.Size(196,108);
+			this.listExamTypes.TabIndex = 48;
+			this.listExamTypes.SelectedIndexChanged += new System.EventHandler(this.listExamTypes_SelectedIndexChanged);
+			// 
+			// label2
+			// 
+			this.label2.AutoSize = true;
+			this.label2.Location = new System.Drawing.Point(8,77);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(134,13);
+			this.label2.TabIndex = 49;
+			this.label2.Text = "Show Existing Exam Types";
 			// 
 			// butAdd
 			// 
@@ -117,10 +120,10 @@ namespace OpenDental{
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(12,80);
+			this.gridMain.Location = new System.Drawing.Point(12,208);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(394,406);
+			this.gridMain.Size = new System.Drawing.Size(394,278);
 			this.gridMain.TabIndex = 4;
 			this.gridMain.Title = "Exam Sheets";
 			this.gridMain.TranslationName = "FormPatientForms";
@@ -145,9 +148,10 @@ namespace OpenDental{
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(417,525);
-			this.Controls.Add(this.butRefreshList);
+			this.Controls.Add(this.label2);
+			this.Controls.Add(this.listExamTypes);
+			this.Controls.Add(this.textExamDescript);
 			this.Controls.Add(this.label1);
-			this.Controls.Add(this.comboExamType);
 			this.Controls.Add(this.butAdd);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.butCancel);
@@ -173,8 +177,9 @@ namespace OpenDental{
 		private System.Windows.Forms.MenuStrip menuStrip1;
 		private System.Windows.Forms.ToolStripMenuItem setupToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem menuItemSheets;
-		private System.Windows.Forms.ComboBox comboExamType;
 		private System.Windows.Forms.Label label1;
-		private OpenDental.UI.Button butRefreshList;
+		private System.Windows.Forms.TextBox textExamDescript;
+		private System.Windows.Forms.ListBox listExamTypes;
+		private System.Windows.Forms.Label label2;
 	}
 }
