@@ -50,17 +50,17 @@ namespace OpenDentBusiness{
 	public enum DisplayFieldCategory{
 		///<summary>0</summary>
 		None,
+		//<summary>0</summary>
+		//ProgressNotes,
 		///<summary>1</summary>
-		ProgressNotes,
-		///<summary>2</summary>
 		PatientSelect,
-		///<summary>3</summary>
+		///<summary>2</summary>
 		PatientInformation,
-		///<summary>4</summary>
+		///<summary>3</summary>
 		AccountModule,
-		///<summary>5</summary>
+		///<summary>4</summary>
 		RecallList,
-		///<summary>6</summary>
+		///<summary>5</summary>
 		ChartPatientInformation
 	}
 	

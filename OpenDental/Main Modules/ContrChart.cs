@@ -212,8 +212,6 @@ namespace OpenDental{
 		private CheckBox checkTasks;
 		private CheckBox checkEmail;
 		private long PrevPtNum;
-		private CheckBox checkShowOnlyFilmsAndExams;
-		private CheckBox checkShowOnlyHygieneProcs;
 		private CheckBox checkSheets;
 		private TabPage tabDraw;
 		private RadioButton radioPointer;
@@ -454,8 +452,6 @@ namespace OpenDental{
 			this.butChartViewDown = new OpenDental.UI.Button();
 			this.butChartViewUp = new OpenDental.UI.Button();
 			this.butChartViewAdd = new OpenDental.UI.Button();
-			this.checkShowOnlyFilmsAndExams = new System.Windows.Forms.CheckBox();
-			this.checkShowOnlyHygieneProcs = new System.Windows.Forms.CheckBox();
 			this.groupBox7 = new System.Windows.Forms.GroupBox();
 			this.checkSheets = new System.Windows.Forms.CheckBox();
 			this.checkTasks = new System.Windows.Forms.CheckBox();
@@ -747,7 +743,7 @@ namespace OpenDental{
 			// checkAudit
 			// 
 			this.checkAudit.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkAudit.Location = new System.Drawing.Point(170,187);
+			this.checkAudit.Location = new System.Drawing.Point(165,187);
 			this.checkAudit.Name = "checkAudit";
 			this.checkAudit.Size = new System.Drawing.Size(73,13);
 			this.checkAudit.TabIndex = 17;
@@ -769,7 +765,7 @@ namespace OpenDental{
 			// checkShowTeeth
 			// 
 			this.checkShowTeeth.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkShowTeeth.Location = new System.Drawing.Point(170,168);
+			this.checkShowTeeth.Location = new System.Drawing.Point(165,168);
 			this.checkShowTeeth.Name = "checkShowTeeth";
 			this.checkShowTeeth.Size = new System.Drawing.Size(104,13);
 			this.checkShowTeeth.TabIndex = 15;
@@ -2259,8 +2255,6 @@ namespace OpenDental{
 			this.tabShow.Controls.Add(this.butChartViewDown);
 			this.tabShow.Controls.Add(this.butChartViewUp);
 			this.tabShow.Controls.Add(this.butChartViewAdd);
-			this.tabShow.Controls.Add(this.checkShowOnlyFilmsAndExams);
-			this.tabShow.Controls.Add(this.checkShowOnlyHygieneProcs);
 			this.tabShow.Controls.Add(this.groupBox7);
 			this.tabShow.Controls.Add(this.groupBox6);
 			this.tabShow.Controls.Add(this.checkShowTeeth);
@@ -2293,7 +2287,7 @@ namespace OpenDental{
 			this.labelCustView.AutoSize = true;
 			this.labelCustView.Font = new System.Drawing.Font("Microsoft Sans Serif",9.75F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
 			this.labelCustView.ForeColor = System.Drawing.Color.Red;
-			this.labelCustView.Location = new System.Drawing.Point(20,217);
+			this.labelCustView.Location = new System.Drawing.Point(20,184);
 			this.labelCustView.Name = "labelCustView";
 			this.labelCustView.Size = new System.Drawing.Size(96,16);
 			this.labelCustView.TabIndex = 43;
@@ -2347,27 +2341,6 @@ namespace OpenDental{
 			this.butChartViewAdd.TabIndex = 40;
 			this.butChartViewAdd.Text = "&Add";
 			this.butChartViewAdd.Click += new System.EventHandler(this.butChartViewAdd_Click);
-			// 
-			// checkShowOnlyFilmsAndExams
-			// 
-			this.checkShowOnlyFilmsAndExams.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkShowOnlyFilmsAndExams.Location = new System.Drawing.Point(15,136);
-			this.checkShowOnlyFilmsAndExams.Name = "checkShowOnlyFilmsAndExams";
-			this.checkShowOnlyFilmsAndExams.Size = new System.Drawing.Size(104,30);
-			this.checkShowOnlyFilmsAndExams.TabIndex = 21;
-			this.checkShowOnlyFilmsAndExams.Text = "Show Only Films and Exams";
-			this.checkShowOnlyFilmsAndExams.TextAlign = System.Drawing.ContentAlignment.TopLeft;
-			this.checkShowOnlyFilmsAndExams.Click += new System.EventHandler(this.checkShowOnlyFilmsAndExams_Click);
-			// 
-			// checkShowOnlyHygieneProcs
-			// 
-			this.checkShowOnlyHygieneProcs.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkShowOnlyHygieneProcs.Location = new System.Drawing.Point(15,121);
-			this.checkShowOnlyHygieneProcs.Name = "checkShowOnlyHygieneProcs";
-			this.checkShowOnlyHygieneProcs.Size = new System.Drawing.Size(120,13);
-			this.checkShowOnlyHygieneProcs.TabIndex = 20;
-			this.checkShowOnlyHygieneProcs.Text = "Show Only Hygiene";
-			this.checkShowOnlyHygieneProcs.Click += new System.EventHandler(this.checkShowHygieneProcs_Click);
 			// 
 			// groupBox7
 			// 
@@ -2491,7 +2464,7 @@ namespace OpenDental{
 			this.butShowAll.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butShowAll.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butShowAll.CornerRadius = 4F;
-			this.butShowAll.Location = new System.Drawing.Point(9,177);
+			this.butShowAll.Location = new System.Drawing.Point(10,129);
 			this.butShowAll.Name = "butShowAll";
 			this.butShowAll.Size = new System.Drawing.Size(53,23);
 			this.butShowAll.TabIndex = 12;
@@ -2505,7 +2478,7 @@ namespace OpenDental{
 			this.butShowNone.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butShowNone.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butShowNone.CornerRadius = 4F;
-			this.butShowNone.Location = new System.Drawing.Point(68,177);
+			this.butShowNone.Location = new System.Drawing.Point(69,129);
 			this.butShowNone.Name = "butShowNone";
 			this.butShowNone.Size = new System.Drawing.Size(58,23);
 			this.butShowNone.TabIndex = 13;
@@ -3991,38 +3964,6 @@ namespace OpenDental{
 					return false;
 				}
 			}
-			// Checks for ShowOnlyHygiene Check Box
-			if (checkShowOnlyHygieneProcs.Checked){
-				string code = row["ProcCode"].ToString();
-				bool b1a = code.CompareTo("D0210") > 0;
-				bool b1b = code.CompareTo("D0330") < 0;
-				bool b2a = code.CompareTo("D1000") > 0;
-				bool b2b = code.CompareTo("D1999") < 0;
-				bool b3a = code.CompareTo("D4340") > 0;
-				bool b3b = code.CompareTo("D4999") < 0;
-				bool IsHygieneProc = (b1a & b1b) | (b2a && b2b) | (b3a & b3b);
-				if (IsHygieneProc)
-				{
-					return ProcStatDesired((ProcStat)PIn.Long(row["ProcStatus"].ToString()));
-				}
-				else
-					return false;
-			}
-			// Checks for ShowOnlyFilmsAndExam Check Box
-			if(checkShowOnlyFilmsAndExams.Checked){
-				string code = row["ProcCode"].ToString();
-				bool b1a = code.CompareTo("D0000") > 0;
-				bool b1b = code.CompareTo("D0999") < 0;
-
-				bool IsFilmExamProc = (b1a & b1b);
-				if (IsFilmExamProc)
-				{
-					return ProcStatDesired((ProcStat)PIn.Long(row["ProcStatus"].ToString()));
-				}
-				else
-					return false;
-
-			}
 			return ProcStatDesired((ProcStat)PIn.Long(row["ProcStatus"].ToString()));
 			// Put check for showing hygine in here
 			// Put check for showing films in here
@@ -4092,7 +4033,7 @@ namespace OpenDental{
 			List<DisplayField> fields;
 			DisplayFields.RefreshCache();
 			if(gridChartViews.Rows.Count==0) {
-				fields=DisplayFields.GetForCategory(DisplayFieldCategory.ProgressNotes);
+				fields=DisplayFields.GetForCategory(DisplayFieldCategory.None);
 				gridProg.Title="Progress Notes";
 				if(!chartCustViewChanged) {
 					checkSheets.Checked=true;
@@ -4311,6 +4252,48 @@ namespace OpenDental{
 				Chartscrollval=0;
 			}
 			FillToothChart(retainSelection);
+		}
+
+		private void FillChartViewsGrid() {
+			if(PatCur==null) {
+				butChartViewAdd.Enabled=false;
+				butChartViewDown.Enabled=false;
+				butChartViewUp.Enabled=false;
+				gridChartViews.Enabled=false;
+				return;
+			}
+			else {
+				butChartViewAdd.Enabled=true;
+				butChartViewDown.Enabled=true;
+				butChartViewUp.Enabled=true;
+				gridChartViews.Enabled=true;
+			}
+			ChartViews.RefreshCache();
+			gridChartViews.BeginUpdate();
+			gridChartViews.Columns.Clear();
+			ODGridColumn col=new ODGridColumn(Lan.g("GridChartViews","F#"),25);
+			gridChartViews.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("GridChartViews","View"),0);
+			gridChartViews.Columns.Add(col);
+			gridChartViews.Rows.Clear();
+			ODGridRow row;
+			for(int i=0;i<ChartViews.Listt.Count;i++) {
+				row=new ODGridRow();
+				//assign hot keys F1-F12
+				if(i<11) {
+					row.Cells.Add("F"+(i+1));
+				}
+				row.Cells.Add(ChartViews.Listt[i].Description);
+				gridChartViews.Rows.Add(row);
+			}
+			gridChartViews.EndUpdate();
+		}
+
+		private void SetChartView(ChartView chartView) {
+			ChartViewCurDisplay=chartView;
+			labelCustView.Visible=false;
+			chartCustViewChanged=false;
+			FillProgNotes();
 		}
 
 		///<summary>This is, of course, called when module refreshed.  But it's also called when user sets missing teeth or tooth movements.  In that case, the Progress notes are not refreshed, so it's a little faster.  This also fills in the movement amounts.</summary>
@@ -6511,8 +6494,6 @@ namespace OpenDental{
 				checkTasks.Checked=true;
 				checkSheets.Checked=true;
 			}
-			checkShowOnlyFilmsAndExams.Checked = false;
-			checkShowOnlyHygieneProcs.Checked = false;
 			FillProgNotes(true);
 		}
 
@@ -6544,8 +6525,6 @@ namespace OpenDental{
 			checkTasks.Checked=true;
 			checkEmail.Checked=true;
 			checkSheets.Checked=true;
-			checkShowOnlyFilmsAndExams.Checked = false;
-			checkShowOnlyHygieneProcs.Checked  = false;
 			FillProgNotes();
 		}
 
@@ -6569,40 +6548,6 @@ namespace OpenDental{
 			checkTasks.Checked=false;
 			checkEmail.Checked=false;
 			checkSheets.Checked=false;
-			FillProgNotes();
-		}
-
-		private void checkShowHygieneProcs_Click(object sender,EventArgs e) {
-			if(gridChartViews.Rows.Count>0) {
-				labelCustView.Visible=true;
-			}
-			chartCustViewChanged=true;
-			checkComm.Checked = false;
-			checkCommFamily.Checked = false;
-			checkLabCase.Checked = false;
-			checkRx.Checked = false;
-			checkShowTeeth.Checked = false;
-			checkTasks.Checked = false;
-			checkEmail.Checked = false;
-			checkSheets.Checked=false;
-			checkShowOnlyFilmsAndExams.Checked = false;
-			FillProgNotes();
-		}
-
-		private void checkShowOnlyFilmsAndExams_Click(object sender,EventArgs e) {
-			if(gridChartViews.Rows.Count>0) {
-				labelCustView.Visible=true;
-			}
-			chartCustViewChanged=true;
-			checkComm.Checked = false;
-			checkCommFamily.Checked = false;
-			checkLabCase.Checked = false;
-			checkRx.Checked = false;
-			checkShowTeeth.Checked = false;
-			checkTasks.Checked = false;
-			checkEmail.Checked = false;
-			checkSheets.Checked=false;
-			checkShowOnlyHygieneProcs.Checked = false ;
 			FillProgNotes();
 		}
 		#endregion Show
@@ -7445,50 +7390,6 @@ namespace OpenDental{
 				+DocCur.DateCreated.ToShortDateString()+": "+DocCur.Description);
 		}
 
-		private void FillChartViewsGrid() {
-			if(PatCur==null) {
-				butChartViewAdd.Enabled=false;
-				butChartViewDown.Enabled=false;
-				butChartViewUp.Enabled=false;
-				gridChartViews.Enabled=false;
-				return;
-			}
-			else {
-				butChartViewAdd.Enabled=true;
-				butChartViewDown.Enabled=true;
-				butChartViewUp.Enabled=true;
-				gridChartViews.Enabled=true;
-			}
-			ChartViews.RefreshCache();
-			gridChartViews.BeginUpdate();
-			gridChartViews.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g("GridChartViews","F#"),25);
-			gridChartViews.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("GridChartViews","View"),0);
-			gridChartViews.Columns.Add(col);
-			gridChartViews.Rows.Clear();
-			ODGridRow row;
-			for(int i=0;i<ChartViews.Listt.Count;i++) {
-				ChartViews.Listt[i].ItemOrder=i;
-				ChartViews.Update(ChartViews.Listt[i]);
-				row=new ODGridRow();
-				//assign hot keys F1-F12
-				if(i<11) {
-					row.Cells.Add("F"+(i+1));
-				}
-				row.Cells.Add(ChartViews.Listt[i].Description);
-				gridChartViews.Rows.Add(row);
-			}
-			gridChartViews.EndUpdate();
-		}
-
-		private void SetChartView(ChartView chartView) {
-			ChartViewCurDisplay=chartView;
-			labelCustView.Visible=false;
-			chartCustViewChanged=false;
-			FillProgNotes();
-		}
-
 		private void gridChartViews_CellClick(object sender,ODGridClickEventArgs e) {
 			SetChartView(ChartViews.Listt[e.Row]);
 		}
@@ -7501,18 +7402,25 @@ namespace OpenDental{
 			FillChartViewsGrid();
 			if(gridChartViews.Rows.Count==0) {
 				FillProgNotes();
+				return;//deleted last view, so display default
 			}
-			else if(FormC.ChartViewCur.ItemOrder==0) {
-				gridChartViews.SetSelected(0,true);
-				SetChartView(ChartViews.Listt[0]);
-			}
-			else if(gridChartViews.Rows.Count==count) {
+			if(gridChartViews.Rows.Count==count) {
 				gridChartViews.SetSelected(FormC.ChartViewCur.ItemOrder,true);
 				SetChartView(ChartViews.Listt[FormC.ChartViewCur.ItemOrder]);
 			}
-			else {
-				gridChartViews.SetSelected(FormC.ChartViewCur.ItemOrder-1,true);
-				SetChartView(ChartViews.Listt[FormC.ChartViewCur.ItemOrder-1]);
+			else if(gridChartViews.Rows.Count>0){
+				for(int i=0;i<ChartViews.Listt.Count;i++) {
+					ChartViews.Listt[i].ItemOrder=i;
+					ChartViews.Update(ChartViews.Listt[i]);
+				}
+				if(FormC.ChartViewCur.ItemOrder!=0) {
+					gridChartViews.SetSelected(FormC.ChartViewCur.ItemOrder-1,true);
+					SetChartView(ChartViews.Listt[FormC.ChartViewCur.ItemOrder-1]);
+				}
+				else {
+					gridChartViews.SetSelected(0,true);
+					SetChartView(ChartViews.Listt[0]);
+				}
 			}
 		}
 
@@ -7524,15 +7432,20 @@ namespace OpenDental{
 			FormChartAdd.ChartViewCur.IsNew=true;
 			FormChartAdd.ShowDialog();
 			FillChartViewsGrid();
-			if(gridChartViews.Rows.Count==0) {
+			int count2=gridChartViews.Rows.Count;
+			if(count2==0) { 
+				return; 
 			}
-			else if(gridChartViews.Rows.Count==count) {
-					gridChartViews.SetSelected(selectedIndex,true);
-					SetChartView(ChartViews.Listt[selectedIndex]);
+			if(count2==count) {
+				gridChartViews.SetSelected(selectedIndex,true);
+				SetChartView(ChartViews.Listt[selectedIndex]);
 			}
 			else {
-				gridChartViews.SetSelected(0,true);
-				SetChartView(ChartViews.Listt[0]);
+				FormChartAdd.ChartViewCur.ItemOrder=count;
+				ChartViews.Update(FormChartAdd.ChartViewCur);
+				SetChartView(ChartViews.Listt[count]);
+				FillChartViewsGrid();
+				gridChartViews.SetSelected(count,true);
 			}
 		}
 

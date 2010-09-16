@@ -2552,7 +2552,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					Description varchar(255) NOT NULL,
 					ItemOrder int NOT NULL,
 					ProcStatuses tinyint NOT NULL,
-					ObjectTypes tinyint NOT NULL,
+					ObjectTypes smallint NOT NULL,
 					ShowProcNotes tinyint NOT NULL,
 					IsAudit tinyint NOT NULL,
 					SelectedTeethOnly tinyint NOT NULL,
@@ -2571,7 +2571,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);
 				command="ALTER TABLE displayfield ADD INDEX (ChartViewNum)";
 				Db.NonQ(command);
-				command="UPDATE displayfield SET Category = Category + 1";
+				command="DELETE FROM displayfield WHERE Category = 0";
 				Db.NonQ(command);
 
 

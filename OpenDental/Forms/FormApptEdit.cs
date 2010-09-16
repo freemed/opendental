@@ -2327,7 +2327,7 @@ namespace OpenDental{
 			gridProg.BeginUpdate();
 			gridProg.Columns.Clear();
 			ODGridColumn col;
-			List<DisplayField> fields=DisplayFields.GetForCategory(DisplayFieldCategory.ProgressNotes);
+			List<DisplayField> fields=DisplayFields.GetForCategory(DisplayFieldCategory.None);
 			for(int i=0;i<fields.Count;i++){
 				if(fields[i].InternalName=="User" || fields[i].InternalName=="Signed"){
 					continue;

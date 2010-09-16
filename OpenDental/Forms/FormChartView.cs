@@ -27,8 +27,6 @@ namespace OpenDental{
 		private bool changed;
 		private OpenDental.UI.Button butOK;
 		private List<DisplayField> ListShowing;
-		private CheckBox checkShowOnlyFilmsAndExams;
-		private CheckBox checkShowOnlyHygieneProcs;
 		private GroupBox groupBox7;
 		private CheckBox checkSheets;
 		private CheckBox checkTasks;
@@ -91,8 +89,6 @@ namespace OpenDental{
 			this.label2 = new System.Windows.Forms.Label();
 			this.listAvailable = new System.Windows.Forms.ListBox();
 			this.label3 = new System.Windows.Forms.Label();
-			this.checkShowOnlyFilmsAndExams = new System.Windows.Forms.CheckBox();
-			this.checkShowOnlyHygieneProcs = new System.Windows.Forms.CheckBox();
 			this.groupBox7 = new System.Windows.Forms.GroupBox();
 			this.checkSheets = new System.Windows.Forms.CheckBox();
 			this.checkTasks = new System.Windows.Forms.CheckBox();
@@ -156,27 +152,6 @@ namespace OpenDental{
 			this.label3.TabIndex = 16;
 			this.label3.Text = "Available Fields";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-			// 
-			// checkShowOnlyFilmsAndExams
-			// 
-			this.checkShowOnlyFilmsAndExams.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkShowOnlyFilmsAndExams.Location = new System.Drawing.Point(16,151);
-			this.checkShowOnlyFilmsAndExams.Name = "checkShowOnlyFilmsAndExams";
-			this.checkShowOnlyFilmsAndExams.Size = new System.Drawing.Size(104,30);
-			this.checkShowOnlyFilmsAndExams.TabIndex = 66;
-			this.checkShowOnlyFilmsAndExams.Text = "Show Only Films and Exams";
-			this.checkShowOnlyFilmsAndExams.TextAlign = System.Drawing.ContentAlignment.TopLeft;
-			this.checkShowOnlyFilmsAndExams.Click += new System.EventHandler(this.checkShowOnlyFilmsAndExams_Click);
-			// 
-			// checkShowOnlyHygieneProcs
-			// 
-			this.checkShowOnlyHygieneProcs.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkShowOnlyHygieneProcs.Location = new System.Drawing.Point(16,136);
-			this.checkShowOnlyHygieneProcs.Name = "checkShowOnlyHygieneProcs";
-			this.checkShowOnlyHygieneProcs.Size = new System.Drawing.Size(120,13);
-			this.checkShowOnlyHygieneProcs.TabIndex = 65;
-			this.checkShowOnlyHygieneProcs.Text = "Show Only Hygiene";
-			this.checkShowOnlyHygieneProcs.Click += new System.EventHandler(this.checkShowHygieneProcs_Click);
 			// 
 			// groupBox7
 			// 
@@ -368,7 +343,7 @@ namespace OpenDental{
 			// checkShowTeeth
 			// 
 			this.checkShowTeeth.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkShowTeeth.Location = new System.Drawing.Point(171,183);
+			this.checkShowTeeth.Location = new System.Drawing.Point(160,183);
 			this.checkShowTeeth.Name = "checkShowTeeth";
 			this.checkShowTeeth.Size = new System.Drawing.Size(99,13);
 			this.checkShowTeeth.TabIndex = 61;
@@ -391,7 +366,7 @@ namespace OpenDental{
 			// checkAudit
 			// 
 			this.checkAudit.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkAudit.Location = new System.Drawing.Point(171,202);
+			this.checkAudit.Location = new System.Drawing.Point(160,202);
 			this.checkAudit.Name = "checkAudit";
 			this.checkAudit.Size = new System.Drawing.Size(73,13);
 			this.checkAudit.TabIndex = 62;
@@ -400,28 +375,26 @@ namespace OpenDental{
 			// 
 			// textBoxViewDesc
 			// 
-			this.textBoxViewDesc.Location = new System.Drawing.Point(164,12);
+			this.textBoxViewDesc.Location = new System.Drawing.Point(134,11);
 			this.textBoxViewDesc.Name = "textBoxViewDesc";
 			this.textBoxViewDesc.Size = new System.Drawing.Size(367,20);
 			this.textBoxViewDesc.TabIndex = 1;
 			// 
 			// labelDescription
 			// 
-			this.labelDescription.Font = new System.Drawing.Font("Microsoft Sans Serif",10F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.labelDescription.Location = new System.Drawing.Point(12,9);
+			this.labelDescription.Font = new System.Drawing.Font("Microsoft Sans Serif",9.75F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.labelDescription.Location = new System.Drawing.Point(12,8);
 			this.labelDescription.Name = "labelDescription";
-			this.labelDescription.Size = new System.Drawing.Size(146,25);
+			this.labelDescription.Size = new System.Drawing.Size(116,25);
 			this.labelDescription.TabIndex = 57;
-			this.labelDescription.Text = "View Description";
+			this.labelDescription.Text = "Description";
 			this.labelDescription.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// groupBoxProperties
 			// 
 			this.groupBoxProperties.Controls.Add(this.groupBox6);
 			this.groupBoxProperties.Controls.Add(this.butShowNone);
-			this.groupBoxProperties.Controls.Add(this.checkShowOnlyFilmsAndExams);
 			this.groupBoxProperties.Controls.Add(this.butShowAll);
-			this.groupBoxProperties.Controls.Add(this.checkShowOnlyHygieneProcs);
 			this.groupBoxProperties.Controls.Add(this.checkAudit);
 			this.groupBoxProperties.Controls.Add(this.groupBox7);
 			this.groupBoxProperties.Controls.Add(this.checkNotes);
@@ -456,7 +429,7 @@ namespace OpenDental{
 			this.butShowNone.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butShowNone.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butShowNone.CornerRadius = 4F;
-			this.butShowNone.Location = new System.Drawing.Point(69,192);
+			this.butShowNone.Location = new System.Drawing.Point(69,144);
 			this.butShowNone.Name = "butShowNone";
 			this.butShowNone.Size = new System.Drawing.Size(58,23);
 			this.butShowNone.TabIndex = 60;
@@ -470,7 +443,7 @@ namespace OpenDental{
 			this.butShowAll.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butShowAll.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butShowAll.CornerRadius = 4F;
-			this.butShowAll.Location = new System.Drawing.Point(10,192);
+			this.butShowAll.Location = new System.Drawing.Point(10,144);
 			this.butShowAll.Name = "butShowAll";
 			this.butShowAll.Size = new System.Drawing.Size(53,23);
 			this.butShowAll.TabIndex = 59;
@@ -634,14 +607,14 @@ namespace OpenDental{
 		private void FormChartView_Load(object sender,EventArgs e) {
 			if(!ChartViewCur.IsNew) {
 				textBoxViewDesc.Text=ChartViewCur.Description;
-				checkSheets.Checked=(ChartViewCur.ObjectTypes&ChartViewObjs.Sheets)==ChartViewObjs.Sheets;
+				checkAppt.Checked=(ChartViewCur.ObjectTypes&ChartViewObjs.Appointments)==ChartViewObjs.Appointments;
+				checkComm.Checked=(ChartViewCur.ObjectTypes&ChartViewObjs.CommLog)==ChartViewObjs.CommLog;
+				checkCommFamily.Checked=(ChartViewCur.ObjectTypes&ChartViewObjs.CommLogFamily)==ChartViewObjs.CommLogFamily;
 				checkTasks.Checked=(ChartViewCur.ObjectTypes&ChartViewObjs.Tasks)==ChartViewObjs.Tasks;
 				checkEmail.Checked=(ChartViewCur.ObjectTypes&ChartViewObjs.Email)==ChartViewObjs.Email;
-				checkCommFamily.Checked=(ChartViewCur.ObjectTypes&ChartViewObjs.CommLogFamily)==ChartViewObjs.CommLogFamily;
-				checkAppt.Checked=(ChartViewCur.ObjectTypes&ChartViewObjs.Appointments)==ChartViewObjs.Appointments;
 				checkLabCase.Checked=(ChartViewCur.ObjectTypes&ChartViewObjs.LabCases)==ChartViewObjs.LabCases;
 				checkRx.Checked=(ChartViewCur.ObjectTypes&ChartViewObjs.Rx)==ChartViewObjs.Rx;
-				checkComm.Checked=(ChartViewCur.ObjectTypes&ChartViewObjs.CommLog)==ChartViewObjs.CommLog;
+				checkSheets.Checked=(ChartViewCur.ObjectTypes&ChartViewObjs.Sheets)==ChartViewObjs.Sheets;
 				checkShowTP.Checked=(ChartViewCur.ProcStatuses&ChartViewProcStat.TP)==ChartViewProcStat.TP;
 				checkShowC.Checked=(ChartViewCur.ProcStatuses&ChartViewProcStat.C)==ChartViewProcStat.C;
 				checkShowE.Checked=(ChartViewCur.ProcStatuses&ChartViewProcStat.EC)==ChartViewProcStat.EC;
@@ -707,7 +680,7 @@ namespace OpenDental{
 			changed=true;
 		}
 
-		private void checkShowCn_Click(object sender,EventArgs e) {
+		private void checkShowCn_Click(object sender,System.EventArgs e) {
 			changed=true;
 		}
 
@@ -715,19 +688,19 @@ namespace OpenDental{
 			changed=true;
 		}
 
-		private void checkAppt_Click(object sender,EventArgs e) {
+		private void checkAppt_Click(object sender,System.EventArgs e) {
 			changed=true;
 		}
 
-		private void checkComm_Click(object sender,EventArgs e) {
+		private void checkComm_Click(object sender,System.EventArgs e) {
 			changed=true;
 		}
 
-		private void checkCommFamily_Click(object sender,EventArgs e) {
+		private void checkCommFamily_Click(object sender,System.EventArgs e) {
 			changed=true;
 		}
 
-		private void checkLabCase_Click(object sender,EventArgs e) {
+		private void checkLabCase_Click(object sender,System.EventArgs e) {
 			changed=true;
 		}
 
@@ -735,11 +708,11 @@ namespace OpenDental{
 			changed=true;
 		}
 
-		private void checkTasks_Click(object sender,EventArgs e) {
+		private void checkTasks_Click(object sender,System.EventArgs e) {
 			changed=true;
 		}
 
-		private void checkEmail_Click(object sender,EventArgs e) {
+		private void checkEmail_Click(object sender,System.EventArgs e) {
 			changed=true;
 		}
 
@@ -780,15 +753,12 @@ namespace OpenDental{
 				checkTasks.Checked=true;
 				checkSheets.Checked=true;
 			}
-			checkShowOnlyFilmsAndExams.Checked = false;
-			checkShowOnlyHygieneProcs.Checked = false;
 			changed=true;
 		}
 
 		private void checkAudit_Click(object sender,EventArgs e) {
 			changed=true;
 		}
-
 
 		private void butShowAll_Click(object sender,EventArgs e) {
 			checkShowTP.Checked=true;
@@ -806,8 +776,6 @@ namespace OpenDental{
 			checkTasks.Checked=true;
 			checkEmail.Checked=true;
 			checkSheets.Checked=true;
-			checkShowOnlyFilmsAndExams.Checked=false;
-			checkShowOnlyHygieneProcs.Checked=false;
 			changed=true;
 		}
 
@@ -827,32 +795,6 @@ namespace OpenDental{
 			checkTasks.Checked=false;
 			checkEmail.Checked=false;
 			checkSheets.Checked=false;
-			changed=true;
-		}
-
-		private void checkShowHygieneProcs_Click(object sender,EventArgs e) {
-			checkComm.Checked=false;
-			checkCommFamily.Checked=false;
-			checkLabCase.Checked=false;
-			checkRx.Checked=false;
-			checkShowTeeth.Checked=false;
-			checkTasks.Checked=false;
-			checkEmail.Checked=false;
-			checkSheets.Checked=false;
-			checkShowOnlyFilmsAndExams.Checked = false;
-			changed=true;
-		}
-
-		private void checkShowOnlyFilmsAndExams_Click(object sender,EventArgs e) {
-			checkComm.Checked=false;
-			checkCommFamily.Checked=false;
-			checkLabCase.Checked=false;
-			checkRx.Checked=false;
-			checkShowTeeth.Checked=false;
-			checkTasks.Checked=false;
-			checkEmail.Checked=false;
-			checkSheets.Checked=false;
-			checkShowOnlyHygieneProcs.Checked = false;
 			changed=true;
 		}
 		#endregion Show
@@ -960,13 +902,12 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
-			if(ChartViewCur.Description!=textBoxViewDesc.Text) {
-				ChartViewCur.Description=textBoxViewDesc.Text;
-				changed=true;
-			}
 			if(textBoxViewDesc.Text.Trim()=="") {
 				MsgBox.Show(this,"View description cannot be blank.");
 				return;
+			}
+			if(ChartViewCur.Description!=textBoxViewDesc.Text) {
+				changed=true;
 			}
 			if(!changed) {
 				DialogResult=DialogResult.OK;
@@ -1029,7 +970,6 @@ namespace OpenDental{
 				ChartViews.Insert(ChartViewCur);
 			}
 			DisplayFields.SaveListForChartView(ListShowing,ChartViewCur.ChartViewNum);
-			//DataValid.SetInvalid(InvalidType.DisplayFields);
 			DialogResult=DialogResult.OK;
 		}
 
