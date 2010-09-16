@@ -7527,8 +7527,8 @@ namespace OpenDental{
 			else {
 				FormChartAdd.ChartViewCur.ItemOrder=count;
 				ChartViews.Update(FormChartAdd.ChartViewCur);
-				SetChartView(ChartViews.Listt[count]);
 				FillChartViewsGrid();
+				SetChartView(ChartViews.Listt[count]);
 				gridChartViews.SetSelected(count,true);
 			}
 		}
