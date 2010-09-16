@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{8136317D-C936-49B6-9E31-D90F02D2F207}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -377,6 +377,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\FormProcApptColors.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormProcGroup.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\FormWebFormSetup.cs">
@@ -3775,6 +3778,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormProcApptColors.resx">
       <DependentUpon>FormProcApptColors.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormProcGroup.resx">
+      <DependentUpon>FormProcGroup.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormWebFormSetup.resx">

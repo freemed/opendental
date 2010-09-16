@@ -2573,7 +2573,19 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);
 				command="DELETE FROM displayfield WHERE Category = 0";
 				Db.NonQ(command);
-
+				command="DROP TABLE IF EXISTS procgroupitem";
+				Db.NonQ(command);
+				command=@"CREATE TABLE procgroupitem (
+					ProcGroupItemNum bigint NOT NULL auto_increment,
+					ProcNum bigint NOT NULL,
+					GroupNum bigint NOT NULL,
+					PRIMARY KEY (ProcGroupItemNum),
+					INDEX(ProcNum),
+					INDEX(GroupNum)
+					) DEFAULT CHARSET=utf8";
+				Db.NonQ(command);
+				//command="ALTER TABLE procedurelog ADD IsGroup tinyint NOT NULL";
+				//Db.NonQ(command);
 
 
 
@@ -2599,15 +2611,5 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 				
-				
 
 
-
-
-			
-
-			
-
-
-
-		

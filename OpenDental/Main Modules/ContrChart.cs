@@ -109,6 +109,7 @@ namespace OpenDental{
 		private List <PatPlan> PatPlanList;
 		private MenuItem menuItemSetComplete;
 		private MenuItem menuItemEditSelected;
+		private MenuItem menuItemGroupSelected;
 		private OpenDental.UI.Button butPin;
 		private ListBox listButtonCats;
 		private ListView listViewButtons;
@@ -345,6 +346,7 @@ namespace OpenDental{
 			this.menuItemDelete = new System.Windows.Forms.MenuItem();
 			this.menuItemSetComplete = new System.Windows.Forms.MenuItem();
 			this.menuItemEditSelected = new System.Windows.Forms.MenuItem();
+			this.menuItemGroupSelected = new System.Windows.Forms.MenuItem();
 			this.menuItemPrintProg = new System.Windows.Forms.MenuItem();
 			this.menuItemPrintDay = new System.Windows.Forms.MenuItem();
 			this.menuItemLabFeeDetach = new System.Windows.Forms.MenuItem();
@@ -861,6 +863,7 @@ namespace OpenDental{
             this.menuItemDelete,
             this.menuItemSetComplete,
             this.menuItemEditSelected,
+						this.menuItemGroupSelected,
             this.menuItemPrintProg,
             this.menuItemPrintDay,
             this.menuItemLabFeeDetach,
@@ -883,6 +886,12 @@ namespace OpenDental{
 			this.menuItemEditSelected.Index = 2;
 			this.menuItemEditSelected.Text = "Edit All";
 			this.menuItemEditSelected.Click += new System.EventHandler(this.menuItemEditSelected_Click);
+			// 
+			// menuItemGroupSelected
+			// 
+			this.menuItemGroupSelected.Index = 2;
+			this.menuItemGroupSelected.Text = "Group Procedures";
+			this.menuItemGroupSelected.Click += new System.EventHandler(this.menuItemGroupSelected_Click);
 			// 
 			// menuItemPrintProg
 			// 
@@ -4794,10 +4803,15 @@ namespace OpenDental{
 					return;
 				}
 				Procedure proc=Procedures.GetOneProc(PIn.Long(row["ProcNum"].ToString()),true);
-				FormProcEdit FormP=new FormProcEdit(proc,PatCur,FamCur);
-				FormP.ShowDialog();
-				if(FormP.DialogResult!=DialogResult.OK) {
-					return;
+				if(row["groupprocnum"].ToString()!="0"){
+					//group
+	
+				}else{
+					FormProcEdit FormP=new FormProcEdit(proc,PatCur,FamCur);
+					FormP.ShowDialog();
+					if(FormP.DialogResult!=DialogResult.OK) {
+						return;
+					}
 				}
 			}
 			else if(row["CommlogNum"].ToString()!="0"){
@@ -6990,6 +7004,63 @@ namespace OpenDental{
 			}
 			FormProcEditAll FormP=new FormProcEditAll();
 			FormP.ProcList=proclist;
+			FormP.ShowDialog();
+			if(FormP.DialogResult==DialogResult.OK){
+				ModuleSelected(PatCur.PatNum);
+			}
+		}
+
+		private void menuItemGroupSelected_Click(object sender,EventArgs e) {
+			int procCount=0;
+			DataRow row;
+			for(int i=0;i<gridProg.SelectedIndices.Length;i++){
+				row=(DataRow)gridProg.Rows[gridProg.SelectedIndices[i]].Tag;
+				if(row["ProcNum"].ToString()=="0") {
+					MsgBox.Show(this,"Only procedures may be grouped.");
+					return;
+				}
+				else{
+					procCount++;
+				}
+			}
+			if(procCount<2){
+				MsgBox.Show(this,"Please select multiple procedure to group.");
+				return;
+			}
+			List<Procedure> proclist=new List<Procedure>();
+			Procedure proc;
+			for(int i=0;i<gridProg.SelectedIndices.Length;i++){//Create proclist from selected items.
+				row=(DataRow)gridProg.Rows[gridProg.SelectedIndices[i]].Tag;
+				proc=Procedures.GetOneProc(PIn.Long(row["ProcNum"].ToString()),false);
+				proclist.Add(proc);
+			}
+			DateTime procDate=proclist[0].ProcDate;
+			long clinicNum=proclist[0].ClinicNum;
+			long provNum=proclist[0].ProvNum;
+			for(int i=0;i<proclist.Count;i++){
+				if(proclist[i].ProcDate!=procDate){
+					MsgBox.Show(this,"Only procedures with the same date may be grouped.");
+					return;
+				}
+				if(proclist[i].ProcStatus!=ProcStat.C){
+					MsgBox.Show(this,"You may only group completed procedures.");
+					return;
+				}
+				if(proclist[i].ClinicNum!=clinicNum){
+					MsgBox.Show(this,"Only procedures with the same clinic may be grouped.");
+					return;
+				}
+				if(proclist[i].ProvNum!=provNum){
+					MsgBox.Show(this,"Only procedures done by the same provider may be grouped.");
+					return;
+				}
+			}
+			Procedure group=new Procedure();
+			group.IsNew=true;
+
+			FormProcGroup FormP=new FormProcGroup();//proclist,PatCur,FamCur);
+			FormP.GroupCur=group;
+			//FormP.ProcList=proclist;
 			FormP.ShowDialog();
 			if(FormP.DialogResult==DialogResult.OK){
 				ModuleSelected(PatCur.PatNum);

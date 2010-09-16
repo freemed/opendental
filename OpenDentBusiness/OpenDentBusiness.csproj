@@ -173,6 +173,7 @@
     <Compile Include="Crud\PopupCrud.cs" />
     <Compile Include="Crud\ProcApptColorCrud.cs" />
     <Compile Include="Crud\ProcedureCrud.cs" />
+    <Compile Include="Crud\ProcGroupItemCrud.cs" />
     <Compile Include="Crud\ProviderCrud.cs" />
     <Compile Include="Crud\RecallTriggerCrud.cs" />
     <Compile Include="Crud\RecallTypeCrud.cs" />
@@ -202,6 +203,7 @@
     <Compile Include="Data Interface\Guardians.cs" />
     <Compile Include="Data Interface\Equipments.cs" />
     <Compile Include="Data Interface\ProcApptColors.cs" />
+    <Compile Include="Data Interface\ProcGroupItems.cs" />
     <Compile Include="Data Interface\ReplicationServers.cs" />
     <Compile Include="Data Interface\InsFilingCodes.cs" />
     <Compile Include="Data Interface\EtransMessageTexts.cs" />
@@ -446,6 +448,7 @@
     <Compile Include="TableTypes\ApptFieldDef.cs" />
     <Compile Include="TableTypes\ApptField.cs" />
     <Compile Include="TableTypes\ChartView.cs" />
+    <Compile Include="TableTypes\ProcGroupItem.cs" />
     <Compile Include="TableTypes\ProcApptColor.cs" />
     <Compile Include="TableTypes\Guardian.cs" />
     <Compile Include="TableTypes\TaskUnread.cs" />

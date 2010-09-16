@@ -8,7 +8,7 @@ using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
 	internal class DisplayFieldCrud {
-		/*///<summary>Gets one DisplayField object from the database using the primary key.  Returns null if not found.</summary>
+		///<summary>Gets one DisplayField object from the database using the primary key.  Returns null if not found.</summary>
 		internal static DisplayField SelectOne(long displayFieldNum){
 			string command="SELECT * FROM displayfield "
 				+"WHERE DisplayFieldNum = "+POut.Long(displayFieldNum)+" LIMIT 1";
@@ -56,7 +56,7 @@ namespace OpenDentBusiness.Crud{
 				retVal.Add(displayField);
 			}
 			return retVal;
-		}*/
+		}
 
 		///<summary>Inserts one DisplayField into the database.  Returns the new priKey.</summary>
 		internal static long Insert(DisplayField displayField){
@@ -92,7 +92,7 @@ namespace OpenDentBusiness.Crud{
 			return displayField.DisplayFieldNum;
 		}
 
-		/*///<summary>Updates one DisplayField in the database.</summary>
+		///<summary>Updates one DisplayField in the database.</summary>
 		internal static void Update(DisplayField displayField){
 			string command="UPDATE displayfield SET "
 				+"InternalName   = '"+POut.String(displayField.InternalName)+"', "
@@ -145,7 +145,7 @@ namespace OpenDentBusiness.Crud{
 			string command="DELETE FROM displayfield "
 				+"WHERE DisplayFieldNum = "+POut.Long(displayFieldNum)+" LIMIT 1";
 			Db.NonQ(command);
-		}*/
+		}
 
 	}
 }

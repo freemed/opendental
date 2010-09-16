@@ -104,7 +104,7 @@ namespace OpenDentBusiness.Crud{
 				+"ShowProcNotes    =  "+POut.Bool  (chartView.ShowProcNotes)+", "
 				+"IsAudit          =  "+POut.Bool  (chartView.IsAudit)+", "
 				+"SelectedTeethOnly=  "+POut.Bool  (chartView.SelectedTeethOnly)+" "
-				+"WHERE ChartViewNum= "+POut.Long(chartView.ChartViewNum)+" LIMIT 1";
+				+"WHERE ChartViewNum = "+POut.Long(chartView.ChartViewNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
 

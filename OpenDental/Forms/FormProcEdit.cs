@@ -78,12 +78,7 @@ namespace OpenDental{
 		private OpenDental.ValidDouble textProcFee;
 		private System.Windows.Forms.CheckBox checkNoBillIns;
 		private OpenDental.ODtextBox textNotes;
-		private System.Windows.Forms.GroupBox groupProsth;
-		private System.Windows.Forms.Label label3;
-		private System.Windows.Forms.Label label4;
 		private System.Windows.Forms.Label labelClaimNote;
-		private System.Windows.Forms.ListBox listProsth;
-		private OpenDental.ValidDate textDateOriginalProsth;
 		private OpenDental.ODtextBox textClaimNote;
 		private List<ClaimProc> ClaimProcsForProc;
 		//private Adjustment[] AdjForProc;
@@ -181,14 +176,19 @@ namespace OpenDental{
 		public List<ClaimProcHist> HistList;
 		private OpenDental.UI.Button butPickProv;
 		private CheckBox checkHideGraphics;
-		private GroupBox groupCanadianProcType;
-		private CheckBox checkTypeCodeC;
-		private CheckBox checkTypeCodeB;
+		private Label label3;
+		private Label label4;
+		private ValidDate textDateOriginalProsth;
+		private ListBox listProsth;
+		private GroupBox groupProsth;
 		private CheckBox checkTypeCodeA;
-		private CheckBox checkTypeCodeX;
-		private CheckBox checkTypeCodeL;
+		private CheckBox checkTypeCodeB;
+		private CheckBox checkTypeCodeC;
 		private CheckBox checkTypeCodeE;
+		private CheckBox checkTypeCodeL;
+		private CheckBox checkTypeCodeX;
 		private CheckBox checkTypeCodeS;
+		private GroupBox groupCanadianProcType;
 		public List<ClaimProcHist> LoopList;
 
 		///<summary>Inserts are no longer done within this dialog, but must be done ahead of time from outside.You must specify a procedure to edit, and only the changes that are made in this dialog get saved.  Only used when double click in Account, Chart, TP, and in ContrChart.AddProcedure().  The procedure may be deleted if new, and user hits Cancel.</summary>
@@ -311,15 +311,6 @@ namespace OpenDental{
 			this.label10 = new System.Windows.Forms.Label();
 			this.label13 = new System.Windows.Forms.Label();
 			this.checkNoBillIns = new System.Windows.Forms.CheckBox();
-			this.groupProsth = new System.Windows.Forms.GroupBox();
-			this.groupCanadianProcType = new System.Windows.Forms.GroupBox();
-			this.checkTypeCodeC = new System.Windows.Forms.CheckBox();
-			this.checkTypeCodeB = new System.Windows.Forms.CheckBox();
-			this.checkTypeCodeA = new System.Windows.Forms.CheckBox();
-			this.listProsth = new System.Windows.Forms.ListBox();
-			this.textDateOriginalProsth = new OpenDental.ValidDate();
-			this.label4 = new System.Windows.Forms.Label();
-			this.label3 = new System.Windows.Forms.Label();
 			this.labelClaimNote = new System.Windows.Forms.Label();
 			this.labelIncomplete = new System.Windows.Forms.Label();
 			this.comboClinic = new System.Windows.Forms.ComboBox();
@@ -359,10 +350,19 @@ namespace OpenDental{
 			this.tbAdj = new OpenDental.TableProcAdj();
 			this.butPickProv = new OpenDental.UI.Button();
 			this.checkHideGraphics = new System.Windows.Forms.CheckBox();
+			this.label3 = new System.Windows.Forms.Label();
+			this.label4 = new System.Windows.Forms.Label();
+			this.textDateOriginalProsth = new OpenDental.ValidDate();
+			this.listProsth = new System.Windows.Forms.ListBox();
+			this.groupProsth = new System.Windows.Forms.GroupBox();
+			this.checkTypeCodeA = new System.Windows.Forms.CheckBox();
+			this.checkTypeCodeB = new System.Windows.Forms.CheckBox();
+			this.checkTypeCodeC = new System.Windows.Forms.CheckBox();
 			this.checkTypeCodeE = new System.Windows.Forms.CheckBox();
 			this.checkTypeCodeL = new System.Windows.Forms.CheckBox();
 			this.checkTypeCodeX = new System.Windows.Forms.CheckBox();
 			this.checkTypeCodeS = new System.Windows.Forms.CheckBox();
+			this.groupCanadianProcType = new System.Windows.Forms.GroupBox();
 			this.groupQuadrant.SuspendLayout();
 			this.panelSurfaces.SuspendLayout();
 			this.groupArch.SuspendLayout();
@@ -1274,96 +1274,6 @@ namespace OpenDental{
 			this.checkNoBillIns.ThreeState = true;
 			this.checkNoBillIns.Click += new System.EventHandler(this.checkNoBillIns_Click);
 			// 
-			// groupProsth
-			// 
-			this.groupProsth.Controls.Add(this.listProsth);
-			this.groupProsth.Controls.Add(this.textDateOriginalProsth);
-			this.groupProsth.Controls.Add(this.label4);
-			this.groupProsth.Controls.Add(this.label3);
-			this.groupProsth.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupProsth.Location = new System.Drawing.Point(15,299);
-			this.groupProsth.Name = "groupProsth";
-			this.groupProsth.Size = new System.Drawing.Size(275,80);
-			this.groupProsth.TabIndex = 7;
-			this.groupProsth.TabStop = false;
-			this.groupProsth.Text = "Prosthesis Replacement";
-			// 
-			// groupCanadianProcType
-			// 
-			this.groupCanadianProcType.Controls.Add(this.checkTypeCodeS);
-			this.groupCanadianProcType.Controls.Add(this.checkTypeCodeX);
-			this.groupCanadianProcType.Controls.Add(this.checkTypeCodeL);
-			this.groupCanadianProcType.Controls.Add(this.checkTypeCodeE);
-			this.groupCanadianProcType.Controls.Add(this.checkTypeCodeC);
-			this.groupCanadianProcType.Controls.Add(this.checkTypeCodeB);
-			this.groupCanadianProcType.Controls.Add(this.checkTypeCodeA);
-			this.groupCanadianProcType.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupCanadianProcType.Location = new System.Drawing.Point(96,300);
-			this.groupCanadianProcType.Name = "groupCanadianProcType";
-			this.groupCanadianProcType.Size = new System.Drawing.Size(316,124);
-			this.groupCanadianProcType.TabIndex = 163;
-			this.groupCanadianProcType.TabStop = false;
-			this.groupCanadianProcType.Text = "Procedure Type Code";
-			// 
-			// checkTypeCodeC
-			// 
-			this.checkTypeCodeC.Location = new System.Drawing.Point(10,50);
-			this.checkTypeCodeC.Name = "checkTypeCodeC";
-			this.checkTypeCodeC.Size = new System.Drawing.Size(239,17);
-			this.checkTypeCodeC.TabIndex = 2;
-			this.checkTypeCodeC.Text = "Correction of TMJ";
-			this.checkTypeCodeC.UseVisualStyleBackColor = true;
-			// 
-			// checkTypeCodeB
-			// 
-			this.checkTypeCodeB.Location = new System.Drawing.Point(10,33);
-			this.checkTypeCodeB.Name = "checkTypeCodeB";
-			this.checkTypeCodeB.Size = new System.Drawing.Size(239,17);
-			this.checkTypeCodeB.TabIndex = 1;
-			this.checkTypeCodeB.Text = "Temporary placement or service.";
-			this.checkTypeCodeB.UseVisualStyleBackColor = true;
-			// 
-			// checkTypeCodeA
-			// 
-			this.checkTypeCodeA.Location = new System.Drawing.Point(10,16);
-			this.checkTypeCodeA.Name = "checkTypeCodeA";
-			this.checkTypeCodeA.Size = new System.Drawing.Size(268,17);
-			this.checkTypeCodeA.TabIndex = 0;
-			this.checkTypeCodeA.Text = "Not initial placement.  Repair of a prior service.";
-			this.checkTypeCodeA.UseVisualStyleBackColor = true;
-			// 
-			// listProsth
-			// 
-			this.listProsth.Location = new System.Drawing.Point(91,14);
-			this.listProsth.Name = "listProsth";
-			this.listProsth.Size = new System.Drawing.Size(163,43);
-			this.listProsth.TabIndex = 0;
-			// 
-			// textDateOriginalProsth
-			// 
-			this.textDateOriginalProsth.Location = new System.Drawing.Point(91,58);
-			this.textDateOriginalProsth.Name = "textDateOriginalProsth";
-			this.textDateOriginalProsth.Size = new System.Drawing.Size(73,20);
-			this.textDateOriginalProsth.TabIndex = 1;
-			// 
-			// label4
-			// 
-			this.label4.Location = new System.Drawing.Point(5,61);
-			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(84,16);
-			this.label4.TabIndex = 4;
-			this.label4.Text = "Original Date";
-			this.label4.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// label3
-			// 
-			this.label3.Location = new System.Drawing.Point(2,14);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(90,41);
-			this.label3.TabIndex = 0;
-			this.label3.Text = "Crown, Bridge, Denture, or RPD";
-			this.label3.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
 			// labelClaimNote
 			// 
 			this.labelClaimNote.Location = new System.Drawing.Point(0,380);
@@ -1805,6 +1715,79 @@ namespace OpenDental{
 			this.checkHideGraphics.Text = "HideGraphics";
 			this.checkHideGraphics.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// label3
+			// 
+			this.label3.Location = new System.Drawing.Point(2,14);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(90,41);
+			this.label3.TabIndex = 0;
+			this.label3.Text = "Crown, Bridge, Denture, or RPD";
+			this.label3.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// label4
+			// 
+			this.label4.Location = new System.Drawing.Point(5,61);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(84,16);
+			this.label4.TabIndex = 4;
+			this.label4.Text = "Original Date";
+			this.label4.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// textDateOriginalProsth
+			// 
+			this.textDateOriginalProsth.Location = new System.Drawing.Point(91,58);
+			this.textDateOriginalProsth.Name = "textDateOriginalProsth";
+			this.textDateOriginalProsth.Size = new System.Drawing.Size(73,20);
+			this.textDateOriginalProsth.TabIndex = 1;
+			// 
+			// listProsth
+			// 
+			this.listProsth.Location = new System.Drawing.Point(91,14);
+			this.listProsth.Name = "listProsth";
+			this.listProsth.Size = new System.Drawing.Size(163,43);
+			this.listProsth.TabIndex = 0;
+			// 
+			// groupProsth
+			// 
+			this.groupProsth.Controls.Add(this.listProsth);
+			this.groupProsth.Controls.Add(this.textDateOriginalProsth);
+			this.groupProsth.Controls.Add(this.label4);
+			this.groupProsth.Controls.Add(this.label3);
+			this.groupProsth.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.groupProsth.Location = new System.Drawing.Point(15,299);
+			this.groupProsth.Name = "groupProsth";
+			this.groupProsth.Size = new System.Drawing.Size(275,80);
+			this.groupProsth.TabIndex = 7;
+			this.groupProsth.TabStop = false;
+			this.groupProsth.Text = "Prosthesis Replacement";
+			// 
+			// checkTypeCodeA
+			// 
+			this.checkTypeCodeA.Location = new System.Drawing.Point(10,16);
+			this.checkTypeCodeA.Name = "checkTypeCodeA";
+			this.checkTypeCodeA.Size = new System.Drawing.Size(268,17);
+			this.checkTypeCodeA.TabIndex = 0;
+			this.checkTypeCodeA.Text = "Not initial placement.  Repair of a prior service.";
+			this.checkTypeCodeA.UseVisualStyleBackColor = true;
+			// 
+			// checkTypeCodeB
+			// 
+			this.checkTypeCodeB.Location = new System.Drawing.Point(10,33);
+			this.checkTypeCodeB.Name = "checkTypeCodeB";
+			this.checkTypeCodeB.Size = new System.Drawing.Size(239,17);
+			this.checkTypeCodeB.TabIndex = 1;
+			this.checkTypeCodeB.Text = "Temporary placement or service.";
+			this.checkTypeCodeB.UseVisualStyleBackColor = true;
+			// 
+			// checkTypeCodeC
+			// 
+			this.checkTypeCodeC.Location = new System.Drawing.Point(10,50);
+			this.checkTypeCodeC.Name = "checkTypeCodeC";
+			this.checkTypeCodeC.Size = new System.Drawing.Size(239,17);
+			this.checkTypeCodeC.TabIndex = 2;
+			this.checkTypeCodeC.Text = "Correction of TMJ";
+			this.checkTypeCodeC.UseVisualStyleBackColor = true;
+			// 
 			// checkTypeCodeE
 			// 
 			this.checkTypeCodeE.Location = new System.Drawing.Point(10,67);
@@ -1840,6 +1823,23 @@ namespace OpenDental{
 			this.checkTypeCodeS.TabIndex = 6;
 			this.checkTypeCodeS.Text = "Appliance stolen";
 			this.checkTypeCodeS.UseVisualStyleBackColor = true;
+			// 
+			// groupCanadianProcType
+			// 
+			this.groupCanadianProcType.Controls.Add(this.checkTypeCodeS);
+			this.groupCanadianProcType.Controls.Add(this.checkTypeCodeX);
+			this.groupCanadianProcType.Controls.Add(this.checkTypeCodeL);
+			this.groupCanadianProcType.Controls.Add(this.checkTypeCodeE);
+			this.groupCanadianProcType.Controls.Add(this.checkTypeCodeC);
+			this.groupCanadianProcType.Controls.Add(this.checkTypeCodeB);
+			this.groupCanadianProcType.Controls.Add(this.checkTypeCodeA);
+			this.groupCanadianProcType.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.groupCanadianProcType.Location = new System.Drawing.Point(96,300);
+			this.groupCanadianProcType.Name = "groupCanadianProcType";
+			this.groupCanadianProcType.Size = new System.Drawing.Size(316,124);
+			this.groupCanadianProcType.TabIndex = 163;
+			this.groupCanadianProcType.TabStop = false;
+			this.groupCanadianProcType.Text = "Procedure Type Code";
 			// 
 			// FormProcEdit
 			// 
