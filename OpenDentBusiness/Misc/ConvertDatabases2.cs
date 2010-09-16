@@ -2590,7 +2590,16 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					DefaultNote) VALUES('~GRP~','Group Note','GrpNote','"
 					+POut.String("/X/")+"',"+POut.Long(procCat)+",'')";
 				Db.NonQ(command);
-
+				//add Orion bridge:
+				command="INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
+					+") VALUES("
+					+"'Orion', "
+					+"'Orion', "
+					+"'0', "
+					+"'', "
+					+"'', "
+					+"'')";
+				Db.NonQ(command);
 
 
 
