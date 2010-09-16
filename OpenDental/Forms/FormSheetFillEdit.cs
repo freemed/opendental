@@ -80,6 +80,22 @@ namespace OpenDental {
 				textShowInTerminal.Text=SheetCur.ShowInTerminal.ToString();
 			}
 			LayoutFields();
+			if(SheetCur.SheetType==SheetTypeEnum.ExamSheet){//Only check security on exam sheets for now
+				if(!Security.IsAuthorized(Permissions.SheetEdit,SheetCur.DateTimeSheet)){
+					DisableControls(this);
+					Enabled=true;
+					butCancel.Enabled=true;
+					butPDF.Enabled=true;
+					butPrint.Enabled=true;
+				}
+			}
+		}
+
+		private void DisableControls(Control control){
+			control.Enabled=false;
+			for(int i=0;i<control.Controls.Count;i++){
+				DisableControls(control.Controls[i]);
+			}
 		}
 
 		///<summary>Runs as the final step of loading the form, and also immediately after fields are moved down due to growth.</summary>
