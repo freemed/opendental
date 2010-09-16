@@ -7473,6 +7473,9 @@ namespace OpenDental{
 		}
 
 		private void gridChartViews_DoubleClick(object sender,ODGridClickEventArgs e) {
+			if(!Security.IsAuthorized(Permissions.Setup)){
+				return;
+			}
 			int count=gridChartViews.Rows.Count;
 			FormChartView FormC=new FormChartView(); 
 			FormC.ChartViewCur=ChartViews.Listt[e.Row];
@@ -7503,6 +7506,9 @@ namespace OpenDental{
 		}
 
 		private void butChartViewAdd_Click(object sender,EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.Setup)){
+				return;
+			}
 			int count=gridChartViews.Rows.Count;
 			int selectedIndex=gridChartViews.GetSelectedIndex();
 			FormChartView FormChartAdd=new FormChartView();
@@ -7528,6 +7534,9 @@ namespace OpenDental{
 		}
 
 		private void butChartViewUp_Click(object sender,EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.Setup)){
+				return;
+			}
 			if(gridChartViews.SelectedIndices.Length==0) {
 				MsgBox.Show(this,"Please select a view first.");
 				return;
@@ -7559,6 +7568,9 @@ namespace OpenDental{
 		}
 
 		private void butChartViewDown_Click(object sender,EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.Setup)){
+				return;
+			}
 			if(gridChartViews.SelectedIndices.Length==0) {
 				MsgBox.Show(this,"Please select a view first.");
 				return;
