@@ -309,7 +309,7 @@ namespace OpenDental{
 		private void InitializeComponent(){
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ContrChart));
-			SparksToothChart.ToothChartData toothChartData2 = new SparksToothChart.ToothChartData();
+			SparksToothChart.ToothChartData toothChartData1 = new SparksToothChart.ToothChartData();
 			this.textSurf = new System.Windows.Forms.TextBox();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.radioEntryCn = new System.Windows.Forms.RadioButton();
@@ -863,7 +863,7 @@ namespace OpenDental{
             this.menuItemDelete,
             this.menuItemSetComplete,
             this.menuItemEditSelected,
-						this.menuItemGroupSelected,
+            this.menuItemGroupSelected,
             this.menuItemPrintProg,
             this.menuItemPrintDay,
             this.menuItemLabFeeDetach,
@@ -889,31 +889,31 @@ namespace OpenDental{
 			// 
 			// menuItemGroupSelected
 			// 
-			this.menuItemGroupSelected.Index = 2;
+			this.menuItemGroupSelected.Index = 3;
 			this.menuItemGroupSelected.Text = "Group Procedures";
 			this.menuItemGroupSelected.Click += new System.EventHandler(this.menuItemGroupSelected_Click);
 			// 
 			// menuItemPrintProg
 			// 
-			this.menuItemPrintProg.Index = 3;
+			this.menuItemPrintProg.Index = 4;
 			this.menuItemPrintProg.Text = "Print Progress Notes ...";
 			this.menuItemPrintProg.Click += new System.EventHandler(this.menuItemPrintProg_Click);
 			// 
 			// menuItemPrintDay
 			// 
-			this.menuItemPrintDay.Index = 4;
+			this.menuItemPrintDay.Index = 5;
 			this.menuItemPrintDay.Text = "Print Day for Hospital";
 			this.menuItemPrintDay.Click += new System.EventHandler(this.menuItemPrintDay_Click);
 			// 
 			// menuItemLabFeeDetach
 			// 
-			this.menuItemLabFeeDetach.Index = 5;
+			this.menuItemLabFeeDetach.Index = 6;
 			this.menuItemLabFeeDetach.Text = "Detach Lab Fee";
 			this.menuItemLabFeeDetach.Click += new System.EventHandler(this.menuItemLabFeeDetach_Click);
 			// 
 			// menuItemLabFee
 			// 
-			this.menuItemLabFee.Index = 6;
+			this.menuItemLabFee.Index = 7;
 			this.menuItemLabFee.Text = "Attach Lab Fee";
 			this.menuItemLabFee.Click += new System.EventHandler(this.menuItemLabFee_Click);
 			// 
@@ -2862,8 +2862,8 @@ namespace OpenDental{
 			this.toothChart.PreferredPixelFormatNumber = 0;
 			this.toothChart.Size = new System.Drawing.Size(410,307);
 			this.toothChart.TabIndex = 194;
-			toothChartData2.SizeControl = new System.Drawing.Size(410,307);
-			this.toothChart.TcData = toothChartData2;
+			toothChartData1.SizeControl = new System.Drawing.Size(410,307);
+			this.toothChart.TcData = toothChartData1;
 			this.toothChart.UseHardware = false;
 			this.toothChart.SegmentDrawn += new SparksToothChart.ToothChartDrawEventHandler(this.toothChart_SegmentDrawn);
 			// 
@@ -2912,6 +2912,7 @@ namespace OpenDental{
 			this.gridProg.TabIndex = 192;
 			this.gridProg.Title = "Progress Notes";
 			this.gridProg.TranslationName = "TableProg";
+			this.gridProg.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridProg_CellClick);
 			this.gridProg.MouseUp += new System.Windows.Forms.MouseEventHandler(this.gridProg_MouseUp);
 			this.gridProg.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridProg_CellDoubleClick);
 			this.gridProg.KeyDown += new System.Windows.Forms.KeyEventHandler(this.gridProg_KeyDown);
@@ -4803,10 +4804,21 @@ namespace OpenDental{
 					return;
 				}
 				Procedure proc=Procedures.GetOneProc(PIn.Long(row["ProcNum"].ToString()),true);
-				if(row["groupprocnum"].ToString()!="0"){
-					//group
-	
-				}else{
+				if(ProcedureCodes.GetStringProcCode(proc.CodeNum)==ProcedureCodes.GroupProcCode){
+					FormProcGroup FormP=new FormProcGroup();		
+					List<ProcGroupItem> groupItemList=ProcGroupItems.Refresh(proc.ProcNum);
+					List<Procedure> procList=new List<Procedure>();
+					for(int i=0;i<groupItemList.Count;i++){
+						procList.Add(Procedures.GetOneProc(groupItemList[i].ProcNum,false));
+					}
+					FormP.GroupCur=proc;
+					FormP.GroupItemList=groupItemList;
+					FormP.ProcList=procList;
+					FormP.ShowDialog();
+					FillProgNotes();
+					return;
+				}
+				else{
 					FormProcEdit FormP=new FormProcEdit(proc,PatCur,FamCur);
 					FormP.ShowDialog();
 					if(FormP.DialogResult!=DialogResult.OK) {
@@ -7855,6 +7867,24 @@ namespace OpenDental{
 			//toothChart.LoadDirectX();
 		}
 
+		private void gridProg_CellClick(object sender,ODGridClickEventArgs e) {
+			DataTable progNotes=DataSetMain.Tables["ProgNotes"];
+			DataRow rowClicked=progNotes.Rows[e.Row];
+			long procNum=PIn.Long(rowClicked["ProcNum"].ToString());
+			if(procNum!=0){//if procedure clicked
+				long codeNum=PIn.Long(rowClicked["CodeNum"].ToString());
+				if(ProcedureCodes.GetStringProcCode(codeNum)==ProcedureCodes.GroupProcCode){
+					List<ProcGroupItem> groupItemList=ProcGroupItems.Refresh(procNum);
+					for(int i=0;i<progNotes.Rows.Count;i++){
+						for(int j=0;j<groupItemList.Count;j++){
+							if(progNotes.Rows[i]["ProcNum"].ToString()==groupItemList[j].ProcNum.ToString()){
+								gridProg.SetSelected(i,true);
+							}
+						}
+					}
+				}
+			}
+		}
 		
 
 		

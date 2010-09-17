@@ -24,6 +24,16 @@ namespace OpenDentBusiness{
 			}
 			return Crud.ProcGroupItemCrud.Insert(procGroupItem);
 		}
+
+		///<summary>Deletes a ProcGroupItem based on its procGroupItemNum.</summary>
+		public static void Delete(long procGroupItemNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),procGroupItemNum);
+				return;
+			}
+			string command= "DELETE FROM procgroupitem WHERE ProcGroupItemNum = "+POut.Long(procGroupItemNum);
+			Db.NonQ(command);
+		}
 		/*
 		#region CachePattern
 		//This region can be eliminated if this is not a table type with cached data.

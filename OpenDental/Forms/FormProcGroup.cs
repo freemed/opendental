@@ -28,16 +28,10 @@ namespace OpenDental{
 		private OpenDental.UI.Button butDelete;
 		private ODErrorProvider errorProvider2=new ODErrorProvider();
 		private OpenDental.ODtextBox textNotes;
-		private Patient PatCur;
-		private Family FamCur;
 		private Label label15;
 		private Label label16;
-		private bool SigChanged;
 		private TextBox textUser;
 		private OpenDental.UI.Button buttonUseAutoNote;
-		private List<Claim> ClaimList;
-		private bool allowTopaz;
-		private bool StartedAttachedToClaim;
 		public List<ClaimProcHist> HistList;
 		private ODGrid gridProc;
 		private SignatureBoxWrapper signatureBoxWrapper;
@@ -47,6 +41,7 @@ namespace OpenDental{
 		private ValidDate textProcDate;
 		private Label label2;
 		public Procedure GroupCur;
+		public Procedure GroupOld;
 		public List<ProcGroupItem> GroupItemList;
 		public List<Procedure> ProcList;
 
@@ -90,7 +85,7 @@ namespace OpenDental{
 			// 
 			// label7
 			// 
-			this.label7.Location = new System.Drawing.Point(39,78);
+			this.label7.Location = new System.Drawing.Point(60,78);
 			this.label7.Name = "label7";
 			this.label7.Size = new System.Drawing.Size(73,16);
 			this.label7.TabIndex = 0;
@@ -99,7 +94,7 @@ namespace OpenDental{
 			// 
 			// label15
 			// 
-			this.label15.Location = new System.Drawing.Point(-1,278);
+			this.label15.Location = new System.Drawing.Point(20,278);
 			this.label15.Name = "label15";
 			this.label15.Size = new System.Drawing.Size(110,41);
 			this.label15.TabIndex = 79;
@@ -108,7 +103,7 @@ namespace OpenDental{
 			// 
 			// label16
 			// 
-			this.label16.Location = new System.Drawing.Point(39,55);
+			this.label16.Location = new System.Drawing.Point(60,55);
 			this.label16.Name = "label16";
 			this.label16.Size = new System.Drawing.Size(73,16);
 			this.label16.TabIndex = 80;
@@ -117,7 +112,7 @@ namespace OpenDental{
 			// 
 			// textUser
 			// 
-			this.textUser.Location = new System.Drawing.Point(114,52);
+			this.textUser.Location = new System.Drawing.Point(135,52);
 			this.textUser.Name = "textUser";
 			this.textUser.ReadOnly = true;
 			this.textUser.Size = new System.Drawing.Size(119,20);
@@ -125,7 +120,7 @@ namespace OpenDental{
 			// 
 			// label12
 			// 
-			this.label12.Location = new System.Drawing.Point(-11,34);
+			this.label12.Location = new System.Drawing.Point(10,34);
 			this.label12.Name = "label12";
 			this.label12.Size = new System.Drawing.Size(125,14);
 			this.label12.TabIndex = 96;
@@ -134,7 +129,7 @@ namespace OpenDental{
 			// 
 			// label26
 			// 
-			this.label26.Location = new System.Drawing.Point(192,34);
+			this.label26.Location = new System.Drawing.Point(213,34);
 			this.label26.Name = "label26";
 			this.label26.Size = new System.Drawing.Size(125,18);
 			this.label26.TabIndex = 97;
@@ -143,7 +138,7 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(16,14);
+			this.label2.Location = new System.Drawing.Point(37,14);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(96,14);
 			this.label2.TabIndex = 101;
@@ -152,7 +147,7 @@ namespace OpenDental{
 			// 
 			// textProcDate
 			// 
-			this.textProcDate.Location = new System.Drawing.Point(114,12);
+			this.textProcDate.Location = new System.Drawing.Point(133,12);
 			this.textProcDate.Name = "textProcDate";
 			this.textProcDate.ReadOnly = true;
 			this.textProcDate.Size = new System.Drawing.Size(76,20);
@@ -161,8 +156,8 @@ namespace OpenDental{
 			// signatureBoxWrapper
 			// 
 			this.signatureBoxWrapper.BackColor = System.Drawing.SystemColors.ControlDark;
-			this.signatureBoxWrapper.LabelText = null;
-			this.signatureBoxWrapper.Location = new System.Drawing.Point(114,276);
+			this.signatureBoxWrapper.LabelText = "Invalid Signature";
+			this.signatureBoxWrapper.Location = new System.Drawing.Point(135,276);
 			this.signatureBoxWrapper.Name = "signatureBoxWrapper";
 			this.signatureBoxWrapper.Size = new System.Drawing.Size(364,81);
 			this.signatureBoxWrapper.TabIndex = 194;
@@ -170,18 +165,18 @@ namespace OpenDental{
 			// gridProc
 			// 
 			this.gridProc.HScrollVisible = true;
-			this.gridProc.Location = new System.Drawing.Point(12,363);
+			this.gridProc.Location = new System.Drawing.Point(26,367);
 			this.gridProc.Name = "gridProc";
 			this.gridProc.ScrollValue = 0;
 			this.gridProc.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridProc.Size = new System.Drawing.Size(580,257);
+			this.gridProc.Size = new System.Drawing.Size(575,257);
 			this.gridProc.TabIndex = 193;
 			this.gridProc.Title = "Procedures";
 			this.gridProc.TranslationName = "TableProg";
 			// 
 			// textDateEntry
 			// 
-			this.textDateEntry.Location = new System.Drawing.Point(114,32);
+			this.textDateEntry.Location = new System.Drawing.Point(133,32);
 			this.textDateEntry.Name = "textDateEntry";
 			this.textDateEntry.ReadOnly = true;
 			this.textDateEntry.Size = new System.Drawing.Size(76,20);
@@ -194,7 +189,7 @@ namespace OpenDental{
 			this.buttonUseAutoNote.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.buttonUseAutoNote.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.buttonUseAutoNote.CornerRadius = 4F;
-			this.buttonUseAutoNote.Location = new System.Drawing.Point(483,43);
+			this.buttonUseAutoNote.Location = new System.Drawing.Point(419,42);
 			this.buttonUseAutoNote.Name = "buttonUseAutoNote";
 			this.buttonUseAutoNote.Size = new System.Drawing.Size(80,24);
 			this.buttonUseAutoNote.TabIndex = 106;
@@ -205,13 +200,14 @@ namespace OpenDental{
 			// 
 			this.textNotes.AcceptsReturn = true;
 			this.textNotes.AcceptsTab = true;
-			this.textNotes.Location = new System.Drawing.Point(114,72);
+			this.textNotes.Location = new System.Drawing.Point(135,72);
 			this.textNotes.Multiline = true;
 			this.textNotes.Name = "textNotes";
 			this.textNotes.QuickPasteType = OpenDentBusiness.QuickPasteType.Procedure;
 			this.textNotes.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textNotes.Size = new System.Drawing.Size(450,200);
+			this.textNotes.Size = new System.Drawing.Size(364,200);
 			this.textNotes.TabIndex = 1;
+			this.textNotes.TextChanged += new System.EventHandler(this.textNotes_TextChanged);
 			// 
 			// butDelete
 			// 
@@ -223,7 +219,7 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(12,626);
+			this.butDelete.Location = new System.Drawing.Point(26,648);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(83,24);
 			this.butDelete.TabIndex = 8;
@@ -239,7 +235,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(492,626);
+			this.butCancel.Location = new System.Drawing.Point(525,648);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(76,24);
 			this.butCancel.TabIndex = 13;
@@ -254,7 +250,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(410,626);
+			this.butOK.Location = new System.Drawing.Point(443,648);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(76,24);
 			this.butOK.TabIndex = 12;
@@ -264,7 +260,7 @@ namespace OpenDental{
 			// FormProcGroup
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(604,658);
+			this.ClientSize = new System.Drawing.Size(627,696);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.textProcDate);
 			this.Controls.Add(this.signatureBoxWrapper);
@@ -287,7 +283,7 @@ namespace OpenDental{
 			this.Name = "FormProcGroup";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Procedure Group";
+			this.Text = "Procedure Group Note";
 			this.Load += new System.EventHandler(this.FormProcGroup_Load);
 			this.ResumeLayout(false);
 			this.PerformLayout();
@@ -297,11 +293,15 @@ namespace OpenDental{
 
 		//Load function from FormProcEdit (FormProcInfo_Load)... (Single procedure - but form looks like I want)
 		private void FormProcGroup_Load(object sender, System.EventArgs e){
+			GroupOld=GroupCur.Copy();
 			textProcDate.Text=GroupCur.ProcDate.ToShortDateString();
 			textDateEntry.Text=GroupCur.DateEntryC.ToShortDateString();
 			textUser.Text=Security.CurUser.UserName;
 			textNotes.Text=GroupCur.Note;
 			FillProcedures();
+			string keyData=GetSignatureKey();
+			signatureBoxWrapper.FillSignature(GroupCur.SigIsTopaz,keyData,GroupCur.Signature);
+			signatureBoxWrapper.BringToFront();
 		}
 
 		private void FillProcedures(){
@@ -313,15 +313,15 @@ namespace OpenDental{
 			gridProc.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableGroupProcs","Surf"),40);
 			gridProc.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableGroupProcs","Description"),275);
+			col=new ODGridColumn(Lan.g("TableGroupProcs","Description"),247);
 			gridProc.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableGroupProcs","Stat"),25);
 			gridProc.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableGroupProcs","Prov"),30);
+			col=new ODGridColumn(Lan.g("TableGroupProcs","Prov"),42);
 			gridProc.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableGroupProcs","Amount"),48,HorizontalAlignment.Right);
 			gridProc.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableGroupProcs","ADA Code"),60);
+			col=new ODGridColumn(Lan.g("TableGroupProcs","ADA Code"),60,HorizontalAlignment.Center);
 			gridProc.Columns.Add(col);
 			gridProc.Rows.Clear();
 			ODGridRow row;
@@ -348,63 +348,77 @@ namespace OpenDental{
 			}
 		}
 
+		private void textNotes_TextChanged(object sender,EventArgs e) {
+			signatureBoxWrapper.SetInvalid();
+		}
+
+		private string GetSignatureKey(){
+			string keyData=GroupCur.ProcDate.ToShortDateString();
+			keyData+=GroupCur.DateEntryC.ToShortDateString();
+			keyData+=Security.CurUser.UserName;
+			keyData+=GroupCur.Note;
+			for(int i=0;i<GroupItemList.Count;i++){
+				keyData+=GroupItemList[i].ProcGroupItemNum.ToString();
+			}
+			return keyData;
+		}
+
+		private void SaveSignature(){
+			if(signatureBoxWrapper.GetSigChanged()){
+					string keyData=GetSignatureKey();
+					GroupCur.Signature=signatureBoxWrapper.GetSignature(keyData);
+					GroupCur.SigIsTopaz=signatureBoxWrapper.GetSigIsTopaz();
+			}
+		}
+
 		private void butDelete_Click(object sender, System.EventArgs e) {
+			bool result=MsgBox.Show(this,MsgBoxButtons.YesNo,"Are you sure you want delete this procedure group note?");
+			if(result){
+				Procedures.Delete(GroupCur.ProcNum);
+				for(int i=0;i<GroupItemList.Count;i++){
+					ProcGroupItems.Delete(GroupItemList[i].ProcGroupItemNum);
+				}
+				DialogResult=DialogResult.Cancel;
+			}
 			return;
 		}		
 
-		private bool EntriesAreValid(){
-			return true;
-		}
-
-		///<summary>MUST call EntriesAreValid first.  Used from OK_Click and from butSetComplete_Click</summary>
-		private void SaveAndClose(){
+		private void butOK_Click(object sender,System.EventArgs e) {
+			GroupCur.Note=textNotes.Text;
+			if(textNotes.Text.Trim()==""){
+				MsgBox.Show(this,"You cannot save a blank message. Please enter something into the notes field.");
+				return;
+			}
+			if(!signatureBoxWrapper.IsValid){
+				MsgBox.Show(this,"Your signature is invalid. Please sign and click OK again.");
+				return;
+			}
 			try {
 				SaveSignature();
 			}
 			catch(Exception ex){
 				MessageBox.Show(Lan.g(this,"Error saving signature.")+"\r\n"+ex.Message);
 			}
-			//Save
-			//update//whether or not new, because group was created before opening this form
-
+			Procedures.Update(GroupCur,GroupOld);
       DialogResult=DialogResult.OK;
-		}
-
-		private void SaveSignature(){
-			return;
-		}
-
-		public static string GetSignatureKey(Sheet sheet){
-			//No need to check RemotingRole; no call to db
-			StringBuilder strBuild=new StringBuilder();
-			for(int i=0;i<sheet.SheetFields.Count;i++){
-				if(sheet.SheetFields[i].FieldValue==""){
-					continue;
-				}
-				if(sheet.SheetFields[i].FieldType==SheetFieldType.SigBox){
-					continue;
-				}
-				strBuild.Append(sheet.SheetFields[i].FieldValue);
-			}
-			return strBuild.ToString();
-		}
-
-		private void butOK_Click(object sender,System.EventArgs e) {
-			if(EntriesAreValid()) {
-				SaveAndClose();
-			}
 		}
 
 		private void butCancel_Click(object sender,System.EventArgs e) {
 			if(GroupCur.IsNew){
-				//delete
+				Procedures.Delete(GroupCur.ProcNum);
+				for(int i=0;i<GroupItemList.Count;i++){
+					ProcGroupItems.Delete(GroupItemList[i].ProcGroupItemNum);
+				}
 			}
 			DialogResult=DialogResult.Cancel;
 		}
-		
-		public void FormProcEdit_FormClosing(object sender,System.EventArgs e) {
-			return;
-		}
+
+
+
+
+
+
+
 
 
 
