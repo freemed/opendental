@@ -562,8 +562,13 @@ namespace OpenDental {
 		}
 
 		private void menuItemSetup_Click(object sender,EventArgs e) {
+			#if DEBUG
+			FormWebFormSetupV2 formW=new FormWebFormSetupV2();
+			formW.ShowDialog();
+			#else
 			FormWebFormSetup formW=new FormWebFormSetup();
 			formW.ShowDialog();
+			#endif
 		}
 
 		private void backgroundWorker1_RunWorkerCompleted(object sender,RunWorkerCompletedEventArgs e) {

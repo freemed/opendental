@@ -11,18 +11,19 @@ using OpenDentBusiness;
 namespace OpenDental {
 
 	/// <summary>
+	/// This Form is for the 'next' version of the Webforms.
 	/// This Form is primarily used by the dental office to set various UI parameters of a webform: eg. border colors and heading text.
 	/// </summary>
-	public partial class FormWebFormSetup:Form {
+	public partial class FormWebFormSetupV2:Form {
 
 		private string WebFormAddress="";
 
-		public FormWebFormSetup() {
+		public FormWebFormSetupV2() {
 			InitializeComponent();
 			Lan.F(this);
 		}
 
-		private void FormWebFormSetup_Load(object sender,EventArgs e) {
+		private void FormWebFormSetupV2_Load(object sender,EventArgs e) {
 			///the line below will allow the code to continue by not throwing an exception.
 			///It will accept the security certificate if there is a problem with the security certificate.
 			System.Net.ServicePointManager.ServerCertificateValidationCallback+=
@@ -39,6 +40,7 @@ namespace OpenDental {
 			butWebformBorderColor.BackColor=PrefC.GetColor(PrefName.WebFormsBorderColor);
 			textBoxWebformsHeading1.Text=PrefC.GetStringSilent(PrefName.WebFormsHeading1);
 			textBoxWebformsHeading2.Text=PrefC.GetStringSilent(PrefName.WebFormsHeading2);
+			TestSheetUpload();
 		}
 
 		private void butWebformBorderColor_Click(object sender,EventArgs e) {
@@ -82,6 +84,29 @@ namespace OpenDental {
 			}
 		}
 		
+		/// <summary>
+		/// Ignore this method - this is for the 'next' version of the Webforms.
+		/// Here sheetDef can be uploaded to the web form Open Dental
+		/// </summary>
+		private void TestSheetUpload() {
+			try {
+				string RegistrationKey=PrefC.GetString(PrefName.RegistrationKey);
+				WebHostSynch.WebHostSynch wh=new WebHostSynch.WebHostSynch();
+				wh.Url=PrefC.GetString(PrefName.WebHostSynchServerURL);
+				SheetDef sheetDef=SheetDefs.GetSheetDef(5);
+				SheetDef sheetDef1=SheetDefs.GetSheetDef(8);
+				List<SheetDef> sheetDefList = new List<SheetDef>();
+				sheetDefList.Add(sheetDef);
+				sheetDefList.Add(sheetDef1);
+				/* for this line to compile one must modify the Reference.cs file in to the Web references folder. The SheetDef and related classes with namespaces of WebHostSync must be removed so that the SheetDef Class of OpenDentBusiness is used
+	*/
+				wh.UpdateSheetDef(RegistrationKey,sheetDefList.ToArray());
+			}
+			catch(Exception ex) {
+				MessageBox.Show(ex.Message);
+			}
+		}
+
 		private void butOK_Click(object sender,EventArgs e) {
 			Cursor=Cursors.WaitCursor;
 			try {
