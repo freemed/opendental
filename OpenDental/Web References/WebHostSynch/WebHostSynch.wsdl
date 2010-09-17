@@ -186,13 +186,19 @@
           </s:sequence>
         </s:complexType>
       </s:element>
-      <s:element name="ReadSheetDef">
+      <s:element name="UpdateSheetDef">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="0" maxOccurs="1" name="sheetDef" type="tns:SheetDef" />
+            <s:element minOccurs="0" maxOccurs="1" name="RegistrationKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="sheetDefList" type="tns:ArrayOfSheetDef" />
           </s:sequence>
         </s:complexType>
       </s:element>
+      <s:complexType name="ArrayOfSheetDef">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="SheetDef" nillable="true" type="tns:SheetDef" />
+        </s:sequence>
+      </s:complexType>
       <s:complexType name="SheetDef">
         <s:complexContent mixed="false">
           <s:extension base="tns:TableBase">
@@ -284,18 +290,7 @@
           <s:element minOccurs="0" maxOccurs="unbounded" name="SheetFieldDef" nillable="true" type="tns:SheetFieldDef" />
         </s:sequence>
       </s:complexType>
-      <s:element name="ReadSheetDefResponse">
-        <s:complexType />
-      </s:element>
-      <s:element name="SheetsInternalMeth">
-        <s:complexType>
-          <s:sequence>
-            <s:element minOccurs="0" maxOccurs="1" name="sheetInt" type="tns:SheetsInternal" />
-          </s:sequence>
-        </s:complexType>
-      </s:element>
-      <s:complexType name="SheetsInternal" />
-      <s:element name="SheetsInternalMethResponse">
+      <s:element name="UpdateSheetDefResponse">
         <s:complexType />
       </s:element>
     </s:schema>
@@ -342,17 +337,11 @@
   <wsdl:message name="GetWebFormAddressSoapOut">
     <wsdl:part name="parameters" element="tns:GetWebFormAddressResponse" />
   </wsdl:message>
-  <wsdl:message name="ReadSheetDefSoapIn">
-    <wsdl:part name="parameters" element="tns:ReadSheetDef" />
+  <wsdl:message name="UpdateSheetDefSoapIn">
+    <wsdl:part name="parameters" element="tns:UpdateSheetDef" />
   </wsdl:message>
-  <wsdl:message name="ReadSheetDefSoapOut">
-    <wsdl:part name="parameters" element="tns:ReadSheetDefResponse" />
-  </wsdl:message>
-  <wsdl:message name="SheetsInternalMethSoapIn">
-    <wsdl:part name="parameters" element="tns:SheetsInternalMeth" />
-  </wsdl:message>
-  <wsdl:message name="SheetsInternalMethSoapOut">
-    <wsdl:part name="parameters" element="tns:SheetsInternalMethResponse" />
+  <wsdl:message name="UpdateSheetDefSoapOut">
+    <wsdl:part name="parameters" element="tns:UpdateSheetDefResponse" />
   </wsdl:message>
   <wsdl:portType name="WebHostSynchSoap">
     <wsdl:operation name="SetPreferences">
@@ -383,13 +372,9 @@
       <wsdl:input message="tns:GetWebFormAddressSoapIn" />
       <wsdl:output message="tns:GetWebFormAddressSoapOut" />
     </wsdl:operation>
-    <wsdl:operation name="ReadSheetDef">
-      <wsdl:input message="tns:ReadSheetDefSoapIn" />
-      <wsdl:output message="tns:ReadSheetDefSoapOut" />
-    </wsdl:operation>
-    <wsdl:operation name="SheetsInternalMeth">
-      <wsdl:input message="tns:SheetsInternalMethSoapIn" />
-      <wsdl:output message="tns:SheetsInternalMethSoapOut" />
+    <wsdl:operation name="UpdateSheetDef">
+      <wsdl:input message="tns:UpdateSheetDefSoapIn" />
+      <wsdl:output message="tns:UpdateSheetDefSoapOut" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="WebHostSynchSoap" type="tns:WebHostSynchSoap">
@@ -457,17 +442,8 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="ReadSheetDef">
-      <soap:operation soapAction="http://opendental.com/ReadSheetDef" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="SheetsInternalMeth">
-      <soap:operation soapAction="http://opendental.com/SheetsInternalMeth" style="document" />
+    <wsdl:operation name="UpdateSheetDef">
+      <soap:operation soapAction="http://opendental.com/UpdateSheetDef" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -541,17 +517,8 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="ReadSheetDef">
-      <soap12:operation soapAction="http://opendental.com/ReadSheetDef" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="SheetsInternalMeth">
-      <soap12:operation soapAction="http://opendental.com/SheetsInternalMeth" style="document" />
+    <wsdl:operation name="UpdateSheetDef">
+      <soap12:operation soapAction="http://opendental.com/UpdateSheetDef" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

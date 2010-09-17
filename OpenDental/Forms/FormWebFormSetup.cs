@@ -89,17 +89,17 @@ namespace OpenDental {
 		/// </summary>
 		private void TestSheetUpload() {
 			try {
-				//pass sheet to webservice
 				string RegistrationKey=PrefC.GetString(PrefName.RegistrationKey);
 				WebHostSynch.WebHostSynch wh=new WebHostSynch.WebHostSynch();
 				wh.Url=PrefC.GetString(PrefName.WebHostSynchServerURL);
 				SheetDef sheetDef=SheetDefs.GetSheetDef(5);
-
+				SheetDef sheetDef1=SheetDefs.GetSheetDef(8);
+				List<SheetDef> sheetDefList = new List<SheetDef>();
+				sheetDefList.Add(sheetDef);
+				sheetDefList.Add(sheetDef1);
 				/* for this line to compile one must modify the Reference.cs file in to the Web references folder. The SheetDef and related classes with namespaces of WebHostSync must be removed so that the SheetDef Class of OpenDentBusiness is used
 	*/
-				//sheetDef.
-
-				wh.ReadSheetDef(sheetDef);
+				wh.UpdateSheetDef(RegistrationKey,sheetDefList.ToArray());
 			}
 			catch(Exception ex) {
 				

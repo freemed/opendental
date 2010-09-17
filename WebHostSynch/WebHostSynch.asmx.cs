@@ -148,86 +148,80 @@ namespace WebHostSynch {
 		/// <summary>
 		/// Ignore this method - this is for the 'next' version of the Webforms.
 		/// Here sheetDef can be uploaded to the webhostsync from Open Dental
+		/// This method deletes ( then inserts) any existing SheetDefs and corresponding sheetfielddef by the same SheetDefNum. Deleting(and then inserting) versus Updating is done because on occasions there can be multiple SheetDefs which have the same SheetDefNum (due to imperfect code). In case of sheetfielddef updating is not even an option because the SheetFieldDefNum can change.
 		/// </summary>
 		[WebMethod]
-		public void ReadSheetDef(SheetDef sheetDef) {
+		public void UpdateSheetDef(string RegistrationKey,List<SheetDef> sheetDefList) {
 			ODWebServiceEntities db=new ODWebServiceEntities();
-			/*
-			String RegistrationKey="sdgsd";
 			long DentalOfficeID=GetDentalOfficeID(RegistrationKey);
 			if(DentalOfficeID==0) {
 				Logger.Information("Incorrect registration key. IpAddress="+HttpContext.Current.Request.UserHostAddress+" RegistrationKey="+RegistrationKey);
-			}
-			*/
-			long DentalOfficeID=4;
-			string a=sheetDef.ToString();
-			var PrefObj = db.webforms_preference.Where(pref => pref.DentalOfficeID==DentalOfficeID);
-			var sdResults= db.webforms_sheetdef.Where(sd => sd.webforms_preference.DentalOfficeID==DentalOfficeID && sd.SheetDefNum==sheetDef.SheetDefNum);
-
-			webforms_sheetdef sdObj=null;
-
-			if(sdResults.Count()>0) {
-				sdObj =sdResults.First();
-				//sdObj.webforms_sheetfielddef.Load(); //Load associated SheetFieldDefs objects.
-				
-				//delete old sheetfielddef
-				for(int i=0;i<sdObj.webforms_sheetfielddef.Count();i++) {
-					sdObj.webforms_sheetfielddef.Attach(sdObj.webforms_sheetfielddef.ElementAt(i));
-					sdObj.webforms_sheetfielddef.Remove(sdObj.webforms_sheetfielddef.ElementAt(i));
-				}
-
-				db.SaveChanges();
-
-			}
-			// if there is no webforms_sheetdef entry for that dental office make a new entry.
-			if(sdResults.Count()==0) {
-				sdObj=new webforms_sheetdef();
-				sdObj.SheetDefNum=sheetDef.SheetDefNum;
-				PrefObj.First().webforms_sheetdef.Add(sdObj);
+				return;
 			}
 			
-			sdObj.Description=sheetDef.Description;
-			sdObj.FontName = sheetDef.FontName;
-			sdObj.SheetType=(int)sheetDef.SheetType;
-			sdObj.FontSize=sheetDef.FontSize;
-			sdObj.Width=sheetDef.Width;
-			sdObj.Height=sheetDef.Height;
-			if(sheetDef.IsLandscape==true) {
-				sdObj.IsLandscape=(sbyte)1;
-			}
-			else {
-				sdObj.IsLandscape=(sbyte)0;
-			}
 
-			FillSheetDef(sheetDef,sdObj);
+			foreach(SheetDef sheetDef in sheetDefList) {
+				var PreferenceResult = db.webforms_preference.Where(pref => pref.DentalOfficeID==DentalOfficeID);
+				webforms_sheetdef SheetDefObj=null;
+				PreferenceResult.First().webforms_sheetdef.Load();//Load associated SheetDefs object.
+				var SheetDefResult=PreferenceResult.First().webforms_sheetdef.Where(sd => sd.SheetDefNum==sheetDef.SheetDefNum);
+				 while(SheetDefResult.Count()>0) {
+					 SheetDefObj=SheetDefResult.First();
+					//load and delete existing child objects i.e sheetfielddefs objects
+					 SheetDefObj.webforms_sheetfielddef.Load();
+					var SheetFieldDefResult=SheetDefObj.webforms_sheetfielddef;
+					//every time a SheetFieldDefResult is deleted the the SheetFieldDefResult.Count() reduces so at some point the count will ultimately become 0.
+					while(SheetFieldDefResult.Count()>0) {
+						db.DeleteObject(SheetFieldDefResult.First());//Delete SheetFieldDefObj
+					}
+					db.DeleteObject(SheetDefResult.First());//Delete SheetDefObj
+				}
+				 SheetDefObj=new webforms_sheetdef();
+				 SheetDefObj.SheetDefNum=sheetDef.SheetDefNum;
+				 PreferenceResult.First().webforms_sheetdef.Add(SheetDefObj);
+
+
+				 FillSheetDef(sheetDef,SheetDefObj);
+				 FillFieldSheetDef(sheetDef,SheetDefObj);
+			}// end of foreach loop
 			db.SaveChanges();
+		
 		}
 
+		private void FillSheetDef(SheetDef sheetDef,webforms_sheetdef SheetDefObj) {
+			SheetDefObj.Description=sheetDef.Description;
+			SheetDefObj.FontName = sheetDef.FontName;
+			SheetDefObj.SheetType=(int)sheetDef.SheetType;
+			SheetDefObj.FontSize=sheetDef.FontSize;
+			SheetDefObj.Width=sheetDef.Width;
+			SheetDefObj.Height=sheetDef.Height;
+			if(sheetDef.IsLandscape==true) {
+				SheetDefObj.IsLandscape=(sbyte)1;
+			}
+			else {
+				SheetDefObj.IsLandscape=(sbyte)0;
+			}
+		}
 
-		private void FillSheetDef(SheetDef sheetDef,webforms_sheetdef sdObj) {
-
-
-
+		private void FillFieldSheetDef(SheetDef sheetDef,webforms_sheetdef SheetDefObj) {
 			for(int i=0;i<sheetDef.SheetFieldDefs.Count();i++) {//assign several webforms_sheetfielddef
-					webforms_sheetfielddef sfdObj = new webforms_sheetfielddef();
-					sfdObj.SheetFieldDefNum=sheetDef.SheetFieldDefs[i].SheetFieldDefNum;
-					sdObj.webforms_sheetfielddef.Add(sfdObj);
-			
-
+				webforms_sheetfielddef SheetFieldDefObj = new webforms_sheetfielddef();
+				SheetFieldDefObj.SheetFieldDefNum=sheetDef.SheetFieldDefs[i].SheetFieldDefNum;
+				SheetDefObj.webforms_sheetfielddef.Add(SheetFieldDefObj);
 				// assign each property of a single webforms_sheetfielddef with corresponding values.
 				foreach(FieldInfo fieldinfo in sheetDef.SheetFieldDefs[i].GetType().GetFields()) {
-					foreach(PropertyInfo propertyinfo in sfdObj.GetType().GetProperties()) {
+					foreach(PropertyInfo propertyinfo in SheetFieldDefObj.GetType().GetProperties()) {
 						if(fieldinfo.Name==propertyinfo.Name) {
 							if(propertyinfo.PropertyType==typeof(SByte)) {
 								if((bool)fieldinfo.GetValue(sheetDef.SheetFieldDefs[i])==true) {
-									propertyinfo.SetValue(sfdObj,(sbyte)1,null);
+									propertyinfo.SetValue(SheetFieldDefObj,(sbyte)1,null);
 								}
 								else {
-									propertyinfo.SetValue(sfdObj,(sbyte)0,null);
+									propertyinfo.SetValue(SheetFieldDefObj,(sbyte)0,null);
 								}
 							}
 							else {
-								propertyinfo.SetValue(sfdObj,fieldinfo.GetValue(sheetDef.SheetFieldDefs[i]),null);
+								propertyinfo.SetValue(SheetFieldDefObj,fieldinfo.GetValue(sheetDef.SheetFieldDefs[i]),null);
 							}
 						}
 					}//foreach propertyinfo

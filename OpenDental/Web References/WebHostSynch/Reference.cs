@@ -22,7 +22,6 @@ namespace OpenDental.WebHostSynch {
     using System.Xml.Serialization;
 	using OpenDentBusiness;
     
-    
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "2.0.50727.3053")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -49,9 +48,7 @@ namespace OpenDental.WebHostSynch {
         
         private System.Threading.SendOrPostCallback GetWebFormAddressOperationCompleted;
         
-        private System.Threading.SendOrPostCallback ReadSheetDefOperationCompleted;
-        
-        private System.Threading.SendOrPostCallback SheetsInternalMethOperationCompleted;
+        private System.Threading.SendOrPostCallback UpdateSheetDefOperationCompleted;
         
         private bool useDefaultCredentialsSetExplicitly;
         
@@ -113,10 +110,7 @@ namespace OpenDental.WebHostSynch {
         public event GetWebFormAddressCompletedEventHandler GetWebFormAddressCompleted;
         
         /// <remarks/>
-        public event ReadSheetDefCompletedEventHandler ReadSheetDefCompleted;
-        
-        /// <remarks/>
-        public event SheetsInternalMethCompletedEventHandler SheetsInternalMethCompleted;
+        public event UpdateSheetDefCompletedEventHandler UpdateSheetDefCompleted;
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://opendental.com/SetPreferences", RequestNamespace="http://opendental.com/", ResponseNamespace="http://opendental.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
@@ -329,58 +323,32 @@ namespace OpenDental.WebHostSynch {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://opendental.com/ReadSheetDef", RequestNamespace="http://opendental.com/", ResponseNamespace="http://opendental.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-        public void ReadSheetDef(SheetDef sheetDef) {
-            this.Invoke("ReadSheetDef", new object[] {
-                        sheetDef});
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://opendental.com/UpdateSheetDef", RequestNamespace="http://opendental.com/", ResponseNamespace="http://opendental.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public void UpdateSheetDef(string RegistrationKey, SheetDef[] sheetDefList) {
+            this.Invoke("UpdateSheetDef", new object[] {
+                        RegistrationKey,
+                        sheetDefList});
         }
         
         /// <remarks/>
-        public void ReadSheetDefAsync(SheetDef sheetDef) {
-            this.ReadSheetDefAsync(sheetDef, null);
+        public void UpdateSheetDefAsync(string RegistrationKey, SheetDef[] sheetDefList) {
+            this.UpdateSheetDefAsync(RegistrationKey, sheetDefList, null);
         }
         
         /// <remarks/>
-        public void ReadSheetDefAsync(SheetDef sheetDef, object userState) {
-            if ((this.ReadSheetDefOperationCompleted == null)) {
-                this.ReadSheetDefOperationCompleted = new System.Threading.SendOrPostCallback(this.OnReadSheetDefOperationCompleted);
+        public void UpdateSheetDefAsync(string RegistrationKey, SheetDef[] sheetDefList, object userState) {
+            if ((this.UpdateSheetDefOperationCompleted == null)) {
+                this.UpdateSheetDefOperationCompleted = new System.Threading.SendOrPostCallback(this.OnUpdateSheetDefOperationCompleted);
             }
-            this.InvokeAsync("ReadSheetDef", new object[] {
-                        sheetDef}, this.ReadSheetDefOperationCompleted, userState);
+            this.InvokeAsync("UpdateSheetDef", new object[] {
+                        RegistrationKey,
+                        sheetDefList}, this.UpdateSheetDefOperationCompleted, userState);
         }
         
-        private void OnReadSheetDefOperationCompleted(object arg) {
-            if ((this.ReadSheetDefCompleted != null)) {
+        private void OnUpdateSheetDefOperationCompleted(object arg) {
+            if ((this.UpdateSheetDefCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-                this.ReadSheetDefCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-            }
-        }
-        
-        /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://opendental.com/SheetsInternalMeth", RequestNamespace="http://opendental.com/", ResponseNamespace="http://opendental.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-        public void SheetsInternalMeth(SheetsInternal sheetInt) {
-            this.Invoke("SheetsInternalMeth", new object[] {
-                        sheetInt});
-        }
-        
-        /// <remarks/>
-        public void SheetsInternalMethAsync(SheetsInternal sheetInt) {
-            this.SheetsInternalMethAsync(sheetInt, null);
-        }
-        
-        /// <remarks/>
-        public void SheetsInternalMethAsync(SheetsInternal sheetInt, object userState) {
-            if ((this.SheetsInternalMethOperationCompleted == null)) {
-                this.SheetsInternalMethOperationCompleted = new System.Threading.SendOrPostCallback(this.OnSheetsInternalMethOperationCompleted);
-            }
-            this.InvokeAsync("SheetsInternalMeth", new object[] {
-                        sheetInt}, this.SheetsInternalMethOperationCompleted, userState);
-        }
-        
-        private void OnSheetsInternalMethOperationCompleted(object arg) {
-            if ((this.SheetsInternalMethCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-                this.SheetsInternalMethCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+                this.UpdateSheetDefCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
         
@@ -571,15 +539,6 @@ namespace OpenDental.WebHostSynch {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "2.0.50727.3053")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://opendental.com/")]
-    public partial class SheetsInternal {
-    }
-    
-        
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(EntityReference))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(EntityReferenceOfwebforms_preference))]
@@ -843,11 +802,7 @@ namespace OpenDental.WebHostSynch {
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "2.0.50727.3053")]
-    public delegate void ReadSheetDefCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "2.0.50727.3053")]
-    public delegate void SheetsInternalMethCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
+    public delegate void UpdateSheetDefCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
 }
 
 #pragma warning restore 1591
