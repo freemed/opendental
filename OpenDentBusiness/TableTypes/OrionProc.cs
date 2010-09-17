@@ -11,14 +11,14 @@ namespace OpenDentBusiness{
 		public long OrionProcNum;
 		///<summary>FK to procedurelog.ProcNum</summary>
 		public long ProcNum;
-		///<summary>Enum:DPC None=0,1A=1,1B=2,1C=3,2=4,3=5,4=6,5=7</summary>
-		public DPC DPCenum;
+		///<summary>Enum:OrionDPC None=0,1A=1,1B=2,1C=3,2=4,3=5,4=6,5=7</summary>
+		public OrionDPC DPC;
 		///<summary>System adds days to the diagnosis date based upon the DPC entered for that procedure. If DPC = none the system will return “No Schedule by Date”. </summary>
 		public DateTime DateScheduleBy;
 		///<summary> Default to current date.  Provider shall have to ability to edit with a previous date, but not a future date.</summary>
 		public DateTime DateStopClock;
-		///<summarty>Enum:Status2 TP=0,C=1,E=2,R=3,RO=4,CS=5,CR=6,CA-Tx=7,CA-ERPD=8,CA-P/D=9,S=10,ST=11,W=12</summarty>
-		public Status2 Status2;
+		///<summarty>Enum:OrionStatus TP=0,C=1,E=2,R=3,RO=4,CS=5,CR=6,CA-Tx=7,CA-ERPD=8,CA-P/D=9,S=10,ST=11,W=12</summarty>
+		public OrionStatus Status2;
 		///<summary></summary>
 		public bool IsOnCall;
 		///<summary>Indicates in the clinical note that effective communication was used for this encounter.</summary>
@@ -33,7 +33,7 @@ namespace OpenDentBusiness{
 		}
 	}
 
-	public enum DPC{
+	public enum OrionDPC{
 	  ///<summary>0- None</summary>
 	  None,
 	  ///<summary>1- Treatment to be scheduled within 1 calendar day</summary>
@@ -52,7 +52,7 @@ namespace OpenDentBusiness{
 	  _5
 	}
 
-	public enum Status2{
+	public enum OrionStatus {
 		///<summary>0– Treatment planned</summary>
 		TP,
 		///<summary>1– Treatment completed</summary>
