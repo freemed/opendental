@@ -71,9 +71,8 @@ namespace OpenDentBusiness{
 		///<summary>Adds code without disrupting existing code.</summary>
 		public static void HookAddCode(object sender,string hookName,params object[] parameters) {
 			for(int i=0;i<PluginList.Count;i++) {
-				if(PluginList[i].Plugin.HookAddCode(sender,hookName,parameters)) {
-					return;
-				}
+				//if there are multiple plugins, we run them all
+				PluginList[i].Plugin.HookAddCode(sender,hookName,parameters);
 			}
 		}
 
