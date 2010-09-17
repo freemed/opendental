@@ -7055,6 +7055,10 @@ namespace OpenDental{
 					MsgBox.Show(this,"Only procedures done by the same provider may be grouped.");
 					return;
 				}
+				if(ProcedureCodes.GetStringProcCode(proclist[i].CodeNum)==ProcedureCodes.GroupProcCode){
+					MsgBox.Show(this,"Procedure groups may not contain procedure groups.");
+					return;
+				}
 			}
 			//Procedures are valid. Create new Procedure "group" and ProcGroupItems-------------------------------------------------------
 			Procedure group=new Procedure();

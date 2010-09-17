@@ -39,7 +39,7 @@ namespace OpenDental{
 		private bool allowTopaz;
 		private bool StartedAttachedToClaim;
 		public List<ClaimProcHist> HistList;
-		private ODGrid gridProcs;
+		private ODGrid gridProc;
 		private SignatureBoxWrapper signatureBoxWrapper;
 		private Label label12;
 		private ValidDate textDateEntry;
@@ -74,18 +74,18 @@ namespace OpenDental{
 			this.label15 = new System.Windows.Forms.Label();
 			this.label16 = new System.Windows.Forms.Label();
 			this.textUser = new System.Windows.Forms.TextBox();
-			this.gridProcs = new OpenDental.UI.ODGrid();
+			this.label12 = new System.Windows.Forms.Label();
+			this.label26 = new System.Windows.Forms.Label();
+			this.label2 = new System.Windows.Forms.Label();
+			this.textProcDate = new OpenDental.ValidDate();
+			this.signatureBoxWrapper = new OpenDental.UI.SignatureBoxWrapper();
+			this.gridProc = new OpenDental.UI.ODGrid();
+			this.textDateEntry = new OpenDental.ValidDate();
 			this.buttonUseAutoNote = new OpenDental.UI.Button();
 			this.textNotes = new OpenDental.ODtextBox();
 			this.butDelete = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
-			this.signatureBoxWrapper = new OpenDental.UI.SignatureBoxWrapper();
-			this.label12 = new System.Windows.Forms.Label();
-			this.textDateEntry = new OpenDental.ValidDate();
-			this.label26 = new System.Windows.Forms.Label();
-			this.textProcDate = new OpenDental.ValidDate();
-			this.label2 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// label7
@@ -123,17 +123,69 @@ namespace OpenDental{
 			this.textUser.Size = new System.Drawing.Size(119,20);
 			this.textUser.TabIndex = 101;
 			// 
-			// gridProcs
+			// label12
 			// 
-			this.gridProcs.HScrollVisible = true;
-			this.gridProcs.Location = new System.Drawing.Point(12,363);
-			this.gridProcs.Name = "gridProcs";
-			this.gridProcs.ScrollValue = 0;
-			this.gridProcs.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridProcs.Size = new System.Drawing.Size(673,257);
-			this.gridProcs.TabIndex = 193;
-			this.gridProcs.Title = "Procedures";
-			this.gridProcs.TranslationName = "TableProg";
+			this.label12.Location = new System.Drawing.Point(-11,34);
+			this.label12.Name = "label12";
+			this.label12.Size = new System.Drawing.Size(125,14);
+			this.label12.TabIndex = 96;
+			this.label12.Text = "Date Entry";
+			this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label26
+			// 
+			this.label26.Location = new System.Drawing.Point(192,34);
+			this.label26.Name = "label26";
+			this.label26.Size = new System.Drawing.Size(125,18);
+			this.label26.TabIndex = 97;
+			this.label26.Text = "(for security)";
+			this.label26.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// label2
+			// 
+			this.label2.Location = new System.Drawing.Point(16,14);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(96,14);
+			this.label2.TabIndex = 101;
+			this.label2.Text = "Procedure Date";
+			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textProcDate
+			// 
+			this.textProcDate.Location = new System.Drawing.Point(114,12);
+			this.textProcDate.Name = "textProcDate";
+			this.textProcDate.ReadOnly = true;
+			this.textProcDate.Size = new System.Drawing.Size(76,20);
+			this.textProcDate.TabIndex = 100;
+			// 
+			// signatureBoxWrapper
+			// 
+			this.signatureBoxWrapper.BackColor = System.Drawing.SystemColors.ControlDark;
+			this.signatureBoxWrapper.LabelText = null;
+			this.signatureBoxWrapper.Location = new System.Drawing.Point(114,276);
+			this.signatureBoxWrapper.Name = "signatureBoxWrapper";
+			this.signatureBoxWrapper.Size = new System.Drawing.Size(364,81);
+			this.signatureBoxWrapper.TabIndex = 194;
+			// 
+			// gridProc
+			// 
+			this.gridProc.HScrollVisible = true;
+			this.gridProc.Location = new System.Drawing.Point(12,363);
+			this.gridProc.Name = "gridProc";
+			this.gridProc.ScrollValue = 0;
+			this.gridProc.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridProc.Size = new System.Drawing.Size(580,257);
+			this.gridProc.TabIndex = 193;
+			this.gridProc.Title = "Procedures";
+			this.gridProc.TranslationName = "TableProg";
+			// 
+			// textDateEntry
+			// 
+			this.textDateEntry.Location = new System.Drawing.Point(114,32);
+			this.textDateEntry.Name = "textDateEntry";
+			this.textDateEntry.ReadOnly = true;
+			this.textDateEntry.Size = new System.Drawing.Size(76,20);
+			this.textDateEntry.TabIndex = 95;
 			// 
 			// buttonUseAutoNote
 			// 
@@ -187,7 +239,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(609,626);
+			this.butCancel.Location = new System.Drawing.Point(492,626);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(76,24);
 			this.butCancel.TabIndex = 13;
@@ -202,74 +254,22 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(527,626);
+			this.butOK.Location = new System.Drawing.Point(410,626);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(76,24);
 			this.butOK.TabIndex = 12;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
-			// signatureBoxWrapper
-			// 
-			this.signatureBoxWrapper.BackColor = System.Drawing.SystemColors.ControlDark;
-			this.signatureBoxWrapper.LabelText = null;
-			this.signatureBoxWrapper.Location = new System.Drawing.Point(114,276);
-			this.signatureBoxWrapper.Name = "signatureBoxWrapper";
-			this.signatureBoxWrapper.Size = new System.Drawing.Size(364,81);
-			this.signatureBoxWrapper.TabIndex = 194;
-			// 
-			// label12
-			// 
-			this.label12.Location = new System.Drawing.Point(-11,34);
-			this.label12.Name = "label12";
-			this.label12.Size = new System.Drawing.Size(125,14);
-			this.label12.TabIndex = 96;
-			this.label12.Text = "Date Entry";
-			this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textDateEntry
-			// 
-			this.textDateEntry.Location = new System.Drawing.Point(114,32);
-			this.textDateEntry.Name = "textDateEntry";
-			this.textDateEntry.ReadOnly = true;
-			this.textDateEntry.Size = new System.Drawing.Size(76,20);
-			this.textDateEntry.TabIndex = 95;
-			// 
-			// label26
-			// 
-			this.label26.Location = new System.Drawing.Point(192,34);
-			this.label26.Name = "label26";
-			this.label26.Size = new System.Drawing.Size(125,18);
-			this.label26.TabIndex = 97;
-			this.label26.Text = "(for security)";
-			this.label26.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// textProcDate
-			// 
-			this.textProcDate.Location = new System.Drawing.Point(114,12);
-			this.textProcDate.Name = "textProcDate";
-			this.textProcDate.ReadOnly = true;
-			this.textProcDate.Size = new System.Drawing.Size(76,20);
-			this.textProcDate.TabIndex = 100;
-			// 
-			// label2
-			// 
-			this.label2.Location = new System.Drawing.Point(16,14);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(96,14);
-			this.label2.TabIndex = 101;
-			this.label2.Text = "Procedure Date";
-			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
 			// FormProcGroup
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(697,658);
+			this.ClientSize = new System.Drawing.Size(604,658);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.textProcDate);
 			this.Controls.Add(this.signatureBoxWrapper);
 			this.Controls.Add(this.label26);
-			this.Controls.Add(this.gridProcs);
+			this.Controls.Add(this.gridProc);
 			this.Controls.Add(this.textDateEntry);
 			this.Controls.Add(this.buttonUseAutoNote);
 			this.Controls.Add(this.label12);
@@ -282,13 +282,13 @@ namespace OpenDental{
 			this.Controls.Add(this.butCancel);
 			this.Controls.Add(this.butOK);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.Load += new System.EventHandler(this.FormProcGroup_Load);
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "FormProcGroup";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Procedure Group";
+			this.Load += new System.EventHandler(this.FormProcGroup_Load);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -301,6 +301,43 @@ namespace OpenDental{
 			textDateEntry.Text=GroupCur.DateEntryC.ToShortDateString();
 			textUser.Text=Security.CurUser.UserName;
 			textNotes.Text=GroupCur.Note;
+			FillProcedures();
+		}
+
+		private void FillProcedures(){
+			gridProc.BeginUpdate();
+			gridProc.Columns.Clear();
+			ODGridColumn col=new ODGridColumn(Lan.g("TableGroupProcs","Date"),68);
+			gridProc.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableGroupProcs","Th"),25);
+			gridProc.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableGroupProcs","Surf"),40);
+			gridProc.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableGroupProcs","Description"),275);
+			gridProc.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableGroupProcs","Stat"),25);
+			gridProc.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableGroupProcs","Prov"),30);
+			gridProc.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableGroupProcs","Amount"),48,HorizontalAlignment.Right);
+			gridProc.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableGroupProcs","ADA Code"),60);
+			gridProc.Columns.Add(col);
+			gridProc.Rows.Clear();
+			ODGridRow row;
+			for(int i=0;i<ProcList.Count;i++){
+				row=new ODGridRow();			
+				row.Cells.Add(ProcList[i].ProcDate.ToShortDateString());
+				row.Cells.Add(ProcList[i].ToothNum.ToString());
+				row.Cells.Add(ProcList[i].Surf.ToString());
+				row.Cells.Add(ProcedureCodes.GetLaymanTerm(ProcList[i].CodeNum));
+				row.Cells.Add(ProcList[i].ProcStatus.ToString());
+				row.Cells.Add(Providers.GetAbbr(ProcList[i].ProvNum));
+				row.Cells.Add(ProcList[i].ProcFee.ToString("F"));
+				row.Cells.Add(ProcedureCodes.GetStringProcCode(ProcList[i].CodeNum));
+				gridProc.Rows.Add(row);
+			}
+			gridProc.EndUpdate();
 		}
 
 		private void buttonUseAutoNote_Click(object sender,EventArgs e) {
