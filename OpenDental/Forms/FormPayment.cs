@@ -29,7 +29,7 @@ namespace OpenDental{
 		private System.Windows.Forms.TextBox textBankBranch;
 		private System.Windows.Forms.Label label7;
 		private System.Windows.Forms.TextBox textTotal;
-		private System.ComponentModel.Container components = null;
+		private IContainer components;
 		///<summary></summary>
 		public bool IsNew=false;
 		private OpenDental.ValidDate textDate;
@@ -80,6 +80,9 @@ namespace OpenDental{
 		private Label labelDeposit;
 		private TextBox textFamAfterIns;
 		private CheckBox checkPayTypeNone;
+		private OpenDental.UI.Button butPayConnect;
+		private ContextMenu contextMenuPayConnect;
+		private MenuItem menuPayConnect;
 		///<summary>This table gets created and filled once at the beginning.  After that, only the last column gets carefully updated.</summary>
 		private DataTable tableBalances;
 
@@ -91,6 +94,7 @@ namespace OpenDental{
 			PaymentCur=paymentCur;
 			Lan.F(this);
 			panelXcharge.ContextMenu=contextMenuXcharge;
+			butPayConnect.ContextMenu=contextMenuPayConnect;
 		}
 
 		///<summary></summary>
@@ -143,6 +147,9 @@ namespace OpenDental{
 			this.labelDeposit = new System.Windows.Forms.Label();
 			this.textFamAfterIns = new System.Windows.Forms.TextBox();
 			this.checkPayTypeNone = new System.Windows.Forms.CheckBox();
+			this.contextMenuPayConnect = new System.Windows.Forms.ContextMenu();
+			this.menuPayConnect = new System.Windows.Forms.MenuItem();
+			this.butPayConnect = new OpenDental.UI.Button();
 			this.butPay = new OpenDental.UI.Button();
 			this.gridBal = new OpenDental.UI.ODGrid();
 			this.gridMain = new OpenDental.UI.ODGrid();
@@ -435,6 +442,32 @@ namespace OpenDental{
 			this.checkPayTypeNone.Click += new System.EventHandler(this.checkPayTypeNone_Click);
 			this.checkPayTypeNone.CheckedChanged += new System.EventHandler(this.checkPayTypeNone_CheckedChanged);
 			// 
+			// contextMenuPayConnect
+			// 
+			this.contextMenuPayConnect.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuPayConnect});
+			// 
+			// menuPayConnect
+			// 
+			this.menuPayConnect.Index = 0;
+			this.menuPayConnect.Text = "Settings";
+			this.menuPayConnect.Click += new System.EventHandler(this.menuPayConnect_Click);
+			// 
+			// butPayConnect
+			// 
+			this.butPayConnect.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butPayConnect.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butPayConnect.Autosize = false;
+			this.butPayConnect.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butPayConnect.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPayConnect.CornerRadius = 4F;
+			this.butPayConnect.Location = new System.Drawing.Point(782,13);
+			this.butPayConnect.Name = "butPayConnect";
+			this.butPayConnect.Size = new System.Drawing.Size(75,24);
+			this.butPayConnect.TabIndex = 129;
+			this.butPayConnect.Text = "PayConnect";
+			this.butPayConnect.Click += new System.EventHandler(this.butPayConnect_Click);
+			// 
 			// butPay
 			// 
 			this.butPay.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -578,6 +611,7 @@ namespace OpenDental{
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(974,562);
+			this.Controls.Add(this.butPayConnect);
 			this.Controls.Add(this.checkPayTypeNone);
 			this.Controls.Add(this.textFamAfterIns);
 			this.Controls.Add(this.textDeposit);
@@ -771,6 +805,24 @@ namespace OpenDental{
 							break;
 						}
 					}
+				}
+			}
+			CheckUIState();
+		}
+
+		private void CheckUIState(){
+			Program progXcharge=Programs.GetCur("Xcharge");
+			Program progPayConnect=Programs.GetCur("PayConnect");
+			if(progXcharge==null || progPayConnect==null){//Should not happen.
+				panelXcharge.Visible=(progXcharge!=null);
+				butPayConnect.Visible=(progPayConnect!=null);
+			}else{
+				panelXcharge.Visible=true;
+				butPayConnect.Visible=true;
+				if(progPayConnect.Enabled){
+					panelXcharge.Visible=false;
+				}else if(progXcharge.Enabled){
+					butPayConnect.Visible=false;
 				}
 			}
 		}
@@ -1180,10 +1232,25 @@ namespace OpenDental{
 			textNote.Text+=resulttext;
 		}
 
+		private void butPayConnect_Click(object sender,EventArgs e) {
+			MsgBox.Show(this,"Not yet implemented.");
+		}
+
 		private void menuXcharge_Click(object sender,EventArgs e) {
 			if(Security.IsAuthorized(Permissions.Setup)) {
 				FormXchargeSetup FormX=new FormXchargeSetup();
-				FormX.ShowDialog();
+				if(FormX.ShowDialog()==DialogResult.OK){
+					CheckUIState();
+				}
+			}
+		}
+
+		private void menuPayConnect_Click(object sender,EventArgs e) {
+			if(Security.IsAuthorized(Permissions.Setup)) {
+				FormPayConnectSetup FormPC=new FormPayConnectSetup();
+				if(FormPC.ShowDialog()==DialogResult.OK){
+					CheckUIState();
+				}
 			}
 		}
 

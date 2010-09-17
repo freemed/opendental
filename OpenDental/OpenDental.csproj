@@ -199,6 +199,7 @@
   <ItemGroup>
     <Compile Include="Bridges\Apteryx.cs" />
     <Compile Include="Bridges\Orion.cs" />
+    <Compile Include="Bridges\PayConnect.cs" />
     <Compile Include="Bridges\PreXion.cs" />
     <Compile Include="Bridges\Ewoo.cs" />
     <Compile Include="Bridges\FormTrophyNamePick.cs">
@@ -370,6 +371,9 @@
     </Compile>
     <Compile Include="Forms\FormWebFormSetupV2.designer.cs">
       <DependentUpon>FormWebFormSetupV2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormPayConnectSetup.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\FormChartView.cs">
       <SubType>Form</SubType>
@@ -3773,6 +3777,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormWebFormSetupV2.resx">
       <DependentUpon>FormWebFormSetupV2.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormPayConnectSetup.resx">
+      <DependentUpon>FormPayConnectSetup.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormChartView.resx">

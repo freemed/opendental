@@ -2600,7 +2600,43 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					+"'', "
 					+"'')";
 				Db.NonQ(command);
-
+				//add PayConnect bridge:
+				command="INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
+					+") VALUES("
+					+"'PayConnect', "
+					+"'PayConnect from http://www.dentalxchange.com/', "
+					+"'0', "
+					+"'', "
+					+"'', "
+					+"'No program path or arguments. Usernames and passwords are supplied by dentalxchange.')";
+				Db.NonQ(command);
+				command="SELECT ProgramNum FROM program WHERE ProgName='PayConnect' LIMIT 1";
+				programNum=PIn.Long(Db.GetScalar(command));
+				command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+					+") VALUES("
+					+"'"+POut.Long(programNum)+"', "
+					+"'Username', "
+					+"'')";
+				Db.NonQ32(command);
+				command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+					+") VALUES("
+					+"'"+POut.Long(programNum)+"', "
+					+"'Password', "
+					+"'')";
+				Db.NonQ32(command);
+				command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+					+") VALUES("
+					+"'"+POut.Long(programNum)+"', "
+					+"'PaymentType', "
+					+"'0')";
+				Db.NonQ32(command);
+				command="INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
+					+"VALUES ("
+					+"'"+POut.Long(programNum)+"', "
+					+"'"+POut.Int(((int)ToolBarsAvail.AccountModule))+"', "
+					+"'PayConnect')";
+				Db.NonQ32(command);
+				
 
 
 
