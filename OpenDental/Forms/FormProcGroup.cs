@@ -22,7 +22,6 @@ using OpenDental.UI;
 namespace OpenDental{
 ///<summary></summary>
 	public class FormProcGroup:System.Windows.Forms.Form {
-		public List<Procedure> ProcList;
 		private System.Windows.Forms.Label label7;
 		private OpenDental.UI.Button butOK;
 		private OpenDental.UI.Button butCancel;
@@ -48,6 +47,8 @@ namespace OpenDental{
 		private ValidDate textProcDate;
 		private Label label2;
 		public Procedure GroupCur;
+		public List<ProcGroupItem> GroupItemList;
+		public List<Procedure> ProcList;
 
 		public FormProcGroup() {
 			InitializeComponent();
@@ -57,11 +58,13 @@ namespace OpenDental{
 		///<summary>Inserts are no longer done within this dialog, but must be done ahead of time from outside.You must specify a procedure to edit, and only the changes that are made in this dialog get saved.  Only used when double click in Account, Chart, TP, and in ContrChart.AddProcedure().  The procedure may be deleted if new, and user hits Cancel.</summary>
 
 		//Constructor from ProcEdit. Lots of this will need to be copied into the new Load function.
-		public FormProcGroup(List<Procedure> procList,Patient patCur,Family famCur) {
-			ProcList=procList;
+		/*public FormProcGroup(long groupNum) {
+			GroupCur=Procedures.GetOneProc(groupNum,true);
+			ProcGroupItem=ProcGroupItems.Refresh(groupNum);
+			//Proc
 			InitializeComponent();
 			Lan.F(this);
-		}
+		}*/
 
 		#region Windows Form Designer generated code
 
@@ -279,6 +282,7 @@ namespace OpenDental{
 			this.Controls.Add(this.butCancel);
 			this.Controls.Add(this.butOK);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.Load += new System.EventHandler(this.FormProcGroup_Load);
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "FormProcGroup";
@@ -293,16 +297,10 @@ namespace OpenDental{
 
 		//Load function from FormProcEdit (FormProcInfo_Load)... (Single procedure - but form looks like I want)
 		private void FormProcGroup_Load(object sender, System.EventArgs e){
-			textDateEntry.Text=ProcList[0].DateEntryC.ToShortDateString();
-			FillControls();
-		}		
-
-
-		///<summary>ONLY run on startup. Fills the basic controls, except not the ones in the upper left panel which are handled in SetControls.</summary>
-		private void FillControls(){
-			//TODO: Get signaturewrapper key
-			//Security.CurUser;
-
+			textProcDate.Text=GroupCur.ProcDate.ToShortDateString();
+			textDateEntry.Text=GroupCur.DateEntryC.ToShortDateString();
+			textUser.Text=Security.CurUser.UserName;
+			textNotes.Text=GroupCur.Note;
 		}
 
 		private void buttonUseAutoNote_Click(object sender,EventArgs e) {

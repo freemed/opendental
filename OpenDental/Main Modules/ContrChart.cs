@@ -7034,6 +7034,7 @@ namespace OpenDental{
 				proc=Procedures.GetOneProc(PIn.Long(row["ProcNum"].ToString()),false);
 				proclist.Add(proc);
 			}
+			//Validate the list of procedures------------------------------------------------------------------------------------
 			DateTime procDate=proclist[0].ProcDate;
 			long clinicNum=proclist[0].ClinicNum;
 			long provNum=proclist[0].ProvNum;
@@ -7055,19 +7056,29 @@ namespace OpenDental{
 					return;
 				}
 			}
+			//Procedures are valid. Create new Procedure "group" and ProcGroupItems-------------------------------------------------------
 			Procedure group=new Procedure();
+			group.PatNum=PatCur.PatNum;
 			group.ProcStatus=ProcStat.C;
-			//set:
-			//procDate
-			//provNum
-			//dateEntryC automatically set to NOW()
-			//clinicNum
+			group.ProcDate=procDate;
+			group.ProvNum=provNum;
+			group.ClinicNum=clinicNum;
 			group.CodeNum=ProcedureCodes.GetCodeNum(ProcedureCodes.GroupProcCode);
 			group.IsNew=true;
-
-			FormProcGroup FormP=new FormProcGroup();//proclist,PatCur,FamCur);
+			Procedures.Insert(group);
+			List<ProcGroupItem> groupItemList=new List<ProcGroupItem>();
+			ProcGroupItem groupItem;
+			for(int i=0;i<proclist.Count;i++){
+				groupItem=new ProcGroupItem();
+				groupItem.ProcNum=proclist[i].ProcNum;
+				groupItem.GroupNum=group.ProcNum;
+				ProcGroupItems.Insert(groupItem);
+				groupItemList.Add(groupItem);
+			}
+			FormProcGroup FormP=new FormProcGroup();
 			FormP.GroupCur=group;
-			//FormP.ProcList=proclist;
+			FormP.GroupItemList=groupItemList;
+			FormP.ProcList=proclist;
 			FormP.ShowDialog();
 			if(FormP.DialogResult==DialogResult.OK){
 				ModuleSelected(PatCur.PatNum);

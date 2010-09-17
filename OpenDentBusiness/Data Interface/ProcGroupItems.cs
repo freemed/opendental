@@ -5,8 +5,25 @@ using System.Reflection;
 using System.Text;
 
 namespace OpenDentBusiness{
-	///<summary></summary>
+	///<summary>In ProcGroupItems the ProcNum is a procedure in a group and GroupNum is the group the procedure is in. GroupNum is a FK to the Procedure table. There is a special type of procedure with the procedure code "~GRP~" that is used to indicate this is a group Procedure.</summary>
 	public class ProcGroupItems{
+		///<summary>Gets all the ProcGroupItems for a Procedure Group.</summary>
+		public static List<ProcGroupItem> Refresh(long groupNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<ProcGroupItem>>(MethodBase.GetCurrentMethod(),groupNum);
+			}
+			string command="SELECT * FROM procgroupitem WHERE GroupNum = "+POut.Long(groupNum);
+			return Crud.ProcGroupItemCrud.SelectMany(command);
+		}
+
+		///<summary>Adds a procedure to a group.</summary>
+		public static long Insert(ProcGroupItem procGroupItem){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
+				procGroupItem.ProcGroupItemNum=Meth.GetLong(MethodBase.GetCurrentMethod(),procGroupItem);
+				return procGroupItem.ProcGroupItemNum;
+			}
+			return Crud.ProcGroupItemCrud.Insert(procGroupItem);
+		}
 		/*
 		#region CachePattern
 		//This region can be eliminated if this is not a table type with cached data.
@@ -64,15 +81,6 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<ProcGroupItem>(MethodBase.GetCurrentMethod(),procGroupItemNum);
 			}
 			return Crud.ProcGroupItemCrud.SelectOne(procGroupItemNum);
-		}
-
-		///<summary></summary>
-		public static long Insert(ProcGroupItem procGroupItem){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				procGroupItem.ProcGroupItemNum=Meth.GetLong(MethodBase.GetCurrentMethod(),procGroupItem);
-				return procGroupItem.ProcGroupItemNum;
-			}
-			return Crud.ProcGroupItemCrud.Insert(procGroupItem);
 		}
 
 		///<summary></summary>
