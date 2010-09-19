@@ -1900,7 +1900,7 @@ namespace OpenDental{
 			if(PatCur.ResponsParty!=0){
 				textResponsParty.Text=Patients.GetLim(PatCur.ResponsParty).GetNameLF();
 			}
-			if(Programs.IsEnabled("TrophyEnhanced")){
+			if(Programs.IsEnabled(ProgramName.TrophyEnhanced)){
 				textTrophyFolder.Text=PatCur.TrophyFolder;
 			}
 			else{
@@ -2811,7 +2811,7 @@ namespace OpenDental{
 			PatCur.GradeLevel=(PatientGrade)comboGradeLevel.SelectedIndex;
 			PatCur.Urgency=(TreatmentUrgency)comboUrgency.SelectedIndex;
 			//ResponsParty handled when buttons are pushed.
-			if(Programs.IsEnabled("TrophyEnhanced")) {
+			if(Programs.IsEnabled(ProgramName.TrophyEnhanced)) {
 				PatCur.TrophyFolder=textTrophyFolder.Text;
 			}
 			PatCur.Ward=textWard.Text;

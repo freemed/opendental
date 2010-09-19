@@ -495,7 +495,7 @@ namespace OpenDental{
 			if(thread!=null){
 				thread.Abort();
 			}
-			Program prog=Programs.GetCur("UAppoint");
+			Program prog=Programs.GetCur(ProgramName.UAppoint);
 			if(prog==null){
 				return;
 			}

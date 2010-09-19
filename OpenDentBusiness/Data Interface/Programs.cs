@@ -109,12 +109,12 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Returns true if a Program link with the given name or number exists and is enabled.</summary>
-		public static bool IsEnabled(string progName){
+		public static bool IsEnabled(ProgramName progName){
 			//No need to check RemotingRole; no call to db.
 			if(ProgramC.HList==null) {
 				Programs.RefreshCache();
 			}
-			if(ProgramC.HList.ContainsKey(progName) && ((Program)ProgramC.HList[progName]).Enabled) {
+			if(ProgramC.HList.ContainsKey(progName.ToString()) && ((Program)ProgramC.HList[progName.ToString()]).Enabled) {
 				return true;
 			}
 			return false;
@@ -132,10 +132,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Supply a valid program Name, and this will set Cur to be the corresponding Program object.</summary>
-		public static Program GetCur(string progName){
+		public static Program GetCur(ProgramName progName) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<ProgramC.Listt.Count;i++) {
-				if(ProgramC.Listt[i].ProgName==progName) {
+				if(ProgramC.Listt[i].ProgName==progName.ToString()) {
 					return ProgramC.Listt[i];
 				}
 			}
@@ -143,17 +143,24 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Supply a valid program Name.  Will return 0 if not found.</summary>
-		public static long GetProgramNum(string progName) {
+		public static long GetProgramNum(ProgramName progName) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<ProgramC.Listt.Count;i++) {
-				if(ProgramC.Listt[i].ProgName==progName) {
+				if(ProgramC.Listt[i].ProgName==progName.ToString()) {
 					return ProgramC.Listt[i].ProgramNum;
 				}
 			}
 			return 0;
 		}
 
-		
+		/// <summary>Using eClinicalWorks tight integration.</summary>
+		public static bool UsingEcwTight() {
+			//No need to check RemotingRole; no call to db.
+			if(Programs.IsEnabled(ProgramName.eClinicalWorks)	&& ProgramProperties.GetPropVal(ProgramName.eClinicalWorks,"IsStandalone")=="0"){
+				return true;
+			}
+			return false;
+		}
 
 
 

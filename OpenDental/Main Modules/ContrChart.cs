@@ -273,6 +273,7 @@ namespace OpenDental{
 		private bool InitializedOnStartup;
 		//<summary>Can be null if user has not set up any views.  Defaults to first in list when starting up.</summary>
 		private ChartView ChartViewCurDisplay;
+		private TabPage tabPatInfo;
 		private bool chartCustViewChanged;
 	
 		///<summary></summary>
@@ -507,6 +508,7 @@ namespace OpenDental{
 			this.button1 = new OpenDental.UI.Button();
 			this.textTreatmentNotes = new OpenDental.ODtextBox();
 			this.gridPtInfo = new OpenDental.UI.ODGrid();
+			this.tabPatInfo = new System.Windows.Forms.TabPage();
 			this.groupBox2.SuspendLayout();
 			this.tabControlImages.SuspendLayout();
 			this.panelImages.SuspendLayout();
@@ -1008,6 +1010,7 @@ namespace OpenDental{
 			this.tabProc.Controls.Add(this.tabPlanned);
 			this.tabProc.Controls.Add(this.tabShow);
 			this.tabProc.Controls.Add(this.tabDraw);
+			this.tabProc.Controls.Add(this.tabPatInfo);
 			this.tabProc.Location = new System.Drawing.Point(415,28);
 			this.tabProc.Name = "tabProc";
 			this.tabProc.SelectedIndex = 0;
@@ -2968,6 +2971,15 @@ namespace OpenDental{
 			this.gridPtInfo.TranslationName = "TableChartPtInfo";
 			this.gridPtInfo.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPtInfo_CellDoubleClick);
 			// 
+			// tabPatInfo
+			// 
+			this.tabPatInfo.Location = new System.Drawing.Point(4,22);
+			this.tabPatInfo.Name = "tabPatInfo";
+			this.tabPatInfo.Size = new System.Drawing.Size(516,233);
+			this.tabPatInfo.TabIndex = 7;
+			this.tabPatInfo.Text = "Pat Info";
+			this.tabPatInfo.UseVisualStyleBackColor = true;
+			// 
 			// ContrChart
 			// 
 			this.Controls.Add(this.panelEcw);
@@ -3026,33 +3038,7 @@ namespace OpenDental{
 		}
 
 		private void ContrChart_Resize(object sender,EventArgs e) {
-			if(!ProgramC.HListIsNull() && Programs.IsEnabled("eClinicalWorks") 
-				&& ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") 
-			{
-				gridProg.Width=524;
-				if(panelImages.Visible) {
-					panelEcw.Height=tabControlImages.Top-panelEcw.Top+1-(panelImages.Height+2);
-				}
-				else {
-					panelEcw.Height=tabControlImages.Top-panelEcw.Top+1;
-				}
-				return;
-			}
-			if(gridProg.Columns !=null && gridProg.Columns.Count>0){
-				int gridW=0;
-				for(int i=0;i<gridProg.Columns.Count;i++){
-					gridW+=gridProg.Columns[i].ColWidth;
-				}
-				if(gridProg.Location.X+gridW+20 < ClientSize.Width){//if space is big enough to allow full width
-					gridProg.Width=gridW+20;
-				}
-				else{
-					if(ClientSize.Width>gridProg.Location.X){//prevents an error
-						gridProg.Width=ClientSize.Width-gridProg.Location.X-1;
-					}
-				}
-			}
-			gridPtInfo.Height=tabControlImages.Top-gridPtInfo.Top;
+			ChartLayoutHelper.Resize(gridProg,panelImages,panelEcw,tabControlImages,ClientSize,gridPtInfo);
 		}
 
 		///<summary></summary>
@@ -3062,44 +3048,9 @@ namespace OpenDental{
 			}
 			InitializedOnStartup=true;
 			newStatus=ProcStat.TP;
-			//ApptPlanned=new ContrApptSingle();
-			//ApptPlanned.Location=new Point(1,3);
-			//ApptPlanned.Visible=false;
-			//tabPlanned.Controls.Add(ApptPlanned);
-			//ApptPlanned.DoubleClick += new System.EventHandler(ApptPlanned_DoubleClick);
-			tabProc.SelectedIndex=0;
-			tabProc.Height=259;
-			if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") {
-				toothChart.Location=new Point(524+2,26);
-				textTreatmentNotes.Location=new Point(524+2,toothChart.Bottom+1);
-				textTreatmentNotes.Size=new Size(411,40);//make it a bit smaller than usual
-				gridPtInfo.Visible=false;
-				panelEcw.Visible=true;
-				panelEcw.Location=new Point(524+2,textTreatmentNotes.Bottom+1);
-				panelEcw.Size=new Size(411,tabControlImages.Top-panelEcw.Top+1);
-				butECWdown.Location=butECWup.Location;//they will be at the same location, but just hide one or the other.
-				butECWdown.Visible=false;
-				tabProc.Location=new Point(0,28);
-				gridProg.Location=new Point(0,tabProc.Bottom+2);
-				gridProg.Height=this.ClientSize.Height-gridProg.Location.Y-2;
-			}
-			else {//normal:
-				toothChart.Location=new Point(0,26);
-				textTreatmentNotes.Location=new Point(0,toothChart.Bottom+1);
-				textTreatmentNotes.Size=new Size(411,71);
-				gridPtInfo.Visible=true;
-				gridPtInfo.Location=new Point(0,textTreatmentNotes.Bottom+1);
-				panelEcw.Visible=false;
-				tabProc.Location=new Point(415,28);
-				gridProg.Location=new Point(415,tabProc.Bottom+2);
-				gridProg.Height=this.ClientSize.Height-gridProg.Location.Y-2;
-			}
-			//original two lines replaced by code above:
-			//gridProg.Location=new Point(tabProc.Left,tabProc.Bottom+2);
-			//gridProg.Height=this.ClientSize.Height-gridProg.Location.Y-2;
+			ChartLayoutHelper.InitializeOnStartup(this,tabProc,gridProg,panelEcw,tabControlImages,ClientSize,gridPtInfo,toothChart,textTreatmentNotes,butECWup,butECWdown,tabPatInfo);
 			//can't use Lan.F
 			Lan.C(this,new Control[]{
-				//groupPlanned,
 				checkDone,
 				butNew,
 				butClear,
@@ -3129,10 +3080,7 @@ namespace OpenDental{
 				label14,
 				//textProcCode is handled in ClearButtons()
 				butOK,
-				label13
-			});
-			Lan.C(this,new Control[]{
-				//these were missing.  Added as recursive.
+				label13,
 				tabEnterTx,
 				tabMissing,
 				tabMovements,
@@ -3180,12 +3128,17 @@ namespace OpenDental{
 					ToolBarMain.Buttons["Consent"].Enabled = false;
 					ToolBarMain.Buttons["ToothChart"].Enabled = false;
 					ToolBarMain.Buttons["ExamSheet"].Enabled=false;
-					if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") {
+					if(UsingEcwTight()) {
 						ToolBarMain.Buttons["Commlog"].Enabled=false;
 						webBrowserEcw.Url=null;
 					}
 				}
 			}
+		}
+
+		///<summary>This reduces the number of places where Programs.UsingEcwTight() is called.  This helps with organization.  All calls from ContrChart must pass through here.  They also must have been checked to not involve the Orion bridge or layout logic.</summary>
+		private bool UsingEcwTight() {
+			return Programs.UsingEcwTight();
 		}
 
 		///<summary>Causes the toolbars to be laid out again.</summary>
@@ -3209,7 +3162,7 @@ namespace OpenDental{
 			button=new ODToolBarButton(Lan.g(this,"Exam Sheet"),-1,"","ExamSheet");
 			button.Style=ODToolBarButtonStyle.PushButton;
 			ToolBarMain.Buttons.Add(button);
-			if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") {
+			if(UsingEcwTight()) {//button will show in this toolbar instead of the usual one.
 				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Commlog"),4,Lan.g(this,"New Commlog Entry"),"Commlog"));
 			}
 			ArrayList toolButItems=ToolButItems.GetForToolBar(ToolBarsAvail.ChartModule);
@@ -3281,7 +3234,7 @@ namespace OpenDental{
 				ToolBarMain.Buttons["Consent"].Enabled = false;
 				ToolBarMain.Buttons["ToothChart"].Enabled = false;
 				ToolBarMain.Buttons["ExamSheet"].Enabled=false;
-				if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") {
+				if(UsingEcwTight()) {
 					ToolBarMain.Buttons["Commlog"].Enabled=false;
 					webBrowserEcw.Url=null;
 				}
@@ -3301,7 +3254,7 @@ namespace OpenDental{
 				ToolBarMain.Buttons["Consent"].Enabled = true;
 				ToolBarMain.Buttons["ToothChart"].Enabled =true;
 				ToolBarMain.Buttons["ExamSheet"].Enabled=true;
-				if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") {
+				if(UsingEcwTight()) {
 					ToolBarMain.Buttons["Commlog"].Enabled=true;
 					//the following sequence also gets repeated after exiting the Rx window to refresh.
 					String strAppServer="";
@@ -3418,7 +3371,7 @@ namespace OpenDental{
 		}
 
 		private void OnRx_Click(){
-			if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") {
+			if(UsingEcwTight()) {
 				VBbridges.Ecw.LoadRxForm((int)Bridges.ECW.UserId,Bridges.ECW.EcwConfigPath,(int)Bridges.ECW.AptNum);
 				//refresh the right panel:
 				try {
@@ -3603,7 +3556,7 @@ namespace OpenDental{
 			if(Plugins.HookMethod(this,"ContrChart.FillPtInfo",PatCur)) {
 				return;
 			}
-			gridPtInfo.Height=tabControlImages.Top-gridPtInfo.Top;
+			ChartLayoutHelper.GridPtInfoSetSize(gridPtInfo,tabControlImages);
 			textTreatmentNotes.Text="";
 			if(PatCur==null) {
 				gridPtInfo.BeginUpdate();
@@ -4238,21 +4191,7 @@ namespace OpenDental{
 				row.Tag=table.Rows[i];
 				gridProg.Rows.Add(row);
 			}
-			if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") {
-				gridProg.Width=524;
-			}
-			else if(gridProg.Columns !=null && gridProg.Columns.Count>0) {
-				int gridW=0;
-				for(int i=0;i<gridProg.Columns.Count;i++) {
-					gridW+=gridProg.Columns[i].ColWidth;
-				}
-				if(gridProg.Location.X+gridW+20 < ClientSize.Width) {//if space is big enough to allow full width
-					gridProg.Width=gridW+20;
-				}
-				else {
-					gridProg.Width=ClientSize.Width-gridProg.Location.X-1;
-				}
-			}
+			ChartLayoutHelper.SetGridProgWidth(gridProg,ClientSize);
 			gridProg.EndUpdate();
 			if(Chartscrollval==0) {
 				gridProg.ScrollToEnd();
@@ -5057,7 +4996,7 @@ namespace OpenDental{
 					MessageBox.Show(ex.Message);
 				}
 			}
-			else if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") {
+			else if(UsingEcwTight()) {
 				//do not synch recall.  Too slow
 			}
 			else{
@@ -5164,7 +5103,7 @@ namespace OpenDental{
 				//Procedures.SetHideGraphical(ProcCur);//might not matter anymore
 				ToothInitials.SetValue(PatCur.PatNum,ProcCur.ToothNum,ToothInitialType.Missing);
 			}
-			if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") {
+			if(UsingEcwTight()) {
 				//do not synch recall.  Too slow
 			}
 			else{
@@ -7398,7 +7337,7 @@ namespace OpenDental{
 			if(panelNewH>panelImages.Bottom-toothChart.Bottom)
 				panelNewH=panelImages.Bottom-toothChart.Bottom;//keeps it from going too high
 			panelImages.Height=panelNewH;
-			if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") {
+			if(UsingEcwTight()) {//this might belong in ChartLayoutHelper
 				if(panelImages.Visible) {
 					panelEcw.Height=tabControlImages.Top-panelEcw.Top+1
 						-(panelImages.Height+2);
@@ -7417,24 +7356,7 @@ namespace OpenDental{
 		}
 
 		private void tabProc_MouseDown(object sender,MouseEventArgs e) {
-			//selected tab will have changed, so we need to test the original selected tab:
-			Rectangle rect=tabProc.GetTabRect(SelectedProcTab);
-			if(rect.Contains(e.X,e.Y) && tabProc.Height>27){//clicked on the already selected tab which was maximized
-				tabProc.Height=27;
-				tabProc.Refresh();
-				gridProg.Location=new Point(tabProc.Left,tabProc.Bottom+1);
-				gridProg.Height=this.ClientSize.Height-gridProg.Location.Y-2;
-			}
-			else if(tabProc.Height==27){//clicked on a minimized tab
-				tabProc.Height=259;
-				tabProc.Refresh();
-				gridProg.Location=new Point(tabProc.Left,tabProc.Bottom+1);
-				gridProg.Height=this.ClientSize.Height-gridProg.Location.Y-2;
-			}
-			else{//clicked on a new tab
-				//height will have already been set, so do nothing
-			}
-			SelectedProcTab=tabProc.SelectedIndex;
+			ChartLayoutHelper.tabProc_MouseDown(SelectedProcTab,gridProg,tabProc,ClientSize,e);
 			FillMovementsAndHidden();
 		}
 
@@ -7459,7 +7381,7 @@ namespace OpenDental{
 			}
 			selectedImageTab=tabControlImages.SelectedIndex;
 			FillImages();//it will not actually fill the images unless panelImages is visible
-			if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") {
+			if(UsingEcwTight()) {
 				if(panelImages.Visible) {
 					panelEcw.Height=tabControlImages.Top-panelEcw.Top+1-(panelImages.Height+2);
 				}

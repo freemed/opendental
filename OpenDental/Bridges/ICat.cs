@@ -172,7 +172,7 @@ namespace OpenDental.Bridges{
 
 		///<summary></summary>
 		public static void StartFileWatcher() {
-			ArrayList ForProgram=ProgramProperties.GetForProgram(Programs.GetProgramNum("iCat"));
+			ArrayList ForProgram=ProgramProperties.GetForProgram(Programs.GetProgramNum(ProgramName.iCat));
 			ProgramProperty PPCur=ProgramProperties.GetCur(ForProgram,"Return folder path");
 			string returnFolder=PPCur.PropertyValue;
 			if(!Directory.Exists(returnFolder)) {
@@ -215,7 +215,7 @@ namespace OpenDental.Bridges{
 
 		private static void ProcessFile(string fullPath) {
 			string filename=Path.GetFileName(fullPath);
-			ArrayList ForProgram=ProgramProperties.GetForProgram(Programs.GetProgramNum("iCat"));
+			ArrayList ForProgram=ProgramProperties.GetForProgram(Programs.GetProgramNum(ProgramName.iCat));
 			ProgramProperty PPCur=ProgramProperties.GetCur(ForProgram,"XML output file path");
 			string xmlOutputFile=PPCur.PropertyValue;
 			if(!File.Exists(xmlOutputFile)){

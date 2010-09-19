@@ -366,7 +366,7 @@ namespace OpenDental{
 				butCancel.Text=Lan.g(this,"Close");
 				butOK.Visible=false;
 			}
-			Program prog=Programs.GetCur("Trojan");
+			Program prog=Programs.GetCur(ProgramName.Trojan);
 			if(prog!=null && prog.Enabled) {
 				trojan=true;
 			}

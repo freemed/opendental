@@ -2617,25 +2617,37 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					+"'"+POut.Long(programNum)+"', "
 					+"'Username', "
 					+"'')";
-				Db.NonQ32(command);
+				Db.NonQ(command);
 				command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 					+") VALUES("
 					+"'"+POut.Long(programNum)+"', "
 					+"'Password', "
 					+"'')";
-				Db.NonQ32(command);
+				Db.NonQ(command);
 				command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 					+") VALUES("
 					+"'"+POut.Long(programNum)+"', "
 					+"'PaymentType', "
 					+"'0')";
-				Db.NonQ32(command);
+				Db.NonQ(command);
 				command="INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
 					+"VALUES ("
 					+"'"+POut.Long(programNum)+"', "
 					+"'"+POut.Int(((int)ToolBarsAvail.AccountModule))+"', "
 					+"'PayConnect')";
-				Db.NonQ32(command);
+				Db.NonQ(command);
+				//Delete NewPatientForm bridge
+				command="SELECT ProgramNum From program WHERE ProgName='NewPatientForm.com'";
+				programNum=PIn.Long(Db.GetScalar(command));
+				if(programNum>0) {
+					command="DELETE FROM program WHERE ProgramNum="+POut.Long(programNum);
+					Db.NonQ(command);
+					command="DELETE FROM toolbutitem WHERE ProgramNum="+POut.Long(programNum);
+					Db.NonQ(command);
+				}
+
+
+
 				
 
 

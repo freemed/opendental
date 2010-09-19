@@ -811,19 +811,26 @@ namespace OpenDental{
 		}
 
 		private void CheckUIState(){
-			Program progXcharge=Programs.GetCur("Xcharge");
-			Program progPayConnect=Programs.GetCur("PayConnect");
+			Program progXcharge=Programs.GetCur(ProgramName.Xcharge);
+			Program progPayConnect=Programs.GetCur(ProgramName.PayConnect);
 			if(progXcharge==null || progPayConnect==null){//Should not happen.
 				panelXcharge.Visible=(progXcharge!=null);
 				butPayConnect.Visible=(progPayConnect!=null);
-			}else{
+				return;
+			}
+			panelXcharge.Visible=false;
+			butPayConnect.Visible=false;
+			if(!progPayConnect.Enabled && !progXcharge.Enabled) {//if neither enabled
+				//show both so user can pick
 				panelXcharge.Visible=true;
 				butPayConnect.Visible=true;
-				if(progPayConnect.Enabled){
-					panelXcharge.Visible=false;
-				}else if(progXcharge.Enabled){
-					butPayConnect.Visible=false;
-				}
+			}
+			//show if enabled.  User could have both enabled.
+			if(progPayConnect.Enabled){
+				butPayConnect.Visible=true;
+			}
+			else if(progXcharge.Enabled){
+				panelXcharge.Visible=true;
 			}
 		}
 
@@ -1134,7 +1141,7 @@ namespace OpenDental{
 			if(e.Button != MouseButtons.Left){
 				return;
 			}
-			Program prog=Programs.GetCur("Xcharge");
+			Program prog=Programs.GetCur(ProgramName.Xcharge);
 			if(prog==null){
 				MsgBox.Show(this,"X-Charge entry is missing from the database.");//should never happen
 				return;

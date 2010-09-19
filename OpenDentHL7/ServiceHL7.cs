@@ -69,9 +69,7 @@ namespace OpenDentHL7 {
 			}
 			//inform od via signal that this service is running
 			IsStandalone=true;//and for Mountainside
-			if(Programs.IsEnabled("eClinicalWorks")
-				&& ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") 
-			{
+			if(Programs.UsingEcwTight()){
 				IsStandalone=false;
 			}
 			//#if DEBUG//just so I don't forget to remove it later.

@@ -22,7 +22,7 @@ namespace OpenDental.Bridges {
 
 		public static void StartupCheck(){
 			//Skip all if not using Trojan.
-			Program ProgramCur=Programs.GetCur("Trojan");
+			Program ProgramCur=Programs.GetCur(ProgramName.Trojan);
 			if(!ProgramCur.Enabled) {
 				return;
 			}

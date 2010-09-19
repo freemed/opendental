@@ -422,7 +422,7 @@ namespace OpenDental{
 			for(int i=0;i<FeeSchedC.ListShort.Count;i++){
 				comboCopyFrom.Items.Add(FeeSchedC.ListShort[i].Description);
 			}
-			if(!Programs.IsEnabled("eClinicalWorks")) {
+			if(!Programs.IsEnabled(ProgramName.eClinicalWorks)) {
 				butImportEcw.Visible=false;
 			}
 		}

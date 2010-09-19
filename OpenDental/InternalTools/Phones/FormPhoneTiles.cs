@@ -193,6 +193,7 @@ namespace OpenDental {
 		}
 
 		private void checkBoxAll_Click(object sender,EventArgs e) {
+			Phones.ClearImages();
 			FillTiles(false);
 		}
 

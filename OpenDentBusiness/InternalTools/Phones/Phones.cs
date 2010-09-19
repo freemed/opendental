@@ -167,6 +167,16 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
+		public static void ClearImages() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod());
+				return;
+			}
+			string command="UPDATE phone SET WebCamImage=''";
+			Db.NonQ(command);
+		}
+
+
 
 	}
 

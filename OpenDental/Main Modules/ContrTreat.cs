@@ -2503,7 +2503,7 @@ namespace OpenDental{
 				#endregion Canadian Lab Fees
 			}
 			//Send TP DFT HL7 message to ECW with embedded PDF when using tight integration only.
-			if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0"){
+			if(Programs.UsingEcwTight()){
 				PrepImageForPrinting();
 				MigraDoc.Rendering.PdfDocumentRenderer pdfRenderer=new MigraDoc.Rendering.PdfDocumentRenderer(true,PdfFontEmbedding.Always);
 				pdfRenderer.Document=CreateDocument();

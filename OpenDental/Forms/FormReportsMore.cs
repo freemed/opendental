@@ -312,7 +312,7 @@ namespace OpenDental {
 		#endregion
 
 		private void FormReportsMore_Load(object sender,EventArgs e) {
-			butPW.Visible=Programs.IsEnabled("PracticeWebReports");
+			butPW.Visible=Programs.IsEnabled(ProgramName.PracticeWebReports);
 			listProdInc.Items.AddRange(new string[] {
 				Lan.g(this,"Today"),
 				Lan.g(this,"Yesterday"),

@@ -150,7 +150,7 @@ namespace OpenDentBusiness {
 			throw new ApplicationException("Property not found: "+desc);
 		}
 
-		public static string GetPropVal(string progName,string propertyDesc) {
+		public static string GetPropVal(ProgramName progName,string propertyDesc) {
 			//No need to check RemotingRole; no call to db.
 			long programNum=Programs.GetProgramNum(progName);
 			for(int i=0;i<ProgramPropertyC.Listt.Count;i++) {

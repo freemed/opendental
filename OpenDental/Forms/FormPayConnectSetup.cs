@@ -208,7 +208,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormXchargeSetup_Load(object sender,EventArgs e) {
-			prog=Programs.GetCur("PayConnect");
+			prog=Programs.GetCur(ProgramName.PayConnect);
 			if(prog==null){
 				return;
 			}
@@ -229,8 +229,9 @@ namespace OpenDental{
 			textPassword.Text=propPassword.PropertyValue;
 			for(int i=0;i<DefC.Short[(int)DefCat.PaymentTypes].Length;i++) {
 				comboPaymentType.Items.Add(DefC.Short[(int)DefCat.PaymentTypes][i].ItemName);
-				if(DefC.Short[(int)DefCat.PaymentTypes][i].DefNum.ToString()==propPayType.PropertyValue)
+				if(DefC.Short[(int)DefCat.PaymentTypes][i].DefNum.ToString()==propPayType.PropertyValue) {
 					comboPaymentType.SelectedIndex=i;
+				}
 			}
 		}
 

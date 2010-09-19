@@ -31,156 +31,151 @@ namespace OpenDental{
 				}
 				return;
 			}
-			if(prog.ProgName=="Apteryx") {
+			if(prog.ProgName==ProgramName.Apteryx.ToString()) {
 				Apteryx.SendData(prog,pat);
 				return;
 			}
-			else if(prog.ProgName=="Camsight") {
+			else if(prog.ProgName==ProgramName.Camsight.ToString()) {
 				Camsight.SendData(prog,pat);
 				return;
 			}
-			else if(prog.ProgName=="CliniView") {
+			else if(prog.ProgName==ProgramName.CliniView.ToString()) {
 				Cliniview.SendData(prog,pat);
 				return;
 			}
-			else if(prog.ProgName=="DBSWin") {
+			else if(prog.ProgName==ProgramName.DBSWin.ToString()) {
 				DBSWin.SendData(prog,pat);
 				return;
 			}
 #if !DISABLE_WINDOWS_BRIDGES
-			else if(prog.ProgName=="DentalEye") {
+			else if(prog.ProgName==ProgramName.DentalEye.ToString()) {
 				DentalEye.SendData(prog,pat);
 				return;
 			}
-			else if(prog.ProgName=="DentX") {
+			else if(prog.ProgName==ProgramName.DentX.ToString()) {
 				DentX.SendData(prog,pat);
 				return;
 			}
-			else if(prog.ProgName=="DrCeph") {
+			else if(prog.ProgName==ProgramName.DrCeph.ToString()) {
 				DrCeph.SendData(prog,pat);
 				return;
 			}
 #endif
-			else if(prog.ProgName=="DentForms") {
+			else if(prog.ProgName==ProgramName.DentForms.ToString()) {
 				DentForms.SendData(prog,pat);
 				return;
 			}
-			else if(prog.ProgName=="Dexis") {
+			else if(prog.ProgName==ProgramName.Dexis.ToString()) {
 				Dexis.SendData(prog,pat);
 				return;
 			}
-			else if(prog.ProgName=="Digora") {
+			else if(prog.ProgName==ProgramName.Digora.ToString()) {
 				Digora.SendData(prog,pat);
 				return;
 			}
-			else if(prog.ProgName=="Dolphin") {
+			else if(prog.ProgName==ProgramName.Dolphin.ToString()) {
 				Dolphin.SendData(prog,pat);
 				return;
 			}
-			else if(prog.ProgName=="Dxis") {
+			else if(prog.ProgName==ProgramName.Dxis.ToString()) {
 				Dxis.SendData(prog,pat);
 				return;
 			}
-			else if(prog.ProgName=="EwooEZDent") {
+			else if(prog.ProgName==ProgramName.EwooEZDent.ToString()) {
 				Ewoo.SendData(prog,pat);
 				return;
 			}
-			else if(prog.ProgName=="FloridaProbe") {
+			else if(prog.ProgName==ProgramName.FloridaProbe.ToString()) {
 				FloridaProbe.SendData(prog,pat);
 				return;
 			}
-			else if(prog.ProgName=="HouseCalls") {
+			else if(prog.ProgName==ProgramName.HouseCalls.ToString()) {
 				FormHouseCalls FormHC=new FormHouseCalls();
 				FormHC.ProgramCur=prog;
 				FormHC.ShowDialog();
 				return;
 			}
-			else if(prog.ProgName=="iCat") {
+			else if(prog.ProgName==ProgramName.iCat.ToString()) {
 				ICat.SendData(prog,pat);
 				return;
 			}
-			else if(prog.ProgName=="ImageFX") {
+			else if(prog.ProgName==ProgramName.ImageFX.ToString()) {
 				ImageFX.SendData(prog,pat);
 				return;
 			}
-			else if(prog.ProgName=="Lightyear") {
+			else if(prog.ProgName==ProgramName.Lightyear.ToString()) {
 				Lightyear.SendData(prog,pat);
 				return;
 			}
-			else if(prog.ProgName=="MediaDent") {
+			else if(prog.ProgName==ProgramName.MediaDent.ToString()) {
 				MediaDent.SendData(prog,pat);
 				return;
 			}
-			//else if(prog.ProgName=="NewPatientForm.com") {
-			//	NewPatientForm npf=new NewPatientForm();
-			//	npf.ShowDownload(prog.Path);//NewPatientForm.com
-			//	return;
-			//}
-			else if(prog.ProgName=="Owandy") {
+			else if(prog.ProgName==ProgramName.Owandy.ToString()) {
 				Owandy.SendData(prog,pat);
 				return;
 			}
-			else if(prog.ProgName=="PerioPal") {
+			else if(prog.ProgName==ProgramName.PerioPal.ToString()) {
 				PerioPal.SendData(prog,pat);
 				return;
 			}
-			else if(prog.ProgName=="Planmeca") {
+			else if(prog.ProgName==ProgramName.Planmeca.ToString()) {
 				Planmeca.SendData(prog,pat);
 				return;
 			}
-			else if(prog.ProgName=="Progeny"){
+			else if(prog.ProgName==ProgramName.Progeny.ToString()){
 				Progeny.SendData(prog,pat);
 				return;
 			}
-			else if(prog.ProgName=="PT") {
+			else if(prog.ProgName==ProgramName.PT.ToString()) {
 				PaperlessTechnology.SendData(prog,pat,false);
 				return;
 			}
-			else if(prog.ProgName=="PTupdate") {
+			else if(prog.ProgName==ProgramName.PTupdate.ToString()) {
 				PaperlessTechnology.SendData(prog,pat,true);
 				return;
 			}
 #if !DISABLE_WINDOWS_BRIDGES
-			else if(prog.ProgName=="Schick") {
+			else if(prog.ProgName==ProgramName.Schick.ToString()) {
 				Schick.SendData(prog,pat);
 				return;
 			}
 #endif
-			else if(prog.ProgName=="Sirona") {
+			else if(prog.ProgName==ProgramName.Sirona.ToString()) {
 				Sirona.SendData(prog,pat);
 				return;
 			}
-			else if(prog.ProgName=="Sopro"){
+			else if(prog.ProgName==ProgramName.Sopro.ToString()){
 				Sopro.SendData(prog,pat);
 				return;
 			}
-			else if(prog.ProgName=="TigerView"){
+			else if(prog.ProgName==ProgramName.TigerView.ToString()){
 				TigerView.SendData(prog,pat);
 				return;
 			}
-			else if(prog.ProgName=="Trophy") {
+			else if(prog.ProgName==ProgramName.Trophy.ToString()) {
 				Trophy.SendData(prog,pat);
 				return;
 			}
-			else if(prog.ProgName=="TrophyEnhanced") {
+			else if(prog.ProgName==ProgramName.TrophyEnhanced.ToString()) {
 				TrophyEnhanced.SendData(prog,pat);
 				return;
 			}
 #if !DISABLE_WINDOWS_BRIDGES
-			else if(prog.ProgName=="Vipersoft") {
+			else if(prog.ProgName==ProgramName.Vipersoft.ToString()) {
 				Vipersoft.SendData(prog,pat);
 				return;
 			}
 #endif
-			else if(prog.ProgName=="VixWin") {
+			else if(prog.ProgName==ProgramName.VixWin.ToString()) {
 				VixWin.SendData(prog,pat);
 				return;
 			}
-			else if(prog.ProgName=="VixWinOld") {
+			else if(prog.ProgName==ProgramName.VixWinOld.ToString()) {
 				VixWinOld.SendData(prog,pat);
 				return;
 			}
-			else if(prog.ProgName=="XDR") {
+			else if(prog.ProgName==ProgramName.XDR.ToString()) {
 				Dexis.SendData(prog,pat);//XDR uses the Dexis protocol
 				return;
 			}

@@ -625,7 +625,7 @@ namespace OpenDental{
 				checkAudit.Checked=ChartViewCur.IsAudit;
 			}
 			DisplayFields.RefreshCache();
-			ListShowing=DisplayFields.GetForChartView(ChartViewCur.ChartViewNum);
+			ListShowing=DisplayFields.GetForChartView(ChartViewCur.ChartViewNum);//This will be zero for a new ChartView
 			FillGrids();
 		}
 
@@ -955,10 +955,6 @@ namespace OpenDental{
 			if(checkShowCn.Checked) {
 				ChartViewCur.ProcStatuses|=ChartViewProcStat.Cn;
 			}	
-			//if(checkShowOnlyFilmsAndExams.Checked) {
-			//}
-			//if(checkShowOnlyHygieneProcs.Checked) {
-			//}
 			ChartViewCur.SelectedTeethOnly=checkShowTeeth.Checked;
 			ChartViewCur.ShowProcNotes=checkNotes.Checked;
 			ChartViewCur.IsAudit=checkAudit.Checked;

@@ -183,7 +183,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormXchargeSetup_Load(object sender,EventArgs e) {
-			prog=Programs.GetCur("Xcharge");
+			prog=Programs.GetCur(ProgramName.Xcharge);
 			if(prog==null){
 				return;
 			}

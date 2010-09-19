@@ -1650,7 +1650,7 @@ namespace OpenDental{
 					PlanCur.PlanType="p";
 				}
 			}
-			Program ProgramCur=Programs.GetCur("Trojan");
+			Program ProgramCur=Programs.GetCur(ProgramName.Trojan);
 			if(ProgramCur!=null && ProgramCur.Enabled) {
 				textTrojanID.Text=PlanCur.TrojanID;
 			}
@@ -1660,7 +1660,7 @@ namespace OpenDental{
 				butImportTrojan.Visible=false;
 				textTrojanID.Visible=false;
 			}
-			ProgramCur=Programs.GetCur("IAP");
+			ProgramCur=Programs.GetCur(ProgramName.IAP);
 			if(ProgramCur==null || !ProgramCur.Enabled) {
 				//labelIAP.Visible=false;
 				butIapFind.Visible=false;

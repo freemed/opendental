@@ -181,7 +181,7 @@ namespace OpenDentBusiness {
 		///<summary></summary>
 		public static string EncryptPassword(string inputPass) {
 			//No need to check RemotingRole; no call to db.
-			bool useEcwAlgorithm=Programs.IsEnabled("eClinicalWorks");
+			bool useEcwAlgorithm=Programs.IsEnabled(ProgramName.eClinicalWorks);
 			return EncryptPassword(inputPass,useEcwAlgorithm);
 		}
 

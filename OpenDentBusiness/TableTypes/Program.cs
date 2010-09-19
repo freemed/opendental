@@ -6,7 +6,7 @@ namespace OpenDentBusiness{
 	public class Program{
 		///<summary>Primary key.</summary>
 		public long ProgramNum;
-		///<summary>Unique name for built-in program bridges. Not user-editable.</summary>
+		///<summary>Unique name for built-in program bridges. Not user-editable. enum ProgramName</summary>
 		public string ProgName;
 		///<summary>Description that shows.</summary>
 		public string ProgDesc;
@@ -27,8 +27,56 @@ namespace OpenDentBusiness{
 
 	}
 
-
-
+	///<summary>This enum is stored in the database as strings rather than as numbers, so we can do the order alphabetically and we can change it whenever we want.</summary>
+	public enum ProgramName {
+		None,
+		Apteryx,
+		Camsight,
+		CliniView,
+		DBSWin,
+		DentalEye,
+		DentForms,
+		DentX,
+		Dexis,
+		Digora,
+		Dolphin,
+		DrCeph,
+		Dxis,
+		EasyNotesPro,
+		eClinicalWorks,
+		EwooEZDent,
+		FloridaProbe,
+		HouseCalls,
+		IAP,
+		iCat,
+		ImageFX,
+		Lightyear,
+		MediaDent,
+		Mountainside,
+		Orion,
+		OrthoPlex,
+		Owandy,
+		PayConnect,
+		PerioPal,
+		Planmeca,
+		PracticeWebReports,
+		Progeny,
+		PT,
+		PTupdate,
+		Schick,
+		Sirona,
+		Sopro,
+		TigerView,
+		Trojan,
+		Trophy,
+		TrophyEnhanced,
+		UAppoint,
+		Vipersoft,
+		VixWin,
+		VixWinOld,
+		Xcharge,
+		XDR
+	}
 
 	
 

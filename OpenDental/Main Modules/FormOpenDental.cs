@@ -1349,7 +1349,7 @@ namespace OpenDental{
 				Application.Exit();
 				return;
 			}
-			if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") {
+			if(Programs.UsingEcwTight()) {
 				Splash.Dispose();//We don't show splash screen when bridging to eCW.
 			}
 			//We no longer do this shotgun approach because it can slow the loading time.
@@ -1360,7 +1360,7 @@ namespace OpenDental{
 			invalidTypes.Add(InvalidType.Providers);//obviously heavily used
 			invalidTypes.Add(InvalidType.Programs);//already done above, but needs to be done explicitly to trigger the PostCleanup 
 			invalidTypes.Add(InvalidType.ToolBut);//so program buttons will show in all the toolbars
-			if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") {
+			if(Programs.UsingEcwTight()) {
 				lightSignalGrid1.Visible=false;
 			}
 			else{
@@ -1427,7 +1427,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Done optimizing tooth chart graphics.");
 			}
 			if(Security.CurUser==null) {//It could already be set if using web service because login from ChooseDatabase window.
-				if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") {
+				if(Programs.UsingEcwTight()) {
 					//leave user as null
 				}
 				else {
@@ -1450,7 +1450,7 @@ namespace OpenDental{
 				userControlTasks1.InitializeOnStartup();
 			}
 			myOutlookBar.SelectedIndex=Security.GetModule(0);//for eCW, this fails silently.
-			if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") {
+			if(Programs.UsingEcwTight()) {
 				myOutlookBar.SelectedIndex=4;//Chart module
 				ToolBarMain.Height=0;//this should force the modules further up on the screen
 				ToolBarMain.Visible=false;
@@ -1709,14 +1709,14 @@ namespace OpenDental{
 				FillSignalButtons(null);
 			}
 			if(itypeList.Contains((int)InvalidType.Programs) || isAll) {
-				if(Programs.GetCur("PT").Enabled) {
+				if(Programs.GetCur(ProgramName.PT).Enabled) {
 					Bridges.PaperlessTechnology.InitializeFileWatcher();
 				}
-				if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") {
+				if(Programs.UsingEcwTight()) {
 					myOutlookBar.Buttons[0].Visible=false;
 					myOutlookBar.Buttons[1].Visible=false;
 					myOutlookBar.Buttons[2].Visible=false;
-					if(ProgramProperties.GetPropVal("eClinicalWorks","ShowImagesModule")=="1") {
+					if(ProgramProperties.GetPropVal(ProgramName.eClinicalWorks,"ShowImagesModule")=="1") {
 						myOutlookBar.Buttons[5].Visible=true;
 					}
 					else {
@@ -4215,10 +4215,10 @@ namespace OpenDental{
 				allNeutral();
 				Userod user=Userods.GetUserByName(userName);
 				if(user==null) {
-					if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") {
+					if(Programs.UsingEcwTight()) {
 						user=new Userod();
 						user.UserName=userName;
-						user.UserGroupNum=PIn.Long(ProgramProperties.GetPropVal("eClinicalWorks","DefaultUserGroup"));
+						user.UserGroupNum=PIn.Long(ProgramProperties.GetPropVal(ProgramName.eClinicalWorks,"DefaultUserGroup"));
 						if(passHash=="") {
 							user.Password="";
 						}

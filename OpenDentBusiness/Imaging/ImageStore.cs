@@ -368,7 +368,7 @@ namespace OpenDentBusiness {
 			SaveDocument(document, filename,patFolder);
 		}
 
-		public static void ImportPdf(string sPDF,Patient pat) {
+		/*public static void ImportPdf(string sPDF,Patient pat) {
 			string patFolder=GetPatientFolder(pat);
 			Document DocCur = new Document();
 			DocCur.FileName = ".pdf";
@@ -409,7 +409,7 @@ namespace OpenDentBusiness {
 				if(File.Exists(tempFileName))
 					File.Delete(tempFileName);
 			}
-		}
+		}*/
 
 		///<summary>patFolder must be fully qualified and valid.</summary>
 		public static void SaveDocument(Document doc,Bitmap image,string patFolder) {
