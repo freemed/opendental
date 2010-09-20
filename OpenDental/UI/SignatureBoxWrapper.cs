@@ -14,7 +14,7 @@ namespace OpenDental.UI {
 		private bool allowTopaz;
 		private Control sigBoxTopaz;
 		private string labelText;
-		///<summary>The reason for this event is so that if a different user is signing, that it properly records the change in users.</summary>
+		///<summary>The reason for this event is so that if a different user is signing, that it properly records the change in users.  See the example pattern in FormProcGroup.</summary>
 		[Category("Action"),Description("Event raised when signature is cleared or altered.")]
 		public event EventHandler SignatureChanged=null;
 
@@ -195,9 +195,6 @@ namespace OpenDental.UI {
 		private void butClearSig_Click(object sender,EventArgs e) {
 			ClearSignature();
 			OnSignatureChanged();
-			//To use this control in FormProcEdit, make use of the event above to perform the following action:
-			//ProcCur.UserNum=Security.CurUser.UserNum;
-			//textUser.Text=Userods.GetName(ProcCur.UserNum);
 		}
 
 		private void butTopazSign_Click(object sender,EventArgs e) {
@@ -211,9 +208,6 @@ namespace OpenDental.UI {
 			labelInvalidSig.Visible=false;
 			sigBoxTopaz.Focus();
 			OnSignatureChanged();
-			//To use this control in FormProcEdit, make use of the event above to perform the following action:
-			//ProcCur.UserNum=Security.CurUser.UserNum;
-			//textUser.Text=Userods.GetName(ProcCur.UserNum);
 		}
 
 		private void sigBox_MouseUp(object sender,MouseEventArgs e) {
@@ -223,9 +217,6 @@ namespace OpenDental.UI {
 			{
 				//sigBox handles its own pen input.
 				OnSignatureChanged();
-				//To use this control in FormProcEdit, make use of the event above to perform the following action:
-				//ProcCur.UserNum=Security.CurUser.UserNum;
-				//textUser.Text=Userods.GetName(ProcCur.UserNum);
 			}
 		}
 

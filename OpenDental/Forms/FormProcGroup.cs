@@ -369,7 +369,7 @@ namespace OpenDental{
 			keyData+=GroupCur.UserNum.ToString();//Security.CurUser.UserName;
 			keyData+=GroupCur.Note;
 			for(int i=0;i<GroupItemList.Count;i++){
-				keyData+=GroupItemList[i].ProcGroupItemNum.ToString();
+				keyData+=GroupItemList[i].ProcGroupItemNum.ToString();//GroupItemList is oredered by ProcNum as specified in ProcGroupItems.cs
 			}
 			return keyData;
 		}

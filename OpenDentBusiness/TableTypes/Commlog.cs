@@ -22,13 +22,11 @@ namespace OpenDentBusiness{
 		public CommItemMode Mode_;
 		///<summary>Enum:CommSentOrReceived Neither=0,Sent=1,Received=2.</summary>
 		public CommSentOrReceived SentOrReceived;
-		//<summary>FK to emailmessage.EmailMessageNum, if there is an associated email. Otherwise 0.</summary>
-		//public long EmailMessageNum;
 		///<Summary>No longer used.  Use the statement table instead.</Summary>
 		public bool IsStatementSent;
 		///<summary>FK to userod.UserNum.</summary>
 		public long UserNum;
-		///<summary>Signature.</summary>
+		///<summary>Signature.  For details, see procedurelog.Signature.</summary>
 		public string Signature;
 		///<summary>True if signed using the Topaz signature pad, false otherwise.</summary>
 		public bool SigIsTopaz;

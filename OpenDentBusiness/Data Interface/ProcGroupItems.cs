@@ -12,7 +12,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<ProcGroupItem>>(MethodBase.GetCurrentMethod(),groupNum);
 			}
-			string command="SELECT * FROM procgroupitem WHERE GroupNum = "+POut.Long(groupNum);
+			string command="SELECT * FROM procgroupitem WHERE GroupNum = "+POut.Long(groupNum)+" ORDER BY ProcNum ASC";//Order is important for creating signature key in FormProcGroup.cs.
 			return Crud.ProcGroupItemCrud.SelectMany(command);
 		}
 
