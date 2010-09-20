@@ -2025,7 +2025,7 @@ namespace OpenDental{
 
 		///<summary>Called from butOK_Click and butPin_Click</summary>
 		private bool UpdateToDB(){
-			DateTime dateTimeAskedToArrive=AptCur.DateTimeAskedToArrive.Date;
+			DateTime dateTimeAskedToArrive=DateTime.MinValue;
 			if(textTimeAskedToArrive.Text!=""){
 				try{
 					dateTimeAskedToArrive=AptCur.AptDateTime.Date+DateTime.Parse(textTimeAskedToArrive.Text).TimeOfDay;

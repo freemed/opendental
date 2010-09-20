@@ -159,6 +159,7 @@ namespace OpenDental{
 		private TextBox textAskToArriveEarly;
 		private Label label42;
 		private CheckBox checkArriveEarlySame;
+		private Label label43;
 		private List<Guardian> GuardianList;
 
 		///<summary></summary>
@@ -353,6 +354,7 @@ namespace OpenDental{
 			this.textAskToArriveEarly = new System.Windows.Forms.TextBox();
 			this.label42 = new System.Windows.Forms.Label();
 			this.checkArriveEarlySame = new System.Windows.Forms.CheckBox();
+			this.label43 = new System.Windows.Forms.Label();
 			this.groupBox2.SuspendLayout();
 			this.groupBox1.SuspendLayout();
 			this.groupNotes.SuspendLayout();
@@ -1548,12 +1550,12 @@ namespace OpenDental{
 			this.textAskToArriveEarly.Location = new System.Drawing.Point(135,379);
 			this.textAskToArriveEarly.MaxLength = 100;
 			this.textAskToArriveEarly.Name = "textAskToArriveEarly";
-			this.textAskToArriveEarly.Size = new System.Drawing.Size(99,20);
+			this.textAskToArriveEarly.Size = new System.Drawing.Size(36,20);
 			this.textAskToArriveEarly.TabIndex = 117;
 			// 
 			// label42
 			// 
-			this.label42.Location = new System.Drawing.Point(4,384);
+			this.label42.Location = new System.Drawing.Point(6,383);
 			this.label42.Name = "label42";
 			this.label42.Size = new System.Drawing.Size(128,14);
 			this.label42.TabIndex = 118;
@@ -1563,11 +1565,20 @@ namespace OpenDental{
 			// checkArriveEarlySame
 			// 
 			this.checkArriveEarlySame.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkArriveEarlySame.Location = new System.Drawing.Point(244,380);
+			this.checkArriveEarlySame.Location = new System.Drawing.Point(233,382);
 			this.checkArriveEarlySame.Name = "checkArriveEarlySame";
 			this.checkArriveEarlySame.Size = new System.Drawing.Size(117,18);
 			this.checkArriveEarlySame.TabIndex = 119;
 			this.checkArriveEarlySame.Text = "Same for entire family";
+			// 
+			// label43
+			// 
+			this.label43.Location = new System.Drawing.Point(171,382);
+			this.label43.Name = "label43";
+			this.label43.Size = new System.Drawing.Size(68,14);
+			this.label43.TabIndex = 120;
+			this.label43.Text = "(minutes)";
+			this.label43.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// FormPatientEdit
 			// 
@@ -1575,6 +1586,7 @@ namespace OpenDental{
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(994,673);
 			this.Controls.Add(this.checkArriveEarlySame);
+			this.Controls.Add(this.label43);
 			this.Controls.Add(this.textAskToArriveEarly);
 			this.Controls.Add(this.label42);
 			this.Controls.Add(this.butGuardianDefaults);
@@ -2684,7 +2696,8 @@ namespace OpenDental{
 			}
 			try{
 				PIn.Int(textAskToArriveEarly.Text);
-			}catch{
+			}
+			catch{
 				MsgBox.Show(this,"Ask To Arrive Early invalid.");
 				return;
 			}

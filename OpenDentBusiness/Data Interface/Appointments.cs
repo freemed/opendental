@@ -708,6 +708,7 @@ namespace OpenDentBusiness{
 			DateTime labDate;
 			DateTime labDueDate;
 			DateTime birthdate;
+			DateTime timeAskedToArrive;
 			for(int i=0;i<raw.Rows.Count;i++) {
 				row=table.NewRow();
 				row["address"]=Patients.GetAddressFull(raw.Rows[i]["Address"].ToString(),raw.Rows[i]["Address2"].ToString(),
@@ -914,7 +915,11 @@ namespace OpenDentBusiness{
 				}
 				row["ProvNum"]=raw.Rows[i]["ProvNum"].ToString();
 				row["ProvHyg"]=raw.Rows[i]["ProvHyg"].ToString();
-				row["timeAskedToArrive"]=PIn.DateT(raw.Rows[i]["DateTimeAskedToArrive"].ToString()).ToShortTimeString();
+				row["timeAskedToArrive"]="";
+				timeAskedToArrive=PIn.DateT(raw.Rows[i]["DateTimeAskedToArrive"].ToString());
+				if(timeAskedToArrive.Year>1880) {
+					row["timeAskedToArrive"]=timeAskedToArrive.ToShortTimeString();
+				}
 				row["wirelessPhone"]=Lans.g("Appointments","Cell: ")+raw.Rows[i]["WirelessPhone"].ToString();
 				row["wkPhone"]=Lans.g("Appointments","Wk: ")+raw.Rows[i]["WkPhone"].ToString();
 				table.Rows.Add(row);
