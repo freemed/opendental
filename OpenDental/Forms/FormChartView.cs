@@ -48,9 +48,9 @@ namespace OpenDental{
 		private OpenDental.UI.Button butShowAll;
 		private OpenDental.UI.Button butShowNone;
 		private TextBox textBoxViewDesc;
-		private Label labelDescription;
 		private GroupBox groupBoxProperties;
 		private OpenDental.UI.Button butDelete;
+		private Label labelDescription;
 		public ChartView ChartViewCur;
 
 		///<summary></summary>
@@ -108,8 +108,8 @@ namespace OpenDental{
 			this.checkNotes = new System.Windows.Forms.CheckBox();
 			this.checkAudit = new System.Windows.Forms.CheckBox();
 			this.textBoxViewDesc = new System.Windows.Forms.TextBox();
-			this.labelDescription = new System.Windows.Forms.Label();
 			this.groupBoxProperties = new System.Windows.Forms.GroupBox();
+			this.labelDescription = new System.Windows.Forms.Label();
 			this.butDelete = new OpenDental.UI.Button();
 			this.butShowNone = new OpenDental.UI.Button();
 			this.butShowAll = new OpenDental.UI.Button();
@@ -128,25 +128,28 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(126,286);
+			this.label2.Location = new System.Drawing.Point(126,241);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(213,25);
+			this.label2.Size = new System.Drawing.Size(213,16);
 			this.label2.TabIndex = 5;
 			this.label2.Text = "Sets entire list to the default.";
+			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// listAvailable
 			// 
+			this.listAvailable.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
 			this.listAvailable.FormattingEnabled = true;
 			this.listAvailable.IntegralHeight = false;
-			this.listAvailable.Location = new System.Drawing.Point(388,327);
+			this.listAvailable.Location = new System.Drawing.Point(388,277);
 			this.listAvailable.Name = "listAvailable";
 			this.listAvailable.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-			this.listAvailable.Size = new System.Drawing.Size(158,412);
+			this.listAvailable.Size = new System.Drawing.Size(158,361);
 			this.listAvailable.TabIndex = 15;
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(385,307);
+			this.label3.Location = new System.Drawing.Point(385,257);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(158,17);
 			this.label3.TabIndex = 16;
@@ -163,7 +166,7 @@ namespace OpenDental{
 			this.groupBox7.Controls.Add(this.checkLabCase);
 			this.groupBox7.Controls.Add(this.checkRx);
 			this.groupBox7.Controls.Add(this.checkComm);
-			this.groupBox7.Location = new System.Drawing.Point(145,19);
+			this.groupBox7.Location = new System.Drawing.Point(145,13);
 			this.groupBox7.Name = "groupBox7";
 			this.groupBox7.Size = new System.Drawing.Size(125,148);
 			this.groupBox7.TabIndex = 64;
@@ -273,7 +276,7 @@ namespace OpenDental{
 			this.groupBox6.Controls.Add(this.checkShowR);
 			this.groupBox6.Controls.Add(this.checkShowC);
 			this.groupBox6.Controls.Add(this.checkShowTP);
-			this.groupBox6.Location = new System.Drawing.Point(6,19);
+			this.groupBox6.Location = new System.Drawing.Point(6,13);
 			this.groupBox6.Name = "groupBox6";
 			this.groupBox6.Size = new System.Drawing.Size(121,99);
 			this.groupBox6.TabIndex = 63;
@@ -333,7 +336,7 @@ namespace OpenDental{
 			this.checkShowTP.Checked = true;
 			this.checkShowTP.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.checkShowTP.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkShowTP.Location = new System.Drawing.Point(28,17);
+			this.checkShowTP.Location = new System.Drawing.Point(9,17);
 			this.checkShowTP.Name = "checkShowTP";
 			this.checkShowTP.Size = new System.Drawing.Size(101,13);
 			this.checkShowTP.TabIndex = 8;
@@ -343,7 +346,7 @@ namespace OpenDental{
 			// checkShowTeeth
 			// 
 			this.checkShowTeeth.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkShowTeeth.Location = new System.Drawing.Point(160,183);
+			this.checkShowTeeth.Location = new System.Drawing.Point(155,163);
 			this.checkShowTeeth.Name = "checkShowTeeth";
 			this.checkShowTeeth.Size = new System.Drawing.Size(99,13);
 			this.checkShowTeeth.TabIndex = 61;
@@ -356,7 +359,7 @@ namespace OpenDental{
 			this.checkNotes.Checked = true;
 			this.checkNotes.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.checkNotes.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkNotes.Location = new System.Drawing.Point(16,120);
+			this.checkNotes.Location = new System.Drawing.Point(15,114);
 			this.checkNotes.Name = "checkNotes";
 			this.checkNotes.Size = new System.Drawing.Size(102,13);
 			this.checkNotes.TabIndex = 58;
@@ -366,7 +369,7 @@ namespace OpenDental{
 			// checkAudit
 			// 
 			this.checkAudit.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkAudit.Location = new System.Drawing.Point(160,202);
+			this.checkAudit.Location = new System.Drawing.Point(155,179);
 			this.checkAudit.Name = "checkAudit";
 			this.checkAudit.Size = new System.Drawing.Size(73,13);
 			this.checkAudit.TabIndex = 62;
@@ -380,16 +383,6 @@ namespace OpenDental{
 			this.textBoxViewDesc.Size = new System.Drawing.Size(367,20);
 			this.textBoxViewDesc.TabIndex = 1;
 			// 
-			// labelDescription
-			// 
-			this.labelDescription.Font = new System.Drawing.Font("Microsoft Sans Serif",9.75F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.labelDescription.Location = new System.Drawing.Point(12,8);
-			this.labelDescription.Name = "labelDescription";
-			this.labelDescription.Size = new System.Drawing.Size(116,25);
-			this.labelDescription.TabIndex = 57;
-			this.labelDescription.Text = "Description";
-			this.labelDescription.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
 			// groupBoxProperties
 			// 
 			this.groupBoxProperties.Controls.Add(this.groupBox6);
@@ -399,11 +392,20 @@ namespace OpenDental{
 			this.groupBoxProperties.Controls.Add(this.groupBox7);
 			this.groupBoxProperties.Controls.Add(this.checkNotes);
 			this.groupBoxProperties.Controls.Add(this.checkShowTeeth);
-			this.groupBoxProperties.Location = new System.Drawing.Point(27,37);
+			this.groupBoxProperties.Location = new System.Drawing.Point(27,31);
 			this.groupBoxProperties.Name = "groupBoxProperties";
-			this.groupBoxProperties.Size = new System.Drawing.Size(277,227);
+			this.groupBoxProperties.Size = new System.Drawing.Size(277,197);
 			this.groupBoxProperties.TabIndex = 67;
 			this.groupBoxProperties.TabStop = false;
+			// 
+			// labelDescription
+			// 
+			this.labelDescription.Location = new System.Drawing.Point(20,12);
+			this.labelDescription.Name = "labelDescription";
+			this.labelDescription.Size = new System.Drawing.Size(108,17);
+			this.labelDescription.TabIndex = 69;
+			this.labelDescription.Text = "Description";
+			this.labelDescription.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// butDelete
 			// 
@@ -415,11 +417,11 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(27,795);
+			this.butDelete.Location = new System.Drawing.Point(584,522);
 			this.butDelete.Name = "butDelete";
-			this.butDelete.Size = new System.Drawing.Size(99,24);
+			this.butDelete.Size = new System.Drawing.Size(75,24);
 			this.butDelete.TabIndex = 68;
-			this.butDelete.Text = "&Delete View";
+			this.butDelete.Text = "&Delete";
 			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
 			// 
 			// butShowNone
@@ -429,7 +431,7 @@ namespace OpenDental{
 			this.butShowNone.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butShowNone.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butShowNone.CornerRadius = 4F;
-			this.butShowNone.Location = new System.Drawing.Point(69,144);
+			this.butShowNone.Location = new System.Drawing.Point(69,138);
 			this.butShowNone.Name = "butShowNone";
 			this.butShowNone.Size = new System.Drawing.Size(58,23);
 			this.butShowNone.TabIndex = 60;
@@ -443,7 +445,7 @@ namespace OpenDental{
 			this.butShowAll.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butShowAll.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butShowAll.CornerRadius = 4F;
-			this.butShowAll.Location = new System.Drawing.Point(10,144);
+			this.butShowAll.Location = new System.Drawing.Point(10,138);
 			this.butShowAll.Name = "butShowAll";
 			this.butShowAll.Size = new System.Drawing.Size(53,23);
 			this.butShowAll.TabIndex = 59;
@@ -458,7 +460,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(390,795);
+			this.butOK.Location = new System.Drawing.Point(584,614);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 56;
@@ -473,7 +475,7 @@ namespace OpenDental{
 			this.butRight.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butRight.CornerRadius = 4F;
 			this.butRight.Image = global::OpenDental.Properties.Resources.Right;
-			this.butRight.Location = new System.Drawing.Point(335,530);
+			this.butRight.Location = new System.Drawing.Point(335,397);
 			this.butRight.Name = "butRight";
 			this.butRight.Size = new System.Drawing.Size(35,24);
 			this.butRight.TabIndex = 55;
@@ -487,7 +489,7 @@ namespace OpenDental{
 			this.butLeft.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butLeft.CornerRadius = 4F;
 			this.butLeft.Image = global::OpenDental.Properties.Resources.Left;
-			this.butLeft.Location = new System.Drawing.Point(335,490);
+			this.butLeft.Location = new System.Drawing.Point(335,357);
 			this.butLeft.Name = "butLeft";
 			this.butLeft.Size = new System.Drawing.Size(35,24);
 			this.butLeft.TabIndex = 54;
@@ -496,13 +498,14 @@ namespace OpenDental{
 			// butDown
 			// 
 			this.butDown.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.butDown.Autosize = true;
 			this.butDown.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butDown.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butDown.CornerRadius = 4F;
 			this.butDown.Image = global::OpenDental.Properties.Resources.down;
 			this.butDown.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDown.Location = new System.Drawing.Point(124,745);
+			this.butDown.Location = new System.Drawing.Point(124,648);
 			this.butDown.Name = "butDown";
 			this.butDown.Size = new System.Drawing.Size(82,24);
 			this.butDown.TabIndex = 14;
@@ -512,13 +515,14 @@ namespace OpenDental{
 			// butUp
 			// 
 			this.butUp.AdjustImageLocation = new System.Drawing.Point(0,1);
+			this.butUp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.butUp.Autosize = true;
 			this.butUp.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butUp.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butUp.CornerRadius = 4F;
 			this.butUp.Image = global::OpenDental.Properties.Resources.up;
 			this.butUp.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butUp.Location = new System.Drawing.Point(27,745);
+			this.butUp.Location = new System.Drawing.Point(27,648);
 			this.butUp.Name = "butUp";
 			this.butUp.Size = new System.Drawing.Size(82,24);
 			this.butUp.TabIndex = 13;
@@ -533,7 +537,7 @@ namespace OpenDental{
 			this.butDefault.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butDefault.CornerRadius = 4F;
 			this.butDefault.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDefault.Location = new System.Drawing.Point(27,280);
+			this.butDefault.Location = new System.Drawing.Point(27,235);
 			this.butDefault.Name = "butDefault";
 			this.butDefault.Size = new System.Drawing.Size(91,24);
 			this.butDefault.TabIndex = 4;
@@ -542,12 +546,14 @@ namespace OpenDental{
 			// 
 			// gridMain
 			// 
+			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
 			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(27,314);
+			this.gridMain.Location = new System.Drawing.Point(27,264);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
 			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridMain.Size = new System.Drawing.Size(292,425);
+			this.gridMain.Size = new System.Drawing.Size(292,374);
 			this.gridMain.TabIndex = 3;
 			this.gridMain.Title = "Fields Showing";
 			this.gridMain.TranslationName = "FormDisplayFields";
@@ -561,7 +567,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(471,795);
+			this.butCancel.Location = new System.Drawing.Point(584,648);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 57;
@@ -571,11 +577,11 @@ namespace OpenDental{
 			// FormChartView
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(570,848);
+			this.ClientSize = new System.Drawing.Size(683,696);
+			this.Controls.Add(this.labelDescription);
 			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.groupBoxProperties);
 			this.Controls.Add(this.textBoxViewDesc);
-			this.Controls.Add(this.labelDescription);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butRight);
 			this.Controls.Add(this.butLeft);
@@ -593,7 +599,7 @@ namespace OpenDental{
 			this.Name = "FormChartView";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Setup Chart Views";
+			this.Text = "Chart View Edit";
 			this.Load += new System.EventHandler(this.FormChartView_Load);
 			this.groupBox7.ResumeLayout(false);
 			this.groupBox6.ResumeLayout(false);
@@ -607,23 +613,27 @@ namespace OpenDental{
 		private void FormChartView_Load(object sender,EventArgs e) {
 			if(!ChartViewCur.IsNew) {
 				textBoxViewDesc.Text=ChartViewCur.Description;
-				checkAppt.Checked=(ChartViewCur.ObjectTypes&ChartViewObjs.Appointments)==ChartViewObjs.Appointments;
-				checkComm.Checked=(ChartViewCur.ObjectTypes&ChartViewObjs.CommLog)==ChartViewObjs.CommLog;
-				checkCommFamily.Checked=(ChartViewCur.ObjectTypes&ChartViewObjs.CommLogFamily)==ChartViewObjs.CommLogFamily;
-				checkTasks.Checked=(ChartViewCur.ObjectTypes&ChartViewObjs.Tasks)==ChartViewObjs.Tasks;
-				checkEmail.Checked=(ChartViewCur.ObjectTypes&ChartViewObjs.Email)==ChartViewObjs.Email;
-				checkLabCase.Checked=(ChartViewCur.ObjectTypes&ChartViewObjs.LabCases)==ChartViewObjs.LabCases;
-				checkRx.Checked=(ChartViewCur.ObjectTypes&ChartViewObjs.Rx)==ChartViewObjs.Rx;
-				checkSheets.Checked=(ChartViewCur.ObjectTypes&ChartViewObjs.Sheets)==ChartViewObjs.Sheets;
-				checkShowTP.Checked=(ChartViewCur.ProcStatuses&ChartViewProcStat.TP)==ChartViewProcStat.TP;
-				checkShowC.Checked=(ChartViewCur.ProcStatuses&ChartViewProcStat.C)==ChartViewProcStat.C;
-				checkShowE.Checked=(ChartViewCur.ProcStatuses&ChartViewProcStat.EC)==ChartViewProcStat.EC;
-				checkShowR.Checked=(ChartViewCur.ProcStatuses&ChartViewProcStat.R)==ChartViewProcStat.R;
-				checkShowCn.Checked=(ChartViewCur.ProcStatuses&ChartViewProcStat.Cn)==ChartViewProcStat.Cn;
-				checkShowTeeth.Checked=ChartViewCur.SelectedTeethOnly;
-				checkNotes.Checked=ChartViewCur.ShowProcNotes;
-				checkAudit.Checked=ChartViewCur.IsAudit;
 			}
+			else {
+				ChartViewCur.ItemOrder+=1;
+				textBoxViewDesc.Text=ChartViewCur.ItemOrder.ToString();
+			}
+			checkAppt.Checked=(ChartViewCur.ObjectTypes&ChartViewObjs.Appointments)==ChartViewObjs.Appointments;
+			checkComm.Checked=(ChartViewCur.ObjectTypes&ChartViewObjs.CommLog)==ChartViewObjs.CommLog;
+			checkCommFamily.Checked=(ChartViewCur.ObjectTypes&ChartViewObjs.CommLogFamily)==ChartViewObjs.CommLogFamily;
+			checkTasks.Checked=(ChartViewCur.ObjectTypes&ChartViewObjs.Tasks)==ChartViewObjs.Tasks;
+			checkEmail.Checked=(ChartViewCur.ObjectTypes&ChartViewObjs.Email)==ChartViewObjs.Email;
+			checkLabCase.Checked=(ChartViewCur.ObjectTypes&ChartViewObjs.LabCases)==ChartViewObjs.LabCases;
+			checkRx.Checked=(ChartViewCur.ObjectTypes&ChartViewObjs.Rx)==ChartViewObjs.Rx;
+			checkSheets.Checked=(ChartViewCur.ObjectTypes&ChartViewObjs.Sheets)==ChartViewObjs.Sheets;
+			checkShowTP.Checked=(ChartViewCur.ProcStatuses&ChartViewProcStat.TP)==ChartViewProcStat.TP;
+			checkShowC.Checked=(ChartViewCur.ProcStatuses&ChartViewProcStat.C)==ChartViewProcStat.C;
+			checkShowE.Checked=(ChartViewCur.ProcStatuses&ChartViewProcStat.EC)==ChartViewProcStat.EC;
+			checkShowR.Checked=(ChartViewCur.ProcStatuses&ChartViewProcStat.R)==ChartViewProcStat.R;
+			checkShowCn.Checked=(ChartViewCur.ProcStatuses&ChartViewProcStat.Cn)==ChartViewProcStat.Cn;
+			checkShowTeeth.Checked=ChartViewCur.SelectedTeethOnly;
+			checkNotes.Checked=ChartViewCur.ShowProcNotes;
+			checkAudit.Checked=ChartViewCur.IsAudit;
 			DisplayFields.RefreshCache();
 			ListShowing=DisplayFields.GetForChartView(ChartViewCur.ChartViewNum);//This will be zero for a new ChartView
 			FillGrids();

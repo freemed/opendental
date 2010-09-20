@@ -491,6 +491,7 @@ namespace OpenDental{
 			this.radioEraser = new System.Windows.Forms.RadioButton();
 			this.radioPen = new System.Windows.Forms.RadioButton();
 			this.radioPointer = new System.Windows.Forms.RadioButton();
+			this.tabPatInfo = new System.Windows.Forms.TabPage();
 			this.menuConsent = new System.Windows.Forms.ContextMenu();
 			this.panelEcw = new System.Windows.Forms.Panel();
 			this.labelECWerror = new System.Windows.Forms.Label();
@@ -508,7 +509,6 @@ namespace OpenDental{
 			this.button1 = new OpenDental.UI.Button();
 			this.textTreatmentNotes = new OpenDental.ODtextBox();
 			this.gridPtInfo = new OpenDental.UI.ODGrid();
-			this.tabPatInfo = new System.Windows.Forms.TabPage();
 			this.groupBox2.SuspendLayout();
 			this.tabControlImages.SuspendLayout();
 			this.panelImages.SuspendLayout();
@@ -747,7 +747,7 @@ namespace OpenDental{
 			// checkAudit
 			// 
 			this.checkAudit.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkAudit.Location = new System.Drawing.Point(165,187);
+			this.checkAudit.Location = new System.Drawing.Point(154,170);
 			this.checkAudit.Name = "checkAudit";
 			this.checkAudit.Size = new System.Drawing.Size(73,13);
 			this.checkAudit.TabIndex = 17;
@@ -769,7 +769,7 @@ namespace OpenDental{
 			// checkShowTeeth
 			// 
 			this.checkShowTeeth.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkShowTeeth.Location = new System.Drawing.Point(165,168);
+			this.checkShowTeeth.Location = new System.Drawing.Point(154,154);
 			this.checkShowTeeth.Name = "checkShowTeeth";
 			this.checkShowTeeth.Size = new System.Drawing.Size(104,13);
 			this.checkShowTeeth.TabIndex = 15;
@@ -2760,6 +2760,15 @@ namespace OpenDental{
 			this.radioPointer.UseVisualStyleBackColor = true;
 			this.radioPointer.Click += new System.EventHandler(this.radioPointer_Click);
 			// 
+			// tabPatInfo
+			// 
+			this.tabPatInfo.Location = new System.Drawing.Point(4,22);
+			this.tabPatInfo.Name = "tabPatInfo";
+			this.tabPatInfo.Size = new System.Drawing.Size(516,233);
+			this.tabPatInfo.TabIndex = 7;
+			this.tabPatInfo.Text = "Pat Info";
+			this.tabPatInfo.UseVisualStyleBackColor = true;
+			// 
 			// menuConsent
 			// 
 			this.menuConsent.Popup += new System.EventHandler(this.menuConsent_Popup);
@@ -2970,15 +2979,6 @@ namespace OpenDental{
 			this.gridPtInfo.Title = "Patient Info";
 			this.gridPtInfo.TranslationName = "TableChartPtInfo";
 			this.gridPtInfo.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPtInfo_CellDoubleClick);
-			// 
-			// tabPatInfo
-			// 
-			this.tabPatInfo.Location = new System.Drawing.Point(4,22);
-			this.tabPatInfo.Name = "tabPatInfo";
-			this.tabPatInfo.Size = new System.Drawing.Size(516,233);
-			this.tabPatInfo.TabIndex = 7;
-			this.tabPatInfo.Text = "Pat Info";
-			this.tabPatInfo.UseVisualStyleBackColor = true;
 			// 
 			// ContrChart
 			// 
@@ -4021,24 +4021,27 @@ namespace OpenDental{
 				}
 				fields=DisplayFields.GetForChartView(ChartViewCurDisplay.ChartViewNum);
 				gridProg.Title=ChartViewCurDisplay.Description;
-				gridChartViews.SetSelected(ChartViewCurDisplay.ItemOrder,true);
 				if(!chartCustViewChanged) {
-					checkSheets.Checked=(ChartViewCurDisplay.ObjectTypes&ChartViewObjs.Sheets)==ChartViewObjs.Sheets;
-					checkTasks.Checked=(ChartViewCurDisplay.ObjectTypes&ChartViewObjs.Tasks)==ChartViewObjs.Tasks;
-					checkEmail.Checked=(ChartViewCurDisplay.ObjectTypes&ChartViewObjs.Email)==ChartViewObjs.Email;
-					checkCommFamily.Checked=(ChartViewCurDisplay.ObjectTypes&ChartViewObjs.CommLogFamily)==ChartViewObjs.CommLogFamily;
-					checkAppt.Checked=(ChartViewCurDisplay.ObjectTypes&ChartViewObjs.Appointments)==ChartViewObjs.Appointments;
-					checkLabCase.Checked=(ChartViewCurDisplay.ObjectTypes&ChartViewObjs.LabCases)==ChartViewObjs.LabCases;
-					checkRx.Checked=(ChartViewCurDisplay.ObjectTypes&ChartViewObjs.Rx)==ChartViewObjs.Rx;
-					checkComm.Checked=(ChartViewCurDisplay.ObjectTypes&ChartViewObjs.CommLog)==ChartViewObjs.CommLog;
-					checkShowTP.Checked=(ChartViewCurDisplay.ProcStatuses&ChartViewProcStat.TP)==ChartViewProcStat.TP;
-					checkShowC.Checked=(ChartViewCurDisplay.ProcStatuses&ChartViewProcStat.C)==ChartViewProcStat.C;
-					checkShowE.Checked=(ChartViewCurDisplay.ProcStatuses&ChartViewProcStat.EC)==ChartViewProcStat.EC;
-					checkShowR.Checked=(ChartViewCurDisplay.ProcStatuses&ChartViewProcStat.R)==ChartViewProcStat.R;
-					checkShowCn.Checked=(ChartViewCurDisplay.ProcStatuses&ChartViewProcStat.Cn)==ChartViewProcStat.Cn;
+					checkSheets.Checked=(ChartViewCurDisplay.ObjectTypes & ChartViewObjs.Sheets)==ChartViewObjs.Sheets;
+					checkTasks.Checked=(ChartViewCurDisplay.ObjectTypes & ChartViewObjs.Tasks)==ChartViewObjs.Tasks;
+					checkEmail.Checked=(ChartViewCurDisplay.ObjectTypes & ChartViewObjs.Email)==ChartViewObjs.Email;
+					checkCommFamily.Checked=(ChartViewCurDisplay.ObjectTypes & ChartViewObjs.CommLogFamily)==ChartViewObjs.CommLogFamily;
+					checkAppt.Checked=(ChartViewCurDisplay.ObjectTypes & ChartViewObjs.Appointments)==ChartViewObjs.Appointments;
+					checkLabCase.Checked=(ChartViewCurDisplay.ObjectTypes & ChartViewObjs.LabCases)==ChartViewObjs.LabCases;
+					checkRx.Checked=(ChartViewCurDisplay.ObjectTypes & ChartViewObjs.Rx)==ChartViewObjs.Rx;
+					checkComm.Checked=(ChartViewCurDisplay.ObjectTypes & ChartViewObjs.CommLog)==ChartViewObjs.CommLog;
+					checkShowTP.Checked=(ChartViewCurDisplay.ProcStatuses & ChartViewProcStat.TP)==ChartViewProcStat.TP;
+					checkShowC.Checked=(ChartViewCurDisplay.ProcStatuses & ChartViewProcStat.C)==ChartViewProcStat.C;
+					checkShowE.Checked=(ChartViewCurDisplay.ProcStatuses & ChartViewProcStat.EC)==ChartViewProcStat.EC;
+					checkShowR.Checked=(ChartViewCurDisplay.ProcStatuses & ChartViewProcStat.R)==ChartViewProcStat.R;
+					checkShowCn.Checked=(ChartViewCurDisplay.ProcStatuses & ChartViewProcStat.Cn)==ChartViewProcStat.Cn;
 					checkShowTeeth.Checked=ChartViewCurDisplay.SelectedTeethOnly;
 					checkNotes.Checked=ChartViewCurDisplay.ShowProcNotes;
 					checkAudit.Checked=ChartViewCurDisplay.IsAudit;
+					gridChartViews.SetSelected(ChartViewCurDisplay.ItemOrder,true);
+				}
+				else {
+					gridChartViews.SetSelected(false);
 				}
 			}
 			for(int i=0;i<fields.Count;i++){
@@ -7463,6 +7466,49 @@ namespace OpenDental{
 			FormChartView FormChartAdd=new FormChartView();
 			FormChartAdd.ChartViewCur=new ChartView();
 			FormChartAdd.ChartViewCur.IsNew=true;
+			FormChartAdd.ChartViewCur.ItemOrder=count;
+			if(checkAppt.Checked) {
+				FormChartAdd.ChartViewCur.ObjectTypes+=1;
+			}
+			if(checkComm.Checked) {
+				FormChartAdd.ChartViewCur.ObjectTypes+=2;
+			}
+			if(checkCommFamily.Checked) {
+				FormChartAdd.ChartViewCur.ObjectTypes+=4;
+			}
+			if(checkTasks.Checked) {
+				FormChartAdd.ChartViewCur.ObjectTypes+=8;
+			}
+			if(checkEmail.Checked) {
+				FormChartAdd.ChartViewCur.ObjectTypes+=16;
+			}
+			if(checkLabCase.Checked) {
+				FormChartAdd.ChartViewCur.ObjectTypes+=32;
+			}
+			if(checkRx.Checked) {
+				FormChartAdd.ChartViewCur.ObjectTypes+=64;
+			}
+			if(checkSheets.Checked) {
+				FormChartAdd.ChartViewCur.ObjectTypes+=128;
+			}
+			if(checkShowTP.Checked) {
+				FormChartAdd.ChartViewCur.ProcStatuses+=1;
+			}
+			if(checkShowC.Checked) {
+				FormChartAdd.ChartViewCur.ProcStatuses+=2;
+			}
+			if(checkShowE.Checked) {
+				FormChartAdd.ChartViewCur.ProcStatuses+=4;
+			}
+			if(checkShowR.Checked) {
+				FormChartAdd.ChartViewCur.ProcStatuses+=16;
+			}
+			if(checkShowCn.Checked) {
+				FormChartAdd.ChartViewCur.ProcStatuses+=64;
+			}
+			FormChartAdd.ChartViewCur.SelectedTeethOnly=checkShowTeeth.Checked;
+			FormChartAdd.ChartViewCur.ShowProcNotes=checkNotes.Checked;
+			FormChartAdd.ChartViewCur.IsAudit=checkAudit.Checked;
 			FormChartAdd.ShowDialog();
 			FillChartViewsGrid();
 			int count2=gridChartViews.Rows.Count;
@@ -7470,8 +7516,10 @@ namespace OpenDental{
 				return; 
 			}
 			if(count2==count) {
-				gridChartViews.SetSelected(selectedIndex,true);
-				SetChartView(ChartViews.Listt[selectedIndex]);
+				if(selectedIndex!=-1) {
+					gridChartViews.SetSelected(selectedIndex,true);
+					SetChartView(ChartViews.Listt[selectedIndex]);
+				}
 			}
 			else {
 				FormChartAdd.ChartViewCur.ItemOrder=count;
