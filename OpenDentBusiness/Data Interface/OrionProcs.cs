@@ -7,7 +7,9 @@ using System.Text;
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class OrionProcs{
+		
 		#region CachePattern
+		/*
 		//This region can be eliminated if this is not a table type with cached data.
 		//If leaving this region in place, be sure to add RefreshCache and FillCache 
 		//to the Cache.cs file with all the other Cache types.
@@ -43,7 +45,44 @@ namespace OpenDentBusiness{
 			//No need to check RemotingRole; no call to db.
 			listt=Crud.OrionProcCrud.TableToList(table);
 		}
+		*/
 		#endregion
+
+		///<summary>Gets one OrionProc from the db.</summary>
+		public static OrionProc GetOne(long orionProcNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<OrionProc>(MethodBase.GetCurrentMethod(),orionProcNum);
+			}
+			return Crud.OrionProcCrud.SelectOne(orionProcNum);
+		}
+
+		///<summary>Gets one OrionProc from the db by ProcNum</summary>
+		public static OrionProc GetOneByProcNum(long ProcNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<OrionProc>(MethodBase.GetCurrentMethod(),ProcNum);
+			}
+			string command="SELECT * FROM orionproc "
+				+"WHERE ProcNum="+POut.Long(ProcNum)+" LIMIT 1";
+			return Crud.OrionProcCrud.SelectOne(command);
+		}
+
+		///<summary></summary>
+		public static long Insert(OrionProc orionProc) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				orionProc.OrionProcNum=Meth.GetLong(MethodBase.GetCurrentMethod(),orionProc);
+				return orionProc.OrionProcNum;
+			}
+			return Crud.OrionProcCrud.Insert(orionProc);
+		}
+
+		///<summary></summary>
+		public static void Update(OrionProc orionProc) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),orionProc);
+				return;
+			}
+			Crud.OrionProcCrud.Update(orionProc);
+		}
 
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
@@ -56,33 +95,7 @@ namespace OpenDentBusiness{
 			string command="SELECT * FROM orionproc WHERE PatNum = "+POut.Long(patNum);
 			return Crud.OrionProcCrud.SelectMany(command);
 		}
-
-		///<summary>Gets one OrionProc from the db.</summary>
-		public static OrionProc GetOne(long orionProcNum){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				return Meth.GetObject<OrionProc>(MethodBase.GetCurrentMethod(),orionProcNum);
-			}
-			return Crud.OrionProcCrud.SelectOne(orionProcNum);
-		}
-
-		///<summary></summary>
-		public static long Insert(OrionProc orionProc){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				orionProc.OrionProcNum=Meth.GetLong(MethodBase.GetCurrentMethod(),orionProc);
-				return orionProc.OrionProcNum;
-			}
-			return Crud.OrionProcCrud.Insert(orionProc);
-		}
-
-		///<summary></summary>
-		public static void Update(OrionProc orionProc){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),orionProc);
-				return;
-			}
-			Crud.OrionProcCrud.Update(orionProc);
-		}
-
+		
 		///<summary></summary>
 		public static void Delete(long orionProcNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
@@ -92,6 +105,9 @@ namespace OpenDentBusiness{
 			string command= "DELETE FROM orionproc WHERE OrionProcNum = "+POut.Long(orionProcNum);
 			Db.NonQ(command);
 		}
+		
+
+		
 		*/
 
 
