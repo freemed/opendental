@@ -48,7 +48,7 @@ namespace OpenDental {
 			PhoneTile tile;
 			int x=0;
 			int y=0;
-			for(int i=0;i<20;i++) {
+			for(int i=0;i<26;i++) {
 				tile=new PhoneTile();
 				tile.Name="phoneTile"+(i+1).ToString();
 				tile.LayoutHorizontal=true;
@@ -60,7 +60,7 @@ namespace OpenDental {
 				tile.MenuStatus=menuStatus;
 				this.Controls.Add(tile);
 				y++;
-				if(y==10){
+				if(y==13){
 					y=0;
 					x++;
 				}
@@ -85,7 +85,7 @@ namespace OpenDental {
 				return;
 			}
 			PhoneTile tile;
-			for(int i=0;i<20;i++) {
+			for(int i=0;i<26;i++) {
 				Application.DoEvents();
 				Control[] controlMatches=Controls.Find("phoneTile"+(i+1).ToString(),false);
 				if(controlMatches.Length==0) {//no match found for some reason.

@@ -240,7 +240,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(619,409);
+			this.ClientSize = new System.Drawing.Size(619,510);
 			this.Controls.Add(this.checkBoxAll);
 			this.Controls.Add(this.labelMsg);
 			this.Controls.Add(this.butOverride);
