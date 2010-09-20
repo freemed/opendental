@@ -163,7 +163,7 @@ namespace OpenDental{
 			this.listType.Name = "listType";
 			this.listType.Size = new System.Drawing.Size(120,95);
 			this.listType.TabIndex = 20;
-			this.listType.SelectedValueChanged += new System.EventHandler(this.listType_SelectedValueChanged);
+			this.listType.SelectedIndexChanged += new System.EventHandler(this.listType_SelectedIndexChanged);
 			// 
 			// textDateTime
 			// 
@@ -179,7 +179,7 @@ namespace OpenDental{
 			this.listMode.Name = "listMode";
 			this.listMode.Size = new System.Drawing.Size(73,95);
 			this.listMode.TabIndex = 23;
-			this.listMode.SelectedValueChanged += new System.EventHandler(this.listMode_SelectedValueChanged);
+			this.listMode.SelectedIndexChanged += new System.EventHandler(this.listMode_SelectedIndexChanged);
 			// 
 			// label3
 			// 
@@ -278,6 +278,7 @@ namespace OpenDental{
 			this.signatureBoxWrapper.Name = "signatureBoxWrapper";
 			this.signatureBoxWrapper.Size = new System.Drawing.Size(364,81);
 			this.signatureBoxWrapper.TabIndex = 106;
+			this.signatureBoxWrapper.SignatureChanged += new System.EventHandler(this.signatureBoxWrapper_SignatureChanged);
 			// 
 			// FormCommItem
 			// 
@@ -359,6 +360,12 @@ namespace OpenDental{
 			IsStartingUp=false;
 		}
 
+		private void signatureBoxWrapper_SignatureChanged(object sender,EventArgs e) {
+			CommlogCur.UserNum=Security.CurUser.UserNum;
+			textUser.Text=Userods.GetName(CommlogCur.UserNum);
+			SigChanged=true;
+		}
+
 		private void ClearSignature(){
 			if(!IsStartingUp//so this happens only if user changes the note
 				&& !SigChanged)//and the original signature is still showing.
@@ -369,14 +376,21 @@ namespace OpenDental{
 		}
 
 		private string GetSignatureKey(){
-			string keyData=CommlogCur.PatNum.ToString();
-			keyData+=CommlogCur.UserNum.ToString();
+			string keyData=CommlogCur.UserNum.ToString();
 			keyData+=CommlogCur.CommDateTime.ToString();
 			keyData+=CommlogCur.Mode_.ToString();
 			keyData+=CommlogCur.SentOrReceived.ToString();
 			keyData+=CommlogCur.Note.ToString();
 			keyData+=CommlogCur.CommlogNum.ToString();
 			return keyData;
+		}
+
+		private void SaveSignature(){
+			if(SigChanged){
+				string keyData=GetSignatureKey();
+				CommlogCur.Signature=signatureBoxWrapper.GetSignature(keyData);
+				CommlogCur.SigIsTopaz=signatureBoxWrapper.GetSigIsTopaz();
+			}
 		}
 		/*
 		///<summary>This button won't even be visible unless there is an email to view.</summary>
@@ -418,6 +432,12 @@ namespace OpenDental{
 			CommlogCur.SentOrReceived=(CommSentOrReceived)listSentOrReceived.SelectedIndex;
 			CommlogCur.Note=textNote.Text;
 			//CommlogCur.IsStatementSent=checkIsStatementSent.Checked;
+			try {
+				SaveSignature();
+			}
+			catch(Exception ex){
+				MessageBox.Show(Lan.g(this,"Error saving signature.")+"\r\n"+ex.Message);
+			}
 			if(IsNew){
 				Commlogs.Insert(CommlogCur);
 			}
@@ -447,11 +467,11 @@ namespace OpenDental{
 			ClearSignature();
 		}
 
-		private void listType_SelectedValueChanged(object sender, EventArgs e){
+		private void listType_SelectedIndexChanged(object sender,EventArgs e) {
 			ClearSignature();
 		}
 
-		private void listMode_SelectedValueChanged(object sender,EventArgs e) {
+		private void listMode_SelectedIndexChanged(object sender,EventArgs e) {
 			ClearSignature();
 		}
 
@@ -462,7 +482,14 @@ namespace OpenDental{
 		private void textNote_TextChanged(object sender,EventArgs e) {
 			ClearSignature();
 		}
+
+
 		
+
+
+
+
+
 
 		//private void button1_Click(object sender, System.EventArgs e) {
 		//	textNote.Select(textNote.Text.Length,1);

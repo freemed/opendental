@@ -286,7 +286,7 @@ namespace OpenDentBusiness {
 				row["RxNum"]=0;
 				row["SheetNum"]=0;
 				row["signature"]="";
-				if(rawNotes.Rows[i]["SigPresent"].ToString()=="1") {
+				if(rawComm.Rows[i]["SigPresent"].ToString()=="1") {
 					row["signature"]=Lans.g("ChartModule","Signed");
 				}
 				row["Surf"]="";
