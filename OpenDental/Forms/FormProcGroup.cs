@@ -44,6 +44,9 @@ namespace OpenDental{
 		public Procedure GroupOld;
 		public List<ProcGroupItem> GroupItemList;
 		public List<Procedure> ProcList;
+		///<summary>This keeps the noteChanged event from erasing the signature when first loading.</summary>
+		private bool IsStartingUp;
+		private bool SigChanged;
 
 		public FormProcGroup() {
 			InitializeComponent();
@@ -120,7 +123,7 @@ namespace OpenDental{
 			// 
 			// label12
 			// 
-			this.label12.Location = new System.Drawing.Point(10,34);
+			this.label12.Location = new System.Drawing.Point(12,34);
 			this.label12.Name = "label12";
 			this.label12.Size = new System.Drawing.Size(125,14);
 			this.label12.TabIndex = 96;
@@ -129,7 +132,7 @@ namespace OpenDental{
 			// 
 			// label26
 			// 
-			this.label26.Location = new System.Drawing.Point(213,34);
+			this.label26.Location = new System.Drawing.Point(215,34);
 			this.label26.Name = "label26";
 			this.label26.Size = new System.Drawing.Size(125,18);
 			this.label26.TabIndex = 97;
@@ -138,7 +141,7 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(37,14);
+			this.label2.Location = new System.Drawing.Point(39,14);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(96,14);
 			this.label2.TabIndex = 101;
@@ -147,7 +150,7 @@ namespace OpenDental{
 			// 
 			// textProcDate
 			// 
-			this.textProcDate.Location = new System.Drawing.Point(133,12);
+			this.textProcDate.Location = new System.Drawing.Point(135,12);
 			this.textProcDate.Name = "textProcDate";
 			this.textProcDate.ReadOnly = true;
 			this.textProcDate.Size = new System.Drawing.Size(76,20);
@@ -161,6 +164,7 @@ namespace OpenDental{
 			this.signatureBoxWrapper.Name = "signatureBoxWrapper";
 			this.signatureBoxWrapper.Size = new System.Drawing.Size(364,81);
 			this.signatureBoxWrapper.TabIndex = 194;
+			this.signatureBoxWrapper.SignatureChanged += new System.EventHandler(this.signatureBoxWrapper_SignatureChanged);
 			// 
 			// gridProc
 			// 
@@ -176,7 +180,7 @@ namespace OpenDental{
 			// 
 			// textDateEntry
 			// 
-			this.textDateEntry.Location = new System.Drawing.Point(133,32);
+			this.textDateEntry.Location = new System.Drawing.Point(135,32);
 			this.textDateEntry.Name = "textDateEntry";
 			this.textDateEntry.ReadOnly = true;
 			this.textDateEntry.Size = new System.Drawing.Size(76,20);
@@ -294,14 +298,16 @@ namespace OpenDental{
 		//Load function from FormProcEdit (FormProcInfo_Load)... (Single procedure - but form looks like I want)
 		private void FormProcGroup_Load(object sender, System.EventArgs e){
 			GroupOld=GroupCur.Copy();
+			IsStartingUp=true;
 			textProcDate.Text=GroupCur.ProcDate.ToShortDateString();
 			textDateEntry.Text=GroupCur.DateEntryC.ToShortDateString();
-			textUser.Text=Security.CurUser.UserName;
+			textUser.Text=Userods.GetName(GroupCur.UserNum);//might be blank. Will change automatically if user changes note or alters sig.
 			textNotes.Text=GroupCur.Note;
 			FillProcedures();
 			string keyData=GetSignatureKey();
 			signatureBoxWrapper.FillSignature(GroupCur.SigIsTopaz,keyData,GroupCur.Signature);
 			signatureBoxWrapper.BringToFront();
+			IsStartingUp=false;
 		}
 
 		private void FillProcedures(){
@@ -349,13 +355,18 @@ namespace OpenDental{
 		}
 
 		private void textNotes_TextChanged(object sender,EventArgs e) {
-			signatureBoxWrapper.ClearSignature();
+			if(!IsStartingUp//so this happens only if user changes the note
+				&& !SigChanged)//and the original signature is still showing.
+			{
+				//SigChanged=true;//happens automatically through the event.
+				signatureBoxWrapper.ClearSignature();
+			}
 		}
 
 		private string GetSignatureKey(){
 			string keyData=GroupCur.ProcDate.ToShortDateString();
 			keyData+=GroupCur.DateEntryC.ToShortDateString();
-			keyData+=Security.CurUser.UserName;
+			keyData+=GroupCur.UserNum.ToString();//Security.CurUser.UserName;
 			keyData+=GroupCur.Note;
 			for(int i=0;i<GroupItemList.Count;i++){
 				keyData+=GroupItemList[i].ProcGroupItemNum.ToString();
@@ -364,11 +375,17 @@ namespace OpenDental{
 		}
 
 		private void SaveSignature(){
-			if(signatureBoxWrapper.GetSigChanged()){
-					string keyData=GetSignatureKey();
-					GroupCur.Signature=signatureBoxWrapper.GetSignature(keyData);
-					GroupCur.SigIsTopaz=signatureBoxWrapper.GetSigIsTopaz();
+			if(SigChanged){
+				string keyData=GetSignatureKey();
+				GroupCur.Signature=signatureBoxWrapper.GetSignature(keyData);
+				GroupCur.SigIsTopaz=signatureBoxWrapper.GetSigIsTopaz();
 			}
+		}
+
+		private void signatureBoxWrapper_SignatureChanged(object sender,EventArgs e) {
+			GroupCur.UserNum=Security.CurUser.UserNum;
+			textUser.Text=Userods.GetName(GroupCur.UserNum);
+			SigChanged=true;
 		}
 
 		private void butDelete_Click(object sender, System.EventArgs e) {
@@ -408,6 +425,8 @@ namespace OpenDental{
 			}
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 
 
