@@ -34,8 +34,10 @@ namespace OpenDental{
 		private Label label16;
 		private Label labelCommlogNum;
 		private TextBox textCommlogNum;
-		private OpenDental.UI.SignatureBoxWrapper signatureBoxWrapper1;
+		private OpenDental.UI.SignatureBoxWrapper signatureBoxWrapper;
 		private Commlog CommlogCur;
+		private bool IsStartingUp;
+		private bool SigChanged;
 
 		///<summary></summary>
 		public FormCommItem(Commlog commlogCur){
@@ -77,7 +79,7 @@ namespace OpenDental{
 			this.label16 = new System.Windows.Forms.Label();
 			this.labelCommlogNum = new System.Windows.Forms.Label();
 			this.textCommlogNum = new System.Windows.Forms.TextBox();
-			this.signatureBoxWrapper1 = new OpenDental.UI.SignatureBoxWrapper();
+			this.signatureBoxWrapper = new OpenDental.UI.SignatureBoxWrapper();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -161,6 +163,7 @@ namespace OpenDental{
 			this.listType.Name = "listType";
 			this.listType.Size = new System.Drawing.Size(120,95);
 			this.listType.TabIndex = 20;
+			this.listType.SelectedValueChanged += new System.EventHandler(this.listType_SelectedValueChanged);
 			// 
 			// textDateTime
 			// 
@@ -168,6 +171,7 @@ namespace OpenDental{
 			this.textDateTime.Name = "textDateTime";
 			this.textDateTime.Size = new System.Drawing.Size(205,20);
 			this.textDateTime.TabIndex = 21;
+			this.textDateTime.TextChanged += new System.EventHandler(this.textDateTime_TextChanged);
 			// 
 			// listMode
 			// 
@@ -175,6 +179,7 @@ namespace OpenDental{
 			this.listMode.Name = "listMode";
 			this.listMode.Size = new System.Drawing.Size(73,95);
 			this.listMode.TabIndex = 23;
+			this.listMode.SelectedValueChanged += new System.EventHandler(this.listMode_SelectedValueChanged);
 			// 
 			// label3
 			// 
@@ -191,6 +196,7 @@ namespace OpenDental{
 			this.listSentOrReceived.Name = "listSentOrReceived";
 			this.listSentOrReceived.Size = new System.Drawing.Size(87,43);
 			this.listSentOrReceived.TabIndex = 25;
+			this.listSentOrReceived.SelectedValueChanged += new System.EventHandler(this.listSentOrReceived_SelectedValueChanged);
 			// 
 			// label4
 			// 
@@ -211,6 +217,7 @@ namespace OpenDental{
 			this.textNote.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
 			this.textNote.Size = new System.Drawing.Size(557,209);
 			this.textNote.TabIndex = 27;
+			this.textNote.TextChanged += new System.EventHandler(this.textNote_TextChanged);
 			// 
 			// textPatientName
 			// 
@@ -263,21 +270,21 @@ namespace OpenDental{
 			this.textCommlogNum.Size = new System.Drawing.Size(94,20);
 			this.textCommlogNum.TabIndex = 105;
 			// 
-			// signatureBoxWrapper1
+			// signatureBoxWrapper
 			// 
-			this.signatureBoxWrapper1.BackColor = System.Drawing.SystemColors.ControlDark;
-			this.signatureBoxWrapper1.LabelText = null;
-			this.signatureBoxWrapper1.Location = new System.Drawing.Point(108,413);
-			this.signatureBoxWrapper1.Name = "signatureBoxWrapper1";
-			this.signatureBoxWrapper1.Size = new System.Drawing.Size(364,81);
-			this.signatureBoxWrapper1.TabIndex = 106;
+			this.signatureBoxWrapper.BackColor = System.Drawing.SystemColors.ControlDark;
+			this.signatureBoxWrapper.LabelText = null;
+			this.signatureBoxWrapper.Location = new System.Drawing.Point(108,413);
+			this.signatureBoxWrapper.Name = "signatureBoxWrapper";
+			this.signatureBoxWrapper.Size = new System.Drawing.Size(364,81);
+			this.signatureBoxWrapper.TabIndex = 106;
 			// 
 			// FormCommItem
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(702,545);
-			this.Controls.Add(this.signatureBoxWrapper1);
+			this.Controls.Add(this.signatureBoxWrapper);
 			this.Controls.Add(this.textCommlogNum);
 			this.Controls.Add(this.labelCommlogNum);
 			this.Controls.Add(this.textUser);
@@ -312,6 +319,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormCommItem_Load(object sender, System.EventArgs e) {
+			IsStartingUp=true;
 			textPatientName.Text=Patients.GetLim(CommlogCur.PatNum).GetNameFL();
 			textUser.Text=Userods.GetName(CommlogCur.UserNum);//might be blank. 
 			textDateTime.Text=CommlogCur.CommDateTime.ToString();
@@ -345,8 +353,31 @@ namespace OpenDental{
 			#endif
 			textCommlogNum.Text=CommlogCur.CommlogNum.ToString();
 			textNote.Select();
+			string keyData=GetSignatureKey();
+			signatureBoxWrapper.FillSignature(CommlogCur.SigIsTopaz,keyData,CommlogCur.Signature);
+			signatureBoxWrapper.BringToFront();
+			IsStartingUp=false;
 		}
 
+		private void ClearSignature(){
+			if(!IsStartingUp//so this happens only if user changes the note
+				&& !SigChanged)//and the original signature is still showing.
+			{
+				//SigChanged=true;//happens automatically through the event.
+				signatureBoxWrapper.ClearSignature();
+			}
+		}
+
+		private string GetSignatureKey(){
+			string keyData=CommlogCur.PatNum.ToString();
+			keyData+=CommlogCur.UserNum.ToString();
+			keyData+=CommlogCur.CommDateTime.ToString();
+			keyData+=CommlogCur.Mode_.ToString();
+			keyData+=CommlogCur.SentOrReceived.ToString();
+			keyData+=CommlogCur.Note.ToString();
+			keyData+=CommlogCur.CommlogNum.ToString();
+			return keyData;
+		}
 		/*
 		///<summary>This button won't even be visible unless there is an email to view.</summary>
 		private void butEmail_Click(object sender, System.EventArgs e) {
@@ -412,7 +443,25 @@ namespace OpenDental{
 			DialogResult=DialogResult.Cancel;
 		}
 
-	
+		private void textDateTime_TextChanged(object sender,EventArgs e) {
+			ClearSignature();
+		}
+
+		private void listType_SelectedValueChanged(object sender, EventArgs e){
+			ClearSignature();
+		}
+
+		private void listMode_SelectedValueChanged(object sender,EventArgs e) {
+			ClearSignature();
+		}
+
+		private void listSentOrReceived_SelectedValueChanged(object sender,EventArgs e) {
+			ClearSignature();
+		}
+
+		private void textNote_TextChanged(object sender,EventArgs e) {
+			ClearSignature();
+		}
 		
 
 		//private void button1_Click(object sender, System.EventArgs e) {

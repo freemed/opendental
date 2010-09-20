@@ -228,7 +228,8 @@ namespace OpenDentBusiness {
 				}
 			}
 			//Commlog-----------------------------------------------------------------------------------------------------------
-			command="SELECT CommlogNum,CommDateTime,CommType,Note,commlog.PatNum,UserNum,p1.FName "
+			command="SELECT CommlogNum,CommDateTime,CommType,Note,commlog.PatNum,UserNum,p1.FName,"
+				+"CASE WHEN Signature!='' THEN 1 ELSE 0 END SigPresent "
 				+"FROM patient p1,patient p2,commlog "
 				+"WHERE commlog.PatNum=p1.PatNum "
 				+"AND p1.Guarantor=p2.Guarantor "
@@ -285,6 +286,9 @@ namespace OpenDentBusiness {
 				row["RxNum"]=0;
 				row["SheetNum"]=0;
 				row["signature"]="";
+				if(rawNotes.Rows[i]["SigPresent"].ToString()=="1") {
+					row["signature"]=Lans.g("ChartModule","Signed");
+				}
 				row["Surf"]="";
 				row["TaskNum"]=0;
 				row["toothNum"]="";

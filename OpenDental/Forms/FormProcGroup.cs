@@ -304,6 +304,7 @@ namespace OpenDental{
 			textUser.Text=Userods.GetName(GroupCur.UserNum);//might be blank. Will change automatically if user changes note or alters sig.
 			textNotes.Text=GroupCur.Note;
 			FillProcedures();
+			textNotes.Select();
 			string keyData=GetSignatureKey();
 			signatureBoxWrapper.FillSignature(GroupCur.SigIsTopaz,keyData,GroupCur.Signature);
 			signatureBoxWrapper.BringToFront();
