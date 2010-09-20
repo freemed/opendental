@@ -252,11 +252,11 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Returns all sheets for the given patient in the given date range which have a description matching the examDescript in a case insensitive manner. If examDescript is blank, then sheets with any description are returned.</summary>
-		public static DataTable GetExamSheetsTable(long patNum,DateTime startDate,DateTime endDate,string examDescript) {
+		public static List<Sheet> GetExamSheetsTable(long patNum,DateTime startDate,DateTime endDate,string examDescript) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetTable(MethodBase.GetCurrentMethod(),patNum,startDate,endDate,examDescript);
+				return Meth.GetObject<List<Sheet>>(MethodBase.GetCurrentMethod(),patNum,startDate,endDate,examDescript);
 			}
-			DataTable table=new DataTable("");
+			/*DataTable table=new DataTable("");
 			DataRow row;
 			//columns that start with lowercase are altered for display rather than being raw data.
 			table.Columns.Add("date");
@@ -268,15 +268,16 @@ namespace OpenDentBusiness{
 			table.Columns.Add("timeOnly",typeof(TimeSpan));//to help with sorting
 			//but we won't actually fill this table with rows until the very end.  It's more useful to use a List<> for now.
 			List<DataRow> rows=new List<DataRow>();
-			//sheet---------------------------------------------------------------------------------------
-			string command="SELECT DateTimeSheet,SheetNum,Description "
+			//sheet---------------------------------------------------------------------------------------*/
+			string command="SELECT * "//DateTimeSheet,SheetNum,Description "
 				+"FROM sheet WHERE PatNum="+POut.Long(patNum)+" "
-				+"AND SheetType="+((int)SheetTypeEnum.ExamSheet)+" ";
+				+"AND SheetType="+POut.Int((int)SheetTypeEnum.ExamSheet)+" ";
 			if(examDescript!=""){
-				command+="AND Description LIKE '"+POut.String(examDescript)+"%' ";//case insensitive text matches
+				command+="AND Description LIKE '%"+POut.String(examDescript)+"%' ";//case insensitive text matches
 			}
-			command+="AND DATE(DateTimeSheet)>="+POut.Date(startDate)+" AND DATE(DateTimeSheet)<="+POut.Date(endDate);
-			DataTable rawSheet=Db.GetTable(command);
+			command+="AND DATE(DateTimeSheet)>="+POut.Date(startDate)+" AND DATE(DateTimeSheet)<="+POut.Date(endDate)+" "
+				+"ORDER BY DateTimeSheet";
+			/*DataTable rawSheet=Db.GetTable(command);
 			DateTime dateT;
 			for(int i=0;i<rawSheet.Rows.Count;i++) {
 				row=table.NewRow();
@@ -299,7 +300,8 @@ namespace OpenDentBusiness{
 			DataView view=table.DefaultView;
 			view.Sort="dateOnly,timeOnly";
 			table=view.ToTable();
-			return table;
+			return table;*/
+			return Crud.SheetCrud.SelectMany(command);
 		}
 
 		///<summary>Used to get sheets filled via the web.</summary>

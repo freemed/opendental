@@ -11,9 +11,9 @@ using OpenDentBusiness;
 
 namespace OpenDental {
 	public partial class FormExamSheets:Form {
-		DataTable table;
+		//DataTable table;
+		private List<Sheet> sheetList;
 		public long PatNum;
-		private List <SheetDef> examSheets=null;
 
 		public FormExamSheets() {
 			InitializeComponent();
@@ -29,17 +29,18 @@ namespace OpenDental {
 
 		private void FillListExamTypes(){
 			listExamTypes.Items.Clear();
-			examSheets=SheetDefs.GetCustomForType(SheetTypeEnum.ExamSheet);
-			for(int i=0;i<examSheets.Count;i++){
-				listExamTypes.Items.Add(examSheets[i].Description);
+			List<SheetDef> sheetDefs=SheetDefs.GetCustomForType(SheetTypeEnum.ExamSheet);
+			for(int i=0;i<sheetDefs.Count;i++) {
+				listExamTypes.Items.Add(sheetDefs[i].Description);
 			}
 		}
 
-		private void listExamTypes_SelectedIndexChanged(object sender,EventArgs e) {
-			if(listExamTypes.SelectedIndex<0){
+		private void listExamTypes_MouseClick(object sender,MouseEventArgs e) {
+			int idx=listExamTypes.IndexFromPoint(e.Location);
+			if(idx==-1){
 				return;
 			}
-			textExamDescript.Text=listExamTypes.Items[listExamTypes.SelectedIndex].ToString();
+			textExamDescript.Text=listExamTypes.Items[idx].ToString();
 			FillGrid();
 		}
 
@@ -51,30 +52,31 @@ namespace OpenDental {
 			//if a sheet is selected, remember it
 			long selectedSheetNum=0;
 			if(gridMain.GetSelectedIndex()!=-1) {
-				selectedSheetNum=PIn.Long(table.Rows[gridMain.GetSelectedIndex()]["SheetNum"].ToString());
+				selectedSheetNum=sheetList[gridMain.GetSelectedIndex()].SheetNum;//PIn.Long(table.Rows[gridMain.GetSelectedIndex()]["SheetNum"].ToString());
 			}
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g(this,"Date"),70);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Time"),42);
+			col=new ODGridColumn(Lan.g(this,"Time"),50);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Description"),210);
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
-			table=Sheets.GetExamSheetsTable(PatNum,DateTime.MinValue,DateTime.MaxValue,textExamDescript.Text);
-			for(int i=0;i<table.Rows.Count;i++){
+			sheetList=Sheets.GetExamSheetsTable(PatNum,DateTime.MinValue,DateTime.MaxValue,textExamDescript.Text);
+			for(int i=0;i<sheetList.Count;i++){
 				row=new ODGridRow();
-				row.Cells.Add(table.Rows[i]["date"].ToString());
-				row.Cells.Add(table.Rows[i]["time"].ToString());
-				row.Cells.Add(table.Rows[i]["description"].ToString());
+				row.Cells.Add(sheetList[i].DateTimeSheet.ToShortDateString());// ["date"].ToString());
+				row.Cells.Add(sheetList[i].DateTimeSheet.ToShortTimeString());// ["time"].ToString());
+				row.Cells.Add(sheetList[i].Description);
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
+			//reselect
 			if(selectedSheetNum!=0) {
-				for(int i=0;i<table.Rows.Count;i++) {
-					if(table.Rows[i]["SheetNum"].ToString()==selectedSheetNum.ToString()) {
+				for(int i=0;i<sheetList.Count;i++) {
+					if(sheetList[i].SheetNum==selectedSheetNum){ //table.Rows[i]["SheetNum"].ToString()==selectedSheetNum.ToString()) {
 						gridMain.SetSelected(i,true);
 						break;
 					}
@@ -84,8 +86,8 @@ namespace OpenDental {
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			//Sheets
-			long sheetNum=PIn.Long(table.Rows[e.Row]["SheetNum"].ToString());
-			Sheet sheet=Sheets.GetSheet(sheetNum);
+			long sheetNum=sheetList[e.Row].SheetNum;// PIn.Long(table.Rows[e.Row]["SheetNum"].ToString());
+			Sheet sheet=Sheets.GetSheet(sheetNum);//must use this to get fields
 			FormSheetFillEdit FormSF=new FormSheetFillEdit(sheet);
 			FormSF.ShowDialog();
 			if(FormSF.DialogResult==DialogResult.OK) {

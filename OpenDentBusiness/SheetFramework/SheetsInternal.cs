@@ -942,16 +942,21 @@ Fam Urgent Fin Note: [famFinUrgNote]"
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("sheet.DateTimeSheet",12f,sheet.FontName,false,350,y,100,20));
 			y+=rowH;
 			int x=100;
+			y+=30;
 			string[] fieldText=new string[] {"TMJ","Neck","Tongue","Palate","Floor of Mouth"};
 			for(int i=0;i<fieldText.Length;i++){
 				sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText(fieldText[i],sheet.FontSize,sheet.FontName,false,x,y,100,20));
 				sheet.SheetFieldDefs.Add(SheetFieldDef.NewRect(x+120,y+2,15,15));
 				sheet.SheetFieldDefs.Add(SheetFieldDef.NewCheckBox("misc",x+121,y+4,13,13));
 				sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("WNL",sheet.FontSize,sheet.FontName,false,x+140,y,40,20));
-				sheet.SheetFieldDefs.Add(SheetFieldDef.NewLine(x+200,y+22,450,0));
-				sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("misc",sheet.FontSize,sheet.FontName,false,x+200,y,450,20));
-				y+=rowH;
+				//sheet.SheetFieldDefs.Add(SheetFieldDef.NewLine(x+200,y+22,450,0));
+				sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("misc",sheet.FontSize,sheet.FontName,false,x+200,y,450,40));
+				y+=45;//rowH;
 			}
+			y+=25;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Additional Notes",sheet.FontSize,sheet.FontName,false,x,y,140,20));
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("misc",sheet.FontSize,sheet.FontName,false,x,y,600,100));
 			return sheet;
 		}
 

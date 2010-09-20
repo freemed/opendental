@@ -295,7 +295,7 @@ namespace OpenDental{
 			this.Controls.Add(this.butCancel);
 			this.Name = "FormSheetFieldInput";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Edit Intput Field";
+			this.Text = "Edit Input Field";
 			this.Load += new System.EventHandler(this.FormSheetFieldInput_Load);
 			this.groupBox1.ResumeLayout(false);
 			this.groupBox1.PerformLayout();

@@ -43,7 +43,7 @@ namespace OpenDental{
             this.setupToolStripMenuItem});
 			this.menuStrip1.Location = new System.Drawing.Point(0,0);
 			this.menuStrip1.Name = "menuStrip1";
-			this.menuStrip1.Size = new System.Drawing.Size(417,24);
+			this.menuStrip1.Size = new System.Drawing.Size(441,24);
 			this.menuStrip1.TabIndex = 8;
 			this.menuStrip1.Text = "menuStrip1";
 			// 
@@ -64,12 +64,12 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(8,36);
+			this.label1.Location = new System.Drawing.Point(9,35);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(199,13);
+			this.label1.Size = new System.Drawing.Size(199,16);
 			this.label1.TabIndex = 46;
-			this.label1.Text = "Show Exam Type (blank shows all types)";
+			this.label1.Text = "Show Type";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// textExamDescript
 			// 
@@ -84,18 +84,19 @@ namespace OpenDental{
 			this.listExamTypes.FormattingEnabled = true;
 			this.listExamTypes.Location = new System.Drawing.Point(11,94);
 			this.listExamTypes.Name = "listExamTypes";
+			this.listExamTypes.SelectionMode = System.Windows.Forms.SelectionMode.None;
 			this.listExamTypes.Size = new System.Drawing.Size(196,108);
 			this.listExamTypes.TabIndex = 48;
-			this.listExamTypes.SelectedIndexChanged += new System.EventHandler(this.listExamTypes_SelectedIndexChanged);
+			this.listExamTypes.MouseClick += new System.Windows.Forms.MouseEventHandler(this.listExamTypes_MouseClick);
 			// 
 			// label2
 			// 
-			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(8,77);
+			this.label2.Location = new System.Drawing.Point(9,76);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(134,13);
+			this.label2.Size = new System.Drawing.Size(156,16);
 			this.label2.TabIndex = 49;
-			this.label2.Text = "Show Existing Exam Types";
+			this.label2.Text = "Custom Types";
+			this.label2.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// butAdd
 			// 
@@ -123,7 +124,7 @@ namespace OpenDental{
 			this.gridMain.Location = new System.Drawing.Point(12,208);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(394,278);
+			this.gridMain.Size = new System.Drawing.Size(418,278);
 			this.gridMain.TabIndex = 4;
 			this.gridMain.Title = "Exam Sheets";
 			this.gridMain.TranslationName = "FormPatientForms";
@@ -137,7 +138,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(331,492);
+			this.butCancel.Location = new System.Drawing.Point(355,492);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 2;
@@ -147,7 +148,7 @@ namespace OpenDental{
 			// FormExamSheets
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(417,525);
+			this.ClientSize = new System.Drawing.Size(441,525);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.listExamTypes);
 			this.Controls.Add(this.textExamDescript);
