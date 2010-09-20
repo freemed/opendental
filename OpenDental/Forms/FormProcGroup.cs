@@ -283,7 +283,7 @@ namespace OpenDental{
 			this.Name = "FormProcGroup";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Procedure Group Note";
+			this.Text = "Group Note";
 			this.Load += new System.EventHandler(this.FormProcGroup_Load);
 			this.ResumeLayout(false);
 			this.PerformLayout();
@@ -349,7 +349,7 @@ namespace OpenDental{
 		}
 
 		private void textNotes_TextChanged(object sender,EventArgs e) {
-			signatureBoxWrapper.SetInvalid();
+			signatureBoxWrapper.ClearSignature();
 		}
 
 		private string GetSignatureKey(){
@@ -372,7 +372,7 @@ namespace OpenDental{
 		}
 
 		private void butDelete_Click(object sender, System.EventArgs e) {
-			bool result=MsgBox.Show(this,MsgBoxButtons.YesNo,"Are you sure you want delete this procedure group note?");
+			bool result=MsgBox.Show(this,MsgBoxButtons.YesNo,"Are you sure you want delete this group note?");
 			if(result){
 				Procedures.Delete(GroupCur.ProcNum);
 				for(int i=0;i<GroupItemList.Count;i++){
@@ -385,10 +385,6 @@ namespace OpenDental{
 
 		private void butOK_Click(object sender,System.EventArgs e) {
 			GroupCur.Note=textNotes.Text;
-			if(textNotes.Text.Trim()==""){
-				MsgBox.Show(this,"You cannot save a blank message. Please enter something into the notes field.");
-				return;
-			}
 			if(!signatureBoxWrapper.IsValid){
 				MsgBox.Show(this,"Your signature is invalid. Please sign and click OK again.");
 				return;

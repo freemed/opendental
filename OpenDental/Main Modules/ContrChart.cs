@@ -883,17 +883,17 @@ namespace OpenDental{
 			this.menuItemSetComplete.Text = "Set Complete";
 			this.menuItemSetComplete.Click += new System.EventHandler(this.menuItemSetComplete_Click);
 			// 
-			// menuItemEditSelected
-			// 
-			this.menuItemEditSelected.Index = 2;
-			this.menuItemEditSelected.Text = "Edit All";
-			this.menuItemEditSelected.Click += new System.EventHandler(this.menuItemEditSelected_Click);
-			// 
 			// menuItemGroupSelected
 			// 
-			this.menuItemGroupSelected.Index = 3;
-			this.menuItemGroupSelected.Text = "Group Procedures";
+			this.menuItemGroupSelected.Index = 2;
+			this.menuItemGroupSelected.Text = "Group Note";
 			this.menuItemGroupSelected.Click += new System.EventHandler(this.menuItemGroupSelected_Click);
+			// 
+			// menuItemEditSelected
+			// 
+			this.menuItemEditSelected.Index = 3;
+			this.menuItemEditSelected.Text = "Edit All";
+			this.menuItemEditSelected.Click += new System.EventHandler(this.menuItemEditSelected_Click);
 			// 
 			// menuItemPrintProg
 			// 
@@ -6964,22 +6964,18 @@ namespace OpenDental{
 			}
 		}
 
-		private void menuItemGroupSelected_Click(object sender,EventArgs e) {
-			int procCount=0;
+		private void menuItemGroupSelected_Click(object sender,EventArgs e){
 			DataRow row;
+			if(gridProg.SelectedIndices.Length==0){
+				MsgBox.Show(this,"Please select procedures to attach a group note to.");
+				return;
+			}
 			for(int i=0;i<gridProg.SelectedIndices.Length;i++){
 				row=(DataRow)gridProg.Rows[gridProg.SelectedIndices[i]].Tag;
-				if(row["ProcNum"].ToString()=="0") {
-					MsgBox.Show(this,"Only procedures may be grouped.");
+				if(row["ProcNum"].ToString()=="0") { //This is not a procedure.
+					MsgBox.Show(this,"You may only attach a group note to procedures.");
 					return;
 				}
-				else{
-					procCount++;
-				}
-			}
-			if(procCount<2){
-				MsgBox.Show(this,"Please select multiple procedure to group.");
-				return;
 			}
 			List<Procedure> proclist=new List<Procedure>();
 			Procedure proc;
@@ -6993,31 +6989,32 @@ namespace OpenDental{
 			long clinicNum=proclist[0].ClinicNum;
 			long provNum=proclist[0].ProvNum;
 			for(int i=0;i<proclist.Count;i++){//starts at 0 to check procStatus
+				if(ProcedureCodes.GetStringProcCode(proclist[i].CodeNum)==ProcedureCodes.GroupProcCode){
+					MsgBox.Show(this,"You may only attach a group note to procedures.");
+					return;
+				}
 				if(proclist[i].ProcDate!=procDate){
-					MsgBox.Show(this,"Only procedures with the same date may be grouped.");
+					MsgBox.Show(this,"Procedures must have the same date to attach a group note.");
 					return;
 				}
 				if(proclist[i].ProcStatus!=ProcStat.C){
-					MsgBox.Show(this,"You may only group completed procedures.");
+					MsgBox.Show(this,"Procedures must be complete to attach a group note.");
 					return;
 				}
 				if(proclist[i].ClinicNum!=clinicNum){
-					MsgBox.Show(this,"Only procedures with the same clinic may be grouped.");
+					MsgBox.Show(this,"Procedures must have the same clinic to attach a group note.");
 					return;
 				}
 				if(proclist[i].ProvNum!=provNum){
-					MsgBox.Show(this,"Only procedures done by the same provider may be grouped.");
-					return;
-				}
-				if(ProcedureCodes.GetStringProcCode(proclist[i].CodeNum)==ProcedureCodes.GroupProcCode){
-					MsgBox.Show(this,"Procedure groups may not contain procedure groups.");
+					MsgBox.Show(this,"Procedures must have the same provider to attach a group note.");
 					return;
 				}
 			}
 			//Procedures are valid. Create new Procedure "group" and ProcGroupItems-------------------------------------------------------
 			Procedure group=new Procedure();
 			group.PatNum=PatCur.PatNum;
-			group.ProcStatus=ProcStat.C;
+			group.ProcStatus=ProcStat.EC;
+			group.DateEntryC=DateTime.Now;
 			group.ProcDate=procDate;
 			group.ProvNum=provNum;
 			group.ClinicNum=clinicNum;

@@ -183,15 +183,16 @@ namespace OpenDental.UI {
 		}
 
 		private void butClearSig_Click(object sender,EventArgs e) {
-			sigBox.ClearTablet();
-			sigBox.Visible=true;
-			if(allowTopaz) {
-				CodeBase.TopazWrapper.ClearTopaz(sigBoxTopaz);
-				sigBoxTopaz.Visible=false;//until user explicitly starts it.
-			}
-			sigBox.SetTabletState(1);//on-screen box is now accepting input.
-			sigChanged=true;
-			labelInvalidSig.Visible=false;
+			ClearSignature();
+			//sigBox.ClearTablet();
+			//sigBox.Visible=true;
+			//if(allowTopaz) {
+			//  CodeBase.TopazWrapper.ClearTopaz(sigBoxTopaz);
+			//  sigBoxTopaz.Visible=false;//until user explicitly starts it.
+			//}
+			//sigBox.SetTabletState(1);//on-screen box is now accepting input.
+			//sigChanged=true;
+			//labelInvalidSig.Visible=false;
 			//To be able to use this control in FormProcEdit, we need to connect this to an event.
 			//ProcCur.UserNum=Security.CurUser.UserNum;
 			//textUser.Text=Userods.GetName(ProcCur.UserNum);
@@ -245,7 +246,17 @@ namespace OpenDental.UI {
 			return sigBitmap;
 		}
 
-		
+		public void ClearSignature(){
+			sigBox.ClearTablet();
+			sigBox.Visible=true;
+			if(allowTopaz) {
+			  CodeBase.TopazWrapper.ClearTopaz(sigBoxTopaz);
+			  sigBoxTopaz.Visible=false;//until user explicitly starts it.
+			}
+			sigBox.SetTabletState(1);//on-screen box is now accepting input.
+			sigChanged=true;
+			labelInvalidSig.Visible=false;
+		}
 
 
 
