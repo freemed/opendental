@@ -2645,7 +2645,22 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="DELETE FROM toolbutitem WHERE ProgramNum="+POut.Long(programNum);
 					Db.NonQ(command);
 				}
-
+				command="DROP TABLE IF EXISTS orionproc";
+				Db.NonQ(command);
+				command=@"CREATE TABLE orionproc (
+					OrionProcNum bigint NOT NULL auto_increment,
+					ProcNum bigint NOT NULL,
+					DPC tinyint NOT NULL,
+					DateScheduleBy date NOT NULL default '0001-01-01', 
+					DateStopClock date NOT NULL default '0001-01-01',  
+					Status2 tinyint NOT NULL,
+					IsOnCall tinyint NOT NULL,
+					IsEffectiveComm tinyint NOT NULL,
+					IsRepair tinyint NOT NULL,
+					PRIMARY KEY (OrionProcNum),
+					INDEX(ProcNum)
+					) DEFAULT CHARSET=utf8";
+				Db.NonQ(command);
 
 
 				
@@ -2673,3 +2688,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				
 
 
+
+
+				
+
+				

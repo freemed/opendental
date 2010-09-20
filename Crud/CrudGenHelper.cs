@@ -228,6 +228,7 @@ namespace Crud {
 			else if(field.FieldType.IsEnum) {
 				dataTypeExpected="tinyint";
 				dataTypeExpected2="int";
+				dataTypeExpected3="smallint";
 			}
 			else switch(field.FieldType.Name) {
 				default:

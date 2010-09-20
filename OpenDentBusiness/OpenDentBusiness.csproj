@@ -163,6 +163,7 @@
     <Compile Include="Crud\MountDefCrud.cs" />
     <Compile Include="Crud\MountItemCrud.cs" />
     <Compile Include="Crud\MountItemDefCrud.cs" />
+    <Compile Include="Crud\OrionProcCrud.cs" />
     <Compile Include="Crud\PatFieldCrud.cs" />
     <Compile Include="Crud\PatFieldDefCrud.cs" />
     <Compile Include="Crud\PatientCrud.cs" />
@@ -202,6 +203,7 @@
     </Compile>
     <Compile Include="Data Interface\Guardians.cs" />
     <Compile Include="Data Interface\Equipments.cs" />
+    <Compile Include="Data Interface\OrionProcs.cs" />
     <Compile Include="Data Interface\ProcApptColors.cs" />
     <Compile Include="Data Interface\ProcGroupItems.cs" />
     <Compile Include="Data Interface\ReplicationServers.cs" />
@@ -448,6 +450,7 @@
     <Compile Include="TableTypes\ApptFieldDef.cs" />
     <Compile Include="TableTypes\ApptField.cs" />
     <Compile Include="TableTypes\ChartView.cs" />
+    <Compile Include="TableTypes\OrionProc.cs" />
     <Compile Include="TableTypes\ProcGroupItem.cs" />
     <Compile Include="TableTypes\ProcApptColor.cs" />
     <Compile Include="TableTypes\Guardian.cs" />
