@@ -4,12 +4,15 @@ using System.Collections;
 namespace OpenDentBusiness{
 	
 	/// <summary>Tracks all forms of communications with patients, including emails, phonecalls, postcards, etc.</summary>
-	public class Commlog{
+	[Serializable]
+	public class Commlog:TableBase{
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long CommlogNum;
 		///<summary>FK to patient.PatNum.</summary>
 		public long PatNum;
 		///<summary>Date and time of entry</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime CommDateTime;
 		///<summary>FK to definition.DefNum. This will be 0 if IsStatementSent.  Used to be an enumeration in previous versions.</summary>
 		public long CommType;
@@ -25,6 +28,10 @@ namespace OpenDentBusiness{
 		public bool IsStatementSent;
 		///<summary>FK to userod.UserNum.</summary>
 		public long UserNum;
+		///<summary>Signature.</summary>
+		public string Signature;
+		///<summary>True if signed using the Topaz signature pad, false otherwise.</summary>
+		public bool SigIsTopaz;
 
 		///<summary></summary>
 		public Commlog Copy(){

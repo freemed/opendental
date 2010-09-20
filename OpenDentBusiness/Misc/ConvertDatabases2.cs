@@ -2661,7 +2661,10 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					INDEX(ProcNum)
 					) DEFAULT CHARSET=utf8";
 				Db.NonQ(command);
-
+				command="ALTER TABLE commlog ADD Signature text NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE commlog ADD SigIsTopaz tinyint NOT NULL";
+				Db.NonQ(command);
 
 				
 
@@ -2689,7 +2692,3 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 
-
-				
-
-				

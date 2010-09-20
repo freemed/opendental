@@ -867,8 +867,8 @@ namespace OpenDental{
 				//make a commlog entry
 				//unless there is an existing recall commlog entry for today
 				bool recallEntryToday=false;
-				Commlog[] CommlogList=Commlogs.Refresh(SelectedPatNum);
-				for(int i=0;i<CommlogList.Length;i++) {
+				List<Commlog> CommlogList=Commlogs.Refresh(SelectedPatNum);
+				for(int i=0;i<CommlogList.Count;i++) {
 					if(CommlogList[i].CommDateTime.Date==DateTime.Today	
 						&& CommlogList[i].CommType==Commlogs.GetTypeAuto(CommItemTypeAuto.RECALL)) {
 						recallEntryToday=true;

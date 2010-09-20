@@ -148,6 +148,7 @@
     <Compile Include="Crud\ClearinghouseCrud.cs" />
     <Compile Include="Crud\ClinicCrud.cs" />
     <Compile Include="Crud\ClockEventCrud.cs" />
+    <Compile Include="Crud\CommlogCrud.cs" />
     <Compile Include="Crud\DeletedObjectCrud.cs" />
     <Compile Include="Crud\DisplayFieldCrud.cs" />
     <Compile Include="Crud\DocumentCrud.cs" />
