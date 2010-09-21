@@ -2675,6 +2675,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);	
 				command="ALTER TABLE patfielddef ADD FieldType tinyint NOT NULL";
 				Db.NonQ(command);
+				command="ALTER TABLE patfielddef ADD PickList text NOT NULL";
+				Db.NonQ(command);
 				command="ALTER TABLE commlog ADD DateTStamp timestamp";
 				Db.NonQ(command);
 				command="UPDATE commlog SET DateTStamp=NOW()";
@@ -2683,7 +2685,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);
 				command="UPDATE procedurelog SET DateTStamp=NOW()";
 				Db.NonQ32(command);
-
 
 
 
@@ -2720,3 +2721,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 
+
+
+			

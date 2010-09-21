@@ -13,6 +13,8 @@ namespace OpenDentBusiness{
 		public string FieldName;
 		///<summary>Enum:PatFieldType Text=0,PickList=1,Date=2</summary>
 		public PatFieldType FieldType;
+		/// <summary>The text that contains pick list values.</summary>
+		public string PickList;
 
 		///<summary></summary>
 		public PatFieldDef Copy() {

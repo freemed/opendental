@@ -41,6 +41,7 @@ namespace OpenDentBusiness {
 				List[i]=new PatFieldDef();
 				List[i].PatFieldDefNum=PIn.Long(table.Rows[i][0].ToString());
 				List[i].FieldName=PIn.String(table.Rows[i][1].ToString());
+				List[i].FieldType=(PatFieldType)PIn.Int(table.Rows[i][2].ToString());
 			}
 		}
 		#endregion

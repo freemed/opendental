@@ -22,6 +22,9 @@ namespace OpenDental{
 		private OpenDental.UI.Button buttonDelete;
 		private PatFieldDef FieldDef;
 		private Label labelStatus;
+		private ComboBox comboFieldType;
+		private Label labelFieldType;
+		private TextBox textPickList;
 		private string OldFieldName;
 
 		///<summary></summary>
@@ -63,6 +66,9 @@ namespace OpenDental{
 			this.textName = new System.Windows.Forms.TextBox();
 			this.buttonDelete = new OpenDental.UI.Button();
 			this.labelStatus = new System.Windows.Forms.Label();
+			this.comboFieldType = new System.Windows.Forms.ComboBox();
+			this.labelFieldType = new System.Windows.Forms.Label();
+			this.textPickList = new System.Windows.Forms.TextBox();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -74,7 +80,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(254,154);
+			this.butCancel.Location = new System.Drawing.Point(254,279);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,25);
 			this.butCancel.TabIndex = 2;
@@ -89,7 +95,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(254,113);
+			this.butOK.Location = new System.Drawing.Point(254,238);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,25);
 			this.butOK.TabIndex = 1;
@@ -98,9 +104,9 @@ namespace OpenDental{
 			// 
 			// textName
 			// 
-			this.textName.Location = new System.Drawing.Point(20,51);
+			this.textName.Location = new System.Drawing.Point(20,27);
 			this.textName.Name = "textName";
-			this.textName.Size = new System.Drawing.Size(308,20);
+			this.textName.Size = new System.Drawing.Size(309,20);
 			this.textName.TabIndex = 0;
 			// 
 			// buttonDelete
@@ -113,7 +119,7 @@ namespace OpenDental{
 			this.buttonDelete.CornerRadius = 4F;
 			this.buttonDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.buttonDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.buttonDelete.Location = new System.Drawing.Point(20,154);
+			this.buttonDelete.Location = new System.Drawing.Point(20,279);
 			this.buttonDelete.Name = "buttonDelete";
 			this.buttonDelete.Size = new System.Drawing.Size(82,25);
 			this.buttonDelete.TabIndex = 3;
@@ -122,19 +128,51 @@ namespace OpenDental{
 			// 
 			// labelStatus
 			// 
-			this.labelStatus.Location = new System.Drawing.Point(17,33);
+			this.labelStatus.Location = new System.Drawing.Point(17,9);
 			this.labelStatus.Name = "labelStatus";
 			this.labelStatus.Size = new System.Drawing.Size(143,15);
 			this.labelStatus.TabIndex = 81;
 			this.labelStatus.Text = "Field Name";
 			this.labelStatus.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
+			// comboFieldType
+			// 
+			this.comboFieldType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboFieldType.DropDownWidth = 177;
+			this.comboFieldType.FormattingEnabled = true;
+			this.comboFieldType.Location = new System.Drawing.Point(20,68);
+			this.comboFieldType.MaxDropDownItems = 30;
+			this.comboFieldType.Name = "comboFieldType";
+			this.comboFieldType.Size = new System.Drawing.Size(177,21);
+			this.comboFieldType.TabIndex = 82;
+			this.comboFieldType.SelectedIndexChanged += new System.EventHandler(this.comboFieldType_SelectedIndexChanged);
+			// 
+			// labelFieldType
+			// 
+			this.labelFieldType.Location = new System.Drawing.Point(17,50);
+			this.labelFieldType.Name = "labelFieldType";
+			this.labelFieldType.Size = new System.Drawing.Size(143,15);
+			this.labelFieldType.TabIndex = 83;
+			this.labelFieldType.Text = "Field Type";
+			this.labelFieldType.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			// 
+			// textPickList
+			// 
+			this.textPickList.Location = new System.Drawing.Point(20,96);
+			this.textPickList.Multiline = true;
+			this.textPickList.Name = "textPickList";
+			this.textPickList.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.textPickList.Size = new System.Drawing.Size(309,114);
+			this.textPickList.TabIndex = 84;
+			// 
 			// FormPatFieldDefEdit
 			// 
-			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
-			this.ClientSize = new System.Drawing.Size(349,203);
+			this.ClientSize = new System.Drawing.Size(349,328);
+			this.Controls.Add(this.textPickList);
+			this.Controls.Add(this.labelFieldType);
+			this.Controls.Add(this.comboFieldType);
 			this.Controls.Add(this.labelStatus);
 			this.Controls.Add(this.buttonDelete);
 			this.Controls.Add(this.textName);
@@ -156,8 +194,23 @@ namespace OpenDental{
 
 		private void FormPatFieldDefEdit_Load(object sender, System.EventArgs e) {
 			textName.Text=FieldDef.FieldName;
+			textPickList.Visible=false;
+			comboFieldType.Items.Clear();
+			comboFieldType.Items.AddRange(Enum.GetNames(typeof(PatFieldType)));
+			comboFieldType.SelectedIndex=0;
 			if(!IsNew){
 				OldFieldName=FieldDef.FieldName;
+				comboFieldType.SelectedIndex=(int)FieldDef.FieldType;
+			}
+			if(comboFieldType.SelectedIndex==(int)PatFieldType.PickList) {
+				textPickList.Visible=true;
+			}
+		}
+
+		private void comboFieldType_SelectedIndexChanged(object sender,EventArgs e) {
+			textPickList.Visible=false;
+			if(comboFieldType.SelectedIndex==(int)PatFieldType.PickList) {
+				textPickList.Visible=true;
 			}
 		}
 
@@ -177,6 +230,10 @@ namespace OpenDental{
 
 		private void butOK_Click(object sender, System.EventArgs e) {
 			FieldDef.FieldName=textName.Text;
+			FieldDef.FieldType=(PatFieldType)comboFieldType.SelectedIndex;
+			if(FieldDef.FieldType==PatFieldType.PickList) {
+				FieldDef.PickList=textPickList.Text;
+			}
 			if(IsNew){
 				PatFieldDefs.Insert(FieldDef);
 			}
@@ -189,6 +246,7 @@ namespace OpenDental{
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
 
 
 	

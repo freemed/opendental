@@ -883,17 +883,17 @@ namespace OpenDental{
 			this.menuItemSetComplete.Text = "Set Complete";
 			this.menuItemSetComplete.Click += new System.EventHandler(this.menuItemSetComplete_Click);
 			// 
-			// menuItemGroupSelected
-			// 
-			this.menuItemGroupSelected.Index = 2;
-			this.menuItemGroupSelected.Text = "Group Note";
-			this.menuItemGroupSelected.Click += new System.EventHandler(this.menuItemGroupSelected_Click);
-			// 
 			// menuItemEditSelected
 			// 
-			this.menuItemEditSelected.Index = 3;
+			this.menuItemEditSelected.Index = 2;
 			this.menuItemEditSelected.Text = "Edit All";
 			this.menuItemEditSelected.Click += new System.EventHandler(this.menuItemEditSelected_Click);
+			// 
+			// menuItemGroupSelected
+			// 
+			this.menuItemGroupSelected.Index = 3;
+			this.menuItemGroupSelected.Text = "Group Note";
+			this.menuItemGroupSelected.Click += new System.EventHandler(this.menuItemGroupSelected_Click);
 			// 
 			// menuItemPrintProg
 			// 
@@ -6651,40 +6651,82 @@ namespace OpenDental{
 			if(Plugins.HookMethod(this,"ContrChart.gridPtInfo_CellDoubleClick",PatCur,FamCur,e,PatientNoteCur)) {
 				return;
 			}
-			if(gridPtInfo.Rows[e.Row].Tag==null){//pt info
+			if(TerminalActives.PatIsInUse(PatCur.PatNum)) {
+				MsgBox.Show(this,"Patient is currently entering info at a reception terminal.  Please try again later.");
 				return;
 			}
-			if(gridPtInfo.Rows[e.Row].Tag.ToString()=="med"){
-				FormMedical FormM=new FormMedical(PatientNoteCur,PatCur);
-				FormM.ShowDialog();
-				ModuleSelected(PatCur.PatNum);
-				return;
-			}
-			if(gridPtInfo.Rows[e.Row].Tag.GetType()==typeof(RegistrationKey)){
-				FormRegistrationKeyEdit FormR=new FormRegistrationKeyEdit();
-				FormR.RegKey=(RegistrationKey)gridPtInfo.Rows[e.Row].Tag;
-				FormR.ShowDialog();
-				FillPtInfo();
-				return;
-			}
-			/*else {//editing patfield
-				string tag=gridPtInfo.Rows[e.Row].Tag.ToString();
-				tag=tag.Substring(8);//strips off all but the number: PatField1
-				int index=PIn.Int(tag);
-				PatField field=PatFields.GetByName(PatFieldDefs.List[index].FieldName,PatFieldList);
-				if(field==null) {
-					field=new PatField();
-					field.PatNum=PatCur.PatNum;
-					field.FieldName=PatFieldDefs.List[index].FieldName;
-					FormPatFieldEdit FormPF=new FormPatFieldEdit(field);
-					FormPF.IsNew=true;
-					FormPF.ShowDialog();
+			if(gridPtInfo.Rows[e.Row].Tag!=null) {
+				if(gridPtInfo.Rows[e.Row].Tag.ToString()=="med") {
+					FormMedical FormM=new FormMedical(PatientNoteCur,PatCur);
+					FormM.ShowDialog();
+					ModuleSelected(PatCur.PatNum);
+					return;
 				}
-				else {
-					FormPatFieldEdit FormPF=new FormPatFieldEdit(field);
-					FormPF.ShowDialog();
+				if(gridPtInfo.Rows[e.Row].Tag.GetType()==typeof(RegistrationKey)) {
+					FormRegistrationKeyEdit FormR=new FormRegistrationKeyEdit();
+					FormR.RegKey=(RegistrationKey)gridPtInfo.Rows[e.Row].Tag;
+					FormR.ShowDialog();
+					FillPtInfo();
+					return;
 				}
-			}*/
+				if(gridPtInfo.Rows[e.Row].Tag.ToString()=="Referral") {
+					//RefAttach refattach=(RefAttach)gridPat.Rows[e.Row].Tag;
+					FormReferralsPatient FormRE=new FormReferralsPatient();
+					FormRE.PatNum=PatCur.PatNum;
+					FormRE.ShowDialog();
+				}
+				else {//patfield
+					string tag=gridPtInfo.Rows[e.Row].Tag.ToString();
+					tag=tag.Substring(8);//strips off all but the number: PatField1
+					int index=PIn.Int(tag);
+					PatField field=PatFields.GetByName(PatFieldDefs.List[index].FieldName,PatFieldList);
+					if(field==null) {
+						field=new PatField();
+						field.PatNum=PatCur.PatNum;
+						field.FieldName=PatFieldDefs.List[index].FieldName;
+						if(PatFieldDefs.List[index].FieldType==PatFieldType.Text) {
+							FormPatFieldEdit FormPF=new FormPatFieldEdit(field);
+							FormPF.IsNew=true;
+							FormPF.ShowDialog();
+						}
+						if(PatFieldDefs.List[index].FieldType==PatFieldType.PickList) {
+							FormPatFieldPickEdit FormPF=new FormPatFieldPickEdit(field);
+							FormPF.IsNew=true;
+							FormPF.ShowDialog();
+						}
+						if(PatFieldDefs.List[index].FieldType==PatFieldType.Date) {
+							FormPatFieldDateEdit FormPF=new FormPatFieldDateEdit(field);
+							FormPF.IsNew=true;
+							FormPF.ShowDialog();
+						}
+					}
+					else {
+						if(PatFieldDefs.List[index].FieldType==PatFieldType.Text) {
+							FormPatFieldEdit FormPF=new FormPatFieldEdit(field);
+							FormPF.ShowDialog();
+						}
+						if(PatFieldDefs.List[index].FieldType==PatFieldType.PickList) {
+							FormPatFieldPickEdit FormPF=new FormPatFieldPickEdit(field);
+							FormPF.ShowDialog();
+						}
+						if(PatFieldDefs.List[index].FieldType==PatFieldType.Date) {
+							FormPatFieldDateEdit FormPF=new FormPatFieldDateEdit(field);
+							FormPF.ShowDialog();
+						}
+					}
+				}
+			}
+			else {
+				string email=PatCur.Email;
+				long siteNum=PatCur.SiteNum;
+				FormPatientEdit FormP=new FormPatientEdit(PatCur,FamCur);
+				FormP.IsNew=false;
+				FormP.ShowDialog();
+				if(FormP.DialogResult==DialogResult.OK) {
+					OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
+				}
+			}
+			FillPtInfo();
 		}
 
 		private void toothChart_Click(object sender,EventArgs e) {

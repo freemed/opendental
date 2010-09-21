@@ -49,6 +49,7 @@ namespace OpenDentBusiness.Crud{
 				patFieldDef.PatFieldDefNum= PIn.Long  (table.Rows[i]["PatFieldDefNum"].ToString());
 				patFieldDef.FieldName     = PIn.String(table.Rows[i]["FieldName"].ToString());
 				patFieldDef.FieldType     = (PatFieldType)PIn.Int(table.Rows[i]["FieldType"].ToString());
+				patFieldDef.PickList      = PIn.String(table.Rows[i]["PickList"].ToString());
 				retVal.Add(patFieldDef);
 			}
 			return retVal;
@@ -68,13 +69,14 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="PatFieldDefNum,";
 			}
-			command+="FieldName,FieldType) VALUES(";
+			command+="FieldName,FieldType,PickList) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(patFieldDef.PatFieldDefNum)+",";
 			}
 			command+=
 				 "'"+POut.String(patFieldDef.FieldName)+"',"
-				+    POut.Int   ((int)patFieldDef.FieldType)+")";
+				+    POut.Int   ((int)patFieldDef.FieldType)+","
+				+"'"+POut.String(patFieldDef.PickList)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -88,7 +90,8 @@ namespace OpenDentBusiness.Crud{
 		internal static void Update(PatFieldDef patFieldDef){
 			string command="UPDATE patfielddef SET "
 				+"FieldName     = '"+POut.String(patFieldDef.FieldName)+"', "
-				+"FieldType     =  "+POut.Int   ((int)patFieldDef.FieldType)+" "
+				+"FieldType     =  "+POut.Int   ((int)patFieldDef.FieldType)+", "
+				+"PickList      = '"+POut.String(patFieldDef.PickList)+"' "
 				+"WHERE PatFieldDefNum = "+POut.Long(patFieldDef.PatFieldDefNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
@@ -103,6 +106,10 @@ namespace OpenDentBusiness.Crud{
 			if(patFieldDef.FieldType != oldPatFieldDef.FieldType) {
 				if(command!=""){ command+=",";}
 				command+="FieldType = "+POut.Int   ((int)patFieldDef.FieldType)+"";
+			}
+			if(patFieldDef.PickList != oldPatFieldDef.PickList) {
+				if(command!=""){ command+=",";}
+				command+="PickList = '"+POut.String(patFieldDef.PickList)+"'";
 			}
 			if(command==""){
 				return;

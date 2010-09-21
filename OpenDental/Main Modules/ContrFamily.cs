@@ -417,13 +417,35 @@ namespace OpenDental{
 						field=new PatField();
 						field.PatNum=PatCur.PatNum;
 						field.FieldName=PatFieldDefs.List[index].FieldName;
-						FormPatFieldEdit FormPF=new FormPatFieldEdit(field);
-						FormPF.IsNew=true;
-						FormPF.ShowDialog();
+						if(PatFieldDefs.List[index].FieldType==PatFieldType.Text) {
+							FormPatFieldEdit FormPF=new FormPatFieldEdit(field);
+							FormPF.IsNew=true;
+							FormPF.ShowDialog();
+						}
+						if(PatFieldDefs.List[index].FieldType==PatFieldType.PickList) {
+							FormPatFieldPickEdit FormPF=new FormPatFieldPickEdit(field);
+							FormPF.IsNew=true;
+							FormPF.ShowDialog();
+						}
+						if(PatFieldDefs.List[index].FieldType==PatFieldType.Date) {
+							FormPatFieldDateEdit FormPF=new FormPatFieldDateEdit(field);
+							FormPF.IsNew=true;
+							FormPF.ShowDialog();
+						}
 					}
 					else{
-						FormPatFieldEdit FormPF=new FormPatFieldEdit(field);
-						FormPF.ShowDialog();
+						if(PatFieldDefs.List[index].FieldType==PatFieldType.Text) {
+							FormPatFieldEdit FormPF=new FormPatFieldEdit(field);
+							FormPF.ShowDialog();
+						}
+						if(PatFieldDefs.List[index].FieldType==PatFieldType.PickList) {
+							FormPatFieldPickEdit FormPF=new FormPatFieldPickEdit(field);
+							FormPF.ShowDialog();
+						}
+						if(PatFieldDefs.List[index].FieldType==PatFieldType.Date) {
+							FormPatFieldDateEdit FormPF=new FormPatFieldDateEdit(field);
+							FormPF.ShowDialog();
+						}
 					}
 				}
 			}
