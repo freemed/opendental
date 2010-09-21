@@ -2669,6 +2669,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					+"SELECT 0,UserGroupNum,"+POut.Int((int)Permissions.SheetEdit)+" "
 					+"FROM usergroup";
 				Db.NonQ(command);
+				command="ALTER TABLE procedurelog ADD ProcTimeEnd time NOT NULL";
+				Db.NonQ(command);
 				command="INSERT INTO grouppermission (NewerDays,UserGroupNum,PermType) " //Everyone starts with commlog edit initially.
 					+"SELECT 0,UserGroupNum,"+POut.Int((int)Permissions.CommlogEdit)+" "
 					+"FROM usergroup";
@@ -2723,4 +2725,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 
-			
+
+
+

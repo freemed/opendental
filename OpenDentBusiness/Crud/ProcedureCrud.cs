@@ -88,6 +88,7 @@ namespace OpenDentBusiness.Crud{
 				procedure.HideGraphics      = PIn.Bool  (table.Rows[i]["HideGraphics"].ToString());
 				procedure.CanadianTypeCodes = PIn.String(table.Rows[i]["CanadianTypeCodes"].ToString());
 				procedure.ProcTime          = PIn.TimeSpan(table.Rows[i]["ProcTime"].ToString());
+				procedure.ProcTimeEnd       = PIn.TimeSpan(table.Rows[i]["ProcTimeEnd"].ToString());
 				procedure.DateTStamp        = PIn.DateT (table.Rows[i]["DateTStamp"].ToString());
 				retVal.Add(procedure);
 			}
@@ -108,7 +109,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="ProcNum,";
 			}
-			command+="PatNum,AptNum,OldCode,ProcDate,ProcFee,Surf,ToothNum,ToothRange,Priority,ProcStatus,ProvNum,Dx,PlannedAptNum,PlaceService,Prosthesis,DateOriginalProsth,ClaimNote,DateEntryC,ClinicNum,MedicalCode,DiagnosticCode,IsPrincDiag,ProcNumLab,BillingTypeOne,BillingTypeTwo,CodeNum,CodeMod1,CodeMod2,CodeMod3,CodeMod4,RevCode,UnitCode,UnitQty,BaseUnits,StartTime,StopTime,DateTP,SiteNum,HideGraphics,CanadianTypeCodes,ProcTime) VALUES(";
+			command+="PatNum,AptNum,OldCode,ProcDate,ProcFee,Surf,ToothNum,ToothRange,Priority,ProcStatus,ProvNum,Dx,PlannedAptNum,PlaceService,Prosthesis,DateOriginalProsth,ClaimNote,DateEntryC,ClinicNum,MedicalCode,DiagnosticCode,IsPrincDiag,ProcNumLab,BillingTypeOne,BillingTypeTwo,CodeNum,CodeMod1,CodeMod2,CodeMod3,CodeMod4,RevCode,UnitCode,UnitQty,BaseUnits,StartTime,StopTime,DateTP,SiteNum,HideGraphics,CanadianTypeCodes,ProcTime,ProcTimeEnd) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(procedure.ProcNum)+",";
 			}
@@ -153,7 +154,8 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Long  (procedure.SiteNum)+","
 				+    POut.Bool  (procedure.HideGraphics)+","
 				+"'"+POut.String(procedure.CanadianTypeCodes)+"',"
-				+    POut.TimeSpan(procedure.ProcTime)+")";
+				+    POut.TimeSpan(procedure.ProcTime)+","
+				+    POut.TimeSpan(procedure.ProcTimeEnd)+")";
 				//DateTStamp can only be set by MySQL
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
@@ -207,7 +209,8 @@ namespace OpenDentBusiness.Crud{
 				+"SiteNum           =  "+POut.Long  (procedure.SiteNum)+", "
 				+"HideGraphics      =  "+POut.Bool  (procedure.HideGraphics)+", "
 				+"CanadianTypeCodes = '"+POut.String(procedure.CanadianTypeCodes)+"', "
-				+"ProcTime          =  "+POut.TimeSpan(procedure.ProcTime)+" "
+				+"ProcTime          =  "+POut.TimeSpan(procedure.ProcTime)+", "
+				+"ProcTimeEnd       =  "+POut.TimeSpan(procedure.ProcTimeEnd)+" "
 				//DateTStamp can only be set by MySQL
 				+"WHERE ProcNum = "+POut.Long(procedure.ProcNum)+" LIMIT 1";
 			Db.NonQ(command);
@@ -379,6 +382,10 @@ namespace OpenDentBusiness.Crud{
 			if(procedure.ProcTime != oldProcedure.ProcTime) {
 				if(command!=""){ command+=",";}
 				command+="ProcTime = "+POut.TimeSpan(procedure.ProcTime)+"";
+			}
+			if(procedure.ProcTimeEnd != oldProcedure.ProcTimeEnd) {
+				if(command!=""){ command+=",";}
+				command+="ProcTimeEnd = "+POut.TimeSpan(procedure.ProcTimeEnd)+"";
 			}
 			//DateTStamp can only be set by MySQL
 			if(command==""){

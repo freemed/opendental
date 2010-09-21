@@ -93,6 +93,8 @@ namespace OpenDentBusiness {
 		public string CanadianTypeCodes;
 		///<summary>Used to be part of the ProcDate, but that was causing reporting issues.</summary>
 		public TimeSpan ProcTime;
+		///<summary>Marks the time a procedure was finished.</summary>
+		public TimeSpan ProcTimeEnd;
 
 		///<summary>Not a database column.  Saved in database in the procnote table.  This note is only the most recent note from that table.  If user changes it, then the business layer handles it by adding another procnote to that table.</summary>
 		[CrudColumn(IsNotDbColumn=true)]

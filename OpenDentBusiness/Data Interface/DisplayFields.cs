@@ -99,7 +99,7 @@ namespace OpenDentBusiness {
 			if(category==DisplayFieldCategory.None) {
 				list.Add(new DisplayField("Date",67,category));
 				//list.Add(new DisplayField("Time",40));
-				list.Add(new DisplayField("Th",27,category));
+				//list.Add(new DisplayField("Th",27,category));
 				list.Add(new DisplayField("Surf",40,category));
 				list.Add(new DisplayField("Dx",28,category));
 				list.Add(new DisplayField("Description",218,category));
@@ -110,6 +110,17 @@ namespace OpenDentBusiness {
 				list.Add(new DisplayField("User",62,category));
 				list.Add(new DisplayField("Signed",55,category));
 				//list.Add(new DisplayField("Priority",65,category));
+				//list.Add(new DisplayField("DPC",25,category));
+				//list.Add(new DisplayField("Schedule By",67,category));
+				//list.Add(new DisplayField("Stop Clock",67,category));
+				//list.Add(new DisplayField("Stat 2",48,category);
+				//list.Add(new DisplayField("On Call",55,category);
+				//list.Add(new DisplayField("Effective Comm",25,category);
+				//list.Add(new DisplayField("Date TP",67,category);
+				//list.Add(new DisplayField("Quadrant",25,category);
+				//list.Add(new DisplayField("Date Entry",67,category);
+				//list.Add(new DisplayField("Proc Time",60,category);
+				//list.Add(new DisplayField("Proc End",60,category);
 			}
 			//else if(category==DisplayFieldCategory.ProgressNotes){
 			//  list.Add(new DisplayField("Date",67,category));
@@ -251,7 +262,17 @@ namespace OpenDentBusiness {
 				list.Add(new DisplayField("ADA Code",62,category));
 				list.Add(new DisplayField("User",62,category));
 				list.Add(new DisplayField("Signed",55,category));
-				list.Add(new DisplayField("Priority",65,category));
+				list.Add(new DisplayField("Priority",55,category));
+				list.Add(new DisplayField("DPC",30,category));
+				list.Add(new DisplayField("Schedule By",72,category));
+				list.Add(new DisplayField("Stop Clock",67,category));
+				list.Add(new DisplayField("Stat 2",36,category));
+				list.Add(new DisplayField("On Call",45,category));
+				list.Add(new DisplayField("Effective Comm",90,category));
+				list.Add(new DisplayField("Date TP",67,category));
+				list.Add(new DisplayField("Quadrant",55,category));
+				list.Add(new DisplayField("Date Entry",67,category));
+				list.Add(new DisplayField("End Time",56,category));
 			}
 			//else if(category==DisplayFieldCategory.ProgressNotes){
 			//  list.Add(new DisplayField("Date",67,category));
