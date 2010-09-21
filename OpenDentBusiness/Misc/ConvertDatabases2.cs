@@ -2669,7 +2669,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					+"SELECT 0,UserGroupNum,"+POut.Int((int)Permissions.SheetEdit)+" "
 					+"FROM usergroup";
 				Db.NonQ(command);
-				
+				command="ALTER TABLE patfielddef ADD FieldType tinyint NOT NULL";
+				Db.NonQ(command);
 
 
 
@@ -2693,5 +2694,10 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 				
 
+
+
+
+
+				
 
 

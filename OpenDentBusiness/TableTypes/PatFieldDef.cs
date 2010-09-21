@@ -11,6 +11,8 @@ namespace OpenDentBusiness{
 		public long PatFieldDefNum;
 		///<summary>The name of the field that the user will be allowed to fill in the patient info window.</summary>
 		public string FieldName;
+		///<summary>Enum:PatFieldType Text=0,PickList=1,Date=2</summary>
+		public PatFieldType FieldType;
 
 		///<summary></summary>
 		public PatFieldDef Copy() {
@@ -20,7 +22,15 @@ namespace OpenDentBusiness{
 		
 	}
 
-		
+
+	public enum PatFieldType {
+		///<summary>0</summary>
+		Text,
+		///<summary>1</summary>
+		PickList,
+		///<summary>2</summary>
+		Date
+	}
 
 
 }

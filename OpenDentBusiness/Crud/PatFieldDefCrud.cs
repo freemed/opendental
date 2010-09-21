@@ -48,6 +48,7 @@ namespace OpenDentBusiness.Crud{
 				patFieldDef=new PatFieldDef();
 				patFieldDef.PatFieldDefNum= PIn.Long  (table.Rows[i]["PatFieldDefNum"].ToString());
 				patFieldDef.FieldName     = PIn.String(table.Rows[i]["FieldName"].ToString());
+				patFieldDef.FieldType     = (PatFieldType)PIn.Int(table.Rows[i]["FieldType"].ToString());
 				retVal.Add(patFieldDef);
 			}
 			return retVal;
@@ -67,12 +68,13 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="PatFieldDefNum,";
 			}
-			command+="FieldName) VALUES(";
+			command+="FieldName,FieldType) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(patFieldDef.PatFieldDefNum)+",";
 			}
 			command+=
-				 "'"+POut.String(patFieldDef.FieldName)+"')";
+				 "'"+POut.String(patFieldDef.FieldName)+"',"
+				+    POut.Int   ((int)patFieldDef.FieldType)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -85,7 +87,8 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one PatFieldDef in the database.</summary>
 		internal static void Update(PatFieldDef patFieldDef){
 			string command="UPDATE patfielddef SET "
-				+"FieldName     = '"+POut.String(patFieldDef.FieldName)+"' "
+				+"FieldName     = '"+POut.String(patFieldDef.FieldName)+"', "
+				+"FieldType     =  "+POut.Int   ((int)patFieldDef.FieldType)+" "
 				+"WHERE PatFieldDefNum = "+POut.Long(patFieldDef.PatFieldDefNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
@@ -96,6 +99,10 @@ namespace OpenDentBusiness.Crud{
 			if(patFieldDef.FieldName != oldPatFieldDef.FieldName) {
 				if(command!=""){ command+=",";}
 				command+="FieldName = '"+POut.String(patFieldDef.FieldName)+"'";
+			}
+			if(patFieldDef.FieldType != oldPatFieldDef.FieldType) {
+				if(command!=""){ command+=",";}
+				command+="FieldType = "+POut.Int   ((int)patFieldDef.FieldType)+"";
 			}
 			if(command==""){
 				return;
