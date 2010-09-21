@@ -179,6 +179,8 @@ namespace OpenDentBusiness{
 					return Lans.g("enumPermissions","Choose Database");
 				case Permissions.ClaimSentEdit:
 					return Lans.g("enumPermissions","Claim Sent Edit");
+				case Permissions.CommlogEdit:
+					return Lans.g("enumPermissions","Commlog Edit");
 				case Permissions.DepositSlips:
 					return Lans.g("enumPermissions","Deposit Slips");
 				case Permissions.EquipmentDelete:

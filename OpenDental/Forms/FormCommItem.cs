@@ -358,6 +358,22 @@ namespace OpenDental{
 			signatureBoxWrapper.FillSignature(CommlogCur.SigIsTopaz,keyData,CommlogCur.Signature);
 			signatureBoxWrapper.BringToFront();
 			IsStartingUp=false;
+			if(!Security.IsAuthorized(Permissions.CommlogEdit,CommlogCur.CommDateTime)){
+				if(IsNew){
+					DialogResult=DialogResult.Cancel;
+					return;
+				}
+				DisableControls(this);
+				Enabled=true;
+				butCancel.Enabled=true;
+			}
+		}
+
+		private void DisableControls(Control control){
+			control.Enabled=false;
+			for(int i=0;i<control.Controls.Count;i++){
+				DisableControls(control.Controls[i]);
+			}
 		}
 
 		private void signatureBoxWrapper_SignatureChanged(object sender,EventArgs e) {
@@ -380,7 +396,9 @@ namespace OpenDental{
 			keyData+=CommlogCur.CommDateTime.ToString();
 			keyData+=CommlogCur.Mode_.ToString();
 			keyData+=CommlogCur.SentOrReceived.ToString();
-			keyData+=CommlogCur.Note.ToString();
+			if(CommlogCur.Note!=null){
+				keyData+=CommlogCur.Note.ToString();
+			}
 			return keyData;
 		}
 

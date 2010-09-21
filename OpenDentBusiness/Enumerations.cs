@@ -1059,6 +1059,8 @@ namespace OpenDentBusiness{
 		EquipmentDelete,
 		///<summary>42 Uses date restrictions</summary>
 		SheetEdit,
+		///<summary>43</summary>
+		CommlogEdit,
 	}
 
 	///<summary>The type of signal being sent.</summary>

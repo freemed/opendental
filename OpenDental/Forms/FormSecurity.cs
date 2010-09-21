@@ -413,6 +413,12 @@ namespace OpenDental{
 						node2.Nodes.Add(node3);
 					node.Nodes.Add(node2);
 				treePermissions.Nodes.Add(node);
+			node=SetNode("Main Toolbar");
+				node2=SetNode(Permissions.CommlogEdit);
+					node.Nodes.Add(node2);
+				node2=SetNode(Permissions.SheetEdit);
+					node.Nodes.Add(node2);
+				treePermissions.Nodes.Add(node);
 			node=SetNode(Permissions.AppointmentsModule);
 				node2=SetNode(Permissions.AppointmentCreate);
 					node.Nodes.Add(node2);
@@ -464,8 +470,6 @@ namespace OpenDental{
 					node3 = SetNode(Permissions.AnesthesiaControlMeds);
 						node2.Nodes.Add(node3);
 						node.Nodes.Add(node2);
-				node2=SetNode(Permissions.SheetEdit);
-					node.Nodes.Add(node2);
 				treePermissions.Nodes.Add(node);
 			node=SetNode(Permissions.ImagesModule);
 				treePermissions.Nodes.Add(node);

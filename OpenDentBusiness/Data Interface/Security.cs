@@ -94,6 +94,7 @@ namespace OpenDentBusiness{
 				|| perm==Permissions.InsPayCreate
 				|| perm==Permissions.InsPayEdit
 				|| perm==Permissions.SheetEdit
+				|| perm==Permissions.CommlogEdit
 				)
 			{
 				if(date.Year>1//if a valid date was passed in
