@@ -2665,7 +2665,10 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);
 				command="ALTER TABLE commlog ADD SigIsTopaz tinyint NOT NULL";
 				Db.NonQ(command);
-
+				command="INSERT INTO grouppermission (NewerDays,UserGroupNum,PermType) " //Everyone starts with sheet edit initially.
+					+"SELECT 0,UserGroupNum,"+POut.Int((int)Permissions.SheetEdit)+" "
+					+"FROM usergroup";
+				Db.NonQ(command);
 				
 
 
