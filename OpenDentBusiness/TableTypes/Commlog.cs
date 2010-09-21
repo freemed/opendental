@@ -30,6 +30,9 @@ namespace OpenDentBusiness{
 		public string Signature;
 		///<summary>True if signed using the Topaz signature pad, false otherwise.</summary>
 		public bool SigIsTopaz;
+		///<summary>Automatically updated by MySQL every time a row is added or changed.</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
+		public DateTime DateTStamp;
 
 		///<summary></summary>
 		public Commlog Copy(){

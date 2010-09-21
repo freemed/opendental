@@ -106,6 +106,9 @@ namespace OpenDentBusiness {
 		///<summary>Not a database column.</summary>
 		[CrudColumn(IsNotDbColumn=true)]
 		public bool SigIsTopaz;
+		///<summary>Automatically updated by MySQL every time a row is added or changed.</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
+		public DateTime DateTStamp;
 
 		public Procedure(){
 			UnitQty=1;

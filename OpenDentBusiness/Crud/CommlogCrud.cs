@@ -57,6 +57,7 @@ namespace OpenDentBusiness.Crud{
 				commlog.UserNum        = PIn.Long  (table.Rows[i]["UserNum"].ToString());
 				commlog.Signature      = PIn.String(table.Rows[i]["Signature"].ToString());
 				commlog.SigIsTopaz     = PIn.Bool  (table.Rows[i]["SigIsTopaz"].ToString());
+				commlog.DateTStamp     = PIn.DateT (table.Rows[i]["DateTStamp"].ToString());
 				retVal.Add(commlog);
 			}
 			return retVal;
@@ -91,6 +92,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Long  (commlog.UserNum)+","
 				+"'"+POut.String(commlog.Signature)+"',"
 				+    POut.Bool  (commlog.SigIsTopaz)+")";
+				//DateTStamp can only be set by MySQL
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -113,6 +115,7 @@ namespace OpenDentBusiness.Crud{
 				+"UserNum        =  "+POut.Long  (commlog.UserNum)+", "
 				+"Signature      = '"+POut.String(commlog.Signature)+"', "
 				+"SigIsTopaz     =  "+POut.Bool  (commlog.SigIsTopaz)+" "
+				//DateTStamp can only be set by MySQL
 				+"WHERE CommlogNum = "+POut.Long(commlog.CommlogNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
@@ -160,6 +163,7 @@ namespace OpenDentBusiness.Crud{
 				if(command!=""){ command+=",";}
 				command+="SigIsTopaz = "+POut.Bool(commlog.SigIsTopaz)+"";
 			}
+			//DateTStamp can only be set by MySQL
 			if(command==""){
 				return;
 			}

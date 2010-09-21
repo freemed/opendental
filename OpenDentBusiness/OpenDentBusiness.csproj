@@ -176,6 +176,7 @@
     <Compile Include="Crud\ProcApptColorCrud.cs" />
     <Compile Include="Crud\ProcedureCrud.cs" />
     <Compile Include="Crud\ProcGroupItemCrud.cs" />
+    <Compile Include="Crud\ProcNoteCrud.cs" />
     <Compile Include="Crud\ProviderCrud.cs" />
     <Compile Include="Crud\RecallTriggerCrud.cs" />
     <Compile Include="Crud\RecallTypeCrud.cs" />

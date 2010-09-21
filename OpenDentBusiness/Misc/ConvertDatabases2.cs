@@ -2668,9 +2668,24 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="INSERT INTO grouppermission (NewerDays,UserGroupNum,PermType) " //Everyone starts with sheet edit initially.
 					+"SELECT 0,UserGroupNum,"+POut.Int((int)Permissions.SheetEdit)+" "
 					+"FROM usergroup";
-				Db.NonQ(command);
+				Db.NonQ(command);				
 				command="ALTER TABLE patfielddef ADD FieldType tinyint NOT NULL";
 				Db.NonQ(command);
+				command="ALTER TABLE commlog ADD DateTStamp timestamp";
+				Db.NonQ(command);
+				command="UPDATE commlog SET DateTStamp=NOW()";
+				Db.NonQ32(command);
+				command="ALTER TABLE procedurelog ADD DateTStamp timestamp";
+				Db.NonQ(command);
+				command="UPDATE procedurelog SET DateTStamp=NOW()";
+				Db.NonQ32(command);
+
+
+
+
+
+
+
 
 
 
@@ -2698,6 +2713,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 
-				
+
 
 

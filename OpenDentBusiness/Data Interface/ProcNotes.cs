@@ -7,37 +7,13 @@ using System.Text;
 
 namespace OpenDentBusiness {
 	public class ProcNotes{
+
 		public static long Insert(ProcNote procNote){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				procNote.ProcNoteNum=Meth.GetLong(MethodBase.GetCurrentMethod(),procNote);
 				return procNote.ProcNoteNum;
 			}
-			if(PrefC.RandomKeys) {
-				procNote.ProcNoteNum=ReplicationServers.GetKey("procnote","ProcNoteNum");
-			}
-			string command="INSERT INTO procnote (";
-			if(PrefC.RandomKeys) {
-				command+="ProcNoteNum,";
-			}
-			command+="PatNum, ProcNum, EntryDateTime, UserNum, Note, SigIsTopaz, Signature) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+=POut.Long(procNote.ProcNoteNum)+", ";
-			}
-			command+=
-				 "'"+POut.Long   (procNote.PatNum)+"', "
-				+"'"+POut.Long   (procNote.ProcNum)+"', "
-				+"NOW(), "//EntryDateTime
-				+"'"+POut.Long   (procNote.UserNum)+"', "
-				+"'"+POut.String(procNote.Note)+"', "
-				+"'"+POut.Bool  (procNote.SigIsTopaz)+"', "
-				+"'"+POut.Base64 (procNote.Signature)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else{
-				procNote.ProcNoteNum=Db.NonQ(command,true);
-			}
-			return procNote.ProcNoteNum;
+			return Crud.ProcNoteCrud.Insert(procNote);
 		}
 		
 		/*

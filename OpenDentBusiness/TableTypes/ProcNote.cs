@@ -4,14 +4,17 @@ using System.Text;
 
 namespace OpenDentBusiness {
 	///<summary>A procedure note for one procedure.  User does not have any direct control over this table at all.  It's handled automatically.  When user "edits" a procedure note, the program actually just adds another note.  No note can EVER be edited or deleted.</summary>
-	public class ProcNote{
+	[Serializable]
+	public class ProcNote:TableBase{
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long ProcNoteNum;
 		///<summary>FK to patient.PatNum</summary>
 		public long PatNum;
 		///<summary>FK to procedurelog.ProcNum</summary>
 		public long ProcNum;
-		///<summary>The server time that this note was entered.</summary>
+		///<summary>The server time that this note was entered. Essentially a timestamp.</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.DateTEntry)]
 		public DateTime EntryDateTime;
 		///<summary>FK to userod.UserNum.</summary>
 		public long UserNum;
