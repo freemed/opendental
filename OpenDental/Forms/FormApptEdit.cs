@@ -2285,7 +2285,7 @@ namespace OpenDental{
 		private void butPDF_Click(object sender,EventArgs e) {
 			//Send DFT to eCW containing a dummy procedure with this appointment in a .pdf file.				
 			string pdfDataStr=GenerateProceduresIntoPdf();
-			Bridges.ECW.SendHL7(AptCur,pat,pdfDataStr,true);
+			Bridges.ECW.SendHL7(AptCur,pat,pdfDataStr,"progressnotes",true);
 			MsgBox.Show(this,"Notes PDF sent.");
 		}
 
@@ -2460,7 +2460,7 @@ namespace OpenDental{
 				}
 				//Send DFT to eCW containing the attached procedures for this appointment in a .pdf file.				
 				string pdfDataStr=GenerateProceduresIntoPdf();
-				Bridges.ECW.SendHL7(AptCur,pat,pdfDataStr,false);
+				Bridges.ECW.SendHL7(AptCur,pat,pdfDataStr,"progressnotes",false);
 				CloseOD=true;
 				if(IsNew) {
 					SecurityLogs.MakeLogEntry(Permissions.AppointmentCreate,pat.PatNum,pat.GetNameLF()+", "

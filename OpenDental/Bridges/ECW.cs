@@ -22,8 +22,8 @@ namespace OpenDental.Bridges {
 		//  HL7Msgs.Insert(msg);
 		//}
 
-		public static void SendHL7(Appointment apt,Patient pat,string pdfDataBase64,bool justPDF) {
-			OpenDentBusiness.HL7.DFT dft=new OpenDentBusiness.HL7.DFT(apt,pat,pdfDataBase64,justPDF);
+		public static void SendHL7(Appointment apt,Patient pat,string pdfDataBase64,string pdfDescription,bool justPDF) {
+			OpenDentBusiness.HL7.DFT dft=new OpenDentBusiness.HL7.DFT(apt,pat,pdfDataBase64,pdfDescription,justPDF);
 			HL7Msg msg=new HL7Msg();
 			if(justPDF){
 				msg.AptNum=0;//Prevents the appt complete button from changing to the "Revise" button prematurely.

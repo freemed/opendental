@@ -20,7 +20,7 @@ namespace OpenDentBusiness.HL7 {
 		//}
 
 		///<summary>The constructor has all the info necessary to create the Message object.</summary>
-		public DFT(Appointment apt,Patient pat,string pdfDataBase64,bool justPDF){
+		public DFT(Appointment apt,Patient pat,string pdfDataBase64,string pdfDescription,bool justPDF){
 			msg=new MessageHL7(MessageType.DFT);
 			MSH();
 			EVN();
@@ -28,7 +28,7 @@ namespace OpenDentBusiness.HL7 {
 			PV1(apt);
 			FT1(apt,justPDF);
 			DG1();
-			ZX1(pdfDataBase64);
+			ZX1(pdfDataBase64,pdfDescription);
 		}
 
 		/////<summary>The constructor has all the info necessary to create the Message object.</summary>
@@ -192,13 +192,13 @@ namespace OpenDentBusiness.HL7 {
 		}
 
 		///<summary>PDF data segment.</summary>
-		private void ZX1(string pdfDataBase64){
+		private void ZX1(string pdfDataBase64,string pdfDescription){
 			seg=new SegmentHL7(SegmentName.ZX1);
 			seg.SetField(0,"ZX1");
 			seg.SetField(1,"6");
 			seg.SetField(2,"PDF");
 			seg.SetField(3,"PATHOLOGY^Pathology Report^L");
-			seg.SetField(4,"");
+			seg.SetField(4,pdfDescription);
 			seg.SetField(5,pdfDataBase64);
 			msg.Segments.Add(seg);
 		}
