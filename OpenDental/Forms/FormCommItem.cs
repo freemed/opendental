@@ -84,16 +84,16 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(11,38);
+			this.label1.Location = new System.Drawing.Point(1,35);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(96,16);
+			this.label1.Size = new System.Drawing.Size(81,18);
 			this.label1.TabIndex = 0;
 			this.label1.Text = "Date / Time";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// label6
 			// 
-			this.label6.Location = new System.Drawing.Point(105,59);
+			this.label6.Location = new System.Drawing.Point(80,56);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(82,16);
 			this.label6.TabIndex = 5;
@@ -108,7 +108,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(591,467);
+			this.butOK.Location = new System.Drawing.Point(564,515);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,25);
 			this.butOK.TabIndex = 6;
@@ -124,7 +124,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(591,500);
+			this.butCancel.Location = new System.Drawing.Point(564,548);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,25);
 			this.butCancel.TabIndex = 7;
@@ -141,7 +141,7 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(14,500);
+			this.butDelete.Location = new System.Drawing.Point(27,544);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(81,25);
 			this.butDelete.TabIndex = 17;
@@ -150,7 +150,7 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(106,176);
+			this.label2.Location = new System.Drawing.Point(81,173);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(82,16);
 			this.label2.TabIndex = 18;
@@ -159,7 +159,7 @@ namespace OpenDental{
 			// 
 			// listType
 			// 
-			this.listType.Location = new System.Drawing.Point(107,77);
+			this.listType.Location = new System.Drawing.Point(82,74);
 			this.listType.Name = "listType";
 			this.listType.Size = new System.Drawing.Size(120,95);
 			this.listType.TabIndex = 20;
@@ -167,7 +167,7 @@ namespace OpenDental{
 			// 
 			// textDateTime
 			// 
-			this.textDateTime.Location = new System.Drawing.Point(107,36);
+			this.textDateTime.Location = new System.Drawing.Point(82,33);
 			this.textDateTime.Name = "textDateTime";
 			this.textDateTime.Size = new System.Drawing.Size(205,20);
 			this.textDateTime.TabIndex = 21;
@@ -175,7 +175,7 @@ namespace OpenDental{
 			// 
 			// listMode
 			// 
-			this.listMode.Location = new System.Drawing.Point(240,77);
+			this.listMode.Location = new System.Drawing.Point(215,74);
 			this.listMode.Name = "listMode";
 			this.listMode.Size = new System.Drawing.Size(73,95);
 			this.listMode.TabIndex = 23;
@@ -183,7 +183,7 @@ namespace OpenDental{
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(239,60);
+			this.label3.Location = new System.Drawing.Point(214,57);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(82,16);
 			this.label3.TabIndex = 22;
@@ -192,7 +192,7 @@ namespace OpenDental{
 			// 
 			// listSentOrReceived
 			// 
-			this.listSentOrReceived.Location = new System.Drawing.Point(328,77);
+			this.listSentOrReceived.Location = new System.Drawing.Point(303,74);
 			this.listSentOrReceived.Name = "listSentOrReceived";
 			this.listSentOrReceived.Size = new System.Drawing.Size(87,43);
 			this.listSentOrReceived.TabIndex = 25;
@@ -200,7 +200,7 @@ namespace OpenDental{
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(327,59);
+			this.label4.Location = new System.Drawing.Point(302,56);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(142,16);
 			this.label4.TabIndex = 24;
@@ -210,7 +210,7 @@ namespace OpenDental{
 			// textNote
 			// 
 			this.textNote.AcceptsReturn = true;
-			this.textNote.Location = new System.Drawing.Point(107,196);
+			this.textNote.Location = new System.Drawing.Point(82,193);
 			this.textNote.Multiline = true;
 			this.textNote.Name = "textNote";
 			this.textNote.QuickPasteType = OpenDentBusiness.QuickPasteType.CommLog;
@@ -221,7 +221,7 @@ namespace OpenDental{
 			// 
 			// textPatientName
 			// 
-			this.textPatientName.Location = new System.Drawing.Point(107,10);
+			this.textPatientName.Location = new System.Drawing.Point(82,7);
 			this.textPatientName.Name = "textPatientName";
 			this.textPatientName.ReadOnly = true;
 			this.textPatientName.Size = new System.Drawing.Size(205,20);
@@ -229,16 +229,16 @@ namespace OpenDental{
 			// 
 			// label5
 			// 
-			this.label5.Location = new System.Drawing.Point(11,12);
+			this.label5.Location = new System.Drawing.Point(4,9);
 			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(96,16);
+			this.label5.Size = new System.Drawing.Size(78,18);
 			this.label5.TabIndex = 29;
 			this.label5.Text = "Patient";
 			this.label5.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// textUser
 			// 
-			this.textUser.Location = new System.Drawing.Point(427,10);
+			this.textUser.Location = new System.Drawing.Point(402,7);
 			this.textUser.Name = "textUser";
 			this.textUser.ReadOnly = true;
 			this.textUser.Size = new System.Drawing.Size(119,20);
@@ -246,7 +246,7 @@ namespace OpenDental{
 			// 
 			// label16
 			// 
-			this.label16.Location = new System.Drawing.Point(352,11);
+			this.label16.Location = new System.Drawing.Point(327,8);
 			this.label16.Name = "label16";
 			this.label16.Size = new System.Drawing.Size(73,16);
 			this.label16.TabIndex = 102;
@@ -255,7 +255,7 @@ namespace OpenDental{
 			// 
 			// labelCommlogNum
 			// 
-			this.labelCommlogNum.Location = new System.Drawing.Point(151,509);
+			this.labelCommlogNum.Location = new System.Drawing.Point(154,552);
 			this.labelCommlogNum.Name = "labelCommlogNum";
 			this.labelCommlogNum.Size = new System.Drawing.Size(96,16);
 			this.labelCommlogNum.TabIndex = 104;
@@ -264,17 +264,17 @@ namespace OpenDental{
 			// 
 			// textCommlogNum
 			// 
-			this.textCommlogNum.Location = new System.Drawing.Point(253,506);
+			this.textCommlogNum.Location = new System.Drawing.Point(256,549);
 			this.textCommlogNum.Name = "textCommlogNum";
 			this.textCommlogNum.ReadOnly = true;
-			this.textCommlogNum.Size = new System.Drawing.Size(94,20);
+			this.textCommlogNum.Size = new System.Drawing.Size(188,20);
 			this.textCommlogNum.TabIndex = 105;
 			// 
 			// signatureBoxWrapper
 			// 
 			this.signatureBoxWrapper.BackColor = System.Drawing.SystemColors.ControlDark;
 			this.signatureBoxWrapper.LabelText = null;
-			this.signatureBoxWrapper.Location = new System.Drawing.Point(108,413);
+			this.signatureBoxWrapper.Location = new System.Drawing.Point(178,408);
 			this.signatureBoxWrapper.Name = "signatureBoxWrapper";
 			this.signatureBoxWrapper.Size = new System.Drawing.Size(364,81);
 			this.signatureBoxWrapper.TabIndex = 106;
@@ -284,7 +284,7 @@ namespace OpenDental{
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
-			this.ClientSize = new System.Drawing.Size(702,545);
+			this.ClientSize = new System.Drawing.Size(662,594);
 			this.Controls.Add(this.signatureBoxWrapper);
 			this.Controls.Add(this.textCommlogNum);
 			this.Controls.Add(this.labelCommlogNum);
@@ -381,7 +381,6 @@ namespace OpenDental{
 			keyData+=CommlogCur.Mode_.ToString();
 			keyData+=CommlogCur.SentOrReceived.ToString();
 			keyData+=CommlogCur.Note.ToString();
-			keyData+=CommlogCur.CommlogNum.ToString();
 			return keyData;
 		}
 
