@@ -2390,8 +2390,12 @@ namespace OpenDental{
 				if(OrionProcCur!=null) {
 					comboDPC.SelectedIndex=(int)OrionProcCur.DPC;
 					comboStatus.SelectedIndex=(int)OrionProcCur.Status2;
-					textDateScheduled.Text=OrionProcCur.DateScheduleBy.ToShortDateString();
-					textDateStop.Text=OrionProcCur.DateStopClock.ToShortDateString();
+					if(OrionProcCur.DateScheduleBy!=DateTime.MinValue) {
+						textDateScheduled.Text=OrionProcCur.DateScheduleBy.ToShortDateString();
+					}
+					if(OrionProcCur.DateStopClock!=DateTime.MinValue){
+						textDateStop.Text=OrionProcCur.DateStopClock.ToShortDateString();
+					}
 					checkIsOnCall.Checked=OrionProcCur.IsOnCall;
 					checkIsEffComm.Checked=OrionProcCur.IsEffectiveComm;
 					checkIsRepair.Checked=OrionProcCur.IsRepair;
@@ -3488,6 +3492,16 @@ namespace OpenDental{
 							return false;
 						}
 					}
+				}
+			}
+			if(panelOrion.Visible) {
+				if(textDateScheduled.errorProvider1.GetError(textDateScheduled)!="") {
+					MsgBox.Show(this,"Invalid schedule date.");
+					return false;
+				}
+				if(textDateStop.errorProvider1.GetError(textDateStop)!="") {
+					MsgBox.Show(this,"Invalid stop clock date.");
+					return false;
 				}
 			}
 			return true;
