@@ -82,7 +82,7 @@ namespace UnitTests {
 			Benefits.Insert(ben);
 		}
 
-		public static void CreateFrequency(long planNum,string procCodeStr,BenefitQuantity quantityQualifier,Byte quantity){
+		public static void CreateFrequencyProc(long planNum,string procCodeStr,BenefitQuantity quantityQualifier,Byte quantity){
 			Benefit ben=new Benefit();
 			ben.PlanNum=planNum;
 			ben.BenefitType=InsBenefitType.Limitations;
@@ -95,6 +95,17 @@ namespace UnitTests {
 			Benefits.Insert(ben);
 		}
 
+		public static void CreateFrequencyCategory(long planNum,EbenefitCategory category,BenefitQuantity quantityQualifier,Byte quantity) {
+			Benefit ben=new Benefit();
+			ben.PlanNum=planNum;
+			ben.BenefitType=InsBenefitType.Limitations;
+			ben.CovCatNum=CovCats.GetForEbenCat(category).CovCatNum;
+			ben.CoverageLevel=BenefitCoverageLevel.None;
+			ben.TimePeriod=BenefitTimePeriod.None;
+			ben.Quantity=quantity;
+			ben.QuantityQualifier=quantityQualifier;
+			Benefits.Insert(ben);
+		}
 
 		/*
 		private void BenefitComputeRenewDate(){

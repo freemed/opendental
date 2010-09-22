@@ -127,7 +127,7 @@ namespace UnitTests {
 			BenefitT.CreateAnnualMax(plan.PlanNum,1000);	
 			BenefitT.CreateCategoryPercent(plan.PlanNum,EbenefitCategory.Crowns,100);
 			BenefitT.CreateCategoryPercent(plan.PlanNum,EbenefitCategory.Diagnostic,100);
-			BenefitT.CreateFrequency(plan.PlanNum,"D0274",BenefitQuantity.Years,1);//BW frequency every 1 year
+			BenefitT.CreateFrequencyProc(plan.PlanNum,"D0274",BenefitQuantity.Years,1);//BW frequency every 1 year
 			PatPlanT.CreatePatPlan(1,pat.PatNum,plan.PlanNum);
 			//proc1 - Crown
 			Procedure proc1=ProcedureT.CreateProcedure(pat,"D2750",ProcStat.TP,"8",1100);
@@ -452,6 +452,60 @@ namespace UnitTests {
 				throw new Exception("Should be 200");
 			}
 			retVal+="9: Passed.  Limitations should override more general limitations for any benefit.\r\n";
+			return retVal;
+		}
+
+		///<summary></summary>
+		public static string TestTen(int specificTest) {
+			if(specificTest != 0 && specificTest !=10) {
+				return "";
+			}
+			string suffix="10";
+			Patient pat=PatientT.CreatePatient(suffix);
+			Carrier carrier=CarrierT.CreateCarrier(suffix);
+			InsPlan plan=InsPlanT.CreateInsPlan(pat.PatNum,carrier.CarrierNum);
+			BenefitT.CreateAnnualMax(plan.PlanNum,400);
+			BenefitT.CreateFrequencyCategory(plan.PlanNum,EbenefitCategory.RoutinePreventive,BenefitQuantity.Years,2);
+			BenefitT.CreateCategoryPercent(plan.PlanNum,EbenefitCategory.RoutinePreventive,100);
+			PatPlanT.CreatePatPlan(1,pat.PatNum,plan.PlanNum);
+			//procs - D1515 (space maintainers)
+			Procedure proc1=ProcedureT.CreateProcedure(pat,"D1515",ProcStat.TP,"3",500);
+			ProcedureT.SetPriority(proc1,0);
+			Procedure proc2=ProcedureT.CreateProcedure(pat,"D1515",ProcStat.TP,"3",500);
+			ProcedureT.SetPriority(proc2,1);
+			//Procedure proc3=ProcedureT.CreateProcedure(pat,"D1515",ProcStat.TP,"3",500);
+			//ProcedureT.SetPriority(proc3,2);
+			//Lists
+			List<ClaimProc> claimProcs=ClaimProcs.Refresh(pat.PatNum);
+			List<ClaimProc> claimProcListOld=new List<ClaimProc>();
+			Family fam=Patients.GetFamily(pat.PatNum);
+			List<InsPlan> planList=InsPlans.RefreshForFam(fam);
+			List<PatPlan> patPlans=PatPlans.Refresh(pat.PatNum);
+			List<Benefit> benefitList=Benefits.Refresh(patPlans);
+			List<ClaimProcHist> histList=new List<ClaimProcHist>();
+			List<ClaimProcHist> loopList=new List<ClaimProcHist>();
+			List<Procedure> ProcList=Procedures.Refresh(pat.PatNum);
+			Procedure[] ProcListTP=Procedures.GetListTP(ProcList);//sorted by priority, then toothnum
+			//Validate
+			string retVal="";
+			for(int i=0;i<ProcListTP.Length;i++) {
+				Procedures.ComputeEstimates(ProcListTP[i],pat.PatNum,ref claimProcs,false,planList,patPlans,benefitList,
+					histList,loopList,false,pat.Age);
+				//then, add this information to loopList so that the next procedure is aware of it.
+				loopList.AddRange(ClaimProcs.GetHistForProc(claimProcs,ProcListTP[i].ProcNum,ProcListTP[i].CodeNum));
+			}
+			//save changes in the list to the database
+			ClaimProcs.Synch(ref claimProcs,claimProcListOld);
+			claimProcs=ClaimProcs.Refresh(pat.PatNum);
+			ClaimProc claimProc1=ClaimProcs.GetEstimate(claimProcs,proc1.ProcNum,plan.PlanNum);
+			if(claimProc1.InsEstTotal!=400) {//Insurance should partially cover.
+				throw new Exception("Should be 400");
+			}
+			ClaimProc claimProc2=ClaimProcs.GetEstimate(claimProcs,proc2.ProcNum,plan.PlanNum);
+			if(claimProc2.InsEstTotal!=0) {//Insurance should not cover.
+				throw new Exception("Should be 0");
+			}
+			retVal+="10: Passed.  Once max is reached, additional procs show 0 coverage even if preventive frequency exists.\r\n";
 			return retVal;
 		}
 

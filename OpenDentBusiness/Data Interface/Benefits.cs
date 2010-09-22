@@ -1055,6 +1055,9 @@ namespace OpenDentBusiness {
 				if(listShort[b].BenefitNum==benefit.BenefitNum) {
 					continue;//skip self.
 				}
+				if(listShort[b].QuantityQualifier!=BenefitQuantity.None) {
+					continue;//it must be some other kind of limitation other than an amount limit.  For example, BW frequency.
+				}
 				if(listShort[b].CodeNum != 0) {
 					if(listShort[b].CodeNum==ProcedureCodes.GetCodeNum(claimProcHist.StrProcCode)) {//Enhance later for code ranges when supported by program
 						return true;//a tighter limitation benefit exists for this specific procedure code.
