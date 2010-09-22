@@ -2162,7 +2162,7 @@ namespace OpenDental{
 			else {
 				groupCanadianProcType.Visible=false;
 			}
-			if(Programs.IsEnabled(ProgramName.Orion)){
+			if(Programs.UsingOrion){
 				panelOrion.Visible=true;
 				butAddEstimate.Visible=false;
 				checkNoBillIns.Visible=false;

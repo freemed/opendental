@@ -29,7 +29,7 @@ namespace OpenDental {
 				}
 				return;
 			}
-			if(Programs.IsEnabled(ProgramName.Orion)) {//full width
+			if(Programs.UsingOrion) {//full width
 				gridProg.Width=ClientSize.Width-gridProg.Location.X-1;
 			}
 			else if(gridProg.Columns !=null && gridProg.Columns.Count>0) {
@@ -46,7 +46,7 @@ namespace OpenDental {
 					}
 				}
 			}
-			if(Programs.IsEnabled(ProgramName.Orion)){
+			if(Programs.UsingOrion) {
 				//gridPtInfo is up in the tabs and does not need to be resized.
 			}
 			else{
@@ -86,7 +86,7 @@ namespace OpenDental {
 				gridProg.Location=new Point(415,tabProc.Bottom+2);
 				gridProg.Height=ClientSize.Height-gridProg.Location.Y-2;
 			}
-			if(Programs.IsEnabled(ProgramName.Orion)) {
+			if(Programs.UsingOrion) {
 				textTreatmentNotes.Visible=false;
 				contrChart.Controls.Remove(gridPtInfo);
 				gridPtInfo.Visible=true;
@@ -110,7 +110,7 @@ namespace OpenDental {
 			if(UsingEcwTight()) {
 				gridProg.Width=524;
 			}
-			if(Programs.IsEnabled(ProgramName.Orion)) {//full width
+			if(Programs.UsingOrion) {//full width
 				gridProg.Width=ClientSize.Width-gridProg.Location.X-1;
 			}
 			else if(gridProg.Columns !=null && gridProg.Columns.Count>0) {
@@ -128,7 +128,7 @@ namespace OpenDental {
 		}
 
 		public static void tabProc_MouseDown(int SelectedProcTab,ODGrid gridProg,TabControl tabProc,Size ClientSize,MouseEventArgs e) {
-			if(Programs.IsEnabled(ProgramName.Orion)) {
+			if(Programs.UsingOrion) {
 				return;//tabs never minimize
 			}
 			//selected tab will have changed, so we need to test the original selected tab:
@@ -152,7 +152,7 @@ namespace OpenDental {
 		}
 
 		public static void GridPtInfoSetSize(ODGrid gridPtInfo,TabControl tabControlImages){
-			if(!Programs.IsEnabled(ProgramName.Orion)) {
+			if(!Programs.UsingOrion) {
 				gridPtInfo.Height=tabControlImages.Top-gridPtInfo.Top;
 			}
 		}

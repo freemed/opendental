@@ -53,6 +53,7 @@ namespace OpenDentBusiness{
 		Lightyear,
 		MediaDent,
 		Mountainside,
+		///<summary>Please use Programs.UsingOrion where possible.</summary>
 		Orion,
 		OrthoPlex,
 		Owandy,

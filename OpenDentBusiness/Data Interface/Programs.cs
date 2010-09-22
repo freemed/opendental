@@ -162,7 +162,13 @@ namespace OpenDentBusiness{
 			return false;
 		}
 
-
+		/// <summary></summary>
+		public static bool UsingOrion {
+			//No need to check RemotingRole; no call to db.
+			get {
+				return Programs.IsEnabled(ProgramName.Orion);
+			}
+		}
 
 
 	}
