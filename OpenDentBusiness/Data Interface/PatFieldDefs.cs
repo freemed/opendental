@@ -42,6 +42,7 @@ namespace OpenDentBusiness {
 				List[i].PatFieldDefNum=PIn.Long(table.Rows[i][0].ToString());
 				List[i].FieldName=PIn.String(table.Rows[i][1].ToString());
 				List[i].FieldType=(PatFieldType)PIn.Int(table.Rows[i][2].ToString());
+				List[i].PickList=PIn.String(table.Rows[i][3].ToString());
 			}
 		}
 		#endregion
@@ -98,6 +99,17 @@ namespace OpenDentBusiness {
 			for(int i=0;i<List.Length;i++){
 				if(List[i].PatFieldDefNum==patFieldDefNum) {
 					return List[i].FieldName;
+				}
+			}
+			return "";
+		}
+
+		/// <summary>GetPickListByFieldName returns the pick list identified by the field name passed as a parameter.</summary>
+		public static string GetPickListByFieldName(string FieldName) {
+			//No need to check RemotingRole; no call to db.
+			for(int i=0;i<List.Length;i++) {
+				if(List[i].FieldName==FieldName) {
+					return List[i].PickList;
 				}
 			}
 			return "";

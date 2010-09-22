@@ -25,6 +25,7 @@ namespace OpenDental{
 		private ComboBox comboFieldType;
 		private Label labelFieldType;
 		private TextBox textPickList;
+		private Label labelWarning;
 		private string OldFieldName;
 
 		///<summary></summary>
@@ -69,6 +70,7 @@ namespace OpenDental{
 			this.comboFieldType = new System.Windows.Forms.ComboBox();
 			this.labelFieldType = new System.Windows.Forms.Label();
 			this.textPickList = new System.Windows.Forms.TextBox();
+			this.labelWarning = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -158,6 +160,7 @@ namespace OpenDental{
 			// 
 			// textPickList
 			// 
+			this.textPickList.AcceptsReturn = true;
 			this.textPickList.Location = new System.Drawing.Point(20,96);
 			this.textPickList.Multiline = true;
 			this.textPickList.Name = "textPickList";
@@ -165,11 +168,23 @@ namespace OpenDental{
 			this.textPickList.Size = new System.Drawing.Size(309,114);
 			this.textPickList.TabIndex = 84;
 			// 
+			// labelWarning
+			// 
+			this.labelWarning.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.labelWarning.Location = new System.Drawing.Point(203,71);
+			this.labelWarning.Name = "labelWarning";
+			this.labelWarning.Size = new System.Drawing.Size(101,14);
+			this.labelWarning.TabIndex = 85;
+			this.labelWarning.Text = "One Per Line";
+			this.labelWarning.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			this.labelWarning.Visible = false;
+			// 
 			// FormPatFieldDefEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(349,328);
+			this.Controls.Add(this.labelWarning);
 			this.Controls.Add(this.textPickList);
 			this.Controls.Add(this.labelFieldType);
 			this.Controls.Add(this.comboFieldType);
@@ -204,13 +219,17 @@ namespace OpenDental{
 			}
 			if(comboFieldType.SelectedIndex==(int)PatFieldType.PickList) {
 				textPickList.Visible=true;
+				labelWarning.Visible=true;
+				textPickList.Text=FieldDef.PickList;
 			}
 		}
 
 		private void comboFieldType_SelectedIndexChanged(object sender,EventArgs e) {
 			textPickList.Visible=false;
+			labelWarning.Visible=false;
 			if(comboFieldType.SelectedIndex==(int)PatFieldType.PickList) {
 				textPickList.Visible=true;
+				labelWarning.Visible=true;
 			}
 		}
 
@@ -229,9 +248,21 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
+			if(OldFieldName!=textName.Text) {
+				for(int i=0;i<PatFieldDefs.List.Length;i++) {
+					if(PatFieldDefs.List[i].FieldName==textName.Text) {
+						MsgBox.Show(this,"Field name currently being used.");
+						return;
+					}
+				}
+			}
 			FieldDef.FieldName=textName.Text;
 			FieldDef.FieldType=(PatFieldType)comboFieldType.SelectedIndex;
 			if(FieldDef.FieldType==PatFieldType.PickList) {
+				if(textPickList.Text=="") {
+					MsgBox.Show(this,"List cannot be blank.");
+					return;
+				}
 				FieldDef.PickList=textPickList.Text;
 			}
 			if(IsNew){

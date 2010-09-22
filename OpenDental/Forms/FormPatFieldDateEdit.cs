@@ -127,7 +127,7 @@ namespace OpenDental{
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Edit Patient Field Date";
-			this.Load += new System.EventHandler(this.FormPatFieldEdit_Load);
+			this.Load += new System.EventHandler(this.FormPatFieldDateEdit_Load);
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormPatFieldDefEdit_FormClosing);
 			this.ResumeLayout(false);
 			this.PerformLayout();
@@ -135,7 +135,7 @@ namespace OpenDental{
 		}
 		#endregion
 
-		private void FormPatFieldEdit_Load(object sender, System.EventArgs e) {
+		private void FormPatFieldDateEdit_Load(object sender, System.EventArgs e) {
 			labelName.Text=Field.FieldName;
 			if(!IsNew) {
 				textFieldDate.Text=Field.FieldValue.ToString();

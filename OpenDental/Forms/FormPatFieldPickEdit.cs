@@ -127,18 +127,32 @@ namespace OpenDental{
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Edit Patient Field Pick List";
-			this.Load += new System.EventHandler(this.FormPatFieldEdit_Load);
+			this.Load += new System.EventHandler(this.FormPatFieldPickEdit_Load);
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormPatFieldDefEdit_FormClosing);
 			this.ResumeLayout(false);
 
 		}
 		#endregion
 
-		private void FormPatFieldEdit_Load(object sender, System.EventArgs e) {
+		private void FormPatFieldPickEdit_Load(object sender, System.EventArgs e) {
 			labelName.Text=Field.FieldName;
+			string value="";
+			value=PatFieldDefs.GetPickListByFieldName(Field.FieldName);
+			string[] valueArray=value.Split(new string[] { "\r\n" },StringSplitOptions.None);
+			foreach(string s in valueArray) {
+				listBoxPick.Items.Add(s);
+			}
+			if(!IsNew) {
+				listBoxPick.SelectedItem=Field.FieldValue;
+			}
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
+			if(listBoxPick.SelectedItems.Count==0) {
+				MsgBox.Show(this,"Please select an item in the list on the right first.");
+				return;
+			}
+			Field.FieldValue=listBoxPick.SelectedItem.ToString();
 			if(Field.FieldValue==""){//if blank, then delete
 				if(IsNew) {
 					DialogResult=DialogResult.Cancel;
