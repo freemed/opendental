@@ -2390,10 +2390,10 @@ namespace OpenDental{
 				if(OrionProcCur!=null) {
 					comboDPC.SelectedIndex=(int)OrionProcCur.DPC;
 					comboStatus.SelectedIndex=(int)OrionProcCur.Status2;
-					if(OrionProcCur.DateScheduleBy!=DateTime.MinValue) {
+					if(OrionProcCur.DateScheduleBy.Year>1880) {
 						textDateScheduled.Text=OrionProcCur.DateScheduleBy.ToShortDateString();
 					}
-					if(OrionProcCur.DateStopClock!=DateTime.MinValue){
+					if(OrionProcCur.DateStopClock.Year>1880){
 						textDateStop.Text=OrionProcCur.DateStopClock.ToShortDateString();
 					}
 					checkIsOnCall.Checked=OrionProcCur.IsOnCall;
