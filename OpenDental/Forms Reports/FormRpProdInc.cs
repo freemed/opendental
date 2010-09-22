@@ -1469,7 +1469,8 @@ ORDER BY adjdate DESC
 				//.ToString("yyyy-MM-dd")+"' "
 				//	+"&& procdate <= '" + datePickerTo.Value
 			for(int i=0;i<dates.Length;i++){//usually 31 days in loop
-				dates[i]=dateFrom.AddDays(i);
+				//AddDays() starts to calculate a few seconds short over the course of 6 months or so. We make a correction here to work around.
+				dates[i]=dateFrom.AddDays(i).AddHours(6).Date;
 				//create new row called 'row' based on structure of TableQ
 				DataRow row = report.TableQ.NewRow();
 				row[0]=dates[i].ToShortDateString();
