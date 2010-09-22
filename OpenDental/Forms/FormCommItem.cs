@@ -274,7 +274,7 @@ namespace OpenDental{
 			// 
 			this.signatureBoxWrapper.BackColor = System.Drawing.SystemColors.ControlDark;
 			this.signatureBoxWrapper.LabelText = null;
-			this.signatureBoxWrapper.Location = new System.Drawing.Point(178,408);
+			this.signatureBoxWrapper.Location = new System.Drawing.Point(83,408);
 			this.signatureBoxWrapper.Name = "signatureBoxWrapper";
 			this.signatureBoxWrapper.Size = new System.Drawing.Size(364,81);
 			this.signatureBoxWrapper.TabIndex = 106;
