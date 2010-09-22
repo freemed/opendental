@@ -214,6 +214,23 @@ namespace OpenDentBusiness{
 			}
 			return labelsUniversal[index];
 		}
+		
+		///<summary>Get quadrant returns "UR" for teeth 1-8, "LR" for 25-32, "UL" for 9-16, and "LL" for 17-24.</summary>
+		public static string GetQuadrant(string toothNum){
+			if(!IsValidDB(toothNum)){
+				return "";
+			}
+			int intTooth=ToInt(toothNum);
+			if(intTooth>=1 && intTooth<=8)
+				return "UR";
+			if(intTooth>=9 && intTooth<=16)
+				return "UL";
+			if(intTooth>=17 && intTooth<=24)
+				return "LL";
+			if(intTooth>=25 && intTooth<=32)
+				return "LR";
+			return "";
+		}
 
 		///<summary>Sometimes validated by IsValidDB before coming here, otherwise an invalid toothnum .  This should be run on all displayed tooth numbers. It will handle checking for whether user is using international tooth numbers.  All tooth numbers are passed in american values until the very last moment.  Just before display, the string is converted using this method.</summary>
 		public static string ToInternat(string toothNum){ // CWI: Left for compatibility
