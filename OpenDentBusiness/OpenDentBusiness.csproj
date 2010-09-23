@@ -174,6 +174,7 @@
     <Compile Include="Crud\PlannedApptCrud.cs" />
     <Compile Include="Crud\PopupCrud.cs" />
     <Compile Include="Crud\ProcApptColorCrud.cs" />
+    <Compile Include="Crud\ProcedureCodeCrud.cs" />
     <Compile Include="Crud\ProcedureCrud.cs" />
     <Compile Include="Crud\ProcGroupItemCrud.cs" />
     <Compile Include="Crud\ProcNoteCrud.cs" />

@@ -23,7 +23,7 @@ namespace OpenDentBusiness{
 
 		public static void FillCache(DataTable table) {
 			//No need to check RemotingRole; no call to db.
-			ProcedureCodeC.Listt=TableToList(table);
+			ProcedureCodeC.Listt=Crud.ProcedureCodeCrud.TableToList(table);
 			ProcedureCodeC.HList=new Hashtable();
 			for(int i=0;i<ProcedureCodeC.Listt.Count;i++) {
 				try {
@@ -39,43 +39,7 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<List<ProcedureCode>>(MethodBase.GetCurrentMethod(),changedSince);
 			}
 			string command="SELECT * FROM procedurecode WHERE DateTStamp > "+POut.DateT(changedSince);
-			DataTable table=Db.GetTable(command);
-			return TableToList(table);
-		}
-
-		public static List<ProcedureCode> TableToList(DataTable table){
-			//No need to check RemotingRole; no call to db.
-			ProcedureCode code;
-			List<ProcedureCode> codeList=new List<ProcedureCode>();
-			for(int i=0;i<table.Rows.Count;i++) {
-				code=new ProcedureCode();
-				code.CodeNum    	 =PIn.Long   (table.Rows[i][0].ToString());
-				code.ProcCode      =PIn.String(table.Rows[i][1].ToString());
-				code.Descript      =PIn.String(table.Rows[i][2].ToString());
-				code.AbbrDesc      =PIn.String(table.Rows[i][3].ToString());
-				code.ProcTime      =PIn.String(table.Rows[i][4].ToString());
-				code.ProcCat       =PIn.Long(table.Rows[i][5].ToString());
-				code.TreatArea     =(TreatmentArea)PIn.Long(table.Rows[i][6].ToString());
-				code.NoBillIns     =PIn.Bool  (table.Rows[i][7].ToString());
-				code.IsProsth      =PIn.Bool  (table.Rows[i][8].ToString());
-				code.DefaultNote   =PIn.String(table.Rows[i][9].ToString());
-				code.IsHygiene     =PIn.Bool  (table.Rows[i][10].ToString());
-				code.GTypeNum      =PIn.Int   (table.Rows[i][11].ToString());
-				code.AlternateCode1=PIn.String(table.Rows[i][12].ToString());
-				code.MedicalCode   =PIn.String(table.Rows[i][13].ToString());
-				code.IsTaxed       =PIn.Bool  (table.Rows[i][14].ToString());
-				code.PaintType     =(ToothPaintingType)PIn.Long(table.Rows[i][15].ToString());
-				code.GraphicColor  =Color.FromArgb(PIn.Int(table.Rows[i][16].ToString()));
-				code.LaymanTerm    =PIn.String(table.Rows[i][17].ToString());
-				code.IsCanadianLab =PIn.Bool  (table.Rows[i][18].ToString());
-				code.PreExisting	 =PIn.Bool  (table.Rows[i][19].ToString());
-				code.BaseUnits     =PIn.Int   (table.Rows[i][20].ToString());
-				code.SubstitutionCode=PIn.String(table.Rows[i][21].ToString());
-				code.SubstOnlyIf   =(SubstitutionCondition)PIn.Long(table.Rows[i][22].ToString());
-				//DateTStamp
-				codeList.Add(code);
-			}
-			return codeList;
+			return Crud.ProcedureCodeCrud.SelectMany(command);
 		}
 
 		///<summary></summary>
@@ -85,53 +49,7 @@ namespace OpenDentBusiness{
 				return code.CodeNum;
 			}
 			//must have already checked procCode for nonduplicate.
-			if(PrefC.RandomKeys) {
-				code.CodeNum=ReplicationServers.GetKey("procedurecode","CodeNum");
-			}
-			string command="INSERT INTO procedurecode (";
-			if(PrefC.RandomKeys) {
-				command+="CodeNum,";
-			}
-			command+="ProcCode,descript,abbrdesc,"
-				+"proctime,proccat,treatarea,"
-				+"nobillins,isprosth,defaultnote,ishygiene,gtypenum,alternatecode1,MedicalCode,IsTaxed,"
-				+"PaintType,GraphicColor,LaymanTerm,IsCanadianLab,PreExisting,BaseUnits,SubstitutionCode,"
-				+"SubstOnlyIf"//DateTStamp
-				+") VALUES(";
-			if(PrefC.RandomKeys) {
-				command+=POut.Long(code.CodeNum)+", ";
-			}
-			command+=
-				 "'"+POut.String(code.ProcCode)+"', "
-				+"'"+POut.String(code.Descript)+"', "
-				+"'"+POut.String(code.AbbrDesc)+"', "
-				+"'"+POut.String(code.ProcTime)+"', "
-				+"'"+POut.Long   (code.ProcCat)+"', "
-				+"'"+POut.Long   ((int)code.TreatArea)+"', "
-				+"'"+POut.Bool  (code.NoBillIns)+"', "
-				+"'"+POut.Bool  (code.IsProsth)+"', "
-				+"'"+POut.String(code.DefaultNote)+"', "
-				+"'"+POut.Bool  (code.IsHygiene)+"', "
-				+"'"+POut.Long   (code.GTypeNum)+"', "
-				+"'"+POut.String(code.AlternateCode1)+"', "
-				+"'"+POut.String(code.MedicalCode)+"', "
-				+"'"+POut.Bool  (code.IsTaxed)+"', "
-				+"'"+POut.Long   ((int)code.PaintType)+"', "
-				+"'"+POut.Long   (code.GraphicColor.ToArgb())+"', "
-				+"'"+POut.String(code.LaymanTerm)+"', "
-				+"'"+POut.Bool  (code.IsCanadianLab)+"', "
-				+"'"+POut.Bool  (code.PreExisting)+"', "
-				+"'"+POut.Long(code.BaseUnits)+"', "
-				+"'"+POut.String(code.SubstitutionCode)+"', "
-				+"'"+POut.Long   ((int)code.SubstOnlyIf)+"')";
-				//DateTStamp
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else{
-				code.CodeNum=Db.NonQ(command,true);
-			}
-			return code.CodeNum;
+			return Crud.ProcedureCodeCrud.Insert(code);
 		}
 
 		///<summary></summary>
@@ -140,33 +58,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),code);
 				return;
 			}
-			//MessageBox.Show("Updating");
-			string command="UPDATE procedurecode SET " 
-				//+ "ProcCode = '"       +POut.PString(code.ProcCode)+"'"
-				+ "descript = '"       +POut.String(code.Descript)+"'"
-				+ ",abbrdesc = '"      +POut.String(code.AbbrDesc)+"'"
-				+ ",proctime = '"      +POut.String(code.ProcTime)+"'"
-				+ ",proccat = '"       +POut.Long   (code.ProcCat)+"'"
-				+ ",treatarea = '"     +POut.Long   ((int)code.TreatArea)+"'"
-				+ ",nobillins = '"     +POut.Bool  (code.NoBillIns)+"'"
-				+ ",isprosth = '"      +POut.Bool  (code.IsProsth)+"'"
-				+ ",defaultnote = '"   +POut.String(code.DefaultNote)+"'"
-				+ ",ishygiene = '"     +POut.Bool  (code.IsHygiene)+"'"
-				+ ",gtypenum = '"      +POut.Long   (code.GTypeNum)+"'"
-				+ ",alternatecode1 = '"+POut.String(code.AlternateCode1)+"'"
-				+ ",MedicalCode = '"   +POut.String(code.MedicalCode)+"'"
-				+ ",IsTaxed = '"       +POut.Bool  (code.IsTaxed)+"'"
-				+ ",PaintType = '"     +POut.Long   ((int)code.PaintType)+"'"
-				+ ",GraphicColor = '"  +POut.Long   (code.GraphicColor.ToArgb())+"'"
-				+ ",LaymanTerm = '"    +POut.String(code.LaymanTerm)+"'"
-				+ ",IsCanadianLab = '" +POut.Bool  (code.IsCanadianLab)+"'"
-				+ ",PreExisting = '"	 +POut.Bool(code.PreExisting)+"'"
-				+ ",BaseUnits = '"     +POut.Long(code.BaseUnits)+"'"
-				+ ",SubstitutionCode = '"+POut.String(code.SubstitutionCode)+"'"
-				+ ",SubstOnlyIf = '"   +POut.Long   ((int)code.SubstOnlyIf)+"'"
-				//DateTStamp
-				+" WHERE CodeNum = '"+POut.Long(code.CodeNum)+"'";
-			Db.NonQ(command);
+			Crud.ProcedureCodeCrud.Update(code);
 		}
 
 		///<summary>Returns the ProcedureCode for the supplied procCode.</summary>
@@ -204,15 +96,12 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<ProcedureCode>(MethodBase.GetCurrentMethod(),codeNum);
 			}
-			if(codeNum==0) {
+			ProcedureCode retval=Crud.ProcedureCodeCrud.SelectOne(codeNum);
+			if(retval==null) {
+				//We clasically return an empty procedurecode object here instead of null.
 				return new ProcedureCode();
 			}
-			string command="SELECT * FROM procedurecode WHERE CodeNum='"+POut.Long(codeNum)+"'";
-			DataTable table=Db.GetTable(command);
-			if(table.Rows.Count==0) {
-				return new ProcedureCode();
-			}
-			return TableToList(table)[0];
+			return retval;
 		}
 
 		///<summary>Supply the human readable proc code such as D####</summary>

@@ -6,11 +6,13 @@ using System.Xml.Serialization;
 namespace OpenDentBusiness{
 	
 	///<summary>A list setup ahead of time with all the procedure codes used by the office.  Every procedurelog entry which is attached to a patient is also linked to this table.</summary>
-	public class ProcedureCode{
+	[Serializable]
+	public class ProcedureCode:TableBase{
 		///<summary>Primary Key.  This happened in version 4.8.7.</summary>
-		//[XmlIgnore]
+		[CrudColumn(IsPriKey=true)]
 		public long CodeNum;
 		///<summary>Was Primary key, but now CodeNum is primary key.  Can hold dental codes, medical codes, custom codes, etc.</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.ExcludeFromUpdate)]
 		public string ProcCode;
 		///<summary>The main description.</summary>
 		public string Descript;
@@ -21,7 +23,7 @@ namespace OpenDentBusiness{
 		///<summary>FK to definition.DefNum.  The category that this code will be found under in the search window.  Has nothing to do with insurance categories.</summary>
 		//[XmlIgnore]
 		public long ProcCat;
-		///<summary>Enum:TreatmentArea</summary>
+		///<summary>Enum:TreatmentArea </summary>
 		public TreatmentArea TreatArea;
 		///<summary>If true, do not usually bill this procedure to insurance.</summary>
 		public bool NoBillIns;
@@ -44,7 +46,7 @@ namespace OpenDentBusiness{
 		///<summary>Used by some offices even though no user interface built yet.  SalesTaxPercentage has been added to the preference table to store the amount of sales tax to apply as an adjustment attached to a procedurelog entry.</summary>
 		//[XmlIgnore]
 		public bool IsTaxed;
-		///<summary>Enum:ToothPaintingType</summary>
+		///<summary>Enum:ToothPaintingType </summary>
 		public ToothPaintingType PaintType;
 		///<summary>If set to anything but 0, then this will override the graphic color for all procedures of this code, regardless of the status.</summary>
 		//[XmlIgnore]
@@ -68,6 +70,8 @@ namespace OpenDentBusiness{
 		//[XmlIgnore]
 		public SubstitutionCondition SubstOnlyIf;
 		//DateTStamp
+		///<summary>Set to true if the procedure takes more than one appointment to complete.</summary>
+		public bool isMultiVisit;
 
 		
 		///<summary>Not a database column.  Only used for xml import function.</summary>
