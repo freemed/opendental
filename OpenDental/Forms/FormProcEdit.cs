@@ -2387,8 +2387,6 @@ namespace OpenDental{
 				comboStatus.Items.Clear();
 				comboStatus.Items.AddRange(Enum.GetNames(typeof(OrionStatus)));
 				OrionProcCur=OrionProcs.GetOneByProcNum(ProcCur.ProcNum);
-				ProcedureCode pc=ProcedureCodes.GetProcCodeFromDb(ProcCur.CodeNum);
-				checkIsRepair.Visible=pc.IsProsth;
 				if(OrionProcCur!=null) {
 					comboDPC.SelectedIndex=(int)OrionProcCur.DPC;
 					comboStatus.SelectedIndex=(int)OrionProcCur.Status2;

@@ -114,7 +114,6 @@ namespace OpenDentBusiness {
 				//list.Add(new DisplayField("Schedule By",72,category));
 				//list.Add(new DisplayField("Stop Clock",67,category));
 				//list.Add(new DisplayField("Stat 2",36,category));
-				//list.Add(new DisplayField("Repair",42,category));
 				//list.Add(new DisplayField("On Call",45,category));
 				//list.Add(new DisplayField("Effective Comm",90,category));
 				//list.Add(new DisplayField("Date TP",67,category));
@@ -267,7 +266,6 @@ namespace OpenDentBusiness {
 				list.Add(new DisplayField("Schedule By",72,category));
 				list.Add(new DisplayField("Stop Clock",67,category));
 				list.Add(new DisplayField("Stat 2",36,category));
-				list.Add(new DisplayField("Repair",42,category));
 				list.Add(new DisplayField("On Call",45,category));
 				list.Add(new DisplayField("Effective Comm",90,category));
 				list.Add(new DisplayField("Date TP",67,category));

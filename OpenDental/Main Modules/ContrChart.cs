@@ -4205,9 +4205,6 @@ namespace OpenDental{
 						case "On Call":
 							row.Cells.Add(table.Rows[i]["isOnCall"].ToString());
 							break;
-						case "Repair":
-							row.Cells.Add(table.Rows[i]["isRepair"].ToString());
-							break;
 						case "End Time":
 							row.Cells.Add(table.Rows[i]["procTimeEnd"].ToString());
 							break;

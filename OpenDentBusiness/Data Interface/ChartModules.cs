@@ -48,7 +48,6 @@ namespace OpenDentBusiness {
 			table.Columns.Add("HideGraphics");
 			table.Columns.Add("isEffectiveComm");
 			table.Columns.Add("isOnCall");
-			table.Columns.Add("isRepair");
 			table.Columns.Add("LabCaseNum");
 			table.Columns.Add("note");
 			table.Columns.Add("PatNum");//only used for Commlog and Task
@@ -83,7 +82,7 @@ namespace OpenDentBusiness {
 			//Procedures-----------------------------------------------------------------------------------------------------
 			string command="SELECT provider.Abbr,appointment.AptDateTime,procedurelog.BaseUnits,procedurelog.ClinicNum,"
 				+"procedurelog.CodeNum,procedurelog.DateEntryC,orionproc.DateScheduleBy,orionproc.DateStopClock,procedurelog.DateTP,"
-				+"procedurecode.Descript,orionproc.DPC,Dx,HideGraphics,orionproc.IsEffectiveComm,orionproc.IsOnCall,orionproc.IsRepair,"
+				+"procedurecode.Descript,orionproc.DPC,Dx,HideGraphics,orionproc.IsEffectiveComm,orionproc.IsOnCall,"
 				+"LaymanTerm,Priority,procedurecode.ProcCode,ProcDate,ProcFee,procedurelog.ProcNum,ProcNumLab,procedurelog.ProcTimeEnd,"
 				+"ProcStatus,orionproc.Status2,Surf,ToothNum,ToothRange,UnitQty "
 				+"FROM procedurelog "
@@ -198,10 +197,6 @@ namespace OpenDentBusiness {
 				}
 				else if(rawProcs.Rows[i]["IsOnCall"].ToString()=="0"){
 					row["isOnCall"]="N";
-				}
-				row["isRepair"]="";
-				if(rawProcs.Rows[i]["IsRepair"].ToString()=="1") {
-					row["isRepair"]="Y";
 				}
 				row["LabCaseNum"]=0;
 				//note-----------------------------------------------------------------------------------------------------------
@@ -360,7 +355,6 @@ namespace OpenDentBusiness {
 				row["HideGraphics"]="";
 				row["isEffectiveComm"]="";
 				row["isOnCall"]="";
-				row["isRepair"]="";
 				row["LabCaseNum"]=0;
 				row["note"]=rawComm.Rows[i]["Note"].ToString();
 				row["PatNum"]=rawComm.Rows[i]["PatNum"].ToString();
@@ -428,7 +422,6 @@ namespace OpenDentBusiness {
 				row["HideGraphics"]="";
 				row["isEffectiveComm"]="";
 				row["isOnCall"]="";
-				row["isRepair"]="";
 				row["LabCaseNum"] = 0;
 				row["note"] = "";
 				row["PatNum"] = "";
@@ -516,7 +509,6 @@ namespace OpenDentBusiness {
 				row["HideGraphics"]="";
 				row["isEffectiveComm"]="";
 				row["isOnCall"]="";
-				row["isRepair"]="";
 				row["LabCaseNum"]=0;
 				row["note"]=rawRx.Rows[i]["Notes"].ToString();
 				row["PatNum"]="";
@@ -597,7 +589,6 @@ namespace OpenDentBusiness {
 				row["HideGraphics"]="";
 				row["isEffectiveComm"]="";
 				row["isOnCall"]="";
-				row["isRepair"]="";
 				row["LabCaseNum"]=rawLab.Rows[i]["LabCaseNum"].ToString();
 				row["note"]=rawLab.Rows[i]["Instructions"].ToString();
 				row["PatNum"]="";
@@ -683,7 +674,6 @@ namespace OpenDentBusiness {
 				row["HideGraphics"]="";
 				row["isEffectiveComm"]="";
 				row["isOnCall"]="";
-				row["isRepair"]="";
 				row["LabCaseNum"]=0;
 				row["note"]=rawTask.Rows[i]["Descript"].ToString();
 				row["PatNum"]=rawTask.Rows[i]["KeyNum"].ToString();
@@ -804,7 +794,6 @@ namespace OpenDentBusiness {
 				row["HideGraphics"]="";
 				row["isEffectiveComm"]="";
 				row["isOnCall"]="";
-				row["isRepair"]="";
 				row["LabCaseNum"]=0;
 				row["note"]=rawApt.Rows[i]["Note"].ToString();
 				row["PatNum"]="";
@@ -874,7 +863,6 @@ namespace OpenDentBusiness {
 				row["HideGraphics"]="";
 				row["isEffectiveComm"]="";
 				row["isOnCall"]="";
-				row["isRepair"]="";
 				row["LabCaseNum"]=0;
 				row["note"]=rawEmail.Rows[i]["BodyText"].ToString();
 				row["PatNum"]="";
@@ -946,7 +934,6 @@ namespace OpenDentBusiness {
 				row["HideGraphics"]="";
 				row["isEffectiveComm"]="";
 				row["isOnCall"]="";
-				row["isRepair"]="";
 				row["LabCaseNum"]=0;
 				row["note"]="";
 				row["PatNum"]="";
