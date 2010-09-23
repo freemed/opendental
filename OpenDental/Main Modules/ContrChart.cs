@@ -4009,6 +4009,9 @@ namespace OpenDental{
 					checkShowR.Checked=true;
 					checkShowCn.Checked=true;
 					checkNotes.Checked=true;
+					checkNotes.Checked=true;
+					checkShowTeeth.Checked=false;
+					checkAudit.Checked=false;
 				}
 			}
 			else {
