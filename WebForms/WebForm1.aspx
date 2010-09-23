@@ -261,7 +261,7 @@
 					<asp:Label ID="LabelPolicy1GroupNumber" runat="server" Text="Group # "></asp:Label>
 					<asp:TextBox ID="TextBoxPolicy1GroupNumber" runat="server" Width="135px" CssClass="textboxstyle"></asp:TextBox>
 					<br />
-					<asp:Label ID="LabelPolicy1Present" runat="server" Text="Please Present card to Receptionist"></asp:Label>
+					<asp:Label ID="LabelPolicy1Present" runat="server" Text="Please present card to Receptionist"></asp:Label>
 					<asp:Panel ID="PanelInsurancePolicy2" runat="server" HorizontalAlign="Center" CssClass="style2">
 						<asp:Label ID="LabelInsurancePolicy2" runat="server" Text="INSURANCE POLICY 2" Font-Bold="True"></asp:Label>
 					</asp:Panel>

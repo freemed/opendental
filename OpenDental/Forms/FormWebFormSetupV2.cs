@@ -40,7 +40,7 @@ namespace OpenDental {
 			butWebformBorderColor.BackColor=PrefC.GetColor(PrefName.WebFormsBorderColor);
 			textBoxWebformsHeading1.Text=PrefC.GetStringSilent(PrefName.WebFormsHeading1);
 			textBoxWebformsHeading2.Text=PrefC.GetStringSilent(PrefName.WebFormsHeading2);
-			TestSheetUpload();
+			//TestSheetUpload();
 		}
 
 		private void butWebformBorderColor_Click(object sender,EventArgs e) {

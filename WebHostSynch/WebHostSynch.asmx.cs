@@ -137,7 +137,7 @@ namespace WebHostSynch {
 			string connectStr=ConfigurationManager.ConnectionStrings["DBRegKey"].ConnectionString;
 			string WebFormAddress="";
 			try {
-				WebFormAddress="https://opendentalsoft.com/WebForms/WebForm1.aspx?DentalOfficeID="+GetDentalOfficeID(RegistrationKeyFromDentalOffice);
+				WebFormAddress=ConfigurationManager.AppSettings["WebFormAddress"].ToString()+"?DentalOfficeID="+GetDentalOfficeID(RegistrationKeyFromDentalOffice);
 			}
 			catch(ApplicationException ex) {
 				Logger.Information(ex.Message.ToString());
