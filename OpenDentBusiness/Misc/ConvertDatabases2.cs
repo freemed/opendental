@@ -2503,7 +2503,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);
 				command="ALTER TABLE sheet ADD IsWebForm tinyint NOT NULL";
 				Db.NonQ(command);
-				command="INSERT INTO preference(PrefName,ValueString) VALUES('WebHostSynchServerURL','https://opendentalsoft.com/WebHostSynch/WebHostSynch.aspx')";
+				command="INSERT INTO preference(PrefName,ValueString) VALUES('WebHostSynchServerURL','https://opendentalsoft.com/WebHostSynch/WebHostSynch.asmx')";
 				Db.NonQ(command);
 				command="INSERT INTO preference(PrefName,ValueString) VALUES('WebFormsBorderColor','3896686')";
 				Db.NonQ(command);
