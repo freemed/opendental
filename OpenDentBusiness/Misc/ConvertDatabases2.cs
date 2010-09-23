@@ -2687,7 +2687,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);
 				command="UPDATE procedurelog SET DateTStamp=NOW()";
 				Db.NonQ32(command);
-				command="ALTER TABLE procedurecode ADD isMultiVisit tinyint NOT NULL";
+				command="ALTER TABLE procedurecode ADD IsMultiVisit tinyint NOT NULL";
 				Db.NonQ(command);
 
 

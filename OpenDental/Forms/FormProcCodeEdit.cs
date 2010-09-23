@@ -68,6 +68,7 @@ namespace OpenDental{
 		private ProcedureCode ProcCode;
 		private Label label19;
 		private ComboBox comboSubstOnlyIf;
+		private CheckBox checkMultiVisit;
 		private List<ProcCodeNote> NoteList;
 
 		///<summary>The procedure code must have already been insterted into the database.</summary>
@@ -132,6 +133,7 @@ namespace OpenDental{
 			this.textSubstitutionCode = new System.Windows.Forms.TextBox();
 			this.label19 = new System.Windows.Forms.Label();
 			this.comboSubstOnlyIf = new System.Windows.Forms.ComboBox();
+			this.checkMultiVisit = new System.Windows.Forms.CheckBox();
 			this.butAddNote = new OpenDental.UI.Button();
 			this.gridNotes = new OpenDental.UI.ODGrid();
 			this.tbTime = new OpenDental.TableTimeBar();
@@ -484,6 +486,16 @@ namespace OpenDental{
 			this.comboSubstOnlyIf.Size = new System.Drawing.Size(145,21);
 			this.comboSubstOnlyIf.TabIndex = 61;
 			// 
+			// checkMultiVisit
+			// 
+			this.checkMultiVisit.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkMultiVisit.Location = new System.Drawing.Point(45,247);
+			this.checkMultiVisit.Name = "checkMultiVisit";
+			this.checkMultiVisit.Size = new System.Drawing.Size(284,18);
+			this.checkMultiVisit.TabIndex = 62;
+			this.checkMultiVisit.Text = "Multi Visit";
+			this.checkMultiVisit.UseVisualStyleBackColor = true;
+			// 
 			// butAddNote
 			// 
 			this.butAddNote.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -596,6 +608,7 @@ namespace OpenDental{
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(941,707);
+			this.Controls.Add(this.checkMultiVisit);
 			this.Controls.Add(this.comboSubstOnlyIf);
 			this.Controls.Add(this.butAddNote);
 			this.Controls.Add(this.gridNotes);
@@ -680,6 +693,8 @@ namespace OpenDental{
 			textLaymanTerm.Text=ProcCode.LaymanTerm;
 			strBTime=new StringBuilder(ProcCode.ProcTime);
 			butColor.BackColor=ProcCode.GraphicColor;
+			checkMultiVisit.Checked=ProcCode.IsMultiVisit;
+			checkMultiVisit.Visible=Programs.UsingOrion;
 			checkNoBillIns.Checked=ProcCode.NoBillIns;
 			checkIsHygiene.Checked=ProcCode.IsHygiene;
 			checkIsProsth.Checked=ProcCode.IsProsth;
@@ -900,6 +915,7 @@ namespace OpenDental{
 			ProcCode.LaymanTerm=textLaymanTerm.Text;
 			ProcCode.ProcTime=strBTime.ToString();
 			ProcCode.GraphicColor=butColor.BackColor;
+			ProcCode.IsMultiVisit=checkMultiVisit.Checked;
 			ProcCode.NoBillIns=checkNoBillIns.Checked;
 			ProcCode.IsProsth=checkIsProsth.Checked;
 			ProcCode.IsHygiene=checkIsHygiene.Checked;

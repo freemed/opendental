@@ -69,7 +69,7 @@ namespace OpenDentBusiness.Crud{
 				procedureCode.BaseUnits       = PIn.Int   (table.Rows[i]["BaseUnits"].ToString());
 				procedureCode.SubstitutionCode= PIn.String(table.Rows[i]["SubstitutionCode"].ToString());
 				procedureCode.SubstOnlyIf     = (SubstitutionCondition)PIn.Int(table.Rows[i]["SubstOnlyIf"].ToString());
-				procedureCode.isMultiVisit    = PIn.Bool  (table.Rows[i]["isMultiVisit"].ToString());
+				procedureCode.IsMultiVisit    = PIn.Bool  (table.Rows[i]["IsMultiVisit"].ToString());
 				retVal.Add(procedureCode);
 			}
 			return retVal;
@@ -89,7 +89,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="CodeNum,";
 			}
-			command+="ProcCode,Descript,AbbrDesc,ProcTime,ProcCat,TreatArea,NoBillIns,IsProsth,DefaultNote,IsHygiene,GTypeNum,AlternateCode1,MedicalCode,IsTaxed,PaintType,GraphicColor,LaymanTerm,IsCanadianLab,PreExisting,BaseUnits,SubstitutionCode,SubstOnlyIf,isMultiVisit) VALUES(";
+			command+="ProcCode,Descript,AbbrDesc,ProcTime,ProcCat,TreatArea,NoBillIns,IsProsth,DefaultNote,IsHygiene,GTypeNum,AlternateCode1,MedicalCode,IsTaxed,PaintType,GraphicColor,LaymanTerm,IsCanadianLab,PreExisting,BaseUnits,SubstitutionCode,SubstOnlyIf,IsMultiVisit) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(procedureCode.CodeNum)+",";
 			}
@@ -116,7 +116,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Int   (procedureCode.BaseUnits)+","
 				+"'"+POut.String(procedureCode.SubstitutionCode)+"',"
 				+    POut.Int   ((int)procedureCode.SubstOnlyIf)+","
-				+    POut.Bool  (procedureCode.isMultiVisit)+")";
+				+    POut.Bool  (procedureCode.IsMultiVisit)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -151,7 +151,7 @@ namespace OpenDentBusiness.Crud{
 				+"BaseUnits       =  "+POut.Int   (procedureCode.BaseUnits)+", "
 				+"SubstitutionCode= '"+POut.String(procedureCode.SubstitutionCode)+"', "
 				+"SubstOnlyIf     =  "+POut.Int   ((int)procedureCode.SubstOnlyIf)+", "
-				+"isMultiVisit    =  "+POut.Bool  (procedureCode.isMultiVisit)+" "
+				+"IsMultiVisit    =  "+POut.Bool  (procedureCode.IsMultiVisit)+" "
 				+"WHERE CodeNum = "+POut.Long(procedureCode.CodeNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
@@ -244,9 +244,9 @@ namespace OpenDentBusiness.Crud{
 				if(command!=""){ command+=",";}
 				command+="SubstOnlyIf = "+POut.Int   ((int)procedureCode.SubstOnlyIf)+"";
 			}
-			if(procedureCode.isMultiVisit != oldProcedureCode.isMultiVisit) {
+			if(procedureCode.IsMultiVisit != oldProcedureCode.IsMultiVisit) {
 				if(command!=""){ command+=",";}
-				command+="isMultiVisit = "+POut.Bool(procedureCode.isMultiVisit)+"";
+				command+="IsMultiVisit = "+POut.Bool(procedureCode.IsMultiVisit)+"";
 			}
 			if(command==""){
 				return;

@@ -71,7 +71,7 @@ namespace OpenDentBusiness{
 		public SubstitutionCondition SubstOnlyIf;
 		//DateTStamp
 		///<summary>Set to true if the procedure takes more than one appointment to complete.</summary>
-		public bool isMultiVisit;
+		public bool IsMultiVisit;
 
 		
 		///<summary>Not a database column.  Only used for xml import function.</summary>
