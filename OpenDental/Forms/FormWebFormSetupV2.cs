@@ -123,7 +123,10 @@ namespace OpenDental {
 					MsgBox.Show(this,"Registration key provided by the dental office is incorrect");
 					return;
 				}
-				wh.SetPreferences(RegistrationKey,PrefC.GetColor(PrefName.WebFormsBorderColor).ToArgb(),PrefC.GetStringSilent(PrefName.WebFormsHeading1),PrefC.GetStringSilent(PrefName.WebFormsHeading2));
+				bool PrefSet= wh.SetPreferences(RegistrationKey,PrefC.GetColor(PrefName.WebFormsBorderColor).ToArgb(),PrefC.GetStringSilent(PrefName.WebFormsHeading1),PrefC.GetStringSilent(PrefName.WebFormsHeading2));
+				if(PrefSet==false) {
+				MsgBox.Show(this,"Preferences could not be set on the server");
+				}
 			}
 			catch(Exception ex) {
 				Cursor=Cursors.Default;

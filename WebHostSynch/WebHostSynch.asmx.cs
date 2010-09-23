@@ -20,31 +20,37 @@ namespace WebHostSynch {
 
 		[WebMethod]
 		public bool SetPreferences(string RegistrationKey,int ColorBorder,string Heading1,string Heading2) {
-			ODWebServiceEntities db=new ODWebServiceEntities();
-			long DentalOfficeID=GetDentalOfficeID(RegistrationKey);
-			if(DentalOfficeID==0) {
-				Logger.Information("Incorrect registration key. IpAddress="+HttpContext.Current.Request.UserHostAddress+" RegistrationKey="+RegistrationKey);
+			try {
+				ODWebServiceEntities db=new ODWebServiceEntities();
+				long DentalOfficeID=GetDentalOfficeID(RegistrationKey);
+				if(DentalOfficeID==0) {
+					Logger.Information("Incorrect registration key. IpAddress="+HttpContext.Current.Request.UserHostAddress+" RegistrationKey="+RegistrationKey);
+					return false;
+				}
+				var wspObj=from wsp in db.webforms_preference
+					where wsp.DentalOfficeID==DentalOfficeID
+					select wsp;
+				//update preference
+				if(wspObj.Count()>0) {
+					wspObj.First().ColorBorder=ColorBorder;
+					wspObj.First().Heading1=Heading1;
+					wspObj.First().Heading2=Heading2;
+				}
+				// if there is no entry for that dental office make a new entry.
+				if(wspObj.Count()==0) {
+					webforms_preference wspNewObj=new webforms_preference();
+					wspNewObj.DentalOfficeID=DentalOfficeID;
+					wspNewObj.ColorBorder=ColorBorder;
+					wspNewObj.Heading1=Heading1;
+					wspNewObj.Heading2=Heading2;
+					db.AddTowebforms_preference(wspNewObj);
+				}
+				db.SaveChanges();
+			}
+			catch(ApplicationException ex) {
+				Logger.Information(ex.Message.ToString());
 				return false;
 			}
-			var wspObj=from wsp in db.webforms_preference
-				where wsp.DentalOfficeID==DentalOfficeID
-				select wsp;
-			//update preference
-			if(wspObj.Count()>0) {
-				wspObj.First().ColorBorder=ColorBorder;
-				wspObj.First().Heading1=Heading1;
-				wspObj.First().Heading2=Heading2;
-			}
-			// if there is no entry for that dental office make a new entry.
-			if(wspObj.Count()==0) {
-				webforms_preference wspNewObj=new webforms_preference();
-				wspNewObj.DentalOfficeID=DentalOfficeID;
-				wspNewObj.ColorBorder=ColorBorder;
-				wspNewObj.Heading1=Heading1;
-				wspNewObj.Heading2=Heading2;
-				db.AddTowebforms_preference(wspNewObj);
-			}
-			db.SaveChanges();
 			return true;
 		}
 
@@ -76,26 +82,31 @@ namespace WebHostSynch {
 
 		[WebMethod]
 		public void DeleteSheetData(string RegistrationKey,List<long> SheetsForDeletion) {
-			long DentalOfficeID=GetDentalOfficeID(RegistrationKey);
-			if(DentalOfficeID==0) {
-				Logger.Information("Incorrect registration key. IPAddress="+HttpContext.Current.Request.UserHostAddress+" RegistrationKey="+RegistrationKey);
-				return;
-			}
-			ODWebServiceEntities db=new ODWebServiceEntities();
-			for(int i=0;i<SheetsForDeletion.Count();i++) {
-				long SheetID=SheetsForDeletion.ElementAt(i);// LINQ throws an error if this is directly put into the select expression
-				// first delete all sheet field then delete the sheet so that a foreign key error is not thrown
-				var delSheetField=from wsf in db.webforms_sheetfield where wsf.webforms_sheet.SheetID==SheetID
-								  select wsf;
-				for(int j=0;j<delSheetField.Count();j++) {
-					// the ElementAt operator only works with lists. Hence ToList()
-					db.DeleteObject(delSheetField.ToList().ElementAt(j));
+			try {
+				long DentalOfficeID=GetDentalOfficeID(RegistrationKey);
+				if(DentalOfficeID==0) {
+					Logger.Information("Incorrect registration key. IPAddress="+HttpContext.Current.Request.UserHostAddress+" RegistrationKey="+RegistrationKey);
+					return;
 				}
-				var delSheet=from ws in db.webforms_sheet where ws.SheetID==SheetID
-					select ws;
-				db.DeleteObject(delSheet.First());
+				ODWebServiceEntities db=new ODWebServiceEntities();
+				for(int i=0;i<SheetsForDeletion.Count();i++) {
+					long SheetID=SheetsForDeletion.ElementAt(i);// LINQ throws an error if this is directly put into the select expression
+					// first delete all sheet field then delete the sheet so that a foreign key error is not thrown
+					var delSheetField=from wsf in db.webforms_sheetfield where wsf.webforms_sheet.SheetID==SheetID
+									  select wsf;
+					for(int j=0;j<delSheetField.Count();j++) {
+						// the ElementAt operator only works with lists. Hence ToList()
+						db.DeleteObject(delSheetField.ToList().ElementAt(j));
+					}
+					var delSheet=from ws in db.webforms_sheet where ws.SheetID==SheetID
+						select ws;
+					db.DeleteObject(delSheet.First());
+				}
+				db.SaveChanges();
 			}
-			db.SaveChanges();
+			catch(ApplicationException ex) {
+				Logger.Information(ex.Message.ToString());
+			}
 		}
 
 		[WebMethod]
@@ -152,39 +163,55 @@ namespace WebHostSynch {
 		/// </summary>
 		[WebMethod]
 		public void UpdateSheetDef(string RegistrationKey,List<SheetDef> sheetDefList) {
-			ODWebServiceEntities db=new ODWebServiceEntities();
-			long DentalOfficeID=GetDentalOfficeID(RegistrationKey);
-			if(DentalOfficeID==0) {
-				Logger.Information("Incorrect registration key. IpAddress="+HttpContext.Current.Request.UserHostAddress+" RegistrationKey="+RegistrationKey);
-				return;
-			}
-			
-
-			foreach(SheetDef sheetDef in sheetDefList) {
-				var PreferenceResult = db.webforms_preference.Where(pref => pref.DentalOfficeID==DentalOfficeID);
-				webforms_sheetdef SheetDefObj=null;
-				PreferenceResult.First().webforms_sheetdef.Load();//Load associated SheetDefs object.
-				var SheetDefResult=PreferenceResult.First().webforms_sheetdef.Where(sd => sd.SheetDefNum==sheetDef.SheetDefNum);
-				 while(SheetDefResult.Count()>0) {
-					 SheetDefObj=SheetDefResult.First();
-					//load and delete existing child objects i.e sheetfielddefs objects
-					 SheetDefObj.webforms_sheetfielddef.Load();
-					var SheetFieldDefResult=SheetDefObj.webforms_sheetfielddef;
-					//every time a SheetFieldDefResult is deleted the the SheetFieldDefResult.Count() reduces so at some point the count will ultimately become 0.
-					while(SheetFieldDefResult.Count()>0) {
-						db.DeleteObject(SheetFieldDefResult.First());//Delete SheetFieldDefObj
-					}
-					db.DeleteObject(SheetDefResult.First());//Delete SheetDefObj
+			try{
+				ODWebServiceEntities db=new ODWebServiceEntities();
+				long DentalOfficeID=GetDentalOfficeID(RegistrationKey);
+				if(DentalOfficeID==0) {
+					Logger.Information("Incorrect registration key. IpAddress="+HttpContext.Current.Request.UserHostAddress+" RegistrationKey="+RegistrationKey);
+					return;
 				}
-				 SheetDefObj=new webforms_sheetdef();
-				 SheetDefObj.SheetDefNum=sheetDef.SheetDefNum;
-				 PreferenceResult.First().webforms_sheetdef.Add(SheetDefObj);
+				
+
+				foreach(SheetDef sheetDef in sheetDefList) {
+					var PreferenceResult = db.webforms_preference.Where(pref => pref.DentalOfficeID==DentalOfficeID);
+					webforms_sheetdef SheetDefObj=null;
+					PreferenceResult.First().webforms_sheetdef.Load();//Load associated SheetDefs object.
+					var SheetDefResult=PreferenceResult.First().webforms_sheetdef.Where(sd => sd.SheetDefNum==sheetDef.SheetDefNum);
+					 while(SheetDefResult.Count()>0) {
+						 SheetDefObj=SheetDefResult.First();
+						//load and delete existing child objects i.e sheetfielddefs objects
+						 SheetDefObj.webforms_sheetfielddef.Load();
+						var SheetFieldDefResult=SheetDefObj.webforms_sheetfielddef;
+						//every time a SheetFieldDefResult is deleted the the SheetFieldDefResult.Count() reduces so at some point the count will ultimately become 0.
+						while(SheetFieldDefResult.Count()>0) {
+							db.DeleteObject(SheetFieldDefResult.First());//Delete SheetFieldDefObj
+						}
+						db.DeleteObject(SheetDefResult.First());//Delete SheetDefObj
+					}
+					 SheetDefObj=new webforms_sheetdef();
+					 SheetDefObj.SheetDefNum=sheetDef.SheetDefNum;
+					 PreferenceResult.First().webforms_sheetdef.Add(SheetDefObj);
 
 
-				 FillSheetDef(sheetDef,SheetDefObj);
-				 FillFieldSheetDef(sheetDef,SheetDefObj);
-			}// end of foreach loop
-			db.SaveChanges();
+					 FillSheetDef(sheetDef,SheetDefObj);
+					 FillFieldSheetDef(sheetDef,SheetDefObj);
+				}// end of foreach loop
+				db.SaveChanges();
+
+				//this code is for use with the UI where Webforms addresses for each sheetDef is shown.
+					List<string> WebFormAddresses = new List<string>();
+
+				// client code on opendental
+
+					if(WebFormAddresses.Count ==0) {
+						// message= WebFormAddresses.Count + " sheet defs have been updated"
+					}
+
+				//
+			}
+			catch(ApplicationException ex) {
+				Logger.Information(ex.Message.ToString());
+			}
 		
 		}
 

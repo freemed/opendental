@@ -11,8 +11,27 @@ namespace WebForms {
 	/// For the next verion of webforms -  This is work in progress.
 	/// </summary>
 	public partial class WebForm2:System.Web.UI.Page {
-	
+
+		private long DentalOfficeID=0;
+		private long SheetDefNum=0;
+		
+
 		protected void Page_Load(object sender,EventArgs e) {
+			try {
+				if(Request["DentalOfficeID"]!=null) {
+					Int64.TryParse(Request["DentalOfficeID"].ToString().Trim(),out DentalOfficeID);
+				}
+				if(Request["SheetDefNum"]!=null) {
+					Int64.TryParse(Request["SheetDefNum"].ToString().Trim(),out SheetDefNum);
+				}
+				GeneratePage(DentalOfficeID,SheetDefNum);
+			}
+			catch(Exception ex) {
+				Logger.Information(ex.Message.ToString());
+			}
+		}
+
+		private void GeneratePage(long DentalOfficeID,long SheetDefNum) {
 			try {
 				int xoffset = 37;
 				int yoffset = 26;
@@ -40,7 +59,7 @@ namespace WebForms {
 				form1.Style["background-repeat"]="no-repeat";
 				form1.Style["background-position"]=xoffset + "px "+ yoffset + "px";
 				ODWebServiceEntities db=new ODWebServiceEntities();
-				var sfdObj = (from sfd in db.webforms_sheetfielddef where sfd.SheetDefNum==5
+				var sfdObj = (from sfd in db.webforms_sheetfielddef where sfd.SheetDefNum==SheetDefNum && sfd.webforms_sheetdef.webforms_preference.DentalOfficeID==DentalOfficeID
 							  select sfd).ToList();
 				for(int j=0;j<sfdObj.Count();j++) {
 					String FieldName=sfdObj.ElementAt(j).FieldName;
