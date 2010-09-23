@@ -6759,7 +6759,7 @@ namespace OpenDental{
 					OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
 				}
 			}
-			FillPtInfo();
+			ModuleSelected(PatCur.PatNum);
 		}
 
 		private void toothChart_Click(object sender,EventArgs e) {
