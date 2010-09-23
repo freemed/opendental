@@ -4190,23 +4190,8 @@ namespace OpenDental{
 						case "Date Entry":
 							row.Cells.Add(table.Rows[i]["dateEntryC"].ToString());
 							break;
-						case "DPC":
-							row.Cells.Add(table.Rows[i]["dPC"].ToString());
-							break;
-						case "Schedule By":
-							row.Cells.Add(table.Rows[i]["dateScheduleBy"].ToString());
-							break;
-						case "Stop Clock":
-							row.Cells.Add(table.Rows[i]["dateStopClock"].ToString());
-							break;
 						case "Date TP":
 							row.Cells.Add(table.Rows[i]["dateTP"].ToString());
-							break;
-						case "Effective Comm":
-							row.Cells.Add(table.Rows[i]["isEffectiveComm"].ToString());
-							break;
-						case "On Call":
-							row.Cells.Add(table.Rows[i]["isOnCall"].ToString());
 							break;
 						case "End Time":
 							row.Cells.Add(table.Rows[i]["procTimeEnd"].ToString());
@@ -4214,8 +4199,23 @@ namespace OpenDental{
 						case "Quadrant":
 							row.Cells.Add(table.Rows[i]["quadrant"].ToString());
 							break;
+						case "Schedule By":
+							row.Cells.Add(table.Rows[i]["orionDateScheduleBy"].ToString());
+							break;
+						case "Stop Clock":
+							row.Cells.Add(table.Rows[i]["orionDateStopClock"].ToString());
+							break;
+						case "DPC":
+							row.Cells.Add(table.Rows[i]["orionDPC"].ToString());
+							break;
+						case "Effective Comm":
+							row.Cells.Add(table.Rows[i]["orionIsEffectiveComm"].ToString());
+							break;
+						case "On Call":
+							row.Cells.Add(table.Rows[i]["orionIsOnCall"].ToString());
+							break;
 						case "Stat 2":
-							row.Cells.Add(table.Rows[i]["status2"].ToString());
+							row.Cells.Add(table.Rows[i]["orionStatus2"].ToString());
 							break;
 						default:
 							row.Cells.Add("");

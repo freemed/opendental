@@ -110,16 +110,19 @@ namespace OpenDentBusiness {
 				list.Add(new DisplayField("User",62,category));
 				list.Add(new DisplayField("Signed",55,category));
 				//list.Add(new DisplayField("Priority",65,category));
-				//list.Add(new DisplayField("DPC",33,category));
-				//list.Add(new DisplayField("Schedule By",72,category));
-				//list.Add(new DisplayField("Stop Clock",67,category));
-				//list.Add(new DisplayField("Stat 2",36,category));
-				//list.Add(new DisplayField("On Call",45,category));
-				//list.Add(new DisplayField("Effective Comm",90,category));
 				//list.Add(new DisplayField("Date TP",67,category));
 				//list.Add(new DisplayField("Quadrant",55,category));
 				//list.Add(new DisplayField("Date Entry",67,category));
 				//list.Add(new DisplayField("End Time",56,category));
+				//if(Programs.UsingOrion){
+					//list.Add(new DisplayField("DPC",33,category));
+					//list.Add(new DisplayField("Schedule By",72,category));
+					//list.Add(new DisplayField("Stop Clock",67,category));
+					//list.Add(new DisplayField("Stat 2",36,category));
+					//list.Add(new DisplayField("On Call",45,category));
+					//list.Add(new DisplayField("Effective Comm",90,category));
+				//}
+				
 			}
 			//else if(category==DisplayFieldCategory.ProgressNotes){
 			//  list.Add(new DisplayField("Date",67,category));
@@ -261,17 +264,19 @@ namespace OpenDentBusiness {
 				list.Add(new DisplayField("ADA Code",62,category));
 				list.Add(new DisplayField("User",62,category));
 				list.Add(new DisplayField("Signed",55,category));
-				list.Add(new DisplayField("Priority",55,category));
-				list.Add(new DisplayField("DPC",33,category));
-				list.Add(new DisplayField("Schedule By",72,category));
-				list.Add(new DisplayField("Stop Clock",67,category));
-				list.Add(new DisplayField("Stat 2",36,category));
-				list.Add(new DisplayField("On Call",45,category));
-				list.Add(new DisplayField("Effective Comm",90,category));
+				list.Add(new DisplayField("Priority",44,category));
 				list.Add(new DisplayField("Date TP",67,category));
 				list.Add(new DisplayField("Quadrant",55,category));
 				list.Add(new DisplayField("Date Entry",67,category));
 				list.Add(new DisplayField("End Time",56,category));
+				if(Programs.UsingOrion){
+					list.Add(new DisplayField("DPC",33,category));
+					list.Add(new DisplayField("Schedule By",72,category));
+					list.Add(new DisplayField("Stop Clock",67,category));
+					list.Add(new DisplayField("Stat 2",36,category));
+					list.Add(new DisplayField("On Call",45,category));
+					list.Add(new DisplayField("Effective Comm",90,category));
+				}
 			}
 			//else if(category==DisplayFieldCategory.ProgressNotes){
 			//  list.Add(new DisplayField("Date",67,category));

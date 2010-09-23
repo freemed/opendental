@@ -36,9 +36,6 @@ namespace OpenDentBusiness {
 			table.Columns.Add("colorText");
 			table.Columns.Add("CommlogNum");
 			table.Columns.Add("dateEntryC");
-			table.Columns.Add("dPC");
-			table.Columns.Add("dateScheduleBy");
-			table.Columns.Add("dateStopClock");
 			table.Columns.Add("dateTP");
 			table.Columns.Add("description");
 			table.Columns.Add("dx");
@@ -46,10 +43,14 @@ namespace OpenDentBusiness {
 			table.Columns.Add("EmailMessageNum");
 			table.Columns.Add("FormPatNum");
 			table.Columns.Add("HideGraphics");
-			table.Columns.Add("isEffectiveComm");
-			table.Columns.Add("isOnCall");
 			table.Columns.Add("LabCaseNum");
 			table.Columns.Add("note");
+			table.Columns.Add("orionDateScheduleBy");
+			table.Columns.Add("orionDateStopClock");
+			table.Columns.Add("orionDPC");
+			table.Columns.Add("orionIsEffectiveComm");
+			table.Columns.Add("orionIsOnCall");
+			table.Columns.Add("orionStatus2");
 			table.Columns.Add("PatNum");//only used for Commlog and Task
 			table.Columns.Add("Priority");//for sorting
 			table.Columns.Add("priority");
@@ -68,7 +69,6 @@ namespace OpenDentBusiness {
 			table.Columns.Add("RxNum");
 			table.Columns.Add("SheetNum");
 			table.Columns.Add("signature");
-			table.Columns.Add("status2");
 			table.Columns.Add("Surf");
 			table.Columns.Add("surf");
 			table.Columns.Add("TaskNum");
@@ -148,21 +148,6 @@ namespace OpenDentBusiness {
 				else {
 					row["dateEntryC"]=dateT.ToString(Lans.GetShortDateTimeFormat());
 				}
-				row["dPC"]=Lans.g("enumDPC",((OrionDPC)PIn.Long(rawProcs.Rows[i]["DPC"].ToString())).ToString());
-				dateT=PIn.DateT(rawProcs.Rows[i]["DateScheduleBy"].ToString());
-				if(dateT.Year<1880) {
-					row["dateScheduleBy"]="";
-				}
-				else {
-					row["dateScheduleBy"]=dateT.ToString(Lans.GetShortDateTimeFormat());
-				}
-				dateT=PIn.DateT(rawProcs.Rows[i]["DateStopClock"].ToString());
-				if(dateT.Year<1880) {
-					row["dateStopClock"]="";
-				}
-				else {
-					row["dateStopClock"]=dateT.ToString(Lans.GetShortDateTimeFormat());
-				}
 				dateT=PIn.DateT(rawProcs.Rows[i]["DateTP"].ToString());
 				if(dateT.Year<1880) {
 					row["dateTP"]="";
@@ -184,24 +169,44 @@ namespace OpenDentBusiness {
 				row["EmailMessageNum"]=0;
 				row["FormPatNum"]=0;
 				row["HideGraphics"]=rawProcs.Rows[i]["HideGraphics"].ToString();
-				row["isEffectiveComm"]="";
-				if(rawProcs.Rows[i]["IsEffectiveComm"].ToString()=="1"){
-					row["isEffectiveComm"]="Y";
-				}
-				else if(rawProcs.Rows[i]["IsEffectiveComm"].ToString()=="0"){
-					row["isEffectiveComm"]="N";
-				}
-				row["isOnCall"]="";
-				if(rawProcs.Rows[i]["IsOnCall"].ToString()=="1"){
-					row["isOnCall"]="Y";
-				}
-				else if(rawProcs.Rows[i]["IsOnCall"].ToString()=="0"){
-					row["isOnCall"]="N";
-				}
 				row["LabCaseNum"]=0;
 				//note-----------------------------------------------------------------------------------------------------------
 				row["user"]="";
 				row["note"]="";
+				dateT=PIn.DateT(rawProcs.Rows[i]["DateScheduleBy"].ToString());
+				if(dateT.Year<1880) {
+					row["orionDateScheduleBy"]="";
+				}
+				else {
+					row["orionDateScheduleBy"]=dateT.ToString(Lans.GetShortDateTimeFormat());
+				}
+				dateT=PIn.DateT(rawProcs.Rows[i]["DateStopClock"].ToString());
+				if(dateT.Year<1880) {
+					row["orionDateStopClock"]="";
+				}
+				else {
+					row["orionDateStopClock"]=dateT.ToString(Lans.GetShortDateTimeFormat());
+				}
+				row["orionDPC"]=Lans.g("enumOrionDPC",((OrionDPC)PIn.Long(rawProcs.Rows[i]["DPC"].ToString())).ToString());
+				row["orionIsEffectiveComm"]="";
+				if(rawProcs.Rows[i]["IsEffectiveComm"].ToString()=="1"){
+					row["orionIsEffectiveComm"]="Y";
+				}
+				else if(rawProcs.Rows[i]["IsEffectiveComm"].ToString()=="0"){
+					row["orionIsEffectiveComm"]="N";
+				}
+				row["orionIsOnCall"]="";
+				if(rawProcs.Rows[i]["IsOnCall"].ToString()=="1"){
+					row["orionIsOnCall"]="Y";
+				}
+				else if(rawProcs.Rows[i]["IsOnCall"].ToString()=="0"){
+					row["orionIsOnCall"]="N";
+				}
+				row["orionStatus2"]="";
+				row["orionStatus2"]=Lans.g("enumStatus2",((OrionStatus)PIn.Long(rawProcs.Rows[i]["Status2"].ToString())).ToString());
+				if(row["orionStatus2"].ToString()=="-1"){
+					row["orionStatus2"]="";
+				}
 				row["signature"]="";
 				if(isAuditMode) {//we will include all notes for each proc.  We will concat and make readable.
 					for(int n=0;n<rawNotes.Rows.Count;n++) {//loop through each note
@@ -292,11 +297,6 @@ namespace OpenDentBusiness {
 				}
 				row["RxNum"]=0;
 				row["SheetNum"]=0;
-				row["status2"]="";
-				row["status2"]=Lans.g("enumStatus2",((OrionStatus)PIn.Long(rawProcs.Rows[i]["Status2"].ToString())).ToString());
-				if(row["status2"].ToString()=="-1"){
-					row["status2"]="";
-				}
 				row["Surf"]=rawProcs.Rows[i]["Surf"].ToString();
 				if(ProcedureCodes.GetProcCode(PIn.Long(row["CodeNum"].ToString())).TreatArea==TreatmentArea.Surf){
 					row["surf"]=Tooth.SurfTidyFromDbToDisplay(rawProcs.Rows[i]["Surf"].ToString(),rawProcs.Rows[i]["ToothNum"].ToString());
@@ -336,9 +336,6 @@ namespace OpenDentBusiness {
 				row["colorText"]=DefC.Long[(int)DefCat.ProgNoteColors][6].ItemColor.ToArgb().ToString();
 				row["CommlogNum"]=rawComm.Rows[i]["CommlogNum"].ToString();
 				row["dateEntryC"]="";
-				row["dPC"]="";
-				row["dateScheduleBy"]="";
-				row["dateStopClock"]="";
 				row["dateTP"]="";
 				if(rawComm.Rows[i]["PatNum"].ToString()==patNum.ToString()) {
 					txt="";
@@ -353,10 +350,14 @@ namespace OpenDentBusiness {
 				row["EmailMessageNum"]=0;
 				row["FormPatNum"]=0;
 				row["HideGraphics"]="";
-				row["isEffectiveComm"]="";
-				row["isOnCall"]="";
 				row["LabCaseNum"]=0;
 				row["note"]=rawComm.Rows[i]["Note"].ToString();
+				row["orionDateScheduleBy"]="";
+				row["orionDateStopClock"]="";
+				row["orionDPC"]="";
+				row["orionIsEffectiveComm"]="";
+				row["orionIsOnCall"]="";
+				row["orionStatus2"]="";
 				row["PatNum"]=rawComm.Rows[i]["PatNum"].ToString();
 				row["Priority"]="";
 				row["priority"]="";
@@ -387,7 +388,6 @@ namespace OpenDentBusiness {
 				if(rawComm.Rows[i]["SigPresent"].ToString()=="1") {
 					row["signature"]=Lans.g("ChartModule","Signed");
 				}
-				row["status2"]="";
 				row["Surf"]="";
 				row["TaskNum"]=0;
 				row["toothNum"]="";
@@ -410,9 +410,6 @@ namespace OpenDentBusiness {
 				row["colorText"] = DefC.Long[(int)DefCat.ProgNoteColors][6].ItemColor.ToArgb().ToString();
 				row["CommlogNum"] =0;
 				row["dateEntryC"]="";
-				row["dPC"]="";
-				row["dateScheduleBy"]="";
-				row["dateStopClock"]="";
 				row["dateTP"]="";
 				row["description"] = Lans.g("ChartModule","Questionnaire");
 				row["dx"] = "";
@@ -420,10 +417,14 @@ namespace OpenDentBusiness {
 				row["EmailMessageNum"] = 0;
 				row["FormPatNum"] = rawForm.Rows[i]["FormPatNum"].ToString();
 				row["HideGraphics"]="";
-				row["isEffectiveComm"]="";
-				row["isOnCall"]="";
 				row["LabCaseNum"] = 0;
 				row["note"] = "";
+				row["orionDateScheduleBy"]="";
+				row["orionDateStopClock"]="";
+				row["orionDPC"]="";
+				row["orionIsEffectiveComm"]="";
+				row["orionIsOnCall"]="";
+				row["orionStatus2"]="";
 				row["PatNum"] = "";
 				row["Priority"] = "";
 				row["priority"]="";
@@ -453,7 +454,6 @@ namespace OpenDentBusiness {
 				row["RxNum"] = 0;
 				row["SheetNum"] = 0;
 				row["signature"] = "";
-				row["status2"]="";
 				row["Surf"] = "";
 				row["TaskNum"] = 0;
 				row["toothNum"] = "";
@@ -494,9 +494,6 @@ namespace OpenDentBusiness {
 				row["colorText"]=DefC.Long[(int)DefCat.ProgNoteColors][5].ItemColor.ToArgb().ToString();
 				row["CommlogNum"]=0;
 				row["dateEntryC"]="";
-				row["dPC"]="";
-				row["dateScheduleBy"]="";
-				row["dateStopClock"]="";
 				row["dateTP"]="";
 				row["description"]=Lans.g("ChartModule","Rx - ")+rawRx.Rows[i]["Drug"].ToString()+" - #"+rawRx.Rows[i]["Disp"].ToString();
 				if(rawRx.Rows[i]["PharmacyNum"].ToString()!="0") {
@@ -507,10 +504,14 @@ namespace OpenDentBusiness {
 				row["EmailMessageNum"]=0;
 				row["FormPatNum"]=0;
 				row["HideGraphics"]="";
-				row["isEffectiveComm"]="";
-				row["isOnCall"]="";
 				row["LabCaseNum"]=0;
 				row["note"]=rawRx.Rows[i]["Notes"].ToString();
+				row["orionDateScheduleBy"]="";
+				row["orionDateStopClock"]="";
+				row["orionDPC"]="";
+				row["orionIsEffectiveComm"]="";
+				row["orionIsOnCall"]="";
+				row["orionStatus2"]="";
 				row["PatNum"]="";
 				row["Priority"]="";
 				row["priority"]="";
@@ -536,7 +537,6 @@ namespace OpenDentBusiness {
 				row["RxNum"]=rawRx.Rows[i]["RxNum"].ToString();
 				row["SheetNum"]=0;
 				row["signature"]="";
-				row["status2"]="";
 				row["Surf"]="";
 				row["TaskNum"]=0;
 				row["toothNum"]="";
@@ -562,9 +562,6 @@ namespace OpenDentBusiness {
 				row["colorText"]=DefC.Long[(int)DefCat.ProgNoteColors][7].ItemColor.ToArgb().ToString();
 				row["CommlogNum"]=0;
 				row["dateEntryC"]="";
-				row["dPC"]="";
-				row["dateScheduleBy"]="";
-				row["dateStopClock"]="";
 				row["dateTP"]="";
 				row["description"]=Lans.g("ChartModule","LabCase - ")+rawLab.Rows[i]["Description"].ToString()+" "
 					+rawLab.Rows[i]["Phone"].ToString();
@@ -587,10 +584,14 @@ namespace OpenDentBusiness {
 				row["EmailMessageNum"]=0;
 				row["FormPatNum"]=0;
 				row["HideGraphics"]="";
-				row["isEffectiveComm"]="";
-				row["isOnCall"]="";
 				row["LabCaseNum"]=rawLab.Rows[i]["LabCaseNum"].ToString();
 				row["note"]=rawLab.Rows[i]["Instructions"].ToString();
+				row["orionDateScheduleBy"]="";
+				row["orionDateStopClock"]="";
+				row["orionDPC"]="";
+				row["orionIsEffectiveComm"]="";
+				row["orionIsOnCall"]="";
+				row["orionStatus2"]="";
 				row["PatNum"]="";
 				row["Priority"]="";
 				row["priority"]="";
@@ -618,7 +619,6 @@ namespace OpenDentBusiness {
 				row["RxNum"]=0;
 				row["SheetNum"]=0;
 				row["signature"]="";
-				row["status2"]="";
 				row["Surf"]="";
 				row["TaskNum"]=0;
 				row["toothNum"]="";
@@ -649,9 +649,6 @@ namespace OpenDentBusiness {
 				//row["colorText"] = DefC.Long[(int)DefCat.ProgNoteColors][6].ItemColor.ToArgb().ToString();//same as commlog
 				row["CommlogNum"]=0;
 				row["dateEntryC"]="";
-				row["dPC"]="";
-				row["dateScheduleBy"]="";
-				row["dateStopClock"]="";
 				row["dateTP"]="";
 				if(rawTask.Rows[i]["KeyNum"].ToString()==patNum.ToString()) {
 					txt="";
@@ -672,10 +669,14 @@ namespace OpenDentBusiness {
 				row["EmailMessageNum"]=0;
 				row["FormPatNum"]=0;
 				row["HideGraphics"]="";
-				row["isEffectiveComm"]="";
-				row["isOnCall"]="";
 				row["LabCaseNum"]=0;
 				row["note"]=rawTask.Rows[i]["Descript"].ToString();
+				row["orionDateScheduleBy"]="";
+				row["orionDateStopClock"]="";
+				row["orionDPC"]="";
+				row["orionIsEffectiveComm"]="";
+				row["orionIsOnCall"]="";
+				row["orionStatus2"]="";
 				row["PatNum"]=rawTask.Rows[i]["KeyNum"].ToString();
 				row["Priority"]="";
 				row["priority"]="";
@@ -714,7 +715,6 @@ namespace OpenDentBusiness {
 				row["RxNum"]=0;
 				row["SheetNum"]=0;
 				row["signature"]="";
-				row["status2"]="";
 				row["Surf"]="";
 				row["TaskNum"]=rawTask.Rows[i]["TaskNum"].ToString();
 				row["toothNum"]="";
@@ -741,9 +741,6 @@ namespace OpenDentBusiness {
 				row["colorText"]=DefC.Long[(int)DefCat.ProgNoteColors][8].ItemColor.ToArgb().ToString();
 				row["CommlogNum"]=0;
 				row["dateEntryC"]="";
-				row["dPC"]="";
-				row["dateScheduleBy"]="";
-				row["dateStopClock"]="";
 				row["dateTP"]="";
 				row["description"]=Lans.g("ChartModule","Appointment - ")+dateT.ToShortTimeString()+"\r\n"
 					+rawApt.Rows[i]["ProcDescript"].ToString();
@@ -792,10 +789,14 @@ namespace OpenDentBusiness {
 				row["EmailMessageNum"]=0;
 				row["FormPatNum"]=0;
 				row["HideGraphics"]="";
-				row["isEffectiveComm"]="";
-				row["isOnCall"]="";
 				row["LabCaseNum"]=0;
 				row["note"]=rawApt.Rows[i]["Note"].ToString();
+				row["orionDateScheduleBy"]="";
+				row["orionDateStopClock"]="";
+				row["orionDPC"]="";
+				row["orionIsEffectiveComm"]="";
+				row["orionIsOnCall"]="";
+				row["orionStatus2"]="";
 				row["PatNum"]="";
 				row["Priority"]="";
 				row["priority"]="";
@@ -822,7 +823,6 @@ namespace OpenDentBusiness {
 				row["RxNum"]=0;
 				row["SheetNum"]=0;
 				row["signature"]="";
-				row["status2"]="";
 				row["Surf"]="";
 				row["TaskNum"]=0;
 				row["toothNum"]="";
@@ -847,9 +847,6 @@ namespace OpenDentBusiness {
 				row["colorText"]=DefC.Long[(int)DefCat.ProgNoteColors][6].ItemColor.ToArgb().ToString();//needs to change
 				row["CommlogNum"]=0;
 				row["dateEntryC"]="";
-				row["dPC"]="";
-				row["dateScheduleBy"]="";
-				row["dateStopClock"]="";
 				row["dateTP"]="";
 				txt="";
 				if(rawEmail.Rows[i]["SentOrReceived"].ToString()=="0") {
@@ -861,10 +858,14 @@ namespace OpenDentBusiness {
 				row["EmailMessageNum"]=rawEmail.Rows[i]["EmailMessageNum"].ToString();
 				row["FormPatNum"]=0;
 				row["HideGraphics"]="";
-				row["isEffectiveComm"]="";
-				row["isOnCall"]="";
 				row["LabCaseNum"]=0;
 				row["note"]=rawEmail.Rows[i]["BodyText"].ToString();
+				row["orionDateScheduleBy"]="";
+				row["orionDateStopClock"]="";
+				row["orionDPC"]="";
+				row["orionIsEffectiveComm"]="";
+				row["orionIsOnCall"]="";
+				row["orionStatus2"]="";
 				row["PatNum"]="";
 				row["Priority"]="";
 				row["priority"]="";
@@ -893,7 +894,6 @@ namespace OpenDentBusiness {
 				row["RxNum"]=0;
 				row["SheetNum"]=0;
 				row["signature"]="";
-				row["status2"]="";
 				row["Surf"]="";
 				row["TaskNum"]=0;
 				row["toothNum"]="";
@@ -921,9 +921,6 @@ namespace OpenDentBusiness {
 				row["colorText"]=Color.Black.ToArgb();//DefC.Long[(int)DefCat.ProgNoteColors][6].ItemColor.ToArgb().ToString();//needs to change
 				row["CommlogNum"]=0;
 				row["dateEntryC"]="";
-				row["dPC"]="";
-				row["dateScheduleBy"]="";
-				row["dateStopClock"]="";
 				row["dateTP"]="";
 				//sheetType=(SheetTypeEnum)PIn.PLong(rawSheet.Rows[i]["SheetType"].ToString());
 				row["description"]=rawSheet.Rows[i]["Description"].ToString();
@@ -932,10 +929,14 @@ namespace OpenDentBusiness {
 				row["EmailMessageNum"]=0;
 				row["FormPatNum"]=0;
 				row["HideGraphics"]="";
-				row["isEffectiveComm"]="";
-				row["isOnCall"]="";
 				row["LabCaseNum"]=0;
 				row["note"]="";
+				row["orionDateScheduleBy"]="";
+				row["orionDateStopClock"]="";
+				row["orionDPC"]="";
+				row["orionIsEffectiveComm"]="";
+				row["orionIsOnCall"]="";
+				row["orionStatus2"]="";
 				row["PatNum"]="";
 				row["Priority"]="";
 				row["priority"]="";
@@ -963,7 +964,6 @@ namespace OpenDentBusiness {
 				row["RxNum"]=0;
 				row["SheetNum"]=rawSheet.Rows[i]["SheetNum"].ToString();
 				row["signature"]="";
-				row["status2"]="";
 				row["Surf"]="";
 				row["TaskNum"]=0;
 				row["toothNum"]="";
