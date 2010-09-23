@@ -54,6 +54,7 @@ namespace OpenDentBusiness.Crud{
 				chartView.ShowProcNotes    = PIn.Bool  (table.Rows[i]["ShowProcNotes"].ToString());
 				chartView.IsAudit          = PIn.Bool  (table.Rows[i]["IsAudit"].ToString());
 				chartView.SelectedTeethOnly= PIn.Bool  (table.Rows[i]["SelectedTeethOnly"].ToString());
+				chartView.OrionStatusFlags = (OrionStatus)PIn.Int(table.Rows[i]["OrionStatusFlags"].ToString());
 				retVal.Add(chartView);
 			}
 			return retVal;
@@ -73,7 +74,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="ChartViewNum,";
 			}
-			command+="Description,ItemOrder,ProcStatuses,ObjectTypes,ShowProcNotes,IsAudit,SelectedTeethOnly) VALUES(";
+			command+="Description,ItemOrder,ProcStatuses,ObjectTypes,ShowProcNotes,IsAudit,SelectedTeethOnly,OrionStatusFlags) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(chartView.ChartViewNum)+",";
 			}
@@ -84,7 +85,8 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Int   ((int)chartView.ObjectTypes)+","
 				+    POut.Bool  (chartView.ShowProcNotes)+","
 				+    POut.Bool  (chartView.IsAudit)+","
-				+    POut.Bool  (chartView.SelectedTeethOnly)+")";
+				+    POut.Bool  (chartView.SelectedTeethOnly)+","
+				+    POut.Int   ((int)chartView.OrionStatusFlags)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -103,7 +105,8 @@ namespace OpenDentBusiness.Crud{
 				+"ObjectTypes      =  "+POut.Int   ((int)chartView.ObjectTypes)+", "
 				+"ShowProcNotes    =  "+POut.Bool  (chartView.ShowProcNotes)+", "
 				+"IsAudit          =  "+POut.Bool  (chartView.IsAudit)+", "
-				+"SelectedTeethOnly=  "+POut.Bool  (chartView.SelectedTeethOnly)+" "
+				+"SelectedTeethOnly=  "+POut.Bool  (chartView.SelectedTeethOnly)+", "
+				+"OrionStatusFlags =  "+POut.Int   ((int)chartView.OrionStatusFlags)+" "
 				+"WHERE ChartViewNum = "+POut.Long(chartView.ChartViewNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
@@ -138,6 +141,10 @@ namespace OpenDentBusiness.Crud{
 			if(chartView.SelectedTeethOnly != oldChartView.SelectedTeethOnly) {
 				if(command!=""){ command+=",";}
 				command+="SelectedTeethOnly = "+POut.Bool(chartView.SelectedTeethOnly)+"";
+			}
+			if(chartView.OrionStatusFlags != oldChartView.OrionStatusFlags) {
+				if(command!=""){ command+=",";}
+				command+="OrionStatusFlags = "+POut.Int   ((int)chartView.OrionStatusFlags)+"";
 			}
 			if(command==""){
 				return;

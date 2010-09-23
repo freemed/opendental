@@ -23,6 +23,8 @@ namespace OpenDentBusiness{
 		public bool IsAudit;
 		///<summary>Set true to only show information regarding the selected teeth.</summary>
 		public bool SelectedTeethOnly;
+		///<summary>Which orion statuses to show. Will be zero if not orion.</summary>
+		public OrionStatus OrionStatusFlags;
 
 
 		public ChartView Copy() {

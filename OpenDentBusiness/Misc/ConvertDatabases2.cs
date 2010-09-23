@@ -2653,7 +2653,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					DPC tinyint NOT NULL,
 					DateScheduleBy date NOT NULL default '0001-01-01', 
 					DateStopClock date NOT NULL default '0001-01-01',  
-					Status2 tinyint NOT NULL,
+					Status2 int NOT NULL,
 					IsOnCall tinyint NOT NULL,
 					IsEffectiveComm tinyint NOT NULL,
 					IsRepair tinyint NOT NULL,
@@ -2689,7 +2689,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ32(command);
 				command="ALTER TABLE procedurecode ADD IsMultiVisit tinyint NOT NULL";
 				Db.NonQ(command);
-
+				command="ALTER TABLE chartview ADD OrionStatusFlags int NOT NULL";
+				Db.NonQ(command);
 
 
 
@@ -2730,5 +2731,10 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 
+
+				
+
+
+				
 
 				

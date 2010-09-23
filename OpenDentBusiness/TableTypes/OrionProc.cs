@@ -17,7 +17,7 @@ namespace OpenDentBusiness{
 		public DateTime DateScheduleBy;
 		///<summary> Default to current date.  Provider shall have to ability to edit with a previous date, but not a future date.</summary>
 		public DateTime DateStopClock;
-		///<summarty>Enum:OrionStatus TP=0,C=1,E=2,R=3,RO=4,CS=5,CR=6,CA-Tx=7,CA-ERPD=8,CA-P/D=9,S=10,ST=11,W=12</summarty>
+		///<summarty>Enum:OrionStatus None=0,TP=1,C=2,E=4,R=8,RO=16,CS=32,CR=64,CA-Tx=128,CA-ERPD=256,CA-P/D=512,S=1024,ST=2048,W=4096</summarty>
 		public OrionStatus Status2;
 		///<summary></summary>
 		public bool IsOnCall;
@@ -52,33 +52,36 @@ namespace OpenDentBusiness{
 	  _5
 	}
 
+	[Flags]
 	public enum OrionStatus {
-		///<summary>0– Treatment planned</summary>
-		TP,
-		///<summary>1– Treatment completed</summary>
-		C,
-		///<summary>2– Condition existing prior to incarceration</summary>
-		E,
-		///<summary>3– Patient refused treatment</summary>
-		R,
-		///<summary>4– Planned treatment to be done by a specialist</summary>
-		RO,
-		///<summary>5– Completed by a specialist</summary>
-		CS,
-		///<summary>6– Completed by a registry</summary>
-		CR,
-		///<summary>7- CA-Tx:Indicates the planned treatment has been cancelled due to a change in the treatment plan</summary>
-		CA_Tx,
-		///<summary>8- CA-EPRD:Planned treatment has been cancelled because the patient is no longer eligible due to upcoming parole</summary>
-		CA_EPRD,
-		///<summary>9- CA-P/D:Planned treatment has been cancelled because the patient has left the system </summary>
-		CA_PD,
-		///<summary>10– Planned treatment has been suspended</summary>
-		S,
-		///<summary>11- Treatment shall require several visits to complete</summary>
-		ST,
-		///<summary>12– Condition is not planned for treatment at this time, but provider is monitoring its status “Watch"</summary>
-		W
+		///<summary>0- None</summary>
+		None=0,
+		///<summary>1– Treatment planned</summary>
+		TP=1,
+		///<summary>2– Treatment completed</summary>
+		C=2,
+		///<summary>4– Condition existing prior to incarceration</summary>
+		E=4,
+		///<summary>8– Patient refused treatment</summary>
+		R=8,
+		///<summary>16– Planned treatment to be done by a specialist</summary>
+		RO=16,
+		///<summary>32– Completed by a specialist</summary>
+		CS=32,
+		///<summary>64– Completed by a registry</summary>
+		CR=64,
+		///<summary>128- CA-Tx:Indicates the planned treatment has been cancelled due to a change in the treatment plan</summary>
+		CA_Tx=128,
+		///<summary>256- CA-EPRD:Planned treatment has been cancelled because the patient is no longer eligible due to upcoming parole</summary>
+		CA_EPRD=256,
+		///<summary>512- CA-P/D:Planned treatment has been cancelled because the patient has left the system </summary>
+		CA_PD=512,
+		///<summary>1024– Planned treatment has been suspended</summary>
+		S=1024,
+		///<summary>2048- Treatment shall require several visits to complete</summary>
+		ST=2048,
+		///<summary>4096– Condition is not planned for treatment at this time, but provider is monitoring its status “Watch"</summary>
+		W=4096
 	}
 
 
