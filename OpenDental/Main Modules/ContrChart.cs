@@ -3986,10 +3986,6 @@ namespace OpenDental{
 			//	selectedTeeth.Add(Tooth.ToInt(toothChart.SelectedTeeth[i]));
 			//}
 			//List<string> selectedTeeth=new List<string>(toothChart.SelectedTeeth);
-			DataSetMain=null;
-			if(PatCur!=null){
-				DataSetMain=ChartModules.GetAll(PatCur.PatNum,checkAudit.Checked);
-			}
 			gridProg.BeginUpdate();
 			gridProg.Columns.Clear();
 			ODGridColumn col;
@@ -4043,6 +4039,10 @@ namespace OpenDental{
 				else {
 					gridChartViews.SetSelected(false);
 				}
+			}
+			DataSetMain=null;
+			if(PatCur!=null){
+				DataSetMain=ChartModules.GetAll(PatCur.PatNum,checkAudit.Checked);
 			}
 			for(int i=0;i<fields.Count;i++){
 				if(fields[i].Description==""){
