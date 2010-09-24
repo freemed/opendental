@@ -201,10 +201,10 @@ namespace OpenDental{
 		private CheckBox checkIsOnCall;
 		private CheckBox checkIsRepair;
 		public List<ClaimProcHist> LoopList;
-		private ValidDate textTimeEnd;
 		private Label labelEndTime;
 		private OpenDental.UI.Button butNow;
 		private TextBox textDate;
+		private TextBox textTimeEnd;
 		private OrionProc OrionProcCur;
 
 		///<summary>Inserts are no longer done within this dialog, but must be done ahead of time from outside.You must specify a procedure to edit, and only the changes that are made in this dialog get saved.  Only used when double click in Account, Chart, TP, and in ContrChart.AddProcedure().  The procedure may be deleted if new, and user hits Cancel.</summary>
@@ -285,6 +285,7 @@ namespace OpenDental{
 			this.label9 = new System.Windows.Forms.Label();
 			this.labelDx = new System.Windows.Forms.Label();
 			this.panel1 = new System.Windows.Forms.Panel();
+			this.textDate = new System.Windows.Forms.TextBox();
 			this.butNow = new OpenDental.UI.Button();
 			this.textDateTP = new OpenDental.ValidDate();
 			this.label27 = new System.Windows.Forms.Label();
@@ -292,7 +293,6 @@ namespace OpenDental{
 			this.listBoxTeeth = new System.Windows.Forms.ListBox();
 			this.textDateEntry = new OpenDental.ValidDate();
 			this.label12 = new System.Windows.Forms.Label();
-			this.textTimeEnd = new OpenDental.ValidDate();
 			this.textProcFee = new OpenDental.ValidDouble();
 			this.labelEndTime = new System.Windows.Forms.Label();
 			this.listBoxTeeth2 = new System.Windows.Forms.ListBox();
@@ -393,7 +393,7 @@ namespace OpenDental{
 			this.tbPay = new OpenDental.TableProcPay();
 			this.tbAdj = new OpenDental.TableProcAdj();
 			this.textClaimNote = new OpenDental.ODtextBox();
-			this.textDate = new System.Windows.Forms.TextBox();
+			this.textTimeEnd = new System.Windows.Forms.TextBox();
 			this.groupQuadrant.SuspendLayout();
 			this.panelSurfaces.SuspendLayout();
 			this.groupArch.SuspendLayout();
@@ -819,6 +819,7 @@ namespace OpenDental{
 			// panel1
 			// 
 			this.panel1.AllowDrop = true;
+			this.panel1.Controls.Add(this.textTimeEnd);
 			this.panel1.Controls.Add(this.textDate);
 			this.panel1.Controls.Add(this.butNow);
 			this.panel1.Controls.Add(this.panelSurfaces);
@@ -836,7 +837,6 @@ namespace OpenDental{
 			this.panel1.Controls.Add(this.textSurfaces);
 			this.panel1.Controls.Add(this.label6);
 			this.panel1.Controls.Add(this.groupArch);
-			this.panel1.Controls.Add(this.textTimeEnd);
 			this.panel1.Controls.Add(this.groupQuadrant);
 			this.panel1.Controls.Add(this.textProcFee);
 			this.panel1.Controls.Add(this.textTooth);
@@ -853,6 +853,13 @@ namespace OpenDental{
 			this.panel1.Size = new System.Drawing.Size(394,177);
 			this.panel1.TabIndex = 2;
 			// 
+			// textDate
+			// 
+			this.textDate.Location = new System.Drawing.Point(106,40);
+			this.textDate.Name = "textDate";
+			this.textDate.Size = new System.Drawing.Size(130,20);
+			this.textDate.TabIndex = 102;
+			// 
 			// butNow
 			// 
 			this.butNow.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -866,6 +873,7 @@ namespace OpenDental{
 			this.butNow.TabIndex = 101;
 			this.butNow.Text = "Now";
 			this.butNow.UseVisualStyleBackColor = true;
+			this.butNow.Click += new System.EventHandler(this.butNow_Click);
 			// 
 			// textDateTP
 			// 
@@ -940,13 +948,6 @@ namespace OpenDental{
 			this.label12.TabIndex = 96;
 			this.label12.Text = "Date Entry";
 			this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textTimeEnd
-			// 
-			this.textTimeEnd.Location = new System.Drawing.Point(295,40);
-			this.textTimeEnd.Name = "textTimeEnd";
-			this.textTimeEnd.Size = new System.Drawing.Size(67,20);
-			this.textTimeEnd.TabIndex = 0;
 			// 
 			// textProcFee
 			// 
@@ -2023,12 +2024,12 @@ namespace OpenDental{
 			this.textClaimNote.Size = new System.Drawing.Size(277,43);
 			this.textClaimNote.TabIndex = 10;
 			// 
-			// textDate
+			// textTimeEnd
 			// 
-			this.textDate.Location = new System.Drawing.Point(106,40);
-			this.textDate.Name = "textDate";
-			this.textDate.Size = new System.Drawing.Size(130,20);
-			this.textDate.TabIndex = 102;
+			this.textTimeEnd.Location = new System.Drawing.Point(300,41);
+			this.textTimeEnd.Name = "textTimeEnd";
+			this.textTimeEnd.Size = new System.Drawing.Size(57,20);
+			this.textTimeEnd.TabIndex = 102;
 			// 
 			// FormProcEdit
 			// 
@@ -2479,7 +2480,11 @@ namespace OpenDental{
 			textDate.Text=ProcCur.ProcDate.ToString("d");
 			textDate.Text+="  ";
 			DateTime dateT=PIn.DateT(ProcCur.ProcTime.ToString());
-			textDate.Text+=dateT.ToShortTimeString();
+			if(dateT.ToShortTimeString()!="12:00 AM"){
+				textDate.Text+=dateT.ToShortTimeString();
+			}
+			dateT=PIn.DateT(ProcCur.ProcTimeEnd.ToString());
+			textTimeEnd.Text=dateT.ToShortTimeString();
 			textProc.Text=ProcedureCode2.ProcCode;
 			textDesc.Text=ProcedureCode2.Descript;
 			textMedicalCode.Text=ProcCur.MedicalCode;
@@ -2752,6 +2757,10 @@ namespace OpenDental{
 			}
 			FormC.ShowDialog();
 			FillIns();
+		}
+
+		void butNow_Click(object sender,EventArgs e) {
+			textTimeEnd.Text=DateTime.Now.ToShortTimeString();
 		}
 
 		private void butAddEstimate_Click(object sender, System.EventArgs e) {
@@ -3450,6 +3459,13 @@ namespace OpenDental{
 				return false;
 			}
 			try{
+				DateTime.Parse(textTimeEnd.Text);
+			}
+			catch{
+				MessageBox.Show(Lan.g(this,"End time invalid."));
+				return false;
+			}
+			try{
 				int unitqty=int.Parse(textUnitQty.Text);
 				if(unitqty<1){
 					MsgBox.Show(this,"Qty not valid.  Typical value is 1.");
@@ -3590,7 +3606,10 @@ namespace OpenDental{
 			}
 			ProcCur.DateTP=PIn.Date(this.textDateTP.Text);
 			ProcCur.ProcDate=PIn.Date(this.textDate.Text);
-			//ProcCur.ProcTime=TimeSpan.Parse(PIn.DateT(this.textDate.Text).ToShortDateString());
+			DateTime dateT=PIn.DateT(this.textDate.Text);
+			ProcCur.ProcTime=new TimeSpan(dateT.Hour,dateT.Minute,0);
+			dateT=PIn.DateT(this.textTimeEnd.Text);
+			ProcCur.ProcTimeEnd=new TimeSpan(dateT.Hour,dateT.Minute,0);
 			ProcCur.ProcFee=PIn.Double(textProcFee.Text);
 			//ProcCur.LabFee=PIn.PDouble(textLabFee.Text);
 			//ProcCur.LabProcCode=textLabCode.Text;
