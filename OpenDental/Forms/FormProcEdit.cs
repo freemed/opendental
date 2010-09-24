@@ -1673,7 +1673,7 @@ namespace OpenDental{
 			this.panelOrion.Controls.Add(this.labelDPC);
 			this.panelOrion.Location = new System.Drawing.Point(1,451);
 			this.panelOrion.Name = "panelOrion";
-			this.panelOrion.Size = new System.Drawing.Size(308,203);
+			this.panelOrion.Size = new System.Drawing.Size(483,203);
 			this.panelOrion.TabIndex = 164;
 			this.panelOrion.Visible = false;
 			// 
@@ -1738,12 +1738,12 @@ namespace OpenDental{
 			// comboStatus
 			// 
 			this.comboStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboStatus.DropDownWidth = 177;
+			this.comboStatus.DropDownWidth = 353;
 			this.comboStatus.FormattingEnabled = true;
 			this.comboStatus.Location = new System.Drawing.Point(105,24);
 			this.comboStatus.MaxDropDownItems = 30;
 			this.comboStatus.Name = "comboStatus";
-			this.comboStatus.Size = new System.Drawing.Size(177,21);
+			this.comboStatus.Size = new System.Drawing.Size(353,21);
 			this.comboStatus.TabIndex = 7;
 			// 
 			// labelStatus
@@ -2275,7 +2275,7 @@ namespace OpenDental{
 					comboDx.SelectedIndex=i;
 			}
 			checkHideGraphics.Checked=ProcCur.HideGraphics;
-			if(Programs.UsingOrion&&this.IsNew){//Orion does not use default providers. Change provider here.
+			if(Programs.UsingOrion && this.IsNew){//Orion does not use default providers. Change provider here.
 				Provider ProvUserCur=Providers.GetProv(Security.CurUser.ProvNum);
 				if(ProvUserCur!=null){//User is a provider.
 					if(!ProvUserCur.IsSecondary){
@@ -2445,13 +2445,32 @@ namespace OpenDental{
 				comboDPC.Items.AddRange(Enum.GetNames(typeof(OrionDPC)));
 				comboDPC.SelectedIndex=0;
 				comboStatus.Items.Clear();
-				comboStatus.Items.AddRange(Enum.GetNames(typeof(OrionStatus)));
+				comboStatus.Items.Add("TP-treatment planned");
+				comboStatus.Items.Add("C-completed");
+				comboStatus.Items.Add("E-exsiting prior");
+				comboStatus.Items.Add("R-refused treatment");
+				comboStatus.Items.Add("RO-to be done by specialist");
+				comboStatus.Items.Add("CS-completed by specialist");
+				comboStatus.Items.Add("CR-completed by registry");
+				comboStatus.Items.Add("CA_Tx-cancelled from change in TP");
+				comboStatus.Items.Add("CA_EPRD-cancelled due to parole");
+				comboStatus.Items.Add("CA_P/D-patient has left the system");
+				comboStatus.Items.Add("S-suspended");
+				comboStatus.Items.Add("ST-several visits required");
+				comboStatus.Items.Add("W-not planned, watched");
 				OrionProcCur=OrionProcs.GetOneByProcNum(ProcCur.ProcNum);
 				ProcedureCode pc=ProcedureCodes.GetProcCodeFromDb(ProcCur.CodeNum);
 				checkIsRepair.Visible=pc.IsProsth;
 				if(OrionProcCur!=null) {
 					comboDPC.SelectedIndex=(int)OrionProcCur.DPC;
-					comboStatus.SelectedIndex=(int)OrionProcCur.Status2;
+					//comboStatus.SelectedIndex=(int)OrionProcCur.Status2;
+					BitArray ba=new BitArray(new int[] { (int)OrionProcCur.Status2 });//always non-zero
+					for(int i=1;i<ba.Length;i++) {
+						if(ba[i]) {
+							comboStatus.SelectedIndex=i-1;
+							break;
+						}
+					}
 					if(OrionProcCur.DateScheduleBy.Year>1880) {
 						textDateScheduled.Text=OrionProcCur.DateScheduleBy.ToShortDateString();
 					}
@@ -3748,7 +3767,8 @@ namespace OpenDental{
 					OrionProcCur=new OrionProc();
 				}
 				OrionProcCur.DPC=(OrionDPC)comboDPC.SelectedIndex;
-				OrionProcCur.Status2=(OrionStatus)this.comboStatus.SelectedIndex;
+				//Enum.GetNames(typeof(OrionStatus));
+				//OrionProcCur.Status2=(OrionStatus)this.comboStatus.SelectedItem;
 				OrionProcCur.DateScheduleBy=PIn.Date(textDateScheduled.Text);
 				OrionProcCur.DateStopClock=PIn.Date(textDateStop.Text);
 				OrionProcCur.IsOnCall=checkIsOnCall.Checked;
