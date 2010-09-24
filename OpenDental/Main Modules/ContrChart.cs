@@ -4007,7 +4007,7 @@ namespace OpenDental{
 
 		private bool OrionProcStatDesired(string os) {
 
-			Lans.g("enumStatus2",((OrionStatus)PIn.Long(rawProcs.Rows[i]["Status2"].ToString())).ToString())
+			//Lans.g("enumStatus2",((OrionStatus)PIn.Long(rawProcs.Rows[i]["Status2"].ToString())).ToString())
 
 
 			switch(os) {
