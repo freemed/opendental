@@ -71,7 +71,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(280,226);
+			this.butCancel.Location = new System.Drawing.Point(280,501);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,25);
 			this.butCancel.TabIndex = 2;
@@ -86,7 +86,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(186,226);
+			this.butOK.Location = new System.Drawing.Point(186,501);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,25);
 			this.butOK.TabIndex = 1;
@@ -104,10 +104,13 @@ namespace OpenDental{
 			// 
 			// listBoxPick
 			// 
+			this.listBoxPick.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.listBoxPick.FormattingEnabled = true;
 			this.listBoxPick.Location = new System.Drawing.Point(21,41);
 			this.listBoxPick.Name = "listBoxPick";
-			this.listBoxPick.Size = new System.Drawing.Size(333,160);
+			this.listBoxPick.Size = new System.Drawing.Size(333,446);
 			this.listBoxPick.TabIndex = 4;
 			// 
 			// FormPatFieldPickEdit
@@ -115,7 +118,7 @@ namespace OpenDental{
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
-			this.ClientSize = new System.Drawing.Size(375,273);
+			this.ClientSize = new System.Drawing.Size(375,538);
 			this.Controls.Add(this.listBoxPick);
 			this.Controls.Add(this.labelName);
 			this.Controls.Add(this.butOK);
@@ -149,7 +152,7 @@ namespace OpenDental{
 
 		private void butOK_Click(object sender, System.EventArgs e) {
 			if(listBoxPick.SelectedItems.Count==0) {
-				MsgBox.Show(this,"Please select an item in the list on the right first.");
+				MsgBox.Show(this,"Please select an item in the list first.");
 				return;
 			}
 			Field.FieldValue=listBoxPick.SelectedItem.ToString();

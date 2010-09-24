@@ -72,7 +72,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(280,146);
+			this.butCancel.Location = new System.Drawing.Point(177,93);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,25);
 			this.butCancel.TabIndex = 2;
@@ -87,7 +87,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(186,146);
+			this.butOK.Location = new System.Drawing.Point(83,93);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,25);
 			this.butOK.TabIndex = 1;
@@ -107,7 +107,7 @@ namespace OpenDental{
 			// 
 			this.textFieldDate.Location = new System.Drawing.Point(22,40);
 			this.textFieldDate.Name = "textFieldDate";
-			this.textFieldDate.Size = new System.Drawing.Size(332,20);
+			this.textFieldDate.Size = new System.Drawing.Size(125,20);
 			this.textFieldDate.TabIndex = 0;
 			// 
 			// FormPatFieldDateEdit
@@ -115,7 +115,7 @@ namespace OpenDental{
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
-			this.ClientSize = new System.Drawing.Size(375,193);
+			this.ClientSize = new System.Drawing.Size(272,140);
 			this.Controls.Add(this.textFieldDate);
 			this.Controls.Add(this.labelName);
 			this.Controls.Add(this.butOK);
