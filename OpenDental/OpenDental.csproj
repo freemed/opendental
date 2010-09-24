@@ -366,6 +366,12 @@
     <Compile Include="Forms\BasicTemplate.designer.cs">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormPayConnect.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormPayConnect.designer.cs">
+      <DependentUpon>FormPayConnect.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormProcEditExplain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -3714,6 +3720,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
+    <Compile Include="Web References\PayConnectService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
     <Compile Include="Web References\WebHostSynch\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -3786,6 +3797,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormPayConnect.resx">
+      <DependentUpon>FormPayConnect.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormProcEditExplain.resx">
@@ -4258,6 +4273,19 @@
     <Content Include="ReportingForRdl\Allocators\MyAllocator1\Images\SnuffLight8.gif" />
     <Content Include="Resources\Anesth.gif" />
     <Content Include="Resources\arrowRightTriangle.gif" />
+    <None Include="Web References\PayConnectService\merchantInfoResponse1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\PayConnectService\MerchantService.wsdl" />
+    <None Include="Web References\PayConnectService\MerchantService_schema1.xsd" />
+    <None Include="Web References\PayConnectService\MerchantService_schema2.xsd" />
+    <None Include="Web References\PayConnectService\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\PayConnectService\transResponse1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
     <None Include="Web References\WebHostSynch\Reference.map">
       <Generator>MSDiscoCodeGenerator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
@@ -4342,6 +4370,17 @@
     <WebReferences Include="Web References\" />
   </ItemGroup>
   <ItemGroup>
+    <WebReferenceUrl Include="C:\development\odinternal\Bridge Info\DentalXChange\PayConnect\Merchant Services WSDL.wsdl">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\PayConnectService\</RelPath>
+      <UpdateFromURL>C:\development\odinternal\Bridge Info\DentalXChange\PayConnect\Merchant Services WSDL.wsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>OpenDental_PayConnect_MerchantService</CachedSettingsPropName>
+    </WebReferenceUrl>
     <WebReferenceUrl Include="http://70.90.133.65:1942/WebServiceCustomerUpdates/">
       <UrlBehavior>Dynamic</UrlBehavior>
       <RelPath>Web References\customerUpdates\</RelPath>

@@ -14,5 +14,8 @@
     <Setting Name="OpenDental_WebHostSynch_WebHostSynch" Type="(Web Service URL)" Scope="Application">
       <Value Profile="(Default)">http://localhost:2923/WebHostSynch.asmx</Value>
     </Setting>
+    <Setting Name="OpenDental_PayConnect_MerchantService" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">https://prelive2.dentalxchange.com/merchant/MerchantService?wsdl</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

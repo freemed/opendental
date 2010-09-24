@@ -1240,7 +1240,13 @@ namespace OpenDental{
 		}
 
 		private void butPayConnect_Click(object sender,EventArgs e) {
-			MsgBox.Show(this,"Not yet implemented.");
+			Program prog=Programs.GetCur(ProgramName.PayConnect);
+			if(!prog.Enabled){
+				MsgBox.Show(this,"Please setup PayConnect before using.");
+				return;
+			}
+			FormPayConnect FormP=new FormPayConnect(PaymentCur,PatCur,textAmount.Text);
+			FormP.ShowDialog();
 		}
 
 		private void menuXcharge_Click(object sender,EventArgs e) {

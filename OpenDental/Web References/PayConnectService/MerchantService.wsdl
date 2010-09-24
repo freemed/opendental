@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<definitions xmlns:tns="dxci.merchant" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MerchantService" targetNamespace="dxci.merchant" xmlns="http://schemas.xmlsoap.org/wsdl/">
+  <types>
+    <xsd:schema>
+      <xsd:import schemaLocation="MerchantService_schema1.xsd" namespace="dxci.merchant" />
+    </xsd:schema>
+    <xsd:schema>
+      <xsd:import schemaLocation="MerchantService_schema2.xsd" namespace="dxci.common" />
+    </xsd:schema>
+  </types>
+  <message name="getMerchantInfo">
+    <part name="parameters" element="tns:getMerchantInfo" />
+  </message>
+  <message name="getMerchantInfoResponse">
+    <part name="parameters" element="tns:getMerchantInfoResponse" />
+  </message>
+  <message name="processCheck">
+    <part name="parameters" element="tns:processCheck" />
+  </message>
+  <message name="processCheckResponse">
+    <part name="parameters" element="tns:processCheckResponse" />
+  </message>
+  <message name="processCreditCard">
+    <part name="parameters" element="tns:processCreditCard" />
+  </message>
+  <message name="processCreditCardResponse">
+    <part name="parameters" element="tns:processCreditCardResponse" />
+  </message>
+  <message name="processDebitCard">
+    <part name="parameters" element="tns:processDebitCard" />
+  </message>
+  <message name="processDebitCardResponse">
+    <part name="parameters" element="tns:processDebitCardResponse" />
+  </message>
+  <message name="isValidExpiration">
+    <part name="parameters" element="tns:isValidExpiration" />
+  </message>
+  <message name="isValidExpirationResponse">
+    <part name="parameters" element="tns:isValidExpirationResponse" />
+  </message>
+  <message name="isValidCard">
+    <part name="parameters" element="tns:isValidCard" />
+  </message>
+  <message name="isValidCardResponse">
+    <part name="parameters" element="tns:isValidCardResponse" />
+  </message>
+  <message name="getCardType">
+    <part name="parameters" element="tns:getCardType" />
+  </message>
+  <message name="getCardTypeResponse">
+    <part name="parameters" element="tns:getCardTypeResponse" />
+  </message>
+  <portType name="MerchantService">
+    <operation name="getMerchantInfo">
+      <input message="tns:getMerchantInfo" />
+      <output message="tns:getMerchantInfoResponse" />
+    </operation>
+    <operation name="processCheck">
+      <input message="tns:processCheck" />
+      <output message="tns:processCheckResponse" />
+    </operation>
+    <operation name="processCreditCard">
+      <input message="tns:processCreditCard" />
+      <output message="tns:processCreditCardResponse" />
+    </operation>
+    <operation name="processDebitCard">
+      <input message="tns:processDebitCard" />
+      <output message="tns:processDebitCardResponse" />
+    </operation>
+    <operation name="isValidExpiration">
+      <input message="tns:isValidExpiration" />
+      <output message="tns:isValidExpirationResponse" />
+    </operation>
+    <operation name="isValidCard">
+      <input message="tns:isValidCard" />
+      <output message="tns:isValidCardResponse" />
+    </operation>
+    <operation name="getCardType">
+      <input message="tns:getCardType" />
+      <output message="tns:getCardTypeResponse" />
+    </operation>
+  </portType>
+  <binding name="MerchantServiceInstancePortBinding" type="tns:MerchantService">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <operation name="getMerchantInfo">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="processCheck">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="processCreditCard">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="processDebitCard">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="isValidExpiration">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="isValidCard">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="getCardType">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+  </binding>
+  <service name="MerchantService">
+    <port name="MerchantServiceInstancePort" binding="tns:MerchantServiceInstancePortBinding">
+      <soap:address location="https://prelive2.dentalxchange.com/merchant/MerchantService?wsdl" />
+    </port>
+  </service>
+</definitions>
