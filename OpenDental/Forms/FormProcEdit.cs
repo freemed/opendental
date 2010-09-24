@@ -3935,6 +3935,12 @@ namespace OpenDental{
 
 		private void butOK_Click(object sender,System.EventArgs e) {
 			if(EntriesAreValid()) {
+				if(Programs.UsingOrion && ProcOld.ProcStatus==ProcStat.TP && ProcOld.DateTP.Date<MiscData.GetNowDateTime().Date){
+					FormProcEditExplain FormP=new FormProcEditExplain();
+					if(FormP.ShowDialog()!=DialogResult.OK){
+						return;
+					}
+				}
 				SaveAndClose();
 			}
 		}

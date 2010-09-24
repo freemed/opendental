@@ -366,6 +366,12 @@
     <Compile Include="Forms\BasicTemplate.designer.cs">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormProcEditExplain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormProcEditExplain.designer.cs">
+      <DependentUpon>FormProcEditExplain.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormPatFieldPickEdit.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -3780,6 +3786,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormProcEditExplain.resx">
+      <DependentUpon>FormProcEditExplain.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormPatFieldPickEdit.resx">
