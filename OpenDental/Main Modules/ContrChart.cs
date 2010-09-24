@@ -387,6 +387,7 @@ namespace OpenDental{
 			this.groupBox5 = new System.Windows.Forms.GroupBox();
 			this.tabPlanned = new System.Windows.Forms.TabPage();
 			this.tabShow = new System.Windows.Forms.TabPage();
+			this.listProcStatusCodes = new System.Windows.Forms.ListBox();
 			this.labelCustView = new System.Windows.Forms.Label();
 			this.groupBox7 = new System.Windows.Forms.GroupBox();
 			this.checkSheets = new System.Windows.Forms.CheckBox();
@@ -429,7 +430,6 @@ namespace OpenDental{
 			this.menuToothChart = new System.Windows.Forms.ContextMenu();
 			this.menuItemChartBig = new System.Windows.Forms.MenuItem();
 			this.menuItemChartSave = new System.Windows.Forms.MenuItem();
-			this.listProcStatusCodes = new System.Windows.Forms.ListBox();
 			this.toothChart = new SparksToothChart.ToothChartWrapper();
 			this.butECWdown = new OpenDental.UI.Button();
 			this.butECWup = new OpenDental.UI.Button();
@@ -1353,14 +1353,28 @@ namespace OpenDental{
 			this.tabShow.Text = "Show";
 			this.tabShow.UseVisualStyleBackColor = true;
 			// 
+			// listProcStatusCodes
+			// 
+			this.listProcStatusCodes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+			this.listProcStatusCodes.ColumnWidth = 60;
+			this.listProcStatusCodes.FormattingEnabled = true;
+			this.listProcStatusCodes.IntegralHeight = false;
+			this.listProcStatusCodes.Location = new System.Drawing.Point(6,156);
+			this.listProcStatusCodes.MultiColumn = true;
+			this.listProcStatusCodes.Name = "listProcStatusCodes";
+			this.listProcStatusCodes.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+			this.listProcStatusCodes.Size = new System.Drawing.Size(130,77);
+			this.listProcStatusCodes.TabIndex = 45;
+			this.listProcStatusCodes.Visible = false;
+			// 
 			// labelCustView
 			// 
-			this.labelCustView.AutoSize = true;
 			this.labelCustView.Font = new System.Drawing.Font("Microsoft Sans Serif",9.75F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
 			this.labelCustView.ForeColor = System.Drawing.Color.Red;
-			this.labelCustView.Location = new System.Drawing.Point(160,199);
+			this.labelCustView.Location = new System.Drawing.Point(151,195);
 			this.labelCustView.Name = "labelCustView";
-			this.labelCustView.Size = new System.Drawing.Size(96,16);
+			this.labelCustView.Size = new System.Drawing.Size(112,16);
 			this.labelCustView.TabIndex = 43;
 			this.labelCustView.Text = "Custom View";
 			this.labelCustView.Visible = false;
@@ -1796,19 +1810,6 @@ namespace OpenDental{
 			this.menuItemChartSave.Index = 1;
 			this.menuItemChartSave.Text = "Save to Images";
 			this.menuItemChartSave.Click += new System.EventHandler(this.menuItemChartSave_Click);
-			// 
-			// listProcStatusCodes
-			// 
-			this.listProcStatusCodes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-			this.listProcStatusCodes.FormattingEnabled = true;
-			this.listProcStatusCodes.IntegralHeight = false;
-			this.listProcStatusCodes.Location = new System.Drawing.Point(6,167);
-			this.listProcStatusCodes.Name = "listProcStatusCodes";
-			this.listProcStatusCodes.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-			this.listProcStatusCodes.Size = new System.Drawing.Size(121,63);
-			this.listProcStatusCodes.TabIndex = 45;
-			this.listProcStatusCodes.Visible = false;
 			// 
 			// toothChart
 			// 
@@ -3033,7 +3034,6 @@ namespace OpenDental{
 			this.groupBox5.ResumeLayout(false);
 			this.tabPlanned.ResumeLayout(false);
 			this.tabShow.ResumeLayout(false);
-			this.tabShow.PerformLayout();
 			this.groupBox7.ResumeLayout(false);
 			this.groupBox6.ResumeLayout(false);
 			this.tabDraw.ResumeLayout(false);

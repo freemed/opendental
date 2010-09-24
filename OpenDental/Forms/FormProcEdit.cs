@@ -3515,7 +3515,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Invalid stop time.");
 				return false;
 			}
-			if(ProcCur.ProvNum==0){
+			if(ProcCur.ProvNum==0){//this works because ProvNum gets set when the user changes the combobox.
 				MsgBox.Show(this,"You must select a provider first.");
 				return false;
 			}
