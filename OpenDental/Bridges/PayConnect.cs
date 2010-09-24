@@ -22,14 +22,14 @@ namespace OpenDental.Bridges {
 					cred.Password=prop.PropertyValue;
 				}
 			}
-			//cred.Client //I'm sure we need this, I don't know the value yet.
-			cred.ServiceID="OpenDental";//correct?
+			cred.Client="Open Dental";//TODO: Figure out what the real value needs to be.
+			cred.ServiceID="208";//TODO: Figure out what the real value needs to be.
 			cred.version="0310";
 			return cred;
 		}
 
-		///<summary>Returns true if the payment was successfull. Otherwise, a message box is shown and false is returned.</summary>
-		public static bool ProcessCreditCard(long paymentNum,decimal amount,string cardNumber,int expYear,int expMonth,string nameOnCard,string securityCode,string zip){
+		///<summary>Shows a message box on error.</summary>
+		public static PayConnectService.Status ProcessCreditCard(long paymentNum,decimal amount,string cardNumber,int expYear,int expMonth,string nameOnCard,string securityCode,string zip){
 			Program prog=Programs.GetCur(ProgramName.PayConnect);
 			PayConnectService.Credentials cred=GetCredentials(prog);
 			PayConnectService.creditCardRequest request=new OpenDental.PayConnectService.creditCardRequest();
@@ -50,9 +50,8 @@ namespace OpenDental.Bridges {
 			ms.Dispose();
 			if(response.Status.code!=0){//Error
 				MessageBox.Show(Lan.g("PayConnect","Payment failed")+". "+response.Status.description);
-				return false;
 			}
-			return true;
+			return response.Status;
 		}
 
 	}

@@ -14,6 +14,7 @@ namespace OpenDental {
 		private Payment PaymentCur;
 		private Patient PatCur;
 		private string amountInit;
+		private PayConnectService.Status status;
 
 		public FormPayConnect(Payment payment,Patient pat,string amount) {
 			InitializeComponent();
@@ -27,6 +28,16 @@ namespace OpenDental {
 			this.textNameOnCard.Text=PatCur.GetNameFL();
 			this.textZipCode.Text=PatCur.Zip;
 			this.textAmount.Text=amountInit;
+		}
+
+		///<summary>Only call after the form is closed and the DialogResult is DialogResult.OK.</summary>
+		public string AmountCharged{
+			get { return textAmount.Text; }
+		}
+
+		///<summary>Only call after the form is closed and the DialogResult is DialogResult.OK.</summary>
+		public PayConnectService.Status PaymentStatus{
+			get{ return status; }
 		}
 
 		private bool VerifyData(out int expYear,out int expMonth){
@@ -65,16 +76,21 @@ namespace OpenDental {
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
+			Cursor=Cursors.WaitCursor;
 			int expYear;
 			int expMonth;
 			if(!VerifyData(out expYear,out expMonth)){
+				Cursor=Cursors.Default;
 				return;
 			}
-			if(!Bridges.PayConnect.ProcessCreditCard(PaymentCur.PayNum,Convert.ToDecimal(textAmount.Text),
-				textCardNumber.Text,expYear,expMonth,textNameOnCard.Text,textSecurityCode.Text,textZipCode.Text)){
+			status=Bridges.PayConnect.ProcessCreditCard(PaymentCur.PayNum,Convert.ToDecimal(textAmount.Text),
+				textCardNumber.Text,expYear,expMonth,textNameOnCard.Text,textSecurityCode.Text,textZipCode.Text);
+			if(status.code!=0){//error in transaction
+				Cursor=Cursors.Default;
 				DialogResult=DialogResult.Cancel;
 				return;
 			}
+			Cursor=Cursors.Default;
 			DialogResult=DialogResult.OK;
 		}
 
