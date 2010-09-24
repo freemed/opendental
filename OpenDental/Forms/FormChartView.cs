@@ -52,7 +52,6 @@ namespace OpenDental{
 		private OpenDental.UI.Button butDelete;
 		private Label labelDescription;
 		private ListBox listProcStatusCodes;
-		private Label label1;
 		public ChartView ChartViewCur;
 
 		///<summary></summary>
@@ -113,7 +112,6 @@ namespace OpenDental{
 			this.groupBoxProperties = new System.Windows.Forms.GroupBox();
 			this.labelDescription = new System.Windows.Forms.Label();
 			this.listProcStatusCodes = new System.Windows.Forms.ListBox();
-			this.label1 = new System.Windows.Forms.Label();
 			this.butDelete = new OpenDental.UI.Button();
 			this.butShowNone = new OpenDental.UI.Button();
 			this.butShowAll = new OpenDental.UI.Button();
@@ -416,21 +414,14 @@ namespace OpenDental{
 			this.listProcStatusCodes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
 			this.listProcStatusCodes.FormattingEnabled = true;
-			this.listProcStatusCodes.Location = new System.Drawing.Point(388,63);
+			this.listProcStatusCodes.IntegralHeight = false;
+			this.listProcStatusCodes.Location = new System.Drawing.Point(388,61);
 			this.listProcStatusCodes.Name = "listProcStatusCodes";
 			this.listProcStatusCodes.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-			this.listProcStatusCodes.Size = new System.Drawing.Size(158,186);
+			this.listProcStatusCodes.Size = new System.Drawing.Size(158,162);
 			this.listProcStatusCodes.TabIndex = 70;
 			this.listProcStatusCodes.Visible = false;
-			// 
-			// label1
-			// 
-			this.label1.Location = new System.Drawing.Point(386,45);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(158,17);
-			this.label1.TabIndex = 71;
-			this.label1.Text = "Statuses";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			this.listProcStatusCodes.SelectedIndexChanged += new System.EventHandler(this.listProcStatusCodes_SelectedIndexChanged);
 			// 
 			// butDelete
 			// 
@@ -603,7 +594,6 @@ namespace OpenDental{
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(683,696);
-			this.Controls.Add(this.label1);
 			this.Controls.Add(this.listProcStatusCodes);
 			this.Controls.Add(this.labelDescription);
 			this.Controls.Add(this.butDelete);
@@ -648,6 +638,48 @@ namespace OpenDental{
 			if(Programs.UsingOrion) {
 				listProcStatusCodes.Visible=true;
 				listProcStatusCodes.Items.AddRange(Enum.GetNames(typeof(OrionStatus)));
+				if(ChartViewCur.OrionStatusFlags==OrionStatus.None){
+					listProcStatusCodes.SetSelected(0,true);
+				}
+				if((ChartViewCur.OrionStatusFlags & OrionStatus.TP)==OrionStatus.TP) {
+					listProcStatusCodes.SetSelected(1,true);
+				}
+				if((ChartViewCur.OrionStatusFlags & OrionStatus.C)==OrionStatus.C) {
+					listProcStatusCodes.SetSelected(2,true);
+				}
+				if((ChartViewCur.OrionStatusFlags & OrionStatus.E)==OrionStatus.E) {
+					listProcStatusCodes.SetSelected(3,true);
+				}
+				if((ChartViewCur.OrionStatusFlags & OrionStatus.R)==OrionStatus.R) {
+					listProcStatusCodes.SetSelected(4,true);
+				}
+				if((ChartViewCur.OrionStatusFlags & OrionStatus.RO)==OrionStatus.RO) {
+					listProcStatusCodes.SetSelected(5,true);
+				}
+				if((ChartViewCur.OrionStatusFlags & OrionStatus.CS)==OrionStatus.CS) {
+					listProcStatusCodes.SetSelected(6,true);
+				}
+				if((ChartViewCur.OrionStatusFlags & OrionStatus.CR)==OrionStatus.CR) {
+					listProcStatusCodes.SetSelected(7,true);
+				}
+				if((ChartViewCur.OrionStatusFlags & OrionStatus.CA_Tx)==OrionStatus.CA_Tx) {
+					listProcStatusCodes.SetSelected(8,true);
+				}
+				if((ChartViewCur.OrionStatusFlags & OrionStatus.CA_EPRD)==OrionStatus.CA_EPRD) {
+					listProcStatusCodes.SetSelected(9,true);
+				}
+				if((ChartViewCur.OrionStatusFlags & OrionStatus.CA_PD)==OrionStatus.CA_PD) {
+					listProcStatusCodes.SetSelected(10,true);
+				}
+				if((ChartViewCur.OrionStatusFlags & OrionStatus.S)==OrionStatus.S) {
+					listProcStatusCodes.SetSelected(11,true);
+				}
+				if((ChartViewCur.OrionStatusFlags & OrionStatus.ST)==OrionStatus.ST) {
+					listProcStatusCodes.SetSelected(12,true);
+				}
+				if((ChartViewCur.OrionStatusFlags & OrionStatus.W)==OrionStatus.W) {
+					listProcStatusCodes.SetSelected(13,true);
+				}
 			}
 			checkAppt.Checked=(ChartViewCur.ObjectTypes & ChartViewObjs.Appointments)==ChartViewObjs.Appointments;
 			checkComm.Checked=(ChartViewCur.ObjectTypes & ChartViewObjs.CommLog)==ChartViewObjs.CommLog;
@@ -848,6 +880,10 @@ namespace OpenDental{
 			changed=true;
 		}
 
+		private void listProcStatusCodes_SelectedIndexChanged(object sender,EventArgs e) {
+			changed=true;
+		}
+
 		private void butDefault_Click(object sender,EventArgs e) {
 			ListShowing=DisplayFields.GetDefaultList(DisplayFieldCategory.None);
 			FillGrids();
@@ -999,6 +1035,54 @@ namespace OpenDental{
 			ChartViewCur.SelectedTeethOnly=checkShowTeeth.Checked;
 			ChartViewCur.ShowProcNotes=checkNotes.Checked;
 			ChartViewCur.IsAudit=checkAudit.Checked;
+			ChartViewCur.OrionStatusFlags=OrionStatus.None;
+			if(listProcStatusCodes.SelectedIndex==0) {
+				ChartViewCur.OrionStatusFlags|=OrionStatus.None;
+			}
+			else{
+				for(int i=0;i<listProcStatusCodes.SelectedItems.Count;i++) {
+					if(listProcStatusCodes.SelectedItems[i].ToString()=="TP") {
+						ChartViewCur.OrionStatusFlags|=OrionStatus.TP;
+					}
+					if(listProcStatusCodes.SelectedItems[i].ToString()=="C") {
+						ChartViewCur.OrionStatusFlags|=OrionStatus.C;
+					}
+					if(listProcStatusCodes.SelectedItems[i].ToString()=="E") {
+						ChartViewCur.OrionStatusFlags|=OrionStatus.E;
+					}
+					if(listProcStatusCodes.SelectedItems[i].ToString()=="R") {
+						ChartViewCur.OrionStatusFlags|=OrionStatus.R;
+					}
+					if(listProcStatusCodes.SelectedItems[i].ToString()=="RO") {
+						ChartViewCur.OrionStatusFlags|=OrionStatus.RO;
+					}
+					if(listProcStatusCodes.SelectedItems[i].ToString()=="CS") {
+						ChartViewCur.OrionStatusFlags|=OrionStatus.CS;
+					}
+					if(listProcStatusCodes.SelectedItems[i].ToString()=="CR") {
+						ChartViewCur.OrionStatusFlags|=OrionStatus.CR;
+					}
+					if(listProcStatusCodes.SelectedItems[i].ToString()=="CA_Tx") {
+						ChartViewCur.OrionStatusFlags|=OrionStatus.CA_Tx;
+					}
+					if(listProcStatusCodes.SelectedItems[i].ToString()=="CA_EPRD") {
+						ChartViewCur.OrionStatusFlags|=OrionStatus.CA_EPRD;
+					}
+					if(listProcStatusCodes.SelectedItems[i].ToString()=="CA_PD") {
+						ChartViewCur.OrionStatusFlags|=OrionStatus.CA_PD;
+					}
+					if(listProcStatusCodes.SelectedItems[i].ToString()=="S") {
+						ChartViewCur.OrionStatusFlags|=OrionStatus.S;
+					}
+					if(listProcStatusCodes.SelectedItems[i].ToString()=="ST") {
+						ChartViewCur.OrionStatusFlags|=OrionStatus.ST;
+					}
+					if(listProcStatusCodes.SelectedItems[i].ToString()=="W") {
+						ChartViewCur.OrionStatusFlags|=OrionStatus.W;
+					}
+				}
+			}
+			
 			if(!ChartViewCur.IsNew) {
 				ChartViews.Update(ChartViewCur);
 			}
@@ -1013,6 +1097,7 @@ namespace OpenDental{
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
 
 		
 
