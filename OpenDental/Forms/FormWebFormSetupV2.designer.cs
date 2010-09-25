@@ -36,10 +36,13 @@ namespace OpenDental{
 			this.colorDialog1 = new System.Windows.Forms.ColorDialog();
 			this.label1 = new System.Windows.Forms.Label();
 			this.textBoxWebFormAddress = new System.Windows.Forms.TextBox();
+			this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+			this.dataGridView1 = new System.Windows.Forms.DataGridView();
 			this.groupBox2.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// textboxWebHostAddress
@@ -159,6 +162,25 @@ namespace OpenDental{
 			this.textBoxWebFormAddress.Size = new System.Drawing.Size(445,20);
 			this.textBoxWebFormAddress.TabIndex = 55;
 			// 
+			// backgroundWorker1
+			// 
+			this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
+			this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
+			// 
+			// gridMain
+			// 
+			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.gridMain.HScrollVisible = false;
+			this.gridMain.Location = new System.Drawing.Point(33,271);
+			this.gridMain.Name = "gridMain";
+			this.gridMain.ScrollValue = 0;
+			this.gridMain.Size = new System.Drawing.Size(800,169);
+			this.gridMain.TabIndex = 56;
+			this.gridMain.Title = "Webforms";
+			this.gridMain.TranslationName = "TableWebforms";
+			// 
 			// butOK
 			// 
 			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -167,7 +189,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(465,250);
+			this.butOK.Location = new System.Drawing.Point(685,673);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 3;
@@ -182,22 +204,27 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(557,250);
+			this.butCancel.Location = new System.Drawing.Point(777,673);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 2;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// backgroundWorker1
+			// dataGridView1
 			// 
-			this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
-			this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
+			this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			this.dataGridView1.Location = new System.Drawing.Point(33,479);
+			this.dataGridView1.Name = "dataGridView1";
+			this.dataGridView1.Size = new System.Drawing.Size(387,150);
+			this.dataGridView1.TabIndex = 57;
 			// 
 			// FormWebFormSetupV2
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(646,288);
+			this.ClientSize = new System.Drawing.Size(866,711);
+			this.Controls.Add(this.dataGridView1);
+			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.textBoxWebFormAddress);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.groupBox2);
@@ -212,6 +239,7 @@ namespace OpenDental{
 			this.Load += new System.EventHandler(this.FormWebFormSetupV2_Load);
 			this.groupBox2.ResumeLayout(false);
 			this.groupBox2.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -235,5 +263,7 @@ namespace OpenDental{
 		private System.Windows.Forms.TextBox textBoxWebFormAddress;
 		private OpenDental.UI.Button butChange;
 		private System.ComponentModel.BackgroundWorker backgroundWorker1;
+		private OpenDental.UI.ODGrid gridMain;
+		private System.Windows.Forms.DataGridView dataGridView1;
 	}
 }

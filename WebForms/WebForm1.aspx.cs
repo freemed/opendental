@@ -32,14 +32,17 @@ namespace WebForms {
 			try {
 				ODWebServiceEntities db=new ODWebServiceEntities();
 				int ColorCode=3896686; // this is the Color Code for the default OpenDental color
-				string Heading1="";
-				string Heading2="";
+				string Heading1=LabelHeading1.Text;
+				string Heading2=LabelHeading2.Text;
 				var PrefObj=from wp in db.webforms_preference where wp.DentalOfficeID==DentalOfficeID
 					select wp;
 				if(PrefObj.Count() > 0) {
 					ColorCode=PrefObj.First().ColorBorder;
 					Heading1=PrefObj.First().Heading1;
 					Heading2=PrefObj.First().Heading2;
+				}
+				else {
+					LabelError.Text="Error: Your form will not be submitted. Please contact your Dental Office";
 				}
 				LabelHeading1.Text=Heading1;
 				LabelHeading2.Text=Heading2;

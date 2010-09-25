@@ -282,8 +282,9 @@ namespace OpenDentBusiness{
 			table.Columns.Add("time");
 			table.Columns.Add("timeOnly",typeof(TimeSpan));//to help with sorting
 			table.Columns.Add("PatNum");
+			table.Columns.Add("SheetNum");
 			List<DataRow> rows=new List<DataRow>();
-			string command="SELECT DateTimeSheet,Description,PatNum "
+			string command="SELECT DateTimeSheet,Description,PatNum,SheetNum "
 				+"FROM sheet WHERE " 
 				+"DateTimeSheet >= "+POut.Date(dateFrom)+" AND DateTimeSheet <= "+POut.Date(dateTo.AddDays(1))+ " "
 				+"AND IsWebForm = "+POut.Bool(true)+ " "
@@ -298,6 +299,7 @@ namespace OpenDentBusiness{
 				row["dateTime"]=dateT;
 				row["description"]=rawSheet.Rows[i]["Description"].ToString();
 				row["PatNum"]=rawSheet.Rows[i]["PatNum"].ToString();
+				row["SheetNum"]=rawSheet.Rows[i]["SheetNum"].ToString();
 				if(dateT.TimeOfDay!=TimeSpan.Zero) {
 					row["time"]=dateT.ToString("h:mm")+dateT.ToString("%t").ToLower();
 				}

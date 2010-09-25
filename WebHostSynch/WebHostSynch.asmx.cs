@@ -7,6 +7,7 @@ using System.Configuration;
 using OpenDentBusiness;
 using System.Reflection;
 
+
 namespace WebHostSynch {
 	/// <summary>
 	/// Summary description for WebHostSynch
@@ -52,6 +53,46 @@ namespace WebHostSynch {
 				return false;
 			}
 			return true;
+		}
+
+		[WebMethod]
+		public webforms_preference GetPreferences(string RegistrationKey) {
+			ODWebServiceEntities db=new ODWebServiceEntities();
+			webforms_preference wspObj= null;
+			//int DefaultColorBorder=3896686;
+			int DefaultColorBorder=-12550016;
+			string DefaultHeading1="PATIENT INFORMATION";
+			string DefaultHeading2="We are pleased to welcome you to our office. Please take a few minutes to fill out this form as completely as you can. If you have any questions we'll be glad to help you.";
+
+			try {
+				long DentalOfficeID=GetDentalOfficeID(RegistrationKey);
+				if(DentalOfficeID==0) {
+					Logger.Information("Incorrect registration key. IpAddress="+HttpContext.Current.Request.UserHostAddress+" RegistrationKey="+RegistrationKey);
+					return wspObj;
+				}
+				var wspRes=from wsp in db.webforms_preference
+						   where wsp.DentalOfficeID==DentalOfficeID
+						   select wsp;
+				
+				if(wspRes.Count()>0) {
+					wspObj=wspRes.First();
+				}
+				// if there is no entry for that dental office make a new entry.
+				if(wspRes.Count()==0) {
+					wspObj=new webforms_preference();
+					wspObj.DentalOfficeID=DentalOfficeID;
+					wspObj.ColorBorder=DefaultColorBorder;
+					wspObj.Heading1=DefaultHeading1;
+					wspObj.Heading2=DefaultHeading2;
+					db.AddTowebforms_preference(wspObj);
+				}
+				db.SaveChanges();
+			}
+			catch(ApplicationException ex) {
+				Logger.Information(ex.Message.ToString());
+				return wspObj;;
+			}
+			return wspObj;;
 		}
 
 		[WebMethod]

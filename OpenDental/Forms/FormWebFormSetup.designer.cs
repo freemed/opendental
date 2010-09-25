@@ -210,6 +210,7 @@ namespace OpenDental{
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Web Form Setup";
 			this.Load += new System.EventHandler(this.FormWebFormSetup_Load);
+			this.Shown += new System.EventHandler(this.FormWebForms_Shown);
 			this.groupBox2.ResumeLayout(false);
 			this.groupBox2.PerformLayout();
 			this.ResumeLayout(false);

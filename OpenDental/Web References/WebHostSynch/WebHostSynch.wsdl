@@ -19,33 +19,28 @@
           </s:sequence>
         </s:complexType>
       </s:element>
-      <s:element name="GetSheetFieldData">
+      <s:element name="GetPreferences">
         <s:complexType>
           <s:sequence>
             <s:element minOccurs="0" maxOccurs="1" name="RegistrationKey" type="s:string" />
           </s:sequence>
         </s:complexType>
       </s:element>
-      <s:element name="GetSheetFieldDataResponse">
+      <s:element name="GetPreferencesResponse">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="0" maxOccurs="1" name="GetSheetFieldDataResult" type="tns:ArrayOfWebforms_sheetfield" />
+            <s:element minOccurs="0" maxOccurs="1" name="GetPreferencesResult" type="tns:webforms_preference" />
           </s:sequence>
         </s:complexType>
       </s:element>
-      <s:complexType name="ArrayOfWebforms_sheetfield">
-        <s:sequence>
-          <s:element minOccurs="0" maxOccurs="unbounded" name="webforms_sheetfield" nillable="true" type="tns:webforms_sheetfield" />
-        </s:sequence>
-      </s:complexType>
-      <s:complexType name="webforms_sheetfield">
+      <s:complexType name="webforms_preference">
         <s:complexContent mixed="false">
           <s:extension base="tns:EntityObject">
             <s:sequence>
-              <s:element minOccurs="0" maxOccurs="1" name="FieldName" type="s:string" />
-              <s:element minOccurs="0" maxOccurs="1" name="FieldValue" type="s:string" />
-              <s:element minOccurs="1" maxOccurs="1" name="SheetFieldID" type="s:long" />
-              <s:element minOccurs="0" maxOccurs="1" name="webforms_sheetReference" type="tns:EntityReferenceOfwebforms_sheet" />
+              <s:element minOccurs="1" maxOccurs="1" name="ColorBorder" type="s:int" />
+              <s:element minOccurs="1" maxOccurs="1" name="DentalOfficeID" type="s:long" />
+              <s:element minOccurs="0" maxOccurs="1" name="Heading1" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="Heading2" type="s:string" />
             </s:sequence>
           </s:extension>
         </s:complexContent>
@@ -78,11 +73,14 @@
           <s:element minOccurs="0" maxOccurs="1" name="Value" />
         </s:sequence>
       </s:complexType>
-      <s:complexType name="EntityReferenceOfwebforms_sheet">
-        <s:complexContent mixed="false">
-          <s:extension base="tns:EntityReference" />
-        </s:complexContent>
-      </s:complexType>
+      <s:element name="GetSheetFieldData">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RegistrationKey" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="RelatedEnd" abstract="true" />
       <s:complexType name="EntityReference" abstract="true">
         <s:complexContent mixed="false">
           <s:extension base="tns:RelatedEnd">
@@ -92,7 +90,35 @@
           </s:extension>
         </s:complexContent>
       </s:complexType>
-      <s:complexType name="RelatedEnd" abstract="true" />
+      <s:complexType name="EntityReferenceOfwebforms_sheet">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:EntityReference" />
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="ArrayOfWebforms_sheetfield">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="webforms_sheetfield" nillable="true" type="tns:webforms_sheetfield" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="webforms_sheetfield">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:EntityObject">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="FieldName" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="FieldValue" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="SheetFieldID" type="s:long" />
+              <s:element minOccurs="0" maxOccurs="1" name="webforms_sheetReference" type="tns:EntityReferenceOfwebforms_sheet" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:element name="GetSheetFieldDataResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetSheetFieldDataResult" type="tns:ArrayOfWebforms_sheetfield" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
       <s:element name="GetSheetData">
         <s:complexType>
           <s:sequence>
@@ -301,6 +327,12 @@
   <wsdl:message name="SetPreferencesSoapOut">
     <wsdl:part name="parameters" element="tns:SetPreferencesResponse" />
   </wsdl:message>
+  <wsdl:message name="GetPreferencesSoapIn">
+    <wsdl:part name="parameters" element="tns:GetPreferences" />
+  </wsdl:message>
+  <wsdl:message name="GetPreferencesSoapOut">
+    <wsdl:part name="parameters" element="tns:GetPreferencesResponse" />
+  </wsdl:message>
   <wsdl:message name="GetSheetFieldDataSoapIn">
     <wsdl:part name="parameters" element="tns:GetSheetFieldData" />
   </wsdl:message>
@@ -348,6 +380,10 @@
       <wsdl:input message="tns:SetPreferencesSoapIn" />
       <wsdl:output message="tns:SetPreferencesSoapOut" />
     </wsdl:operation>
+    <wsdl:operation name="GetPreferences">
+      <wsdl:input message="tns:GetPreferencesSoapIn" />
+      <wsdl:output message="tns:GetPreferencesSoapOut" />
+    </wsdl:operation>
     <wsdl:operation name="GetSheetFieldData">
       <wsdl:input message="tns:GetSheetFieldDataSoapIn" />
       <wsdl:output message="tns:GetSheetFieldDataSoapOut" />
@@ -381,6 +417,15 @@
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
     <wsdl:operation name="SetPreferences">
       <soap:operation soapAction="http://opendental.com/SetPreferences" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPreferences">
+      <soap:operation soapAction="http://opendental.com/GetPreferences" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -456,6 +501,15 @@
     <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
     <wsdl:operation name="SetPreferences">
       <soap12:operation soapAction="http://opendental.com/SetPreferences" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPreferences">
+      <soap12:operation soapAction="http://opendental.com/GetPreferences" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

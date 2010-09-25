@@ -73,15 +73,16 @@ namespace OpenDental {
 			DataTable table=Sheets.GetWebFormSheetsTable(dateFrom,dateTo);
 			for(int i=0;i<table.Rows.Count;i++) {
 				long patNum = PIn.Long(table.Rows[i]["PatNum"].ToString());
+				long sheetNum = PIn.Long(table.Rows[i]["SheetNum"].ToString());
 				Patient pat = Patients.GetPat(patNum);
 				if(pat!=null) {
 					ODGridRow row=new ODGridRow();
 					row.Cells.Add(table.Rows[i]["date"].ToString());
 					row.Cells.Add(table.Rows[i]["time"].ToString());
-					row.Tag=patNum;
 					row.Cells.Add(pat.LName);
 					row.Cells.Add(pat.FName);
 					row.Cells.Add(table.Rows[i]["description"].ToString());
+					row.Tag=sheetNum;
 					gridMain.Rows.Add(row);
 				}
 			} 
@@ -126,7 +127,8 @@ namespace OpenDental {
 					MsgBox.Show(this,"Registration key provided by the dental office is incorrect");
 					return;
 				}
-				wh.SetPreferences(RegistrationKey,PrefC.GetColor(PrefName.WebFormsBorderColor).ToArgb(),PrefC.GetStringSilent(PrefName.WebFormsHeading1),PrefC.GetStringSilent(PrefName.WebFormsHeading2));
+				// set preferences should only be done in the FormWebFormSetup window
+				//wh.SetPreferences(RegistrationKey,PrefC.GetColor(PrefName.WebFormsBorderColor).ToArgb(),PrefC.GetStringSilent(PrefName.WebFormsHeading1),PrefC.GetStringSilent(PrefName.WebFormsHeading2));
 				OpenDental.WebHostSynch.webforms_sheetfield[] wbsf=wh.GetSheetFieldData(RegistrationKey);
 				// The second call GetSheetData is used to retrieve the Datetime the sheet was submitted because as of now I don't quite know how to get it elegently by calling a single method.
 				OpenDental.WebHostSynch.webforms_sheet[] SheetDetails=wh.GetSheetData(RegistrationKey);
@@ -544,30 +546,54 @@ namespace OpenDental {
 			FillGrid();
 		}
 
-		private void textDateStart_Validated(object sender,EventArgs e) {
-			
-		}
-
-		private void textDateEnd_Validated(object sender,EventArgs e) {
-			//FillGrid();
+		private void menuItemSetup_Click(object sender,EventArgs e) {
+			FormWebFormSetup formW=new FormWebFormSetup();
+			formW.ShowDialog();
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			/* delete later
 			long PatNum=(long)gridMain.Rows[e.Row].Tag;
 			if(PatNum!=0) {
 				FormPatientForms formP=new FormPatientForms();
 				formP.PatNum=PatNum;
 				formP.ShowDialog();
 			}
+			*/
+			long sheetNum=(long)gridMain.Rows[e.Row].Tag;
+			Sheet sheet=Sheets.GetSheet(sheetNum);
+			FormSheetFillEdit FormSF=new FormSheetFillEdit(sheet);
+			FormSF.ShowDialog();
 		}
 
-		private void menuItemSetup_Click(object sender,EventArgs e) {
-
-			FormWebFormSetup formW=new FormWebFormSetup();
-			formW.ShowDialog();
-
+		private void gridMain_MouseUp(object sender,MouseEventArgs e) {
+			if(e.Button==MouseButtons.Right) {
+				menuWebFormsRight.Show(gridMain,new Point(e.X,e.Y));
+			}
 		}
 
+		private void menuItemViewSheet_Click(object sender,EventArgs e) {
+			long sheetNum=(long)gridMain.Rows[gridMain.SelectedIndices[0]].Tag;
+			Sheet sheet=Sheets.GetSheet(sheetNum);
+			FormSheetFillEdit FormSF=new FormSheetFillEdit(sheet);
+			FormSF.ShowDialog();
+		}
+
+		private void menuItemImportSheet_Click(object sender,EventArgs e) {
+			long sheetNum=(long)gridMain.Rows[gridMain.SelectedIndices[0]].Tag;
+			Sheet sheet=Sheets.GetSheet(sheetNum);
+			FormSheetImport formSI=new FormSheetImport();
+			formSI.SheetCur=sheet;
+			formSI.ShowDialog();
+		}
+
+		private void menuItemViewAllSheets_Click(object sender,EventArgs e) {
+			long sheetNum=(long)gridMain.Rows[gridMain.SelectedIndices[0]].Tag;
+			Sheet sheet=Sheets.GetSheet(sheetNum);
+			FormPatientForms formP=new FormPatientForms();
+			formP.PatNum=sheet.PatNum;
+			formP.ShowDialog();
+		}
 		private void backgroundWorker1_RunWorkerCompleted(object sender,RunWorkerCompletedEventArgs e) {
 			FillGrid(); 
 		}
@@ -583,6 +609,14 @@ namespace OpenDental {
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+
+
+
+
+
+
+
 
 		
 
