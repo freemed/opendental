@@ -91,8 +91,6 @@ namespace OpenDental {
 				}
 				WebFormAddress=wh.GetWebFormAddress(RegistrationKey);
 				PrefObj=wh.GetPreferences(RegistrationKey);
-				
-
 			}
 			catch(Exception ex) {
 				MessageBox.Show(ex.Message);

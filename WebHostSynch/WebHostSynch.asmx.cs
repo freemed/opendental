@@ -47,6 +47,7 @@ namespace WebHostSynch {
 					db.AddTowebforms_preference(wspNewObj);
 				}
 				db.SaveChanges();
+				Logger.Information("Preferences saved IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID);
 			}
 			catch(ApplicationException ex) {
 				Logger.Information(ex.Message.ToString());
@@ -57,6 +58,7 @@ namespace WebHostSynch {
 
 		[WebMethod]
 		public webforms_preference GetPreferences(string RegistrationKey) {
+			Logger.Information("In GetPreferences IpAddress="+HttpContext.Current.Request.UserHostAddress+" RegistrationKey="+RegistrationKey);
 			ODWebServiceEntities db=new ODWebServiceEntities();
 			webforms_preference wspObj= null;
 			//int DefaultColorBorder=3896686;
@@ -85,8 +87,10 @@ namespace WebHostSynch {
 					wspObj.Heading1=DefaultHeading1;
 					wspObj.Heading2=DefaultHeading2;
 					db.AddTowebforms_preference(wspObj);
+					Logger.Information("new entry IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID);
 				}
 				db.SaveChanges();
+				Logger.Information("In GetPreferences IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID);
 			}
 			catch(ApplicationException ex) {
 				Logger.Information(ex.Message.ToString());
@@ -105,6 +109,7 @@ namespace WebHostSynch {
 			var wsfObj=from wsf in db.webforms_sheetfield
 				where wsf.webforms_sheet.webforms_preference.DentalOfficeID==DentalOfficeID
 				select wsf;
+			Logger.Information("In GetSheetFieldData IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID);
 			return wsfObj.ToList();
 		}
 
@@ -118,6 +123,7 @@ namespace WebHostSynch {
 			var wsObj=from wsf in db.webforms_sheet
 				where wsf.webforms_preference.DentalOfficeID==DentalOfficeID
 				select wsf;
+			Logger.Information("In GetSheetData IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID);
 			return wsObj.ToList();
 		}
 
@@ -142,8 +148,10 @@ namespace WebHostSynch {
 					var delSheet=from ws in db.webforms_sheet where ws.SheetID==SheetID
 						select ws;
 					db.DeleteObject(delSheet.First());
+					Logger.Information("deleted SheetID="+SheetID+" DentalOfficeID="+DentalOfficeID);
 				}
 				db.SaveChanges();
+				Logger.Information("In DeleteSheetData IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID);
 			}
 			catch(ApplicationException ex) {
 				Logger.Information(ex.Message.ToString());
@@ -194,6 +202,7 @@ namespace WebHostSynch {
 			catch(ApplicationException ex) {
 				Logger.Information(ex.Message.ToString());
 			}
+			Logger.Information("In GetWebFormAddress WebFormAddress=" +WebFormAddress);
 			return WebFormAddress;
 		}
 

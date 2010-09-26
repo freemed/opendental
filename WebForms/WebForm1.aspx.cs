@@ -21,7 +21,7 @@ namespace WebForms {
 				SetPagePreferences(DentalOfficeID);
 			}
 			catch(Exception ex) {
-				Logger.Information(ex.Message.ToString());
+				Logger.Information(ex.Message.ToString()+" IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID);
 			}
 		}
 
@@ -43,10 +43,12 @@ namespace WebForms {
 				}
 				else {
 					LabelError.Text="Error: Your form will not be submitted. Please contact your Dental Office";
+					Logger.Information("Error. Form requested at IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID);
 				}
 				LabelHeading1.Text=Heading1;
 				LabelHeading2.Text=Heading2;
 				bodytag.Attributes.Add("bgcolor",ColorTranslator.ToHtml(Color.FromArgb(ColorCode)));
+				Logger.Information("Form requested from IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID);
 			}
 			catch(Exception ex) {
 				Logger.Information(ex.Message.ToString());
@@ -71,7 +73,7 @@ namespace WebForms {
 				}
 			}
 			catch(Exception ex) {
-				Logger.Information(ex.Message.ToString());
+				Logger.Information(ex.Message.ToString()+" IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID);
 			}
 		}
 
@@ -91,7 +93,7 @@ namespace WebForms {
 				}
 			}
 			catch(Exception ex) {
-				Logger.Information(ex.Message.ToString());
+				Logger.Information(ex.Message.ToString()+" IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID);
 			}
 		}
 
@@ -123,7 +125,7 @@ namespace WebForms {
 				}
 			}
 			catch(Exception ex) {
-				Logger.Information(ex.Message.ToString());
+				Logger.Information(ex.Message.ToString()+" IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID);
 			}
 		}
 
@@ -140,18 +142,26 @@ namespace WebForms {
 					NewSheetfieldObj.FieldValue=FormValuesHashTable[key].ToString();
 					NewSheetObj.webforms_sheetfield.Add(NewSheetfieldObj);
 				}
-				if(PrefObj.Count() > 0) {
+				if(PrefObj.Count()>0) {
 					PrefObj.First().webforms_sheet.Add(NewSheetObj);
+					db.SaveChanges();
+					LabelSubmitMessage.Text="Your details have been successfully submited";
+					Logger.Information("Form values saved from IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID);
 				}
-				db.SaveChanges();
+				if(PrefObj.Count()==0) {
+					LabelSubmitMessage.Text="Error: Your form has not be submitted. Please contact your Dental Office";
+					Logger.Information("Error: Your form has not be submitted IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID);
+				}
+				
 				Panel1.Visible=false;
-				LabelSubmitMessage.Text="Your details have been successfully submited";
+				
 				Panel2.Visible=true;
 			}
 			catch(Exception ex) {
 				Logger.Information(ex.Message.ToString());
 				Panel1.Visible=false;
 				LabelSubmitMessage.Text="There has been a problem submitting your details. <br /> We apologize for the inconvenience.";
+				Logger.Information("There has been a problem submitting your details IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID);
 			}
 		}
 

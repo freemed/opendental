@@ -117,10 +117,10 @@
 
                     --%>
 					<asp:TextBox ID="TextBoxBirthdate" runat="server" Width="140px" CssClass="textboxstyle"></asp:TextBox>
-					<asp:CalendarExtender ID="calendarExtender" runat="server" Animated="true" PopupPosition="Right"
+					<%--<asp:CalendarExtender ID="calendarExtender" runat="server" Animated="true" PopupPosition="Right"
 						Format="MM/dd/yyyy" TargetControlID="TextBoxBirthdate" DefaultView="Years" BehaviorID="CalendarBehaviorID"
 						OnClientDateSelectionChanged="setCalendarModeToYears">
-					</asp:CalendarExtender>
+					</asp:CalendarExtender>--%>
 
 					<script type="text/javascript">
 						function setCalendarModeToYears() {
