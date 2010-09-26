@@ -52,6 +52,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butDelete;
 		private Label labelDescription;
 		private ListBox listProcStatusCodes;
+		private Label label1;
 		public ChartView ChartViewCur;
 
 		///<summary></summary>
@@ -112,6 +113,7 @@ namespace OpenDental{
 			this.groupBoxProperties = new System.Windows.Forms.GroupBox();
 			this.labelDescription = new System.Windows.Forms.Label();
 			this.listProcStatusCodes = new System.Windows.Forms.ListBox();
+			this.label1 = new System.Windows.Forms.Label();
 			this.butDelete = new OpenDental.UI.Button();
 			this.butShowNone = new OpenDental.UI.Button();
 			this.butShowAll = new OpenDental.UI.Button();
@@ -414,14 +416,22 @@ namespace OpenDental{
 			this.listProcStatusCodes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
 			this.listProcStatusCodes.FormattingEnabled = true;
-			this.listProcStatusCodes.IntegralHeight = false;
 			this.listProcStatusCodes.Location = new System.Drawing.Point(388,61);
 			this.listProcStatusCodes.Name = "listProcStatusCodes";
 			this.listProcStatusCodes.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-			this.listProcStatusCodes.Size = new System.Drawing.Size(158,162);
+			this.listProcStatusCodes.Size = new System.Drawing.Size(158,186);
 			this.listProcStatusCodes.TabIndex = 70;
 			this.listProcStatusCodes.Visible = false;
 			this.listProcStatusCodes.SelectedIndexChanged += new System.EventHandler(this.listProcStatusCodes_SelectedIndexChanged);
+			// 
+			// label1
+			// 
+			this.label1.Location = new System.Drawing.Point(388,41);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(158,17);
+			this.label1.TabIndex = 71;
+			this.label1.Text = "Statuses";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// butDelete
 			// 
@@ -594,6 +604,7 @@ namespace OpenDental{
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(683,696);
+			this.Controls.Add(this.label1);
 			this.Controls.Add(this.listProcStatusCodes);
 			this.Controls.Add(this.labelDescription);
 			this.Controls.Add(this.butDelete);
@@ -641,19 +652,6 @@ namespace OpenDental{
 				for(int i=1;i<statusNames.Length;i++) {
 					listProcStatusCodes.Items.Add(statusNames[i]);
 				}
-				//listProcStatusCodes.Items.Add(OrionStatus.TP.ToString());
-				//listProcStatusCodes.Items.Add(OrionStatus.C.ToString());
-				//listProcStatusCodes.Items.Add(OrionStatus.E.ToString());
-				//listProcStatusCodes.Items.Add(OrionStatus.R.ToString());
-				//listProcStatusCodes.Items.Add(OrionStatus.RO.ToString());
-				//listProcStatusCodes.Items.Add(OrionStatus.CS.ToString());
-				//listProcStatusCodes.Items.Add(OrionStatus.CR.ToString());
-				//listProcStatusCodes.Items.Add(OrionStatus.CA_Tx.ToString());
-				//listProcStatusCodes.Items.Add(OrionStatus.CA_EPRD.ToString());
-				//listProcStatusCodes.Items.Add(OrionStatus.CA_PD.ToString());
-				//listProcStatusCodes.Items.Add(OrionStatus.S.ToString());
-				//listProcStatusCodes.Items.Add(OrionStatus.ST.ToString());
-				//listProcStatusCodes.Items.Add(OrionStatus.W.ToString());
 				if((ChartViewCur.OrionStatusFlags & OrionStatus.TP)==OrionStatus.TP) {
 					listProcStatusCodes.SetSelected(0,true);
 				}
@@ -692,6 +690,9 @@ namespace OpenDental{
 				}
 				if((ChartViewCur.OrionStatusFlags & OrionStatus.W)==OrionStatus.W) {
 					listProcStatusCodes.SetSelected(12,true);
+				}
+				if((ChartViewCur.OrionStatusFlags & OrionStatus.A)==OrionStatus.A) {
+					listProcStatusCodes.SetSelected(13,true);
 				}
 			}
 			checkAppt.Checked=(ChartViewCur.ObjectTypes & ChartViewObjs.Appointments)==ChartViewObjs.Appointments;
@@ -1088,6 +1089,9 @@ namespace OpenDental{
 				}
 				if(listProcStatusCodes.SelectedItems[i].ToString()=="W") {
 					ChartViewCur.OrionStatusFlags|=OrionStatus.W;
+				}
+				if(listProcStatusCodes.SelectedItems[i].ToString()=="A") {
+					ChartViewCur.OrionStatusFlags|=OrionStatus.A;
 				}
 			}
 			

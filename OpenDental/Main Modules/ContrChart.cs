@@ -4144,6 +4144,9 @@ namespace OpenDental{
 						if((ChartViewCurDisplay.OrionStatusFlags & OrionStatus.W)==OrionStatus.W) {
 							listProcStatusCodes.SetSelected(12,true);
 						}
+						if((ChartViewCurDisplay.OrionStatusFlags & OrionStatus.A)==OrionStatus.A) {
+							listProcStatusCodes.SetSelected(13,true);
+						}
 					}
 				}
 				else {
@@ -7738,6 +7741,9 @@ namespace OpenDental{
 				}
 				if(listProcStatusCodes.SelectedItems[i].ToString()=="W") {
 					FormChartAdd.ChartViewCur.OrionStatusFlags|=OrionStatus.W;
+				}
+				if(listProcStatusCodes.SelectedItems[i].ToString()=="A") {
+					FormChartAdd.ChartViewCur.OrionStatusFlags|=OrionStatus.A;
 				}
 			}
 			FormChartAdd.ShowDialog();

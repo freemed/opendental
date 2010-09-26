@@ -52,36 +52,39 @@ namespace OpenDentBusiness{
 	  _5
 	}
 
+	///<summary></summary>
 	[Flags]
 	public enum OrionStatus {
 		///<summary>0- None.  While a normal orion proc would never have this status2, it is still needed for flags in ChartViews.  And it's also possible that a status2 slipped through the cracks and was not assigned, leaving it with this value.</summary>
 		None=0,
 		///<summary>1– Treatment planned</summary>
 		TP=1,
-		///<summary>2– Treatment completed</summary>
+		///<summary>2– Completed</summary>
 		C=2,
-		///<summary>4– Condition existing prior to incarceration</summary>
+		///<summary>4– Existing prior to incarceration</summary>
 		E=4,
-		///<summary>8– Patient refused treatment</summary>
+		///<summary>8– Refused treatment</summary>
 		R=8,
-		///<summary>16– Planned treatment to be done by a specialist</summary>
+		///<summary>16– Referred out to specialist</summary>
 		RO=16,
-		///<summary>32– Completed by a specialist</summary>
+		///<summary>32– Completed by specialist</summary>
 		CS=32,
-		///<summary>64– Completed by a registry</summary>
+		///<summary>64– Completed by registry</summary>
 		CR=64,
-		///<summary>128- CA-Tx:Indicates the planned treatment has been cancelled due to a change in the treatment plan</summary>
+		///<summary>128- Cancelled, tx plan changed</summary>
 		CA_Tx=128,
-		///<summary>256- CA-EPRD:Planned treatment has been cancelled because the patient is no longer eligible due to upcoming parole</summary>
+		///<summary>256- Cancelled, eligible parole</summary>
 		CA_EPRD=256,
-		///<summary>512- CA-P/D:Planned treatment has been cancelled because the patient has left the system </summary>
+		///<summary>512- Cancelled, parole/discharge</summary>
 		CA_PD=512,
-		///<summary>1024– Planned treatment has been suspended</summary>
+		///<summary>1024– Suspended, unacceptable plaque</summary>
 		S=1024,
-		///<summary>2048- Treatment shall require several visits to complete</summary>
+		///<summary>2048- Stop clock, multi visit</summary>
 		ST=2048,
-		///<summary>4096– Condition is not planned for treatment at this time, but provider is monitoring its status “Watch"</summary>
-		W=4096
+		///<summary>4096– Watch</summary>
+		W=4096,
+		///<summary>8192– Alternative</summary>
+		A=8192
 	}
 
 
