@@ -1743,7 +1743,7 @@ namespace OpenDental{
 			this.comboStatus.Location = new System.Drawing.Point(105,24);
 			this.comboStatus.MaxDropDownItems = 30;
 			this.comboStatus.Name = "comboStatus";
-			this.comboStatus.Size = new System.Drawing.Size(353,21);
+			this.comboStatus.Size = new System.Drawing.Size(251,21);
 			this.comboStatus.TabIndex = 7;
 			// 
 			// labelStatus
@@ -2463,11 +2463,14 @@ namespace OpenDental{
 				checkIsRepair.Visible=pc.IsProsth;
 				if(OrionProcCur!=null) {
 					comboDPC.SelectedIndex=(int)OrionProcCur.DPC;
+					//if(OrionProcCur.Status2!=OrionStatus.None) {
+					//	comboStatus.SelectedIndex=(int)Math.Pow((double)OrionProcCur.Status2,.5d);
+					//}
 					//comboStatus.SelectedIndex=(int)OrionProcCur.Status2;
-					BitArray ba=new BitArray(new int[] { (int)OrionProcCur.Status2 });//always non-zero
-					for(int i=1;i<ba.Length;i++) {
+					BitArray ba=new BitArray(new int[] { (int)OrionProcCur.Status2 });//should nearly always be non-zero
+					for(int i=0;i<ba.Length;i++) {
 						if(ba[i]) {
-							comboStatus.SelectedIndex=i-1;
+							comboStatus.SelectedIndex=i;
 							break;
 						}
 					}
@@ -3500,7 +3503,7 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Date and time invalid."));
 				return false;
 			}
-			if(Programs.UsingOrion&&textTimeEnd.Text!=""){
+			if(Programs.UsingOrion && textTimeEnd.Text!=""){
 				try{
 					DateTime.Parse(textTimeEnd.Text);
 				}
@@ -3616,6 +3619,10 @@ namespace OpenDental{
 				}
 			}
 			if(panelOrion.Visible) {
+				if(comboStatus.SelectedIndex==-1) {
+					MsgBox.Show(this,"Invalid status.");
+					return false;
+				}
 				if(textDateScheduled.errorProvider1.GetError(textDateScheduled)!="") {
 					MsgBox.Show(this,"Invalid schedule date.");
 					return false;
@@ -3767,8 +3774,7 @@ namespace OpenDental{
 					OrionProcCur=new OrionProc();
 				}
 				OrionProcCur.DPC=(OrionDPC)comboDPC.SelectedIndex;
-				//Enum.GetNames(typeof(OrionStatus));
-				//OrionProcCur.Status2=(OrionStatus)this.comboStatus.SelectedItem;
+				OrionProcCur.Status2=(OrionStatus)((int)(Math.Pow(2d,(double)(comboStatus.SelectedIndex))));
 				OrionProcCur.DateScheduleBy=PIn.Date(textDateScheduled.Text);
 				OrionProcCur.DateStopClock=PIn.Date(textDateStop.Text);
 				OrionProcCur.IsOnCall=checkIsOnCall.Checked;
@@ -4004,15 +4010,16 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender,System.EventArgs e) {
-			if(EntriesAreValid()) {
-				if(Programs.UsingOrion && ProcOld.ProcStatus==ProcStat.TP && ProcOld.DateTP.Date<MiscData.GetNowDateTime().Date){
-					FormProcEditExplain FormP=new FormProcEditExplain();
-					if(FormP.ShowDialog()!=DialogResult.OK){
-						return;
-					}
-				}
-				SaveAndClose();
+			if(!EntriesAreValid()) {
+				return;
 			}
+			if(Programs.UsingOrion && ProcOld.ProcStatus==ProcStat.TP && ProcOld.DateTP.Date<MiscData.GetNowDateTime().Date){
+				FormProcEditExplain FormP=new FormProcEditExplain();
+				if(FormP.ShowDialog()!=DialogResult.OK){
+					return;
+				}
+			}
+			SaveAndClose();
 		}
 
 		private void butCancel_Click(object sender,System.EventArgs e) {

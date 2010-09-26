@@ -2288,12 +2288,14 @@ namespace OpenDental{
 			// 
 			this.listProcStatusCodes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
+			this.listProcStatusCodes.ColumnWidth = 60;
 			this.listProcStatusCodes.FormattingEnabled = true;
 			this.listProcStatusCodes.IntegralHeight = false;
-			this.listProcStatusCodes.Location = new System.Drawing.Point(6,167);
+			this.listProcStatusCodes.Location = new System.Drawing.Point(6,156);
+			this.listProcStatusCodes.MultiColumn = true;
 			this.listProcStatusCodes.Name = "listProcStatusCodes";
 			this.listProcStatusCodes.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-			this.listProcStatusCodes.Size = new System.Drawing.Size(121,63);
+			this.listProcStatusCodes.Size = new System.Drawing.Size(134,74);
 			this.listProcStatusCodes.TabIndex = 45;
 			this.listProcStatusCodes.Visible = false;
 			this.listProcStatusCodes.MouseClick += new System.Windows.Forms.MouseEventHandler(this.listProcStatusCodes_MouseClick);
@@ -3271,6 +3273,7 @@ namespace OpenDental{
 				ToolBarMain.Buttons["Consent"].Enabled = true;
 				ToolBarMain.Buttons["ToothChart"].Enabled =true;
 				ToolBarMain.Buttons["ExamSheet"].Enabled=true;
+				/*moved into FillProgressNotes
 				if(Programs.UsingOrion) {
 					listProcStatusCodes.Visible=true;
 					if(listProcStatusCodes.Items.Count==0) {
@@ -3278,21 +3281,8 @@ namespace OpenDental{
 						for(int i=1;i<statusNames.Length;i++) {
 							listProcStatusCodes.Items.Add(statusNames[i]);
 						}
-						//listProcStatusCodes.Items.Add(OrionStatus.TP.ToString());
-						//listProcStatusCodes.Items.Add(OrionStatus.C.ToString());
-						//listProcStatusCodes.Items.Add(OrionStatus.E.ToString());
-						//listProcStatusCodes.Items.Add(OrionStatus.R.ToString());
-						//listProcStatusCodes.Items.Add(OrionStatus.RO.ToString());
-						//listProcStatusCodes.Items.Add(OrionStatus.CS.ToString());
-						//listProcStatusCodes.Items.Add(OrionStatus.CR.ToString());
-						//listProcStatusCodes.Items.Add(OrionStatus.CA_Tx.ToString());
-						//listProcStatusCodes.Items.Add(OrionStatus.CA_EPRD.ToString());
-						//listProcStatusCodes.Items.Add(OrionStatus.CA_PD.ToString());
-						//listProcStatusCodes.Items.Add(OrionStatus.S.ToString());
-						//listProcStatusCodes.Items.Add(OrionStatus.ST.ToString());
-						//listProcStatusCodes.Items.Add(OrionStatus.W.ToString());
 					}
-				}
+				}*/
 				if(UsingEcwTight()) {
 					ToolBarMain.Buttons["Commlog"].Enabled=true;
 					//the following sequence also gets repeated after exiting the Rx window to refresh.
@@ -3979,7 +3969,7 @@ namespace OpenDental{
 			return true;
 		}
 
-		/// <summary> Checks ProcStat passed to see if one of the check boxes on the forms contains a +ve check for the ps passed. For example if ps is TP and the checkShowTP.Checked is true it will return true.</summary>
+		/// <summary> Checks ProcStat passed to see if one of the check boxes on the form contains a check for the ps passed. For example if ps is TP and the checkShowTP.Checked is true it will return true.</summary>
 		private bool ProcStatDesired(ProcStat ps) {
 			switch(ps) {
 				case ProcStat.TP:
@@ -4021,48 +4011,19 @@ namespace OpenDental{
 			return false;
 		}
 
-		private bool OrionProcStatDesired(string os) {
+		private bool OrionProcStatDesired(string status2) {
+			//We ought to include procs with no status2 in case one slips through the cracks and for testing.
+			if(status2=="" || status2==OrionStatus.None.ToString()) {
+				return true;
+			}
 			//Convert the graphical status "os" into a single string status "status2".
+			//Not needed because we never translate orion fields to other languages.
+			/*
 			string status2="";
 			if(os==Lans.g("enumStatus2",OrionStatus.TP.ToString())) {
 				status2=OrionStatus.TP.ToString();
 			}
-			if(os==Lans.g("enumStatus2",OrionStatus.C.ToString())) {
-				status2=OrionStatus.C.ToString();
-			}
-			if(os==Lans.g("enumStatus2",OrionStatus.E.ToString())) {
-				status2=OrionStatus.E.ToString();
-			}
-			if(os==Lans.g("enumStatus2",OrionStatus.R.ToString())) {
-				status2=OrionStatus.R.ToString();
-			}
-			if(os==Lans.g("enumStatus2",OrionStatus.RO.ToString())) {
-				status2=OrionStatus.RO.ToString();
-			}
-			if(os==Lans.g("enumStatus2",OrionStatus.CS.ToString())) {
-				status2=OrionStatus.CS.ToString();
-			}
-			if(os==Lans.g("enumStatus2",OrionStatus.CR.ToString())) {
-				status2=OrionStatus.CR.ToString();
-			}
-			if(os==Lans.g("enumStatus2",OrionStatus.CA_Tx.ToString())) {
-				status2=OrionStatus.CA_Tx.ToString();
-			}
-			if(os==Lans.g("enumStatus2",OrionStatus.CA_EPRD.ToString())) {
-				status2=OrionStatus.CA_EPRD.ToString();
-			}
-			if(os==Lans.g("enumStatus2",OrionStatus.CA_PD.ToString())) {
-				status2=OrionStatus.CA_PD.ToString();
-			}
-			if(os==Lans.g("enumStatus2",OrionStatus.S.ToString())) {
-				status2=OrionStatus.S.ToString();
-			}
-			if(os==Lans.g("enumStatus2",OrionStatus.ST.ToString())) {
-				status2=OrionStatus.ST.ToString();
-			}
-			if(os==Lans.g("enumStatus2",OrionStatus.W.ToString())) {
-				status2=OrionStatus.W.ToString();
-			}
+			 * etc*/
 			for(int i=0;i<listProcStatusCodes.SelectedItems.Count;i++) {
 				if(listProcStatusCodes.SelectedItems[i].ToString()==status2) {
 					return true;
@@ -4135,7 +4096,14 @@ namespace OpenDental{
 					checkNotes.Checked=ChartViewCurDisplay.ShowProcNotes;
 					checkAudit.Checked=ChartViewCurDisplay.IsAudit;
 					gridChartViews.SetSelected(ChartViewCurDisplay.ItemOrder,true);
-					if(listProcStatusCodes.Visible) {
+					if(Programs.UsingOrion){
+						listProcStatusCodes.Visible=true;
+						if(listProcStatusCodes.Items.Count==0) {
+							string[] statusNames=Enum.GetNames(typeof(OrionStatus));
+							for(int i=1;i<statusNames.Length;i++) {
+								listProcStatusCodes.Items.Add(statusNames[i]);
+							}
+						}
 						listProcStatusCodes.ClearSelected();
 						if((ChartViewCurDisplay.OrionStatusFlags & OrionStatus.TP)==OrionStatus.TP) {
 							listProcStatusCodes.SetSelected(0,true);

@@ -54,7 +54,7 @@ namespace OpenDentBusiness{
 
 	[Flags]
 	public enum OrionStatus {
-		///<summary>0- None</summary>
+		///<summary>0- None.  While a normal orion proc would never have this status2, it is still needed for flags in ChartViews.  And it's also possible that a status2 slipped through the cracks and was not assigned, leaving it with this value.</summary>
 		None=0,
 		///<summary>1– Treatment planned</summary>
 		TP=1,
