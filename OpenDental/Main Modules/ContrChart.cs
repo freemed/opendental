@@ -4069,7 +4069,6 @@ namespace OpenDental{
 					checkNotes.Checked=true;
 					checkShowTeeth.Checked=false;
 					checkAudit.Checked=false;
-					listProcStatusCodes.SetSelected(0,true);
 				}
 			}
 			else {
