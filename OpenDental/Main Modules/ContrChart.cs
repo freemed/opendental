@@ -4043,6 +4043,15 @@ namespace OpenDental{
 			//	selectedTeeth.Add(Tooth.ToInt(toothChart.SelectedTeeth[i]));
 			//}
 			//List<string> selectedTeeth=new List<string>(toothChart.SelectedTeeth);
+			if(Programs.UsingOrion){
+				listProcStatusCodes.Visible=true;
+				if(listProcStatusCodes.Items.Count==0) {
+					string[] statusNames=Enum.GetNames(typeof(OrionStatus));
+					for(int i=1;i<statusNames.Length;i++) {
+						listProcStatusCodes.Items.Add(statusNames[i]);
+					}
+				}
+			}
 			gridProg.BeginUpdate();
 			gridProg.Columns.Clear();
 			ODGridColumn col;
@@ -4095,14 +4104,7 @@ namespace OpenDental{
 					checkNotes.Checked=ChartViewCurDisplay.ShowProcNotes;
 					checkAudit.Checked=ChartViewCurDisplay.IsAudit;
 					gridChartViews.SetSelected(ChartViewCurDisplay.ItemOrder,true);
-					if(Programs.UsingOrion){
-						listProcStatusCodes.Visible=true;
-						if(listProcStatusCodes.Items.Count==0) {
-							string[] statusNames=Enum.GetNames(typeof(OrionStatus));
-							for(int i=1;i<statusNames.Length;i++) {
-								listProcStatusCodes.Items.Add(statusNames[i]);
-							}
-						}
+					if(listProcStatusCodes.Visible) {
 						listProcStatusCodes.ClearSelected();
 						if((ChartViewCurDisplay.OrionStatusFlags & OrionStatus.TP)==OrionStatus.TP) {
 							listProcStatusCodes.SetSelected(0,true);
