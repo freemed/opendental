@@ -31,14 +31,14 @@ namespace OpenDental{
 			this.textBoxWebformsHeading2 = new System.Windows.Forms.TextBox();
 			this.labelWebformsHeading2 = new System.Windows.Forms.Label();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
-			this.butChange = new OpenDental.UI.Button();
 			this.butWebformBorderColor = new System.Windows.Forms.Button();
 			this.colorDialog1 = new System.Windows.Forms.ColorDialog();
 			this.label1 = new System.Windows.Forms.Label();
 			this.textBoxWebFormAddress = new System.Windows.Forms.TextBox();
+			this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+			this.butChange = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
 			this.groupBox2.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -117,20 +117,6 @@ namespace OpenDental{
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Web Form Preferences";
 			// 
-			// butChange
-			// 
-			this.butChange.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butChange.Autosize = true;
-			this.butChange.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butChange.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butChange.CornerRadius = 4F;
-			this.butChange.Location = new System.Drawing.Point(169,26);
-			this.butChange.Name = "butChange";
-			this.butChange.Size = new System.Drawing.Size(75,24);
-			this.butChange.TabIndex = 72;
-			this.butChange.Text = "Change";
-			this.butChange.Click += new System.EventHandler(this.butChange_Click);
-			// 
 			// butWebformBorderColor
 			// 
 			this.butWebformBorderColor.BackColor = System.Drawing.Color.RoyalBlue;
@@ -158,6 +144,25 @@ namespace OpenDental{
 			this.textBoxWebFormAddress.ReadOnly = true;
 			this.textBoxWebFormAddress.Size = new System.Drawing.Size(445,20);
 			this.textBoxWebFormAddress.TabIndex = 55;
+			// 
+			// backgroundWorker1
+			// 
+			this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
+			this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
+			// 
+			// butChange
+			// 
+			this.butChange.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butChange.Autosize = true;
+			this.butChange.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butChange.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butChange.CornerRadius = 4F;
+			this.butChange.Location = new System.Drawing.Point(169,26);
+			this.butChange.Name = "butChange";
+			this.butChange.Size = new System.Drawing.Size(75,24);
+			this.butChange.TabIndex = 72;
+			this.butChange.Text = "Change";
+			this.butChange.Click += new System.EventHandler(this.butChange_Click);
 			// 
 			// butOK
 			// 
@@ -188,11 +193,6 @@ namespace OpenDental{
 			this.butCancel.TabIndex = 2;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
-			// 
-			// backgroundWorker1
-			// 
-			this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
-			this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
 			// 
 			// FormWebFormSetup
 			// 

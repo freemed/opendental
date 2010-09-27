@@ -28,26 +28,39 @@ namespace OpenDental {
 		}
 		private void FormWebForms_Shown(object sender,EventArgs e) {
 			Cursor=Cursors.WaitCursor;
-			///the line below will allow the code to continue by not throwing an exception.
-			///It will accept the security certificate if there is a problem with the security certificate.
-			/*
-			System.Net.ServicePointManager.ServerCertificateValidationCallback+=
-				delegate(object sender2,System.Security.Cryptography.X509Certificates.X509Certificate certificate,
-				System.Security.Cryptography.X509Certificates.X509Chain chain,
-				System.Net.Security.SslPolicyErrors sslPolicyErrors) {
-					///do stuff here and return true or false accordingly.
-					///In this particular case it always returns true i.e accepts any certificate.
-					return true;
-				};
-			*/
+			#if DEBUG
+			//IgnoreCertificateErrors();// used with faulty certificates only while debugging.
+			#endif
 			//The function of the background thread fetch the settings from the web server.
 			this.backgroundWorker1.RunWorkerAsync();
 			textboxWebHostAddress.Text=PrefC.GetString(PrefName.WebHostSynchServerURL);
-			/* Dennis delete later
-			butWebformBorderColor.BackColor=PrefC.GetColor(PrefName.WebFormsBorderColor);
-			textBoxWebformsHeading1.Text=PrefC.GetStringSilent(PrefName.WebFormsHeading1);
-			textBoxWebformsHeading2.Text=PrefC.GetStringSilent(PrefName.WebFormsHeading2);
-			 * */
+		}
+
+		/// <summary>
+		///  This method is used only for testing with security certificates that has problems.
+		/// </summary>
+		private void IgnoreCertificateErrors() {
+			///the line below will allow the code to continue by not throwing an exception.
+			///It will accept the security certificate if there is a problem with the security certificate.
+
+			System.Net.ServicePointManager.ServerCertificateValidationCallback+=
+			delegate(object sender,System.Security.Cryptography.X509Certificates.X509Certificate certificate,
+									System.Security.Cryptography.X509Certificates.X509Chain chain,
+									System.Net.Security.SslPolicyErrors sslPolicyErrors) {
+				///do stuff here and return true or false accordingly.
+				///In this particular case it always returns true i.e accepts any certificate.
+				/* sample code 
+				if(sslPolicyErrors==System.Net.Security.SslPolicyErrors.None) return true;
+				// the sample below allows expired certificates
+				foreach(X509ChainStatus s in chain.ChainStatus) {
+					// allows expired certificates
+					if(string.Equals(s.Status.ToString(),"NotTimeValid",
+						StringComparison.OrdinalIgnoreCase)) {
+						return true;
+					}						
+				}*/
+				return true;
+			};
 		}
 
 		private void butWebformBorderColor_Click(object sender,EventArgs e) {
@@ -68,6 +81,16 @@ namespace OpenDental {
 
 
 		private void backgroundWorker1_RunWorkerCompleted(object sender,RunWorkerCompletedEventArgs e) {
+			/* this will work only if the exception is thrown form _Dowork
+			 if(e.Error!= null) {
+				// IMPORTANT: check error to retrieve any exceptions.     
+				MessageBox.Show(
+					"ERROR thrown here: {0}"+ e.Error.Message);
+			} else if(e.Cancelled) {
+				MessageBox.Show("worker Cancelled");
+			}
+
+			*/
 			//these values are set here because it will thow an error if put under _Dowork
 			textBoxWebFormAddress.Text=WebFormAddress;
 			butWebformBorderColor.BackColor=Color.FromArgb(PrefObj.ColorBorder);
@@ -81,9 +104,10 @@ namespace OpenDental {
 			GetFieldValuesFromServer();
 		}
 
-		/// <summary>Only called from worker thread.</summary>
+		/// <summary>Only called from worker thread. If this method is called from a </summary>
 		private void GetFieldValuesFromServer() {
-			try{
+			/* a probably bug in MS Visual Studio/threading model with no easy workaround. try catch cannot be easily implemented in a _DoWork. If an exception is thrown in _DoWork it will *always* close this Form leaving the user with no way of changing the WebHostSynchServerURL  hence a 100 second sleep is implemented to allows the user the key in the correct URL*/
+			try {
 				string RegistrationKey=PrefC.GetString(PrefName.RegistrationKey);
 				WebHostSynch.WebHostSynch wh=new WebHostSynch.WebHostSynch();
 				wh.Url=PrefC.GetString(PrefName.WebHostSynchServerURL);
@@ -95,28 +119,26 @@ namespace OpenDental {
 				PrefObj=wh.GetPreferences(RegistrationKey);
 			}
 			catch(Exception ex) {
+				
 				MessageBox.Show(ex.Message);
 				// the code below used to prevent this form from being automatically closed. It appears that if the backgroundWorker1 is abrubtly exited then the form also closes. this code allows it to gracefully terminate.
-				// this has to be replace by a more elegent method because the hourglass still shows.
+				// this has to be replaced by a more elegent method because the hourglass still shows.
 				backgroundWorker1.WorkerSupportsCancellation=true;
 				backgroundWorker1.CancelAsync();   // ask the backgroundWorker1 to stop
-				// Wait when it really exits
-				while(backgroundWorker1.IsBusy) {
-					System.Threading.Thread.Sleep(100);
-				}
+//this is a very inelagent work around which allows the user the key in the correct URL before the form closes - it *always* does if an exception is thrown.
+				System.Threading.Thread.Sleep(100000);
 				
-				
+			
 			}
 		}
-		
+
+		private void FormWebFormSetup_FormClosing(object sender,FormClosingEventArgs e) {
+
+		}
+
 		private void butOK_Click(object sender,EventArgs e) {
 			Cursor=Cursors.WaitCursor;
 			try {
-				/* Dennis delete later
-				Prefs.UpdateLong(PrefName.WebFormsBorderColor,butWebformBorderColor.BackColor.ToArgb());
-				Prefs.UpdateString(PrefName.WebFormsHeading1,textBoxWebformsHeading1.Text.Trim());
-				Prefs.UpdateString(PrefName.WebFormsHeading2,textBoxWebformsHeading2.Text.Trim());
-				 * */
 				Prefs.UpdateString(PrefName.WebHostSynchServerURL,textboxWebHostAddress.Text.Trim());
 				// update preferences on server
 				string RegistrationKey=PrefC.GetString(PrefName.RegistrationKey);
@@ -139,6 +161,8 @@ namespace OpenDental {
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+
 
 
 

@@ -87,41 +87,13 @@ namespace OpenDental {
 				}
 			} 
 			gridMain.EndUpdate();
-				//if(table.Rows.Count==0) {
-				//	MsgBox.Show(this,"No Patient forms available");
-				//	return;
-				//}
-			//}
-			//catch(Exception e) {
-			//	gridMain.EndUpdate();
-			//	MessageBox.Show(e.Message);
-			//}
 		}
 
 		private void RetrieveAndSaveData() {
 			try {
-				///the line below will allow the code to continue by not throwing an exception.
-				///It will accept the security certificate if there is a problem with the security certificate.
-				/*
-				System.Net.ServicePointManager.ServerCertificateValidationCallback+=
-				delegate(object sender,System.Security.Cryptography.X509Certificates.X509Certificate certificate,
-										System.Security.Cryptography.X509Certificates.X509Chain chain,
-										System.Net.Security.SslPolicyErrors sslPolicyErrors) {
-					///do stuff here and return true or false accordingly.
-					///In this particular case it always returns true i.e accepts any certificate.
-					/* sample code 
-					if(sslPolicyErrors==System.Net.Security.SslPolicyErrors.None) return true;
-					// the sample below allows expired certificates
-					foreach(X509ChainStatus s in chain.ChainStatus) {
-						// allows expired certificates
-						if(string.Equals(s.Status.ToString(),"NotTimeValid",
-							StringComparison.OrdinalIgnoreCase)) {
-							return true;
-						}						
-					}
-					return true;
-				};
-				*/
+				#if DEBUG
+				//IgnoreCertificateErrors();// used with faulty certificates only while debugging.
+				#endif
 				WebHostSynch.WebHostSynch wh=new WebHostSynch.WebHostSynch();
 				wh.Url=PrefC.GetString(PrefName.WebHostSynchServerURL);
 				string RegistrationKey=PrefC.GetString(PrefName.RegistrationKey);
@@ -203,6 +175,33 @@ namespace OpenDental {
 				}
 			}
 			return dataExistsInDb;
+		}
+
+		/// <summary>
+		///  This method is used only for testing with security certificates that has problems.
+		/// </summary>
+		private void IgnoreCertificateErrors() {
+			///the line below will allow the code to continue by not throwing an exception.
+			///It will accept the security certificate if there is a problem with the security certificate.
+			
+			System.Net.ServicePointManager.ServerCertificateValidationCallback+=
+			delegate(object sender,System.Security.Cryptography.X509Certificates.X509Certificate certificate,
+									System.Security.Cryptography.X509Certificates.X509Chain chain,
+									System.Net.Security.SslPolicyErrors sslPolicyErrors) {
+				///do stuff here and return true or false accordingly.
+				///In this particular case it always returns true i.e accepts any certificate.
+				/* sample code 
+				if(sslPolicyErrors==System.Net.Security.SslPolicyErrors.None) return true;
+				// the sample below allows expired certificates
+				foreach(X509ChainStatus s in chain.ChainStatus) {
+					// allows expired certificates
+					if(string.Equals(s.Status.ToString(),"NotTimeValid",
+						StringComparison.OrdinalIgnoreCase)) {
+						return true;
+					}						
+				}*/
+				return true;
+			};
 		}
 
 		/// <summary>
