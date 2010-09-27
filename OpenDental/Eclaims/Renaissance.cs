@@ -276,12 +276,12 @@ namespace OpenDental.Eclaims{
 			Fill(231,"");
 			Fill(232,"");
 			Fill(233,"");
-			Fill(234,"");
-			Fill(235,"TreatingDentistLicense");
-			Fill(236,"TreatingDentistSigDate");
-			Fill(237,"");
-			Fill(238,"");
-			Fill(239,"");
+			Fill(234,"TreatingDentistSignature");//Treating Dentist Signature - Will accept any text string
+			Fill(235,"TreatingDentistLicense");//Treating License # - Will accept any text string
+			Fill(236,"TreatingDentistSigDate");//Date Signed - Expecting MM/DD/YYYY
+			Fill(237,"TreatingDentistAddress");//Address Where Procedure Performed - Will accept any text string
+			Fill(238,"TreatingDentistCity");//City Where Procedure Performed - Will accept any text string
+			Fill(239,"TreatingDentistST");//State Where Procedure Performed - Will accept any text string
 			Fill(240,"");
 			ClaimFormItem[] listForForm=new ClaimFormItem[241];
 			//items.CopyTo(ClaimFormItems.ListForForm,0);
