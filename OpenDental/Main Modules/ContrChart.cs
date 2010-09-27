@@ -5274,8 +5274,8 @@ namespace OpenDental{
 					}
 				}
 				else{
-					//needed because not always TP
-					Recalls.Synch(PatCur.PatNum);
+					//Do not synch. Recalls based on ScheduleByDate reports in Orion mode.
+					//Recalls.Synch(PatCur.PatNum);
 				}
 			}
 		}

@@ -185,8 +185,10 @@ namespace OpenDental {
 				}
 			}
 			else{
-				//not needed because always TP
-				//Recalls.Synch(PatCur.PatNum);
+				//Default is set to TP, so Synch is usually not needed.
+				if(ProcCur.ProcStatus==ProcStat.C||ProcCur.ProcStatus==ProcStat.EC||ProcCur.ProcStatus==ProcStat.EO){
+					Recalls.Synch(pat.PatNum);
+				}
 			}
 			FillGrid();
 		}
