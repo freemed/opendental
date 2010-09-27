@@ -5260,6 +5260,24 @@ namespace OpenDental{
 				Recalls.Synch(PatCur.PatNum);
 			}
 			Procedures.ComputeEstimates(ProcCur,PatCur.PatNum,new List<ClaimProc>(),true,PlanList,PatPlanList,BenefitList,PatCur.Age);
+			if(Programs.UsingOrion){
+				FormProcEdit FormP=new FormProcEdit(ProcCur,PatCur.Copy(),FamCur);
+				FormP.IsNew=true;
+				FormP.ShowDialog();
+				if(FormP.DialogResult==DialogResult.Cancel){
+					//any created claimprocs are automatically deleted from within procEdit window.
+					try{
+						Procedures.Delete(ProcCur.ProcNum);//also deletes the claimprocs
+					}
+					catch(Exception ex){
+						MessageBox.Show(ex.Message);
+					}
+				}
+				else{
+					//needed because not always TP
+					Recalls.Synch(PatCur.PatNum);
+				}
+			}
 		}
 
 		private void butAddProc_Click(object sender, System.EventArgs e){

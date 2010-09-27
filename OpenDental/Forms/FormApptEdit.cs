@@ -1893,6 +1893,24 @@ namespace OpenDental{
 				ProcCur.BaseUnits=ProcedureCodes.GetProcCode(ProcCur.CodeNum).BaseUnits;
 				Procedures.Insert(ProcCur);//recall synch not required
 				Procedures.ComputeEstimates(ProcCur,pat.PatNum,ClaimProcList,false,PlanList,PatPlanList,benefitList,pat.Age);
+				if(Programs.UsingOrion){
+					FormProcEdit FormP=new FormProcEdit(ProcCur,pat.Copy(),fam);
+					FormP.IsNew=true;
+					FormP.ShowDialog();
+					if(FormP.DialogResult==DialogResult.Cancel){
+						//any created claimprocs are automatically deleted from within procEdit window.
+						try{
+							Procedures.Delete(ProcCur.ProcNum);//also deletes the claimprocs
+						}
+						catch(Exception ex){
+							MessageBox.Show(ex.Message);
+						}
+					}
+					else{
+						//not needed because always TP
+						//Recalls.Synch(PatCur.PatNum);
+					}
+				}
 			}
 			listQuickAdd.SelectedIndex=-1;
 			string[] selectedProcs=new string[gridProc.SelectedIndices.Length];
