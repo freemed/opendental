@@ -2298,7 +2298,7 @@ namespace OpenDental{
 			this.listProcStatusCodes.Size = new System.Drawing.Size(134,74);
 			this.listProcStatusCodes.TabIndex = 45;
 			this.listProcStatusCodes.Visible = false;
-			this.listProcStatusCodes.MouseClick += new System.Windows.Forms.MouseEventHandler(this.listProcStatusCodes_MouseClick);
+			this.listProcStatusCodes.MouseUp += new System.Windows.Forms.MouseEventHandler(this.listProcStatusCodes_MouseUp);
 			// 
 			// gridChartViews
 			// 
@@ -6812,7 +6812,7 @@ namespace OpenDental{
 		}
 		#endregion Draw
 
-		private void listProcStatusCodes_MouseClick(object sender,MouseEventArgs e) {
+		private void listProcStatusCodes_MouseUp(object sender,MouseEventArgs e) {
 			if(gridChartViews.Rows.Count>0) {
 				labelCustView.Visible=true;
 			}
