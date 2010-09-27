@@ -1605,6 +1605,9 @@ namespace OpenDental{
 					MessageBox.Show(ex.Message);
 				}
 			}
+			else if(Programs.UsingOrion){
+				//No need to synch with Orion mode.
+			}
 			else{
 				//Default is set to TP, so Synch is usually not needed.
 				if(ProcCur.ProcStatus==ProcStat.C||ProcCur.ProcStatus==ProcStat.EC||ProcCur.ProcStatus==ProcStat.EO){

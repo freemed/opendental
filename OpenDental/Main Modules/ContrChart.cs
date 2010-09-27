@@ -5149,6 +5149,9 @@ namespace OpenDental{
 			else if(UsingEcwTight()) {
 				//do not synch recall.  Too slow
 			}
+			else if(Programs.UsingOrion){
+				//No need to synch with Orion mode.
+			}
 			else{
 				Recalls.Synch(PatCur.PatNum);
 			}
@@ -5255,6 +5258,9 @@ namespace OpenDental{
 			}
 			if(UsingEcwTight()) {
 				//do not synch recall.  Too slow
+			}
+			else if(Programs.UsingOrion){
+				//No need to synch with Orion mode.
 			}
 			else{
 				Recalls.Synch(PatCur.PatNum);
