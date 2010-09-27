@@ -24,8 +24,8 @@ namespace OpenDental {
 		}
 
 		private void FormWebFormSetup_Load(object sender,EventArgs e) {
-
 		}
+
 		private void FormWebForms_Shown(object sender,EventArgs e) {
 			Cursor=Cursors.WaitCursor;
 			#if DEBUG
@@ -80,33 +80,13 @@ namespace OpenDental {
 		}
 
 
-		private void backgroundWorker1_RunWorkerCompleted(object sender,RunWorkerCompletedEventArgs e) {
-			/* this will work only if the exception is thrown form _Dowork
-			 if(e.Error!= null) {
-				// IMPORTANT: check error to retrieve any exceptions.     
-				MessageBox.Show(
-					"ERROR thrown here: {0}"+ e.Error.Message);
-			} else if(e.Cancelled) {
-				MessageBox.Show("worker Cancelled");
-			}
-
-			*/
-			//these values are set here because it will thow an error if put under _Dowork
-			textBoxWebFormAddress.Text=WebFormAddress;
-			butWebformBorderColor.BackColor=Color.FromArgb(PrefObj.ColorBorder);
-			textBoxWebformsHeading1.Text=PrefObj.Heading1;
-			textBoxWebformsHeading2.Text=PrefObj.Heading2;
-			Cursor=Cursors.Default;
-	
-		}
-
 		private void backgroundWorker1_DoWork(object sender,DoWorkEventArgs e) {
 			GetFieldValuesFromServer();
 		}
 
 		/// <summary>Only called from worker thread. If this method is called from a </summary>
 		private void GetFieldValuesFromServer() {
-			/* a probably bug in MS Visual Studio/threading model with no easy workaround. try catch cannot be easily implemented in a _DoWork. If an exception is thrown in _DoWork it will *always* close this Form leaving the user with no way of changing the WebHostSynchServerURL  hence a 100 second sleep is implemented to allows the user the key in the correct URL*/
+			/* a probably bug in MS Visual Studio/threading model with no easy workaround. try/catch cannot be easily implemented in a _DoWork. One cannot re-throw the exception either. If an exception is thrown in _DoWork it will *always* close this form leaving the user with no way of changing the WebHostSynchServerURL  hence a 100 second sleep is implemented to allows the user to put in the correct WebHostSynchServerURL*/
 			try {
 				string RegistrationKey=PrefC.GetString(PrefName.RegistrationKey);
 				WebHostSynch.WebHostSynch wh=new WebHostSynch.WebHostSynch();
@@ -119,22 +99,33 @@ namespace OpenDental {
 				PrefObj=wh.GetPreferences(RegistrationKey);
 			}
 			catch(Exception ex) {
-				
 				MessageBox.Show(ex.Message);
-				// the code below used to prevent this form from being automatically closed. It appears that if the backgroundWorker1 is abrubtly exited then the form also closes. this code allows it to gracefully terminate.
-				// this has to be replaced by a more elegent method because the hourglass still shows.
+				// the code below is used to prevent this form from being automatically closed. It appears that if the backgroundWorker1 is abrubtly exited then the form also closes. this code allows it to gracefully terminate.
 				backgroundWorker1.WorkerSupportsCancellation=true;
 				backgroundWorker1.CancelAsync();   // ask the backgroundWorker1 to stop
-//this is a very inelagent work around which allows the user the key in the correct URL before the form closes - it *always* does if an exception is thrown.
+//Dennis: this is a very inelegant work around which allows the user to key in the correct URL before the form closes. The form *always* closes if an exception is thrown. I don't know why.
 				System.Threading.Thread.Sleep(100000);
-				
-			
 			}
 		}
 
-		private void FormWebFormSetup_FormClosing(object sender,FormClosingEventArgs e) {
-
+		private void backgroundWorker1_RunWorkerCompleted(object sender,RunWorkerCompletedEventArgs e) {
+			/* this will work only if the exception is thrown form _Dowork
+			 if(e.Error!= null) {
+				// IMPORTANT: check error to retrieve any exceptions.     
+				MessageBox.Show(
+					"ERROR thrown here: {0}"+ e.Error.Message);
+			} else if(e.Cancelled) {
+				MessageBox.Show("worker Cancelled");
+			}
+			*/
+			//these values are set here because it will thow an error if put under _Dowork
+			textBoxWebFormAddress.Text=WebFormAddress;
+			butWebformBorderColor.BackColor=Color.FromArgb(PrefObj.ColorBorder);
+			textBoxWebformsHeading1.Text=PrefObj.Heading1;
+			textBoxWebformsHeading2.Text=PrefObj.Heading2;
+			Cursor=Cursors.Default;
 		}
+
 
 		private void butOK_Click(object sender,EventArgs e) {
 			Cursor=Cursors.WaitCursor;
