@@ -102,6 +102,7 @@ namespace OpenDental {
 			try {
 				///the line below will allow the code to continue by not throwing an exception.
 				///It will accept the security certificate if there is a problem with the security certificate.
+				/*
 				System.Net.ServicePointManager.ServerCertificateValidationCallback+=
 				delegate(object sender,System.Security.Cryptography.X509Certificates.X509Certificate certificate,
 										System.Security.Cryptography.X509Certificates.X509Chain chain,
@@ -117,9 +118,10 @@ namespace OpenDental {
 							StringComparison.OrdinalIgnoreCase)) {
 							return true;
 						}						
-					}*/
+					}
 					return true;
 				};
+				*/
 				WebHostSynch.WebHostSynch wh=new WebHostSynch.WebHostSynch();
 				wh.Url=PrefC.GetString(PrefName.WebHostSynchServerURL);
 				string RegistrationKey=PrefC.GetString(PrefName.RegistrationKey);

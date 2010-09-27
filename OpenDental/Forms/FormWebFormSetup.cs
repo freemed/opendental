@@ -30,6 +30,7 @@ namespace OpenDental {
 			Cursor=Cursors.WaitCursor;
 			///the line below will allow the code to continue by not throwing an exception.
 			///It will accept the security certificate if there is a problem with the security certificate.
+			/*
 			System.Net.ServicePointManager.ServerCertificateValidationCallback+=
 				delegate(object sender2,System.Security.Cryptography.X509Certificates.X509Certificate certificate,
 				System.Security.Cryptography.X509Certificates.X509Chain chain,
@@ -38,6 +39,7 @@ namespace OpenDental {
 					///In this particular case it always returns true i.e accepts any certificate.
 					return true;
 				};
+			*/
 			//The function of the background thread fetch the settings from the web server.
 			this.backgroundWorker1.RunWorkerAsync();
 			textboxWebHostAddress.Text=PrefC.GetString(PrefName.WebHostSynchServerURL);
@@ -94,6 +96,16 @@ namespace OpenDental {
 			}
 			catch(Exception ex) {
 				MessageBox.Show(ex.Message);
+				// the code below used to prevent this form from being automatically closed. It appears that if the backgroundWorker1 is abrubtly exited then the form also closes. this code allows it to gracefully terminate.
+				// this has to be replace by a more elegent method because the hourglass still shows.
+				backgroundWorker1.WorkerSupportsCancellation=true;
+				backgroundWorker1.CancelAsync();   // ask the backgroundWorker1 to stop
+				// Wait when it really exits
+				while(backgroundWorker1.IsBusy) {
+					System.Threading.Thread.Sleep(100);
+				}
+				
+				
 			}
 		}
 		
