@@ -1249,7 +1249,9 @@ namespace OpenDental{
 				CheckUIState();
 			}
 			FormPayConnect FormP=new FormPayConnect(PaymentCur,PatCur,textAmount.Text);
-			FormP.ShowDialog();
+			if(FormP.ShowDialog()==DialogResult.OK){
+				textNote.Text+=((textNote.Text=="")?"":Environment.NewLine)+Lan.g(this,"Payment Status")+": "+FormP.PaymentStatus.description;
+			}
 			ArrayList props=ProgramProperties.GetForProgram(prog.ProgramNum);
 			ProgramProperty prop=null;
 			for(int i=0;i<props.Count;i++){
@@ -1263,7 +1265,6 @@ namespace OpenDental{
 			//still need to add functionality for accountingAutoPay
 			listPayType.SelectedIndex=DefC.GetOrder(DefCat.PaymentTypes,PIn.Long(prop.PropertyValue));
 			SetComboDepositAccounts();
-			textNote.Text+=((textNote.Text=="")?"":Environment.NewLine)+Lan.g(this,"Payment Status")+": "+FormP.PaymentStatus.description;
 		}
 
 		private void menuXcharge_Click(object sender,EventArgs e) {

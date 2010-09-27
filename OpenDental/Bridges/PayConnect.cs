@@ -22,8 +22,8 @@ namespace OpenDental.Bridges {
 					cred.Password=prop.PropertyValue;
 				}
 			}
-			cred.Client="Open Dental";//TODO: Figure out what the real value needs to be.
-			cred.ServiceID="208";//TODO: Figure out what the real value needs to be.
+			cred.Client="208";//TODO: Figure out what the real value needs to be.
+			cred.ServiceID="103";//TODO: Figure out what the real value needs to be.
 			cred.version="0310";
 			return cred;
 		}
@@ -39,7 +39,7 @@ namespace OpenDental.Bridges {
 			request.Expiration=new OpenDental.PayConnectService.expiration();
 			request.Expiration.year=expYear;
 			request.Expiration.month=expMonth;			
-			//request.MagData //What do we do with this? It might be needed if for passing card reader information if we end up supporting it.
+			//request.MagData //Needed if we decide to support card swiping.
 			request.NameOnCard=nameOnCard;
 			request.RefNumber=paymentNum.ToString();
 			request.SecurityCode=securityCode;
