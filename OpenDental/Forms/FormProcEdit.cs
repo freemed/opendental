@@ -2234,6 +2234,8 @@ namespace OpenDental{
 				butAddAdjust.Visible=false;
 				tbPay.Visible=false;
 				tbAdj.Visible=false;
+				//TODO: list should be .visible=false; when released to Orion.  
+				listProcStatus.Enabled=false;
 			}
 			IsStartingUp=true;
 			FillControls();
@@ -2484,6 +2486,7 @@ namespace OpenDental{
 				comboStatus.Items.Add("ST-stop clock, multi visit");
 				comboStatus.Items.Add("W-watch");
 				comboStatus.Items.Add("A-alternative");
+				comboStatus.SelectedIndex=0;
 				OrionProcCur=OrionProcs.GetOneByProcNum(ProcCur.ProcNum);
 				ProcedureCode pc=ProcedureCodes.GetProcCodeFromDb(ProcCur.CodeNum);
 				checkIsRepair.Visible=pc.IsProsth;
@@ -3392,6 +3395,15 @@ namespace OpenDental{
 					textDateStop.Text=MiscData.GetNowDateTime().ToShortDateString();
 				}
 			}
+			switch(comboStatus.SelectedIndex){//default to treatment plan
+				case 1: listProcStatus.SelectedIndex=1; break;
+				case 2: listProcStatus.SelectedIndex=3; break;
+				case 4: listProcStatus.SelectedIndex=4; break;
+				case 5: listProcStatus.SelectedIndex=3; break;
+				case 6: listProcStatus.SelectedIndex=3; break;
+				case 12: listProcStatus.SelectedIndex=5; break;
+				default: listProcStatus.SelectedIndex=0; break;
+			}
 		}
 
 		private void UpdateSurf() {
@@ -4110,11 +4122,11 @@ namespace OpenDental{
 					MsgBox.Show(this,"Future date not allowed for Date Stop Clock.");
 					return;
 				}
-			}
-			if(Programs.UsingOrion && ProcOld.ProcStatus==ProcStat.TP && ProcOld.DateTP.Date<MiscData.GetNowDateTime().Date){
-				FormProcEditExplain FormP=new FormProcEditExplain();
-				if(FormP.ShowDialog()!=DialogResult.OK){
-					return;
+				if(Programs.UsingOrion && ProcOld.ProcStatus==ProcStat.TP && ProcOld.DateTP.Date<MiscData.GetNowDateTime().Date){
+					FormProcEditExplain FormP=new FormProcEditExplain();
+					if(FormP.ShowDialog()!=DialogResult.OK){
+						return;
+					}
 				}
 			}
 			SaveAndClose();
