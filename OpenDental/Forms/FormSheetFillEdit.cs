@@ -11,6 +11,7 @@ using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
 using CodeBase;
+using System.Text.RegularExpressions;
 
 namespace OpenDental {
 	public partial class FormSheetFillEdit:Form {
@@ -590,9 +591,10 @@ namespace OpenDental {
 				message.PatNum=SheetCur.PatNum;
 				message.ToAddress=FormS.EmailPatAddress;
 				message.FromAddress=PrefC.GetString(PrefName.EmailSenderAddress);
-				message.Subject=SheetCur.SheetType.ToString();//this could be improved
+				message.Subject=SheetCur.Description.ToString();//this could be improved
 				EmailAttach attach=new EmailAttach();
-				attach.DisplayedFileName=SheetCur.SheetType.ToString()+".pdf";
+				string shortFileName=Regex.Replace(SheetCur.Description.ToString(), @"[^\w'@-_()&]", ""); 
+				attach.DisplayedFileName=shortFileName+".pdf";
 				attach.ActualFileName=fileName;
 				message.Attachments.Add(attach);
 				FormEmailMessageEdit FormE=new FormEmailMessageEdit(message);
@@ -612,9 +614,10 @@ namespace OpenDental {
 				message.PatNum=SheetCur.PatNum;
 				message.ToAddress=FormS.Email2Address;
 				message.FromAddress=PrefC.GetString(PrefName.EmailSenderAddress);
-				message.Subject=SheetCur.SheetType.ToString()+" to "+Referrals.GetNameFL(referral.ReferralNum);//this could be improved
+				message.Subject=SheetCur.Description.ToString()+" to "+Referrals.GetNameFL(referral.ReferralNum);//this could be improved
 				EmailAttach attach=new EmailAttach();
-				attach.DisplayedFileName=SheetCur.SheetType.ToString()+".pdf";
+				string shortFileName=Regex.Replace(SheetCur.Description.ToString(), @"[^\w,'@-_()&]", ""); 
+				attach.DisplayedFileName=shortFileName+".pdf";
 				attach.ActualFileName=fileName;
 				message.Attachments.Add(attach);
 				FormEmailMessageEdit FormE=new FormEmailMessageEdit(message);
