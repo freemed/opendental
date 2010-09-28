@@ -207,8 +207,7 @@ namespace OpenDental{
 		private TextBox textTimeEnd;
 		private Label labelScheduleBy;
 		private OrionProc OrionProcCur;
-		private int oldDPC;
-		private DateTime oldStopClockDate;
+		private OrionProc OrionProcOld;
 
 		///<summary>Inserts are no longer done within this dialog, but must be done ahead of time from outside.  You must specify a procedure to edit, and only the changes that are made in this dialog get saved.  Only used when double click in Account, Chart, TP, and in ContrChart.AddProcedure().  The procedure may be deleted if new, and user hits Cancel.</summary>
 		public FormProcEdit(Procedure proc,Patient patCur,Family famCur){
@@ -1762,6 +1761,7 @@ namespace OpenDental{
 			this.comboStatus.Name = "comboStatus";
 			this.comboStatus.Size = new System.Drawing.Size(230,21);
 			this.comboStatus.TabIndex = 7;
+			this.comboStatus.SelectedIndexChanged += new System.EventHandler(this.comboStatus_SelectedIndexChanged);
 			// 
 			// labelStatus
 			// 
@@ -2488,8 +2488,8 @@ namespace OpenDental{
 				ProcedureCode pc=ProcedureCodes.GetProcCodeFromDb(ProcCur.CodeNum);
 				checkIsRepair.Visible=pc.IsProsth;
 				if(OrionProcCur!=null) {
+					OrionProcOld=OrionProcCur.Copy();
 					comboDPC.SelectedIndex=(int)OrionProcCur.DPC;
-					oldDPC=comboDPC.SelectedIndex;
 					if(ProcCur.DateTP.Date!=MiscData.GetNowDateTime().Date) {
 						comboDPC.Enabled=false;
 					}
@@ -2509,7 +2509,6 @@ namespace OpenDental{
 					}
 					if(OrionProcCur.DateStopClock.Year>1880) {
 						textDateStop.Text=OrionProcCur.DateStopClock.ToShortDateString();
-						oldStopClockDate=OrionProcCur.DateStopClock;
 					}
 					checkIsOnCall.Checked=OrionProcCur.IsOnCall;
 					checkIsEffComm.Checked=OrionProcCur.IsEffectiveComm;
@@ -2518,8 +2517,7 @@ namespace OpenDental{
 				else {
 					labelScheduleBy.Visible=true;
 					comboDPC.SelectedIndex=0;
-					textDateStop.Text=MiscData.GetNowDateTime().ToShortDateString();
-					oldStopClockDate=MiscData.GetNowDateTime();
+					textDateStop.Text="";
 				}
 			}
 			/*if(ProcCur.DateLocked.Year>1880){//if locked
@@ -3382,6 +3380,20 @@ namespace OpenDental{
 			}
 		}
 
+		private void comboStatus_SelectedIndexChanged(object sender,EventArgs e) {
+			if(comboStatus.SelectedIndex==0 && (OrionProcCur==null || OrionProcCur.DateStopClock.Year<1880)) {
+				textDateStop.Text="";
+			}
+			else {
+				if(OrionProcCur!=null && OrionProcCur.DateStopClock.Year>1880) {
+					textDateStop.Text=OrionProcCur.DateStopClock.ToShortDateString();
+				}
+				else {
+					textDateStop.Text=MiscData.GetNowDateTime().ToShortDateString();
+				}
+			}
+		}
+
 		private void UpdateSurf() {
 			if(!Tooth.IsValidEntry(textTooth.Text)){
 				return;
@@ -3851,7 +3863,7 @@ namespace OpenDental{
 					OrionProcs.Insert(OrionProcCur);
 				}
 				else {
-					if(oldDPC!=(int)OrionProcCur.DPC) {
+					if((int)OrionProcOld.DPC!=(int)OrionProcCur.DPC) {
 						FormProcEditDPCExplain FormDPC=new FormProcEditDPCExplain();
 						if(FormDPC.ShowDialog()!=DialogResult.OK) {
 							return;
@@ -4087,9 +4099,17 @@ namespace OpenDental{
 			if(!EntriesAreValid()) {
 				return;
 			}
-			if(Programs.UsingOrion && PIn.Date(textDateStop.Text)>oldStopClockDate) {
-				MsgBox.Show(this,"Future date not allowed for Date Stop Clock.");
-				return;
+			if(Programs.UsingOrion) {
+				if(OrionProcOld!=null && OrionProcOld.DateStopClock.Year>1880) {
+					if(PIn.Date(textDateStop.Text)>OrionProcOld.DateStopClock.Date) {
+						MsgBox.Show(this,"Future date not allowed for Date Stop Clock.");
+						return;
+					}
+				}
+				else if(PIn.Date(textDateStop.Text)>MiscData.GetNowDateTime().Date) {
+					MsgBox.Show(this,"Future date not allowed for Date Stop Clock.");
+					return;
+				}
 			}
 			if(Programs.UsingOrion && ProcOld.ProcStatus==ProcStat.TP && ProcOld.DateTP.Date<MiscData.GetNowDateTime().Date){
 				FormProcEditExplain FormP=new FormProcEditExplain();
@@ -4103,6 +4123,7 @@ namespace OpenDental{
 		private void butCancel_Click(object sender,System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
 
 
 		
