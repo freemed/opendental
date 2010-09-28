@@ -49,11 +49,11 @@ namespace OpenDental {
 				return false;
 			}
 			if(Regex.IsMatch(textExpDate.Text,@"^\d\d[/\- ]\d\d$")){//08/07 or 08-07 or 08 07
-				expYear=Convert.ToInt32("20"+textExpDate.Text.Substring(3,2));
+				expYear=Convert.ToInt32(textExpDate.Text.Substring(3,2));
 				expMonth=Convert.ToInt32(textExpDate.Text.Substring(0,2));
 			}
 			else if(Regex.IsMatch(textExpDate.Text,@"^\d{4}$")){//0807
-				expYear=Convert.ToInt32("20"+textExpDate.Text.Substring(2,2));
+				expYear=Convert.ToInt32(textExpDate.Text.Substring(2,2));
 				expMonth=Convert.ToInt32(textExpDate.Text.Substring(0,2));
 			}  
 			else {
@@ -62,10 +62,6 @@ namespace OpenDental {
 			}
 			if(textNameOnCard.Text.Trim()==""){
 				MsgBox.Show(this,"Name On Card required.");
-				return false;
-			}
-			if(textZipCode.Text.Trim()==""){
-				MsgBox.Show(this,"Invalid Zip Code.");
 				return false;
 			}
 			if(!Regex.IsMatch(textAmount.Text,"^[0-9]+$") && !Regex.IsMatch(textAmount.Text,"^[0-9]*\\.[0-9]+$")){
