@@ -208,6 +208,7 @@ namespace OpenDental{
 		private Label labelScheduleBy;
 		private OrionProc OrionProcCur;
 		private int oldDPC;
+		private DateTime oldStopClockDate;
 
 		///<summary>Inserts are no longer done within this dialog, but must be done ahead of time from outside.  You must specify a procedure to edit, and only the changes that are made in this dialog get saved.  Only used when double click in Account, Chart, TP, and in ContrChart.AddProcedure().  The procedure may be deleted if new, and user hits Cancel.</summary>
 		public FormProcEdit(Procedure proc,Patient patCur,Family famCur){
@@ -2486,8 +2487,6 @@ namespace OpenDental{
 				OrionProcCur=OrionProcs.GetOneByProcNum(ProcCur.ProcNum);
 				ProcedureCode pc=ProcedureCodes.GetProcCodeFromDb(ProcCur.CodeNum);
 				checkIsRepair.Visible=pc.IsProsth;
-				comboDPC.SelectedIndex=0;
-				labelScheduleBy.Visible=true;
 				if(OrionProcCur!=null) {
 					comboDPC.SelectedIndex=(int)OrionProcCur.DPC;
 					oldDPC=comboDPC.SelectedIndex;
@@ -2508,12 +2507,19 @@ namespace OpenDental{
 					if(OrionProcCur.DateScheduleBy.Year>1880) {
 						textDateScheduled.Text=OrionProcCur.DateScheduleBy.ToShortDateString();
 					}
-					if(OrionProcCur.DateStopClock.Year>1880){
+					if(OrionProcCur.DateStopClock.Year>1880) {
 						textDateStop.Text=OrionProcCur.DateStopClock.ToShortDateString();
+						oldStopClockDate=OrionProcCur.DateStopClock;
 					}
 					checkIsOnCall.Checked=OrionProcCur.IsOnCall;
 					checkIsEffComm.Checked=OrionProcCur.IsEffectiveComm;
 					checkIsRepair.Checked=OrionProcCur.IsRepair;
+				}
+				else {
+					labelScheduleBy.Visible=true;
+					comboDPC.SelectedIndex=0;
+					textDateStop.Text=MiscData.GetNowDateTime().ToShortDateString();
+					oldStopClockDate=MiscData.GetNowDateTime();
 				}
 			}
 			/*if(ProcCur.DateLocked.Year>1880){//if locked
@@ -4079,6 +4085,10 @@ namespace OpenDental{
 
 		private void butOK_Click(object sender,System.EventArgs e) {
 			if(!EntriesAreValid()) {
+				return;
+			}
+			if(Programs.UsingOrion && PIn.Date(textDateStop.Text)>oldStopClockDate) {
+				MsgBox.Show(this,"Future date not allowed for Date Stop Clock.");
 				return;
 			}
 			if(Programs.UsingOrion && ProcOld.ProcStatus==ProcStat.TP && ProcOld.DateTP.Date<MiscData.GetNowDateTime().Date){
