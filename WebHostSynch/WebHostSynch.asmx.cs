@@ -230,13 +230,14 @@ namespace WebHostSynch {
 		/// This method deletes ( then inserts) any existing SheetDefs and corresponding sheetfielddef by the same SheetDefNum. Deleting(and then inserting) versus Updating is done because on occasions there can be multiple SheetDefs which have the same SheetDefNum (due to imperfect code). In case of sheetfielddef updating is not even an option because the SheetFieldDefNum can change.
 		/// </summary>
 		[WebMethod]
-		public void UpdateSheetDef(string RegistrationKey,List<SheetDef> sheetDefList) {
+		public List<String> UpdateSheetDef(string RegistrationKey,List<SheetDef> sheetDefList) {
+			ODWebServiceEntities db=new ODWebServiceEntities();
+			List<String> WebFormAddressList=new List<string>();
+			long DentalOfficeID=GetDentalOfficeID(RegistrationKey);
 			try{
-				ODWebServiceEntities db=new ODWebServiceEntities();
-				long DentalOfficeID=GetDentalOfficeID(RegistrationKey);
 				if(DentalOfficeID==0) {
 					Logger.Information("Incorrect registration key. IpAddress="+HttpContext.Current.Request.UserHostAddress+" RegistrationKey="+RegistrationKey);
-					return;
+					return WebFormAddressList;
 				}
 				
 
@@ -259,28 +260,19 @@ namespace WebHostSynch {
 					 SheetDefObj=new webforms_sheetdef();
 					 SheetDefObj.SheetDefNum=sheetDef.SheetDefNum;
 					 PreferenceResult.First().webforms_sheetdef.Add(SheetDefObj);
-
-
 					 FillSheetDef(sheetDef,SheetDefObj);
 					 FillFieldSheetDef(sheetDef,SheetDefObj);
+					 string SheetDefAddress=ConfigurationManager.ConnectionStrings["SheetDefAddress"].ConnectionString;
+					 WebFormAddressList.Add(SheetDefAddress+"?DentalOfficeID="+DentalOfficeID+"SheetDef" + sheetDef.SheetDefNum);
+
 				}// end of foreach loop
 				db.SaveChanges();
-
-				//this code is for use with the UI where Webforms addresses for each sheetDef is shown.
-					List<string> WebFormAddresses = new List<string>();
-
-				// client code on opendental
-
-					if(WebFormAddresses.Count ==0) {
-						// message= WebFormAddresses.Count + " sheet defs have been updated"
-					}
-
-				//
 			}
 			catch(ApplicationException ex) {
 				Logger.Information(ex.Message.ToString());
+				return WebFormAddressList;
 			}
-		
+			return WebFormAddressList;
 		}
 
 		private void FillSheetDef(SheetDef sheetDef,webforms_sheetdef SheetDefObj) {

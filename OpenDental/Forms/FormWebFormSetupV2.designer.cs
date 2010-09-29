@@ -26,23 +26,21 @@ namespace OpenDental{
 			this.textboxWebHostAddress = new System.Windows.Forms.TextBox();
 			this.labelWebhostURL = new System.Windows.Forms.Label();
 			this.labelBorderColor = new System.Windows.Forms.Label();
-			this.textBoxWebformsHeading1 = new System.Windows.Forms.TextBox();
 			this.labelWebformsHeading1 = new System.Windows.Forms.Label();
-			this.textBoxWebformsHeading2 = new System.Windows.Forms.TextBox();
 			this.labelWebformsHeading2 = new System.Windows.Forms.Label();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
-			this.butChange = new OpenDental.UI.Button();
 			this.butWebformBorderColor = new System.Windows.Forms.Button();
 			this.colorDialog1 = new System.Windows.Forms.ColorDialog();
 			this.label1 = new System.Windows.Forms.Label();
 			this.textBoxWebFormAddress = new System.Windows.Forms.TextBox();
 			this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
 			this.gridMain = new OpenDental.UI.ODGrid();
+			this.butChange = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.dataGridView1 = new System.Windows.Forms.DataGridView();
+			this.butDelete = new OpenDental.UI.Button();
+			this.butAdd = new OpenDental.UI.Button();
 			this.groupBox2.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// textboxWebHostAddress
@@ -70,13 +68,6 @@ namespace OpenDental{
 			this.labelBorderColor.Text = "Border Color";
 			this.labelBorderColor.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textBoxWebformsHeading1
-			// 
-			this.textBoxWebformsHeading1.Location = new System.Drawing.Point(130,52);
-			this.textBoxWebformsHeading1.Name = "textBoxWebformsHeading1";
-			this.textBoxWebformsHeading1.Size = new System.Drawing.Size(384,20);
-			this.textBoxWebformsHeading1.TabIndex = 49;
-			// 
 			// labelWebformsHeading1
 			// 
 			this.labelWebformsHeading1.Location = new System.Drawing.Point(14,52);
@@ -85,14 +76,6 @@ namespace OpenDental{
 			this.labelWebformsHeading1.TabIndex = 50;
 			this.labelWebformsHeading1.Text = "Heading 1";
 			this.labelWebformsHeading1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textBoxWebformsHeading2
-			// 
-			this.textBoxWebformsHeading2.Location = new System.Drawing.Point(130,73);
-			this.textBoxWebformsHeading2.Multiline = true;
-			this.textBoxWebformsHeading2.Name = "textBoxWebformsHeading2";
-			this.textBoxWebformsHeading2.Size = new System.Drawing.Size(384,74);
-			this.textBoxWebformsHeading2.TabIndex = 51;
 			// 
 			// labelWebformsHeading2
 			// 
@@ -108,10 +91,8 @@ namespace OpenDental{
 			this.groupBox2.Controls.Add(this.butChange);
 			this.groupBox2.Controls.Add(this.butWebformBorderColor);
 			this.groupBox2.Controls.Add(this.labelBorderColor);
-			this.groupBox2.Controls.Add(this.textBoxWebformsHeading2);
 			this.groupBox2.Controls.Add(this.labelWebformsHeading2);
 			this.groupBox2.Controls.Add(this.labelWebformsHeading1);
-			this.groupBox2.Controls.Add(this.textBoxWebformsHeading1);
 			this.groupBox2.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.groupBox2.Location = new System.Drawing.Point(41,67);
 			this.groupBox2.Name = "groupBox2";
@@ -119,20 +100,6 @@ namespace OpenDental{
 			this.groupBox2.TabIndex = 53;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Web Form Preferences";
-			// 
-			// butChange
-			// 
-			this.butChange.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butChange.Autosize = true;
-			this.butChange.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butChange.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butChange.CornerRadius = 4F;
-			this.butChange.Location = new System.Drawing.Point(169,26);
-			this.butChange.Name = "butChange";
-			this.butChange.Size = new System.Drawing.Size(75,24);
-			this.butChange.TabIndex = 72;
-			this.butChange.Text = "Change";
-			this.butChange.Click += new System.EventHandler(this.butChange_Click);
 			// 
 			// butWebformBorderColor
 			// 
@@ -181,6 +148,20 @@ namespace OpenDental{
 			this.gridMain.Title = "Webforms";
 			this.gridMain.TranslationName = "TableWebforms";
 			// 
+			// butChange
+			// 
+			this.butChange.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butChange.Autosize = true;
+			this.butChange.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butChange.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butChange.CornerRadius = 4F;
+			this.butChange.Location = new System.Drawing.Point(169,26);
+			this.butChange.Name = "butChange";
+			this.butChange.Size = new System.Drawing.Size(75,24);
+			this.butChange.TabIndex = 72;
+			this.butChange.Text = "Change";
+			this.butChange.Click += new System.EventHandler(this.butChange_Click);
+			// 
 			// butOK
 			// 
 			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -211,19 +192,44 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// dataGridView1
+			// butDelete
 			// 
-			this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			this.dataGridView1.Location = new System.Drawing.Point(33,479);
-			this.dataGridView1.Name = "dataGridView1";
-			this.dataGridView1.Size = new System.Drawing.Size(387,150);
-			this.dataGridView1.TabIndex = 57;
+			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butDelete.Autosize = true;
+			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDelete.CornerRadius = 4F;
+			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
+			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butDelete.Location = new System.Drawing.Point(758,537);
+			this.butDelete.Name = "butDelete";
+			this.butDelete.Size = new System.Drawing.Size(75,26);
+			this.butDelete.TabIndex = 58;
+			this.butDelete.Text = "&Delete";
+			// 
+			// butAdd
+			// 
+			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butAdd.Autosize = true;
+			this.butAdd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAdd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAdd.CornerRadius = 4F;
+			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
+			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butAdd.Location = new System.Drawing.Point(669,537);
+			this.butAdd.Name = "butAdd";
+			this.butAdd.Size = new System.Drawing.Size(75,26);
+			this.butAdd.TabIndex = 57;
+			this.butAdd.Text = "&Add";
 			// 
 			// FormWebFormSetupV2
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(866,711);
-			this.Controls.Add(this.dataGridView1);
+			this.Controls.Add(this.butDelete);
+			this.Controls.Add(this.butAdd);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.textBoxWebFormAddress);
 			this.Controls.Add(this.label1);
@@ -238,8 +244,6 @@ namespace OpenDental{
 			this.Text = "Web Form Setup V2";
 			this.Load += new System.EventHandler(this.FormWebFormSetupV2_Load);
 			this.groupBox2.ResumeLayout(false);
-			this.groupBox2.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -252,9 +256,7 @@ namespace OpenDental{
 		private System.Windows.Forms.TextBox textboxWebHostAddress;
 		private System.Windows.Forms.Label labelWebhostURL;
 		private System.Windows.Forms.Label labelBorderColor;
-		private System.Windows.Forms.TextBox textBoxWebformsHeading1;
 		private System.Windows.Forms.Label labelWebformsHeading1;
-		private System.Windows.Forms.TextBox textBoxWebformsHeading2;
 		private System.Windows.Forms.Label labelWebformsHeading2;
 		private System.Windows.Forms.GroupBox groupBox2;
 		private System.Windows.Forms.Button butWebformBorderColor;
@@ -264,6 +266,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butChange;
 		private System.ComponentModel.BackgroundWorker backgroundWorker1;
 		private OpenDental.UI.ODGrid gridMain;
-		private System.Windows.Forms.DataGridView dataGridView1;
+		private OpenDental.UI.Button butDelete;
+		private OpenDental.UI.Button butAdd;
 	}
 }

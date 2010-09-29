@@ -25,26 +25,14 @@ namespace OpenDental {
 		}
 
 		private void FormWebFormSetupV2_Load(object sender,EventArgs e) {
-			///the line below will allow the code to continue by not throwing an exception.
-			///It will accept the security certificate if there is a problem with the security certificate.
-			System.Net.ServicePointManager.ServerCertificateValidationCallback+=
-				delegate(object sender2,System.Security.Cryptography.X509Certificates.X509Certificate certificate,
-				System.Security.Cryptography.X509Certificates.X509Chain chain,
-				System.Net.Security.SslPolicyErrors sslPolicyErrors) {
-					///do stuff here and return true or false accordingly.
-					///In this particular case it always returns true i.e accepts any certificate.
-					return true;
-				};
-			//The only function of the background thread is to fill the WebFormAddressBox from the web server.
-			this.backgroundWorker1.RunWorkerAsync();
-			/*
-			textboxWebHostAddress.Text=PrefC.GetString(PrefName.WebHostSynchServerURL);
-			butWebformBorderColor.BackColor=PrefC.GetColor(PrefName.WebFormsBorderColor);
-			textBoxWebformsHeading1.Text=PrefC.GetStringSilent(PrefName.WebFormsHeading1);
-			textBoxWebformsHeading2.Text=PrefC.GetStringSilent(PrefName.WebFormsHeading2);
-			*/
-			//TestSheetUpload();
 
+			this.backgroundWorker1.RunWorkerAsync();
+			
+
+			#if DEBUG
+				IgnoreCertificateErrors();// used with faulty certificates only while debugging.
+			#endif
+			//TestSheetUpload();
 
 
 			gridMain.Columns.Clear();
@@ -52,9 +40,7 @@ namespace OpenDental {
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Web Form Address"),42);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Background Color"),110);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Patient Fist Name"),110);
+			col=new ODGridColumn(Lan.g(this,"Update Status"),110);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Description"),210);
 			gridMain.Columns.Add(col);
@@ -62,7 +48,6 @@ namespace OpenDental {
 			gridMain.Rows.Clear();
 
 			ODGridRow row=new ODGridRow();
-			DataGridViewCheckBoxCell dc = new DataGridViewCheckBoxCell();
 			long patNum = 3;
 			row.Cells.Add("a");
 			row.Cells.Add("a");
@@ -71,30 +56,10 @@ namespace OpenDental {
 			row.Cells.Add("a");
 			row.Cells.Add("a");
 			gridMain.Rows.Add(row);
-
-
 			gridMain.EndUpdate();
 
 
-			dataGridView1.ColumnCount = 3;
-			dataGridView1.Columns[0].Name = "Product ID";
-			dataGridView1.Columns[1].Name = "Product Name";
-			dataGridView1.Columns[2].Name = "Product Price";
-
-			string[] rowd = new string[] { "1","Product 1","1000" };
-			dataGridView1.Rows.Add(rowd);
-			rowd = new string[] { "2","Product 2","2000" };
-			dataGridView1.Rows.Add(row);
-			rowd = new string[] { "3","Product 3","3000" };
-			dataGridView1.Rows.Add(row);
-			rowd = new string[] { "4","Product 4","4000" };
-			dataGridView1.Rows.Add(row);
-
-			DataGridViewCheckBoxColumn chk = new DataGridViewCheckBoxColumn();
-			dataGridView1.Columns.Add(chk);
-			chk.HeaderText = "Check Data";
-			chk.Name = "chk";
-			dataGridView1.Rows[2].Cells[3].Value = true;
+		
 
 		}
 
@@ -112,6 +77,33 @@ namespace OpenDental {
 				return;
 			}
 			butWebformBorderColor.BackColor=colorDialog1.Color;
+		}
+
+		/// <summary>
+		///  This method is used only for testing with security certificates that has problems.
+		/// </summary>
+		private void IgnoreCertificateErrors() {
+			///the line below will allow the code to continue by not throwing an exception.
+			///It will accept the security certificate if there is a problem with the security certificate.
+
+			System.Net.ServicePointManager.ServerCertificateValidationCallback+=
+			delegate(object sender,System.Security.Cryptography.X509Certificates.X509Certificate certificate,
+									System.Security.Cryptography.X509Certificates.X509Chain chain,
+									System.Net.Security.SslPolicyErrors sslPolicyErrors) {
+				///do stuff here and return true or false accordingly.
+				///In this particular case it always returns true i.e accepts any certificate.
+				/* sample code 
+				if(sslPolicyErrors==System.Net.Security.SslPolicyErrors.None) return true;
+				// the sample below allows expired certificates
+				foreach(X509ChainStatus s in chain.ChainStatus) {
+					// allows expired certificates
+					if(string.Equals(s.Status.ToString(),"NotTimeValid",
+						StringComparison.OrdinalIgnoreCase)) {
+						return true;
+					}						
+				}*/
+				return true;
+			};
 		}
 
 		private void backgroundWorker1_RunWorkerCompleted(object sender,RunWorkerCompletedEventArgs e) {
@@ -155,7 +147,11 @@ namespace OpenDental {
 				sheetDefList.Add(sheetDef1);
 				/* for this line to compile one must modify the Reference.cs file in to the Web references folder. The SheetDef and related classes with namespaces of WebHostSync must be removed so that the SheetDef Class of OpenDentBusiness is used
 	*/
-				//wh.UpdateSheetDef(RegistrationKey,sheetDefList.ToArray());
+				//List<String> WebFormAddressList=wh.UpdateSheetDef(RegistrationKey,sheetDefList.ToArray());
+
+				//if(WebFormAddressList.Count ==0) {
+					// message= WebFormAddresses.Count + " sheet defs have been updated"
+				//}
 			}
 			catch(Exception ex) {
 				MessageBox.Show(ex.Message);
@@ -165,12 +161,6 @@ namespace OpenDental {
 		private void butOK_Click(object sender,EventArgs e) {
 			Cursor=Cursors.WaitCursor;
 			try {
-				/*
-				Prefs.UpdateLong(PrefName.WebFormsBorderColor,butWebformBorderColor.BackColor.ToArgb());
-				Prefs.UpdateString(PrefName.WebFormsHeading1,textBoxWebformsHeading1.Text.Trim());
-				Prefs.UpdateString(PrefName.WebFormsHeading2,textBoxWebformsHeading2.Text.Trim());
-				Prefs.UpdateString(PrefName.WebHostSynchServerURL,textboxWebHostAddress.Text.Trim());
-				*/
 				// update preferences on server
 				string RegistrationKey=PrefC.GetString(PrefName.RegistrationKey);
 				WebHostSynch.WebHostSynch wh=new WebHostSynch.WebHostSynch();

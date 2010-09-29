@@ -44,7 +44,7 @@ namespace WebForms {
 				else {
 					Panel1.Visible=false;
 					Panel2.Visible=true;
-					LabelSubmitMessage.Text="Error: Your form is not availble. Please contact your Dental Office";
+					LabelSubmitMessage.Text="Error: Your form is not available. Please contact your Dental Office";
 					Logger.Information("Error. Form requested at IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID);
 				}
 				LabelHeading1.Text=Heading1;
