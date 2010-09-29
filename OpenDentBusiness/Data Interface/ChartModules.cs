@@ -88,8 +88,8 @@ namespace OpenDentBusiness {
 				+"FROM procedurelog "
 				+"LEFT JOIN procedurecode ON procedurecode.CodeNum=procedurelog.CodeNum "
 				+"LEFT JOIN provider ON provider.ProvNum=procedurelog.ProvNum "
-				+"LEFT JOIN appointment ON appointment.AptNum=procedurelog.AptNum "
 				+"LEFT JOIN orionproc ON procedurelog.ProcNum=orionproc.ProcNum "
+				+"LEFT JOIN appointment ON appointment.AptNum=procedurelog.AptNum "
 				+"AND (appointment.AptStatus="+POut.Long((int)ApptStatus.Scheduled)
 				+" OR appointment.AptStatus="+POut.Long((int)ApptStatus.ASAP)
 				+" OR appointment.AptStatus="+POut.Long((int)ApptStatus.Broken)
@@ -187,7 +187,7 @@ namespace OpenDentBusiness {
 				else {
 					row["orionDateStopClock"]=dateT.ToString(Lans.GetShortDateTimeFormat());
 				}
-				row["orionDPC"]=Lans.g("enumOrionDPC",((OrionDPC)PIn.Long(rawProcs.Rows[i]["DPC"].ToString())).ToString());
+				row["orionDPC"]=((OrionDPC)PIn.Int(rawProcs.Rows[i]["DPC"].ToString())).ToString();
 				row["orionIsEffectiveComm"]="";
 				if(rawProcs.Rows[i]["IsEffectiveComm"].ToString()=="1"){
 					row["orionIsEffectiveComm"]="Y";
@@ -202,11 +202,7 @@ namespace OpenDentBusiness {
 				else if(rawProcs.Rows[i]["IsOnCall"].ToString()=="0"){
 					row["orionIsOnCall"]="N";
 				}
-				row["orionStatus2"]="";
-				row["orionStatus2"]=Lans.g("enumStatus2",((OrionStatus)PIn.Long(rawProcs.Rows[i]["Status2"].ToString())).ToString());
-				if(row["orionStatus2"].ToString()=="-1"){
-					row["orionStatus2"]="";
-				}
+				row["orionStatus2"]=((OrionStatus)PIn.Int(rawProcs.Rows[i]["Status2"].ToString())).ToString();
 				row["signature"]="";
 				if(isAuditMode) {//we will include all notes for each proc.  We will concat and make readable.
 					for(int n=0;n<rawNotes.Rows.Count;n++) {//loop through each note

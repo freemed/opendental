@@ -4013,7 +4013,7 @@ namespace OpenDental{
 
 		private bool OrionProcStatDesired(string status2) {
 			//We ought to include procs with no status2 in case one slips through the cracks and for testing.
-			if(status2=="" || status2==OrionStatus.None.ToString()) {
+			if(status2==OrionStatus.None.ToString() || listProcStatusCodes.SelectedItems.Count==0) {
 				return true;
 			}
 			//Convert the graphical status "os" into a single string status "status2".
@@ -4326,7 +4326,7 @@ namespace OpenDental{
 							row.Cells.Add(table.Rows[i]["orionIsOnCall"].ToString());
 							break;
 						case "Stat 2":
-								row.Cells.Add(table.Rows[i]["orionStatus2"].ToString());
+							row.Cells.Add(table.Rows[i]["orionStatus2"].ToString());
 							break;
 						default:
 							row.Cells.Add("");
