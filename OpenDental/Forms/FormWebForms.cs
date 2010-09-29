@@ -35,9 +35,6 @@ namespace OpenDental {
 		/// Code in this method was not put into the Form load event because often the "No Patient forms available" Meassage would popup even before a form is loaded - which could confuse the user.
 		/// </summary>
 		private void FormWebForms_Shown(object sender,EventArgs e) {
-			//if a thread is not used, the RetrieveAndSaveData() Method will freeze the application if the web is slow 
-			//this.backgroundWorker1.RunWorkerAsync();//should only run when click button.
-			//SetDates();
 			textDateStart.Text=DateTime.Today.ToShortDateString();
 			textDateEnd.Text=DateTime.Today.ToShortDateString();
 			FillGrid();
@@ -101,8 +98,6 @@ namespace OpenDental {
 					MsgBox.Show(this,"Registration key provided by the dental office is incorrect");
 					return;
 				}
-				// set preferences should only be done in the FormWebFormSetup window
-				//wh.SetPreferences(RegistrationKey,PrefC.GetColor(PrefName.WebFormsBorderColor).ToArgb(),PrefC.GetStringSilent(PrefName.WebFormsHeading1),PrefC.GetStringSilent(PrefName.WebFormsHeading2));
 				OpenDental.WebHostSynch.webforms_sheetfield[] wbsf=wh.GetSheetFieldData(RegistrationKey);
 				// The second call GetSheetData is used to retrieve the Datetime the sheet was submitted because as of now I don't quite know how to get it elegently by calling a single method.
 				OpenDental.WebHostSynch.webforms_sheet[] SheetDetails=wh.GetSheetData(RegistrationKey);
@@ -520,11 +515,6 @@ namespace OpenDental {
 			}
 			return isEqual;
 		}
-
-		//private void SetDates() {
-		//	textDateStart.Text=DateTime.Today.ToShortDateString();
-		//	textDateEnd.Text=DateTime.Today.ToShortDateString();
-		//}
 
 		private void butRetrieve_Click(object sender,System.EventArgs e) {
 			if(textDateStart.errorProvider1.GetError(textDateStart)!=""

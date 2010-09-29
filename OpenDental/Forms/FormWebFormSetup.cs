@@ -27,13 +27,13 @@ namespace OpenDental {
 		}
 
 		private void FormWebForms_Shown(object sender,EventArgs e) {
-			Cursor=Cursors.WaitCursor;
+			textboxWebHostAddress.Text=PrefC.GetString(PrefName.WebHostSynchServerURL);
 			#if DEBUG
 			//IgnoreCertificateErrors();// used with faulty certificates only while debugging.
 			#endif
-			//The function of the background thread fetch the settings from the web server.
-			this.backgroundWorker1.RunWorkerAsync();
-			textboxWebHostAddress.Text=PrefC.GetString(PrefName.WebHostSynchServerURL);
+			//this.backgroundWorker1.RunWorkerAsync(); The threading approach has been abandoned because of unsolvable bugs the web service methods will have to be explored later.
+			MsgBox.Show(this,"Please wait for a few seconds while values for this form are fetched from the server");
+			GetFieldValuesFromServer();
 		}
 
 		/// <summary>
@@ -71,7 +71,7 @@ namespace OpenDental {
 			ShowColorDialog();
 		}
 
-		private void ShowColorDialog(){
+		private void ShowColorDialog() {
 			colorDialog1.Color=butWebformBorderColor.BackColor;
 			if(colorDialog1.ShowDialog()!=DialogResult.OK) {
 				return;
@@ -79,13 +79,38 @@ namespace OpenDental {
 			butWebformBorderColor.BackColor=colorDialog1.Color;
 		}
 
-
+		/// <summary>This method has been abandoned because it is buggy</summary>
 		private void backgroundWorker1_DoWork(object sender,DoWorkEventArgs e) {
-			GetFieldValuesFromServer();
+			GetFieldValuesFromServerOld();
 		}
 
-		/// <summary>Only called from worker thread. If this method is called from a </summary>
 		private void GetFieldValuesFromServer() {
+			try {
+				Cursor=Cursors.WaitCursor;
+				string RegistrationKey=PrefC.GetString(PrefName.RegistrationKey);
+				WebHostSynch.WebHostSynch wh=new WebHostSynch.WebHostSynch();
+				wh.Url=PrefC.GetString(PrefName.WebHostSynchServerURL);
+				if(wh.CheckRegistrationKey(RegistrationKey)==false) {
+					Cursor=Cursors.Default;
+					MsgBox.Show(this,"Registration key provided by the dental office is incorrect");
+					return;
+				}
+				WebFormAddress=wh.GetWebFormAddress(RegistrationKey);
+				PrefObj=wh.GetPreferences(RegistrationKey);
+				textBoxWebFormAddress.Text=WebFormAddress;
+				butWebformBorderColor.BackColor=Color.FromArgb(PrefObj.ColorBorder);
+				textBoxWebformsHeading1.Text=PrefObj.Heading1;
+				textBoxWebformsHeading2.Text=PrefObj.Heading2;
+				Cursor=Cursors.Default;
+			}
+			catch(Exception ex) {
+				Cursor=Cursors.Default;
+				MessageBox.Show(ex.Message);
+			}
+		}
+
+		/// <summary>This method has been abandoned because it is buggy</summary>
+		private void GetFieldValuesFromServerOld() {
 			/* a probably bug in MS Visual Studio/threading model with no easy workaround. try/catch cannot be easily implemented in a _DoWork. One cannot re-throw the exception either. If an exception is thrown in _DoWork it will *always* close this form leaving the user with no way of changing the WebHostSynchServerURL  hence a 100 second sleep is implemented to allows the user to put in the correct WebHostSynchServerURL*/
 			try {
 				string RegistrationKey=PrefC.GetString(PrefName.RegistrationKey);
@@ -93,23 +118,28 @@ namespace OpenDental {
 				wh.Url=PrefC.GetString(PrefName.WebHostSynchServerURL);
 				if(wh.CheckRegistrationKey(RegistrationKey)==false) {
 					MsgBox.Show(this,"Registration key provided by the dental office is incorrect");
+					//Dennis: An exception is thown here after above message is shown which closes the form. Don't know why. It's got to do with threading.
+					//this is a very inelegant work around which allows the user to key in the correct URL before the form closes.
+					//System.Threading.Thread.Sleep(100000);
 					return;
 				}
 				WebFormAddress=wh.GetWebFormAddress(RegistrationKey);
 				PrefObj=wh.GetPreferences(RegistrationKey);
 			}
 			catch(Exception ex) {
+				//throw ex;
 				MessageBox.Show(ex.Message);
 				// the code below is used to prevent this form from being automatically closed. It appears that if the backgroundWorker1 is abrubtly exited then the form also closes. this code allows it to gracefully terminate.
-				backgroundWorker1.WorkerSupportsCancellation=true;
-				backgroundWorker1.CancelAsync();   // ask the backgroundWorker1 to stop
+				//backgroundWorker1.WorkerSupportsCancellation=true;
+				//backgroundWorker1.CancelAsync();   // ask the backgroundWorker1 to stop
 //Dennis: this is a very inelegant work around which allows the user to key in the correct URL before the form closes. The form *always* closes if an exception is thrown. I don't know why.
-				System.Threading.Thread.Sleep(100000);
+				System.Threading.Thread.Sleep(10000);
 			}
 		}
 
+		/// <summary>This method has been abandoned because it is buggy</summary>
 		private void backgroundWorker1_RunWorkerCompleted(object sender,RunWorkerCompletedEventArgs e) {
-			/* this will work only if the exception is thrown form _Dowork
+			 //this will work only if the exception is thrown form _Dowork
 			 if(e.Error!= null) {
 				// IMPORTANT: check error to retrieve any exceptions.     
 				MessageBox.Show(
@@ -117,7 +147,7 @@ namespace OpenDental {
 			} else if(e.Cancelled) {
 				MessageBox.Show("worker Cancelled");
 			}
-			*/
+			
 			//these values are set here because it will thow an error if put under _Dowork
 			textBoxWebFormAddress.Text=WebFormAddress;
 			butWebformBorderColor.BackColor=Color.FromArgb(PrefObj.ColorBorder);
