@@ -84,6 +84,40 @@ namespace OpenDentBusiness{
 			Crud.OrionProcCrud.Update(orionProc);
 		}
 
+		public static DataTable GetCancelledScheduleDateByToothOrSurf(long PatNum, string ToothNum, string Surf) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),PatNum,ToothNum,Surf);
+			}
+			DataConnection dcon=new DataConnection();
+			DataTable table=new DataTable("OrionSchedDate");
+			DataRow row;
+			table.Columns.Add("ProcNum");
+			table.Columns.Add("Status2");
+			table.Columns.Add("DateTP",typeof(DateTime));
+			table.Columns.Add("DateScheduleBy",typeof(DateTime));
+			table.Columns.Add("ToothNum");
+			table.Columns.Add("Surf");
+			string command="SELECT orionproc.ProcNum,orionproc.Status2,procedurelog.DateTP,orionproc.DateScheduleBy,procedurelog.ToothNum,procedurelog.Surf "
+				+"FROM orionproc "
+				+"LEFT JOIN procedurelog ON orionproc.ProcNum=procedurelog.ProcNum "
+				+"WHERE procedurelog.PatNum="+POut.Long(PatNum)
+				+" AND orionproc.Status2=128"
+				+" AND procedurelog.ToothNum='"+POut.String(ToothNum)+"'"
+				+" OR procedurelog.Surf='"+POut.String(Surf)+"'"
+				+" ORDER BY orionproc.DateScheduleBy DESC "
+				+"LIMIT 1"; 
+			DataTable rawOrion=dcon.GetTable(command);
+			row=table.NewRow();
+			row["ProcNum"]=rawOrion.Rows[0]["ProcNum"].ToString();
+			row["Status2"]=((OrionStatus)PIn.Int(rawOrion.Rows[0]["Status2"].ToString())).ToString();
+			row["DateTP"]=rawOrion.Rows[0]["DateTP"].ToString();
+			row["DateScheduleBy"]=rawOrion.Rows[0]["DateScheduleBy"].ToString();
+			row["ToothNum"]=rawOrion.Rows[0]["ToothNum"].ToString();
+			row["Surf"]=rawOrion.Rows[0]["Surf"].ToString();
+			table.Rows.Add(row);
+			return table;
+		}
+
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
 

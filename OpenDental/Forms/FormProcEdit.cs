@@ -3,6 +3,7 @@ Open Dental GPL license Copyright (C) 2003  Jordan Sparks, DMD.  http://www.open
 See header in FormOpenDental.cs for complete text.  Redistributions must retain this text.
 ===============================================================================================================*/
 using System;
+using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Collections;
@@ -4142,6 +4143,9 @@ namespace OpenDental{
 				else if(PIn.Date(textDateStop.Text)>MiscData.GetNowDateTime().Date) {
 					MsgBox.Show(this,"Future date not allowed for Date Stop Clock.");
 					return;
+				}
+				if(ProcCur.Surf!="" || textTooth.Text!="" || textSurfaces.Text!="") {
+					DataTable table=OrionProcs.GetCancelledScheduleDateByToothOrSurf(ProcCur.PatNum,textTooth.Text.ToString(),textSurfaces.Text.ToString());
 				}
 				if(Programs.UsingOrion && ProcOld.ProcStatus==ProcStat.TP && ProcOld.DateTP.Date<MiscData.GetNowDateTime().Date){
 					FormProcEditExplain FormP=new FormProcEditExplain();
