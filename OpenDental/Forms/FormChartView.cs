@@ -111,12 +111,12 @@ namespace OpenDental{
 			this.checkAudit = new System.Windows.Forms.CheckBox();
 			this.textBoxViewDesc = new System.Windows.Forms.TextBox();
 			this.groupBoxProperties = new System.Windows.Forms.GroupBox();
+			this.butShowNone = new OpenDental.UI.Button();
+			this.butShowAll = new OpenDental.UI.Button();
 			this.labelDescription = new System.Windows.Forms.Label();
 			this.listProcStatusCodes = new System.Windows.Forms.ListBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.butDelete = new OpenDental.UI.Button();
-			this.butShowNone = new OpenDental.UI.Button();
-			this.butShowAll = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butRight = new OpenDental.UI.Button();
 			this.butLeft = new OpenDental.UI.Button();
@@ -402,54 +402,6 @@ namespace OpenDental{
 			this.groupBoxProperties.TabIndex = 67;
 			this.groupBoxProperties.TabStop = false;
 			// 
-			// labelDescription
-			// 
-			this.labelDescription.Location = new System.Drawing.Point(20,12);
-			this.labelDescription.Name = "labelDescription";
-			this.labelDescription.Size = new System.Drawing.Size(108,17);
-			this.labelDescription.TabIndex = 69;
-			this.labelDescription.Text = "Description";
-			this.labelDescription.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// listProcStatusCodes
-			// 
-			this.listProcStatusCodes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-			this.listProcStatusCodes.FormattingEnabled = true;
-			this.listProcStatusCodes.Location = new System.Drawing.Point(388,61);
-			this.listProcStatusCodes.Name = "listProcStatusCodes";
-			this.listProcStatusCodes.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-			this.listProcStatusCodes.Size = new System.Drawing.Size(158,186);
-			this.listProcStatusCodes.TabIndex = 70;
-			this.listProcStatusCodes.Visible = false;
-			this.listProcStatusCodes.SelectedIndexChanged += new System.EventHandler(this.listProcStatusCodes_SelectedIndexChanged);
-			// 
-			// label1
-			// 
-			this.label1.Location = new System.Drawing.Point(388,41);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(158,17);
-			this.label1.TabIndex = 71;
-			this.label1.Text = "Statuses";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-			// 
-			// butDelete
-			// 
-			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butDelete.Autosize = true;
-			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDelete.CornerRadius = 4F;
-			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
-			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(584,522);
-			this.butDelete.Name = "butDelete";
-			this.butDelete.Size = new System.Drawing.Size(75,24);
-			this.butDelete.TabIndex = 68;
-			this.butDelete.Text = "&Delete";
-			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
-			// 
 			// butShowNone
 			// 
 			this.butShowNone.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -477,6 +429,54 @@ namespace OpenDental{
 			this.butShowAll.TabIndex = 59;
 			this.butShowAll.Text = "All";
 			this.butShowAll.Click += new System.EventHandler(this.butShowAll_Click);
+			// 
+			// labelDescription
+			// 
+			this.labelDescription.Location = new System.Drawing.Point(20,12);
+			this.labelDescription.Name = "labelDescription";
+			this.labelDescription.Size = new System.Drawing.Size(108,17);
+			this.labelDescription.TabIndex = 69;
+			this.labelDescription.Text = "Description";
+			this.labelDescription.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// listProcStatusCodes
+			// 
+			this.listProcStatusCodes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+			this.listProcStatusCodes.FormattingEnabled = true;
+			this.listProcStatusCodes.Location = new System.Drawing.Point(388,61);
+			this.listProcStatusCodes.Name = "listProcStatusCodes";
+			this.listProcStatusCodes.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+			this.listProcStatusCodes.Size = new System.Drawing.Size(158,186);
+			this.listProcStatusCodes.TabIndex = 70;
+			this.listProcStatusCodes.Visible = false;
+			this.listProcStatusCodes.MouseUp += new System.Windows.Forms.MouseEventHandler(this.listProcStatusCodes_MouseUp);
+			// 
+			// label1
+			// 
+			this.label1.Location = new System.Drawing.Point(388,41);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(158,17);
+			this.label1.TabIndex = 71;
+			this.label1.Text = "Statuses";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			// 
+			// butDelete
+			// 
+			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butDelete.Autosize = true;
+			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDelete.CornerRadius = 4F;
+			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
+			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butDelete.Location = new System.Drawing.Point(584,522);
+			this.butDelete.Name = "butDelete";
+			this.butDelete.Size = new System.Drawing.Size(75,24);
+			this.butDelete.TabIndex = 68;
+			this.butDelete.Text = "&Delete";
+			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
 			// 
 			// butOK
 			// 
@@ -894,7 +894,7 @@ namespace OpenDental{
 			changed=true;
 		}
 
-		private void listProcStatusCodes_SelectedIndexChanged(object sender,EventArgs e) {
+		private void listProcStatusCodes_MouseUp(object sender,MouseEventArgs e) {
 			changed=true;
 		}
 

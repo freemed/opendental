@@ -1749,7 +1749,7 @@ namespace OpenDental{
 			this.comboDPC.Name = "comboDPC";
 			this.comboDPC.Size = new System.Drawing.Size(177,21);
 			this.comboDPC.TabIndex = 8;
-			this.comboDPC.SelectedIndexChanged += new System.EventHandler(this.comboDPC_SelectedIndexChanged);
+			this.comboDPC.SelectionChangeCommitted += new System.EventHandler(this.comboDPC_SelectionChangeCommitted);
 			// 
 			// comboStatus
 			// 
@@ -1761,7 +1761,7 @@ namespace OpenDental{
 			this.comboStatus.Name = "comboStatus";
 			this.comboStatus.Size = new System.Drawing.Size(230,21);
 			this.comboStatus.TabIndex = 7;
-			this.comboStatus.SelectedIndexChanged += new System.EventHandler(this.comboStatus_SelectedIndexChanged);
+			this.comboStatus.SelectionChangeCommitted += new System.EventHandler(this.comboStatus_SelectionChangeCommitted);
 			// 
 			// labelStatus
 			// 
@@ -3354,7 +3354,7 @@ namespace OpenDental{
 			}
 		}
 
-		private void comboDPC_SelectedIndexChanged(object sender,EventArgs e) {
+		private void comboDPC_SelectionChangeCommitted(object sender,EventArgs e) {
 			DateTime tempDate=ProcCur.DateTP.Date;
 			switch(comboDPC.SelectedIndex) {
 				case 1:
@@ -3383,7 +3383,7 @@ namespace OpenDental{
 			}
 		}
 
-		private void comboStatus_SelectedIndexChanged(object sender,EventArgs e) {
+		private void comboStatus_SelectionChangeCommitted(object sender,EventArgs e) {
 			if(comboStatus.SelectedIndex==0 && (OrionProcCur==null || OrionProcCur.DateStopClock.Year<1880)) {
 				textDateStop.Text="";
 			}
@@ -3395,7 +3395,7 @@ namespace OpenDental{
 					textDateStop.Text=MiscData.GetNowDateTime().ToShortDateString();
 				}
 			}
-			switch(comboStatus.SelectedIndex){//default to treatment plan
+			switch(comboStatus.SelectedIndex) {//default to treatment plan
 				case 1: listProcStatus.SelectedIndex=1; break;
 				case 2: listProcStatus.SelectedIndex=3; break;
 				case 4: listProcStatus.SelectedIndex=4; break;
@@ -4135,6 +4135,10 @@ namespace OpenDental{
 		private void butCancel_Click(object sender,System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
+
+		
 
 
 
