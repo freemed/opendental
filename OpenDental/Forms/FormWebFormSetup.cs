@@ -32,7 +32,10 @@ namespace OpenDental {
 			//IgnoreCertificateErrors();// used with faulty certificates only while debugging.
 			#endif
 			//this.backgroundWorker1.RunWorkerAsync(); The threading approach has been abandoned because of unsolvable bugs the web service methods will have to be explored later.
-			MsgBox.Show(this,"Please wait for a few seconds while values for this form are fetched from the server");
+			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Please wait for a few seconds while values for this form are fetched from the server")) {
+				DialogResult=DialogResult.Cancel;
+				return;
+			}
 			GetFieldValuesFromServer();
 		}
 
@@ -144,10 +147,10 @@ namespace OpenDental {
 				// IMPORTANT: check error to retrieve any exceptions.     
 				MessageBox.Show(
 					"ERROR thrown here: {0}"+ e.Error.Message);
-			} else if(e.Cancelled) {
+			} 
+			else if(e.Cancelled) {
 				MessageBox.Show("worker Cancelled");
 			}
-			
 			//these values are set here because it will thow an error if put under _Dowork
 			textBoxWebFormAddress.Text=WebFormAddress;
 			butWebformBorderColor.BackColor=Color.FromArgb(PrefObj.ColorBorder);
