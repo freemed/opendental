@@ -49,11 +49,11 @@ namespace OpenDental {
 				return false;
 			}
 			if(Regex.IsMatch(textExpDate.Text,@"^\d\d[/\- ]\d\d$")){//08/07 or 08-07 or 08 07
-				expYear=Convert.ToInt32(textExpDate.Text.Substring(3,2));
+				expYear=Convert.ToInt32("20"+textExpDate.Text.Substring(3,2));
 				expMonth=Convert.ToInt32(textExpDate.Text.Substring(0,2));
 			}
 			else if(Regex.IsMatch(textExpDate.Text,@"^\d{4}$")){//0807
-				expYear=Convert.ToInt32(textExpDate.Text.Substring(2,2));
+				expYear=Convert.ToInt32("20"+textExpDate.Text.Substring(2,2));
 				expMonth=Convert.ToInt32(textExpDate.Text.Substring(0,2));
 			}  
 			else {
