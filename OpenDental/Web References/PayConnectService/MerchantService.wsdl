@@ -148,7 +148,7 @@
   </binding>
   <service name="MerchantService">
     <port name="MerchantServiceInstancePort" binding="tns:MerchantServiceInstancePortBinding">
-      <soap:address location="https://prelive2.dentalxchange.com/merchant/MerchantService?wsdl" />
+      <soap:address location="https:/webservices.dentalxchange.com/merchant/MerchantService?wsdl" />
     </port>
   </service>
 </definitions>

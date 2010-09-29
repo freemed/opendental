@@ -22,8 +22,8 @@ namespace OpenDental.Bridges {
 					cred.Password=prop.PropertyValue;
 				}
 			}
-			cred.Client="OpenDental2";//TODO: Test environment only. Needs new value for production.
-			cred.ServiceID="DCI Web Service ID: 002778";//TODO: Test environment only. Needs new value for production.
+			cred.Client="OpenDental2";
+			cred.ServiceID="DCI Web Service ID: 006328";
 			cred.version="0310";
 			return cred;
 		}
