@@ -1469,7 +1469,10 @@ namespace OpenDental{
 			if(PrefC.GetBool(PrefName.DockPhonePanelShow)){
 				#if !DEBUG
 					if(Process.GetProcessesByName("WebCamOD").Length==0) {
-						Process.Start("WebCamOD.exe");
+						try {
+							Process.Start("WebCamOD.exe");
+						}
+						catch { }//for example, if working from home.
 					}
 				#endif
 			}
