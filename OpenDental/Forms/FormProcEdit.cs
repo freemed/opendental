@@ -3396,13 +3396,34 @@ namespace OpenDental{
 				}
 			}
 			switch(comboStatus.SelectedIndex) {//default to treatment plan
-				case 1: listProcStatus.SelectedIndex=1; break;
-				case 2: listProcStatus.SelectedIndex=3; break;
-				case 4: listProcStatus.SelectedIndex=4; break;
-				case 5: listProcStatus.SelectedIndex=3; break;
-				case 6: listProcStatus.SelectedIndex=3; break;
-				case 12: listProcStatus.SelectedIndex=5; break;
-				default: listProcStatus.SelectedIndex=0; break;
+				case 1: 
+					listProcStatus.SelectedIndex=1;
+					ProcCur.ProcStatus=ProcStat.C;
+					break;
+				case 2: 
+					listProcStatus.SelectedIndex=3;
+					ProcCur.ProcStatus=ProcStat.EO;
+					break;
+				case 4:
+					listProcStatus.SelectedIndex=4;
+					ProcCur.ProcStatus=ProcStat.R; 
+					break;
+				case 5:
+					listProcStatus.SelectedIndex=3;
+					ProcCur.ProcStatus=ProcStat.EO; 
+					break;
+				case 6:
+					listProcStatus.SelectedIndex=3;
+					ProcCur.ProcStatus=ProcStat.EO; 
+					break;
+				case 12:
+					listProcStatus.SelectedIndex=5;
+					ProcCur.ProcStatus=ProcStat.Cn; 
+					break;
+				default: 
+					listProcStatus.SelectedIndex=0;
+					ProcCur.ProcStatus=ProcStat.TP;
+					break;
 			}
 		}
 
