@@ -26,7 +26,7 @@
 				<asp:Panel ID="Panel1" runat="server" Width="680px" HorizontalAlign="Left" BorderColor="White"
 					BorderWidth="60px" Style="border-bottom: 20px;" BackColor="White">
 					<asp:Panel ID="PanelError" runat="server" HorizontalAlign="Center">
-						<asp:Label ID="LabelError" runat="server" Text="" Font-Bold="True" ForeColor="Red"></asp:Label>
+						
 						<br />
 					</asp:Panel>
 					<asp:Panel ID="PanelHeading1" runat="server" HorizontalAlign="Center">

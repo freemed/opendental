@@ -61,7 +61,6 @@ namespace WebHostSynch {
 			Logger.Information("In GetPreferences IpAddress="+HttpContext.Current.Request.UserHostAddress+" RegistrationKey="+RegistrationKey);
 			ODWebServiceEntities db=new ODWebServiceEntities();
 			webforms_preference wspObj= null;
-			//int DefaultColorBorder=3896686;
 			int DefaultColorBorder=-12550016;
 			string DefaultHeading1="PATIENT INFORMATION";
 			string DefaultHeading2="We are pleased to welcome you to our office. Please take a few minutes to fill out this form as completely as you can. If you have any questions we'll be glad to help you.";
@@ -123,7 +122,7 @@ namespace WebHostSynch {
 			var wsObj=from wsf in db.webforms_sheet
 				where wsf.webforms_preference.DentalOfficeID==DentalOfficeID
 				select wsf;
-			Logger.Information("In GetSheetData IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID);
+			Logger.Information("In GetSheetData IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID+" Sheets sent to Client ="+ wsObj.Count());
 			return wsObj.ToList();
 		}
 

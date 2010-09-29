@@ -31,7 +31,7 @@ namespace WebForms {
 		private void SetPagePreferences(int DentalOfficeID) {
 			try {
 				ODWebServiceEntities db=new ODWebServiceEntities();
-				int ColorCode=3896686; // this is the Color Code for the default OpenDental color
+				int ColorCode=-12550016; //default color
 				string Heading1=LabelHeading1.Text;
 				string Heading2=LabelHeading2.Text;
 				var PrefObj=from wp in db.webforms_preference where wp.DentalOfficeID==DentalOfficeID
@@ -42,7 +42,9 @@ namespace WebForms {
 					Heading2=PrefObj.First().Heading2;
 				}
 				else {
-					LabelError.Text="Error: Your form will not be submitted. Please contact your Dental Office";
+					Panel1.Visible=false;
+					Panel2.Visible=true;
+					LabelSubmitMessage.Text="Error: Your form is not availble. Please contact your Dental Office";
 					Logger.Information("Error. Form requested at IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID);
 				}
 				LabelHeading1.Text=Heading1;
@@ -148,13 +150,7 @@ namespace WebForms {
 					LabelSubmitMessage.Text="Your details have been successfully submited";
 					Logger.Information("Form values saved from IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID);
 				}
-				if(PrefObj.Count()==0) {
-					LabelSubmitMessage.Text="Error: Your form has not be submitted. Please contact your Dental Office";
-					Logger.Information("Error: Your form has not be submitted IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID);
-				}
-				
 				Panel1.Visible=false;
-				
 				Panel2.Visible=true;
 			}
 			catch(Exception ex) {
