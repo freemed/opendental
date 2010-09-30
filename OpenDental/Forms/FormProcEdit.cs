@@ -209,6 +209,7 @@ namespace OpenDental{
 		private Label labelScheduleBy;
 		private OrionProc OrionProcCur;
 		private OrionProc OrionProcOld;
+		private DateTime CancelledScheduleByDate;
 
 		///<summary>Inserts are no longer done within this dialog, but must be done ahead of time from outside.  You must specify a procedure to edit, and only the changes that are made in this dialog get saved.  Only used when double click in Account, Chart, TP, and in ContrChart.AddProcedure().  The procedure may be deleted if new, and user hits Cancel.</summary>
 		public FormProcEdit(Procedure proc,Patient patCur,Family famCur){
@@ -2224,6 +2225,13 @@ namespace OpenDental{
 				groupCanadianProcType.Visible=false;
 			}
 			if(Programs.UsingOrion){
+				if(IsNew) {
+					OrionProcCur=new OrionProc();
+					OrionProcCur.ProcNum=ProcCur.ProcNum;
+				}
+				else {
+					OrionProcCur=OrionProcs.GetOneByProcNum(ProcCur.ProcNum);
+				}
 				labelEndTime.Visible=true;
 				textDateTP.ReadOnly=true;
 				textTimeEnd.Visible=true;
@@ -2488,10 +2496,9 @@ namespace OpenDental{
 				comboStatus.Items.Add("W-watch");
 				comboStatus.Items.Add("A-alternative");
 				comboStatus.SelectedIndex=0;
-				OrionProcCur=OrionProcs.GetOneByProcNum(ProcCur.ProcNum);
 				ProcedureCode pc=ProcedureCodes.GetProcCodeFromDb(ProcCur.CodeNum);
 				checkIsRepair.Visible=pc.IsProsth;
-				if(OrionProcCur!=null) {
+				if(!IsNew) {
 					OrionProcOld=OrionProcCur.Copy();
 					comboDPC.SelectedIndex=(int)OrionProcCur.DPC;
 					if(ProcCur.DateTP.Date!=MiscData.GetNowDateTime().Date) {
@@ -3360,18 +3367,33 @@ namespace OpenDental{
 			switch(comboDPC.SelectedIndex) {
 				case 1:
 					tempDate=tempDate.Date.AddDays(1);
+					if(CancelledScheduleByDate.Year>1880 && CancelledScheduleByDate<tempDate) {
+						tempDate=CancelledScheduleByDate;
+					}
 					break;
 				case 2:
 					tempDate=tempDate.Date.AddDays(30);
+					if(CancelledScheduleByDate.Year>1880 && CancelledScheduleByDate<tempDate) {
+						tempDate=CancelledScheduleByDate;
+					}
 					break;
 				case 3:
 					tempDate=tempDate.Date.AddDays(60);
+					if(CancelledScheduleByDate.Year>1880 && CancelledScheduleByDate<tempDate) {
+						tempDate=CancelledScheduleByDate;
+					}
 					break;
 				case 4:
 					tempDate=tempDate.Date.AddDays(120);
+					if(CancelledScheduleByDate.Year>1880 && CancelledScheduleByDate<tempDate) {
+						tempDate=CancelledScheduleByDate;
+					}
 					break;
 				case 5:
 					tempDate=tempDate.Date.AddYears(1);
+					if(CancelledScheduleByDate.Year>1880 && CancelledScheduleByDate<tempDate) {
+						tempDate=CancelledScheduleByDate;
+					}
 					break;
 			}
 			textDateScheduled.Text=tempDate.ToShortDateString();
@@ -3385,47 +3407,119 @@ namespace OpenDental{
 		}
 
 		private void comboStatus_SelectionChangeCommitted(object sender,EventArgs e) {
-			if(comboStatus.SelectedIndex==0 && (OrionProcCur==null || OrionProcCur.DateStopClock.Year<1880)) {
+			if(comboStatus.SelectedIndex==0 && OrionProcCur.DateStopClock.Year<1880) {
 				textDateStop.Text="";
 			}
 			else {
-				if(OrionProcCur!=null && OrionProcCur.DateStopClock.Year>1880) {
+				if(OrionProcCur.DateStopClock.Year>1880) {
 					textDateStop.Text=OrionProcCur.DateStopClock.ToShortDateString();
 				}
 				else {
 					textDateStop.Text=MiscData.GetNowDateTime().ToShortDateString();
 				}
 			}
-			switch(comboStatus.SelectedIndex) {//default to treatment plan
-				case 1: 
+			switch(comboStatus.SelectedIndex) {
+				case 0:
+					listProcStatus.SelectedIndex=0;
+					ProcCur.ProcStatus=ProcStat.TP;
+					break;
+				case 1:
+					if(!Security.IsAuthorized(Permissions.ProcComplCreate)) {
+						//set it back to whatever it was before
+						if(OrionProcCur.Status2==OrionStatus.TP) {
+							comboStatus.SelectedIndex=0;
+						}
+						if(OrionProcCur.Status2==OrionStatus.E) {
+							comboStatus.SelectedIndex=2;
+						}
+						if(OrionProcCur.Status2==OrionStatus.R) {
+							comboStatus.SelectedIndex=3;
+						}
+						if(OrionProcCur.Status2==OrionStatus.RO) {
+							comboStatus.SelectedIndex=4;
+						}
+						if(OrionProcCur.Status2==OrionStatus.CS) {
+							comboStatus.SelectedIndex=5;
+						}
+						if(OrionProcCur.Status2==OrionStatus.CR) {
+							comboStatus.SelectedIndex=6;
+						}
+						if(OrionProcCur.Status2==OrionStatus.CA_Tx) {
+							comboStatus.SelectedIndex=7;
+						}
+						if(OrionProcCur.Status2==OrionStatus.CA_EPRD) {
+							comboStatus.SelectedIndex=8;
+						}
+						if(OrionProcCur.Status2==OrionStatus.CA_PD) {
+							comboStatus.SelectedIndex=9;
+						}
+						if(OrionProcCur.Status2==OrionStatus.S) {
+							comboStatus.SelectedIndex=10;
+						}
+						if(OrionProcCur.Status2==OrionStatus.ST) {
+							comboStatus.SelectedIndex=11;
+						}
+						if(OrionProcCur.Status2==OrionStatus.W) {
+							comboStatus.SelectedIndex=12;
+						}
+						if(OrionProcCur.Status2==OrionStatus.A) {
+							comboStatus.SelectedIndex=13;
+						}
+						return;
+					}
 					listProcStatus.SelectedIndex=1;
 					ProcCur.ProcStatus=ProcStat.C;
 					break;
-				case 2: 
+				case 2:
 					listProcStatus.SelectedIndex=3;
 					ProcCur.ProcStatus=ProcStat.EO;
 					break;
+				case 3:
+					listProcStatus.SelectedIndex=0;
+					ProcCur.ProcStatus=ProcStat.TP;
+					break;
 				case 4:
 					listProcStatus.SelectedIndex=4;
-					ProcCur.ProcStatus=ProcStat.R; 
+					ProcCur.ProcStatus=ProcStat.R;
 					break;
 				case 5:
 					listProcStatus.SelectedIndex=3;
-					ProcCur.ProcStatus=ProcStat.EO; 
+					ProcCur.ProcStatus=ProcStat.EO;
 					break;
 				case 6:
 					listProcStatus.SelectedIndex=3;
-					ProcCur.ProcStatus=ProcStat.EO; 
+					ProcCur.ProcStatus=ProcStat.EO;
+					break;
+				case 7:
+					listProcStatus.SelectedIndex=0;
+					ProcCur.ProcStatus=ProcStat.TP;
+					break;
+				case 8:
+					listProcStatus.SelectedIndex=0;
+					ProcCur.ProcStatus=ProcStat.TP;
+					break;
+				case 9:
+					listProcStatus.SelectedIndex=0;
+					ProcCur.ProcStatus=ProcStat.TP;
+					break;
+				case 10:
+					listProcStatus.SelectedIndex=0;
+					ProcCur.ProcStatus=ProcStat.TP;
+					break;
+				case 11:
+					listProcStatus.SelectedIndex=0;
+					ProcCur.ProcStatus=ProcStat.TP;
 					break;
 				case 12:
 					listProcStatus.SelectedIndex=5;
-					ProcCur.ProcStatus=ProcStat.Cn; 
+					ProcCur.ProcStatus=ProcStat.Cn;
 					break;
-				default: 
+				case 13:
 					listProcStatus.SelectedIndex=0;
 					ProcCur.ProcStatus=ProcStat.TP;
 					break;
 			}
+			OrionProcCur.Status2=(OrionStatus)((int)(Math.Pow(2d,(double)(comboStatus.SelectedIndex))));
 		}
 
 		private void UpdateSurf() {
@@ -3882,18 +3976,17 @@ namespace OpenDental{
 			}
 			//ProcCur.HideGraphical=checkHideGraphical.Checked;
 			if(panelOrion.Visible) {
-				if(OrionProcCur==null) {
-					OrionProcCur=new OrionProc();
+				if(IsNew) {
+					//In case user didn't change comboStatus
+					OrionProcCur.Status2=(OrionStatus)((int)(Math.Pow(2d,(double)(comboStatus.SelectedIndex))));
 				}
 				OrionProcCur.DPC=(OrionDPC)comboDPC.SelectedIndex;
-				OrionProcCur.Status2=(OrionStatus)((int)(Math.Pow(2d,(double)(comboStatus.SelectedIndex))));
 				OrionProcCur.DateScheduleBy=PIn.Date(textDateScheduled.Text);
 				OrionProcCur.DateStopClock=PIn.Date(textDateStop.Text);
 				OrionProcCur.IsOnCall=checkIsOnCall.Checked;
 				OrionProcCur.IsEffectiveComm=checkIsEffComm.Checked;
 				OrionProcCur.IsRepair=checkIsRepair.Checked;
-				if(OrionProcCur.ProcNum==0) {
-					OrionProcCur.ProcNum=ProcCur.ProcNum;
+				if(IsNew) {
 					OrionProcs.Insert(OrionProcCur);
 				}
 				else {
@@ -4146,6 +4239,14 @@ namespace OpenDental{
 				}
 				if(ProcCur.Surf!="" || textTooth.Text!="" || textSurfaces.Text!="") {
 					DataTable table=OrionProcs.GetCancelledScheduleDateByToothOrSurf(ProcCur.PatNum,textTooth.Text.ToString(),textSurfaces.Text.ToString());
+					if(table.Rows.Count>0) {
+						if(textDateScheduled.Text!="" && DateTime.Parse(textDateScheduled.Text)>PIn.DateT(table.Rows[0]["DateScheduleBy"].ToString())) {
+							textDateScheduled.Text=((DateTime)table.Rows[0]["DateScheduleBy"]).ToShortDateString();
+							CancelledScheduleByDate=DateTime.Parse(textDateScheduled.Text);
+							MsgBox.Show(this,"Schedule by date cannot be later than: "+textDateScheduled.Text+".");
+							return;
+						}
+					}
 				}
 				if(Programs.UsingOrion && ProcOld.ProcStatus==ProcStat.TP && ProcOld.DateTP.Date<MiscData.GetNowDateTime().Date){
 					FormProcEditExplain FormP=new FormProcEditExplain();
