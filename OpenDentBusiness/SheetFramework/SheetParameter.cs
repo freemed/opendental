@@ -78,6 +78,9 @@ namespace OpenDentBusiness{
 			if(sheetType==SheetTypeEnum.ExamSheet) {
 				list.Add(new SheetParameter(true,"PatNum"));
 			}
+			if(sheetType==SheetTypeEnum.DepositSlip){
+				list.Add(new SheetParameter(true,"PatNum"));
+			}
 			return list;
 		}
 

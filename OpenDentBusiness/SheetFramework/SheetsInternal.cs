@@ -50,6 +50,8 @@ namespace OpenDentBusiness{
 					return LabSlip();
 				case SheetInternalType.ExamSheet:
 					return ExamSheet();
+				case SheetInternalType.DepositSlip:
+					return DepositSlip();
 				default:
 					throw new ApplicationException("Invalid SheetInternalType.");
 			}
@@ -957,6 +959,17 @@ Fam Urgent Fin Note: [famFinUrgNote]"
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Additional Notes",sheet.FontSize,sheet.FontName,false,x,y,140,20));
 			y+=rowH;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("misc",sheet.FontSize,sheet.FontName,false,x,y,600,100));
+			return sheet;
+		}
+
+		public static SheetDef DepositSlip(){
+			SheetDef sheet=new SheetDef(SheetTypeEnum.DepositSlip);
+			sheet.Description="Deposit Slip";
+			sheet.FontName="Microsoft Sans Serif";
+			sheet.FontSize=11f;
+			sheet.Width=850;
+			sheet.Height=1100;
+			//TODO:
 			return sheet;
 		}
 

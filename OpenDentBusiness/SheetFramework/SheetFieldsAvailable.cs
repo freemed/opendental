@@ -47,6 +47,8 @@ namespace OpenDentBusiness{
 					return GetLabSlip(outInCheck);
 				case SheetTypeEnum.ExamSheet:
 					return GetExamSheet(outInCheck);
+				case SheetTypeEnum.DepositSlip:
+					return GetDepositSlip(outInCheck);
 			}
 			return new List<SheetFieldDef>();
 		}
@@ -385,6 +387,12 @@ namespace OpenDentBusiness{
 			else if(outInCheck==OutInCheck.Check){
 				list.Add(NewCheck("misc"));
 			}
+			return list;
+		}
+
+		public static List<SheetFieldDef> GetDepositSlip(OutInCheck outInCheck){
+			List<SheetFieldDef> list=new List<SheetFieldDef>();
+			//TODO:
 			return list;
 		}
 
