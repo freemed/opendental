@@ -159,11 +159,11 @@ namespace OpenDental{
 			for(int i=0;i<Automations.Listt.Count;i++){
 				row=new OpenDental.UI.ODGridRow();
 				row.Cells.Add(Automations.Listt[i].Description);
-				if(Automations.Listt[i].AutoTrigger==AutomationTrigger.CompleteProcedure) {
+				if(Automations.Listt[i].Autotrigger==AutomationTrigger.CompleteProcedure) {
 					row.Cells.Add(Automations.Listt[i].ProcCodes);
 				}
 				else {
-					row.Cells.Add(Automations.Listt[i].AutoTrigger.ToString());
+					row.Cells.Add(Automations.Listt[i].Autotrigger.ToString());
 				}
 				row.Cells.Add(Automations.Listt[i].AutoAction.ToString());
 				//details: 

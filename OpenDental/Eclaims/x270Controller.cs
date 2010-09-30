@@ -28,7 +28,7 @@ namespace OpenDental.Eclaims {
 			//attach it to an etrans-------------------------------------------------------------
 			Etrans etrans=new Etrans();
 			etrans.DateTimeTrans=DateTime.Now;
-			etrans.ClearinghouseNum=clearhouse.ClearinghouseNum;
+			etrans.ClearingHouseNum=clearhouse.ClearinghouseNum;
 			etrans.Etype=EtransType.BenefitInquiry270;
 			etrans.PlanNum=plan.PlanNum;
 			etrans.EtransMessageTextNum=etransMessageText.EtransMessageTextNum;
@@ -80,7 +80,7 @@ namespace OpenDental.Eclaims {
 			EtransMessageTexts.Insert(etransMessageText);
 			Etrans etrans271=new Etrans();
 			etrans271.DateTimeTrans=DateTime.Now;
-			etrans271.ClearinghouseNum=clearhouse.ClearinghouseNum;
+			etrans271.ClearingHouseNum=clearhouse.ClearinghouseNum;
 			etrans271.Etype=EtransType.TextReport;
 			if(X12object.IsX12(x12response)) {//this shouldn't need to be tested because it was tested above.
 				if(x271==null){

@@ -9,10 +9,10 @@ namespace OpenDentBusiness{
 		///<summary>Primary key.</summary>
 		[CrudColumn(IsPriKey=true)]
 		public long AutomationNum;
-		///<summary></summary>
+		///<summary>.</summary>
 		public string Description;
-		///<summary>What triggers this automation</summary>
-		public AutomationTrigger AutoTrigger;
+		///<summary>Enum:AutomationTrigger What triggers this automation</summary>
+		public AutomationTrigger Autotrigger;
 		///<summary>If this has a CompleteProcedure trigger, this is a comma-delimited list of codes that will trigger the action.</summary>
 		public string ProcCodes;
 		///<summary>The action taken as a result of the trigger.  To get more than one action, create multiple automation entries.</summary>

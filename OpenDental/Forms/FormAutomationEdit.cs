@@ -316,7 +316,7 @@ namespace OpenDental{
 			for(int i=0;i<Enum.GetNames(typeof(AutomationTrigger)).Length;i++){
 				comboTrigger.Items.Add(Enum.GetNames(typeof(AutomationTrigger))[i]);
 			}
-			comboTrigger.SelectedIndex=(int)AutoCur.AutoTrigger;
+			comboTrigger.SelectedIndex=(int)AutoCur.Autotrigger;
 			textProcCodes.Text=AutoCur.ProcCodes;//although might not be visible.
 			for(int i=0;i<Enum.GetNames(typeof(AutomationAction)).Length;i++) {
 				comboAction.Items.Add(Enum.GetNames(typeof(AutomationAction))[i]);
@@ -440,7 +440,7 @@ namespace OpenDental{
 				}
 			}
 			AutoCur.Description=textDescription.Text;
-			AutoCur.AutoTrigger=(AutomationTrigger)comboTrigger.SelectedIndex;
+			AutoCur.Autotrigger=(AutomationTrigger)comboTrigger.SelectedIndex;
 			if(comboTrigger.SelectedIndex==(int)AutomationTrigger.CompleteProcedure) {
 				AutoCur.ProcCodes=textProcCodes.Text;
 			}

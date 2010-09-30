@@ -48,7 +48,7 @@ namespace OpenDentBusiness.Crud{
 				automation=new Automation();
 				automation.AutomationNum = PIn.Long  (table.Rows[i]["AutomationNum"].ToString());
 				automation.Description   = PIn.String(table.Rows[i]["Description"].ToString());
-				automation.AutoTrigger   = (AutomationTrigger)PIn.Int(table.Rows[i]["AutoTrigger"].ToString());
+				automation.Autotrigger   = (AutomationTrigger)PIn.Int(table.Rows[i]["AutoTrigger"].ToString());
 				automation.ProcCodes     = PIn.String(table.Rows[i]["ProcCodes"].ToString());
 				automation.AutoAction    = (AutomationAction)PIn.Int(table.Rows[i]["AutoAction"].ToString());
 				automation.SheetDefNum   = PIn.Long  (table.Rows[i]["SheetDefNum"].ToString());
@@ -79,7 +79,7 @@ namespace OpenDentBusiness.Crud{
 			}
 			command+=
 				 "'"+POut.String(automation.Description)+"',"
-				+    POut.Int   ((int)automation.AutoTrigger)+","
+				+    POut.Int   ((int)automation.Autotrigger)+","
 				+"'"+POut.String(automation.ProcCodes)+"',"
 				+    POut.Int   ((int)automation.AutoAction)+","
 				+    POut.Long  (automation.SheetDefNum)+","
@@ -98,7 +98,7 @@ namespace OpenDentBusiness.Crud{
 		internal static void Update(Automation automation){
 			string command="UPDATE automation SET "
 				+"Description   = '"+POut.String(automation.Description)+"', "
-				+"AutoTrigger   =  "+POut.Int   ((int)automation.AutoTrigger)+", "
+				+"AutoTrigger   =  "+POut.Int   ((int)automation.Autotrigger)+", "
 				+"ProcCodes     = '"+POut.String(automation.ProcCodes)+"', "
 				+"AutoAction    =  "+POut.Int   ((int)automation.AutoAction)+", "
 				+"SheetDefNum   =  "+POut.Long  (automation.SheetDefNum)+", "
@@ -115,9 +115,9 @@ namespace OpenDentBusiness.Crud{
 				if(command!=""){ command+=",";}
 				command+="Description = '"+POut.String(automation.Description)+"'";
 			}
-			if(automation.AutoTrigger != oldAutomation.AutoTrigger) {
+			if(automation.Autotrigger != oldAutomation.Autotrigger) {
 				if(command!=""){ command+=",";}
-				command+="AutoTrigger = "+POut.Int   ((int)automation.AutoTrigger)+"";
+				command+="AutoTrigger = "+POut.Int   ((int)automation.Autotrigger)+"";
 			}
 			if(automation.ProcCodes != oldAutomation.ProcCodes) {
 				if(command!=""){ command+=",";}

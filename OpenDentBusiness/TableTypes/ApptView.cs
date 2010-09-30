@@ -21,9 +21,9 @@ namespace OpenDentBusiness{
 		public TimeSpan OnlySchedBeforeTime;
 		///<summary>If OnlyScheduledProvs is set to true, and this time is not 0:00, then only provider schedules with start or stop time after this time will be included.</summary>
 		public TimeSpan OnlySchedAfterTime;
-		///<summary></summary>
+		///<summary>Enum:ApptViewStackBehavior </summary>
 		public ApptViewStackBehavior StackBehavUR;
-		///<summary></summary>
+		///<summary>Enum:ApptViewStackBehavior </summary>
 		public ApptViewStackBehavior StackBehavLR;
 
 
@@ -36,8 +36,11 @@ namespace OpenDentBusiness{
 
 	}
 
+	///<summary></summary>
 	public enum ApptViewStackBehavior {
+		///<summary></summary>
 		Vertical,
+		///<summary></summary>
 		Horizontal
 	}
 

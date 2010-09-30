@@ -74,14 +74,26 @@ namespace DocumentationBuilder {
 			}
 			//ProcessStartInfo startInfo=new ProcessStartInfo();
 			//Process.Start("Notepad.exe",outputFile);
+			//Process.Start("iexplore.exe",outputFile);
 			Process.Start(outputFile);
 			Application.Exit();
 		}
 
 		private void WriteTable(XmlWriter writer,string tableName){
-			//if(tableName=="") {
-			//	return;
-			//}
+			if(tableName=="anestheticdata"
+				|| tableName=="anesthmedsgiven"
+				|| tableName=="anesthmedsintake"
+				|| tableName=="anesthmedsinventory"
+				|| tableName=="anesthmedsinventoryadj"
+				|| tableName=="anesthmedsuppliers"
+				|| tableName=="anesthscore"
+				|| tableName=="anesthvsdata"
+				|| tableName==""
+				|| tableName==""
+				|| tableName=="") {
+				
+				return;
+			}
 			writer.WriteStartElement("table");
 			writer.WriteAttributeString("name",tableName);
 			//table summary
@@ -195,6 +207,8 @@ namespace DocumentationBuilder {
 				//or those which are obsolete.
 				case "accountingautopay": return "AccountingAutoPay";
 				case "appointmentrule": return "AppointmentRule";
+				case "apptfield": return "ApptField";
+				case "apptfielddef": return "ApptFieldDef";
 				case "apptview": return "ApptView";
 				case "apptviewitem": return "ApptViewItem";
 				case "autocode": return "AutoCode";
@@ -205,6 +219,7 @@ namespace DocumentationBuilder {
 				case "canadianclaim": return "CanadianClaim";
 				case "canadianextract": return "CanadianExtract";
 				case "canadiannetwork": return "CanadianNetwork";
+				case "chartview": return "ChartView";
 				case "claimattach": return "ClaimAttach";
 				case "claimform": return "ClaimForm";
 				case "claimformitem": return "ClaimFormItem";
@@ -247,6 +262,7 @@ namespace DocumentationBuilder {
 				case "mountdef": return "MountDef";
 				case "mountitem": return "MountItem";
 				case "mountitemdef": return "MountItemDef";
+				case "orionproc": return "OrionProc";
 				case "patfield": return "PatField";
 				case "patfielddef": return "PatFieldDef";
 				case "patientnote": return "PatientNote";
@@ -260,11 +276,13 @@ namespace DocumentationBuilder {
 				case "phonenumber": return "PhoneNumber";
 				case "plannedappt": return "PlannedAppt";
 				case "preference": return "Pref";
+				case "procapptcolor": return "ProcApptColor";
 				case "procbutton": return "ProcButton";
 				case "procbuttonitem": return "ProcButtonItem";
 				case "proccodenote": return "ProcCodeNote";
 				case "procedurecode": return "ProcedureCode";
 				case "procedurelog": return "Procedure";
+				case "procgroupitem": return "ProcGroupItem";
 				case "proclicense": return "proclicense not used";
 				case "procnote": return "ProcNote";
 				case "proctp": return "ProcTP";
@@ -278,6 +296,7 @@ namespace DocumentationBuilder {
 				case "recalltrigger": return "RecallTrigger";
 				case "recalltype": return "RecallType";
 				case "repeatcharge": return "RepeatCharge";
+				case "replicationserver": return "ReplicationServer";
 				case "reqneeded": return "ReqNeeded";
 				case "reqstudent": return "ReqStudent";
 				case "rxalert": return "RxAlert";
@@ -302,6 +321,7 @@ namespace DocumentationBuilder {
 				case "taskancestor": return "TaskAncestor";
 				case "tasklist": return "TaskList";
 				case "tasksubscription": return "TaskSubscription";
+				case "taskunread": return "TaskUnread";
 				case "terminalactive": return "TerminalActive";
 				case "timeadjust": return "TimeAdjust";
 				case "toolbutitem": return "ToolButItem";

@@ -75,7 +75,7 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command= "UPDATE EtransMessageText SET "
-				+"ClearinghouseNum = '"   +POut.PInt   (EtransMessageText.ClearinghouseNum)+"', "
+				+"ClearingHouseNum = '"   +POut.PInt   (EtransMessageText.ClearingHouseNum)+"', "
 				+"Etype= '"               +POut.PInt   ((int)EtransMessageText.Etype)+"', "
 				+"Note= '"                +POut.PString(EtransMessageText.Note)+"', "
 				+"EtransMessageTextMessageTextNum= '"+POut.PInt   (EtransMessageText.EtransMessageTextMessageTextNum)+"' "

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Drawing;
 
 namespace OpenDentBusiness{
-	///<summary></summary>
+	///<summary>This table is only used by one customer.  1:1 relationship to procedurelog table.</summary>
 	[Serializable]
 	public class OrionProc:TableBase{
 		///<summary>Primary key.</summary>
@@ -17,13 +17,13 @@ namespace OpenDentBusiness{
 		public DateTime DateScheduleBy;
 		///<summary> Default to current date.  Provider shall have to ability to edit with a previous date, but not a future date.</summary>
 		public DateTime DateStopClock;
-		///<summarty>Enum:OrionStatus None=0,TP=1,C=2,E=4,R=8,RO=16,CS=32,CR=64,CA-Tx=128,CA-ERPD=256,CA-P/D=512,S=1024,ST=2048,W=4096</summarty>
+		///<summary>Enum:OrionStatus None=0,TP=1,C=2,E=4,R=8,RO=16,CS=32,CR=64,CA-Tx=128,CA-ERPD=256,CA-P/D=512,S=1024,ST=2048,W=4096</summary>
 		public OrionStatus Status2;
-		///<summary></summary>
+		///<summary>.</summary>
 		public bool IsOnCall;
 		///<summary>Indicates in the clinical note that effective communication was used for this encounter.</summary>
 		public bool IsEffectiveComm;
-		///<summary></summary>
+		///<summary>.</summary>
 		public bool IsRepair;
 		
 
@@ -33,6 +33,7 @@ namespace OpenDentBusiness{
 		}
 	}
 
+	///<summary></summary>
 	public enum OrionDPC{
 	  ///<summary>0- None</summary>
 	  None,

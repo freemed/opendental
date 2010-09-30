@@ -132,7 +132,7 @@ namespace OpenDentBusiness{
 			Etrans etrans=SubmitAndFill(table);
 			command="SELECT * FROM etrans WHERE "
 				+"Etype=21 "//ack997
-				+"AND ClearinghouseNum="+POut.PInt(etrans.ClearinghouseNum)
+				+"AND ClearingHouseNum="+POut.PInt(etrans.ClearingHouseNum)
 				+" AND BatchNumber= "+POut.PInt(etrans.BatchNumber)
 				+" AND DateTimeTrans < "+POut.PDateT(etrans.DateTimeTrans.AddDays(14))//less than 2wks in the future
 				+" AND DateTimeTrans > "+POut.PDateT(etrans.DateTimeTrans.AddDays(-1));//and no more than one day before claim
@@ -151,7 +151,7 @@ namespace OpenDentBusiness{
 				etrans=new Etrans();
 				etrans.EtransNum           =PIn.Long(table.Rows[i][0].ToString());
 				etrans.DateTimeTrans       =PIn.DateT(table.Rows[i][1].ToString());
-				etrans.ClearinghouseNum    =PIn.Long(table.Rows[i][2].ToString());
+				etrans.ClearingHouseNum    =PIn.Long(table.Rows[i][2].ToString());
 				etrans.Etype               =(EtransType)PIn.Long(table.Rows[i][3].ToString());
 				etrans.ClaimNum            =PIn.Long(table.Rows[i][4].ToString());
 				etrans.OfficeSequenceNumber=PIn.Int(table.Rows[i][5].ToString());
@@ -198,7 +198,7 @@ namespace OpenDentBusiness{
 				command+=POut.DateT(etrans.DateTimeTrans);
 			}
 			command+=", "
-				+"'"+POut.Long   (etrans.ClearinghouseNum)+"', "
+				+"'"+POut.Long   (etrans.ClearingHouseNum)+"', "
 				+"'"+POut.Long   ((int)etrans.Etype)+"', "
 				+"'"+POut.Long   (etrans.ClaimNum)+"', "
 				+"'"+POut.Long   (etrans.OfficeSequenceNumber)+"', "
@@ -230,7 +230,7 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command= "UPDATE etrans SET "
-				+"ClearinghouseNum = '"   +POut.Long   (etrans.ClearinghouseNum)+"', "
+				+"ClearinghouseNum = '"   +POut.Long   (etrans.ClearingHouseNum)+"', "
 				+"Etype= '"               +POut.Long   ((int)etrans.Etype)+"', "
 				+"ClaimNum= '"            +POut.Long   (etrans.ClaimNum)+"', "
 				+"OfficeSequenceNumber= '"+POut.Long   (etrans.OfficeSequenceNumber)+"', "
@@ -267,7 +267,7 @@ namespace OpenDentBusiness{
 			}
 			Etrans etrans=new Etrans();
 			//etrans.DateTimeTrans handled automatically
-			etrans.ClearinghouseNum=clearinghouseNum;
+			etrans.ClearingHouseNum=clearinghouseNum;
 			etrans.Etype=etype;
 			etrans.ClaimNum=0;//no claim involved
 			etrans.PatNum=patNum;
@@ -394,7 +394,7 @@ namespace OpenDentBusiness{
 			string command;
 			Etrans etrans=new Etrans();
 			//etrans.DateTimeTrans handled automatically
-			etrans.ClearinghouseNum=clearinghouseNum;
+			etrans.ClearingHouseNum=clearinghouseNum;
 			etrans.Etype=etype;
 			etrans.ClaimNum=claimNum;
 			etrans.PatNum=patNum;
@@ -503,7 +503,7 @@ namespace OpenDentBusiness{
 			}
 			Etrans etrans=new Etrans();
 			etrans.DateTimeTrans=dateTimeTrans;
-			etrans.ClearinghouseNum=clearinghouseNum;
+			etrans.ClearingHouseNum=clearinghouseNum;
 			EtransMessageText etransMessageText=new EtransMessageText();
 			etransMessageText.MessageText=messageText;
 			EtransMessageTexts.Insert(etransMessageText);

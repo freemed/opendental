@@ -95,7 +95,7 @@ namespace DocumentationBuilder {
 			this.textVersion.Name = "textVersion";
 			this.textVersion.Size = new System.Drawing.Size(59,20);
 			this.textVersion.TabIndex = 7;
-			this.textVersion.Text = "6.8.0";
+			this.textVersion.Text = "7.3.0";
 			// 
 			// textConnStr
 			// 

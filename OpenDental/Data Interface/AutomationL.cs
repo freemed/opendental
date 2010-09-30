@@ -10,7 +10,7 @@ namespace OpenDental {
 		///<summary>ProcCodes will be null unless trigger is CompleteProcedure.  This routine will generally fail silently.</summary>
 		public static void Trigger(AutomationTrigger trigger,List<string> procCodes,long patNum) {
 			for(int i=0;i<Automations.Listt.Count;i++) {
-				if(Automations.Listt[i].AutoTrigger!=trigger) {
+				if(Automations.Listt[i].Autotrigger!=trigger) {
 					continue;
 				}
 				if(trigger==AutomationTrigger.CompleteProcedure) {

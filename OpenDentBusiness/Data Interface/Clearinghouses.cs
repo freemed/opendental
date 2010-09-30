@@ -8,7 +8,7 @@ namespace OpenDentBusiness{
 	public class Clearinghouses {
 		///<summary>List of all clearinghouses.</summary>
 		private static Clearinghouse[] listt;
-		///<summary>Key=PayorID. Value=ClearinghouseNum.</summary>
+		///<summary>Key=PayorID. Value=ClearingHouseNum.</summary>
 		private static Hashtable HList;
 
 		public static Clearinghouse[] Listt{
