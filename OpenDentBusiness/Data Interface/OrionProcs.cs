@@ -92,9 +92,15 @@ namespace OpenDentBusiness{
 				+"FROM orionproc "
 				+"LEFT JOIN procedurelog ON orionproc.ProcNum=procedurelog.ProcNum "
 				+"WHERE procedurelog.PatNum="+POut.Long(PatNum)
-				+" AND orionproc.Status2=128"
-				+" AND procedurelog.ToothNum='"+POut.String(ToothNum)+"'"
-				+" AND procedurelog.Surf='"+POut.String(Surf)+"'"
+				+" AND orionproc.Status2=128";
+			if(POut.String(ToothNum)!="") {
+				command+=" AND procedurelog.ToothNum='"+POut.String(ToothNum)+"'";
+			}
+			else {
+				command+=" AND procedurelog.ToothNum=''"
+				+" AND procedurelog.Surf='"+POut.String(Surf)+"'";
+			}
+				command+=" AND procedurelog.Surf='"+POut.String(Surf)+"'"
 				+" AND YEAR(orionproc.DateScheduleBy)>1880"
 				+" ORDER BY orionproc.DateScheduleBy "
 				+"LIMIT 1";

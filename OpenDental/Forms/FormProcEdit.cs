@@ -4238,7 +4238,7 @@ namespace OpenDental{
 					return;
 				}
 				if(ProcCur.Surf!="" || textTooth.Text!="" || textSurfaces.Text!="") {
-					DataTable table=OrionProcs.GetCancelledScheduleDateByToothOrSurf(ProcCur.PatNum,textTooth.Text.ToString(),textSurfaces.Text.ToString());
+					DataTable table=OrionProcs.GetCancelledScheduleDateByToothOrSurf(ProcCur.PatNum,textTooth.Text.ToString(),ProcCur.Surf);
 					if(table.Rows.Count>0) {
 						if(textDateScheduled.Text!="" && DateTime.Parse(textDateScheduled.Text)>PIn.DateT(table.Rows[0]["DateScheduleBy"].ToString())) {
 							textDateScheduled.Text=((DateTime)table.Rows[0]["DateScheduleBy"]).ToShortDateString();
