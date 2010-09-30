@@ -4249,9 +4249,11 @@ namespace OpenDental{
 					}
 				}
 				if(Programs.UsingOrion && ProcOld.ProcStatus==ProcStat.TP && ProcOld.DateTP.Date<MiscData.GetNowDateTime().Date){
-					FormProcEditExplain FormP=new FormProcEditExplain();
-					if(FormP.ShowDialog()!=DialogResult.OK){
-						return;
+					if(FormProcEditExplain.GetChanges(ProcCur,ProcOld)!=""){//Also sets FormProcEditExplain.Changes.
+						FormProcEditExplain FormP=new FormProcEditExplain();
+						if(FormP.ShowDialog()!=DialogResult.OK){
+							return;
+						}
 					}
 				}
 			}

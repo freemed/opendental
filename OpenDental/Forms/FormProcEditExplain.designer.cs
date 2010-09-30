@@ -113,6 +113,7 @@ namespace OpenDental{
 			this.Name = "FormProcEditExplain";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Procedure Edit Explanation";
+			this.Load += new System.EventHandler(this.FormProcEditExplain_Load);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

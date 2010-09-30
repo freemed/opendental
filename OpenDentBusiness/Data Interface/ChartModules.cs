@@ -279,12 +279,12 @@ namespace OpenDentBusiness {
 					string[] toothNum=rawProcs.Rows[i]["ToothRange"].ToString().Split(',');
 					bool sameQuad=false;//Don't want true if length==0.
 					for(int n=0;n<toothNum.Length;n++){//But want true if length==1 (check index 0 against itself).
-						if(Tooth.GetQuadrant(toothNum[i])==Tooth.GetQuadrant(toothNum[0])){
+						if(Tooth.GetQuadrant(toothNum[n])==Tooth.GetQuadrant(toothNum[0])){
 							sameQuad=true;
 						}
 						else{
 							sameQuad=false;
-							n=toothNum.Length;//Break out of the loop.
+							break;
 						}
 					}
 					if(sameQuad){
