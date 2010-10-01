@@ -4,8 +4,10 @@ using System.Collections;
 namespace OpenDentBusiness{
 
 	///<summary>A deposit slip.  Contains multiple insurance and patient checks.</summary>
-	public class Deposit{
+	[Serializable]
+	public class Deposit:TableBase{
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long DepositNum;
 		///<summary>The date of the deposit.</summary>
 		public DateTime DateDeposit;
@@ -13,15 +15,12 @@ namespace OpenDentBusiness{
 		public string BankAccountInfo;
 		///<summary>Total amount of the deposit. User not allowed to directly edit.</summary>
 		public double Amount;
+		///<summary>FK to sheetdef.SheetDefNum. If 0, then the default internal deposit slip sheet is used.</summary>
+		public long SheetDefNum;
 		
 		///<summary></summary>
 		public Deposit Copy(){
-			Deposit d=new Deposit();
-			d.DepositNum=DepositNum;
-			d.DateDeposit=DateDeposit;
-			d.BankAccountInfo=BankAccountInfo;
-			d.Amount=Amount;
-			return d;
+			return (Deposit)this.MemberwiseClone();
 		}
 
 	

@@ -969,7 +969,19 @@ Fam Urgent Fin Note: [famFinUrgNote]"
 			sheet.FontSize=11f;
 			sheet.Width=850;
 			sheet.Height=1100;
-			//TODO:
+			int rowH=25;
+			int y=100;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Deposit Slip",16f,sheet.FontName,true,300,y,300,20));
+			y+=35;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("[clinicDescription]",12f,sheet.FontName,true,300,y,300,20));
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("deposit.DateDeposit",12f,sheet.FontName,false,300,y,200,20));
+			y+=rowH;
+
+
+
+
+
 			return sheet;
 		}
 

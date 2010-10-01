@@ -14,7 +14,7 @@ namespace OpenDentBusiness{
 			}
 			string command="SELECT * FROM deposit "
 				+"ORDER BY DateDeposit";
-			return RefreshAndFill(Db.GetTable(command));
+			return Crud.DepositCrud.SelectMany(command).ToArray();
 		}
 
 		///<summary>Gets only Deposits which are not attached to transactions.</summary>
@@ -25,7 +25,7 @@ namespace OpenDentBusiness{
 			string command="SELECT * FROM deposit "
 				+"WHERE NOT EXISTS(SELECT * FROM transaction WHERE deposit.DepositNum=transaction.DepositNum) "
 				+"ORDER BY DateDeposit";
-			return RefreshAndFill(Db.GetTable(command));
+			return Crud.DepositCrud.SelectMany(command).ToArray();
 		}
 
 		///<summary>Gets a single deposit directly from the database.</summary>
@@ -33,22 +33,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Deposit>(MethodBase.GetCurrentMethod(),depositNum);
 			}
-			string command="SELECT * FROM deposit "
-				+"WHERE DepositNum="+POut.Long(depositNum);
-			return RefreshAndFill(Db.GetTable(command))[0];
-		}
-
-		private static Deposit[] RefreshAndFill(DataTable table) {
-			//No need to check RemotingRole; no call to db.
-			Deposit[] List=new Deposit[table.Rows.Count];
-			for(int i=0;i<table.Rows.Count;i++) {
-				List[i]=new Deposit();
-				List[i].DepositNum     = PIn.Long(table.Rows[i][0].ToString());
-				List[i].DateDeposit    = PIn.Date(table.Rows[i][1].ToString());
-				List[i].BankAccountInfo= PIn.String(table.Rows[i][2].ToString());
-				List[i].Amount         = PIn.Double(table.Rows[i][3].ToString());
-			}
-			return List;
+			return Crud.DepositCrud.SelectOne(depositNum);
 		}
 
 		///<summary></summary>
@@ -57,13 +42,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),dep);
 				return;
 			}
-			string command= "UPDATE deposit SET "
-				+"DateDeposit = "     +POut.Date  (dep.DateDeposit)
-				+",BankAccountInfo = '"+POut.String(dep.BankAccountInfo)+"'"
-				+",Amount = '"         +POut.Double(dep.Amount)+"'"
-				+" WHERE DepositNum ='"+POut.Long   (dep.DepositNum)+"'";
-			//MessageBox.Show(string command);
- 			Db.NonQ(command);
+			Crud.DepositCrud.Update(dep);
 		}
 
 		///<summary></summary>
@@ -72,28 +51,7 @@ namespace OpenDentBusiness{
 				dep.DepositNum=Meth.GetLong(MethodBase.GetCurrentMethod(),dep);
 				return dep.DepositNum;
 			}
-			if(PrefC.RandomKeys){
-				dep.DepositNum=ReplicationServers.GetKey("deposit","DepositNum");
-			}
-			string command= "INSERT INTO deposit (";
-			if(PrefC.RandomKeys){
-				command+="DepositNum,";
-			}
-			command+="DateDeposit,BankAccountInfo,Amount) VALUES(";
-			if(PrefC.RandomKeys){
-				command+="'"+POut.Long(dep.DepositNum)+"', ";
-			}
-			command+=
-				 POut.Date  (dep.DateDeposit)+", "
-				+"'"+POut.String(dep.BankAccountInfo)+"', "
-				+"'"+POut.Double(dep.Amount)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				dep.DepositNum=Db.NonQ(command,true);
-			}
-			return dep.DepositNum;
+			return Crud.DepositCrud.Insert(dep);
 		}
 
 		///<summary>Also handles detaching all payments and claimpayments.  Throws exception if deposit is attached as a source document to a transaction.  The program should have detached the deposit from the transaction ahead of time, so I would never expect the program to throw this exception unless there was a bug.</summary>
@@ -120,8 +78,7 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 			command="UPDATE claimpayment SET DepositNum=0 WHERE DepositNum="+POut.Long(dep.DepositNum);
 			Db.NonQ(command);
-			command= "DELETE FROM deposit WHERE DepositNum="+POut.Long(dep.DepositNum);
- 			Db.NonQ(command);
+			Crud.DepositCrud.Delete(dep.DepositNum);
 		}
 
 

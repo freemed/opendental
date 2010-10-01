@@ -150,6 +150,7 @@
     <Compile Include="Crud\ClockEventCrud.cs" />
     <Compile Include="Crud\CommlogCrud.cs" />
     <Compile Include="Crud\DeletedObjectCrud.cs" />
+    <Compile Include="Crud\DepositCrud.cs" />
     <Compile Include="Crud\DisplayFieldCrud.cs" />
     <Compile Include="Crud\DocumentCrud.cs" />
     <Compile Include="Crud\FeeSchedCrud.cs" />

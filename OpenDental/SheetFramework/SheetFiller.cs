@@ -81,8 +81,8 @@ namespace OpenDental{
 					FillFieldsForExamSheet(sheet,pat);
 					break;
 				case SheetTypeEnum.DepositSlip:
-					pat=Patients.GetPat((long)GetParamByName(sheet,"PatNum").ParamValue);
-					FillFieldsForDepositSlip(sheet,pat);
+					Deposit deposit=Deposits.GetOne((long)GetParamByName(sheet,"DepositNum").ParamValue);
+					FillFieldsForDepositSlip(sheet,deposit);
 					break;
 			}
 			FillFieldsInStaticText(sheet,pat);
@@ -1215,7 +1215,14 @@ namespace OpenDental{
 			}
 		}
 
-		private static void FillFieldsForDepositSlip(Sheet sheet,Patient pat) {
+		private static void FillFieldsForDepositSlip(Sheet sheet,Deposit deposit) {
+			foreach(SheetField field in sheet.SheetFields) {
+				switch(field.FieldName) {
+					case "deposit.DateDeposit":
+						field.FieldValue=deposit.DateDeposit.ToShortDateString();
+						break;
+				}
+			}
 		}
 
 	}

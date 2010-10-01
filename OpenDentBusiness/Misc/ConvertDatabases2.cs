@@ -2694,7 +2694,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 		private static void To7_4_0() {
 			if(FromVersion<new Version("7.4.0.0")) {
 				string command;
-				
+				command="ALTER TABLE deposit ADD SheetDefNum bigint NOT NULL";
+				Db.NonQ(command);
 
 
 

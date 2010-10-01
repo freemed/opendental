@@ -79,7 +79,7 @@ namespace OpenDentBusiness{
 				list.Add(new SheetParameter(true,"PatNum"));
 			}
 			if(sheetType==SheetTypeEnum.DepositSlip){
-				list.Add(new SheetParameter(true,"PatNum"));
+				list.Add(new SheetParameter(true,"DepositNum"));
 			}
 			return list;
 		}
