@@ -29,6 +29,9 @@ namespace OpenDental{
 		private bool changed;
 		private Label label2;
 		private OpenDental.UI.Button butCopy2;
+		private OpenDental.UI.Button butImport;
+		private OpenDental.UI.Button butExportCustom;
+		private OpenDental.UI.Button butExportInternal;
 		List<SheetDef> LabelList;
 
 		///<summary></summary>
@@ -67,6 +70,9 @@ namespace OpenDental{
 			this.label1 = new System.Windows.Forms.Label();
 			this.comboLabel = new System.Windows.Forms.ComboBox();
 			this.label2 = new System.Windows.Forms.Label();
+			this.butExportInternal = new OpenDental.UI.Button();
+			this.butExportCustom = new OpenDental.UI.Button();
+			this.butImport = new OpenDental.UI.Button();
 			this.butCopy2 = new OpenDental.UI.Button();
 			this.butCopy = new OpenDental.UI.Button();
 			this.grid1 = new OpenDental.UI.ODGrid();
@@ -105,6 +111,54 @@ namespace OpenDental{
 			this.label2.Text = "Most other sheet types are assigned simply by creating custom sheets of the same " +
     "type.  Referral slips are set in the referral edit window of each referral.";
 			// 
+			// butExportInternal
+			// 
+			this.butExportInternal.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butExportInternal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butExportInternal.Autosize = true;
+			this.butExportInternal.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butExportInternal.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butExportInternal.CornerRadius = 4F;
+			this.butExportInternal.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butExportInternal.Location = new System.Drawing.Point(35,635);
+			this.butExportInternal.Name = "butExportInternal";
+			this.butExportInternal.Size = new System.Drawing.Size(80,24);
+			this.butExportInternal.TabIndex = 26;
+			this.butExportInternal.Text = "Export";
+			this.butExportInternal.Click += new System.EventHandler(this.butExportInternal_Click);
+			// 
+			// butExportCustom
+			// 
+			this.butExportCustom.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butExportCustom.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butExportCustom.Autosize = true;
+			this.butExportCustom.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butExportCustom.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butExportCustom.CornerRadius = 4F;
+			this.butExportCustom.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butExportCustom.Location = new System.Drawing.Point(530,635);
+			this.butExportCustom.Name = "butExportCustom";
+			this.butExportCustom.Size = new System.Drawing.Size(80,24);
+			this.butExportCustom.TabIndex = 25;
+			this.butExportCustom.Text = "Export";
+			this.butExportCustom.Click += new System.EventHandler(this.butExportCustom_Click);
+			// 
+			// butImport
+			// 
+			this.butImport.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butImport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butImport.Autosize = true;
+			this.butImport.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butImport.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butImport.CornerRadius = 4F;
+			this.butImport.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butImport.Location = new System.Drawing.Point(445,635);
+			this.butImport.Name = "butImport";
+			this.butImport.Size = new System.Drawing.Size(80,24);
+			this.butImport.TabIndex = 24;
+			this.butImport.Text = "Import";
+			this.butImport.Click += new System.EventHandler(this.butImport_Click);
+			// 
 			// butCopy2
 			// 
 			this.butCopy2.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -115,7 +169,7 @@ namespace OpenDental{
 			this.butCopy2.CornerRadius = 4F;
 			this.butCopy2.Image = global::OpenDental.Properties.Resources.Add;
 			this.butCopy2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butCopy2.Location = new System.Drawing.Point(620,635);
+			this.butCopy2.Location = new System.Drawing.Point(700,635);
 			this.butCopy2.Name = "butCopy2";
 			this.butCopy2.Size = new System.Drawing.Size(89,24);
 			this.butCopy2.TabIndex = 19;
@@ -131,7 +185,7 @@ namespace OpenDental{
 			this.butCopy.CornerRadius = 4F;
 			this.butCopy.Image = global::OpenDental.Properties.Resources.Right;
 			this.butCopy.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butCopy.Location = new System.Drawing.Point(361,635);
+			this.butCopy.Location = new System.Drawing.Point(333,635);
 			this.butCopy.Name = "butCopy";
 			this.butCopy.Size = new System.Drawing.Size(75,24);
 			this.butCopy.TabIndex = 15;
@@ -148,6 +202,7 @@ namespace OpenDental{
 			this.grid1.TabIndex = 14;
 			this.grid1.Title = "Internal";
 			this.grid1.TranslationName = null;
+			this.grid1.Click += new System.EventHandler(this.grid1_Click);
 			this.grid1.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.grid1_CellDoubleClick);
 			// 
 			// grid2
@@ -160,6 +215,7 @@ namespace OpenDental{
 			this.grid2.TabIndex = 12;
 			this.grid2.Title = "Custom";
 			this.grid2.TranslationName = null;
+			this.grid2.Click += new System.EventHandler(this.grid2_Click);
 			this.grid2.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.grid2_CellDoubleClick);
 			// 
 			// butNew
@@ -172,7 +228,7 @@ namespace OpenDental{
 			this.butNew.CornerRadius = 4F;
 			this.butNew.Image = global::OpenDental.Properties.Resources.Add;
 			this.butNew.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butNew.Location = new System.Drawing.Point(534,635);
+			this.butNew.Location = new System.Drawing.Point(615,635);
 			this.butNew.Name = "butNew";
 			this.butNew.Size = new System.Drawing.Size(80,24);
 			this.butNew.TabIndex = 10;
@@ -198,6 +254,9 @@ namespace OpenDental{
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(881,669);
+			this.Controls.Add(this.butExportInternal);
+			this.Controls.Add(this.butExportCustom);
+			this.Controls.Add(this.butImport);
 			this.Controls.Add(this.butCopy2);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.comboLabel);
@@ -358,6 +417,19 @@ namespace OpenDental{
 			FormS.ShowDialog();
 		}
 
+		private void grid1_Click(object sender,EventArgs e) {
+			if(grid1.GetSelectedIndex()>-1) {
+				grid2.SetSelected(false);
+			}
+		}
+
+		private void butExportInternal_Click(object sender,EventArgs e) {
+			if(grid1.GetSelectedIndex()==-1) {
+				MsgBox.Show(this,"Please select an internal sheet from the list above first.");
+				return;
+			}
+		}
+		
 		private void grid2_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			SheetDef sheetdef=SheetDefC.Listt[e.Row];
 			SheetDefs.GetFieldsAndParameters(sheetdef);
@@ -370,6 +442,26 @@ namespace OpenDental{
 				}
 			}
 			changed=true;
+		}
+
+		private void grid2_Click(object sender,EventArgs e) {
+			if(grid2.GetSelectedIndex()>-1) {
+				grid1.SetSelected(false);
+			}
+		}
+
+		private void butImport_Click(object sender,EventArgs e) {
+			if(grid2.GetSelectedIndex()==-1) {
+				MsgBox.Show(this,"Please select a sheet from the list above first.");
+				return;
+			}
+		}
+
+		private void butExportCustom_Click(object sender,EventArgs e) {
+			if(grid2.GetSelectedIndex()==-1) {
+				MsgBox.Show(this,"Please select a sheet from the list above first.");
+				return;
+			}
 		}
 
 		private void comboLabel_DropDown(object sender,EventArgs e) {
@@ -409,6 +501,9 @@ namespace OpenDental{
 				DataValid.SetInvalid(InvalidType.Sheets);
 			}
 		}
+
+
+
 
 		
 
