@@ -540,7 +540,7 @@ namespace OpenDental {
 		private void menuItemSetup_Click(object sender,EventArgs e) {
 			//Dennis: For some reason an exception is thrown here when there is a remote exception not found error in the FormWebFormSetup. Will figure out the reason later.
 			try {
-				FormWebFormSetup formW=new FormWebFormSetup();
+				FormWebFormSetupV2 formW=new FormWebFormSetupV2();
 				formW.ShowDialog();
 			}
 			catch(Exception ex) {
@@ -549,14 +549,6 @@ namespace OpenDental {
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			/* delete later
-			long PatNum=(long)gridMain.Rows[e.Row].Tag;
-			if(PatNum!=0) {
-				FormPatientForms formP=new FormPatientForms();
-				formP.PatNum=PatNum;
-				formP.ShowDialog();
-			}
-			*/
 			long sheetNum=(long)gridMain.Rows[e.Row].Tag;
 			Sheet sheet=Sheets.GetSheet(sheetNum);
 			FormSheetFillEdit FormSF=new FormSheetFillEdit(sheet);
