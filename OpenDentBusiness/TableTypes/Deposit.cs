@@ -15,8 +15,6 @@ namespace OpenDentBusiness{
 		public string BankAccountInfo;
 		///<summary>Total amount of the deposit. User not allowed to directly edit.</summary>
 		public double Amount;
-		///<summary>FK to sheetdef.SheetDefNum. If 0, then the default internal deposit slip sheet is used.</summary>
-		public long SheetDefNum;
 		
 		///<summary></summary>
 		public Deposit Copy(){

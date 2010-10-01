@@ -50,7 +50,6 @@ namespace OpenDentBusiness.Crud{
 				deposit.DateDeposit    = PIn.Date  (table.Rows[i]["DateDeposit"].ToString());
 				deposit.BankAccountInfo= PIn.String(table.Rows[i]["BankAccountInfo"].ToString());
 				deposit.Amount         = PIn.Double(table.Rows[i]["Amount"].ToString());
-				deposit.SheetDefNum    = PIn.Long  (table.Rows[i]["SheetDefNum"].ToString());
 				retVal.Add(deposit);
 			}
 			return retVal;
@@ -70,15 +69,14 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="DepositNum,";
 			}
-			command+="DateDeposit,BankAccountInfo,Amount,SheetDefNum) VALUES(";
+			command+="DateDeposit,BankAccountInfo,Amount) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(deposit.DepositNum)+",";
 			}
 			command+=
 				     POut.Date  (deposit.DateDeposit)+","
 				+"'"+POut.String(deposit.BankAccountInfo)+"',"
-				+"'"+POut.Double(deposit.Amount)+"',"
-				+    POut.Long  (deposit.SheetDefNum)+")";
+				+"'"+POut.Double(deposit.Amount)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -93,8 +91,7 @@ namespace OpenDentBusiness.Crud{
 			string command="UPDATE deposit SET "
 				+"DateDeposit    =  "+POut.Date  (deposit.DateDeposit)+", "
 				+"BankAccountInfo= '"+POut.String(deposit.BankAccountInfo)+"', "
-				+"Amount         = '"+POut.Double(deposit.Amount)+"', "
-				+"SheetDefNum    =  "+POut.Long  (deposit.SheetDefNum)+" "
+				+"Amount         = '"+POut.Double(deposit.Amount)+"' "
 				+"WHERE DepositNum = "+POut.Long(deposit.DepositNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
@@ -113,10 +110,6 @@ namespace OpenDentBusiness.Crud{
 			if(deposit.Amount != oldDeposit.Amount) {
 				if(command!=""){ command+=",";}
 				command+="Amount = '"+POut.Double(deposit.Amount)+"'";
-			}
-			if(deposit.SheetDefNum != oldDeposit.SheetDefNum) {
-				if(command!=""){ command+=",";}
-				command+="SheetDefNum = "+POut.Long(deposit.SheetDefNum)+"";
 			}
 			if(command==""){
 				return;
