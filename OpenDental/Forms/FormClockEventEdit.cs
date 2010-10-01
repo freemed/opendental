@@ -351,7 +351,6 @@ namespace OpenDental{
 				butClear.Enabled=false;
 				butNow1.Enabled=false;
 				butNow2.Enabled=false;
-				return;
 			}
 			if(ClockEventCur.ClockStatus==TimeClockStatus.Break){
 				groupBox1.Text=Lan.g(this,"Clock Out Date and Time");
