@@ -2242,8 +2242,7 @@ namespace OpenDental{
 				gridIns.Visible=false;
 				butAddAdjust.Visible=false;
 				tbPay.Visible=false;
-				tbAdj.Visible=false;
-				//TODO: list should be .visible=false; when released to Orion.  
+				tbAdj.Visible=false;  
 				listProcStatus.Enabled=false;
 			}
 			IsStartingUp=true;
