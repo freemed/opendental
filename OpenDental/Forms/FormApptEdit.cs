@@ -1130,6 +1130,7 @@ namespace OpenDental{
 				if(Clinics.List[i].ClinicNum==AptCur.ClinicNum)
 					comboClinic.SelectedIndex=i+1;
 			}
+			AptCur.ProvNum=Providers.GetOrionProvNum(AptCur.ProvNum);
 			for(int i=0;i<ProviderC.List.Length;i++) {
 				comboProvNum.Items.Add(ProviderC.List[i].Abbr);
 				if(ProviderC.List[i].ProvNum==AptCur.ProvNum)
@@ -1835,6 +1836,10 @@ namespace OpenDental{
 		}
 
 		private void listQuickAdd_MouseDown(object sender,System.Windows.Forms.MouseEventArgs e) {
+			if(AptCur.ProvNum==0){
+				MsgBox.Show(this,"Please select a dentist first.");
+				return;
+			}
 			if(listQuickAdd.IndexFromPoint(e.X,e.Y)==-1) {
 				return;
 			}
@@ -1898,24 +1903,24 @@ namespace OpenDental{
 				ProcCur.BaseUnits=ProcedureCodes.GetProcCode(ProcCur.CodeNum).BaseUnits;
 				Procedures.Insert(ProcCur);//recall synch not required
 				Procedures.ComputeEstimates(ProcCur,pat.PatNum,ClaimProcList,false,PlanList,PatPlanList,benefitList,pat.Age);
-				if(Programs.UsingOrion){
-					FormProcEdit FormP=new FormProcEdit(ProcCur,pat.Copy(),fam);
-					FormP.IsNew=true;
-					FormP.ShowDialog();
-					if(FormP.DialogResult==DialogResult.Cancel){
-						//any created claimprocs are automatically deleted from within procEdit window.
-						try{
-							Procedures.Delete(ProcCur.ProcNum);//also deletes the claimprocs
-						}
-						catch(Exception ex){
-							MessageBox.Show(ex.Message);
-						}
-					}
-					else{
-						//Do not synch. Recalls based on ScheduleByDate reports in Orion mode.
-						//Recalls.Synch(PatCur.PatNum);
-					}
-				}
+				//if(Programs.UsingOrion){//Not needed. Orion ProvNum set here in ApptEdit now, not necessary to open ProcEdit.
+				//  FormProcEdit FormP=new FormProcEdit(ProcCur,pat.Copy(),fam);
+				//  FormP.IsNew=true;
+				//  FormP.ShowDialog();
+				//  if(FormP.DialogResult==DialogResult.Cancel){
+				//    //any created claimprocs are automatically deleted from within procEdit window.
+				//    try{
+				//      Procedures.Delete(ProcCur.ProcNum);//also deletes the claimprocs
+				//    }
+				//    catch(Exception ex){
+				//      MessageBox.Show(ex.Message);
+				//    }
+				//  }
+				//  else{
+				//    //Do not synch. Recalls based on ScheduleByDate reports in Orion mode.
+				//    //Recalls.Synch(PatCur.PatNum);
+				//  }
+				//}
 			}
 			listQuickAdd.SelectedIndex=-1;
 			string[] selectedProcs=new string[gridProc.SelectedIndices.Length];
@@ -2604,7 +2609,6 @@ namespace OpenDental{
 				Appointments.Delete(AptCur.AptNum);
 			}
 		}
-
 		
 
 		

@@ -11,7 +11,7 @@ namespace OpenDentBusiness{
 		public bool NoGraph;
 		///<summary></summary>
 		public bool NoColor;
-		///<summary></summary>
+		///<summary>0=all, 1=none, 2=backup</summary>
 		public AsteriskRingGroups RingGroups;
 		///<summary>Just makes management easier.  Not used by the program.</summary>
 		public string EmpName;

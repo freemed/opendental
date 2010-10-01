@@ -2304,19 +2304,8 @@ namespace OpenDental{
 					comboDx.SelectedIndex=i;
 			}
 			checkHideGraphics.Checked=ProcCur.HideGraphics;
-			if(Programs.UsingOrion && this.IsNew){//Orion does not use default providers. Change provider here.
-				Provider ProvUserCur=Providers.GetProv(Security.CurUser.ProvNum);
-				if(ProvUserCur!=null){//User is a provider.
-					if(!ProvUserCur.IsSecondary){
-						ProcCur.ProvNum=ProvUserCur.ProvNum;
-					}
-					else{//User is not a dentist.
-						ProcCur.ProvNum=0;
-					}
-				}
-				else{//User is not a provider.
-					ProcCur.ProvNum=0;
-				}
+			if(this.IsNew){
+				ProcCur.ProvNum=Providers.GetOrionProvNum(ProcCur.ProvNum);
 			}//ProvNum of 0 will be required to change before closing form.
 			comboProvNum.Items.Clear();
 			for(int i=0;i<ProviderC.List.Length;i++){
@@ -4248,7 +4237,7 @@ namespace OpenDental{
 						}
 					}
 				}
-				if(Programs.UsingOrion && ProcOld.ProcStatus==ProcStat.TP && ProcOld.DateTP.Date<MiscData.GetNowDateTime().Date){
+				if(ProcOld.ProcStatus==ProcStat.TP && ProcOld.DateTP.Date<MiscData.GetNowDateTime().Date){
 					if(FormProcEditExplain.GetChanges(ProcCur,ProcOld)!=""){//Also sets FormProcEditExplain.Changes.
 						FormProcEditExplain FormP=new FormProcEditExplain();
 						if(FormP.ShowDialog()!=DialogResult.OK){

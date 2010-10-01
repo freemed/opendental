@@ -225,6 +225,23 @@ namespace OpenDentBusiness{
 			return null;
 		}
 
+		public static long GetOrionProvNum(long provNum) {
+			if(Programs.UsingOrion)
+			{
+				Userod user=Security.CurUser;
+				if(user!=null){
+					Provider prov=Providers.GetProv(user.ProvNum);
+					if(prov!=null){
+						if(!prov.IsSecondary){
+							long num=user.ProvNum;
+							return user.ProvNum;
+						}
+					}
+				}
+				return 0;
+			}
+			return provNum;
+		}
 
 		///<summary></summary>
 		public static int GetIndexLong(long provNum) {
