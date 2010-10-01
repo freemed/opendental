@@ -225,6 +225,7 @@ namespace OpenDentBusiness{
 			return null;
 		}
 
+		/// <summary>Takes a provNum. Normally returns that provNum. If in Orion mode, returns the user's ProvNum, if that user is a primary provider. Otherwise, in Orion Mode, returns 0.</summary>
 		public static long GetOrionProvNum(long provNum) {
 			if(Programs.UsingOrion)
 			{

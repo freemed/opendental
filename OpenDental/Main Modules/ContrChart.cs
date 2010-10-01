@@ -276,6 +276,7 @@ namespace OpenDental{
 		private TabPage tabPatInfo;
 		private ListBox listProcStatusCodes;
 		private bool chartCustViewChanged;
+		private long orionProvNum;
 	
 		///<summary></summary>
 		public ContrChart(){
@@ -5159,6 +5160,9 @@ namespace OpenDental{
 			
 		///<summary>No user dialog is shown.  This only works for some kinds of procedures.  Set the codeNum first.</summary>
 		private void AddQuick(Procedure ProcCur){
+			if(orionProvNum==-1){//User has hit cancel at Procedure Info (only pops up in Orion mode).
+				return;
+			}
 			Plugins.HookAddCode(this,"ContrChart.AddQuick_begin",ProcCur);
 			//procnum
 			ProcCur.PatNum=PatCur.PatNum;
@@ -5266,7 +5270,10 @@ namespace OpenDental{
 				Recalls.Synch(PatCur.PatNum);
 			}
 			Procedures.ComputeEstimates(ProcCur,PatCur.PatNum,new List<ClaimProc>(),true,PlanList,PatPlanList,BenefitList,PatCur.Age);
-			if(Programs.UsingOrion){
+			if(orionProvNum==0){//Always hits this case first time through the loop.
+				orionProvNum=Providers.GetOrionProvNum(ProcCur.ProvNum);
+			}
+			if(orionProvNum==0){//Hits this case first time through only if user is not a primary provider in using Orion mode.
 				FormProcEdit FormP=new FormProcEdit(ProcCur,PatCur.Copy(),FamCur);
 				FormP.IsNew=true;
 				FormP.ShowDialog();
@@ -5278,15 +5285,22 @@ namespace OpenDental{
 					catch(Exception ex){
 						MessageBox.Show(ex.Message);
 					}
+					orionProvNum=-1;//This will cause this function (AddQuick) to be skipped for all other procedures in the 
+													//loop (possibly called from a loop in EnterTypedCode, ProcButtonClicked, or butAddProc_Click).
 				}
 				else{
 					//Do not synch. Recalls based on ScheduleByDate reports in Orion mode.
 					//Recalls.Synch(PatCur.PatNum);
 				}
+				orionProvNum=ProcCur.ProvNum;
+			}
+			else{
+				ProcCur.ProvNum=orionProvNum;
 			}
 		}
 
 		private void butAddProc_Click(object sender, System.EventArgs e){
+			orionProvNum=0;
 			if(newStatus==ProcStat.C){
 				if(!Security.IsAuthorized(Permissions.ProcComplCreate,PIn.Date(textDate.Text))){
 					return;
@@ -5506,6 +5520,7 @@ namespace OpenDental{
 
 		///<summary>If quickbutton, then pass the code in and set procButtonNum to 0.</summary>
 		private void ProcButtonClicked(long procButtonNum,string quickcode) {
+			orionProvNum=0;
 			if(newStatus==ProcStat.C){
 				if(!Security.IsAuthorized(Permissions.ProcComplCreate,PIn.Date(textDate.Text))){
 					return;
@@ -5626,6 +5641,7 @@ namespace OpenDental{
 			string toothNum;
 			string surf;
 			bool isAdditional;
+			//long orionProvNum=0;
 			for(int i=0;i<autoCodeList.Length;i++){
 				for(int n=0;n==0 || n<toothChart.SelectedTeeth.Count;n++) {
 					isValid=true;
@@ -5720,6 +5736,7 @@ namespace OpenDental{
 						AddQuick(ProcCur);
 					}
 				}//n selected teeth
+				//orionProvNum=ProcCur.ProvNum;
 			}//for i
 			ModuleSelected(PatCur.PatNum);
 			if(newStatus==ProcStat.C){
@@ -5753,6 +5770,7 @@ namespace OpenDental{
 		}
 
 		private void EnterTypedCode() {
+			orionProvNum=0;
 			if(newStatus==ProcStat.C) {
 				if(!Security.IsAuthorized(Permissions.ProcComplCreate,PIn.Date(textDate.Text))) {
 					return;
