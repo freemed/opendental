@@ -3,7 +3,10 @@ using System.Drawing;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Windows.Forms;
+using System.Xml;
+using System.Xml.Serialization;
 using OpenDentBusiness;
 using OpenDental.UI;
 
@@ -428,6 +431,19 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please select an internal sheet from the list above first.");
 				return;
 			}
+			SheetDef sheetdef=internalList[grid1.GetSelectedIndex()];
+			SaveFileDialog saveDlg=new SaveFileDialog();
+			string filename="SheetDefInternal.xml";
+			saveDlg.InitialDirectory=PrefC.GetString(PrefName.ExportPath);
+			saveDlg.FileName=filename;
+			if(saveDlg.ShowDialog()!=DialogResult.OK) {
+				return;
+			}
+			XmlSerializer serializer=new XmlSerializer(typeof(SheetDef));
+			TextWriter writer=new StreamWriter(saveDlg.FileName);
+			serializer.Serialize(writer,sheetdef);
+			writer.Close();
+			MessageBox.Show("Exported");
 		}
 		
 		private void grid2_CellDoubleClick(object sender,ODGridClickEventArgs e) {
@@ -451,9 +467,45 @@ namespace OpenDental{
 		}
 
 		private void butImport_Click(object sender,EventArgs e) {
-			if(grid2.GetSelectedIndex()==-1) {
-				MsgBox.Show(this,"Please select a sheet from the list above first.");
+			OpenFileDialog openDlg=new OpenFileDialog();
+			openDlg.InitialDirectory=PrefC.GetString(PrefName.ExportPath);
+			if(openDlg.ShowDialog()!=DialogResult.OK) {
 				return;
+			}
+			try {
+				ImportCustomSheetDef(openDlg.FileName);
+			}
+			catch (ApplicationException ex){
+				MessageBox.Show(ex.Message);
+				FillGrid2();
+				return;
+			}
+			MessageBox.Show("Sheet def inserted.");
+		}
+
+		private void ImportCustomSheetDef(string path) {
+			SheetDef sheetdef=new SheetDef();
+			XmlSerializer serializer=new XmlSerializer(typeof(SheetDef));
+			if(path!="") {
+				if(!File.Exists(path)) {
+					throw new ApplicationException(Lan.g("FormSheetDefs","File does not exist."));
+				}
+				try {
+					using(TextReader reader=new StreamReader(path)) {
+						sheetdef=(SheetDef)serializer.Deserialize(reader);
+					}
+				}
+				catch {
+					throw new ApplicationException(Lan.g("FormSheetDefs","Invalid file format"));
+				}
+			}
+			sheetdef.IsNew=true;
+			SheetDefs.InsertOrUpdate(sheetdef);
+			FillGrid2();
+			for(int i=0;i<SheetDefC.Listt.Count;i++) {
+				if(SheetDefC.Listt[i].SheetDefNum==sheetdef.SheetDefNum) {
+					grid2.SetSelected(i,true);
+				}
 			}
 		}
 
@@ -462,6 +514,19 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please select a sheet from the list above first.");
 				return;
 			}
+			SheetDef sheetdef=SheetDefs.GetSheetDef(SheetDefC.Listt[grid2.GetSelectedIndex()].SheetDefNum);
+			SaveFileDialog saveDlg=new SaveFileDialog();
+			string filename="SheetDefCustom.xml";
+			saveDlg.InitialDirectory=PrefC.GetString(PrefName.ExportPath);
+			saveDlg.FileName=filename;
+			if(saveDlg.ShowDialog()!=DialogResult.OK) {
+				return;
+			}
+			XmlSerializer serializer=new XmlSerializer(typeof(SheetDef));
+			TextWriter writer=new StreamWriter(saveDlg.FileName);
+			serializer.Serialize(writer,sheetdef);
+			writer.Close();
+			MessageBox.Show("Exported");
 		}
 
 		private void comboLabel_DropDown(object sender,EventArgs e) {
