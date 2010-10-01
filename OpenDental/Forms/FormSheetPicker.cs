@@ -19,6 +19,8 @@ namespace OpenDental {
 		private List<int> alreadyAdded;
 		///<summary>On closing, this will be true if the ToTerminal button was used and if the selected sheets should be sent to a terminal.</summary>
 		public bool TerminalSend;
+		///<summary>It will always be hidden anyway if sheetType is not PatientForm.  So this is only useful if it is a PatientForm and you also want to hide the button.</summary>
+		public bool HideKioskButton;
 
 		public FormSheetPicker() {
 			InitializeComponent();
@@ -49,6 +51,10 @@ namespace OpenDental {
 			}
 			else {
 				labelSheetType.Text=Lan.g("enumSheetTypeEnum",SheetType.ToString());
+				butTerminal.Visible=false;
+				labelTerminal.Visible=false;
+			}
+			if(HideKioskButton){
 				butTerminal.Visible=false;
 				labelTerminal.Visible=false;
 			}

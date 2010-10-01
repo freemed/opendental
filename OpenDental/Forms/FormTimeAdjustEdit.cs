@@ -22,10 +22,12 @@ namespace OpenDental{
 		private Label label2;
 		private TextBox textTimeEntry;
 		private Label label4;
-		private ValidDouble textHours;
 		private TextBox textNote;
 		private CheckBox checkOvertime;
 		private OpenDental.UI.Button butDelete;
+		private TextBox textHours;
+		private Label label3;
+		private Label label5;
 		private TimeAdjust TimeAdjustCur;
 
 		///<summary></summary>
@@ -67,10 +69,12 @@ namespace OpenDental{
 			this.textTimeEntry = new System.Windows.Forms.TextBox();
 			this.label4 = new System.Windows.Forms.Label();
 			this.textNote = new System.Windows.Forms.TextBox();
-			this.textHours = new OpenDental.ValidDouble();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.checkOvertime = new System.Windows.Forms.CheckBox();
+			this.textHours = new System.Windows.Forms.TextBox();
+			this.label3 = new System.Windows.Forms.Label();
+			this.label5 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// butDelete
@@ -101,7 +105,7 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(11,48);
+			this.label2.Location = new System.Drawing.Point(11,49);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(126,20);
 			this.label2.TabIndex = 13;
@@ -117,7 +121,7 @@ namespace OpenDental{
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(10,76);
+			this.label4.Location = new System.Drawing.Point(10,96);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(126,20);
 			this.label4.TabIndex = 18;
@@ -126,18 +130,11 @@ namespace OpenDental{
 			// 
 			// textNote
 			// 
-			this.textNote.Location = new System.Drawing.Point(137,77);
+			this.textNote.Location = new System.Drawing.Point(137,97);
 			this.textNote.Multiline = true;
 			this.textNote.Name = "textNote";
 			this.textNote.Size = new System.Drawing.Size(377,96);
 			this.textNote.TabIndex = 21;
-			// 
-			// textHours
-			// 
-			this.textHours.Location = new System.Drawing.Point(137,49);
-			this.textHours.Name = "textHours";
-			this.textHours.Size = new System.Drawing.Size(66,20);
-			this.textHours.TabIndex = 19;
 			// 
 			// butOK
 			// 
@@ -171,21 +168,49 @@ namespace OpenDental{
 			// 
 			// checkOvertime
 			// 
-			this.checkOvertime.AutoSize = true;
-			this.checkOvertime.Location = new System.Drawing.Point(212,51);
+			this.checkOvertime.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkOvertime.Location = new System.Drawing.Point(12,76);
 			this.checkOvertime.Name = "checkOvertime";
-			this.checkOvertime.Size = new System.Drawing.Size(123,17);
+			this.checkOvertime.Size = new System.Drawing.Size(139,17);
 			this.checkOvertime.TabIndex = 22;
 			this.checkOvertime.Text = "Overtime Adjustment";
+			this.checkOvertime.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkOvertime.UseVisualStyleBackColor = true;
+			// 
+			// textHours
+			// 
+			this.textHours.Location = new System.Drawing.Point(137,50);
+			this.textHours.Name = "textHours";
+			this.textHours.Size = new System.Drawing.Size(68,20);
+			this.textHours.TabIndex = 23;
+			// 
+			// label3
+			// 
+			this.label3.Location = new System.Drawing.Point(152,74);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(300,18);
+			this.label3.TabIndex = 24;
+			this.label3.Text = "(the hours will be shifted from regular time to overtime)";
+			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// label5
+			// 
+			this.label5.Location = new System.Drawing.Point(208,51);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(196,18);
+			this.label5.TabIndex = 25;
+			this.label5.Text = "(either decimal or colon format)";
+			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// FormTimeAdjustEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(540,313);
+			this.Controls.Add(this.label5);
+			this.Controls.Add(this.label3);
+			this.Controls.Add(this.textHours);
 			this.Controls.Add(this.checkOvertime);
 			this.Controls.Add(this.textNote);
-			this.Controls.Add(this.textHours);
 			this.Controls.Add(this.label4);
 			this.Controls.Add(this.textTimeEntry);
 			this.Controls.Add(this.butDelete);
@@ -230,23 +255,39 @@ namespace OpenDental{
 
 		private void butOK_Click(object sender, System.EventArgs e) {
 			try {
-				TimeAdjustCur.TimeEntry=DateTime.Parse(textTimeEntry.Text);
+				DateTime.Parse(textTimeEntry.Text);
 			}
 			catch {
-				MsgBox.Show(this,"Please enter a valid date and time.");
+				MsgBox.Show(this,"Please enter a valid Date/Time.");
 				return;
 			}
-			if( textHours.errorProvider1.GetError(textHours)!="")
-			{
-				MsgBox.Show(this,"Please fix data entry errors first.");
+			try{
+				if(textHours.Text.Contains(":")){
+					TimeSpan.Parse(textHours.Text);
+				}
+				else{
+					Double.Parse(textHours.Text);
+				}
+			}
+			catch{
+				MsgBox.Show(this,"Please enter valid Hours and Minutes.");
 				return;
 			}
-			if(checkOvertime.Checked){
-				TimeAdjustCur.RegHours=TimeSpan.FromHours(-PIn.Double(textHours.Text));
-				TimeAdjustCur.OTimeHours=TimeSpan.FromHours(PIn.Double(textHours.Text));
+			//end of validation
+			TimeAdjustCur.TimeEntry=DateTime.Parse(textTimeEntry.Text);
+			TimeSpan hoursEntered;
+			if(textHours.Text.Contains(":")){
+				hoursEntered=TimeSpan.Parse(textHours.Text);
 			}
 			else{
-				TimeAdjustCur.RegHours=TimeSpan.FromHours(PIn.Double(textHours.Text));
+				hoursEntered=TimeSpan.FromHours(Double.Parse(textHours.Text));
+			}
+			if(checkOvertime.Checked){
+				TimeAdjustCur.RegHours=-hoursEntered;
+				TimeAdjustCur.OTimeHours=hoursEntered;
+			}
+			else{
+				TimeAdjustCur.RegHours=hoursEntered;
 				TimeAdjustCur.OTimeHours=TimeSpan.FromHours(0);
 			}
 			TimeAdjustCur.Note=textNote.Text;
