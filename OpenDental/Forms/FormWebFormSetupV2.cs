@@ -25,23 +25,30 @@ namespace OpenDental {
 		List<SheetDef> SheetDefListLocal;
 		List<long> SheetsDefsForDeletion;
 		long DentalOfficeID=0;
+		bool SheetUpload=false;
 		
 
 		public FormWebFormSetupV2() {
 			InitializeComponent();
 			Lan.F(this);
-			InitializeVariables();
 		}
 
 		private void FormWebFormSetupV2_Load(object sender,EventArgs e) {
-			//this.backgroundWorker1.RunWorkerAsync();
-			#if DEBUG
-				IgnoreCertificateErrors();// used with faulty certificates only while debugging.
-			#endif
-				FillGrid();
 				
 		}
 
+		private void FormWebFormSetupV2_Shown(object sender,EventArgs e) {
+			textboxWebHostAddress.Text=PrefC.GetString(PrefName.WebHostSynchServerURL);
+		#if DEBUG
+			IgnoreCertificateErrors();// used with faulty certificates only while debugging.
+		#endif
+			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Please wait for a few seconds while values for this form are fetched from the server")) {
+				DialogResult=DialogResult.Cancel;
+				return;
+			}
+			Cursor=Cursors.WaitCursor;
+			this.backgroundWorker1.RunWorkerAsync();
+		}
 
 		private void InitializeVariables() {
 			wh.Url=PrefC.GetString(PrefName.WebHostSynchServerURL);
@@ -50,6 +57,7 @@ namespace OpenDental {
 			SheetDefListLocal= new List<SheetDef>();
 			SheetsDefsForDeletion=new List<long>();
 			DentalOfficeID=wh.GetDentalOfficeID(RegistrationKey);
+			GetWebFormAddress();
 			}
 
 
@@ -63,8 +71,7 @@ namespace OpenDental {
 	*/
 				wh.UpLoadSheetDef(RegistrationKey,SheetDefListLocal.ToArray());
 				wh.DeleteSheetDefs(RegistrationKey,SheetsDefsForDeletion.ToArray());
-				InitializeVariables();
-				FillGrid();
+
 
 			}
 			catch(Exception ex) {
@@ -117,11 +124,18 @@ namespace OpenDental {
 		}
 
 		private void backgroundWorker1_RunWorkerCompleted(object sender,RunWorkerCompletedEventArgs e) {
-			//textBoxWebFormAddress.Text=WebFormAddress; //the textbox is set here because it will thow an error if put under _Dowork
+			FillGrid();
+			Cursor=Cursors.Default;
 		}
 
 		private void backgroundWorker1_DoWork(object sender,DoWorkEventArgs e) {
-			GetWebFormAddress();
+
+			if(SheetUpload==true) {
+				SheetDefUpload();
+				SheetUpload=false;
+			}
+			InitializeVariables();
+			
 		}
 
 		/// <summary>Only called from worker thread.</summary>
@@ -163,26 +177,20 @@ namespace OpenDental {
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
-			//long sheetDefNum=(long)gridMain.Rows[gridMain.SelectedIndices[0]].Tag;
-
 			if(gridMain.Rows[gridMain.SelectedIndices[0]].Tag.GetType()==typeof(SheetDef)) {
 				SheetDef sheetDef=(SheetDef)gridMain.Rows[gridMain.SelectedIndices[0]].Tag;
 				SheetDefListLocal.Remove(SheetDefListLocal.Find(sd => sd.SheetDefNum==sheetDef.SheetDefNum));
 			}
 			else {
-
 				OpenDental.WebHostSynch.webforms_sheetdef WebSheetDef= (OpenDental.WebHostSynch.webforms_sheetdef)gridMain.Rows[gridMain.SelectedIndices[0]].Tag;
 				SheetsDefsForDeletion.Add(WebSheetDef.WebSheetDefNum);
 			}
-
-			
 			FillGrid();
 		}
 
 		private void butUploadSheetDefs_Click(object sender,EventArgs e) {
-			SheetDefUpload();
-			
-
+			SheetUpload=true;
+			this.backgroundWorker1.RunWorkerAsync();
 		}
 
 		private void FillGrid() {
@@ -192,21 +200,18 @@ namespace OpenDental {
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Description"),100);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Status"),150);
+			col=new ODGridColumn(Lan.g(this,"Location"),150);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Browser Address For Patients"),510);
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 
-
-
 			for(int i=0;i<sheetDefList.Length;i++) {
 				ODGridRow row=new ODGridRow();
 
 				row.Tag=sheetDefList[i];
-				row.Cells.Add(sheetDefList[i].SheetDefNum+"");
+				row.Cells.Add(sheetDefList[i].WebSheetDefNum+"");
 				row.Cells.Add(sheetDefList[i].Description);
-
 				if(SheetsDefsForDeletion.Exists(wsn => wsn==sheetDefList[i].WebSheetDefNum)) {
 					row.Cells.Add(Lan.g(this,"On Server- marked for deletion"));
 				}
@@ -220,14 +225,8 @@ namespace OpenDental {
 				
 				gridMain.Rows.Add(row);
 			}
-
-
-			
 				SheetDef sheetDef;
-
-
 				for(int i=0;i<SheetDefListLocal.Count;i++) {
-
 					sheetDef=SheetDefListLocal[i];
 					ODGridRow row=new ODGridRow();
 					row.Tag=sheetDef;
@@ -237,17 +236,14 @@ namespace OpenDental {
 					row.Cells.Add(Lan.g(this,"N/A"));
 					gridMain.Rows.Add(row);
 				}
-
-
-
 			gridMain.EndUpdate();
-
 		}
 	
 	
 		private void butOK_Click(object sender,EventArgs e) {
 			Cursor=Cursors.WaitCursor;
 			try {
+				Prefs.UpdateString(PrefName.WebHostSynchServerURL,textboxWebHostAddress.Text.Trim());
 				// update preferences on server
 				if(wh.GetDentalOfficeID(RegistrationKey)==0) {
 					Cursor=Cursors.Default;
@@ -270,6 +266,8 @@ namespace OpenDental {
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+
 
 
 
