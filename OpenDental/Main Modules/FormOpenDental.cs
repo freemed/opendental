@@ -1366,7 +1366,8 @@ namespace OpenDental{
 			else{
 				invalidTypes.Add(InvalidType.Signals);//so when mouse moves over light buttons, it won't crash
 			}
-			Plugins.LoadAllPlugins(this);//moved up from right after toothchart optimize.  New position might cause problems.
+			Plugins.LoadAllPlugins(this);//moved up from right after optimizing tooth chart graphics.  New position might cause problems.
+			//It was moved because RefreshLocalData()=>RefreshLocalDataPostCleanup()=>ContrChart2.InitializeLocalData()=>LayoutToolBar() has a hook.
 			RefreshLocalData(invalidTypes.ToArray());
 			FillSignalButtons(null);
 			ContrManage2.InitializeOnStartup();//so that when a signal is received, it can handle it.
@@ -1571,7 +1572,7 @@ namespace OpenDental{
 			//menuItemMergeDatabases.Visible=PrefC.GetBool(PrefName.RandomPrimaryKeys");
 			return true;
 		}
-
+		
 		///<summary>Refreshes certain rarely used data from database.  Must supply the types of data to refresh as flags.  Also performs a few other tasks that must be done when local data is changed.</summary>
 		private void RefreshLocalData(params InvalidType[] itypes){
 			List<int> itypeList=new List<int>();
@@ -1592,7 +1593,7 @@ namespace OpenDental{
 			Cache.RefreshCache(itypesStr);
 			RefreshLocalDataPostCleanup(itypeList,isAll,itypes);
 		}
-
+		
 		///<summary>Performs a few tasks that must be done when local data is changed.</summary>
 		private void RefreshLocalDataPostCleanup(List<int> itypeList,bool isAll,params InvalidType[] itypes) {
 			if(itypeList.Contains((int)InvalidType.Prefs) || isAll) {

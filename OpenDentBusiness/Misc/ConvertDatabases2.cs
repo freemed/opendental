@@ -2694,6 +2694,32 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 		private static void To7_4_0() {
 			if(FromVersion<new Version("7.4.0.0")) {
 				string command;
+				command="DROP TABLE IF EXISTS temptimeadjust";
+				Db.NonQ(command);
+				command=@"CREATE TABLE temptimeadjust (
+					TimeAdjustNum bigint NOT NULL,
+					RegHours double NOT NULL,
+					OTimeHours double NOT NULL,
+					PRIMARY KEY (TimeAdjustNum)
+					) DEFAULT CHARSET=utf8";
+				Db.NonQ(command);
+				command="INSERT INTO temptimeadjust "
+					+"SELECT TimeAdjustNum,RegHours,OTimeHours "
+					+"FROM timeadjust";
+				Db.NonQ(command);
+				command="UPDATE timeadjust SET RegHours=0, OTimeHours=0";
+				Db.NonQ(command);
+				command="ALTER TABLE timeadjust CHANGE RegHours RegHours time NOT NULL default '00:00:00'";
+				Db.NonQ(command);
+				command="ALTER TABLE timeadjust CHANGE OTimeHours OTimeHours time NOT NULL default '00:00:00'";
+				Db.NonQ(command);
+				command=@"UPDATE timeadjust,temptimeadjust 
+					SET timeadjust.RegHours=temptimeadjust.RegHours,
+					timeadjust.OTimeHours=temptimeadjust.OTimeHours
+					WHERE timeadjust.TimeAdjustNum=temptimeadjust.TimeAdjustNum";
+				Db.NonQ(command);
+				command="DROP TABLE IF EXISTS temptimeadjust";
+				Db.NonQ(command);
 
 
 

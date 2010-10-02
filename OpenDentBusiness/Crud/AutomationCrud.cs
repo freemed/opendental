@@ -48,7 +48,7 @@ namespace OpenDentBusiness.Crud{
 				automation=new Automation();
 				automation.AutomationNum = PIn.Long  (table.Rows[i]["AutomationNum"].ToString());
 				automation.Description   = PIn.String(table.Rows[i]["Description"].ToString());
-				automation.Autotrigger   = (AutomationTrigger)PIn.Int(table.Rows[i]["AutoTrigger"].ToString());
+				automation.Autotrigger   = (AutomationTrigger)PIn.Int(table.Rows[i]["Autotrigger"].ToString());
 				automation.ProcCodes     = PIn.String(table.Rows[i]["ProcCodes"].ToString());
 				automation.AutoAction    = (AutomationAction)PIn.Int(table.Rows[i]["AutoAction"].ToString());
 				automation.SheetDefNum   = PIn.Long  (table.Rows[i]["SheetDefNum"].ToString());
@@ -73,7 +73,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="AutomationNum,";
 			}
-			command+="Description,AutoTrigger,ProcCodes,AutoAction,SheetDefNum,CommType,MessageContent) VALUES(";
+			command+="Description,Autotrigger,ProcCodes,AutoAction,SheetDefNum,CommType,MessageContent) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(automation.AutomationNum)+",";
 			}
@@ -98,7 +98,7 @@ namespace OpenDentBusiness.Crud{
 		internal static void Update(Automation automation){
 			string command="UPDATE automation SET "
 				+"Description   = '"+POut.String(automation.Description)+"', "
-				+"AutoTrigger   =  "+POut.Int   ((int)automation.Autotrigger)+", "
+				+"Autotrigger   =  "+POut.Int   ((int)automation.Autotrigger)+", "
 				+"ProcCodes     = '"+POut.String(automation.ProcCodes)+"', "
 				+"AutoAction    =  "+POut.Int   ((int)automation.AutoAction)+", "
 				+"SheetDefNum   =  "+POut.Long  (automation.SheetDefNum)+", "
@@ -117,7 +117,7 @@ namespace OpenDentBusiness.Crud{
 			}
 			if(automation.Autotrigger != oldAutomation.Autotrigger) {
 				if(command!=""){ command+=",";}
-				command+="AutoTrigger = "+POut.Int   ((int)automation.Autotrigger)+"";
+				command+="Autotrigger = "+POut.Int   ((int)automation.Autotrigger)+"";
 			}
 			if(automation.ProcCodes != oldAutomation.ProcCodes) {
 				if(command!=""){ command+=",";}

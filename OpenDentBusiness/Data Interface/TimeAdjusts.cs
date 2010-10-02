@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace OpenDentBusiness{
 	///<summary></summary>
-	public class TimeAdjusts {
+	public static class TimeAdjusts {
 
 		///<summary></summary>
 		public static TimeAdjust[] Refresh(long empNum,DateTime fromDate,DateTime toDate) {
@@ -91,7 +91,17 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
-	
+		///<summary>-H:mm</summary>
+		public static string ToStringHmm(this TimeSpan tspan){
+			//No need to check RemotingRole; no call to db.
+			string retVal="";
+			if(tspan < TimeSpan.Zero){
+				retVal+="-";
+			}
+			DateTime dt=DateTime.Today+tspan.Duration();
+			retVal+=dt.ToString("H:mm");
+			return retVal;
+		}
 	
 
 

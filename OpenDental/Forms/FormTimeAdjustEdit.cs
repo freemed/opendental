@@ -235,11 +235,11 @@ namespace OpenDental{
 		private void FormTimeAdjustEdit_Load(object sender, System.EventArgs e) {
 			textTimeEntry.Text=TimeAdjustCur.TimeEntry.ToString();
 			if(TimeAdjustCur.OTimeHours.TotalHours==0){
-				textHours.Text=TimeAdjustCur.RegHours.TotalHours.ToString("n");
+				textHours.Text=TimeAdjustCur.RegHours.ToStringHmm();//.TotalHours.ToString("n");
 			}
 			else{
 				checkOvertime.Checked=true;
-				textHours.Text=TimeAdjustCur.OTimeHours.TotalHours.ToString("n");
+				textHours.Text=TimeAdjustCur.OTimeHours.ToStringHmm();//.TotalHours.ToString("n");
 			}
 			textNote.Text=TimeAdjustCur.Note;
 		}
