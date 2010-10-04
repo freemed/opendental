@@ -392,7 +392,14 @@ namespace OpenDentBusiness{
 
 		public static List<SheetFieldDef> GetDepositSlip(OutInCheck outInCheck){
 			List<SheetFieldDef> list=new List<SheetFieldDef>();
-			//TODO:
+			if(outInCheck==OutInCheck.Out) {
+				list.Add(NewInput("deposit.DateDeposit"));
+				list.Add(NewInput("depositList"));
+			}
+			else if(outInCheck==OutInCheck.In){				
+			}
+			else if(outInCheck==OutInCheck.Check){
+			}
 			return list;
 		}
 

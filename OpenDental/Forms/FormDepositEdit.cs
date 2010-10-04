@@ -655,64 +655,21 @@ namespace OpenDental{
 				}
 				//if security.NotAuthorized, then it simply skips the save process before printing
 			}
-			//refresh the lists because some items may not be highlighted
-			PatPayList=Payments.GetForDeposit(DepositCur.DepositNum);
-			ClaimPayList=ClaimPayments.GetForDeposit(DepositCur.DepositNum);
-			ReportSimpleGrid report=new ReportSimpleGrid();
-			report.TableQ=new DataTable();
-			for(int i=0;i<5;i++){ //add 5 columns
-				report.TableQ.Columns.Add(new System.Data.DataColumn());//blank columns
+			SheetDef sheetDef=null;
+			List <SheetDef> depositSheetDefs=SheetDefs.GetCustomForType(SheetTypeEnum.DepositSlip);
+			if(depositSheetDefs.Count>0){
+				sheetDef=depositSheetDefs[0];
+				SheetDefs.GetFieldsAndParameters(sheetDef);
 			}
-			report.InitializeColumns();
-			DataRow row;
-			List<long> patNums=new List<long>();
-			for(int i=0;i<PatPayList.Count;i++){
-				patNums.Add(PatPayList[i].PatNum);
+			else{
+				sheetDef=SheetsInternal.DepositSlip();
 			}
-			Patient[] pats=Patients.GetMultPats(patNums);
-			for(int i=0;i<PatPayList.Count;i++){
-				row=report.TableQ.NewRow();
-				row[0]=PatPayList[i].PayDate.ToShortDateString();
-				row[1]=Patients.GetOnePat(pats,PatPayList[i].PatNum).GetNameLF();
-				row[2]=PatPayList[i].CheckNum;
-				row[3]=PatPayList[i].BankBranch;
-				row[4]=PatPayList[i].PayAmt.ToString("F");
-				report.TableQ.Rows.Add(row);
-				report.ColTotal[4]+=PatPayList[i].PayAmt;
-			}
-			for(int i=0;i<ClaimPayList.Length;i++){
-				row=report.TableQ.NewRow();
-				row[0]=ClaimPayList[i].CheckDate.ToShortDateString();
-				row[1]=ClaimPayList[i].CarrierName;
-				row[2]=ClaimPayList[i].CheckNum;
-				row[3]=ClaimPayList[i].BankBranch;
-				row[4]=ClaimPayList[i].CheckAmt.ToString("F");
-				report.TableQ.Rows.Add(row);
-				report.ColTotal[4]+=ClaimPayList[i].CheckAmt;
-			}
-			FormQuery FormQuery2=new FormQuery(report);
-			FormQuery2.IsReport=true;
-			FormQuery2.ResetGrid();//necessary won't work without
-			report.Title="Deposit Slip";
-			report.SubTitle.Add(PrefC.GetString(PrefName.PracticeTitle));
-			report.SubTitle.Add(DepositCur.DateDeposit.ToShortDateString());
-			report.Summary.Add(DepositCur.BankAccountInfo);
-			if(DepositCur.BankAccountInfo.StartsWith("A")){
-				report.SummaryFont="GnuMICR";
-			}
-			report.ColPos[0]=20;
-			report.ColPos[1]=110;
-			report.ColPos[2]=260;
-			report.ColPos[3]=350;
-			report.ColPos[4]=440;
-			report.ColPos[5]=530;
-			report.ColCaption[0]="Date";
-			report.ColCaption[1]="Name";
-			report.ColCaption[2]="Check Number";
-			report.ColCaption[3]="Bank-Branch";
-			report.ColCaption[4]="Amount";
-			report.ColAlign[4]=HorizontalAlignment.Right;
-			FormQuery2.ShowDialog();
+			Sheet sheet=SheetUtil.CreateSheet(sheetDef,DepositCur.DepositNum);
+			SheetParameter.SetParameter(sheet,"DepositNum",DepositCur.DepositNum);
+			SheetFiller.FillFields(sheet);
+			SheetUtil.CalculateHeights(sheet,this.CreateGraphics());
+			FormSheetFillEdit FormSF=new FormSheetFillEdit(sheet);
+			FormSF.ShowDialog();
 			DialogResult=DialogResult.OK;//this is imporant, since we don't want to insert the deposit slip twice.
 		}
 

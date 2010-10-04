@@ -16,6 +16,7 @@ namespace OpenDental{
 			}
 			Patient pat=null;
 			Referral refer=null;
+			Deposit deposit=null;
 			switch(sheet.SheetType) {
 				case SheetTypeEnum.LabelPatient:
 					pat=Patients.GetPat((long)GetParamByName(sheet,"PatNum").ParamValue);
@@ -81,7 +82,7 @@ namespace OpenDental{
 					FillFieldsForExamSheet(sheet,pat);
 					break;
 				case SheetTypeEnum.DepositSlip:
-					Deposit deposit=Deposits.GetOne((long)GetParamByName(sheet,"DepositNum").ParamValue);
+					deposit=Deposits.GetOne((long)GetParamByName(sheet,"DepositNum").ParamValue);
 					FillFieldsForDepositSlip(sheet,deposit);
 					break;
 			}
@@ -1220,6 +1221,51 @@ namespace OpenDental{
 				switch(field.FieldName) {
 					case "deposit.DateDeposit":
 						field.FieldValue=deposit.DateDeposit.ToShortDateString();
+						break;
+					case "depositList":
+						StringBuilder depositListB=new StringBuilder("Date      Name                           Check Number    Bank-Branch     Amount"+Environment.NewLine);
+						List <Payment> PatPayList=Payments.GetForDeposit(deposit.DepositNum);
+						for(int i=0;i<PatPayList.Count;i++){
+							depositListB.Append(PatPayList[i].PayDate.ToShortDateString()+"  ");
+							Patient pat=Patients.GetPat(PatPayList[i].PatNum);
+							string name=pat.GetNameLF();
+							if(name.Length>30){
+								name=name.Substring(0,30);
+							}
+							depositListB.Append(name.PadRight(30,' ')+" ");
+							string checkNum=PatPayList[i].CheckNum;
+							if(checkNum.Length>15){
+								checkNum=checkNum.Substring(0,15);
+							}
+							depositListB.Append(checkNum.PadRight(15,' ')+" ");
+							string bankBranch=PatPayList[i].BankBranch;
+							if(bankBranch.Length>15){
+								bankBranch=bankBranch.Substring(0,15);
+							}
+							depositListB.Append(bankBranch.PadRight(15,' ')+" ");
+							depositListB.Append(PatPayList[i].PayAmt.ToString("F")+Environment.NewLine);
+						}
+						ClaimPayment[] ClaimPayList=ClaimPayments.GetForDeposit(deposit.DepositNum);
+						for(int i=0;i<ClaimPayList.Length;i++){
+							depositListB.Append(ClaimPayList[i].CheckDate.ToShortDateString()+"  ");
+							string name=ClaimPayList[i].CarrierName;
+							if(name.Length>30){
+								name=name.Substring(0,30);
+							}
+							depositListB.Append(name.PadRight(30,' ')+" ");
+							string checkNum=ClaimPayList[i].CheckNum;
+							if(checkNum.Length>15){
+								checkNum=checkNum.Substring(0,15);
+							}
+							depositListB.Append(checkNum.PadRight(15,' ')+" ");
+							string bankBranch=ClaimPayList[i].BankBranch;
+							if(bankBranch.Length>15){
+								bankBranch=bankBranch.Substring(0,15);
+							}
+							depositListB.Append(bankBranch.PadRight(15,' ')+" ");
+							depositListB.Append(ClaimPayList[i].CheckAmt.ToString("F")+Environment.NewLine);
+						}
+						field.FieldValue=depositListB.ToString();
 						break;
 				}
 			}

@@ -971,12 +971,18 @@ Fam Urgent Fin Note: [famFinUrgNote]"
 			sheet.Height=1100;
 			int rowH=25;
 			int y=100;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Deposit Slip",16f,sheet.FontName,true,300,y,300,20));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Deposit Slip",16f,sheet.FontName,true,300,y,300,30));
 			y+=35;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("[clinicDescription]",12f,sheet.FontName,true,300,y,300,20));
-			y+=rowH;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("deposit.DateDeposit",12f,sheet.FontName,false,300,y,200,20));
-			y+=rowH;
+			//sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("[clinicDescription]",12f,sheet.FontName,true,300,y,300,20));
+			//y+=rowH;
+			//sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("deposit.DateDeposit",12f,sheet.FontName,false,300,y,200,20));
+			//y+=rowH;
+			//sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("[dateToday]",12f,sheet.FontName,false,0,y,100,20));
+			//y+=rowH;
+			//sheet.SheetFieldDefs.Add(SheetFieldDef.NewLine(0,y,800,0));
+			//y+=6;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositList",12f,sheet.FontName,false,100,y,600,500));
+
 
 
 
