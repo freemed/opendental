@@ -18,7 +18,8 @@ namespace UnitTests {
 				_timespan time NOT NULL default '00:00:00',
 				_date date NOT NULL default '0001-01-01',
 				_datetime datetime NOT NULL default '0001-01-01 00:00:00',
-				_double double NOT NULL
+				_double double NOT NULL,
+				_bool tinyint(1) NOT NULL
 				) DEFAULT CHARSET=utf8";
 			DataCore.NonQ(command);
 			command="DROP TABLE IF EXISTS tempgroupconcat";
@@ -131,6 +132,35 @@ namespace UnitTests {
 			command="DELETE FROM tempcore";
 			DataCore.NonQ(command);
 			retVal+="Group_concat: Passed.\r\n";
+			//bool,pos------------------------------------------------------------------------------------
+			bool bool1;
+			bool bool2;
+			bool1=true;
+			command="INSERT INTO tempcore (_bool) VALUES ("+POut.Bool(bool1)+")";
+			DataCore.NonQ(command);
+			command="SELECT _bool FROM tempcore";
+			table=DataCore.GetTable(command);
+			bool2=PIn.Bool(table.Rows[0]["_bool"].ToString());
+			if(bool1!=bool2) {
+				throw new Exception();
+			}
+			command="DELETE FROM tempcore";
+			DataCore.NonQ(command);
+			retVal+="Bool, true: Passed.\r\n";
+			//bool,pos------------------------------------------------------------------------------------
+			bool1=false;
+			command="INSERT INTO tempcore (_bool) VALUES ("+POut.Bool(bool1)+")";
+			DataCore.NonQ(command);
+			command="SELECT _bool FROM tempcore";
+			table=DataCore.GetTable(command);
+			bool2=PIn.Bool(table.Rows[0]["_bool"].ToString());
+			if(bool1!=bool2) {
+				throw new Exception();
+			}
+			command="DELETE FROM tempcore";
+			DataCore.NonQ(command);
+			retVal+="Bool, false: Passed.\r\n";
+
 
 
 

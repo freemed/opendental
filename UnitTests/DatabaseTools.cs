@@ -22,7 +22,7 @@ namespace UnitTests {
 			try {
 				DataConnection.DBtype=DatabaseType.MySql;
 				dcon=new OpenDentBusiness.DataConnection(DataConnection.DBtype);
-				dcon.SetDb("Server=localhost;Database="+dbName+";User ID=root;Password=;CharSet=utf8","",DataConnection.DBtype,true);
+				dcon.SetDb("Server=localhost;Database="+dbName+";User ID=root;Password=;CharSet=utf8;Treat Tiny As Boolean=false","",DataConnection.DBtype,true);
 				RemotingClient.RemotingRole=RemotingRole.ClientDirect;
 				return true;
 			}

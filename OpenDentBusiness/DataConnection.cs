@@ -105,7 +105,8 @@ namespace OpenDentBusiness{
 				//+";Connect Timeout=20"
 				+";User ID="+pUserID
 				+";Password="+pPassword
-				+";CharSet=utf8";
+				+";CharSet=utf8"
+				+";Treat Tiny As Boolean=false";
 				//+";Pooling=false";
 			//}
 			return connectStr;
