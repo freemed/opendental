@@ -6,14 +6,14 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.Threading;
+using System.IO;
 using OpenDental.UI;
 using OpenDentBusiness;
+using CodeBase;
 
 namespace OpenDental {
-
 	/// <summary>
-	/// This Form is for the 'next' version of the Webforms.
-	/// This Form is primarily used by the dental office to set various UI parameters of a webform: eg. border colors and heading text.
+	/// This Form is primarily used by the dental office to upload sheetDefs
 	/// </summary>
 	public partial class FormWebFormSetupV2:Form {
 
@@ -25,7 +25,7 @@ namespace OpenDental {
 		List<SheetDef> SheetDefListLocal;
 		List<long> SheetsDefsForDeletion;
 		long DentalOfficeID=0;
-		bool SheetUpload=false;
+		bool SheetDefUploaded=false;
 		
 
 		public FormWebFormSetupV2() {
@@ -47,32 +47,59 @@ namespace OpenDental {
 				return;
 			}
 			Cursor=Cursors.WaitCursor;
-			this.backgroundWorker1.RunWorkerAsync();
+			Cursor=Cursors.Default;
+
+			if(TestWebServiceExists()==true) {
+				this.backgroundWorker1.RunWorkerAsync();
+			}
 		}
 
-		private void InitializeVariables() {
+		/// <summary>
+		/// An empty method to test if the webservice is up and running. This was made with the intention of testing the correctness of the webservice URL. If an incorrect webservice URL is used in a background thread the exception cannot be handled easily to a point where even a correct URL cannot be keyed in by the user. Because an exception in a background thread closes the Form which spawned it.
+		/// </summary>
+		/// <returns></returns>
+		private bool TestWebServiceExists() {
+			try {
 			wh.Url=PrefC.GetString(PrefName.WebHostSynchServerURL);
-			sheetDefList=wh.DownloadSheetDefs(RegistrationKey);
-			SheetDefAddress= wh.GetSheetDefAddress(RegistrationKey);
-			SheetDefListLocal= new List<SheetDef>();
-			SheetsDefsForDeletion=new List<long>();
-			DentalOfficeID=wh.GetDentalOfficeID(RegistrationKey);
-			GetWebFormAddress();
+			//if(wh.ServiceExists()){
+			return true;
+			//}
+			}
+			catch(Exception ex) {
+				MsgBox.Show(this,"Please correct your web service URL");
+				return true;
+			}
+		}
+
+
+		private void InitializeVariables() {
+			try {
+				wh.Url=PrefC.GetString(PrefName.WebHostSynchServerURL);
+				sheetDefList=wh.DownloadSheetDefs(RegistrationKey);
+				SheetDefAddress= wh.GetSheetDefAddress(RegistrationKey);
+				SheetDefListLocal= new List<SheetDef>();
+				SheetsDefsForDeletion=new List<long>();
+				DentalOfficeID=wh.GetDentalOfficeID(RegistrationKey);
+				GetWebFormAddress();
+			}
+			catch(Exception ex) {
+				//throw ex;
+				//MessageBox.Show(ex.Message);
+			}
+
 			}
 
 
-		/// <summary>
-		/// Ignore this method - this is for the 'next' version of the Webforms.
-		/// Here sheetDef can be uploaded to the web form Open Dental
-		/// </summary>
+
 		private void SheetDefUpload() {
 			try {
 				/* for this line to compile one must modify the Reference.cs file in to the Web references folder. The SheetDef and related classes with namespaces of WebHostSync must be removed so that the SheetDef Class of OpenDentBusiness is used
 	*/
+				for(int i=0;i<SheetDefListLocal.Count;i++){
+					LoadImagesToSheetsDefs(SheetDefListLocal[i]);
+				}
 				wh.UpLoadSheetDef(RegistrationKey,SheetDefListLocal.ToArray());
 				wh.DeleteSheetDefs(RegistrationKey,SheetsDefsForDeletion.ToArray());
-
-
 			}
 			catch(Exception ex) {
 				MessageBox.Show(ex.Message);
@@ -124,18 +151,20 @@ namespace OpenDental {
 		}
 
 		private void backgroundWorker1_RunWorkerCompleted(object sender,RunWorkerCompletedEventArgs e) {
+			if(e.Error!= null) { 
+				MessageBox.Show(
+					"ERROR thrown here: {0}"+ e.Error.Message);
+			} 
 			FillGrid();
 			Cursor=Cursors.Default;
 		}
 
 		private void backgroundWorker1_DoWork(object sender,DoWorkEventArgs e) {
-
-			if(SheetUpload==true) {
+			if(SheetDefUploaded==true) {
 				SheetDefUpload();
-				SheetUpload=false;
+				SheetDefUploaded=false;
 			}
 			InitializeVariables();
-			
 		}
 
 		/// <summary>Only called from worker thread.</summary>
@@ -150,6 +179,28 @@ namespace OpenDental {
 			catch(Exception ex) {
 				MessageBox.Show(ex.Message);
 			}
+		}
+
+		private void LoadImagesToSheetsDefs(SheetDef SheetDefCur){
+
+							for(int j=0;j<SheetDefCur.SheetFieldDefs.Count;j++) {
+					if(SheetDefCur.SheetFieldDefs[j].FieldType==SheetFieldType.Parameter) {
+						continue;
+					}
+					if(SheetDefCur.SheetFieldDefs[j].FieldType==SheetFieldType.Image) {
+						string filePathAndName=ODFileUtils.CombinePaths(SheetUtil.GetImagePath(),SheetDefCur.SheetFieldDefs[j].FieldName);
+						Image img=null;
+						if(SheetDefCur.SheetFieldDefs[j].FieldName=="Patient Info.gif") {
+							img=Properties.Resources.Patient_Info;
+						}
+						else if(File.Exists(filePathAndName)) {
+							img=Image.FromFile(filePathAndName);
+						}
+						SheetDefCur.SheetFieldDefs[j].ImageData=POut.Bitmap(new Bitmap(img));
+
+					}
+				}
+
 		}
 
 
@@ -189,7 +240,7 @@ namespace OpenDental {
 		}
 
 		private void butUploadSheetDefs_Click(object sender,EventArgs e) {
-			SheetUpload=true;
+			SheetDefUploaded=true;
 			this.backgroundWorker1.RunWorkerAsync();
 		}
 

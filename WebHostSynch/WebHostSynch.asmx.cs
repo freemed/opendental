@@ -223,7 +223,19 @@ namespace WebHostSynch {
 
 		#endregion
 
+		
 		#region FormWebForm Sheets
+
+		/// <summary>
+			/// An empty method to test if the webservice is up and running. this was made with the intention of testing the correctness of the webservice URL on an Open Dental Installation. If an incorrect webservice URL is used in a background thread of OD the exception cannot be handled easily.
+		/// </summary>
+		/// <returns></returns>
+	
+		[WebMethod]
+			public bool ServiceExists() {
+				return true;
+			}
+
 			[WebMethod]
 			public string GetSheetDefAddress(string RegistrationKey) { System.Threading.Thread.Sleep(5000);
 				long DentalOfficeID=GetDentalOfficeID(RegistrationKey);
