@@ -2488,10 +2488,10 @@ namespace OpenDental{
 				checkIsRepair.Visible=pc.IsProsth;
 				if(!IsNew) {
 					OrionProcOld=OrionProcCur.Copy();
-					comboDPC.SelectedIndex=(int)OrionProcCur.DPC;
+					comboDPC.SelectedIndex=(int)OrionProcCur.DPC;		
 					if(ProcCur.DateTP.Date!=MiscData.GetNowDateTime().Date) {
 						comboDPC.Enabled=false;
-					}
+					}			
 					//if(OrionProcCur.Status2!=OrionStatus.None) {
 					//	comboStatus.SelectedIndex=(int)Math.Pow((double)OrionProcCur.Status2,.5d);
 					//}

@@ -5253,7 +5253,18 @@ namespace OpenDental{
 			ProcCur.BaseUnits=ProcedureCodes.GetProcCode(ProcCur.CodeNum).BaseUnits;
 			ProcCur.SiteNum=PatCur.SiteNum;
 			//nextaptnum
+			if(orionProvNum==0){//Always hits this case first time through the loop.
+				orionProvNum=Providers.GetOrionProvNum(ProcCur.ProvNum);
+			}
+			if(orionProvNum!=0){
+				ProcCur.ProvNum=orionProvNum;
+			}
 			Procedures.Insert(ProcCur);
+			if(orionProvNum!=0){
+				OrionProc orionProc=new OrionProc();
+				orionProc.ProcNum=ProcCur.ProcNum;
+				OrionProcs.Insert(orionProc);
+			}
 			if((ProcCur.ProcStatus==ProcStat.C || ProcCur.ProcStatus==ProcStat.EC || ProcCur.ProcStatus==ProcStat.EO)
 				&& ProcedureCodes.GetProcCode(ProcCur.CodeNum).PaintType==ToothPaintingType.Extraction) {
 				//if an extraction, then mark previous procs hidden
@@ -5270,9 +5281,6 @@ namespace OpenDental{
 				Recalls.Synch(PatCur.PatNum);
 			}
 			Procedures.ComputeEstimates(ProcCur,PatCur.PatNum,new List<ClaimProc>(),true,PlanList,PatPlanList,BenefitList,PatCur.Age);
-			if(orionProvNum==0){//Always hits this case first time through the loop.
-				orionProvNum=Providers.GetOrionProvNum(ProcCur.ProvNum);
-			}
 			if(orionProvNum==0){//Hits this case first time through only if user is not a primary provider in using Orion mode.
 				FormProcEdit FormP=new FormProcEdit(ProcCur,PatCur.Copy(),FamCur);
 				FormP.IsNew=true;
@@ -5293,9 +5301,6 @@ namespace OpenDental{
 					//Recalls.Synch(PatCur.PatNum);
 				}
 				orionProvNum=ProcCur.ProvNum;
-			}
-			else{
-				ProcCur.ProvNum=orionProvNum;
 			}
 		}
 

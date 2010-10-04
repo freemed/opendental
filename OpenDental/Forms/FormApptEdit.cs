@@ -1902,6 +1902,11 @@ namespace OpenDental{
 				ProcCur.MedicalCode=ProcedureCodes.GetProcCode(ProcCur.CodeNum).MedicalCode;
 				ProcCur.BaseUnits=ProcedureCodes.GetProcCode(ProcCur.CodeNum).BaseUnits;
 				Procedures.Insert(ProcCur);//recall synch not required
+				if(Programs.UsingOrion){
+					OrionProc orionProc=new OrionProc();
+					orionProc.ProcNum=ProcCur.ProcNum;
+					OrionProcs.Insert(orionProc);
+				}
 				Procedures.ComputeEstimates(ProcCur,pat.PatNum,ClaimProcList,false,PlanList,PatPlanList,benefitList,pat.Age);
 				//if(Programs.UsingOrion){//Not needed. Orion ProvNum set here in ApptEdit now, not necessary to open ProcEdit.
 				//  FormProcEdit FormP=new FormProcEdit(ProcCur,pat.Copy(),fam);
