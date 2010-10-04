@@ -40,6 +40,9 @@ namespace OpenDentBusiness{
 		public string RadioButtonGroup;
 		///<summary>Set to true if this field is required to have a value before the sheet is closed.</summary>
 		public bool IsRequired;
+		///<summary>The Bitmap should be converted to Base64 using POut.Bitmap() before placing in this field.  Not stored in the database.  Only used when uploading SheetDefs to the web server.</summary>
+		[CrudColumn(IsNotDbColumn=true)]
+		public string ImageData;
 
 		public SheetFieldDef(){
 			//required for use as a generic.
