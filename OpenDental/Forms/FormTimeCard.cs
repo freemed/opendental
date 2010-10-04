@@ -40,7 +40,7 @@ namespace OpenDental{
 		private TextBox textOvertime;
 		private OpenDental.UI.Button butCompute;
 		private OpenDental.UI.Button butPrint;
-		private TimeAdjust[] TimeAdjustList;
+		private List<TimeAdjust> TimeAdjustList;
 		private PrintDocument pd;
 		private int linesPrinted;
 		private GroupBox groupBox2;
@@ -509,7 +509,7 @@ namespace OpenDental{
 				ClockEventList=ClockEvents.Refresh(EmployeeCur.EmployeeNum,PIn.Date(textDateStart.Text),
 					PIn.Date(textDateStop.Text),false,IsBreaks);
 				if(IsBreaks){
-					TimeAdjustList=new TimeAdjust[0];
+					TimeAdjustList=new List<TimeAdjust>();
 				}
 				else{
 					TimeAdjustList=TimeAdjusts.Refresh(EmployeeCur.EmployeeNum,PIn.Date(textDateStart.Text),
@@ -520,7 +520,7 @@ namespace OpenDental{
 			for(int i=0;i<ClockEventList.Count;i++) {
 				mergedAL.Add(ClockEventList[i]);
 			}
-			for(int i=0;i<TimeAdjustList.Length;i++) {
+			for(int i=0;i<TimeAdjustList.Count;i++) {
 				mergedAL.Add(TimeAdjustList[i]);
 			}
 			IComparer myComparer=new ObjectDateComparer();
@@ -831,7 +831,7 @@ namespace OpenDental{
 				return;
 			}
 			//first, delete all existing overtime entries
-			for(int i=0;i<TimeAdjustList.Length;i++) {
+			for(int i=0;i<TimeAdjustList.Count;i++) {
 				if(TimeAdjustList[i].OTimeHours.TotalHours!=0) {
 					TimeAdjusts.Delete(TimeAdjustList[i]);
 				}

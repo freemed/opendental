@@ -81,6 +81,7 @@
     <Compile Include="BenefitT.cs" />
     <Compile Include="CarrierT.cs" />
     <Compile Include="ClaimT.cs" />
+    <Compile Include="CoreTypesT.cs" />
     <Compile Include="FeeSchedT.cs" />
     <Compile Include="ProcedureT.cs" />
     <Compile Include="PatPlanT.cs" />

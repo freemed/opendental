@@ -94,11 +94,16 @@ namespace OpenDentBusiness{
 		}
 
 		public static string TimeSpan(System.TimeSpan myTimeSpan,bool encapsulate) {
+			//In mysql, time can be + or -.  Not sure about Oracle.
 			string retval="00:00:00";
 			if(myTimeSpan!=System.TimeSpan.Zero) {
 				try {
-					DateTime dateT=new DateTime(1,1,1)+myTimeSpan;
-					retval=dateT.ToString("HH:mm:ss",CultureInfo.InvariantCulture);
+					DateTime dateT=new DateTime(1,1,1)+myTimeSpan.Duration();//abs val
+					retval="";
+					if(myTimeSpan < System.TimeSpan.Zero) {
+						retval+="-";
+					}
+					retval+=dateT.ToString("HH:mm:ss",CultureInfo.InvariantCulture);
 				} 
 				catch {
 					//Do nothing. This will return the time zero.

@@ -46,6 +46,16 @@ namespace UnitTests {
 			Cursor=Cursors.Default;
 		}
 
+		private void butCore_Click(object sender,EventArgs e) {
+			Cursor=Cursors.WaitCursor;
+			textResults.Text="";
+			Application.DoEvents();
+			textResults.Text+=CoreTypesT.CreateTempTable();
+			Application.DoEvents();
+			textResults.Text+=CoreTypesT.RunAll();
+			Cursor=Cursors.Default;
+		}
+
 		private void butNewDb_Click(object sender,EventArgs e) {
 			textResults.Text="";
 			Application.DoEvents();
@@ -101,6 +111,8 @@ namespace UnitTests {
 			textResults.SelectionStart=textResults.Text.Length;
 			*/
 		}
+
+		
 
 	
 

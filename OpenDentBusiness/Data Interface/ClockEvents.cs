@@ -178,8 +178,8 @@ namespace OpenDentBusiness{
 				retVal+=events[i].TimeDisplayed2-events[i].TimeDisplayed1;
 			}
 			//now, adjustments
-			TimeAdjust[] TimeAdjustList=TimeAdjusts.Refresh(empNum,date.AddDays(-6),date.AddDays(-1));
-			for(int i=0;i<TimeAdjustList.Length;i++) {
+			List<TimeAdjust> TimeAdjustList=TimeAdjusts.Refresh(empNum,date.AddDays(-6),date.AddDays(-1));
+			for(int i=0;i<TimeAdjustList.Count;i++) {
 				if(TimeAdjustList[i].TimeEntry.DayOfWeek > date.DayOfWeek) {//eg, Friday > Thursday, so ignore
 					continue;
 				}
