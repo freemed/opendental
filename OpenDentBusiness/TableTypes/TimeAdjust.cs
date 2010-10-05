@@ -16,7 +16,7 @@ namespace OpenDentBusiness{
 		public DateTime TimeEntry;
 		///<summary>The number of regular hours to adjust timecard by.  Can be + or -.</summary>
 		public TimeSpan RegHours;
-		///<summary>Overtime hours. Usually +.  Automatically combined with a - adj to RegHours.</summary>
+		///<summary>Overtime hours. Usually +.  Automatically combined with a - adj to RegHours.  Another option is clockevent.OTimeHours.</summary>
 		public TimeSpan OTimeHours;
 		///<summary>.</summary>
 		public string Note;

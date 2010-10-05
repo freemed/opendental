@@ -2719,6 +2719,19 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						+"WHERE TimeAdjustNum="+POut.Long(timeAdjustNum);
 					Db.NonQ(command);
 				}
+				command="ALTER TABLE clockevent ADD OTimeHours time NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE clockevent ADD OTimeAuto time NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE clockevent ADD Adjust time NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE clockevent ADD AdjustAuto time NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE clockevent ADD AdjustIsOverridden tinyint NOT NULL";
+				Db.NonQ(command);
+
+
+
 
 
 
@@ -2738,26 +2751,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 			
 		
-
-
-
-				
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-				
 
 
 				

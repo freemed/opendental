@@ -54,6 +54,7 @@ namespace OpenDental{
 		private TextBox textOvertime2;
 		private TextBox textTotal2;
 		public Employee EmployeeCur;
+		private OpenDental.UI.Button butDaily;
 		private bool cannotEdit;
 
 		///<summary></summary>
@@ -114,6 +115,7 @@ namespace OpenDental{
 			this.radioTimeCard = new System.Windows.Forms.RadioButton();
 			this.textOvertime2 = new System.Windows.Forms.TextBox();
 			this.textTotal2 = new System.Windows.Forms.TextBox();
+			this.butDaily = new OpenDental.UI.Button();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.SuspendLayout();
@@ -269,11 +271,11 @@ namespace OpenDental{
 			this.butCompute.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCompute.CornerRadius = 4F;
 			this.butCompute.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butCompute.Location = new System.Drawing.Point(145,650);
+			this.butCompute.Location = new System.Drawing.Point(139,650);
 			this.butCompute.Name = "butCompute";
-			this.butCompute.Size = new System.Drawing.Size(115,26);
+			this.butCompute.Size = new System.Drawing.Size(90,24);
 			this.butCompute.TabIndex = 18;
-			this.butCompute.Text = "Compute Overtime";
+			this.butCompute.Text = "Calc Week OT";
 			this.butCompute.Click += new System.EventHandler(this.butCompute_Click);
 			// 
 			// butAdj
@@ -284,10 +286,11 @@ namespace OpenDental{
 			this.butAdj.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butAdj.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butAdj.CornerRadius = 4F;
+			this.butAdj.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAdj.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butAdj.Location = new System.Drawing.Point(18,650);
 			this.butAdj.Name = "butAdj";
-			this.butAdj.Size = new System.Drawing.Size(115,26);
+			this.butAdj.Size = new System.Drawing.Size(115,24);
 			this.butAdj.TabIndex = 15;
 			this.butAdj.Text = "Add Adjustment";
 			this.butAdj.Click += new System.EventHandler(this.butAdj_Click);
@@ -314,7 +317,7 @@ namespace OpenDental{
 			this.butClose.CornerRadius = 4F;
 			this.butClose.Location = new System.Drawing.Point(794,650);
 			this.butClose.Name = "butClose";
-			this.butClose.Size = new System.Drawing.Size(75,26);
+			this.butClose.Size = new System.Drawing.Size(75,24);
 			this.butClose.TabIndex = 0;
 			this.butClose.Text = "&Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
@@ -327,10 +330,11 @@ namespace OpenDental{
 			this.butPrint.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butPrint.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butPrint.CornerRadius = 4F;
+			this.butPrint.Image = global::OpenDental.Properties.Resources.butPrint;
 			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butPrint.Location = new System.Drawing.Point(691,650);
 			this.butPrint.Name = "butPrint";
-			this.butPrint.Size = new System.Drawing.Size(86,26);
+			this.butPrint.Size = new System.Drawing.Size(86,24);
 			this.butPrint.TabIndex = 19;
 			this.butPrint.Text = "Print";
 			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
@@ -385,10 +389,27 @@ namespace OpenDental{
 			this.textTotal2.TabIndex = 21;
 			this.textTotal2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
+			// butDaily
+			// 
+			this.butDaily.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDaily.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butDaily.Autosize = true;
+			this.butDaily.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDaily.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDaily.CornerRadius = 4F;
+			this.butDaily.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butDaily.Location = new System.Drawing.Point(235,650);
+			this.butDaily.Name = "butDaily";
+			this.butDaily.Size = new System.Drawing.Size(78,24);
+			this.butDaily.TabIndex = 23;
+			this.butDaily.Text = "Calc Daily";
+			this.butDaily.Click += new System.EventHandler(this.butDaily_Click);
+			// 
 			// FormTimeCard
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(891,686);
+			this.Controls.Add(this.butDaily);
 			this.Controls.Add(this.textOvertime2);
 			this.Controls.Add(this.textTotal2);
 			this.Controls.Add(this.groupBox2);
@@ -547,6 +568,8 @@ namespace OpenDental{
 			}
 			col=new ODGridColumn(Lan.g(this,"Total"),50,HorizontalAlignment.Right);
 			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g(this,"Adjust"),55,HorizontalAlignment.Right);
+			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Overtime"),55,HorizontalAlignment.Right);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Daily"),50,HorizontalAlignment.Right);
@@ -560,7 +583,8 @@ namespace OpenDental{
 			WeeklyTotals=new TimeSpan[mergedAL.Count];
 			TimeSpan alteredSpan=new TimeSpan(0);//used to display altered times
 			TimeSpan oneSpan=new TimeSpan(0);//used to sum one pair of clock-in/clock-out
-			//ClockEvent pairFirst=null;//the first of a pair of clockevents
+			TimeSpan oneAdj;
+			TimeSpan oneOT;
 			TimeSpan daySpan=new TimeSpan(0);//used for daily totals.
 			TimeSpan weekSpan=new TimeSpan(0);//used for weekly totals.
 			if(mergedAL.Count>0){
@@ -625,7 +649,7 @@ namespace OpenDental{
 					else{
 						row.Cells.Add(clock.TimeDisplayed2.ToShortTimeString());
 					}
-					//minutes or hours-------------------------------
+					//total-------------------------------
 					if(IsBreaks){ //breaks
 						if(clock.TimeDisplayed2.Year<1880){
 							row.Cells.Add("");
@@ -649,8 +673,38 @@ namespace OpenDental{
 							periodSpan+=oneSpan;
 						}
 					}
+					//Adjust---------------------------------
+					oneAdj=TimeSpan.Zero;
+					if(clock.AdjustIsOverridden) {
+						oneAdj+=clock.Adjust;
+					}
+					else {
+						oneAdj+=clock.AdjustAuto;//typically zero
+					}
+					/*
+					if(clock.OTimeHours!=TimeSpan.FromHours(-1)) {//overridden
+						oneAdj-=clock.OTimeHours;
+					}
+					else {
+						oneAdj-=clock.OTimeAuto;//typically zero
+					}*/
+					daySpan+=oneAdj;
+					weekSpan+=oneAdj;
+					periodSpan+=oneAdj;
+					row.Cells.Add(oneAdj.ToStringHmm());
 					//Overtime------------------------------
-					row.Cells.Add("");
+					oneOT=TimeSpan.Zero;
+					if(clock.OTimeHours!=TimeSpan.FromHours(-1)) {//overridden
+						oneOT=clock.OTimeHours;
+					}
+					else {
+						oneOT=clock.OTimeAuto;//typically zero
+					}
+					otspan+=oneOT;
+					daySpan-=oneOT;
+					weekSpan-=oneOT;
+					periodSpan-=oneOT;
+					row.Cells.Add(oneOT.ToStringHmm());
 					//Daily-----------------------------------
 					//if this is the last entry for a given date
 					if(i==mergedAL.Count-1//if this is the last row
@@ -689,8 +743,8 @@ namespace OpenDental{
 						weekSpan=new TimeSpan(0);
 					}
 					else {
-						row.Cells.Add(ClockEvents.Format(weekSpan));
-						//row.Cells.Add("");
+						//row.Cells.Add(ClockEvents.Format(weekSpan));
+						row.Cells.Add("");
 					}
 					//Note-----------------------------------------
 					row.Cells.Add(clock.Note);
@@ -716,9 +770,11 @@ namespace OpenDental{
 					row.Cells.Add("");//4
 					//time-----------------------------
 					row.Cells.Add(adjust.TimeEntry.ToShortTimeString());//5
-					//minutes or hours-------------------------------
+					//total-------------------------------
+					row.Cells.Add("");//
+					//Adjust------------------------------
 					if(adjust.RegHours.TotalHours==0){
-						row.Cells.Add("");//6
+						row.Cells.Add("");//
 					}
 					else{
 						daySpan+=adjust.RegHours;//might be negative
@@ -732,14 +788,14 @@ namespace OpenDental{
 						row.Cells.Add(ClockEvents.Format(adjust.OTimeHours));//7
 					}
 					else{
-						row.Cells.Add("");//7
+						row.Cells.Add("");//
 					}
 					//Daily-----------------------------------
 					//if this is the last entry for a given date
 					if(i==mergedAL.Count-1//if this is the last row
 						|| GetDateForRow(i+1) != curDate)//or the next row is a different date
 					{
-						row.Cells.Add(ClockEvents.Format(daySpan));//8
+						row.Cells.Add(ClockEvents.Format(daySpan));//
 						daySpan=new TimeSpan(0);
 					}
 					else{
@@ -864,6 +920,13 @@ namespace OpenDental{
 			FillMain(true);
 		}
 
+		private void butDaily_Click(object sender,EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.TimecardsEditAll)) {
+				return;
+			}
+
+		}
+
 		private void butPrint_Click(object sender,EventArgs e) {
 			linesPrinted=0;
 			pd=new PrintDocument();
@@ -901,20 +964,20 @@ namespace OpenDental{
 			g.DrawString(str,fontTitle,brush,xPos,yPos);
 			yPos+=30;
 			//define columns
-			int[] colW=new int[10];
+			int[] colW=new int[11];
 			colW[0]=70;//date
 			colW[1]=70;//weekday
 			colW[2]=50;//altered
 			colW[3]=60;//in
 			colW[4]=60;//out
-			//colW[5]=60;//time
 			colW[5]=50;//total
-			colW[6]=55;//overtime
-			colW[7]=50;//daily
-			colW[8]=50;//weekly
-			colW[9]=200;//note
+			colW[6]=50;//adjust
+			colW[7]=55;//overtime
+			colW[8]=50;//daily
+			colW[9]=50;//weekly
+			colW[10]=160;//note
 			int[] colPos=new int[colW.Length+1];
-			colPos[0]=55;
+			colPos[0]=45;
 			for(int i=1;i<colPos.Length;i++) {
 				colPos[i]=colPos[i-1]+colW[i-1];
 			}
@@ -924,12 +987,12 @@ namespace OpenDental{
 			ColCaption[2]=Lan.g(this,"Altered");
 			ColCaption[3]=Lan.g(this,"In");
 			ColCaption[4]=Lan.g(this,"Out");
-			//ColCaption[5]=Lan.g(this,"Time");
 			ColCaption[5]=Lan.g(this,"Total");
-			ColCaption[6]=Lan.g(this,"Overtime");
-			ColCaption[7]=Lan.g(this,"Daily");
-			ColCaption[8]=Lan.g(this,"Weekly");
-			ColCaption[9]=Lan.g(this,"Note");
+			ColCaption[6]=Lan.g(this,"Adjust");
+			ColCaption[7]=Lan.g(this,"Overtime");
+			ColCaption[8]=Lan.g(this,"Daily");
+			ColCaption[9]=Lan.g(this,"Weekly");
+			ColCaption[10]=Lan.g(this,"Note");
 			//column headers-----------------------------------------------------------------------------------------
 			e.Graphics.FillRectangle(Brushes.LightGray,colPos[0],yPos,colPos[colPos.Length-1]-colPos[0],18);
 			e.Graphics.DrawRectangle(pen,colPos[0],yPos,colPos[colPos.Length-1]-colPos[0],18);
@@ -978,6 +1041,8 @@ namespace OpenDental{
 				FillMain(false);
 			}
 		}
+
+		
 
 		
 

@@ -50,9 +50,12 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
-		///<summary>-H:mm</summary>
+		///<summary>-H:mm.  If zero, then returns empty string.</summary>
 		public static string ToStringHmm(this TimeSpan tspan){
 			//No need to check RemotingRole; no call to db.
+			if(tspan==TimeSpan.Zero) {
+				return "";
+			}
 			string retVal="";
 			if(tspan < TimeSpan.Zero){
 				retVal+="-";

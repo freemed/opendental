@@ -46,14 +46,19 @@ namespace OpenDentBusiness.Crud{
 			ClockEvent clockEvent;
 			for(int i=0;i<table.Rows.Count;i++) {
 				clockEvent=new ClockEvent();
-				clockEvent.ClockEventNum = PIn.Long  (table.Rows[i]["ClockEventNum"].ToString());
-				clockEvent.EmployeeNum   = PIn.Long  (table.Rows[i]["EmployeeNum"].ToString());
-				clockEvent.TimeEntered1  = PIn.DateT (table.Rows[i]["TimeEntered1"].ToString());
-				clockEvent.TimeDisplayed1= PIn.DateT (table.Rows[i]["TimeDisplayed1"].ToString());
-				clockEvent.ClockStatus   = (TimeClockStatus)PIn.Int(table.Rows[i]["ClockStatus"].ToString());
-				clockEvent.Note          = PIn.String(table.Rows[i]["Note"].ToString());
-				clockEvent.TimeEntered2  = PIn.DateT (table.Rows[i]["TimeEntered2"].ToString());
-				clockEvent.TimeDisplayed2= PIn.DateT (table.Rows[i]["TimeDisplayed2"].ToString());
+				clockEvent.ClockEventNum     = PIn.Long  (table.Rows[i]["ClockEventNum"].ToString());
+				clockEvent.EmployeeNum       = PIn.Long  (table.Rows[i]["EmployeeNum"].ToString());
+				clockEvent.TimeEntered1      = PIn.DateT (table.Rows[i]["TimeEntered1"].ToString());
+				clockEvent.TimeDisplayed1    = PIn.DateT (table.Rows[i]["TimeDisplayed1"].ToString());
+				clockEvent.ClockStatus       = (TimeClockStatus)PIn.Int(table.Rows[i]["ClockStatus"].ToString());
+				clockEvent.Note              = PIn.String(table.Rows[i]["Note"].ToString());
+				clockEvent.TimeEntered2      = PIn.DateT (table.Rows[i]["TimeEntered2"].ToString());
+				clockEvent.TimeDisplayed2    = PIn.DateT (table.Rows[i]["TimeDisplayed2"].ToString());
+				clockEvent.OTimeHours        = PIn.TimeSpan(table.Rows[i]["OTimeHours"].ToString());
+				clockEvent.OTimeAuto         = PIn.TimeSpan(table.Rows[i]["OTimeAuto"].ToString());
+				clockEvent.Adjust            = PIn.TimeSpan(table.Rows[i]["Adjust"].ToString());
+				clockEvent.AdjustAuto        = PIn.TimeSpan(table.Rows[i]["AdjustAuto"].ToString());
+				clockEvent.AdjustIsOverridden= PIn.Bool  (table.Rows[i]["AdjustIsOverridden"].ToString());
 				retVal.Add(clockEvent);
 			}
 			return retVal;
@@ -73,7 +78,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="ClockEventNum,";
 			}
-			command+="EmployeeNum,TimeEntered1,TimeDisplayed1,ClockStatus,Note,TimeEntered2,TimeDisplayed2) VALUES(";
+			command+="EmployeeNum,TimeEntered1,TimeDisplayed1,ClockStatus,Note,TimeEntered2,TimeDisplayed2,OTimeHours,OTimeAuto,Adjust,AdjustAuto,AdjustIsOverridden) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(clockEvent.ClockEventNum)+",";
 			}
@@ -84,7 +89,12 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Int   ((int)clockEvent.ClockStatus)+","
 				+"'"+POut.String(clockEvent.Note)+"',"
 				+    POut.DateT (clockEvent.TimeEntered2)+","
-				+    POut.DateT (clockEvent.TimeDisplayed2)+")";
+				+    POut.DateT (clockEvent.TimeDisplayed2)+","
+				+    POut.TimeSpan(clockEvent.OTimeHours)+","
+				+    POut.TimeSpan(clockEvent.OTimeAuto)+","
+				+    POut.TimeSpan(clockEvent.Adjust)+","
+				+    POut.TimeSpan(clockEvent.AdjustAuto)+","
+				+    POut.Bool  (clockEvent.AdjustIsOverridden)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -97,13 +107,18 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one ClockEvent in the database.</summary>
 		internal static void Update(ClockEvent clockEvent){
 			string command="UPDATE clockevent SET "
-				+"EmployeeNum   =  "+POut.Long  (clockEvent.EmployeeNum)+", "
+				+"EmployeeNum       =  "+POut.Long  (clockEvent.EmployeeNum)+", "
 				//TimeEntered1 not allowed to change
-				+"TimeDisplayed1=  "+POut.DateT (clockEvent.TimeDisplayed1)+", "
-				+"ClockStatus   =  "+POut.Int   ((int)clockEvent.ClockStatus)+", "
-				+"Note          = '"+POut.String(clockEvent.Note)+"', "
-				+"TimeEntered2  =  "+POut.DateT (clockEvent.TimeEntered2)+", "
-				+"TimeDisplayed2=  "+POut.DateT (clockEvent.TimeDisplayed2)+" "
+				+"TimeDisplayed1    =  "+POut.DateT (clockEvent.TimeDisplayed1)+", "
+				+"ClockStatus       =  "+POut.Int   ((int)clockEvent.ClockStatus)+", "
+				+"Note              = '"+POut.String(clockEvent.Note)+"', "
+				+"TimeEntered2      =  "+POut.DateT (clockEvent.TimeEntered2)+", "
+				+"TimeDisplayed2    =  "+POut.DateT (clockEvent.TimeDisplayed2)+", "
+				+"OTimeHours        =  "+POut.TimeSpan(clockEvent.OTimeHours)+", "
+				+"OTimeAuto         =  "+POut.TimeSpan(clockEvent.OTimeAuto)+", "
+				+"Adjust            =  "+POut.TimeSpan(clockEvent.Adjust)+", "
+				+"AdjustAuto        =  "+POut.TimeSpan(clockEvent.AdjustAuto)+", "
+				+"AdjustIsOverridden=  "+POut.Bool  (clockEvent.AdjustIsOverridden)+" "
 				+"WHERE ClockEventNum = "+POut.Long(clockEvent.ClockEventNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
@@ -135,6 +150,26 @@ namespace OpenDentBusiness.Crud{
 			if(clockEvent.TimeDisplayed2 != oldClockEvent.TimeDisplayed2) {
 				if(command!=""){ command+=",";}
 				command+="TimeDisplayed2 = "+POut.DateT(clockEvent.TimeDisplayed2)+"";
+			}
+			if(clockEvent.OTimeHours != oldClockEvent.OTimeHours) {
+				if(command!=""){ command+=",";}
+				command+="OTimeHours = "+POut.TimeSpan(clockEvent.OTimeHours)+"";
+			}
+			if(clockEvent.OTimeAuto != oldClockEvent.OTimeAuto) {
+				if(command!=""){ command+=",";}
+				command+="OTimeAuto = "+POut.TimeSpan(clockEvent.OTimeAuto)+"";
+			}
+			if(clockEvent.Adjust != oldClockEvent.Adjust) {
+				if(command!=""){ command+=",";}
+				command+="Adjust = "+POut.TimeSpan(clockEvent.Adjust)+"";
+			}
+			if(clockEvent.AdjustAuto != oldClockEvent.AdjustAuto) {
+				if(command!=""){ command+=",";}
+				command+="AdjustAuto = "+POut.TimeSpan(clockEvent.AdjustAuto)+"";
+			}
+			if(clockEvent.AdjustIsOverridden != oldClockEvent.AdjustIsOverridden) {
+				if(command!=""){ command+=",";}
+				command+="AdjustIsOverridden = "+POut.Bool(clockEvent.AdjustIsOverridden)+"";
 			}
 			if(command==""){
 				return;
