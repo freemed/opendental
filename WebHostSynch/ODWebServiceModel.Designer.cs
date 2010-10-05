@@ -15,7 +15,7 @@
 [assembly: global::System.Data.Objects.DataClasses.EdmRelationshipAttribute("odwebserviceModel", "FK_webforms_sheetfielddef_WebSheetDefNum", "webforms_sheetdef", global::System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(WebHostSynch.webforms_sheetdef), "webforms_sheetfielddef", global::System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(WebHostSynch.webforms_sheetfielddef))]
 
 // Original file name:
-// Generation date: 9/8/2010 3:35:43 PM
+// Generation date: 10/4/2010 4:10:04 PM
 namespace WebHostSynch
 {
     
@@ -914,7 +914,24 @@ namespace WebHostSynch
         /// <param name="width">Initial value of Width.</param>
         /// <param name="xPos">Initial value of XPos.</param>
         /// <param name="yPos">Initial value of YPos.</param>
-        public static webforms_sheetfielddef Createwebforms_sheetfielddef(string fieldName, int fieldType, string fieldValue, sbyte fontIsBold, string fontName, float fontSize, int growthBehavior, int height, string radioButtonValue, long sheetDefNum, long sheetFieldDefNum, long webSheetFieldDefNum, int width, int xPos, int yPos)
+        /// <param name="imageData">Initial value of ImageData.</param>
+        public static webforms_sheetfielddef Createwebforms_sheetfielddef(
+                    string fieldName, 
+                    int fieldType, 
+                    string fieldValue, 
+                    sbyte fontIsBold, 
+                    string fontName, 
+                    float fontSize, 
+                    int growthBehavior, 
+                    int height, 
+                    string radioButtonValue, 
+                    long sheetDefNum, 
+                    long sheetFieldDefNum, 
+                    long webSheetFieldDefNum, 
+                    int width, 
+                    int xPos, 
+                    int yPos, 
+                    string imageData)
         {
             webforms_sheetfielddef webforms_sheetfielddef = new webforms_sheetfielddef();
             webforms_sheetfielddef.FieldName = fieldName;
@@ -932,6 +949,7 @@ namespace WebHostSynch
             webforms_sheetfielddef.Width = width;
             webforms_sheetfielddef.XPos = xPos;
             webforms_sheetfielddef.YPos = yPos;
+            webforms_sheetfielddef.ImageData = imageData;
             return webforms_sheetfielddef;
         }
         /// <summary>
@@ -1279,6 +1297,29 @@ namespace WebHostSynch
         private int _YPos;
         partial void OnYPosChanging(int value);
         partial void OnYPosChanged();
+        /// <summary>
+        /// There are no comments for Property ImageData in the schema.
+        /// </summary>
+        [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(IsNullable=false)]
+        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        public string ImageData
+        {
+            get
+            {
+                return this._ImageData;
+            }
+            set
+            {
+                this.OnImageDataChanging(value);
+                this.ReportPropertyChanging("ImageData");
+                this._ImageData = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value, false);
+                this.ReportPropertyChanged("ImageData");
+                this.OnImageDataChanged();
+            }
+        }
+        private string _ImageData;
+        partial void OnImageDataChanging(string value);
+        partial void OnImageDataChanged();
         /// <summary>
         /// There are no comments for webforms_sheetdef in the schema.
         /// </summary>

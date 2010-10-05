@@ -184,9 +184,6 @@ namespace OpenDental {
 		private void LoadImagesToSheetsDefs(SheetDef SheetDefCur){
 
 							for(int j=0;j<SheetDefCur.SheetFieldDefs.Count;j++) {
-					if(SheetDefCur.SheetFieldDefs[j].FieldType==SheetFieldType.Parameter) {
-						continue;
-					}
 					if(SheetDefCur.SheetFieldDefs[j].FieldType==SheetFieldType.Image) {
 						string filePathAndName=ODFileUtils.CombinePaths(SheetUtil.GetImagePath(),SheetDefCur.SheetFieldDefs[j].FieldName);
 						Image img=null;
@@ -197,7 +194,9 @@ namespace OpenDental {
 							img=Image.FromFile(filePathAndName);
 						}
 						SheetDefCur.SheetFieldDefs[j].ImageData=POut.Bitmap(new Bitmap(img));
-
+					}
+					else {
+						SheetDefCur.SheetFieldDefs[j].ImageData="";// because null is not allowed
 					}
 				}
 

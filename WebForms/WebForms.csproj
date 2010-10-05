@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{099AC80B-E862-42F1-8109-87BF450DC3D9}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
@@ -88,6 +88,9 @@
     <Content Include="WebForm2.aspx" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Handler1.ashx.cs">
+      <DependentUpon>Handler1.ashx</DependentUpon>
+    </Compile>
     <Compile Include="Logger.cs" />
     <Compile Include="ODWebServiceModel.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -112,6 +115,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="db\db.sql" />
+    <Content Include="Handler1.ashx" />
     <EntityDeploy Include="ODWebServiceModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>ODWebServiceModel.Designer.cs</LastGenOutput>
@@ -146,6 +150,9 @@
           <IISUrl>
           </IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>

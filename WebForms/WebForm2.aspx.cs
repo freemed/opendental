@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Drawing;
+using System.Drawing.Imaging;
 using OpenDentBusiness;
 
 namespace WebForms {
@@ -12,8 +14,8 @@ namespace WebForms {
 	/// </summary>
 	public partial class WebForm2:System.Web.UI.Page {
 
-		private long DentalOfficeID=0;
-		private long SheetDefNum=0;
+		private long DentalOfficeID=1486;
+		private long SheetDefNum=7;
 		
 
 		protected void Page_Load(object sender,EventArgs e) {
@@ -53,9 +55,9 @@ namespace WebForms {
 				if(browser.Browser == "IE") {
 					RadioButtonXOffset=-6;
 				}
-				
+
 				form1.Style["background-color"]="#0066FF";
-				form1.Style["background-image"]="url('Patient Info.gif')";
+				//form1.Style["background-image"]="url('Patient Info.gif')";
 				form1.Style["background-repeat"]="no-repeat";
 				form1.Style["background-position"]=xoffset + "px "+ yoffset + "px";
 				ODWebServiceEntities db=new ODWebServiceEntities();
@@ -113,6 +115,25 @@ namespace WebForms {
 					if(FieldType==SheetFieldType.StaticText) {
 
 					}
+					if(FieldType==SheetFieldType.Image) {
+						System.Web.UI.WebControls.Image img = new System.Web.UI.WebControls.Image();
+
+						long WebSheetFieldDefNum = sfdObj.ElementAt(j).WebSheetFieldDefNum;
+
+						img.ImageUrl = ("~/Handler1.ashx?WebSheetFieldDefNum="+WebSheetFieldDefNum);
+						wc = img;
+						//Bitmap bitmap=PIn.Bitmap(FieldValue);
+						//Response.ContentType = "image/Jpeg";
+						//bitmap.Save(Response.OutputStream,ImageFormat.Jpeg);
+
+						/*
+						byte[] image = (byte[])FieldValue;
+					stream.Write(image,0,image.Length);
+					Bitmap bitmap = new Bitmap(stream);
+					Response.ContentType = "image/gif";
+					bitmap.Save(Response.OutputStream,ImageFormat.Gif);
+					*/
+					}
 					if(wc!=null) {
 						//wc.BorderStyle=BorderStyle.None;
 						wc.ID = FieldName;
@@ -136,6 +157,9 @@ namespace WebForms {
 				//set form height - if this is not set none of the elements in the form will be seen.
 				FormHeight=maxYPos+maxHeight+buttonYoffset+ FormHeightOffset;
 				form1.Style["height"]=FormHeight+"px";
+
+
+
 				}
 				catch(ApplicationException ex) {
 					Logger.Information(ex.Message.ToString());

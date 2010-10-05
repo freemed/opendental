@@ -237,7 +237,7 @@ namespace WebHostSynch {
 			}
 
 			[WebMethod]
-			public string GetSheetDefAddress(string RegistrationKey) { System.Threading.Thread.Sleep(5000);
+			public string GetSheetDefAddress(string RegistrationKey) {
 				long DentalOfficeID=GetDentalOfficeID(RegistrationKey);
 				if(DentalOfficeID==0) {
 					return "";
@@ -256,7 +256,7 @@ namespace WebHostSynch {
 			
 
 			[WebMethod]
-			public List<webforms_sheetdef> DownloadSheetDefs(string RegistrationKey) {System.Threading.Thread.Sleep(5000);
+			public List<webforms_sheetdef> DownloadSheetDefs(string RegistrationKey) {
 				List<webforms_sheetdef> sheetDefList=null;
 				try {
 					long DentalOfficeID=GetDentalOfficeID(RegistrationKey);
@@ -278,7 +278,6 @@ namespace WebHostSynch {
 			public void DeleteSheetDefs(string RegistrationKey,List<long> SheetDefsForDeletion) {
 
 				try {
-					System.Threading.Thread.Sleep(5000);
 					long DentalOfficeID=GetDentalOfficeID(RegistrationKey);
 					if(DentalOfficeID==0) {
 						return;
@@ -316,7 +315,7 @@ namespace WebHostSynch {
 			/// </summary>
 			[WebMethod]
 			public void UpLoadSheetDef(string RegistrationKey,List<SheetDef> sheetDefList) {
-				ODWebServiceEntities db=new ODWebServiceEntities(); System.Threading.Thread.Sleep(5000);
+				ODWebServiceEntities db=new ODWebServiceEntities();
 				long DentalOfficeID=GetDentalOfficeID(RegistrationKey);
 				try{
 					if(DentalOfficeID==0) {

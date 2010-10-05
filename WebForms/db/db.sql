@@ -95,6 +95,7 @@ CREATE TABLE `webforms_sheetfielddef` (
   `Height` int(11) NOT NULL,
   `GrowthBehavior` int(11) NOT NULL,
   `RadioButtonValue` varchar(255) NOT NULL,
+  `ImageData` mediumtext NOT NULL,
   PRIMARY KEY (`WebSheetFieldDefNum`),
   KEY `FK_webforms_sheetfielddef_WebSheetDefNum` (`WebSheetDefNum`),
   CONSTRAINT `FK_webforms_sheetfielddef_WebSheetDefNum` FOREIGN KEY (`WebSheetDefNum`) REFERENCES `webforms_sheetdef` (`WebSheetDefNum`)

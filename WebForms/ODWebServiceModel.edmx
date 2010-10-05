@@ -81,6 +81,7 @@
           <Property Name="FontSize" Type="float" Nullable="false" />
           <Property Name="GrowthBehavior" Type="int" Nullable="false" />
           <Property Name="Height" Type="int" Nullable="false" />
+          <Property Name="ImageData" Type="mediumtext" Nullable="false" />
           <Property Name="RadioButtonValue" Type="varchar" Nullable="false" MaxLength="255" />
           <Property Name="SheetDefNum" Type="bigint" Nullable="false" />
           <Property Name="SheetFieldDefNum" Type="bigint" Nullable="false" />
@@ -230,7 +231,8 @@
           <Property Name="Width" Type="Int32" Nullable="false" />
           <Property Name="XPos" Type="Int32" Nullable="false" />
           <Property Name="YPos" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="webforms_sheetdef" Relationship="odwebserviceModel.FK_webforms_sheetfielddef_WebSheetDefNum" FromRole="webforms_sheetfielddef" ToRole="webforms_sheetdef" /></EntityType>
+          <NavigationProperty Name="webforms_sheetdef" Relationship="odwebserviceModel.FK_webforms_sheetfielddef_WebSheetDefNum" FromRole="webforms_sheetfielddef" ToRole="webforms_sheetdef" />
+          <Property Name="ImageData" Type="String" Nullable="false" /></EntityType>
         <Association Name="FK_webforms_sheetdef_DentalOfficeID">
           <End Type="odwebserviceModel.webforms_preference" Role="webforms_preference" Multiplicity="1" />
           <End Type="odwebserviceModel.webforms_sheetdef" Role="webforms_sheetdef" Multiplicity="*" /></Association>
@@ -300,6 +302,7 @@
           <EntitySetMapping Name="webforms_sheetfielddef">
             <EntityTypeMapping TypeName="IsTypeOf(odwebserviceModel.webforms_sheetfielddef)">
               <MappingFragment StoreEntitySet="webforms_sheetfielddef">
+                <ScalarProperty Name="ImageData" ColumnName="ImageData" />
                 <ScalarProperty Name="YPos" ColumnName="YPos" />
                 <ScalarProperty Name="XPos" ColumnName="XPos" />
                 <ScalarProperty Name="Width" ColumnName="Width" />
