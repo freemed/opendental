@@ -4065,6 +4065,17 @@ namespace OpenDental{
 				//Procedures.SetHideGraphical(ProcCur);//might not matter anymore
 				ToothInitials.SetValue(ProcCur.PatNum,ProcCur.ToothNum,ToothInitialType.Missing);
 			}
+			//Last chance to run this code before ProcOld gets lost.
+			if(Programs.UsingOrion){//Ask for an explanation. If they hit cancel here, return and don't save.
+				if(ProcOld.ProcStatus==ProcStat.TP && ProcOld.DateTP.Date<MiscData.GetNowDateTime().Date){
+					if(FormProcEditExplain.GetChanges(ProcCur,ProcOld,OrionProcCur,OrionProcOld)!=""){//Also sets FormProcEditExplain.Changes.
+						FormProcEditExplain FormP=new FormProcEditExplain();
+						if(FormP.ShowDialog()!=DialogResult.OK){
+							return;
+						}
+					}
+				}
+			}
 			ProcOld=ProcCur.Copy();//in case we now make more changes.
 			//these areas have no autocodes
 			if(ProcedureCode2.TreatArea==TreatmentArea.Mouth
@@ -4232,14 +4243,6 @@ namespace OpenDental{
 							textDateScheduled.Text=((DateTime)table.Rows[0]["DateScheduleBy"]).ToShortDateString();
 							CancelledScheduleByDate=DateTime.Parse(textDateScheduled.Text);
 							MsgBox.Show(this,"Schedule by date cannot be later than: "+textDateScheduled.Text+".");
-							return;
-						}
-					}
-				}
-				if(ProcOld.ProcStatus==ProcStat.TP && ProcOld.DateTP.Date<MiscData.GetNowDateTime().Date){
-					if(FormProcEditExplain.GetChanges(ProcCur,ProcOld)!=""){//Also sets FormProcEditExplain.Changes.
-						FormProcEditExplain FormP=new FormProcEditExplain();
-						if(FormP.ShowDialog()!=DialogResult.OK){
 							return;
 						}
 					}
