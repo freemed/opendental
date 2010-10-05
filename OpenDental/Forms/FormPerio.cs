@@ -1155,6 +1155,11 @@ namespace OpenDental{
 			List<ToothInitial> initialList=ToothInitials.Refresh(PatCur.PatNum);
 			MissingTeeth=ToothInitials.GetMissingOrHiddenTeeth(initialList);
 			RefreshListExams();
+			if(Programs.UsingOrion) {
+				labelPlaqueHistory.Visible=true;
+				listPlaqueHistory.Visible=true;
+				RefreshListPlaque();
+			}
 			listExams.SelectedIndex=PerioExams.ListExams.Count-1;//this works even if no items.
 			FillGrid();
 		}
@@ -1169,24 +1174,22 @@ namespace OpenDental{
 				listExams.Items.Add(PerioExams.ListExams[i].ExamDate.ToShortDateString()+"   "
 					+Providers.GetAbbr(PerioExams.ListExams[i].ProvNum));
 			}
-			if(Programs.UsingOrion) {
-				RefreshListPlaque();
-			}
 		}
 
 		private void RefreshListPlaque() {
-			labelPlaqueHistory.Visible=true;
-			listPlaqueHistory.Visible=true;
+			PerioExams.Refresh(PatCur.PatNum);
+			PerioMeasures.Refresh(PatCur.PatNum,PerioExams.ListExams);
 			listPlaqueHistory.Items.Clear();
 			for(int i=0;i<PerioExams.ListExams.Count;i++) {
 				string ph="";
-				ph=PerioExams.ListExams[i].ExamDate.ToShortDateString()+"   ";
+				ph=PerioExams.ListExams[i].ExamDate.ToShortDateString()+"\t";
 				gridP.SelectedExam=i;
 				gridP.LoadData();
-				ph+=gridP.ComputeIndex(BleedingFlags.Plaque);
+				ph+=gridP.ComputeOrionPlaqueIndex();
 				listPlaqueHistory.Items.Add(ph);
 			}
-			FillGrid();
+			//Not sure if necessary but set it back to what it was
+			gridP.SelectedExam=listExams.SelectedIndex;
 		}
 
 		///<summary>Usually set the selected index first</summary>
@@ -1363,6 +1366,11 @@ namespace OpenDental{
 
 		private void butCalcIndex_Click(object sender, System.EventArgs e) {
 			FillIndexes();
+			if(listPlaqueHistory.Visible) {
+				gridP.SaveCurExam(PerioExamCur.PerioExamNum);
+				RefreshListPlaque();
+				FillGrid();
+			}
 		}
 
 		private void FillIndexes(){

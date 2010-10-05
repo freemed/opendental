@@ -1738,6 +1738,48 @@ namespace OpenDental
 		}
 
 		///<summary></summary>
+		public string ComputeOrionPlaqueIndex() {
+			if(this.selectedExam==-1) {
+				return "";
+			}
+			int counter=0;
+			List<PerioMeasure> pm=PerioMeasures.GetAllForExam(PerioExams.ListExams[selectedExam].PerioExamNum);
+			for(int i=0;i<pm.Count;i++) {
+				if(pm[i].SequenceType==PerioSequenceType.Bleeding) {
+					//If tooth has plaque on any of the six points
+					if(((BleedingFlags)pm[i].MBvalue & BleedingFlags.Plaque)==BleedingFlags.Plaque) {
+						counter++;
+						continue;
+					}
+					if(((BleedingFlags)pm[i].Bvalue & BleedingFlags.Plaque)==BleedingFlags.Plaque) {
+						counter++;
+						continue;
+					}
+					if(((BleedingFlags)pm[i].DBvalue & BleedingFlags.Plaque)==BleedingFlags.Plaque) {
+						counter++;
+						continue;
+					}
+					if(((BleedingFlags)pm[i].MLvalue & BleedingFlags.Plaque)==BleedingFlags.Plaque) {
+						counter++;
+						continue;
+					}
+					if(((BleedingFlags)pm[i].Lvalue & BleedingFlags.Plaque)==BleedingFlags.Plaque) {
+						counter++;
+						continue;
+					}
+					if(((BleedingFlags)pm[i].DLvalue & BleedingFlags.Plaque)==BleedingFlags.Plaque) {
+						counter++;
+						continue;
+					}
+				}
+			}
+			if(counter==0) {
+				return (0).ToString("F0");
+			}
+			return (100*counter/((32-skippedTeeth.Count))).ToString("F0");
+		}
+
+		///<summary></summary>
 		public string ComputeIndex(BleedingFlags bleedFlag){
 			if(this.selectedExam==-1){
 				return "";
