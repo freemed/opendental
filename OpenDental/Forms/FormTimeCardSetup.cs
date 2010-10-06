@@ -10,7 +10,7 @@ namespace OpenDental{
 	/// <summary>
 	/// Summary description for FormBasicTemplate.
 	/// </summary>
-	public class FormPayPeriods : System.Windows.Forms.Form{
+	public class FormTimeCardSetup:System.Windows.Forms.Form {
 		private OpenDental.UI.Button butAdd;
 		private OpenDental.UI.Button butClose;
 		/// <summary>
@@ -21,7 +21,7 @@ namespace OpenDental{
 		private bool changed;
 
 		///<summary></summary>
-		public FormPayPeriods()
+		public FormTimeCardSetup()
 		{
 			//
 			// Required for Windows Form Designer support
@@ -52,7 +52,7 @@ namespace OpenDental{
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormPayPeriods));
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormTimeCardSetup));
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butAdd = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
@@ -60,11 +60,13 @@ namespace OpenDental{
 			// 
 			// gridMain
 			// 
+			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
 			this.gridMain.HScrollVisible = false;
 			this.gridMain.Location = new System.Drawing.Point(21,12);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(294,404);
+			this.gridMain.Size = new System.Drawing.Size(294,428);
 			this.gridMain.TabIndex = 11;
 			this.gridMain.Title = "Pay Periods";
 			this.gridMain.TranslationName = "TablePayPeriods";
@@ -80,9 +82,9 @@ namespace OpenDental{
 			this.butAdd.CornerRadius = 4F;
 			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(19,445);
+			this.butAdd.Location = new System.Drawing.Point(19,467);
 			this.butAdd.Name = "butAdd";
-			this.butAdd.Size = new System.Drawing.Size(80,26);
+			this.butAdd.Size = new System.Drawing.Size(80,24);
 			this.butAdd.TabIndex = 10;
 			this.butAdd.Text = "&Add";
 			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
@@ -95,29 +97,29 @@ namespace OpenDental{
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(241,445);
+			this.butClose.Location = new System.Drawing.Point(510,467);
 			this.butClose.Name = "butClose";
-			this.butClose.Size = new System.Drawing.Size(75,26);
+			this.butClose.Size = new System.Drawing.Size(75,24);
 			this.butClose.TabIndex = 0;
 			this.butClose.Text = "&Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
-			// FormPayPeriods
+			// FormTimeCardSetup
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(348,494);
+			this.ClientSize = new System.Drawing.Size(609,508);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.butAdd);
 			this.Controls.Add(this.butClose);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
-			this.Name = "FormPayPeriods";
+			this.Name = "FormTimeCardSetup";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Pay Periods for Timecards";
-			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormPayPeriods_FormClosing);
+			this.Text = "Time Card Setup";
 			this.Load += new System.EventHandler(this.FormPayPeriods_Load);
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormPayPeriods_FormClosing);
 			this.ResumeLayout(false);
 
 		}

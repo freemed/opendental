@@ -129,7 +129,7 @@ namespace OpenDental{
 		private int LastModule;
 		private System.Windows.Forms.MenuItem menuItemRepeatingCharges;
 		private System.Windows.Forms.MenuItem menuItemImportXML;
-		private MenuItem menuItemPayPeriods;
+		private MenuItem menuItemTimeCards;
 		private MenuItem menuItemApptRules;
 		private MenuItem menuItemAuditTrail;
 		private MenuItem menuItemPatFieldDefs;
@@ -353,7 +353,7 @@ namespace OpenDental{
 			this.menuItemModules = new System.Windows.Forms.MenuItem();
 			this.menuItemOperatories = new System.Windows.Forms.MenuItem();
 			this.menuItemPatFieldDefs = new System.Windows.Forms.MenuItem();
-			this.menuItemPayPeriods = new System.Windows.Forms.MenuItem();
+			this.menuItemTimeCards = new System.Windows.Forms.MenuItem();
 			this.menuItemPractice = new System.Windows.Forms.MenuItem();
 			this.menuItemProcedureButtons = new System.Windows.Forms.MenuItem();
 			this.menuItemLinks = new System.Windows.Forms.MenuItem();
@@ -551,7 +551,6 @@ namespace OpenDental{
             this.menuItemModules,
             this.menuItemOperatories,
             this.menuItemPatFieldDefs,
-            this.menuItemPayPeriods,
             this.menuItemPractice,
             this.menuItemProcedureButtons,
             this.menuItemLinks,
@@ -563,7 +562,8 @@ namespace OpenDental{
             this.menuItemSched,
             this.menuItemSecurity,
             this.menuItemSheets,
-            this.menuItemEasy});
+            this.menuItemEasy,
+            this.menuItemTimeCards});
 			this.menuItemSettings.Shortcut = System.Windows.Forms.Shortcut.CtrlS;
 			this.menuItemSettings.Text = "&Setup";
 			// 
@@ -723,81 +723,81 @@ namespace OpenDental{
 			this.menuItemPatFieldDefs.Text = "Patient Field Defs";
 			this.menuItemPatFieldDefs.Click += new System.EventHandler(this.menuItemPatFieldDefs_Click);
 			// 
-			// menuItemPayPeriods
+			// menuItemTimeCards
 			// 
-			this.menuItemPayPeriods.Index = 26;
-			this.menuItemPayPeriods.Text = "Pay Periods";
-			this.menuItemPayPeriods.Click += new System.EventHandler(this.menuItemPayPeriods_Click);
+			this.menuItemTimeCards.Index = 38;
+			this.menuItemTimeCards.Text = "Time Cards";
+			this.menuItemTimeCards.Click += new System.EventHandler(this.menuItemTimeCards_Click);
 			// 
 			// menuItemPractice
 			// 
-			this.menuItemPractice.Index = 27;
+			this.menuItemPractice.Index = 26;
 			this.menuItemPractice.Text = "Practice";
 			this.menuItemPractice.Click += new System.EventHandler(this.menuItemPractice_Click);
 			// 
 			// menuItemProcedureButtons
 			// 
-			this.menuItemProcedureButtons.Index = 28;
+			this.menuItemProcedureButtons.Index = 27;
 			this.menuItemProcedureButtons.Text = "Procedure Buttons";
 			this.menuItemProcedureButtons.Click += new System.EventHandler(this.menuItemProcedureButtons_Click);
 			// 
 			// menuItemLinks
 			// 
-			this.menuItemLinks.Index = 29;
+			this.menuItemLinks.Index = 28;
 			this.menuItemLinks.Text = "Program Links";
 			this.menuItemLinks.Click += new System.EventHandler(this.menuItemLinks_Click);
 			// 
 			// menuItemQuestions
 			// 
-			this.menuItemQuestions.Index = 30;
+			this.menuItemQuestions.Index = 29;
 			this.menuItemQuestions.Text = "Questionnaire";
 			this.menuItemQuestions.Click += new System.EventHandler(this.menuItemQuestions_Click);
 			// 
 			// menuItemRecall
 			// 
-			this.menuItemRecall.Index = 31;
+			this.menuItemRecall.Index = 30;
 			this.menuItemRecall.Text = "Recall";
 			this.menuItemRecall.Click += new System.EventHandler(this.menuItemRecall_Click);
 			// 
 			// menuItemRecallTypes
 			// 
-			this.menuItemRecallTypes.Index = 32;
+			this.menuItemRecallTypes.Index = 31;
 			this.menuItemRecallTypes.Text = "RecallTypes";
 			this.menuItemRecallTypes.Click += new System.EventHandler(this.menuItemRecallTypes_Click);
 			// 
 			// menuItemReplication
 			// 
-			this.menuItemReplication.Index = 33;
+			this.menuItemReplication.Index = 32;
 			this.menuItemReplication.Text = "Replication";
 			this.menuItemReplication.Click += new System.EventHandler(this.menuItemReplication_Click);
 			// 
 			// menuItemRequirementsNeeded
 			// 
-			this.menuItemRequirementsNeeded.Index = 34;
+			this.menuItemRequirementsNeeded.Index = 33;
 			this.menuItemRequirementsNeeded.Text = "Requirements Needed";
 			this.menuItemRequirementsNeeded.Click += new System.EventHandler(this.menuItemRequirementsNeeded_Click);
 			// 
 			// menuItemSched
 			// 
-			this.menuItemSched.Index = 35;
+			this.menuItemSched.Index = 34;
 			this.menuItemSched.Text = "Schedules";
 			this.menuItemSched.Click += new System.EventHandler(this.menuItemSched_Click);
 			// 
 			// menuItemSecurity
 			// 
-			this.menuItemSecurity.Index = 36;
+			this.menuItemSecurity.Index = 35;
 			this.menuItemSecurity.Text = "Security";
 			this.menuItemSecurity.Click += new System.EventHandler(this.menuItemSecurity_Click);
 			// 
 			// menuItemSheets
 			// 
-			this.menuItemSheets.Index = 37;
+			this.menuItemSheets.Index = 36;
 			this.menuItemSheets.Text = "Sheets";
 			this.menuItemSheets.Click += new System.EventHandler(this.menuItemSheets_Click);
 			// 
 			// menuItemEasy
 			// 
-			this.menuItemEasy.Index = 38;
+			this.menuItemEasy.Index = 37;
 			this.menuItemEasy.Text = "Show Features";
 			this.menuItemEasy.Click += new System.EventHandler(this.menuItemEasy_Click);
 			// 
@@ -3529,15 +3529,6 @@ namespace OpenDental{
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Patient Field Defs");
 		}
 
-		private void menuItemPayPeriods_Click(object sender,EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.Setup)) {
-				return;
-			}
-			FormPayPeriods FormP=new FormPayPeriods();
-			FormP.ShowDialog();
-			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Pay Periods");
-		}
-
 		private void menuItemPractice_Click(object sender, System.EventArgs e) {
 			if(!Security.IsAuthorized(Permissions.Setup)){
 				return;
@@ -3676,6 +3667,15 @@ namespace OpenDental{
 			ContrAccount2.LayoutToolBar();//for repeating charges
 			RefreshCurrentModule();
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Show Features");
+		}
+
+		private void menuItemTimeCards_Click(object sender,EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.Setup)) {
+				return;
+			}
+			FormTimeCardSetup FormTCS=new FormTimeCardSetup();
+			FormTCS.ShowDialog();
+			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Time Card Setup");
 		}
 
 		//Lists

@@ -367,7 +367,7 @@ namespace OpenDental{
 			this.radioTimeCard.Size = new System.Drawing.Size(97,19);
 			this.radioTimeCard.TabIndex = 0;
 			this.radioTimeCard.TabStop = true;
-			this.radioTimeCard.Text = "Timecard";
+			this.radioTimeCard.Text = "Time Card";
 			this.radioTimeCard.UseVisualStyleBackColor = true;
 			this.radioTimeCard.Click += new System.EventHandler(this.radioTimeCard_Click);
 			// 
