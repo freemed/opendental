@@ -19,6 +19,9 @@ namespace OpenDental{
 		private System.ComponentModel.Container components = null;
 		private OpenDental.UI.ODGrid gridMain;
 		private CheckBox checkUseDecimal;
+		private ODGrid gridRules;
+		private GroupBox groupBox1;
+		private OpenDental.UI.Button butAddRule;
 		private bool changed;
 
 		///<summary></summary>
@@ -54,21 +57,35 @@ namespace OpenDental{
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormTimeCardSetup));
+			this.checkUseDecimal = new System.Windows.Forms.CheckBox();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butAdd = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
-			this.checkUseDecimal = new System.Windows.Forms.CheckBox();
+			this.gridRules = new OpenDental.UI.ODGrid();
+			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.butAddRule = new OpenDental.UI.Button();
+			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
+			// 
+			// checkUseDecimal
+			// 
+			this.checkUseDecimal.Location = new System.Drawing.Point(12,19);
+			this.checkUseDecimal.Name = "checkUseDecimal";
+			this.checkUseDecimal.Size = new System.Drawing.Size(295,18);
+			this.checkUseDecimal.TabIndex = 12;
+			this.checkUseDecimal.Text = "Use decimal format rather than colon format";
+			this.checkUseDecimal.UseVisualStyleBackColor = true;
+			this.checkUseDecimal.Click += new System.EventHandler(this.checkUseDecimal_Click);
 			// 
 			// gridMain
 			// 
 			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
 			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(21,12);
+			this.gridMain.Location = new System.Drawing.Point(19,12);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(294,428);
+			this.gridMain.Size = new System.Drawing.Size(294,432);
 			this.gridMain.TabIndex = 11;
 			this.gridMain.Title = "Pay Periods";
 			this.gridMain.TranslationName = "TablePayPeriods";
@@ -84,7 +101,7 @@ namespace OpenDental{
 			this.butAdd.CornerRadius = 4F;
 			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(19,467);
+			this.butAdd.Location = new System.Drawing.Point(19,450);
 			this.butAdd.Name = "butAdd";
 			this.butAdd.Size = new System.Drawing.Size(80,24);
 			this.butAdd.TabIndex = 10;
@@ -99,28 +116,59 @@ namespace OpenDental{
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(652,467);
+			this.butClose.Location = new System.Drawing.Point(573,591);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75,24);
 			this.butClose.TabIndex = 0;
 			this.butClose.Text = "&Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
-			// checkUseDecimal
+			// gridRules
 			// 
-			this.checkUseDecimal.Location = new System.Drawing.Point(355,12);
-			this.checkUseDecimal.Name = "checkUseDecimal";
-			this.checkUseDecimal.Size = new System.Drawing.Size(295,18);
-			this.checkUseDecimal.TabIndex = 12;
-			this.checkUseDecimal.Text = "Use decimal format rather than colon format";
-			this.checkUseDecimal.UseVisualStyleBackColor = true;
-			this.checkUseDecimal.Click += new System.EventHandler(this.checkUseDecimal_Click);
+			this.gridRules.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+			this.gridRules.HScrollVisible = false;
+			this.gridRules.Location = new System.Drawing.Point(353,12);
+			this.gridRules.Name = "gridRules";
+			this.gridRules.ScrollValue = 0;
+			this.gridRules.Size = new System.Drawing.Size(294,432);
+			this.gridRules.TabIndex = 13;
+			this.gridRules.Title = "Rules";
+			this.gridRules.TranslationName = "FormTimeCardSetup";
+			// 
+			// groupBox1
+			// 
+			this.groupBox1.Controls.Add(this.checkUseDecimal);
+			this.groupBox1.Location = new System.Drawing.Point(19,515);
+			this.groupBox1.Name = "groupBox1";
+			this.groupBox1.Size = new System.Drawing.Size(391,100);
+			this.groupBox1.TabIndex = 14;
+			this.groupBox1.TabStop = false;
+			this.groupBox1.Text = "Options";
+			// 
+			// butAddRule
+			// 
+			this.butAddRule.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butAddRule.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butAddRule.Autosize = true;
+			this.butAddRule.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAddRule.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAddRule.CornerRadius = 4F;
+			this.butAddRule.Image = global::OpenDental.Properties.Resources.Add;
+			this.butAddRule.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butAddRule.Location = new System.Drawing.Point(353,450);
+			this.butAddRule.Name = "butAddRule";
+			this.butAddRule.Size = new System.Drawing.Size(80,24);
+			this.butAddRule.TabIndex = 15;
+			this.butAddRule.Text = "Add";
 			// 
 			// FormTimeCardSetup
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(751,508);
-			this.Controls.Add(this.checkUseDecimal);
+			this.ClientSize = new System.Drawing.Size(672,632);
+			this.Controls.Add(this.butAddRule);
+			this.Controls.Add(this.groupBox1);
+			this.Controls.Add(this.gridRules);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.butAdd);
 			this.Controls.Add(this.butClose);
@@ -133,6 +181,7 @@ namespace OpenDental{
 			this.Text = "Time Card Setup";
 			this.Load += new System.EventHandler(this.FormPayPeriods_Load);
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormPayPeriods_FormClosing);
+			this.groupBox1.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
