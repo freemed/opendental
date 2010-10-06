@@ -439,6 +439,16 @@ namespace OpenDental{
 					return;
 				}
 			}
+			if(comboAction.SelectedIndex==(int)AutomationAction.ShowExamSheet) {
+				if(comboSheetDef.SelectedIndex==-1) {
+					MsgBox.Show(this,"A SheetDef must be selected.");
+					return;
+				}
+				if(SheetDefC.Listt[comboSheetDef.SelectedIndex].SheetType!=SheetTypeEnum.ExamSheet) {
+					MsgBox.Show(this,"The selected sheet type must be an exam sheet.");
+					return;
+				}
+			}
 			AutoCur.Description=textDescription.Text;
 			AutoCur.Autotrigger=(AutomationTrigger)comboTrigger.SelectedIndex;
 			if(comboTrigger.SelectedIndex==(int)AutomationTrigger.CompleteProcedure) {

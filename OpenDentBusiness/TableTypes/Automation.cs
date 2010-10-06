@@ -51,7 +51,9 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		CreateCommlog,
 		///<summary>If a referral does not exist for this patient, then notify user instead.</summary>
-		PrintReferralLetter
+		PrintReferralLetter,
+		///<summary></summary>
+		ShowExamSheet
 		//<summary></summary>
 		//AddStatementNoteBold
 	}

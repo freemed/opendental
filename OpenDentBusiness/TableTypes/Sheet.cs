@@ -32,7 +32,7 @@ namespace OpenDentBusiness{
 		public long SheetNum;
 		///<summary>Enum:SheetTypeEnum</summary>
 		public SheetTypeEnum SheetType;
-		///<summary>FK to patient.PatNum.  A saved sheet is always attached to a patient.  There are a few sheets that are so minor that they don't get saved, such as a Carrier label.</summary>
+		///<summary>FK to patient.PatNum.  A saved sheet is always attached to a patient (except deposit slip).  There are a few sheets that are so minor that they don't get saved, such as a Carrier label.</summary>
 		public long PatNum;
 		///<summary>The date and time of the sheet as it will be displayed in the commlog.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
