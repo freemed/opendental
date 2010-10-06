@@ -4,15 +4,15 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" >
 <head runat="server">
-    <title></title>
+<title></title>
 </head>
-<body>
-    <form id="form1" runat="server">
-    <div>
-    
-    	<asp:Button ID="Button1" runat="server" Text="Submit" />
-    
-    </div>
-    </form>
+<body id="bodytag" runat="server">
+<form id="form1" runat="server">
+<div>
+
+	<asp:Button ID="Button1" runat="server" Text="Submit" />
+
+</div>
+</form>
 </body>
 </html>

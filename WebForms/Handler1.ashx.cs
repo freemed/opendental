@@ -11,6 +11,7 @@ using System.IO;
 namespace WebForms {
 	/// <summary>
 	/// Dynamically generates the sheet images which are read from the database.
+	/// ToDo: test with various images.formats 
 	/// </summary>
 	[WebService(Namespace="http://opendental.com/")]
 	[WebServiceBinding(ConformsTo=WsiProfiles.BasicProfile1_1)]
@@ -20,33 +21,26 @@ namespace WebForms {
 
 		public void ProcessRequest(HttpContext context) {
 
-			context.Response.ContentType = "image/gif";
+			context.Response.ContentType="image/gif";
 			ODWebServiceEntities db=new ODWebServiceEntities();
-
 			try {
-
-
 				if(context.Request["WebSheetFieldDefNum"]!=null) {
 					Int64.TryParse(context.Request["WebSheetFieldDefNum"].ToString().Trim(),out WebSheetFieldDefNum);
 				}
-
-				var sfdObj = db.webforms_sheetfielddef.Where(sfd => sfd.WebSheetFieldDefNum==WebSheetFieldDefNum).First();
+				var sfdObj=db.webforms_sheetfielddef.Where(sfd => sfd.WebSheetFieldDefNum==WebSheetFieldDefNum).First();
 				string ImageData=sfdObj.ImageData;
 				Bitmap bitmap=PIn.Bitmap(ImageData);
-				MemoryStream ms = new MemoryStream();
+				MemoryStream ms=new MemoryStream();
 				// Save to memory using the Jpeg format
 				bitmap.Save(ms,ImageFormat.Jpeg);
 				// read to end
-				byte[] binaryImage = ms.GetBuffer();
+				byte[] binaryImage=ms.GetBuffer();
 				bitmap.Dispose();
 				ms.Close();
 				context.Response.BinaryWrite(binaryImage);
 			}
-
 			catch(Exception ex) {
-
-				throw ex;
-
+				Logger.Information(ex.Message.ToString());
 			}
 		}
 

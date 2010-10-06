@@ -10,12 +10,12 @@ using OpenDentBusiness;
 
 namespace WebForms {
 	/// <summary>
-	/// For the next verion of webforms -  This is work in progress.
+	/// For the next verion of webforms -+This is work in progress.
 	/// </summary>
 	public partial class WebForm2:System.Web.UI.Page {
 
-		private long DentalOfficeID=1486;
-		private long SheetDefNum=7;
+		private long DentalOfficeID=0;
+		private long WebSheetDefNum=0;
 		
 
 		protected void Page_Load(object sender,EventArgs e) {
@@ -23,46 +23,54 @@ namespace WebForms {
 				if(Request["DentalOfficeID"]!=null) {
 					Int64.TryParse(Request["DentalOfficeID"].ToString().Trim(),out DentalOfficeID);
 				}
-				if(Request["SheetDefNum"]!=null) {
-					Int64.TryParse(Request["SheetDefNum"].ToString().Trim(),out SheetDefNum);
+				if(Request["WebSheetDefNum"]!=null) {
+					Int64.TryParse(Request["WebSheetDefNum"].ToString().Trim(),out WebSheetDefNum);
 				}
-				GeneratePage(DentalOfficeID,SheetDefNum);
+				GeneratePage(DentalOfficeID,WebSheetDefNum);
 			}
 			catch(Exception ex) {
 				Logger.Information(ex.Message.ToString());
 			}
 		}
 
-		private void GeneratePage(long DentalOfficeID,long SheetDefNum) {
+		private void GeneratePage(long DentalOfficeID,long WebSheetDefNum) {
 			try {
-				int xoffset = 37;
-				int yoffset = 26;
-				int FormHeight = 0;
-				int FormHeightOffset = 0;
+				int xoffset=37;
+				int yoffset=26;
+				int FormHeight=0;
+				int FormHeightOffset=0;
 				int maxYPos=0;
 				int maxXPos=0;
 				int maxHeight=0;
 				int maxWidth=0;
 				int buttonXoffset=0;
 				int buttonYoffset=0;
-				int RadioButtonXOffset=0;
-				int RadioButtonYOffset=5;
+				int RadioButtonXOffset=-250;
+				int RadioButtonYOffset=-6;
+				int RadioButtonDistance=-6;
+				int ImageXOffset=4;
+				int ImageYOffset=4;
 				float heightfactor =1.2f;
-				System.Web.HttpBrowserCapabilities browser = Request.Browser;
+				System.Web.HttpBrowserCapabilities browser=Request.Browser;
 				
 				if(browser.Browser == "Firefox") {
 				}
 				if(browser.Browser == "IE") {
-					RadioButtonXOffset=-6;
+					//RadioButtonXOffset=-6;
 				}
-
+				/*
 				form1.Style["background-color"]="#0066FF";
-				//form1.Style["background-image"]="url('Patient Info.gif')";
+				form1.Style["background-image"]="url('Patient Info.gif')";
 				form1.Style["background-repeat"]="no-repeat";
-				form1.Style["background-position"]=xoffset + "px "+ yoffset + "px";
+				form1.Style["background-position"]=xoffset+"px "+ yoffset+"px";
+				*/
 				ODWebServiceEntities db=new ODWebServiceEntities();
-				var sfdObj = (from sfd in db.webforms_sheetfielddef where sfd.SheetDefNum==SheetDefNum && sfd.webforms_sheetdef.webforms_preference.DentalOfficeID==DentalOfficeID
-							  select sfd).ToList();
+
+			
+				int ColorBorder=db.webforms_preference.Where(pref => pref.DentalOfficeID==DentalOfficeID).First().ColorBorder;
+				bodytag.Attributes.Add("bgcolor",ColorTranslator.ToHtml(Color.FromArgb(ColorBorder)));
+				var sfdObj=(from sfd in db.webforms_sheetfielddef where sfd.webforms_sheetdef.WebSheetDefNum==WebSheetDefNum && sfd.webforms_sheetdef.webforms_preference.DentalOfficeID==DentalOfficeID
+							select sfd).ToList();
 				for(int j=0;j<sfdObj.Count();j++) {
 					String FieldName=sfdObj.ElementAt(j).FieldName;
 					String FieldValue=sfdObj.ElementAt(j).FieldValue;
@@ -70,10 +78,10 @@ namespace WebForms {
 					SheetFieldType FieldType=(SheetFieldType)sfdObj.ElementAt(j).FieldType;
 					int XPos=sfdObj.ElementAt(j).XPos;
 					int YPos=sfdObj.ElementAt(j).YPos;
-					int width = sfdObj.ElementAt(j).Width;
-					int height = sfdObj.ElementAt(j).Height;
-					float fontsize = sfdObj.ElementAt(j).FontSize;
-					String fontname = sfdObj.ElementAt(j).FontName;
+					int width=sfdObj.ElementAt(j).Width;
+					int height=sfdObj.ElementAt(j).Height;
+					float fontsize=sfdObj.ElementAt(j).FontSize;
+					String fontname=sfdObj.ElementAt(j).FontName;
 					if(XPos>maxXPos) {
 						maxXPos=XPos;
 						maxWidth=width;
@@ -84,68 +92,84 @@ namespace WebForms {
 					}
 					WebControl wc=null; // WebControl is the parent class of all controls
 					if(FieldType==SheetFieldType.InputField) {
-						TextBox tb = new TextBox();
-						tb.Text = FieldValue;
-						tb.Style["font-family"]=fontname;
-						tb.Style["font-size"]=fontsize+"px";
-						wc = tb;
+						TextBox tb=new TextBox();
+						tb.Text=FieldValue;
+						wc=tb;
 					}
 					if(FieldType==SheetFieldType.CheckBox) {
-						bool RadioButtonListExists = false;
+						bool RadioButtonListExists=false;
 						RadioButtonList rb=null;
-						ListItem li = new ListItem();
-						li.Value = RadioButtonValue;
-						li.Text = "";
+						ListItem li=new ListItem();
+						li.Value=RadioButtonValue;
+						li.Text="";
 						li.Attributes.CssStyle.Add("position","absolute");
-						li.Attributes.CssStyle.Add("left",XPos + RadioButtonXOffset + "px");
-						//search  for existing RadioButtonList by the same name.
+						li.Attributes.CssStyle.Add("left",XPos+RadioButtonXOffset+"px");
+						//search for existing RadioButtonList by the same name.
 						foreach(Control c in form1.Controls) {
 							if(c.ID==FieldName && c.GetType()==typeof(RadioButtonList)) {
-								rb = (RadioButtonList)c;
-										RadioButtonListExists = true;
+								rb=(RadioButtonList)c;
+										RadioButtonListExists=true;
 								}
 						}
 						if(RadioButtonListExists==false) {
-							rb = new RadioButtonList();
-							rb.RepeatDirection = RepeatDirection.Horizontal;
-							wc = rb;
+							if(RadioButtonValue=="") {
+								CheckBox cb=new CheckBox();
+								wc=cb;
+							}
+							else {
+								rb=new RadioButtonList();
+								rb.RepeatDirection=RepeatDirection.Horizontal;
+								wc=rb;
+							}
 						}
-						rb.Items.Add(li);
+						if(rb!=null) {
+							rb.Items.Add(li);
+						}
 					}
 					if(FieldType==SheetFieldType.StaticText) {
-
+						Label lb=new Label();
+						lb.Text= FieldValue;
+						wc=lb;
 					}
 					if(FieldType==SheetFieldType.Image) {
-						System.Web.UI.WebControls.Image img = new System.Web.UI.WebControls.Image();
-
-						long WebSheetFieldDefNum = sfdObj.ElementAt(j).WebSheetFieldDefNum;
-
-						img.ImageUrl = ("~/Handler1.ashx?WebSheetFieldDefNum="+WebSheetFieldDefNum);
-						wc = img;
-						//Bitmap bitmap=PIn.Bitmap(FieldValue);
-						//Response.ContentType = "image/Jpeg";
-						//bitmap.Save(Response.OutputStream,ImageFormat.Jpeg);
-
-						/*
-						byte[] image = (byte[])FieldValue;
-					stream.Write(image,0,image.Length);
-					Bitmap bitmap = new Bitmap(stream);
-					Response.ContentType = "image/gif";
-					bitmap.Save(Response.OutputStream,ImageFormat.Gif);
-					*/
+						System.Web.UI.WebControls.Image img=new System.Web.UI.WebControls.Image();
+						long WebSheetFieldDefNum=sfdObj.ElementAt(j).WebSheetFieldDefNum;
+						img.ImageUrl=("~/Handler1.ashx?WebSheetFieldDefNum="+WebSheetFieldDefNum);
+						wc=img;
 					}
 					if(wc!=null) {
-						//wc.BorderStyle=BorderStyle.None;
-						wc.ID = FieldName;
+						wc.ID=FieldName;
 						wc.Style["position"]="absolute";
 						wc.Style["width"]=width+"px";
-						wc.Style["height"]=height/heightfactor+"px";
+						wc.Style["height"]=height+"px";
 						wc.Style["top"]=YPos+"px";
-						if(wc.GetType()==typeof(RadioButtonList)) {
-							wc.Style["top"]=YPos - RadioButtonYOffset +"px";
-						}else {
-							wc.Style["left"]=XPos+"px";
+						wc.Style["left"]=XPos+"px";
+
+						if(FieldType==SheetFieldType.InputField) { //textboxes
+							wc.Style["font-family"]=fontname;
+							wc.Style["font-size"]=fontsize+"px";
+							wc.Style["height"]=height/heightfactor+"px";
 						}
+						if(wc.GetType()==typeof(RadioButtonList)) {
+							wc.Style["top"]=YPos+RadioButtonYOffset+"px";
+							wc.Style["left"]=XPos+RadioButtonXOffset+"px";
+						}
+						if(wc.GetType()==typeof(System.Web.UI.WebControls.Image)){
+							wc.Style["top"]=YPos+ImageYOffset+"px";
+							wc.Style["left"]=XPos+ImageXOffset+"px";
+						}
+						if(FieldType==SheetFieldType.StaticText) {
+							wc.Style["font-family"]=fontname;
+							wc.Style["font-size"]=fontsize+"px";
+						}
+						if(FieldType==SheetFieldType.Image) {
+							wc.Style["z-index"]="-1";
+						}
+
+
+
+
+
 						form1.Controls.Add(wc);
 					}
 

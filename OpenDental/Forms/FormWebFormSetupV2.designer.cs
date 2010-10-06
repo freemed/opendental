@@ -154,6 +154,7 @@ namespace OpenDental{
 			this.gridMain.TabIndex = 56;
 			this.gridMain.Title = "Sheet Defs";
 			this.gridMain.TranslationName = "TableSheetDefs";
+			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			// 
 			// butOK
 			// 

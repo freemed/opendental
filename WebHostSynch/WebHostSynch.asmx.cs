@@ -71,8 +71,8 @@ namespace WebHostSynch {
 						return wspObj;
 					}
 					var wspRes=from wsp in db.webforms_preference
-							   where wsp.DentalOfficeID==DentalOfficeID
-							   select wsp;
+							where wsp.DentalOfficeID==DentalOfficeID
+							select wsp;
 					
 					if(wspRes.Count()>0) {
 						wspObj=wspRes.First();
@@ -135,7 +135,7 @@ namespace WebHostSynch {
 						long SheetID=SheetsForDeletion.ElementAt(i);// LINQ throws an error if this is directly put into the select expression
 						// first delete all sheet field then delete the sheet so that a foreign key error is not thrown
 						var delSheetField=from wsf in db.webforms_sheetfield where wsf.webforms_sheet.SheetID==SheetID
-										  select wsf;
+										select wsf;
 						for(int j=0;j<delSheetField.Count();j++) {
 							// the ElementAt operator only works with lists. Hence ToList()
 							db.DeleteObject(delSheetField.ToList().ElementAt(j));
@@ -165,11 +165,11 @@ namespace WebHostSynch {
 					RegistrationKeyFromDb=RegistrationKeys.GetByKey(RegistrationKeyFromDentalOffice);
 					DateTime d1= new DateTime(1902,1,1);
 					if(d1<RegistrationKeyFromDb.DateDisabled && RegistrationKeyFromDb.DateDisabled<DateTime.Today) {
-						Logger.Information("RegistrationKey has been disabled. Dental OfficeId=" +RegistrationKeyFromDb.PatNum);
+						Logger.Information("RegistrationKey has been disabled. Dental OfficeId="+RegistrationKeyFromDb.PatNum);
 						return false;
 					}
 					if(d1<RegistrationKeyFromDb.DateEnded && RegistrationKeyFromDb.DateEnded<DateTime.Today) {
-						Logger.Information("RegistrationKey DateEnded date is past. Dental OfficeId=" +RegistrationKeyFromDb.PatNum);
+						Logger.Information("RegistrationKey DateEnded date is past. Dental OfficeId="+RegistrationKeyFromDb.PatNum);
 						return false;
 					}
 				}
@@ -192,11 +192,11 @@ namespace WebHostSynch {
 					RegistrationKeyFromDb=RegistrationKeys.GetByKey(RegistrationKeyFromDentalOffice);
 					DateTime d1= new DateTime(1902,1,1);
 					if(d1<RegistrationKeyFromDb.DateDisabled && RegistrationKeyFromDb.DateDisabled<DateTime.Today) {
-						Logger.Information("RegistrationKey has been disabled. Dental OfficeId=" +RegistrationKeyFromDb.PatNum);
+						Logger.Information("RegistrationKey has been disabled. Dental OfficeId="+RegistrationKeyFromDb.PatNum);
 						return 0;
 					}
 					if(d1<RegistrationKeyFromDb.DateEnded && RegistrationKeyFromDb.DateEnded<DateTime.Today) {
-						Logger.Information("RegistrationKey DateEnded date is past. Dental OfficeId=" +RegistrationKeyFromDb.PatNum);
+						Logger.Information("RegistrationKey DateEnded date is past. Dental OfficeId="+RegistrationKeyFromDb.PatNum);
 						return 0;
 					}
 				}
@@ -217,7 +217,7 @@ namespace WebHostSynch {
 				catch(ApplicationException ex) {
 					Logger.Information(ex.Message.ToString());
 				}
-				Logger.Information("In GetWebFormAddress WebFormAddress=" +WebFormAddress);
+				Logger.Information("In GetWebFormAddress WebFormAddress="+WebFormAddress);
 				return WebFormAddress;
 			}
 
@@ -249,7 +249,7 @@ namespace WebHostSynch {
 				catch(ApplicationException ex) {
 					Logger.Information(ex.Message.ToString());
 				}
-				Logger.Information("In GetWebFormAddress SheetDefAddress=" +SheetDefAddress);
+				Logger.Information("In GetWebFormAddress SheetDefAddress="+SheetDefAddress);
 				return SheetDefAddress;
 			}
 
@@ -264,7 +264,7 @@ namespace WebHostSynch {
 						return sheetDefList;
 					}
 				ODWebServiceEntities db=new ODWebServiceEntities();
-				var SheetDefResult = db.webforms_sheetdef.Where(sheetdef => sheetdef.webforms_preference.DentalOfficeID==DentalOfficeID);
+				var SheetDefResult=db.webforms_sheetdef.Where(sheetdef => sheetdef.webforms_preference.DentalOfficeID==DentalOfficeID);
 				sheetDefList=SheetDefResult.ToList();
 				}
 				catch(ApplicationException ex) {
@@ -324,7 +324,7 @@ namespace WebHostSynch {
 					
 
 					foreach(SheetDef sheetDef in sheetDefList) {
-						var PreferenceResult = db.webforms_preference.Where(pref => pref.DentalOfficeID==DentalOfficeID);
+						var PreferenceResult=db.webforms_preference.Where(pref => pref.DentalOfficeID==DentalOfficeID);
 						webforms_sheetdef SheetDefObj=null;
 						/* code below is not needed because Sheet defs are never updated.
 						PreferenceResult.First().webforms_sheetdef.Load();//Load associated SheetDefs object.
@@ -342,7 +342,7 @@ namespace WebHostSynch {
 						}
 						*/
 						 SheetDefObj=new webforms_sheetdef();
-						 SheetDefObj.SheetDefNum=sheetDef.SheetDefNum;
+						 SheetDefObj.SheetDefNum=sheetDef.SheetDefNum; // this line may be removed later after deleting SheetDefNum column form the database
 						 PreferenceResult.First().webforms_sheetdef.Add(SheetDefObj);
 						 FillSheetDef(sheetDef,SheetDefObj);
 						 FillFieldSheetDef(sheetDef,SheetDefObj);
@@ -357,7 +357,7 @@ namespace WebHostSynch {
 
 			private void FillSheetDef(SheetDef sheetDef,webforms_sheetdef SheetDefObj) {
 				SheetDefObj.Description=sheetDef.Description;
-				SheetDefObj.FontName = sheetDef.FontName;
+				SheetDefObj.FontName=sheetDef.FontName;
 				SheetDefObj.SheetType=(int)sheetDef.SheetType;
 				SheetDefObj.FontSize=sheetDef.FontSize;
 				SheetDefObj.Width=sheetDef.Width;
@@ -372,7 +372,7 @@ namespace WebHostSynch {
 
 			private void FillFieldSheetDef(SheetDef sheetDef,webforms_sheetdef SheetDefObj) {
 				for(int i=0;i<sheetDef.SheetFieldDefs.Count();i++) {//assign several webforms_sheetfielddef
-					webforms_sheetfielddef SheetFieldDefObj = new webforms_sheetfielddef();
+					webforms_sheetfielddef SheetFieldDefObj=new webforms_sheetfielddef();
 					SheetFieldDefObj.SheetFieldDefNum=sheetDef.SheetFieldDefs[i].SheetFieldDefNum;
 					SheetDefObj.webforms_sheetfielddef.Add(SheetFieldDefObj);
 					// assign each property of a single webforms_sheetfielddef with corresponding values.

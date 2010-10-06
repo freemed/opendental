@@ -61,14 +61,15 @@ namespace OpenDental {
 		private bool TestWebServiceExists() {
 			try {
 			wh.Url=PrefC.GetString(PrefName.WebHostSynchServerURL);
-			//if(wh.ServiceExists()){
-			return true;
-			//}
+				if(wh.ServiceExists()){
+				return true;
+				}
 			}
 			catch(Exception ex) {
-				MsgBox.Show(this,"Please correct your web service URL");
-				return true;
+				MsgBox.Show(this,"Either the web service is not available or the WebHostSynch URL is incorrect");
+				return false;
 			}
+			return true;
 		}
 
 
@@ -288,7 +289,18 @@ namespace OpenDental {
 				}
 			gridMain.EndUpdate();
 		}
-	
+
+		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+		
+			if(gridMain.Rows[gridMain.SelectedIndices[0]].Tag.GetType()==typeof(SheetDef)) {
+
+			}
+			else {
+				OpenDental.WebHostSynch.webforms_sheetdef WebSheetDef= (OpenDental.WebHostSynch.webforms_sheetdef)gridMain.Rows[gridMain.SelectedIndices[0]].Tag;
+				String SheetFormAddress = SheetDefAddress+"?DentalOfficeID="+DentalOfficeID+"&WebSheetDefNum="+WebSheetDef.WebSheetDefNum;
+				System.Diagnostics.Process.Start(SheetFormAddress);
+			}
+		}
 	
 		private void butOK_Click(object sender,EventArgs e) {
 			Cursor=Cursors.WaitCursor;
@@ -316,6 +328,8 @@ namespace OpenDental {
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+
 
 
 

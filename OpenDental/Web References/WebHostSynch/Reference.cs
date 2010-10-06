@@ -22,6 +22,7 @@ namespace OpenDental.WebHostSynch {
     using System.Xml.Serialization;
 	using OpenDentBusiness;
     
+    
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "2.0.50727.3053")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -48,6 +49,8 @@ namespace OpenDental.WebHostSynch {
         private System.Threading.SendOrPostCallback GetDentalOfficeIDOperationCompleted;
         
         private System.Threading.SendOrPostCallback GetWebFormAddressOperationCompleted;
+        
+        private System.Threading.SendOrPostCallback ServiceExistsOperationCompleted;
         
         private System.Threading.SendOrPostCallback GetSheetDefAddressOperationCompleted;
         
@@ -118,6 +121,9 @@ namespace OpenDental.WebHostSynch {
         
         /// <remarks/>
         public event GetWebFormAddressCompletedEventHandler GetWebFormAddressCompleted;
+        
+        /// <remarks/>
+        public event ServiceExistsCompletedEventHandler ServiceExistsCompleted;
         
         /// <remarks/>
         public event GetSheetDefAddressCompletedEventHandler GetSheetDefAddressCompleted;
@@ -367,6 +373,33 @@ namespace OpenDental.WebHostSynch {
             if ((this.GetWebFormAddressCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.GetWebFormAddressCompleted(this, new GetWebFormAddressCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://opendental.com/ServiceExists", RequestNamespace="http://opendental.com/", ResponseNamespace="http://opendental.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public bool ServiceExists() {
+            object[] results = this.Invoke("ServiceExists", new object[0]);
+            return ((bool)(results[0]));
+        }
+        
+        /// <remarks/>
+        public void ServiceExistsAsync() {
+            this.ServiceExistsAsync(null);
+        }
+        
+        /// <remarks/>
+        public void ServiceExistsAsync(object userState) {
+            if ((this.ServiceExistsOperationCompleted == null)) {
+                this.ServiceExistsOperationCompleted = new System.Threading.SendOrPostCallback(this.OnServiceExistsOperationCompleted);
+            }
+            this.InvokeAsync("ServiceExists", new object[0], this.ServiceExistsOperationCompleted, userState);
+        }
+        
+        private void OnServiceExistsOperationCompleted(object arg) {
+            if ((this.ServiceExistsCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.ServiceExistsCompleted(this, new ServiceExistsCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
         
@@ -667,7 +700,7 @@ namespace OpenDental.WebHostSynch {
         }
     }
     
- 
+
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(EntityReference))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(EntityReferenceOfwebforms_preference))]
@@ -1148,6 +1181,32 @@ namespace OpenDental.WebHostSynch {
             get {
                 this.RaiseExceptionIfNecessary();
                 return ((string)(this.results[0]));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "2.0.50727.3053")]
+    public delegate void ServiceExistsCompletedEventHandler(object sender, ServiceExistsCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "2.0.50727.3053")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class ServiceExistsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal ServiceExistsCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        /// <remarks/>
+        public bool Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((bool)(this.results[0]));
             }
         }
     }
