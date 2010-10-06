@@ -965,29 +965,53 @@ Fam Urgent Fin Note: [famFinUrgNote]"
 		public static SheetDef DepositSlip(){
 			SheetDef sheet=new SheetDef(SheetTypeEnum.DepositSlip);
 			sheet.Description="Deposit Slip";
-			sheet.FontName="Microsoft Sans Serif";
+			sheet.FontName=FontFamily.GenericMonospace.Name;
 			sheet.FontSize=11f;
 			sheet.Width=850;
 			sheet.Height=1100;
-			int rowH=25;
-			int y=100;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Deposit Slip",16f,sheet.FontName,true,300,y,300,30));
-			y+=35;
-			//sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("[clinicDescription]",12f,sheet.FontName,true,300,y,300,20));
-			//y+=rowH;
-			//sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("deposit.DateDeposit",12f,sheet.FontName,false,300,y,200,20));
-			//y+=rowH;
-			//sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("[dateToday]",12f,sheet.FontName,false,0,y,100,20));
-			//y+=rowH;
-			//sheet.SheetFieldDefs.Add(SheetFieldDef.NewLine(0,y,800,0));
-			//y+=6;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositList",12f,sheet.FontName,false,100,y,600,500));
-
-
-
-
-
-
+			//The following fields are invisible by default because they have no height.
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositItemCount",8f,sheet.FontName,false,0,0,80,0));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositItem01",8f,sheet.FontName,false,0,0,100,0));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositItem02",8f,sheet.FontName,false,0,0,100,0));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositItem03",8f,sheet.FontName,false,0,0,100,0));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositItem04",8f,sheet.FontName,false,0,0,100,0));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositItem05",8f,sheet.FontName,false,0,0,100,0));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositItem06",8f,sheet.FontName,false,0,0,100,0));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositItem07",8f,sheet.FontName,false,0,0,100,0));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositItem08",8f,sheet.FontName,false,0,0,100,0));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositItem09",8f,sheet.FontName,false,0,0,100,0));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositItem10",8f,sheet.FontName,false,0,0,100,0));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositItem11",8f,sheet.FontName,false,0,0,100,0));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositItem12",8f,sheet.FontName,false,0,0,100,0));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositItem13",8f,sheet.FontName,false,0,0,100,0));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositItem14",8f,sheet.FontName,false,0,0,100,0));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositItem15",8f,sheet.FontName,false,0,0,100,0));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositItem16",8f,sheet.FontName,false,0,0,100,0));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositItem17",8f,sheet.FontName,false,0,0,100,0));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositItem18",8f,sheet.FontName,false,0,0,100,0));
+			//The following fields are visible and together define the default sheet.
+			int rowH=20;
+			int y=50;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Deposit Slip",16f,sheet.FontName,true,323,y,300,30));
+			y+=30;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("[practiceTitle]",10f,sheet.FontName,true,323,y,300,20));
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("deposit.DateDeposit",10f,sheet.FontName,false,352,y,200,20));
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Date: [dateToday]",8f,sheet.FontName,false,50,y,160,20));
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewLine(50,y,750,0));
+			y+=4;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositList",8f,sheet.FontName,false,75,y,700,0,GrowthBehaviorEnum.DownGlobal));
+			y+=6;//The actual y-value of the proceeding elements will be changed depending on the size of the depositList, since we are using DownGlobal growth.
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewLine(50,y,750,0));
+			y+=4;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositTotal",8f,sheet.FontName,true,615,y,200,20));
+			y+=rowH+4;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewLine(50,y,750,0));
+			y+=4;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("deposit.BankAccountInfo",8f,sheet.FontName,true,50,y,700,0,GrowthBehaviorEnum.DownGlobal));
+			y+=1;//The actual y-value of the proceeding elements will be changed depending on the size of the deposit.BankAccountInfo, since we are using DownGlobal growth.
 			return sheet;
 		}
 

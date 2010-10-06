@@ -100,51 +100,9 @@ namespace OpenDental{
 		}
 
 		private static void FillFieldsInStaticText(Sheet sheet,Patient pat) {
-			if(pat==null){
-				return;
-			}
-			string plannedAppointmentInfo="";
-			string fldval;
-			string address=pat.Address;
-			if(pat.Address2!=""){
-				address+=", "+pat.Address2;
-			}
-			string birthdate=pat.Birthdate.ToShortDateString();
-			if(pat.Birthdate.Year<1880){
-				birthdate="";
-			}
-			string dateFirstVisit=pat.DateFirstVisit.ToShortDateString();
-			if(pat.DateFirstVisit.Year<1880) {
-				dateFirstVisit="";
-			}
-			Family fam=Patients.GetFamily(pat.PatNum);
-			string treatmentPlanProcs="";
-			List<Procedure> procsList=null;
-			if(Sheets.ContainsStaticField(sheet,"treatmentPlanProcs") || Sheets.ContainsStaticField(sheet,"plannedAppointmentInfo")) {
-				procsList=Procedures.Refresh(pat.PatNum);
-				if(Sheets.ContainsStaticField(sheet,"treatmentPlanProcs")) {
-					for(int i=0;i<procsList.Count;i++) {
-						if(procsList[i].ProcStatus!=ProcStat.TP) {
-							continue;
-						}
-						if(treatmentPlanProcs!="") {
-							treatmentPlanProcs+="\r\n";
-						}
-						treatmentPlanProcs+=ProcedureCodes.GetStringProcCode(procsList[i].CodeNum)+", "
-							+Procedures.GetDescription(procsList[i])+", "
-							+procsList[i].ProcFee.ToString("c");
-					}
-				}
-			}
-			//Insurance-------------------------------------------------------------------------------------------------------------------
-			List <PatPlan> patPlanList=PatPlans.Refresh(pat.PatNum);
-			long planNum=PatPlans.GetPlanNum(patPlanList,1);
-			long patPlanNum=PatPlans.GetPatPlanNum(patPlanList,planNum);
-			List<InsPlan> planList=InsPlans.RefreshForFam(fam);
-			InsPlan plan=InsPlans.GetPlan(planNum,planList);
-			Carrier carrier=null;
-			List<Benefit> benefitList=Benefits.Refresh(patPlanList);
-			List<ClaimProcHist> histList=ClaimProcs.GetHistList(pat.PatNum,benefitList,patPlanList,planList,DateTime.Today);
+			string fldval="";
+			string address="";
+			string birthdate="";
 			string carrierName="";
 			string carrierAddress="";
 			string carrierCityStZip="";
@@ -157,69 +115,6 @@ namespace OpenDental{
 			string insPercentages="";
 			string insRemaining="";
 			string insUsed="";
-			double doubAnnualMax;
-			double doubDeductible;
-			double doubDeductibleUsed;
-			double doubPending;
-			double doubRemain;
-			double doubUsed;
-			if(plan!=null){
-				carrier=Carriers.GetCarrier(plan.CarrierNum);
-				carrierName=carrier.CarrierName;
-				carrierAddress=carrier.Address;
-				if(carrier.Address2!=""){
-					carrierAddress+=", "+carrier.Address2;
-				}
-				carrierCityStZip=carrier.City+", "+carrier.State+"  "+carrier.Zip;
-				subscriberId=plan.SubscriberID;
-				subscriberNameFL=Patients.GetLim(plan.Subscriber).GetNameFL();
-				doubAnnualMax=Benefits.GetAnnualMaxDisplay(benefitList,plan.PlanNum,patPlanNum,false);
-				doubRemain=-1;
-				if(doubAnnualMax!=-1){
-					insAnnualMax=doubAnnualMax.ToString("c");
-					doubRemain=doubAnnualMax;
-				}
-				doubDeductible=Benefits.GetDeductGeneralDisplay(benefitList,plan.PlanNum,patPlanNum,BenefitCoverageLevel.Individual);
-				if(doubDeductible!=-1){
-					insDeductible=doubDeductible.ToString("c");
-				}
-				doubDeductibleUsed=InsPlans.GetDedUsedDisplay(histList,DateTime.Today,plan.PlanNum,patPlanNum,-1,planList,BenefitCoverageLevel.Individual,pat.PatNum);
-				if(doubDeductibleUsed!=-1){
-					insDeductibleUsed=doubDeductibleUsed.ToString("c");
-				}
-				doubPending=InsPlans.GetPendingDisplay(histList,DateTime.Today,plan,patPlanNum,-1,pat.PatNum);
-				if(doubPending!=-1) {
-					insPending=doubPending.ToString("c");
-					if(doubRemain!=-1){
-						doubRemain-=doubPending;
-					}
-				}
-				doubUsed=InsPlans.GetInsUsedDisplay(histList,DateTime.Today,plan.PlanNum,patPlanNum,-1,planList,benefitList,pat.PatNum);
-				if(doubUsed!=-1) {
-					insUsed=doubUsed.ToString("c");
-					if(doubRemain!=-1){
-						doubRemain-=doubUsed;
-					}
-				}
-				if(doubRemain!=-1){
-					insRemaining=doubRemain.ToString("c");
-				}
-				for(int j=0;j<benefitList.Count;j++) {
-					if(benefitList[j].PlanNum != plan.PlanNum) {
-						continue;
-					}
-					if(benefitList[j].BenefitType != InsBenefitType.CoInsurance) {
-						continue;
-					}
-					if(insPercentages!="") {
-						insPercentages+=",  ";
-					}
-					insPercentages+=CovCats.GetDesc(benefitList[j].CovCatNum)+" "+benefitList[j].Percent.ToString()+"%";
-				}
-			}
-			planNum=PatPlans.GetPlanNum(patPlanList,2);
-			patPlanNum=PatPlans.GetPatPlanNum(patPlanList,planNum);
-			plan=InsPlans.GetPlan(planNum,planList);
 			string carrier2Name="";
 			string subscriber2NameFL="";
 			string ins2AnnualMax="";
@@ -229,110 +124,224 @@ namespace OpenDental{
 			string ins2Percentages="";
 			string ins2Remaining="";
 			string ins2Used="";
-			if(plan!=null) {
-				carrier=Carriers.GetCarrier(plan.CarrierNum);
-				carrier2Name=carrier.CarrierName;
-				//carrierAddress=carrier.Address;
-				//if(carrier.Address2!="") {
-				//	carrierAddress+=", "+carrier.Address2;
-				//}
-				//carrierCityStZip=carrier.City+", "+carrier.State+"  "+carrier.Zip;
-				//subscriberId=plan.SubscriberID;
-				subscriber2NameFL=Patients.GetLim(plan.Subscriber).GetNameFL();
-				doubAnnualMax=Benefits.GetAnnualMaxDisplay(benefitList,plan.PlanNum,patPlanNum,false);
-				doubRemain=-1;
-				if(doubAnnualMax!=-1) {
-					ins2AnnualMax=doubAnnualMax.ToString("c");
-					doubRemain=doubAnnualMax;
-				}
-				doubDeductible=Benefits.GetDeductGeneralDisplay(benefitList,plan.PlanNum,patPlanNum,BenefitCoverageLevel.Individual);
-				if(doubDeductible!=-1) {
-					ins2Deductible=doubDeductible.ToString("c");
-				}
-				doubDeductibleUsed=InsPlans.GetDedUsedDisplay(histList,DateTime.Today,plan.PlanNum,patPlanNum,-1,planList,BenefitCoverageLevel.Individual,pat.PatNum);
-				if(doubDeductibleUsed!=-1) {
-					ins2DeductibleUsed=doubDeductibleUsed.ToString("c");
-				}
-				doubPending=InsPlans.GetPendingDisplay(histList,DateTime.Today,plan,patPlanNum,-1,pat.PatNum);
-				if(doubPending!=-1) {
-					ins2Pending=doubPending.ToString("c");
-					if(doubRemain!=-1){
-						doubRemain-=doubPending;
-					}
-				}
-				doubUsed=InsPlans.GetInsUsedDisplay(histList,DateTime.Today,plan.PlanNum,patPlanNum,-1,planList,benefitList,pat.PatNum);
-				if(doubUsed!=-1) {
-					ins2Used=doubUsed.ToString("c");
-					if(doubRemain!=-1){
-						doubRemain-=doubUsed;
-					}
-				}
-				if(doubRemain!=-1){
-					ins2Remaining=doubRemain.ToString("c");
-				}
-				for(int j=0;j<benefitList.Count;j++) {
-					if(benefitList[j].PlanNum != plan.PlanNum) {
-						continue;
-					}
-					if(benefitList[j].BenefitType != InsBenefitType.CoInsurance) {
-						continue;
-					}
-					if(ins2Percentages!="") {
-						ins2Percentages+=",  ";
-					}
-					ins2Percentages+=CovCats.GetDesc(benefitList[j].CovCatNum)+" "+benefitList[j].Percent.ToString()+"%";
-				}
-			}
-			//Treatment plan-----------------------------------------------------------------------------------------------------------
-			TreatPlan[] treatPlanList=TreatPlans.Refresh(pat.PatNum);
-			TreatPlan treatPlan=null;
+			string clinicDescription="";
+			string clinicAddress="";
+			string clinicCityStZip="";
+			string phone="";
+			string clinicPhone="";
+			string plannedAppointmentInfo="";
+			string dateFirstVisit="";
+			string treatmentPlanProcs="";
 			string dateOfLastSavedTP="";
 			string tpResponsPartyAddress="";
 			string tpResponsPartyCityStZip="";
 			string tpResponsPartyNameFL="";
-			if(treatPlanList.Length>0){
-				treatPlan=treatPlanList[treatPlanList.Length-1].Copy();
-				dateOfLastSavedTP=treatPlan.DateTP.ToShortDateString();
-				Patient patRespParty=Patients.GetPat(treatPlan.ResponsParty);
-				if(patRespParty!=null){
-					tpResponsPartyAddress=patRespParty.Address;
-					if(patRespParty.Address2!=""){
-						tpResponsPartyAddress+=", "+patRespParty.Address2;
-					}
-					tpResponsPartyCityStZip=patRespParty.City+", "+patRespParty.State+"  "+patRespParty.Zip;
-					tpResponsPartyNameFL=patRespParty.GetNameFL();
-				}
-			}
-			//Recall--------------------------------------------------------------------------------------------------------------------
-			Recall recall=Recalls.GetRecallProphyOrPerio(pat.PatNum);
 			string dateRecallDue="";
 			string recallInterval="";
-			if(recall!=null){
-				if(recall.DateDue.Year>1880){
-					dateRecallDue=recall.DateDue.ToShortDateString();
-				}
-				recallInterval=recall.RecallInterval.ToString();
-			}
-			//Appointments--------------------------------------------------------------------------------------------------------------
-			List<Appointment> apptList=Appointments.GetListForPat(pat.PatNum);
 			string nextSchedApptDateT="";
 			string dateTimeLastAppt="";
-			for(int i=0;i<apptList.Count;i++) {
-				if(apptList[i].AptStatus != ApptStatus.Scheduled
-					&& apptList[i].AptStatus != ApptStatus.Complete
-					&& apptList[i].AptStatus != ApptStatus.None
-					&& apptList[i].AptStatus != ApptStatus.ASAP) 
-				{
-					continue;
+			Family fam=null;
+			Provider priProv=null;
+			if(pat!=null){
+				address=pat.Address;
+				if(pat.Address2!=""){
+					address+=", "+pat.Address2;
 				}
-				if(apptList[i].AptDateTime < DateTime.Now) {
-					//this will happen repeatedly up until the most recent.
-					dateTimeLastAppt=apptList[i].AptDateTime.ToShortDateString()+"  "+apptList[i].AptDateTime.ToShortTimeString();
+				birthdate=pat.Birthdate.ToShortDateString();
+				if(pat.Birthdate.Year<1880){
+					birthdate="";
 				}
-				else {//after now
-					if(nextSchedApptDateT=="") {//only the first one found
-						nextSchedApptDateT=apptList[i].AptDateTime.ToShortDateString()+"  "+apptList[i].AptDateTime.ToShortTimeString();
-						break;//we're done with the list now.
+				dateFirstVisit=pat.DateFirstVisit.ToShortDateString();
+				if(pat.DateFirstVisit.Year<1880) {
+					dateFirstVisit="";
+				}
+				fam=Patients.GetFamily(pat.PatNum);
+				List<Procedure> procsList=null;
+				if(Sheets.ContainsStaticField(sheet,"treatmentPlanProcs") || Sheets.ContainsStaticField(sheet,"plannedAppointmentInfo")) {
+					procsList=Procedures.Refresh(pat.PatNum);
+					if(Sheets.ContainsStaticField(sheet,"treatmentPlanProcs")) {
+						for(int i=0;i<procsList.Count;i++) {
+							if(procsList[i].ProcStatus!=ProcStat.TP) {
+								continue;
+							}
+							if(treatmentPlanProcs!="") {
+								treatmentPlanProcs+="\r\n";
+							}
+							treatmentPlanProcs+=ProcedureCodes.GetStringProcCode(procsList[i].CodeNum)+", "
+								+Procedures.GetDescription(procsList[i])+", "
+								+procsList[i].ProcFee.ToString("c");
+						}
+					}
+				}
+				//Insurance-------------------------------------------------------------------------------------------------------------------
+				List <PatPlan> patPlanList=PatPlans.Refresh(pat.PatNum);
+				long planNum=PatPlans.GetPlanNum(patPlanList,1);
+				long patPlanNum=PatPlans.GetPatPlanNum(patPlanList,planNum);
+				List<InsPlan> planList=InsPlans.RefreshForFam(fam);
+				InsPlan plan=InsPlans.GetPlan(planNum,planList);
+				Carrier carrier=null;
+				List<Benefit> benefitList=Benefits.Refresh(patPlanList);
+				List<ClaimProcHist> histList=ClaimProcs.GetHistList(pat.PatNum,benefitList,patPlanList,planList,DateTime.Today);
+				double doubAnnualMax;
+				double doubDeductible;
+				double doubDeductibleUsed;
+				double doubPending;
+				double doubRemain;
+				double doubUsed;
+				if(plan!=null){
+					carrier=Carriers.GetCarrier(plan.CarrierNum);
+					carrierName=carrier.CarrierName;
+					carrierAddress=carrier.Address;
+					if(carrier.Address2!=""){
+						carrierAddress+=", "+carrier.Address2;
+					}
+					carrierCityStZip=carrier.City+", "+carrier.State+"  "+carrier.Zip;
+					subscriberId=plan.SubscriberID;
+					subscriberNameFL=Patients.GetLim(plan.Subscriber).GetNameFL();
+					doubAnnualMax=Benefits.GetAnnualMaxDisplay(benefitList,plan.PlanNum,patPlanNum,false);
+					doubRemain=-1;
+					if(doubAnnualMax!=-1){
+						insAnnualMax=doubAnnualMax.ToString("c");
+						doubRemain=doubAnnualMax;
+					}
+					doubDeductible=Benefits.GetDeductGeneralDisplay(benefitList,plan.PlanNum,patPlanNum,BenefitCoverageLevel.Individual);
+					if(doubDeductible!=-1){
+						insDeductible=doubDeductible.ToString("c");
+					}
+					doubDeductibleUsed=InsPlans.GetDedUsedDisplay(histList,DateTime.Today,plan.PlanNum,patPlanNum,-1,planList,BenefitCoverageLevel.Individual,pat.PatNum);
+					if(doubDeductibleUsed!=-1){
+						insDeductibleUsed=doubDeductibleUsed.ToString("c");
+					}
+					doubPending=InsPlans.GetPendingDisplay(histList,DateTime.Today,plan,patPlanNum,-1,pat.PatNum);
+					if(doubPending!=-1) {
+						insPending=doubPending.ToString("c");
+						if(doubRemain!=-1){
+							doubRemain-=doubPending;
+						}
+					}
+					doubUsed=InsPlans.GetInsUsedDisplay(histList,DateTime.Today,plan.PlanNum,patPlanNum,-1,planList,benefitList,pat.PatNum);
+					if(doubUsed!=-1) {
+						insUsed=doubUsed.ToString("c");
+						if(doubRemain!=-1){
+							doubRemain-=doubUsed;
+						}
+					}
+					if(doubRemain!=-1){
+						insRemaining=doubRemain.ToString("c");
+					}
+					for(int j=0;j<benefitList.Count;j++) {
+						if(benefitList[j].PlanNum != plan.PlanNum) {
+							continue;
+						}
+						if(benefitList[j].BenefitType != InsBenefitType.CoInsurance) {
+							continue;
+						}
+						if(insPercentages!="") {
+							insPercentages+=",  ";
+						}
+						insPercentages+=CovCats.GetDesc(benefitList[j].CovCatNum)+" "+benefitList[j].Percent.ToString()+"%";
+					}
+				}
+				planNum=PatPlans.GetPlanNum(patPlanList,2);
+				patPlanNum=PatPlans.GetPatPlanNum(patPlanList,planNum);
+				plan=InsPlans.GetPlan(planNum,planList);
+				if(plan!=null) {
+					carrier=Carriers.GetCarrier(plan.CarrierNum);
+					carrier2Name=carrier.CarrierName;
+					//carrierAddress=carrier.Address;
+					//if(carrier.Address2!="") {
+					//	carrierAddress+=", "+carrier.Address2;
+					//}
+					//carrierCityStZip=carrier.City+", "+carrier.State+"  "+carrier.Zip;
+					//subscriberId=plan.SubscriberID;
+					subscriber2NameFL=Patients.GetLim(plan.Subscriber).GetNameFL();
+					doubAnnualMax=Benefits.GetAnnualMaxDisplay(benefitList,plan.PlanNum,patPlanNum,false);
+					doubRemain=-1;
+					if(doubAnnualMax!=-1) {
+						ins2AnnualMax=doubAnnualMax.ToString("c");
+						doubRemain=doubAnnualMax;
+					}
+					doubDeductible=Benefits.GetDeductGeneralDisplay(benefitList,plan.PlanNum,patPlanNum,BenefitCoverageLevel.Individual);
+					if(doubDeductible!=-1) {
+						ins2Deductible=doubDeductible.ToString("c");
+					}
+					doubDeductibleUsed=InsPlans.GetDedUsedDisplay(histList,DateTime.Today,plan.PlanNum,patPlanNum,-1,planList,BenefitCoverageLevel.Individual,pat.PatNum);
+					if(doubDeductibleUsed!=-1) {
+						ins2DeductibleUsed=doubDeductibleUsed.ToString("c");
+					}
+					doubPending=InsPlans.GetPendingDisplay(histList,DateTime.Today,plan,patPlanNum,-1,pat.PatNum);
+					if(doubPending!=-1) {
+						ins2Pending=doubPending.ToString("c");
+						if(doubRemain!=-1){
+							doubRemain-=doubPending;
+						}
+					}
+					doubUsed=InsPlans.GetInsUsedDisplay(histList,DateTime.Today,plan.PlanNum,patPlanNum,-1,planList,benefitList,pat.PatNum);
+					if(doubUsed!=-1) {
+						ins2Used=doubUsed.ToString("c");
+						if(doubRemain!=-1){
+							doubRemain-=doubUsed;
+						}
+					}
+					if(doubRemain!=-1){
+						ins2Remaining=doubRemain.ToString("c");
+					}
+					for(int j=0;j<benefitList.Count;j++) {
+						if(benefitList[j].PlanNum != plan.PlanNum) {
+							continue;
+						}
+						if(benefitList[j].BenefitType != InsBenefitType.CoInsurance) {
+							continue;
+						}
+						if(ins2Percentages!="") {
+							ins2Percentages+=",  ";
+						}
+						ins2Percentages+=CovCats.GetDesc(benefitList[j].CovCatNum)+" "+benefitList[j].Percent.ToString()+"%";
+					}
+				}
+				//Treatment plan-----------------------------------------------------------------------------------------------------------
+				TreatPlan[] treatPlanList=TreatPlans.Refresh(pat.PatNum);
+				TreatPlan treatPlan=null;
+				if(treatPlanList.Length>0){
+					treatPlan=treatPlanList[treatPlanList.Length-1].Copy();
+					dateOfLastSavedTP=treatPlan.DateTP.ToShortDateString();
+					Patient patRespParty=Patients.GetPat(treatPlan.ResponsParty);
+					if(patRespParty!=null){
+						tpResponsPartyAddress=patRespParty.Address;
+						if(patRespParty.Address2!=""){
+							tpResponsPartyAddress+=", "+patRespParty.Address2;
+						}
+						tpResponsPartyCityStZip=patRespParty.City+", "+patRespParty.State+"  "+patRespParty.Zip;
+						tpResponsPartyNameFL=patRespParty.GetNameFL();
+					}
+				}
+				//Recall--------------------------------------------------------------------------------------------------------------------
+				Recall recall=Recalls.GetRecallProphyOrPerio(pat.PatNum);
+				if(recall!=null){
+					if(recall.DateDue.Year>1880){
+						dateRecallDue=recall.DateDue.ToShortDateString();
+					}
+					recallInterval=recall.RecallInterval.ToString();
+				}
+				//Appointments--------------------------------------------------------------------------------------------------------------
+				List<Appointment> apptList=Appointments.GetListForPat(pat.PatNum);
+				for(int i=0;i<apptList.Count;i++) {
+					if(apptList[i].AptStatus != ApptStatus.Scheduled
+						&& apptList[i].AptStatus != ApptStatus.Complete
+						&& apptList[i].AptStatus != ApptStatus.None
+						&& apptList[i].AptStatus != ApptStatus.ASAP) 
+					{
+						continue;
+					}
+					if(apptList[i].AptDateTime < DateTime.Now) {
+						//this will happen repeatedly up until the most recent.
+						dateTimeLastAppt=apptList[i].AptDateTime.ToShortDateString()+"  "+apptList[i].AptDateTime.ToShortTimeString();
+					}
+					else {//after now
+						if(nextSchedApptDateT=="") {//only the first one found
+							nextSchedApptDateT=apptList[i].AptDateTime.ToShortDateString()+"  "+apptList[i].AptDateTime.ToShortTimeString();
+							break;//we're done with the list now.
+						}
 					}
 				}
 			}
@@ -369,37 +378,34 @@ namespace OpenDental{
 					}
 				}*/
 			}
-			Provider priProv=Providers.GetProv(Patients.GetProvNum(pat));//guaranteed to work
-			//Clinic-------------------------------------------------------------------------------------------------------------
-			Clinic clinic=Clinics.GetClinic(pat.ClinicNum);
-			string clinicDescription="";
-			string clinicAddress="";
-			string clinicCityStZip="";
-			string phone;
-			string clinicPhone="";
-			if(clinic==null){
-				clinicDescription=PrefC.GetString(PrefName.PracticeTitle);
-				clinicAddress=PrefC.GetString(PrefName.PracticeAddress);
-				if(PrefC.GetString(PrefName.PracticeAddress2)!="") {
-					clinicAddress+=", "+PrefC.GetString(PrefName.PracticeAddress2);
+			if(pat!=null){
+				priProv=Providers.GetProv(Patients.GetProvNum(pat));//guaranteed to work
+				//Clinic-------------------------------------------------------------------------------------------------------------
+				Clinic clinic=Clinics.GetClinic(pat.ClinicNum);
+				if(clinic==null){
+					clinicDescription=PrefC.GetString(PrefName.PracticeTitle);
+					clinicAddress=PrefC.GetString(PrefName.PracticeAddress);
+					if(PrefC.GetString(PrefName.PracticeAddress2)!="") {
+						clinicAddress+=", "+PrefC.GetString(PrefName.PracticeAddress2);
+					}
+					clinicCityStZip=PrefC.GetString(PrefName.PracticeCity)+", "+PrefC.GetString(PrefName.PracticeST)+"  "+PrefC.GetString(PrefName.PracticeZip);
+					phone=PrefC.GetString(PrefName.PracticePhone);
 				}
-				clinicCityStZip=PrefC.GetString(PrefName.PracticeCity)+", "+PrefC.GetString(PrefName.PracticeST)+"  "+PrefC.GetString(PrefName.PracticeZip);
-				phone=PrefC.GetString(PrefName.PracticePhone);
-			}
-			else{
-				clinicDescription=clinic.Description;
-				clinicAddress=clinic.Address;
-				if(clinic.Address2!=""){
-					clinicAddress+=", "+clinic.Address2;
+				else{
+					clinicDescription=clinic.Description;
+					clinicAddress=clinic.Address;
+					if(clinic.Address2!=""){
+						clinicAddress+=", "+clinic.Address2;
+					}
+					clinicCityStZip=clinic.City+", "+clinic.State+"  "+clinic.Zip;
+					phone=clinic.Phone;
 				}
-				clinicCityStZip=clinic.City+", "+clinic.State+"  "+clinic.Zip;
-				phone=clinic.Phone;
-			}
-			if(phone.Length==10 && System.Globalization.CultureInfo.CurrentCulture.Name=="en-US") {
-				clinicPhone="("+phone.Substring(0,3)+")"+phone.Substring(3,3)+"-"+phone.Substring(6);
-			}
-			else {
-				clinicPhone=phone;
+				if(phone.Length==10 && System.Globalization.CultureInfo.CurrentCulture.Name=="en-US") {
+					clinicPhone="("+phone.Substring(0,3)+")"+phone.Substring(3,3)+"-"+phone.Substring(6);
+				}
+				else {
+					clinicPhone=phone;
+				}
 			}
 			//Fill fields---------------------------------------------------------------------------------------------------------
 			foreach(SheetField field in sheet.SheetFields) {
@@ -407,73 +413,76 @@ namespace OpenDental{
 					continue;
 				}
 				fldval=field.FieldValue;
-				fldval=fldval.Replace("[address]",address);
-				fldval=fldval.Replace("[age]",Patients.AgeToString(pat.Age));
-				fldval=fldval.Replace("[balTotal]",fam.ListPats[0].BalTotal.ToString("c"));
-				fldval=fldval.Replace("[bal_0_30]",fam.ListPats[0].Bal_0_30.ToString("c"));
-				fldval=fldval.Replace("[bal_31_60]",fam.ListPats[0].Bal_31_60.ToString("c"));
-				fldval=fldval.Replace("[bal_61_90]",fam.ListPats[0].Bal_61_90.ToString("c"));
-				fldval=fldval.Replace("[balOver90]",fam.ListPats[0].BalOver90.ToString("c"));
-				fldval=fldval.Replace("[balInsEst]",fam.ListPats[0].InsEst.ToString("c"));
-				fldval=fldval.Replace("[balTotalMinusInsEst]",(fam.ListPats[0].BalTotal-fam.ListPats[0].InsEst).ToString("c"));
-				fldval=fldval.Replace("[BillingType]",DefC.GetName(DefCat.BillingTypes,pat.BillingType));
-				fldval=fldval.Replace("[Birthdate]",birthdate);
-				fldval=fldval.Replace("[carrierName]",carrierName);
-				fldval=fldval.Replace("[carrier2Name]",carrier2Name);
-				fldval=fldval.Replace("[ChartNumber]",pat.ChartNumber);
-				fldval=fldval.Replace("[carrierAddress]",carrierAddress);
-				fldval=fldval.Replace("[carrierCityStZip]",carrierCityStZip);
-				fldval=fldval.Replace("[cityStateZip]",pat.City+", "+pat.State+"  "+pat.Zip);
-				fldval=fldval.Replace("[clinicDescription]",clinicDescription);
-				fldval=fldval.Replace("[clinicAddress]",clinicAddress);
-				fldval=fldval.Replace("[clinicCityStZip]",clinicCityStZip);
-				fldval=fldval.Replace("[clinicPhone]",clinicPhone);
-				fldval=fldval.Replace("[DateFirstVisit]",dateFirstVisit);
-				fldval=fldval.Replace("[dateOfLastSavedTP]",dateOfLastSavedTP);
-				fldval=fldval.Replace("[dateRecallDue]",dateRecallDue);
-				fldval=fldval.Replace("[dateTimeLastAppt]",dateTimeLastAppt);
+				if(pat!=null){
+					fldval=fldval.Replace("[address]",address);
+					fldval=fldval.Replace("[age]",Patients.AgeToString(pat.Age));
+					fldval=fldval.Replace("[balTotal]",fam.ListPats[0].BalTotal.ToString("c"));
+					fldval=fldval.Replace("[bal_0_30]",fam.ListPats[0].Bal_0_30.ToString("c"));
+					fldval=fldval.Replace("[bal_31_60]",fam.ListPats[0].Bal_31_60.ToString("c"));
+					fldval=fldval.Replace("[bal_61_90]",fam.ListPats[0].Bal_61_90.ToString("c"));
+					fldval=fldval.Replace("[balOver90]",fam.ListPats[0].BalOver90.ToString("c"));
+					fldval=fldval.Replace("[balInsEst]",fam.ListPats[0].InsEst.ToString("c"));
+					fldval=fldval.Replace("[balTotalMinusInsEst]",(fam.ListPats[0].BalTotal-fam.ListPats[0].InsEst).ToString("c"));
+					fldval=fldval.Replace("[BillingType]",DefC.GetName(DefCat.BillingTypes,pat.BillingType));
+					fldval=fldval.Replace("[Birthdate]",birthdate);
+					fldval=fldval.Replace("[carrierName]",carrierName);
+					fldval=fldval.Replace("[carrier2Name]",carrier2Name);
+					fldval=fldval.Replace("[ChartNumber]",pat.ChartNumber);
+					fldval=fldval.Replace("[carrierAddress]",carrierAddress);
+					fldval=fldval.Replace("[carrierCityStZip]",carrierCityStZip);
+					fldval=fldval.Replace("[cityStateZip]",pat.City+", "+pat.State+"  "+pat.Zip);
+					fldval=fldval.Replace("[clinicDescription]",clinicDescription);
+					fldval=fldval.Replace("[clinicAddress]",clinicAddress);
+					fldval=fldval.Replace("[clinicCityStZip]",clinicCityStZip);
+					fldval=fldval.Replace("[clinicPhone]",clinicPhone);
+					fldval=fldval.Replace("[DateFirstVisit]",dateFirstVisit);
+					fldval=fldval.Replace("[dateOfLastSavedTP]",dateOfLastSavedTP);
+					fldval=fldval.Replace("[dateRecallDue]",dateRecallDue);
+					fldval=fldval.Replace("[dateTimeLastAppt]",dateTimeLastAppt);
+					fldval=fldval.Replace("[Email]",pat.Email);
+					fldval=fldval.Replace("[famFinUrgNote]",fam.ListPats[0].FamFinUrgNote);
+					fldval=fldval.Replace("[gender]",Lan.g("enumPatientGender",pat.Gender.ToString()));
+					fldval=fldval.Replace("[guarantorNameFL]",fam.ListPats[0].GetNameFL());
+					fldval=fldval.Replace("[HmPhone]",StripPhoneBeyondSpace(pat.HmPhone));
+					fldval=fldval.Replace("[insAnnualMax]",insAnnualMax);
+					fldval=fldval.Replace("[insDeductible]",insDeductible);
+					fldval=fldval.Replace("[insDeductibleUsed]",insDeductibleUsed);
+					fldval=fldval.Replace("[insPending]",insPending);
+					fldval=fldval.Replace("[insPercentages]",insPercentages);
+					fldval=fldval.Replace("[insRemaining]",insRemaining);
+					fldval=fldval.Replace("[insUsed]",insUsed);
+					fldval=fldval.Replace("[ins2AnnualMax]",ins2AnnualMax);
+					fldval=fldval.Replace("[ins2Deductible]",ins2Deductible);
+					fldval=fldval.Replace("[ins2DeductibleUsed]",ins2DeductibleUsed);
+					fldval=fldval.Replace("[ins2Pending]",ins2Pending);
+					fldval=fldval.Replace("[ins2Percentages]",ins2Percentages);
+					fldval=fldval.Replace("[ins2Remaining]",insRemaining);
+					fldval=fldval.Replace("[ins2Used]",ins2Used);
+					fldval=fldval.Replace("[MedUrgNote]",pat.MedUrgNote);
+					fldval=fldval.Replace("[nameF]",pat.FName);
+					fldval=fldval.Replace("[nameFL]",pat.GetNameFL());
+					fldval=fldval.Replace("[nameFLFormal]",pat.GetNameFLFormal());
+					fldval=fldval.Replace("[nameL]",pat.LName);
+					fldval=fldval.Replace("[nameLF]",pat.GetNameLF());
+					fldval=fldval.Replace("[nextSchedApptDateT]",nextSchedApptDateT);
+					fldval=fldval.Replace("[PatNum]",pat.PatNum.ToString());
+					fldval=fldval.Replace("[plannedAppointmentInfo]",plannedAppointmentInfo);
+					fldval=fldval.Replace("[priProvNameFormal]",priProv.GetFormalName());
+					fldval=fldval.Replace("[recallInterval]",recallInterval);
+					fldval=fldval.Replace("[salutation]",pat.GetSalutation());
+					fldval=fldval.Replace("[siteDescription]",Sites.GetDescription(pat.SiteNum));
+					fldval=fldval.Replace("[subscriberID]",subscriberId);
+					fldval=fldval.Replace("[subscriberNameFL]",subscriberNameFL);
+					fldval=fldval.Replace("[subscriber2NameFL]",subscriber2NameFL);
+					fldval=fldval.Replace("[tpResponsPartyAddress]",tpResponsPartyAddress);
+					fldval=fldval.Replace("[tpResponsPartyCityStZip]",tpResponsPartyCityStZip);
+					fldval=fldval.Replace("[tpResponsPartyNameFL]",tpResponsPartyNameFL);
+					fldval=fldval.Replace("[treatmentPlanProcs]",treatmentPlanProcs);
+					fldval=fldval.Replace("[WirelessPhone]",StripPhoneBeyondSpace(pat.WirelessPhone));
+					fldval=fldval.Replace("[WkPhone]",StripPhoneBeyondSpace(pat.WkPhone));
+				}
 				fldval=fldval.Replace("[dateToday]",DateTime.Today.ToShortDateString());
-				fldval=fldval.Replace("[Email]",pat.Email);
-				fldval=fldval.Replace("[famFinUrgNote]",fam.ListPats[0].FamFinUrgNote);
-				fldval=fldval.Replace("[gender]",Lan.g("enumPatientGender",pat.Gender.ToString()));
-				fldval=fldval.Replace("[guarantorNameFL]",fam.ListPats[0].GetNameFL());
-				fldval=fldval.Replace("[HmPhone]",StripPhoneBeyondSpace(pat.HmPhone));
-				fldval=fldval.Replace("[insAnnualMax]",insAnnualMax);
-				fldval=fldval.Replace("[insDeductible]",insDeductible);
-				fldval=fldval.Replace("[insDeductibleUsed]",insDeductibleUsed);
-				fldval=fldval.Replace("[insPending]",insPending);
-				fldval=fldval.Replace("[insPercentages]",insPercentages);
-				fldval=fldval.Replace("[insRemaining]",insRemaining);
-				fldval=fldval.Replace("[insUsed]",insUsed);
-				fldval=fldval.Replace("[ins2AnnualMax]",ins2AnnualMax);
-				fldval=fldval.Replace("[ins2Deductible]",ins2Deductible);
-				fldval=fldval.Replace("[ins2DeductibleUsed]",ins2DeductibleUsed);
-				fldval=fldval.Replace("[ins2Pending]",ins2Pending);
-				fldval=fldval.Replace("[ins2Percentages]",ins2Percentages);
-				fldval=fldval.Replace("[ins2Remaining]",insRemaining);
-				fldval=fldval.Replace("[ins2Used]",ins2Used);
-				fldval=fldval.Replace("[MedUrgNote]",pat.MedUrgNote);
-				fldval=fldval.Replace("[nameF]",pat.FName);
-				fldval=fldval.Replace("[nameFL]",pat.GetNameFL());
-				fldval=fldval.Replace("[nameFLFormal]",pat.GetNameFLFormal());
-				fldval=fldval.Replace("[nameL]",pat.LName);
-				fldval=fldval.Replace("[nameLF]",pat.GetNameLF());
-				fldval=fldval.Replace("[nextSchedApptDateT]",nextSchedApptDateT);
-				fldval=fldval.Replace("[PatNum]",pat.PatNum.ToString());
-				fldval=fldval.Replace("[plannedAppointmentInfo]",plannedAppointmentInfo);
-				fldval=fldval.Replace("[priProvNameFormal]",priProv.GetFormalName());
-				fldval=fldval.Replace("[recallInterval]",recallInterval);
-				fldval=fldval.Replace("[salutation]",pat.GetSalutation());
-				fldval=fldval.Replace("[siteDescription]",Sites.GetDescription(pat.SiteNum));
-				fldval=fldval.Replace("[subscriberID]",subscriberId);
-				fldval=fldval.Replace("[subscriberNameFL]",subscriberNameFL);
-				fldval=fldval.Replace("[subscriber2NameFL]",subscriber2NameFL);
-				fldval=fldval.Replace("[tpResponsPartyAddress]",tpResponsPartyAddress);
-				fldval=fldval.Replace("[tpResponsPartyCityStZip]",tpResponsPartyCityStZip);
-				fldval=fldval.Replace("[tpResponsPartyNameFL]",tpResponsPartyNameFL);
-				fldval=fldval.Replace("[treatmentPlanProcs]",treatmentPlanProcs);
-				fldval=fldval.Replace("[WirelessPhone]",StripPhoneBeyondSpace(pat.WirelessPhone));
-				fldval=fldval.Replace("[WkPhone]",StripPhoneBeyondSpace(pat.WkPhone));
+				fldval=fldval.Replace("[practiceTitle]",PrefC.GetString(PrefName.PracticeTitle));
 				field.FieldValue=fldval;
 			}
 		}
@@ -1260,55 +1269,191 @@ namespace OpenDental{
 		}
 
 		private static void FillFieldsForDepositSlip(Sheet sheet,Deposit deposit) {
+			List <Payment> PatPayList=Payments.GetForDeposit(deposit.DepositNum);
+			ClaimPayment[] ClaimPayList=ClaimPayments.GetForDeposit(deposit.DepositNum);
+			List<string[]> depositList=new List<string[]> ();
+			int[] colSize=new int[] {11,33,15,14,0};
+			for(int i=0;i<PatPayList.Count;i++){
+				string amount=PatPayList[i].PayAmt.ToString("F");
+				colSize[4]=Math.Max(colSize[4],amount.Length);
+			}
+			for(int i=0;i<ClaimPayList.Length;i++){
+				string amount=ClaimPayList[i].CheckAmt.ToString("F");
+				colSize[4]=Math.Max(colSize[4],amount.Length);
+			}
+			for(int i=0;i<PatPayList.Count;i++){
+				string[] depositItem=new string[5];
+				string date=PatPayList[i].PayDate.ToShortDateString();
+				if(date.Length>colSize[0]){
+					date=date.Substring(0,colSize[0]);
+				}
+				depositItem[0]=date.PadRight(colSize[0],' ')+" ";
+				Patient pat=Patients.GetPat(PatPayList[i].PatNum);
+				string name=pat.GetNameLF();
+				if(name.Length>colSize[1]){
+					name=name.Substring(0,colSize[1]);
+				}
+				depositItem[1]=name.PadRight(colSize[1],' ')+" ";
+				string checkNum=PatPayList[i].CheckNum;
+				if(checkNum.Length>colSize[2]){
+					checkNum=checkNum.Substring(0,colSize[2]);
+				}
+				depositItem[2]=checkNum.PadRight(colSize[2],' ')+" ";
+				string bankBranch=PatPayList[i].BankBranch;
+				if(bankBranch.Length>colSize[3]){
+					bankBranch=bankBranch.Substring(0,colSize[3]);
+				}
+				depositItem[3]=bankBranch.PadRight(colSize[3],' ')+" ";
+				depositItem[4]=PatPayList[i].PayAmt.ToString("F").PadLeft(colSize[4],' ');
+				depositList.Add(depositItem);
+			}
+			for(int i=0;i<ClaimPayList.Length;i++){
+				string[] depositItem=new string[5];
+				string date=ClaimPayList[i].CheckDate.ToShortDateString();
+				if(date.Length>colSize[0]){
+					date=date.Substring(0,colSize[0]);
+				}
+				depositItem[0]=date.PadRight(colSize[0],' ')+" ";
+				string name=ClaimPayList[i].CarrierName;
+				if(name.Length>colSize[1]){
+					name=name.Substring(0,colSize[1]);
+				}
+				depositItem[1]=name.PadRight(colSize[1],' ')+" ";
+				string checkNum=ClaimPayList[i].CheckNum;
+				if(checkNum.Length>colSize[2]){
+					checkNum=checkNum.Substring(0,colSize[2]);
+				}
+				depositItem[2]=checkNum.PadRight(colSize[2],' ')+" ";
+				string bankBranch=ClaimPayList[i].BankBranch;
+				if(bankBranch.Length>colSize[3]){
+					bankBranch=bankBranch.Substring(0,colSize[3]);
+				}
+				depositItem[3]=bankBranch.PadRight(colSize[3],' ')+" ";
+				depositItem[4]=ClaimPayList[i].CheckAmt.ToString("F").PadLeft(colSize[4],' ');
+				depositList.Add(depositItem);
+			}
 			foreach(SheetField field in sheet.SheetFields) {
 				switch(field.FieldName) {
+					case "deposit.BankAccountInfo":
+						field.FieldValue=deposit.BankAccountInfo;
+						break;
 					case "deposit.DateDeposit":
 						field.FieldValue=deposit.DateDeposit.ToShortDateString();
 						break;
 					case "depositList":
-						StringBuilder depositListB=new StringBuilder("Date      Name                           Check Number    Bank-Branch     Amount"+Environment.NewLine);
-						List <Payment> PatPayList=Payments.GetForDeposit(deposit.DepositNum);
-						for(int i=0;i<PatPayList.Count;i++){
-							depositListB.Append(PatPayList[i].PayDate.ToShortDateString()+"  ");
-							Patient pat=Patients.GetPat(PatPayList[i].PatNum);
-							string name=pat.GetNameLF();
-							if(name.Length>30){
-								name=name.Substring(0,30);
+						StringBuilder depositListB=new StringBuilder("Date        Name                              Check Number    Bank-Branch    Amount"+Environment.NewLine);
+						for(int i=0;i<depositList.Count;i++){
+							if(i>0){
+								depositListB.Append(Environment.NewLine);
 							}
-							depositListB.Append(name.PadRight(30,' ')+" ");
-							string checkNum=PatPayList[i].CheckNum;
-							if(checkNum.Length>15){
-								checkNum=checkNum.Substring(0,15);
+							for(int j=0;j<5;j++){
+								depositListB.Append(depositList[i][j]);
 							}
-							depositListB.Append(checkNum.PadRight(15,' ')+" ");
-							string bankBranch=PatPayList[i].BankBranch;
-							if(bankBranch.Length>15){
-								bankBranch=bankBranch.Substring(0,15);
-							}
-							depositListB.Append(bankBranch.PadRight(15,' ')+" ");
-							depositListB.Append(PatPayList[i].PayAmt.ToString("F")+Environment.NewLine);
-						}
-						ClaimPayment[] ClaimPayList=ClaimPayments.GetForDeposit(deposit.DepositNum);
-						for(int i=0;i<ClaimPayList.Length;i++){
-							depositListB.Append(ClaimPayList[i].CheckDate.ToShortDateString()+"  ");
-							string name=ClaimPayList[i].CarrierName;
-							if(name.Length>30){
-								name=name.Substring(0,30);
-							}
-							depositListB.Append(name.PadRight(30,' ')+" ");
-							string checkNum=ClaimPayList[i].CheckNum;
-							if(checkNum.Length>15){
-								checkNum=checkNum.Substring(0,15);
-							}
-							depositListB.Append(checkNum.PadRight(15,' ')+" ");
-							string bankBranch=ClaimPayList[i].BankBranch;
-							if(bankBranch.Length>15){
-								bankBranch=bankBranch.Substring(0,15);
-							}
-							depositListB.Append(bankBranch.PadRight(15,' ')+" ");
-							depositListB.Append(ClaimPayList[i].CheckAmt.ToString("F")+Environment.NewLine);
 						}
 						field.FieldValue=depositListB.ToString();
+						break;
+					case "depositTotal":
+						decimal total=0;
+						for(int i=0;i<PatPayList.Count;i++){
+							total+=(decimal)PatPayList[i].PayAmt;
+						}
+						for(int i=0;i<ClaimPayList.Length;i++){
+							total+=(decimal)ClaimPayList[i].CheckAmt;
+						}
+						field.FieldValue=total.ToString("n");
+						break;
+					case "depositItemCount":
+						field.FieldValue=(PatPayList.Count+ClaimPayList.Length).ToString().PadLeft(2,'0');
+						break;
+					case "depositItem01":
+						if(depositList.Count>=1){
+							field.FieldValue=depositList[0][4];
+						}
+						break;
+					case "depositItem02":
+						if(depositList.Count>=2){
+							field.FieldValue=depositList[1][4];
+						}
+						break;
+					case "depositItem03":
+						if(depositList.Count>=3){
+							field.FieldValue=depositList[2][4];
+						}
+						break;
+					case "depositItem04":
+						if(depositList.Count>=4){
+							field.FieldValue=depositList[3][4];
+						}
+						break;
+					case "depositItem05":
+						if(depositList.Count>=5){
+							field.FieldValue=depositList[4][4];
+						}
+						break;
+					case "depositItem06":
+						if(depositList.Count>=6){
+							field.FieldValue=depositList[5][4];
+						}
+						break;
+					case "depositItem07":
+						if(depositList.Count>=7){
+							field.FieldValue=depositList[6][4];
+						}
+						break;
+					case "depositItem08":
+						if(depositList.Count>=8){
+							field.FieldValue=depositList[7][4];
+						}
+						break;
+					case "depositItem09":
+						if(depositList.Count>=9){
+							field.FieldValue=depositList[8][4];
+						}
+						break;
+					case "depositItem10":
+						if(depositList.Count>=10){
+							field.FieldValue=depositList[9][4];
+						}
+						break;
+					case "depositItem11":
+						if(depositList.Count>=11){
+							field.FieldValue=depositList[10][4];
+						}
+						break;
+					case "depositItem12":
+						if(depositList.Count>=12){
+							field.FieldValue=depositList[11][4];
+						}
+						break;
+					case "depositItem13":
+						if(depositList.Count>=13){
+							field.FieldValue=depositList[12][4];
+						}
+						break;
+					case "depositItem14":
+						if(depositList.Count>=14){
+							field.FieldValue=depositList[13][4];
+						}
+						break;
+					case "depositItem15":
+						if(depositList.Count>=15){
+							field.FieldValue=depositList[14][4];
+						}
+						break;
+					case "depositItem16":
+						if(depositList.Count>=16){
+							field.FieldValue=depositList[15][4];
+						}
+						break;
+					case "depositItem17":
+						if(depositList.Count>=17){
+							field.FieldValue=depositList[16][4];
+						}
+						break;
+					case "depositItem18":
+						if(depositList.Count>=18){
+							field.FieldValue=depositList[17][4];
+						}
 						break;
 				}
 			}

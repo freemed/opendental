@@ -393,8 +393,29 @@ namespace OpenDentBusiness{
 		public static List<SheetFieldDef> GetDepositSlip(OutInCheck outInCheck){
 			List<SheetFieldDef> list=new List<SheetFieldDef>();
 			if(outInCheck==OutInCheck.Out) {
-				list.Add(NewInput("deposit.DateDeposit"));
-				list.Add(NewInput("depositList"));
+				list.Add(NewOutput("deposit.BankAccountInfo"));
+				list.Add(NewOutput("deposit.DateDeposit"));
+				list.Add(NewOutput("depositList"));
+				list.Add(NewOutput("depositTotal"));
+				list.Add(NewOutput("depositItemCount"));
+				list.Add(NewOutput("depositItem01"));
+				list.Add(NewOutput("depositItem02"));
+				list.Add(NewOutput("depositItem03"));
+				list.Add(NewOutput("depositItem04"));
+				list.Add(NewOutput("depositItem05"));
+				list.Add(NewOutput("depositItem06"));
+				list.Add(NewOutput("depositItem07"));
+				list.Add(NewOutput("depositItem08"));
+				list.Add(NewOutput("depositItem09"));
+				list.Add(NewOutput("depositItem10"));
+				list.Add(NewOutput("depositItem11"));
+				list.Add(NewOutput("depositItem12"));
+				list.Add(NewOutput("depositItem13"));
+				list.Add(NewOutput("depositItem14"));
+				list.Add(NewOutput("depositItem15"));
+				list.Add(NewOutput("depositItem16"));
+				list.Add(NewOutput("depositItem17"));
+				list.Add(NewOutput("depositItem18"));
 			}
 			else if(outInCheck==OutInCheck.In){				
 			}

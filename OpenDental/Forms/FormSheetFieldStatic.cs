@@ -104,6 +104,7 @@ namespace OpenDental {
 				"nextSchedApptDateT",
 				"PatNum",
 				"plannedAppointmentInfo",
+				"practiceTitle",
 				"priProvNameFormal",
 				"recallInterval",
 				"salutation",

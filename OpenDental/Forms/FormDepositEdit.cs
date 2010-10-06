@@ -696,6 +696,10 @@ namespace OpenDental{
 			//amount already handled.
 			DepositCur.BankAccountInfo=PIn.String(textBankAccountInfo.Text);
 			if(IsNew){
+				if(gridPat.SelectedIndices.Length+gridIns.SelectedIndices.Length>18){
+					MsgBox.Show(this,"Not allowed to attach more than 18 items to any single deposit.");
+					return false;
+				}
 				Deposits.Insert(DepositCur);
 				if(Accounts.DepositsLinked() && DepositCur.Amount>0){
 					//create a transaction here
