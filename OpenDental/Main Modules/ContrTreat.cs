@@ -131,6 +131,7 @@ namespace OpenDental{
 		private Label label5;
 		private TextBox textFamPriMax;
 		private List<ClaimProcHist> LoopList;
+		private bool checkShowInsNotAutomatic;
 
 		///<summary></summary>
 		public ContrTreat(){
@@ -872,7 +873,9 @@ namespace OpenDental{
 					if(!PrefC.GetBool(PrefName.EasyHideInsurance)){//if insurance isn't hidden
 						checkShowMaxDed.Visible=true;
 						if(checkShowFees.Checked){//if fees are showing
-							checkShowIns.Checked=true;
+							if(!checkShowInsNotAutomatic){
+								checkShowIns.Checked=true;
+							}
 							InsPlan plan=InsPlans.GetPlan(PatPlanList[0].PlanNum,InsPlanList);
 							if(plan.PlanType=="p" || plan.PlanType=="c"){//ppo or cap
 								checkShowDiscount.Checked=true;
@@ -1677,7 +1680,9 @@ namespace OpenDental{
 		private void checkShowFees_Click(object sender,EventArgs e) {
 			if(checkShowFees.Checked){
 				//checkShowStandard.Checked=true;
-				checkShowIns.Checked=true;
+				if(!checkShowInsNotAutomatic){
+					checkShowIns.Checked=true;
+				}
 				//if(PrefC.GetBool(PrefName.TreatPlanShowDiscount")){
 				checkShowDiscount.Checked=true;
 				//}
@@ -1686,7 +1691,9 @@ namespace OpenDental{
 			}
 			else{
 				//checkShowStandard.Checked=false;
-				checkShowIns.Checked=false;
+				if(!checkShowInsNotAutomatic){
+					checkShowIns.Checked=false;
+				}
 				checkShowDiscount.Checked=false;
 				checkShowSubtotals.Checked=false;
 				checkShowTotals.Checked=false;
@@ -1699,6 +1706,11 @@ namespace OpenDental{
 		}
 
 		private void checkShowIns_Click(object sender,EventArgs e) {
+			if(!checkShowIns.Checked) {
+				if(MsgBox.Show(this,MsgBoxButtons.YesNo,"Turn off automatic checking of this box for the rest of this session?")) {
+					checkShowInsNotAutomatic=true;
+				}
+			}
 			FillMain();
 		}
 
