@@ -65,7 +65,21 @@ namespace OpenDentBusiness{
 			return retVal;
 		}
 	
-
+		///<summary>-H:mm:ss.  If zero, then returns empty string.</summary>
+		public static string ToStringHmmss(this TimeSpan tspan){
+			//No need to check RemotingRole; no call to db.
+			if(tspan==TimeSpan.Zero) {
+				return "";
+			}
+			string retVal="";
+			if(tspan < TimeSpan.Zero){
+				retVal+="-";
+			}
+			DateTime dt=DateTime.Today+tspan.Duration();
+			retVal+=dt.ToString("H:mm:ss");
+			return retVal;
+		}
+	
 
 		
 

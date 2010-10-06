@@ -27,7 +27,6 @@ namespace OpenDental{
 		private OpenDental.UI.Button butDelete;
 		private TextBox textHours;
 		private Label label3;
-		private Label label5;
 		private TimeAdjust TimeAdjustCur;
 
 		///<summary></summary>
@@ -63,36 +62,18 @@ namespace OpenDental{
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormTimeAdjustEdit));
-			this.butDelete = new OpenDental.UI.Button();
 			this.label1 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
 			this.textTimeEntry = new System.Windows.Forms.TextBox();
 			this.label4 = new System.Windows.Forms.Label();
 			this.textNote = new System.Windows.Forms.TextBox();
-			this.butOK = new OpenDental.UI.Button();
-			this.butCancel = new OpenDental.UI.Button();
 			this.checkOvertime = new System.Windows.Forms.CheckBox();
 			this.textHours = new System.Windows.Forms.TextBox();
 			this.label3 = new System.Windows.Forms.Label();
-			this.label5 = new System.Windows.Forms.Label();
+			this.butDelete = new OpenDental.UI.Button();
+			this.butOK = new OpenDental.UI.Button();
+			this.butCancel = new OpenDental.UI.Button();
 			this.SuspendLayout();
-			// 
-			// butDelete
-			// 
-			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butDelete.Autosize = true;
-			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDelete.CornerRadius = 4F;
-			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
-			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(37,269);
-			this.butDelete.Name = "butDelete";
-			this.butDelete.Size = new System.Drawing.Size(79,24);
-			this.butDelete.TabIndex = 16;
-			this.butDelete.Text = "&Delete";
-			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
 			// 
 			// label1
 			// 
@@ -136,6 +117,50 @@ namespace OpenDental{
 			this.textNote.Size = new System.Drawing.Size(377,96);
 			this.textNote.TabIndex = 21;
 			// 
+			// checkOvertime
+			// 
+			this.checkOvertime.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkOvertime.Location = new System.Drawing.Point(12,76);
+			this.checkOvertime.Name = "checkOvertime";
+			this.checkOvertime.Size = new System.Drawing.Size(139,17);
+			this.checkOvertime.TabIndex = 22;
+			this.checkOvertime.Text = "Overtime Adjustment";
+			this.checkOvertime.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkOvertime.UseVisualStyleBackColor = true;
+			// 
+			// textHours
+			// 
+			this.textHours.Location = new System.Drawing.Point(137,50);
+			this.textHours.Name = "textHours";
+			this.textHours.Size = new System.Drawing.Size(68,20);
+			this.textHours.TabIndex = 23;
+			// 
+			// label3
+			// 
+			this.label3.Location = new System.Drawing.Point(152,74);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(300,18);
+			this.label3.TabIndex = 24;
+			this.label3.Text = "(the hours will be shifted from regular time to overtime)";
+			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// butDelete
+			// 
+			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butDelete.Autosize = true;
+			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDelete.CornerRadius = 4F;
+			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
+			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butDelete.Location = new System.Drawing.Point(37,269);
+			this.butDelete.Name = "butDelete";
+			this.butDelete.Size = new System.Drawing.Size(79,24);
+			this.butDelete.TabIndex = 16;
+			this.butDelete.Text = "&Delete";
+			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
+			// 
 			// butOK
 			// 
 			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -166,47 +191,10 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// checkOvertime
-			// 
-			this.checkOvertime.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkOvertime.Location = new System.Drawing.Point(12,76);
-			this.checkOvertime.Name = "checkOvertime";
-			this.checkOvertime.Size = new System.Drawing.Size(139,17);
-			this.checkOvertime.TabIndex = 22;
-			this.checkOvertime.Text = "Overtime Adjustment";
-			this.checkOvertime.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkOvertime.UseVisualStyleBackColor = true;
-			// 
-			// textHours
-			// 
-			this.textHours.Location = new System.Drawing.Point(137,50);
-			this.textHours.Name = "textHours";
-			this.textHours.Size = new System.Drawing.Size(68,20);
-			this.textHours.TabIndex = 23;
-			// 
-			// label3
-			// 
-			this.label3.Location = new System.Drawing.Point(152,74);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(300,18);
-			this.label3.TabIndex = 24;
-			this.label3.Text = "(the hours will be shifted from regular time to overtime)";
-			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// label5
-			// 
-			this.label5.Location = new System.Drawing.Point(208,51);
-			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(196,18);
-			this.label5.TabIndex = 25;
-			this.label5.Text = "(either decimal or colon format)";
-			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
 			// FormTimeAdjustEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(540,313);
-			this.Controls.Add(this.label5);
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.textHours);
 			this.Controls.Add(this.checkOvertime);
@@ -235,11 +223,11 @@ namespace OpenDental{
 		private void FormTimeAdjustEdit_Load(object sender, System.EventArgs e) {
 			textTimeEntry.Text=TimeAdjustCur.TimeEntry.ToString();
 			if(TimeAdjustCur.OTimeHours.TotalHours==0){
-				textHours.Text=TimeAdjustCur.RegHours.ToStringHmm();//.TotalHours.ToString("n");
+				textHours.Text=ClockEvents.Format(TimeAdjustCur.RegHours);
 			}
 			else{
 				checkOvertime.Checked=true;
-				textHours.Text=TimeAdjustCur.OTimeHours.ToStringHmm();//.TotalHours.ToString("n");
+				textHours.Text=ClockEvents.Format(TimeAdjustCur.OTimeHours);
 			}
 			textNote.Text=TimeAdjustCur.Note;
 		}

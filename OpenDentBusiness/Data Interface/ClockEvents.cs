@@ -188,32 +188,17 @@ namespace OpenDentBusiness{
 			return retVal;
 		}
 
-		///<summary>Normally hh:mm or hh.mm.</summary>
+		///<summary>-hh:mm or -hh.mm, depending on the pref.TimeCardsUseDecimalInsteadOfColon.  Blank if zero.</summary>
 		public static string Format(TimeSpan span) {
-			return Format(false,span,false);
-		}
-
-		///<summary>(hh):mm</summary>
-		public static string Format(bool isDecimal,TimeSpan span,bool showSeconds) {
-			string retVal="";
-			if(span < TimeSpan.Zero) {
-				retVal+="-";
-				span=span.Negate();
-			}
-			if(isDecimal) {
-				retVal+=span.TotalHours.ToString("n");
+			if(PrefC.GetBool(PrefName.TimeCardsUseDecimalInsteadOfColon)){
+				if(span==TimeSpan.Zero){
+					return "";
+				}
+				return span.TotalHours.ToString("n");
 			}
 			else{
-				int hours=span.Days*24+span.Hours;
-				if(hours>0) {
-					retVal+=hours.ToString();
-				}
-				retVal+=":"+span.Minutes.ToString().PadLeft(2,'0');
-				if(showSeconds) {
-					retVal+=":"+span.Seconds.ToString().PadLeft(2,'0');
-				}
+				return span.ToStringHmm();//blank if zero
 			}
-			return retVal;
 		}
 
 

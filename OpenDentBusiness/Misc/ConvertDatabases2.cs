@@ -2729,7 +2729,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);
 				command="ALTER TABLE clockevent ADD AdjustIsOverridden tinyint NOT NULL";
 				Db.NonQ(command);
-
+				command="INSERT INTO preference(PrefName,ValueString) VALUES('TimeCardsUseDecimalInsteadOfColon','0')";
+				Db.NonQ(command);
 
 
 

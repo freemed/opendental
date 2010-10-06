@@ -18,6 +18,7 @@ namespace OpenDental{
 		/// </summary>
 		private System.ComponentModel.Container components = null;
 		private OpenDental.UI.ODGrid gridMain;
+		private CheckBox checkUseDecimal;
 		private bool changed;
 
 		///<summary></summary>
@@ -56,6 +57,7 @@ namespace OpenDental{
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butAdd = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
+			this.checkUseDecimal = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
 			// 
 			// gridMain
@@ -97,17 +99,28 @@ namespace OpenDental{
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(510,467);
+			this.butClose.Location = new System.Drawing.Point(652,467);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75,24);
 			this.butClose.TabIndex = 0;
 			this.butClose.Text = "&Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
+			// checkUseDecimal
+			// 
+			this.checkUseDecimal.Location = new System.Drawing.Point(355,12);
+			this.checkUseDecimal.Name = "checkUseDecimal";
+			this.checkUseDecimal.Size = new System.Drawing.Size(295,18);
+			this.checkUseDecimal.TabIndex = 12;
+			this.checkUseDecimal.Text = "Use decimal format rather than colon format";
+			this.checkUseDecimal.UseVisualStyleBackColor = true;
+			this.checkUseDecimal.Click += new System.EventHandler(this.checkUseDecimal_Click);
+			// 
 			// FormTimeCardSetup
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(609,508);
+			this.ClientSize = new System.Drawing.Size(751,508);
+			this.Controls.Add(this.checkUseDecimal);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.butAdd);
 			this.Controls.Add(this.butClose);
@@ -126,6 +139,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormPayPeriods_Load(object sender, System.EventArgs e) {
+			checkUseDecimal.Checked=PrefC.GetBool(PrefName.TimeCardsUseDecimalInsteadOfColon);
 			FillGrid();
 		}
 
@@ -183,15 +197,23 @@ namespace OpenDental{
 			changed=true;
 		}
 
+		private void checkUseDecimal_Click(object sender,EventArgs e) {
+			if(Prefs.UpdateBool(PrefName.TimeCardsUseDecimalInsteadOfColon,checkUseDecimal.Checked)){
+				changed=true;
+			}
+		}
+
 		private void butClose_Click(object sender, System.EventArgs e) {
 			Close();
 		}
 
 		private void FormPayPeriods_FormClosing(object sender,FormClosingEventArgs e) {
 			if(changed) {
-				DataValid.SetInvalid(InvalidType.Employees);
+				DataValid.SetInvalid(InvalidType.Employees,InvalidType.Prefs);
 			}
 		}
+
+	
 
 		
 

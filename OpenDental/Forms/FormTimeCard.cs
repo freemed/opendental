@@ -681,17 +681,10 @@ namespace OpenDental{
 					else {
 						oneAdj+=clock.AdjustAuto;//typically zero
 					}
-					/*
-					if(clock.OTimeHours!=TimeSpan.FromHours(-1)) {//overridden
-						oneAdj-=clock.OTimeHours;
-					}
-					else {
-						oneAdj-=clock.OTimeAuto;//typically zero
-					}*/
 					daySpan+=oneAdj;
 					weekSpan+=oneAdj;
 					periodSpan+=oneAdj;
-					row.Cells.Add(oneAdj.ToStringHmm());
+					row.Cells.Add(ClockEvents.Format(oneAdj));
 					//Overtime------------------------------
 					oneOT=TimeSpan.Zero;
 					if(clock.OTimeHours!=TimeSpan.FromHours(-1)) {//overridden
@@ -704,7 +697,7 @@ namespace OpenDental{
 					daySpan-=oneOT;
 					weekSpan-=oneOT;
 					periodSpan-=oneOT;
-					row.Cells.Add(oneOT.ToStringHmm());
+					row.Cells.Add(ClockEvents.Format(oneOT));
 					//Daily-----------------------------------
 					//if this is the last entry for a given date
 					if(i==mergedAL.Count-1//if this is the last row
@@ -714,7 +707,7 @@ namespace OpenDental{
 							if(clock.TimeDisplayed2.Year<1880){//if they have not clocked back in yet from break
 								//display the timespan of oneSpan using current time as the other number.
 								oneSpan=DateTime.Now-clock.TimeDisplayed1+TimeDelta;
-								row.Cells.Add(ClockEvents.Format(false,oneSpan,true));
+								row.Cells.Add(oneSpan.ToStringHmmss());
 								daySpan+=oneSpan;
 							}
 							else{
@@ -773,23 +766,13 @@ namespace OpenDental{
 					//total-------------------------------
 					row.Cells.Add("");//
 					//Adjust------------------------------
-					if(adjust.RegHours.TotalHours==0){
-						row.Cells.Add("");//
-					}
-					else{
-						daySpan+=adjust.RegHours;//might be negative
-						weekSpan+=adjust.RegHours;
-						periodSpan+=adjust.RegHours;
-						row.Cells.Add(ClockEvents.Format(adjust.RegHours));//6
-					}
+					daySpan+=adjust.RegHours;//might be negative
+					weekSpan+=adjust.RegHours;
+					periodSpan+=adjust.RegHours;
+					row.Cells.Add(ClockEvents.Format(adjust.RegHours));//6
 					//Overtime------------------------------
-					if(adjust.OTimeHours.TotalHours!=0){
-						otspan+=adjust.OTimeHours;
-						row.Cells.Add(ClockEvents.Format(adjust.OTimeHours));//7
-					}
-					else{
-						row.Cells.Add("");//
-					}
+					otspan+=adjust.OTimeHours;
+					row.Cells.Add(ClockEvents.Format(adjust.OTimeHours));//7
 					//Daily-----------------------------------
 					//if this is the last entry for a given date
 					if(i==mergedAL.Count-1//if this is the last row
@@ -829,10 +812,10 @@ namespace OpenDental{
 				textTotal.Text="";
 			}
 			else{
-				textTotal.Text=ClockEvents.Format(periodSpan);
-				textOvertime.Text=ClockEvents.Format(otspan);
-				textTotal2.Text=ClockEvents.Format(true,periodSpan,false);
-				textOvertime2.Text=ClockEvents.Format(true,otspan,false);
+				textTotal.Text=periodSpan.ToStringHmm();
+				textOvertime.Text=otspan.ToStringHmm();
+				textTotal2.Text=periodSpan.TotalHours.ToString("n");
+				textOvertime2.Text=otspan.TotalHours.ToString("n");
 			}
 		}
 

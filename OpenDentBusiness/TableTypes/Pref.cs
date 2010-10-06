@@ -256,6 +256,7 @@ namespace OpenDentBusiness {
 		TasksCheckOnStartup,
 		TerminalClosePassword,
 		TimecardSecurityEnabled,
+		TimeCardsUseDecimalInsteadOfColon,
 		TimecardUsersDontEditOwnCard,
 		TitleBarShowSite,
 		ToothChartMoveMenuToRight,
