@@ -344,41 +344,45 @@ namespace OpenDental{
 						}
 					}
 				}
-			}
-			if(pat!=null) {
-				//plannedAppointmentInfo
-				//PlannedAppts.Refresh Or better yet, add another method to PlannedAppts to just get AptNum (long) of row with lowest ItemOrder.
-				//Then, loop through apptList to find appt.
-
-				//Get list of orionprocs
-				//Then, find schedbydate (loop through procs/orionprocs)
-
-
-
-				/*
 				if(Sheets.ContainsStaticField(sheet,"plannedAppointmentInfo")) {
-					for(int i=0;i<procsList.Count;i++) {
-						if(procsList[i].PlannedAptNum!=0) {
-							Appointment appt=Appointments.GetOneApt(procsList[i].PlannedAptNum);
-							plannedAppointmentInfo=appt.ProcDescript+="\r\n";
-							int minutesTotal=appt.Pattern.Length*5;
+					PlannedAppt plannedAppt=PlannedAppts.GetOneOrderedByItemOrder(pat.PatNum);
+					for(int i=0;i<apptList.Count;i++) {
+						if(apptList[i].AptNum==plannedAppt.AptNum) {
+							plannedAppointmentInfo=apptList[i].ProcDescript+"\r\n";
+							int minutesTotal=apptList[i].Pattern.Length*5;
 							int hours=minutesTotal/60;//automatically rounds down
 							int minutes=minutesTotal-hours*60;
 							if(hours>0) {
 								plannedAppointmentInfo+=hours.ToString()+" hours, ";
 							}
 							plannedAppointmentInfo+=minutes.ToString()+" min\r\n";
-						}
-						if(Programs.UsingOrion) {
-							OrionProc op=OrionProcs.GetOneByProcNum(procsList[i].ProcNum);
-							if(op!=null && op.DateScheduleBy.Year>1880) {
-								plannedAppointmentInfo+=op.DateScheduleBy.ToShortDateString();
+							if(Programs.UsingOrion) {
+								DateTime newDateSched=new DateTime();
+								for(int p=0;p<procsList.Count;p++) {
+									if(procsList[p].PlannedAptNum==apptList[i].AptNum) {
+										OrionProc op=OrionProcs.GetOneByProcNum(procsList[p].ProcNum);
+										if(op!=null && op.DateScheduleBy.Year>1880) {
+											if(newDateSched.Year<1880) {
+												newDateSched=op.DateScheduleBy;
+											}
+											else {
+												if(op.DateScheduleBy<newDateSched) {
+													newDateSched=op.DateScheduleBy;
+												}
+											}
+										}
+									}
+								}
+								if(newDateSched.Year>1880) {
+									plannedAppointmentInfo+=newDateSched.ToShortDateString();
+								}
+								else {
+									plannedAppointmentInfo+="No schedule by date.";
+								}
 							}
 						}
 					}
-				}*/
-			}
-			if(pat!=null){
+				}
 				priProv=Providers.GetProv(Patients.GetProvNum(pat));//guaranteed to work
 				//Clinic-------------------------------------------------------------------------------------------------------------
 				Clinic clinic=Clinics.GetClinic(pat.ClinicNum);

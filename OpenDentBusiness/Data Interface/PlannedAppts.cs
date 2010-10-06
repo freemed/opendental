@@ -26,6 +26,16 @@ namespace OpenDentBusiness{
 			return Crud.PlannedApptCrud.SelectOne(plannedApptNum);
 		}
 
+		///<summary>Gets one plannedAppt by patient, ordered by ItemOrder</summary>
+		public static PlannedAppt GetOneOrderedByItemOrder(long patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<PlannedAppt>(MethodBase.GetCurrentMethod(),patNum);
+			}
+			string command="SELECT * FROM plannedappt WHERE PatNum="+POut.Long(patNum)
+				+" ORDER BY ItemOrder LIMIT 1";
+			return Crud.PlannedApptCrud.SelectOne(command);
+		}
+
 		///<summary></summary>
 		public static long Insert(PlannedAppt plannedAppt) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
