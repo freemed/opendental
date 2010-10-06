@@ -99,7 +99,7 @@ namespace OpenDentBusiness {
 			if(category==DisplayFieldCategory.None) {
 				list.Add(new DisplayField("Date",67,category));
 				//list.Add(new DisplayField("Time",40));
-				//list.Add(new DisplayField("Th",27,category));
+				list.Add(new DisplayField("Th",27,category));
 				list.Add(new DisplayField("Surf",40,category));
 				list.Add(new DisplayField("Dx",28,category));
 				list.Add(new DisplayField("Description",218,category));
