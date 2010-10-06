@@ -103,6 +103,7 @@ namespace OpenDental{
 			if(pat==null){
 				return;
 			}
+			string plannedAppointmentInfo="";
 			string fldval;
 			string address=pat.Address;
 			if(pat.Address2!=""){
@@ -118,21 +119,24 @@ namespace OpenDental{
 			}
 			Family fam=Patients.GetFamily(pat.PatNum);
 			string treatmentPlanProcs="";
-			if(Sheets.ContainsStaticField(sheet,"treatmentPlanProcs")) {
-				List<Procedure> procsList=Procedures.Refresh(pat.PatNum);
-				for(int i=0;i<procsList.Count;i++) {
-					if(procsList[i].ProcStatus!=ProcStat.TP) {
-						continue;
+			List<Procedure> procsList=null;
+			if(Sheets.ContainsStaticField(sheet,"treatmentPlanProcs") || Sheets.ContainsStaticField(sheet,"plannedAppointmentInfo")) {
+				procsList=Procedures.Refresh(pat.PatNum);
+				if(Sheets.ContainsStaticField(sheet,"treatmentPlanProcs")) {
+					for(int i=0;i<procsList.Count;i++) {
+						if(procsList[i].ProcStatus!=ProcStat.TP) {
+							continue;
+						}
+						if(treatmentPlanProcs!="") {
+							treatmentPlanProcs+="\r\n";
+						}
+						treatmentPlanProcs+=ProcedureCodes.GetStringProcCode(procsList[i].CodeNum)+", "
+							+Procedures.GetDescription(procsList[i])+", "
+							+procsList[i].ProcFee.ToString("c");
 					}
-					if(treatmentPlanProcs!="") {
-						treatmentPlanProcs+="\r\n";
-					}
-					treatmentPlanProcs+=ProcedureCodes.GetStringProcCode(procsList[i].CodeNum)+", "
-						+Procedures.GetDescription(procsList[i])+", "
-						+procsList[i].ProcFee.ToString("c");
 				}
 			}
-			//Insurance------------------------
+			//Insurance-------------------------------------------------------------------------------------------------------------------
 			List <PatPlan> patPlanList=PatPlans.Refresh(pat.PatNum);
 			long planNum=PatPlans.GetPlanNum(patPlanList,1);
 			long patPlanNum=PatPlans.GetPatPlanNum(patPlanList,planNum);
@@ -279,6 +283,7 @@ namespace OpenDental{
 					ins2Percentages+=CovCats.GetDesc(benefitList[j].CovCatNum)+" "+benefitList[j].Percent.ToString()+"%";
 				}
 			}
+			//Treatment plan-----------------------------------------------------------------------------------------------------------
 			TreatPlan[] treatPlanList=TreatPlans.Refresh(pat.PatNum);
 			TreatPlan treatPlan=null;
 			string dateOfLastSavedTP="";
@@ -298,6 +303,7 @@ namespace OpenDental{
 					tpResponsPartyNameFL=patRespParty.GetNameFL();
 				}
 			}
+			//Recall--------------------------------------------------------------------------------------------------------------------
 			Recall recall=Recalls.GetRecallProphyOrPerio(pat.PatNum);
 			string dateRecallDue="";
 			string recallInterval="";
@@ -307,6 +313,7 @@ namespace OpenDental{
 				}
 				recallInterval=recall.RecallInterval.ToString();
 			}
+			//Appointments--------------------------------------------------------------------------------------------------------------
 			List<Appointment> apptList=Appointments.GetListForPat(pat.PatNum);
 			string nextSchedApptDateT="";
 			string dateTimeLastAppt="";
@@ -329,7 +336,41 @@ namespace OpenDental{
 					}
 				}
 			}
+			if(pat!=null) {
+				//plannedAppointmentInfo
+				//PlannedAppts.Refresh Or better yet, add another method to PlannedAppts to just get AptNum (long) of row with lowest ItemOrder.
+				//Then, loop through apptList to find appt.
+
+				//Get list of orionprocs
+				//Then, find schedbydate (loop through procs/orionprocs)
+
+
+
+				/*
+				if(Sheets.ContainsStaticField(sheet,"plannedAppointmentInfo")) {
+					for(int i=0;i<procsList.Count;i++) {
+						if(procsList[i].PlannedAptNum!=0) {
+							Appointment appt=Appointments.GetOneApt(procsList[i].PlannedAptNum);
+							plannedAppointmentInfo=appt.ProcDescript+="\r\n";
+							int minutesTotal=appt.Pattern.Length*5;
+							int hours=minutesTotal/60;//automatically rounds down
+							int minutes=minutesTotal-hours*60;
+							if(hours>0) {
+								plannedAppointmentInfo+=hours.ToString()+" hours, ";
+							}
+							plannedAppointmentInfo+=minutes.ToString()+" min\r\n";
+						}
+						if(Programs.UsingOrion) {
+							OrionProc op=OrionProcs.GetOneByProcNum(procsList[i].ProcNum);
+							if(op!=null && op.DateScheduleBy.Year>1880) {
+								plannedAppointmentInfo+=op.DateScheduleBy.ToShortDateString();
+							}
+						}
+					}
+				}*/
+			}
 			Provider priProv=Providers.GetProv(Patients.GetProvNum(pat));//guaranteed to work
+			//Clinic-------------------------------------------------------------------------------------------------------------
 			Clinic clinic=Clinics.GetClinic(pat.ClinicNum);
 			string clinicDescription="";
 			string clinicAddress="";
@@ -360,6 +401,7 @@ namespace OpenDental{
 			else {
 				clinicPhone=phone;
 			}
+			//Fill fields---------------------------------------------------------------------------------------------------------
 			foreach(SheetField field in sheet.SheetFields) {
 				if(field.FieldType!=SheetFieldType.StaticText) {
 					continue;
@@ -418,6 +460,7 @@ namespace OpenDental{
 				fldval=fldval.Replace("[nameLF]",pat.GetNameLF());
 				fldval=fldval.Replace("[nextSchedApptDateT]",nextSchedApptDateT);
 				fldval=fldval.Replace("[PatNum]",pat.PatNum.ToString());
+				fldval=fldval.Replace("[plannedAppointmentInfo]",plannedAppointmentInfo);
 				fldval=fldval.Replace("[priProvNameFormal]",priProv.GetFormalName());
 				fldval=fldval.Replace("[recallInterval]",recallInterval);
 				fldval=fldval.Replace("[salutation]",pat.GetSalutation());
