@@ -124,21 +124,6 @@ namespace OpenDentBusiness {
 				//}
 				
 			}
-			//else if(category==DisplayFieldCategory.ProgressNotes){
-			//  list.Add(new DisplayField("Date",67,category));
-			//  //list.Add(new DisplayField("Time",40));
-			//  list.Add(new DisplayField("Th",27,category));
-			//  list.Add(new DisplayField("Surf",40,category));
-			//  list.Add(new DisplayField("Dx",28,category));
-			//  list.Add(new DisplayField("Description",218,category));
-			//  list.Add(new DisplayField("Stat",25,category));
-			//  list.Add(new DisplayField("Prov",42,category));
-			//  list.Add(new DisplayField("Amount",48,category));
-			//  list.Add(new DisplayField("ADA Code",62,category));
-			//  list.Add(new DisplayField("User",62,category));
-			//  list.Add(new DisplayField("Signed",55,category));
-			//  //list.Add(new DisplayField("Priority",65,category));
-			//}
 			else if(category==DisplayFieldCategory.PatientSelect){
 				list.Add(new DisplayField("LastName",75,category));
 				list.Add(new DisplayField("First Name",75,category));
@@ -278,21 +263,6 @@ namespace OpenDentBusiness {
 					list.Add(new DisplayField("Quadrant",55,category));//behavior is specific to orion
 				}
 			}
-			//else if(category==DisplayFieldCategory.ProgressNotes){
-			//  list.Add(new DisplayField("Date",67,category));
-			//  list.Add(new DisplayField("Time",40,category));
-			//  list.Add(new DisplayField("Th",27,category));
-			//  list.Add(new DisplayField("Surf",40,category));
-			//  list.Add(new DisplayField("Dx",28,category));
-			//  list.Add(new DisplayField("Description",218,category));
-			//  list.Add(new DisplayField("Stat",25,category));
-			//  list.Add(new DisplayField("Prov",42,category));
-			//  list.Add(new DisplayField("Amount",48,category));
-			//  list.Add(new DisplayField("ADA Code",62,category));
-			//  list.Add(new DisplayField("User",62,category));
-			//  list.Add(new DisplayField("Signed",55,category));
-			//  list.Add(new DisplayField("Priority",65,category));
-			//}
 			else if(category==DisplayFieldCategory.PatientSelect){
 				list.Add(new DisplayField("LastName",75,category));
 				list.Add(new DisplayField("First Name",75,category));
