@@ -814,7 +814,7 @@ namespace OpenDental {
 						continue;
 					}
 					OpenDental.UI.SignatureBoxWrapper sigBox=(OpenDental.UI.SignatureBoxWrapper)control;
-					if(!sigBox.IsValid || sigBox.SigIsBlank){
+					if(field.IsRequired && (!sigBox.IsValid || sigBox.SigIsBlank)){
 						MsgBox.Show(this,"Signature required");
 						return false;
 					}
