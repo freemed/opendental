@@ -25,11 +25,11 @@ namespace OpenDental{
 		private void InitializeComponent() {
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormTimeCardRuleEdit));
 			this.label1 = new System.Windows.Forms.Label();
-			this.comboEmployee = new System.Windows.Forms.ComboBox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.textOverHoursPerDay = new System.Windows.Forms.TextBox();
 			this.label3 = new System.Windows.Forms.Label();
 			this.textAfterTimeOfDay = new System.Windows.Forms.TextBox();
+			this.listEmployees = new System.Windows.Forms.ListBox();
 			this.butDelete = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
@@ -44,58 +44,59 @@ namespace OpenDental{
 			this.label1.Text = "Employee";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// comboEmployee
-			// 
-			this.comboEmployee.FormattingEnabled = true;
-			this.comboEmployee.Location = new System.Drawing.Point(15,30);
-			this.comboEmployee.Name = "comboEmployee";
-			this.comboEmployee.Size = new System.Drawing.Size(200,21);
-			this.comboEmployee.TabIndex = 5;
-			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(13,54);
+			this.label2.Location = new System.Drawing.Point(234,100);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(203,18);
+			this.label2.Size = new System.Drawing.Size(112,18);
 			this.label2.TabIndex = 6;
 			this.label2.Text = "Over Hours Per Day";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// textOverHoursPerDay
 			// 
-			this.textOverHoursPerDay.Location = new System.Drawing.Point(15,75);
+			this.textOverHoursPerDay.Location = new System.Drawing.Point(236,121);
 			this.textOverHoursPerDay.Name = "textOverHoursPerDay";
-			this.textOverHoursPerDay.Size = new System.Drawing.Size(141,20);
+			this.textOverHoursPerDay.Size = new System.Drawing.Size(62,20);
 			this.textOverHoursPerDay.TabIndex = 7;
-			this.textOverHoursPerDay.Text = "8";
+			this.textOverHoursPerDay.Text = "8:00";
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(14,98);
+			this.label3.Location = new System.Drawing.Point(235,144);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(203,18);
+			this.label3.Size = new System.Drawing.Size(111,18);
 			this.label3.TabIndex = 8;
-			this.label3.Text = "After Time of Day (Military Time)";
+			this.label3.Text = "After Time of Day";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// textAfterTimeOfDay
 			// 
-			this.textAfterTimeOfDay.Location = new System.Drawing.Point(15,119);
+			this.textAfterTimeOfDay.Location = new System.Drawing.Point(236,165);
 			this.textAfterTimeOfDay.Name = "textAfterTimeOfDay";
-			this.textAfterTimeOfDay.Size = new System.Drawing.Size(141,20);
+			this.textAfterTimeOfDay.Size = new System.Drawing.Size(62,20);
 			this.textAfterTimeOfDay.TabIndex = 9;
 			this.textAfterTimeOfDay.Text = "16:00";
+			// 
+			// listEmployees
+			// 
+			this.listEmployees.FormattingEnabled = true;
+			this.listEmployees.Location = new System.Drawing.Point(15,30);
+			this.listEmployees.Name = "listEmployees";
+			this.listEmployees.Size = new System.Drawing.Size(200,277);
+			this.listEmployees.TabIndex = 156;
 			// 
 			// butDelete
 			// 
 			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.butDelete.Autosize = true;
 			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(15,206);
+			this.butDelete.Location = new System.Drawing.Point(15,318);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(75,24);
 			this.butDelete.TabIndex = 155;
@@ -110,7 +111,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(211,165);
+			this.butOK.Location = new System.Drawing.Point(258,277);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 3;
@@ -125,7 +126,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(211,206);
+			this.butCancel.Location = new System.Drawing.Point(258,318);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 2;
@@ -135,13 +136,13 @@ namespace OpenDental{
 			// FormTimeCardRuleEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(311,257);
+			this.ClientSize = new System.Drawing.Size(358,369);
+			this.Controls.Add(this.listEmployees);
 			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.textAfterTimeOfDay);
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.textOverHoursPerDay);
 			this.Controls.Add(this.label2);
-			this.Controls.Add(this.comboEmployee);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
@@ -160,11 +161,11 @@ namespace OpenDental{
 		private OpenDental.UI.Button butOK;
 		private OpenDental.UI.Button butCancel;
 		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.ComboBox comboEmployee;
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.TextBox textOverHoursPerDay;
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.TextBox textAfterTimeOfDay;
 		private OpenDental.UI.Button butDelete;
+		private System.Windows.Forms.ListBox listEmployees;
 	}
 }

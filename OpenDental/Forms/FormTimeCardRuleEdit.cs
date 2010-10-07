@@ -18,17 +18,16 @@ namespace OpenDental {
 		}
 
 		private void FormTimeCardRuleEdit_Load(object sender,EventArgs e) {
+			listEmployees.Items.Add("All Employees");
+			listEmployees.SelectedIndex=0;
 			for(int i=0;i<Employees.ListShort.Length;i++){
-				comboEmployee.Items.Add(Employees.ListShort[i].FName+" "+Employees.ListShort[i].LName);
+				listEmployees.Items.Add(Employees.ListShort[i].FName+" "+Employees.ListShort[i].LName);
 				if(Employees.ListShort[i].EmployeeNum==timeCardRule.EmployeeNum){
-					comboEmployee.SelectedIndex=i;
+					listEmployees.SelectedIndex=i+1;
 				}
 			}
-			if(comboEmployee.SelectedIndex<0){
-				comboEmployee.SelectedIndex=0;
-			}
 			if(timeCardRule.OverHoursPerDay.Hours>0){
-				textOverHoursPerDay.Text=timeCardRule.OverHoursPerDay.Hours.ToString();
+				textOverHoursPerDay.Text=timeCardRule.OverHoursPerDay.ToStringHmm();
 			}
 			if(timeCardRule.AfterTimeOfDay.Hours>0){
 				textAfterTimeOfDay.Text=timeCardRule.AfterTimeOfDay.ToStringHmm();
@@ -36,6 +35,9 @@ namespace OpenDental {
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
+			if(!MsgBox.Show(this,true,"Are you sure you want to delete this time card rule?")){
+				return;
+			}
 			if(timeCardRule.TimeCardRuleNum!=0){
 				TimeCardRules.Delete(timeCardRule.TimeCardRuleNum);
 			}
@@ -44,18 +46,18 @@ namespace OpenDental {
 
 		private void butOK_Click(object sender,EventArgs e) {
 			//Verify Data.
-			if(comboEmployee.SelectedIndex<0){
+			if(listEmployees.SelectedIndex<0){
 				MsgBox.Show(this,"You must select an employee");
 				return;
 			}
-			int overHoursPerDay=-1;
+			TimeSpan overHoursPerDay=TimeSpan.Zero;
 			try{
-				overHoursPerDay=Int32.Parse(this.textOverHoursPerDay.Text);
+				overHoursPerDay=TimeSpan.Parse(this.textOverHoursPerDay.Text);
 			}
 			catch{
 			}
-			if(overHoursPerDay<0 || overHoursPerDay>24){
-				MsgBox.Show(this,"Over hours per day must be between 0 and 24.");
+			if(overHoursPerDay==TimeSpan.Zero || overHoursPerDay.Days>0){
+				MsgBox.Show(this,"Over hours per day invalid");
 				return;
 			}
 			TimeSpan afterTimeOfDay=TimeSpan.Zero;
@@ -64,13 +66,18 @@ namespace OpenDental {
 			}
 			catch{
 			}
-			if(afterTimeOfDay==TimeSpan.Zero){
-				MsgBox.Show(this,"After time of day must be in format hh:mm");
+			if(afterTimeOfDay==TimeSpan.Zero || afterTimeOfDay.Days>0){
+				MsgBox.Show(this,"After time of day invalid");
 				return;
 			}
 			//Save the data entered.
-			timeCardRule.EmployeeNum=Employees.ListShort[comboEmployee.SelectedIndex].EmployeeNum;
-			timeCardRule.OverHoursPerDay=new TimeSpan(overHoursPerDay,0,0);
+			if(listEmployees.SelectedIndex==0){
+				timeCardRule.EmployeeNum=0;//All employees.
+			}
+			else{
+				timeCardRule.EmployeeNum=Employees.ListShort[listEmployees.SelectedIndex-1].EmployeeNum;
+			}
+			timeCardRule.OverHoursPerDay=overHoursPerDay;
 			timeCardRule.AfterTimeOfDay=afterTimeOfDay;
 			if(timeCardRule.TimeCardRuleNum==0){
 				TimeCardRules.Insert(timeCardRule);

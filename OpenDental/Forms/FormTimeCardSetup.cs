@@ -237,9 +237,14 @@ namespace OpenDental{
 			UI.ODGridRow row;
 			for(int i=0;i<TimeCardRules.Listt.Count;i++){
 				row=new OpenDental.UI.ODGridRow();
-				Employee emp=Employees.GetEmp(TimeCardRules.Listt[i].EmployeeNum);
-				row.Cells.Add(emp.FName+" "+emp.LName);
-				row.Cells.Add(TimeCardRules.Listt[i].OverHoursPerDay.Hours.ToString());
+				if(TimeCardRules.Listt[i].EmployeeNum==0){
+					row.Cells.Add("All Employees");
+				}
+				else{
+					Employee emp=Employees.GetEmp(TimeCardRules.Listt[i].EmployeeNum);
+					row.Cells.Add(emp.FName+" "+emp.LName);
+				}
+				row.Cells.Add(TimeCardRules.Listt[i].OverHoursPerDay.ToStringHmm());
 				row.Cells.Add(TimeCardRules.Listt[i].AfterTimeOfDay.ToStringHmm());
 				gridRules.Rows.Add(row);
 			}
