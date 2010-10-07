@@ -18,6 +18,7 @@ namespace OpenDental {
 	public partial class FormWebFormSetupV2:Form {
 
 		private string WebFormAddress="";
+		private OpenDental.WebHostSynch.webforms_preference PrefObj=null;
 		string RegistrationKey=PrefC.GetString(PrefName.RegistrationKey);
 		string SheetDefAddress ="";
 		WebHostSynch.WebHostSynch wh=new WebHostSynch.WebHostSynch();
@@ -46,11 +47,10 @@ namespace OpenDental {
 				DialogResult=DialogResult.Cancel;
 				return;
 			}
-			Cursor=Cursors.WaitCursor;
-			Cursor=Cursors.Default;
-
 			if(TestWebServiceExists()==true) {
+				Cursor=Cursors.WaitCursor;
 				this.backgroundWorker1.RunWorkerAsync();
+				
 			}
 		}
 
@@ -76,6 +76,7 @@ namespace OpenDental {
 		private void InitializeVariables() {
 			try {
 				wh.Url=PrefC.GetString(PrefName.WebHostSynchServerURL);
+				PrefObj=wh.GetPreferences(RegistrationKey);
 				sheetDefList=wh.DownloadSheetDefs(RegistrationKey);
 				SheetDefAddress= wh.GetSheetDefAddress(RegistrationKey);
 				SheetDefListLocal= new List<SheetDef>();
@@ -155,7 +156,9 @@ namespace OpenDental {
 			if(e.Error!= null) { 
 				MessageBox.Show(
 					"ERROR thrown here: {0}"+ e.Error.Message);
-			} 
+			}
+
+			butWebformBorderColor.BackColor=Color.FromArgb(PrefObj.ColorBorder);
 			FillGrid();
 			Cursor=Cursors.Default;
 		}
@@ -313,7 +316,7 @@ namespace OpenDental {
 					return;
 				}
 				bool PrefSet=true;
-				/*bool PrefSet= wh.SetPreferences(RegistrationKey,PrefC.GetColor(PrefName.WebFormsBorderColor).ToArgb(),PrefC.GetStringSilent(PrefName.WebFormsHeading1),PrefC.GetStringSilent(PrefName.WebFormsHeading2));*/
+				PrefSet=wh.SetPreferences(RegistrationKey,butWebformBorderColor.BackColor.ToArgb(),"","");
 				if(PrefSet==false) {
 				MsgBox.Show(this,"Preferences could not be set on the server");
 				}

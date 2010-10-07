@@ -105,6 +105,11 @@ namespace WebForms {
 					WebControl wc=null; // WebControl is the parent class of all controls
 					if(FieldType==SheetFieldType.InputField) {
 						TextBox tb=new TextBox();
+						int rows = (int)Math.Floor((double)height/fontsize);
+						if(rows>1) {
+							tb.TextMode = TextBoxMode.MultiLine;
+							tb.Rows=rows;
+						}
 						tb.Text=FieldValue;
 						wc=tb;
 					}
