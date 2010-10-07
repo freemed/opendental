@@ -460,6 +460,7 @@
     <Compile Include="TableTypes\Automation.cs" />
     <Compile Include="TableTypes\ApptFieldDef.cs" />
     <Compile Include="TableTypes\ApptField.cs" />
+    <Compile Include="TableTypes\AutomationCondition.cs" />
     <Compile Include="TableTypes\ChartView.cs" />
     <Compile Include="TableTypes\OrionProc.cs" />
     <Compile Include="TableTypes\ProcGroupItem.cs" />

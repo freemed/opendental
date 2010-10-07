@@ -155,6 +155,39 @@ namespace OpenDental {
 			formT.ShowDialog();
 			FillGrid();
 		}
+
+		private void butCopy_Click(object sender,EventArgs e) {
+			if(gridMain.SelectedIndices.Length !=1) {
+				MsgBox.Show(this,"Please select one completed sheet from the list above first.");
+				return;
+			}
+			long sheetNum=PIn.Long(table.Rows[gridMain.SelectedIndices[0]]["SheetNum"].ToString());
+			if(sheetNum==0) {
+				MsgBox.Show(this,"Must select a sheet.");
+				return;
+			}
+			Sheet sheet=Sheets.GetSheet(sheetNum);
+			Sheet sheet2=sheet.Copy();
+			sheet2.DateTimeSheet=DateTime.Now;
+			sheet2.SheetFields=new List<SheetField>(sheet.SheetFields);
+			for(int i=0;i<sheet2.SheetFields.Count;i++){
+				if(sheet2.SheetFields[i].FieldType==SheetFieldType.SigBox){
+					sheet2.SheetFields[i].FieldValue="";//clear signatures
+				}
+				//no need to set SheetNums here.  That's done from inside FormSheetFillEdit
+			}
+			sheet2.IsNew=true;
+			FormSheetFillEdit FormSF=new FormSheetFillEdit(sheet2);
+			FormSF.ShowDialog();
+			if(FormSF.DialogResult==DialogResult.OK) {
+				FillGrid();
+				for(int i=0;i<table.Rows.Count;i++){
+					if(table.Rows[i]["SheetNum"].ToString()==sheet2.SheetNum.ToString()){
+						gridMain.SetSelected(i,true);
+					}
+				}
+			}
+		}
 		
 		private void butImport_Click(object sender,EventArgs e) {
 			if(gridMain.SelectedIndices.Length !=1) {
@@ -190,6 +223,8 @@ namespace OpenDental {
 		private void butCancel_Click(object sender,EventArgs e) {
 			Close();
 		}
+
+		
 
 		
 

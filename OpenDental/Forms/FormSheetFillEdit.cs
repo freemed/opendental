@@ -644,6 +644,7 @@ namespace OpenDental {
 		private void butDelete_Click(object sender,EventArgs e) {
 			if(SheetCur.IsNew){
 				DialogResult=DialogResult.Cancel;
+				return;
 			}
 			if(!MsgBox.Show(this,true,"Delete?")){
 				return;
@@ -808,7 +809,8 @@ namespace OpenDental {
 						MessageBox.Show(Lan.g(this,"You must enter a value for")+" "+field.FieldName+" "+Lan.g(this,"before continuing."));
 						return false;			
 					}	
-				}else if(control.GetType()==typeof(OpenDental.UI.SignatureBoxWrapper)){
+				}
+				else if(control.GetType()==typeof(OpenDental.UI.SignatureBoxWrapper)){
 					SheetField field=(SheetField)control.Tag;
 					if(field.FieldType!=SheetFieldType.SigBox){
 						continue;
@@ -818,7 +820,8 @@ namespace OpenDental {
 						MsgBox.Show(this,"Signature required");
 						return false;
 					}
-				}else if(control.GetType()==typeof(SheetCheckBox)){//Radio button groups.
+				}
+				else if(control.GetType()==typeof(SheetCheckBox)){//Radio button groups.
 					SheetField field=(SheetField)control.Tag;
 					if(field.IsRequired && field.RadioButtonGroup!=""){
 						if(field.FieldValue!="X"){//This group is required but this radio button is not checked.
