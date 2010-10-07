@@ -459,7 +459,8 @@ namespace OpenDental{
 			}
 			AutoCur.AutoAction=(AutomationAction)comboAction.SelectedIndex;
 			if(comboAction.SelectedIndex==(int)AutomationAction.PrintPatientLetter
-				|| comboAction.SelectedIndex==(int)AutomationAction.PrintReferralLetter) 
+				|| comboAction.SelectedIndex==(int)AutomationAction.PrintReferralLetter
+				|| comboAction.SelectedIndex==(int)AutomationAction.ShowExamSheet) 
 			{
 				AutoCur.SheetDefNum=SheetDefC.Listt[comboSheetDef.SelectedIndex].SheetDefNum;
 			}

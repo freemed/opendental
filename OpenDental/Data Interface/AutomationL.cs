@@ -80,7 +80,7 @@ namespace OpenDental {
 				else if(Automations.Listt[i].AutoAction==AutomationAction.ShowExamSheet) {
 					SheetDef sheetDef=SheetDefs.GetSheetDef(Automations.Listt[i].SheetDefNum);
 					Sheet sheet=SheetUtil.CreateSheet(sheetDef,patNum);
-					//Put general sheet parameters here?
+					SheetParameter.SetParameter(sheet,"PatNum",patNum);
 					SheetFiller.FillFields(sheet);
 					using(Bitmap bmp=new Bitmap(100,100)) {//a dummy bitmap for the graphics object
 						using(Graphics g=Graphics.FromImage(bmp)) {
