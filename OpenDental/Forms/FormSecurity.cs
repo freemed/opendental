@@ -36,6 +36,7 @@ namespace OpenDental{
 		private CheckBox checkPasswordsMustBeStrong;
 		private TextBox textDaysLock;
 		private Label label2;
+		private CheckBox checkLogOffWindows;
 		//private DataTable table;
 		private List<Userod> ListUser;
 
@@ -92,6 +93,7 @@ namespace OpenDental{
 			this.butClose = new OpenDental.UI.Button();
 			this.textDaysLock = new System.Windows.Forms.TextBox();
 			this.label2 = new System.Windows.Forms.Label();
+			this.checkLogOffWindows = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
 			// 
 			// treePermissions
@@ -133,7 +135,7 @@ namespace OpenDental{
 			this.checkTimecardSecurityEnabled.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.checkTimecardSecurityEnabled.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkTimecardSecurityEnabled.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkTimecardSecurityEnabled.Location = new System.Drawing.Point(8,615);
+			this.checkTimecardSecurityEnabled.Location = new System.Drawing.Point(8,606);
 			this.checkTimecardSecurityEnabled.Name = "checkTimecardSecurityEnabled";
 			this.checkTimecardSecurityEnabled.Size = new System.Drawing.Size(224,16);
 			this.checkTimecardSecurityEnabled.TabIndex = 57;
@@ -175,7 +177,7 @@ namespace OpenDental{
 			this.checkCannotEditOwn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.checkCannotEditOwn.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkCannotEditOwn.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkCannotEditOwn.Location = new System.Drawing.Point(8,633);
+			this.checkCannotEditOwn.Location = new System.Drawing.Point(8,624);
 			this.checkCannotEditOwn.Name = "checkCannotEditOwn";
 			this.checkCannotEditOwn.Size = new System.Drawing.Size(224,16);
 			this.checkCannotEditOwn.TabIndex = 92;
@@ -206,7 +208,7 @@ namespace OpenDental{
 			this.checkPasswordsMustBeStrong.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.checkPasswordsMustBeStrong.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkPasswordsMustBeStrong.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkPasswordsMustBeStrong.Location = new System.Drawing.Point(8,597);
+			this.checkPasswordsMustBeStrong.Location = new System.Drawing.Point(238,624);
 			this.checkPasswordsMustBeStrong.Name = "checkPasswordsMustBeStrong";
 			this.checkPasswordsMustBeStrong.Size = new System.Drawing.Size(224,16);
 			this.checkPasswordsMustBeStrong.TabIndex = 96;
@@ -267,7 +269,7 @@ namespace OpenDental{
 			this.butAddUser.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butAddUser.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butAddUser.CornerRadius = 4F;
-			this.butAddUser.Location = new System.Drawing.Point(118,563);
+			this.butAddUser.Location = new System.Drawing.Point(118,565);
 			this.butAddUser.Name = "butAddUser";
 			this.butAddUser.Size = new System.Drawing.Size(75,24);
 			this.butAddUser.TabIndex = 0;
@@ -282,7 +284,7 @@ namespace OpenDental{
 			this.butAddGroup.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butAddGroup.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butAddGroup.CornerRadius = 4F;
-			this.butAddGroup.Location = new System.Drawing.Point(8,563);
+			this.butAddGroup.Location = new System.Drawing.Point(8,565);
 			this.butAddGroup.Name = "butAddGroup";
 			this.butAddGroup.Size = new System.Drawing.Size(75,24);
 			this.butAddGroup.TabIndex = 1;
@@ -323,10 +325,23 @@ namespace OpenDental{
 			this.label2.Text = "Lock Days";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// checkLogOffWindows
+			// 
+			this.checkLogOffWindows.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.checkLogOffWindows.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkLogOffWindows.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkLogOffWindows.Location = new System.Drawing.Point(238,606);
+			this.checkLogOffWindows.Name = "checkLogOffWindows";
+			this.checkLogOffWindows.Size = new System.Drawing.Size(224,16);
+			this.checkLogOffWindows.TabIndex = 99;
+			this.checkLogOffWindows.Text = "Log off with Windows";
+			this.checkLogOffWindows.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// FormSecurity
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(894,700);
+			this.Controls.Add(this.checkLogOffWindows);
 			this.Controls.Add(this.textDaysLock);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.checkPasswordsMustBeStrong);
@@ -383,6 +398,7 @@ namespace OpenDental{
 			checkTimecardSecurityEnabled.Checked=PrefC.GetBool(PrefName.TimecardSecurityEnabled);
 			checkCannotEditOwn.Checked=PrefC.GetBool(PrefName.TimecardUsersDontEditOwnCard);
 			checkCannotEditOwn.Enabled=checkTimecardSecurityEnabled.Checked;
+			checkLogOffWindows.Checked=PrefC.GetBool(PrefName.SecurityLogOffWithWindows);
 			if(PrefC.GetInt(PrefName.SecurityLockDays)>0) {
 				textDaysLock.Text=PrefC.GetInt(PrefName.SecurityLockDays).ToString();
 			}
@@ -841,7 +857,8 @@ namespace OpenDental{
 			}
 			if(	//Prefs.UpdateBool(PrefName.PasswordsMustBeStrong,checkPasswordsMustBeStrong.Checked) //handled when box clicked.
 				Prefs.UpdateBool(PrefName.TimecardSecurityEnabled,checkTimecardSecurityEnabled.Checked) ||
-				Prefs.UpdateBool(PrefName.TimecardUsersDontEditOwnCard,checkCannotEditOwn.Checked))
+				Prefs.UpdateBool(PrefName.TimecardUsersDontEditOwnCard,checkCannotEditOwn.Checked) ||
+				Prefs.UpdateBool(PrefName.SecurityLogOffWithWindows,checkLogOffWindows.Checked))
 			{
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}

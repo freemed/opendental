@@ -2742,7 +2742,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					INDEX(EmployeeNum)
 					) DEFAULT CHARSET=utf8";
 				Db.NonQ(command);
-
+				command="INSERT INTO preference(PrefName,ValueString) VALUES('SecurityLogOffWithWindows','0')";
+				Db.NonQ(command);
 
 
 
@@ -2761,6 +2762,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 			
+
+
 		
 
 
