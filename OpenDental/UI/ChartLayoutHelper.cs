@@ -109,6 +109,7 @@ namespace OpenDental {
 		public static void SetGridProgWidth(ODGrid gridProg,Size ClientSize){
 			if(UsingEcwTight()) {
 				gridProg.Width=524;
+				return;
 			}
 			if(Programs.UsingOrion) {//full width
 				gridProg.Width=ClientSize.Width-gridProg.Location.X-1;
