@@ -37,31 +37,43 @@ namespace WebForms {
 			try {
 				int xoffset=37;
 				int yoffset=26;
+
+				int ImageXOffset=0;
+				int ImageYOffset=0;
+				int ImageZIndex=-1;
+
 				int FormHeight=0;
 				int FormHeightOffset=0;
+
 				int maxYPos=0;
 				int maxXPos=0;
 				int maxHeight=0;
 				int maxWidth=0;
 				int buttonXoffset=0;
 				int buttonYoffset=0;
-				int RadioButtonXOffset=-250;
-				int RadioButtonYOffset=-6;
-				int RadioButtonDistance=-6;
-				int ImageXOffset=4;
-				int ImageYOffset=4;
+
+				int RadioButtonXOffset=-4;
+				int RadioButtonYOffset=-5;
+				int RadioButtonXOffsetIE=0;
+				int RadioButtonXOffsetFirefox=-2;
+
+				int CheckBoxXOffset=-4;
+				int CheckBoxYOffset=-4;
+				
+
 				float heightfactor =1.2f;
 				System.Web.HttpBrowserCapabilities browser=Request.Browser;
 				
 				if(browser.Browser == "Firefox") {
+					RadioButtonXOffset=RadioButtonXOffset+RadioButtonXOffsetFirefox;
 				}
 				if(browser.Browser == "IE") {
-					//RadioButtonXOffset=-6;
+					RadioButtonXOffset=RadioButtonXOffset+RadioButtonXOffsetIE;
 				}
+
+
+
 				/*
-				form1.Style["background-color"]="#0066FF";
-				form1.Style["background-image"]="url('Patient Info.gif')";
-				form1.Style["background-repeat"]="no-repeat";
 				form1.Style["background-position"]=xoffset+"px "+ yoffset+"px";
 				*/
 				ODWebServiceEntities db=new ODWebServiceEntities();
@@ -102,8 +114,10 @@ namespace WebForms {
 						ListItem li=new ListItem();
 						li.Value=RadioButtonValue;
 						li.Text="";
+						
 						li.Attributes.CssStyle.Add("position","absolute");
 						li.Attributes.CssStyle.Add("left",XPos+RadioButtonXOffset+"px");
+						li.Attributes.CssStyle.Add("top",YPos+RadioButtonYOffset+"px");
 						//search for existing RadioButtonList by the same name.
 						foreach(Control c in form1.Controls) {
 							if(c.ID==FieldName && c.GetType()==typeof(RadioButtonList)) {
@@ -145,26 +159,30 @@ namespace WebForms {
 						wc.Style["top"]=YPos+"px";
 						wc.Style["left"]=XPos+"px";
 
+						if(wc.GetType()==typeof(System.Web.UI.WebControls.Image)) {
+							wc.Style["top"]=YPos+ImageYOffset+"px";
+							wc.Style["left"]=XPos+ImageXOffset+"px";
+							wc.Style["z-index"]=""+ImageZIndex;
+							
+						}
 						if(FieldType==SheetFieldType.InputField) { //textboxes
 							wc.Style["font-family"]=fontname;
 							wc.Style["font-size"]=fontsize+"px";
 							wc.Style["height"]=height/heightfactor+"px";
 						}
 						if(wc.GetType()==typeof(RadioButtonList)) {
-							wc.Style["top"]=YPos+RadioButtonYOffset+"px";
-							wc.Style["left"]=XPos+RadioButtonXOffset+"px";
+							wc.Style["position"]="static";
 						}
-						if(wc.GetType()==typeof(System.Web.UI.WebControls.Image)){
-							wc.Style["top"]=YPos+ImageYOffset+"px";
-							wc.Style["left"]=XPos+ImageXOffset+"px";
+						if(wc.GetType()==typeof(CheckBox)) {
+							wc.Style["top"]=YPos+CheckBoxXOffset+"px";
+							wc.Style["left"]=XPos+CheckBoxYOffset+"px";
 						}
+
 						if(FieldType==SheetFieldType.StaticText) {
 							wc.Style["font-family"]=fontname;
 							wc.Style["font-size"]=fontsize+"px";
 						}
-						if(FieldType==SheetFieldType.Image) {
-							wc.Style["z-index"]="-1";
-						}
+
 
 
 
