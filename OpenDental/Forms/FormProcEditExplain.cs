@@ -9,8 +9,8 @@ using OpenDentBusiness;
 
 namespace OpenDental {
 	public partial class FormProcEditExplain:Form {
-		private static string Changes;
-
+		public static string Changes;
+		public static string Explanation;
 
 		public FormProcEditExplain() {
 			InitializeComponent();
@@ -24,9 +24,6 @@ namespace OpenDental {
 
 		public static string GetChanges(Procedure procCur, Procedure procOld, OrionProc orionProcCur, OrionProc orionProcOld){
 			Changes="";
-			if(procOld.HideGraphics != procCur.HideGraphics) {
-				Changes="Hide Graphics changed from "+(procOld.HideGraphics?"true":"false")+" to "+(procCur.HideGraphics?"true":"false")+".";
-			}
 			if(procOld.PatNum != procCur.PatNum) {
 				if(Changes!=""){ Changes+="\r\n";}
 		    Changes+="Patient Num changed from "+POut.Long(procOld.PatNum)+" to "+POut.Long(procCur.PatNum)+".";
@@ -35,71 +32,135 @@ namespace OpenDental {
 		    if(Changes!=""){ Changes+="\r\n";}
 		    Changes+="Apt Num changed from "+POut.Long(procOld.AptNum)+" to "+POut.Long(procCur.AptNum)+".";
 		  }
+		  if(procOld.PlannedAptNum != procCur.PlannedAptNum) {
+		    if(Changes!=""){ Changes+="\r\n";}
+		    Changes+="Planned Apt Num changed from "+POut.Long(procOld.PlannedAptNum)+" to "+POut.Long(procCur.PlannedAptNum)+".";
+		  }
+		  if(procOld.DateEntryC != procCur.DateEntryC) {
+		    if(Changes!=""){ Changes+="\r\n";}
+		    Changes+="Date Entry changed from "+POut.Date(procOld.DateEntryC)+" to "+POut.Date(procCur.DateEntryC)+".";
+		  }
 		  if(procOld.ProcDate != procCur.ProcDate) {
 		    if(Changes!=""){ Changes+="\r\n";}
 		    Changes+="Proc Date changed from "+POut.Date(procOld.ProcDate)+" to "+POut.Date(procCur.ProcDate)+".";
 		  }
+		  if(procOld.StartTime != procCur.StartTime) {
+		    if(Changes!=""){ Changes+="\r\n";}
+		    Changes+="Start Time changed from "+POut.Int(procOld.StartTime)+" to "+POut.Int(procCur.StartTime)+".";
+		  }
+		  if(procOld.StopTime != procCur.StopTime) {
+		    if(Changes!=""){ Changes+="\r\n";}
+		    Changes+="Stop Time changed from "+POut.Int(procOld.StopTime)+" to "+POut.Int(procCur.StopTime)+".";
+		  }
+		  if(procOld.ProcTime != procCur.ProcTime) {
+		    if(Changes!=""){ Changes+="\r\n";}
+		    Changes+="Procedure Time changed from "+POut.TimeSpan(procOld.ProcTime)+" to "+POut.TimeSpan(procCur.ProcTime)+".";
+		  }
+		  if(procOld.ProcTimeEnd != procCur.ProcTimeEnd) {
+		    if(Changes!=""){ Changes+="\r\n";}
+		    Changes+="End Time changed from "+POut.TimeSpan(procOld.ProcTimeEnd)+" to "+POut.TimeSpan(procCur.ProcTimeEnd)+".";
+		  }
+		  if(procOld.CodeNum != procCur.CodeNum) {
+		    if(Changes!=""){ Changes+="\r\n";}
+		    Changes+="Procedure changed from "+ProcedureCodes.GetLaymanTerm(procOld.CodeNum)+" to "+ProcedureCodes.GetLaymanTerm(procCur.CodeNum)+".";
+		  }
 		  if(procOld.ProcFee != procCur.ProcFee) {
 		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Proc Fee changed from "+POut.Double(procOld.ProcFee)+" to "+POut.Double(procCur.ProcFee)+".";
-		  }
-		  if(procOld.Surf != procCur.Surf) {
-		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Surface changed from "+POut.String(procOld.Surf)+" to "+POut.String(procCur.Surf)+".";
+		    Changes+="Proc Fee changed from $"+POut.Double(procOld.ProcFee)+" to $"+POut.Double(procCur.ProcFee)+".";
 		  }
 		  if(procOld.ToothNum != procCur.ToothNum) {
 		    if(Changes!=""){ Changes+="\r\n";}
 		    Changes+="Tooth Num changed from "+POut.String(procOld.ToothNum)+" to "+POut.String(procCur.ToothNum)+".";
 		  }
+		  if(procOld.Surf != procCur.Surf) {
+		    if(Changes!=""){ Changes+="\r\n";}
+		    Changes+="Surface changed from "+POut.String(procOld.Surf)+" to "+POut.String(procCur.Surf)+".";
+		  }
 		  if(procOld.ToothRange != procCur.ToothRange) {
 		    if(Changes!=""){ Changes+="\r\n";}
 		    Changes+="Tooth Range changed from "+POut.String(procOld.ToothRange)+" to "+POut.String(procCur.ToothRange)+".";
+		  }
+			if(procOld.HideGraphics != procCur.HideGraphics) {
+				if(Changes!=""){ Changes+="\r\n";}
+				Changes="Hide Graphics changed from "+(procOld.HideGraphics?"Hide Graphics":"Do Not Hide Graphics")
+					+" to "+(procCur.HideGraphics?"Hide Graphics":"Do Not Hide Graphics")+".";
+			}
+		  if(procOld.ProvNum != procCur.ProvNum) {
+		    if(Changes!=""){ Changes+="\r\n";}
+		    Changes+="Provider changed from "+Providers.GetAbbr(procOld.ProvNum)+" to "+Providers.GetAbbr(procCur.ProvNum)+".";
+		  }
+		  if(procOld.Dx != procCur.Dx) {
+		    if(Changes!=""){ Changes+="\r\n";}
+		    Changes+="Diagnosis changed from "+DefC.GetDef(DefCat.Diagnosis,procOld.Dx).ItemName.ToString()
+					+" to "+DefC.GetDef(DefCat.Diagnosis,procCur.Dx).ItemName.ToString()+".";
 		  }
 		  if(procOld.Priority != procCur.Priority) {
 		    if(Changes!=""){ Changes+="\r\n";}
 		    Changes+="Priority changed from "+((procOld.Priority!=0)?DefC.GetDef(DefCat.TxPriorities,procOld.Priority).ItemName:"no priority")
 					+" to "+((procCur.Priority!=0)?DefC.GetDef(DefCat.TxPriorities,procCur.Priority).ItemName:"no priority")+".";
 		  }
-		  if(procOld.ProcStatus != procCur.ProcStatus) {
-		    if(Changes!=""){ Changes+="\r\n";}
-				string procStatOld=Enum.GetName(typeof(ProcStat),procOld.ProcStatus);
-		    Changes+="Proc Status changed from "+POut.Int((int)procOld.ProcStatus)+" to "+POut.Int((int)procCur.ProcStatus)+".";
-		  }
-		  if(procOld.ProvNum != procCur.ProvNum) {
-		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Prov Num changed from "+POut.Long(procOld.ProvNum)+" to "+POut.Long(procCur.ProvNum)+".";
-		  }
-		  if(procOld.Dx != procCur.Dx) {
-		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Dx changed from "+DefC.GetDef(DefCat.Diagnosis,procOld.Dx).ItemName+" to "+DefC.GetDef(DefCat.Diagnosis,procCur.Dx).ItemName+".";
-		  }
-		  if(procOld.PlannedAptNum != procCur.PlannedAptNum) {
-		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Planned AptNum changed from "+POut.Long(procOld.PlannedAptNum)+" to "+POut.Long(procCur.PlannedAptNum)+".";
-		  }
 		  if(procOld.PlaceService != procCur.PlaceService) {
 		    if(Changes!=""){ Changes+="\r\n";}
 		    Changes+="Place Service changed from "+procOld.PlaceService.ToString()+" to "+procCur.PlaceService.ToString()+".";
 		  }
+		  if(procOld.ClinicNum != procCur.ClinicNum) {
+		    if(Changes!=""){ Changes+="\r\n";}
+		    Changes+="Clinic changed from "+Clinics.GetDesc(procOld.ClinicNum)+" to "+Clinics.GetDesc(procCur.ClinicNum)+".";
+		  }
+		  if(procOld.SiteNum != procCur.SiteNum) {
+		    if(Changes!=""){ Changes+="\r\n";}
+		    Changes+="Site changed from "+Sites.GetDescription(procOld.SiteNum)+" to "+Sites.GetDescription(procCur.SiteNum)+".";
+		  }
 		  if(procOld.Prosthesis != procCur.Prosthesis) {
 		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Prosthesis changed from "+POut.String(procOld.Prosthesis)+" to "+POut.String(procCur.Prosthesis)+".";
+		    Changes+="Prosthesis changed from "+procOld.Prosthesis.ToString()+" to "+procCur.Prosthesis.ToString()+".";
 		  }
 		  if(procOld.DateOriginalProsth != procCur.DateOriginalProsth) {
 		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Date Original Prosth changed from "+POut.Date(procOld.DateOriginalProsth)+" to "+POut.Date(procCur.DateOriginalProsth)+".";
+		    Changes+="Date of Original Prosthesis changed from "+POut.Date(procOld.DateOriginalProsth)+" to "+POut.Date(procCur.DateOriginalProsth)+".";
 		  }
 		  if(procOld.ClaimNote != procCur.ClaimNote) {
 		    if(Changes!=""){ Changes+="\r\n";}
 		    Changes+="Claim Note changed from "+POut.String(procOld.ClaimNote)+" to "+POut.String(procCur.ClaimNote)+".";
 		  }
-		  if(procOld.DateEntryC != procCur.DateEntryC) {
+			if(orionProcOld.OrionProcNum != orionProcCur.OrionProcNum) {
 		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Date Entry changed from "+POut.Date(procOld.DateEntryC)+" to "+POut.Date(procCur.DateEntryC)+".";
+		    Changes+="Orion Proc Num changed from "+POut.Long(orionProcOld.OrionProcNum)+" to "+POut.Long(orionProcCur.OrionProcNum)+".";
 		  }
-		  if(procOld.ClinicNum != procCur.ClinicNum) {
+			if(orionProcOld.ProcNum != orionProcCur.ProcNum) {
 		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Clinic Num changed from "+POut.Long(procOld.ClinicNum)+" to "+POut.Long(procCur.ClinicNum)+".";
+		    Changes+="Proc Num changed from "+POut.Long(orionProcOld.ProcNum)+" to "+POut.Long(orionProcCur.ProcNum)+".";
+		  }
+			if(orionProcOld.DPC != orionProcCur.DPC) {
+		    if(Changes!=""){ Changes+="\r\n";}
+		    Changes+="DPC changed from "+POut.String(orionProcOld.DPC.ToString())+" to "+POut.String(orionProcCur.DPC.ToString())+".";
+		  }
+			if(orionProcOld.Status2 != orionProcCur.Status2) {
+		    if(Changes!=""){ Changes+="\r\n";}
+		    Changes+="Status 2 changed from "+orionProcOld.Status2.ToString()+" to "+orionProcCur.Status2.ToString()+".";
+		  }
+			if(orionProcOld.DateScheduleBy != orionProcCur.DateScheduleBy) {
+		    if(Changes!=""){ Changes+="\r\n";}
+		    Changes+="Date Schedule By changed from "+POut.Date(orionProcOld.DateScheduleBy)+" to "+POut.Date(orionProcCur.DateScheduleBy)+".";
+		  }
+			if(orionProcOld.DateStopClock != orionProcCur.DateStopClock) {
+		    if(Changes!=""){ Changes+="\r\n";}
+		    Changes+="Date Stop Clock changed from "+POut.Date(orionProcOld.DateStopClock)+" to "+POut.Date(orionProcCur.DateStopClock)+".";
+		  }
+			if(orionProcOld.IsOnCall != orionProcCur.IsOnCall) {
+		    if(Changes!=""){ Changes+="\r\n";}
+		    Changes+="Is On Call changed from "+(orionProcOld.IsOnCall?"Is On Call":"Is Not On Call")
+					+" to "+(orionProcCur.IsOnCall?"Is On Call":"Is Not On Call")+".";
+		  }
+			if(orionProcOld.IsEffectiveComm != orionProcCur.IsEffectiveComm) {
+		    if(Changes!=""){ Changes+="\r\n";}
+		    Changes+="Is Effective Comm changed from "+(orionProcOld.IsEffectiveComm?"Is an Effective Communicator":"Is Not an Effective Communicator")
+					+" to "+(orionProcCur.IsEffectiveComm?"Is an Effective Communicator":"Is Not an Effective Communicator")+".";
+		  }
+			if(orionProcOld.IsRepair != orionProcCur.IsRepair) {
+		    if(Changes!=""){ Changes+="\r\n";}
+		    Changes+="Is Repair changed from "+(orionProcOld.IsRepair?"Is a Repair":"Is Not a Repair")
+					+" to "+(orionProcCur.IsRepair?"Is a Repair":"Is Not a Repair")+".";
 		  }
 		  if(procOld.MedicalCode != procCur.MedicalCode) {
 		    if(Changes!=""){ Changes+="\r\n";}
@@ -111,7 +172,8 @@ namespace OpenDental {
 		  }
 		  if(procOld.IsPrincDiag != procCur.IsPrincDiag) {
 		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Is Princ Diag changed from "+POut.Bool(procOld.IsPrincDiag)+" to "+POut.Bool(procCur.IsPrincDiag)+".";
+		    Changes+="Is Princ Diag changed from "+(procOld.IsPrincDiag?"Principal Diagnosis":"Not Principal Diagnosis")
+					+" to "+(procCur.IsPrincDiag?"Principal Diagnosis":"Not Principal Diagnosis")+".";
 		  }
 		  if(procOld.ProcNumLab != procCur.ProcNumLab) {
 		    if(Changes!=""){ Changes+="\r\n";}
@@ -127,9 +189,11 @@ namespace OpenDental {
 		    Changes+="Billing Type Two changed from "+(procOld.BillingTypeTwo!=0?DefC.GetDef(DefCat.BillingTypes,procOld.BillingTypeTwo).ItemName:"none")
 					+" to "+(procCur.BillingTypeTwo!=0?DefC.GetDef(DefCat.BillingTypes,procCur.BillingTypeTwo).ItemName:"none")+".";
 		  }
-		  if(procOld.CodeNum != procCur.CodeNum) {
+		  if(procOld.ProcStatus != procCur.ProcStatus) {
 		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Code Num changed from "+POut.Long(procOld.CodeNum)+" to "+POut.Long(procCur.CodeNum)+".";
+				string procStatOld=Enum.GetName(typeof(ProcStat),procOld.ProcStatus);
+				string procStatCur=Enum.GetName(typeof(ProcStat),procOld.ProcStatus);
+		    Changes+="Proc Status changed from "+procStatOld+" to "+procStatCur+".";
 		  }
 		  if(procOld.RevCode != procCur.RevCode) {
 		    if(Changes!=""){ Changes+="\r\n";}
@@ -143,78 +207,24 @@ namespace OpenDental {
 		    if(Changes!=""){ Changes+="\r\n";}
 		    Changes+="Unit Quantity changed from "+POut.Int(procOld.UnitQty)+" to "+POut.Int(procCur.UnitQty)+".";
 		  }
-		  if(procOld.StartTime != procCur.StartTime) {
-		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Start Time changed from "+POut.Int(procOld.StartTime)+" to "+POut.Int(procCur.StartTime)+".";
-		  }
-		  if(procOld.StopTime != procCur.StopTime) {
-		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Stop Time changed from "+POut.Int(procOld.StopTime)+" to "+POut.Int(procCur.StopTime)+".";
-		  }
 		  if(procOld.DateTP != procCur.DateTP) {
 		    if(Changes!=""){ Changes+="\r\n";}
 		    Changes+="Date TP changed from "+POut.Date(procOld.DateTP)+" to "+POut.Date(procCur.DateTP)+".";
-		  }
-		  if(procOld.SiteNum != procCur.SiteNum) {
-		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Site Num changed from "+POut.Long(procOld.SiteNum)+" to "+POut.Long(procCur.SiteNum)+".";
 		  }
 		  if(procOld.CanadianTypeCodes != procCur.CanadianTypeCodes) {
 		    if(Changes!=""){ Changes+="\r\n";}
 		    Changes+="Canadian Code Type changed from "+POut.String(procOld.CanadianTypeCodes)+" to "+POut.String(procCur.CanadianTypeCodes)+".";
 		  }
-		  if(procOld.ProcTime != procCur.ProcTime) {
-		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Procedure Time changed from "+POut.TimeSpan(procOld.ProcTime)+" to "+POut.TimeSpan(procCur.ProcTime)+".";
-		  }
-		  if(procOld.ProcTimeEnd != procCur.ProcTimeEnd) {
-		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="End Time changed from "+POut.TimeSpan(procOld.ProcTimeEnd)+" to "+POut.TimeSpan(procCur.ProcTimeEnd)+".";
-		  }
 			if(procOld.Note != procCur.Note) {
 		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Note changed from "+POut.String(procOld.Note)+" to "+POut.String(procCur.Note)+".";
-		  }
-			if(orionProcOld.OrionProcNum != orionProcCur.OrionProcNum) {
-		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Orion Proc Num changed from "+POut.Long(orionProcOld.OrionProcNum)+" to "+POut.Long(orionProcCur.OrionProcNum)+".";
-		  }
-			if(orionProcOld.ProcNum != orionProcCur.ProcNum) {
-		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Proc Num changed from "+POut.Long(orionProcOld.ProcNum)+" to "+POut.Long(orionProcCur.ProcNum)+".";
-		  }
-			if(orionProcOld.DPC != orionProcCur.DPC) {
-		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="DPC changed from "+POut.String(orionProcOld.DPC.ToString())+" to "+POut.String(orionProcCur.DPC.ToString())+".";
-		  }
-			if(orionProcOld.DateScheduleBy != orionProcCur.DateScheduleBy) {
-		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Date Schedule By changed from "+POut.Date(orionProcOld.DateScheduleBy)+" to "+POut.Date(orionProcCur.DateScheduleBy)+".";
-		  }
-			if(orionProcOld.DateStopClock != orionProcCur.DateStopClock) {
-		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Date Stop Clock changed from "+POut.Date(orionProcOld.DateStopClock)+" to "+POut.Date(orionProcCur.DateStopClock)+".";
-		  }
-			if(orionProcOld.Status2 != orionProcCur.Status2) {
-		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Status 2 changed from "+orionProcOld.Status2.ToString()+" to "+orionProcCur.Status2.ToString()+".";
-		  }
-			if(orionProcOld.IsOnCall != orionProcCur.IsOnCall) {
-		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Is On Call changed from "+(orionProcOld.IsOnCall?"true":"false")+" to "+(orionProcCur.IsOnCall?"true":"false")+".";
-		  }
-			if(orionProcOld.IsEffectiveComm != orionProcCur.IsEffectiveComm) {
-		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Is Effective Comm changed from "+(orionProcOld.IsEffectiveComm?"true":"false")+" to "+(orionProcCur.IsEffectiveComm?"true":"false")+".";
-		  }
-			if(orionProcOld.IsRepair != orionProcCur.IsRepair) {
-		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Is Repair changed from "+(orionProcOld.IsRepair?"true":"false")+" to "+(orionProcCur.IsRepair?"true":"false")+".";
+		    Changes+="Note changed from "+((procOld.Note=="")?"none":"'"+procOld.Note+"'")
+					+" to "+((procCur.Note=="")?"none":"'"+procCur.Note+"'");
 		  }
 			return Changes;
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
+			Explanation="Values Changed:\r\n"+Changes+"\r\nExplanation:\r\n"+textExplanation.Text;
 			DialogResult=DialogResult.OK;
 		}
 

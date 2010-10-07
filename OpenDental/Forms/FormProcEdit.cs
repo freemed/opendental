@@ -17,6 +17,7 @@ using OpenDentBusiness;
 using CodeBase;
 using SparksToothChart;
 using OpenDental.UI;
+using System.Threading;
 
 
 namespace OpenDental{
@@ -4032,6 +4033,24 @@ namespace OpenDental{
 				}
 			}
 			ProcCur.ClaimNote=textClaimNote.Text;
+			//Last chance to run this code before Proc gets updated.
+			if(Programs.UsingOrion){//Ask for an explanation. If they hit cancel here, return and don't save.
+				if(ProcOld.ProcStatus==ProcStat.TP && ProcOld.DateTP.Date<MiscData.GetNowDateTime().Date){
+					if(FormProcEditExplain.GetChanges(ProcCur,ProcOld,OrionProcCur,OrionProcOld)!=""){//Also sets FormProcEditExplain.Changes.
+						FormProcEditExplain FormP=new FormProcEditExplain();
+						if(FormP.ShowDialog()!=DialogResult.OK){
+							return;
+						}
+						  //string procNote=ProcCur.Note;
+							Procedure ProcExplain=ProcOld.Copy();
+						  ProcOld.Note=FormProcEditExplain.Explanation;
+						  Procedures.Update(ProcOld,ProcExplain);
+							//ProcOld=ProcCur.Copy();
+							//ProcCur.Note=procNote;
+							Thread.Sleep(1100);
+					}
+				}
+			}
 			Procedures.Update(ProcCur,ProcOld);
 			for(int i=0;i<ClaimProcsForProc.Count;i++) {
 				ClaimProcsForProc[i].ClinicNum=ProcCur.ClinicNum;
@@ -4064,17 +4083,6 @@ namespace OpenDental{
 				//if an extraction, then mark previous procs hidden
 				//Procedures.SetHideGraphical(ProcCur);//might not matter anymore
 				ToothInitials.SetValue(ProcCur.PatNum,ProcCur.ToothNum,ToothInitialType.Missing);
-			}
-			//Last chance to run this code before ProcOld gets lost.
-			if(Programs.UsingOrion){//Ask for an explanation. If they hit cancel here, return and don't save.
-				if(ProcOld.ProcStatus==ProcStat.TP && ProcOld.DateTP.Date<MiscData.GetNowDateTime().Date){
-					if(FormProcEditExplain.GetChanges(ProcCur,ProcOld,OrionProcCur,OrionProcOld)!=""){//Also sets FormProcEditExplain.Changes.
-						FormProcEditExplain FormP=new FormProcEditExplain();
-						if(FormP.ShowDialog()!=DialogResult.OK){
-							return;
-						}
-					}
-				}
 			}
 			ProcOld=ProcCur.Copy();//in case we now make more changes.
 			//these areas have no autocodes
