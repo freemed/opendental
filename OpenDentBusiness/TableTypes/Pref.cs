@@ -237,6 +237,7 @@ namespace OpenDentBusiness {
 		///<summary>Set to 0 to always grant permission. 1 means only today.</summary>
 		SecurityLockDays,
 		SecurityLockIncludesAdmin,
+		SecurityLogOffWithWindows,
 		ShowAccountFamilyCommEntries,
 		ShowFeatureMedicalInsurance,
 		ShowIDinTitleBar,
