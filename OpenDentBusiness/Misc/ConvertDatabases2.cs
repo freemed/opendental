@@ -2731,7 +2731,17 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);
 				command="INSERT INTO preference(PrefName,ValueString) VALUES('TimeCardsUseDecimalInsteadOfColon','0')";
 				Db.NonQ(command);
-
+				command="DROP TABLE IF EXISTS timecardrule";
+				Db.NonQ(command);
+				command=@"CREATE TABLE timecardrule (
+					TimeCardRuleNum bigint NOT NULL auto_increment,
+					EmployeeNum bigint NOT NULL,
+					OverHoursPerDay time NOT NULL,
+					AfterTimeOfDay time NOT NULL,
+					PRIMARY KEY (TimeCardRuleNum),
+					INDEX(EmployeeNum)
+					) DEFAULT CHARSET=utf8";
+				Db.NonQ(command);
 
 
 

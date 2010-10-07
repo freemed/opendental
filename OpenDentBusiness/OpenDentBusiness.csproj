@@ -202,6 +202,7 @@
     <Compile Include="Crud\TaskSubscriptionCrud.cs" />
     <Compile Include="Crud\TaskUnreadCrud.cs" />
     <Compile Include="Crud\TimeAdjustCrud.cs" />
+    <Compile Include="Crud\TimeCardRuleCrud.cs" />
     <Compile Include="Crud\UserodCrud.cs" />
     <Compile Include="Data Interface\ApptFieldDefs.cs" />
     <Compile Include="Data Interface\ApptFields.cs" />
@@ -250,6 +251,7 @@
     <Compile Include="Cache\EnumRemotingRole.cs" />
     <Compile Include="Cache\MountDefC.cs" />
     <Compile Include="Cache\PrefC.cs" />
+    <Compile Include="Data Interface\TimeCardRules.cs" />
     <Compile Include="InternalTools\Phones\PhoneAsterisks.cs" />
     <Compile Include="InternalTools\Phones\PhoneEmpDefaults.cs" />
     <Compile Include="InternalTools\Phones\PhoneNumbers.cs" />

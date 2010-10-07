@@ -58,12 +58,12 @@ namespace OpenDental{
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormTimeCardSetup));
 			this.checkUseDecimal = new System.Windows.Forms.CheckBox();
+			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.butAddRule = new OpenDental.UI.Button();
+			this.gridRules = new OpenDental.UI.ODGrid();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butAdd = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
-			this.gridRules = new OpenDental.UI.ODGrid();
-			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.butAddRule = new OpenDental.UI.Button();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -76,6 +76,47 @@ namespace OpenDental{
 			this.checkUseDecimal.Text = "Use decimal format rather than colon format";
 			this.checkUseDecimal.UseVisualStyleBackColor = true;
 			this.checkUseDecimal.Click += new System.EventHandler(this.checkUseDecimal_Click);
+			// 
+			// groupBox1
+			// 
+			this.groupBox1.Controls.Add(this.checkUseDecimal);
+			this.groupBox1.Location = new System.Drawing.Point(19,515);
+			this.groupBox1.Name = "groupBox1";
+			this.groupBox1.Size = new System.Drawing.Size(391,100);
+			this.groupBox1.TabIndex = 14;
+			this.groupBox1.TabStop = false;
+			this.groupBox1.Text = "Options";
+			// 
+			// butAddRule
+			// 
+			this.butAddRule.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butAddRule.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butAddRule.Autosize = true;
+			this.butAddRule.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAddRule.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAddRule.CornerRadius = 4F;
+			this.butAddRule.Image = global::OpenDental.Properties.Resources.Add;
+			this.butAddRule.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butAddRule.Location = new System.Drawing.Point(327,450);
+			this.butAddRule.Name = "butAddRule";
+			this.butAddRule.Size = new System.Drawing.Size(80,24);
+			this.butAddRule.TabIndex = 15;
+			this.butAddRule.Text = "Add";
+			this.butAddRule.Click += new System.EventHandler(this.butAddRule_Click);
+			// 
+			// gridRules
+			// 
+			this.gridRules.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+			this.gridRules.HScrollVisible = false;
+			this.gridRules.Location = new System.Drawing.Point(327,12);
+			this.gridRules.Name = "gridRules";
+			this.gridRules.ScrollValue = 0;
+			this.gridRules.Size = new System.Drawing.Size(320,432);
+			this.gridRules.TabIndex = 13;
+			this.gridRules.Title = "Rules";
+			this.gridRules.TranslationName = "FormTimeCardSetup";
+			this.gridRules.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridRules_CellDoubleClick);
 			// 
 			// gridMain
 			// 
@@ -123,45 +164,6 @@ namespace OpenDental{
 			this.butClose.Text = "&Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
-			// gridRules
-			// 
-			this.gridRules.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-			this.gridRules.HScrollVisible = false;
-			this.gridRules.Location = new System.Drawing.Point(353,12);
-			this.gridRules.Name = "gridRules";
-			this.gridRules.ScrollValue = 0;
-			this.gridRules.Size = new System.Drawing.Size(294,432);
-			this.gridRules.TabIndex = 13;
-			this.gridRules.Title = "Rules";
-			this.gridRules.TranslationName = "FormTimeCardSetup";
-			// 
-			// groupBox1
-			// 
-			this.groupBox1.Controls.Add(this.checkUseDecimal);
-			this.groupBox1.Location = new System.Drawing.Point(19,515);
-			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(391,100);
-			this.groupBox1.TabIndex = 14;
-			this.groupBox1.TabStop = false;
-			this.groupBox1.Text = "Options";
-			// 
-			// butAddRule
-			// 
-			this.butAddRule.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butAddRule.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butAddRule.Autosize = true;
-			this.butAddRule.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAddRule.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAddRule.CornerRadius = 4F;
-			this.butAddRule.Image = global::OpenDental.Properties.Resources.Add;
-			this.butAddRule.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAddRule.Location = new System.Drawing.Point(353,450);
-			this.butAddRule.Name = "butAddRule";
-			this.butAddRule.Size = new System.Drawing.Size(80,24);
-			this.butAddRule.TabIndex = 15;
-			this.butAddRule.Text = "Add";
-			// 
 			// FormTimeCardSetup
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
@@ -189,7 +191,9 @@ namespace OpenDental{
 
 		private void FormPayPeriods_Load(object sender, System.EventArgs e) {
 			checkUseDecimal.Checked=PrefC.GetBool(PrefName.TimeCardsUseDecimalInsteadOfColon);
+			Employees.RefreshCache();
 			FillGrid();
+			FillRules();
 		}
 
 		private void FillGrid(){
@@ -217,6 +221,29 @@ namespace OpenDental{
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
+		}
+
+		private void FillRules(){
+			TimeCardRules.RefreshCache();
+			gridRules.BeginUpdate();
+			gridRules.Columns.Clear();
+			ODGridColumn col=new ODGridColumn("Employee",70);
+			gridRules.Columns.Add(col);
+			col=new ODGridColumn("Over Hours Per Day",120);
+			gridRules.Columns.Add(col);
+			col=new ODGridColumn("After Time Of Day",70);
+			gridRules.Columns.Add(col);
+			gridRules.Rows.Clear();
+			UI.ODGridRow row;
+			for(int i=0;i<TimeCardRules.Listt.Count;i++){
+				row=new OpenDental.UI.ODGridRow();
+				Employee emp=Employees.GetEmp(TimeCardRules.Listt[i].EmployeeNum);
+				row.Cells.Add(emp.FName+" "+emp.LName);
+				row.Cells.Add(TimeCardRules.Listt[i].OverHoursPerDay.Hours.ToString());
+				row.Cells.Add(TimeCardRules.Listt[i].AfterTimeOfDay.ToStringHmm());
+				gridRules.Rows.Add(row);
+			}
+			gridRules.EndUpdate();
 		}
 
 		private void gridMain_CellDoubleClick(object sender, OpenDental.UI.ODGridClickEventArgs e) {
@@ -250,6 +277,19 @@ namespace OpenDental{
 			if(Prefs.UpdateBool(PrefName.TimeCardsUseDecimalInsteadOfColon,checkUseDecimal.Checked)){
 				changed=true;
 			}
+		}
+
+		private void butAddRule_Click(object sender,EventArgs e) {
+			FormTimeCardRuleEdit FormT=new FormTimeCardRuleEdit();
+			FormT.ShowDialog();
+			FillRules();
+		}
+
+		private void gridRules_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			FormTimeCardRuleEdit FormT=new FormTimeCardRuleEdit();
+			FormT.timeCardRule=TimeCardRules.Listt[e.Row];
+			FormT.ShowDialog();
+			FillRules();
 		}
 
 		private void butClose_Click(object sender, System.EventArgs e) {
