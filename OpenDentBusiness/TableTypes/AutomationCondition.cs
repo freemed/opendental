@@ -9,6 +9,8 @@ namespace OpenDentBusiness{
 		///<summary>Primary key.</summary>
 		[CrudColumn(IsPriKey=true)]
 		public long AutomationConditionNum;
+		///<summary>FK to automation.AutomationNum. </summary>
+		public long AutomationNum;
 		///<summary>Enum:AutoCondField </summary>
 		public AutoCondField CompareField;
 		///<summary>Enum:AutoCondComparison Not all comparisons are allowed with all data types.</summary>
