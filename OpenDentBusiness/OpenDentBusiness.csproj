@@ -134,6 +134,7 @@
     <Compile Include="Crud\AutoCodeCondCrud.cs" />
     <Compile Include="Crud\AutoCodeCrud.cs" />
     <Compile Include="Crud\AutoCodeItemCrud.cs" />
+    <Compile Include="Crud\AutomationConditionCrud.cs" />
     <Compile Include="Crud\AutomationCrud.cs" />
     <Compile Include="Crud\AutoNoteControlCrud.cs" />
     <Compile Include="Crud\AutoNoteCrud.cs" />
