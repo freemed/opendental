@@ -28,6 +28,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Media;
+using Microsoft.Win32;
 using System.Net;
 using System.Net.Sockets;
 using System.IO;
@@ -228,6 +229,7 @@ namespace OpenDental{
 				Splash.Show();
 			}
 			InitializeComponent();
+			SystemEvents.SessionSwitch+=new SessionSwitchEventHandler(SystemEvents_SessionSwitch);
 			//toolbar
 			ToolBarMain=new ODToolBar();
 			ToolBarMain.Location=new Point(51,0);
@@ -1299,10 +1301,10 @@ namespace OpenDental{
 			this.Resize += new System.EventHandler(this.FormOpenDental_Resize);
 			this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FormOpenDental_KeyDown);
 			this.ResumeLayout(false);
-
 		}
+
 		#endregion
-	
+
 		private void FormOpenDental_Load(object sender, System.EventArgs e){
 			Splash.Dispose();
 			allNeutral();
@@ -1438,7 +1440,7 @@ namespace OpenDental{
 					}
 					else {
 						FormLogOn FormL=new FormLogOn();
-						FormL.ShowDialog();
+						FormL.ShowDialog(this);
 						if(FormL.DialogResult==DialogResult.Cancel) {
 							Cursor=Cursors.Default;
 							Application.Exit();
@@ -3185,7 +3187,7 @@ namespace OpenDental{
 			UnselectActive();
 			allNeutral();
 			FormLogOn FormL=new FormLogOn();
-			FormL.ShowDialog();
+			FormL.ShowDialog(this);
 			if(FormL.DialogResult==DialogResult.Cancel){
 				Application.Exit();
 				return;
@@ -4235,7 +4237,7 @@ namespace OpenDental{
 					else {//not using eCW in tight integration mode
 						//So present logon screen
 						FormLogOn FormL=new FormLogOn();
-						FormL.ShowDialog();
+						FormL.ShowDialog(this);
 						if(FormL.DialogResult==DialogResult.Cancel) {
 							Application.Exit();
 							return;
@@ -4258,7 +4260,7 @@ namespace OpenDental{
 				else{//password not accepted
 					//So present logon screen
 					FormLogOn FormL=new FormLogOn();
-					FormL.ShowDialog();
+					FormL.ShowDialog(this);
 					if(FormL.DialogResult==DialogResult.Cancel) {
 						Application.Exit();
 						return;
@@ -4351,6 +4353,46 @@ namespace OpenDental{
 			}
 			phoneSmall.Extension=extension;
 			phoneSmall.PhoneCur=phone;
+		}
+
+		private void SystemEvents_SessionSwitch(object sender,SessionSwitchEventArgs e) {
+			if(e.Reason!=SessionSwitchReason.SessionLock) {
+				return;
+			}
+			if(!PrefC.GetBool(PrefName.SecurityLogOffWithWindows)) {
+				return;
+			}
+			if(Security.CurUser==null) {//not sure if this is a good test.
+				return;
+			}
+			//simply copied and pasted code from logoff menu click for testing.
+			LastModule=myOutlookBar.SelectedIndex;
+			myOutlookBar.SelectedIndex=-1;
+			myOutlookBar.Invalidate();
+			UnselectActive();
+			allNeutral();
+			FormLogOn FormL=new FormLogOn();
+			FormL.ShowDialog(this);//Passing "this" brings FormL to the front when user logs back in.
+			if(FormL.DialogResult==DialogResult.Cancel) {
+				Application.Exit();
+				return;
+			}
+			myOutlookBar.SelectedIndex=Security.GetModule(LastModule);
+			myOutlookBar.Invalidate();
+			SetModuleSelected();
+			if(CurPatNum==0) {
+				Text=PatientL.GetMainTitle("",0,"",0);
+			}
+			else {
+				Patient pat=Patients.GetPat(CurPatNum);
+				Text=PatientL.GetMainTitle(pat.GetNameLF(),pat.PatNum,pat.ChartNumber,pat.SiteNum);
+			}
+			if(userControlTasks1.Visible) {
+				userControlTasks1.InitializeOnStartup();
+			}
+			if(myOutlookBar.SelectedIndex==-1) {
+				MsgBox.Show(this,"You do not have permission to use any modules.");
+			}
 		}
 
 		private void FormOpenDental_FormClosing(object sender,FormClosingEventArgs e) {
