@@ -33,6 +33,8 @@ namespace OpenDental{
 		private ComboBox comboCommType;
 		private ComboBox comboSheetDef;
 		private OpenDental.UI.Button butProcCode;
+		private OpenDental.UI.ODGrid gridMain;
+		private OpenDental.UI.Button butAdd;
 		private Automation AutoCur;
 
 		///<summary></summary>
@@ -87,6 +89,8 @@ namespace OpenDental{
 			this.butProcCode = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.gridMain = new OpenDental.UI.ODGrid();
+			this.butAdd = new OpenDental.UI.Button();
 			butDelete = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
@@ -100,7 +104,7 @@ namespace OpenDental{
 			butDelete.CornerRadius = 4F;
 			butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			butDelete.Location = new System.Drawing.Point(48,421);
+			butDelete.Location = new System.Drawing.Point(48,454);
 			butDelete.Name = "butDelete";
 			butDelete.Size = new System.Drawing.Size(75,24);
 			butDelete.TabIndex = 16;
@@ -150,7 +154,7 @@ namespace OpenDental{
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(48,107);
+			this.label4.Location = new System.Drawing.Point(48,255);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(111,20);
 			this.label4.TabIndex = 21;
@@ -159,7 +163,7 @@ namespace OpenDental{
 			// 
 			// labelSheetDef
 			// 
-			this.labelSheetDef.Location = new System.Drawing.Point(48,134);
+			this.labelSheetDef.Location = new System.Drawing.Point(48,282);
 			this.labelSheetDef.Name = "labelSheetDef";
 			this.labelSheetDef.Size = new System.Drawing.Size(111,20);
 			this.labelSheetDef.TabIndex = 22;
@@ -168,7 +172,7 @@ namespace OpenDental{
 			// 
 			// labelCommType
 			// 
-			this.labelCommType.Location = new System.Drawing.Point(48,159);
+			this.labelCommType.Location = new System.Drawing.Point(48,307);
 			this.labelCommType.Name = "labelCommType";
 			this.labelCommType.Size = new System.Drawing.Size(111,20);
 			this.labelCommType.TabIndex = 24;
@@ -177,7 +181,7 @@ namespace OpenDental{
 			// 
 			// labelMessage
 			// 
-			this.labelMessage.Location = new System.Drawing.Point(39,185);
+			this.labelMessage.Location = new System.Drawing.Point(39,333);
 			this.labelMessage.Name = "labelMessage";
 			this.labelMessage.Size = new System.Drawing.Size(120,20);
 			this.labelMessage.TabIndex = 25;
@@ -186,7 +190,7 @@ namespace OpenDental{
 			// 
 			// textMessage
 			// 
-			this.textMessage.Location = new System.Drawing.Point(161,186);
+			this.textMessage.Location = new System.Drawing.Point(161,334);
 			this.textMessage.Multiline = true;
 			this.textMessage.Name = "textMessage";
 			this.textMessage.Size = new System.Drawing.Size(316,73);
@@ -206,7 +210,7 @@ namespace OpenDental{
 			// 
 			this.comboAction.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboAction.FormattingEnabled = true;
-			this.comboAction.Location = new System.Drawing.Point(161,107);
+			this.comboAction.Location = new System.Drawing.Point(161,255);
 			this.comboAction.Name = "comboAction";
 			this.comboAction.Size = new System.Drawing.Size(183,21);
 			this.comboAction.TabIndex = 28;
@@ -216,7 +220,7 @@ namespace OpenDental{
 			// 
 			this.comboCommType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboCommType.FormattingEnabled = true;
-			this.comboCommType.Location = new System.Drawing.Point(161,159);
+			this.comboCommType.Location = new System.Drawing.Point(161,307);
 			this.comboCommType.Name = "comboCommType";
 			this.comboCommType.Size = new System.Drawing.Size(183,21);
 			this.comboCommType.TabIndex = 29;
@@ -225,7 +229,7 @@ namespace OpenDental{
 			// 
 			this.comboSheetDef.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboSheetDef.FormattingEnabled = true;
-			this.comboSheetDef.Location = new System.Drawing.Point(161,133);
+			this.comboSheetDef.Location = new System.Drawing.Point(161,281);
 			this.comboSheetDef.Name = "comboSheetDef";
 			this.comboSheetDef.Size = new System.Drawing.Size(183,21);
 			this.comboSheetDef.TabIndex = 31;
@@ -253,7 +257,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(536,389);
+			this.butOK.Location = new System.Drawing.Point(536,422);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 4;
@@ -268,17 +272,45 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(536,421);
+			this.butCancel.Location = new System.Drawing.Point(536,454);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 5;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// gridMain
+			// 
+			this.gridMain.HScrollVisible = false;
+			this.gridMain.Location = new System.Drawing.Point(161,103);
+			this.gridMain.Name = "gridMain";
+			this.gridMain.ScrollValue = 0;
+			this.gridMain.Size = new System.Drawing.Size(341,146);
+			this.gridMain.TabIndex = 34;
+			this.gridMain.Title = "Conditions";
+			this.gridMain.TranslationName = null;
+			// 
+			// butAdd
+			// 
+			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butAdd.Autosize = true;
+			this.butAdd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAdd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAdd.CornerRadius = 4F;
+			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
+			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butAdd.Location = new System.Drawing.Point(508,225);
+			this.butAdd.Name = "butAdd";
+			this.butAdd.Size = new System.Drawing.Size(65,24);
+			this.butAdd.TabIndex = 35;
+			this.butAdd.Text = "Add";
+			// 
 			// FormAutomationEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(637,465);
+			this.ClientSize = new System.Drawing.Size(637,498);
+			this.Controls.Add(this.butAdd);
+			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.butProcCode);
 			this.Controls.Add(this.comboSheetDef);
 			this.Controls.Add(this.comboCommType);

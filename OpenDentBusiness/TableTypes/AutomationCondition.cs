@@ -3,32 +3,38 @@ using System.Collections;
 using System.Drawing;
 
 namespace OpenDentBusiness{
-	///<summary></summary>
+	///<summary>Each condition evaluates to true or false.  A series of conditions for a single automation is ANDed together.</summary>
 	[Serializable]
 	public class AutomationCondition:TableBase{
 		///<summary>Primary key.</summary>
 		[CrudColumn(IsPriKey=true)]
 		public long AutomationConditionNum;
-
-
-		/*
+		///<summary>Enum:AutoCondField </summary>
+		public AutoCondField CompareField;
+		///<summary>Enum:AutoCondComparison Not all comparisons are allowed with all data types.</summary>
+		public AutoCondComparison Comparison;
 		///<summary></summary>
-		public string Description;
-		///<summary>FK to restaurant.RestaurantNum.</summary>
-		public long RestaurantNum;
-		///<summary>Enum:HotDogToppings Ketchup, Mustard, Relish.</summary>
-		public HotDogToppings Toppings;
-		///<summary>For example, 6 or 12. Decimals allowed.</summary>
-		public double Length;
-		///<summary>Set to true to indicate your favorite dog.</summary>
-		public bool IsFavorite;
-		///<summary>The color of the carrying bag.</summary>
-		public Color BagColor;*/
+		public string CompareString;
 
 		///<summary></summary>
 		public AutomationCondition Clone() {
 			return (AutomationCondition)this.MemberwiseClone();
 		}
 
+	}
+
+	public enum AutoCondField {
+		///<summary>Typically specify Equals the exact name/description of the sheet.</summary>
+		SheetCompletedTodayWithName
+	}
+
+	public enum AutoCondComparison{
+		///<summary></summary>
+		Equals
+		//Exists,
+		//NotEquals,
+		//Contains,
+		//GreaterThan,
+		//LessThan
 	}
 }
