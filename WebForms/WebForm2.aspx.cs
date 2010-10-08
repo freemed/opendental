@@ -8,6 +8,9 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using OpenDentBusiness;
 
+
+using System.Drawing.Text;
+
 namespace WebForms {
 	/// <summary>
 	/// For the next verion of webforms -+This is work in progress.
@@ -20,6 +23,7 @@ namespace WebForms {
 
 		protected void Page_Load(object sender,EventArgs e) {
 			try {
+				//DrawImage2(); //make a handler2?
 				if(Request["DentalOfficeID"]!=null) {
 					Int64.TryParse(Request["DentalOfficeID"].ToString().Trim(),out DentalOfficeID);
 				}
@@ -31,26 +35,22 @@ namespace WebForms {
 			catch(Exception ex) {
 				Logger.Information(ex.Message.ToString());
 			}
+			
 		}
 
 		private void GeneratePage(long DentalOfficeID,long WebSheetDefNum) {
 			try {
-				int xoffset=37;
-				int yoffset=26;
+				int FormXOffset=37;
+				int FormYOffset=26;
 
 				int ImageXOffset=0;
 				int ImageYOffset=0;
-				int ImageZIndex=-1;
+				int ImageZIndex=1;
 
-				int FormHeight=0;
-				int FormHeightOffset=0;
+				int ElementZIndex=2;
 
-				int maxYPos=0;
-				int maxXPos=0;
-				int maxHeight=0;
-				int maxWidth=0;
-				int buttonXoffset=0;
-				int buttonYoffset=0;
+				int SubmitButtonXoffset=-150;
+				int SubmitButtonYoffset=-50;
 
 				int RadioButtonXOffset=-4;
 				int RadioButtonYOffset=-5;
@@ -73,14 +73,25 @@ namespace WebForms {
 
 
 
-				/*
-				form1.Style["background-position"]=xoffset+"px "+ yoffset+"px";
-				*/
 				ODWebServiceEntities db=new ODWebServiceEntities();
 
 			
 				int ColorBorder=db.webforms_preference.Where(pref => pref.DentalOfficeID==DentalOfficeID).First().ColorBorder;
 				bodytag.Attributes.Add("bgcolor",ColorTranslator.ToHtml(Color.FromArgb(ColorBorder)));
+
+				var SheetDefObj=db.webforms_sheetdef.Where(sd => sd.WebSheetDefNum==WebSheetDefNum && sd.webforms_preference.DentalOfficeID==DentalOfficeID).First();
+				int SheetDefWidth=SheetDefObj.Width;
+				int SheetDefHeight=SheetDefObj.Height;
+
+
+			
+				form1.Style["position"]="absolute";
+				form1.Style["top"]=FormXOffset+"px";
+				form1.Style["left"]=FormYOffset+"px";
+				form1.Style["width"]=SheetDefWidth+"px";
+				form1.Style["height"]=SheetDefHeight+"px";
+				form1.Style["background-color"]="white";
+
 				var sfdObj=(from sfd in db.webforms_sheetfielddef where sfd.webforms_sheetdef.WebSheetDefNum==WebSheetDefNum && sfd.webforms_sheetdef.webforms_preference.DentalOfficeID==DentalOfficeID
 							select sfd).ToList();
 				for(int j=0;j<sfdObj.Count();j++) {
@@ -94,14 +105,7 @@ namespace WebForms {
 					int height=sfdObj.ElementAt(j).Height;
 					float fontsize=sfdObj.ElementAt(j).FontSize;
 					String fontname=sfdObj.ElementAt(j).FontName;
-					if(XPos>maxXPos) {
-						maxXPos=XPos;
-						maxWidth=width;
-					}
-					if(YPos>maxYPos) {
-						maxYPos=YPos;
-						maxHeight=height;
-					}
+
 					WebControl wc=null; // WebControl is the parent class of all controls
 					if(FieldType==SheetFieldType.InputField) {
 						TextBox tb=new TextBox();
@@ -123,6 +127,7 @@ namespace WebForms {
 						li.Attributes.CssStyle.Add("position","absolute");
 						li.Attributes.CssStyle.Add("left",XPos+RadioButtonXOffset+"px");
 						li.Attributes.CssStyle.Add("top",YPos+RadioButtonYOffset+"px");
+						li.Attributes.CssStyle.Add("z-index",""+ElementZIndex);
 						//search for existing RadioButtonList by the same name.
 						foreach(Control c in form1.Controls) {
 							if(c.ID==FieldName && c.GetType()==typeof(RadioButtonList)) {
@@ -163,6 +168,8 @@ namespace WebForms {
 						wc.Style["height"]=height+"px";
 						wc.Style["top"]=YPos+"px";
 						wc.Style["left"]=XPos+"px";
+						wc.Style["z-index"]=""+ElementZIndex;
+						
 
 						if(wc.GetType()==typeof(System.Web.UI.WebControls.Image)) {
 							wc.Style["top"]=YPos+ImageYOffset+"px";
@@ -199,12 +206,8 @@ namespace WebForms {
 				}
 				//position the submit button at the end of the page.
 				Button1.Style["position"]="absolute";
-				Button1.Style["left"]=maxXPos+maxWidth+buttonXoffset+"px";
-				Button1.Style["top"]=maxYPos+maxHeight+buttonYoffset+"px";
-				//set form height - if this is not set none of the elements in the form will be seen.
-				FormHeight=maxYPos+maxHeight+buttonYoffset+ FormHeightOffset;
-				form1.Style["height"]=FormHeight+"px";
-
+				Button1.Style["left"]=SheetDefWidth+SubmitButtonXoffset+"px";
+				Button1.Style["top"]=SheetDefHeight+SubmitButtonYoffset+"px";
 
 
 				}
@@ -213,5 +216,70 @@ namespace WebForms {
 				}
 
 		}
+
+		private void DrawImage1() {
+			Bitmap objBitmap;
+			Graphics objGraphics;
+
+			objBitmap  =  new Bitmap(400,440);
+			objGraphics  =  Graphics.FromImage(objBitmap);
+
+
+			objGraphics.Clear(Color.White);
+
+
+
+			Pen p=new Pen(Color.Yellow,0);
+			Rectangle rect=new Rectangle(10,10,280,280);
+			objGraphics.DrawEllipse(p,rect);
+
+			Brush b1=new SolidBrush(Color.Red);
+			Brush b2=new SolidBrush(Color.Green);
+			Brush b3=new SolidBrush(Color.Blue);
+			objGraphics.FillPie(b1,rect,0f,60f);
+			objGraphics.FillPie(b2,rect,60f,150f);
+			objGraphics.FillPie(b3,rect,210f,150f);
+
+			FontFamily fontfml = new FontFamily(GenericFontFamilies.Serif);
+			Font font = new Font(fontfml,16);
+			SolidBrush brush = new SolidBrush(Color.Blue);
+			objGraphics.DrawString("Drawing Graphics",font,brush,70,300);
+
+
+			objBitmap.Save(Response.OutputStream,ImageFormat.Gif);
+			objBitmap.Save(Server.MapPath("x.jpg"),ImageFormat.Jpeg);
+
+
+			objBitmap.Dispose();
+			objGraphics.Dispose();
+		}
+
+
+		private void DrawImage2() {
+
+			Response.Clear();
+			int height = 100;
+			int width = 200;
+			Random r = new Random();
+			int x = r.Next(75);
+
+			Bitmap bmp = new Bitmap(width,height,PixelFormat.Format24bppRgb);
+			Graphics g = Graphics.FromImage(bmp);
+
+			g.TextRenderingHint = TextRenderingHint.AntiAlias;
+			g.Clear(Color.Orange);
+			g.DrawRectangle(Pens.White,1,1,width-3,height-3);
+			g.DrawRectangle(Pens.Gray,2,2,width-3,height-3);
+			g.DrawRectangle(Pens.Black,0,0,width,height);
+			g.DrawString("The Code Project",new Font("Arial",12,FontStyle.Italic),
+			SystemBrushes.WindowText,new PointF(x,50));
+
+			bmp.Save(Response.OutputStream,ImageFormat.Jpeg);
+			g.Dispose();
+			bmp.Dispose();
+			Response.End();
+		}
+
+
 	}
 }

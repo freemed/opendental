@@ -100,6 +100,7 @@ namespace OpenDental {
 				for(int i=0;i<SheetDefListLocal.Count;i++){
 					LoadImagesToSheetsDefs(SheetDefListLocal[i]);
 				}
+				wh.SetPreferences(RegistrationKey,butWebformBorderColor.BackColor.ToArgb(),"","");
 				wh.UpLoadSheetDef(RegistrationKey,SheetDefListLocal.ToArray());
 				wh.DeleteSheetDefs(RegistrationKey,SheetsDefsForDeletion.ToArray());
 			}
