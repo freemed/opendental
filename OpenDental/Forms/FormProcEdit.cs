@@ -3964,30 +3964,6 @@ namespace OpenDental{
 				ProcCur.BillingTypeTwo=DefC.Short[(int)DefCat.BillingTypes][comboBillingTypeTwo.SelectedIndex-1].DefNum;
 			}
 			//ProcCur.HideGraphical=checkHideGraphical.Checked;
-			if(panelOrion.Visible) {
-				if(IsNew) {
-					//In case user didn't change comboStatus
-					OrionProcCur.Status2=(OrionStatus)((int)(Math.Pow(2d,(double)(comboStatus.SelectedIndex))));
-				}
-				OrionProcCur.DPC=(OrionDPC)comboDPC.SelectedIndex;
-				OrionProcCur.DateScheduleBy=PIn.Date(textDateScheduled.Text);
-				OrionProcCur.DateStopClock=PIn.Date(textDateStop.Text);
-				OrionProcCur.IsOnCall=checkIsOnCall.Checked;
-				OrionProcCur.IsEffectiveComm=checkIsEffComm.Checked;
-				OrionProcCur.IsRepair=checkIsRepair.Checked;
-				if(IsNew) {
-					OrionProcs.Insert(OrionProcCur);
-				}
-				else {
-					if((int)OrionProcOld.DPC!=(int)OrionProcCur.DPC) {
-						FormProcEditDPCExplain FormDPC=new FormProcEditDPCExplain();
-						if(FormDPC.ShowDialog()!=DialogResult.OK) {
-							return;
-						}
-					}
-					OrionProcs.Update(OrionProcCur);
-				}
-			}
 			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {
 				ProcCur.CanadianTypeCodes="";
 				if(checkTypeCodeA.Checked) {
@@ -4035,21 +4011,40 @@ namespace OpenDental{
 			ProcCur.ClaimNote=textClaimNote.Text;
 			//Last chance to run this code before Proc gets updated.
 			if(Programs.UsingOrion){//Ask for an explanation. If they hit cancel here, return and don't save.
-				if(ProcOld.ProcStatus==ProcStat.TP && ProcOld.DateTP.Date<MiscData.GetNowDateTime().Date){
-					if(FormProcEditExplain.GetChanges(ProcCur,ProcOld,OrionProcCur,OrionProcOld)!=""){//Also sets FormProcEditExplain.Changes.
-						FormProcEditExplain FormP=new FormProcEditExplain();
-						if(FormP.ShowDialog()!=DialogResult.OK){
+				if(IsNew) {
+					//In case user didn't change comboStatus
+					OrionProcCur.Status2=(OrionStatus)((int)(Math.Pow(2d,(double)(comboStatus.SelectedIndex))));
+				}
+				OrionProcCur.DPC=(OrionDPC)comboDPC.SelectedIndex;
+				OrionProcCur.DateScheduleBy=PIn.Date(textDateScheduled.Text);
+				OrionProcCur.DateStopClock=PIn.Date(textDateStop.Text);
+				OrionProcCur.IsOnCall=checkIsOnCall.Checked;
+				OrionProcCur.IsEffectiveComm=checkIsEffComm.Checked;
+				OrionProcCur.IsRepair=checkIsRepair.Checked;
+				if(IsNew) {
+					OrionProcs.Insert(OrionProcCur);
+				}
+				else {//Is not new.
+					if((int)OrionProcOld.DPC!=(int)OrionProcCur.DPC) {
+						FormProcEditDPCExplain FormDPC=new FormProcEditDPCExplain();
+						if(FormDPC.ShowDialog()!=DialogResult.OK) {
 							return;
 						}
-						  //string procNote=ProcCur.Note;
-							Procedure ProcExplain=ProcOld.Copy();
-						  ProcOld.Note=FormProcEditExplain.Explanation;
-						  Procedures.Update(ProcOld,ProcExplain);
-							//ProcOld=ProcCur.Copy();
-							//ProcCur.Note=procNote;
-							Thread.Sleep(1100);
 					}
-				}
+					if(ProcOld.ProcStatus==ProcStat.TP && ProcOld.DateTP.Date<MiscData.GetNowDateTime().Date){//Must be at least one day old by date.
+						if(FormProcEditExplain.GetChanges(ProcCur,ProcOld,OrionProcCur,OrionProcOld)!=""){//Checks if any changes were made. Also sets static variable Changes.
+							FormProcEditExplain FormP=new FormProcEditExplain();
+							if(FormP.ShowDialog()!=DialogResult.OK){
+								return;
+							}
+								Procedure ProcPreExplain=ProcOld.Copy();
+								ProcOld.Note=FormProcEditExplain.Explanation;
+								Procedures.Update(ProcOld,ProcPreExplain);
+								Thread.Sleep(1100);
+						}
+					}
+					OrionProcs.Update(OrionProcCur);
+				}//End of "is not new."
 			}
 			Procedures.Update(ProcCur,ProcOld);
 			for(int i=0;i<ClaimProcsForProc.Count;i++) {

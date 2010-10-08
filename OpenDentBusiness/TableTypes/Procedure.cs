@@ -38,7 +38,7 @@ namespace OpenDentBusiness {
 		public long PlannedAptNum;
 		///<summary>Enum:PlaceOfService  Only used in Public Health. Zero(Office) until procedure set complete. Then it's set to the value of the DefaultProcedurePlaceService preference.</summary>
 		public PlaceOfService PlaceService;
-		///<summary>Single char. Blank=no, or Initial, or Replacement.</summary>
+		///<summary>Single char. Blank=no, I=Initial, R=Replacement.</summary>
 		public string Prosthesis;
 		///<summary>For a prosthesis Replacement, this is the original date.</summary>
 		public DateTime DateOriginalProsth;

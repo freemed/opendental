@@ -26,55 +26,58 @@ namespace OpenDental {
 			Changes="";
 			if(procOld.PatNum != procCur.PatNum) {
 				if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Patient Num changed from "+POut.Long(procOld.PatNum)+" to "+POut.Long(procCur.PatNum)+".";
+		    Changes+="Patient Num changed from "+procOld.PatNum+" to "+procCur.PatNum+".";
 		  }
 		  if(procOld.AptNum != procCur.AptNum) {
 		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Apt Num changed from "+POut.Long(procOld.AptNum)+" to "+POut.Long(procCur.AptNum)+".";
+		    Changes+="Apt Num changed from "+procOld.AptNum+" to "+procCur.AptNum+".";
 		  }
 		  if(procOld.PlannedAptNum != procCur.PlannedAptNum) {
 		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Planned Apt Num changed from "+POut.Long(procOld.PlannedAptNum)+" to "+POut.Long(procCur.PlannedAptNum)+".";
+		    Changes+="Planned Apt Num changed from "+procOld.PlannedAptNum+" to "+procCur.PlannedAptNum+".";
 		  }
-		  if(procOld.DateEntryC != procCur.DateEntryC) {
+		  if(procOld.DateEntryC.Date != procCur.DateEntryC.Date) {
 		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Date Entry changed from "+POut.Date(procOld.DateEntryC)+" to "+POut.Date(procCur.DateEntryC)+".";
+		    Changes+="Date Entry changed from "+procOld.DateEntryC.ToShortDateString()+" to "+procCur.DateEntryC.ToShortDateString()+".";
 		  }
-		  if(procOld.ProcDate != procCur.ProcDate) {
+		  if(procOld.ProcDate.Date != procCur.ProcDate.Date) {
 		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Proc Date changed from "+POut.Date(procOld.ProcDate)+" to "+POut.Date(procCur.ProcDate)+".";
+		    Changes+="Proc Date changed from "+procOld.ProcDate.ToShortDateString()+" to "+procCur.ProcDate.ToShortDateString()+".";
 		  }
 		  if(procOld.StartTime != procCur.StartTime) {
 		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Start Time changed from "+POut.Int(procOld.StartTime)+" to "+POut.Int(procCur.StartTime)+".";
+		    Changes+="Start Time changed from "+procOld.StartTime+" to "+procCur.StartTime+".";
 		  }
 		  if(procOld.StopTime != procCur.StopTime) {
 		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Stop Time changed from "+POut.Int(procOld.StopTime)+" to "+POut.Int(procCur.StopTime)+".";
+		    Changes+="Stop Time changed from "+procOld.StopTime+" to "+procCur.StopTime+".";
 		  }
 		  if(procOld.ProcTime != procCur.ProcTime) {
 		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Procedure Time changed from "+POut.TimeSpan(procOld.ProcTime)+" to "+POut.TimeSpan(procCur.ProcTime)+".";
+		    Changes+="Procedure Time changed from "+PIn.DateT(procOld.ProcTime.ToString()).ToShortTimeString()
+					+" to "+PIn.DateT(procCur.ProcTime.ToString()).ToShortTimeString()+".";
 		  }
 		  if(procOld.ProcTimeEnd != procCur.ProcTimeEnd) {
 		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="End Time changed from "+POut.TimeSpan(procOld.ProcTimeEnd)+" to "+POut.TimeSpan(procCur.ProcTimeEnd)+".";
+		    Changes+="Procedure End Time changed from "+PIn.DateT(procOld.ProcTimeEnd.ToString()).ToShortTimeString()
+					+" to "+PIn.DateT(procCur.ProcTimeEnd.ToString()).ToShortTimeString()+".";
 		  }
+			//Procedure, related areas, amount, hide graphics, etc.-----------------------------------------------------------------------------------------
 		  if(procOld.CodeNum != procCur.CodeNum) {
 		    if(Changes!=""){ Changes+="\r\n";}
 		    Changes+="Procedure changed from "+ProcedureCodes.GetLaymanTerm(procOld.CodeNum)+" to "+ProcedureCodes.GetLaymanTerm(procCur.CodeNum)+".";
 		  }
 		  if(procOld.ProcFee != procCur.ProcFee) {
 		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Proc Fee changed from $"+POut.Double(procOld.ProcFee)+" to $"+POut.Double(procCur.ProcFee)+".";
+		    Changes+="Proc Fee changed from $"+procOld.ProcFee.ToString("F")+" to $"+procCur.ProcFee.ToString("F")+".";
 		  }
 		  if(procOld.ToothNum != procCur.ToothNum) {
 		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Tooth Num changed from "+POut.String(procOld.ToothNum)+" to "+POut.String(procCur.ToothNum)+".";
+		    Changes+="Tooth Num changed from "+procOld.ToothNum+" to "+procCur.ToothNum+".";
 		  }
 		  if(procOld.Surf != procCur.Surf) {
 		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Surface changed from "+POut.String(procOld.Surf)+" to "+POut.String(procCur.Surf)+".";
+		    Changes+="Surface changed from "+procOld.Surf+" to "+procCur.Surf+".";
 		  }
 		  if(procOld.ToothRange != procCur.ToothRange) {
 		    if(Changes!=""){ Changes+="\r\n";}
@@ -82,17 +85,18 @@ namespace OpenDental {
 		  }
 			if(procOld.HideGraphics != procCur.HideGraphics) {
 				if(Changes!=""){ Changes+="\r\n";}
-				Changes="Hide Graphics changed from "+(procOld.HideGraphics?"Hide Graphics":"Do Not Hide Graphics")
+				Changes+="Hide Graphics changed from "+(procOld.HideGraphics?"Hide Graphics":"Do Not Hide Graphics")
 					+" to "+(procCur.HideGraphics?"Hide Graphics":"Do Not Hide Graphics")+".";
 			}
+			//Provider, Diagnosis, Priority, Place of Service, Clinic, Site--------------------------------------------------------------------
 		  if(procOld.ProvNum != procCur.ProvNum) {
 		    if(Changes!=""){ Changes+="\r\n";}
 		    Changes+="Provider changed from "+Providers.GetAbbr(procOld.ProvNum)+" to "+Providers.GetAbbr(procCur.ProvNum)+".";
 		  }
 		  if(procOld.Dx != procCur.Dx) {
 		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Diagnosis changed from "+DefC.GetDef(DefCat.Diagnosis,procOld.Dx).ItemName.ToString()
-					+" to "+DefC.GetDef(DefCat.Diagnosis,procCur.Dx).ItemName.ToString()+".";
+		    Changes+="Diagnosis changed from "+DefC.GetDef(DefCat.Diagnosis,procOld.Dx).ItemName
+					+" to "+DefC.GetDef(DefCat.Diagnosis,procCur.Dx).ItemName+".";
 		  }
 		  if(procOld.Priority != procCur.Priority) {
 		    if(Changes!=""){ Changes+="\r\n";}
@@ -101,7 +105,7 @@ namespace OpenDental {
 		  }
 		  if(procOld.PlaceService != procCur.PlaceService) {
 		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Place Service changed from "+procOld.PlaceService.ToString()+" to "+procCur.PlaceService.ToString()+".";
+		    Changes+="Place of Service changed from "+procOld.PlaceService.ToString()+" to "+procCur.PlaceService.ToString()+".";
 		  }
 		  if(procOld.ClinicNum != procCur.ClinicNum) {
 		    if(Changes!=""){ Changes+="\r\n";}
@@ -109,19 +113,53 @@ namespace OpenDental {
 		  }
 		  if(procOld.SiteNum != procCur.SiteNum) {
 		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Site changed from "+Sites.GetDescription(procOld.SiteNum)+" to "+Sites.GetDescription(procCur.SiteNum)+".";
+		    Changes+="Site changed from "+(procOld.SiteNum==0?"none":Sites.GetDescription(procOld.SiteNum))
+					+" to "+(procCur.SiteNum==0?"none":Sites.GetDescription(procCur.SiteNum))+".";
 		  }
+			//Prosthesis reverse lookup-----------------------------------------------------------------------------------------
 		  if(procOld.Prosthesis != procCur.Prosthesis) {
 		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Prosthesis changed from "+procOld.Prosthesis.ToString()+" to "+procCur.Prosthesis.ToString()+".";
+				string prosthesisOld;
+				switch(procOld.Prosthesis.ToString()){
+					case "":
+						prosthesisOld="no";
+						break;
+					case "I":
+						prosthesisOld="Initial";
+						break;
+					case "R":
+						prosthesisOld="Replacement";
+						break;
+					default:
+						prosthesisOld="error";
+						break;
+				}
+				string prosthesisCur;
+				switch(procCur.Prosthesis.ToString()){
+					case "":
+						prosthesisCur="no";
+						break;
+					case "I":
+						prosthesisCur="Initial";
+						break;
+					case "R":
+						prosthesisCur="Replacement";
+						break;
+					default:
+						prosthesisCur="error";
+						break;
+				}
+		    Changes+="Prosthesis changed from "+prosthesisOld+" to "+prosthesisCur+".";
 		  }
-		  if(procOld.DateOriginalProsth != procCur.DateOriginalProsth) {
+		  if(procOld.DateOriginalProsth.Date != procCur.DateOriginalProsth.Date) {
 		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Date of Original Prosthesis changed from "+POut.Date(procOld.DateOriginalProsth)+" to "+POut.Date(procCur.DateOriginalProsth)+".";
+		    Changes+="Date of Original Prosthesis changed from "+procOld.DateOriginalProsth.ToShortDateString()+" to "+procCur.DateOriginalProsth.ToShortDateString()+".";
 		  }
+			//Claim Note & Orion Proc Fields-----------------------------------------------------------------------------------------
 		  if(procOld.ClaimNote != procCur.ClaimNote) {
 		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Claim Note changed from "+POut.String(procOld.ClaimNote)+" to "+POut.String(procCur.ClaimNote)+".";
+				Changes+="Claim Note changed from "+((procOld.ClaimNote=="")?"none":"'"+procOld.ClaimNote+"'")
+					+" to "+((procCur.ClaimNote=="")?"none":"'"+procCur.ClaimNote+"'");
 		  }
 			if(orionProcOld.OrionProcNum != orionProcCur.OrionProcNum) {
 		    if(Changes!=""){ Changes+="\r\n";}
@@ -135,17 +173,74 @@ namespace OpenDental {
 		    if(Changes!=""){ Changes+="\r\n";}
 		    Changes+="DPC changed from "+POut.String(orionProcOld.DPC.ToString())+" to "+POut.String(orionProcCur.DPC.ToString())+".";
 		  }
-			if(orionProcOld.Status2 != orionProcCur.Status2) {
+			//Orion Status Reverse Lookup for Description-------------------------------------------------------------------------------
+			if(orionProcOld.Status2 != orionProcCur.Status2 && !(orionProcOld.Status2==OrionStatus.None && orionProcCur.Status2==OrionStatus.TP)) {//None is equivalent to TP
 		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Status 2 changed from "+orionProcOld.Status2.ToString()+" to "+orionProcCur.Status2.ToString()+".";
+				string[] status2=new string[2];
+				string[] status2Desc=new string[2];
+				status2[0]=orionProcOld.Status2.ToString();
+				status2[1]=orionProcCur.Status2.ToString();
+				for(int i=0;i<2;i++){
+					switch(status2[i]){
+						case "None":
+							status2Desc[i]="TP-treatment planned";
+							break;
+						case "TP":
+							status2Desc[i]="TP-treatment planned";
+							break;
+						case "C":
+							status2Desc[i]="C-completed";
+							break;
+						case "E":
+							status2Desc[i]="E-existing prior to incarceration";
+							break;
+						case "R":
+							status2Desc[i]="R-refused treatment";
+							break;
+						case "RO":
+							status2Desc[i]="RO-referred out to specialist";
+							break;
+						case "CS":
+							status2Desc[i]="CS-completed by specialist";
+							break;
+						case "CR":
+							status2Desc[i]="CR-completed by registry";
+							break;
+						case "CA_Tx":
+							status2Desc[i]="CA_Tx-cancelled, tx plan changed";
+							break;
+						case "CA_EPRD":
+							status2Desc[i]="CA_EPRD-cancelled, eligible parole";
+							break;
+						case "CA_P/D":
+							status2Desc[i]="CA_P/D--cancelled, parole/discharge";
+							break;
+						case "S":
+							status2Desc[i]="S-suspended, unacceptable plaque";
+							break;
+						case "ST":
+							status2Desc[i]="ST-stop clock, multi visit";
+							break;
+						case "W":
+							status2Desc[i]="W-watch";
+							break;
+						case "A":
+							status2Desc[i]="A-alternative";
+							break;
+						default:
+							status2Desc[i]="error";
+							break;
+					}
+				}
+		    Changes+="Orion Procedure Status changed from "+status2Desc[0]+" to "+status2Desc[1]+".";
 		  }
-			if(orionProcOld.DateScheduleBy != orionProcCur.DateScheduleBy) {
+			if(orionProcOld.DateScheduleBy.Date != orionProcCur.DateScheduleBy.Date) {
 		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Date Schedule By changed from "+POut.Date(orionProcOld.DateScheduleBy)+" to "+POut.Date(orionProcCur.DateScheduleBy)+".";
+		    Changes+="Date Schedule By changed from "+orionProcOld.DateScheduleBy.ToShortDateString()+" to "+orionProcCur.DateScheduleBy.ToShortDateString()+".";
 		  }
-			if(orionProcOld.DateStopClock != orionProcCur.DateStopClock) {
+			if(orionProcOld.DateStopClock.Date != orionProcCur.DateStopClock.Date) {
 		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Date Stop Clock changed from "+POut.Date(orionProcOld.DateStopClock)+" to "+POut.Date(orionProcCur.DateStopClock)+".";
+		    Changes+="Date Stop Clock changed from "+orionProcOld.DateStopClock.ToShortDateString()+" to "+orionProcCur.DateStopClock.ToShortDateString()+".";
 		  }
 			if(orionProcOld.IsOnCall != orionProcCur.IsOnCall) {
 		    if(Changes!=""){ Changes+="\r\n";}
@@ -164,12 +259,14 @@ namespace OpenDental {
 		  }
 		  if(procOld.MedicalCode != procCur.MedicalCode) {
 		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Medical Code changed from "+POut.String(procOld.MedicalCode)+" to "+POut.String(procCur.MedicalCode)+".";
+		    Changes+="Medical Code changed from "+(procOld.MedicalCode==""?"none":procOld.MedicalCode)
+					+" to "+(procCur.MedicalCode==""?"none":procCur.MedicalCode)+".";
 		  }
 		  if(procOld.DiagnosticCode != procCur.DiagnosticCode) {
 		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Diagnostic Code changed from "+procOld.DiagnosticCode.ToString()+" to "+procCur.DiagnosticCode.ToString()+".";
-		  }
+		    Changes+="Diagnostic Code changed from "+(procOld.DiagnosticCode==""?"none":procOld.DiagnosticCode)
+					+" to "+(procCur.DiagnosticCode==""?"none":procCur.DiagnosticCode)+".";
+			}
 		  if(procOld.IsPrincDiag != procCur.IsPrincDiag) {
 		    if(Changes!=""){ Changes+="\r\n";}
 		    Changes+="Is Princ Diag changed from "+(procOld.IsPrincDiag?"Principal Diagnosis":"Not Principal Diagnosis")
@@ -191,9 +288,7 @@ namespace OpenDental {
 		  }
 		  if(procOld.ProcStatus != procCur.ProcStatus) {
 		    if(Changes!=""){ Changes+="\r\n";}
-				string procStatOld=Enum.GetName(typeof(ProcStat),procOld.ProcStatus);
-				string procStatCur=Enum.GetName(typeof(ProcStat),procOld.ProcStatus);
-		    Changes+="Proc Status changed from "+procStatOld+" to "+procStatCur+".";
+		    Changes+="Procedure Status changed from "+procOld.ProcStatus.ToString()+" to "+procCur.ProcStatus.ToString()+".";
 		  }
 		  if(procOld.RevCode != procCur.RevCode) {
 		    if(Changes!=""){ Changes+="\r\n";}
@@ -207,15 +302,15 @@ namespace OpenDental {
 		    if(Changes!=""){ Changes+="\r\n";}
 		    Changes+="Unit Quantity changed from "+POut.Int(procOld.UnitQty)+" to "+POut.Int(procCur.UnitQty)+".";
 		  }
-		  if(procOld.DateTP != procCur.DateTP) {
+		  if(procOld.DateTP.Date != procCur.DateTP.Date) {
 		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Date TP changed from "+POut.Date(procOld.DateTP)+" to "+POut.Date(procCur.DateTP)+".";
+		    Changes+="Date TP changed from "+procOld.DateTP.ToShortDateString()+" to "+procCur.DateTP.ToShortDateString()+".";
 		  }
 		  if(procOld.CanadianTypeCodes != procCur.CanadianTypeCodes) {
 		    if(Changes!=""){ Changes+="\r\n";}
 		    Changes+="Canadian Code Type changed from "+POut.String(procOld.CanadianTypeCodes)+" to "+POut.String(procCur.CanadianTypeCodes)+".";
 		  }
-			if(procOld.Note != procCur.Note) {
+			if(procOld.Note != procCur.Note && !(procOld.Note==null && procCur.Note=="")) {//Null note is equivalent to an empty note string.
 		    if(Changes!=""){ Changes+="\r\n";}
 		    Changes+="Note changed from "+((procOld.Note=="")?"none":"'"+procOld.Note+"'")
 					+" to "+((procCur.Note=="")?"none":"'"+procCur.Note+"'");
