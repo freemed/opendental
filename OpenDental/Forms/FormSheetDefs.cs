@@ -437,13 +437,15 @@ namespace OpenDental{
 			saveDlg.InitialDirectory=PrefC.GetString(PrefName.ExportPath);
 			saveDlg.FileName=filename;
 			if(saveDlg.ShowDialog()!=DialogResult.OK) {
+				saveDlg.Dispose();
 				return;
 			}
 			XmlSerializer serializer=new XmlSerializer(typeof(SheetDef));
 			TextWriter writer=new StreamWriter(saveDlg.FileName);
+			saveDlg.Dispose();
 			serializer.Serialize(writer,sheetdef);
-			writer.Close();
-			MessageBox.Show("Exported");
+			writer.Dispose();
+			MsgBox.Show(this,"Exported");
 		}
 		
 		private void grid2_CellDoubleClick(object sender,ODGridClickEventArgs e) {
@@ -470,17 +472,19 @@ namespace OpenDental{
 			OpenFileDialog openDlg=new OpenFileDialog();
 			openDlg.InitialDirectory=PrefC.GetString(PrefName.ExportPath);
 			if(openDlg.ShowDialog()!=DialogResult.OK) {
+				openDlg.Dispose();
 				return;
 			}
 			try {
 				ImportCustomSheetDef(openDlg.FileName);
+				openDlg.Dispose();
 			}
 			catch (ApplicationException ex){
 				MessageBox.Show(ex.Message);
 				FillGrid2();
 				return;
 			}
-			MessageBox.Show("Sheet def inserted.");
+			MsgBox.Show(this,"Sheet def inserted.");
 		}
 
 		private void ImportCustomSheetDef(string path) {
@@ -520,13 +524,15 @@ namespace OpenDental{
 			saveDlg.InitialDirectory=PrefC.GetString(PrefName.ExportPath);
 			saveDlg.FileName=filename;
 			if(saveDlg.ShowDialog()!=DialogResult.OK) {
+				saveDlg.Dispose();
 				return;
 			}
 			XmlSerializer serializer=new XmlSerializer(typeof(SheetDef));
 			TextWriter writer=new StreamWriter(saveDlg.FileName);
+			saveDlg.Dispose();
 			serializer.Serialize(writer,sheetdef);
-			writer.Close();
-			MessageBox.Show("Exported");
+			writer.Dispose();
+			MsgBox.Show(this,"Exported");
 		}
 
 		private void comboLabel_DropDown(object sender,EventArgs e) {
