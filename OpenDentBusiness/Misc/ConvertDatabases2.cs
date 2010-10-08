@@ -2744,7 +2744,18 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);
 				command="INSERT INTO preference(PrefName,ValueString) VALUES('SecurityLogOffWithWindows','0')";
 				Db.NonQ(command);
-
+				command="DROP TABLE IF EXISTS automationcondition";
+				Db.NonQ(command);
+				command=@"CREATE TABLE automationcondition (
+					AutomationConditionNum bigint NOT NULL auto_increment,
+					AutomationNum bigint NOT NULL,
+					CompareField tinyint NOT NULL,
+					Comparison tinyint NOT NULL,
+					CompareString varchar(255) NOT NULL,
+					PRIMARY KEY (AutomationConditionNum),
+					INDEX(AutomationNum)
+					) DEFAULT CHARSET=utf8";
+				Db.NonQ(command);
 
 
 
@@ -2768,5 +2779,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 				
+
+				
+
 
 				
