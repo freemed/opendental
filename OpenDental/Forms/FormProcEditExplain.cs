@@ -24,6 +24,7 @@ namespace OpenDental {
 
 		public static string GetChanges(Procedure procCur, Procedure procOld, OrionProc orionProcCur, OrionProc orionProcOld){
 			Changes="";
+			//PatNum, AptNum, PlannedAptNum should never change---------------------------------------------------------------------------------------------
 			if(procOld.PatNum != procCur.PatNum) {
 				if(Changes!=""){ Changes+="\r\n";}
 		    Changes+="Patient Num changed from "+procOld.PatNum+" to "+procCur.PatNum+".";
@@ -35,7 +36,8 @@ namespace OpenDental {
 		  if(procOld.PlannedAptNum != procCur.PlannedAptNum) {
 		    if(Changes!=""){ Changes+="\r\n";}
 		    Changes+="Planned Apt Num changed from "+procOld.PlannedAptNum+" to "+procCur.PlannedAptNum+".";
-		  }
+			}
+			//Date and time related fields------------------------------------------------------------------------------------------------------------------
 		  if(procOld.DateEntryC.Date != procCur.DateEntryC.Date) {
 		    if(Changes!=""){ Changes+="\r\n";}
 		    Changes+="Date Entry changed from "+procOld.DateEntryC.ToShortDateString()+" to "+procCur.DateEntryC.ToShortDateString()+".";
@@ -81,14 +83,14 @@ namespace OpenDental {
 		  }
 		  if(procOld.ToothRange != procCur.ToothRange) {
 		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Tooth Range changed from "+POut.String(procOld.ToothRange)+" to "+POut.String(procCur.ToothRange)+".";
+		    Changes+="Tooth Range changed from "+procOld.ToothRange+" to "+procCur.ToothRange+".";
 		  }
 			if(procOld.HideGraphics != procCur.HideGraphics) {
 				if(Changes!=""){ Changes+="\r\n";}
 				Changes+="Hide Graphics changed from "+(procOld.HideGraphics?"Hide Graphics":"Do Not Hide Graphics")
 					+" to "+(procCur.HideGraphics?"Hide Graphics":"Do Not Hide Graphics")+".";
 			}
-			//Provider, Diagnosis, Priority, Place of Service, Clinic, Site--------------------------------------------------------------------
+			//Provider, Diagnosis, Priority, Place of Service, Clinic, Site---------------------------------------------------------------------------------
 		  if(procOld.ProvNum != procCur.ProvNum) {
 		    if(Changes!=""){ Changes+="\r\n";}
 		    Changes+="Provider changed from "+Providers.GetAbbr(procOld.ProvNum)+" to "+Providers.GetAbbr(procCur.ProvNum)+".";
@@ -116,50 +118,35 @@ namespace OpenDental {
 		    Changes+="Site changed from "+(procOld.SiteNum==0?"none":Sites.GetDescription(procOld.SiteNum))
 					+" to "+(procCur.SiteNum==0?"none":Sites.GetDescription(procCur.SiteNum))+".";
 		  }
-			//Prosthesis reverse lookup-----------------------------------------------------------------------------------------
+			//Prosthesis reverse lookup---------------------------------------------------------------------------------------------------------------------
 		  if(procOld.Prosthesis != procCur.Prosthesis) {
 		    if(Changes!=""){ Changes+="\r\n";}
 				string prosthesisOld;
 				switch(procOld.Prosthesis.ToString()){
-					case "":
-						prosthesisOld="no";
-						break;
-					case "I":
-						prosthesisOld="Initial";
-						break;
-					case "R":
-						prosthesisOld="Replacement";
-						break;
-					default:
-						prosthesisOld="error";
-						break;
+					case "": prosthesisOld="no"; break;
+					case "I":	prosthesisOld="Initial"; break;
+					case "R": prosthesisOld="Replacement"; break;
+					default: prosthesisOld="error"; break;
 				}
 				string prosthesisCur;
 				switch(procCur.Prosthesis.ToString()){
-					case "":
-						prosthesisCur="no";
-						break;
-					case "I":
-						prosthesisCur="Initial";
-						break;
-					case "R":
-						prosthesisCur="Replacement";
-						break;
-					default:
-						prosthesisCur="error";
-						break;
+					case "": prosthesisCur="no"; break;
+					case "I": prosthesisCur="Initial"; break;
+					case "R": prosthesisCur="Replacement"; break;
+					default: prosthesisCur="error"; break;
 				}
 		    Changes+="Prosthesis changed from "+prosthesisOld+" to "+prosthesisCur+".";
 		  }
 		  if(procOld.DateOriginalProsth.Date != procCur.DateOriginalProsth.Date) {
 		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Date of Original Prosthesis changed from "+procOld.DateOriginalProsth.ToShortDateString()+" to "+procCur.DateOriginalProsth.ToShortDateString()+".";
+		    Changes+="Date of Original Prosthesis changed from "+procOld.DateOriginalProsth.ToShortDateString()
+					+" to "+procCur.DateOriginalProsth.ToShortDateString()+".";
 		  }
-			//Claim Note & Orion Proc Fields-----------------------------------------------------------------------------------------
+			//Claim Note & Orion Proc Fields----------------------------------------------------------------------------------------------------------------
 		  if(procOld.ClaimNote != procCur.ClaimNote) {
 		    if(Changes!=""){ Changes+="\r\n";}
-				Changes+="Claim Note changed from "+((procOld.ClaimNote=="")?"none":"'"+procOld.ClaimNote+"'")
-					+" to "+((procCur.ClaimNote=="")?"none":"'"+procCur.ClaimNote+"'");
+				Changes+="Claim Note changed from "+(procOld.ClaimNote==""?"none":"'"+procOld.ClaimNote+"'")
+					+" to "+(procCur.ClaimNote==""?"none":"'"+procCur.ClaimNote+"'");
 		  }
 			if(orionProcOld.OrionProcNum != orionProcCur.OrionProcNum) {
 		    if(Changes!=""){ Changes+="\r\n";}
@@ -173,8 +160,8 @@ namespace OpenDental {
 		    if(Changes!=""){ Changes+="\r\n";}
 		    Changes+="DPC changed from "+POut.String(orionProcOld.DPC.ToString())+" to "+POut.String(orionProcCur.DPC.ToString())+".";
 		  }
-			//Orion Status Reverse Lookup for Description-------------------------------------------------------------------------------
-			if(orionProcOld.Status2 != orionProcCur.Status2 && !(orionProcOld.Status2==OrionStatus.None && orionProcCur.Status2==OrionStatus.TP)) {//None is equivalent to TP
+			//Orion Status Reverse Lookup for Description----------------------------------//None is equivalent to TP---------------------------------------
+			if(orionProcOld.Status2 != orionProcCur.Status2 && !(orionProcOld.Status2==OrionStatus.None && orionProcCur.Status2==OrionStatus.TP)) {
 		    if(Changes!=""){ Changes+="\r\n";}
 				string[] status2=new string[2];
 				string[] status2Desc=new string[2];
@@ -182,65 +169,36 @@ namespace OpenDental {
 				status2[1]=orionProcCur.Status2.ToString();
 				for(int i=0;i<2;i++){
 					switch(status2[i]){
-						case "None":
-							status2Desc[i]="TP-treatment planned";
-							break;
-						case "TP":
-							status2Desc[i]="TP-treatment planned";
-							break;
-						case "C":
-							status2Desc[i]="C-completed";
-							break;
-						case "E":
-							status2Desc[i]="E-existing prior to incarceration";
-							break;
-						case "R":
-							status2Desc[i]="R-refused treatment";
-							break;
-						case "RO":
-							status2Desc[i]="RO-referred out to specialist";
-							break;
-						case "CS":
-							status2Desc[i]="CS-completed by specialist";
-							break;
-						case "CR":
-							status2Desc[i]="CR-completed by registry";
-							break;
-						case "CA_Tx":
-							status2Desc[i]="CA_Tx-cancelled, tx plan changed";
-							break;
-						case "CA_EPRD":
-							status2Desc[i]="CA_EPRD-cancelled, eligible parole";
-							break;
-						case "CA_P/D":
-							status2Desc[i]="CA_P/D--cancelled, parole/discharge";
-							break;
-						case "S":
-							status2Desc[i]="S-suspended, unacceptable plaque";
-							break;
-						case "ST":
-							status2Desc[i]="ST-stop clock, multi visit";
-							break;
-						case "W":
-							status2Desc[i]="W-watch";
-							break;
-						case "A":
-							status2Desc[i]="A-alternative";
-							break;
-						default:
-							status2Desc[i]="error";
-							break;
+						case "None":		status2Desc[i]="TP-treatment planned"; break;
+						case "TP":			status2Desc[i]="TP-treatment planned"; break;
+						case "C":				status2Desc[i]="C-completed";	break;
+						case "E":				status2Desc[i]="E-existing prior to incarceration"; break;
+						case "R":				status2Desc[i]="R-refused treatment"; break;
+						case "RO":			status2Desc[i]="RO-referred out to specialist"; break;
+						case "CS":			status2Desc[i]="CS-completed by specialist"; break;
+						case "CR":			status2Desc[i]="CR-completed by registry"; break;
+						case "CA_Tx":		status2Desc[i]="CA_Tx-cancelled, tx plan changed"; break;
+						case "CA_EPRD": status2Desc[i]="CA_EPRD-cancelled, eligible parole"; break;
+						case "CA_P/D":	status2Desc[i]="CA_P/D--cancelled, parole/discharge"; break;
+						case "S":				status2Desc[i]="S-suspended, unacceptable plaque"; break;
+						case "ST":			status2Desc[i]="ST-stop clock, multi visit"; break;
+						case "W":				status2Desc[i]="W-watch"; break;
+						case "A":				status2Desc[i]="A-alternative"; break;
+						default:				status2Desc[i]="error"; break;
 					}
 				}
 		    Changes+="Orion Procedure Status changed from "+status2Desc[0]+" to "+status2Desc[1]+".";
 		  }
+			//Other orion fields----------------------------------------------------------------------------------------------------------------------------
 			if(orionProcOld.DateScheduleBy.Date != orionProcCur.DateScheduleBy.Date) {
 		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Date Schedule By changed from "+orionProcOld.DateScheduleBy.ToShortDateString()+" to "+orionProcCur.DateScheduleBy.ToShortDateString()+".";
+		    Changes+="Date Schedule By changed from "+orionProcOld.DateScheduleBy.ToShortDateString()
+					+" to "+orionProcCur.DateScheduleBy.ToShortDateString()+".";
 		  }
 			if(orionProcOld.DateStopClock.Date != orionProcCur.DateStopClock.Date) {
 		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Date Stop Clock changed from "+orionProcOld.DateStopClock.ToShortDateString()+" to "+orionProcCur.DateStopClock.ToShortDateString()+".";
+		    Changes+="Date Stop Clock changed from "+orionProcOld.DateStopClock.ToShortDateString()
+					+" to "+orionProcCur.DateStopClock.ToShortDateString()+".";
 		  }
 			if(orionProcOld.IsOnCall != orionProcCur.IsOnCall) {
 		    if(Changes!=""){ Changes+="\r\n";}
@@ -257,6 +215,7 @@ namespace OpenDental {
 		    Changes+="Is Repair changed from "+(orionProcOld.IsRepair?"Is a Repair":"Is Not a Repair")
 					+" to "+(orionProcCur.IsRepair?"Is a Repair":"Is Not a Repair")+".";
 		  }
+			//Medical fields--------------------------------------------------------------------------------------------------------------------------------
 		  if(procOld.MedicalCode != procCur.MedicalCode) {
 		    if(Changes!=""){ Changes+="\r\n";}
 		    Changes+="Medical Code changed from "+(procOld.MedicalCode==""?"none":procOld.MedicalCode)
@@ -272,9 +231,18 @@ namespace OpenDental {
 		    Changes+="Is Princ Diag changed from "+(procOld.IsPrincDiag?"Principal Diagnosis":"Not Principal Diagnosis")
 					+" to "+(procCur.IsPrincDiag?"Principal Diagnosis":"Not Principal Diagnosis")+".";
 		  }
-		  if(procOld.ProcNumLab != procCur.ProcNumLab) {
+		  if(procOld.RevCode != procCur.RevCode) {
 		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Proc Num Lab changed from "+POut.Long(procOld.ProcNumLab)+" to "+POut.Long(procCur.ProcNumLab)+".";
+		    Changes+="Rev Code changed from "+POut.String(procOld.RevCode)+"' to '"+POut.String(procCur.RevCode)+".";
+		  }
+			//Proc status and billing fields----------------------------------------------------------------------------------------------------------------
+		  if(procOld.ProcStatus != procCur.ProcStatus) {
+		    if(Changes!=""){ Changes+="\r\n";}
+		    Changes+="Procedure Status changed from "+procOld.ProcStatus.ToString()+" to "+procCur.ProcStatus.ToString()+".";
+		  }
+		  if(procOld.DateTP.Date != procCur.DateTP.Date) {
+		    if(Changes!=""){ Changes+="\r\n";}
+		    Changes+="Date TP changed from "+procOld.DateTP.ToShortDateString()+" to "+procCur.DateTP.ToShortDateString()+".";
 		  }
 		  if(procOld.BillingTypeOne != procCur.BillingTypeOne) {
 		    if(Changes!=""){ Changes+="\r\n";}
@@ -286,25 +254,18 @@ namespace OpenDental {
 		    Changes+="Billing Type Two changed from "+(procOld.BillingTypeTwo!=0?DefC.GetDef(DefCat.BillingTypes,procOld.BillingTypeTwo).ItemName:"none")
 					+" to "+(procCur.BillingTypeTwo!=0?DefC.GetDef(DefCat.BillingTypes,procCur.BillingTypeTwo).ItemName:"none")+".";
 		  }
-		  if(procOld.ProcStatus != procCur.ProcStatus) {
+		  if(procOld.ProcNumLab != procCur.ProcNumLab) {
 		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Procedure Status changed from "+procOld.ProcStatus.ToString()+" to "+procCur.ProcStatus.ToString()+".";
-		  }
-		  if(procOld.RevCode != procCur.RevCode) {
-		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Rev Code changed from "+POut.String(procOld.RevCode)+"' to '"+POut.String(procCur.RevCode)+".";
+		    Changes+="Proc Num Lab changed from "+POut.Long(procOld.ProcNumLab)+" to "+POut.Long(procCur.ProcNumLab)+".";
 		  }
 		  if(procOld.UnitCode != procCur.UnitCode) {
 		    if(Changes!=""){ Changes+="\r\n";}
 		    Changes+="Unit Code changed from "+POut.String(procOld.UnitCode)+" to "+POut.String(procCur.UnitCode)+".";
 		  }
+			//UnitQty, Canadian Type Codes, and Note--------------------------------------------------------------------------------------------------------
 		  if(procOld.UnitQty != procCur.UnitQty) {
 		    if(Changes!=""){ Changes+="\r\n";}
 		    Changes+="Unit Quantity changed from "+POut.Int(procOld.UnitQty)+" to "+POut.Int(procCur.UnitQty)+".";
-		  }
-		  if(procOld.DateTP.Date != procCur.DateTP.Date) {
-		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Date TP changed from "+procOld.DateTP.ToShortDateString()+" to "+procCur.DateTP.ToShortDateString()+".";
 		  }
 		  if(procOld.CanadianTypeCodes != procCur.CanadianTypeCodes) {
 		    if(Changes!=""){ Changes+="\r\n";}
@@ -312,8 +273,8 @@ namespace OpenDental {
 		  }
 			if(procOld.Note != procCur.Note && !(procOld.Note==null && procCur.Note=="")) {//Null note is equivalent to an empty note string.
 		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Note changed from "+((procOld.Note=="")?"none":"'"+procOld.Note+"'")
-					+" to "+((procCur.Note=="")?"none":"'"+procCur.Note+"'");
+		    Changes+="Note changed from "+(procOld.Note==""?"none":"'"+procOld.Note+"'")
+					+" to "+(procCur.Note==""?"none":"'"+procCur.Note+"'");
 		  }
 			return Changes;
 		}
