@@ -79,10 +79,11 @@ namespace OpenDental{
 			// 
 			// groupBox1
 			// 
+			this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.groupBox1.Controls.Add(this.checkUseDecimal);
-			this.groupBox1.Location = new System.Drawing.Point(19,515);
+			this.groupBox1.Location = new System.Drawing.Point(19,536);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(391,100);
+			this.groupBox1.Size = new System.Drawing.Size(391,55);
 			this.groupBox1.TabIndex = 14;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Options";
@@ -97,7 +98,7 @@ namespace OpenDental{
 			this.butAddRule.CornerRadius = 4F;
 			this.butAddRule.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAddRule.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAddRule.Location = new System.Drawing.Point(327,450);
+			this.butAddRule.Location = new System.Drawing.Point(305,499);
 			this.butAddRule.Name = "butAddRule";
 			this.butAddRule.Size = new System.Drawing.Size(80,24);
 			this.butAddRule.TabIndex = 15;
@@ -109,10 +110,10 @@ namespace OpenDental{
 			this.gridRules.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
 			this.gridRules.HScrollVisible = false;
-			this.gridRules.Location = new System.Drawing.Point(327,12);
+			this.gridRules.Location = new System.Drawing.Point(305,12);
 			this.gridRules.Name = "gridRules";
 			this.gridRules.ScrollValue = 0;
-			this.gridRules.Size = new System.Drawing.Size(320,432);
+			this.gridRules.Size = new System.Drawing.Size(394,481);
 			this.gridRules.TabIndex = 13;
 			this.gridRules.Title = "Rules";
 			this.gridRules.TranslationName = "FormTimeCardSetup";
@@ -126,7 +127,7 @@ namespace OpenDental{
 			this.gridMain.Location = new System.Drawing.Point(19,12);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(294,432);
+			this.gridMain.Size = new System.Drawing.Size(272,481);
 			this.gridMain.TabIndex = 11;
 			this.gridMain.Title = "Pay Periods";
 			this.gridMain.TranslationName = "TablePayPeriods";
@@ -142,7 +143,7 @@ namespace OpenDental{
 			this.butAdd.CornerRadius = 4F;
 			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(19,450);
+			this.butAdd.Location = new System.Drawing.Point(19,499);
 			this.butAdd.Name = "butAdd";
 			this.butAdd.Size = new System.Drawing.Size(80,24);
 			this.butAdd.TabIndex = 10;
@@ -157,7 +158,7 @@ namespace OpenDental{
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(573,591);
+			this.butClose.Location = new System.Drawing.Point(628,567);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75,24);
 			this.butClose.TabIndex = 0;
@@ -167,7 +168,7 @@ namespace OpenDental{
 			// FormTimeCardSetup
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(672,632);
+			this.ClientSize = new System.Drawing.Size(727,608);
 			this.Controls.Add(this.butAddRule);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.gridRules);
@@ -227,7 +228,7 @@ namespace OpenDental{
 			TimeCardRules.RefreshCache();
 			gridRules.BeginUpdate();
 			gridRules.Columns.Clear();
-			ODGridColumn col=new ODGridColumn("Employee",70);
+			ODGridColumn col=new ODGridColumn("Employee",150);
 			gridRules.Columns.Add(col);
 			col=new ODGridColumn("Over Hours Per Day",120);
 			gridRules.Columns.Add(col);
@@ -238,7 +239,7 @@ namespace OpenDental{
 			for(int i=0;i<TimeCardRules.Listt.Count;i++){
 				row=new OpenDental.UI.ODGridRow();
 				if(TimeCardRules.Listt[i].EmployeeNum==0){
-					row.Cells.Add("All Employees");
+					row.Cells.Add(Lan.g(this,"All Employees"));
 				}
 				else{
 					Employee emp=Employees.GetEmp(TimeCardRules.Listt[i].EmployeeNum);
@@ -285,9 +286,13 @@ namespace OpenDental{
 		}
 
 		private void butAddRule_Click(object sender,EventArgs e) {
+			TimeCardRule rule=new TimeCardRule();
+			rule.IsNew=true;
 			FormTimeCardRuleEdit FormT=new FormTimeCardRuleEdit();
+			FormT.timeCardRule=rule;
 			FormT.ShowDialog();
 			FillRules();
+			changed=true;
 		}
 
 		private void gridRules_CellDoubleClick(object sender,ODGridClickEventArgs e) {
@@ -295,6 +300,7 @@ namespace OpenDental{
 			FormT.timeCardRule=TimeCardRules.Listt[e.Row];
 			FormT.ShowDialog();
 			FillRules();
+			changed=true;
 		}
 
 		private void butClose_Click(object sender, System.EventArgs e) {
@@ -303,7 +309,7 @@ namespace OpenDental{
 
 		private void FormPayPeriods_FormClosing(object sender,FormClosingEventArgs e) {
 			if(changed) {
-				DataValid.SetInvalid(InvalidType.Employees,InvalidType.Prefs);
+				DataValid.SetInvalid(InvalidType.Employees,InvalidType.Prefs,InvalidType.TimeCardRules);
 			}
 		}
 

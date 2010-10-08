@@ -33,29 +33,31 @@ namespace OpenDental{
 			this.butDelete = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(12,9);
+			this.label1.Location = new System.Drawing.Point(14,108);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(203,18);
+			this.label1.Size = new System.Drawing.Size(97,18);
 			this.label1.TabIndex = 4;
 			this.label1.Text = "Employee";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(234,100);
+			this.label2.Location = new System.Drawing.Point(23,19);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(112,18);
 			this.label2.TabIndex = 6;
 			this.label2.Text = "Over Hours Per Day";
-			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textOverHoursPerDay
 			// 
-			this.textOverHoursPerDay.Location = new System.Drawing.Point(236,121);
+			this.textOverHoursPerDay.Location = new System.Drawing.Point(138,19);
 			this.textOverHoursPerDay.Name = "textOverHoursPerDay";
 			this.textOverHoursPerDay.Size = new System.Drawing.Size(62,20);
 			this.textOverHoursPerDay.TabIndex = 7;
@@ -63,16 +65,16 @@ namespace OpenDental{
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(235,144);
+			this.label3.Location = new System.Drawing.Point(24,50);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(111,18);
 			this.label3.TabIndex = 8;
 			this.label3.Text = "After Time of Day";
-			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textAfterTimeOfDay
 			// 
-			this.textAfterTimeOfDay.Location = new System.Drawing.Point(236,165);
+			this.textAfterTimeOfDay.Location = new System.Drawing.Point(138,50);
 			this.textAfterTimeOfDay.Name = "textAfterTimeOfDay";
 			this.textAfterTimeOfDay.Size = new System.Drawing.Size(62,20);
 			this.textAfterTimeOfDay.TabIndex = 9;
@@ -81,7 +83,7 @@ namespace OpenDental{
 			// listEmployees
 			// 
 			this.listEmployees.FormattingEnabled = true;
-			this.listEmployees.Location = new System.Drawing.Point(15,30);
+			this.listEmployees.Location = new System.Drawing.Point(15,130);
 			this.listEmployees.Name = "listEmployees";
 			this.listEmployees.Size = new System.Drawing.Size(200,277);
 			this.listEmployees.TabIndex = 156;
@@ -89,14 +91,14 @@ namespace OpenDental{
 			// butDelete
 			// 
 			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butDelete.Autosize = true;
 			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(15,318);
+			this.butDelete.Location = new System.Drawing.Point(273,260);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(75,24);
 			this.butDelete.TabIndex = 155;
@@ -111,7 +113,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(258,277);
+			this.butOK.Location = new System.Drawing.Point(273,351);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 3;
@@ -126,23 +128,33 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(258,318);
+			this.butCancel.Location = new System.Drawing.Point(273,383);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 2;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// groupBox1
+			// 
+			this.groupBox1.Controls.Add(this.textOverHoursPerDay);
+			this.groupBox1.Controls.Add(this.label2);
+			this.groupBox1.Controls.Add(this.label3);
+			this.groupBox1.Controls.Add(this.textAfterTimeOfDay);
+			this.groupBox1.Location = new System.Drawing.Point(15,12);
+			this.groupBox1.Name = "groupBox1";
+			this.groupBox1.Size = new System.Drawing.Size(214,84);
+			this.groupBox1.TabIndex = 157;
+			this.groupBox1.TabStop = false;
+			this.groupBox1.Text = "Overtime if";
+			// 
 			// FormTimeCardRuleEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(358,369);
+			this.ClientSize = new System.Drawing.Size(373,419);
+			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.listEmployees);
 			this.Controls.Add(this.butDelete);
-			this.Controls.Add(this.textAfterTimeOfDay);
-			this.Controls.Add(this.label3);
-			this.Controls.Add(this.textOverHoursPerDay);
-			this.Controls.Add(this.label2);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
@@ -151,8 +163,9 @@ namespace OpenDental{
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Time Card Rule Edit";
 			this.Load += new System.EventHandler(this.FormTimeCardRuleEdit_Load);
+			this.groupBox1.ResumeLayout(false);
+			this.groupBox1.PerformLayout();
 			this.ResumeLayout(false);
-			this.PerformLayout();
 
 		}
 
@@ -167,5 +180,6 @@ namespace OpenDental{
 		private System.Windows.Forms.TextBox textAfterTimeOfDay;
 		private OpenDental.UI.Button butDelete;
 		private System.Windows.Forms.ListBox listEmployees;
+		private System.Windows.Forms.GroupBox groupBox1;
 	}
 }

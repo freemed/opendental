@@ -10,7 +10,7 @@ using OpenDentBusiness;
 namespace OpenDental {
 	public partial class FormTimeCardRuleEdit:Form {
 
-		public TimeCardRule timeCardRule=new TimeCardRule();
+		public TimeCardRule timeCardRule;
 
 		public FormTimeCardRuleEdit() {
 			InitializeComponent();
@@ -18,7 +18,7 @@ namespace OpenDental {
 		}
 
 		private void FormTimeCardRuleEdit_Load(object sender,EventArgs e) {
-			listEmployees.Items.Add("All Employees");
+			listEmployees.Items.Add(Lan.g(this,"All Employees"));
 			listEmployees.SelectedIndex=0;
 			for(int i=0;i<Employees.ListShort.Length;i++){
 				listEmployees.Items.Add(Employees.ListShort[i].FName+" "+Employees.ListShort[i].LName);
@@ -26,63 +26,73 @@ namespace OpenDental {
 					listEmployees.SelectedIndex=i+1;
 				}
 			}
-			if(timeCardRule.OverHoursPerDay.Hours>0){
-				textOverHoursPerDay.Text=timeCardRule.OverHoursPerDay.ToStringHmm();
-			}
-			if(timeCardRule.AfterTimeOfDay.Hours>0){
-				textAfterTimeOfDay.Text=timeCardRule.AfterTimeOfDay.ToStringHmm();
-			}
+			textOverHoursPerDay.Text=timeCardRule.OverHoursPerDay.ToStringHmm();
+			textAfterTimeOfDay.Text=timeCardRule.AfterTimeOfDay.ToStringHmm();
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
-			if(!MsgBox.Show(this,true,"Are you sure you want to delete this time card rule?")){
+			if(timeCardRule.IsNew) {
+				DialogResult=DialogResult.Cancel;
 				return;
 			}
-			if(timeCardRule.TimeCardRuleNum!=0){
-				TimeCardRules.Delete(timeCardRule.TimeCardRuleNum);
+			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Are you sure you want to delete this time card rule?")){
+				return;
 			}
-			DialogResult=DialogResult.Cancel;
+			TimeCardRules.Delete(timeCardRule.TimeCardRuleNum);
+			DialogResult=DialogResult.OK;
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
 			//Verify Data.
 			if(listEmployees.SelectedIndex<0){
-				MsgBox.Show(this,"You must select an employee");
+				MsgBox.Show(this,"Please select an employee.");
 				return;
 			}
 			TimeSpan overHoursPerDay=TimeSpan.Zero;
-			try{
-				overHoursPerDay=TimeSpan.Parse(this.textOverHoursPerDay.Text);
-			}
-			catch{
-			}
-			if(overHoursPerDay==TimeSpan.Zero || overHoursPerDay.Days>0){
-				MsgBox.Show(this,"Over hours per day invalid");
-				return;
+			if(textOverHoursPerDay.Text!="") {
+				try {
+					overHoursPerDay=TimeSpan.Parse(textOverHoursPerDay.Text);
+				}
+				catch {
+					MsgBox.Show(this,"Over hours per day invalid.");
+					return;
+				}
+				if(overHoursPerDay==TimeSpan.Zero || overHoursPerDay.Days>0) {
+					MsgBox.Show(this,"Over hours per day invalid.");
+					return;
+				}
 			}
 			TimeSpan afterTimeOfDay=TimeSpan.Zero;
-			try{
-				afterTimeOfDay=TimeSpan.Parse(this.textAfterTimeOfDay.Text);
+			if(textAfterTimeOfDay.Text!="") {
+				try {
+					afterTimeOfDay=TimeSpan.Parse(textAfterTimeOfDay.Text);
+				}
+				catch {
+					MsgBox.Show(this,"After time of day invalid.");
+					return;
+				}
+				if(afterTimeOfDay==TimeSpan.Zero || afterTimeOfDay.Days>0) {
+					MsgBox.Show(this,"After time of day invalid.");
+					return;
+				}
 			}
-			catch{
-			}
-			if(afterTimeOfDay==TimeSpan.Zero || afterTimeOfDay.Days>0){
-				MsgBox.Show(this,"After time of day invalid");
+			if(overHoursPerDay==TimeSpan.Zero && afterTimeOfDay==TimeSpan.Zero) {
+				MsgBox.Show(this,"Hours or time of day must be entered.");
 				return;
 			}
-			//Save the data entered.
-			if(listEmployees.SelectedIndex==0){
+			//save-------------------------------------------------
+			if(listEmployees.SelectedIndex==0) {
 				timeCardRule.EmployeeNum=0;//All employees.
 			}
-			else{
+			else {
 				timeCardRule.EmployeeNum=Employees.ListShort[listEmployees.SelectedIndex-1].EmployeeNum;
 			}
 			timeCardRule.OverHoursPerDay=overHoursPerDay;
 			timeCardRule.AfterTimeOfDay=afterTimeOfDay;
-			if(timeCardRule.TimeCardRuleNum==0){
+			if(timeCardRule.IsNew) {
 				TimeCardRules.Insert(timeCardRule);
 			}
-			else{
+			else {
 				TimeCardRules.Update(timeCardRule);
 			}
 			DialogResult=DialogResult.OK;

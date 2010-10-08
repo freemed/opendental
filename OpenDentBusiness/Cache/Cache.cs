@@ -187,6 +187,9 @@ namespace OpenDentBusiness {
 				ds.Tables.Add(Sites.RefreshCache());
 			}
 			//InvalidTypes.Tasks not handled here.
+			if(itypes.Contains((int)InvalidType.TimeCardRules) || isAll) {
+				ds.Tables.Add(TimeCardRules.RefreshCache());
+			}
 			if(itypes.Contains((int)InvalidType.ToolBut) || isAll){
 				ds.Tables.Add(ToolButItems.RefreshCache());
 			}
@@ -348,6 +351,9 @@ namespace OpenDentBusiness {
 			}
 			if(itypes.Contains((int)InvalidType.Sites) || isAll) {
 				Sites.FillCache(ds.Tables["Site"]);
+			}
+			if(itypes.Contains((int)InvalidType.TimeCardRules) || isAll) {
+				TimeCardRules.FillCache(ds.Tables["TimeCardRule"]);
 			}
 			//InvalidTypes.Tasks not handled here.
 			if(itypes.Contains((int)InvalidType.ToolBut) || isAll) {
