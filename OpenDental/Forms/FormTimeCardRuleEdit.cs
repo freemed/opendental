@@ -30,6 +30,11 @@ namespace OpenDental {
 			textAfterTimeOfDay.Text=timeCardRule.AfterTimeOfDay.ToStringHmm();
 		}
 
+		private void but5pm_Click(object sender,EventArgs e) {
+			DateTime dt=new DateTime(2010,1,1,17,0,0);
+			textAfterTimeOfDay.Text=dt.ToShortTimeString();
+		}
+
 		private void butDelete_Click(object sender,EventArgs e) {
 			if(timeCardRule.IsNew) {
 				DialogResult=DialogResult.Cancel;
@@ -51,7 +56,12 @@ namespace OpenDental {
 			TimeSpan overHoursPerDay=TimeSpan.Zero;
 			if(textOverHoursPerDay.Text!="") {
 				try {
-					overHoursPerDay=TimeSpan.Parse(textOverHoursPerDay.Text);
+					if(textOverHoursPerDay.Text.Contains(":")){
+						overHoursPerDay=TimeSpan.Parse(textOverHoursPerDay.Text);
+					}
+					else{
+						overHoursPerDay=TimeSpan.FromHours(PIn.Double(textOverHoursPerDay.Text));
+					}
 				}
 				catch {
 					MsgBox.Show(this,"Over hours per day invalid.");
@@ -65,7 +75,7 @@ namespace OpenDental {
 			TimeSpan afterTimeOfDay=TimeSpan.Zero;
 			if(textAfterTimeOfDay.Text!="") {
 				try {
-					afterTimeOfDay=TimeSpan.Parse(textAfterTimeOfDay.Text);
+					afterTimeOfDay=DateTime.Parse(textAfterTimeOfDay.Text).TimeOfDay;
 				}
 				catch {
 					MsgBox.Show(this,"After time of day invalid.");
@@ -101,6 +111,8 @@ namespace OpenDental {
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 	}
 }

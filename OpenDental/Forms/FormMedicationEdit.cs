@@ -157,9 +157,9 @@ namespace OpenDental{
 			// 
 			this.label3.Location = new System.Drawing.Point(21,66);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(127,17);
+			this.label3.Size = new System.Drawing.Size(127,47);
 			this.label3.TabIndex = 8;
-			this.label3.Text = "Notes";
+			this.label3.Text = "Notes\r\n(for generic only)";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// textNotes
@@ -271,8 +271,8 @@ namespace OpenDental{
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Edit Medication";
-			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormMedicationEdit_Closing);
 			this.Load += new System.EventHandler(this.MedicationEdit_Load);
+			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormMedicationEdit_Closing);
 			this.groupBox1.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();

@@ -14,9 +14,9 @@ namespace OpenDentBusiness{
 		private static Hashtable HList;
 
 		///<summary></summary>
-		public static void Refresh(){
+		public static void Refresh(string str){
 			//No need to check RemotingRole; no call to db.
-			List<Medication> list=GetList();
+			List<Medication> list=GetList(str);
 			HList=new Hashtable();
 			List=list.ToArray();
 			for(int i=0;i<list.Count;i++) {
@@ -24,11 +24,11 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		public static List<Medication> GetList() {
+		public static List<Medication> GetList(string str) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Medication>>(MethodBase.GetCurrentMethod());
 			}
-			string command ="SELECT * from medication ORDER BY MedName";
+			string command ="SELECT * from medication WHERE MedName LIKE '%"+POut.String(str)+"%' ORDER BY MedName";
 			DataTable table=Db.GetTable(command);
 			List<Medication> retVal=new List<Medication>();
 			Medication med;
@@ -145,6 +145,14 @@ namespace OpenDentBusiness{
 			return (Medication)HList[((Medication)HList[medNum]).GenericNum];
 		}
 
+		///<summary>Gets the generic medication name, given it's generic Num.</summary>
+		public static string GetGenericName(long genericNum) {
+			//No need to check RemotingRole; no call to db.
+			if(HList.ContainsKey(genericNum)){
+				return ((Medication)HList[genericNum]).MedName;
+			}
+			return "";
+		}
 
 		
 	}

@@ -30,10 +30,11 @@ namespace OpenDental{
 			this.label3 = new System.Windows.Forms.Label();
 			this.textAfterTimeOfDay = new System.Windows.Forms.TextBox();
 			this.listEmployees = new System.Windows.Forms.ListBox();
+			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.butDelete = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.but5pm = new OpenDental.UI.Button();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -88,6 +89,20 @@ namespace OpenDental{
 			this.listEmployees.Size = new System.Drawing.Size(200,277);
 			this.listEmployees.TabIndex = 156;
 			// 
+			// groupBox1
+			// 
+			this.groupBox1.Controls.Add(this.but5pm);
+			this.groupBox1.Controls.Add(this.textOverHoursPerDay);
+			this.groupBox1.Controls.Add(this.label2);
+			this.groupBox1.Controls.Add(this.label3);
+			this.groupBox1.Controls.Add(this.textAfterTimeOfDay);
+			this.groupBox1.Location = new System.Drawing.Point(15,12);
+			this.groupBox1.Name = "groupBox1";
+			this.groupBox1.Size = new System.Drawing.Size(252,84);
+			this.groupBox1.TabIndex = 157;
+			this.groupBox1.TabStop = false;
+			this.groupBox1.Text = "Overtime if";
+			// 
 			// butDelete
 			// 
 			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -135,18 +150,20 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// groupBox1
+			// but5pm
 			// 
-			this.groupBox1.Controls.Add(this.textOverHoursPerDay);
-			this.groupBox1.Controls.Add(this.label2);
-			this.groupBox1.Controls.Add(this.label3);
-			this.groupBox1.Controls.Add(this.textAfterTimeOfDay);
-			this.groupBox1.Location = new System.Drawing.Point(15,12);
-			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(214,84);
-			this.groupBox1.TabIndex = 157;
-			this.groupBox1.TabStop = false;
-			this.groupBox1.Text = "Overtime if";
+			this.but5pm.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.but5pm.Autosize = true;
+			this.but5pm.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.but5pm.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.but5pm.CornerRadius = 4F;
+			this.but5pm.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.but5pm.Location = new System.Drawing.Point(206,49);
+			this.but5pm.Name = "but5pm";
+			this.but5pm.Size = new System.Drawing.Size(35,22);
+			this.but5pm.TabIndex = 158;
+			this.but5pm.Text = "5 PM";
+			this.but5pm.Click += new System.EventHandler(this.but5pm_Click);
 			// 
 			// FormTimeCardRuleEdit
 			// 
@@ -181,5 +198,6 @@ namespace OpenDental{
 		private OpenDental.UI.Button butDelete;
 		private System.Windows.Forms.ListBox listEmployees;
 		private System.Windows.Forms.GroupBox groupBox1;
+		private OpenDental.UI.Button but5pm;
 	}
 }

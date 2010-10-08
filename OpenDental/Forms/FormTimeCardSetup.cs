@@ -230,9 +230,9 @@ namespace OpenDental{
 			gridRules.Columns.Clear();
 			ODGridColumn col=new ODGridColumn("Employee",150);
 			gridRules.Columns.Add(col);
-			col=new ODGridColumn("Over Hours Per Day",120);
+			col=new ODGridColumn("OT after x Hours",110);
 			gridRules.Columns.Add(col);
-			col=new ODGridColumn("After Time Of Day",70);
+			col=new ODGridColumn("OT after x Time",70);
 			gridRules.Columns.Add(col);
 			gridRules.Rows.Clear();
 			UI.ODGridRow row;
