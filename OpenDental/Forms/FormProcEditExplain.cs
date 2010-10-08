@@ -280,7 +280,7 @@ namespace OpenDental {
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
-			Explanation="Values Changed:\r\n"+Changes+"\r\nExplanation:\r\n"+textExplanation.Text;
+			Explanation="Summary of Changes Made:\r\n"+Changes+"\r\nExplanation:\r\n"+textExplanation.Text;
 			DialogResult=DialogResult.OK;
 		}
 
