@@ -1863,15 +1863,15 @@ namespace OpenDental{
 				int indexProv;
 				for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++){
 					indexProv=-1;
-					if(DS.Tables["Appointments"].Rows[i]["IsHygiene"].ToString()=="1"){
-						if(DS.Tables["Appointments"].Rows[i]["ProvHyg"].ToString()=="0") {//set ishyg, but no hyg prov set.
+					if(DS.Tables["Appointments"].Rows[i]["IsHygiene"].ToString()=="1"){//if isHygiene
+						if(DS.Tables["Appointments"].Rows[i]["ProvHyg"].ToString()=="0") {//if no hyg prov set.
 							indexProv=ApptViewItemL.GetIndexProv(PIn.Long(DS.Tables["Appointments"].Rows[i]["ProvNum"].ToString()));
 						}
 						else {
 							indexProv=ApptViewItemL.GetIndexProv(PIn.Long(DS.Tables["Appointments"].Rows[i]["ProvHyg"].ToString()));
 						}
 					}
-					else{
+					else{//not hyg
 						indexProv=ApptViewItemL.GetIndexProv(PIn.Long(DS.Tables["Appointments"].Rows[i]["ProvNum"].ToString()));
 					}
 					if(indexProv==-1){

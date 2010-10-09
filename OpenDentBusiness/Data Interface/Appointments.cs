@@ -602,14 +602,14 @@ namespace OpenDentBusiness{
 				+"LabCaseNum,patient.LName,patient.MedUrgNote,patient.MiddleI,Note,Op,appointment.PatNum,"
 				+"Pattern,patplan.PlanNum,patient.PreferConfirmMethod,patient.PreferContactMethod,patient.Preferred,"
 				+"patient.PreferRecallMethod,patient.Premed,"
-				+"ProcDescript,ProcsColored,"
-				+"(SELECT SUM(ProcFee) FROM procedurelog ";
-			if(isPlanned){
-				command+="WHERE procedurelog.PlannedAptNum=appointment.AptNum AND procedurelog.PlannedAptNum!=0) Production, ";
-			}
-			else{
-				command+="WHERE procedurelog.AptNum=appointment.AptNum AND procedurelog.AptNum!=0) Production, ";
-			}
+				+"ProcDescript,ProcsColored,";
+				//+"(SELECT SUM(ProcFee) FROM procedurelog ";
+			//if(isPlanned){
+			//	command+="WHERE procedurelog.PlannedAptNum=appointment.AptNum AND procedurelog.PlannedAptNum!=0) Production, ";
+			//}
+			//else{
+			//	command+="WHERE procedurelog.AptNum=appointment.AptNum AND procedurelog.AptNum!=0) Production, ";
+			//}
 			command+="ProvHyg,appointment.ProvNum,patient.State,patient.WirelessPhone,patient.WkPhone,patient.Zip "
 				+"FROM appointment LEFT JOIN patient ON patient.PatNum=appointment.PatNum "
 				+"LEFT JOIN provider p1 ON p1.ProvNum=appointment.ProvNum "
@@ -637,19 +637,26 @@ namespace OpenDentBusiness{
 			}
 			command+=" GROUP BY appointment.AptNum";
 			DataTable raw=dcon.GetTable(command);
+			//rawProc table was historically used for other purposes.  It is currently only used for production--------------------------
 			DataTable rawProc;
 			if(raw.Rows.Count==0){
 				rawProc=new DataTable();
 			}
 			else{
-				command="SELECT pc.AbbrDesc,p.AptNum,p.CodeNum,p.PlannedAptNum,p.Surf,p.ToothNum,pc.TreatArea  "
-					+"FROM procedurelog p,procedurecode pc "
-					+"WHERE p.CodeNum=pc.CodeNum AND ";
+				command="SELECT AptNum,PlannedAptNum,"//AbbrDesc,procedurecode.CodeNum
+					+"ProcFee, "
+					+"SUM(WriteOffEst) writeoffPPO "
+					//+"Surf,ToothNum,TreatArea  "
+					+"FROM procedurelog "
+					+"LEFT JOIN procedurecode ON procedurelog.CodeNum=procedurecode.CodeNum "
+					+"LEFT JOIN claimproc ON claimproc.ProcNum=procedurelog.ProcNum "
+					+"AND claimproc.WriteOffEst != -1 "
+					+"WHERE ";
 				if(isPlanned) {
-					command+="p.PlannedAptNum!=0 AND p.PlannedAptNum ";
+					command+="PlannedAptNum!=0 AND PlannedAptNum ";
 				} 
 				else {
-					command+="p.AptNum!=0 AND p.AptNum ";
+					command+="AptNum!=0 AND AptNum ";
 				}
 				command+="IN(";//this was far too slow:SELECT a.AptNum FROM appointment a WHERE ";
 				if(aptNum==0) {
@@ -665,9 +672,10 @@ namespace OpenDentBusiness{
 				else {
 					command+=POut.Long(aptNum);
 				}
-				command+=")";
+				command+=") GROUP BY procedurelog.ProcNum";
 				rawProc=dcon.GetTable(command);
 			}
+			//rawInsProc table is usually skipped. Too slow------------------------------------------------------------------------------
 			DataTable rawInsProc=null;
 			if(PrefC.GetBool(PrefName.ApptExclamationShowForUnsentIns)){
 				//procs for flag, InsNotSent
@@ -685,7 +693,7 @@ namespace OpenDentBusiness{
 					+"GROUP BY patient.Guarantor"; 
 				rawInsProc=dcon.GetTable(command);
 			}
-			//Guardians-----------------------------------------------------------------------
+			//Guardians-------------------------------------------------------------------------------------------------------------------
 			command="SELECT PatNumChild,PatNumGuardian,Relationship,patient.FName,patient.Preferred "
 				+"FROM guardian "
 				+"LEFT JOIN patient ON patient.PatNum=guardian.PatNumGuardian "
@@ -709,6 +717,7 @@ namespace OpenDentBusiness{
 			DateTime labDueDate;
 			DateTime birthdate;
 			DateTime timeAskedToArrive;
+			decimal production;
 			for(int i=0;i<raw.Rows.Count;i++) {
 				row=table.NewRow();
 				row["address"]=Patients.GetAddressFull(raw.Rows[i]["Address"].ToString(),raw.Rows[i]["Address2"].ToString(),
@@ -899,8 +908,22 @@ namespace OpenDentBusiness{
 				}
 				row["procs"]=raw.Rows[i]["ProcDescript"].ToString();
 				row["procsColored"]+=raw.Rows[i]["ProcsColored"].ToString();
-				row["production"]=PIn.Double(raw.Rows[i]["Production"].ToString()).ToString("c");
-				row["productionVal"]=raw.Rows[i]["Production"].ToString();
+				production=0;
+				if(rawProc!=null) {
+					for(int p=0;p<rawProc.Rows.Count;p++) {
+						if(isPlanned && raw.Rows[i]["PlannedAptNum"].ToString()!=rawProc.Rows[p]["PlannedAptNum"].ToString()) {
+							continue;
+						}
+						else if(!isPlanned && raw.Rows[i]["AptNum"].ToString()!=rawProc.Rows[p]["AptNum"].ToString()) {
+							continue;
+						}
+						production+=PIn.Decimal(rawProc.Rows[p]["ProcFee"].ToString());
+						//WriteOffEst -1 already excluded
+						production-=PIn.Decimal(rawProc.Rows[p]["writeoffPPO"].ToString());//frequently zero
+					}
+				}
+				row["production"]=production.ToString("c");//PIn.Double(raw.Rows[i]["Production"].ToString()).ToString("c");
+				row["productionVal"]=production.ToString();//raw.Rows[i]["Production"].ToString();
 				if(raw.Rows[i]["IsHygiene"].ToString()=="1"){
 					row["provider"]=raw.Rows[i]["HygAbbr"].ToString();
 					if(raw.Rows[i]["ProvAbbr"].ToString()!=""){

@@ -1280,15 +1280,14 @@ GROUP BY SchedDate
 				}
 				whereClin+=") ";
 			}
-			report.Query= "SELECT FROM_DAYS(TO_DAYS(appointment.AptDateTime)) "//gets rid of time
-			  +"SchedDate,SUM(procedurelog.ProcFee) FROM appointment,procedurelog WHERE "
-        +"appointment.AptNum = procedurelog.AptNum "
-				+"AND (appointment.AptStatus = 1 OR "//stat=scheduled
+			report.Query= "SELECT DATE(appointment.AptDateTime) SchedDate,SUM(procedurelog.ProcFee-WriteOffEst) "
+				+"FROM appointment "
+				+"LEFT JOIN procedurelog ON appointment.AptNum = procedurelog.AptNum "
+				+"LEFT JOIN claimproc ON procedurelog.ProcNum = claimproc.ProcNum AND WriteOffEst != -1 "
+				+"WHERE (appointment.AptStatus = 1 OR "//stat=scheduled
         +"appointment.AptStatus = 4) "//or stat=ASAP
-				+"AND FROM_DAYS(TO_DAYS(appointment.AptDateTime)) >= "
-				+POut.Date(dateFrom)+" "
-				+"AND FROM_DAYS(TO_DAYS(appointment.AptDateTime)) <= "
-				+POut.Date(dateTo)+" "
+				+"AND DATE(appointment.AptDateTime) >= "+POut.Date(dateFrom)+" "
+				+"AND DATE(appointment.AptDateTime) <= "+POut.Date(dateTo)+" "
 				+whereProv
 				+whereClin
 				+" GROUP BY SchedDate "
