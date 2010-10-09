@@ -277,8 +277,8 @@ namespace OpenDental{
 			this.label9.Name = "label9";
 			this.label9.Size = new System.Drawing.Size(410,29);
 			this.label9.TabIndex = 61;
-			this.label9.Text = "For custom bridges, NOT for regular bridges, you can also include [PatNum] or [Ch" +
-    "artNumber] in either of the two boxes above.";
+			this.label9.Text = "For custom bridges, NOT for regular bridges, you can also include [PatNum], [Char" +
+    "tNumber], [WirelessPhone], or [HmPhone] in either of the two boxes above.";
 			// 
 			// gridMain
 			// 
