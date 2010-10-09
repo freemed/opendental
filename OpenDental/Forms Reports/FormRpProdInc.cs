@@ -451,6 +451,9 @@ namespace OpenDental{
 					break;
 			}
 			SetDates();
+			if(PrefC.GetBool(PrefName.ReportsPPOwriteoffDefaultToProcDate)) {
+				radioWriteoffProc.Checked=true;
+			}
 			if(DateStart.Year>1880){
 				textDateFrom.Text=DateStart.ToShortDateString();
 				textDateTo.Text=DateEnd.ToShortDateString();
@@ -466,9 +469,6 @@ namespace OpenDental{
 						break;
 				}
 				Close();
-			}
-			if(PrefC.GetBool(PrefName.ReportsPPOwriteoffDefaultToProcDate)){
-				radioWriteoffProc.Checked=true;
 			}
 		}
 
