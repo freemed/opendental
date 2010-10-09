@@ -26,7 +26,7 @@ namespace OpenDentBusiness{
 		///<summary>User can edit. Can be 01-01-0001 if not clocked out yet.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime TimeDisplayed2;
-		///<summary>This is a manual override for OTimeAuto.  Typically -1 hour (-00:01:00) to indicate no override.  When used as override, allowed values are zero or positive.  This is an alternative to using a TimeAdjust row.</summary>
+		///<summary>This is a manual override for OTimeAuto.  Typically -1 hour (-01:00:00) to indicate no override.  When used as override, allowed values are zero or positive.  This is an alternative to using a TimeAdjust row.</summary>
 		public TimeSpan OTimeHours;
 		///<summary>Automatically calculated OT.  Will be zero if none.</summary>
 		public TimeSpan OTimeAuto;
@@ -36,6 +36,10 @@ namespace OpenDentBusiness{
 		public TimeSpan AdjustAuto;
 		///<summary>True if AdjustAuto is overridden by Adjust.</summary>
 		public bool AdjustIsOverridden;
+
+		public ClockEvent(){
+			OTimeHours=TimeSpan.FromHours(-1);
+		}
 
 		///<summary></summary>
 		public ClockEvent Copy() {

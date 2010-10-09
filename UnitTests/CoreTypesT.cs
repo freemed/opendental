@@ -73,6 +73,19 @@ namespace UnitTests {
 			command="DELETE FROM tempcore";
 			DataCore.NonQ(command);
 			retVal+="TimeSpan, negative: Passed.\r\n";
+			//timespan, over 24 hours-----------------------------------------------------------------------------
+			timespan=new TimeSpan(432,5,17);
+			command="INSERT INTO tempcore (_timespan) VALUES ("+POut.TimeSpan(timespan)+")";
+			DataCore.NonQ(command);
+			command="SELECT _timespan FROM tempcore";
+			table=DataCore.GetTable(command);
+			timespan2=PIn.TimeSpan(table.Rows[0]["_timespan"].ToString());
+			if(timespan!=timespan2) {
+				throw new Exception();
+			}
+			command="DELETE FROM tempcore";
+			DataCore.NonQ(command);
+			retVal+="TimeSpan, large: Passed.\r\n";
 			//date----------------------------------------------------------------------------------------------
 			DateTime date1;
 			DateTime date2;

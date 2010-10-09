@@ -27,6 +27,9 @@ namespace OpenDental{
 		private OpenDental.UI.Button butDelete;
 		private TextBox textHours;
 		private Label label3;
+		private RadioButton radioAuto;
+		private RadioButton radioManual;
+		private Label label5;
 		private TimeAdjust TimeAdjustCur;
 
 		///<summary></summary>
@@ -73,11 +76,14 @@ namespace OpenDental{
 			this.butDelete = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.radioAuto = new System.Windows.Forms.RadioButton();
+			this.radioManual = new System.Windows.Forms.RadioButton();
+			this.label5 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(11,22);
+			this.label1.Location = new System.Drawing.Point(11,49);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(126,20);
 			this.label1.TabIndex = 11;
@@ -86,7 +92,7 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(11,49);
+			this.label2.Location = new System.Drawing.Point(11,76);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(126,20);
 			this.label2.TabIndex = 13;
@@ -95,14 +101,14 @@ namespace OpenDental{
 			// 
 			// textTimeEntry
 			// 
-			this.textTimeEntry.Location = new System.Drawing.Point(137,23);
+			this.textTimeEntry.Location = new System.Drawing.Point(137,50);
 			this.textTimeEntry.Name = "textTimeEntry";
 			this.textTimeEntry.Size = new System.Drawing.Size(155,20);
 			this.textTimeEntry.TabIndex = 17;
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(10,96);
+			this.label4.Location = new System.Drawing.Point(10,123);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(126,20);
 			this.label4.TabIndex = 18;
@@ -111,7 +117,7 @@ namespace OpenDental{
 			// 
 			// textNote
 			// 
-			this.textNote.Location = new System.Drawing.Point(137,97);
+			this.textNote.Location = new System.Drawing.Point(137,124);
 			this.textNote.Multiline = true;
 			this.textNote.Name = "textNote";
 			this.textNote.Size = new System.Drawing.Size(377,96);
@@ -120,7 +126,7 @@ namespace OpenDental{
 			// checkOvertime
 			// 
 			this.checkOvertime.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkOvertime.Location = new System.Drawing.Point(12,76);
+			this.checkOvertime.Location = new System.Drawing.Point(12,103);
 			this.checkOvertime.Name = "checkOvertime";
 			this.checkOvertime.Size = new System.Drawing.Size(139,17);
 			this.checkOvertime.TabIndex = 22;
@@ -130,14 +136,14 @@ namespace OpenDental{
 			// 
 			// textHours
 			// 
-			this.textHours.Location = new System.Drawing.Point(137,50);
+			this.textHours.Location = new System.Drawing.Point(137,77);
 			this.textHours.Name = "textHours";
 			this.textHours.Size = new System.Drawing.Size(68,20);
 			this.textHours.TabIndex = 23;
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(152,74);
+			this.label3.Location = new System.Drawing.Point(152,101);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(300,18);
 			this.label3.TabIndex = 24;
@@ -191,10 +197,46 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// radioAuto
+			// 
+			this.radioAuto.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.radioAuto.Location = new System.Drawing.Point(12,10);
+			this.radioAuto.Name = "radioAuto";
+			this.radioAuto.Size = new System.Drawing.Size(139,18);
+			this.radioAuto.TabIndex = 25;
+			this.radioAuto.TabStop = true;
+			this.radioAuto.Text = "Automatically entered";
+			this.radioAuto.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.radioAuto.UseVisualStyleBackColor = true;
+			// 
+			// radioManual
+			// 
+			this.radioManual.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.radioManual.Location = new System.Drawing.Point(12,27);
+			this.radioManual.Name = "radioManual";
+			this.radioManual.Size = new System.Drawing.Size(139,18);
+			this.radioManual.TabIndex = 26;
+			this.radioManual.TabStop = true;
+			this.radioManual.Text = "Manually entered";
+			this.radioManual.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.radioManual.UseVisualStyleBackColor = true;
+			// 
+			// label5
+			// 
+			this.label5.Location = new System.Drawing.Point(152,27);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(170,18);
+			this.label5.TabIndex = 27;
+			this.label5.Text = "(protected from auto deletion)";
+			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
 			// FormTimeAdjustEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(540,313);
+			this.Controls.Add(this.label5);
+			this.Controls.Add(this.radioManual);
+			this.Controls.Add(this.radioAuto);
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.textHours);
 			this.Controls.Add(this.checkOvertime);
@@ -221,6 +263,12 @@ namespace OpenDental{
 		#endregion
 
 		private void FormTimeAdjustEdit_Load(object sender, System.EventArgs e) {
+			if(TimeAdjustCur.IsAuto) {
+				radioAuto.Checked=true;
+			}
+			else {
+				radioManual.Checked=true;
+			}
 			textTimeEntry.Text=TimeAdjustCur.TimeEntry.ToString();
 			if(TimeAdjustCur.OTimeHours.TotalHours==0){
 				textHours.Text=ClockEvents.Format(TimeAdjustCur.RegHours);
@@ -262,6 +310,7 @@ namespace OpenDental{
 				return;
 			}
 			//end of validation
+			TimeAdjustCur.IsAuto=radioAuto.Checked;
 			TimeAdjustCur.TimeEntry=DateTime.Parse(textTimeEntry.Text);
 			TimeSpan hoursEntered;
 			if(textHours.Text.Contains(":")){

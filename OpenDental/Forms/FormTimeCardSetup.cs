@@ -22,6 +22,7 @@ namespace OpenDental{
 		private ODGrid gridRules;
 		private GroupBox groupBox1;
 		private OpenDental.UI.Button butAddRule;
+		private CheckBox checkAdjOverBreaks;
 		private bool changed;
 
 		///<summary></summary>
@@ -64,6 +65,7 @@ namespace OpenDental{
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butAdd = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
+			this.checkAdjOverBreaks = new System.Windows.Forms.CheckBox();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -80,10 +82,11 @@ namespace OpenDental{
 			// groupBox1
 			// 
 			this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.groupBox1.Controls.Add(this.checkAdjOverBreaks);
 			this.groupBox1.Controls.Add(this.checkUseDecimal);
-			this.groupBox1.Location = new System.Drawing.Point(19,536);
+			this.groupBox1.Location = new System.Drawing.Point(19,545);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(391,55);
+			this.groupBox1.Size = new System.Drawing.Size(391,74);
 			this.groupBox1.TabIndex = 14;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Options";
@@ -98,7 +101,7 @@ namespace OpenDental{
 			this.butAddRule.CornerRadius = 4F;
 			this.butAddRule.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAddRule.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAddRule.Location = new System.Drawing.Point(305,499);
+			this.butAddRule.Location = new System.Drawing.Point(305,494);
 			this.butAddRule.Name = "butAddRule";
 			this.butAddRule.Size = new System.Drawing.Size(80,24);
 			this.butAddRule.TabIndex = 15;
@@ -113,7 +116,7 @@ namespace OpenDental{
 			this.gridRules.Location = new System.Drawing.Point(305,12);
 			this.gridRules.Name = "gridRules";
 			this.gridRules.ScrollValue = 0;
-			this.gridRules.Size = new System.Drawing.Size(394,481);
+			this.gridRules.Size = new System.Drawing.Size(394,478);
 			this.gridRules.TabIndex = 13;
 			this.gridRules.Title = "Rules";
 			this.gridRules.TranslationName = "FormTimeCardSetup";
@@ -127,7 +130,7 @@ namespace OpenDental{
 			this.gridMain.Location = new System.Drawing.Point(19,12);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(272,481);
+			this.gridMain.Size = new System.Drawing.Size(272,478);
 			this.gridMain.TabIndex = 11;
 			this.gridMain.Title = "Pay Periods";
 			this.gridMain.TranslationName = "TablePayPeriods";
@@ -143,7 +146,7 @@ namespace OpenDental{
 			this.butAdd.CornerRadius = 4F;
 			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(19,499);
+			this.butAdd.Location = new System.Drawing.Point(19,494);
 			this.butAdd.Name = "butAdd";
 			this.butAdd.Size = new System.Drawing.Size(80,24);
 			this.butAdd.TabIndex = 10;
@@ -158,17 +161,27 @@ namespace OpenDental{
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(628,567);
+			this.butClose.Location = new System.Drawing.Point(628,595);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75,24);
 			this.butClose.TabIndex = 0;
 			this.butClose.Text = "&Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
+			// checkAdjOverBreaks
+			// 
+			this.checkAdjOverBreaks.Location = new System.Drawing.Point(12,43);
+			this.checkAdjOverBreaks.Name = "checkAdjOverBreaks";
+			this.checkAdjOverBreaks.Size = new System.Drawing.Size(354,18);
+			this.checkAdjOverBreaks.TabIndex = 13;
+			this.checkAdjOverBreaks.Text = "Calc Daily button makes adjustments if breaks over 30 minutes.";
+			this.checkAdjOverBreaks.UseVisualStyleBackColor = true;
+			this.checkAdjOverBreaks.Click += new System.EventHandler(this.checkAdjOverBreaks_Click);
+			// 
 			// FormTimeCardSetup
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(727,608);
+			this.ClientSize = new System.Drawing.Size(727,636);
 			this.Controls.Add(this.butAddRule);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.gridRules);
@@ -192,6 +205,7 @@ namespace OpenDental{
 
 		private void FormPayPeriods_Load(object sender, System.EventArgs e) {
 			checkUseDecimal.Checked=PrefC.GetBool(PrefName.TimeCardsUseDecimalInsteadOfColon);
+			checkAdjOverBreaks.Checked=PrefC.GetBool(PrefName.TimeCardsMakesAdjustmentsForOverBreaks);
 			Employees.RefreshCache();
 			FillGrid();
 			FillRules();
@@ -285,6 +299,12 @@ namespace OpenDental{
 			}
 		}
 
+		private void checkAdjOverBreaks_Click(object sender,EventArgs e) {
+			if(Prefs.UpdateBool(PrefName.TimeCardsMakesAdjustmentsForOverBreaks,checkAdjOverBreaks.Checked)){
+				changed=true;
+			}
+		}
+
 		private void butAddRule_Click(object sender,EventArgs e) {
 			TimeCardRule rule=new TimeCardRule();
 			rule.IsNew=true;
@@ -312,6 +332,8 @@ namespace OpenDental{
 				DataValid.SetInvalid(InvalidType.Employees,InvalidType.Prefs,InvalidType.TimeCardRules);
 			}
 		}
+
+		
 
 	
 

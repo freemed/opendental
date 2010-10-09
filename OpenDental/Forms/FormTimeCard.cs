@@ -502,6 +502,7 @@ namespace OpenDental{
 			labelOvertime.Visible=true;
 			butCompute.Visible=true;
 			butAdj.Visible=true;
+			butDaily.Visible=true;
 			FillMain(true);
 		}
 
@@ -511,6 +512,7 @@ namespace OpenDental{
 			labelOvertime.Visible=false;
 			butCompute.Visible=false;
 			butAdj.Visible=false;
+			butDaily.Visible=false;
 			FillMain(true);
 		}
 
@@ -528,7 +530,7 @@ namespace OpenDental{
 		private void FillMain(bool fromDB){
 			if(fromDB){
 				ClockEventList=ClockEvents.Refresh(EmployeeCur.EmployeeNum,PIn.Date(textDateStart.Text),
-					PIn.Date(textDateStop.Text),false,IsBreaks);
+					PIn.Date(textDateStop.Text),IsBreaks);
 				if(IsBreaks){
 					TimeAdjustList=new List<TimeAdjust>();
 				}
@@ -871,9 +873,13 @@ namespace OpenDental{
 			}
 			//first, delete all existing overtime entries
 			for(int i=0;i<TimeAdjustList.Count;i++) {
-				if(TimeAdjustList[i].OTimeHours.TotalHours!=0) {
-					TimeAdjusts.Delete(TimeAdjustList[i]);
+				if(TimeAdjustList[i].OTimeHours==TimeSpan.Zero) {
+					continue;
 				}
+				if(!TimeAdjustList[i].IsAuto) {
+					continue;
+				}
+				TimeAdjusts.Delete(TimeAdjustList[i]);
 			}
 			//then, fill grid
 			FillMain(true);
@@ -894,6 +900,7 @@ namespace OpenDental{
 				}
 				//found a weekly total over 40 hours
 				TimeAdjust adjust=new TimeAdjust();
+				adjust.IsAuto=true;
 				adjust.EmployeeNum=EmployeeCur.EmployeeNum;
 				adjust.TimeEntry=GetDateForRow(i).AddHours(20);//puts it at 8pm on the same day.
 				adjust.OTimeHours=WeeklyTotals[i]-TimeSpan.FromHours(40);
@@ -904,10 +911,157 @@ namespace OpenDental{
 		}
 
 		private void butDaily_Click(object sender,EventArgs e) {
+			//not even visible if viewing breaks.
 			if(!Security.IsAuthorized(Permissions.TimecardsEditAll)) {
 				return;
 			}
-
+			Cursor=Cursors.WaitCursor;
+			DateTime previousDate;
+			//Over breaks-------------------------------------------------------------------------------------------------
+			if(PrefC.GetBool(PrefName.TimeCardsMakesAdjustmentsForOverBreaks)){
+				//set adj auto to zero for all.
+				for(int i=0;i<ClockEventList.Count;i++){
+					ClockEventList[i].AdjustAuto=TimeSpan.Zero;
+					ClockEvents.Update(ClockEventList[i]);
+				}
+				List<ClockEvent> breakList=ClockEvents.Refresh(EmployeeCur.EmployeeNum,PIn.Date(textDateStart.Text),PIn.Date(textDateStop.Text),true);
+				TimeSpan totalToday=TimeSpan.Zero;
+				TimeSpan totalOne=TimeSpan.Zero;
+				previousDate=DateTime.MinValue;
+				for(int b=0;b<breakList.Count;b++){
+					if(breakList[b].TimeDisplayed2.Year<1880){
+						Cursor=Cursors.Default;
+						MsgBox.Show(this,"Error. Employee break malformed.");
+						FillMain(true);//in case some changes already made.
+						return;
+					}
+					if(breakList[b].TimeDisplayed1.Date != breakList[b].TimeDisplayed2.Date){
+						Cursor=Cursors.Default;
+						MsgBox.Show(this,"Error. One break spans multiple dates.");
+						FillMain(true);//in case some changes already made.
+						return;
+					}
+					//calc time for the one break
+					totalOne=breakList[b].TimeDisplayed2-breakList[b].TimeDisplayed1;
+					//calc daily total
+					if(previousDate.Date != breakList[b].TimeDisplayed1.Date) {//if date changed, this is the first pair of the day
+						totalToday=TimeSpan.Zero;//new day
+						previousDate=breakList[b].TimeDisplayed1.Date;//for the next loop
+					}
+					totalToday+=totalOne;
+					//decide if breaks for the day went over 30 min.
+					if(totalToday > TimeSpan.FromMinutes(31)){//31 to prevent silly fractions less than 1.
+						//loop through all ClockEvents in this grid to find one to adjust.
+						//Go backwards to find the last entry for a given date.
+						for(int c=ClockEventList.Count-1;c>=0;c--){
+							if(ClockEventList[c].TimeDisplayed1.Date==breakList[b].TimeDisplayed1.Date){
+								ClockEventList[c].AdjustAuto-=(totalToday-TimeSpan.FromMinutes(30));
+								ClockEvents.Update(ClockEventList[c]);
+								totalToday=TimeSpan.FromMinutes(30);//reset to 30.  Therefore, any additional breaks will be wholly adjustments.
+								break;
+							}
+							if(c==0){//we never found a match
+								Cursor=Cursors.Default;
+								MessageBox.Show("Error. Over breaks, but could not adjust because not regular time entered for date:"
+									+breakList[b].TimeDisplayed1.Date.ToShortDateString());
+								FillMain(true);//in case some changes already made.
+								return;
+							}
+						}
+					}
+				}
+				FillMain(true);
+			}
+			//OT-------------------------------------------------------------------------------------------------------------
+			TimeSpan afterTime=TimeSpan.Zero;
+			TimeSpan overHours=TimeSpan.Zero;
+			//loop through timecardrules to find one rule of each kind.
+			for(int i=0;i<TimeCardRules.Listt.Count;i++){
+				if(TimeCardRules.Listt[i].EmployeeNum!=0 && TimeCardRules.Listt[i].EmployeeNum!=EmployeeCur.EmployeeNum){
+					continue;
+				}
+				if(TimeCardRules.Listt[i].AfterTimeOfDay > TimeSpan.Zero){
+					if(afterTime > TimeSpan.Zero){//already found a match, and this is a second match
+						Cursor=Cursors.Default;
+						MsgBox.Show(this,"Error.  Multiple matches of AfterTimeOfDay found for this employee.  Only one allowed.");
+						return;
+					}
+					afterTime=TimeCardRules.Listt[i].AfterTimeOfDay;
+				}
+				else if(TimeCardRules.Listt[i].OverHoursPerDay > TimeSpan.Zero){
+					if(overHours > TimeSpan.Zero){//already found a match, and this is a second match
+						Cursor=Cursors.Default;
+						MsgBox.Show(this,"Error.  Multiple matches of OverHoursPerDay found for this employee.  Only one allowed.");
+						return;
+					}
+					overHours=TimeCardRules.Listt[i].OverHoursPerDay;
+				}
+				if(afterTime > TimeSpan.Zero && overHours > TimeSpan.Zero){
+					Cursor=Cursors.Default;
+					MsgBox.Show(this,"Error.  Both an OverHoursPerDay and an AfterTimeOfDay found for this employee.  Only one or the other is allowed.");
+					return;
+				}
+			}
+			//loop through all ClockEvents in this grid.
+			TimeSpan dailyTotal=TimeSpan.Zero;
+			TimeSpan pairTotal=TimeSpan.Zero;
+			previousDate=DateTime.MinValue;
+			for(int i=0;i<ClockEventList.Count;i++){
+				if(ClockEventList[i].TimeDisplayed2.Year<1880){
+					Cursor=Cursors.Default;
+					MsgBox.Show(this,"Error. Employee not clocked out.");
+					FillMain(true);//in case some changes already made.
+					return;
+				}
+				if(ClockEventList[i].TimeDisplayed1.Date != ClockEventList[i].TimeDisplayed2.Date){
+					Cursor=Cursors.Default;
+					MsgBox.Show(this,"Error. One clock pair spans multiple dates.");
+					FillMain(true);//in case some changes already made.
+					return;
+				}
+				pairTotal=ClockEventList[i].TimeDisplayed2-ClockEventList[i].TimeDisplayed1;
+				//add any adjustments, manual or overrides.
+				if(ClockEventList[i].AdjustIsOverridden){
+					pairTotal+=ClockEventList[i].Adjust;
+				}
+				else{
+					pairTotal+=ClockEventList[i].AdjustAuto;
+				}
+				//calc daily total
+				if(previousDate.Date != ClockEventList[i].TimeDisplayed1.Date){ //if date changed
+					dailyTotal=TimeSpan.Zero;//new day
+					previousDate=ClockEventList[i].TimeDisplayed1.Date;//for the next loop
+				}
+				dailyTotal+=pairTotal;
+				//handle OT
+				ClockEventList[i].OTimeAuto=TimeSpan.Zero;//set auto OT to zero.
+				if(ClockEventList[i].OTimeHours != TimeSpan.FromHours(-1)){//if OT is overridden
+					//don't try to calc a time.
+					ClockEvents.Update(ClockEventList[i]);//just to possibly clear autoOT, even though it doesn't count.
+					//but still need to subtract OT from dailyTotal
+					dailyTotal-=ClockEventList[i].OTimeHours;
+					continue;
+				}
+				if(afterTime != TimeSpan.Zero){
+					//test to see if this span is after specified time
+					if(ClockEventList[i].TimeDisplayed1.TimeOfDay > afterTime){//the start time is after time, so the whole pairTotal is OT
+						ClockEventList[i].OTimeAuto=pairTotal;
+					}
+					else if(ClockEventList[i].TimeDisplayed2.TimeOfDay > afterTime){//only the second time is after time
+						ClockEventList[i].OTimeAuto=ClockEventList[i].TimeDisplayed2.TimeOfDay-afterTime;//only a portion of the pairTotal is OT
+					}
+				}
+				else if(overHours != TimeSpan.Zero){
+					//test dailyTotal
+					if(dailyTotal > overHours){
+						ClockEventList[i].OTimeAuto=dailyTotal-overHours;
+						dailyTotal=overHours;//e.g. reset to 8.  Any further pairs on this date will be wholly OT
+					}
+				}
+				ClockEvents.Update(ClockEventList[i]);
+			}
+			FillMain(true);
+			Cursor=Cursors.Default;
 		}
 
 		private void butPrint_Click(object sender,EventArgs e) {

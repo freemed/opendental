@@ -2721,6 +2721,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				}
 				command="ALTER TABLE clockevent ADD OTimeHours time NOT NULL";
 				Db.NonQ(command);
+				command="UPDATE clockevent SET OTimeHours ='-01:00:00'";//default to -1 to indicate no override.
+				Db.NonQ(command);
 				command="ALTER TABLE clockevent ADD OTimeAuto time NOT NULL";
 				Db.NonQ(command);
 				command="ALTER TABLE clockevent ADD Adjust time NOT NULL";
@@ -2756,6 +2758,11 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					INDEX(AutomationNum)
 					) DEFAULT CHARSET=utf8";
 				Db.NonQ(command);
+				command="INSERT INTO preference(PrefName,ValueString) VALUES('TimeCardsMakesAdjustmentsForOverBreaks','0')";
+				Db.NonQ(command);
+				command="ALTER TABLE timeadjust ADD IsAuto tinyint NOT NULL";
+				Db.NonQ(command);
+
 
 
 
@@ -2777,10 +2784,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 		
 
-
 				
-
-				
-
 
 				

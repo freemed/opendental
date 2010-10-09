@@ -94,16 +94,17 @@ namespace OpenDentBusiness{
 		}
 
 		public static string TimeSpan(System.TimeSpan myTimeSpan,bool encapsulate) {
-			//In mysql, time can be + or -.  Not sure about Oracle.
+			//In mysql, time can be + or - and can be up to 800+ hours.  Not sure about Oracle.
 			string retval="00:00:00";
 			if(myTimeSpan!=System.TimeSpan.Zero) {
 				try {
-					DateTime dateT=new DateTime(1,1,1)+myTimeSpan.Duration();//abs val
 					retval="";
 					if(myTimeSpan < System.TimeSpan.Zero) {
 						retval+="-";
+						myTimeSpan=myTimeSpan.Duration();
 					}
-					retval+=dateT.ToString("HH:mm:ss",CultureInfo.InvariantCulture);
+					int hours=(myTimeSpan.Days*24)+myTimeSpan.Hours;
+					retval+=hours.ToString()+":"+myTimeSpan.Minutes.ToString().PadLeft(2,'0')+":"+myTimeSpan.Seconds.ToString().PadLeft(2,'0');
 				} 
 				catch {
 					//Do nothing. This will return the time zero.

@@ -20,6 +20,8 @@ namespace OpenDentBusiness{
 		public TimeSpan OTimeHours;
 		///<summary>.</summary>
 		public string Note;
+		///<summary>Set to true if this adjustment was automatically made by the system.  When the calc weekly ot tool is run, these types of adjustments are fair game for deletion.  Other adjustments are preserved.</summary>
+		public bool IsAuto;
 		
 		///<summary></summary>
 		public TimeAdjust Copy() {

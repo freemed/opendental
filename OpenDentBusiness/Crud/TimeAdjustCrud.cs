@@ -52,6 +52,7 @@ namespace OpenDentBusiness.Crud{
 				timeAdjust.RegHours     = PIn.TimeSpan(table.Rows[i]["RegHours"].ToString());
 				timeAdjust.OTimeHours   = PIn.TimeSpan(table.Rows[i]["OTimeHours"].ToString());
 				timeAdjust.Note         = PIn.String(table.Rows[i]["Note"].ToString());
+				timeAdjust.IsAuto       = PIn.Bool  (table.Rows[i]["IsAuto"].ToString());
 				retVal.Add(timeAdjust);
 			}
 			return retVal;
@@ -71,7 +72,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="TimeAdjustNum,";
 			}
-			command+="EmployeeNum,TimeEntry,RegHours,OTimeHours,Note) VALUES(";
+			command+="EmployeeNum,TimeEntry,RegHours,OTimeHours,Note,IsAuto) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(timeAdjust.TimeAdjustNum)+",";
 			}
@@ -80,7 +81,8 @@ namespace OpenDentBusiness.Crud{
 				+    POut.DateT (timeAdjust.TimeEntry)+","
 				+    POut.TimeSpan(timeAdjust.RegHours)+","
 				+    POut.TimeSpan(timeAdjust.OTimeHours)+","
-				+"'"+POut.String(timeAdjust.Note)+"')";
+				+"'"+POut.String(timeAdjust.Note)+"',"
+				+    POut.Bool  (timeAdjust.IsAuto)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -97,7 +99,8 @@ namespace OpenDentBusiness.Crud{
 				+"TimeEntry    =  "+POut.DateT (timeAdjust.TimeEntry)+", "
 				+"RegHours     =  "+POut.TimeSpan(timeAdjust.RegHours)+", "
 				+"OTimeHours   =  "+POut.TimeSpan(timeAdjust.OTimeHours)+", "
-				+"Note         = '"+POut.String(timeAdjust.Note)+"' "
+				+"Note         = '"+POut.String(timeAdjust.Note)+"', "
+				+"IsAuto       =  "+POut.Bool  (timeAdjust.IsAuto)+" "
 				+"WHERE TimeAdjustNum = "+POut.Long(timeAdjust.TimeAdjustNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
@@ -124,6 +127,10 @@ namespace OpenDentBusiness.Crud{
 			if(timeAdjust.Note != oldTimeAdjust.Note) {
 				if(command!=""){ command+=",";}
 				command+="Note = '"+POut.String(timeAdjust.Note)+"'";
+			}
+			if(timeAdjust.IsAuto != oldTimeAdjust.IsAuto) {
+				if(command!=""){ command+=",";}
+				command+="IsAuto = "+POut.Bool(timeAdjust.IsAuto)+"";
 			}
 			if(command==""){
 				return;

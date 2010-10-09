@@ -8,9 +8,9 @@ namespace OpenDentBusiness{
 	///<summary></summary>
 	public class ClockEvents {
 		///<summary></summary>
-		public static List<ClockEvent> Refresh(long empNum,DateTime fromDate,DateTime toDate,bool getAll,bool isBreaks){
+		public static List<ClockEvent> Refresh(long empNum,DateTime fromDate,DateTime toDate,bool isBreaks){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<ClockEvent>>(MethodBase.GetCurrentMethod(),empNum,fromDate,toDate,getAll,isBreaks);
+				return Meth.GetObject<List<ClockEvent>>(MethodBase.GetCurrentMethod(),empNum,fromDate,toDate,isBreaks);
 			}
 			string command=
 				"SELECT * FROM clockevent WHERE"
@@ -18,11 +18,11 @@ namespace OpenDentBusiness{
 				+" AND TimeDisplayed1 >= "+POut.Date(fromDate)
 				//adding a day takes it to midnight of the specified toDate
 				+" AND TimeDisplayed1 <= "+POut.Date(toDate.AddDays(1));
-			if(!getAll) {
-				if(isBreaks)
-					command+=" AND ClockStatus = '2'";
-				else
-					command+=" AND (ClockStatus = '0' OR ClockStatus = '1')";
+			if(isBreaks){
+				command+=" AND ClockStatus = '2'";
+			}
+			else{
+				command+=" AND (ClockStatus = '0' OR ClockStatus = '1')";
 			}
 			command+=" ORDER BY TimeDisplayed1";
 			return Crud.ClockEventCrud.SelectMany(command);
@@ -168,7 +168,7 @@ namespace OpenDentBusiness{
 		///<summary>Used in the timecard to track hours worked per week when the week started in a previous time period.  This gets all the hours of the first week before the date listed.  Also adds in any adjustments for that week.</summary>
 		public static TimeSpan GetWeekTotal(long empNum,DateTime date) {
 			//No need to check RemotingRole; no call to db.
-			List<ClockEvent> events=Refresh(empNum,date.AddDays(-6),date.AddDays(-1),false,false);
+			List<ClockEvent> events=Refresh(empNum,date.AddDays(-6),date.AddDays(-1),false);
 			//eg, if this is Thursday, then we are getting last Friday through this Wed.
 			TimeSpan retVal=new TimeSpan(0);
 			for(int i=0;i<events.Count;i++){
