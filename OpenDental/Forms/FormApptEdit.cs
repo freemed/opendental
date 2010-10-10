@@ -105,7 +105,6 @@ namespace OpenDental{
 		public bool CloseOD;
 		private ListBox listQuickAdd;
 		private Label labelQuickAdd;
-		private bool procColorShowDate;
 
 		///<summary></summary>
 		public FormApptEdit(long aptNum)
@@ -2198,29 +2197,23 @@ namespace OpenDental{
 				    //strLine+=table.Rows[j][13].ToString()+" ";//don't show range
 				    break;
 				}
-				procDescOne+=DS.Tables["Procedure"].Rows[gridProc.SelectedIndices[i]]["AbbrDesc"].ToString();//procCode
+				procDescOne+=DS.Tables["Procedure"].Rows[gridProc.SelectedIndices[i]]["AbbrDesc"].ToString();
 				AptCur.ProcDescript+=procDescOne;
-				string pColor=GetProcColor(procCode);
-				string prevDate="";
-				if(pColor!="" && procColorShowDate) {
-					DateTime maxDate=new DateTime();
-					maxDate=AptCur.AptDateTime;
-					if(maxDate.Year<1880) {
-						maxDate=DateTime.Today;
-					}
-					ProcedureCode pc=ProcedureCodes.GetProcCode(procCode);//used to get codenum
-					List<Procedure> procs=Procedures.GetProcsForPatByStatusBeforeDate(AptCur.PatNum,new ProcStat[] { ProcStat.C,ProcStat.EC,ProcStat.EO },maxDate,pc.CodeNum);
-					if(procs.Count>0) {
-						prevDate=" ("+procs[0].ProcDate.ToShortDateString()+")";
+				//Color and previous date are determined by ProcApptColor object
+				ProcApptColor pac=ProcApptColors.GetMatch(procCode);
+				System.Drawing.Color pColor=System.Drawing.Color.Black;
+				string prevDateString="";
+				if(pac!=null){
+					pColor=pac.ColorText;
+					if(pac.ShowPreviousDate) {
+						prevDateString=Procedures.GetRecentProcDateString(AptCur.PatNum,AptCur.AptDateTime,pac.CodeRange);
+						if(prevDateString!="") {
+							prevDateString=" ("+prevDateString+")";
+						}
 					}
 				}
-				AptCur.ProcsColored+="<span color=\""+pColor+"\">"+procDescOne+prevDate+"</span>";
-				procColorShowDate=false;
+				AptCur.ProcsColored+="<span color=\""+pColor.ToArgb().ToString()+"\">"+procDescOne+prevDateString+"</span>";
 			}
-			//int[] procNums=new int[gridProc.SelectedIndices.Length];
-			//for(int i=0;i<procNums.Length;i++){
-			//	procNums[i]=PIn.PInt(DS.Tables["Procedure"].Rows[gridProc.SelectedIndices[i]]["ProcNum"].ToString());
-			//}
 			bool isPlanned=AptCur.AptStatus==ApptStatus.Planned;
 			try {
 				Appointments.Update(AptCur,AptOld);
@@ -2256,8 +2249,9 @@ namespace OpenDental{
 			return true;
 		}
 
-		private string GetProcColor(string code) {
-			string defaultColor="";
+		/*
+		private System.Drawing.Color GetProcColor(string procCode) {
+			System.Drawing.Color defaultColor=System.Drawing.Color.Black;
 			string code1="";
 			string code2="";
 			List<ProcApptColor> colorList=ProcApptColors.Listt;
@@ -2272,11 +2266,11 @@ namespace OpenDental{
 					code1=codeSplit[0].Trim();
 					code2=codeSplit[1].Trim();
 				}
-				if(code==code1 || code==code2) {
+				if(procCode==code1 || procCode==code2) {
 					if(colorList[i].ShowPreviousDate) {
 						procColorShowDate=true;
 					}
-					return colorList[i].ColorText.ToArgb().ToString();
+					return colorList[i].ColorText;//.ToArgb().ToString();
 				}
 				else if(code.Length==code1.Length && code1.Length==code2.Length) {
 					char[] indexCode=code.ToCharArray();
@@ -2306,14 +2300,14 @@ namespace OpenDental{
 							if(colorList[i].ShowPreviousDate) {
 								procColorShowDate=true;
 							}
-							return colorList[i].ColorText.ToArgb().ToString();
+							return colorList[i].ColorText;//.ToArgb().ToString();
 						}
 					}
 					continue;
 				}
 			}
 			return defaultColor;
-		}
+		}*/
 
 		private void butPDF_Click(object sender,EventArgs e) {
 			//Send DFT to eCW containing a dummy procedure with this appointment in a .pdf file.				

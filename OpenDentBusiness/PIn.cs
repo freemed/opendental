@@ -29,7 +29,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static DateTime Date(string myString){
-			if(myString=="")
+			if(myString=="" || myString==null)
 				return DateTime.MinValue;
 			try{
 				return (DateTime.Parse(myString));

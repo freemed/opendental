@@ -223,26 +223,41 @@ namespace OpenDentBusiness {
 			return result;
 		}
 
-		///<summary>Get all procedures by statuses for the specified patient directly from the database</summary>
-		public static List<Procedure> GetProcsForPatByStatusBeforeDate(long patNum,ProcStat[] statuses,DateTime ceilDate,long codeNum) {
+		///<summary>Gets a string in M/yy format for the most recent completed procedure in the specified code range.  Gets directly from the database.</summary>
+		public static string GetRecentProcDateString(long patNum,DateTime aptDate,string procCodeRange) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<Procedure>>(MethodBase.GetCurrentMethod(),patNum,statuses,ceilDate,codeNum);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),patNum,aptDate,procCodeRange);
 			}
-			string procStatus="";
-			for(int i=0;i<statuses.Length;i++) {
-				if(i>0) {
-					procStatus+=" OR ";
-				}
-				procStatus+="ProcStatus="+POut.Int((int)statuses[i]);
+			if(aptDate.Year<1880) {
+				aptDate=DateTime.Today;
 			}
-			string command="SELECT * FROM procedurelog "
-				+"WHERE PatNum='"+POut.Long(patNum)+"'"
-				+"AND CodeNum='"+POut.Long(codeNum)+"'"
-				+"AND ProcDate<"+POut.Date(ceilDate)
-				+"AND ("+procStatus+")"
-				+"ORDER BY ProcDate DESC";
-			List<Procedure> result=Crud.ProcedureCrud.SelectMany(command);
-			return result;
+			string code1;
+			string code2;
+			if(procCodeRange.Contains("-")) {
+				string[] codeSplit=procCodeRange.Split('-');
+				code1=codeSplit[0].Trim();
+				code2=codeSplit[1].Trim();
+			}
+			else {
+				code1=procCodeRange.Trim();
+				code2=procCodeRange.Trim();
+			}
+			string command="SELECT ProcDate FROM procedurelog "
+				+"LEFT JOIN procedurecode ON procedurecode.CodeNum=procedurelog.CodeNum "
+				+"WHERE PatNum="+POut.Long(patNum)+" "
+				//+"AND CodeNum="+POut.Long(codeNum)+" "
+				+"AND ProcDate < "+POut.Date(aptDate)+" "
+				+"AND (ProcStatus ="+POut.Int((int)ProcStat.C)+" "
+				+"OR ProcStatus ="+POut.Int((int)ProcStat.EC)+" "
+				+"OR ProcStatus ="+POut.Int((int)ProcStat.EO)+") "
+				+"AND procedurecode.ProcCode >= '"+POut.String(code1)+"' "
+				+"AND procedurecode.ProcCode <= '"+POut.String(code2)+"' "
+				+"ORDER BY ProcDate DESC LIMIT 1";
+			DateTime date=PIn.Date(Db.GetScalar(command));
+			if(date.Year<1880) {
+				return "";
+			}
+			return date.ToString("M/yy");
 		}
 
 		///<summary>Gets a list (procsMultApts is a struct of type ProcDesc(aptNum, string[], and production) of all the procedures attached to the specified appointments.  Then, use GetProcsOneApt to pull procedures for one appointment from this list.  This process requires only one call to the database. "myAptNums" is the list of appointments to get procedures for.</summary>

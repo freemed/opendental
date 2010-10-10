@@ -88,7 +88,27 @@ namespace OpenDentBusiness{
 			return Crud.ProcApptColorCrud.SelectOne(procApptColorNum);
 		}*/
 
-
+		///<summary>Supply code such as D####.  Returns null if no match</summary>
+		public static ProcApptColor GetMatch(string procCode) {
+			string code1="";
+			string code2="";
+			for(int i=0;i<Listt.Count;i++) {//using public property to trigger refresh if needed.
+				if(Listt[i].CodeRange.Contains("-")) {
+					string[] codeSplit=Listt[i].CodeRange.Split('-');
+					code1=codeSplit[0].Trim();
+					code2=codeSplit[1].Trim();
+				}
+				else{
+					code1=Listt[i].CodeRange.Trim();
+					code2=Listt[i].CodeRange.Trim();
+				}
+				if(procCode.CompareTo(code1)<0 || procCode.CompareTo(code2)>0) {
+					continue;
+				}
+				return listt[i];
+			}
+			return null;
+		}
 
 
 
