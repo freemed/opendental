@@ -23,7 +23,7 @@ namespace WebForms {
 
 		protected void Page_Load(object sender,EventArgs e) {
 			try {
-				//DrawImage2(); //make a handler2?
+
 				if(Request["DentalOfficeID"]!=null) {
 					Int64.TryParse(Request["DentalOfficeID"].ToString().Trim(),out DentalOfficeID);
 				}
@@ -46,6 +46,8 @@ namespace WebForms {
 				int ImageXOffset=0;
 				int ImageYOffset=0;
 				int ImageZIndex=1;
+
+				int DrawingZIndex=3;
 
 				int ElementZIndex=2;
 
@@ -155,12 +157,19 @@ namespace WebForms {
 						lb.Text= FieldValue;
 						wc=lb;
 					}
-					if(FieldType==SheetFieldType.Image) {
+					if(FieldType==SheetFieldType.Image||FieldType==SheetFieldType.Rectangle||FieldType==SheetFieldType.Line) {
 						System.Web.UI.WebControls.Image img=new System.Web.UI.WebControls.Image();
 						long WebSheetFieldDefNum=sfdObj.ElementAt(j).WebSheetFieldDefNum;
 						img.ImageUrl=("~/Handler1.ashx?WebSheetFieldDefNum="+WebSheetFieldDefNum);
 						wc=img;
 					}
+					if(FieldType==SheetFieldType.SigBox) {
+						Label lb=new Label();
+						lb.Text= "Signature will be recorded later.";
+						lb.BorderStyle=BorderStyle.Solid;
+						wc=lb;
+					}
+
 					if(wc!=null) {
 						wc.ID=FieldName;
 						wc.Style["position"]="absolute";
@@ -177,6 +186,10 @@ namespace WebForms {
 							wc.Style["z-index"]=""+ImageZIndex;
 							
 						}
+						if(FieldType==SheetFieldType.Rectangle||FieldType==SheetFieldType.Line) {
+							wc.Style["z-index"]=""+DrawingZIndex;
+						}
+
 						if(FieldType==SheetFieldType.InputField) { //textboxes
 							wc.Style["font-family"]=fontname;
 							wc.Style["font-size"]=fontsize+"px";
@@ -217,68 +230,7 @@ namespace WebForms {
 
 		}
 
-		private void DrawImage1() {
-			Bitmap objBitmap;
-			Graphics objGraphics;
 
-			objBitmap  =  new Bitmap(400,440);
-			objGraphics  =  Graphics.FromImage(objBitmap);
-
-
-			objGraphics.Clear(Color.White);
-
-
-
-			Pen p=new Pen(Color.Yellow,0);
-			Rectangle rect=new Rectangle(10,10,280,280);
-			objGraphics.DrawEllipse(p,rect);
-
-			Brush b1=new SolidBrush(Color.Red);
-			Brush b2=new SolidBrush(Color.Green);
-			Brush b3=new SolidBrush(Color.Blue);
-			objGraphics.FillPie(b1,rect,0f,60f);
-			objGraphics.FillPie(b2,rect,60f,150f);
-			objGraphics.FillPie(b3,rect,210f,150f);
-
-			FontFamily fontfml = new FontFamily(GenericFontFamilies.Serif);
-			Font font = new Font(fontfml,16);
-			SolidBrush brush = new SolidBrush(Color.Blue);
-			objGraphics.DrawString("Drawing Graphics",font,brush,70,300);
-
-
-			objBitmap.Save(Response.OutputStream,ImageFormat.Gif);
-			objBitmap.Save(Server.MapPath("x.jpg"),ImageFormat.Jpeg);
-
-
-			objBitmap.Dispose();
-			objGraphics.Dispose();
-		}
-
-
-		private void DrawImage2() {
-
-			Response.Clear();
-			int height = 100;
-			int width = 200;
-			Random r = new Random();
-			int x = r.Next(75);
-
-			Bitmap bmp = new Bitmap(width,height,PixelFormat.Format24bppRgb);
-			Graphics g = Graphics.FromImage(bmp);
-
-			g.TextRenderingHint = TextRenderingHint.AntiAlias;
-			g.Clear(Color.Orange);
-			g.DrawRectangle(Pens.White,1,1,width-3,height-3);
-			g.DrawRectangle(Pens.Gray,2,2,width-3,height-3);
-			g.DrawRectangle(Pens.Black,0,0,width,height);
-			g.DrawString("The Code Project",new Font("Arial",12,FontStyle.Italic),
-			SystemBrushes.WindowText,new PointF(x,50));
-
-			bmp.Save(Response.OutputStream,ImageFormat.Jpeg);
-			g.Dispose();
-			bmp.Dispose();
-			Response.End();
-		}
 
 
 	}
