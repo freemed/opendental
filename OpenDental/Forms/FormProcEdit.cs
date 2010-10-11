@@ -211,6 +211,7 @@ namespace OpenDental{
 		private OrionProc OrionProcCur;
 		private OrionProc OrionProcOld;
 		private DateTime CancelledScheduleByDate;
+		public long OrionProvNum;
 
 		///<summary>Inserts are no longer done within this dialog, but must be done ahead of time from outside.  You must specify a procedure to edit, and only the changes that are made in this dialog get saved.  Only used when double click in Account, Chart, TP, and in ContrChart.AddProcedure().  The procedure may be deleted if new, and user hits Cancel.</summary>
 		public FormProcEdit(Procedure proc,Patient patCur,Family famCur){
@@ -2305,7 +2306,12 @@ namespace OpenDental{
 			}
 			checkHideGraphics.Checked=ProcCur.HideGraphics;
 			if(this.IsNew){
-				ProcCur.ProvNum=Providers.GetOrionProvNum(ProcCur.ProvNum);
+				if(OrionProvNum==null){
+					ProcCur.ProvNum=Providers.GetOrionProvNum(ProcCur.ProvNum);//Returns 0 if logged in as non provider.
+				}
+				else{
+					ProcCur.ProvNum=OrionProvNum;
+				}
 			}//ProvNum of 0 will be required to change before closing form.
 			comboProvNum.Items.Clear();
 			for(int i=0;i<ProviderC.List.Length;i++){

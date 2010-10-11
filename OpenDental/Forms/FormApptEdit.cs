@@ -1522,6 +1522,10 @@ namespace OpenDental{
 		}
 
 		private void butAdd_Click(object sender,EventArgs e) {
+			if(comboProvNum.SelectedIndex==-1){
+				MsgBox.Show(this,"Please select a dentist first.");
+				return;
+			}
 			FormProcCodes FormP=new FormProcCodes();
 			FormP.IsSelectionMode=true;
 			FormP.ShowDialog();
@@ -1595,6 +1599,9 @@ namespace OpenDental{
 			Procedures.ComputeEstimates(ProcCur,pat.PatNum,new List<ClaimProc>(),true,PlanList,patPlanList,benefitList,pat.Age);
 			FormProcEdit FormPE=new FormProcEdit(ProcCur,pat.Copy(),fam);
 			FormPE.IsNew=true;
+			if(Programs.UsingOrion){
+				FormPE.OrionProvNum=ProviderC.List[comboProvNum.SelectedIndex].ProvNum;
+			}
 			FormPE.ShowDialog();
 			if(FormPE.DialogResult==DialogResult.Cancel){
 				//any created claimprocs are automatically deleted from within procEdit window.
@@ -1835,7 +1842,7 @@ namespace OpenDental{
 		}
 
 		private void listQuickAdd_MouseDown(object sender,System.Windows.Forms.MouseEventArgs e) {
-			if(AptCur.ProvNum==0){
+			if(comboProvNum.SelectedIndex==-1){
 				MsgBox.Show(this,"Please select a dentist first.");
 				return;
 			}
