@@ -1,8 +1,10 @@
 using System;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
+using OpenDental.UI;
 using OpenDentBusiness;
 
 namespace OpenDental{
@@ -36,7 +38,7 @@ namespace OpenDental{
 		private OpenDental.UI.ODGrid gridMain;
 		private OpenDental.UI.Button butAdd;
 		private Automation AutoCur;
-
+		
 		///<summary></summary>
 		public FormAutomationEdit(Automation autoCur)
 		{
@@ -86,30 +88,13 @@ namespace OpenDental{
 			this.comboAction = new System.Windows.Forms.ComboBox();
 			this.comboCommType = new System.Windows.Forms.ComboBox();
 			this.comboSheetDef = new System.Windows.Forms.ComboBox();
+			this.butAdd = new OpenDental.UI.Button();
+			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butProcCode = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.gridMain = new OpenDental.UI.ODGrid();
-			this.butAdd = new OpenDental.UI.Button();
 			butDelete = new OpenDental.UI.Button();
 			this.SuspendLayout();
-			// 
-			// butDelete
-			// 
-			butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
-			butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			butDelete.Autosize = true;
-			butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			butDelete.CornerRadius = 4F;
-			butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
-			butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			butDelete.Location = new System.Drawing.Point(48,454);
-			butDelete.Name = "butDelete";
-			butDelete.Size = new System.Drawing.Size(75,24);
-			butDelete.TabIndex = 16;
-			butDelete.Text = "&Delete";
-			butDelete.Click += new System.EventHandler(this.butDelete_Click);
 			// 
 			// label1
 			// 
@@ -234,6 +219,34 @@ namespace OpenDental{
 			this.comboSheetDef.Size = new System.Drawing.Size(183,21);
 			this.comboSheetDef.TabIndex = 31;
 			// 
+			// butAdd
+			// 
+			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butAdd.Autosize = true;
+			this.butAdd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAdd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAdd.CornerRadius = 4F;
+			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
+			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butAdd.Location = new System.Drawing.Point(677,225);
+			this.butAdd.Name = "butAdd";
+			this.butAdd.Size = new System.Drawing.Size(65,24);
+			this.butAdd.TabIndex = 35;
+			this.butAdd.Text = "Add";
+			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
+			// 
+			// gridMain
+			// 
+			this.gridMain.HScrollVisible = false;
+			this.gridMain.Location = new System.Drawing.Point(161,103);
+			this.gridMain.Name = "gridMain";
+			this.gridMain.ScrollValue = 0;
+			this.gridMain.Size = new System.Drawing.Size(510,146);
+			this.gridMain.TabIndex = 34;
+			this.gridMain.Title = "Conditions";
+			this.gridMain.TranslationName = null;
+			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			// 
 			// butProcCode
 			// 
 			this.butProcCode.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -249,6 +262,23 @@ namespace OpenDental{
 			this.butProcCode.Text = "...";
 			this.butProcCode.Click += new System.EventHandler(this.butProcCode_Click);
 			// 
+			// butDelete
+			// 
+			butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
+			butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			butDelete.Autosize = true;
+			butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			butDelete.CornerRadius = 4F;
+			butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
+			butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			butDelete.Location = new System.Drawing.Point(48,454);
+			butDelete.Name = "butDelete";
+			butDelete.Size = new System.Drawing.Size(75,24);
+			butDelete.TabIndex = 16;
+			butDelete.Text = "&Delete";
+			butDelete.Click += new System.EventHandler(this.butDelete_Click);
+			// 
 			// butOK
 			// 
 			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -257,7 +287,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(536,422);
+			this.butOK.Location = new System.Drawing.Point(677,422);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 4;
@@ -272,43 +302,17 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(536,454);
+			this.butCancel.Location = new System.Drawing.Point(677,454);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 5;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// gridMain
-			// 
-			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(161,103);
-			this.gridMain.Name = "gridMain";
-			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(341,146);
-			this.gridMain.TabIndex = 34;
-			this.gridMain.Title = "Conditions";
-			this.gridMain.TranslationName = null;
-			// 
-			// butAdd
-			// 
-			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butAdd.Autosize = true;
-			this.butAdd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAdd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAdd.CornerRadius = 4F;
-			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
-			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(508,225);
-			this.butAdd.Name = "butAdd";
-			this.butAdd.Size = new System.Drawing.Size(65,24);
-			this.butAdd.TabIndex = 35;
-			this.butAdd.Text = "Add";
-			// 
 			// FormAutomationEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(637,498);
+			this.ClientSize = new System.Drawing.Size(778,498);
 			this.Controls.Add(this.butAdd);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.butProcCode);
@@ -367,6 +371,30 @@ namespace OpenDental{
 				}
 			}
 			textMessage.Text=AutoCur.MessageContent;
+			FillGrid();
+		}
+
+		private void FillGrid() {
+			AutomationConditions.RefreshCache();
+			List<AutomationCondition> autoList=AutomationConditions.GetListByAutomationNum(AutoCur.AutomationNum);
+			gridMain.BeginUpdate();
+			gridMain.Columns.Clear();
+			ODGridColumn col=new ODGridColumn(Lan.g("AutomationCondition","Field"),180);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("AutomationCondition","Comparison"),75);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("AutomationCondition","Text"),100);
+			gridMain.Columns.Add(col);
+			gridMain.Rows.Clear();
+			ODGridRow row;
+			for(int i=0;i<autoList.Count;i++) {
+				row=new ODGridRow();
+				row.Cells.Add(AutomationConditions.Listt[i].CompareField.ToString());
+				row.Cells.Add(AutomationConditions.Listt[i].Comparison.ToString());
+				row.Cells.Add(AutomationConditions.Listt[i].CompareString);
+				gridMain.Rows.Add(row);
+			}
+			gridMain.EndUpdate();
 		}
 
 		private void comboTrigger_SelectedIndexChanged(object sender,EventArgs e) {
@@ -401,6 +429,13 @@ namespace OpenDental{
 			}
 		}
 
+		private void gridMain_CellDoubleClick(object sender,OpenDental.UI.ODGridClickEventArgs e) {
+			FormAutomationConditionEdit FormACE=new FormAutomationConditionEdit();
+			FormACE.ConditionCur=AutomationConditions.Listt[e.Row];
+			FormACE.ShowDialog();
+			FillGrid();
+		}
+
 		private void butProcCode_Click(object sender,EventArgs e) {
 			FormProcCodes formp=new FormProcCodes();
 			formp.IsSelectionMode=true;
@@ -412,6 +447,18 @@ namespace OpenDental{
 				textProcCodes.Text+=",";
 			}
 			textProcCodes.Text+=ProcedureCodes.GetStringProcCode(formp.SelectedCodeNum);
+		}
+
+		private void butAdd_Click(object sender,EventArgs e) {
+			FormAutomationConditionEdit FormACE=new FormAutomationConditionEdit();
+			FormACE.IsNew=true;
+			FormACE.ConditionCur=new AutomationCondition();
+			FormACE.ConditionCur.AutomationNum=AutoCur.AutomationNum;
+			FormACE.ShowDialog();
+			if(FormACE.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			FillGrid();
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
@@ -519,6 +566,7 @@ namespace OpenDental{
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
 
 		
 

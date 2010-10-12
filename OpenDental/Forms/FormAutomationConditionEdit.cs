@@ -5,9 +5,13 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using OpenDentBusiness;
 
 namespace OpenDental {
 	public partial class FormAutomationConditionEdit:Form {
+		public bool IsNew;
+		public AutomationCondition ConditionCur;
+
 		public FormAutomationConditionEdit() {
 			InitializeComponent();
 			Lan.F(this);
@@ -15,16 +19,59 @@ namespace OpenDental {
 		}
 
 		private void FormAutomationConditionEdit_Load(object sender,EventArgs e) {
+			for(int i=0;i<Enum.GetNames(typeof(AutoCondField)).Length;i++) {
+				listCompareField.Items.Add(Enum.GetNames(typeof(AutoCondField))[i]);
+				listCompareField.SelectedIndex=0;
+			}
+			for(int i=0;i<Enum.GetNames(typeof(AutoCondComparison)).Length;i++) {
+				listComparison.Items.Add(Enum.GetNames(typeof(AutoCondComparison))[i]);
+				listComparison.SelectedIndex=0;
+			}
+			if(!IsNew) {
+				textCompareString.Text=ConditionCur.CompareString;
+				listCompareField.SelectedIndex=(int)ConditionCur.CompareField;
+				listComparison.SelectedIndex=(int)ConditionCur.Comparison;
+			}
+		}
 
+		private void butDelete_Click(object sender,EventArgs e) {
+			if(IsNew) {
+				DialogResult=DialogResult.Cancel;
+				return;
+			}
+			if(!MsgBox.Show(this,true,"Delete this condition?")) {
+				return;
+			}
+			try {
+				AutomationConditions.Delete(ConditionCur.AutomationConditionNum);
+				DialogResult=DialogResult.OK;
+			}
+			catch(Exception ex) {
+				MessageBox.Show(ex.Message);
+			}
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
+			if(textCompareString.Text.Trim()=="") {
+				MsgBox.Show(this,"Text not allowed to be blank.");
+				return;
+			}
+			ConditionCur.CompareString=textCompareString.Text;
+			ConditionCur.CompareField=(AutoCondField)listCompareField.SelectedIndex;
+			ConditionCur.Comparison=(AutoCondComparison)listComparison.SelectedIndex;
+			if(IsNew) {
+				AutomationConditions.Insert(ConditionCur);
+			}
+			else {
+				AutomationConditions.Update(ConditionCur);
+			}
 			DialogResult=DialogResult.OK;
 		}
 
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
 
 	}
 }
