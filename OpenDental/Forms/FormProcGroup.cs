@@ -369,8 +369,9 @@ namespace OpenDental{
 			keyData+=GroupCur.DateEntryC.ToShortDateString();
 			keyData+=GroupCur.UserNum.ToString();//Security.CurUser.UserName;
 			keyData+=GroupCur.Note;
+			GroupItemList=ProcGroupItems.Refresh(GroupCur.ProcNum);//Orders the list to ensure same key in all cases.
 			for(int i=0;i<GroupItemList.Count;i++){
-				keyData+=GroupItemList[i].ProcGroupItemNum.ToString();//GroupItemList is oredered by ProcNum as specified in ProcGroupItems.cs
+				keyData+=GroupItemList[i].ProcGroupItemNum.ToString();
 			}
 			return keyData;
 		}
