@@ -437,14 +437,12 @@ namespace OpenDental{
 			saveDlg.InitialDirectory=PrefC.GetString(PrefName.ExportPath);
 			saveDlg.FileName=filename;
 			if(saveDlg.ShowDialog()!=DialogResult.OK) {
-				saveDlg.Dispose();
 				return;
 			}
 			XmlSerializer serializer=new XmlSerializer(typeof(SheetDef));
-			TextWriter writer=new StreamWriter(saveDlg.FileName);
-			saveDlg.Dispose();
-			serializer.Serialize(writer,sheetdef);
-			writer.Dispose();
+			using(TextWriter writer=new StreamWriter(saveDlg.FileName)) {
+				serializer.Serialize(writer,sheetdef);
+			}
 			MsgBox.Show(this,"Exported");
 		}
 		
@@ -472,12 +470,10 @@ namespace OpenDental{
 			OpenFileDialog openDlg=new OpenFileDialog();
 			openDlg.InitialDirectory=PrefC.GetString(PrefName.ExportPath);
 			if(openDlg.ShowDialog()!=DialogResult.OK) {
-				openDlg.Dispose();
 				return;
 			}
 			try {
 				ImportCustomSheetDef(openDlg.FileName);
-				openDlg.Dispose();
 			}
 			catch (ApplicationException ex){
 				MessageBox.Show(ex.Message);
@@ -524,14 +520,12 @@ namespace OpenDental{
 			saveDlg.InitialDirectory=PrefC.GetString(PrefName.ExportPath);
 			saveDlg.FileName=filename;
 			if(saveDlg.ShowDialog()!=DialogResult.OK) {
-				saveDlg.Dispose();
 				return;
 			}
 			XmlSerializer serializer=new XmlSerializer(typeof(SheetDef));
-			TextWriter writer=new StreamWriter(saveDlg.FileName);
-			saveDlg.Dispose();
-			serializer.Serialize(writer,sheetdef);
-			writer.Dispose();
+			using(TextWriter writer=new StreamWriter(saveDlg.FileName)) {
+				serializer.Serialize(writer,sheetdef);
+			}
 			MsgBox.Show(this,"Exported");
 		}
 

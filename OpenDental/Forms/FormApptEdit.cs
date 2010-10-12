@@ -2256,66 +2256,6 @@ namespace OpenDental{
 			return true;
 		}
 
-		/*
-		private System.Drawing.Color GetProcColor(string procCode) {
-			System.Drawing.Color defaultColor=System.Drawing.Color.Black;
-			string code1="";
-			string code2="";
-			List<ProcApptColor> colorList=ProcApptColors.Listt;
-			for(int i=0;i<colorList.Count;i++) {
-				int hyphen=colorList[i].CodeRange.IndexOf("-");
-				if(hyphen==-1) {
-					code1=colorList[i].CodeRange.Trim();
-					code2=colorList[i].CodeRange.Trim();
-				}
-				else {
-					string[] codeSplit=colorList[i].CodeRange.Split(new char[] { '-' });
-					code1=codeSplit[0].Trim();
-					code2=codeSplit[1].Trim();
-				}
-				if(procCode==code1 || procCode==code2) {
-					if(colorList[i].ShowPreviousDate) {
-						procColorShowDate=true;
-					}
-					return colorList[i].ColorText;//.ToArgb().ToString();
-				}
-				else if(code.Length==code1.Length && code1.Length==code2.Length) {
-					char[] indexCode=code.ToCharArray();
-					char[] indexCode1=code1.ToCharArray();
-					char[] indexCode2=code2.ToCharArray();
-					string c0="0",c1="0",c2="0";
-					int num0=0,num1=0,num2=0;
-					for(int p=0;p<indexCode.Length;p++) {
-						if((Char.IsDigit(indexCode[p])) && (Char.IsDigit(indexCode1[p])) && (Char.IsDigit(indexCode2[p]))) {
-							c0+=(indexCode[p].ToString());
-							c1+=(indexCode1[p].ToString());
-							c2+=(indexCode2[p].ToString());
-							continue;
-						}
-						else if(indexCode[p]==indexCode1[p] && indexCode[p]==indexCode2[p]) {
-							continue;
-						}
-						else {
-							break;
-						}
-					}
-					num0=Convert.ToInt32(c0);
-					num1=Convert.ToInt32(c1);
-					num2=Convert.ToInt32(c2);
-					if(num0!=0) {
-						if(num1<=num0 && num0<=num2 || num2<=num0 && num0<=num1) {
-							if(colorList[i].ShowPreviousDate) {
-								procColorShowDate=true;
-							}
-							return colorList[i].ColorText;//.ToArgb().ToString();
-						}
-					}
-					continue;
-				}
-			}
-			return defaultColor;
-		}*/
-
 		private void butPDF_Click(object sender,EventArgs e) {
 			//Send DFT to eCW containing a dummy procedure with this appointment in a .pdf file.				
 			string pdfDataStr=GenerateProceduresIntoPdf();
