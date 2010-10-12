@@ -6,6 +6,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Collections;
 using OpenDentBusiness;
 
 
@@ -19,6 +20,7 @@ namespace WebForms {
 
 		private long DentalOfficeID=0;
 		private long WebSheetDefNum=0;
+		private Hashtable FormValuesHashTable=new Hashtable();
 		
 
 		protected void Page_Load(object sender,EventArgs e) {
@@ -30,6 +32,7 @@ namespace WebForms {
 				if(Request["WebSheetDefNum"]!=null) {
 					Int64.TryParse(Request["WebSheetDefNum"].ToString().Trim(),out WebSheetDefNum);
 				}
+				Panel2.Visible=true;
 				GeneratePage(DentalOfficeID,WebSheetDefNum);
 			}
 			catch(Exception ex) {
@@ -47,9 +50,9 @@ namespace WebForms {
 				int ImageYOffset=0;
 				int ImageZIndex=1;
 
-				int DrawingZIndex=3;
+				int DrawingZIndex=2;
 
-				int ElementZIndex=2;
+				int ElementZIndex=3;
 
 				int SubmitButtonXoffset=-150;
 				int SubmitButtonYoffset=-50;
@@ -61,6 +64,8 @@ namespace WebForms {
 
 				int CheckBoxXOffset=-4;
 				int CheckBoxYOffset=-4;
+
+				int SignatureFontSize=20;
 				
 
 				float heightfactor =1.2f;
@@ -72,28 +77,18 @@ namespace WebForms {
 				if(browser.Browser == "IE") {
 					RadioButtonXOffset=RadioButtonXOffset+RadioButtonXOffsetIE;
 				}
-
-
-
 				ODWebServiceEntities db=new ODWebServiceEntities();
-
-			
 				int ColorBorder=db.webforms_preference.Where(pref => pref.DentalOfficeID==DentalOfficeID).First().ColorBorder;
 				bodytag.Attributes.Add("bgcolor",ColorTranslator.ToHtml(Color.FromArgb(ColorBorder)));
-
 				var SheetDefObj=db.webforms_sheetdef.Where(sd => sd.WebSheetDefNum==WebSheetDefNum && sd.webforms_preference.DentalOfficeID==DentalOfficeID).First();
 				int SheetDefWidth=SheetDefObj.Width;
 				int SheetDefHeight=SheetDefObj.Height;
-
-
-			
 				form1.Style["position"]="absolute";
 				form1.Style["top"]=FormXOffset+"px";
 				form1.Style["left"]=FormYOffset+"px";
 				form1.Style["width"]=SheetDefWidth+"px";
 				form1.Style["height"]=SheetDefHeight+"px";
 				form1.Style["background-color"]="white";
-
 				var sfdObj=(from sfd in db.webforms_sheetfielddef where sfd.webforms_sheetdef.WebSheetDefNum==WebSheetDefNum && sfd.webforms_sheetdef.webforms_preference.DentalOfficeID==DentalOfficeID
 							select sfd).ToList();
 				for(int j=0;j<sfdObj.Count();j++) {
@@ -117,7 +112,7 @@ namespace WebForms {
 							tb.Rows=rows;
 						}
 						tb.Text=FieldValue;
-						wc=tb;
+						wc=tb;						
 					}
 					if(FieldType==SheetFieldType.CheckBox) {
 						bool RadioButtonListExists=false;
@@ -131,7 +126,7 @@ namespace WebForms {
 						li.Attributes.CssStyle.Add("top",YPos+RadioButtonYOffset+"px");
 						li.Attributes.CssStyle.Add("z-index",""+ElementZIndex);
 						//search for existing RadioButtonList by the same name.
-						foreach(Control c in form1.Controls) {
+						foreach(Control c in Panel1.Controls) {
 							if(c.ID==FieldName && c.GetType()==typeof(RadioButtonList)) {
 								rb=(RadioButtonList)c;
 										RadioButtonListExists=true;
@@ -154,6 +149,10 @@ namespace WebForms {
 					}
 					if(FieldType==SheetFieldType.StaticText) {
 						Label lb=new Label();
+						if(FieldValue.Contains("[dateToday]")) {
+							FieldValue=FieldValue.Replace("[dateToday]",DateTime.Today.ToString("M/d/yyyy"));
+						}
+
 						lb.Text= FieldValue;
 						wc=lb;
 					}
@@ -164,10 +163,16 @@ namespace WebForms {
 						wc=img;
 					}
 					if(FieldType==SheetFieldType.SigBox) {
+						Panel pa = new Panel();
+						pa.BorderStyle=BorderStyle.Solid;
+						pa.Style["padding-top"]=height/2 +"px";
+						pa.HorizontalAlign=HorizontalAlign.Center;
+						
 						Label lb=new Label();
+						lb.Style["font-size"]=SignatureFontSize+"px";
 						lb.Text= "Signature will be recorded later.";
-						lb.BorderStyle=BorderStyle.Solid;
-						wc=lb;
+						pa.Controls.Add(lb);
+						wc=pa;
 					}
 
 					if(wc!=null) {
@@ -178,13 +183,12 @@ namespace WebForms {
 						wc.Style["top"]=YPos+"px";
 						wc.Style["left"]=XPos+"px";
 						wc.Style["z-index"]=""+ElementZIndex;
-						
 
-						if(wc.GetType()==typeof(System.Web.UI.WebControls.Image)) {
+
+						if(FieldType==SheetFieldType.Image) {
 							wc.Style["top"]=YPos+ImageYOffset+"px";
 							wc.Style["left"]=XPos+ImageXOffset+"px";
 							wc.Style["z-index"]=""+ImageZIndex;
-							
 						}
 						if(FieldType==SheetFieldType.Rectangle||FieldType==SheetFieldType.Line) {
 							wc.Style["z-index"]=""+DrawingZIndex;
@@ -194,6 +198,10 @@ namespace WebForms {
 							wc.Style["font-family"]=fontname;
 							wc.Style["font-size"]=fontsize+"px";
 							wc.Style["height"]=height/heightfactor+"px";
+
+								AddValidator(FieldName);
+
+							
 						}
 						if(wc.GetType()==typeof(RadioButtonList)) {
 							wc.Style["position"]="static";
@@ -210,10 +218,7 @@ namespace WebForms {
 
 
 
-
-
-
-						form1.Controls.Add(wc);
+						Panel1.Controls.Add(wc);
 					}
 
 				}
@@ -229,8 +234,143 @@ namespace WebForms {
 				}
 
 		}
+		private void AddValidator(string FieldName) {
+
+			String ErrorMessage="";
+			
+
+			if(FieldName.ToLower().Contains("fname") || FieldName.ToLower().Contains("firstname")) {
+				ErrorMessage="First Name is a required field";
+			}
+			else if(FieldName.ToLower().Contains("lname") || FieldName.ToLower().Contains("lastname")) {
+				ErrorMessage="Last Name is a required field";
+			}
+			else {
+				return;
+			}
+
+			RequiredFieldValidator rv = new RequiredFieldValidator();
 
 
+
+			rv.ControlToValidate=FieldName;
+			rv.ErrorMessage=ErrorMessage;
+			rv.Display=ValidatorDisplay.None;
+			rv.SetFocusOnError=true;
+			rv.ID=FieldName+"Validator";
+
+			AjaxControlToolkit.ValidatorCalloutExtender vc = new AjaxControlToolkit.ValidatorCalloutExtender();
+			vc.TargetControlID=rv.ID;
+
+			Panel1.Controls.Add(rv);
+			Panel1.Controls.Add(vc);
+		}
+		protected void Button1_Click(object sender,EventArgs e) {
+			LoopThroughControls(this.Page);
+			SaveFieldValuesInDB(DentalOfficeID);
+		}
+
+		private void LoopThroughControls(Page p) {
+			try {
+				foreach(Control c in p.Controls) {
+					if(c.HasControls()) {
+						ExtractValue(c);
+						FindControls(c);
+					}
+					else {
+						ExtractValue(c);
+					}
+				}
+			}
+			catch(Exception ex) {
+				Logger.Information(ex.Message.ToString()+" IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID);
+			}
+		}
+
+		/// <summary>
+		/// This is a recursive function which searches through nested controls on a  webpage
+		/// </summary>
+		private void FindControls(Control c) {
+			try {
+				foreach(Control ctl in c.Controls) {
+					if(ctl.HasControls()) {
+						ExtractValue(ctl);
+						FindControls(ctl);
+					}
+					else {
+						ExtractValue(ctl);
+					}
+				}
+			}
+			catch(Exception ex) {
+				Logger.Information(ex.Message.ToString()+" IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID);
+			}
+		}
+
+		/// <summary>
+		/// Fill the FormValuesHashTable here.
+		/// </summary>
+		private void ExtractValue(Control c) {
+			try {
+				if(c.GetType()==typeof(TextBox)) {
+					TextBox tbox=((TextBox)c);
+					if(tbox.Text.Trim()!="") {
+						//string FieldName=tbox.ID.Remove(0,"TextBox".Length);
+						string FieldName=tbox.ID;
+						FormValuesHashTable.Add(FieldName,tbox.Text.Trim());
+					}
+				}
+				if(c.GetType()==typeof(RadioButtonList)) {
+					RadioButtonList rbl=((RadioButtonList)c);
+					//string FieldName=rbl.ID.Remove(0,"RadioButtonList".Length);
+					string FieldName=rbl.ID;
+					if(rbl.SelectedIndex!=-1) {
+						FormValuesHashTable.Add(FieldName,rbl.SelectedValue);
+					}
+				}
+				if(c.GetType()==typeof(CheckBox)) {
+					CheckBox cbox=((CheckBox)c);
+					//string FieldName=cbox.ID.Remove(0,"CheckBox".Length);
+					string FieldName=cbox.ID;
+					if(cbox.Checked==true) {
+						FormValuesHashTable.Add(FieldName,cbox.Checked.ToString());
+					}
+				}
+			}
+			catch(Exception ex) {
+				Logger.Information(ex.Message.ToString()+" IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID);
+			}
+		}
+
+		private void SaveFieldValuesInDB(long DentalOfficeID) {
+			try {
+				ODWebServiceEntities db=new ODWebServiceEntities();
+				webforms_sheet NewSheetObj=new webforms_sheet();
+				var PrefObj=from wp in db.webforms_preference where wp.DentalOfficeID==DentalOfficeID
+							select wp;
+				NewSheetObj.DateTimeSubmitted=DateTime.Now;
+				foreach(string key in FormValuesHashTable.Keys) {
+					webforms_sheetfield NewSheetfieldObj=new webforms_sheetfield();
+					NewSheetfieldObj.FieldName=key;
+					NewSheetfieldObj.FieldValue=FormValuesHashTable[key].ToString();
+					NewSheetObj.webforms_sheetfield.Add(NewSheetfieldObj);
+				}
+				if(PrefObj.Count()>0) {
+					PrefObj.First().webforms_sheet.Add(NewSheetObj);
+					db.SaveChanges();
+					LabelSubmitMessage.Text="Your details have been successfully submited";
+					Logger.Information("Form values saved from IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID);
+				}
+				Panel1.Visible=false;
+				Panel2.Visible=true;
+			}
+			catch(Exception ex) {
+				Logger.Information(ex.Message.ToString());
+				Panel1.Visible=false;
+				LabelSubmitMessage.Text="There has been a problem submitting your details. <br /> We apologize for the inconvenience.";
+				Logger.Information("There has been a problem submitting your details IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID);
+			}
+		}
 
 
 	}

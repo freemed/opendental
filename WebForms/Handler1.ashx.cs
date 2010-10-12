@@ -20,43 +20,48 @@ namespace WebForms {
 		private long WebSheetFieldDefNum=0;
 
 		public void ProcessRequest(HttpContext context) {
-
-
-			////context.Response.ContentType="image/gif";
-			////ODWebServiceEntities db=new ODWebServiceEntities();
+			//TestBackGround(context); return;
 			try {
 				if(context.Request["WebSheetFieldDefNum"]!=null) {
 					Int64.TryParse(context.Request["WebSheetFieldDefNum"].ToString().Trim(),out WebSheetFieldDefNum);
 				}
-				context.Response.ContentType="image/gif";
+				/*png images are used because the background of rectangles/lines can be set to transparent. For gif images the process of making the background transparent is convoluted*/
+				context.Response.ContentType="image/png";
 				ODWebServiceEntities db=new ODWebServiceEntities();
 				var sfdObj=db.webforms_sheetfielddef.Where(sfd => sfd.WebSheetFieldDefNum==WebSheetFieldDefNum).First();
 				SheetFieldType FieldType = (SheetFieldType)sfdObj.FieldType;
 				Bitmap bmp=null;
 				Graphics g=null;
-
+				
 				Pen p=new Pen(Color.Black,2.0f);
 				
 				if(FieldType==SheetFieldType.Rectangle || FieldType==SheetFieldType.Line) {
 					bmp = new Bitmap(sfdObj.Width,sfdObj.Height);
 					g = Graphics.FromImage(bmp);
-					g.Clear(Color.White);
+					//g.Clear(Color.Transparent);
 				}
 				if(FieldType==SheetFieldType.Rectangle) {
-					g.DrawRectangle(p,sfdObj.XPos,sfdObj.YPos,sfdObj.Width,sfdObj.Height);
+					g.DrawRectangle(p,0,0,sfdObj.Width,sfdObj.Height);
 				}
 				if(FieldType==SheetFieldType.Line) {
-					g.DrawLine(p,sfdObj.XPos,sfdObj.YPos,sfdObj.XPos+sfdObj.Width,sfdObj.YPos+sfdObj.Height);
-				}
+					g.DrawLine(p,0,0,sfdObj.Width,sfdObj.Height);
+				}	
 				if((SheetFieldType)sfdObj.FieldType==SheetFieldType.Image) {
 					string ImageData=sfdObj.ImageData;
 					bmp=PIn.Bitmap(ImageData);
 				}
-				bmp.Save(context.Response.OutputStream,ImageFormat.Jpeg);
+
+				/*  These 3 lines are used in lue of the shorter "bmp.Save(context.Response.OutputStream,ImageFormat.Png);" because it does not work with png images.*/
+				MemoryStream MemStream=new MemoryStream();
+				bmp.Save(MemStream,System.Drawing.Imaging.ImageFormat.Png);
+				MemStream.WriteTo(context.Response.OutputStream);
+
+				
 				if(FieldType==SheetFieldType.Rectangle || FieldType==SheetFieldType.Line) {
 					g.Dispose();
 				}
 				bmp.Dispose();
+				
 			}
 			catch(Exception ex) {
 				Logger.Information(ex.Message.ToString());
@@ -131,6 +136,34 @@ namespace WebForms {
 			catch(Exception ex) {
 				Logger.Information(ex.Message.ToString());
 			}
+		}
+
+		private void TestBackGround(HttpContext context) {
+			// Create a red and black bitmap to demonstrate transparency.            
+			Bitmap tempBMP = new Bitmap(700,700);
+			Graphics g = Graphics.FromImage(tempBMP);
+			g.FillEllipse(new SolidBrush(Color.Red),0,0,tempBMP.Width,tempBMP.Width);
+			g.DrawLine(new Pen(Color.Black),0,0,tempBMP.Width,tempBMP.Width);
+			g.DrawLine(new Pen(Color.Black),tempBMP.Width,0,0,tempBMP.Width);
+			g.Dispose();
+
+
+			// Set the transparancy key attributes,at current it is set to the 
+			// color of the pixel in top left corner(0,0)
+			ImageAttributes attr = new ImageAttributes();
+			attr.SetColorKey(tempBMP.GetPixel(0,0),tempBMP.GetPixel(0,0));
+
+			// Draw the image to your output using the transparancy key attributes
+			Bitmap outputImage = new Bitmap(700,700);
+			g = Graphics.FromImage(outputImage);
+			Rectangle destRect = new Rectangle(0,0,tempBMP.Width,tempBMP.Height);
+			g.DrawImage(tempBMP,destRect,0,0,tempBMP.Width,tempBMP.Height,GraphicsUnit.Pixel,attr);
+
+			outputImage.Save(context.Response.OutputStream,ImageFormat.Jpeg);
+			g.Dispose();
+			tempBMP.Dispose();
+			
+
 		}
 
 		public bool IsReusable {
