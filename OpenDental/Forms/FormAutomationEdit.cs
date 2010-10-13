@@ -38,6 +38,7 @@ namespace OpenDental{
 		private OpenDental.UI.ODGrid gridMain;
 		private OpenDental.UI.Button butAdd;
 		private Automation AutoCur;
+		private List<AutomationCondition> autoList;
 		
 		///<summary></summary>
 		public FormAutomationEdit(Automation autoCur)
@@ -241,6 +242,7 @@ namespace OpenDental{
 			this.gridMain.Location = new System.Drawing.Point(161,103);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
+			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.None;
 			this.gridMain.Size = new System.Drawing.Size(510,146);
 			this.gridMain.TabIndex = 34;
 			this.gridMain.Title = "Conditions";
@@ -376,7 +378,7 @@ namespace OpenDental{
 
 		private void FillGrid() {
 			AutomationConditions.RefreshCache();
-			List<AutomationCondition> autoList=AutomationConditions.GetListByAutomationNum(AutoCur.AutomationNum);
+			autoList=AutomationConditions.GetListByAutomationNum(AutoCur.AutomationNum);
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("AutomationCondition","Field"),180);
@@ -389,9 +391,9 @@ namespace OpenDental{
 			ODGridRow row;
 			for(int i=0;i<autoList.Count;i++) {
 				row=new ODGridRow();
-				row.Cells.Add(AutomationConditions.Listt[i].CompareField.ToString());
-				row.Cells.Add(AutomationConditions.Listt[i].Comparison.ToString());
-				row.Cells.Add(AutomationConditions.Listt[i].CompareString);
+				row.Cells.Add(autoList[i].CompareField.ToString());
+				row.Cells.Add(autoList[i].Comparison.ToString());
+				row.Cells.Add(autoList[i].CompareString);
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
@@ -431,7 +433,7 @@ namespace OpenDental{
 
 		private void gridMain_CellDoubleClick(object sender,OpenDental.UI.ODGridClickEventArgs e) {
 			FormAutomationConditionEdit FormACE=new FormAutomationConditionEdit();
-			FormACE.ConditionCur=AutomationConditions.Listt[e.Row];
+			FormACE.ConditionCur=autoList[e.Row];
 			FormACE.ShowDialog();
 			FillGrid();
 		}

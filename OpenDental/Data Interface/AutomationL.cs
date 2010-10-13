@@ -32,7 +32,14 @@ namespace OpenDental {
 					}
 				}
 				//matching automation item has been found
+				//Get possible list of conditions that exist for this automation item
+				List<AutomationCondition> autoConditionsList=AutomationConditions.GetListByAutomationNum(Automations.Listt[i].AutomationNum);
 				if(Automations.Listt[i].AutoAction==AutomationAction.CreateCommlog) {
+					if(autoConditionsList.Count>0) {
+						if(!CheckAutomationConditions(autoConditionsList,patNum)) {
+							continue;
+						}
+					}
 					Commlog CommlogCur=new Commlog();
 					CommlogCur.PatNum=patNum;
 					CommlogCur.CommDateTime=DateTime.Now;
@@ -45,6 +52,11 @@ namespace OpenDental {
 					FormCI.ShowDialog();
 				}
 				else if(Automations.Listt[i].AutoAction==AutomationAction.PrintPatientLetter) {
+					if(autoConditionsList.Count>0) {
+						if(!CheckAutomationConditions(autoConditionsList,patNum)) {
+							continue;
+						}
+					}
 					SheetDef sheetDef=SheetDefs.GetSheetDef(Automations.Listt[i].SheetDefNum);
 					Sheet sheet=SheetUtil.CreateSheet(sheetDef,patNum);
 					SheetParameter.SetParameter(sheet,"PatNum",patNum);
@@ -59,6 +71,11 @@ namespace OpenDental {
 					FormSF.ShowDialog();
 				}
 				else if(Automations.Listt[i].AutoAction==AutomationAction.PrintReferralLetter) {
+					if(autoConditionsList.Count>0) {
+						if(!CheckAutomationConditions(autoConditionsList,patNum)) {
+							continue;
+						}
+					}
 					long referralNum=RefAttaches.GetReferralNum(patNum);
 					if(referralNum==0) {
 						MsgBox.Show("Automations","This patient has no referral source entered.");
@@ -78,6 +95,11 @@ namespace OpenDental {
 					FormSF.ShowDialog();
 				}
 				else if(Automations.Listt[i].AutoAction==AutomationAction.ShowExamSheet) {
+					if(autoConditionsList.Count>0) {
+						if(!CheckAutomationConditions(autoConditionsList,patNum)) {
+							continue;
+						}
+					}
 					SheetDef sheetDef=SheetDefs.GetSheetDef(Automations.Listt[i].SheetDefNum);
 					Sheet sheet=SheetUtil.CreateSheet(sheetDef,patNum);
 					SheetParameter.SetParameter(sheet,"PatNum",patNum);
@@ -92,6 +114,36 @@ namespace OpenDental {
 				}
 			}
 		}
+
+		private static bool CheckAutomationConditions(List<AutomationCondition> autoConditionsList,long patNum) {
+			//Make sure every condition returns true
+			for(int i=0;i<autoConditionsList.Count;i++) {
+				switch(autoConditionsList[i].CompareField) {
+					case AutoCondField.SheetCompletedTodayWithName:
+						if(!SheetCompletedTodayWithName(autoConditionsList[i],patNum)) {
+							return false;
+						}
+						break;
+				}
+			}
+			return true;
+		}
+
+		private static bool SheetCompletedTodayWithName(AutomationCondition autoCond, long patNum) {
+			List<Sheet> sheetList=Sheets.GetForPatientForToday(patNum);
+			switch(autoCond.Comparison) {//Find out what operand to use.
+				case AutoCondComparison.Equals:
+					//Loop through every sheet to find one that matches the condition.
+					for(int i=0;i<sheetList.Count;i++) {
+						if(sheetList[i].Description==autoCond.CompareString) {//Operand based on AutoCondComparison.
+							return true;
+						}
+					}
+					break;
+			}
+			return false;
+		}
+
 
 
 

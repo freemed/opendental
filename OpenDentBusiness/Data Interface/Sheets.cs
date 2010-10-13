@@ -93,6 +93,16 @@ namespace OpenDentBusiness{
 			return Crud.SheetCrud.SelectMany(command);
 		}
 
+		///<summary>Get all sheets for a patient for today.</summary>
+		public static List<Sheet> GetForPatientForToday(long patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Sheet>>(MethodBase.GetCurrentMethod(),patNum);
+			}
+			string command="SELECT * FROM sheet WHERE PatNum="+POut.Long(patNum)
+				+" AND DATE(DateTimeSheet) = CURDATE()";
+			return Crud.SheetCrud.SelectMany(command);
+		}
+
 		///<summary></summary>
 		public static long Insert(Sheet sheet) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
