@@ -468,6 +468,7 @@ namespace OpenDental{
 				DialogResult=DialogResult.Cancel;
 				return;
 			}
+			AutomationConditions.DeleteByAutomationNum(AutoCur.AutomationNum);
 			Automations.Delete(AutoCur);
 			DialogResult=DialogResult.OK;
 		}

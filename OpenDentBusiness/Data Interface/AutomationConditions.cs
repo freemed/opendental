@@ -90,6 +90,16 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
+		///<summary></summary.
+		public static void DeleteByAutomationNum(long automationNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),automationNum);
+				return;
+			}
+			string command= "DELETE FROM automationcondition WHERE AutomationNum = "+POut.Long(automationNum);
+			Db.NonQ(command);
+		}
+
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
 
