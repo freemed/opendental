@@ -21,6 +21,7 @@ namespace WebForms {
 		private long DentalOfficeID=0;
 		private long WebSheetDefNum=0;
 		private Hashtable FormValuesHashTable=new Hashtable();
+		List<WControl> listwc= new List<WControl>();
 		
 
 		protected void Page_Load(object sender,EventArgs e) {
@@ -198,17 +199,21 @@ namespace WebForms {
 							wc.Style["font-family"]=fontname;
 							wc.Style["font-size"]=fontsize+"px";
 							wc.Style["height"]=height/heightfactor+"px";
+							AddValidator(FieldName);
+							WControl wcobj = new WControl(XPos,YPos,wc);
+							listwc.Add(wcobj);
 
-								AddValidator(FieldName);
-
-							
 						}
 						if(wc.GetType()==typeof(RadioButtonList)) {
 							wc.Style["position"]="static";
+							WControl wcobj = new WControl(XPos,YPos,wc);
+							listwc.Add(wcobj);
 						}
 						if(wc.GetType()==typeof(CheckBox)) {
 							wc.Style["top"]=YPos+CheckBoxXOffset+"px";
 							wc.Style["left"]=XPos+CheckBoxYOffset+"px";
+							WControl wcobj = new WControl(XPos,YPos,wc);
+							listwc.Add(wcobj);
 						}
 
 						if(FieldType==SheetFieldType.StaticText) {
@@ -219,9 +224,14 @@ namespace WebForms {
 
 
 						Panel1.Controls.Add(wc);
+
+						
 					}
 
 				}
+
+				AssignTabOrder();
+
 				//position the submit button at the end of the page.
 				Button1.Style["position"]="absolute";
 				Button1.Style["left"]=SheetDefWidth+SubmitButtonXoffset+"px";
@@ -234,36 +244,74 @@ namespace WebForms {
 				}
 
 		}
+		private void AssignTabOrder() {
+			var sortedlist= listwc.OrderBy(wc => wc.YPos).ThenBy(wc => wc.XPos).ToList();
+			for(short i=0;i<sortedlist.Count();i++){
+				sortedlist[i].wc.TabIndex=(short)(i+1);
+			}
+		}
+		/// <summary>
+		/// A class made  just for sorting purposes.
+		/// </summary>
+		public class WControl{
+			public int XPos=0;
+			public int YPos=0;
+			public WebControl wc=null;
+
+			public WControl(int XPos,int YPos,WebControl wc) {
+				this.XPos=XPos;
+				this.YPos=YPos;
+				this.wc=wc;
+			}
+
+		}
+
 		private void AddValidator(string FieldName) {
 
 			String ErrorMessage="";
 			
 
-			if(FieldName.ToLower().Contains("fname") || FieldName.ToLower().Contains("firstname")) {
+			if(FieldName.ToLower()=="fname" || FieldName.ToLower()=="firstname") {
 				ErrorMessage="First Name is a required field";
 			}
-			else if(FieldName.ToLower().Contains("lname") || FieldName.ToLower().Contains("lastname")) {
+			else if(FieldName.ToLower()=="lname" || FieldName.ToLower()=="lastname") {
 				ErrorMessage="Last Name is a required field";
+			}
+			else if(FieldName.ToLower()=="birthdate" || FieldName.ToLower()=="bdate") {
+				ErrorMessage="Birthdate is a required field";
 			}
 			else {
 				return;
 			}
-
 			RequiredFieldValidator rv = new RequiredFieldValidator();
-
-
-
 			rv.ControlToValidate=FieldName;
 			rv.ErrorMessage=ErrorMessage;
 			rv.Display=ValidatorDisplay.None;
 			rv.SetFocusOnError=true;
-			rv.ID=FieldName+"Validator";
+			rv.ID=FieldName+"RequiredFieldValidator";
 
 			AjaxControlToolkit.ValidatorCalloutExtender vc = new AjaxControlToolkit.ValidatorCalloutExtender();
 			vc.TargetControlID=rv.ID;
-
+			vc.ID="ValidatorCalloutExtender"+rv.ID;
 			Panel1.Controls.Add(rv);
 			Panel1.Controls.Add(vc);
+
+			if(FieldName.ToLower()=="birthdate" || FieldName.ToLower()=="bdate") {
+				CompareValidator cv = new CompareValidator();
+				cv.ControlToValidate=FieldName;
+				cv.ErrorMessage="Invalid Date of Birth.";
+				cv.Display=ValidatorDisplay.None;
+				cv.Type=ValidationDataType.Date;
+				cv.Operator=ValidationCompareOperator.DataTypeCheck;
+				cv.SetFocusOnError=true;
+				cv.ID=FieldName+"CompareValidator";
+				AjaxControlToolkit.ValidatorCalloutExtender vc1 = new AjaxControlToolkit.ValidatorCalloutExtender();
+				vc1.TargetControlID=cv.ID;
+				vc1.ID="ValidatorCalloutExtender"+cv.ID;
+				Panel1.Controls.Add(cv);
+				Panel1.Controls.Add(vc1);
+				
+			}
 		}
 		protected void Button1_Click(object sender,EventArgs e) {
 			LoopThroughControls(this.Page);
