@@ -127,9 +127,9 @@ namespace OpenDental{
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(288,65);
 			this.label1.TabIndex = 16;
-			this.label1.Text = "Warning! The changes made here are only applied to individual appointments when t" +
-    "he OK button is pressed in the Appointment Edit window.  Do not expect immediate" +
-    " synchronization.";
+			this.label1.Text = "The changes made here are only applied to individual appointments when the OK but" +
+    "ton is pressed in the Appointment Edit window.  Do not expect immediate synchron" +
+    "ization.";
 			// 
 			// FormProcApptColors
 			// 

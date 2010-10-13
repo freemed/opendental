@@ -256,7 +256,7 @@ namespace OpenDental{
 		}
 
 		private void butLexiComp_Click(object sender,EventArgs e) {
-
+			System.Diagnostics.Process.Start("http://www.lexi.com/ods/");
 		}
 
 		private void butAddGeneric_Click(object sender, System.EventArgs e) {
