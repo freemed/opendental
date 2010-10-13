@@ -119,8 +119,8 @@ namespace OpenDental {
 			//Make sure every condition returns true
 			for(int i=0;i<autoConditionsList.Count;i++) {
 				switch(autoConditionsList[i].CompareField) {
-					case AutoCondField.SheetCompletedTodayWithName:
-						if(!SheetCompletedTodayWithName(autoConditionsList[i],patNum)) {
+					case AutoCondField.SheetNotCompletedTodayWithName:
+						if(SheetNotCompletedTodayWithName(autoConditionsList[i],patNum)) {
 							return false;
 						}
 						break;
@@ -129,7 +129,7 @@ namespace OpenDental {
 			return true;
 		}
 
-		private static bool SheetCompletedTodayWithName(AutomationCondition autoCond, long patNum) {
+		private static bool SheetNotCompletedTodayWithName(AutomationCondition autoCond, long patNum) {
 			List<Sheet> sheetList=Sheets.GetForPatientForToday(patNum);
 			switch(autoCond.Comparison) {//Find out what operand to use.
 				case AutoCondComparison.Equals:

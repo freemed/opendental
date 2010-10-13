@@ -27,7 +27,7 @@ namespace OpenDentBusiness{
 
 	public enum AutoCondField {
 		///<summary>Typically specify Equals the exact name/description of the sheet.</summary>
-		SheetCompletedTodayWithName
+		SheetNotCompletedTodayWithName
 	}
 
 	public enum AutoCondComparison{

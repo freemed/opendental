@@ -381,7 +381,7 @@ namespace OpenDental{
 			autoList=AutomationConditions.GetListByAutomationNum(AutoCur.AutomationNum);
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g("AutomationCondition","Field"),180);
+			ODGridColumn col=new ODGridColumn(Lan.g("AutomationCondition","Field"),200);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("AutomationCondition","Comparison"),75);
 			gridMain.Columns.Add(col);

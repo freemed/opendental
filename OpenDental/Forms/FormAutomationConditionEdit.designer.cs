@@ -36,7 +36,7 @@ namespace OpenDental{
 			// 
 			// labelCompareString
 			// 
-			this.labelCompareString.Location = new System.Drawing.Point(386,20);
+			this.labelCompareString.Location = new System.Drawing.Point(397,20);
 			this.labelCompareString.Name = "labelCompareString";
 			this.labelCompareString.Size = new System.Drawing.Size(147,20);
 			this.labelCompareString.TabIndex = 4;
@@ -45,7 +45,7 @@ namespace OpenDental{
 			// 
 			// textCompareString
 			// 
-			this.textCompareString.Location = new System.Drawing.Point(387,43);
+			this.textCompareString.Location = new System.Drawing.Point(397,43);
 			this.textCompareString.Name = "textCompareString";
 			this.textCompareString.Size = new System.Drawing.Size(316,20);
 			this.textCompareString.TabIndex = 5;
@@ -61,7 +61,7 @@ namespace OpenDental{
 			// 
 			// labelComparison
 			// 
-			this.labelComparison.Location = new System.Drawing.Point(225,20);
+			this.labelComparison.Location = new System.Drawing.Point(231,20);
 			this.labelComparison.Name = "labelComparison";
 			this.labelComparison.Size = new System.Drawing.Size(138,20);
 			this.labelComparison.TabIndex = 32;
@@ -76,7 +76,7 @@ namespace OpenDental{
 			this.listCompareField.Location = new System.Drawing.Point(24,43);
 			this.listCompareField.Name = "listCompareField";
 			this.listCompareField.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-			this.listCompareField.Size = new System.Drawing.Size(175,212);
+			this.listCompareField.Size = new System.Drawing.Size(181,212);
 			this.listCompareField.TabIndex = 71;
 			// 
 			// listComparison
@@ -84,7 +84,7 @@ namespace OpenDental{
 			this.listComparison.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
 			this.listComparison.FormattingEnabled = true;
-			this.listComparison.Location = new System.Drawing.Point(223,43);
+			this.listComparison.Location = new System.Drawing.Point(234,43);
 			this.listComparison.Name = "listComparison";
 			this.listComparison.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
 			this.listComparison.Size = new System.Drawing.Size(138,212);
@@ -115,7 +115,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(629,261);
+			this.butOK.Location = new System.Drawing.Point(638,261);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 3;
@@ -130,7 +130,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(629,302);
+			this.butCancel.Location = new System.Drawing.Point(638,302);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 2;
@@ -140,7 +140,7 @@ namespace OpenDental{
 			// FormAutomationConditionEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(729,353);
+			this.ClientSize = new System.Drawing.Size(738,353);
 			this.Controls.Add(this.listComparison);
 			this.Controls.Add(this.listCompareField);
 			this.Controls.Add(this.butDelete);
