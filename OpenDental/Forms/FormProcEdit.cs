@@ -2571,6 +2571,10 @@ namespace OpenDental{
 				if(dateT.ToShortTimeString()!="12:00 AM"){
 					textTimeEnd.Text=dateT.ToShortTimeString();
 				}
+				//DateTP doesn't get set sometimes and calculations are made based on the DateTP. So set it to the current date as fail-safe.
+				if(ProcCur.DateTP.Year<1880) {
+					textDateTP.Text=MiscData.GetNowDateTime().ToShortDateString();
+				}
 			}
 			textProc.Text=ProcedureCode2.ProcCode;
 			textDesc.Text=ProcedureCode2.Descript;
