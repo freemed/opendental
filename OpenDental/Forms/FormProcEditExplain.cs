@@ -240,7 +240,7 @@ namespace OpenDental {
 		    if(Changes!=""){ Changes+="\r\n";}
 		    Changes+="Procedure Status changed from "+procOld.ProcStatus.ToString()+" to "+procCur.ProcStatus.ToString()+".";
 		  }
-		  if(procOld.DateTP.Date != procCur.DateTP.Date) {
+		  if(procOld.DateTP.Date != procCur.DateTP.Date && procOld.DateTP.Date!=DateTime.MinValue.Date) {
 		    if(Changes!=""){ Changes+="\r\n";}
 		    Changes+="Date TP changed from "+procOld.DateTP.ToShortDateString()+" to "+procCur.DateTP.ToShortDateString()+".";
 		  }
