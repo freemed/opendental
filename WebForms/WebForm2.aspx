@@ -6,10 +6,8 @@
 <head runat="server">
 <title></title>
 	<script type="text/javascript">
-
 		function pageLoad() {
-		}
-    
+		}		
 	</script>
 </head>
 <body id="bodytag" runat="server">

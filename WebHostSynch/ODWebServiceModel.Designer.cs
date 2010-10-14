@@ -15,7 +15,7 @@
 [assembly: global::System.Data.Objects.DataClasses.EdmRelationshipAttribute("odwebserviceModel", "FK_webforms_sheetfielddef_WebSheetDefNum", "webforms_sheetdef", global::System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(WebHostSynch.webforms_sheetdef), "webforms_sheetfielddef", global::System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(WebHostSynch.webforms_sheetfielddef))]
 
 // Original file name:
-// Generation date: 10/4/2010 4:10:04 PM
+// Generation date: 10/14/2010 5:26:56 PM
 namespace WebHostSynch
 {
     
@@ -915,6 +915,8 @@ namespace WebHostSynch
         /// <param name="xPos">Initial value of XPos.</param>
         /// <param name="yPos">Initial value of YPos.</param>
         /// <param name="imageData">Initial value of ImageData.</param>
+        /// <param name="isRequired">Initial value of IsRequired.</param>
+        /// <param name="radioButtonGroup">Initial value of RadioButtonGroup.</param>
         public static webforms_sheetfielddef Createwebforms_sheetfielddef(
                     string fieldName, 
                     int fieldType, 
@@ -931,7 +933,9 @@ namespace WebHostSynch
                     int width, 
                     int xPos, 
                     int yPos, 
-                    string imageData)
+                    string imageData, 
+                    sbyte isRequired, 
+                    string radioButtonGroup)
         {
             webforms_sheetfielddef webforms_sheetfielddef = new webforms_sheetfielddef();
             webforms_sheetfielddef.FieldName = fieldName;
@@ -950,6 +954,8 @@ namespace WebHostSynch
             webforms_sheetfielddef.XPos = xPos;
             webforms_sheetfielddef.YPos = yPos;
             webforms_sheetfielddef.ImageData = imageData;
+            webforms_sheetfielddef.IsRequired = isRequired;
+            webforms_sheetfielddef.RadioButtonGroup = radioButtonGroup;
             return webforms_sheetfielddef;
         }
         /// <summary>
@@ -1320,6 +1326,52 @@ namespace WebHostSynch
         private string _ImageData;
         partial void OnImageDataChanging(string value);
         partial void OnImageDataChanged();
+        /// <summary>
+        /// There are no comments for Property IsRequired in the schema.
+        /// </summary>
+        [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(IsNullable=false)]
+        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        public sbyte IsRequired
+        {
+            get
+            {
+                return this._IsRequired;
+            }
+            set
+            {
+                this.OnIsRequiredChanging(value);
+                this.ReportPropertyChanging("IsRequired");
+                this._IsRequired = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value);
+                this.ReportPropertyChanged("IsRequired");
+                this.OnIsRequiredChanged();
+            }
+        }
+        private sbyte _IsRequired;
+        partial void OnIsRequiredChanging(sbyte value);
+        partial void OnIsRequiredChanged();
+        /// <summary>
+        /// There are no comments for Property RadioButtonGroup in the schema.
+        /// </summary>
+        [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(IsNullable=false)]
+        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        public string RadioButtonGroup
+        {
+            get
+            {
+                return this._RadioButtonGroup;
+            }
+            set
+            {
+                this.OnRadioButtonGroupChanging(value);
+                this.ReportPropertyChanging("RadioButtonGroup");
+                this._RadioButtonGroup = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value, false);
+                this.ReportPropertyChanged("RadioButtonGroup");
+                this.OnRadioButtonGroupChanged();
+            }
+        }
+        private string _RadioButtonGroup;
+        partial void OnRadioButtonGroupChanging(string value);
+        partial void OnRadioButtonGroupChanged();
         /// <summary>
         /// There are no comments for webforms_sheetdef in the schema.
         /// </summary>

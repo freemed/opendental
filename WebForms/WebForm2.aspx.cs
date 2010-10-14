@@ -95,7 +95,6 @@ namespace WebForms {
 				for(int j=0;j<sfdObj.Count();j++) {
 					String FieldName=sfdObj.ElementAt(j).FieldName;
 					String FieldValue=sfdObj.ElementAt(j).FieldValue;
-					String RadioButtonValue=sfdObj.ElementAt(j).RadioButtonValue;
 					SheetFieldType FieldType=(SheetFieldType)sfdObj.ElementAt(j).FieldType;
 					int XPos=sfdObj.ElementAt(j).XPos;
 					int YPos=sfdObj.ElementAt(j).YPos;
@@ -116,37 +115,7 @@ namespace WebForms {
 						wc=tb;						
 					}
 					if(FieldType==SheetFieldType.CheckBox) {
-						bool RadioButtonListExists=false;
-						RadioButtonList rb=null;
-						ListItem li=new ListItem();
-						li.Value=RadioButtonValue;
-						li.Text="";
-						
-						li.Attributes.CssStyle.Add("position","absolute");
-						li.Attributes.CssStyle.Add("left",XPos+RadioButtonXOffset+"px");
-						li.Attributes.CssStyle.Add("top",YPos+RadioButtonYOffset+"px");
-						li.Attributes.CssStyle.Add("z-index",""+ElementZIndex);
-						//search for existing RadioButtonList by the same name.
-						foreach(Control c in Panel1.Controls) {
-							if(c.ID==FieldName && c.GetType()==typeof(RadioButtonList)) {
-								rb=(RadioButtonList)c;
-										RadioButtonListExists=true;
-								}
-						}
-						if(RadioButtonListExists==false) {
-							if(RadioButtonValue=="") {
-								CheckBox cb=new CheckBox();
-								wc=cb;
-							}
-							else {
-								rb=new RadioButtonList();
-								rb.RepeatDirection=RepeatDirection.Horizontal;
-								wc=rb;
-							}
-						}
-						if(rb!=null) {
-							rb.Items.Add(li);
-						}
+						wc=AddRadioButtonOrCheckBox(sfdObj.ElementAt(j),XPos,YPos,RadioButtonXOffset,RadioButtonYOffset,ElementZIndex);
 					}
 					if(FieldType==SheetFieldType.StaticText) {
 						Label lb=new Label();
@@ -212,6 +181,9 @@ namespace WebForms {
 						if(wc.GetType()==typeof(CheckBox)) {
 							wc.Style["top"]=YPos+CheckBoxXOffset+"px";
 							wc.Style["left"]=XPos+CheckBoxYOffset+"px";
+							if(!String.IsNullOrEmpty(sfdObj.ElementAt(j).RadioButtonValue)) {
+								wc.ID=FieldName+sfdObj.ElementAt(j).RadioButtonValue;
+							}
 							WControl wcobj = new WControl(XPos,YPos,wc);
 							listwc.Add(wcobj);
 						}
@@ -244,6 +216,69 @@ namespace WebForms {
 				}
 
 		}
+
+		private WebControl AddRadioButtonOrCheckBox(webforms_sheetfielddef sfd,int XPos,int YPos,int RadioButtonXOffset,int RadioButtonYOffset,int ElementZIndex) {
+			
+			
+			String	FieldName=sfd.FieldName;
+			String RadioButtonValue=sfd.RadioButtonValue;
+			String RadioButtonGroup=sfd.RadioButtonGroup;
+			
+			WebControl wc=null;
+			/*
+			bool runCode=false;
+
+			if(runCode==true) {
+				bool RadioButtonListExists=false;
+				RadioButtonList rb=null;
+				ListItem li=new ListItem();
+				li.Value=RadioButtonValue;
+				li.Text="";
+
+				li.Attributes.CssStyle.Add("position","absolute");
+				li.Attributes.CssStyle.Add("left",XPos+RadioButtonXOffset+"px");
+				li.Attributes.CssStyle.Add("top",YPos+RadioButtonYOffset+"px");
+				li.Attributes.CssStyle.Add("z-index",""+ElementZIndex);
+				//search for existing RadioButtonList by the same name.
+				foreach(Control c in Panel1.Controls) {
+					if(c.ID==FieldName && c.GetType()==typeof(RadioButtonList)) {
+						rb=(RadioButtonList)c;
+						RadioButtonListExists=true;
+					}
+					if(FieldName=="misc" && c.ID==RadioButtonGroup && c.GetType()==typeof(RadioButtonList)) {
+						rb=(RadioButtonList)c;
+						RadioButtonListExists=true;
+					}
+					if(FieldName=="misc" && RadioButtonValue=="" && c.GetType()==typeof(RadioButtonList)) {
+						//put code here
+
+					}
+				}
+				if(RadioButtonListExists==false) {
+					if(RadioButtonValue=="") {
+						CheckBox cb=new CheckBox();
+						wc=cb;
+					}
+					else {
+						rb=new RadioButtonList();
+						rb.RepeatDirection=RepeatDirection.Horizontal;
+						wc=rb;
+					}
+				}
+				if(rb!=null) {
+					rb.Items.Add(li);
+				}
+
+			}//old code
+			*/
+
+			CheckBox cb1=new CheckBox();
+			wc=cb1;
+
+
+			return wc;
+		}
+
 		private void AssignTabOrder() {
 			var sortedlist= listwc.OrderBy(wc => wc.YPos).ThenBy(wc => wc.XPos).ToList();
 			for(short i=0;i<sortedlist.Count();i++){
