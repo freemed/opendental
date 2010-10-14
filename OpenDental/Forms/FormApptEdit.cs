@@ -1911,6 +1911,7 @@ namespace OpenDental{
 				if(Programs.UsingOrion){
 					OrionProc orionProc=new OrionProc();
 					orionProc.ProcNum=ProcCur.ProcNum;
+					orionProc.Status2=OrionStatus.TP;
 					OrionProcs.Insert(orionProc);
 				}
 				Procedures.ComputeEstimates(ProcCur,pat.PatNum,ClaimProcList,false,PlanList,PatPlanList,benefitList,pat.Age);

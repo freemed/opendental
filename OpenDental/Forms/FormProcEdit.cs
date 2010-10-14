@@ -2230,6 +2230,7 @@ namespace OpenDental{
 				if(IsNew) {
 					OrionProcCur=new OrionProc();
 					OrionProcCur.ProcNum=ProcCur.ProcNum;
+					OrionProcCur.Status2=OrionStatus.TP;//Change from none to TP.
 				}
 				else {
 					OrionProcCur=OrionProcs.GetOneByProcNum(ProcCur.ProcNum);

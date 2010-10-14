@@ -5264,6 +5264,7 @@ namespace OpenDental{
 			if(orionProvNum!=0){
 				OrionProc orionProc=new OrionProc();
 				orionProc.ProcNum=ProcCur.ProcNum;
+				orionProc.Status2=OrionStatus.TP;
 				OrionProcs.Insert(orionProc);
 			}
 			if((ProcCur.ProcStatus==ProcStat.C || ProcCur.ProcStatus==ProcStat.EC || ProcCur.ProcStatus==ProcStat.EO)
@@ -5776,7 +5777,7 @@ namespace OpenDental{
 		}
 
 		private void EnterTypedCode() {
-			orionProvNum=0;
+			//orionProcNum=0;
 			if(newStatus==ProcStat.C) {
 				if(!Security.IsAuthorized(Permissions.ProcComplCreate,PIn.Date(textDate.Text))) {
 					return;
