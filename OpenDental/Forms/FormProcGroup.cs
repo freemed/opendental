@@ -46,7 +46,12 @@ namespace OpenDental{
 		public List<Procedure> ProcList;
 		///<summary>This keeps the noteChanged event from erasing the signature when first loading.</summary>
 		private bool IsStartingUp;
+		private OpenDental.UI.Button butExamSheets;
+		private ODGrid gridPat;
 		private bool SigChanged;
+		private PatField[] PatFieldList;
+		private Patient PatCur;
+		private Family FamCur;
 
 		public FormProcGroup() {
 			InitializeComponent();
@@ -75,10 +80,12 @@ namespace OpenDental{
 			this.label12 = new System.Windows.Forms.Label();
 			this.label26 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
+			this.gridPat = new OpenDental.UI.ODGrid();
 			this.textProcDate = new OpenDental.ValidDate();
 			this.signatureBoxWrapper = new OpenDental.UI.SignatureBoxWrapper();
 			this.gridProc = new OpenDental.UI.ODGrid();
 			this.textDateEntry = new OpenDental.ValidDate();
+			this.butExamSheets = new OpenDental.UI.Button();
 			this.buttonUseAutoNote = new OpenDental.UI.Button();
 			this.textNotes = new OpenDental.ODtextBox();
 			this.butDelete = new OpenDental.UI.Button();
@@ -88,7 +95,7 @@ namespace OpenDental{
 			// 
 			// label7
 			// 
-			this.label7.Location = new System.Drawing.Point(60,78);
+			this.label7.Location = new System.Drawing.Point(23,78);
 			this.label7.Name = "label7";
 			this.label7.Size = new System.Drawing.Size(73,16);
 			this.label7.TabIndex = 0;
@@ -97,7 +104,7 @@ namespace OpenDental{
 			// 
 			// label15
 			// 
-			this.label15.Location = new System.Drawing.Point(20,278);
+			this.label15.Location = new System.Drawing.Point(-17,278);
 			this.label15.Name = "label15";
 			this.label15.Size = new System.Drawing.Size(110,41);
 			this.label15.TabIndex = 79;
@@ -106,7 +113,7 @@ namespace OpenDental{
 			// 
 			// label16
 			// 
-			this.label16.Location = new System.Drawing.Point(60,55);
+			this.label16.Location = new System.Drawing.Point(23,55);
 			this.label16.Name = "label16";
 			this.label16.Size = new System.Drawing.Size(73,16);
 			this.label16.TabIndex = 80;
@@ -115,7 +122,7 @@ namespace OpenDental{
 			// 
 			// textUser
 			// 
-			this.textUser.Location = new System.Drawing.Point(135,52);
+			this.textUser.Location = new System.Drawing.Point(98,52);
 			this.textUser.Name = "textUser";
 			this.textUser.ReadOnly = true;
 			this.textUser.Size = new System.Drawing.Size(119,20);
@@ -123,7 +130,7 @@ namespace OpenDental{
 			// 
 			// label12
 			// 
-			this.label12.Location = new System.Drawing.Point(12,34);
+			this.label12.Location = new System.Drawing.Point(-25,34);
 			this.label12.Name = "label12";
 			this.label12.Size = new System.Drawing.Size(125,14);
 			this.label12.TabIndex = 96;
@@ -132,25 +139,40 @@ namespace OpenDental{
 			// 
 			// label26
 			// 
-			this.label26.Location = new System.Drawing.Point(215,34);
+			this.label26.Location = new System.Drawing.Point(178,34);
 			this.label26.Name = "label26";
-			this.label26.Size = new System.Drawing.Size(125,18);
+			this.label26.Size = new System.Drawing.Size(112,18);
 			this.label26.TabIndex = 97;
 			this.label26.Text = "(for security)";
 			this.label26.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(39,14);
+			this.label2.Location = new System.Drawing.Point(2,14);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(96,14);
 			this.label2.TabIndex = 101;
 			this.label2.Text = "Procedure Date";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// gridPat
+			// 
+			this.gridPat.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+			this.gridPat.HScrollVisible = false;
+			this.gridPat.Location = new System.Drawing.Point(468,276);
+			this.gridPat.Name = "gridPat";
+			this.gridPat.ScrollValue = 0;
+			this.gridPat.SelectionMode = OpenDental.UI.GridSelectionMode.None;
+			this.gridPat.Size = new System.Drawing.Size(252,81);
+			this.gridPat.TabIndex = 195;
+			this.gridPat.Title = "Patient Information";
+			this.gridPat.TranslationName = "TablePatient";
+			this.gridPat.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPat_CellDoubleClick);
+			// 
 			// textProcDate
 			// 
-			this.textProcDate.Location = new System.Drawing.Point(135,12);
+			this.textProcDate.Location = new System.Drawing.Point(98,12);
 			this.textProcDate.Name = "textProcDate";
 			this.textProcDate.ReadOnly = true;
 			this.textProcDate.Size = new System.Drawing.Size(76,20);
@@ -160,7 +182,7 @@ namespace OpenDental{
 			// 
 			this.signatureBoxWrapper.BackColor = System.Drawing.SystemColors.ControlDark;
 			this.signatureBoxWrapper.LabelText = "Invalid Signature";
-			this.signatureBoxWrapper.Location = new System.Drawing.Point(135,276);
+			this.signatureBoxWrapper.Location = new System.Drawing.Point(98,276);
 			this.signatureBoxWrapper.Name = "signatureBoxWrapper";
 			this.signatureBoxWrapper.Size = new System.Drawing.Size(364,81);
 			this.signatureBoxWrapper.TabIndex = 194;
@@ -169,22 +191,36 @@ namespace OpenDental{
 			// gridProc
 			// 
 			this.gridProc.HScrollVisible = true;
-			this.gridProc.Location = new System.Drawing.Point(26,367);
+			this.gridProc.Location = new System.Drawing.Point(10,367);
 			this.gridProc.Name = "gridProc";
 			this.gridProc.ScrollValue = 0;
 			this.gridProc.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridProc.Size = new System.Drawing.Size(575,257);
+			this.gridProc.Size = new System.Drawing.Size(721,222);
 			this.gridProc.TabIndex = 193;
 			this.gridProc.Title = "Procedures";
 			this.gridProc.TranslationName = "TableProg";
 			// 
 			// textDateEntry
 			// 
-			this.textDateEntry.Location = new System.Drawing.Point(135,32);
+			this.textDateEntry.Location = new System.Drawing.Point(98,32);
 			this.textDateEntry.Name = "textDateEntry";
 			this.textDateEntry.ReadOnly = true;
 			this.textDateEntry.Size = new System.Drawing.Size(76,20);
 			this.textDateEntry.TabIndex = 95;
+			// 
+			// butExamSheets
+			// 
+			this.butExamSheets.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butExamSheets.Autosize = true;
+			this.butExamSheets.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butExamSheets.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butExamSheets.CornerRadius = 4F;
+			this.butExamSheets.Location = new System.Drawing.Point(296,42);
+			this.butExamSheets.Name = "butExamSheets";
+			this.butExamSheets.Size = new System.Drawing.Size(80,24);
+			this.butExamSheets.TabIndex = 106;
+			this.butExamSheets.Text = "Exam Sheets";
+			this.butExamSheets.Click += new System.EventHandler(this.buttonUseAutoNote_Click);
 			// 
 			// buttonUseAutoNote
 			// 
@@ -193,7 +229,7 @@ namespace OpenDental{
 			this.buttonUseAutoNote.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.buttonUseAutoNote.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.buttonUseAutoNote.CornerRadius = 4F;
-			this.buttonUseAutoNote.Location = new System.Drawing.Point(419,42);
+			this.buttonUseAutoNote.Location = new System.Drawing.Point(382,42);
 			this.buttonUseAutoNote.Name = "buttonUseAutoNote";
 			this.buttonUseAutoNote.Size = new System.Drawing.Size(80,24);
 			this.buttonUseAutoNote.TabIndex = 106;
@@ -204,7 +240,7 @@ namespace OpenDental{
 			// 
 			this.textNotes.AcceptsReturn = true;
 			this.textNotes.AcceptsTab = true;
-			this.textNotes.Location = new System.Drawing.Point(135,72);
+			this.textNotes.Location = new System.Drawing.Point(98,72);
 			this.textNotes.Multiline = true;
 			this.textNotes.Name = "textNotes";
 			this.textNotes.QuickPasteType = OpenDentBusiness.QuickPasteType.Procedure;
@@ -223,7 +259,7 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(26,648);
+			this.butDelete.Location = new System.Drawing.Point(26,606);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(83,24);
 			this.butDelete.TabIndex = 8;
@@ -239,7 +275,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(525,648);
+			this.butCancel.Location = new System.Drawing.Point(549,606);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(76,24);
 			this.butCancel.TabIndex = 13;
@@ -254,7 +290,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(443,648);
+			this.butOK.Location = new System.Drawing.Point(467,606);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(76,24);
 			this.butOK.TabIndex = 12;
@@ -264,13 +300,15 @@ namespace OpenDental{
 			// FormProcGroup
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(627,696);
+			this.ClientSize = new System.Drawing.Size(742,645);
+			this.Controls.Add(this.gridPat);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.textProcDate);
 			this.Controls.Add(this.signatureBoxWrapper);
 			this.Controls.Add(this.label26);
 			this.Controls.Add(this.gridProc);
 			this.Controls.Add(this.textDateEntry);
+			this.Controls.Add(this.butExamSheets);
 			this.Controls.Add(this.buttonUseAutoNote);
 			this.Controls.Add(this.label12);
 			this.Controls.Add(this.textUser);
@@ -309,6 +347,71 @@ namespace OpenDental{
 			signatureBoxWrapper.FillSignature(GroupCur.SigIsTopaz,keyData,GroupCur.Signature);
 			signatureBoxWrapper.BringToFront();
 			IsStartingUp=false;
+			PatCur=Patients.GetPat(GroupCur.PatNum);
+			FamCur=Patients.GetFamily(GroupCur.PatNum);
+			FillPatientData();
+		}
+
+		private void FillPatientData(){
+			if(PatCur==null){
+				gridPat.BeginUpdate();
+				gridPat.Rows.Clear();
+				gridPat.Columns.Clear();
+				gridPat.EndUpdate();
+				return;
+			}
+			gridPat.BeginUpdate();
+			gridPat.Columns.Clear();
+			ODGridColumn col=new ODGridColumn("",100);
+			gridPat.Columns.Add(col);
+			col=new ODGridColumn("",150);
+			gridPat.Columns.Add(col);
+			gridPat.Rows.Clear();
+			ODGridRow row;
+			PatFieldList=PatFields.Refresh(PatCur.PatNum);
+			List<DisplayField> fields=DisplayFields.GetForCategory(DisplayFieldCategory.PatientInformation);
+			for(int f=0;f<fields.Count;f++) {
+				row=new ODGridRow();
+				if(fields[f].Description==""){
+					//...
+				}
+				else{
+					if(fields[f].InternalName=="PatFields") {
+						//don't add a cell
+					}
+					else {
+						row.Cells.Add(fields[f].Description);
+					}
+				}
+				switch(fields[f].InternalName){
+					//...
+					case "PatFields":
+						PatField field;
+						for(int i=0;i<PatFieldDefs.List.Length;i++){
+							if(i>0){
+								row=new ODGridRow();
+							}
+							row.Cells.Add(PatFieldDefs.List[i].FieldName);
+							field=PatFields.GetByName(PatFieldDefs.List[i].FieldName,PatFieldList);
+							if(field==null){
+								row.Cells.Add("");
+							}
+							else{
+								row.Cells.Add(field.FieldValue);
+							}
+							row.Tag="PatField"+i.ToString();
+							gridPat.Rows.Add(row);
+						}
+						break;
+				}
+				if(fields[f].InternalName=="PatFields"){
+					//don't add the row here
+				}
+				else{
+					gridPat.Rows.Add(row);
+				}
+			}
+			gridPat.EndUpdate();
 		}
 
 		private void FillProcedures(){
@@ -348,11 +451,9 @@ namespace OpenDental{
 		}
 
 		private void buttonUseAutoNote_Click(object sender,EventArgs e) {
-			FormAutoNoteCompose FormA=new FormAutoNoteCompose();
-			FormA.ShowDialog();
-			if(FormA.DialogResult==DialogResult.OK) {
-				textNotes.AppendText(FormA.CompletedNote);
-			}
+			FormExamSheets fes=new FormExamSheets();
+			fes.PatNum=GroupCur.PatNum;
+			fes.ShowDialog();
 		}
 
 		private void textNotes_TextChanged(object sender,EventArgs e) {
@@ -426,6 +527,48 @@ namespace OpenDental{
 				}
 			}
 			DialogResult=DialogResult.Cancel;
+		}
+
+		private void gridPat_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			string tag=gridPat.Rows[e.Row].Tag.ToString();
+			tag=tag.Substring(8);//strips off all but the number: PatField1
+			int index=PIn.Int(tag);
+			PatField field=PatFields.GetByName(PatFieldDefs.List[index].FieldName,PatFieldList);
+			if(field==null) {
+				field=new PatField();
+				field.PatNum=PatCur.PatNum;
+				field.FieldName=PatFieldDefs.List[index].FieldName;
+				if(PatFieldDefs.List[index].FieldType==PatFieldType.Text) {
+					FormPatFieldEdit FormPF=new FormPatFieldEdit(field);
+					FormPF.IsNew=true;
+					FormPF.ShowDialog();
+				}
+				if(PatFieldDefs.List[index].FieldType==PatFieldType.PickList) {
+					FormPatFieldPickEdit FormPF=new FormPatFieldPickEdit(field);
+					FormPF.IsNew=true;
+					FormPF.ShowDialog();
+				}
+				if(PatFieldDefs.List[index].FieldType==PatFieldType.Date) {
+					FormPatFieldDateEdit FormPF=new FormPatFieldDateEdit(field);
+					FormPF.IsNew=true;
+					FormPF.ShowDialog();
+				}
+			}
+			else{
+				if(PatFieldDefs.List[index].FieldType==PatFieldType.Text) {
+					FormPatFieldEdit FormPF=new FormPatFieldEdit(field);
+					FormPF.ShowDialog();
+				}
+				if(PatFieldDefs.List[index].FieldType==PatFieldType.PickList) {
+					FormPatFieldPickEdit FormPF=new FormPatFieldPickEdit(field);
+					FormPF.ShowDialog();
+				}
+				if(PatFieldDefs.List[index].FieldType==PatFieldType.Date) {
+					FormPatFieldDateEdit FormPF=new FormPatFieldDateEdit(field);
+					FormPF.ShowDialog();
+				}
+			}
+			FillPatientData();
 		}
 
 		
