@@ -111,7 +111,7 @@ namespace OpenDental{
 			this.butAddGeneric.CornerRadius = 4F;
 			this.butAddGeneric.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAddGeneric.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAddGeneric.Location = new System.Drawing.Point(9,52);
+			this.butAddGeneric.Location = new System.Drawing.Point(9,41);
 			this.butAddGeneric.Name = "butAddGeneric";
 			this.butAddGeneric.Size = new System.Drawing.Size(113,26);
 			this.butAddGeneric.TabIndex = 33;
@@ -127,7 +127,7 @@ namespace OpenDental{
 			this.butAddBrand.CornerRadius = 4F;
 			this.butAddBrand.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAddBrand.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAddBrand.Location = new System.Drawing.Point(128,52);
+			this.butAddBrand.Location = new System.Drawing.Point(128,41);
 			this.butAddBrand.Name = "butAddBrand";
 			this.butAddBrand.Size = new System.Drawing.Size(113,26);
 			this.butAddBrand.TabIndex = 34;
@@ -139,7 +139,7 @@ namespace OpenDental{
 			this.butLexiComp.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("butLexiComp.BackgroundImage")));
 			this.butLexiComp.FlatAppearance.BorderColor = System.Drawing.SystemColors.Control;
 			this.butLexiComp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.butLexiComp.Location = new System.Drawing.Point(8,12);
+			this.butLexiComp.Location = new System.Drawing.Point(8,3);
 			this.butLexiComp.Name = "butLexiComp";
 			this.butLexiComp.Size = new System.Drawing.Size(175,34);
 			this.butLexiComp.TabIndex = 35;
@@ -148,11 +148,12 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(185,23);
+			this.label2.Location = new System.Drawing.Point(185,6);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(506,17);
+			this.label2.Size = new System.Drawing.Size(323,31);
 			this.label2.TabIndex = 36;
-			this.label2.Text = "Sign up with LexiComp now.  There is not yet any integration.";
+			this.label2.Text = "Sign up with LexiComp now.  Get a 15% discount by using coupon code LCODODS at ch" +
+    "eckout.  There is not yet any integration.";
 			// 
 			// gridMain
 			// 
@@ -160,10 +161,10 @@ namespace OpenDental{
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(8,84);
+			this.gridMain.Location = new System.Drawing.Point(8,72);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(836,578);
+			this.gridMain.Size = new System.Drawing.Size(836,590);
 			this.gridMain.TabIndex = 37;
 			this.gridMain.Title = "Medications";
 			this.gridMain.TranslationName = "FormMedications";
@@ -171,7 +172,7 @@ namespace OpenDental{
 			// 
 			// textSearch
 			// 
-			this.textSearch.Location = new System.Drawing.Point(443,57);
+			this.textSearch.Location = new System.Drawing.Point(443,46);
 			this.textSearch.Name = "textSearch";
 			this.textSearch.Size = new System.Drawing.Size(195,20);
 			this.textSearch.TabIndex = 38;
@@ -179,7 +180,7 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(315,60);
+			this.label1.Location = new System.Drawing.Point(315,49);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(127,17);
 			this.label1.TabIndex = 39;
