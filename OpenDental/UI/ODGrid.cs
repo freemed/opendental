@@ -76,6 +76,12 @@ namespace OpenDental.UI{
 		private TextBox editBox;
 		private MouseButtons lastButtonPressed;
 		private ArrayList selectedIndicesWhenMouseDown;
+		private bool allowSortingByColumn;
+		private bool mouseIsDownInHeader;
+		///<summary>Typically -1 to show no triangle.  Or, specify a column to show a triangle.  The actual sorting happens at mouse down.</summary>
+		private int sortedByColumnIdx;
+		///<summary>True to show a triangle pointing up.  False to show a triangle pointing down.  Only works if sortedByColumnIdx is not -1.</summary>
+		private bool sortedIsAscending;
 
 		///<summary></summary>
 		public ODGrid(){
@@ -103,6 +109,7 @@ namespace OpenDental.UI{
 			wrapText=true;
 			noteSpanStart=0;
 			noteSpanStop=0;
+			sortedByColumnIdx=-1;
 		}
 
 		///<summary>Clean up any resources being used.</summary>
@@ -336,6 +343,21 @@ namespace OpenDental.UI{
 			}
 		}
 
+		///<summary>Set true to allow user to click on column headers to sort rows, alternating between ascending and descending.</summary>
+		[Category("Behavior"),Description("Set true to allow user to click on column headers to sort rows, alternating between ascending and descending.")]
+		[DefaultValue(false)]
+		public bool AllowSortingByColumn{
+			get{ 
+				return allowSortingByColumn; 
+			}
+			set{
+				allowSortingByColumn=value;
+				if(!allowSortingByColumn){
+					sortedByColumnIdx=-1;
+				}
+			}
+		}
+
 		#endregion Properties
 
 		#region Computations
@@ -484,6 +506,7 @@ namespace OpenDental.UI{
 			ComputeColumns();//it's only here because I can't figure out how to do it when columns are added. It will be removed.
 			Bitmap doubleBuffer=new Bitmap(Width,Height,e.Graphics);
 			using(Graphics g=Graphics.FromImage(doubleBuffer)) {
+				g.SmoothingMode=SmoothingMode.HighQuality;
 				DrawBackG(g);
 				DrawRows(g);
 				DrawTitleAndHeaders(g);//this will draw on top of any grid stuff
@@ -738,6 +761,33 @@ namespace OpenDental.UI{
 					g.DrawString(columns[i].Heading,headerFont,Brushes.Black,
 						-hScroll.Value+ColPos[i]+columns[i].ColWidth/2-g.MeasureString(columns[i].Heading,headerFont).Width/2,
 						titleHeight+2);
+					if(sortedByColumnIdx==i){
+						PointF p=new PointF(-hScroll.Value+1+ColPos[i]+6,titleHeight+(float)headerHeight/2f);
+						if(sortedIsAscending){//pointing up
+							g.FillPolygon(Brushes.White,new PointF[] {
+								new PointF(p.X-4.9f,p.Y+2f),//LLstub
+								new PointF(p.X-4.9f,p.Y+2.5f),//LLbase
+								new PointF(p.X+4.9f,p.Y+2.5f),//LRbase
+								new PointF(p.X+4.9f,p.Y+2f),//LRstub
+								new PointF(p.X,p.Y-2.8f)});//Top
+							g.FillPolygon(Brushes.Black,new PointF[] {
+								new PointF(p.X-4,p.Y+2),//LL
+								new PointF(p.X+4,p.Y+2),//LR
+								new PointF(p.X,p.Y-2)});//Top
+						}
+						else{//pointing down
+							g.FillPolygon(Brushes.White,new PointF[] {//shaped like home plate
+								new PointF(p.X-4.9f,p.Y-2f),//ULstub
+								new PointF(p.X-4.9f,p.Y-2.7f),//ULtop
+								new PointF(p.X+4.9f,p.Y-2.7f),//URtop
+								new PointF(p.X+4.9f,p.Y-2f),//URstub
+								new PointF(p.X,p.Y+2.8f)});//Bottom
+							g.FillPolygon(Brushes.Black,new PointF[] {
+								new PointF(p.X-4,p.Y-2),//UL
+								new PointF(p.X+4,p.Y-2),//UR
+								new PointF(p.X,p.Y+2)});//Bottom
+						}
+					}
 				}
 			}
 			//line below headers
@@ -813,6 +863,7 @@ namespace OpenDental.UI{
 			if(editBox!=null) {
 				editBox.Dispose();
 			}
+			sortedByColumnIdx=-1;
 			IsUpdating=false;
 			Invalidate();
 		}
@@ -1190,6 +1241,22 @@ namespace OpenDental.UI{
 		}
 		#endregion Scrolling
 
+		#region Sorting
+		///<summary>Gets run on mouse down on a column header.</summary>
+		private void SortByColumn(int mouseDownCol){
+			if(mouseDownCol==-1){
+				return;
+			}
+			if(sortedByColumnIdx==mouseDownCol){//already sorting by this column
+				sortedIsAscending=!sortedIsAscending;//switch ascending/descending.
+			}
+			else{
+				sortedIsAscending=true;//start out ascending
+				sortedByColumnIdx=mouseDownCol;
+			}
+		}
+		#endregion Sorting
+
 		#region MouseEvents
 
 		///<summary></summary>
@@ -1205,7 +1272,24 @@ namespace OpenDental.UI{
 			MouseIsDown=true;
 			MouseDownRow=PointToRow(e.Y);
 			MouseDownCol=PointToCol(e.X);
-			if(MouseDownRow==-1){//mouse down was in the title or header section
+			if(e.Y < 1+titleHeight){//mouse down was in the title section
+				return;
+			}
+			if(e.Y < 1+titleHeight+headerHeight){//mouse down was on a column header
+				mouseIsDownInHeader=true;
+				if(allowSortingByColumn){
+					if(MouseDownCol==-1){
+						return;
+					}
+					SortByColumn(MouseDownCol);
+					Invalidate();
+					return;
+				}
+				else{
+					return;
+				}
+			}
+			if(MouseDownRow==-1){//mouse down was below the grid rows
 				return;
 			}
 			if(MouseDownCol==-1){//mouse down was to the right of columns
@@ -1282,6 +1366,7 @@ namespace OpenDental.UI{
 			//	return;
 			//}
 			MouseIsDown=false;
+			mouseIsDownInHeader=false;
 		}
 
 		///<summary>When selection mode is OneCell, and user clicks in a column that isEditable, then this edit box will appear.  Pass in the location from the click event so that we can determine where to place the text cursor in the box.</summary>
@@ -1368,6 +1453,9 @@ namespace OpenDental.UI{
 			if(!allowSelection){
 				return;//dragging does not change selection of rows
 			}
+			if(mouseIsDownInHeader){
+				return;//started drag in header, so not allowed to select anything.
+			}
 			int curRow=PointToRow(e.Y);
 			if(curRow==-1 || curRow==MouseDownRow){
 				return;
@@ -1376,7 +1464,8 @@ namespace OpenDental.UI{
 			if(ControlIsDown){
 				if(selectedIndicesWhenMouseDown==null){
 					selectedIndices=new ArrayList();
-				}else{
+				}
+				else{
 					selectedIndices=new ArrayList(selectedIndicesWhenMouseDown);
 				}
 			}

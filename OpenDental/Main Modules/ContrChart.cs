@@ -2935,6 +2935,7 @@ namespace OpenDental{
 			// 
 			// gridProg
 			// 
+			this.gridProg.AllowSortingByColumn = true;
 			this.gridProg.HScrollVisible = true;
 			this.gridProg.Location = new System.Drawing.Point(415,291);
 			this.gridProg.Name = "gridProg";
