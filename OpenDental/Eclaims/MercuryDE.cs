@@ -51,15 +51,20 @@ namespace OpenDental.Eclaims
 			Channel channel=null;
 			ChannelSftp ch=null;
 			JSch jsch=new JSch();
-			session=jsch.getSession(clearinghouse.LoginID,remoteHost,22);
-			session.setPassword(clearinghouse.Password);
-			Hashtable config=new Hashtable();
-			config.Add("StrictHostKeyChecking", "no");
-			session.setConfig(config);
-			session.connect();
-			channel=session.openChannel("sftp");
-			channel.connect();
-			ch=(ChannelSftp)channel;
+			try{
+				session=jsch.getSession(clearinghouse.LoginID,remoteHost,22);
+				session.setPassword(clearinghouse.Password);
+				Hashtable config=new Hashtable();
+				config.Add("StrictHostKeyChecking", "no");
+				session.setConfig(config);
+				session.connect();
+				channel=session.openChannel("sftp");
+				channel.connect();
+				ch=(ChannelSftp)channel;
+			}catch(Exception ex){
+				MessageBox.Show(Lan.g("MercuryDE","Connection Failed")+": "+ex.Message);
+				return false;
+			}
 			try{
 				//At this point we are connected to the MDE SFTP server.
 				if(batchNum==0){
