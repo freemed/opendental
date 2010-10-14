@@ -3362,7 +3362,7 @@ namespace OpenDental{
 		}
 
 		private void comboDPC_SelectionChangeCommitted(object sender,EventArgs e) {
-			DateTime tempDate=ProcCur.DateTP.Date;
+			DateTime tempDate=PIn.Date(textDateTP.Text);
 			switch(comboDPC.SelectedIndex) {
 				case 1:
 					tempDate=tempDate.Date.AddDays(1);
