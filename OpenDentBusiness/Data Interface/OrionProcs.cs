@@ -103,6 +103,21 @@ namespace OpenDentBusiness{
 			return Db.GetTable(command);
 		}
 
+		///<summary>Loops through every procedure attached to an appt and sets the Status2 to complete.</summary>
+		public static void SetCompleteInAppt(List<Procedure> procsInAppt) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),procsInAppt);
+				return;
+			}
+			OrionProc orionProc;
+			for(int i=0;i<procsInAppt.Count;i++) {
+				orionProc=GetOneByProcNum(procsInAppt[i].ProcNum);
+				orionProc.Status2=OrionStatus.C;
+				Update(orionProc);
+			}
+		}
+
+
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
 
