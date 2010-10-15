@@ -51,18 +51,19 @@ namespace OpenDental{
 		private bool SigChanged;
 		private PatField[] PatFieldList;
 		private Patient PatCur;
+		private Family FamCur;
 		private ComboBox comboDPC;
 		private Label labelDPC;
 		private Label label1;
 		private Label label3;
 		private Label label4;
-		private System.Windows.Forms.Button button6;
-		private System.Windows.Forms.Button button5;
-		private System.Windows.Forms.Button button3;
-		private System.Windows.Forms.Button button4;
-		private System.Windows.Forms.Button button2;
-		private System.Windows.Forms.Button button1;
-		private Family FamCur;
+		private System.Windows.Forms.Button butRepairN;
+		private System.Windows.Forms.Button butRepairY;
+		private System.Windows.Forms.Button butEffectiveCommY;
+		private System.Windows.Forms.Button butEffectiveCommN;
+		private System.Windows.Forms.Button butOnCallN;
+		private System.Windows.Forms.Button butOnCallY;
+		private OpenDental.UI.Button butRx;
 
 		public FormProcGroup() {
 			InitializeComponent();
@@ -107,12 +108,13 @@ namespace OpenDental{
 			this.label1 = new System.Windows.Forms.Label();
 			this.label3 = new System.Windows.Forms.Label();
 			this.label4 = new System.Windows.Forms.Label();
-			this.button6 = new System.Windows.Forms.Button();
-			this.button5 = new System.Windows.Forms.Button();
-			this.button3 = new System.Windows.Forms.Button();
-			this.button4 = new System.Windows.Forms.Button();
-			this.button2 = new System.Windows.Forms.Button();
-			this.button1 = new System.Windows.Forms.Button();
+			this.butRepairN = new System.Windows.Forms.Button();
+			this.butRepairY = new System.Windows.Forms.Button();
+			this.butEffectiveCommY = new System.Windows.Forms.Button();
+			this.butEffectiveCommN = new System.Windows.Forms.Button();
+			this.butOnCallN = new System.Windows.Forms.Button();
+			this.butOnCallY = new System.Windows.Forms.Button();
+			this.butRx = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// label7
@@ -163,7 +165,7 @@ namespace OpenDental{
 			// 
 			this.label26.Location = new System.Drawing.Point(178,34);
 			this.label26.Name = "label26";
-			this.label26.Size = new System.Drawing.Size(112,18);
+			this.label26.Size = new System.Drawing.Size(83,18);
 			this.label26.TabIndex = 97;
 			this.label26.Text = "(for security)";
 			this.label26.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -196,7 +198,6 @@ namespace OpenDental{
 			// 
 			this.textProcDate.Location = new System.Drawing.Point(98,12);
 			this.textProcDate.Name = "textProcDate";
-			this.textProcDate.ReadOnly = true;
 			this.textProcDate.Size = new System.Drawing.Size(76,20);
 			this.textProcDate.TabIndex = 100;
 			// 
@@ -367,70 +368,84 @@ namespace OpenDental{
 			this.label4.Text = "Repair";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// button6
+			// butRepairN
 			// 
-			this.button6.Location = new System.Drawing.Point(566,247);
-			this.button6.Name = "button6";
-			this.button6.Size = new System.Drawing.Size(23,20);
-			this.button6.TabIndex = 198;
-			this.button6.Text = "N";
-			this.button6.UseVisualStyleBackColor = true;
+			this.butRepairN.Location = new System.Drawing.Point(566,247);
+			this.butRepairN.Name = "butRepairN";
+			this.butRepairN.Size = new System.Drawing.Size(23,20);
+			this.butRepairN.TabIndex = 198;
+			this.butRepairN.Text = "N";
+			this.butRepairN.UseVisualStyleBackColor = true;
 			// 
-			// button5
+			// butRepairY
 			// 
-			this.button5.Location = new System.Drawing.Point(543,247);
-			this.button5.Name = "button5";
-			this.button5.Size = new System.Drawing.Size(23,20);
-			this.button5.TabIndex = 198;
-			this.button5.Text = "Y";
-			this.button5.UseVisualStyleBackColor = true;
+			this.butRepairY.Location = new System.Drawing.Point(543,247);
+			this.butRepairY.Name = "butRepairY";
+			this.butRepairY.Size = new System.Drawing.Size(23,20);
+			this.butRepairY.TabIndex = 198;
+			this.butRepairY.Text = "Y";
+			this.butRepairY.UseVisualStyleBackColor = true;
 			// 
-			// button3
+			// butEffectiveCommY
 			// 
-			this.button3.Location = new System.Drawing.Point(543,224);
-			this.button3.Name = "button3";
-			this.button3.Size = new System.Drawing.Size(23,20);
-			this.button3.TabIndex = 198;
-			this.button3.Text = "Y";
-			this.button3.UseVisualStyleBackColor = true;
+			this.butEffectiveCommY.Location = new System.Drawing.Point(543,224);
+			this.butEffectiveCommY.Name = "butEffectiveCommY";
+			this.butEffectiveCommY.Size = new System.Drawing.Size(23,20);
+			this.butEffectiveCommY.TabIndex = 198;
+			this.butEffectiveCommY.Text = "Y";
+			this.butEffectiveCommY.UseVisualStyleBackColor = true;
 			// 
-			// button4
+			// butEffectiveCommN
 			// 
-			this.button4.Location = new System.Drawing.Point(566,224);
-			this.button4.Name = "button4";
-			this.button4.Size = new System.Drawing.Size(23,20);
-			this.button4.TabIndex = 198;
-			this.button4.Text = "N";
-			this.button4.UseVisualStyleBackColor = true;
+			this.butEffectiveCommN.Location = new System.Drawing.Point(566,224);
+			this.butEffectiveCommN.Name = "butEffectiveCommN";
+			this.butEffectiveCommN.Size = new System.Drawing.Size(23,20);
+			this.butEffectiveCommN.TabIndex = 198;
+			this.butEffectiveCommN.Text = "N";
+			this.butEffectiveCommN.UseVisualStyleBackColor = true;
 			// 
-			// button2
+			// butOnCallN
 			// 
-			this.button2.Location = new System.Drawing.Point(566,201);
-			this.button2.Name = "button2";
-			this.button2.Size = new System.Drawing.Size(23,20);
-			this.button2.TabIndex = 198;
-			this.button2.Text = "N";
-			this.button2.UseVisualStyleBackColor = true;
+			this.butOnCallN.Location = new System.Drawing.Point(566,201);
+			this.butOnCallN.Name = "butOnCallN";
+			this.butOnCallN.Size = new System.Drawing.Size(23,20);
+			this.butOnCallN.TabIndex = 198;
+			this.butOnCallN.Text = "N";
+			this.butOnCallN.UseVisualStyleBackColor = true;
 			// 
-			// button1
+			// butOnCallY
 			// 
-			this.button1.Location = new System.Drawing.Point(543,201);
-			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(23,20);
-			this.button1.TabIndex = 198;
-			this.button1.Text = "Y";
-			this.button1.UseVisualStyleBackColor = true;
+			this.butOnCallY.Location = new System.Drawing.Point(543,201);
+			this.butOnCallY.Name = "butOnCallY";
+			this.butOnCallY.Size = new System.Drawing.Size(23,20);
+			this.butOnCallY.TabIndex = 198;
+			this.butOnCallY.Text = "Y";
+			this.butOnCallY.UseVisualStyleBackColor = true;
+			// 
+			// butRx
+			// 
+			this.butRx.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butRx.Autosize = true;
+			this.butRx.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butRx.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRx.CornerRadius = 4F;
+			this.butRx.Location = new System.Drawing.Point(267,42);
+			this.butRx.Name = "butRx";
+			this.butRx.Size = new System.Drawing.Size(23,24);
+			this.butRx.TabIndex = 106;
+			this.butRx.Text = "Rx";
+			this.butRx.Click += new System.EventHandler(this.buttonUseAutoNote_Click);
 			// 
 			// FormProcGroup
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(730,645);
-			this.Controls.Add(this.button6);
-			this.Controls.Add(this.button4);
-			this.Controls.Add(this.button2);
-			this.Controls.Add(this.button5);
-			this.Controls.Add(this.button3);
-			this.Controls.Add(this.button1);
+			this.Controls.Add(this.butRepairN);
+			this.Controls.Add(this.butEffectiveCommN);
+			this.Controls.Add(this.butOnCallN);
+			this.Controls.Add(this.butRepairY);
+			this.Controls.Add(this.butEffectiveCommY);
+			this.Controls.Add(this.butOnCallY);
 			this.Controls.Add(this.comboDPC);
 			this.Controls.Add(this.label4);
 			this.Controls.Add(this.label3);
@@ -443,6 +458,7 @@ namespace OpenDental{
 			this.Controls.Add(this.label26);
 			this.Controls.Add(this.gridProc);
 			this.Controls.Add(this.textDateEntry);
+			this.Controls.Add(this.butRx);
 			this.Controls.Add(this.butExamSheets);
 			this.Controls.Add(this.buttonUseAutoNote);
 			this.Controls.Add(this.label12);
@@ -470,6 +486,8 @@ namespace OpenDental{
 
 		//Load function from FormProcEdit (FormProcInfo_Load)... (Single procedure - but form looks like I want)
 		private void FormProcGroup_Load(object sender, System.EventArgs e){
+			PatCur=Patients.GetPat(GroupCur.PatNum);
+			FamCur=Patients.GetFamily(GroupCur.PatNum);
 			GroupOld=GroupCur.Copy();
 			IsStartingUp=true;
 			textProcDate.Text=GroupCur.ProcDate.ToShortDateString();
@@ -481,10 +499,8 @@ namespace OpenDental{
 			string keyData=GetSignatureKey();
 			signatureBoxWrapper.FillSignature(GroupCur.SigIsTopaz,keyData,GroupCur.Signature);
 			signatureBoxWrapper.BringToFront();
-			IsStartingUp=false;
-			PatCur=Patients.GetPat(GroupCur.PatNum);
-			FamCur=Patients.GetFamily(GroupCur.PatNum);
 			FillPatientData();
+			IsStartingUp=false;
 		}
 
 		private void FillPatientData(){
