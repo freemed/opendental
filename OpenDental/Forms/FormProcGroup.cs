@@ -51,11 +51,17 @@ namespace OpenDental{
 		private bool SigChanged;
 		private PatField[] PatFieldList;
 		private Patient PatCur;
-		private CheckBox checkIsRepair;
-		private CheckBox checkIsEffComm;
-		private CheckBox checkIsOnCall;
 		private ComboBox comboDPC;
 		private Label labelDPC;
+		private Label label1;
+		private Label label3;
+		private Label label4;
+		private System.Windows.Forms.Button button6;
+		private System.Windows.Forms.Button button5;
+		private System.Windows.Forms.Button button3;
+		private System.Windows.Forms.Button button4;
+		private System.Windows.Forms.Button button2;
+		private System.Windows.Forms.Button button1;
 		private Family FamCur;
 
 		public FormProcGroup() {
@@ -96,11 +102,17 @@ namespace OpenDental{
 			this.butDelete = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
-			this.checkIsRepair = new System.Windows.Forms.CheckBox();
-			this.checkIsEffComm = new System.Windows.Forms.CheckBox();
-			this.checkIsOnCall = new System.Windows.Forms.CheckBox();
 			this.comboDPC = new System.Windows.Forms.ComboBox();
 			this.labelDPC = new System.Windows.Forms.Label();
+			this.label1 = new System.Windows.Forms.Label();
+			this.label3 = new System.Windows.Forms.Label();
+			this.label4 = new System.Windows.Forms.Label();
+			this.button6 = new System.Windows.Forms.Button();
+			this.button5 = new System.Windows.Forms.Button();
+			this.button3 = new System.Windows.Forms.Button();
+			this.button4 = new System.Windows.Forms.Button();
+			this.button2 = new System.Windows.Forms.Button();
+			this.button1 = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// label7
@@ -205,7 +217,7 @@ namespace OpenDental{
 			this.gridProc.Name = "gridProc";
 			this.gridProc.ScrollValue = 0;
 			this.gridProc.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridProc.Size = new System.Drawing.Size(721,222);
+			this.gridProc.Size = new System.Drawing.Size(710,222);
 			this.gridProc.TabIndex = 193;
 			this.gridProc.Title = "Procedures";
 			this.gridProc.TranslationName = "TableProg";
@@ -269,7 +281,7 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(26,606);
+			this.butDelete.Location = new System.Drawing.Point(19,606);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(83,24);
 			this.butDelete.TabIndex = 8;
@@ -285,7 +297,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(549,606);
+			this.butCancel.Location = new System.Drawing.Point(635,606);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(76,24);
 			this.butCancel.TabIndex = 13;
@@ -300,52 +312,19 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(467,606);
+			this.butOK.Location = new System.Drawing.Point(553,606);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(76,24);
 			this.butOK.TabIndex = 12;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
-			// checkIsRepair
-			// 
-			this.checkIsRepair.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkIsRepair.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkIsRepair.Location = new System.Drawing.Point(453,253);
-			this.checkIsRepair.Name = "checkIsRepair";
-			this.checkIsRepair.Size = new System.Drawing.Size(114,18);
-			this.checkIsRepair.TabIndex = 200;
-			this.checkIsRepair.Text = "Repair";
-			this.checkIsRepair.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// checkIsEffComm
-			// 
-			this.checkIsEffComm.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkIsEffComm.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkIsEffComm.Location = new System.Drawing.Point(453,236);
-			this.checkIsEffComm.Name = "checkIsEffComm";
-			this.checkIsEffComm.Size = new System.Drawing.Size(114,18);
-			this.checkIsEffComm.TabIndex = 199;
-			this.checkIsEffComm.Text = "Effective Comm";
-			this.checkIsEffComm.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// checkIsOnCall
-			// 
-			this.checkIsOnCall.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkIsOnCall.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkIsOnCall.Location = new System.Drawing.Point(453,219);
-			this.checkIsOnCall.Name = "checkIsOnCall";
-			this.checkIsOnCall.Size = new System.Drawing.Size(114,18);
-			this.checkIsOnCall.TabIndex = 198;
-			this.checkIsOnCall.Text = "On Call";
-			this.checkIsOnCall.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
 			// comboDPC
 			// 
 			this.comboDPC.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboDPC.DropDownWidth = 177;
 			this.comboDPC.FormattingEnabled = true;
-			this.comboDPC.Location = new System.Drawing.Point(554,192);
+			this.comboDPC.Location = new System.Drawing.Point(543,174);
 			this.comboDPC.MaxDropDownItems = 30;
 			this.comboDPC.Name = "comboDPC";
 			this.comboDPC.Size = new System.Drawing.Size(177,21);
@@ -354,21 +333,108 @@ namespace OpenDental{
 			// 
 			// labelDPC
 			// 
-			this.labelDPC.Location = new System.Drawing.Point(452,193);
+			this.labelDPC.Location = new System.Drawing.Point(473,175);
 			this.labelDPC.Name = "labelDPC";
-			this.labelDPC.Size = new System.Drawing.Size(100,16);
+			this.labelDPC.Size = new System.Drawing.Size(73,16);
 			this.labelDPC.TabIndex = 196;
 			this.labelDPC.Text = "DPC";
 			this.labelDPC.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// label1
+			// 
+			this.label1.Location = new System.Drawing.Point(463,203);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(83,16);
+			this.label1.TabIndex = 196;
+			this.label1.Text = "On Call";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label3
+			// 
+			this.label3.Location = new System.Drawing.Point(463,226);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(83,16);
+			this.label3.TabIndex = 196;
+			this.label3.Text = "Effective Comm";
+			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label4
+			// 
+			this.label4.Location = new System.Drawing.Point(463,249);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(83,16);
+			this.label4.TabIndex = 196;
+			this.label4.Text = "Repair";
+			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// button6
+			// 
+			this.button6.Location = new System.Drawing.Point(566,247);
+			this.button6.Name = "button6";
+			this.button6.Size = new System.Drawing.Size(23,20);
+			this.button6.TabIndex = 198;
+			this.button6.Text = "N";
+			this.button6.UseVisualStyleBackColor = true;
+			// 
+			// button5
+			// 
+			this.button5.Location = new System.Drawing.Point(543,247);
+			this.button5.Name = "button5";
+			this.button5.Size = new System.Drawing.Size(23,20);
+			this.button5.TabIndex = 198;
+			this.button5.Text = "Y";
+			this.button5.UseVisualStyleBackColor = true;
+			// 
+			// button3
+			// 
+			this.button3.Location = new System.Drawing.Point(543,224);
+			this.button3.Name = "button3";
+			this.button3.Size = new System.Drawing.Size(23,20);
+			this.button3.TabIndex = 198;
+			this.button3.Text = "Y";
+			this.button3.UseVisualStyleBackColor = true;
+			// 
+			// button4
+			// 
+			this.button4.Location = new System.Drawing.Point(566,224);
+			this.button4.Name = "button4";
+			this.button4.Size = new System.Drawing.Size(23,20);
+			this.button4.TabIndex = 198;
+			this.button4.Text = "N";
+			this.button4.UseVisualStyleBackColor = true;
+			// 
+			// button2
+			// 
+			this.button2.Location = new System.Drawing.Point(566,201);
+			this.button2.Name = "button2";
+			this.button2.Size = new System.Drawing.Size(23,20);
+			this.button2.TabIndex = 198;
+			this.button2.Text = "N";
+			this.button2.UseVisualStyleBackColor = true;
+			// 
+			// button1
+			// 
+			this.button1.Location = new System.Drawing.Point(543,201);
+			this.button1.Name = "button1";
+			this.button1.Size = new System.Drawing.Size(23,20);
+			this.button1.TabIndex = 198;
+			this.button1.Text = "Y";
+			this.button1.UseVisualStyleBackColor = true;
+			// 
 			// FormProcGroup
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(742,645);
-			this.Controls.Add(this.checkIsRepair);
-			this.Controls.Add(this.checkIsEffComm);
-			this.Controls.Add(this.checkIsOnCall);
+			this.ClientSize = new System.Drawing.Size(730,645);
+			this.Controls.Add(this.button6);
+			this.Controls.Add(this.button4);
+			this.Controls.Add(this.button2);
+			this.Controls.Add(this.button5);
+			this.Controls.Add(this.button3);
+			this.Controls.Add(this.button1);
 			this.Controls.Add(this.comboDPC);
+			this.Controls.Add(this.label4);
+			this.Controls.Add(this.label3);
+			this.Controls.Add(this.label1);
 			this.Controls.Add(this.labelDPC);
 			this.Controls.Add(this.gridPat);
 			this.Controls.Add(this.label2);
