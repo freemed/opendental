@@ -3314,6 +3314,9 @@ namespace OpenDental{
 					PrevPtNum = PatCur.PatNum;
 				}
 			}
+			if(Programs.UsingOrion) {
+				groupBox2.Visible=false;
+			}
 			ToolBarMain.Invalidate();
 			ClearButtons();
 			FillChartViewsGrid();
