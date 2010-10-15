@@ -179,7 +179,7 @@ namespace OpenDental{
 			// 
 			// labelOnCall
 			// 
-			this.labelOnCall.Location = new System.Drawing.Point(468,203);
+			this.labelOnCall.Location = new System.Drawing.Point(468,229);
 			this.labelOnCall.Name = "labelOnCall";
 			this.labelOnCall.Size = new System.Drawing.Size(90,16);
 			this.labelOnCall.TabIndex = 196;
@@ -189,7 +189,7 @@ namespace OpenDental{
 			// 
 			// labelEffectiveComm
 			// 
-			this.labelEffectiveComm.Location = new System.Drawing.Point(468,226);
+			this.labelEffectiveComm.Location = new System.Drawing.Point(468,252);
 			this.labelEffectiveComm.Name = "labelEffectiveComm";
 			this.labelEffectiveComm.Size = new System.Drawing.Size(90,16);
 			this.labelEffectiveComm.TabIndex = 196;
@@ -199,7 +199,7 @@ namespace OpenDental{
 			// 
 			// labelRepair
 			// 
-			this.labelRepair.Location = new System.Drawing.Point(468,249);
+			this.labelRepair.Location = new System.Drawing.Point(468,206);
 			this.labelRepair.Name = "labelRepair";
 			this.labelRepair.Size = new System.Drawing.Size(90,16);
 			this.labelRepair.TabIndex = 196;
@@ -209,7 +209,7 @@ namespace OpenDental{
 			// 
 			// butRepairN
 			// 
-			this.butRepairN.Location = new System.Drawing.Point(583,247);
+			this.butRepairN.Location = new System.Drawing.Point(583,204);
 			this.butRepairN.Name = "butRepairN";
 			this.butRepairN.Size = new System.Drawing.Size(23,20);
 			this.butRepairN.TabIndex = 198;
@@ -220,7 +220,7 @@ namespace OpenDental{
 			// 
 			// butRepairY
 			// 
-			this.butRepairY.Location = new System.Drawing.Point(560,247);
+			this.butRepairY.Location = new System.Drawing.Point(560,204);
 			this.butRepairY.Name = "butRepairY";
 			this.butRepairY.Size = new System.Drawing.Size(23,20);
 			this.butRepairY.TabIndex = 198;
@@ -231,7 +231,7 @@ namespace OpenDental{
 			// 
 			// butEffectiveCommY
 			// 
-			this.butEffectiveCommY.Location = new System.Drawing.Point(560,224);
+			this.butEffectiveCommY.Location = new System.Drawing.Point(560,250);
 			this.butEffectiveCommY.Name = "butEffectiveCommY";
 			this.butEffectiveCommY.Size = new System.Drawing.Size(23,20);
 			this.butEffectiveCommY.TabIndex = 198;
@@ -242,7 +242,7 @@ namespace OpenDental{
 			// 
 			// butEffectiveCommN
 			// 
-			this.butEffectiveCommN.Location = new System.Drawing.Point(583,224);
+			this.butEffectiveCommN.Location = new System.Drawing.Point(583,250);
 			this.butEffectiveCommN.Name = "butEffectiveCommN";
 			this.butEffectiveCommN.Size = new System.Drawing.Size(23,20);
 			this.butEffectiveCommN.TabIndex = 198;
@@ -253,7 +253,7 @@ namespace OpenDental{
 			// 
 			// butOnCallN
 			// 
-			this.butOnCallN.Location = new System.Drawing.Point(583,201);
+			this.butOnCallN.Location = new System.Drawing.Point(583,227);
 			this.butOnCallN.Name = "butOnCallN";
 			this.butOnCallN.Size = new System.Drawing.Size(23,20);
 			this.butOnCallN.TabIndex = 198;
@@ -264,7 +264,7 @@ namespace OpenDental{
 			// 
 			// butOnCallY
 			// 
-			this.butOnCallY.Location = new System.Drawing.Point(560,201);
+			this.butOnCallY.Location = new System.Drawing.Point(560,227);
 			this.butOnCallY.Name = "butOnCallY";
 			this.butOnCallY.Size = new System.Drawing.Size(23,20);
 			this.butOnCallY.TabIndex = 198;
@@ -639,10 +639,52 @@ namespace OpenDental{
 			}
 		}
 
+		private void butRx_Click(object sender,EventArgs e) {
+			/*?
+			if(UsingEcwTight()) {
+				VBbridges.Ecw.LoadRxForm((int)Bridges.ECW.UserId,Bridges.ECW.EcwConfigPath,(int)Bridges.ECW.AptNum);
+				//refresh the right panel:
+				try {
+					string strAppServer=VBbridges.Ecw.GetAppServer((int)Bridges.ECW.UserId,Bridges.ECW.EcwConfigPath);
+					webBrowserEcw.Url=new Uri("http://"+strAppServer+"/mobiledoc/jsp/dashboard/Overview.jsp?ptId="
+							+PatCur.PatNum.ToString()+"&panelName=overview&pnencid="
+							+Bridges.ECW.AptNum.ToString()+"&context=progressnotes&TrUserId="+Bridges.ECW.UserId.ToString());
+					labelECWerror.Visible=false;
+				}
+				catch(Exception ex) {
+					webBrowserEcw.Url=null;
+					labelECWerror.Text="Error: "+ex.Message;
+					labelECWerror.Visible=true;
+				}
+			}
+			else {
+			?*/
+				if(!Security.IsAuthorized(Permissions.RxCreate)) {
+					return;
+				}
+				FormRxSelect FormRS=new FormRxSelect(PatCur);
+				FormRS.ShowDialog();
+				if(FormRS.DialogResult!=DialogResult.OK) return;
+				//ModuleSelected(PatCur.PatNum);
+				SecurityLogs.MakeLogEntry(Permissions.RxCreate,PatCur.PatNum,PatCur.GetNameLF());
+			//}
+			//TODO: Print a note about Rx added.
+		}
+
 		private void buttonUseAutoNote_Click(object sender,EventArgs e) {
+			FormAutoNoteCompose FormA=new FormAutoNoteCompose();
+			FormA.ShowDialog();
+			if(FormA.DialogResult==DialogResult.OK) {
+				textNotes.AppendText(FormA.CompletedNote);
+			}
+			//TODO: Finish implementing autonotes...
+		}
+
+		private void butExamSheets_Click(object sender,EventArgs e) {
 			FormExamSheets fes=new FormExamSheets();
 			fes.PatNum=GroupCur.PatNum;
 			fes.ShowDialog();
+			//TODO: Print a note about Exam Sheet added.
 		}
 
 		private void textNotes_TextChanged(object sender,EventArgs e) {
