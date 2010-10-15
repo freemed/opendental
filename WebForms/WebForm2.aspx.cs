@@ -63,8 +63,8 @@ namespace WebForms {
 				int RadioButtonXOffsetIE=0;
 				int RadioButtonXOffsetFirefox=-2;
 
-				int CheckBoxXOffset=-4;
-				int CheckBoxYOffset=-4;
+				float CheckBoxXOffset=-4.0f;
+				float CheckBoxYOffset=-4.0f;
 
 				int SignatureFontSize=20;
 				
@@ -146,7 +146,9 @@ namespace WebForms {
 					}
 
 					if(wc!=null) {
-						wc.ID=FieldName;
+						if(String.IsNullOrEmpty(wc.ID)) {
+							wc.ID=FieldName;
+						}
 						wc.Style["position"]="absolute";
 						wc.Style["width"]=width+"px";
 						wc.Style["height"]=height+"px";
@@ -179,11 +181,8 @@ namespace WebForms {
 							listwc.Add(wcobj);
 						}
 						if(wc.GetType()==typeof(CheckBox)) {
-							wc.Style["top"]=YPos+CheckBoxXOffset+"px";
-							wc.Style["left"]=XPos+CheckBoxYOffset+"px";
-							if(!String.IsNullOrEmpty(sfdObj.ElementAt(j).RadioButtonValue)) {
-								wc.ID=FieldName+sfdObj.ElementAt(j).RadioButtonValue;
-							}
+							wc.Style["top"]=YPos+CheckBoxYOffset+"px";
+							wc.Style["left"]=XPos+CheckBoxXOffset+"px";
 							WControl wcobj = new WControl(XPos,YPos,wc);
 							listwc.Add(wcobj);
 						}
@@ -219,16 +218,9 @@ namespace WebForms {
 
 		private WebControl AddRadioButtonOrCheckBox(webforms_sheetfielddef sfd,int XPos,int YPos,int RadioButtonXOffset,int RadioButtonYOffset,int ElementZIndex) {
 			
-			
-			String	FieldName=sfd.FieldName;
-			String RadioButtonValue=sfd.RadioButtonValue;
-			String RadioButtonGroup=sfd.RadioButtonGroup;
-			
-			WebControl wc=null;
-			/*
-			bool runCode=false;
 
-			if(runCode==true) {
+			/*
+
 				bool RadioButtonListExists=false;
 				RadioButtonList rb=null;
 				ListItem li=new ListItem();
@@ -269,11 +261,28 @@ namespace WebForms {
 					rb.Items.Add(li);
 				}
 
-			}//old code
+			//old code
 			*/
 
-			CheckBox cb1=new CheckBox();
-			wc=cb1;
+			String FieldName=sfd.FieldName;
+			String RadioButtonValue=sfd.RadioButtonValue;
+			String RadioButtonGroup=sfd.RadioButtonGroup;
+			WebControl wc=null;
+
+			CheckBox cb=new CheckBox();
+			cb.ID=FieldName+RadioButtonValue;
+			AjaxControlToolkit.MutuallyExclusiveCheckBoxExtender mecb = new AjaxControlToolkit.MutuallyExclusiveCheckBoxExtender();
+			mecb.ID=cb.ID+"MutuallyExclusiveCheckBoxExtender";
+			mecb.TargetControlID=cb.ID;
+			if(!String.IsNullOrEmpty(sfd.RadioButtonGroup) && FieldName=="misc") {
+				mecb.Key=RadioButtonGroup;
+			}
+			else {// cases like gender, position etc that have no value for RadioButtonGroup
+				mecb.Key=FieldName;
+			}
+			Panel1.Controls.Add(mecb);
+
+			wc=cb;
 
 
 			return wc;
