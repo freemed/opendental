@@ -27,6 +27,7 @@ namespace OpenDental {
 		private Label label1;
 		private CheckBox checkShow;
 		private OpenDental.UI.Button butTemp;
+		private UI.Button butFix;
 		private OpenDental.UI.Button butPrint;
 
 		///<summary></summary>
@@ -70,6 +71,7 @@ namespace OpenDental {
 			this.checkShow = new System.Windows.Forms.CheckBox();
 			this.butPrint = new OpenDental.UI.Button();
 			this.butTemp = new OpenDental.UI.Button();
+			this.butFix = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// butClose
@@ -112,7 +114,7 @@ namespace OpenDental {
 			this.buttonCheck.Name = "buttonCheck";
 			this.buttonCheck.Size = new System.Drawing.Size(87,26);
 			this.buttonCheck.TabIndex = 5;
-			this.buttonCheck.Text = "C&heck Now";
+			this.buttonCheck.Text = "C&heck";
 			this.buttonCheck.Click += new System.EventHandler(this.buttonCheck_Click);
 			// 
 			// textLog
@@ -176,12 +178,28 @@ namespace OpenDental {
 			this.butTemp.Text = "Temp Check";
 			this.butTemp.Click += new System.EventHandler(this.butTemp_Click);
 			// 
+			// butFix
+			// 
+			this.butFix.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butFix.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butFix.Autosize = true;
+			this.butFix.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butFix.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butFix.CornerRadius = 4F;
+			this.butFix.Location = new System.Drawing.Point(528,631);
+			this.butFix.Name = "butFix";
+			this.butFix.Size = new System.Drawing.Size(87,26);
+			this.butFix.TabIndex = 20;
+			this.butFix.Text = "Fix";
+			this.butFix.Click += new System.EventHandler(this.butFix_Click);
+			// 
 			// FormDatabaseMaintenance
 			// 
 			this.AcceptButton = this.buttonCheck;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butClose;
 			this.ClientSize = new System.Drawing.Size(895,667);
+			this.Controls.Add(this.butFix);
 			this.Controls.Add(this.butTemp);
 			this.Controls.Add(this.butPrint);
 			this.Controls.Add(this.checkShow);
@@ -213,144 +231,147 @@ namespace OpenDental {
 		}
 
 		private void buttonCheck_Click(object sender,System.EventArgs e) {
+			Run(false);
+		}
+
+		private void butFix_Click(object sender,EventArgs e) {
+			Run(true);
+		}
+
+		private void Run(bool isFix){
 			Cursor=Cursors.WaitCursor;
 			bool verbose=checkShow.Checked;
 			StringBuilder strB=new StringBuilder();
 			strB.Append('-',90);
 			textLog.Text=DateTime.Now.ToString()+strB.ToString()+"\r\n";
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.MySQLTables(verbose);
+			textLog.Text+=DatabaseMaintenance.MySQLTables(verbose,isFix);
 			if(!DatabaseMaintenance.GetSuccess()) {
 				Cursor=Cursors.Default;
 				return;
 			}
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.DatesNoZeros(verbose);
+			textLog.Text+=DatabaseMaintenance.DatesNoZeros(verbose,isFix);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.DecimalValues(verbose);
+			textLog.Text+=DatabaseMaintenance.DecimalValues(verbose,isFix);
 			Application.DoEvents();
 			//Now, methods that apply to specific tables----------------------------------------------------------------------------
-			textLog.Text+=DatabaseMaintenance.AppointmentsNoPattern(verbose);
+			textLog.Text+=DatabaseMaintenance.AppointmentsNoPattern(verbose,isFix);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.AppointmentsNoDateOrProcs(verbose);
+			textLog.Text+=DatabaseMaintenance.AppointmentsNoDateOrProcs(verbose,isFix);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.AppointmentsNoPatients(verbose);
+			textLog.Text+=DatabaseMaintenance.AppointmentsNoPatients(verbose,isFix);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.AutoCodesDeleteWithNoItems(verbose);
+			textLog.Text+=DatabaseMaintenance.AutoCodesDeleteWithNoItems(verbose,isFix);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.ClaimPlanNum2NotValid(verbose);
+			textLog.Text+=DatabaseMaintenance.ClaimPlanNum2NotValid(verbose,isFix);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.ClaimDeleteWithInvalidPlanNums(verbose);
+			textLog.Text+=DatabaseMaintenance.ClaimDeleteWithInvalidPlanNums(verbose,isFix);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.ClaimDeleteWithNoClaimProcs(verbose);
+			textLog.Text+=DatabaseMaintenance.ClaimDeleteWithNoClaimProcs(verbose,isFix);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.ClaimWriteoffSum(verbose);
+			textLog.Text+=DatabaseMaintenance.ClaimWriteoffSum(verbose,isFix);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.ClaimPaymentCheckAmt(verbose);//also fixes resulting deposit misbalances.
+			textLog.Text+=DatabaseMaintenance.ClaimPaymentCheckAmt(verbose,isFix);//also fixes resulting deposit misbalances.
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.ClaimPaymentDeleteWithNoSplits(verbose);
+			textLog.Text+=DatabaseMaintenance.ClaimPaymentDeleteWithNoSplits(verbose,isFix);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.ClaimProcDateNotMatchCapComplete(verbose);
+			textLog.Text+=DatabaseMaintenance.ClaimProcDateNotMatchCapComplete(verbose,isFix);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.ClaimProcDateNotMatchPayment(verbose);
+			textLog.Text+=DatabaseMaintenance.ClaimProcDateNotMatchPayment(verbose,isFix);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.ClaimProcDeleteDuplicates(verbose);//
+			textLog.Text+=DatabaseMaintenance.ClaimProcDeleteWithInvalidClaimNum(verbose,isFix);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.ClaimProcDeleteWithInvalidClaimNum(verbose);
+			textLog.Text+=DatabaseMaintenance.ClaimProcDeleteWithInvalidPlanNum(verbose,isFix);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.ClaimProcDeleteWithInvalidPlanNum(verbose);
+			textLog.Text+=DatabaseMaintenance.ClaimProcDeleteWithInvalidProcNum(verbose,isFix);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.ClaimProcDeleteWithInvalidProcNum(verbose);
+			textLog.Text+=DatabaseMaintenance.ClaimProcEstNoBillIns(verbose,isFix);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.ClaimProcEstNoBillIns(verbose);
+			textLog.Text+=DatabaseMaintenance.ClaimProcEstWithInsPaidAmt(verbose,isFix);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.ClaimProcEstWithInsPaidAmt(verbose);
+			textLog.Text+=DatabaseMaintenance.ClaimProcProvNumMissing(verbose,isFix);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.ClaimProcProvNumMissing(verbose);
+			textLog.Text+=DatabaseMaintenance.ClaimProcPreauthNotMatchClaim(verbose,isFix);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.ClaimProcPreauthNotMatchClaim(verbose);
+			textLog.Text+=DatabaseMaintenance.ClaimProcStatusNotMatchClaim(verbose,isFix);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.ClaimProcStatusNotMatchClaim(verbose);
+			textLog.Text+=DatabaseMaintenance.ClaimProcWithInvalidClaimPaymentNum(verbose,isFix);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.ClaimProcWithInvalidClaimPaymentNum(verbose);
+			textLog.Text+=DatabaseMaintenance.ClaimProcWriteOffNegative(verbose,isFix);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.ClaimProcWriteOffNegative(verbose);
+			textLog.Text+=DatabaseMaintenance.ClockEventInFuture(verbose,isFix);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.ClockEventInFuture(verbose);
+			textLog.Text+=DatabaseMaintenance.DocumentWithNoCategory(verbose,isFix);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.DocumentWithNoCategory(verbose);
+			textLog.Text+=DatabaseMaintenance.InsPlanCheckNoCarrier(verbose,isFix);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.InsPlanCheckNoCarrier(verbose);
+			textLog.Text+=DatabaseMaintenance.InsPlanNoClaimForm(verbose,isFix);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.InsPlanNoClaimForm(verbose);
+			textLog.Text+=DatabaseMaintenance.MedicationPatDeleteWithInvalidMedNum(verbose,isFix);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.MedicationPatDeleteWithInvalidMedNum(verbose);
+			textLog.Text+=DatabaseMaintenance.PatFieldsDeleteDuplicates(verbose,isFix);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.PatFieldsDeleteDuplicates(verbose);
+			textLog.Text+=DatabaseMaintenance.PatientBadGuarantor(verbose,isFix);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.PatientBadGuarantor(verbose);
+			textLog.Text+=DatabaseMaintenance.PatientPriProvMissing(verbose,isFix);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.PatientPriProvMissing(verbose);
+			textLog.Text+=DatabaseMaintenance.PatientUnDeleteWithBalance(verbose,isFix);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.PatientUnDeleteWithBalance(verbose);
+			textLog.Text+=DatabaseMaintenance.PatPlanOrdinalTwoToOne(verbose,isFix);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.PatPlanOrdinalTwoToOne(verbose);
+			textLog.Text+=DatabaseMaintenance.PaymentDetachMissingDeposit(verbose,isFix);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.PaymentDetachMissingDeposit(verbose);
+			textLog.Text+=DatabaseMaintenance.PayPlanChargeGuarantorMatch(verbose,isFix);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.PayPlanChargeGuarantorMatch(verbose);
+			textLog.Text+=DatabaseMaintenance.PayPlanChargeProvNum(verbose,isFix);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.PayPlanChargeProvNum(verbose);
+			textLog.Text+=DatabaseMaintenance.PayPlanSetGuarantorToPatForIns(verbose,isFix);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.PayPlanSetGuarantorToPatForIns(verbose);
+			textLog.Text+=DatabaseMaintenance.PaySplitDeleteWithInvalidPayNum(verbose,isFix);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.PaySplitDeleteWithInvalidPayNum(verbose);
+			textLog.Text+=DatabaseMaintenance.PaySplitAttachedToPayPlan(verbose,isFix);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.PaySplitAttachedToPayPlan(verbose);
+			textLog.Text+=DatabaseMaintenance.PreferenceDateDepositsStarted(verbose,isFix);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.PreferenceDateDepositsStarted(verbose);
+			textLog.Text+=DatabaseMaintenance.PreferencePracticeBillingType(verbose,isFix);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.PreferencePracticeBillingType(verbose);
+			textLog.Text+=DatabaseMaintenance.PreferencePracticeProv(verbose,isFix);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.PreferencePracticeProv(verbose);
+			textLog.Text+=DatabaseMaintenance.ProcButtonItemsDeleteWithInvalidAutoCode(verbose,isFix);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.ProcButtonItemsDeleteWithInvalidAutoCode(verbose);
+			textLog.Text+=DatabaseMaintenance.ProcedurelogAttachedToWrongAppts(verbose,isFix);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.ProcedurelogAttachedToWrongAppts(verbose);
+			textLog.Text+=DatabaseMaintenance.ProcedurelogAttachedToWrongApptDate(verbose,isFix);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.ProcedurelogAttachedToWrongApptDate(verbose);
+			textLog.Text+=DatabaseMaintenance.ProcedurelogBaseUnitsZero(verbose,isFix);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.ProcedurelogBaseUnitsZero(verbose);
+			textLog.Text+=DatabaseMaintenance.ProcedurelogCodeNumZero(verbose,isFix);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.ProcedurelogCodeNumZero(verbose);
+			textLog.Text+=DatabaseMaintenance.ProcedurelogProvNumMissing(verbose,isFix);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.ProcedurelogProvNumMissing(verbose);
+			textLog.Text+=DatabaseMaintenance.ProcedurelogToothNums(verbose,isFix);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.ProcedurelogToothNums(verbose);
+			textLog.Text+=DatabaseMaintenance.ProcedurelogTpAttachedToClaim(verbose,isFix);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.ProcedurelogTpAttachedToClaim(verbose);
+			textLog.Text+=DatabaseMaintenance.ProcedurelogUnitQtyZero(verbose,isFix);
 			Application.DoEvents();
-			//textLog.Text+=DatabaseMaintenance.ProcedurelogUndeleteAttachedToClaim(verbose);
-			//Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.ProcedurelogUnitQtyZero(verbose);
+			textLog.Text+=DatabaseMaintenance.ProviderHiddenWithClaimPayments(verbose,isFix);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.ProviderHiddenWithClaimPayments(verbose);
+			textLog.Text+=DatabaseMaintenance.RecallDuplicatesWarn(verbose,isFix);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.RecallDuplicatesWarn(verbose);
+			textLog.Text+=DatabaseMaintenance.RecallTriggerDeleteBadCodeNum(verbose,isFix);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.RecallTriggerDeleteBadCodeNum(verbose);
+			textLog.Text+=DatabaseMaintenance.SchedulesDeleteShort(verbose,isFix);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.SchedulesDeleteShort(verbose);
+			textLog.Text+=DatabaseMaintenance.SchedulesDeleteProvClosed(verbose,isFix);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.SchedulesDeleteProvClosed(verbose);
+			textLog.Text+=DatabaseMaintenance.SignalInFuture(verbose,isFix);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.SignalInFuture(verbose);
-			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.StatementDateRangeMax(verbose);
+			textLog.Text+=DatabaseMaintenance.StatementDateRangeMax(verbose,isFix);
 			Application.DoEvents();
 			textLog.Text+=Lan.g("FormDatabaseMaintenance","Done");
 			SaveLogToFile();
-			//textLog.ScrollToCaret
 			Cursor=Cursors.Default;
 		}
 
@@ -374,8 +395,6 @@ namespace OpenDental {
 			pd2 = new PrintDocument();
 			pd2.PrintPage += new PrintPageEventHandler(this.pd2_PrintPage);
 			pd2.DefaultPageSettings.Margins=new Margins(40,50,50,60);
-			//pagesPrinted=0;
-			//linesPrinted=0;
 			try {
 				pd2.Print();
 			}

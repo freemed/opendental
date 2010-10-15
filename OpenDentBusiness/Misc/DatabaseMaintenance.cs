@@ -6,9 +6,6 @@ using System.Text;
 
 namespace OpenDentBusiness {
 	public class DatabaseMaintenance {
-		//public static bool verbose;
-		//<summary>This gets initialized to empty before starting, and then stores the running log.</summary>
-		//public static string textLog;
 		private static DataTable table;
 		private static string command;
 		private static bool success=false;
@@ -20,7 +17,7 @@ namespace OpenDentBusiness {
 			return DatabaseMaintenance.success; 
 		}
 
-		public static string MySQLTables(bool verbose) {
+		public static string MySQLTables(bool verbose,bool isFix) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
@@ -34,8 +31,6 @@ namespace OpenDentBusiness {
 			string[] tableNames=new string[table.Rows.Count];
 			int lastRow;
 			bool allOK=true;
-			//DialogResult result;
-			//ArrayList corruptTables=new ArrayList();
 			for(int i=0;i<table.Rows.Count;i++) {
 				tableNames[i]=table.Rows[i][0].ToString();
 			}
@@ -46,15 +41,18 @@ namespace OpenDentBusiness {
 				if(table.Rows[lastRow][3].ToString()!="OK") {
 					log+=Lans.g("FormDatabaseMaintenance","Corrupt file found for table")+" "+tableNames[i]+"\r\n";
 					allOK=false;
-					command="REPAIR TABLE "+tableNames[i];
-					DataTable tableResults=Db.GetTable(command);
-					//we always log the results of a repair table, regardless of whether user wants to show all.
-					log+=Lans.g("FormDatabaseMaintenance","Repair log:")+"\r\n";
-					for(int t=0;t<tableResults.Rows.Count;t++) {
-						for(int j=0;j<tableResults.Columns.Count;j++) {
-							log+=tableResults.Rows[t][j].ToString()+",";
+					//Sometimes dangerous because it can remove table rows (it has happened a few times). Repair of tables is necessary frequently though, so left the code here.
+					if(isFix){
+						command="REPAIR TABLE "+tableNames[i];
+						DataTable tableResults=Db.GetTable(command);
+						//we always log the results of a repair table, regardless of whether user wants to show all.
+						log+=Lans.g("FormDatabaseMaintenance","Repair log:")+"\r\n";
+						for(int t=0;t<tableResults.Rows.Count;t++) {
+							for(int j=0;j<tableResults.Columns.Count;j++) {
+								log+=tableResults.Rows[t][j].ToString()+",";
+							}
+							log+="\r\n";
 						}
-						log+="\r\n";
 					}
 				}
 			}
@@ -70,7 +68,7 @@ namespace OpenDentBusiness {
 			return log;
 		}
 
-		public static string DatesNoZeros(bool verbose) {
+		public static string DatesNoZeros(bool verbose,bool isFix) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
@@ -115,40 +113,44 @@ namespace OpenDentBusiness {
 				,"UPDATE signal SET SigDateTime='0001-01-01 00:00:00' WHERE SigDateTime LIKE '0000-00-00%'"
 				,"UPDATE signal SET AckTime='0001-01-01 00:00:00' WHERE AckTime LIKE '0000-00-00%'"
 			};
-			int rowsChanged=Db.NonQ32(commands);
-			if(rowsChanged !=0 || verbose) {
-				log+=Lans.g("FormDatabaseMaintenance","Dates fixed. Rows changed:")+" "+rowsChanged.ToString()+"\r\n";
+			//These updates have never been known to cause problems so I don't think they are dangerous.
+			if(isFix){
+				int rowsChanged=Db.NonQ32(commands);
+				if(rowsChanged !=0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Dates fixed. Rows changed:")+" "+rowsChanged.ToString()+"\r\n";
+				}
 			}
 			return log;
 		}
 
-		public static string DecimalValues(bool verbose) {
+		public static string DecimalValues(bool verbose,bool isFix) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
 			string log="";
-			//Holds columns to be checked. Strings are in pairs in the following order: table-name,column-name
-			string[] decimalCols=new string[] {
-				"patient","EstBalance"
-			};
-			int decimalPlacessToRoundTo=8;
-			int numberFixed=0;
-			for(int i=0;i<decimalCols.Length;i+=2) {
-				string tablename=decimalCols[i];
-				string colname=decimalCols[i+1];
-				string command="UPDATE "+tablename+" SET "+colname+"=ROUND("+colname+","+decimalPlacessToRoundTo
-					+") WHERE "+colname+"!=ROUND("+colname+","+decimalPlacessToRoundTo+")";
-				numberFixed+=Db.NonQ32(command);
-			}
-			if(numberFixed>0 || verbose) {
-				log+=Lans.g("FormDatabaseMaintenance","Decimal values fixed: ")+numberFixed.ToString()+"\r\n";
-			}
+			//No longer needed, since we are using ROUND(EstBalance,2) in the aging calculation now.
+			////Holds columns to be checked. Strings are in pairs in the following order: table-name,column-name
+			//string[] decimalCols=new string[] {
+			//  "patient","EstBalance"
+			//};
+			//int decimalPlacessToRoundTo=8;
+			//int numberFixed=0;
+			//for(int i=0;i<decimalCols.Length;i+=2) {
+			//  string tablename=decimalCols[i];
+			//  string colname=decimalCols[i+1];
+			//  string command="UPDATE "+tablename+" SET "+colname+"=ROUND("+colname+","+decimalPlacessToRoundTo
+			//    +") WHERE "+colname+"!=ROUND("+colname+","+decimalPlacessToRoundTo+")";
+			//  numberFixed+=Db.NonQ32(command);
+			//}
+			//if(numberFixed>0 || verbose) {
+			//  log+=Lans.g("FormDatabaseMaintenance","Decimal values fixed: ")+numberFixed.ToString()+"\r\n";
+			//}
 			return log;
 		}
 
 		//Methods that apply to specific tables----------------------------------------------------------------------------------
 
-		public static string AppointmentsNoPattern(bool verbose) {
+		public static string AppointmentsNoPattern(bool verbose,bool isFix) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
@@ -171,7 +173,7 @@ namespace OpenDentBusiness {
 			return log;
 		}
 
-		public static string AppointmentsNoDateOrProcs(bool verbose) {
+		public static string AppointmentsNoDateOrProcs(bool verbose,bool isFix) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
@@ -187,7 +189,7 @@ namespace OpenDentBusiness {
 			return log;
 		}
 
-		public static string AppointmentsNoPatients(bool verbose) {
+		public static string AppointmentsNoPatients(bool verbose,bool isFix) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
@@ -215,7 +217,7 @@ namespace OpenDentBusiness {
 			return log;
 		}
 
-		public static string AutoCodesDeleteWithNoItems(bool verbose) {
+		public static string AutoCodesDeleteWithNoItems(bool verbose,bool isFix) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
@@ -232,7 +234,7 @@ namespace OpenDentBusiness {
 			return log;
 		}
 
-		public static string ClaimPlanNum2NotValid(bool verbose) {
+		public static string ClaimPlanNum2NotValid(bool verbose,bool isFix) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
@@ -247,7 +249,7 @@ namespace OpenDentBusiness {
 			return log;
 		}
 
-		public static string ClaimDeleteWithInvalidPlanNums(bool verbose) {
+		public static string ClaimDeleteWithInvalidPlanNums(bool verbose,bool isFix) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
@@ -271,7 +273,7 @@ namespace OpenDentBusiness {
 			return log;
 		}
 
-		public static string ClaimDeleteWithNoClaimProcs(bool verbose) {
+		public static string ClaimDeleteWithNoClaimProcs(bool verbose,bool isFix) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
@@ -285,7 +287,7 @@ namespace OpenDentBusiness {
 			return log;
 		}
 
-		public static string ClaimWriteoffSum(bool verbose) {
+		public static string ClaimWriteoffSum(bool verbose,bool isFix) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
@@ -314,7 +316,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<Summary>also fixes resulting deposit misbalances.</Summary>
-		public static string ClaimPaymentCheckAmt(bool verbose) {
+		public static string ClaimPaymentCheckAmt(bool verbose,bool isFix) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
@@ -362,7 +364,7 @@ namespace OpenDentBusiness {
 			return log;
 		}
 
-		public static string ClaimPaymentDeleteWithNoSplits(bool verbose) {
+		public static string ClaimPaymentDeleteWithNoSplits(bool verbose,bool isFix) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
@@ -376,7 +378,7 @@ namespace OpenDentBusiness {
 			return log;
 		}
 
-		public static string ClaimProcDateNotMatchCapComplete(bool verbose) {
+		public static string ClaimProcDateNotMatchCapComplete(bool verbose,bool isFix) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
@@ -389,7 +391,7 @@ namespace OpenDentBusiness {
 			return log;
 		}
 
-		public static string ClaimProcDateNotMatchPayment(bool verbose) {
+		public static string ClaimProcDateNotMatchPayment(bool verbose,bool isFix) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
@@ -412,44 +414,7 @@ namespace OpenDentBusiness {
 			return log;
 		}
 
-		/// <summary>This addresses a bug discovered on 3/17/10.  Some duplicate claimprocs had been created.  The bug only lasted a few days.</summary>
-		public static string ClaimProcDeleteDuplicates(bool verbose) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
-			}
-			string log="";
-			/*Please see http://www.opendental.com/manual/bugcp.html
-			command=@"SELECT PatNum,ClaimNum,FeeBilled,Status,ProcNum,ProcDate,ClaimProcNum,InsPayAmt,LineNumber, COUNT(*) cnt
-FROM claimproc
-WHERE ClaimNum > 0
-AND ProcNum>0
-AND Status!=4/*exclude supplemental*
-GROUP BY Claimnum,ProcNum,Status,InsPayAmt,FeeBilled,LineNumber
-HAVING cnt>1";
-			table=Db.GetTable(command);
-			int numberFixed=0;
-			double insPayAmt;
-			double feeBilled;
-			for(int i=0;i<table.Rows.Count;i++) {
-				insPayAmt=PIn.Double(table.Rows[i]["InsPayAmt"].ToString());
-				feeBilled=PIn.Double(table.Rows[i]["FeeBilled"].ToString());
-				command="DELETE FROM claimproc "
-					+"WHERE ClaimNum= "+table.Rows[i]["ClaimNum"].ToString()+" "
-					+"AND ProcNum= "+table.Rows[i]["ProcNum"].ToString()+" "
-					+"AND Status= "+table.Rows[i]["Status"].ToString()+" "
-					+"AND InsPayAmt= '"+POut.Double(insPayAmt)+"' "
-					+"AND FeeBilled= '"+POut.Double(feeBilled)+"' "
-					+"AND LineNumber= "+table.Rows[i]["LineNumber"].ToString()+" "
-					+"AND ClaimProcNum != "+table.Rows[i]["ClaimProcNum"].ToString();
-				numberFixed+=Db.NonQ32(command);
-			}
-			if(numberFixed>0 || verbose) {
-				log+=Lans.g("FormDatabaseMaintenance","Claimprocs deleted due duplicate entries: ")+numberFixed.ToString()+".  Run this tool again to fix related totals.\r\n";
-			}*/
-			return log;
-		}
-
-		public static string ClaimProcDeleteWithInvalidClaimNum(bool verbose) {
+		public static string ClaimProcDeleteWithInvalidClaimNum(bool verbose,bool isFix) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
@@ -463,7 +428,7 @@ HAVING cnt>1";
 			return log;
 		}
 
-		public static string ClaimProcDeleteWithInvalidPlanNum(bool verbose) {
+		public static string ClaimProcDeleteWithInvalidPlanNum(bool verbose,bool isFix) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
@@ -487,7 +452,7 @@ HAVING cnt>1";
 			return log;
 		}
 
-		public static string ClaimProcDeleteWithInvalidProcNum(bool verbose) {
+		public static string ClaimProcDeleteWithInvalidProcNum(bool verbose,bool isFix) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
@@ -502,7 +467,7 @@ HAVING cnt>1";
 			return log;
 		}
 
-		public static string ClaimProcEstNoBillIns(bool verbose) {
+		public static string ClaimProcEstNoBillIns(bool verbose,bool isFix) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
@@ -515,7 +480,7 @@ HAVING cnt>1";
 			return log;
 		}
 
-		public static string ClaimProcEstWithInsPaidAmt(bool verbose) {
+		public static string ClaimProcEstWithInsPaidAmt(bool verbose,bool isFix) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
@@ -528,7 +493,7 @@ HAVING cnt>1";
 			return log;
 		}
 
-		public static string ClaimProcProvNumMissing(bool verbose) {
+		public static string ClaimProcProvNumMissing(bool verbose,bool isFix) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
@@ -541,7 +506,7 @@ HAVING cnt>1";
 			return log;
 		}
 
-		public static string ClaimProcPreauthNotMatchClaim(bool verbose) {
+		public static string ClaimProcPreauthNotMatchClaim(bool verbose,bool isFix) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
@@ -561,15 +526,10 @@ HAVING cnt>1";
 			if(numberFixed>0 || verbose) {
 				log+=Lans.g("FormDatabaseMaintenance","ClaimProcs for preauths with status not preauth fixed: ")+numberFixed.ToString()+"\r\n";
 			}
-			//this gives the wrong number of rows fixed, so we had to get more complicated:
-			//command=@"UPDATE claimproc,claim
-			//	SET claimproc.Status=2
-			//	WHERE claimproc.ClaimNum=claim.ClaimNum
-			//	AND claim.ClaimType='PreAuth'";
 			return log;
 		}
 
-		public static string ClaimProcStatusNotMatchClaim(bool verbose) {
+		public static string ClaimProcStatusNotMatchClaim(bool verbose,bool isFix) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
@@ -589,7 +549,7 @@ HAVING cnt>1";
 			return log;
 		}
 
-		public static string ClaimProcWithInvalidClaimPaymentNum(bool verbose) {
+		public static string ClaimProcWithInvalidClaimPaymentNum(bool verbose,bool isFix) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
@@ -603,7 +563,7 @@ HAVING cnt>1";
 			return log;
 		}
 
-		public static string ClaimProcWriteOffNegative(bool verbose) {
+		public static string ClaimProcWriteOffNegative(bool verbose,bool isFix) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
@@ -616,7 +576,7 @@ HAVING cnt>1";
 			return log;
 		}
 
-		public static string ClockEventInFuture(bool verbose) {
+		public static string ClockEventInFuture(bool verbose,bool isFix) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
@@ -629,7 +589,7 @@ HAVING cnt>1";
 			return log;
 		}
 
-		public static string DocumentWithNoCategory(bool verbose) {
+		public static string DocumentWithNoCategory(bool verbose,bool isFix) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
@@ -648,34 +608,7 @@ HAVING cnt>1";
 			return log;
 		}
 
-		/*No longer relevant due to database changes.
-		public static string EtransRemoveOldReceivedClaimTransactions(bool verbose) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
-			}
-			//Set the etrans entries to blank where the associated claim has been
-			//received for at least a month.
-			command="UPDATE etrans e,claim c "+
-				"SET e.messagetext='' "+
-				"WHERE e.ClaimNum=c.ClaimNum AND "+
-				"UPPER(c.ClaimStatus)='R' AND "+
-				"DATE(c.DateReceived)<=ADDDATE(CURDATE(),INTERVAL -1 MONTH) AND "+
-				"YEAR(c.DateReceived)>1";
-			int rowsCleared=Db.NonQ(command);
-			//Now, alter the etrans table messagetext column to force MySQL to delete
-			//the dead space still in the file which is no longer needed. By default,
-			//MySQL will leave dead space when you shrink the contents of a string
-			//within a row, I presume this is for speed efficiency.
-			command="ALTER TABLE etrans CHANGE messagetext messagetext text NULL";
-			Db.NonQ(command);
-			if(rowsCleared>0 && verbose){
-				return Lans.g("FormDatabaseMaintenance","Number of old/received etrans entries cleared: ")+
-					rowsCleared.ToString()+"\r\n";
-			}
-			return "";
-		}*/
-
-		public static string InsPlanCheckNoCarrier(bool verbose) {
+		public static string InsPlanCheckNoCarrier(bool verbose,bool isFix) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
@@ -698,7 +631,7 @@ HAVING cnt>1";
 			return log;
 		}
 
-		public static string InsPlanNoClaimForm(bool verbose) {
+		public static string InsPlanNoClaimForm(bool verbose,bool isFix) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
@@ -712,7 +645,7 @@ HAVING cnt>1";
 			return log;
 		}
 
-		public static string MedicationPatDeleteWithInvalidMedNum(bool verbose) {
+		public static string MedicationPatDeleteWithInvalidMedNum(bool verbose,bool isFix) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
@@ -726,7 +659,7 @@ HAVING cnt>1";
 			return log;
 		}
 
-		public static string PatFieldsDeleteDuplicates(bool verbose) {
+		public static string PatFieldsDeleteDuplicates(bool verbose,bool isFix) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
@@ -749,7 +682,6 @@ HAVING cnt>1";
 					log+=Lans.g("FormDatabaseMaintenance","Patient Field duplicate entries deleted")+": 0\r\n";
 				}
 				command=@"DROP TABLE IF EXISTS tempduplicatepatfields";
-				//DROP TABLE IF EXISTS temppatfieldstodelete;";
 				Db.NonQ(command);
 				return log;
 			}
@@ -773,7 +705,7 @@ HAVING cnt>1";
 			return log;
 		}
 
-		public static string PatientBadGuarantor(bool verbose) {
+		public static string PatientBadGuarantor(bool verbose,bool isFix) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
@@ -791,7 +723,7 @@ HAVING cnt>1";
 			return log;
 		}
 
-		public static string PatientPriProvMissing(bool verbose) {
+		public static string PatientPriProvMissing(bool verbose,bool isFix) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
@@ -806,7 +738,7 @@ HAVING cnt>1";
 			return log;
 		}
 
-		public static string PatientUnDeleteWithBalance(bool verbose) {
+		public static string PatientUnDeleteWithBalance(bool verbose,bool isFix) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
@@ -832,7 +764,7 @@ HAVING cnt>1";
 			return log;
 		}
 
-		public static string PatPlanOrdinalTwoToOne(bool verbose) {
+		public static string PatPlanOrdinalTwoToOne(bool verbose,bool isFix) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
@@ -851,7 +783,7 @@ HAVING cnt>1";
 			return log;
 		}
 
-		public static string PaymentDetachMissingDeposit(bool verbose) {
+		public static string PaymentDetachMissingDeposit(bool verbose,bool isFix) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
@@ -867,7 +799,7 @@ HAVING cnt>1";
 			return log;
 		}
 
-		public static string PayPlanChargeGuarantorMatch(bool verbose) {
+		public static string PayPlanChargeGuarantorMatch(bool verbose,bool isFix) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
@@ -891,7 +823,7 @@ HAVING cnt>1";
 			return log;
 		}
 
-		public static string PayPlanChargeProvNum(bool verbose) {
+		public static string PayPlanChargeProvNum(bool verbose,bool isFix) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
@@ -907,7 +839,7 @@ HAVING cnt>1";
 			return log;
 		}
 
-		public static string PayPlanSetGuarantorToPatForIns(bool verbose) {
+		public static string PayPlanSetGuarantorToPatForIns(bool verbose,bool isFix) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
@@ -921,7 +853,7 @@ HAVING cnt>1";
 			return log;
 		}
 
-		public static string PaySplitAttachedToPayPlan(bool verbose) {
+		public static string PaySplitAttachedToPayPlan(bool verbose,bool isFix) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
@@ -942,7 +874,7 @@ HAVING cnt>1";
 			return log;
 		}
 
-		public static string PaySplitDeleteWithInvalidPayNum(bool verbose) {
+		public static string PaySplitDeleteWithInvalidPayNum(bool verbose,bool isFix) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
@@ -955,7 +887,7 @@ HAVING cnt>1";
 			return log;
 		}
 
-		public static string PreferenceDateDepositsStarted(bool verbose) {
+		public static string PreferenceDateDepositsStarted(bool verbose,bool isFix) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
@@ -975,7 +907,7 @@ HAVING cnt>1";
 			return log;
 		}
 
-		public static string PreferencePracticeBillingType(bool verbose) {
+		public static string PreferencePracticeBillingType(bool verbose,bool isFix) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
@@ -997,7 +929,7 @@ HAVING cnt>1";
 			return log;
 		}
 
-		public static string PreferencePracticeProv(bool verbose) {
+		public static string PreferencePracticeProv(bool verbose,bool isFix) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
@@ -1024,7 +956,7 @@ HAVING cnt>1";
 			return log;
 		}
 
-		public static string ProcButtonItemsDeleteWithInvalidAutoCode(bool verbose) {
+		public static string ProcButtonItemsDeleteWithInvalidAutoCode(bool verbose,bool isFix) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
@@ -1041,7 +973,7 @@ HAVING cnt>1";
 			return log;
 		}
 
-		public static string ProcedurelogAttachedToWrongAppts(bool verbose) {
+		public static string ProcedurelogAttachedToWrongAppts(bool verbose,bool isFix) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
@@ -1058,7 +990,7 @@ HAVING cnt>1";
 			return log;
 		}
 
-		public static string ProcedurelogAttachedToWrongApptDate(bool verbose) {
+		public static string ProcedurelogAttachedToWrongApptDate(bool verbose,bool isFix) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
@@ -1075,7 +1007,7 @@ HAVING cnt>1";
 			return log;
 		}
 
-		public static string ProcedurelogBaseUnitsZero(bool verbose) {
+		public static string ProcedurelogBaseUnitsZero(bool verbose,bool isFix) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
@@ -1100,7 +1032,7 @@ HAVING cnt>1";
 			return log;
 		}
 
-		public static string ProcedurelogCodeNumZero(bool verbose) {
+		public static string ProcedurelogCodeNumZero(bool verbose,bool isFix) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
@@ -1113,7 +1045,7 @@ HAVING cnt>1";
 			return log;
 		}
 
-		public static string ProcedurelogProvNumMissing(bool verbose) {
+		public static string ProcedurelogProvNumMissing(bool verbose,bool isFix) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
@@ -1126,7 +1058,7 @@ HAVING cnt>1";
 			return log;
 		}
 
-		public static string ProcedurelogToothNums(bool verbose) {
+		public static string ProcedurelogToothNums(bool verbose,bool isFix) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
@@ -1170,7 +1102,7 @@ HAVING cnt>1";
 			return log;
 		}
 
-		public static string ProcedurelogTpAttachedToClaim(bool verbose) {
+		public static string ProcedurelogTpAttachedToClaim(bool verbose,bool isFix) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
@@ -1194,28 +1126,7 @@ HAVING cnt>1";
 			return log;
 		}
 
-		/*public static string ProcedurelogUndeleteAttachedToClaim(bool verbose) {
-			//This is no longer used and can be considered buggy.  It was replaced by the better ProcedurelogTpAttachedToClaim
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
-			}
-			string log="";
-			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				return "";
-			}
-			command=@"UPDATE procedurelog,claimproc         
-				SET procedurelog.ProcStatus=2
-				WHERE procedurelog.ProcNum=claimproc.ProcNum
-				AND procedurelog.ProcStatus=6
-				AND claimproc.ClaimNum!=0";
-			int numberFixed=Db.NonQ32(command);
-			if(numberFixed>0 || verbose) {
-				log+=Lans.g("FormDatabaseMaintenance","Procedures undeleted because found attached to claims: ")+numberFixed.ToString()+"\r\n";
-			}
-			return log;
-		}*/
-
-		public static string ProcedurelogUnitQtyZero(bool verbose) {
+		public static string ProcedurelogUnitQtyZero(bool verbose,bool isFix) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
@@ -1230,7 +1141,7 @@ HAVING cnt>1";
 			return log;
 		}
 
-		public static string ProviderHiddenWithClaimPayments(bool verbose) {
+		public static string ProviderHiddenWithClaimPayments(bool verbose,bool isFix) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
@@ -1259,7 +1170,7 @@ HAVING cnt>1";
 			return log;
 		}
 
-		public static string RecallDuplicatesWarn(bool verbose) {
+		public static string RecallDuplicatesWarn(bool verbose,bool isFix) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
@@ -1294,7 +1205,7 @@ HAVING cnt>1";
 			return log;
 		}
 
-		public static string RecallTriggerDeleteBadCodeNum(bool verbose) {
+		public static string RecallTriggerDeleteBadCodeNum(bool verbose,bool isFix) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
@@ -1311,36 +1222,7 @@ HAVING cnt>1";
 			return log;
 		}
 
-		//no longer relevant:
-		/*public static string RecallDeleteDuplicate(bool verbose) {
-			//command="SELECT COUNT(*) AS repetitions,PatNum FROM recall GROUP BY PatNum HAVING repetitions >1";
-			command="SELECT COUNT(*),PatNum FROM recall GROUP BY PatNum HAVING COUNT(*) >1";
-			table=Db.GetTable(command);
-			int numberFound=table.Rows.Count;
-			//we're going to do one patient at a time.
-			DataTable tableRecalls;
-			for(int i=0;i<table.Rows.Count;i++) {
-				command="SELECT RecallNum FROM recall WHERE PatNum="+table.Rows[i][1].ToString();
-				tableRecalls=Db.GetTable(command);
-				command="DELETE FROM recall WHERE ";
-				for(int r=0;r<tableRecalls.Rows.Count-1;r++) {//we ignore the last row
-					if(r>0) {
-						command+="OR ";
-					}
-					command+="RecallNum="+tableRecalls.Rows[r][0].ToString()+" ";
-				}
-				Db.NonQ(command);
-				//pats+=table.Rows[i][1].ToString();
-			}
-			if(numberFound>0) {
-				Recalls.SynchAllPatients();
-			}
-			if(numberFound>0 || verbose) {
-				log+=Lans.g("FormDatabaseMaintenance","Duplicate recall entries fixed: ")+numberFound.ToString()+"\r\n";
-			}
-		}*/
-
-		public static string SchedulesDeleteShort(bool verbose) {
+		public static string SchedulesDeleteShort(bool verbose,bool isFix) {
 			//No need to check RemotingRole; no call to db.
 			string log="";
 			int numberFixed=0;
@@ -1360,11 +1242,10 @@ HAVING cnt>1";
 			if(numberFixed>0 || verbose) {
 				log+=Lans.g("FormDatabaseMaintenance","Schedule blocks fixed: ")+numberFixed.ToString()+"\r\n";
 			}
-			//DataValid.SetInvalid(InvalidTypes.Sched);
 			return log;
 		}
 
-		public static string SchedulesDeleteProvClosed(bool verbose) {
+		public static string SchedulesDeleteProvClosed(bool verbose,bool isFix) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
@@ -1377,7 +1258,7 @@ HAVING cnt>1";
 			return log;
 		}
 
-		public static string SignalInFuture(bool verbose) {
+		public static string SignalInFuture(bool verbose,bool isFix) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
@@ -1394,7 +1275,7 @@ HAVING cnt>1";
 			return log;
 		}
 
-		public static string StatementDateRangeMax(bool verbose) {
+		public static string StatementDateRangeMax(bool verbose,bool isFix) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
@@ -1447,23 +1328,18 @@ HAVING cnt>1";
 				return "";
 			}
 			retVal+="Duplicate claim payments found:\r\n";
-			//double amt;
 			DateTime date;
-			//long patNum;
 			for(int i=0;i<table.Rows.Count;i++){
 				if(i>0){//check for duplicate rows.  We only want to report each claim once.
 					if(table.Rows[i]["ClaimNum"].ToString()==table.Rows[i-1]["ClaimNum"].ToString()){
 						continue;
 					}
 				}
-				//amt=PIn.Double(table.Rows[i]["InsPayAmt"].ToString());
 				date=PIn.Date(table.Rows[i]["ProcDate"].ToString());
-				//patNum=PIn.Long(table.Rows[i]["PatNum"].ToString());
 				retVal+=table.Rows[i]["LName"].ToString()+", "
 					+table.Rows[i]["FName"].ToString()+" "
 					+"("+table.Rows[i]["PatNum"].ToString()+"), "
 					+date.ToShortDateString()+"\r\n";
-					//+amt.ToString("c")+"\r\n";
 			}
 			retVal+="\r\n";
 			return retVal;
@@ -1488,7 +1364,6 @@ HAVING cnt>1";
 				return "";
 			}
 			retVal+="Duplicate supplemental payments found (may be false positives):\r\n";
-			//double amt;
 			DateTime date;
 			for(int i=0;i<table.Rows.Count;i++){
 				if(i>0){
@@ -1496,13 +1371,11 @@ HAVING cnt>1";
 						continue;
 					}
 				}
-				//amt=PIn.Double(table.Rows[i]["InsPayAmt"].ToString());
 				date=PIn.Date(table.Rows[i]["ProcDate"].ToString());
 				retVal+=table.Rows[i]["LName"].ToString()+", "
 					+table.Rows[i]["FName"].ToString()+" "
 					+"("+table.Rows[i]["PatNum"].ToString()+"), "
 					+date.ToShortDateString()+"\r\n";
-					//+amt.ToString("c")+"\r\n";
 			}
 			retVal+="\r\n";
 			return retVal;
