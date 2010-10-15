@@ -4416,6 +4416,7 @@ namespace OpenDental{
 				}
 			}
 			//}
+			Plugins.HookAddCode(this,"ContrAppt.ShowSearch_end",listProviders);
 			groupSearch.Visible=true;
 		}
 
