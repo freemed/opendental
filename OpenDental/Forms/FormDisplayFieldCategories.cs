@@ -75,7 +75,7 @@ namespace OpenDental{
 			this.listCategory.FormattingEnabled = true;
 			this.listCategory.Location = new System.Drawing.Point(23,34);
 			this.listCategory.Name = "listCategory";
-			this.listCategory.Size = new System.Drawing.Size(155,69);
+			this.listCategory.Size = new System.Drawing.Size(155,82);
 			this.listCategory.TabIndex = 57;
 			this.listCategory.DoubleClick += new System.EventHandler(this.listCategory_DoubleClick);
 			// 
@@ -87,7 +87,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(92,130);
+			this.butOK.Location = new System.Drawing.Point(92,143);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 56;
@@ -102,7 +102,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(173,130);
+			this.butCancel.Location = new System.Drawing.Point(173,143);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 0;
@@ -112,7 +112,7 @@ namespace OpenDental{
 			// FormDisplayFieldCategories
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(271,169);
+			this.ClientSize = new System.Drawing.Size(271,182);
 			this.Controls.Add(this.listCategory);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.label1);

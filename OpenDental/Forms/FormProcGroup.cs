@@ -568,34 +568,55 @@ namespace OpenDental{
 		private void FillProcedures(){
 			gridProc.BeginUpdate();
 			gridProc.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g("TableGroupProcs","Date"),68);
-			gridProc.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableGroupProcs","Th"),25);
-			gridProc.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableGroupProcs","Surf"),40);
-			gridProc.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableGroupProcs","Description"),247);
-			gridProc.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableGroupProcs","Stat"),25);
-			gridProc.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableGroupProcs","Prov"),42);
-			gridProc.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableGroupProcs","Amount"),48,HorizontalAlignment.Right);
-			gridProc.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableGroupProcs","ADA Code"),60,HorizontalAlignment.Center);
-			gridProc.Columns.Add(col);
+			ODGridColumn col;
+			DisplayFields.RefreshCache();
+			List<DisplayField> fields=DisplayFields.GetForCategory(DisplayFieldCategory.ProcedureGroupNote);
+			for(int i=0;i<fields.Count;i++) {
+				if(fields[i].Description=="") {
+					col=new ODGridColumn(fields[i].InternalName,fields[i].ColumnWidth);
+				}
+				else {
+					col=new ODGridColumn(fields[i].Description,fields[i].ColumnWidth);
+				}
+				if(fields[i].InternalName=="Amount") {
+					col.TextAlign=HorizontalAlignment.Right;
+				}
+				if(fields[i].InternalName=="ADA Code") {
+					col.TextAlign=HorizontalAlignment.Center;
+				}
+				gridProc.Columns.Add(col);
+			}
 			gridProc.Rows.Clear();
-			ODGridRow row;
-			for(int i=0;i<ProcList.Count;i++){
-				row=new ODGridRow();			
-				row.Cells.Add(ProcList[i].ProcDate.ToShortDateString());
-				row.Cells.Add(ProcList[i].ToothNum.ToString());
-				row.Cells.Add(ProcList[i].Surf.ToString());
-				row.Cells.Add(ProcedureCodes.GetLaymanTerm(ProcList[i].CodeNum));
-				row.Cells.Add(ProcList[i].ProcStatus.ToString());
-				row.Cells.Add(Providers.GetAbbr(ProcList[i].ProvNum));
-				row.Cells.Add(ProcList[i].ProcFee.ToString("F"));
-				row.Cells.Add(ProcedureCodes.GetStringProcCode(ProcList[i].CodeNum));
+			for(int i=0;i<ProcList.Count;i++) {
+				ODGridRow row=new ODGridRow();
+				for(int f=0;f<fields.Count;f++) {
+					switch(fields[f].InternalName) {
+						case "Date":
+							row.Cells.Add(ProcList[i].ProcDate.ToShortDateString());
+							break;
+						case "Th":
+							row.Cells.Add(ProcList[i].ToothNum.ToString());
+							break;
+						case "Surf":
+							row.Cells.Add(ProcList[i].Surf.ToString());
+							break;
+						case "Description":
+							row.Cells.Add(ProcedureCodes.GetLaymanTerm(ProcList[i].CodeNum));
+							break;
+						case "Stat":
+							row.Cells.Add(ProcList[i].ProcStatus.ToString());
+							break;
+						case "Prov":
+							row.Cells.Add(Providers.GetAbbr(ProcList[i].ProvNum));
+							break;
+						case "Amount":
+							row.Cells.Add(ProcList[i].ProcFee.ToString("F"));
+							break;
+						case "ADA Code":
+							row.Cells.Add(ProcedureCodes.GetStringProcCode(ProcList[i].CodeNum));
+							break;
+					}
+				}
 				gridProc.Rows.Add(row);
 			}
 			gridProc.EndUpdate();

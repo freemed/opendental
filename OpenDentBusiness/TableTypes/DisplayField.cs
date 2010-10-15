@@ -61,7 +61,9 @@ namespace OpenDentBusiness{
 		///<summary>4</summary>
 		RecallList,
 		///<summary>5</summary>
-		ChartPatientInformation
+		ChartPatientInformation,
+		///<summary>6</summary>
+		ProcedureGroupNote
 	}
 	
 
