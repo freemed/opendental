@@ -1593,6 +1593,7 @@ namespace OpenDentBusiness{
 			if(make5minute) {
 				return ConvertPatternTo5(pattern);
 			}
+			Plugins.HookAddCode(null,"Appointments.CalculatePattern_end",strBTime,provDent,provHyg,codeNums);
 			return pattern;
 		}
 

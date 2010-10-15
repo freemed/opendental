@@ -1777,7 +1777,7 @@ namespace OpenDental{
 				codeNums.Add(PIn.Long(DS.Tables["Procedure"].Rows[gridProc.SelectedIndices[i]]["CodeNum"].ToString()));
 			}
 			strBTime=new StringBuilder(Appointments.CalculatePattern(provDent,provHyg,codeNums,false));
-			Plugins.HookAddCode(this,"FormApptEdit.CalculateTime_end",strBTime,provDent,provHyg,codeNums);//set strBTime, but without using the 'new' keyword.
+			//Plugins.HookAddCode(this,"FormApptEdit.CalculateTime_end",strBTime,provDent,provHyg,codeNums);//set strBTime, but without using the 'new' keyword.--Hook removed.
 		}
 
 		private void checkTimeLocked_Click(object sender,EventArgs e) {
