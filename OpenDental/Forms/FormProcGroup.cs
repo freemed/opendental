@@ -46,7 +46,6 @@ namespace OpenDental{
 		public List<Procedure> ProcList;
 		private List<Procedure> ProcListOld;
 		private List<OrionProc> OrionProcList;
-		private List<OrionProc> OrionProcListOld;
 		///<summary>This keeps the noteChanged event from erasing the signature when first loading.</summary>
 		private bool IsStartingUp;
 		private OpenDental.UI.Button butExamSheets;
@@ -55,11 +54,9 @@ namespace OpenDental{
 		private PatField[] PatFieldList;
 		private Patient PatCur;
 		private Family FamCur;
-		private ComboBox comboDPC;
-		private Label labelDPC;
-		private Label label1;
-		private Label label3;
-		private Label label4;
+		private Label labelOnCall;
+		private Label labelEffectiveComm;
+		private Label labelRepair;
 		private System.Windows.Forms.Button butRepairN;
 		private System.Windows.Forms.Button butRepairY;
 		private System.Windows.Forms.Button butEffectiveCommY;
@@ -95,29 +92,27 @@ namespace OpenDental{
 			this.label12 = new System.Windows.Forms.Label();
 			this.label26 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
-			this.gridPat = new OpenDental.UI.ODGrid();
-			this.textProcDate = new OpenDental.ValidDate();
-			this.signatureBoxWrapper = new OpenDental.UI.SignatureBoxWrapper();
-			this.gridProc = new OpenDental.UI.ODGrid();
-			this.textDateEntry = new OpenDental.ValidDate();
-			this.butExamSheets = new OpenDental.UI.Button();
-			this.buttonUseAutoNote = new OpenDental.UI.Button();
-			this.textNotes = new OpenDental.ODtextBox();
-			this.butDelete = new OpenDental.UI.Button();
-			this.butCancel = new OpenDental.UI.Button();
-			this.butOK = new OpenDental.UI.Button();
-			this.comboDPC = new System.Windows.Forms.ComboBox();
-			this.labelDPC = new System.Windows.Forms.Label();
-			this.label1 = new System.Windows.Forms.Label();
-			this.label3 = new System.Windows.Forms.Label();
-			this.label4 = new System.Windows.Forms.Label();
+			this.labelOnCall = new System.Windows.Forms.Label();
+			this.labelEffectiveComm = new System.Windows.Forms.Label();
+			this.labelRepair = new System.Windows.Forms.Label();
 			this.butRepairN = new System.Windows.Forms.Button();
 			this.butRepairY = new System.Windows.Forms.Button();
 			this.butEffectiveCommY = new System.Windows.Forms.Button();
 			this.butEffectiveCommN = new System.Windows.Forms.Button();
 			this.butOnCallN = new System.Windows.Forms.Button();
 			this.butOnCallY = new System.Windows.Forms.Button();
+			this.gridPat = new OpenDental.UI.ODGrid();
+			this.textProcDate = new OpenDental.ValidDate();
+			this.signatureBoxWrapper = new OpenDental.UI.SignatureBoxWrapper();
+			this.gridProc = new OpenDental.UI.ODGrid();
+			this.textDateEntry = new OpenDental.ValidDate();
 			this.butRx = new OpenDental.UI.Button();
+			this.butExamSheets = new OpenDental.UI.Button();
+			this.buttonUseAutoNote = new OpenDental.UI.Button();
+			this.textNotes = new OpenDental.ODtextBox();
+			this.butDelete = new OpenDental.UI.Button();
+			this.butCancel = new OpenDental.UI.Button();
+			this.butOK = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// label7
@@ -182,6 +177,102 @@ namespace OpenDental{
 			this.label2.Text = "Procedure Date";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// labelOnCall
+			// 
+			this.labelOnCall.Location = new System.Drawing.Point(468,203);
+			this.labelOnCall.Name = "labelOnCall";
+			this.labelOnCall.Size = new System.Drawing.Size(90,16);
+			this.labelOnCall.TabIndex = 196;
+			this.labelOnCall.Text = "On Call";
+			this.labelOnCall.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.labelOnCall.Visible = false;
+			// 
+			// labelEffectiveComm
+			// 
+			this.labelEffectiveComm.Location = new System.Drawing.Point(468,226);
+			this.labelEffectiveComm.Name = "labelEffectiveComm";
+			this.labelEffectiveComm.Size = new System.Drawing.Size(90,16);
+			this.labelEffectiveComm.TabIndex = 196;
+			this.labelEffectiveComm.Text = "Effective Comm";
+			this.labelEffectiveComm.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.labelEffectiveComm.Visible = false;
+			// 
+			// labelRepair
+			// 
+			this.labelRepair.Location = new System.Drawing.Point(468,249);
+			this.labelRepair.Name = "labelRepair";
+			this.labelRepair.Size = new System.Drawing.Size(90,16);
+			this.labelRepair.TabIndex = 196;
+			this.labelRepair.Text = "Repair";
+			this.labelRepair.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.labelRepair.Visible = false;
+			// 
+			// butRepairN
+			// 
+			this.butRepairN.Location = new System.Drawing.Point(583,247);
+			this.butRepairN.Name = "butRepairN";
+			this.butRepairN.Size = new System.Drawing.Size(23,20);
+			this.butRepairN.TabIndex = 198;
+			this.butRepairN.Text = "N";
+			this.butRepairN.UseVisualStyleBackColor = true;
+			this.butRepairN.Visible = false;
+			this.butRepairN.Click += new System.EventHandler(this.butRepairN_Click);
+			// 
+			// butRepairY
+			// 
+			this.butRepairY.Location = new System.Drawing.Point(560,247);
+			this.butRepairY.Name = "butRepairY";
+			this.butRepairY.Size = new System.Drawing.Size(23,20);
+			this.butRepairY.TabIndex = 198;
+			this.butRepairY.Text = "Y";
+			this.butRepairY.UseVisualStyleBackColor = true;
+			this.butRepairY.Visible = false;
+			this.butRepairY.Click += new System.EventHandler(this.butRepairY_Click);
+			// 
+			// butEffectiveCommY
+			// 
+			this.butEffectiveCommY.Location = new System.Drawing.Point(560,224);
+			this.butEffectiveCommY.Name = "butEffectiveCommY";
+			this.butEffectiveCommY.Size = new System.Drawing.Size(23,20);
+			this.butEffectiveCommY.TabIndex = 198;
+			this.butEffectiveCommY.Text = "Y";
+			this.butEffectiveCommY.UseVisualStyleBackColor = true;
+			this.butEffectiveCommY.Visible = false;
+			this.butEffectiveCommY.Click += new System.EventHandler(this.butEffectiveCommY_Click);
+			// 
+			// butEffectiveCommN
+			// 
+			this.butEffectiveCommN.Location = new System.Drawing.Point(583,224);
+			this.butEffectiveCommN.Name = "butEffectiveCommN";
+			this.butEffectiveCommN.Size = new System.Drawing.Size(23,20);
+			this.butEffectiveCommN.TabIndex = 198;
+			this.butEffectiveCommN.Text = "N";
+			this.butEffectiveCommN.UseVisualStyleBackColor = true;
+			this.butEffectiveCommN.Visible = false;
+			this.butEffectiveCommN.Click += new System.EventHandler(this.butEffectiveCommN_Click);
+			// 
+			// butOnCallN
+			// 
+			this.butOnCallN.Location = new System.Drawing.Point(583,201);
+			this.butOnCallN.Name = "butOnCallN";
+			this.butOnCallN.Size = new System.Drawing.Size(23,20);
+			this.butOnCallN.TabIndex = 198;
+			this.butOnCallN.Text = "N";
+			this.butOnCallN.UseVisualStyleBackColor = true;
+			this.butOnCallN.Visible = false;
+			this.butOnCallN.Click += new System.EventHandler(this.butOnCallN_Click);
+			// 
+			// butOnCallY
+			// 
+			this.butOnCallY.Location = new System.Drawing.Point(560,201);
+			this.butOnCallY.Name = "butOnCallY";
+			this.butOnCallY.Size = new System.Drawing.Size(23,20);
+			this.butOnCallY.TabIndex = 198;
+			this.butOnCallY.Text = "Y";
+			this.butOnCallY.UseVisualStyleBackColor = true;
+			this.butOnCallY.Visible = false;
+			this.butOnCallY.Click += new System.EventHandler(this.butOnCallY_Click);
+			// 
 			// gridPat
 			// 
 			this.gridPat.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -233,6 +324,20 @@ namespace OpenDental{
 			this.textDateEntry.ReadOnly = true;
 			this.textDateEntry.Size = new System.Drawing.Size(76,20);
 			this.textDateEntry.TabIndex = 95;
+			// 
+			// butRx
+			// 
+			this.butRx.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butRx.Autosize = true;
+			this.butRx.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butRx.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRx.CornerRadius = 4F;
+			this.butRx.Location = new System.Drawing.Point(267,42);
+			this.butRx.Name = "butRx";
+			this.butRx.Size = new System.Drawing.Size(23,24);
+			this.butRx.TabIndex = 106;
+			this.butRx.Text = "Rx";
+			this.butRx.Click += new System.EventHandler(this.buttonUseAutoNote_Click);
 			// 
 			// butExamSheets
 			// 
@@ -301,7 +406,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(635,606);
+			this.butCancel.Location = new System.Drawing.Point(634,606);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(76,24);
 			this.butCancel.TabIndex = 13;
@@ -316,129 +421,12 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(553,606);
+			this.butOK.Location = new System.Drawing.Point(552,606);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(76,24);
 			this.butOK.TabIndex = 12;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
-			// 
-			// comboDPC
-			// 
-			this.comboDPC.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboDPC.DropDownWidth = 177;
-			this.comboDPC.FormattingEnabled = true;
-			this.comboDPC.Location = new System.Drawing.Point(543,174);
-			this.comboDPC.MaxDropDownItems = 30;
-			this.comboDPC.Name = "comboDPC";
-			this.comboDPC.Size = new System.Drawing.Size(177,21);
-			this.comboDPC.TabIndex = 197;
-			this.comboDPC.SelectedIndexChanged += new System.EventHandler(this.comboDPC_SelectedIndexChanged);
-			// 
-			// labelDPC
-			// 
-			this.labelDPC.Location = new System.Drawing.Point(473,175);
-			this.labelDPC.Name = "labelDPC";
-			this.labelDPC.Size = new System.Drawing.Size(73,16);
-			this.labelDPC.TabIndex = 196;
-			this.labelDPC.Text = "DPC";
-			this.labelDPC.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label1
-			// 
-			this.label1.Location = new System.Drawing.Point(463,203);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(83,16);
-			this.label1.TabIndex = 196;
-			this.label1.Text = "On Call";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label3
-			// 
-			this.label3.Location = new System.Drawing.Point(463,226);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(83,16);
-			this.label3.TabIndex = 196;
-			this.label3.Text = "Effective Comm";
-			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label4
-			// 
-			this.label4.Location = new System.Drawing.Point(463,249);
-			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(83,16);
-			this.label4.TabIndex = 196;
-			this.label4.Text = "Repair";
-			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// butRepairN
-			// 
-			this.butRepairN.Location = new System.Drawing.Point(566,247);
-			this.butRepairN.Name = "butRepairN";
-			this.butRepairN.Size = new System.Drawing.Size(23,20);
-			this.butRepairN.TabIndex = 198;
-			this.butRepairN.Text = "N";
-			this.butRepairN.UseVisualStyleBackColor = true;
-			// 
-			// butRepairY
-			// 
-			this.butRepairY.Location = new System.Drawing.Point(543,247);
-			this.butRepairY.Name = "butRepairY";
-			this.butRepairY.Size = new System.Drawing.Size(23,20);
-			this.butRepairY.TabIndex = 198;
-			this.butRepairY.Text = "Y";
-			this.butRepairY.UseVisualStyleBackColor = true;
-			// 
-			// butEffectiveCommY
-			// 
-			this.butEffectiveCommY.Location = new System.Drawing.Point(543,224);
-			this.butEffectiveCommY.Name = "butEffectiveCommY";
-			this.butEffectiveCommY.Size = new System.Drawing.Size(23,20);
-			this.butEffectiveCommY.TabIndex = 198;
-			this.butEffectiveCommY.Text = "Y";
-			this.butEffectiveCommY.UseVisualStyleBackColor = true;
-			// 
-			// butEffectiveCommN
-			// 
-			this.butEffectiveCommN.Location = new System.Drawing.Point(566,224);
-			this.butEffectiveCommN.Name = "butEffectiveCommN";
-			this.butEffectiveCommN.Size = new System.Drawing.Size(23,20);
-			this.butEffectiveCommN.TabIndex = 198;
-			this.butEffectiveCommN.Text = "N";
-			this.butEffectiveCommN.UseVisualStyleBackColor = true;
-			// 
-			// butOnCallN
-			// 
-			this.butOnCallN.Location = new System.Drawing.Point(566,201);
-			this.butOnCallN.Name = "butOnCallN";
-			this.butOnCallN.Size = new System.Drawing.Size(23,20);
-			this.butOnCallN.TabIndex = 198;
-			this.butOnCallN.Text = "N";
-			this.butOnCallN.UseVisualStyleBackColor = true;
-			// 
-			// butOnCallY
-			// 
-			this.butOnCallY.Location = new System.Drawing.Point(543,201);
-			this.butOnCallY.Name = "butOnCallY";
-			this.butOnCallY.Size = new System.Drawing.Size(23,20);
-			this.butOnCallY.TabIndex = 198;
-			this.butOnCallY.Text = "Y";
-			this.butOnCallY.UseVisualStyleBackColor = true;
-			this.butOnCallY.Click += new System.EventHandler(this.butOnCallY_Click);
-			// 
-			// butRx
-			// 
-			this.butRx.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butRx.Autosize = true;
-			this.butRx.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butRx.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butRx.CornerRadius = 4F;
-			this.butRx.Location = new System.Drawing.Point(267,42);
-			this.butRx.Name = "butRx";
-			this.butRx.Size = new System.Drawing.Size(23,24);
-			this.butRx.TabIndex = 106;
-			this.butRx.Text = "Rx";
-			this.butRx.Click += new System.EventHandler(this.buttonUseAutoNote_Click);
 			// 
 			// FormProcGroup
 			// 
@@ -450,11 +438,9 @@ namespace OpenDental{
 			this.Controls.Add(this.butRepairY);
 			this.Controls.Add(this.butEffectiveCommY);
 			this.Controls.Add(this.butOnCallY);
-			this.Controls.Add(this.comboDPC);
-			this.Controls.Add(this.label4);
-			this.Controls.Add(this.label3);
-			this.Controls.Add(this.label1);
-			this.Controls.Add(this.labelDPC);
+			this.Controls.Add(this.labelRepair);
+			this.Controls.Add(this.labelEffectiveComm);
+			this.Controls.Add(this.labelOnCall);
 			this.Controls.Add(this.gridPat);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.textProcDate);
@@ -497,8 +483,13 @@ namespace OpenDental{
 			ProcListOld=new List<Procedure>();
 			for(int i=0;i<ProcList.Count;i++){
 				ProcListOld.Add(ProcList[i].Copy());
-				OrionProcList.Add(OrionProcs.GetOneByProcNum(ProcList[i].ProcNum));
-				OrionProcListOld.Add(OrionProcs.GetOneByProcNum(ProcList[i].ProcNum));
+			}
+			if(Programs.UsingOrion){
+				OrionProcList=new List<OrionProc>();
+				for(int i=0;i<ProcList.Count;i++){
+					OrionProcList.Add(OrionProcs.GetOneByProcNum(ProcList[i].ProcNum));
+				}
+				MakeOrionItemsVisible();
 			}
 			textProcDate.Text=GroupCur.ProcDate.ToShortDateString();
 			textDateEntry.Text=GroupCur.DateEntryC.ToShortDateString();
@@ -632,6 +623,22 @@ namespace OpenDental{
 			gridProc.EndUpdate();
 		}
 
+		private void MakeOrionItemsVisible(){
+			labelOnCall.Visible=true;
+			butOnCallY.Visible=true;
+			butOnCallN.Visible=true;
+			labelEffectiveComm.Visible=true;
+			butEffectiveCommY.Visible=true;
+			butEffectiveCommN.Visible=true;
+			for(int i=0;i<ProcList.Count;i++){
+				if(ProcedureCodes.GetProcCodeFromDb(ProcList[i].CodeNum).IsProsth){
+					labelRepair.Visible=true;
+					butRepairY.Visible=true;
+					butRepairN.Visible=true;
+				}
+			}
+		}
+
 		private void buttonUseAutoNote_Click(object sender,EventArgs e) {
 			FormExamSheets fes=new FormExamSheets();
 			fes.PatNum=GroupCur.PatNum;
@@ -673,6 +680,48 @@ namespace OpenDental{
 			SigChanged=true;
 		}
 
+		private void butOnCallY_Click(object sender,EventArgs e) {			
+			for(int i=0;i<OrionProcList.Count;i++){
+				OrionProcList[i].IsOnCall=true;
+			}
+			FillPatientData();
+		}
+
+		private void butOnCallN_Click(object sender,EventArgs e) {
+			for(int i=0;i<OrionProcList.Count;i++){
+				OrionProcList[i].IsOnCall=false;
+			}
+			FillPatientData();
+		}
+
+		private void butEffectiveCommY_Click(object sender,EventArgs e) {
+			for(int i=0;i<OrionProcList.Count;i++){
+				OrionProcList[i].IsEffectiveComm=true;
+			}
+			FillPatientData();
+		}
+
+		private void butEffectiveCommN_Click(object sender,EventArgs e) {
+			for(int i=0;i<OrionProcList.Count;i++){
+				OrionProcList[i].IsEffectiveComm=false;
+			}
+			FillPatientData();
+		}
+
+		private void butRepairY_Click(object sender,EventArgs e) {
+			for(int i=0;i<OrionProcList.Count;i++){
+				OrionProcList[i].IsRepair=true;
+			}
+			FillPatientData();
+		}
+
+		private void butRepairN_Click(object sender,EventArgs e) {
+			for(int i=0;i<OrionProcList.Count;i++){
+				OrionProcList[i].IsRepair=true;
+			}
+			FillPatientData();
+		}
+
 		private void butDelete_Click(object sender, System.EventArgs e) {
 			bool result=MsgBox.Show(this,MsgBoxButtons.YesNo,"Are you sure you want delete this group note?");
 			if(result){
@@ -698,6 +747,14 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Error saving signature.")+"\r\n"+ex.Message);
 			}
 			Procedures.Update(GroupCur,GroupOld);
+			for(int i=0;i<ProcList.Count;i++){
+				Procedures.Update(ProcList[i],ProcListOld[i]);
+			}
+			if(Programs.UsingOrion){
+				for(int i=0;i<OrionProcList.Count;i++){
+					OrionProcs.Update(OrionProcList[i]);
+				}
+			}
       DialogResult=DialogResult.OK;
 		}
 
@@ -752,14 +809,7 @@ namespace OpenDental{
 			}
 			FillPatientData();
 		}
-
-		private void comboDPC_SelectedIndexChanged(object sender,EventArgs e) {
-			//Have fun Jason!
-		}
-
-		private void butOnCallY_Click(object sender,EventArgs e) {
-			//Needs OrionProcList first...
-		}
+		
 
 		
 
