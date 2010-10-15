@@ -44,6 +44,9 @@ namespace OpenDental{
 		public Procedure GroupOld;
 		public List<ProcGroupItem> GroupItemList;
 		public List<Procedure> ProcList;
+		private List<Procedure> ProcListOld;
+		private List<OrionProc> OrionProcList;
+		private List<OrionProc> OrionProcListOld;
 		///<summary>This keeps the noteChanged event from erasing the signature when first loading.</summary>
 		private bool IsStartingUp;
 		private OpenDental.UI.Button butExamSheets;
@@ -421,6 +424,7 @@ namespace OpenDental{
 			this.butOnCallY.TabIndex = 198;
 			this.butOnCallY.Text = "Y";
 			this.butOnCallY.UseVisualStyleBackColor = true;
+			this.butOnCallY.Click += new System.EventHandler(this.butOnCallY_Click);
 			// 
 			// butRx
 			// 
@@ -484,12 +488,18 @@ namespace OpenDental{
 		}
 		#endregion
 
-		//Load function from FormProcEdit (FormProcInfo_Load)... (Single procedure - but form looks like I want)
 		private void FormProcGroup_Load(object sender, System.EventArgs e){
+			IsStartingUp=true;
+			//ProcList gets set in ContrChart where this form is created.
 			PatCur=Patients.GetPat(GroupCur.PatNum);
 			FamCur=Patients.GetFamily(GroupCur.PatNum);
 			GroupOld=GroupCur.Copy();
-			IsStartingUp=true;
+			ProcListOld=new List<Procedure>();
+			for(int i=0;i<ProcList.Count;i++){
+				ProcListOld.Add(ProcList[i].Copy());
+				OrionProcList.Add(OrionProcs.GetOneByProcNum(ProcList[i].ProcNum));
+				OrionProcListOld.Add(OrionProcs.GetOneByProcNum(ProcList[i].ProcNum));
+			}
 			textProcDate.Text=GroupCur.ProcDate.ToShortDateString();
 			textDateEntry.Text=GroupCur.DateEntryC.ToShortDateString();
 			textUser.Text=Userods.GetName(GroupCur.UserNum);//might be blank. Will change automatically if user changes note or alters sig.
@@ -745,6 +755,10 @@ namespace OpenDental{
 
 		private void comboDPC_SelectedIndexChanged(object sender,EventArgs e) {
 			//Have fun Jason!
+		}
+
+		private void butOnCallY_Click(object sender,EventArgs e) {
+			//Needs OrionProcList first...
 		}
 
 		
