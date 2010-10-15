@@ -51,6 +51,11 @@ namespace OpenDental{
 		private bool SigChanged;
 		private PatField[] PatFieldList;
 		private Patient PatCur;
+		private CheckBox checkIsRepair;
+		private CheckBox checkIsEffComm;
+		private CheckBox checkIsOnCall;
+		private ComboBox comboDPC;
+		private Label labelDPC;
 		private Family FamCur;
 
 		public FormProcGroup() {
@@ -91,6 +96,11 @@ namespace OpenDental{
 			this.butDelete = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
+			this.checkIsRepair = new System.Windows.Forms.CheckBox();
+			this.checkIsEffComm = new System.Windows.Forms.CheckBox();
+			this.checkIsOnCall = new System.Windows.Forms.CheckBox();
+			this.comboDPC = new System.Windows.Forms.ComboBox();
+			this.labelDPC = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// label7
@@ -297,10 +307,69 @@ namespace OpenDental{
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
+			// checkIsRepair
+			// 
+			this.checkIsRepair.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkIsRepair.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkIsRepair.Location = new System.Drawing.Point(453,253);
+			this.checkIsRepair.Name = "checkIsRepair";
+			this.checkIsRepair.Size = new System.Drawing.Size(114,18);
+			this.checkIsRepair.TabIndex = 200;
+			this.checkIsRepair.Text = "Repair";
+			this.checkIsRepair.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// checkIsEffComm
+			// 
+			this.checkIsEffComm.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkIsEffComm.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkIsEffComm.Location = new System.Drawing.Point(453,236);
+			this.checkIsEffComm.Name = "checkIsEffComm";
+			this.checkIsEffComm.Size = new System.Drawing.Size(114,18);
+			this.checkIsEffComm.TabIndex = 199;
+			this.checkIsEffComm.Text = "Effective Comm";
+			this.checkIsEffComm.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// checkIsOnCall
+			// 
+			this.checkIsOnCall.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkIsOnCall.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkIsOnCall.Location = new System.Drawing.Point(453,219);
+			this.checkIsOnCall.Name = "checkIsOnCall";
+			this.checkIsOnCall.Size = new System.Drawing.Size(114,18);
+			this.checkIsOnCall.TabIndex = 198;
+			this.checkIsOnCall.Text = "On Call";
+			this.checkIsOnCall.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// comboDPC
+			// 
+			this.comboDPC.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboDPC.DropDownWidth = 177;
+			this.comboDPC.FormattingEnabled = true;
+			this.comboDPC.Location = new System.Drawing.Point(554,192);
+			this.comboDPC.MaxDropDownItems = 30;
+			this.comboDPC.Name = "comboDPC";
+			this.comboDPC.Size = new System.Drawing.Size(177,21);
+			this.comboDPC.TabIndex = 197;
+			this.comboDPC.SelectedIndexChanged += new System.EventHandler(this.comboDPC_SelectedIndexChanged);
+			// 
+			// labelDPC
+			// 
+			this.labelDPC.Location = new System.Drawing.Point(452,193);
+			this.labelDPC.Name = "labelDPC";
+			this.labelDPC.Size = new System.Drawing.Size(100,16);
+			this.labelDPC.TabIndex = 196;
+			this.labelDPC.Text = "DPC";
+			this.labelDPC.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// FormProcGroup
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(742,645);
+			this.Controls.Add(this.checkIsRepair);
+			this.Controls.Add(this.checkIsEffComm);
+			this.Controls.Add(this.checkIsOnCall);
+			this.Controls.Add(this.comboDPC);
+			this.Controls.Add(this.labelDPC);
 			this.Controls.Add(this.gridPat);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.textProcDate);
@@ -569,6 +638,10 @@ namespace OpenDental{
 				}
 			}
 			FillPatientData();
+		}
+
+		private void comboDPC_SelectedIndexChanged(object sender,EventArgs e) {
+			//Have fun Jason!
 		}
 
 		
