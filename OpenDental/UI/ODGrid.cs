@@ -55,7 +55,6 @@ namespace OpenDental.UI{
 		private int[] NoteHeights;
 		///<summary>This array has one element for each row.  For each row, it keeps track of the vertical location at which to start drawing this row in pixels.  This makes it much easier to paint rows.</summary>
 		private int[] RowLocs;
-		private int[] RowLocsStandard;
 		private bool hScrollVisible;
 		///<summary>Set at the very beginning of OnPaint.  Uses the ColWidth of each column to set up this array with one element for each column.  Contains the columns Pos for that column.</summary>
 		private int[] ColPos;
@@ -401,7 +400,6 @@ namespace OpenDental.UI{
 					RowHeights=new int[rows.Count];
 					NoteHeights=new int[rows.Count];
 					RowLocs=new int[rows.Count];
-					RowLocsStandard=new int[rows.Count];
 					GridH=0;
 					int cellH;
 					int noteW=0;
@@ -454,7 +452,6 @@ namespace OpenDental.UI{
 						else {
 							RowLocs[i]=RowLocs[i-1]+RowHeights[i-1]+NoteHeights[i-1];
 						}
-						RowLocsStandard[i]=RowLocs[i];
 						GridH+=RowHeights[i]+NoteHeights[i];
 					}
 				}
@@ -1258,35 +1255,22 @@ namespace OpenDental.UI{
 				sortedIsAscending=true;//start out ascending
 				sortedByColumnIdx=mouseDownCol;
 			}
-			List <RowSortItem> sortVals=new List <RowSortItem> ();
+			List <ODGridRow> rowsSorted=new List <ODGridRow> ();
 			for(int i=0;i<rows.Count;i++){
-				RowSortItem item=new RowSortItem();
-				item.index=i;
-				item.cellValue=rows[i].Cells[sortedByColumnIdx].Text;
-				sortVals.Add(item);
+				rowsSorted.Add(rows[i]);
 			}
-			if(sortedIsAscending){
-				sortVals.Sort(CompareRowSortItemsAsc);
-			}
-			else{
-				sortVals.Sort(CompareRowSortItemsDesc);
-			}
-			for(int i=0;i<sortVals.Count;i++){
-				RowLocs[i]=RowLocsStandard[sortVals[i].index];
-			}
+			rowsSorted.Sort(CompareRowsForSort);
+			BeginUpdate();
+			rows.Clear();
+			for(int i=0;i<rowsSorted.Count;i++){
+				rows.Add(rowsSorted[i]);
+			}			
+			EndUpdate();
+			sortedByColumnIdx=mouseDownCol;//Must be set again since set to -1 in EndUpdate();
 		}
 
-		private int CompareRowSortItemsAsc(RowSortItem item1,RowSortItem item2){
-			return item1.cellValue.CompareTo(item2);
-		}
-
-		private int CompareRowSortItemsDesc(RowSortItem item1,RowSortItem item2){
-			return -item1.cellValue.CompareTo(item2);
-		}
-
-		class RowSortItem{
-			public int index;
-			public string cellValue;
+		private int CompareRowsForSort(ODGridRow item1,ODGridRow item2){
+			return (sortedIsAscending?1:-1)*item1.Cells[sortedByColumnIdx].Text.CompareTo(item2.Cells[sortedByColumnIdx].Text);
 		}
 
 		#endregion Sorting
