@@ -2494,10 +2494,22 @@ namespace OpenDental{
 				comboStatus.SelectedIndex=0;
 				ProcedureCode pc=ProcedureCodes.GetProcCodeFromDb(ProcCur.CodeNum);
 				checkIsRepair.Visible=pc.IsProsth;
+				//DateTP doesn't get set sometimes and calculations are made based on the DateTP. So set it to the current date as fail-safe.
+				if(ProcCur.DateTP.Year<1880) {
+					textDateTP.Text=MiscData.GetNowDateTime().ToShortDateString();
+				}
+				else {
+					textDateTP.Text=ProcCur.DateTP.ToShortDateString();
+				}
 				if(!IsNew) {
 					OrionProcOld=OrionProcCur.Copy();
-					comboDPC.SelectedIndex=(int)OrionProcCur.DPC;		
-					if(ProcCur.DateTP.Date!=MiscData.GetNowDateTime().Date) {
+					comboDPC.SelectedIndex=(int)OrionProcCur.DPC;
+					if(OrionProcCur.DPC==OrionDPC.None ||
+						OrionProcCur.DPC==OrionDPC._4 ||
+						OrionProcCur.DPC==OrionDPC._5) {
+						labelScheduleBy.Visible=true;
+					}
+					if(PIn.Date(textDateTP.Text).Date!=MiscData.GetNowDateTime().Date) {
 						comboDPC.Enabled=false;
 					}			
 					//if(OrionProcCur.Status2!=OrionStatus.None) {
@@ -2572,7 +2584,6 @@ namespace OpenDental{
 				if(dateT.ToShortTimeString()!="12:00 AM"){
 					textTimeEnd.Text=dateT.ToShortTimeString();
 				}
-				//DateTP doesn't get set sometimes and calculations are made based on the DateTP. So set it to the current date as fail-safe.
 				if(ProcCur.DateTP.Year<1880) {
 					textDateTP.Text=MiscData.GetNowDateTime().ToShortDateString();
 				}
