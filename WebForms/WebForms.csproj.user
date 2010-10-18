@@ -10,12 +10,9 @@
           <StartPageUrl>WebForm2.aspx</StartPageUrl>
           <StartAction>SpecificPage</StartAction>
           <AspNetDebugging>True</AspNetDebugging>
+          <SilverlightDebugging>False</SilverlightDebugging>
           <NativeDebugging>False</NativeDebugging>
           <SQLDebugging>False</SQLDebugging>
-          <PublishCopyOption>RunFiles</PublishCopyOption>
-          <PublishTargetLocation>C:\Documents and Settings\dennis1\My Documents\dennis\work\Jordan\ftp\WebForms\</PublishTargetLocation>
-          <PublishDeleteAllFiles>True</PublishDeleteAllFiles>
-          <PublishCopyAppData>True</PublishCopyAppData>
           <ExternalProgram>
           </ExternalProgram>
           <StartExternalURL>
@@ -26,7 +23,6 @@
           </StartWorkingDirectory>
           <EnableENC>False</EnableENC>
           <AlwaysStartWebServerOnDebug>False</AlwaysStartWebServerOnDebug>
-          <EnableWcfTestClientForSVC>False</EnableWcfTestClientForSVC>
         </WebProjectProperties>
       </FlavorProperties>
     </VisualStudio>

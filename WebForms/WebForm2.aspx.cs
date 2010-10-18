@@ -186,19 +186,12 @@ namespace WebForms {
 							WControl wcobj = new WControl(XPos,YPos,wc);
 							listwc.Add(wcobj);
 						}
-
 						if(FieldType==SheetFieldType.StaticText) {
 							wc.Style["font-family"]=fontname;
 							wc.Style["font-size"]=fontsize+"px";
 						}
-
-
-
 						Panel1.Controls.Add(wc);
-
-						
 					}
-
 				}
 
 				AssignTabOrder();

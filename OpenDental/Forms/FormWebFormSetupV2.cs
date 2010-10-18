@@ -85,7 +85,7 @@ namespace OpenDental {
 				GetWebFormAddress();
 			}
 			catch(Exception ex) {
-				//throw ex;
+				throw ex;
 				//MessageBox.Show(ex.Message);
 			}
 
@@ -154,11 +154,15 @@ namespace OpenDental {
 		}
 
 		private void backgroundWorker1_RunWorkerCompleted(object sender,RunWorkerCompletedEventArgs e) {
-			if(e.Error!= null) { 
-				MessageBox.Show(
-					"ERROR thrown here: {0}"+ e.Error.Message);
+			if(e.Error!= null) {
+                Cursor = Cursors.Default;
+				MessageBox.Show(e.Error.Message);
+                return;
 			}
-
+            if (PrefObj == null)
+            {
+                MsgBox.Show(this, "There has been an error in fetching values from the server");
+            }
 			butWebformBorderColor.BackColor=Color.FromArgb(PrefObj.ColorBorder);
 			FillGrid();
 			Cursor=Cursors.Default;

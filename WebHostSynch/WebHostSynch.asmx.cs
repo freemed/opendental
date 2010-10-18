@@ -49,7 +49,7 @@ namespace WebHostSynch {
 					db.SaveChanges();
 					Logger.Information("Preferences saved IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID);
 				}
-				catch(ApplicationException ex) {
+				catch(Exception ex) {
 					Logger.Information(ex.Message.ToString());
 					return false;
 				}
@@ -59,7 +59,7 @@ namespace WebHostSynch {
 			[WebMethod]
 			public webforms_preference GetPreferences(string RegistrationKey) {
 				Logger.Information("In GetPreferences IpAddress="+HttpContext.Current.Request.UserHostAddress+" RegistrationKey="+RegistrationKey);
-				ODWebServiceEntities db=new ODWebServiceEntities();
+                ODWebServiceEntities db = new ODWebServiceEntities();
 				webforms_preference wspObj= null;
 				int DefaultColorBorder=-12550016;
 				string DefaultHeading1="PATIENT INFORMATION";
@@ -70,15 +70,21 @@ namespace WebHostSynch {
 					if(DentalOfficeID==0) {
 						return wspObj;
 					}
+                    /*
 					var wspRes=from wsp in db.webforms_preference
 							where wsp.DentalOfficeID==DentalOfficeID
 							select wsp;
-					
-					if(wspRes.Count()>0) {
+                    */
+                    var wspRes = db.webforms_preference.Where(wsp => wsp.DentalOfficeID == DentalOfficeID);
+                                 
+
+                    if (wspRes.Count() > 0)
+                    {
 						wspObj=wspRes.First();
 					}
 					// if there is no entry for that dental office make a new entry.
-					if(wspRes.Count()==0) {
+                    if (wspRes.Count() == 0)
+                    {
 						wspObj=new webforms_preference();
 						wspObj.DentalOfficeID=DentalOfficeID;
 						wspObj.ColorBorder=DefaultColorBorder;
@@ -90,7 +96,7 @@ namespace WebHostSynch {
 					db.SaveChanges();
 					Logger.Information("In GetPreferences IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID);
 				}
-				catch(ApplicationException ex) {
+				catch(Exception ex) {
 					Logger.Information(ex.Message.ToString());
 					return wspObj;;
 				}
@@ -148,7 +154,7 @@ namespace WebHostSynch {
 					db.SaveChanges();
 					Logger.Information("In DeleteSheetData IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID);
 				}
-				catch(ApplicationException ex) {
+				catch(Exception ex) {
 					Logger.Information(ex.Message.ToString());
 				}
 			}
@@ -173,7 +179,7 @@ namespace WebHostSynch {
 						return false;
 					}
 				}
-				catch(ApplicationException ex) {
+				catch(Exception ex) {
 					Logger.Information(ex.Message.ToString());
 					Logger.Information("Incorrect registration key. IpAddress="+HttpContext.Current.Request.UserHostAddress+" RegistrationKey="+RegistrationKeyFromDentalOffice);
 					return false;
@@ -200,7 +206,7 @@ namespace WebHostSynch {
 						return 0;
 					}
 				}
-				catch(ApplicationException ex) {
+				catch(Exception ex) {
 					Logger.Information(ex.Message.ToString());
 					Logger.Information("Incorrect registration key. IpAddress="+HttpContext.Current.Request.UserHostAddress+" RegistrationKey="+RegistrationKeyFromDentalOffice);
 					return 0;
@@ -214,7 +220,7 @@ namespace WebHostSynch {
 				try {
 					WebFormAddress=ConfigurationManager.AppSettings["WebFormAddress"].ToString()+"?DentalOfficeID="+GetDentalOfficeID(RegistrationKeyFromDentalOffice);
 				}
-				catch(ApplicationException ex) {
+				catch(Exception ex) {
 					Logger.Information(ex.Message.ToString());
 				}
 				Logger.Information("In GetWebFormAddress WebFormAddress="+WebFormAddress);
@@ -246,10 +252,10 @@ namespace WebHostSynch {
 				try {
 					SheetDefAddress=ConfigurationManager.AppSettings["SheetDefAddress"];
 				}
-				catch(ApplicationException ex) {
+				catch(Exception ex) {
 					Logger.Information(ex.Message.ToString());
 				}
-				Logger.Information("In GetWebFormAddress SheetDefAddress="+SheetDefAddress);
+                Logger.Information("In GetSheetDefAddress SheetDefAddress=" + SheetDefAddress);
 				return SheetDefAddress;
 			}
 
@@ -267,7 +273,7 @@ namespace WebHostSynch {
 				var SheetDefResult=db.webforms_sheetdef.Where(sheetdef => sheetdef.webforms_preference.DentalOfficeID==DentalOfficeID);
 				sheetDefList=SheetDefResult.ToList();
 				}
-				catch(ApplicationException ex) {
+				catch(Exception ex) {
 					Logger.Information(ex.Message.ToString());
 					return sheetDefList;
 				}
@@ -303,7 +309,7 @@ namespace WebHostSynch {
 					db.SaveChanges();
 					Logger.Information("In DeleteSheetData IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID);
 				}
-				catch(ApplicationException ex) {
+				catch(Exception ex) {
 					Logger.Information(ex.Message.ToString());
 				}
 			}
@@ -349,7 +355,7 @@ namespace WebHostSynch {
 					}// end of foreach loop
 					db.SaveChanges();
 				}
-				catch(ApplicationException ex) {
+				catch(Exception ex) {
 					Logger.Information(ex.Message.ToString());
 					return ;
 				}
