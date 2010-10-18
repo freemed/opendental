@@ -39,6 +39,9 @@ namespace OpenDentalServer {
 					DtoObject[] parameters=dtoGetTable.Params;
 					Type[] paramTypes=DtoObject.GenerateTypes(parameters,assemb);
 					MethodInfo methodInfo=classType.GetMethod(methodName,paramTypes);
+					if(methodInfo==null){
+						throw new ApplicationException("Method not found with "+parameters.Length.ToString()+" parameters: "+dtoGetTable.MethodName);
+					}
 					object[] paramObjs=DtoObject.GenerateObjects(parameters);
 					DataTable dt=(DataTable)methodInfo.Invoke(null,paramObjs);
 					String response=XmlConverter.TableToXml(dt);
@@ -63,6 +66,9 @@ namespace OpenDentalServer {
 					DtoObject[] parameters=dtoGetDS.Params;
 					Type[] paramTypes=DtoObject.GenerateTypes(parameters,assemb);
 					MethodInfo methodInfo=classType.GetMethod(methodName,paramTypes);
+					if(methodInfo==null){
+						throw new ApplicationException("Method not found with "+parameters.Length.ToString()+" parameters: "+dtoGetDS.MethodName);
+					}
 					object[] paramObjs=DtoObject.GenerateObjects(parameters);
 					DataSet ds=(DataSet)methodInfo.Invoke(null,paramObjs);
 					String response=XmlConverter.DsToXml(ds);
@@ -78,6 +84,9 @@ namespace OpenDentalServer {
 					DtoObject[] parameters=dtoGetLong.Params;
 					Type[] paramTypes=DtoObject.GenerateTypes(parameters,assemb);
 					MethodInfo methodInfo=classType.GetMethod(methodName,paramTypes);
+					if(methodInfo==null){
+						throw new ApplicationException("Method not found with "+parameters.Length.ToString()+" parameters: "+dtoGetLong.MethodName);
+					}
 					object[] paramObjs=DtoObject.GenerateObjects(parameters);
 					long longResult=(long)methodInfo.Invoke(null,paramObjs);
 					return longResult.ToString();
@@ -92,6 +101,9 @@ namespace OpenDentalServer {
 					DtoObject[] parameters=dtoGetInt.Params;
 					Type[] paramTypes=DtoObject.GenerateTypes(parameters,assemb);
 					MethodInfo methodInfo=classType.GetMethod(methodName,paramTypes);
+					if(methodInfo==null){
+						throw new ApplicationException("Method not found with "+parameters.Length.ToString()+" parameters: "+dtoGetInt.MethodName);
+					}
 					object[] paramObjs=DtoObject.GenerateObjects(parameters);
 					int intResult=(int)methodInfo.Invoke(null,paramObjs);
 					return intResult.ToString();
@@ -106,6 +118,9 @@ namespace OpenDentalServer {
 					DtoObject[] parameters=dtoGetVoid.Params;
 					Type[] paramTypes=DtoObject.GenerateTypes(parameters,assemb);
 					MethodInfo methodInfo=classType.GetMethod(methodName,paramTypes);
+					if(methodInfo==null){
+						throw new ApplicationException("Method not found with "+parameters.Length.ToString()+" parameters: "+dtoGetVoid.MethodName);
+					}
 					object[] paramObjs=DtoObject.GenerateObjects(parameters);
 					methodInfo.Invoke(null,paramObjs);
 					return "0";
@@ -122,6 +137,9 @@ namespace OpenDentalServer {
 					DtoObject[] parameters=dtoGetObject.Params;
 					Type[] paramTypes=DtoObject.GenerateTypes(parameters,assemb);
 					MethodInfo methodInfo=classType.GetMethod(methodName,paramTypes);
+					if(methodInfo==null){
+						throw new ApplicationException("Method not found with "+parameters.Length.ToString()+" parameters: "+dtoGetObject.MethodName);
+					}
 					if(className=="Security" && methodName=="LogInWeb") {
 						string mappedPath=Server.MapPath(".");
 						parameters[2]=new DtoObject(mappedPath,typeof(string));//because we can't access this variable from within OpenDentBusiness.
@@ -142,6 +160,9 @@ namespace OpenDentalServer {
 					DtoObject[] parameters=dtoGetString.Params;
 					Type[] paramTypes=DtoObject.GenerateTypes(parameters,assemb);
 					MethodInfo methodInfo=classType.GetMethod(methodName,paramTypes);
+					if(methodInfo==null){
+						throw new ApplicationException("Method not found with "+parameters.Length.ToString()+" parameters: "+dtoGetString.MethodName);
+					}
 					object[] paramObjs=DtoObject.GenerateObjects(parameters);
 					string strResult=(string)methodInfo.Invoke(null,paramObjs);
 					return strResult;
@@ -156,6 +177,9 @@ namespace OpenDentalServer {
 					DtoObject[] parameters=dtoGetBool.Params;
 					Type[] paramTypes=DtoObject.GenerateTypes(parameters,assemb);
 					MethodInfo methodInfo=classType.GetMethod(methodName,paramTypes);
+					if(methodInfo==null){
+						throw new ApplicationException("Method not found with "+parameters.Length.ToString()+" parameters: "+dtoGetBool.MethodName);
+					}
 					object[] paramObjs=DtoObject.GenerateObjects(parameters);
 					bool boolResult=(bool)methodInfo.Invoke(null,paramObjs);
 					return boolResult.ToString();

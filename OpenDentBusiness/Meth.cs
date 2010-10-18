@@ -24,7 +24,7 @@ namespace OpenDentBusiness {
 			dto.Params=DtoObject.ConstructArray(parameters,GetParamTypes(methodBase));
 			dto.Credentials=new Credentials();
 			dto.Credentials.Username=Security.CurUser.UserName;
-			dto.Credentials.PassHash=Security.CurUser.Password;
+			dto.Credentials.Password=Security.PasswordTyped;//.CurUser.Password;
 			return RemotingClient.ProcessGetTable(dto);
 		}
 
@@ -39,7 +39,7 @@ namespace OpenDentBusiness {
 			dto.Params=new DtoObject[] { dtoObj };
 			dto.Credentials=new Credentials();
 			dto.Credentials.Username=Security.CurUser.UserName;
-			dto.Credentials.PassHash=Security.CurUser.Password;
+			dto.Credentials.Password=Security.PasswordTyped;//.CurUser.Password;
 			return RemotingClient.ProcessGetTableLow(dto);
 		}
 
@@ -60,7 +60,7 @@ namespace OpenDentBusiness {
 			dto.Params=DtoObject.ConstructArray(parameters,GetParamTypes(methodBase));
 			dto.Credentials=new Credentials();
 			dto.Credentials.Username=Security.CurUser.UserName;
-			dto.Credentials.PassHash=Security.CurUser.Password;
+			dto.Credentials.Password=Security.PasswordTyped;//.CurUser.Password;
 			return RemotingClient.ProcessGetDS(dto);
 		}
 
@@ -81,7 +81,7 @@ namespace OpenDentBusiness {
 			dto.Params=DtoObject.ConstructArray(parameters,GetParamTypes(methodBase));
 			dto.Credentials=new Credentials();
 			dto.Credentials.Username=Security.CurUser.UserName;
-			dto.Credentials.PassHash=Security.CurUser.Password;
+			dto.Credentials.Password=Security.PasswordTyped;//.CurUser.Password;
 			return RemotingClient.ProcessGetLong(dto);
 		}
 
@@ -102,7 +102,7 @@ namespace OpenDentBusiness {
 			dto.Params=DtoObject.ConstructArray(parameters,GetParamTypes(methodBase));
 			dto.Credentials=new Credentials();
 			dto.Credentials.Username=Security.CurUser.UserName;
-			dto.Credentials.PassHash=Security.CurUser.Password;
+			dto.Credentials.Password=Security.PasswordTyped;//.CurUser.Password;
 			return RemotingClient.ProcessGetInt(dto);
 		}
 
@@ -123,7 +123,7 @@ namespace OpenDentBusiness {
 			dto.Params=DtoObject.ConstructArray(parameters,GetParamTypes(methodBase));
 			dto.Credentials=new Credentials();
 			dto.Credentials.Username=Security.CurUser.UserName;
-			dto.Credentials.PassHash=Security.CurUser.Password;
+			dto.Credentials.Password=Security.PasswordTyped;//.CurUser.Password;
 			RemotingClient.ProcessGetVoid(dto);
 		}
 
@@ -145,7 +145,7 @@ namespace OpenDentBusiness {
 			dto.Params=DtoObject.ConstructArray(parameters,GetParamTypes(methodBase));
 			dto.Credentials=new Credentials();
 			dto.Credentials.Username=Security.CurUser.UserName;
-			dto.Credentials.PassHash=Security.CurUser.Password;
+			dto.Credentials.Password=Security.PasswordTyped;//.CurUser.Password;
 			return RemotingClient.ProcessGetObject<T>(dto);
 		}
 
@@ -166,7 +166,7 @@ namespace OpenDentBusiness {
 			dto.Params=DtoObject.ConstructArray(parameters,GetParamTypes(methodBase));
 			dto.Credentials=new Credentials();
 			dto.Credentials.Username=Security.CurUser.UserName;
-			dto.Credentials.PassHash=Security.CurUser.Password;
+			dto.Credentials.Password=Security.PasswordTyped;//.CurUser.Password;
 			return RemotingClient.ProcessGetString(dto);
 		}
 
@@ -187,7 +187,7 @@ namespace OpenDentBusiness {
 			dto.Params=DtoObject.ConstructArray(parameters,GetParamTypes(methodBase));
 			dto.Credentials=new Credentials();
 			dto.Credentials.Username=Security.CurUser.UserName;
-			dto.Credentials.PassHash=Security.CurUser.Password;
+			dto.Credentials.Password=Security.PasswordTyped;//.CurUser.Password;
 			return RemotingClient.ProcessGetBool(dto);
 		}
 

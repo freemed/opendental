@@ -210,7 +210,7 @@ namespace OpenDental{
 
 		private void butOK_Click(object sender,System.EventArgs e) {
 			Userod selectedUser = (Userod)listUser.SelectedItem;
-			if(!Userods.CheckPassword(textPassword.Text,selectedUser.Password)) {
+			if(!Userods.CheckTypedPassword(textPassword.Text,selectedUser.Password)) {
 				MsgBox.Show(this,"Incorrect password");
 				return;
 			}
@@ -219,6 +219,9 @@ namespace OpenDental{
 				return;
 			}
 			Security.CurUser = selectedUser.Copy();
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
+				Security.PasswordTyped=textPassword.Text;
+			}
 			if(PrefC.GetBool(PrefName.TasksCheckOnStartup)){
 				int taskcount=Tasks.UserTasksCount(Security.CurUser.UserNum);
 				if(taskcount>0){

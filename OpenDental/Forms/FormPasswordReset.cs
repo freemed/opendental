@@ -133,7 +133,7 @@ namespace OpenDental{
 
 		private void butOK_Click(object sender, System.EventArgs e) {
 			Debug.WriteLine(Userods.EncryptPassword(textMasterPass.Text));
-			if(!Userods.CheckPassword(textMasterPass.Text,masterHash)){
+			if(!Userods.CheckTypedPassword(textMasterPass.Text,masterHash)){
 				MessageBox.Show(Lan.g(this,"Master password incorrect."));
 				return;
 			}

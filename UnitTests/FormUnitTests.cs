@@ -31,7 +31,7 @@ namespace UnitTests {
 			RemotingClient.ServerURI="http://localhost:49262/ServiceMain.asmx";
 			Cursor=Cursors.WaitCursor;
 			try{
-				Userod user=Security.LogInWeb("Admin","","",Application.ProductVersion);//Userods.EncryptPassword("pass",false)
+				Userod user=Security.LogInWeb("Admin","","",Application.ProductVersion,false);//Userods.EncryptPassword("pass",false)
 				Security.CurUser=user;
 				RemotingClient.RemotingRole=RemotingRole.ClientWeb;
 			}

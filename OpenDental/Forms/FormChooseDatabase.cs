@@ -53,6 +53,7 @@ namespace OpenDental{
 		private CheckBox checkUsingEcw;
 		private TextBox textConnectionString;
 		public string OdUser;
+		///<summary>Only used by Ecw.</summary>
 		public string OdPassHash;
 
 		///<summary></summary>
@@ -661,7 +662,8 @@ namespace OpenDental{
 			if(checkConnectServer.Checked && checkUsingEcw.Checked){
 				RemotingClient.ServerURI=textURI.Text;
 				try{
-					Userod user=Security.LogInWeb(OdUser,OdPassHash,"",Application.ProductVersion);
+					//this is only OdPassHash because of Ecw.
+					Userod user=Security.LogInWeb(OdUser,OdPassHash,"",Application.ProductVersion,true);
 					Security.CurUser=user;
 					RemotingClient.RemotingRole=RemotingRole.ClientWeb;
 					return true;
@@ -694,9 +696,10 @@ namespace OpenDental{
 				RemotingClient.ServerURI=textURI.Text;
 				bool useEcwAlgorithm=checkUsingEcw.Checked;
 				try{
-					string passhash=Userods.EncryptPassword(textPassword2.Text,useEcwAlgorithm);
-					Userod user=Security.LogInWeb(textUser2.Text,passhash,"",Application.ProductVersion);
+					//string passhash=Userods.EncryptPassword(textPassword2.Text,useEcwAlgorithm);
+					Userod user=Security.LogInWeb(textUser2.Text,textPassword2.Text,"",Application.ProductVersion,useEcwAlgorithm);
 					Security.CurUser=user;
+					Security.PasswordTyped=textPassword2.Text;
 					RemotingClient.RemotingRole=RemotingRole.ClientWeb;
 				}
 				catch(Exception ex){

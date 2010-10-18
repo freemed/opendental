@@ -73,15 +73,23 @@ namespace OpenDentBusiness {
 		}
 
 
-		///<summary>Only used in one place on the server when first attempting to log on.  Must pass in a hash of the actual password since we don't want to be moving the real password around.  It will be checked against the one in the database.  Passhash should be empty string if user does not have a password.  Returns a user object if user and password are valid.  Otherwise, returns null.</summary>
-		public static Userod CheckUserAndPassword(string username, string passhash){
+		///<summary>Only used in one place on the server when first attempting to log on.  The password will be hashed and checked against the one in the database.  Password is required, so empty string will return null.  Returns a user object if user and password are valid.  Otherwise, returns null.  If usingEcw, password will actually be the hash.</summary>
+		public static Userod CheckUserAndPassword(string username, string password,bool usingEcw){
 			//No need to check RemotingRole; no call to db.
+			if(password==""){
+				return null;
+			}
 			RefreshCache();
 			Userod user=GetUserByName(username);
 			if(user==null){
 				return null;
 			}
-			if(user.Password==passhash) {
+			if(usingEcw){
+				if(user.Password==password) {
+					return user;
+				}
+			}
+			else if(user.Password==EncryptPassword(password)) {
 				return user;
 			}
 			return null;
@@ -93,7 +101,7 @@ namespace OpenDentBusiness {
 			#if DEBUG
 				return;//skip checking credentials when in debug for faster testing.
 			#endif
-			if(cred.Username=="" || cred.PassHash==""){
+			if(cred.Username=="" || cred.Password==""){
 				throw new ApplicationException("Invalid username or password.");
 			}
 			Userod userod=null;
@@ -106,7 +114,13 @@ namespace OpenDentBusiness {
 			if(userod==null){
 				throw new ApplicationException("Invalid username or password.");
 			}
-			if(userod.Password!=cred.PassHash){
+			bool useEcwAlgorithm=Programs.IsEnabled(ProgramName.eClinicalWorks);
+			if(useEcwAlgorithm){
+				if(userod.Password!=cred.Password){
+					throw new ApplicationException("Invalid username or password.");
+				}
+			}
+			else if(userod.Password!=EncryptPassword(cred.Password)){
 				throw new ApplicationException("Invalid username or password.");
 			}
 		}
@@ -246,8 +260,8 @@ namespace OpenDentBusiness {
 			}
 		}
 
-		///<summary></summary>
-		public static bool CheckPassword(string inputPass,string hashedPass) {
+		///<summary>Only used from log on screen.</summary>
+		public static bool CheckTypedPassword(string inputPass,string hashedPass) {
 			//No need to check RemotingRole; no call to db.
 			if(hashedPass=="") {
 				return inputPass=="";

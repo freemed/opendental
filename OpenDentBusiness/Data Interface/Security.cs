@@ -11,6 +11,8 @@ namespace OpenDentBusiness{
 	public class Security{
 		///<summary>The current user.  Might be null when first starting the program.  Otherwise, must contain valid user.</summary>
 		private static Userod curUser;
+		///<summary>Remember the password that the user typed in.  Do not store it in the database.  We will need it when connecting to the web service.  Probably blank if not connected to the web service.</summary>
+		public static string PasswordTyped;
 
 		public static Userod CurUser {
 			get {
@@ -226,8 +228,8 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}*/
 
-		///<summary>RemotingRole has not yet been set to ClientWeb, but it will if this succeeds.  Will throw an exception if server cannot validate username and password.  configPath will be empty from a workstation and filled from the server.</summary>
-		public static Userod LogInWeb(string oduser,string odpasshash,string configPath,string clientVersionStr) {
+		///<summary>RemotingRole has not yet been set to ClientWeb, but it will if this succeeds.  Will throw an exception if server cannot validate username and password.  configPath will be empty from a workstation and filled from the server.  If Ecw, odpass will actually be the hash.</summary>
+		public static Userod LogInWeb(string oduser,string odpass,string configPath,string clientVersionStr,bool usingEcw) {
 			//Very unusual method.  Remoting role can't be checked, but is implied by the presence of a value in configPath.
 			if(configPath != "") {//RemotingRole.ServerWeb
 				Userods.LoadDatabaseInfoFromFile(ODFileUtils.CombinePaths(configPath,"OpenDentalServerConfig.xml"));
@@ -238,7 +240,7 @@ namespace OpenDentBusiness{
 				//Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),"OpenDentalServerConfig.xml"));
 				//Environment.CurrentDirectory,"OpenDentalServerConfig.xml"));
 				//Then, check username and password
-				Userod user=Userods.CheckUserAndPassword(oduser,odpasshash);
+				Userod user=Userods.CheckUserAndPassword(oduser,odpass,usingEcw);
 				#if DEBUG
 					if(oduser=="Admin"){
 						user=Userods.GetUserByName("Admin");//without checking password.  Makes debugging faster.
@@ -275,11 +277,11 @@ namespace OpenDentBusiness{
 				DtoGetObject dto=new DtoGetObject();
 				dto.Credentials=new Credentials();
 				dto.Credentials.Username=oduser;
-				dto.Credentials.PassHash=odpasshash;//Userods.EncryptPassword(password);
+				dto.Credentials.Password=odpass;//Userods.EncryptPassword(password);
 				dto.MethodName="Security.LogInWeb";
 				dto.ObjectType=typeof(Userod).FullName;
-				object[] parameters=new object[] { oduser,odpasshash,configPath,clientVersionStr };
-				Type[] objTypes=new Type[] { typeof(string),typeof(string),typeof(string),typeof(string) };
+				object[] parameters=new object[] { oduser,odpass,configPath,clientVersionStr,usingEcw };
+				Type[] objTypes=new Type[] { typeof(string),typeof(string),typeof(string),typeof(string),typeof(bool) };
 				dto.Params=DtoObject.ConstructArray(parameters,objTypes);
 				return RemotingClient.ProcessGetObject<Userod>(dto);//can throw exception
 			}

@@ -53,7 +53,8 @@ namespace OpenDentBusiness {
 	///<summary>The username and password are internal to OD.  They are not the MySQL username and password.</summary>
 	public class Credentials{
 		public string Username;
-		public string PassHash;
+		///<summary>If using Ecw, then the password is actually just a hash because we don't know the real password.</summary>
+		public string Password;
 	}
 
 	///<summary></summary>
