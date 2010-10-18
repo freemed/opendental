@@ -1898,7 +1898,7 @@ namespace OpenDental{
 				//priority
 				ProcCur.ProcStatus=ProcStat.TP;
 				//procnote
-				ProcCur.ProvNum=AptCur.ProvNum;
+				ProcCur.ProvNum=ProviderC.List[comboProvNum.SelectedIndex].ProvNum;
 				//Dx
 				ProcCur.ClinicNum=AptCur.ClinicNum;
 				ProcCur.SiteNum=pat.SiteNum;
