@@ -463,8 +463,11 @@ namespace OpenDental{
 			RxPatCur.Notes=textNotes.Text;
 			//pharmacy is set when using pick button.
 			if(IsNew){
-				RxPats.Insert(RxPatCur);
+				RxPatCur.RxNum=RxPats.Insert(RxPatCur);
 				//SecurityLogs.MakeLogEntry("Prescription Create",RxPats.cmd.CommandText,user);
+				if(FormProcGroup.IsOpen){
+					FormProcGroup.RxNum=RxPatCur.RxNum;
+				}
 			}
 			else{
 				RxPats.Update(RxPatCur);

@@ -64,6 +64,8 @@ namespace OpenDental{
 		private System.Windows.Forms.Button butOnCallN;
 		private System.Windows.Forms.Button butOnCallY;
 		private OpenDental.UI.Button butRx;
+		public static bool IsOpen;
+		public static long RxNum;
 
 		public FormProcGroup() {
 			InitializeComponent();
@@ -292,6 +294,7 @@ namespace OpenDental{
 			// 
 			this.textProcDate.Location = new System.Drawing.Point(98,12);
 			this.textProcDate.Name = "textProcDate";
+			this.textProcDate.ReadOnly = true;
 			this.textProcDate.Size = new System.Drawing.Size(76,20);
 			this.textProcDate.TabIndex = 100;
 			// 
@@ -337,7 +340,7 @@ namespace OpenDental{
 			this.butRx.Size = new System.Drawing.Size(23,24);
 			this.butRx.TabIndex = 106;
 			this.butRx.Text = "Rx";
-			this.butRx.Click += new System.EventHandler(this.buttonUseAutoNote_Click);
+			this.butRx.Click += new System.EventHandler(this.butRx_Click);
 			// 
 			// butExamSheets
 			// 
@@ -351,7 +354,7 @@ namespace OpenDental{
 			this.butExamSheets.Size = new System.Drawing.Size(80,24);
 			this.butExamSheets.TabIndex = 106;
 			this.butExamSheets.Text = "Exam Sheets";
-			this.butExamSheets.Click += new System.EventHandler(this.buttonUseAutoNote_Click);
+			this.butExamSheets.Click += new System.EventHandler(this.butExamSheets_Click);
 			// 
 			// buttonUseAutoNote
 			// 
@@ -475,6 +478,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormProcGroup_Load(object sender, System.EventArgs e){
+			IsOpen=true;
 			IsStartingUp=true;
 			//ProcList gets set in ContrChart where this form is created.
 			PatCur=Patients.GetPat(GroupCur.PatNum);
@@ -637,6 +641,7 @@ namespace OpenDental{
 					butRepairN.Visible=true;
 				}
 			}
+			textProcDate.ReadOnly=false;
 		}
 
 		private void butRx_Click(object sender,EventArgs e) {
@@ -668,7 +673,17 @@ namespace OpenDental{
 				//ModuleSelected(PatCur.PatNum);
 				SecurityLogs.MakeLogEntry(Permissions.RxCreate,PatCur.PatNum,PatCur.GetNameLF());
 			//}
-			//TODO: Print a note about Rx added.
+			if(FormRS.DialogResult==DialogResult.OK){
+				RxPat Rx=RxPats.GetRx(RxNum);
+				if(textNotes.Text!=""){
+					textNotes.Text+="\r\n";
+				}
+				textNotes.Text+="Rx - "+Rx.Drug+" - #"+Rx.Disp;
+				string rxNote=Pharmacies.GetDescription(RxNum);
+				if(rxNote!=""){
+					textNotes.Text+="\r\n"+rxNote;
+				}
+			}
 		}
 
 		private void buttonUseAutoNote_Click(object sender,EventArgs e) {
@@ -677,7 +692,6 @@ namespace OpenDental{
 			if(FormA.DialogResult==DialogResult.OK) {
 				textNotes.AppendText(FormA.CompletedNote);
 			}
-			//TODO: Finish implementing autonotes...
 		}
 
 		private void butExamSheets_Click(object sender,EventArgs e) {
@@ -772,12 +786,21 @@ namespace OpenDental{
 					ProcGroupItems.Delete(GroupItemList[i].ProcGroupItemNum);
 				}
 				DialogResult=DialogResult.Cancel;
+				IsOpen=false;
 			}
 			return;
 		}		
 
 		private void butOK_Click(object sender,System.EventArgs e) {
+			if(textProcDate.errorProvider1.GetError(textProcDate)!=""){
+				MsgBox.Show(this,"Please fix data entry errors first.");
+				return;
+			}
 			GroupCur.Note=textNotes.Text;
+			GroupCur.ProcDate=PIn.Date(this.textProcDate.Text);
+			for(int i=0;i<ProcList.Count;i++){
+				ProcList[i].ProcDate=GroupCur.ProcDate;
+			}
 			if(!signatureBoxWrapper.IsValid){
 				MsgBox.Show(this,"Your signature is invalid. Please sign and click OK again.");
 				return;
@@ -797,7 +820,8 @@ namespace OpenDental{
 					OrionProcs.Update(OrionProcList[i]);
 				}
 			}
-      DialogResult=DialogResult.OK;
+			DialogResult=DialogResult.OK;
+			IsOpen=false;
 		}
 
 		private void butCancel_Click(object sender,System.EventArgs e) {
@@ -808,6 +832,7 @@ namespace OpenDental{
 				}
 			}
 			DialogResult=DialogResult.Cancel;
+			IsOpen=false;
 		}
 
 		private void gridPat_CellDoubleClick(object sender,ODGridClickEventArgs e) {

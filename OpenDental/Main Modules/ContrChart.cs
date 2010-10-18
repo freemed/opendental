@@ -7268,6 +7268,7 @@ namespace OpenDental{
 			group.ProvNum=provNum;
 			group.ClinicNum=clinicNum;
 			group.CodeNum=ProcedureCodes.GetCodeNum(ProcedureCodes.GroupProcCode);
+			group.Note=ProcCodeNotes.GetNote(group.ProvNum,group.CodeNum);
 			group.IsNew=true;
 			Procedures.Insert(group);
 			List<ProcGroupItem> groupItemList=new List<ProcGroupItem>();
