@@ -723,6 +723,33 @@ namespace OpenDental{
 						case "ADA Code":
 							row.Cells.Add(ProcedureCodes.GetStringProcCode(ProcList[i].CodeNum));
 							break;
+						case "Stat 2":
+							row.Cells.Add(((OrionStatus)OrionProcList[i].Status2).ToString());
+							break;
+						case "On Call":
+							if(OrionProcList[i].IsOnCall) {
+								row.Cells.Add("Y");
+							}
+							else {
+								row.Cells.Add("N");
+							}
+							break;
+						case "Effective Comm":
+							if(OrionProcList[i].IsEffectiveComm) {
+								row.Cells.Add("Y");
+							}
+							else {
+								row.Cells.Add("N");
+							}
+							break;
+						case "Repair":
+							if(OrionProcList[i].IsRepair) {
+								row.Cells.Add("Y");
+							}
+							else {
+								row.Cells.Add("N");
+							}
+							break;
 					}
 				}
 				gridProc.Rows.Add(row);

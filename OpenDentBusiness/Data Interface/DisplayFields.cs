@@ -239,6 +239,12 @@ namespace OpenDentBusiness {
 				list.Add(new DisplayField("Prov",42,category));
 				list.Add(new DisplayField("Amount",48,category));
 				list.Add(new DisplayField("ADA Code",62,category));
+				//if(Programs.UsingOrion){
+				//  list.Add(new DisplayField("Stat 2",36,category));
+				//  list.Add(new DisplayField("On Call",45,category));
+				//  list.Add(new DisplayField("Effective Comm",90,category));
+				//  list.Add(new DisplayField("Repair",45,category));
+				//}
 			}
 			return list;
 		}
@@ -385,6 +391,12 @@ namespace OpenDentBusiness {
 				list.Add(new DisplayField("Prov",42,category));
 				list.Add(new DisplayField("Amount",48,category));
 				list.Add(new DisplayField("ADA Code",62,category));
+				if(Programs.UsingOrion){
+					list.Add(new DisplayField("Stat 2",36,category));
+					list.Add(new DisplayField("On Call",45,category));
+					list.Add(new DisplayField("Effective Comm",90,category));
+					list.Add(new DisplayField("Repair",45,category));
+				}
 			}
 			return list;
 		}
