@@ -2926,13 +2926,18 @@ namespace OpenDental{
 			long assignedHyg=Schedules.GetAssignedProvNumForSpot(SchedListPeriod,curOp,true,apt.AptDateTime);
 			List<Procedure> procsForSingleApt=null;
 			if(apt.AptStatus!=ApptStatus.PtNote && apt.AptStatus!=ApptStatus.PtNoteCompleted) {
-				if(PatCur.AskToArriveEarly>0) {
-					apt.DateTimeAskedToArrive=apt.AptDateTime.AddMinutes(-PatCur.AskToArriveEarly);
-					MessageBox.Show(Lan.g(this,"Ask patient to arrive")+" "+PatCur.AskToArriveEarly
-						+" "+Lan.g(this,"minutes early at")+" "+apt.DateTimeAskedToArrive.ToShortTimeString()+".");
-				}
-				else {
-					apt.DateTimeAskedToArrive=DateTime.MinValue;
+				if(timeWasMoved) {
+					if(PatCur.AskToArriveEarly>0) {
+						apt.DateTimeAskedToArrive=apt.AptDateTime.AddMinutes(-PatCur.AskToArriveEarly);
+						MessageBox.Show(Lan.g(this,"Ask patient to arrive")+" "+PatCur.AskToArriveEarly
+							+" "+Lan.g(this,"minutes early at")+" "+apt.DateTimeAskedToArrive.ToShortTimeString()+".");
+					}
+					else {
+						if(apt.DateTimeAskedToArrive.Year>1880){
+							MessageBox.Show(Lan.g(this,"Time asked to arrive was ")+apt.DateTimeAskedToArrive.ToShortTimeString());//OK is only option
+						}
+						apt.DateTimeAskedToArrive=DateTime.MinValue;
+					}
 				}
 				//if no dentist/hygenist is assigned to spot, then keep the original dentist/hygenist without prompt.  All appts must have prov.
 				if((assignedDent!=0 && assignedDent!=apt.ProvNum) || (assignedHyg!=0 && assignedHyg!=apt.ProvHyg)) {
