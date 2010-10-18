@@ -71,10 +71,8 @@ namespace OpenDentBusiness{
 		public long FilingCodeSubtype;
 		///<summary>Canadian C12.  Single char, usually blank.  A=Newfoundland MCP Plan - Provincial Medical Plan.  V=Veteran's Affairs Plan.  N=NIHB(poorly documented).  If N, then it does not go out in messages, blank is sent instead.  At least that's the way to make in comply with the scripts; see Elig5.</summary>
 		public string CanadianPlanFlag;
-		//<summary>Canadian C13.  Used when NIHB. 3 digit.  0 means blank.</summary>
-		//public int CanadianBandNumber;
-		//<summary>Canadian C14.  Used when NIHB. 5 digit.  0 means blank.</summary>
-		//public int CanadianFamilyNumber;
+		
+
 		///<summary>This is not a database column.  It is just used to display the number of plans with the same info.</summary>
 		[CrudColumn(IsNotDbColumn=true)]
 		public int NumberPlans;

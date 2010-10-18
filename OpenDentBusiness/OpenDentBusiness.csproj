@@ -465,6 +465,7 @@
     <Compile Include="TableTypes\ApptField.cs" />
     <Compile Include="TableTypes\AutomationCondition.cs" />
     <Compile Include="TableTypes\ChartView.cs" />
+    <Compile Include="TableTypes\InsSub.cs" />
     <Compile Include="TableTypes\OrionProc.cs" />
     <Compile Include="TableTypes\ProcGroupItem.cs" />
     <Compile Include="TableTypes\ProcApptColor.cs" />
