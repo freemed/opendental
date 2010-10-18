@@ -4909,7 +4909,10 @@ namespace OpenDental{
 					FormP.GroupItemList=groupItemList;
 					FormP.ProcList=procList;
 					FormP.ShowDialog();
-					FillProgNotes();
+					if(FormP.DialogResult==DialogResult.OK){
+						ModuleSelected(PatCur.PatNum);
+						FillProgNotes();
+					}
 					return;
 				}
 				else{

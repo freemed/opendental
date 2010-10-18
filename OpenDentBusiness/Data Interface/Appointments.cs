@@ -911,7 +911,7 @@ namespace OpenDentBusiness{
 				production=0;
 				if(rawProc!=null) {
 					for(int p=0;p<rawProc.Rows.Count;p++) {
-						if(isPlanned && raw.Rows[i]["PlannedAptNum"].ToString()!=rawProc.Rows[p]["PlannedAptNum"].ToString()) {
+						if(isPlanned && raw.Rows[i]["AptNum"].ToString()!=rawProc.Rows[p]["PlannedAptNum"].ToString()) {
 							continue;
 						}
 						else if(!isPlanned && raw.Rows[i]["AptNum"].ToString()!=rawProc.Rows[p]["AptNum"].ToString()) {
