@@ -4321,15 +4321,6 @@
       <Generator>MSDiscoCodeGenerator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
-    <None Include="Web References\WebHostSynch\webforms_preference.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\WebHostSynch\webforms_sheet.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\WebHostSynch\webforms_sheetdef.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
     <None Include="Web References\WebHostSynch\webforms_sheetfield.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>

@@ -101,7 +101,7 @@ namespace OpenDental {
 					LoadImagesToSheetsDefs(SheetDefListLocal[i]);
 				}
 				wh.SetPreferences(RegistrationKey,butWebformBorderColor.BackColor.ToArgb(),"","");
-//js 10/15/10 error: wh.UpLoadSheetDef(RegistrationKey,SheetDefListLocal.ToArray());
+                wh.UpLoadSheetDef(RegistrationKey,SheetDefListLocal.ToArray());
 				wh.DeleteSheetDefs(RegistrationKey,SheetsDefsForDeletion.ToArray());
 			}
 			catch(Exception ex) {
