@@ -12,12 +12,12 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Text;
+using System.Data;
 using Microsoft.Win32;
 using OpenDentBusiness;
 using CodeBase;
 using SparksToothChart;
 using OpenDental.UI;
-
 
 namespace OpenDental{
 ///<summary></summary>
@@ -72,6 +72,7 @@ namespace OpenDental{
 		private UI.Button butNew;
 		private ODGrid gridPlanned;
 		public static long RxNum;
+		private DataTable TablePlanned;
 
 		public FormProcGroup() {
 			InitializeComponent();
@@ -459,7 +460,7 @@ namespace OpenDental{
 			// butDown
 			// 
 			this.butDown.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butDown.Autosize = true;
+			this.butDown.Autosize = false;
 			this.butDown.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butDown.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butDown.CornerRadius = 4F;
@@ -467,14 +468,15 @@ namespace OpenDental{
 			this.butDown.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butDown.Location = new System.Drawing.Point(189,3);
 			this.butDown.Name = "butDown";
-			this.butDown.Size = new System.Drawing.Size(59,23);
+			this.butDown.Size = new System.Drawing.Size(68,23);
 			this.butDown.TabIndex = 208;
 			this.butDown.Text = "&Down";
+			this.butDown.Click += new System.EventHandler(this.butDown_Click);
 			// 
 			// butUp
 			// 
 			this.butUp.AdjustImageLocation = new System.Drawing.Point(0,1);
-			this.butUp.Autosize = true;
+			this.butUp.Autosize = false;
 			this.butUp.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butUp.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butUp.CornerRadius = 4F;
@@ -485,11 +487,12 @@ namespace OpenDental{
 			this.butUp.Size = new System.Drawing.Size(59,23);
 			this.butUp.TabIndex = 207;
 			this.butUp.Text = "&Up";
+			this.butUp.Click += new System.EventHandler(this.butUp_Click);
 			// 
 			// butClear
 			// 
 			this.butClear.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butClear.Autosize = true;
+			this.butClear.Autosize = false;
 			this.butClear.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClear.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClear.CornerRadius = 4F;
@@ -497,14 +500,15 @@ namespace OpenDental{
 			this.butClear.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butClear.Location = new System.Drawing.Point(65,3);
 			this.butClear.Name = "butClear";
-			this.butClear.Size = new System.Drawing.Size(59,23);
+			this.butClear.Size = new System.Drawing.Size(64,23);
 			this.butClear.TabIndex = 206;
 			this.butClear.Text = "Delete";
+			this.butClear.Click += new System.EventHandler(this.butClear_Click);
 			// 
 			// butNew
 			// 
 			this.butNew.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butNew.Autosize = true;
+			this.butNew.Autosize = false;
 			this.butNew.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butNew.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butNew.CornerRadius = 4F;
@@ -515,7 +519,7 @@ namespace OpenDental{
 			this.butNew.Size = new System.Drawing.Size(59,23);
 			this.butNew.TabIndex = 205;
 			this.butNew.Text = "Add";
-			this.butNew.Click += new System.EventHandler(this.butNew_Click_1);
+			this.butNew.Click += new System.EventHandler(this.butNew_Click);
 			// 
 			// gridPlanned
 			// 
@@ -581,6 +585,8 @@ namespace OpenDental{
 		#endregion
 
 		private void FormProcGroup_Load(object sender, System.EventArgs e){
+			this.butClear.Size=new System.Drawing.Size(59,23);//attempt to force size for delete & down buttons
+			this.butDown.Size=new System.Drawing.Size(59,23);
 			IsOpen=true;
 			IsStartingUp=true;
 			//ProcList gets set in ContrChart where this form is created.
@@ -608,6 +614,7 @@ namespace OpenDental{
 			signatureBoxWrapper.FillSignature(GroupCur.SigIsTopaz,keyData,GroupCur.Signature);
 			signatureBoxWrapper.BringToFront();
 			FillPatientData();
+			FillPlanned();
 			IsStartingUp=false;
 		}
 
@@ -773,6 +780,191 @@ namespace OpenDental{
 			}
 			textProcDate.ReadOnly=false;
 		}
+
+		
+		#region Planned
+		private void FillPlanned(){
+			if(PatCur==null){
+				butNew.Enabled=false;
+				butClear.Enabled=false;
+				butUp.Enabled=false;
+				butDown.Enabled=false;
+				gridPlanned.Enabled=false;
+				return;
+			}
+			else{
+				butNew.Enabled=true;
+				butClear.Enabled=true;
+				butUp.Enabled=true;
+				butDown.Enabled=true;
+				gridPlanned.Enabled=true;
+			}
+			//Fill grid
+			gridPlanned.BeginUpdate();
+			gridPlanned.Columns.Clear();
+			ODGridColumn col;
+			col=new ODGridColumn(Lan.g("TablePlannedAppts","#"),15,HorizontalAlignment.Center);
+			gridPlanned.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TablePlannedAppts","Min"),20);
+			gridPlanned.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TablePlannedAppts","Procedures"),100);
+			gridPlanned.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TablePlannedAppts","Note"),100);
+			gridPlanned.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TablePlannedAppts","DateSched"),40);
+			gridPlanned.Columns.Add(col);
+			gridPlanned.Rows.Clear();
+			ODGridRow row;
+			TablePlanned=ChartModules.GetAll(PatCur.PatNum,false).Tables["Planned"];
+			//This gets done in the business layer:
+			/*
+			bool iochanged=false;
+			for(int i=0;i<table.Rows.Count;i++) {
+				if(table.Rows[i]["ItemOrder"].ToString()!=i.ToString()) {
+					PlannedAppt planned=PlannedAppts.CreateObject(PIn.PLong(table.Rows[i]["PlannedApptNum"].ToString()));
+					planned.ItemOrder=i;
+					PlannedAppts.InsertOrUpdate(planned);
+					iochanged=true;
+				}
+			}
+			if(iochanged) {
+				DataSetMain=ChartModules.GetAll(PatCur.PatNum,checkAudit.Checked);
+				table=DataSetMain.Tables["Planned"];
+			}*/
+			for(int i=0;i<TablePlanned.Rows.Count;i++){
+				row=new ODGridRow();
+				row.Cells.Add(TablePlanned.Rows[i]["ItemOrder"].ToString());
+				row.Cells.Add(TablePlanned.Rows[i]["minutes"].ToString());
+				row.Cells.Add(TablePlanned.Rows[i]["ProcDescript"].ToString());
+				row.Cells.Add(TablePlanned.Rows[i]["Note"].ToString());
+				row.Cells.Add(TablePlanned.Rows[i]["dateSched"].ToString());
+				row.ColorText=Color.FromArgb(PIn.Int(TablePlanned.Rows[i]["colorText"].ToString()));
+				row.ColorBackG=Color.FromArgb(PIn.Int(TablePlanned.Rows[i]["colorBackG"].ToString()));
+				gridPlanned.Rows.Add(row);
+			}
+			gridPlanned.EndUpdate();
+		}
+
+		private void butNew_Click(object sender,EventArgs e) {
+			/*if(ApptPlanned.Visible){
+				if(MessageBox.Show(Lan.g(this,"Replace existing planned appointment?")
+					,"",MessageBoxButtons.OKCancel)!=DialogResult.OK)
+					return;
+				//Procedures.UnattachProcsInPlannedAppt(ApptPlanned.Info.MyApt.AptNum);
+				AppointmentL.Delete(PIn.PInt(ApptPlanned.DataRoww["AptNum"].ToString()));
+			}*/
+			Appointment AptCur=new Appointment();
+			AptCur.PatNum=PatCur.PatNum;
+			AptCur.ProvNum=PatCur.PriProv;
+			AptCur.ClinicNum=PatCur.ClinicNum;
+			AptCur.AptStatus=ApptStatus.Planned;
+			AptCur.AptDateTime=DateTime.Today;
+			AptCur.Pattern="/X/";
+			Appointments.Insert(AptCur);
+			PlannedAppt plannedAppt=new PlannedAppt();
+			plannedAppt.AptNum=AptCur.AptNum;
+			plannedAppt.PatNum=PatCur.PatNum;
+			plannedAppt.ItemOrder=TablePlanned.Rows.Count+1;
+			PlannedAppts.Insert(plannedAppt);
+			FormApptEdit FormApptEdit2=new FormApptEdit(AptCur.AptNum);
+			FormApptEdit2.IsNew=true;
+			FormApptEdit2.ShowDialog();
+			if(FormApptEdit2.DialogResult!=DialogResult.OK){
+				//delete new appt, delete plannedappt, and unattach procs already handled in dialog
+				FillPlanned();
+				return;
+			}
+			List<Procedure> myProcList=Procedures.Refresh(PatCur.PatNum);
+			bool allProcsHyg=true;
+			for(int i=0;i<myProcList.Count;i++){
+				if(myProcList[i].PlannedAptNum!=AptCur.AptNum)
+					continue;//only concerned with procs on this plannedAppt
+				if(!ProcedureCodes.GetProcCode(myProcList[i].CodeNum).IsHygiene){
+					allProcsHyg=false;
+					break;
+				}
+			}
+			if(allProcsHyg && PatCur.SecProv!=0){
+				Appointment aptOld=AptCur.Clone();
+				AptCur.ProvNum=PatCur.SecProv;
+				Appointments.Update(AptCur,aptOld);
+			}
+			Patient patOld=PatCur.Copy();
+			//PatCur.NextAptNum=AptCur.AptNum;
+			PatCur.PlannedIsDone=false;
+			Patients.Update(PatCur,patOld);
+			FillPlanned();//if procs were added in appt, then this will display them
+		}
+
+		private void butClear_Click(object sender,EventArgs e) {
+			if(gridPlanned.SelectedIndices.Length==0){
+				MsgBox.Show(this,"Please select an item first");
+				return;
+			}
+			if(!MsgBox.Show(this,true,"Delete planned appointment(s)?")){
+				return;
+			}
+			for(int i=0;i<gridPlanned.SelectedIndices.Length;i++){
+				Appointments.Delete(PIn.Long(TablePlanned.Rows[gridPlanned.SelectedIndices[i]]["AptNum"].ToString()));
+			}
+			FillPlanned();
+		}
+
+		private void butUp_Click(object sender,EventArgs e) {
+			if(gridPlanned.SelectedIndices.Length==0) {
+				MsgBox.Show(this,"Please select an item first.");
+				return;
+			}
+			if(gridPlanned.SelectedIndices.Length>1) {
+				MsgBox.Show(this,"Please only select one item first.");
+				return;
+			}
+			int idx=gridPlanned.SelectedIndices[0];
+			if(idx==0) {
+				return;
+			}
+			PlannedAppt planned;
+			planned=PlannedAppts.GetOne(PIn.Long(TablePlanned.Rows[idx]["PlannedApptNum"].ToString()));
+			planned.ItemOrder=idx-1;
+			PlannedAppts.Update(planned);
+			planned=PlannedAppts.GetOne(PIn.Long(TablePlanned.Rows[idx-1]["PlannedApptNum"].ToString()));
+			planned.ItemOrder=idx;
+			PlannedAppts.Update(planned);
+			TablePlanned=ChartModules.GetAll(PatCur.PatNum,false).Tables["Planned"];
+			FillPlanned();
+			gridPlanned.SetSelected(idx-1,true);
+		}
+
+		private void butDown_Click(object sender,EventArgs e) {
+			if(gridPlanned.SelectedIndices.Length==0) {
+				MsgBox.Show(this,"Please select an item first.");
+				return;
+			}
+			if(gridPlanned.SelectedIndices.Length>1) {
+				MsgBox.Show(this,"Please only select one item first.");
+				return;
+			}
+			int idx=gridPlanned.SelectedIndices[0];
+			if(idx==TablePlanned.Rows.Count-1) {
+				return;
+			}
+			PlannedAppt planned;
+			planned=PlannedAppts.GetOne(PIn.Long(TablePlanned.Rows[idx]["PlannedApptNum"].ToString()));
+			planned.ItemOrder=idx+1;
+			PlannedAppts.Update(planned);
+			planned=PlannedAppts.GetOne(PIn.Long(TablePlanned.Rows[idx+1]["PlannedApptNum"].ToString()));
+			planned.ItemOrder=idx;
+			PlannedAppts.Update(planned);
+			TablePlanned=ChartModules.GetAll(PatCur.PatNum,false).Tables["Planned"];
+			FillPlanned();
+			gridPlanned.SetSelected(idx+1,true);
+		}
+
+		private void gridPlanned_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+
+		}
+		#endregion Planned
+
 
 		private void butRx_Click(object sender,EventArgs e) {
 			/*?
@@ -1007,64 +1199,6 @@ namespace OpenDental{
 			FillPatientData();
 		}
 
-		private void butDown_Click(object sender,EventArgs e) {
-			/*
-			if(gridPlanned.SelectedIndices.Length==0) {
-				MsgBox.Show(this,"Please select an item first.");
-				return;
-			}
-			if(gridPlanned.SelectedIndices.Length>1) {
-				MsgBox.Show(this,"Please only select one item first.");
-				return;
-			}
-			DataTable table=DataSetMain.Tables["Planned"];
-			int idx=gridPlanned.SelectedIndices[0];
-			if(idx==table.Rows.Count-1) {
-				return;
-			}
-			PlannedAppt planned;
-			planned=PlannedAppts.GetOne(PIn.Long(table.Rows[idx]["PlannedApptNum"].ToString()));
-			planned.ItemOrder=idx+1;
-			PlannedAppts.Update(planned);
-			planned=PlannedAppts.GetOne(PIn.Long(table.Rows[idx+1]["PlannedApptNum"].ToString()));
-			planned.ItemOrder=idx;
-			PlannedAppts.Update(planned);
-			DataSetMain=ChartModules.GetAll(PatCur.PatNum,checkAudit.Checked);
-			FillPlanned();
-			gridPlanned.SetSelected(idx+1,true);
-			 */
-		}
-
-		private void butUp_Click(object sender,EventArgs e) {
-
-		}
-
-		private void butPin_Click(object sender,EventArgs e) {
-
-		}
-
-		private void butClear_Click(object sender,EventArgs e) {
-
-		}
-
-		private void butNew_Click(object sender,EventArgs e) {
-
-		}
-
-		private void checkDone_Click(object sender,EventArgs e) {
-
-		}
-
-		private void gridPlanned_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-
-		}
-
-		private void butNew_Click_1(object sender,EventArgs e) {
-
-		}
-		
-
-		
 
 
 
