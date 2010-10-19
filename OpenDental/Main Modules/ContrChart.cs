@@ -4170,7 +4170,14 @@ namespace OpenDental{
 				else{
 					col=new ODGridColumn(fields[i].Description,fields[i].ColumnWidth);
 				}
+				if(fields[i].InternalName=="Th"){
+					col.SortingStrategy=GridSortingStrategy.ToothNumberParse;
+				}
+				if(fields[i].InternalName=="Date"){
+					col.SortingStrategy=GridSortingStrategy.DateParse;
+				}
 				if(fields[i].InternalName=="Amount"){
+					col.SortingStrategy=GridSortingStrategy.AmountParse;
 					col.TextAlign=HorizontalAlignment.Right;
 				}
 				if(fields[i].InternalName=="ADA Code"

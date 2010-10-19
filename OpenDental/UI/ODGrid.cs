@@ -1259,7 +1259,18 @@ namespace OpenDental.UI{
 			for(int i=0;i<rows.Count;i++){
 				rowsSorted.Add(rows[i]);
 			}
-			rowsSorted.Sort(CompareRowsForSort);
+			if(columns[sortedByColumnIdx].SortingStrategy==GridSortingStrategy.StringCompare){
+				rowsSorted.Sort(SortStringCompare);
+			}
+			else if(columns[sortedByColumnIdx].SortingStrategy==GridSortingStrategy.DateParse){
+				rowsSorted.Sort(SortDateParse);
+			}
+			else if(columns[sortedByColumnIdx].SortingStrategy==GridSortingStrategy.ToothNumberParse){
+				rowsSorted.Sort(SortToothNumberParse);
+			}
+			else if(columns[sortedByColumnIdx].SortingStrategy==GridSortingStrategy.AmountParse){
+				rowsSorted.Sort(SortAmountParse);
+			}
 			BeginUpdate();
 			rows.Clear();
 			for(int i=0;i<rowsSorted.Count;i++){
@@ -1269,8 +1280,81 @@ namespace OpenDental.UI{
 			sortedByColumnIdx=mouseDownCol;//Must be set again since set to -1 in EndUpdate();
 		}
 
-		private int CompareRowsForSort(ODGridRow item1,ODGridRow item2){
-			return (sortedIsAscending?1:-1)*item1.Cells[sortedByColumnIdx].Text.CompareTo(item2.Cells[sortedByColumnIdx].Text);
+		private int SortStringCompare(ODGridRow row1,ODGridRow row2){
+			return (sortedIsAscending?1:-1)*row1.Cells[sortedByColumnIdx].Text.CompareTo(row2.Cells[sortedByColumnIdx].Text);
+		}
+
+		private int SortDateParse(ODGridRow row1,ODGridRow row2){
+			string raw1=row1.Cells[sortedByColumnIdx].Text;
+			string raw2=row2.Cells[sortedByColumnIdx].Text;
+			DateTime date1=DateTime.MinValue;
+			DateTime date2=DateTime.MinValue;
+			if(raw1!=""){
+				try{
+					date1=DateTime.Parse(raw1);
+				}
+				catch{
+					return 0;//shouldn't happen
+				}
+			}
+			if(raw2!=""){
+				try{
+					date2=DateTime.Parse(raw2);
+				}
+				catch{
+					return 0;//shouldn't happen
+				}
+			}
+			return (sortedIsAscending?1:-1)*date1.CompareTo(date2);
+		}
+		
+		private int SortToothNumberParse(ODGridRow row1,ODGridRow row2){
+			//remember that teeth could be in international format.
+			//fail gracefully
+			string raw1=row1.Cells[sortedByColumnIdx].Text;
+			string raw2=row2.Cells[sortedByColumnIdx].Text;
+			if(!Tooth.IsValidEntry(raw1) && !Tooth.IsValidEntry(raw2)){//both invalid
+				return 0;
+			}
+			int retVal=0;
+			if(!Tooth.IsValidEntry(raw1)){//only first invalid
+				retVal=-1;;
+			}
+			else if(!Tooth.IsValidEntry(raw2)){//only second invalid
+				retVal=1;;
+			}
+			else{//both valid
+				string tooth1=Tooth.FromInternat(raw1);
+				string tooth2=Tooth.FromInternat(raw2);
+				int toothInt1=Tooth.ToInt(tooth1);
+				int toothInt2=Tooth.ToInt(tooth2);
+				retVal=toothInt1.CompareTo(toothInt2);
+			}
+			return (sortedIsAscending?1:-1)*retVal;
+		}
+
+		private int SortAmountParse(ODGridRow row1,ODGridRow row2){
+			string raw1=row1.Cells[sortedByColumnIdx].Text;
+			string raw2=row2.Cells[sortedByColumnIdx].Text;
+			Decimal amt1=0;
+			Decimal amt2=0;
+			if(raw1!=""){
+				try{
+					amt1=Decimal.Parse(raw1);
+				}
+				catch{
+					return 0;//shouldn't happen
+				}
+			}
+			if(raw2!=""){
+				try{
+					amt2=Decimal.Parse(raw2);
+				}
+				catch{
+					return 0;//shouldn't happen
+				}
+			}
+			return (sortedIsAscending?1:-1)*amt1.CompareTo(amt2);
 		}
 
 		#endregion Sorting
