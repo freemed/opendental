@@ -760,6 +760,14 @@ namespace OpenDental{
 							gridPat.Rows.Add(row);
 						}
 						break;
+					case "Arrive Early":
+						if(PatCur.AskToArriveEarly==0){
+							row.Cells.Add("");
+						}
+						else{
+							row.Cells.Add(PatCur.AskToArriveEarly.ToString());
+						}
+						break;
 				}
 				if(fields[f].InternalName=="PatFields"){
 					//don't add the row here

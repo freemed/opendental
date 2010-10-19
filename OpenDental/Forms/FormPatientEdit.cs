@@ -1120,8 +1120,8 @@ namespace OpenDental{
 			this.textEmployer.Name = "textEmployer";
 			this.textEmployer.Size = new System.Drawing.Size(226,20);
 			this.textEmployer.TabIndex = 14;
-			this.textEmployer.Leave += new System.EventHandler(this.textEmployer_Leave);
 			this.textEmployer.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textEmployer_KeyUp);
+			this.textEmployer.Leave += new System.EventHandler(this.textEmployer_Leave);
 			// 
 			// label33
 			// 
@@ -1246,8 +1246,8 @@ namespace OpenDental{
 			this.textSite.Name = "textSite";
 			this.textSite.Size = new System.Drawing.Size(198,20);
 			this.textSite.TabIndex = 2;
-			this.textSite.Leave += new System.EventHandler(this.textSite_Leave);
 			this.textSite.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textSite_KeyUp);
+			this.textSite.Leave += new System.EventHandler(this.textSite_Leave);
 			// 
 			// label35
 			// 
@@ -1274,8 +1274,8 @@ namespace OpenDental{
 			this.textCounty.Name = "textCounty";
 			this.textCounty.Size = new System.Drawing.Size(198,20);
 			this.textCounty.TabIndex = 1;
-			this.textCounty.Leave += new System.EventHandler(this.textCounty_Leave);
 			this.textCounty.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textCounty_KeyUp);
+			this.textCounty.Leave += new System.EventHandler(this.textCounty_Leave);
 			// 
 			// label15
 			// 
@@ -1567,7 +1567,7 @@ namespace OpenDental{
 			this.checkArriveEarlySame.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.checkArriveEarlySame.Location = new System.Drawing.Point(233,382);
 			this.checkArriveEarlySame.Name = "checkArriveEarlySame";
-			this.checkArriveEarlySame.Size = new System.Drawing.Size(117,18);
+			this.checkArriveEarlySame.Size = new System.Drawing.Size(142,18);
 			this.checkArriveEarlySame.TabIndex = 119;
 			this.checkArriveEarlySame.Text = "Same for entire family";
 			// 
@@ -1665,8 +1665,8 @@ namespace OpenDental{
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Edit Patient Information";
-			this.Load += new System.EventHandler(this.FormPatientEdit_Load);
 			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormPatientEdit_Closing);
+			this.Load += new System.EventHandler(this.FormPatientEdit_Load);
 			this.groupBox2.ResumeLayout(false);
 			this.groupBox2.PerformLayout();
 			this.groupBox1.ResumeLayout(false);

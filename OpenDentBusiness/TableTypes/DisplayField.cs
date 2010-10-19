@@ -54,7 +54,7 @@ namespace OpenDentBusiness{
 		//ProgressNotes,
 		///<summary>1</summary>
 		PatientSelect,
-		///<summary>2</summary>
+		///<summary>2- Family module.</summary>
 		PatientInformation,
 		///<summary>3</summary>
 		AccountModule,
