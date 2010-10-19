@@ -826,11 +826,11 @@ namespace OpenDental{
 			ODGridColumn col;
 			col=new ODGridColumn(Lan.g("TablePlannedAppts","#"),15,HorizontalAlignment.Center);
 			gridPlanned.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TablePlannedAppts","Min"),30);
+			col=new ODGridColumn(Lan.g("TablePlannedAppts","Min"),25);
 			gridPlanned.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TablePlannedAppts","Procedures"),160);
 			gridPlanned.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TablePlannedAppts","Note"),120);
+			col=new ODGridColumn(Lan.g("TablePlannedAppts","Note"),115);
 			gridPlanned.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TablePlannedAppts","Date"),50);
 			gridPlanned.Columns.Add(col);
