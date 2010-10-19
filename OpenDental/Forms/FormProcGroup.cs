@@ -792,7 +792,7 @@ namespace OpenDental{
 				textProcDate.ReadOnly=false;
 			}
 			else{
-				this.ClientSize = new System.Drawing.Size(491,645);
+				this.ClientSize = new System.Drawing.Size(556,645);
 			}
 		}
 
@@ -823,14 +823,14 @@ namespace OpenDental{
 			gridPlanned.BeginUpdate();
 			gridPlanned.Columns.Clear();
 			ODGridColumn col;
-			col=new ODGridColumn(Lan.g("TablePlannedAppts","#"),13,HorizontalAlignment.Center);
+			col=new ODGridColumn(Lan.g("TablePlannedAppts","#"),15,HorizontalAlignment.Center);
 			gridPlanned.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TablePlannedAppts","Min"),20);
 			gridPlanned.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TablePlannedAppts","Procedures"),125);
+			col=new ODGridColumn(Lan.g("TablePlannedAppts","Procedures"),100);
 			gridPlanned.Columns.Add(col);
-			//col=new ODGridColumn(Lan.g("TablePlannedAppts","Note"),50);
-			//gridPlanned.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TablePlannedAppts","Note"),100);
+			gridPlanned.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TablePlannedAppts","Date"),50);
 			gridPlanned.Columns.Add(col);
 			gridPlanned.Rows.Clear();
