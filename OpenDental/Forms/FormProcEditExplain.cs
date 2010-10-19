@@ -280,6 +280,10 @@ namespace OpenDental {
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
+			if(textExplanation.Text.Trim()==""){
+				MsgBox.Show(this,"Please explain why the above changes were made.");
+				return;
+			}
 			Explanation="Summary of Changes Made:\r\n"+Changes+"\r\nExplanation:\r\n"+textExplanation.Text;
 			DialogResult=DialogResult.OK;
 		}
