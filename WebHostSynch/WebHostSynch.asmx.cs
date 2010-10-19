@@ -1,4 +1,9 @@
-﻿using System;
+﻿///Dennis Mathew: For using ADO.NET Entity Data Model/LINQ with Mysql/Visual Studio 2010, download and install Connector/Net from http://dev.mysql.com/downloads/connector/net/ 
+/// Connector/Net is a ADO.NET driver for MySQL.
+/// The web server which hosts the webservice will also need this install.
+/// The integration with Visual Studio can be flaky. So a few cycles of install/uninstall/restart may be needed. I've also tried the non-install options of adding dlls but they don't seem to work in the few attempts that I made.
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
