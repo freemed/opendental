@@ -198,6 +198,9 @@ namespace OpenDental.UI {
 			}
 			e.Graphics.DrawImageUnscaled(doubleBuffer,0,0);
 			g.Dispose();
+			g=null;
+			doubleBuffer.Dispose();
+			doubleBuffer=null;
 			base.OnPaint(e);
 		}
 
