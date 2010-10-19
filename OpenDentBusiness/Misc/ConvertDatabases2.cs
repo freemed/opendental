@@ -2762,7 +2762,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);
 				command="ALTER TABLE timeadjust ADD IsAuto tinyint NOT NULL";
 				Db.NonQ(command);
-				command="UPDATE preference SET ValueString = '7.4.0.0' WHERE PrefName = 'DataBaseVersion'";
+				command="UPDATE preference SET ValueString = '7.4.1.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
 			To7_5_0();
