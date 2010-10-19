@@ -335,6 +335,7 @@ namespace OpenDental {
 				Lan.g(this,"Capitation Utilization"),
 				Lan.g(this,"Finance Charge Report"),
 				Lan.g(this,"Outstanding Insurance Claims"),
+				Lan.g(this,"Outstanding Insurance Claims II"),
 				Lan.g(this,"Procedures Not Billed to Insurance"),
 				Lan.g(this,"PPO Writeoffs"),
 				Lan.g(this,"Payment Plans"),
@@ -540,22 +541,27 @@ namespace OpenDental {
 					FormOut.ShowDialog();
 					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Outstanding Insurance Claims");
 					break;
-				case 5://Procedures Not Billed to Insurance
+				case 5://Outstanding Insurance Claims II
+					FormRpOutIns FormOutIns=new FormRpOutIns();
+					FormOutIns.ShowDialog();
+					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Outstanding Insurance Claims");
+					break;
+				case 6://Procedures Not Billed to Insurance
 					FormRpProcNotBilledIns FormProc=new FormRpProcNotBilledIns();
 					FormProc.ShowDialog();
 					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Procedures not billed to insurance.");
 					break;
-				case 6://PPO Writeoffs
+				case 7://PPO Writeoffs
 					FormRpPPOwriteoffs FormPPO=new FormRpPPOwriteoffs();
 					FormPPO.ShowDialog();
 					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"PPO Writeoffs.");
 					break;
-				case 7://Payment Plans
+				case 8://Payment Plans
 					FormRpPayPlans FormPP=new FormRpPayPlans();
 					FormPP.ShowDialog();
 					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Payment Plans.");
 					break;
-				case 8://Receivable Breakdown
+				case 9://Receivable Breakdown
 					if(!Security.IsAuthorized(Permissions.ReportProdInc)) {
 						return;
 					}
@@ -563,12 +569,12 @@ namespace OpenDental {
 					FormRcv.ShowDialog();
 					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Receivable Breakdown.");
 					break;
-				case 9://Unearned Income
+				case 10://Unearned Income
 					FormRpUnearnedIncome FormU=new FormRpUnearnedIncome();
 					FormU.ShowDialog();
 					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Unearned Income.");
 					break;
-				case 10://Insurance Overpaid
+				case 11://Insurance Overpaid
 					FormRpInsOverpaid FormI=new FormRpInsOverpaid();
 					FormI.ShowDialog();
 					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Insurance Overpaid.");
