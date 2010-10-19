@@ -44,8 +44,9 @@ namespace OpenDentBusiness{
 		[CrudColumn(IsNotDbColumn=true)]
 		public string ImageData;
 
-		public SheetFieldDef(){
-			//required for use as a generic.
+		public SheetFieldDef(){//required for use as a generic.
+			RadioButtonGroup="";
+			ImageData="";
 		}
 	
 		public SheetFieldDef(SheetFieldType fieldType,string fieldName,string fieldValue,
