@@ -23,7 +23,7 @@ namespace OpenDentBusiness {
 	//The other file was simply getting too big.  It was bogging down VS speed.
 	///<summary></summary>
 	public partial class ConvertDatabases {
-		public static System.Version LatestVersion=new Version("7.4.0.0");//This value must be changed when a new conversion is to be triggered.
+		public static System.Version LatestVersion=new Version("7.5.0.0");//This value must be changed when a new conversion is to be triggered.
 
 		private static void To6_2_9() {
 			if(FromVersion<new Version("6.2.9.0")) {
@@ -2688,11 +2688,11 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="UPDATE preference SET ValueString = '7.3.1.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
-			To7_4_0();
+			To7_4_1();
 		}
 
-		private static void To7_4_0() {
-			if(FromVersion<new Version("7.4.0.0")) {
+		private static void To7_4_1() {
+			if(FromVersion<new Version("7.4.1.0")) {
 				string command;
 				command="SELECT TimeAdjustNum,RegHours,OTimeHours FROM timeadjust";
 				DataTable table=Db.GetTable(command);
@@ -2762,15 +2762,25 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);
 				command="ALTER TABLE timeadjust ADD IsAuto tinyint NOT NULL";
 				Db.NonQ(command);
-
-
-
-
-
 				command="UPDATE preference SET ValueString = '7.4.0.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
-			//To7_5_0();
+			To7_5_0();
+		}
+
+		private static void To7_5_0() {
+			if(FromVersion<new Version("7.5.0.0")) {
+				string command;
+			
+
+
+
+
+
+				command="UPDATE preference SET ValueString = '7.5.0.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
+			//To7_6_0();
 		}
 
 
