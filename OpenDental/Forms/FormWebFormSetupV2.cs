@@ -95,12 +95,15 @@ namespace OpenDental {
 
 		private void SheetDefUpload() {
 			try {
-				/* for this line to compile one must modify the Reference.cs file in to the Web references folder. The SheetDef and related classes with namespaces of WebHostSync must be removed so that the SheetDef Class of OpenDentBusiness is used
-	*/
 				for(int i=0;i<SheetDefListLocal.Count;i++){
 					LoadImagesToSheetsDefs(SheetDefListLocal[i]);
 				}
 				wh.SetPreferences(RegistrationKey,butWebformBorderColor.BackColor.ToArgb(),"","");
+                /*for this line to compile one must modify the Reference.cs file in to the Web references folder. The folowing changes must be made to the Reference.cs file:
+                1)The SheetDef and related classes with namespaces of WebHostSync must be removed 
+                2) Add "using OpenDentBusiness;" at the top of the Reference.cs file
+                This is done so that the SheetDef Class of OpenDentBusiness is used.
+                */
                 wh.UpLoadSheetDef(RegistrationKey,SheetDefListLocal.ToArray());
 				wh.DeleteSheetDefs(RegistrationKey,SheetsDefsForDeletion.ToArray());
 			}

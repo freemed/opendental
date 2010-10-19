@@ -40,6 +40,28 @@ CREATE TABLE `webforms_sheet` (
   CONSTRAINT `FK_webforms_sheet_DentalOfficeID` FOREIGN KEY (`DentalOfficeID`) REFERENCES `webforms_preference` (`DentalOfficeID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=148 DEFAULT CHARSET=utf8;
 
+
+new
+-----
+
+DROP TABLE IF EXISTS `webforms_sheet_new`;
+
+CREATE TABLE `webforms_sheet_new` (
+  `SheetID` bigint(20) NOT NULL AUTO_INCREMENT,
+   `DentalOfficeID` bigint(20) NOT NULL,
+  `SheetType` int(11) NOT NULL,
+  `DateTimeSheet` datetime NOT NULL DEFAULT '0001-01-01 00:00:00',
+  `FontSize` float NOT NULL,
+  `FontName` varchar(255) DEFAULT NULL,
+  `Width` int(11) NOT NULL,
+  `Height` int(11) NOT NULL,
+  `IsLandscape` tinyint(4) NOT NULL,
+  PRIMARY KEY (`SheetID`),
+  KEY `FK_webforms_sheet_new_DentalOfficeID` (`DentalOfficeID`),
+  CONSTRAINT `FK_webforms_sheet_new_DentalOfficeID` FOREIGN KEY (`DentalOfficeID`) REFERENCES `webforms_preference` (`DentalOfficeID`)
+) ENGINE=InnoDB AUTO_INCREMENT=148 DEFAULT CHARSET=utf8;
+
+
 /*Table structure for table `webforms_sheetdef` */
 
 DROP TABLE IF EXISTS `webforms_sheetdef`;
@@ -72,7 +94,35 @@ CREATE TABLE `webforms_sheetfield` (
   PRIMARY KEY (`SheetFieldID`),
   KEY `FK_webforms_sheetfield_SheetID` (`SheetID`),
   CONSTRAINT `FK_webforms_sheetfield_SheetID` FOREIGN KEY (`SheetID`) REFERENCES `webforms_sheet` (`SheetID`)
-) ENGINE=InnoDB AUTO_INCREMENT=2024 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+new
+-----
+DROP TABLE IF EXISTS `webforms_sheetfield_new`;
+CREATE TABLE `webforms_sheetfield_new` (
+  `SheetFieldID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `SheetID` bigint(20) NOT NULL,
+  `FieldType` int(11) NOT NULL,
+  `FieldName` varchar(255) DEFAULT NULL,
+  `FieldValue` text NOT NULL,
+  `FontSize` float NOT NULL,
+  `FontName` varchar(255) DEFAULT NULL,
+  `FontIsBold` tinyint(4) NOT NULL,
+  `XPos` int(11) NOT NULL,
+  `YPos` int(11) NOT NULL,
+  `Width` int(11) NOT NULL,
+  `Height` int(11) NOT NULL,
+  `GrowthBehavior` int(11) NOT NULL,
+  `RadioButtonValue` varchar(255) NOT NULL,
+  `RadioButtonGroup` varchar(255) NOT NULL,
+  `IsRequired` tinyint(4) NOT NULL,
+  PRIMARY KEY (`SheetFieldID`),
+   KEY `FK_webforms_sheetfield_new_SheetID` (`SheetID`),
+  CONSTRAINT `FK_webforms_sheetfield_new_SheetID` FOREIGN KEY (`SheetID`) REFERENCES `webforms_sheet_new` (`SheetID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
 
 /*Table structure for table `webforms_sheetfielddef` */
 

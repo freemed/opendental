@@ -1,7 +1,8 @@
 ﻿///Dennis Mathew: For using ADO.NET Entity Data Model/LINQ with Mysql/Visual Studio 2010, download and install Connector/Net from http://dev.mysql.com/downloads/connector/net/ 
 /// Connector/Net is a ADO.NET driver for MySQL.
 /// The web server which hosts the webservice will also need this install.
-/// The integration with Visual Studio can be flaky. So a few cycles of install/unstall may be needed. I've also tried the non-install options of adding dlls but they don't seem to work in the few attempts that I made.
+/// The integration with Visual Studio can be flaky. So a few cycles of install/uninstall/restart may be needed. I've also tried the non-install options of adding dlls but they don't seem to work in the few attempts that I made.
+
 
 using System;
 using System.Collections.Generic;
@@ -111,16 +112,16 @@ namespace WebForms {
 					WebControl wc=null; // WebControl is the parent class of all controls
 					if(FieldType==SheetFieldType.InputField) {
 						TextBox tb=new TextBox();
-						int rows = (int)Math.Floor((double)height/fontsize);
-						if(rows>1) {
+						int rowcount = (int)Math.Floor((double)height/fontsize);
+                        if (rowcount > 1){
 							tb.TextMode = TextBoxMode.MultiLine;
-							tb.Rows=rows;
+                            tb.Rows = rowcount;
 						}
 						tb.Text=FieldValue;
 						wc=tb;						
 					}
 					if(FieldType==SheetFieldType.CheckBox) {
-						wc=AddRadioButtonOrCheckBox(sfdObj.ElementAt(j),XPos,YPos,RadioButtonXOffset,RadioButtonYOffset,ElementZIndex);
+						wc=AddCheckBox(sfdObj.ElementAt(j));
 					}
 					if(FieldType==SheetFieldType.StaticText) {
 						Label lb=new Label();
@@ -151,9 +152,8 @@ namespace WebForms {
 					}
 
 					if(wc!=null) {
-						if(String.IsNullOrEmpty(wc.ID)) {
-							wc.ID=FieldName;
-						}
+                        AssignID(wc,sfdObj.ElementAt(j));
+
 						wc.Style["position"]="absolute";
 						wc.Style["width"]=width+"px";
 						wc.Style["height"]=height+"px";
@@ -214,11 +214,11 @@ namespace WebForms {
 
 		}
 
-		private WebControl AddRadioButtonOrCheckBox(webforms_sheetfielddef sfd,int XPos,int YPos,int RadioButtonXOffset,int RadioButtonYOffset,int ElementZIndex) {
-			
+		private WebControl AddCheckBox(webforms_sheetfielddef sfd)
+        {
 
-			/*
-
+            #region old code
+            /*
 				bool RadioButtonListExists=false;
 				RadioButtonList rb=null;
 				ListItem li=new ListItem();
@@ -259,8 +259,8 @@ namespace WebForms {
 					rb.Items.Add(li);
 				}
 
-			//old code
-			*/
+               */
+                #endregion 
 
 			String FieldName=sfd.FieldName;
 			String RadioButtonValue=sfd.RadioButtonValue;
@@ -268,14 +268,21 @@ namespace WebForms {
 			WebControl wc=null;
 
 			CheckBox cb=new CheckBox();
-			cb.ID=FieldName+RadioButtonValue;
+
+			if(FieldName=="misc") {
+				cb.ID=FieldName+RadioButtonValue+sfd.WebSheetFieldDefNum;
+			}
+			else {
+				cb.ID=FieldName+RadioButtonValue;
+			}
+
 			AjaxControlToolkit.MutuallyExclusiveCheckBoxExtender mecb = new AjaxControlToolkit.MutuallyExclusiveCheckBoxExtender();
 			mecb.ID=cb.ID+"MutuallyExclusiveCheckBoxExtender";
 			mecb.TargetControlID=cb.ID;
-			if(!String.IsNullOrEmpty(sfd.RadioButtonGroup) && FieldName=="misc") {
+            if (!String.IsNullOrEmpty(RadioButtonGroup) && FieldName == "misc"){
 				mecb.Key=RadioButtonGroup;
 			}
-			else {// cases like gender, position etc that have no value for RadioButtonGroup
+			else if(!String.IsNullOrEmpty(RadioButtonValue)) {// cases like gender, position etc that have no value for RadioButtonGroup but have RadioButtonValue
 				mecb.Key=FieldName;
 			}
 			Panel1.Controls.Add(mecb);
@@ -286,6 +293,15 @@ namespace WebForms {
 			return wc;
 		}
 
+        private void AssignID(WebControl wc, webforms_sheetfielddef sfd)
+        {
+            if(String.IsNullOrEmpty(wc.ID)) {
+                wc.ID = sfd.FieldName;
+			}
+			if(wc.ID=="misc"){
+				wc.ID=wc.ID+sfd.WebSheetFieldDefNum;
+            }
+        }
 		private void AssignTabOrder() {
 			var sortedlist= listwc.OrderBy(wc => wc.YPos).ThenBy(wc => wc.XPos).ToList();
 			for(short i=0;i<sortedlist.Count();i++){

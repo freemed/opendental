@@ -399,7 +399,13 @@ namespace WebHostSynch {
 									}
 								}
 								else {
-									propertyinfo.SetValue(SheetFieldDefObj,fieldinfo.GetValue(sheetDef.SheetFieldDefs[i]),null);
+									if(fieldinfo.GetValue(sheetDef.SheetFieldDefs[i])==null) {
+										propertyinfo.SetValue(SheetFieldDefObj,"",null);
+									}
+									else {
+										propertyinfo.SetValue(SheetFieldDefObj,fieldinfo.GetValue(sheetDef.SheetFieldDefs[i]),null);
+									}
+									
 								}
 							}
 						}//foreach propertyinfo
