@@ -941,7 +941,7 @@ namespace OpenDentBusiness{
 				row["timeAskedToArrive"]="";
 				timeAskedToArrive=PIn.DateT(raw.Rows[i]["DateTimeAskedToArrive"].ToString());
 				if(timeAskedToArrive.Year>1880) {
-					row["timeAskedToArrive"]=timeAskedToArrive.ToShortTimeString();
+					row["timeAskedToArrive"]=timeAskedToArrive.ToString("H:mm");
 				}
 				row["wirelessPhone"]=Lans.g("Appointments","Cell: ")+raw.Rows[i]["WirelessPhone"].ToString();
 				row["wkPhone"]=Lans.g("Appointments","Wk: ")+raw.Rows[i]["WkPhone"].ToString();
