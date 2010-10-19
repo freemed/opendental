@@ -1063,6 +1063,8 @@ namespace OpenDentBusiness{
 		SheetEdit,
 		///<summary>43</summary>
 		CommlogEdit,
+		///<summary>44</summary>
+		ImageDelete
 	}
 
 	///<summary>The type of signal being sent.</summary>

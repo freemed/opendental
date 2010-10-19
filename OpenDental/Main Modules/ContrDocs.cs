@@ -1039,10 +1039,14 @@ namespace OpenDental{
 				MsgBox.Show(this,"Cannot delete folders");
 				return;
 			}
-			EnableAllTreeItemTools(false);
 			DataRow obj=(DataRow)TreeDocuments.SelectedNode.Tag;
 			long mountNum=Convert.ToInt64(obj["MountNum"].ToString());
 			long docNum=Convert.ToInt64(obj["DocNum"].ToString());
+			Document doc=Documents.GetByNum(docNum);
+			if(!Security.IsAuthorized(Permissions.ImageDelete,doc.DateCreated)) {
+				return;
+			}
+			EnableAllTreeItemTools(false);
 			Document[] docs;
 			bool refreshTree=true;
 			if(mountNum!=0){//This is a mount object.
@@ -1087,7 +1091,7 @@ namespace OpenDental{
 						return;
 					}
 				}
-				docs=new Document[1] { Documents.GetByNum(docNum) };
+				docs=new Document[1] { doc };
 				SelectTreeNode(null);//Release access to current image so it may be properly deleted.
 			}
 			//Delete all documents involved in deleting this object.

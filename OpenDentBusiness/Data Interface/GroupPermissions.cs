@@ -187,6 +187,8 @@ namespace OpenDentBusiness{
 					return Lans.g("enumPermissions","Equipment Delete");
 				case Permissions.FamilyModule:
 					return Lans.g("enumPermissions","Family Module");
+				case Permissions.ImageDelete:
+					return Lans.g("enumPermissions","Image Delete");
 				case Permissions.ImagesModule:
 					return Lans.g("enumPermissions","Images Module");
 				case Permissions.InsPayCreate:

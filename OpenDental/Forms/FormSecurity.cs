@@ -488,6 +488,8 @@ namespace OpenDental{
 						node.Nodes.Add(node2);
 				treePermissions.Nodes.Add(node);
 			node=SetNode(Permissions.ImagesModule);
+				node2=SetNode(Permissions.ImageDelete);
+					node.Nodes.Add(node2);
 				treePermissions.Nodes.Add(node);
 			node=SetNode(Permissions.ManageModule);
 				node2=SetNode(Permissions.Accounting);

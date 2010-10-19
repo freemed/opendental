@@ -93,6 +93,7 @@ namespace OpenDentBusiness{
 				|| perm==Permissions.PaymentEdit
 				|| perm==Permissions.ProcComplCreate
 				|| perm==Permissions.ProcComplEdit
+				|| perm==Permissions.ImageDelete
 				|| perm==Permissions.InsPayCreate
 				|| perm==Permissions.InsPayEdit
 				|| perm==Permissions.SheetEdit
