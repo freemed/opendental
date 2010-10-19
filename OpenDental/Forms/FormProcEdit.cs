@@ -2573,19 +2573,22 @@ namespace OpenDental{
 		///<summary>Called on open and after changing code.  Sets the visibilities and the data of all the fields in the upper left panel.</summary>
 		private void SetControls(){
 			textDateTP.Text=ProcCur.DateTP.ToString("d");
-			textDate.Text=ProcCur.ProcDate.ToString("d");
-			textDate.Text+="  ";
-			DateTime dateT=PIn.DateT(ProcCur.ProcTime.ToString());
-			if(dateT.ToShortTimeString()!="12:00 AM"){
-				textDate.Text+=dateT.ToShortTimeString();
-			}
-			if(Programs.UsingOrion){
-				dateT=PIn.DateT(ProcCur.ProcTimeEnd.ToString());
+			DateTime dateT;
+			if(IsStartingUp){
+				textDate.Text=ProcCur.ProcDate.ToString("d");
+				textDate.Text+="  ";
+				dateT=PIn.DateT(ProcCur.ProcTime.ToString());
 				if(dateT.ToShortTimeString()!="12:00 AM"){
-					textTimeEnd.Text=dateT.ToShortTimeString();
+					textDate.Text+=dateT.ToShortTimeString();
 				}
-				if(ProcCur.DateTP.Year<1880) {
-					textDateTP.Text=MiscData.GetNowDateTime().ToShortDateString();
+				if(Programs.UsingOrion){
+					dateT=PIn.DateT(ProcCur.ProcTimeEnd.ToString());
+					if(dateT.ToShortTimeString()!="12:00 AM"){
+						textTimeEnd.Text=dateT.ToShortTimeString();
+					}
+					if(ProcCur.DateTP.Year<1880) {
+						textDateTP.Text=MiscData.GetNowDateTime().ToShortDateString();
+					}
 				}
 			}
 			textProc.Text=ProcedureCode2.ProcCode;
