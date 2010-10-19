@@ -1129,7 +1129,10 @@ namespace OpenDental{
 				if(Clinics.List[i].ClinicNum==AptCur.ClinicNum)
 					comboClinic.SelectedIndex=i+1;
 			}
-			AptCur.ProvNum=Providers.GetOrionProvNum(AptCur.ProvNum);
+			if(IsNew) {
+				//Try to auto-select a provider when in Orion mode. Only for new appointments so we don't change historical data.
+				AptCur.ProvNum=Providers.GetOrionProvNum(AptCur.ProvNum);
+			}
 			for(int i=0;i<ProviderC.List.Length;i++) {
 				comboProvNum.Items.Add(ProviderC.List[i].Abbr);
 				if(ProviderC.List[i].ProvNum==AptCur.ProvNum)
