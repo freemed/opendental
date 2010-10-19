@@ -173,7 +173,15 @@ namespace UnitTests {
 			command="DELETE FROM tempcore";
 			DataCore.NonQ(command);
 			retVal+="Bool, false: Passed.\r\n";
-
+			//SHOW CREATE TABLE -----------------------------------------------------------------------
+			//This command is needed in order to perform a backup.
+			command="SHOW CREATE TABLE account";
+			table=DataCore.GetTable(command);
+			string createResult=PIn.ByteArray(table.Rows[0][1]);
+			if(!createResult.StartsWith("CREATE TABLE")){
+				throw new Exception();
+			}
+			retVal+="SHOW CREATE TABLE: Passed.\r\n";
 
 
 

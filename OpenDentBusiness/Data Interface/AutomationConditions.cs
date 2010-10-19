@@ -90,7 +90,7 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
-		///<summary></summary.
+		///<summary></summary>
 		public static void DeleteByAutomationNum(long automationNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),automationNum);

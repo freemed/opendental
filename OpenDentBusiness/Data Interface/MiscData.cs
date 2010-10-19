@@ -81,7 +81,7 @@ namespace OpenDentBusiness {
 			for(int i=0;i<tableName.Length;i++) {
 				command="SHOW CREATE TABLE "+oldDb+"."+tableName[i];
 				table=newDcon.GetTable(command);
-				command=table.Rows[0][1].ToString();
+				command=PIn.ByteArray(table.Rows[0][1]);
 				newDcon.NonQ(command);//this has to be run using connection with new database
 				command="INSERT INTO "+newDb+"."+tableName[i]
 					+" SELECT * FROM "+oldDb+"."+tableName[i];
