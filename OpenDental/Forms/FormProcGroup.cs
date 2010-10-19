@@ -334,7 +334,7 @@ namespace OpenDental{
 			this.butRx.CornerRadius = 4F;
 			this.butRx.Location = new System.Drawing.Point(671,69);
 			this.butRx.Name = "butRx";
-			this.butRx.Size = new System.Drawing.Size(80,24);
+			this.butRx.Size = new System.Drawing.Size(75,24);
 			this.butRx.TabIndex = 106;
 			this.butRx.Text = "Rx";
 			this.butRx.Visible = false;
@@ -347,9 +347,9 @@ namespace OpenDental{
 			this.butExamSheets.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butExamSheets.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butExamSheets.CornerRadius = 4F;
-			this.butExamSheets.Location = new System.Drawing.Point(671,43);
+			this.butExamSheets.Location = new System.Drawing.Point(671,42);
 			this.butExamSheets.Name = "butExamSheets";
-			this.butExamSheets.Size = new System.Drawing.Size(80,24);
+			this.butExamSheets.Size = new System.Drawing.Size(75,24);
 			this.butExamSheets.TabIndex = 106;
 			this.butExamSheets.Text = "Exam Sheets";
 			this.butExamSheets.Visible = false;
@@ -357,7 +357,7 @@ namespace OpenDental{
 			// 
 			// labelRepair
 			// 
-			this.labelRepair.Location = new System.Drawing.Point(499,45);
+			this.labelRepair.Location = new System.Drawing.Point(498,85);
 			this.labelRepair.Name = "labelRepair";
 			this.labelRepair.Size = new System.Drawing.Size(90,16);
 			this.labelRepair.TabIndex = 196;
@@ -367,7 +367,7 @@ namespace OpenDental{
 			// 
 			// butRepairY
 			// 
-			this.butRepairY.Location = new System.Drawing.Point(591,43);
+			this.butRepairY.Location = new System.Drawing.Point(590,83);
 			this.butRepairY.Name = "butRepairY";
 			this.butRepairY.Size = new System.Drawing.Size(23,20);
 			this.butRepairY.TabIndex = 198;
@@ -378,7 +378,7 @@ namespace OpenDental{
 			// 
 			// butRepairN
 			// 
-			this.butRepairN.Location = new System.Drawing.Point(615,43);
+			this.butRepairN.Location = new System.Drawing.Point(614,83);
 			this.butRepairN.Name = "butRepairN";
 			this.butRepairN.Size = new System.Drawing.Size(23,20);
 			this.butRepairN.TabIndex = 198;
@@ -389,7 +389,7 @@ namespace OpenDental{
 			// 
 			// butOnCallY
 			// 
-			this.butOnCallY.Location = new System.Drawing.Point(591,64);
+			this.butOnCallY.Location = new System.Drawing.Point(590,41);
 			this.butOnCallY.Name = "butOnCallY";
 			this.butOnCallY.Size = new System.Drawing.Size(23,20);
 			this.butOnCallY.TabIndex = 198;
@@ -400,7 +400,7 @@ namespace OpenDental{
 			// 
 			// butOnCallN
 			// 
-			this.butOnCallN.Location = new System.Drawing.Point(615,64);
+			this.butOnCallN.Location = new System.Drawing.Point(614,41);
 			this.butOnCallN.Name = "butOnCallN";
 			this.butOnCallN.Size = new System.Drawing.Size(23,20);
 			this.butOnCallN.TabIndex = 198;
@@ -411,7 +411,7 @@ namespace OpenDental{
 			// 
 			// butEffectiveCommN
 			// 
-			this.butEffectiveCommN.Location = new System.Drawing.Point(615,85);
+			this.butEffectiveCommN.Location = new System.Drawing.Point(614,62);
 			this.butEffectiveCommN.Name = "butEffectiveCommN";
 			this.butEffectiveCommN.Size = new System.Drawing.Size(23,20);
 			this.butEffectiveCommN.TabIndex = 198;
@@ -422,7 +422,7 @@ namespace OpenDental{
 			// 
 			// labelOnCall
 			// 
-			this.labelOnCall.Location = new System.Drawing.Point(499,66);
+			this.labelOnCall.Location = new System.Drawing.Point(498,43);
 			this.labelOnCall.Name = "labelOnCall";
 			this.labelOnCall.Size = new System.Drawing.Size(90,16);
 			this.labelOnCall.TabIndex = 196;
@@ -432,7 +432,7 @@ namespace OpenDental{
 			// 
 			// labelEffectiveComm
 			// 
-			this.labelEffectiveComm.Location = new System.Drawing.Point(499,87);
+			this.labelEffectiveComm.Location = new System.Drawing.Point(498,64);
 			this.labelEffectiveComm.Name = "labelEffectiveComm";
 			this.labelEffectiveComm.Size = new System.Drawing.Size(90,16);
 			this.labelEffectiveComm.TabIndex = 196;
@@ -442,7 +442,7 @@ namespace OpenDental{
 			// 
 			// butEffectiveCommY
 			// 
-			this.butEffectiveCommY.Location = new System.Drawing.Point(591,85);
+			this.butEffectiveCommY.Location = new System.Drawing.Point(590,62);
 			this.butEffectiveCommY.Name = "butEffectiveCommY";
 			this.butEffectiveCommY.Size = new System.Drawing.Size(23,20);
 			this.butEffectiveCommY.TabIndex = 198;
@@ -579,6 +579,7 @@ namespace OpenDental{
 			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.butCancel);
 			this.Controls.Add(this.butOK);
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
@@ -825,11 +826,11 @@ namespace OpenDental{
 			ODGridColumn col;
 			col=new ODGridColumn(Lan.g("TablePlannedAppts","#"),15,HorizontalAlignment.Center);
 			gridPlanned.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TablePlannedAppts","Min"),20);
+			col=new ODGridColumn(Lan.g("TablePlannedAppts","Min"),30);
 			gridPlanned.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TablePlannedAppts","Procedures"),100);
+			col=new ODGridColumn(Lan.g("TablePlannedAppts","Procedures"),160);
 			gridPlanned.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TablePlannedAppts","Note"),100);
+			col=new ODGridColumn(Lan.g("TablePlannedAppts","Note"),120);
 			gridPlanned.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TablePlannedAppts","Date"),50);
 			gridPlanned.Columns.Add(col);
@@ -1116,14 +1117,18 @@ namespace OpenDental{
 
 		private void butRepairY_Click(object sender,EventArgs e) {
 			for(int i=0;i<OrionProcList.Count;i++){
-				OrionProcList[i].IsRepair=true;
+				if(ProcedureCodes.GetProcCodeFromDb(ProcList[i].CodeNum).IsProsth){//OrionProcList[i] corresponds to ProcList[i]
+					OrionProcList[i].IsRepair=true;
+				}
 			}
 			FillProcedures();
 		}
 
 		private void butRepairN_Click(object sender,EventArgs e) {
 			for(int i=0;i<OrionProcList.Count;i++){
-				OrionProcList[i].IsRepair=true;
+				if(ProcedureCodes.GetProcCodeFromDb(ProcList[i].CodeNum).IsProsth){//OrionProcList[i] corresponds to ProcList[i]
+					OrionProcList[i].IsRepair=false;
+				}
 			}
 			FillProcedures();
 		}
