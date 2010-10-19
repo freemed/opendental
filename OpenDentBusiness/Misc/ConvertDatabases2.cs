@@ -2762,12 +2762,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);
 				command="ALTER TABLE timeadjust ADD IsAuto tinyint NOT NULL";
 				Db.NonQ(command);
-				command="UPDATE clearinghouse "
-					+"SET SenderTIN='204944520',"//TIN for Open Dental. I have been told that this needs to always be the same.
-						+"SenderName='"+PrefC.GetString(PrefName.PracticeTitle)+"',"//I have been informed that this is can be office specific.
-						+"SenderTelephone='"+PrefC.GetString(PrefName.PracticePhone)+"' "//I have been informed that this is can be office specific.
-					+"WHERE SenderTIN='' AND Description='MercuryDE' LIMIT 1";
-				Db.NonQ(command);
 
 
 
