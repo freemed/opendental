@@ -530,12 +530,12 @@ namespace OpenDental{
 			// 
 			this.checkInsurancePlansShared.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkInsurancePlansShared.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkInsurancePlansShared.Location = new System.Drawing.Point(6,46);
+			this.checkInsurancePlansShared.Location = new System.Drawing.Point(102,46);
 			this.checkInsurancePlansShared.Name = "checkInsurancePlansShared";
-			this.checkInsurancePlansShared.Size = new System.Drawing.Size(410,27);
+			this.checkInsurancePlansShared.Size = new System.Drawing.Size(314,27);
 			this.checkInsurancePlansShared.TabIndex = 58;
-			this.checkInsurancePlansShared.Text = "Many patients have identical insurance plans.  Change behavior of program slightl" +
-    "y to optimize for identical plans.";
+			this.checkInsurancePlansShared.Text = "Checkbox at bottom of InsPlan, \'Apply changes for all subscribers\' checked by def" +
+    "ault.";
 			this.checkInsurancePlansShared.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// checkMedicalEclaimsEnabled

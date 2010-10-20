@@ -165,6 +165,7 @@
     <Compile Include="Crud\InsFilingCodeCrud.cs" />
     <Compile Include="Crud\InsFilingCodeSubtypeCrud.cs" />
     <Compile Include="Crud\InsPlanCrud.cs" />
+    <Compile Include="Crud\InsSubCrud.cs" />
     <Compile Include="Crud\LabCaseCrud.cs" />
     <Compile Include="Crud\LaboratoryCrud.cs" />
     <Compile Include="Crud\MountCrud.cs" />
@@ -216,6 +217,7 @@
     </Compile>
     <Compile Include="Data Interface\Guardians.cs" />
     <Compile Include="Data Interface\Equipments.cs" />
+    <Compile Include="Data Interface\InsSubs.cs" />
     <Compile Include="Data Interface\OrionProcs.cs" />
     <Compile Include="Data Interface\ProcApptColors.cs" />
     <Compile Include="Data Interface\ProcGroupItems.cs" />

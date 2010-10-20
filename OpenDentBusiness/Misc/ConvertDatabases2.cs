@@ -2771,7 +2771,24 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 		private static void To7_5_0() {
 			if(FromVersion<new Version("7.5.0.0")) {
 				string command;
-			
+				command="DROP TABLE IF EXISTS inssub";
+				Db.NonQ(command);
+				command=@"CREATE TABLE inssub (
+					InsSubNum bigint NOT NULL auto_increment,
+					PlanNum bigint NOT NULL,
+					Subscriber bigint NOT NULL,
+					DateEffective date NOT NULL default '0001-01-01',
+					DateTerm date NOT NULL default '0001-01-01',
+					ReleaseInfo tinyint NOT NULL,
+					AssignBen tinyint NOT NULL,
+					SubscriberID varchar(255) NOT NULL,
+					BenefitNotes varchar(255) NOT NULL,
+					SubscNote varchar(255) NOT NULL,
+					PRIMARY KEY (InsSubNum),
+					INDEX(PlanNum),
+					INDEX(Subscriber)
+					) DEFAULT CHARSET=utf8";
+				Db.NonQ(command);
 
 
 
@@ -2797,3 +2814,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				
 
 				
+
+				/*
+			
+				*/

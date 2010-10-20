@@ -3,20 +3,20 @@ using System.Collections;
 
 namespace OpenDentBusiness{
 	
-	///<summary>Planned for 7.5.  Not added to schema yet.  Multiple subscribers can have the same insurance plan.</summary>
+	///<summary>Multiple subscribers can have the same insurance plan.  But the patplan table is still what determines coverage for individual patients.</summary>
 	[Serializable]
-	public class InsSub{//:TableBase{
+	public class InsSub:TableBase{
 		///<summary>Primary key.</summary>
 		[CrudColumn(IsPriKey=true)]
 		public long InsSubNum;
+		///<summary>FK to insplan.PlanNum.</summary>
+		public long PlanNum;
 		///<summary>FK to patient.PatNum.</summary>
 		public long Subscriber;
 		///<summary>Date plan became effective.</summary>
 		public DateTime DateEffective;
 		///<summary>Date plan was terminated</summary>
 		public DateTime DateTerm;
-		///<summary>FK to insplan.PlanNum.</summary>
-		public long PlanNum;
 		///<summary>Release of information signature is on file.</summary>
 		public bool ReleaseInfo;
 		///<summary>Assignment of benefits signature is on file.  For Canada, this handles Payee Code, F01.  Option to pay other third party is not included.</summary>

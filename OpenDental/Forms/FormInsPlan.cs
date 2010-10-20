@@ -451,8 +451,8 @@ namespace OpenDental{
 			this.textCarrier.Name = "textCarrier";
 			this.textCarrier.Size = new System.Drawing.Size(273,20);
 			this.textCarrier.TabIndex = 0;
-			this.textCarrier.Leave += new System.EventHandler(this.textCarrier_Leave);
 			this.textCarrier.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textCarrier_KeyUp);
+			this.textCarrier.Leave += new System.EventHandler(this.textCarrier_Leave);
 			// 
 			// textPhone
 			// 
@@ -530,8 +530,8 @@ namespace OpenDental{
 			this.textEmployer.Name = "textEmployer";
 			this.textEmployer.Size = new System.Drawing.Size(291,20);
 			this.textEmployer.TabIndex = 4;
-			this.textEmployer.Leave += new System.EventHandler(this.textEmployer_Leave);
 			this.textEmployer.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textEmployer_KeyUp);
+			this.textEmployer.Leave += new System.EventHandler(this.textEmployer_Leave);
 			// 
 			// label16
 			// 
@@ -1193,9 +1193,9 @@ namespace OpenDental{
 			this.checkApplyAll.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.checkApplyAll.Location = new System.Drawing.Point(468,676);
 			this.checkApplyAll.Name = "checkApplyAll";
-			this.checkApplyAll.Size = new System.Drawing.Size(269,21);
+			this.checkApplyAll.Size = new System.Drawing.Size(280,21);
 			this.checkApplyAll.TabIndex = 12;
-			this.checkApplyAll.Text = "Apply changes to all identical insurance plans";
+			this.checkApplyAll.Text = "Apply changes for all subscribers";
 			this.checkApplyAll.UseVisualStyleBackColor = true;
 			// 
 			// label18
@@ -1469,7 +1469,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(801,673);
+			this.butOK.Location = new System.Drawing.Point(810,673);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 13;
@@ -1567,8 +1567,8 @@ namespace OpenDental{
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Edit Insurance Plan";
-			this.Load += new System.EventHandler(this.FormInsPlan_Load);
 			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormInsPlan_Closing);
+			this.Load += new System.EventHandler(this.FormInsPlan_Load);
 			this.groupSubscriber.ResumeLayout(false);
 			this.groupSubscriber.PerformLayout();
 			this.groupCoPay.ResumeLayout(false);
