@@ -2789,8 +2789,23 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					INDEX(Subscriber)
 					) DEFAULT CHARSET=utf8";
 				Db.NonQ(command);
+				//
+				//much more conversion code is needed for insplan->inssub
+				//
+				//Create a temporary table that will hold a copy of all the original plans.
+				/*command="DROP TABLE IF EXISTS tempinsplan";
+				Db.NonQ(command);
+				command="CREATE TABLE tempinsplan SELECT * FROM insplan"
+				Db.NonQ(command);
+				command="ALTER TABLE displayfield ADD INDEX (ChartViewNum)";
+				Db.NonQ(command);
+				//Get a list of identical plans
+				command="SELECT PlanNum FROM insplan GROUP BY EmployerNum,GroupName,GroupNum,DivisionNo,CarrierNum,IsMedical,TrojanID,FeeSched";
 
 
+
+				//command="ALTER TABLE insplan DROP Subscriber,DateEffective,DateTerm,ReleaseInfo,AssignBen,SubscriberID,BenefitNotes,SubscNote";
+				//Db.NonQ(command);*/
 
 
 
