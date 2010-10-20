@@ -106,7 +106,8 @@ namespace OpenDentBusiness{
 				+";User ID="+pUserID
 				+";Password="+pPassword
 				+";CharSet=utf8"
-				+";Treat Tiny As Boolean=false";
+				+";Treat Tiny As Boolean=false"
+				+";Allow User Variables=true";
 				//+";Pooling=false";
 			//}
 			return connectStr;
