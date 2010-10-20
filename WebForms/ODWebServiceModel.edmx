@@ -4,13 +4,13 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="odwebserviceModel.Store" Alias="Self" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.1" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+    <Schema Namespace="odwebserviceModel.Store" Alias="Self" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.1" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityContainer Name="odwebserviceModelStoreContainer">
-          <EntitySet Name="webforms_preference" EntityType="odwebserviceModel.Store.webforms_preference" store:Type="Tables" Schema="odwebservice" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
-          <EntitySet Name="webforms_sheet" EntityType="odwebserviceModel.Store.webforms_sheet" store:Type="Tables" Schema="odwebservice" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
-          <EntitySet Name="webforms_sheetdef" EntityType="odwebserviceModel.Store.webforms_sheetdef" store:Type="Tables" Schema="odwebservice" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
-          <EntitySet Name="webforms_sheetfield" EntityType="odwebserviceModel.Store.webforms_sheetfield" store:Type="Tables" Schema="odwebservice" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
-          <EntitySet Name="webforms_sheetfielddef" EntityType="odwebserviceModel.Store.webforms_sheetfielddef" store:Type="Tables" Schema="odwebservice" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="webforms_preference" EntityType="odwebserviceModel.Store.webforms_preference" store:Type="Tables" Schema="odwebservice" />
+          <EntitySet Name="webforms_sheet" EntityType="odwebserviceModel.Store.webforms_sheet" store:Type="Tables" Schema="odwebservice" />
+          <EntitySet Name="webforms_sheetdef" EntityType="odwebserviceModel.Store.webforms_sheetdef" store:Type="Tables" Schema="odwebservice" />
+          <EntitySet Name="webforms_sheetfield" EntityType="odwebserviceModel.Store.webforms_sheetfield" store:Type="Tables" Schema="odwebservice" />
+          <EntitySet Name="webforms_sheetfielddef" EntityType="odwebserviceModel.Store.webforms_sheetfielddef" store:Type="Tables" Schema="odwebservice" />
           <AssociationSet Name="FK_webforms_sheetdef_DentalOfficeID" Association="odwebserviceModel.Store.FK_webforms_sheetdef_DentalOfficeID">
             <End Role="webforms_preference" EntitySet="webforms_preference" />
             <End Role="webforms_sheetdef" EntitySet="webforms_sheetdef" />
@@ -41,9 +41,15 @@
           <Key>
             <PropertyRef Name="SheetID" />
           </Key>
-          <Property Name="DateTimeSubmitted" Type="datetime" Nullable="false" />
+          <Property Name="DateTimeSheet" Type="datetime" Nullable="false" />
           <Property Name="DentalOfficeID" Type="bigint" Nullable="false" />
+          <Property Name="FontName" Type="varchar" MaxLength="255" />
+          <Property Name="FontSize" Type="float" Nullable="false" />
+          <Property Name="Height" Type="int" Nullable="false" />
+          <Property Name="IsLandscape" Type="tinyint" Nullable="false" />
           <Property Name="SheetID" Type="bigint" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="SheetType" Type="int" Nullable="false" />
+          <Property Name="Width" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="webforms_sheetdef">
           <Key>
@@ -64,10 +70,22 @@
           <Key>
             <PropertyRef Name="SheetFieldID" />
           </Key>
-          <Property Name="FieldName" Type="varchar" Nullable="false" MaxLength="255" />
+          <Property Name="FieldName" Type="varchar" MaxLength="255" />
+          <Property Name="FieldType" Type="int" Nullable="false" />
           <Property Name="FieldValue" Type="text" Nullable="false" />
+          <Property Name="FontIsBold" Type="tinyint" Nullable="false" />
+          <Property Name="FontName" Type="varchar" MaxLength="255" />
+          <Property Name="FontSize" Type="float" Nullable="false" />
+          <Property Name="GrowthBehavior" Type="int" Nullable="false" />
+          <Property Name="Height" Type="int" Nullable="false" />
+          <Property Name="IsRequired" Type="tinyint" Nullable="false" />
+          <Property Name="RadioButtonGroup" Type="varchar" Nullable="false" MaxLength="255" />
+          <Property Name="RadioButtonValue" Type="varchar" Nullable="false" MaxLength="255" />
           <Property Name="SheetFieldID" Type="bigint" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="SheetID" Type="bigint" Nullable="false" />
+          <Property Name="Width" Type="int" Nullable="false" />
+          <Property Name="XPos" Type="int" Nullable="false" />
+          <Property Name="YPos" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="webforms_sheetfielddef">
           <Key>
@@ -179,10 +197,16 @@
           <Key>
             <PropertyRef Name="SheetID" />
           </Key>
-          <Property Name="DateTimeSubmitted" Type="DateTime" Nullable="false" />
           <Property Name="SheetID" Type="Int64" Nullable="false" />
           <NavigationProperty Name="webforms_preference" Relationship="odwebserviceModel.FK_webforms_sheet_DentalOfficeID" FromRole="webforms_sheet" ToRole="webforms_preference" />
           <NavigationProperty Name="webforms_sheetfield" Relationship="odwebserviceModel.FK_webforms_sheetfield_SheetID" FromRole="webforms_sheet" ToRole="webforms_sheetfield" />
+          <Property Type="DateTime" Name="DateTimeSheet" Nullable="false" />
+          <Property Type="String" Name="FontName" />
+          <Property Type="Single" Name="FontSize" Nullable="false" />
+          <Property Type="Int32" Name="Height" Nullable="false" />
+          <Property Type="SByte" Name="IsLandscape" Nullable="false" />
+          <Property Type="Int32" Name="SheetType" Nullable="false" />
+          <Property Type="Int32" Name="Width" Nullable="false" />
         </EntityType>
         <EntityType Name="webforms_sheetfield">
           <Key>
@@ -192,6 +216,18 @@
           <Property Name="FieldValue" Type="String" Nullable="false" />
           <Property Name="SheetFieldID" Type="Int64" Nullable="false" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="webforms_sheet" Relationship="odwebserviceModel.FK_webforms_sheetfield_SheetID" FromRole="webforms_sheetfield" ToRole="webforms_sheet" />
+          <Property Type="Int32" Name="FieldType" Nullable="false" />
+          <Property Type="SByte" Name="FontIsBold" Nullable="false" />
+          <Property Type="String" Name="FontName" />
+          <Property Type="Single" Name="FontSize" Nullable="false" />
+          <Property Type="Int32" Name="GrowthBehavior" Nullable="false" />
+          <Property Type="Int32" Name="Height" Nullable="false" />
+          <Property Type="SByte" Name="IsRequired" Nullable="false" />
+          <Property Type="String" Name="RadioButtonGroup" Nullable="false" />
+          <Property Type="String" Name="RadioButtonValue" Nullable="false" />
+          <Property Type="Int32" Name="Width" Nullable="false" />
+          <Property Type="Int32" Name="XPos" Nullable="false" />
+          <Property Type="Int32" Name="YPos" Nullable="false" />
         </EntityType>
         <Association Name="FK_webforms_sheet_DentalOfficeID">
           <End Role="webforms_preference" Type="odwebserviceModel.webforms_preference" Multiplicity="1" />
@@ -261,7 +297,13 @@
           <EntitySetMapping Name="webforms_sheet">
             <EntityTypeMapping TypeName="IsTypeOf(odwebserviceModel.webforms_sheet)">
               <MappingFragment StoreEntitySet="webforms_sheet">
-                <ScalarProperty Name="DateTimeSubmitted" ColumnName="DateTimeSubmitted" />
+                <ScalarProperty Name="Width" ColumnName="Width" />
+                <ScalarProperty Name="SheetType" ColumnName="SheetType" />
+                <ScalarProperty Name="IsLandscape" ColumnName="IsLandscape" />
+                <ScalarProperty Name="Height" ColumnName="Height" />
+                <ScalarProperty Name="FontSize" ColumnName="FontSize" />
+                <ScalarProperty Name="FontName" ColumnName="FontName" />
+                <ScalarProperty Name="DateTimeSheet" ColumnName="DateTimeSheet" />
                 <ScalarProperty Name="SheetID" ColumnName="SheetID" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -269,6 +311,18 @@
           <EntitySetMapping Name="webforms_sheetfield">
             <EntityTypeMapping TypeName="IsTypeOf(odwebserviceModel.webforms_sheetfield)">
               <MappingFragment StoreEntitySet="webforms_sheetfield">
+                <ScalarProperty Name="YPos" ColumnName="YPos" />
+                <ScalarProperty Name="XPos" ColumnName="XPos" />
+                <ScalarProperty Name="Width" ColumnName="Width" />
+                <ScalarProperty Name="RadioButtonValue" ColumnName="RadioButtonValue" />
+                <ScalarProperty Name="RadioButtonGroup" ColumnName="RadioButtonGroup" />
+                <ScalarProperty Name="IsRequired" ColumnName="IsRequired" />
+                <ScalarProperty Name="Height" ColumnName="Height" />
+                <ScalarProperty Name="GrowthBehavior" ColumnName="GrowthBehavior" />
+                <ScalarProperty Name="FontSize" ColumnName="FontSize" />
+                <ScalarProperty Name="FontName" ColumnName="FontName" />
+                <ScalarProperty Name="FontIsBold" ColumnName="FontIsBold" />
+                <ScalarProperty Name="FieldType" ColumnName="FieldType" />
                 <ScalarProperty Name="FieldName" ColumnName="FieldName" />
                 <ScalarProperty Name="FieldValue" ColumnName="FieldValue" />
                 <ScalarProperty Name="SheetFieldID" ColumnName="SheetFieldID" />
@@ -347,20 +401,22 @@
     <edmx:Options>
       <DesignerInfoPropertySet xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
       </DesignerInfoPropertySet>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram Name="ODWebServiceModel" xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
         <EntityTypeShape EntityType="odwebserviceModel.webforms_preference" Width="1.5" PointX="0.75" PointY="0.875" Height="1.7566536458333333" IsExpanded="true" />
-        <EntityTypeShape EntityType="odwebserviceModel.webforms_sheet" Width="1.5" PointX="3" PointY="1" Height="1.5923063151041665" IsExpanded="true" />
+        <EntityTypeShape EntityType="odwebserviceModel.webforms_sheet" Width="1.5" PointX="3" PointY="1" Height="2.5783902994791661" IsExpanded="true" />
         <EntityTypeShape EntityType="odwebserviceModel.webforms_sheetfield" Width="1.5" PointX="5.25" PointY="1" Height="1.5923063151041672" IsExpanded="true" />
         <AssociationConnector Association="odwebserviceModel.FK_webforms_sheet_DentalOfficeID" ManuallyRouted="false">
-          <ConnectorPoint PointX="2.25" PointY="1.7961531575520833" />
-          <ConnectorPoint PointX="3" PointY="1.7961531575520833" /></AssociationConnector>
+          <ConnectorPoint PointX="2.25" PointY="1.89800048828125" />
+          <ConnectorPoint PointX="3" PointY="1.89800048828125" /></AssociationConnector>
         <AssociationConnector Association="odwebserviceModel.FK_webforms_sheetfield_SheetID" ManuallyRouted="false">
-          <ConnectorPoint PointX="4.5" PointY="1.7961531575520833" />
-          <ConnectorPoint PointX="5.25" PointY="1.7961531575520833" /></AssociationConnector>
+          <ConnectorPoint PointX="4.5" PointY="2.2891951497395828" />
+          <ConnectorPoint PointX="5.25" PointY="2.2891951497395828" /></AssociationConnector>
         <EntityTypeShape EntityType="odwebserviceModel.webforms_sheetdef" Width="1.5" PointX="3" PointY="4.625" Height="2.7427376302083335" />
         <EntityTypeShape EntityType="odwebserviceModel.webforms_sheetfielddef" Width="1.5" PointX="5.25" PointY="4.125" Height="3.5644742838541674" />
         <AssociationConnector Association="odwebserviceModel.FK_webforms_sheetdef_DentalOfficeID">

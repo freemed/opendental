@@ -137,7 +137,7 @@ namespace WebForms {
 				webforms_sheet NewSheetObj=new webforms_sheet();
 				var PrefObj=from wp in db.webforms_preference where wp.DentalOfficeID==DentalOfficeID
 					select wp;
-				NewSheetObj.DateTimeSubmitted=DateTime.Now;
+				NewSheetObj.DateTimeSheet=DateTime.Now;
 				foreach(string key in FormValuesHashTable.Keys) {
 					webforms_sheetfield NewSheetfieldObj=new webforms_sheetfield();
 					NewSheetfieldObj.FieldName=key;

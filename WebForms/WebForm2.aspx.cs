@@ -96,18 +96,18 @@ namespace WebForms {
 				form1.Style["width"]=SheetDefWidth+"px";
 				form1.Style["height"]=SheetDefHeight+"px";
 				form1.Style["background-color"]="white";
-				var sfdObj=(from sfd in db.webforms_sheetfielddef where sfd.webforms_sheetdef.WebSheetDefNum==WebSheetDefNum && sfd.webforms_sheetdef.webforms_preference.DentalOfficeID==DentalOfficeID
+				var SheetFieldDefList=(from sfd in db.webforms_sheetfielddef where sfd.webforms_sheetdef.WebSheetDefNum==WebSheetDefNum && sfd.webforms_sheetdef.webforms_preference.DentalOfficeID==DentalOfficeID
 							select sfd).ToList();
-				for(int j=0;j<sfdObj.Count();j++) {
-					String FieldName=sfdObj.ElementAt(j).FieldName;
-					String FieldValue=sfdObj.ElementAt(j).FieldValue;
-					SheetFieldType FieldType=(SheetFieldType)sfdObj.ElementAt(j).FieldType;
-					int XPos=sfdObj.ElementAt(j).XPos;
-					int YPos=sfdObj.ElementAt(j).YPos;
-					int width=sfdObj.ElementAt(j).Width;
-					int height=sfdObj.ElementAt(j).Height;
-					float fontsize=sfdObj.ElementAt(j).FontSize;
-					String fontname=sfdObj.ElementAt(j).FontName;
+				for(int j=0;j<SheetFieldDefList.Count();j++) {
+					String FieldName=SheetFieldDefList.ElementAt(j).FieldName;
+					String FieldValue=SheetFieldDefList.ElementAt(j).FieldValue;
+					SheetFieldType FieldType=(SheetFieldType)SheetFieldDefList.ElementAt(j).FieldType;
+					int XPos=SheetFieldDefList.ElementAt(j).XPos;
+					int YPos=SheetFieldDefList.ElementAt(j).YPos;
+					int width=SheetFieldDefList.ElementAt(j).Width;
+					int height=SheetFieldDefList.ElementAt(j).Height;
+					float fontsize=SheetFieldDefList.ElementAt(j).FontSize;
+					String fontname=SheetFieldDefList.ElementAt(j).FontName;
 
 					WebControl wc=null; // WebControl is the parent class of all controls
 					if(FieldType==SheetFieldType.InputField) {
@@ -121,7 +121,7 @@ namespace WebForms {
 						wc=tb;						
 					}
 					if(FieldType==SheetFieldType.CheckBox) {
-						wc=AddCheckBox(sfdObj.ElementAt(j));
+						wc=AddCheckBox(SheetFieldDefList.ElementAt(j));
 					}
 					if(FieldType==SheetFieldType.StaticText) {
 						Label lb=new Label();
@@ -134,7 +134,7 @@ namespace WebForms {
 					}
 					if(FieldType==SheetFieldType.Image||FieldType==SheetFieldType.Rectangle||FieldType==SheetFieldType.Line) {
 						System.Web.UI.WebControls.Image img=new System.Web.UI.WebControls.Image();
-						long WebSheetFieldDefNum=sfdObj.ElementAt(j).WebSheetFieldDefNum;
+						long WebSheetFieldDefNum=SheetFieldDefList.ElementAt(j).WebSheetFieldDefNum;
 						img.ImageUrl=("~/Handler1.ashx?WebSheetFieldDefNum="+WebSheetFieldDefNum);
 						wc=img;
 					}
@@ -152,7 +152,7 @@ namespace WebForms {
 					}
 
 					if(wc!=null) {
-                        AssignID(wc,sfdObj.ElementAt(j));
+                        AssignID(wc,SheetFieldDefList.ElementAt(j));
 
 						wc.Style["position"]="absolute";
 						wc.Style["width"]=width+"px";
@@ -188,6 +188,9 @@ namespace WebForms {
 						if(wc.GetType()==typeof(CheckBox)) {
 							wc.Style["top"]=YPos+CheckBoxYOffset+"px";
 							wc.Style["left"]=XPos+CheckBoxXOffset+"px";
+							//wc.BorderStyle=BorderStyle.Solid;
+							//wc.BorderColor=Color.Gold;
+							//wc.BorderWidth=Unit.Pixel(3);
 							WControl wcobj = new WControl(XPos,YPos,wc);
 							listwc.Add(wcobj);
 						}
@@ -302,14 +305,16 @@ namespace WebForms {
 				wc.ID=wc.ID+sfd.WebSheetFieldDefNum;
             }
         }
+
 		private void AssignTabOrder() {
 			var sortedlist= listwc.OrderBy(wc => wc.YPos).ThenBy(wc => wc.XPos).ToList();
 			for(short i=0;i<sortedlist.Count();i++){
 				sortedlist[i].wc.TabIndex=(short)(i+1);
 			}
 		}
+
 		/// <summary>
-		/// A class made  just for sorting purposes.
+		/// A class made  just for sorting purposes - to assign tab order to the controls on a web page.
 		/// </summary>
 		public class WControl{
 			public int XPos=0;
@@ -371,9 +376,10 @@ namespace WebForms {
 				
 			}
 		}
+
 		protected void Button1_Click(object sender,EventArgs e) {
 			LoopThroughControls(this.Page);
-			SaveFieldValuesInDB(DentalOfficeID);
+			SaveFieldValuesInDB(DentalOfficeID,WebSheetDefNum);
 		}
 
 		private void LoopThroughControls(Page p) {
@@ -448,19 +454,55 @@ namespace WebForms {
 			}
 		}
 
-		private void SaveFieldValuesInDB(long DentalOfficeID) {
+		private void SaveFieldValuesInDB(long DentalOfficeID,long WebSheetDefNum) {
 			try {
 				ODWebServiceEntities db=new ODWebServiceEntities();
+				var SheetDefObj=db.webforms_sheetdef.Where(sd => sd.WebSheetDefNum==WebSheetDefNum && sd.webforms_preference.DentalOfficeID==DentalOfficeID).First();
+
 				webforms_sheet NewSheetObj=new webforms_sheet();
-				var PrefObj=from wp in db.webforms_preference where wp.DentalOfficeID==DentalOfficeID
-							select wp;
-				NewSheetObj.DateTimeSubmitted=DateTime.Now;
-				foreach(string key in FormValuesHashTable.Keys) {
+
+
+				
+				NewSheetObj.DateTimeSheet=DateTime.Now;
+				NewSheetObj.Height=SheetDefObj.Height;
+				NewSheetObj.Width=SheetDefObj.Width;
+				NewSheetObj.FontName=SheetDefObj.FontName;
+				NewSheetObj.FontSize=SheetDefObj.FontSize;
+				// assign all values - complete this list
+
+				SheetDefObj.webforms_sheetfielddef.Load();
+				var SheetFieldDefResult=SheetDefObj.webforms_sheetfielddef;
+				//copy sheetfielddef values to sheetfield except the FieldValue which is read from the hash table
+				for(int i=0; i<SheetFieldDefResult.Count();i++) {
 					webforms_sheetfield NewSheetfieldObj=new webforms_sheetfield();
-					NewSheetfieldObj.FieldName=key;
-					NewSheetfieldObj.FieldValue=FormValuesHashTable[key].ToString();
+					
+					//var SheetFieldDefObj=db.webforms_sheetfielddef.Where(sfd => sfd.WebSheetFieldDefNum==SheetFieldDefResult.ElementAt(i).WebSheetFieldDefNum).First();
+					var SheetFieldDefObj=SheetFieldDefResult.ElementAt(i);
+					NewSheetfieldObj.FieldName=SheetFieldDefObj.FieldName;
+					NewSheetfieldObj.FieldType=SheetFieldDefObj.FieldType;
+					NewSheetfieldObj.FontIsBold=SheetFieldDefObj.FontIsBold;
+					NewSheetfieldObj.FontName=SheetFieldDefObj.FontName;
+					NewSheetfieldObj.FontSize=SheetFieldDefObj.FontSize;
+					NewSheetfieldObj.Height=SheetFieldDefObj.Height;
+					
+					// assign all values - complete this list
+
+
+					long WebSheetFieldDefNum=SheetFieldDefObj.WebSheetFieldDefNum;
+					if(FormValuesHashTable.ContainsKey(WebSheetFieldDefNum+"")) {
+						NewSheetfieldObj.FieldValue=FormValuesHashTable[WebSheetFieldDefNum+""].ToString();
+					}
+					else {
+						NewSheetfieldObj.FieldValue="";
+					}
+					
+					
 					NewSheetObj.webforms_sheetfield.Add(NewSheetfieldObj);
 				}
+
+
+				var PrefObj=db.webforms_preference.Where(wp=>wp.DentalOfficeID==DentalOfficeID);
+
 				if(PrefObj.Count()>0) {
 					PrefObj.First().webforms_sheet.Add(NewSheetObj);
 					db.SaveChanges();

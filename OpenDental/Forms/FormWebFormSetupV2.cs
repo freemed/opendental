@@ -231,6 +231,15 @@ namespace OpenDental {
 					SheetDefListLocal.Add(FormS.SelectedSheetDefs[i]);
 				}
 
+				//internal sheets have SheetDefNum 0
+				if(SheetDefListLocal.Exists(sd => sd.SheetDefNum==FormS.SelectedSheetDefs[i].SheetDefNum && sd.SheetDefNum==0)) {
+					if(!SheetDefListLocal.Exists(sd => sd.Description==FormS.SelectedSheetDefs[i].Description)) {
+						
+							SheetDefListLocal.Add(FormS.SelectedSheetDefs[i]);
+						
+					}
+				}
+
 			}
 
 			FillGrid();

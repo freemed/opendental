@@ -394,42 +394,28 @@ namespace WebHostSynch
         /// <summary>
         /// Create a new webforms_sheet object.
         /// </summary>
-        /// <param name="dateTimeSubmitted">Initial value of the DateTimeSubmitted property.</param>
         /// <param name="sheetID">Initial value of the SheetID property.</param>
-        public static webforms_sheet Createwebforms_sheet(global::System.DateTime dateTimeSubmitted, global::System.Int64 sheetID)
+        /// <param name="dateTimeSheet">Initial value of the DateTimeSheet property.</param>
+        /// <param name="fontSize">Initial value of the FontSize property.</param>
+        /// <param name="height">Initial value of the Height property.</param>
+        /// <param name="isLandscape">Initial value of the IsLandscape property.</param>
+        /// <param name="sheetType">Initial value of the SheetType property.</param>
+        /// <param name="width">Initial value of the Width property.</param>
+        public static webforms_sheet Createwebforms_sheet(global::System.Int64 sheetID, global::System.DateTime dateTimeSheet, global::System.Single fontSize, global::System.Int32 height, global::System.SByte isLandscape, global::System.Int32 sheetType, global::System.Int32 width)
         {
             webforms_sheet webforms_sheet = new webforms_sheet();
-            webforms_sheet.DateTimeSubmitted = dateTimeSubmitted;
             webforms_sheet.SheetID = sheetID;
+            webforms_sheet.DateTimeSheet = dateTimeSheet;
+            webforms_sheet.FontSize = fontSize;
+            webforms_sheet.Height = height;
+            webforms_sheet.IsLandscape = isLandscape;
+            webforms_sheet.SheetType = sheetType;
+            webforms_sheet.Width = width;
             return webforms_sheet;
         }
 
         #endregion
         #region Primitive Properties
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.DateTime DateTimeSubmitted
-        {
-            get
-            {
-                return _DateTimeSubmitted;
-            }
-            set
-            {
-                OnDateTimeSubmittedChanging(value);
-                ReportPropertyChanging("DateTimeSubmitted");
-                _DateTimeSubmitted = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("DateTimeSubmitted");
-                OnDateTimeSubmittedChanged();
-            }
-        }
-        private global::System.DateTime _DateTimeSubmitted;
-        partial void OnDateTimeSubmittedChanging(global::System.DateTime value);
-        partial void OnDateTimeSubmittedChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -457,6 +443,174 @@ namespace WebHostSynch
         private global::System.Int64 _SheetID;
         partial void OnSheetIDChanging(global::System.Int64 value);
         partial void OnSheetIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.DateTime DateTimeSheet
+        {
+            get
+            {
+                return _DateTimeSheet;
+            }
+            set
+            {
+                OnDateTimeSheetChanging(value);
+                ReportPropertyChanging("DateTimeSheet");
+                _DateTimeSheet = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("DateTimeSheet");
+                OnDateTimeSheetChanged();
+            }
+        }
+        private global::System.DateTime _DateTimeSheet;
+        partial void OnDateTimeSheetChanging(global::System.DateTime value);
+        partial void OnDateTimeSheetChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String FontName
+        {
+            get
+            {
+                return _FontName;
+            }
+            set
+            {
+                OnFontNameChanging(value);
+                ReportPropertyChanging("FontName");
+                _FontName = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("FontName");
+                OnFontNameChanged();
+            }
+        }
+        private global::System.String _FontName;
+        partial void OnFontNameChanging(global::System.String value);
+        partial void OnFontNameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Single FontSize
+        {
+            get
+            {
+                return _FontSize;
+            }
+            set
+            {
+                OnFontSizeChanging(value);
+                ReportPropertyChanging("FontSize");
+                _FontSize = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("FontSize");
+                OnFontSizeChanged();
+            }
+        }
+        private global::System.Single _FontSize;
+        partial void OnFontSizeChanging(global::System.Single value);
+        partial void OnFontSizeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 Height
+        {
+            get
+            {
+                return _Height;
+            }
+            set
+            {
+                OnHeightChanging(value);
+                ReportPropertyChanging("Height");
+                _Height = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Height");
+                OnHeightChanged();
+            }
+        }
+        private global::System.Int32 _Height;
+        partial void OnHeightChanging(global::System.Int32 value);
+        partial void OnHeightChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.SByte IsLandscape
+        {
+            get
+            {
+                return _IsLandscape;
+            }
+            set
+            {
+                OnIsLandscapeChanging(value);
+                ReportPropertyChanging("IsLandscape");
+                _IsLandscape = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("IsLandscape");
+                OnIsLandscapeChanged();
+            }
+        }
+        private global::System.SByte _IsLandscape;
+        partial void OnIsLandscapeChanging(global::System.SByte value);
+        partial void OnIsLandscapeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 SheetType
+        {
+            get
+            {
+                return _SheetType;
+            }
+            set
+            {
+                OnSheetTypeChanging(value);
+                ReportPropertyChanging("SheetType");
+                _SheetType = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("SheetType");
+                OnSheetTypeChanged();
+            }
+        }
+        private global::System.Int32 _SheetType;
+        partial void OnSheetTypeChanging(global::System.Int32 value);
+        partial void OnSheetTypeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 Width
+        {
+            get
+            {
+                return _Width;
+            }
+            set
+            {
+                OnWidthChanging(value);
+                ReportPropertyChanging("Width");
+                _Width = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Width");
+                OnWidthChanged();
+            }
+        }
+        private global::System.Int32 _Width;
+        partial void OnWidthChanging(global::System.Int32 value);
+        partial void OnWidthChanged();
 
         #endregion
     
@@ -867,12 +1021,34 @@ namespace WebHostSynch
         /// <param name="fieldName">Initial value of the FieldName property.</param>
         /// <param name="fieldValue">Initial value of the FieldValue property.</param>
         /// <param name="sheetFieldID">Initial value of the SheetFieldID property.</param>
-        public static webforms_sheetfield Createwebforms_sheetfield(global::System.String fieldName, global::System.String fieldValue, global::System.Int64 sheetFieldID)
+        /// <param name="fieldType">Initial value of the FieldType property.</param>
+        /// <param name="fontIsBold">Initial value of the FontIsBold property.</param>
+        /// <param name="fontSize">Initial value of the FontSize property.</param>
+        /// <param name="growthBehavior">Initial value of the GrowthBehavior property.</param>
+        /// <param name="height">Initial value of the Height property.</param>
+        /// <param name="isRequired">Initial value of the IsRequired property.</param>
+        /// <param name="radioButtonGroup">Initial value of the RadioButtonGroup property.</param>
+        /// <param name="radioButtonValue">Initial value of the RadioButtonValue property.</param>
+        /// <param name="width">Initial value of the Width property.</param>
+        /// <param name="xPos">Initial value of the XPos property.</param>
+        /// <param name="yPos">Initial value of the YPos property.</param>
+        public static webforms_sheetfield Createwebforms_sheetfield(global::System.String fieldName, global::System.String fieldValue, global::System.Int64 sheetFieldID, global::System.Int32 fieldType, global::System.SByte fontIsBold, global::System.Single fontSize, global::System.Int32 growthBehavior, global::System.Int32 height, global::System.SByte isRequired, global::System.String radioButtonGroup, global::System.String radioButtonValue, global::System.Int32 width, global::System.Int32 xPos, global::System.Int32 yPos)
         {
             webforms_sheetfield webforms_sheetfield = new webforms_sheetfield();
             webforms_sheetfield.FieldName = fieldName;
             webforms_sheetfield.FieldValue = fieldValue;
             webforms_sheetfield.SheetFieldID = sheetFieldID;
+            webforms_sheetfield.FieldType = fieldType;
+            webforms_sheetfield.FontIsBold = fontIsBold;
+            webforms_sheetfield.FontSize = fontSize;
+            webforms_sheetfield.GrowthBehavior = growthBehavior;
+            webforms_sheetfield.Height = height;
+            webforms_sheetfield.IsRequired = isRequired;
+            webforms_sheetfield.RadioButtonGroup = radioButtonGroup;
+            webforms_sheetfield.RadioButtonValue = radioButtonValue;
+            webforms_sheetfield.Width = width;
+            webforms_sheetfield.XPos = xPos;
+            webforms_sheetfield.YPos = yPos;
             return webforms_sheetfield;
         }
 
@@ -953,6 +1129,294 @@ namespace WebHostSynch
         private global::System.Int64 _SheetFieldID;
         partial void OnSheetFieldIDChanging(global::System.Int64 value);
         partial void OnSheetFieldIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 FieldType
+        {
+            get
+            {
+                return _FieldType;
+            }
+            set
+            {
+                OnFieldTypeChanging(value);
+                ReportPropertyChanging("FieldType");
+                _FieldType = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("FieldType");
+                OnFieldTypeChanged();
+            }
+        }
+        private global::System.Int32 _FieldType;
+        partial void OnFieldTypeChanging(global::System.Int32 value);
+        partial void OnFieldTypeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.SByte FontIsBold
+        {
+            get
+            {
+                return _FontIsBold;
+            }
+            set
+            {
+                OnFontIsBoldChanging(value);
+                ReportPropertyChanging("FontIsBold");
+                _FontIsBold = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("FontIsBold");
+                OnFontIsBoldChanged();
+            }
+        }
+        private global::System.SByte _FontIsBold;
+        partial void OnFontIsBoldChanging(global::System.SByte value);
+        partial void OnFontIsBoldChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String FontName
+        {
+            get
+            {
+                return _FontName;
+            }
+            set
+            {
+                OnFontNameChanging(value);
+                ReportPropertyChanging("FontName");
+                _FontName = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("FontName");
+                OnFontNameChanged();
+            }
+        }
+        private global::System.String _FontName;
+        partial void OnFontNameChanging(global::System.String value);
+        partial void OnFontNameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Single FontSize
+        {
+            get
+            {
+                return _FontSize;
+            }
+            set
+            {
+                OnFontSizeChanging(value);
+                ReportPropertyChanging("FontSize");
+                _FontSize = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("FontSize");
+                OnFontSizeChanged();
+            }
+        }
+        private global::System.Single _FontSize;
+        partial void OnFontSizeChanging(global::System.Single value);
+        partial void OnFontSizeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 GrowthBehavior
+        {
+            get
+            {
+                return _GrowthBehavior;
+            }
+            set
+            {
+                OnGrowthBehaviorChanging(value);
+                ReportPropertyChanging("GrowthBehavior");
+                _GrowthBehavior = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("GrowthBehavior");
+                OnGrowthBehaviorChanged();
+            }
+        }
+        private global::System.Int32 _GrowthBehavior;
+        partial void OnGrowthBehaviorChanging(global::System.Int32 value);
+        partial void OnGrowthBehaviorChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 Height
+        {
+            get
+            {
+                return _Height;
+            }
+            set
+            {
+                OnHeightChanging(value);
+                ReportPropertyChanging("Height");
+                _Height = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Height");
+                OnHeightChanged();
+            }
+        }
+        private global::System.Int32 _Height;
+        partial void OnHeightChanging(global::System.Int32 value);
+        partial void OnHeightChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.SByte IsRequired
+        {
+            get
+            {
+                return _IsRequired;
+            }
+            set
+            {
+                OnIsRequiredChanging(value);
+                ReportPropertyChanging("IsRequired");
+                _IsRequired = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("IsRequired");
+                OnIsRequiredChanged();
+            }
+        }
+        private global::System.SByte _IsRequired;
+        partial void OnIsRequiredChanging(global::System.SByte value);
+        partial void OnIsRequiredChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String RadioButtonGroup
+        {
+            get
+            {
+                return _RadioButtonGroup;
+            }
+            set
+            {
+                OnRadioButtonGroupChanging(value);
+                ReportPropertyChanging("RadioButtonGroup");
+                _RadioButtonGroup = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("RadioButtonGroup");
+                OnRadioButtonGroupChanged();
+            }
+        }
+        private global::System.String _RadioButtonGroup;
+        partial void OnRadioButtonGroupChanging(global::System.String value);
+        partial void OnRadioButtonGroupChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String RadioButtonValue
+        {
+            get
+            {
+                return _RadioButtonValue;
+            }
+            set
+            {
+                OnRadioButtonValueChanging(value);
+                ReportPropertyChanging("RadioButtonValue");
+                _RadioButtonValue = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("RadioButtonValue");
+                OnRadioButtonValueChanged();
+            }
+        }
+        private global::System.String _RadioButtonValue;
+        partial void OnRadioButtonValueChanging(global::System.String value);
+        partial void OnRadioButtonValueChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 Width
+        {
+            get
+            {
+                return _Width;
+            }
+            set
+            {
+                OnWidthChanging(value);
+                ReportPropertyChanging("Width");
+                _Width = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Width");
+                OnWidthChanged();
+            }
+        }
+        private global::System.Int32 _Width;
+        partial void OnWidthChanging(global::System.Int32 value);
+        partial void OnWidthChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 XPos
+        {
+            get
+            {
+                return _XPos;
+            }
+            set
+            {
+                OnXPosChanging(value);
+                ReportPropertyChanging("XPos");
+                _XPos = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("XPos");
+                OnXPosChanged();
+            }
+        }
+        private global::System.Int32 _XPos;
+        partial void OnXPosChanging(global::System.Int32 value);
+        partial void OnXPosChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 YPos
+        {
+            get
+            {
+                return _YPos;
+            }
+            set
+            {
+                OnYPosChanging(value);
+                ReportPropertyChanging("YPos");
+                _YPos = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("YPos");
+                OnYPosChanged();
+            }
+        }
+        private global::System.Int32 _YPos;
+        partial void OnYPosChanging(global::System.Int32 value);
+        partial void OnYPosChanged();
 
         #endregion
     

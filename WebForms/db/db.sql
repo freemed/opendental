@@ -2,7 +2,8 @@
 SQLyog Community Edition- MySQL GUI v8.0 
 MySQL - 5.1.30-community : Database - odwebservice
 *********************************************************************
-*/
+*/
+
 
 /*!40101 SET NAMES utf8 */;
 
@@ -30,7 +31,7 @@ CREATE TABLE `webforms_preference` (
 /*Table structure for table `webforms_sheet` */
 
 DROP TABLE IF EXISTS `webforms_sheet`;
-
+/*
 CREATE TABLE `webforms_sheet` (
   `SheetID` bigint(20) NOT NULL AUTO_INCREMENT,
   `DentalOfficeID` bigint(20) NOT NULL,
@@ -40,15 +41,11 @@ CREATE TABLE `webforms_sheet` (
   CONSTRAINT `FK_webforms_sheet_DentalOfficeID` FOREIGN KEY (`DentalOfficeID`) REFERENCES `webforms_preference` (`DentalOfficeID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=148 DEFAULT CHARSET=utf8;
 
+*/
 
-new
------
-
-DROP TABLE IF EXISTS `webforms_sheet_new`;
-
-CREATE TABLE `webforms_sheet_new` (
+CREATE TABLE `webforms_sheet` (
   `SheetID` bigint(20) NOT NULL AUTO_INCREMENT,
-   `DentalOfficeID` bigint(20) NOT NULL,
+  `DentalOfficeID` bigint(20) NOT NULL,
   `SheetType` int(11) NOT NULL,
   `DateTimeSheet` datetime NOT NULL DEFAULT '0001-01-01 00:00:00',
   `FontSize` float NOT NULL,
@@ -57,9 +54,9 @@ CREATE TABLE `webforms_sheet_new` (
   `Height` int(11) NOT NULL,
   `IsLandscape` tinyint(4) NOT NULL,
   PRIMARY KEY (`SheetID`),
-  KEY `FK_webforms_sheet_new_DentalOfficeID` (`DentalOfficeID`),
-  CONSTRAINT `FK_webforms_sheet_new_DentalOfficeID` FOREIGN KEY (`DentalOfficeID`) REFERENCES `webforms_preference` (`DentalOfficeID`)
-) ENGINE=InnoDB AUTO_INCREMENT=148 DEFAULT CHARSET=utf8;
+  KEY `FK_webforms_sheet_DentalOfficeID` (`DentalOfficeID`),
+  CONSTRAINT `FK_webforms_sheet_DentalOfficeID` FOREIGN KEY (`DentalOfficeID`) REFERENCES `webforms_preference` (`DentalOfficeID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 /*Table structure for table `webforms_sheetdef` */
@@ -84,8 +81,9 @@ CREATE TABLE `webforms_sheetdef` (
 
 /*Table structure for table `webforms_sheetfield` */
 
-DROP TABLE IF EXISTS `webforms_sheetfield`;
 
+DROP TABLE IF EXISTS `webforms_sheetfield`;
+/*
 CREATE TABLE `webforms_sheetfield` (
   `SheetFieldID` bigint(20) NOT NULL AUTO_INCREMENT,
   `SheetID` bigint(20) NOT NULL,
@@ -96,10 +94,9 @@ CREATE TABLE `webforms_sheetfield` (
   CONSTRAINT `FK_webforms_sheetfield_SheetID` FOREIGN KEY (`SheetID`) REFERENCES `webforms_sheet` (`SheetID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-new
------
-DROP TABLE IF EXISTS `webforms_sheetfield_new`;
-CREATE TABLE `webforms_sheetfield_new` (
+*/
+
+CREATE TABLE `webforms_sheetfield` (
   `SheetFieldID` bigint(20) NOT NULL AUTO_INCREMENT,
   `SheetID` bigint(20) NOT NULL,
   `FieldType` int(11) NOT NULL,
@@ -117,8 +114,8 @@ CREATE TABLE `webforms_sheetfield_new` (
   `RadioButtonGroup` varchar(255) NOT NULL,
   `IsRequired` tinyint(4) NOT NULL,
   PRIMARY KEY (`SheetFieldID`),
-   KEY `FK_webforms_sheetfield_new_SheetID` (`SheetID`),
-  CONSTRAINT `FK_webforms_sheetfield_new_SheetID` FOREIGN KEY (`SheetID`) REFERENCES `webforms_sheet_new` (`SheetID`)
+   KEY `FK_webforms_sheetfield_SheetID` (`SheetID`),
+  CONSTRAINT `FK_webforms_sheetfield_SheetID` FOREIGN KEY (`SheetID`) REFERENCES `webforms_sheet` (`SheetID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
