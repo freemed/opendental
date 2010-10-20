@@ -4,7 +4,9 @@ using System.Drawing;
 using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
+using OpenDental.UI;
 using OpenDentBusiness;
+
 
 namespace OpenDental{
 ///<summary></summary>
@@ -14,7 +16,10 @@ namespace OpenDental{
 		private System.ComponentModel.Container components = null;
 		private Label label1;
 		private CheckBox checkIncludeNoIns;
+		private UI.ODGrid gridMain;
+		private GroupBox groupBox1;
 		private FormQuery FormQuery2;
+		private UI.Button butRefresh;
 
 		///<summary></summary>
 		public FormRpTreatmentFinder() {
@@ -40,11 +45,15 @@ namespace OpenDental{
 			this.checkIncludeNoIns = new System.Windows.Forms.CheckBox();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
+			this.gridMain = new OpenDental.UI.ODGrid();
+			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.butRefresh = new OpenDental.UI.Button();
+			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(31,9);
+			this.label1.Location = new System.Drawing.Point(287,18);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(567,49);
 			this.label1.TabIndex = 29;
@@ -52,9 +61,9 @@ namespace OpenDental{
 			// 
 			// checkIncludeNoIns
 			// 
-			this.checkIncludeNoIns.Location = new System.Drawing.Point(34,95);
+			this.checkIncludeNoIns.Location = new System.Drawing.Point(21,19);
 			this.checkIncludeNoIns.Name = "checkIncludeNoIns";
-			this.checkIncludeNoIns.Size = new System.Drawing.Size(323,18);
+			this.checkIncludeNoIns.Size = new System.Drawing.Size(242,18);
 			this.checkIncludeNoIns.TabIndex = 30;
 			this.checkIncludeNoIns.Text = "Include patients without insurance";
 			this.checkIncludeNoIns.UseVisualStyleBackColor = true;
@@ -68,7 +77,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(523,216);
+			this.butCancel.Location = new System.Drawing.Point(779,644);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 4;
@@ -83,18 +92,60 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(523,184);
+			this.butOK.Location = new System.Drawing.Point(698,644);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 3;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
+			// gridMain
+			// 
+			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.gridMain.HScrollVisible = true;
+			this.gridMain.Location = new System.Drawing.Point(3,89);
+			this.gridMain.Name = "gridMain";
+			this.gridMain.ScrollValue = 0;
+			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridMain.Size = new System.Drawing.Size(852,525);
+			this.gridMain.TabIndex = 31;
+			this.gridMain.Title = "Treatment Finder";
+			this.gridMain.TranslationName = "TableTreatmentFinder";
+			// 
+			// groupBox1
+			// 
+			this.groupBox1.Controls.Add(this.butRefresh);
+			this.groupBox1.Controls.Add(this.checkIncludeNoIns);
+			this.groupBox1.Location = new System.Drawing.Point(12,9);
+			this.groupBox1.Name = "groupBox1";
+			this.groupBox1.Size = new System.Drawing.Size(269,74);
+			this.groupBox1.TabIndex = 33;
+			this.groupBox1.TabStop = false;
+			this.groupBox1.Text = "View";
+			// 
+			// butRefresh
+			// 
+			this.butRefresh.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butRefresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.butRefresh.Autosize = true;
+			this.butRefresh.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butRefresh.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRefresh.CornerRadius = 4F;
+			this.butRefresh.Location = new System.Drawing.Point(21,43);
+			this.butRefresh.Name = "butRefresh";
+			this.butRefresh.Size = new System.Drawing.Size(86,26);
+			this.butRefresh.TabIndex = 32;
+			this.butRefresh.Text = "&Refresh";
+			this.butRefresh.Click += new System.EventHandler(this.butRefresh_Click);
+			// 
 			// FormRpTreatmentFinder
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(616,254);
-			this.Controls.Add(this.checkIncludeNoIns);
+			this.ClientSize = new System.Drawing.Size(858,672);
+			this.Controls.Add(this.groupBox1);
+			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.butCancel);
 			this.Controls.Add(this.butOK);
@@ -106,6 +157,7 @@ namespace OpenDental{
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Treatment Finder";
 			this.Load += new System.EventHandler(this.FormRpTreatmentFinder_Load);
+			this.groupBox1.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -116,12 +168,52 @@ namespace OpenDental{
 			//will start out 1st through 30th of previous month
 			//date1.SelectionStart=new DateTime(today.Year,today.Month,1).AddMonths(-1);
 			//date2.SelectionStart=new DateTime(today.Year,today.Month,1).AddDays(-1);
+			FillGrid();
+		}
+
+		private void FillGrid() {
+			gridMain.BeginUpdate();
+			gridMain.Columns.Clear();
+			ODGridColumn col=new ODGridColumn(Lan.g("TableTreatmentFinder","LName"),100);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableTreatmentFinder","FName"),100);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableTreatmentFinder","Annual Max"),100);
+			col.TextAlign=HorizontalAlignment.Right;
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableTreatmentFinder","Amount Used"),100);
+			col.TextAlign=HorizontalAlignment.Right;
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableTreatmentFinder","Amount Remaining"),200);
+			col.TextAlign=HorizontalAlignment.Right;
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableTreatmentFinder","Treatment Plan"),125);
+			col.TextAlign=HorizontalAlignment.Right;
+			gridMain.Columns.Add(col);
+			gridMain.Rows.Clear();
+			DataTable table=Patients.GetTreatmentFinderList(checkIncludeNoIns.Checked);
+			ODGridRow row;
+			for(int i=0;i<table.Rows.Count;i++) {
+			  row=new ODGridRow();
+			  for(int j=0;j<table.Columns.Count;j++) {
+			    row.Cells.Add(table.Rows[i][j].ToString());
+			  }
+			  gridMain.Rows.Add(row);
+			}
+			gridMain.EndUpdate();
+		}
+
+		private void butRefresh_Click(object sender,EventArgs e) {
+			FillGrid();
+		}
+
+		private void butCancel_Click(object sender, System.EventArgs e) {
+			DialogResult=DialogResult.Cancel;
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
-
-			ReportSimpleGrid report=new ReportSimpleGrid();
-			report.Query=@"
+      ReportSimpleGrid report=new ReportSimpleGrid();
+      report.Query=@"
 DROP TABLE IF EXISTS tempused;
 DROP TABLE IF EXISTS tempplanned;
 DROP TABLE IF EXISTS tempannualmax;
@@ -181,26 +273,27 @@ LEFT JOIN tempannualmax ON tempannualmax.PlanNum=patplan.PlanNum
 	AND tempannualmax.AnnualMax>0
 	/*AND tempannualmax.AnnualMax-tempused.AmtUsed>0*/
 WHERE tempplanned.AmtPlanned>0 ";
-			if(!checkIncludeNoIns.Checked){//if we don't want patients without insurance
-				report.Query+="AND AnnualMax > 0 ";
-			}
-			report.Query+=@"
+      if(!checkIncludeNoIns.Checked){//if we don't want patients without insurance
+        report.Query+="AND AnnualMax > 0 ";
+      }
+      report.Query+=@"
 AND patient.PatStatus =0
 ORDER BY tempplanned.AmtPlanned DESC;
 DROP TABLE tempused;
 DROP TABLE tempplanned;
 DROP TABLE tempannualmax;";
-			FormQuery2=new FormQuery(report);
-			FormQuery2.textTitle.Text="Treatment Finder";
-			//FormQuery2.IsReport=true;
-			//FormQuery2.SubmitReportQuery();			
-			FormQuery2.SubmitQuery();
-			FormQuery2.ShowDialog();
+      FormQuery2=new FormQuery(report);
+      FormQuery2.textTitle.Text="Treatment Finder";
+      //FormQuery2.IsReport=true;
+      //FormQuery2.SubmitReportQuery();			
+      FormQuery2.SubmitQuery();
+      FormQuery2.ShowDialog();
 			DialogResult=DialogResult.OK;
 		}
-		private void butCancel_Click(object sender, System.EventArgs e) {
-			DialogResult=DialogResult.Cancel;
-		}
+		
+
+
+
 
 
 
