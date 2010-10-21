@@ -19,6 +19,8 @@ namespace OpenDentBusiness{
 		public Relat Relationship;
 		///<summary>An optional patient ID which will override the insplan.SubscriberID on eclaims.  For Canada, this holds the Dependent Code, C17 and E17, and in that use it doesn't override subscriber id, but instead supplements it.</summary>
 		public string PatID;
+		/// <summary>FK to inssub.InsSubNum.  Gives info about the subscriber.</summary>
+		public long InsSubNum;
 
 		///<summary></summary>
 		public PatPlan Copy(){

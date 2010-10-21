@@ -21,6 +21,8 @@ namespace OpenDentBusiness{
 		public long PlanNum;
 		///<summary>The amount of the treatment that has already been completed.  This should match the sum of the principal amounts for most situations.  But if the procedures have not yet been completed, and the payment plan is to make any sense, then this number must be changed.</summary>
 		public double CompletedAmt;
+		///<summary>FK to inssub.InsSubNum.</summary>
+		public long InsSubNum;
 
 		///<summary></summary>
 		public PayPlan Copy(){

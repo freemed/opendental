@@ -96,6 +96,8 @@ namespace OpenDentBusiness.Crud{
 				claim.CanadianIsInitialUpper     = PIn.String(table.Rows[i]["CanadianIsInitialUpper"].ToString());
 				claim.CanadianDateInitialUpper   = PIn.Date  (table.Rows[i]["CanadianDateInitialUpper"].ToString());
 				claim.CanadianMaxProsthMaterial  = PIn.Byte  (table.Rows[i]["CanadianMaxProsthMaterial"].ToString());
+				claim.InsSubNum                  = PIn.Long  (table.Rows[i]["InsSubNum"].ToString());
+				claim.InsSubNum2                 = PIn.Long  (table.Rows[i]["InsSubNum2"].ToString());
 				retVal.Add(claim);
 			}
 			return retVal;
@@ -115,7 +117,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="ClaimNum,";
 			}
-			command+="PatNum,DateService,DateSent,ClaimStatus,DateReceived,PlanNum,ProvTreat,ClaimFee,InsPayEst,InsPayAmt,DedApplied,PreAuthString,IsProsthesis,PriorDate,ReasonUnderPaid,ClaimNote,ClaimType,ProvBill,ReferringProv,RefNumString,PlaceService,AccidentRelated,AccidentDate,AccidentST,EmployRelated,IsOrtho,OrthoRemainM,OrthoDate,PatRelat,PlanNum2,PatRelat2,WriteOff,Radiographs,ClinicNum,ClaimForm,EFormat,AttachedImages,AttachedModels,AttachedFlags,AttachmentID,CanadianMaterialsForwarded,CanadianReferralProviderNum,CanadianReferralReason,CanadianIsInitialLower,CanadianDateInitialLower,CanadianMandProsthMaterial,CanadianIsInitialUpper,CanadianDateInitialUpper,CanadianMaxProsthMaterial) VALUES(";
+			command+="PatNum,DateService,DateSent,ClaimStatus,DateReceived,PlanNum,ProvTreat,ClaimFee,InsPayEst,InsPayAmt,DedApplied,PreAuthString,IsProsthesis,PriorDate,ReasonUnderPaid,ClaimNote,ClaimType,ProvBill,ReferringProv,RefNumString,PlaceService,AccidentRelated,AccidentDate,AccidentST,EmployRelated,IsOrtho,OrthoRemainM,OrthoDate,PatRelat,PlanNum2,PatRelat2,WriteOff,Radiographs,ClinicNum,ClaimForm,EFormat,AttachedImages,AttachedModels,AttachedFlags,AttachmentID,CanadianMaterialsForwarded,CanadianReferralProviderNum,CanadianReferralReason,CanadianIsInitialLower,CanadianDateInitialLower,CanadianMandProsthMaterial,CanadianIsInitialUpper,CanadianDateInitialUpper,CanadianMaxProsthMaterial,InsSubNum,InsSubNum2) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(claim.ClaimNum)+",";
 			}
@@ -168,7 +170,9 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Byte  (claim.CanadianMandProsthMaterial)+","
 				+"'"+POut.String(claim.CanadianIsInitialUpper)+"',"
 				+    POut.Date  (claim.CanadianDateInitialUpper)+","
-				+    POut.Byte  (claim.CanadianMaxProsthMaterial)+")";
+				+    POut.Byte  (claim.CanadianMaxProsthMaterial)+","
+				+    POut.Long  (claim.InsSubNum)+","
+				+    POut.Long  (claim.InsSubNum2)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -229,7 +233,9 @@ namespace OpenDentBusiness.Crud{
 				+"CanadianMandProsthMaterial =  "+POut.Byte  (claim.CanadianMandProsthMaterial)+", "
 				+"CanadianIsInitialUpper     = '"+POut.String(claim.CanadianIsInitialUpper)+"', "
 				+"CanadianDateInitialUpper   =  "+POut.Date  (claim.CanadianDateInitialUpper)+", "
-				+"CanadianMaxProsthMaterial  =  "+POut.Byte  (claim.CanadianMaxProsthMaterial)+" "
+				+"CanadianMaxProsthMaterial  =  "+POut.Byte  (claim.CanadianMaxProsthMaterial)+", "
+				+"InsSubNum                  =  "+POut.Long  (claim.InsSubNum)+", "
+				+"InsSubNum2                 =  "+POut.Long  (claim.InsSubNum2)+" "
 				+"WHERE ClaimNum = "+POut.Long(claim.ClaimNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
@@ -432,6 +438,14 @@ namespace OpenDentBusiness.Crud{
 			if(claim.CanadianMaxProsthMaterial != oldClaim.CanadianMaxProsthMaterial) {
 				if(command!=""){ command+=",";}
 				command+="CanadianMaxProsthMaterial = "+POut.Byte(claim.CanadianMaxProsthMaterial)+"";
+			}
+			if(claim.InsSubNum != oldClaim.InsSubNum) {
+				if(command!=""){ command+=",";}
+				command+="InsSubNum = "+POut.Long(claim.InsSubNum)+"";
+			}
+			if(claim.InsSubNum2 != oldClaim.InsSubNum2) {
+				if(command!=""){ command+=",";}
+				command+="InsSubNum2 = "+POut.Long(claim.InsSubNum2)+"";
 			}
 			if(command==""){
 				return;

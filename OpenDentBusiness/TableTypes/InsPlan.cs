@@ -2,9 +2,9 @@ using System;
 using System.Collections;
 
 namespace OpenDentBusiness{
-	
-	///<summary>There is a separate insplan in this table for each subscriber.  Subscribers never share insplans, although multiple patients can have the plan assigned to them (with the one subscriber).  But plans can have identical information in them as other plans.  In this case, they are considered similar or identical, and some synchronization can be done.  For some offices, this synchronization will be extensive, with hundreds of identical insplans.</summary>
-	[Serializable()]
+
+	///<summary>Subscribers can share insplans by using the InsSub table.  The patplan table determines coverage for individual patients.  InsPlans can also exist without any subscriber.</summary>
+	[Serializable]
 	public class InsPlan:TableBase{
 		///<summary>Primary key.</summary>
 		[CrudColumn(IsPriKey=true)]

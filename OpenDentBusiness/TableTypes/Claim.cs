@@ -110,6 +110,10 @@ namespace OpenDentBusiness{
 		public DateTime CanadianDateInitialUpper;
 		///<summary>F20.  If crown, not required.  If denture or bridge, required if F15 is N.  0 indicates empty response.  Single digit number code, 1-6.  We added type 7, which is crown.</summary>
 		public byte CanadianMaxProsthMaterial;
+		///<summary>FK to inssub.InsSubNum.</summary>
+		public long InsSubNum;
+		///<summary>FK to inssub.InsSubNum.</summary>
+		public long InsSubNum2;
 
 		///<summary>Not a data column.</summary>
 		[CrudColumn(IsNotDbColumn=true)]
