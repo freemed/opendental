@@ -1,5 +1,5 @@
 namespace OpenDental{
-	partial class FormWebForms {
+	partial class FormWebFormsV2 {
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -224,7 +224,7 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// FormWebForms
+			// FormWebFormsV2
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(755,352);
@@ -235,11 +235,11 @@ namespace OpenDental{
 			this.Controls.Add(this.butCancel);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.Menu = this.mainMenu1;
-			this.Name = "FormWebForms";
+			this.Name = "FormWebFormsV2";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Web Forms";
-			this.Load += new System.EventHandler(this.FormWebForms_Load);
-			this.Shown += new System.EventHandler(this.FormWebForms_Shown);
+			this.Load += new System.EventHandler(this.FormWebFormsV2_Load);
+			this.Shown += new System.EventHandler(this.FormWebFormsV2_Shown);
 			this.groupDateRange.ResumeLayout(false);
 			this.groupDateRange.PerformLayout();
 			this.ResumeLayout(false);

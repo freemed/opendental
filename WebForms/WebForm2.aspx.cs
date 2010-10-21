@@ -175,7 +175,7 @@ namespace WebForms {
 							wc.Style["font-family"]=fontname;
 							wc.Style["font-size"]=fontsize+"px";
 							wc.Style["height"]=height/heightfactor+"px";
-							AddValidator(FieldName);
+							AddValidator(SheetFieldDefList.ElementAt(j));
 							WControl wcobj = new WControl(XPos,YPos,wc);
 							listwc.Add(wcobj);
 
@@ -278,7 +278,7 @@ namespace WebForms {
 			else {
 				cb.ID=FieldName+RadioButtonValue;
 			}
-
+			cb.ID=""+sfd.WebSheetFieldDefNum; // newid
 			AjaxControlToolkit.MutuallyExclusiveCheckBoxExtender mecb = new AjaxControlToolkit.MutuallyExclusiveCheckBoxExtender();
 			mecb.ID=cb.ID+"MutuallyExclusiveCheckBoxExtender";
 			mecb.TargetControlID=cb.ID;
@@ -304,6 +304,7 @@ namespace WebForms {
 			if(wc.ID=="misc"){
 				wc.ID=wc.ID+sfd.WebSheetFieldDefNum;
             }
+			wc.ID=""+sfd.WebSheetFieldDefNum;// newid
         }
 
 		private void AssignTabOrder() {
@@ -329,10 +330,9 @@ namespace WebForms {
 
 		}
 
-		private void AddValidator(string FieldName) {
-
+		private void AddValidator(webforms_sheetfielddef sfd ) {
+			String FieldName=sfd.FieldName;
 			String ErrorMessage="";
-			
 
 			if(FieldName.ToLower()=="fname" || FieldName.ToLower()=="firstname") {
 				ErrorMessage="First Name is a required field";
@@ -347,11 +347,11 @@ namespace WebForms {
 				return;
 			}
 			RequiredFieldValidator rv = new RequiredFieldValidator();
-			rv.ControlToValidate=FieldName;
+			rv.ControlToValidate=""+sfd.WebSheetFieldDefNum;
 			rv.ErrorMessage=ErrorMessage;
 			rv.Display=ValidatorDisplay.None;
 			rv.SetFocusOnError=true;
-			rv.ID=FieldName+"RequiredFieldValidator";
+			rv.ID=rv.ControlToValidate+"RequiredFieldValidator";
 
 			AjaxControlToolkit.ValidatorCalloutExtender vc = new AjaxControlToolkit.ValidatorCalloutExtender();
 			vc.TargetControlID=rv.ID;
@@ -361,13 +361,13 @@ namespace WebForms {
 
 			if(FieldName.ToLower()=="birthdate" || FieldName.ToLower()=="bdate") {
 				CompareValidator cv = new CompareValidator();
-				cv.ControlToValidate=FieldName;
+				cv.ControlToValidate=""+sfd.WebSheetFieldDefNum;
 				cv.ErrorMessage="Invalid Date of Birth.";
 				cv.Display=ValidatorDisplay.None;
 				cv.Type=ValidationDataType.Date;
 				cv.Operator=ValidationCompareOperator.DataTypeCheck;
 				cv.SetFocusOnError=true;
-				cv.ID=FieldName+"CompareValidator";
+				cv.ID=""+sfd.WebSheetFieldDefNum+"CompareValidator";
 				AjaxControlToolkit.ValidatorCalloutExtender vc1 = new AjaxControlToolkit.ValidatorCalloutExtender();
 				vc1.TargetControlID=cv.ID;
 				vc1.ID="ValidatorCalloutExtender"+cv.ID;
@@ -476,7 +476,6 @@ namespace WebForms {
 				for(int i=0; i<SheetFieldDefResult.Count();i++) {
 					webforms_sheetfield NewSheetfieldObj=new webforms_sheetfield();
 					
-					//var SheetFieldDefObj=db.webforms_sheetfielddef.Where(sfd => sfd.WebSheetFieldDefNum==SheetFieldDefResult.ElementAt(i).WebSheetFieldDefNum).First();
 					var SheetFieldDefObj=SheetFieldDefResult.ElementAt(i);
 					NewSheetfieldObj.FieldName=SheetFieldDefObj.FieldName;
 					NewSheetfieldObj.FieldType=SheetFieldDefObj.FieldType;
@@ -484,6 +483,13 @@ namespace WebForms {
 					NewSheetfieldObj.FontName=SheetFieldDefObj.FontName;
 					NewSheetfieldObj.FontSize=SheetFieldDefObj.FontSize;
 					NewSheetfieldObj.Height=SheetFieldDefObj.Height;
+					NewSheetfieldObj.Width=SheetFieldDefObj.Height;
+					NewSheetfieldObj.XPos=SheetFieldDefObj.XPos;
+					NewSheetfieldObj.YPos=SheetFieldDefObj.YPos;
+					NewSheetfieldObj.IsRequired=SheetFieldDefObj.IsRequired;
+					NewSheetfieldObj.RadioButtonGroup=SheetFieldDefObj.RadioButtonGroup;
+					NewSheetfieldObj.RadioButtonValue=SheetFieldDefObj.RadioButtonGroup;
+					NewSheetfieldObj.FieldValue=SheetFieldDefObj.FieldValue;
 					
 					// assign all values - complete this list
 
@@ -492,9 +498,7 @@ namespace WebForms {
 					if(FormValuesHashTable.ContainsKey(WebSheetFieldDefNum+"")) {
 						NewSheetfieldObj.FieldValue=FormValuesHashTable[WebSheetFieldDefNum+""].ToString();
 					}
-					else {
-						NewSheetfieldObj.FieldValue="";
-					}
+
 					
 					
 					NewSheetObj.webforms_sheetfield.Add(NewSheetfieldObj);
@@ -513,7 +517,7 @@ namespace WebForms {
 				Panel2.Visible=true;
 			}
 			catch(Exception ex) {
-				Logger.Information(ex.Message.ToString());
+				Logger.LogError(ex);
 				Panel1.Visible=false;
 				LabelSubmitMessage.Text="There has been a problem submitting your details. <br /> We apologize for the inconvenience.";
 				Logger.Information("There has been a problem submitting your details IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID);

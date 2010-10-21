@@ -14,7 +14,7 @@ using OpenDentBusiness;
 using System.Threading;
 
 namespace OpenDental {
-	public partial class FormWebForms:Form {
+	public partial class FormWebFormsV2:Form {
 		
 		/// <summary>
 		/// This Form does 3 things: 
@@ -22,19 +22,19 @@ namespace OpenDental {
 		/// 2) Send a list of the Sheets that have been created to the Server for deletion.
 		/// 3)Show all the sheets that have been created in 1) using a date filter.
 		/// </summary>
-		public FormWebForms() {
+		public FormWebFormsV2() {
 			InitializeComponent();
 			Lan.F(this);
 		}
 
-		private void FormWebForms_Load(object sender,EventArgs e) {
+		private void FormWebFormsV2_Load(object sender,EventArgs e) {
 
 		}
 
 		/// <summary>
 		/// Code in this method was not put into the Form load event because often the "No Patient forms available" Meassage would popup even before a form is loaded - which could confuse the user.
 		/// </summary>
-		private void FormWebForms_Shown(object sender,EventArgs e) {
+		private void FormWebFormsV2_Shown(object sender,EventArgs e) {
 			textDateStart.Text=DateTime.Today.ToShortDateString();
 			textDateEnd.Text=DateTime.Today.ToShortDateString();
 			FillGrid();
@@ -540,7 +540,7 @@ namespace OpenDental {
 		private void menuItemSetup_Click(object sender,EventArgs e) {
 			//Dennis: For some reason an exception is thrown here when there is a remote exception not found error in the FormWebFormSetup. Will figure out the reason later.
 			try {
-				FormWebFormSetup formW=new FormWebFormSetup();
+				FormWebFormSetupV2 formW=new FormWebFormSetupV2();
 				formW.ShowDialog();
 			}
 			catch(Exception ex) {

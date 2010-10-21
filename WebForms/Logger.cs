@@ -99,6 +99,25 @@ namespace WebForms {
 		}
 
 		/// <summary>
+		/// Writes an Error and it's inner exception if any to the log.
+		/// </summary>
+		/// <param name="message">Information Message</param>
+		public static void LogError(Exception ex) {
+			string message=ex.Message.ToString();
+			StackFrame stFrame = new StackFrame(1,true);
+			string Filename = " Filename: " + stFrame.GetFileName().Substring(stFrame.GetFileName().LastIndexOf(@"\")+1);
+			string MethodName =" Method: "+ stFrame.GetMethod();
+			string LineNumber =" LineNumber: "+ stFrame.GetFileLineNumber();
+			message = message + Filename + MethodName + LineNumber;
+			Write(message,TraceEventType.Information);
+
+			if(ex.InnerException != null) {
+				Console.WriteLine("Inner Exception");
+				Write("Inner Exception " +ex.InnerException.StackTrace+ " " +ex.InnerException.Message,TraceEventType.Information);
+			}
+		}
+
+		/// <summary>
 		/// Writes a message to the log using the specified category.
 		/// </summary>
 		/// <param name="message"> Message to log</param>
