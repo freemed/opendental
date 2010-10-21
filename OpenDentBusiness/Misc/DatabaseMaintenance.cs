@@ -38,7 +38,8 @@ namespace OpenDentBusiness {
 				command="CHECK TABLE "+tableNames[i];
 				table=Db.GetTable(command);
 				lastRow=table.Rows.Count-1;
-				if(table.Rows[lastRow][3].ToString()!="OK") {
+				string status=PIn.ByteArray(table.Rows[lastRow][3]);
+				if(status!="OK") {
 					log+=Lans.g("FormDatabaseMaintenance","Corrupt file found for table")+" "+tableNames[i]+"\r\n";
 					allOK=false;
 					//Sometimes dangerous because it can remove table rows (it has happened a few times). Repair of tables is necessary frequently though, so left the code here.
@@ -63,7 +64,9 @@ namespace OpenDentBusiness {
 			}
 			else {
 				success=false;//no other checks should be done until we can successfully get past this.
-				log+=Lans.g("FormDatabaseMaintenance","Corrupted files probably fixed.  Look closely at the log.  Also, run again to be sure they were really fixed.")+"\r\n";
+				if(!isCheck) {
+					log+=Lans.g("FormDatabaseMaintenance","Corrupted files probably fixed.  Look closely at the log.  Also, run again to be sure they were really fixed.")+"\r\n";
+				}
 			}
 			return log;
 		}
@@ -78,7 +81,49 @@ namespace OpenDentBusiness {
 				//and 0000-00-00 is not a valid Oracle date.
 			}
 			if(isCheck){
-				//No check implemented.
+				string[] commands=new string[]
+				{
+				  "SELECT COUNT(*) FROM adjustment WHERE AdjDate='0000-00-00'"
+				  ,"SELECT COUNT(*) FROM adjustment WHERE DateEntry<'1980'"
+				  ,"SELECT COUNT(*) FROM adjustment WHERE ProcDate='0000-00-00'"
+				  ,"SELECT COUNT(*) FROM appointment WHERE AptDateTime LIKE '0000-00-00%'"
+				  ,"SELECT COUNT(*) FROM appointment WHERE DateTimeArrived LIKE '0000-00-00%'"
+				  ,"SELECT COUNT(*) FROM appointment WHERE DateTimeSeated LIKE '0000-00-00%'"
+				  ,"SELECT COUNT(*) FROM appointment WHERE DateTimeDismissed LIKE '0000-00-00%'"
+				  ,"SELECT COUNT(*) FROM appointment WHERE DateTStamp='0000-00-00 00:00:00'"
+				  ,"SELECT COUNT(*) FROM claim WHERE DateService='0000-00-00'"
+				  ,"SELECT COUNT(*) FROM claim WHERE DateSent='0000-00-00'"
+				  ,"SELECT COUNT(*) FROM claim WHERE DateReceived='0000-00-00'"
+				  ,"SELECT COUNT(*) FROM claim WHERE PriorDate='0000-00-00'"
+				  ,"SELECT COUNT(*) FROM claim WHERE AccidentDate='0000-00-00'"
+				  ,"SELECT COUNT(*) FROM claim WHERE OrthoDate='0000-00-00'"
+				  ,"SELECT COUNT(*) FROM claimpayment WHERE CheckDate='0000-00-00'"
+				  ,"SELECT COUNT(*) FROM claimproc WHERE DateCP='0000-00-00'"
+				  ,"SELECT COUNT(*) FROM claimproc WHERE ProcDate='0000-00-00'"
+				  ,"SELECT COUNT(*) FROM insplan WHERE DateEffective='0000-00-00'"
+				  ,"SELECT COUNT(*) FROM insplan WHERE DateTerm='0000-00-00'"
+				  ,"SELECT COUNT(*) FROM patient WHERE Birthdate='0000-00-00'"
+				  ,"SELECT COUNT(*) FROM patient WHERE DateFirstVisit='0000-00-00'"
+				  ,"SELECT COUNT(*) FROM procedurelog WHERE ProcDate LIKE '0000-00-00%'"
+				  ,"SELECT COUNT(*) FROM procedurelog WHERE DateOriginalProsth='0000-00-00'"
+				  ,"SELECT COUNT(*) FROM procedurelog WHERE DateEntryC='0000-00-00'"
+				  ,"SELECT COUNT(*) FROM procedurelog WHERE DateTP='0000-00-00'"
+				  ,"SELECT COUNT(*) FROM recall WHERE DateDueCalc='0000-00-00'"
+				  ,"SELECT COUNT(*) FROM recall WHERE DateDue='0000-00-00'"
+				  ,"SELECT COUNT(*) FROM recall WHERE DatePrevious='0000-00-00'"
+				  ,"SELECT COUNT(*) FROM recall WHERE DisableUntilDate='0000-00-00'"
+				  ,"SELECT COUNT(*) FROM schedule WHERE SchedDate='0000-00-00'"
+				  ,"SELECT COUNT(*) FROM signal WHERE DateViewing='0000-00-00'"
+				  ,"SELECT COUNT(*) FROM signal WHERE SigDateTime LIKE '0000-00-00%'"
+				  ,"SELECT COUNT(*) FROM signal WHERE AckTime LIKE '0000-00-00%'"
+				};
+				int numInvalidDates=0;
+				for(int i=0;i<commands.Length;i++) {
+					numInvalidDates+=PIn.Int(Db.GetTable(commands[i]).Rows[0][0].ToString());
+				}
+				if(numInvalidDates>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Dates found invalid:")+" "+numInvalidDates+"\r\n";
+				}
 			}
 			else{
 				//string[] commands=new string[]
@@ -160,7 +205,7 @@ namespace OpenDentBusiness {
 			command=@"SELECT AptNum FROM appointment WHERE Pattern=''";
 			table=Db.GetTable(command);
 			if(isCheck){
-				if(verbose || table.Rows.Count>0){
+				if(table.Rows.Count>0 || verbose){
 					log+=Lans.g("FormDatabaseMaintenance","Appointments found with zero length: ")+table.Rows.Count.ToString()+"\r\n";
 				}
 			}
@@ -211,7 +256,7 @@ namespace OpenDentBusiness {
 			command="SELECT Count(*) FROM appointment WHERE PatNum NOT IN(SELECT PatNum FROM patient)";
 			int numberFixed=PIn.Int(Db.GetCount(command));
 			if(isCheck){
-				if(verbose || table.Rows.Count>0){
+				if(table.Rows.Count>0 || verbose){
 					log+=Lans.g("FormDatabaseMaintenance","Appointments found abandoned: ")+numberFixed.ToString()+"\r\n";
 				}
 			}
@@ -290,7 +335,7 @@ namespace OpenDentBusiness {
 				WHERE insplan.PlanNum IS NULL";
 			table=Db.GetTable(command);
 			if(isCheck){
-				if(verbose || table.Rows.Count>0){
+				if(table.Rows.Count>0 || verbose){
 					log+=Lans.g("FormDatabaseMaintenance","Claims found with invalid PlanNum: ")+table.Rows.Count.ToString()+"\r\n";
 				}
 			}
@@ -347,7 +392,7 @@ namespace OpenDentBusiness {
 				OR sumwo-claim.WriteOff < -.01";
 			table=Db.GetTable(command);
 			if(isCheck){
-				if(verbose || table.Rows.Count>0){
+				if(table.Rows.Count>0 || verbose){
 					log+=Lans.g("FormDatabaseMaintenance","Claim writeoff sums found incorrect: ")+table.Rows.Count.ToString()+"\r\n";
 				}
 			}
@@ -379,8 +424,8 @@ namespace OpenDentBusiness {
 					HAVING _sumpay!=_checkamt";
 			table=Db.GetTable(command);
 			//int numberFixed=0;
-			if(verbose || isCheck){
-				if(table.Rows.Count>0){
+			if(isCheck){
+				if(table.Rows.Count>0 || verbose){
 					log+=Lans.g("FormDatabaseMaintenance","Claim payment sums found incorrect: ")+table.Rows.Count.ToString()+"\r\n";
 				}
 			}
@@ -403,7 +448,9 @@ namespace OpenDentBusiness {
 				HAVING ROUND(_sum,2) != ROUND(deposit.Amount,2)";
 			table=Db.GetTable(command);
 			if(isCheck){
-				log+=Lans.g("FormDatabaseMaintenance","Deposit sums found incorrect: ")+table.Rows.Count.ToString()+"\r\n";
+				if(table.Rows.Count>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Deposit sums found incorrect: ")+table.Rows.Count.ToString()+"\r\n";
+				}
 			}
 			else{
 				//for(int i=0;i<table.Rows.Count;i++) {
@@ -473,7 +520,7 @@ namespace OpenDentBusiness {
 				+"AND claimproc.DateCP!=claimpayment.CheckDate";
 			table=Db.GetTable(command);
 			if(isCheck){
-				if(verbose || table.Rows.Count>0){
+				if(table.Rows.Count>0 || verbose){
 					log+=Lans.g("FormDatabaseMaintenance","Claim payments with mismatched dates found: ")+table.Rows.Count.ToString()+"\r\n";
 				}
 			}
@@ -522,7 +569,7 @@ namespace OpenDentBusiness {
 				WHERE insplan.PlanNum IS NULL";
 			table=Db.GetTable(command);
 			if(isCheck){
-				if(verbose || table.Rows.Count>0){
+				if(table.Rows.Count>0 || verbose){
 					log+=Lans.g("FormDatabaseMaintenance","ClaimProcs found with invalid PlanNum: ")+table.Rows.Count.ToString()+"\r\n";
 				}
 			}
@@ -629,7 +676,7 @@ namespace OpenDentBusiness {
 				AND claimproc.Status!=2";
 			table=Db.GetTable(command);
 			if(isCheck){
-				if(verbose || table.Rows.Count>0){
+				if(table.Rows.Count>0 || verbose){
 					log+=Lans.g("FormDatabaseMaintenance","ClaimProcs for preauths with status not preauth fixed: ")+table.Rows.Count.ToString()+"\r\n";
 				}
 			}
@@ -735,7 +782,7 @@ namespace OpenDentBusiness {
 			command="SELECT DocNum FROM document WHERE DocCategory=0";
 			table=Db.GetTable(command);
 			if(isCheck){
-				if(verbose || table.Rows.Count>0){
+				if(table.Rows.Count>0 || verbose){
 					log+=Lans.g("FormDatabaseMaintenance","Images with no category found: ")+table.Rows.Count.ToString()+"\r\n";
 				}
 			}
@@ -762,7 +809,7 @@ namespace OpenDentBusiness {
 			command="SELECT PlanNum FROM insplan WHERE CarrierNum=0";
 			table=Db.GetTable(command);
 			if(isCheck){
-				if(verbose || table.Rows.Count>0){
+				if(table.Rows.Count>0 || verbose){
 					log+=Lans.g("FormDatabaseMaintenance","Ins plans with carrier missing found: ")+table.Rows.Count.ToString()+"\r\n";
 				}
 			}
@@ -840,7 +887,7 @@ namespace OpenDentBusiness {
 				WHERE p.PatNum=t.PatNum";
 			table=Db.GetTable(command);
 			if(isCheck) {
-				if(verbose || table.Rows.Count>0) {
+				if(table.Rows.Count>0 || verbose) {
 					log+=Lans.g("FormDatabaseMaintenance","Patient Field duplicate entries found: ")+table.Rows.Count.ToString()+".\r\n";
 				}
 			}
@@ -882,7 +929,7 @@ namespace OpenDentBusiness {
 			command="SELECT p.PatNum FROM patient p LEFT JOIN patient p2 ON p.Guarantor = p2.PatNum WHERE p2.PatNum IS NULL";
 			table=Db.GetTable(command);
 			if(isCheck) {
-				if(verbose || table.Rows.Count>0) {
+				if(table.Rows.Count>0 || verbose) {
 					log+=Lans.g("FormDatabaseMaintenance","Patients with invalid Guarantors found: ")+table.Rows.Count.ToString()+"\r\n";
 				}
 			}
@@ -928,7 +975,7 @@ namespace OpenDentBusiness {
 				+"AND (Bal_0_30 !=0	OR Bal_31_60 !=0 OR Bal_61_90 !=0	OR BalOver90 !=0 OR InsEst !=0 OR BalTotal !=0)";
 			table=Db.GetTable(command);
 			if(isCheck) {
-				if(verbose || table.Rows.Count>0) {
+				if(table.Rows.Count>0 || verbose) {
 					log+=Lans.g("FormDatabaseMaintenance","Patients found who are marked deleted with non-zero balances: ")+table.Rows.Count;
 				}
 			}
@@ -961,7 +1008,7 @@ namespace OpenDentBusiness {
 				+"SELECT * FROM patplan patplan2 WHERE patplan1.PatNum=patplan2.PatNum AND patplan2.Ordinal=1)";
 			table=Db.GetTable(command);
 			if(isCheck) {
-				if(verbose || table.Rows.Count>0) {
+				if(table.Rows.Count>0 || verbose) {
 					log+=Lans.g("FormDatabaseMaintenance","PatPlans for secondary found where no primary ins: ")+table.Rows.Count.ToString()+"\r\n";
 				}
 			}
@@ -1078,7 +1125,7 @@ namespace OpenDentBusiness {
 				+"AND paysplit.PatNum!=payplan.Guarantor";
 			DataTable table=Db.GetTable(command);
 			if(isCheck) {
-				if(verbose || table.Rows.Count>0) {
+				if(table.Rows.Count>0 || verbose) {
 					log+=Lans.g("FormDatabaseMaintenance","Paysplits found with patnum not matching payplan guarantor: ")+table.Rows.Count.ToString()+"\r\n";
 				}
 			}
@@ -1265,23 +1312,28 @@ namespace OpenDentBusiness {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
 			string log="";
-			////procedurelog.BaseUnits must match procedurecode.BaseUnits because there is no UI for procs.
-			////For speed, we will use two different strategies
-			//command="SELECT COUNT(*) FROM procedurecode WHERE BaseUnits != 0";
-			//if(Db.GetCount(command)=="0") {
-			//	command="UPDATE procedurelog SET BaseUnits=0 WHERE BaseUnits!=0";
-			//}
-			//else {
-			//	command=@"UPDATE procedurelog
-			//		SET baseunits =  (SELECT procedurecode.BaseUnits FROM procedurecode
-			//		WHERE procedurecode.CodeNum=procedurelog.CodeNum)
-			//		WHERE baseunits != (SELECT procedurecode.BaseUnits FROM procedurecode
-			//		WHERE procedurecode.CodeNum=procedurelog.CodeNum)";
-			//}
-			//int numberFixed=Db.NonQ32(command);
-			//if(numberFixed>0 || verbose) {
-			//	log+=Lans.g("FormDatabaseMaintenance","Procedure BaseUnits set to match procedurecode BaseUnits: ")+numberFixed.ToString()+"\r\n";
-			//}
+			if(isCheck) {
+				//No check implemented.
+			}
+			else {
+				////procedurelog.BaseUnits must match procedurecode.BaseUnits because there is no UI for procs.
+				////For speed, we will use two different strategies
+				//command="SELECT COUNT(*) FROM procedurecode WHERE BaseUnits != 0";
+				//if(Db.GetCount(command)=="0") {
+				//	command="UPDATE procedurelog SET BaseUnits=0 WHERE BaseUnits!=0";
+				//}
+				//else {
+				//	command=@"UPDATE procedurelog
+				//		SET baseunits =  (SELECT procedurecode.BaseUnits FROM procedurecode
+				//		WHERE procedurecode.CodeNum=procedurelog.CodeNum)
+				//		WHERE baseunits != (SELECT procedurecode.BaseUnits FROM procedurecode
+				//		WHERE procedurecode.CodeNum=procedurelog.CodeNum)";
+				//}
+				//int numberFixed=Db.NonQ32(command);
+				//if(numberFixed>0 || verbose) {
+				//	log+=Lans.g("FormDatabaseMaintenance","Procedure BaseUnits set to match procedurecode BaseUnits: ")+numberFixed.ToString()+"\r\n";
+				//}
+			}
 			return log;
 		}
 
@@ -1326,42 +1378,46 @@ namespace OpenDentBusiness {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
 			string log="";
-			//Patient Lim=null;
-			//string toothNum;
-			//int numberFixed=0;
-			//command="SELECT procnum,toothnum,patnum FROM procedurelog";
-			//table=Db.GetTable(command);
-			//for(int i=0;i<table.Rows.Count;i++) {
-			//  toothNum=table.Rows[i][1].ToString();
-			//  if(toothNum=="")
-			//    continue;
-			//  if(Tooth.IsValidDB(toothNum)) {
-			//    continue;
-			//  }
-			//  if(verbose) {
-			//    Lim=Patients.GetLim(Convert.ToInt32(table.Rows[i][2].ToString()));
-			//  }
-			//  if(string.CompareOrdinal(toothNum,"a")>=0 && string.CompareOrdinal(toothNum,"t")<=0) {
-			//    command="UPDATE procedurelog SET ToothNum = '"+toothNum.ToUpper()+"' WHERE ProcNum = "+table.Rows[i][0].ToString();
-			//    Db.NonQ(command);
-			//    if(verbose) {
-			//      log+=Lim.GetNameLF()+" "+toothNum+" - "+toothNum.ToUpper()+"\r\n";
-			//    }
-			//    numberFixed++;
-			//  }
-			//  else {
-			//    command="UPDATE procedurelog SET ToothNum = '1' WHERE ProcNum = "+table.Rows[i][0].ToString();
-			//    Db.NonQ(command);
-			//    if(verbose) {
-			//      log+=Lim.GetNameLF()+" "+toothNum+" - 1\r\n";
-			//    }
-			//    numberFixed++;
-			//  }
-			//}
-			//if(numberFixed!=0 || verbose) {
-			//  log+=Lans.g("FormDatabaseMaintenance","Check for invalid tooth numbers complete.  Records checked: ")
-			//    +table.Rows.Count.ToString()+". "+Lans.g("FormDatabaseMaintenance","Records fixed: ")+numberFixed.ToString()+"\r\n";
-			//}
+			command="SELECT procnum,toothnum,patnum FROM procedurelog";
+			table=Db.GetTable(command);
+			Patient Lim=null;
+			string toothNum;
+			int numberFixed=0;
+			for(int i=0;i<table.Rows.Count;i++) {
+				toothNum=table.Rows[i][1].ToString();
+				if(toothNum=="")
+					continue;
+				if(Tooth.IsValidDB(toothNum)) {
+					continue;
+				}
+				if(verbose) {
+					Lim=Patients.GetLim(Convert.ToInt32(table.Rows[i][2].ToString()));
+				}
+				if(string.CompareOrdinal(toothNum,"a")>=0 && string.CompareOrdinal(toothNum,"t")<=0) {
+					if(!isCheck) {
+						//command="UPDATE procedurelog SET ToothNum = '"+toothNum.ToUpper()+"' WHERE ProcNum = "+table.Rows[i][0].ToString();
+						//Db.NonQ(command);
+					}
+					if(verbose) {
+						log+=Lim.GetNameLF()+" "+toothNum+" - "+toothNum.ToUpper()+"\r\n";
+					}
+					numberFixed++;
+				}
+				else {
+					if(!isCheck) {
+						//command="UPDATE procedurelog SET ToothNum = '1' WHERE ProcNum = "+table.Rows[i][0].ToString();
+						//Db.NonQ(command);
+					}
+					if(verbose) {
+						log+=Lim.GetNameLF()+" "+toothNum+" - 1\r\n";
+					}
+					numberFixed++;
+				}
+			}
+			if(numberFixed!=0 || verbose) {
+				log+=Lans.g("FormDatabaseMaintenance","Check for invalid tooth numbers complete.  Records checked: ")
+					+table.Rows.Count.ToString()+". "+Lans.g("FormDatabaseMaintenance","Records invalid: ")+numberFixed.ToString()+"\r\n";
+			}
 			return log;
 		}
 
@@ -1378,7 +1434,7 @@ namespace OpenDentBusiness {
 					+"AND (claim.ClaimType='P' OR claim.ClaimType='S' OR claim.ClaimType='Other')";//pri, sec, or other.  Eliminates preauths.
 			table=Db.GetTable(command);
 			if(isCheck) {
-				if(verbose || table.Rows.Count>0) {
+				if(table.Rows.Count>0 || verbose) {
 					log+=Lans.g("FormDatabaseMaintenance","Procedures attached to claims, but with status of TP: ")+table.Rows.Count+"\r\n";
 				}
 			}
@@ -1421,28 +1477,32 @@ namespace OpenDentBusiness {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
 			string log="";
-			//command=@"SELECT MAX(claimproc.ProcDate),provider.ProvNum
-			//	FROM claimproc,provider
-			//	WHERE claimproc.ProvNum=provider.ProvNum
-			//	AND provider.IsHidden=1
-			//	AND claimproc.InsPayAmt>0
-			//	GROUP BY provider.ProvNum";
-			//table=Db.GetTable(command);
-			//if(table.Rows.Count==0) {
-			//  if(verbose) {
-			//    log+=Lans.g("FormDatabaseMaintenance","Hidden providers checked for claim payments.")+"\r\n";
-			//  }
-			//}
-			//else {
-			//  Provider prov;
-			//  for(int i=0;i<table.Rows.Count;i++) {
-			//    prov=Providers.GetProv(PIn.Long(table.Rows[i][1].ToString()));
-			//    log+=Lans.g("FormDatabaseMaintenance","Warning!  Hidden provider ")+" "+prov.Abbr+" "
-			//      +Lans.g("FormDatabaseMaintenance","has claim payments entered as recently as ")
-			//      +PIn.Date(table.Rows[i][0].ToString()).ToShortDateString()
-			//      +Lans.g("FormDatabaseMaintenance",".  This data will be missing on income reports.")+"\r\n";
-			//  }
-			//}
+			command=@"SELECT MAX(claimproc.ProcDate),provider.ProvNum
+				FROM claimproc,provider
+				WHERE claimproc.ProvNum=provider.ProvNum
+				AND provider.IsHidden=1
+				AND claimproc.InsPayAmt>0
+				GROUP BY provider.ProvNum";
+			table=Db.GetTable(command);
+			if(table.Rows.Count==0) {
+			  if(verbose) {
+			    log+=Lans.g("FormDatabaseMaintenance","Hidden providers checked for claim payments.")+"\r\n";
+			  }
+				return log;
+			}
+			if(isCheck) {
+				Provider prov;
+				for(int i=0;i<table.Rows.Count;i++) {
+					prov=Providers.GetProv(PIn.Long(table.Rows[i][1].ToString()));
+					log+=Lans.g("FormDatabaseMaintenance","Warning!  Hidden provider ")+" "+prov.Abbr+" "
+						+Lans.g("FormDatabaseMaintenance","has claim payments entered as recently as ")
+						+PIn.Date(table.Rows[i][0].ToString()).ToShortDateString()
+						+Lans.g("FormDatabaseMaintenance",".  This data will be missing on income reports.")+"\r\n";
+				}
+			}
+			else {
+				//No fix implemented.
+			}
 			return log;
 		}
 
@@ -1451,33 +1511,38 @@ namespace OpenDentBusiness {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
 			string log="";
-			//if(RecallTypes.PerioType<1 || RecallTypes.ProphyType<1) {
-			//  log+=Lans.g("FormDatabaseMaintenance","Warning!  Recall types not set up properly.")+"\r\n";
-			//  return log;
-			//}
-			//command="SELECT FName,LName,COUNT(*) countDups FROM patient LEFT JOIN recall ON recall.PatNum=patient.PatNum "
-			//  +"AND (recall.RecallTypeNum="+POut.Long(RecallTypes.PerioType)+" "
-			//  +"OR recall.RecallTypeNum="+POut.Long(RecallTypes.ProphyType)+") "
-			//  +"GROUP BY patient.PatNum HAVING countDups>1";
-			//table=Db.GetTable(command);
-			//if(table.Rows.Count==0) {
-			//  if(verbose) {
-			//    log+=Lans.g("FormDatabaseMaintenance","Recalls checked for duplicates.")+"\r\n";
-			//  }
-			//  return log;
-			//}
-			//string patNames="";
-			//for(int i=0;i<table.Rows.Count;i++) {
-			//  if(i>15) {
-			//    break;
-			//  }
-			//  if(i>0) {
-			//    patNames+=", ";
-			//  }
-			//  patNames+=table.Rows[i][0].ToString()+" "+table.Rows[i][1].ToString();
-			//}
-			//log+=Lans.g("FormDatabaseMaintenance","Warning!  Number of patients with duplicate recalls: ")+table.Rows.Count.ToString()+".  "
-			//  +Lans.g("FormDatabaseMaintenance","including: ")+patNames+"\r\n";
+			if(RecallTypes.PerioType<1 || RecallTypes.ProphyType<1) {
+			  log+=Lans.g("FormDatabaseMaintenance","Warning!  Recall types not set up properly.")+"\r\n";
+			  return log;
+			}
+			command="SELECT FName,LName,COUNT(*) countDups FROM patient LEFT JOIN recall ON recall.PatNum=patient.PatNum "
+			  +"AND (recall.RecallTypeNum="+POut.Long(RecallTypes.PerioType)+" "
+			  +"OR recall.RecallTypeNum="+POut.Long(RecallTypes.ProphyType)+") "
+			  +"GROUP BY patient.PatNum HAVING countDups>1";
+			table=Db.GetTable(command);
+			if(table.Rows.Count==0) {
+				if(verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Recalls checked for duplicates.")+"\r\n";
+				}
+				return log;
+			}
+			if(isCheck) {
+				string patNames="";
+				for(int i=0;i<table.Rows.Count;i++) {
+					if(i>15) {
+						break;
+					}
+					if(i>0) {
+						patNames+=", ";
+					}
+					patNames+=table.Rows[i][0].ToString()+" "+table.Rows[i][1].ToString();
+				}
+				log+=Lans.g("FormDatabaseMaintenance","Warning!  Number of patients with duplicate recalls: ")+table.Rows.Count.ToString()+".  "
+					+Lans.g("FormDatabaseMaintenance","including: ")+patNames+"\r\n";
+			}
+			else {
+				//No fix implemented.
+			}
 			return log;
 		}
 
@@ -1486,38 +1551,48 @@ namespace OpenDentBusiness {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
 			string log="";
-			//command=@"DELETE FROM recalltrigger
-			//	WHERE NOT EXISTS (SELECT * FROM procedurecode WHERE procedurecode.CodeNum=recalltrigger.CodeNum)";
-			//int numberFixed=Db.NonQ32(command);
-			//if(numberFixed>0) {
-			//  Signals.SetInvalid(InvalidType.RecallTypes);
-			//}
-			//if(numberFixed>0 || verbose) {
-			//  log+=Lans.g("FormDatabaseMaintenance","Recall triggers deleted due to bad codenum: ")+numberFixed.ToString()+"\r\n";
-			//}
+			if(isCheck) {
+				//No check implemented.
+			}
+			else {
+				//command=@"DELETE FROM recalltrigger
+				//	WHERE NOT EXISTS (SELECT * FROM procedurecode WHERE procedurecode.CodeNum=recalltrigger.CodeNum)";
+				//int numberFixed=Db.NonQ32(command);
+				//if(numberFixed>0) {
+				//  Signals.SetInvalid(InvalidType.RecallTypes);
+				//}
+				//if(numberFixed>0 || verbose) {
+				//  log+=Lans.g("FormDatabaseMaintenance","Recall triggers deleted due to bad codenum: ")+numberFixed.ToString()+"\r\n";
+				//}
+			}
 			return log;
 		}
 
 		public static string SchedulesDeleteShort(bool verbose,bool isCheck) {
 			//No need to check RemotingRole; no call to db.
 			string log="";
-			//int numberFixed=0;
-			//Schedule[] schedList=Schedules.RefreshAll();
-			//for(int i=0;i<schedList.Length;i++) {
-			//  if(schedList[i].Status!=SchedStatus.Open) {
-			//    continue;//closed and holiday statuses do not use starttime and stoptime
-			//  }
-			//  if(schedList[i].StopTime.TimeOfDay-schedList[i].StartTime.TimeOfDay<new TimeSpan(0,5,0)) {//Schedule items less than five minutes won't show up. Remove them.
-			//    //But we don't want to remove provider notes, employee notes, or pratice notes.
-			//    if(schedList[i].Note==""){
-			//      Schedules.Delete(schedList[i]);
-			//      numberFixed++;
-			//    }
-			//  }
-			//}
-			//if(numberFixed>0 || verbose) {
-			//  log+=Lans.g("FormDatabaseMaintenance","Schedule blocks fixed: ")+numberFixed.ToString()+"\r\n";
-			//}
+			if(isCheck) {
+				//No check implemented.
+			}
+			else {
+				//int numberFixed=0;
+				//Schedule[] schedList=Schedules.RefreshAll();
+				//for(int i=0;i<schedList.Length;i++) {
+				//  if(schedList[i].Status!=SchedStatus.Open) {
+				//    continue;//closed and holiday statuses do not use starttime and stoptime
+				//  }
+				//  if(schedList[i].StopTime.TimeOfDay-schedList[i].StartTime.TimeOfDay<new TimeSpan(0,5,0)) {//Schedule items less than five minutes won't show up. Remove them.
+				//    //But we don't want to remove provider notes, employee notes, or pratice notes.
+				//    if(schedList[i].Note==""){
+				//      Schedules.Delete(schedList[i]);
+				//      numberFixed++;
+				//    }
+				//  }
+				//}
+				//if(numberFixed>0 || verbose) {
+				//  log+=Lans.g("FormDatabaseMaintenance","Schedule blocks fixed: ")+numberFixed.ToString()+"\r\n";
+				//}
+			}
 			return log;
 		}
 
@@ -1526,11 +1601,16 @@ namespace OpenDentBusiness {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
 			string log="";
-			//command="DELETE FROM schedule WHERE SchedType=1 AND Status=1";//type=prov,status=closed
-			//int numberFixed=Db.NonQ32(command);
-			//if(numberFixed>0||verbose) {
-			//  log+=Lans.g("FormDatabaseMaintenance","Schedules deleted that were causing printing issues: ")+numberFixed.ToString()+"\r\n";
-			//}
+			if(isCheck) {
+				//No check implemented.
+			}
+			else {
+				//command="DELETE FROM schedule WHERE SchedType=1 AND Status=1";//type=prov,status=closed
+				//int numberFixed=Db.NonQ32(command);
+				//if(numberFixed>0||verbose) {
+				//  log+=Lans.g("FormDatabaseMaintenance","Schedules deleted that were causing printing issues: ")+numberFixed.ToString()+"\r\n";
+				//}
+			}
 			return log;
 		}
 
@@ -1539,15 +1619,20 @@ namespace OpenDentBusiness {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
 			string log="";
-			//command=@"DELETE FROM signal WHERE SigDateTime > NOW() OR AckTime > NOW()";
-			//if(DataConnection.DBtype==DatabaseType.Oracle) {
-			//  string nowDateTime=POut.DateT(MiscData.GetNowDateTime());
-			//  command=@"DELETE FROM signal WHERE SigDateTime > "+nowDateTime+" OR AckTime > "+nowDateTime;
-			//}
-			//int numberFixed=Db.NonQ32(command);
-			//if(numberFixed>0 || verbose) {
-			//  log+=Lans.g("FormDatabaseMaintenance","Signal entries deleted: ")+numberFixed.ToString()+"\r\n";
-			//}
+			if(isCheck) {
+				//No check implemented.
+			}
+			else {
+				//command=@"DELETE FROM signal WHERE SigDateTime > NOW() OR AckTime > NOW()";
+				//if(DataConnection.DBtype==DatabaseType.Oracle) {
+				//  string nowDateTime=POut.DateT(MiscData.GetNowDateTime());
+				//  command=@"DELETE FROM signal WHERE SigDateTime > "+nowDateTime+" OR AckTime > "+nowDateTime;
+				//}
+				//int numberFixed=Db.NonQ32(command);
+				//if(numberFixed>0 || verbose) {
+				//  log+=Lans.g("FormDatabaseMaintenance","Signal entries deleted: ")+numberFixed.ToString()+"\r\n";
+				//}
+			}
 			return log;
 		}
 
@@ -1556,11 +1641,16 @@ namespace OpenDentBusiness {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
 			string log="";
-			//command="UPDATE statement SET DateRangeTo='2200-01-01' WHERE DateRangeTo='9999-12-31'";
-			//int numberFixed=Db.NonQ32(command);
-			//if(numberFixed>0 || verbose) {
-			//  log+=Lans.g("FormDatabaseMaintenance","Statement DateRangeTo max fixed: ")+numberFixed.ToString()+"\r\n";
-			//}
+			if(isCheck) {
+				//No check implemented.
+			}
+			else {
+				//command="UPDATE statement SET DateRangeTo='2200-01-01' WHERE DateRangeTo='9999-12-31'";
+				//int numberFixed=Db.NonQ32(command);
+				//if(numberFixed>0 || verbose) {
+				//  log+=Lans.g("FormDatabaseMaintenance","Statement DateRangeTo max fixed: ")+numberFixed.ToString()+"\r\n";
+				//}
+			}
 			return log;
 		}
 
@@ -1699,16 +1789,16 @@ HAVING cnt>1";
 			return retVal;
 		}
 
-		public static bool DatabaseIsOlderThanMarchSeventeenth(string olddb){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetBool(MethodBase.GetCurrentMethod(),olddb);
-			}
-			command="SELECT COUNT(*) FROM "+olddb+".claimproc WHERE DateEntry > '2010-03-16'";
-			if(Db.GetCount(command)=="0"){
-				return true;
-			}
-			return false;
-		}
+		//public static bool DatabaseIsOlderThanMarchSeventeenth(string olddb){
+		//  if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+		//    return Meth.GetBool(MethodBase.GetCurrentMethod(),olddb);
+		//  }
+		//  command="SELECT COUNT(*) FROM "+olddb+".claimproc WHERE DateEntry > '2010-03-16'";
+		//  if(Db.GetCount(command)=="0"){
+		//    return true;
+		//  }
+		//  return false;
+		//}
 
 		/// <summary></summary>
 		public static string FixClaimProcDeleteDuplicates() {
