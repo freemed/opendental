@@ -1217,6 +1217,107 @@ namespace OpenDentBusiness{
 			return PIn.String(table.Rows[0][1].ToString()) + ", "+ PIn.String(table.Rows[0][0].ToString()) + " is Eligible";
 		}
 
+		///<summary>Gets the DataTable to display for treatment finder report</summary>
+		public static DataTable GetTreatmentFinderList(bool noIns) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),noIns);
+			}
+			DataTable table=new DataTable();
+			DataRow row;
+			//columns that start with lowercase are altered for display rather than being raw data.
+			table.Columns.Add("LName");
+			table.Columns.Add("FName");
+			table.Columns.Add("annualMax");
+			table.Columns.Add("amountUsed");
+			table.Columns.Add("amountRemaining");
+			table.Columns.Add("treatmentPlan");
+			List<DataRow> rows=new List<DataRow>();
+			string command=@"
+				DROP TABLE IF EXISTS tempused;
+				DROP TABLE IF EXISTS tempplanned;
+				DROP TABLE IF EXISTS tempannualmax;
+
+				CREATE TABLE tempused(
+				PatPlanNum bigint unsigned NOT NULL,
+				AmtUsed double NOT NULL,
+				PRIMARY KEY (PatPlanNum));
+
+				CREATE TABLE tempplanned(
+				PatNum bigint unsigned NOT NULL,
+				AmtPlanned double NOT NULL,
+				PRIMARY KEY (PatNum));
+
+				CREATE TABLE tempannualmax(
+				PlanNum bigint unsigned NOT NULL,
+				AnnualMax double NOT NULL,
+				PRIMARY KEY (PlanNum));
+
+				INSERT INTO tempused
+				SELECT patplan.PatPlanNum,
+				SUM(IFNULL(claimproc.InsPayAmt,0))
+				FROM claimproc
+				LEFT JOIN patplan ON patplan.PatNum = claimproc.PatNum
+				AND patplan.PlanNum = claimproc.PlanNum
+				WHERE claimproc.Status IN (1, 3, 4)
+				AND claimproc.ProcDate BETWEEN makedate(year(curdate()), 1)
+				AND makedate(year(curdate())+1, 1) /*current calendar year*/
+				GROUP BY patplan.PatPlanNum;
+
+				INSERT INTO tempplanned
+				SELECT PatNum, SUM(ProcFee)
+				FROM procedurelog
+				WHERE ProcStatus = 1 /*treatment planned*/
+				GROUP BY PatNum;
+
+				INSERT INTO tempannualmax
+				SELECT benefit.PlanNum, benefit.MonetaryAmt
+				FROM benefit, covcat
+				WHERE covcat.CovCatNum = benefit.CovCatNum
+				AND benefit.BenefitType = 5 /* limitation */
+				AND (covcat.EbenefitCat=1 OR ISNULL(covcat.EbenefitCat))
+				AND benefit.MonetaryAmt <> 0
+				GROUP BY benefit.PlanNum
+				ORDER BY benefit.PlanNum;
+
+				SELECT patient.LName, patient.FName,
+				tempannualmax.AnnualMax $AnnualMax,
+				tempused.AmtUsed $AmountUsed,
+				tempannualmax.AnnualMax-IFNULL(tempused.AmtUsed,0) $AmtRemaining,
+				tempplanned.AmtPlanned $TreatmentPlan
+				FROM patient
+				LEFT JOIN tempplanned ON tempplanned.PatNum=patient.PatNum
+				LEFT JOIN patplan ON patient.PatNum=patplan.PatNum
+				LEFT JOIN tempused ON tempused.PatPlanNum=patplan.PatPlanNum
+				LEFT JOIN tempannualmax ON tempannualmax.PlanNum=patplan.PlanNum
+					AND tempannualmax.AnnualMax>0
+					/*AND tempannualmax.AnnualMax-tempused.AmtUsed>0*/
+				WHERE tempplanned.AmtPlanned>0 ";
+			if(!noIns) {//if we don't want patients without insurance
+				command+="AND AnnualMax > 0 ";
+			}
+			command+=@"
+				AND patient.PatStatus =0
+				ORDER BY tempplanned.AmtPlanned DESC;
+				DROP TABLE tempused;
+				DROP TABLE tempplanned;
+				DROP TABLE tempannualmax;";
+			DataTable rawtable=Db.GetTable(command);
+			for(int i=0;i<rawtable.Rows.Count;i++) {
+				row=table.NewRow();
+				row["LName"]=rawtable.Rows[i]["LName"].ToString();
+				row["FName"]=rawtable.Rows[i]["FName"].ToString();
+				row["annualMax"]=(PIn.Double(rawtable.Rows[i]["$AnnualMax"].ToString())).ToString("N");
+				row["amountUsed"]=(PIn.Double(rawtable.Rows[i]["$AmountUsed"].ToString())).ToString("N");
+				row["amountRemaining"]=(PIn.Double(rawtable.Rows[i]["$AmtRemaining"].ToString())).ToString("N");
+				row["treatmentPlan"]=(PIn.Double(rawtable.Rows[i]["$TreatmentPlan"].ToString())).ToString("N");
+				rows.Add(row);
+			}
+			for(int i=0;i<rows.Count;i++) {
+				table.Rows.Add(rows[i]);
+			}
+			return table;
+		}
+
 		///<summary>Only a partial folderName will be sent in.  Not the .rvg part.</summary>
 		public static bool IsTrophyFolderInUse(string folderName) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
@@ -1499,82 +1600,7 @@ namespace OpenDentBusiness{
 
 
 
-		//Placing code here while under construction. Will move to better place after finished -Jason
-		public static DataTable GetTreatmentFinderList(bool noIns) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetTable(MethodBase.GetCurrentMethod(),noIns);
-			}
-			string command=@"
-				DROP TABLE IF EXISTS tempused;
-				DROP TABLE IF EXISTS tempplanned;
-				DROP TABLE IF EXISTS tempannualmax;
-
-				CREATE TABLE tempused(
-				PatPlanNum bigint unsigned NOT NULL,
-				AmtUsed double NOT NULL,
-				PRIMARY KEY (PatPlanNum));
-
-				CREATE TABLE tempplanned(
-				PatNum bigint unsigned NOT NULL,
-				AmtPlanned double NOT NULL,
-				PRIMARY KEY (PatNum));
-
-				CREATE TABLE tempannualmax(
-				PlanNum bigint unsigned NOT NULL,
-				AnnualMax double NOT NULL,
-				PRIMARY KEY (PlanNum));
-
-				INSERT INTO tempused
-				SELECT patplan.PatPlanNum,
-				SUM(IFNULL(claimproc.InsPayAmt,0))
-				FROM claimproc
-				LEFT JOIN patplan ON patplan.PatNum = claimproc.PatNum
-				AND patplan.PlanNum = claimproc.PlanNum
-				WHERE claimproc.Status IN (1, 3, 4)
-				AND claimproc.ProcDate BETWEEN makedate(year(curdate()), 1)
-				AND makedate(year(curdate())+1, 1) /*current calendar year*/
-				GROUP BY patplan.PatPlanNum;
-
-				INSERT INTO tempplanned
-				SELECT PatNum, SUM(ProcFee)
-				FROM procedurelog
-				WHERE ProcStatus = 1 /*treatment planned*/
-				GROUP BY PatNum;
-
-				INSERT INTO tempannualmax
-				SELECT benefit.PlanNum, benefit.MonetaryAmt
-				FROM benefit, covcat
-				WHERE covcat.CovCatNum = benefit.CovCatNum
-				AND benefit.BenefitType = 5 /* limitation */
-				AND (covcat.EbenefitCat=1 OR ISNULL(covcat.EbenefitCat))
-				AND benefit.MonetaryAmt <> 0
-				GROUP BY benefit.PlanNum
-				ORDER BY benefit.PlanNum;
-
-				SELECT patient.LName, patient.FName,
-				tempannualmax.AnnualMax $AnnualMax,
-				tempused.AmtUsed $AmountUsed,
-				tempannualmax.AnnualMax-IFNULL(tempused.AmtUsed,0) $AmtRemaining,
-				tempplanned.AmtPlanned $TreatmentPlan
-				FROM patient
-				LEFT JOIN tempplanned ON tempplanned.PatNum=patient.PatNum
-				LEFT JOIN patplan ON patient.PatNum=patplan.PatNum
-				LEFT JOIN tempused ON tempused.PatPlanNum=patplan.PatPlanNum
-				LEFT JOIN tempannualmax ON tempannualmax.PlanNum=patplan.PlanNum
-					AND tempannualmax.AnnualMax>0
-					/*AND tempannualmax.AnnualMax-tempused.AmtUsed>0*/
-				WHERE tempplanned.AmtPlanned>0 ";
-			if(!noIns) {//if we don't want patients without insurance
-				command+="AND AnnualMax > 0 ";
-			}
-			command+=@"
-				AND patient.PatStatus =0
-				ORDER BY tempplanned.AmtPlanned DESC;
-				DROP TABLE tempused;
-				DROP TABLE tempplanned;
-				DROP TABLE tempannualmax;";
-			return Db.GetTable(command);
-		}
+		
 
 
 

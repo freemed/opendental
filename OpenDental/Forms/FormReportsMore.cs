@@ -640,7 +640,7 @@ namespace OpenDental {
 					break;
 				case 10://Treatment Finder
 					FormRpTreatmentFinder FormT=new FormRpTreatmentFinder();
-					FormT.ShowDialog();
+					FormT.Show();
 					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Treatment Finder");
 					break;
 				//case 11://Treatment Plan Manager
