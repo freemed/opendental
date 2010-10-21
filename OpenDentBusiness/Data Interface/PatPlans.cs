@@ -7,6 +7,45 @@ using System.Reflection;
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class PatPlans {
+		/*
+		///<summary>Gets one PatPlan from the db.</summary>
+		public static PatPlan GetOne(long patPlanNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
+				return Meth.GetObject<PatPlan>(MethodBase.GetCurrentMethod(),patPlanNum);
+			}
+			return Crud.PatPlanCrud.SelectOne(patPlanNum);
+		}
+
+		///<summary></summary>
+		public static long Insert(PatPlan patPlan){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
+				patPlan.PatPlanNum=Meth.GetLong(MethodBase.GetCurrentMethod(),patPlan);
+				return patPlan.PatPlanNum;
+			}
+			return Crud.PatPlanCrud.Insert(patPlan);
+		}
+
+		///<summary></summary>
+		public static void Update(PatPlan patPlan){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),patPlan);
+				return;
+			}
+			Crud.PatPlanCrud.Update(patPlan);
+		}
+
+		///<summary></summary>
+		public static void Delete(long patPlanNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),patPlanNum);
+				return;
+			}
+			string command= "DELETE FROM patplan WHERE PatPlanNum = "+POut.Long(patPlanNum);
+			Db.NonQ(command);
+		}
+		*/
+
+
 		///<summary>Gets a list of all patplans for a given patient</summary>
 		public static List<PatPlan> Refresh(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
@@ -15,8 +54,7 @@ namespace OpenDentBusiness{
 			string command="SELECT * from patplan"
 				+" WHERE PatNum = "+patNum.ToString()
 				+" ORDER BY Ordinal";
-			DataTable table=Db.GetTable(command);
-			return RefreshAndFill(table);
+			return Crud.PatPlanCrud.SelectMany(command);
 		}
 
 		private static List<PatPlan> RefreshAndFill(DataTable table){
@@ -28,7 +66,7 @@ namespace OpenDentBusiness{
 				patplan.PatPlanNum  = PIn.Long(table.Rows[i][0].ToString());
 				patplan.PatNum      = PIn.Long(table.Rows[i][1].ToString());
 				patplan.PlanNum     = PIn.Long(table.Rows[i][2].ToString());
-				patplan.Ordinal     = PIn.Int(table.Rows[i][3].ToString());
+				patplan.Ordinal     = PIn.Byte(table.Rows[i][3].ToString());
 				patplan.IsPending   = PIn.Bool(table.Rows[i][4].ToString());
 				patplan.Relationship= (Relat)PIn.Long(table.Rows[i][5].ToString());
 				patplan.PatID       = PIn.String(table.Rows[i][6].ToString());

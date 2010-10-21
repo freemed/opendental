@@ -2918,6 +2918,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				//Db.NonQ(command);
 				//todo: implement above lines.
 				//todo: any place that PlanNum is set, set InsSubNum
+				//todo: move payplan, and patplan to crud.
 
 
 

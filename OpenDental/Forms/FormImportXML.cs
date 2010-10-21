@@ -434,7 +434,7 @@ namespace OpenDental{
 			//Then attach plan
 			List <PatPlan> PatPlanList=PatPlans.Refresh(pat.PatNum);
 			PatPlan patplan=new PatPlan();
-			patplan.Ordinal=PatPlanList.Count+1;//so the ordinal of the first entry will be 1, NOT 0.
+			patplan.Ordinal=(byte)(PatPlanList.Count+1);//so the ordinal of the first entry will be 1, NOT 0.
 			patplan.PatNum=pat.PatNum;
 			patplan.PlanNum=plan.PlanNum;
 			switch(insRelat){

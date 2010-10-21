@@ -176,6 +176,8 @@
     <Compile Include="Crud\PatFieldCrud.cs" />
     <Compile Include="Crud\PatFieldDefCrud.cs" />
     <Compile Include="Crud\PatientCrud.cs" />
+    <Compile Include="Crud\PatPlanCrud.cs" />
+    <Compile Include="Crud\PayPlanCrud.cs" />
     <Compile Include="Crud\PharmacyCrud.cs" />
     <Compile Include="Crud\PhoneCrud.cs" />
     <Compile Include="Crud\PhoneNumberCrud.cs" />

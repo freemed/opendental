@@ -2,10 +2,12 @@ using System;
 using System.Collections;
 
 namespace OpenDentBusiness{
-	
+
 	/// <summary>Each row represents one signed agreement to make payments. </summary>
-	public class PayPlan{
+	[Serializable]
+	public class PayPlan:TableBase {
 		/// <summary>Primary key</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long PayPlanNum;
 		/// <summary>FK to patient.PatNum.  The patient who had the treatment done.</summary>
 		public long PatNum;

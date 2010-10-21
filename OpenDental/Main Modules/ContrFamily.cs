@@ -1280,7 +1280,7 @@ namespace OpenDental{
 			}
 			//Then attach plan------------------------------------------------------------------------------------------------
 			PatPlan patplan=new PatPlan();
-			patplan.Ordinal=PatPlanList.Count+1;//so the ordinal of the first entry will be 1, NOT 0.
+			patplan.Ordinal=(byte)(PatPlanList.Count+1);//so the ordinal of the first entry will be 1, NOT 0.
 			patplan.PatNum=PatCur.PatNum;
 			patplan.PlanNum=plan.PlanNum;
 			patplan.Relationship=Relat.Self;
