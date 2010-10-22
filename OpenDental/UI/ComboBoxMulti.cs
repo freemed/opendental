@@ -18,6 +18,7 @@ namespace OpenDental.UI
 		private System.Windows.Forms.TextBox textMain;
 		private System.Windows.Forms.ContextMenu cMenu;
 		private ArrayList selectedIndices;
+		private bool useCommas;
 
 		/// <summary></summary>
 		public ComboBoxMulti()
@@ -113,6 +114,17 @@ namespace OpenDental.UI
 				selectedIndices=value;
 			}
 		}
+
+		///<summary>Use commas instead of OR in the display when muliple selected.</summary>
+		[Category("Appearance"), Description("Use commas instead of OR in the display when muliple selected.")]
+		public bool UseCommas{
+			get{
+				return useCommas;
+			}
+			set{
+				useCommas=value;
+			}
+		}
 		
 		private void ComboBoxMulti_Paint(object sender, System.Windows.Forms.PaintEventArgs e) {
 			e.Graphics.DrawRectangle(new Pen(Color.FromArgb(127,157,185))//blue
@@ -191,10 +203,21 @@ namespace OpenDental.UI
 
 		private void FillText(){
 			textMain.Text="";
-			for(int i=0;i<selectedIndices.Count;i++){
-				if(i>0)
-					textMain.Text+=" OR ";
-				textMain.Text+=items[(int)selectedIndices[i]];
+			if(useCommas) {
+				for(int i=0;i<selectedIndices.Count;i++) {
+					if(i>0) {
+						textMain.Text+=", ";
+					}
+					textMain.Text+=items[(int)selectedIndices[i]];
+				}
+			}
+			else {
+				for(int i=0;i<selectedIndices.Count;i++) {
+					if(i>0) {
+						textMain.Text+=" OR ";
+					}
+					textMain.Text+=items[(int)selectedIndices[i]];
+				}
 			}
 		}
 
