@@ -218,7 +218,8 @@ namespace OpenDentBusiness{
 				+"FROM carrier,patient,claim,insplan "
 				+"WHERE carrier.CarrierNum = insplan.CarrierNum "
 				+"AND claim.PlanNum = insplan.PlanNum "
-				+"AND claim.PatNum = patient.PatNum ";
+				+"AND claim.PatNum = patient.PatNum "
+				+"AND claim.ClaimStatus='S' ";
 			if(dateMin!=DateTime.MinValue) {
 				command+="AND claim.DateSent <= "+POut.Date(dateMin)+" ";
 			}
@@ -235,6 +236,7 @@ namespace OpenDentBusiness{
 					command+=") ";
 				}
 			}
+			command+="ORDER BY carrier.Phone,insplan.PlanNum, carrier.Phone,insplan.PlanNum";
 			DataTable table=Db.GetTable(command);
 			return table;
 		}
