@@ -211,6 +211,34 @@ namespace OpenDentBusiness{
 			return GetQueueList(0,0);
 		}*/
 
+		///<summary>Called from FormRpOutIns. Gets outstanding insurance claims.</summary>
+		public static DataTable GetOutInsClaims(bool isAllProv, List<long> provNumList, DateTime dateMin, DateTime dateMax, isPreAuth){
+			string command;
+			command = "SELECT carrier.CarrierName,patient.HmPhone,claim.ClaimType,patient.FName,patient.LName,claim.DateService,claim.DateSent,claim.ClaimFee "
+				+"FROM carrier,patient,claim,insplan "
+				+"WHERE carrier.CarrierNum = insplan.CarrierNum "
+				+"AND claim.PlanNum = insplan.PlanNum "
+				+"AND claim.PatNum = patient.PatNum ";
+			if(dateMax!=DateTime.MinValue) {
+				command+="AND claim.DateService >= "+POut.Date(dateMin)+" ";
+			}
+			if(dateMax!=DateTime.MinValue) {
+				command+="AND claim.DateService <= "+POut.Date(dateMax)+" ";
+			}
+			if(!isAllProv) {
+				if(provNumList.Count>0) {
+					command+="AND claim.ProvBill IN (";
+					command+=""+provNumList[0];
+					for(int i=1;i<provNumList.Count;i++) {
+						command+=","+provNumList[i];
+					}
+					command+=") ";
+				}
+			}
+			DataTable table=Db.GetTable(command);
+			return table;
+		}
+
 		///<summary>Called from claimsend window and from Claim edit window.  Use 0 to get all waiting claims, or an actual claimnum to get just one claim.</summary>
 		public static ClaimSendQueueItem[] GetQueueList(long claimNum,long clinicNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
