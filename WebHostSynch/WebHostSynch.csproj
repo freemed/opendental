@@ -89,9 +89,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ODWebServiceModel.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
       <DependentUpon>ODWebServiceModel.edmx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WebHostSynch.asmx.cs">

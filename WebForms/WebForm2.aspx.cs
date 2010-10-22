@@ -317,7 +317,7 @@ namespace WebForms {
 		/// <summary>
 		/// A class made  just for sorting purposes - to assign tab order to the controls on a web page.
 		/// </summary>
-		public class WControl{
+		private class WControl{
 			public int XPos=0;
 			public int YPos=0;
 			public WebControl wc=null;
@@ -445,7 +445,8 @@ namespace WebForms {
 					//string FieldName=cbox.ID.Remove(0,"CheckBox".Length);
 					string FieldName=cbox.ID;
 					if(cbox.Checked==true) {
-						FormValuesHashTable.Add(FieldName,cbox.Checked.ToString());
+						//FormValuesHashTable.Add(FieldName,cbox.Checked.ToString());
+						FormValuesHashTable.Add(FieldName,"X");
 					}
 				}
 			}
@@ -468,6 +469,9 @@ namespace WebForms {
 				NewSheetObj.Width=SheetDefObj.Width;
 				NewSheetObj.FontName=SheetDefObj.FontName;
 				NewSheetObj.FontSize=SheetDefObj.FontSize;
+				NewSheetObj.SheetType=SheetDefObj.SheetType;
+				NewSheetObj.IsLandscape=SheetDefObj.IsLandscape;
+
 				// assign all values - complete this list
 
 				SheetDefObj.webforms_sheetfielddef.Load();
@@ -483,15 +487,15 @@ namespace WebForms {
 					NewSheetfieldObj.FontName=SheetFieldDefObj.FontName;
 					NewSheetfieldObj.FontSize=SheetFieldDefObj.FontSize;
 					NewSheetfieldObj.Height=SheetFieldDefObj.Height;
-					NewSheetfieldObj.Width=SheetFieldDefObj.Height;
+					NewSheetfieldObj.Width=SheetFieldDefObj.Width;
 					NewSheetfieldObj.XPos=SheetFieldDefObj.XPos;
 					NewSheetfieldObj.YPos=SheetFieldDefObj.YPos;
 					NewSheetfieldObj.IsRequired=SheetFieldDefObj.IsRequired;
 					NewSheetfieldObj.RadioButtonGroup=SheetFieldDefObj.RadioButtonGroup;
-					NewSheetfieldObj.RadioButtonValue=SheetFieldDefObj.RadioButtonGroup;
+					NewSheetfieldObj.RadioButtonValue=SheetFieldDefObj.RadioButtonValue;
+					NewSheetfieldObj.GrowthBehavior=SheetFieldDefObj.GrowthBehavior;
 					NewSheetfieldObj.FieldValue=SheetFieldDefObj.FieldValue;
 					
-					// assign all values - complete this list
 
 
 					long WebSheetFieldDefNum=SheetFieldDefObj.WebSheetFieldDefNum;

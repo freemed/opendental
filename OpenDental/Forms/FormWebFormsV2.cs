@@ -62,7 +62,7 @@ namespace OpenDental {
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Patient Last Name"),110);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Patient Fist Name"),110);
+			col=new ODGridColumn(Lan.g(this,"Patient First Name"),110);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Description"),210);
 			gridMain.Columns.Add(col);
@@ -98,9 +98,59 @@ namespace OpenDental {
 					MsgBox.Show(this,"Registration key provided by the dental office is incorrect");
 					return;
 				}
-				OpenDental.WebHostSynch.webforms_sheetfield[] wbsf=wh.GetSheetFieldData(RegistrationKey);
-				// The second call GetSheetData is used to retrieve the Datetime the sheet was submitted because as of now I don't quite know how to get it elegently by calling a single method.
-				OpenDental.WebHostSynch.webforms_sheet[] SheetDetails=wh.GetSheetData(RegistrationKey);
+
+				OpenDental.WebHostSynch.SheetAndSheetField[] sAnds=wh.GetSheets(RegistrationKey);
+				List<long> SheetsForDeletion=new List<long>();
+				if(sAnds.Count()==0) {
+					MsgBox.Show(this,"No Patient forms retrieved from server");
+					return;
+				}
+				for(int i=0;i<sAnds.Length;i++) {
+
+					long PatNum=7;
+					SheetDef sheetDef=new SheetDef((SheetTypeEnum)sAnds[i].sh.SheetType);
+					Sheet newSheet=SheetUtil.CreateSheet(sheetDef,PatNum);
+					SheetParameter.SetParameter(newSheet,"PatNum",PatNum);
+					newSheet.DateTimeSheet=sAnds[i].sh.DateTimeSheet;
+					newSheet.Height=sAnds[i].sh.Height;
+					newSheet.Width=sAnds[i].sh.Width;
+					newSheet.FontName=sAnds[i].sh.FontName;
+					newSheet.FontSize=sAnds[i].sh.FontSize;
+					newSheet.SheetType=(SheetTypeEnum)sAnds[i].sh.SheetType;
+					newSheet.IsLandscape=sAnds[i].sh.IsLandscape==(sbyte)1?true:false;
+
+					newSheet.InternalNote="";//because null not ok
+					newSheet.IsWebForm=true;
+
+
+					for(int j=0;j<sAnds[i].sf.Count();j++) {
+						SheetField sheetfield= new SheetField();
+						sheetfield.FieldName=sAnds[i].sf[j].FieldName;
+						sheetfield.FieldType=(SheetFieldType)sAnds[i].sf[j].FieldType;
+						sheetfield.FontIsBold=sAnds[i].sf[j].FontIsBold==(sbyte)1?true:false; ;
+						sheetfield.FontName=sAnds[i].sf[j].FontName;
+						sheetfield.FontSize=sAnds[i].sf[j].FontSize;
+						sheetfield.Height=sAnds[i].sf[j].Height;
+						sheetfield.Width=sAnds[i].sf[j].Width;
+						sheetfield.XPos=sAnds[i].sf[j].XPos;
+						sheetfield.YPos=sAnds[i].sf[j].YPos;
+						sheetfield.IsRequired=sAnds[i].sf[j].IsRequired==(sbyte)1?true:false; ;
+						sheetfield.RadioButtonGroup=sAnds[i].sf[j].RadioButtonGroup;
+						sheetfield.RadioButtonValue=sAnds[i].sf[j].RadioButtonValue;
+						sheetfield.GrowthBehavior=(GrowthBehaviorEnum)sAnds[i].sf[j].GrowthBehavior;
+						sheetfield.FieldValue=sAnds[i].sf[j].FieldValue;
+						newSheet.SheetFields.Add(sheetfield);
+					}
+
+					Sheets.SaveNewSheet(newSheet);
+
+					if(DataExistsInDb(newSheet)==true) {
+						SheetsForDeletion.Add(sAnds[i].sh.SheetID);
+					}
+				}// end of for loop
+				wh.DeleteSheetData(RegistrationKey,SheetsForDeletion.ToArray());
+
+				/*
 				if(wbsf.Count()==0) {
 					MsgBox.Show(this,"No Patient forms retrieved from server");
 					return;
@@ -121,7 +171,7 @@ namespace OpenDental {
 					//loop through each variable in a single sheet
 					for(int j=0;j<SingleSheet.Count();j++) {
 						String FieldName=SingleSheet.ElementAt(j).FieldName;
-						String FieldValue=SingleSheet.ElementAt(j).FieldValue;
+						String FieldValue=SingleSheet.ElementAt(j).FieldValue; 
 						if(FieldName.ToLower().Contains("lastname")) {
 							LastName=FieldValue;
 						}
@@ -140,7 +190,7 @@ namespace OpenDental {
 					Patient newPat=null;
 					Sheet newSheet=null;
 					DateTime SheetDateTimeSubmitted= (from s in SheetDetails where s.SheetID==SheetID
-						select s.DateTimeSubmitted).First();
+						select s.DateTimeSheet).First();
 					if(PatNum==0) {
 						newPat=CreatePatient(SingleSheet.ToList());
 						PatNum=newPat.PatNum;
@@ -150,7 +200,9 @@ namespace OpenDental {
 						SheetsForDeletion.Add(SheetID);
 					}
 				}// end of for loop
-				wh.DeleteSheetData(RegistrationKey,SheetsForDeletion.ToArray());
+				//wh.DeleteSheetData(RegistrationKey,SheetsForDeletion.ToArray());
+
+				*/
 			}
 			catch(Exception e) {
 				MessageBox.Show(e.Message);

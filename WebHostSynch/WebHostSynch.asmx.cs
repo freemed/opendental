@@ -9,8 +9,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Services;
 using System.Configuration;
-using OpenDentBusiness;
 using System.Reflection;
+using OpenDentBusiness;
 
 
 namespace WebHostSynch {
@@ -102,7 +102,7 @@ namespace WebHostSynch {
 					Logger.Information("In GetPreferences IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID);
 				}
 				catch(Exception ex) {
-					Logger.Information(ex.Message.ToString());
+					Logger.LogError(ex);
 					return wspObj;;
 				}
 				return wspObj;;
@@ -123,15 +123,72 @@ namespace WebHostSynch {
 
 			[WebMethod]
 			public List<webforms_sheet> GetSheetData(string RegistrationKey) {
-				long DentalOfficeID=GetDentalOfficeID(RegistrationKey);
-				if(DentalOfficeID==0) {
+				List<webforms_sheet> wslist=null;
+				try {
+					long DentalOfficeID=GetDentalOfficeID(RegistrationKey);
+					if(DentalOfficeID==0) {
+					}
+					ODWebServiceEntities db=new ODWebServiceEntities();
+					var wsRes=from wsf in db.webforms_sheet
+						where wsf.webforms_preference.DentalOfficeID==DentalOfficeID
+						select wsf;
+					wslist=wsRes.ToList();
+					Logger.Information("In GetSheetData IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID+" Sheets sent to Client ="+ wsRes.Count());
+					return wslist;
+					}
+					catch(Exception ex) {
+						Logger.Information(ex.Message.ToString());
+						return wslist;
+					}
+			}
+
+			[WebMethod]
+			public List<SheetAndSheetField> GetSheets(string RegistrationKey) {
+				List<SheetAndSheetField> sAndsfList= new List<SheetAndSheetField>();
+			
+				try {
+					long DentalOfficeID=GetDentalOfficeID(RegistrationKey);
+					if(DentalOfficeID==0) {
+					}
+					ODWebServiceEntities db=new ODWebServiceEntities();
+					var wsRes=from wsf in db.webforms_sheet
+							  where wsf.webforms_preference.DentalOfficeID==DentalOfficeID
+							  select wsf;
+					//SheetDefObj.webforms_sheetfielddef.Load();
+
+					for(int i=0;i<wsRes.Count();i++) {
+						var wsobj=wsRes.ToList()[i];
+						
+						wsobj.webforms_sheetfield.Load();
+						var sheetfieldList= wsobj.webforms_sheetfield;
+						SheetAndSheetField sAnds=new SheetAndSheetField(wsobj,sheetfieldList.ToList());
+						sAndsfList.Add(sAnds);
+
+					}
+					Logger.Information("In GetSheetData IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID+" Sheets sent to Client ="+ wsRes.Count());
+					return sAndsfList;
 				}
-				ODWebServiceEntities db=new ODWebServiceEntities();
-				var wsObj=from wsf in db.webforms_sheet
-					where wsf.webforms_preference.DentalOfficeID==DentalOfficeID
-					select wsf;
-				Logger.Information("In GetSheetData IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID+" Sheets sent to Client ="+ wsObj.Count());
-				return wsObj.ToList();
+				catch(Exception ex) {
+					Logger.Information(ex.Message.ToString());
+					return sAndsfList;
+				}
+			}
+
+			/// <summary>
+			/// A class made  for just transferring both the sheets and it's fields in a web service.
+			/// </summary>
+			public class SheetAndSheetField {
+				public webforms_sheet sh=null;
+				public List<webforms_sheetfield> sf=null;
+
+				public SheetAndSheetField() {
+				
+				}
+				public SheetAndSheetField(webforms_sheet sh,List<webforms_sheetfield> sf) {
+					this.sh=sh;
+					this.sf=sf;
+				}
+
 			}
 
 			[WebMethod]

@@ -140,7 +140,7 @@ namespace OpenDental {
 					Patient newPat=null;
 					Sheet newSheet=null;
 					DateTime SheetDateTimeSubmitted= (from s in SheetDetails where s.SheetID==SheetID
-						select s.DateTimeSubmitted).First();
+						select s.DateTimeSheet).First();
 					if(PatNum==0) {
 						newPat=CreatePatient(SingleSheet.ToList());
 						PatNum=newPat.PatNum;
