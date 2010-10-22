@@ -211,19 +211,19 @@ namespace OpenDentBusiness{
 			return GetQueueList(0,0);
 		}*/
 
-		///<summary>Called from FormRpOutIns. Gets outstanding insurance claims.</summary>
-		public static DataTable GetOutInsClaims(bool isAllProv, List<long> provNumList, DateTime dateMin, DateTime dateMax, isPreAuth){
+		///<summary>Called from FormRpOutIns. Gets outstanding insurance claims. Requires all fields. provNumList may be empty (but will return null if isAllProv is false). dateMin and dateMax will not be used if they are set to DateTime.MinValue() (01/01/0001). If isPreauth is true only claims of type preauth will be returned.</summary>
+		public static DataTable GetOutInsClaims(bool isAllProv, List<long> provNumList, DateTime dateMin, DateTime dateMax, bool isPreauth){
 			string command;
 			command = "SELECT carrier.CarrierName,patient.HmPhone,claim.ClaimType,patient.FName,patient.LName,claim.DateService,claim.DateSent,claim.ClaimFee "
 				+"FROM carrier,patient,claim,insplan "
 				+"WHERE carrier.CarrierNum = insplan.CarrierNum "
 				+"AND claim.PlanNum = insplan.PlanNum "
 				+"AND claim.PatNum = patient.PatNum ";
-			if(dateMax!=DateTime.MinValue) {
-				command+="AND claim.DateService >= "+POut.Date(dateMin)+" ";
+			if(dateMin!=DateTime.MinValue) {
+				command+="AND claim.DateSent <= "+POut.Date(dateMin)+" ";
 			}
 			if(dateMax!=DateTime.MinValue) {
-				command+="AND claim.DateService <= "+POut.Date(dateMax)+" ";
+				command+="AND claim.DateSent >= "+POut.Date(dateMax)+" ";
 			}
 			if(!isAllProv) {
 				if(provNumList.Count>0) {
