@@ -2768,16 +2768,16 @@ namespace OpenDental{
 			else{//other cultures
 				PatCur.SSN=textSSN.Text;
 			}
-			//Show a warning if patient lname and fname have match in db.
-			List<Patient> patList=Patients.GetListByName(PatCur.LName,PatCur.FName);
-			for(int i=0;i<patList.Count;i++) {
-				//If dates match or aren't entered there might be a duplicate patient.
-				if(patList[i].Birthdate==PatCur.Birthdate
+			if(IsNew) {//Check if patient already exists.
+				List<Patient> patList=Patients.GetListByName(PatCur.LName,PatCur.FName);
+				for(int i=0;i<patList.Count;i++) {
+					//If dates match or aren't entered there might be a duplicate patient.
+					if(patList[i].Birthdate==PatCur.Birthdate
 					|| patList[i].Birthdate.Year<1880
-					|| PatCur.Birthdate.Year<1880) 
-				{
-					if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"This patient might already exist.  Continue anyway?")) {
-						return;
+					|| PatCur.Birthdate.Year<1880) {
+						if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"This patient might already exist.  Continue anyway?")) {
+							return;
+						}
 					}
 				}
 			}
