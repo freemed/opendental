@@ -1061,7 +1061,7 @@ namespace OpenDentBusiness {
 			table=Db.GetTable(command);
 			if(isCheck) {
 				if(table.Rows.Count>0 || verbose) {
-					log+=Lans.g("FormDatabaseMaintenance","Patients found who are marked deleted with non-zero balances: ")+table.Rows.Count;
+					log+=Lans.g("FormDatabaseMaintenance","Patients found who are marked deleted with non-zero balances: ")+table.Rows.Count+"\r\n";
 				}
 			}
 			else {
@@ -1084,12 +1084,40 @@ namespace OpenDentBusiness {
 			return log;
 		}
 
+		public static string PatPlanOrdinalZeroToOne(bool verbose,bool isCheck) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
+			}
+			string log="";
+			command="SELECT PatPlanNum,PatNum FROM patplan WHERE Ordinal=0";
+			table=Db.GetTable(command);
+			if(isCheck) {
+				if(table.Rows.Count>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","PatPlan ordinals currently zero: ")+table.Rows.Count+"\r\n";
+				}
+			}
+			else {
+				int numberFixed=0;
+				for(int i=0;i<table.Rows.Count;i++) {
+					PatPlan patPlan=PatPlans.GetPatPlan(PIn.Int(table.Rows[i][1].ToString()),0);
+					if(patPlan!=null) {//Unlikely but possible if plan gets deleted by a user during this check.
+						PatPlans.SetOrdinal(patPlan.PatPlanNum,1);
+						numberFixed++;
+					}
+				}
+				if(numberFixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","PatPlan ordinals changed from 0 to 1: ")+numberFixed+"\r\n";
+				}
+			}
+			return log;
+		}
+
 		public static string PatPlanOrdinalTwoToOne(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
-			command="SELECT PatPlanNum FROM patplan patplan1 WHERE Ordinal=2 AND NOT EXISTS("
+			command="SELECT PatPlanNum,PatNum FROM patplan patplan1 WHERE Ordinal=2 AND NOT EXISTS("
 				+"SELECT * FROM patplan patplan2 WHERE patplan1.PatNum=patplan2.PatNum AND patplan2.Ordinal=1)";
 			table=Db.GetTable(command);
 			if(isCheck) {
@@ -1098,14 +1126,17 @@ namespace OpenDentBusiness {
 				}
 			}
 			else {
-				//for(int i=0;i<table.Rows.Count;i++) {
-				//  command="UPDATE patplan SET Ordinal=1 WHERE PatPlanNum="+table.Rows[i][0].ToString();
-				//  Db.NonQ(command);
-				//}
-				//int numberFixed=table.Rows.Count;
-				//if(numberFixed>0 || verbose) {
-				//  log+=Lans.g("FormDatabaseMaintenance","PatPlan ordinals changed from 2 to 1 if no primary ins: ")+numberFixed.ToString()+"\r\n";
-				//}
+				int numberFixed=0;
+				for(int i=0;i<table.Rows.Count;i++) {
+					PatPlan patPlan=PatPlans.GetPatPlan(PIn.Int(table.Rows[i][1].ToString()),2);
+					if(patPlan!=null) {//Unlikely but possible if plan gets deleted by a user during this check.
+						PatPlans.SetOrdinal(patPlan.PatPlanNum,1);
+						numberFixed++;
+					}
+				}
+				if(numberFixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","PatPlan ordinals changed from 2 to 1 if no primary ins: ")+numberFixed+"\r\n";
+				}
 			}
 			return log;
 		}

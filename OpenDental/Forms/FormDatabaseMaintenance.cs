@@ -318,6 +318,8 @@ namespace OpenDental {
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.PatientUnDeleteWithBalance(verbose,isCheck);
 			Application.DoEvents();
+			textLog.Text+=DatabaseMaintenance.PatPlanOrdinalZeroToOne(verbose,isCheck);
+			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.PatPlanOrdinalTwoToOne(verbose,isCheck);
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.PaymentDetachMissingDeposit(verbose,isCheck);
