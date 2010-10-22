@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://opendental.com/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="http://opendental.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+<wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://opendental.com/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://opendental.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsdl:types>
     <s:schema elementFormDefault="qualified" targetNamespace="http://opendental.com/">
       <s:element name="SetPreferences">
@@ -107,6 +107,18 @@
               <s:element minOccurs="0" maxOccurs="1" name="FieldName" type="s:string" />
               <s:element minOccurs="0" maxOccurs="1" name="FieldValue" type="s:string" />
               <s:element minOccurs="1" maxOccurs="1" name="SheetFieldID" type="s:long" />
+              <s:element minOccurs="1" maxOccurs="1" name="FieldType" type="s:int" />
+              <s:element minOccurs="1" maxOccurs="1" name="FontIsBold" type="s:byte" />
+              <s:element minOccurs="0" maxOccurs="1" name="FontName" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="FontSize" type="s:float" />
+              <s:element minOccurs="1" maxOccurs="1" name="GrowthBehavior" type="s:int" />
+              <s:element minOccurs="1" maxOccurs="1" name="Height" type="s:int" />
+              <s:element minOccurs="1" maxOccurs="1" name="IsRequired" type="s:byte" />
+              <s:element minOccurs="0" maxOccurs="1" name="RadioButtonGroup" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="RadioButtonValue" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="Width" type="s:int" />
+              <s:element minOccurs="1" maxOccurs="1" name="XPos" type="s:int" />
+              <s:element minOccurs="1" maxOccurs="1" name="YPos" type="s:int" />
               <s:element minOccurs="0" maxOccurs="1" name="webforms_sheetReference" type="tns:EntityReferenceOfwebforms_sheet" />
             </s:sequence>
           </s:extension>
@@ -135,8 +147,14 @@
         <s:complexContent mixed="false">
           <s:extension base="tns:EntityObject">
             <s:sequence>
-              <s:element minOccurs="1" maxOccurs="1" name="DateTimeSubmitted" type="s:dateTime" />
               <s:element minOccurs="1" maxOccurs="1" name="SheetID" type="s:long" />
+              <s:element minOccurs="1" maxOccurs="1" name="DateTimeSheet" type="s:dateTime" />
+              <s:element minOccurs="0" maxOccurs="1" name="FontName" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="FontSize" type="s:float" />
+              <s:element minOccurs="1" maxOccurs="1" name="Height" type="s:int" />
+              <s:element minOccurs="1" maxOccurs="1" name="IsLandscape" type="s:byte" />
+              <s:element minOccurs="1" maxOccurs="1" name="SheetType" type="s:int" />
+              <s:element minOccurs="1" maxOccurs="1" name="Width" type="s:int" />
               <s:element minOccurs="0" maxOccurs="1" name="webforms_preferenceReference" type="tns:EntityReferenceOfwebforms_preference" />
             </s:sequence>
           </s:extension>
@@ -151,6 +169,45 @@
         <s:complexType>
           <s:sequence>
             <s:element minOccurs="0" maxOccurs="1" name="GetSheetDataResult" type="tns:ArrayOfWebforms_sheet" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetSheetsX">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RegistrationKey" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetSheetsXResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="GetSheetsXResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetSheets">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RegistrationKey" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="SheetAndSheetField">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="sh" type="tns:webforms_sheet" />
+          <s:element minOccurs="0" maxOccurs="1" name="sf" type="tns:ArrayOfWebforms_sheetfield" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfSheetAndSheetField">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="SheetAndSheetField" nillable="true" type="tns:SheetAndSheetField" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetSheetsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetSheetsResult" type="tns:ArrayOfSheetAndSheetField" />
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -419,6 +476,18 @@
   <wsdl:message name="GetSheetDataSoapOut">
     <wsdl:part name="parameters" element="tns:GetSheetDataResponse" />
   </wsdl:message>
+  <wsdl:message name="GetSheetsXSoapIn">
+    <wsdl:part name="parameters" element="tns:GetSheetsX" />
+  </wsdl:message>
+  <wsdl:message name="GetSheetsXSoapOut">
+    <wsdl:part name="parameters" element="tns:GetSheetsXResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetSheetsSoapIn">
+    <wsdl:part name="parameters" element="tns:GetSheets" />
+  </wsdl:message>
+  <wsdl:message name="GetSheetsSoapOut">
+    <wsdl:part name="parameters" element="tns:GetSheetsResponse" />
+  </wsdl:message>
   <wsdl:message name="DeleteSheetDataSoapIn">
     <wsdl:part name="parameters" element="tns:DeleteSheetData" />
   </wsdl:message>
@@ -490,6 +559,14 @@
       <wsdl:input message="tns:GetSheetDataSoapIn" />
       <wsdl:output message="tns:GetSheetDataSoapOut" />
     </wsdl:operation>
+    <wsdl:operation name="GetSheetsX">
+      <wsdl:input message="tns:GetSheetsXSoapIn" />
+      <wsdl:output message="tns:GetSheetsXSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSheets">
+      <wsdl:input message="tns:GetSheetsSoapIn" />
+      <wsdl:output message="tns:GetSheetsSoapOut" />
+    </wsdl:operation>
     <wsdl:operation name="DeleteSheetData">
       <wsdl:input message="tns:DeleteSheetDataSoapIn" />
       <wsdl:output message="tns:DeleteSheetDataSoapOut" />
@@ -558,6 +635,24 @@
     </wsdl:operation>
     <wsdl:operation name="GetSheetData">
       <soap:operation soapAction="http://opendental.com/GetSheetData" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSheetsX">
+      <soap:operation soapAction="http://opendental.com/GetSheetsX" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSheets">
+      <soap:operation soapAction="http://opendental.com/GetSheets" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -678,6 +773,24 @@
     </wsdl:operation>
     <wsdl:operation name="GetSheetData">
       <soap12:operation soapAction="http://opendental.com/GetSheetData" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSheetsX">
+      <soap12:operation soapAction="http://opendental.com/GetSheetsX" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSheets">
+      <soap12:operation soapAction="http://opendental.com/GetSheets" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

@@ -42,6 +42,10 @@ namespace OpenDental.WebHostSynch {
         
         private System.Threading.SendOrPostCallback GetSheetDataOperationCompleted;
         
+        private System.Threading.SendOrPostCallback GetSheetsXOperationCompleted;
+        
+        private System.Threading.SendOrPostCallback GetSheetsOperationCompleted;
+        
         private System.Threading.SendOrPostCallback DeleteSheetDataOperationCompleted;
         
         private System.Threading.SendOrPostCallback CheckRegistrationKeyOperationCompleted;
@@ -109,6 +113,12 @@ namespace OpenDental.WebHostSynch {
         
         /// <remarks/>
         public event GetSheetDataCompletedEventHandler GetSheetDataCompleted;
+        
+        /// <remarks/>
+        public event GetSheetsXCompletedEventHandler GetSheetsXCompleted;
+        
+        /// <remarks/>
+        public event GetSheetsCompletedEventHandler GetSheetsCompleted;
         
         /// <remarks/>
         public event DeleteSheetDataCompletedEventHandler DeleteSheetDataCompleted;
@@ -256,6 +266,64 @@ namespace OpenDental.WebHostSynch {
             if ((this.GetSheetDataCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.GetSheetDataCompleted(this, new GetSheetDataCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://opendental.com/GetSheetsX", RequestNamespace="http://opendental.com/", ResponseNamespace="http://opendental.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public int GetSheetsX(string RegistrationKey) {
+            object[] results = this.Invoke("GetSheetsX", new object[] {
+                        RegistrationKey});
+            return ((int)(results[0]));
+        }
+        
+        /// <remarks/>
+        public void GetSheetsXAsync(string RegistrationKey) {
+            this.GetSheetsXAsync(RegistrationKey, null);
+        }
+        
+        /// <remarks/>
+        public void GetSheetsXAsync(string RegistrationKey, object userState) {
+            if ((this.GetSheetsXOperationCompleted == null)) {
+                this.GetSheetsXOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetSheetsXOperationCompleted);
+            }
+            this.InvokeAsync("GetSheetsX", new object[] {
+                        RegistrationKey}, this.GetSheetsXOperationCompleted, userState);
+        }
+        
+        private void OnGetSheetsXOperationCompleted(object arg) {
+            if ((this.GetSheetsXCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.GetSheetsXCompleted(this, new GetSheetsXCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://opendental.com/GetSheets", RequestNamespace="http://opendental.com/", ResponseNamespace="http://opendental.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public SheetAndSheetField[] GetSheets(string RegistrationKey) {
+            object[] results = this.Invoke("GetSheets", new object[] {
+                        RegistrationKey});
+            return ((SheetAndSheetField[])(results[0]));
+        }
+        
+        /// <remarks/>
+        public void GetSheetsAsync(string RegistrationKey) {
+            this.GetSheetsAsync(RegistrationKey, null);
+        }
+        
+        /// <remarks/>
+        public void GetSheetsAsync(string RegistrationKey, object userState) {
+            if ((this.GetSheetsOperationCompleted == null)) {
+                this.GetSheetsOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetSheetsOperationCompleted);
+            }
+            this.InvokeAsync("GetSheets", new object[] {
+                        RegistrationKey}, this.GetSheetsOperationCompleted, userState);
+        }
+        
+        private void OnGetSheetsOperationCompleted(object arg) {
+            if ((this.GetSheetsCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.GetSheetsCompleted(this, new GetSheetsCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
         
@@ -700,17 +768,160 @@ namespace OpenDental.WebHostSynch {
         }
     }
     
-
     /// <remarks/>
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(EntityReference))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(EntityReferenceOfwebforms_preference))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(EntityReferenceOfwebforms_sheet))]
+   
+
+    public partial class SheetAndSheetField {
+        
+        private webforms_sheet shField;
+        
+        private webforms_sheetfield[] sfField;
+        
+        /// <remarks/>
+        public webforms_sheet sh {
+            get {
+                return this.shField;
+            }
+            set {
+                this.shField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public webforms_sheetfield[] sf {
+            get {
+                return this.sfField;
+            }
+            set {
+                this.sfField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://opendental.com/")]
-    public abstract partial class RelatedEnd {
+    public partial class webforms_sheet : EntityObject {
+        
+        private long sheetIDField;
+        
+        private System.DateTime dateTimeSheetField;
+        
+        private string fontNameField;
+        
+        private float fontSizeField;
+        
+        private int heightField;
+        
+        private sbyte isLandscapeField;
+        
+        private int sheetTypeField;
+        
+        private int widthField;
+        
+        private EntityReferenceOfwebforms_preference webforms_preferenceReferenceField;
+        
+        /// <remarks/>
+        public long SheetID {
+            get {
+                return this.sheetIDField;
+            }
+            set {
+                this.sheetIDField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public System.DateTime DateTimeSheet {
+            get {
+                return this.dateTimeSheetField;
+            }
+            set {
+                this.dateTimeSheetField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string FontName {
+            get {
+                return this.fontNameField;
+            }
+            set {
+                this.fontNameField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public float FontSize {
+            get {
+                return this.fontSizeField;
+            }
+            set {
+                this.fontSizeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public int Height {
+            get {
+                return this.heightField;
+            }
+            set {
+                this.heightField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public sbyte IsLandscape {
+            get {
+                return this.isLandscapeField;
+            }
+            set {
+                this.isLandscapeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public int SheetType {
+            get {
+                return this.sheetTypeField;
+            }
+            set {
+                this.sheetTypeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public int Width {
+            get {
+                return this.widthField;
+            }
+            set {
+                this.widthField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public EntityReferenceOfwebforms_preference webforms_preferenceReference {
+            get {
+                return this.webforms_preferenceReferenceField;
+            }
+            set {
+                this.webforms_preferenceReferenceField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://opendental.com/")]
+    public partial class EntityReferenceOfwebforms_preference : EntityReference {
     }
     
     /// <remarks/>
@@ -737,12 +948,15 @@ namespace OpenDental.WebHostSynch {
     }
     
     /// <remarks/>
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(EntityReference))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(EntityReferenceOfwebforms_preference))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(EntityReferenceOfwebforms_sheet))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://opendental.com/")]
-    public partial class EntityReferenceOfwebforms_preference : EntityReference {
+    public abstract partial class RelatedEnd {
     }
     
     /// <remarks/>
@@ -752,6 +966,207 @@ namespace OpenDental.WebHostSynch {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://opendental.com/")]
     public partial class EntityReferenceOfwebforms_sheet : EntityReference {
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://opendental.com/")]
+    public partial class webforms_sheetfield : EntityObject {
+        
+        private string fieldNameField;
+        
+        private string fieldValueField;
+        
+        private long sheetFieldIDField;
+        
+        private int fieldTypeField;
+        
+        private sbyte fontIsBoldField;
+        
+        private string fontNameField;
+        
+        private float fontSizeField;
+        
+        private int growthBehaviorField;
+        
+        private int heightField;
+        
+        private sbyte isRequiredField;
+        
+        private string radioButtonGroupField;
+        
+        private string radioButtonValueField;
+        
+        private int widthField;
+        
+        private int xPosField;
+        
+        private int yPosField;
+        
+        private EntityReferenceOfwebforms_sheet webforms_sheetReferenceField;
+        
+        /// <remarks/>
+        public string FieldName {
+            get {
+                return this.fieldNameField;
+            }
+            set {
+                this.fieldNameField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string FieldValue {
+            get {
+                return this.fieldValueField;
+            }
+            set {
+                this.fieldValueField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public long SheetFieldID {
+            get {
+                return this.sheetFieldIDField;
+            }
+            set {
+                this.sheetFieldIDField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public int FieldType {
+            get {
+                return this.fieldTypeField;
+            }
+            set {
+                this.fieldTypeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public sbyte FontIsBold {
+            get {
+                return this.fontIsBoldField;
+            }
+            set {
+                this.fontIsBoldField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string FontName {
+            get {
+                return this.fontNameField;
+            }
+            set {
+                this.fontNameField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public float FontSize {
+            get {
+                return this.fontSizeField;
+            }
+            set {
+                this.fontSizeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public int GrowthBehavior {
+            get {
+                return this.growthBehaviorField;
+            }
+            set {
+                this.growthBehaviorField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public int Height {
+            get {
+                return this.heightField;
+            }
+            set {
+                this.heightField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public sbyte IsRequired {
+            get {
+                return this.isRequiredField;
+            }
+            set {
+                this.isRequiredField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string RadioButtonGroup {
+            get {
+                return this.radioButtonGroupField;
+            }
+            set {
+                this.radioButtonGroupField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string RadioButtonValue {
+            get {
+                return this.radioButtonValueField;
+            }
+            set {
+                this.radioButtonValueField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public int Width {
+            get {
+                return this.widthField;
+            }
+            set {
+                this.widthField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public int XPos {
+            get {
+                return this.xPosField;
+            }
+            set {
+                this.xPosField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public int YPos {
+            get {
+                return this.yPosField;
+            }
+            set {
+                this.yPosField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public EntityReferenceOfwebforms_sheet webforms_sheetReference {
+            get {
+                return this.webforms_sheetReferenceField;
+            }
+            set {
+                this.webforms_sheetReferenceField = value;
+            }
+        }
     }
     
     /// <remarks/>
@@ -898,108 +1313,6 @@ namespace OpenDental.WebHostSynch {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://opendental.com/")]
-    public partial class webforms_sheet : EntityObject {
-        
-        private System.DateTime dateTimeSubmittedField;
-        
-        private long sheetIDField;
-        
-        private EntityReferenceOfwebforms_preference webforms_preferenceReferenceField;
-        
-        /// <remarks/>
-        public System.DateTime DateTimeSubmitted {
-            get {
-                return this.dateTimeSubmittedField;
-            }
-            set {
-                this.dateTimeSubmittedField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public long SheetID {
-            get {
-                return this.sheetIDField;
-            }
-            set {
-                this.sheetIDField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public EntityReferenceOfwebforms_preference webforms_preferenceReference {
-            get {
-                return this.webforms_preferenceReferenceField;
-            }
-            set {
-                this.webforms_preferenceReferenceField = value;
-            }
-        }
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://opendental.com/")]
-    public partial class webforms_sheetfield : EntityObject {
-        
-        private string fieldNameField;
-        
-        private string fieldValueField;
-        
-        private long sheetFieldIDField;
-        
-        private EntityReferenceOfwebforms_sheet webforms_sheetReferenceField;
-        
-        /// <remarks/>
-        public string FieldName {
-            get {
-                return this.fieldNameField;
-            }
-            set {
-                this.fieldNameField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string FieldValue {
-            get {
-                return this.fieldValueField;
-            }
-            set {
-                this.fieldValueField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public long SheetFieldID {
-            get {
-                return this.sheetFieldIDField;
-            }
-            set {
-                this.sheetFieldIDField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public EntityReferenceOfwebforms_sheet webforms_sheetReference {
-            get {
-                return this.webforms_sheetReferenceField;
-            }
-            set {
-                this.webforms_sheetReferenceField = value;
-            }
-        }
-    }
-    
-    /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void SetPreferencesCompletedEventHandler(object sender, SetPreferencesCompletedEventArgs e);
     
@@ -1099,6 +1412,58 @@ namespace OpenDental.WebHostSynch {
             get {
                 this.RaiseExceptionIfNecessary();
                 return ((webforms_sheet[])(this.results[0]));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
+    public delegate void GetSheetsXCompletedEventHandler(object sender, GetSheetsXCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class GetSheetsXCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal GetSheetsXCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        /// <remarks/>
+        public int Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((int)(this.results[0]));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
+    public delegate void GetSheetsCompletedEventHandler(object sender, GetSheetsCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class GetSheetsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal GetSheetsCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        /// <remarks/>
+        public SheetAndSheetField[] Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((SheetAndSheetField[])(this.results[0]));
             }
         }
     }
