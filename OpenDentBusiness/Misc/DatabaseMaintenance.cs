@@ -19,7 +19,7 @@ namespace OpenDentBusiness {
 
 		public static string MySQLTables(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
 			success=true;
@@ -73,7 +73,7 @@ namespace OpenDentBusiness {
 
 		public static string DatesNoZeros(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
@@ -119,10 +119,10 @@ namespace OpenDentBusiness {
 				};
 				int numInvalidDates=0;
 				for(int i=0;i<commands.Length;i++) {
-					numInvalidDates+=PIn.Int(Db.GetTable(commands[i]).Rows[0][0].ToString());
+					numInvalidDates+=PIn.Int(Db.GetCount(commands[i]));
 				}
 				if(numInvalidDates>0 || verbose) {
-					log+=Lans.g("FormDatabaseMaintenance","Dates found invalid:")+" "+numInvalidDates+"\r\n";
+					log+=Lans.g("FormDatabaseMaintenance","Dates invalid:")+" "+numInvalidDates+"\r\n";
 				}
 			}
 			else{
@@ -172,7 +172,7 @@ namespace OpenDentBusiness {
 
 		public static string DecimalValues(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
 			//No longer needed, since we are using ROUND(EstBalance,2) in the aging calculation now.
@@ -199,7 +199,7 @@ namespace OpenDentBusiness {
 
 		public static string AppointmentsNoPattern(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
 			command=@"SELECT AptNum FROM appointment WHERE Pattern=''";
@@ -229,16 +229,23 @@ namespace OpenDentBusiness {
 
 		public static string AppointmentsNoDateOrProcs(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
 			if(isCheck){
-				//Check not implemented.
+				command="SELECT COUNT(*) FROM appointment "
+				  +"WHERE AptStatus=1 "//scheduled 
+				  +"AND YEAR(AptDateTime)<1880 "//scheduled but no date 
+				  +"AND NOT EXISTS(SELECT * FROM procedurelog WHERE procedurelog.AptNum=appointment.AptNum)";//and no procs
+				int numFound=PIn.Int(Db.GetCount(command));
+				if(numFound!=0 || verbose) {
+				  log+=Lans.g("FormDatabaseMaintenance","Appointments found with no date and no procs: ")+numFound+"\r\n";
+				}
 			}
 			else{
 				//command="DELETE FROM appointment "
 				//  +"WHERE AptStatus=1 "//scheduled 
-				//  +"AND DATE(AptDateTime)='0001-01-01' "//scheduled but no date 
+				//  +"AND YEAR(AptDateTime)<1880 "//scheduled but no date 
 				//  +"AND NOT EXISTS(SELECT * FROM procedurelog WHERE procedurelog.AptNum=appointment.AptNum)";//and no procs
 				//int numberFixed=Db.NonQ32(command);
 				//if(numberFixed!=0 || verbose) {
@@ -250,7 +257,7 @@ namespace OpenDentBusiness {
 
 		public static string AppointmentsNoPatients(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
 			command="SELECT Count(*) FROM appointment WHERE PatNum NOT IN(SELECT PatNum FROM patient)";
@@ -285,11 +292,16 @@ namespace OpenDentBusiness {
 
 		public static string AutoCodesDeleteWithNoItems(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
 			if(isCheck){
-				//No check implemented.
+				command=@"SELECT COUNT(*) FROM autocode WHERE NOT EXISTS(
+					SELECT * FROM autocodeitem WHERE autocodeitem.AutoCodeNum=autocode.AutoCodeNum)";
+        int numFound=PIn.Int(Db.GetCount(command));
+        if(numFound!=0 || verbose) {
+          log+=Lans.g("FormDatabaseMaintenance","Autocodes found with no items: ")+numFound+"\r\n";
+        }
 			}
 			else{
         //command=@"DELETE FROM autocode WHERE NOT EXISTS(
@@ -307,11 +319,16 @@ namespace OpenDentBusiness {
 
 		public static string ClaimPlanNum2NotValid(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
 			if(isCheck){
-				//No check implemented.
+				command="SELECT COUNT(*) FROM claim WHERE PlanNum2 !=0 AND NOT EXISTS( SELECT * FROM insplan "
+				  +"WHERE claim.PlanNum2=insplan.PlanNum)";
+				int numFound=PIn.Int(Db.GetCount(command));
+				if(numFound>0 || verbose) {
+				  log+=Lans.g("FormDatabaseMaintenance","Claims with invalid PlanNum2 found: ")+numFound+"\r\n";
+				}
 			}
 			else{
 				////This fixes a slight database inconsistency that might cause an error when trying to open the send claims window.
@@ -327,7 +344,7 @@ namespace OpenDentBusiness {
 
 		public static string ClaimDeleteWithInvalidPlanNums(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
 			command=@"SELECT ClaimNum,PatNum FROM claim
@@ -358,11 +375,16 @@ namespace OpenDentBusiness {
 
 		public static string ClaimDeleteWithNoClaimProcs(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
 			if(isCheck){
-				//No check implemented.
+				command=@"SELECT COUNT(*) FROM claim WHERE NOT EXISTS(
+					SELECT * FROM claimproc WHERE claim.ClaimNum=claimproc.ClaimNum)";
+				int numFound=PIn.Int(Db.GetCount(command));
+				if(numFound!=0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Claims found with no procedures: ")+numFound+"\r\n";
+				}
 			}
 			else{
 				//command=@"DELETE FROM claim WHERE NOT EXISTS(
@@ -377,7 +399,7 @@ namespace OpenDentBusiness {
 
 		public static string ClaimWriteoffSum(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				return "";
@@ -413,7 +435,7 @@ namespace OpenDentBusiness {
 		///<Summary>also fixes resulting deposit misbalances.</Summary>
 		public static string ClaimPaymentCheckAmt(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
 			//because of the way this is grouped, it will just get one of many patients for each
@@ -423,7 +445,6 @@ namespace OpenDentBusiness {
 					GROUP BY claimproc.ClaimPaymentNum
 					HAVING _sumpay!=_checkamt";
 			table=Db.GetTable(command);
-			//int numberFixed=0;
 			if(isCheck){
 				if(table.Rows.Count>0 || verbose){
 					log+=Lans.g("FormDatabaseMaintenance","Claim payment sums found incorrect: ")+table.Rows.Count.ToString()+"\r\n";
@@ -475,11 +496,16 @@ namespace OpenDentBusiness {
 
 		public static string ClaimPaymentDeleteWithNoSplits(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
 			if(isCheck){
-				//No check implemented.
+				command="SELECT COUNT(*) FROM claimpayment WHERE NOT EXISTS("
+				  +"SELECT * FROM claimproc WHERE claimpayment.ClaimPaymentNum=claimproc.ClaimPaymentNum)";
+				int numFound=PIn.Int(Db.GetCount(command));
+				if(numFound>0 || verbose) {
+				  log+=Lans.g("FormDatabaseMaintenance","Claim payments with no splits found: ")+numFound.ToString()+"\r\n";
+				}
 			}
 			else{
 				//command="DELETE FROM claimpayment WHERE NOT EXISTS("
@@ -494,11 +520,15 @@ namespace OpenDentBusiness {
 
 		public static string ClaimProcDateNotMatchCapComplete(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
 			if(isCheck){
-				//No check implemented.
+				command="SELECT COUNT(*) FROM claimproc WHERE Status=7 AND DateCP != ProcDate";
+				int numFound=PIn.Int(Db.GetCount(command));
+				if(numFound>0 || verbose) {
+				  log+=Lans.g("FormDatabaseMaintenance","Capitation procs with mismatched dates found: ")+numFound+"\r\n";
+				}
 			}
 			else{
 				//command="UPDATE claimproc SET DateCP=ProcDate WHERE Status=7 AND DateCP != ProcDate";
@@ -512,7 +542,7 @@ namespace OpenDentBusiness {
 
 		public static string ClaimProcDateNotMatchPayment(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
 			command="SELECT claimproc.ClaimProcNum,claimpayment.CheckDate FROM claimproc,claimpayment "
@@ -542,11 +572,16 @@ namespace OpenDentBusiness {
 
 		public static string ClaimProcDeleteWithInvalidClaimNum(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
 			if(isCheck){
-				//No check implemented.
+				command="SELECT COUNT(*) FROM claimproc WHERE claimproc.ClaimNum!=0 "
+				  +"AND NOT EXISTS(SELECT * FROM claim WHERE claim.ClaimNum=claimproc.ClaimNum)";
+				int numFound=PIn.Int(Db.GetCount(command));
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Claimprocs found with invalid ClaimNum: ")+numFound+"\r\n";
+				}
 			}
 			else{
 				//command="DELETE FROM claimproc WHERE claimproc.ClaimNum!=0 "
@@ -561,7 +596,7 @@ namespace OpenDentBusiness {
 
 		public static string ClaimProcDeleteWithInvalidPlanNum(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
 			command=@"SELECT ClaimProcNum,PatNum FROM claimproc
@@ -592,11 +627,16 @@ namespace OpenDentBusiness {
 
 		public static string ClaimProcDeleteWithInvalidProcNum(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
 			if(isCheck){
-				//No check implemented.
+				command="SELECT COUNT(*) FROM claimproc WHERE ProcNum>0 AND NOT EXISTS(SELECT * FROM procedurelog "
+				  +"WHERE claimproc.ProcNum=procedurelog.ProcNum)";
+				int numFound=PIn.Int(Db.GetCount(command));
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Estimates found for procedures that no longer exist: ")+numFound+"\r\n";
+				}
 			}
 			else{
 				////These seem to pop up quite regularly due to the program forgetting to delete them
@@ -612,11 +652,15 @@ namespace OpenDentBusiness {
 
 		public static string ClaimProcEstNoBillIns(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
 			if(isCheck){
-				//No check implemented.
+				command="SELECT COUNT(*) FROM claimproc WHERE NoBillIns=1 AND InsPayEst !=0";
+				int numFound=PIn.Int(Db.GetCount(command));
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Claimprocs found with non-zero estimates marked NoBillIns: ")+numFound+"\r\n";
+				}
 			}
 			else{
 				//command="UPDATE claimproc SET InsPayEst=0 WHERE NoBillIns=1 AND InsPayEst !=0";
@@ -630,11 +674,15 @@ namespace OpenDentBusiness {
 
 		public static string ClaimProcEstWithInsPaidAmt(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
 			if(isCheck){
-				//No check implemented.
+				command=@"SELECT COUNT(*) FROM claimproc WHERE InsPayAmt > 0 AND ClaimNum=0 AND Status=6";
+				int numFound=PIn.Int(Db.GetCount(command));
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","ClaimProc estimates with InsPaidAmt > 0 found: ")+numFound+"\r\n";
+				}
 			}
 			else{
 				//command=@"UPDATE claimproc SET InsPayAmt=0 WHERE InsPayAmt > 0 AND ClaimNum=0 AND Status=6";
@@ -648,11 +696,15 @@ namespace OpenDentBusiness {
 
 		public static string ClaimProcProvNumMissing(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
 			if(isCheck){
-				//No check implemented.
+				command="SELECT COUNT(*) FROM claimproc WHERE ProvNum=0";
+				int numFound=PIn.Int(Db.GetCount(command));
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","ClaimProcs with missing provnums found: ")+numFound+"\r\n";
+				}
 			}
 			else{
 				//command="UPDATE claimproc SET ProvNum="+PrefC.GetString(PrefName.PracticeDefaultProv)+" WHERE ProvNum=0";
@@ -666,7 +718,7 @@ namespace OpenDentBusiness {
 
 		public static string ClaimProcPreauthNotMatchClaim(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
 			command=@"SELECT claimproc.ClaimProcNum 
@@ -696,14 +748,21 @@ namespace OpenDentBusiness {
 
 		public static string ClaimProcStatusNotMatchClaim(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				return "";
 			}
 			string log="";
 			if(isCheck){
-				//No check implemented.
+				command=@"SELECT COUNT(*) FROM claimproc,claim
+					WHERE claimproc.ClaimNum=claim.ClaimNum
+					AND claim.ClaimStatus='R'
+					AND claimproc.Status=0";
+				int numFound=PIn.Int(Db.GetCount(command));
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","ClaimProcs with status not matching claim found: ")+numFound+"\r\n";
+				}
 			}
 			else{
 				//command=@"UPDATE claimproc,claim
@@ -721,11 +780,16 @@ namespace OpenDentBusiness {
 
 		public static string ClaimProcWithInvalidClaimPaymentNum(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
 			if(isCheck){
-				//No check implemented.
+				command=@"SELECT COUNT(*) FROM claimproc WHERE claimpaymentnum !=0 AND NOT EXISTS(
+					SELECT * FROM claimpayment WHERE claimpayment.ClaimPaymentNum=claimproc.ClaimPaymentNum)";
+				int numFound=PIn.Int(Db.GetCount(command));
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","ClaimProcs with with invalid ClaimPaymentNumber found: ")+numFound+"\r\n";
+				}
 			}
 			else{
 				//command=@"UPDATE claimproc SET ClaimPaymentNum=0 WHERE claimpaymentnum !=0 AND NOT EXISTS(
@@ -740,11 +804,15 @@ namespace OpenDentBusiness {
 
 		public static string ClaimProcWriteOffNegative(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
 			if(isCheck){
-				//No check implemented.
+				command=@"SELECT COUNT(*) FROM claimproc WHERE WriteOff < 0";
+				int numFound=PIn.Int(Db.GetCount(command));
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Negative writeoffs found: ")+numFound+"\r\n";
+				}
 			}
 			else{
 				//command=@"UPDATE claimproc SET WriteOff = -WriteOff WHERE WriteOff < 0";
@@ -758,11 +826,15 @@ namespace OpenDentBusiness {
 
 		public static string ClockEventInFuture(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
 			if(isCheck){
-				//No check implemented.
+				command=@"SELECT COUNT(*) FROM clockevent WHERE TimeDisplayed1 > NOW()";
+				int numFound=PIn.Int(Db.GetCount(command));
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Timecard entries invalid: ")+numFound+"\r\n";
+				}
 			}
 			else{
 				//command=@"UPDATE clockevent SET TimeDisplayed1=TimeEntered1 WHERE TimeDisplayed1 > NOW()";
@@ -776,14 +848,14 @@ namespace OpenDentBusiness {
 
 		public static string DocumentWithNoCategory(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
 			command="SELECT DocNum FROM document WHERE DocCategory=0";
 			table=Db.GetTable(command);
 			if(isCheck){
 				if(table.Rows.Count>0 || verbose){
-					log+=Lans.g("FormDatabaseMaintenance","Images with no category found: ")+table.Rows.Count.ToString()+"\r\n";
+					log+=Lans.g("FormDatabaseMaintenance","Images with no category found: ")+table.Rows.Count+"\r\n";
 				}
 			}
 			else{
@@ -802,7 +874,7 @@ namespace OpenDentBusiness {
 
 		public static string InsPlanCheckNoCarrier(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
 			//Gets a list of insurance plans that do not have a carrier attached. The list should be blank. If not, then you need to go to the plan listed and add a carrier. Missing carriers will cause the send claims function to give an error.
@@ -810,7 +882,7 @@ namespace OpenDentBusiness {
 			table=Db.GetTable(command);
 			if(isCheck){
 				if(table.Rows.Count>0 || verbose){
-					log+=Lans.g("FormDatabaseMaintenance","Ins plans with carrier missing found: ")+table.Rows.Count.ToString()+"\r\n";
+					log+=Lans.g("FormDatabaseMaintenance","Ins plans with carrier missing found: ")+table.Rows.Count+"\r\n";
 				}
 			}
 			else{
@@ -832,11 +904,15 @@ namespace OpenDentBusiness {
 
 		public static string InsPlanNoClaimForm(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
 			if(isCheck){
-				//No check implemented.
+				command="SELECT COUNT(*) FROM insplan WHERE ClaimFormNum=0";
+				int numFound=PIn.Int(Db.GetCount(command));
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Insplan claimforms missing: ")+numFound+"\r\n";
+				}
 			}
 			else{
 				//command="UPDATE insplan SET ClaimFormNum="+POut.Long(PrefC.GetLong(PrefName.DefaultClaimForm))
@@ -851,11 +927,16 @@ namespace OpenDentBusiness {
 
 		public static string MedicationPatDeleteWithInvalidMedNum(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
 			if(isCheck){
-				//No check implemeneted.
+				command="SELECT COUNT(*) FROM medicationpat WHERE NOT EXISTS(SELECT * FROM medication "
+				  +"WHERE medication.MedicationNum=medicationpat.MedicationNum)";
+				int numFound=PIn.Int(Db.GetCount(command));
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Medications found where no defition exists for them: ")+numFound+"\r\n";
+				}
 			}
 			else{
 				//command="DELETE FROM medicationpat WHERE NOT EXISTS(SELECT * FROM medication "
@@ -870,7 +951,7 @@ namespace OpenDentBusiness {
 
 		public static string PatFieldsDeleteDuplicates(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
 			string command=@"DROP TABLE IF EXISTS tempduplicatepatfields";
@@ -923,7 +1004,7 @@ namespace OpenDentBusiness {
 
 		public static string PatientBadGuarantor(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
 			command="SELECT p.PatNum FROM patient p LEFT JOIN patient p2 ON p.Guarantor = p2.PatNum WHERE p2.PatNum IS NULL";
@@ -948,11 +1029,15 @@ namespace OpenDentBusiness {
 
 		public static string PatientPriProvMissing(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
 			if(isCheck) {
-				//No check implemented.
+				command=@"SELECT COUNT(*) FROM patient WHERE PriProv=0";
+				int numFound=PIn.Int(Db.GetCount(command));
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Patient pri provs not set: ")+numFound+"\r\n";
+				}
 			}
 			else {
 				////previous versions of the program just dealt gracefully with missing provnum.
@@ -968,7 +1053,7 @@ namespace OpenDentBusiness {
 
 		public static string PatientUnDeleteWithBalance(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
 			command="SELECT PatNum FROM patient	WHERE PatStatus=4 "
@@ -1001,7 +1086,7 @@ namespace OpenDentBusiness {
 
 		public static string PatPlanOrdinalTwoToOne(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
 			command="SELECT PatPlanNum FROM patplan patplan1 WHERE Ordinal=2 AND NOT EXISTS("
@@ -1009,7 +1094,7 @@ namespace OpenDentBusiness {
 			table=Db.GetTable(command);
 			if(isCheck) {
 				if(table.Rows.Count>0 || verbose) {
-					log+=Lans.g("FormDatabaseMaintenance","PatPlans for secondary found where no primary ins: ")+table.Rows.Count.ToString()+"\r\n";
+					log+=Lans.g("FormDatabaseMaintenance","PatPlans for secondary found where no primary ins: ")+table.Rows.Count+"\r\n";
 				}
 			}
 			else {
@@ -1027,16 +1112,22 @@ namespace OpenDentBusiness {
 
 		public static string PaymentDetachMissingDeposit(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
 			if(isCheck) {
-				//No check implemented.
+				command="SELECT COUNT(*) FROM payment "
+					+"WHERE DepositNum != 0 " 
+					+"AND NOT EXISTS(SELECT * FROM deposit WHERE deposit.DepositNum=payment.DepositNum)";
+				int numFound=PIn.Int(Db.GetCount(command));
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Payments attached to deposits that no longer exist: ")+numFound+"\r\n";
+				}
 			}
 			else {
 				//command="UPDATE payment SET DepositNum=0 "
-				//+"WHERE DepositNum != 0 " 
-				//+"AND NOT EXISTS(SELECT * FROM deposit WHERE deposit.DepositNum=payment.DepositNum)";
+				//	+"WHERE DepositNum != 0 " 
+				//	+"AND NOT EXISTS(SELECT * FROM deposit WHERE deposit.DepositNum=payment.DepositNum)";
 				//int numberFixed=Db.NonQ32(command);
 				//if(numberFixed>0 || verbose) {
 				//  log+=Lans.g("FormDatabaseMaintenance","Payments detached from deposits that no longer exist: ")
@@ -1048,24 +1139,35 @@ namespace OpenDentBusiness {
 
 		public static string PayPlanChargeGuarantorMatch(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				return "";
 			}
 			string log="";
 			if(isCheck) {
-				//No check implemented.
+				int numFound=0;
+				command="SELECT COUNT(*) FROM payplancharge,payplan "
+					+"WHERE payplan.PayPlanNum=payplancharge.PayPlanNum "
+					+"AND payplancharge.Guarantor != payplan.Guarantor";
+				numFound+=PIn.Int(Db.GetCount(command));
+				command="SELECT COUNT(*) FROM payplancharge,payplan "
+					+"WHERE payplan.PayPlanNum=payplancharge.PayPlanNum "
+					+"AND payplancharge.PatNum != payplan.PatNum";
+				numFound+=PIn.Int(Db.GetCount(command));
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","PayPlanCharge guarantors and pats not matching payplan guarantors and pats: ")+numFound+"\r\n";
+				}
 			}
 			else {
 				//int numberFixed=0;
 				//command="UPDATE payplancharge,payplan SET payplancharge.Guarantor=payplan.Guarantor "
-				//+"WHERE payplan.PayPlanNum=payplancharge.PayPlanNum "
-				//+"AND payplancharge.Guarantor != payplan.Guarantor";
+				//	+"WHERE payplan.PayPlanNum=payplancharge.PayPlanNum "
+				//	+"AND payplancharge.Guarantor != payplan.Guarantor";
 				//numberFixed+=Db.NonQ32(command);
 				//command="UPDATE payplancharge,payplan SET payplancharge.PatNum=payplan.PatNum "
-				//+"WHERE payplan.PayPlanNum=payplancharge.PayPlanNum "
-				//+"AND payplancharge.PatNum != payplan.PatNum";
+				//	+"WHERE payplan.PayPlanNum=payplancharge.PayPlanNum "
+				//	+"AND payplancharge.PatNum != payplan.PatNum";
 				//numberFixed+=Db.NonQ32(command);
 				//if(numberFixed>0 || verbose) {
 				//  log+=Lans.g("FormDatabaseMaintenance","PayPlanCharge guarantors and pats set to match payplan guarantors and pats: ")
@@ -1077,16 +1179,20 @@ namespace OpenDentBusiness {
 
 		public static string PayPlanChargeProvNum(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
 			if(isCheck) {
-				//No check implemented.
+				command="SELECT COUNT(*) FROM payplancharge WHERE ProvNum=0";
+				int numFound=PIn.Int(Db.GetCount(command));
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Pay plan charge providers missing: ")+numFound+"\r\n";
+				}
 			}
 			else {
 				////I would rather set the provnum to that of the patient, but it's more complex.
 				//command="UPDATE payplancharge SET ProvNum="+POut.Long(PrefC.GetLong(PrefName.PracticeDefaultProv))
-				//+" WHERE ProvNum=0";
+				//	+" WHERE ProvNum=0";
 				//int numberFixed=Db.NonQ32(command);
 				//if(numberFixed>0 || verbose) {
 				//  log+=Lans.g("FormDatabaseMaintenance","Pay plan charge providers set if missing: ")
@@ -1098,11 +1204,15 @@ namespace OpenDentBusiness {
 
 		public static string PayPlanSetGuarantorToPatForIns(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
 			if(isCheck) {
-				//No check implemented.
+				command="SELECT COUNT(*) FROM payplan WHERE PlanNum>0 AND Guarantor != PatNum";
+				int numFound=PIn.Int(Db.GetCount(command));
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","PayPlan Guarantors not equal to PatNum where used for insurance tracking: ")+numFound+"\r\n";
+				}
 			}
 			else {
 				//command="UPDATE payplan SET Guarantor=PatNum WHERE PlanNum>0 AND Guarantor != PatNum";
@@ -1117,7 +1227,7 @@ namespace OpenDentBusiness {
 
 		public static string PaySplitAttachedToPayPlan(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
 			command="SELECT SplitNum,payplan.Guarantor FROM paysplit,payplan "
@@ -1126,7 +1236,7 @@ namespace OpenDentBusiness {
 			DataTable table=Db.GetTable(command);
 			if(isCheck) {
 				if(table.Rows.Count>0 || verbose) {
-					log+=Lans.g("FormDatabaseMaintenance","Paysplits found with patnum not matching payplan guarantor: ")+table.Rows.Count.ToString()+"\r\n";
+					log+=Lans.g("FormDatabaseMaintenance","Paysplits found with patnum not matching payplan guarantor: ")+table.Rows.Count+"\r\n";
 				}
 			}
 			else {
@@ -1145,11 +1255,15 @@ namespace OpenDentBusiness {
 
 		public static string PaySplitDeleteWithInvalidPayNum(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
 			if(isCheck) {
-				//No check implemented.
+				command="SELECT COUNT(*) FROM paysplit WHERE NOT EXISTS(SELECT * FROM payment WHERE paysplit.PayNum=payment.PayNum)";
+				int numFound=PIn.Int(Db.GetCount(command));
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Paysplits found with invalid PayNum: ")+numFound+"\r\n";
+				}
 			}
 			else {
 				//command="DELETE FROM paysplit WHERE NOT EXISTS(SELECT * FROM payment WHERE paysplit.PayNum=payment.PayNum)";
@@ -1163,11 +1277,17 @@ namespace OpenDentBusiness {
 
 		public static string PreferenceDateDepositsStarted(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
 			if(isCheck) {
-				//No check implemented.
+				DateTime date=PrefC.GetDate(PrefName.DateDepositsStarted);
+				if(date<DateTime.Now.AddMonths(-1)) {
+					log+=Lans.g("FormDatabaseMaintenance","Deposit start date needs to be reset.")+"\r\n";
+				}
+				else if(verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Deposit start date checked.")+"\r\n";
+				}
 			}
 			else {
 				////If the program locks up when trying to create a deposit slip, it's because someone removed the start date from the deposit edit window. Run this query to get back in.
@@ -1188,7 +1308,7 @@ namespace OpenDentBusiness {
 
 		public static string PreferencePracticeBillingType(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
 			command="SELECT valuestring FROM preference WHERE prefname = 'PracticeDefaultBillType'";
@@ -1213,7 +1333,7 @@ namespace OpenDentBusiness {
 
 		public static string PreferencePracticeProv(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
 			command="SELECT valuestring FROM preference WHERE prefname = 'PracticeDefaultProv'";
@@ -1243,15 +1363,20 @@ namespace OpenDentBusiness {
 
 		public static string ProcButtonItemsDeleteWithInvalidAutoCode(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
 			if(isCheck) {
-				//No check implemented.
+				command=@"SELECT COUNT(*) FROM procbuttonitem WHERE CodeNum=0 AND NOT EXISTS(
+					SELECT * FROM autocode WHERE autocode.AutoCodeNum=procbuttonitem.AutoCodeNum)";
+				int numFound=PIn.Int(Db.GetCount(command));
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","ProcButtonItems found with invalid autocode: ")+numFound+"\r\n";
+				}
 			}
 			else {
 				//command=@"DELETE FROM procbuttonitem WHERE CodeNum=0 AND NOT EXISTS(
-				//SELECT * FROM autocode WHERE autocode.AutoCodeNum=procbuttonitem.AutoCodeNum)";
+				//	SELECT * FROM autocode WHERE autocode.AutoCodeNum=procbuttonitem.AutoCodeNum)";
 				//int numberFixed=Db.NonQ32(command);
 				//if(numberFixed>0) {
 				//	Signals.SetInvalid(InvalidType.ProcButtons);
@@ -1265,18 +1390,23 @@ namespace OpenDentBusiness {
 
 		public static string ProcedurelogAttachedToWrongAppts(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				return "";
 			}
 			string log="";
 			if(isCheck) {
-				//No check implemented.
+				command="SELECT COUNT(*) FROM appointment,procedurelog "
+					+"WHERE procedurelog.AptNum=appointment.AptNum AND procedurelog.PatNum != appointment.PatNum";
+				int numFound=PIn.Int(Db.GetCount(command));
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Procedures attached to appointments with incorrect patient: ")+numFound+"\r\n";
+				}
 			}
 			else {
 				//command="UPDATE appointment,procedurelog SET procedurelog.AptNum=0 "
-				//+"WHERE procedurelog.AptNum=appointment.AptNum AND procedurelog.PatNum != appointment.PatNum";
+				//	+"WHERE procedurelog.AptNum=appointment.AptNum AND procedurelog.PatNum != appointment.PatNum";
 				//int numberFixed=Db.NonQ32(command);
 				//if(numberFixed>0 || verbose) {
 				//  log+=Lans.g("FormDatabaseMaintenance","Procedures detached from appointments: ")+numberFixed.ToString()+"\r\n";
@@ -1287,11 +1417,18 @@ namespace OpenDentBusiness {
 
 		public static string ProcedurelogAttachedToWrongApptDate(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
 			if(isCheck) {
-				//No check implemented.
+				command=@"SELECT COUNT(*) FROM procedurelog,appointment
+					WHERE procedurelog.AptNum = appointment.AptNum
+					AND DATE(procedurelog.ProcDate) != DATE(appointment.AptDateTime)
+					AND procedurelog.ProcStatus = 2";
+				int numFound=PIn.Int(Db.GetCount(command));
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Procedures which are attached to appointments with mismatched dates: ")+numFound+"\r\n";
+				}
 			}
 			else {
 				//command=@"UPDATE procedurelog,appointment
@@ -1309,11 +1446,16 @@ namespace OpenDentBusiness {
 
 		public static string ProcedurelogBaseUnitsZero(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
 			if(isCheck) {
-				//No check implemented.
+				command=@"SELECT COUNT(*) FROM procedurelog 
+					WHERE baseunits != (SELECT procedurecode.BaseUnits FROM procedurecode WHERE procedurecode.CodeNum=procedurelog.CodeNum)";
+				int numFound=PIn.Int(Db.GetCount(command));
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Procedure BaseUnits not matching procedurecode BaseUnits: ")+numFound+"\r\n";
+				}
 			}
 			else {
 				////procedurelog.BaseUnits must match procedurecode.BaseUnits because there is no UI for procs.
@@ -1339,11 +1481,15 @@ namespace OpenDentBusiness {
 
 		public static string ProcedurelogCodeNumZero(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
 			if(isCheck) {
-				//No check implemented.
+				command="SELECT COUNT(*) FROM procedurelog WHERE CodeNum=0";
+				int numFound=PIn.Int(Db.GetCount(command));
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Procedures found with CodeNum=0: ")+numFound+"\r\n";
+				}
 			}
 			else {
 				//command="DELETE FROM procedurelog WHERE CodeNum=0";
@@ -1357,11 +1503,15 @@ namespace OpenDentBusiness {
 
 		public static string ProcedurelogProvNumMissing(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
 			if(isCheck) {
-				//No check implemented.
+				command="SELECT COUNT(*) FROM procedurelog WHERE ProvNum=0";
+				int numFound=PIn.Int(Db.GetCount(command));
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Procedures with missing provnums found: ")+numFound+"\r\n";
+				}
 			}
 			else {
 				//command="UPDATE procedurelog SET ProvNum="+PrefC.GetString(PrefName.PracticeDefaultProv)+" WHERE ProvNum=0";
@@ -1375,7 +1525,7 @@ namespace OpenDentBusiness {
 
 		public static string ProcedurelogToothNums(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
 			command="SELECT procnum,toothnum,patnum FROM procedurelog";
@@ -1423,7 +1573,7 @@ namespace OpenDentBusiness {
 
 		public static string ProcedurelogTpAttachedToClaim(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
 			command="SELECT procedurelog.ProcNum FROM procedurelog,claim,claimproc "
@@ -1454,11 +1604,15 @@ namespace OpenDentBusiness {
 
 		public static string ProcedurelogUnitQtyZero(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
 			if(isCheck) {
-				//No check implemented.
+				command="SELECT COUNT(*) FROM procedurelog WHERE UnitQty=0";
+				int numFound=PIn.Int(Db.GetCount(command));
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Procedures with UnitQty=0 found: ")+numFound+"\r\n";
+				}
 			}
 			else {
 				//command=@"UPDATE procedurelog        
@@ -1474,7 +1628,7 @@ namespace OpenDentBusiness {
 
 		public static string ProviderHiddenWithClaimPayments(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
 			command=@"SELECT MAX(claimproc.ProcDate),provider.ProvNum
@@ -1508,7 +1662,7 @@ namespace OpenDentBusiness {
 
 		public static string RecallDuplicatesWarn(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
 			if(RecallTypes.PerioType<1 || RecallTypes.ProphyType<1) {
@@ -1548,11 +1702,15 @@ namespace OpenDentBusiness {
 
 		public static string RecallTriggerDeleteBadCodeNum(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
 			if(isCheck) {
-				//No check implemented.
+				command="SELECT COUNT(*) FROM recalltrigger WHERE NOT EXISTS (SELECT * FROM procedurecode WHERE procedurecode.CodeNum=recalltrigger.CodeNum)";
+				int numFound=PIn.Int(Db.GetCount(command));
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Recall triggers found with bad codenum: ")+numFound+"\r\n";
+				}
 			}
 			else {
 				//command=@"DELETE FROM recalltrigger
@@ -1572,7 +1730,22 @@ namespace OpenDentBusiness {
 			//No need to check RemotingRole; no call to db.
 			string log="";
 			if(isCheck) {
-				//No check implemented.
+				int numFound=0;
+				Schedule[] schedList=Schedules.RefreshAll();
+				for(int i=0;i<schedList.Length;i++) {
+					if(schedList[i].Status!=SchedStatus.Open) {
+						continue;//closed and holiday statuses do not use starttime and stoptime
+					}
+					if(schedList[i].StopTime.TimeOfDay-schedList[i].StartTime.TimeOfDay<new TimeSpan(0,5,0)) {//Schedule items less than five minutes won't show up.
+						//But we don't want to count provider notes, employee notes, or pratice notes.
+						if(schedList[i].Note=="") {
+							numFound++;
+						}
+					}
+				}
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Schedule blocks invalid: ")+numFound+"\r\n";
+				}
 			}
 			else {
 				//int numberFixed=0;
@@ -1598,11 +1771,15 @@ namespace OpenDentBusiness {
 
 		public static string SchedulesDeleteProvClosed(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
 			if(isCheck) {
-				//No check implemented.
+				command="SELECT COUNT(*) FROM schedule WHERE SchedType=1 AND Status=1";//type=prov,status=closed
+				int numFound=PIn.Int(Db.GetCount(command));
+				if(numFound>0||verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Schedules found which are causing printing issues: ")+numFound+"\r\n";
+				}
 			}
 			else {
 				//command="DELETE FROM schedule WHERE SchedType=1 AND Status=1";//type=prov,status=closed
@@ -1616,11 +1793,19 @@ namespace OpenDentBusiness {
 
 		public static string SignalInFuture(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
 			if(isCheck) {
-				//No check implemented.
+				command=@"SELECT COUNT(*) FROM signal WHERE SigDateTime > NOW() OR AckTime > NOW()";
+				if(DataConnection.DBtype==DatabaseType.Oracle) {
+					string nowDateTime=POut.DateT(MiscData.GetNowDateTime());
+					command=@"SELECT COUNT(*) FROM signal WHERE SigDateTime > "+nowDateTime+" OR AckTime > "+nowDateTime;
+				}
+				int numFound=PIn.Int(Db.GetCount(command));
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Signal entries with future time: ")+numFound+"\r\n";
+				}
 			}
 			else {
 				//command=@"DELETE FROM signal WHERE SigDateTime > NOW() OR AckTime > NOW()";
@@ -1638,11 +1823,15 @@ namespace OpenDentBusiness {
 
 		public static string StatementDateRangeMax(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
 			if(isCheck) {
-				//No check implemented.
+				command="SELECT COUNT(*) FROM statement WHERE DateRangeTo='9999-12-31'";
+				int numFound=PIn.Int(Db.GetCount(command));
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Statement DateRangeTo max found: ")+numFound+"\r\n";
+				}
 			}
 			else {
 				//command="UPDATE statement SET DateRangeTo='2200-01-01' WHERE DateRangeTo='9999-12-31'";
