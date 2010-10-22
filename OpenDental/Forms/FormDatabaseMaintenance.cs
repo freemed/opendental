@@ -280,11 +280,13 @@ namespace OpenDental {
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.ClaimProcDateNotMatchPayment(verbose,isCheck);
 			Application.DoEvents();
+			textLog.Text+=DatabaseMaintenance.ClaimProcWithInvalidClaimNum(verbose,isCheck);
+			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.ClaimProcDeleteWithInvalidClaimNum(verbose,isCheck);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.ClaimProcDeleteWithInvalidPlanNum(verbose,isCheck);
+			textLog.Text+=DatabaseMaintenance.ClaimProcWithInvalidPlanNum(verbose,isCheck);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.ClaimProcDeleteWithInvalidProcNum(verbose,isCheck);
+			textLog.Text+=DatabaseMaintenance.ClaimProcDeleteEstimateWithInvalidProcNum(verbose,isCheck);
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.ClaimProcEstNoBillIns(verbose,isCheck);
 			Application.DoEvents();
@@ -330,7 +332,7 @@ namespace OpenDental {
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.PayPlanSetGuarantorToPatForIns(verbose,isCheck);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.PaySplitDeleteWithInvalidPayNum(verbose,isCheck);
+			textLog.Text+=DatabaseMaintenance.PaySplitWithInvalidPayNum(verbose,isCheck);
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.PaySplitAttachedToPayPlan(verbose,isCheck);
 			Application.DoEvents();

@@ -126,46 +126,46 @@ namespace OpenDentBusiness {
 				}
 			}
 			else{
-				//string[] commands=new string[]
-				//{
-				//  "UPDATE adjustment SET AdjDate='0001-01-01' WHERE AdjDate='0000-00-00'"
-				//  ,"UPDATE adjustment SET DateEntry='1980-01-01' WHERE DateEntry<'1980'"
-				//  ,"UPDATE adjustment SET ProcDate='0001-01-01' WHERE ProcDate='0000-00-00'"
-				//  ,"UPDATE appointment SET AptDateTime='0001-01-01 00:00:00' WHERE AptDateTime LIKE '0000-00-00%'"
-				//  ,"UPDATE appointment SET DateTimeArrived='0001-01-01 00:00:00' WHERE DateTimeArrived LIKE '0000-00-00%'"
-				//  ,"UPDATE appointment SET DateTimeSeated='0001-01-01 00:00:00' WHERE DateTimeSeated LIKE '0000-00-00%'"
-				//  ,"UPDATE appointment SET DateTimeDismissed='0001-01-01 00:00:00' WHERE DateTimeDismissed LIKE '0000-00-00%'"
-				//  ,"UPDATE appointment SET DateTStamp='2009-08-24 00:00:00' WHERE DateTStamp='0000-00-00 00:00:00'"
-				//  ,"UPDATE claim SET DateService='0001-01-01' WHERE DateService='0000-00-00'"
-				//  ,"UPDATE claim SET DateSent='0001-01-01' WHERE DateSent='0000-00-00'"
-				//  ,"UPDATE claim SET DateReceived='0001-01-01' WHERE DateReceived='0000-00-00'"
-				//  ,"UPDATE claim SET PriorDate='0001-01-01' WHERE PriorDate='0000-00-00'"
-				//  ,"UPDATE claim SET AccidentDate='0001-01-01' WHERE AccidentDate='0000-00-00'"
-				//  ,"UPDATE claim SET OrthoDate='0001-01-01' WHERE OrthoDate='0000-00-00'"
-				//  ,"UPDATE claimpayment SET CheckDate='0001-01-01' WHERE CheckDate='0000-00-00'"
-				//  ,"UPDATE claimproc SET DateCP='0001-01-01' WHERE DateCP='0000-00-00'"
-				//  ,"UPDATE claimproc SET ProcDate='0001-01-01' WHERE ProcDate='0000-00-00'"
-				//  ,"UPDATE insplan SET DateEffective='0001-01-01' WHERE DateEffective='0000-00-00'"
-				//  ,"UPDATE insplan SET DateTerm='0001-01-01' WHERE DateTerm='0000-00-00'"
-				//  ,"UPDATE patient SET Birthdate='0001-01-01' WHERE Birthdate='0000-00-00'"
-				//  ,"UPDATE patient SET DateFirstVisit='0001-01-01' WHERE DateFirstVisit='0000-00-00'"
-				//  ,"UPDATE procedurelog SET ProcDate='0001-01-01 00:00:00' WHERE ProcDate LIKE '0000-00-00%'"
-				//  ,"UPDATE procedurelog SET DateOriginalProsth='0001-01-01' WHERE DateOriginalProsth='0000-00-00'"
-				//  ,"UPDATE procedurelog SET DateEntryC='0001-01-01' WHERE DateEntryC='0000-00-00'"
-				//  ,"UPDATE procedurelog SET DateTP='0001-01-01' WHERE DateTP='0000-00-00'"
-				//  ,"UPDATE recall SET DateDueCalc='0001-01-01' WHERE DateDueCalc='0000-00-00'"
-				//  ,"UPDATE recall SET DateDue='0001-01-01' WHERE DateDue='0000-00-00'"
-				//  ,"UPDATE recall SET DatePrevious='0001-01-01' WHERE DatePrevious='0000-00-00'"
-				//  ,"UPDATE recall SET DisableUntilDate='0001-01-01' WHERE DisableUntilDate='0000-00-00'"
-				//  ,"UPDATE schedule SET SchedDate='0001-01-01' WHERE SchedDate='0000-00-00'"
-				//  ,"UPDATE signal SET DateViewing='0001-01-01' WHERE DateViewing='0000-00-00'"
-				//  ,"UPDATE signal SET SigDateTime='0001-01-01 00:00:00' WHERE SigDateTime LIKE '0000-00-00%'"
-				//  ,"UPDATE signal SET AckTime='0001-01-01 00:00:00' WHERE AckTime LIKE '0000-00-00%'"
-				//};
-				//int rowsChanged=Db.NonQ32(commands);
-				//if(rowsChanged !=0 || verbose) {
-				//  log+=Lans.g("FormDatabaseMaintenance","Dates fixed. Rows changed:")+" "+rowsChanged.ToString()+"\r\n";
-				//}
+				string[] commands=new string[]
+				{
+				  "UPDATE adjustment SET AdjDate='0001-01-01' WHERE AdjDate='0000-00-00'"
+				  ,"UPDATE adjustment SET DateEntry='1980-01-01' WHERE DateEntry<'1980'"
+				  ,"UPDATE adjustment SET ProcDate='0001-01-01' WHERE ProcDate='0000-00-00'"
+				  ,"UPDATE appointment SET AptDateTime='0001-01-01 00:00:00' WHERE AptDateTime LIKE '0000-00-00%'"
+				  ,"UPDATE appointment SET DateTimeArrived='0001-01-01 00:00:00' WHERE DateTimeArrived LIKE '0000-00-00%'"
+				  ,"UPDATE appointment SET DateTimeSeated='0001-01-01 00:00:00' WHERE DateTimeSeated LIKE '0000-00-00%'"
+				  ,"UPDATE appointment SET DateTimeDismissed='0001-01-01 00:00:00' WHERE DateTimeDismissed LIKE '0000-00-00%'"
+				  ,"UPDATE appointment SET DateTStamp='2009-08-24 00:00:00' WHERE DateTStamp='0000-00-00 00:00:00'"
+				  ,"UPDATE claim SET DateService='0001-01-01' WHERE DateService='0000-00-00'"
+				  ,"UPDATE claim SET DateSent='0001-01-01' WHERE DateSent='0000-00-00'"
+				  ,"UPDATE claim SET DateReceived='0001-01-01' WHERE DateReceived='0000-00-00'"
+				  ,"UPDATE claim SET PriorDate='0001-01-01' WHERE PriorDate='0000-00-00'"
+				  ,"UPDATE claim SET AccidentDate='0001-01-01' WHERE AccidentDate='0000-00-00'"
+				  ,"UPDATE claim SET OrthoDate='0001-01-01' WHERE OrthoDate='0000-00-00'"
+				  ,"UPDATE claimpayment SET CheckDate='0001-01-01' WHERE CheckDate='0000-00-00'"
+				  ,"UPDATE claimproc SET DateCP='0001-01-01' WHERE DateCP='0000-00-00'"
+				  ,"UPDATE claimproc SET ProcDate='0001-01-01' WHERE ProcDate='0000-00-00'"
+				  ,"UPDATE insplan SET DateEffective='0001-01-01' WHERE DateEffective='0000-00-00'"
+				  ,"UPDATE insplan SET DateTerm='0001-01-01' WHERE DateTerm='0000-00-00'"
+				  ,"UPDATE patient SET Birthdate='0001-01-01' WHERE Birthdate='0000-00-00'"
+				  ,"UPDATE patient SET DateFirstVisit='0001-01-01' WHERE DateFirstVisit='0000-00-00'"
+				  ,"UPDATE procedurelog SET ProcDate='0001-01-01 00:00:00' WHERE ProcDate LIKE '0000-00-00%'"
+				  ,"UPDATE procedurelog SET DateOriginalProsth='0001-01-01' WHERE DateOriginalProsth='0000-00-00'"
+				  ,"UPDATE procedurelog SET DateEntryC='0001-01-01' WHERE DateEntryC='0000-00-00'"
+				  ,"UPDATE procedurelog SET DateTP='0001-01-01' WHERE DateTP='0000-00-00'"
+				  ,"UPDATE recall SET DateDueCalc='0001-01-01' WHERE DateDueCalc='0000-00-00'"
+				  ,"UPDATE recall SET DateDue='0001-01-01' WHERE DateDue='0000-00-00'"
+				  ,"UPDATE recall SET DatePrevious='0001-01-01' WHERE DatePrevious='0000-00-00'"
+				  ,"UPDATE recall SET DisableUntilDate='0001-01-01' WHERE DisableUntilDate='0000-00-00'"
+				  ,"UPDATE schedule SET SchedDate='0001-01-01' WHERE SchedDate='0000-00-00'"
+				  ,"UPDATE signal SET DateViewing='0001-01-01' WHERE DateViewing='0000-00-00'"
+				  ,"UPDATE signal SET SigDateTime='0001-01-01 00:00:00' WHERE SigDateTime LIKE '0000-00-00%'"
+				  ,"UPDATE signal SET AckTime='0001-01-01 00:00:00' WHERE AckTime LIKE '0000-00-00%'"
+				};
+				int rowsChanged=Db.NonQ32(commands);
+				if(rowsChanged !=0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Dates fixed. Rows changed:")+" "+rowsChanged.ToString()+"\r\n";
+				}
 			}
 			return log;
 		}
@@ -210,19 +210,19 @@ namespace OpenDentBusiness {
 				}
 			}
 			else{
-				//if(table.Rows.Count>0) {
-				//  //detach all procedures
-				//  command="UPDATE procedurelog P, appointment A SET P.AptNum = 0 WHERE P.AptNum = A.AptNum AND A.Pattern = ''";
-				//  Db.NonQ(command);
-				//  command="UPDATE procedurelog P, appointment A SET P.PlannedAptNum = 0 WHERE P.PlannedAptNum = A.AptNum AND A.Pattern = ''";
-				//  Db.NonQ(command);
-				//  command="DELETE FROM appointment WHERE Pattern = ''";
-				//  Db.NonQ(command);
-				//}
-				//int numberFixed=table.Rows.Count;
-				//if(numberFixed!=0 || verbose) {
-				//  log+=Lans.g("FormDatabaseMaintenance","Appointments deleted with zero length: ")+numberFixed.ToString()+"\r\n";
-				//}
+				if(table.Rows.Count>0) {
+					//detach all procedures
+					command="UPDATE procedurelog P, appointment A SET P.AptNum = 0 WHERE P.AptNum = A.AptNum AND A.Pattern = ''";
+					Db.NonQ(command);
+					command="UPDATE procedurelog P, appointment A SET P.PlannedAptNum = 0 WHERE P.PlannedAptNum = A.AptNum AND A.Pattern = ''";
+					Db.NonQ(command);
+					command="DELETE FROM appointment WHERE Pattern = ''";
+					Db.NonQ(command);
+				}
+				int numberFixed=table.Rows.Count;
+				if(numberFixed!=0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Appointments deleted with zero length: ")+numberFixed.ToString()+"\r\n";
+				}
 			}
 			return log;
 		}
@@ -243,14 +243,14 @@ namespace OpenDentBusiness {
 				}
 			}
 			else{
-				//command="DELETE FROM appointment "
-				//  +"WHERE AptStatus=1 "//scheduled 
-				//  +"AND YEAR(AptDateTime)<1880 "//scheduled but no date 
-				//  +"AND NOT EXISTS(SELECT * FROM procedurelog WHERE procedurelog.AptNum=appointment.AptNum)";//and no procs
-				//int numberFixed=Db.NonQ32(command);
-				//if(numberFixed!=0 || verbose) {
-				//  log+=Lans.g("FormDatabaseMaintenance","Appointments deleted due to no date and no procs: ")+numberFixed.ToString()+"\r\n";
-				//}
+				command="DELETE FROM appointment "
+				  +"WHERE AptStatus=1 "//scheduled 
+				  +"AND YEAR(AptDateTime)<1880 "//scheduled but no date 
+				  +"AND NOT EXISTS(SELECT * FROM procedurelog WHERE procedurelog.AptNum=appointment.AptNum)";//and no procs
+				int numberFixed=Db.NonQ32(command);
+				if(numberFixed!=0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Appointments deleted due to no date and no procs: ")+numberFixed.ToString()+"\r\n";
+				}
 			}
 			return log;
 		}
@@ -304,15 +304,15 @@ namespace OpenDentBusiness {
         }
 			}
 			else{
-        //command=@"DELETE FROM autocode WHERE NOT EXISTS(
-				//	SELECT * FROM autocodeitem WHERE autocodeitem.AutoCodeNum=autocode.AutoCodeNum)";
-        //int numberFixed=Db.NonQ32(command);
-        //if(numberFixed>0) {
-        //  Signals.SetInvalid(InvalidType.AutoCodes);
-        //}
-        //if(numberFixed!=0 || verbose) {
-        //  log+=Lans.g("FormDatabaseMaintenance","Autocodes deleted due to no items: ")+numberFixed.ToString()+"\r\n";
-        //}
+				command=@"DELETE FROM autocode WHERE NOT EXISTS(
+					SELECT * FROM autocodeitem WHERE autocodeitem.AutoCodeNum=autocode.AutoCodeNum)";
+				int numberFixed=Db.NonQ32(command);
+				if(numberFixed>0) {
+					Signals.SetInvalid(InvalidType.AutoCodes);
+				}
+				if(numberFixed!=0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Autocodes deleted due to no items: ")+numberFixed.ToString()+"\r\n";
+				}
 			}
 			return log;
 		}
@@ -419,15 +419,15 @@ namespace OpenDentBusiness {
 				}
 			}
 			else{
-				//for(int i=0;i<table.Rows.Count;i++) {
-				//  command="UPDATE claim SET WriteOff='"+POut.Double(PIn.Double(table.Rows[i]["sumwo"].ToString()))+"' "
-				//    +"WHERE ClaimNum="+table.Rows[i]["ClaimNum"].ToString();
-				//  Db.NonQ(command);
-				//}
-				//int numberFixed=table.Rows.Count;
-				//if(numberFixed>0 || verbose) {
-				//  log+=Lans.g("FormDatabaseMaintenance","Claim writeoff sums fixed: ")+numberFixed.ToString()+"\r\n";
-				//}
+				for(int i=0;i<table.Rows.Count;i++) {
+					command="UPDATE claim SET WriteOff='"+POut.Double(PIn.Double(table.Rows[i]["sumwo"].ToString()))+"' "
+				    +"WHERE ClaimNum="+table.Rows[i]["ClaimNum"].ToString();
+					Db.NonQ(command);
+				}
+				int numberFixed=table.Rows.Count;
+				if(numberFixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Claim writeoff sums fixed: ")+numberFixed.ToString()+"\r\n";
+				}
 			}
 			return log;
 		}
@@ -451,15 +451,15 @@ namespace OpenDentBusiness {
 				}
 			}
 			else{
-				//for(int i=0;i<table.Rows.Count;i++) {
-				//  command="UPDATE claimpayment SET CheckAmt='"+POut.Double(PIn.Double(table.Rows[i]["_sumpay"].ToString()))+"' "
-				//    +"WHERE ClaimPaymentNum="+table.Rows[i]["ClaimPaymentNum"].ToString();
-				//  Db.NonQ(command);
-				//}
-				//numberFixed=table.Rows.Count;
-				//if(numberFixed>0||verbose) {
-				//  log+=Lans.g("FormDatabaseMaintenance","Claim payment sums fixed: ")+numberFixed.ToString()+"\r\n";
-				//}
+				for(int i=0;i<table.Rows.Count;i++) {
+					command="UPDATE claimpayment SET CheckAmt='"+POut.Double(PIn.Double(table.Rows[i]["_sumpay"].ToString()))+"' "
+				    +"WHERE ClaimPaymentNum="+table.Rows[i]["ClaimPaymentNum"].ToString();
+					Db.NonQ(command);
+				}
+				int numberFixed=table.Rows.Count;
+				if(numberFixed>0||verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Claim payment sums fixed: ")+numberFixed.ToString()+"\r\n";
+				}
 			}
 			//now deposits which were affected by the changes above--------------------------------------------------
 			command=@"SELECT DepositNum,deposit.Amount,DateDeposit,
@@ -474,22 +474,23 @@ namespace OpenDentBusiness {
 				}
 			}
 			else{
-				//for(int i=0;i<table.Rows.Count;i++) {
-				//  if(i==0) {
-				//    log+=Lans.g("FormDatabaseMaintenance","PRINT THIS FOR REFERENCE. Deposit sums recalculated:")+"\r\n";
-				//  }
-				//  DateTime date=PIn.Date(table.Rows[i]["DateDeposit"].ToString());
-				//  Double oldval=PIn.Double(table.Rows[i]["Amount"].ToString());
-				//  Double newval=PIn.Double(table.Rows[i]["_sum"].ToString());
-				//  log+=date.ToShortDateString()+" "+Lans.g("FormDatabaseMaintenance","OldSum:")+oldval.ToString("c")
-				//    +", "+Lans.g("FormDatabaseMaintenance","NewSum:")+newval.ToString("c")+"\r\n";
-				//  command="UPDATE deposit SET Amount='"+POut.Double(PIn.Double(table.Rows[i]["_sum"].ToString()))+"' "
-				//    +"WHERE DepositNum="+table.Rows[i]["DepositNum"].ToString();
-				//  Db.NonQ(command);
-				//}
-				//if(numberFixed>0||verbose) {
-				//  log+=Lans.g("FormDatabaseMaintenance","Deposit sums fixed: ")+numberFixed.ToString()+"\r\n";
-				//}
+				for(int i=0;i<table.Rows.Count;i++) {
+					if(i==0) {
+						log+=Lans.g("FormDatabaseMaintenance","PRINT THIS FOR REFERENCE. Deposit sums recalculated:")+"\r\n";
+					}
+					DateTime date=PIn.Date(table.Rows[i]["DateDeposit"].ToString());
+					Double oldval=PIn.Double(table.Rows[i]["Amount"].ToString());
+					Double newval=PIn.Double(table.Rows[i]["_sum"].ToString());
+					log+=date.ToShortDateString()+" "+Lans.g("FormDatabaseMaintenance","OldSum:")+oldval.ToString("c")
+				    +", "+Lans.g("FormDatabaseMaintenance","NewSum:")+newval.ToString("c")+"\r\n";
+					command="UPDATE deposit SET Amount='"+POut.Double(PIn.Double(table.Rows[i]["_sum"].ToString()))+"' "
+				    +"WHERE DepositNum="+table.Rows[i]["DepositNum"].ToString();
+					Db.NonQ(command);
+				}
+				int numberFixed=table.Rows.Count;
+				if(numberFixed>0||verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Deposit sums fixed: ")+numberFixed.ToString()+"\r\n";
+				}
 			}
 			return log;
 		}
@@ -570,31 +571,53 @@ namespace OpenDentBusiness {
 			return log;
 		}
 
-		public static string ClaimProcDeleteWithInvalidClaimNum(bool verbose,bool isCheck) {
+		public static string ClaimProcWithInvalidClaimNum(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
 			if(isCheck){
 				command="SELECT COUNT(*) FROM claimproc WHERE claimproc.ClaimNum!=0 "
-				  +"AND NOT EXISTS(SELECT * FROM claim WHERE claim.ClaimNum=claimproc.ClaimNum)";
+				  +"AND NOT EXISTS(SELECT * FROM claim WHERE claim.ClaimNum=claimproc.ClaimNum) "
+					+"AND (claimproc.InsPayAmt!=0 OR claimproc.WriteOff!=0)";
 				int numFound=PIn.Int(Db.GetCount(command));
 				if(numFound>0 || verbose) {
 					log+=Lans.g("FormDatabaseMaintenance","Claimprocs found with invalid ClaimNum: ")+numFound+"\r\n";
 				}
 			}
 			else{
-				//command="DELETE FROM claimproc WHERE claimproc.ClaimNum!=0 "
-				//  +"AND NOT EXISTS(SELECT * FROM claim WHERE claim.ClaimNum=claimproc.ClaimNum)";
-				//int numberFixed=Db.NonQ32(command);
-				//if(numberFixed>0 || verbose) {
-				//  log+=Lans.g("FormDatabaseMaintenance","Claimprocs deleted due to invalid ClaimNum: ")+numberFixed.ToString()+"\r\n";
-				//}
+				//Inform only
 			}
 			return log;
 		}
 
-		public static string ClaimProcDeleteWithInvalidPlanNum(bool verbose,bool isCheck) {
+		public static string ClaimProcDeleteWithInvalidClaimNum(bool verbose,bool isCheck) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
+			}
+			string log="";
+			if(isCheck) {
+				command="SELECT COUNT(*) FROM claimproc WHERE claimproc.ClaimNum!=0 "
+				  +"AND NOT EXISTS(SELECT * FROM claim WHERE claim.ClaimNum=claimproc.ClaimNum) "
+					+"AND claimproc.InsPayAmt=0 AND claimproc.WriteOff=0";
+				int numFound=PIn.Int(Db.GetCount(command));
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Claimprocs found with invalid ClaimNum: ")+numFound+"\r\n";
+				}
+			}
+			else {
+				command="DELETE FROM claimproc WHERE claimproc.ClaimNum!=0 "
+				  +"AND NOT EXISTS(SELECT * FROM claim WHERE claim.ClaimNum=claimproc.ClaimNum) "
+					+"AND claimproc.InsPayAmt=0 AND claimproc.WriteOff=0";
+				int numberFixed=Db.NonQ32(command);
+				if(numberFixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Claimprocs deleted due to invalid ClaimNum: ")+numberFixed.ToString()+"\r\n";
+				}
+			}
+			return log;
+		}
+
+		public static string ClaimProcWithInvalidPlanNum(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
@@ -609,29 +632,20 @@ namespace OpenDentBusiness {
 				}
 			}
 			else{
-				//Patient Lim;
-				//int numberFixed=0;
-				//for(int i=0;i<table.Rows.Count;i++) {
-				//  command="DELETE FROM claimproc WHERE ClaimProcNum="+table.Rows[i][0].ToString();
-				//  Db.NonQ(command);
-				//  Lim=Patients.GetLim(PIn.Long(table.Rows[i][1].ToString()));
-				//  log+=Lans.g("FormDatabaseMaintenance","Claimproc with invalid PlanNum deleted for ")+Lim.GetNameLF()+"\r\n";
-				//  numberFixed++;
-				//}
-				//if(numberFixed!=0 || verbose) {
-				//  log+=Lans.g("FormDatabaseMaintenance","ClaimProcs deleted due to invalid PlanNum: ")+numberFixed.ToString()+"\r\n";
-				//}
+				//Take no action.  Use descriptive explanation.
 			}
 			return log;
 		}
 
-		public static string ClaimProcDeleteWithInvalidProcNum(bool verbose,bool isCheck) {
+		public static string ClaimProcDeleteEstimateWithInvalidProcNum(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
 			if(isCheck){
-				command="SELECT COUNT(*) FROM claimproc WHERE ProcNum>0 AND NOT EXISTS(SELECT * FROM procedurelog "
+				command="SELECT COUNT(*) FROM claimproc WHERE ProcNum>0 "
+					+"AND Status="+POut.Int((int)ClaimProcStatus.Estimate)+" "
+					+"AND NOT EXISTS(SELECT * FROM procedurelog "
 				  +"WHERE claimproc.ProcNum=procedurelog.ProcNum)";
 				int numFound=PIn.Int(Db.GetCount(command));
 				if(numFound>0 || verbose) {
@@ -639,13 +653,15 @@ namespace OpenDentBusiness {
 				}
 			}
 			else{
-				////These seem to pop up quite regularly due to the program forgetting to delete them
-				//command="DELETE FROM claimproc WHERE ProcNum>0 AND NOT EXISTS(SELECT * FROM procedurelog "
-				//  +"WHERE claimproc.ProcNum=procedurelog.ProcNum)";
-				//int numberFixed=Db.NonQ32(command);
-				//if(numberFixed>0 || verbose) {
-				//  log+=Lans.g("FormDatabaseMaintenance","Estimates deleted for procedures that no longer exist: ")+numberFixed.ToString()+"\r\n";
-				//}
+				//These seem to pop up quite regularly due to the program forgetting to delete them
+				command="DELETE FROM claimproc WHERE ProcNum>0 "
+					+"AND Status="+POut.Int((int)ClaimProcStatus.Estimate)+" "
+					+"AND NOT EXISTS(SELECT * FROM procedurelog "
+				  +"WHERE claimproc.ProcNum=procedurelog.ProcNum)";
+				int numberFixed=Db.NonQ32(command);
+				if(numberFixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Estimates deleted for procedures that no longer exist: ")+numberFixed.ToString()+"\r\n";
+				}
 			}
 			return log;
 		}
@@ -663,11 +679,12 @@ namespace OpenDentBusiness {
 				}
 			}
 			else{
-				//command="UPDATE claimproc SET InsPayEst=0 WHERE NoBillIns=1 AND InsPayEst !=0";
-				//int numberFixed=Db.NonQ32(command);
-				//if(numberFixed>0 || verbose) {
-				//  log+=Lans.g("FormDatabaseMaintenance","Claimproc estimates set to zero because marked NoBillIns: ")+numberFixed.ToString()+"\r\n";
-				//}
+				//This is just estimate info, regardless of the claimproc status, so totally safe.
+				command="UPDATE claimproc SET InsPayEst=0 WHERE NoBillIns=1 AND InsPayEst !=0";
+				int numberFixed=Db.NonQ32(command);
+				if(numberFixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Claimproc estimates set to zero because marked NoBillIns: ")+numberFixed.ToString()+"\r\n";
+				}
 			}
 			return log;
 		}
@@ -685,11 +702,12 @@ namespace OpenDentBusiness {
 				}
 			}
 			else{
-				//command=@"UPDATE claimproc SET InsPayAmt=0 WHERE InsPayAmt > 0 AND ClaimNum=0 AND Status=6";
-				//int numberFixed=Db.NonQ32(command);
-				//if(numberFixed>0 || verbose) {
-				//  log+=Lans.g("FormDatabaseMaintenance","ClaimProc estimates with InsPaidAmt > 0 fixed: ")+numberFixed.ToString()+"\r\n";
-				//}
+				//The InsPayAmt is already being ignored due to the status of the claimproc.  So changing its value is harmless.
+				command=@"UPDATE claimproc SET InsPayAmt=0 WHERE InsPayAmt > 0 AND ClaimNum=0 AND Status=6";
+				int numberFixed=Db.NonQ32(command);
+				if(numberFixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","ClaimProc estimates with InsPaidAmt > 0 fixed: ")+numberFixed.ToString()+"\r\n";
+				}
 			}
 			return log;
 		}
@@ -707,6 +725,9 @@ namespace OpenDentBusiness {
 				}
 			}
 			else{
+				//create a dummy provider (using helper function).
+				//change provnum to the dummy prov
+
 				//command="UPDATE claimproc SET ProvNum="+PrefC.GetString(PrefName.PracticeDefaultProv)+" WHERE ProvNum=0";
 				//int numberFixed=Db.NonQ32(command);
 				//if(numberFixed>0 || verbose) {
@@ -733,15 +754,7 @@ namespace OpenDentBusiness {
 				}
 			}
 			else{
-				//for(int i=0;i<table.Rows.Count;i++) {
-				//  command="UPDATE claimproc SET Status=2"
-				//    +" WHERE ClaimProcNum="+table.Rows[i][0].ToString();
-				//  Db.NonQ(command);
-				//}
-				//int numberFixed=table.Rows.Count;
-				//if(numberFixed>0 || verbose) {
-				//  log+=Lans.g("FormDatabaseMaintenance","ClaimProcs for preauths with status not preauth fixed: ")+numberFixed.ToString()+"\r\n";
-				//}
+				//Take no action.  Use descriptive explanation.
 			}
 			return log;
 		}
@@ -765,15 +778,7 @@ namespace OpenDentBusiness {
 				}
 			}
 			else{
-				//command=@"UPDATE claimproc,claim
-				//	SET claimproc.Status=1
-				//	WHERE claimproc.ClaimNum=claim.ClaimNum
-				//	AND claim.ClaimStatus='R'
-				//	AND claimproc.Status=0";
-				//int numberFixed=Db.NonQ32(command);
-				//if(numberFixed>0 || verbose) {
-				//	log+=Lans.g("FormDatabaseMaintenance","ClaimProcs with status not matching claim fixed: ")+numberFixed.ToString()+"\r\n";
-				//}
+				//Take no action.  Use descriptive explanation.
 			}
 			return log;
 		}
@@ -792,12 +797,13 @@ namespace OpenDentBusiness {
 				}
 			}
 			else{
-				//command=@"UPDATE claimproc SET ClaimPaymentNum=0 WHERE claimpaymentnum !=0 AND NOT EXISTS(
-				//	SELECT * FROM claimpayment WHERE claimpayment.ClaimPaymentNum=claimproc.ClaimPaymentNum)";
-				//int numberFixed=Db.NonQ32(command);
-				//if(numberFixed>0 || verbose) {
-				//  log+=Lans.g("FormDatabaseMaintenance","ClaimProcs with with invalid ClaimPaymentNumber fixed: ")+numberFixed.ToString()+"\r\n";
-				//}
+				//slightly dangerous.  User will have to creat ins check again.  But does not alter financials.
+				command=@"UPDATE claimproc SET ClaimPaymentNum=0 WHERE claimpaymentnum !=0 AND NOT EXISTS(
+					SELECT * FROM claimpayment WHERE claimpayment.ClaimPaymentNum=claimproc.ClaimPaymentNum)";
+				int numberFixed=Db.NonQ32(command);
+				if(numberFixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","ClaimProcs with with invalid ClaimPaymentNumber fixed: ")+numberFixed.ToString()+"\r\n";
+				}
 			}
 			return log;
 		}
@@ -815,11 +821,7 @@ namespace OpenDentBusiness {
 				}
 			}
 			else{
-				//command=@"UPDATE claimproc SET WriteOff = -WriteOff WHERE WriteOff < 0";
-				//int numberFixed=Db.NonQ32(command);
-				//if(numberFixed>0 || verbose) {
-				//  log+=Lans.g("FormDatabaseMaintenance","Negative writeoffs fixed: ")+numberFixed.ToString()+"\r\n";
-				//}
+				//Take no action.  Use descriptive explanation.
 			}
 			return log;
 		}
@@ -837,11 +839,11 @@ namespace OpenDentBusiness {
 				}
 			}
 			else{
-				//command=@"UPDATE clockevent SET TimeDisplayed1=TimeEntered1 WHERE TimeDisplayed1 > NOW()";
-				//int numberFixed=Db.NonQ32(command);
-				//if(numberFixed>0 || verbose) {
-				//  log+=Lans.g("FormDatabaseMaintenance","Timecard entries fixed: ")+numberFixed.ToString()+"\r\n";
-				//}
+				command=@"UPDATE clockevent SET TimeDisplayed1=TimeEntered1 WHERE TimeDisplayed1 > NOW()";
+				int numberFixed=Db.NonQ32(command);
+				if(numberFixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Timecard entries fixed: ")+numberFixed.ToString()+"\r\n";
+				}
 			}
 			return log;
 		}
@@ -859,15 +861,15 @@ namespace OpenDentBusiness {
 				}
 			}
 			else{
-				//for(int i=0;i<table.Rows.Count;i++) {
-				//  command="UPDATE document SET DocCategory="+POut.Long(DefC.Short[(int)DefCat.ImageCats][0].DefNum)
-				//    +" WHERE DocNum="+table.Rows[i][0].ToString();
-				//  Db.NonQ(command);
-				//}
-				//int numberFixed=table.Rows.Count;
-				//if(numberFixed>0 || verbose) {
-				//  log+=Lans.g("FormDatabaseMaintenance","Images with no category fixed: ")+numberFixed.ToString()+"\r\n";
-				//}
+				for(int i=0;i<table.Rows.Count;i++) {
+					command="UPDATE document SET DocCategory="+POut.Long(DefC.Short[(int)DefCat.ImageCats][0].DefNum)
+				    +" WHERE DocNum="+table.Rows[i][0].ToString();
+					Db.NonQ(command);
+				}
+				int numberFixed=table.Rows.Count;
+				if(numberFixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Images with no category fixed: ")+numberFixed.ToString()+"\r\n";
+				}
 			}
 			return log;
 		}
@@ -886,18 +888,18 @@ namespace OpenDentBusiness {
 				}
 			}
 			else{
-				//if(table.Rows.Count>0) {
-				//  Carrier carrier=new Carrier();
-				//  carrier.CarrierName="unknown";
-				//  Carriers.Insert(carrier);
-				//  command="UPDATE insplan SET CarrierNum="+POut.Long(carrier.CarrierNum)
-				//    +" WHERE CarrierNum=0";
-				//  Db.NonQ(command);
-				//}
-				//int numberFixed=table.Rows.Count;
-				//if(numberFixed>0 || verbose) {
-				//  log+=Lans.g("FormDatabaseMaintenance","Ins plans with carrier missing fixed: ")+numberFixed.ToString()+"\r\n";
-				//}
+				if(table.Rows.Count>0) {
+					Carrier carrier=new Carrier();
+					carrier.CarrierName="unknown";
+					Carriers.Insert(carrier);
+					command="UPDATE insplan SET CarrierNum="+POut.Long(carrier.CarrierNum)
+				    +" WHERE CarrierNum=0";
+					Db.NonQ(command);
+				}
+				int numberFixed=table.Rows.Count;
+				if(numberFixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Ins plans with carrier missing fixed: ")+numberFixed.ToString()+"\r\n";
+				}
 			}
 			return log;
 		}
@@ -915,12 +917,12 @@ namespace OpenDentBusiness {
 				}
 			}
 			else{
-				//command="UPDATE insplan SET ClaimFormNum="+POut.Long(PrefC.GetLong(PrefName.DefaultClaimForm))
-				//  +" WHERE ClaimFormNum=0";
-				//int numberFixed=Db.NonQ32(command);
-				//if(numberFixed>0 || verbose) {
-				//  log+=Lans.g("FormDatabaseMaintenance","Insplan claimforms set if missing: ")+numberFixed.ToString()+"\r\n";
-				//}
+				command="UPDATE insplan SET ClaimFormNum="+POut.Long(PrefC.GetLong(PrefName.DefaultClaimForm))
+				  +" WHERE ClaimFormNum=0";
+				int numberFixed=Db.NonQ32(command);
+				if(numberFixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Insplan claimforms set if missing: ")+numberFixed.ToString()+"\r\n";
+				}
 			}
 			return log;
 		}
@@ -939,12 +941,12 @@ namespace OpenDentBusiness {
 				}
 			}
 			else{
-				//command="DELETE FROM medicationpat WHERE NOT EXISTS(SELECT * FROM medication "
-				//  +"WHERE medication.MedicationNum=medicationpat.MedicationNum)";
-				//int numberFixed=Db.NonQ32(command);
-				//if(numberFixed>0 || verbose) {
-				//  log+=Lans.g("FormDatabaseMaintenance","Medications deleted because no defition exists for them: ")+numberFixed.ToString()+"\r\n";
-				//}
+				command="DELETE FROM medicationpat WHERE NOT EXISTS(SELECT * FROM medication "
+				  +"WHERE medication.MedicationNum=medicationpat.MedicationNum)";
+				int numberFixed=Db.NonQ32(command);
+				if(numberFixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Medications deleted because no defition exists for them: ")+numberFixed.ToString()+"\r\n";
+				}
 			}
 			return log;
 		}
@@ -973,31 +975,31 @@ namespace OpenDentBusiness {
 				}
 			}
 			else {
-				//if(table.Rows.Count==0) {
-				//	if(verbose) {
-				//		log+=Lans.g("FormDatabaseMaintenance","Patient Field duplicate entries deleted")+": 0\r\n";
-				//	}
-				//	command=@"DROP TABLE IF EXISTS tempduplicatepatfields";
-				//	Db.NonQ(command);
-				//	return log;
-				//}
-				//else {
-				//	log+=Lans.g("FormDatabaseMaintenance","The following patients had corrupted 'Patient Fields'.  Compare the Patient Fields of each patient in the list against a backup from before the most recent version upgrade.")+"\r\n";
-				//}
-				//for(int i=0;i<table.Rows.Count;i++) {
-				//	log+="#"+table.Rows[i]["PatNum"].ToString()+" "+table.Rows[i]["LName"]+", "+table.Rows[i]["FName"]+".\r\n";
-				//}
-				////Without this index the delete process takes too long.
-				//command=@"ALTER TABLE tempduplicatepatfields 
-				//	ADD INDEX idx_temppatfield_patnum(PatNum)";
-				//command="DELETE FROM patfield "
-				//	+"WHERE PatNum IN(SELECT PatNum FROM tempduplicatepatfields)";
-				//int numberFixed=Db.NonQ32(command);
-				//if(numberFixed>0) {
-				//	log+=Lans.g("FormDatabaseMaintenance","Patient Field duplicate entries deleted: ")+numberFixed.ToString()+".\r\n";
-				//}
-				//command=@"DROP TABLE IF EXISTS tempduplicatepatfields";
-				//Db.NonQ(command);
+				if(table.Rows.Count==0) {
+					if(verbose) {
+						log+=Lans.g("FormDatabaseMaintenance","Patient Field duplicate entries deleted")+": 0\r\n";
+					}
+					command=@"DROP TABLE IF EXISTS tempduplicatepatfields";
+					Db.NonQ(command);
+					return log;
+				}
+				else {
+					log+=Lans.g("FormDatabaseMaintenance","The following patients had corrupted 'Patient Fields'.  Compare the Patient Fields of each patient in the list against a backup from before the most recent version upgrade.")+"\r\n";
+				}
+				for(int i=0;i<table.Rows.Count;i++) {
+					log+="#"+table.Rows[i]["PatNum"].ToString()+" "+table.Rows[i]["LName"]+", "+table.Rows[i]["FName"]+".\r\n";
+				}
+				//Without this index the delete process takes too long.
+				command=@"ALTER TABLE tempduplicatepatfields 
+					ADD INDEX idx_temppatfield_patnum(PatNum)";
+				command="DELETE FROM patfield "
+					+"WHERE PatNum IN(SELECT PatNum FROM tempduplicatepatfields)";
+				int numberFixed=Db.NonQ32(command);
+				if(numberFixed>0) {
+					log+=Lans.g("FormDatabaseMaintenance","Patient Field duplicate entries deleted: ")+numberFixed.ToString()+".\r\n";
+				}
+				command=@"DROP TABLE IF EXISTS tempduplicatepatfields";
+				Db.NonQ(command);
 			}
 			return log;
 		}
@@ -1015,14 +1017,14 @@ namespace OpenDentBusiness {
 				}
 			}
 			else {
-				//for(int i=0;i<table.Rows.Count;i++) {
-				//  command="UPDATE patient SET Guarantor=PatNum WHERE PatNum="+table.Rows[i][0].ToString();
-				//  Db.NonQ(command);
-				//}
-				//int numberFixed=table.Rows.Count;
-				//if(numberFixed>0 || verbose) {
-				//  log+=Lans.g("FormDatabaseMaintenance","Patients with invalid Guarantors fixed: ")+numberFixed.ToString()+"\r\n";
-				//}
+				for(int i=0;i<table.Rows.Count;i++) {
+					command="UPDATE patient SET Guarantor=PatNum WHERE PatNum="+table.Rows[i][0].ToString();
+					Db.NonQ(command);
+				}
+				int numberFixed=table.Rows.Count;
+				if(numberFixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Patients with invalid Guarantors fixed: ")+numberFixed.ToString()+"\r\n";
+				}
 			}
 			return log;
 		}
@@ -1040,13 +1042,13 @@ namespace OpenDentBusiness {
 				}
 			}
 			else {
-				////previous versions of the program just dealt gracefully with missing provnum.
-				////From now on, we can assum priprov is not missing, making coding easier.
-				//command=@"UPDATE patient SET PriProv="+PrefC.GetString(PrefName.PracticeDefaultProv)+" WHERE PriProv=0";
-				//int numberFixed=Db.NonQ32(command);
-				//if(numberFixed>0 || verbose) {
-				//  log+=Lans.g("FormDatabaseMaintenance","Patient pri provs fixed: ")+numberFixed.ToString()+"\r\n";
-				//}
+				//previous versions of the program just dealt gracefully with missing provnum.
+				//From now on, we can assum priprov is not missing, making coding easier.
+				command=@"UPDATE patient SET PriProv="+PrefC.GetString(PrefName.PracticeDefaultProv)+" WHERE PriProv=0";
+				int numberFixed=Db.NonQ32(command);
+				if(numberFixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Patient pri provs fixed: ")+numberFixed.ToString()+"\r\n";
+				}
 			}
 			return log;
 		}
@@ -1065,21 +1067,21 @@ namespace OpenDentBusiness {
 				}
 			}
 			else {
-				//if(table.Rows.Count==0 && verbose) {
-				//  log+=Lans.g("FormDatabaseMaintenance","No balances found for deleted patients.")+"\r\n";
-				//  return log;
-				//}
-				//Patient pat;
-				//Patient old;
-				//for(int i=0;i<table.Rows.Count;i++) {
-				//  pat=Patients.GetPat(PIn.Long(table.Rows[i][0].ToString()));
-				//  old=pat.Copy();
-				//  pat.LName=pat.LName+Lans.g("FormDatabaseMaintenance","DELETED");
-				//  pat.PatStatus=PatientStatus.Archived;
-				//  Patients.Update(pat,old);
-				//  log+=Lans.g("FormDatabaseMaintenance","Warning!  Patient:")+" "+old.GetNameFL()+" "
-				//    +Lans.g("FormDatabaseMaintenance","was previously marked as deleted, but was found to have a balance. Patient has been changed to Archive status.  The account will need to be cleared, and the patient deleted again.")+"\r\n";
-				//}
+				if(table.Rows.Count==0 && verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","No balances found for deleted patients.")+"\r\n";
+					return log;
+				}
+				Patient pat;
+				Patient old;
+				for(int i=0;i<table.Rows.Count;i++) {
+					pat=Patients.GetPat(PIn.Long(table.Rows[i][0].ToString()));
+					old=pat.Copy();
+					pat.LName=pat.LName+Lans.g("FormDatabaseMaintenance","DELETED");
+					pat.PatStatus=PatientStatus.Archived;
+					Patients.Update(pat,old);
+					log+=Lans.g("FormDatabaseMaintenance","Warning!  Patient:")+" "+old.GetNameFL()+" "
+				    +Lans.g("FormDatabaseMaintenance","was previously marked as deleted, but was found to have a balance. Patient has been changed to Archive status.  The account will need to be cleared, and the patient deleted again.")+"\r\n";
+				}
 			}
 			return log;
 		}
@@ -1156,14 +1158,14 @@ namespace OpenDentBusiness {
 				}
 			}
 			else {
-				//command="UPDATE payment SET DepositNum=0 "
-				//	+"WHERE DepositNum != 0 " 
-				//	+"AND NOT EXISTS(SELECT * FROM deposit WHERE deposit.DepositNum=payment.DepositNum)";
-				//int numberFixed=Db.NonQ32(command);
-				//if(numberFixed>0 || verbose) {
-				//  log+=Lans.g("FormDatabaseMaintenance","Payments detached from deposits that no longer exist: ")
-				//  +numberFixed.ToString()+"\r\n";
-				//}
+				command="UPDATE payment SET DepositNum=0 "
+					+"WHERE DepositNum != 0 " 
+					+"AND NOT EXISTS(SELECT * FROM deposit WHERE deposit.DepositNum=payment.DepositNum)";
+				int numberFixed=Db.NonQ32(command);
+				if(numberFixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Payments detached from deposits that no longer exist: ")
+				  +numberFixed.ToString()+"\r\n";
+				}
 			}
 			return log;
 		}
@@ -1191,19 +1193,7 @@ namespace OpenDentBusiness {
 				}
 			}
 			else {
-				//int numberFixed=0;
-				//command="UPDATE payplancharge,payplan SET payplancharge.Guarantor=payplan.Guarantor "
-				//	+"WHERE payplan.PayPlanNum=payplancharge.PayPlanNum "
-				//	+"AND payplancharge.Guarantor != payplan.Guarantor";
-				//numberFixed+=Db.NonQ32(command);
-				//command="UPDATE payplancharge,payplan SET payplancharge.PatNum=payplan.PatNum "
-				//	+"WHERE payplan.PayPlanNum=payplancharge.PayPlanNum "
-				//	+"AND payplancharge.PatNum != payplan.PatNum";
-				//numberFixed+=Db.NonQ32(command);
-				//if(numberFixed>0 || verbose) {
-				//  log+=Lans.g("FormDatabaseMaintenance","PayPlanCharge guarantors and pats set to match payplan guarantors and pats: ")
-				//  +numberFixed.ToString()+"\r\n";
-				//}
+				//Take no action.  Use descriptive explanation.
 			}
 			return log;
 		}
@@ -1221,14 +1211,7 @@ namespace OpenDentBusiness {
 				}
 			}
 			else {
-				////I would rather set the provnum to that of the patient, but it's more complex.
-				//command="UPDATE payplancharge SET ProvNum="+POut.Long(PrefC.GetLong(PrefName.PracticeDefaultProv))
-				//	+" WHERE ProvNum=0";
-				//int numberFixed=Db.NonQ32(command);
-				//if(numberFixed>0 || verbose) {
-				//  log+=Lans.g("FormDatabaseMaintenance","Pay plan charge providers set if missing: ")
-				//  +numberFixed.ToString()+"\r\n";
-				//}
+				//Take no action.  Use descriptive explanation.
 			}
 			return log;
 		}
@@ -1246,12 +1229,7 @@ namespace OpenDentBusiness {
 				}
 			}
 			else {
-				//command="UPDATE payplan SET Guarantor=PatNum WHERE PlanNum>0 AND Guarantor != PatNum";
-				//int numberFixed=Db.NonQ32(command);
-				//if(numberFixed>0 || verbose) {
-				//  log+=Lans.g("FormDatabaseMaintenance","PayPlan Guarantors set to PatNum if used for insurance tracking: ")
-				//  +numberFixed.ToString()+"\r\n";
-				//}
+				//Too dangerous to do anything at all.  Just have a very descriptive explanation in the check.
 			}
 			return log;
 		}
@@ -1271,20 +1249,12 @@ namespace OpenDentBusiness {
 				}
 			}
 			else {
-				//for(int i=0;i<table.Rows.Count;i++) {
-				//  command="UPDATE paysplit SET PatNum="+table.Rows[i]["Guarantor"].ToString()
-				//  +" WHERE SplitNum="+table.Rows[i]["SplitNum"].ToString();
-				//  Db.NonQ(command);
-				//}
-				//int numberFixed=table.Rows.Count;
-				//if(numberFixed>0 || verbose) {
-				//  log+=Lans.g("FormDatabaseMaintenance","Paysplits changed patnum to match payplan guarantor: ")+numberFixed.ToString()+"\r\n";
-				//}
+				//Too dangerous to do anything at all.  Just have a very descriptive explanation in the check.
 			}
 			return log;
 		}
 
-		public static string PaySplitDeleteWithInvalidPayNum(bool verbose,bool isCheck) {
+		public static string PaySplitWithInvalidPayNum(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
@@ -1297,6 +1267,11 @@ namespace OpenDentBusiness {
 				}
 			}
 			else {
+				//create a payment
+				//attach one paysplit to the payment
+				//repeat as needed.
+
+
 				//command="DELETE FROM paysplit WHERE NOT EXISTS(SELECT * FROM payment WHERE paysplit.PayNum=payment.PayNum)";
 				//int numberFixed=Db.NonQ32(command);
 				//if(numberFixed>0 || verbose) {
@@ -1321,18 +1296,18 @@ namespace OpenDentBusiness {
 				}
 			}
 			else {
-				////If the program locks up when trying to create a deposit slip, it's because someone removed the start date from the deposit edit window. Run this query to get back in.
-				//DateTime date=PrefC.GetDate(PrefName.DateDepositsStarted);
-				//if(date<DateTime.Now.AddMonths(-1)) {
-				//  command="UPDATE preference SET ValueString="+POut.Date(DateTime.Today.AddDays(-21))
-				//  +" WHERE PrefName='DateDepositsStarted'";
-				//  Db.NonQ(command);
-				//  Signals.SetInvalid(InvalidType.Prefs);
-				//  log+=Lans.g("FormDatabaseMaintenance","Deposit start date reset.")+"\r\n";
-				//}
-				//else if(verbose) {
-				//  log+=Lans.g("FormDatabaseMaintenance","Deposit start date checked.")+"\r\n";
-				//}
+				//If the program locks up when trying to create a deposit slip, it's because someone removed the start date from the deposit edit window. Run this query to get back in.
+				DateTime date=PrefC.GetDate(PrefName.DateDepositsStarted);
+				if(date<DateTime.Now.AddMonths(-1)) {
+					command="UPDATE preference SET ValueString="+POut.Date(DateTime.Today.AddDays(-21))
+				  +" WHERE PrefName='DateDepositsStarted'";
+					Db.NonQ(command);
+					Signals.SetInvalid(InvalidType.Prefs);
+					log+=Lans.g("FormDatabaseMaintenance","Deposit start date reset.")+"\r\n";
+				}
+				else if(verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Deposit start date checked.")+"\r\n";
+				}
 			}
 			return log;
 		}
@@ -1352,11 +1327,11 @@ namespace OpenDentBusiness {
 			else {
 				log+=Lans.g("FormDatabaseMaintenance","No default billing type set.");
 				if(!isCheck) {
-					//command="SELECT defnum FROM definition WHERE category = 4 AND ishidden = 0 ORDER BY itemorder";
-					//table=Db.GetTable(command);
-					//command="UPDATE preference SET valuestring='"+table.Rows[0][0].ToString()+"' WHERE prefname='PracticeDefaultBillType'";
-					//Db.NonQ(command);
-					//log+="  "+Lans.g("FormDatabaseMaintenance","Fixed.")+"\r\n";
+					command="SELECT defnum FROM definition WHERE category = 4 AND ishidden = 0 ORDER BY itemorder";
+					table=Db.GetTable(command);
+					command="UPDATE preference SET valuestring='"+table.Rows[0][0].ToString()+"' WHERE prefname='PracticeDefaultBillType'";
+					Db.NonQ(command);
+					log+="  "+Lans.g("FormDatabaseMaintenance","Fixed.")+"\r\n";
 				}
 			}
 			return log;
@@ -1377,16 +1352,16 @@ namespace OpenDentBusiness {
 			else{
 				log+=Lans.g("FormDatabaseMaintenance","No default provider set.")+"\r\n";
 				if(!isCheck) {
-					//if(DataConnection.DBtype==DatabaseType.Oracle) {
-					//  command="SELECT ProvNum FROM provider WHERE IsHidden=0 ORDER BY itemorder";
-					//}
-					//else {//MySQL
-					//  command="SELECT provnum FROM provider WHERE IsHidden=0 ORDER BY itemorder LIMIT 1";
-					//}
-					//table=Db.GetTable(command);
-					//command="UPDATE preference SET valuestring = '"+table.Rows[0][0].ToString()+"' WHERE prefname = 'PracticeDefaultProv'";
-					//Db.NonQ(command);
-					//log+="  "+Lans.g("FormDatabaseMaintenance","Fixed.")+"\r\n";
+					if(DataConnection.DBtype==DatabaseType.Oracle) {
+						command="SELECT ProvNum FROM provider WHERE IsHidden=0 ORDER BY itemorder";
+					}
+					else {//MySQL
+						command="SELECT provnum FROM provider WHERE IsHidden=0 ORDER BY itemorder LIMIT 1";
+					}
+					table=Db.GetTable(command);
+					command="UPDATE preference SET valuestring = '"+table.Rows[0][0].ToString()+"' WHERE prefname = 'PracticeDefaultProv'";
+					Db.NonQ(command);
+					log+="  "+Lans.g("FormDatabaseMaintenance","Fixed.")+"\r\n";
 				}
 			}
 			return log;
@@ -1406,15 +1381,15 @@ namespace OpenDentBusiness {
 				}
 			}
 			else {
-				//command=@"DELETE FROM procbuttonitem WHERE CodeNum=0 AND NOT EXISTS(
-				//	SELECT * FROM autocode WHERE autocode.AutoCodeNum=procbuttonitem.AutoCodeNum)";
-				//int numberFixed=Db.NonQ32(command);
-				//if(numberFixed>0) {
-				//	Signals.SetInvalid(InvalidType.ProcButtons);
-				//}
-				//if(numberFixed>0 || verbose) {
-				//	log+=Lans.g("FormDatabaseMaintenance","ProcButtonItems deleted due to invalid autocode: ")+numberFixed.ToString()+"\r\n";
-				//}
+				command=@"DELETE FROM procbuttonitem WHERE CodeNum=0 AND NOT EXISTS(
+					SELECT * FROM autocode WHERE autocode.AutoCodeNum=procbuttonitem.AutoCodeNum)";
+				int numberFixed=Db.NonQ32(command);
+				if(numberFixed>0) {
+					Signals.SetInvalid(InvalidType.ProcButtons);
+				}
+				if(numberFixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","ProcButtonItems deleted due to invalid autocode: ")+numberFixed.ToString()+"\r\n";
+				}
 			}
 			return log;
 		}
@@ -1436,12 +1411,12 @@ namespace OpenDentBusiness {
 				}
 			}
 			else {
-				//command="UPDATE appointment,procedurelog SET procedurelog.AptNum=0 "
-				//	+"WHERE procedurelog.AptNum=appointment.AptNum AND procedurelog.PatNum != appointment.PatNum";
-				//int numberFixed=Db.NonQ32(command);
-				//if(numberFixed>0 || verbose) {
-				//  log+=Lans.g("FormDatabaseMaintenance","Procedures detached from appointments: ")+numberFixed.ToString()+"\r\n";
-				//}
+				command="UPDATE appointment,procedurelog SET procedurelog.AptNum=0 "
+					+"WHERE procedurelog.AptNum=appointment.AptNum AND procedurelog.PatNum != appointment.PatNum";
+				int numberFixed=Db.NonQ32(command);
+				if(numberFixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Procedures detached from appointments: ")+numberFixed.ToString()+"\r\n";
+				}
 			}
 			return log;
 		}
@@ -1462,15 +1437,15 @@ namespace OpenDentBusiness {
 				}
 			}
 			else {
-				//command=@"UPDATE procedurelog,appointment
-				//	SET procedurelog.AptNum=0
-				//	WHERE procedurelog.AptNum = appointment.AptNum
-				//	AND DATE(procedurelog.ProcDate) != DATE(appointment.AptDateTime)
-				//	AND procedurelog.ProcStatus = 2";//only detach completed procs 
-				//int numberFixed=Db.NonQ32(command);
-				//if(numberFixed>0 || verbose) {
-				//  log+=Lans.g("FormDatabaseMaintenance","Procedures detached from appointments due to mismatched dates: ")+numberFixed.ToString()+"\r\n";
-				//}
+				command=@"UPDATE procedurelog,appointment
+					SET procedurelog.AptNum=0
+					WHERE procedurelog.AptNum = appointment.AptNum
+					AND DATE(procedurelog.ProcDate) != DATE(appointment.AptDateTime)
+					AND procedurelog.ProcStatus = 2";//only detach completed procs 
+				int numberFixed=Db.NonQ32(command);
+				if(numberFixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Procedures detached from appointments due to mismatched dates: ")+numberFixed.ToString()+"\r\n";
+				}
 			}
 			return log;
 		}
@@ -1481,9 +1456,21 @@ namespace OpenDentBusiness {
 			}
 			string log="";
 			if(isCheck) {
+				//zero--------------------------------------------------------------------------------------
 				command=@"SELECT COUNT(*) FROM procedurelog 
-					WHERE baseunits != (SELECT procedurecode.BaseUnits FROM procedurecode WHERE procedurecode.CodeNum=procedurelog.CodeNum)";
+					WHERE baseunits != (SELECT procedurecode.BaseUnits FROM procedurecode WHERE procedurecode.CodeNum=procedurelog.CodeNum)
+					AND baseunits = 0";
+				//we do not want to change this automatically.  Do not fix these!
 				int numFound=PIn.Int(Db.GetCount(command));
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Procedure BaseUnits are zero and are not matching procedurecode BaseUnits: ")+numFound+"\r\n";
+				}
+				//not zero----------------------------------------------------------------------------------
+				command=@"SELECT COUNT(*) FROM procedurelog 
+					WHERE baseunits != (SELECT procedurecode.BaseUnits FROM procedurecode WHERE procedurecode.CodeNum=procedurelog.CodeNum)
+					AND baseunits != 0";
+				//pretty safe to change them back to zero.
+				numFound=PIn.Int(Db.GetCount(command));
 				if(numFound>0 || verbose) {
 					log+=Lans.g("FormDatabaseMaintenance","Procedure BaseUnits not matching procedurecode BaseUnits: ")+numFound+"\r\n";
 				}
@@ -1523,6 +1510,15 @@ namespace OpenDentBusiness {
 				}
 			}
 			else {
+				if(!ProcedureCodes.IsValidCode("~BAD~")) {
+					ProcedureCode badcode=new ProcedureCode();
+					//badcode.AbbrDesc=""
+					//	etc.
+					//insert
+				}
+				//get the code num
+				//set code num below
+
 				//command="DELETE FROM procedurelog WHERE CodeNum=0";
 				//int numberFixed=Db.NonQ32(command);
 				//if(numberFixed>0 || verbose) {
@@ -1545,6 +1541,8 @@ namespace OpenDentBusiness {
 				}
 			}
 			else {
+				//Create a new provider and attach procedures.
+
 				//command="UPDATE procedurelog SET ProvNum="+PrefC.GetString(PrefName.PracticeDefaultProv)+" WHERE ProvNum=0";
 				//int numberFixed=Db.NonQ32(command);
 				//if(numberFixed>0 || verbose) {
@@ -1576,8 +1574,8 @@ namespace OpenDentBusiness {
 				}
 				if(string.CompareOrdinal(toothNum,"a")>=0 && string.CompareOrdinal(toothNum,"t")<=0) {
 					if(!isCheck) {
-						//command="UPDATE procedurelog SET ToothNum = '"+toothNum.ToUpper()+"' WHERE ProcNum = "+table.Rows[i][0].ToString();
-						//Db.NonQ(command);
+						command="UPDATE procedurelog SET ToothNum = '"+toothNum.ToUpper()+"' WHERE ProcNum = "+table.Rows[i][0].ToString();
+						Db.NonQ(command);
 					}
 					if(verbose) {
 						log+=Lim.GetNameLF()+" "+toothNum+" - "+toothNum.ToUpper()+"\r\n";
@@ -1586,8 +1584,8 @@ namespace OpenDentBusiness {
 				}
 				else {
 					if(!isCheck) {
-						//command="UPDATE procedurelog SET ToothNum = '1' WHERE ProcNum = "+table.Rows[i][0].ToString();
-						//Db.NonQ(command);
+						command="UPDATE procedurelog SET ToothNum = '1' WHERE ProcNum = "+table.Rows[i][0].ToString();
+						Db.NonQ(command);
 					}
 					if(verbose) {
 						log+=Lim.GetNameLF()+" "+toothNum+" - 1\r\n";
@@ -1620,6 +1618,8 @@ namespace OpenDentBusiness {
 				}
 			}
 			else {
+				//Detach claimproc(s) from claim.
+
 				//for(int i=0;i<table.Rows.Count;i++) {
 				//  command="UPDATE procedurelog SET ProcStatus=2 WHERE ProcNum="+table.Rows[i][0].ToString();
 				//  Db.NonQ(command);
@@ -1646,13 +1646,13 @@ namespace OpenDentBusiness {
 				}
 			}
 			else {
-				//command=@"UPDATE procedurelog        
-				//	SET UnitQty=1
-				//	WHERE UnitQty=0";
-				//int numberFixed=Db.NonQ32(command);
-				//if(numberFixed>0 || verbose) {
-				//  log+=Lans.g("FormDatabaseMaintenance","Procedures changed from UnitQty=0 to UnitQty=1: ")+numberFixed.ToString()+"\r\n";
-				//}
+				command=@"UPDATE procedurelog        
+					SET UnitQty=1
+					WHERE UnitQty=0";
+				int numberFixed=Db.NonQ32(command);
+				if(numberFixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Procedures changed from UnitQty=0 to UnitQty=1: ")+numberFixed.ToString()+"\r\n";
+				}
 			}
 			return log;
 		}
@@ -1779,23 +1779,23 @@ namespace OpenDentBusiness {
 				}
 			}
 			else {
-				//int numberFixed=0;
-				//Schedule[] schedList=Schedules.RefreshAll();
-				//for(int i=0;i<schedList.Length;i++) {
-				//  if(schedList[i].Status!=SchedStatus.Open) {
-				//    continue;//closed and holiday statuses do not use starttime and stoptime
-				//  }
-				//  if(schedList[i].StopTime.TimeOfDay-schedList[i].StartTime.TimeOfDay<new TimeSpan(0,5,0)) {//Schedule items less than five minutes won't show up. Remove them.
-				//    //But we don't want to remove provider notes, employee notes, or pratice notes.
-				//    if(schedList[i].Note==""){
-				//      Schedules.Delete(schedList[i]);
-				//      numberFixed++;
-				//    }
-				//  }
-				//}
-				//if(numberFixed>0 || verbose) {
-				//  log+=Lans.g("FormDatabaseMaintenance","Schedule blocks fixed: ")+numberFixed.ToString()+"\r\n";
-				//}
+				int numberFixed=0;
+				Schedule[] schedList=Schedules.RefreshAll();
+				for(int i=0;i<schedList.Length;i++) {
+					if(schedList[i].Status!=SchedStatus.Open) {
+						continue;//closed and holiday statuses do not use starttime and stoptime
+					}
+					if(schedList[i].StopTime.TimeOfDay-schedList[i].StartTime.TimeOfDay<new TimeSpan(0,5,0)) {//Schedule items less than five minutes won't show up. Remove them.
+						//But we don't want to remove provider notes, employee notes, or pratice notes.
+						if(schedList[i].Note=="") {
+							Schedules.Delete(schedList[i]);
+							numberFixed++;
+						}
+					}
+				}
+				if(numberFixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Schedule blocks fixed: ")+numberFixed.ToString()+"\r\n";
+				}
 			}
 			return log;
 		}
@@ -1813,11 +1813,11 @@ namespace OpenDentBusiness {
 				}
 			}
 			else {
-				//command="DELETE FROM schedule WHERE SchedType=1 AND Status=1";//type=prov,status=closed
-				//int numberFixed=Db.NonQ32(command);
-				//if(numberFixed>0||verbose) {
-				//  log+=Lans.g("FormDatabaseMaintenance","Schedules deleted that were causing printing issues: ")+numberFixed.ToString()+"\r\n";
-				//}
+				command="DELETE FROM schedule WHERE SchedType=1 AND Status=1";//type=prov,status=closed
+				int numberFixed=Db.NonQ32(command);
+				if(numberFixed>0||verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Schedules deleted that were causing printing issues: ")+numberFixed.ToString()+"\r\n";
+				}
 			}
 			return log;
 		}
@@ -1839,15 +1839,15 @@ namespace OpenDentBusiness {
 				}
 			}
 			else {
-				//command=@"DELETE FROM signal WHERE SigDateTime > NOW() OR AckTime > NOW()";
-				//if(DataConnection.DBtype==DatabaseType.Oracle) {
-				//  string nowDateTime=POut.DateT(MiscData.GetNowDateTime());
-				//  command=@"DELETE FROM signal WHERE SigDateTime > "+nowDateTime+" OR AckTime > "+nowDateTime;
-				//}
-				//int numberFixed=Db.NonQ32(command);
-				//if(numberFixed>0 || verbose) {
-				//  log+=Lans.g("FormDatabaseMaintenance","Signal entries deleted: ")+numberFixed.ToString()+"\r\n";
-				//}
+				command=@"DELETE FROM signal WHERE SigDateTime > NOW() OR AckTime > NOW()";
+				if(DataConnection.DBtype==DatabaseType.Oracle) {
+					string nowDateTime=POut.DateT(MiscData.GetNowDateTime());
+					command=@"DELETE FROM signal WHERE SigDateTime > "+nowDateTime+" OR AckTime > "+nowDateTime;
+				}
+				int numberFixed=Db.NonQ32(command);
+				if(numberFixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Signal entries deleted: ")+numberFixed.ToString()+"\r\n";
+				}
 			}
 			return log;
 		}
@@ -1865,11 +1865,11 @@ namespace OpenDentBusiness {
 				}
 			}
 			else {
-				//command="UPDATE statement SET DateRangeTo='2200-01-01' WHERE DateRangeTo='9999-12-31'";
-				//int numberFixed=Db.NonQ32(command);
-				//if(numberFixed>0 || verbose) {
-				//  log+=Lans.g("FormDatabaseMaintenance","Statement DateRangeTo max fixed: ")+numberFixed.ToString()+"\r\n";
-				//}
+				command="UPDATE statement SET DateRangeTo='2200-01-01' WHERE DateRangeTo='9999-12-31'";
+				int numberFixed=Db.NonQ32(command);
+				if(numberFixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Statement DateRangeTo max fixed: ")+numberFixed.ToString()+"\r\n";
+				}
 			}
 			return log;
 		}
