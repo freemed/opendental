@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Drawing.Printing;
 using System.Collections;
 using System.ComponentModel;
+using System.IO;
 using System.Windows.Forms;
 using OpenDental.UI;
 using OpenDentBusiness;
@@ -13,13 +14,11 @@ namespace OpenDental{
 ///<summary></summary>
 	public class FormRpTreatmentFinder:System.Windows.Forms.Form {
 		private OpenDental.UI.Button butCancel;
-		private OpenDental.UI.Button butOK;
 		private System.ComponentModel.Container components = null;
 		private Label label1;
 		private CheckBox checkIncludeNoIns;
 		private UI.ODGrid gridMain;
 		private GroupBox groupBox1;
-		private FormQuery FormQuery2;
 		private UI.Button butPrint;
 		private UI.Button butRefresh;
 		private DataTable table;
@@ -33,7 +32,6 @@ namespace OpenDental{
 		private UI.Button butGotoAccount;
 		private ValidDate textDateStart;
 		private Label label2;
-		private ComboBox comboProv;
 		private Label label4;
 		private Label label3;
 		private Label label5;
@@ -42,13 +40,14 @@ namespace OpenDental{
 		private UI.Button butLabelSingle;
 		private UI.Button butLabelPreview;
 		private Label label7;
-		private ComboBox comboBillingType;
 		private UI.Button butPostcards;
 		private UI.Button buttonExport;
 		private Label label8;
-		private CheckBox checkBox1;
+		private CheckBox checkRemainingIns;
 		private ComboBox comboMonthStart;
-		private ValidDouble textProcFee;
+		private ValidDouble textOverAmount;
+		private ComboBoxMulti comboBoxMultiProv;
+		private ComboBoxMulti comboBoxMultiBilling;
 		private int pagesPrinted;
 
 		///<summary></summary>
@@ -75,21 +74,19 @@ namespace OpenDental{
 			this.label1 = new System.Windows.Forms.Label();
 			this.checkIncludeNoIns = new System.Windows.Forms.CheckBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.comboMonthStart = new System.Windows.Forms.ComboBox();
+			this.label8 = new System.Windows.Forms.Label();
+			this.checkRemainingIns = new System.Windows.Forms.CheckBox();
+			this.label7 = new System.Windows.Forms.Label();
+			this.label5 = new System.Windows.Forms.Label();
+			this.textCodeRange = new System.Windows.Forms.TextBox();
+			this.label3 = new System.Windows.Forms.Label();
+			this.label6 = new System.Windows.Forms.Label();
+			this.label4 = new System.Windows.Forms.Label();
+			this.label2 = new System.Windows.Forms.Label();
 			this.contextRightClick = new System.Windows.Forms.ContextMenu();
 			this.menuItemFamily = new System.Windows.Forms.MenuItem();
 			this.menuItemAccount = new System.Windows.Forms.MenuItem();
-			this.label2 = new System.Windows.Forms.Label();
-			this.comboProv = new System.Windows.Forms.ComboBox();
-			this.label4 = new System.Windows.Forms.Label();
-			this.label3 = new System.Windows.Forms.Label();
-			this.label5 = new System.Windows.Forms.Label();
-			this.textCodeRange = new System.Windows.Forms.TextBox();
-			this.label6 = new System.Windows.Forms.Label();
-			this.comboBillingType = new System.Windows.Forms.ComboBox();
-			this.label7 = new System.Windows.Forms.Label();
-			this.checkBox1 = new System.Windows.Forms.CheckBox();
-			this.label8 = new System.Windows.Forms.Label();
-			this.comboMonthStart = new System.Windows.Forms.ComboBox();
 			this.buttonExport = new OpenDental.UI.Button();
 			this.butPostcards = new OpenDental.UI.Button();
 			this.butLabelSingle = new OpenDental.UI.Button();
@@ -97,12 +94,13 @@ namespace OpenDental{
 			this.butGotoAccount = new OpenDental.UI.Button();
 			this.butGotoFamily = new OpenDental.UI.Button();
 			this.butPrint = new OpenDental.UI.Button();
-			this.textProcFee = new OpenDental.ValidDouble();
+			this.comboBoxMultiBilling = new OpenDental.UI.ComboBoxMulti();
+			this.comboBoxMultiProv = new OpenDental.UI.ComboBoxMulti();
+			this.textOverAmount = new OpenDental.ValidDouble();
 			this.textDateStart = new OpenDental.ValidDate();
 			this.butRefresh = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butCancel = new OpenDental.UI.Button();
-			this.butOK = new OpenDental.UI.Button();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -127,17 +125,17 @@ namespace OpenDental{
 			// 
 			// groupBox1
 			// 
-			this.groupBox1.Controls.Add(this.textProcFee);
+			this.groupBox1.Controls.Add(this.comboBoxMultiBilling);
+			this.groupBox1.Controls.Add(this.comboBoxMultiProv);
+			this.groupBox1.Controls.Add(this.textOverAmount);
 			this.groupBox1.Controls.Add(this.comboMonthStart);
 			this.groupBox1.Controls.Add(this.label8);
-			this.groupBox1.Controls.Add(this.checkBox1);
+			this.groupBox1.Controls.Add(this.checkRemainingIns);
 			this.groupBox1.Controls.Add(this.label7);
-			this.groupBox1.Controls.Add(this.comboBillingType);
 			this.groupBox1.Controls.Add(this.label5);
 			this.groupBox1.Controls.Add(this.textCodeRange);
 			this.groupBox1.Controls.Add(this.label3);
 			this.groupBox1.Controls.Add(this.label6);
-			this.groupBox1.Controls.Add(this.comboProv);
 			this.groupBox1.Controls.Add(this.label4);
 			this.groupBox1.Controls.Add(this.textDateStart);
 			this.groupBox1.Controls.Add(this.label2);
@@ -149,122 +147,6 @@ namespace OpenDental{
 			this.groupBox1.TabIndex = 33;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "View";
-			// 
-			// contextRightClick
-			// 
-			this.contextRightClick.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.menuItemFamily,
-            this.menuItemAccount});
-			// 
-			// menuItemFamily
-			// 
-			this.menuItemFamily.Index = 0;
-			this.menuItemFamily.Text = "See Family";
-			this.menuItemFamily.Click += new System.EventHandler(this.menuItemFamily_Click);
-			// 
-			// menuItemAccount
-			// 
-			this.menuItemAccount.Index = 1;
-			this.menuItemAccount.Text = "See Account";
-			this.menuItemAccount.Click += new System.EventHandler(this.menuItemAccount_Click);
-			// 
-			// label2
-			// 
-			this.label2.Location = new System.Drawing.Point(242,14);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(119,14);
-			this.label2.TabIndex = 33;
-			this.label2.Text = "Proc Date Since";
-			this.label2.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// comboProv
-			// 
-			this.comboProv.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboProv.Location = new System.Drawing.Point(515,11);
-			this.comboProv.MaxDropDownItems = 40;
-			this.comboProv.Name = "comboProv";
-			this.comboProv.Size = new System.Drawing.Size(160,21);
-			this.comboProv.TabIndex = 36;
-			// 
-			// label4
-			// 
-			this.label4.Location = new System.Drawing.Point(443,14);
-			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(70,14);
-			this.label4.TabIndex = 35;
-			this.label4.Text = "Provider";
-			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label3
-			// 
-			this.label3.Location = new System.Drawing.Point(250,36);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(88,14);
-			this.label3.TabIndex = 37;
-			this.label3.Text = "Month Start";
-			this.label3.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// label5
-			// 
-			this.label5.Location = new System.Drawing.Point(758,34);
-			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(150,13);
-			this.label5.TabIndex = 41;
-			this.label5.Text = "Ex: D1050-D1060";
-			// 
-			// textCodeRange
-			// 
-			this.textCodeRange.Location = new System.Drawing.Point(758,12);
-			this.textCodeRange.Name = "textCodeRange";
-			this.textCodeRange.Size = new System.Drawing.Size(150,20);
-			this.textCodeRange.TabIndex = 39;
-			// 
-			// label6
-			// 
-			this.label6.Location = new System.Drawing.Point(679,12);
-			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(77,17);
-			this.label6.TabIndex = 40;
-			this.label6.Text = "Code Range";
-			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// comboBillingType
-			// 
-			this.comboBillingType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBillingType.Location = new System.Drawing.Point(515,32);
-			this.comboBillingType.MaxDropDownItems = 40;
-			this.comboBillingType.Name = "comboBillingType";
-			this.comboBillingType.Size = new System.Drawing.Size(160,21);
-			this.comboBillingType.TabIndex = 42;
-			// 
-			// label7
-			// 
-			this.label7.Location = new System.Drawing.Point(443,35);
-			this.label7.Name = "label7";
-			this.label7.Size = new System.Drawing.Size(70,14);
-			this.label7.TabIndex = 43;
-			this.label7.Text = "Billing Type";
-			this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// checkBox1
-			// 
-			this.checkBox1.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkBox1.Location = new System.Drawing.Point(13,35);
-			this.checkBox1.Name = "checkBox1";
-			this.checkBox1.Size = new System.Drawing.Size(214,18);
-			this.checkBox1.TabIndex = 44;
-			this.checkBox1.Text = "Patients with remaining insurance";
-			this.checkBox1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkBox1.UseVisualStyleBackColor = true;
-			// 
-			// label8
-			// 
-			this.label8.Location = new System.Drawing.Point(38,61);
-			this.label8.Name = "label8";
-			this.label8.Size = new System.Drawing.Size(115,14);
-			this.label8.TabIndex = 46;
-			this.label8.Text = "Over Amount";
-			this.label8.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// comboMonthStart
 			// 
@@ -287,6 +169,105 @@ namespace OpenDental{
 			this.comboMonthStart.Size = new System.Drawing.Size(98,21);
 			this.comboMonthStart.TabIndex = 47;
 			// 
+			// label8
+			// 
+			this.label8.Location = new System.Drawing.Point(13,61);
+			this.label8.Name = "label8";
+			this.label8.Size = new System.Drawing.Size(140,14);
+			this.label8.TabIndex = 46;
+			this.label8.Text = "Amount remaining over";
+			this.label8.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// checkRemainingIns
+			// 
+			this.checkRemainingIns.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkRemainingIns.Location = new System.Drawing.Point(13,35);
+			this.checkRemainingIns.Name = "checkRemainingIns";
+			this.checkRemainingIns.Size = new System.Drawing.Size(214,18);
+			this.checkRemainingIns.TabIndex = 44;
+			this.checkRemainingIns.Text = "Patients with remaining insurance";
+			this.checkRemainingIns.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkRemainingIns.UseVisualStyleBackColor = true;
+			this.checkRemainingIns.CheckedChanged += new System.EventHandler(this.checkRemainingIns_CheckedChanged);
+			// 
+			// label7
+			// 
+			this.label7.Location = new System.Drawing.Point(443,35);
+			this.label7.Name = "label7";
+			this.label7.Size = new System.Drawing.Size(70,14);
+			this.label7.TabIndex = 43;
+			this.label7.Text = "Billing Type";
+			this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label5
+			// 
+			this.label5.Location = new System.Drawing.Point(758,34);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(150,13);
+			this.label5.TabIndex = 41;
+			this.label5.Text = "Ex: D1050-D1060";
+			// 
+			// textCodeRange
+			// 
+			this.textCodeRange.Location = new System.Drawing.Point(758,12);
+			this.textCodeRange.Name = "textCodeRange";
+			this.textCodeRange.Size = new System.Drawing.Size(150,20);
+			this.textCodeRange.TabIndex = 39;
+			// 
+			// label3
+			// 
+			this.label3.Location = new System.Drawing.Point(250,36);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(88,14);
+			this.label3.TabIndex = 37;
+			this.label3.Text = "Month Start";
+			this.label3.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// label6
+			// 
+			this.label6.Location = new System.Drawing.Point(679,12);
+			this.label6.Name = "label6";
+			this.label6.Size = new System.Drawing.Size(77,17);
+			this.label6.TabIndex = 40;
+			this.label6.Text = "Code Range";
+			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label4
+			// 
+			this.label4.Location = new System.Drawing.Point(443,14);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(70,14);
+			this.label4.TabIndex = 35;
+			this.label4.Text = "Provider";
+			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label2
+			// 
+			this.label2.Location = new System.Drawing.Point(242,14);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(119,14);
+			this.label2.TabIndex = 33;
+			this.label2.Text = "Proc Date Since";
+			this.label2.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// contextRightClick
+			// 
+			this.contextRightClick.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItemFamily,
+            this.menuItemAccount});
+			// 
+			// menuItemFamily
+			// 
+			this.menuItemFamily.Index = 0;
+			this.menuItemFamily.Text = "See Family";
+			this.menuItemFamily.Click += new System.EventHandler(this.menuItemFamily_Click);
+			// 
+			// menuItemAccount
+			// 
+			this.menuItemAccount.Index = 1;
+			this.menuItemAccount.Text = "See Account";
+			this.menuItemAccount.Click += new System.EventHandler(this.menuItemAccount_Click);
+			// 
 			// buttonExport
 			// 
 			this.buttonExport.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -301,6 +282,7 @@ namespace OpenDental{
 			this.buttonExport.Size = new System.Drawing.Size(119,24);
 			this.buttonExport.TabIndex = 72;
 			this.buttonExport.Text = "Export to File";
+			this.buttonExport.Click += new System.EventHandler(this.buttonExport_Click);
 			// 
 			// butPostcards
 			// 
@@ -399,12 +381,37 @@ namespace OpenDental{
 			this.butPrint.Text = "Print List";
 			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
 			// 
-			// textProcFee
+			// comboBoxMultiBilling
 			// 
-			this.textProcFee.Location = new System.Drawing.Point(159,58);
-			this.textProcFee.Name = "textProcFee";
-			this.textProcFee.Size = new System.Drawing.Size(68,20);
-			this.textProcFee.TabIndex = 48;
+			this.comboBoxMultiBilling.BackColor = System.Drawing.SystemColors.Window;
+			this.comboBoxMultiBilling.DroppedDown = false;
+			this.comboBoxMultiBilling.Items = ((System.Collections.ArrayList)(resources.GetObject("comboBoxMultiBilling.Items")));
+			this.comboBoxMultiBilling.Location = new System.Drawing.Point(513,32);
+			this.comboBoxMultiBilling.Name = "comboBoxMultiBilling";
+			this.comboBoxMultiBilling.SelectedIndices = ((System.Collections.ArrayList)(resources.GetObject("comboBoxMultiBilling.SelectedIndices")));
+			this.comboBoxMultiBilling.Size = new System.Drawing.Size(160,21);
+			this.comboBoxMultiBilling.TabIndex = 50;
+			this.comboBoxMultiBilling.UseCommas = true;
+			// 
+			// comboBoxMultiProv
+			// 
+			this.comboBoxMultiProv.BackColor = System.Drawing.SystemColors.Window;
+			this.comboBoxMultiProv.DroppedDown = false;
+			this.comboBoxMultiProv.Items = ((System.Collections.ArrayList)(resources.GetObject("comboBoxMultiProv.Items")));
+			this.comboBoxMultiProv.Location = new System.Drawing.Point(513,10);
+			this.comboBoxMultiProv.Name = "comboBoxMultiProv";
+			this.comboBoxMultiProv.SelectedIndices = ((System.Collections.ArrayList)(resources.GetObject("comboBoxMultiProv.SelectedIndices")));
+			this.comboBoxMultiProv.Size = new System.Drawing.Size(160,21);
+			this.comboBoxMultiProv.TabIndex = 49;
+			this.comboBoxMultiProv.UseCommas = true;
+			// 
+			// textOverAmount
+			// 
+			this.textOverAmount.Enabled = false;
+			this.textOverAmount.Location = new System.Drawing.Point(159,58);
+			this.textOverAmount.Name = "textOverAmount";
+			this.textOverAmount.Size = new System.Drawing.Size(68,20);
+			this.textOverAmount.TabIndex = 48;
 			// 
 			// textDateStart
 			// 
@@ -461,21 +468,6 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// butOK
-			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(418,587);
-			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(87,24);
-			this.butOK.TabIndex = 3;
-			this.butOK.Text = "R&un Query";
-			this.butOK.Click += new System.EventHandler(this.butOK_Click);
-			// 
 			// FormRpTreatmentFinder
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
@@ -491,7 +483,6 @@ namespace OpenDental{
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.butCancel);
-			this.Controls.Add(this.butOK);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.Name = "FormRpTreatmentFinder";
@@ -515,6 +506,31 @@ namespace OpenDental{
 		}
 
 		private void FillGrid() {
+			if(textDateStart.errorProvider1.GetError(textDateStart)!="") {
+				return;
+			}
+			DateTime startDate;
+			double aboveAmount;
+			if(textDateStart.Text.Trim()=="") {
+				startDate=DateTime.MinValue;
+			}
+			else {
+				startDate=PIn.Date(textDateStart.Text);
+			}
+			if(textOverAmount.Enabled) {
+				if(textOverAmount.errorProvider1.GetError(textOverAmount)!="") {
+					return;
+				}
+				if(textOverAmount.Text.Trim()=="") {
+				aboveAmount=0;
+			}
+			else {
+				aboveAmount=PIn.Double(textOverAmount.Text);
+			}
+			}
+			else {
+				aboveAmount=0;
+			}
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableTreatmentFinder","PatNum"),100);
@@ -523,6 +539,8 @@ namespace OpenDental{
 			col=new ODGridColumn(Lan.g("TableTreatmentFinder","LName"),100);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableTreatmentFinder","FName"),100);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableTreatmentFinder","Contact"),120);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableTreatmentFinder","Annual Max"),100);
 			col.TextAlign=HorizontalAlignment.Right;
@@ -537,7 +555,7 @@ namespace OpenDental{
 			col.TextAlign=HorizontalAlignment.Right;
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
-			table=Patients.GetTreatmentFinderList(checkIncludeNoIns.Checked);
+			table=Patients.GetTreatmentFinderList(checkIncludeNoIns.Checked,checkRemainingIns.Checked, startDate,aboveAmount);
 			ODGridRow row;
 			for(int i=0;i<table.Rows.Count;i++) {
 			  row=new ODGridRow();
@@ -550,11 +568,20 @@ namespace OpenDental{
 		}
 
 		private void gridMain_CellClick(object sender,ODGridClickEventArgs e) {
-			//Might not need the cellClick
+			//Might not need cellClick
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			//Add functionality later
+			//Might not need cellDoubleClick
+		}
+
+		private void checkRemainingIns_CheckedChanged(object sender,EventArgs e) {
+			if(checkRemainingIns.Checked) {
+				textOverAmount.Enabled=true;
+			}
+			else {
+				textOverAmount.Enabled=false;
+			}
 		}
 
 		private void menuItemFamily_Click(object sender,EventArgs e) {
@@ -605,6 +632,62 @@ namespace OpenDental{
 			WindowState=FormWindowState.Minimized;
 			long patNum=PIn.Long(table.Rows[gridMain.SelectedIndices[0]]["PatNum"].ToString());
 			GotoModule.GotoAccount(patNum);
+		}
+
+		private void buttonExport_Click(object sender,EventArgs e) {
+			SaveFileDialog saveFileDialog2=new SaveFileDialog();
+      saveFileDialog2.AddExtension=true;
+			saveFileDialog2.Title=Lan.g(this,"Treatment Finder");
+			saveFileDialog2.FileName=Lan.g(this,"Treatment Finder");
+			if(!Directory.Exists(PrefC.GetString(PrefName.ExportPath) )){
+				try{
+					Directory.CreateDirectory(PrefC.GetString(PrefName.ExportPath) );
+					saveFileDialog2.InitialDirectory=PrefC.GetString(PrefName.ExportPath);
+				}
+				catch{
+					//initialDirectory will be blank
+				}
+			}
+			else saveFileDialog2.InitialDirectory=PrefC.GetString(PrefName.ExportPath);
+			saveFileDialog2.Filter="Text files(*.txt)|*.txt|Excel Files(*.xls)|*.xls|All files(*.*)|*.*";
+      saveFileDialog2.FilterIndex=0;
+		  if(saveFileDialog2.ShowDialog()!=DialogResult.OK){
+	   	  return;
+			}
+			try{
+			  using(StreamWriter sw=new StreamWriter(saveFileDialog2.FileName,false))
+				{
+					String line="";  
+					for(int i=0;i<gridMain.Columns.Count;i++){
+						if(i>0) {
+							line+="\t";
+						}
+					  line+=gridMain.Columns[i].Heading;
+					}
+					sw.WriteLine(line);
+					string cell;
+					for(int i=0;i<table.Rows.Count;i++){
+					  line="";
+					  for(int j=0;j<table.Columns.Count;j++){
+							if(j>0) {
+								line+="\t";
+							}
+					    cell=table.Rows[i][j].ToString();
+					    cell=cell.Replace("\r","");
+					    cell=cell.Replace("\n","");
+					    cell=cell.Replace("\t","");
+					    cell=cell.Replace("\"","");
+					    line+=cell;
+					  }
+					  sw.WriteLine(line);
+					}
+				}
+      }
+      catch{
+        MessageBox.Show(Lan.g(this,"File in use by another program.  Close and try again."));
+				return;
+			}
+			MessageBox.Show(Lan.g(this,"File created successfully"));
 		}
 
 		private void butPrint_Click(object sender,EventArgs e) {
@@ -681,85 +764,10 @@ namespace OpenDental{
 			Close();
 		}
 
-		private void butOK_Click(object sender, System.EventArgs e) {
-      ReportSimpleGrid report=new ReportSimpleGrid();
-      report.Query=@"
-DROP TABLE IF EXISTS tempused;
-DROP TABLE IF EXISTS tempplanned;
-DROP TABLE IF EXISTS tempannualmax;
+		
 
-CREATE TABLE tempused(
-PatPlanNum bigint unsigned NOT NULL,
-AmtUsed double NOT NULL,
-PRIMARY KEY (PatPlanNum));
 
-CREATE TABLE tempplanned(
-PatNum bigint unsigned NOT NULL,
-AmtPlanned double NOT NULL,
-PRIMARY KEY (PatNum));
-
-CREATE TABLE tempannualmax(
-PlanNum bigint unsigned NOT NULL,
-AnnualMax double NOT NULL,
-PRIMARY KEY (PlanNum));
-
-INSERT INTO tempused
-SELECT patplan.PatPlanNum,
-SUM(IFNULL(claimproc.InsPayAmt,0))
-FROM claimproc
-LEFT JOIN patplan ON patplan.PatNum = claimproc.PatNum
-AND patplan.PlanNum = claimproc.PlanNum
-WHERE claimproc.Status IN (1, 3, 4)
-AND claimproc.ProcDate BETWEEN makedate(year(curdate()), 1)
-AND makedate(year(curdate())+1, 1) /*current calendar year*/
-GROUP BY patplan.PatPlanNum;
-
-INSERT INTO tempplanned
-SELECT PatNum, SUM(ProcFee)
-FROM procedurelog
-WHERE ProcStatus = 1 /*treatment planned*/
-GROUP BY PatNum;
-
-INSERT INTO tempannualmax
-SELECT benefit.PlanNum, benefit.MonetaryAmt
-FROM benefit, covcat
-WHERE covcat.CovCatNum = benefit.CovCatNum
-AND benefit.BenefitType = 5 /* limitation */
-AND (covcat.EbenefitCat=1 OR ISNULL(covcat.EbenefitCat))
-AND benefit.MonetaryAmt <> 0
-GROUP BY benefit.PlanNum
-ORDER BY benefit.PlanNum;
-
-SELECT patient.LName, patient.FName,
-tempannualmax.AnnualMax $AnnualMax,
-tempused.AmtUsed $AmountUsed,
-tempannualmax.AnnualMax-IFNULL(tempused.AmtUsed,0) $AmtRemaining,
-tempplanned.AmtPlanned $TreatmentPlan
-FROM patient
-LEFT JOIN tempplanned ON tempplanned.PatNum=patient.PatNum
-LEFT JOIN patplan ON patient.PatNum=patplan.PatNum
-LEFT JOIN tempused ON tempused.PatPlanNum=patplan.PatPlanNum
-LEFT JOIN tempannualmax ON tempannualmax.PlanNum=patplan.PlanNum
-	AND tempannualmax.AnnualMax>0
-	/*AND tempannualmax.AnnualMax-tempused.AmtUsed>0*/
-WHERE tempplanned.AmtPlanned>0 ";
-      if(!checkIncludeNoIns.Checked){//if we don't want patients without insurance
-        report.Query+="AND AnnualMax > 0 ";
-      }
-      report.Query+=@"
-AND patient.PatStatus =0
-ORDER BY tempplanned.AmtPlanned DESC;
-DROP TABLE tempused;
-DROP TABLE tempplanned;
-DROP TABLE tempannualmax;";
-      FormQuery2=new FormQuery(report);
-      FormQuery2.textTitle.Text="Treatment Finder";
-      //FormQuery2.IsReport=true;
-      //FormQuery2.SubmitReportQuery();			
-      FormQuery2.SubmitQuery();
-      FormQuery2.ShowDialog();
-			//DialogResult=DialogResult.OK;
-		}
+		
 
 		
 

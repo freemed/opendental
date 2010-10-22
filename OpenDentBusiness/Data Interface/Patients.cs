@@ -1218,7 +1218,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets the DataTable to display for treatment finder report</summary>
-		public static DataTable GetTreatmentFinderList(bool noIns) {
+		public static DataTable GetTreatmentFinderList(bool noIns,bool remainingIns, DateTime startDate,double aboveAmount) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),noIns);
 			}
@@ -1228,6 +1228,7 @@ namespace OpenDentBusiness{
 			table.Columns.Add("PatNum");
 			table.Columns.Add("LName");
 			table.Columns.Add("FName");
+			table.Columns.Add("contactMethod");
 			table.Columns.Add("annualMax");
 			table.Columns.Add("amountUsed");
 			table.Columns.Add("amountRemaining");
@@ -1281,6 +1282,8 @@ namespace OpenDentBusiness{
 				ORDER BY benefit.PlanNum;
 
 				SELECT patient.PatNum, patient.LName, patient.FName,
+				patient.Email, patient.HmPhone, patient.PreferRecallMethod,
+				patient.WirelessPhone, patient.WkPhone,
 				tempannualmax.AnnualMax $AnnualMax,
 				tempused.AmtUsed $AmountUsed,
 				tempannualmax.AnnualMax-IFNULL(tempused.AmtUsed,0) $AmtRemaining,
@@ -1296,6 +1299,9 @@ namespace OpenDentBusiness{
 			if(!noIns) {//if we don't want patients without insurance
 				command+="AND AnnualMax > 0 ";
 			}
+			if(remainingIns) {
+				command+="AND tempannualmax.AnnualMax-IFNULL(tempused.AmtUsed,0)>"+POut.Double(aboveAmount)+" ";
+			}
 			command+=@"
 				AND patient.PatStatus =0
 				ORDER BY tempplanned.AmtPlanned DESC;
@@ -1303,11 +1309,44 @@ namespace OpenDentBusiness{
 				DROP TABLE tempplanned;
 				DROP TABLE tempannualmax;";
 			DataTable rawtable=Db.GetTable(command);
+			ContactMethod contmeth;
 			for(int i=0;i<rawtable.Rows.Count;i++) {
 				row=table.NewRow();
 				row["PatNum"]=PIn.Long(rawtable.Rows[i]["PatNum"].ToString());
 				row["LName"]=rawtable.Rows[i]["LName"].ToString();
 				row["FName"]=rawtable.Rows[i]["FName"].ToString();
+				contmeth=(ContactMethod)PIn.Long(rawtable.Rows[i]["PreferRecallMethod"].ToString());
+				if(contmeth==ContactMethod.None){
+					if(PrefC.GetBool(PrefName.RecallUseEmailIfHasEmailAddress)){//if user only wants to use email if contact method is email
+						if(rawtable.Rows[i]["Email"].ToString() != "") {
+							row["contactMethod"]=rawtable.Rows[i]["Email"].ToString();
+						}
+						else{
+							row["contactMethod"]=Lans.g("FormRecallList","Hm:")+rawtable.Rows[i]["HmPhone"].ToString();
+						}
+					}
+					else{
+						row["contactMethod"]=Lans.g("FormRecallList","Hm:")+rawtable.Rows[i]["HmPhone"].ToString();
+					}
+				}
+				if(contmeth==ContactMethod.HmPhone){
+					row["contactMethod"]=Lans.g("FormRecallList","Hm:")+rawtable.Rows[i]["HmPhone"].ToString();
+				}
+				if(contmeth==ContactMethod.WkPhone) {
+					row["contactMethod"]=Lans.g("FormRecallList","Wk:")+rawtable.Rows[i]["WkPhone"].ToString();
+				}
+				if(contmeth==ContactMethod.WirelessPh) {
+					row["contactMethod"]=Lans.g("FormRecallList","Cell:")+rawtable.Rows[i]["WirelessPhone"].ToString();
+				}
+				if(contmeth==ContactMethod.Email) {
+					row["contactMethod"]=rawtable.Rows[i]["Email"].ToString();
+				}
+				if(contmeth==ContactMethod.Mail) {
+					row["contactMethod"]=Lans.g("FormRecallList","Mail");
+				}
+				if(contmeth==ContactMethod.DoNotCall || contmeth==ContactMethod.SeeNotes) {
+					row["contactMethod"]=Lans.g("enumContactMethod",contmeth.ToString());
+				}
 				row["annualMax"]=(PIn.Double(rawtable.Rows[i]["$AnnualMax"].ToString())).ToString("N");
 				row["amountUsed"]=(PIn.Double(rawtable.Rows[i]["$AmountUsed"].ToString())).ToString("N");
 				row["amountRemaining"]=(PIn.Double(rawtable.Rows[i]["$AmtRemaining"].ToString())).ToString("N");
