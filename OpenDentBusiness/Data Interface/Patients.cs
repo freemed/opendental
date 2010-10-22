@@ -1225,6 +1225,7 @@ namespace OpenDentBusiness{
 			DataTable table=new DataTable();
 			DataRow row;
 			//columns that start with lowercase are altered for display rather than being raw data.
+			table.Columns.Add("PatNum");
 			table.Columns.Add("LName");
 			table.Columns.Add("FName");
 			table.Columns.Add("annualMax");
@@ -1279,7 +1280,7 @@ namespace OpenDentBusiness{
 				GROUP BY benefit.PlanNum
 				ORDER BY benefit.PlanNum;
 
-				SELECT patient.LName, patient.FName,
+				SELECT patient.PatNum, patient.LName, patient.FName,
 				tempannualmax.AnnualMax $AnnualMax,
 				tempused.AmtUsed $AmountUsed,
 				tempannualmax.AnnualMax-IFNULL(tempused.AmtUsed,0) $AmtRemaining,
@@ -1304,6 +1305,7 @@ namespace OpenDentBusiness{
 			DataTable rawtable=Db.GetTable(command);
 			for(int i=0;i<rawtable.Rows.Count;i++) {
 				row=table.NewRow();
+				row["PatNum"]=PIn.Long(rawtable.Rows[i]["PatNum"].ToString());
 				row["LName"]=rawtable.Rows[i]["LName"].ToString();
 				row["FName"]=rawtable.Rows[i]["FName"].ToString();
 				row["annualMax"]=(PIn.Double(rawtable.Rows[i]["$AnnualMax"].ToString())).ToString("N");

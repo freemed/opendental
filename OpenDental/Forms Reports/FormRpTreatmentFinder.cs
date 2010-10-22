@@ -22,15 +22,22 @@ namespace OpenDental{
 		private FormQuery FormQuery2;
 		private UI.Button butPrint;
 		private UI.Button butRefresh;
+		private DataTable table;
 		private PrintDocument pd;
 		private bool headingPrinted;
 		private int headingPrintH;
+		private ContextMenu contextRightClick;
+		private MenuItem menuItemFamily;
+		private MenuItem menuItemAccount;
+		private UI.Button butGotoFamily;
+		private UI.Button butGotoAccount;
 		private int pagesPrinted;
 
 		///<summary></summary>
 		public FormRpTreatmentFinder() {
 			InitializeComponent();
 			Lan.F(this);
+			gridMain.ContextMenu=contextRightClick;
 		}
 
 		///<summary></summary>
@@ -51,10 +58,15 @@ namespace OpenDental{
 			this.checkIncludeNoIns = new System.Windows.Forms.CheckBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.butRefresh = new OpenDental.UI.Button();
+			this.contextRightClick = new System.Windows.Forms.ContextMenu();
+			this.menuItemFamily = new System.Windows.Forms.MenuItem();
+			this.menuItemAccount = new System.Windows.Forms.MenuItem();
+			this.butGotoAccount = new OpenDental.UI.Button();
+			this.butGotoFamily = new OpenDental.UI.Button();
+			this.butPrint = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
-			this.butPrint = new OpenDental.UI.Button();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -101,6 +113,73 @@ namespace OpenDental{
 			this.butRefresh.Text = "&Refresh";
 			this.butRefresh.Click += new System.EventHandler(this.butRefresh_Click);
 			// 
+			// contextRightClick
+			// 
+			this.contextRightClick.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItemFamily,
+            this.menuItemAccount});
+			// 
+			// menuItemFamily
+			// 
+			this.menuItemFamily.Index = 0;
+			this.menuItemFamily.Text = "See Family";
+			this.menuItemFamily.Click += new System.EventHandler(this.menuItemFamily_Click);
+			// 
+			// menuItemAccount
+			// 
+			this.menuItemAccount.Index = 1;
+			this.menuItemAccount.Text = "See Account";
+			this.menuItemAccount.Click += new System.EventHandler(this.menuItemAccount_Click);
+			// 
+			// butGotoAccount
+			// 
+			this.butGotoAccount.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butGotoAccount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butGotoAccount.Autosize = true;
+			this.butGotoAccount.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butGotoAccount.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butGotoAccount.CornerRadius = 4F;
+			this.butGotoAccount.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butGotoAccount.Location = new System.Drawing.Point(480,623);
+			this.butGotoAccount.Name = "butGotoAccount";
+			this.butGotoAccount.Size = new System.Drawing.Size(96,24);
+			this.butGotoAccount.TabIndex = 68;
+			this.butGotoAccount.Text = "Go to Account";
+			this.butGotoAccount.Click += new System.EventHandler(this.butGotoAccount_Click);
+			// 
+			// butGotoFamily
+			// 
+			this.butGotoFamily.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butGotoFamily.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butGotoFamily.Autosize = true;
+			this.butGotoFamily.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butGotoFamily.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butGotoFamily.CornerRadius = 4F;
+			this.butGotoFamily.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butGotoFamily.Location = new System.Drawing.Point(480,597);
+			this.butGotoFamily.Name = "butGotoFamily";
+			this.butGotoFamily.Size = new System.Drawing.Size(96,24);
+			this.butGotoFamily.TabIndex = 67;
+			this.butGotoFamily.Text = "Go to Family";
+			this.butGotoFamily.Click += new System.EventHandler(this.butGotoFamily_Click);
+			// 
+			// butPrint
+			// 
+			this.butPrint.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butPrint.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butPrint.Autosize = true;
+			this.butPrint.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butPrint.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPrint.CornerRadius = 4F;
+			this.butPrint.Image = global::OpenDental.Properties.Resources.butPrintSmall;
+			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butPrint.Location = new System.Drawing.Point(290,623);
+			this.butPrint.Name = "butPrint";
+			this.butPrint.Size = new System.Drawing.Size(87,24);
+			this.butPrint.TabIndex = 34;
+			this.butPrint.Text = "Print List";
+			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
+			// 
 			// gridMain
 			// 
 			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -111,10 +190,12 @@ namespace OpenDental{
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
 			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridMain.Size = new System.Drawing.Size(852,525);
+			this.gridMain.Size = new System.Drawing.Size(852,504);
 			this.gridMain.TabIndex = 31;
 			this.gridMain.Title = "Treatment Finder";
 			this.gridMain.TranslationName = "TableTreatmentFinder";
+			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			this.gridMain.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellClick);
 			// 
 			// butCancel
 			// 
@@ -125,7 +206,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(779,644);
+			this.butCancel.Location = new System.Drawing.Point(779,623);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 4;
@@ -140,34 +221,19 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(698,644);
+			this.butOK.Location = new System.Drawing.Point(290,597);
 			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,24);
+			this.butOK.Size = new System.Drawing.Size(87,24);
 			this.butOK.TabIndex = 3;
-			this.butOK.Text = "&OK";
+			this.butOK.Text = "R&un Query";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
-			// 
-			// butPrint
-			// 
-			this.butPrint.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butPrint.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butPrint.Autosize = true;
-			this.butPrint.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butPrint.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butPrint.CornerRadius = 4F;
-			this.butPrint.Image = global::OpenDental.Properties.Resources.butPrintSmall;
-			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPrint.Location = new System.Drawing.Point(387,644);
-			this.butPrint.Name = "butPrint";
-			this.butPrint.Size = new System.Drawing.Size(87,24);
-			this.butPrint.TabIndex = 34;
-			this.butPrint.Text = "Print List";
-			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
 			// 
 			// FormRpTreatmentFinder
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(858,672);
+			this.ClientSize = new System.Drawing.Size(858,651);
+			this.Controls.Add(this.butGotoAccount);
+			this.Controls.Add(this.butGotoFamily);
 			this.Controls.Add(this.butPrint);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.gridMain);
@@ -197,7 +263,10 @@ namespace OpenDental{
 		private void FillGrid() {
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g("TableTreatmentFinder","LName"),100);
+			ODGridColumn col=new ODGridColumn(Lan.g("TableTreatmentFinder","PatNum"),100);
+			col.TextAlign=HorizontalAlignment.Center;
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableTreatmentFinder","LName"),100);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableTreatmentFinder","FName"),100);
 			gridMain.Columns.Add(col);
@@ -214,7 +283,7 @@ namespace OpenDental{
 			col.TextAlign=HorizontalAlignment.Right;
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
-			DataTable table=Patients.GetTreatmentFinderList(checkIncludeNoIns.Checked);
+			table=Patients.GetTreatmentFinderList(checkIncludeNoIns.Checked);
 			ODGridRow row;
 			for(int i=0;i<table.Rows.Count;i++) {
 			  row=new ODGridRow();
@@ -224,6 +293,64 @@ namespace OpenDental{
 			  gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
+		}
+
+		private void gridMain_CellClick(object sender,ODGridClickEventArgs e) {
+			//Might not need the cellClick
+		}
+
+		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			//Add functionality later
+		}
+
+		private void menuItemFamily_Click(object sender,EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.FamilyModule)) {
+				return;
+			}
+			if(gridMain.SelectedIndices.Length==0) {
+				MsgBox.Show(this,"Please select a patient first.");
+				return;
+			}
+			long patNum=PIn.Long(table.Rows[gridMain.SelectedIndices[0]]["PatNum"].ToString());
+			GotoModule.GotoFamily(patNum);
+		}
+
+		private void menuItemAccount_Click(object sender,EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.AccountModule)) {
+				return;
+			}
+			if(gridMain.SelectedIndices.Length==0) {
+				MsgBox.Show(this,"Please select a patient first.");
+				return;
+			}
+			long patNum=PIn.Long(table.Rows[gridMain.SelectedIndices[0]]["PatNum"].ToString());
+			GotoModule.GotoAccount(patNum);
+		}
+
+		private void butGotoFamily_Click(object sender,EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.FamilyModule)) {
+				return;
+			}
+			if(gridMain.SelectedIndices.Length==0) {
+				MsgBox.Show(this,"Please select a patient first.");
+				return;
+			}
+			WindowState=FormWindowState.Minimized;
+			long patNum=PIn.Long(table.Rows[gridMain.SelectedIndices[0]]["PatNum"].ToString());
+			GotoModule.GotoFamily(patNum);
+		}
+
+		private void butGotoAccount_Click(object sender,EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.AccountModule)) {
+				return;
+			}
+			if(gridMain.SelectedIndices.Length==0) {
+				MsgBox.Show(this,"Please select a patient first.");
+				return;
+			}
+			WindowState=FormWindowState.Minimized;
+			long patNum=PIn.Long(table.Rows[gridMain.SelectedIndices[0]]["PatNum"].ToString());
+			GotoModule.GotoAccount(patNum);
 		}
 
 		private void butPrint_Click(object sender,EventArgs e) {
@@ -379,6 +506,14 @@ DROP TABLE tempannualmax;";
       FormQuery2.ShowDialog();
 			//DialogResult=DialogResult.OK;
 		}
+
+		
+
+		
+
+		
+
+		
 
 		
 

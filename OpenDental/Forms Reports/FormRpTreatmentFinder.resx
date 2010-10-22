@@ -120,6 +120,9 @@
   <data name="label1.Text" xml:space="preserve">
     <value>The planned appointment tracker is normally used to find treatment that has not been completed.  But this report can be used to find patients that slipped through the cracks.  Especially at the end of the year when looking for treatment that can be performed for patients with remaining insurance benefits.</value>
   </data>
+  <metadata name="contextRightClick.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
