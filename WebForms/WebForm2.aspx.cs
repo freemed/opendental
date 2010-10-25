@@ -79,10 +79,10 @@ namespace WebForms {
 				System.Web.HttpBrowserCapabilities browser=Request.Browser;
 				
 				if(browser.Browser == "Firefox") {
-					RadioButtonXOffset=RadioButtonXOffset+RadioButtonXOffsetFirefox;
+					RadioButtonXOffset+=RadioButtonXOffsetFirefox;
 				}
 				if(browser.Browser == "IE") {
-					RadioButtonXOffset=RadioButtonXOffset+RadioButtonXOffsetIE;
+					RadioButtonXOffset+=RadioButtonXOffsetIE;
 				}
 				ODWebServiceEntities db=new ODWebServiceEntities();
 				int ColorBorder=db.webforms_preference.Where(pref => pref.DentalOfficeID==DentalOfficeID).First().ColorBorder;
@@ -351,7 +351,7 @@ namespace WebForms {
 			rv.ErrorMessage=ErrorMessage;
 			rv.Display=ValidatorDisplay.None;
 			rv.SetFocusOnError=true;
-			rv.ID=rv.ControlToValidate+"RequiredFieldValidator";
+			rv.ID="RequiredFieldValidator"+ rv.ControlToValidate;
 
 			AjaxControlToolkit.ValidatorCalloutExtender vc = new AjaxControlToolkit.ValidatorCalloutExtender();
 			vc.TargetControlID=rv.ID;
@@ -367,7 +367,7 @@ namespace WebForms {
 				cv.Type=ValidationDataType.Date;
 				cv.Operator=ValidationCompareOperator.DataTypeCheck;
 				cv.SetFocusOnError=true;
-				cv.ID=""+sfd.WebSheetFieldDefNum+"CompareValidator";
+				cv.ID="CompareValidator"+cv.ControlToValidate;
 				AjaxControlToolkit.ValidatorCalloutExtender vc1 = new AjaxControlToolkit.ValidatorCalloutExtender();
 				vc1.TargetControlID=cv.ID;
 				vc1.ID="ValidatorCalloutExtender"+cv.ID;
@@ -427,14 +427,12 @@ namespace WebForms {
 				if(c.GetType()==typeof(TextBox)) {
 					TextBox tbox=((TextBox)c);
 					if(tbox.Text.Trim()!="") {
-						//string FieldName=tbox.ID.Remove(0,"TextBox".Length);
 						string FieldName=tbox.ID;
 						FormValuesHashTable.Add(FieldName,tbox.Text.Trim());
 					}
 				}
 				if(c.GetType()==typeof(RadioButtonList)) {
 					RadioButtonList rbl=((RadioButtonList)c);
-					//string FieldName=rbl.ID.Remove(0,"RadioButtonList".Length);
 					string FieldName=rbl.ID;
 					if(rbl.SelectedIndex!=-1) {
 						FormValuesHashTable.Add(FieldName,rbl.SelectedValue);
@@ -442,10 +440,8 @@ namespace WebForms {
 				}
 				if(c.GetType()==typeof(CheckBox)) {
 					CheckBox cbox=((CheckBox)c);
-					//string FieldName=cbox.ID.Remove(0,"CheckBox".Length);
 					string FieldName=cbox.ID;
 					if(cbox.Checked==true) {
-						//FormValuesHashTable.Add(FieldName,cbox.Checked.ToString());
 						FormValuesHashTable.Add(FieldName,"X");
 					}
 				}

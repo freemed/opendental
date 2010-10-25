@@ -559,10 +559,22 @@ namespace OpenDental {
 		private bool CompareSheets(Sheet sheetFromDb,Sheet newSheet) {
 			bool isEqual=true;
 			for(int i=0;i<sheetFromDb.SheetFields.Count;i++) {
-				string dbSheetFieldValue=sheetFromDb.SheetFields[i].FieldValue.ToString();
-				string newSheetFieldValue=newSheet.SheetFields[i].FieldValue.ToString();
-				if(dbSheetFieldValue!=newSheetFieldValue) {
-					isEqual=false;
+				// read each parameter of the SheetField like Fontsize,FieldValue, FontIsBold, XPos, YPos etc.
+				foreach(FieldInfo fieldinfo in sheetFromDb.SheetFields[i].GetType().GetFields()) {
+					string dbSheetFieldValue="";
+					string newSheetFieldValue="";
+					//.ToString() works for Int64, Int32, Enum, DateTime(bithdate), Boolean, Double
+					if(fieldinfo.GetValue(sheetFromDb.SheetFields[i])!=null) {
+						dbSheetFieldValue=fieldinfo.GetValue(sheetFromDb.SheetFields[i]).ToString();
+					}
+					if(fieldinfo.GetValue(newSheet.SheetFields[i])!=null) {
+						newSheetFieldValue=fieldinfo.GetValue(newSheet.SheetFields[i]).ToString();
+					}
+					if(dbSheetFieldValue!=newSheetFieldValue) {
+						isEqual=false;
+					}
+
+
 				}
 			}
 			return isEqual;
