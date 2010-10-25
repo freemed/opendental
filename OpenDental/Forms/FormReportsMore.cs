@@ -543,7 +543,7 @@ namespace OpenDental {
 					break;
 				case 5://Outstanding Insurance Claims II
 					FormRpOutIns FormOutIns=new FormRpOutIns();
-					FormOutIns.ShowDialog();
+					FormOutIns.Show();
 					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Outstanding Insurance Claims");
 					break;
 				case 6://Procedures Not Billed to Insurance

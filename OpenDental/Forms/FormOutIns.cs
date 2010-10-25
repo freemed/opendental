@@ -28,19 +28,12 @@ namespace OpenDental {
     private bool isAllProv;
     private bool isPreauth;
 		private DataTable Table;
+		private long selectedPatNum;
 	
 		public FormRpOutIns() {
 			InitializeComponent();
 			Lan.F(this);
 
-		}
-
-		private void butOK_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.OK;
-		}
-
-		private void butCancel_Click(object sender,EventArgs e) {
-		  DialogResult=DialogResult.Cancel;
 		}
 
 		private void InitializeComponent() {
@@ -69,6 +62,7 @@ namespace OpenDental {
 			this.checkPreauth.TabIndex = 51;
 			this.checkPreauth.Text = "Include Preauths";
 			this.checkPreauth.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkPreauth.CheckedChanged += new System.EventHandler(this.checkPreauth_CheckedChanged);
 			// 
 			// checkProvAll
 			// 
@@ -99,7 +93,6 @@ namespace OpenDental {
 			this.label3.TabIndex = 48;
 			this.label3.Text = "Providers";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-			this.label3.Click += new System.EventHandler(this.label3_Click);
 			// 
 			// labelDaysOldMin
 			// 
@@ -127,6 +120,7 @@ namespace OpenDental {
 			this.textDaysOldMax.Name = "textDaysOldMax";
 			this.textDaysOldMax.Size = new System.Drawing.Size(60,20);
 			this.textDaysOldMax.TabIndex = 47;
+			this.textDaysOldMax.TextChanged += new System.EventHandler(this.textDaysOldMax_TextChanged);
 			// 
 			// textDaysOldMin
 			// 
@@ -137,6 +131,7 @@ namespace OpenDental {
 			this.textDaysOldMin.Size = new System.Drawing.Size(60,20);
 			this.textDaysOldMin.TabIndex = 47;
 			this.textDaysOldMin.Text = "30";
+			this.textDaysOldMin.TextChanged += new System.EventHandler(this.textDaysOldMin_TextChanged);
 			// 
 			// butCancel
 			// 
@@ -152,6 +147,7 @@ namespace OpenDental {
 			this.butCancel.Size = new System.Drawing.Size(75,23);
 			this.butCancel.TabIndex = 45;
 			this.butCancel.Text = "&Cancel";
+			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
 			// gridMain
 			// 
@@ -165,6 +161,8 @@ namespace OpenDental {
 			this.gridMain.TabIndex = 1;
 			this.gridMain.Title = null;
 			this.gridMain.TranslationName = null;
+			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			this.gridMain.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellClick);
 			// 
 			// butOK
 			// 
@@ -205,26 +203,42 @@ namespace OpenDental {
 		}
 
 		private void FormRpOutIns_Load(object sender,EventArgs e) {
+			FillProvs();
 			RefreshGrid();
 		}
 
+		private void FillProvs() {
+			for(int i=0;i<ProviderC.List.Length;i++) {
+				listProv.Items.Add(ProviderC.List[i].GetLongDesc());
+			}
+			if(listProv.Items.Count>0) {
+				listProv.SelectedIndex=0;
+			}
+			checkProvAll.Checked=true;
+			listProv.Visible=false;
+		}
+
 		private void RefreshGrid(){
-			if(textDaysOldMin.Text.Trim() == "") {
+			if(textDaysOldMin.Text.Trim()=="" || PIn.Double(textDaysOldMin.Text)==0) {
 				dateMin=DateTime.MinValue;
 			}
 			else {
 				dateMin = DateTime.Today.AddDays(-1 * PIn.Int(textDaysOldMin.Text));
 			}
-			if(textDaysOldMax.Text.Trim() == "") {
+			if(textDaysOldMax.Text.Trim()=="" || PIn.Double(textDaysOldMax.Text)==0) {
 				dateMax=DateTime.MinValue;
 			}
 			else {
 				dateMax = DateTime.Today.AddDays(-1 * PIn.Int(textDaysOldMax.Text));
 			}
-			provNumList=new List<long>();
-			for(int i=0;i<listProv.SelectedIndices.Count;i++) {
-				provNumList.Add(listProv.SelectedIndices[i]);
+			isAllProv=checkProvAll.Checked;
+			if(!isAllProv) {
+				provNumList=new List<long>();
+				for(int i=0;i<listProv.SelectedIndices.Count;i++) {
+					provNumList.Add(listProv.SelectedIndices[i]);
+				}
 			}
+			isPreauth=checkPreauth.Checked;
 			Table=Claims.GetOutInsClaims(isAllProv,provNumList,dateMin,dateMax,isPreauth);
 			FillGrid();
 		}
@@ -233,19 +247,19 @@ namespace OpenDental {
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col;
-			col=new ODGridColumn(Lan.g(this,"Carrier"),165);
+			col=new ODGridColumn(Lan.g(this,"Carrier"),160);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Phone"),85);
+			col=new ODGridColumn(Lan.g(this,"Phone"),90);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Type"),100);
+			col=new ODGridColumn(Lan.g(this,"Type"),85);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Patient Name"),135);
+			col=new ODGridColumn(Lan.g(this,"Patient Name"),150);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Date of Service"),80);
+			col=new ODGridColumn(Lan.g(this,"Date of Service"),88);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Date Sent"),80);
+			col=new ODGridColumn(Lan.g(this,"Date Sent"),88);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Amount"),80);
+			col=new ODGridColumn(Lan.g(this,"Amount"),70);
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
@@ -262,8 +276,8 @@ namespace OpenDental {
 					case "S":
 						type="Secondary";
 						break;
-					case "PreAuth":
-						type="PreAuth";
+					case "Preauth":
+						type="Preauth";
 						break;
 					case "Other":
 						type="Other";
@@ -279,7 +293,7 @@ namespace OpenDental {
 						break;
 				}
 				row.Cells.Add(type);
-				row.Cells.Add(Table.Rows[i]["FName"].ToString()+" "+Table.Rows[i]["LName"].ToString());
+				row.Cells.Add(Table.Rows[i]["LName"].ToString()+", "+Table.Rows[i]["FName"].ToString()+" "+Table.Rows[i]["MiddleI"].ToString());
 				row.Cells.Add(PIn.Date(Table.Rows[i]["DateService"].ToString()).ToShortDateString());
 				row.Cells.Add(PIn.Date(Table.Rows[i]["DateSent"].ToString()).ToShortDateString());
 				row.Cells.Add("$"+PIn.Double(Table.Rows[i]["ClaimFee"].ToString()).ToString("F"));
@@ -289,16 +303,59 @@ namespace OpenDental {
 		}
 
 		private void listProv_SelectedIndexChanged(object sender,EventArgs e) {
-
+			RefreshGrid();
 		}
 
 		private void checkProvAll_CheckedChanged(object sender,EventArgs e) {
-
+			if(checkProvAll.Checked) {
+				listProv.Visible=false;
+			}
+			else {
+				listProv.Visible=true;
+			}
+			RefreshGrid();
 		}
 
 		private void label3_Click(object sender,EventArgs e) {
-
+			RefreshGrid();
 		}
+
+		private void textDaysOldMin_TextChanged(object sender,EventArgs e) {
+			RefreshGrid();
+		}
+
+		private void checkPreauth_CheckedChanged(object sender,EventArgs e) {
+			RefreshGrid();
+		}
+
+		private void textDaysOldMax_TextChanged(object sender,EventArgs e) {
+			RefreshGrid();
+		}
+
+		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			Claim claim=Claims.GetClaim(PIn.Long(Table.Rows[e.Row]["ClaimNum"].ToString()));
+			Patient pat=Patients.GetPat(claim.PatNum);
+			Family fam=Patients.GetFamily(pat.PatNum);
+			FormClaimEdit FormCE=new FormClaimEdit(claim,pat,fam);
+			FormCE.IsNew=false;
+			FormCE.ShowDialog();
+		}
+
+		private void butOK_Click(object sender,EventArgs e) {
+			DialogResult=DialogResult.OK;
+			Close();
+		}
+
+		private void butCancel_Click(object sender,EventArgs e) {
+			DialogResult=DialogResult.Cancel;
+			Close();
+		}
+
+		private void gridMain_CellClick(object sender,ODGridClickEventArgs e) {
+			GotoModule.GotoAccount(PIn.Long(Table.Rows[e.Row]["PatNum"].ToString()));
+		}
+
+
 
 
 
