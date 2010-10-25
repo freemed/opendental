@@ -1198,14 +1198,19 @@ namespace OpenDental{
 		}
 
 		private static void FillFieldsForMedicalHistory(Sheet sheet,Patient pat) {
-			/*There aren't any fields for medical history yet
 			foreach(SheetField field in sheet.SheetFields) {
 				switch(field.FieldName) {
-					case "appt.timeDate":
-						field.FieldValue=apt.AptDateTime.ToShortTimeString()+"  "+apt.AptDateTime.ToShortDateString();
+					case "Birthdate":
+						field.FieldValue=pat.Birthdate.ToShortDateString();
+						break;
+					case "FName":
+						field.FieldValue=pat.FName;
+						break;
+					case "LName":
+						field.FieldValue=pat.LName;
 						break;
 				}
-			}*/
+			}
 		}
 
 		private static void FillFieldsForLabCase(Sheet sheet,Patient pat,LabCase labcase) {

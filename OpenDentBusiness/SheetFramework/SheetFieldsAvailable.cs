@@ -341,6 +341,9 @@ namespace OpenDentBusiness{
 				//none
 			}
 			else if(outInCheck==OutInCheck.In) {
+				list.Add(NewInput("Birthdate"));
+				list.Add(NewInput("FName"));
+				list.Add(NewInput("LName"));
 				list.Add(NewInput("misc"));
 			}
 			else if(outInCheck==OutInCheck.Check) {
