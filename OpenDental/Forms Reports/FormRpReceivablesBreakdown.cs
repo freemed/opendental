@@ -426,14 +426,13 @@ namespace OpenDental {
 					}
 					whereProv += ") ";
 				}
-				report.Query = "SELECT claimpayment.CheckDate,SUM(claimproc.InsPayamt) "
-                + "FROM claimpayment,claimproc WHERE "
-                + "claimproc.ClaimPaymentNum = claimpayment.ClaimPaymentNum "
-                + "AND (claimproc.Status=1 OR claimproc.Status=4) "//received or supplemental
-                + "AND claimpayment.CheckDate >= '" + bDate + "' "
-                + "AND claimpayment.CheckDate < '" + eDate + "' "
+				report.Query = "SELECT DateCP,SUM(InsPayamt) "
+                + "FROM claimproc WHERE "
+                + "Status IN (1,4) "//received or supplemental
+                + "AND DateCP >= '" + bDate + "' "
+                + "AND DateCP < '" + eDate + "' "
                 + whereProv
-                + " GROUP BY claimpayment.CheckDate ORDER BY checkdate";
+                + " GROUP BY DateCP ORDER BY DateCP";
 				TableIns = report.GetTempTable();
 				whereProv = "";
 				if(listProv.SelectedIndices[0] != 0) {
