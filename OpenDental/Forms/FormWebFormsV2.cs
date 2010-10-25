@@ -105,9 +105,16 @@ namespace OpenDental {
 					MsgBox.Show(this,"No Patient forms retrieved from server");
 					return;
 				}
+				//loop through all incoming sheets
 				for(int i=0;i<sAnds.Length;i++) {
 
 					long PatNum=7;
+
+					string LastName="";
+					string FirstName="";
+					string BirthDate="";
+
+
 					SheetDef sheetDef=new SheetDef((SheetTypeEnum)sAnds[i].sh.SheetType);
 					Sheet newSheet=SheetUtil.CreateSheet(sheetDef,PatNum);
 					SheetParameter.SetParameter(newSheet,"PatNum",PatNum);
@@ -122,7 +129,7 @@ namespace OpenDental {
 					newSheet.InternalNote="";//because null not ok
 					newSheet.IsWebForm=true;
 
-
+					//loop through each variable in a single sheetfield
 					for(int j=0;j<sAnds[i].sf.Count();j++) {
 						SheetField sheetfield= new SheetField();
 						sheetfield.FieldName=sAnds[i].sf[j].FieldName;
@@ -140,7 +147,41 @@ namespace OpenDental {
 						sheetfield.GrowthBehavior=(GrowthBehaviorEnum)sAnds[i].sf[j].GrowthBehavior;
 						sheetfield.FieldValue=sAnds[i].sf[j].FieldValue;
 						newSheet.SheetFields.Add(sheetfield);
+
+						
+
+						if(sheetfield.FieldName.ToLower().Contains("lname")||sheetfield.FieldName.ToLower().Contains("lastname")) {
+							LastName=sheetfield.FieldValue;
+						}
+						if(sheetfield.FieldName.ToLower().Contains("fname")||sheetfield.FieldName.ToLower().Contains("firstname")) {
+							FirstName=sheetfield.FieldValue;
+						}
+						if(sheetfield.FieldName.ToLower().Contains("bdate")||sheetfield.FieldName.ToLower().Contains("birthdate")) {
+							BirthDate=sheetfield.FieldValue;
+						}
+
+					}// end of for loop
+
+					/*
+					DateTime birthDate=PIn.Date(BirthDate);
+					if(birthDate.Year==1) {
+						//log invalid birth date  format
 					}
+					long PatNum=Patients.GetPatNumByNameAndBirthday(LastName,FirstName,birthDate);
+					Patient newPat=null;
+					Sheet newSheet=null;
+					DateTime SheetDateTimeSubmitted= (from s in SheetDetails where s.SheetID==SheetID
+													  select s.DateTimeSheet).First();
+					if(PatNum==0) {
+						newPat=CreatePatient(SingleSheet.ToList());
+						PatNum=newPat.PatNum;
+					}
+					newSheet=CreateSheet(PatNum,SheetDateTimeSubmitted,SingleSheet.ToList());
+					if(DataExistsInDb(newSheet)==true) {
+						SheetsForDeletion.Add(SheetID);
+					}
+
+					*/
 
 					Sheets.SaveNewSheet(newSheet);
 

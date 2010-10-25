@@ -90,12 +90,18 @@ namespace WebForms {
 				var SheetDefObj=db.webforms_sheetdef.Where(sd => sd.WebSheetDefNum==WebSheetDefNum && sd.webforms_preference.DentalOfficeID==DentalOfficeID).First();
 				int SheetDefWidth=SheetDefObj.Width;
 				int SheetDefHeight=SheetDefObj.Height;
+				bool SheetDefIsLandscape=SheetDefObj.IsLandscape==(sbyte)1?true:false;
 				form1.Style["position"]="absolute";
 				form1.Style["top"]=FormXOffset+"px";
 				form1.Style["left"]=FormYOffset+"px";
 				form1.Style["width"]=SheetDefWidth+"px";
 				form1.Style["height"]=SheetDefHeight+"px";
 				form1.Style["background-color"]="white";
+				if(SheetDefIsLandscape) {
+					form1.Style["height"]=SheetDefWidth+"px";
+					form1.Style["width"]=SheetDefHeight+"px";
+				}
+
 				var SheetFieldDefList=(from sfd in db.webforms_sheetfielddef where sfd.webforms_sheetdef.WebSheetDefNum==WebSheetDefNum && sfd.webforms_sheetdef.webforms_preference.DentalOfficeID==DentalOfficeID
 							select sfd).ToList();
 				for(int j=0;j<SheetFieldDefList.Count();j++) {
@@ -128,7 +134,6 @@ namespace WebForms {
 						if(FieldValue.Contains("[dateToday]")) {
 							FieldValue=FieldValue.Replace("[dateToday]",DateTime.Today.ToString("M/d/yyyy"));
 						}
-
 						lb.Text= FieldValue;
 						wc=lb;
 					}
@@ -175,6 +180,8 @@ namespace WebForms {
 							wc.Style["font-family"]=fontname;
 							wc.Style["font-size"]=fontsize+"px";
 							wc.Style["height"]=height/heightfactor+"px";
+							wc.BorderWidth=Unit.Pixel(0);
+							wc.BackColor=Color.LightYellow;
 							AddValidator(SheetFieldDefList.ElementAt(j));
 							WControl wcobj = new WControl(XPos,YPos,wc);
 							listwc.Add(wcobj);
@@ -493,12 +500,16 @@ namespace WebForms {
 					NewSheetfieldObj.FieldValue=SheetFieldDefObj.FieldValue;
 					
 
-
 					long WebSheetFieldDefNum=SheetFieldDefObj.WebSheetFieldDefNum;
 					if(FormValuesHashTable.ContainsKey(WebSheetFieldDefNum+"")) {
 						NewSheetfieldObj.FieldValue=FormValuesHashTable[WebSheetFieldDefNum+""].ToString();
 					}
 
+					string FieldValue=SheetFieldDefObj.FieldValue; 
+					if(FieldValue.Contains("[dateToday]")) {
+						FieldValue=FieldValue.Replace("[dateToday]",DateTime.Today.ToString("M/d/yyyy"));
+						NewSheetfieldObj.FieldValue=FieldValue;
+					}
 					
 					
 					NewSheetObj.webforms_sheetfield.Add(NewSheetfieldObj);
