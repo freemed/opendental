@@ -2925,11 +2925,24 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				//payplan.PlanNum -- payplan.InsSubNum
 				command="UPDATE payplan SET InsSubNum = (SELECT InsSubNum FROM inssub WHERE inssub.PlanNum=payplan.PlanNum) WHERE PlanNum > 0";
 				Db.NonQ(command);
-				//command="ALTER TABLE insplan DROP Subscriber,DateEffective,DateTerm,ReleaseInfo,AssignBen,SubscriberID,BenefitNotes,SubscNote";
-				//Db.NonQ(command);
+				command="ALTER TABLE insplan DROP Subscriber";
+				Db.NonQ(command);
+				command="ALTER TABLE insplan DROP DateEffective";
+				Db.NonQ(command);
+				command="ALTER TABLE insplan DROP DateTerm";
+				Db.NonQ(command);
+				command="ALTER TABLE insplan DROP ReleaseInfo";
+				Db.NonQ(command);
+				command="ALTER TABLE insplan DROP AssignBen";
+				Db.NonQ(command);
+				command="ALTER TABLE insplan DROP SubscriberID";
+				Db.NonQ(command);
+				command="ALTER TABLE insplan DROP BenefitNotes";
+				Db.NonQ(command);
+				command="ALTER TABLE insplan DROP SubscNote";
+				Db.NonQ(command);
 				//todo: implement above lines.
 				//todo: any place that PlanNum is set, set InsSubNum
-				//todo: run crud gen to rebuild InsPlanCrud.
 				//todo: move etrans to crud.
 				//todo: if plans have same TrojanId, combine them.
 				//todo: reports

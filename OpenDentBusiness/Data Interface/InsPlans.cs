@@ -97,8 +97,7 @@ namespace OpenDentBusiness {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<InsPlan>>(MethodBase.GetCurrentMethod(),subList);
 			}
-			string command=
-				"(SELECT * FROM insplan WHERE";
+			string command="SELECT * FROM insplan WHERE";
 			for(int i=0;i<subList.Count;i++) {
 				if(i>0) {
 					command+=" OR";
