@@ -125,7 +125,12 @@ namespace OpenDental.UI
 				useCommas=value;
 			}
 		}
-		
+
+		///<summary>Force text being displayed to be refreshed.</summary>
+		public void RefreshText() {
+			FillText();
+		}
+
 		private void ComboBoxMulti_Paint(object sender, System.Windows.Forms.PaintEventArgs e) {
 			e.Graphics.DrawRectangle(new Pen(Color.FromArgb(127,157,185))//blue
 				,0,0,Width-1,Height-1);

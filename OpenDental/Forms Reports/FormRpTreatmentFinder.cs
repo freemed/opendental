@@ -49,6 +49,7 @@ namespace OpenDental{
 		private ComboBoxMulti comboBoxMultiProv;
 		private ComboBoxMulti comboBoxMultiBilling;
 		private int pagesPrinted;
+		private int patientsPrinted;
 
 		///<summary></summary>
 		public FormRpTreatmentFinder() {
@@ -303,7 +304,7 @@ namespace OpenDental{
 			// butLabelSingle
 			// 
 			this.butLabelSingle.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butLabelSingle.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butLabelSingle.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butLabelSingle.Autosize = true;
 			this.butLabelSingle.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butLabelSingle.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
@@ -315,6 +316,7 @@ namespace OpenDental{
 			this.butLabelSingle.Size = new System.Drawing.Size(119,24);
 			this.butLabelSingle.TabIndex = 70;
 			this.butLabelSingle.Text = "Single Labels";
+			this.butLabelSingle.Click += new System.EventHandler(this.butLabelSingle_Click);
 			// 
 			// butLabelPreview
 			// 
@@ -331,6 +333,7 @@ namespace OpenDental{
 			this.butLabelPreview.Size = new System.Drawing.Size(119,24);
 			this.butLabelPreview.TabIndex = 69;
 			this.butLabelPreview.Text = "Label Preview";
+			this.butLabelPreview.Click += new System.EventHandler(this.butLabelPreview_Click);
 			// 
 			// butGotoAccount
 			// 
@@ -392,6 +395,7 @@ namespace OpenDental{
 			this.comboBoxMultiBilling.Size = new System.Drawing.Size(160,21);
 			this.comboBoxMultiBilling.TabIndex = 50;
 			this.comboBoxMultiBilling.UseCommas = true;
+			this.comboBoxMultiBilling.Leave += new System.EventHandler(this.comboBoxMultiBilling_Leave);
 			// 
 			// comboBoxMultiProv
 			// 
@@ -404,6 +408,7 @@ namespace OpenDental{
 			this.comboBoxMultiProv.Size = new System.Drawing.Size(160,21);
 			this.comboBoxMultiProv.TabIndex = 49;
 			this.comboBoxMultiProv.UseCommas = true;
+			this.comboBoxMultiProv.Leave += new System.EventHandler(this.comboBoxMultiProv_Leave);
 			// 
 			// textOverAmount
 			// 
@@ -501,6 +506,18 @@ namespace OpenDental{
 			//will start out 1st through 30th of previous month
 			//date1.SelectionStart=new DateTime(today.Year,today.Month,1).AddMonths(-1);
 			//date2.SelectionStart=new DateTime(today.Year,today.Month,1).AddDays(-1);
+			comboBoxMultiProv.Items.Add("All");
+			for(int i=0;i<ProviderC.List.Length;i++){
+			  comboBoxMultiProv.Items.Add(ProviderC.List[i].GetLongDesc());
+			}
+			comboBoxMultiProv.SetSelected(0,true);
+			comboBoxMultiProv.RefreshText();
+			comboBoxMultiBilling.Items.Add("All");
+			for(int i=0;i<DefC.Short[(int)DefCat.BillingTypes].Length;i++){
+				comboBoxMultiBilling.Items.Add(DefC.Short[(int)DefCat.BillingTypes][i].ItemName);
+			}
+			comboBoxMultiBilling.SetSelected(0,true);
+			comboBoxMultiBilling.RefreshText();
 			comboMonthStart.SelectedIndex=0;
 			FillGrid();
 		}
@@ -533,15 +550,19 @@ namespace OpenDental{
 			}
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g("TableTreatmentFinder","PatNum"),100);
-			col.TextAlign=HorizontalAlignment.Center;
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableTreatmentFinder","LName"),100);
+			//ODGridColumn col=new ODGridColumn(Lan.g("TableTreatmentFinder","PatNum"),100);
+			//col.TextAlign=HorizontalAlignment.Center;
+			//gridMain.Columns.Add(col);
+			ODGridColumn col=new ODGridColumn(Lan.g("TableTreatmentFinder","LName"),100);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableTreatmentFinder","FName"),100);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableTreatmentFinder","Contact"),120);
 			gridMain.Columns.Add(col);
+			//col=new ODGridColumn(Lan.g("TableTreatmentFinder","address"),120);
+			//gridMain.Columns.Add(col);
+			//col=new ODGridColumn(Lan.g("TableTreatmentFinder","cityStateZip"),120);
+			//gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableTreatmentFinder","Annual Max"),100);
 			col.TextAlign=HorizontalAlignment.Right;
 			gridMain.Columns.Add(col);
@@ -560,7 +581,9 @@ namespace OpenDental{
 			for(int i=0;i<table.Rows.Count;i++) {
 			  row=new ODGridRow();
 			  for(int j=0;j<table.Columns.Count;j++) {
-			    row.Cells.Add(table.Rows[i][j].ToString());
+					if(j==1 || j==2 || j==3	|| j==6 || j==7 || j==8 || j==9) {
+						row.Cells.Add(table.Rows[i][j].ToString());
+					}
 			  }
 			  gridMain.Rows.Add(row);
 			}
@@ -575,12 +598,99 @@ namespace OpenDental{
 			//Might not need cellDoubleClick
 		}
 
+		private void comboBoxMultiProv_Leave(object sender,EventArgs e) {
+			for(int i=0;i<comboBoxMultiProv.SelectedIndices.Count;i++) {
+				if(comboBoxMultiProv.SelectedIndices[i].ToString()=="0") {
+					comboBoxMultiProv.SelectedIndices.Clear();
+					comboBoxMultiProv.SetSelected(0,true);
+					comboBoxMultiProv.RefreshText();
+				}
+			}
+		}
+
+		private void comboBoxMultiBilling_Leave(object sender,EventArgs e) {
+			for(int i=0;i<comboBoxMultiBilling.SelectedIndices.Count;i++) {
+				if(comboBoxMultiBilling.SelectedIndices[i].ToString()=="0") {
+					comboBoxMultiBilling.SelectedIndices.Clear();
+					comboBoxMultiBilling.SetSelected(0,true);
+					comboBoxMultiBilling.RefreshText();
+				}
+			}
+		}
+
 		private void checkRemainingIns_CheckedChanged(object sender,EventArgs e) {
 			if(checkRemainingIns.Checked) {
 				textOverAmount.Enabled=true;
 			}
 			else {
 				textOverAmount.Enabled=false;
+			}
+		}
+
+		private void butLabelSingle_Click(object sender,EventArgs e) {
+		  if(gridMain.SelectedIndices.Length==0) {
+		    MsgBox.Show(this,"Please select patient(s) first.");
+		    return;
+		  }
+		  int patientsPrinted=0;
+		  string text;
+			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
+				text="";
+		    //print single label
+		    text=table.Rows[gridMain.SelectedIndices[i]]["FName"].ToString()+" "
+					+table.Rows[gridMain.SelectedIndices[i]]["LName"].ToString()+"\r\n";
+		    text+=table.Rows[gridMain.SelectedIndices[i]]["address"].ToString()+"\r\n";
+		    text+=table.Rows[gridMain.SelectedIndices[i]]["cityStZip"].ToString()+"\r\n";
+		    LabelSingle.PrintText(0,text);
+		    patientsPrinted++;
+			}
+		}
+
+		private void butLabelPreview_Click(object sender,EventArgs e) {
+			if(gridMain.SelectedIndices.Length==0){
+				MsgBox.Show(this,"Please select patient(s) first.");
+		    return;
+			}
+			pagesPrinted=0;
+			patientsPrinted=0;
+			pd=new PrintDocument();
+			pd.PrintPage+=new PrintPageEventHandler(this.pdLabels_PrintPage);
+			pd.OriginAtMargins=true;
+			pd.DefaultPageSettings.Margins=new Margins(0,0,0,0);
+			PrintPreview printPreview=new OpenDental.UI.PrintPreview(PrintSituation.LabelSheet
+			  ,pd,(int)Math.Ceiling((double)gridMain.SelectedIndices.Length/30));
+			printPreview.ShowDialog();
+		}
+
+		private void pdLabels_PrintPage(object sender, PrintPageEventArgs ev){
+			int totalPages=(int)Math.Ceiling((double)gridMain.SelectedIndices.Length/30);
+			Graphics g=ev.Graphics;
+			float yPos=63;
+			float xPos=50;
+			string text="";
+			while(yPos<1000 && patientsPrinted<gridMain.SelectedIndices.Length){
+				text="";
+				text=table.Rows[gridMain.SelectedIndices[patientsPrinted]]["FName"].ToString()+" "
+					+table.Rows[gridMain.SelectedIndices[patientsPrinted]]["LName"].ToString()+"\r\n";
+				text+=table.Rows[gridMain.SelectedIndices[patientsPrinted]]["address"].ToString()+"\r\n";
+				text+=table.Rows[gridMain.SelectedIndices[patientsPrinted]]["cityStZip"].ToString()+"\r\n";
+				g.DrawString(text,new Font(FontFamily.GenericSansSerif,11),Brushes.Black,xPos,yPos);
+				//reposition for next label
+				xPos+=275;
+				if(xPos>850){//drop a line
+					xPos=50;
+					yPos+=100;
+				}
+				patientsPrinted++;
+			}
+			pagesPrinted++;
+			if(pagesPrinted==totalPages){
+				ev.HasMorePages=false;
+				pagesPrinted=0;//because it has to print again from the print preview
+				patientsPrinted=0;
+			}
+			else{
+				ev.HasMorePages=true;
 			}
 		}
 
@@ -760,9 +870,18 @@ namespace OpenDental{
 		}
 
 		private void butCancel_Click(object sender, System.EventArgs e) {
-			//DialogResult=DialogResult.Cancel;
 			Close();
 		}
+
+		
+
+		
+
+		
+
+		
+
+		
 
 		
 

@@ -1229,6 +1229,8 @@ namespace OpenDentBusiness{
 			table.Columns.Add("LName");
 			table.Columns.Add("FName");
 			table.Columns.Add("contactMethod");
+			table.Columns.Add("address");
+			table.Columns.Add("cityStZip");
 			table.Columns.Add("annualMax");
 			table.Columns.Add("amountUsed");
 			table.Columns.Add("amountRemaining");
@@ -1283,7 +1285,8 @@ namespace OpenDentBusiness{
 
 				SELECT patient.PatNum, patient.LName, patient.FName,
 				patient.Email, patient.HmPhone, patient.PreferRecallMethod,
-				patient.WirelessPhone, patient.WkPhone,
+				patient.WirelessPhone, patient.WkPhone, patient.Address,
+				patient.Address2, patient.City, patient.State, patient.Zip,
 				tempannualmax.AnnualMax $AnnualMax,
 				tempused.AmtUsed $AmountUsed,
 				tempannualmax.AnnualMax-IFNULL(tempused.AmtUsed,0) $AmtRemaining,
@@ -1347,6 +1350,13 @@ namespace OpenDentBusiness{
 				if(contmeth==ContactMethod.DoNotCall || contmeth==ContactMethod.SeeNotes) {
 					row["contactMethod"]=Lans.g("enumContactMethod",contmeth.ToString());
 				}
+				row["address"]=rawtable.Rows[i]["Address"].ToString();
+					if(rawtable.Rows[i]["Address2"].ToString()!="") {
+						row["address"]+="\r\n"+rawtable.Rows[i]["Address2"].ToString();
+					}
+					row["cityStZip"]=rawtable.Rows[i]["City"].ToString()+",  "
+						+rawtable.Rows[i]["State"].ToString()+"  "
+						+rawtable.Rows[i]["Zip"].ToString();
 				row["annualMax"]=(PIn.Double(rawtable.Rows[i]["$AnnualMax"].ToString())).ToString("N");
 				row["amountUsed"]=(PIn.Double(rawtable.Rows[i]["$AmountUsed"].ToString())).ToString("N");
 				row["amountRemaining"]=(PIn.Double(rawtable.Rows[i]["$AmtRemaining"].ToString())).ToString("N");
