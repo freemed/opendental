@@ -20,6 +20,7 @@ namespace TestCanada {
 			Patient pat;
 			Patient oldPatient;
 			InsPlan plan;
+			InsSub sub;
 			PatPlan patplan;
 			pat=new Patient();
 			pat.PatStatus=PatientStatus.Patient;
@@ -47,14 +48,18 @@ namespace TestCanada {
 			plan=new InsPlan();
 			plan.CarrierNum=CarrierTC.GetCarrierNumById("666666");
 			plan.GroupNum="PLAN012";
-			plan.SubscriberID="AB123C4G";
-			plan.Subscriber=pat.PatNum;
 			plan.DentaideCardSequence=3;
 			plan.CanadianPlanFlag="";
 			InsPlans.Insert(plan);
+			sub=new InsSub();
+			sub.PlanNum=plan.PlanNum;
+			sub.Subscriber=pat.PatNum;
+			sub.SubscriberID="AB123C4G";
+			InsSubs.Insert(sub);
 			patplan=new PatPlan();
 			patplan.PatNum=pat.PatNum;
 			patplan.PlanNum=plan.PlanNum;
+			patplan.InsSubNum=sub.InsSubNum;
 			patplan.Relationship=Relat.Self;//1
 			patplan.PatID="00";
 			patplan.Ordinal=1;
@@ -84,16 +89,21 @@ namespace TestCanada {
 			plan=new InsPlan();
 			plan.CarrierNum=CarrierTC.GetCarrierNumById("666666");
 			plan.GroupNum="PLAN02";
-			plan.SubscriberID="123432145222";
-			plan.Subscriber=pat.PatNum;
 			plan.DivisionNo="1542B";
 			plan.DentaideCardSequence=0;
 			plan.CanadianPlanFlag="";
 			InsPlans.Insert(plan);
 			long planNum_pat2_pri=plan.PlanNum;
+			sub=new InsSub();
+			sub.PlanNum=plan.PlanNum;
+			sub.Subscriber=pat.PatNum;
+			sub.SubscriberID="123432145222";
+			InsSubs.Insert(sub);
+			long subNum_pat2_pri=sub.InsSubNum;
 			patplan=new PatPlan();
 			patplan.PatNum=pat.PatNum;
 			patplan.PlanNum=plan.PlanNum;
+			patplan.InsSubNum=sub.InsSubNum;
 			patplan.Relationship=Relat.Self;//1
 			patplan.PatID="00";
 			patplan.Ordinal=1;
@@ -102,16 +112,20 @@ namespace TestCanada {
 			plan=new InsPlan();
 			plan.CarrierNum=CarrierTC.GetCarrierNumById("777777");
 			plan.GroupNum="P9902";
-			plan.SubscriberID="12343B7";
-			plan.Subscriber=pat.PatNum;
 			plan.DivisionNo="";
 			plan.DentaideCardSequence=0;
 			plan.CanadianPlanFlag="";
 			InsPlans.Insert(plan);
 			//long planNum_pat2_sec=plan.PlanNum;//won't need this
+			sub=new InsSub();
+			sub.PlanNum=plan.PlanNum;
+			sub.Subscriber=pat.PatNum;
+			sub.SubscriberID="12343B7";
+			InsSubs.Insert(sub);
 			patplan=new PatPlan();
 			patplan.PatNum=pat.PatNum;
 			patplan.PlanNum=plan.PlanNum;
+			patplan.InsSubNum=sub.InsSubNum;
 			patplan.Relationship=Relat.Self;//1
 			patplan.PatID="00";
 			patplan.Ordinal=2;
@@ -140,6 +154,7 @@ namespace TestCanada {
 			patplan=new PatPlan();
 			patplan.PatNum=pat.PatNum;
 			patplan.PlanNum=planNum_pat2_pri;
+			patplan.InsSubNum=subNum_pat2_pri;
 			patplan.Relationship=Relat.Spouse;//2
 			patplan.PatID="01";
 			patplan.Ordinal=1;
@@ -148,15 +163,19 @@ namespace TestCanada {
 			plan=new InsPlan();
 			plan.CarrierNum=CarrierTC.GetCarrierNumById("777777");
 			plan.GroupNum="P9902";
-			plan.SubscriberID="12343C7";//had to add this as separate plan because of unique subscriber id.
-			plan.Subscriber=PatNum2;
 			plan.DivisionNo="";
 			plan.DentaideCardSequence=0;
 			plan.CanadianPlanFlag="";
 			InsPlans.Insert(plan);
+			sub=new InsSub();
+			sub.PlanNum=plan.PlanNum;
+			sub.Subscriber=PatNum2;
+			sub.SubscriberID="12343C7";//had to add this as separate plan because of unique subscriber id.
+			InsSubs.Insert(sub);
 			patplan=new PatPlan();
 			patplan.PatNum=pat.PatNum;
 			patplan.PlanNum=plan.PlanNum;
+			patplan.InsSubNum=sub.InsSubNum;
 			patplan.Relationship=Relat.Spouse;//2
 			patplan.PatID="00";
 			patplan.Ordinal=2;
@@ -185,6 +204,7 @@ namespace TestCanada {
 			patplan=new PatPlan();
 			patplan.PatNum=pat.PatNum;
 			patplan.PlanNum=planNum_pat2_pri;
+			patplan.InsSubNum=subNum_pat2_pri;
 			patplan.Relationship=Relat.Child;//3
 			patplan.PatID="02";
 			patplan.Ordinal=1;
@@ -193,15 +213,19 @@ namespace TestCanada {
 			plan=new InsPlan();
 			plan.CarrierNum=CarrierTC.GetCarrierNumById("777777");
 			plan.GroupNum="P9902";
-			plan.SubscriberID="12343D6";//had to add this as separate plan because of unique subscriber id.
-			plan.Subscriber=PatNum2;
 			plan.DivisionNo="";
 			plan.DentaideCardSequence=0;
 			plan.CanadianPlanFlag="";
 			InsPlans.Insert(plan);
+			sub=new InsSub();
+			sub.PlanNum=plan.PlanNum;
+			sub.Subscriber=PatNum2;
+			sub.SubscriberID="12343D6";//had to add this as separate plan because of unique subscriber id.
+			InsSubs.Insert(sub);
 			patplan=new PatPlan();
 			patplan.PatNum=pat.PatNum;
 			patplan.PlanNum=plan.PlanNum;
+			patplan.InsSubNum=sub.InsSubNum;
 			patplan.Relationship=Relat.Child;//3
 			patplan.PatID="00";
 			patplan.Ordinal=2;
@@ -234,15 +258,19 @@ namespace TestCanada {
 			plan=new InsPlan();
 			plan.CarrierNum=CarrierTC.GetCarrierNumById("888888");
 			plan.GroupNum="17542";
-			plan.SubscriberID="30322145";//concat bandNumber(303) and familyNumber(22145)
-			plan.Subscriber=pat.PatNum;
 			plan.DivisionNo="";
 			plan.DentaideCardSequence=0;
 			plan.CanadianPlanFlag="N";
 			InsPlans.Insert(plan);
+			sub=new InsSub();
+			sub.PlanNum=plan.PlanNum;
+			sub.Subscriber=pat.PatNum;
+			sub.SubscriberID="30322145";//concat bandNumber(303) and familyNumber(22145)
+			InsSubs.Insert(sub);
 			patplan=new PatPlan();
 			patplan.PatNum=pat.PatNum;
 			patplan.PlanNum=plan.PlanNum;
+			patplan.InsSubNum=sub.InsSubNum;
 			patplan.Relationship=Relat.Self;//1
 			patplan.PatID="00";
 			patplan.Ordinal=1;
@@ -290,15 +318,19 @@ namespace TestCanada {
 			plan=new InsPlan();
 			plan.CarrierNum=CarrierTC.GetCarrierNumById("666666");
 			plan.GroupNum="2221";
-			plan.SubscriberID="19234G";
-			plan.Subscriber=PatNum6;
 			plan.DivisionNo="BA1765";
 			plan.DentaideCardSequence=0;
 			plan.CanadianPlanFlag="";
 			InsPlans.Insert(plan);
+			sub=new InsSub();
+			sub.PlanNum=plan.PlanNum;
+			sub.Subscriber=PatNum6;
+			sub.SubscriberID="19234G";
+			InsSubs.Insert(sub);
 			patplan=new PatPlan();
 			patplan.PatNum=PatNum6;
 			patplan.PlanNum=plan.PlanNum;
+			patplan.InsSubNum=sub.InsSubNum;
 			patplan.Relationship=Relat.Self;//1
 			patplan.PatID="00";
 			patplan.Ordinal=1;
@@ -307,15 +339,19 @@ namespace TestCanada {
 			plan=new InsPlan();
 			plan.CarrierNum=CarrierTC.GetCarrierNumById("777777");
 			plan.GroupNum="P4042";
-			plan.SubscriberID="D6PD4";
-			plan.Subscriber=pat.PatNum;//Henry
 			plan.DivisionNo="15476";
 			plan.DentaideCardSequence=0;
 			plan.CanadianPlanFlag="";
 			InsPlans.Insert(plan);
+			sub=new InsSub();
+			sub.PlanNum=plan.PlanNum;
+			sub.Subscriber=pat.PatNum;//Henry
+			sub.SubscriberID="D6PD4";
+			InsSubs.Insert(sub);
 			patplan=new PatPlan();
 			patplan.PatNum=PatNum6;
 			patplan.PlanNum=plan.PlanNum;
+			patplan.InsSubNum=sub.InsSubNum;
 			patplan.Relationship=Relat.Spouse;//2
 			patplan.PatID="01";
 			patplan.Ordinal=2;
@@ -363,15 +399,19 @@ namespace TestCanada {
 			plan=new InsPlan();
 			plan.CarrierNum=CarrierTC.GetCarrierNumById("777777");
 			plan.GroupNum="AN99012";
-			plan.SubscriberID="344C41";
-			plan.Subscriber=PatNum7;
 			plan.DivisionNo="887B3";
 			plan.DentaideCardSequence=22;
 			plan.CanadianPlanFlag="";
 			InsPlans.Insert(plan);
+			sub=new InsSub();
+			sub.PlanNum=plan.PlanNum;
+			sub.Subscriber=PatNum7;
+			sub.SubscriberID="344C41";
+			InsSubs.Insert(sub);
 			patplan=new PatPlan();
 			patplan.PatNum=PatNum7;
 			patplan.PlanNum=plan.PlanNum;
+			patplan.InsSubNum=sub.InsSubNum;
 			patplan.Relationship=Relat.Self;//1
 			patplan.PatID="00";
 			patplan.Ordinal=1;
@@ -380,15 +420,19 @@ namespace TestCanada {
 			plan=new InsPlan();
 			plan.CarrierNum=CarrierTC.GetCarrierNumById("666666");
 			plan.GroupNum="P605B2";
-			plan.SubscriberID="D6577";
-			plan.Subscriber=pat.PatNum;//Maurice
 			plan.DivisionNo="";
 			plan.DentaideCardSequence=0;
 			plan.CanadianPlanFlag="";
 			InsPlans.Insert(plan);
+			sub=new InsSub();
+			sub.PlanNum=plan.PlanNum;
+			sub.Subscriber=pat.PatNum;//Maurice
+			sub.SubscriberID="D6577";
+			InsSubs.Insert(sub);
 			patplan=new PatPlan();
 			patplan.PatNum=PatNum7;
 			patplan.PlanNum=plan.PlanNum;
+			patplan.InsSubNum=sub.InsSubNum;
 			patplan.Relationship=Relat.Spouse;//2
 			patplan.PatID="01";
 			patplan.Ordinal=2;
@@ -436,15 +480,19 @@ namespace TestCanada {
 			plan=new InsPlan();
 			plan.CarrierNum=CarrierTC.GetCarrierNumById("777777");
 			plan.GroupNum="BN99012";
-			plan.SubscriberID="XX344C41";
-			plan.Subscriber=PatNum8;//Fred
 			plan.DivisionNo="887OP";
 			plan.DentaideCardSequence=03;
 			plan.CanadianPlanFlag="";
 			InsPlans.Insert(plan);
+			sub=new InsSub();
+			sub.PlanNum=plan.PlanNum;
+			sub.Subscriber=PatNum8;//Fred
+			sub.SubscriberID="XX344C41";
+			InsSubs.Insert(sub);
 			patplan=new PatPlan();
 			patplan.PatNum=PatNum8;
 			patplan.PlanNum=plan.PlanNum;
+			patplan.InsSubNum=sub.InsSubNum;
 			patplan.Relationship=Relat.Self;//1
 			patplan.PatID="00";
 			patplan.Ordinal=1;
@@ -453,15 +501,19 @@ namespace TestCanada {
 			plan=new InsPlan();
 			plan.CarrierNum=CarrierTC.GetCarrierNumById("999111");
 			plan.GroupNum="P300";
-			plan.SubscriberID="12A6577";
-			plan.Subscriber=pat.PatNum;//Wanda
 			plan.DivisionNo="";
 			plan.DentaideCardSequence=0;
 			plan.CanadianPlanFlag="";
 			InsPlans.Insert(plan);
+			sub=new InsSub();
+			sub.PlanNum=plan.PlanNum;
+			sub.Subscriber=pat.PatNum;//Wanda
+			sub.SubscriberID="12A6577";
+			InsSubs.Insert(sub);
 			patplan=new PatPlan();
 			patplan.PatNum=PatNum8;
 			patplan.PlanNum=plan.PlanNum;
+			patplan.InsSubNum=sub.InsSubNum;
 			patplan.Relationship=Relat.Spouse;//2
 			patplan.PatID="01";
 			patplan.Ordinal=2;
@@ -491,15 +543,19 @@ namespace TestCanada {
 			plan=new InsPlan();
 			plan.CarrierNum=CarrierTC.GetCarrierNumById("555555");
 			plan.GroupNum="44C99";
-			plan.SubscriberID="344941";
-			plan.Subscriber=pat.PatNum;
 			plan.DivisionNo="9914";
 			plan.DentaideCardSequence=0;
 			plan.CanadianPlanFlag="";
 			InsPlans.Insert(plan);
+			sub=new InsSub();
+			sub.PlanNum=plan.PlanNum;
+			sub.Subscriber=pat.PatNum;
+			sub.SubscriberID="344941";
+			InsSubs.Insert(sub);
 			patplan=new PatPlan();
 			patplan.PatNum=pat.PatNum;
 			patplan.PlanNum=plan.PlanNum;
+			patplan.InsSubNum=sub.InsSubNum;
 			patplan.Relationship=Relat.Self;//1
 			patplan.PatID="";
 			patplan.Ordinal=1;

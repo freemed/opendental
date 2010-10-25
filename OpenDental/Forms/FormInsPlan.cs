@@ -91,8 +91,12 @@ namespace OpenDental{
 		private OpenDental.UI.Button butSearch;
 		///<summary></summary>
 		private InsPlan PlanCur;
-		///<summary>This is a copy of PlanCur as it was originally when this form was openned.  It is only needed if user decides to apply changes to all identical plans.</summary>
-		private InsPlan PlanCurOld;
+		///<summary>This is a copy of PlanCur as it was originally when this form was opened.  This is needed to determine whether plan was changed.  However, this is also reset when 'pick from list' is used.</summary>
+		private InsPlan PlanCurOriginal;
+		///<summary>This original planNum does not get reset when 'pick from list' is used.  This allows intelligent decisions about how to save changes.</summary>
+		private long PlanNumOriginal;
+		///<summary></summary>
+		private InsSub SubCur;
 		private System.Windows.Forms.ComboBox comboElectIDdescript;
 		private System.Windows.Forms.Label label12;
 		private System.Windows.Forms.ComboBox comboAllowedFeeSched;
@@ -135,11 +139,10 @@ namespace OpenDental{
 		//private bool usesAnnivers;
 		private Label label17;
 		private OpenDental.UI.Button butPick;
-		private CheckBox checkApplyAll;
 		private ODtextBox textPlanNote;
 		private Label label18;
-		///<summary>Set to true if called from the list of insurance plans.  In this case, the planNum will be 0.  There will be no subscriber.  Benefits will be 'typical' rather than from one specific plan.  Upon saving, all similar plans will be set to be exactly the same as PlanCur.</summary>
-		public bool IsForAll;
+		//<summary>Set to true if called from the list of insurance plans.  In this case, the planNum will be 0.  There will be no subscriber.  Benefits will be 'typical' rather than from one specific plan.  Upon saving, all similar plans will be set to be exactly the same as PlanCur.</summary>
+		//public bool IsForAll;//Instead, just pass in a null subscriber.
 		///<summary>Set to true from FormInsPlansMerge.  In this case, the insplan is read only, because it's much more complicated to allow user to change.</summary>
 		public bool IsReadOnly;
 		private List<FeeSched> FeeSchedsStandard;
@@ -156,7 +159,7 @@ namespace OpenDental{
 		private CheckBox checkShowBaseUnits;
 		private CheckBox checkCodeSubst;
 		private TextBox textElectBenLastDate;
-		private Label label9;
+		private Label labelHistElect;
 		private OpenDental.UI.Button butHistoryElect;
 		private ComboBox comboFilingCodeSubtype;
 		private Label label15;
@@ -165,16 +168,20 @@ namespace OpenDental{
 		private TextBox textPlanFlag;
 		private Label label22;
 		private Label label24;
+		private RadioButton radioChangeAll;
+		private GroupBox groupChanges;
+		private RadioButton radioCreateNew;
 		private CheckBox checkIsHidden;
 		//<summary>This is a field that is accessed only by clicking on the button because there's not room for it otherwise.  This variable should be treated just as if it was a visible textBox.</summary>
 		//private string BenefitNotes;
 
-		///<summary>Called from ContrFamily and FormInsPlans. Must pass in both the plan and the patPlan, although patPlan can be null.  They are handled separately.</summary>
-		public FormInsPlan(InsPlan planCur,PatPlan patPlanCur){
+		///<summary>Called from ContrFamily and FormInsPlans. Must pass in the plan, patPlan, and sub, although patPlan and sub can be null.</summary>
+		public FormInsPlan(InsPlan planCur,PatPlan patPlanCur,InsSub subCur){
 			Cursor=Cursors.WaitCursor;
 			InitializeComponent();
 			PlanCur=planCur;
 			PatPlanCur=patPlanCur;
+			SubCur=subCur;
 			listEmps=new ListBox();
 			listEmps.Location=new Point(panelPlan.Left+groupPlan.Left+textEmployer.Left,
 				panelPlan.Top+groupPlan.Top+textEmployer.Bottom);
@@ -278,7 +285,6 @@ namespace OpenDental{
 			this.label2 = new System.Windows.Forms.Label();
 			this.textDateEffect = new OpenDental.ValidDate();
 			this.textDateTerm = new OpenDental.ValidDate();
-			this.textSubscNote = new OpenDental.ODtextBox();
 			this.comboLinked = new System.Windows.Forms.ComboBox();
 			this.textLinkedNum = new System.Windows.Forms.TextBox();
 			this.label4 = new System.Windows.Forms.Label();
@@ -303,7 +309,7 @@ namespace OpenDental{
 			this.butIapFind = new OpenDental.UI.Button();
 			this.labelDrop = new System.Windows.Forms.Label();
 			this.groupRequestBen = new System.Windows.Forms.GroupBox();
-			this.label9 = new System.Windows.Forms.Label();
+			this.labelHistElect = new System.Windows.Forms.Label();
 			this.textElectBenLastDate = new System.Windows.Forms.TextBox();
 			this.labelTrojanID = new System.Windows.Forms.Label();
 			this.textTrojanID = new System.Windows.Forms.TextBox();
@@ -324,7 +330,6 @@ namespace OpenDental{
 			this.butDrop = new OpenDental.UI.Button();
 			this.textPlanNum = new System.Windows.Forms.TextBox();
 			this.label17 = new System.Windows.Forms.Label();
-			this.checkApplyAll = new System.Windows.Forms.CheckBox();
 			this.label18 = new System.Windows.Forms.Label();
 			this.groupPlan = new System.Windows.Forms.GroupBox();
 			this.groupCarrier = new System.Windows.Forms.GroupBox();
@@ -345,12 +350,16 @@ namespace OpenDental{
 			this.comboFilingCode = new System.Windows.Forms.ComboBox();
 			this.label13 = new System.Windows.Forms.Label();
 			this.butPick = new OpenDental.UI.Button();
-			this.textPlanNote = new OpenDental.ODtextBox();
 			this.butOK = new OpenDental.UI.Button();
 			this.gridBenefits = new OpenDental.UI.ODGrid();
 			this.butLabel = new OpenDental.UI.Button();
 			this.butDelete = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.radioChangeAll = new System.Windows.Forms.RadioButton();
+			this.groupChanges = new System.Windows.Forms.GroupBox();
+			this.radioCreateNew = new System.Windows.Forms.RadioButton();
+			this.textPlanNote = new OpenDental.ODtextBox();
+			this.textSubscNote = new OpenDental.ODtextBox();
 			this.groupSubscriber.SuspendLayout();
 			this.groupCoPay.SuspendLayout();
 			this.groupRequestBen.SuspendLayout();
@@ -359,11 +368,12 @@ namespace OpenDental{
 			this.groupCarrier.SuspendLayout();
 			this.panelPlan.SuspendLayout();
 			this.groupCanadian.SuspendLayout();
+			this.groupChanges.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// label5
 			// 
-			this.label5.Location = new System.Drawing.Point(7,53);
+			this.label5.Location = new System.Drawing.Point(7,57);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(100,15);
 			this.label5.TabIndex = 5;
@@ -372,7 +382,7 @@ namespace OpenDental{
 			// 
 			// label6
 			// 
-			this.label6.Location = new System.Drawing.Point(182,53);
+			this.label6.Location = new System.Drawing.Point(182,57);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(36,15);
 			this.label6.TabIndex = 6;
@@ -435,7 +445,7 @@ namespace OpenDental{
 			// 
 			// label28
 			// 
-			this.label28.Location = new System.Drawing.Point(2,74);
+			this.label28.Location = new System.Drawing.Point(2,78);
 			this.label28.Name = "label28";
 			this.label28.Size = new System.Drawing.Size(55,41);
 			this.label28.TabIndex = 28;
@@ -572,7 +582,7 @@ namespace OpenDental{
 			// checkAssign
 			// 
 			this.checkAssign.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkAssign.Location = new System.Drawing.Point(300,50);
+			this.checkAssign.Location = new System.Drawing.Point(300,54);
 			this.checkAssign.Name = "checkAssign";
 			this.checkAssign.Size = new System.Drawing.Size(199,20);
 			this.checkAssign.TabIndex = 4;
@@ -581,7 +591,7 @@ namespace OpenDental{
 			// checkRelease
 			// 
 			this.checkRelease.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkRelease.Location = new System.Drawing.Point(300,32);
+			this.checkRelease.Location = new System.Drawing.Point(300,36);
 			this.checkRelease.Name = "checkRelease";
 			this.checkRelease.Size = new System.Drawing.Size(199,20);
 			this.checkRelease.TabIndex = 3;
@@ -634,7 +644,7 @@ namespace OpenDental{
 			// 
 			// textSubscriber
 			// 
-			this.textSubscriber.Location = new System.Drawing.Point(109,10);
+			this.textSubscriber.Location = new System.Drawing.Point(109,14);
 			this.textSubscriber.Name = "textSubscriber";
 			this.textSubscriber.ReadOnly = true;
 			this.textSubscriber.Size = new System.Drawing.Size(278,20);
@@ -655,16 +665,16 @@ namespace OpenDental{
 			this.groupSubscriber.Controls.Add(this.textSubscNote);
 			this.groupSubscriber.Controls.Add(this.label28);
 			this.groupSubscriber.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupSubscriber.Location = new System.Drawing.Point(468,93);
+			this.groupSubscriber.Location = new System.Drawing.Point(468,94);
 			this.groupSubscriber.Name = "groupSubscriber";
-			this.groupSubscriber.Size = new System.Drawing.Size(502,175);
+			this.groupSubscriber.Size = new System.Drawing.Size(502,176);
 			this.groupSubscriber.TabIndex = 9;
 			this.groupSubscriber.TabStop = false;
-			this.groupSubscriber.Text = "Subscriber";
+			this.groupSubscriber.Text = "Subscriber Information";
 			// 
 			// label25
 			// 
-			this.label25.Location = new System.Drawing.Point(8,14);
+			this.label25.Location = new System.Drawing.Point(8,18);
 			this.label25.Name = "label25";
 			this.label25.Size = new System.Drawing.Size(99,15);
 			this.label25.TabIndex = 115;
@@ -673,7 +683,7 @@ namespace OpenDental{
 			// 
 			// textSubscriberID
 			// 
-			this.textSubscriberID.Location = new System.Drawing.Point(109,30);
+			this.textSubscriberID.Location = new System.Drawing.Point(109,34);
 			this.textSubscriberID.MaxLength = 20;
 			this.textSubscriberID.Name = "textSubscriberID";
 			this.textSubscriberID.Size = new System.Drawing.Size(129,20);
@@ -681,7 +691,7 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(8,32);
+			this.label2.Location = new System.Drawing.Point(8,36);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(99,15);
 			this.label2.TabIndex = 114;
@@ -690,30 +700,17 @@ namespace OpenDental{
 			// 
 			// textDateEffect
 			// 
-			this.textDateEffect.Location = new System.Drawing.Point(109,50);
+			this.textDateEffect.Location = new System.Drawing.Point(109,54);
 			this.textDateEffect.Name = "textDateEffect";
 			this.textDateEffect.Size = new System.Drawing.Size(72,20);
 			this.textDateEffect.TabIndex = 1;
 			// 
 			// textDateTerm
 			// 
-			this.textDateTerm.Location = new System.Drawing.Point(221,50);
+			this.textDateTerm.Location = new System.Drawing.Point(221,54);
 			this.textDateTerm.Name = "textDateTerm";
 			this.textDateTerm.Size = new System.Drawing.Size(72,20);
 			this.textDateTerm.TabIndex = 2;
-			// 
-			// textSubscNote
-			// 
-			this.textSubscNote.AcceptsReturn = true;
-			this.textSubscNote.Location = new System.Drawing.Point(57,71);
-			this.textSubscNote.Multiline = true;
-			this.textSubscNote.Name = "textSubscNote";
-			this.textSubscNote.QuickPasteType = OpenDentBusiness.QuickPasteType.InsPlan;
-			this.textSubscNote.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textSubscNote.Size = new System.Drawing.Size(439,98);
-			this.textSubscNote.TabIndex = 5;
-			this.textSubscNote.Text = "1\r\n2\r\n3 lines will show here in 46 vert.\r\n4 lines will show here in 59 vert.\r\n5 l" +
-    "ines in 72 vert\r\n6 lines in 85 vert\r\n7 lines in 98";
 			// 
 			// comboLinked
 			// 
@@ -740,7 +737,7 @@ namespace OpenDental{
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(104,17);
 			this.label4.TabIndex = 66;
-			this.label4.Text = "Identical Plans";
+			this.label4.Text = "Other Subscribers";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// comboPlanType
@@ -954,7 +951,7 @@ namespace OpenDental{
 			// groupRequestBen
 			// 
 			this.groupRequestBen.Controls.Add(this.butHistoryElect);
-			this.groupRequestBen.Controls.Add(this.label9);
+			this.groupRequestBen.Controls.Add(this.labelHistElect);
 			this.groupRequestBen.Controls.Add(this.textElectBenLastDate);
 			this.groupRequestBen.Controls.Add(this.butImportTrojan);
 			this.groupRequestBen.Controls.Add(this.butGetElectronic);
@@ -963,21 +960,21 @@ namespace OpenDental{
 			this.groupRequestBen.Controls.Add(this.labelTrojanID);
 			this.groupRequestBen.Controls.Add(this.textTrojanID);
 			this.groupRequestBen.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupRequestBen.Location = new System.Drawing.Point(468,271);
+			this.groupRequestBen.Location = new System.Drawing.Point(468,269);
 			this.groupRequestBen.Name = "groupRequestBen";
 			this.groupRequestBen.Size = new System.Drawing.Size(502,63);
 			this.groupRequestBen.TabIndex = 10;
 			this.groupRequestBen.TabStop = false;
 			this.groupRequestBen.Text = "Request Electronic Benefits";
 			// 
-			// label9
+			// labelHistElect
 			// 
-			this.label9.Location = new System.Drawing.Point(3,19);
-			this.label9.Name = "label9";
-			this.label9.Size = new System.Drawing.Size(84,15);
-			this.label9.TabIndex = 119;
-			this.label9.Text = "Last Request";
-			this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.labelHistElect.Location = new System.Drawing.Point(3,19);
+			this.labelHistElect.Name = "labelHistElect";
+			this.labelHistElect.Size = new System.Drawing.Size(84,15);
+			this.labelHistElect.TabIndex = 119;
+			this.labelHistElect.Text = "Last Request";
+			this.labelHistElect.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textElectBenLastDate
 			// 
@@ -1188,23 +1185,13 @@ namespace OpenDental{
 			this.label17.Text = "Carrier";
 			this.label17.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// checkApplyAll
-			// 
-			this.checkApplyAll.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkApplyAll.Location = new System.Drawing.Point(468,676);
-			this.checkApplyAll.Name = "checkApplyAll";
-			this.checkApplyAll.Size = new System.Drawing.Size(280,21);
-			this.checkApplyAll.TabIndex = 12;
-			this.checkApplyAll.Text = "Apply changes for all subscribers";
-			this.checkApplyAll.UseVisualStyleBackColor = true;
-			// 
 			// label18
 			// 
-			this.label18.Location = new System.Drawing.Point(5,563);
+			this.label18.Location = new System.Drawing.Point(12,563);
 			this.label18.Name = "label18";
-			this.label18.Size = new System.Drawing.Size(399,15);
+			this.label18.Size = new System.Drawing.Size(272,15);
 			this.label18.TabIndex = 156;
-			this.label18.Text = "Plan Note.  Always applies to all similar plans, not just this one.";
+			this.label18.Text = "Plan Note";
 			this.label18.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// groupPlan
@@ -1227,7 +1214,6 @@ namespace OpenDental{
 			this.groupPlan.Size = new System.Drawing.Size(425,264);
 			this.groupPlan.TabIndex = 0;
 			this.groupPlan.TabStop = false;
-			this.groupPlan.Text = "Plan";
 			// 
 			// groupCarrier
 			// 
@@ -1442,25 +1428,12 @@ namespace OpenDental{
 			this.butPick.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butPick.CornerRadius = 4F;
 			this.butPick.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPick.Location = new System.Drawing.Point(327,93);
+			this.butPick.Location = new System.Drawing.Point(322,93);
 			this.butPick.Name = "butPick";
 			this.butPick.Size = new System.Drawing.Size(90,23);
 			this.butPick.TabIndex = 153;
 			this.butPick.Text = "Pick From List";
 			this.butPick.Click += new System.EventHandler(this.butPick_Click);
-			// 
-			// textPlanNote
-			// 
-			this.textPlanNote.AcceptsReturn = true;
-			this.textPlanNote.Location = new System.Drawing.Point(14,581);
-			this.textPlanNote.Multiline = true;
-			this.textPlanNote.Name = "textPlanNote";
-			this.textPlanNote.QuickPasteType = OpenDentBusiness.QuickPasteType.InsPlan;
-			this.textPlanNote.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textPlanNote.Size = new System.Drawing.Size(395,85);
-			this.textPlanNote.TabIndex = 8;
-			this.textPlanNote.Text = "1\r\n2\r\n3 lines will show here in 46 vert.\r\n4 lines will show here in 59 vert.\r\n5 l" +
-    "ines in 72 vert\r\n6 in 85";
 			// 
 			// butOK
 			// 
@@ -1479,11 +1452,11 @@ namespace OpenDental{
 			// gridBenefits
 			// 
 			this.gridBenefits.HScrollVisible = false;
-			this.gridBenefits.Location = new System.Drawing.Point(468,335);
+			this.gridBenefits.Location = new System.Drawing.Point(468,332);
 			this.gridBenefits.Name = "gridBenefits";
 			this.gridBenefits.ScrollValue = 0;
 			this.gridBenefits.SelectionMode = OpenDental.UI.GridSelectionMode.None;
-			this.gridBenefits.Size = new System.Drawing.Size(502,336);
+			this.gridBenefits.Size = new System.Drawing.Size(502,326);
 			this.gridBenefits.TabIndex = 146;
 			this.gridBenefits.Title = "Benefit Information";
 			this.gridBenefits.TranslationName = "TableBenefits";
@@ -1500,7 +1473,7 @@ namespace OpenDental{
 			this.butLabel.Enabled = false;
 			this.butLabel.Image = global::OpenDental.Properties.Resources.butLabel;
 			this.butLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butLabel.Location = new System.Drawing.Point(131,673);
+			this.butLabel.Location = new System.Drawing.Point(201,673);
 			this.butLabel.Name = "butLabel";
 			this.butLabel.Size = new System.Drawing.Size(81,24);
 			this.butLabel.TabIndex = 125;
@@ -1540,19 +1513,75 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// radioChangeAll
+			// 
+			this.radioChangeAll.Location = new System.Drawing.Point(6,25);
+			this.radioChangeAll.Name = "radioChangeAll";
+			this.radioChangeAll.Size = new System.Drawing.Size(211,17);
+			this.radioChangeAll.TabIndex = 158;
+			this.radioChangeAll.Text = "Change Plan for all subscribers";
+			this.radioChangeAll.UseVisualStyleBackColor = true;
+			// 
+			// groupChanges
+			// 
+			this.groupChanges.Controls.Add(this.radioCreateNew);
+			this.groupChanges.Controls.Add(this.radioChangeAll);
+			this.groupChanges.Location = new System.Drawing.Point(467,653);
+			this.groupChanges.Name = "groupChanges";
+			this.groupChanges.Size = new System.Drawing.Size(240,45);
+			this.groupChanges.TabIndex = 159;
+			this.groupChanges.TabStop = false;
+			// 
+			// radioCreateNew
+			// 
+			this.radioCreateNew.Checked = true;
+			this.radioCreateNew.Location = new System.Drawing.Point(6,8);
+			this.radioCreateNew.Name = "radioCreateNew";
+			this.radioCreateNew.Size = new System.Drawing.Size(211,17);
+			this.radioCreateNew.TabIndex = 159;
+			this.radioCreateNew.TabStop = true;
+			this.radioCreateNew.Text = "Create new Plan if needed";
+			this.radioCreateNew.UseVisualStyleBackColor = true;
+			// 
+			// textPlanNote
+			// 
+			this.textPlanNote.AcceptsReturn = true;
+			this.textPlanNote.Location = new System.Drawing.Point(14,581);
+			this.textPlanNote.Multiline = true;
+			this.textPlanNote.Name = "textPlanNote";
+			this.textPlanNote.QuickPasteType = OpenDentBusiness.QuickPasteType.InsPlan;
+			this.textPlanNote.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.textPlanNote.Size = new System.Drawing.Size(395,85);
+			this.textPlanNote.TabIndex = 8;
+			this.textPlanNote.Text = "1\r\n2\r\n3 lines will show here in 46 vert.\r\n4 lines will show here in 59 vert.\r\n5 l" +
+    "ines in 72 vert\r\n6 in 85";
+			// 
+			// textSubscNote
+			// 
+			this.textSubscNote.AcceptsReturn = true;
+			this.textSubscNote.Location = new System.Drawing.Point(57,75);
+			this.textSubscNote.Multiline = true;
+			this.textSubscNote.Name = "textSubscNote";
+			this.textSubscNote.QuickPasteType = OpenDentBusiness.QuickPasteType.InsPlan;
+			this.textSubscNote.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.textSubscNote.Size = new System.Drawing.Size(439,98);
+			this.textSubscNote.TabIndex = 5;
+			this.textSubscNote.Text = "1\r\n2\r\n3 lines will show here in 46 vert.\r\n4 lines will show here in 59 vert.\r\n5 l" +
+    "ines in 72 vert\r\n6 lines in 85 vert\r\n7 lines in 98";
+			// 
 			// FormInsPlan
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(982,700);
+			this.Controls.Add(this.gridBenefits);
+			this.Controls.Add(this.groupChanges);
 			this.Controls.Add(this.panelPlan);
 			this.Controls.Add(this.butPick);
 			this.Controls.Add(this.textPlanNote);
 			this.Controls.Add(this.label18);
 			this.Controls.Add(this.panel1);
-			this.Controls.Add(this.checkApplyAll);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.textPlanNum);
-			this.Controls.Add(this.gridBenefits);
 			this.Controls.Add(this.panelPat);
 			this.Controls.Add(this.butLabel);
 			this.Controls.Add(this.butDelete);
@@ -1583,6 +1612,7 @@ namespace OpenDental{
 			this.panelPlan.ResumeLayout(false);
 			this.groupCanadian.ResumeLayout(false);
 			this.groupCanadian.PerformLayout();
+			this.groupChanges.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -1590,43 +1620,57 @@ namespace OpenDental{
 		#endregion
 
 		private void FormInsPlan_Load(object sender,System.EventArgs e) {
-			Cursor=Cursors.WaitCursor; 
-			PlanCurOld=PlanCur.Copy();
+			Cursor=Cursors.WaitCursor;
+			PlanNumOriginal=PlanCur.PlanNum;
+			PlanCurOriginal=PlanCur.Copy();
 			long patPlanNum=0;
 			if(PatPlanCur!=null) {
 				patPlanNum=PatPlanCur.PatPlanNum;
 			}
-			if(IsForAll) {
+			if(SubCur==null) {//editing from big list
 				butPick.Visible=false;//This prevents an infinite loop
 				//groupRequestBen.Visible=false;//might try to make this functional later, but not now.
 				//groupRequestBen:---------------------------------------------
+				butGetElectronic.Visible=false;
+				butHistoryElect.Visible=false;
+				labelHistElect.Visible=false;
+				textElectBenLastDate.Visible=false;
 				butImportTrojan.Visible=false;
-				//labelIAP.Visible=false;
 				butIapFind.Visible=false;
 				textTrojanID.Enabled=false;//view only
 				butBenefitNotes.Visible=false;
 				//end of groupRequestBen
 				groupSubscriber.Visible=false;
-				checkApplyAll.Checked=true;
-				checkApplyAll.Visible=false;
-				benefitList=Benefits.RefreshForAll(PlanCur);
-				if(IsReadOnly) {
-					butOK.Enabled=false;
-				}
+				//radioChangeAll.Checked=true;//this logic needs to be repeated in OK.
+				groupChanges.Visible=false;
+				//benefitList=Benefits.RefreshForAll(PlanCur);
+				//if(IsReadOnly) {
+				//	butOK.Enabled=false;
+				//}
 				butDelete.Visible=false;
 			}
-			else {
-				benefitList=Benefits.RefreshForPlan(PlanCur.PlanNum,patPlanNum);
+			else {//editing from a patient
+				if(PrefC.GetBool(PrefName.InsurancePlansShared)) {
+					radioChangeAll.Checked=true;
+				}
 			}
+			if(IsNewPlan) {//Regardless of whether from big list or from individual patient.  Overrides above settings.
+				//radioCreateNew.Checked=true;//this logic needs to be repeated in OK.
+				groupChanges.Visible=false;//because it wouldn't make sense to apply anything to "all"
+				if(PrefC.GetBool(PrefName.InsDefaultPPOpercent)) {
+					PlanCur.PlanType="p";
+				}
+			}
+			benefitList=Benefits.RefreshForPlan(PlanCur.PlanNum,patPlanNum);
 			benefitListOld=new List<Benefit>();
 			for(int i=0;i<benefitList.Count;i++){
 				benefitListOld.Add(benefitList[i].Copy());
 			}
-#if DEBUG
-			textPlanNum.Text=PlanCur.PlanNum.ToString();
-#else
+			#if DEBUG
+				textPlanNum.Text=PlanCur.PlanNum.ToString();
+			#else
 				textPlanNum.Visible=false;
-#endif
+			#endif
 			if(PrefC.GetBool(PrefName.EasyHideCapitation)) {
 				//groupCoPay.Visible=false;
 				//comboCopay.Visible=false;
@@ -1639,16 +1683,6 @@ namespace OpenDental{
 				//labelOrthoMax.Visible=false;
 				//panelAdvancedIns.Visible=false;
 				//panelSynch.Visible=false;
-			}
-			if(PrefC.GetBool(PrefName.InsurancePlansShared)) {
-				checkApplyAll.Checked=true;
-			}
-			if(IsNewPlan) {
-				checkApplyAll.Checked=false;
-				checkApplyAll.Visible=false;//because it wouldn't make sense to apply anything to "all"
-				if(PrefC.GetBool(PrefName.InsDefaultPPOpercent)) {
-					PlanCur.PlanType="p";
-				}
 			}
 			Program ProgramCur=Programs.GetCur(ProgramName.Trojan);
 			if(ProgramCur!=null && ProgramCur.Enabled) {
@@ -1685,17 +1719,24 @@ namespace OpenDental{
 				textPatID.Text=PatPlanCur.PatID;
 				FillPatientAdjustments();
 			}
-			if(!IsForAll) {
-				textSubscriber.Text=Patients.GetLim(PlanCur.Subscriber).GetNameLF();
-				textSubscriberID.Text=PlanCur.SubscriberID;
-				if(PlanCur.DateEffective.Year < 1880)
+			if(SubCur!=null) {
+				textSubscriber.Text=Patients.GetLim(SubCur.Subscriber).GetNameLF();
+				textSubscriberID.Text=SubCur.SubscriberID;
+				if(SubCur.DateEffective.Year < 1880) {
 					textDateEffect.Text="";
-				else
-					textDateEffect.Text=PlanCur.DateEffective.ToString("d");
-				if(PlanCur.DateTerm.Year < 1880)
+				}
+				else {
+					textDateEffect.Text=SubCur.DateEffective.ToString("d");
+				}
+				if(SubCur.DateTerm.Year < 1880) {
 					textDateTerm.Text="";
-				else
-					textDateTerm.Text=PlanCur.DateTerm.ToString("d");
+				}
+				else {
+					textDateTerm.Text=SubCur.DateTerm.ToString("d");
+				}
+				checkRelease.Checked=SubCur.ReleaseInfo;
+				checkAssign.Checked=SubCur.AssignBen;
+				textSubscNote.Text=SubCur.SubscNote;
 			}
 			FeeSchedsStandard=FeeScheds.GetListForType(FeeScheduleType.Normal,false);
 			FeeSchedsCopay=FeeScheds.GetListForType(FeeScheduleType.CoPay,false);
@@ -1716,7 +1757,7 @@ namespace OpenDental{
 			Cursor=Cursors.Default;
 		}
 
-		///<summary>Uses PlanCur to fill out the information on the form.  Called once on startup and also if user picks a plan from template list.</summary>
+		///<summary>Uses PlanCur to fill out the information on the form.  Called once on startup and also if user picks a plan from template list.  This does not fill from SubCur, unlike FillPlanCurFromForm().</summary>
 		private void FillFormWithPlanCur() {
 			Cursor=Cursors.WaitCursor;
 			textEmployer.Text=Employers.GetName(PlanCur.EmployerNum);
@@ -1750,7 +1791,6 @@ namespace OpenDental{
 				checkClaimsUseUCR.Checked=true;
 			}
 			checkIsHidden.Checked=PlanCur.IsHidden;
-			//checkDedBeforePerc.Checked=PlanCur.DedBeforePerc;
 			checkShowBaseUnits.Checked=PlanCur.ShowBaseUnits;
 			comboFeeSched.Items.Clear();
 			comboFeeSched.Items.Add(Lan.g(this,"none"));
@@ -1806,23 +1846,8 @@ namespace OpenDental{
 				}
 			}
 			FillCarrier(PlanCur.CarrierNum);
-			long excludePlan=-1;
-			if(!IsForAll){
-				excludePlan=PlanCur.PlanNum;
-			}
-			string[] samePlans=InsPlans.GetSubscribersForSamePlans(textEmployer.Text,textGroupName.Text,textGroupNum.Text,
-				textDivisionNo.Text,textCarrier.Text,checkIsMedical.Checked,excludePlan);
-			textLinkedNum.Text=samePlans.Length.ToString();
-			comboLinked.Items.Clear();
-			for(int i=0;i<samePlans.Length;i++) {
-				comboLinked.Items.Add(samePlans[i]);
-			}
-			if(samePlans.Length>0)
-				comboLinked.SelectedIndex=0;
-			checkRelease.Checked=PlanCur.ReleaseInfo;
-			checkAssign.Checked=PlanCur.AssignBen;
+			FillOtherSubscribers();
 			textPlanNote.Text=PlanCur.PlanNote;
-			textSubscNote.Text=PlanCur.SubscNote;
 			if(PlanCur.DentaideCardSequence==0){
 				textDentaide.Text="";
 			}
@@ -1834,6 +1859,23 @@ namespace OpenDental{
 			//	butBenefitNotes.Enabled=false;
 			//}
 			Cursor=Cursors.Default;
+		}
+
+		private void FillOtherSubscribers() {
+			long excludeSub=-1;
+			if(SubCur!=null){
+				excludeSub=SubCur.InsSubNum;
+			}
+			//Even though this sub hasn't been updated to the database, this still works because SubCur.InsSubNum is valid and won't change.
+			string[] arraySubs=InsSubs.GetSubscribersForPlan(PlanCur.PlanNum,excludeSub);
+			textLinkedNum.Text=arraySubs.Length.ToString();
+			comboLinked.Items.Clear();
+			for(int i=0;i<arraySubs.Length;i++) {
+				comboLinked.Items.Add(arraySubs[i]);
+			}
+			if(arraySubs.Length>0){
+				comboLinked.SelectedIndex=0;
+			}
 		}
 
 		private void FillPatientAdjustments() {
@@ -1960,7 +2002,7 @@ namespace OpenDental{
 			FillPatientAdjustments();
 		}
 
-		///<summary></summary>
+		///<summary>Button not visible if SubCur=null, editing from big list.</summary>
 		private void butPick_Click(object sender,EventArgs e) {
 			FormInsPlans FormIP=new FormInsPlans();
 			FormIP.empText=textEmployer.Text;
@@ -1973,51 +2015,19 @@ namespace OpenDental{
 			if(!IsNewPlan && !MsgBox.Show(this,true,"Are you sure you want to use the selected plan?  You should NOT use this if the patient is changing insurance.  Use the Drop button instead.")) {
 				return;
 			}
-			//FillPlanCur();//this catches the non-synch fields
-			//Non-synched fields:
-			PlanCur.SubscriberID=textSubscriberID.Text;
-			PlanCur.DateEffective=PIn.Date(textDateEffect.Text);//can handle misformed dates.
-			PlanCur.DateTerm=PIn.Date(textDateTerm.Text);
-			PlanCur.ReleaseInfo=checkRelease.Checked;
-			PlanCur.AssignBen=checkAssign.Checked;
-			PlanCur.SubscNote=textSubscNote.Text;
-			//synched fields
-			PlanCur.EmployerNum    =FormIP.SelectedPlan.EmployerNum;
-			PlanCur.GroupName      =FormIP.SelectedPlan.GroupName;
-			PlanCur.GroupNum       =FormIP.SelectedPlan.GroupNum;
-			PlanCur.DivisionNo     =FormIP.SelectedPlan.DivisionNo;
-			PlanCur.CarrierNum     =FormIP.SelectedPlan.CarrierNum;
-			PlanCur.PlanType       =FormIP.SelectedPlan.PlanType;
-			PlanCur.UseAltCode     =FormIP.SelectedPlan.UseAltCode;
-			PlanCur.CodeSubstNone  =FormIP.SelectedPlan.CodeSubstNone;
-			PlanCur.IsMedical      =FormIP.SelectedPlan.IsMedical;
-			PlanCur.ClaimsUseUCR   =FormIP.SelectedPlan.ClaimsUseUCR;
-			//PlanCur.DedBeforePerc  =FormIP.SelectedPlan.DedBeforePerc;
-			PlanCur.IsHidden       =FormIP.SelectedPlan.IsHidden;
-			PlanCur.ShowBaseUnits = FormIP.SelectedPlan.ShowBaseUnits;
-			PlanCur.FeeSched       =FormIP.SelectedPlan.FeeSched;
-			PlanCur.CopayFeeSched  =FormIP.SelectedPlan.CopayFeeSched;
-			PlanCur.ClaimFormNum   =FormIP.SelectedPlan.ClaimFormNum;
-			PlanCur.AllowedFeeSched=FormIP.SelectedPlan.AllowedFeeSched;
-			PlanCur.TrojanID       =FormIP.SelectedPlan.TrojanID;
-			PlanCur.FilingCode     =FormIP.SelectedPlan.FilingCode;
-			PlanCur.PlanNote       =FormIP.SelectedPlan.PlanNote;
-			//PlanCur.Update();//updates to the db so that the synch info will show correctly
+			PlanCur=FormIP.SelectedPlan;
 			FillFormWithPlanCur();
-			//need to clear benefits for this plan now.  That way they won't be available as benefits of an 'identical' plan.
-			Benefits.DeleteForPlan(PlanCur.PlanNum);
-			benefitList=Benefits.RefreshForAll(PlanCur);//these benefits are only typical, not precise.
-			//set all benefitNums to 0 to trigger having them saved as new
-			for(int i=0;i<benefitList.Count;i++) {
-				((Benefit)benefitList[i]).BenefitNum=0;
-				((Benefit)benefitList[i]).PlanNum=PlanCur.PlanNum;
+			long patPlanNum=0;
+			if(PatPlanCur!=null){
+				patPlanNum=PatPlanCur.PatPlanNum;
 			}
-			Benefits.UpdateList(benefitListOld,benefitList);//replaces all benefits for this plan in the database
+			benefitList=Benefits.RefreshForPlan(PlanCur.PlanNum,patPlanNum);
 			FillBenefits();
-			//The new data on the form should be the basis for any 'changes to all'.
-			PlanCurOld=PlanCur.Copy();
 			benefitListOld=new List<Benefit>(benefitList);
-			//It's as if we've just opened a new form now.
+			PlanCurOriginal=PlanCur.Copy();
+			FillOtherSubscribers();
+			//PlanNumOriginal is NOT reset here.
+			//It's now similar to if we'd just opened a new form, except for SubCur still needs to be changed.
 		}
 
 		private void textEmployer_KeyUp(object sender,System.Windows.Forms.KeyEventArgs e) {
@@ -2119,17 +2129,12 @@ namespace OpenDental{
 
 		private void butPickCarrier_Click(object sender,EventArgs e) {
 			FormCarriers formc=new FormCarriers();
-			//formc.
-				/*
-			if(comboProvNum.SelectedIndex > -1) {
-				formp.SelectedProvNum=ProviderC.List[comboProvNum.SelectedIndex].ProvNum;
-			}
-			formp.ShowDialog();
-			if(formp.DialogResult!=DialogResult.OK) {
+			formc.IsSelectMode=true;
+			formc.ShowDialog();
+			if(formc.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			comboProvNum.SelectedIndex=Providers.GetIndex(formp.SelectedProvNum);
-			ProcCur.ProvNum=formp.SelectedProvNum;*/
+			FillCarrier(formc.SelectedCarrier.CarrierNum);
 		}
 
 		private void textCarrier_KeyUp(object sender,System.Windows.Forms.KeyEventArgs e) {
@@ -2335,6 +2340,7 @@ namespace OpenDental{
 		}
 
 		private void butImportTrojan_Click(object sender,System.EventArgs e) {
+			//If SubCur is null, this button is not visible to click.
 			if(CovCats.GetForEbenCat(EbenefitCategory.Diagnostic)==null
 				|| CovCats.GetForEbenCat(EbenefitCategory.RoutinePreventive)==null
 				|| CovCats.GetForEbenCat(EbenefitCategory.Restorative)==null
@@ -2380,10 +2386,10 @@ namespace OpenDental{
 			textCity.Text=troj.MAILCITYONLY;
 			textState.Text=troj.MAILSTATEONLY;
 			textZip.Text=troj.MAILZIPONLY;
-			if(PlanCur.BenefitNotes!="") {
-				PlanCur.BenefitNotes+="\r\n--------------------------------\r\n";
+			if(SubCur.BenefitNotes!="") {
+				SubCur.BenefitNotes+="\r\n--------------------------------\r\n";
 			}
-			PlanCur.BenefitNotes+=troj.BenefitNotes;
+			SubCur.BenefitNotes+=troj.BenefitNotes;
 			if(troj.PlanNote!=""){
 				if(textPlanNote.Text=="") {
 					textPlanNote.Text=troj.PlanNote;
@@ -2410,9 +2416,9 @@ namespace OpenDental{
 				troj.BenefitList[i].PlanNum=PlanCur.PlanNum;
 				benefitList.Add(troj.BenefitList[i].Copy());
 			}
-#if !DEBUG
-			File.Delete(file);
-#endif
+			#if !DEBUG
+				File.Delete(file);
+			#endif
 			butBenefitNotes.Enabled=true;
 			FillBenefits();
 			/*if(resetFeeSched){
@@ -2450,6 +2456,7 @@ namespace OpenDental{
 		}
 
 		private void butIapFind_Click(object sender,System.EventArgs e) {
+			//If SubCur is null, this button is not visible to click.
 			FormIap FormI=new FormIap();
 			FormI.ShowDialog();
 			if(FormI.DialogResult==DialogResult.Cancel) {
@@ -2474,65 +2481,65 @@ namespace OpenDental{
 							//do nothing
 							break;
 						case Iap.Employer:
-							if(PlanCur.BenefitNotes!="") {
-								PlanCur.BenefitNotes+="\r\n";
+							if(SubCur.BenefitNotes!="") {
+								SubCur.BenefitNotes+="\r\n";
 							}
-							PlanCur.BenefitNotes+="Employer: "+field;
+							SubCur.BenefitNotes+="Employer: "+field;
 							textEmployer.Text=field;
 							break;
 						case Iap.Phone:
-							PlanCur.BenefitNotes+="\r\n"+"Phone: "+field;
+							SubCur.BenefitNotes+="\r\n"+"Phone: "+field;
 							break;
 						case Iap.InsUnder:
-							PlanCur.BenefitNotes+="\r\n"+"InsUnder: "+field;
+							SubCur.BenefitNotes+="\r\n"+"InsUnder: "+field;
 							break;
 						case Iap.Carrier:
-							PlanCur.BenefitNotes+="\r\n"+"Carrier: "+field;
+							SubCur.BenefitNotes+="\r\n"+"Carrier: "+field;
 							textCarrier.Text=field;
 							break;
 						case Iap.CarrierPh:
-							PlanCur.BenefitNotes+="\r\n"+"CarrierPh: "+field;
+							SubCur.BenefitNotes+="\r\n"+"CarrierPh: "+field;
 							textPhone.Text=field;
 							break;
 						case Iap.Group://seems to be used as groupnum
-							PlanCur.BenefitNotes+="\r\n"+"Group: "+field;
+							SubCur.BenefitNotes+="\r\n"+"Group: "+field;
 							textGroupNum.Text=field;
 							break;
 						case Iap.MailTo://the carrier name again
-							PlanCur.BenefitNotes+="\r\n"+"MailTo: "+field;
+							SubCur.BenefitNotes+="\r\n"+"MailTo: "+field;
 							break;
 						case Iap.MailTo2://address
-							PlanCur.BenefitNotes+="\r\n"+"MailTo2: "+field;
+							SubCur.BenefitNotes+="\r\n"+"MailTo2: "+field;
 							textAddress.Text=field;
 							break;
 						case Iap.MailTo3://address2
-							PlanCur.BenefitNotes+="\r\n"+"MailTo3: "+field;
+							SubCur.BenefitNotes+="\r\n"+"MailTo3: "+field;
 							textAddress2.Text=field;
 							break;
 						case Iap.EClaims:
-							PlanCur.BenefitNotes+="\r\n"+"EClaims: "+field;//this contains the PayorID at the end, but also a bunch of other drivel.
+							SubCur.BenefitNotes+="\r\n"+"EClaims: "+field;//this contains the PayorID at the end, but also a bunch of other drivel.
 							int payorIDloc=field.LastIndexOf("Payor ID#:");
 							if(payorIDloc!=-1 && field.Length>payorIDloc+10) {
 								textElectID.Text=field.Substring(payorIDloc+10);
 							}
 							break;
 						case Iap.FAXClaims:
-							PlanCur.BenefitNotes+="\r\n"+"FAXClaims: "+field;
+							SubCur.BenefitNotes+="\r\n"+"FAXClaims: "+field;
 							break;
 						case Iap.DMOOption:
-							PlanCur.BenefitNotes+="\r\n"+"DMOOption: "+field;
+							SubCur.BenefitNotes+="\r\n"+"DMOOption: "+field;
 							break;
 						case Iap.Medical:
-							PlanCur.BenefitNotes+="\r\n"+"Medical: "+field;
+							SubCur.BenefitNotes+="\r\n"+"Medical: "+field;
 							break;
 						case Iap.GroupNum://not used.  They seem to use the group field instead
-							PlanCur.BenefitNotes+="\r\n"+"GroupNum: "+field;
+							SubCur.BenefitNotes+="\r\n"+"GroupNum: "+field;
 							break;
 						case Iap.Phone2://?
-							PlanCur.BenefitNotes+="\r\n"+"Phone2: "+field;
+							SubCur.BenefitNotes+="\r\n"+"Phone2: "+field;
 							break;
 						case Iap.Deductible:
-							PlanCur.BenefitNotes+="\r\n"+"Deductible: "+field;
+							SubCur.BenefitNotes+="\r\n"+"Deductible: "+field;
 							if(field.StartsWith("$")) {
 								splitField=field.Split(new char[] { ' ' });
 								ben=new Benefit();
@@ -2545,10 +2552,10 @@ namespace OpenDental{
 							}
 							break;
 						case Iap.FamilyDed:
-							PlanCur.BenefitNotes+="\r\n"+"FamilyDed: "+field;
+							SubCur.BenefitNotes+="\r\n"+"FamilyDed: "+field;
 							break;
 						case Iap.Maximum:
-							PlanCur.BenefitNotes+="\r\n"+"Maximum: "+field;
+							SubCur.BenefitNotes+="\r\n"+"Maximum: "+field;
 							if(field.StartsWith("$")) {
 								splitField=field.Split(new char[] { ' ' });
 								ben=new Benefit();
@@ -2561,13 +2568,13 @@ namespace OpenDental{
 							}
 							break;
 						case Iap.BenefitYear://text is too complex to parse
-							PlanCur.BenefitNotes+="\r\n"+"BenefitYear: "+field;
+							SubCur.BenefitNotes+="\r\n"+"BenefitYear: "+field;
 							break;
 						case Iap.DependentAge://too complex to parse
-							PlanCur.BenefitNotes+="\r\n"+"DependentAge: "+field;
+							SubCur.BenefitNotes+="\r\n"+"DependentAge: "+field;
 							break;
 						case Iap.Preventive:
-							PlanCur.BenefitNotes+="\r\n"+"Preventive: "+field;
+							SubCur.BenefitNotes+="\r\n"+"Preventive: "+field;
 							splitField=field.Split(new char[] { ' ' });
 							if(splitField.Length==0 || !splitField[0].EndsWith("%")) {
 								break;
@@ -2586,7 +2593,7 @@ namespace OpenDental{
 							benefitList.Add(ben.Copy());
 							break;
 						case Iap.Basic:
-							PlanCur.BenefitNotes+="\r\n"+"Basic: "+field;
+							SubCur.BenefitNotes+="\r\n"+"Basic: "+field;
 							splitField=field.Split(new char[] { ' ' });
 							if(splitField.Length==0 || !splitField[0].EndsWith("%")) {
 								break;
@@ -2626,7 +2633,7 @@ namespace OpenDental{
 							benefitList.Add(ben.Copy());
 							break;
 						case Iap.Major:
-							PlanCur.BenefitNotes+="\r\n"+"Major: "+field;
+							SubCur.BenefitNotes+="\r\n"+"Major: "+field;
 							splitField=field.Split(new char[] { ' ' });
 							if(splitField.Length==0 || !splitField[0].EndsWith("%")) {
 								break;
@@ -2645,19 +2652,19 @@ namespace OpenDental{
 							benefitList.Add(ben.Copy());
 							break;
 						case Iap.InitialPlacement:
-							PlanCur.BenefitNotes+="\r\n"+"InitialPlacement: "+field;
+							SubCur.BenefitNotes+="\r\n"+"InitialPlacement: "+field;
 							break;
 						case Iap.ExtractionClause:
-							PlanCur.BenefitNotes+="\r\n"+"ExtractionClause: "+field;
+							SubCur.BenefitNotes+="\r\n"+"ExtractionClause: "+field;
 							break;
 						case Iap.Replacement:
-							PlanCur.BenefitNotes+="\r\n"+"Replacement: "+field;
+							SubCur.BenefitNotes+="\r\n"+"Replacement: "+field;
 							break;
 						case Iap.Other:
-							PlanCur.BenefitNotes+="\r\n"+"Other: "+field;
+							SubCur.BenefitNotes+="\r\n"+"Other: "+field;
 							break;
 						case Iap.Orthodontics:
-							PlanCur.BenefitNotes+="\r\n"+"Orthodontics: "+field;
+							SubCur.BenefitNotes+="\r\n"+"Orthodontics: "+field;
 							splitField=field.Split(new char[] { ' ' });
 							if(splitField.Length==0 || !splitField[0].EndsWith("%")) {
 								break;
@@ -2676,10 +2683,10 @@ namespace OpenDental{
 							benefitList.Add(ben.Copy());
 							break;
 						case Iap.Deductible2:
-							PlanCur.BenefitNotes+="\r\n"+"Deductible2: "+field;
+							SubCur.BenefitNotes+="\r\n"+"Deductible2: "+field;
 							break;
 						case Iap.Maximum2://ortho Max
-							PlanCur.BenefitNotes+="\r\n"+"Maximum2: "+field;
+							SubCur.BenefitNotes+="\r\n"+"Maximum2: "+field;
 							if(field.StartsWith("$")) {
 								splitField=field.Split(new char[] { ' ' });
 								ben=new Benefit();
@@ -2692,151 +2699,151 @@ namespace OpenDental{
 							}
 							break;
 						case Iap.PymtSchedule:
-							PlanCur.BenefitNotes+="\r\n"+"PymtSchedule: "+field;
+							SubCur.BenefitNotes+="\r\n"+"PymtSchedule: "+field;
 							break;
 						case Iap.AgeLimit:
-							PlanCur.BenefitNotes+="\r\n"+"AgeLimit: "+field;
+							SubCur.BenefitNotes+="\r\n"+"AgeLimit: "+field;
 							break;
 						case Iap.SignatureonFile:
-							PlanCur.BenefitNotes+="\r\n"+"SignatureonFile: "+field;
+							SubCur.BenefitNotes+="\r\n"+"SignatureonFile: "+field;
 							break;
 						case Iap.StandardADAForm:
-							PlanCur.BenefitNotes+="\r\n"+"StandardADAForm: "+field;
+							SubCur.BenefitNotes+="\r\n"+"StandardADAForm: "+field;
 							break;
 						case Iap.CoordinationRule:
-							PlanCur.BenefitNotes+="\r\n"+"CoordinationRule: "+field;
+							SubCur.BenefitNotes+="\r\n"+"CoordinationRule: "+field;
 							break;
 						case Iap.CoordinationCOB:
-							PlanCur.BenefitNotes+="\r\n"+"CoordinationCOB: "+field;
+							SubCur.BenefitNotes+="\r\n"+"CoordinationCOB: "+field;
 							break;
 						case Iap.NightguardsforBruxism:
-							PlanCur.BenefitNotes+="\r\n"+"NightguardsforBruxism: "+field;
+							SubCur.BenefitNotes+="\r\n"+"NightguardsforBruxism: "+field;
 							break;
 						case Iap.OcclusalAdjustments:
-							PlanCur.BenefitNotes+="\r\n"+"OcclusalAdjustments: "+field;
+							SubCur.BenefitNotes+="\r\n"+"OcclusalAdjustments: "+field;
 							break;
 						case Iap.XXXXXX:
-							PlanCur.BenefitNotes+="\r\n"+"XXXXXX: "+field;
+							SubCur.BenefitNotes+="\r\n"+"XXXXXX: "+field;
 							break;
 						case Iap.TMJNonSurgical:
-							PlanCur.BenefitNotes+="\r\n"+"TMJNonSurgical: "+field;
+							SubCur.BenefitNotes+="\r\n"+"TMJNonSurgical: "+field;
 							break;
 						case Iap.Implants:
-							PlanCur.BenefitNotes+="\r\n"+"Implants: "+field;
+							SubCur.BenefitNotes+="\r\n"+"Implants: "+field;
 							break;
 						case Iap.InfectionControl:
-							PlanCur.BenefitNotes+="\r\n"+"InfectionControl: "+field;
+							SubCur.BenefitNotes+="\r\n"+"InfectionControl: "+field;
 							break;
 						case Iap.Cleanings:
-							PlanCur.BenefitNotes+="\r\n"+"Cleanings: "+field;
+							SubCur.BenefitNotes+="\r\n"+"Cleanings: "+field;
 							break;
 						case Iap.OralEvaluation:
-							PlanCur.BenefitNotes+="\r\n"+"OralEvaluation: "+field;
+							SubCur.BenefitNotes+="\r\n"+"OralEvaluation: "+field;
 							break;
 						case Iap.Fluoride1200s:
-							PlanCur.BenefitNotes+="\r\n"+"Fluoride1200s: "+field;
+							SubCur.BenefitNotes+="\r\n"+"Fluoride1200s: "+field;
 							break;
 						case Iap.Code0220:
-							PlanCur.BenefitNotes+="\r\n"+"Code0220: "+field;
+							SubCur.BenefitNotes+="\r\n"+"Code0220: "+field;
 							break;
 						case Iap.Code0272_0274:
-							PlanCur.BenefitNotes+="\r\n"+"Code0272_0274: "+field;
+							SubCur.BenefitNotes+="\r\n"+"Code0272_0274: "+field;
 							break;
 						case Iap.Code0210:
-							PlanCur.BenefitNotes+="\r\n"+"Code0210: "+field;
+							SubCur.BenefitNotes+="\r\n"+"Code0210: "+field;
 							break;
 						case Iap.Code0330:
-							PlanCur.BenefitNotes+="\r\n"+"Code0330: "+field;
+							SubCur.BenefitNotes+="\r\n"+"Code0330: "+field;
 							break;
 						case Iap.SpaceMaintainers:
-							PlanCur.BenefitNotes+="\r\n"+"SpaceMaintainers: "+field;
+							SubCur.BenefitNotes+="\r\n"+"SpaceMaintainers: "+field;
 							break;
 						case Iap.EmergencyExams:
-							PlanCur.BenefitNotes+="\r\n"+"EmergencyExams: "+field;
+							SubCur.BenefitNotes+="\r\n"+"EmergencyExams: "+field;
 							break;
 						case Iap.EmergencyTreatment:
-							PlanCur.BenefitNotes+="\r\n"+"EmergencyTreatment: "+field;
+							SubCur.BenefitNotes+="\r\n"+"EmergencyTreatment: "+field;
 							break;
 						case Iap.Sealants1351:
-							PlanCur.BenefitNotes+="\r\n"+"Sealants1351: "+field;
+							SubCur.BenefitNotes+="\r\n"+"Sealants1351: "+field;
 							break;
 						case Iap.Fillings2100:
-							PlanCur.BenefitNotes+="\r\n"+"Fillings2100: "+field;
+							SubCur.BenefitNotes+="\r\n"+"Fillings2100: "+field;
 							break;
 						case Iap.Extractions:
-							PlanCur.BenefitNotes+="\r\n"+"Extractions: "+field;
+							SubCur.BenefitNotes+="\r\n"+"Extractions: "+field;
 							break;
 						case Iap.RootCanals:
-							PlanCur.BenefitNotes+="\r\n"+"RootCanals: "+field;
+							SubCur.BenefitNotes+="\r\n"+"RootCanals: "+field;
 							break;
 						case Iap.MolarRootCanal:
-							PlanCur.BenefitNotes+="\r\n"+"MolarRootCanal: "+field;
+							SubCur.BenefitNotes+="\r\n"+"MolarRootCanal: "+field;
 							break;
 						case Iap.OralSurgery:
-							PlanCur.BenefitNotes+="\r\n"+"OralSurgery: "+field;
+							SubCur.BenefitNotes+="\r\n"+"OralSurgery: "+field;
 							break;
 						case Iap.ImpactionSoftTissue:
-							PlanCur.BenefitNotes+="\r\n"+"ImpactionSoftTissue: "+field;
+							SubCur.BenefitNotes+="\r\n"+"ImpactionSoftTissue: "+field;
 							break;
 						case Iap.ImpactionPartialBony:
-							PlanCur.BenefitNotes+="\r\n"+"ImpactionPartialBony: "+field;
+							SubCur.BenefitNotes+="\r\n"+"ImpactionPartialBony: "+field;
 							break;
 						case Iap.ImpactionCompleteBony:
-							PlanCur.BenefitNotes+="\r\n"+"ImpactionCompleteBony: "+field;
+							SubCur.BenefitNotes+="\r\n"+"ImpactionCompleteBony: "+field;
 							break;
 						case Iap.SurgicalProceduresGeneral:
-							PlanCur.BenefitNotes+="\r\n"+"SurgicalProceduresGeneral: "+field;
+							SubCur.BenefitNotes+="\r\n"+"SurgicalProceduresGeneral: "+field;
 							break;
 						case Iap.PerioSurgicalPerioOsseous:
-							PlanCur.BenefitNotes+="\r\n"+"PerioSurgicalPerioOsseous: "+field;
+							SubCur.BenefitNotes+="\r\n"+"PerioSurgicalPerioOsseous: "+field;
 							break;
 						case Iap.SurgicalPerioOther:
-							PlanCur.BenefitNotes+="\r\n"+"SurgicalPerioOther: "+field;
+							SubCur.BenefitNotes+="\r\n"+"SurgicalPerioOther: "+field;
 							break;
 						case Iap.RootPlaning:
-							PlanCur.BenefitNotes+="\r\n"+"RootPlaning: "+field;
+							SubCur.BenefitNotes+="\r\n"+"RootPlaning: "+field;
 							break;
 						case Iap.Scaling4345:
-							PlanCur.BenefitNotes+="\r\n"+"Scaling4345: "+field;
+							SubCur.BenefitNotes+="\r\n"+"Scaling4345: "+field;
 							break;
 						case Iap.PerioPx:
-							PlanCur.BenefitNotes+="\r\n"+"PerioPx: "+field;
+							SubCur.BenefitNotes+="\r\n"+"PerioPx: "+field;
 							break;
 						case Iap.PerioComment:
-							PlanCur.BenefitNotes+="\r\n"+"PerioComment: "+field;
+							SubCur.BenefitNotes+="\r\n"+"PerioComment: "+field;
 							break;
 						case Iap.IVSedation:
-							PlanCur.BenefitNotes+="\r\n"+"IVSedation: "+field;
+							SubCur.BenefitNotes+="\r\n"+"IVSedation: "+field;
 							break;
 						case Iap.General9220:
-							PlanCur.BenefitNotes+="\r\n"+"General9220: "+field;
+							SubCur.BenefitNotes+="\r\n"+"General9220: "+field;
 							break;
 						case Iap.Relines5700s:
-							PlanCur.BenefitNotes+="\r\n"+"Relines5700s: "+field;
+							SubCur.BenefitNotes+="\r\n"+"Relines5700s: "+field;
 							break;
 						case Iap.StainlessSteelCrowns:
-							PlanCur.BenefitNotes+="\r\n"+"StainlessSteelCrowns: "+field;
+							SubCur.BenefitNotes+="\r\n"+"StainlessSteelCrowns: "+field;
 							break;
 						case Iap.Crowns2700s:
-							PlanCur.BenefitNotes+="\r\n"+"Crowns2700s: "+field;
+							SubCur.BenefitNotes+="\r\n"+"Crowns2700s: "+field;
 							break;
 						case Iap.Bridges6200:
-							PlanCur.BenefitNotes+="\r\n"+"Bridges6200: "+field;
+							SubCur.BenefitNotes+="\r\n"+"Bridges6200: "+field;
 							break;
 						case Iap.Partials5200s:
-							PlanCur.BenefitNotes+="\r\n"+"Partials5200s: "+field;
+							SubCur.BenefitNotes+="\r\n"+"Partials5200s: "+field;
 							break;
 						case Iap.Dentures5100s:
-							PlanCur.BenefitNotes+="\r\n"+"Dentures5100s: "+field;
+							SubCur.BenefitNotes+="\r\n"+"Dentures5100s: "+field;
 							break;
 						case Iap.EmpNumberXXX:
-							PlanCur.BenefitNotes+="\r\n"+"EmpNumberXXX: "+field;
+							SubCur.BenefitNotes+="\r\n"+"EmpNumberXXX: "+field;
 							break;
 						case Iap.DateXXX:
-							PlanCur.BenefitNotes+="\r\n"+"DateXXX: "+field;
+							SubCur.BenefitNotes+="\r\n"+"DateXXX: "+field;
 							break;
 						case Iap.Line4://city state
-							PlanCur.BenefitNotes+="\r\n"+"Line4: "+field;
+							SubCur.BenefitNotes+="\r\n"+"Line4: "+field;
 							field=field.Replace("  "," ");//get rid of double space before zip
 							splitField=field.Split(new char[] { ' ' });
 							if(splitField.Length<3) {
@@ -2847,16 +2854,16 @@ namespace OpenDental{
 							textZip.Text=splitField[2];
 							break;
 						case Iap.Note:
-							PlanCur.BenefitNotes+="\r\n"+"Note: "+field;
+							SubCur.BenefitNotes+="\r\n"+"Note: "+field;
 							break;
 						case Iap.Plan://?
-							PlanCur.BenefitNotes+="\r\n"+"Plan: "+field;
+							SubCur.BenefitNotes+="\r\n"+"Plan: "+field;
 							break;
 						case Iap.BuildUps:
-							PlanCur.BenefitNotes+="\r\n"+"BuildUps: "+field;
+							SubCur.BenefitNotes+="\r\n"+"BuildUps: "+field;
 							break;
 						case Iap.PosteriorComposites:
-							PlanCur.BenefitNotes+="\r\n"+"PosteriorComposites: "+field;
+							SubCur.BenefitNotes+="\r\n"+"PosteriorComposites: "+field;
 							break;
 					}
 				}
@@ -2896,7 +2903,7 @@ namespace OpenDental{
 			Relat relat=(Relat)comboRelationship.SelectedIndex;
 			string patID=textPatID.Text;
 			try {
-				Eclaims.CanadianOutput.SendElegibility(PatPlanCur.PatNum,PlanCur,date,relat,patID,true);//   textElectID.Text,PatPlanCur.PatNum,textGroupNum.Text,textDivisionNo.Text,
+				Eclaims.CanadianOutput.SendElegibility(PatPlanCur.PatNum,PlanCur,date,relat,patID,true,SubCur);//   textElectID.Text,PatPlanCur.PatNum,textGroupNum.Text,textDivisionNo.Text,
 				//textSubscriberID.Text,textPatID.Text,(Relat)comboRelationship.SelectedIndex,PlanCur.Subscriber,textDentaide.Text);
 				//printout will happen in the line above.
 			}
@@ -2917,23 +2924,23 @@ namespace OpenDental{
 			}
 		}
 
-		///<summary>This button is only visible if Trojan or IAP is enabled.  Always active.</summary>
+		///<summary>This button is only visible if Trojan or IAP is enabled.  Always active.  Button not visible if SubCur==null.</summary>
 		private void butBenefitNotes_Click(object sender,System.EventArgs e) {
 			string otherBenNote="";
-			if(PlanCur.BenefitNotes=="") {
-				//try to find some other similar notes. Never includes the current plan.
-				List<long> samePlans=InsPlans.GetPlanNumsOfSamePlans(textEmployer.Text,textGroupName.Text,textGroupNum.Text,
-					textDivisionNo.Text,textCarrier.Text,checkIsMedical.Checked,PlanCur.PlanNum,false);
-				otherBenNote=InsPlans.GetBenefitNotes(samePlans);
+			if(SubCur.BenefitNotes=="") {
+				//try to find some other similar notes. Never includes the current subscriber.
+				//List<long> samePlans=InsPlans.GetPlanNumsOfSamePlans(textEmployer.Text,textGroupName.Text,textGroupNum.Text,
+				//	textDivisionNo.Text,textCarrier.Text,checkIsMedical.Checked,PlanCur.PlanNum,false);
+				otherBenNote=InsSubs.GetBenefitNotes(PlanCur.PlanNum,SubCur.InsSubNum);
 				if(otherBenNote=="") {
 					MsgBox.Show(this,"No benefit note found.  Benefit notes are created when importing Trojan or IAP benefit information and are frequently read-only.  Store your own notes in the subscriber note instead.");
 					return;
 				}
-				MsgBox.Show(this,"This plan does not have a benefit note, but a note was found for an identical plan.  You will be able to view this note, but not change it.");
+				MsgBox.Show(this,"This plan does not have a benefit note, but a note was found for another subsriber of this plan.  You will be able to view this note, but not change it.");
 			}
 			FormInsBenefitNotes FormI=new FormInsBenefitNotes();
-			if(PlanCur.BenefitNotes!="") {
-				FormI.BenefitNotes=PlanCur.BenefitNotes;
+			if(SubCur.BenefitNotes!="") {
+				FormI.BenefitNotes=SubCur.BenefitNotes;
 			}
 			else {
 				FormI.BenefitNotes=otherBenNote;
@@ -2942,16 +2949,37 @@ namespace OpenDental{
 			if(FormI.DialogResult==DialogResult.Cancel) {
 				return;
 			}
-			if(PlanCur.BenefitNotes!="") {
-				PlanCur.BenefitNotes=FormI.BenefitNotes;
+			if(SubCur.BenefitNotes!="") {
+				SubCur.BenefitNotes=FormI.BenefitNotes;
 			}
 		}
 
 		private void butDelete_Click(object sender,System.EventArgs e) {
 			if(IsNewPlan) {
-				DialogResult=DialogResult.Cancel;//will get deleted in closing event
+				DialogResult=DialogResult.Cancel;//original plan will get deleted in closing event.
 				return;
 			}
+			if(comboLinked.Items.Count>0) {//Other subscribers are present.  
+				if(SubCur==null) {//viewing from big list
+					MsgBox.Show(this,"Subscribers must be removed individually before deleting plan.");
+					return;
+				}
+				else {//Just detach subscriber.
+					if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Remove subscriber from plan?  Plan will not be deleted.")) {
+						return;
+					}
+					try {
+						InsSubs.Delete(SubCur);//checks dependencies first.  Doesn't delete anything else.
+					}
+					catch(ApplicationException ex) {
+						MessageBox.Show(ex.Message);
+						return;
+					}
+					DialogResult=DialogResult.OK;
+					return;
+				}
+			}
+			//this is the only subscriber, or this is the big list and there are no subscribers.
 			if(!MsgBox.Show(this,true,"Delete Plan?")) {
 				return;
 			}
@@ -3154,6 +3182,7 @@ namespace OpenDental{
 		}
 
 		private void butGetElectronic_Click(object sender,EventArgs e) {
+			//button not visible if SubCur is null
 			if(PrefC.GetBool(PrefName.CustomizedForPracticeWeb)) {
 				EligibilityCheckDentalXchange();
 				return;
@@ -3179,7 +3208,7 @@ namespace OpenDental{
 			}
 			Cursor=Cursors.WaitCursor;
 			try {
-				Eclaims.x270Controller.RequestBenefits(clearhouse,PlanCur,PatPlanCur.PatNum,CarrierCur,benefitList,PatPlanCur.PatPlanNum);
+				Eclaims.x270Controller.RequestBenefits(clearhouse,PlanCur,PatPlanCur.PatNum,CarrierCur,benefitList,PatPlanCur.PatPlanNum,SubCur);
 			}
 			catch(Exception ex) {//although many errors will be caught and result in a response etrans.
 				//this also catches validation errors such as missing info.
@@ -3205,7 +3234,8 @@ namespace OpenDental{
 		}
 
 		private void butHistoryElect_Click(object sender,EventArgs e) {
-			FormBenefitElectHistory formB=new FormBenefitElectHistory(PlanCur.PlanNum,PatPlanCur.PatPlanNum);
+			//button not visible if SubCur is null
+			FormBenefitElectHistory formB=new FormBenefitElectHistory(PlanCur.PlanNum,PatPlanCur.PatPlanNum,SubCur.InsSubNum);
 			formB.BenList=benefitList;
 			formB.ShowDialog();
 			DateTime dateLast270=Etranss.GetLastDate270(PlanCur.PlanNum);
@@ -3621,7 +3651,7 @@ namespace OpenDental{
 
 		#endregion
 
-		///<summary>Used from butGetElectronic_Click and from butOK_Click.  Returns false if unable to complete.</summary>
+		///<summary>Used from butGetElectronic_Click and from butOK_Click.  Returns false if unable to complete.  Also fills SubCur if not null.</summary>
 		private bool FillPlanCurFromForm(){
 			if(textDateEffect.errorProvider1.GetError(textDateEffect)!=""
 				||textDateTerm.errorProvider1.GetError(textDateTerm)!=""
@@ -3636,7 +3666,7 @@ namespace OpenDental{
 					return false;
 				}
 			}
-			if(textSubscriberID.Text=="" && !IsForAll) {
+			if(textSubscriberID.Text=="" && SubCur!=null) {
 				MsgBox.Show(this,"Subscriber ID not allowed to be blank.");
 				return false;
 			}
@@ -3648,10 +3678,16 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please fix data entry errors first.");
 				return false;
 			}
-			//Subscriber: Can never be changed once a plan is created.
-			PlanCur.SubscriberID=textSubscriberID.Text;
-			PlanCur.DateEffective=PIn.Date(textDateEffect.Text);
-			PlanCur.DateTerm=PIn.Date(textDateTerm.Text);
+			if(SubCur!=null) {
+				//Subscriber: Can never be changed once a plan is created.
+				SubCur.SubscriberID=textSubscriberID.Text;
+				SubCur.DateEffective=PIn.Date(textDateEffect.Text);
+				SubCur.DateTerm=PIn.Date(textDateTerm.Text);
+				SubCur.ReleaseInfo=checkRelease.Checked;
+				SubCur.AssignBen=checkAssign.Checked;
+				SubCur.SubscNote=textSubscNote.Text;
+				//MonthRenew already handled inside benefit window.
+			}
 			GetEmployerNum();
 			PlanCur.GroupName=textGroupName.Text;
 			PlanCur.GroupNum=textGroupNum.Text;
@@ -3756,123 +3792,145 @@ namespace OpenDental{
 			//Canadian end---------------------------------------------------------------------------------------
 			PlanCur.TrojanID=textTrojanID.Text;
 			PlanCur.PlanNote=textPlanNote.Text;
-			PlanCur.ReleaseInfo=checkRelease.Checked;
-			PlanCur.AssignBen=checkAssign.Checked;
-			PlanCur.SubscNote=textSubscNote.Text;
-			//MonthRenew already handled inside benefit window.
 			return true;
 		}
 		
 		private void butOK_Click(object sender,System.EventArgs e) {
-			if(!FillPlanCurFromForm()) {
+			if(!FillPlanCurFromForm()) {//also fills SubCur if not null
 				return;
 			}
-			if(IsForAll && textGroupName.Text=="" && textGroupNum.Text=="") {
-				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Changes will be applied to all similar plans.  Because no group name or group number is entered, more plans may be affected than intended.  Continue anyway?")) {
-					return;
-				}
-			}
-			Cursor=Cursors.WaitCursor;
+			//PatPlan-------------------------------------------------------------------------------------------
 			if(PatPlanCur!=null) {
 				if(PIn.Long(textOrdinal.Text)!=PatPlanCur.Ordinal){//if ordinal changed
-					PatPlans.SetOrdinal(PatPlanCur.PatPlanNum,PIn.Int(textOrdinal.Text));
+					PatPlanCur.Ordinal=(byte)(PatPlans.SetOrdinal(PatPlanCur.PatPlanNum,PIn.Int(textOrdinal.Text)));
 				}
 				PatPlanCur.IsPending=checkIsPending.Checked;
 				PatPlanCur.Relationship=(Relat)comboRelationship.SelectedIndex;
 				PatPlanCur.PatID=textPatID.Text;
 				PatPlans.Update(PatPlanCur);
 			}
-			//Update the plan(s)
-			List<long> planNums=InsPlans.GetPlanNumsOfSamePlans(Employers.GetName(PlanCurOld.EmployerNum),PlanCurOld.GroupName,
-				PlanCurOld.GroupNum,PlanCurOld.DivisionNo,Carriers.GetName(PlanCurOld.CarrierNum),PlanCurOld.IsMedical,
-				PlanCurOld.PlanNum,true);//include the current plan.
-			if(!IsForAll){
-				InsPlans.Update(PlanCur);//This is done regardless of checkApplyAll. Catches fields which are not synched.
-			}
-			if(checkApplyAll.Checked){//also triggered when IsForAll, because box is checked but hidden
-				InsPlans.UpdateForLike(PlanCurOld,PlanCur);
-				Benefits.UpdateListForIdentical(benefitListOld,benefitList,planNums);
-				//if(changed){
-					//for(int i=0;i<planNums.Count;i++){
-						//InsPlans.ComputeEstimatesForPlan(planNums[i]);
-						//Eliminated in 5.0 because of severe speed issues.
-					//}
+			//InsPlan-----------------------------------------------------------------------------------------
+			if(SubCur==null) {//editing from big list.  No subscriber.  'pick from list' button not visible, making logic easier.
+				//if(IsNewPlan) {//not yet implemented
+				//	if(InsPlans.AreEqualValue(PlanCur,PlanCurOriginal)) {//If no changes
+
+				//	}
+				//	else {//changes were made
+
+				//	}
+				//}
+				//else {//editing an existing plan from big list
+					if(InsPlans.AreEqualValue(PlanCur,PlanCurOriginal)) {//If no changes
+						//pick button doesn't complicate things.  Simply nothing to do.
+						//Also, no SubCur, so just close the form.
+						DialogResult=DialogResult.OK;
+					}
+					else {//changes were made
+						InsPlans.Update(PlanCur);
+						DialogResult=DialogResult.OK;
+					}
 				//}
 			}
-			else{//also triggered when IsNew, because box is unchecked and hidden
-				for(int i=0;i<benefitList.Count;i++) {
-					if(benefitList[i].BenefitNum==0 && benefitList[i].PatPlanNum==0 && benefitList[i].PlanNum==0){
-						benefitList[i].PlanNum=PlanCur.PlanNum;
+			else {//editing from within patient
+				//Be very careful here.  User could have clicked 'pick from list' button, which would have changed PlanNum.
+				//So we always compare with PlanNumOriginal.
+				if(IsNewPlan) {
+					if(InsPlans.AreEqualValue(PlanCur,PlanCurOriginal)) {//New plan, no changes
+						if(PlanCur.PlanNum != PlanNumOriginal) {//clicked 'pick from list' button
+							//delete original plan.
+							InsPlans.Delete(PlanNumOriginal);//doesn't touch any other objects.
+							//do not need to update PlanCur because no changes were made.
+						}
+						else {//new plan, no changes, not picked from list.
+							//do not need to update PlanCur because no changes were made.
+						}
+					}
+					else {//new plan, changes were made
+						if(PlanCur.PlanNum != PlanNumOriginal) {//clicked 'pick from list' button, and then made changes
+							if(radioChangeAll.Checked) {
+								InsPlans.Update(PlanCur);//they might not realize that they would be changing an existing plan. Oh well.
+								InsPlans.Delete(PlanNumOriginal);//quick delete doesn't affect other objects.
+							}
+							else {//option is checked for "create new plan if needed"
+								PlanCur.PlanNum=PlanNumOriginal;
+								//when 'pick from list' button was pushed, benefitListOld was set to new empty list.
+								for(int i=0;i<benefitList.Count;i++) {
+									if(benefitList[i].PlanNum>0) {
+										benefitList[i].PlanNum=PlanCur.PlanNum;
+										benefitList[i].BenefitNum=0;//triggers insert.
+									}
+								}
+							}
+						}
+						else {//new plan, changes made, not picked from list.
+							InsPlans.Update(PlanCur);
+						}
 					}
 				}
-				Benefits.UpdateList(benefitListOld,benefitList);
-				InsPlans.ComputeEstimatesForPlan(PlanCur.PlanNum);
-			}
-			//Synchronize PlanNote----------------------------------------------------------------------------------------------
-			if(planNums.Count==1 && IsForAll){
-				InsPlans.UpdateNoteForPlans(planNums,PlanCur.PlanNote);
-				Cursor=Cursors.Default;
-				DialogResult=DialogResult.OK;
-				return;
-			}
-			if(planNums.Count<=1){//if no similar plans
-				//note has already been saved
-				Cursor=Cursors.Default;
-				DialogResult=DialogResult.OK;
-				return;
-			}
-			//Get a list of all distinct notes, not including this one
-			string[] notesSimilar=InsPlans.GetNotesForPlans(planNums,PlanCur.PlanNum);//excludes PlanCur (0 if IsForAll)
-			bool curNoteInSimilar=false;
-			for(int i=0;i<notesSimilar.Length;i++){
-				if(notesSimilar[i]==PlanCur.PlanNote){
-					curNoteInSimilar=true;
-				}
-			}
-			string[] notesAll;//this has all distinct notes INCLUDING PlanCur.PlanNote
-			if(curNoteInSimilar){//the curNote is alread in notesSimilar
-				notesAll=new string[notesSimilar.Length];
-				notesSimilar.CopyTo(notesAll,0);
-			}
-			else{
-				notesAll=new string[notesSimilar.Length+1];
-				notesSimilar.CopyTo(notesAll,1);
-				notesAll[0]=PlanCur.PlanNote;//curNote will be at position 0
-			}
-			if(notesSimilar.Length==0){
-				//probably because there are not even any other similar plans
-				//note has already been saved
-			}
-			else if(notesSimilar.Length==1){
-				if(notesSimilar[0]==PlanCur.PlanNote){//all notes are already the same
-					//note has already been saved
-				}
-				else if(notesSimilar[0]==PlanCurOld.PlanNote){//notes were all the same until user just changed it
-					//this also handles 'deleting' a note
-					InsPlans.UpdateNoteForPlans(planNums,PlanCur.PlanNote);
-				}
-				//this note is different than the other notes
-				else if(IsNewPlan){//but it's a new plan, so user simply isn't aware of difference
-					//if(PlanCur.PlanNote==""){//user never entered a note for the new plan. Still must inform user of note.
-					//must give user a choice of notes
-					FormNotePick FormN=new FormNotePick(notesAll);
-					FormN.ShowDialog();
-					if(FormN.DialogResult==DialogResult.OK){
-						InsPlans.UpdateNoteForPlans(planNums,FormN.SelectedNote);
+				else {//editing an existing plan from within patient
+					if(InsPlans.AreEqualValue(PlanCur,PlanCurOriginal)) {//If no changes
+						if(PlanCur.PlanNum != PlanNumOriginal) {//clicked 'pick from list' button, then made no changes
+							//do not need to update PlanCur because no changes were made.
+						}
+						else {//existing plan, no changes, not picked from list.
+							//do not need to update PlanCur because no changes were made.
+						}
 					}
-					//If user cancels, the note for this insplan is already saved, just no synch happens.
+					else {//changes were made
+						if(PlanCur.PlanNum != PlanNumOriginal) {//clicked 'pick from list' button, and then made changes
+							if(radioChangeAll.Checked) {
+								//warn user here?
+								InsPlans.Update(PlanCur);
+							}
+							else {//option is checked for "create new plan if needed"
+								if(comboLinked.Items.Count==0) {//if this is the only subscriber
+									InsPlans.Update(PlanCur);
+								}
+								else {//if there are other subscribers
+									InsPlans.Insert(PlanCur);//this gives it a new primary key.
+									//make copies of all the benefits
+									benefitListOld=new List<Benefit>();
+									for(int i=0;i<benefitList.Count;i++) {
+										if(benefitList[i].PlanNum>0) {
+											benefitList[i].PlanNum=PlanCur.PlanNum;
+											benefitList[i].BenefitNum=0;//triggers insert.
+										}
+									}
+								}
+							}
+						}
+						else {//existing plan, changes made, not picked from list.
+							if(radioChangeAll.Checked) {
+								InsPlans.Update(PlanCur);
+							}
+							else {//option is checked for "create new plan if needed"
+								if(comboLinked.Items.Count==0) {//if this is the only subscriber
+									InsPlans.Update(PlanCur);
+								}
+								else {//if there are other subscribers
+									InsPlans.Insert(PlanCur);//this gives it a new primary key.
+									//make copies of all the benefits
+									benefitListOld=new List<Benefit>();
+									for(int i=0;i<benefitList.Count;i++) {
+										if(benefitList[i].PlanNum>0) {
+											benefitList[i].PlanNum=PlanCur.PlanNum;
+											benefitList[i].BenefitNum=0;//triggers insert.
+										}
+									}
+								}
+							}
+						}
+					}
 				}
 			}
-			else{//notesSimilar must be >1.  Can't really think of how this could happen except for improper conversion
-				//must give user a choice of notes
-				FormNotePick FormN=new FormNotePick(notesAll);
-				FormN.ShowDialog();
-				if(FormN.DialogResult==DialogResult.OK){
-					InsPlans.UpdateNoteForPlans(planNums,FormN.SelectedNote);
-				}
-				//If user cancels, the note for this insplan is already saved, just no synch happens.				
+			//Synch benefits-----------------------------------------------------------------------------------------------
+			Benefits.UpdateList(benefitListOld,benefitList);
+			//Update SubCur if needed-------------------------------------------------------------------------------------
+			if(SubCur!=null) {
+				SubCur.PlanNum=PlanCur.PlanNum;
+				InsSubs.Update(SubCur);//also saves the other fields besides PlanNum
 			}
-			Cursor=Cursors.Default;
+			InsPlans.ComputeEstimatesForPlan(PlanCur.PlanNum);
 			DialogResult=DialogResult.OK;
 		}
 
@@ -3881,14 +3939,22 @@ namespace OpenDental{
 		}
 
 		private void FormInsPlan_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
-			if(DialogResult==DialogResult.OK)
+			if(DialogResult==DialogResult.OK) {
 				return;
-			if(IsNewPlan){//this would also be new coverage
-				InsPlans.Delete(PlanCur);//also drops
 			}
-			else if(IsNewPatPlan){//but plan is not new
+			//So, user cancelled a new entry
+			if(IsNewPlan){//this would also be new coverage
+				//warning: If user clicked 'pick from list' button, then we don't want to delete an existing plan used by others
+				InsPlans.Delete(PlanNumOriginal);//safe, does not delete other objects
+				if(SubCur!=null) {
+					InsSubs.Delete(SubCur.InsSubNum);
+				}
+			}
+			//else if(IsNewPatPlan){//but plan is not new
+			if(IsNewPatPlan){
 				PatPlans.Delete(PatPlanCur.PatPlanNum);//no need to check dependencies.  Maintains ordinals and recomputes estimates.
 			}
+			
 		}
 
 		

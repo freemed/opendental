@@ -81,6 +81,8 @@ namespace OpenDentBusiness{
 		public double WriteOffEstOverride;
 		///<summary>FK to clinic.ClinicNum.  Can be zero.  No user interface for editing.  Forced to always be the same as the procedure, or if no procedure, then the claim.</summary>
 		public long ClinicNum;
+		///<summary>FK to inssub.InsSubNum.</summary>
+		public long InsSubNum;
 		///<summary>Not a database column.  Used to help manage passing lists around.</summary>
 		[CrudColumn(IsNotDbColumn=true)]
 		public bool DoDelete;

@@ -282,6 +282,7 @@ namespace OpenDental{
 		private ListBox listExtractedTeeth;
 		private OpenDental.UI.Button butHistory;
 		private bool doubleClickWarningAlreadyDisplayed=false;
+		private List<InsSub> SubList;
 
 		///<summary></summary>
 		public FormClaimEdit(Claim claimCur, Patient patCur,Family famCur){
@@ -3163,7 +3164,8 @@ namespace OpenDental{
       ClaimList=Claims.Refresh(PatCur.PatNum); 
       ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
 			ProcList=Procedures.Refresh(PatCur.PatNum);
-			PlanList=InsPlans.RefreshForFam(FamCur);
+			SubList=InsSubs.RefreshForFam(FamCur);
+			PlanList=InsPlans.RefreshForSubList(SubList);
 			PatPlanList=PatPlans.Refresh(PatCur.PatNum);
 			if(InsPlans.GetPlan(ClaimCur.PlanNum,PlanList).PlanType=="p"){//ppo
 				butPayTotal.Enabled=false;	
@@ -3302,23 +3304,26 @@ namespace OpenDental{
 			comboProvBill.Items.Clear();
 			for(int i=0;i<ProviderC.List.Length;i++){
 				comboProvBill.Items.Add(ProviderC.List[i].Abbr);
-				if(ProviderC.List[i].ProvNum==ClaimCur.ProvBill)
+				if(ProviderC.List[i].ProvNum==ClaimCur.ProvBill) {
 					comboProvBill.SelectedIndex=i;
+				}
 			}
 			if(comboProvBill.Items.Count>0 && comboProvBill.SelectedIndex==-1)
 				comboProvBill.SelectedIndex=0;
 			comboProvTreat.Items.Clear();
 			for(int i=0;i<ProviderC.List.Length;i++){
 				comboProvTreat.Items.Add(ProviderC.List[i].Abbr);
-				if(ProviderC.List[i].ProvNum==ClaimCur.ProvTreat)
+				if(ProviderC.List[i].ProvNum==ClaimCur.ProvTreat) {
 					comboProvTreat.SelectedIndex=i;
+				}
 			}
-			if(comboProvTreat.Items.Count>0 && comboProvTreat.SelectedIndex==-1)
+			if(comboProvTreat.Items.Count>0 && comboProvTreat.SelectedIndex==-1) {
 				comboProvTreat.SelectedIndex=0;
+			}
 			textPreAuth.Text=ClaimCur.PreAuthString;
-			textPlan.Text=InsPlans.GetDescript(ClaimCur.PlanNum,FamCur,PlanList);
+			textPlan.Text=InsPlans.GetDescript(ClaimCur.PlanNum,FamCur,PlanList,ClaimCur.InsSubNum,SubList);
 			comboPatRelat.SelectedIndex=(int)ClaimCur.PatRelat;
-			textPlan2.Text=InsPlans.GetDescript(ClaimCur.PlanNum2,FamCur,PlanList);
+			textPlan2.Text=InsPlans.GetDescript(ClaimCur.PlanNum2,FamCur,PlanList,ClaimCur.InsSubNum2,SubList);
 			comboPatRelat2.SelectedIndex=(int)ClaimCur.PatRelat2;
 			if(textPlan2.Text==""){
 				comboPatRelat2.Visible=false;
@@ -3804,7 +3809,8 @@ namespace OpenDental{
 				return;
 			}
 			ClaimCur.PlanNum2=FormIPS.SelectedPlan.PlanNum;
-			textPlan2.Text=InsPlans.GetDescript(ClaimCur.PlanNum2,FamCur,PlanList);
+			ClaimCur.InsSubNum2=FormIPS.SelectedSub.InsSubNum;
+			textPlan2.Text=InsPlans.GetDescript(ClaimCur.PlanNum2,FamCur,PlanList,ClaimCur.InsSubNum2,SubList);
 			if(textPlan2.Text==""){
 				comboPatRelat2.Visible=false;
 				label10.Visible=false;
@@ -3817,6 +3823,7 @@ namespace OpenDental{
 
 		private void butOtherNone_Click(object sender, System.EventArgs e) {
 			ClaimCur.PlanNum2=0;
+			ClaimCur.InsSubNum2=0;
 			ClaimCur.PatRelat2=Relat.Self;
 			textPlan2.Text="";
 			comboPatRelat2.Visible=false;

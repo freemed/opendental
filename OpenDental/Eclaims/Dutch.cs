@@ -31,6 +31,7 @@ namespace OpenDental.Eclaims {
 			Provider provBill=Providers.GetProv(claim.ProvBill);
 			Patient pat=Patients.GetPat(claim.PatNum);
 			InsPlan insplan=InsPlans.GetPlan(claim.PlanNum,new List<InsPlan>());
+			InsSub insSub=InsSubs.GetSub(claim.InsSubNum,new List<InsSub>());
 			Carrier carrier=Carriers.GetCarrier(insplan.CarrierNum);
 			List<ClaimProc> claimProcList=ClaimProcs.Refresh(pat.PatNum);
 			List<ClaimProc> claimProcsForClaim=ClaimProcs.GetForSendClaim(claimProcList,claim.ClaimNum);
@@ -47,7 +48,7 @@ namespace OpenDental.Eclaims {
 				strb.Append(t);//118
 				strb.Append(pat.SSN+t);//203/403
 				strb.Append(carrier.CarrierName+t);//carrier name?
-				strb.Append(insplan.SubscriberID+t);
+				strb.Append(insSub.SubscriberID+t);
 				strb.Append(pat.PatNum.ToString()+t);
 				strb.Append(pat.Birthdate.ToString("dd-MM-yyyy")+t);
 				if(pat.Gender==PatientGender.Female) {

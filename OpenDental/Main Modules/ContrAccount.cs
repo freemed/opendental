@@ -2521,7 +2521,8 @@ namespace OpenDental {
 
 		private void OnIns_Click() {
 			List <PatPlan> PatPlanList=PatPlans.Refresh(PatCur.PatNum);
-			List <InsPlan> InsPlanList=InsPlans.RefreshForFam(FamCur);
+			List<InsSub> SubList=InsSubs.RefreshForFam(FamCur);
+			List<InsPlan> InsPlanList=InsPlans.RefreshForSubList(SubList);
 			List<ClaimProc> ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
 			List <Benefit> BenefitList=Benefits.Refresh(PatPlanList);
 			List<Procedure> procsForPat=Procedures.Refresh(PatCur.PatNum);
@@ -2804,7 +2805,8 @@ namespace OpenDental {
 
 		private void menuInsPri_Click(object sender, System.EventArgs e) {
 			List <PatPlan> PatPlanList=PatPlans.Refresh(PatCur.PatNum);
-			List <InsPlan> InsPlanList=InsPlans.RefreshForFam(FamCur);
+			List<InsSub> SubList=InsSubs.RefreshForFam(FamCur);
+			List<InsPlan> InsPlanList=InsPlans.RefreshForSubList(SubList);
 			List<ClaimProc> ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
 			List <Benefit> BenefitList=Benefits.Refresh(PatPlanList);
 			List<Procedure> procsForPat=Procedures.Refresh(PatCur.PatNum);
@@ -2844,7 +2846,8 @@ namespace OpenDental {
 
 		private void menuInsSec_Click(object sender, System.EventArgs e) {
 			List <PatPlan> PatPlanList=PatPlans.Refresh(PatCur.PatNum);
-			List <InsPlan> InsPlanList=InsPlans.RefreshForFam(FamCur);
+			List<InsSub> SubList=InsSubs.RefreshForFam(FamCur);
+			List<InsPlan> InsPlanList=InsPlans.RefreshForSubList(SubList);
 			List<ClaimProc> ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
 			List <Benefit> BenefitList=Benefits.Refresh(PatPlanList);
 			List<Procedure> procsForPat=Procedures.Refresh(PatCur.PatNum);
@@ -2883,7 +2886,8 @@ namespace OpenDental {
 
 		private void menuInsMedical_Click(object sender, System.EventArgs e) {
 			List <PatPlan> PatPlanList=PatPlans.Refresh(PatCur.PatNum);
-			List <InsPlan> InsPlanList=InsPlans.RefreshForFam(FamCur);
+			List<InsSub> SubList=InsSubs.RefreshForFam(FamCur);
+			List<InsPlan> InsPlanList=InsPlans.RefreshForSubList(SubList);
 			List<ClaimProc> ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
 			List <Benefit> BenefitList=Benefits.Refresh(PatPlanList);
 			List<Procedure> procsForPat=Procedures.Refresh(PatCur.PatNum);
@@ -2949,7 +2953,8 @@ namespace OpenDental {
 
 		private void menuInsOther_Click(object sender, System.EventArgs e) {
 			List <PatPlan> PatPlanList=PatPlans.Refresh(PatCur.PatNum);
-			List <InsPlan> InsPlanList=InsPlans.RefreshForFam(FamCur);
+			List<InsSub> SubList=InsSubs.RefreshForFam(FamCur);
+			List<InsPlan> InsPlanList=InsPlans.RefreshForSubList(SubList);
 			List<ClaimProc> ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
 			List <Benefit> BenefitList=Benefits.Refresh(PatPlanList);
 			List<Procedure> procsForPat=Procedures.Refresh(PatCur.PatNum);
@@ -3834,7 +3839,8 @@ namespace OpenDental {
 			if(PatCur == null) {//redundant
 				return;
 			}
-			List<InsPlan> InsPlanList=InsPlans.RefreshForFam(FamCur);
+			List<InsSub> SubList=InsSubs.RefreshForFam(FamCur);
+			List<InsPlan> InsPlanList=InsPlans.RefreshForSubList(SubList);
 			List<PatPlan> PatPlanList=PatPlans.Refresh(PatCur.PatNum);
 			List<Benefit> BenefitList=Benefits.Refresh(PatPlanList);
 			List<ClaimProc> ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);

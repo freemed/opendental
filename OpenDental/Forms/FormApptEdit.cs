@@ -66,6 +66,7 @@ namespace OpenDental{
 		private Point mouseOrigin;
 		private Point sliderOrigin;
 		private List <InsPlan> PlanList;
+		private List<InsSub> SubList;
 		private Patient pat;
 		private Family fam;
 		private OpenDental.UI.Button butLab;
@@ -1031,7 +1032,8 @@ namespace OpenDental{
 			//The four objects below are needed when adding procs to this appt.
 			fam=Patients.GetFamily(AptCur.PatNum);
 			pat=fam.GetPatient(AptCur.PatNum);
-			PlanList=InsPlans.RefreshForFam(fam);
+			SubList=InsSubs.RefreshForFam(fam);
+			PlanList=InsPlans.RefreshForSubList(SubList);
 			if(PrefC.GetBool(PrefName.EasyHideDentalSchools)) {
 				butRequirement.Visible=false;
 				textRequirement.Visible=false;
@@ -1169,8 +1171,8 @@ namespace OpenDental{
 			if(AptCur.DateTimeDismissed.TimeOfDay>TimeSpan.FromHours(0)){
 				textTimeDismissed.Text=AptCur.DateTimeDismissed.ToShortTimeString();
 			}
-			textInsPlan1.Text=InsPlans.GetDescript(AptCur.InsPlan1,fam,PlanList);
-			textInsPlan2.Text=InsPlans.GetDescript(AptCur.InsPlan2,fam,PlanList);
+			textInsPlan1.Text=InsPlans.GetCarrierName(AptCur.InsPlan1,PlanList);
+			textInsPlan2.Text=InsPlans.GetCarrierName(AptCur.InsPlan2,PlanList);
 			textRequirement.Text=DS.Tables["Misc"].Rows[0]["requirements"].ToString();
 			//IsNewPatient is set well before opening this form.
 			checkIsNewPatient.Checked=AptCur.IsNewPatient;
@@ -2002,7 +2004,7 @@ namespace OpenDental{
 				return;
 			}
 			AptCur.InsPlan1=FormIPS.SelectedPlan.PlanNum;
-			textInsPlan1.Text=InsPlans.GetDescript(AptCur.InsPlan1,fam,PlanList);
+			textInsPlan1.Text=InsPlans.GetCarrierName(AptCur.InsPlan1,PlanList);
 		}
 
 		private void butInsPlan2_Click(object sender,EventArgs e) {
@@ -2019,7 +2021,7 @@ namespace OpenDental{
 				return;
 			}
 			AptCur.InsPlan2=FormIPS.SelectedPlan.PlanNum;
-			textInsPlan2.Text=InsPlans.GetDescript(AptCur.InsPlan2,fam,PlanList);
+			textInsPlan2.Text=InsPlans.GetCarrierName(AptCur.InsPlan2,PlanList);
 		}
 
 		private void butRequirement_Click(object sender,EventArgs e) {

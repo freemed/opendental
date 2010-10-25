@@ -41,8 +41,8 @@ namespace OpenDentBusiness{
 		public long AckEtransNum;
 		///<summary>FK to insplan.PlanNum.  Used if EtransType.BenefitInquiry270 and BenefitResponse271.</summary>
 		public long PlanNum;
-
-
+		///<summary>FK to inssub.InsSubNum.  Used if EtransType.BenefitInquiry270 and BenefitResponse271.</summary>
+		public long InsSubNum;
 		///<summary></summary>
 		public Etrans Copy(){
 			return (Etrans)this.MemberwiseClone();

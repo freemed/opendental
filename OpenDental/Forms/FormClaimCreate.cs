@@ -24,6 +24,7 @@ namespace OpenDental{
 		private Family FamCur;
 		///<summary>After closing this form, this will contain the selected plan.</summary>
 		public InsPlan SelectedPlan;
+		public InsSub SelectedSub;
 		private List <InsPlan> PlanList;
 		private OpenDental.UI.ODGrid gridMain;
 		private GroupBox groupBox1;
@@ -33,6 +34,7 @@ namespace OpenDental{
 		private long PatNum;
 		public long ClaimFormNum;
 		public EtransType EFormat;
+		private List<InsSub> SubList;
 
 		///<summary></summary>
 		public FormClaimCreate(long patNum) {
@@ -197,7 +199,8 @@ namespace OpenDental{
 			//usage: eg. from coverage.  Since can be totally new subscriber, get all plans for them.
 			FamCur=Patients.GetFamily(PatNum);
 			PatCur=FamCur.GetPatient(PatNum);
-      PlanList=InsPlans.RefreshForFam(FamCur);
+			SubList=InsSubs.RefreshForFam(FamCur);
+			PlanList=InsPlans.RefreshForSubList(SubList);
 			FillPlanData();
 			FillClaimForms();
     }
@@ -226,19 +229,19 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
-			for(int i=0;i<PlanList.Count;i++) {
+			for(int i=0;i<SubList.Count;i++) {
 				row=new ODGridRow();
 				row.Cells.Add((i+1).ToString());
-				row.Cells.Add(FamCur.GetNameInFamLF(PlanList[i].Subscriber));
+				row.Cells.Add(FamCur.GetNameInFamLF(SubList[i].Subscriber));
 				row.Cells.Add(Carriers.GetName(PlanList[i].CarrierNum));
-				if(PlanList[i].DateEffective.Year<1880)
+				if(SubList[i].DateEffective.Year<1880)
 					row.Cells.Add("");
 				else
-					row.Cells.Add(PlanList[i].DateEffective.ToString("d"));
-				if(PlanList[i].DateTerm.Year<1880)
+					row.Cells.Add(SubList[i].DateEffective.ToString("d"));
+				if(SubList[i].DateTerm.Year<1880)
 					row.Cells.Add("");
 				else
-					row.Cells.Add(PlanList[i].DateTerm.ToString("d"));
+					row.Cells.Add(SubList[i].DateTerm.ToString("d"));
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
@@ -254,7 +257,8 @@ namespace OpenDental{
 				return;
 			}
 			PatRelat=(Relat)listRelat.SelectedIndex;
-			SelectedPlan=PlanList[e.Row];
+			SelectedSub=SubList[e.Row];
+			SelectedPlan=InsPlans.GetPlan(SubList[e.Row].PlanNum,PlanList);
 			DialogResult=DialogResult.OK;
 		}
 
@@ -272,7 +276,8 @@ namespace OpenDental{
 				return;
 			}
 			PatRelat=(Relat)listRelat.SelectedIndex;
-			SelectedPlan=PlanList[gridMain.GetSelectedIndex()];
+			SelectedSub=SubList[gridMain.GetSelectedIndex()];
+			SelectedPlan=InsPlans.GetPlan(SubList[gridMain.GetSelectedIndex()].PlanNum,PlanList);
 			ClaimFormNum=ClaimForms.ListShort[comboClaimForm.SelectedIndex].ClaimFormNum;
 			EFormat=EtransType.ClaimSent;//?? was 2;
       DialogResult=DialogResult.OK;

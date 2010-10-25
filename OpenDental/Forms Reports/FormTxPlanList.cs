@@ -415,6 +415,7 @@ namespace OpenDental {
 				ref double SecMax,ref double SecPend,ref double SecUsed,
 				ref double SecDed,ref double SecDedRemain,ref double SecRemain) {
 			List<PatPlan> PatPlanList;
+			List<InsSub> SubList;
 			List<InsPlan> InsPlanList;
 			List<Benefit> BenefitList;
 			List<ClaimProc> ClaimProcList;
@@ -426,7 +427,8 @@ namespace OpenDental {
 			double pend = 0;
 			double used = 0;
 			FamCur = Patients.GetFamily(PatNum);
-			InsPlanList = InsPlans.RefreshForFam(FamCur);
+			SubList=InsSubs.RefreshForFam(FamCur);
+			InsPlanList = InsPlans.RefreshForSubList(SubList);
 			PatPlanList = PatPlans.Refresh(PatNum);
 			BenefitList = Benefits.Refresh(PatPlanList);
 			//Claims.Refresh(PatNum);

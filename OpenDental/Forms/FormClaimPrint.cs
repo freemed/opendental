@@ -49,7 +49,7 @@ namespace OpenDental{
 		public ClaimForm ClaimFormCur;
 		private List <InsPlan> PlanList;
 		//private InsPlan[] MedPlanList;
-		private ArrayList MedPlanArrayList;
+		private List<InsSub> MedSubList;
 		private Claim ClaimCur;
 		///<summary>Always length of 4.</summary>
 		private string[] diagnoses;
@@ -58,6 +58,7 @@ namespace OpenDental{
 		private ArrayList MedClaimsArrayList;
 		private List<ClaimValCodeLog> MedValueCodes;
 		private Referral ClaimReferral;
+		private List<InsSub> SubList;
 
 		///<summary></summary>
 		public FormClaimPrint(){
@@ -436,8 +437,10 @@ namespace OpenDental{
 			List<Claim> ClaimList=Claims.Refresh(PatCur.PatNum);
 			ClaimCur=Claims.GetFromList(ClaimList,ThisClaimNum);
 				//((Claim)Claims.HList[ThisClaimNum]).Clone();
-			PlanList=InsPlans.RefreshForFam(FamCur);
+			SubList=InsSubs.RefreshForFam(FamCur);
+			PlanList=InsPlans.RefreshForSubList(SubList);
 			InsPlan otherPlan=InsPlans.GetPlan(ClaimCur.PlanNum2,PlanList);
+			InsSub otherSub=InsSubs.GetSub(ClaimCur.InsSubNum2,SubList);
 			if(otherPlan==null){
 				otherPlan=new InsPlan();//easier than leaving it null
 			}
@@ -448,28 +451,29 @@ namespace OpenDental{
 			//Employers.GetEmployer(otherPlan.EmployerNum);
 			//Employer otherEmployer=Employers.Cur;//not actually used
 			//then get the main plan
+			InsSub subCur=InsSubs.GetSub(ClaimCur.InsSubNum,SubList);
 			InsPlan planCur=InsPlans.GetPlan(ClaimCur.PlanNum,PlanList);
 			Clinic clinic=Clinics.GetClinic(ClaimCur.ClinicNum);
 			Carrier carrier=Carriers.GetCarrier(planCur.CarrierNum);
 			//Employers.GetEmployer(InsPlans.Cur.EmployerNum);
 			Patient subsc;
-			if(FamCur.GetIndex(planCur.Subscriber)==-1){//from another family
-				subsc=Patients.GetPat(planCur.Subscriber);
+			if(FamCur.GetIndex(subCur.Subscriber)==-1) {//from another family
+				subsc=Patients.GetPat(subCur.Subscriber);
 				//Patients.Cur;
 				//Patients.GetFamily(ThisPatNum);//return to current family
 			}
 			else{
-				subsc=FamCur.ListPats[FamCur.GetIndex(planCur.Subscriber)];
+				subsc=FamCur.ListPats[FamCur.GetIndex(subCur.Subscriber)];
 			}
 			Patient otherSubsc=new Patient();
 			if(otherPlan.PlanNum!=0){//if secondary insurance exists
-				if(FamCur.GetIndex(otherPlan.Subscriber)==-1){//from another family
-					otherSubsc=Patients.GetPat(otherPlan.Subscriber);
+				if(FamCur.GetIndex(otherSub.Subscriber)==-1) {//from another family
+					otherSubsc=Patients.GetPat(otherSub.Subscriber);
 					//Patients.Cur;
 					//Patients.GetFamily(ThisPatNum);//return to current family
 				}
 				else{
-					otherSubsc=FamCur.ListPats[FamCur.GetIndex(otherPlan.Subscriber)];
+					otherSubsc=FamCur.ListPats[FamCur.GetIndex(otherSub.Subscriber)];
 				}				
 			}	
 			if(ClaimCur.ReferringProv>0){
@@ -634,7 +638,7 @@ namespace OpenDental{
 						break;
 					case "OtherInsSubscrID":
 						if(otherPlan.PlanNum!=0)
-							displayStrings[i]=otherPlan.SubscriberID;
+							displayStrings[i]=otherSub.SubscriberID;
 						break;
 						//if(otherPlan.PlanNum!=0 && otherSubsc.SSN.Length==9){
 						//	displayStrings[i]=otherSubsc.SSN.Substring(0,3)
@@ -751,7 +755,7 @@ namespace OpenDental{
 						List <PatPlan> patPlans=PatPlans.Refresh(ThisPatNum);
 						string patID=PatPlans.GetPatID(patPlans,planCur.PlanNum);
 						if(patID==""){
-							displayStrings[i]=planCur.SubscriberID;
+							displayStrings[i]=subCur.SubscriberID;
 						}
 						else{
 							displayStrings[i]=patID;
@@ -1058,11 +1062,11 @@ namespace OpenDental{
 						displayStrings[i]+=ClaimCur.ClaimNote;
 						break;
 					case "PatientRelease":
-						if(planCur.ReleaseInfo)
+						if(subCur.ReleaseInfo)
 							displayStrings[i]="Signature on File"; 
 						break;
 					case "PatientReleaseDate":
-						if(planCur.ReleaseInfo && ClaimCur.DateSent.Year > 1860){
+						if(subCur.ReleaseInfo && ClaimCur.DateSent.Year > 1860) {
 							if(ClaimFormCur.Items[i].FormatString=="")
 								displayStrings[i]=ClaimCur.DateSent.ToShortDateString();
 							else
@@ -1071,11 +1075,11 @@ namespace OpenDental{
 						} 
 						break;
 					case "PatientAssignment":
-						if(planCur.AssignBen)
+						if(subCur.AssignBen)
 							displayStrings[i]="Signature on File"; 
 						break;
 					case "PatientAssignmentDate":
-						if(planCur.AssignBen && ClaimCur.DateSent.Year > 1860){
+						if(subCur.AssignBen && ClaimCur.DateSent.Year > 1860) {
 							if(ClaimFormCur.Items[i].FormatString=="")
 								displayStrings[i]=ClaimCur.DateSent.ToShortDateString();
 							else
@@ -2667,6 +2671,9 @@ namespace OpenDental{
 			InsPlan MedInsA = new InsPlan(); //Primary Insurance
 			InsPlan MedInsB = new InsPlan(); //Secondary Insurance
 			InsPlan MedInsC = new InsPlan(); //Tertiary Insurance
+			InsSub MedSubA=new InsSub();
+			InsSub MedSubB=new InsSub();
+			InsSub MedSubC=new InsSub();
 			Claim Primary = new Claim(); //Pri Claim
 			Claim Secondary = new Claim(); //Secondary Claim
 			Claim Tertiary = new Claim(); //Tertiary Claim
@@ -2675,12 +2682,14 @@ namespace OpenDental{
 			bool isTertiary = false;
 			List <PatPlan> PatInsPlans = PatPlans.Refresh(ThisPatNum); //get this patients ins plans
 			MedClaimsArrayList = new ArrayList(); //list of medical claims for patient
-			MedPlanArrayList = new ArrayList(); //list of medical ins plans for patient and family
+			MedSubList = new List<InsSub>(); //list of medical ins plans for patient and family
 			for(int i=0;i<PatInsPlans.Count;i++){ //fill med ins plans
 				PatPlan tempPatPlan = (PatPlan)PatInsPlans[i];
+				InsSub tempSub = InsSubs.GetSub(tempPatPlan.InsSubNum,SubList);
 				InsPlan tempInsPlan = InsPlans.GetPlan(tempPatPlan.PlanNum, PlanList);
-				if(tempInsPlan.IsMedical)
-					MedPlanArrayList.Add(tempInsPlan);
+				if(tempInsPlan.IsMedical) {
+					MedSubList.Add(tempSub);
+				}
 			}
 			List<ClaimProc> ClaimProcList=ClaimProcs.Refresh(ThisPatNum); //get all claimprocs for patient
 			ArrayList tmpPlansBilled = new ArrayList();
@@ -2716,14 +2725,17 @@ namespace OpenDental{
 				isTertiary = true;
 			}
 			//Set Primary through Tertiary Insurance Plans
-			if (MedPlanArrayList.Count > 0){
-				MedInsA = (InsPlan)MedPlanArrayList[0];
+			if(MedSubList.Count > 0){
+				MedSubA=MedSubList[0];
+				MedInsA=InsPlans.GetPlan(MedSubList[0].PlanNum,PlanList);
 			}
-			if (MedPlanArrayList.Count > 1){
-				MedInsB = (InsPlan)MedPlanArrayList[1];
+			if(MedSubList.Count > 1) {
+				MedSubB=MedSubList[1];
+				MedInsB=InsPlans.GetPlan(MedSubList[1].PlanNum,PlanList);
 			}
-			if (MedPlanArrayList.Count > 2){
-				MedInsC = (InsPlan)MedPlanArrayList[2];
+			if(MedSubList.Count > 2) {
+				MedSubC=MedSubList[2];
+				MedInsC=InsPlans.GetPlan(MedSubList[2].PlanNum,PlanList);
 			}
 			double TotalValAmount = ClaimValCodeLogs.GetValAmountTotal(ClaimCur,"23");
 			//MessageBox.Show(TotalValAmount.ToString());
@@ -2774,11 +2786,11 @@ namespace OpenDental{
 							}
 							break;
 						case "MedInsAInsuredName":
-							Patient pTemp = Patients.GetPat(Int16.Parse((MedInsA.Subscriber.ToString())));
+							Patient pTemp = Patients.GetPat(Int16.Parse((MedSubA.Subscriber.ToString())));
 							displayStrings[i] = pTemp.FName.ToString() + " " + pTemp.MiddleI.ToString() + " " + pTemp.LName.ToString();
 							break;
 						case "MedInsAInsuredID":
-							displayStrings[i] = MedInsA.SubscriberID.ToString();
+							displayStrings[i] = MedSubA.SubscriberID.ToString();
 							break;
 						case "MedInsAGroupName":
 							displayStrings[i] = MedInsA.GroupName.ToString();
@@ -2841,11 +2853,11 @@ namespace OpenDental{
 							}
 							break;
 						case "MedInsBInsuredName":
-							Patient pTemp = Patients.GetPat(Int16.Parse((MedInsB.Subscriber.ToString())));
+							Patient pTemp = Patients.GetPat(Int16.Parse((MedSubB.Subscriber.ToString())));
 							displayStrings[i] = pTemp.FName.ToString() + " " + pTemp.MiddleI.ToString() + " " + pTemp.LName.ToString();
 							break;
 						case "MedInsBInsuredID":
-							displayStrings[i] = MedInsB.SubscriberID.ToString();
+							displayStrings[i] = MedSubB.SubscriberID.ToString();
 							break;
 						case "MedInsBGroupName":
 							displayStrings[i] = MedInsB.GroupName.ToString();
@@ -2908,11 +2920,11 @@ namespace OpenDental{
 							}
 							break;
 						case "MedInsCInsuredName":
-							Patient pTemp = Patients.GetPat(Int16.Parse((MedInsC.Subscriber.ToString())));
+							Patient pTemp = Patients.GetPat(Int16.Parse((MedSubC.Subscriber.ToString())));
 							displayStrings[i] = pTemp.FName.ToString() + " " + pTemp.MiddleI.ToString() + " " + pTemp.LName.ToString();
 							break;
 						case "MedInsCInsuredID":
-							displayStrings[i] = MedInsC.SubscriberID.ToString();
+							displayStrings[i] = MedSubC.SubscriberID.ToString();
 							break;
 						case "MedInsCGroupName":
 							displayStrings[i] = MedInsC.GroupName.ToString();

@@ -14,12 +14,14 @@ namespace OpenDental {
 		private long PlanNum;
 		private long PatPlanNum;
 		public List<Benefit> BenList;
+		private long SubNum;
 
-		public FormBenefitElectHistory(long planNum,long patPlanNum) {
+		public FormBenefitElectHistory(long planNum,long patPlanNum,long subNum) {
 			InitializeComponent();
 			Lan.F(this);
 			PlanNum=planNum;
 			PatPlanNum=patPlanNum;
+			SubNum=subNum;
 		}
 
 		private void FormBenefitElectHistory_Load(object sender,EventArgs e) {
@@ -55,7 +57,7 @@ namespace OpenDental {
 				formETE.ShowDialog();
 			}
 			else {
-				FormEtrans270Edit formE=new FormEtrans270Edit(PatPlanNum,PlanNum);
+				FormEtrans270Edit formE=new FormEtrans270Edit(PatPlanNum,PlanNum,SubNum);
 				formE.EtransCur=etrans;
 				formE.benList=BenList;
 				formE.ShowDialog();

@@ -936,19 +936,10 @@ namespace OpenDental{
 			Family fam=Patients.GetFamily(SelectedPatNum);
 			Patient pat=fam.GetPatient(SelectedPatNum);
 			List<Procedure> procList;
-			//List<Recall> recallList;
-			List <InsPlan> planList;
 			Appointment apt=null;
-			//for(int i=0;i<fam.List.Length;i++) {
 			procList=Procedures.Refresh(pat.PatNum);
-			//List<int> patNums=new List<int>();
-			//patNums.Add(pat.PatNum);
-			//recallList=Recalls.GetList(patNums);//get the recall for this pt
-			//if(recallList.Count==0) {
-			//	MsgBox.Show(this,"This patient does not have any recall due.");
-			//	return;
-			//}
-			planList=InsPlans.RefreshForFam(fam);
+			List<InsSub> subList=InsSubs.RefreshForFam(fam);
+			List<InsPlan> planList=InsPlans.RefreshForSubList(subList);
 			long recallNum=PIn.Long(table.Rows[gridMain.SelectedIndices[0]]["RecallNum"].ToString());
 			try{
 				apt=AppointmentL.CreateRecallApt(pat,procList,planList,recallNum);
@@ -982,15 +973,15 @@ namespace OpenDental{
 			Family fam=Patients.GetFamily(SelectedPatNum);
 			List<Procedure> procList;
 			List <InsPlan> planList;
+			List<InsSub> subList;
 			Appointment apt;
 			//List<long> patNums;
 			List<long> pinAptNums=new List<long>();
 			List<long> excludePatNums=new List<long>();
 			for(int i=0;i<fam.ListPats.Length;i++) {
 				procList=Procedures.Refresh(fam.ListPats[i].PatNum);
-				//patNums=new List<long>();
-				//patNums.Add(fam.ListPats[i].PatNum);
-				planList=InsPlans.RefreshForFam(fam);
+				subList=InsSubs.RefreshForFam(fam);
+				planList=InsPlans.RefreshForSubList(subList);
 				try{
 					apt=AppointmentL.CreateRecallApt(fam.ListPats[i],procList,planList,-1);
 				}

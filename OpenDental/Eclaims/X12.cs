@@ -163,6 +163,8 @@ namespace OpenDental.Eclaims
 			Claim claim;
 			InsPlan insPlan;
 			InsPlan otherPlan=new InsPlan();
+			InsSub sub;
+			InsSub otherSub=new InsSub();
 			Patient patient;
 			Patient subscriber;
 			Patient otherSubsc=new Patient();
@@ -404,14 +406,16 @@ namespace OpenDental.Eclaims
 				#endregion Billing Provider
 				claim=Claims.GetClaim(claimItems[i].ClaimNum4);				
 				insPlan=InsPlans.GetPlan(claim.PlanNum,new List <InsPlan> ());
+				sub=InsSubs.GetSub(claim.InsSubNum,null);
 				//insPlan could be null if db corruption. No error checking for that
 				if(claim.PlanNum2>0){
 					otherPlan=InsPlans.GetPlan(claim.PlanNum2,new List <InsPlan> ());
-					otherSubsc=Patients.GetPat(otherPlan.Subscriber);
+					otherSub=InsSubs.GetSub(claim.InsSubNum2,null);
+					otherSubsc=Patients.GetPat(otherSub.Subscriber);
 					otherCarrier=Carriers.GetCarrier(otherPlan.CarrierNum);
 				}
 				patient=Patients.GetPat(claim.PatNum);
-				subscriber=Patients.GetPat(insPlan.Subscriber);
+				subscriber=Patients.GetPat(sub.Subscriber);
 				carrier=Carriers.GetCarrier(insPlan.CarrierNum);
 				claimProcList=ClaimProcs.Refresh(patient.PatNum);
 				claimProcs=ClaimProcs.GetForSendClaim(claimProcList,claim.ClaimNum);
@@ -499,7 +503,7 @@ namespace OpenDental.Eclaims
 						+"*"//NM106: not used
 						+"*"//NM107: suffix. Not present in Open Dental yet.
 						+"MI*"//NM108: MI=MemberID
-						+Sout(insPlan.SubscriberID.Replace("-",""),80)+"~");//NM109: Subscriber ID
+						+Sout(sub.SubscriberID.Replace("-",""),80)+"~");//NM109: Subscriber ID
 					//At the request of WebMD, we are including N3,N4,and DMG even if patient is not subscriber.
 					//This does not make the transaction non-compliant, and they find it useful.
 					//if(claimAr[3,i].ToString()==claimAr[2,i].ToString()){//if patient is the subscriber
@@ -681,7 +685,7 @@ namespace OpenDental.Eclaims
 					+GetPlaceService(claim.PlaceService)+"::1*"//CLM05: place+1. 1=Original claim
 					+"Y*"//CLM06: prov sig on file (always yes)
 					+"A*");//CLM07: prov accepts medicaid assignment. OD has no field for this, so no choice
-				if(insPlan.AssignBen){
+				if(sub.AssignBen){
 					sw.Write("Y*");//CLM08: assign ben. Y or N
 				}
 				else{
@@ -1046,7 +1050,7 @@ namespace OpenDental.Eclaims
 				//2320 OI: Other ins info
 					seg++;
 					sw.Write("OI***");//OI01 & 02 not used
-					if(otherPlan.AssignBen){
+					if(otherSub.AssignBen){
 						sw.Write("Y***");//OI03: assign ben. Y or N. OI04(medical): we don't support
 					}
 					else{
@@ -1069,7 +1073,7 @@ namespace OpenDental.Eclaims
 						+"*"//NM106: not used
 						+"*"//NM107: suffix. No corresponding field in OD
 						+"MI*"//NM108: MI=Member ID
-						+Sout(otherPlan.SubscriberID,80)+"~");//NM109: ID
+						+Sout(otherSub.SubscriberID,80)+"~");//NM109: ID
 					//2330A N3: Address
 					seg++;
 					sw.Write("N3*"
@@ -1687,7 +1691,8 @@ namespace OpenDental.Eclaims
 			List<X12TransactionItem> claimItems=Claims.GetX12TransactionInfo(((ClaimSendQueueItem)queueItem).ClaimNum);//just to get prov. Needs work.
 			Provider billProv=ProviderC.ListLong[Providers.GetIndexLong(claimItems[0].ProvBill1)];
 			Provider treatProv=ProviderC.ListLong[Providers.GetIndexLong(claim.ProvTreat)];
-			InsPlan insPlan=InsPlans.GetPlan(claim.PlanNum,new List <InsPlan> ());
+			InsPlan insPlan=InsPlans.GetPlan(claim.PlanNum,null);
+			InsSub sub=InsSubs.GetSub(claim.InsSubNum,null);
 			if(insPlan.IsMedical){
 				return "Medical e-claims not allowed";
 			}
@@ -1744,7 +1749,7 @@ namespace OpenDental.Eclaims
 			else{
 				X12Validate.Clinic(clinic,strb);
 			}
-			if(!insPlan.ReleaseInfo){
+			if(!sub.ReleaseInfo){
 				if(strb.Length!=0) {
 					strb.Append(",");
 				}
@@ -1761,6 +1766,7 @@ namespace OpenDental.Eclaims
 			}
 			if(claim.PlanNum2>0){
 				InsPlan insPlan2=InsPlans.GetPlan(claim.PlanNum2,new List <InsPlan> ());
+				InsSub sub2=InsSubs.GetSub(claim.InsSubNum2,null);
 				Carrier carrier2=Carriers.GetCarrier(insPlan2.CarrierNum);
 				if(carrier2.Address==""){
 					if(strb.Length!=0) {
@@ -1786,7 +1792,7 @@ namespace OpenDental.Eclaims
 					}
 					strb.Append("Secondary Carrier Zip");
 				}
-				if(claim.PatNum != insPlan2.Subscriber//if patient is not subscriber
+				if(claim.PatNum != sub2.Subscriber//if patient is not subscriber
 					&& claim.PatRelat2==Relat.Self) {//and relat is self
 					if(strb.Length!=0) {
 						strb.Append(",");
@@ -1804,15 +1810,15 @@ namespace OpenDental.Eclaims
 					strb.Append("Billing Prov Supplemental ID:"+providerIdents[i].ToString();
 				}
 			}*/
-			if(insPlan.SubscriberID.Length<2){
+			if(sub.SubscriberID.Length<2){
 				if(strb.Length!=0) {
 					strb.Append(",");
 				}
 				strb.Append("SubscriberID");
 			}
 			Patient patient=Patients.GetPat(claim.PatNum);
-			Patient subscriber=Patients.GetPat(insPlan.Subscriber);
-			if(claim.PatNum != insPlan.Subscriber//if patient is not subscriber
+			Patient subscriber=Patients.GetPat(sub.Subscriber);
+			if(claim.PatNum != sub.Subscriber//if patient is not subscriber
 				&& claim.PatRelat==Relat.Self){//and relat is self
 				if(strb.Length!=0) {
 					strb.Append(",");

@@ -1224,7 +1224,8 @@ namespace OpenDental
 			PaidOtherInsTotal=ClaimProcs.GetPaidOtherInsTotal(ClaimProcCur,PatPlanList);
 			PaidOtherInsBaseEst=ClaimProcs.GetPaidOtherInsBaseEst(ClaimProcCur,PatPlanList);
 			WriteOffOtherIns=ClaimProcs.GetWriteOffOtherIns(ClaimProcCur,PatPlanList);
-			textInsPlan.Text=InsPlans.GetDescript(ClaimProcCur.PlanNum,FamCur,PlanList);
+			List<InsSub> subList=InsSubs.RefreshForFam(FamCur);
+			textInsPlan.Text=InsPlans.GetDescript(ClaimProcCur.PlanNum,FamCur,PlanList,ClaimProcCur.InsSubNum,subList);
 			checkNoBillIns.Checked=ClaimProcCur.NoBillIns;
 			if(ClaimProcCur.ClaimPaymentNum>0){//attached to ins check
 				textDateCP.ReadOnly=true;//DateCP always the same as the payment date and can't be changed here

@@ -48,7 +48,7 @@ namespace OpenDentBusiness {
 			return Crud.BenefitCrud.SelectMany(command);
 		}
 
-
+		/*
 		///<summary>Used in the Plan edit window to get a typical list of benefits for all identical plans.  It used to exclude the supplied plan from the benefits, but no longer does that.  This behavior needs to be watched closely for possible bugs.</summary>
 		public static List<Benefit> RefreshForAll(InsPlan like) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
@@ -135,7 +135,7 @@ namespace OpenDentBusiness {
 				//all set to 0 if the plan IsForIdentical.
 			}
 			return retVal;
-		}
+		}*/
 	
 
 		///<summary></summary>
@@ -1330,7 +1330,8 @@ namespace OpenDentBusiness {
 			}
 		}
 
-		///<summary>Used in FormInsPlan when applying changes to all identical plans.  Also used when merging plans. 1. Deletes any benefits where the benefitNum is not found in the new list.  2. Adds any new Benefits (BenefitNum=0) found in the new list.  It does not test to see whether any benefits with the same BenefitNum have changed, because FormInsBenefits never changes existing benefits.</summary>
+		/*
+		///<summary>Was used in FormInsPlan when applying changes to all identical plans.  Needs to be removed. 1. Deletes any benefits where the benefitNum is not found in the new list.  2. Adds any new Benefits (BenefitNum=0) found in the new list.  It does not test to see whether any benefits with the same BenefitNum have changed, because FormInsBenefits never changes existing benefits.</summary>
 		public static void UpdateListForIdentical(List<Benefit> oldBenefitList,List<Benefit> newBenefitList,List<long> planNums) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),oldBenefitList,newBenefitList,planNums);
@@ -1439,8 +1440,8 @@ namespace OpenDentBusiness {
 					Db.NonQ(command);
 				}
 			}
-			//don't forget to compute estimates for each plan now.//that would be too slow
-		}
+			//might be a good idea to compute estimates for each plan now.
+		}*/
 
 		///<summary>Used in family module display to get a list of benefits.  The main purpose of this function is to group similar benefits for each plan on the same row, making it easier to display in a simple grid.  Supply a list of all benefits for the patient, and the patPlans for the patient.</summary>
 		public static Benefit[,] GetDisplayMatrix(List <Benefit> bensForPat,List <PatPlan> patPlanList){

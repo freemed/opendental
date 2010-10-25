@@ -97,6 +97,7 @@ namespace OpenDental{
 		private Label label16;
 		private GroupBox groupBox1;
 		private double TotPrincInt;
+		private List<InsSub> SubList;
 
 		///<summary>The supplied payment plan should already have been saved in the database.</summary>
 		public FormPayPlan(Patient patCur,PayPlan payPlanCur){
@@ -107,7 +108,8 @@ namespace OpenDental{
 			PatCur=patCur.Copy();
 			PayPlanCur=payPlanCur.Copy();
 			FamCur=Patients.GetFamily(PatCur.PatNum);
-			InsPlanList=InsPlans.RefreshForFam(FamCur);
+			SubList=InsSubs.RefreshForFam(FamCur);
+			InsPlanList=InsPlans.RefreshForSubList(SubList);
 			Lan.F(this);
 		}
 
@@ -880,7 +882,7 @@ namespace OpenDental{
 				butChangePlan.Visible=false;
 			}
 			else{
-				textInsPlan.Text=InsPlans.GetDescript(PayPlanCur.PlanNum,FamCur,InsPlanList);
+				textInsPlan.Text=InsPlans.GetDescript(PayPlanCur.PlanNum,FamCur,InsPlanList,PayPlanCur.InsSubNum,SubList);
 				checkIns.Checked=true;
 				labelGuarantor.Visible=false;
 				textGuarantor.Visible=false;
@@ -1024,7 +1026,7 @@ namespace OpenDental{
 				}
 				PayPlanCur.PlanNum=FormI.SelectedPlan.PlanNum;
 				PayPlanCur.Guarantor=PayPlanCur.PatNum;
-				textInsPlan.Text=InsPlans.GetDescript(PayPlanCur.PlanNum,FamCur,InsPlanList);
+				textInsPlan.Text=InsPlans.GetDescript(PayPlanCur.PlanNum,FamCur,InsPlanList,PayPlanCur.InsSubNum,SubList);
 				labelGuarantor.Visible=false;
 				textGuarantor.Visible=false;
 				butGoToGuar.Visible=false;
@@ -1062,7 +1064,8 @@ namespace OpenDental{
 				return;
 			}
 			PayPlanCur.PlanNum=FormI.SelectedPlan.PlanNum;
-			textInsPlan.Text=InsPlans.GetDescript(PayPlanCur.PlanNum,Patients.GetFamily(PayPlanCur.PatNum),new List <InsPlan> ());
+			PayPlanCur.InsSubNum=FormI.SelectedSub.InsSubNum;
+			textInsPlan.Text=InsPlans.GetDescript(PayPlanCur.PlanNum,Patients.GetFamily(PayPlanCur.PatNum),new List <InsPlan> (),PayPlanCur.InsSubNum,new List<InsSub>());
 		}
 
 		private void textTerm_KeyPress(object sender, System.Windows.Forms.KeyPressEventArgs e) {

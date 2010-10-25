@@ -13,7 +13,7 @@ namespace OpenDentBusiness
 		}
 
 		///<summary>In progress.  Probably needs a different name.  Info must be validated first.</summary>
-		public static string GenerateMessageText(Clearinghouse clearhouse,Carrier carrier,Provider billProv,Clinic clinic,InsPlan insPlan,Patient subscriber) {
+		public static string GenerateMessageText(Clearinghouse clearhouse,Carrier carrier,Provider billProv,Clinic clinic,InsPlan insPlan,Patient subscriber,InsSub insSub) {
 			int batchNum=Clearinghouses.GetNextBatchNumber(clearhouse);
 			string groupControlNumber=batchNum.ToString();//Must be unique within file.  We will use batchNum
 			int transactionNum=1;
@@ -181,7 +181,7 @@ namespace OpenDentBusiness
 				+"*"//NM106: not used
 				+"*"//NM107: suffix. Not present in Open Dental yet.
 				+"MI*"//NM108: MI=MemberID
-				+Sout(insPlan.SubscriberID.Replace("-",""),80)+"~");//NM109: Subscriber ID. Validated to be L>2.
+				+Sout(insSub.SubscriberID.Replace("-",""),80)+"~");//NM109: Subscriber ID. Validated to be L>2.
 			//2100C REF: Subscriber Additional Information.  Without this, old plans seem to be frequently returned.
 			seg++;
 			strb.AppendLine("REF*6P*"//REF01: 6P=GroupNumber
@@ -284,7 +284,7 @@ IEA*1*000012145~";
 			return X12Generator.Sout(str,-1,-1);
 		}
 
-		public static string Validate(Clearinghouse clearhouse,Carrier carrier,Provider billProv,Clinic clinic,InsPlan insPlan,Patient subscriber) {
+		public static string Validate(Clearinghouse clearhouse,Carrier carrier,Provider billProv,Clinic clinic,InsPlan insPlan,Patient subscriber,InsSub insSub) {
 			StringBuilder strb=new StringBuilder();
 			X12Validate.ISA(clearhouse,strb);
 			X12Validate.Carrier(carrier,strb);
@@ -307,7 +307,7 @@ IEA*1*000012145~";
 			else {
 				X12Validate.Clinic(clinic,strb);
 			}
-			if(insPlan.SubscriberID.Length<2) {
+			if(insSub.SubscriberID.Length<2) {
 				if(strb.Length!=0) {
 					strb.Append(",");
 				}

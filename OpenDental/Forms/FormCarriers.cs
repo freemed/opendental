@@ -18,16 +18,18 @@ namespace OpenDental{
 		private System.ComponentModel.IContainer components;
 		private System.Windows.Forms.ToolTip toolTip1;
 		private OpenDental.UI.Button butCombine;
-		//No longer used. <summary>Set to true if using this dialog to select a carrier.</summary>
-		//public bool IsSelectMode;
+		///<summary>Set to true if using this dialog to select a carrier.</summary>
+		public bool IsSelectMode;
 		private OpenDental.UI.Button butCancel;
 		private OpenDental.UI.ODGrid gridMain;
 		private CheckBox checkCDAnet;
 		private bool changed;
 		private CheckBox checkShowHidden;
 		private TextBox textCarrier;
-		private Label label2;//keeps track of whether an update is necessary.
+		private Label label2;
+		private UI.Button butOK;//keeps track of whether an update is necessary.
 		private DataTable table;
+		public Carrier SelectedCarrier;
 
 		///<summary></summary>
 		public FormCarriers()
@@ -72,6 +74,7 @@ namespace OpenDental{
 			this.checkShowHidden = new System.Windows.Forms.CheckBox();
 			this.textCarrier = new System.Windows.Forms.TextBox();
 			this.label2 = new System.Windows.Forms.Label();
+			this.butOK = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// butAdd
@@ -84,7 +87,7 @@ namespace OpenDental{
 			this.butAdd.CornerRadius = 4F;
 			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(830,463);
+			this.butAdd.Location = new System.Drawing.Point(830,435);
 			this.butAdd.Name = "butAdd";
 			this.butAdd.Size = new System.Drawing.Size(90,26);
 			this.butAdd.TabIndex = 7;
@@ -99,7 +102,7 @@ namespace OpenDental{
 			this.butCombine.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCombine.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCombine.CornerRadius = 4F;
-			this.butCombine.Location = new System.Drawing.Point(830,501);
+			this.butCombine.Location = new System.Drawing.Point(830,471);
 			this.butCombine.Name = "butCombine";
 			this.butCombine.Size = new System.Drawing.Size(90,26);
 			this.butCombine.TabIndex = 10;
@@ -176,10 +179,26 @@ namespace OpenDental{
 			this.label2.Text = "Carrier";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// butOK
+			// 
+			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butOK.Autosize = true;
+			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butOK.CornerRadius = 4F;
+			this.butOK.Location = new System.Drawing.Point(830,587);
+			this.butOK.Name = "butOK";
+			this.butOK.Size = new System.Drawing.Size(90,26);
+			this.butOK.TabIndex = 103;
+			this.butOK.Text = "OK";
+			this.butOK.Click += new System.EventHandler(this.butOK_Click);
+			// 
 			// FormCarriers
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(927,672);
+			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.textCarrier);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.checkShowHidden);
@@ -195,8 +214,8 @@ namespace OpenDental{
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Carriers";
-			this.Load += new System.EventHandler(this.FormCarriers_Load);
 			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormCarriers_Closing);
+			this.Load += new System.EventHandler(this.FormCarriers_Load);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -211,6 +230,13 @@ namespace OpenDental{
 			//else{
 			//	checkCDAnet.Visible=false;
 			//}
+			if(IsSelectMode) {
+				butCancel.Text=Lan.g(this,"Cancel");
+				butOK.Visible=false;
+			}
+			else {
+				butCancel.Text=Lan.g(this,"Close");
+			}
 			Carriers.RefreshCache();
 			FillGrid();
 		}
@@ -333,8 +359,14 @@ namespace OpenDental{
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			Carrier carrier=Carriers.GetCarrier(PIn.Long(table.Rows[e.Row]["CarrierNum"].ToString()));
+			if(IsSelectMode) {
+				SelectedCarrier=carrier;
+				DialogResult=DialogResult.OK;
+				return;
+			}
 			FormCarrierEdit FormCE=new FormCarrierEdit();
-			FormCE.CarrierCur=Carriers.GetCarrier(PIn.Long(table.Rows[e.Row]["CarrierNum"].ToString()));
+			FormCE.CarrierCur=carrier;
 			FormCE.ShowDialog();
 			if(FormCE.DialogResult!=DialogResult.OK){
 				return;
@@ -408,14 +440,16 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
-			/*if(IsSelectMode){
-				if(tbCarriers.SelectedIndices.Length!=1){
-					//Employers.Cur=new Employer();
-					MessageBox.Show(Lan.g(this,"Please select one item first."));
-					return;
-				}
-				Carriers.Cur=Carriers.List[tbCarriers.SelectedIndices[0]];
-			}*/
+			//only visible if IsSelectMode
+			if(gridMain.SelectedIndices.Length==0) {
+				MessageBox.Show(Lan.g(this,"Please select an item first."));
+				return;
+			}
+			if(gridMain.SelectedIndices.Length>1) {
+				MessageBox.Show(Lan.g(this,"Please select only one item first."));
+				return;
+			}
+			SelectedCarrier=Carriers.GetCarrier(PIn.Long(table.Rows[gridMain.SelectedIndices[0]]["CarrierNum"].ToString()));
 			DialogResult=DialogResult.OK;
 		}
 

@@ -2795,9 +2795,9 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				//benefit.PlanNum -- DELETE unused
 				//claim.PlanNum/PlanNum2 -- UPDATE PlanNum/2, add claim.InsSubNum/2
 				//claimproc.PlanNum -- UPDATE PlanNum, add claimproc.InsSubNum
-				//etrans.PlanNum -- UPDATE PlanNum
+				//etrans.PlanNum -- UPDATE PlanNum, add etrans.InsSubNum
 				//patplan.PlanNum -- UPDATE PlanNum, add patplan.InsSubNum
-				//payplan.PlanNum -- UPDATE PlanNum, add claim.InsSubNum
+				//payplan.PlanNum -- UPDATE PlanNum, add payplan.InsSubNum
 				command="ALTER TABLE claim ADD InsSubNum bigint NOT NULL";
 				Db.NonQ(command);
 				command="ALTER TABLE claim ADD INDEX (InsSubNum)";
@@ -2805,6 +2805,14 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="ALTER TABLE claim ADD InsSubNum2 bigint NOT NULL";
 				Db.NonQ(command);
 				command="ALTER TABLE claim ADD INDEX (InsSubNum2)";
+				Db.NonQ(command);
+				command="ALTER TABLE claimproc ADD InsSubNum bigint NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE claimproc ADD INDEX (InsSubNum)";
+				Db.NonQ(command);
+				command="ALTER TABLE etrans ADD InsSubNum bigint NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE etrans ADD INDEX (InsSubNum)";
 				Db.NonQ(command);
 				command="ALTER TABLE patplan ADD InsSubNum bigint NOT NULL";
 				Db.NonQ(command);
@@ -2908,18 +2916,23 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				//claimproc.PlanNum -- claimproc.InsSubNum
 				command="UPDATE claimproc SET InsSubNum = (SELECT InsSubNum FROM inssub WHERE inssub.PlanNum=claimproc.PlanNum) WHERE PlanNum > 0";
 				Db.NonQ(command);
+				//etrans.PlanNum -- etrans.InsSubNum
+				command="UPDATE etrans SET InsSubNum = (SELECT InsSubNum FROM inssub WHERE inssub.PlanNum=etrans.PlanNum) WHERE PlanNum > 0";
+				Db.NonQ(command);
 				//patplan.PlanNum -- patplan.InsSubNum
 				command="UPDATE patplan SET InsSubNum = (SELECT InsSubNum FROM inssub WHERE inssub.PlanNum=patplan.PlanNum) WHERE PlanNum > 0";
 				Db.NonQ(command);
-				//payplan.PlanNum -- claim.InsSubNum
+				//payplan.PlanNum -- payplan.InsSubNum
 				command="UPDATE payplan SET InsSubNum = (SELECT InsSubNum FROM inssub WHERE inssub.PlanNum=payplan.PlanNum) WHERE PlanNum > 0";
 				Db.NonQ(command);
 				//command="ALTER TABLE insplan DROP Subscriber,DateEffective,DateTerm,ReleaseInfo,AssignBen,SubscriberID,BenefitNotes,SubscNote";
 				//Db.NonQ(command);
 				//todo: implement above lines.
 				//todo: any place that PlanNum is set, set InsSubNum
-				//todo: move payplan, and patplan to crud.
-
+				//todo: run crud gen to rebuild InsPlanCrud.
+				//todo: move etrans to crud.
+				//todo: if plans have same TrojanId, combine them.
+				//todo: reports
 
 
 

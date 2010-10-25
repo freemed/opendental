@@ -1133,8 +1133,8 @@ namespace OpenDental {
 			selectedPlan1=FormIP.SelectedPlan.Copy();
 			//Non-synched fields:
 			//selectedPlan1.SubscriberID=textSubscriberID.Text;//later
-			selectedPlan1.DateEffective=DateTime.MinValue;
-			selectedPlan1.DateTerm=DateTime.MinValue;
+			//selectedPlan1.DateEffective=DateTime.MinValue;
+			//selectedPlan1.DateTerm=DateTime.MinValue;
 			//PlanCur.ReleaseInfo=checkRelease.Checked;
 			//PlanCur.AssignBen=checkAssign.Checked;
 			//PlanCur.SubscNote=textSubscNote.Text;
@@ -1157,8 +1157,8 @@ namespace OpenDental {
 			selectedPlan2=FormIP.SelectedPlan.Copy();
 			//Non-synched fields:
 			//selectedPlan2.SubscriberID=textSubscriberID.Text;//later
-			selectedPlan2.DateEffective=DateTime.MinValue;
-			selectedPlan2.DateTerm=DateTime.MinValue;
+			//selectedPlan2.DateEffective=DateTime.MinValue;
+			//selectedPlan2.DateTerm=DateTime.MinValue;
 			//PlanCur.ReleaseInfo=checkRelease.Checked;
 			//PlanCur.AssignBen=checkAssign.Checked;
 			//PlanCur.SubscNote=textSubscNote.Text;
@@ -1499,6 +1499,8 @@ namespace OpenDental {
 				}
 			}
 			//Insurance------------------------------------------------------------------------------------------------------------
+			InsSub sub1=null;
+			InsSub sub2=null;
 			if(selectedPlan1!=null){
 				//validate the ins fields.  If they don't match perfectly, then set it to null
 				if(Employers.GetName(selectedPlan1.EmployerNum)!=textEmployer1.Text
@@ -1546,9 +1548,6 @@ namespace OpenDental {
 					selectedPlan1.CarrierNum=selectedCarrier1.CarrierNum;
 					selectedPlan1.GroupName=textGroupName1.Text;
 					selectedPlan1.GroupNum=textGroupNum1.Text;
-					selectedPlan1.ReleaseInfo=true;
-					selectedPlan1.AssignBen=true;
-					//selectedPlan1.DedBeforePerc=PrefC.GetBool(PrefName.DeductibleBeforePercentAsDefault");
 					selectedPlan1.PlanType="";
 					InsPlans.Insert(selectedPlan1);
 					Benefit ben;
@@ -1566,31 +1565,29 @@ namespace OpenDental {
 						Benefits.Insert(ben);
 					}
 				}
-				else{
-					InsPlans.Insert(selectedPlan1);//to get a different PlanNum
-					List<Benefit> benefitList=Benefits.RefreshForAll(selectedPlan1);
-					for(int i=0;i<benefitList.Count;i++){
-						benefitList[i].PlanNum=selectedPlan1.PlanNum;
-						Benefits.Insert(benefitList[i]);
-					}
-				}
+				sub1=new InsSub();
+				sub1.PlanNum=selectedPlan1.PlanNum;
+				sub1.AssignBen=true;
+				sub1.ReleaseInfo=true;
+				sub1.DateEffective=DateTime.MinValue;
+				sub1.DateTerm=DateTime.MinValue;
 				if(comboSubscriber1.SelectedIndex==1){
-					selectedPlan1.Subscriber=guar.PatNum;
+					sub1.Subscriber=guar.PatNum;
 				}
 				if(comboSubscriber1.SelectedIndex==2){
-					selectedPlan1.Subscriber=pat2.PatNum;
+					sub1.Subscriber=pat2.PatNum;
 				}
 				if(comboSubscriber1.SelectedIndex==3){
-					selectedPlan1.Subscriber=pat3.PatNum;
+					sub1.Subscriber=pat3.PatNum;
 				}
 				if(comboSubscriber1.SelectedIndex==4){
-					selectedPlan1.Subscriber=pat4.PatNum;
+					sub1.Subscriber=pat4.PatNum;
 				}
 				if(comboSubscriber1.SelectedIndex==5){
-					selectedPlan1.Subscriber=pat5.PatNum;
+					sub1.Subscriber=pat5.PatNum;
 				}
-				selectedPlan1.SubscriberID=textSubscriberID1.Text;
-				InsPlans.Update(selectedPlan1);
+				sub1.SubscriberID=textSubscriberID1.Text;
+				InsSubs.Insert(sub1);
 			}
 			if(insComplete2){
 				if(selectedCarrier2==null){
@@ -1604,9 +1601,6 @@ namespace OpenDental {
 					selectedPlan2.CarrierNum=selectedCarrier2.CarrierNum;
 					selectedPlan2.GroupName=textGroupName2.Text;
 					selectedPlan2.GroupNum=textGroupNum2.Text;
-					selectedPlan2.ReleaseInfo=true;
-					selectedPlan2.AssignBen=true;
-					//selectedPlan2.DedBeforePerc=PrefC.GetBool(PrefName.DeductibleBeforePercentAsDefault");
 					selectedPlan2.PlanType="";
 					InsPlans.Insert(selectedPlan2);
 					Benefit ben;
@@ -1624,31 +1618,29 @@ namespace OpenDental {
 						Benefits.Insert(ben);
 					}
 				}
-				else{
-					InsPlans.Insert(selectedPlan2);//to get a different PlanNum
-					List<Benefit> benefitList=Benefits.RefreshForAll(selectedPlan2);
-					for(int i=0;i<benefitList.Count;i++){
-						benefitList[i].PlanNum=selectedPlan2.PlanNum;
-						Benefits.Insert(benefitList[i]);
-					}
-				}
+				sub2=new InsSub();
+				sub2.PlanNum=selectedPlan2.PlanNum;
+				sub2.AssignBen=true;
+				sub2.ReleaseInfo=true;
+				sub2.DateEffective=DateTime.MinValue;
+				sub2.DateTerm=DateTime.MinValue;
 				if(comboSubscriber2.SelectedIndex==1){
-					selectedPlan2.Subscriber=guar.PatNum;
+					sub2.Subscriber=guar.PatNum;
 				}
 				if(comboSubscriber2.SelectedIndex==2){
-					selectedPlan2.Subscriber=pat2.PatNum;
+					sub2.Subscriber=pat2.PatNum;
 				}
 				if(comboSubscriber2.SelectedIndex==3){
-					selectedPlan2.Subscriber=pat3.PatNum;
+					sub2.Subscriber=pat3.PatNum;
 				}
 				if(comboSubscriber2.SelectedIndex==4){
-					selectedPlan2.Subscriber=pat4.PatNum;
+					sub2.Subscriber=pat4.PatNum;
 				}
 				if(comboSubscriber2.SelectedIndex==5){
-					selectedPlan2.Subscriber=pat5.PatNum;
+					sub2.Subscriber=pat5.PatNum;
 				}
-				selectedPlan2.SubscriberID=textSubscriberID2.Text;
-				InsPlans.Update(selectedPlan2);
+				sub2.SubscriberID=textSubscriberID2.Text;
+				InsSubs.Insert(sub2);
 			}
 			PatPlan patplan;
 			//attach insurance to subscriber--------------------------------------------------------------------------------
@@ -1663,6 +1655,7 @@ namespace OpenDental {
 				}
 				patplan.PatNum=guar.PatNum;
 				patplan.PlanNum=selectedPlan1.PlanNum;
+				patplan.InsSubNum=sub1.InsSubNum;
 				if(comboSubscriber1.SelectedIndex==1){
 					patplan.Relationship=Relat.Self;
 				}
@@ -1688,6 +1681,7 @@ namespace OpenDental {
 				}
 				patplan.PatNum=guar.PatNum;
 				patplan.PlanNum=selectedPlan2.PlanNum;
+				patplan.InsSubNum=sub2.InsSubNum;
 				if(comboSubscriber2.SelectedIndex==1){
 					patplan.Relationship=Relat.Self;
 				}
@@ -1711,6 +1705,7 @@ namespace OpenDental {
 				}
 				patplan.PatNum=pat2.PatNum;
 				patplan.PlanNum=selectedPlan1.PlanNum;
+				patplan.InsSubNum=sub1.InsSubNum;
 				if(comboSubscriber1.SelectedIndex==2){
 					patplan.Relationship=Relat.Self;
 				}
@@ -1736,6 +1731,7 @@ namespace OpenDental {
 				}
 				patplan.PatNum=pat2.PatNum;
 				patplan.PlanNum=selectedPlan2.PlanNum;
+				patplan.InsSubNum=sub2.InsSubNum;
 				if(comboSubscriber2.SelectedIndex==2){
 					patplan.Relationship=Relat.Self;
 				}
@@ -1753,6 +1749,7 @@ namespace OpenDental {
 				patplan.Ordinal=1;
 				patplan.PatNum=pat3.PatNum;
 				patplan.PlanNum=selectedPlan1.PlanNum;
+				patplan.InsSubNum=sub1.InsSubNum;
 				patplan.Relationship=Relat.Child;
 				PatPlans.Insert(patplan);
 			}
@@ -1767,6 +1764,7 @@ namespace OpenDental {
 				}
 				patplan.PatNum=pat3.PatNum;
 				patplan.PlanNum=selectedPlan2.PlanNum;
+				patplan.InsSubNum=sub2.InsSubNum;
 				patplan.Relationship=Relat.Child;
 				PatPlans.Insert(patplan);
 			}
@@ -1776,6 +1774,7 @@ namespace OpenDental {
 				patplan.Ordinal=1;
 				patplan.PatNum=pat4.PatNum;
 				patplan.PlanNum=selectedPlan1.PlanNum;
+				patplan.InsSubNum=sub1.InsSubNum;
 				patplan.Relationship=Relat.Child;
 				PatPlans.Insert(patplan);
 			}
@@ -1790,6 +1789,7 @@ namespace OpenDental {
 				}
 				patplan.PatNum=pat4.PatNum;
 				patplan.PlanNum=selectedPlan2.PlanNum;
+				patplan.InsSubNum=sub2.InsSubNum;
 				patplan.Relationship=Relat.Child;
 				PatPlans.Insert(patplan);
 			}
@@ -1799,6 +1799,7 @@ namespace OpenDental {
 				patplan.Ordinal=1;
 				patplan.PatNum=pat5.PatNum;
 				patplan.PlanNum=selectedPlan1.PlanNum;
+				patplan.InsSubNum=sub1.InsSubNum;
 				patplan.Relationship=Relat.Child;
 				PatPlans.Insert(patplan);
 			}
@@ -1813,6 +1814,7 @@ namespace OpenDental {
 				}
 				patplan.PatNum=pat5.PatNum;
 				patplan.PlanNum=selectedPlan2.PlanNum;
+				patplan.InsSubNum=sub2.InsSubNum;
 				patplan.Relationship=Relat.Child;
 				PatPlans.Insert(patplan);
 			}

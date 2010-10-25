@@ -130,7 +130,8 @@ namespace OpenDental {
 			InsPlan priplan=null;
 			Family fam=Patients.GetFamily(AptCur.PatNum);
 			Patient pat=fam.GetPatient(AptCur.PatNum);
-			List<InsPlan> planList=InsPlans.RefreshForFam(fam);
+			List<InsSub> subList=InsSubs.RefreshForFam(fam);
+			List<InsPlan> planList=InsPlans.RefreshForSubList(subList);
 			List<PatPlan> patPlanList=PatPlans.Refresh(pat.PatNum);
 			if(patPlanList.Count>0) {
 				priplan=InsPlans.GetPlan(patPlanList[0].PlanNum,planList);

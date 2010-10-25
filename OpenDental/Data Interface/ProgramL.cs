@@ -127,14 +127,14 @@ namespace OpenDental{
 				Progeny.SendData(prog,pat);
 				return;
 			}
-			else if(prog.ProgName==ProgramName.PT.ToString()) {
-				PaperlessTechnology.SendData(prog,pat,false);
-				return;
-			}
-			else if(prog.ProgName==ProgramName.PTupdate.ToString()) {
-				PaperlessTechnology.SendData(prog,pat,true);
-				return;
-			}
+			//else if(prog.ProgName==ProgramName.PT.ToString()) {
+			//	PaperlessTechnology.SendData(prog,pat,false);
+			//	return;
+			//}
+			//else if(prog.ProgName==ProgramName.PTupdate.ToString()) {
+			//	PaperlessTechnology.SendData(prog,pat,true);
+			//	return;
+			//}
 #if !DISABLE_WINDOWS_BRIDGES
 			else if(prog.ProgName==ProgramName.Schick.ToString()) {
 				Schick.SendData(prog,pat);

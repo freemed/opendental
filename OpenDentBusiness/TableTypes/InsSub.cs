@@ -23,7 +23,7 @@ namespace OpenDentBusiness{
 		public bool AssignBen;
 		///<summary>Usually SSN, but can also be changed by user.  No dashes. Not allowed to be blank.</summary>
 		public string SubscriberID;
-		///<summary>User doesn't usually put these in.  Only used when automatically requesting benefits, such as with Trojan.  All the benefits get stored here in text form for later reference.  Not at plan level because might be specific to subscriber.  If blank, we might add a function to try to find any benefitNote for a similar plan.</summary>
+		///<summary>User doesn't usually put these in.  Only used when automatically requesting benefits, such as with Trojan.  All the benefits get stored here in text form for later reference.  Not at plan level because might be specific to subscriber.  If blank, we try to display a benefitNote for another subscriber to the plan.</summary>
 		public string BenefitNotes;
 		///<summary>Use to store any other info that affects coverage.</summary>
 		public string SubscNote;

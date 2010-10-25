@@ -124,7 +124,7 @@ namespace OpenDental{
 			FillGrid();
 		}
 
-		///<summary>Only gets run once.</summary>
+		///<summary></summary>
 		private void FillGrid(){
 			Cursor=Cursors.WaitCursor;
 			//ListAll: Set externally before loading.
@@ -148,11 +148,7 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn("Group Name",90);
 			gridMain.Columns.Add(col);
-			//col=new ODGridColumn("noE",35);
-			//gridMain.Columns.Add(col);
-			//col=new ODGridColumn("ElectID",45);
-			//gridMain.Columns.Add(col);
-			col=new ODGridColumn("Plans",40);
+			col=new ODGridColumn("Subs",40);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn("Plan Note",180);
 			gridMain.Columns.Add(col);
@@ -172,12 +168,7 @@ namespace OpenDental{
 				row.Cells.Add(carrier.Zip);
 				row.Cells.Add(ListAll[i].GroupNum);
 				row.Cells.Add(ListAll[i].GroupName);
-				//if(carrier.NoSendElect)
-				//	row.Cells.Add("X");
-				//else
-				//	row.Cells.Add("");
-				//row.Cells.Add(carrier.ElectID);
-				row.Cells.Add(ListAll[i].NumberPlans.ToString());
+				row.Cells.Add(ListAll[i].NumberSubscribers.ToString());
 				row.Cells.Add(ListAll[i].PlanNote);
 				gridMain.Rows.Add(row);
 			}
@@ -188,10 +179,13 @@ namespace OpenDental{
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e){
 			InsPlan PlanCur=ListAll[e.Row].Copy();
-			FormInsPlan FormIP=new FormInsPlan(PlanCur,null);
-			FormIP.IsForAll=true;
-			FormIP.IsReadOnly=true;
-			FormIP.ShowDialog();//just for viewing
+			FormInsPlan FormIP=new FormInsPlan(PlanCur,null,null);
+			//FormIP.IsForAll=true;
+			//FormIP.IsReadOnly=true;
+			FormIP.ShowDialog();
+			if(FormIP.DialogResult==DialogResult.OK) {
+				FillGrid();
+			}
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {

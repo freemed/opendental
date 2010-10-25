@@ -308,7 +308,8 @@ namespace TestCanada {
 
 		private static Claim CreateClaim(Patient pat,List<Procedure> procList,long provTreat) {
 			Family fam=Patients.GetFamily(pat.PatNum);
-			List<InsPlan> planList=InsPlans.RefreshForFam(fam);
+			List<InsSub> subList=InsSubs.RefreshForFam(fam);
+			List<InsPlan> planList=InsPlans.RefreshForSubList(subList);
 			List<PatPlan> patPlanList=PatPlans.Refresh(pat.PatNum);
 			List<Benefit> benefitList=Benefits.Refresh(patPlanList);
 			List<ClaimProc> claimProcList=ClaimProcs.Refresh(pat.PatNum);
@@ -389,63 +390,63 @@ namespace TestCanada {
 
 		public static string RunOne(bool showForms) {
 			Claim claim=Claims.GetClaim(ClaimNums[0]);
-			InsPlanTC.SetAssignBen(claim.PlanNum,false);
+			InsSubTC.SetAssignBen(false,claim.InsSubNum);
 			CarrierTC.SetEncryptionMethod(claim.PlanNum,2);
 			return Run(1,"C","11",claim,showForms);
 		}
 
 		public static string RunTwo(bool showForms) {
 			Claim claim=Claims.GetClaim(ClaimNums[1]);
-			InsPlanTC.SetAssignBen(claim.PlanNum,true);
+			InsSubTC.SetAssignBen(true,claim.InsSubNum);
 			CarrierTC.SetEncryptionMethod(claim.PlanNum,1);
 			return Run(2,"","21",claim,showForms);
 		}
 
 		public static string RunThree(bool showForms) {
 			Claim claim=Claims.GetClaim(ClaimNums[2]);
-			InsPlanTC.SetAssignBen(claim.PlanNum,true);
+			InsSubTC.SetAssignBen(true,claim.InsSubNum);
 			CarrierTC.SetEncryptionMethod(claim.PlanNum,2);//Even though the test says 1, the example message uses 2
 			return Run(3,"","21",claim,showForms);//expecting EOB
 		}
 
 		public static string RunFour(bool showForms) {
 			Claim claim=Claims.GetClaim(ClaimNums[3]);
-			InsPlanTC.SetAssignBen(claim.PlanNum,false);
+			InsSubTC.SetAssignBen(false,claim.InsSubNum);
 			CarrierTC.SetEncryptionMethod(claim.PlanNum,2);
 			return Run(4,"","21",claim,showForms);//expecting EOB
 		}
 
 		public static string RunFive(bool showForms) {
 			Claim claim=Claims.GetClaim(ClaimNums[4]);
-			InsPlanTC.SetAssignBen(claim.PlanNum,true);
+			InsSubTC.SetAssignBen(true,claim.InsSubNum);
 			CarrierTC.SetEncryptionMethod(claim.PlanNum,2);
 			return Run(5,"C","11",claim,showForms);
 		}
 
 		public static string RunSix(bool showForms) {
 			Claim claim=Claims.GetClaim(ClaimNums[5]);
-			InsPlanTC.SetAssignBen(claim.PlanNum,false);
+			InsSubTC.SetAssignBen(false,claim.InsSubNum);
 			CarrierTC.SetEncryptionMethod(claim.PlanNum,1);
 			return Run(6,"R","11",claim,showForms);
 		}
 
 		public static string RunSeven(bool showForms) {
 			Claim claim=Claims.GetClaim(ClaimNums[6]);
-			InsPlanTC.SetAssignBen(claim.PlanNum,false);
+			InsSubTC.SetAssignBen(false,claim.InsSubNum);
 			CarrierTC.SetEncryptionMethod(claim.PlanNum,1);
 			return Run(7,"","21",claim,showForms);
 		}
 
 		public static string RunEight(bool showForms) {
 			Claim claim=Claims.GetClaim(ClaimNums[7]);
-			InsPlanTC.SetAssignBen(claim.PlanNum,true);
+			InsSubTC.SetAssignBen(true,claim.InsSubNum);
 			CarrierTC.SetEncryptionMethod(claim.PlanNum,2);
 			return Run(8,"","21",claim,showForms);
 		}
 
 		public static string RunNine(bool showForms) {
 			Claim claim=Claims.GetClaim(ClaimNums[8]);
-			InsPlanTC.SetAssignBen(claim.PlanNum,false);
+			InsSubTC.SetAssignBen(false,claim.InsSubNum);
 			CarrierTC.SetEncryptionMethod(claim.PlanNum,1);
 			return Run(9,"","21",claim,showForms);//test the result of the COB
 		}

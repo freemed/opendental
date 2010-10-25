@@ -29,6 +29,8 @@ namespace OpenDental{
 		private OpenDental.UI.Button butNone;
 		private long PatNum;
 		public bool ShowNoneButton;
+		private List<InsSub> SubList;
+		public InsSub SelectedSub;
 
 		///<summary></summary>
 		public FormInsPlanSelect(long patNum) {
@@ -170,7 +172,8 @@ namespace OpenDental{
 			//usage: eg. from coverage.  Since can be totally new subscriber, get all plans for them.
 			FamCur=Patients.GetFamily(PatNum);
 			PatCur=FamCur.GetPatient(PatNum);
-      PlanList=InsPlans.RefreshForFam(FamCur);
+			SubList=InsSubs.RefreshForFam(FamCur);
+			PlanList=InsPlans.RefreshForSubList(SubList);
 			FillPlanData();
 			if(!ShowNoneButton) {
 				butNone.Visible=false;
@@ -196,22 +199,24 @@ namespace OpenDental{
 			gridMain.Rows.Clear();
 			ODGridRow row;
 			PatPlan[] patPlanArray;
-			for(int i=0;i<PlanList.Count;i++) {
+			InsPlan plan;
+			for(int i=0;i<SubList.Count;i++) {
 				row=new ODGridRow();
 				//row.Cells.Add((i+1).ToString());
-				row.Cells.Add(FamCur.GetNameInFamLF(PlanList[i].Subscriber));
-				row.Cells.Add(Carriers.GetName(PlanList[i].CarrierNum));
-				if(PlanList[i].DateEffective.Year<1880)
+				row.Cells.Add(FamCur.GetNameInFamLF(SubList[i].Subscriber));
+				plan=InsPlans.GetPlan(SubList[i].PlanNum,PlanList);
+				row.Cells.Add(Carriers.GetName(plan.CarrierNum));
+				if(SubList[i].DateEffective.Year<1880)
 					row.Cells.Add("");
 				else
-					row.Cells.Add(PlanList[i].DateEffective.ToString("d"));
-				if(PlanList[i].DateTerm.Year<1880) {
+					row.Cells.Add(SubList[i].DateEffective.ToString("d"));
+				if(SubList[i].DateTerm.Year<1880) {
 					row.Cells.Add("");
 				}
 				else {
-					row.Cells.Add(PlanList[i].DateTerm.ToString("d"));
+					row.Cells.Add(SubList[i].DateTerm.ToString("d"));
 				}
-				patPlanArray=PatPlans.GetByPlanNum(PlanList[i].PlanNum);
+				patPlanArray=PatPlans.GetByPlanNum(SubList[i].PlanNum);
 				row.Cells.Add(patPlanArray.Length.ToString());
 				gridMain.Rows.Add(row);
 			}
@@ -230,7 +235,8 @@ namespace OpenDental{
 			if(ViewRelat) {
 				PatRelat=(Relat)listRelat.SelectedIndex;
 			}
-			SelectedPlan=PlanList[e.Row];
+			SelectedSub=SubList[e.Row];
+			SelectedPlan=InsPlans.GetPlan(SubList[e.Row].PlanNum,PlanList);
 			DialogResult=DialogResult.OK;
 		}
 
@@ -251,7 +257,8 @@ namespace OpenDental{
 			if(ViewRelat){
 				PatRelat=(Relat)listRelat.SelectedIndex;
 			}
-			SelectedPlan=PlanList[gridMain.GetSelectedIndex()];
+			SelectedSub=SubList[gridMain.GetSelectedIndex()];
+			SelectedPlan=InsPlans.GetPlan(SubList[gridMain.GetSelectedIndex()].PlanNum,PlanList);
       DialogResult=DialogResult.OK;		
 		}
 

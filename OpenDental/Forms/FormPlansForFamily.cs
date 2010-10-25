@@ -21,7 +21,8 @@ namespace OpenDental{
 		private System.ComponentModel.Container components = null;
 		///<summary>Set this externally.</summary>
 		public Family FamCur;
-		private List <InsPlan> PlanList;
+		private List<InsPlan> PlanList;
+		private List<InsSub> SubList;
 
 		///<summary></summary>
 		public FormPlansForFamily()
@@ -69,7 +70,7 @@ namespace OpenDental{
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(475,252);
+			this.butClose.Location = new System.Drawing.Point(475,257);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75,26);
 			this.butClose.TabIndex = 0;
@@ -82,7 +83,7 @@ namespace OpenDental{
 			this.gridMain.Location = new System.Drawing.Point(34,57);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(516,157);
+			this.gridMain.Size = new System.Drawing.Size(516,181);
 			this.gridMain.TabIndex = 1;
 			this.gridMain.Title = "Insurance Plans for Family";
 			this.gridMain.TranslationName = "TableInsPlans";
@@ -123,7 +124,8 @@ namespace OpenDental{
 		}
 
 		private void FillGrid(){
-			PlanList=InsPlans.RefreshForFam(FamCur);
+			SubList=InsSubs.RefreshForFam(FamCur);
+			PlanList=InsPlans.RefreshForSubList(SubList);
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col;
@@ -142,22 +144,23 @@ namespace OpenDental{
 			gridMain.Rows.Clear();
 			ODGridRow row;
 			PatPlan[] patPlanArray;
-			for(int i=0;i<PlanList.Count;i++){
+			InsPlan plan;
+			for(int i=0;i<SubList.Count;i++){
+				plan=InsPlans.GetPlan(SubList[i].PlanNum,PlanList);
 				row=new ODGridRow();
-				//row.Cells.Add((i+1).ToString());
-				row.Cells.Add(FamCur.GetNameInFamLF(PlanList[i].Subscriber));
-				row.Cells.Add(Carriers.GetName(PlanList[i].CarrierNum));
-				if(PlanList[i].DateEffective.Year<1880)
+				row.Cells.Add(FamCur.GetNameInFamLF(SubList[i].Subscriber));
+				row.Cells.Add(Carriers.GetName(plan.CarrierNum));
+				if(SubList[i].DateEffective.Year<1880)
 					row.Cells.Add("");
 				else
-					row.Cells.Add(PlanList[i].DateEffective.ToString("d"));
-				if(PlanList[i].DateTerm.Year<1880) {
+					row.Cells.Add(SubList[i].DateEffective.ToString("d"));
+				if(SubList[i].DateTerm.Year<1880) {
 					row.Cells.Add("");
 				}
 				else {
-					row.Cells.Add(PlanList[i].DateTerm.ToString("d"));
+					row.Cells.Add(SubList[i].DateTerm.ToString("d"));
 				}
-				patPlanArray=PatPlans.GetByPlanNum(PlanList[i].PlanNum);
+				patPlanArray=PatPlans.GetByPlanNum(SubList[i].PlanNum);
 				row.Cells.Add(patPlanArray.Length.ToString());
 				gridMain.Rows.Add(row);
 			}
@@ -165,7 +168,8 @@ namespace OpenDental{
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			FormInsPlan FormIP=new FormInsPlan(PlanList[e.Row],null);
+			InsPlan plan=InsPlans.GetPlan(SubList[e.Row].PlanNum,PlanList);
+			FormInsPlan FormIP=new FormInsPlan(plan,null,SubList[e.Row]);
 			FormIP.ShowDialog();
 			FillGrid();
 		}

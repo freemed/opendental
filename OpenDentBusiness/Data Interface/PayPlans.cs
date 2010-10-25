@@ -22,98 +22,37 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<PayPlan>(MethodBase.GetCurrentMethod(),payPlanNum);
 			}
-			string command="SELECT * FROM payplan"
-				+" WHERE PayPlanNum = "+POut.Long(payPlanNum);
-			return RefreshAndFill(Db.GetTable(command))[0];
+			return Crud.PayPlanCrud.SelectOne(payPlanNum);
 		}
 
-		///<summary>Refreshes the list for the specified guarantor, and then determines if there are any valid plans with that patient as the guarantor.  If more than one valid payment plan, displays list to select from.  If any valid plans, then it returns that plan, else returns null.</summary>
-		public static List<PayPlan> GetValidPlansNoIns(long guarNum) {//,bool isIns){
+		///<summary>Determines if there are any valid plans with that patient as the guarantor.</summary>
+		public static List<PayPlan> GetValidPlansNoIns(long guarNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<PayPlan>>(MethodBase.GetCurrentMethod(),guarNum);
 			}
 			string command="SELECT * FROM payplan"
-				+" WHERE Guarantor = "+POut.Long(guarNum);
-			//if(isIns){
-			//	command+=" AND PlanNum != 0";
-			//}
-			//else{
-				command+=" AND PlanNum = 0";
-			//}
-			command+=" ORDER BY payplandate";
-			return RefreshAndFill(Db.GetTable(command));
-		}
-
-		private static List<PayPlan> RefreshAndFill(DataTable table){
-			//No need to check RemotingRole; no call to db.
-			List<PayPlan> retVal=new List<PayPlan>();
-			//PayPlan[] List=new PayPlan[table.Rows.Count];
-			PayPlan payplan;
-			for(int i=0;i<table.Rows.Count;i++) {
-				payplan=new PayPlan();
-				payplan.PayPlanNum    = PIn.Long   (table.Rows[i][0].ToString());
-				payplan.PatNum        = PIn.Long   (table.Rows[i][1].ToString());
-				payplan.Guarantor     = PIn.Long   (table.Rows[i][2].ToString());
-				payplan.PayPlanDate   = PIn.Date  (table.Rows[i][3].ToString());
-				payplan.APR           = PIn.Double(table.Rows[i][4].ToString());
-				payplan.Note          = PIn.String(table.Rows[i][5].ToString());
-				payplan.PlanNum       = PIn.Long   (table.Rows[i][6].ToString());
-				payplan.CompletedAmt  = PIn.Double(table.Rows[i][7].ToString());
-				retVal.Add(payplan);
-			}
-			return retVal;
+				+" WHERE Guarantor = "+POut.Long(guarNum)
+				+" AND PlanNum = 0"
+				+" ORDER BY payplandate";
+			return Crud.PayPlanCrud.SelectMany(command);
 		}
 
 		///<summary></summary>
-		public static void Update(PayPlan plan){
+		public static long Insert(PayPlan payPlan){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
+				payPlan.PayPlanNum=Meth.GetLong(MethodBase.GetCurrentMethod(),payPlan);
+				return payPlan.PayPlanNum;
+			}
+			return Crud.PayPlanCrud.Insert(payPlan);
+		}
+
+		///<summary></summary>
+		public static void Update(PayPlan payPlan) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),plan);
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),payPlan);
 				return;
 			}
-			string command="UPDATE payplan SET " 
-				+"PatNum = '"         +POut.Long   (plan.PatNum)+"'"
-				+",Guarantor = '"     +POut.Long   (plan.Guarantor)+"'"
-				+",PayPlanDate = "    +POut.Date  (plan.PayPlanDate)
-				+",APR = '"           +POut.Double(plan.APR)+"'"
-				+",Note = '"          +POut.String(plan.Note)+"'"
-				+",PlanNum = '"       +POut.Long   (plan.PlanNum)+"'"
-				+",CompletedAmt = '"  +POut.Double(plan.CompletedAmt)+"'"
-				+" WHERE PayPlanNum = '" +POut.Long(plan.PayPlanNum)+"'";
- 			Db.NonQ(command);
-		}
-
-		///<summary></summary>
-		public static long Insert(PayPlan plan) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				plan.PayPlanNum=Meth.GetLong(MethodBase.GetCurrentMethod(),plan);
-				return plan.PayPlanNum;
-			}
-			if(PrefC.RandomKeys){
-				plan.PayPlanNum=ReplicationServers.GetKey("payplan","PayPlanNum");
-			}
-			string command="INSERT INTO payplan (";
-			if(PrefC.RandomKeys){
-				command+="PayPlanNum,";
-			}
-			command+="PatNum,Guarantor,PayPlanDate,APR,Note,PlanNum,CompletedAmt) VALUES(";
-			if(PrefC.RandomKeys){
-				command+="'"+POut.Long(plan.PayPlanNum)+"', ";
-			}
-			command+=
-				 "'"+POut.Long   (plan.PatNum)+"', "
-				+"'"+POut.Long   (plan.Guarantor)+"', "
-				+POut.Date  (plan.PayPlanDate)+", "
-				+"'"+POut.Double(plan.APR)+"', "
-				+"'"+POut.String(plan.Note)+"', "
-				+"'"+POut.Long   (plan.PlanNum)+"', "
-				+"'"+POut.Double(plan.CompletedAmt)+"')";
-			if(PrefC.RandomKeys){
-				Db.NonQ(command);
-			}
-			else{
- 				plan.PayPlanNum=Db.NonQ(command,true);
-			}
-			return plan.PayPlanNum;
+			Crud.PayPlanCrud.Update(payPlan);
 		}
 
 		///<summary>Called from FormPayPlan.  Also deletes all attached payplancharges.  Throws exception if there are any paysplits attached.</summary>

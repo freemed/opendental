@@ -844,7 +844,8 @@ namespace OpenDental{
 			if(patNum!=0){
 				FamCur=Patients.GetFamily(patNum);
 				PatCur=FamCur.GetPatient(patNum);
-				InsPlanList=InsPlans.RefreshForFam(FamCur);
+				List<InsSub> subList=InsSubs.RefreshForFam(FamCur);
+				InsPlanList=InsPlans.RefreshForSubList(subList);
 				PatPlanList=PatPlans.Refresh(patNum);
 				BenefitList=Benefits.Refresh(PatPlanList);
 				ClaimList=Claims.Refresh(PatCur.PatNum);

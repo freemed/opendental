@@ -79,6 +79,8 @@ namespace OpenDental.Eclaims {
 		Provider provBill;
 		InsPlan insplan;
 		InsPlan insplan2;
+		InsSub insSub;
+		InsSub insSub2;
 		List<ClaimProc> claimprocs;
 		List<PatPlan> patPlansForPatient;
 		List<Procedure> extracted;
@@ -146,16 +148,19 @@ namespace OpenDental.Eclaims {
 			if(claim==null){//for eligibility
 				provTreat=Providers.GetProv(Patients.GetProvNum(patient));
 				provBill=Providers.GetProv(Patients.GetProvNum(patient));
+				insSub=InsSubs.GetSub(etrans.InsSubNum,new List<InsSub>());
 				insplan=InsPlans.GetPlan(etrans.PlanNum,new List<InsPlan>());
 			}
 			else{
 				provTreat=Providers.GetProv(claim.ProvTreat);
 				provBill=Providers.GetProv(claim.ProvBill);
+				insSub=InsSubs.GetSub(claim.InsSubNum,new List<InsSub>());
 				insplan=InsPlans.GetPlan(claim.PlanNum,new List <InsPlan> ());
 				if(claim.PlanNum2>0){
 					secondaryCarrier=Carriers.GetCarrier(etrans.CarrierNum2);
+					insSub2=InsSubs.GetSub(claim.InsSubNum2,new List<InsSub>());
 					insplan2=InsPlans.GetPlan(claim.PlanNum2,new List <InsPlan> ());
-					subscriber2=Patients.GetPat(insplan2.Subscriber);
+					subscriber2=Patients.GetPat(insSub2.Subscriber);
 					if(secondaryCarrier==null || insplan2==null || subscriber2==null) {
 						throw new Exception(this.ToString()+".FormCCDPrint: failed to load secondary insurance info!");
 					}
@@ -170,13 +175,14 @@ namespace OpenDental.Eclaims {
 				}
 				if(clinicNum!=0){
 					clinic=Clinics.GetClinic(clinicNum);
-				}else if(!PrefC.GetBool(PrefName.EasyNoClinics) && Clinics.List.Length>0){
+				}
+				else if(!PrefC.GetBool(PrefName.EasyNoClinics) && Clinics.List.Length>0){
 					clinic=Clinics.List[0];
 				}
 			}
 			patPlansForPatient=PatPlans.Refresh(etrans.PatNum);
 			patPlanPri=PatPlans.GetFromList(patPlansForPatient,insplan.PlanNum);
-			subscriber=Patients.GetPat(insplan.Subscriber);
+			subscriber=Patients.GetPat(insSub.Subscriber);
 			if(subscriber.Language=="fr") {
 				isFrench=true;
 				culture=new CultureInfo("fr-CA");
@@ -634,7 +640,7 @@ namespace OpenDental.Eclaims {
 			x=doc.StartElement(verticalLine);
 			doc.HorizontalLine(g,breakLinePen,doc.bounds.Left,doc.bounds.Right,0);
 			doc.StartElement();
-			PrintProcedureListAck(g,GetPayableToString(insplan.AssignBen));
+			PrintProcedureListAck(g,GetPayableToString(insSub.AssignBen));
 			x=doc.StartElement();
 			doc.DrawString(g,isFrench?"C'est un rapport précis des services assurés et de tous les honoraires E. payable et OE.":
 				"This is an accurate statement of services performed and the total fee payable E. & OE.",x,0,standardSmall);
@@ -696,9 +702,9 @@ namespace OpenDental.Eclaims {
 			}
 			x=doc.StartElement();
 			doc.DrawString(g,isFrench?"NO DU TITULAIRE/CERTIFICAT:":"INSURANCE/CERTIFICATE NO:",x,0);
-			doc.DrawString(g,insplan.SubscriberID,leftMidCol,0);//Fields D01 and D11
+			doc.DrawString(g,insSub.SubscriberID,leftMidCol,0);//Fields D01 and D11
 			if(insplan2!=null) {
-				doc.DrawString(g,insplan2.SubscriberID,rightMidCol,0);//Fields E04 and E07
+				doc.DrawString(g,insSub2.SubscriberID,rightMidCol,0);//Fields E04 and E07
 			}
 			x=doc.StartElement();
 			doc.DrawString(g,isFrench?"EMPLOYEUR:":"EMPLOYER:",x,0);
@@ -977,9 +983,9 @@ namespace OpenDental.Eclaims {
 			}
 			x=doc.StartElement();
 			doc.DrawString(g,isFrench?"NO DU TITULAIRE/CERTIFICAT:":"INSURANCE/CERTIFICATE NO:",x,0);
-			doc.DrawString(g,insplan.SubscriberID,leftMidCol,0);//Fields D01 and D11
+			doc.DrawString(g,insSub.SubscriberID,leftMidCol,0);//Fields D01 and D11
 			if(insplan2!=null){
-				doc.DrawString(g,insplan2.SubscriberID,rightCol,0);//Fields E04 and E07
+				doc.DrawString(g,insSub2.SubscriberID,rightCol,0);//Fields E04 and E07
 			}
 			x=doc.StartElement();
 			doc.DrawString(g,isFrench?"SÉQUENCE:":"SEQUENCE:",x,0);
@@ -1585,7 +1591,7 @@ namespace OpenDental.Eclaims {
 			doc.HorizontalLine(g,breakLinePen,doc.bounds.Left,doc.bounds.Right,0);
 			x=doc.StartElement();
 			//Field F01 - Not visible in predetermination
-			PrintProcedureListAck(g,predetermination?"":GetPayableToString(insplan.AssignBen));
+			PrintProcedureListAck(g,predetermination?"":GetPayableToString(insSub.AssignBen));
 			if(!rejection){
 				x=doc.StartElement(verticalLine);
 				doc.DrawString(g,centralDisclaimer,x,0);
@@ -1722,7 +1728,7 @@ namespace OpenDental.Eclaims {
 			PrintCarrierClaimNo(g,x,0);
 			PrintTransactionDate(g,x+450,0);
 			x=doc.StartElement(verticalLine);
-			PrintProcedureListEOB(g,GetPayableToString(insplan.AssignBen));
+			PrintProcedureListEOB(g,GetPayableToString(insSub.AssignBen));
 			x=doc.StartElement(verticalLine);
 			PrintPaymentSummary(g);
 			x=doc.StartElement(verticalLine);
@@ -2040,10 +2046,10 @@ namespace OpenDental.Eclaims {
 
 		private SizeF PrintCertificateNo(Graphics g,float X,float Y,bool primary) {
 			if(primary){
-				text=insplan.SubscriberID;//Field C02
+				text=insSub.SubscriberID;//Field C02
 			}
 			else if(insplan2!=null) {
-				text=insplan2.SubscriberID;//Field E03
+				text=insSub2.SubscriberID;//Field E03
 			}
 			return doc.DrawField(g,isFrench?"NO DE CERTIFICAT":"CERTIFICATE NO",text,true,X,Y);
 			//TODO: For NIHB claims where SubscriberID=="", print the Band (Field C13) and Family (Field C14) numbers. (primary only?)

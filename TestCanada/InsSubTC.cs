@@ -7,16 +7,16 @@ using OpenDentBusiness;
 using OpenDental.Eclaims;
 
 namespace TestCanada {
-	public class InsPlanTC {
+	public class InsSubTC {
 		
 
-		public static void SetAssignBen(long planNum,bool assignBen) {
-			InsPlan plan=InsPlans.RefreshOne(planNum);
-			if(plan.AssignBen==assignBen){
+		public static void SetAssignBen(bool assignBen,long subNum) {
+			InsSub sub=InsSubs.GetOne(subNum);
+			if(sub.AssignBen==assignBen){
 				return;//no change needed
 			}
-			plan.AssignBen=assignBen;
-			InsPlans.Update(plan);
+			sub.AssignBen=assignBen;
+			InsSubs.Update(sub);
 		}
 
 		

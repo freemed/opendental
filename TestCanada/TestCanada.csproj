@@ -72,7 +72,7 @@
   <ItemGroup>
     <Compile Include="CarrierTC.cs" />
     <Compile Include="ClaimTC.cs" />
-    <Compile Include="InsPlanTC.cs" />
+    <Compile Include="InsSubTC.cs" />
     <Compile Include="PatPlanTC.cs" />
     <Compile Include="Eligibility.cs" />
     <Compile Include="ToothInitialTC.cs" />

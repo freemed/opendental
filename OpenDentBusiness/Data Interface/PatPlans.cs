@@ -7,45 +7,6 @@ using System.Reflection;
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class PatPlans {
-		/*
-		///<summary>Gets one PatPlan from the db.</summary>
-		public static PatPlan GetOne(long patPlanNum){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				return Meth.GetObject<PatPlan>(MethodBase.GetCurrentMethod(),patPlanNum);
-			}
-			return Crud.PatPlanCrud.SelectOne(patPlanNum);
-		}
-
-		///<summary></summary>
-		public static long Insert(PatPlan patPlan){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				patPlan.PatPlanNum=Meth.GetLong(MethodBase.GetCurrentMethod(),patPlan);
-				return patPlan.PatPlanNum;
-			}
-			return Crud.PatPlanCrud.Insert(patPlan);
-		}
-
-		///<summary></summary>
-		public static void Update(PatPlan patPlan){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),patPlan);
-				return;
-			}
-			Crud.PatPlanCrud.Update(patPlan);
-		}
-
-		///<summary></summary>
-		public static void Delete(long patPlanNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),patPlanNum);
-				return;
-			}
-			string command= "DELETE FROM patplan WHERE PatPlanNum = "+POut.Long(patPlanNum);
-			Db.NonQ(command);
-		}
-		*/
-
-
 		///<summary>Gets a list of all patplans for a given patient</summary>
 		public static List<PatPlan> Refresh(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
@@ -57,81 +18,24 @@ namespace OpenDentBusiness{
 			return Crud.PatPlanCrud.SelectMany(command);
 		}
 
-		private static List<PatPlan> RefreshAndFill(DataTable table){
-			//No need to check RemotingRole; no call to db.
-			PatPlan patplan;
-			List<PatPlan> retVal=new List<PatPlan>();
-			for(int i=0;i<table.Rows.Count;i++) {
-				patplan=new PatPlan();
-				patplan.PatPlanNum  = PIn.Long(table.Rows[i][0].ToString());
-				patplan.PatNum      = PIn.Long(table.Rows[i][1].ToString());
-				patplan.PlanNum     = PIn.Long(table.Rows[i][2].ToString());
-				patplan.Ordinal     = PIn.Byte(table.Rows[i][3].ToString());
-				patplan.IsPending   = PIn.Bool(table.Rows[i][4].ToString());
-				patplan.Relationship= (Relat)PIn.Long(table.Rows[i][5].ToString());
-				patplan.PatID       = PIn.String(table.Rows[i][6].ToString());
-				retVal.Add(patplan);
-			}
-			return retVal;
-		}
-	
 		///<summary></summary>
-		public static void Update(PatPlan p){
+		public static void Update(PatPlan patPlan) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),p);
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),patPlan);
 				return;
 			}
-			string command="UPDATE patplan SET " 
-				+"PatNum = '"       +POut.Long   (p.PatNum)+"'"
-				+",PlanNum = '"     +POut.Long   (p.PlanNum)+"'"
-				//+",Ordinal = '"     +POut.PInt   (Ordinal)+"'"//ordinal always set using SetOrdinal
-				+",IsPending = '"   +POut.Bool  (p.IsPending)+"'"
-				+",Relationship = '"+POut.Long   ((int)p.Relationship)+"'"
-				+",PatID = '"       +POut.String(p.PatID)+"'"
-				+" WHERE PatPlanNum = '" +POut.Long(p.PatPlanNum)+"'";
- 			Db.NonQ(command);
+			//ordinal was already set using SetOrdinal, but it's harmless to set it again.
+			Crud.PatPlanCrud.Update(patPlan);
 		}
 
 		///<summary></summary>
-		public static long Insert(PatPlan p) {
+		public static long Insert(PatPlan patPlan) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				p.PatPlanNum=Meth.GetLong(MethodBase.GetCurrentMethod(),p);
-				return p.PatPlanNum;
+				patPlan.PatPlanNum=Meth.GetLong(MethodBase.GetCurrentMethod(),patPlan);
+				return patPlan.PatPlanNum;
 			}
-			if(PrefC.RandomKeys){
-				p.PatPlanNum=ReplicationServers.GetKey("patplan","PatPlanNum");
-			}
-			string command="INSERT INTO patplan (";
-			if(PrefC.RandomKeys){
-				command+="PatPlanNum,";
-			}
-			command+="PatNum,PlanNum,Ordinal,IsPending,Relationship,PatID) VALUES(";
-			if(PrefC.RandomKeys){
-				command+="'"+POut.Long(p.PatPlanNum)+"', ";
-			}
-			command+=
-				 "'"+POut.Long   (p.PatNum)+"', "
-				+"'"+POut.Long   (p.PlanNum)+"', "
-				+"'"+POut.Long   (p.Ordinal)+"', "
-				+"'"+POut.Bool  (p.IsPending)+"', "
-				+"'"+POut.Long   ((int)p.Relationship)+"', "
-				+"'"+POut.String(p.PatID)+"')";
-			if(PrefC.RandomKeys){
-				Db.NonQ(command);
-			}
-			else{
- 				p.PatPlanNum=Db.NonQ(command,true);
-			}
-			return p.PatPlanNum;
+			return Crud.PatPlanCrud.Insert(patPlan);
 		}
-
-		/*  Do NOT use this.  Use PatPlans.Delete() instead.
-		///<summary></summary>
-		public void Delete(){
-			string command="DELETE FROM patplan WHERE PatPlanNum ="+POut.PInt(PatPlanNum);
-			DataConnection dcon=new DataConnection();
-			Db.NonQ(command);
-		}*/
 
 		///<summary>Supply a PatPlan list.  This function loops through the list and returns the plan num of the specified ordinal.  If ordinal not valid, then it returns 0.  The main purpose of this function is so we don't have to check the length of the list.</summary>
 		public static long GetPlanNum(List<PatPlan> list,int ordinal) {
@@ -139,6 +43,17 @@ namespace OpenDentBusiness{
 			for(int i=0;i<list.Count;i++){
 				if(list[i].Ordinal==ordinal){
 					return list[i].PlanNum;
+				}
+			}
+			return 0;
+		}
+
+		///<summary>Supply a PatPlan list.  This function loops through the list and returns the insSubNum of the specified ordinal.  If ordinal not valid, then it returns 0.  The main purpose of this function is so we don't have to check the length of the list.</summary>
+		public static long GetInsSubNum(List<PatPlan> list,int ordinal) {
+			//No need to check RemotingRole; no call to db.
+			for(int i=0;i<list.Count;i++) {
+				if(list[i].Ordinal==ordinal) {
+					return list[i].InsSubNum;
 				}
 			}
 			return 0;
@@ -187,16 +102,15 @@ namespace OpenDentBusiness{
 			return null;
 		}
 
-		///<summary>Sets the ordinal of the specified patPlan.  Rearranges the other patplans for the patient to keep the ordinal sequence contiguous.  Estimates must be recomputed after this.  FormInsPlan currently updates estimates every time it closes.</summary>
-		public static void SetOrdinal(long patPlanNum,int newOrdinal) {
+		///<summary>Sets the ordinal of the specified patPlan.  Rearranges the other patplans for the patient to keep the ordinal sequence contiguous.  Estimates must be recomputed after this.  FormInsPlan currently updates estimates every time it closes.  Only used in one place.  Returns the new ordinal.</summary>
+		public static int SetOrdinal(long patPlanNum,int newOrdinal) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),patPlanNum,newOrdinal);
-				return;
+				return Meth.GetInt(MethodBase.GetCurrentMethod(),patPlanNum,newOrdinal);
 			}
 			string command="SELECT PatNum FROM patplan WHERE PatPlanNum="+POut.Long(patPlanNum);
 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0){
-				return;
+				return 1;
 			}
 			long patNum=PIn.Long(table.Rows[0][0].ToString());
 			List<PatPlan> patPlans=Refresh(patNum);
@@ -223,6 +137,7 @@ namespace OpenDentBusiness{
 			command="UPDATE patplan SET Ordinal="+POut.Long(newOrdinal)
 				+" WHERE PatPlanNum="+POut.Long(patPlanNum);
 			Db.NonQ(command);
+			return newOrdinal;
 		}
 
 		///<summary>Loops through the supplied list to find the one patplan needed.</summary>
@@ -262,8 +177,7 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<PatPlan[]>(MethodBase.GetCurrentMethod(),planNum);
 			} 
 			string command="SELECT * FROM patplan WHERE PlanNum='"+POut.Long(planNum)+"'";
-			DataTable table=Db.GetTable(command);
-			return RefreshAndFill(table).ToArray();
+			return Crud.PatPlanCrud.SelectMany(command).ToArray();
 		}
 
 		///<summary>Will return null if none exists.</summary>
@@ -273,12 +187,7 @@ namespace OpenDentBusiness{
 			} 
 			string command="SELECT * FROM patplan WHERE PatNum="+POut.Long(patNum)
 				+" AND Ordinal="+POut.Long(ordinal);
-			DataTable table=Db.GetTable(command);
-			List<PatPlan> list=RefreshAndFill(table);
-			if(list.Count==0) {
-				return null;
-			}
-			return list[0];
+			return Crud.PatPlanCrud.SelectOne(command);
 		}
 
 		///<summary>Deletes the patplan with the specified patPlanNum.  Rearranges the other patplans for the patient to keep the ordinal sequence contiguous.  Then, recomputes all estimates for this patient because their coverage is now different.  Also sets patient.HasIns to the correct value.</summary>
@@ -315,7 +224,8 @@ namespace OpenDentBusiness{
 			List<ClaimProc> claimProcs=ClaimProcs.Refresh(patNum);
 			List<Procedure> procs=Procedures.Refresh(patNum);
 			patPlans=PatPlans.Refresh(patNum);
-			List<InsPlan> planList=InsPlans.RefreshForFam(fam);
+			List<InsSub> subList=InsSubs.RefreshForFam(fam);
+			List<InsPlan> planList=InsPlans.RefreshForSubList(subList);
 			List<Benefit> benList=Benefits.Refresh(patPlans);
 			Procedures.ComputeEstimatesForAll(patNum,claimProcs,procs,planList,patPlans,benList,pat.Age);
 			Patients.SetHasIns(patNum);

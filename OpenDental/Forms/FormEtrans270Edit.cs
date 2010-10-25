@@ -29,12 +29,14 @@ namespace OpenDental {
 		private bool headingPrinted;
 		private int pagesPrinted;
 		private int headingPrintH=0;
+		private long SubNum;
 
-		public FormEtrans270Edit(long patPlanNum,long planNum) {
+		public FormEtrans270Edit(long patPlanNum,long planNum,long subNum) {
 			InitializeComponent();
 			Lan.F(this);
 			PatPlanNum=patPlanNum;
 			PlanNum=planNum;
+			SubNum=subNum;
 		}
 
 		private void FormEtrans270Edit_Load(object sender,EventArgs e) {
@@ -286,8 +288,9 @@ namespace OpenDental {
 				text=Lan.g(this,"Electronic Benefits Response");
 				g.DrawString(text,headingFont,Brushes.Black,center-g.MeasureString(text,headingFont).Width/2,yPos);
 				yPos+=(int)g.MeasureString(text,headingFont).Height;
+				InsSub sub=InsSubs.GetSub(this.SubNum,new List<InsSub>());
 				InsPlan plan=InsPlans.GetPlan(this.PlanNum,new List<InsPlan>());
-				Patient subsc=Patients.GetPat(plan.Subscriber);
+				Patient subsc=Patients.GetPat(sub.Subscriber);
 				text=Lan.g(this,"Subscriber: ")+subsc.GetNameFL();
 				g.DrawString(text,subHeadingFont,Brushes.Black,center-g.MeasureString(text,subHeadingFont).Width/2,yPos);
 				yPos+=(int)g.MeasureString(text,subHeadingFont).Height;

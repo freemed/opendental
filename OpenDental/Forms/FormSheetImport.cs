@@ -31,6 +31,9 @@ namespace OpenDental {
 		private Carrier carrier1;
 		private Carrier carrier2;
 		private Dictionary<string,string> dictAcrobatFields;
+		private List<InsSub> subList;
+		private InsSub sub1;
+		private InsSub sub2;
 
 		public FormSheetImport() {
 			InitializeComponent();
@@ -122,28 +125,33 @@ namespace OpenDental {
 				}
 			}
 			patPlanList=PatPlans.Refresh(pat.PatNum);
-			planList=InsPlans.RefreshForFam(fam);
+			subList=InsSubs.RefreshForFam(fam);
+			planList=InsPlans.RefreshForSubList(subList);
 			if(patPlanList.Count==0) {
 				patPlan1=null;
 				plan1=null;
+				sub1=null;
 				ins1Relat=null;
 				carrier1=null;
 			}
 			else {
 				patPlan1=patPlanList[0];
 				plan1=InsPlans.GetPlan(patPlan1.PlanNum,planList);
+				sub1=InsSubs.GetSub(patPlan1.InsSubNum,subList);
 				ins1Relat=patPlan1.Relationship;
 				carrier1=Carriers.GetCarrier(plan1.CarrierNum);
 			}
 			if(patPlanList.Count<2) {
 				patPlan2=null;
 				plan2=null;
+				sub2=null;
 				ins2Relat=null;
 				carrier2=null;
 			}
 			else {
 				patPlan2=patPlanList[1];
 				plan2=InsPlans.GetPlan(patPlan2.PlanNum,planList);
+				sub2=InsSubs.GetSub(patPlan2.InsSubNum,subList);
 				ins2Relat=patPlan2.Relationship;
 				carrier2=Carriers.GetCarrier(plan2.CarrierNum);
 			}
@@ -672,7 +680,7 @@ namespace OpenDental {
 			row.IsSeparator=true;
 			rows.Add(row);
 			#region ins1
-			//It turns out that importing insurance is crazy complicated if want it to be perfect.
+			//It turns out that importing insurance is crazy complicated if we want it to be perfect.
 			//So it's better to table that plan for now.
 			//The new strategy is simply to show them what the user entered and notify them if it seems different.
 			//ins1Relat------------------------------------------------------------
@@ -713,8 +721,8 @@ namespace OpenDental {
 				row.FieldName="ins1Subscriber";
 				row.FieldDisplay="Subscriber";
 				if(plan1!=null) {
-					row.OldValDisplay=fam.GetNameInFamFirst(plan1.Subscriber);
-					row.OldValObj=plan1.Subscriber;
+					row.OldValDisplay=fam.GetNameInFamFirst(sub1.Subscriber);
+					row.OldValObj=sub1.Subscriber;
 				}
 				else {
 					row.OldValDisplay="";
@@ -738,7 +746,7 @@ namespace OpenDental {
 				row.FieldName="ins1SubscriberID";
 				row.FieldDisplay="Subscriber ID";
 				if(plan1!=null) {
-					row.OldValDisplay=plan1.SubscriberID;
+					row.OldValDisplay=sub1.SubscriberID;
 					row.OldValObj="";
 				}
 				else {
@@ -926,8 +934,8 @@ namespace OpenDental {
 				row.FieldName="ins2Subscriber";
 				row.FieldDisplay="Subscriber";
 				if(plan2!=null) {
-					row.OldValDisplay=fam.GetNameInFamFirst(plan2.Subscriber);
-					row.OldValObj=plan2.Subscriber;
+					row.OldValDisplay=fam.GetNameInFamFirst(sub2.Subscriber);
+					row.OldValObj=sub2.Subscriber;
 				}
 				else {
 					row.OldValDisplay="";
@@ -951,7 +959,7 @@ namespace OpenDental {
 				row.FieldName="ins2SubscriberID";
 				row.FieldDisplay="Subscriber ID";
 				if(plan2!=null) {
-					row.OldValDisplay=plan2.SubscriberID;
+					row.OldValDisplay=sub2.SubscriberID;
 					row.OldValObj="";
 				}
 				else {

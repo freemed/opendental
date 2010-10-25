@@ -45,6 +45,7 @@ namespace OpenDental{
 		private ODGrid gridRecall;
 		private PatField[] PatFieldList;
 		private bool InitializedOnStartup;
+		private List<InsSub> SubList;
 
 		///<summary></summary>
 		public ContrFamily(){
@@ -218,7 +219,8 @@ namespace OpenDental{
 			}
 			FamCur=Patients.GetFamily(patNum);
 			PatCur=FamCur.GetPatient(patNum);
-			PlanList=InsPlans.RefreshForFam(FamCur);
+			SubList=InsSubs.RefreshForFam(FamCur);
+			PlanList=InsPlans.RefreshForSubList(SubList);
 			PatPlanList=PatPlans.Refresh(patNum);
 			BenefitList=Benefits.Refresh(PatPlanList);
 			RecallList=Recalls.GetList(MiscUtils.ArrayToList<Patient>(FamCur.ListPats));
@@ -894,7 +896,8 @@ namespace OpenDental{
 			List<ClaimProc> claimProcList=ClaimProcs.Refresh(PatCur.PatNum);
 			List<Commlog> commlogList=Commlogs.Refresh(PatCur.PatNum);
 			int payPlanCount=PayPlans.GetDependencyCount(PatCur.PatNum);
-			List<InsPlan> planList=InsPlans.RefreshForFam(FamCur);
+			List<InsSub> subList=InsSubs.RefreshForFam(FamCur);
+			List<InsPlan> planList=InsPlans.RefreshForSubList(subList);
 			List<MedicationPat> medList=MedicationPats.GetList(PatCur.PatNum);
 			PatPlanList=PatPlans.Refresh(PatCur.PatNum);
 			//CovPats.Refresh(planList,PatPlanList);
@@ -908,8 +911,8 @@ namespace OpenDental{
 			bool hasPayPlans=payPlanCount>0;
 			bool hasInsPlans=false;
 			bool hasMeds=medList.Count>0;
-			for(int i=0;i<planList.Count;i++){
-				if(planList[i].Subscriber==PatCur.PatNum){
+			for(int i=0;i<subList.Count;i++) {
+				if(subList[i].Subscriber==PatCur.PatNum) {
 					hasInsPlans=true;
 				}
 			}
@@ -1204,8 +1207,10 @@ namespace OpenDental{
 			}
 			//Subscriber has been chosen. Now, pick a plan-------------------------------------------------------------------
 			InsPlan plan=null;
+			InsSub sub=null;
 			bool planIsNew=false;
-			if(InsPlans.GetListForSubscriber(subscriber.PatNum).Count==0){
+			List<InsSub> subList=InsSubs.GetListForSubscriber(subscriber.PatNum);
+			if(subList.Count==0){
 				planIsNew=true;
 			}
 			else{
@@ -1214,29 +1219,32 @@ namespace OpenDental{
 				if(FormISS.DialogResult==DialogResult.Cancel) {
 					return;
 				}
-				if(FormISS.SelectedPlanNum==0){//'New' option selected.
+				if(FormISS.SelectedInsSubNum==0){//'New' option selected.
 					planIsNew=true;
 				}
 				else{
-					plan=InsPlans.GetPlan(FormISS.SelectedPlanNum,PlanList);
+					sub=InsSubs.GetSub(FormISS.SelectedInsSubNum,subList);
+					plan=InsPlans.GetPlan(sub.PlanNum,new List<InsPlan>());
 				}
 			}
 			//New plan was selected instead of an existing plan.  Create the plan--------------------------------------------
 			if(planIsNew){
 				plan=new InsPlan();
 				plan.EmployerNum=subscriber.EmployerNum;
-				plan.Subscriber=subscriber.PatNum;
-				if(subscriber.MedicaidID==""){
-					plan.SubscriberID=subscriber.SSN;
-				}
-				else{
-					plan.SubscriberID=subscriber.MedicaidID;
-				}
-				plan.ReleaseInfo=true;
-				plan.AssignBen=true;
-				//plan.DedBeforePerc=PrefC.GetBool(PrefName.DeductibleBeforePercentAsDefault");
 				plan.PlanType="";
 				InsPlans.Insert(plan);
+				sub=new InsSub();
+				sub.PlanNum=plan.PlanNum;
+				sub.Subscriber=subscriber.PatNum;
+				if(subscriber.MedicaidID==""){
+					sub.SubscriberID=subscriber.SSN;
+				}
+				else{
+					sub.SubscriberID=subscriber.MedicaidID;
+				}
+				sub.ReleaseInfo=true;
+				sub.AssignBen=true;
+				InsSubs.Insert(sub);
 				Benefit ben;
 				for(int i=0;i<CovCatC.ListShort.Count;i++){
 					if(CovCatC.ListShort[i].DefaultPercent==-1){
@@ -1283,10 +1291,11 @@ namespace OpenDental{
 			patplan.Ordinal=(byte)(PatPlanList.Count+1);//so the ordinal of the first entry will be 1, NOT 0.
 			patplan.PatNum=PatCur.PatNum;
 			patplan.PlanNum=plan.PlanNum;
+			patplan.InsSubNum=sub.InsSubNum;
 			patplan.Relationship=Relat.Self;
 			PatPlans.Insert(patplan);
 			//Then, display insPlanEdit to user-------------------------------------------------------------------------------
-			FormInsPlan FormI=new FormInsPlan(plan,patplan);
+			FormInsPlan FormI=new FormInsPlan(plan,patplan,sub);
 			FormI.IsNewPlan=planIsNew;
 			FormI.IsNewPatPlan=true;
 			FormI.ShowDialog();//this updates estimates also.
@@ -1303,8 +1312,10 @@ namespace OpenDental{
 				gridIns.EndUpdate();
 				return;
 			}
-			List <InsPlan> planArray=new List <InsPlan> ();//prevents repeated calls to db.
+			List<InsSub> subArray=new List<InsSub>();//prevents repeated calls to db.
+			List<InsPlan> planArray=new List<InsPlan>();
 			for(int i=0;i<PatPlanList.Count;i++){
+				subArray.Add(InsSubs.GetSub(PatPlanList[i].InsSubNum,SubList));
 				planArray.Add(InsPlans.GetPlan(PatPlanList[i].PlanNum,PlanList));
 			}
 			gridIns.BeginUpdate();
@@ -1335,7 +1346,7 @@ namespace OpenDental{
 			//subscriber
 			row.Cells.Add(Lan.g("TableCoverage","Subscriber"));
 			for(int i=0;i<PatPlanList.Count;i++){
-				row.Cells.Add(FamCur.GetNameInFamFL(planArray[i].Subscriber));
+				row.Cells.Add(FamCur.GetNameInFamFL(subArray[i].Subscriber));
 			}
 			row.ColorBackG=DefC.Long[(int)DefCat.MiscColors][0].ItemColor;
 			gridIns.Rows.Add(row);
@@ -1343,7 +1354,7 @@ namespace OpenDental{
 			row=new ODGridRow();
 			row.Cells.Add(Lan.g("TableCoverage","Subscriber ID"));
 			for(int i=0;i<PatPlanList.Count;i++) {
-				row.Cells.Add(planArray[i].SubscriberID);
+				row.Cells.Add(subArray[i].SubscriberID);
 			}
 			row.ColorBackG=DefC.Long[(int)DefCat.MiscColors][0].ItemColor;
 			gridIns.Rows.Add(row);
@@ -1620,7 +1631,7 @@ namespace OpenDental{
 			row.Cells.Add(Lan.g("TableCoverage","Subscriber Note"));
 			for(int i=0;i<PatPlanList.Count;i++) {
 				cell=new ODGridCell();
-				cell.Text=planArray[i].SubscNote;
+				cell.Text=subArray[i].SubscNote;
 				cell.ColorText=Color.Red;
 				cell.Bold=YN.Yes;
 				row.Cells.Add(cell);
@@ -1636,7 +1647,8 @@ namespace OpenDental{
 			Cursor=Cursors.WaitCursor;
 			PatPlan patPlan=PatPlanList[e.Col-1];
 			InsPlan insPlan=InsPlans.GetPlan(patPlan.PlanNum,PlanList);
-			FormInsPlan FormIP=new FormInsPlan(insPlan,patPlan);
+			InsSub insSub=InsSubs.GetSub(patPlan.InsSubNum,SubList);
+			FormInsPlan FormIP=new FormInsPlan(insPlan,patPlan,insSub);
 			FormIP.ShowDialog();
 			Cursor=Cursors.Default;
 			ModuleSelected(PatCur.PatNum);

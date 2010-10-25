@@ -18,9 +18,9 @@ namespace OpenDental{
 		/// </summary>
 		private System.ComponentModel.Container components = null;
 		private long Subscriber;
-		private List <InsPlan> PlanList;
-		///<summary>When dialogResult=OK, this will contain the PlanNum of the selected plan.  If this is 0, then user has selected the 'New' option.</summary>
-		public long SelectedPlanNum;
+		private List <InsSub> SubList;
+		///<summary>When dialogResult=OK, this will contain the InsSubNum of the selected plan.  If this is 0, then user has selected the 'New' option.</summary>
+		public long SelectedInsSubNum;
 
 		///<summary></summary>
 		public FormInsSelectSubscr(long subscriber)
@@ -137,21 +137,18 @@ namespace OpenDental{
 		#endregion
 
 		private void FormInsSelectSubscr_Load(object sender, System.EventArgs e) {
-			PlanList=InsPlans.GetListForSubscriber(Subscriber);
+			SubList=InsSubs.GetListForSubscriber(Subscriber);
+			List<InsPlan> planList=InsPlans.RefreshForSubList(SubList);
 			PatPlan[] patPlanArray;
 			string str;
 			InsPlan plan;
-			for(int i=0;i<PlanList.Count;i++){
-				plan=InsPlans.GetPlan(PlanList[i].PlanNum,PlanList);
-				if(plan==null){
-					listPlans.Items.Add("invalid plan");
-					continue;
-				}
-				str=InsPlans.GetCarrierName(PlanList[i].PlanNum,PlanList);
+			for(int i=0;i<SubList.Count;i++) {
+				plan=InsPlans.GetPlan(SubList[i].PlanNum,planList);
+				str=InsPlans.GetCarrierName(SubList[i].PlanNum,planList);
 				if(plan.GroupNum!="") {
 					str+=Lan.g(this," group:")+plan.GroupNum;
 				}
-				patPlanArray=PatPlans.GetByPlanNum(PlanList[i].PlanNum);
+				patPlanArray=PatPlans.GetByPlanNum(SubList[i].PlanNum);
 				if(patPlanArray.Length==0) {
 					str+=" "+Lan.g(this,"(not in use)");
 				}
@@ -163,12 +160,12 @@ namespace OpenDental{
 			if(listPlans.SelectedIndex==-1){
 				return;
 			}
-			SelectedPlanNum=PlanList[listPlans.SelectedIndex].PlanNum;
+			SelectedInsSubNum=SubList[listPlans.SelectedIndex].InsSubNum;
 			DialogResult=DialogResult.OK;
 		}
 
 		private void butNew_Click(object sender, System.EventArgs e) {
-			SelectedPlanNum=0;
+			SelectedInsSubNum=0;
 			DialogResult=DialogResult.OK;
 		}
 
@@ -177,7 +174,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please select a plan first.");
 				return;
 			}
-			SelectedPlanNum=PlanList[listPlans.SelectedIndex].PlanNum;
+			SelectedInsSubNum=SubList[listPlans.SelectedIndex].InsSubNum;
 			DialogResult=DialogResult.OK;
 		}
 

@@ -212,6 +212,7 @@ namespace OpenDental{
 		private OrionProc OrionProcOld;
 		private DateTime CancelledScheduleByDate;
 		public long OrionProvNum;
+		private List<InsSub> SubList;
 
 		///<summary>Inserts are no longer done within this dialog, but must be done ahead of time from outside.  You must specify a procedure to edit, and only the changes that are made in this dialog get saved.  Only used when double click in Account, Chart, TP, and in ContrChart.AddProcedure().  The procedure may be deleted if new, and user hits Cancel.</summary>
 		public FormProcEdit(Procedure proc,Patient patCur,Family famCur){
@@ -219,7 +220,8 @@ namespace OpenDental{
 			ProcOld=proc.Copy();
 			PatCur=patCur;
 			FamCur=famCur;
-			PlanList=InsPlans.RefreshForFam(FamCur);
+			SubList=InsSubs.RefreshForFam(FamCur);
+			PlanList=InsPlans.RefreshForSubList(SubList);
 			//HistList=null;
 			//LoopList=null;
 			InitializeComponent();
@@ -2759,8 +2761,8 @@ namespace OpenDental{
 					allNoBillIns=false;
 				}
 				row=new ODGridRow();
-				
-				row.Cells.Add(InsPlans.GetDescript(ClaimProcsForProc[i].PlanNum,FamCur,PlanList));
+
+				row.Cells.Add(InsPlans.GetDescript(ClaimProcsForProc[i].PlanNum,FamCur,PlanList,ClaimProcsForProc[i].InsSubNum,SubList));
 				plan=InsPlans.GetPlan(ClaimProcsForProc[i].PlanNum,PlanList);
 				if(plan.IsMedical) {
 					row.Cells.Add("Med");

@@ -73,16 +73,17 @@ namespace OpenDentBusiness {
 					"p.SSN,"+
 					"p.Birthdate,"+
 					"i.GroupNum,"+
-					"i.SubscriberID,"+
+					"s.SubscriberID,"+
 					"i.TrojanID,"+
 					"CASE i.EmployerNum WHEN 0 THEN '' ELSE e.EmpName END,"+
 					"CASE i.EmployerNum WHEN 0 THEN '' ELSE e.Phone END,"+
 					"c.CarrierName,"+
 					"c.Phone "+
-					"FROM patient p,insplan i,employer e,carrier c "+
+					"FROM patient p,insplan i,employer e,carrier c,inssub s "+
 					"WHERE p.PatNum=i.Subscriber AND "+
 					"("+whereTrojanID+") AND "+
 					"i.CarrierNum=c.CarrierNum AND "+
+					"s.PlanNum=i.PlanNum AND "+
 					"(i.EmployerNum=e.EmployerNum OR i.EmployerNum=0) AND "+
 					"(SELECT COUNT(*) FROM patplan a WHERE a.PlanNum=i.PlanNum) > 0 "+
 					"ORDER BY i.TrojanID,p.LName,p.FName";
@@ -109,64 +110,59 @@ namespace OpenDentBusiness {
 					"p.SSN,"+
 					"p.Birthdate,"+
 					"i.GroupNum,"+
-					"i.SubscriberID,"+
+					"s.SubscriberID,"+
 					"i.TrojanID,"+
 					"CASE i.EmployerNum WHEN 0 THEN '' ELSE e.EmpName END,"+
 					"CASE i.EmployerNum WHEN 0 THEN '' ELSE e.Phone END,"+
 					"c.CarrierName,"+
 					"c.Phone "+
-					"FROM patient p,insplan i,employer e,carrier c "+
+					"FROM patient p,insplan i,employer e,carrier c,inssub s "+
 					"WHERE p.PatNum=i.Subscriber AND "+
 					"("+whereTrojanID+") AND "+
 					"i.CarrierNum=c.CarrierNum AND "+
+					"s.PlanNum=i.PlanNum AND "+
 					"(i.EmployerNum=e.EmployerNum OR i.EmployerNum=0) AND "+
 					"(SELECT COUNT(*) FROM patplan a WHERE a.PlanNum=i.PlanNum) > 0 "+
 					"ORDER BY i.TrojanID,p.LName,p.FName";
 			return Db.GetTable(command);
 		}
 
-		public static List<long> GetPlanNumsWithTrojanID(string trojanID){
+		public static InsPlan GetPlanWithTrojanID(string trojanID){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<long>>(MethodBase.GetCurrentMethod(),trojanID);
+				return Meth.GetObject<InsPlan>(MethodBase.GetCurrentMethod(),trojanID);
 			}
-			string command="SELECT PlanNum FROM insplan WHERE TrojanID = '"+POut.String(trojanID)+"'"; 
-			DataTable table=Db.GetTable(command);
-			List<long> retVal=new List<long>();
-			for(int i=0;i<table.Rows.Count;i++){
-				retVal.Add(PIn.Long(table.Rows[i]["PlanNum"].ToString()));
-			}
-			return retVal;
+			string command="SELECT * FROM insplan WHERE TrojanID = '"+POut.String(trojanID)+"'";
+			return Crud.InsPlanCrud.SelectOne(command);
 		}
 
 		///<summary>This returns the number of plans affected.</summary>
-		public static int UpdatePlans(TrojanObject troj,List<long> planNums,bool updateBenefits) {
+		public static void UpdatePlan(TrojanObject troj,long planNum,bool updateBenefits) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetInt(MethodBase.GetCurrentMethod(),troj,planNums,updateBenefits);
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),troj,planNum,updateBenefits);
+				return;
 			}
 			long employerNum=Employers.GetEmployerNum(troj.ENAME);
 			string command;
-			for(int i=0;i<planNums.Count;i++) {
-				command="UPDATE insplan SET "
-					+"EmployerNum="  +POut.Long  (employerNum)+", "
-					+"GroupName='"   +POut.String(troj.PLANDESC)+"', "
-					+"GroupNum='"    +POut.String(troj.POLICYNO)+"', "
-					+"CarrierNum= "  +POut.Long  (troj.CarrierNum)+", "
-					+"BenefitNotes='"+POut.String(troj.BenefitNotes)+"' "
-					+"WHERE PlanNum="+POut.Long  (planNums[i]);
+			//for(int i=0;i<planNums.Count;i++) {
+			command="UPDATE insplan SET "
+				+"EmployerNum="  +POut.Long  (employerNum)+", "
+				+"GroupName='"   +POut.String(troj.PLANDESC)+"', "
+				+"GroupNum='"    +POut.String(troj.POLICYNO)+"', "
+				+"CarrierNum= "  +POut.Long  (troj.CarrierNum)+", "
+				+"BenefitNotes='"+POut.String(troj.BenefitNotes)+"' "
+				+"WHERE PlanNum="+POut.Long  (planNum);
+			Db.NonQ(command);
+			if(updateBenefits) {
+				//clear benefits
+				command="DELETE FROM benefit WHERE PlanNum="+POut.Long(planNum);
 				Db.NonQ(command);
-				if(updateBenefits) {
-					//clear benefits
-					command="DELETE FROM benefit WHERE PlanNum="+POut.Long(planNums[i]);
-					Db.NonQ(command);
-					//benefitList
-					for(int j=0;j<troj.BenefitList.Count;j++) {
-						troj.BenefitList[j].PlanNum=planNums[i];
-						Benefits.Insert(troj.BenefitList[j]);
-					}
-					InsPlans.ComputeEstimatesForPlan(planNums[i]);
+				//benefitList
+				for(int j=0;j<troj.BenefitList.Count;j++) {
+					troj.BenefitList[j].PlanNum=planNum;
+					Benefits.Insert(troj.BenefitList[j]);
 				}
+				InsPlans.ComputeEstimatesForPlan(planNum);
 			}
-			return planNums.Count;
 		}
 
 	}

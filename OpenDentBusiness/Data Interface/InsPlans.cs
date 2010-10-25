@@ -27,46 +27,7 @@ namespace OpenDentBusiness {
 			Crud.InsPlanCrud.Update(plan);
 		}
 
-		///<summary>Called from FormInsPlan when applying changes to all identical insurance plans. This updates the synchronized fields for all plans like the specified insPlan.  Current InsPlan must be set to the new values that we want.  BenefitNotes and SubscNote are specific to subscriber and are not changed.  PlanNotes are handled separately in a different function after this one is complete.</summary>
-		public static void UpdateForLike(InsPlan like, InsPlan plan) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),like,plan);
-				return;
-			}
-			string command= "UPDATE insplan SET "
-				+"EmployerNum = '"     +POut.Long   (plan.EmployerNum)+"'"
-				+",GroupName = '"      +POut.String(plan.GroupName)+"'"
-				+",GroupNum = '"       +POut.String(plan.GroupNum)+"'"
-				+",DivisionNo = '"     +POut.String(plan.DivisionNo)+"'"
-				+",CarrierNum = '"     +POut.Long   (plan.CarrierNum)+"'"
-				+",PlanType = '"       +POut.String(plan.PlanType)+"'"
-				+",UseAltCode = '"     +POut.Bool  (plan.UseAltCode)+"'"
-				+",IsMedical = '"      +POut.Bool  (plan.IsMedical)+"'"
-				+",ClaimsUseUCR = '"   +POut.Bool  (plan.ClaimsUseUCR)+"'"
-				+",FeeSched = '"       +POut.Long   (plan.FeeSched)+"'"
-				+",CopayFeeSched = '"  +POut.Long   (plan.CopayFeeSched)+"'"
-				+",ClaimFormNum = '"   +POut.Long   (plan.ClaimFormNum)+"'"
-				+",AllowedFeeSched= '" +POut.Long   (plan.AllowedFeeSched)+"'"
-				+",TrojanID = '"       +POut.String(plan.TrojanID)+"'"
-				+",FilingCode = '"     +POut.Long   (plan.FilingCode)+"'"
-				+",FilingCodeSubtype = '"+POut.Long(plan.FilingCodeSubtype)+"'"
-				+",ShowBaseUnits = '"  +POut.Bool  (plan.ShowBaseUnits)+"'"
-				//+",DedBeforePerc = '"  +POut.PBool  (plan.DedBeforePerc)+"'"
-				+",CodeSubstNone='"    +POut.Bool  (plan.CodeSubstNone)+"'"
-				+",IsHidden='"         +POut.Bool  (plan.IsHidden)+"'"
-				+",MonthRenew='"       +POut.Int   (plan.MonthRenew)+"'"
-				//It is most likely that MonthRenew would be the same for everyone on the same plan.  If we get complaints, we might have to add an option.
-				+" WHERE "
-				+"EmployerNum = '"        +POut.Long   (like.EmployerNum)+"' "
-				+"AND GroupName = '"      +POut.String(like.GroupName)+"' "
-				+"AND GroupNum = '"       +POut.String(like.GroupNum)+"' "
-				+"AND DivisionNo = '"     +POut.String(like.DivisionNo)+"'"
-				+"AND CarrierNum = '"     +POut.Long   (like.CarrierNum)+"' "
-				+"AND IsMedical = '"      +POut.Bool  (like.IsMedical)+"'";
-			Db.NonQ(command);
-		}
-
-		///<summary>It's fastest if you supply a plan list that contains the plan, but it also works just fine if it can't initally locate the plan in the list.  You can supply an array of length 0.  If still not found, returns null.</summary>
+		///<summary>It's fastest if you supply a plan list that contains the plan, but it also works just fine if it can't initally locate the plan in the list.  You can supply an list of length 0 or null.  If still not found, returns null.</summary>
 		public static InsPlan GetPlan(long planNum,List<InsPlan> planList) {
 			//No need to check RemotingRole; no call to db.
 			InsPlan retPlan=new InsPlan();
@@ -114,15 +75,6 @@ namespace OpenDentBusiness {
 			return Crud.InsPlanCrud.SelectMany(command).ToArray();
 		}
 
-		///<summary>Used in FormInsSelectSubscr to get a list of insplans for one subscriber directly from the database.</summary>
-		public static List <InsPlan> GetListForSubscriber(long subscriber) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return MiscUtils.ArrayToList(Meth.GetObject<InsPlan[]>(MethodBase.GetCurrentMethod(),subscriber));
-			} 
-			string command="SELECT * FROM insplan WHERE Subscriber="+POut.Long(subscriber);
-			return Crud.InsPlanCrud.SelectMany(command);
-		}
-
 		///<summary>Only loads one plan from db. Can return null.</summary>
 		public static InsPlan RefreshOne(long planNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
@@ -135,46 +87,116 @@ namespace OpenDentBusiness {
 			return Crud.InsPlanCrud.SelectOne(command);
 		}
 
-		///<summary>Gets new List for the specified family.  The only plans it misses are for claims with no current coverage.  These are handled as needed.</summary>
-		public static List<InsPlan> RefreshForFam(Family Fam) {
+		///<summary>Deprecated.  Instead, use RefreshForSubList.</summary>
+		public static List<InsPlan> RefreshForFam(){//Family Fam) {
+			return null;
+		}
+
+		///<summary>Gets List of plans based on the subList.  The list won't be in the same order.</summary>
+		public static List<InsPlan> RefreshForSubList(List<InsSub> subList) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<InsPlan>>(MethodBase.GetCurrentMethod(),Fam);
-			} 
+				return Meth.GetObject<List<InsPlan>>(MethodBase.GetCurrentMethod(),subList);
+			}
 			string command=
-				"(SELECT * from insplan "
-				+"WHERE";
-			//subscribers in family
-			for(int i=0;i<Fam.ListPats.Length;i++) {
+				"(SELECT * FROM insplan WHERE";
+			for(int i=0;i<subList.Count;i++) {
 				if(i>0) {
 					command+=" OR";
 				}
-				command+=" Subscriber="+POut.Long(Fam.ListPats[i].PatNum);
+				command+=" PlanNum="+POut.Long(subList[i].PlanNum);
 			}
-			//in union, distinct is implied
-			command+=") UNION (SELECT insplan.* FROM insplan,patplan WHERE insplan.PlanNum=patplan.PlanNum AND (";
-			for(int i=0;i<Fam.ListPats.Length;i++) {
-				if(i>0) {
-					command+=" OR";
-				}
-				command+=" patplan.PatNum="+POut.Long(Fam.ListPats[i].PatNum);
-			}
-			//command+=")) ORDER BY DateEffective";//FIXME:UNION-ORDER-BY
-			command+=")) ORDER BY 3";//***ORACLE ORDINAL
 			return Crud.InsPlanCrud.SelectMany(command);
 		}
 
+		///<summary>Tests all fields for equality.</summary>
+		public static bool AreEqualValue(InsPlan plan1,InsPlan plan2) {
+			if(plan1.PlanNum==plan2.PlanNum
+				&& plan1.GroupName==plan2.GroupName
+				&& plan1.GroupNum==plan2.GroupNum
+				&& plan1.PlanNote==plan2.PlanNote
+				&& plan1.FeeSched==plan2.FeeSched
+				&& plan1.PlanType==plan2.PlanType
+				&& plan1.ClaimFormNum==plan2.ClaimFormNum
+				&& plan1.UseAltCode==plan2.UseAltCode
+				&& plan1.ClaimsUseUCR==plan2.ClaimsUseUCR
+				&& plan1.CopayFeeSched==plan2.CopayFeeSched
+				&& plan1.EmployerNum==plan2.EmployerNum
+				&& plan1.CarrierNum==plan2.CarrierNum
+				&& plan1.AllowedFeeSched==plan2.AllowedFeeSched
+				&& plan1.TrojanID==plan2.TrojanID
+				&& plan1.DivisionNo==plan2.DivisionNo
+				&& plan1.IsMedical==plan2.IsMedical
+				&& plan1.FilingCode==plan2.FilingCode
+				&& plan1.DentaideCardSequence==plan2.DentaideCardSequence
+				&& plan1.ShowBaseUnits==plan2.ShowBaseUnits
+				&& plan1.CodeSubstNone==plan2.CodeSubstNone
+				&& plan1.IsHidden==plan2.IsHidden
+				&& plan1.MonthRenew==plan2.MonthRenew
+				&& plan1.FilingCodeSubtype==plan2.FilingCodeSubtype
+				&& plan1.CanadianPlanFlag==plan2.CanadianPlanFlag) 
+			{
+				return true;
+			}
+			return false;
+		}
+
+		/*
+		///<summary>Called from FormInsPlan when applying changes to all identical insurance plans. This updates the synchronized fields for all plans like the specified insPlan.  Current InsPlan must be set to the new values that we want.  BenefitNotes and SubscNote are specific to subscriber and are not changed.  PlanNotes are handled separately in a different function after this one is complete.</summary>
+		public static void UpdateForLike(InsPlan like, InsPlan plan) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),like,plan);
+				return;
+			}
+			string command= "UPDATE insplan SET "
+				+"EmployerNum = '"     +POut.Long   (plan.EmployerNum)+"'"
+				+",GroupName = '"      +POut.String(plan.GroupName)+"'"
+				+",GroupNum = '"       +POut.String(plan.GroupNum)+"'"
+				+",DivisionNo = '"     +POut.String(plan.DivisionNo)+"'"
+				+",CarrierNum = '"     +POut.Long   (plan.CarrierNum)+"'"
+				+",PlanType = '"       +POut.String(plan.PlanType)+"'"
+				+",UseAltCode = '"     +POut.Bool  (plan.UseAltCode)+"'"
+				+",IsMedical = '"      +POut.Bool  (plan.IsMedical)+"'"
+				+",ClaimsUseUCR = '"   +POut.Bool  (plan.ClaimsUseUCR)+"'"
+				+",FeeSched = '"       +POut.Long   (plan.FeeSched)+"'"
+				+",CopayFeeSched = '"  +POut.Long   (plan.CopayFeeSched)+"'"
+				+",ClaimFormNum = '"   +POut.Long   (plan.ClaimFormNum)+"'"
+				+",AllowedFeeSched= '" +POut.Long   (plan.AllowedFeeSched)+"'"
+				+",TrojanID = '"       +POut.String(plan.TrojanID)+"'"
+				+",FilingCode = '"     +POut.Long   (plan.FilingCode)+"'"
+				+",FilingCodeSubtype = '"+POut.Long(plan.FilingCodeSubtype)+"'"
+				+",ShowBaseUnits = '"  +POut.Bool  (plan.ShowBaseUnits)+"'"
+				//+",DedBeforePerc = '"  +POut.PBool  (plan.DedBeforePerc)+"'"
+				+",CodeSubstNone='"    +POut.Bool  (plan.CodeSubstNone)+"'"
+				+",IsHidden='"         +POut.Bool  (plan.IsHidden)+"'"
+				+",MonthRenew='"       +POut.Int   (plan.MonthRenew)+"'"
+				//It is most likely that MonthRenew would be the same for everyone on the same plan.  If we get complaints, we might have to add an option.
+				+" WHERE "
+				+"EmployerNum = '"        +POut.Long   (like.EmployerNum)+"' "
+				+"AND GroupName = '"      +POut.String(like.GroupName)+"' "
+				+"AND GroupNum = '"       +POut.String(like.GroupNum)+"' "
+				+"AND DivisionNo = '"     +POut.String(like.DivisionNo)+"'"
+				+"AND CarrierNum = '"     +POut.Long   (like.CarrierNum)+"' "
+				+"AND IsMedical = '"      +POut.Bool  (like.IsMedical)+"'";
+			Db.NonQ(command);
+		}*/
+
 		///<summary>Gets a description of the specified plan, including carrier name and subscriber. It's fastest if you supply a plan list that contains the plan, but it also works just fine if it can't initally locate the plan in the list.  You can supply an array of length 0 for both family and planlist.</summary>
-		public static string GetDescript(long planNum,Family family,List<InsPlan> planList) {
+		public static string GetDescript(long planNum,Family family,List<InsPlan> planList,long insSubNum,List<InsSub> subList) {
 			//No need to check RemotingRole; no call to db.
-			if(planNum==0)
+			if(planNum==0) {
 				return "";
+			}
 			InsPlan plan=GetPlan(planNum,planList);
 			if(plan==null || plan.PlanNum==0) {
 				return "";
 			}
-			string subscriber=family.GetNameInFamFL(plan.Subscriber);
+			InsSub sub=InsSubs.GetSub(insSubNum,subList);
+			if(sub==null || sub.InsSubNum==0) {
+				return "";
+			}
+			string subscriber=family.GetNameInFamFL(sub.Subscriber);
 			if(subscriber=="") {//subscriber from another family
-				subscriber=Patients.GetLim(plan.Subscriber).GetNameLF();
+				subscriber=Patients.GetLim(sub.Subscriber).GetNameLF();
 			}
 			string retStr="";
 			//loop just to get the index of the plan in the family list
@@ -185,8 +207,9 @@ namespace OpenDentBusiness {
 					//retStr += (i+1).ToString()+": ";
 				}
 			}
-			if(otherFam)//retStr=="")
+			if(otherFam) {//retStr=="")
 				retStr="(other fam):";
+			}
 			Carrier carrier=Carriers.GetCarrier(plan.CarrierNum);
 			string carrierName=carrier.CarrierName;
 			if(carrierName.Length>20) {
@@ -386,9 +409,9 @@ namespace OpenDentBusiness {
 				+"WHERE insplan.CarrierNum=carrier.CarrierNum";
 			return Db.GetTable(command);
 		}
-
-		///<summary>Gets all distinct notes for the planNums supplied.  Supply a planNum to exclude it.  Only called when closing FormInsPlan.  Includes blank notes.</summary>
-		public static string[] GetNotesForPlans(List<long> planNums,long excludePlanNum) {
+		/*
+		///<summary>Used by Trojan.  Gets all distinct notes for the planNums supplied.  Includes blank notes.</summary>
+		public static string[] GetNotesForPlans(List<long> planNums) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<string[]>(MethodBase.GetCurrentMethod(),planNums,excludePlanNum);
 			}
@@ -417,7 +440,7 @@ namespace OpenDentBusiness {
 			return retVal;
 		}
 
-		///<summary>Called when closing FormInsPlan to set the PlanNote for multiple plans at once.</summary>
+		///<summary>Used by Trojan.  Sets the PlanNote for multiple plans at once.</summary>
 		public static void UpdateNoteForPlans(List<long> planNums,string newNote) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),planNums,newNote);
@@ -436,8 +459,9 @@ namespace OpenDentBusiness {
 			string command="UPDATE insplan SET PlanNote='"+POut.String(newNote)+"' "
 				+"WHERE"+s;
 			Db.NonQ(command);
-		}
+		}*/
 
+		/*
 		///<summary>Called from FormInsPlan when user wants to view a benefit note for similar plans.  Should never include the current plan that the user is editing.  This function will get one note from the database, not including blank notes.  If no note can be found, then it returns empty string.</summary>
 		public static string GetBenefitNotes(List<long> planNums) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
@@ -465,41 +489,9 @@ namespace OpenDentBusiness {
 				return "";
 			}
 			return PIn.String(table.Rows[0][0].ToString());
-		}
+		}*/
 
-		///<summary>Only used once.  Gets a list of subscriber names from the database that have identical plan info as this one. Used to display in the insplan window.  The returned list never includes the plan that we're viewing.  Use excludePlan for this purpose; it's more consistent, because we have no way of knowing if the current plan will be picked up or not.</summary>
-		public static string[] GetSubscribersForSamePlans(string employerName, string groupName, string groupNum,
-				string divisionNo,string carrierName,bool isMedical,long excludePlan)
-		{
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<string[]>(MethodBase.GetCurrentMethod(),employerName,groupName,groupNum,divisionNo,carrierName,isMedical,excludePlan);
-			}
-			string command="SELECT CONCAT(CONCAT(LName,', '),FName) "
-				+"FROM patient "
-				+"LEFT JOIN insplan ON patient.PatNum=insplan.Subscriber "
-				+"LEFT JOIN carrier ON carrier.CarrierNum = insplan.CarrierNum "
-				+"LEFT JOIN employer ON employer.EmployerNum = insplan.EmployerNum ";
-			if(employerName==""){
-				command+="WHERE employer.EmpName IS NULL ";
-			}
-			else{
-				command+="WHERE employer.EmpName = '"+POut.String(employerName)+"' ";
-			}
-			command+="AND insplan.GroupName = '"  +POut.String(groupName)+"' "
-				+"AND insplan.GroupNum = '"   +POut.String(groupNum)+"' "
-				+"AND insplan.DivisionNo = '" +POut.String(divisionNo)+"' "
-				+"AND carrier.CarrierName = '"+POut.String(carrierName)+"' "
-				+"AND insplan.IsMedical = '"  +POut.Bool(isMedical)+"' "
-				+"AND insplan.PlanNum != "    +POut.Long(excludePlan)
-				+" ORDER BY LName,FName";
-			DataTable table=Db.GetTable(command);
-			string[] retStr=new string[table.Rows.Count];
-			for(int i=0;i<table.Rows.Count;i++) {
-				retStr[i]=PIn.String(table.Rows[i][0].ToString());
-			}
-			return retStr;
-		}
-
+		/*
 		///<summary>Gets a list of PlanNums from the database of plans that have identical info as this one. Used to perform updates to benefits, etc.  Note that you have the option to include the current plan in the list.</summary>
 		public static List<long> GetPlanNumsOfSamePlans(string employerName,string groupName,string groupNum,
 				string divisionNo,string carrierName,bool isMedical,long planNum,bool includePlanNum) {
@@ -536,9 +528,9 @@ namespace OpenDentBusiness {
 				retVal.Add(planNum);
 			}
 			return retVal;
-		}
+		}*/
 
-		///<summary>Used from FormInsPlans to get a big list of many plans, organized by carrier name or by employer.  Identical plans are grouped as one row.</summary>
+		///<summary>Used from FormInsPlans to get a big list of many plans, organized by carrier name or by employer.</summary>
 		public static DataTable GetBigList(bool byEmployer,string empName,string carrierName,string groupName,string groupNum,
 			string trojanID,bool showHidden)
 		{
@@ -557,17 +549,19 @@ namespace OpenDentBusiness {
 			table.Columns.Add("noSendElect");
 			table.Columns.Add("Phone");
 			table.Columns.Add("PlanNum");
-			table.Columns.Add("plans");
 			table.Columns.Add("State");
+			table.Columns.Add("subscribers");
 			table.Columns.Add("trojanID");
 			table.Columns.Add("Zip");
 			List<DataRow> rows=new List<DataRow>();
 			string command="SELECT carrier.Address,carrier.City,CarrierName,ElectID,EmpName,GroupName,GroupNum,NoSendElect,"
 				+"carrier.Phone,MAX(PlanNum) onePlanNum,"//for Oracle
-				+"COUNT(*) plans,carrier.State,TrojanID,carrier.Zip, "
-				+"CASE WHEN (EmpName IS NULL) THEN 1 ELSE 0 END as haveName "//for Oracle
+				+"(SELECT COUNT(*) FROM inssub WHERE insplan.PlanNum=inssub.PlanNum) subscribers,"//for Oracle
+				+"carrier.State,TrojanID,carrier.Zip, "
+				+"(SELECT COUNT(*) FROM employer WHERE insplan.EmployerNum=employer.EmployerNum) haveName "//for Oracle. Could be higher than 1?
+				//CASE WHEN (EmpName IS NULL) THEN 1 ELSE 0 END as haveName "//for Oracle
 				+"FROM insplan "
-				+"LEFT JOIN employer ON employer.EmployerNum = insplan.EmployerNum "
+				//+"LEFT JOIN employer ON employer.EmployerNum = insplan.EmployerNum "
 				+"LEFT JOIN carrier ON carrier.CarrierNum = insplan.CarrierNum "
 				+"WHERE CarrierName LIKE '%"+POut.String(carrierName)+"%' ";
 			if(empName!="") {
@@ -585,11 +579,11 @@ namespace OpenDentBusiness {
 			if(!showHidden){
 				command+="AND insplan.IsHidden=0 ";
 			}
-			command+="GROUP BY insplan.EmployerNum,GroupName,GroupNum,DivisionNo,"
-				+"insplan.CarrierNum,insplan.IsMedical,TrojanID ";
-			if(DataConnection.DBtype==DatabaseType.Oracle){
-				command+=",carrier.Address,carrier.City,CarrierName,ElectID,EmpName,NoSendElect,carrier.Phone,carrier.State,carrier.Zip ";
-			}
+			//command+="GROUP BY insplan.EmployerNum,GroupName,GroupNum,DivisionNo,"
+			//	+"insplan.CarrierNum,insplan.IsMedical,TrojanID ";
+			//if(DataConnection.DBtype==DatabaseType.Oracle){
+			//	command+=",carrier.Address,carrier.City,CarrierName,ElectID,EmpName,NoSendElect,carrier.Phone,carrier.State,carrier.Zip ";
+			//}
 			if(byEmployer) {
 				command+="ORDER BY haveName,EmpName,CarrierName";
 			}
@@ -608,13 +602,14 @@ namespace OpenDentBusiness {
 				row["GroupNum"]=rawT.Rows[i]["GroupNum"].ToString();
 				if(rawT.Rows[i]["NoSendElect"].ToString()=="0"){
 					row["noSendElect"]="";
-				}	else{
+				}	
+				else{
 					row["noSendElect"]="X";
 				}
 				row["Phone"]=rawT.Rows[i]["Phone"].ToString();
 				row["PlanNum"]=rawT.Rows[i]["onePlanNum"].ToString();
-				row["plans"]=rawT.Rows[i]["plans"].ToString();
 				row["State"]=rawT.Rows[i]["State"].ToString();
+				row["subscribers"]=rawT.Rows[i]["subscribers"].ToString();
 				row["TrojanID"]=rawT.Rows[i]["TrojanID"].ToString();
 				row["Zip"]=rawT.Rows[i]["Zip"].ToString();
 				rows.Add(row);
@@ -901,7 +896,8 @@ namespace OpenDentBusiness {
 				Patient pat=fam.GetPatient(patNum);
 				List<ClaimProc> claimProcs=ClaimProcs.Refresh(patNum);
 				List<Procedure> procs=Procedures.Refresh(patNum);
-				List<InsPlan> plans=InsPlans.RefreshForFam(fam);
+				List<InsSub> subs=InsSubs.RefreshForFam(fam);
+				List<InsPlan> plans=InsPlans.RefreshForSubList(subs);
 				List<PatPlan> patPlans=PatPlans.Refresh(patNum);
 				List<Benefit> benefitList=Benefits.Refresh(patPlans);
 				Procedures.ComputeEstimatesForAll(patNum,claimProcs,procs,plans,patPlans,benefitList,pat.Age);
@@ -957,6 +953,54 @@ namespace OpenDentBusiness {
 			command="DELETE FROM insplan "
 				+"WHERE PlanNum = '"+plan.PlanNum.ToString()+"'";
 			Db.NonQ(command);
+		}
+
+		/// <summary>Used from FormInsPlan and InsPlans.Merge. Does not check any dependencies.  Used when a new plan is created and then is no longer needed.  Also used if all dependencies have already been fixed.  Does not affect any other objects.</summary>
+		public static void Delete(long planNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),planNum);
+				return;
+			}
+			Crud.InsPlanCrud.Delete(planNum);
+		}
+
+		/// <summary>This changes PlanNum in every place in database where it's used.  It also deletes benefits for the old planNum.</summary>
+		public static void ChangeReferences(long planNum,long planNumTo) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),planNum,planNumTo);
+				return;
+			}
+			string command;
+			//change all references to the old plan to point to the new plan.
+			//appointment.InsPlan1/2
+			command="UPDATE appointment SET InsPlan1="+POut.Long(planNumTo)+" WHERE InsPlan1="+POut.Long(planNum);
+			Db.NonQ(command);
+			command="UPDATE appointment SET InsPlan2="+POut.Long(planNumTo)+" WHERE InsPlan2="+POut.Long(planNum);
+			Db.NonQ(command);
+			//benefit.PlanNum -- DELETE unused
+			command="DELETE FROM benefit WHERE PlanNum="+POut.Long(planNum);
+			Db.NonQ(command);
+			//claim.PlanNum/PlanNum2
+			command="UPDATE claim SET PlanNum="+POut.Long(planNumTo)+" WHERE PlanNum="+POut.Long(planNum);
+			Db.NonQ(command);
+			command="UPDATE claim SET PlanNum2="+POut.Long(planNumTo)+" WHERE PlanNum2="+POut.Long(planNum);
+			Db.NonQ(command);
+			//claimproc.PlanNum
+			command="UPDATE claimproc SET PlanNum="+POut.Long(planNumTo)+" WHERE PlanNum="+POut.Long(planNum);
+			Db.NonQ(command);
+			//etrans.PlanNum
+			command="UPDATE etrans SET PlanNum="+POut.Long(planNumTo)+" WHERE PlanNum="+POut.Long(planNum);
+			Db.NonQ(command);
+			//inssub.PlanNum
+			command="UPDATE inssub SET PlanNum="+POut.Long(planNumTo)+" WHERE PlanNum="+POut.Long(planNum);
+			Db.NonQ(command);
+			//patplan.PlanNum
+			command="UPDATE patplan SET PlanNum="+POut.Long(planNumTo)+" WHERE PlanNum="+POut.Long(planNum);
+			Db.NonQ(command);
+			//payplan.PlanNum
+			command="UPDATE payplan SET PlanNum="+POut.Long(planNumTo)+" WHERE PlanNum="+POut.Long(planNum);
+			Db.NonQ(command);
+			//the old plan should then be deleted.
 		}
 
 		///<summary>Returns the number of plans affected.</summary>

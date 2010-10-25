@@ -9,7 +9,7 @@ using OpenDentBusiness;
 namespace OpenDental.Eclaims {
 	public class CanadianOutput {
 		///<summary>The result is the etransNum of the response message.  Or it might throw an exception if invalid data.  This class is also responsible for saving the returned message to the etrans table, and for printing out the required form.</summary>
-		public static long SendElegibility(long patNum,InsPlan plan,DateTime date,Relat relat,string patID,bool doPrint){
+		public static long SendElegibility(long patNum,InsPlan plan,DateTime date,Relat relat,string patID,bool doPrint,InsSub insSub){
 			//string electID,long patNum,string groupNumber,string divisionNo,
 			//string subscriberID,string patID,Relat patRelat,long subscNum,string dentaideCardSequence)
 			//Note: This might be the only class of this kind that returns a string.  It's a special situation.
@@ -19,7 +19,7 @@ namespace OpenDental.Eclaims {
 				throw new ApplicationException("Invalid carrier.");
 			}
 			Patient patient=Patients.GetPat(patNum);
-			Patient subscriber=Patients.GetPat(plan.Subscriber);
+			Patient subscriber=Patients.GetPat(insSub.Subscriber);
 			Provider prov=Providers.GetProv(Patients.GetProvNum(patient));
 			Clearinghouse clearhouse=Canadian.GetClearinghouse();
 			if(clearhouse==null){
@@ -56,7 +56,7 @@ namespace OpenDental.Eclaims {
 			//	if(error!="") error+=", ";
 			//	error+="SubscriberID";
 			//}
-			if(patNum != plan.Subscriber && relat==Relat.Self) {//if patient is not subscriber, and relat is self
+			if(patNum != insSub.Subscriber && relat==Relat.Self) {//if patient is not subscriber, and relat is self
 				if(error!="") error+=", ";
 				error+="Relationship cannot be self";
 			}
@@ -170,11 +170,11 @@ namespace OpenDental.Eclaims {
 			strb.Append(Canadian.TidyAN(plan.DivisionNo,10));
 			if(carrier.CDAnetVersion=="02") {
 				//C02 subscriber id number 11 AN
-				strb.Append(Canadian.TidyAN(plan.SubscriberID.Replace("-",""),11));//no extra validation for version 02
+				strb.Append(Canadian.TidyAN(insSub.SubscriberID.Replace("-",""),11));//no extra validation for version 02
 			}
 			else{
 				//C02 subscriber id number 12 AN
-				strb.Append(Canadian.TidyAN(plan.SubscriberID.Replace("-",""),12));//validated
+				strb.Append(Canadian.TidyAN(insSub.SubscriberID.Replace("-",""),12));//validated
 			}
 			if(carrier.CDAnetVersion=="04") {
 				//C17 primary dependant code 2 N. Optional

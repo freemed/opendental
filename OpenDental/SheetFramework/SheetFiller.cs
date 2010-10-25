@@ -99,6 +99,7 @@ namespace OpenDental{
 			return null;
 		}
 
+		///<summary>Pat can be null sometimes.  For example, in deposit slip.</summary>
 		private static void FillFieldsInStaticText(Sheet sheet,Patient pat) {
 			string fldval="";
 			string address="";
@@ -176,9 +177,12 @@ namespace OpenDental{
 				//Insurance-------------------------------------------------------------------------------------------------------------------
 				List <PatPlan> patPlanList=PatPlans.Refresh(pat.PatNum);
 				long planNum=PatPlans.GetPlanNum(patPlanList,1);
+				long subNum=PatPlans.GetInsSubNum(patPlanList,1);
 				long patPlanNum=PatPlans.GetPatPlanNum(patPlanList,planNum);
-				List<InsPlan> planList=InsPlans.RefreshForFam(fam);
+				List<InsSub> subList=InsSubs.RefreshForFam(fam);
+				List<InsPlan> planList=InsPlans.RefreshForSubList(subList);
 				InsPlan plan=InsPlans.GetPlan(planNum,planList);
+				InsSub sub=InsSubs.GetSub(subNum,subList);
 				Carrier carrier=null;
 				List<Benefit> benefitList=Benefits.Refresh(patPlanList);
 				List<ClaimProcHist> histList=ClaimProcs.GetHistList(pat.PatNum,benefitList,patPlanList,planList,DateTime.Today);
@@ -196,8 +200,8 @@ namespace OpenDental{
 						carrierAddress+=", "+carrier.Address2;
 					}
 					carrierCityStZip=carrier.City+", "+carrier.State+"  "+carrier.Zip;
-					subscriberId=plan.SubscriberID;
-					subscriberNameFL=Patients.GetLim(plan.Subscriber).GetNameFL();
+					subscriberId=sub.SubscriberID;
+					subscriberNameFL=Patients.GetLim(sub.Subscriber).GetNameFL();
 					doubAnnualMax=Benefits.GetAnnualMaxDisplay(benefitList,plan.PlanNum,patPlanNum,false);
 					doubRemain=-1;
 					if(doubAnnualMax!=-1){
@@ -243,8 +247,10 @@ namespace OpenDental{
 					}
 				}
 				planNum=PatPlans.GetPlanNum(patPlanList,2);
+				subNum=PatPlans.GetInsSubNum(patPlanList,2);
 				patPlanNum=PatPlans.GetPatPlanNum(patPlanList,planNum);
 				plan=InsPlans.GetPlan(planNum,planList);
+				sub=InsSubs.GetSub(subNum,subList);
 				if(plan!=null) {
 					carrier=Carriers.GetCarrier(plan.CarrierNum);
 					carrier2Name=carrier.CarrierName;
@@ -254,7 +260,7 @@ namespace OpenDental{
 					//}
 					//carrierCityStZip=carrier.City+", "+carrier.State+"  "+carrier.Zip;
 					//subscriberId=plan.SubscriberID;
-					subscriber2NameFL=Patients.GetLim(plan.Subscriber).GetNameFL();
+					subscriber2NameFL=Patients.GetLim(sub.Subscriber).GetNameFL();
 					doubAnnualMax=Benefits.GetAnnualMaxDisplay(benefitList,plan.PlanNum,patPlanNum,false);
 					doubRemain=-1;
 					if(doubAnnualMax!=-1) {
@@ -917,17 +923,22 @@ namespace OpenDental{
 		private static void FillFieldsForPatientForm(Sheet sheet,Patient pat) {
 			Family fam=Patients.GetFamily(pat.PatNum);
 			List<PatPlan> patPlanList=PatPlans.Refresh(pat.PatNum);
-			List<InsPlan> planList=InsPlans.RefreshForFam(fam);
+			List<InsSub> subList=InsSubs.RefreshForFam(fam);
+			List<InsPlan> planList=InsPlans.RefreshForSubList(subList);
 			InsPlan insplan1=null;
+			InsSub sub1=null;
 			Carrier carrier1=null;
 			if(patPlanList.Count>0){
 				insplan1=InsPlans.GetPlan(patPlanList[0].PlanNum,planList);
+				sub1=InsSubs.GetSub(patPlanList[0].InsSubNum,subList);
 				carrier1=Carriers.GetCarrier(insplan1.CarrierNum);
 			}
 			InsPlan insplan2=null;
+			InsSub sub2=null;
 			Carrier carrier2=null;
 			if(patPlanList.Count>1) {
 				insplan2=InsPlans.GetPlan(patPlanList[1].PlanNum,planList);
+				sub2=InsSubs.GetSub(patPlanList[1].InsSubNum,subList);
 				carrier2=Carriers.GetCarrier(insplan2.CarrierNum);
 			}
 			foreach(SheetField field in sheet.SheetFields) {
@@ -1008,12 +1019,12 @@ namespace OpenDental{
 						break;
 					case "ins1SubscriberID":
 						if(insplan1!=null) {
-							field.FieldValue=insplan1.SubscriberID;
+							field.FieldValue=sub1.SubscriberID;
 						}
 						break;
 					case "ins1SubscriberNameF":
 						if(insplan1!=null) {
-							field.FieldValue=fam.GetNameInFamFirst(insplan1.Subscriber);
+							field.FieldValue=fam.GetNameInFamFirst(sub1.Subscriber);
 						}
 						break;
 					case "ins2CarrierName":
@@ -1048,12 +1059,12 @@ namespace OpenDental{
 						break;
 					case "ins2SubscriberID":
 						if(insplan2!=null) {
-							field.FieldValue=insplan2.SubscriberID;
+							field.FieldValue=sub2.SubscriberID;
 						}
 						break;
 					case "ins2SubscriberNameF":
 						if(insplan2!=null) {
-							field.FieldValue=fam.GetNameInFamFirst(insplan2.Subscriber);
+							field.FieldValue=fam.GetNameInFamFirst(sub2.Subscriber);
 						}
 						break;
 					case "LName":

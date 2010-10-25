@@ -28,6 +28,7 @@ namespace OpenDental{
 		private Patient guar;
 		private Patient subsc;
 		private InsPlan plan;
+		private InsSub sub;
 		private Carrier carrier;
 		private string targetVersion="";
 		private string warnings="";
@@ -160,9 +161,10 @@ namespace OpenDental{
 			subsc=new Patient();
 			subsc.PriProv=PrefC.GetLong(PrefName.PracticeDefaultProv);
 			subsc.BillingType=PrefC.GetLong(PrefName.PracticeDefaultBillType);
+			sub=new InsSub();
+			sub.ReleaseInfo=true;
+			sub.AssignBen=true;
 			plan=new InsPlan();
-			plan.ReleaseInfo=true;
-			plan.AssignBen=true;
 			carrier=new Carrier();
 			insRelat="self";//this is the default if not included
 			guarRelat="self";
@@ -289,9 +291,9 @@ namespace OpenDental{
 						insPresent=false;
 					}
 				}
-				else if(plan.SubscriberID==""){
+				else if(sub.SubscriberID==""){
 					warnings+="PolicyNumber/SubscriberID missing.\r\n";
-					plan.SubscriberID=" ";
+					sub.SubscriberID=" ";
 				}
 			}
 			if(warnings!=""){
@@ -408,12 +410,12 @@ namespace OpenDental{
 				DialogResult=DialogResult.OK;
 			}
 			if(insRelat=="self"){
-				plan.Subscriber=pat.PatNum;
+				sub.Subscriber=pat.PatNum;
 			}
 			else{//we need to find or add the subscriber
 				patNum=Patients.GetPatNumByNameAndBirthday(subsc.LName,subsc.FName,subsc.Birthdate);
 				if(patNum != 0){//a subsc already exists, so simply attach. Make no other changes
-					plan.Subscriber=patNum;
+					sub.Subscriber=patNum;
 				}
 				else{//need to create and attach a subscriber
 					Patients.Insert(subsc,false);
@@ -421,7 +423,7 @@ namespace OpenDental{
 					existingPatOld=subsc.Copy();
 					subsc.Guarantor=pat.Guarantor;
 					Patients.Update(subsc,existingPatOld);
-					plan.Subscriber=subsc.PatNum;
+					sub.Subscriber=subsc.PatNum;
 				}
 			}
 			//carrier-------------------------------------------------------------------------------------------------
@@ -431,12 +433,16 @@ namespace OpenDental{
 			plan.EmployerNum=Employers.GetEmployerNum(InsEmp);
 			plan.CarrierNum=carrier.CarrierNum;
 			InsPlans.Insert(plan);
+			//Attach plan to subscriber
+			sub.PlanNum=plan.PlanNum;
+			InsSubs.Insert(sub);
 			//Then attach plan
 			List <PatPlan> PatPlanList=PatPlans.Refresh(pat.PatNum);
 			PatPlan patplan=new PatPlan();
 			patplan.Ordinal=(byte)(PatPlanList.Count+1);//so the ordinal of the first entry will be 1, NOT 0.
 			patplan.PatNum=pat.PatNum;
 			patplan.PlanNum=plan.PlanNum;
+			patplan.InsSubNum=sub.InsSubNum;
 			switch(insRelat){
 			  case "self":
 					patplan.Relationship=Relat.Self;
@@ -764,10 +770,10 @@ namespace OpenDental{
 					InsEmp=textValue;
 					break;
 				case "PlanEffectiveDate":
-					plan.DateEffective=DateTime.MinValue;
+					sub.DateEffective=DateTime.MinValue;
 					if(textValue.Length>0){
 						try{
-							plan.DateEffective=DateTime.Parse(textValue);
+							sub.DateEffective=DateTime.Parse(textValue);
 						}
 						catch{
 							warnings+="Invalid PlanEffectiveDate\r\n";
@@ -775,10 +781,10 @@ namespace OpenDental{
 					}
 					break;
 				case "PlanExpirationDate":
-					plan.DateTerm=DateTime.MinValue;
+					sub.DateTerm=DateTime.MinValue;
 					if(textValue.Length>0){
 						try{
-							plan.DateTerm=DateTime.Parse(textValue);
+							sub.DateTerm=DateTime.Parse(textValue);
 						}
 						catch{
 							warnings+="Invalid PlanExpirationDate\r\n";
@@ -846,16 +852,16 @@ namespace OpenDental{
 				case "AssignmentOfBenefits":
 					switch(textValue.ToUpper()){
 						case "Y":
-							plan.AssignBen=true;
+							sub.AssignBen=true;
 							break;
 						case "N":
-							plan.AssignBen=false;
+							sub.AssignBen=false;
 							break;
 						case "":
-							plan.AssignBen=true;
+							sub.AssignBen=true;
 							break;
 						default:
-							plan.AssignBen=true;
+							sub.AssignBen=true;
 							warnings+="Invalid AssignmentOfBenefits\r\n";
 							break;
 					}
@@ -863,22 +869,22 @@ namespace OpenDental{
 				case "ReleaseInformationCode":
 					switch(textValue.ToUpper()){
 						case "Y":
-							plan.ReleaseInfo=true;
+							sub.ReleaseInfo=true;
 							break;
 						case "N":
-							plan.ReleaseInfo=false;
+							sub.ReleaseInfo=false;
 							break;
 						case "":
-							plan.ReleaseInfo=true;
+							sub.ReleaseInfo=true;
 							break;
 						default:
-							plan.ReleaseInfo=true;
+							sub.ReleaseInfo=true;
 							warnings+="Invalid ReleaseInformationCode\r\n";
 							break;
 					}
 					break;
 				case "PolicyNumber":
-					plan.SubscriberID=textValue;
+					sub.SubscriberID=textValue;
 					break;
 				case "PolicyDeductible":
 					deductible=-1;//unknown
@@ -936,7 +942,7 @@ namespace OpenDental{
 					subsc.HmPhone=TelephoneNumbers.ReFormat(textValue);
 					break;
 				case "NotePlan":
-					plan.BenefitNotes=textValue;
+					sub.BenefitNotes=textValue;
 					break;
 				default:
 					warnings+="Unrecognized field: "+field+"\r\n";

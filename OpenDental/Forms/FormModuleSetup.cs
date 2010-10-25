@@ -530,12 +530,11 @@ namespace OpenDental{
 			// 
 			this.checkInsurancePlansShared.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkInsurancePlansShared.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkInsurancePlansShared.Location = new System.Drawing.Point(102,46);
+			this.checkInsurancePlansShared.Location = new System.Drawing.Point(10,37);
 			this.checkInsurancePlansShared.Name = "checkInsurancePlansShared";
-			this.checkInsurancePlansShared.Size = new System.Drawing.Size(314,27);
+			this.checkInsurancePlansShared.Size = new System.Drawing.Size(406,17);
 			this.checkInsurancePlansShared.TabIndex = 58;
-			this.checkInsurancePlansShared.Text = "Checkbox at bottom of InsPlan, \'Apply changes for all subscribers\' checked by def" +
-    "ault.";
+			this.checkInsurancePlansShared.Text = "InsPlan option at bottom, \'Change Plan for all subscribers\', is default.";
 			this.checkInsurancePlansShared.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// checkMedicalEclaimsEnabled
@@ -543,7 +542,7 @@ namespace OpenDental{
 			this.checkMedicalEclaimsEnabled.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkMedicalEclaimsEnabled.Enabled = false;
 			this.checkMedicalEclaimsEnabled.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkMedicalEclaimsEnabled.Location = new System.Drawing.Point(70,24);
+			this.checkMedicalEclaimsEnabled.Location = new System.Drawing.Point(70,20);
 			this.checkMedicalEclaimsEnabled.Name = "checkMedicalEclaimsEnabled";
 			this.checkMedicalEclaimsEnabled.Size = new System.Drawing.Size(346,17);
 			this.checkMedicalEclaimsEnabled.TabIndex = 60;
@@ -815,7 +814,7 @@ namespace OpenDental{
 			// 
 			this.checkPPOpercentage.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkPPOpercentage.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkPPOpercentage.Location = new System.Drawing.Point(3,76);
+			this.checkPPOpercentage.Location = new System.Drawing.Point(3,54);
 			this.checkPPOpercentage.Name = "checkPPOpercentage";
 			this.checkPPOpercentage.Size = new System.Drawing.Size(413,17);
 			this.checkPPOpercentage.TabIndex = 192;
@@ -832,7 +831,7 @@ namespace OpenDental{
 			this.groupBox2.Controls.Add(this.checkInsurancePlansShared);
 			this.groupBox2.Location = new System.Drawing.Point(12,233);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(422,163);
+			this.groupBox2.Size = new System.Drawing.Size(422,134);
 			this.groupBox2.TabIndex = 193;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Family module";
@@ -841,7 +840,7 @@ namespace OpenDental{
 			// 
 			this.checkInsDefaultShowUCRonClaims.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkInsDefaultShowUCRonClaims.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkInsDefaultShowUCRonClaims.Location = new System.Drawing.Point(3,130);
+			this.checkInsDefaultShowUCRonClaims.Location = new System.Drawing.Point(3,105);
 			this.checkInsDefaultShowUCRonClaims.Name = "checkInsDefaultShowUCRonClaims";
 			this.checkInsDefaultShowUCRonClaims.Size = new System.Drawing.Size(413,17);
 			this.checkInsDefaultShowUCRonClaims.TabIndex = 196;
@@ -853,7 +852,7 @@ namespace OpenDental{
 			// 
 			this.checkCoPayFeeScheduleBlankLikeZero.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkCoPayFeeScheduleBlankLikeZero.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkCoPayFeeScheduleBlankLikeZero.Location = new System.Drawing.Point(3,112);
+			this.checkCoPayFeeScheduleBlankLikeZero.Location = new System.Drawing.Point(3,88);
 			this.checkCoPayFeeScheduleBlankLikeZero.Name = "checkCoPayFeeScheduleBlankLikeZero";
 			this.checkCoPayFeeScheduleBlankLikeZero.Size = new System.Drawing.Size(413,17);
 			this.checkCoPayFeeScheduleBlankLikeZero.TabIndex = 195;
@@ -864,7 +863,7 @@ namespace OpenDental{
 			// 
 			this.checkAllowedFeeSchedsAutomate.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkAllowedFeeSchedsAutomate.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkAllowedFeeSchedsAutomate.Location = new System.Drawing.Point(3,94);
+			this.checkAllowedFeeSchedsAutomate.Location = new System.Drawing.Point(3,71);
 			this.checkAllowedFeeSchedsAutomate.Name = "checkAllowedFeeSchedsAutomate";
 			this.checkAllowedFeeSchedsAutomate.Size = new System.Drawing.Size(413,17);
 			this.checkAllowedFeeSchedsAutomate.TabIndex = 193;

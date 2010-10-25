@@ -10,18 +10,18 @@ namespace OpenDental.Eclaims {
 	public class x270Controller {
 
 		///<summary>The insplan that's passed in need not be properly updated to the database first.</summary>
-		public static void RequestBenefits(Clearinghouse clearhouse,InsPlan plan,long patNum,Carrier carrier,List<Benefit> benList,long patPlanNum) {
+		public static void RequestBenefits(Clearinghouse clearhouse,InsPlan plan,long patNum,Carrier carrier,List<Benefit> benList,long patPlanNum,InsSub insSub) {
 			Patient pat=Patients.GetPat(patNum);
-			Patient subsc=Patients.GetPat(plan.Subscriber);
+			Patient subsc=Patients.GetPat(insSub.Subscriber);
 			Clinic clinic=Clinics.GetClinic(pat.ClinicNum);
 			Provider billProv=Providers.GetProv(Providers.GetBillingProvNum(pat.PriProv,pat.ClinicNum));
 			//validation.  Throw exception if missing info----------------------------------------
-			string validationResult=X270.Validate(clearhouse,carrier,billProv,clinic,plan,subsc);
+			string validationResult=X270.Validate(clearhouse,carrier,billProv,clinic,plan,subsc,insSub);
 			if(validationResult != "") {
 				throw new Exception(Lan.g("FormInsPlan","Please fix the following errors first:")+"\r\n"+validationResult);
 			}
 			//create a 270 message---------------------------------------------------------------
-			string x12message=X270.GenerateMessageText(clearhouse,carrier,billProv,clinic,plan,subsc);
+			string x12message=X270.GenerateMessageText(clearhouse,carrier,billProv,clinic,plan,subsc,insSub);
 			EtransMessageText etransMessageText=new EtransMessageText();
 			etransMessageText.MessageText=x12message;
 			EtransMessageTexts.Insert(etransMessageText);
@@ -122,7 +122,7 @@ namespace OpenDental.Eclaims {
 			}
 			Etranss.Update(etrans);
 			//show the user a list of benefits to pick from for import--------------------------
-			FormEtrans270Edit formE=new FormEtrans270Edit(patPlanNum,plan.PlanNum);
+			FormEtrans270Edit formE=new FormEtrans270Edit(patPlanNum,plan.PlanNum,insSub.InsSubNum);
 			formE.EtransCur=etrans;
 			formE.IsInitialResponse=true;
 			formE.benList=benList;

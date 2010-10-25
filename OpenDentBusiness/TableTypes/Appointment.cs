@@ -56,9 +56,9 @@ namespace OpenDentBusiness{
 		///<summary>The date and time that the patient got up out of the chair</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTimeDismissed;
-		///<summary>FK to insplan.PlanNum for the primary insurance plan at the time the appointment is set complete. May be 0.</summary>
+		///<summary>FK to insplan.PlanNum for the primary insurance plan at the time the appointment is set complete. May be 0. We can't tell later which subscriber is involved; only the plan.</summary>
 		public long InsPlan1;
-		///<summary>FK to insplan.PlanNum for the secoondary insurance plan at the time the appointment is set complete. May be 0.</summary>
+		///<summary>FK to insplan.PlanNum for the secoondary insurance plan at the time the appointment is set complete. May be 0. We can't tell later which subscriber is involved; only the plan.</summary>
 		public long InsPlan2;
 		///<summary>Date and time patient asked to arrive, or minval if patient not asked to arrive at a different time than appt.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
