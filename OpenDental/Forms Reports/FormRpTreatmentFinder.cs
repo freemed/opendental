@@ -40,7 +40,7 @@ namespace OpenDental{
 		private UI.Button butLabelSingle;
 		private UI.Button butLabelPreview;
 		private Label label7;
-		private UI.Button butPostcards;
+		private UI.Button butLettersPreview;
 		private UI.Button buttonExport;
 		private Label label8;
 		private CheckBox checkRemainingIns;
@@ -89,7 +89,7 @@ namespace OpenDental{
 			this.menuItemFamily = new System.Windows.Forms.MenuItem();
 			this.menuItemAccount = new System.Windows.Forms.MenuItem();
 			this.buttonExport = new OpenDental.UI.Button();
-			this.butPostcards = new OpenDental.UI.Button();
+			this.butLettersPreview = new OpenDental.UI.Button();
 			this.butLabelSingle = new OpenDental.UI.Button();
 			this.butLabelPreview = new OpenDental.UI.Button();
 			this.butGotoAccount = new OpenDental.UI.Button();
@@ -153,17 +153,20 @@ namespace OpenDental{
 			// 
 			this.comboMonthStart.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboMonthStart.Items.AddRange(new object[] {
+            "Calendar Year",
             "01 - January",
             "02 - February",
             "03 - March",
             "04 - April",
-            "05 - June",
-            "06 - July",
-            "07 - August",
+            "05 - May",
+            "06 - June",
+            "07 - July",
+            "08 - August",
             "09 - September",
             "10 - October",
             "11 - November",
-            "12 - December"});
+            "12 - December",
+            "All"});
 			this.comboMonthStart.Location = new System.Drawing.Point(342,32);
 			this.comboMonthStart.MaxDropDownItems = 40;
 			this.comboMonthStart.Name = "comboMonthStart";
@@ -217,11 +220,11 @@ namespace OpenDental{
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(250,36);
+			this.label3.Location = new System.Drawing.Point(233,36);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(88,14);
+			this.label3.Size = new System.Drawing.Size(105,14);
 			this.label3.TabIndex = 37;
-			this.label3.Text = "Month Start";
+			this.label3.Text = "Ins Month Start";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// label6
@@ -285,21 +288,22 @@ namespace OpenDental{
 			this.buttonExport.Text = "Export to File";
 			this.buttonExport.Click += new System.EventHandler(this.buttonExport_Click);
 			// 
-			// butPostcards
+			// butLettersPreview
 			// 
-			this.butPostcards.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butPostcards.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butPostcards.Autosize = true;
-			this.butPostcards.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butPostcards.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butPostcards.CornerRadius = 4F;
-			this.butPostcards.Image = global::OpenDental.Properties.Resources.butPreview;
-			this.butPostcards.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPostcards.Location = new System.Drawing.Point(3,587);
-			this.butPostcards.Name = "butPostcards";
-			this.butPostcards.Size = new System.Drawing.Size(119,24);
-			this.butPostcards.TabIndex = 71;
-			this.butPostcards.Text = "Letters Preview";
+			this.butLettersPreview.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butLettersPreview.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butLettersPreview.Autosize = true;
+			this.butLettersPreview.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butLettersPreview.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butLettersPreview.CornerRadius = 4F;
+			this.butLettersPreview.Image = global::OpenDental.Properties.Resources.butPreview;
+			this.butLettersPreview.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butLettersPreview.Location = new System.Drawing.Point(3,587);
+			this.butLettersPreview.Name = "butLettersPreview";
+			this.butLettersPreview.Size = new System.Drawing.Size(119,24);
+			this.butLettersPreview.TabIndex = 71;
+			this.butLettersPreview.Text = "Letters Preview";
+			this.butLettersPreview.Click += new System.EventHandler(this.butLettersPreview_Click);
 			// 
 			// butLabelSingle
 			// 
@@ -478,7 +482,7 @@ namespace OpenDental{
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(923,641);
 			this.Controls.Add(this.buttonExport);
-			this.Controls.Add(this.butPostcards);
+			this.Controls.Add(this.butLettersPreview);
 			this.Controls.Add(this.butLabelSingle);
 			this.Controls.Add(this.butLabelPreview);
 			this.Controls.Add(this.butGotoAccount);
@@ -518,7 +522,7 @@ namespace OpenDental{
 			}
 			comboBoxMultiBilling.SetSelected(0,true);
 			comboBoxMultiBilling.RefreshText();
-			comboMonthStart.SelectedIndex=0;
+			comboMonthStart.SelectedIndex=13;
 			FillGrid();
 		}
 
@@ -526,14 +530,15 @@ namespace OpenDental{
 			if(textDateStart.errorProvider1.GetError(textDateStart)!="") {
 				return;
 			}
-			DateTime startDate;
-			double aboveAmount;
+			DateTime dateSince;
 			if(textDateStart.Text.Trim()=="") {
-				startDate=DateTime.MinValue;
+				dateSince=DateTime.MinValue;
 			}
 			else {
-				startDate=PIn.Date(textDateStart.Text);
+				dateSince=PIn.Date(textDateStart.Text);
 			}
+			int monthStart=comboMonthStart.SelectedIndex;
+			double aboveAmount;
 			if(textOverAmount.Enabled) {
 				if(textOverAmount.errorProvider1.GetError(textOverAmount)!="") {
 					return;
@@ -547,6 +552,45 @@ namespace OpenDental{
 			}
 			else {
 				aboveAmount=0;
+			}
+			string provFilter="";
+			string billFilter="";
+			if(comboBoxMultiProv.SelectedIndices[0].ToString()!="0") {
+				for(int i=0;i<comboBoxMultiProv.SelectedIndices.Count;i++) {
+					if(i==0) {
+						provFilter=" AND (patient.PriProv=";
+					}
+					else {
+						provFilter+=" OR patient.PriProv=";
+					}
+					provFilter+=POut.Long(ProviderC.List[(int)comboBoxMultiProv.SelectedIndices[i]-1].ProvNum);
+				}
+				provFilter+=") ";
+			}
+			if(comboBoxMultiBilling.SelectedIndices[0].ToString()!="0") {
+				for(int i=0;i<comboBoxMultiBilling.SelectedIndices.Count;i++) {
+					if(i==0) {
+						billFilter=" AND (patient.BillingType=";
+					}
+					else {
+						billFilter+=" OR patient.BillingType=";
+					}
+					billFilter+=POut.Long(DefC.Short[(int)DefCat.BillingTypes][(int)comboBoxMultiBilling.SelectedIndices[i]-1].DefNum);
+				}
+				billFilter+=") ";
+			}
+			string code1="";
+			string code2="";
+			if(textCodeRange.Text.Trim()!="") {
+				if(textCodeRange.Text.Contains("-")) {
+					string[] codeSplit=textCodeRange.Text.Split('-');
+					code1=codeSplit[0].Trim();
+					code2=codeSplit[1].Trim();
+				}
+				else {
+					code1=textCodeRange.Text.Trim();
+					code2=textCodeRange.Text.Trim();
+				}
 			}
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
@@ -576,10 +620,11 @@ namespace OpenDental{
 			col.TextAlign=HorizontalAlignment.Right;
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
-			table=Patients.GetTreatmentFinderList(checkIncludeNoIns.Checked,checkRemainingIns.Checked, startDate,aboveAmount);
+			table=Patients.GetTreatmentFinderList(checkIncludeNoIns.Checked,checkRemainingIns.Checked,monthStart,dateSince,aboveAmount,provFilter,billFilter,code1,code2);
 			ODGridRow row;
 			for(int i=0;i<table.Rows.Count;i++) {
 			  row=new ODGridRow();
+				//Temporary filter just showing columns wanted. Probable it will become user defined.
 			  for(int j=0;j<table.Columns.Count;j++) {
 					if(j==1 || j==2 || j==3	|| j==6 || j==7 || j==8 || j==9) {
 						row.Cells.Add(table.Rows[i][j].ToString());
@@ -606,6 +651,11 @@ namespace OpenDental{
 					comboBoxMultiProv.RefreshText();
 				}
 			}
+			if(comboBoxMultiProv.SelectedIndices.Count==0) {
+				comboBoxMultiProv.SelectedIndices.Clear();
+				comboBoxMultiProv.SetSelected(0,true);
+				comboBoxMultiProv.RefreshText();
+			}
 		}
 
 		private void comboBoxMultiBilling_Leave(object sender,EventArgs e) {
@@ -616,6 +666,11 @@ namespace OpenDental{
 					comboBoxMultiBilling.RefreshText();
 				}
 			}
+			if(comboBoxMultiBilling.SelectedIndices.Count==0) {
+				comboBoxMultiBilling.SelectedIndices.Clear();
+				comboBoxMultiBilling.SetSelected(0,true);
+				comboBoxMultiBilling.RefreshText();
+			}
 		}
 
 		private void checkRemainingIns_CheckedChanged(object sender,EventArgs e) {
@@ -625,6 +680,11 @@ namespace OpenDental{
 			else {
 				textOverAmount.Enabled=false;
 			}
+		}
+
+		private void butLettersPreview_Click(object sender,EventArgs e) {
+			//Create letters. loop through each row and insert information into sheets,
+			//take all the sheets and add to one giant pdf for preview.
 		}
 
 		private void butLabelSingle_Click(object sender,EventArgs e) {
@@ -872,6 +932,10 @@ namespace OpenDental{
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			Close();
 		}
+
+		
+
+		
 
 		
 

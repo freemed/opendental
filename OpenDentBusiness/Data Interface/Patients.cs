@@ -1218,7 +1218,9 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets the DataTable to display for treatment finder report</summary>
-		public static DataTable GetTreatmentFinderList(bool noIns,bool remainingIns, DateTime startDate,double aboveAmount) {
+		public static DataTable GetTreatmentFinderList(bool noIns,bool remainingIns,int monthStart,DateTime dateSince,double aboveAmount,string providerFilter,
+			string billingFilter,string code1,string code2) 
+		{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),noIns);
 			}
@@ -1270,16 +1272,29 @@ namespace OpenDentBusiness{
 				INSERT INTO tempplanned
 				SELECT PatNum, SUM(ProcFee)
 				FROM procedurelog
-				WHERE ProcStatus = 1 /*treatment planned*/
+				LEFT JOIN procedurecode ON procedurecode.CodeNum = procedurelog.CodeNum
+				WHERE ProcStatus = 1 /*treatment planned*/";
+			if(code1!="") {
+				command+=@"
+				AND (((SELECT STRCMP('"+POut.String(code1)+@"', ProcCode))=0) OR ((SELECT STRCMP('"+POut.String(code1)+@"', ProcCode))=-1))
+				AND (((SELECT STRCMP('"+POut.String(code2)+@"', ProcCode))=0) OR ((SELECT STRCMP('"+POut.String(code2)+@"', ProcCode))=1))";
+			}
+				command+=@"
+				AND procedurelog.ProcDate>"+POut.DateT(dateSince)+@"
 				GROUP BY PatNum;
 
 				INSERT INTO tempannualmax
 				SELECT benefit.PlanNum, benefit.MonetaryAmt
-				FROM benefit, covcat
+				FROM benefit, covcat, insplan
 				WHERE covcat.CovCatNum = benefit.CovCatNum
 				AND benefit.BenefitType = 5 /* limitation */
 				AND (covcat.EbenefitCat=1 OR ISNULL(covcat.EbenefitCat))
 				AND benefit.MonetaryAmt <> 0
+				AND benefit.PlanNum=insplan.PlanNum ";
+			if(monthStart!=13) {
+				command+="AND insplan.MonthRenew='"+POut.Int(monthStart)+"' ";
+			}
+				command+=@"
 				GROUP BY benefit.PlanNum
 				ORDER BY benefit.PlanNum;
 
@@ -1287,6 +1302,7 @@ namespace OpenDentBusiness{
 				patient.Email, patient.HmPhone, patient.PreferRecallMethod,
 				patient.WirelessPhone, patient.WkPhone, patient.Address,
 				patient.Address2, patient.City, patient.State, patient.Zip,
+				patient.PriProv, patient.BillingType, 
 				tempannualmax.AnnualMax $AnnualMax,
 				tempused.AmtUsed $AmountUsed,
 				tempannualmax.AnnualMax-IFNULL(tempused.AmtUsed,0) $AmtRemaining,
@@ -1304,6 +1320,12 @@ namespace OpenDentBusiness{
 			}
 			if(remainingIns) {
 				command+="AND tempannualmax.AnnualMax-IFNULL(tempused.AmtUsed,0)>"+POut.Double(aboveAmount)+" ";
+			}
+			if(providerFilter!="") {
+				command+=providerFilter;
+			}
+			if(billingFilter!="") {
+				command+=billingFilter;
 			}
 			command+=@"
 				AND patient.PatStatus =0
