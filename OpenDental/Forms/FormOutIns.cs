@@ -28,6 +28,7 @@ namespace OpenDental {
     private bool isAllProv;
     private bool isPreauth;
 		private DataTable Table;
+		private UI.Button butPrint;
 		private long selectedPatNum;
 	
 		public FormRpOutIns() {
@@ -48,6 +49,7 @@ namespace OpenDental {
 			this.butCancel = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butOK = new OpenDental.UI.Button();
+			this.butPrint = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// checkPreauth
@@ -180,9 +182,26 @@ namespace OpenDental {
 			this.butOK.UseVisualStyleBackColor = true;
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
+			// butPrint
+			// 
+			this.butPrint.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butPrint.Autosize = true;
+			this.butPrint.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butPrint.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPrint.CornerRadius = 4F;
+			this.butPrint.Image = global::OpenDental.Properties.Resources.butPrintSmall;
+			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butPrint.Location = new System.Drawing.Point(17,555);
+			this.butPrint.Name = "butPrint";
+			this.butPrint.Size = new System.Drawing.Size(79,23);
+			this.butPrint.TabIndex = 52;
+			this.butPrint.Text = "&Print";
+			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
+			// 
 			// FormRpOutIns
 			// 
 			this.ClientSize = new System.Drawing.Size(764,590);
+			this.Controls.Add(this.butPrint);
 			this.Controls.Add(this.checkPreauth);
 			this.Controls.Add(this.checkProvAll);
 			this.Controls.Add(this.listProv);
@@ -247,19 +266,19 @@ namespace OpenDental {
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col;
-			col=new ODGridColumn(Lan.g(this,"Carrier"),160);
+			col=new ODGridColumn(Lan.g(this,"Carrier"),165);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Phone"),90);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Type"),85);
+			col=new ODGridColumn(Lan.g(this,"Type"),70);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Patient Name"),150);
+			col=new ODGridColumn(Lan.g(this,"Patient Name"),165);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Date of Service"),88);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Date Sent"),88);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Amount"),70);
+			col=new ODGridColumn(Lan.g(this,"Amount"),65,HorizontalAlignment.Right);
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
@@ -353,6 +372,89 @@ namespace OpenDental {
 
 		private void gridMain_CellClick(object sender,ODGridClickEventArgs e) {
 			GotoModule.GotoAccount(PIn.Long(Table.Rows[e.Row]["PatNum"].ToString()));
+		}
+
+		private void butPrint_Click(object sender,EventArgs e) {
+			//Validating of parameters is done during RefreshGrid().
+			ReportSimpleGrid report=new ReportSimpleGrid();
+			report.Query = "SELECT carrier.CarrierName,patient.HmPhone,claim.ClaimType,patient.FName,patient.LName,patient.MiddleI,patient.PatNum,claim.DateService,claim.DateSent,claim.ClaimFee,claim.ClaimNum "
+				+"FROM carrier,patient,claim,insplan "
+				+"WHERE carrier.CarrierNum = insplan.CarrierNum "
+				+"AND claim.PlanNum = insplan.PlanNum "
+				+"AND claim.PatNum = patient.PatNum "
+				+"AND claim.ClaimStatus='S' ";
+			if(dateMin!=DateTime.MinValue) {
+				report.Query+="AND claim.DateSent <= "+POut.Date(dateMin)+" ";
+			}
+			if(dateMax!=DateTime.MinValue) {
+				report.Query+="AND claim.DateSent >= "+POut.Date(dateMax)+" ";
+			}
+			if(!isAllProv) {
+				if(provNumList.Count>0) {
+					report.Query+="AND claim.ProvBill IN (";
+					report.Query+=""+provNumList[0];
+					for(int i=1;i<provNumList.Count;i++) {
+						report.Query+=","+provNumList[i];
+					}
+					report.Query+=") ";
+				}
+			}
+			if(!isPreauth) {
+				report.Query+="AND claim.ClaimType!='Preauth' ";
+			}
+			report.Query+="ORDER BY carrier.Phone,insplan.PlanNum, carrier.Phone,insplan.PlanNum";
+			FormQuery FormQuery2=new FormQuery(report);
+			FormQuery2.IsReport=true;
+			DataTable tableTemp= report.GetTempTable();
+			report.TableQ=new DataTable(null);//new table no name
+			for(int i=0;i<6;i++) {//add columns
+				report.TableQ.Columns.Add(new System.Data.DataColumn());//blank columns
+			}
+			report.InitializeColumns();
+			for(int i=0;i<tableTemp.Rows.Count;i++) {//loop through data rows
+				DataRow row = report.TableQ.NewRow();//create new row called 'row' based on structure of TableQ
+				//start filling 'row'. First column is carrier:
+				row[0]=tableTemp.Rows[i][0];
+				row[1]=tableTemp.Rows[i][7];
+				if(PIn.String(tableTemp.Rows[i][2].ToString())=="P")
+					row[2]="Primary";
+				if(PIn.String(tableTemp.Rows[i][2].ToString())=="S")
+					row[2]="Secondary";
+				if(PIn.String(tableTemp.Rows[i][2].ToString())=="PreAuth")
+					row[2]="PreAuth";
+				if(PIn.String(tableTemp.Rows[i][2].ToString())=="Other")
+					row[2]="Other";
+				row[3]=tableTemp.Rows[i][4];
+				row[4]=(PIn.Date(tableTemp.Rows[i][3].ToString())).ToString("d");
+				row[5]=PIn.Double(tableTemp.Rows[i][6].ToString()).ToString("F");
+				//TimeSpan d = DateTime.Today.Subtract((PIn.PDate(tableTemp.Rows[i][5].ToString())));
+				//if(d.Days>5000)
+				//	row[4]="";
+				//else
+				//	row[4]=d.Days.ToString();
+				report.ColTotal[5]+=PIn.Double(tableTemp.Rows[i][6].ToString());
+				report.TableQ.Rows.Add(row);
+			}
+			FormQuery2.ResetGrid();//this is a method in FormQuery;
+			report.Title="OUTSTANDING INSURANCE CLAIMS";
+			report.SubTitle.Add(PrefC.GetString(PrefName.PracticeTitle));
+			report.SubTitle.Add("Sent before "+dateMin.Date.ToShortDateString());
+			report.ColPos[0]=20;
+			report.ColPos[1]=210;
+			report.ColPos[2]=330;
+			report.ColPos[3]=430;
+			report.ColPos[4]=600;
+			report.ColPos[5]=690;
+			report.ColPos[6]=770;
+			report.ColCaption[0]=Lan.g(this,"Carrier");
+			report.ColCaption[1]=Lan.g(this,"Phone");
+			report.ColCaption[2]=Lan.g(this,"Type");
+			report.ColCaption[3]=Lan.g(this,"Patient Name");
+			report.ColCaption[4]=Lan.g(this,"Date of Service");
+			report.ColCaption[5]=Lan.g(this,"Amount");
+			report.ColAlign[5]=HorizontalAlignment.Right;
+			FormQuery2.ShowDialog();
+			DialogResult=DialogResult.OK;
 		}
 
 
