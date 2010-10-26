@@ -2769,7 +2769,7 @@ namespace OpenDental{
 				PatCur.SSN=textSSN.Text;
 			}
 			if(IsNew) {//Check if patient already exists.
-				List<Patient> patList=Patients.GetListByName(PatCur.LName,PatCur.FName);
+				List<Patient> patList=Patients.GetListByName(PatCur.LName,PatCur.FName,PatCur.PatNum);
 				for(int i=0;i<patList.Count;i++) {
 					//If dates match or aren't entered there might be a duplicate patient.
 					if(patList[i].Birthdate==PatCur.Birthdate

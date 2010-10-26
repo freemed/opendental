@@ -1163,15 +1163,16 @@ namespace OpenDentBusiness{
 			return PIn.Long(Db.GetScalar(command));
 		}
 
-		///<summary>Returns a list of patients that match both last and first name.</summary>
-		public static List<Patient> GetListByName(string lName,string fName) {
+		///<summary>Returns a list of patients that match last and first name.</summary>
+		public static List<Patient> GetListByName(string lName,string fName,long PatNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Patient>>(MethodBase.GetCurrentMethod(),lName,fName);
 			}
 			string command="SELECT * FROM patient WHERE "
 				+"LOWER(LName)=LOWER('"+POut.String(lName)+"') "
 				+"AND LOWER(FName)=LOWER('"+POut.String(fName)+"') "
-				+"AND PatStatus!=4";//not deleted
+				+"AND PatNum!="+POut.Long(PatNum)
+				+" AND PatStatus!=4";//not deleted
 			return Crud.PatientCrud.SelectMany(command);
 		}
 
@@ -1218,7 +1219,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets the DataTable to display for treatment finder report</summary>
-		public static DataTable GetTreatmentFinderList(bool noIns,bool remainingIns,int monthStart,DateTime dateSince,double aboveAmount,string providerFilter,
+		public static DataTable GetTreatmentFinderList(bool noIns,int monthStart,DateTime dateSince,double aboveAmount,string providerFilter,
 			string billingFilter,string code1,string code2) 
 		{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
@@ -1318,7 +1319,7 @@ namespace OpenDentBusiness{
 			if(!noIns) {//if we don't want patients without insurance
 				command+="AND AnnualMax > 0 ";
 			}
-			if(remainingIns) {
+			if(!(aboveAmount==0 && noIns)){
 				command+="AND tempannualmax.AnnualMax-IFNULL(tempused.AmtUsed,0)>"+POut.Double(aboveAmount)+" ";
 			}
 			if(providerFilter!="") {
