@@ -25,7 +25,7 @@ namespace OpenDental{
 	public class FormProcEdit : System.Windows.Forms.Form{
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Label label2;
-		private System.Windows.Forms.Label label5;
+		private System.Windows.Forms.Label labelAmount;
 		private System.Windows.Forms.TextBox textProc;
 		private System.Windows.Forms.TextBox textSurfaces;
 		private System.Windows.Forms.Label label6;
@@ -69,7 +69,7 @@ namespace OpenDental{
 		private System.Windows.Forms.ComboBox comboPlaceService;
 		private System.Windows.Forms.Label labelPlaceService;
 		private OpenDental.UI.Button butSetComplete;
-		private System.Windows.Forms.Label label10;
+		private System.Windows.Forms.Label labelPriority;
 		private ProcedureCode ProcedureCode2;
 		private System.Windows.Forms.Label label13;
 		private OpenDental.UI.Button butAddEstimate;
@@ -259,7 +259,7 @@ namespace OpenDental{
 			this.label2 = new System.Windows.Forms.Label();
 			this.labelTooth = new System.Windows.Forms.Label();
 			this.labelSurfaces = new System.Windows.Forms.Label();
-			this.label5 = new System.Windows.Forms.Label();
+			this.labelAmount = new System.Windows.Forms.Label();
 			this.textProc = new System.Windows.Forms.TextBox();
 			this.textTooth = new System.Windows.Forms.TextBox();
 			this.textSurfaces = new System.Windows.Forms.TextBox();
@@ -335,7 +335,7 @@ namespace OpenDental{
 			this.labelClaim = new System.Windows.Forms.Label();
 			this.comboPlaceService = new System.Windows.Forms.ComboBox();
 			this.labelPlaceService = new System.Windows.Forms.Label();
-			this.label10 = new System.Windows.Forms.Label();
+			this.labelPriority = new System.Windows.Forms.Label();
 			this.label13 = new System.Windows.Forms.Label();
 			this.checkNoBillIns = new System.Windows.Forms.CheckBox();
 			this.labelClaimNote = new System.Windows.Forms.Label();
@@ -452,14 +452,14 @@ namespace OpenDental{
 			this.labelSurfaces.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			this.labelSurfaces.Visible = false;
 			// 
-			// label5
+			// labelAmount
 			// 
-			this.label5.Location = new System.Drawing.Point(30,158);
-			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(75,16);
-			this.label5.TabIndex = 4;
-			this.label5.Text = "Amount";
-			this.label5.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.labelAmount.Location = new System.Drawing.Point(30,158);
+			this.labelAmount.Name = "labelAmount";
+			this.labelAmount.Size = new System.Drawing.Size(75,16);
+			this.labelAmount.TabIndex = 4;
+			this.labelAmount.Text = "Amount";
+			this.labelAmount.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// textProc
 			// 
@@ -842,7 +842,7 @@ namespace OpenDental{
 			this.panel1.Controls.Add(this.label2);
 			this.panel1.Controls.Add(this.labelTooth);
 			this.panel1.Controls.Add(this.labelSurfaces);
-			this.panel1.Controls.Add(this.label5);
+			this.panel1.Controls.Add(this.labelAmount);
 			this.panel1.Controls.Add(this.textSurfaces);
 			this.panel1.Controls.Add(this.label6);
 			this.panel1.Controls.Add(this.groupArch);
@@ -1324,14 +1324,14 @@ namespace OpenDental{
 			this.labelPlaceService.Text = "Place of Service";
 			this.labelPlaceService.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// label10
+			// labelPriority
 			// 
-			this.label10.Location = new System.Drawing.Point(32,241);
-			this.label10.Name = "label10";
-			this.label10.Size = new System.Drawing.Size(72,16);
-			this.label10.TabIndex = 56;
-			this.label10.Text = "Priority";
-			this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.labelPriority.Location = new System.Drawing.Point(32,241);
+			this.labelPriority.Name = "labelPriority";
+			this.labelPriority.Size = new System.Drawing.Size(72,16);
+			this.labelPriority.TabIndex = 56;
+			this.labelPriority.Text = "Priority";
+			this.labelPriority.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// label13
 			// 
@@ -2084,7 +2084,7 @@ namespace OpenDental{
 			this.Controls.Add(this.comboPriority);
 			this.Controls.Add(this.comboClinic);
 			this.Controls.Add(this.labelClinic);
-			this.Controls.Add(this.label10);
+			this.Controls.Add(this.labelPriority);
 			this.Controls.Add(this.labelPlaceService);
 			this.Controls.Add(this.labelDx);
 			this.Controls.Add(this.label9);
@@ -2120,8 +2120,8 @@ namespace OpenDental{
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Procedure Info";
-			this.Load += new System.EventHandler(this.FormProcInfo_Load);
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormProcEdit_FormClosing);
+			this.Load += new System.EventHandler(this.FormProcInfo_Load);
 			this.groupQuadrant.ResumeLayout(false);
 			this.panelSurfaces.ResumeLayout(false);
 			this.groupArch.ResumeLayout(false);
@@ -2249,6 +2249,10 @@ namespace OpenDental{
 				tbPay.Visible=false;
 				tbAdj.Visible=false;  
 				listProcStatus.Enabled=false;
+				labelAmount.Visible=false;
+				textProcFee.Visible=false;
+				labelPriority.Visible=false;
+				comboPriority.Visible=false;
 			}
 			IsStartingUp=true;
 			FillControls();
