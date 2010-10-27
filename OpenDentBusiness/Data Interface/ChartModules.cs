@@ -83,8 +83,8 @@ namespace OpenDentBusiness {
 			string command="SELECT provider.Abbr,appointment.AptDateTime,procedurelog.BaseUnits,procedurelog.ClinicNum,"
 				+"procedurelog.CodeNum,procedurelog.DateEntryC,orionproc.DateScheduleBy,orionproc.DateStopClock,procedurelog.DateTP,"
 				+"procedurecode.Descript,orionproc.DPC,Dx,HideGraphics,orionproc.IsEffectiveComm,orionproc.IsOnCall,"
-				+"LaymanTerm,Priority,procedurecode.ProcCode,ProcDate,ProcFee,procedurelog.ProcNum,ProcNumLab,procedurelog.ProcTimeEnd,"
-				+"ProcStatus,orionproc.Status2,Surf,ToothNum,ToothRange,UnitQty "
+				+"LaymanTerm,Priority,procedurecode.ProcCode,ProcDate,ProcFee,procedurelog.ProcNum,ProcNumLab,procedurelog.ProcTime,"
+				+"procedurelog.ProcTimeEnd,ProcStatus,orionproc.Status2,Surf,ToothNum,ToothRange,UnitQty "
 				+"FROM procedurelog "
 				+"LEFT JOIN procedurecode ON procedurecode.CodeNum=procedurelog.CodeNum "
 				+"LEFT JOIN provider ON provider.ProvNum=procedurelog.ProvNum "
@@ -259,6 +259,7 @@ namespace OpenDentBusiness {
 				row["procStatus"]=Lans.g("enumProcStat",((ProcStat)PIn.Long(rawProcs.Rows[i]["ProcStatus"].ToString())).ToString());
 				row["ProcStatus"]=rawProcs.Rows[i]["ProcStatus"].ToString();
 				row["procTime"]="";
+				dateT=PIn.DateT(rawProcs.Rows[i]["ProcTime"].ToString());
 				if(dateT.TimeOfDay!=TimeSpan.Zero) {
 					row["procTime"]=dateT.ToString("h:mm")+dateT.ToString("%t").ToLower();
 				}
