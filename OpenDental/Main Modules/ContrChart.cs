@@ -7291,6 +7291,12 @@ namespace OpenDental{
 				ProcGroupItems.Insert(groupItem);
 				groupItemList.Add(groupItem);
 			}
+			if(Programs.UsingOrion) {
+				OrionProc op=new OrionProc();
+				op.ProcNum=group.ProcNum;
+				op.Status2=OrionStatus.C;
+				OrionProcs.Insert(op);
+			}
 			FormProcGroup FormP=new FormProcGroup();
 			FormP.GroupCur=group;
 			FormP.GroupItemList=groupItemList;
