@@ -916,8 +916,15 @@ namespace OpenDentBusiness {
 				row["colorBackG"]=Color.White.ToArgb();
 				row["colorText"]=Color.Black.ToArgb();//DefC.Long[(int)DefCat.ProgNoteColors][6].ItemColor.ToArgb().ToString();//needs to change
 				row["CommlogNum"]=0;
-				row["dateEntryC"]="";
-				row["dateTP"]="";
+				dateT=PIn.DateT(rawSheet.Rows[i]["DateTimeSheet"].ToString());
+				if(dateT.Year<1880) {
+					row["dateEntryC"]="";
+					row["dateTP"]="";
+				}
+				else {
+					row["dateEntryC"]=dateT.ToString(Lans.GetShortDateTimeFormat());
+					row["dateTP"]=dateT.ToString(Lans.GetShortDateTimeFormat());
+				}
 				//sheetType=(SheetTypeEnum)PIn.PLong(rawSheet.Rows[i]["SheetType"].ToString());
 				row["description"]=rawSheet.Rows[i]["Description"].ToString();
 				row["dx"]="";
@@ -937,7 +944,6 @@ namespace OpenDentBusiness {
 				row["Priority"]="";
 				row["priority"]="";
 				row["ProcCode"]="";
-				dateT=PIn.DateT(rawSheet.Rows[i]["DateTimeSheet"].ToString());
 				if(dateT.Year<1880) {
 					row["procDate"]="";
 				}
