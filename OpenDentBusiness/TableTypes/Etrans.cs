@@ -4,10 +4,13 @@ using System.Collections;
 namespace OpenDentBusiness{
 	
 	/// <summary>One electronic transaction.  Typically, one claim or response.  Or one benefit request or response.  Is constantly being expanded to include more types of transactions with clearinghouses.  Also stores printing of paper claims.  Sometimes stores a copy of what was sent.</summary>
-	public class Etrans{
+	[Serializable]
+	public class Etrans:TableBase{
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long EtransNum;
 		///<summary>The date and time of the transaction.</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.DateTEntryEditable)]
 		public DateTime DateTimeTrans;
 		///<summary>FK to clearinghouse.ClearinghouseNum .  Can be 0 if no clearinghouse was involved.</summary>
 		public long ClearingHouseNum;
@@ -43,6 +46,7 @@ namespace OpenDentBusiness{
 		public long PlanNum;
 		///<summary>FK to inssub.InsSubNum.  Used if EtransType.BenefitInquiry270 and BenefitResponse271.</summary>
 		public long InsSubNum;
+
 		///<summary></summary>
 		public Etrans Copy(){
 			return (Etrans)this.MemberwiseClone();

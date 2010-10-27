@@ -89,9 +89,7 @@ namespace OpenDentBusiness{
 			string command="SELECT * FROM etrans WHERE ClaimNum="+POut.Long(claimNum)+" "
 				+"AND (Etype="+POut.Int((int)EtransType.Claim_CA)+" "
 				+"OR Etype="+POut.Int((int)EtransType.ClaimSent)+")";
-			DataTable table=Db.GetTable(command);
-			List<Etrans> list=SubmitAndFill(table);
-			return list;
+			return Crud.EtransCrud.SelectMany(command);
 		}
 
 		///<summary></summary>
@@ -100,12 +98,7 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<Etrans>(MethodBase.GetCurrentMethod(),etransNum);
 			}
 			string command="SELECT * FROM etrans WHERE EtransNum="+POut.Long(etransNum);
-			DataTable table=Db.GetTable(command);
-			List<Etrans> list=SubmitAndFill(table);
-			if(list.Count==0) {
-				return null;
-			}
-			return list[0];
+			return Crud.EtransCrud.SelectOne(command);
 		}
 
 		///<summary>Gets a list of all 270's and Canadian eligibilities for this plan.</summary>
@@ -116,8 +109,7 @@ namespace OpenDentBusiness{
 			string command="SELECT * FROM etrans WHERE PlanNum="+POut.Long(planNum)
 				+" AND (Etype="+POut.Long((int)EtransType.BenefitInquiry270)
 				+" OR Etype="+POut.Long((int)EtransType.Eligibility_CA)+")";
-			DataTable table=Db.GetTable(command);
-			return SubmitAndFill(table);
+			return Crud.EtransCrud.SelectMany(command);
 		}
 
 		/*
@@ -140,6 +132,7 @@ namespace OpenDentBusiness{
 			return SubmitAndFill(table);
 		}*/
 
+		/*
 		private static List<Etrans> SubmitAndFill(DataTable table){
 			//No need to check RemotingRole; no call to db.
 			//if(table.Rows.Count==0){
@@ -170,57 +163,15 @@ namespace OpenDentBusiness{
 				retVal.Add(etrans);
 			}
 			return retVal;
-		}
+		}*/
 
-		///<summary>DateTimeTrans can be handled automatically here.  No need to set it in advance, but it's allowed to do so.</summary>
+		///<summary>DateTimeTrans handled automatically here.</summary>
 		public static long Insert(Etrans etrans) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				etrans.EtransNum=Meth.GetLong(MethodBase.GetCurrentMethod(),etrans);
 				return etrans.EtransNum;
 			}
-			if(PrefC.RandomKeys) {
-				etrans.EtransNum=ReplicationServers.GetKey("etrans","EtransNum");
-			}
-			string command="INSERT INTO etrans (";
-			if(PrefC.RandomKeys) {
-				command+="EtransNum,";
-			}
-			command+="DateTimeTrans,ClearinghouseNum,Etype,ClaimNum,OfficeSequenceNumber,CarrierTransCounter,"
-				+"CarrierTransCounter2,CarrierNum,CarrierNum2,PatNum,BatchNumber,AckCode,TransSetNum,Note,EtransMessageTextNum,"
-				+"AckEtransNum,PlanNum) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+="'"+POut.Long(etrans.EtransNum)+"', ";
-			}
-			if(etrans.DateTimeTrans.Year<1880) {
-				command+="NOW()";
-			}
-			else {
-				command+=POut.DateT(etrans.DateTimeTrans);
-			}
-			command+=", "
-				+"'"+POut.Long   (etrans.ClearingHouseNum)+"', "
-				+"'"+POut.Long   ((int)etrans.Etype)+"', "
-				+"'"+POut.Long   (etrans.ClaimNum)+"', "
-				+"'"+POut.Long   (etrans.OfficeSequenceNumber)+"', "
-				+"'"+POut.Long   (etrans.CarrierTransCounter)+"', "
-				+"'"+POut.Long   (etrans.CarrierTransCounter2)+"', "
-				+"'"+POut.Long   (etrans.CarrierNum)+"', "
-				+"'"+POut.Long   (etrans.CarrierNum2)+"', "
-				+"'"+POut.Long   (etrans.PatNum)+"', "
-				+"'"+POut.Long   (etrans.BatchNumber)+"', "
-				+"'"+POut.String(etrans.AckCode)+"', "
-				+"'"+POut.Long   (etrans.TransSetNum)+"', "
-				+"'"+POut.String(etrans.Note)+"', "
-				+"'"+POut.Long   (etrans.EtransMessageTextNum)+"', "
-				+"'"+POut.Long   (etrans.AckEtransNum)+"', "
-				+"'"+POut.Long   (etrans.PlanNum)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				etrans.EtransNum=Db.NonQ(command,true);
-			}
-			return etrans.EtransNum;
+			return Crud.EtransCrud.Insert(etrans);
 		}
 
 		///<summary></summary>
@@ -229,25 +180,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),etrans);
 				return;
 			}
-			string command= "UPDATE etrans SET "
-				+"ClearinghouseNum = '"   +POut.Long   (etrans.ClearingHouseNum)+"', "
-				+"Etype= '"               +POut.Long   ((int)etrans.Etype)+"', "
-				+"ClaimNum= '"            +POut.Long   (etrans.ClaimNum)+"', "
-				+"OfficeSequenceNumber= '"+POut.Long   (etrans.OfficeSequenceNumber)+"', "
-				+"CarrierTransCounter= '" +POut.Long   (etrans.CarrierTransCounter)+"', "
-				+"CarrierTransCounter2= '"+POut.Long   (etrans.CarrierTransCounter2)+"', "
-				+"CarrierNum= '"          +POut.Long   (etrans.CarrierNum)+"', "
-				+"CarrierNum2= '"         +POut.Long   (etrans.CarrierNum2)+"', "
-				+"PatNum= '"              +POut.Long   (etrans.PatNum)+"', "
-				+"BatchNumber= '"         +POut.Long   (etrans.BatchNumber)+"', "
-				+"AckCode= '"             +POut.String(etrans.AckCode)+"', "
-				+"TransSetNum= '"         +POut.Long   (etrans.TransSetNum)+"', "
-				+"Note= '"                +POut.String(etrans.Note)+"', "
-				+"EtransMessageTextNum= '"+POut.Long   (etrans.EtransMessageTextNum)+"', "
-				+"AckEtransNum= '"         +POut.Long   (etrans.AckEtransNum)+"', "
-				+"PlanNum= '"             +POut.Long   (etrans.PlanNum)+"' "
-				+"WHERE EtransNum = "+POut.Long(etrans.EtransNum);
-			Db.NonQ(command);
+			Crud.EtransCrud.Update(etrans);
 		}
 
 		///<summary>Not for claim types, just other types, including Eligibility. This function gets run first.  Then, the messagetext is created and an attempt is made to send the message.  Finally, the messagetext is added to the etrans.  This is necessary because the transaction numbers must be incremented and assigned to each message before creating the message and attempting to send.  If it fails, we will need to roll back.  Provide EITHER a carrierNum OR a canadianNetworkNum.  Many transactions can be sent to a carrier or to a network.</summary>

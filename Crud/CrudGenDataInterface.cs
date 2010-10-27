@@ -42,6 +42,9 @@ namespace Crud {
 
 		private static string GetSname(string typeClassName){
 			string Sname=typeClassName;
+			if(typeClassName=="Etrans") {
+				return "Etranss";
+			}
 			if(Sname.EndsWith("s")){
 				Sname=Sname+"es";
 			}

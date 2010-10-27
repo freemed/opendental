@@ -159,6 +159,7 @@
     <Compile Include="Crud\DepositCrud.cs" />
     <Compile Include="Crud\DisplayFieldCrud.cs" />
     <Compile Include="Crud\DocumentCrud.cs" />
+    <Compile Include="Crud\EtransCrud.cs" />
     <Compile Include="Crud\FeeSchedCrud.cs" />
     <Compile Include="Crud\GuardianCrud.cs" />
     <Compile Include="Crud\HL7MsgCrud.cs" />

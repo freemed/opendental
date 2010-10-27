@@ -2941,9 +2941,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);
 				command="ALTER TABLE insplan DROP SubscNote";
 				Db.NonQ(command);
-				//todo: implement above lines.
 				//todo: any place that PlanNum is set, set InsSubNum
-				//todo: move etrans to crud.
 				//todo: if plans have same TrojanId, combine them.
 				//todo: reports
 
