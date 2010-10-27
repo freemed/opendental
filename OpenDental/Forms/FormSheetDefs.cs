@@ -34,7 +34,6 @@ namespace OpenDental{
 		private OpenDental.UI.Button butCopy2;
 		private OpenDental.UI.Button butImport;
 		private OpenDental.UI.Button butExportCustom;
-		private OpenDental.UI.Button butExportInternal;
 		List<SheetDef> LabelList;
 
 		///<summary></summary>
@@ -73,7 +72,6 @@ namespace OpenDental{
 			this.label1 = new System.Windows.Forms.Label();
 			this.comboLabel = new System.Windows.Forms.ComboBox();
 			this.label2 = new System.Windows.Forms.Label();
-			this.butExportInternal = new OpenDental.UI.Button();
 			this.butExportCustom = new OpenDental.UI.Button();
 			this.butImport = new OpenDental.UI.Button();
 			this.butCopy2 = new OpenDental.UI.Button();
@@ -102,8 +100,8 @@ namespace OpenDental{
 			this.comboLabel.Name = "comboLabel";
 			this.comboLabel.Size = new System.Drawing.Size(185,21);
 			this.comboLabel.TabIndex = 17;
-			this.comboLabel.SelectionChangeCommitted += new System.EventHandler(this.comboLabel_SelectionChangeCommitted);
 			this.comboLabel.DropDown += new System.EventHandler(this.comboLabel_DropDown);
+			this.comboLabel.SelectionChangeCommitted += new System.EventHandler(this.comboLabel_SelectionChangeCommitted);
 			// 
 			// label2
 			// 
@@ -113,22 +111,6 @@ namespace OpenDental{
 			this.label2.TabIndex = 18;
 			this.label2.Text = "Most other sheet types are assigned simply by creating custom sheets of the same " +
     "type.  Referral slips are set in the referral edit window of each referral.";
-			// 
-			// butExportInternal
-			// 
-			this.butExportInternal.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butExportInternal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butExportInternal.Autosize = true;
-			this.butExportInternal.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butExportInternal.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butExportInternal.CornerRadius = 4F;
-			this.butExportInternal.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butExportInternal.Location = new System.Drawing.Point(35,635);
-			this.butExportInternal.Name = "butExportInternal";
-			this.butExportInternal.Size = new System.Drawing.Size(80,24);
-			this.butExportInternal.TabIndex = 26;
-			this.butExportInternal.Text = "Export";
-			this.butExportInternal.Click += new System.EventHandler(this.butExportInternal_Click);
 			// 
 			// butExportCustom
 			// 
@@ -205,8 +187,8 @@ namespace OpenDental{
 			this.grid1.TabIndex = 14;
 			this.grid1.Title = "Internal";
 			this.grid1.TranslationName = null;
-			this.grid1.Click += new System.EventHandler(this.grid1_Click);
 			this.grid1.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.grid1_CellDoubleClick);
+			this.grid1.Click += new System.EventHandler(this.grid1_Click);
 			// 
 			// grid2
 			// 
@@ -218,8 +200,8 @@ namespace OpenDental{
 			this.grid2.TabIndex = 12;
 			this.grid2.Title = "Custom";
 			this.grid2.TranslationName = null;
-			this.grid2.Click += new System.EventHandler(this.grid2_Click);
 			this.grid2.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.grid2_CellDoubleClick);
+			this.grid2.Click += new System.EventHandler(this.grid2_Click);
 			// 
 			// butNew
 			// 
@@ -257,7 +239,6 @@ namespace OpenDental{
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(881,669);
-			this.Controls.Add(this.butExportInternal);
 			this.Controls.Add(this.butExportCustom);
 			this.Controls.Add(this.butImport);
 			this.Controls.Add(this.butCopy2);
@@ -276,8 +257,8 @@ namespace OpenDental{
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Sheet Defs";
-			this.Load += new System.EventHandler(this.FormSheetDefs_Load);
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormSheetDefs_FormClosing);
+			this.Load += new System.EventHandler(this.FormSheetDefs_Load);
 			this.ResumeLayout(false);
 
 		}
@@ -424,26 +405,6 @@ namespace OpenDental{
 			if(grid1.GetSelectedIndex()>-1) {
 				grid2.SetSelected(false);
 			}
-		}
-
-		private void butExportInternal_Click(object sender,EventArgs e) {
-			if(grid1.GetSelectedIndex()==-1) {
-				MsgBox.Show(this,"Please select an internal sheet from the list above first.");
-				return;
-			}
-			SheetDef sheetdef=internalList[grid1.GetSelectedIndex()];
-			SaveFileDialog saveDlg=new SaveFileDialog();
-			string filename="SheetDefInternal.xml";
-			saveDlg.InitialDirectory=PrefC.GetString(PrefName.ExportPath);
-			saveDlg.FileName=filename;
-			if(saveDlg.ShowDialog()!=DialogResult.OK) {
-				return;
-			}
-			XmlSerializer serializer=new XmlSerializer(typeof(SheetDef));
-			using(TextWriter writer=new StreamWriter(saveDlg.FileName)) {
-				serializer.Serialize(writer,sheetdef);
-			}
-			MsgBox.Show(this,"Exported");
 		}
 		
 		private void grid2_CellDoubleClick(object sender,ODGridClickEventArgs e) {
