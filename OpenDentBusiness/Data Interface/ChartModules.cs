@@ -193,14 +193,14 @@ namespace OpenDentBusiness {
 					row["orionIsEffectiveComm"]="Y";
 				}
 				else if(rawProcs.Rows[i]["IsEffectiveComm"].ToString()=="0"){
-					row["orionIsEffectiveComm"]="N";
+					row["orionIsEffectiveComm"]="";
 				}
 				row["orionIsOnCall"]="";
 				if(rawProcs.Rows[i]["IsOnCall"].ToString()=="1"){
 					row["orionIsOnCall"]="Y";
 				}
 				else if(rawProcs.Rows[i]["IsOnCall"].ToString()=="0"){
-					row["orionIsOnCall"]="N";
+					row["orionIsOnCall"]="";
 				}
 				row["orionStatus2"]=((OrionStatus)PIn.Int(rawProcs.Rows[i]["Status2"].ToString())).ToString();
 				row["signature"]="";
