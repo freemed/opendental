@@ -220,7 +220,7 @@ namespace OpenDental{
 			this.gridProc.Location = new System.Drawing.Point(10,367);
 			this.gridProc.Name = "gridProc";
 			this.gridProc.ScrollValue = 0;
-			this.gridProc.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridProc.SelectionMode = OpenDental.UI.GridSelectionMode.None;
 			this.gridProc.Size = new System.Drawing.Size(858,222);
 			this.gridProc.TabIndex = 193;
 			this.gridProc.Title = "Procedures";
@@ -741,7 +741,7 @@ namespace OpenDental{
 								row.Cells.Add("Y");
 							}
 							else {
-								row.Cells.Add("N");
+								row.Cells.Add("");
 							}
 							break;
 						case "Effective Comm":
@@ -749,7 +749,7 @@ namespace OpenDental{
 								row.Cells.Add("Y");
 							}
 							else {
-								row.Cells.Add("N");
+								row.Cells.Add("");
 							}
 							break;
 						case "Repair":
@@ -757,7 +757,7 @@ namespace OpenDental{
 								row.Cells.Add("Y");
 							}
 							else {
-								row.Cells.Add("N");
+								row.Cells.Add("");
 							}
 							break;
 					}
@@ -832,7 +832,7 @@ namespace OpenDental{
 			gridPlanned.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TablePlannedAppts","Note"),115);
 			gridPlanned.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TablePlannedAppts","Date"),50);
+			col=new ODGridColumn(Lan.g("TablePlannedAppts","SchedBy"),50);
 			gridPlanned.Columns.Add(col);
 			gridPlanned.Rows.Clear();
 			ODGridRow row;
@@ -857,8 +857,32 @@ namespace OpenDental{
 				row.Cells.Add(TablePlanned.Rows[i]["ItemOrder"].ToString());
 				row.Cells.Add(TablePlanned.Rows[i]["minutes"].ToString());
 				row.Cells.Add(TablePlanned.Rows[i]["ProcDescript"].ToString());
-				//row.Cells.Add(TablePlanned.Rows[i]["Note"].ToString());
-				row.Cells.Add(TablePlanned.Rows[i]["dateSched"].ToString());
+				row.Cells.Add(TablePlanned.Rows[i]["Note"].ToString());
+				string text;
+				List<Procedure> procsList=Procedures.Refresh(PatCur.PatNum);
+				DateTime newDateSched=new DateTime();
+				for(int p=0;p<procsList.Count;p++) {
+					if(procsList[p].PlannedAptNum==PIn.Long(TablePlanned.Rows[i]["AptNum"].ToString())) {
+						OrionProc op=OrionProcs.GetOneByProcNum(procsList[p].ProcNum);
+						if(op!=null && op.DateScheduleBy.Year>1880) {
+							if(newDateSched.Year<1880) {
+								newDateSched=op.DateScheduleBy;
+							}
+							else {
+								if(op.DateScheduleBy<newDateSched) {
+									newDateSched=op.DateScheduleBy;
+								}
+							}
+						}
+					}
+				}
+				if(newDateSched.Year>1880) {
+					text=newDateSched.ToShortDateString();
+				}
+				else {
+					text="None";
+				}
+				row.Cells.Add(text);
 				row.ColorText=Color.FromArgb(PIn.Int(TablePlanned.Rows[i]["colorText"].ToString()));
 				row.ColorBackG=Color.FromArgb(PIn.Int(TablePlanned.Rows[i]["colorBackG"].ToString()));
 				gridPlanned.Rows.Add(row);

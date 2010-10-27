@@ -6318,7 +6318,12 @@ namespace OpenDental{
 			gridPlanned.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TablePlannedAppts","Note"),175);
 			gridPlanned.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TablePlannedAppts","DateSched"),80);
+			if(Programs.UsingOrion) {
+				col=new ODGridColumn(Lan.g("TablePlannedAppts","SchedBy"),80);
+			}
+			else {
+				col=new ODGridColumn(Lan.g("TablePlannedAppts","DateSched"),80);
+			}
 			gridPlanned.Columns.Add(col);
 			gridPlanned.Rows.Clear();
 			ODGridRow row;
@@ -6344,7 +6349,36 @@ namespace OpenDental{
 				row.Cells.Add(table.Rows[i]["minutes"].ToString());
 				row.Cells.Add(table.Rows[i]["ProcDescript"].ToString());
 				row.Cells.Add(table.Rows[i]["Note"].ToString());
-				row.Cells.Add(table.Rows[i]["dateSched"].ToString());
+				if(Programs.UsingOrion) {
+					string text;
+					List<Procedure> procsList=Procedures.Refresh(PatCur.PatNum);
+					DateTime newDateSched=new DateTime();
+					for(int p=0;p<procsList.Count;p++) {
+						if(procsList[p].PlannedAptNum==PIn.Long(table.Rows[i]["AptNum"].ToString())) {
+							OrionProc op=OrionProcs.GetOneByProcNum(procsList[p].ProcNum);
+							if(op!=null && op.DateScheduleBy.Year>1880) {
+								if(newDateSched.Year<1880) {
+									newDateSched=op.DateScheduleBy;
+								}
+								else {
+									if(op.DateScheduleBy<newDateSched) {
+										newDateSched=op.DateScheduleBy;
+									}
+								}
+							}
+						}
+					}
+					if(newDateSched.Year>1880) {
+						text=newDateSched.ToShortDateString();
+					}
+					else {
+						text="None";
+					}
+					row.Cells.Add(text);
+				}
+				else {
+					row.Cells.Add(table.Rows[i]["dateSched"].ToString());
+				}
 				row.ColorText=Color.FromArgb(PIn.Int(table.Rows[i]["colorText"].ToString()));
 				row.ColorBackG=Color.FromArgb(PIn.Int(table.Rows[i]["colorBackG"].ToString()));
 				gridPlanned.Rows.Add(row);

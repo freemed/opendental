@@ -354,10 +354,12 @@ namespace OpenDental{
 					PlannedAppt plannedAppt=PlannedAppts.GetOneOrderedByItemOrder(pat.PatNum);
 					for(int i=0;i<apptList.Count;i++) {
 						if(apptList[i].AptNum==plannedAppt.AptNum) {
-							plannedAppointmentInfo=apptList[i].ProcDescript+"\r\n";
+							plannedAppointmentInfo="Procedures: ";
+							plannedAppointmentInfo+=apptList[i].ProcDescript+"\r\n";
 							int minutesTotal=apptList[i].Pattern.Length*5;
 							int hours=minutesTotal/60;//automatically rounds down
 							int minutes=minutesTotal-hours*60;
+							plannedAppointmentInfo+="Appt Length: ";
 							if(hours>0) {
 								plannedAppointmentInfo+=hours.ToString()+" hours, ";
 							}
@@ -380,7 +382,7 @@ namespace OpenDental{
 									}
 								}
 								if(newDateSched.Year>1880) {
-									plannedAppointmentInfo+=newDateSched.ToShortDateString();
+									plannedAppointmentInfo+="Schedule by: "+newDateSched.ToShortDateString();
 								}
 								else {
 									plannedAppointmentInfo+="No schedule by date.";
