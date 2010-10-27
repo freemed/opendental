@@ -3316,7 +3316,12 @@ namespace OpenDental{
 				}
 			}
 			if(Programs.UsingOrion) {
-				groupBox2.Visible=false;
+				radioEntryC.Visible=false;
+				radioEntryEC.Visible=false;
+				radioEntryR.Visible=false;
+				radioEntryCn.Visible=false;
+				radioEntryEO.Location=new Point(radioEntryEO.Location.X,31);
+				groupBox2.Height=54;
 			}
 			ToolBarMain.Invalidate();
 			ClearButtons();
@@ -5278,7 +5283,12 @@ namespace OpenDental{
 			if(orionProvNum!=0){
 				OrionProc orionProc=new OrionProc();
 				orionProc.ProcNum=ProcCur.ProcNum;
-				orionProc.Status2=OrionStatus.TP;
+				if(ProcCur.ProcStatus==ProcStat.EO) {
+					orionProc.Status2=OrionStatus.E;
+				}
+				else {
+					orionProc.Status2=OrionStatus.TP;
+				}
 				OrionProcs.Insert(orionProc);
 			}
 			if((ProcCur.ProcStatus==ProcStat.C || ProcCur.ProcStatus==ProcStat.EC || ProcCur.ProcStatus==ProcStat.EO)

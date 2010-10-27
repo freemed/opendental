@@ -2232,7 +2232,12 @@ namespace OpenDental{
 				if(IsNew) {
 					OrionProcCur=new OrionProc();
 					OrionProcCur.ProcNum=ProcCur.ProcNum;
-					OrionProcCur.Status2=OrionStatus.TP;//Change from none to TP.
+					if(ProcCur.ProcStatus==ProcStat.EO) {
+						OrionProcCur.Status2=OrionStatus.E;
+					}
+					else {
+						OrionProcCur.Status2=OrionStatus.TP;
+					}
 				}
 				else {
 					OrionProcCur=OrionProcs.GetOneByProcNum(ProcCur.ProcNum);
@@ -2507,6 +2512,13 @@ namespace OpenDental{
 				else {
 					textDateTP.Text=ProcCur.DateTP.ToShortDateString();
 				}
+				BitArray ba=new BitArray(new int[] { (int)OrionProcCur.Status2 });//should nearly always be non-zero
+				for(int i=0;i<ba.Length;i++) {
+					if(ba[i]) {
+						comboStatus.SelectedIndex=i;
+						break;
+					}
+				}
 				if(!IsNew) {
 					OrionProcOld=OrionProcCur.Copy();
 					comboDPC.SelectedIndex=(int)OrionProcCur.DPC;
@@ -2517,17 +2529,6 @@ namespace OpenDental{
 					}
 					if(PIn.Date(textDateTP.Text).Date!=MiscData.GetNowDateTime().Date) {
 						comboDPC.Enabled=false;
-					}			
-					//if(OrionProcCur.Status2!=OrionStatus.None) {
-					//	comboStatus.SelectedIndex=(int)Math.Pow((double)OrionProcCur.Status2,.5d);
-					//}
-					//comboStatus.SelectedIndex=(int)OrionProcCur.Status2;
-					BitArray ba=new BitArray(new int[] { (int)OrionProcCur.Status2 });//should nearly always be non-zero
-					for(int i=0;i<ba.Length;i++) {
-						if(ba[i]) {
-							comboStatus.SelectedIndex=i;
-							break;
-						}
 					}
 					if(OrionProcCur.DateScheduleBy.Year>1880) {
 						textDateScheduled.Text=OrionProcCur.DateScheduleBy.ToShortDateString();
