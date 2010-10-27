@@ -272,6 +272,9 @@ namespace OpenDentBusiness {
 				if(ProcedureCodes.GetProcCode(PIn.Long(row["CodeNum"].ToString())).TreatArea==TreatmentArea.Tooth){
 					row["quadrant"]=Tooth.GetQuadrant(rawProcs.Rows[i]["ToothNum"].ToString());
 				}
+				else if(ProcedureCodes.GetProcCode(PIn.Long(row["CodeNum"].ToString())).TreatArea==TreatmentArea.Surf) {
+					row["quadrant"]=Tooth.GetQuadrant(rawProcs.Rows[i]["ToothNum"].ToString());
+				}
 				else if(ProcedureCodes.GetProcCode(PIn.Long(row["CodeNum"].ToString())).TreatArea==TreatmentArea.Quad){
 					row["quadrant"]=rawProcs.Rows[i]["Surf"].ToString();
 				}
