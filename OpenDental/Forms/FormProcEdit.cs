@@ -4288,6 +4288,10 @@ namespace OpenDental{
 						}
 					}
 				}
+				if(comboStatus.SelectedIndex==0 && comboDPC.SelectedIndex==0) {
+					MsgBox.Show(this,"Status of treatment planned should have a DPC");
+					return;
+				}
 			}
 			SaveAndClose();
 		}
