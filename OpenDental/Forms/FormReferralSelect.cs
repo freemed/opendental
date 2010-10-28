@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
+using OpenDental.UI;
 using OpenDentBusiness;
 
 namespace OpenDental{
@@ -10,7 +11,6 @@ namespace OpenDental{
 	public class FormReferralSelect : System.Windows.Forms.Form{
 		private OpenDental.UI.Button butCancel;
 		private OpenDental.UI.Button butOK;
-		private OpenDental.TableRefSelect tbRefSelect;
 		private System.Windows.Forms.CheckBox checkHidden;
 		private System.ComponentModel.Container components = null;
 		///<summary></summary>
@@ -19,13 +19,13 @@ namespace OpenDental{
 		private OpenDental.UI.Button butDelete;
 		private OpenDental.UI.Button butAdd;//disables double click to choose referral. Hides some buttons.
     private ArrayList AList;
+		private UI.ODGrid gridMain;
 		///<summary>This will contain the referral that was selected.</summary>
 		public Referral SelectedReferral;
 
 		///<summary></summary>
 		public FormReferralSelect(){
 			InitializeComponent();
-			tbRefSelect.CellDoubleClicked += new OpenDental.ContrTable.CellEventHandler(tbRefSelect_CellDoubleClicked);
 			Lan.F(this);
 		}
 
@@ -49,11 +49,11 @@ namespace OpenDental{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormReferralSelect));
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
-			this.tbRefSelect = new OpenDental.TableRefSelect();
 			this.checkHidden = new System.Windows.Forms.CheckBox();
 			this.butEdit = new OpenDental.UI.Button();
 			this.butDelete = new OpenDental.UI.Button();
 			this.butAdd = new OpenDental.UI.Button();
+			this.gridMain = new OpenDental.UI.ODGrid();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -87,20 +87,6 @@ namespace OpenDental{
 			this.butOK.TabIndex = 5;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
-			// 
-			// tbRefSelect
-			// 
-			this.tbRefSelect.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.tbRefSelect.BackColor = System.Drawing.SystemColors.Window;
-			this.tbRefSelect.Location = new System.Drawing.Point(8,6);
-			this.tbRefSelect.Name = "tbRefSelect";
-			this.tbRefSelect.ScrollValue = 1;
-			this.tbRefSelect.SelectedIndices = new int[0];
-			this.tbRefSelect.SelectionMode = System.Windows.Forms.SelectionMode.One;
-			this.tbRefSelect.Size = new System.Drawing.Size(829,678);
-			this.tbRefSelect.TabIndex = 7;
 			// 
 			// checkHidden
 			// 
@@ -165,15 +151,30 @@ namespace OpenDental{
 			this.butAdd.Text = "&Add";
 			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
 			// 
+			// gridMain
+			// 
+			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.gridMain.HScrollVisible = false;
+			this.gridMain.Location = new System.Drawing.Point(8,12);
+			this.gridMain.Name = "gridMain";
+			this.gridMain.ScrollValue = 0;
+			this.gridMain.Size = new System.Drawing.Size(829,672);
+			this.gridMain.TabIndex = 15;
+			this.gridMain.Title = "Select Referral";
+			this.gridMain.TranslationName = "TableSelectReferral";
+			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			// 
 			// FormReferralSelect
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(962,696);
+			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.butEdit);
 			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.butAdd);
 			this.Controls.Add(this.checkHidden);
-			this.Controls.Add(this.tbRefSelect);
 			this.Controls.Add(this.butCancel);
 			this.Controls.Add(this.butOK);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -208,50 +209,68 @@ namespace OpenDental{
         for(int i=0;i<Referrals.List.Length;i++){
             AList.Add(Referrals.List[i]);
         } 
-      }          
-			tbRefSelect.ResetRows(AList.Count);
-			tbRefSelect.SetGridColor(Color.Gray);
-			tbRefSelect.SetBackGColor(Color.White);      
-			for(int i=0;i<AList.Count;i++){
-				tbRefSelect.Cell[0,i]=((Referral)(AList[i])).LName;
-        tbRefSelect.Cell[1,i]=((Referral)(AList[i])).FName;
-        if(((Referral)(AList[i])).MName!=""){
-          tbRefSelect.Cell[2,i]=((Referral)(AList[i])).MName.Substring(0,1).ToUpper();
-        } 
-				tbRefSelect.Cell[3,i]=((Referral)(AList[i])).Title;
-        if(((Referral)(AList[i])).PatNum==0 && !((Referral)(AList[i])).NotPerson){
-          tbRefSelect.Cell[4,i]
-						=Lan.g("enumDentalSpecialty",((DentalSpecialty)(((Referral)(AList[i])).Specialty)).ToString());
-        }
-				if(((Referral)(AList[i])).PatNum>0)
-					tbRefSelect.Cell[5,i]="X";
-				else
-					tbRefSelect.Cell[5,i]="";
-        tbRefSelect.Cell[6,i]=((Referral)(AList[i])).Note;
-				if(((Referral)(AList[i])).IsHidden)
-					tbRefSelect.SetTextColorRow(i,SystemColors.GrayText);
+      }    
+      gridMain.BeginUpdate();
+			gridMain.Columns.Clear();
+			ODGridColumn col=new ODGridColumn(Lans.g("TableSelectRefferal","LastName"),150);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lans.g("TableSelectRefferal","FirstName"),80);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lans.g("TableSelectRefferal","MI"),30);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lans.g("TableSelectRefferal","Title"),70);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lans.g("TableSelectRefferal","Specialty"),60);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lans.g("TableSelectRefferal","Patient"),45);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lans.g("TableSelectRefferal","Note"),250);
+			gridMain.Columns.Add(col);
+			gridMain.Rows.Clear();
+			ODGridRow row;
+			for(int i=0;i<AList.Count;i++) {
+				row=new ODGridRow();
+				row.Cells.Add(((Referral)(AList[i])).LName);
+				row.Cells.Add(((Referral)(AList[i])).FName);
+				if(((Referral)(AList[i])).MName!="") {
+					row.Cells.Add(((Referral)(AList[i])).MName.Substring(0,1).ToUpper());
+				}
+				else {
+					row.Cells.Add("");
+				}
+				row.Cells.Add(((Referral)(AList[i])).Title);
+				if(((Referral)(AList[i])).PatNum==0 && !((Referral)(AList[i])).NotPerson) {
+					row.Cells.Add(Lan.g("enumDentalSpecialty",((DentalSpecialty)(((Referral)(AList[i])).Specialty)).ToString()));
+				}
+				else {
+					row.Cells.Add("");
+				}
+				if(((Referral)(AList[i])).PatNum>0) {
+					row.Cells.Add("X");
+				}
+				else {
+					row.Cells.Add("");
+				}
+				row.Cells.Add(((Referral)(AList[i])).Note);
+				if(((Referral)(AList[i])).IsHidden) {
+					row.ColorText=Color.Gray;
+				}
+				gridMain.Rows.Add(row);
 			}
-			tbRefSelect.LayoutTables();  
-      //if(tbRefSelect.SelectedRow!=-1){ 
-      //  tbRefSelect.ColorRow(tbRefSelect.SelectedRow,Color.Silver);
-      //} 
+			gridMain.EndUpdate();
     }
 
-    private void tbRefSelect_CellDoubleClicked(object sender, CellEventArgs e){
-			/*if(IsSelectionMode){
-				SelectedReferral=(Referral)AList[tbRefSelect.SelectedRow];
-				DialogResult=DialogResult.OK;
-			}*/
-
-			if (tbRefSelect.SelectedRow == -1)
-			{
-				return;
+		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			if(gridMain.SelectedIndices.Length==0) {
+				MsgBox.Show(this,"Please select a referral first");
+        return;
 			}
-			FormReferralEdit FormRE = new FormReferralEdit((Referral)AList[tbRefSelect.SelectedRow]);
+			FormReferralEdit FormRE = new FormReferralEdit((Referral)AList[e.Row]);
 			FormRE.ShowDialog();
+			int selectedIndex=gridMain.GetSelectedIndex();
 			FillTable();
-			//otherwise, don't do anything
-    }
+			gridMain.SetSelected(selectedIndex,true);
+		}
 
 		private void butAdd_Click(object sender, System.EventArgs e) {
       Referral refCur=new Referral();
@@ -285,16 +304,21 @@ namespace OpenDental{
 				DialogResult=DialogResult.OK;
 			}
 			else{
-				tbRefSelect.SelectedRow=-1;
 				FillTable();
+				for(int i=0;i<AList.Count;i++) {
+					if(((Referral)(AList[i])).ReferralNum==FormRE2.RefCur.ReferralNum) {
+						gridMain.SetSelected(i,true);
+					}
+				}
 			}
 		}
 
 		private void butDelete_Click(object sender, System.EventArgs e) {
-      if(tbRefSelect.SelectedRow==-1){ 
-        return; 
-      }  
- 		  Referral RefCur=(Referral)AList[tbRefSelect.SelectedRow];
+			if(gridMain.SelectedIndices.Length==0) {
+				MsgBox.Show(this,"Please select a referral first");
+        return;
+			}
+			Referral RefCur=(Referral)AList[gridMain.GetSelectedIndex()];
 			if(RefAttaches.IsReferralAttached(RefCur.ReferralNum)){
 				MessageBox.Show(Lan.g(this,"Cannot delete Referral because it is attached to patients"));
 				return;
@@ -303,31 +327,32 @@ namespace OpenDental{
         return;   
       }
       Referrals.Delete(RefCur);
-      tbRefSelect.SelectedRow=-1;
       FillTable();
     }
 
 		private void butEdit_Click(object sender, System.EventArgs e) {
-      if(tbRefSelect.SelectedRow==-1){
-        return;  
-      }
-  		FormReferralEdit FormRE=new FormReferralEdit((Referral)AList[tbRefSelect.SelectedRow]);
+			if(gridMain.SelectedIndices.Length==0) {
+				MsgBox.Show(this,"Please select a referral first");
+        return;
+			}
+  		FormReferralEdit FormRE=new FormReferralEdit((Referral)AList[gridMain.GetSelectedIndex()]);
       FormRE.ShowDialog();
-      FillTable();
+      int selectedIndex=gridMain.GetSelectedIndex();
+			FillTable();
+			gridMain.SetSelected(selectedIndex,true);
 		}
 
 		private void checkHidden_Click(object sender, System.EventArgs e) {
-      tbRefSelect.SelectedRow=-1; 
 		  FillTable();
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e){
 			if(IsSelectionMode){
-				if(tbRefSelect.SelectedRow==-1){
+				if(gridMain.SelectedIndices.Length==0) {
 					MsgBox.Show(this,"Please select a referral first");
           return;
-        }
-				SelectedReferral=(Referral)AList[tbRefSelect.SelectedRow];  
+				}
+				SelectedReferral=(Referral)AList[gridMain.GetSelectedIndex()];  
 			}
 			DialogResult=DialogResult.OK;
 		}
@@ -335,6 +360,8 @@ namespace OpenDental{
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 	}
 }
