@@ -18,10 +18,10 @@ using System.Runtime.Serialization;
 [assembly: EdmSchemaAttribute()]
 #region EDM Relationship Metadata
 
-[assembly: EdmRelationshipAttribute("odwebserviceModel", "FK_webforms_sheet_DentalOfficeID", "webforms_preference", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(WebHostSynch.webforms_preference), "webforms_sheet", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(WebHostSynch.webforms_sheet))]
-[assembly: EdmRelationshipAttribute("odwebserviceModel", "FK_webforms_sheetfield_SheetID", "webforms_sheet", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(WebHostSynch.webforms_sheet), "webforms_sheetfield", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(WebHostSynch.webforms_sheetfield))]
-[assembly: EdmRelationshipAttribute("odwebserviceModel", "FK_webforms_sheetdef_DentalOfficeID", "webforms_preference", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(WebHostSynch.webforms_preference), "webforms_sheetdef", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(WebHostSynch.webforms_sheetdef))]
-[assembly: EdmRelationshipAttribute("odwebserviceModel", "FK_webforms_sheetfielddef_WebSheetDefNum", "webforms_sheetdef", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(WebHostSynch.webforms_sheetdef), "webforms_sheetfielddef", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(WebHostSynch.webforms_sheetfielddef))]
+[assembly: EdmRelationshipAttribute("odwebserviceModel", "FK_webforms_sheetdef_DentalOfficeID", "webforms_preference", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(WebHostSynch.webforms_preference), "webforms_sheetdef", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(WebHostSynch.webforms_sheetdef), true)]
+[assembly: EdmRelationshipAttribute("odwebserviceModel", "FK_webforms_sheet_DentalOfficeID", "webforms_preference", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(WebHostSynch.webforms_preference), "webforms_sheet", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(WebHostSynch.webforms_sheet), true)]
+[assembly: EdmRelationshipAttribute("odwebserviceModel", "FK_webforms_sheetfield_SheetID", "webforms_sheet", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(WebHostSynch.webforms_sheet), "webforms_sheetfield", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(WebHostSynch.webforms_sheetfield), true)]
+[assembly: EdmRelationshipAttribute("odwebserviceModel", "FK_webforms_sheetfielddef_WebSheetDefID", "webforms_sheetdef", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(WebHostSynch.webforms_sheetdef), "webforms_sheetfielddef", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(WebHostSynch.webforms_sheetfielddef), true)]
 
 #endregion
 
@@ -105,22 +105,6 @@ namespace WebHostSynch
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<webforms_sheetfield> webforms_sheetfield
-        {
-            get
-            {
-                if ((_webforms_sheetfield == null))
-                {
-                    _webforms_sheetfield = base.CreateObjectSet<webforms_sheetfield>("webforms_sheetfield");
-                }
-                return _webforms_sheetfield;
-            }
-        }
-        private ObjectSet<webforms_sheetfield> _webforms_sheetfield;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<webforms_sheetdef> webforms_sheetdef
         {
             get
@@ -133,6 +117,22 @@ namespace WebHostSynch
             }
         }
         private ObjectSet<webforms_sheetdef> _webforms_sheetdef;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<webforms_sheetfield> webforms_sheetfield
+        {
+            get
+            {
+                if ((_webforms_sheetfield == null))
+                {
+                    _webforms_sheetfield = base.CreateObjectSet<webforms_sheetfield>("webforms_sheetfield");
+                }
+                return _webforms_sheetfield;
+            }
+        }
+        private ObjectSet<webforms_sheetfield> _webforms_sheetfield;
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -170,19 +170,19 @@ namespace WebHostSynch
         }
     
         /// <summary>
-        /// Deprecated Method for adding a new object to the webforms_sheetfield EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddTowebforms_sheetfield(webforms_sheetfield webforms_sheetfield)
-        {
-            base.AddObject("webforms_sheetfield", webforms_sheetfield);
-        }
-    
-        /// <summary>
         /// Deprecated Method for adding a new object to the webforms_sheetdef EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
         public void AddTowebforms_sheetdef(webforms_sheetdef webforms_sheetdef)
         {
             base.AddObject("webforms_sheetdef", webforms_sheetdef);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the webforms_sheetfield EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddTowebforms_sheetfield(webforms_sheetfield webforms_sheetfield)
+        {
+            base.AddObject("webforms_sheetfield", webforms_sheetfield);
         }
     
         /// <summary>
@@ -340,28 +340,6 @@ namespace WebHostSynch
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("odwebserviceModel", "FK_webforms_sheet_DentalOfficeID", "webforms_sheet")]
-        public EntityCollection<webforms_sheet> webforms_sheet
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<webforms_sheet>("odwebserviceModel.FK_webforms_sheet_DentalOfficeID", "webforms_sheet");
-            }
-            set
-            {
-                if ((value != null))
-                {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<webforms_sheet>("odwebserviceModel.FK_webforms_sheet_DentalOfficeID", "webforms_sheet", value);
-                }
-            }
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [XmlIgnoreAttribute()]
-        [SoapIgnoreAttribute()]
-        [DataMemberAttribute()]
         [EdmRelationshipNavigationPropertyAttribute("odwebserviceModel", "FK_webforms_sheetdef_DentalOfficeID", "webforms_sheetdef")]
         public EntityCollection<webforms_sheetdef> webforms_sheetdef
         {
@@ -374,6 +352,28 @@ namespace WebHostSynch
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<webforms_sheetdef>("odwebserviceModel.FK_webforms_sheetdef_DentalOfficeID", "webforms_sheetdef", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("odwebserviceModel", "FK_webforms_sheet_DentalOfficeID", "webforms_sheet")]
+        public EntityCollection<webforms_sheet> webforms_sheet
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<webforms_sheet>("odwebserviceModel.FK_webforms_sheet_DentalOfficeID", "webforms_sheet");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<webforms_sheet>("odwebserviceModel.FK_webforms_sheet_DentalOfficeID", "webforms_sheet", value);
                 }
             }
         }
@@ -394,21 +394,23 @@ namespace WebHostSynch
         /// <summary>
         /// Create a new webforms_sheet object.
         /// </summary>
-        /// <param name="sheetID">Initial value of the SheetID property.</param>
         /// <param name="dateTimeSheet">Initial value of the DateTimeSheet property.</param>
+        /// <param name="dentalOfficeID">Initial value of the DentalOfficeID property.</param>
         /// <param name="fontSize">Initial value of the FontSize property.</param>
         /// <param name="height">Initial value of the Height property.</param>
         /// <param name="isLandscape">Initial value of the IsLandscape property.</param>
+        /// <param name="sheetID">Initial value of the SheetID property.</param>
         /// <param name="sheetType">Initial value of the SheetType property.</param>
         /// <param name="width">Initial value of the Width property.</param>
-        public static webforms_sheet Createwebforms_sheet(global::System.Int64 sheetID, global::System.DateTime dateTimeSheet, global::System.Single fontSize, global::System.Int32 height, global::System.SByte isLandscape, global::System.Int32 sheetType, global::System.Int32 width)
+        public static webforms_sheet Createwebforms_sheet(global::System.DateTime dateTimeSheet, global::System.Int64 dentalOfficeID, global::System.Single fontSize, global::System.Int32 height, global::System.SByte isLandscape, global::System.Int64 sheetID, global::System.Int32 sheetType, global::System.Int32 width)
         {
             webforms_sheet webforms_sheet = new webforms_sheet();
-            webforms_sheet.SheetID = sheetID;
             webforms_sheet.DateTimeSheet = dateTimeSheet;
+            webforms_sheet.DentalOfficeID = dentalOfficeID;
             webforms_sheet.FontSize = fontSize;
             webforms_sheet.Height = height;
             webforms_sheet.IsLandscape = isLandscape;
+            webforms_sheet.SheetID = sheetID;
             webforms_sheet.SheetType = sheetType;
             webforms_sheet.Width = width;
             return webforms_sheet;
@@ -416,33 +418,6 @@ namespace WebHostSynch
 
         #endregion
         #region Primitive Properties
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.Int64 SheetID
-        {
-            get
-            {
-                return _SheetID;
-            }
-            set
-            {
-                if (_SheetID != value)
-                {
-                    OnSheetIDChanging(value);
-                    ReportPropertyChanging("SheetID");
-                    _SheetID = StructuralObject.SetValidValue(value);
-                    ReportPropertyChanged("SheetID");
-                    OnSheetIDChanged();
-                }
-            }
-        }
-        private global::System.Int64 _SheetID;
-        partial void OnSheetIDChanging(global::System.Int64 value);
-        partial void OnSheetIDChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -467,6 +442,30 @@ namespace WebHostSynch
         private global::System.DateTime _DateTimeSheet;
         partial void OnDateTimeSheetChanging(global::System.DateTime value);
         partial void OnDateTimeSheetChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int64 DentalOfficeID
+        {
+            get
+            {
+                return _DentalOfficeID;
+            }
+            set
+            {
+                OnDentalOfficeIDChanging(value);
+                ReportPropertyChanging("DentalOfficeID");
+                _DentalOfficeID = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("DentalOfficeID");
+                OnDentalOfficeIDChanged();
+            }
+        }
+        private global::System.Int64 _DentalOfficeID;
+        partial void OnDentalOfficeIDChanging(global::System.Int64 value);
+        partial void OnDentalOfficeIDChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -563,6 +562,33 @@ namespace WebHostSynch
         private global::System.SByte _IsLandscape;
         partial void OnIsLandscapeChanging(global::System.SByte value);
         partial void OnIsLandscapeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int64 SheetID
+        {
+            get
+            {
+                return _SheetID;
+            }
+            set
+            {
+                if (_SheetID != value)
+                {
+                    OnSheetIDChanging(value);
+                    ReportPropertyChanging("SheetID");
+                    _SheetID = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("SheetID");
+                    OnSheetIDChanged();
+                }
+            }
+        }
+        private global::System.Int64 _SheetID;
+        partial void OnSheetIDChanging(global::System.Int64 value);
+        partial void OnSheetIDChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -692,32 +718,56 @@ namespace WebHostSynch
         /// <summary>
         /// Create a new webforms_sheetdef object.
         /// </summary>
+        /// <param name="dentalOfficeID">Initial value of the DentalOfficeID property.</param>
         /// <param name="description">Initial value of the Description property.</param>
         /// <param name="fontName">Initial value of the FontName property.</param>
         /// <param name="fontSize">Initial value of the FontSize property.</param>
         /// <param name="height">Initial value of the Height property.</param>
         /// <param name="isLandscape">Initial value of the IsLandscape property.</param>
-        /// <param name="sheetDefNum">Initial value of the SheetDefNum property.</param>
         /// <param name="sheetType">Initial value of the SheetType property.</param>
-        /// <param name="webSheetDefNum">Initial value of the WebSheetDefNum property.</param>
+        /// <param name="webSheetDefID">Initial value of the WebSheetDefID property.</param>
         /// <param name="width">Initial value of the Width property.</param>
-        public static webforms_sheetdef Createwebforms_sheetdef(global::System.String description, global::System.String fontName, global::System.Single fontSize, global::System.Int32 height, global::System.SByte isLandscape, global::System.Int64 sheetDefNum, global::System.Int32 sheetType, global::System.Int64 webSheetDefNum, global::System.Int32 width)
+        public static webforms_sheetdef Createwebforms_sheetdef(global::System.Int64 dentalOfficeID, global::System.String description, global::System.String fontName, global::System.Single fontSize, global::System.Int32 height, global::System.SByte isLandscape, global::System.Int32 sheetType, global::System.Int64 webSheetDefID, global::System.Int32 width)
         {
             webforms_sheetdef webforms_sheetdef = new webforms_sheetdef();
+            webforms_sheetdef.DentalOfficeID = dentalOfficeID;
             webforms_sheetdef.Description = description;
             webforms_sheetdef.FontName = fontName;
             webforms_sheetdef.FontSize = fontSize;
             webforms_sheetdef.Height = height;
             webforms_sheetdef.IsLandscape = isLandscape;
-            webforms_sheetdef.SheetDefNum = sheetDefNum;
             webforms_sheetdef.SheetType = sheetType;
-            webforms_sheetdef.WebSheetDefNum = webSheetDefNum;
+            webforms_sheetdef.WebSheetDefID = webSheetDefID;
             webforms_sheetdef.Width = width;
             return webforms_sheetdef;
         }
 
         #endregion
         #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int64 DentalOfficeID
+        {
+            get
+            {
+                return _DentalOfficeID;
+            }
+            set
+            {
+                OnDentalOfficeIDChanging(value);
+                ReportPropertyChanging("DentalOfficeID");
+                _DentalOfficeID = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("DentalOfficeID");
+                OnDentalOfficeIDChanged();
+            }
+        }
+        private global::System.Int64 _DentalOfficeID;
+        partial void OnDentalOfficeIDChanging(global::System.Int64 value);
+        partial void OnDentalOfficeIDChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -844,30 +894,6 @@ namespace WebHostSynch
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Int64 SheetDefNum
-        {
-            get
-            {
-                return _SheetDefNum;
-            }
-            set
-            {
-                OnSheetDefNumChanging(value);
-                ReportPropertyChanging("SheetDefNum");
-                _SheetDefNum = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("SheetDefNum");
-                OnSheetDefNumChanged();
-            }
-        }
-        private global::System.Int64 _SheetDefNum;
-        partial void OnSheetDefNumChanging(global::System.Int64 value);
-        partial void OnSheetDefNumChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
         public global::System.Int32 SheetType
         {
             get
@@ -892,27 +918,27 @@ namespace WebHostSynch
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Int64 WebSheetDefNum
+        public global::System.Int64 WebSheetDefID
         {
             get
             {
-                return _WebSheetDefNum;
+                return _WebSheetDefID;
             }
             set
             {
-                if (_WebSheetDefNum != value)
+                if (_WebSheetDefID != value)
                 {
-                    OnWebSheetDefNumChanging(value);
-                    ReportPropertyChanging("WebSheetDefNum");
-                    _WebSheetDefNum = StructuralObject.SetValidValue(value);
-                    ReportPropertyChanged("WebSheetDefNum");
-                    OnWebSheetDefNumChanged();
+                    OnWebSheetDefIDChanging(value);
+                    ReportPropertyChanging("WebSheetDefID");
+                    _WebSheetDefID = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("WebSheetDefID");
+                    OnWebSheetDefIDChanged();
                 }
             }
         }
-        private global::System.Int64 _WebSheetDefNum;
-        partial void OnWebSheetDefNumChanging(global::System.Int64 value);
-        partial void OnWebSheetDefNumChanged();
+        private global::System.Int64 _WebSheetDefID;
+        partial void OnWebSheetDefIDChanging(global::System.Int64 value);
+        partial void OnWebSheetDefIDChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -986,18 +1012,18 @@ namespace WebHostSynch
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("odwebserviceModel", "FK_webforms_sheetfielddef_WebSheetDefNum", "webforms_sheetfielddef")]
+        [EdmRelationshipNavigationPropertyAttribute("odwebserviceModel", "FK_webforms_sheetfielddef_WebSheetDefID", "webforms_sheetfielddef")]
         public EntityCollection<webforms_sheetfielddef> webforms_sheetfielddef
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<webforms_sheetfielddef>("odwebserviceModel.FK_webforms_sheetfielddef_WebSheetDefNum", "webforms_sheetfielddef");
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<webforms_sheetfielddef>("odwebserviceModel.FK_webforms_sheetfielddef_WebSheetDefID", "webforms_sheetfielddef");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<webforms_sheetfielddef>("odwebserviceModel.FK_webforms_sheetfielddef_WebSheetDefNum", "webforms_sheetfielddef", value);
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<webforms_sheetfielddef>("odwebserviceModel.FK_webforms_sheetfielddef_WebSheetDefID", "webforms_sheetfielddef", value);
                 }
             }
         }
@@ -1018,10 +1044,8 @@ namespace WebHostSynch
         /// <summary>
         /// Create a new webforms_sheetfield object.
         /// </summary>
-        /// <param name="fieldName">Initial value of the FieldName property.</param>
-        /// <param name="fieldValue">Initial value of the FieldValue property.</param>
-        /// <param name="sheetFieldID">Initial value of the SheetFieldID property.</param>
         /// <param name="fieldType">Initial value of the FieldType property.</param>
+        /// <param name="fieldValue">Initial value of the FieldValue property.</param>
         /// <param name="fontIsBold">Initial value of the FontIsBold property.</param>
         /// <param name="fontSize">Initial value of the FontSize property.</param>
         /// <param name="growthBehavior">Initial value of the GrowthBehavior property.</param>
@@ -1029,16 +1053,16 @@ namespace WebHostSynch
         /// <param name="isRequired">Initial value of the IsRequired property.</param>
         /// <param name="radioButtonGroup">Initial value of the RadioButtonGroup property.</param>
         /// <param name="radioButtonValue">Initial value of the RadioButtonValue property.</param>
+        /// <param name="sheetFieldID">Initial value of the SheetFieldID property.</param>
+        /// <param name="sheetID">Initial value of the SheetID property.</param>
         /// <param name="width">Initial value of the Width property.</param>
         /// <param name="xPos">Initial value of the XPos property.</param>
         /// <param name="yPos">Initial value of the YPos property.</param>
-        public static webforms_sheetfield Createwebforms_sheetfield(global::System.String fieldName, global::System.String fieldValue, global::System.Int64 sheetFieldID, global::System.Int32 fieldType, global::System.SByte fontIsBold, global::System.Single fontSize, global::System.Int32 growthBehavior, global::System.Int32 height, global::System.SByte isRequired, global::System.String radioButtonGroup, global::System.String radioButtonValue, global::System.Int32 width, global::System.Int32 xPos, global::System.Int32 yPos)
+        public static webforms_sheetfield Createwebforms_sheetfield(global::System.Int32 fieldType, global::System.String fieldValue, global::System.SByte fontIsBold, global::System.Single fontSize, global::System.Int32 growthBehavior, global::System.Int32 height, global::System.SByte isRequired, global::System.String radioButtonGroup, global::System.String radioButtonValue, global::System.Int64 sheetFieldID, global::System.Int64 sheetID, global::System.Int32 width, global::System.Int32 xPos, global::System.Int32 yPos)
         {
             webforms_sheetfield webforms_sheetfield = new webforms_sheetfield();
-            webforms_sheetfield.FieldName = fieldName;
-            webforms_sheetfield.FieldValue = fieldValue;
-            webforms_sheetfield.SheetFieldID = sheetFieldID;
             webforms_sheetfield.FieldType = fieldType;
+            webforms_sheetfield.FieldValue = fieldValue;
             webforms_sheetfield.FontIsBold = fontIsBold;
             webforms_sheetfield.FontSize = fontSize;
             webforms_sheetfield.GrowthBehavior = growthBehavior;
@@ -1046,6 +1070,8 @@ namespace WebHostSynch
             webforms_sheetfield.IsRequired = isRequired;
             webforms_sheetfield.RadioButtonGroup = radioButtonGroup;
             webforms_sheetfield.RadioButtonValue = radioButtonValue;
+            webforms_sheetfield.SheetFieldID = sheetFieldID;
+            webforms_sheetfield.SheetID = sheetID;
             webforms_sheetfield.Width = width;
             webforms_sheetfield.XPos = xPos;
             webforms_sheetfield.YPos = yPos;
@@ -1058,7 +1084,7 @@ namespace WebHostSynch
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public global::System.String FieldName
         {
@@ -1070,7 +1096,7 @@ namespace WebHostSynch
             {
                 OnFieldNameChanging(value);
                 ReportPropertyChanging("FieldName");
-                _FieldName = StructuralObject.SetValidValue(value, false);
+                _FieldName = StructuralObject.SetValidValue(value, true);
                 ReportPropertyChanged("FieldName");
                 OnFieldNameChanged();
             }
@@ -1078,57 +1104,6 @@ namespace WebHostSynch
         private global::System.String _FieldName;
         partial void OnFieldNameChanging(global::System.String value);
         partial void OnFieldNameChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String FieldValue
-        {
-            get
-            {
-                return _FieldValue;
-            }
-            set
-            {
-                OnFieldValueChanging(value);
-                ReportPropertyChanging("FieldValue");
-                _FieldValue = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("FieldValue");
-                OnFieldValueChanged();
-            }
-        }
-        private global::System.String _FieldValue;
-        partial void OnFieldValueChanging(global::System.String value);
-        partial void OnFieldValueChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.Int64 SheetFieldID
-        {
-            get
-            {
-                return _SheetFieldID;
-            }
-            set
-            {
-                if (_SheetFieldID != value)
-                {
-                    OnSheetFieldIDChanging(value);
-                    ReportPropertyChanging("SheetFieldID");
-                    _SheetFieldID = StructuralObject.SetValidValue(value);
-                    ReportPropertyChanged("SheetFieldID");
-                    OnSheetFieldIDChanged();
-                }
-            }
-        }
-        private global::System.Int64 _SheetFieldID;
-        partial void OnSheetFieldIDChanging(global::System.Int64 value);
-        partial void OnSheetFieldIDChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -1153,6 +1128,30 @@ namespace WebHostSynch
         private global::System.Int32 _FieldType;
         partial void OnFieldTypeChanging(global::System.Int32 value);
         partial void OnFieldTypeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String FieldValue
+        {
+            get
+            {
+                return _FieldValue;
+            }
+            set
+            {
+                OnFieldValueChanging(value);
+                ReportPropertyChanging("FieldValue");
+                _FieldValue = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("FieldValue");
+                OnFieldValueChanged();
+            }
+        }
+        private global::System.String _FieldValue;
+        partial void OnFieldValueChanging(global::System.String value);
+        partial void OnFieldValueChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -1349,6 +1348,57 @@ namespace WebHostSynch
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int64 SheetFieldID
+        {
+            get
+            {
+                return _SheetFieldID;
+            }
+            set
+            {
+                if (_SheetFieldID != value)
+                {
+                    OnSheetFieldIDChanging(value);
+                    ReportPropertyChanging("SheetFieldID");
+                    _SheetFieldID = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("SheetFieldID");
+                    OnSheetFieldIDChanged();
+                }
+            }
+        }
+        private global::System.Int64 _SheetFieldID;
+        partial void OnSheetFieldIDChanging(global::System.Int64 value);
+        partial void OnSheetFieldIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int64 SheetID
+        {
+            get
+            {
+                return _SheetID;
+            }
+            set
+            {
+                OnSheetIDChanging(value);
+                ReportPropertyChanging("SheetID");
+                _SheetID = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("SheetID");
+                OnSheetIDChanged();
+            }
+        }
+        private global::System.Int64 _SheetID;
+        partial void OnSheetIDChanging(global::System.Int64 value);
+        partial void OnSheetIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.Int32 Width
@@ -1484,17 +1534,16 @@ namespace WebHostSynch
         /// <param name="fontSize">Initial value of the FontSize property.</param>
         /// <param name="growthBehavior">Initial value of the GrowthBehavior property.</param>
         /// <param name="height">Initial value of the Height property.</param>
-        /// <param name="radioButtonValue">Initial value of the RadioButtonValue property.</param>
-        /// <param name="sheetDefNum">Initial value of the SheetDefNum property.</param>
-        /// <param name="sheetFieldDefNum">Initial value of the SheetFieldDefNum property.</param>
-        /// <param name="webSheetFieldDefNum">Initial value of the WebSheetFieldDefNum property.</param>
-        /// <param name="width">Initial value of the Width property.</param>
-        /// <param name="xPos">Initial value of the XPos property.</param>
-        /// <param name="yPos">Initial value of the YPos property.</param>
         /// <param name="imageData">Initial value of the ImageData property.</param>
         /// <param name="isRequired">Initial value of the IsRequired property.</param>
         /// <param name="radioButtonGroup">Initial value of the RadioButtonGroup property.</param>
-        public static webforms_sheetfielddef Createwebforms_sheetfielddef(global::System.String fieldName, global::System.Int32 fieldType, global::System.String fieldValue, global::System.SByte fontIsBold, global::System.String fontName, global::System.Single fontSize, global::System.Int32 growthBehavior, global::System.Int32 height, global::System.String radioButtonValue, global::System.Int64 sheetDefNum, global::System.Int64 sheetFieldDefNum, global::System.Int64 webSheetFieldDefNum, global::System.Int32 width, global::System.Int32 xPos, global::System.Int32 yPos, global::System.String imageData, global::System.SByte isRequired, global::System.String radioButtonGroup)
+        /// <param name="radioButtonValue">Initial value of the RadioButtonValue property.</param>
+        /// <param name="webSheetDefID">Initial value of the WebSheetDefID property.</param>
+        /// <param name="webSheetFieldDefID">Initial value of the WebSheetFieldDefID property.</param>
+        /// <param name="width">Initial value of the Width property.</param>
+        /// <param name="xPos">Initial value of the XPos property.</param>
+        /// <param name="yPos">Initial value of the YPos property.</param>
+        public static webforms_sheetfielddef Createwebforms_sheetfielddef(global::System.String fieldName, global::System.Int32 fieldType, global::System.String fieldValue, global::System.SByte fontIsBold, global::System.String fontName, global::System.Single fontSize, global::System.Int32 growthBehavior, global::System.Int32 height, global::System.String imageData, global::System.SByte isRequired, global::System.String radioButtonGroup, global::System.String radioButtonValue, global::System.Int64 webSheetDefID, global::System.Int64 webSheetFieldDefID, global::System.Int32 width, global::System.Int32 xPos, global::System.Int32 yPos)
         {
             webforms_sheetfielddef webforms_sheetfielddef = new webforms_sheetfielddef();
             webforms_sheetfielddef.FieldName = fieldName;
@@ -1505,16 +1554,15 @@ namespace WebHostSynch
             webforms_sheetfielddef.FontSize = fontSize;
             webforms_sheetfielddef.GrowthBehavior = growthBehavior;
             webforms_sheetfielddef.Height = height;
-            webforms_sheetfielddef.RadioButtonValue = radioButtonValue;
-            webforms_sheetfielddef.SheetDefNum = sheetDefNum;
-            webforms_sheetfielddef.SheetFieldDefNum = sheetFieldDefNum;
-            webforms_sheetfielddef.WebSheetFieldDefNum = webSheetFieldDefNum;
-            webforms_sheetfielddef.Width = width;
-            webforms_sheetfielddef.XPos = xPos;
-            webforms_sheetfielddef.YPos = yPos;
             webforms_sheetfielddef.ImageData = imageData;
             webforms_sheetfielddef.IsRequired = isRequired;
             webforms_sheetfielddef.RadioButtonGroup = radioButtonGroup;
+            webforms_sheetfielddef.RadioButtonValue = radioButtonValue;
+            webforms_sheetfielddef.WebSheetDefID = webSheetDefID;
+            webforms_sheetfielddef.WebSheetFieldDefID = webSheetFieldDefID;
+            webforms_sheetfielddef.Width = width;
+            webforms_sheetfielddef.XPos = xPos;
+            webforms_sheetfielddef.YPos = yPos;
             return webforms_sheetfielddef;
         }
 
@@ -1718,6 +1766,78 @@ namespace WebHostSynch
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
+        public global::System.String ImageData
+        {
+            get
+            {
+                return _ImageData;
+            }
+            set
+            {
+                OnImageDataChanging(value);
+                ReportPropertyChanging("ImageData");
+                _ImageData = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("ImageData");
+                OnImageDataChanged();
+            }
+        }
+        private global::System.String _ImageData;
+        partial void OnImageDataChanging(global::System.String value);
+        partial void OnImageDataChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.SByte IsRequired
+        {
+            get
+            {
+                return _IsRequired;
+            }
+            set
+            {
+                OnIsRequiredChanging(value);
+                ReportPropertyChanging("IsRequired");
+                _IsRequired = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("IsRequired");
+                OnIsRequiredChanged();
+            }
+        }
+        private global::System.SByte _IsRequired;
+        partial void OnIsRequiredChanging(global::System.SByte value);
+        partial void OnIsRequiredChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String RadioButtonGroup
+        {
+            get
+            {
+                return _RadioButtonGroup;
+            }
+            set
+            {
+                OnRadioButtonGroupChanging(value);
+                ReportPropertyChanging("RadioButtonGroup");
+                _RadioButtonGroup = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("RadioButtonGroup");
+                OnRadioButtonGroupChanged();
+            }
+        }
+        private global::System.String _RadioButtonGroup;
+        partial void OnRadioButtonGroupChanging(global::System.String value);
+        partial void OnRadioButtonGroupChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
         public global::System.String RadioButtonValue
         {
             get
@@ -1742,75 +1862,51 @@ namespace WebHostSynch
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Int64 SheetDefNum
+        public global::System.Int64 WebSheetDefID
         {
             get
             {
-                return _SheetDefNum;
+                return _WebSheetDefID;
             }
             set
             {
-                OnSheetDefNumChanging(value);
-                ReportPropertyChanging("SheetDefNum");
-                _SheetDefNum = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("SheetDefNum");
-                OnSheetDefNumChanged();
+                OnWebSheetDefIDChanging(value);
+                ReportPropertyChanging("WebSheetDefID");
+                _WebSheetDefID = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("WebSheetDefID");
+                OnWebSheetDefIDChanged();
             }
         }
-        private global::System.Int64 _SheetDefNum;
-        partial void OnSheetDefNumChanging(global::System.Int64 value);
-        partial void OnSheetDefNumChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.Int64 SheetFieldDefNum
-        {
-            get
-            {
-                return _SheetFieldDefNum;
-            }
-            set
-            {
-                OnSheetFieldDefNumChanging(value);
-                ReportPropertyChanging("SheetFieldDefNum");
-                _SheetFieldDefNum = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("SheetFieldDefNum");
-                OnSheetFieldDefNumChanged();
-            }
-        }
-        private global::System.Int64 _SheetFieldDefNum;
-        partial void OnSheetFieldDefNumChanging(global::System.Int64 value);
-        partial void OnSheetFieldDefNumChanged();
+        private global::System.Int64 _WebSheetDefID;
+        partial void OnWebSheetDefIDChanging(global::System.Int64 value);
+        partial void OnWebSheetDefIDChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Int64 WebSheetFieldDefNum
+        public global::System.Int64 WebSheetFieldDefID
         {
             get
             {
-                return _WebSheetFieldDefNum;
+                return _WebSheetFieldDefID;
             }
             set
             {
-                if (_WebSheetFieldDefNum != value)
+                if (_WebSheetFieldDefID != value)
                 {
-                    OnWebSheetFieldDefNumChanging(value);
-                    ReportPropertyChanging("WebSheetFieldDefNum");
-                    _WebSheetFieldDefNum = StructuralObject.SetValidValue(value);
-                    ReportPropertyChanged("WebSheetFieldDefNum");
-                    OnWebSheetFieldDefNumChanged();
+                    OnWebSheetFieldDefIDChanging(value);
+                    ReportPropertyChanging("WebSheetFieldDefID");
+                    _WebSheetFieldDefID = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("WebSheetFieldDefID");
+                    OnWebSheetFieldDefIDChanged();
                 }
             }
         }
-        private global::System.Int64 _WebSheetFieldDefNum;
-        partial void OnWebSheetFieldDefNumChanging(global::System.Int64 value);
-        partial void OnWebSheetFieldDefNumChanged();
+        private global::System.Int64 _WebSheetFieldDefID;
+        partial void OnWebSheetFieldDefIDChanging(global::System.Int64 value);
+        partial void OnWebSheetFieldDefIDChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -1883,78 +1979,6 @@ namespace WebHostSynch
         private global::System.Int32 _YPos;
         partial void OnYPosChanging(global::System.Int32 value);
         partial void OnYPosChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String ImageData
-        {
-            get
-            {
-                return _ImageData;
-            }
-            set
-            {
-                OnImageDataChanging(value);
-                ReportPropertyChanging("ImageData");
-                _ImageData = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("ImageData");
-                OnImageDataChanged();
-            }
-        }
-        private global::System.String _ImageData;
-        partial void OnImageDataChanging(global::System.String value);
-        partial void OnImageDataChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.SByte IsRequired
-        {
-            get
-            {
-                return _IsRequired;
-            }
-            set
-            {
-                OnIsRequiredChanging(value);
-                ReportPropertyChanging("IsRequired");
-                _IsRequired = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("IsRequired");
-                OnIsRequiredChanged();
-            }
-        }
-        private global::System.SByte _IsRequired;
-        partial void OnIsRequiredChanging(global::System.SByte value);
-        partial void OnIsRequiredChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String RadioButtonGroup
-        {
-            get
-            {
-                return _RadioButtonGroup;
-            }
-            set
-            {
-                OnRadioButtonGroupChanging(value);
-                ReportPropertyChanging("RadioButtonGroup");
-                _RadioButtonGroup = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("RadioButtonGroup");
-                OnRadioButtonGroupChanged();
-            }
-        }
-        private global::System.String _RadioButtonGroup;
-        partial void OnRadioButtonGroupChanging(global::System.String value);
-        partial void OnRadioButtonGroupChanged();
 
         #endregion
     
@@ -1966,16 +1990,16 @@ namespace WebHostSynch
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("odwebserviceModel", "FK_webforms_sheetfielddef_WebSheetDefNum", "webforms_sheetdef")]
+        [EdmRelationshipNavigationPropertyAttribute("odwebserviceModel", "FK_webforms_sheetfielddef_WebSheetDefID", "webforms_sheetdef")]
         public webforms_sheetdef webforms_sheetdef
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<webforms_sheetdef>("odwebserviceModel.FK_webforms_sheetfielddef_WebSheetDefNum", "webforms_sheetdef").Value;
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<webforms_sheetdef>("odwebserviceModel.FK_webforms_sheetfielddef_WebSheetDefID", "webforms_sheetdef").Value;
             }
             set
             {
-                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<webforms_sheetdef>("odwebserviceModel.FK_webforms_sheetfielddef_WebSheetDefNum", "webforms_sheetdef").Value = value;
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<webforms_sheetdef>("odwebserviceModel.FK_webforms_sheetfielddef_WebSheetDefID", "webforms_sheetdef").Value = value;
             }
         }
         /// <summary>
@@ -1987,13 +2011,13 @@ namespace WebHostSynch
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<webforms_sheetdef>("odwebserviceModel.FK_webforms_sheetfielddef_WebSheetDefNum", "webforms_sheetdef");
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<webforms_sheetdef>("odwebserviceModel.FK_webforms_sheetfielddef_WebSheetDefID", "webforms_sheetdef");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<webforms_sheetdef>("odwebserviceModel.FK_webforms_sheetfielddef_WebSheetDefNum", "webforms_sheetdef", value);
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<webforms_sheetdef>("odwebserviceModel.FK_webforms_sheetfielddef_WebSheetDefID", "webforms_sheetdef", value);
                 }
             }
         }

@@ -20,7 +20,7 @@ namespace OpenDental {
 		private string WebFormAddress="";
 		private OpenDental.WebHostSynch.webforms_preference PrefObj=null;
 		string RegistrationKey=PrefC.GetString(PrefName.RegistrationKey);
-		string SheetDefAddress ="";
+		string SheetDefAddress="";
 		WebHostSynch.WebHostSynch wh=new WebHostSynch.WebHostSynch();
 		OpenDental.WebHostSynch.webforms_sheetdef[] sheetDefList;
 		List<SheetDef> SheetDefListLocal;
@@ -35,7 +35,6 @@ namespace OpenDental {
 		}
 
 		private void FormWebFormSetupV2_Load(object sender,EventArgs e) {
-				
 		}
 
 		private void FormWebFormSetupV2_Shown(object sender,EventArgs e) {
@@ -50,7 +49,6 @@ namespace OpenDental {
 			if(TestWebServiceExists()==true) {
 				Cursor=Cursors.WaitCursor;
 				this.backgroundWorker1.RunWorkerAsync();
-				
 			}
 		}
 
@@ -78,8 +76,8 @@ namespace OpenDental {
 				wh.Url=PrefC.GetString(PrefName.WebHostSynchServerURL);
 				PrefObj=wh.GetPreferences(RegistrationKey);
 				sheetDefList=wh.DownloadSheetDefs(RegistrationKey);
-				SheetDefAddress= wh.GetSheetDefAddress(RegistrationKey);
-				SheetDefListLocal= new List<SheetDef>();
+				SheetDefAddress=wh.GetSheetDefAddress(RegistrationKey);
+				SheetDefListLocal=new List<SheetDef>();
 				SheetsDefsForDeletion=new List<long>();
 				DentalOfficeID=wh.GetDentalOfficeID(RegistrationKey);
 				GetWebFormAddress();
@@ -157,12 +155,12 @@ namespace OpenDental {
 		}
 
 		private void backgroundWorker1_RunWorkerCompleted(object sender,RunWorkerCompletedEventArgs e) {
-			if(e.Error!= null) {
-                Cursor = Cursors.Default;
+			if(e.Error!=null) {
+                Cursor=Cursors.Default;
 				MessageBox.Show(e.Error.Message);
                 return;
 			}
-            if (PrefObj == null)
+            if (PrefObj==null)
             {
                 MsgBox.Show(this, "There has been an error in fetching values from the server");
             }
@@ -194,29 +192,25 @@ namespace OpenDental {
 		}
 
 		private void LoadImagesToSheetsDefs(SheetDef SheetDefCur){
-
-							for(int j=0;j<SheetDefCur.SheetFieldDefs.Count;j++) {
-					if(SheetDefCur.SheetFieldDefs[j].FieldType==SheetFieldType.Image) {
-						string filePathAndName=ODFileUtils.CombinePaths(SheetUtil.GetImagePath(),SheetDefCur.SheetFieldDefs[j].FieldName);
-						Image img=null;
-						if(SheetDefCur.SheetFieldDefs[j].FieldName=="Patient Info.gif") {
-							img=Properties.Resources.Patient_Info;
-						}
-						else if(File.Exists(filePathAndName)) {
-							img=Image.FromFile(filePathAndName);
-						}
+			for(int j=0;j<SheetDefCur.SheetFieldDefs.Count;j++) {
+				if(SheetDefCur.SheetFieldDefs[j].FieldType==SheetFieldType.Image) {
+					string filePathAndName=ODFileUtils.CombinePaths(SheetUtil.GetImagePath(),SheetDefCur.SheetFieldDefs[j].FieldName);
+					Image img=null;
+					if(SheetDefCur.SheetFieldDefs[j].FieldName=="Patient Info.gif") {
+						img=Properties.Resources.Patient_Info;
+					}
+					else if(File.Exists(filePathAndName)) {
+						img=Image.FromFile(filePathAndName);
+					}
 						SheetDefCur.SheetFieldDefs[j].ImageData=POut.Bitmap(new Bitmap(img));
-					}
-					else {
+				}else{
 						SheetDefCur.SheetFieldDefs[j].ImageData="";// because null is not allowed
-					}
 				}
-
+			}
 		}
 
 
 		private void butAdd_Click(object sender,EventArgs e) {
-			
 			FormSheetPicker FormS=new FormSheetPicker();
 			FormS.SheetType=SheetTypeEnum.PatientForm;
 			FormS.HideKioskButton=true;
@@ -224,37 +218,28 @@ namespace OpenDental {
 			if(FormS.DialogResult!=DialogResult.OK) {
 				return;
 			}
-
 			for(int i=0;i<FormS.SelectedSheetDefs.Count;i++) {
-
-				if(!SheetDefListLocal.Exists(sd => sd.SheetDefNum==FormS.SelectedSheetDefs[i].SheetDefNum)) {
+				if(!SheetDefListLocal.Exists(sd=>sd.SheetDefNum==FormS.SelectedSheetDefs[i].SheetDefNum)) {
 					SheetDefListLocal.Add(FormS.SelectedSheetDefs[i]);
 				}
-
 				//internal sheets have SheetDefNum 0
-				if(SheetDefListLocal.Exists(sd => sd.SheetDefNum==FormS.SelectedSheetDefs[i].SheetDefNum && sd.SheetDefNum==0)) {
-					if(!SheetDefListLocal.Exists(sd => sd.Description==FormS.SelectedSheetDefs[i].Description)) {
-						
-							SheetDefListLocal.Add(FormS.SelectedSheetDefs[i]);
-						
+				if(SheetDefListLocal.Exists(sd=>sd.SheetDefNum==FormS.SelectedSheetDefs[i].SheetDefNum && sd.SheetDefNum==0)) {
+					if(!SheetDefListLocal.Exists(sd=>sd.Description==FormS.SelectedSheetDefs[i].Description)) {
+						SheetDefListLocal.Add(FormS.SelectedSheetDefs[i]);
 					}
 				}
-
 			}
-
 			FillGrid();
-
-
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
 			if(gridMain.Rows[gridMain.SelectedIndices[0]].Tag.GetType()==typeof(SheetDef)) {
 				SheetDef sheetDef=(SheetDef)gridMain.Rows[gridMain.SelectedIndices[0]].Tag;
-				SheetDefListLocal.Remove(SheetDefListLocal.Find(sd => sd.SheetDefNum==sheetDef.SheetDefNum));
+				SheetDefListLocal.Remove(SheetDefListLocal.Find(sd=>sd.SheetDefNum==sheetDef.SheetDefNum));
 			}
 			else {
-				OpenDental.WebHostSynch.webforms_sheetdef WebSheetDef= (OpenDental.WebHostSynch.webforms_sheetdef)gridMain.Rows[gridMain.SelectedIndices[0]].Tag;
-				SheetsDefsForDeletion.Add(WebSheetDef.WebSheetDefNum);
+				OpenDental.WebHostSynch.webforms_sheetdef WebSheetDef=(OpenDental.WebHostSynch.webforms_sheetdef)gridMain.Rows[gridMain.SelectedIndices[0]].Tag;
+				SheetsDefsForDeletion.Add(WebSheetDef.WebSheetDefID);
 			}
 			FillGrid();
 		}
@@ -265,7 +250,6 @@ namespace OpenDental {
 		}
 
 		private void FillGrid() {
-
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g(this,"Sheet Num"),70);
 			gridMain.Columns.Add(col);
@@ -276,24 +260,19 @@ namespace OpenDental {
 			col=new ODGridColumn(Lan.g(this,"Browser Address For Patients"),510);
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
-
 			for(int i=0;i<sheetDefList.Length;i++) {
 				ODGridRow row=new ODGridRow();
-
 				row.Tag=sheetDefList[i];
-				row.Cells.Add(sheetDefList[i].WebSheetDefNum+"");
+				row.Cells.Add(sheetDefList[i].WebSheetDefID+"");
 				row.Cells.Add(sheetDefList[i].Description);
-				if(SheetsDefsForDeletion.Exists(wsn => wsn==sheetDefList[i].WebSheetDefNum)) {
+				if(SheetsDefsForDeletion.Exists(wsn=>wsn==sheetDefList[i].WebSheetDefID)) {
 					row.Cells.Add(Lan.g(this,"On Server- marked for deletion"));
 				}
 				else {
 					row.Cells.Add(Lan.g(this,"On Server"));
 				}
-
-				String  SheetFormAddress = SheetDefAddress+"?DentalOfficeID="+DentalOfficeID+"&WebSheetDefNum="+sheetDefList[i].WebSheetDefNum;
-
+				String  SheetFormAddress=SheetDefAddress+"?DentalOfficeID="+DentalOfficeID+"&WebSheetDefID="+sheetDefList[i].WebSheetDefID;
 				row.Cells.Add(SheetFormAddress);
-				
 				gridMain.Rows.Add(row);
 			}
 				SheetDef sheetDef;
@@ -309,15 +288,13 @@ namespace OpenDental {
 				}
 			gridMain.EndUpdate();
 		}
-
+		 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-		
 			if(gridMain.Rows[gridMain.SelectedIndices[0]].Tag.GetType()==typeof(SheetDef)) {
-
 			}
 			else {
-				OpenDental.WebHostSynch.webforms_sheetdef WebSheetDef= (OpenDental.WebHostSynch.webforms_sheetdef)gridMain.Rows[gridMain.SelectedIndices[0]].Tag;
-				String SheetFormAddress = SheetDefAddress+"?DentalOfficeID="+DentalOfficeID+"&WebSheetDefNum="+WebSheetDef.WebSheetDefNum;
+				OpenDental.WebHostSynch.webforms_sheetdef WebSheetDef=(OpenDental.WebHostSynch.webforms_sheetdef)gridMain.Rows[gridMain.SelectedIndices[0]].Tag;
+				String SheetFormAddress=SheetDefAddress+"?DentalOfficeID="+DentalOfficeID+"&WebSheetDefID="+WebSheetDef.WebSheetDefID;
 				System.Diagnostics.Process.Start(SheetFormAddress);
 			}
 		}

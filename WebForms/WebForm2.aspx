@@ -21,9 +21,9 @@
 </div>
 
 </asp:Panel>
-<asp:Panel ID="Panel2" runat="server" Width="680px" HorizontalAlign="Left" BorderColor="White"
+<asp:Panel ID="Panel2" runat="server" Width="0px" HorizontalAlign="Left" BorderColor="White"
 					BorderWidth="60px" Style="border-bottom: 20px;text-align: center;" BackColor="White" 
-					Visible="False" Height="300px">
+					Visible="False" Height="0px">
 					<br /><br /><br /><br />
 						<asp:Label ID="LabelSubmitMessage" runat="server" Text=""></asp:Label>
 		</asp:Panel>

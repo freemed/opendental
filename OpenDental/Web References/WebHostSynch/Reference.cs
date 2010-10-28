@@ -1201,11 +1201,9 @@ namespace OpenDental.WebHostSynch {
         
         private sbyte isLandscapeField;
         
-        private long sheetDefNumField;
-        
         private int sheetTypeField;
         
-        private long webSheetDefNumField;
+        private long webSheetDefIDField;
         
         private int widthField;
         
@@ -1261,15 +1259,6 @@ namespace OpenDental.WebHostSynch {
             }
         }
         
-        /// <remarks/>
-        public long SheetDefNum {
-            get {
-                return this.sheetDefNumField;
-            }
-            set {
-                this.sheetDefNumField = value;
-            }
-        }
         
         /// <remarks/>
         public int SheetType {
@@ -1282,12 +1271,12 @@ namespace OpenDental.WebHostSynch {
         }
         
         /// <remarks/>
-        public long WebSheetDefNum {
+        public long WebSheetDefID {
             get {
-                return this.webSheetDefNumField;
+                return this.webSheetDefIDField;
             }
             set {
-                this.webSheetDefNumField = value;
+                this.webSheetDefIDField = value;
             }
         }
         

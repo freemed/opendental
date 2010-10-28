@@ -64,9 +64,8 @@ CREATE TABLE `webforms_sheet` (
 DROP TABLE IF EXISTS `webforms_sheetdef`;
 
 CREATE TABLE `webforms_sheetdef` (
-  `WebSheetDefNum` bigint(20) NOT NULL AUTO_INCREMENT,
+  `WebSheetDefID` bigint(20) NOT NULL AUTO_INCREMENT,
   `DentalOfficeID` bigint(20) NOT NULL,
-  `SheetDefNum` bigint(20) NOT NULL,
   `Description` varchar(255) NOT NULL,
   `SheetType` int(11) NOT NULL,
   `FontSize` float NOT NULL,
@@ -74,7 +73,7 @@ CREATE TABLE `webforms_sheetdef` (
   `Width` int(11) NOT NULL,
   `Height` int(11) NOT NULL,
   `IsLandscape` tinyint(4) NOT NULL,
-  PRIMARY KEY (`WebSheetDefNum`),
+  PRIMARY KEY (`WebSheetDefID`),
   KEY `FK_webforms_sheetdef_DentalOfficeID` (`DentalOfficeID`),
   CONSTRAINT `FK_webforms_sheetdef_DentalOfficeID` FOREIGN KEY (`DentalOfficeID`) REFERENCES `webforms_preference` (`DentalOfficeID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -126,10 +125,8 @@ CREATE TABLE `webforms_sheetfield` (
 DROP TABLE IF EXISTS `webforms_sheetfielddef`;
 
 CREATE TABLE `webforms_sheetfielddef` (
-  `WebSheetFieldDefNum` bigint(20) NOT NULL AUTO_INCREMENT,
-  `SheetFieldDefNum` bigint(20) NOT NULL,
-  `WebSheetDefNum` bigint(20) NOT NULL,
-  `SheetDefNum` bigint(20) NOT NULL,
+  `WebSheetFieldDefID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `WebSheetDefID` bigint(20) NOT NULL,
   `FieldType` int(11) NOT NULL,
   `FieldName` varchar(255) NOT NULL,
   `FieldValue` text NOT NULL,
@@ -145,9 +142,9 @@ CREATE TABLE `webforms_sheetfielddef` (
   `RadioButtonGroup` varchar(255) NOT NULL,
   `IsRequired` tinyint(4) NOT NULL,
   `ImageData` mediumtext NOT NULL,
-  PRIMARY KEY (`WebSheetFieldDefNum`),
-  KEY `FK_webforms_sheetfielddef_WebSheetDefNum` (`WebSheetDefNum`),
-  CONSTRAINT `FK_webforms_sheetfielddef_WebSheetDefNum` FOREIGN KEY (`WebSheetDefNum`) REFERENCES `webforms_sheetdef` (`WebSheetDefNum`)
+  PRIMARY KEY (`WebSheetFieldDefID`),
+  KEY `FK_webforms_sheetfielddef_WebSheetDefID` (`WebSheetDefID`),
+  CONSTRAINT `FK_webforms_sheetfielddef_WebSheetDefID` FOREIGN KEY (`WebSheetDefID`) REFERENCES `webforms_sheetdef` (`WebSheetDefID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

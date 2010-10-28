@@ -17,18 +17,18 @@ namespace WebForms {
 	[WebServiceBinding(ConformsTo=WsiProfiles.BasicProfile1_1)]
 	public class Handler1:IHttpHandler {
 
-		private long WebSheetFieldDefNum=0;
+		private long WebSheetFieldDefID=0;
 
 		public void ProcessRequest(HttpContext context) {
 			//TestBackGround(context); return;
 			try {
-				if(context.Request["WebSheetFieldDefNum"]!=null) {
-					Int64.TryParse(context.Request["WebSheetFieldDefNum"].ToString().Trim(),out WebSheetFieldDefNum);
+				if(context.Request["WebSheetFieldDefID"]!=null) {
+					Int64.TryParse(context.Request["WebSheetFieldDefID"].ToString().Trim(),out WebSheetFieldDefID);
 				}
 				/*png images are used because the background of rectangles/lines can be set to transparent. For gif images the process of making the background transparent is convoluted*/
 				context.Response.ContentType="image/png";
 				ODWebServiceEntities db=new ODWebServiceEntities();
-				var sfdObj=db.webforms_sheetfielddef.Where(sfd => sfd.WebSheetFieldDefNum==WebSheetFieldDefNum).First();
+				var sfdObj=db.webforms_sheetfielddef.Where(sfd => sfd.WebSheetFieldDefID==WebSheetFieldDefID).First();
 				SheetFieldType FieldType = (SheetFieldType)sfdObj.FieldType;
 				Bitmap bmp=null;
 				Graphics g=null;
@@ -68,11 +68,11 @@ namespace WebForms {
 			}
 		}
 
-		private void DrawFigure(HttpContext context, long WebSheetFieldDefNum) {
+		private void DrawFigure(HttpContext context, long WebSheetFieldDefID) {
 			try {
 				context.Response.ContentType="image/gif";
 				ODWebServiceEntities db=new ODWebServiceEntities();
-				var sfdObj=db.webforms_sheetfielddef.Where(sfd => sfd.WebSheetFieldDefNum==WebSheetFieldDefNum).First();
+				var sfdObj=db.webforms_sheetfielddef.Where(sfd => sfd.WebSheetFieldDefID==WebSheetFieldDefID).First();
 				Bitmap bmp = new Bitmap(sfdObj.Width,sfdObj.Height,PixelFormat.Format24bppRgb);
 				Graphics g = Graphics.FromImage(bmp);
 				g.Clear(Color.White);
@@ -91,10 +91,10 @@ namespace WebForms {
 			}
 	}
 
-		private void PutImage(HttpContext context,long WebSheetFieldDefNum) {
+		private void PutImage(HttpContext context,long WebSheetFieldDefID) {
 				context.Response.ContentType="image/gif";
 			ODWebServiceEntities db=new ODWebServiceEntities();
-				var sfdObj=db.webforms_sheetfielddef.Where(sfd => sfd.WebSheetFieldDefNum==WebSheetFieldDefNum).First();
+				var sfdObj=db.webforms_sheetfielddef.Where(sfd => sfd.WebSheetFieldDefID==WebSheetFieldDefID).First();
 				string ImageData=sfdObj.ImageData;
 				Bitmap bitmap=PIn.Bitmap(ImageData);
 				bitmap.Save(context.Response.OutputStream,ImageFormat.Jpeg);

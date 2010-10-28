@@ -64,8 +64,8 @@ namespace WebHostSynch {
 			[WebMethod]
 			public webforms_preference GetPreferences(string RegistrationKey) {
 				Logger.Information("In GetPreferences IpAddress="+HttpContext.Current.Request.UserHostAddress+" RegistrationKey="+RegistrationKey);
-                ODWebServiceEntities db = new ODWebServiceEntities();
-				webforms_preference wspObj= null;
+                ODWebServiceEntities db=new ODWebServiceEntities();
+				webforms_preference wspObj=null;
 				int DefaultColorBorder=-12550016;
 				string DefaultHeading1="PATIENT INFORMATION";
 				string DefaultHeading2="We are pleased to welcome you to our office. Please take a few minutes to fill out this form as completely as you can. If you have any questions we'll be glad to help you.";
@@ -80,7 +80,7 @@ namespace WebHostSynch {
 							where wsp.DentalOfficeID==DentalOfficeID
 							select wsp;
                     */
-                    var wspRes = db.webforms_preference.Where(wsp => wsp.DentalOfficeID == DentalOfficeID);
+                    var wspRes=db.webforms_preference.Where(wsp=>wsp.DentalOfficeID==DentalOfficeID);
                                  
 
                     if (wspRes.Count() > 0)
@@ -88,7 +88,7 @@ namespace WebHostSynch {
 						wspObj=wspRes.First();
 					}
 					// if there is no entry for that dental office make a new entry.
-                    if (wspRes.Count() == 0)
+                    if (wspRes.Count()==0)
                     {
 						wspObj=new webforms_preference();
 						wspObj.DentalOfficeID=DentalOfficeID;
@@ -133,7 +133,7 @@ namespace WebHostSynch {
 						where wsf.webforms_preference.DentalOfficeID==DentalOfficeID
 						select wsf;
 					wslist=wsRes.ToList();
-					Logger.Information("In GetSheetData IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID+" Sheets sent to Client ="+ wsRes.Count());
+					Logger.Information("In GetSheetData IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID+" Sheets sent to Client="+ wsRes.Count());
 					return wslist;
 					}
 					catch(Exception ex) {
@@ -144,7 +144,7 @@ namespace WebHostSynch {
 
 			[WebMethod]
 			public List<SheetAndSheetField> GetSheets(string RegistrationKey) {
-				List<SheetAndSheetField> sAndsfList= new List<SheetAndSheetField>();
+				List<SheetAndSheetField> sAndsfList=new List<SheetAndSheetField>();
 			
 				try {
 					long DentalOfficeID=GetDentalOfficeID(RegistrationKey);
@@ -160,12 +160,12 @@ namespace WebHostSynch {
 						var wsobj=wsRes.ToList()[i];
 						
 						wsobj.webforms_sheetfield.Load();
-						var sheetfieldList= wsobj.webforms_sheetfield;
+						var sheetfieldList=wsobj.webforms_sheetfield;
 						SheetAndSheetField sAnds=new SheetAndSheetField(wsobj,sheetfieldList.ToList());
 						sAndsfList.Add(sAnds);
 
 					}
-					Logger.Information("In GetSheetData IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID+" Sheets sent to Client ="+ wsRes.Count());
+					Logger.Information("In GetSheetData IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID+" Sheets sent to Client="+ wsRes.Count());
 					return sAndsfList;
 				}
 				catch(Exception ex) {
@@ -231,7 +231,7 @@ namespace WebHostSynch {
 				RegistrationKey RegistrationKeyFromDb=null;
 				try {
 					RegistrationKeyFromDb=RegistrationKeys.GetByKey(RegistrationKeyFromDentalOffice);
-					DateTime d1= new DateTime(1902,1,1);
+					DateTime d1=new DateTime(1902,1,1);
 					if(d1<RegistrationKeyFromDb.DateDisabled && RegistrationKeyFromDb.DateDisabled<DateTime.Today) {
 						Logger.Information("RegistrationKey has been disabled. Dental OfficeId="+RegistrationKeyFromDb.PatNum);
 						return false;
@@ -258,7 +258,7 @@ namespace WebHostSynch {
 				RegistrationKey RegistrationKeyFromDb=null;
 				try {
 					RegistrationKeyFromDb=RegistrationKeys.GetByKey(RegistrationKeyFromDentalOffice);
-					DateTime d1= new DateTime(1902,1,1);
+					DateTime d1=new DateTime(1902,1,1);
 					if(d1<RegistrationKeyFromDb.DateDisabled && RegistrationKeyFromDb.DateDisabled<DateTime.Today) {
 						Logger.Information("RegistrationKey has been disabled. Dental OfficeId="+RegistrationKeyFromDb.PatNum);
 						return 0;
@@ -298,7 +298,6 @@ namespace WebHostSynch {
 			/// An empty method to test if the webservice is up and running. this was made with the intention of testing the correctness of the webservice URL on an Open Dental Installation. If an incorrect webservice URL is used in a background thread of OD the exception cannot be handled easily.
 		/// </summary>
 		/// <returns></returns>
-	
 		[WebMethod]
 			public bool ServiceExists() {
 				return true;
@@ -332,7 +331,7 @@ namespace WebHostSynch {
 						return sheetDefList;
 					}
 				ODWebServiceEntities db=new ODWebServiceEntities();
-				var SheetDefResult=db.webforms_sheetdef.Where(sheetdef => sheetdef.webforms_preference.DentalOfficeID==DentalOfficeID);
+				var SheetDefResult=db.webforms_sheetdef.Where(sheetdef=>sheetdef.webforms_preference.DentalOfficeID==DentalOfficeID);
 				sheetDefList=SheetDefResult.ToList();
 				}
 				catch(Exception ex) {
@@ -344,7 +343,6 @@ namespace WebHostSynch {
 
 			[WebMethod]
 			public void DeleteSheetDefs(string RegistrationKey,List<long> SheetDefsForDeletion) {
-
 				try {
 					long DentalOfficeID=GetDentalOfficeID(RegistrationKey);
 					if(DentalOfficeID==0) {
@@ -352,9 +350,9 @@ namespace WebHostSynch {
 					}
 					ODWebServiceEntities db=new ODWebServiceEntities();
 					for(int i=0;i<SheetDefsForDeletion.Count();i++) {
-						long WebSheetDefNum=SheetDefsForDeletion.ElementAt(i);// LINQ throws an error if this is directly put into the select expression
+						long WebSheetDefID=SheetDefsForDeletion.ElementAt(i);// LINQ throws an error if this is directly put into the select expression
 						webforms_sheetdef SheetDefObj=null;
-						var SheetDefResult=db.webforms_sheetdef.Where(sd => sd.WebSheetDefNum==WebSheetDefNum);
+						var SheetDefResult=db.webforms_sheetdef.Where(sd=>sd.WebSheetDefID==WebSheetDefID);
 						if(SheetDefResult.Count()>0) {
 							SheetDefObj=SheetDefResult.First();
 							//load and delete existing child objects i.e sheetfielddefs objects
@@ -366,7 +364,7 @@ namespace WebHostSynch {
 							db.DeleteObject(SheetDefResult.First());//Delete SheetDefObj
 						}
 
-						Logger.Information("deleted WebSheetDefNum="+WebSheetDefNum+" DentalOfficeID="+DentalOfficeID);
+						Logger.Information("deleted WebSheetDefID="+WebSheetDefID+" DentalOfficeID="+DentalOfficeID);
 					}
 					db.SaveChanges();
 					Logger.Information("In DeleteSheetData IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID);
@@ -378,8 +376,7 @@ namespace WebHostSynch {
 
 
 			/// <summary>
-			/// Here sheetDef can be uploaded to the webhostsync from Open Dental
-			/// This method deletes ( then inserts) any existing SheetDefs and corresponding sheetfielddef by the same SheetDefNum. Deleting(and then inserting) versus Updating is done because on occasions there can be multiple SheetDefs which have the same SheetDefNum (due to imperfect code). In case of sheetfielddef updating is not even an option because the SheetFieldDefNum can change.
+			/// Here SheetDef can be via webhostsync from Open Dental
 			/// </summary>
 			[WebMethod]
 			public void UpLoadSheetDef(string RegistrationKey,List<SheetDef> sheetDefList) {
@@ -389,28 +386,10 @@ namespace WebHostSynch {
 					if(DentalOfficeID==0) {
 						return;
 					}
-					
-
 					foreach(SheetDef sheetDef in sheetDefList) {
-						var PreferenceResult=db.webforms_preference.Where(pref => pref.DentalOfficeID==DentalOfficeID);
+						var PreferenceResult=db.webforms_preference.Where(pref=>pref.DentalOfficeID==DentalOfficeID);
 						webforms_sheetdef SheetDefObj=null;
-						/* code below is not needed because Sheet defs are never updated.
-						PreferenceResult.First().webforms_sheetdef.Load();//Load associated SheetDefs object.
-						var SheetDefResult=PreferenceResult.First().webforms_sheetdef.Where(sd => sd.SheetDefNum==sheetDef.SheetDefNum);
-						 while(SheetDefResult.Count()>0) {
-							 SheetDefObj=SheetDefResult.First();
-							//load and delete existing child objects i.e sheetfielddefs objects
-							 SheetDefObj.webforms_sheetfielddef.Load();
-							var SheetFieldDefResult=SheetDefObj.webforms_sheetfielddef;
-							//every time a SheetFieldDefResult is deleted the the SheetFieldDefResult.Count() reduces so at some point the count will ultimately become 0.
-							while(SheetFieldDefResult.Count()>0) {
-								db.DeleteObject(SheetFieldDefResult.First());//Delete SheetFieldDefObj
-							}
-							db.DeleteObject(SheetDefResult.First());//Delete SheetDefObj
-						}
-						*/
 						 SheetDefObj=new webforms_sheetdef();
-						 SheetDefObj.SheetDefNum=sheetDef.SheetDefNum; // this line may be removed later after deleting SheetDefNum column form the database
 						 PreferenceResult.First().webforms_sheetdef.Add(SheetDefObj);
 						 FillSheetDef(sheetDef,SheetDefObj);
 						 FillFieldSheetDef(sheetDef,SheetDefObj);
@@ -441,7 +420,6 @@ namespace WebHostSynch {
 			private void FillFieldSheetDef(SheetDef sheetDef,webforms_sheetdef SheetDefObj) {
 				for(int i=0;i<sheetDef.SheetFieldDefs.Count();i++) {//assign several webforms_sheetfielddef
 					webforms_sheetfielddef SheetFieldDefObj=new webforms_sheetfielddef();
-					SheetFieldDefObj.SheetFieldDefNum=sheetDef.SheetFieldDefs[i].SheetFieldDefNum;
 					SheetDefObj.webforms_sheetfielddef.Add(SheetFieldDefObj);
 					// assign each property of a single webforms_sheetfielddef with corresponding values.
 					foreach(FieldInfo fieldinfo in sheetDef.SheetFieldDefs[i].GetType().GetFields()) {

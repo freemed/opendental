@@ -314,9 +314,8 @@
               <s:element minOccurs="1" maxOccurs="1" name="FontSize" type="s:float" />
               <s:element minOccurs="1" maxOccurs="1" name="Height" type="s:int" />
               <s:element minOccurs="1" maxOccurs="1" name="IsLandscape" type="s:byte" />
-              <s:element minOccurs="1" maxOccurs="1" name="SheetDefNum" type="s:long" />
               <s:element minOccurs="1" maxOccurs="1" name="SheetType" type="s:int" />
-              <s:element minOccurs="1" maxOccurs="1" name="WebSheetDefNum" type="s:long" />
+              <s:element minOccurs="1" maxOccurs="1" name="WebSheetDefID" type="s:long" />
               <s:element minOccurs="1" maxOccurs="1" name="Width" type="s:int" />
               <s:element minOccurs="0" maxOccurs="1" name="webforms_preferenceReference" type="tns:EntityReferenceOfwebforms_preference" />
             </s:sequence>
