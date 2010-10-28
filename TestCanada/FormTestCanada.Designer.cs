@@ -116,6 +116,8 @@
 			// 
 			// checkEligibility
 			// 
+			this.checkEligibility.Checked = true;
+			this.checkEligibility.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.checkEligibility.Location = new System.Drawing.Point(13,136);
 			this.checkEligibility.Name = "checkEligibility";
 			this.checkEligibility.Size = new System.Drawing.Size(161,18);
@@ -126,8 +128,6 @@
 			// 
 			// checkClaims
 			// 
-			this.checkClaims.Checked = true;
-			this.checkClaims.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.checkClaims.Location = new System.Drawing.Point(13,154);
 			this.checkClaims.Name = "checkClaims";
 			this.checkClaims.Size = new System.Drawing.Size(161,18);
@@ -210,7 +210,7 @@
 			this.textSingleScript.Name = "textSingleScript";
 			this.textSingleScript.Size = new System.Drawing.Size(49,20);
 			this.textSingleScript.TabIndex = 27;
-			this.textSingleScript.Text = "9";
+			this.textSingleScript.Text = "1";
 			// 
 			// label4
 			// 
