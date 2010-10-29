@@ -268,6 +268,11 @@ namespace OpenDental {
 		public static void CreatePdf(Sheet sheet,string fullFileName) {
 			PdfDocument document=new PdfDocument();
 			PdfPage page=document.AddPage();
+			CreatePdfPage(sheet,page);
+			document.Save(fullFileName);
+		}
+
+		public static void CreatePdfPage(Sheet sheet,PdfPage page) {
 			page.Width=p(sheet.Width);//XUnit.FromInch((double)sheet.Width/100);  //new XUnit((double)sheet.Width/100,XGraphicsUnit.Inch);
 			page.Height=p(sheet.Height);//new XUnit((double)sheet.Height/100,XGraphicsUnit.Inch);
 			if(sheet.IsLandscape){
@@ -392,7 +397,6 @@ namespace OpenDental {
 				XImage sigBitmap=XImage.FromGdiPlusImage(wrapper.GetSigImage());
 				g.DrawImage(sigBitmap,p(field.XPos),p(field.YPos),p(field.Width-2),p(field.Height-2));
 			}
-			document.Save(fullFileName);
 		}
 
 		/*//<summary>Converts pixels used by us to points used by PdfSharp.</summary>

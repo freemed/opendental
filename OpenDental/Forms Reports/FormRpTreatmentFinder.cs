@@ -1,5 +1,6 @@
 using System;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.Collections;
@@ -8,6 +9,10 @@ using System.IO;
 using System.Windows.Forms;
 using OpenDental.UI;
 using OpenDentBusiness;
+using PdfSharp;
+using PdfSharp.Pdf;
+using PdfSharp.Pdf.IO;
+using PdfSharp.Pdf.Printing;
 
 
 namespace OpenDental{
@@ -637,6 +642,38 @@ namespace OpenDental{
 		private void butLettersPreview_Click(object sender,EventArgs e) {
 			//Create letters. loop through each row and insert information into sheets,
 			//take all the sheets and add to one giant pdf for preview.
+			if(gridMain.SelectedIndices.Length==0) {
+				MsgBox.Show(this,"Please select patient(s) first.");
+				return;
+			}
+			FormSheetPicker FormS=new FormSheetPicker();
+			FormS.SheetType=SheetTypeEnum.PatientLetter;
+			FormS.ShowDialog();
+			if(FormS.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			SheetDef sheetDef;
+			Sheet sheet=null;
+			for(int i=0;i<FormS.SelectedSheetDefs.Count;i++) {
+				PdfDocument document=new PdfDocument();
+				FormSheetFillEdit FormSF=null;
+				PdfPage page=new PdfPage();
+				string filePathAndName="";
+				for(int j=0;j<gridMain.SelectedIndices.Length;j++) {
+					page=document.AddPage();
+					sheetDef=FormS.SelectedSheetDefs[i];
+					sheet=SheetUtil.CreateSheet(sheetDef,PIn.Long(table.Rows[gridMain.SelectedIndices[j]][0].ToString()));
+					SheetParameter.SetParameter(sheet,"PatNum",PIn.Long(table.Rows[gridMain.SelectedIndices[j]][0].ToString()));
+					SheetFiller.FillFields(sheet);
+					SheetUtil.CalculateHeights(sheet,this.CreateGraphics());
+					FormSF=new FormSheetFillEdit(sheet);
+					SheetPrinting.CreatePdfPage(sheet,page);
+				}
+				filePathAndName=Path.ChangeExtension(Path.GetTempFileName(),".pdf");
+				document.Save(filePathAndName);
+				Process.Start(filePathAndName);
+				DialogResult=DialogResult.OK;
+			}
 		}
 
 		private void butLabelSingle_Click(object sender,EventArgs e) {

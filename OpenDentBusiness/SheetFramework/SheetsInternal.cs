@@ -34,6 +34,8 @@ namespace OpenDentBusiness{
 					return Consent();
 				case SheetInternalType.PatientLetter:
 					return PatientLetter();
+				case SheetInternalType.PatientLetterTxFinder:
+					return PatientLetterTxFinder();
 				case SheetInternalType.ReferralLetter:
 					return ReferralLetter();
 				case SheetInternalType.PatientRegistration:
@@ -439,6 +441,55 @@ By signing below you acknowledge that you understand the information presented, 
 			y+=200;
 			y+=rowH;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Sincerely,",sheet.FontSize,sheet.FontName,false,x,y,100,rowH));
+			y+=rowH;
+			y+=rowH;
+			y+=rowH;
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("patient.priProvNameFL",sheet.FontSize,sheet.FontName,false,x,y,240,rowH));
+			return sheet;
+		}
+
+		private static SheetDef PatientLetterTxFinder(){
+			SheetDef sheet=new SheetDef(SheetTypeEnum.PatientLetter);
+			sheet.Description="Patient Letter Tx Finder";
+			sheet.FontName="Microsoft Sans Serif";
+			sheet.FontSize=11f;
+			sheet.Width=850;
+			sheet.Height=1100;
+			int rowH=19;
+			int x=100;
+			int y=100;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("PracticeTitle",sheet.FontSize,sheet.FontName,false,x,y,200,rowH));
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("PracticeAddress",sheet.FontSize,sheet.FontName,false,x,y,200,rowH,
+				GrowthBehaviorEnum.DownLocal));
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("practiceCityStateZip",sheet.FontSize,sheet.FontName,false,x,y,200,rowH));
+			y+=rowH;
+			y+=rowH;
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("patient.nameFL",sheet.FontSize,sheet.FontName,false,x,y,200,rowH));
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("patient.address",sheet.FontSize,sheet.FontName,false,x,y,200,rowH,
+				GrowthBehaviorEnum.DownLocal));
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("patient.cityStateZip",sheet.FontSize,sheet.FontName,false,x,y,200,rowH));
+			y+=rowH;
+			y+=rowH;
+			y+=rowH;
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("today.DayDate",sheet.FontSize,sheet.FontName,false,x,y,200,rowH));
+			y+=rowH;
+			y+=rowH;
+			y+=rowH;
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText(@"Your insurance benefits will renew soon.  You have [insRemaining] remaining that can be applied towards important dental treatment."
+				+@"  Our records show that the following treatment has not yet been completed."
+				+"\r\n\r\n[treatmentPlanProcs]\r\n\r\n"
+				+"Please call our office at your earliest convenience to schedule an appointment.",sheet.FontSize,sheet.FontName,false,x,y,650,200,
+				GrowthBehaviorEnum.DownGlobal));
+			y+=200;
+			y+=rowH;
 			y+=rowH;
 			y+=rowH;
 			y+=rowH;

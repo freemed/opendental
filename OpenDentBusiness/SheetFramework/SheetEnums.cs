@@ -94,6 +94,7 @@ namespace OpenDentBusiness {
 		Rx,
 		Consent,
 		PatientLetter,
+		PatientLetterTxFinder,
 		ReferralLetter,
 		RoutingSlip,
 		PatientRegistration,
