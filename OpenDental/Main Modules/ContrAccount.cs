@@ -2569,7 +2569,7 @@ namespace OpenDental {
 			if(countIsOverMaxCanadian) {
 				MsgBox.Show(this,"Only the first 7 procedures will be selected.  You will need to create a second claim for the remaining procedures.");
 			}
-			Claim ClaimCur=CreateClaim("P",PatPlanList,InsPlanList,ClaimProcList,procsForPat);
+			Claim ClaimCur=CreateClaim("P",PatPlanList,InsPlanList,ClaimProcList,procsForPat,SubList);
 			ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
 			if(ClaimCur.ClaimNum==0){
 				ModuleSelected(PatCur.PatNum);
@@ -2588,7 +2588,7 @@ namespace OpenDental {
 			if(PatPlans.GetPlanNum(PatPlanList,2)>0 && !CultureInfo.CurrentCulture.Name.EndsWith("CA")){//don't create secondary claim for Canada
 				InsPlan plan=InsPlans.GetPlan(PatPlans.GetPlanNum(PatPlanList,2),InsPlanList);
 				if(!plan.IsMedical){
-					ClaimCur=CreateClaim("S",PatPlanList,InsPlanList,ClaimProcList,procsForPat);
+					ClaimCur=CreateClaim("S",PatPlanList,InsPlanList,ClaimProcList,procsForPat,SubList);
 					if(ClaimCur.ClaimNum==0){
 						ModuleSelected(PatCur.PatNum);
 						return;
@@ -2602,23 +2602,27 @@ namespace OpenDental {
 		}
 
 		///<summary>The only validation that's been done is just to make sure that only procedures are selected.  All validation on the procedures selected is done here.  Creates and saves claim initially, attaching all selected procedures.  But it does not refresh any data. Does not do a final update of the new claim.  Does not enter fee amounts.  claimType=P,S,Med,or Other</summary>
-		private Claim CreateClaim(string claimType,List <PatPlan> PatPlanList,List <InsPlan> InsPlanList,List<ClaimProc> ClaimProcList,List<Procedure> procsForPat){
+		private Claim CreateClaim(string claimType,List <PatPlan> PatPlanList,List <InsPlan> planList,List<ClaimProc> ClaimProcList,List<Procedure> procsForPat,List<InsSub> subList){
 			long claimFormNum = 0;
 			EtransType eFormat = 0;
 			InsPlan PlanCur=new InsPlan();
+			InsSub SubCur=new InsSub();
 			Relat relatOther=Relat.Self;
 			switch(claimType){
 				case "P":
-					PlanCur=InsPlans.GetPlan(PatPlans.GetPlanNum(PatPlanList,1),InsPlanList);
+					PlanCur=InsPlans.GetPlan(PatPlans.GetPlanNum(PatPlanList,1),planList);
+					SubCur=InsSubs.GetSub(PatPlans.GetInsSubNum(PatPlanList,1),subList);
 					break;
 				case "S":
-					PlanCur=InsPlans.GetPlan(PatPlans.GetPlanNum(PatPlanList,2),InsPlanList);
+					PlanCur=InsPlans.GetPlan(PatPlans.GetPlanNum(PatPlanList,2),planList);
+					SubCur=InsSubs.GetSub(PatPlans.GetInsSubNum(PatPlanList,2),subList);
 					break;
 				case "Med":
 					//It's already been verified that a med plan exists
 					for(int i=0;i<PatPlanList.Count;i++){
-						if(InsPlans.GetPlan(PatPlanList[i].PlanNum,InsPlanList).IsMedical){
-							PlanCur=InsPlans.GetPlan(PatPlanList[i].PlanNum,InsPlanList);
+						if(InsPlans.GetPlan(PatPlanList[i].PlanNum,planList).IsMedical) {
+							PlanCur=InsPlans.GetPlan(PatPlanList[i].PlanNum,planList);
+							SubCur=InsSubs.GetSub(PatPlanList[i].InsSubNum,subList);
 							break;
 						}
 					}
@@ -2631,6 +2635,7 @@ namespace OpenDental {
 						return new Claim();
 					}
 					PlanCur=FormCC.SelectedPlan;
+					SubCur=FormCC.SelectedSub;
 					relatOther=FormCC.PatRelat;
 					claimFormNum=FormCC.ClaimFormNum;
 					eFormat=FormCC.EFormat;
@@ -2678,7 +2683,7 @@ namespace OpenDental {
 				if(claimProcs[i]==null){
 					claimProcs[i]=new ClaimProc();
 					proc=Procedures.GetProcFromList(procsForPat,PIn.Long(table.Rows[gridAccount.SelectedIndices[i]]["ProcNum"].ToString()));//1:1
-					ClaimProcs.CreateEst(claimProcs[i],proc,PlanCur);
+					ClaimProcs.CreateEst(claimProcs[i],proc,PlanCur,SubCur);
 				}
 			}
 			Claim ClaimCur=new Claim();
@@ -2829,7 +2834,7 @@ namespace OpenDental {
 				MessageBox.Show(Lan.g(this,"You can only select procedures."));
 				return;
 			}
-			Claim ClaimCur=CreateClaim("P",PatPlanList,InsPlanList,ClaimProcList,procsForPat);
+			Claim ClaimCur=CreateClaim("P",PatPlanList,InsPlanList,ClaimProcList,procsForPat,SubList);
 			if(ClaimCur.ClaimNum==0){
 				ModuleSelected(PatCur.PatNum);
 				return;
@@ -2870,7 +2875,7 @@ namespace OpenDental {
 				MessageBox.Show(Lan.g(this,"You can only select procedures."));
 				return;
 			}
-			Claim ClaimCur=CreateClaim("S",PatPlanList,InsPlanList,ClaimProcList,procsForPat);
+			Claim ClaimCur=CreateClaim("S",PatPlanList,InsPlanList,ClaimProcList,procsForPat,SubList);
 			if(ClaimCur.ClaimNum==0){
 				ModuleSelected(PatCur.PatNum);
 				return;
@@ -2936,7 +2941,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"You can only select procedures.");
 				return;
 			}
-			Claim ClaimCur=CreateClaim("Med",PatPlanList,InsPlanList,ClaimProcList,procsForPat);
+			Claim ClaimCur=CreateClaim("Med",PatPlanList,InsPlanList,ClaimProcList,procsForPat,SubList);
 			if(ClaimCur.ClaimNum==0){
 				ModuleSelected(PatCur.PatNum);
 				return;
@@ -2973,7 +2978,7 @@ namespace OpenDental {
 				MessageBox.Show(Lan.g(this,"You can only select procedures."));
 				return;
 			}
-			Claim ClaimCur=CreateClaim("Other",PatPlanList,InsPlanList,ClaimProcList,procsForPat);
+			Claim ClaimCur=CreateClaim("Other",PatPlanList,InsPlanList,ClaimProcList,procsForPat,SubList);
 			if(ClaimCur.ClaimNum==0){
 				ModuleSelected(PatCur.PatNum);
 				return;

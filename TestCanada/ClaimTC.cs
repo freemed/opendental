@@ -315,7 +315,8 @@ namespace TestCanada {
 			List<ClaimProc> claimProcList=ClaimProcs.Refresh(pat.PatNum);
 			List<Procedure> procsForPat=Procedures.Refresh(pat.PatNum);
 			InsPlan insPlan=InsPlans.GetPlan(PatPlans.GetPlanNum(patPlanList,1),planList);
-			InsPlan insPlan2=InsPlans.GetPlan(PatPlans.GetPlanNum(patPlanList,2),planList);
+			//InsPlan insPlan2=InsPlans.GetPlan(PatPlans.GetPlanNum(patPlanList,2),planList);
+			InsSub sub=InsSubs.GetSub(PatPlans.GetInsSubNum(patPlanList,1),subList);
 			Claim claim=new Claim();
 			Claims.Insert(claim);//to retreive a key for new Claim.ClaimNum
 			claim.PatNum=pat.PatNum;
@@ -324,6 +325,8 @@ namespace TestCanada {
 			claim.ClaimStatus="W";
 			claim.PlanNum=PatPlans.GetPlanNum(patPlanList,1);
 			claim.PlanNum2=PatPlans.GetPlanNum(patPlanList,2);
+			claim.InsSubNum=PatPlans.GetInsSubNum(patPlanList,1);
+			claim.InsSubNum2=PatPlans.GetInsSubNum(patPlanList,2);
 			claim.PatRelat=PatPlans.GetRelat(patPlanList,1);
 			claim.PatRelat2=PatPlans.GetRelat(patPlanList,2);
 			//if(ordinal==1) {
@@ -345,7 +348,7 @@ namespace TestCanada {
 			}
 			for(int i=0;i<procListClaim.Count;i++) {
 				cp=new ClaimProc();
-				ClaimProcs.CreateEst(cp,procListClaim[i],insPlan);
+				ClaimProcs.CreateEst(cp,procListClaim[i],insPlan,sub);
 				cp.ClaimNum=claim.ClaimNum;
 				cp.Status=ClaimProcStatus.NotReceived;
 				cp.CodeSent=ProcedureCodes.GetProcCode(procListClaim[i].CodeNum).ProcCode;

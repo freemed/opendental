@@ -2883,9 +2883,10 @@ namespace OpenDental{
 				return;
 			}
 			InsPlan plan=FormIS.SelectedPlan;
+			InsSub sub=FormIS.SelectedSub;
 			List <Benefit> benList=Benefits.Refresh(PatPlanList);
 			ClaimProc cp=new ClaimProc();
-			ClaimProcs.CreateEst(cp,ProcCur,plan);
+			ClaimProcs.CreateEst(cp,ProcCur,plan,sub);
 			if(plan.PlanType=="c") {//capitation
 				double allowed=PIn.Double(textProcFee.Text);
 				cp.BaseEst=allowed;

@@ -95,7 +95,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Used when creating a claim to create any missing claimProcs. Also used in FormProcEdit if click button to add Estimate.  Inserts it into db. It will still be altered after this to fill in the fields that actually attach it to the claim.</summary>
-		public static void CreateEst(ClaimProc cp, Procedure proc, InsPlan plan) {
+		public static void CreateEst(ClaimProc cp, Procedure proc, InsPlan plan,InsSub sub) {
 			//No need to check RemotingRole; no call to db.
 			cp.ProcNum=proc.ProcNum;
 			//claimnum
@@ -113,6 +113,7 @@ namespace OpenDentBusiness{
 				cp.Status=ClaimProcStatus.Estimate;
 			}
 			cp.PlanNum=plan.PlanNum;
+			cp.InsSubNum=sub.InsSubNum;
 			cp.DateCP=proc.ProcDate;
 			//Writeoff=0
 			cp.AllowedOverride=-1;
