@@ -507,7 +507,7 @@ namespace OpenDental.UI{
 			ComputeColumns();//it's only here because I can't figure out how to do it when columns are added. It will be removed.
 			Bitmap doubleBuffer=new Bitmap(Width,Height,e.Graphics);
 			using(Graphics g=Graphics.FromImage(doubleBuffer)) {
-				g.SmoothingMode=SmoothingMode.HighQuality;
+				g.SmoothingMode=SmoothingMode.HighQuality;//for the up/down triangles
 				DrawBackG(g);
 				DrawRows(g);
 				DrawTitleAndHeaders(g);//this will draw on top of any grid stuff
@@ -527,8 +527,8 @@ namespace OpenDental.UI{
 			//}
 			//else{
 			g.FillRectangle(new SolidBrush(Color.FromArgb(224,223,227)),
-				0,titleHeight+headerHeight+1,
-				Width,this.Height-titleHeight-headerHeight-1);
+				0,titleHeight+headerHeight,
+				Width,Height-titleHeight-headerHeight);
 			//}
 		}
 
