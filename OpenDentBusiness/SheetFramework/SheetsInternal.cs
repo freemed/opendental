@@ -712,24 +712,33 @@ Fam Urgent Fin Note: [famFinUrgNote]"
 			sheet.FontName="Microsoft Sans Serif";
 			sheet.FontSize=10f;
 			sheet.Width=850;
-			sheet.Height=550;
+			sheet.Height=575;
+			int rowH=18;
+			int yOffset=25;
+			int y=135;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Financial Agreement",12f,sheet.FontName,true,332,65,200,20));
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Date: [dateToday]",sheet.FontSize,sheet.FontName,false,92,135,120,18));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Last Name:",sheet.FontSize,sheet.FontName,false,91,y,75,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("LName",sheet.FontSize,sheet.FontName,false,166,y,150,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("First Name:",sheet.FontSize,sheet.FontName,false,321,y,75,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("FName",sheet.FontSize,sheet.FontName,false,396,y,150,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Birthdate:",sheet.FontSize,sheet.FontName,false,551,y,65,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("Birthdate",sheet.FontSize,sheet.FontName,false,616,y,145,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Date: [dateToday]",sheet.FontSize,sheet.FontName,false,92,135+yOffset,120,18));
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText(@"* For my convenience, this office may release my information to my insurance company, and receive payment directly from them.
 * I understand that if I begin major treatment that involves lab work, I will be responsible for the fee at that time.
 * If sent to collections, I agree to pay all related fees and court costs.
 * Every effort will be made to help me with my insurance, but if they do not pay as expected, I will still be responsible.
 * I agree to pay finance charges of 1.5% per month (18% APR) on any balance 90 days past due.
 * I will pay a fee for appointments broken without 24 hours notice. 
-* Treatment plans may change, and I will be responsible for the work actually done.",sheet.FontSize,sheet.FontName,false,92,167,670,155));
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("I agree to let this office run a credit report.  If no, then all fees are due at time of service.",sheet.FontSize,sheet.FontName,false,92,337,550,18));
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewRect(93,360,11,11));
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewRect(93,378,11,11));
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewCheckBox("misc",94,361,10,10));
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewCheckBox("misc",94,379,10,10));
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Yes",sheet.FontSize,sheet.FontName,false,108,358,40,18));
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("No",sheet.FontSize,sheet.FontName,false,108,376,40,18));
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewSigBox(258,416,364,81));
+* Treatment plans may change, and I will be responsible for the work actually done.",sheet.FontSize,sheet.FontName,false,92,167+yOffset,670,155));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("I agree to let this office run a credit report.  If no, then all fees are due at time of service.",sheet.FontSize,sheet.FontName,false,92,337+yOffset,550,18));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewRect(93,360+yOffset,11,11));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewRect(93,378+yOffset,11,11));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewCheckBox("misc",94,361+yOffset,10,10));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewCheckBox("misc",94,379+yOffset,10,10));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Yes",sheet.FontSize,sheet.FontName,false,108,358+yOffset,40,18));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("No",sheet.FontSize,sheet.FontName,false,108,376+yOffset,40,18));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewSigBox(258,416+yOffset,364,81));
 			return sheet;
 		}
 
@@ -737,13 +746,23 @@ Fam Urgent Fin Note: [famFinUrgNote]"
 			SheetDef sheet=new SheetDef(SheetTypeEnum.PatientForm);
 			sheet.Description="HIPAA";
 			sheet.FontName="Microsoft Sans Serif";
+			int rowH=18;
+			int yOffset=25;
+			int y=127;
 			sheet.FontSize=10f;
 			sheet.Width=850;
-			sheet.Height=550;
+			sheet.Height=575;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Notice of Privacy Policies",12f,sheet.FontName,true,332,65,220,20));
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Date: [dateToday]",sheet.FontSize,sheet.FontName,false,92,135,120,18));
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("I have had full opportunity to read and consider the contents of  the Notice of Privacy Practices.  I understand that I am giving my permission to your use and disclosure of my protected health information in order to carry out treatment, payment activities, and healthcare operations.  I also understand that I have the right to revoke permission.",sheet.FontSize,sheet.FontName,false,92,167,670,80));
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewSigBox(261,295,364,81));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Last Name:",sheet.FontSize,sheet.FontName,false,91,y,75,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("LName",sheet.FontSize,sheet.FontName,false,166,y,150,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("First Name:",sheet.FontSize,sheet.FontName,false,321,y,75,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("FName",sheet.FontSize,sheet.FontName,false,396,y,150,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Birthdate:",sheet.FontSize,sheet.FontName,false,551,y,65,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("Birthdate",sheet.FontSize,sheet.FontName,false,616,y,145,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Date: [dateToday]",sheet.FontSize,sheet.FontName,false,92,135+yOffset,120,18));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("I have had full opportunity to read and consider the contents of  the Notice of Privacy Practices.  I understand that I am giving my permission to your use and disclosure of my protected health information in order to carry out treatment, payment activities, and healthcare operations.  I also understand that I have the right to revoke permission.",sheet.FontSize,sheet.FontName,false,92,167+yOffset,670,80));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewSigBox(261,295+yOffset,364,81));
+			
 			return sheet;
 		}
 
@@ -759,6 +778,13 @@ Fam Urgent Fin Note: [famFinUrgNote]"
 			int x=75;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Medical History",12f,sheet.FontName,true,345,y,180,20));
 			y=105;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Last Name:",sheet.FontSize,sheet.FontName,false,76,y,75,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("LName",sheet.FontSize,sheet.FontName,false,151,y,155,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("First Name:",sheet.FontSize,sheet.FontName,false,311,y,76,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("FName",sheet.FontSize,sheet.FontName,false,387,y,155,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Birthdate:",sheet.FontSize,sheet.FontName,false,547,y,65,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("Birthdate",sheet.FontSize,sheet.FontName,false,612,y,145,rowH));
+			y+=rowH+2;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Name of Medical Doctor:",sheet.FontSize,sheet.FontName,false,x,y,155,rowH));
 			x=230;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewLine(x,y+rowH,265,0));
