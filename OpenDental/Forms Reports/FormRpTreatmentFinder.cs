@@ -532,31 +532,13 @@ namespace OpenDental{
 			else {
 				aboveAmount=0;
 			}
-			string provFilter="";
-			string billFilter="";
+			ArrayList provFilter=new ArrayList();
+			ArrayList billFilter=new ArrayList();
 			if(comboBoxMultiProv.SelectedIndices[0].ToString()!="0") {
-				for(int i=0;i<comboBoxMultiProv.SelectedIndices.Count;i++) {
-					if(i==0) {
-						provFilter=" AND (patient.PriProv=";
-					}
-					else {
-						provFilter+=" OR patient.PriProv=";
-					}
-					provFilter+=POut.Long(ProviderC.List[(int)comboBoxMultiProv.SelectedIndices[i]-1].ProvNum);
-				}
-				provFilter+=") ";
+				provFilter=comboBoxMultiProv.SelectedIndices;
 			}
 			if(comboBoxMultiBilling.SelectedIndices[0].ToString()!="0") {
-				for(int i=0;i<comboBoxMultiBilling.SelectedIndices.Count;i++) {
-					if(i==0) {
-						billFilter=" AND (patient.BillingType=";
-					}
-					else {
-						billFilter+=" OR patient.BillingType=";
-					}
-					billFilter+=POut.Long(DefC.Short[(int)DefCat.BillingTypes][(int)comboBoxMultiBilling.SelectedIndices[i]-1].DefNum);
-				}
-				billFilter+=") ";
+				billFilter=comboBoxMultiBilling.SelectedIndices;
 			}
 			string code1="";
 			string code2="";

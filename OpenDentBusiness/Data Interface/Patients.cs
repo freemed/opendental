@@ -1219,8 +1219,8 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets the DataTable to display for treatment finder report</summary>
-		public static DataTable GetTreatmentFinderList(bool noIns,int monthStart,DateTime dateSince,double aboveAmount,string providerFilter,
-			string billingFilter,string code1,string code2) 
+		public static DataTable GetTreatmentFinderList(bool noIns,int monthStart,DateTime dateSince,double aboveAmount,ArrayList providerFilter,
+			ArrayList billingFilter,string code1,string code2) 
 		{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),noIns);
@@ -1322,11 +1322,29 @@ namespace OpenDentBusiness{
 			if(!(aboveAmount==0 && noIns)){
 				command+="AND tempannualmax.AnnualMax-IFNULL(tempused.AmtUsed,0)>"+POut.Double(aboveAmount)+" ";
 			}
-			if(providerFilter!="") {
-				command+=providerFilter;
+			for(int i=0;i<providerFilter.Count;i++) {
+				if(i==0) {
+					command+=" AND (patient.PriProv=";
+				}
+				else {
+					command+=" OR patient.PriProv=";
+				}
+				command+=POut.Long(ProviderC.List[(int)providerFilter[i]-1].ProvNum);
+				if(i==providerFilter.Count-1) {
+					command+=") ";
+				}
 			}
-			if(billingFilter!="") {
-				command+=billingFilter;
+			for(int i=0;i<billingFilter.Count;i++) {
+				if(i==0) {
+					command+=" AND (patient.BillingType=";
+				}
+				else {
+					command+=" OR patient.BillingType=";
+				}
+				command+=POut.Long(DefC.Short[(int)DefCat.BillingTypes][(int)billingFilter[i]-1].DefNum);
+				if(i==billingFilter.Count-1) {
+					command+=") ";
+				}
 			}
 			command+=@"
 				AND patient.PatStatus =0
