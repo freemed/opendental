@@ -110,9 +110,9 @@ namespace OpenDental {
 
 					long PatNum=0;
 
-					string LastName="mathew";
-					string FirstName="dennis";
-					string BirthDate="1/1/1970";
+					string LastName="";
+					string FirstName="";
+					string BirthDate="";
 					//loop through each variable in a single sheetfield to get First name, last name and DOB
 					for(int j=0;j<sAnds[i].sf.Count();j++) {
 	

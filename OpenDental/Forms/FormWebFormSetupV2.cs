@@ -246,7 +246,15 @@ namespace OpenDental {
 
 		private void butUploadSheetDefs_Click(object sender,EventArgs e) {
 			SheetDefUploaded=true;
-			this.backgroundWorker1.RunWorkerAsync();
+			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Please wait for a few seconds while sheets are uploaded to the server")) {
+				//DialogResult=DialogResult.Cancel;
+				return;
+			}
+			
+			if(TestWebServiceExists()==true) {
+				Cursor=Cursors.WaitCursor;
+				this.backgroundWorker1.RunWorkerAsync();
+			}
 		}
 
 		private void FillGrid() {
@@ -300,7 +308,15 @@ namespace OpenDental {
 		}
 	
 		private void butOK_Click(object sender,EventArgs e) {
-			Cursor=Cursors.WaitCursor;
+
+
+			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Please wait for a few seconds while your preferences are uploaded to the server")) {
+				//DialogResult=DialogResult.Cancel;
+				return;
+			}
+			if(TestWebServiceExists()==true) {
+				Cursor=Cursors.WaitCursor;
+			}
 			try {
 				Prefs.UpdateString(PrefName.WebHostSynchServerURL,textboxWebHostAddress.Text.Trim());
 				// update preferences on server
@@ -311,8 +327,9 @@ namespace OpenDental {
 				}
 				bool PrefSet=true;
 				PrefSet=wh.SetPreferences(RegistrationKey,butWebformBorderColor.BackColor.ToArgb(),"","");
+				Cursor=Cursors.Default;
 				if(PrefSet==false) {
-				MsgBox.Show(this,"Preferences could not be set on the server");
+				MsgBox.Show(this,"Error:Preferences could not be set on the server");
 				}
 			}
 			catch(Exception ex) {

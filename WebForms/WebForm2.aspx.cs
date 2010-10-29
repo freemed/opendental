@@ -421,7 +421,7 @@ namespace WebForms {
 				if(PrefObj.Count()>0) {
 					PrefObj.First().webforms_sheet.Add(NewSheetObj);
 					db.SaveChanges();
-					LabelSubmitMessage.Text="Your details have been successfully submited";
+					LabelSubmitMessage.Text="Your details have been successfully submitted";
 					Logger.Information("Form values saved from IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID);
 				}
 				Panel1.Visible=false;

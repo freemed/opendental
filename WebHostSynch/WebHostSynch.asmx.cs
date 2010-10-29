@@ -55,7 +55,7 @@ namespace WebHostSynch {
 					Logger.Information("Preferences saved IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID);
 				}
 				catch(Exception ex) {
-					Logger.Information(ex.Message.ToString());
+					Logger.LogError(ex);
 					return false;
 				}
 				return true;
@@ -137,7 +137,7 @@ namespace WebHostSynch {
 					return wslist;
 					}
 					catch(Exception ex) {
-						Logger.Information(ex.Message.ToString());
+						Logger.LogError(ex);
 						return wslist;
 					}
 			}
@@ -169,7 +169,7 @@ namespace WebHostSynch {
 					return sAndsfList;
 				}
 				catch(Exception ex) {
-					Logger.Information(ex.Message.ToString());
+					Logger.LogError(ex);
 					return sAndsfList;
 				}
 			}
@@ -217,7 +217,7 @@ namespace WebHostSynch {
 					Logger.Information("In DeleteSheetData IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID);
 				}
 				catch(Exception ex) {
-					Logger.Information(ex.Message.ToString());
+					Logger.LogError(ex);
 				}
 			}
 
@@ -242,7 +242,7 @@ namespace WebHostSynch {
 					}
 				}
 				catch(Exception ex) {
-					Logger.Information(ex.Message.ToString());
+					Logger.LogError(ex);
 					Logger.Information("Incorrect registration key. IpAddress="+HttpContext.Current.Request.UserHostAddress+" RegistrationKey="+RegistrationKeyFromDentalOffice);
 					return false;
 				}
@@ -269,7 +269,7 @@ namespace WebHostSynch {
 					}
 				}
 				catch(Exception ex) {
-					Logger.Information(ex.Message.ToString());
+					Logger.LogError(ex);
 					Logger.Information("Incorrect registration key. IpAddress="+HttpContext.Current.Request.UserHostAddress+" RegistrationKey="+RegistrationKeyFromDentalOffice);
 					return 0;
 				}
@@ -283,7 +283,7 @@ namespace WebHostSynch {
 					WebFormAddress=ConfigurationManager.AppSettings["WebFormAddress"].ToString()+"?DentalOfficeID="+GetDentalOfficeID(RegistrationKeyFromDentalOffice);
 				}
 				catch(Exception ex) {
-					Logger.Information(ex.Message.ToString());
+					Logger.LogError(ex);
 				}
 				Logger.Information("In GetWebFormAddress WebFormAddress="+WebFormAddress);
 				return WebFormAddress;
@@ -314,7 +314,7 @@ namespace WebHostSynch {
 					SheetDefAddress=ConfigurationManager.AppSettings["SheetDefAddress"];
 				}
 				catch(Exception ex) {
-					Logger.Information(ex.Message.ToString());
+					Logger.LogError(ex);
 				}
                 Logger.Information("In GetSheetDefAddress SheetDefAddress=" + SheetDefAddress);
 				return SheetDefAddress;
@@ -370,13 +370,13 @@ namespace WebHostSynch {
 					Logger.Information("In DeleteSheetData IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID);
 				}
 				catch(Exception ex) {
-					Logger.Information(ex.Message.ToString());
+					Logger.LogError(ex);
 				}
 			}
 
 
 			/// <summary>
-			/// Here SheetDef can be via webhostsync from Open Dental
+			/// Here SheetDefs can be uploaded via webhostsync from an Open Dental installation.
 			/// </summary>
 			[WebMethod]
 			public void UpLoadSheetDef(string RegistrationKey,List<SheetDef> sheetDefList) {
@@ -397,7 +397,7 @@ namespace WebHostSynch {
 					db.SaveChanges();
 				}
 				catch(Exception ex) {
-					Logger.Information(ex.Message.ToString());
+					Logger.LogError(ex);
 					return ;
 				}
 			}
