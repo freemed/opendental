@@ -485,7 +485,6 @@ namespace OpenDental.Eclaims {
 					frenchFieldName="L'anniversaire de l'abonné";
 					format="N";
 					lengthRequirement=new ConstLengthRequirement(8);
-					//TODO: check date is within last 150 years.
 					break;
 				case "D02":
 					fieldName="Subscriber's Last Name";

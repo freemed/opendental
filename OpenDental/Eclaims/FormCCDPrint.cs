@@ -13,7 +13,7 @@ using CodeBase;
 
 /*
  * TODOS: (not in any particular order)
- * *Fix bullets 18 through 22 on the Dentaide form to use the secondary information under the secondary inurance plan section.
+ * *Fix bullets 18 through 22 on the Dentaide form to use the secondary information under the secondary inurance plan section. Might be done. Check alignments when printing.
  * *Be sure all fields have been processed in each form, either directly or indirectly.
  * *Merge predetermination forms into existing forms? (see pages 48 and 122 in message formats).
  * *Add option in UI to print dentist copy.
@@ -409,7 +409,7 @@ namespace OpenDental.Eclaims {
 			text="MESSAGE";
 			CCDField indicator=formData.GetFieldById("A11");
 			if(indicator!=null && indicator.valuestr!=null && indicator.valuestr!="N"){
-				text+=" - ("+(isFrench?"CE MESSAGE A ÉTÉ EN OUTRE ENVOYÉ À L'EMAIL ADDRESS CI-DESSUS"://TODO: get proper french trans.
+				text+=" - ("+(isFrench?"CE MESSAGE A ÉTÉ EN OUTRE ENVOYÉ À L'EMAIL ADDRESS CI-DESSUS"://Translated by google. Probably not good.
 					"THIS MESSAGE WAS ALSO SENT TO THE EMAIL ADDRESS ABOVE")+")";
 			}
 			float lineCol=x+55;
@@ -909,7 +909,7 @@ namespace OpenDental.Eclaims {
 			x=doc.StartElement();
 			PrintDentistAddress(g,x,0,0);
 			size1=PrintDentistPhone(g,rightMidCol,0);
-			//TODO: check that this is the correct patient number to be printing.
+			//Dependant NO. should be same for both primary and secondary insurance, because it is the patient account number from within Open Dental.
 			SizeF size2=PrintPrimaryDependantNo(g,rightMidCol,size1.Height,"PATIENT'S OFFICE ACCOUNT NO","NO DE DOSSIER DU PATIENT");
 			PrintDentalOfficeClaimReferenceNo(g,rightMidCol,size1.Height+size2.Height);
 			x=doc.StartElement();
@@ -1644,7 +1644,7 @@ namespace OpenDental.Eclaims {
 				ClaimProc claimproc=claimprocs[i];
 				if(claimproc.ProcNum!=0) {//Is this a valid procedure?
 					proc=Procedures.GetOneProc(claimproc.ProcNum,true);
-					text=claimproc.CodeSent.PadLeft(5,'0');//Field F08 - TODO check padding needed
+					text=claimproc.CodeSent;
 					doc.DrawString(g,text,procedureCodeCol,0);
 					text=ProcedureCodes.GetProcCode(proc.CodeNum).Descript;
 					const int maxDescLen=40;
@@ -1755,8 +1755,24 @@ namespace OpenDental.Eclaims {
 				x=doc.StartElement();
 				for(int i=0;i<notes.Length;i++){
 					doc.DrawString(g,i.ToString().PadLeft(2,'0')+notes[i].valuestr,x,0);
-					x=doc.StartElement();
-					//TODO: reprint header on each printed page where the notes overflow.
+					//There is a 32 note max, so printing will max out at two pages. Therefore, we may only need to print one extra header.
+					if(i==10) {//Max out at 10 notes on the first page. TODO: Decide the right number by testing, 10 might not be right.
+						doc.NextPage();
+						//reprint header on the second page where the notes overflow as required in the documentation.
+						PrintEOBHeader(g);
+						x=doc.StartElement();
+						PrintCarrierClaimNo(g,x,0);
+						PrintTransactionDate(g,x+450,0);
+						x=doc.StartElement(verticalLine);
+						PrintProcedureListEOB(g,GetPayableToString(insSub.AssignBen));
+						x=doc.StartElement(verticalLine);
+						PrintPaymentSummary(g);
+						x=doc.StartElement(verticalLine);
+						doc.HorizontalLine(g,breakLinePen,doc.bounds.Left,doc.bounds.Right,0);
+					}
+					else {
+						x=doc.StartElement();
+					}
 				}
 				x=doc.StartElement(verticalLine);
 				doc.HorizontalLine(g,breakLinePen,doc.bounds.Left,doc.bounds.Right,0);
@@ -1839,7 +1855,7 @@ namespace OpenDental.Eclaims {
 					ClaimProc claimproc=claimprocs[i];
 					x=doc.StartElement();
 					proc=Procedures.GetOneProc(claimproc.ProcNum,true);
-					text=claimproc.CodeSent.PadLeft(5,'0');//Field F08 - TODO check padding needed
+					text=claimproc.CodeSent;
 					doc.DrawString(g,text,procedureCodeCol,0);
 					text=ProcedureCodes.GetProcCode(proc.CodeNum).AbbrDesc;
 					if(text.Length>maxDescriptLen){
@@ -2051,8 +2067,18 @@ namespace OpenDental.Eclaims {
 			else if(insplan2!=null) {
 				text=insSub2.SubscriberID;//Field E03
 			}
+			//The instructions for how to deal with NIHB plans came from the version 4.1 Message Formats Document, described in the data dictionary near field C02.
+			CCDField fieldC12=formData.GetFieldById("C12");//Plan flag. 'N' for NIHB, 'A' for Newfoundland MCP Plan - Provincial Medical Plan, 'V' for Veteran's Affairs Plan. There may be other values.
+			CCDField fieldC13=formData.GetFieldById("C13");//Band number for NIHB plans.
+			CCDField fieldC14=formData.GetFieldById("C14");//Family number for NIHB plans.
+			//NIHB stands for "Non-Insured Health Benefits" as defined at http://www.hc-sc.gc.ca/fniah-spnia/nihb-ssna/index-eng.php. Government based program.
+			//For NIHB claims, print the Band (Field C13) and Family (Field C14) numbers as required.
+			//If they have NIHB, then it is probably their primary and they probably don't have any other plan.
+			if(fieldC12!=null && fieldC12.valuestr=="N" && fieldC13!=null && fieldC13.valuestr.Trim()!="" && fieldC14!=null && fieldC14.valuestr.Trim()!="") {
+				//The French here was provided by google translator. Probably useless but at least it's something.
+				text=isFrench?("BANDE: "+fieldC13.valuestr+"  FAMILLE: "+fieldC14.valuestr):("BAND: "+fieldC13.valuestr+"  FAMILY: "+fieldC14.valuestr);
+			}
 			return doc.DrawField(g,isFrench?"NO DE CERTIFICAT":"CERTIFICATE NO",text,true,X,Y);
-			//TODO: For NIHB claims where SubscriberID=="", print the Band (Field C13) and Family (Field C14) numbers. (primary only?)
 		}
 
 		///<summary>Print "sequence" number.</summary>
@@ -2575,7 +2601,7 @@ namespace OpenDental.Eclaims {
 
 		///<summary>Convet a code from fields F20 and F21 into a human-readable string.</summary>
 		private string GetMaterialDescription(int materialCode) {
-			//TODO: check translations. English to french translations provided by google translator.
+			//English to french translations provided by google translator. Probably not good.
 			switch(materialCode) {
 				case 1:
 					return isFrench?"Pont fixe":"Fixed Bridge";
@@ -2599,7 +2625,7 @@ namespace OpenDental.Eclaims {
 
 		///<summary>Convert one of the type codes from field F16 into a human-readable string.</summary>
 		private string GetProcedureTypeCodeDescription(char procedureTypeCode) {
-			//TODO: check translations. English to french translations provided by google translator.
+			//English to french translations provided by google translator. Probably not good.
 			switch(procedureTypeCode) {
 				case 'A':
 					return isFrench?"Réparation d'un service ou d'une installation antérieur.":
