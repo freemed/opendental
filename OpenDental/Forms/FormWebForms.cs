@@ -27,10 +27,6 @@ namespace OpenDental {
 			Lan.F(this);
 		}
 
-		private void FormWebForms_Load(object sender,EventArgs e) {
-
-		}
-
 		/// <summary>
 		/// Code in this method was not put into the Form load event because often the "No Patient forms available" Meassage would popup even before a form is loaded - which could confuse the user.
 		/// </summary>
