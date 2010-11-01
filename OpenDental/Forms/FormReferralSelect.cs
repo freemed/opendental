@@ -6,9 +6,9 @@ using System.Windows.Forms;
 using OpenDental.UI;
 using OpenDentBusiness;
 
-namespace OpenDental{
-///<summary></summary>
-	public class FormReferralSelect : System.Windows.Forms.Form{
+namespace OpenDental {
+	///<summary></summary>
+	public class FormReferralSelect:System.Windows.Forms.Form {
 		private OpenDental.UI.Button butCancel;
 		private OpenDental.UI.Button butOK;
 		private System.Windows.Forms.CheckBox checkHidden;
@@ -18,25 +18,25 @@ namespace OpenDental{
 		private OpenDental.UI.Button butEdit;
 		private OpenDental.UI.Button butDelete;
 		private OpenDental.UI.Button butAdd;//disables double click to choose referral. Hides some buttons.
-    private ArrayList AList;
+		private ArrayList AList;
 		private UI.ODGrid gridMain;
 		///<summary>This will contain the referral that was selected.</summary>
 		public Referral SelectedReferral;
 
 		///<summary></summary>
-		public FormReferralSelect(){
+		public FormReferralSelect() {
 			InitializeComponent();
 			Lan.F(this);
 		}
 
 		///<summary></summary>
-		protected override void Dispose( bool disposing ){
-			if( disposing ){
-				if(components != null){
+		protected override void Dispose(bool disposing) {
+			if(disposing) {
+				if(components != null) {
 					components.Dispose();
 				}
 			}
-			base.Dispose( disposing );
+			base.Dispose(disposing);
 		}
 
 		#region Windows Form Designer generated code
@@ -44,8 +44,7 @@ namespace OpenDental{
 		/// Required method for Designer support - do not modify
 		/// the contents of this method with the code editor.
 		/// </summary>
-		private void InitializeComponent()
-		{
+		private void InitializeComponent() {
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormReferralSelect));
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
@@ -191,26 +190,26 @@ namespace OpenDental{
 		}
 		#endregion
 
-		private void FormReferralSelect_Load(object sender, System.EventArgs e) {
+		private void FormReferralSelect_Load(object sender,System.EventArgs e) {
 			FillTable();
-		}		
+		}
 
-    private void FillTable(){
+		private void FillTable() {
 			Referrals.RefreshCache();
-      AList=new ArrayList();
-      if(!checkHidden.Checked){
-        for(int i=0;i<Referrals.List.Length;i++){
-          if(!Referrals.List[i].IsHidden){
-            AList.Add(Referrals.List[i]);
-          }
-        } 
-      }
-      else{
-        for(int i=0;i<Referrals.List.Length;i++){
-            AList.Add(Referrals.List[i]);
-        } 
-      }    
-      gridMain.BeginUpdate();
+			AList=new ArrayList();
+			if(!checkHidden.Checked) {
+				for(int i=0;i<Referrals.List.Length;i++) {
+					if(!Referrals.List[i].IsHidden) {
+						AList.Add(Referrals.List[i]);
+					}
+				}
+			}
+			else {
+				for(int i=0;i<Referrals.List.Length;i++) {
+					AList.Add(Referrals.List[i]);
+				}
+			}
+			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lans.g("TableSelectRefferal","LastName"),150);
 			gridMain.Columns.Add(col);
@@ -258,12 +257,12 @@ namespace OpenDental{
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
-    }
+		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			if(gridMain.SelectedIndices.Length==0) {
+			if(gridMain.GetSelectedIndex()==-1) {
 				MsgBox.Show(this,"Please select a referral first");
-        return;
+				return;
 			}
 			FormReferralEdit FormRE = new FormReferralEdit((Referral)AList[e.Row]);
 			FormRE.ShowDialog();
@@ -272,21 +271,20 @@ namespace OpenDental{
 			gridMain.SetSelected(selectedIndex,true);
 		}
 
-		private void butAdd_Click(object sender, System.EventArgs e) {
-      Referral refCur=new Referral();
+		private void butAdd_Click(object sender,System.EventArgs e) {
+			Referral refCur=new Referral();
 			bool referralIsNew=true;
 			if(MessageBox.Show(Lan.g(this,"Is the referral source an existing patient?"),""
-				,MessageBoxButtons.YesNo)==DialogResult.Yes)
-			{
+				,MessageBoxButtons.YesNo)==DialogResult.Yes) {
 				FormPatientSelect FormPS=new FormPatientSelect();
-				FormPS.SelectionModeOnly=true;        
+				FormPS.SelectionModeOnly=true;
 				FormPS.ShowDialog();
-				if(FormPS.DialogResult!=DialogResult.OK){
-					return;  
+				if(FormPS.DialogResult!=DialogResult.OK) {
+					return;
 				}
 				refCur.PatNum=FormPS.SelectedPatNum;
-				for(int i=0;i<Referrals.List.Length;i++){
-					if(Referrals.List[i].PatNum==FormPS.SelectedPatNum){//referral already existed
+				for(int i=0;i<Referrals.List.Length;i++) {
+					if(Referrals.List[i].PatNum==FormPS.SelectedPatNum) {//referral already existed
 						refCur=Referrals.List[i];
 						referralIsNew=false;
 						break;
@@ -294,16 +292,16 @@ namespace OpenDental{
 				}
 			}
 			FormReferralEdit FormRE2=new FormReferralEdit(refCur);//the ReferralNum must be added here
-			FormRE2.IsNew=referralIsNew; 
-      FormRE2.ShowDialog();
-			if(FormRE2.DialogResult==DialogResult.Cancel){
+			FormRE2.IsNew=referralIsNew;
+			FormRE2.ShowDialog();
+			if(FormRE2.DialogResult==DialogResult.Cancel) {
 				return;
 			}
-			if(IsSelectionMode){
+			if(IsSelectionMode) {
 				SelectedReferral=FormRE2.RefCur;
 				DialogResult=DialogResult.OK;
 			}
-			else{
+			else {
 				FillTable();
 				for(int i=0;i<AList.Count;i++) {
 					if(((Referral)(AList[i])).ReferralNum==FormRE2.RefCur.ReferralNum) {
@@ -313,55 +311,55 @@ namespace OpenDental{
 			}
 		}
 
-		private void butDelete_Click(object sender, System.EventArgs e) {
-			if(gridMain.SelectedIndices.Length==0) {
+		private void butDelete_Click(object sender,System.EventArgs e) {
+			if(gridMain.GetSelectedIndex()==-1) {
 				MsgBox.Show(this,"Please select a referral first");
-        return;
+				return;
 			}
 			Referral RefCur=(Referral)AList[gridMain.GetSelectedIndex()];
-			if(RefAttaches.IsReferralAttached(RefCur.ReferralNum)){
+			if(RefAttaches.IsReferralAttached(RefCur.ReferralNum)) {
 				MessageBox.Show(Lan.g(this,"Cannot delete Referral because it is attached to patients"));
 				return;
 			}
-      if(!MsgBox.Show(this,true,"Delete Referral?")){
-        return;   
-      }
-      Referrals.Delete(RefCur);
-      FillTable();
-    }
-
-		private void butEdit_Click(object sender, System.EventArgs e) {
-			if(gridMain.SelectedIndices.Length==0) {
-				MsgBox.Show(this,"Please select a referral first");
-        return;
+			if(!MsgBox.Show(this,true,"Delete Referral?")) {
+				return;
 			}
-  		FormReferralEdit FormRE=new FormReferralEdit((Referral)AList[gridMain.GetSelectedIndex()]);
-      FormRE.ShowDialog();
-      int selectedIndex=gridMain.GetSelectedIndex();
+			Referrals.Delete(RefCur);
+			FillTable();
+		}
+
+		private void butEdit_Click(object sender,System.EventArgs e) {
+			if(gridMain.GetSelectedIndex()==-1) {
+				MsgBox.Show(this,"Please select a referral first");
+				return;
+			}
+			FormReferralEdit FormRE=new FormReferralEdit((Referral)AList[gridMain.GetSelectedIndex()]);
+			FormRE.ShowDialog();
+			int selectedIndex=gridMain.GetSelectedIndex();
 			FillTable();
 			gridMain.SetSelected(selectedIndex,true);
 		}
 
-		private void checkHidden_Click(object sender, System.EventArgs e) {
-		  FillTable();
+		private void checkHidden_Click(object sender,System.EventArgs e) {
+			FillTable();
 		}
 
-		private void butOK_Click(object sender, System.EventArgs e){
-			if(IsSelectionMode){
-				if(gridMain.SelectedIndices.Length==0) {
+		private void butOK_Click(object sender,System.EventArgs e) {
+			if(IsSelectionMode) {
+				if(gridMain.GetSelectedIndex()==-1) {
 					MsgBox.Show(this,"Please select a referral first");
-          return;
+					return;
 				}
-				SelectedReferral=(Referral)AList[gridMain.GetSelectedIndex()];  
+				SelectedReferral=(Referral)AList[gridMain.GetSelectedIndex()];
 			}
 			DialogResult=DialogResult.OK;
 		}
 
-		private void butCancel_Click(object sender, System.EventArgs e) {
+		private void butCancel_Click(object sender,System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
 
-		
+
 
 	}
 }
