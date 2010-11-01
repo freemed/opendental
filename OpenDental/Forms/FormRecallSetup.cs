@@ -790,10 +790,11 @@ namespace OpenDental{
 				MsgBox.Show(this,"Both status options at the bottom must be set.");
 				return; 
 			}
-			if(textPostcardsPerSheet.Text=="1"){
-				MsgBox.Show(this,"If using 1 postcard per sheet, you must adjust the position, and also the preview will not work");
+			if(Prefs.UpdateString(PrefName.RecallPostcardsPerSheet,textPostcardsPerSheet.Text)) {
+				if(textPostcardsPerSheet.Text=="1"){
+					MsgBox.Show(this,"If using 1 postcard per sheet, you must adjust the position, and also the preview will not work");
+				}
 			}
-			Prefs.UpdateString(PrefName.RecallPostcardsPerSheet,textPostcardsPerSheet.Text);
 			Prefs.UpdateBool(PrefName.RecallCardsShowReturnAdd,checkReturnAdd.Checked);
 			Prefs.UpdateBool(PrefName.RecallGroupByFamily,checkGroupFamilies.Checked);
 			if(textDaysPast.Text=="") {
