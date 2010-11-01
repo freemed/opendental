@@ -223,6 +223,7 @@ namespace OpenDental {
 					newSheet=SheetUtil.CreateSheet(sheetDef,PatNum);
 					SheetParameter.SetParameter(newSheet,"PatNum",PatNum);
 					newSheet.DateTimeSheet=sAnds.sh.DateTimeSheet;
+					//newSheet.Description=sAnds.sh.de add the descrption fields also
 					newSheet.Height=sAnds.sh.Height;
 					newSheet.Width=sAnds.sh.Width;
 					newSheet.FontName=sAnds.sh.FontName;
@@ -264,109 +265,6 @@ namespace OpenDental {
 			return newSheet;
 		}
 
-		/// <summary>
-		/// </summary>
-		private void FillSheetFields(SheetField fld,string SheetWebFieldValue) {
-			try {
-				switch(fld.FieldName) {
-					case "Gender":
-						if(fld.RadioButtonValue=="Male") {
-							if(SheetWebFieldValue=="M") {
-								fld.FieldValue="X";
-							}
-						}
-						if(fld.RadioButtonValue=="Female") {
-							if(SheetWebFieldValue=="F") {
-								fld.FieldValue="X";
-							}
-						}
-						break;
-					case "Position":
-						if(fld.RadioButtonValue=="Married") {
-							if(SheetWebFieldValue=="Y") {
-								fld.FieldValue="X";
-							}
-						}
-						if(fld.RadioButtonValue=="Single") {
-							if(SheetWebFieldValue=="N") {
-								fld.FieldValue="X";
-							}
-						}
-						break;
-					case "PreferContactMethod":
-					case "PreferConfirmMethod":
-					case "PreferRecallMethod":
-						if(fld.RadioButtonValue=="HmPhone") {
-							if(SheetWebFieldValue=="HmPhone") {
-								fld.FieldValue="X";
-							}
-						}
-						if(fld.RadioButtonValue=="WkPhone") {
-							if(SheetWebFieldValue=="WkPhone") {
-								fld.FieldValue="X";
-							}
-						}
-						if(fld.RadioButtonValue=="WirelessPh") {
-							if(SheetWebFieldValue=="WirelessPh") {
-								fld.FieldValue="X";
-							}
-						}
-						if(fld.RadioButtonValue=="Email") {
-							if(SheetWebFieldValue=="Email") {
-								fld.FieldValue="X";
-							}
-						}
-						break;
-					case "StudentStatus":
-						if(fld.RadioButtonValue=="Nonstudent") {
-							if(SheetWebFieldValue=="Nonstudent") {
-								fld.FieldValue="X";
-							}
-						}
-						if(fld.RadioButtonValue=="Fulltime") {
-							if(SheetWebFieldValue=="Fulltime") {
-								fld.FieldValue="X";
-							}
-						}
-						if(fld.RadioButtonValue=="Parttime") {
-							if(SheetWebFieldValue=="Parttime") {
-								fld.FieldValue="X";
-							}
-						}
-						break;
-					case "ins1Relat":
-					case "ins2Relat":
-						if(fld.RadioButtonValue=="Self") {
-							if(SheetWebFieldValue=="Self") {
-								fld.FieldValue="X";
-							}
-						}
-						if(fld.RadioButtonValue=="Spouse") {
-							if(SheetWebFieldValue=="Spouse") {
-								fld.FieldValue="X";
-							}
-						}
-						if(fld.RadioButtonValue=="Child") {
-							if(SheetWebFieldValue=="Child") {
-								fld.FieldValue="X";
-							}
-						}
-						break;
-					case "addressAndHmPhoneIsSameEntireFamily":
-					if(SheetWebFieldValue=="True") {
-						fld.FieldValue="X";
-					}
-					break;
-					default:
-						fld.FieldValue=SheetWebFieldValue;
-					break;
-				}//switch case
-			}
-			catch(Exception e) {
-				gridMain.EndUpdate();
-				MessageBox.Show(fld.FieldName + e.Message);
-			}
-		}
 
 		/// <summary>
 		/// </summary>
