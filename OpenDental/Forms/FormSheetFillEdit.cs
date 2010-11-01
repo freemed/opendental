@@ -81,7 +81,7 @@ namespace OpenDental {
 				textShowInTerminal.Text=SheetCur.ShowInTerminal.ToString();
 			}
 			LayoutFields();
-			if(!Security.IsAuthorized(Permissions.SheetEdit,SheetCur.DateTimeSheet)){
+			if(!SheetCur.IsNew && !Security.IsAuthorized(Permissions.SheetEdit,SheetCur.DateTimeSheet)){
 				DisableControls(this);
 				Enabled=true;
 				butCancel.Enabled=true;
