@@ -10,6 +10,7 @@ using System.Web;
 using System.Web.Services;
 using System.Configuration;
 using System.Reflection;
+using System.Threading;
 using OpenDentBusiness;
 
 
@@ -63,6 +64,7 @@ namespace WebHostSynch {
 
 			[WebMethod]
 			public webforms_preference GetPreferences(string RegistrationKey) {
+				
 				Logger.Information("In GetPreferences IpAddress="+HttpContext.Current.Request.UserHostAddress+" RegistrationKey="+RegistrationKey);
                 ODWebServiceEntities db=new ODWebServiceEntities();
 				webforms_preference wspObj=null;
@@ -145,7 +147,6 @@ namespace WebHostSynch {
 			[WebMethod]
 			public List<SheetAndSheetField> GetSheets(string RegistrationKey) {
 				List<SheetAndSheetField> sAndsfList=new List<SheetAndSheetField>();
-			
 				try {
 					long DentalOfficeID=GetDentalOfficeID(RegistrationKey);
 					if(DentalOfficeID==0) {
@@ -304,6 +305,7 @@ namespace WebHostSynch {
 			}
 
 			[WebMethod]
+				
 			public string GetSheetDefAddress(string RegistrationKey) {
 				long DentalOfficeID=GetDentalOfficeID(RegistrationKey);
 				if(DentalOfficeID==0) {
@@ -342,15 +344,13 @@ namespace WebHostSynch {
 			}
 
 			[WebMethod]
-			public void DeleteSheetDefs(string RegistrationKey,List<long> SheetDefsForDeletion) {
+			public void DeleteSheetDef(string RegistrationKey,long WebSheetDefID) {
 				try {
 					long DentalOfficeID=GetDentalOfficeID(RegistrationKey);
 					if(DentalOfficeID==0) {
 						return;
 					}
 					ODWebServiceEntities db=new ODWebServiceEntities();
-					for(int i=0;i<SheetDefsForDeletion.Count();i++) {
-						long WebSheetDefID=SheetDefsForDeletion.ElementAt(i);// LINQ throws an error if this is directly put into the select expression
 						webforms_sheetdef SheetDefObj=null;
 						var SheetDefResult=db.webforms_sheetdef.Where(sd=>sd.WebSheetDefID==WebSheetDefID);
 						if(SheetDefResult.Count()>0) {
@@ -362,8 +362,6 @@ namespace WebHostSynch {
 								db.DeleteObject(SheetFieldDefResult.First());//Delete SheetFieldDefObj
 							}
 							db.DeleteObject(SheetDefResult.First());//Delete SheetDefObj
-						}
-
 						Logger.Information("deleted WebSheetDefID="+WebSheetDefID+" DentalOfficeID="+DentalOfficeID);
 					}
 					db.SaveChanges();
@@ -376,24 +374,23 @@ namespace WebHostSynch {
 
 
 			/// <summary>
-			/// Here SheetDefs can be uploaded via webhostsync from an Open Dental installation.
+			/// Here a single SheetDef can be uploaded via webhostsync from an Open Dental installation.
 			/// </summary>
 			[WebMethod]
-			public void UpLoadSheetDef(string RegistrationKey,List<SheetDef> sheetDefList) {
+			public void UpLoadSheetDef(string RegistrationKey,SheetDef sheetDef) {
 				ODWebServiceEntities db=new ODWebServiceEntities();
 				long DentalOfficeID=GetDentalOfficeID(RegistrationKey);
 				try{
 					if(DentalOfficeID==0) {
 						return;
 					}
-					foreach(SheetDef sheetDef in sheetDefList) {
 						var PreferenceResult=db.webforms_preference.Where(pref=>pref.DentalOfficeID==DentalOfficeID);
 						webforms_sheetdef SheetDefObj=null;
 						 SheetDefObj=new webforms_sheetdef();
 						 PreferenceResult.First().webforms_sheetdef.Add(SheetDefObj);
 						 FillSheetDef(sheetDef,SheetDefObj);
 						 FillFieldSheetDef(sheetDef,SheetDefObj);
-					}// end of foreach loop
+					
 					db.SaveChanges();
 				}
 				catch(Exception ex) {

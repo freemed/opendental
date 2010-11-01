@@ -193,7 +193,7 @@ namespace OpenDental {
 			}
 		}
 
-		private void LoadImagesToSheetsDef(SheetDef sheetDefCur){
+		private void LoadImagesToSheetDef(SheetDef sheetDefCur){
 			for(int j=0;j<sheetDefCur.SheetFieldDefs.Count;j++) {
 				if(sheetDefCur.SheetFieldDefs[j].FieldType==SheetFieldType.Image) {
 					string filePathAndName=ODFileUtils.CombinePaths(SheetUtil.GetImagePath(),sheetDefCur.SheetFieldDefs[j].FieldName);
@@ -227,8 +227,8 @@ namespace OpenDental {
 				return;
 			}
 			for(int i=0;i<FormS.SelectedSheetDefs.Count;i++) {
-				LoadImagesToSheetsDef(FormS.SelectedSheetDefs[i]);
-//wh.UpLoadSheetDef(RegistrationKey,FormS.SelectedSheetDefs[i]);
+				LoadImagesToSheetDef(FormS.SelectedSheetDefs[i]);
+				wh.UpLoadSheetDef(RegistrationKey,FormS.SelectedSheetDefs[i]);
 			}
 			FillGrid();
 			Cursor=Cursors.Default;
@@ -246,7 +246,7 @@ namespace OpenDental {
 				return;
 			}
 			OpenDental.WebHostSynch.webforms_sheetdef wf_sheetDef=(OpenDental.WebHostSynch.webforms_sheetdef)gridMain.Rows[gridMain.SelectedIndices[0]].Tag;
-//wh.DeleteSheetDef(RegistrationKey,long???
+			wh.DeleteSheetDef(RegistrationKey,wf_sheetDef.WebSheetDefID);
 			FillGrid();
 			Cursor=Cursors.Default;
 		}
