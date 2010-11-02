@@ -3442,7 +3442,7 @@ namespace OpenDental{
 					textDateStop.Text=OrionProcCur.DateStopClock.ToShortDateString();
 				}
 				else {
-					textDateStop.Text=MiscData.GetNowDateTime().ToShortDateString();
+					textDateStop.Text=textDate.Text.Trim();
 				}
 			}
 			switch(comboStatus.SelectedIndex) {
