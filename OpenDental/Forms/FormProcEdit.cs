@@ -71,7 +71,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butSetComplete;
 		private System.Windows.Forms.Label labelPriority;
 		private ProcedureCode ProcedureCode2;
-		private System.Windows.Forms.Label label13;
+		private System.Windows.Forms.Label labelSetComplete;
 		private OpenDental.UI.Button butAddEstimate;
 		private Procedure ProcCur;
 		private Procedure ProcOld;
@@ -336,7 +336,7 @@ namespace OpenDental{
 			this.comboPlaceService = new System.Windows.Forms.ComboBox();
 			this.labelPlaceService = new System.Windows.Forms.Label();
 			this.labelPriority = new System.Windows.Forms.Label();
-			this.label13 = new System.Windows.Forms.Label();
+			this.labelSetComplete = new System.Windows.Forms.Label();
 			this.checkNoBillIns = new System.Windows.Forms.CheckBox();
 			this.labelClaimNote = new System.Windows.Forms.Label();
 			this.labelIncomplete = new System.Windows.Forms.Label();
@@ -1333,13 +1333,13 @@ namespace OpenDental{
 			this.labelPriority.Text = "Priority";
 			this.labelPriority.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// label13
+			// labelSetComplete
 			// 
-			this.label13.Location = new System.Drawing.Point(856,62);
-			this.label13.Name = "label13";
-			this.label13.Size = new System.Drawing.Size(103,42);
-			this.label13.TabIndex = 58;
-			this.label13.Text = "Also changes date and adds note.";
+			this.labelSetComplete.Location = new System.Drawing.Point(856,62);
+			this.labelSetComplete.Name = "labelSetComplete";
+			this.labelSetComplete.Size = new System.Drawing.Size(103,42);
+			this.labelSetComplete.TabIndex = 58;
+			this.labelSetComplete.Text = "Also changes date and adds note.";
 			// 
 			// checkNoBillIns
 			// 
@@ -2108,7 +2108,7 @@ namespace OpenDental{
 			this.Controls.Add(this.tbPay);
 			this.Controls.Add(this.tbAdj);
 			this.Controls.Add(this.checkNoBillIns);
-			this.Controls.Add(this.label13);
+			this.Controls.Add(this.labelSetComplete);
 			this.Controls.Add(this.labelClaim);
 			this.Controls.Add(this.panel1);
 			this.Controls.Add(this.textClaimNote);
@@ -2258,6 +2258,8 @@ namespace OpenDental{
 				textProcFee.Visible=false;
 				labelPriority.Visible=false;
 				comboPriority.Visible=false;
+				butSetComplete.Visible=false;
+				labelSetComplete.Visible=false;
 			}
 			IsStartingUp=true;
 			FillControls();
