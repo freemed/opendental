@@ -1459,6 +1459,9 @@ namespace OpenDental{
 				ToolBarMain.Visible=false;
 				LayoutControls();
 			}
+			if(Programs.UsingOrion) {
+				myOutlookBar.SelectedIndex=1;//Family module
+			}
 			myOutlookBar.Invalidate();
 			LayoutToolBar();
 			SetModuleSelected();
@@ -1729,6 +1732,11 @@ namespace OpenDental{
 						myOutlookBar.Buttons[5].Visible=false;
 					}
 					myOutlookBar.Buttons[6].Visible=false;
+				}
+				if(Programs.UsingOrion) {
+					myOutlookBar.Buttons[0].Visible=false;//Appt module
+					myOutlookBar.Buttons[2].Visible=false;//Account module
+					myOutlookBar.Buttons[3].Visible=false;//TP module
 				}
 			}
 			if(itypeList.Contains((int)InvalidType.ToolBut) || isAll) {
