@@ -1528,7 +1528,7 @@ namespace OpenDental{
 
 		private void butAdd_Click(object sender,EventArgs e) {
 			if(comboProvNum.SelectedIndex==-1){
-				MsgBox.Show(this,"Please select a dentist first.");
+				MsgBox.Show(this,"Please select a dentist.");
 				return;
 			}
 			FormProcCodes FormP=new FormProcCodes();
@@ -1848,7 +1848,7 @@ namespace OpenDental{
 
 		private void listQuickAdd_MouseDown(object sender,System.Windows.Forms.MouseEventArgs e) {
 			if(comboProvNum.SelectedIndex==-1){
-				MsgBox.Show(this,"Please select a dentist first.");
+				MsgBox.Show(this,"Please select a dentist.");
 				return;
 			}
 			if(listQuickAdd.IndexFromPoint(e.X,e.Y)==-1) {
@@ -2538,6 +2538,10 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
+			if(comboProvNum.SelectedIndex==-1) {
+				MsgBox.Show(this,"Please select a dentist.");
+				return;
+			}
 			if(!UpdateToDB()){
 				return;
 			}

@@ -846,7 +846,7 @@ namespace OpenDentBusiness {
 				command=@"UPDATE clockevent SET TimeDisplayed2=NOW() WHERE TimeDisplayed2 > NOW()+INTERVAL 15 MINUTE";
 				numberFixed+=Db.NonQ32(command);
 				if(numberFixed>0 || verbose) {
-					log+=Lans.g("FormDatabaseMaintenance","Timecard entries fixed: ")+numberFixed.ToString()+"\r\n";
+					log+=Lans.g("FormDatabaseMaintenance","Future timecard entry times fixed: ")+numberFixed.ToString()+"\r\n";
 				}
 			}
 			return log;
