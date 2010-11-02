@@ -745,27 +745,27 @@ namespace OpenDental.WebHostSynch {
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://opendental.com/")]
     public partial class SheetAndSheetField {
         
-        private webforms_sheet shField;
+        private webforms_sheet web_sheetField;
         
-        private webforms_sheetfield[] sfField;
+        private webforms_sheetfield[] web_sheetfieldlistField;
         
         /// <remarks/>
-        public webforms_sheet sh {
+        public webforms_sheet web_sheet {
             get {
-                return this.shField;
+                return this.web_sheetField;
             }
             set {
-                this.shField = value;
+                this.web_sheetField = value;
             }
         }
         
         /// <remarks/>
-        public webforms_sheetfield[] sf {
+        public webforms_sheetfield[] web_sheetfieldlist {
             get {
-                return this.sfField;
+                return this.web_sheetfieldlistField;
             }
             set {
-                this.sfField = value;
+                this.web_sheetfieldlistField = value;
             }
         }
     }

@@ -103,7 +103,7 @@ namespace WebForms {
 					if(FieldType==SheetFieldType.InputField) {
 						TextBox tb=new TextBox();
 						int rowcount=(int)Math.Floor((double)height/fontsize);
-                        if (rowcount > 1){
+                        if (rowcount>1){
 							tb.TextMode=TextBoxMode.MultiLine;
                             tb.Rows=rowcount;
 						}

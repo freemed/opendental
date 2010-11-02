@@ -77,21 +77,12 @@ namespace WebHostSynch {
 					if(DentalOfficeID==0) {
 						return wspObj;
 					}
-                    /*
-					var wspRes=from wsp in db.webforms_preference
-							where wsp.DentalOfficeID==DentalOfficeID
-							select wsp;
-                    */
                     var wspRes=db.webforms_preference.Where(wsp=>wsp.DentalOfficeID==DentalOfficeID);
-                                 
-
-                    if (wspRes.Count() > 0)
-                    {
+                    if (wspRes.Count()>0){
 						wspObj=wspRes.First();
 					}
 					// if there is no entry for that dental office make a new entry.
-                    if (wspRes.Count()==0)
-                    {
+                    if (wspRes.Count()==0){
 						wspObj=new webforms_preference();
 						wspObj.DentalOfficeID=DentalOfficeID;
 						wspObj.ColorBorder=DefaultColorBorder;
@@ -179,17 +170,14 @@ namespace WebHostSynch {
 			/// A class made  for just transferring both the sheets and it's fields in a web service.
 			/// </summary>
 			public class SheetAndSheetField {
-				public webforms_sheet sh=null;
-				public List<webforms_sheetfield> sf=null;
-
+				public webforms_sheet web_sheet=null;
+				public List<webforms_sheetfield> web_sheetfieldlist=null;
 				public SheetAndSheetField() {
-				
 				}
-				public SheetAndSheetField(webforms_sheet sh,List<webforms_sheetfield> sf) {
-					this.sh=sh;
-					this.sf=sf;
+				public SheetAndSheetField(webforms_sheet web_sheet,List<webforms_sheetfield> web_sheetfieldlist) {
+					this.web_sheet=web_sheet;
+					this.web_sheetfieldlist=web_sheetfieldlist;
 				}
-
 			}
 
 			[WebMethod]
@@ -305,7 +293,6 @@ namespace WebHostSynch {
 			}
 
 			[WebMethod]
-				
 			public string GetSheetDefAddress(string RegistrationKey) {
 				long DentalOfficeID=GetDentalOfficeID(RegistrationKey);
 				if(DentalOfficeID==0) {
@@ -321,8 +308,6 @@ namespace WebHostSynch {
                 Logger.Information("In GetSheetDefAddress SheetDefAddress=" + SheetDefAddress);
 				return SheetDefAddress;
 			}
-
-			
 
 			[WebMethod]
 			public List<webforms_sheetdef> DownloadSheetDefs(string RegistrationKey) {
@@ -365,7 +350,7 @@ namespace WebHostSynch {
 						Logger.Information("deleted WebSheetDefID="+WebSheetDefID+" DentalOfficeID="+DentalOfficeID);
 					}
 					db.SaveChanges();
-					Logger.Information("In DeleteSheetData IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID);
+					Logger.Information("In DeleteSheetDef IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID);
 				}
 				catch(Exception ex) {
 					Logger.LogError(ex);
@@ -384,13 +369,12 @@ namespace WebHostSynch {
 					if(DentalOfficeID==0) {
 						return;
 					}
-						var PreferenceResult=db.webforms_preference.Where(pref=>pref.DentalOfficeID==DentalOfficeID);
-						webforms_sheetdef SheetDefObj=null;
-						 SheetDefObj=new webforms_sheetdef();
-						 PreferenceResult.First().webforms_sheetdef.Add(SheetDefObj);
-						 FillSheetDef(sheetDef,SheetDefObj);
-						 FillFieldSheetDef(sheetDef,SheetDefObj);
-					
+					var PreferenceResult=db.webforms_preference.Where(pref=>pref.DentalOfficeID==DentalOfficeID);
+					webforms_sheetdef SheetDefObj=null;
+					SheetDefObj=new webforms_sheetdef();
+					PreferenceResult.First().webforms_sheetdef.Add(SheetDefObj);
+					FillSheetDef(sheetDef,SheetDefObj);
+					FillFieldSheetDef(sheetDef,SheetDefObj);
 					db.SaveChanges();
 				}
 				catch(Exception ex) {
@@ -437,16 +421,12 @@ namespace WebHostSynch {
 									else {
 										propertyinfo.SetValue(SheetFieldDefObj,fieldinfo.GetValue(sheetDef.SheetFieldDefs[i]),null);
 									}
-									
 								}
 							}
 						}//foreach propertyinfo
 					}//foreach fieldinfo
 				}
 			}
-
 		#endregion
-
-
 	}
 }

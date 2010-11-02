@@ -114,20 +114,19 @@ namespace OpenDental {
 					string FirstName="";
 					string BirthDate="";
 					//loop through each variable in a single sheetfield to get First name, last name and DOB
-					for(int j=0;j<sAnds[i].sf.Count();j++) {
-	
-						if(sAnds[i].sf[j].FieldName.ToLower().Contains("lname")||sAnds[i].sf[j].FieldName.ToLower().Contains("lastname")) {
-							LastName=sAnds[i].sf[j].FieldValue;
+					for(int j=0;j<sAnds[i].web_sheetfieldlist.Count();j++) {
+
+						if(sAnds[i].web_sheetfieldlist[j].FieldName.ToLower().Contains("lname")||sAnds[i].web_sheetfieldlist[j].FieldName.ToLower().Contains("lastname")) {
+							LastName=sAnds[i].web_sheetfieldlist[j].FieldValue;
 						}
-						if(sAnds[i].sf[j].FieldName.ToLower().Contains("fname")||sAnds[i].sf[j].FieldName.ToLower().Contains("firstname")) {
-							FirstName=sAnds[i].sf[j].FieldValue;
+						if(sAnds[i].web_sheetfieldlist[j].FieldName.ToLower().Contains("fname")||sAnds[i].web_sheetfieldlist[j].FieldName.ToLower().Contains("firstname")) {
+							FirstName=sAnds[i].web_sheetfieldlist[j].FieldValue;
 						}
-						if(sAnds[i].sf[j].FieldName.ToLower().Contains("bdate")||sAnds[i].sf[j].FieldName.ToLower().Contains("birthdate")) {
-							BirthDate=sAnds[i].sf[j].FieldValue;
+						if(sAnds[i].web_sheetfieldlist[j].FieldName.ToLower().Contains("bdate")||sAnds[i].web_sheetfieldlist[j].FieldName.ToLower().Contains("birthdate")) {
+							BirthDate=sAnds[i].web_sheetfieldlist[j].FieldValue;
 						}
 
 					}// end of j loop
-
 					DateTime birthDate=PIn.Date(BirthDate);
 					if(birthDate.Year==1) {
 						//log invalid birth date  format
@@ -136,15 +135,15 @@ namespace OpenDental {
 					Patient newPat=null;
 
 					if(PatNum==0) {
-						newPat=CreatePatient(LastName,FirstName,birthDate);
+						newPat=CreatePatient(LastName,FirstName,birthDate,sAnds[i]);
 						PatNum=newPat.PatNum;
 					}
 					Sheet newSheet=CreateSheet(PatNum,sAnds[i]);
 					if(DataExistsInDb(newSheet)==true) {
-						SheetsForDeletion.Add(sAnds[i].sh.SheetID);
+						SheetsForDeletion.Add(sAnds[i].web_sheet.SheetID);
 					}
 				}// end of for loop
-				wh.DeleteSheetData(RegistrationKey,SheetsForDeletion.ToArray());
+				//revert dennis wh.DeleteSheetData(RegistrationKey,SheetsForDeletion.ToArray());
 			}
 			catch(Exception e) {
 				MessageBox.Show(e.Message);
@@ -195,11 +194,32 @@ namespace OpenDental {
 
 		/// <summary>
 		/// </summary>
-		private Patient CreatePatient(String LastName,String FirstName,DateTime birthDate) {
+		private Patient CreatePatient(String LastName,String FirstName,DateTime birthDate,WebHostSynch.SheetAndSheetField sAnds) {
 			Patient newPat=new Patient();
 			newPat.LName=LastName;
 			newPat.FName=FirstName;
 			newPat.Birthdate=birthDate;
+			
+			Type t=newPat.GetType();
+			FieldInfo[] fi=t.GetFields();
+
+			foreach(FieldInfo field in fi) {
+				// find match for fields in Patients in the web_sheetfieldlist
+				var WebSheetFieldList=sAnds.web_sheetfieldlist.Where(sf => sf.FieldName.ToLower()==field.Name.ToLower());
+				if(WebSheetFieldList.Count()>0) {
+					// this loop is used to field that may generate mutiple values for a single field in the patient.
+					//for example the filed gender has 2 eqivalent sheet field in the web_sheetfieldlist
+					for(int i=0;i<WebSheetFieldList.Count();i++) {
+						WebHostSynch.webforms_sheetfield sf=WebSheetFieldList.ElementAt(i);
+						String SheetWebFieldValue=sf.FieldValue;
+						String RadioButtonValue= sf.RadioButtonValue;
+						FillPatientFields(newPat,field,SheetWebFieldValue,RadioButtonValue);
+					}
+				}
+			}
+
+
+
 			try{
 				Patients.Insert(newPat,false);
 				//set Guarantor field the same as PatNum
@@ -219,38 +239,38 @@ namespace OpenDental {
 		private Sheet CreateSheet(long PatNum,WebHostSynch.SheetAndSheetField sAnds) {
 			Sheet newSheet=null;
 			try{
-					SheetDef sheetDef=new SheetDef((SheetTypeEnum)sAnds.sh.SheetType);
+				SheetDef sheetDef=new SheetDef((SheetTypeEnum)sAnds.web_sheet.SheetType);
 					newSheet=SheetUtil.CreateSheet(sheetDef,PatNum);
 					SheetParameter.SetParameter(newSheet,"PatNum",PatNum);
-					newSheet.DateTimeSheet=sAnds.sh.DateTimeSheet;
+					newSheet.DateTimeSheet=sAnds.web_sheet.DateTimeSheet;
 					//newSheet.Description=sAnds.sh.de add the descrption fields also
-					newSheet.Height=sAnds.sh.Height;
-					newSheet.Width=sAnds.sh.Width;
-					newSheet.FontName=sAnds.sh.FontName;
-					newSheet.FontSize=sAnds.sh.FontSize;
-					newSheet.SheetType=(SheetTypeEnum)sAnds.sh.SheetType;
-					newSheet.IsLandscape=sAnds.sh.IsLandscape==(sbyte)1?true:false;
+					newSheet.Height=sAnds.web_sheet.Height;
+					newSheet.Width=sAnds.web_sheet.Width;
+					newSheet.FontName=sAnds.web_sheet.FontName;
+					newSheet.FontSize=sAnds.web_sheet.FontSize;
+					newSheet.SheetType=(SheetTypeEnum)sAnds.web_sheet.SheetType;
+					newSheet.IsLandscape=sAnds.web_sheet.IsLandscape==(sbyte)1?true:false;
 
 					newSheet.InternalNote="";
 					newSheet.IsWebForm=true;
 
 					//loop through each variable in a single sheetfield
-					for(int i=0;i<sAnds.sf.Count();i++) {
+					for(int i=0;i<sAnds.web_sheetfieldlist.Count();i++) {
 						SheetField sheetfield=new SheetField();
-						sheetfield.FieldName=sAnds.sf[i].FieldName;
-						sheetfield.FieldType=(SheetFieldType)sAnds.sf[i].FieldType;
-						sheetfield.FontIsBold=sAnds.sf[i].FontIsBold==(sbyte)1?true:false; ;
-						sheetfield.FontName=sAnds.sf[i].FontName;
-						sheetfield.FontSize=sAnds.sf[i].FontSize;
-						sheetfield.Height=sAnds.sf[i].Height;
-						sheetfield.Width=sAnds.sf[i].Width;
-						sheetfield.XPos=sAnds.sf[i].XPos;
-						sheetfield.YPos=sAnds.sf[i].YPos;
-						sheetfield.IsRequired=sAnds.sf[i].IsRequired==(sbyte)1?true:false; ;
-						sheetfield.RadioButtonGroup=sAnds.sf[i].RadioButtonGroup;
-						sheetfield.RadioButtonValue=sAnds.sf[i].RadioButtonValue;
-						sheetfield.GrowthBehavior=(GrowthBehaviorEnum)sAnds.sf[i].GrowthBehavior;
-						sheetfield.FieldValue=sAnds.sf[i].FieldValue;
+						sheetfield.FieldName=sAnds.web_sheetfieldlist[i].FieldName;
+						sheetfield.FieldType=(SheetFieldType)sAnds.web_sheetfieldlist[i].FieldType;
+						sheetfield.FontIsBold=sAnds.web_sheetfieldlist[i].FontIsBold==(sbyte)1?true:false; ;
+						sheetfield.FontName=sAnds.web_sheetfieldlist[i].FontName;
+						sheetfield.FontSize=sAnds.web_sheetfieldlist[i].FontSize;
+						sheetfield.Height=sAnds.web_sheetfieldlist[i].Height;
+						sheetfield.Width=sAnds.web_sheetfieldlist[i].Width;
+						sheetfield.XPos=sAnds.web_sheetfieldlist[i].XPos;
+						sheetfield.YPos=sAnds.web_sheetfieldlist[i].YPos;
+						sheetfield.IsRequired=sAnds.web_sheetfieldlist[i].IsRequired==(sbyte)1?true:false; ;
+						sheetfield.RadioButtonGroup=sAnds.web_sheetfieldlist[i].RadioButtonGroup;
+						sheetfield.RadioButtonValue=sAnds.web_sheetfieldlist[i].RadioButtonValue;
+						sheetfield.GrowthBehavior=(GrowthBehaviorEnum)sAnds.web_sheetfieldlist[i].GrowthBehavior;
+						sheetfield.FieldValue=sAnds.web_sheetfieldlist[i].FieldValue;
 						newSheet.SheetFields.Add(sheetfield);
 
 					}// end of j loop
@@ -268,7 +288,7 @@ namespace OpenDental {
 
 		/// <summary>
 		/// </summary>
-		private void FillPatientFields(Patient newPat,FieldInfo field,string SheetWebFieldValue) {
+		private void FillPatientFields(Patient newPat,FieldInfo field,String SheetWebFieldValue,String RadioButtonValue) {
 			try {
 				switch(field.Name) {
 					case "Birthdate":
@@ -276,63 +296,93 @@ namespace OpenDental {
 						field.SetValue(newPat,birthDate);
 						break;
 					case "Gender":
-						if(SheetWebFieldValue=="M") {
-							field.SetValue(newPat,PatientGender.Male);
+
+						if(RadioButtonValue=="Male") {
+							if(SheetWebFieldValue=="X") {
+								field.SetValue(newPat,PatientGender.Male);
+							}
 						}
-						if(SheetWebFieldValue=="F") {
-							field.SetValue(newPat,PatientGender.Female);
+						if(RadioButtonValue=="Female") {
+							if(SheetWebFieldValue=="X") {
+								field.SetValue(newPat,PatientGender.Female);
+							}
 						}
 						break;
 					case "Position":
-						if(SheetWebFieldValue=="Y") {
-							field.SetValue(newPat,PatientPosition.Married);
+						if(RadioButtonValue=="Married") {
+							if(SheetWebFieldValue=="X") {
+								field.SetValue(newPat,PatientPosition.Married);
+							}
 						}
-						if(SheetWebFieldValue=="N") {
-							field.SetValue(newPat,PatientPosition.Single);
+						if(RadioButtonValue=="Single") {
+							if(SheetWebFieldValue=="X") {
+								field.SetValue(newPat,PatientPosition.Single);
+							}
 						}
 						break;
 					case "PreferContactMethod":
 					case "PreferConfirmMethod":
 					case "PreferRecallMethod":
-						if(SheetWebFieldValue=="HmPhone") {
-							field.SetValue(newPat,ContactMethod.HmPhone);
+						if(RadioButtonValue=="HmPhone") {
+							if(SheetWebFieldValue=="X") {
+								field.SetValue(newPat,ContactMethod.HmPhone);
+							}
 						}
-						if(SheetWebFieldValue=="WkPhone") {
-							field.SetValue(newPat,ContactMethod.WkPhone);
+						if(RadioButtonValue=="WkPhone") {
+							if(SheetWebFieldValue=="X") {
+								field.SetValue(newPat,ContactMethod.WkPhone);
+							}
 						}
-						if(SheetWebFieldValue=="WirelessPh") {
-							field.SetValue(newPat,ContactMethod.WirelessPh);
+						if(RadioButtonValue=="WirelessPh") {
+							if(SheetWebFieldValue=="X") {
+								field.SetValue(newPat,ContactMethod.WirelessPh);
+							}
 						}
-						if(SheetWebFieldValue=="Email") {
-							field.SetValue(newPat,ContactMethod.Email);
+						if(RadioButtonValue=="Email") {
+							if(SheetWebFieldValue=="X") {
+								field.SetValue(newPat,ContactMethod.Email);
+							}
+							
 						}
 						break;
 					case "StudentStatus":
-						if(SheetWebFieldValue=="Nonstudent") {
-							field.SetValue(newPat,"");
+						if(RadioButtonValue=="Nonstudent") {
+							if(SheetWebFieldValue=="X") {
+								field.SetValue(newPat,"");
+							}
 						}
-						if(SheetWebFieldValue=="Fulltime") {
-							field.SetValue(newPat,"F");
+						if(RadioButtonValue=="Fulltime") {
+							if(SheetWebFieldValue=="X") {
+								field.SetValue(newPat,"F");
+							}
 						}
-						if(SheetWebFieldValue=="Parttime") {
-							field.SetValue(newPat,"P");
+						if(RadioButtonValue=="Parttime") {
+							if(SheetWebFieldValue=="X") {
+								field.SetValue(newPat,"P");
+							}
 						}
 						break;
 					case "ins1Relat":
 					case "ins2Relat":
-						if(SheetWebFieldValue=="Self") {
-							field.SetValue(newPat,Relat.Self);
+						if(RadioButtonValue=="Self") {
+							if(SheetWebFieldValue=="X") {
+								field.SetValue(newPat,Relat.Self);
+							}
 						}
-						if(SheetWebFieldValue=="Spouse") {
-							field.SetValue(newPat,Relat.Spouse);
+						if(RadioButtonValue=="Spouse") {
+							if(SheetWebFieldValue=="X") {
+								field.SetValue(newPat,Relat.Spouse);
+							}
 						}
-						if(SheetWebFieldValue=="Child") {
-							field.SetValue(newPat,Relat.Child);
+						if(RadioButtonValue=="Child") {
+							if(SheetWebFieldValue=="X") {
+								field.SetValue(newPat,Relat.Child);
+							}
 						}
-						break;
+					break;
 					default:
 						field.SetValue(newPat,SheetWebFieldValue);
-						break;
+					break;
 				}//switch case
 			}
 			catch(Exception e) {

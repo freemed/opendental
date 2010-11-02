@@ -183,8 +183,8 @@
       </s:element>
       <s:complexType name="SheetAndSheetField">
         <s:sequence>
-          <s:element minOccurs="0" maxOccurs="1" name="sh" type="tns:webforms_sheet" />
-          <s:element minOccurs="0" maxOccurs="1" name="sf" type="tns:ArrayOfWebforms_sheetfield" />
+          <s:element minOccurs="0" maxOccurs="1" name="web_sheet" type="tns:webforms_sheet" />
+          <s:element minOccurs="0" maxOccurs="1" name="web_sheetfieldlist" type="tns:ArrayOfWebforms_sheetfield" />
         </s:sequence>
       </s:complexType>
       <s:complexType name="ArrayOfSheetAndSheetField">
