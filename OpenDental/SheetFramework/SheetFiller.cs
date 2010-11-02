@@ -353,7 +353,7 @@ namespace OpenDental{
 				if(Sheets.ContainsStaticField(sheet,"plannedAppointmentInfo")) {
 					PlannedAppt plannedAppt=PlannedAppts.GetOneOrderedByItemOrder(pat.PatNum);
 					for(int i=0;i<apptList.Count;i++) {
-						if(apptList[i].AptNum==plannedAppt.AptNum) {
+						if(plannedAppt!=null && apptList[i].AptNum==plannedAppt.AptNum) {
 							plannedAppointmentInfo="Procedures: ";
 							plannedAppointmentInfo+=apptList[i].ProcDescript+"\r\n";
 							int minutesTotal=apptList[i].Pattern.Length*5;
