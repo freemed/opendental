@@ -2481,6 +2481,7 @@ namespace OpenDental{
 			if(panelOrion.Visible) {
 				comboDPC.Items.Clear();
 				//comboDPC.Items.AddRange(Enum.GetNames(typeof(OrionDPC)));
+				comboDPC.Items.Add("Not Specified");
 				comboDPC.Items.Add("None");
 				comboDPC.Items.Add("1A-within 1 day");
 				comboDPC.Items.Add("1B-within 30 days");
@@ -2524,7 +2525,8 @@ namespace OpenDental{
 				if(!IsNew) {
 					OrionProcOld=OrionProcCur.Copy();
 					comboDPC.SelectedIndex=(int)OrionProcCur.DPC;
-					if(OrionProcCur.DPC==OrionDPC.None ||
+					if(OrionProcCur.DPC==OrionDPC.NotSpecified ||
+						OrionProcCur.DPC==OrionDPC.None ||
 						OrionProcCur.DPC==OrionDPC._4 ||
 						OrionProcCur.DPC==OrionDPC._5) {
 						labelScheduleBy.Visible=true;
@@ -3389,31 +3391,31 @@ namespace OpenDental{
 		private void comboDPC_SelectionChangeCommitted(object sender,EventArgs e) {
 			DateTime tempDate=PIn.Date(textDateTP.Text);
 			switch(comboDPC.SelectedIndex) {
-				case 1:
+				case 2:
 					tempDate=tempDate.Date.AddDays(1);
 					if(CancelledScheduleByDate.Year>1880 && CancelledScheduleByDate<tempDate) {
 						tempDate=CancelledScheduleByDate;
 					}
 					break;
-				case 2:
+				case 3:
 					tempDate=tempDate.Date.AddDays(30);
 					if(CancelledScheduleByDate.Year>1880 && CancelledScheduleByDate<tempDate) {
 						tempDate=CancelledScheduleByDate;
 					}
 					break;
-				case 3:
+				case 4:
 					tempDate=tempDate.Date.AddDays(60);
 					if(CancelledScheduleByDate.Year>1880 && CancelledScheduleByDate<tempDate) {
 						tempDate=CancelledScheduleByDate;
 					}
 					break;
-				case 4:
+				case 5:
 					tempDate=tempDate.Date.AddDays(120);
 					if(CancelledScheduleByDate.Year>1880 && CancelledScheduleByDate<tempDate) {
 						tempDate=CancelledScheduleByDate;
 					}
 					break;
-				case 5:
+				case 6:
 					tempDate=tempDate.Date.AddYears(1);
 					if(CancelledScheduleByDate.Year>1880 && CancelledScheduleByDate<tempDate) {
 						tempDate=CancelledScheduleByDate;
@@ -3423,8 +3425,9 @@ namespace OpenDental{
 			textDateScheduled.Text=tempDate.ToShortDateString();
 			labelScheduleBy.Visible=false;
 			if(comboDPC.SelectedIndex==0
-				|| comboDPC.SelectedIndex==6
-				|| comboDPC.SelectedIndex==7) {
+				|| comboDPC.SelectedIndex==1
+				|| comboDPC.SelectedIndex==7
+				|| comboDPC.SelectedIndex==8) {
 				textDateScheduled.Text="";
 				labelScheduleBy.Visible=true;
 			}
@@ -4293,7 +4296,7 @@ namespace OpenDental{
 					}
 				}
 				if(comboStatus.SelectedIndex==0 && comboDPC.SelectedIndex==0) {
-					MsgBox.Show(this,"Status of treatment planned should have a DPC");
+					MsgBox.Show(this,"Status of TP should not have DPC of \"Not Specified\".");
 					return;
 				}
 			}

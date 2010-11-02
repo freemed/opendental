@@ -35,22 +35,24 @@ namespace OpenDentBusiness{
 
 	///<summary></summary>
 	public enum OrionDPC{
-	  ///<summary>0- None</summary>
+	  ///<summary>0- Not Specified</summary>
+	  NotSpecified,
+		///<summary>1- None</summary>
 	  None,
-	  ///<summary>1- Treatment to be scheduled within 1 calendar day</summary>
+	  ///<summary>2- Treatment to be scheduled within 1 calendar day</summary>
 	  _1A,
-	  ///<summary>2- Treatment to be scheduled within 30 calendar days</summary>
+	  ///<summary>3- Treatment to be scheduled within 30 calendar days</summary>
 	  _1B,
-	  ///<summary>3- Treatment to be scheduled within 60 calendar days</summary>
+	  ///<summary>4- Treatment to be scheduled within 60 calendar days</summary>
 	  _1C,
-	  ///<summary>4– Treatment to be scheduled within 120 calendar days</summary>
+	  ///<summary>5– Treatment to be scheduled within 120 calendar days</summary>
 	  _2,
-	  ///<summary>5– Treatment to be scheduled within 1 year</summary>
+	  ///<summary>6– Treatment to be scheduled within 1 year</summary>
 	  _3,
-	  ///<summary>6– No further treatment is needed, no appointment needed</summary>
+	  ///<summary>7– No further treatment is needed, no appointment needed</summary>
 	  _4,
-	  ///<summary>7– No appointment needed </summary>
-	  _5
+	  ///<summary>8– No appointment needed </summary>
+	  _5		
 	}
 
 	///<summary></summary>

@@ -187,7 +187,12 @@ namespace OpenDentBusiness {
 				else {
 					row["orionDateStopClock"]=dateT.ToString(Lans.GetShortDateTimeFormat());
 				}
-				row["orionDPC"]=((OrionDPC)PIn.Int(rawProcs.Rows[i]["DPC"].ToString())).ToString();
+				if(((OrionDPC)PIn.Int(rawProcs.Rows[i]["DPC"].ToString())).ToString()=="NotSpecified") {
+					row["orionDPC"]="";
+				}
+				else {
+					row["orionDPC"]=((OrionDPC)PIn.Int(rawProcs.Rows[i]["DPC"].ToString())).ToString();
+				}
 				row["orionIsEffectiveComm"]="";
 				if(rawProcs.Rows[i]["IsEffectiveComm"].ToString()=="1"){
 					row["orionIsEffectiveComm"]="Y";
