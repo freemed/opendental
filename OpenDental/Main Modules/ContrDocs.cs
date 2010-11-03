@@ -1026,11 +1026,11 @@ namespace OpenDental{
 
 		///<summary>If the node does not correspond to a valid document or mount, nothing happens. Otherwise the document/mount record and its corresponding file(s) are deleted.</summary>
 		private void OnDelete_Click(){
-			DeleteSelection(true);
+			DeleteSelection(true,true);
 		}
 		
-		///<summary>Deletes the current selection from the database and refreshes the tree view.</summary>
-		private void DeleteSelection(bool verbose){
+		///<summary>Deletes the current selection from the database and refreshes the tree view. Set securityCheck false when creating a new document that might get cancelled.</summary>
+		private void DeleteSelection(bool verbose,bool securityCheck){
 			if(GetNodeIdentifier(TreeDocuments.SelectedNode)=="") {
 				MsgBox.Show(this,"No item is currently selected");
 				return;//No current selection, or some kind of internal error somehow.
@@ -1043,8 +1043,10 @@ namespace OpenDental{
 			long mountNum=Convert.ToInt64(obj["MountNum"].ToString());
 			long docNum=Convert.ToInt64(obj["DocNum"].ToString());
 			Document doc=Documents.GetByNum(docNum);
-			if(!Security.IsAuthorized(Permissions.ImageDelete,doc.DateCreated)) {
-				return;
+			if(securityCheck) {
+				if(!Security.IsAuthorized(Permissions.ImageDelete,doc.DateCreated)) {
+					return;
+				}
 			}
 			EnableAllTreeItemTools(false);
 			Document[] docs;
@@ -1238,7 +1240,7 @@ namespace OpenDental{
 				formDocInfo.ShowDialog();
 				if(formDocInfo.DialogResult!=DialogResult.OK){
 					File.Delete(selectionDoc.FileName);
-					DeleteSelection(false);
+					DeleteSelection(false,true);
 				}else{
 					FillDocList(true);//Update tree, in case the new document's icon or category were modified in formDocInfo.
 				}
@@ -1295,7 +1297,7 @@ namespace OpenDental{
 			FormDocInfo FormD=new FormDocInfo(PatCur,doc,GetCurrentFolderName(TreeDocuments.SelectedNode)); 
 			FormD.ShowDialog();//some of the fields might get changed, but not the filename 
 			if(FormD.DialogResult!=DialogResult.OK){ 
-				DeleteSelection(false); 
+				DeleteSelection(false,false); 
 			}
 			else{ 
 				nodeId=MakeIdentifier(doc.DocNum.ToString(),"0"); 
@@ -1334,7 +1336,7 @@ namespace OpenDental{
 					FormDocInfo FormD=new FormDocInfo(PatCur,doc,GetCurrentFolderName(TreeDocuments.SelectedNode));
 					FormD.ShowDialog();//some of the fields might get changed, but not the filename
 					if(FormD.DialogResult!=DialogResult.OK){
-						DeleteSelection(false);
+						DeleteSelection(false,false);
 					}else{
 						nodeId=MakeIdentifier(doc.DocNum.ToString(),"0");
 						selectionDoc=doc.Copy();
@@ -1398,7 +1400,7 @@ namespace OpenDental{
 						this.Cursor=Cursors.Default;
 						return;
 					}
-					DeleteSelection(false);
+					DeleteSelection(false,true);
 				}
 				try {
 					doc=ImageStore.ImportCapturedImage(pasteImage,0,selectionMountItems[hotDocument].MountItemNum,GetCurrentCategory(),PatCur);
@@ -1427,7 +1429,7 @@ namespace OpenDental{
 				FormDocInfo formD=new FormDocInfo(PatCur,doc,GetCurrentFolderName(TreeDocuments.SelectedNode));
 				formD.ShowDialog();
 				if(formD.DialogResult!=DialogResult.OK) {
-					DeleteSelection(false);
+					DeleteSelection(false,false);
 				} else {
 					FillDocList(true);
 				}
@@ -1528,7 +1530,7 @@ namespace OpenDental{
 				FormDocInfo FormD=new FormDocInfo(PatCur,doc,GetCurrentFolderName(TreeDocuments.SelectedNode));
 				FormD.ShowDialog();//some of the fields might get changed, but not the filename
 				if(FormD.DialogResult!=DialogResult.OK){
-					DeleteSelection(false);
+					DeleteSelection(false,false);
 				}else{
 					FillDocList(true);//Refresh possible changes in the document due to FormD.
 				}
