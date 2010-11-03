@@ -7668,6 +7668,7 @@ namespace OpenDental{
 
 		private void tabProc_MouseDown(object sender,MouseEventArgs e) {
 			ChartLayoutHelper.tabProc_MouseDown(SelectedProcTab,gridProg,tabProc,ClientSize,e);
+			SelectedProcTab=tabProc.SelectedIndex;
 			FillMovementsAndHidden();
 		}
 
