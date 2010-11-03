@@ -664,7 +664,7 @@ namespace OpenDental{
 			else{
 				sheetDef=SheetsInternal.DepositSlip();
 			}
-			Sheet sheet=SheetUtil.CreateSheet(sheetDef,DepositCur.DepositNum);
+			Sheet sheet=SheetUtil.CreateSheet(sheetDef,0);
 			SheetParameter.SetParameter(sheet,"DepositNum",DepositCur.DepositNum);
 			SheetFiller.FillFields(sheet);
 			SheetUtil.CalculateHeights(sheet,this.CreateGraphics());

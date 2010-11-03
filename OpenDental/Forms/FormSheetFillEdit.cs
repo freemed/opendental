@@ -541,11 +541,13 @@ namespace OpenDental {
 			else{
 				FormS.PaperCopies=1;
 			}
-			Patient pat=Patients.GetPat(SheetCur.PatNum);
-			if(pat.Email!=""){
-				FormS.EmailPatAddress=pat.Email;
-				FormS.EmailPat=true;
-				FormS.PaperCopies--;
+			if(SheetCur.PatNum!=0) {
+				Patient pat=Patients.GetPat(SheetCur.PatNum);
+				if(pat.Email!="") {
+					FormS.EmailPatAddress=pat.Email;
+					FormS.EmailPat=true;
+					FormS.PaperCopies--;
+				}
 			}
 			Referral referral=null;
 			if(SheetCur.SheetType==SheetTypeEnum.ReferralSlip
