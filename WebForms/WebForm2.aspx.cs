@@ -99,6 +99,8 @@ namespace WebForms {
 					int height=SheetFieldDefList.ElementAt(j).Height;
 					float fontsize=SheetFieldDefList.ElementAt(j).FontSize;
 					String fontname=SheetFieldDefList.ElementAt(j).FontName;
+					bool fontIsBold=SheetFieldDefList.ElementAt(j).FontIsBold==(sbyte)1?true:false;
+					long WebSheetFieldDefID=SheetFieldDefList.ElementAt(j).WebSheetFieldDefID;
 					WebControl wc=null; // WebControl is the parent class of all controls
 					if(FieldType==SheetFieldType.InputField) {
 						TextBox tb=new TextBox();
@@ -119,27 +121,28 @@ namespace WebForms {
 							FieldValue=FieldValue.Replace("[dateToday]",DateTime.Today.ToString("M/d/yyyy"));
 						}
 						lb.Text=FieldValue;
+
 						wc=lb;
 					}
 					if(FieldType==SheetFieldType.Image||FieldType==SheetFieldType.Rectangle||FieldType==SheetFieldType.Line) {
 						System.Web.UI.WebControls.Image img=new System.Web.UI.WebControls.Image();
-						long WebSheetFieldDefID=SheetFieldDefList.ElementAt(j).WebSheetFieldDefID;
 						img.ImageUrl=("~/Handler1.ashx?WebSheetFieldDefID="+WebSheetFieldDefID);
 						wc=img;
 					}
 					if(FieldType==SheetFieldType.SigBox) {
 						Panel pa=new Panel();
 						pa.BorderStyle=BorderStyle.Solid;
-						pa.Style["padding-top"]=height/2 +"px";
 						pa.HorizontalAlign=HorizontalAlign.Center;
 						Label lb=new Label();
 						lb.Style["font-size"]=SignatureFontSize+"px";
+						lb.Style["position"]="relative";						
+						lb.Style["top"]=(height-SignatureFontSize)/2  +"px";
 						lb.Text="Signature will be recorded later.";
 						pa.Controls.Add(lb);
 						wc=pa;
 					}
 					if(wc!=null) {
-                        AssignID(wc,SheetFieldDefList.ElementAt(j));
+						wc.ID=""+WebSheetFieldDefID;
 						wc.Style["position"]="absolute";
 						wc.Style["width"]=width+"px";
 						wc.Style["height"]=height+"px";
@@ -156,8 +159,11 @@ namespace WebForms {
 						}
 						if(FieldType==SheetFieldType.InputField) { //textboxes
 							wc.Style["font-family"]=fontname;
-							wc.Style["font-size"]=fontsize+"px";
+							wc.Style["font-size"]=fontsize+"pt";
 							wc.Style["height"]=height/heightfactor+"px";
+							if(fontIsBold) {
+								wc.Font.Bold=true;
+							}
 							wc.BorderWidth=Unit.Pixel(0);
 							wc.BackColor=Color.LightYellow;
 							AddValidator(SheetFieldDefList.ElementAt(j));
@@ -177,7 +183,10 @@ namespace WebForms {
 						}
 						if(FieldType==SheetFieldType.StaticText) {
 							wc.Style["font-family"]=fontname;
-							wc.Style["font-size"]=fontsize+"px";
+							wc.Style["font-size"]=fontsize+"pt";
+							if(fontIsBold) {
+								wc.Font.Bold=true;
+							}
 						}
 						Panel1.Controls.Add(wc);
 					}
@@ -201,13 +210,7 @@ namespace WebForms {
 			String RadioButtonGroup=sfd.RadioButtonGroup;
 			WebControl wc=null;
 			CheckBox cb=new CheckBox();
-			if(FieldName=="misc") {
-				cb.ID=FieldName+RadioButtonValue+sfd.WebSheetFieldDefID;
-			}
-			else {
-				cb.ID=FieldName+RadioButtonValue;
-			}
-			cb.ID=""+sfd.WebSheetFieldDefID; // newid
+			cb.ID=""+sfd.WebSheetFieldDefID;
 			AjaxControlToolkit.MutuallyExclusiveCheckBoxExtender mecb=new AjaxControlToolkit.MutuallyExclusiveCheckBoxExtender();
 			mecb.ID=cb.ID+"MutuallyExclusiveCheckBoxExtender";
 			mecb.TargetControlID=cb.ID;
@@ -221,17 +224,6 @@ namespace WebForms {
 			wc=cb;
 			return wc;
 		}
-
-        private void AssignID(WebControl wc, webforms_sheetfielddef sfd)
-        {
-            if(String.IsNullOrEmpty(wc.ID)) {
-                wc.ID=sfd.FieldName;
-			}
-			if(wc.ID=="misc"){
-				wc.ID=wc.ID+sfd.WebSheetFieldDefID;
-            }
-			wc.ID=""+sfd.WebSheetFieldDefID;// newid
-        }
 
 		private void AssignTabOrder() {
 			var sortedlist=listwc.OrderBy(wc=>wc.YPos).ThenBy(wc=>wc.XPos).ToList();
@@ -265,6 +257,9 @@ namespace WebForms {
 			}
 			else if(FieldName.ToLower()=="birthdate" || FieldName.ToLower()=="bdate") {
 				ErrorMessage="Birthdate is a required field";
+			}
+			else if(sfd.IsRequired==(sbyte)1) {
+				ErrorMessage="This is a required field";
 			}
 			else {
 				return;

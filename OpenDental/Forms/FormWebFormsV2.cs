@@ -143,7 +143,7 @@ namespace OpenDental {
 						SheetsForDeletion.Add(sAnds[i].web_sheet.SheetID);
 					}
 				}// end of for loop
-				//revert dennis wh.DeleteSheetData(RegistrationKey,SheetsForDeletion.ToArray());
+				wh.DeleteSheetData(RegistrationKey,SheetsForDeletion.ToArray());
 			}
 			catch(Exception e) {
 				MessageBox.Show(e.Message);
