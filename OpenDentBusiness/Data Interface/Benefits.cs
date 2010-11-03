@@ -29,8 +29,12 @@ namespace OpenDentBusiness {
 			string command="SELECT * FROM benefit"
 				+" WHERE"+s;
 			List<Benefit> list=Crud.BenefitCrud.SelectMany(command);
-			list.Sort();
+			list.Sort(SortBenefits);
 			return list;
+		}
+
+		public static int SortBenefits(Benefit b1,Benefit b2){
+			return b1.ToString().CompareTo(b2.ToString());
 		}
 
 		///<summary>Used in the PlanEdit and FormClaimProc to get a list of benefits for specified plan and patPlan.  patPlanNum can be 0.</summary>
@@ -169,6 +173,7 @@ namespace OpenDentBusiness {
 		///<summary>Only for display purposes rather than any calculations.  Gets an annual max from the supplied list of benefits.  Ignores benefits that do not match either the planNum or the patPlanNum.  Because it starts at the top of the benefit list, it will get the most general limitation first.  Returns -1 if none found.  Usually, set isFam to false unless we are specifically interested in that value.</summary>
 		public static double GetAnnualMaxDisplay(List<Benefit> benList,long planNum,long patPlanNum,bool isFam) {
 			//No need to check RemotingRole; no call to db.
+			List<Benefit> matchingBens=new List<Benefit>();
 			for(int i=0;i<benList.Count;i++) {
 				if(benList[i].PlanNum==0 && benList[i].PatPlanNum!=patPlanNum) {
 					continue;
@@ -205,9 +210,22 @@ namespace OpenDentBusiness {
 						continue;
 					}
 				}
-				return benList[i].MonetaryAmt;
+				matchingBens.Add(benList[i]);
 			}
-			return -1;
+			if(matchingBens.Count==0) {
+				return -1;
+			}
+			if(matchingBens.Count==1) {
+				return matchingBens[0].MonetaryAmt;
+			}
+			double minBen;
+			minBen=matchingBens[0].MonetaryAmt;
+			for(int i=1;i<matchingBens.Count;i++) {//Start counting at 1 to compare to 0.
+				if(minBen>matchingBens[i].MonetaryAmt){
+					minBen=matchingBens[i].MonetaryAmt;
+				}
+			}
+			return minBen;
 		}
 
 		///<summary>Only for display purposes rather than any calculations.  Gets a general deductible from the supplied list of benefits.  Ignores benefits that do not match either the planNum or the patPlanNum.</summary>
