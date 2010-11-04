@@ -257,7 +257,8 @@ namespace OpenDental.Eclaims
 				strResponse=response.content;
 			}
 			catch(SoapException ex) {
-				strResponse=Lan.g("FormInsPlan","SoapException: ")+ex.Detail.InnerText;
+				strResponse="Invalid Username or Password.  Servers may need a few hours before ready to accept new user information.";
+					//Lan.g("FormInsPlan","SoapException: ")+ex.Detail.InnerText;
 			}
 			//cleanup response.  Seems to start with \n and 4 spaces.  Ends with trailing \n.
 			strResponse=strResponse.Replace("\n","");
