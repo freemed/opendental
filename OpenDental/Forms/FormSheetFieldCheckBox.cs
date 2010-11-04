@@ -43,18 +43,19 @@ namespace OpenDental {
 			textWidth.Text=SheetFieldDefCur.Width.ToString();
 			textHeight.Text=SheetFieldDefCur.Height.ToString();
 			textRadioGroupName.Text=SheetFieldDefCur.RadioButtonGroup;
-			textRadioValue.Text=SheetFieldDefCur.RadioButtonValue;
 			checkRequired.Checked=SheetFieldDefCur.IsRequired;
 		}
 
 		private void listFields_SelectedIndexChanged(object sender,EventArgs e) {
 			groupRadio.Visible=false;
 			groupRadioMisc.Visible=false;
+			checkRequired.Visible=false;
 			if(listFields.SelectedIndex==-1){
 				return;
 			}
 			if(AvailFields[listFields.SelectedIndex].FieldName=="misc"){
 				groupRadioMisc.Visible=true;
+				checkRequired.Visible=true;
 			}
 			else{
 				radioButtonValues=SheetFieldsAvailable.GetRadio(AvailFields[listFields.SelectedIndex].FieldName);
@@ -62,6 +63,7 @@ namespace OpenDental {
 					return;
 				}
 				groupRadio.Visible=true;
+				checkRequired.Visible=true;
 				listRadio.Items.Clear();
 				for(int i=0;i<radioButtonValues.Count;i++) {
 					listRadio.Items.Add(radioButtonValues[i]);
@@ -117,7 +119,6 @@ namespace OpenDental {
 			}
 			else if(groupRadioMisc.Visible){
 				SheetFieldDefCur.RadioButtonGroup=textRadioGroupName.Text;
-				SheetFieldDefCur.RadioButtonValue=textRadioValue.Text;
 			}
 			SheetFieldDefCur.IsRequired=checkRequired.Checked;
 			//don't save to database here.

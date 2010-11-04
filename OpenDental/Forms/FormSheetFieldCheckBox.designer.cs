@@ -29,15 +29,14 @@ namespace OpenDental{
 			this.label6 = new System.Windows.Forms.Label();
 			this.label7 = new System.Windows.Forms.Label();
 			this.label8 = new System.Windows.Forms.Label();
-			this.groupRadio = new System.Windows.Forms.GroupBox();
-			this.listRadio = new System.Windows.Forms.ListBox();
-			this.label1 = new System.Windows.Forms.Label();
-			this.textRadioGroupName = new System.Windows.Forms.TextBox();
 			this.label3 = new System.Windows.Forms.Label();
-			this.label4 = new System.Windows.Forms.Label();
-			this.textRadioValue = new System.Windows.Forms.TextBox();
-			this.groupRadioMisc = new System.Windows.Forms.GroupBox();
+			this.textRadioGroupName = new System.Windows.Forms.TextBox();
 			this.label9 = new System.Windows.Forms.Label();
+			this.checkRequired = new System.Windows.Forms.CheckBox();
+			this.groupRadioMisc = new System.Windows.Forms.GroupBox();
+			this.label1 = new System.Windows.Forms.Label();
+			this.listRadio = new System.Windows.Forms.ListBox();
+			this.groupRadio = new System.Windows.Forms.GroupBox();
 			this.butDelete = new OpenDental.UI.Button();
 			this.textHeight = new OpenDental.ValidNum();
 			this.textWidth = new OpenDental.ValidNum();
@@ -45,9 +44,8 @@ namespace OpenDental{
 			this.textXPos = new OpenDental.ValidNum();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.checkRequired = new System.Windows.Forms.CheckBox();
-			this.groupRadio.SuspendLayout();
 			this.groupRadioMisc.SuspendLayout();
+			this.groupRadio.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// label2
@@ -64,7 +62,7 @@ namespace OpenDental{
 			this.listFields.FormattingEnabled = true;
 			this.listFields.Location = new System.Drawing.Point(15,37);
 			this.listFields.Name = "listFields";
-			this.listFields.Size = new System.Drawing.Size(142,433);
+			this.listFields.Size = new System.Drawing.Size(142,420);
 			this.listFields.TabIndex = 85;
 			this.listFields.SelectedIndexChanged += new System.EventHandler(this.listFields_SelectedIndexChanged);
 			this.listFields.DoubleClick += new System.EventHandler(this.listFields_DoubleClick);
@@ -105,26 +103,54 @@ namespace OpenDental{
 			this.label8.Text = "Height";
 			this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// groupRadio
+			// label3
 			// 
-			this.groupRadio.Controls.Add(this.listRadio);
-			this.groupRadio.Controls.Add(this.label1);
-			this.groupRadio.Location = new System.Drawing.Point(182,286);
-			this.groupRadio.Name = "groupRadio";
-			this.groupRadio.Size = new System.Drawing.Size(297,183);
-			this.groupRadio.TabIndex = 101;
-			this.groupRadio.TabStop = false;
-			this.groupRadio.Text = "Radio Button Value";
-			this.groupRadio.Visible = false;
+			this.label3.Location = new System.Drawing.Point(5,51);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(89,16);
+			this.label3.TabIndex = 103;
+			this.label3.Text = "Group Name";
+			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// listRadio
+			// textRadioGroupName
 			// 
-			this.listRadio.FormattingEnabled = true;
-			this.listRadio.Location = new System.Drawing.Point(94,56);
-			this.listRadio.Name = "listRadio";
-			this.listRadio.Size = new System.Drawing.Size(142,121);
-			this.listRadio.TabIndex = 88;
-			this.listRadio.Click += new System.EventHandler(this.listRadio_Click);
+			this.textRadioGroupName.Location = new System.Drawing.Point(94,50);
+			this.textRadioGroupName.Name = "textRadioGroupName";
+			this.textRadioGroupName.Size = new System.Drawing.Size(197,20);
+			this.textRadioGroupName.TabIndex = 102;
+			// 
+			// label9
+			// 
+			this.label9.Location = new System.Drawing.Point(11,15);
+			this.label9.Name = "label9";
+			this.label9.Size = new System.Drawing.Size(280,33);
+			this.label9.TabIndex = 106;
+			this.label9.Text = "Use the same Field Name (misc) and the same Group Name for each radio button in a" +
+    " group.";
+			// 
+			// checkRequired
+			// 
+			this.checkRequired.Location = new System.Drawing.Point(193,245);
+			this.checkRequired.Name = "checkRequired";
+			this.checkRequired.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+			this.checkRequired.Size = new System.Drawing.Size(97,17);
+			this.checkRequired.TabIndex = 107;
+			this.checkRequired.Text = "Required";
+			this.checkRequired.UseVisualStyleBackColor = true;
+			this.checkRequired.Visible = false;
+			// 
+			// groupRadioMisc
+			// 
+			this.groupRadioMisc.Controls.Add(this.label9);
+			this.groupRadioMisc.Controls.Add(this.textRadioGroupName);
+			this.groupRadioMisc.Controls.Add(this.label3);
+			this.groupRadioMisc.Location = new System.Drawing.Point(182,153);
+			this.groupRadioMisc.Name = "groupRadioMisc";
+			this.groupRadioMisc.Size = new System.Drawing.Size(297,78);
+			this.groupRadioMisc.TabIndex = 106;
+			this.groupRadioMisc.TabStop = false;
+			this.groupRadioMisc.Text = "Radio Button";
+			this.groupRadioMisc.Visible = false;
 			// 
 			// label1
 			// 
@@ -135,62 +161,26 @@ namespace OpenDental{
 			this.label1.Text = "Use the same Field Name for each radio button in a group.  But set a different Ra" +
     "dio Button Value for each.";
 			// 
-			// textRadioGroupName
+			// listRadio
 			// 
-			this.textRadioGroupName.Location = new System.Drawing.Point(94,64);
-			this.textRadioGroupName.Name = "textRadioGroupName";
-			this.textRadioGroupName.Size = new System.Drawing.Size(197,20);
-			this.textRadioGroupName.TabIndex = 102;
+			this.listRadio.FormattingEnabled = true;
+			this.listRadio.Location = new System.Drawing.Point(94,56);
+			this.listRadio.Name = "listRadio";
+			this.listRadio.Size = new System.Drawing.Size(142,121);
+			this.listRadio.TabIndex = 88;
+			this.listRadio.Click += new System.EventHandler(this.listRadio_Click);
 			// 
-			// label3
+			// groupRadio
 			// 
-			this.label3.Location = new System.Drawing.Point(5,65);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(89,16);
-			this.label3.TabIndex = 103;
-			this.label3.Text = "Group Name";
-			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label4
-			// 
-			this.label4.Location = new System.Drawing.Point(21,91);
-			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(73,16);
-			this.label4.TabIndex = 105;
-			this.label4.Text = "Value";
-			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textRadioValue
-			// 
-			this.textRadioValue.Location = new System.Drawing.Point(94,90);
-			this.textRadioValue.Name = "textRadioValue";
-			this.textRadioValue.Size = new System.Drawing.Size(197,20);
-			this.textRadioValue.TabIndex = 104;
-			// 
-			// groupRadioMisc
-			// 
-			this.groupRadioMisc.Controls.Add(this.checkRequired);
-			this.groupRadioMisc.Controls.Add(this.label9);
-			this.groupRadioMisc.Controls.Add(this.textRadioGroupName);
-			this.groupRadioMisc.Controls.Add(this.label4);
-			this.groupRadioMisc.Controls.Add(this.label3);
-			this.groupRadioMisc.Controls.Add(this.textRadioValue);
-			this.groupRadioMisc.Location = new System.Drawing.Point(182,142);
-			this.groupRadioMisc.Name = "groupRadioMisc";
-			this.groupRadioMisc.Size = new System.Drawing.Size(297,138);
-			this.groupRadioMisc.TabIndex = 106;
-			this.groupRadioMisc.TabStop = false;
-			this.groupRadioMisc.Text = "Radio Button";
-			this.groupRadioMisc.Visible = false;
-			// 
-			// label9
-			// 
-			this.label9.Location = new System.Drawing.Point(11,15);
-			this.label9.Name = "label9";
-			this.label9.Size = new System.Drawing.Size(280,42);
-			this.label9.TabIndex = 106;
-			this.label9.Text = "Use the same Field Name (misc) and the same Group Name for each radio button in a" +
-    " group.  Set a different Radio Button Value for each.";
+			this.groupRadio.Controls.Add(this.listRadio);
+			this.groupRadio.Controls.Add(this.label1);
+			this.groupRadio.Location = new System.Drawing.Point(182,272);
+			this.groupRadio.Name = "groupRadio";
+			this.groupRadio.Size = new System.Drawing.Size(297,183);
+			this.groupRadio.TabIndex = 101;
+			this.groupRadio.TabStop = false;
+			this.groupRadio.Text = "Radio Button Value";
+			this.groupRadio.Visible = false;
 			// 
 			// butDelete
 			// 
@@ -202,7 +192,7 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(16,485);
+			this.butDelete.Location = new System.Drawing.Point(16,472);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(77,24);
 			this.butDelete.TabIndex = 100;
@@ -253,7 +243,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(323,485);
+			this.butOK.Location = new System.Drawing.Point(323,472);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 3;
@@ -268,28 +258,18 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(404,485);
+			this.butCancel.Location = new System.Drawing.Point(404,472);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 2;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// checkRequired
-			// 
-			this.checkRequired.AutoSize = true;
-			this.checkRequired.Location = new System.Drawing.Point(39,116);
-			this.checkRequired.Name = "checkRequired";
-			this.checkRequired.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-			this.checkRequired.Size = new System.Drawing.Size(69,17);
-			this.checkRequired.TabIndex = 107;
-			this.checkRequired.Text = "Required";
-			this.checkRequired.UseVisualStyleBackColor = true;
-			// 
 			// FormSheetFieldCheckBox
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(495,535);
+			this.ClientSize = new System.Drawing.Size(495,510);
+			this.Controls.Add(this.checkRequired);
 			this.Controls.Add(this.groupRadioMisc);
 			this.Controls.Add(this.groupRadio);
 			this.Controls.Add(this.butDelete);
@@ -309,9 +289,9 @@ namespace OpenDental{
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Edit CheckBox";
 			this.Load += new System.EventHandler(this.FormSheetFieldCheckBox_Load);
-			this.groupRadio.ResumeLayout(false);
 			this.groupRadioMisc.ResumeLayout(false);
 			this.groupRadioMisc.PerformLayout();
+			this.groupRadio.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -329,18 +309,16 @@ namespace OpenDental{
 		private System.Windows.Forms.Label label6;
 		private ValidNum textWidth;
 		private System.Windows.Forms.Label label7;
-		private ValidNum textHeight;
 		private System.Windows.Forms.Label label8;
-		private OpenDental.UI.Button butDelete;
-		private System.Windows.Forms.GroupBox groupRadio;
-		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.ListBox listRadio;
-		private System.Windows.Forms.TextBox textRadioGroupName;
+		private ValidNum textHeight;
+		private UI.Button butDelete;
 		private System.Windows.Forms.Label label3;
-		private System.Windows.Forms.Label label4;
-		private System.Windows.Forms.TextBox textRadioValue;
-		private System.Windows.Forms.GroupBox groupRadioMisc;
+		private System.Windows.Forms.TextBox textRadioGroupName;
 		private System.Windows.Forms.Label label9;
 		private System.Windows.Forms.CheckBox checkRequired;
+		private System.Windows.Forms.GroupBox groupRadioMisc;
+		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.ListBox listRadio;
+		private System.Windows.Forms.GroupBox groupRadio;
 	}
 }

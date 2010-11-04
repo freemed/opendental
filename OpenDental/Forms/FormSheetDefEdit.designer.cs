@@ -77,9 +77,9 @@ namespace OpenDental{
 			this.panelMain.TabIndex = 0;
 			this.panelMain.TabStop = true;
 			this.panelMain.Paint += new System.Windows.Forms.PaintEventHandler(this.panelMain_Paint);
-			this.panelMain.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panelMain_MouseMove);
 			this.panelMain.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.panelMain_MouseDoubleClick);
 			this.panelMain.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelMain_MouseDown);
+			this.panelMain.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panelMain_MouseMove);
 			this.panelMain.MouseUp += new System.Windows.Forms.MouseEventHandler(this.panelMain_MouseUp);
 			// 
 			// labelInternal
@@ -102,8 +102,8 @@ namespace OpenDental{
 			this.listFields.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
 			this.listFields.Size = new System.Drawing.Size(142,316);
 			this.listFields.TabIndex = 83;
-			this.listFields.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listFields_MouseDoubleClick);
 			this.listFields.Click += new System.EventHandler(this.listFields_Click);
+			this.listFields.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listFields_MouseDoubleClick);
 			// 
 			// label2
 			// 
@@ -141,7 +141,6 @@ namespace OpenDental{
 			this.butAddPatImage.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butAddPatImage.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butAddPatImage.CornerRadius = 4F;
-			this.butAddPatImage.Enabled = false;
 			this.butAddPatImage.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butAddPatImage.Location = new System.Drawing.Point(3,95);
 			this.butAddPatImage.Name = "butAddPatImage";
@@ -149,6 +148,7 @@ namespace OpenDental{
 			this.butAddPatImage.TabIndex = 93;
 			this.butAddPatImage.TabStop = false;
 			this.butAddPatImage.Text = "Pat Image";
+			this.butAddPatImage.Visible = false;
 			this.butAddPatImage.Click += new System.EventHandler(this.butAddPatImage_Click);
 			// 
 			// butAddSigBox
@@ -365,8 +365,8 @@ namespace OpenDental{
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Edit Sheet Def";
 			this.Load += new System.EventHandler(this.FormSheetDefEdit_Load);
-			this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.FormSheetDefEdit_KeyUp);
 			this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FormSheetDefEdit_KeyDown);
+			this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.FormSheetDefEdit_KeyUp);
 			this.panel1.ResumeLayout(false);
 			this.groupAddNew.ResumeLayout(false);
 			this.ResumeLayout(false);
