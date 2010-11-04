@@ -301,7 +301,7 @@ namespace OpenDental{
 			this.textOTimeHours.Location = new System.Drawing.Point(176,78);
 			this.textOTimeHours.Name = "textOTimeHours";
 			this.textOTimeHours.Size = new System.Drawing.Size(68,20);
-			this.textOTimeHours.TabIndex = 25;
+			this.textOTimeHours.TabIndex = 7;
 			this.textOTimeHours.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			this.textOTimeHours.TextChanged += new System.EventHandler(this.textOvertime_TextChanged);
 			// 
@@ -310,7 +310,7 @@ namespace OpenDental{
 			this.label7.Location = new System.Drawing.Point(8,78);
 			this.label7.Name = "label7";
 			this.label7.Size = new System.Drawing.Size(92,18);
-			this.label7.TabIndex = 24;
+			this.label7.TabIndex = 10;
 			this.label7.Text = "- Overtime";
 			this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
@@ -320,7 +320,7 @@ namespace OpenDental{
 			this.textTotalTime.Name = "textTotalTime";
 			this.textTotalTime.ReadOnly = true;
 			this.textTotalTime.Size = new System.Drawing.Size(68,20);
-			this.textTotalTime.TabIndex = 27;
+			this.textTotalTime.TabIndex = 1;
 			this.textTotalTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// label8
@@ -328,7 +328,7 @@ namespace OpenDental{
 			this.label8.Location = new System.Drawing.Point(8,34);
 			this.label8.Name = "label8";
 			this.label8.Size = new System.Drawing.Size(92,18);
-			this.label8.TabIndex = 26;
+			this.label8.TabIndex = 8;
 			this.label8.Text = "Total Time";
 			this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
@@ -338,7 +338,7 @@ namespace OpenDental{
 			this.textRegTime.Name = "textRegTime";
 			this.textRegTime.ReadOnly = true;
 			this.textRegTime.Size = new System.Drawing.Size(68,20);
-			this.textRegTime.TabIndex = 29;
+			this.textRegTime.TabIndex = 4;
 			this.textRegTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// label9
@@ -346,7 +346,7 @@ namespace OpenDental{
 			this.label9.Location = new System.Drawing.Point(8,100);
 			this.label9.Name = "label9";
 			this.label9.Size = new System.Drawing.Size(92,18);
-			this.label9.TabIndex = 28;
+			this.label9.TabIndex = 11;
 			this.label9.Text = "Regular Time";
 			this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
@@ -377,7 +377,7 @@ namespace OpenDental{
 			this.textOTimeAuto.Name = "textOTimeAuto";
 			this.textOTimeAuto.ReadOnly = true;
 			this.textOTimeAuto.Size = new System.Drawing.Size(68,20);
-			this.textOTimeAuto.TabIndex = 35;
+			this.textOTimeAuto.TabIndex = 3;
 			this.textOTimeAuto.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// textAdjust
@@ -385,7 +385,7 @@ namespace OpenDental{
 			this.textAdjust.Location = new System.Drawing.Point(176,56);
 			this.textAdjust.Name = "textAdjust";
 			this.textAdjust.Size = new System.Drawing.Size(68,20);
-			this.textAdjust.TabIndex = 34;
+			this.textAdjust.TabIndex = 6;
 			this.textAdjust.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			this.textAdjust.TextChanged += new System.EventHandler(this.textAdjust_TextChanged);
 			// 
@@ -394,7 +394,7 @@ namespace OpenDental{
 			this.label12.Location = new System.Drawing.Point(176,13);
 			this.label12.Name = "label12";
 			this.label12.Size = new System.Drawing.Size(68,18);
-			this.label12.TabIndex = 33;
+			this.label12.TabIndex = 5;
 			this.label12.Text = "Override";
 			this.label12.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
 			// 
@@ -403,7 +403,7 @@ namespace OpenDental{
 			this.label11.Location = new System.Drawing.Point(100,13);
 			this.label11.Name = "label11";
 			this.label11.Size = new System.Drawing.Size(68,18);
-			this.label11.TabIndex = 32;
+			this.label11.TabIndex = 0;
 			this.label11.Text = "Calculated";
 			this.label11.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
 			// 
@@ -412,7 +412,7 @@ namespace OpenDental{
 			this.label10.Location = new System.Drawing.Point(8,56);
 			this.label10.Name = "label10";
 			this.label10.Size = new System.Drawing.Size(92,18);
-			this.label10.TabIndex = 30;
+			this.label10.TabIndex = 9;
 			this.label10.Text = "+ Adj";
 			this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
@@ -422,7 +422,7 @@ namespace OpenDental{
 			this.textAdjustAuto.Name = "textAdjustAuto";
 			this.textAdjustAuto.ReadOnly = true;
 			this.textAdjustAuto.Size = new System.Drawing.Size(68,20);
-			this.textAdjustAuto.TabIndex = 31;
+			this.textAdjustAuto.TabIndex = 2;
 			this.textAdjustAuto.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// butDelete
@@ -762,9 +762,17 @@ namespace OpenDental{
 						return;
 					}
 				}
-				if(textRegTime.Text==""){//must be invalid calc.
-					MsgBox.Show(this,"Overtime and adjustments cannot excede the total time.");
-					return;
+				if(textRegTime.Text=="") {//Must be invalid calc.
+					if(textTimeEntered2.Text=="") {//They haven't clocked out yet.	Invalid calc is expected.
+						if(textAdjust.Text.Trim()!=""||textOTimeHours.Text.Trim()!="") {//They're entering in overtime or adjustments.
+							MsgBox.Show(this,"Cannot enter overtime or adjustments while clocked in.");//To this timespan is implied.
+							return;
+						}
+					}
+					else {//They have clocked out.
+						MsgBox.Show(this,"Overtime and adjustments cannot excede the total time.");
+						return;
+					}
 				}
 			}
 			//timeEntered2 is largely taken care of, except for this one situation
