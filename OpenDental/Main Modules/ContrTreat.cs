@@ -193,11 +193,11 @@ namespace OpenDental{
 			this.textFamSecDed = new System.Windows.Forms.TextBox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.groupBoxFamilyIns = new System.Windows.Forms.GroupBox();
+			this.textFamPriMax = new System.Windows.Forms.TextBox();
 			this.label3 = new System.Windows.Forms.Label();
 			this.label4 = new System.Windows.Forms.Label();
 			this.textFamSecMax = new System.Windows.Forms.TextBox();
 			this.label5 = new System.Windows.Forms.Label();
-			this.textFamPriMax = new System.Windows.Forms.TextBox();
 			this.groupBoxIndIns = new System.Windows.Forms.GroupBox();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
@@ -585,6 +585,16 @@ namespace OpenDental{
 			this.groupBoxFamilyIns.TabStop = false;
 			this.groupBoxFamilyIns.Text = "Family Insurance";
 			// 
+			// textFamPriMax
+			// 
+			this.textFamPriMax.BackColor = System.Drawing.Color.White;
+			this.textFamPriMax.Location = new System.Drawing.Point(72,35);
+			this.textFamPriMax.Name = "textFamPriMax";
+			this.textFamPriMax.ReadOnly = true;
+			this.textFamPriMax.Size = new System.Drawing.Size(60,20);
+			this.textFamPriMax.TabIndex = 69;
+			this.textFamPriMax.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			// 
 			// label3
 			// 
 			this.label3.Location = new System.Drawing.Point(74,16);
@@ -622,16 +632,6 @@ namespace OpenDental{
 			this.label5.Text = "Secondary";
 			this.label5.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			// 
-			// textFamPriMax
-			// 
-			this.textFamPriMax.BackColor = System.Drawing.Color.White;
-			this.textFamPriMax.Location = new System.Drawing.Point(72,35);
-			this.textFamPriMax.Name = "textFamPriMax";
-			this.textFamPriMax.ReadOnly = true;
-			this.textFamPriMax.Size = new System.Drawing.Size(60,20);
-			this.textFamPriMax.TabIndex = 69;
-			this.textFamPriMax.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			// 
 			// groupBoxIndIns
 			// 
 			this.groupBoxIndIns.Controls.Add(this.textPriDed);
@@ -654,7 +654,7 @@ namespace OpenDental{
 			this.groupBoxIndIns.Controls.Add(this.label16);
 			this.groupBoxIndIns.Controls.Add(this.textSecDed);
 			this.groupBoxIndIns.Controls.Add(this.textSecUsed);
-			this.groupBoxIndIns.Location = new System.Drawing.Point(746,491);
+			this.groupBoxIndIns.Location = new System.Drawing.Point(746,485);
 			this.groupBoxIndIns.Name = "groupBoxIndIns";
 			this.groupBoxIndIns.Size = new System.Drawing.Size(193,160);
 			this.groupBoxIndIns.TabIndex = 67;
@@ -674,8 +674,8 @@ namespace OpenDental{
 			this.gridMain.TabIndex = 59;
 			this.gridMain.Title = "Procedures";
 			this.gridMain.TranslationName = "TableTP";
-			this.gridMain.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellClick);
 			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			this.gridMain.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellClick);
 			// 
 			// ToolBarMain
 			// 
@@ -697,8 +697,8 @@ namespace OpenDental{
 			this.gridPreAuth.TabIndex = 62;
 			this.gridPreAuth.Title = "Pre Authorizations";
 			this.gridPreAuth.TranslationName = "TablePreAuth";
-			this.gridPreAuth.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPreAuth_CellClick);
 			this.gridPreAuth.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPreAuth_CellDoubleClick);
+			this.gridPreAuth.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPreAuth_CellClick);
 			// 
 			// gridPlans
 			// 
@@ -710,8 +710,8 @@ namespace OpenDental{
 			this.gridPlans.TabIndex = 60;
 			this.gridPlans.Title = "Treatment Plans";
 			this.gridPlans.TranslationName = "TableTPList";
-			this.gridPlans.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPlans_CellClick);
 			this.gridPlans.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPlans_CellDoubleClick);
+			this.gridPlans.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPlans_CellClick);
 			// 
 			// ContrTreat
 			// 
