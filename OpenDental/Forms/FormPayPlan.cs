@@ -1025,6 +1025,7 @@ namespace OpenDental{
 					return;
 				}
 				PayPlanCur.PlanNum=FormI.SelectedPlan.PlanNum;
+				PayPlanCur.InsSubNum=FormI.SelectedSub.InsSubNum;
 				PayPlanCur.Guarantor=PayPlanCur.PatNum;
 				textInsPlan.Text=InsPlans.GetDescript(PayPlanCur.PlanNum,FamCur,InsPlanList,PayPlanCur.InsSubNum,SubList);
 				labelGuarantor.Visible=false;
@@ -1039,6 +1040,7 @@ namespace OpenDental{
 				PayPlanCur.Guarantor=PayPlanCur.PatNum;
 				textGuarantor.Text=Patients.GetLim(PayPlanCur.Guarantor).GetNameLF();
 				PayPlanCur.PlanNum=0;
+				PayPlanCur.InsSubNum=0;
 				labelGuarantor.Visible=true;
 				textGuarantor.Visible=true;
 				butGoToGuar.Visible=true;

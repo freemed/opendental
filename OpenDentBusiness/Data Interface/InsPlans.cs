@@ -902,7 +902,7 @@ namespace OpenDentBusiness {
 				List<InsPlan> plans=InsPlans.RefreshForSubList(subs);
 				List<PatPlan> patPlans=PatPlans.Refresh(patNum);
 				List<Benefit> benefitList=Benefits.Refresh(patPlans);
-				Procedures.ComputeEstimatesForAll(patNum,claimProcs,procs,plans,patPlans,benefitList,pat.Age);
+				Procedures.ComputeEstimatesForAll(patNum,claimProcs,procs,plans,patPlans,benefitList,pat.Age,subs);
 				Patients.SetHasIns(patNum);
 			}
 		}

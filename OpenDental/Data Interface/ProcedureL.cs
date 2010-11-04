@@ -8,7 +8,7 @@ namespace OpenDental {
 	public class ProcedureL {
 		public static void SetCompleteInAppt(Appointment apt,List<InsPlan> PlanList,List<PatPlan> patPlans,long siteNum,int patientAge) {
 			List<Procedure> procsInAppt=Procedures.GetProcsForSingle(apt.AptNum,false);
-			Procedures.SetCompleteInAppt(apt,PlanList,patPlans,siteNum,patientAge,procsInAppt);
+			Procedures.SetCompleteInAppt(apt,PlanList,patPlans,siteNum,patientAge,procsInAppt,null);
 			if(Programs.UsingOrion) {
 				OrionProcs.SetCompleteInAppt(procsInAppt);
 			}

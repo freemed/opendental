@@ -59,7 +59,7 @@ namespace OpenDental{
 						}
 					}
 				}
-				Procedures.ComputeEstimates(ProcCur,claimCur.PatNum,ref ClaimProcsAll,false,planList,patPlans,benefitList,histList,loopList,false,patientAge);
+				Procedures.ComputeEstimates(ProcCur,claimCur.PatNum,ref ClaimProcsAll,false,planList,patPlans,benefitList,histList,loopList,false,patientAge,null);
 				//then, add this information to loopList so that the next procedure is aware of it.
 				loopList.AddRange(ClaimProcs.GetHistForProc(ClaimProcsAll,ProcCur.ProcNum,ProcCur.CodeNum));
 			}

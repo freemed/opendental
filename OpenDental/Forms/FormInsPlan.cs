@@ -1987,6 +1987,7 @@ namespace OpenDental{
 			ClaimProcCur.ProcDate=DateTime.Today;
 			ClaimProcCur.Status=ClaimProcStatus.Adjustment;
 			ClaimProcCur.PlanNum=PlanCur.PlanNum;
+			ClaimProcCur.InsSubNum=SubCur.InsSubNum;
 			FormInsAdj FormIA=new FormInsAdj(ClaimProcCur);
 			FormIA.IsNew=true;
 			FormIA.ShowDialog();

@@ -96,7 +96,7 @@ namespace OpenDental.Eclaims {
 				throw new ApplicationException(error);
 			}
 			Etrans etrans=Etranss.CreateCanadianOutput(patNum,carrier.CarrierNum,carrier.CanadianNetworkNum,
-				clearhouse.ClearinghouseNum,EtransType.Eligibility_CA,plan.PlanNum);
+				clearhouse.ClearinghouseNum,EtransType.Eligibility_CA,plan.PlanNum,insSub.InsSubNum);
 			StringBuilder strb=new StringBuilder();
 			//create message----------------------------------------------------------------------------------------------
 			//A01 transaction prefix 12 AN
@@ -254,6 +254,7 @@ namespace OpenDental.Eclaims {
 			Etrans etransAck=new Etrans();
 			etransAck.PatNum=etrans.PatNum;
 			etransAck.PlanNum=etrans.PlanNum;
+			etransAck.InsSubNum=etrans.InsSubNum;
 			etransAck.CarrierNum=etrans.CarrierNum;
 			etransAck.DateTimeTrans=DateTime.Now;
 			CCDFieldInputter fieldInputter=null;

@@ -31,6 +31,7 @@ namespace OpenDental.Eclaims {
 			etrans.ClearingHouseNum=clearhouse.ClearinghouseNum;
 			etrans.Etype=EtransType.BenefitInquiry270;
 			etrans.PlanNum=plan.PlanNum;
+			etrans.InsSubNum=insSub.InsSubNum;
 			etrans.EtransMessageTextNum=etransMessageText.EtransMessageTextNum;
 			Etranss.Insert(etrans);
 			//send the 270----------------------------------------------------------------------
@@ -91,6 +92,7 @@ namespace OpenDental.Eclaims {
 				}
 			}
 			etrans271.PlanNum=plan.PlanNum;
+			etrans271.InsSubNum=insSub.InsSubNum;
 			etrans271.EtransMessageTextNum=etransMessageText.EtransMessageTextNum;
 			Etranss.Insert(etrans271);
 			etrans.AckEtransNum=etrans271.EtransNum;

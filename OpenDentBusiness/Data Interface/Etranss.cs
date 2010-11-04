@@ -184,7 +184,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Not for claim types, just other types, including Eligibility. This function gets run first.  Then, the messagetext is created and an attempt is made to send the message.  Finally, the messagetext is added to the etrans.  This is necessary because the transaction numbers must be incremented and assigned to each message before creating the message and attempting to send.  If it fails, we will need to roll back.  Provide EITHER a carrierNum OR a canadianNetworkNum.  Many transactions can be sent to a carrier or to a network.</summary>
-		public static Etrans CreateCanadianOutput(long patNum,long carrierNum,long canadianNetworkNum,long clearinghouseNum,EtransType etype,long planNum) {
+		public static Etrans CreateCanadianOutput(long patNum,long carrierNum,long canadianNetworkNum,long clearinghouseNum,EtransType etype,long planNum,long insSubNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Etrans>(MethodBase.GetCurrentMethod(),patNum,carrierNum,canadianNetworkNum,clearinghouseNum,etype,planNum);
 			}
@@ -207,6 +207,7 @@ namespace OpenDentBusiness{
 			//CanadianNetworkNum?
 			etrans.CarrierNum=carrierNum;
 			etrans.PlanNum=planNum;
+			etrans.InsSubNum=insSubNum;
 			//Get next OfficeSequenceNumber-----------------------------------------------------------------------------------------
 			etrans.OfficeSequenceNumber=0;
 			string command="SELECT MAX(OfficeSequenceNumber) FROM etrans";

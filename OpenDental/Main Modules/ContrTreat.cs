@@ -1068,7 +1068,7 @@ namespace OpenDental{
 				LoopList=new List<ClaimProcHist>();
 				for(int i=0;i<ProcListTP.Length;i++){
 					Procedures.ComputeEstimates(ProcListTP[i],PatCur.PatNum,ref ClaimProcList,false,InsPlanList,PatPlanList,BenefitList,
-						HistList,LoopList,false,PatCur.Age);
+						HistList,LoopList,false,PatCur.Age,null);
 					//then, add this information to loopList so that the next procedure is aware of it.
 					LoopList.AddRange(ClaimProcs.GetHistForProc(ClaimProcList,ProcListTP[i].ProcNum,ProcListTP[i].CodeNum));
 				}
@@ -2418,7 +2418,7 @@ namespace OpenDental{
 				else {
 					procCur.ProcFee=insfee;
 				}
-				Procedures.ComputeEstimates(procCur,PatCur.PatNum,claimProcList,false,InsPlanList,PatPlanList,BenefitList,PatCur.Age);
+				Procedures.ComputeEstimates(procCur,PatCur.PatNum,claimProcList,false,InsPlanList,PatPlanList,BenefitList,PatCur.Age,null);
 				Procedures.UpdateFee(procCur.ProcNum,procCur.ProcFee);
 				//Procedures.Update(procCur,procOld);//no recall synch required 
       }
@@ -2638,6 +2638,7 @@ namespace OpenDental{
 				ClaimProcCur.Status=ClaimProcStatus.Preauth;
 				ClaimProcCur.FeeBilled=ProcCur.ProcFee;
 				ClaimProcCur.PlanNum=FormIPS.SelectedPlan.PlanNum;
+				ClaimProcCur.InsSubNum=FormIPS.SelectedSub.InsSubNum;
 				cpExisting=ClaimProcs.GetEstimate(ClaimProcList,ProcCur.ProcNum,FormIPS.SelectedPlan.PlanNum);
 				if(cpExisting!=null){
 					ClaimProcCur.InsPayEst=cpExisting.InsPayEst;

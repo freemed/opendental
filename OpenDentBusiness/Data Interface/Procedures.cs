@@ -933,12 +933,17 @@ namespace OpenDentBusiness {
 		}
 
 		public static void ComputeEstimates(Procedure proc,long patNum,List<ClaimProc> claimProcs,bool isInitialEntry,List<InsPlan> PlanList,List<PatPlan> patPlans,List<Benefit> benefitList,int patientAge) {
+			//This is a stub that needs to be fixed before release of 7.5.
+			ComputeEstimates(proc,patNum,ref claimProcs,isInitialEntry,PlanList,patPlans,benefitList,null,null,true,patientAge,null);
+		}
+
+		public static void ComputeEstimates(Procedure proc,long patNum,List<ClaimProc> claimProcs,bool isInitialEntry,List<InsPlan> PlanList,List<PatPlan> patPlans,List<Benefit> benefitList,int patientAge,List<InsSub> subList) {
 			//This is a stub that needs revision.
-			ComputeEstimates(proc,patNum,ref claimProcs,isInitialEntry,PlanList,patPlans,benefitList,null,null,true,patientAge);
+			ComputeEstimates(proc,patNum,ref claimProcs,isInitialEntry,PlanList,patPlans,benefitList,null,null,true,patientAge,subList);
 		}
 
 		///<summary>Used whenever a procedure changes or a plan changes.  All estimates for a given procedure must be updated. This frequently includes adding claimprocs, but can also just edit the appropriate existing claimprocs. Skips status=Adjustment,CapClaim,Preauth,Supplemental.  Also fixes date,status,and provnum if appropriate.  The claimProc list only needs to include claimprocs for this proc, although it can include more.  Only set isInitialEntry true from Chart module; it is for cap procs.  loopList only contains information about procedures that come before this one in a list such as TP or claim.</summary>
-		public static void ComputeEstimates(Procedure proc,long patNum,ref List<ClaimProc> claimProcs,bool isInitialEntry,List<InsPlan> PlanList,List<PatPlan> patPlans,List<Benefit> benefitList,List<ClaimProcHist> histList,List<ClaimProcHist> loopList,bool saveToDb,int patientAge) {
+		public static void ComputeEstimates(Procedure proc,long patNum,ref List<ClaimProc> claimProcs,bool isInitialEntry,List<InsPlan> PlanList,List<PatPlan> patPlans,List<Benefit> benefitList,List<ClaimProcHist> histList,List<ClaimProcHist> loopList,bool saveToDb,int patientAge,List<InsSub> subList) {
 			//No need to check RemotingRole; no call to db.
 			bool doCreate=true;
 			if(proc.ProcDate<DateTime.Today && proc.ProcStatus==ProcStat.C) {
@@ -985,6 +990,7 @@ namespace OpenDentBusiness {
 				}
 			}
 			InsPlan PlanCur;
+			InsSub SubCur;
 			bool estExists;
 			bool cpAdded=false;
 			//loop through all patPlans (current coverage), and add any missing estimates
@@ -1023,7 +1029,8 @@ namespace OpenDentBusiness {
 				cp.PatNum=patNum;
 				cp.ProvNum=proc.ProvNum;
 				PlanCur=InsPlans.GetPlan(patPlans[p].PlanNum,PlanList);
-				if(PlanCur==null) {
+				SubCur=InsSubs.GetSub(patPlans[p].InsSubNum,subList);
+				if(PlanCur==null || SubCur==null) {//??
 					continue;//??
 				}
 				if(PlanCur.PlanType=="c") {
@@ -1038,6 +1045,7 @@ namespace OpenDentBusiness {
 					cp.Status=ClaimProcStatus.Estimate;
 				}
 				cp.PlanNum=PlanCur.PlanNum;
+				cp.InsSubNum=SubCur.InsSubNum;
 				cp.DateCP=proc.ProcDate;
 				cp.AllowedOverride=-1;
 				cp.PercentOverride=-1;
@@ -1237,17 +1245,17 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>After changing important coverage plan info, this is called to recompute estimates for all procedures for this patient.</summary>
-		public static void ComputeEstimatesForAll(long patNum,List<ClaimProc> claimProcs,List<Procedure> procs,List<InsPlan> PlanList,List<PatPlan> patPlans,List<Benefit> benefitList,int patientAge) {
+		public static void ComputeEstimatesForAll(long patNum,List<ClaimProc> claimProcs,List<Procedure> procs,List<InsPlan> PlanList,List<PatPlan> patPlans,List<Benefit> benefitList,int patientAge,List<InsSub> subList) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<procs.Count;i++) {
-				ComputeEstimates(procs[i],patNum,claimProcs,false,PlanList,patPlans,benefitList,patientAge);
+				ComputeEstimates(procs[i],patNum,claimProcs,false,PlanList,patPlans,benefitList,patientAge,subList);
 			}
 		}
 
 		///<summary>Loops through each proc. Does not add notes to a procedure that already has notes. Used three times, security checked in all three places before calling this.  Also sets provider for each proc and claimproc.</summary>
-		public static void SetCompleteInAppt(Appointment apt,List<InsPlan> PlanList,List<PatPlan> patPlans,long siteNum,int patientAge,List<Procedure> procsInAppt) { 
+		public static void SetCompleteInAppt(Appointment apt,List<InsPlan> PlanList,List<PatPlan> patPlans,long siteNum,int patientAge,List<Procedure> procsInAppt,List<InsSub> subList) { 
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),apt,PlanList,patPlans,siteNum,patientAge,procsInAppt);
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),apt,PlanList,patPlans,siteNum,patientAge,procsInAppt,subList);
 				return;
 			}
 			List<Procedure> ProcList=Procedures.Refresh(apt.PatNum);
@@ -1313,7 +1321,7 @@ namespace OpenDentBusiness {
 					ProcList[i].Note+=ProcCodeNotes.GetNote(ProcList[i].ProvNum,ProcList[i].CodeNum);
 				}
 				Procedures.Update(ProcList[i],oldProc);
-				Procedures.ComputeEstimates(ProcList[i],apt.PatNum,ClaimProcList,false,PlanList,patPlans,benefitList,patientAge);
+				Procedures.ComputeEstimates(ProcList[i],apt.PatNum,ClaimProcList,false,PlanList,patPlans,benefitList,patientAge,subList);
 				ClaimProcs.SetProvForProc(ProcList[i],ClaimProcList);
 			}
 			//if(doResetRecallStatus){
