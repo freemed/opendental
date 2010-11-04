@@ -3869,6 +3869,7 @@ namespace OpenDental{
 			//remarks
 			//ClaimProcs.Cur.ClaimPaymentNum
 			ClaimProcCur.PlanNum=ClaimCur.PlanNum;
+			ClaimProcCur.InsSubNum=ClaimCur.InsSubNum;
 			ClaimProcCur.DateCP=DateTime.Today;
 			ClaimProcCur.ProcDate=ClaimCur.DateService;
 			ClaimProcCur.DateEntry=DateTime.Now;//will get set anyway

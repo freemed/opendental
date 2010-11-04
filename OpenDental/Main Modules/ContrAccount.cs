@@ -2711,25 +2711,31 @@ namespace OpenDental {
 			switch(claimType){
 				case "P":
 					ClaimCur.PlanNum=PatPlans.GetPlanNum(PatPlanList,1);
+					ClaimCur.InsSubNum=PatPlans.GetInsSubNum(PatPlanList,1);
 					ClaimCur.PatRelat=PatPlans.GetRelat(PatPlanList,1);
 					ClaimCur.ClaimType="P";
 					ClaimCur.PlanNum2=PatPlans.GetPlanNum(PatPlanList,2);//might be 0 if no sec ins
+					ClaimCur.InsSubNum2=PatPlans.GetInsSubNum(PatPlanList,2);
 					ClaimCur.PatRelat2=PatPlans.GetRelat(PatPlanList,2);
 					break;
 				case "S":
 					ClaimCur.PlanNum=PatPlans.GetPlanNum(PatPlanList,2);
+					ClaimCur.InsSubNum=PatPlans.GetInsSubNum(PatPlanList,2);
 					ClaimCur.PatRelat=PatPlans.GetRelat(PatPlanList,2);
 					ClaimCur.ClaimType="S";
 					ClaimCur.PlanNum2=PatPlans.GetPlanNum(PatPlanList,1);
+					ClaimCur.InsSubNum2=PatPlans.GetInsSubNum(PatPlanList,1);
 					ClaimCur.PatRelat2=PatPlans.GetRelat(PatPlanList,1);
 					break;
 				case "Med":
 					ClaimCur.PlanNum=PlanCur.PlanNum;
+					ClaimCur.InsSubNum=SubCur.InsSubNum;
 					ClaimCur.PatRelat=PatPlans.GetFromList(PatPlanList,PlanCur.PlanNum).Relationship;
 					ClaimCur.ClaimType="Other";
 					break;
 				case "Other":
 					ClaimCur.PlanNum=PlanCur.PlanNum;
+					ClaimCur.InsSubNum=SubCur.InsSubNum;
 					ClaimCur.PatRelat=relatOther;
 					ClaimCur.ClaimType="Other";
 					//plannum2 is not automatically filled in.

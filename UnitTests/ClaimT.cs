@@ -51,16 +51,20 @@ namespace UnitTests {
 			switch(claimType) {
 				case "P":
 					claim.PlanNum=PatPlans.GetPlanNum(PatPlanList,1);
+					claim.InsSubNum=PatPlans.GetInsSubNum(PatPlanList,1);
 					claim.PatRelat=PatPlans.GetRelat(PatPlanList,1);
 					claim.ClaimType="P";
 					claim.PlanNum2=PatPlans.GetPlanNum(PatPlanList,2);//might be 0 if no sec ins
+					claim.InsSubNum2=PatPlans.GetInsSubNum(PatPlanList,2);
 					claim.PatRelat2=PatPlans.GetRelat(PatPlanList,2);
 					break;
 				case "S":
 					claim.PlanNum=PatPlans.GetPlanNum(PatPlanList,2);
+					claim.InsSubNum=PatPlans.GetInsSubNum(PatPlanList,2);
 					claim.PatRelat=PatPlans.GetRelat(PatPlanList,2);
 					claim.ClaimType="S";
 					claim.PlanNum2=PatPlans.GetPlanNum(PatPlanList,1);
+					claim.InsSubNum2=PatPlans.GetInsSubNum(PatPlanList,1);
 					claim.PatRelat2=PatPlans.GetRelat(PatPlanList,1);
 					break;
 			}

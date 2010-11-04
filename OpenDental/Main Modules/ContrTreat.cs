@@ -2597,6 +2597,7 @@ namespace OpenDental{
 			ClaimCur.ClaimStatus="W";
 			ClaimCur.DateSent=DateTime.Today;
 			ClaimCur.PlanNum=FormIPS.SelectedPlan.PlanNum;
+			ClaimCur.InsSubNum=FormIPS.SelectedSub.InsSubNum;
 			ClaimCur.ProvTreat=0;
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++){
 				if(gridMain.Rows[gridMain.SelectedIndices[i]].Tag==null){
