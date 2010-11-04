@@ -52,7 +52,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butDelete;
 		private Label labelDescription;
 		private ListBox listProcStatusCodes;
-		private Label label1;
+		private Label labelProcStatus;
 		public ChartView ChartViewCur;
 
 		///<summary></summary>
@@ -115,7 +115,7 @@ namespace OpenDental{
 			this.butShowAll = new OpenDental.UI.Button();
 			this.labelDescription = new System.Windows.Forms.Label();
 			this.listProcStatusCodes = new System.Windows.Forms.ListBox();
-			this.label1 = new System.Windows.Forms.Label();
+			this.labelProcStatus = new System.Windows.Forms.Label();
 			this.butDelete = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butRight = new OpenDental.UI.Button();
@@ -452,14 +452,15 @@ namespace OpenDental{
 			this.listProcStatusCodes.Visible = false;
 			this.listProcStatusCodes.MouseUp += new System.Windows.Forms.MouseEventHandler(this.listProcStatusCodes_MouseUp);
 			// 
-			// label1
+			// labelProcStatus
 			// 
-			this.label1.Location = new System.Drawing.Point(388,41);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(158,17);
-			this.label1.TabIndex = 71;
-			this.label1.Text = "Statuses";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			this.labelProcStatus.Location = new System.Drawing.Point(388,41);
+			this.labelProcStatus.Name = "labelProcStatus";
+			this.labelProcStatus.Size = new System.Drawing.Size(158,17);
+			this.labelProcStatus.TabIndex = 71;
+			this.labelProcStatus.Text = "Statuses";
+			this.labelProcStatus.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			this.labelProcStatus.Visible = false;
 			// 
 			// butDelete
 			// 
@@ -604,7 +605,7 @@ namespace OpenDental{
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(683,696);
-			this.Controls.Add(this.label1);
+			this.Controls.Add(this.labelProcStatus);
 			this.Controls.Add(this.listProcStatusCodes);
 			this.Controls.Add(this.labelDescription);
 			this.Controls.Add(this.butDelete);
@@ -648,6 +649,7 @@ namespace OpenDental{
 			}
 			if(Programs.UsingOrion) {
 				listProcStatusCodes.Visible=true;
+				labelProcStatus.Visible=true;
 				string[] statusNames=Enum.GetNames(typeof(OrionStatus));
 				for(int i=1;i<statusNames.Length;i++) {
 					listProcStatusCodes.Items.Add(statusNames[i]);
