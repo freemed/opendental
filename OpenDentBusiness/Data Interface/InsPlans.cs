@@ -87,10 +87,10 @@ namespace OpenDentBusiness {
 			return Crud.InsPlanCrud.SelectOne(command);
 		}
 
-		///<summary>Deprecated.  Instead, use RefreshForSubList.</summary>
-		public static List<InsPlan> RefreshForFam(){//Family Fam) {
-			return null;
-		}
+		//<summary>Deprecated.  Instead, use RefreshForSubList.</summary>
+		//public static List<InsPlan> RefreshForFam(){//Family Fam) {
+		//	return null;
+		//}
 
 		///<summary>Gets List of plans based on the subList.  The list won't be in the same order.</summary>
 		public static List<InsPlan> RefreshForSubList(List<InsSub> subList) {

@@ -4066,7 +4066,7 @@ namespace OpenDental{
 			}
 			else {
 				Appointments.SetAptStatusComplete(apt.AptNum,PatPlans.GetPlanNum(PatPlanList,1),PatPlans.GetPlanNum(PatPlanList,2));
-				ProcedureL.SetCompleteInAppt(apt, PlanList, PatPlanList,pat.SiteNum,pat.Age);//loops through each proc
+				ProcedureL.SetCompleteInAppt(apt, PlanList, PatPlanList,pat.SiteNum,pat.Age,SubList);//loops through each proc
 				SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit, apt.PatNum,
 					pat.GetNameLF() + ", "
 					+ ContrApptSingle3[GetIndex(apt.AptNum)].DataRoww["procs"].ToString() + ", "

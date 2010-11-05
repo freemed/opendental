@@ -5,7 +5,7 @@ using OpenDentBusiness;
 
 namespace UnitTests {
 	public class PatPlanT {
-		public static PatPlan CreatePatPlan(int ordinal,long patNum,long planNum,long subNum){
+		public static PatPlan CreatePatPlan(byte ordinal,long patNum,long planNum,long subNum){
 			PatPlan patPlan=new PatPlan();
 			patPlan.Ordinal=ordinal;
 			patPlan.PatNum=patNum;

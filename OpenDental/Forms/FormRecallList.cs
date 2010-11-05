@@ -942,7 +942,7 @@ namespace OpenDental{
 			List<InsPlan> planList=InsPlans.RefreshForSubList(subList);
 			long recallNum=PIn.Long(table.Rows[gridMain.SelectedIndices[0]]["RecallNum"].ToString());
 			try{
-				apt=AppointmentL.CreateRecallApt(pat,procList,planList,recallNum);
+				apt=AppointmentL.CreateRecallApt(pat,procList,planList,recallNum,subList);
 			}
 			catch(Exception ex){
 				MessageBox.Show(ex.Message);
@@ -983,7 +983,7 @@ namespace OpenDental{
 				subList=InsSubs.RefreshForFam(fam);
 				planList=InsPlans.RefreshForSubList(subList);
 				try{
-					apt=AppointmentL.CreateRecallApt(fam.ListPats[i],procList,planList,-1);
+					apt=AppointmentL.CreateRecallApt(fam.ListPats[i],procList,planList,-1,subList);
 				}
 				catch{//(Exception ex){
 					continue;

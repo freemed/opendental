@@ -1601,7 +1601,7 @@ namespace OpenDental{
 			ProcCur.SiteNum=pat.SiteNum;
 			Procedures.Insert(ProcCur);
 			List <Benefit> benefitList=Benefits.Refresh(patPlanList);
-			Procedures.ComputeEstimates(ProcCur,pat.PatNum,new List<ClaimProc>(),true,PlanList,patPlanList,benefitList,pat.Age);
+			Procedures.ComputeEstimates(ProcCur,pat.PatNum,new List<ClaimProc>(),true,PlanList,patPlanList,benefitList,pat.Age,SubList);
 			FormProcEdit FormPE=new FormProcEdit(ProcCur,pat.Copy(),fam);
 			FormPE.IsNew=true;
 			if(Programs.UsingOrion){
@@ -1919,7 +1919,7 @@ namespace OpenDental{
 					orionProc.Status2=OrionStatus.TP;
 					OrionProcs.Insert(orionProc);
 				}
-				Procedures.ComputeEstimates(ProcCur,pat.PatNum,ClaimProcList,false,PlanList,PatPlanList,benefitList,pat.Age);
+				Procedures.ComputeEstimates(ProcCur,pat.PatNum,ClaimProcList,false,PlanList,PatPlanList,benefitList,pat.Age,SubList);
 				//if(Programs.UsingOrion){//Not needed. Orion ProvNum set here in ApptEdit now, not necessary to open ProcEdit.
 				//  FormProcEdit FormP=new FormProcEdit(ProcCur,pat.Copy(),fam);
 				//  FormP.IsNew=true;
@@ -2251,7 +2251,7 @@ namespace OpenDental{
 						return false;
 					}
 					List <PatPlan> PatPlanList=PatPlans.Refresh(AptCur.PatNum);
-					ProcedureL.SetCompleteInAppt(AptCur,PlanList,PatPlanList,pat.SiteNum,pat.Age);
+					ProcedureL.SetCompleteInAppt(AptCur,PlanList,PatPlanList,pat.SiteNum,pat.Age,SubList);
 					SecurityLogs.MakeLogEntry(Permissions.ProcComplCreate,pat.PatNum,
 						pat.GetNameLF()+" "+AptCur.AptDateTime.ToShortDateString());
 				}

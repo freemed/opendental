@@ -590,7 +590,7 @@ namespace OpenDental{
 			List<InsPlan> planList=InsPlans.RefreshForSubList(subList);
 			Appointment apt=null;
 			try{
-				apt=AppointmentL.CreateRecallApt(PatCur,procList,planList,-1);
+				apt=AppointmentL.CreateRecallApt(PatCur,procList,planList,-1,subList);
 			}
 			catch(Exception ex){
 				MessageBox.Show(ex.Message);
@@ -667,7 +667,7 @@ namespace OpenDental{
 				subList=InsSubs.RefreshForFam(FamCur);
 				planList=InsPlans.RefreshForSubList(subList);
 				try{
-					apt=AppointmentL.CreateRecallApt(FamCur.ListPats[i],procList,planList,-1);
+					apt=AppointmentL.CreateRecallApt(FamCur.ListPats[i],procList,planList,-1,subList);
 				}
 				catch{
 					//MessageBox.Show(ex.Message);

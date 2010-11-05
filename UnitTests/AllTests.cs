@@ -44,18 +44,23 @@ namespace UnitTests {
 			Fees.RefreshCache();
 			//Carrier
 			Carrier carrier=CarrierT.CreateCarrier(suffix);
-			long planNum1=InsPlanT.CreateInsPlanPPO(pat.PatNum,carrier.CarrierNum,feeSchedNum1).PlanNum;
-			long planNum2=InsPlanT.CreateInsPlanPPO(pat.PatNum,carrier.CarrierNum,feeSchedNum2).PlanNum;
+			long planNum1=InsPlanT.CreateInsPlanPPO(carrier.CarrierNum,feeSchedNum1).PlanNum;
+			long planNum2=InsPlanT.CreateInsPlanPPO(carrier.CarrierNum,feeSchedNum2).PlanNum;
+			InsSub sub1=InsSubT.CreateInsSub(pat.PatNum,planNum1);
+			long subNum1=sub1.InsSubNum;
+			InsSub sub2=InsSubT.CreateInsSub(pat.PatNum,planNum2);
+			long subNum2=sub2.InsSubNum;
 			BenefitT.CreateCategoryPercent(planNum1,EbenefitCategory.Crowns,50);
 			BenefitT.CreateCategoryPercent(planNum2,EbenefitCategory.Crowns,50);
-			PatPlanT.CreatePatPlan(1,patNum,planNum1);
-			PatPlanT.CreatePatPlan(2,patNum,planNum2);
+			PatPlanT.CreatePatPlan(1,patNum,planNum1,subNum1);
+			PatPlanT.CreatePatPlan(2,patNum,planNum2,subNum2);
 			Procedure proc=ProcedureT.CreateProcedure(pat,"D2750",ProcStat.TP,"8",Fees.GetAmount0(codeNum,53));//crown on 8
 			long procNum=proc.ProcNum;
 			//Lists
 			List<ClaimProc> claimProcs=ClaimProcs.Refresh(patNum);
 			Family fam=Patients.GetFamily(patNum);
-			List<InsPlan> planList=InsPlans.RefreshForFam(fam);
+			List<InsSub> subList=InsSubs.RefreshForFam(fam);
+			List<InsPlan> planList=InsPlans.RefreshForSubList(subList);
 			List<PatPlan> patPlans=PatPlans.Refresh(patNum);
 			List<Benefit> benefitList=Benefits.Refresh(patPlans);
 			List<ClaimProcHist> histList=new List<ClaimProcHist>();
@@ -64,7 +69,7 @@ namespace UnitTests {
 			string retVal="";
 			ClaimProc claimProc;
 			if(specificTest==0 || specificTest==1){
-				Procedures.ComputeEstimates(proc,patNum,ref claimProcs,false,planList,patPlans,benefitList,histList,loopList,true,pat.Age);
+				Procedures.ComputeEstimates(proc,patNum,ref claimProcs,false,planList,patPlans,benefitList,histList,loopList,true,pat.Age,subList);
 				claimProcs=ClaimProcs.Refresh(patNum);
 				claimProc=ClaimProcs.GetEstimate(claimProcs,procNum,planNum1);
 				//I don't think allowed can be easily tested on the fly, and it's not that important.
@@ -93,7 +98,7 @@ namespace UnitTests {
 				fee.Amount=900;
 				Fees.Update(fee);
 				Fees.RefreshCache();
-				Procedures.ComputeEstimates(proc,patNum,ref claimProcs,false,planList,patPlans,benefitList,histList,loopList,true,pat.Age);
+				Procedures.ComputeEstimates(proc,patNum,ref claimProcs,false,planList,patPlans,benefitList,histList,loopList,true,pat.Age,subList);
 				//Validate
 				claimProcs=ClaimProcs.Refresh(patNum);
 				claimProc=ClaimProcs.GetEstimate(claimProcs,procNum,planNum1);
@@ -123,12 +128,13 @@ namespace UnitTests {
 			string suffix="3";
 			Patient pat=PatientT.CreatePatient(suffix);
 			Carrier carrier=CarrierT.CreateCarrier(suffix);
-			InsPlan plan=InsPlanT.CreateInsPlan(pat.PatNum,carrier.CarrierNum);
+			InsPlan plan=InsPlanT.CreateInsPlan(carrier.CarrierNum);
+			InsSub sub=InsSubT.CreateInsSub(pat.PatNum,plan.PlanNum);//guarantor is subscriber
 			BenefitT.CreateAnnualMax(plan.PlanNum,1000);	
 			BenefitT.CreateCategoryPercent(plan.PlanNum,EbenefitCategory.Crowns,100);
 			BenefitT.CreateCategoryPercent(plan.PlanNum,EbenefitCategory.Diagnostic,100);
 			BenefitT.CreateFrequencyProc(plan.PlanNum,"D0274",BenefitQuantity.Years,1);//BW frequency every 1 year
-			PatPlanT.CreatePatPlan(1,pat.PatNum,plan.PlanNum);
+			PatPlanT.CreatePatPlan(1,pat.PatNum,plan.PlanNum,sub.InsSubNum);
 			//proc1 - Crown
 			Procedure proc1=ProcedureT.CreateProcedure(pat,"D2750",ProcStat.TP,"8",1100);
 			ProcedureT.SetPriority(proc1,0);
@@ -139,7 +145,8 @@ namespace UnitTests {
 			List<ClaimProc> claimProcs=ClaimProcs.Refresh(pat.PatNum);
 			List<ClaimProc> claimProcListOld=new List<ClaimProc>();
 			Family fam=Patients.GetFamily(pat.PatNum);
-			List<InsPlan> planList=InsPlans.RefreshForFam(fam);
+			List<InsSub> subList=InsSubs.RefreshForFam(fam);
+			List<InsPlan> planList=InsPlans.RefreshForSubList(subList);
 			List<PatPlan> patPlans=PatPlans.Refresh(pat.PatNum);
 			List<Benefit> benefitList=Benefits.Refresh(patPlans);
 			List<ClaimProcHist> histList=new List<ClaimProcHist>();
@@ -150,7 +157,7 @@ namespace UnitTests {
 			string retVal="";
 			for(int i=0;i<ProcListTP.Length;i++){
 				Procedures.ComputeEstimates(ProcListTP[i],pat.PatNum,ref claimProcs,false,planList,patPlans,benefitList,
-					histList,loopList,false,pat.Age);
+					histList,loopList,false,pat.Age,subList);
 				//then, add this information to loopList so that the next procedure is aware of it.
 				loopList.AddRange(ClaimProcs.GetHistForProc(claimProcs,ProcListTP[i].ProcNum,ProcListTP[i].CodeNum));
 			}
@@ -177,10 +184,12 @@ namespace UnitTests {
 			Patient pat2=PatientT.CreatePatient(suffix);
 			PatientT.SetGuarantor(pat2,pat.PatNum);
 			Carrier carrier=CarrierT.CreateCarrier(suffix);
-			InsPlan plan=InsPlanT.CreateInsPlan(pat.PatNum,carrier.CarrierNum);//guarantor is subscriber
+			InsPlan plan=InsPlanT.CreateInsPlan(carrier.CarrierNum);
 			long planNum=plan.PlanNum;
-			PatPlanT.CreatePatPlan(1,pat.PatNum,planNum);
-			PatPlanT.CreatePatPlan(1,pat2.PatNum,planNum);//both patients have the same plan
+			InsSub sub=InsSubT.CreateInsSub(pat.PatNum,planNum);//guarantor is subscriber
+			long subNum=sub.InsSubNum;
+			PatPlanT.CreatePatPlan(1,pat.PatNum,planNum,subNum);
+			PatPlanT.CreatePatPlan(1,pat2.PatNum,planNum,subNum);//both patients have the same plan
 			BenefitT.CreateAnnualMax(planNum,1000);	
 			BenefitT.CreateAnnualMaxFamily(planNum,2500);	
 			BenefitT.CreateCategoryPercent(planNum,EbenefitCategory.Crowns,100);
@@ -189,13 +198,14 @@ namespace UnitTests {
 			//Lists
 			List<ClaimProc> claimProcs=ClaimProcs.Refresh(patNum);
 			Family fam=Patients.GetFamily(patNum);
-			List<InsPlan> planList=InsPlans.RefreshForFam(fam);
+			List<InsSub> subList=InsSubs.RefreshForFam(fam);
+			List<InsPlan> planList=InsPlans.RefreshForSubList(subList);
 			List<PatPlan> patPlans=PatPlans.Refresh(patNum);
 			List<Benefit> benefitList=Benefits.Refresh(patPlans);
 			List<ClaimProcHist> histList=new List<ClaimProcHist>();
 			List<ClaimProcHist> loopList=new List<ClaimProcHist>();
 			//Validate
-			Procedures.ComputeEstimates(proc,patNum,ref claimProcs,false,planList,patPlans,benefitList,histList,loopList,true,pat.Age);
+			Procedures.ComputeEstimates(proc,patNum,ref claimProcs,false,planList,patPlans,benefitList,histList,loopList,true,pat.Age,subList);
 			claimProcs=ClaimProcs.Refresh(patNum);
 			ClaimProc claimProc=ClaimProcs.GetEstimate(claimProcs,procNum,planNum);
 			if(claimProc.InsEstTotal!=830) {
@@ -218,26 +228,29 @@ namespace UnitTests {
 			Patient pat2=PatientT.CreatePatient(suffix);
 			PatientT.SetGuarantor(pat2,pat.PatNum);
 			Carrier carrier=CarrierT.CreateCarrier(suffix);
-			InsPlan plan=InsPlanT.CreateInsPlan(pat.PatNum,carrier.CarrierNum);//guarantor is subscriber
+			InsPlan plan=InsPlanT.CreateInsPlan(carrier.CarrierNum);
 			long planNum=plan.PlanNum;
-			PatPlanT.CreatePatPlan(1,pat.PatNum,planNum);
-			PatPlanT.CreatePatPlan(1,pat2.PatNum,planNum);//both patients have the same plan
+			InsSub sub=InsSubT.CreateInsSub(pat.PatNum,planNum);//guarantor is subscriber
+			long subNum=sub.InsSubNum;
+			PatPlanT.CreatePatPlan(1,pat.PatNum,planNum,subNum);
+			PatPlanT.CreatePatPlan(1,pat2.PatNum,planNum,subNum);//both patients have the same plan
 			BenefitT.CreateAnnualMax(planNum,1000);	
 			BenefitT.CreateAnnualMaxFamily(planNum,2500);	
 			BenefitT.CreateCategoryPercent(planNum,EbenefitCategory.Crowns,100);
-			ClaimProcT.AddInsUsedAdjustment(pat2.PatNum,planNum,2000);//Adjustment goes on the second patient
+			ClaimProcT.AddInsUsedAdjustment(pat2.PatNum,planNum,2000,subNum);//Adjustment goes on the second patient
 			Procedure proc=ProcedureT.CreateProcedure(pat2,"D2750",ProcStat.TP,"8",830);//crown and testing is for the first patient
 			long procNum=proc.ProcNum;
 			//Lists
 			List<ClaimProc> claimProcs=ClaimProcs.Refresh(patNum);
 			Family fam=Patients.GetFamily(patNum);
-			List<InsPlan> planList=InsPlans.RefreshForFam(fam);
+			List<InsSub> subList=InsSubs.RefreshForFam(fam);
+			List<InsPlan> planList=InsPlans.RefreshForSubList(subList);
 			List<PatPlan> patPlans=PatPlans.Refresh(patNum);
 			List<Benefit> benefitList=Benefits.Refresh(patPlans);
 			List<ClaimProcHist> histList=ClaimProcs.GetHistList(patNum,benefitList,patPlans,planList,DateTime.Today);
 			List<ClaimProcHist> loopList=new List<ClaimProcHist>();
 			//Validate
-			Procedures.ComputeEstimates(proc,patNum,ref claimProcs,false,planList,patPlans,benefitList,histList,loopList,true,pat.Age);
+			Procedures.ComputeEstimates(proc,patNum,ref claimProcs,false,planList,patPlans,benefitList,histList,loopList,true,pat.Age,subList);
 			claimProcs=ClaimProcs.Refresh(patNum);
 			ClaimProc claimProc=ClaimProcs.GetEstimate(claimProcs,procNum,planNum);
 			if(claimProc.InsEstTotal!=500) {
@@ -258,19 +271,22 @@ namespace UnitTests {
 			Patient pat=PatientT.CreatePatient(suffix);
 			long patNum=pat.PatNum;
 			Carrier carrier=CarrierT.CreateCarrier(suffix);
-			InsPlan plan=InsPlanT.CreateInsPlan(pat.PatNum,carrier.CarrierNum);//guarantor is subscriber
+			InsPlan plan=InsPlanT.CreateInsPlan(carrier.CarrierNum);
 			long planNum=plan.PlanNum;
-			long patPlanNum=PatPlanT.CreatePatPlan(1,pat.PatNum,planNum).PatPlanNum;
+			InsSub sub=InsSubT.CreateInsSub(pat.PatNum,planNum);//guarantor is subscriber
+			long subNum=sub.InsSubNum;
+			long patPlanNum=PatPlanT.CreatePatPlan(1,pat.PatNum,planNum,subNum).PatPlanNum;
 			BenefitT.CreateAnnualMax(planNum,1000);	
 			BenefitT.CreateLimitation(planNum,EbenefitCategory.Diagnostic,1000);	
 			Procedure proc=ProcedureT.CreateProcedure(pat,"D0120",ProcStat.C,"",50);//An exam
 			long procNum=proc.ProcNum;
 			Procedure proc2=ProcedureT.CreateProcedure(pat,"D2750",ProcStat.C,"8",830);//create a crown
-			ClaimProcT.AddInsPaid(patNum,planNum,procNum,50);
-			ClaimProcT.AddInsPaid(patNum,planNum,proc2.ProcNum,400);
+			ClaimProcT.AddInsPaid(patNum,planNum,procNum,50,subNum);
+			ClaimProcT.AddInsPaid(patNum,planNum,proc2.ProcNum,400,subNum);
 			//Lists
 			Family fam=Patients.GetFamily(patNum);
-			List<InsPlan> planList=InsPlans.RefreshForFam(fam);
+			List<InsSub> subList=InsSubs.RefreshForFam(fam);
+			List<InsPlan> planList=InsPlans.RefreshForSubList(subList);
 			List<PatPlan> patPlans=PatPlans.Refresh(patNum);
 			List<Benefit> benefitList=Benefits.Refresh(patPlans);
 			List<ClaimProcHist> histList=ClaimProcs.GetHistList(patNum,benefitList,patPlans,planList,DateTime.Today);
@@ -291,14 +307,16 @@ namespace UnitTests {
 			string suffix="7";
 			Patient pat=PatientT.CreatePatient(suffix);
 			Carrier carrier=CarrierT.CreateCarrier(suffix);
-			InsPlan plan=InsPlanT.CreateInsPlan(pat.PatNum,carrier.CarrierNum);
+			InsPlan plan=InsPlanT.CreateInsPlan(carrier.CarrierNum);
+			InsSub sub=InsSubT.CreateInsSub(pat.PatNum,plan.PlanNum);
+			long subNum=sub.InsSubNum;
 			BenefitT.CreateAnnualMax(plan.PlanNum,1000);	
 			BenefitT.CreateCategoryPercent(plan.PlanNum,EbenefitCategory.RoutinePreventive,100);
 			BenefitT.CreateCategoryPercent(plan.PlanNum,EbenefitCategory.Diagnostic,100);
 			BenefitT.CreateDeductibleGeneral(plan.PlanNum,50);
 			BenefitT.CreateDeductible(plan.PlanNum,EbenefitCategory.RoutinePreventive,25);
 			BenefitT.CreateDeductible(plan.PlanNum,EbenefitCategory.Diagnostic,25);
-			PatPlanT.CreatePatPlan(1,pat.PatNum,plan.PlanNum);
+			PatPlanT.CreatePatPlan(1,pat.PatNum,plan.PlanNum,subNum);
 			//proc1 - PerExam
 			Procedure proc1=ProcedureT.CreateProcedure(pat,"D0120",ProcStat.TP,"",60);
 			ProcedureT.SetPriority(proc1,0);
@@ -309,7 +327,8 @@ namespace UnitTests {
 			List<ClaimProc> claimProcs=ClaimProcs.Refresh(pat.PatNum);
 			List<ClaimProc> claimProcListOld=new List<ClaimProc>();
 			Family fam=Patients.GetFamily(pat.PatNum);
-			List<InsPlan> planList=InsPlans.RefreshForFam(fam);
+			List<InsSub> subList=InsSubs.RefreshForFam(fam);
+			List<InsPlan> planList=InsPlans.RefreshForSubList(subList);
 			List<PatPlan> patPlans=PatPlans.Refresh(pat.PatNum);
 			List<Benefit> benefitList=Benefits.Refresh(patPlans);
 			List<ClaimProcHist> histList=new List<ClaimProcHist>();
@@ -320,7 +339,7 @@ namespace UnitTests {
 			string retVal="";
 			for(int i=0;i<ProcListTP.Length;i++){
 				Procedures.ComputeEstimates(ProcListTP[i],pat.PatNum,ref claimProcs,false,planList,patPlans,benefitList,
-					histList,loopList,false,pat.Age);
+					histList,loopList,false,pat.Age,subList);
 				//then, add this information to loopList so that the next procedure is aware of it.
 				loopList.AddRange(ClaimProcs.GetHistForProc(claimProcs,ProcListTP[i].ProcNum,ProcListTP[i].CodeNum));
 			}
@@ -374,29 +393,34 @@ namespace UnitTests {
 			Fees.RefreshCache();
 			//Carrier
 			Carrier carrier=CarrierT.CreateCarrier(suffix);
-			long planNum1=InsPlanT.CreateInsPlanPPO(pat.PatNum,carrier.CarrierNum,feeSchedNum1).PlanNum;
-			long planNum2=InsPlanT.CreateInsPlanPPO(pat.PatNum,carrier.CarrierNum,feeSchedNum2).PlanNum;
+			long planNum1=InsPlanT.CreateInsPlanPPO(carrier.CarrierNum,feeSchedNum1).PlanNum;
+			long planNum2=InsPlanT.CreateInsPlanPPO(carrier.CarrierNum,feeSchedNum2).PlanNum;
+			InsSub sub1=InsSubT.CreateInsSub(pat.PatNum,planNum1);
+			long subNum1=sub1.InsSubNum;
+			InsSub sub2=InsSubT.CreateInsSub(pat.PatNum,planNum2);
+			long subNum2=sub2.InsSubNum;
 			BenefitT.CreateCategoryPercent(planNum1,EbenefitCategory.Crowns,50);
 			BenefitT.CreateCategoryPercent(planNum2,EbenefitCategory.Crowns,50);
 			BenefitT.CreateAnnualMax(planNum1,1000);
 			BenefitT.CreateAnnualMax(planNum2,1000);
-			PatPlanT.CreatePatPlan(1,patNum,planNum1);
-			PatPlanT.CreatePatPlan(2,patNum,planNum2);
+			PatPlanT.CreatePatPlan(1,patNum,planNum1,subNum1);
+			PatPlanT.CreatePatPlan(2,patNum,planNum2,subNum2);
 			Procedure proc=ProcedureT.CreateProcedure(pat,"D2750",ProcStat.TP,"8",Fees.GetAmount0(codeNum,53));//crown on 8
 			long procNum=proc.ProcNum;
 			//Lists
 			List<ClaimProc> claimProcs=ClaimProcs.Refresh(patNum);
 			Family fam=Patients.GetFamily(patNum);
-			List<InsPlan> planList=InsPlans.RefreshForFam(fam);
+			List<InsSub> subList=InsSubs.RefreshForFam(fam);
+			List<InsPlan> planList=InsPlans.RefreshForSubList(subList);
 			List<PatPlan> patPlans=PatPlans.Refresh(patNum);
 			List<Benefit> benefitList=Benefits.Refresh(patPlans);
 			List<Procedure> procList=Procedures.Refresh(patNum);
 			//Set complete and attach to claim
-			ProcedureT.SetComplete(proc,pat,planList,patPlans,claimProcs,benefitList);
+			ProcedureT.SetComplete(proc,pat,planList,patPlans,claimProcs,benefitList,subList);
 			claimProcs=ClaimProcs.Refresh(patNum);
 			List<Procedure> procsForClaim=new List<Procedure>();
 			procsForClaim.Add(proc);
-			Claim claim=ClaimT.CreateClaim("P",patPlans,planList,claimProcs,procList,pat,procsForClaim,benefitList);
+			Claim claim=ClaimT.CreateClaim("P",patPlans,planList,claimProcs,procList,pat,procsForClaim,benefitList,subList);
 			//Validate
 			string retVal="";
 			if(claim.WriteOff!=500) {
@@ -414,11 +438,13 @@ namespace UnitTests {
 			string suffix="9";
 			Patient pat=PatientT.CreatePatient(suffix);
 			Carrier carrier=CarrierT.CreateCarrier(suffix);
-			InsPlan plan=InsPlanT.CreateInsPlan(pat.PatNum,carrier.CarrierNum);
+			InsPlan plan=InsPlanT.CreateInsPlan(carrier.CarrierNum);
+			InsSub sub=InsSubT.CreateInsSub(pat.PatNum,plan.PlanNum);
+			long subNum=sub.InsSubNum;
 			BenefitT.CreateAnnualMax(plan.PlanNum,200);
 			BenefitT.CreateLimitationProc(plan.PlanNum,"D2161",2000);
 			BenefitT.CreateCategoryPercent(plan.PlanNum,EbenefitCategory.Restorative,80);
-			PatPlanT.CreatePatPlan(1,pat.PatNum,plan.PlanNum);
+			PatPlanT.CreatePatPlan(1,pat.PatNum,plan.PlanNum,subNum);
 			//proc1 - D2161 (4-surf amalgam)
 			Procedure proc1=ProcedureT.CreateProcedure(pat,"D2161",ProcStat.TP,"3",300);
 			ProcedureT.SetPriority(proc1,0);
@@ -429,7 +455,8 @@ namespace UnitTests {
 			List<ClaimProc> claimProcs=ClaimProcs.Refresh(pat.PatNum);
 			List<ClaimProc> claimProcListOld=new List<ClaimProc>();
 			Family fam=Patients.GetFamily(pat.PatNum);
-			List<InsPlan> planList=InsPlans.RefreshForFam(fam);
+			List<InsSub> subList=InsSubs.RefreshForFam(fam);
+			List<InsPlan> planList=InsPlans.RefreshForSubList(subList);
 			List<PatPlan> patPlans=PatPlans.Refresh(pat.PatNum);
 			List<Benefit> benefitList=Benefits.Refresh(patPlans);
 			List<ClaimProcHist> histList=new List<ClaimProcHist>();
@@ -440,7 +467,7 @@ namespace UnitTests {
 			string retVal="";
 			for(int i=0;i<ProcListTP.Length;i++) {
 				Procedures.ComputeEstimates(ProcListTP[i],pat.PatNum,ref claimProcs,false,planList,patPlans,benefitList,
-					histList,loopList,false,pat.Age);
+					histList,loopList,false,pat.Age,subList);
 				//then, add this information to loopList so that the next procedure is aware of it.
 				loopList.AddRange(ClaimProcs.GetHistForProc(claimProcs,ProcListTP[i].ProcNum,ProcListTP[i].CodeNum));
 			}
@@ -463,11 +490,13 @@ namespace UnitTests {
 			string suffix="10";
 			Patient pat=PatientT.CreatePatient(suffix);
 			Carrier carrier=CarrierT.CreateCarrier(suffix);
-			InsPlan plan=InsPlanT.CreateInsPlan(pat.PatNum,carrier.CarrierNum);
+			InsPlan plan=InsPlanT.CreateInsPlan(carrier.CarrierNum);
+			InsSub sub=InsSubT.CreateInsSub(pat.PatNum,plan.PlanNum);
+			long subNum=sub.InsSubNum;
 			BenefitT.CreateAnnualMax(plan.PlanNum,400);
 			BenefitT.CreateFrequencyCategory(plan.PlanNum,EbenefitCategory.RoutinePreventive,BenefitQuantity.Years,2);
 			BenefitT.CreateCategoryPercent(plan.PlanNum,EbenefitCategory.RoutinePreventive,100);
-			PatPlanT.CreatePatPlan(1,pat.PatNum,plan.PlanNum);
+			PatPlanT.CreatePatPlan(1,pat.PatNum,plan.PlanNum,subNum);
 			//procs - D1515 (space maintainers)
 			Procedure proc1=ProcedureT.CreateProcedure(pat,"D1515",ProcStat.TP,"3",500);
 			ProcedureT.SetPriority(proc1,0);
@@ -479,7 +508,8 @@ namespace UnitTests {
 			List<ClaimProc> claimProcs=ClaimProcs.Refresh(pat.PatNum);
 			List<ClaimProc> claimProcListOld=new List<ClaimProc>();
 			Family fam=Patients.GetFamily(pat.PatNum);
-			List<InsPlan> planList=InsPlans.RefreshForFam(fam);
+			List<InsSub> subList=InsSubs.RefreshForFam(fam);
+			List<InsPlan> planList=InsPlans.RefreshForSubList(subList);
 			List<PatPlan> patPlans=PatPlans.Refresh(pat.PatNum);
 			List<Benefit> benefitList=Benefits.Refresh(patPlans);
 			List<ClaimProcHist> histList=new List<ClaimProcHist>();
@@ -490,7 +520,7 @@ namespace UnitTests {
 			string retVal="";
 			for(int i=0;i<ProcListTP.Length;i++) {
 				Procedures.ComputeEstimates(ProcListTP[i],pat.PatNum,ref claimProcs,false,planList,patPlans,benefitList,
-					histList,loopList,false,pat.Age);
+					histList,loopList,false,pat.Age,subList);
 				//then, add this information to loopList so that the next procedure is aware of it.
 				loopList.AddRange(ClaimProcs.GetHistForProc(claimProcs,ProcListTP[i].ProcNum,ProcListTP[i].CodeNum));
 			}

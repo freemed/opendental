@@ -32,13 +32,13 @@ namespace UnitTests {
 			Procedures.Update(procedure,oldProcedure);
 		}
 
-		public static void SetComplete(Procedure proc,Patient pat,List<InsPlan> planList,List<PatPlan> patPlanList,List<ClaimProc> claimProcList,List<Benefit> benefitList) {
+		public static void SetComplete(Procedure proc,Patient pat,List<InsPlan> planList,List<PatPlan> patPlanList,List<ClaimProc> claimProcList,List<Benefit> benefitList,List<InsSub> subList) {
 			Procedure procOld=proc.Copy();
 			ProcedureCode procCode=ProcedureCodes.GetProcCode(proc.CodeNum);
 			proc.DateEntryC=DateTime.Now;
 			proc.ProcStatus=ProcStat.C;
 			Procedures.Update(proc,procOld);
-			Procedures.ComputeEstimates(proc,proc.PatNum,claimProcList,false,planList,patPlanList,benefitList,pat.Age);
+			Procedures.ComputeEstimates(proc,proc.PatNum,claimProcList,false,planList,patPlanList,benefitList,pat.Age,subList);
 
 		}
 

@@ -7,18 +7,21 @@ using OpenDental;
 namespace UnitTests {
 	public class ClaimT {
 		/// <summary>claimType="P" or "S".</summary>
-		public static Claim CreateClaim(string claimType,List<PatPlan> PatPlanList,List<InsPlan> InsPlanList,List<ClaimProc> ClaimProcList,List<Procedure> procsForPat,Patient pat,List<Procedure> procsForClaim,List<Benefit> benefitList){
+		public static Claim CreateClaim(string claimType,List<PatPlan> PatPlanList,List<InsPlan> InsPlanList,List<ClaimProc> ClaimProcList,List<Procedure> procsForPat,Patient pat,List<Procedure> procsForClaim,List<Benefit> benefitList,List<InsSub> SubList){
 			//Claim ClaimCur=CreateClaim("P",PatPlanList,InsPlanList,ClaimProcList,procsForPat);
 			long claimFormNum = 0;
 			EtransType eFormat = 0;
 			InsPlan PlanCur=new InsPlan();
+			InsSub SubCur=new InsSub();
 			Relat relatOther=Relat.Self;
 			switch(claimType) {
 				case "P":
 					PlanCur=InsPlans.GetPlan(PatPlans.GetPlanNum(PatPlanList,1),InsPlanList);
+					SubCur=InsSubs.GetSub(PatPlans.GetInsSubNum(PatPlanList,1),SubList);
 					break;
 				case "S":
 					PlanCur=InsPlans.GetPlan(PatPlans.GetPlanNum(PatPlanList,2),InsPlanList);
+					SubCur=InsSubs.GetSub(PatPlans.GetInsSubNum(PatPlanList,2),SubList);
 					break;
 			}
 			//DataTable table=DataSetMain.Tables["account"];
@@ -37,7 +40,7 @@ namespace UnitTests {
 				if(claimProcs[i]==null) {
 					claimProcs[i]=new ClaimProc();
 					proc=procsForClaim[i];
-					ClaimProcs.CreateEst(claimProcs[i],proc,PlanCur);
+					ClaimProcs.CreateEst(claimProcs[i],proc,PlanCur,SubCur);
 				}
 			}
 			Claim claim=new Claim();
@@ -87,7 +90,7 @@ namespace UnitTests {
 				ClaimProcs.Update(claimProcs[i]);
 			}
 			ClaimProcList=ClaimProcs.Refresh(pat.PatNum);
-			ClaimL.CalculateAndUpdate(procsForPat,InsPlanList,claim,PatPlanList,benefitList,pat.Age);
+			ClaimL.CalculateAndUpdate(procsForPat,InsPlanList,claim,PatPlanList,benefitList,pat.Age,SubList);
 			return claim;
 		}
 

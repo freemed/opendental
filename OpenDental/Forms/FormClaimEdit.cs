@@ -3581,7 +3581,7 @@ namespace OpenDental{
 				return;
 			}
 			List <Benefit> benefitList=Benefits.Refresh(PatPlanList);
-			ClaimL.CalculateAndUpdate(ProcList,PlanList,ClaimCur,PatPlanList,benefitList,PatCur.Age);
+			ClaimL.CalculateAndUpdate(ProcList,PlanList,ClaimCur,PatPlanList,benefitList,PatCur.Age,SubList);
 			ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
 			FillGrids();
 		}

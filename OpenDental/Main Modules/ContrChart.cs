@@ -95,6 +95,7 @@ namespace OpenDental{
 		private Family FamCur;
 		private Patient PatCur;
 		private List <InsPlan> PlanList;
+		private List<InsSub> SubList;
 		///<summary></summary>
 		[Category("Data"),Description("Occurs when user changes current patient, usually by clicking on the Select Patient button.")]
 		public event PatientSelectedEventHandler PatientSelected=null;
@@ -3217,6 +3218,7 @@ namespace OpenDental{
 			FamCur=null;
 			PatCur=null;
 			PlanList=null;
+			SubList=null;
 			Plugins.HookAddCode(this,"ContrChart.ModuleUnselected_end");
 		}
 
@@ -3228,7 +3230,7 @@ namespace OpenDental{
 			}
 			FamCur=Patients.GetFamily(patNum);
 			PatCur=FamCur.GetPatient(patNum);
-			List<InsSub> SubList=InsSubs.RefreshForFam(FamCur);
+			SubList=InsSubs.RefreshForFam(FamCur);
 			PlanList=InsPlans.RefreshForSubList(SubList);
 			PatPlanList=PatPlans.Refresh(patNum);
 			BenefitList=Benefits.Refresh(PatPlanList);
@@ -5154,7 +5156,7 @@ namespace OpenDental{
 				//Procedures.SetHideGraphical(ProcCur);//might not matter anymore
 				ToothInitials.SetValue(PatCur.PatNum,ProcCur.ToothNum,ToothInitialType.Missing);
 			}
-			Procedures.ComputeEstimates(ProcCur,PatCur.PatNum,new List<ClaimProc>(),true,PlanList,PatPlanList,BenefitList,PatCur.Age);
+			Procedures.ComputeEstimates(ProcCur,PatCur.PatNum,new List<ClaimProc>(),true,PlanList,PatPlanList,BenefitList,PatCur.Age,SubList);
 			FormProcEdit FormPE=new FormProcEdit(ProcCur,PatCur.Copy(),FamCur);
 			FormPE.IsNew=true;
 			FormPE.ShowDialog();
@@ -5306,7 +5308,7 @@ namespace OpenDental{
 			else{
 				Recalls.Synch(PatCur.PatNum);
 			}
-			Procedures.ComputeEstimates(ProcCur,PatCur.PatNum,new List<ClaimProc>(),true,PlanList,PatPlanList,BenefitList,PatCur.Age);
+			Procedures.ComputeEstimates(ProcCur,PatCur.PatNum,new List<ClaimProc>(),true,PlanList,PatPlanList,BenefitList,PatCur.Age,SubList);
 			if(orionProvNum==0){//Hits this case first time through only if user is not a primary provider in using Orion mode.
 				FormProcEdit FormP=new FormProcEdit(ProcCur,PatCur.Copy(),FamCur);
 				FormP.IsNew=true;
@@ -7142,7 +7144,7 @@ namespace OpenDental{
 					return;
 				}
 				Appointments.SetAptStatusComplete(apt.AptNum,PatPlans.GetPlanNum(PatPlanList,1),PatPlans.GetPlanNum(PatPlanList,2));
-				ProcedureL.SetCompleteInAppt(apt,PlanList,PatPlanList,PatCur.SiteNum,PatCur.Age);//loops through each proc
+				ProcedureL.SetCompleteInAppt(apt,PlanList,PatPlanList,PatCur.SiteNum,PatCur.Age,SubList);//loops through each proc
 				SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit, apt.PatNum,
 					PatCur.GetNameLF() + ", "
 					+ apt.ProcDescript + ", "
@@ -7229,7 +7231,7 @@ namespace OpenDental{
 				//Tried to move it to the business layer, but too complex for now.
 				//Procedures.SetComplete(
 				//	((Procedure)gridProg.Rows[gridProg.SelectedIndices[i]].Tag).ProcNum,PIn.PDate(textDate.Text));
-				Procedures.ComputeEstimates(procCur,procCur.PatNum,ClaimProcList,false,PlanList,PatPlanList,BenefitList,PatCur.Age);
+				Procedures.ComputeEstimates(procCur,procCur.PatNum,ClaimProcList,false,PlanList,PatPlanList,BenefitList,PatCur.Age,SubList);
 			}
 			AutomationL.Trigger(AutomationTrigger.CompleteProcedure,procCodeList,PatCur.PatNum);
 			Recalls.Synch(PatCur.PatNum);

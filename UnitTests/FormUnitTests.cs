@@ -99,6 +99,7 @@ namespace UnitTests {
 			textResults.Text+=AllTests.TestNine(specificTest);
 			Application.DoEvents();
 			textResults.Text+=AllTests.TestTen(specificTest);
+			textResults.Text+="Done";
 			Cursor=Cursors.Default;
 
 

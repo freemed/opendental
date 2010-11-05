@@ -356,7 +356,7 @@ namespace TestCanada {
 				ClaimProcs.Update(cp);
 			}
 			claimProcList=ClaimProcs.Refresh(pat.PatNum);
-			ClaimL.CalculateAndUpdate(procsForPat,planList,claim,patPlanList,benefitList,pat.Age);
+			ClaimL.CalculateAndUpdate(procsForPat,planList,claim,patPlanList,benefitList,pat.Age,subList);
 			return claim;
 		}
 

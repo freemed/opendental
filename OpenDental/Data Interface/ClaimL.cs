@@ -10,7 +10,7 @@ namespace OpenDental{
 	public class ClaimL{
 
 		///<summary>Updates all claimproc estimates and also updates claim totals to db. Must supply procList which includes all procedures that this claim is linked to.  Will also need to refresh afterwards to see the results</summary>
-		public static void CalculateAndUpdate(List<Procedure> procList,List <InsPlan> planList,Claim claimCur,List <PatPlan> patPlans,List <Benefit> benefitList,int patientAge){
+		public static void CalculateAndUpdate(List<Procedure> procList,List <InsPlan> planList,Claim claimCur,List <PatPlan> patPlans,List <Benefit> benefitList,int patientAge,List<InsSub> subList){
 			//we need more than just the claimprocs for this claim.
 			//in order to run Procedures.ComputeEstimates, we need all claimprocs for all procedures attached to this claim
 			List<ClaimProc> ClaimProcsAll=ClaimProcs.Refresh(claimCur.PatNum);
@@ -59,7 +59,7 @@ namespace OpenDental{
 						}
 					}
 				}
-				Procedures.ComputeEstimates(ProcCur,claimCur.PatNum,ref ClaimProcsAll,false,planList,patPlans,benefitList,histList,loopList,false,patientAge,null);
+				Procedures.ComputeEstimates(ProcCur,claimCur.PatNum,ref ClaimProcsAll,false,planList,patPlans,benefitList,histList,loopList,false,patientAge,subList);
 				//then, add this information to loopList so that the next procedure is aware of it.
 				loopList.AddRange(ClaimProcs.GetHistForProc(ClaimProcsAll,ProcCur.ProcNum,ProcCur.CodeNum));
 			}
