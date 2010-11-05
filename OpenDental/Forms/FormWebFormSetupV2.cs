@@ -106,9 +106,7 @@ namespace OpenDental {
 			wh.Url=textboxWebHostAddress.Text;
 			sheetDefList=wh.DownloadSheetDefs(RegistrationKey);
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g(this,"Sheet Num"),70);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Description"),100);
+			ODGridColumn col=new ODGridColumn(Lan.g(this,"Description"),200);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Browser Address For Patients"),510);
 			gridMain.Columns.Add(col);
@@ -116,7 +114,6 @@ namespace OpenDental {
 			for(int i=0;i<sheetDefList.Length;i++) {
 				ODGridRow row=new ODGridRow();
 				row.Tag=sheetDefList[i];
-				row.Cells.Add(sheetDefList[i].WebSheetDefID+"");
 				row.Cells.Add(sheetDefList[i].Description);
 				String SheetFormAddress=SheetDefAddress+"?DentalOfficeID="+DentalOfficeID+"&WebSheetDefID="+sheetDefList[i].WebSheetDefID;
 				row.Cells.Add(SheetFormAddress);
@@ -126,6 +123,26 @@ namespace OpenDental {
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			openBrowser();
+		}
+
+		private void gridMain_MouseUp(object sender,MouseEventArgs e) {
+			if(e.Button==MouseButtons.Right) {
+				menuWebFormSetupRight.Show(gridMain,new Point(e.X,e.Y));
+			}
+		}
+
+		private void menuItemNavigateURL_Click(object sender,EventArgs e) {
+			openBrowser();
+		}
+
+		private void menuItemCopyURL_Click(object sender,EventArgs e) {
+			OpenDental.WebHostSynch.webforms_sheetdef WebSheetDef=(OpenDental.WebHostSynch.webforms_sheetdef)gridMain.Rows[gridMain.SelectedIndices[0]].Tag;
+			String SheetFormAddress=SheetDefAddress+"?DentalOfficeID="+DentalOfficeID+"&WebSheetDefID="+WebSheetDef.WebSheetDefID;
+			Clipboard.SetText(SheetFormAddress);
+		}
+
+		private void openBrowser() {
 			OpenDental.WebHostSynch.webforms_sheetdef WebSheetDef=(OpenDental.WebHostSynch.webforms_sheetdef)gridMain.Rows[gridMain.SelectedIndices[0]].Tag;
 			String SheetFormAddress=SheetDefAddress+"?DentalOfficeID="+DentalOfficeID+"&WebSheetDefID="+WebSheetDef.WebSheetDefID;
 			System.Diagnostics.Process.Start(SheetFormAddress);
@@ -151,6 +168,7 @@ namespace OpenDental {
 				Cursor=Cursors.Default;
 				MessageBox.Show(ex.Message);
 			}
+			FillGrid();
 			Cursor=Cursors.Default;
 		}
 
@@ -211,7 +229,7 @@ namespace OpenDental {
 				}
 			}
 		}
-
+		
 		private void butAdd_Click(object sender,EventArgs e) {
 			FormSheetPicker FormS=new FormSheetPicker();
 			FormS.SheetType=SheetTypeEnum.PatientForm;
@@ -254,6 +272,9 @@ namespace OpenDental {
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+
+
 
 		
 

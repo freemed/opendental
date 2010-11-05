@@ -23,29 +23,18 @@ DROP TABLE IF EXISTS `webforms_preference`;
 CREATE TABLE `webforms_preference` (
   `DentalOfficeID` bigint(20) NOT NULL,
   `ColorBorder` int(11) NOT NULL,
-  `Heading1` text NOT NULL,
-  `Heading2` text NOT NULL,
   PRIMARY KEY (`DentalOfficeID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Table structure for table `webforms_sheet` */
 
 DROP TABLE IF EXISTS `webforms_sheet`;
-/*
-CREATE TABLE `webforms_sheet` (
-  `SheetID` bigint(20) NOT NULL AUTO_INCREMENT,
-  `DentalOfficeID` bigint(20) NOT NULL,
-  `DateTimeSubmitted` datetime NOT NULL,
-  PRIMARY KEY (`SheetID`),
-  KEY `FK_webforms_sheet_DentalOfficeID` (`DentalOfficeID`),
-  CONSTRAINT `FK_webforms_sheet_DentalOfficeID` FOREIGN KEY (`DentalOfficeID`) REFERENCES `webforms_preference` (`DentalOfficeID`)
-) ENGINE=InnoDB AUTO_INCREMENT=148 DEFAULT CHARSET=utf8;
 
-*/
 
 CREATE TABLE `webforms_sheet` (
   `SheetID` bigint(20) NOT NULL AUTO_INCREMENT,
   `DentalOfficeID` bigint(20) NOT NULL,
+  `Description` varchar(255) NOT NULL,
   `SheetType` int(11) NOT NULL,
   `DateTimeSheet` datetime NOT NULL DEFAULT '0001-01-01 00:00:00',
   `FontSize` float NOT NULL,
@@ -82,18 +71,7 @@ CREATE TABLE `webforms_sheetdef` (
 
 
 DROP TABLE IF EXISTS `webforms_sheetfield`;
-/*
-CREATE TABLE `webforms_sheetfield` (
-  `SheetFieldID` bigint(20) NOT NULL AUTO_INCREMENT,
-  `SheetID` bigint(20) NOT NULL,
-  `FieldName` varchar(255) NOT NULL,
-  `FieldValue` text NOT NULL,
-  PRIMARY KEY (`SheetFieldID`),
-  KEY `FK_webforms_sheetfield_SheetID` (`SheetID`),
-  CONSTRAINT `FK_webforms_sheetfield_SheetID` FOREIGN KEY (`SheetID`) REFERENCES `webforms_sheet` (`SheetID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-*/
 
 CREATE TABLE `webforms_sheetfield` (
   `SheetFieldID` bigint(20) NOT NULL AUTO_INCREMENT,

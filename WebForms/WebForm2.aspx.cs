@@ -380,6 +380,7 @@ namespace WebForms {
 				NewSheetObj.FontName=SheetDefObj.FontName;
 				NewSheetObj.FontSize=SheetDefObj.FontSize;
 				NewSheetObj.SheetType=SheetDefObj.SheetType;
+				NewSheetObj.Description=SheetDefObj.Description;
 				NewSheetObj.IsLandscape=SheetDefObj.IsLandscape;
 				SheetDefObj.webforms_sheetfielddef.Load();
 				var SheetFieldDefResult=SheetDefObj.webforms_sheetfielddef;

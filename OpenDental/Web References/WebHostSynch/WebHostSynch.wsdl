@@ -157,6 +157,7 @@
               <s:element minOccurs="1" maxOccurs="1" name="SheetID" type="s:long" />
               <s:element minOccurs="1" maxOccurs="1" name="SheetType" type="s:int" />
               <s:element minOccurs="1" maxOccurs="1" name="Width" type="s:int" />
+              <s:element minOccurs="0" maxOccurs="1" name="Description" type="s:string" />
               <s:element minOccurs="0" maxOccurs="1" name="webforms_preferenceReference" type="tns:EntityReferenceOfwebforms_preference" />
             </s:sequence>
           </s:extension>

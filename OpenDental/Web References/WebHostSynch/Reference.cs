@@ -796,6 +796,8 @@ namespace OpenDental.WebHostSynch {
         
         private int widthField;
         
+        private string descriptionField;
+        
         private EntityReferenceOfwebforms_preference webforms_preferenceReferenceField;
         
         /// <remarks/>
@@ -885,6 +887,16 @@ namespace OpenDental.WebHostSynch {
             }
             set {
                 this.widthField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string Description {
+            get {
+                return this.descriptionField;
+            }
+            set {
+                this.descriptionField = value;
             }
         }
         

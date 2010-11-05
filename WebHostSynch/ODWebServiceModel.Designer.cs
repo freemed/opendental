@@ -402,7 +402,8 @@ namespace WebHostSynch
         /// <param name="sheetID">Initial value of the SheetID property.</param>
         /// <param name="sheetType">Initial value of the SheetType property.</param>
         /// <param name="width">Initial value of the Width property.</param>
-        public static webforms_sheet Createwebforms_sheet(global::System.DateTime dateTimeSheet, global::System.Int64 dentalOfficeID, global::System.Single fontSize, global::System.Int32 height, global::System.SByte isLandscape, global::System.Int64 sheetID, global::System.Int32 sheetType, global::System.Int32 width)
+        /// <param name="description">Initial value of the Description property.</param>
+        public static webforms_sheet Createwebforms_sheet(global::System.DateTime dateTimeSheet, global::System.Int64 dentalOfficeID, global::System.Single fontSize, global::System.Int32 height, global::System.SByte isLandscape, global::System.Int64 sheetID, global::System.Int32 sheetType, global::System.Int32 width, global::System.String description)
         {
             webforms_sheet webforms_sheet = new webforms_sheet();
             webforms_sheet.DateTimeSheet = dateTimeSheet;
@@ -413,6 +414,7 @@ namespace WebHostSynch
             webforms_sheet.SheetID = sheetID;
             webforms_sheet.SheetType = sheetType;
             webforms_sheet.Width = width;
+            webforms_sheet.Description = description;
             return webforms_sheet;
         }
 
@@ -637,6 +639,30 @@ namespace WebHostSynch
         private global::System.Int32 _Width;
         partial void OnWidthChanging(global::System.Int32 value);
         partial void OnWidthChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Description
+        {
+            get
+            {
+                return _Description;
+            }
+            set
+            {
+                OnDescriptionChanging(value);
+                ReportPropertyChanging("Description");
+                _Description = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Description");
+                OnDescriptionChanged();
+            }
+        }
+        private global::System.String _Description;
+        partial void OnDescriptionChanging(global::System.String value);
+        partial void OnDescriptionChanged();
 
         #endregion
     

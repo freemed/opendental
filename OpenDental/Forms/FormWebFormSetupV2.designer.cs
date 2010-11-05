@@ -34,6 +34,9 @@ namespace OpenDental{
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butSave = new OpenDental.UI.Button();
+			this.menuWebFormSetupRight = new System.Windows.Forms.ContextMenu();
+			this.menuItemCopyURL = new System.Windows.Forms.MenuItem();
+			this.menuItemNavigateURL = new System.Windows.Forms.MenuItem();
 			this.SuspendLayout();
 			// 
 			// textboxWebHostAddress
@@ -135,6 +138,7 @@ namespace OpenDental{
 			this.gridMain.Title = "Sheet Defs";
 			this.gridMain.TranslationName = "TableSheetDefs";
 			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			this.gridMain.MouseUp += new System.Windows.Forms.MouseEventHandler(this.gridMain_MouseUp);
 			// 
 			// butCancel
 			// 
@@ -164,6 +168,24 @@ namespace OpenDental{
 			this.butSave.TabIndex = 74;
 			this.butSave.Text = "Save";
 			this.butSave.Click += new System.EventHandler(this.butSave_Click);
+			// 
+			// menuWebFormSetupRight
+			// 
+			this.menuWebFormSetupRight.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItemCopyURL,
+            this.menuItemNavigateURL});
+			// 
+			// menuItemCopyURL
+			// 
+			this.menuItemCopyURL.Index = 0;
+			this.menuItemCopyURL.Text = "Copy URL to clipboard";
+			this.menuItemCopyURL.Click += new System.EventHandler(this.menuItemCopyURL_Click);
+			// 
+			// menuItemNavigateURL
+			// 
+			this.menuItemNavigateURL.Index = 1;
+			this.menuItemNavigateURL.Text = "Navigate to the URL on the web browser";
+			this.menuItemNavigateURL.Click += new System.EventHandler(this.menuItemNavigateURL_Click);
 			// 
 			// FormWebFormSetupV2
 			// 
@@ -203,5 +225,8 @@ namespace OpenDental{
 		private OpenDental.UI.Button butDelete;
 		private OpenDental.UI.Button butAdd;
 		private UI.Button butSave;
+		private System.Windows.Forms.ContextMenu menuWebFormSetupRight;
+		private System.Windows.Forms.MenuItem menuItemCopyURL;
+		private System.Windows.Forms.MenuItem menuItemNavigateURL;
 	}
 }

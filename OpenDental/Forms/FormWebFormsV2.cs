@@ -243,14 +243,13 @@ namespace OpenDental {
 					newSheet=SheetUtil.CreateSheet(sheetDef,PatNum);
 					SheetParameter.SetParameter(newSheet,"PatNum",PatNum);
 					newSheet.DateTimeSheet=sAnds.web_sheet.DateTimeSheet;
-					//newSheet.Description=sAnds.sh.de add the descrption fields also
+					newSheet.Description=sAnds.web_sheet.Description;
 					newSheet.Height=sAnds.web_sheet.Height;
 					newSheet.Width=sAnds.web_sheet.Width;
 					newSheet.FontName=sAnds.web_sheet.FontName;
 					newSheet.FontSize=sAnds.web_sheet.FontSize;
 					newSheet.SheetType=(SheetTypeEnum)sAnds.web_sheet.SheetType;
 					newSheet.IsLandscape=sAnds.web_sheet.IsLandscape==(sbyte)1?true:false;
-
 					newSheet.InternalNote="";
 					newSheet.IsWebForm=true;
 

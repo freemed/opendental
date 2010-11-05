@@ -43,6 +43,7 @@
           </Key>
           <Property Name="DateTimeSheet" Type="datetime" Nullable="false" />
           <Property Name="DentalOfficeID" Type="bigint" Nullable="false" />
+          <Property Name="Description" Type="varchar" Nullable="false" MaxLength="255" />
           <Property Name="FontName" Type="varchar" MaxLength="255" />
           <Property Name="FontSize" Type="float" Nullable="false" />
           <Property Name="Height" Type="int" Nullable="false" />
@@ -209,6 +210,7 @@
           <Property Type="Int32" Name="Width" Nullable="false" />
           <NavigationProperty Name="webforms_preference" Relationship="odwebserviceModel.FK_webforms_sheet_DentalOfficeID" FromRole="webforms_sheet" ToRole="webforms_preference" />
           <NavigationProperty Name="webforms_sheetfield" Relationship="odwebserviceModel.FK_webforms_sheetfield_SheetID" FromRole="webforms_sheet" ToRole="webforms_sheetfield" />
+          <Property Type="String" Name="Description" Nullable="false" />
         </EntityType>
         <EntityType Name="webforms_sheetdef">
           <Key>
@@ -338,6 +340,7 @@
           <EntitySetMapping Name="webforms_sheet">
             <EntityTypeMapping TypeName="odwebserviceModel.webforms_sheet">
               <MappingFragment StoreEntitySet="webforms_sheet">
+                <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Width" ColumnName="Width" />
                 <ScalarProperty Name="SheetType" ColumnName="SheetType" />
                 <ScalarProperty Name="SheetID" ColumnName="SheetID" />
