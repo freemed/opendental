@@ -71,7 +71,6 @@ namespace WebHostSynch {
 				int DefaultColorBorder=-12550016;
 				string DefaultHeading1="PATIENT INFORMATION";
 				string DefaultHeading2="We are pleased to welcome you to our office. Please take a few minutes to fill out this form as completely as you can. If you have any questions we'll be glad to help you.";
-
 				try {
 					long DentalOfficeID=GetDentalOfficeID(RegistrationKey);
 					if(DentalOfficeID==0) {

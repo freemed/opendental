@@ -34,37 +34,37 @@ namespace OpenDental {
 		}
 
 		private void FormWebFormSetupV2_Shown(object sender,EventArgs e) {
-			textboxWebHostAddress.Text=PrefC.GetString(PrefName.WebHostSynchServerURL);
-			butSave.Enabled=false;
-		#if DEBUG
-			IgnoreCertificateErrors();
-		#endif
-			Cursor=Cursors.WaitCursor;
-			if(!TestWebServiceExists()) {
-				Cursor=Cursors.Default;
-				MsgBox.Show(this,"Either the web service is not available or the WebHostSynch URL is incorrect");
-				return;
-			}
-			//Get color from server
-			wh.Url=textboxWebHostAddress.Text;
-			PrefObj=wh.GetPreferences(RegistrationKey);
-			if(PrefObj==null) {
-				Cursor=Cursors.Default;
-				MsgBox.Show(this,"There has been an error retrieving values from the server");
-			}
-			butWebformBorderColor.BackColor=Color.FromArgb(PrefObj.ColorBorder);
-			//Get DentalOfficeID
-			DentalOfficeID=wh.GetDentalOfficeID(RegistrationKey);
-			//Get SheetDefAddress
-			SheetDefAddress=wh.GetSheetDefAddress(RegistrationKey);
-			//Get WebFormAddress
+			FetchValuesFromWebServer();
+		}
+
+		private void FetchValuesFromWebServer() {
 			try {
+				textboxWebHostAddress.Text=PrefC.GetString(PrefName.WebHostSynchServerURL);
+				butSave.Enabled=false;
+				#if DEBUG
+				IgnoreCertificateErrors();
+				#endif
+				Cursor=Cursors.WaitCursor;
+				if(!TestWebServiceExists()) {
+					Cursor=Cursors.Default;
+					MsgBox.Show(this,"Either the web service is not available or the WebHostSynch URL is incorrect");
+					return;
+				}
+				DentalOfficeID=wh.GetDentalOfficeID(RegistrationKey);
+			
 				if(wh.GetDentalOfficeID(RegistrationKey)==0) {
 					Cursor=Cursors.Default;
 					MsgBox.Show(this,"Registration key provided by the dental office is incorrect");
 					return;
 				}
 				WebFormAddress=wh.GetWebFormAddress(RegistrationKey);
+				PrefObj=wh.GetPreferences(RegistrationKey);
+				if(PrefObj==null) {
+					Cursor=Cursors.Default;
+					MsgBox.Show(this,"There has been an error retrieving values from the server");
+				}
+				butWebformBorderColor.BackColor=Color.FromArgb(PrefObj.ColorBorder);
+				SheetDefAddress=wh.GetSheetDefAddress(RegistrationKey);
 			}
 			catch(Exception ex) {
 				Cursor=Cursors.Default;
@@ -123,7 +123,7 @@ namespace OpenDental {
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			openBrowser();
+			OpenBrowser();
 		}
 
 		private void gridMain_MouseUp(object sender,MouseEventArgs e) {
@@ -133,7 +133,7 @@ namespace OpenDental {
 		}
 
 		private void menuItemNavigateURL_Click(object sender,EventArgs e) {
-			openBrowser();
+			OpenBrowser();
 		}
 
 		private void menuItemCopyURL_Click(object sender,EventArgs e) {
@@ -142,7 +142,7 @@ namespace OpenDental {
 			Clipboard.SetText(SheetFormAddress);
 		}
 
-		private void openBrowser() {
+		private void OpenBrowser() {
 			OpenDental.WebHostSynch.webforms_sheetdef WebSheetDef=(OpenDental.WebHostSynch.webforms_sheetdef)gridMain.Rows[gridMain.SelectedIndices[0]].Tag;
 			String SheetFormAddress=SheetDefAddress+"?DentalOfficeID="+DentalOfficeID+"&WebSheetDefID="+WebSheetDef.WebSheetDefID;
 			System.Diagnostics.Process.Start(SheetFormAddress);
@@ -168,7 +168,7 @@ namespace OpenDental {
 				Cursor=Cursors.Default;
 				MessageBox.Show(ex.Message);
 			}
-			FillGrid();
+			FetchValuesFromWebServer();
 			Cursor=Cursors.Default;
 		}
 

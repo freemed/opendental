@@ -40,7 +40,8 @@ namespace WebForms {
 				GeneratePage(DentalOfficeID,WebSheetDefID);
 			}
 			catch(Exception ex) {
-				Logger.Information(ex.Message.ToString());
+				Logger.LogError(ex);
+				DisplayMessage("Error: Your form is not available. Please contact your Dental Office");
 			}
 			
 		}
@@ -198,7 +199,8 @@ namespace WebForms {
 				Button1.Style["top"]=SheetDefHeight+SubmitButtonYoffset+"px";
 				}
 				catch(ApplicationException ex) {
-					Logger.Information(ex.Message.ToString());
+					Logger.LogError(ex);
+					DisplayMessage("Error: Your form is not available. Please contact your Dental Office");
 				}
 
 		}
@@ -417,23 +419,28 @@ namespace WebForms {
 				if(PrefObj.Count()>0) {
 					PrefObj.First().webforms_sheet.Add(NewSheetObj);
 					db.SaveChanges();
-					LabelSubmitMessage.Text="Your details have been successfully submitted";
+					DisplayMessage("Your details have been successfully submitted");
 					Logger.Information("Form values saved from IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID);
 				}
-				Panel1.Visible=false;
-				// the form is reduced to size zero and the Panel2 is opened up. This is done because even when panels/forms are invisible only their controls are invisible. The pane is still shown on the web page
-				form1.Style["width"]="0px";
-				form1.Style["height"]="0px";
-				Panel2.Width=Unit.Pixel(680);
-				Panel2.Height=Unit.Pixel(300);
-				Panel2.Visible=true;
+
 			}
 			catch(Exception ex) {
 				Logger.LogError(ex);
 				Panel1.Visible=false;
-				LabelSubmitMessage.Text="There has been a problem submitting your details. <br /> We apologize for the inconvenience.";
+				DisplayMessage("There has been a problem submitting your details. <br /> We apologize for the inconvenience.");
 				Logger.Information("There has been a problem submitting your details IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID);
 			}
+		}
+
+		private void DisplayMessage(String Message) {
+			LabelSubmitMessage.Text=Message;
+			Panel1.Visible=false;
+			// the form is reduced to size zero and the Panel2 is opened up. This is done because even when panels/forms are invisible only their controls are invisible. The pane is still shown on the web page
+			form1.Style["width"]="0px";
+			form1.Style["height"]="0px";
+			Panel2.Width=Unit.Pixel(680);
+			Panel2.Height=Unit.Pixel(300);
+			Panel2.Visible=true;
 		}
 
 		protected void Button1_Click(object sender,EventArgs e) {
