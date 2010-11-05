@@ -30,6 +30,9 @@ namespace OpenDental{
 		public bool Convert(string fromVersion,string toVersion,bool silent) {
 			FromVersion=new Version(fromVersion);
 			ToVersion=new Version(toVersion);//Application.ProductVersion);
+			if(FromVersion==ToVersion) {
+				return true;//no conversion necessary
+			}
 			if(FromVersion>=new Version("3.4.0") && PrefC.GetBool(PrefName.CorruptedDatabase)){
 				MsgBox.Show(this,"Your database is corrupted because a conversion failed.  Please contact us.  This database is unusable and you will need to restore from a backup.");
 				return false;//shuts program down.
@@ -45,37 +48,11 @@ namespace OpenDental{
 			if(FromVersion < new Version("3.0.1")) {
 				MsgBox.Show(this,"This is an old database.  The conversion must be done using MySQL 4.1 (not MySQL 5.0) or it will fail.");
 			}
-			if(FromVersion.ToString()=="2.9.0.0"
-				|| FromVersion.ToString()=="3.0.0.0"
-				|| FromVersion.ToString()=="4.7.0.0"
-				|| FromVersion.ToString()=="4.8.0.0"
-				|| FromVersion.ToString()=="4.9.0.0"
-				|| FromVersion.ToString()=="5.0.0.0"
-				|| FromVersion.ToString()=="5.1.0.0"
-				|| FromVersion.ToString()=="5.2.0.0"
-				|| FromVersion.ToString()=="5.3.0.0"
-				|| FromVersion.ToString()=="5.4.0.0"
-				|| FromVersion.ToString()=="5.5.0.0"
-				|| FromVersion.ToString()=="5.6.0.0"
-				|| FromVersion.ToString()=="5.7.0.0"
-				|| FromVersion.ToString()=="5.8.0.0"
-				|| FromVersion.ToString()=="5.9.0.0"
-				|| FromVersion.ToString()=="6.0.0.0"
-				|| FromVersion.ToString()=="6.1.0.0"
-				|| FromVersion.ToString()=="6.2.0.0"
-				|| FromVersion.ToString()=="6.3.0.0"
-				|| FromVersion.ToString()=="6.4.0.0"
-				|| FromVersion.ToString()=="6.5.0.0"
-				|| FromVersion.ToString()=="6.6.0.0"
-				|| FromVersion.ToString()=="6.7.0.0"
-				|| FromVersion.ToString()=="6.8.0.0"
-				|| FromVersion.ToString()=="6.9.0.0"
-				|| FromVersion.ToString()=="7.0.0.0"
-				|| FromVersion.ToString()=="7.1.0.0"
-				|| FromVersion.ToString()=="7.2.0.0"
-				|| FromVersion.ToString()=="7.3.0.0"
-				|| FromVersion.ToString()=="7.4.0.0")
-			{
+			if(FromVersion.ToString()=="2.9.0.0" || FromVersion.ToString()=="3.0.0.0" || FromVersion.ToString()=="4.7.0.0"){
+				MsgBox.Show(this,"Cannot convert this database version which was only for development purposes.");
+				return false;
+			}
+			if(FromVersion > new Version("4.7.0") && FromVersion.Build==0){
 				MsgBox.Show(this,"Cannot convert this database version which was only for development purposes.");
 				return false;
 			}
