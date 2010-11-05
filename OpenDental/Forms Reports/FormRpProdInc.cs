@@ -1280,7 +1280,7 @@ GROUP BY SchedDate
 				}
 				whereClin+=") ";
 			}
-			report.Query= "SELECT DATE(appointment.AptDateTime) SchedDate,SUM(procedurelog.ProcFee-IFNULL(WriteOffEst,0)) "
+			report.Query= "SELECT DATE(appointment.AptDateTime) SchedDate,SUM(IFNULL(procedurelog.ProcFee,0)-IFNULL(WriteOffEst,0)) "
 				+"FROM appointment "
 				+"LEFT JOIN procedurelog ON appointment.AptNum = procedurelog.AptNum "
 				+"LEFT JOIN claimproc ON procedurelog.ProcNum = claimproc.ProcNum AND WriteOffEst != -1 "
