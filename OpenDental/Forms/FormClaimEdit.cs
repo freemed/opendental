@@ -4026,7 +4026,8 @@ namespace OpenDental{
 			if(!allAreRecd){
 				MessageBox.Show(Lan.g(this,"All selected procedures must be status received."));
 				return;
-			}
+			} 
+			List<ClaimProc> cpList=new List<ClaimProc>();
 			for(int i=0;i<gridProc.SelectedIndices.Length;i++){
 				ClaimProc ClaimProcCur=ClaimProcsForClaim[gridProc.SelectedIndices[i]];
 				ClaimProcCur.FeeBilled=0;
@@ -4041,6 +4042,17 @@ namespace OpenDental{
 				ClaimProcCur.DateCP=DateTime.Today;
 				ClaimProcCur.DateEntry=DateTime.Today;
 				ClaimProcs.Insert(ClaimProcCur);//this inserts a copy of the original with the changes as above.
+				cpList.Add(ClaimProcCur);
+			}
+			FormClaimPayTotal FormCPT=new FormClaimPayTotal(PatCur,FamCur,PlanList,PatPlanList);
+			FormCPT.ClaimProcsToEdit=cpList.ToArray();
+			FormCPT.ShowDialog();
+			if(FormCPT.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			//save changes now
+			for(int i=0;i<FormCPT.ClaimProcsToEdit.Length;i++) {
+				ClaimProcs.Update(FormCPT.ClaimProcsToEdit[i]);
 			}
 //fix: need to debug the recalculation feature to take this status into account.
 			ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
