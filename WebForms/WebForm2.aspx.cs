@@ -63,7 +63,8 @@ namespace WebForms {
 				int RadioButtonXOffsetFirefox=-2;
 				float CheckBoxXOffset=-4.0f;
 				float CheckBoxYOffset=-4.0f;
-				int SignatureFontSize=20;
+				int SignatureFontSize=16;
+				String SignatureFont="sans-serif";
 				float heightfactor=1.2f;
 				System.Web.HttpBrowserCapabilities browser=Request.Browser;
 				if(browser.Browser=="Firefox") {
@@ -122,7 +123,6 @@ namespace WebForms {
 							FieldValue=FieldValue.Replace("[dateToday]",DateTime.Today.ToString("M/d/yyyy"));
 						}
 						lb.Text=FieldValue;
-
 						wc=lb;
 					}
 					if(FieldType==SheetFieldType.Image||FieldType==SheetFieldType.Rectangle||FieldType==SheetFieldType.Line) {
@@ -133,8 +133,10 @@ namespace WebForms {
 					if(FieldType==SheetFieldType.SigBox) {
 						Panel pa=new Panel();
 						pa.BorderStyle=BorderStyle.Solid;
+						pa.BorderWidth=Unit.Pixel(1);
 						pa.HorizontalAlign=HorizontalAlign.Center;
 						Label lb=new Label();
+						lb.Style["font-family"]=SignatureFont;
 						lb.Style["font-size"]=SignatureFontSize+"px";
 						lb.Style["position"]="relative";						
 						lb.Style["top"]=(height-SignatureFontSize)/2  +"px";

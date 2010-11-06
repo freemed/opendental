@@ -28,11 +28,10 @@ namespace OpenDental {
 		}
 
 		private void FormWebFormsV2_Load(object sender,EventArgs e) {
-
 		}
 
 		/// <summary>
-		/// Code in this method was not put into the Form load event because often the "No Patient forms available" Meassage would popup even before a form is loaded - which could confuse the user.
+		/// Code in this method was not put into the Form load event because often the "No Patient forms available" Message would popup even before a form is loaded - which could confuse the user.
 		/// </summary>
 		private void FormWebFormsV2_Shown(object sender,EventArgs e) {
 			textDateStart.Text=DateTime.Today.ToShortDateString();
@@ -89,7 +88,7 @@ namespace OpenDental {
 		private void RetrieveAndSaveData() {
 			try {
 				#if DEBUG
-				//IgnoreCertificateErrors();// used with faulty certificates only while debugging.
+				IgnoreCertificateErrors();// used with faulty certificates only while debugging.
 				#endif
 				WebHostSynch.WebHostSynch wh=new WebHostSynch.WebHostSynch();
 				wh.Url=PrefC.GetString(PrefName.WebHostSynchServerURL);
@@ -98,7 +97,6 @@ namespace OpenDental {
 					MsgBox.Show(this,"Registration key provided by the dental office is incorrect");
 					return;
 				}
-
 				OpenDental.WebHostSynch.SheetAndSheetField[] sAnds=wh.GetSheets(RegistrationKey);
 				List<long> SheetsForDeletion=new List<long>();
 				if(sAnds.Count()==0) {
@@ -107,15 +105,12 @@ namespace OpenDental {
 				}
 				//loop through all incoming sheets
 				for(int i=0;i<sAnds.Length;i++) {
-
 					long PatNum=0;
-
 					string LastName="";
 					string FirstName="";
 					string BirthDate="";
 					//loop through each variable in a single sheetfield to get First name, last name and DOB
 					for(int j=0;j<sAnds[i].web_sheetfieldlist.Count();j++) {
-
 						if(sAnds[i].web_sheetfieldlist[j].FieldName.ToLower().Contains("lname")||sAnds[i].web_sheetfieldlist[j].FieldName.ToLower().Contains("lastname")) {
 							LastName=sAnds[i].web_sheetfieldlist[j].FieldValue;
 						}
@@ -125,7 +120,6 @@ namespace OpenDental {
 						if(sAnds[i].web_sheetfieldlist[j].FieldName.ToLower().Contains("bdate")||sAnds[i].web_sheetfieldlist[j].FieldName.ToLower().Contains("birthdate")) {
 							BirthDate=sAnds[i].web_sheetfieldlist[j].FieldValue;
 						}
-
 					}// end of j loop
 					DateTime birthDate=PIn.Date(BirthDate);
 					if(birthDate.Year==1) {
@@ -133,7 +127,6 @@ namespace OpenDental {
 					}
 					PatNum=Patients.GetPatNumByNameAndBirthday(LastName,FirstName,birthDate);
 					Patient newPat=null;
-
 					if(PatNum==0) {
 						newPat=CreatePatient(LastName,FirstName,birthDate,sAnds[i]);
 						PatNum=newPat.PatNum;
@@ -199,10 +192,8 @@ namespace OpenDental {
 			newPat.LName=LastName;
 			newPat.FName=FirstName;
 			newPat.Birthdate=birthDate;
-			
 			Type t=newPat.GetType();
 			FieldInfo[] fi=t.GetFields();
-
 			foreach(FieldInfo field in fi) {
 				// find match for fields in Patients in the web_sheetfieldlist
 				var WebSheetFieldList=sAnds.web_sheetfieldlist.Where(sf => sf.FieldName.ToLower()==field.Name.ToLower());
@@ -212,14 +203,11 @@ namespace OpenDental {
 					for(int i=0;i<WebSheetFieldList.Count();i++) {
 						WebHostSynch.webforms_sheetfield sf=WebSheetFieldList.ElementAt(i);
 						String SheetWebFieldValue=sf.FieldValue;
-						String RadioButtonValue= sf.RadioButtonValue;
+						String RadioButtonValue=sf.RadioButtonValue;
 						FillPatientFields(newPat,field,SheetWebFieldValue,RadioButtonValue);
 					}
 				}
 			}
-
-
-
 			try{
 				Patients.Insert(newPat,false);
 				//set Guarantor field the same as PatNum
@@ -252,7 +240,6 @@ namespace OpenDental {
 					newSheet.IsLandscape=sAnds.web_sheet.IsLandscape==(sbyte)1?true:false;
 					newSheet.InternalNote="";
 					newSheet.IsWebForm=true;
-
 					//loop through each variable in a single sheetfield
 					for(int i=0;i<sAnds.web_sheetfieldlist.Count();i++) {
 						SheetField sheetfield=new SheetField();
@@ -271,9 +258,7 @@ namespace OpenDental {
 						sheetfield.GrowthBehavior=(GrowthBehaviorEnum)sAnds.web_sheetfieldlist[i].GrowthBehavior;
 						sheetfield.FieldValue=sAnds.web_sheetfieldlist[i].FieldValue;
 						newSheet.SheetFields.Add(sheetfield);
-
 					}// end of j loop
-
 					Sheets.SaveNewSheet(newSheet);
 					return newSheet;
 			}
@@ -283,7 +268,6 @@ namespace OpenDental {
 			}
 			return newSheet;
 		}
-
 
 		/// <summary>
 		/// </summary>
@@ -295,7 +279,6 @@ namespace OpenDental {
 						field.SetValue(newPat,birthDate);
 						break;
 					case "Gender":
-
 						if(RadioButtonValue=="Male") {
 							if(SheetWebFieldValue=="X") {
 								field.SetValue(newPat,PatientGender.Male);
@@ -341,7 +324,6 @@ namespace OpenDental {
 							if(SheetWebFieldValue=="X") {
 								field.SetValue(newPat,ContactMethod.Email);
 							}
-							
 						}
 						break;
 					case "StudentStatus":
@@ -435,8 +417,6 @@ namespace OpenDental {
 					if(dbSheetFieldValue!=newSheetFieldValue) {
 						isEqual=false;
 					}
-
-
 				}
 			}
 			return isEqual;
@@ -464,7 +444,6 @@ namespace OpenDental {
 		}
 
 		private void menuItemSetup_Click(object sender,EventArgs e) {
-			//Dennis: For some reason an exception is thrown here when there is a remote exception not found error in the FormWebFormSetup. Will figure out the reason later.
 			try {
 				FormWebFormSetupV2 formW=new FormWebFormSetupV2();
 				formW.ShowDialog();
@@ -509,6 +488,7 @@ namespace OpenDental {
 			formP.PatNum=sheet.PatNum;
 			formP.ShowDialog();
 		}
+
 		private void backgroundWorker1_RunWorkerCompleted(object sender,RunWorkerCompletedEventArgs e) {
 			FillGrid(); 
 		}
