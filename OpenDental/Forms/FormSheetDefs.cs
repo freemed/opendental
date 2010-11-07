@@ -428,46 +428,50 @@ namespace OpenDental{
 		}
 
 		private void butImport_Click(object sender,EventArgs e) {
+			Cursor=Cursors.WaitCursor;
 			OpenFileDialog openDlg=new OpenFileDialog();
-			openDlg.InitialDirectory=PrefC.GetString(PrefName.ExportPath);
+			string initDir=PrefC.GetString(PrefName.ExportPath);
+			if(Directory.Exists(initDir)) {
+				openDlg.InitialDirectory=initDir;
+			}
 			if(openDlg.ShowDialog()!=DialogResult.OK) {
+				Cursor=Cursors.Default;
 				return;
 			}
 			try {
-				ImportCustomSheetDef(openDlg.FileName);
+				//ImportCustomSheetDef(openDlg.FileName);
+				SheetDef sheetdef=new SheetDef();
+				XmlSerializer serializer=new XmlSerializer(typeof(SheetDef));
+				if(openDlg.FileName!="") {
+					if(!File.Exists(openDlg.FileName)) {
+						throw new ApplicationException(Lan.g("FormSheetDefs","File does not exist."));
+					}
+					try {
+						using(TextReader reader=new StreamReader(openDlg.FileName)) {
+							sheetdef=(SheetDef)serializer.Deserialize(reader);
+						}
+					}
+					catch {
+						throw new ApplicationException(Lan.g("FormSheetDefs","Invalid file format"));
+					}
+				}
+				sheetdef.IsNew=true;
+				SheetDefs.InsertOrUpdate(sheetdef);
+				FillGrid2();
+				for(int i=0;i<SheetDefC.Listt.Count;i++) {
+					if(SheetDefC.Listt[i].SheetDefNum==sheetdef.SheetDefNum) {
+						grid2.SetSelected(i,true);
+					}
+				}
 			}
-			catch (ApplicationException ex){
+			catch(ApplicationException ex) {
+				Cursor=Cursors.Default;
 				MessageBox.Show(ex.Message);
 				FillGrid2();
 				return;
 			}
-			MsgBox.Show(this,"Sheet def inserted.");
-		}
-
-		private void ImportCustomSheetDef(string path) {
-			SheetDef sheetdef=new SheetDef();
-			XmlSerializer serializer=new XmlSerializer(typeof(SheetDef));
-			if(path!="") {
-				if(!File.Exists(path)) {
-					throw new ApplicationException(Lan.g("FormSheetDefs","File does not exist."));
-				}
-				try {
-					using(TextReader reader=new StreamReader(path)) {
-						sheetdef=(SheetDef)serializer.Deserialize(reader);
-					}
-				}
-				catch {
-					throw new ApplicationException(Lan.g("FormSheetDefs","Invalid file format"));
-				}
-			}
-			sheetdef.IsNew=true;
-			SheetDefs.InsertOrUpdate(sheetdef);
-			FillGrid2();
-			for(int i=0;i<SheetDefC.Listt.Count;i++) {
-				if(SheetDefC.Listt[i].SheetDefNum==sheetdef.SheetDefNum) {
-					grid2.SetSelected(i,true);
-				}
-			}
+			Cursor=Cursors.Default;
+			MsgBox.Show(this,"Imported.");
 		}
 
 		private void butExportCustom_Click(object sender,EventArgs e) {
