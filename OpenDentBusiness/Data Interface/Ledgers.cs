@@ -254,41 +254,29 @@ namespace OpenDentBusiness{
 				//Update the tempaging table with the insurance estimates for each patient.
 				"SET a.InsEst=t.InsEst "+
 				"WHERE a.PatNum=t.PatNum;";
-			//Calculate the payment plan amount remaining to be paid for each patient 
-			//as the amount owed due to payment plans, minus the payments made to payment plans.
+			//Calculate the payment plan charges for each payment plan guarantor
+			//on or before the specified date (also considering the PayPlansBillInAdvanceDays setting).
+			//We cannot exclude payments made outside the specified family, since payment plan
+			//guarantors can be in another family.
 			command+="UPDATE "+tempAgingTableName+" a,"+
-				//Get payment plan patient amount due for the entire office history 
-				//on or before the specified date (also considering the PayPlansBillInAdvanceDays setting)
-				//and place the results in memory table 'c'.
-				"(SELECT ppc.PatNum PatNum,"+
-					"IFNULL(SUM(ppc.Principal+ppc.Interest),0) PayPlanCharges "+
-					"FROM payplancharge ppc "+
-					"WHERE ppc.PatNum<>0 "+
-						(guarantor==0?"":(" AND ppc.PatNum IN "+familyPatNums+" "))+
-						(historic?(" AND ppc.ChargeDate<=DATE("+billInAdvanceDate+") "):"")+
-					"GROUP BY ppc.PatNum) c,"+
-				//Get the payments made to payment plans for each patient
-				//on or before the specified date and store the results in memory table 'p'.
-				"(SELECT pay.PatNum,SUM(pay.Amt) PayPlanPayments FROM "+
-					"(SELECT ps.PatNum,ps.SplitAmt Amt,ps.SplitNum "+//need paysplitnum so that UNION doesn't remove similar payment rows.
-					"FROM paysplit ps "+
-					"WHERE ps.PayPlanNum<>0 "+//only payments attached to payment plans.
-						(guarantor==0?"":(" AND ps.PatNum IN "+familyPatNums+" "))+
-						(historic?(" AND ps.ProcDate<=DATE("+asOfDate+") "):"")+
-					"UNION "+
-					//We have to include patients which have not made payments to their payment plans
-					//and represent those patients with zero amounts so that the join below between 
-					//tables a,c, and p will work properly. This subquery includes all patients which
-					//have had at least one payment plan charge and creates an imaginary $0.00 payment.
-					"SELECT DISTINCT ppc2.PatNum,0 Amt,0 SplitNum "+
-					"FROM payplancharge ppc2 "+
-					(guarantor==0?"":("WHERE ppc2.PatNum IN "+familyPatNums+" "))+
-					") pay "+
-				"GROUP BY pay.PatNum) p "+
-				//Now using the tables tempaging, c and p, update the payment plan remaining
-				//amount to be paid within the tempaging table for each patient.
-				"SET a.PayPlanDue=IFNULL(c.PayPlanCharges-p.PayPlanPayments,0) "+
-						"WHERE c.PatNum=a.PatNum AND p.PatNum=a.PatNum;";
+				"(SELECT ppc.Guarantor,IFNULL(SUM(ppc.Principal+ppc.Interest),0) PayPlanCharges "+
+				"FROM payplancharge ppc "+
+				"WHERE ppc.ChargeDate<=DATE("+billInAdvanceDate+") "+//bill in adv. date accounts for historic vs current because of how it is set above.
+				"GROUP BY ppc.Guarantor) c "+
+			"SET a.PayPlanDue=c.PayPlanCharges "+
+				"WHERE c.Guarantor=a.PatNum;";
+			//Calculate the total payments made to each payment plan
+			//on or before the specified date and store the results in memory table 'p'.
+			//We cannot exclude payments made outside the specified family, since payment plan
+			//guarantors can be in another family.
+			command+="UPDATE "+tempAgingTableName+" a,"+
+				"(SELECT ps.PatNum,SUM(ps.SplitAmt) PayPlanPayments "+
+				"FROM paysplit ps "+
+				"WHERE ps.PayPlanNum<>0 "+//only payments attached to payment plans.
+				(historic?(" AND ps.ProcDate<=DATE("+asOfDate+") "):"")+
+				"GROUP BY ps.PatNum) p "+
+			"SET a.PayPlanDue=a.PayPlanDue-p.PayPlanPayments "+
+				"WHERE p.PatNum=a.PatNum;";
 			//Calculate the total balance for each patient.
 			//In historical mode, only transactions on or before AsOfDate will be included.
 			command+="UPDATE "+tempAgingTableName+" a,"+
