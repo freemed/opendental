@@ -2598,7 +2598,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
 					+") VALUES("
 					+"'PayConnect', "
-					+"'PayConnect from http://www.dentalxchange.com/', "
+					+"'PayConnect from www.dentalxchange.com', "
 					+"'0', "
 					+"'', "
 					+"'', "
@@ -2623,12 +2623,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					+"'"+POut.Long(programNum)+"', "
 					+"'PaymentType', "
 					+"'0')";
-				Db.NonQ(command);
-				command="INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
-					+"VALUES ("
-					+"'"+POut.Long(programNum)+"', "
-					+"'"+POut.Int(((int)ToolBarsAvail.AccountModule))+"', "
-					+"'PayConnect')";
 				Db.NonQ(command);
 				//Delete NewPatientForm bridge
 				command="SELECT ProgramNum From program WHERE ProgName='NewPatientForm.com'";
@@ -3056,13 +3050,31 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="UPDATE preference SET ValueString = '7.5.1.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To7_5_3();
+		}
+
+		private static void To7_5_3() {
+			if(FromVersion<new Version("7.5.3.0")) {
+				string command;
+				command="DELETE FROM toolbutitem WHERE ProgramNum=(SELECT p.ProgramNum FROM program p WHERE p.ProgName='PayConnect' LIMIT 1)";
+				Db.NonQ(command);
+
+
+
+
+
+
+				command="UPDATE preference SET ValueString = '7.5.3.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
 			To7_6_0();
 		}
 
 		private static void To7_6_0() {
 			if(FromVersion<new Version("7.6.0.0")) {
 				string command;
-
+				command="UPDATE program SET ProgDesc='PayConnect from www.dentalxchange.com' WHERE ProgName='PayConnect' LIMIT 1";
+				Db.NonQ(command);
 
 
 
