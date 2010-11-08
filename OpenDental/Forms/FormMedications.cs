@@ -150,7 +150,7 @@ namespace OpenDental{
 			// 
 			this.label2.Location = new System.Drawing.Point(185,6);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(323,31);
+			this.label2.Size = new System.Drawing.Size(348,31);
 			this.label2.TabIndex = 36;
 			this.label2.Text = "Sign up with LexiComp now.  Get a 15% discount by using coupon code LCODODS at ch" +
     "eckout.  There is not yet any integration.";
