@@ -557,13 +557,13 @@ namespace OpenDentBusiness {
 			table.Columns.Add("Zip");
 			List<DataRow> rows=new List<DataRow>();
 			string command="SELECT carrier.Address,carrier.City,CarrierName,ElectID,EmpName,GroupName,GroupNum,NoSendElect,"
-				+"carrier.Phone,MAX(PlanNum) onePlanNum,"//for Oracle
+				+"carrier.Phone,PlanNum,"
 				+"(SELECT COUNT(*) FROM inssub WHERE insplan.PlanNum=inssub.PlanNum) subscribers,"//for Oracle
 				+"carrier.State,TrojanID,carrier.Zip, "
 				+"(SELECT COUNT(*) FROM employer WHERE insplan.EmployerNum=employer.EmployerNum) haveName "//for Oracle. Could be higher than 1?
 				//CASE WHEN (EmpName IS NULL) THEN 1 ELSE 0 END as haveName "//for Oracle
 				+"FROM insplan "
-				//+"LEFT JOIN employer ON employer.EmployerNum = insplan.EmployerNum "
+				+"LEFT JOIN employer ON employer.EmployerNum = insplan.EmployerNum "
 				+"LEFT JOIN carrier ON carrier.CarrierNum = insplan.CarrierNum "
 				+"WHERE CarrierName LIKE '%"+POut.String(carrierName)+"%' ";
 			if(empName!="") {
@@ -581,11 +581,6 @@ namespace OpenDentBusiness {
 			if(!showHidden){
 				command+="AND insplan.IsHidden=0 ";
 			}
-			//command+="GROUP BY insplan.EmployerNum,GroupName,GroupNum,DivisionNo,"
-			//	+"insplan.CarrierNum,insplan.IsMedical,TrojanID ";
-			//if(DataConnection.DBtype==DatabaseType.Oracle){
-			//	command+=",carrier.Address,carrier.City,CarrierName,ElectID,EmpName,NoSendElect,carrier.Phone,carrier.State,carrier.Zip ";
-			//}
 			if(byEmployer) {
 				command+="ORDER BY haveName,EmpName,CarrierName";
 			}
@@ -609,7 +604,7 @@ namespace OpenDentBusiness {
 					row["noSendElect"]="X";
 				}
 				row["Phone"]=rawT.Rows[i]["Phone"].ToString();
-				row["PlanNum"]=rawT.Rows[i]["onePlanNum"].ToString();
+				row["PlanNum"]=rawT.Rows[i]["PlanNum"].ToString();
 				row["State"]=rawT.Rows[i]["State"].ToString();
 				row["subscribers"]=rawT.Rows[i]["subscribers"].ToString();
 				row["TrojanID"]=rawT.Rows[i]["TrojanID"].ToString();

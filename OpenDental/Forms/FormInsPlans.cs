@@ -524,6 +524,7 @@ namespace OpenDental{
 					continue;
 				}
 				InsPlans.ChangeReferences(listSelected[i].PlanNum,planToMergeTo.PlanNum);
+				Benefits.DeleteForPlan(listSelected[i].PlanNum);
 				InsPlans.Delete(listSelected[i].PlanNum);
 				//for(int j=0;j<planNums.Count;j++) {
 					//InsPlans.ComputeEstimatesForPlan(planNums[j]);
