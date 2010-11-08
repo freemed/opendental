@@ -193,10 +193,11 @@ namespace OpenDental{
 
 		private void butAdd_Click(object sender, System.EventArgs e) {
 			Automation auto=new Automation();
+			Automations.Insert(auto);//so that we can attach conditions
 			FormAutomationEdit FormA=new FormAutomationEdit(auto);
 			FormA.IsNew=true;
 			FormA.ShowDialog();
-			if(FormA.DialogResult==DialogResult.Cancel){
+			if(FormA.DialogResult!=DialogResult.OK){
 				return;
 			}
 			FillGrid();

@@ -97,6 +97,23 @@ namespace OpenDental{
 			butDelete = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
+			// butDelete
+			// 
+			butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
+			butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			butDelete.Autosize = true;
+			butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			butDelete.CornerRadius = 4F;
+			butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
+			butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			butDelete.Location = new System.Drawing.Point(48,454);
+			butDelete.Name = "butDelete";
+			butDelete.Size = new System.Drawing.Size(75,24);
+			butDelete.TabIndex = 16;
+			butDelete.Text = "&Delete";
+			butDelete.Click += new System.EventHandler(this.butDelete_Click);
+			// 
 			// label1
 			// 
 			this.label1.Location = new System.Drawing.Point(48,24);
@@ -264,23 +281,6 @@ namespace OpenDental{
 			this.butProcCode.Text = "...";
 			this.butProcCode.Click += new System.EventHandler(this.butProcCode_Click);
 			// 
-			// butDelete
-			// 
-			butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
-			butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			butDelete.Autosize = true;
-			butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			butDelete.CornerRadius = 4F;
-			butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
-			butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			butDelete.Location = new System.Drawing.Point(48,454);
-			butDelete.Name = "butDelete";
-			butDelete.Size = new System.Drawing.Size(75,24);
-			butDelete.TabIndex = 16;
-			butDelete.Text = "&Delete";
-			butDelete.Click += new System.EventHandler(this.butDelete_Click);
-			// 
 			// butOK
 			// 
 			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -342,6 +342,7 @@ namespace OpenDental{
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Edit Automation";
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormAutomationEdit_FormClosing);
 			this.Load += new System.EventHandler(this.FormAutomationEdit_Load);
 			this.ResumeLayout(false);
 			this.PerformLayout();
@@ -464,13 +465,18 @@ namespace OpenDental{
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
-			if(IsNew){
-				DialogResult=DialogResult.Cancel;
-				return;
-			}
+			//if(IsNew){
+			//
+			//	return;
+			//}
 			AutomationConditions.DeleteByAutomationNum(AutoCur.AutomationNum);
 			Automations.Delete(AutoCur);
-			DialogResult=DialogResult.OK;
+			if(IsNew) {
+				DialogResult=DialogResult.Cancel;
+			}
+			else {
+				DialogResult=DialogResult.OK;
+			}
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
@@ -557,17 +563,23 @@ namespace OpenDental{
 				AutoCur.CommType=0;
 				AutoCur.MessageContent="";
 			}
-			if(IsNew){
-				Automations.Insert(AutoCur);
-			}
-			else{
-				Automations.Update(AutoCur);
-			}
+			Automations.Update(AutoCur);//Because always inserted before opening this form.
 			DialogResult=DialogResult.OK;
 		}
 
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
+		}
+
+		private void FormAutomationEdit_FormClosing(object sender,FormClosingEventArgs e) {
+			if(DialogResult==DialogResult.OK) {
+				return;
+			}
+			//this happens if cancel.
+			if(IsNew) {
+				AutomationConditions.DeleteByAutomationNum(AutoCur.AutomationNum);
+				Automations.Delete(AutoCur);
+			}
 		}
 
 
