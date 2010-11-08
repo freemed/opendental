@@ -2876,130 +2876,167 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);
 				command="ALTER TABLE payplan ADD INDEX (InsSubNum)";
 				Db.NonQ(command);
-				//command="SELECT ValueString FROM preference WHERE PrefName='InsurancePlansShared'";
-				//string result=Db.GetScalar(command);
-				//bool plansShared=(result=="1");
-				//if(plansShared) {//for example, a clinic with 2000 identical plans.
-					//Create a temporary table that will hold a copy of all the original plans.
-					command="DROP TABLE IF EXISTS tempinsplan";
-					Db.NonQ(command);
-					command="CREATE TABLE tempinsplan SELECT * FROM insplan";
-					Db.NonQ(command);
-					command="ALTER TABLE tempinsplan ADD NewPlanNum bigint NOT NULL";//This new column is the only thing different about this table.
-					Db.NonQ(command);
-					command="ALTER TABLE tempinsplan ADD INDEX (NewPlanNum)";
-					Db.NonQ(command);
-					command="ALTER TABLE tempinsplan ADD INDEX (PlanNum)";
-					Db.NonQ(command);
-					command="ALTER TABLE tempinsplan ADD INDEX (Subscriber)";
-					Db.NonQ(command);
-					command="ALTER TABLE tempinsplan ADD INDEX (CarrierNum)";
-					Db.NonQ(command);
-					//Create a temporary table that will hold a copy of all the unique plans
-					command="DROP TABLE IF EXISTS tempunique";
-					Db.NonQ(command);
-					command="CREATE TABLE tempunique SELECT * FROM insplan GROUP BY EmployerNum,GroupName,GroupNum,DivisionNo,CarrierNum,IsMedical,TrojanID,FeeSched";
-					Db.NonQ(command);
-					command="ALTER TABLE tempunique ADD INDEX (PlanNum)";
-					Db.NonQ(command);
-					command="ALTER TABLE tempunique ADD INDEX (Subscriber)";
-					Db.NonQ(command);
-					command="ALTER TABLE tempunique ADD INDEX (CarrierNum)";
-					Db.NonQ(command);
-					command="UPDATE tempinsplan,tempunique SET tempinsplan.NewPlanNum=tempunique.PlanNum "
-						+"WHERE tempinsplan.EmployerNum=tempunique.EmployerNum "
-						+"AND tempinsplan.GroupName=tempunique.GroupName "
-						+"AND tempinsplan.GroupNum=tempunique.GroupNum "
-						+"AND tempinsplan.DivisionNo=tempunique.DivisionNo "
-						+"AND tempinsplan.CarrierNum=tempunique.CarrierNum "
-						+"AND tempinsplan.IsMedical=tempunique.IsMedical "
-						+"AND tempinsplan.TrojanID=tempunique.TrojanID "
-						+"AND tempinsplan.FeeSched=tempunique.FeeSched";
-					Db.NonQ(command);
-					//Now, create a series of inssub rows, one for each of the original plans.
-					//But instead of referencing the original planNum, reference the NewPlanNum
-					command="INSERT INTO inssub (PlanNum,Subscriber,DateEffective,DateTerm,ReleaseInfo,AssignBen,SubscriberID,BenefitNotes,SubscNote,OldPlanNum) "
-						+"SELECT NewPlanNum,Subscriber,DateEffective,DateTerm,ReleaseInfo,AssignBen,SubscriberID,BenefitNotes,SubscNote,PlanNum "
-						+"FROM tempinsplan";
-					Db.NonQ(command);
-					//fix references to plannums throughout the program---------------------------------------------------
-					//appointment.InsPlan1/2 -- UPDATE InsPlan1/2
-					command="UPDATE appointment SET InsPlan1=(SELECT NewPlanNum FROM tempinsplan WHERE appointment.InsPlan1=tempinsplan.PlanNum) WHERE InsPlan1 != 0";
-					Db.NonQ(command);
-					command="UPDATE appointment SET InsPlan2=(SELECT NewPlanNum FROM tempinsplan WHERE appointment.InsPlan2=tempinsplan.PlanNum) WHERE InsPlan2 != 0";
-					Db.NonQ(command);
-					//benefit.PlanNum -- DELETE unused
-					command="DELETE FROM benefit WHERE PlanNum > 0 AND NOT EXISTS(SELECT * FROM tempunique WHERE tempunique.PlanNum=benefit.PlanNum)";
-					Db.NonQ(command);
-					//claim.PlanNum/PlanNum2 -- UPDATE PlanNum/2
-					command="UPDATE claim SET PlanNum=(SELECT NewPlanNum FROM tempinsplan WHERE claim.PlanNum=tempinsplan.PlanNum) WHERE PlanNum != 0";
-					Db.NonQ(command);
-					command="UPDATE claim SET PlanNum2=(SELECT NewPlanNum FROM tempinsplan WHERE claim.PlanNum2=tempinsplan.PlanNum) WHERE PlanNum2 != 0";
-					Db.NonQ(command);
-					//claimproc.PlanNum -- UPDATE PlanNum
-					command="UPDATE claimproc SET PlanNum=(SELECT NewPlanNum FROM tempinsplan WHERE claimproc.PlanNum=tempinsplan.PlanNum) WHERE PlanNum != 0";
-					Db.NonQ(command);
-					//etrans.PlanNum -- UPDATE PlanNum
-					command="UPDATE etrans SET PlanNum=(SELECT NewPlanNum FROM tempinsplan WHERE etrans.PlanNum=tempinsplan.PlanNum) WHERE PlanNum != 0";
-					Db.NonQ(command);
-					//patplan.PlanNum -- UPDATE PlanNum
-					command="UPDATE patplan SET PlanNum=(SELECT NewPlanNum FROM tempinsplan WHERE patplan.PlanNum=tempinsplan.PlanNum) WHERE PlanNum != 0";
-					Db.NonQ(command);
-					//payplan.PlanNum -- UPDATE PlanNum
-					command="UPDATE payplan SET PlanNum=(SELECT NewPlanNum FROM tempinsplan WHERE payplan.PlanNum=tempinsplan.PlanNum) WHERE PlanNum != 0";
-					Db.NonQ(command);
-					//Now, drop all the unused plans--------------------------------------------------------------------------
-					command="DELETE FROM insplan WHERE NOT EXISTS(SELECT * FROM tempunique WHERE tempunique.PlanNum=insplan.PlanNum)";
-					Db.NonQ(command);
-					//Set all the InsSubNums.  Very similar to the queries for the offices without shared plans------------------------------------
-					//claim.PlanNum/PlanNum2 -- claim.InsSubNum/2
-					command="UPDATE claim SET InsSubNum = (SELECT InsSubNum FROM inssub WHERE inssub.OldPlanNum=claim.PlanNum) WHERE PlanNum > 0";
-					Db.NonQ(command);
-					command="UPDATE claim SET InsSubNum2 = (SELECT InsSubNum FROM inssub WHERE inssub.OldPlanNum=claim.PlanNum2) WHERE PlanNum2 > 0";
-					Db.NonQ(command);
-					//claimproc.PlanNum -- claimproc.InsSubNum
-					command="UPDATE claimproc SET InsSubNum = (SELECT InsSubNum FROM inssub WHERE inssub.OldPlanNum=claimproc.PlanNum) WHERE PlanNum > 0";
-					Db.NonQ(command);
-					//etrans.PlanNum -- etrans.InsSubNum
-					command="UPDATE etrans SET InsSubNum = (SELECT InsSubNum FROM inssub WHERE inssub.OldPlanNum=etrans.PlanNum) WHERE PlanNum > 0";
-					Db.NonQ(command);
-					//patplan.PlanNum -- patplan.InsSubNum
-					command="UPDATE patplan SET InsSubNum = (SELECT InsSubNum FROM inssub WHERE inssub.OldPlanNum=patplan.PlanNum) WHERE PlanNum > 0";
-					Db.NonQ(command);
-					//payplan.PlanNum -- payplan.InsSubNum
-					command="UPDATE payplan SET InsSubNum = (SELECT InsSubNum FROM inssub WHERE inssub.OldPlanNum=payplan.PlanNum) WHERE PlanNum > 0";
-					Db.NonQ(command);
-					//Drop temp columns and tables-------------------------------------------------------------------------------------------------
-					command="ALTER TABLE inssub DROP OldPlanNum";
-					Db.NonQ(command);
-					command="DROP TABLE IF EXISTS tempinsplan";
-					Db.NonQ(command);
-					command="DROP TABLE IF EXISTS tempunique";
-					Db.NonQ(command);
-				/*}
-				else {//For most offices, plansShared will be false, and no combining of plans will happen
-					command="INSERT INTO inssub (PlanNum,Subscriber,DateEffective,DateTerm,ReleaseInfo,AssignBen,SubscriberID,BenefitNotes,SubscNote) "
-						+"SELECT PlanNum,Subscriber,DateEffective,DateTerm,ReleaseInfo,AssignBen,SubscriberID,BenefitNotes,SubscNote "
-						+"FROM insplan";
-					Db.NonQ(command);
-					//claim.PlanNum/PlanNum2 -- claim.InsSubNum/2
-					command="UPDATE claim SET InsSubNum = (SELECT InsSubNum FROM inssub WHERE inssub.PlanNum=claim.PlanNum) WHERE PlanNum > 0";
-					Db.NonQ(command);
-					command="UPDATE claim SET InsSubNum2 = (SELECT InsSubNum FROM inssub WHERE inssub.PlanNum=claim.PlanNum2) WHERE PlanNum2 > 0";
-					Db.NonQ(command);
-					//claimproc.PlanNum -- claimproc.InsSubNum
-					command="UPDATE claimproc SET InsSubNum = (SELECT InsSubNum FROM inssub WHERE inssub.PlanNum=claimproc.PlanNum) WHERE PlanNum > 0";
-					Db.NonQ(command);
-					//etrans.PlanNum -- etrans.InsSubNum
-					command="UPDATE etrans SET InsSubNum = (SELECT InsSubNum FROM inssub WHERE inssub.PlanNum=etrans.PlanNum) WHERE PlanNum > 0";
-					Db.NonQ(command);
-					//patplan.PlanNum -- patplan.InsSubNum
-					command="UPDATE patplan SET InsSubNum = (SELECT InsSubNum FROM inssub WHERE inssub.PlanNum=patplan.PlanNum) WHERE PlanNum > 0";
-					Db.NonQ(command);
-					//payplan.PlanNum -- payplan.InsSubNum
-					command="UPDATE payplan SET InsSubNum = (SELECT InsSubNum FROM inssub WHERE inssub.PlanNum=payplan.PlanNum) WHERE PlanNum > 0";
-					Db.NonQ(command);
-				}*/
+				//Create a temporary table that will hold a copy of all the original plans.
+				command="DROP TABLE IF EXISTS tempinsplan";
+				Db.NonQ(command);
+				command="CREATE TABLE tempinsplan SELECT * FROM insplan";
+				Db.NonQ(command);
+				command="ALTER TABLE tempinsplan ADD NewPlanNum bigint NOT NULL";//This new column is the only thing different about this table.
+				Db.NonQ(command);
+				command="ALTER TABLE tempinsplan ADD INDEX (NewPlanNum)";
+				Db.NonQ(command);
+				command="ALTER TABLE tempinsplan ADD INDEX (PlanNum)";
+				Db.NonQ(command);
+				command="ALTER TABLE tempinsplan ADD INDEX (Subscriber)";
+				Db.NonQ(command);
+				command="ALTER TABLE tempinsplan ADD INDEX (CarrierNum)";
+				Db.NonQ(command);
+				//Create a temporary table that will hold a copy of all the unique plans
+				command="DROP TABLE IF EXISTS tempunique";
+				Db.NonQ(command);
+				command="CREATE TABLE tempunique SELECT * FROM insplan GROUP BY EmployerNum,GroupName,GroupNum,DivisionNo,CarrierNum,IsMedical,TrojanID,FeeSched";
+				Db.NonQ(command);
+				command="ALTER TABLE tempunique ADD INDEX (PlanNum)";
+				Db.NonQ(command);
+				command="ALTER TABLE tempunique ADD INDEX (Subscriber)";
+				Db.NonQ(command);
+				command="ALTER TABLE tempunique ADD INDEX (CarrierNum)";
+				Db.NonQ(command);
+				command="UPDATE tempinsplan,tempunique SET tempinsplan.NewPlanNum=tempunique.PlanNum "
+					+"WHERE tempinsplan.EmployerNum=tempunique.EmployerNum "
+					+"AND tempinsplan.GroupName=tempunique.GroupName "
+					+"AND tempinsplan.GroupNum=tempunique.GroupNum "
+					+"AND tempinsplan.DivisionNo=tempunique.DivisionNo "
+					+"AND tempinsplan.CarrierNum=tempunique.CarrierNum "
+					+"AND tempinsplan.IsMedical=tempunique.IsMedical "
+					+"AND tempinsplan.TrojanID=tempunique.TrojanID "
+					+"AND tempinsplan.FeeSched=tempunique.FeeSched";
+				Db.NonQ(command);
+				//Now, create a series of inssub rows, one for each of the original plans.
+				//But instead of referencing the original planNum, reference the NewPlanNum
+				command="INSERT INTO inssub (PlanNum,Subscriber,DateEffective,DateTerm,ReleaseInfo,AssignBen,SubscriberID,BenefitNotes,SubscNote,OldPlanNum) "
+					+"SELECT NewPlanNum,Subscriber,DateEffective,DateTerm,ReleaseInfo,AssignBen,SubscriberID,BenefitNotes,SubscNote,PlanNum "
+					+"FROM tempinsplan";
+				Db.NonQ(command);
+				command="DROP TABLE IF EXISTS tempinsplan";//to emphasize that we will not be using it again.
+				Db.NonQ(command);
+				//fix references to plannums throughout the program---------------------------------------------------
+				//appointment.InsPlan1/2 -- UPDATE InsPlan1/2
+				command="ALTER TABLE appointment ADD OldInsPlan1 bigint NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE appointment ADD INDEX (OldInsPlan1)";
+				Db.NonQ(command);
+				command="UPDATE appointment SET OldInsPlan1 = InsPlan1";
+				Db.NonQ(command);
+				command="ALTER TABLE appointment ADD OldInsPlan2 bigint NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE appointment ADD INDEX (OldInsPlan2)";
+				Db.NonQ(command);
+				command="UPDATE appointment SET OldInsPlan2 = InsPlan2";
+				Db.NonQ(command);
+				command="UPDATE appointment SET InsPlan1=(SELECT PlanNum FROM inssub WHERE inssub.OldPlanNum=appointment.OldInsPlan1) WHERE InsPlan1 != 0";
+				Db.NonQ(command);
+				command="UPDATE appointment SET InsPlan2=(SELECT PlanNum FROM inssub WHERE inssub.OldPlanNum=appointment.OldInsPlan2) WHERE InsPlan2 != 0";
+				Db.NonQ(command);
+				//benefit.PlanNum -- DELETE unused
+				command="DELETE FROM benefit WHERE PlanNum > 0 AND NOT EXISTS(SELECT * FROM tempunique WHERE tempunique.PlanNum=benefit.PlanNum)";
+				Db.NonQ(command);
+				//claim.PlanNum/PlanNum2 -- UPDATE PlanNum/2
+				command="ALTER TABLE claim ADD OldPlanNum bigint NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE claim ADD INDEX (OldPlanNum)";
+				Db.NonQ(command);
+				command="UPDATE claim SET OldPlanNum = PlanNum";
+				Db.NonQ(command);
+				command="ALTER TABLE claim ADD OldPlanNum2 bigint NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE claim ADD INDEX (OldPlanNum2)";
+				Db.NonQ(command);
+				command="UPDATE claim SET OldPlanNum2 = PlanNum2";
+				Db.NonQ(command);
+				command="UPDATE claim SET PlanNum=(SELECT PlanNum FROM inssub WHERE inssub.OldPlanNum=claim.OldPlanNum) WHERE PlanNum != 0";
+				Db.NonQ(command);
+				command="UPDATE claim SET PlanNum2=(SELECT PlanNum FROM inssub WHERE inssub.OldPlanNum=claim.OldPlanNum2) WHERE PlanNum2 != 0";
+				Db.NonQ(command);
+				//claimproc.PlanNum -- UPDATE PlanNum
+				command="ALTER TABLE claimproc ADD OldPlanNum bigint NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE claimproc ADD INDEX (OldPlanNum)";
+				Db.NonQ(command);
+				command="UPDATE claimproc SET OldPlanNum = PlanNum";
+				Db.NonQ(command);
+				command="UPDATE claimproc SET PlanNum=(SELECT PlanNum FROM inssub WHERE inssub.OldPlanNum=claimproc.OldPlanNum) WHERE PlanNum != 0";
+				Db.NonQ(command);
+				//etrans.PlanNum -- UPDATE PlanNum
+				command="ALTER TABLE etrans ADD OldPlanNum bigint NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE etrans ADD INDEX (OldPlanNum)";
+				Db.NonQ(command);
+				command="UPDATE etrans SET OldPlanNum = PlanNum";
+				Db.NonQ(command);
+				command="UPDATE etrans SET PlanNum=(SELECT PlanNum FROM inssub WHERE inssub.OldPlanNum=etrans.OldPlanNum) WHERE PlanNum != 0";
+				Db.NonQ(command);
+				//patplan.PlanNum -- UPDATE PlanNum
+				command="ALTER TABLE patplan ADD OldPlanNum bigint NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE patplan ADD INDEX (OldPlanNum)";
+				Db.NonQ(command);
+				command="UPDATE patplan SET OldPlanNum = PlanNum";
+				Db.NonQ(command);
+				command="UPDATE patplan SET PlanNum=(SELECT PlanNum FROM inssub WHERE inssub.OldPlanNum=patplan.OldPlanNum) WHERE PlanNum != 0";
+				Db.NonQ(command);
+				//payplan.PlanNum -- UPDATE PlanNum
+				command="ALTER TABLE payplan ADD OldPlanNum bigint NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE payplan ADD INDEX (OldPlanNum)";
+				Db.NonQ(command);
+				command="UPDATE payplan SET OldPlanNum = PlanNum";
+				Db.NonQ(command);
+				command="UPDATE payplan SET PlanNum=(SELECT PlanNum FROM inssub WHERE inssub.OldPlanNum=payplan.OldPlanNum) WHERE PlanNum != 0";
+				Db.NonQ(command);
+				//Now, drop all the unused plans-------------------------------------------------------------------------------------------
+				command="DELETE FROM insplan WHERE NOT EXISTS(SELECT * FROM tempunique WHERE tempunique.PlanNum=insplan.PlanNum)";
+				Db.NonQ(command);
+				//Set all the InsSubNums.--------------------------------------------------------------------------------------------------
+				//claim.PlanNum/PlanNum2 -- claim.InsSubNum/2
+				command="UPDATE claim SET InsSubNum = (SELECT InsSubNum FROM inssub WHERE inssub.OldPlanNum=claim.OldPlanNum) WHERE PlanNum > 0";
+				Db.NonQ(command);
+				command="UPDATE claim SET InsSubNum2 = (SELECT InsSubNum FROM inssub WHERE inssub.OldPlanNum=claim.OldPlanNum2) WHERE PlanNum2 > 0";
+				Db.NonQ(command);
+				//claimproc.PlanNum -- claimproc.InsSubNum
+				command="UPDATE claimproc SET InsSubNum = (SELECT InsSubNum FROM inssub WHERE inssub.OldPlanNum=claimproc.OldPlanNum) WHERE PlanNum > 0";
+				Db.NonQ(command);
+				//etrans.PlanNum -- etrans.InsSubNum
+				command="UPDATE etrans SET InsSubNum = (SELECT InsSubNum FROM inssub WHERE inssub.OldPlanNum=etrans.OldPlanNum) WHERE PlanNum > 0";
+				Db.NonQ(command);
+				//patplan.PlanNum -- patplan.InsSubNum
+				command="UPDATE patplan SET InsSubNum = (SELECT InsSubNum FROM inssub WHERE inssub.OldPlanNum=patplan.OldPlanNum) WHERE PlanNum > 0";
+				Db.NonQ(command);
+				//payplan.PlanNum -- payplan.InsSubNum
+				command="UPDATE payplan SET InsSubNum = (SELECT InsSubNum FROM inssub WHERE inssub.OldPlanNum=payplan.OldPlanNum) WHERE PlanNum > 0";
+				Db.NonQ(command);
+				//Drop temp columns and tables-------------------------------------------------------------------------------------------------
+				command="ALTER TABLE inssub DROP OldPlanNum";
+				Db.NonQ(command);
+				command="ALTER TABLE appointment DROP OldInsPlan1";
+				Db.NonQ(command);
+				command="ALTER TABLE appointment DROP OldInsPlan2";
+				Db.NonQ(command);
+				command="ALTER TABLE claim DROP OldPlanNum";
+				Db.NonQ(command);
+				command="ALTER TABLE claim DROP OldPlanNum2";
+				Db.NonQ(command);
+				command="ALTER TABLE claimproc DROP OldPlanNum";
+				Db.NonQ(command);
+				command="ALTER TABLE etrans DROP OldPlanNum";
+				Db.NonQ(command);
+				command="ALTER TABLE patplan DROP OldPlanNum";
+				Db.NonQ(command);
+				command="ALTER TABLE payplan DROP OldPlanNum";
+				Db.NonQ(command);
+				command="DROP TABLE IF EXISTS tempunique";
+				Db.NonQ(command);
+				//Final changes to tables-----------------------------------------------------------------------------------------------------
 				command="ALTER TABLE insplan DROP Subscriber";
 				Db.NonQ(command);
 				command="ALTER TABLE insplan DROP DateEffective";

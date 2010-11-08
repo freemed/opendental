@@ -198,7 +198,7 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
-			PatPlan[] patPlanArray;
+			//PatPlan[] patPlanArray;
 			InsPlan plan;
 			for(int i=0;i<SubList.Count;i++) {
 				row=new ODGridRow();
@@ -216,8 +216,8 @@ namespace OpenDental{
 				else {
 					row.Cells.Add(SubList[i].DateTerm.ToString("d"));
 				}
-				patPlanArray=PatPlans.GetByPlanNum(SubList[i].PlanNum);
-				row.Cells.Add(patPlanArray.Length.ToString());
+				int countPatPlans=PatPlans.GetCountBySubNum(SubList[i].InsSubNum);
+				row.Cells.Add(countPatPlans.ToString());
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();

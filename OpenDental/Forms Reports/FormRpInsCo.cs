@@ -125,12 +125,13 @@ Order By patient.lname,patient.fname
 			report.Query= "SELECT carrier.CarrierName"
 				+",CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName),' '),patient.MiddleI),carrier.Phone,"
 				+"insplan.Groupname "
-				+"FROM insplan,inssub,patient,carrier,patplan "
+				+"FROM insplan,inssub,patient,carrier "//,patplan "//we only include patplan to make sure insurance is active for a patient.  We don't want any info from patplan.
 				+"WHERE inssub.Subscriber=patient.PatNum "
 				+"AND inssub.PlanNum=insplan.PlanNum "
-				+"AND insplan.PlanNum=patplan.PlanNum "
-				+"AND patplan.PatNum=patient.PatNum "
-				+"AND patplan.Ordinal=1 "
+				+"AND EXISTS (SELECT * FROM patplan WHERE patplan.InsSubNum=inssub.InsSubNum) "
+				//+"AND insplan.PlanNum=patplan.PlanNum "
+				//+"AND patplan.PatNum=patient.PatNum "
+				//+"AND patplan.Ordinal=1 "
 				+"AND carrier.CarrierNum=insplan.CarrierNum "
 				+"AND carrier.CarrierName LIKE '"+carrier+"%' "
 				+"ORDER BY carrier.CarrierName,patient.LName";

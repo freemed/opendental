@@ -139,7 +139,7 @@ namespace OpenDental{
 		private void FormInsSelectSubscr_Load(object sender, System.EventArgs e) {
 			SubList=InsSubs.GetListForSubscriber(Subscriber);
 			List<InsPlan> planList=InsPlans.RefreshForSubList(SubList);
-			PatPlan[] patPlanArray;
+			//PatPlan[] patPlanArray;
 			string str;
 			InsPlan plan;
 			for(int i=0;i<SubList.Count;i++) {
@@ -148,8 +148,8 @@ namespace OpenDental{
 				if(plan.GroupNum!="") {
 					str+=Lan.g(this," group:")+plan.GroupNum;
 				}
-				patPlanArray=PatPlans.GetByPlanNum(SubList[i].PlanNum);
-				if(patPlanArray.Length==0) {
+				int countPatPlans=PatPlans.GetCountBySubNum(SubList[i].InsSubNum);
+				if(countPatPlans==0) {
 					str+=" "+Lan.g(this,"(not in use)");
 				}
 				listPlans.Items.Add(str);

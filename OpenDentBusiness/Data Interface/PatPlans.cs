@@ -171,13 +171,22 @@ namespace OpenDentBusiness{
 			return PIn.Long(Db.GetScalar(command));
 		}
 
-		///<summary>Gets directly from database.  Used by Trojan. Also used in a few loops where it shouldn't be.  It will be faster to replace this with a single query instead of those loops.</summary>
+		///<summary>Gets directly from database.  Used by Trojan.</summary>
 		public static PatPlan[] GetByPlanNum(long planNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<PatPlan[]>(MethodBase.GetCurrentMethod(),planNum);
 			} 
 			string command="SELECT * FROM patplan WHERE PlanNum='"+POut.Long(planNum)+"'";
 			return Crud.PatPlanCrud.SelectMany(command).ToArray();
+		}
+
+		///<summary></summary>
+		public static int GetCountBySubNum(long insSubNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetInt(MethodBase.GetCurrentMethod(),insSubNum);
+			}
+			string command="SELECT COUNT(*) FROM patplan WHERE InsSubNum='"+POut.Long(insSubNum)+"'";
+			return PIn.Int(Db.GetCount(command));
 		}
 
 		///<summary>Will return null if none exists.</summary>

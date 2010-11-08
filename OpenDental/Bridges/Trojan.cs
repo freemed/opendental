@@ -113,7 +113,7 @@ namespace OpenDental.Bridges {
 					try {
 						InsPlan[] insplans=InsPlans.GetByTrojanID(records[i][0]);
 						for(int j=0;j<insplans.Length;j++) {
-							insplans[j].PlanNote="PLAN DROPED BY TROJAN"+Environment.NewLine+insplans[j].PlanNote;
+							insplans[j].PlanNote="PLAN DROPPED BY TROJAN"+Environment.NewLine+insplans[j].PlanNote;
 							insplans[j].TrojanID="";
 							InsPlans.Update(insplans[j]);
 							PatPlan[] patplans=PatPlans.GetByPlanNum(insplans[j].PlanNum);
