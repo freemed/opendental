@@ -33,7 +33,6 @@ namespace OpenDental{
 			this.labelStartDate = new System.Windows.Forms.Label();
 			this.labelEndDate = new System.Windows.Forms.Label();
 			this.textDateEnd = new OpenDental.ValidDate();
-			this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
 			this.menuWebFormsRight = new System.Windows.Forms.ContextMenu();
 			this.menuItemViewSheet = new System.Windows.Forms.MenuItem();
 			this.menuItemImportSheet = new System.Windows.Forms.MenuItem();
@@ -132,11 +131,6 @@ namespace OpenDental{
 			this.textDateEnd.Name = "textDateEnd";
 			this.textDateEnd.Size = new System.Drawing.Size(77,20);
 			this.textDateEnd.TabIndex = 224;
-			// 
-			// backgroundWorker1
-			// 
-			this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
-			this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
 			// 
 			// menuWebFormsRight
 			// 
@@ -260,7 +254,6 @@ namespace OpenDental{
 		private System.Windows.Forms.Label labelStartDate;
 		private System.Windows.Forms.Label labelEndDate;
 		private ValidDate textDateEnd;
-		private System.ComponentModel.BackgroundWorker backgroundWorker1;
 		private OpenDental.UI.Button butRefresh;
 		private System.Windows.Forms.ContextMenu menuWebFormsRight;
 		private System.Windows.Forms.MenuItem menuItemViewSheet;

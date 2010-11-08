@@ -198,8 +198,8 @@ namespace OpenDental {
 				// find match for fields in Patients in the web_sheetfieldlist
 				var WebSheetFieldList=sAnds.web_sheetfieldlist.Where(sf => sf.FieldName.ToLower()==field.Name.ToLower());
 				if(WebSheetFieldList.Count()>0) {
-					// this loop is used to field that may generate mutiple values for a single field in the patient.
-					//for example the filed gender has 2 eqivalent sheet field in the web_sheetfieldlist
+					// this loop is used to fill a field that may generate mutiple values for a single field in the patient.
+					//for example the field gender has 2 eqivalent sheet fields in the web_sheetfieldlist
 					for(int i=0;i<WebSheetFieldList.Count();i++) {
 						WebHostSynch.webforms_sheetfield sf=WebSheetFieldList.ElementAt(i);
 						String SheetWebFieldValue=sf.FieldValue;
@@ -429,8 +429,11 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please fix data entry errors first.");
 				return;
 			}
-			//if a thread is not used, the RetrieveAndSaveData() Method will freeze the application if the web is slow 
-			this.backgroundWorker1.RunWorkerAsync();
+			Cursor=Cursors.WaitCursor;
+			//this.backgroundWorker1.RunWorkerAsync(); call this  method if theread is to be used later.
+			RetrieveAndSaveData(); // if a thread is used this method will go into backgroundWorker1_DoWork
+			FillGrid(); // if a thread is used this method will go into backgroundWorker1_RunWorkerCompleted
+			Cursor=Cursors.Default;
 		}
 
 		private void butToday_Click(object sender,EventArgs e) {
@@ -487,14 +490,6 @@ namespace OpenDental {
 			FormPatientForms formP=new FormPatientForms();
 			formP.PatNum=sheet.PatNum;
 			formP.ShowDialog();
-		}
-
-		private void backgroundWorker1_RunWorkerCompleted(object sender,RunWorkerCompletedEventArgs e) {
-			FillGrid(); 
-		}
-
-		private void backgroundWorker1_DoWork(object sender,DoWorkEventArgs e) {
-			RetrieveAndSaveData();
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {

@@ -25,7 +25,7 @@
 					BorderWidth="60px" Style="border-bottom: 20px;text-align: center;" BackColor="White" 
 					Visible="False" Height="0px">
 					<br /><br /><br /><br />
-						<asp:Label ID="LabelSubmitMessage" runat="server" Text=""></asp:Label>
+						<asp:Label ID="LabelSubmitMessage" runat="server" Text="" Font-Names="sans-serif" Font-Size="16px"></asp:Label>
 		</asp:Panel>
 
 </form>
