@@ -418,9 +418,6 @@
     <Compile Include="Forms\FormWebFormSetupV2.designer.cs">
       <DependentUpon>FormWebFormSetupV2.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\FormPayConnectSetup.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Forms\FormChartView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -3857,10 +3854,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormWebFormSetupV2.resx">
       <DependentUpon>FormWebFormSetupV2.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormPayConnectSetup.resx">
-      <DependentUpon>FormPayConnectSetup.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormChartView.resx">
