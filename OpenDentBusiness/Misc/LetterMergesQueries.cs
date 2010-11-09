@@ -67,7 +67,7 @@ namespace OpenDentBusiness {
 					command+="CONCAT(patSubsc.FName,' ',patSubsc.LName) SubscriberNameFL";
 				} 
 				else if(letter.Fields[i]=="SubscriberID") {
-					command+="insplan.SubscriberID";
+					command+="inssub.SubscriberID";
 				} 
 				else if(letter.Fields[i]=="NextSchedAppt") {
 					command+="MIN(appointment.AptDateTime) NextSchedAppt";
@@ -98,7 +98,8 @@ namespace OpenDentBusiness {
 				+"LEFT JOIN patplan ON patplan.PatNum=patient.PatNum AND Ordinal=1 "
 				+"LEFT JOIN insplan ON patplan.PlanNum=insplan.PlanNum "
 				+"LEFT JOIN carrier ON carrier.CarrierNum=insplan.CarrierNum "
-				+"LEFT JOIN patient patSubsc ON patSubsc.PatNum=insplan.Subscriber "
+				+"LEFT JOIN inssub ON patplan.InsSubNum=inssub.InsSubNum "
+				+"LEFT JOIN patient patSubsc ON patSubsc.PatNum=inssub.Subscriber "
 				+"LEFT JOIN appointment ON appointment.PatNum=patient.PatNum "
 					+"AND AptStatus="+POut.Long((int)ApptStatus.Scheduled)+" "
 					+"AND AptDateTime > NOW() "

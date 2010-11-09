@@ -305,13 +305,14 @@ namespace OpenDentBusiness{
 				str.Append(" claim.ClaimNum="+POut.Long(claimNums[i]));//((ClaimSendQueueItem)queueItems[i]).ClaimNum.ToString());
 			}
 			string command;
-			command="SELECT carrier.ElectID,claim.ProvBill,insplan.Subscriber,"
+			command="SELECT carrier.ElectID,claim.ProvBill,inssub.Subscriber,"
 				+"claim.PatNum,claim.ClaimNum "
-				+"FROM claim,insplan,carrier "
+				+"FROM claim,insplan,inssub,carrier "
 				+"WHERE claim.PlanNum=insplan.PlanNum "
+				+"AND claim.InsSubNum=inssub.InsSubNum "
 				+"AND carrier.CarrierNum=insplan.CarrierNum "
 				+"AND ("+str.ToString()+") "
-				+"ORDER BY carrier.ElectID,claim.ProvBill,insplan.Subscriber,insplan.Subscriber!=claim.PatNum,claim.PatNum";
+				+"ORDER BY carrier.ElectID,claim.ProvBill,inssub.Subscriber,inssub.Subscriber!=claim.PatNum,claim.PatNum";
 			DataTable table=Db.GetTable(command);
 			List<X12TransactionItem> retVal=new List<X12TransactionItem>();
 			//object[,] myA=new object[5,table.Rows.Count];

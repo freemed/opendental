@@ -166,9 +166,12 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),Cur);
 			}
-			string command="SELECT insplan.Carrier,CONCAT(patient.LName,patient.FName) FROM insplan,patient" 
-				+" WHERE insplan.Subscriber=patient.PatNum"
-				+" AND insplan.EmployerNum = '"+POut.Long(Cur.EmployerNum)+"'";
+			string command="SELECT carrier.CarrierName,CONCAT(CONCAT(patient.LName,', '),patient.FName) "
+				+"FROM insplan "
+				+"LEFT JOIN inssub ON insplan.PlanNum=inssub.PlanNum "
+				+"LEFT JOIN patient ON inssub.Subscriber=patient.PatNum "
+				+"LEFT JOIN carrier ON insplan.CarrierNum=carrier.CarrierNum "
+				+"WHERE insplan.EmployerNum = "+POut.Long(Cur.EmployerNum);
 			DataTable table=Db.GetTable(command);
 			string retStr="";
 			for(int i=0;i<table.Rows.Count;i++){

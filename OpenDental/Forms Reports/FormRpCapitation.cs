@@ -145,13 +145,14 @@ namespace OpenDental{
 				,procedurelog.ToothNum,procedurelog.Surf,procedurelog.ProcDate
 				,procedurelog.ProcFee,procedurelog.ProcFee-claimproc.WriteOff
 				FROM procedurelog,patient AS patSub,patient AS patPat
-				,insplan,carrier,procedurecode,claimproc
+				,insplan,inssub,carrier,procedurecode,claimproc
 				WHERE procedurelog.PatNum = patPat.PatNum
-				AND claimproc.ProcNum = procedurelog.ProcNum
+				AND claimproc.InsSubNum = inssub.InsSubNum
+				AND procedurelog.ProcNum = claimproc.ProcNum
 				AND claimproc.PlanNum = insplan.PlanNum
 				AND claimproc.Status = 7
 				AND claimproc.NoBillIns = 0 
-				AND insplan.Subscriber = patSub.PatNum
+				AND inssub.Subscriber = patSub.PatNum
 				AND insplan.CarrierNum = carrier.CarrierNum	
 				AND procedurelog.CodeNum = procedurecode.CodeNum
 				AND ?carrier

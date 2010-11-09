@@ -1446,7 +1446,7 @@ namespace OpenDentBusiness{
 				"emailmessage.PatNum",
 				"etrans.PatNum",
 				"formpat.PatNum",
-				"insplan.Subscriber",
+				"inssub.Subscriber",
 				"labcase.PatNum",
 				"medicationpat.PatNum",
 				"mount.PatNum",

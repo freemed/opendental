@@ -218,19 +218,20 @@ namespace OpenDentBusiness{
 				return;
 			}
 			//look for dependencies in insplan table.
-			string command="SELECT CONCAT(CONCAT(LName,', '),FName) FROM patient,insplan" 
-				+" WHERE patient.PatNum=insplan.Subscriber"
-				+" AND insplan.CarrierNum = '"+POut.Long(Cur.CarrierNum)+"'"
-				+" ORDER BY LName,FName";
+			string command="SELECT insplan.PlanNum,CONCAT(CONCAT(LName,', '),FName) FROM insplan "
+				+"LEFT JOIN inssub ON insplan.PlanNum=inssub.PlanNum "
+				+"LEFT JOIN patient ON inssub.Subscriber=patient.PatNum " 
+				+"WHERE insplan.CarrierNum = "+POut.Long(Cur.CarrierNum)+" "
+				+"ORDER BY LName,FName";
 			DataTable table=Db.GetTable(command);
 			string strInUse;
 			if(table.Rows.Count>0){
 				strInUse="";//new string[table.Rows.Count];
 				for(int i=0;i<table.Rows.Count;i++) {
 					if(i>0){
-						strInUse+=", ";
+						strInUse+="; ";
 					}
-					strInUse+=PIn.String(table.Rows[i][0].ToString());
+					strInUse+=PIn.String(table.Rows[i][1].ToString());
 				}
 				throw new ApplicationException(Lans.g("Carriers","Not allowed to delete carrier because it is in use.  Subscribers using this carrier include ")+strInUse);
 			}
@@ -257,8 +258,9 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<string[]>(MethodBase.GetCurrentMethod(),Cur);
 			}
-			string command="SELECT CONCAT(CONCAT(LName,', '),FName) FROM patient,insplan" 
-				+" WHERE patient.PatNum=insplan.Subscriber"
+			string command="SELECT CONCAT(CONCAT(LName,', '),FName) FROM patient,insplan,inssub" 
+				+" WHERE patient.PatNum=inssub.Subscriber"
+				+" AND insplan.PlanNum=inssub.PlanNum"
 				+" AND insplan.CarrierNum = '"+POut.Long(Cur.CarrierNum)+"'"
 				+" ORDER BY LName,FName";
 			DataTable table=Db.GetTable(command);
