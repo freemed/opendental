@@ -1589,11 +1589,11 @@ namespace OpenDentBusiness{
 			if(strBTime.Length>39) {
 				strBTime.Remove(39,strBTime.Length-39);
 			}
+			Plugins.HookAddCode(null,"Appointments.CalculatePattern_end",strBTime,provDent,provHyg,codeNums);
 			string pattern=strBTime.ToString();
 			if(make5minute) {
 				return ConvertPatternTo5(pattern);
 			}
-			Plugins.HookAddCode(null,"Appointments.CalculatePattern_end",strBTime,provDent,provHyg,codeNums);
 			return pattern;
 		}
 
