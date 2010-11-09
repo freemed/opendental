@@ -71,6 +71,7 @@ namespace OpenDental{
 			this.textCardNumber.Name = "textCardNumber";
 			this.textCardNumber.Size = new System.Drawing.Size(217,20);
 			this.textCardNumber.TabIndex = 1;
+			this.textCardNumber.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textCardNumber_KeyPress);
 			// 
 			// label4
 			// 
