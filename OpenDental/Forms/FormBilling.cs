@@ -58,6 +58,7 @@ namespace OpenDental{
 		[Category("Property Changed"),Description("Event raised when user wants to go to a patient or related object.")]
 		public event PatientSelectedEventHandler GoToChanged=null;
 		private bool isInitial=true;
+		private bool ignoreRefreshOnce;
 
 		protected void OnGoToChanged(long patNum) {
 			if(GoToChanged!=null) {
@@ -464,9 +465,14 @@ namespace OpenDental{
 
 		private void FormBilling_Activated(object sender,EventArgs e) {
 			//this gets fired very frequently, including right in the middle of printing a batch.
-			if(!isPrinting){
-				FillGrid();
+			if(isPrinting){
+				return;
 			}
+			if(ignoreRefreshOnce) {
+				ignoreRefreshOnce=false;
+				return;
+			}
+			FillGrid();
 		}
 
 		///<summary>We will always try to preserve the selected bills as well as the scroll postition.</summary>
@@ -474,6 +480,7 @@ namespace OpenDental{
 			if(textDateStart.errorProvider1.GetError(textDateStart)!=""
 				|| textDateEnd.errorProvider1.GetError(textDateEnd)!="")
 			{
+				ignoreRefreshOnce=true;
 				MsgBox.Show(this,"Please fix data entry errors first.");
 				return;
 			}
@@ -576,6 +583,7 @@ namespace OpenDental{
 			if(textDateStart.errorProvider1.GetError(textDateStart)!=""
 				|| textDateEnd.errorProvider1.GetError(textDateEnd)!="")
 			{
+				ignoreRefreshOnce=true;
 				MsgBox.Show(this,"Please fix data entry errors first.");
 				return;
 			}
