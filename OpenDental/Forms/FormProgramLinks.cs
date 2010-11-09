@@ -195,6 +195,15 @@ namespace OpenDental{
 				}
 				return;
 			}
+			if(program.ProgName=="PayConnect") {
+				FormPayConnectSetup fpcs=new FormPayConnectSetup();
+				fpcs.ShowDialog();
+				if(fpcs.DialogResult==DialogResult.OK) {
+					changed=true;
+					FillList();
+				}
+				return;
+			}
 			FormProgramLinkEdit FormPE=new FormProgramLinkEdit();
 			FormPE.ProgramCur=program;
 			FormPE.ShowDialog();

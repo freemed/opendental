@@ -1242,9 +1242,8 @@ namespace OpenDental{
 		private void butPayConnect_Click(object sender,EventArgs e) {
 			Program prog=Programs.GetCur(ProgramName.PayConnect);
 			if(!prog.Enabled){
-				FormProgramLinkEdit formProg=new FormProgramLinkEdit();
-				formProg.ProgramCur=prog;
-				formProg.ShowDialog();
+				FormPayConnectSetup fpcs=new FormPayConnectSetup();
+				fpcs.ShowDialog();
 				CheckUIState();
 				return;
 			}
@@ -1279,10 +1278,8 @@ namespace OpenDental{
 
 		private void menuPayConnect_Click(object sender,EventArgs e) {
 			if(Security.IsAuthorized(Permissions.Setup)) {
-				Program prog=Programs.GetCur(ProgramName.PayConnect);
-				FormProgramLinkEdit formProg=new FormProgramLinkEdit();
-				formProg.ProgramCur=prog;
-				if(formProg.ShowDialog()==DialogResult.OK){
+				FormPayConnectSetup fpcs=new FormPayConnectSetup();
+				if(fpcs.ShowDialog()==DialogResult.OK){
 					CheckUIState();
 				}
 			}

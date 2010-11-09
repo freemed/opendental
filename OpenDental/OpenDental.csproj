@@ -370,6 +370,9 @@
     <Compile Include="Forms\BasicTemplate.designer.cs">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormPayConnectSetup.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\FormWebFormsV2.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1983,6 +1986,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms Reports\FormRpLaserLabels.resx">
       <DependentUpon>FormRpLaserLabels.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormPayConnectSetup.resx">
+      <DependentUpon>FormPayConnectSetup.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormWebFormsV2.resx">
