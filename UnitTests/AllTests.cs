@@ -74,17 +74,17 @@ namespace UnitTests {
 				claimProc=ClaimProcs.GetEstimate(claimProcs,procNum,planNum1);
 				//I don't think allowed can be easily tested on the fly, and it's not that important.
 				if(claimProc.InsEstTotal!=450) {
-					throw new Exception("Should be 450");
+					throw new Exception("Should be 450. \r\n");
 				}
 				if(claimProc.WriteOffEst!=300) {
-					throw new Exception("Should be 300");
+					throw new Exception("Should be 300. \r\n");
 				}
 				claimProc=ClaimProcs.GetEstimate(claimProcs,procNum,planNum2);
 				if(claimProc.InsEstTotal!=200) {
-					throw new Exception("Should be 200");
+					throw new Exception("Should be 200. \r\n");
 				}
 				if(claimProc.WriteOffEst!=0) {
-					throw new Exception("Should be 0");
+					throw new Exception("Should be 0. \r\n");
 				}
 				retVal+="1: Passed.  Claim proc estimates for dual PPO ins.  Allowed1 greater than Allowed2.\r\n";
 			}
@@ -103,17 +103,17 @@ namespace UnitTests {
 				claimProcs=ClaimProcs.Refresh(patNum);
 				claimProc=ClaimProcs.GetEstimate(claimProcs,procNum,planNum1);
 				if(claimProc.InsEstTotal!=325) {
-					throw new Exception("Should be 325");
+					throw new Exception("Should be 325. \r\n");
 				}
 				if(claimProc.WriteOffEst!=425) {
-					throw new Exception("Should be 425");
+					throw new Exception("Should be 425. \r\n");
 				}
 				claimProc=ClaimProcs.GetEstimate(claimProcs,procNum,planNum2);
 				if(claimProc.InsEstTotal!=450) {
-					throw new Exception("Should be 450");
+					throw new Exception("Should be 450. \r\n");
 				}
 				if(claimProc.WriteOffEst!=0) {
-					throw new Exception("Should be 0");
+					throw new Exception("Should be 0. \r\n");
 				}
 				retVal+="2: Passed.  Claim proc estimates for dual PPO ins.  Allowed2 greater than Allowed1.\r\n";
 			}
@@ -167,7 +167,7 @@ namespace UnitTests {
 			ClaimProc claimProc=ClaimProcs.GetEstimate(claimProcs,proc2.ProcNum,plan.PlanNum);
 			//I don't think allowed can be easily tested on the fly, and it's not that important.
 			if(claimProc.InsEstTotal!=0) {//Insurance should not cover because over annual max.
-				throw new Exception("Should be 0");
+				throw new Exception("Should be 0. \r\n");
 			}
 			retVal+="3: Passed.  Insurance show zero coverage over annual max.  Not affected by a frequency.\r\n";
 			return retVal;
@@ -209,7 +209,7 @@ namespace UnitTests {
 			claimProcs=ClaimProcs.Refresh(patNum);
 			ClaimProc claimProc=ClaimProcs.GetEstimate(claimProcs,procNum,planNum);
 			if(claimProc.InsEstTotal!=830) {
-				throw new Exception("Should be 830.");
+				throw new Exception("Should be 830. \r\n");
 			}
 			if(claimProc.EstimateNote!="") {
 				throw new Exception("EstimateNote should be blank.");
@@ -254,7 +254,7 @@ namespace UnitTests {
 			claimProcs=ClaimProcs.Refresh(patNum);
 			ClaimProc claimProc=ClaimProcs.GetEstimate(claimProcs,procNum,planNum);
 			if(claimProc.InsEstTotal!=500) {
-				throw new Exception("Should be 500.");
+				throw new Exception("Should be 500. \r\n");
 			}
 			if(claimProc.EstimateNote!="Over family annual max") {//this explains estimate was reduced.
 				throw new Exception("EstimateNote not matching expected.");
@@ -293,7 +293,7 @@ namespace UnitTests {
 			//Validate
 			double insUsed=InsPlans.GetInsUsedDisplay(histList,DateTime.Today,planNum,patPlanNum,-1,planList,benefitList,patNum);
 			if(insUsed!=400){
-				throw new Exception("Should be 400.");
+				throw new Exception("Should be 400. \r\n");
 			}
 			//Patient has one insurance plan, subscriber self. Benefits: annual max 1000, diagnostic max 1000. One completed procedure, an exam for $50. Sent to insurance and insurance paid $50. Ins used should still show 0 because the ins used value should only be concerned with annual max . 
 			return "6: Passed.  Limitations override more general limitations.\r\n"; 
@@ -348,7 +348,7 @@ namespace UnitTests {
 			claimProcs=ClaimProcs.Refresh(pat.PatNum);
 			ClaimProc claimProc=ClaimProcs.GetEstimate(claimProcs,proc2.ProcNum,plan.PlanNum);
 			if(claimProc.DedEst!=0) {//Second procedure should show no deductible.
-				throw new Exception("Should be 0");
+				throw new Exception("Should be 0. \r\n");
 			}
 			retVal+="7: Passed.  A deductible for preventive/diagnostic is only included once.\r\n";
 			return retVal;
@@ -424,7 +424,7 @@ namespace UnitTests {
 			//Validate
 			string retVal="";
 			if(claim.WriteOff!=500) {
-				throw new Exception("Should be 500");
+				throw new Exception("Should be 500. \r\n");
 			}
 			retVal+="8: Passed.  Completed writeoffs same as estimates for dual PPO ins when Allowed2 greater than Allowed1.\r\n";
 			return retVal;
@@ -476,7 +476,7 @@ namespace UnitTests {
 			claimProcs=ClaimProcs.Refresh(pat.PatNum);
 			ClaimProc claimProc=ClaimProcs.GetEstimate(claimProcs,proc2.ProcNum,plan.PlanNum);
 			if(claimProc.InsEstTotal!=200) {//Insurance should cover.
-				throw new Exception("Should be 200");
+				throw new Exception("Should be 200. \r\n");
 			}
 			retVal+="9: Passed.  Limitations should override more general limitations for any benefit.\r\n";
 			return retVal;
@@ -529,13 +529,71 @@ namespace UnitTests {
 			claimProcs=ClaimProcs.Refresh(pat.PatNum);
 			ClaimProc claimProc1=ClaimProcs.GetEstimate(claimProcs,proc1.ProcNum,plan.PlanNum);
 			if(claimProc1.InsEstTotal!=400) {//Insurance should partially cover.
-				throw new Exception("Should be 400");
+				throw new Exception("Should be 400. \r\n");
 			}
 			ClaimProc claimProc2=ClaimProcs.GetEstimate(claimProcs,proc2.ProcNum,plan.PlanNum);
 			if(claimProc2.InsEstTotal!=0) {//Insurance should not cover.
-				throw new Exception("Should be 0");
+				throw new Exception("Should be 0. \r\n");
 			}
 			retVal+="10: Passed.  Once max is reached, additional procs show 0 coverage even if preventive frequency exists.\r\n";
+			return retVal;
+		}
+
+		///<summary></summary>
+		public static string TestEleven(int specificTest) {
+			if(specificTest != 0 && specificTest !=11) {
+				return "";
+			}
+			string suffix="11";
+			Patient pat=PatientT.CreatePatient(suffix);
+			Carrier carrier=CarrierT.CreateCarrier(suffix);
+			InsPlan plan=InsPlanT.CreateInsPlan(carrier.CarrierNum);
+			InsSub sub=InsSubT.CreateInsSub(pat.PatNum,plan.PlanNum);
+			long subNum=sub.InsSubNum;
+			BenefitT.CreateAnnualMaxFamily(plan.PlanNum,400);
+			BenefitT.CreateCategoryPercent(plan.PlanNum,EbenefitCategory.Restorative,100);
+			PatPlanT.CreatePatPlan(1,pat.PatNum,plan.PlanNum,subNum);
+			//procs - D2140 (amalgum fillings)
+			Procedure proc1=ProcedureT.CreateProcedure(pat,"D2140",ProcStat.TP,"18",500);
+			//Procedure proc1=ProcedureT.CreateProcedure(pat,"D1515",ProcStat.TP,"3",500);
+			ProcedureT.SetPriority(proc1,0);
+			Procedure proc2=ProcedureT.CreateProcedure(pat,"D2140",ProcStat.TP,"19",500);
+			//Procedure proc2=ProcedureT.CreateProcedure(pat,"D1515",ProcStat.TP,"3",500);
+			ProcedureT.SetPriority(proc2,1);
+			//Procedure proc3=ProcedureT.CreateProcedure(pat,"D1515",ProcStat.TP,"3",500);
+			//ProcedureT.SetPriority(proc3,2);
+			//Lists
+			List<ClaimProc> claimProcs=ClaimProcs.Refresh(pat.PatNum);
+			List<ClaimProc> claimProcListOld=new List<ClaimProc>();
+			Family fam=Patients.GetFamily(pat.PatNum);
+			List<InsSub> subList=InsSubs.RefreshForFam(fam);
+			List<InsPlan> planList=InsPlans.RefreshForSubList(subList);
+			List<PatPlan> patPlans=PatPlans.Refresh(pat.PatNum);
+			List<Benefit> benefitList=Benefits.Refresh(patPlans);
+			List<ClaimProcHist> histList=new List<ClaimProcHist>();
+			List<ClaimProcHist> loopList=new List<ClaimProcHist>();
+			List<Procedure> ProcList=Procedures.Refresh(pat.PatNum);
+			Procedure[] ProcListTP=Procedures.GetListTP(ProcList);//sorted by priority, then toothnum
+			//Validate
+			string retVal="";
+			for(int i=0;i<ProcListTP.Length;i++) {
+				Procedures.ComputeEstimates(ProcListTP[i],pat.PatNum,ref claimProcs,false,planList,patPlans,benefitList,
+					histList,loopList,false,pat.Age,subList);
+				//then, add this information to loopList so that the next procedure is aware of it.
+				loopList.AddRange(ClaimProcs.GetHistForProc(claimProcs,ProcListTP[i].ProcNum,ProcListTP[i].CodeNum));
+			}
+			//save changes in the list to the database
+			ClaimProcs.Synch(ref claimProcs,claimProcListOld);
+			claimProcs=ClaimProcs.Refresh(pat.PatNum);
+			ClaimProc claimProc1=ClaimProcs.GetEstimate(claimProcs,proc1.ProcNum,plan.PlanNum);
+			if(claimProc1.InsEstTotal!=400) {//Insurance should partially cover.
+				throw new Exception("Claim 1 was "+claimProc1.InsEstTotal+", should be 400.\r\n");
+			}
+			ClaimProc claimProc2=ClaimProcs.GetEstimate(claimProcs,proc2.ProcNum,plan.PlanNum);
+			if(claimProc2.InsEstTotal!=0) {//Insurance should not cover.
+				throw new Exception("Claim 2 was "+claimProc2.InsEstTotal+", should be 0.\r\n");
+			}
+			retVal+="11: Passed.  Once family max is reached, additional procs show 0 coverage.\r\n";
 			return retVal;
 		}
 

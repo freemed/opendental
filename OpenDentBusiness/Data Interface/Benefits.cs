@@ -783,152 +783,173 @@ namespace OpenDentBusiness {
 				}
 			}
 			//example. $1000 individual max, $3000 family max.
-			//Only individual max makes sense as the starting point.
-			//Family max just limits the sum of individual maxes.
-			//If there is no individual limitation that matches, then return 0.
-			//fluoride age limit already handled, so all that's left is maximums. 
-			if(benInd==null || benInd.MonetaryAmt==-1 || benInd.MonetaryAmt==0) {
+			//Only individual max makes sense as the starting point.								Only family max is now being considered as well.
+			//Family max just limits the sum of individual maxes.										Family max may be the only cap being used.
+			//If there is no individual limitation that matches, then return 0.     No longer valid. Return amount covered by ins, whether individual or family max.
+			//fluoride age limit already handled, so all that's left is maximums.   ...
+			if((benInd==null || benInd.MonetaryAmt==-1 || benInd.MonetaryAmt==0) && (benFam==null || benFam.MonetaryAmt==-1 || benFam.MonetaryAmt==0)){ 
+			//if(benInd==null || benInd.MonetaryAmt==-1 || benInd.MonetaryAmt==0) {
 				return insEstTotal;//no max found for this code.
 			}
-			double maxInd=benInd.MonetaryAmt;
+			double maxInd=0;
+			if(benInd!=null) {
+				maxInd=benInd.MonetaryAmt;
+			}
 			//reduce individual max by amount already paid this year/lifetime---------------------------------------------------
 			//establish date range for procedures to consider
 			DateTime dateStart=BenefitLogic.ComputeRenewDate(procDate,plan.MonthRenew);
 			DateTime dateEnd=procDate;//don't consider anything after the date of this procedure.
-			if(benInd.TimePeriod==BenefitTimePeriod.Lifetime) {
-				dateStart=DateTime.MinValue;
-			}
-			for(int i=0;i<histList.Count;i++) {
-				if(histList[i].PlanNum != planNum) {
-					continue;//different plan
+			if(benInd!=null) {
+				if(benInd.TimePeriod==BenefitTimePeriod.Lifetime) {
+					dateStart=DateTime.MinValue;
 				}
-				if(histList[i].ProcDate<dateStart || histList[i].ProcDate>dateEnd) {
-					continue;
-				}
-				if(histList[i].PatNum != patNum) {
-					continue;//this is for someone else in the family
-				}
-				if(benInd.CodeNum!=0) {//specific code
-					//Enhance this later when code spans are supported.
-					if(ProcedureCodes.GetStringProcCode(benInd.CodeNum)!=histList[i].StrProcCode) {
+				for(int i=0;i<histList.Count;i++) {
+					if(histList[i].PlanNum != planNum) {
+						continue;//different plan
+					}
+					if(histList[i].ProcDate<dateStart || histList[i].ProcDate>dateEnd) {
 						continue;
 					}
-				}
-				else if(benInd.CovCatNum!=0) {//specific category
-					spansForCat=CovSpans.GetForCat(benInd.CovCatNum);
-					bool isMatch=false;
-					if(histList[i].StrProcCode=="") {//If this was a 'total' payment that was not attached to a procedure
-						if(CovCats.GetEbenCat(benInd.CovCatNum)==EbenefitCategory.General) {//And if this is the general category
-							//Then it should affect this max.
-							isMatch=true;
-						}
+					if(histList[i].PatNum != patNum) {
+						continue;//this is for someone else in the family //SHOULD PROBABLY NOT SKIP THIS IN THE CASE OF FAM BUT NO IND MAX. :(
 					}
-					else {//If the payment was attached to a proc, then the proc must be in the coderange of this annual max benefit
-						for(int j=0;j<spansForCat.Length;j++) {
-							if(String.Compare(histList[i].StrProcCode,spansForCat[j].FromCode)>=0 
-							&& String.Compare(histList[i].StrProcCode,spansForCat[j].ToCode)<=0) {
-								isMatch=true;
-								break;
-							}
-						}
-					}
-					if(!isMatch) {
-						continue;
-					}
-				}
-				//if no category, then benefits are not restricted by proc code.
-				//In other words, the benefit applies to all codes.
-				//At this point, we know that the proc in the loopList falls within this max benefit.
-				//But it may also fall within a more restrictive benefit which would take precedence over this one.
-				if(TighterLimitExists(listShort,benInd,histList[i])) {
-					continue;
-				}
-				maxInd-=histList[i].Amount;
-			}
-			//reduce individual max by amount in loop ------------------------------------------------------------------
-			for(int i=0;i<loopList.Count;i++) {
-				//no date restriction, since all TP or part of current claim
-				//if(histList[i].ProcDate<dateStart || histList[i].ProcDate>dateEnd) {
-				//	continue;
-				//}
-				if(loopList[i].PlanNum != planNum) {
-					continue;//different plan.  Even the loop list can contain info for multiple plans.
-				}
-				if(loopList[i].PatNum != patNum) {
-					continue;//this is for someone else in the family
-				}
-				if(benInd.CodeNum!=0) {//specific code
-					//Enhance this later when code spans are supported.
-					if(ProcedureCodes.GetStringProcCode(benInd.CodeNum)!=loopList[i].StrProcCode) {
-						continue;
-					}
-				}
-				else if(benInd.CovCatNum!=0) {//specific category
-					spansForCat=CovSpans.GetForCat(benInd.CovCatNum);
-					bool isMatch=false;
-					if(loopList[i].StrProcCode=="") {//If this was a 'total' payment that was not attached to a procedure
-						if(CovCats.GetEbenCat(benInd.CovCatNum)==EbenefitCategory.General) {//And if this is the general category
-							//Then it should affect this max.
-							isMatch=true;
-						}
-					}
-					else {//If the payment was attached to a proc, then the proc must be in the coderange of this annual max benefit
-						for(int j=0;j<spansForCat.Length;j++) {
-							if(String.Compare(loopList[i].StrProcCode,spansForCat[j].FromCode)>=0 
-							&& String.Compare(loopList[i].StrProcCode,spansForCat[j].ToCode)<=0) {
-								isMatch=true;
-								break;
-							}
-						}
-					}
-					if(!isMatch) {
-						continue;
-					}
-				}
-				else{//if no category, then benefits are not normally restricted by proc code.
-					//The problem is that if the amount in the loop is from an ortho proc, then the general category will exclude ortho.
-					//But sometimes, the annual max is in the system as no category instead of general category.
-					CovCat generalCat=CovCats.GetForEbenCat(EbenefitCategory.General);
-					if(generalCat!=null) {//If there is a general category, then we only consider codes within it.  This is how we exclude ortho.
-						CovSpan[] covSpanArray=CovSpans.GetForCat(generalCat.CovCatNum);
-						if(loopList[i].StrProcCode!="" && !CovSpans.IsCodeInSpans(loopList[i].StrProcCode,covSpanArray)){//for example, ortho
+					if(benInd.CodeNum!=0) {//specific code
+						//Enhance this later when code spans are supported.
+						if(ProcedureCodes.GetStringProcCode(benInd.CodeNum)!=histList[i].StrProcCode) {
 							continue;
 						}
 					}
+					else if(benInd.CovCatNum!=0) {//specific category
+						spansForCat=CovSpans.GetForCat(benInd.CovCatNum);
+						bool isMatch=false;
+						if(histList[i].StrProcCode=="") {//If this was a 'total' payment that was not attached to a procedure
+							if(CovCats.GetEbenCat(benInd.CovCatNum)==EbenefitCategory.General) {//And if this is the general category
+								//Then it should affect this max.
+								isMatch=true;
+							}
+						}
+						else {//If the payment was attached to a proc, then the proc must be in the coderange of this annual max benefit
+							for(int j=0;j<spansForCat.Length;j++) {
+								if(String.Compare(histList[i].StrProcCode,spansForCat[j].FromCode)>=0 
+								&& String.Compare(histList[i].StrProcCode,spansForCat[j].ToCode)<=0) {
+									isMatch=true;
+									break;
+								}
+							}
+						}
+						if(!isMatch) {
+							continue;
+						}
+					}
+					//if no category, then benefits are not restricted by proc code.
+					//In other words, the benefit applies to all codes.
+					//At this point, we know that the proc in the loopList falls within this max benefit.
+					//But it may also fall within a more restrictive benefit which would take precedence over this one.
+					if(TighterLimitExists(listShort,benInd,histList[i])) {
+						continue;
+					}
+					maxInd-=histList[i].Amount;
 				}
-				//At this point, we know that the proc in the loopList falls within this max benefit.
-				//But it may also fall within a more restrictive benefit which would take precedence over this one.
-				if(TighterLimitExists(listShort,benInd,loopList[i])) {
-					continue;
-				}
-				maxInd-=loopList[i].Amount;
 			}
-			if(maxInd <= 0) {//then patient has used up all of their annual max, so no coverage.
-				if(benInd.TimePeriod==BenefitTimePeriod.Lifetime) {
-					note+=Lans.g("Benefits","Over lifetime max");
+			//reduce individual max by amount in loop ------------------------------------------------------------------
+			if(benInd!=null) {
+				for(int i=0;i<loopList.Count;i++) {
+					//no date restriction, since all TP or part of current claim
+					//if(histList[i].ProcDate<dateStart || histList[i].ProcDate>dateEnd) {
+					//	continue;
+					//}
+					if(loopList[i].PlanNum != planNum) {
+						continue;//different plan.  Even the loop list can contain info for multiple plans.
+					}
+					if(loopList[i].PatNum != patNum) {
+						continue;//this is for someone else in the family
+					}
+					if(benInd.CodeNum!=0) {//specific code
+						//Enhance this later when code spans are supported.
+						if(ProcedureCodes.GetStringProcCode(benInd.CodeNum)!=loopList[i].StrProcCode) {
+							continue;
+						}
+					}
+					else if(benInd.CovCatNum!=0) {//specific category
+						spansForCat=CovSpans.GetForCat(benInd.CovCatNum);
+						bool isMatch=false;
+						if(loopList[i].StrProcCode=="") {//If this was a 'total' payment that was not attached to a procedure
+							if(CovCats.GetEbenCat(benInd.CovCatNum)==EbenefitCategory.General) {//And if this is the general category
+								//Then it should affect this max.
+								isMatch=true;
+							}
+						}
+						else {//If the payment was attached to a proc, then the proc must be in the coderange of this annual max benefit
+							for(int j=0;j<spansForCat.Length;j++) {
+								if(String.Compare(loopList[i].StrProcCode,spansForCat[j].FromCode)>=0 
+								&& String.Compare(loopList[i].StrProcCode,spansForCat[j].ToCode)<=0) {
+									isMatch=true;
+									break;
+								}
+							}
+						}
+						if(!isMatch) {
+							continue;
+						}
+					}
+					else {//if no category, then benefits are not normally restricted by proc code.
+						//The problem is that if the amount in the loop is from an ortho proc, then the general category will exclude ortho.
+						//But sometimes, the annual max is in the system as no category instead of general category.
+						CovCat generalCat=CovCats.GetForEbenCat(EbenefitCategory.General);
+						if(generalCat!=null) {//If there is a general category, then we only consider codes within it.  This is how we exclude ortho.
+							CovSpan[] covSpanArray=CovSpans.GetForCat(generalCat.CovCatNum);
+							if(loopList[i].StrProcCode!="" && !CovSpans.IsCodeInSpans(loopList[i].StrProcCode,covSpanArray)) {//for example, ortho
+								continue;
+							}
+						}
+					}
+					//At this point, we know that the proc in the loopList falls within this max benefit.
+					//But it may also fall within a more restrictive benefit which would take precedence over this one.
+					if(TighterLimitExists(listShort,benInd,loopList[i])) {
+						continue;
+					}
+					maxInd-=loopList[i].Amount;
 				}
-				else if(benInd.TimePeriod==BenefitTimePeriod.CalendarYear
-					|| benInd.TimePeriod==BenefitTimePeriod.ServiceYear) 
-				{
-					note+=Lans.g("Benefits","Over annual max");
-				}
-				return 0;
 			}
-			double retVal=insEstTotal;
-			if(maxInd < insEstTotal) {//if there's not enough left in the annual max to cover this proc.
-				retVal=maxInd;//insurance will only cover up to the remaining annual max
-			}
-			//So at this point, there seems to be enough to cover at least part of this procedure, and the only reason to continue
-			//would be if there was also a family max that had been met.
-			//I don't think this is common, but the following code will handle it.
-			if(benFam==null || benFam.MonetaryAmt==-1) {
-				if(retVal != insEstTotal){
+			if(benInd!=null) {
+				if(maxInd <= 0) {//then patient has used up all of their annual max, so no coverage.
 					if(benInd.TimePeriod==BenefitTimePeriod.Lifetime) {
 						note+=Lans.g("Benefits","Over lifetime max");
 					}
 					else if(benInd.TimePeriod==BenefitTimePeriod.CalendarYear
 						|| benInd.TimePeriod==BenefitTimePeriod.ServiceYear) {
 						note+=Lans.g("Benefits","Over annual max");
+					}
+					return 0;
+				}
+			}
+			double retVal=insEstTotal;
+			if(benInd!=null){
+				if(maxInd < insEstTotal) {//if there's not enough left in the individual annual max to cover this proc.
+					retVal=maxInd;//insurance will only cover up to the remaining annual max
+				}
+			}
+			//Three situations:
+			//1. Ind only. 
+ 			//Handled in the next 10 lines, then return.
+			//
+			//2. Ind and Fam max present.  
+			//There seems to be enough to cover at least part of this procedure.
+			//There may also be a family max that has been met which may partially or completely reduce coverage of this proc.
+			//
+			//3. Fam only.  We don't know how much is left.
+			//maxInd=-1
+			//benInd=null
+			if(benFam==null || benFam.MonetaryAmt==-1) {//if no family max.  Ind only.
+				if(retVal != insEstTotal){//and procedure is not fully covered by ind max
+					if(benInd!=null) {//redundant
+						if(benInd.TimePeriod==BenefitTimePeriod.Lifetime) {
+							note+=Lans.g("Benefits","Over lifetime max");
+						}
+						else if(benInd.TimePeriod==BenefitTimePeriod.CalendarYear
+							|| benInd.TimePeriod==BenefitTimePeriod.ServiceYear) {
+							note+=Lans.g("Benefits","Over annual max");
+						}
 					}
 				}
 				return retVal;//no family max anyway, so no need to go further.
@@ -955,7 +976,7 @@ namespace OpenDentBusiness {
 					spansForCat=CovSpans.GetForCat(benFam.CovCatNum);
 					bool isMatch=false;
 					if(histList[i].StrProcCode=="") {//If this was a 'total' payment that was not attached to a procedure
-						if(CovCats.GetEbenCat(benInd.CovCatNum)==EbenefitCategory.General) {//And if this is the general category
+						if(CovCats.GetEbenCat(benFam.CovCatNum)==EbenefitCategory.General) {//And if this is the general category
 							//Then it should affect this max.
 							isMatch=true;
 						}
@@ -990,7 +1011,7 @@ namespace OpenDentBusiness {
 					spansForCat=CovSpans.GetForCat(benFam.CovCatNum);
 					bool isMatch=false;
 					if(loopList[i].StrProcCode=="") {//If this was a 'total' payment that was not attached to a procedure
-						if(CovCats.GetEbenCat(benInd.CovCatNum)==EbenefitCategory.General) {//And if this is the general category
+						if(CovCats.GetEbenCat(benFam.CovCatNum)==EbenefitCategory.General) {//And if this is the general category
 							//Then it should affect this max.
 							isMatch=true;
 						}
@@ -1011,20 +1032,24 @@ namespace OpenDentBusiness {
 				//if no category, then benefits are not restricted by proc code.
 				maxFam-=loopList[i].Amount;
 			}
-			//if the family max has all been used up on other procs
+			//if the family max has all been used up on other procs 
 			if(maxFam<=0) {
-				if(benInd.TimePeriod==BenefitTimePeriod.Lifetime) {
-					note+=Lans.g("Benefits","Over family lifetime max");
+				if(benInd==null) {
+					note+=Lans.g("Benefits","Over family max");
 				}
-				else if(benInd.TimePeriod==BenefitTimePeriod.CalendarYear
+				else{//and there is an individual max.
+					if(benInd.TimePeriod==BenefitTimePeriod.Lifetime) {
+						note+=Lans.g("Benefits","Over family lifetime max");
+					}
+					else if(benInd.TimePeriod==BenefitTimePeriod.CalendarYear
 					|| benInd.TimePeriod==BenefitTimePeriod.ServiceYear) {
-					note+=Lans.g("Benefits","Over family annual max");
+						note+=Lans.g("Benefits","Over family annual max");
+					}
 				}
 				return 0;//then no coverage, regardless of what we computed for individual
 			}
 			//This section was causing a bug. I'm really not even sure what it was attempting to do, since it's common for family max to be greater than indiv max
-			if(maxFam > maxInd) {//restrict by maxInd
-				/*
+			/*if(maxFam > maxInd) {//restrict by maxInd
 				//which we already calculated
 				if(benInd.TimePeriod==BenefitTimePeriod.Lifetime) {
 					note+=Lans.g("Benefits","Over lifetime max");
@@ -1033,28 +1058,38 @@ namespace OpenDentBusiness {
 					|| benInd.TimePeriod==BenefitTimePeriod.ServiceYear) {
 					note+=Lans.g("Benefits","Over annual max");
 				}
-				return retVal;*/
-			}
-			else {//restrict by maxFam
+				return retVal;
+			}*/
+			if((benInd==null) || (maxFam < maxInd)) {//restrict by maxFam
 				if(maxFam < retVal) {//if there's not enough left in the annual max to cover this proc.
 					//example. retVal=$70.  But 2970 of 3000 family max has been used.  maxFam=30.  We need to return 30.
-					if(benInd.TimePeriod==BenefitTimePeriod.Lifetime) {
-						note+=Lans.g("Benefits","Over family lifetime max");
+					if(benInd==null) {
+						note+=Lans.g("Benefits","Over family max");
 					}
-					else if(benInd.TimePeriod==BenefitTimePeriod.CalendarYear
-					|| benInd.TimePeriod==BenefitTimePeriod.ServiceYear) {
-						note+=Lans.g("Benefits","Over family annual max");
+					else{//both ind and fam
+						if(benInd.TimePeriod==BenefitTimePeriod.Lifetime) {
+							note+=Lans.g("Benefits","Over family lifetime max");
+						}
+						else if(benInd.TimePeriod==BenefitTimePeriod.CalendarYear
+						|| benInd.TimePeriod==BenefitTimePeriod.ServiceYear) {
+							note+=Lans.g("Benefits","Over family annual max");
+						}
 					}
 					return maxFam;//insurance will only cover up to the remaining annual max
 				}
 			}
-			if(retVal<insEstTotal) {//must have been an individual restriction
-				if(benInd.TimePeriod==BenefitTimePeriod.Lifetime) {
-					note+=Lans.g("Benefits","Over lifetime max");
-				}
-				else if(benInd.TimePeriod==BenefitTimePeriod.CalendarYear
-					|| benInd.TimePeriod==BenefitTimePeriod.ServiceYear) {
+			if(retVal < insEstTotal) {//must have been an individual restriction
+				if(benInd==null) {//js I don't understand this situation. It will probably not happen, but this is safe.
 					note+=Lans.g("Benefits","Over annual max");
+				}
+				else {
+					if(benInd.TimePeriod==BenefitTimePeriod.Lifetime) {
+						note+=Lans.g("Benefits","Over lifetime max");
+					}
+					else if(benInd.TimePeriod==BenefitTimePeriod.CalendarYear
+					|| benInd.TimePeriod==BenefitTimePeriod.ServiceYear) {
+						note+=Lans.g("Benefits","Over annual max");
+					}
 				}
 			}
 			return retVal;

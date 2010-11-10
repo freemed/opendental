@@ -80,25 +80,78 @@ namespace UnitTests {
 			else {
 				textResults.Text+=DatabaseTools.ClearDb();
 			}
-			Application.DoEvents();
-			int specificTest=PIn.Int(textSpecificTest.Text);//typically zero
-			textResults.Text+=AllTests.TestOneTwo(specificTest);
-			Application.DoEvents();
-			textResults.Text+=AllTests.TestThree(specificTest);
-			Application.DoEvents();
-			textResults.Text+=AllTests.TestFour(specificTest);
-			Application.DoEvents();
-			textResults.Text+=AllTests.TestFive(specificTest);
-			Application.DoEvents();
-			textResults.Text+=AllTests.TestSix(specificTest);
-			Application.DoEvents();
-			textResults.Text+=AllTests.TestSeven(specificTest);
-			Application.DoEvents();
-			textResults.Text+=AllTests.TestEight(specificTest);
-			Application.DoEvents();
-			textResults.Text+=AllTests.TestNine(specificTest);
-			Application.DoEvents();
-			textResults.Text+=AllTests.TestTen(specificTest);
+			int specificTest=0;
+			try {
+				Application.DoEvents();
+				specificTest=PIn.Int(textSpecificTest.Text);//typically zero
+				textResults.Text+=AllTests.TestOneTwo(specificTest);
+			}
+			catch(Exception ex) {
+				textResults.Text+="1&2: Failed. "+ex.Message;
+			}
+			try {
+				Application.DoEvents();
+				textResults.Text+=AllTests.TestThree(specificTest);
+			}
+			catch(Exception ex) {
+				textResults.Text+="3: Failed. "+ex.Message;
+			}
+			try {
+				Application.DoEvents();
+				textResults.Text+=AllTests.TestFour(specificTest);
+			}
+			catch(Exception ex) {
+				textResults.Text+="4: Failed. "+ex.Message;
+			}
+			try {
+				Application.DoEvents();
+				textResults.Text+=AllTests.TestFive(specificTest);
+			}
+			catch(Exception ex) {
+				textResults.Text+="5: Failed. "+ex.Message;
+			}
+			try {
+				Application.DoEvents();
+				textResults.Text+=AllTests.TestSix(specificTest);
+			}
+			catch(Exception ex) {
+				textResults.Text+="6: Failed. "+ex.Message;
+			}
+			try {
+				Application.DoEvents();
+				textResults.Text+=AllTests.TestSeven(specificTest);
+			}
+			catch(Exception ex) {
+				textResults.Text+="7: Failed. "+ex.Message;
+			}
+			try {
+				Application.DoEvents();
+				textResults.Text+=AllTests.TestEight(specificTest);
+			}
+			catch(Exception ex) {
+				textResults.Text+="8: Failed. "+ex.Message;
+			}
+			try {
+				Application.DoEvents();
+				textResults.Text+=AllTests.TestNine(specificTest);
+			}
+			catch(Exception ex) {
+				textResults.Text+="9: Failed. "+ex.Message;
+			}
+			try {
+				Application.DoEvents();
+				textResults.Text+=AllTests.TestTen(specificTest);
+			}
+			catch(Exception ex) {
+				textResults.Text+="10: Failed. "+ex.Message;
+			}
+			try {
+				Application.DoEvents();
+				textResults.Text+=AllTests.TestEleven(specificTest);
+			}
+			catch(Exception ex) {
+				textResults.Text+="11: Failed. "+ex.Message;
+			}
 			textResults.Text+="Done";
 			Cursor=Cursors.Default;
 
