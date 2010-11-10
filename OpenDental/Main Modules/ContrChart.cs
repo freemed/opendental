@@ -3810,7 +3810,7 @@ namespace OpenDental{
 						row.Tag="med";
 						break;
 					case "Medications":
-						Medications.Refresh("");
+						Medications.Refresh();
 						MedicationPats.Refresh(PatCur.PatNum);
 						row=new ODGridRow();
 						cell=new ODGridCell();

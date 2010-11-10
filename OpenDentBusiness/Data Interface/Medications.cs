@@ -9,28 +9,20 @@ namespace OpenDentBusiness{
 	///<summary></summary>
 	public class Medications{
 		///<summary>All medications.  Not refreshed with local data.  Only refreshed as needed.  Only used in UI layer.</summary>
-		public static Medication[] List;
+		public static Medication[] Listt;
 		///<summary></summary>
 		private static Hashtable HList;
 
 		///<summary></summary>
-		public static void Refresh(string str){
-			//No need to check RemotingRole; no call to db.
-			List<Medication> list=GetList(str);
-			HList=new Hashtable();
-			List=list.ToArray();
-			for(int i=0;i<list.Count;i++) {
-				HList.Add(list[i].MedicationNum,list[i]);
-			}
-		}
-
-		public static List<Medication> GetList(string str) {
+		public static void Refresh() {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<Medication>>(MethodBase.GetCurrentMethod());
+				Meth.GetVoid(MethodBase.GetCurrentMethod());
+				return;
 			}
-			string command ="SELECT * from medication WHERE MedName LIKE '%"+POut.String(str)+"%' ORDER BY MedName";
+			string command ="SELECT * from medication ORDER BY MedName";// WHERE MedName LIKE '%"+POut.String(str)+"%' ORDER BY MedName";
 			DataTable table=Db.GetTable(command);
-			List<Medication> retVal=new List<Medication>();
+			HList=new Hashtable();
+			List<Medication> list=new List<Medication>();
 			Medication med;
 			for(int i=0;i<table.Rows.Count;i++) {
 				med=new Medication();
@@ -38,7 +30,20 @@ namespace OpenDentBusiness{
 				med.MedName      =PIn.String(table.Rows[i][1].ToString());
 				med.GenericNum   =PIn.Long(table.Rows[i][2].ToString());
 				med.Notes        =PIn.String(table.Rows[i][3].ToString());
-				retVal.Add(med);
+				list.Add(med);
+				HList.Add(list[i].MedicationNum,list[i]);
+			}
+			Listt=list.ToArray();
+		}
+
+		public static List<Medication> GetList(string str) {
+			//No need to check RemotingRole; no call to db.
+			Refresh();
+			List<Medication> retVal=new List<Medication>();
+			for(int i=0;i<Listt.Length;i++) {
+				if(str=="" || Listt[i].MedName.ToUpper().Contains(str.ToUpper())) {
+					retVal.Add(Listt[i]);
+				}
 			}
 			return retVal;
 		}

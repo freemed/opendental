@@ -307,7 +307,7 @@ namespace OpenDental{
 		}
 
 		private void FillMeds(){
-			Medications.Refresh("");
+			Medications.Refresh();
 			MedicationPats.Refresh(PatCur.PatNum);
 			gridMeds.BeginUpdate();
 			gridMeds.Columns.Clear();

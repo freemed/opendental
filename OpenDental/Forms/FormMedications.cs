@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -26,6 +27,7 @@ namespace OpenDental{
 		private Label label1;
 		///<summary>the number returned if using select mode.</summary>
 		public long MedicationNum;
+		private List<Medication> medList;
 
 		///<summary></summary>
 		public FormMedications()
@@ -84,7 +86,7 @@ namespace OpenDental{
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,26);
 			this.butCancel.TabIndex = 0;
-			this.butCancel.Text = "&Cancel";
+			this.butCancel.Text = "Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
 			// butOK
@@ -99,7 +101,7 @@ namespace OpenDental{
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,26);
 			this.butOK.TabIndex = 1;
-			this.butOK.Text = "&OK";
+			this.butOK.Text = "OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
 			// butAddGeneric
@@ -175,7 +177,7 @@ namespace OpenDental{
 			this.textSearch.Location = new System.Drawing.Point(443,46);
 			this.textSearch.Name = "textSearch";
 			this.textSearch.Size = new System.Drawing.Size(195,20);
-			this.textSearch.TabIndex = 38;
+			this.textSearch.TabIndex = 0;
 			this.textSearch.TextChanged += new System.EventHandler(this.textSearch_TextChanged);
 			// 
 			// label1
@@ -229,7 +231,7 @@ namespace OpenDental{
 		}
 
 		private void FillGrid(){
-			Medications.Refresh(textSearch.Text);
+			medList=Medications.GetList(textSearch.Text);
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g(this,"Drug Name"),120);
@@ -240,17 +242,17 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
-			for(int i=0;i<Medications.List.Length;i++){
+			for(int i=0;i<medList.Count;i++) {
 				row=new ODGridRow();
-				if(Medications.List[i].MedicationNum==Medications.List[i].GenericNum){//isGeneric
-					row.Cells.Add(Medications.List[i].MedName);
+				if(medList[i].MedicationNum==medList[i].GenericNum) {//isGeneric
+					row.Cells.Add(medList[i].MedName);
 					row.Cells.Add("");
 				}
 				else{
-					row.Cells.Add(Medications.List[i].MedName);
-					row.Cells.Add(Medications.GetGenericName(Medications.List[i].GenericNum));
+					row.Cells.Add(medList[i].MedName);
+					row.Cells.Add(Medications.GetGenericName(medList[i].GenericNum));
 				}
-				row.Cells.Add(Medications.List[i].Notes);
+				row.Cells.Add(medList[i].Notes);
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
@@ -276,7 +278,7 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"You must first highlight the generic medication from the list.  If it is not already on the list, then you must add it first."));
 				return;
 			}
-			Medication selected=Medications.List[gridMain.GetSelectedIndex()];
+			Medication selected=medList[gridMain.GetSelectedIndex()];
 			if(selected.MedicationNum!=selected.GenericNum){
 				MessageBox.Show(Lan.g(this,"The selected medication is not generic."));
 				return;
@@ -293,13 +295,13 @@ namespace OpenDental{
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			if(SelectMode){
-				MedicationNum=Medications.List[e.Row].MedicationNum;
+				MedicationNum=medList[e.Row].MedicationNum;
 				DialogResult=DialogResult.OK;
 			}
 			else{//normal mode from main menu
 				//edit
 				FormMedicationEdit FormME=new FormMedicationEdit();
-				FormME.MedicationCur=Medications.List[e.Row];
+				FormME.MedicationCur=medList[e.Row];
 				FormME.ShowDialog();
 				FillGrid();
 			}
@@ -315,7 +317,7 @@ namespace OpenDental{
 					MessageBox.Show(Lan.g(this,"Please select an item first."));
 					return;
 				}
-				MedicationNum=Medications.List[gridMain.GetSelectedIndex()].MedicationNum;
+				MedicationNum=medList[gridMain.GetSelectedIndex()].MedicationNum;
 			}
 			else{//normal mode from main menu
 				//just close
