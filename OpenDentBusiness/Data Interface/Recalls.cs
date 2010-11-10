@@ -24,14 +24,14 @@ namespace OpenDentBusiness{
 			string command=
 				"SELECT recall.*, "
 				//MIN prevents multiple rows from being returned in the subquery.
-				+"(SELECT MIN(appointment.AptDateTime) FROM appointment,procedurelog,recalltrigger "
+				+"DATE((SELECT MIN(appointment.AptDateTime) FROM appointment,procedurelog,recalltrigger "
 				+"WHERE appointment.AptNum=procedurelog.AptNum "
 				+"AND appointment.AptDateTime > NOW() "
 				+"AND procedurelog.CodeNum=recalltrigger.CodeNum "
 				+"AND recall.PatNum=procedurelog.PatNum "
 				+"AND recalltrigger.RecallTypeNum=recall.RecallTypeNum "
 				+"AND (appointment.AptStatus=1 "//Scheduled
-				+"OR appointment.AptStatus=4))"//ASAP
+				+"OR appointment.AptStatus=4)))"//ASAP
 				+"FROM recall "
 				+"WHERE "+wherePats;
 			DataTable table=Db.GetTable(command);
