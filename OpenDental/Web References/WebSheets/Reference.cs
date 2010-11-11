@@ -28,7 +28,6 @@ namespace OpenDental.WebSheets {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Web.Services.WebServiceBindingAttribute(Name="SheetsSoap", Namespace="http://opendental.com/")]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(TableBase))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(RelatedEnd))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(StructuralObject))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(EntityKeyMember[]))]
@@ -631,28 +630,7 @@ namespace OpenDental.WebSheets {
             }
         }
     }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://opendental.com/")]
-    public abstract partial class TableBase {
-        
-        private bool isNewField;
-        
-        /// <remarks/>
-        public bool IsNew {
-            get {
-                return this.isNewField;
-            }
-            set {
-                this.isNewField = value;
-            }
-        }
-    }
-    
+      
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(EntityReference))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(EntityReferenceOfwebforms_sheet))]
