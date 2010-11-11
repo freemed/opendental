@@ -2076,7 +2076,7 @@ namespace OpenDental.Eclaims {
 			//If they have NIHB, then it is probably their primary and they probably don't have any other plan.
 			if(fieldC12!=null && fieldC12.valuestr=="N" && fieldC13!=null && fieldC13.valuestr.Trim()!="" && fieldC14!=null && fieldC14.valuestr.Trim()!="") {
 				//The French here was provided by google translator. Probably useless but at least it's something.
-				text=isFrench?("BANDE: "+fieldC13.valuestr+"  FAMILLE: "+fieldC14.valuestr):("BAND: "+fieldC13.valuestr+"  FAMILY: "+fieldC14.valuestr);
+				return doc.DrawString(g,isFrench?("BANDE: "+fieldC13.valuestr+"  FAMILLE: "+fieldC14.valuestr):("BAND: "+fieldC13.valuestr+"  FAMILY: "+fieldC14.valuestr),X,Y);
 			}
 			return doc.DrawField(g,isFrench?"NO DE CERTIFICAT":"CERTIFICATE NO",text,true,X,Y);
 		}

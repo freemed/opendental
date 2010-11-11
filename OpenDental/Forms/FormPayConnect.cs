@@ -116,7 +116,7 @@ namespace OpenDental {
 				return;
 			}
 			status=Bridges.PayConnect.ProcessCreditCard(PaymentCur.PayNum,Convert.ToDecimal(textAmount.Text),
-				textCardNumber.Text,expYear,expMonth,textNameOnCard.Text,textSecurityCode.Text,textZipCode.Text,(parser!=null?parser.TrackData:null));
+				textCardNumber.Text,expYear,expMonth,textNameOnCard.Text,textSecurityCode.Text,textZipCode.Text,(parser!=null?parser.Track2:null));
 			if(status.code!=0){//error in transaction
 				Cursor=Cursors.Default;
 				DialogResult=DialogResult.Cancel;
