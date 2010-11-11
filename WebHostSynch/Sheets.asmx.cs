@@ -98,6 +98,37 @@ namespace WebHostSynch {
 			return wspObj;;
 		}
 
+		[WebMethod]
+		public List<SheetAndSheetField> GetSheets(string RegistrationKey) {
+			List<SheetAndSheetField> sAndsfList=new List<SheetAndSheetField>();
+			try {
+				long DentalOfficeID=GetDentalOfficeID(RegistrationKey);
+				if(DentalOfficeID==0) {
+				}
+				ODWebServiceEntities db=new ODWebServiceEntities();
+				var wsRes=from wsf in db.webforms_sheet
+						  where wsf.webforms_preference.DentalOfficeID==DentalOfficeID
+						  select wsf;
+				//SheetDefObj.webforms_sheetfielddef.Load();
+
+				for(int i=0;i<wsRes.Count();i++) {
+					var wsobj=wsRes.ToList()[i];
+
+					wsobj.webforms_sheetfield.Load();
+					var sheetfieldList=wsobj.webforms_sheetfield;
+					SheetAndSheetField sAnds=new SheetAndSheetField(wsobj,sheetfieldList.ToList());
+					sAndsfList.Add(sAnds);
+
+				}
+				Logger.Information("In GetSheetData IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID+" Sheets sent to Client="+ wsRes.Count());
+				return sAndsfList;
+			}
+			catch(Exception ex) {
+				Logger.LogError(ex);
+				return sAndsfList;
+			}
+		}
+
 		/// <summary>
 		/// A class made  for just transferring both the sheets and it's fields in a web service.
 		/// </summary>

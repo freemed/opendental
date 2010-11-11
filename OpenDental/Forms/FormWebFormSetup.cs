@@ -17,11 +17,11 @@ namespace OpenDental {
 	/// </summary>
 	public partial class FormWebFormSetup:Form {
 
-		private OpenDental.WebHostSynch.webforms_preference PrefObj=null;
+		private OpenDental.WebSheets.webforms_preference PrefObj=null;
 		string RegistrationKey=PrefC.GetString(PrefName.RegistrationKey);
 		string SheetDefAddress="";
-		WebHostSynch.WebHostSynch wh=new WebHostSynch.WebHostSynch();
-		OpenDental.WebHostSynch.webforms_sheetdef[] sheetDefList;
+		WebSheets.Sheets wh=new WebSheets.Sheets();
+		OpenDental.WebSheets.webforms_sheetdef[] sheetDefList;
 		long DentalOfficeID=0;
 
 		public FormWebFormSetup() {
@@ -134,13 +134,13 @@ namespace OpenDental {
 		}
 
 		private void menuItemCopyURL_Click(object sender,EventArgs e) {
-			OpenDental.WebHostSynch.webforms_sheetdef WebSheetDef=(OpenDental.WebHostSynch.webforms_sheetdef)gridMain.Rows[gridMain.SelectedIndices[0]].Tag;
+			OpenDental.WebSheets.webforms_sheetdef WebSheetDef=(OpenDental.WebSheets.webforms_sheetdef)gridMain.Rows[gridMain.SelectedIndices[0]].Tag;
 			String SheetFormAddress=SheetDefAddress+"?DentalOfficeID="+DentalOfficeID+"&WebSheetDefID="+WebSheetDef.WebSheetDefID;
 			Clipboard.SetText(SheetFormAddress);
 		}
 
 		private void OpenBrowser() {
-			OpenDental.WebHostSynch.webforms_sheetdef WebSheetDef=(OpenDental.WebHostSynch.webforms_sheetdef)gridMain.Rows[gridMain.SelectedIndices[0]].Tag;
+			OpenDental.WebSheets.webforms_sheetdef WebSheetDef=(OpenDental.WebSheets.webforms_sheetdef)gridMain.Rows[gridMain.SelectedIndices[0]].Tag;
 			String SheetFormAddress=SheetDefAddress+"?DentalOfficeID="+DentalOfficeID+"&WebSheetDefID="+WebSheetDef.WebSheetDefID;
 			System.Diagnostics.Process.Start(SheetFormAddress);
 		}
@@ -260,7 +260,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"Either the web service is not available or the WebHostSynch URL is incorrect");
 				return;
 			}
-			OpenDental.WebHostSynch.webforms_sheetdef wf_sheetDef=(OpenDental.WebHostSynch.webforms_sheetdef)gridMain.Rows[gridMain.SelectedIndices[0]].Tag;
+			OpenDental.WebSheets.webforms_sheetdef wf_sheetDef=(OpenDental.WebSheets.webforms_sheetdef)gridMain.Rows[gridMain.SelectedIndices[0]].Tag;
 			wh.DeleteSheetDef(RegistrationKey,wf_sheetDef.WebSheetDefID);
 			FillGrid();
 			Cursor=Cursors.Default;

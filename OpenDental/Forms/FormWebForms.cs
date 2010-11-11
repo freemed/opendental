@@ -90,16 +90,14 @@ namespace OpenDental {
 				#if DEBUG
 				IgnoreCertificateErrors();// used with faulty certificates only while debugging.
 				#endif
-				WebHostSynch.WebHostSynch wh=new WebHostSynch.WebHostSynch();
-				Sheets.SheetsSoapClient ab= new Sheets.SheetsSoapClient();
-				ab.CheckRegistrationKey("");
+				WebSheets.Sheets wh=new WebSheets.Sheets();
 				wh.Url=PrefC.GetString(PrefName.WebHostSynchServerURL);
 				string RegistrationKey=PrefC.GetString(PrefName.RegistrationKey);
 				if(wh.CheckRegistrationKey(RegistrationKey)==false) {
 					MsgBox.Show(this,"Registration key provided by the dental office is incorrect");
 					return;
 				}
-				OpenDental.WebHostSynch.SheetAndSheetField[] sAnds=wh.GetSheets(RegistrationKey);
+				OpenDental.WebSheets.SheetAndSheetField[] sAnds=wh.GetSheets(RegistrationKey);
 				List<long> SheetsForDeletion=new List<long>();
 				if(sAnds.Count()==0) {
 					MsgBox.Show(this,"No Patient forms retrieved from server");
@@ -189,7 +187,7 @@ namespace OpenDental {
 
 		/// <summary>
 		/// </summary>
-		private Patient CreatePatient(String LastName,String FirstName,DateTime birthDate,WebHostSynch.SheetAndSheetField sAnds) {
+		private Patient CreatePatient(String LastName,String FirstName,DateTime birthDate,WebSheets.SheetAndSheetField sAnds) {
 			Patient newPat=new Patient();
 			newPat.LName=LastName;
 			newPat.FName=FirstName;
@@ -203,7 +201,7 @@ namespace OpenDental {
 					// this loop is used to fill a field that may generate mutiple values for a single field in the patient.
 					//for example the field gender has 2 eqivalent sheet fields in the web_sheetfieldlist
 					for(int i=0;i<WebSheetFieldList.Count();i++) {
-						WebHostSynch.webforms_sheetfield sf=WebSheetFieldList.ElementAt(i);
+						WebSheets.webforms_sheetfield sf=WebSheetFieldList.ElementAt(i);
 						String SheetWebFieldValue=sf.FieldValue;
 						String RadioButtonValue=sf.RadioButtonValue;
 						FillPatientFields(newPat,field,SheetWebFieldValue,RadioButtonValue);
@@ -226,7 +224,7 @@ namespace OpenDental {
 
 		/// <summary>
 		/// </summary>
-		private Sheet CreateSheet(long PatNum,WebHostSynch.SheetAndSheetField sAnds) {
+		private Sheet CreateSheet(long PatNum,WebSheets.SheetAndSheetField sAnds) {
 			Sheet newSheet=null;
 			try{
 				SheetDef sheetDef=new SheetDef((SheetTypeEnum)sAnds.web_sheet.SheetType);

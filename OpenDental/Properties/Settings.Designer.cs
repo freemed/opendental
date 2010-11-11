@@ -56,16 +56,6 @@ namespace OpenDental.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:2923/WebHostSynch.asmx")]
-        public string OpenDental_WebHostSynch_WebHostSynch {
-            get {
-                return ((string)(this["OpenDental_WebHostSynch_WebHostSynch"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
         [global::System.Configuration.DefaultSettingValueAttribute("https:/webservices.dentalxchange.com/merchant/MerchantService?wsdl")]
         public string OpenDental_PayConnect_MerchantService {
             get {
