@@ -3827,7 +3827,7 @@ namespace OpenDental{
 						DialogResult=DialogResult.OK;
 					}
 					else {//changes were made
-						InsPlans.Update(PlanCur);
+							InsPlans.Update(PlanCur);
 						DialogResult=DialogResult.OK;
 					}
 				//}
@@ -3910,6 +3910,8 @@ namespace OpenDental{
 								}
 								else {//if there are other subscribers
 									InsPlans.Insert(PlanCur);//this gives it a new primary key.
+									PatPlanCur.PlanNum=PlanCur.PlanNum;
+									PatPlans.Update(PatPlanCur);
 									//make copies of all the benefits
 									benefitListOld=new List<Benefit>();
 									for(int i=0;i<benefitList.Count;i++) {
