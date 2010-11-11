@@ -4036,7 +4036,7 @@ namespace OpenDental{
 		}
 
 		private void menuItemWebForms_Click(object sender,EventArgs e) {
-			FormWebFormsV2 FormWF = new FormWebFormsV2();
+			FormWebForms FormWF = new FormWebForms();
 			FormWF.ShowDialog();
 		}
 

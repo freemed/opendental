@@ -172,6 +172,8 @@
     <Reference Include="System.DirectoryServices" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Services" />
@@ -373,11 +375,17 @@
     <Compile Include="Forms\FormPayConnectSetup.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\FormWebFormsV2.cs">
+    <Compile Include="Forms\FormWebForms.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\FormWebFormsV2.designer.cs">
-      <DependentUpon>FormWebFormsV2.cs</DependentUpon>
+    <Compile Include="Forms\FormWebForms.designer.cs">
+      <DependentUpon>FormWebForms.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormWebFormSetup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormWebFormSetup.designer.cs">
+      <DependentUpon>FormWebFormSetup.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FormAutomationConditionEdit.cs">
       <SubType>Form</SubType>
@@ -415,12 +423,6 @@
     <Compile Include="Forms\FormPatFieldDateEdit.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\FormWebFormSetupV2.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormWebFormSetupV2.designer.cs">
-      <DependentUpon>FormWebFormSetupV2.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\FormChartView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -438,18 +440,6 @@
     </Compile>
     <Compile Include="Forms\FormProcGroup.cs">
       <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormWebFormSetup.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormWebFormSetup.designer.cs">
-      <DependentUpon>FormWebFormSetup.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\FormWebForms.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormWebForms.designer.cs">
-      <DependentUpon>FormWebForms.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FormApptFieldEdit.cs">
       <SubType>Form</SubType>
@@ -1957,6 +1947,11 @@
     <Compile Include="Misc\Tooth.cs" />
     <Compile Include="Misc\VisiQuick.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Web References\WebSheets\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Bridges\FormHouseCalls.resx">
       <DependentUpon>FormHouseCalls.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -1992,8 +1987,12 @@
       <DependentUpon>FormPayConnectSetup.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormWebFormsV2.resx">
-      <DependentUpon>FormWebFormsV2.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\FormWebForms.resx">
+      <DependentUpon>FormWebForms.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormWebFormSetup.resx">
+      <DependentUpon>FormWebFormSetup.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormAccountingLock.resx">
@@ -3762,8 +3761,20 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
+    <None Include="Web References\WebSheets\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\WebSheets\Sheets.wsdl" />
+    <None Include="Web References\WebSheets\webforms_preference.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\WebSheets\webforms_sheetdef.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Web References\WebSheets\Sheets.disco" />
     <EmbeddedResource Include="Bridges\FormTrophyNamePick.resx">
       <DependentUpon>FormTrophyNamePick.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -3859,10 +3870,6 @@
       <DependentUpon>FormPatFieldDateEdit.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormWebFormSetupV2.resx">
-      <DependentUpon>FormWebFormSetupV2.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormChartView.resx">
       <DependentUpon>FormChartView.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -3881,14 +3888,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormProcGroup.resx">
       <DependentUpon>FormProcGroup.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormWebFormSetup.resx">
-      <DependentUpon>FormWebFormSetup.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormWebForms.resx">
-      <DependentUpon>FormWebForms.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormApptFieldEdit.resx">
@@ -4440,6 +4439,17 @@
       </CachedDynamicPropName>
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>OpenDental_customerUpdates_Service1</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="http://localhost:2923/Sheets.asmx">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\WebSheets\</RelPath>
+      <UpdateFromURL>http://localhost:2923/Sheets.asmx</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>OpenDental_WebSheets_Sheets</CachedSettingsPropName>
     </WebReferenceUrl>
     <WebReferenceUrl Include="http://localhost:2923/WebHostSynch.asmx">
       <UrlBehavior>Dynamic</UrlBehavior>

@@ -72,5 +72,15 @@ namespace OpenDental.Properties {
                 return ((string)(this["OpenDental_PayConnect_MerchantService"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:2923/Sheets.asmx")]
+        public string OpenDental_WebSheets_Sheets {
+            get {
+                return ((string)(this["OpenDental_WebSheets_Sheets"]));
+            }
+        }
     }
 }

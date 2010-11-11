@@ -3069,7 +3069,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				string command;
 				command="UPDATE program SET ProgDesc='PayConnect from www.dentalxchange.com' WHERE ProgName='PayConnect' LIMIT 1";
 				Db.NonQ(command);
-
+				command="UPDATE preference SET ValueString = 'https://opendentalsoft.com/WebHostSynch/Sheets.asmx' WHERE PrefName = 'WebHostSynchServerURL'";
+				Db.NonQ(command);
 
 
 

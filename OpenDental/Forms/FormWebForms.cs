@@ -27,8 +27,11 @@ namespace OpenDental {
 			Lan.F(this);
 		}
 
+		private void FormWebForms_Load(object sender,EventArgs e) {
+		}
+
 		/// <summary>
-		/// Code in this method was not put into the Form load event because often the "No Patient forms available" Meassage would popup even before a form is loaded - which could confuse the user.
+		/// Code in this method was not put into the Form load event because often the "No Patient forms available" Message would popup even before a form is loaded - which could confuse the user.
 		/// </summary>
 		private void FormWebForms_Shown(object sender,EventArgs e) {
 			textDateStart.Text=DateTime.Today.ToShortDateString();
@@ -58,16 +61,16 @@ namespace OpenDental {
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Patient Last Name"),110);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Patient Fist Name"),110);
+			col=new ODGridColumn(Lan.g(this,"Patient First Name"),110);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Description"),210);
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			DataTable table=Sheets.GetWebFormSheetsTable(dateFrom,dateTo);
 			for(int i=0;i<table.Rows.Count;i++) {
-				long patNum = PIn.Long(table.Rows[i]["PatNum"].ToString());
-				long sheetNum = PIn.Long(table.Rows[i]["SheetNum"].ToString());
-				Patient pat = Patients.GetPat(patNum);
+				long patNum=PIn.Long(table.Rows[i]["PatNum"].ToString());
+				long sheetNum=PIn.Long(table.Rows[i]["SheetNum"].ToString());
+				Patient pat=Patients.GetPat(patNum);
 				if(pat!=null) {
 					ODGridRow row=new ODGridRow();
 					row.Cells.Add(table.Rows[i]["date"].ToString());
@@ -85,65 +88,54 @@ namespace OpenDental {
 		private void RetrieveAndSaveData() {
 			try {
 				#if DEBUG
-				//IgnoreCertificateErrors();// used with faulty certificates only while debugging.
+				IgnoreCertificateErrors();// used with faulty certificates only while debugging.
 				#endif
 				WebHostSynch.WebHostSynch wh=new WebHostSynch.WebHostSynch();
+				Sheets.SheetsSoapClient ab= new Sheets.SheetsSoapClient();
+				ab.CheckRegistrationKey("");
 				wh.Url=PrefC.GetString(PrefName.WebHostSynchServerURL);
 				string RegistrationKey=PrefC.GetString(PrefName.RegistrationKey);
 				if(wh.CheckRegistrationKey(RegistrationKey)==false) {
 					MsgBox.Show(this,"Registration key provided by the dental office is incorrect");
 					return;
 				}
-				OpenDental.WebHostSynch.webforms_sheetfield[] wbsf=wh.GetSheetFieldData(RegistrationKey);
-				// The second call GetSheetData is used to retrieve the Datetime the sheet was submitted because as of now I don't quite know how to get it elegently by calling a single method.
-				OpenDental.WebHostSynch.webforms_sheet[] SheetDetails=wh.GetSheetData(RegistrationKey);
-				if(wbsf.Count()==0) {
+				OpenDental.WebHostSynch.SheetAndSheetField[] sAnds=wh.GetSheets(RegistrationKey);
+				List<long> SheetsForDeletion=new List<long>();
+				if(sAnds.Count()==0) {
 					MsgBox.Show(this,"No Patient forms retrieved from server");
 					return;
 				}
-				// Select distinct Web sheet ids
-				var wbs=(from w in wbsf select w.webforms_sheetReference.EntityKey.EntityKeyValues.First().Value).Distinct();
-				var SheetIdArray=wbs.ToArray();
-				List<long> SheetsForDeletion=new List<long>();
-				// loop through each sheet
-				for(int i=0;i<SheetIdArray.Length;i++) {
-					long SheetID=(long)SheetIdArray[i];
-					var SingleSheet=from w in wbsf where (long)w.webforms_sheetReference.EntityKey.EntityKeyValues.First().Value==SheetID
-						select w;
-					//ODGridRow row=new ODGridRow();
+				//loop through all incoming sheets
+				for(int i=0;i<sAnds.Length;i++) {
+					long PatNum=0;
 					string LastName="";
 					string FirstName="";
 					string BirthDate="";
-					//loop through each variable in a single sheet
-					for(int j=0;j<SingleSheet.Count();j++) {
-						String FieldName=SingleSheet.ElementAt(j).FieldName;
-						String FieldValue=SingleSheet.ElementAt(j).FieldValue;
-						if(FieldName.ToLower().Contains("lastname")) {
-							LastName=FieldValue;
+					//loop through each variable in a single sheetfield to get First name, last name and DOB
+					for(int j=0;j<sAnds[i].web_sheetfieldlist.Count();j++) {
+						if(sAnds[i].web_sheetfieldlist[j].FieldName.ToLower().Contains("lname")||sAnds[i].web_sheetfieldlist[j].FieldName.ToLower().Contains("lastname")) {
+							LastName=sAnds[i].web_sheetfieldlist[j].FieldValue;
 						}
-						if(FieldName.ToLower().Contains("firstname")) {
-							FirstName=FieldValue;
+						if(sAnds[i].web_sheetfieldlist[j].FieldName.ToLower().Contains("fname")||sAnds[i].web_sheetfieldlist[j].FieldName.ToLower().Contains("firstname")) {
+							FirstName=sAnds[i].web_sheetfieldlist[j].FieldValue;
 						}
-						if(FieldName.ToLower().Contains("birthdate")) {
-							BirthDate=FieldValue;
+						if(sAnds[i].web_sheetfieldlist[j].FieldName.ToLower().Contains("bdate")||sAnds[i].web_sheetfieldlist[j].FieldName.ToLower().Contains("birthdate")) {
+							BirthDate=sAnds[i].web_sheetfieldlist[j].FieldValue;
 						}
-					}
+					}// end of j loop
 					DateTime birthDate=PIn.Date(BirthDate);
 					if(birthDate.Year==1) {
 						//log invalid birth date  format
 					}
-					long PatNum=Patients.GetPatNumByNameAndBirthday(LastName,FirstName,birthDate);
+					PatNum=Patients.GetPatNumByNameAndBirthday(LastName,FirstName,birthDate);
 					Patient newPat=null;
-					Sheet newSheet=null;
-					DateTime SheetDateTimeSubmitted= (from s in SheetDetails where s.SheetID==SheetID
-						select s.DateTimeSheet).First();
 					if(PatNum==0) {
-						newPat=CreatePatient(SingleSheet.ToList());
+						newPat=CreatePatient(LastName,FirstName,birthDate,sAnds[i]);
 						PatNum=newPat.PatNum;
 					}
-					newSheet=CreateSheet(PatNum,SheetDateTimeSubmitted,SingleSheet.ToList());
+					Sheet newSheet=CreateSheet(PatNum,sAnds[i]);
 					if(DataExistsInDb(newSheet)==true) {
-						SheetsForDeletion.Add(SheetID);
+						SheetsForDeletion.Add(sAnds[i].web_sheet.SheetID);
 					}
 				}// end of for loop
 				wh.DeleteSheetData(RegistrationKey,SheetsForDeletion.ToArray());
@@ -197,37 +189,28 @@ namespace OpenDental {
 
 		/// <summary>
 		/// </summary>
-		private Patient CreatePatient(List<OpenDental.WebHostSynch.webforms_sheetfield> SingleSheet) {
-			Patient newPat=null;
-			newPat=new Patient();
-			//PatFields must have a one to one mapping with the SheetWebFields
-			String[] PatFields={ "LName","FName","MiddleI","Birthdate","Preferred", "Email","SSN",
-				"Address","Address2","City","State","Zip",
-				"HmPhone","Gender","Position","PreferContactMethod","PreferConfirmMethod",
-				"PreferRecallMethod","StudentStatus","WirelessPhone","WkPhone"};
-			//other PatFields="PatStatus","Guarantor","CreditType","PriProv","SecProv","FeeSched","BillingType","AddrNote","ClinicNum" EmployerNum, EmploymentNote, GradeLevel, HasIns, InsEst, };
-			String[] SheetWebFields={"LastName","FirstName","MI","Birthdate","Preferred","Email","SS",
-				"Address1","Address2","City","State","Zip",
-				"HomePhone","Gender","Married","MethodContact","MethodConf",
-				"MethodRecall","StudentStatus","WirelessPhone","WorkPhone"};
-				/*Other SheetWebFields="WholeFamily","WirelessCarrier","Hear","Policy1GroupName","Policy1GroupNumber","Policy1Relationship","Policy1SubscriberName","Policy1SubscriberID","Policy1InsuranceCompany", "Policy1Phone","Policy1Employer","Policy2GroupName","Policy2GroupNumber","Policy2Relationship","Policy2SubscriberName","Policy2SubscriberID","Policy2InsuranceCompany", "Policy2Phone","Policy2Employer","Comments"
-				 */
+		private Patient CreatePatient(String LastName,String FirstName,DateTime birthDate,WebHostSynch.SheetAndSheetField sAnds) {
+			Patient newPat=new Patient();
+			newPat.LName=LastName;
+			newPat.FName=FirstName;
+			newPat.Birthdate=birthDate;
 			Type t=newPat.GetType();
 			FieldInfo[] fi=t.GetFields();
-			try {
-				for(int i=0;i<SingleSheet.Count();i++) {
-					String SheetWebFieldName=SingleSheet.ElementAt(i).FieldName;
-					String SheetWebFieldValue=SingleSheet.ElementAt(i).FieldValue;
-					for(int j=0;j<SheetWebFields.Length;j++) {
-						if(SheetWebFieldName==SheetWebFields[j]) {// SheetWebFields[j] and PatFields[j] should have a one to one correspondence
-							foreach(FieldInfo field in fi) {
-								if(field.Name==PatFields[j]) {
-									FillPatientFields(newPat,field,SheetWebFieldValue);
-								}
-							}
-						} 
-					}// j loop
-				}// i loop
+			foreach(FieldInfo field in fi) {
+				// find match for fields in Patients in the web_sheetfieldlist
+				var WebSheetFieldList=sAnds.web_sheetfieldlist.Where(sf => sf.FieldName.ToLower()==field.Name.ToLower());
+				if(WebSheetFieldList.Count()>0) {
+					// this loop is used to fill a field that may generate mutiple values for a single field in the patient.
+					//for example the field gender has 2 eqivalent sheet fields in the web_sheetfieldlist
+					for(int i=0;i<WebSheetFieldList.Count();i++) {
+						WebHostSynch.webforms_sheetfield sf=WebSheetFieldList.ElementAt(i);
+						String SheetWebFieldValue=sf.FieldValue;
+						String RadioButtonValue=sf.RadioButtonValue;
+						FillPatientFields(newPat,field,SheetWebFieldValue,RadioButtonValue);
+					}
+				}
+			}
+			try{
 				Patients.Insert(newPat,false);
 				//set Guarantor field the same as PatNum
 				Patient patOld=newPat.Copy();
@@ -243,163 +226,54 @@ namespace OpenDental {
 
 		/// <summary>
 		/// </summary>
-		private Sheet CreateSheet(long PatNum,DateTime SheetDateTimeSubmitted, List<OpenDental.WebHostSynch.webforms_sheetfield> SingleSheet) {
-			Sheet sheet=null;//only useful if not Terminal
-			try {
-				SheetDef sheetDef;
-				sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.PatientRegistration);
-				sheet=SheetUtil.CreateSheet(sheetDef,PatNum);
-				SheetParameter.SetParameter(sheet,"PatNum",PatNum);
-				sheet.InternalNote="";//because null not ok
-				//SheetFields elements must have a one to one mapping with the SheetWebFields elements.
-				String[] SheetFields={"LName","FName","MiddleI","Birthdate","Preferred", "Email","SSN",
-									"addressAndHmPhoneIsSameEntireFamily","Address","Address2","City","State","Zip",
-									"HmPhone","Gender","Position","PreferContactMethod","PreferConfirmMethod",
-									"PreferRecallMethod","StudentStatus","referredFrom","WirelessPhone","wirelessCarrier","WkPhone",
-									"ins1GroupName","ins1GroupNum","ins1Relat","ins1SubscriberNameF","ins1SubscriberID","ins1CarrierName","ins1CarrierPhone","ins1EmployerName",
-									"ins2GroupName","ins2GroupNum","ins2Relat","ins2SubscriberNameF","ins2SubscriberID","ins2CarrierName","ins2CarrierPhone","ins2EmployerName",
-									  "misc"};
-				//other SheetFields="PatStatus", "Patient Info.gif","Guarantor","CreditType","PriProv","SecProv","FeeSched","BillingType","AddrNote","ClinicNum" };
-				String[] SheetWebFields={"LastName","FirstName","MI","Birthdate","Preferred","Email","SS",
-									"WholeFamily","Address1","Address2","City","State","Zip",
-									"HomePhone","Gender","Married","MethodContact","MethodConf",
-									"MethodRecall","StudentStatus","Hear","WirelessPhone","WirelessCarrier","WorkPhone",
-									"Policy1GroupName","Policy1GroupNumber","Policy1Relationship","Policy1SubscriberName","Policy1SubscriberID","Policy1InsuranceCompany", "Policy1Phone","Policy1Employer",
-									"Policy2GroupName","Policy2GroupNumber","Policy2Relationship","Policy2SubscriberName","Policy2SubscriberID","Policy2InsuranceCompany", "Policy2Phone","Policy2Employer",
-									"Comments",
-									   };
-				for(int i=0;i<SingleSheet.Count();i++) {
-					String SheetWebFieldName=SingleSheet.ElementAt(i).FieldName;
-					String SheetWebFieldValue=SingleSheet.ElementAt(i).FieldValue;
-					for(int j=0;j<SheetWebFields.Length;j++) {
-						if(SheetWebFieldName==SheetWebFields[j]) {// SheetWebFields[j] and SheetFields[j] should have a one to one correspondence
-							foreach(SheetField fld in sheet.SheetFields) {
-								if(fld.FieldName==SheetFields[j]) {
-									FillSheetFields(fld,SheetWebFieldValue);
-								}
-							}
-						} 
-					}// j loop
-				}// i loop
-				sheet.IsWebForm=true;
-				sheet.DateTimeSheet=SheetDateTimeSubmitted;
-				Sheets.SaveNewSheet(sheet);
-				return sheet;
+		private Sheet CreateSheet(long PatNum,WebHostSynch.SheetAndSheetField sAnds) {
+			Sheet newSheet=null;
+			try{
+				SheetDef sheetDef=new SheetDef((SheetTypeEnum)sAnds.web_sheet.SheetType);
+					newSheet=SheetUtil.CreateSheet(sheetDef,PatNum);
+					SheetParameter.SetParameter(newSheet,"PatNum",PatNum);
+					newSheet.DateTimeSheet=sAnds.web_sheet.DateTimeSheet;
+					newSheet.Description=sAnds.web_sheet.Description;
+					newSheet.Height=sAnds.web_sheet.Height;
+					newSheet.Width=sAnds.web_sheet.Width;
+					newSheet.FontName=sAnds.web_sheet.FontName;
+					newSheet.FontSize=sAnds.web_sheet.FontSize;
+					newSheet.SheetType=(SheetTypeEnum)sAnds.web_sheet.SheetType;
+					newSheet.IsLandscape=sAnds.web_sheet.IsLandscape==(sbyte)1?true:false;
+					newSheet.InternalNote="";
+					newSheet.IsWebForm=true;
+					//loop through each variable in a single sheetfield
+					for(int i=0;i<sAnds.web_sheetfieldlist.Count();i++) {
+						SheetField sheetfield=new SheetField();
+						sheetfield.FieldName=sAnds.web_sheetfieldlist[i].FieldName;
+						sheetfield.FieldType=(SheetFieldType)sAnds.web_sheetfieldlist[i].FieldType;
+						sheetfield.FontIsBold=sAnds.web_sheetfieldlist[i].FontIsBold==(sbyte)1?true:false; ;
+						sheetfield.FontName=sAnds.web_sheetfieldlist[i].FontName;
+						sheetfield.FontSize=sAnds.web_sheetfieldlist[i].FontSize;
+						sheetfield.Height=sAnds.web_sheetfieldlist[i].Height;
+						sheetfield.Width=sAnds.web_sheetfieldlist[i].Width;
+						sheetfield.XPos=sAnds.web_sheetfieldlist[i].XPos;
+						sheetfield.YPos=sAnds.web_sheetfieldlist[i].YPos;
+						sheetfield.IsRequired=sAnds.web_sheetfieldlist[i].IsRequired==(sbyte)1?true:false; ;
+						sheetfield.RadioButtonGroup=sAnds.web_sheetfieldlist[i].RadioButtonGroup;
+						sheetfield.RadioButtonValue=sAnds.web_sheetfieldlist[i].RadioButtonValue;
+						sheetfield.GrowthBehavior=(GrowthBehaviorEnum)sAnds.web_sheetfieldlist[i].GrowthBehavior;
+						sheetfield.FieldValue=sAnds.web_sheetfieldlist[i].FieldValue;
+						newSheet.SheetFields.Add(sheetfield);
+					}// end of j loop
+					Sheets.SaveNewSheet(newSheet);
+					return newSheet;
 			}
 			catch(Exception e) {
 				gridMain.EndUpdate();
 				MessageBox.Show(e.Message);
 			}
-			return sheet;
+			return newSheet;
 		}
 
 		/// <summary>
 		/// </summary>
-		private void FillSheetFields(SheetField fld,string SheetWebFieldValue) {
-			try {
-				switch(fld.FieldName) {
-					case "Gender":
-						if(fld.RadioButtonValue=="Male") {
-							if(SheetWebFieldValue=="M") {
-								fld.FieldValue="X";
-							}
-						}
-						if(fld.RadioButtonValue=="Female") {
-							if(SheetWebFieldValue=="F") {
-								fld.FieldValue="X";
-							}
-						}
-						break;
-					case "Position":
-						if(fld.RadioButtonValue=="Married") {
-							if(SheetWebFieldValue=="Y") {
-								fld.FieldValue="X";
-							}
-						}
-						if(fld.RadioButtonValue=="Single") {
-							if(SheetWebFieldValue=="N") {
-								fld.FieldValue="X";
-							}
-						}
-						break;
-					case "PreferContactMethod":
-					case "PreferConfirmMethod":
-					case "PreferRecallMethod":
-						if(fld.RadioButtonValue=="HmPhone") {
-							if(SheetWebFieldValue=="HmPhone") {
-								fld.FieldValue="X";
-							}
-						}
-						if(fld.RadioButtonValue=="WkPhone") {
-							if(SheetWebFieldValue=="WkPhone") {
-								fld.FieldValue="X";
-							}
-						}
-						if(fld.RadioButtonValue=="WirelessPh") {
-							if(SheetWebFieldValue=="WirelessPh") {
-								fld.FieldValue="X";
-							}
-						}
-						if(fld.RadioButtonValue=="Email") {
-							if(SheetWebFieldValue=="Email") {
-								fld.FieldValue="X";
-							}
-						}
-						break;
-					case "StudentStatus":
-						if(fld.RadioButtonValue=="Nonstudent") {
-							if(SheetWebFieldValue=="Nonstudent") {
-								fld.FieldValue="X";
-							}
-						}
-						if(fld.RadioButtonValue=="Fulltime") {
-							if(SheetWebFieldValue=="Fulltime") {
-								fld.FieldValue="X";
-							}
-						}
-						if(fld.RadioButtonValue=="Parttime") {
-							if(SheetWebFieldValue=="Parttime") {
-								fld.FieldValue="X";
-							}
-						}
-						break;
-					case "ins1Relat":
-					case "ins2Relat":
-						if(fld.RadioButtonValue=="Self") {
-							if(SheetWebFieldValue=="Self") {
-								fld.FieldValue="X";
-							}
-						}
-						if(fld.RadioButtonValue=="Spouse") {
-							if(SheetWebFieldValue=="Spouse") {
-								fld.FieldValue="X";
-							}
-						}
-						if(fld.RadioButtonValue=="Child") {
-							if(SheetWebFieldValue=="Child") {
-								fld.FieldValue="X";
-							}
-						}
-						break;
-					case "addressAndHmPhoneIsSameEntireFamily":
-					if(SheetWebFieldValue=="True") {
-						fld.FieldValue="X";
-					}
-					break;
-					default:
-						fld.FieldValue=SheetWebFieldValue;
-					break;
-				}//switch case
-			}
-			catch(Exception e) {
-				gridMain.EndUpdate();
-				MessageBox.Show(fld.FieldName + e.Message);
-			}
-		}
-
-		/// <summary>
-		/// </summary>
-		private void FillPatientFields(Patient newPat,FieldInfo field,string SheetWebFieldValue) {
+		private void FillPatientFields(Patient newPat,FieldInfo field,String SheetWebFieldValue,String RadioButtonValue) {
 			try {
 				switch(field.Name) {
 					case "Birthdate":
@@ -407,63 +281,91 @@ namespace OpenDental {
 						field.SetValue(newPat,birthDate);
 						break;
 					case "Gender":
-						if(SheetWebFieldValue=="M") {
-							field.SetValue(newPat,PatientGender.Male);
+						if(RadioButtonValue=="Male") {
+							if(SheetWebFieldValue=="X") {
+								field.SetValue(newPat,PatientGender.Male);
+							}
 						}
-						if(SheetWebFieldValue=="F") {
-							field.SetValue(newPat,PatientGender.Female);
+						if(RadioButtonValue=="Female") {
+							if(SheetWebFieldValue=="X") {
+								field.SetValue(newPat,PatientGender.Female);
+							}
 						}
 						break;
 					case "Position":
-						if(SheetWebFieldValue=="Y") {
-							field.SetValue(newPat,PatientPosition.Married);
+						if(RadioButtonValue=="Married") {
+							if(SheetWebFieldValue=="X") {
+								field.SetValue(newPat,PatientPosition.Married);
+							}
 						}
-						if(SheetWebFieldValue=="N") {
-							field.SetValue(newPat,PatientPosition.Single);
+						if(RadioButtonValue=="Single") {
+							if(SheetWebFieldValue=="X") {
+								field.SetValue(newPat,PatientPosition.Single);
+							}
 						}
 						break;
 					case "PreferContactMethod":
 					case "PreferConfirmMethod":
 					case "PreferRecallMethod":
-						if(SheetWebFieldValue=="HmPhone") {
-							field.SetValue(newPat,ContactMethod.HmPhone);
+						if(RadioButtonValue=="HmPhone") {
+							if(SheetWebFieldValue=="X") {
+								field.SetValue(newPat,ContactMethod.HmPhone);
+							}
 						}
-						if(SheetWebFieldValue=="WkPhone") {
-							field.SetValue(newPat,ContactMethod.WkPhone);
+						if(RadioButtonValue=="WkPhone") {
+							if(SheetWebFieldValue=="X") {
+								field.SetValue(newPat,ContactMethod.WkPhone);
+							}
 						}
-						if(SheetWebFieldValue=="WirelessPh") {
-							field.SetValue(newPat,ContactMethod.WirelessPh);
+						if(RadioButtonValue=="WirelessPh") {
+							if(SheetWebFieldValue=="X") {
+								field.SetValue(newPat,ContactMethod.WirelessPh);
+							}
 						}
-						if(SheetWebFieldValue=="Email") {
-							field.SetValue(newPat,ContactMethod.Email);
+						if(RadioButtonValue=="Email") {
+							if(SheetWebFieldValue=="X") {
+								field.SetValue(newPat,ContactMethod.Email);
+							}
 						}
 						break;
 					case "StudentStatus":
-						if(SheetWebFieldValue=="Nonstudent") {
-							field.SetValue(newPat,"");
+						if(RadioButtonValue=="Nonstudent") {
+							if(SheetWebFieldValue=="X") {
+								field.SetValue(newPat,"");
+							}
 						}
-						if(SheetWebFieldValue=="Fulltime") {
-							field.SetValue(newPat,"F");
+						if(RadioButtonValue=="Fulltime") {
+							if(SheetWebFieldValue=="X") {
+								field.SetValue(newPat,"F");
+							}
 						}
-						if(SheetWebFieldValue=="Parttime") {
-							field.SetValue(newPat,"P");
+						if(RadioButtonValue=="Parttime") {
+							if(SheetWebFieldValue=="X") {
+								field.SetValue(newPat,"P");
+							}
 						}
 						break;
 					case "ins1Relat":
 					case "ins2Relat":
-						if(SheetWebFieldValue=="Self") {
-							field.SetValue(newPat,Relat.Self);
+						if(RadioButtonValue=="Self") {
+							if(SheetWebFieldValue=="X") {
+								field.SetValue(newPat,Relat.Self);
+							}
 						}
-						if(SheetWebFieldValue=="Spouse") {
-							field.SetValue(newPat,Relat.Spouse);
+						if(RadioButtonValue=="Spouse") {
+							if(SheetWebFieldValue=="X") {
+								field.SetValue(newPat,Relat.Spouse);
+							}
 						}
-						if(SheetWebFieldValue=="Child") {
-							field.SetValue(newPat,Relat.Child);
+						if(RadioButtonValue=="Child") {
+							if(SheetWebFieldValue=="X") {
+								field.SetValue(newPat,Relat.Child);
+							}
 						}
-						break;
+					break;
 					default:
 						field.SetValue(newPat,SheetWebFieldValue);
-						break;
+					break;
 				}//switch case
 			}
 			catch(Exception e) {
@@ -472,41 +374,25 @@ namespace OpenDental {
 			}
 		}
 
-		/// <summary> Dennis: This function is not being used - delete later.
-		/// </summary>
-		private bool ComparePatients(Patient patientFromDb,Patient newPat) {
-			bool isEqual=true;
-			foreach(FieldInfo fieldinfo in patientFromDb.GetType().GetFields()) {
-				/* these field are to be ignored while comparing because they have different values when extracted from the db */
-				if(fieldinfo.Name=="DateTStamp" ||
-					fieldinfo.Name=="Age") {
-					continue; // code below this line will not be executed for this loop.
-				}
-				string dbPatientFieldValue="";
-				string newPatientFieldValue="";
-				//.ToString() works for Int64, Int32, Enum, DateTime(bithdate), Boolean, Double
-				if(fieldinfo.GetValue(patientFromDb)!=null) {
-					dbPatientFieldValue=fieldinfo.GetValue(patientFromDb).ToString();
-				}
-				if(fieldinfo.GetValue(newPat)!=null) {
-					newPatientFieldValue=fieldinfo.GetValue(newPat).ToString();
-				}
-				if(dbPatientFieldValue!=newPatientFieldValue) {
-					isEqual=false;
-				}
-			}
-			return isEqual;
-		}
-
 		/// <summary>
 		/// </summary>
 		private bool CompareSheets(Sheet sheetFromDb,Sheet newSheet) {
 			bool isEqual=true;
 			for(int i=0;i<sheetFromDb.SheetFields.Count;i++) {
-				string dbSheetFieldValue=sheetFromDb.SheetFields[i].FieldValue.ToString();
-				string newSheetFieldValue=newSheet.SheetFields[i].FieldValue.ToString();
-				if(dbSheetFieldValue!=newSheetFieldValue) {
-					isEqual=false;
+				// read each parameter of the SheetField like Fontsize,FieldValue, FontIsBold, XPos, YPos etc.
+				foreach(FieldInfo fieldinfo in sheetFromDb.SheetFields[i].GetType().GetFields()) {
+					string dbSheetFieldValue="";
+					string newSheetFieldValue="";
+					//.ToString() works for Int64, Int32, Enum, DateTime(bithdate), Boolean, Double
+					if(fieldinfo.GetValue(sheetFromDb.SheetFields[i])!=null) {
+						dbSheetFieldValue=fieldinfo.GetValue(sheetFromDb.SheetFields[i]).ToString();
+					}
+					if(fieldinfo.GetValue(newSheet.SheetFields[i])!=null) {
+						newSheetFieldValue=fieldinfo.GetValue(newSheet.SheetFields[i]).ToString();
+					}
+					if(dbSheetFieldValue!=newSheetFieldValue) {
+						isEqual=false;
+					}
 				}
 			}
 			return isEqual;
@@ -519,8 +405,11 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please fix data entry errors first.");
 				return;
 			}
-			//if a thread is not used, the RetrieveAndSaveData() Method will freeze the application if the web is slow 
-			this.backgroundWorker1.RunWorkerAsync();
+			Cursor=Cursors.WaitCursor;
+			//this.backgroundWorker1.RunWorkerAsync(); call this  method if theread is to be used later.
+			RetrieveAndSaveData(); // if a thread is used this method will go into backgroundWorker1_DoWork
+			FillGrid(); // if a thread is used this method will go into backgroundWorker1_RunWorkerCompleted
+			Cursor=Cursors.Default;
 		}
 
 		private void butToday_Click(object sender,EventArgs e) {
@@ -534,7 +423,6 @@ namespace OpenDental {
 		}
 
 		private void menuItemSetup_Click(object sender,EventArgs e) {
-			//Dennis: For some reason an exception is thrown here when there is a remote exception not found error in the FormWebFormSetup. Will figure out the reason later.
 			try {
 				FormWebFormSetup formW=new FormWebFormSetup();
 				formW.ShowDialog();
@@ -578,13 +466,6 @@ namespace OpenDental {
 			FormPatientForms formP=new FormPatientForms();
 			formP.PatNum=sheet.PatNum;
 			formP.ShowDialog();
-		}
-		private void backgroundWorker1_RunWorkerCompleted(object sender,RunWorkerCompletedEventArgs e) {
-			FillGrid(); 
-		}
-
-		private void backgroundWorker1_DoWork(object sender,DoWorkEventArgs e) {
-			RetrieveAndSaveData();
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {

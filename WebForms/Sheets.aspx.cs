@@ -22,7 +22,7 @@ namespace WebForms {
 	/// <summary>
 	/// For the next version of webforms -This is work in progress.
 	/// </summary>
-	public partial class WebForm2:System.Web.UI.Page {
+	public partial class Sheets:System.Web.UI.Page {
 		private long DentalOfficeID=0;
 		private long WebSheetDefID=0;
 		private Hashtable FormValuesHashTable=new Hashtable();
