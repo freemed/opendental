@@ -2341,8 +2341,8 @@ namespace OpenDental{
 					comboDx.SelectedIndex=i;
 			}
 			checkHideGraphics.Checked=ProcCur.HideGraphics;
-			if(this.IsNew){
-				if(Programs.UsingOrion && OrionProvNum==null){
+			if(this.IsNew && Programs.UsingOrion){
+				if(OrionProvNum==null){
 					ProcCur.ProvNum=Providers.GetOrionProvNum(ProcCur.ProvNum);//Returns 0 if logged in as non provider.
 				}
 				else{
