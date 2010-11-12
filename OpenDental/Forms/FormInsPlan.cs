@@ -171,6 +171,7 @@ namespace OpenDental{
 		private RadioButton radioChangeAll;
 		private GroupBox groupChanges;
 		private RadioButton radioCreateNew;
+		private UI.Button butChange;
 		private CheckBox checkIsHidden;
 		//<summary>This is a field that is accessed only by clicking on the button because there's not room for it otherwise.  This variable should be treated just as if it was a visible textBox.</summary>
 		//private string BenefitNotes;
@@ -280,11 +281,13 @@ namespace OpenDental{
 			this.label14 = new System.Windows.Forms.Label();
 			this.textSubscriber = new System.Windows.Forms.TextBox();
 			this.groupSubscriber = new System.Windows.Forms.GroupBox();
+			this.butChange = new OpenDental.UI.Button();
 			this.label25 = new System.Windows.Forms.Label();
 			this.textSubscriberID = new System.Windows.Forms.TextBox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.textDateEffect = new OpenDental.ValidDate();
 			this.textDateTerm = new OpenDental.ValidDate();
+			this.textSubscNote = new OpenDental.ODtextBox();
 			this.comboLinked = new System.Windows.Forms.ComboBox();
 			this.textLinkedNum = new System.Windows.Forms.TextBox();
 			this.label4 = new System.Windows.Forms.Label();
@@ -359,7 +362,6 @@ namespace OpenDental{
 			this.groupChanges = new System.Windows.Forms.GroupBox();
 			this.radioCreateNew = new System.Windows.Forms.RadioButton();
 			this.textPlanNote = new OpenDental.ODtextBox();
-			this.textSubscNote = new OpenDental.ODtextBox();
 			this.groupSubscriber.SuspendLayout();
 			this.groupCoPay.SuspendLayout();
 			this.groupRequestBen.SuspendLayout();
@@ -647,11 +649,12 @@ namespace OpenDental{
 			this.textSubscriber.Location = new System.Drawing.Point(109,14);
 			this.textSubscriber.Name = "textSubscriber";
 			this.textSubscriber.ReadOnly = true;
-			this.textSubscriber.Size = new System.Drawing.Size(278,20);
+			this.textSubscriber.Size = new System.Drawing.Size(298,20);
 			this.textSubscriber.TabIndex = 109;
 			// 
 			// groupSubscriber
 			// 
+			this.groupSubscriber.Controls.Add(this.butChange);
 			this.groupSubscriber.Controls.Add(this.checkAssign);
 			this.groupSubscriber.Controls.Add(this.label25);
 			this.groupSubscriber.Controls.Add(this.checkRelease);
@@ -671,6 +674,21 @@ namespace OpenDental{
 			this.groupSubscriber.TabIndex = 9;
 			this.groupSubscriber.TabStop = false;
 			this.groupSubscriber.Text = "Subscriber Information";
+			// 
+			// butChange
+			// 
+			this.butChange.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butChange.Autosize = true;
+			this.butChange.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butChange.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butChange.CornerRadius = 4F;
+			this.butChange.Location = new System.Drawing.Point(413,13);
+			this.butChange.Name = "butChange";
+			this.butChange.Size = new System.Drawing.Size(73,21);
+			this.butChange.TabIndex = 121;
+			this.butChange.Text = "Change";
+			this.toolTip1.SetToolTip(this.butChange,"Change subscriber name");
+			this.butChange.Click += new System.EventHandler(this.butChange_Click);
 			// 
 			// label25
 			// 
@@ -711,6 +729,19 @@ namespace OpenDental{
 			this.textDateTerm.Name = "textDateTerm";
 			this.textDateTerm.Size = new System.Drawing.Size(72,20);
 			this.textDateTerm.TabIndex = 2;
+			// 
+			// textSubscNote
+			// 
+			this.textSubscNote.AcceptsReturn = true;
+			this.textSubscNote.Location = new System.Drawing.Point(57,75);
+			this.textSubscNote.Multiline = true;
+			this.textSubscNote.Name = "textSubscNote";
+			this.textSubscNote.QuickPasteType = OpenDentBusiness.QuickPasteType.InsPlan;
+			this.textSubscNote.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.textSubscNote.Size = new System.Drawing.Size(439,98);
+			this.textSubscNote.TabIndex = 5;
+			this.textSubscNote.Text = "1\r\n2\r\n3 lines will show here in 46 vert.\r\n4 lines will show here in 59 vert.\r\n5 l" +
+    "ines in 72 vert\r\n6 lines in 85 vert\r\n7 lines in 98";
 			// 
 			// comboLinked
 			// 
@@ -1556,19 +1587,6 @@ namespace OpenDental{
 			this.textPlanNote.Text = "1\r\n2\r\n3 lines will show here in 46 vert.\r\n4 lines will show here in 59 vert.\r\n5 l" +
     "ines in 72 vert\r\n6 in 85";
 			// 
-			// textSubscNote
-			// 
-			this.textSubscNote.AcceptsReturn = true;
-			this.textSubscNote.Location = new System.Drawing.Point(57,75);
-			this.textSubscNote.Multiline = true;
-			this.textSubscNote.Name = "textSubscNote";
-			this.textSubscNote.QuickPasteType = OpenDentBusiness.QuickPasteType.InsPlan;
-			this.textSubscNote.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textSubscNote.Size = new System.Drawing.Size(439,98);
-			this.textSubscNote.TabIndex = 5;
-			this.textSubscNote.Text = "1\r\n2\r\n3 lines will show here in 46 vert.\r\n4 lines will show here in 59 vert.\r\n5 l" +
-    "ines in 72 vert\r\n6 lines in 85 vert\r\n7 lines in 98";
-			// 
 			// FormInsPlan
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
@@ -2317,6 +2335,40 @@ namespace OpenDental{
 			}
 			FillPayor();
 			//}
+		}
+		
+		private void butChange_Click(object sender,EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.SecurityAdmin)) {
+				return;
+			}
+			try {
+				InsSubs.ValidateNoKeys(SubCur.InsSubNum,false);
+				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Change subscriber?  This should not normally be needed.")) {
+					return;
+				}
+			}
+			catch(Exception ex){
+				if(PrefC.GetBool(PrefName.SubscriberAllowChangeAlways)) {
+					DialogResult dres=MessageBox.Show(Lan.g(this,"Warning!  Do not change unless fixing database corruption.  ")+"\r\n"+ex.Message);
+					if(dres!=DialogResult.OK) {
+						return;
+					}
+				}
+				else {
+					MessageBox.Show(Lan.g(this,"Not allowed to change.")+"\r\n"+ex.Message);
+					return;
+				}
+			}
+			Family fam=Patients.GetFamily(PatPlanCur.PatNum);
+			FormFamilyMemberSelect FormF=new FormFamilyMemberSelect(fam);
+			FormF.ShowDialog();
+			if(FormF.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			SubCur.Subscriber=FormF.SelectedPatNum;
+			Patient subsc=Patients.GetLim(FormF.SelectedPatNum);
+			textSubscriber.Text=subsc.GetNameLF();
+			textSubscriberID.Text=subsc.SSN;
 		}
 
 		private void butSearch_Click(object sender,System.EventArgs e) {
@@ -3680,7 +3732,7 @@ namespace OpenDental{
 				return false;
 			}
 			if(SubCur!=null) {
-				//Subscriber: Can never be changed once a plan is created.
+				//Subscriber: Only changed when user clicks change button.
 				SubCur.SubscriberID=textSubscriberID.Text;
 				SubCur.DateEffective=PIn.Date(textDateEffect.Text);
 				SubCur.DateTerm=PIn.Date(textDateTerm.Text);
@@ -3959,6 +4011,7 @@ namespace OpenDental{
 			}
 			
 		}
+
 
 		
 

@@ -3061,6 +3061,17 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="UPDATE preference SET ValueString = '7.5.4.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To7_5_7();
+		}
+
+		private static void To7_5_7() {
+			if(FromVersion<new Version("7.5.7.0")) {
+				string command;
+				command="INSERT INTO preference(PrefName,ValueString) VALUES('SubscriberAllowChangeAlways','0')";
+				Db.NonQ(command);
+				command="UPDATE preference SET ValueString = '7.5.7.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
 			To7_6_0();
 		}
 
@@ -3071,7 +3082,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);
 				command="UPDATE preference SET ValueString = 'https://opendentalsoft.com/WebHostSynch/Sheets.asmx' WHERE PrefName = 'WebHostSynchServerURL'";
 				Db.NonQ(command);
-
 
 
 

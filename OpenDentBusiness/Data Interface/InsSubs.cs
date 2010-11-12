@@ -93,45 +93,63 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),insSub);
 				return;
 			}
-			string command;
 			long subNum=insSub.InsSubNum;
+			try {
+				ValidateNoKeys(subNum,true);
+			}
+			catch(ApplicationException ex){
+				throw new ApplicationException(Lans.g("FormInsPlan","Not allowed to delete: ")+ex.Message);
+			}
+			Crud.InsSubCrud.Delete(insSub.InsSubNum);
+		}
+
+		/// <summary>Will throw an exception if this InsSub is being used anywhere. Set strict true to test against every check.</summary>
+		public static void ValidateNoKeys(long subNum, bool strict){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),subNum,strict);
+				return;
+			}
+			string command;
 			string result;
 			//claim.InsSubNum/2
 			command="SELECT COUNT(*) FROM claim WHERE InsSubNum = "+POut.Long(subNum);
 			result=Db.GetScalar(command);
 			if(result!="0") {
-				throw new ApplicationException(Lans.g("FormInsPlan","Not allowed to delete a subscriber with existing claims."));
+				throw new ApplicationException(Lans.g("FormInsPlan","Subscriber has existing claims."));
 			}
 			command="SELECT COUNT(*) FROM claim WHERE InsSubNum2 = "+POut.Long(subNum);
 			result=Db.GetScalar(command);
 			if(result!="0") {
-				throw new ApplicationException(Lans.g("FormInsPlan","Not allowed to delete a subscriber with existing claims."));
+				throw new ApplicationException(Lans.g("FormInsPlan","Subscriber has existing claims."));
 			}
 			//claimproc.InsSubNum
-			command="SELECT COUNT(*) FROM claimproc WHERE InsSubNum = "+POut.Long(subNum);
-			result=Db.GetScalar(command);
-			if(result!="0") {
-				throw new ApplicationException(Lans.g("FormInsPlan","Not allowed to delete a subscriber with existing claimprocs."));
+			if(strict) {
+				command="SELECT COUNT(*) FROM claimproc WHERE InsSubNum = "+POut.Long(subNum);
+				result=Db.GetScalar(command);
+				if(result!="0") {
+					throw new ApplicationException(Lans.g("FormInsPlan","Subscriber has existing claimprocs."));
+				}
 			}
 			//etrans.InsSubNum
 			command="SELECT COUNT(*) FROM etrans WHERE InsSubNum = "+POut.Long(subNum);
 			result=Db.GetScalar(command);
 			if(result!="0") {
-				throw new ApplicationException(Lans.g("FormInsPlan","Not allowed to delete a subscriber with existing etrans entry."));
+				throw new ApplicationException(Lans.g("FormInsPlan","Subscriber has existing etrans entry."));
 			}
 			//patplan.InsSubNum
-			command="SELECT COUNT(*) FROM patplan WHERE InsSubNum = "+POut.Long(subNum);
-			result=Db.GetScalar(command);
-			if(result!="0") {
-				throw new ApplicationException(Lans.g("FormInsPlan","Not allowed to delete a subscriber with existing patplan entry."));
+			if(strict) {
+				command="SELECT COUNT(*) FROM patplan WHERE InsSubNum = "+POut.Long(subNum);
+				result=Db.GetScalar(command);
+				if(result!="0") {
+					throw new ApplicationException(Lans.g("FormInsPlan","Subscriber has existing patplan entry."));
+				}
 			}
 			//payplan.InsSubNum
 			command="SELECT COUNT(*) FROM payplan WHERE InsSubNum = "+POut.Long(subNum);
 			result=Db.GetScalar(command);
 			if(result!="0") {
-				throw new ApplicationException(Lans.g("FormInsPlan","Not allowed to delete a subscriber with existing payplans."));
+				throw new ApplicationException(Lans.g("FormInsPlan","Subscriber has existing payplans."));
 			}
-			Crud.InsSubCrud.Delete(insSub.InsSubNum);
 		}
 
 		///<summary>A quick delete that is only used when cancelling out of a new edit window.</summary>
