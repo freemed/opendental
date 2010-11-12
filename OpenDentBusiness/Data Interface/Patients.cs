@@ -197,12 +197,13 @@ namespace OpenDentBusiness{
 				"SELECT patient.PatNum,LName,FName,MiddleI,Preferred,Birthdate,SSN,HmPhone,WkPhone,Address,PatStatus"
 				+",BillingType,ChartNumber,City,State,PriProv,SiteNum ";
 			if(subscriberId!=""){
-				command+=",SubscriberId ";
+				command+=",inssub.SubscriberId ";
 			}
 			command+="FROM patient ";
 			if(subscriberId!=""){
 				command+="LEFT JOIN patplan ON patplan.PatNum=patient.PatNum "
-					+"LEFT JOIN insplan ON patplan.PlanNum=insplan.PlanNum ";
+					+"LEFT JOIN insplan ON patplan.PlanNum=insplan.PlanNum "
+					+"LEFT JOIN inssub ON patPlan.InsSubNum=inssub.InsSubNum ";
 			}
 			command+="WHERE PatStatus != '4' "//not status 'deleted'
 				+(lname.Length>0?"AND LOWER(LName) LIKE '"+POut.String(lname).ToLower()+"%' ":"") //case matters in a like statement in oracle.
@@ -245,7 +246,7 @@ namespace OpenDentBusiness{
 				command+="AND SiteNum="+POut.Long(siteNum)+" ";
 			}
 			if(subscriberId!=""){
-				command+="AND SubscriberId LIKE '%"+POut.String(subscriberId)+"%' ";
+				command+="AND inssub.SubscriberId LIKE '%"+POut.String(subscriberId)+"%' ";
 			}
 			command+="ORDER BY LName,FName ";
 			if(limit){
