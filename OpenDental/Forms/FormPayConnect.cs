@@ -51,8 +51,8 @@ namespace OpenDental {
 			}
 			if(parser!=null) {
 				textCardNumber.Text=parser.AccountNumber;
-				textExpDate.Text=parser.ExpirationMonth.ToString().PadLeft(2,'0')+(parser.ExpirationYear%10).ToString().PadLeft(2,'0');
-				textNameOnCard.Text=parser.AccountName;
+				textExpDate.Text=parser.ExpirationMonth.ToString().PadLeft(2,'0')+(parser.ExpirationYear%100).ToString().PadLeft(2,'0');
+				textNameOnCard.Text=parser.FirstName+" "+parser.LastName;
 				GetNextControl(textNameOnCard,true).Focus();//Move forward to the next control in the tab order.
 			}
 		}
@@ -63,7 +63,6 @@ namespace OpenDental {
 			textNameOnCard.Text="";
 			textSecurityCode.Text="";
 			textZipCode.Text="";
-			textAmount.Text="";
 		}
 
 		///<summary>Only call after the form is closed and the DialogResult is DialogResult.OK.</summary>
@@ -117,7 +116,7 @@ namespace OpenDental {
 			}
 			status=Bridges.PayConnect.ProcessCreditCard(PaymentCur.PayNum,Convert.ToDecimal(textAmount.Text),
 				textCardNumber.Text,expYear,expMonth,textNameOnCard.Text,textSecurityCode.Text,textZipCode.Text,(parser!=null?parser.Track2:null));
-			if(status.code!=0){//error in transaction
+			if(status==null || status.code!=0){//error in transaction
 				Cursor=Cursors.Default;
 				DialogResult=DialogResult.Cancel;
 				return;

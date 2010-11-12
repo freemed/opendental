@@ -56,7 +56,7 @@ namespace OpenDental.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
-        [global::System.Configuration.DefaultSettingValueAttribute("https:/webservices.dentalxchange.com/merchant/MerchantService?wsdl")]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://webservices.dentalxchange.com/merchant/MerchantService?wsdl")]
         public string OpenDental_PayConnect_MerchantService {
             get {
                 return ((string)(this["OpenDental_PayConnect_MerchantService"]));
