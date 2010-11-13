@@ -107,7 +107,8 @@ namespace OpenDentBusiness{
 				+";Password="+pPassword
 				+";CharSet=utf8"
 				+";Treat Tiny As Boolean=false"
-				+";Allow User Variables=true";
+				+";Allow User Variables=true"
+				+";Default Command Timeout=3600";//one hour timeout on commands.  Prevents crash during conversions, etc.
 				//+";Pooling=false";
 			//}
 			return connectStr;
