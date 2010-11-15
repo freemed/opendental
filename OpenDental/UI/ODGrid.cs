@@ -83,6 +83,7 @@ namespace OpenDental.UI{
 		private int sortedByColumnIdx;
 		///<summary>True to show a triangle pointing up.  False to show a triangle pointing down.  Only works if sortedByColumnIdx is not -1.</summary>
 		private bool sortedIsAscending;
+		private int noteMark;//Marks the first character of a note that still needs to be printed.
 
 		///<summary></summary>
 		public ODGrid(){
@@ -111,6 +112,7 @@ namespace OpenDental.UI{
 			noteSpanStart=0;
 			noteSpanStop=0;
 			sortedByColumnIdx=-1;
+			noteMark=-1;
 		}
 
 		///<summary>Clean up any resources being used.</summary>
@@ -876,9 +878,19 @@ namespace OpenDental.UI{
 			float adj=100f/96f;
 			int totalPages=0;
 			int rowsPrinted=0;
+			//string note;//Class variable.
 			float yPos=marginTopFirstPage+headerHeight;//set for first page
 			while(rowsPrinted<rows.Count) {
-				float rowHeight=adj*RowHeights[rowsPrinted]+adj*NoteHeights[rowsPrinted];
+				//Row
+				float rowHeight=adj*RowHeights[rowsPrinted];
+				if(yPos+rowHeight>bounds.Bottom) {//The row is too tall to fit on the current page.
+					totalPages++;
+					yPos=bounds.Top;//Reset y for next page. We only print header for first page.
+				}
+				yPos+=rowHeight;//Must always add rowHeight to yPos, because if a row spills onto the next page,
+				//it immediately gets printed at the top of the page (bounds.Top+rowHeight).
+				//Note
+				rowHeight=adj*NoteHeights[rowsPrinted];
 				if(yPos+rowHeight>bounds.Bottom) {//The row is too tall to fit on the current page.
 					totalPages++;
 					yPos=bounds.Top;//Reset y for next page. We only print header for first page.
@@ -926,19 +938,120 @@ namespace OpenDental.UI{
 				#region Rows
 				yPos=marginTopFirstPage+headerHeight;//set for first page
 				while(rowsPrinted<rows.Count) {
-					if(yPos+adj*(float)RowHeights[rowsPrinted]+adj*(float)NoteHeights[rowsPrinted] > bounds.Bottom) {
-						//if row is too tall to fit
-						currentPage++;
+					//Initialize our pens for drawing.
+					gridPen=new Pen(this.cGridLine);
+					lowerPen=new Pen(this.cGridLine);
+					if(rows[rowsPrinted].ColorLborder!=Color.Empty) {
+						lowerPen=new Pen(rows[rowsPrinted].ColorLborder);
+					}
+					if(noteMark==-1) {//We are not in the middle of printing a note at the beginning of this new page.
+						//Row
+						if(yPos+adj*(float)RowHeights[rowsPrinted] > bounds.Bottom) {//The row is too tall to fit
+							currentPage++;//There is not enough room for even this. 
+							yPos=bounds.Top+headerHeight;//reset y for next page. Header was already printed.
+						}
+						//Print Row
+						if(currentPage>pageNumber) {
+							break;
+						}
+						if(currentPage==pageNumber) {
+							//left vertical gridline
+							g.DrawLine(gridPen,
+								xPos+ColPos[0],
+								yPos,
+								xPos+ColPos[0],
+								yPos+adj*(float)RowHeights[rowsPrinted]);
+							for(int i=0;i<columns.Count;i++) {
+								//right vertical gridline
+								g.DrawLine(gridPen,
+									xPos+adj*(float)ColPos[i]+adj*(float)columns[i].ColWidth,
+									yPos,
+									xPos+adj*(float)ColPos[i]+adj*(float)columns[i].ColWidth,
+									yPos+adj*(float)RowHeights[rowsPrinted]);
+								if(NoteHeights[rowsPrinted]>0) {
+									//Horizontal line which divides the main part of the row from the notes section of the row
+									g.DrawLine(gridPen,
+										xPos+ColPos[0],
+										yPos+adj*(float)RowHeights[rowsPrinted],
+										xPos+adj*(float)ColPos[columns.Count-1]+adj*(float)columns[columns.Count-1].ColWidth,
+										yPos+adj*(float)RowHeights[rowsPrinted]);
+								}
+								//text
+								if(rows[rowsPrinted].Cells.Count-1<i) {
+									continue;
+								}
+								switch(columns[i].TextAlign) {
+									case HorizontalAlignment.Left:
+										format.Alignment=StringAlignment.Near;
+										break;
+									case HorizontalAlignment.Center:
+										format.Alignment=StringAlignment.Center;
+										break;
+									case HorizontalAlignment.Right:
+										format.Alignment=StringAlignment.Far;
+										break;
+								}
+								if(rows[rowsPrinted].Cells[i].ColorText==Color.Empty) {
+									textBrush=new SolidBrush(rows[rowsPrinted].ColorText);
+								}
+								else {
+									textBrush=new SolidBrush(rows[rowsPrinted].Cells[i].ColorText);
+								}
+								if(rows[rowsPrinted].Cells[i].Bold==YN.Yes) {
+									cellFont=new Font(cellFont,FontStyle.Bold);
+								}
+								else if(rows[rowsPrinted].Cells[i].Bold==YN.No) {
+									cellFont=new Font(cellFont,FontStyle.Regular);
+								}
+								else {//unknown.  Use row bold
+									if(rows[rowsPrinted].Bold) {
+										cellFont=new Font(cellFont,FontStyle.Bold);
+									}
+									else {
+										cellFont=new Font(cellFont,FontStyle.Regular);
+									}
+								}
+								//Some printers will malfunction (BSOD) if print bold colored fonts.  This prevents the error.
+								if(textBrush.Color!=Color.Black && cellFont.Bold) {
+									cellFont=new Font(cellFont,FontStyle.Regular);
+								}
+								if(columns[i].TextAlign==HorizontalAlignment.Right) {
+									textRect=new RectangleF(
+										xPos+adj*(float)ColPos[i]-2,
+										yPos,
+										adj*(float)columns[i].ColWidth+2,
+										adj*(float)RowHeights[rowsPrinted]);
+									//shift the rect to account for MS issue with strings of different lengths
+									textRect.Location=new PointF
+										(textRect.X+adj*g.MeasureString(rows[rowsPrinted].Cells[i].Text,cellFont).Width/textRect.Width,
+										textRect.Y);
+									g.DrawString(rows[rowsPrinted].Cells[i].Text,cellFont,textBrush,textRect,format);
+
+								}
+								else {
+									textRect=new RectangleF(
+										xPos+adj*(float)ColPos[i],
+										yPos,
+										adj*(float)columns[i].ColWidth,
+										adj*(float)RowHeights[rowsPrinted]);
+									g.DrawString(rows[rowsPrinted].Cells[i].Text,cellFont,textBrush,textRect,format);
+								}
+								g.DrawString(rows[rowsPrinted].Cells[i].Text,cellFont,textBrush,textRect,format);
+							}
+						}
+						yPos+=(int)(adj*(float)RowHeights[rowsPrinted]);//Move yPos down the length of the row (not the note).
+						//rowsPrinted++;//Don't increment since note still may need to be printed.
+						//End Print Row
+					}
+					//Note
+					if(yPos+adj*(float)NoteHeights[rowsPrinted] > bounds.Bottom) {//The note is too tall to fit
+						currentPage++;//There is not enough room for even this. 
 						yPos=bounds.Top+headerHeight;//reset y for next page. Header was already printed.
 					}
-					//else {
-					//	yPos+=RowHeights[rowsPrinted]+NoteHeights[rowsPrinted];
-					//}
 					if(currentPage>pageNumber) {
 						break;
 					}
 					if(currentPage==pageNumber) {
-						//g.DrawString(rowsPrinted.ToString(),cellFont,Brushes.Black,xPos,yPos);
 						gridPen=new Pen(this.cGridLine);
 						lowerPen=new Pen(this.cGridLine);
 						if(rows[rowsPrinted].ColorLborder!=Color.Empty) {
@@ -950,104 +1063,29 @@ namespace OpenDental.UI{
 							if(NoteSpanStart!=0) {
 								g.DrawLine(gridPen,
 									xPos+adj*(float)ColPos[NoteSpanStart],
-									yPos+adj*(float)RowHeights[rowsPrinted],
+									yPos,
 									xPos+adj*(float)ColPos[NoteSpanStart],
-									yPos+adj*(float)RowHeights[rowsPrinted]+adj*(float)NoteHeights[rowsPrinted]);
+									yPos+adj*(float)NoteHeights[rowsPrinted]);
 							}
-							//Horizontal line which divides the main part of the row from the notes section of the row
+							//right vertical gridline
+							g.DrawLine(gridPen,
+								xPos+adj*(float)ColPos[columns.Count-1]+adj*(float)columns[columns.Count-1].ColWidth,
+								yPos,
+								xPos+adj*(float)ColPos[columns.Count-1]+adj*(float)columns[columns.Count-1].ColWidth,
+								yPos+adj*(float)NoteHeights[rowsPrinted]);
+							//left vertical gridline
 							g.DrawLine(gridPen,
 								xPos+ColPos[0],
-								yPos+adj*(float)RowHeights[rowsPrinted],
-								xPos+adj*(float)ColPos[columns.Count-1]+adj*(float)columns[columns.Count-1].ColWidth,
-								yPos+adj*(float)RowHeights[rowsPrinted]);
-							//right vertical gridline
-							g.DrawLine(gridPen,
-								xPos+adj*(float)ColPos[columns.Count-1]+adj*(float)columns[columns.Count-1].ColWidth,
-								yPos+adj*(float)RowHeights[rowsPrinted],
-								xPos+adj*(float)ColPos[columns.Count-1]+adj*(float)columns[columns.Count-1].ColWidth,
-								yPos+adj*(float)RowHeights[rowsPrinted]+adj*(float)NoteHeights[rowsPrinted]);
-						}
-						//left vertical gridline
-						g.DrawLine(gridPen,
-							xPos+ColPos[0],
-							yPos,
-							xPos+ColPos[0],
-							yPos+adj*(float)RowHeights[rowsPrinted]+adj*(float)NoteHeights[rowsPrinted]);
-						for(int i=0;i<columns.Count;i++) {
-							//right vertical gridline
-							g.DrawLine(gridPen,
-								xPos+adj*(float)ColPos[i]+adj*(float)columns[i].ColWidth,
 								yPos,
-								xPos+adj*(float)ColPos[i]+adj*(float)columns[i].ColWidth,
-								yPos+adj*(float)RowHeights[rowsPrinted]);
-							//lower horizontal gridline
-							g.DrawLine(lowerPen,
-								xPos+adj*(float)ColPos[i],
-								yPos+adj*(float)RowHeights[rowsPrinted]+adj*(float)NoteHeights[rowsPrinted],
-								xPos+adj*(float)ColPos[i]+adj*(float)columns[i].ColWidth,
-								yPos+adj*(float)RowHeights[rowsPrinted]+adj*(float)NoteHeights[rowsPrinted]);
-							//text
-							if(rows[rowsPrinted].Cells.Count-1<i) {
-								continue;
-							}
-							switch(columns[i].TextAlign) {
-								case HorizontalAlignment.Left:
-									format.Alignment=StringAlignment.Near;
-									break;
-								case HorizontalAlignment.Center:
-									format.Alignment=StringAlignment.Center;
-									break;
-								case HorizontalAlignment.Right:
-									format.Alignment=StringAlignment.Far;
-									break;
-							}
-							if(rows[rowsPrinted].Cells[i].ColorText==Color.Empty) {
-								textBrush=new SolidBrush(rows[rowsPrinted].ColorText);
-							}
-							else {
-								textBrush=new SolidBrush(rows[rowsPrinted].Cells[i].ColorText);
-							}
-							if(rows[rowsPrinted].Cells[i].Bold==YN.Yes) {
-								cellFont=new Font(cellFont,FontStyle.Bold);
-							}
-							else if(rows[rowsPrinted].Cells[i].Bold==YN.No) {
-								cellFont=new Font(cellFont,FontStyle.Regular);
-							}
-							else {//unknown.  Use row bold
-								if(rows[rowsPrinted].Bold) {
-									cellFont=new Font(cellFont,FontStyle.Bold);
-								}
-								else {
-									cellFont=new Font(cellFont,FontStyle.Regular);
-								}
-							}
-							//Some printers will malfunction (BSOD) if print bold colored fonts.  This prevents the error.
-							if(textBrush.Color!=Color.Black && cellFont.Bold) {
-								cellFont=new Font(cellFont,FontStyle.Regular);
-							}
-							if(columns[i].TextAlign==HorizontalAlignment.Right) {
-								textRect=new RectangleF(
-									xPos+adj*(float)ColPos[i]-2,
-									yPos,
-									adj*(float)columns[i].ColWidth+2,
-									adj*(float)RowHeights[rowsPrinted]);
-								//shift the rect to account for MS issue with strings of different lengths
-								textRect.Location=new PointF
-									(textRect.X+adj*g.MeasureString(rows[rowsPrinted].Cells[i].Text,cellFont).Width/textRect.Width,
-									textRect.Y);
-								g.DrawString(rows[rowsPrinted].Cells[i].Text,cellFont,textBrush,textRect,format);
-
-							}
-							else {
-								textRect=new RectangleF(
-									xPos+adj*(float)ColPos[i],
-									yPos,
-									adj*(float)columns[i].ColWidth,
-									adj*(float)RowHeights[rowsPrinted]);
-								g.DrawString(rows[rowsPrinted].Cells[i].Text,cellFont,textBrush,textRect,format);
-							}
-							g.DrawString(rows[rowsPrinted].Cells[i].Text,cellFont,textBrush,textRect,format);
+								xPos+ColPos[0],
+								yPos+adj*(float)NoteHeights[rowsPrinted]);
 						}
+						//lower horizontal gridline
+						g.DrawLine(lowerPen,
+							xPos+ColPos[0],
+							yPos+adj*(float)NoteHeights[rowsPrinted],
+							xPos+adj*(float)ColPos[columns.Count-1]+adj*(float)columns[columns.Count-1].ColWidth,
+							yPos+adj*(float)NoteHeights[rowsPrinted]);
 						//note text
 						if(NoteHeights[rowsPrinted]>0 && NoteSpanStop>0 && NoteSpanStart<columns.Count) {
 							int noteW=0;
@@ -1063,15 +1101,20 @@ namespace OpenDental.UI{
 							textBrush=new SolidBrush(rows[rowsPrinted].ColorText);
 							textRect=new RectangleF(
 								xPos+adj*(float)ColPos[NoteSpanStart]+1,
-								yPos+adj*(float)RowHeights[rowsPrinted],
+								yPos,
 								adj*(float)ColPos[NoteSpanStop]+adj*(float)columns[NoteSpanStop].ColWidth-adj*(float)ColPos[NoteSpanStart],
 								adj*(float)NoteHeights[rowsPrinted]);
 							format.Alignment=StringAlignment.Near;
+							//if(note==""){
 							g.DrawString(rows[rowsPrinted].Note,cellFont,textBrush,textRect,format);
+							//}
+							//else{//MAKE SURE TO DRAW LINES BASED ON MEASUREMENT OF note NOTE rows[rowsPrinted].Note.
+							//  g.DrawString(note,cellFont,textBrush,textRect,format);
+							//}
 						}
 					}
-					yPos+=(int)(adj*(float)RowHeights[rowsPrinted]+adj*(float)NoteHeights[rowsPrinted]);
-					rowsPrinted++;
+					yPos+=(int)(adj*(float)NoteHeights[rowsPrinted]);//ONLY INCREMENT PART PRINTED (NOTE?)
+					rowsPrinted++;//DON'T INCREMENT IF STILL PRINTING NOTE
 				}
 				#endregion Rows
 			}
@@ -1082,6 +1125,7 @@ namespace OpenDental.UI{
 			}
 			return yPos+4;
 		}
+
 		#endregion Printing
 
 		#region Selections
