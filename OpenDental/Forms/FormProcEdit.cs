@@ -4308,14 +4308,18 @@ namespace OpenDental{
 					MsgBox.Show(this,"Future date not allowed for Date Stop Clock.");
 					return;
 				}
+				//Strange logic for Orion for setting sched by date to a scheduled date from a previously cancelled TP on the same tooth/surf.
 				if(ProcCur.Surf!="" || textTooth.Text!="" || textSurfaces.Text!="") {
 					DataTable table=OrionProcs.GetCancelledScheduleDateByToothOrSurf(ProcCur.PatNum,textTooth.Text.ToString(),ProcCur.Surf);
 					if(table.Rows.Count>0) {
 						if(textDateScheduled.Text!="" && DateTime.Parse(textDateScheduled.Text)>PIn.DateT(table.Rows[0]["DateScheduleBy"].ToString())) {
-							textDateScheduled.Text=((DateTime)table.Rows[0]["DateScheduleBy"]).ToShortDateString();
-							CancelledScheduleByDate=DateTime.Parse(textDateScheduled.Text);
-							MsgBox.Show(this,"Schedule by date cannot be later than: "+textDateScheduled.Text+".");
-							return;
+							//If the cancelled sched by date is in the past then do nothing.
+							if(PIn.DateT(table.Rows[0]["DateScheduleBy"].ToString())>MiscData.GetNowDateTime().Date) {
+								textDateScheduled.Text=((DateTime)table.Rows[0]["DateScheduleBy"]).ToShortDateString();
+								CancelledScheduleByDate=DateTime.Parse(textDateScheduled.Text);
+								MsgBox.Show(this,"Schedule by date cannot be later than: "+textDateScheduled.Text+".");
+								return;
+							}
 						}
 					}
 				}
