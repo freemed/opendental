@@ -2837,6 +2837,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					INDEX(OldPlanNum)
 					) DEFAULT CHARSET=utf8";
 				Db.NonQ(command);
+				command="UPDATE insplan SET TrojanID='' WHERE TrojanID IS NULL";//In a previous version of this script, NULL TrojanIDs caused some insplan values to not carry forward.
+				Db.NonQ(command);
 				//Master plan for fixing references to plannums throughout the program--------------------------------------
 				//But many of these only apply to plansShared.
 				//appointment.InsPlan1/2 -- UPDATE InsPlan1/2
