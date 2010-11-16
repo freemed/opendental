@@ -30,6 +30,12 @@ namespace OpenDental{
 			this.textSummary = new System.Windows.Forms.TextBox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.textExplanation = new System.Windows.Forms.TextBox();
+			this.radioButtonNewProv = new System.Windows.Forms.RadioButton();
+			this.radioButtonReAssign = new System.Windows.Forms.RadioButton();
+			this.radioButtonError = new System.Windows.Forms.RadioButton();
+			this.radioButtonOther = new System.Windows.Forms.RadioButton();
+			this.groupBoxDPC = new System.Windows.Forms.GroupBox();
+			this.groupBoxDPC.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// butOK
@@ -99,10 +105,69 @@ namespace OpenDental{
 			this.textExplanation.Size = new System.Drawing.Size(685,200);
 			this.textExplanation.TabIndex = 7;
 			// 
+			// radioButtonNewProv
+			// 
+			this.radioButtonNewProv.AutoSize = true;
+			this.radioButtonNewProv.Location = new System.Drawing.Point(89,29);
+			this.radioButtonNewProv.Name = "radioButtonNewProv";
+			this.radioButtonNewProv.Size = new System.Drawing.Size(88,17);
+			this.radioButtonNewProv.TabIndex = 11;
+			this.radioButtonNewProv.Text = "New provider";
+			this.radioButtonNewProv.UseVisualStyleBackColor = true;
+			this.radioButtonNewProv.CheckedChanged += new System.EventHandler(this.radioButtonNewProv_CheckedChanged);
+			// 
+			// radioButtonReAssign
+			// 
+			this.radioButtonReAssign.AutoSize = true;
+			this.radioButtonReAssign.Location = new System.Drawing.Point(183,29);
+			this.radioButtonReAssign.Name = "radioButtonReAssign";
+			this.radioButtonReAssign.Size = new System.Drawing.Size(95,17);
+			this.radioButtonReAssign.TabIndex = 10;
+			this.radioButtonReAssign.Text = "Re-assignment";
+			this.radioButtonReAssign.UseVisualStyleBackColor = true;
+			this.radioButtonReAssign.CheckedChanged += new System.EventHandler(this.radioButtonReAssign_CheckedChanged);
+			// 
+			// radioButtonError
+			// 
+			this.radioButtonError.AutoSize = true;
+			this.radioButtonError.Location = new System.Drawing.Point(10,29);
+			this.radioButtonError.Name = "radioButtonError";
+			this.radioButtonError.Size = new System.Drawing.Size(73,17);
+			this.radioButtonError.TabIndex = 9;
+			this.radioButtonError.Text = "Entry error";
+			this.radioButtonError.UseVisualStyleBackColor = true;
+			this.radioButtonError.CheckedChanged += new System.EventHandler(this.radioButtonError_CheckedChanged);
+			// 
+			// radioButtonOther
+			// 
+			this.radioButtonOther.AutoSize = true;
+			this.radioButtonOther.Location = new System.Drawing.Point(284,29);
+			this.radioButtonOther.Name = "radioButtonOther";
+			this.radioButtonOther.Size = new System.Drawing.Size(51,17);
+			this.radioButtonOther.TabIndex = 12;
+			this.radioButtonOther.Text = "Other";
+			this.radioButtonOther.UseVisualStyleBackColor = true;
+			this.radioButtonOther.CheckedChanged += new System.EventHandler(this.radioButtonOther_CheckedChanged);
+			// 
+			// groupBoxDPC
+			// 
+			this.groupBoxDPC.Controls.Add(this.radioButtonOther);
+			this.groupBoxDPC.Controls.Add(this.radioButtonError);
+			this.groupBoxDPC.Controls.Add(this.radioButtonNewProv);
+			this.groupBoxDPC.Controls.Add(this.radioButtonReAssign);
+			this.groupBoxDPC.Location = new System.Drawing.Point(15,484);
+			this.groupBoxDPC.Name = "groupBoxDPC";
+			this.groupBoxDPC.Size = new System.Drawing.Size(355,66);
+			this.groupBoxDPC.TabIndex = 13;
+			this.groupBoxDPC.TabStop = false;
+			this.groupBoxDPC.Text = "Reason for DPC change:";
+			this.groupBoxDPC.Visible = false;
+			// 
 			// FormProcEditExplain
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(725,577);
+			this.Controls.Add(this.groupBoxDPC);
 			this.Controls.Add(this.textExplanation);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.textSummary);
@@ -114,6 +179,8 @@ namespace OpenDental{
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Procedure Edit Explanation";
 			this.Load += new System.EventHandler(this.FormProcEditExplain_Load);
+			this.groupBoxDPC.ResumeLayout(false);
+			this.groupBoxDPC.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -127,5 +194,10 @@ namespace OpenDental{
 		private System.Windows.Forms.TextBox textSummary;
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.TextBox textExplanation;
+		private System.Windows.Forms.RadioButton radioButtonNewProv;
+		private System.Windows.Forms.RadioButton radioButtonReAssign;
+		private System.Windows.Forms.RadioButton radioButtonError;
+		private System.Windows.Forms.RadioButton radioButtonOther;
+		private System.Windows.Forms.GroupBox groupBoxDPC;
 	}
 }

@@ -4086,15 +4086,17 @@ namespace OpenDental{
 				}
 				else {//Is not new.
 					if((int)OrionProcOld.DPC!=(int)OrionProcCur.DPC) {
-						FormProcEditDPCExplain FormDPC=new FormProcEditDPCExplain();
-						if(FormDPC.ShowDialog()!=DialogResult.OK) {
-							return;
+						if(FormProcEditExplain.GetChanges(ProcCur,ProcOld,OrionProcCur,OrionProcOld)!="") {//Checks if any changes were made. Also sets static variable Changes.
+							FormProcEditExplain FormP=new FormProcEditExplain();
+							FormP.dpcChange=true;
+							if(FormP.ShowDialog()!=DialogResult.OK) {
+								return;
+							}
+							Procedure ProcPreExplain=ProcOld.Copy();
+							ProcOld.Note=FormProcEditExplain.Explanation;
+							Procedures.Update(ProcOld,ProcPreExplain);
+							Thread.Sleep(1100);
 						}
-						Procedure ProcPreExplain=ProcOld.Copy();
-						ProcOld.Note="DPC changed from "+OrionProcOld.DPC.ToString()+
-							" to "+OrionProcCur.DPC.ToString()+".\r\nExplanation: "+FormDPC.Explanation;
-						Procedures.Update(ProcOld,ProcPreExplain);
-						Thread.Sleep(1100);
 					}
 					//Must be at least one day old by date.
 					if(OrionProcOld.Status2!=OrionStatus.C && ProcOld.DateTP.Date<MiscData.GetNowDateTime().Date &&
