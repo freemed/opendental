@@ -88,6 +88,7 @@ namespace OpenDentBusiness {
 				  ,"SELECT COUNT(*) FROM adjustment WHERE ProcDate='0000-00-00'"
 				  ,"SELECT COUNT(*) FROM appointment WHERE AptDateTime LIKE '0000-00-00%'"
 				  ,"SELECT COUNT(*) FROM appointment WHERE DateTimeArrived LIKE '0000-00-00%'"
+					,"SELECT COUNT(*) FROM appointment WHERE DateTimeAskedToArrive LIKE '0000-00-00%'"
 				  ,"SELECT COUNT(*) FROM appointment WHERE DateTimeSeated LIKE '0000-00-00%'"
 				  ,"SELECT COUNT(*) FROM appointment WHERE DateTimeDismissed LIKE '0000-00-00%'"
 				  ,"SELECT COUNT(*) FROM appointment WHERE DateTStamp='0000-00-00 00:00:00'"
@@ -133,6 +134,7 @@ namespace OpenDentBusiness {
 				  ,"UPDATE adjustment SET ProcDate='0001-01-01' WHERE ProcDate='0000-00-00'"
 				  ,"UPDATE appointment SET AptDateTime='0001-01-01 00:00:00' WHERE AptDateTime LIKE '0000-00-00%'"
 				  ,"UPDATE appointment SET DateTimeArrived='0001-01-01 00:00:00' WHERE DateTimeArrived LIKE '0000-00-00%'"
+					,"UPDATE appointment SET DateTimeAskedToArrive='0001-01-01 00:00:00' WHERE DateTimeAskedToArrive LIKE '0000-00-00%'"
 				  ,"UPDATE appointment SET DateTimeSeated='0001-01-01 00:00:00' WHERE DateTimeSeated LIKE '0000-00-00%'"
 				  ,"UPDATE appointment SET DateTimeDismissed='0001-01-01 00:00:00' WHERE DateTimeDismissed LIKE '0000-00-00%'"
 				  ,"UPDATE appointment SET DateTStamp='2009-08-24 00:00:00' WHERE DateTStamp='0000-00-00 00:00:00'"
@@ -162,7 +164,10 @@ namespace OpenDentBusiness {
 				  ,"UPDATE signal SET SigDateTime='0001-01-01 00:00:00' WHERE SigDateTime LIKE '0000-00-00%'"
 				  ,"UPDATE signal SET AckTime='0001-01-01 00:00:00' WHERE AckTime LIKE '0000-00-00%'"
 				};
-				int rowsChanged=Db.NonQ32(commands);
+				long rowsChanged=0;
+				for(int i=0;i<commands.Length;i++) {
+					rowsChanged+=Db.NonQ(commands[i]);
+				}
 				if(rowsChanged !=0 || verbose) {
 					log+=Lans.g("FormDatabaseMaintenance","Dates fixed. Rows changed:")+" "+rowsChanged.ToString()+"\r\n";
 				}
