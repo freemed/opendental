@@ -1606,6 +1606,7 @@ namespace OpenDental{
 			FormPE.IsNew=true;
 			if(Programs.UsingOrion){
 				FormPE.OrionProvNum=ProviderC.List[comboProvNum.SelectedIndex].ProvNum;
+				FormPE.OrionDentist=true;
 			}
 			FormPE.ShowDialog();
 			if(FormPE.DialogResult==DialogResult.Cancel){
@@ -1913,31 +1914,21 @@ namespace OpenDental{
 				ProcCur.MedicalCode=ProcedureCodes.GetProcCode(ProcCur.CodeNum).MedicalCode;
 				ProcCur.BaseUnits=ProcedureCodes.GetProcCode(ProcCur.CodeNum).BaseUnits;
 				Procedures.Insert(ProcCur);//recall synch not required
-				if(Programs.UsingOrion){
-					OrionProc orionProc=new OrionProc();
-					orionProc.ProcNum=ProcCur.ProcNum;
-					orionProc.Status2=OrionStatus.TP;
-					OrionProcs.Insert(orionProc);
+				if(Programs.UsingOrion){//Orion requires a DPC for every procedure. Force proc edit window open.
+					FormProcEdit FormP=new FormProcEdit(ProcCur,pat.Copy(),fam);
+					FormP.IsNew=true;
+					FormP.OrionDentist=true;
+					FormP.ShowDialog();
+					if(FormP.DialogResult==DialogResult.Cancel) {
+						try {
+							Procedures.Delete(ProcCur.ProcNum);//also deletes the claimprocs
+						}
+						catch(Exception ex) {
+							MessageBox.Show(ex.Message);
+						}
+					}
 				}
 				Procedures.ComputeEstimates(ProcCur,pat.PatNum,ClaimProcList,false,PlanList,PatPlanList,benefitList,pat.Age,SubList);
-				//if(Programs.UsingOrion){//Not needed. Orion ProvNum set here in ApptEdit now, not necessary to open ProcEdit.
-				//  FormProcEdit FormP=new FormProcEdit(ProcCur,pat.Copy(),fam);
-				//  FormP.IsNew=true;
-				//  FormP.ShowDialog();
-				//  if(FormP.DialogResult==DialogResult.Cancel){
-				//    //any created claimprocs are automatically deleted from within procEdit window.
-				//    try{
-				//      Procedures.Delete(ProcCur.ProcNum);//also deletes the claimprocs
-				//    }
-				//    catch(Exception ex){
-				//      MessageBox.Show(ex.Message);
-				//    }
-				//  }
-				//  else{
-				//    //Do not synch. Recalls based on ScheduleByDate reports in Orion mode.
-				//    //Recalls.Synch(PatCur.PatNum);
-				//  }
-				//}
 			}
 			listQuickAdd.SelectedIndex=-1;
 			string[] selectedProcs=new string[gridProc.SelectedIndices.Length];

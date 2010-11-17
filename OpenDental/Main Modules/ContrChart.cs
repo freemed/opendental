@@ -3278,16 +3278,6 @@ namespace OpenDental{
 				ToolBarMain.Buttons["Consent"].Enabled = true;
 				ToolBarMain.Buttons["ToothChart"].Enabled =true;
 				ToolBarMain.Buttons["ExamSheet"].Enabled=true;
-				/*moved into FillProgressNotes
-				if(Programs.UsingOrion) {
-					listProcStatusCodes.Visible=true;
-					if(listProcStatusCodes.Items.Count==0) {
-						string[] statusNames=Enum.GetNames(typeof(OrionStatus));
-						for(int i=1;i<statusNames.Length;i++) {
-							listProcStatusCodes.Items.Add(statusNames[i]);
-						}
-					}
-				}*/
 				if(UsingEcwTight()) {
 					ToolBarMain.Buttons["Commlog"].Enabled=true;
 					//the following sequence also gets repeated after exiting the Rx window to refresh.
@@ -5182,9 +5172,6 @@ namespace OpenDental{
 			
 		///<summary>No user dialog is shown.  This only works for some kinds of procedures.  Set the codeNum first.</summary>
 		private void AddQuick(Procedure ProcCur){
-			if(orionProvNum==-1){//User has hit cancel at Procedure Info (only pops up in Orion mode).
-				return;
-			}
 			Plugins.HookAddCode(this,"ContrChart.AddQuick_begin",ProcCur);
 			//procnum
 			ProcCur.PatNum=PatCur.PatNum;
@@ -5275,24 +5262,7 @@ namespace OpenDental{
 			ProcCur.BaseUnits=ProcedureCodes.GetProcCode(ProcCur.CodeNum).BaseUnits;
 			ProcCur.SiteNum=PatCur.SiteNum;
 			//nextaptnum
-			if(orionProvNum==0){//Always hits this case first time through the loop.
-				orionProvNum=Providers.GetOrionProvNum(ProcCur.ProvNum);
-			}
-			if(orionProvNum!=0){
-				ProcCur.ProvNum=orionProvNum;
-			}
 			Procedures.Insert(ProcCur);
-			if(orionProvNum!=0){
-				OrionProc orionProc=new OrionProc();
-				orionProc.ProcNum=ProcCur.ProcNum;
-				if(ProcCur.ProcStatus==ProcStat.EO) {
-					orionProc.Status2=OrionStatus.E;
-				}
-				else {
-					orionProc.Status2=OrionStatus.TP;
-				}
-				OrionProcs.Insert(orionProc);
-			}
 			if((ProcCur.ProcStatus==ProcStat.C || ProcCur.ProcStatus==ProcStat.EC || ProcCur.ProcStatus==ProcStat.EO)
 				&& ProcedureCodes.GetProcCode(ProcCur.CodeNum).PaintType==ToothPaintingType.Extraction) {
 				//if an extraction, then mark previous procs hidden
@@ -5309,9 +5279,10 @@ namespace OpenDental{
 				Recalls.Synch(PatCur.PatNum);
 			}
 			Procedures.ComputeEstimates(ProcCur,PatCur.PatNum,new List<ClaimProc>(),true,PlanList,PatPlanList,BenefitList,PatCur.Age,SubList);
-			if(orionProvNum==0){//Hits this case first time through only if user is not a primary provider in using Orion mode.
+			if(Programs.UsingOrion){//Orion requires a DPC to be set. Force the proc edit window open so they can set it.
 				FormProcEdit FormP=new FormProcEdit(ProcCur,PatCur.Copy(),FamCur);
 				FormP.IsNew=true;
+				FormP.OrionProvNum=Providers.GetOrionProvNum(ProcCur.ProvNum);
 				FormP.ShowDialog();
 				if(FormP.DialogResult==DialogResult.Cancel){
 					//any created claimprocs are automatically deleted from within procEdit window.
@@ -5321,14 +5292,11 @@ namespace OpenDental{
 					catch(Exception ex){
 						MessageBox.Show(ex.Message);
 					}
-					orionProvNum=-1;//This will cause this function (AddQuick) to be skipped for all other procedures in the 
-													//loop (possibly called from a loop in EnterTypedCode, ProcButtonClicked, or butAddProc_Click).
 				}
 				else{
 					//Do not synch. Recalls based on ScheduleByDate reports in Orion mode.
 					//Recalls.Synch(PatCur.PatNum);
 				}
-				orionProvNum=ProcCur.ProvNum;
 			}
 		}
 

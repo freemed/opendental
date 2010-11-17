@@ -212,6 +212,7 @@ namespace OpenDental{
 		private OrionProc OrionProcOld;
 		private DateTime CancelledScheduleByDate;
 		public long OrionProvNum;
+		public bool OrionDentist;
 		private TextBox textTimeStart;
 		private Label labelStartTime;
 		private List<InsSub> SubList;
@@ -2341,13 +2342,8 @@ namespace OpenDental{
 					comboDx.SelectedIndex=i;
 			}
 			checkHideGraphics.Checked=ProcCur.HideGraphics;
-			if(this.IsNew && Programs.UsingOrion){
-				if(OrionProvNum==null){
-					ProcCur.ProvNum=Providers.GetOrionProvNum(ProcCur.ProvNum);//Returns 0 if logged in as non provider.
-				}
-				else{
-					ProcCur.ProvNum=OrionProvNum;
-				}
+			if(Programs.UsingOrion && this.IsNew && !OrionDentist){
+				ProcCur.ProvNum=Providers.GetOrionProvNum(ProcCur.ProvNum);//Returns 0 if logged in as non provider.
 			}//ProvNum of 0 will be required to change before closing form.
 			comboProvNum.Items.Clear();
 			for(int i=0;i<ProviderC.List.Length;i++){
@@ -4071,10 +4067,6 @@ namespace OpenDental{
 			ProcCur.ClaimNote=textClaimNote.Text;
 			//Last chance to run this code before Proc gets updated.
 			if(Programs.UsingOrion){//Ask for an explanation. If they hit cancel here, return and don't save.
-				if(IsNew) {
-					//In case user didn't change comboStatus
-					OrionProcCur.Status2=(OrionStatus)((int)(Math.Pow(2d,(double)(comboStatus.SelectedIndex))));
-				}
 				OrionProcCur.DPC=(OrionDPC)comboDPC.SelectedIndex;
 				OrionProcCur.DateScheduleBy=PIn.Date(textDateScheduled.Text);
 				OrionProcCur.DateStopClock=PIn.Date(textDateStop.Text);
