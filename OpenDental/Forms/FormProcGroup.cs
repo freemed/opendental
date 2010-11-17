@@ -1009,7 +1009,9 @@ namespace OpenDental{
 			long aptnum=PIn.Long(TablePlanned.Rows[e.Row]["AptNum"].ToString());
 			FormApptEdit FormAE=new FormApptEdit(aptnum);
 			FormAE.ShowDialog();
-			Refresh();
+			if(FormAE.DialogResult==DialogResult.OK) {
+				Refresh();
+			}
 			for(int i=0;i<TablePlanned.Rows.Count;i++){
 				if(TablePlanned.Rows[i]["AptNum"].ToString()==aptnum.ToString()){
 					gridPlanned.SetSelected(i,true);

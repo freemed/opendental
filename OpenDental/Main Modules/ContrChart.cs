@@ -6501,7 +6501,14 @@ namespace OpenDental{
 			long aptnum=PIn.Long(DataSetMain.Tables["Planned"].Rows[e.Row]["AptNum"].ToString());
 			FormApptEdit FormAE=new FormApptEdit(aptnum);
 			FormAE.ShowDialog();
-			ModuleSelected(PatCur.PatNum);//if procs were added in appt, then this will display them*/
+			if(Programs.UsingOrion) {
+				if(FormAE.DialogResult==DialogResult.OK) {
+					ModuleSelected(PatCur.PatNum);//if procs were added in appt, then this will display them*/
+				}
+			}
+			else {
+				ModuleSelected(PatCur.PatNum);//if procs were added in appt, then this will display them*/
+			}
 			for(int i=0;i<DataSetMain.Tables["Planned"].Rows.Count;i++){
 				if(DataSetMain.Tables["Planned"].Rows[i]["AptNum"].ToString()==aptnum.ToString()){
 					gridPlanned.SetSelected(i,true);
