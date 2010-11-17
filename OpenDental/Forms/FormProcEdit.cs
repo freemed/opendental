@@ -4099,7 +4099,7 @@ namespace OpenDental{
 						}
 					}
 					//Must be at least one day old by date.
-					if(OrionProcOld.Status2!=OrionStatus.C && ProcOld.DateTP.Date<MiscData.GetNowDateTime().Date &&
+					if(ProcOld.DateTP.Date<MiscData.GetNowDateTime().Date &&	
 						(OrionProcOld.Status2!=OrionStatus.TP || (OrionProcCur.Status2!=OrionStatus.C && OrionProcCur.Status2!=OrionStatus.CS && OrionProcCur.Status2!=OrionStatus.CR))) {
 						if(FormProcEditExplain.GetChanges(ProcCur,ProcOld,OrionProcCur,OrionProcOld)!=""){//Checks if any changes were made. Also sets static variable Changes.
 							FormProcEditExplain FormP=new FormProcEditExplain();
