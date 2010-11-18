@@ -2267,9 +2267,10 @@ namespace OpenDental{
 					if(ProcCur.DateTP<MiscData.GetNowDateTime().Date && 
 						(OrionProcCur.Status2==OrionStatus.CA_EPRD
 						|| OrionProcCur.Status2==OrionStatus.CA_PD
-						|| OrionProcCur.Status2==OrionStatus.CA_Tx)) 
-					{
-						MsgBox.Show(this,"You cannot edit a cancelled procedure.");
+						|| OrionProcCur.Status2==OrionStatus.CA_Tx
+						|| OrionProcCur.Status2==OrionStatus.R)) 
+					{//Not allowed to edit procedures with these statuses that are older than a day.
+						MsgBox.Show(this,"You cannot edit refused or cancelled procedures.");
 						DialogResult=DialogResult.Cancel;
 					}
 				}
@@ -4104,6 +4105,15 @@ namespace OpenDental{
 						}
 					}
 					OrionProcs.Update(OrionProcCur);
+					//Date entry needs to be updated when status changes to cancelled or refused and at least a day old.
+					if(ProcOld.DateTP.Date<MiscData.GetNowDateTime().Date &&
+						OrionProcCur.Status2==OrionStatus.CA_EPRD ||
+						OrionProcCur.Status2==OrionStatus.CA_PD ||
+						OrionProcCur.Status2==OrionStatus.CA_Tx ||
+						OrionProcCur.Status2==OrionStatus.R) 
+					{
+						ProcCur.DateEntryC=MiscData.GetNowDateTime().Date;
+					}
 				}//End of "is not new."
 			}
 			Procedures.Update(ProcCur,ProcOld);
