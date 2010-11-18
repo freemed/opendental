@@ -3314,6 +3314,7 @@ namespace OpenDental{
 				radioEntryCn.Visible=false;
 				radioEntryEO.Location=new Point(radioEntryEO.Location.X,31);
 				groupBox2.Height=54;
+				menuItemSetComplete.Visible=false;
 			}
 			ToolBarMain.Invalidate();
 			ClearButtons();
