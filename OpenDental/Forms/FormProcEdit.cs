@@ -3460,17 +3460,6 @@ namespace OpenDental{
 		}
 
 		private void comboStatus_SelectionChangeCommitted(object sender,EventArgs e) {
-			if(comboStatus.SelectedIndex==0 && OrionProcCur.DateStopClock.Year<1880) {
-				textDateStop.Text="";
-			}
-			else {
-				if(OrionProcCur.DateStopClock.Year>1880) {
-					textDateStop.Text=OrionProcCur.DateStopClock.ToShortDateString();
-				}
-				else {
-					textDateStop.Text=textDate.Text.Trim();
-				}
-			}
 			switch(comboStatus.SelectedIndex) {
 				case 0:
 					listProcStatus.SelectedIndex=0;
@@ -3574,6 +3563,23 @@ namespace OpenDental{
 					break;
 			}
 			OrionProcCur.Status2=(OrionStatus)((int)(Math.Pow(2d,(double)(comboStatus.SelectedIndex))));
+			//Do not automatically set the stop clock date if status is set to treatment planned, existing, or watch.
+			if(OrionProcCur.Status2==OrionStatus.TP || OrionProcCur.Status2==OrionStatus.E || OrionProcCur.Status2==OrionStatus.W) {
+				//Clear the stop the clock date if there was no stop the clock date defined in a previous edit. Therefore, for a new procedure, always clear.
+				if(OrionProcCur.DateStopClock.Year<1880){
+					textDateStop.Text="";
+				}
+			}
+			else {//Set the stop the clock date for all other statuses.
+				//Use the previously set stop the clock date if one exists. Will never be true if this is a new procedure.
+				if(OrionProcCur.DateStopClock.Year>1880) {
+					textDateStop.Text=OrionProcCur.DateStopClock.ToShortDateString();
+				}
+				else {
+					//When the stop the clock date has not already been set, set to the ProcDate for the procedure.
+					textDateStop.Text=textDate.Text.Trim();
+				}
+			}
 		}
 
 		private void UpdateSurf() {
