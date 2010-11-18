@@ -4085,25 +4085,16 @@ namespace OpenDental{
 					OrionProcs.Insert(OrionProcCur);
 				}
 				else {//Is not new.
-					if((int)OrionProcOld.DPC!=(int)OrionProcCur.DPC) {
-						if(FormProcEditExplain.GetChanges(ProcCur,ProcOld,OrionProcCur,OrionProcOld)!="") {//Checks if any changes were made. Also sets static variable Changes.
+					if(FormProcEditExplain.GetChanges(ProcCur,ProcOld,OrionProcCur,OrionProcOld)!="") {//Checks if any changes were made. Also sets static variable Changes.
+						//Always show explain window if DPC changes. Can't change DPC in interface if not today.
+						//If a day old and the orion procedure status did not go from TP to C, CS or CR, then show explaination window.
+						if((int)OrionProcOld.DPC!=(int)OrionProcCur.DPC ||
+							(ProcOld.DateTP.Date<MiscData.GetNowDateTime().Date &&
+							(OrionProcOld.Status2!=OrionStatus.TP || (OrionProcCur.Status2!=OrionStatus.C && OrionProcCur.Status2!=OrionStatus.CS && OrionProcCur.Status2!=OrionStatus.CR))))
+						{
 							FormProcEditExplain FormP=new FormProcEditExplain();
-							FormP.dpcChange=true;
+							FormP.dpcChange=((int)OrionProcOld.DPC!=(int)OrionProcCur.DPC);
 							if(FormP.ShowDialog()!=DialogResult.OK) {
-								return;
-							}
-							Procedure ProcPreExplain=ProcOld.Copy();
-							ProcOld.Note=FormProcEditExplain.Explanation;
-							Procedures.Update(ProcOld,ProcPreExplain);
-							Thread.Sleep(1100);
-						}
-					}
-					//Must be at least one day old by date.
-					if(ProcOld.DateTP.Date<MiscData.GetNowDateTime().Date &&	
-						(OrionProcOld.Status2!=OrionStatus.TP || (OrionProcCur.Status2!=OrionStatus.C && OrionProcCur.Status2!=OrionStatus.CS && OrionProcCur.Status2!=OrionStatus.CR))) {
-						if(FormProcEditExplain.GetChanges(ProcCur,ProcOld,OrionProcCur,OrionProcOld)!=""){//Checks if any changes were made. Also sets static variable Changes.
-							FormProcEditExplain FormP=new FormProcEditExplain();
-							if(FormP.ShowDialog()!=DialogResult.OK){
 								return;
 							}
 							Procedure ProcPreExplain=ProcOld.Copy();

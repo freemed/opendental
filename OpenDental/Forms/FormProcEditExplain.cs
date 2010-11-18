@@ -31,6 +31,11 @@ namespace OpenDental {
 
 		public static string GetChanges(Procedure procCur, Procedure procOld, OrionProc orionProcCur, OrionProc orionProcOld){
 			Changes="";
+			if(orionProcOld.DPC != orionProcCur.DPC) {
+				if(Changes!="") { Changes+="\r\n"; }
+				Changes+="DPC changed from "+POut.String(orionProcOld.DPC.ToString())+" to "+POut.String(orionProcCur.DPC.ToString())+".";
+				return Changes;//DPC can only change on the day the procedure was created. Everything else is allowed to change same day without an explaination.
+			}
 			//PatNum, AptNum, PlannedAptNum should never change---------------------------------------------------------------------------------------------
 			if(procOld.PatNum != procCur.PatNum) {
 				if(Changes!=""){ Changes+="\r\n";}
@@ -164,10 +169,6 @@ namespace OpenDental {
 			if(orionProcOld.ProcNum != orionProcCur.ProcNum) {
 		    if(Changes!=""){ Changes+="\r\n";}
 		    Changes+="Proc Num changed from "+POut.Long(orionProcOld.ProcNum)+" to "+POut.Long(orionProcCur.ProcNum)+".";
-		  }
-			if(orionProcOld.DPC != orionProcCur.DPC) {
-		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="DPC changed from "+POut.String(orionProcOld.DPC.ToString())+" to "+POut.String(orionProcCur.DPC.ToString())+".";
 		  }
 			//Orion Status Reverse Lookup for Description----------------------------------//None is equivalent to TP---------------------------------------
 			if(orionProcOld.Status2 != orionProcCur.Status2 && !(orionProcOld.Status2==OrionStatus.None && orionProcCur.Status2==OrionStatus.TP)) {
