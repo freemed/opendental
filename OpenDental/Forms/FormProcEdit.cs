@@ -2264,6 +2264,14 @@ namespace OpenDental{
 				}
 				else {
 					OrionProcCur=OrionProcs.GetOneByProcNum(ProcCur.ProcNum);
+					if(ProcCur.DateTP<MiscData.GetNowDateTime().Date && 
+						(OrionProcCur.Status2==OrionStatus.CA_EPRD
+						|| OrionProcCur.Status2==OrionStatus.CA_PD
+						|| OrionProcCur.Status2==OrionStatus.CA_Tx)) 
+					{
+						MsgBox.Show(this,"You cannot edit a cancelled procedure.");
+						DialogResult=DialogResult.Cancel;
+					}
 				}
 				labelEndTime.Visible=true;
 				textDateTP.ReadOnly=true;
