@@ -252,6 +252,7 @@ namespace DocumentationBuilder {
 				case "insfilingcode": return "InsFilingCode";
 				case "insfilingcodesubtype": return "InsFilingCodeSubtype";
 				case "insplan": return "InsPlan";
+				case "inssub": return "InsSub";
 				case "journalentry": return "JournalEntry";
 				case "labcase": return "LabCase";
 				case "labturnaround": return "LabTurnaround";
@@ -324,6 +325,7 @@ namespace DocumentationBuilder {
 				case "taskunread": return "TaskUnread";
 				case "terminalactive": return "TerminalActive";
 				case "timeadjust": return "TimeAdjust";
+				case "timecardrule": return "TimeCardRule";
 				case "toolbutitem": return "ToolButItem";
 				case "toothinitial": return "ToothInitial";
 				case "treatplan": return "TreatPlan";

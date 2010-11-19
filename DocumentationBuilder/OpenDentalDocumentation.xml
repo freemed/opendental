@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/xsl" href="OpenDentalDocumentation.xsl"?>
-<database version="7.3.0">
+<database version="7.5.1">
     <table name="account">
         <summary>Used in the accounting section in chart of accounts.  Not related to patient accounts in any way.</summary>
         <column order="0" name="AccountNum" type="bigint(20)">
@@ -174,10 +174,10 @@
             <summary>The date and time that the patient got up out of the chair</summary>
         </column>
         <column order="22" name="InsPlan1" type="bigint(20)" fk="insplan">
-            <summary>FK to insplan.PlanNum for the primary insurance plan at the time the appointment is set complete. May be 0.</summary>
+            <summary>FK to insplan.PlanNum for the primary insurance plan at the time the appointment is set complete. May be 0. We can't tell later which subscriber is involved; only the plan.</summary>
         </column>
         <column order="23" name="InsPlan2" type="bigint(20)" fk="insplan">
-            <summary>FK to insplan.PlanNum for the secoondary insurance plan at the time the appointment is set complete. May be 0.</summary>
+            <summary>FK to insplan.PlanNum for the secoondary insurance plan at the time the appointment is set complete. May be 0. We can't tell later which subscriber is involved; only the plan.</summary>
         </column>
         <column order="24" name="DateTimeAskedToArrive" type="datetime">
             <summary>Date and time patient asked to arrive, or minval if patient not asked to arrive at a different time than appt.</summary>
@@ -395,6 +395,24 @@
         </column>
         <column order="7" name="MessageContent" type="text">
             <summary>If a commlog action, then this is the text that goes in the commlog.  If this is a ShowStatementNoteBold action, then this is the NoteBold. Might later be expanded to work with email or to use variables.</summary>
+        </column>
+    </table>
+    <table name="automationcondition">
+        <summary></summary>
+        <column order="0" name="AutomationConditionNum" type="bigint(20)">
+            <summary></summary>
+        </column>
+        <column order="1" name="AutomationNum" type="bigint(20)">
+            <summary></summary>
+        </column>
+        <column order="2" name="CompareField" type="tinyint(4)">
+            <summary></summary>
+        </column>
+        <column order="3" name="Comparison" type="tinyint(4)">
+            <summary></summary>
+        </column>
+        <column order="4" name="CompareString" type="varchar(255)">
+            <summary></summary>
         </column>
     </table>
     <table name="autonote">
@@ -830,6 +848,12 @@
         <column order="49" name="CanadianMaxProsthMaterial" type="tinyint(4)">
             <summary>F20.  If crown, not required.  If denture or bridge, required if F15 is N.  0 indicates empty response.  Single digit number code, 1-6.  We added type 7, which is crown.</summary>
         </column>
+        <column order="50" name="InsSubNum" type="bigint(20)" fk="inssub">
+            <summary>FK to inssub.InsSubNum.</summary>
+        </column>
+        <column order="51" name="InsSubNum2" type="bigint(20)" fk="inssub">
+            <summary>FK to inssub.InsSubNum.</summary>
+        </column>
     </table>
     <table name="claimattach">
         <summary>Keeps track of one image file attached to a claim.  Multiple files can be attached to a claim using this method.</summary>
@@ -1100,6 +1124,9 @@
         <column order="35" name="ClinicNum" type="bigint(20)" fk="clinic">
             <summary>FK to clinic.ClinicNum.  Can be zero.  No user interface for editing.  Forced to always be the same as the procedure, or if no procedure, then the claim.</summary>
         </column>
+        <column order="36" name="InsSubNum" type="bigint(20)" fk="inssub">
+            <summary>FK to inssub.InsSubNum.</summary>
+        </column>
     </table>
     <table name="claimvalcodelog">
         <summary></summary>
@@ -1296,6 +1323,21 @@
         </column>
         <column order="7" name="TimeDisplayed2" type="datetime">
             <summary>User can edit. Can be 01-01-0001 if not clocked out yet.</summary>
+        </column>
+        <column order="8" name="OTimeHours" type="time">
+            <summary>This is a manual override for OTimeAuto.  Typically -1 hour (-01:00:00) to indicate no override.  When used as override, allowed values are zero or positive.  This is an alternative to using a TimeAdjust row.</summary>
+        </column>
+        <column order="9" name="OTimeAuto" type="time">
+            <summary>Automatically calculated OT.  Will be zero if none.</summary>
+        </column>
+        <column order="10" name="Adjust" type="time">
+            <summary>This is a manual override of AdjustAuto.  Ignored unless AdjustIsOverridden set to true.  When used as override, it's typically negative, although zero and positive are also allowed.</summary>
+        </column>
+        <column order="11" name="AdjustAuto" type="time">
+            <summary>Automatically calculated Adjust.  Will be zero if none.</summary>
+        </column>
+        <column order="12" name="AdjustIsOverridden" type="tinyint(4)">
+            <summary>True if AdjustAuto is overridden by Adjust.</summary>
         </column>
     </table>
     <table name="commlog">
@@ -1991,6 +2033,9 @@
         <column order="17" name="PlanNum" type="bigint(20)" fk="insplan">
             <summary>FK to insplan.PlanNum.  Used if EtransType.BenefitInquiry270 and BenefitResponse271.</summary>
         </column>
+        <column order="18" name="InsSubNum" type="bigint(20)" fk="inssub">
+            <summary>FK to inssub.InsSubNum.  Used if EtransType.BenefitInquiry270 and BenefitResponse271.</summary>
+        </column>
     </table>
     <table name="etransmessagetext">
         <summary>Each row is big.  The entire X12 message text is stored here, since it can be the same for multiple etrans objects, and since the messages can be so big.</summary>
@@ -2129,6 +2174,7 @@
                 <EnumValue name="EquipmentDelete">41 All other equipment functions are covered by .Setup.  Uses date restrictions.</EnumValue>
                 <EnumValue name="SheetEdit">42 Uses date restrictions</EnumValue>
                 <EnumValue name="CommlogEdit">43</EnumValue>
+                <EnumValue name="ImageDelete">44</EnumValue>
             </Enumeration>
         </column>
     </table>
@@ -2200,105 +2246,114 @@
         </column>
     </table>
     <table name="insplan">
-        <summary>There is a separate insplan in this table for each subscriber.  Subscribers never share insplans, although multiple patients can have the plan assigned to them (with the one subscriber).  But plans can have identical information in them as other plans.  In this case, they are considered similar or identical, and some synchronization can be done.  For some offices, this synchronization will be extensive, with hundreds of identical insplans.</summary>
+        <summary>Subscribers can share insplans by using the InsSub table.  The patplan table determines coverage for individual patients.  InsPlans can also exist without any subscriber.</summary>
         <column order="0" name="PlanNum" type="bigint(20)">
             <summary>Primary key.</summary>
         </column>
-        <column order="1" name="Subscriber" type="bigint(20)" fk="patient">
-            <summary>FK to patient.PatNum.</summary>
-        </column>
-        <column order="2" name="DateEffective" type="date">
-            <summary>Date plan became effective.</summary>
-        </column>
-        <column order="3" name="DateTerm" type="date">
-            <summary>Date plan was terminated</summary>
-        </column>
-        <column order="4" name="GroupName" type="varchar(50)">
+        <column order="1" name="GroupName" type="varchar(50)">
             <summary>Optional</summary>
         </column>
-        <column order="5" name="GroupNum" type="varchar(20)">
+        <column order="2" name="GroupNum" type="varchar(20)">
             <summary>Optional.  In Canada, this is called the Plan Number.</summary>
         </column>
-        <column order="6" name="PlanNote" type="text">
+        <column order="3" name="PlanNote" type="text">
             <summary>Note for all plans identical to this one.  Always stays in synch with other identical plans regardless of user actions.  If they change it on one, it gets changed on all.</summary>
         </column>
-        <column order="7" name="FeeSched" type="bigint(20)" fk="feesched">
+        <column order="4" name="FeeSched" type="bigint(20)" fk="feesched">
             <summary>FK to feesched.FeeSchedNum.</summary>
         </column>
-        <column order="8" name="ReleaseInfo" type="tinyint">
-            <summary>Release of information signature is on file.</summary>
-        </column>
-        <column order="9" name="AssignBen" type="tinyint">
-            <summary>Assignment of benefits signature is on file.  For Canada, this handles Payee Code, F01.  Option to pay other third party is not included.</summary>
-        </column>
-        <column order="10" name="PlanType" type="char(1)">
+        <column order="5" name="PlanType" type="char(1)">
             <summary>""=percentage(the default),"p"=ppo_percentage,"f"=flatCopay,"c"=capitation.</summary>
         </column>
-        <column order="11" name="ClaimFormNum" type="bigint(20)" fk="claimform">
+        <column order="6" name="ClaimFormNum" type="bigint(20)" fk="claimform">
             <summary>FK to claimform.ClaimFormNum. eg. "1" for ADA2002.  For ADA2006, it varies by office.</summary>
         </column>
-        <column order="12" name="UseAltCode" type="tinyint">
+        <column order="7" name="UseAltCode" type="tinyint">
             <summary>0=no,1=yes.  could later be extended if more alternates required</summary>
         </column>
-        <column order="13" name="ClaimsUseUCR" type="tinyint">
+        <column order="8" name="ClaimsUseUCR" type="tinyint">
             <summary>Fee billed on claim should be the UCR fee for the patient's provider.</summary>
         </column>
-        <column order="14" name="CopayFeeSched" type="bigint(20)" fk="feesched">
+        <column order="9" name="CopayFeeSched" type="bigint(20)" fk="feesched">
             <summary>FK to feesched.FeeSchedNum. Not usually used. This fee schedule holds only co-pays(patient portions).  Only used for Capitation or for fixed copay plans.</summary>
         </column>
-        <column order="15" name="SubscriberID" type="varchar(40)">
-            <summary>Usually SSN, but can also be changed by user.  No dashes. Not allowed to be blank.</summary>
-        </column>
-        <column order="16" name="EmployerNum" type="bigint(20)" fk="employer">
+        <column order="10" name="EmployerNum" type="bigint(20)" fk="employer">
             <summary>FK to employer.EmployerNum.</summary>
         </column>
-        <column order="17" name="CarrierNum" type="bigint(20)" fk="carrier">
+        <column order="11" name="CarrierNum" type="bigint(20)" fk="carrier">
             <summary>FK to carrier.CarrierNum.</summary>
         </column>
-        <column order="18" name="AllowedFeeSched" type="bigint(20)" fk="feesched">
+        <column order="12" name="AllowedFeeSched" type="bigint(20)" fk="feesched">
             <summary>FK to feesched.FeeSchedNum. Not usually used.  This fee schedule holds amounts allowed by carriers.</summary>
         </column>
-        <column order="19" name="TrojanID" type="varchar(100)">
+        <column order="13" name="TrojanID" type="varchar(100)">
             <summary>.</summary>
         </column>
-        <column order="20" name="DivisionNo" type="varchar(255)">
+        <column order="14" name="DivisionNo" type="varchar(255)">
             <summary>Only used in Canada. It's a suffix to the plan number (group number).</summary>
         </column>
-        <column order="21" name="BenefitNotes" type="text">
-            <summary>User doesn't usually put these in.  Only used when automatically requesting benefits, such as with Trojan.  All the benefits get stored here in text form for later reference.  Specific to one plan and not synchronized because might be specific to subscriber.  If blank, we might add a function to try to find any benefitNote for a similar plan.</summary>
-        </column>
-        <column order="22" name="IsMedical" type="tinyint">
+        <column order="15" name="IsMedical" type="tinyint">
             <summary>True if this is medical insurance rather than dental insurance.</summary>
         </column>
-        <column order="23" name="SubscNote" type="text">
-            <summary>Specific to an individual plan and not synchronized in any way.  Use to store any other info that affects coverage.</summary>
-        </column>
-        <column order="24" name="FilingCode" type="bigint(20)" fk="insfilingcode">
+        <column order="16" name="FilingCode" type="bigint(20)" fk="insfilingcode">
             <summary>FK to insfilingcode.InsFilingCodeNum.  Used for e-claims.  Also used for some complex reports in public health.  The e-claim usage might become obsolete when PlanID implemented by HIPAA.  Can be 0 to indicate none.  Then 'CI' will go out on claims.</summary>
         </column>
-        <column order="25" name="DentaideCardSequence" type="tinyint">
+        <column order="17" name="DentaideCardSequence" type="tinyint">
             <summary>Canadian e-claim field. D11 and E07.  Zero indicates empty.  Mandatory value for Dentaide.  Not used for all others.  2 digit.</summary>
         </column>
-        <column order="26" name="ShowBaseUnits" type="tinyint(1)">
+        <column order="18" name="ShowBaseUnits" type="tinyint(1)">
             <summary>If checked, the units Qty will show the base units assigned to a procedure on the claim form.</summary>
         </column>
-        <column order="27" name="DedBeforePerc" type="tinyint(1)">
+        <column order="19" name="DedBeforePerc" type="tinyint(1)">
             <summary></summary>
         </column>
-        <column order="28" name="CodeSubstNone" type="tinyint(1)">
+        <column order="20" name="CodeSubstNone" type="tinyint(1)">
             <summary>Set to true to not allow procedure code downgrade substitution on this insurance plan.</summary>
         </column>
-        <column order="29" name="IsHidden" type="tinyint(4)">
+        <column order="21" name="IsHidden" type="tinyint(4)">
             <summary>Set to true to hide it from the pick list and from the main list.</summary>
         </column>
-        <column order="30" name="MonthRenew" type="tinyint(4)">
+        <column order="22" name="MonthRenew" type="tinyint(4)">
             <summary>The month, 1 through 12 when the insurance plan renews.  It will renew on the first of the month.  To indicate calendar year, set renew month to 0.</summary>
         </column>
-        <column order="31" name="FilingCodeSubtype" type="bigint(20)" fk="insfilingcodesubtype">
+        <column order="23" name="FilingCodeSubtype" type="bigint(20)" fk="insfilingcodesubtype">
             <summary>FK to insfilingcodesubtype.insfilingcodesubtypenum</summary>
         </column>
-        <column order="32" name="CanadianPlanFlag" type="varchar(5)">
+        <column order="24" name="CanadianPlanFlag" type="varchar(5)">
             <summary>Canadian C12.  Single char, usually blank.  A=Newfoundland MCP Plan - Provincial Medical Plan.  V=Veteran's Affairs Plan.  N=NIHB(poorly documented).  If N, then it does not go out in messages, blank is sent instead.  At least that's the way to make in comply with the scripts; see Elig5.</summary>
+        </column>
+    </table>
+    <table name="inssub">
+        <summary>Multiple subscribers can have the same insurance plan.  But the patplan table is still what determines coverage for individual patients.</summary>
+        <column order="0" name="InsSubNum" type="bigint(20)">
+            <summary>Primary key.</summary>
+        </column>
+        <column order="1" name="PlanNum" type="bigint(20)" fk="insplan">
+            <summary>FK to insplan.PlanNum.</summary>
+        </column>
+        <column order="2" name="Subscriber" type="bigint(20)" fk="patient">
+            <summary>FK to patient.PatNum.</summary>
+        </column>
+        <column order="3" name="DateEffective" type="date">
+            <summary>Date plan became effective.</summary>
+        </column>
+        <column order="4" name="DateTerm" type="date">
+            <summary>Date plan was terminated</summary>
+        </column>
+        <column order="5" name="ReleaseInfo" type="tinyint(4)">
+            <summary>Release of information signature is on file.</summary>
+        </column>
+        <column order="6" name="AssignBen" type="tinyint(4)">
+            <summary>Assignment of benefits signature is on file.  For Canada, this handles Payee Code, F01.  Option to pay other third party is not included.</summary>
+        </column>
+        <column order="7" name="SubscriberID" type="varchar(255)">
+            <summary>Usually SSN, but can also be changed by user.  No dashes. Not allowed to be blank.</summary>
+        </column>
+        <column order="8" name="BenefitNotes" type="varchar(255)">
+            <summary>User doesn't usually put these in.  Only used when automatically requesting benefits, such as with Trojan.  All the benefits get stored here in text form for later reference.  Not at plan level because might be specific to subscriber.  If blank, we try to display a benefitNote for another subscriber to the plan.</summary>
+        </column>
+        <column order="9" name="SubscNote" type="varchar(255)">
+            <summary>Use to store any other info that affects coverage.</summary>
         </column>
     </table>
     <table name="instructor">
@@ -2699,14 +2754,15 @@
             <summary>Enum:OrionDPC None=0,1A=1,1B=2,1C=3,2=4,3=5,4=6,5=7</summary>
             <Enumeration name="OrionDPC">
                 <summary />
-                <EnumValue name="None">0- None</EnumValue>
-                <EnumValue name="_1A">1- Treatment to be scheduled within 1 calendar day</EnumValue>
-                <EnumValue name="_1B">2- Treatment to be scheduled within 30 calendar days</EnumValue>
-                <EnumValue name="_1C">3- Treatment to be scheduled within 60 calendar days</EnumValue>
-                <EnumValue name="_2">4– Treatment to be scheduled within 120 calendar days</EnumValue>
-                <EnumValue name="_3">5– Treatment to be scheduled within 1 year</EnumValue>
-                <EnumValue name="_4">6– No further treatment is needed, no appointment needed</EnumValue>
-                <EnumValue name="_5">7– No appointment needed </EnumValue>
+                <EnumValue name="NotSpecified">0- Not Specified</EnumValue>
+                <EnumValue name="None">1- None</EnumValue>
+                <EnumValue name="_1A">2- Treatment to be scheduled within 1 calendar day</EnumValue>
+                <EnumValue name="_1B">3- Treatment to be scheduled within 30 calendar days</EnumValue>
+                <EnumValue name="_1C">4- Treatment to be scheduled within 60 calendar days</EnumValue>
+                <EnumValue name="_2">5– Treatment to be scheduled within 120 calendar days</EnumValue>
+                <EnumValue name="_3">6– Treatment to be scheduled within 1 year</EnumValue>
+                <EnumValue name="_4">7– No further treatment is needed, no appointment needed</EnumValue>
+                <EnumValue name="_5">8– No appointment needed </EnumValue>
             </Enumeration>
         </column>
         <column order="3" name="DateScheduleBy" type="date">
@@ -3153,6 +3209,9 @@
         <column order="6" name="PatID" type="varchar(100)">
             <summary>An optional patient ID which will override the insplan.SubscriberID on eclaims.  For Canada, this holds the Dependent Code, C17 and E17, and in that use it doesn't override subscriber id, but instead supplements it.</summary>
         </column>
+        <column order="7" name="InsSubNum" type="bigint(20)" fk="inssub">
+            <summary>FK to inssub.InsSubNum.  Gives info about the subscriber.</summary>
+        </column>
     </table>
     <table name="payment">
         <summary>A patient payment.  Always has at least one split.</summary>
@@ -3233,6 +3292,9 @@
         </column>
         <column order="7" name="CompletedAmt" type="double">
             <summary>The amount of the treatment that has already been completed.  This should match the sum of the principal amounts for most situations.  But if the procedures have not yet been completed, and the payment plan is to make any sense, then this number must be changed.</summary>
+        </column>
+        <column order="8" name="InsSubNum" type="bigint(20)" fk="inssub">
+            <summary>FK to inssub.InsSubNum.</summary>
         </column>
     </table>
     <table name="payplancharge">
@@ -3797,7 +3859,7 @@
             </Enumeration>
         </column>
         <column order="15" name="Prosthesis" type="char(1)">
-            <summary>Single char. Blank=no, or Initial, or Replacement.</summary>
+            <summary>Single char. Blank=no, I=Initial, R=Replacement.</summary>
         </column>
         <column order="16" name="DateOriginalProsth" type="date">
             <summary>For a prosthesis Replacement, this is the original date.</summary>
@@ -4987,6 +5049,7 @@
                 <EnumValue name="EquipmentDelete">41 All other equipment functions are covered by .Setup.  Uses date restrictions.</EnumValue>
                 <EnumValue name="SheetEdit">42 Uses date restrictions</EnumValue>
                 <EnumValue name="CommlogEdit">43</EnumValue>
+                <EnumValue name="ImageDelete">44</EnumValue>
             </Enumeration>
         </column>
         <column order="2" name="UserNum" type="bigint(20)" fk="user">
@@ -5025,10 +5088,11 @@
                 <EnumValue name="MedicalHistory">11-Requires SheetParameter for PatNum.</EnumValue>
                 <EnumValue name="LabSlip">12-Requires SheetParameter for PatNum, LabCaseNum.</EnumValue>
                 <EnumValue name="ExamSheet">13-Requires SheetParameter for PatNum.</EnumValue>
+                <EnumValue name="DepositSlip">14-Requires SheetParameter for PatNum.</EnumValue>
             </Enumeration>
         </column>
         <column order="2" name="PatNum" type="bigint(20)" fk="patient">
-            <summary>FK to patient.PatNum.  A saved sheet is always attached to a patient.  There are a few sheets that are so minor that they don't get saved, such as a Carrier label.</summary>
+            <summary>FK to patient.PatNum.  A saved sheet is always attached to a patient (except deposit slip).  There are a few sheets that are so minor that they don't get saved, such as a Carrier label.</summary>
         </column>
         <column order="3" name="DateTimeSheet" type="datetime">
             <summary>The date and time of the sheet as it will be displayed in the commlog.</summary>
@@ -5087,6 +5151,7 @@
                 <EnumValue name="MedicalHistory">11-Requires SheetParameter for PatNum.</EnumValue>
                 <EnumValue name="LabSlip">12-Requires SheetParameter for PatNum, LabCaseNum.</EnumValue>
                 <EnumValue name="ExamSheet">13-Requires SheetParameter for PatNum.</EnumValue>
+                <EnumValue name="DepositSlip">14-Requires SheetParameter for PatNum.</EnumValue>
             </Enumeration>
         </column>
         <column order="3" name="FontSize" type="float">
@@ -5153,7 +5218,7 @@
             </Enumeration>
         </column>
         <column order="13" name="RadioButtonValue" type="varchar(255)">
-            <summary>This is only used for checkboxes that you want to behave like radiobuttons.  Set the FieldName the same for each Checkbox in the group.  The FieldValue will likely be X for one of them and empty string for the others.  Each of them will have a different RadioButtonValue.  Whichever box has X, the RadioButtonValue for that box will be used when importing..</summary>
+            <summary>This is only used for checkboxes that you want to behave like radiobuttons.  Set the FieldName the same for each Checkbox in the group.  The FieldValue will likely be X for one of them and empty string for the others.  Each of them will have a different RadioButtonValue.  Whichever box has X, the RadioButtonValue for that box will be used when importing.  This field is not used for "misc" radiobutton groups.</summary>
         </column>
         <column order="14" name="RadioButtonGroup" type="varchar(255)">
             <summary>Name which identifies the group within which the radio button belongs. FieldName must be set to "misc" in order for the group to take effect.</summary>
@@ -5210,7 +5275,7 @@
             </Enumeration>
         </column>
         <column order="13" name="RadioButtonValue" type="varchar(255)">
-            <summary>This is only used for checkboxes that you want to behave like radiobuttons.  Set the FieldName the same for each Checkbox in the group.  The FieldValue will likely be X for one of them and empty string for the others.  Each of them will have a different RadioButtonValue.  Whichever box has X, the RadioButtonValue for that box will be used when importing..</summary>
+            <summary>This is only used for checkboxes that you want to behave like radiobuttons.  Set the FieldName the same for each Checkbox in the group.  The FieldValue will likely be X for one of them and empty string for the others.  Each of them will have a different RadioButtonValue.  Whichever box has X, the RadioButtonValue for that box will be used when importing.  This field is not used for "misc" radiobutton groups.</summary>
         </column>
         <column order="14" name="RadioButtonGroup" type="varchar(255)">
             <summary>Name which identifies the group within which the radio button belongs. FieldName must be set to "misc" in order for the group to take effect.</summary>
@@ -5354,6 +5419,7 @@
                 <EnumValue name="ReplicationServers">48</EnumValue>
                 <EnumValue name="Automation">49</EnumValue>
                 <EnumValue name="PhoneAsteriskReload">50. This is used internally by OD, Inc with the phone server to trigger the phone system to reload after changing which call groups users are in.</EnumValue>
+                <EnumValue name="TimeCardRules">51</EnumValue>
             </Enumeration>
         </column>
         <column order="3" name="DateViewing" type="date">
@@ -5716,14 +5782,32 @@
         <column order="2" name="TimeEntry" type="datetime">
             <summary>The date and time that this entry will show on timecard.</summary>
         </column>
-        <column order="3" name="RegHours" type="double">
+        <column order="3" name="RegHours" type="time">
             <summary>The number of regular hours to adjust timecard by.  Can be + or -.</summary>
         </column>
-        <column order="4" name="OTimeHours" type="double">
-            <summary>Overtime hours. Usually +.  Usually combined with a - adj to RegHours.</summary>
+        <column order="4" name="OTimeHours" type="time">
+            <summary>Overtime hours. Usually +.  Automatically combined with a - adj to RegHours.  Another option is clockevent.OTimeHours.</summary>
         </column>
         <column order="5" name="Note" type="text">
             <summary>.</summary>
+        </column>
+        <column order="6" name="IsAuto" type="tinyint(4)">
+            <summary>Set to true if this adjustment was automatically made by the system.  When the calc weekly ot tool is run, these types of adjustments are fair game for deletion.  Other adjustments are preserved.</summary>
+        </column>
+    </table>
+    <table name="timecardrule">
+        <summary></summary>
+        <column order="0" name="TimeCardRuleNum" type="bigint(20)">
+            <summary>Primary key.</summary>
+        </column>
+        <column order="1" name="EmployeeNum" type="bigint(20)" fk="employee">
+            <summary>FK to employee.EmployeeNum. If zero, then this rule applies to all employees.</summary>
+        </column>
+        <column order="2" name="OverHoursPerDay" type="time">
+            <summary>Typical example is 8:00.  In California, any work after the first 8 hours is overtime.</summary>
+        </column>
+        <column order="3" name="AfterTimeOfDay" type="time">
+            <summary>Typical example is 16:00 to indicate that all time worked after 4pm for specific employees is overtime.</summary>
         </column>
     </table>
     <table name="toolbutitem">

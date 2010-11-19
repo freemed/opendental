@@ -59,8 +59,8 @@ namespace DocumentationBuilder {
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(558,41);
 			this.label2.TabIndex = 2;
-			this.label2.Text = "Step 1: Build the release, which also generates OpenDentBusiness.xml which contai" +
-    "ns all the comments for each database column.";
+			this.label2.Text = "Step 1: Build the release of OpenDental, which also generates OpenDentBusiness.xm" +
+    "l which contains all the comments for each database column.";
 			// 
 			// label3
 			// 
@@ -77,9 +77,7 @@ namespace DocumentationBuilder {
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(558,41);
 			this.label4.TabIndex = 4;
-			this.label4.Text = "Step 4: Build.  The output file is DocumentationBuilder/OpenDentalDocumentation.x" +
-    "ml, which will be automatically launched when done.  Approximate time to complet" +
-    "e is 9 seconds on a fast computer.";
+			this.label4.Text = resources.GetString("label4.Text");
 			// 
 			// label6
 			// 
@@ -95,7 +93,7 @@ namespace DocumentationBuilder {
 			this.textVersion.Name = "textVersion";
 			this.textVersion.Size = new System.Drawing.Size(59,20);
 			this.textVersion.TabIndex = 7;
-			this.textVersion.Text = "7.3.0";
+			this.textVersion.Text = "7.5.1";
 			// 
 			// textConnStr
 			// 
