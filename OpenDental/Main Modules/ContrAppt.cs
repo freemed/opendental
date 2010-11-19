@@ -3798,8 +3798,12 @@ namespace OpenDental{
 				Appointments.Delete(PIn.Long(row["AptNum"].ToString()));
 			}
 			if(pinBoard.SelectedIndex==-1){
-				RefreshModuleDataPatient(0);
-				//RefreshModulePatient(0);
+				if(PatCur==null) {
+					RefreshModuleDataPatient(0);
+				}
+				else {
+					ModuleSelected(PatCur.PatNum);
+				}
 			}
 			else{
 				RefreshModuleDataPatient(PIn.Long(pinBoard.ApptList[pinBoard.SelectedIndex].DataRoww["PatNum"].ToString()));
@@ -4153,7 +4157,12 @@ namespace OpenDental{
 			}
 			//ContrApptSingle.PinBoardIsSelected=false;
 			//PatCurNum=0;
-			ModuleSelected(0);
+			if(PatCur==null) {
+				ModuleSelected(0);				
+			}
+			else {
+				ModuleSelected(PatCur.PatNum);
+			}
 			SetInvalid();
 		}		
 
