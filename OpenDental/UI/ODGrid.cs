@@ -83,7 +83,8 @@ namespace OpenDental.UI{
 		private int sortedByColumnIdx;
 		///<summary>True to show a triangle pointing up.  False to show a triangle pointing down.  Only works if sortedByColumnIdx is not -1.</summary>
 		private bool sortedIsAscending;
-		private int noteMark;//Marks the first character of a note that still needs to be printed.
+		private List<List<int>> multiPageNoteHeights;//If NoteHeights[i] won't fit on one page, get various page heights here (printing).
+		private List<List<string>> multiPageNoteSection;//Section of the note that is split up across multiple pages.
 
 		///<summary></summary>
 		public ODGrid(){
@@ -112,7 +113,6 @@ namespace OpenDental.UI{
 			noteSpanStart=0;
 			noteSpanStop=0;
 			sortedByColumnIdx=-1;
-			noteMark=-1;
 		}
 
 		///<summary>Clean up any resources being used.</summary>
@@ -401,6 +401,14 @@ namespace OpenDental.UI{
 				using(Font cellFont=new Font(FontFamily.GenericSansSerif,cellFontSize)) {
 					RowHeights=new int[rows.Count];
 					NoteHeights=new int[rows.Count];
+					multiPageNoteHeights=new List<List<int>>();
+					multiPageNoteSection=new List<List<string>>();
+					for(int i=0;i<rows.Count;i++) {
+						List<int> intList=new List<int>();
+						multiPageNoteHeights.Add(intList);
+						List<string> stringList=new List<string>();
+						multiPageNoteSection.Add(stringList);
+					}
 					RowLocs=new int[rows.Count];
 					GridH=0;
 					int cellH;
@@ -876,28 +884,81 @@ namespace OpenDental.UI{
 		///<summary>When using the included printing function, this tells you how many pages the printing will take.  The first page does not need to start at 0, but can start further down.</summary>
 		public int GetNumberOfPages(Rectangle bounds,int marginTopFirstPage) {
 			float adj=100f/96f;
+			int noteMark=-1;
 			int totalPages=0;
 			int rowsPrinted=0;
-			//string note;//Class variable.
 			float yPos=marginTopFirstPage+headerHeight;//set for first page
+			ComputeRows();//To refresh multiPageNotes.
 			while(rowsPrinted<rows.Count) {
 				//Row
-				float rowHeight=adj*RowHeights[rowsPrinted];
-				if(yPos+rowHeight>bounds.Bottom) {//The row is too tall to fit on the current page.
-					totalPages++;
-					yPos=bounds.Top;//Reset y for next page. We only print header for first page.
+				float rowHeight;
+				if(noteMark==-1) {
+					rowHeight=adj*RowHeights[rowsPrinted];
+					if(yPos+rowHeight>bounds.Bottom) {//The row is too tall to fit on the current page.
+						totalPages++;
+						yPos=bounds.Top;//Reset y for next page. We only print header for first page.
+					}
+					yPos+=rowHeight;//Must always add rowHeight to yPos, because if a row spills onto the next page,
+					//it immediately gets printed at the top of the page (bounds.Top+rowHeight).
 				}
-				yPos+=rowHeight;//Must always add rowHeight to yPos, because if a row spills onto the next page,
-				//it immediately gets printed at the top of the page (bounds.Top+rowHeight).
 				//Note
-				rowHeight=adj*NoteHeights[rowsPrinted];
+				if(noteMark==-1) {
+					rowHeight=adj*NoteHeights[rowsPrinted];
+				}
+				else {
+					rowHeight=multiPageNoteHeights[rowsPrinted][noteMark];
+				}
 				if(yPos+rowHeight>bounds.Bottom) {//The row is too tall to fit on the current page.
-					totalPages++;
-					yPos=bounds.Top;//Reset y for next page. We only print header for first page.
+					noteMark=0;
+					Graphics g=this.CreateGraphics();
+					int noteW=0;
+					if(NoteSpanStop>0 && NoteSpanStart<columns.Count) {
+						for(int i=NoteSpanStart;i<=NoteSpanStop;i++) {
+							noteW+=(int)(adj*(float)columns[i].ColWidth);
+						}
+					}
+					StringFormat format=new StringFormat();
+					Font cellFont=new Font(FontFamily.GenericSansSerif,cellFontSize);
+					int totalCharactersFitted=0;
+					int charactersFitted;
+					int linesFilled;
+					//Break it into a multiPageNote.
+					rowHeight=bounds.Bottom-yPos+1;//Fix a row height for first row.
+					multiPageNoteHeights[rowsPrinted].Add(Convert.ToInt32(rowHeight));//First part of this note, index 0.
+					SizeF sizeF=g.MeasureString(rows[rowsPrinted].Note,cellFont,new SizeF(noteW,multiPageNoteHeights[rowsPrinted][noteMark]),format,out charactersFitted,out linesFilled);//Figure out how much text fits.
+					multiPageNoteSection[rowsPrinted].Add(rows[rowsPrinted].Note.Substring(totalCharactersFitted,charactersFitted));//Put that text into the list.
+					totalCharactersFitted+=charactersFitted;
+					while(totalCharactersFitted<rows[rowsPrinted].Note.Length) {//Chop up the note into pieces.
+						noteMark++;
+						multiPageNoteHeights[rowsPrinted].Add(bounds.Bottom - bounds.Top - headerHeight);//This is a full page length. Is shortened if we reach the end of the note. Index should be noteMark.
+						sizeF=g.MeasureString(rows[rowsPrinted].Note.Substring(totalCharactersFitted),cellFont,new SizeF(noteW,multiPageNoteHeights[rowsPrinted][noteMark]),
+							format,out charactersFitted,out linesFilled);//Figures how much text fits in the give sizeF.
+						//if(totalCharactersFitted+charactersFitted>rows[rowsPrinted].Note.Length) {
+						//  charactersFitted=rows[rowsPrinted].Note.Length-totalCharactersFitted;
+						//}
+						multiPageNoteSection[rowsPrinted].Add(rows[rowsPrinted].Note.Substring(totalCharactersFitted,charactersFitted));
+						totalCharactersFitted+=charactersFitted;
+					}
+					multiPageNoteHeights[rowsPrinted][noteMark]=(int)g.MeasureString(multiPageNoteSection[rowsPrinted][noteMark],cellFont,noteW,format).Height;//Last note height is not a full page.
+					rowHeight=multiPageNoteHeights[rowsPrinted][0];//Move current selection back to 0 index.
+					noteMark=0;
+					//Do this for all the pages until one fits on a page.
+					////currentPage++;//There is not enough room for even this.
+					////yPos=bounds.Top+headerHeight;//reset y for next page. Header was already printed.
+					//totalPages++;
+					//yPos=bounds.Top;//Reset y for next page. We only print header for first page.
 				}
 				yPos+=rowHeight;//Must always add rowHeight to yPos, because if a row spills onto the next page,
 				//it immediately gets printed at the top of the page (bounds.Top+rowHeight).
-				rowsPrinted++;
+				if(noteMark==-1 || noteMark==multiPageNoteHeights[rowsPrinted].Count-1) {
+					rowsPrinted++;
+					noteMark=-1;
+				}
+				else {
+					noteMark++;//Simulates printing a note section (not the last) for counting pages.
+					totalPages++;//If we're still printing a note, then it has run off the end of the page.
+					yPos=bounds.Top+headerHeight;//Reset to top of page.
+				}
 			}
 			return totalPages+1;
 		}
@@ -905,6 +966,7 @@ namespace OpenDental.UI{
 		///<summary>Use in conjunction with GetNumberOfPages.  Prints the requested pageNumber based on the supplied printing bounds and start of the first page.  Returns the yPos of where the printing stopped so that the calling function can print below it if needed.</summary>
 		public int PrintPage(Graphics g,int pageNumber,Rectangle bounds,int marginTopFirstPage){
 			float adj=100f/96f;//This is a hack for an MS problem.  100 is printer dpi, and 96 is screen dpi.
+			int noteMark=-1;
 			int currentPage=0;//this is for looping.  We need to loop through all pages each time
 			int rowsPrinted=0;
 			int yPos=bounds.Top;
@@ -922,6 +984,12 @@ namespace OpenDental.UI{
 			SolidBrush textBrush;
 			RectangleF textRect;
 			Font cellFont=new Font(FontFamily.GenericSansSerif,cellFontSize);
+			//Initialize our pens for drawing.
+			gridPen=new Pen(this.cGridLine);
+			lowerPen=new Pen(this.cGridLine);
+			if(rows[rowsPrinted].ColorLborder!=Color.Empty) {
+				lowerPen=new Pen(rows[rowsPrinted].ColorLborder);
+			}
 			try {
 				#region Headers
 				g.FillRectangle(Brushes.LightGray,xPos+ColPos[0],yPos,adj*(float)GridW,headerHeight);
@@ -938,19 +1006,12 @@ namespace OpenDental.UI{
 				#region Rows
 				yPos=marginTopFirstPage+headerHeight;//set for first page
 				while(rowsPrinted<rows.Count) {
-					//Initialize our pens for drawing.
-					gridPen=new Pen(this.cGridLine);
-					lowerPen=new Pen(this.cGridLine);
-					if(rows[rowsPrinted].ColorLborder!=Color.Empty) {
-						lowerPen=new Pen(rows[rowsPrinted].ColorLborder);
-					}
-					if(noteMark==-1) {//We are not in the middle of printing a note at the beginning of this new page.
-						//Row
+					//Print Row
+					if(noteMark==-1) {//Don't print the row if in the middle of printing the note.
 						if(yPos+adj*(float)RowHeights[rowsPrinted] > bounds.Bottom) {//The row is too tall to fit
 							currentPage++;//There is not enough room for even this. 
 							yPos=bounds.Top+headerHeight;//reset y for next page. Header was already printed.
 						}
-						//Print Row
 						if(currentPage>pageNumber) {
 							break;
 						}
@@ -1038,56 +1099,57 @@ namespace OpenDental.UI{
 								}
 								g.DrawString(rows[rowsPrinted].Cells[i].Text,cellFont,textBrush,textRect,format);
 							}
+							yPos+=(int)(adj*(float)RowHeights[rowsPrinted]);//Move yPos down the length of the row (not the note).
 						}
-						yPos+=(int)(adj*(float)RowHeights[rowsPrinted]);//Move yPos down the length of the row (not the note).
-						//rowsPrinted++;//Don't increment since note still may need to be printed.
-						//End Print Row
 					}
-					//Note
-					if(yPos+adj*(float)NoteHeights[rowsPrinted] > bounds.Bottom) {//The note is too tall to fit
-						currentPage++;//There is not enough room for even this. 
-						yPos=bounds.Top+headerHeight;//reset y for next page. Header was already printed.
+					//End Print Row
+					//Print Note
+					float noteHeight;
+					if(noteMark==-1) {
+						noteHeight=adj*(float)NoteHeights[rowsPrinted];
+						if(yPos+noteHeight > bounds.Bottom) {//The note is too tall to fit and we must use the multiPageNoteSection peices.
+							noteHeight=multiPageNoteHeights[rowsPrinted][0];//Move noteHeight to 0 index.
+							noteMark=0;//Indicates we are now printing mutli-page note sections.
+						}
+					}
+					else {
+						noteHeight=multiPageNoteHeights[rowsPrinted][noteMark];
 					}
 					if(currentPage>pageNumber) {
 						break;
 					}
 					if(currentPage==pageNumber) {
-						gridPen=new Pen(this.cGridLine);
-						lowerPen=new Pen(this.cGridLine);
-						if(rows[rowsPrinted].ColorLborder!=Color.Empty) {
-							lowerPen=new Pen(rows[rowsPrinted].ColorLborder);
-						}
 						//lines for note section
-						if(NoteHeights[rowsPrinted]>0) {
+						if(noteHeight>0) {
 							//left vertical gridline
 							if(NoteSpanStart!=0) {
 								g.DrawLine(gridPen,
 									xPos+adj*(float)ColPos[NoteSpanStart],
 									yPos,
 									xPos+adj*(float)ColPos[NoteSpanStart],
-									yPos+adj*(float)NoteHeights[rowsPrinted]);
+									yPos+noteHeight);
 							}
 							//right vertical gridline
 							g.DrawLine(gridPen,
 								xPos+adj*(float)ColPos[columns.Count-1]+adj*(float)columns[columns.Count-1].ColWidth,
 								yPos,
 								xPos+adj*(float)ColPos[columns.Count-1]+adj*(float)columns[columns.Count-1].ColWidth,
-								yPos+adj*(float)NoteHeights[rowsPrinted]);
+								yPos+noteHeight);
 							//left vertical gridline
 							g.DrawLine(gridPen,
 								xPos+ColPos[0],
 								yPos,
 								xPos+ColPos[0],
-								yPos+adj*(float)NoteHeights[rowsPrinted]);
+								yPos+noteHeight);
 						}
 						//lower horizontal gridline
 						g.DrawLine(lowerPen,
 							xPos+ColPos[0],
-							yPos+adj*(float)NoteHeights[rowsPrinted],
+							yPos+noteHeight,
 							xPos+adj*(float)ColPos[columns.Count-1]+adj*(float)columns[columns.Count-1].ColWidth,
-							yPos+adj*(float)NoteHeights[rowsPrinted]);
+							yPos+noteHeight);
 						//note text
-						if(NoteHeights[rowsPrinted]>0 && NoteSpanStop>0 && NoteSpanStart<columns.Count) {
+						if(noteHeight>0 && NoteSpanStop>0 && NoteSpanStart<columns.Count) {
 							int noteW=0;
 							for(int i=NoteSpanStart;i<=NoteSpanStop;i++) {
 								noteW+=(int)(adj*(float)columns[i].ColWidth);
@@ -1103,19 +1165,29 @@ namespace OpenDental.UI{
 								xPos+adj*(float)ColPos[NoteSpanStart]+1,
 								yPos,
 								adj*(float)ColPos[NoteSpanStop]+adj*(float)columns[NoteSpanStop].ColWidth-adj*(float)ColPos[NoteSpanStart],
-								adj*(float)NoteHeights[rowsPrinted]);
+								noteHeight);
 							format.Alignment=StringAlignment.Near;
-							//if(note==""){
-							g.DrawString(rows[rowsPrinted].Note,cellFont,textBrush,textRect,format);
-							//}
-							//else{//MAKE SURE TO DRAW LINES BASED ON MEASUREMENT OF note NOTE rows[rowsPrinted].Note.
-							//  g.DrawString(note,cellFont,textBrush,textRect,format);
-							//}
+							if(noteMark==-1) {//Note fits on one page.
+								g.DrawString(rows[rowsPrinted].Note,cellFont,textBrush,textRect,format);
+							}
+							else {//Print the section for this page.
+								g.DrawString(multiPageNoteSection[rowsPrinted][noteMark],cellFont,textBrush,textRect,format);
+							}
 						}
 					}
-					yPos+=(int)(adj*(float)NoteHeights[rowsPrinted]);//ONLY INCREMENT PART PRINTED (NOTE?)
-					rowsPrinted++;//DON'T INCREMENT IF STILL PRINTING NOTE
+					yPos+=Convert.ToInt32(noteHeight);
+					if(noteMark==-1 || noteMark==multiPageNoteHeights[rowsPrinted].Count-1) {//One piece note or last section of multi-piece note. Stay on same page.
+						rowsPrinted++;
+						noteMark=-1;//This only applies when noteMark==multiPageNoteHeights[rowsPrinted.Count-1.
+					}
+					else {
+						noteMark++;//Note section printed.
+						currentPage++;//End of page was reached.
+						yPos=bounds.Top+headerHeight;//Reset to top of page.
+					}
 				}
+
+				//else{//We are in the middle of printing a note.
 				#endregion Rows
 			}
 			finally {
