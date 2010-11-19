@@ -4108,7 +4108,7 @@ namespace OpenDental{
 					checkNotes.Checked=ChartViewCurDisplay.ShowProcNotes;
 					checkAudit.Checked=ChartViewCurDisplay.IsAudit;
 					gridChartViews.SetSelected(ChartViewCurDisplay.ItemOrder,true);
-					if(listProcStatusCodes.Visible) {
+					if(Programs.UsingOrion) {
 						listProcStatusCodes.ClearSelected();
 						if((ChartViewCurDisplay.OrionStatusFlags & OrionStatus.TP)==OrionStatus.TP) {
 							listProcStatusCodes.SetSelected(0,true);
