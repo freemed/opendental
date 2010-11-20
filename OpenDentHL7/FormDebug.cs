@@ -16,7 +16,12 @@ namespace OpenDentHL7 {
 
 		private void FormDebug_Load(object sender,EventArgs e) {
 			ServiceHL7 service=new ServiceHL7();
-			service.StartManually();
+			try {
+				service.StartManually();
+			}
+			catch(Exception ex) {
+				MessageBox.Show(ex.Message);
+			}
 		}
 
 	

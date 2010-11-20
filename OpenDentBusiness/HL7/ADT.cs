@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace OpenDentBusiness.HL7 {
 	public class ADT {
-		public static void ProcessMessage(MessageHL7 message,bool isStandalone) {
+		public static void ProcessMessage(MessageHL7 message,bool isStandalone,bool isVerboseLogging) {
 			/*string triggerevent=message.Segments[0].GetFieldComponent(8,1);
 			switch(triggerevent) {
 				case "A01"://Admit/Visit Information
@@ -88,6 +89,9 @@ namespace OpenDentBusiness.HL7 {
 				ProcessIN1(pat,seg);
 			}
 			if(isNewPat) {
+				if(isVerboseLogging) {
+					EventLog.WriteEntry("OpenDentHL7","Inserted patient: "+pat.FName+" "+pat.LName,EventLogEntryType.Information);
+				}
 				Patients.Insert(pat,true);
 				if(pat.Guarantor==0) {
 					patOld=pat.Copy();
@@ -96,6 +100,9 @@ namespace OpenDentBusiness.HL7 {
 				}
 			}
 			else {
+				if(isVerboseLogging) {
+					EventLog.WriteEntry("OpenDentHL7","Updated patient: "+pat.FName+" "+pat.LName,EventLogEntryType.Information);
+				}
 				Patients.Update(pat,patOld);
 			}				
 		}

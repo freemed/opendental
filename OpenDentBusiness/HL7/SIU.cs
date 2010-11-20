@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace OpenDentBusiness.HL7 {
 	public class SIU {
-		public static void ProcessMessage(MessageHL7 message,bool isStandalone) {
+		public static void ProcessMessage(MessageHL7 message,bool isStandalone,bool isVerboseLogging) {
 			SegmentHL7 seg=message.GetSegment(SegmentName.PID,true);
 			long patNum=PIn.Long(seg.GetFieldFullText(2));
 			Patient pat=Patients.GetPat(patNum);
@@ -42,7 +43,10 @@ namespace OpenDentBusiness.HL7 {
 				aptOld=apt.Clone();
 			}
 			if(apt.PatNum != pat.PatNum) {
-				return;//we can't process this message because wrong patnum.  No good way to notify user yet.
+				EventLog.WriteEntry("OpenDentHL7","Appointment does not match patient: "+pat.FName+" "+pat.LName
+					+", apt.PatNum:"+apt.PatNum.ToString()+", pat.PatNum:"+pat.PatNum.ToString()
+					,EventLogEntryType.Error);
+				return;//we can't process this message because wrong patnum.
 			}
 			apt.Note=seg.GetFieldFullText(7);
 			//apt.Pattern=ProcessDuration(seg.GetFieldFullText(9));
@@ -62,15 +66,28 @@ namespace OpenDentBusiness.HL7 {
 			}
 			//AIL,AIP seem to be optional, and I'm going to ignore them for now.
 			if(isNewPat) {
+				if(isVerboseLogging) {
+					EventLog.WriteEntry("OpenDentHL7","Inserted patient: "+pat.FName+" "+pat.LName+", PatNum:"+pat.PatNum.ToString()
+						,EventLogEntryType.Information);
+				}
 				Patients.Insert(pat,true);
 			}
 			else {
+				if(isVerboseLogging) {
+					EventLog.WriteEntry("OpenDentHL7","Updated patient: "+pat.FName+" "+pat.LName,EventLogEntryType.Information);
+				}
 				Patients.Update(pat,patOld);
-			}	
-			if(isNewApt){
+			}
+			if(isNewApt) {
+				if(isVerboseLogging) {
+					EventLog.WriteEntry("OpenDentHL7","Inserted appointment for: "+pat.FName+" "+pat.LName,EventLogEntryType.Information);
+				}
 				Appointments.InsertIncludeAptNum(apt,true);
 			}
-			else{
+			else {
+				if(isVerboseLogging) {
+					EventLog.WriteEntry("OpenDentHL7","Updated appointment for: "+pat.FName+" "+pat.LName,EventLogEntryType.Information);
+				}
 				Appointments.Update(apt,aptOld);
 			}
 		}
