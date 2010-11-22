@@ -29,7 +29,8 @@ namespace OpenDentBusiness.HL7 {
 			}
 			//SCH- Schedule Activity Information
 			seg=message.GetSegment(SegmentName.SCH,true);
-			long aptNum=PIn.Long(seg.GetFieldFullText(1));
+			//The documentation is wrong.  SCH.01 is not a the appointment ID, but is instead a sequence# (always 1)
+			long aptNum=PIn.Long(seg.GetFieldFullText(2));
 			Appointment apt=Appointments.GetOneApt(aptNum);
 			Appointment aptOld=null;
 			bool isNewApt = apt==null;
