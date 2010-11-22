@@ -463,6 +463,8 @@
     <Compile Include="Misc\HouseCallsQueries.cs" />
     <Compile Include="Misc\LetterMergesQueries.cs" />
     <Compile Include="Misc\TrojanQueries.cs" />
+    <Compile Include="Mobile\TableTypes\Appointmentm.cs" />
+    <Compile Include="Mobile\TableTypes\Patientm.cs" />
     <Compile Include="Plugins\PluginBase.cs" />
     <Compile Include="Plugins\PluginContainer.cs" />
     <Compile Include="Plugins\Plugins.cs" />
@@ -731,7 +733,8 @@
     <None Include="Web References\OpenDentalServer\ServiceMain.wsdl" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="WebServer\" />
+    <Folder Include="Mobile\Crud\" />
+    <Folder Include="Mobile\Data Interface\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

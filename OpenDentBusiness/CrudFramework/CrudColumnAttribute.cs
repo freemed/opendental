@@ -9,6 +9,8 @@ namespace OpenDentBusiness {
 			this.isPriKey=false;
 			this.specialType=CrudSpecialColType.None;
 			this.isNotDbColumn=false;
+			this.isPriKeyMobile1=false;
+			this.isPriKeyMobile2=false;
 		}
 
 		private bool isPriKey;
@@ -28,6 +30,21 @@ namespace OpenDentBusiness {
 			get { return isNotDbColumn; }
 			set { isNotDbColumn=value; }
 		}
+
+		private bool isPriKeyMobile1;
+		///<summary>Always present in a mobile table.  Always CustomerNum, FK to PatNum.</summary>
+		public bool IsPriKeyMobile1 {
+			get { return isPriKeyMobile1; }
+			set { isPriKeyMobile1=value; }
+		}
+
+		private bool isPriKeyMobile2;
+		///<summary>Always present in a mobile table.  Always the ordinary priKey of the table, used together with CustomerNum.</summary>
+		public bool IsPriKeyMobile2 {
+			get { return isPriKeyMobile2; }
+			set { isPriKeyMobile2=value; }
+		}
+
 	}
 
 	public enum CrudSpecialColType {
