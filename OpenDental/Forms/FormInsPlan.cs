@@ -3893,6 +3893,8 @@ namespace OpenDental{
 							//delete original plan.
 							InsPlans.Delete(PlanNumOriginal);//doesn't touch any other objects.
 							//do not need to update PlanCur because no changes were made.
+							PatPlanCur.PlanNum=PlanCur.PlanNum;
+							PatPlans.Update(PatPlanCur);
 						}
 						else {//new plan, no changes, not picked from list.
 							//do not need to update PlanCur because no changes were made.
@@ -3903,9 +3905,12 @@ namespace OpenDental{
 							if(radioChangeAll.Checked) {
 								InsPlans.Update(PlanCur);//they might not realize that they would be changing an existing plan. Oh well.
 								InsPlans.Delete(PlanNumOriginal);//quick delete doesn't affect other objects.
+								PatPlanCur.PlanNum=PlanCur.PlanNum;
+								PatPlans.Update(PatPlanCur);
 							}
 							else {//option is checked for "create new plan if needed"
 								PlanCur.PlanNum=PlanNumOriginal;
+								//no need to update PatPlan.  Same old PlanNum.
 								//when 'pick from list' button was pushed, benefitListOld was set to new empty list.
 								for(int i=0;i<benefitList.Count;i++) {
 									if(benefitList[i].PlanNum>0) {
@@ -3924,6 +3929,8 @@ namespace OpenDental{
 					if(InsPlans.AreEqualValue(PlanCur,PlanCurOriginal)) {//If no changes
 						if(PlanCur.PlanNum != PlanNumOriginal) {//clicked 'pick from list' button, then made no changes
 							//do not need to update PlanCur because no changes were made.
+							PatPlanCur.PlanNum=PlanCur.PlanNum;
+							PatPlans.Update(PatPlanCur);
 						}
 						else {//existing plan, no changes, not picked from list.
 							//do not need to update PlanCur because no changes were made.
@@ -3934,13 +3941,19 @@ namespace OpenDental{
 							if(radioChangeAll.Checked) {
 								//warn user here?
 								InsPlans.Update(PlanCur);
+								PatPlanCur.PlanNum=PlanCur.PlanNum;
+								PatPlans.Update(PatPlanCur);
 							}
 							else {//option is checked for "create new plan if needed"
 								if(comboLinked.Items.Count==0) {//if this is the only subscriber
 									InsPlans.Update(PlanCur);
+									PatPlanCur.PlanNum=PlanCur.PlanNum;
+									PatPlans.Update(PatPlanCur);
 								}
 								else {//if there are other subscribers
 									InsPlans.Insert(PlanCur);//this gives it a new primary key.
+									PatPlanCur.PlanNum=PlanCur.PlanNum;
+									PatPlans.Update(PatPlanCur);
 									//make copies of all the benefits
 									benefitListOld=new List<Benefit>();
 									for(int i=0;i<benefitList.Count;i++) {
