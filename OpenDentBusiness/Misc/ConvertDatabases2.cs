@@ -3074,6 +3074,19 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="UPDATE preference SET ValueString = '7.5.7.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To7_5_12();
+		}
+
+		private static void To7_5_12() {
+			if(FromVersion<new Version("7.5.12.0")) {
+				string command;
+				command="ALTER TABLE inssub CHANGE BenefitNotes BenefitNotes text NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE inssub CHANGE SubscNote SubscNote text NOT NULL";
+				Db.NonQ(command);
+				command="UPDATE preference SET ValueString = '7.5.12.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
 			To7_6_0();
 		}
 
