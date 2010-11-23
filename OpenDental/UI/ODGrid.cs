@@ -983,9 +983,6 @@ namespace OpenDental.UI {
 			//Initialize our pens for drawing.
 			gridPen=new Pen(this.cGridLine);
 			lowerPen=new Pen(this.cGridLine);
-			if(rows[rowsPrinted].ColorLborder!=Color.Empty) {
-				lowerPen=new Pen(rows[rowsPrinted].ColorLborder);
-			}
 			try {
 				#region Headers
 				g.FillRectangle(Brushes.LightGray,xPos+ColPos[0],yPos,adj*(float)GridW,headerHeight);
@@ -1002,7 +999,10 @@ namespace OpenDental.UI {
 				#region Rows
 				yPos=marginTopFirstPage+headerHeight;//set for first page
 				while(rowsPrinted<rows.Count) {
-					//Print Row
+					if(rows[rowsPrinted].ColorLborder!=Color.Empty) {//rows[rowsPrinted] is blank when 
+						lowerPen=new Pen(rows[rowsPrinted].ColorLborder);
+					}
+					#region Rows Main Part
 					if(noteMark==-1) {//Don't print the row if in the middle of printing the note.
 						if(yPos+adj*(float)RowHeights[rowsPrinted] > bounds.Bottom) {//The row is too tall to fit
 							currentPage++;//There is not enough room for even this. 
@@ -1098,8 +1098,8 @@ namespace OpenDental.UI {
 						}
 						yPos+=(int)(adj*(float)RowHeights[rowsPrinted]);//Move yPos down the length of the row (not the note).
 					}
-					//End Print Row
-					//Print Note
+					#endregion Rows Main Part
+					#region Rows Note Part
 					float noteHeight;
 					if(noteMark==-1) {
 						noteHeight=(float)NoteHeights[rowsPrinted];
@@ -1171,7 +1171,7 @@ namespace OpenDental.UI {
 							}
 						}
 					}
-					yPos+=Convert.ToInt32(adj*noteHeight);
+					yPos+=Convert.ToInt32(adj*noteHeight);//Usually the whole note. Sometimes just a section.
 					if(noteMark==-1 || noteMark==multiPageNoteHeights[rowsPrinted].Count-1) {//Either the note, or the last piece of a long note.
 						rowsPrinted++;
 						noteMark=-1;//Usually does nothing. Necessary though.
@@ -1182,6 +1182,7 @@ namespace OpenDental.UI {
 						yPos=bounds.Top+headerHeight;//Reset to top of page.
 					}
 				}
+				#endregion Rows Note Part
 				#endregion Rows
 			}
 			finally {
