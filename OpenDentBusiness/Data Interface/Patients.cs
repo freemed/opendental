@@ -1435,6 +1435,7 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string[] patNumForeignKeys=new string[]{
+				//This list is up to date as of 11/19/2010 up to version 7.6.0
 				"adjustment.PatNum",
 				"anestheticrecord.PatNum",
 				"anesthvsdata.PatNum",
@@ -1521,6 +1522,11 @@ namespace OpenDentBusiness{
 					//which is just clutter but at least the merge is guaranteed this way.
 				}
 			}
+			//If the 'patFrom' had any ties to guardians, they should be deleted to prevent duplicate entries.
+			command="DELETE FROM guardian"
+				+" WHERE PatNumChild="+POut.Long(patFrom)
+				+" OR PatNumGuardian="+POut.Long(patFrom);
+			Db.NonQ(command);
 			//Update all guarantor foreign keys to change them from 'patFrom' to 
 			//the guarantor of 'patTo'. This will effectively move all 'patFrom' family members 
 			//to the family defined by 'patTo' in the case that 'patFrom' is a guarantor. If
