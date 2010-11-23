@@ -897,8 +897,7 @@ namespace OpenDental.UI {
 						totalPages++;
 						yPos=bounds.Top;//Reset y for next page. We only print header for first page.
 					}
-					yPos+=rowHeight;//Must always add rowHeight to yPos, because if a row spills onto the next page,
-					//it immediately gets printed at the top of the page (bounds.Top+rowHeight).
+					yPos+=rowHeight;//Must always add rowHeight to yPos, because if a row spills onto the next page, it immediately gets printed at the top of the page (bounds.Top+rowHeight).
 				}
 				//Note
 				if(noteMark==-1) {
@@ -907,21 +906,21 @@ namespace OpenDental.UI {
 				else {
 					rowHeight=multiPageNoteHeights[rowsPrinted][noteMark];
 				}
-				if(yPos+adj*rowHeight>bounds.Bottom) {//The row is too tall to fit on the current page.
-					noteMark=0;
-					Graphics g=this.CreateGraphics();
+				if(yPos+adj*rowHeight>bounds.Bottom) {//The row is too tall to fit on the current page. Break it into a mutli-page note.
+					noteMark=0;//noteMark>-1 means we are printing a multi-page note.
+					Graphics g=this.CreateGraphics();//Used for MeasureString.
 					int noteW=0;
 					if(NoteSpanStop>0 && NoteSpanStart<columns.Count) {
 						for(int i=NoteSpanStart;i<=NoteSpanStop;i++) {
 							noteW+=(int)((float)columns[i].ColWidth)-1;//Subtract 1 to attempt to fix a MeasureString problem.
 						}
 					}
+					noteW+=2;//Tweaking for MeasureString issues. Gives us a more accurate measurement.
 					StringFormat format=new StringFormat();
 					Font cellFont=new Font(FontFamily.GenericSansSerif,cellFontSize);
 					int totalCharactersFitted=0;
 					int charactersFitted;
 					int linesFilled;
-					//Break it into a multiPageNote.
 					rowHeight=(bounds.Bottom-yPos)/adj-1;//Fix a row height for first row. Ensures failure of the (yPos+adj*rowHeight>bounds.Bottom) test in the future.
 					multiPageNoteHeights[rowsPrinted].Add(Convert.ToInt32(rowHeight));//First part of this note, index 0.
 					SizeF sizeF;
@@ -938,9 +937,6 @@ namespace OpenDental.UI {
 						multiPageNoteHeights[rowsPrinted].Add(Convert.ToInt32((bounds.Bottom - bounds.Top - headerHeight)/adj-1));//This is a full page length. Is shortened if we reach the end of the note. Index should be noteMark.
 						sizeF=g.MeasureString(rows[rowsPrinted].Note.Substring(totalCharactersFitted),cellFont,new SizeF(noteW,multiPageNoteHeights[rowsPrinted][noteMark]-5),
 							format,out charactersFitted,out linesFilled);//Figures how much text fits in the give sizeF.
-						//if(totalCharactersFitted+charactersFitted>rows[rowsPrinted].Note.Length) {
-						//  charactersFitted=rows[rowsPrinted].Note.Length-totalCharactersFitted;
-						//}
 						multiPageNoteSection[rowsPrinted].Add(rows[rowsPrinted].Note.Substring(totalCharactersFitted,charactersFitted));
 						totalCharactersFitted+=charactersFitted;
 					}
@@ -948,14 +944,8 @@ namespace OpenDental.UI {
 						,format).Height-12;//Last note height is not a full page.
 					rowHeight=multiPageNoteHeights[rowsPrinted][0];//Move current selection back to 0 index.
 					noteMark=0;
-					//Do this for all the pages until one fits on a page.
-					////currentPage++;//There is not enough room for even this.
-					////yPos=bounds.Top+headerHeight;//reset y for next page. Header was already printed.
-					//totalPages++;
-					//yPos=bounds.Top;//Reset y for next page. We only print header for first page.
 				}
-				yPos+=rowHeight;//Must always add rowHeight to yPos, because if a row spills onto the next page,
-				//it immediately gets printed at the top of the page (bounds.Top+rowHeight).
+				yPos+=rowHeight;//Must always add rowHeight to yPos, because if a row spills onto the next page, it immediately gets printed at the top of the page (bounds.Top+rowHeight).
 				if(noteMark==-1 || noteMark==multiPageNoteHeights[rowsPrinted].Count-1) {
 					rowsPrinted++;
 					noteMark=-1;
@@ -1182,9 +1172,9 @@ namespace OpenDental.UI {
 						}
 					}
 					yPos+=Convert.ToInt32(adj*noteHeight);
-					if(noteMark==-1 || noteMark==multiPageNoteHeights[rowsPrinted].Count-1) {//One piece note or last section of multi-piece note. Stay on same page.
+					if(noteMark==-1 || noteMark==multiPageNoteHeights[rowsPrinted].Count-1) {//Either the note, or the last piece of a long note.
 						rowsPrinted++;
-						noteMark=-1;//This only applies when noteMark==multiPageNoteHeights[rowsPrinted.Count-1.
+						noteMark=-1;//Usually does nothing. Necessary though.
 					}
 					else {
 						noteMark++;//Note section printed.
@@ -1192,8 +1182,6 @@ namespace OpenDental.UI {
 						yPos=bounds.Top+headerHeight;//Reset to top of page.
 					}
 				}
-
-				//else{//We are in the middle of printing a note.
 				#endregion Rows
 			}
 			finally {
