@@ -32,9 +32,7 @@ namespace WebForms {
 				SheetFieldType FieldType = (SheetFieldType)sfdObj.FieldType;
 				Bitmap bmp=null;
 				Graphics g=null;
-				
 				Pen p=new Pen(Color.Black,2.0f);
-				
 				if(FieldType==SheetFieldType.Rectangle || FieldType==SheetFieldType.Line) {
 					bmp = new Bitmap(sfdObj.Width,sfdObj.Height);
 					g = Graphics.FromImage(bmp);
@@ -50,20 +48,17 @@ namespace WebForms {
 					string ImageData=sfdObj.ImageData;
 					bmp=PIn.Bitmap(ImageData);
 				}
-
 				/*  These 3 lines are used in lue of the shorter "bmp.Save(context.Response.OutputStream,ImageFormat.Png);" because it does not work with png images.*/
 				MemoryStream MemStream=new MemoryStream();
 				bmp.Save(MemStream,System.Drawing.Imaging.ImageFormat.Png);
 				MemStream.WriteTo(context.Response.OutputStream);
-
-				
 				if(FieldType==SheetFieldType.Rectangle || FieldType==SheetFieldType.Line) {
 					g.Dispose();
 				}
 				bmp.Dispose();
-				
 			}
 			catch(Exception ex) {
+				Logger.Information("WebSheetFieldDefID="+WebSheetFieldDefID);
 				Logger.LogError(ex);
 			}
 		}

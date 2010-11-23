@@ -26,7 +26,7 @@ namespace WebHostSynch {
 	public class Sheets:System.Web.Services.WebService {
 
 		[WebMethod]
-		public bool SetPreferences(string RegistrationKey,int ColorBorder,string Heading1,string Heading2) {
+		public bool SetPreferences(string RegistrationKey,int ColorBorder) {
 			try {
 				ODWebServiceEntities db=new ODWebServiceEntities();
 				long DentalOfficeID=GetDentalOfficeID(RegistrationKey);
@@ -38,16 +38,12 @@ namespace WebHostSynch {
 				//update preference
 				if(wspObj.Count()>0) {
 					wspObj.First().ColorBorder=ColorBorder;
-					wspObj.First().Heading1=Heading1;
-					wspObj.First().Heading2=Heading2;
 				}
 				// if there is no entry for that dental office make a new entry.
 				if(wspObj.Count()==0) {
 					webforms_preference wspNewObj=new webforms_preference();
 					wspNewObj.DentalOfficeID=DentalOfficeID;
 					wspNewObj.ColorBorder=ColorBorder;
-					wspNewObj.Heading1=Heading1;
-					wspNewObj.Heading2=Heading2;
 					db.AddTowebforms_preference(wspNewObj);
 				}
 				db.SaveChanges();
@@ -67,8 +63,6 @@ namespace WebHostSynch {
             ODWebServiceEntities db=new ODWebServiceEntities();
 			webforms_preference wspObj=null;
 			int DefaultColorBorder=-12550016;
-			string DefaultHeading1="PATIENT INFORMATION";
-			string DefaultHeading2="We are pleased to welcome you to our office. Please take a few minutes to fill out this form as completely as you can. If you have any questions we'll be glad to help you.";
 			try {
 				long DentalOfficeID=GetDentalOfficeID(RegistrationKey);
 				if(DentalOfficeID==0) {
@@ -83,8 +77,6 @@ namespace WebHostSynch {
 					wspObj=new webforms_preference();
 					wspObj.DentalOfficeID=DentalOfficeID;
 					wspObj.ColorBorder=DefaultColorBorder;
-					wspObj.Heading1=DefaultHeading1;
-					wspObj.Heading2=DefaultHeading2;
 					db.AddTowebforms_preference(wspObj);
 					Logger.Information("new entry IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID);
 				}

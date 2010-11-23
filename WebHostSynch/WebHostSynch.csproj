@@ -110,9 +110,7 @@
       <Name>OpenDentBusiness</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <EntityDeploy Include="ODWebServiceModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>

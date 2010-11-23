@@ -34,8 +34,6 @@
           </Key>
           <Property Name="ColorBorder" Type="int" Nullable="false" />
           <Property Name="DentalOfficeID" Type="bigint" Nullable="false" />
-          <Property Name="Heading1" Type="text" Nullable="false" />
-          <Property Name="Heading2" Type="text" Nullable="false" />
         </EntityType>
         <EntityType Name="webforms_sheet">
           <Key>
@@ -190,8 +188,6 @@
           </Key>
           <Property Type="Int32" Name="ColorBorder" Nullable="false" />
           <Property Type="Int64" Name="DentalOfficeID" Nullable="false" />
-          <Property Type="String" Name="Heading1" Nullable="false" />
-          <Property Type="String" Name="Heading2" Nullable="false" />
           <NavigationProperty Name="webforms_sheetdef" Relationship="odwebserviceModel.FK_webforms_sheetdef_DentalOfficeID" FromRole="webforms_preference" ToRole="webforms_sheetdef" />
           <NavigationProperty Name="webforms_sheet" Relationship="odwebserviceModel.FK_webforms_sheet_DentalOfficeID" FromRole="webforms_preference" ToRole="webforms_sheet" />
         </EntityType>
@@ -330,8 +326,6 @@
           <EntitySetMapping Name="webforms_preference">
             <EntityTypeMapping TypeName="odwebserviceModel.webforms_preference">
               <MappingFragment StoreEntitySet="webforms_preference">
-                <ScalarProperty Name="Heading2" ColumnName="Heading2" />
-                <ScalarProperty Name="Heading1" ColumnName="Heading1" />
                 <ScalarProperty Name="DentalOfficeID" ColumnName="DentalOfficeID" />
                 <ScalarProperty Name="ColorBorder" ColumnName="ColorBorder" />
               </MappingFragment>
@@ -434,20 +428,20 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram Name="ODWebServiceModel" xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
-        <EntityTypeShape EntityType="odwebserviceModel.webforms_preference" Width="1.5" PointX="0.75" PointY="4.5" Height="1.9210009765624996" />
+        <EntityTypeShape EntityType="odwebserviceModel.webforms_preference" Width="1.5" PointX="0.75" PointY="4.5" Height="1.5923063151041657" />
         <EntityTypeShape EntityType="odwebserviceModel.webforms_sheet" Width="1.5" PointX="3" PointY="1.75" Height="2.7427376302083317" />
         <EntityTypeShape EntityType="odwebserviceModel.webforms_sheetdef" Width="1.5" PointX="3" PointY="6.25" Height="2.7427376302083317" />
         <EntityTypeShape EntityType="odwebserviceModel.webforms_sheetfield" Width="1.5" PointX="5.25" PointY="1.25" Height="3.7288216145833317" />
         <EntityTypeShape EntityType="odwebserviceModel.webforms_sheetfielddef" Width="1.5" PointX="5.25" PointY="5.75" Height="3.8931689453125031" />
         <AssociationConnector Association="odwebserviceModel.FK_webforms_sheetdef_DentalOfficeID" >
-          <ConnectorPoint PointX="2.25" PointY="5.3749994999999995" />
-          <ConnectorPoint PointX="3.75" PointY="5.3749994999999995" />
-          <ConnectorPoint PointX="3.75" PointY="6.25" />
+          <ConnectorPoint PointX="1.5" PointY="6.0923063151041656" />
+          <ConnectorPoint PointX="1.5" PointY="7.6213688151041659" />
+          <ConnectorPoint PointX="3" PointY="7.6213688151041659" />
         </AssociationConnector>
         <AssociationConnector Association="odwebserviceModel.FK_webforms_sheet_DentalOfficeID" >
-          <ConnectorPoint PointX="1.5" PointY="4.5" />
-          <ConnectorPoint PointX="1.5" PointY="3.1213688151041659" />
-          <ConnectorPoint PointX="3" PointY="3.1213688151041659" />
+          <ConnectorPoint PointX="2.25" PointY="5.3746961380208322" />
+          <ConnectorPoint PointX="3.75" PointY="5.3746961380208322" />
+          <ConnectorPoint PointX="3.75" PointY="4.6570849609375" />
         </AssociationConnector>
         <AssociationConnector Association="odwebserviceModel.FK_webforms_sheetfield_SheetID" >
           <ConnectorPoint PointX="4.5" PointY="3.1213688151041659" />

@@ -1,7 +1,7 @@
 ﻿///Dennis Mathew: For using ADO.NET Entity Data Model/LINQ with Mysql/Visual Studio 2010, download and install Connector/Net from http://dev.mysql.com/downloads/connector/net/ 
 /// Connector/Net is a ADO.NET driver for MySQL.
 /// The web server which hosts the webservice will also need this install.
-/// The integration with Visual Studio can be flaky. So a few cycles of install/uninstall/restart may be needed. I've also tried the non-install options of adding dlls but they don't seem to work in the few attempts that I made.
+/// The integration with Visual Studio can be flakey. So a few cycles of install/uninstall/restart may be needed. I've also tried the non-install options of adding dlls but they don't seem to work in the few attempts that I made.
 
 
 using System;
@@ -36,6 +36,7 @@ namespace WebForms {
 				if(Request["WebSheetDefID"]!=null) {
 					Int64.TryParse(Request["WebSheetDefID"].ToString().Trim(),out WebSheetDefID);
 				}
+				Logger.Information("Page requested from IpAddress="+HttpContext.Current.Request.UserHostAddress+"for  DentalOfficeID="+DentalOfficeID);
 				Panel2.Visible=true;
 				GeneratePage(DentalOfficeID,WebSheetDefID);
 			}
@@ -126,9 +127,12 @@ namespace WebForms {
 						wc=lb;
 					}
 					if(FieldType==SheetFieldType.Image||FieldType==SheetFieldType.Rectangle||FieldType==SheetFieldType.Line) {
-						System.Web.UI.WebControls.Image img=new System.Web.UI.WebControls.Image();
-						img.ImageUrl=("~/Handler1.ashx?WebSheetFieldDefID="+WebSheetFieldDefID);
-						wc=img;
+						// this is a bug which must be addressed. Horizontal and vertical lines may have either height or width as zero. this throws an error, so they have been excluded for now
+						if(width!=0 && height!=0) { 
+							System.Web.UI.WebControls.Image img=new System.Web.UI.WebControls.Image();
+							img.ImageUrl=("~/Handler1.ashx?WebSheetFieldDefID="+WebSheetFieldDefID);
+							wc=img;
+						}
 					}
 					if(FieldType==SheetFieldType.SigBox) {
 						Panel pa=new Panel();

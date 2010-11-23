@@ -216,15 +216,11 @@ namespace WebForms
         /// </summary>
         /// <param name="colorBorder">Initial value of the ColorBorder property.</param>
         /// <param name="dentalOfficeID">Initial value of the DentalOfficeID property.</param>
-        /// <param name="heading1">Initial value of the Heading1 property.</param>
-        /// <param name="heading2">Initial value of the Heading2 property.</param>
-        public static webforms_preference Createwebforms_preference(global::System.Int32 colorBorder, global::System.Int64 dentalOfficeID, global::System.String heading1, global::System.String heading2)
+        public static webforms_preference Createwebforms_preference(global::System.Int32 colorBorder, global::System.Int64 dentalOfficeID)
         {
             webforms_preference webforms_preference = new webforms_preference();
             webforms_preference.ColorBorder = colorBorder;
             webforms_preference.DentalOfficeID = dentalOfficeID;
-            webforms_preference.Heading1 = heading1;
-            webforms_preference.Heading2 = heading2;
             return webforms_preference;
         }
 
@@ -281,54 +277,6 @@ namespace WebForms
         private global::System.Int64 _DentalOfficeID;
         partial void OnDentalOfficeIDChanging(global::System.Int64 value);
         partial void OnDentalOfficeIDChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String Heading1
-        {
-            get
-            {
-                return _Heading1;
-            }
-            set
-            {
-                OnHeading1Changing(value);
-                ReportPropertyChanging("Heading1");
-                _Heading1 = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("Heading1");
-                OnHeading1Changed();
-            }
-        }
-        private global::System.String _Heading1;
-        partial void OnHeading1Changing(global::System.String value);
-        partial void OnHeading1Changed();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String Heading2
-        {
-            get
-            {
-                return _Heading2;
-            }
-            set
-            {
-                OnHeading2Changing(value);
-                ReportPropertyChanging("Heading2");
-                _Heading2 = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("Heading2");
-                OnHeading2Changed();
-            }
-        }
-        private global::System.String _Heading2;
-        partial void OnHeading2Changing(global::System.String value);
-        partial void OnHeading2Changed();
 
         #endregion
     

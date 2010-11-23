@@ -128,30 +128,26 @@ namespace OpenDental.WebSheets {
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://opendental.com/SetPreferences", RequestNamespace="http://opendental.com/", ResponseNamespace="http://opendental.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-        public bool SetPreferences(string RegistrationKey, int ColorBorder, string Heading1, string Heading2) {
+        public bool SetPreferences(string RegistrationKey, int ColorBorder) {
             object[] results = this.Invoke("SetPreferences", new object[] {
                         RegistrationKey,
-                        ColorBorder,
-                        Heading1,
-                        Heading2});
+                        ColorBorder});
             return ((bool)(results[0]));
         }
         
         /// <remarks/>
         public void SetPreferencesAsync(string RegistrationKey, int ColorBorder, string Heading1, string Heading2) {
-            this.SetPreferencesAsync(RegistrationKey, ColorBorder, Heading1, Heading2, null);
+            this.SetPreferencesAsync(RegistrationKey, ColorBorder, null);
         }
         
         /// <remarks/>
-        public void SetPreferencesAsync(string RegistrationKey, int ColorBorder, string Heading1, string Heading2, object userState) {
+        public void SetPreferencesAsync(string RegistrationKey, int ColorBorder, object userState) {
             if ((this.SetPreferencesOperationCompleted == null)) {
                 this.SetPreferencesOperationCompleted = new System.Threading.SendOrPostCallback(this.OnSetPreferencesOperationCompleted);
             }
             this.InvokeAsync("SetPreferences", new object[] {
                         RegistrationKey,
-                        ColorBorder,
-                        Heading1,
-                        Heading2}, this.SetPreferencesOperationCompleted, userState);
+                        ColorBorder}, this.SetPreferencesOperationCompleted, userState);
         }
         
         private void OnSetPreferencesOperationCompleted(object arg) {
@@ -483,10 +479,7 @@ namespace OpenDental.WebSheets {
         
         private long dentalOfficeIDField;
         
-        private string heading1Field;
-        
-        private string heading2Field;
-        
+       
         /// <remarks/>
         public int ColorBorder {
             get {
@@ -507,26 +500,7 @@ namespace OpenDental.WebSheets {
             }
         }
         
-        /// <remarks/>
-        public string Heading1 {
-            get {
-                return this.heading1Field;
-            }
-            set {
-                this.heading1Field = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string Heading2 {
-            get {
-                return this.heading2Field;
-            }
-            set {
-                this.heading2Field = value;
-            }
-        }
-    }
+	}
     
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(webforms_preference))]

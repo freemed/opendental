@@ -196,7 +196,7 @@ namespace OpenDental {
 					return;
 				}
 				bool PrefSet=true;
-				PrefSet=wh.SetPreferences(RegistrationKey,butWebformBorderColor.BackColor.ToArgb(),"","");
+				PrefSet=wh.SetPreferences(RegistrationKey,butWebformBorderColor.BackColor.ToArgb());
 				Cursor=Cursors.Default;
 				if(!PrefSet) {
 					MsgBox.Show(this,"Error, color could not be saved to server.");
