@@ -7038,6 +7038,7 @@ namespace OpenDental{
 			bool showTask=this.checkTasks.Checked;
 			bool showLab=this.checkLabCase.Checked;
 			bool showSheets=this.checkSheets.Checked;
+			bool customView=this.chartCustViewChanged;
 			checkRx.Checked=false;
 			checkComm.Checked=false;
 			checkAppt.Checked=false;
@@ -7045,6 +7046,7 @@ namespace OpenDental{
 			checkTasks.Checked=false;
 			checkLabCase.Checked=false;
 			checkSheets.Checked=false;
+			chartCustViewChanged=true;//custom view will not reset the check boxes so we force it true.
 			FillProgNotes();
 			try {
 				pagesPrinted=0;
@@ -7066,6 +7068,7 @@ namespace OpenDental{
 			checkTasks.Checked=showTask;
 			checkLabCase.Checked=showLab;
 			checkSheets.Checked=showSheets;
+			chartCustViewChanged=customView;
 			FillProgNotes();
 		}
 
