@@ -52,6 +52,11 @@ namespace OpenDentHL7 {
 			string database=nav.SelectSingleNode("Database").Value;
 			string user=nav.SelectSingleNode("User").Value;
 			string password=nav.SelectSingleNode("Password").Value;
+			XPathNavigator verboseNav=Navigator.SelectSingleNode("//HL7verbose");
+			if(verboseNav!=null && verboseNav.Value=="True") {
+				IsVerboseLogging=true;
+				EventLog.WriteEntry("OpenDentHL7","Verbose mode.",EventLogEntryType.Information);
+			}
 			OpenDentBusiness.DataConnection dcon=new OpenDentBusiness.DataConnection();
 			//Try to connect to the database directly
 			try {
