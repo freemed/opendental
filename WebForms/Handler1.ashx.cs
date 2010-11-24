@@ -20,7 +20,6 @@ namespace WebForms {
 		private long WebSheetFieldDefID=0;
 
 		public void ProcessRequest(HttpContext context) {
-			//TestBackGround(context); return;
 			try {
 				if(context.Request["WebSheetFieldDefID"]!=null) {
 					Int64.TryParse(context.Request["WebSheetFieldDefID"].ToString().Trim(),out WebSheetFieldDefID);
@@ -32,7 +31,7 @@ namespace WebForms {
 				SheetFieldType FieldType = (SheetFieldType)sfdObj.FieldType;
 				Bitmap bmp=null;
 				Graphics g=null;
-				Pen p=new Pen(Color.Black,2.0f);
+				Pen p=new Pen(Color.Black,2.0f);//1.0f does not show, this is a bug in the Drawing namespace.
 				if(FieldType==SheetFieldType.Rectangle || FieldType==SheetFieldType.Line) {
 					bmp = new Bitmap(sfdObj.Width,sfdObj.Height);
 					g = Graphics.FromImage(bmp);
