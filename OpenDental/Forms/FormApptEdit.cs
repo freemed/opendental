@@ -2541,6 +2541,11 @@ namespace OpenDental{
 					+AptCur.AptDateTime.ToString()+", "
 					+AptCur.ProcDescript);
 			}
+			else {
+				SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit,pat.PatNum,pat.GetNameLF()+", "
+					+AptCur.AptDateTime.ToShortDateString()+", "
+					+AptCur.ProcDescript);
+			}
 			DialogResult=DialogResult.OK;
 		}
 
