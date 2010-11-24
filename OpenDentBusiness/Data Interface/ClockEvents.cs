@@ -176,6 +176,12 @@ namespace OpenDentBusiness{
 					continue;
 				}
 				retVal+=events[i].TimeDisplayed2-events[i].TimeDisplayed1;
+				if(events[i].AdjustIsOverridden) {
+					retVal+=events[i].Adjust;
+				}
+				else {
+					retVal+=events[i].AdjustAuto;//typically zero
+				}
 			}
 			//now, adjustments
 			List<TimeAdjust> TimeAdjustList=TimeAdjusts.Refresh(empNum,date.AddDays(-6),date.AddDays(-1));
