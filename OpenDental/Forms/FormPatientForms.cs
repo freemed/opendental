@@ -171,6 +171,7 @@ namespace OpenDental {
 			sheet2.DateTimeSheet=DateTime.Now;
 			sheet2.SheetFields=new List<SheetField>(sheet.SheetFields);
 			for(int i=0;i<sheet2.SheetFields.Count;i++){
+				sheet2.SheetFields[i].IsNew=true;
 				if(sheet2.SheetFields[i].FieldType==SheetFieldType.SigBox){
 					sheet2.SheetFields[i].FieldValue="";//clear signatures
 				}
