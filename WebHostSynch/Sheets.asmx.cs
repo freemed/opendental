@@ -25,12 +25,13 @@ namespace WebHostSynch {
 	// To allow this Web Service to be called from script, using ASP.NET AJAX, uncomment the following line. 
 	// [System.Web.Script.Services.ScriptService]
 	public class Sheets:System.Web.Services.WebService {
+		private Util util=new Util();
 
 		[WebMethod]
 		public bool SetPreferences(string RegistrationKey,int ColorBorder) {
 			try {
 				ODWebServiceEntities db=new ODWebServiceEntities();
-				long DentalOfficeID=GetDentalOfficeID(RegistrationKey);
+				long DentalOfficeID=util.GetDentalOfficeID(RegistrationKey);
 				if(DentalOfficeID==0) {
 				}
 				var wspObj=from wsp in db.webforms_preference
@@ -65,7 +66,7 @@ namespace WebHostSynch {
 			webforms_preference wspObj=null;
 			int DefaultColorBorder=-12550016;
 			try {
-				long DentalOfficeID=GetDentalOfficeID(RegistrationKey);
+				long DentalOfficeID=util.GetDentalOfficeID(RegistrationKey);
 				if(DentalOfficeID==0) {
 					return wspObj;
 				}
@@ -95,7 +96,7 @@ namespace WebHostSynch {
 		public List<SheetAndSheetField> GetSheets(string RegistrationKey) {
 			List<SheetAndSheetField> sAndsfList=new List<SheetAndSheetField>();
 			try {
-				long DentalOfficeID=GetDentalOfficeID(RegistrationKey);
+				long DentalOfficeID=util.GetDentalOfficeID(RegistrationKey);
 				if(DentalOfficeID==0) {
 				}
 				ODWebServiceEntities db=new ODWebServiceEntities();
@@ -139,7 +140,7 @@ namespace WebHostSynch {
 		[WebMethod]
 		public void DeleteSheetData(string RegistrationKey,List<long> SheetsForDeletion) {
 			try {
-				long DentalOfficeID=GetDentalOfficeID(RegistrationKey);
+				long DentalOfficeID=util.GetDentalOfficeID(RegistrationKey);
 				if(DentalOfficeID==0) {
 					return;
 				}
@@ -168,57 +169,12 @@ namespace WebHostSynch {
 
 		[WebMethod]
 		public bool CheckRegistrationKey(string RegistrationKeyFromDentalOffice) {
-			Logger.Information("In CheckRegistrationKey() RegistrationKeyFromDentalOffice="+RegistrationKeyFromDentalOffice);
-			string connectStr=ConfigurationManager.ConnectionStrings["DBRegKey"].ConnectionString;
-			OpenDentBusiness.DataConnection dc=new OpenDentBusiness.DataConnection();
-			// sets a static variable
-			dc.SetDb(connectStr,"",DatabaseType.MySql,true);
-			RegistrationKey RegistrationKeyFromDb=null;
-			try {
-				RegistrationKeyFromDb=RegistrationKeys.GetByKey(RegistrationKeyFromDentalOffice);
-				DateTime d1=new DateTime(1902,1,1);
-				if(d1<RegistrationKeyFromDb.DateDisabled && RegistrationKeyFromDb.DateDisabled<DateTime.Today) {
-					Logger.Information("RegistrationKey has been disabled. Dental OfficeId="+RegistrationKeyFromDb.PatNum);
-					return false;
-				}
-				if(d1<RegistrationKeyFromDb.DateEnded && RegistrationKeyFromDb.DateEnded<DateTime.Today) {
-					Logger.Information("RegistrationKey DateEnded date is past. Dental OfficeId="+RegistrationKeyFromDb.PatNum);
-					return false;
-				}
-			}
-			catch(Exception ex) {
-				Logger.LogError(ex);
-				Logger.Information("Incorrect registration key. IpAddress="+HttpContext.Current.Request.UserHostAddress+" RegistrationKey="+RegistrationKeyFromDentalOffice);
-				return false;
-			}
-			return true;
+			return util.CheckRegistrationKey(RegistrationKeyFromDentalOffice);
 		}
 
 		[WebMethod]
 		public long GetDentalOfficeID(string RegistrationKeyFromDentalOffice) {
-			string connectStr=ConfigurationManager.ConnectionStrings["DBRegKey"].ConnectionString;
-			OpenDentBusiness.DataConnection dc=new OpenDentBusiness.DataConnection();
-			// sets a static variable
-			dc.SetDb(connectStr,"",DatabaseType.MySql,true);
-			RegistrationKey RegistrationKeyFromDb=null;
-			try {
-				RegistrationKeyFromDb=RegistrationKeys.GetByKey(RegistrationKeyFromDentalOffice);
-				DateTime d1=new DateTime(1902,1,1);
-				if(d1<RegistrationKeyFromDb.DateDisabled && RegistrationKeyFromDb.DateDisabled<DateTime.Today) {
-					Logger.Information("RegistrationKey has been disabled. Dental OfficeId="+RegistrationKeyFromDb.PatNum);
-					return 0;
-				}
-				if(d1<RegistrationKeyFromDb.DateEnded && RegistrationKeyFromDb.DateEnded<DateTime.Today) {
-					Logger.Information("RegistrationKey DateEnded date is past. Dental OfficeId="+RegistrationKeyFromDb.PatNum);
-					return 0;
-				}
-			}
-			catch(Exception ex) {
-				Logger.LogError(ex);
-				Logger.Information("Incorrect registration key. IpAddress="+HttpContext.Current.Request.UserHostAddress+" RegistrationKey="+RegistrationKeyFromDentalOffice);
-				return 0;
-			}
-			return RegistrationKeyFromDb.PatNum;
+			return util.GetDentalOfficeID(RegistrationKeyFromDentalOffice);
 		}
 
 		/// <summary>
@@ -232,7 +188,7 @@ namespace WebHostSynch {
 
 		[WebMethod]
 		public string GetSheetDefAddress(string RegistrationKey) {
-			long DentalOfficeID=GetDentalOfficeID(RegistrationKey);
+			long DentalOfficeID=util.GetDentalOfficeID(RegistrationKey);
 			if(DentalOfficeID==0) {
 				return "";
 			}
@@ -251,7 +207,7 @@ namespace WebHostSynch {
 		public List<webforms_sheetdef> DownloadSheetDefs(string RegistrationKey) {
 			List<webforms_sheetdef> sheetDefList=null;
 			try {
-				long DentalOfficeID=GetDentalOfficeID(RegistrationKey);
+				long DentalOfficeID=util.GetDentalOfficeID(RegistrationKey);
 				if(DentalOfficeID==0) {
 					return sheetDefList;
 				}
@@ -269,7 +225,7 @@ namespace WebHostSynch {
 		[WebMethod]
 		public void DeleteSheetDef(string RegistrationKey,long WebSheetDefID) {
 			try {
-				long DentalOfficeID=GetDentalOfficeID(RegistrationKey);
+				long DentalOfficeID=util.GetDentalOfficeID(RegistrationKey);
 				if(DentalOfficeID==0) {
 					return;
 				}
@@ -301,7 +257,7 @@ namespace WebHostSynch {
 		[WebMethod]
 		public void UpLoadSheetDef(string RegistrationKey,SheetDef sheetDef) {
 			ODWebServiceEntities db=new ODWebServiceEntities();
-			long DentalOfficeID=GetDentalOfficeID(RegistrationKey);
+			long DentalOfficeID=util.GetDentalOfficeID(RegistrationKey);
 			try{
 				if(DentalOfficeID==0) {
 					return;

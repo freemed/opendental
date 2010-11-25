@@ -86,9 +86,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Logger.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Mobile.asmx.cs">
       <DependentUpon>Mobile.asmx</DependentUpon>
       <SubType>Component</SubType>
@@ -98,6 +95,7 @@
       <DependentUpon>Sheets.asmx</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Util.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\OpenDentBusiness\OpenDentBusiness.csproj">

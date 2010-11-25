@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Services;
+using OpenDentBusiness.Mobile;
+using WebForms;
+
 
 namespace WebHostSynch {
 	/// <summary>
@@ -16,8 +19,22 @@ namespace WebHostSynch {
 	public class Mobile:System.Web.Services.WebService {
 
 		[WebMethod]
-		public string HelloWorld() {
-			return "Hello World";
+		public DateTime GetLastDateTStampOfPatients(string RegistrationKey) {
+			return DateTime.Today;
 		}
+
+		[WebMethod]
+		public DateTime GetLastDateTStampOfAppointments(string RegistrationKey) {
+			return DateTime.Today;
+		}
+
+		[WebMethod]
+		public void SynchRecords(string RegistrationKey,List<Patientm> patientmList) {
+		}
+
+		[WebMethod]
+		public void DeleteRecords(List<long> patientNums) {
+		}
+
 	}
 }
