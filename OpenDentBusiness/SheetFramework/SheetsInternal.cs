@@ -1048,30 +1048,30 @@ Fam Urgent Fin Note: [famFinUrgNote]"
 			sheet.Height=1100;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("deposit.DateDeposit",11f,sheet.FontName,false,89,156,100,17));
 			//col 1, 6 boxes
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositItem01",8f,sheet.FontName,false,358,56,100,20));
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositItem02",8f,sheet.FontName,false,358,83,100,20));
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositItem03",8f,sheet.FontName,false,358,111,100,20));
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositItem04",8f,sheet.FontName,false,358,139,100,20));
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositItem05",8f,sheet.FontName,false,358,167,100,20));
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositItem06",8f,sheet.FontName,false,358,199,100,20));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositItem01",8f,sheet.FontName,false,338,62,100,20));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositItem02",8f,sheet.FontName,false,338,90,100,20));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositItem03",8f,sheet.FontName,false,338,118,100,20));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositItem04",8f,sheet.FontName,false,338,146,100,20));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositItem05",8f,sheet.FontName,false,338,173,100,20));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositItem06",8f,sheet.FontName,false,338,201,100,20));
 			//col 2, 7 boxes
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositItem07",8f,sheet.FontName,false,544,30,100,20));
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositItem08",8f,sheet.FontName,false,544,58,100,20));
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositItem09",8f,sheet.FontName,false,544,86,100,20));
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositItem10",8f,sheet.FontName,false,544,111,100,20));
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositItem11",8f,sheet.FontName,false,544,139,100,20));
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositItem12",8f,sheet.FontName,false,544,167,100,20));
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositItem13",8f,sheet.FontName,false,544,199,100,20));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositItem07",8f,sheet.FontName,false,530,34,100,20));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositItem08",8f,sheet.FontName,false,530,62,100,20));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositItem09",8f,sheet.FontName,false,530,90,100,20));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositItem10",8f,sheet.FontName,false,530,118,100,20));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositItem11",8f,sheet.FontName,false,530,146,100,20));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositItem12",8f,sheet.FontName,false,530,173,100,20));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositItem13",8f,sheet.FontName,false,530,201,100,20));
 			//col 3, 5 boxes
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositItem14",8f,sheet.FontName,false,730,30,100,20));
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositItem15",8f,sheet.FontName,false,730,58,100,20));
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositItem16",8f,sheet.FontName,false,730,86,100,20));
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositItem17",8f,sheet.FontName,false,730,111,100,20));
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositItem18",8f,sheet.FontName,false,730,139,100,20));
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositTotal",8f,sheet.FontName,false,730,167,100,20));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositItem14",8f,sheet.FontName,false,720,34,100,20));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositItem15",8f,sheet.FontName,false,720,62,100,20));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositItem16",8f,sheet.FontName,false,720,90,100,20));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositItem17",8f,sheet.FontName,false,720,118,100,20));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositItem18",8f,sheet.FontName,false,720,146,100,20));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositTotal",8f,sheet.FontName,false,720,173,100,20));
 			//
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositItemCount",8f,sheet.FontName,false,454,275,50,20));
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositTotal",8f,sheet.FontName,false,705,275,130,20));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositItemCount",8f,sheet.FontName,false,556,275,50,20));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositTotal",8f,sheet.FontName,false,720,275,130,20));
 			int rowH=20;
 			int y=399;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Deposit Slip",16f,sheet.FontName,true,323,y,300,30));
@@ -1088,7 +1088,7 @@ Fam Urgent Fin Note: [famFinUrgNote]"
 			y+=26;//The actual y-value of the proceeding elements will be changed depending on the size of the depositList, since we are using DownGlobal growth.
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewLine(50,y,750,0));
 			y+=4;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositTotal",8f,sheet.FontName,true,615,y,200,20));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositTotal",8f,sheet.FontName,true,562,y,200,20));
 			y+=rowH+4;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewLine(50,y,750,0));
 			y+=4;

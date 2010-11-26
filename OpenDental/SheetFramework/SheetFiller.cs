@@ -1382,99 +1382,99 @@ namespace OpenDental{
 						for(int i=0;i<ClaimPayList.Length;i++){
 							total+=(decimal)ClaimPayList[i].CheckAmt;
 						}
-						field.FieldValue=total.ToString("n");
+						field.FieldValue=total.ToString("n").PadLeft(12,' ');
 						break;
 					case "depositItemCount":
 						field.FieldValue=(PatPayList.Count+ClaimPayList.Length).ToString().PadLeft(2,'0');
 						break;
 					case "depositItem01":
 						if(depositList.Count>=1){
-							field.FieldValue=depositList[0][4];
+							field.FieldValue=depositList[0][4].PadLeft(12,' ');
 						}
 						break;
 					case "depositItem02":
 						if(depositList.Count>=2){
-							field.FieldValue=depositList[1][4];
+							field.FieldValue=depositList[1][4].PadLeft(12,' ');
 						}
 						break;
 					case "depositItem03":
 						if(depositList.Count>=3){
-							field.FieldValue=depositList[2][4];
+							field.FieldValue=depositList[2][4].PadLeft(12,' ');
 						}
 						break;
 					case "depositItem04":
 						if(depositList.Count>=4){
-							field.FieldValue=depositList[3][4];
+							field.FieldValue=depositList[3][4].PadLeft(12,' ');
 						}
 						break;
 					case "depositItem05":
 						if(depositList.Count>=5){
-							field.FieldValue=depositList[4][4];
+							field.FieldValue=depositList[4][4].PadLeft(12,' ');
 						}
 						break;
 					case "depositItem06":
 						if(depositList.Count>=6){
-							field.FieldValue=depositList[5][4];
+							field.FieldValue=depositList[5][4].PadLeft(12,' ');
 						}
 						break;
 					case "depositItem07":
 						if(depositList.Count>=7){
-							field.FieldValue=depositList[6][4];
+							field.FieldValue=depositList[6][4].PadLeft(12,' ');
 						}
 						break;
 					case "depositItem08":
 						if(depositList.Count>=8){
-							field.FieldValue=depositList[7][4];
+							field.FieldValue=depositList[7][4].PadLeft(12,' ');
 						}
 						break;
 					case "depositItem09":
 						if(depositList.Count>=9){
-							field.FieldValue=depositList[8][4];
+							field.FieldValue=depositList[8][4].PadLeft(12,' ');
 						}
 						break;
 					case "depositItem10":
 						if(depositList.Count>=10){
-							field.FieldValue=depositList[9][4];
+							field.FieldValue=depositList[9][4].PadLeft(12,' ');
 						}
 						break;
 					case "depositItem11":
 						if(depositList.Count>=11){
-							field.FieldValue=depositList[10][4];
+							field.FieldValue=depositList[10][4].PadLeft(12,' ');
 						}
 						break;
 					case "depositItem12":
 						if(depositList.Count>=12){
-							field.FieldValue=depositList[11][4];
+							field.FieldValue=depositList[11][4].PadLeft(12,' ');
 						}
 						break;
 					case "depositItem13":
 						if(depositList.Count>=13){
-							field.FieldValue=depositList[12][4];
+							field.FieldValue=depositList[12][4].PadLeft(12,' ');
 						}
 						break;
 					case "depositItem14":
 						if(depositList.Count>=14){
-							field.FieldValue=depositList[13][4];
+							field.FieldValue=depositList[13][4].PadLeft(12,' ');
 						}
 						break;
 					case "depositItem15":
 						if(depositList.Count>=15){
-							field.FieldValue=depositList[14][4];
+							field.FieldValue=depositList[14][4].PadLeft(12,' ');
 						}
 						break;
 					case "depositItem16":
 						if(depositList.Count>=16){
-							field.FieldValue=depositList[15][4];
+							field.FieldValue=depositList[15][4].PadLeft(12,' ');
 						}
 						break;
 					case "depositItem17":
 						if(depositList.Count>=17){
-							field.FieldValue=depositList[16][4];
+							field.FieldValue=depositList[16][4].PadLeft(12,' ');
 						}
 						break;
 					case "depositItem18":
 						if(depositList.Count>=18){
-							field.FieldValue=depositList[17][4];
+							field.FieldValue=depositList[17][4].PadLeft(12,' ');
 						}
 						break;
 				}
