@@ -697,8 +697,9 @@ namespace OpenDental{
 			DepositCur.BankAccountInfo=PIn.String(textBankAccountInfo.Text);
 			if(IsNew){
 				if(gridPat.SelectedIndices.Length+gridIns.SelectedIndices.Length>18){
-					MsgBox.Show(this,"Not allowed to attach more than 18 items to any single deposit.");
-					return false;
+					if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"No more than 18 items will fit on a QuickBooks deposit slip. Continue anyway?")) {
+						return false;
+					}
 				}
 				Deposits.Insert(DepositCur);
 				if(Accounts.DepositsLinked() && DepositCur.Amount>0){
