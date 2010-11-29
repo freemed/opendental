@@ -645,12 +645,13 @@ namespace OpenDentBusiness{
 			else{
 				command="SELECT AptNum,PlannedAptNum,"//AbbrDesc,procedurecode.CodeNum
 					+"ProcFee, "
-					+"SUM(WriteOffEst) writeoffPPO "
+					+"SUM(CASE WHEN WriteOffEstOverride!=-1 THEN WriteOffEstOverride ELSE WriteOffEst END) writeoffPPO "
 					//+"Surf,ToothNum,TreatArea  "
 					+"FROM procedurelog "
 					+"LEFT JOIN procedurecode ON procedurelog.CodeNum=procedurecode.CodeNum "
 					+"LEFT JOIN claimproc ON claimproc.ProcNum=procedurelog.ProcNum "
-					+"AND claimproc.WriteOffEst != -1 "
+					+"AND (claimproc.WriteOffEst != -1 "
+					+"OR claimproc.WriteOffEstOverride != -1) "
 					+"WHERE ";
 				if(isPlanned) {
 					command+="PlannedAptNum!=0 AND PlannedAptNum ";
@@ -918,7 +919,7 @@ namespace OpenDentBusiness{
 							continue;
 						}
 						production+=PIn.Decimal(rawProc.Rows[p]["ProcFee"].ToString());
-						//WriteOffEst -1 already excluded
+						//WriteOffEst -1 and WriteOffEstOverride -1 already excluded
 						production-=PIn.Decimal(rawProc.Rows[p]["writeoffPPO"].ToString());//frequently zero
 					}
 				}
