@@ -471,7 +471,7 @@ namespace OpenDental{
       ALpatSelect.Add("Guarantor");   
       ALpatSelect.Add("ImageFolder");
       ALpatSelect.Add("MedUrgNote"); 
-      ALpatSelect.Add("NextAptNum"); 
+			//ALpatSelect.Add("NextAptNum"); 
       //ALpatSelect.Add("PriPlanNum");//Primary Carrier?
       //ALpatSelect.Add("PriRelationship");// ?
 			//ALpatSelect.Add("SecPlanNum");//Secondary Carrier? 
@@ -492,12 +492,33 @@ namespace OpenDental{
 			//EmploymentNote
 			ALpatSelect.Add("Race");
 			ALpatSelect.Add("County");
-			ALpatSelect.Add("GradeSchool");
+			//ALpatSelect.Add("GradeSchool");
 			ALpatSelect.Add("GradeLevel");
 			ALpatSelect.Add("Urgency");
 			ALpatSelect.Add("DateFirstVisit");
-			ALpatSelect.Add("PriPending");
-			ALpatSelect.Add("SecPending");
+			//ALpatSelect.Add("PriPending");
+			//ALpatSelect.Add("SecPending");
+			ALpatSelect.Add("ClinicNum");
+			ALpatSelect.Add("HasIns");
+			ALpatSelect.Add("TrophyFolder");
+			//ALpatSelect.Add("PlannedIsDone");
+			//ALpatSelect.Add("PreMed");
+			ALpatSelect.Add("Ward");
+			//ALpatSelect.Add("PreferConfirmMethod");
+			//ALpatSelect.Add("PreferContactMethod");
+			//ALpatSelect.Add("PreferRecallMethod");
+			//ALpatSelect.Add("SchedBeforeTime");
+			//ALpatSelect.Add("SchedAfterTime");
+			//ALpatSelect.Add("SchedDayOfWeek");
+			//ALpatSelect.Add("Language");
+			ALpatSelect.Add("AdmitDate");
+			ALpatSelect.Add("Title");
+			ALpatSelect.Add("PayPlanDue");
+			ALpatSelect.Add("SiteNum");
+			ALpatSelect.Add("DateTStamp");
+			ALpatSelect.Add("ResponsParty");
+			//ALpatSelect.Add("CanadianEligibilityCode");
+			//ALpatSelect.Add("AskToArriveEarly");
  		}
 
     private void FillALrefToSelect(){
