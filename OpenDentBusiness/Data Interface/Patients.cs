@@ -203,7 +203,7 @@ namespace OpenDentBusiness{
 			if(subscriberId!=""){
 				command+="LEFT JOIN patplan ON patplan.PatNum=patient.PatNum "
 					+"LEFT JOIN insplan ON patplan.PlanNum=insplan.PlanNum "
-					+"LEFT JOIN inssub ON patPlan.InsSubNum=inssub.InsSubNum ";
+					+"LEFT JOIN inssub ON patplan.InsSubNum=inssub.InsSubNum ";
 			}
 			command+="WHERE PatStatus != '4' "//not status 'deleted'
 				+(lname.Length>0?"AND LOWER(LName) LIKE '"+POut.String(lname).ToLower()+"%' ":"") //case matters in a like statement in oracle.

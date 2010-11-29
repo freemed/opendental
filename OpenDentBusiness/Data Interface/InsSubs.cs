@@ -57,7 +57,7 @@ namespace OpenDentBusiness{
 				command+=" Subscriber="+POut.Long(Fam.ListPats[i].PatNum);
 			}
 			//in union, distinct is implied
-			command+=") UNION (SELECT inssub.* FROM inssub,patplan WHERE insSub.InsSubNum=patplan.InsSubNum AND (";
+			command+=") UNION (SELECT inssub.* FROM inssub,patplan WHERE inssub.InsSubNum=patplan.InsSubNum AND (";
 			for(int i=0;i<Fam.ListPats.Length;i++) {
 				if(i>0) {
 					command+=" OR";
@@ -177,7 +177,7 @@ namespace OpenDentBusiness{
 			}
 			string command="SELECT CONCAT(CONCAT(LName,', '),FName) "
 				+"FROM inssub LEFT JOIN patient ON patient.PatNum=inssub.Subscriber "
-				+"WHERE inssub.planNum="+POut.Long(planNum)+" "
+				+"WHERE inssub.PlanNum="+POut.Long(planNum)+" "
 				+"AND inssub.InsSubNum !="+POut.Long(excludeSub)+" "
 				+" ORDER BY LName,FName";
 			DataTable table=Db.GetTable(command);
