@@ -1753,15 +1753,15 @@ namespace OpenDentBusiness {
 				}
 			}
 			else {
-				//command=@"DELETE FROM recalltrigger
-				//	WHERE NOT EXISTS (SELECT * FROM procedurecode WHERE procedurecode.CodeNum=recalltrigger.CodeNum)";
-				//int numberFixed=Db.NonQ32(command);
-				//if(numberFixed>0) {
-				//  Signals.SetInvalid(InvalidType.RecallTypes);
-				//}
-				//if(numberFixed>0 || verbose) {
-				//  log+=Lans.g("FormDatabaseMaintenance","Recall triggers deleted due to bad codenum: ")+numberFixed.ToString()+"\r\n";
-				//}
+				command=@"DELETE FROM recalltrigger
+					WHERE NOT EXISTS (SELECT * FROM procedurecode WHERE procedurecode.CodeNum=recalltrigger.CodeNum)";
+				int numberFixed=Db.NonQ32(command);
+				if(numberFixed>0) {
+					Signals.SetInvalid(InvalidType.RecallTypes);
+				}
+				if(numberFixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Recall triggers deleted due to bad codenum: ")+numberFixed.ToString()+"\r\n";
+				}
 			}
 			return log;
 		}
