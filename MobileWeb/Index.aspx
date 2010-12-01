@@ -59,7 +59,7 @@
                 <a class="button back" href="#">Back</a>
                 <a class="button logout" href="#">Logout</a>
             </div>
-			 <div class="navigation">
+			 <div class="datenavigation">
                <a class="button previous" href="#">Previous</a>
                <a class="button next" href="#">Next</a>
             </div>

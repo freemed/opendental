@@ -16,7 +16,9 @@ min-height: 48px;
 .previous, .next{
 position: relative;
 }
-
+.datenavigation
+{height: 45px;
+}
 .previous{
 float: left;
 }
