@@ -50,6 +50,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebCamOD", "WebCamOD\WebCam
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebForms", "WebForms\WebForms.csproj", "{099AC80B-E862-42F1-8109-87BF450DC3D9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MobileWeb", "MobileWeb\MobileWeb.csproj", "{9AA8DE60-462D-4169-88EB-0ADE7F1BD71A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -294,6 +296,15 @@ Global
 		{099AC80B-E862-42F1-8109-87BF450DC3D9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{099AC80B-E862-42F1-8109-87BF450DC3D9}.Release|x86.ActiveCfg = Release|x86
 		{099AC80B-E862-42F1-8109-87BF450DC3D9}.Release|x86.Build.0 = Release|x86
+		{9AA8DE60-462D-4169-88EB-0ADE7F1BD71A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9AA8DE60-462D-4169-88EB-0ADE7F1BD71A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9AA8DE60-462D-4169-88EB-0ADE7F1BD71A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9AA8DE60-462D-4169-88EB-0ADE7F1BD71A}.LinuxRelease|Any CPU.ActiveCfg = Release|Any CPU
+		{9AA8DE60-462D-4169-88EB-0ADE7F1BD71A}.LinuxRelease|Any CPU.Build.0 = Release|Any CPU
+		{9AA8DE60-462D-4169-88EB-0ADE7F1BD71A}.LinuxRelease|x86.ActiveCfg = Release|Any CPU
+		{9AA8DE60-462D-4169-88EB-0ADE7F1BD71A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9AA8DE60-462D-4169-88EB-0ADE7F1BD71A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9AA8DE60-462D-4169-88EB-0ADE7F1BD71A}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
