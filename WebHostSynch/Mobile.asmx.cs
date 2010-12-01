@@ -19,21 +19,25 @@ namespace WebHostSynch {
 	public class Mobile:System.Web.Services.WebService {
 
 		[WebMethod]
-		public DateTime GetLastDateTStampOfPatients(string RegistrationKey) {
+		public DateTime GetLastDateTStampOfPatients(String RegistrationKey) {
 			return DateTime.Today;
 		}
 
 		[WebMethod]
-		public DateTime GetLastDateTStampOfAppointments(string RegistrationKey) {
+		public DateTime GetLastDateTStampOfAppointments(String RegistrationKey) {
 			return DateTime.Today;
 		}
 
 		[WebMethod]
-		public void SynchRecords(string RegistrationKey,List<Patientm> patientmList) {
+		public void SynchRecords(String RegistrationKey,List<Patientm> patientmList) {
 		}
 
 		[WebMethod]
-		public void DeleteRecords(List<long> patientNums) {
+		public void DeleteRecords(String RegistrationKey,List<long> patientNums) {
+		}
+
+		[WebMethod]
+		public void SetMobileWebPassword(String RegistrationKey,String Password) {
 		}
 
 	}
