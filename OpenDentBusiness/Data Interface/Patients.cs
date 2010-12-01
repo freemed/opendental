@@ -205,27 +205,45 @@ namespace OpenDentBusiness{
 					+"LEFT JOIN insplan ON patplan.PlanNum=insplan.PlanNum "
 					+"LEFT JOIN inssub ON patplan.InsSubNum=inssub.InsSubNum ";
 			}
-			command+="WHERE PatStatus != '4' "//not status 'deleted'
-				+(lname.Length>0?"AND LOWER(LName) LIKE '"+POut.String(lname).ToLower()+"%' ":"") //case matters in a like statement in oracle.
-				+(fname.Length>0?"AND LOWER(FName) LIKE '"+POut.String(fname).ToLower()+"%' ":"");//case matters in a like statement in oracle.
+			command+="WHERE PatStatus != '4' ";//not status 'deleted'
+			if(DataConnection.DBtype==DatabaseType.MySql) {
+				command+=(lname.Length>0?"AND LName LIKE '"+POut.String(lname)+"%' ":"")//LIKE is case insensitive in mysql.
+					+(fname.Length>0?"AND FName LIKE '"+POut.String(fname)+"%' ":"");//LIKE is case insensitive in mysql.
+			}
+			else {//oracle
+				command+=(lname.Length>0?"AND LOWER(LName) LIKE '"+POut.String(lname).ToLower()+"%' ":"") //case matters in a like statement in oracle.
+					+(fname.Length>0?"AND LOWER(FName) LIKE '"+POut.String(fname).ToLower()+"%' ":"");//case matters in a like statement in oracle.
+			}
 			if(regexp!="") {
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command+="AND (HmPhone REGEXP '"+POut.String(regexp)+"' "
 						+"OR WkPhone REGEXP '"+POut.String(regexp)+"' "
 						+"OR WirelessPhone REGEXP '"+POut.String(regexp)+"') ";
-				} else {//oracle
+				} 
+				else {//oracle
 					command+="AND ((SELECT REGEXP_INSTR(p.HmPhone,'"+POut.String(regexp)+"') FROM dual)<>0"
 						+"OR (SELECT REGEXP_INSTR(p.WkPhone,'"+POut.String(regexp)+"') FROM dual)<>0 "
 						+"OR (SELECT REGEXP_INSTR(p.WirelessPhone,'"+POut.String(regexp)+"') FROM dual)<>0) ";
 				}
 			}
-			command+=
-				(address.Length>0?"AND LOWER(Address) LIKE '"+POut.String(address).ToLower()+"%' ":"")//case matters in a like statement in oracle.
-				+(city.Length>0?"AND LOWER(City) LIKE '"+POut.String(city).ToLower()+"%' ":"")//case matters in a like statement in oracle.
-				+(state.Length>0?"AND LOWER(State) LIKE '"+POut.String(state).ToLower()+"%' ":"")//case matters in a like statement in oracle.
-				+(ssn.Length>0?"AND LOWER(SSN) LIKE '"+POut.String(ssn).ToLower()+"%' ":"")//In case an office uses this field for something else.
-				+(patnum.Length>0?"AND PatNum LIKE '"+POut.String(patnum)+"%' ":"")//case matters in a like statement in oracle.
-				+(chartnumber.Length>0?"AND LOWER(ChartNumber) LIKE '"+POut.String(chartnumber).ToLower()+"%' ":"");//case matters in a like statement in oracle.
+			if(DataConnection.DBtype==DatabaseType.MySql) {
+				command+=
+					(address.Length>0?"AND Address LIKE '"+POut.String(address)+"%' ":"")//LIKE is case insensitive in mysql.
+					+(city.Length>0?"AND City LIKE '"+POut.String(city)+"%' ":"")//LIKE is case insensitive in mysql.
+					+(state.Length>0?"AND State LIKE '"+POut.String(state)+"%' ":"")//LIKE is case insensitive in mysql.
+					+(ssn.Length>0?"AND SSN LIKE '"+POut.String(ssn)+"%' ":"")//LIKE is case insensitive in mysql.
+					+(patnum.Length>0?"AND PatNum LIKE '"+POut.String(patnum)+"%' ":"")//LIKE is case insensitive in mysql.
+					+(chartnumber.Length>0?"AND ChartNumber LIKE '"+POut.String(chartnumber)+"%' ":"");//LIKE is case insensitive in mysql.
+			}
+			else {//oracle
+				command+=
+					(address.Length>0?"AND LOWER(Address) LIKE '"+POut.String(address).ToLower()+"%' ":"")//case matters in a like statement in oracle.
+					+(city.Length>0?"AND LOWER(City) LIKE '"+POut.String(city).ToLower()+"%' ":"")//case matters in a like statement in oracle.
+					+(state.Length>0?"AND LOWER(State) LIKE '"+POut.String(state).ToLower()+"%' ":"")//case matters in a like statement in oracle.
+					+(ssn.Length>0?"AND LOWER(SSN) LIKE '"+POut.String(ssn).ToLower()+"%' ":"")//In case an office uses this field for something else.
+					+(patnum.Length>0?"AND PatNum LIKE '"+POut.String(patnum)+"%' ":"")//case matters in a like statement in oracle.
+					+(chartnumber.Length>0?"AND LOWER(ChartNumber) LIKE '"+POut.String(chartnumber).ToLower()+"%' ":"");//case matters in a like statement in oracle.
+			}
 			if(birthdate.Year>1880 && birthdate.Year<2100){
 				command+="AND Birthdate ="+POut.Date(birthdate)+" ";
 			}
