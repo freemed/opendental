@@ -60,9 +60,6 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		private static List<ClaimPaySplit> ClaimPaySplitToList(string command) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<ClaimPaySplit>>(MethodBase.GetCurrentMethod(),command);
-			}
 			DataTable table=Db.GetTable(command);
 			List<ClaimPaySplit> splits=new List<ClaimPaySplit>();
 			ClaimPaySplit split;
