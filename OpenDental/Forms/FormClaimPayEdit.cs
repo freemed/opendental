@@ -533,6 +533,8 @@ namespace OpenDental{
 					}
 				}
 				else{//row not selected
+					//If user had not been attaching their inspayments to checks, then this will cause such payments to annoyingly have their
+					//date changed to the current date.  This prompts them to call us.  Then, we tell them to attach to checks.
 					ClaimProcs.SetForClaim(splits[i].ClaimNum,ClaimPaymentCur.ClaimPaymentNum,ClaimPaymentCur.CheckDate,false);
 				}
 			}

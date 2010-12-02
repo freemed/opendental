@@ -27,6 +27,7 @@ namespace OpenDental {
 		private Label label1;
 		private CheckBox checkShow;
 		private UI.Button butFix;
+		private UI.Button butInsPayFix;
 		private OpenDental.UI.Button butPrint;
 
 		///<summary></summary>
@@ -70,6 +71,7 @@ namespace OpenDental {
 			this.checkShow = new System.Windows.Forms.CheckBox();
 			this.butPrint = new OpenDental.UI.Button();
 			this.butFix = new OpenDental.UI.Button();
+			this.butInsPayFix = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// butClose
@@ -175,12 +177,28 @@ namespace OpenDental {
 			this.butFix.Text = "Fix";
 			this.butFix.Click += new System.EventHandler(this.butFix_Click);
 			// 
+			// butInsPayFix
+			// 
+			this.butInsPayFix.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butInsPayFix.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butInsPayFix.Autosize = true;
+			this.butInsPayFix.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butInsPayFix.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butInsPayFix.CornerRadius = 4F;
+			this.butInsPayFix.Location = new System.Drawing.Point(27,631);
+			this.butInsPayFix.Name = "butInsPayFix";
+			this.butInsPayFix.Size = new System.Drawing.Size(87,26);
+			this.butInsPayFix.TabIndex = 21;
+			this.butInsPayFix.Text = "Ins Pay Fix";
+			this.butInsPayFix.Click += new System.EventHandler(this.butInsPayFix_Click);
+			// 
 			// FormDatabaseMaintenance
 			// 
 			this.AcceptButton = this.buttonCheck;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butClose;
 			this.ClientSize = new System.Drawing.Size(895,667);
+			this.Controls.Add(this.butInsPayFix);
 			this.Controls.Add(this.butFix);
 			this.Controls.Add(this.butPrint);
 			this.Controls.Add(this.checkShow);
@@ -398,6 +416,11 @@ namespace OpenDental {
 		private void butTemp_Click(object sender,EventArgs e) {
 			FormDatabaseMaintTemp form=new FormDatabaseMaintTemp();
 			form.ShowDialog();
+		}
+
+		private void butInsPayFix_Click(object sender,EventArgs e) {
+			FormInsPayFix formIns=new FormInsPayFix();
+			formIns.ShowDialog();
 		}
 
 

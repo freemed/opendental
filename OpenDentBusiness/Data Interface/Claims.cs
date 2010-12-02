@@ -34,6 +34,35 @@ namespace OpenDentBusiness{
 					+" GROUP BY claimproc.ClaimNum";
 			}
 			command+=" ORDER BY _patName";
+			return ClaimPaySplitToList(command);
+		}
+
+		///<summary></summary>
+		public static List<ClaimPaySplit> GetInsPayNotAttached() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<ClaimPaySplit>>(MethodBase.GetCurrentMethod());
+			}
+			string command=
+				"SELECT claim.DateService,claim.ProvTreat,CONCAT(CONCAT(patient.LName,', '),patient.FName) _patName"
+				+",carrier.CarrierName,SUM(claimproc.FeeBilled) _feeBilled,SUM(claimproc.InsPayAmt) _insPayAmt,claim.ClaimNum"
+				+",claimproc.ClaimPaymentNum,claim.PatNum"
+				+" FROM claim,patient,insplan,carrier,claimproc"
+				+" WHERE claimproc.ClaimNum = claim.ClaimNum"
+				+" AND patient.PatNum = claim.PatNum"
+				+" AND insplan.PlanNum = claim.PlanNum"
+				+" AND insplan.CarrierNum = carrier.CarrierNum"
+				+" AND (claimproc.Status = '1' OR claimproc.Status = '4' OR claimproc.Status=5)"//received or supplemental or capclaim
+				+" AND (claimproc.InsPayAmt != 0 AND claimproc.ClaimPaymentNum = '0')"
+				+" GROUP BY claimproc.ClaimNum"
+				+" ORDER BY _patName";
+			return ClaimPaySplitToList(command);
+		}
+
+		///<summary></summary>
+		private static List<ClaimPaySplit> ClaimPaySplitToList(string command) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<ClaimPaySplit>>(MethodBase.GetCurrentMethod(),command);
+			}
 			DataTable table=Db.GetTable(command);
 			List<ClaimPaySplit> splits=new List<ClaimPaySplit>();
 			ClaimPaySplit split;
