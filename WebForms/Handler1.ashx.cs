@@ -16,7 +16,6 @@ namespace WebForms {
 	[WebService(Namespace="http://opendental.com/")]
 	[WebServiceBinding(ConformsTo=WsiProfiles.BasicProfile1_1)]
 	public class Handler1:IHttpHandler {
-
 		private long WebSheetFieldDefID=0;
 
 		public void ProcessRequest(HttpContext context) {
@@ -27,14 +26,14 @@ namespace WebForms {
 				/*png images are used because the background of rectangles/lines can be set to transparent. For gif images the process of making the background transparent is convoluted*/
 				context.Response.ContentType="image/png";
 				ODWebServiceEntities db=new ODWebServiceEntities();
-				var sfdObj=db.webforms_sheetfielddef.Where(sfd => sfd.WebSheetFieldDefID==WebSheetFieldDefID).First();
-				SheetFieldType FieldType = (SheetFieldType)sfdObj.FieldType;
+				var sfdObj=db.webforms_sheetfielddef.Where(sfd=>sfd.WebSheetFieldDefID==WebSheetFieldDefID).First();
+				SheetFieldType FieldType=(SheetFieldType)sfdObj.FieldType;
 				Bitmap bmp=null;
 				Graphics g=null;
 				Pen p=new Pen(Color.Black,2.0f);//1.0f does not show, this is a bug in the Drawing namespace.
 				if(FieldType==SheetFieldType.Rectangle || FieldType==SheetFieldType.Line) {
-					bmp = new Bitmap(sfdObj.Width,sfdObj.Height);
-					g = Graphics.FromImage(bmp);
+					bmp=new Bitmap(sfdObj.Width,sfdObj.Height);
+					g=Graphics.FromImage(bmp);
 					//g.Clear(Color.Transparent);
 				}
 				if(FieldType==SheetFieldType.Rectangle) {

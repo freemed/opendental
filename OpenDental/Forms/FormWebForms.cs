@@ -196,7 +196,7 @@ namespace OpenDental {
 			FieldInfo[] fi=t.GetFields();
 			foreach(FieldInfo field in fi) {
 				// find match for fields in Patients in the web_sheetfieldlist
-				var WebSheetFieldList=sAnds.web_sheetfieldlist.Where(sf => sf.FieldName.ToLower()==field.Name.ToLower());
+				var WebSheetFieldList=sAnds.web_sheetfieldlist.Where(sf=>sf.FieldName.ToLower()==field.Name.ToLower());
 				if(WebSheetFieldList.Count()>0) {
 					// this loop is used to fill a field that may generate mutiple values for a single field in the patient.
 					//for example the field gender has 2 eqivalent sheet fields in the web_sheetfieldlist
@@ -368,7 +368,7 @@ namespace OpenDental {
 			}
 			catch(Exception e) {
 				gridMain.EndUpdate();
-				MessageBox.Show(field.Name + e.Message);
+				MessageBox.Show(field.Name+e.Message);
 			}
 		}
 

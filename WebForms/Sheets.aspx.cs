@@ -3,7 +3,6 @@
 /// The web server which hosts the webservice will also need this install.
 /// The integration with Visual Studio can be flakey. So a few cycles of install/uninstall/restart may be needed. I've also tried the non-install options of adding dlls but they don't seem to work in the few attempts that I made.
 
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,10 +12,8 @@ using System.Web.UI.WebControls;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Collections;
-using OpenDentBusiness;
-
-
 using System.Drawing.Text;
+using OpenDentBusiness;
 
 namespace WebForms {
 	/// <summary>
@@ -208,7 +205,6 @@ namespace WebForms {
 					Logger.LogError(ex);
 					DisplayMessage("Error: Your form is not available. Please contact your Dental Office");
 				}
-
 		}
 
 		private WebControl AddCheckBox(webforms_sheetfielddef sfd)
@@ -278,7 +274,7 @@ namespace WebForms {
 			rv.ErrorMessage=ErrorMessage;
 			rv.Display=ValidatorDisplay.None;
 			rv.SetFocusOnError=true;
-			rv.ID="RequiredFieldValidator"+ rv.ControlToValidate;
+			rv.ID="RequiredFieldValidator"+rv.ControlToValidate;
 			//callout extender
 			AjaxControlToolkit.ValidatorCalloutExtender vc=new AjaxControlToolkit.ValidatorCalloutExtender();
 			vc.TargetControlID=rv.ID;
@@ -304,8 +300,6 @@ namespace WebForms {
 				
 			}
 		}
-
-
 
 		private void LoopThroughControls(Page p) {
 			try {
@@ -428,7 +422,6 @@ namespace WebForms {
 					DisplayMessage("Your details have been successfully submitted");
 					Logger.Information("Form values saved from IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID);
 				}
-
 			}
 			catch(Exception ex) {
 				Logger.LogError(ex);

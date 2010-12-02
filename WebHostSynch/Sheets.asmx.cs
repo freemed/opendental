@@ -14,7 +14,6 @@ using System.Threading;
 using OpenDentBusiness;
 using WebForms;
 
-
 namespace WebHostSynch {
 	/// <summary>
 	/// Summary description for WebHostSynch
@@ -103,18 +102,14 @@ namespace WebHostSynch {
 				var wsRes=from wsf in db.webforms_sheet
 						  where wsf.webforms_preference.DentalOfficeID==DentalOfficeID
 						  select wsf;
-				//SheetDefObj.webforms_sheetfielddef.Load();
-
 				for(int i=0;i<wsRes.Count();i++) {
 					var wsobj=wsRes.ToList()[i];
-
 					wsobj.webforms_sheetfield.Load();
 					var sheetfieldList=wsobj.webforms_sheetfield;
 					SheetAndSheetField sAnds=new SheetAndSheetField(wsobj,sheetfieldList.ToList());
 					sAndsfList.Add(sAnds);
-
 				}
-				Logger.Information("In GetSheetData IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID+" Sheets sent to Client="+ wsRes.Count());
+				Logger.Information("In GetSheetData IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID+" Sheets sent to Client="+wsRes.Count());
 				return sAndsfList;
 			}
 			catch(Exception ex) {
@@ -199,7 +194,7 @@ namespace WebHostSynch {
 			catch(Exception ex) {
 				Logger.LogError(ex);
 			}
-            Logger.Information("In GetSheetDefAddress SheetDefAddress=" + SheetDefAddress);
+            Logger.Information("In GetSheetDefAddress SheetDefAddress="+SheetDefAddress);
 			return SheetDefAddress;
 		}
 

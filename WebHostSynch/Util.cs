@@ -9,7 +9,6 @@ using OpenDentBusiness;
 namespace WebHostSynch {
 	public class Util {
 
-
 		public bool CheckRegistrationKey(string RegistrationKeyFromDentalOffice) {
 			Logger.Information("In CheckRegistrationKey() RegistrationKeyFromDentalOffice="+RegistrationKeyFromDentalOffice);
 			string connectStr=ConfigurationManager.ConnectionStrings["DBRegKey"].ConnectionString;
