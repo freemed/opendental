@@ -1461,6 +1461,31 @@ namespace OpenDentBusiness {
 			return log;
 		}
 
+		public static string ProcedurelogAttachedToApptWithProcStatusDeleted(bool verbose,bool isCheck) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
+			}
+			string log="";
+			if(isCheck) {
+				command="SELECT COUNT(*) FROM procedurelog "
+					+"WHERE ProcStatus=6 AND (AptNum!=0 OR PlannedAptNum!=0)";
+				int numFound=PIn.Int(Db.GetCount(command));
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Deleted procedures still attached to appointments: ")+numFound+"\r\n";
+				}
+			}
+			else {
+				command="UPDATE procedurelog SET AptNum=0,PlannedAptNum=0 "
+					+"WHERE ProcStatus=6 "
+					+"AND (AptNum!=0 OR PlannedAptNum!=0)";
+				int numberFixed=Db.NonQ32(command);
+				if(numberFixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Deleted procedures detached from appointments: ")+numberFixed.ToString()+"\r\n";
+				}
+			}
+			return log;
+		}
+
 		public static string ProcedurelogAttachedToWrongAppts(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
