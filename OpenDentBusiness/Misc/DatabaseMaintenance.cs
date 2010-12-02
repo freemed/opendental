@@ -936,6 +936,64 @@ namespace OpenDentBusiness {
 			return log;
 		}
 
+		public static string InsPlanInvalidNum(bool verbose,bool isCheck) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
+			}
+			string log="";
+			if(isCheck) {
+				command="SELECT COUNT(*) FROM appointment WHERE appointment.InsPlan1 != 0 AND NOT EXISTS(SELECT * FROM insplan WHERE insplan.PlanNum=appointment.InsPlan1)";
+				int numFound=PIn.Int(Db.GetCount(command));
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Invalid appointment InsSubNums: ")+numFound+"\r\n";
+				}
+				command="SELECT COUNT(*) FROM appointment WHERE appointment.InsPlan2 != 0 AND NOT EXISTS(SELECT * FROM insplan WHERE insplan.PlanNum=appointment.InsPlan2)";
+				numFound=PIn.Int(Db.GetCount(command));
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Invalid appointment InsSubNums: ")+numFound+"\r\n";
+				}
+				command="SELECT COUNT(*) FROM benefit WHERE NOT EXISTS(SELECT * FROM insplan WHERE insplan.PlanNum=benefit.PlanNum)";
+				numFound=PIn.Int(Db.GetCount(command));
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Invalid benefit InsSubNums: ")+numFound+"\r\n";
+				}
+				command="SELECT COUNT(*) FROM claim WHERE NOT EXISTS(SELECT * FROM insplan WHERE insplan.PlanNum=claim.PlanNum)";
+				numFound=PIn.Int(Db.GetCount(command));
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Invalid claim InsSubNums: ")+numFound+"\r\n";
+				}
+				command="SELECT COUNT(*) FROM claim WHERE NOT EXISTS(SELECT * FROM insplan WHERE insplan.PlanNum=claim.PlanNum2)";
+				numFound=PIn.Int(Db.GetCount(command));
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Invalid claim InsSubNums: ")+numFound+"\r\n";
+				}
+				command="SELECT COUNT(*) FROM claimproc WHERE NOT EXISTS(SELECT * FROM insplan WHERE insplan.PlanNum=claimproc.PlanNum)";
+				numFound=PIn.Int(Db.GetCount(command));
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Invalid claimproc InsSubNums: ")+numFound+"\r\n";
+				}
+				command="SELECT COUNT(*) FROM etrans WHERE NOT EXISTS(SELECT * FROM insplan WHERE insplan.PlanNum=etrans.PlanNum)";
+				numFound=PIn.Int(Db.GetCount(command));
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Invalid etrans InsSubNums: ")+numFound+"\r\n";
+				}
+				command="SELECT COUNT(*) FROM patplan WHERE NOT EXISTS(SELECT * FROM insplan WHERE insplan.PlanNum=patplan.PlanNum)";
+				numFound=PIn.Int(Db.GetCount(command));
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Invalid patplan InsSubNums: ")+numFound+"\r\n";
+				}
+				command="SELECT COUNT(*) FROM payplan WHERE PlanNum != 0 AND NOT EXISTS(SELECT * FROM insplan WHERE insplan.PlanNum=payplan.PlanNum)";
+				numFound=PIn.Int(Db.GetCount(command));
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Invalid payplan InsSubNums: ")+numFound+"\r\n";
+				}
+			}
+			else {
+				//Todo: Figure out what to do here and do it.
+			}
+			return log;
+		}
+
 		public static string MedicationPatDeleteWithInvalidMedNum(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);

@@ -309,6 +309,8 @@ namespace OpenDental {
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.InsPlanNoClaimForm(verbose,isCheck);
 			Application.DoEvents();
+			textLog.Text+=DatabaseMaintenance.InsPlanInvalidNum(verbose,isCheck);
+			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.MedicationPatDeleteWithInvalidMedNum(verbose,isCheck);
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.PatFieldsDeleteDuplicates(verbose,isCheck);
