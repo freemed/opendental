@@ -40,6 +40,9 @@ function TraversePage(){
 	
 	/* menulevel 1 ends here*/
 	
+	
+
+	// a click is used instead of tap because it gives an error with jQT.goTo(MoveToURL, 'slide') 'Not able to tap element' error.
 	/* menulevel 2 */
 	$('a[href="#AppointmentList"]').click(function (e) {
 		console.log('AppointmentList clicked');
@@ -49,21 +52,11 @@ function TraversePage(){
 		ProcessNormalPageLink(e,UrlForFetchingData, MoveToURL, SectionToFill);
 	}); 
 
-	//Patients clicked.
-	// a click is used instead of tap because it gives an error with jQT.goTo(MoveToURL, 'slide') 'Not able to tap element' error.
 	$('a[href="#PatientList"]').click(function (e) {
 		console.log('PatientList clicked');
 		var UrlForFetchingData = this.attributes["linkattib"].value; 
 		var SectionToFill='#PatientListContents';
 		var MoveToURL='#PatientList';
-		ProcessNormalPageLink(e,UrlForFetchingData, MoveToURL, SectionToFill);
-	}); 
-	
-		$('a[href="#AppointmentList"]').click(function (e) {
-		console.log('AppointmentList clicked');
-		var UrlForFetchingData = this.attributes["linkattib"].value; 
-		var SectionToFill='#AppointmentListContents';
-		var MoveToURL='#AppointmentList';
 		ProcessNormalPageLink(e,UrlForFetchingData, MoveToURL, SectionToFill);
 	}); 
 
@@ -72,6 +65,31 @@ function TraversePage(){
 	/* menulevel 3 */
 	// a tap function is used instead of .live() for elements loaded by AJAX
 	// here the tap does not give an error with jQT.goTo(MoveToURL, 'slide')
+	
+	$('a[href="#AppointmentDetails"]').tap(function(e) {
+		console.log('AppointmentDetails tapped');
+		var UrlForFetchingData = this.attributes["linkattib"].value; 
+		var SectionToFill='#AppointmentDetailsContents';
+		var MoveToURL='#AppointmentDetails';
+		ProcessNormalPageLink(e,UrlForFetchingData, MoveToURL, SectionToFill);
+	});
+	
+	$('.button.previous').tap(function(e) {
+		console.log('Previous button tapped');
+		var UrlForFetchingData = this.attributes["linkattib"].value; 
+		var SectionToFill='#AppointmentListContents';
+		var MoveToURL='#AppointmentList';
+		ProcessPreviousNextButton(e,UrlForFetchingData, MoveToURL, SectionToFill);
+	});
+	
+		$('.button.next').tap(function(e) {
+		console.log('Next button tapped');
+		var UrlForFetchingData = this.attributes["linkattib"].value; 
+		var SectionToFill='#AppointmentListContents';
+		var MoveToURL='#AppointmentList';
+		ProcessPreviousNextButton(e,UrlForFetchingData, MoveToURL, SectionToFill);
+	});
+	
 	$('a[href="#PatientDetails"]').tap(function(e) {
 		console.log('PatientDetails tapped');
 		var UrlForFetchingData = this.attributes["linkattib"].value; 
@@ -82,13 +100,7 @@ function TraversePage(){
 	
 	
 	
-	$('a[href="#AppointmentDetails"]').tap(function(e) {
-		console.log('AppointmentDetails tapped');
-		var UrlForFetchingData = this.attributes["linkattib"].value; 
-		var SectionToFill='#AppointmentDetailsContents';
-		var MoveToURL='#AppointmentDetails';
-		ProcessNormalPageLink(e,UrlForFetchingData, MoveToURL, SectionToFill);
-	});
+
 	
 
 }
@@ -99,31 +111,43 @@ function ProcessNormalPageLink(e,UrlForFetchingData, MoveToURL, SectionToFill){
 	console.log(' UrlForFetchingData =' + UrlForFetchingData );
  	$(SectionToFill).append('<div id="progress">Loading...</div>');
 	
-						// for newly loaded links this is null
-						if(e.currentTarget.attributes==null){
-						console.log('in this if statement');
-						jQT.goTo(MoveToURL, 'slide'); //do not use this line with tap event, it gives a 'Not able to tap element' error.
-							
-						}
-		
-		$.ajax({
-			type: "GET",
-			url: UrlForFetchingData,
-			success: function (msg) {
-				var $response = $(msg);
-				var IsLoggedIn = $response.filter('#loggedin').text();
-				var Content = $response.filter('#content').html();
-				if(IsLoggedIn=='LoggedIn'){
-
-						$(SectionToFill).html(Content);
-				}else{
-				////console.log('about to flip');
-				jQT.goTo('#login', 'flip');
-				}
-			}
-		});
-		
+	// for newly loaded links this is null
+	if(e.currentTarget.attributes==null){
+	console.log('in this if statement');
+	jQT.goTo(MoveToURL, 'slide'); //do not use this line with tap event, it gives a 'Not able to tap element' error.
 	}
+	FetchPage(UrlForFetchingData, SectionToFill)
+}
+
+function ProcessPreviousNextButton(e,UrlForFetchingData, MoveToURL, SectionToFill){
+	e.preventDefault();
+	console.log(' UrlForFetchingData =' + UrlForFetchingData );
+ 	$(SectionToFill).append('<div id="progress">Loading...</div>');
+	FetchPage(UrlForFetchingData, SectionToFill)
+}
+	
+function FetchPage(UrlForFetchingData, SectionToFill){
+
+	$.ajax({
+		type: "GET",
+		url: UrlForFetchingData,
+		success: function (msg) {
+			var $response = $(msg);
+			var IsLoggedIn = $response.filter('#loggedin').text();
+			var Content = $response.filter('#content').html();
+			if(IsLoggedIn=='LoggedIn'){
+				console.log('still in session');
+				$(SectionToFill).html(Content);
+			}else{
+				console.log('session ended');
+				console.log('about to flip');
+				jQT.goTo('#login', 'flip');
+			}
+		}
+	});
+
+}	
+	
 	
 function ProcessNormalPageLinkOld(e,targetsection){
 	

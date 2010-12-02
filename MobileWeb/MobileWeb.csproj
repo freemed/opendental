@@ -139,7 +139,12 @@
       <DependentUpon>PatientDetails.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\WebForms\WebForms.csproj">
+      <Project>{099AC80B-E862-42F1-8109-87BF450DC3D9}</Project>
+      <Name>WebForms</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
   <ProjectExtensions>

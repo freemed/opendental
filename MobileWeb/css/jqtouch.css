@@ -1,39 +1,3 @@
-/*dennis start*/
-body
-{
-width: 320px;
-height: 480px;
-}
-
-html>body body
-{
-width: auto;
-height: auto;
-min-width: 320px;
-min-height: 48px;
-}
-
-.previous, .next{
-position: relative;
-}
-.datenavigation
-{height: 45px;
-}
-.previous{
-float: left;
-}
-.next{
-float: right;
-}
-
-.contents
-{
-clear: both;
-}
-
-/*dennis end*/
-
-
 * {
     margin: 0;
     padding: 0;
@@ -407,3 +371,40 @@ body > .current {
         opacity: 0;
     }
 }
+
+/*dennis start*/
+body
+{
+width: 320px;
+height: 480px;
+}
+
+html>body body
+{
+width: auto;
+height: auto;
+min-width: 320px;
+min-height: 48px;
+}
+
+.previous, .next{
+position: relative;
+}
+.datenavigation{
+    height:45px; background-color:Black;
+}
+.previous{
+float: left; margin-left:15px;
+}
+.next{
+float: right;
+}
+.datestring{
+ position: relative;float:center; top:10px; left:20px;
+}
+.contents
+{
+clear:both;
+}
+
+/*dennis end*/
