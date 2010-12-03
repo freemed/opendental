@@ -387,17 +387,33 @@ min-width: 320px;
 min-height: 48px;
 }
 
-.previous, .next{
+.previous, .next, .today{
 position: relative;
 }
 .datenavigation{
-    height:45px; background-color:Black;
+    height:45px;
 }
 .previous{
-float: left; margin-left:15px;
+float: left; 
+margin-left:10px;
+background-image: url(themes/jqt/img/listArrowSel.png);
+background-position: right center;
+background-repeat: no-repeat;
+width:20px;
+-webkit-border-image: none;
+-webkit-transform: rotate(180deg);
+}
+
+.today
+{float: center; height: 130px;
 }
 .next{
-float: right;
+    float: right;
+    background-image: url(themes/jqt/img/listArrowSel.png);
+    background-position: right center;
+    background-repeat: no-repeat;
+    -webkit-border-image: none;
+    width:20px;
 }
 .datestring{
  position: relative;float:center; top:10px; left:20px;
@@ -406,5 +422,7 @@ float: right;
 {
 clear:both;
 }
+
+
 
 /*dennis end*/

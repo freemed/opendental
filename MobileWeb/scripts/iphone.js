@@ -82,7 +82,16 @@ function TraversePage(){
 		ProcessPreviousNextButton(e,UrlForFetchingData, MoveToURL, SectionToFill);
 	});
 	
-		$('.button.next').tap(function(e) {
+	$('.button.today').tap(function(e) {
+		console.log('Today button tapped');
+		var UrlForFetchingData = 'AppointmentList.aspx'; 
+		var SectionToFill='#AppointmentListContents';
+		var MoveToURL='#AppointmentList';
+		ProcessPreviousNextButton(e,UrlForFetchingData, MoveToURL, SectionToFill);
+	});
+	
+	
+	$('.button.next').tap(function(e) {
 		console.log('Next button tapped');
 		var UrlForFetchingData = this.attributes["linkattib"].value; 
 		var SectionToFill='#AppointmentListContents';

@@ -9,7 +9,7 @@
 <body>
 <div id="loggedin"><asp:Literal runat="server" ID="Message"></asp:Literal></div>
 <div id="content">
-	<ul class="edgetoedge">
+	<ul class="rounded">
 		<asp:Repeater ID="Repeater1" runat="server">
 		<ItemTemplate>
 		<li class="arrow">
