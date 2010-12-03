@@ -34,7 +34,8 @@ namespace OpenDentBusiness{
 					+" GROUP BY claimproc.ClaimNum";
 			}
 			command+=" ORDER BY _patName";
-			return ClaimPaySplitToList(command);
+			DataTable table=Db.GetTable(command);
+			return ClaimPaySplitTableToList(table);
 		}
 
 		///<summary></summary>
@@ -55,12 +56,13 @@ namespace OpenDentBusiness{
 				+" AND (claimproc.InsPayAmt != 0 AND claimproc.ClaimPaymentNum = '0')"
 				+" GROUP BY claimproc.ClaimNum"
 				+" ORDER BY _patName";
-			return ClaimPaySplitToList(command);
+			DataTable table=Db.GetTable(command);
+			return ClaimPaySplitTableToList(table);
 		}
 
 		///<summary></summary>
-		private static List<ClaimPaySplit> ClaimPaySplitToList(string command) {
-			DataTable table=Db.GetTable(command);
+		private static List<ClaimPaySplit> ClaimPaySplitTableToList(DataTable table) {
+			//No need to check RemotingRole; no call to db.
 			List<ClaimPaySplit> splits=new List<ClaimPaySplit>();
 			ClaimPaySplit split;
 			for(int i=0;i<table.Rows.Count;i++){
