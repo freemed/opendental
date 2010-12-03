@@ -1200,6 +1200,13 @@ namespace OpenDental{
 			FillProcedures();
 		}
 
+		private void comboDPCpost_SelectionChangeCommitted(object sender,EventArgs e) {
+			for(int i=0;i<OrionProcList.Count;i++) {
+				OrionProcList[i].DPCpost=(OrionDPC)comboDPCpost.SelectedIndex;
+			}
+			FillProcedures();
+		}
+
 		private void butDelete_Click(object sender, System.EventArgs e) {
 			bool result=MsgBox.Show(this,MsgBoxButtons.YesNo,"Are you sure you want delete this group note?");
 			if(result){
@@ -1297,13 +1304,6 @@ namespace OpenDental{
 				}
 			}
 			FillPatientData();
-		}
-
-		private void comboDPCpost_SelectionChangeCommitted(object sender,EventArgs e) {
-			for(int i=0;i<OrionProcList.Count;i++) {
-				OrionProcList[i].DPCpost=(OrionDPC)comboDPCpost.SelectedIndex;
-			}
-			FillProcedures();
 		}
 
 
