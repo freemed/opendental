@@ -33,7 +33,6 @@ namespace OpenDental {
 			if(orionProcOld.DPC != orionProcCur.DPC) {
 				if(Changes!="") { Changes+="\r\n"; }
 				Changes+="DPC changed from "+POut.String(orionProcOld.DPC.ToString())+" to "+POut.String(orionProcCur.DPC.ToString())+".";
-				return Changes;//DPC can only change on the day the procedure was created. Everything else is allowed to change same day without an explaination.
 			}
 			if(orionProcOld.DPCpost != orionProcCur.DPCpost) {
 				if(Changes!=""){ Changes+="\r\n";}
