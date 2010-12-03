@@ -72,6 +72,8 @@ namespace OpenDental{
 		private UI.Button butUp;
 		private UI.Button butDown;
 		private Panel panelPlanned;
+		private Label labelDPCpost;
+		private ComboBox comboDPCpost;
 		private DataTable TablePlanned;
 
 		public FormProcGroup() {
@@ -128,6 +130,8 @@ namespace OpenDental{
 			this.butUp = new OpenDental.UI.Button();
 			this.butDown = new OpenDental.UI.Button();
 			this.panelPlanned = new System.Windows.Forms.Panel();
+			this.labelDPCpost = new System.Windows.Forms.Label();
+			this.comboDPCpost = new System.Windows.Forms.ComboBox();
 			this.panelPlanned.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -332,7 +336,7 @@ namespace OpenDental{
 			this.butRx.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butRx.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butRx.CornerRadius = 4F;
-			this.butRx.Location = new System.Drawing.Point(671,69);
+			this.butRx.Location = new System.Drawing.Point(792,41);
 			this.butRx.Name = "butRx";
 			this.butRx.Size = new System.Drawing.Size(75,24);
 			this.butRx.TabIndex = 106;
@@ -347,9 +351,9 @@ namespace OpenDental{
 			this.butExamSheets.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butExamSheets.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butExamSheets.CornerRadius = 4F;
-			this.butExamSheets.Location = new System.Drawing.Point(671,42);
+			this.butExamSheets.Location = new System.Drawing.Point(792,14);
 			this.butExamSheets.Name = "butExamSheets";
-			this.butExamSheets.Size = new System.Drawing.Size(75,24);
+			this.butExamSheets.Size = new System.Drawing.Size(76,24);
 			this.butExamSheets.TabIndex = 106;
 			this.butExamSheets.Text = "Exam Sheets";
 			this.butExamSheets.Visible = false;
@@ -546,10 +550,35 @@ namespace OpenDental{
 			this.panelPlanned.TabIndex = 199;
 			this.panelPlanned.Visible = false;
 			// 
+			// labelDPCpost
+			// 
+			this.labelDPCpost.Location = new System.Drawing.Point(488,15);
+			this.labelDPCpost.Name = "labelDPCpost";
+			this.labelDPCpost.Size = new System.Drawing.Size(100,16);
+			this.labelDPCpost.TabIndex = 201;
+			this.labelDPCpost.Text = "DPC Post Visit";
+			this.labelDPCpost.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.labelDPCpost.Visible = false;
+			// 
+			// comboDPCpost
+			// 
+			this.comboDPCpost.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboDPCpost.DropDownWidth = 177;
+			this.comboDPCpost.FormattingEnabled = true;
+			this.comboDPCpost.Location = new System.Drawing.Point(590,14);
+			this.comboDPCpost.MaxDropDownItems = 30;
+			this.comboDPCpost.Name = "comboDPCpost";
+			this.comboDPCpost.Size = new System.Drawing.Size(177,21);
+			this.comboDPCpost.TabIndex = 200;
+			this.comboDPCpost.Visible = false;
+			this.comboDPCpost.SelectionChangeCommitted += new System.EventHandler(this.comboDPCpost_SelectionChangeCommitted);
+			// 
 			// FormProcGroup
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(880,645);
+			this.Controls.Add(this.labelDPCpost);
+			this.Controls.Add(this.comboDPCpost);
 			this.Controls.Add(this.panelPlanned);
 			this.Controls.Add(this.butRepairN);
 			this.Controls.Add(this.butEffectiveCommN);
@@ -791,6 +820,18 @@ namespace OpenDental{
 				panelPlanned.Visible=true;
 				gridPat.Visible=true;
 				textProcDate.ReadOnly=false;
+				labelDPCpost.Visible=true;
+				comboDPCpost.Visible=true;
+				comboDPCpost.Items.Clear();
+				comboDPCpost.Items.Add("Not Specified");
+				comboDPCpost.Items.Add("None");
+				comboDPCpost.Items.Add("1A-within 1 day");
+				comboDPCpost.Items.Add("1B-within 30 days");
+				comboDPCpost.Items.Add("1C-within 60 days");
+				comboDPCpost.Items.Add("2-within 120 days");
+				comboDPCpost.Items.Add("3-within 1 year");
+				comboDPCpost.Items.Add("4-no further treatment/appt");
+				comboDPCpost.Items.Add("5-no appointment needed");
 			}
 			else{
 				this.ClientSize = new System.Drawing.Size(556,645);
@@ -1258,6 +1299,12 @@ namespace OpenDental{
 			FillPatientData();
 		}
 
+		private void comboDPCpost_SelectionChangeCommitted(object sender,EventArgs e) {
+			for(int i=0;i<OrionProcList.Count;i++) {
+				OrionProcList[i].DPCpost=(OrionDPC)comboDPCpost.SelectedIndex;
+			}
+			FillProcedures();
+		}
 
 
 
