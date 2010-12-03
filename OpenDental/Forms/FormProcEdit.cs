@@ -2299,6 +2299,9 @@ namespace OpenDental{
 						MsgBox.Show(this,"You cannot edit refused or cancelled procedures.");
 						DialogResult=DialogResult.Cancel;
 					}
+					if(OrionProcCur.Status2==OrionStatus.C || OrionProcCur.Status2==OrionStatus.CR || OrionProcCur.Status2==OrionStatus.CS){
+						textNotes.Enabled=false;
+					}
 				}
 				labelEndTime.Visible=true;
 				textDateTP.ReadOnly=true;
