@@ -85,6 +85,27 @@ namespace OpenDentBusiness {
 			return 0;
 		}
 
+		///<summary>Returns the named def.  If it can't find the name, then it returns the first def in the category.</summary>
+		public static long GetByExactNameNeverZero(DefCat myCat,string itemName) {
+			if(itemName=="") {
+				return DefC.Long[(int)myCat][0].DefNum;//return the first one in the list
+			}
+			for(int i=0;i<DefC.Long[(int)myCat].GetLength(0);i++) {
+				if(DefC.Long[(int)myCat][i].ItemName==itemName) {
+					return DefC.Long[(int)myCat][i].DefNum;
+				}
+			}
+			if(DefC.Long[(int)myCat].Length==0) {
+				Def def=new Def();
+				def.Category=myCat;
+				def.ItemOrder=0;
+				def.ItemName=itemName;
+				Defs.Insert(def);
+				Defs.RefreshCache();
+			}
+			return DefC.Long[(int)myCat][0].DefNum;//return the first one in the list
+		}
+
 		///<summary>Gets the order of the def within Short or -1 if not found.</summary>
 		public static int GetOrder(DefCat myCat,long myDefNum) {
 			//gets the index in the list of unhidden (the Short list).

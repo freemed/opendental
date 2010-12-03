@@ -180,7 +180,10 @@ namespace OpenDentBusiness {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
-			//No longer needed, since we are using ROUND(EstBalance,2) in the aging calculation now.
+			//This specific fix is no longer needed, since we are using ROUND(EstBalance,2) in the aging calculation now.
+			//However, it is still a problem in many columns that we will eventually need to deal with.
+			//Maybe add this back when users can control which fixes they make.
+			//One problem is the foreign users do not necessarily use 2 decimal places (Kuwait uses 3).
 			////Holds columns to be checked. Strings are in pairs in the following order: table-name,column-name
 			//string[] decimalCols=new string[] {
 			//  "patient","EstBalance"
@@ -322,62 +325,6 @@ namespace OpenDentBusiness {
 			return log;
 		}
 
-		public static string ClaimPlanNum2NotValid(bool verbose,bool isCheck) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
-			}
-			string log="";
-			if(isCheck){
-				command="SELECT COUNT(*) FROM claim WHERE PlanNum2 !=0 AND NOT EXISTS( SELECT * FROM insplan "
-				  +"WHERE claim.PlanNum2=insplan.PlanNum)";
-				int numFound=PIn.Int(Db.GetCount(command));
-				if(numFound>0 || verbose) {
-				  log+=Lans.g("FormDatabaseMaintenance","Claims with invalid PlanNum2 found: ")+numFound+"\r\n";
-				}
-			}
-			else{
-				////This fixes a slight database inconsistency that might cause an error when trying to open the send claims window.
-				//command="UPDATE claim SET PlanNum2=0 WHERE PlanNum2 !=0 AND NOT EXISTS( SELECT * FROM insplan "
-				//  +"WHERE claim.PlanNum2=insplan.PlanNum)";
-				//int numberFixed=Db.NonQ32(command);
-				//if(numberFixed>0 || verbose) {
-				//  log+=Lans.g("FormDatabaseMaintenance","Claims with invalid PlanNum2 fixed: ")+numberFixed.ToString()+"\r\n";
-				//}
-			}
-			return log;
-		}
-
-		public static string ClaimDeleteWithInvalidPlanNums(bool verbose,bool isCheck) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
-			}
-			string log="";
-			command=@"SELECT ClaimNum,PatNum FROM claim
-				LEFT JOIN insplan ON claim.PlanNum=insplan.PlanNum
-				WHERE insplan.PlanNum IS NULL";
-			table=Db.GetTable(command);
-			if(isCheck){
-				if(table.Rows.Count>0 || verbose){
-					log+=Lans.g("FormDatabaseMaintenance","Claims found with invalid PlanNum: ")+table.Rows.Count.ToString()+"\r\n";
-				}
-			}
-			else{
-				//Patient Lim;
-				//int numberFixed=0;
-				//for(int i=0;i<table.Rows.Count;i++) {
-				//  command="DELETE FROM claim WHERE ClaimNum="+table.Rows[i][0].ToString();
-				//  Db.NonQ(command);
-				//  Lim=Patients.GetLim(PIn.Long(table.Rows[i][1].ToString()));
-				//  log+=Lans.g("FormDatabaseMaintenance","Claim with invalid PlanNum deleted for ")+Lim.GetNameLF()+"\r\n";
-				//  numberFixed++;
-				//}
-				//if(numberFixed!=0 || verbose) {
-				//  log+=Lans.g("FormDatabaseMaintenance","Claims deleted due to invalid PlanNum: ")+numberFixed.ToString()+"\r\n";
-				//}
-			}
-			return log;
-		}
-
 		public static string ClaimDeleteWithNoClaimProcs(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
@@ -392,12 +339,13 @@ namespace OpenDentBusiness {
 				}
 			}
 			else{
-				//command=@"DELETE FROM claim WHERE NOT EXISTS(
-				//	SELECT * FROM claimproc WHERE claim.ClaimNum=claimproc.ClaimNum)";
-				//int numberFixed=Db.NonQ32(command);
-				//if(numberFixed!=0 || verbose) {
-				//	log+=Lans.g("FormDatabaseMaintenance","Claims deleted due to no procedures: ")+numberFixed.ToString()+"\r\n";
-				//}
+				//Orphaned claims do not show in the account module (tested) so OK to delete.
+				command=@"DELETE FROM claim WHERE NOT EXISTS(
+					SELECT * FROM claimproc WHERE claim.ClaimNum=claimproc.ClaimNum)";
+				int numberFixed=Db.NonQ32(command);
+				if(numberFixed!=0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Claims deleted due to no procedures: ")+numberFixed.ToString()+"\r\n";
+				}
 			}
 			return log;
 		}
@@ -514,12 +462,7 @@ namespace OpenDentBusiness {
 				}
 			}
 			else{
-				//command="DELETE FROM claimpayment WHERE NOT EXISTS("
-				//  +"SELECT * FROM claimproc WHERE claimpayment.ClaimPaymentNum=claimproc.ClaimPaymentNum)";
-				//int numberFixed=Db.NonQ32(command);
-				//if(numberFixed>0 || verbose) {
-				//  log+=Lans.g("FormDatabaseMaintenance","Claim payments with no splits removed: ")+numberFixed.ToString()+"\r\n";
-				//}
+				//Because it would change the sum on a deposit slip, can't easily delete these.
 			}
 			return log;
 		}
@@ -537,11 +480,11 @@ namespace OpenDentBusiness {
 				}
 			}
 			else{
-				//command="UPDATE claimproc SET DateCP=ProcDate WHERE Status=7 AND DateCP != ProcDate";
-				//int numberFixed=Db.NonQ32(command);
-				//if(numberFixed>0 || verbose) {
-				//  log+=Lans.g("FormDatabaseMaintenance","Capitation procs with mismatched dates fixed: ")+numberFixed.ToString()+"\r\n";
-				//}
+				command="UPDATE claimproc SET DateCP=ProcDate WHERE Status=7 AND DateCP != ProcDate";
+				int numberFixed=Db.NonQ32(command);
+				if(numberFixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Capitation procs with mismatched dates fixed: ")+numberFixed.ToString()+"\r\n";
+				}
 			}
 			return log;
 		}
@@ -551,27 +494,53 @@ namespace OpenDentBusiness {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
-			command="SELECT claimproc.ClaimProcNum,claimpayment.CheckDate FROM claimproc,claimpayment "
+			if(isCheck){
+				command="SELECT claimproc.ClaimProcNum,claimpayment.CheckDate FROM claimproc,claimpayment "
 				+"WHERE claimproc.ClaimPaymentNum=claimpayment.ClaimPaymentNum "
 				+"AND claimproc.DateCP!=claimpayment.CheckDate";
-			table=Db.GetTable(command);
-			if(isCheck){
+				table=Db.GetTable(command);
 				if(table.Rows.Count>0 || verbose){
 					log+=Lans.g("FormDatabaseMaintenance","Claim payments with mismatched dates found: ")+table.Rows.Count.ToString()+"\r\n";
 				}
 			}
 			else{
-				//DateTime datecp;
-				//for(int i=0;i<table.Rows.Count;i++) {
-				//  datecp=PIn.Date(table.Rows[i][1].ToString());
-				//  command="UPDATE claimproc SET DateCP="+POut.Date(datecp)
-				//    +" WHERE ClaimProcNum="+table.Rows[i][0].ToString();
-				//  Db.NonQ(command);
-				//}
-				//int numberFixed=table.Rows.Count;
-				//if(numberFixed>0 || verbose) {
-				//  log+=Lans.g("FormDatabaseMaintenance","Claim payments with mismatched dates fixed: ")+numberFixed.ToString()+"\r\n";
-				//}
+				//This is a very strict relationship that has been enforced rigorously for many years.
+				//If there is an error, it is a fairly new error.  All errors must be repaired.
+				//It won't change amounts of history, just dates.  The changes will typically be only a few days or weeks.
+				//Various reports assume this enforcement and the reports will malfunction if this is not fixed.
+				//Let's list out each change.  Patient name, procedure desc, date of service, old dateCP, new dateCP (check date).
+				command="SELECT patient.LName,patient.FName,patient.MiddleI,procedurecode.Descript,claim.DateService,claimproc.DateCP,claimpayment.CheckDate,claimproc.ClaimProcNum "
+				+"FROM patient,procedurecode,procedurelog,claim,claimproc,claimpayment "
+				+"WHERE claimproc.ClaimPaymentNum=claimpayment.ClaimPaymentNum "
+				+"AND patient.PatNum=claimproc.PatNum "
+				+"AND procedurecode.CodeNum=procedurelog.CodeNum "
+				+"AND procedurelog.ProcNum=claimproc.ProcNum "
+				+"AND claim.ClaimNum=claimproc.ClaimNum "
+				+"AND claimproc.DateCP!=claimpayment.CheckDate";
+				table=Db.GetTable(command);
+				string patientName;
+				string procDesc;
+				DateTime dateService;
+				DateTime oldDateCP;
+				DateTime newDateCP;
+				if(table.Rows.Count>0 || verbose){
+					log+="Claim payments with mismatched dates (Patient Name, Procedure, Date of Service, Old Date, New Date):\r\n";
+				}
+				for(int i=0;i<table.Rows.Count;i++) {
+					patientName=table.Rows[i][0].ToString() + ", " + table.Rows[i][1].ToString() + " " + table.Rows[i][2].ToString();
+					procDesc=table.Rows[i][3].ToString();
+					dateService=PIn.Date(table.Rows[i][4].ToString());
+					oldDateCP=PIn.Date(table.Rows[i][5].ToString());
+				  newDateCP=PIn.Date(table.Rows[i][6].ToString());
+				  command="UPDATE claimproc SET DateCP="+POut.Date(newDateCP)
+				    +" WHERE ClaimProcNum="+table.Rows[i][7].ToString();
+				  Db.NonQ(command);
+					log+=patientName + ", " + procDesc + ", " + dateService.ToShortDateString() + ", " + oldDateCP.ToShortDateString() + ", " + newDateCP.ToShortDateString() + "\r\n";
+				}
+				int numberFixed=table.Rows.Count;
+				if(numberFixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Claim payments with mismatched dates fixed: ")+numberFixed.ToString()+"\r\n";
+				}
 			}
 			return log;
 		}
@@ -882,7 +851,7 @@ namespace OpenDentBusiness {
 			}
 			return log;
 		}
-
+		
 		public static string InsPlanCheckNoCarrier(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
@@ -913,30 +882,8 @@ namespace OpenDentBusiness {
 			return log;
 		}
 
-		public static string InsPlanNoClaimForm(bool verbose,bool isCheck) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
-			}
-			string log="";
-			if(isCheck){
-				command="SELECT COUNT(*) FROM insplan WHERE ClaimFormNum=0";
-				int numFound=PIn.Int(Db.GetCount(command));
-				if(numFound>0 || verbose) {
-					log+=Lans.g("FormDatabaseMaintenance","Insplan claimforms missing: ")+numFound+"\r\n";
-				}
-			}
-			else{
-				command="UPDATE insplan SET ClaimFormNum="+POut.Long(PrefC.GetLong(PrefName.DefaultClaimForm))
-				  +" WHERE ClaimFormNum=0";
-				int numberFixed=Db.NonQ32(command);
-				if(numberFixed>0 || verbose) {
-					log+=Lans.g("FormDatabaseMaintenance","Insplan claimforms set if missing: ")+numberFixed.ToString()+"\r\n";
-				}
-			}
-			return log;
-		}
-
 		public static string InsPlanInvalidNum(bool verbose,bool isCheck) {
+			//not backported earlier than 7.6
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
@@ -962,7 +909,8 @@ namespace OpenDentBusiness {
 				if(numFound>0 || verbose) {
 					log+=Lans.g("FormDatabaseMaintenance","Invalid claim InsSubNums: ")+numFound+"\r\n";
 				}
-				command="SELECT COUNT(*) FROM claim WHERE NOT EXISTS(SELECT * FROM insplan WHERE insplan.PlanNum=claim.PlanNum2)";
+				//This one can cause an error when trying to open the send claims window:
+				command="SELECT COUNT(*) FROM claim WHERE claim.PlanNum2 !=0 AND NOT EXISTS(SELECT * FROM insplan WHERE insplan.PlanNum=claim.PlanNum2)";
 				numFound=PIn.Int(Db.GetCount(command));
 				if(numFound>0 || verbose) {
 					log+=Lans.g("FormDatabaseMaintenance","Invalid claim InsSubNums: ")+numFound+"\r\n";
@@ -989,7 +937,30 @@ namespace OpenDentBusiness {
 				}
 			}
 			else {
-				//Todo: Figure out what to do here and do it.
+				//Todo: Figure out what to do here and do it.				
+			}
+			return log;
+		}
+
+		public static string InsPlanNoClaimForm(bool verbose,bool isCheck) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
+			}
+			string log="";
+			if(isCheck){
+				command="SELECT COUNT(*) FROM insplan WHERE ClaimFormNum=0";
+				int numFound=PIn.Int(Db.GetCount(command));
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Insplan claimforms missing: ")+numFound+"\r\n";
+				}
+			}
+			else{
+				command="UPDATE insplan SET ClaimFormNum="+POut.Long(PrefC.GetLong(PrefName.DefaultClaimForm))
+				  +" WHERE ClaimFormNum=0";
+				int numberFixed=Db.NonQ32(command);
+				if(numberFixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Insplan claimforms set if missing: ")+numberFixed.ToString()+"\r\n";
+				}
 			}
 			return log;
 		}
@@ -1598,24 +1569,24 @@ namespace OpenDentBusiness {
 				command="SELECT COUNT(*) FROM procedurelog WHERE CodeNum=0";
 				int numFound=PIn.Int(Db.GetCount(command));
 				if(numFound>0 || verbose) {
-					log+=Lans.g("FormDatabaseMaintenance","Procedures found with CodeNum=0: ")+numFound+"\r\n";
+					log+=Lans.g("FormDatabaseMaintenance","Procedures found with CodeNum=0")+": "+numFound+"\r\n";
 				}
 			}
 			else {
 				if(!ProcedureCodes.IsValidCode("~BAD~")) {
-					ProcedureCode badcode=new ProcedureCode();
-					//badcode.AbbrDesc=""
-					//	etc.
-					//insert
+					ProcedureCode badCode=new ProcedureCode();
+					badCode.ProcCode="~BAD~";
+					badCode.Descript="Invalid procedure";
+					badCode.AbbrDesc="Invalid procedure";
+					badCode.ProcCat=DefC.GetByExactNameNeverZero(DefCat.ProcCodeCats,"Never Used");
+					ProcedureCodes.Insert(badCode);
 				}
-				//get the code num
-				//set code num below
-
-				//command="DELETE FROM procedurelog WHERE CodeNum=0";
-				//int numberFixed=Db.NonQ32(command);
-				//if(numberFixed>0 || verbose) {
-				//  log+=Lans.g("FormDatabaseMaintenance","Procedures deleted with CodeNum=0: ")+numberFixed.ToString()+"\r\n";
-				//}
+				long badCodeNum=ProcedureCodes.GetCodeNum("~BAD~");
+				command="UPDATE procedurelog SET CodeNum=" + badCodeNum + " WHERE CodeNum=0";
+				int numberFixed=Db.NonQ32(command);
+				if(numberFixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Procedures with CodeNum=0 flagged as invalid")+": "+numberFixed.ToString()+"\r\n";
+				}
 			}
 			return log;
 		}

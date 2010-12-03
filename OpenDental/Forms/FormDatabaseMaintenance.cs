@@ -263,10 +263,6 @@ namespace OpenDental {
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.AutoCodesDeleteWithNoItems(verbose,isCheck);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.ClaimPlanNum2NotValid(verbose,isCheck);
-			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.ClaimDeleteWithInvalidPlanNums(verbose,isCheck);
-			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.ClaimDeleteWithNoClaimProcs(verbose,isCheck);
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.ClaimWriteoffSum(verbose,isCheck);

@@ -11,7 +11,7 @@ namespace OpenDentBusiness {
 		public long DefNum;
 		///<summary>Enum:DefCat</summary>
 		public DefCat Category;
-		///<summary>Order that each item shows on various lists.</summary>
+		///<summary>Order that each item shows on various lists. 0-indexed.</summary>
 		public int ItemOrder;
 		///<summary>Each category is a little different.  This field is usually the common name of the item.</summary>
 		public string ItemName;
