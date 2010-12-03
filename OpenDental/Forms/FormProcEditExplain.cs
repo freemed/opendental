@@ -36,6 +36,10 @@ namespace OpenDental {
 				Changes+="DPC changed from "+POut.String(orionProcOld.DPC.ToString())+" to "+POut.String(orionProcCur.DPC.ToString())+".";
 				return Changes;//DPC can only change on the day the procedure was created. Everything else is allowed to change same day without an explaination.
 			}
+			if(orionProcOld.DPCpost != orionProcCur.DPCpost) {
+				if(Changes!=""){ Changes+="\r\n";}
+		    Changes+="DPC Post Visit changed from "+POut.String(orionProcOld.DPCpost.ToString())+" to "+POut.String(orionProcCur.DPCpost.ToString())+".";
+			}
 			//PatNum, AptNum, PlannedAptNum should never change---------------------------------------------------------------------------------------------
 			if(procOld.PatNum != procCur.PatNum) {
 				if(Changes!=""){ Changes+="\r\n";}
