@@ -48,6 +48,7 @@ namespace OpenDentBusiness {
 			table.Columns.Add("orionDateScheduleBy");
 			table.Columns.Add("orionDateStopClock");
 			table.Columns.Add("orionDPC");
+			table.Columns.Add("orionDPCpost");
 			table.Columns.Add("orionIsEffectiveComm");
 			table.Columns.Add("orionIsOnCall");
 			table.Columns.Add("orionStatus2");
@@ -82,7 +83,7 @@ namespace OpenDentBusiness {
 			//Procedures-----------------------------------------------------------------------------------------------------
 			string command="SELECT provider.Abbr,appointment.AptDateTime,procedurelog.BaseUnits,procedurelog.ClinicNum,"
 				+"procedurelog.CodeNum,procedurelog.DateEntryC,orionproc.DateScheduleBy,orionproc.DateStopClock,procedurelog.DateTP,"
-				+"procedurecode.Descript,orionproc.DPC,Dx,HideGraphics,orionproc.IsEffectiveComm,orionproc.IsOnCall,"
+				+"procedurecode.Descript,orionproc.DPC,orionproc.DPCpost,Dx,HideGraphics,orionproc.IsEffectiveComm,orionproc.IsOnCall,"
 				+"LaymanTerm,Priority,procedurecode.ProcCode,ProcDate,ProcFee,procedurelog.ProcNum,ProcNumLab,procedurelog.ProcTime,"
 				+"procedurelog.ProcTimeEnd,ProcStatus,orionproc.Status2,Surf,ToothNum,ToothRange,UnitQty "
 				+"FROM procedurelog "
@@ -192,6 +193,12 @@ namespace OpenDentBusiness {
 				}
 				else {
 					row["orionDPC"]=((OrionDPC)PIn.Int(rawProcs.Rows[i]["DPC"].ToString())).ToString();
+				}
+				if(((OrionDPC)PIn.Int(rawProcs.Rows[i]["DPCpost"].ToString())).ToString()=="NotSpecified") {
+					row["orionDPCpost"]="";
+				}
+				else {
+					row["orionDPCpost"]=((OrionDPC)PIn.Int(rawProcs.Rows[i]["DPCpost"].ToString())).ToString();
 				}
 				row["orionIsEffectiveComm"]="";
 				if(rawProcs.Rows[i]["IsEffectiveComm"].ToString()=="1"){
@@ -360,6 +367,7 @@ namespace OpenDentBusiness {
 				row["orionDateScheduleBy"]="";
 				row["orionDateStopClock"]="";
 				row["orionDPC"]="";
+				row["orionDPCpost"]="";
 				row["orionIsEffectiveComm"]="";
 				row["orionIsOnCall"]="";
 				row["orionStatus2"]="";
@@ -427,6 +435,7 @@ namespace OpenDentBusiness {
 				row["orionDateScheduleBy"]="";
 				row["orionDateStopClock"]="";
 				row["orionDPC"]="";
+				row["orionDPCpost"]="";
 				row["orionIsEffectiveComm"]="";
 				row["orionIsOnCall"]="";
 				row["orionStatus2"]="";
@@ -514,6 +523,7 @@ namespace OpenDentBusiness {
 				row["orionDateScheduleBy"]="";
 				row["orionDateStopClock"]="";
 				row["orionDPC"]="";
+				row["orionDPCpost"]="";
 				row["orionIsEffectiveComm"]="";
 				row["orionIsOnCall"]="";
 				row["orionStatus2"]="";
@@ -594,6 +604,7 @@ namespace OpenDentBusiness {
 				row["orionDateScheduleBy"]="";
 				row["orionDateStopClock"]="";
 				row["orionDPC"]="";
+				row["orionDPCpost"]="";
 				row["orionIsEffectiveComm"]="";
 				row["orionIsOnCall"]="";
 				row["orionStatus2"]="";
@@ -679,6 +690,7 @@ namespace OpenDentBusiness {
 				row["orionDateScheduleBy"]="";
 				row["orionDateStopClock"]="";
 				row["orionDPC"]="";
+				row["orionDPCpost"]="";
 				row["orionIsEffectiveComm"]="";
 				row["orionIsOnCall"]="";
 				row["orionStatus2"]="";
@@ -799,6 +811,7 @@ namespace OpenDentBusiness {
 				row["orionDateScheduleBy"]="";
 				row["orionDateStopClock"]="";
 				row["orionDPC"]="";
+				row["orionDPCpost"]="";
 				row["orionIsEffectiveComm"]="";
 				row["orionIsOnCall"]="";
 				row["orionStatus2"]="";
@@ -868,6 +881,7 @@ namespace OpenDentBusiness {
 				row["orionDateScheduleBy"]="";
 				row["orionDateStopClock"]="";
 				row["orionDPC"]="";
+				row["orionDPCpost"]="";
 				row["orionIsEffectiveComm"]="";
 				row["orionIsOnCall"]="";
 				row["orionStatus2"]="";
@@ -946,6 +960,7 @@ namespace OpenDentBusiness {
 				row["orionDateScheduleBy"]="";
 				row["orionDateStopClock"]="";
 				row["orionDPC"]="";
+				row["orionDPCpost"]="";
 				row["orionIsEffectiveComm"]="";
 				row["orionIsOnCall"]="";
 				row["orionStatus2"]="";

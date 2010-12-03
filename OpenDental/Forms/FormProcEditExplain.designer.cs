@@ -155,13 +155,13 @@ namespace OpenDental{
 			this.groupBoxDPC.Controls.Add(this.radioButtonError);
 			this.groupBoxDPC.Controls.Add(this.radioButtonNewProv);
 			this.groupBoxDPC.Controls.Add(this.radioButtonReAssign);
+			this.groupBoxDPC.Enabled = false;
 			this.groupBoxDPC.Location = new System.Drawing.Point(15,484);
 			this.groupBoxDPC.Name = "groupBoxDPC";
 			this.groupBoxDPC.Size = new System.Drawing.Size(355,66);
 			this.groupBoxDPC.TabIndex = 13;
 			this.groupBoxDPC.TabStop = false;
 			this.groupBoxDPC.Text = "Reason for DPC change:";
-			this.groupBoxDPC.Visible = false;
 			// 
 			// FormProcEditExplain
 			// 

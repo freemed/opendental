@@ -24,8 +24,7 @@ namespace OpenDental {
 		private void FormProcEditExplain_Load(object sender,EventArgs e) {
 			textSummary.Text=Changes;
 			if(dpcChange) {
-				groupBoxDPC.Visible=true;
-				textExplanation.Enabled=false;
+				groupBoxDPC.Enabled=true;
 			}
 		}
 
@@ -295,35 +294,26 @@ namespace OpenDental {
 
 		private void radioButtonError_CheckedChanged(object sender,EventArgs e) {
 			radioChange=true;
-			textExplanation.Text="";
-			textExplanation.Enabled=false;
 			radioText="Entry error";
 		}
 
 		private void radioButtonNewProv_CheckedChanged(object sender,EventArgs e) {
 			radioChange=true;
-			textExplanation.Text="";
-			textExplanation.Enabled=false;
 			radioText="New provider";
 		}
 
 		private void radioButtonReAssign_CheckedChanged(object sender,EventArgs e) {
 			radioChange=true;
-			textExplanation.Text="";
-			textExplanation.Enabled=false;
 			radioText="Re-assignment";
 		}
 
 		private void radioButtonOther_CheckedChanged(object sender,EventArgs e) {
 			radioChange=true;
-			textExplanation.Enabled=true;
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
-			if(groupBoxDPC.Visible){
+			if(groupBoxDPC.Enabled){
 				if(radioButtonOther.Checked	&& textExplanation.Text.Trim()=="") {
-					//If DPC changed it will be the only thing needing an explanation
-					//because it only editable on the same day it was created.
 					MsgBox.Show(this,"Please explain why the DPC was changed.");
 					return;
 				}
@@ -332,13 +322,16 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please explain why the above changes were made.");
 				return;
 			}
-			if(groupBoxDPC.Visible && !radioChange) {
+			if(groupBoxDPC.Enabled && !radioChange) {
 				MsgBox.Show(this,"Please select a reason for DPC change.");
 				return;
 			}
 			Explanation="Summary of Changes Made:\r\n"+Changes+"\r\nExplanation:\r\n"+textExplanation.Text;
 			if(radioChange) {
 				if(!radioButtonOther.Checked) {
+					if(textExplanation.Text.Trim()!="") {
+						Explanation+="\r\n";//New line if user typed explanation for other things changed.
+					}
 					Explanation+="DPC change due to: "+radioText;
 				}
 			}

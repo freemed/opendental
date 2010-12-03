@@ -4339,6 +4339,9 @@ namespace OpenDental{
 						case "Stat 2":
 							row.Cells.Add(table.Rows[i]["orionStatus2"].ToString());
 							break;
+						case "DPCpost":
+							row.Cells.Add(table.Rows[i]["orionDPCpost"].ToString());
+							break;
 						default:
 							row.Cells.Add("");
 							break;

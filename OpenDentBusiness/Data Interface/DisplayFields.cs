@@ -121,6 +121,7 @@ namespace OpenDentBusiness {
 					//list.Add(new DisplayField("Effective Comm",90,category));
 					//list.Add(new DisplayField("End Time",56,category));
 					//list.Add(new DisplayField("Quadrant",55,category));
+					//list.Add(new DisplayField("DPCpost",52,category));
 				//}
 				
 			}
@@ -245,6 +246,7 @@ namespace OpenDentBusiness {
 				//  list.Add(new DisplayField("On Call",45,category));
 				//  list.Add(new DisplayField("Effective Comm",90,category));
 				//  list.Add(new DisplayField("Repair",45,category));
+				//	list.Add(new DisplayField("DPCpost",52,category));
 				//}
 			}
 			return list;
@@ -278,6 +280,7 @@ namespace OpenDentBusiness {
 					list.Add(new DisplayField("Effective Comm",90,category));
 					list.Add(new DisplayField("End Time",56,category));//not visible unless orion
 					list.Add(new DisplayField("Quadrant",55,category));//behavior is specific to orion
+					list.Add(new DisplayField("DPCpost",52,category));
 				}
 			}
 			else if(category==DisplayFieldCategory.PatientSelect){
@@ -398,6 +401,7 @@ namespace OpenDentBusiness {
 					list.Add(new DisplayField("On Call",45,category));
 					list.Add(new DisplayField("Effective Comm",90,category));
 					list.Add(new DisplayField("Repair",45,category));
+					list.Add(new DisplayField("DPCpost",52,category));
 				}
 			}
 			return list;

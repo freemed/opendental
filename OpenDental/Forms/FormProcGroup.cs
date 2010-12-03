@@ -789,6 +789,9 @@ namespace OpenDental{
 								row.Cells.Add("");
 							}
 							break;
+						case "DPCpost":
+							row.Cells.Add(((OrionDPC)OrionProcList[i].DPCpost).ToString());
+							break;
 					}
 				}
 				gridProc.Rows.Add(row);

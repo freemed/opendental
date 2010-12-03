@@ -2598,9 +2598,6 @@ namespace OpenDental{
 						OrionProcCur.DPC==OrionDPC._5) {
 						labelScheduleBy.Visible=true;
 					}
-					if(PIn.Date(textDateTP.Text).Date!=MiscData.GetNowDateTime().Date) {
-						comboDPC.Enabled=false;
-					}
 					if(OrionProcCur.DateScheduleBy.Year>1880) {
 						textDateScheduled.Text=OrionProcCur.DateScheduleBy.ToShortDateString();
 					}
@@ -4135,10 +4132,8 @@ namespace OpenDental{
 				}
 				else {//Is not new.
 					if(FormProcEditExplain.GetChanges(ProcCur,ProcOld,OrionProcCur,OrionProcOld)!="") {//Checks if any changes were made. Also sets static variable Changes.
-						//Always show explain window if DPC changes. Can't change DPC in interface if not today.
 						//If a day old and the orion procedure status did not go from TP to C, CS or CR, then show explaination window.
-						if((int)OrionProcOld.DPC!=(int)OrionProcCur.DPC ||
-							(ProcOld.DateTP.Date<MiscData.GetNowDateTime().Date &&
+						if((ProcOld.DateTP.Date<MiscData.GetNowDateTime().Date &&
 							(OrionProcOld.Status2!=OrionStatus.TP || (OrionProcCur.Status2!=OrionStatus.C && OrionProcCur.Status2!=OrionStatus.CS && OrionProcCur.Status2!=OrionStatus.CR))))
 						{
 							FormProcEditExplain FormP=new FormProcEditExplain();
@@ -4372,8 +4367,8 @@ namespace OpenDental{
 						}
 					}
 				}
-				if(comboStatus.SelectedIndex==0 && comboDPC.SelectedIndex==0) {
-					MsgBox.Show(this,"Status of TP should not have DPC of \"Not Specified\".");
+				if(comboDPC.SelectedIndex==0) {
+					MsgBox.Show(this,"DPC should not be \"Not Specified\".");
 					return;
 				}
 			}
