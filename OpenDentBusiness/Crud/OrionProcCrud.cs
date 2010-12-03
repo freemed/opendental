@@ -49,6 +49,7 @@ namespace OpenDentBusiness.Crud{
 				orionProc.OrionProcNum   = PIn.Long  (table.Rows[i]["OrionProcNum"].ToString());
 				orionProc.ProcNum        = PIn.Long  (table.Rows[i]["ProcNum"].ToString());
 				orionProc.DPC            = (OrionDPC)PIn.Int(table.Rows[i]["DPC"].ToString());
+				orionProc.DPCpost        = (OrionDPC)PIn.Int(table.Rows[i]["DPCpost"].ToString());
 				orionProc.DateScheduleBy = PIn.Date  (table.Rows[i]["DateScheduleBy"].ToString());
 				orionProc.DateStopClock  = PIn.Date  (table.Rows[i]["DateStopClock"].ToString());
 				orionProc.Status2        = (OrionStatus)PIn.Int(table.Rows[i]["Status2"].ToString());
@@ -74,13 +75,14 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="OrionProcNum,";
 			}
-			command+="ProcNum,DPC,DateScheduleBy,DateStopClock,Status2,IsOnCall,IsEffectiveComm,IsRepair) VALUES(";
+			command+="ProcNum,DPC,DPCpost,DateScheduleBy,DateStopClock,Status2,IsOnCall,IsEffectiveComm,IsRepair) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(orionProc.OrionProcNum)+",";
 			}
 			command+=
 				     POut.Long  (orionProc.ProcNum)+","
 				+    POut.Int   ((int)orionProc.DPC)+","
+				+    POut.Int   ((int)orionProc.DPCpost)+","
 				+    POut.Date  (orionProc.DateScheduleBy)+","
 				+    POut.Date  (orionProc.DateStopClock)+","
 				+    POut.Int   ((int)orionProc.Status2)+","
@@ -101,6 +103,7 @@ namespace OpenDentBusiness.Crud{
 			string command="UPDATE orionproc SET "
 				+"ProcNum        =  "+POut.Long  (orionProc.ProcNum)+", "
 				+"DPC            =  "+POut.Int   ((int)orionProc.DPC)+", "
+				+"DPCpost        =  "+POut.Int   ((int)orionProc.DPCpost)+", "
 				+"DateScheduleBy =  "+POut.Date  (orionProc.DateScheduleBy)+", "
 				+"DateStopClock  =  "+POut.Date  (orionProc.DateStopClock)+", "
 				+"Status2        =  "+POut.Int   ((int)orionProc.Status2)+", "
@@ -121,6 +124,10 @@ namespace OpenDentBusiness.Crud{
 			if(orionProc.DPC != oldOrionProc.DPC) {
 				if(command!=""){ command+=",";}
 				command+="DPC = "+POut.Int   ((int)orionProc.DPC)+"";
+			}
+			if(orionProc.DPCpost != oldOrionProc.DPCpost) {
+				if(command!=""){ command+=",";}
+				command+="DPCpost = "+POut.Int   ((int)orionProc.DPCpost)+"";
 			}
 			if(orionProc.DateScheduleBy != oldOrionProc.DateScheduleBy) {
 				if(command!=""){ command+=",";}

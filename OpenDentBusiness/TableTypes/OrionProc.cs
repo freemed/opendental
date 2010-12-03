@@ -13,6 +13,8 @@ namespace OpenDentBusiness{
 		public long ProcNum;
 		///<summary>Enum:OrionDPC NotSpecified=0,None=1,_1A=2,_1B=3,_1C=4,_2=5,_3=6,_4=7,_5=8.</summary>
 		public OrionDPC DPC;
+		///<summary>Enum:OrionDPC None=0,1A=1,1B=2,1C=3,2=4,3=5,4=6,5=7</summary>
+		public OrionDPC DPCpost;
 		///<summary>System adds days to the diagnosis date based upon the DPC entered for that procedure. If DPC = none the system will return “No Schedule by Date”. </summary>
 		public DateTime DateScheduleBy;
 		///<summary> Default to current date.  Provider shall have to ability to edit with a previous date, but not a future date.</summary>

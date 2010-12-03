@@ -3087,6 +3087,17 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="UPDATE preference SET ValueString = '7.5.12.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To7_5_16();
+		}
+
+		private static void To7_5_16() {
+			if(FromVersion<new Version("7.5.16.0")) {
+				string command;
+				command="ALTER TABLE orionproc ADD DPCpost tinyint NOT NULL";
+				Db.NonQ(command);
+				command="UPDATE preference SET ValueString = '7.5.16.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
 			To7_6_0();
 		}
 
@@ -3097,7 +3108,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);
 				command="UPDATE preference SET ValueString = 'https://opendentalsoft.com/WebHostSynch/Sheets.asmx' WHERE PrefName = 'WebHostSynchServerURL'";
 				Db.NonQ(command);
-
 
 
 
@@ -3120,6 +3130,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 				
 
-				/*
-			
-				*/
+				
+
+				
