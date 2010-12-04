@@ -23,6 +23,34 @@ namespace Crud {
 			throw new ApplicationException("No primary key defined for "+tableName);
 		}
 
+		///<summary>Will throw exception if no primary key attribute defined.</summary>
+		public static FieldInfo GetPriKeyMobile1(FieldInfo[] fields,string tableName) {
+			for(int i=0;i<fields.Length;i++) {
+				object[] attributes = fields[i].GetCustomAttributes(typeof(CrudColumnAttribute),true);
+				if(attributes.Length!=1) {
+					continue;
+				}
+				if(((CrudColumnAttribute)attributes[0]).IsPriKeyMobile1) {
+					return fields[i];
+				}
+			}
+			throw new ApplicationException("No primary key 1 defined for "+tableName);
+		}
+
+		///<summary>Will throw exception if no primary key attribute defined.</summary>
+		public static FieldInfo GetPriKeyMobile2(FieldInfo[] fields,string tableName) {
+			for(int i=0;i<fields.Length;i++) {
+				object[] attributes = fields[i].GetCustomAttributes(typeof(CrudColumnAttribute),true);
+				if(attributes.Length!=1) {
+					continue;
+				}
+				if(((CrudColumnAttribute)attributes[0]).IsPriKeyMobile2) {
+					return fields[i];
+				}
+			}
+			throw new ApplicationException("No primary key 2 defined for "+tableName);
+		}
+
 		///<summary>The name of the table in the database.  By default, the lowercase name of the class type.</summary>
 		public static string GetTableName(Type typeClass) {
 			object[] attributes = typeClass.GetCustomAttributes(typeof(CrudTableAttribute),true);
@@ -77,7 +105,25 @@ namespace Crud {
 			return false;
 		}
 
-		///<summary>This also excludes fields that are not in the database, like patient.Age.</summary>
+		///<summary></summary>
+		public static bool IsMobile(Type typeClass) {
+			object[] attributes = typeClass.GetCustomAttributes(typeof(CrudTableAttribute),true);
+			if(attributes.Length==0) {
+				return false;
+			}
+			for(int i=0;i<attributes.Length;i++) {
+				if(attributes[i].GetType()!=typeof(CrudTableAttribute)) {
+					continue;
+				}
+				if(((CrudTableAttribute)attributes[i]).IsMobile) {
+					return true;
+				}
+			}
+			//couldn't find any.
+			return false;
+		}
+
+		///<summary>For Mobile, this only excludes PK2; result includes PK1, the CustomerNum.  Always excludes fields that are not in the database, like patient.Age.</summary>
 		public static List<FieldInfo> GetFieldsExceptPriKey(FieldInfo[] fields,FieldInfo priKey) {
 			List<FieldInfo> retVal=new List<FieldInfo>();
 			for(int i=0;i<fields.Length;i++) {
@@ -132,10 +178,15 @@ namespace Crud {
 			return retVal;
 		}
 
-		///<summary>Pass in fields processed by GetFieldsExceptPriKey.  This quick method returns the bigint fields so that indexes can possibly be added.</summary>
-		public static List<FieldInfo> GetBigIntFields(List<FieldInfo> fieldsExceptPri) {
+		///<summary>Pass in fields processed by GetFieldsExceptPriKey.  This quick method returns the bigint fields so that indexes can possibly be added.  For mobile, pass in the priKeyName2 so that it can be excluded.  If not mobile, then set it to null.</summary>
+		public static List<FieldInfo> GetBigIntFields(List<FieldInfo> fieldsExceptPri,string priKeyName2) {
 			List<FieldInfo> retVal=new List<FieldInfo>();
 			for(int i=0;i<fieldsExceptPri.Count;i++) {
+				if(priKeyName2 != null) {//mobile
+					if(fieldsExceptPri[i].Name==priKeyName2) {
+						continue;
+					}
+				}
 				if(fieldsExceptPri[i].FieldType.Name=="Int64") {
 					retVal.Add(fieldsExceptPri[i]);
 				}
@@ -163,6 +214,12 @@ namespace Crud {
 		public static void ConnectToDatabase(string dbName){
 			OpenDentBusiness.DataConnection dcon=new OpenDentBusiness.DataConnection();
 			dcon.SetDb("localhost",dbName,"root","","","",DatabaseType.MySql);
+			RemotingClient.RemotingRole=RemotingRole.ClientDirect;
+		}
+
+		public static void ConnectToDatabaseM(string dbName) {
+			OpenDentBusiness.DataConnection dcon=new OpenDentBusiness.DataConnection();
+			dcon.SetDb("192.168.0.196",dbName,"root","","","",DatabaseType.MySql);
 			RemotingClient.RemotingRole=RemotingRole.ClientDirect;
 		}
 

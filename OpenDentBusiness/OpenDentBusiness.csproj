@@ -463,8 +463,10 @@
     <Compile Include="Misc\HouseCallsQueries.cs" />
     <Compile Include="Misc\LetterMergesQueries.cs" />
     <Compile Include="Misc\TrojanQueries.cs" />
+    <Compile Include="Mobile\ConvertDatabasem.cs" />
     <Compile Include="Mobile\TableTypes\Appointmentm.cs" />
     <Compile Include="Mobile\TableTypes\Patientm.cs" />
+    <Compile Include="Mobile\TableTypes\Prefm.cs" />
     <Compile Include="Plugins\PluginBase.cs" />
     <Compile Include="Plugins\PluginContainer.cs" />
     <Compile Include="Plugins\Plugins.cs" />

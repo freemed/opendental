@@ -36,11 +36,16 @@
 			this.textSnippet = new System.Windows.Forms.TextBox();
 			this.label6 = new System.Windows.Forms.Label();
 			this.listClass = new System.Windows.Forms.ListBox();
+			this.label7 = new System.Windows.Forms.Label();
+			this.textDbM = new System.Windows.Forms.TextBox();
+			this.checkRun = new System.Windows.Forms.CheckBox();
+			this.checkRunM = new System.Windows.Forms.CheckBox();
+			this.label8 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(186,14);
+			this.label1.Location = new System.Drawing.Point(406,11);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(421,54);
 			this.label1.TabIndex = 0;
@@ -48,7 +53,7 @@
 			// 
 			// butRun
 			// 
-			this.butRun.Location = new System.Drawing.Point(667,15);
+			this.butRun.Location = new System.Drawing.Point(868,14);
 			this.butRun.Name = "butRun";
 			this.butRun.Size = new System.Drawing.Size(75,23);
 			this.butRun.TabIndex = 1;
@@ -58,25 +63,25 @@
 			// 
 			// textDb
 			// 
-			this.textDb.Location = new System.Drawing.Point(18,31);
+			this.textDb.Location = new System.Drawing.Point(105,24);
 			this.textDb.Name = "textDb";
 			this.textDb.Size = new System.Drawing.Size(127,20);
 			this.textDb.TabIndex = 5;
-			this.textDb.Text = "development75";
+			this.textDb.Text = "development76";
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(15,11);
+			this.label3.Location = new System.Drawing.Point(17,25);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(87,17);
 			this.label3.TabIndex = 7;
 			this.label3.Text = "Database";
-			this.label3.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// label2
 			// 
 			this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif",10F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.label2.Location = new System.Drawing.Point(160,101);
+			this.label2.Location = new System.Drawing.Point(160,84);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(163,17);
 			this.label2.TabIndex = 9;
@@ -85,7 +90,7 @@
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(9,224);
+			this.label4.Location = new System.Drawing.Point(9,207);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(125,17);
 			this.label4.TabIndex = 10;
@@ -94,7 +99,7 @@
 			// 
 			// label5
 			// 
-			this.label5.Location = new System.Drawing.Point(9,179);
+			this.label5.Location = new System.Drawing.Point(9,162);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(125,17);
 			this.label5.TabIndex = 12;
@@ -105,7 +110,7 @@
 			// 
 			this.comboType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboType.FormattingEnabled = true;
-			this.comboType.Location = new System.Drawing.Point(11,199);
+			this.comboType.Location = new System.Drawing.Point(11,182);
 			this.comboType.MaxDropDownItems = 100;
 			this.comboType.Name = "comboType";
 			this.comboType.Size = new System.Drawing.Size(144,21);
@@ -113,7 +118,7 @@
 			// 
 			// butSnippet
 			// 
-			this.butSnippet.Location = new System.Drawing.Point(59,153);
+			this.butSnippet.Location = new System.Drawing.Point(59,136);
 			this.butSnippet.Name = "butSnippet";
 			this.butSnippet.Size = new System.Drawing.Size(96,23);
 			this.butSnippet.TabIndex = 13;
@@ -124,17 +129,17 @@
 			// textSnippet
 			// 
 			this.textSnippet.Font = new System.Drawing.Font("Courier New",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.textSnippet.Location = new System.Drawing.Point(161,121);
+			this.textSnippet.Location = new System.Drawing.Point(161,104);
 			this.textSnippet.Multiline = true;
 			this.textSnippet.Name = "textSnippet";
 			this.textSnippet.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-			this.textSnippet.Size = new System.Drawing.Size(988,743);
+			this.textSnippet.Size = new System.Drawing.Size(988,751);
 			this.textSnippet.TabIndex = 14;
 			this.textSnippet.WordWrap = false;
 			// 
 			// label6
 			// 
-			this.label6.Location = new System.Drawing.Point(1,103);
+			this.label6.Location = new System.Drawing.Point(1,86);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(157,43);
 			this.label6.TabIndex = 15;
@@ -144,16 +149,67 @@
 			// listClass
 			// 
 			this.listClass.FormattingEnabled = true;
-			this.listClass.Location = new System.Drawing.Point(11,244);
+			this.listClass.Location = new System.Drawing.Point(11,227);
 			this.listClass.Name = "listClass";
-			this.listClass.Size = new System.Drawing.Size(144,615);
+			this.listClass.Size = new System.Drawing.Size(144,628);
 			this.listClass.TabIndex = 16;
+			// 
+			// label7
+			// 
+			this.label7.Location = new System.Drawing.Point(-1,49);
+			this.label7.Name = "label7";
+			this.label7.Size = new System.Drawing.Size(105,17);
+			this.label7.TabIndex = 18;
+			this.label7.Text = "Mobile on .196";
+			this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textDbM
+			// 
+			this.textDbM.Location = new System.Drawing.Point(105,48);
+			this.textDbM.Name = "textDbM";
+			this.textDbM.Size = new System.Drawing.Size(127,20);
+			this.textDbM.TabIndex = 17;
+			this.textDbM.Text = "mobile_dev";
+			// 
+			// checkRun
+			// 
+			this.checkRun.Checked = true;
+			this.checkRun.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkRun.Location = new System.Drawing.Point(239,26);
+			this.checkRun.Name = "checkRun";
+			this.checkRun.Size = new System.Drawing.Size(39,17);
+			this.checkRun.TabIndex = 19;
+			this.checkRun.UseVisualStyleBackColor = true;
+			// 
+			// checkRunM
+			// 
+			this.checkRunM.Checked = true;
+			this.checkRunM.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkRunM.Location = new System.Drawing.Point(239,51);
+			this.checkRunM.Name = "checkRunM";
+			this.checkRunM.Size = new System.Drawing.Size(39,17);
+			this.checkRunM.TabIndex = 20;
+			this.checkRunM.UseVisualStyleBackColor = true;
+			// 
+			// label8
+			// 
+			this.label8.Location = new System.Drawing.Point(223,4);
+			this.label8.Name = "label8";
+			this.label8.Size = new System.Drawing.Size(48,17);
+			this.label8.TabIndex = 21;
+			this.label8.Text = "Run";
+			this.label8.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
 			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(1161,876);
+			this.Controls.Add(this.label8);
+			this.Controls.Add(this.checkRunM);
+			this.Controls.Add(this.checkRun);
+			this.Controls.Add(this.label7);
+			this.Controls.Add(this.textDbM);
 			this.Controls.Add(this.listClass);
 			this.Controls.Add(this.label6);
 			this.Controls.Add(this.textSnippet);
@@ -189,6 +245,11 @@
 		private System.Windows.Forms.TextBox textSnippet;
 		private System.Windows.Forms.Label label6;
 		private System.Windows.Forms.ListBox listClass;
+		private System.Windows.Forms.Label label7;
+		private System.Windows.Forms.TextBox textDbM;
+		private System.Windows.Forms.CheckBox checkRun;
+		private System.Windows.Forms.CheckBox checkRunM;
+		private System.Windows.Forms.Label label8;
 	}
 }
 

@@ -204,7 +204,7 @@ namespace Crud {
 				}
 			}
 			strb.Append(rn+t5+"PRIMARY KEY ("+priKeyName+"),");
-			List<FieldInfo> indexes=CrudGenHelper.GetBigIntFields(fieldsExceptPri);
+			List<FieldInfo> indexes=CrudGenHelper.GetBigIntFields(fieldsExceptPri,null);
 			for(int f=0;f<indexes.Count;f++) {
 				strb.Append(rn+t5+"INDEX("+indexes[f].Name+")");
 				if(f<indexes.Count-1) {

@@ -13,7 +13,9 @@ using OpenDentBusiness;
 namespace Crud {
 	public partial class Form1:Form {
 		private string crudDir;
+		private string crudmDir;
 		private string convertDbFile;
+		private string convertDbFilem;
 		private const string rn="\r\n";
 		private const string t="\t";
 		private const string t2="\t\t";
@@ -21,6 +23,8 @@ namespace Crud {
 		private const string t4="\t\t\t\t";
 		private const string t5="\t\t\t\t\t";
 		private List<Type> tableTypes;
+		private List<Type> tableTypesAll;
+		private List<Type> tableTypesM;
 
 		public Form1() {
 			InitializeComponent();
@@ -28,22 +32,38 @@ namespace Crud {
 
 		private void Form1_Load(object sender,EventArgs e) {
 			crudDir=@"..\..\..\OpenDentBusiness\Crud";
+			crudmDir=@"..\..\..\OpenDentBusiness\Mobile\Crud";
 			convertDbFile=@"..\..\..\OpenDentBusiness\Misc\ConvertDatabases2.cs";
+			convertDbFilem=@"..\..\..\OpenDentBusiness\Misc\ConvertDatabasem.cs";
 			if(!Directory.Exists(crudDir)) {
 				MessageBox.Show(crudDir+" is an invalid path.");
 				Application.Exit();
 			}
+			if(!Directory.Exists(crudmDir)) {
+				MessageBox.Show(crudmDir+" is an invalid path.");
+				Application.Exit();
+			}
 			tableTypes=new List<Type>();
+			tableTypesAll=new List<Type>();
+			tableTypesM=new List<Type>();
 			Type typeTableBase=typeof(TableBase);
 			Assembly assembly=Assembly.GetAssembly(typeTableBase);
 			foreach(Type typeClass in assembly.GetTypes()){
 				if(typeClass.BaseType==typeTableBase) {
-					tableTypes.Add(typeClass);	
+					if(CrudGenHelper.IsMobile(typeClass)){
+						tableTypesM.Add(typeClass);	
+					}
+					else{
+						tableTypes.Add(typeClass);	
+					}
+					tableTypesAll.Add(typeClass);	
 				}
 			}
+			tableTypesAll.Sort(CompareTypesByName);
 			tableTypes.Sort(CompareTypesByName);
+			tableTypesM.Sort(CompareTypesByName);
 			for(int i=0;i<tableTypes.Count;i++){
-				listClass.Items.Add(tableTypes[i].Name);
+				listClass.Items.Add(tableTypesAll[i].Name);
 			}
 			for(int i=0;i<Enum.GetNames(typeof(SnippetType)).Length;i++){
 				comboType.Items.Add(Enum.GetNames(typeof(SnippetType))[i].ToString());
@@ -58,17 +78,34 @@ namespace Crud {
 
 		private void butRun_Click(object sender,EventArgs e) {
 			Cursor=Cursors.WaitCursor;
-			string[] files=Directory.GetFiles(crudDir);
+			string[] files;
 			StringBuilder strb;
-			CrudGenHelper.ConnectToDatabase(textDb.Text);
-			for(int i=0;i<tableTypes.Count;i++){
-				string className=tableTypes[i].Name+"Crud";
-				strb=new StringBuilder();
-				CrudGenHelper.ValidateTypes(tableTypes[i],textDb.Text);
-				WriteAll(strb,className,tableTypes[i]);
-				File.WriteAllText(Path.Combine(crudDir,className+".cs"),strb.ToString());
-				CrudQueries.Write(convertDbFile,tableTypes[i],textDb.Text);
-				CrudGenDataInterface.Create(convertDbFile,tableTypes[i],textDb.Text);
+			string className;
+			if(checkRun.Checked){
+				files=Directory.GetFiles(crudDir);
+				CrudGenHelper.ConnectToDatabase(textDb.Text);
+				for(int i=0;i<tableTypes.Count;i++){
+					className=tableTypes[i].Name+"Crud";
+					strb=new StringBuilder();
+					CrudGenHelper.ValidateTypes(tableTypes[i],textDb.Text);
+					WriteAll(strb,className,tableTypes[i]);
+					File.WriteAllText(Path.Combine(crudDir,className+".cs"),strb.ToString());
+					CrudQueries.Write(convertDbFile,tableTypes[i],textDb.Text);
+					CrudGenDataInterface.Create(convertDbFile,tableTypes[i],textDb.Text);
+				}
+			}
+			if(checkRunM.Checked) {
+				files=Directory.GetFiles(crudmDir);
+				CrudGenHelper.ConnectToDatabaseM(textDbM.Text);
+				for(int i=0;i<tableTypesM.Count;i++) {
+					className=tableTypesM[i].Name+"Crud";
+					strb=new StringBuilder();
+					CrudGenHelper.ValidateTypes(tableTypesM[i],textDbM.Text);
+					WriteAll(strb,className,tableTypesM[i]);
+					File.WriteAllText(Path.Combine(crudmDir,className+".cs"),strb.ToString());
+					CrudQueries.Write(convertDbFilem,tableTypesM[i],textDbM.Text);
+					CrudGenDataInterface.Create(convertDbFilem,tableTypesM[i],textDbM.Text);
+				}
 			}
 			Cursor=Cursors.Default;
 			MessageBox.Show("Done");
