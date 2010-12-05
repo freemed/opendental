@@ -464,6 +464,8 @@
     <Compile Include="Misc\LetterMergesQueries.cs" />
     <Compile Include="Misc\TrojanQueries.cs" />
     <Compile Include="Mobile\ConvertDatabasem.cs" />
+    <Compile Include="Mobile\Crud\AppointmentmCrud.cs" />
+    <Compile Include="Mobile\Crud\PatientmCrud.cs" />
     <Compile Include="Mobile\TableTypes\Appointmentm.cs" />
     <Compile Include="Mobile\TableTypes\Patientm.cs" />
     <Compile Include="Mobile\TableTypes\Prefm.cs" />
@@ -735,7 +737,6 @@
     <None Include="Web References\OpenDentalServer\ServiceMain.wsdl" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Mobile\Crud\" />
     <Folder Include="Mobile\Data Interface\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

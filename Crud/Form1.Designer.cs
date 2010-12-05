@@ -173,8 +173,6 @@
 			// 
 			// checkRun
 			// 
-			this.checkRun.Checked = true;
-			this.checkRun.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.checkRun.Location = new System.Drawing.Point(239,26);
 			this.checkRun.Name = "checkRun";
 			this.checkRun.Size = new System.Drawing.Size(39,17);
