@@ -19,6 +19,81 @@ namespace OpenDentBusiness.Mobile.Crud{
 			return list[0];
 		}
 
+		///<summary>Gets one Appointmentm object from the database using a query.</summary>
+		internal static Appointmentm SelectOne(string command){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
+			}
+			List<Appointmentm> list=TableToList(Db.GetTable(command));
+			if(list.Count==0) {
+				return null;
+			}
+			return list[0];
+		}
+
+		///<summary>Gets a list of Appointmentm objects from the database using a query.</summary>
+		internal static List<Appointmentm> SelectMany(string command){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
+			}
+			List<Appointmentm> list=TableToList(Db.GetTable(command));
+			return list;
+		}
+
+		///<summary>Converts a DataTable to a list of objects.</summary>
+		internal static List<Appointmentm> TableToList(DataTable table){
+			List<Appointmentm> retVal=new List<Appointmentm>();
+			Appointmentm appointmentm;
+			for(int i=0;i<table.Rows.Count;i++) {
+				appointmentm=new Appointmentm();
+				appointmentm.CustomerNum = PIn.Long  (table.Rows[i]["CustomerNum"].ToString());
+				appointmentm.AptNum      = PIn.Long  (table.Rows[i]["AptNum"].ToString());
+				appointmentm.PatNum      = PIn.Long  (table.Rows[i]["PatNum"].ToString());
+				appointmentm.AptStatus   = (ApptStatus)PIn.Int(table.Rows[i]["AptStatus"].ToString());
+				appointmentm.Pattern     = PIn.String(table.Rows[i]["Pattern"].ToString());
+				appointmentm.Confirmed   = PIn.Long  (table.Rows[i]["Confirmed"].ToString());
+				appointmentm.Op          = PIn.Long  (table.Rows[i]["Op"].ToString());
+				appointmentm.Note        = PIn.String(table.Rows[i]["Note"].ToString());
+				appointmentm.ProvNum     = PIn.Long  (table.Rows[i]["ProvNum"].ToString());
+				appointmentm.ProvHyg     = PIn.Long  (table.Rows[i]["ProvHyg"].ToString());
+				appointmentm.AptDateTime = PIn.DateT (table.Rows[i]["AptDateTime"].ToString());
+				appointmentm.IsNewPatient= PIn.Bool  (table.Rows[i]["IsNewPatient"].ToString());
+				appointmentm.ProcDescript= PIn.String(table.Rows[i]["ProcDescript"].ToString());
+				appointmentm.ClinicNum   = PIn.Long  (table.Rows[i]["ClinicNum"].ToString());
+				appointmentm.IsHygiene   = PIn.Bool  (table.Rows[i]["IsHygiene"].ToString());
+				retVal.Add(appointmentm);
+			}
+			return retVal;
+		}
+
+		///<summary>Usually set useExistingPK=true.  Inserts one Appointmentm into the database.</summary>
+		internal static long Insert(Appointmentm appointmentm,bool useExistingPK){
+			if(!useExistingPK) {
+				appointmentm.AptNum=ReplicationServers.GetKey("appointmentm","AptNum");
+			}
+			string command="INSERT INTO appointmentm (";
+			command+="AptNum,";
+			command+="CustomerNum,PatNum,AptStatus,Pattern,Confirmed,Op,Note,ProvNum,ProvHyg,AptDateTime,IsNewPatient,ProcDescript,ClinicNum,IsHygiene) VALUES(";
+			command+=POut.Long(appointmentm.AptNum)+",";
+			command+=
+				     POut.Long  (appointmentm.CustomerNum)+","
+				+    POut.Long  (appointmentm.PatNum)+","
+				+    POut.Int   ((int)appointmentm.AptStatus)+","
+				+"'"+POut.String(appointmentm.Pattern)+"',"
+				+    POut.Long  (appointmentm.Confirmed)+","
+				+    POut.Long  (appointmentm.Op)+","
+				+"'"+POut.String(appointmentm.Note)+"',"
+				+    POut.Long  (appointmentm.ProvNum)+","
+				+    POut.Long  (appointmentm.ProvHyg)+","
+				+    POut.DateT (appointmentm.AptDateTime)+","
+				+    POut.Bool  (appointmentm.IsNewPatient)+","
+				+"'"+POut.String(appointmentm.ProcDescript)+"',"
+				+    POut.Long  (appointmentm.ClinicNum)+","
+				+    POut.Bool  (appointmentm.IsHygiene)+")";
+			Db.NonQ(command);//There is no autoincrement in the mobile server.
+			return appointmentm.AptNum;
+		}
+
 
 	}
 }

@@ -171,12 +171,6 @@ using System.Drawing;"+rn);
 			strb.Append(rn+t3+"}");
 			strb.Append(rn+t3+"return list[0];");
 			strb.Append(rn+t2+"}");
-			if(isMobile) {
-				//just to make it compile
-				strb.Append(rn+rn+rn+t+"}");
-				strb.Append(rn+"}");
-				return;
-			}
 			//SelectOne(string command)--------------------------------------------------------------------------
 			strb.Append(rn+rn+t2+"///<summary>Gets one "+typeClass.Name+" object from the database using a query.</summary>");
 			strb.Append(rn+t2+"internal static "+typeClass.Name+" SelectOne(string command){");
@@ -298,36 +292,69 @@ using System.Drawing;"+rn);
 			strb.Append(rn+t3+"return retVal;");
 			strb.Append(rn+t2+"}");
 			//Insert---------------------------------------------------------------------------------------------
-			strb.Append(rn+rn+t2+"///<summary>Inserts one "+typeClass.Name+" into the database.  Returns the new priKey.</summary>");
-			strb.Append(rn+t2+"internal static long Insert("+typeClass.Name+" "+obj+"){");
-			strb.Append(rn+t3+"return Insert("+obj+",false);");
-			strb.Append(rn+t2+"}");
-			//second override
-			strb.Append(rn+rn+t2+"///<summary>Inserts one "+typeClass.Name+" into the database.  Provides option to use the existing priKey.</summary>");
-			strb.Append(rn+t2+"internal static long Insert("+typeClass.Name+" "+obj+",bool useExistingPK){");
-			strb.Append(rn+t3+"if(!useExistingPK && PrefC.RandomKeys) {");
-			strb.Append(rn+t4+obj+"."+priKey.Name+"=ReplicationServers.GetKey(\""+tablename+"\",\""+priKey.Name+"\");");
-			strb.Append(rn+t3+"}");
-			strb.Append(rn+t3+"string command=\"INSERT INTO "+tablename+" (\";");
-			strb.Append(rn+t3+"if(useExistingPK || PrefC.RandomKeys) {");
-			strb.Append(rn+t4+"command+=\""+priKey.Name+",\";");
-			strb.Append(rn+t3+"}");
-			strb.Append(rn+t3+"command+=\"");
-			List<FieldInfo> fieldsExceptPri=CrudGenHelper.GetFieldsExceptPriKey(fields,priKey);
-			for(int f=0;f<fieldsExceptPri.Count;f++) {
-				if(CrudGenHelper.GetSpecialType(fieldsExceptPri[f])==CrudSpecialColType.TimeStamp) {
-					continue;
+			List<FieldInfo> fieldsExceptPri=null; 
+			if(isMobile) {
+				fieldsExceptPri=CrudGenHelper.GetFieldsExceptPriKey(fields,priKey2);
+				//first override not used for mobile.
+				//second override
+				strb.Append(rn+rn+t2+"///<summary>Usually set useExistingPK=true.  Inserts one "+typeClass.Name+" into the database.</summary>");
+				strb.Append(rn+t2+"internal static long Insert("+typeClass.Name+" "+obj+",bool useExistingPK){");
+				strb.Append(rn+t3+"if(!useExistingPK) {");// && PrefC.RandomKeys) {");PrefC.RandomKeys is always true for mobile, since autoincr is just not possible.
+//Todo: ReplicationServers.GetKey() needs to work for mobile.
+				strb.Append(rn+t4+obj+"."+priKey2.Name+"=ReplicationServers.GetKey(\""+tablename+"\",\""+priKey2.Name+"\");");
+				strb.Append(rn+t3+"}");
+				strb.Append(rn+t3+"string command=\"INSERT INTO "+tablename+" (\";");
+				//strb.Append(rn+t3+"if(useExistingPK || PrefC.RandomKeys) {");//PrefC.RandomKeys is always true
+				strb.Append(rn+t3+"command+=\""+priKey2.Name+",\";");
+				//strb.Append(rn+t3+"}");
+				strb.Append(rn+t3+"command+=\"");
+				for(int f=0;f<fieldsExceptPri.Count;f++) {//all fields except PK2.
+					if(CrudGenHelper.GetSpecialType(fieldsExceptPri[f])==CrudSpecialColType.TimeStamp) {
+						continue;
+					}
+					if(f>0) {
+						strb.Append(",");
+					}
+					strb.Append(fieldsExceptPri[f].Name);
 				}
-				if(f>0) {
-					strb.Append(",");
-				}
-				strb.Append(fieldsExceptPri[f].Name);
+				strb.Append(") VALUES(\";");
+				//strb.Append(rn+t3+"if(useExistingPK || PrefC.RandomKeys) {");//PrefC.RandomKeys is always true
+				strb.Append(rn+t3+"command+=POut.Long("+obj+"."+priKey2.Name+")+\",\";");
+				//strb.Append(rn+t3+"}");
+				strb.Append(rn+t3+"command+=");
 			}
-			strb.Append(") VALUES(\";");
-			strb.Append(rn+t3+"if(useExistingPK || PrefC.RandomKeys) {");
-			strb.Append(rn+t4+"command+=POut.Long("+obj+"."+priKey.Name+")+\",\";");
-			strb.Append(rn+t3+"}");
-			strb.Append(rn+t3+"command+=");
+			else {
+				fieldsExceptPri=CrudGenHelper.GetFieldsExceptPriKey(fields,priKey);
+				strb.Append(rn+rn+t2+"///<summary>Inserts one "+typeClass.Name+" into the database.  Returns the new priKey.</summary>");
+				strb.Append(rn+t2+"internal static long Insert("+typeClass.Name+" "+obj+"){");
+				strb.Append(rn+t3+"return Insert("+obj+",false);");
+				strb.Append(rn+t2+"}");
+				//second override
+				strb.Append(rn+rn+t2+"///<summary>Inserts one "+typeClass.Name+" into the database.  Provides option to use the existing priKey.</summary>");
+				strb.Append(rn+t2+"internal static long Insert("+typeClass.Name+" "+obj+",bool useExistingPK){");
+				strb.Append(rn+t3+"if(!useExistingPK && PrefC.RandomKeys) {");
+				strb.Append(rn+t4+obj+"."+priKey.Name+"=ReplicationServers.GetKey(\""+tablename+"\",\""+priKey.Name+"\");");
+				strb.Append(rn+t3+"}");
+				strb.Append(rn+t3+"string command=\"INSERT INTO "+tablename+" (\";");
+				strb.Append(rn+t3+"if(useExistingPK || PrefC.RandomKeys) {");
+				strb.Append(rn+t4+"command+=\""+priKey.Name+",\";");
+				strb.Append(rn+t3+"}");
+				strb.Append(rn+t3+"command+=\"");
+				for(int f=0;f<fieldsExceptPri.Count;f++) {
+					if(CrudGenHelper.GetSpecialType(fieldsExceptPri[f])==CrudSpecialColType.TimeStamp) {
+						continue;
+					}
+					if(f>0) {
+						strb.Append(",");
+					}
+					strb.Append(fieldsExceptPri[f].Name);
+				}
+				strb.Append(") VALUES(\";");
+				strb.Append(rn+t3+"if(useExistingPK || PrefC.RandomKeys) {");
+				strb.Append(rn+t4+"command+=POut.Long("+obj+"."+priKey.Name+")+\",\";");
+				strb.Append(rn+t3+"}");
+				strb.Append(rn+t3+"command+=");
+			}
 			for(int f=0;f<fieldsExceptPri.Count;f++) {
 				strb.Append(rn+t4);
 				specialType=CrudGenHelper.GetSpecialType(fieldsExceptPri[f]);
@@ -409,15 +436,32 @@ using System.Drawing;"+rn);
 				else {
 					strb.Append(")\";");
 				}
-			} 
-			strb.Append(rn+t3+"if(useExistingPK || PrefC.RandomKeys) {");
-			strb.Append(rn+t4+"Db.NonQ(command);");
-			strb.Append(rn+t3+"}");
-			strb.Append(rn+t3+"else {");
-			strb.Append(rn+t4+obj+"."+priKey.Name+"=Db.NonQ(command,true);");
-			strb.Append(rn+t3+"}");
-			strb.Append(rn+t3+"return "+obj+"."+priKey.Name+";");
-			strb.Append(rn+t2+"}");
+			}
+			if(isMobile) {
+				strb.Append(rn+t3+"Db.NonQ(command);//There is no autoincrement in the mobile server.");
+				strb.Append(rn+t3+"return "+obj+"."+priKey2.Name+";");
+				strb.Append(rn+t2+"}");
+			}
+			else {
+				strb.Append(rn+t3+"if(useExistingPK || PrefC.RandomKeys) {");
+				strb.Append(rn+t4+"Db.NonQ(command);");
+				strb.Append(rn+t3+"}");
+				strb.Append(rn+t3+"else {");
+				strb.Append(rn+t4+obj+"."+priKey.Name+"=Db.NonQ(command,true);");
+				strb.Append(rn+t3+"}");
+				strb.Append(rn+t3+"return "+obj+"."+priKey.Name+";");
+				strb.Append(rn+t2+"}");
+			}
+
+
+
+			if(isMobile) {
+				//just to make it compile
+				strb.Append(rn+rn+rn+t+"}");
+				strb.Append(rn+"}");
+				return;
+			}
+
 			//Update---------------------------------------------------------------------------------------------
 			strb.Append(rn+rn+t2+"///<summary>Updates one "+typeClass.Name+" in the database.</summary>");
 			strb.Append(rn+t2+"internal static void Update("+typeClass.Name+" "+obj+"){");
