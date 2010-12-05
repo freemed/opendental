@@ -452,21 +452,14 @@ using System.Drawing;"+rn);
 				strb.Append(rn+t3+"return "+obj+"."+priKey.Name+";");
 				strb.Append(rn+t2+"}");
 			}
-
-
-
-			if(isMobile) {
-				//just to make it compile
-				strb.Append(rn+rn+rn+t+"}");
-				strb.Append(rn+"}");
-				return;
-			}
-
 			//Update---------------------------------------------------------------------------------------------
 			strb.Append(rn+rn+t2+"///<summary>Updates one "+typeClass.Name+" in the database.</summary>");
 			strb.Append(rn+t2+"internal static void Update("+typeClass.Name+" "+obj+"){");
 			strb.Append(rn+t3+"string command=\"UPDATE "+tablename+" SET \"");
 			for(int f=0;f<fieldsExceptPri.Count;f++) {
+				if(isMobile && fieldsExceptPri[f]==priKey1) {
+					continue;
+				}
 				specialType=CrudGenHelper.GetSpecialType(fieldsExceptPri[f]);
 				if(specialType==CrudSpecialColType.DateEntry) {
 					strb.Append(rn+t4+"//"+fieldsExceptPri[f].Name+" not allowed to change");
@@ -551,99 +544,114 @@ using System.Drawing;"+rn);
 				}
 				strb.Append(" \"");
 			}
-			strb.Append(rn+t4+"+\"WHERE "+priKey.Name+" = \"+POut.Long("+obj+"."+priKey.Name+")+\" LIMIT 1\";");
+			if(isMobile) {
+				strb.Append(rn+t4+"+\"WHERE "+priKey1.Name+" = \"+POut.Long("+obj+"."+priKey1.Name+")+\" AND "+priKey2.Name+" = \"+POut.Long("+obj+"."+priKey2.Name+")+\" LIMIT 1\";");
+			}
+			else {
+				strb.Append(rn+t4+"+\"WHERE "+priKey.Name+" = \"+POut.Long("+obj+"."+priKey.Name+")+\" LIMIT 1\";");
+			}
 			strb.Append(rn+t3+"Db.NonQ(command);");
 			strb.Append(rn+t2+"}");
 			//Update, 2nd override-------------------------------------------------------------------------------
-			strb.Append(rn+rn+t2+"///<summary>Updates one "+typeClass.Name+" in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>");
-			strb.Append(rn+t2+"internal static void Update("+typeClass.Name+" "+obj+","+typeClass.Name+" "+oldObj+"){");
-			strb.Append(rn+t3+"string command=\"\";");
-			for(int f=0;f<fieldsExceptPri.Count;f++) {
-				specialType=CrudGenHelper.GetSpecialType(fieldsExceptPri[f]);
-				if(specialType==CrudSpecialColType.DateEntry) {
-					strb.Append(rn+t3+"//"+fieldsExceptPri[f].Name+" not allowed to change");
-					continue;
-				}
-				if(specialType==CrudSpecialColType.DateTEntry) {
-					strb.Append(rn+t3+"//"+fieldsExceptPri[f].Name+" not allowed to change");
-					continue;
-				}
-				if(specialType==CrudSpecialColType.TimeStamp) {
-					strb.Append(rn+t3+"//"+fieldsExceptPri[f].Name+" can only be set by MySQL");
-					continue;
-				}
-				if(specialType==CrudSpecialColType.ExcludeFromUpdate) {
-					strb.Append(rn+t3+"//"+fieldsExceptPri[f].Name+" excluded from update");
-					continue;
-				}
-				strb.Append(rn+t3+"if("+obj+"."+fieldsExceptPri[f].Name+" != "+oldObj+"."+fieldsExceptPri[f].Name+") {");
-				strb.Append(rn+t4+"if(command!=\"\"){ command+=\",\";}");
-				strb.Append(rn+t4+"command+=\""+fieldsExceptPri[f].Name+" = ");
-				if(specialType==CrudSpecialColType.DateT){
-					strb.Append("\"+POut.DateT("+obj+"."+fieldsExceptPri[f].Name+")+\"");
-				}
-				else if(specialType==CrudSpecialColType.DateEntryEditable){
-					strb.Append("\"+POut.Date("+obj+"."+fieldsExceptPri[f].Name+")+\"");
-				}
-				else if(specialType==CrudSpecialColType.DateTEntryEditable){
-					strb.Append("\"+POut.DateT("+obj+"."+fieldsExceptPri[f].Name+")+\"");
-				}
-				else if(specialType==CrudSpecialColType.EnumAsString) {
-					strb.Append("\"+POut.String("+obj+"."+fieldsExceptPri[f].Name+".ToString())+\"");
-				}
-				else if(fieldsExceptPri[f].FieldType.IsEnum) {
-					strb.Append("\"+POut.Int   ((int)"+obj+"."+fieldsExceptPri[f].Name+")+\"");
-				}
-				else switch(fieldsExceptPri[f].FieldType.Name) {
-					default:
-						throw new ApplicationException("Type not yet supported: "+fieldsExceptPri[f].FieldType.Name);
-					case "Boolean":
-						strb.Append("\"+POut.Bool("+obj+"."+fieldsExceptPri[f].Name+")+\"");
-						break;
-					case "Bitmap":
-						strb.Append("\"+POut.Bitmap("+obj+"."+fieldsExceptPri[f].Name+")+\"");
-						break;
-					case "Byte":
-						strb.Append("\"+POut.Byte("+obj+"."+fieldsExceptPri[f].Name+")+\"");
-						break;
-					case "Color":
-						strb.Append("\"+POut.Int("+obj+"."+fieldsExceptPri[f].Name+".ToArgb())+\"");
-						break;
-					case "DateTime"://This is only for date, not dateT.
+			if(!isMobile) {
+				strb.Append(rn+rn+t2+"///<summary>Updates one "+typeClass.Name+" in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>");
+				strb.Append(rn+t2+"internal static void Update("+typeClass.Name+" "+obj+","+typeClass.Name+" "+oldObj+"){");
+				strb.Append(rn+t3+"string command=\"\";");
+				for(int f=0;f<fieldsExceptPri.Count;f++) {
+					//if(isMobile && fieldsExceptPri[f]==priKey1) {
+					//	continue;
+					//}
+					specialType=CrudGenHelper.GetSpecialType(fieldsExceptPri[f]);
+					if(specialType==CrudSpecialColType.DateEntry) {
+						strb.Append(rn+t3+"//"+fieldsExceptPri[f].Name+" not allowed to change");
+						continue;
+					}
+					if(specialType==CrudSpecialColType.DateTEntry) {
+						strb.Append(rn+t3+"//"+fieldsExceptPri[f].Name+" not allowed to change");
+						continue;
+					}
+					if(specialType==CrudSpecialColType.TimeStamp) {
+						strb.Append(rn+t3+"//"+fieldsExceptPri[f].Name+" can only be set by MySQL");
+						continue;
+					}
+					if(specialType==CrudSpecialColType.ExcludeFromUpdate) {
+						strb.Append(rn+t3+"//"+fieldsExceptPri[f].Name+" excluded from update");
+						continue;
+					}
+					strb.Append(rn+t3+"if("+obj+"."+fieldsExceptPri[f].Name+" != "+oldObj+"."+fieldsExceptPri[f].Name+") {");
+					strb.Append(rn+t4+"if(command!=\"\"){ command+=\",\";}");
+					strb.Append(rn+t4+"command+=\""+fieldsExceptPri[f].Name+" = ");
+					if(specialType==CrudSpecialColType.DateT) {
+						strb.Append("\"+POut.DateT("+obj+"."+fieldsExceptPri[f].Name+")+\"");
+					}
+					else if(specialType==CrudSpecialColType.DateEntryEditable) {
 						strb.Append("\"+POut.Date("+obj+"."+fieldsExceptPri[f].Name+")+\"");
-						break;
-					case "Double":
-						strb.Append("'\"+POut.Double("+obj+"."+fieldsExceptPri[f].Name+")+\"'");
-						break;
-					case "Interval":
-						strb.Append("\"+POut.Int("+obj+"."+fieldsExceptPri[f].Name+".ToInt())+\"");
-						break;
-					case "Int64":
-						strb.Append("\"+POut.Long("+obj+"."+fieldsExceptPri[f].Name+")+\"");
-						break;
-					case "Int32":
-						strb.Append("\"+POut.Int("+obj+"."+fieldsExceptPri[f].Name+")+\"");
-						break;
-					case "Single":
-						strb.Append("\"+POut.Float("+obj+"."+fieldsExceptPri[f].Name+")+\"");
-						break;
-					case "String":
-						strb.Append("'\"+POut.String("+obj+"."+fieldsExceptPri[f].Name+")+\"'");
-						break;
-					case "TimeSpan":
-						strb.Append("\"+POut.TimeSpan("+obj+"."+fieldsExceptPri[f].Name+")+\"");
-						break;
+					}
+					else if(specialType==CrudSpecialColType.DateTEntryEditable) {
+						strb.Append("\"+POut.DateT("+obj+"."+fieldsExceptPri[f].Name+")+\"");
+					}
+					else if(specialType==CrudSpecialColType.EnumAsString) {
+						strb.Append("\"+POut.String("+obj+"."+fieldsExceptPri[f].Name+".ToString())+\"");
+					}
+					else if(fieldsExceptPri[f].FieldType.IsEnum) {
+						strb.Append("\"+POut.Int   ((int)"+obj+"."+fieldsExceptPri[f].Name+")+\"");
+					}
+					else switch(fieldsExceptPri[f].FieldType.Name) {
+							default:
+								throw new ApplicationException("Type not yet supported: "+fieldsExceptPri[f].FieldType.Name);
+							case "Boolean":
+								strb.Append("\"+POut.Bool("+obj+"."+fieldsExceptPri[f].Name+")+\"");
+								break;
+							case "Bitmap":
+								strb.Append("\"+POut.Bitmap("+obj+"."+fieldsExceptPri[f].Name+")+\"");
+								break;
+							case "Byte":
+								strb.Append("\"+POut.Byte("+obj+"."+fieldsExceptPri[f].Name+")+\"");
+								break;
+							case "Color":
+								strb.Append("\"+POut.Int("+obj+"."+fieldsExceptPri[f].Name+".ToArgb())+\"");
+								break;
+							case "DateTime"://This is only for date, not dateT.
+								strb.Append("\"+POut.Date("+obj+"."+fieldsExceptPri[f].Name+")+\"");
+								break;
+							case "Double":
+								strb.Append("'\"+POut.Double("+obj+"."+fieldsExceptPri[f].Name+")+\"'");
+								break;
+							case "Interval":
+								strb.Append("\"+POut.Int("+obj+"."+fieldsExceptPri[f].Name+".ToInt())+\"");
+								break;
+							case "Int64":
+								strb.Append("\"+POut.Long("+obj+"."+fieldsExceptPri[f].Name+")+\"");
+								break;
+							case "Int32":
+								strb.Append("\"+POut.Int("+obj+"."+fieldsExceptPri[f].Name+")+\"");
+								break;
+							case "Single":
+								strb.Append("\"+POut.Float("+obj+"."+fieldsExceptPri[f].Name+")+\"");
+								break;
+							case "String":
+								strb.Append("'\"+POut.String("+obj+"."+fieldsExceptPri[f].Name+")+\"'");
+								break;
+							case "TimeSpan":
+								strb.Append("\"+POut.TimeSpan("+obj+"."+fieldsExceptPri[f].Name+")+\"");
+								break;
+						}
+					strb.Append("\";");
+					strb.Append(rn+t3+"}");
 				}
-				strb.Append("\";");
+				strb.Append(rn+t3+"if(command==\"\"){");
+				strb.Append(rn+t4+"return;");
 				strb.Append(rn+t3+"}");
+				strb.Append(rn+t3+"command=\"UPDATE "+tablename+" SET \"+command");
+				//if(isMobile) {
+				//	strb.Append(rn+t4+"+\" WHERE "+priKey1.Name+" = \"+POut.Long("+obj+"."+priKey1.Name+")+\" AND "+priKey2.Name+" = \"+POut.Long("+obj+"."+priKey2.Name+")+\" LIMIT 1\";");
+				//}
+				//else {
+					strb.Append(rn+t4+"+\" WHERE "+priKey.Name+" = \"+POut.Long("+obj+"."+priKey.Name+")+\" LIMIT 1\";");
+				//}
+				strb.Append(rn+t3+"Db.NonQ(command);");
+				strb.Append(rn+t2+"}");
 			}
-			strb.Append(rn+t3+"if(command==\"\"){");
-			strb.Append(rn+t4+"return;");
-			strb.Append(rn+t3+"}");
-			strb.Append(rn+t3+"command=\"UPDATE "+tablename+" SET \"+command");
-			strb.Append(rn+t4+"+\" WHERE "+priKey.Name+" = \"+POut.Long("+obj+"."+priKey.Name+")+\" LIMIT 1\";");
-			strb.Append(rn+t3+"Db.NonQ(command);");
-			strb.Append(rn+t2+"}");
 			//Delete---------------------------------------------------------------------------------------------
 			if(CrudGenHelper.IsDeleteForbidden(typeClass)) {
 				strb.Append(rn+rn+t2+"//Delete not allowed for this table");
@@ -653,9 +661,16 @@ using System.Drawing;"+rn);
 			}
 			else {
 				strb.Append(rn+rn+t2+"///<summary>Deletes one "+typeClass.Name+" from the database.</summary>");
-				strb.Append(rn+t2+"internal static void Delete(long "+priKeyParam+"){");
-				strb.Append(rn+t3+"string command=\"DELETE FROM "+tablename+" \"");
-				strb.Append(rn+t4+"+\"WHERE "+priKey.Name+" = \"+POut.Long("+priKeyParam+")+\" LIMIT 1\";");
+				if(isMobile) {
+					strb.Append(rn+t2+"internal static void Delete(long "+priKeyParam1+",long "+priKeyParam2+"){");
+					strb.Append(rn+t3+"string command=\"DELETE FROM "+tablename+" \"");
+					strb.Append(rn+t4+"+\"WHERE "+priKey1.Name+" = \"+POut.Long("+priKeyParam1+")+\" AND "+priKey2.Name+" = \"+POut.Long("+priKeyParam2+")+\" LIMIT 1\";");
+				}
+				else {
+					strb.Append(rn+t2+"internal static void Delete(long "+priKeyParam+"){");
+					strb.Append(rn+t3+"string command=\"DELETE FROM "+tablename+" \"");
+					strb.Append(rn+t4+"+\"WHERE "+priKey.Name+" = \"+POut.Long("+priKeyParam+")+\" LIMIT 1\";");
+				}
 				strb.Append(rn+t3+"Db.NonQ(command);");
 				strb.Append(rn+t2+"}");
 			}

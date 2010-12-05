@@ -110,6 +110,40 @@ namespace OpenDentBusiness.Mobile.Crud{
 			return patientm.PatNum;
 		}
 
+		///<summary>Updates one Patientm in the database.</summary>
+		internal static void Update(Patientm patientm){
+			string command="UPDATE patientm SET "
+				+"LName              = '"+POut.String(patientm.LName)+"', "
+				+"FName              = '"+POut.String(patientm.FName)+"', "
+				+"MiddleI            = '"+POut.String(patientm.MiddleI)+"', "
+				+"Preferred          = '"+POut.String(patientm.Preferred)+"', "
+				+"PatStatus          =  "+POut.Int   ((int)patientm.PatStatus)+", "
+				+"Gender             =  "+POut.Int   ((int)patientm.Gender)+", "
+				+"Position           =  "+POut.Int   ((int)patientm.Position)+", "
+				+"Birthdate          =  "+POut.Date  (patientm.Birthdate)+", "
+				+"Address            = '"+POut.String(patientm.Address)+"', "
+				+"Address2           = '"+POut.String(patientm.Address2)+"', "
+				+"City               = '"+POut.String(patientm.City)+"', "
+				+"State              = '"+POut.String(patientm.State)+"', "
+				+"Zip                = '"+POut.String(patientm.Zip)+"', "
+				+"HmPhone            = '"+POut.String(patientm.HmPhone)+"', "
+				+"WkPhone            = '"+POut.String(patientm.WkPhone)+"', "
+				+"WirelessPhone      = '"+POut.String(patientm.WirelessPhone)+"', "
+				+"Guarantor          =  "+POut.Long  (patientm.Guarantor)+", "
+				+"Email              = '"+POut.String(patientm.Email)+"', "
+				+"AddrNote           = '"+POut.String(patientm.AddrNote)+"', "
+				+"ClinicNum          =  "+POut.Long  (patientm.ClinicNum)+", "
+				+"PreferContactMethod=  "+POut.Int   ((int)patientm.PreferContactMethod)+" "
+				+"WHERE CustomerNum = "+POut.Long(patientm.CustomerNum)+" AND PatNum = "+POut.Long(patientm.PatNum)+" LIMIT 1";
+			Db.NonQ(command);
+		}
+
+		///<summary>Deletes one Patientm from the database.</summary>
+		internal static void Delete(long customerNum,long patNum){
+			string command="DELETE FROM patientm "
+				+"WHERE CustomerNum = "+POut.Long(customerNum)+" AND PatNum = "+POut.Long(patNum)+" LIMIT 1";
+			Db.NonQ(command);
+		}
 
 	}
 }

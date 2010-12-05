@@ -94,6 +94,32 @@ namespace OpenDentBusiness.Mobile.Crud{
 			return appointmentm.AptNum;
 		}
 
+		///<summary>Updates one Appointmentm in the database.</summary>
+		internal static void Update(Appointmentm appointmentm){
+			string command="UPDATE appointmentm SET "
+				+"PatNum      =  "+POut.Long  (appointmentm.PatNum)+", "
+				+"AptStatus   =  "+POut.Int   ((int)appointmentm.AptStatus)+", "
+				+"Pattern     = '"+POut.String(appointmentm.Pattern)+"', "
+				+"Confirmed   =  "+POut.Long  (appointmentm.Confirmed)+", "
+				+"Op          =  "+POut.Long  (appointmentm.Op)+", "
+				+"Note        = '"+POut.String(appointmentm.Note)+"', "
+				+"ProvNum     =  "+POut.Long  (appointmentm.ProvNum)+", "
+				+"ProvHyg     =  "+POut.Long  (appointmentm.ProvHyg)+", "
+				+"AptDateTime =  "+POut.DateT (appointmentm.AptDateTime)+", "
+				+"IsNewPatient=  "+POut.Bool  (appointmentm.IsNewPatient)+", "
+				+"ProcDescript= '"+POut.String(appointmentm.ProcDescript)+"', "
+				+"ClinicNum   =  "+POut.Long  (appointmentm.ClinicNum)+", "
+				+"IsHygiene   =  "+POut.Bool  (appointmentm.IsHygiene)+" "
+				+"WHERE CustomerNum = "+POut.Long(appointmentm.CustomerNum)+" AND AptNum = "+POut.Long(appointmentm.AptNum)+" LIMIT 1";
+			Db.NonQ(command);
+		}
+
+		///<summary>Deletes one Appointmentm from the database.</summary>
+		internal static void Delete(long customerNum,long aptNum){
+			string command="DELETE FROM appointmentm "
+				+"WHERE CustomerNum = "+POut.Long(customerNum)+" AND AptNum = "+POut.Long(aptNum)+" LIMIT 1";
+			Db.NonQ(command);
+		}
 
 	}
 }
