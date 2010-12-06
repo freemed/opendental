@@ -25,7 +25,7 @@ namespace OpenDentBusiness {
 		}
 
 		public static void SetRingGroups(int extension,AsteriskRingGroups ringGroups) {
-			DataConnection dcon=new DataConnection("asterisk","asterisk","opendental","secret",DatabaseType.MySql);
+			DataConnection dcon=new DataConnection("192.168.0.197","asterisk","opendental","secret",DatabaseType.MySql);
 			string command="SELECT grpnum,grplist FROM ringgroups WHERE grpnum = '601' OR grpnum = '609'";
 			DataTable table=null;
 			try {
@@ -99,7 +99,7 @@ namespace OpenDentBusiness {
 				+"WHERE grpnum='"+ringGroup+"' "
 				+"AND grplist = '"+POut.String(rawExtensions)+"'";//this ensures it hasn't changed since we checked it.  If it has, then this silently fails.
 				//A transaction would be better, but no time.
-			DataConnection dcon=new DataConnection("asterisk","asterisk","opendental","secret",DatabaseType.MySql);
+			DataConnection dcon=new DataConnection("192.168.0.197","asterisk","opendental","secret",DatabaseType.MySql);
 			dcon.NonQ(command);
 		}
 
@@ -117,13 +117,13 @@ namespace OpenDentBusiness {
 			string command="UPDATE ringgroups SET grplist='"+POut.String(newExtensions)+"' "
 				+"WHERE grpnum='"+ringGroup+"' "
 				+"AND grplist = '"+POut.String(rawExtensions)+"'";
-			DataConnection dcon=new DataConnection("asterisk","asterisk","opendental","secret",DatabaseType.MySql);
+			DataConnection dcon=new DataConnection("192.168.0.197","asterisk","opendental","secret",DatabaseType.MySql);
 			dcon.NonQ(command);
 		}
 
 		///<summary>For a given date, gets a list of dateTimes of missed calls.  Gets directly from the Asterisk database, hard-coded.</summary>
 		public static List<DateTime> GetMissedCalls(DateTime date) {
-			DataConnection dcon=new DataConnection("asterisk","asteriskcdrdb","opendental","secret",DatabaseType.MySql);
+			DataConnection dcon=new DataConnection("192.168.0.197","asteriskcdrdb","opendental","secret",DatabaseType.MySql);
 			string command="SELECT calldate FROM cdr WHERE DATE(calldate) = "+POut.Date(date)+" "
 				+"AND (dcontext='ext-group' OR dcontext='ext-local') AND dst='vmu998'";
 			List<DateTime> retVal=new List<DateTime>();
