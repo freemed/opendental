@@ -47,6 +47,7 @@ namespace MobileWeb {
 				}
 
 				DayLabel.Text=AppointmentDate.ToString("ddd") + ", " + AppointmentDate.ToString("MMM") + " " + AppointmentDate.ToString("dd");
+				String appsuffix=DayLabel.Text;
 
 				DateTime PreviousDate=AppointmentDate.AddDays(-1);
 				PreviousDateDay=PreviousDate.Day;
@@ -60,7 +61,7 @@ namespace MobileWeb {
 
 
 
-				string[] ar= { "Appointmnet1 of "+ DayLabel.Text,"Appointmnet2","Appointmnet3","Appointmnet4","Appointmnet5" };
+				string[] ar= { "Appointmnet1 of "+ appsuffix,"Appointmnet2","Appointmnet3","Appointmnet4","Appointmnet5" };
 
 				var somevar = ar.Where(a => a.Contains("Appointmnet"));
 				Repeater1.DataSource = somevar;

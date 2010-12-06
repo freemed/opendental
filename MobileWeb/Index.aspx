@@ -11,6 +11,16 @@
         <script type="text/javascript" src="scripts/jquery.js"></script>
 		<script type="text/javascript" src="scripts/jqtouch.js"></script>
 		<script type="text/javascript" src="scripts/iphone.js"></script>
+		<%--<script type="text/javascript" src="https://getfirebug.com/firebug-lite.js">
+		
+		{
+    overrideConsole: false,
+    startInNewWindow: true,
+    startOpened: true,
+    enableTrace: true
+}
+		
+		</script>--%>
 		<script type="text/javascript">
             var jQT = $.jQTouch({
                 icon: 'Mob.png',
