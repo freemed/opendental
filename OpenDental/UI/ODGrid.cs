@@ -897,11 +897,11 @@ namespace OpenDental.UI {
 						totalPages++;
 						yPos=bounds.Top;//Reset y for next page. We only print header for first page.
 					}
-					yPos+=rowHeight;//Must always add rowHeight to yPos, because if a row spills onto the next page, it immediately gets printed at the top of the page (bounds.Top+rowHeight).
+					yPos+=adj*rowHeight;//Must always add rowHeight to yPos, because if a row spills onto the next page, it immediately gets printed at the top of the page (bounds.Top+rowHeight).
 				}
 				//Note
 				if(noteMark==-1) {
-					rowHeight=adj*NoteHeights[rowsPrinted];
+					rowHeight=NoteHeights[rowsPrinted];
 				}
 				else {
 					rowHeight=multiPageNoteHeights[rowsPrinted][noteMark];
@@ -945,7 +945,7 @@ namespace OpenDental.UI {
 					rowHeight=multiPageNoteHeights[rowsPrinted][0];//Move current selection back to 0 index.
 					noteMark=0;
 				}
-				yPos+=rowHeight;//Must always add rowHeight to yPos, because if a row spills onto the next page, it immediately gets printed at the top of the page (bounds.Top+rowHeight).
+				yPos+=adj*rowHeight;//Must always add rowHeight to yPos, because if a row spills onto the next page, it immediately gets printed at the top of the page (bounds.Top+rowHeight).
 				if(noteMark==-1 || noteMark==multiPageNoteHeights[rowsPrinted].Count-1) {
 					rowsPrinted++;
 					noteMark=-1;
@@ -1103,8 +1103,8 @@ namespace OpenDental.UI {
 					float noteHeight;
 					if(noteMark==-1) {
 						noteHeight=(float)NoteHeights[rowsPrinted];
-						if(yPos+adj*noteHeight > bounds.Bottom) {//The note is too tall to fit and we must use the multiPageNoteSection peices.
-							noteHeight=multiPageNoteHeights[rowsPrinted][0];//Move noteHeight to 0 index.
+						if(multiPageNoteHeights[rowsPrinted].Count>1){//yPos+adj*noteHeight > bounds.Bottom) {//The note is too tall to fit. Commented out calculation done above in GetNumberOfPages.
+							noteHeight=multiPageNoteHeights[rowsPrinted][0];//Change noteHeight to 0 index of array. Array filled in GetNumberOfPages.
 							noteMark=0;//Indicates we are now printing mutli-page note sections.
 						}
 					}
