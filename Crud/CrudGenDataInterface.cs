@@ -18,25 +18,65 @@ namespace Crud {
 		private const string t4="\t\t\t\t";
 		private const string t5="\t\t\t\t\t";
 
-		public static string GetSnippet(Type typeClass,SnippetType snipType){
+		public static string GetSnippet(Type typeClass,SnippetType snipType,bool isMobile){
+			//bool isMobile=CrudGenHelper.IsMobile(typeClass);
 			string Sname=GetSname(typeClass.Name);
 			FieldInfo[] fields=typeClass.GetFields();//We can't assume they are in the correct order.
-			FieldInfo priKey=CrudGenHelper.GetPriKey(fields,typeClass.Name);
-			string priKeyParam=priKey.Name.Substring(0,1).ToLower()+priKey.Name.Substring(1);//lowercase initial letter.  Example patNum
+			FieldInfo priKey=null;
+			FieldInfo priKey1=null;
+			FieldInfo priKey2=null;
+			if(isMobile) {
+				priKey1=CrudGenHelper.GetPriKeyMobile1(fields,typeClass.Name);
+				priKey2=CrudGenHelper.GetPriKeyMobile2(fields,typeClass.Name);
+			}
+			else {
+				priKey=CrudGenHelper.GetPriKey(fields,typeClass.Name);
+			}
+			string priKeyParam=null;
+			string priKeyParam1=null;
+			string priKeyParam2=null;
+			if(isMobile) {
+				priKeyParam1=priKey1.Name.Substring(0,1).ToLower()+priKey1.Name.Substring(1);//lowercase initial letter.  Example customerNum
+				priKeyParam2=priKey2.Name.Substring(0,1).ToLower()+priKey2.Name.Substring(1);//lowercase initial letter.  Example patNum
+			}
+			else {
+				priKeyParam=priKey.Name.Substring(0,1).ToLower()+priKey.Name.Substring(1);//lowercase initial letter.  Example patNum
+			}
 			string obj=typeClass.Name.Substring(0,1).ToLower()+typeClass.Name.Substring(1);//lowercase initial letter.  Example feeSched
 			string tablename=CrudGenHelper.GetTableName(typeClass);//in lowercase now.  Example feesched
-			List<FieldInfo> fieldsExceptPri=CrudGenHelper.GetFieldsExceptPriKey(fields,priKey);
+			List<FieldInfo> fieldsExceptPri=null;
+			if(isMobile) {
+				fieldsExceptPri=CrudGenHelper.GetFieldsExceptPriKey(fields,priKey2);//for mobile, only excludes PK2
+			}
+			else {
+				fieldsExceptPri=CrudGenHelper.GetFieldsExceptPriKey(fields,priKey);
+			}
 			switch(snipType){
 				default:
 					return "snippet type not found.";
 				case SnippetType.Insert:
-					return GetInsert(typeClass.Name,obj,priKey.Name);
+					if(isMobile) {
+						return GetInsert(typeClass.Name,obj,null,true);
+					}
+					else {
+						return GetInsert(typeClass.Name,obj,priKey.Name,false);
+					}
 				case SnippetType.Update:
-					return GetUpdate(typeClass.Name,obj);
+					return GetUpdate(typeClass.Name,obj,isMobile);
 				case SnippetType.EntireSclass:
-					return GetEntireSclass(typeClass.Name,obj,priKey.Name,Sname,tablename,priKeyParam);
+					if(isMobile) {
+						return GetEntireSclassMobile(typeClass.Name,obj,priKey1.Name,priKey2.Name,Sname,tablename,priKeyParam1,priKeyParam2);
+					}
+					else {
+						return GetEntireSclass(typeClass.Name,obj,priKey.Name,Sname,tablename,priKeyParam);
+					}
 				case SnippetType.CreateTable:
-					return GetCreateTable(tablename,priKey.Name,fieldsExceptPri);
+					if(isMobile) {
+						return GetCreateTable(tablename,priKey1.Name,priKey2.Name,fieldsExceptPri);
+					}
+					else {
+						return GetCreateTable(tablename,priKey.Name,null,fieldsExceptPri);
+					}
 			}
 		}
 
@@ -64,9 +104,15 @@ namespace Crud {
 		}
 
 		///<summary>Creates the Data Interface "s" classes for new tables, complete with typical stubs.  Asks user first.</summary>
-		public static void Create(string convertDbFile,Type typeClass,string dbName) {
+		public static void Create(string convertDbFile,Type typeClass,string dbName,bool isMobile) {
 			string Sname=GetSname(typeClass.Name);
-			string fileName=@"..\..\..\OpenDentBusiness\Data Interface\"+Sname+".cs";
+			string fileName=null;
+			if(isMobile) {
+				fileName=@"..\..\..\OpenDentBusiness\Mobile\Data Interface\"+Sname+".cs";
+			}
+			else {
+				fileName=@"..\..\..\OpenDentBusiness\Data Interface\"+Sname+".cs";
+			}
 			if(File.Exists(fileName)) {
 				return;
 			}
@@ -76,14 +122,23 @@ namespace Crud {
 			if(MessageBox.Show("Create stub for "+fileName+"?","",MessageBoxButtons.YesNo)!=DialogResult.Yes) {
 				return;
 			}
-			string snippet=GetSnippet(typeClass,SnippetType.EntireSclass);
+			string snippet=GetSnippet(typeClass,SnippetType.EntireSclass,isMobile);
 			File.WriteAllText(fileName,snippet);
 			//Process.Start(fileName);
 			MessageBox.Show(fileName+" has been created.  Be sure to add it to the project and to SVN");
 		}
 
-		private static string GetInsert(string typeClassName,string obj,string priKeyName){
-			string retVal=@"		///<summary></summary>
+		/// <summary>priKeyName will be null if mobile.</summary>
+		private static string GetInsert(string typeClassName,string obj,string priKeyName,bool isMobile){
+			string retVal=null;
+			if(isMobile) {
+				retVal=@"		///<summary></summary>
+		public static long Insert("+typeClassName+@" "+obj+@"){
+			return Crud."+typeClassName+@"Crud.Insert("+obj+@");
+		}";
+			}
+			else {
+				retVal=@"		///<summary></summary>
 		public static long Insert("+typeClassName+@" "+obj+@"){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
 				"+obj+@"."+priKeyName+@"=Meth.GetLong(MethodBase.GetCurrentMethod(),"+obj+@");
@@ -91,11 +146,20 @@ namespace Crud {
 			}
 			return Crud."+typeClassName+@"Crud.Insert("+obj+@");
 		}";
+			}
 			return retVal;
 		}
 
-		private static string GetUpdate(string typeClassName,string obj){
-			string retVal=@"		///<summary></summary>
+		private static string GetUpdate(string typeClassName,string obj,bool isMobile){
+			string retVal=null;
+			if(isMobile) {
+				retVal=@"		///<summary></summary>
+		public static void Update("+typeClassName+@" "+obj+@"){
+			Crud."+typeClassName+@"Crud.Update("+obj+@");
+		}";
+			}
+			else {
+				retVal=@"		///<summary></summary>
 		public static void Update("+typeClassName+@" "+obj+@"){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),"+obj+@");
@@ -103,6 +167,7 @@ namespace Crud {
 			}
 			Crud."+typeClassName+@"Crud.Update("+obj+@");
 		}";
+			}
 			return retVal;
 		}
 
@@ -174,9 +239,9 @@ namespace OpenDentBusiness{
 			return Crud."+typeClassName+@"Crud.SelectOne("+priKeyParam+@");
 		}
 
-"+GetInsert(typeClassName,obj,priKeyName)+@"
+"+GetInsert(typeClassName,obj,priKeyName,false)+@"
 
-"+GetUpdate(typeClassName,obj)+@"
+"+GetUpdate(typeClassName,obj,false)+@"
 
 		///<summary></summary>
 		public static void Delete(long "+priKeyParam+@") {
@@ -196,9 +261,53 @@ namespace OpenDentBusiness{
 			return str;			
 		}
 
-		private static string GetCreateTable(string tablename,string priKeyName,List<FieldInfo> fieldsExceptPri) {
+		private static string GetEntireSclassMobile(string typeClassName,string obj,string priKeyName1,string priKeyName2,string Sname,string tablename,string priKeyParam1,string priKeyParam2) {
+			string str=@"using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Reflection;
+using System.Text;
+
+namespace OpenDentBusiness.Mobile{
+	///<summary></summary>
+	public class "+Sname+@"{
+		
+		/*
+		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
+
+		///<summary></summary>
+		public static List<"+typeClassName+@"> Refresh(long patNum){
+			string command=""SELECT * FROM "+tablename+@" WHERE PatNum = ""+POut.Long(patNum);
+			return Crud."+typeClassName+@"Crud.SelectMany(command);
+		}
+
+		///<summary>Gets one "+typeClassName+@" from the db.</summary>
+		public static "+typeClassName+@" GetOne(long "+priKeyParam1+",long "+priKeyParam2+@"){
+			return Crud."+typeClassName+@"Crud.SelectOne("+priKeyParam1+","+priKeyParam2+@");
+		}
+
+"+GetInsert(typeClassName,obj,null,true)+@"
+
+"+GetUpdate(typeClassName,obj,true)+@"
+
+		///<summary></summary>
+		public static void Delete(long "+priKeyParam1+",long "+priKeyParam2+@") {
+			string command= ""DELETE FROM "+tablename+@" WHERE "+priKeyName1+@" = ""+POut.Long("+priKeyParam1+") AND +\" "+priKeyName2+@" = ""+POut.Long("+priKeyParam2+@");
+			Db.NonQ(command);
+		}
+		*/
+
+
+
+	}
+}";
+			return str;
+		}
+
+		///<summary>priKeyName2 will be null if not mobile.</summary>
+		private static string GetCreateTable(string tablename,string priKeyName1,string priKeyName2,List<FieldInfo> fieldsExceptPri) {
 			StringBuilder strb=new StringBuilder();
-			CrudQueries.GetCreateTable(strb,tablename,priKeyName,fieldsExceptPri);
+			CrudQueries.GetCreateTable(strb,tablename,priKeyName1,priKeyName2,fieldsExceptPri);
 			return strb.ToString();
 		}
 

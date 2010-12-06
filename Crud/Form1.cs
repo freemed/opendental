@@ -34,7 +34,7 @@ namespace Crud {
 			crudDir=@"..\..\..\OpenDentBusiness\Crud";
 			crudmDir=@"..\..\..\OpenDentBusiness\Mobile\Crud";
 			convertDbFile=@"..\..\..\OpenDentBusiness\Misc\ConvertDatabases2.cs";
-			convertDbFilem=@"..\..\..\OpenDentBusiness\Misc\ConvertDatabasem.cs";
+			convertDbFilem=@"..\..\..\OpenDentBusiness\Mobile\ConvertDatabasem.cs";
 			if(!Directory.Exists(crudDir)) {
 				MessageBox.Show(crudDir+" is an invalid path.");
 				Application.Exit();
@@ -90,8 +90,8 @@ namespace Crud {
 					CrudGenHelper.ValidateTypes(tableTypes[i],textDb.Text);
 					WriteAll(strb,className,tableTypes[i],false);
 					File.WriteAllText(Path.Combine(crudDir,className+".cs"),strb.ToString());
-					CrudQueries.Write(convertDbFile,tableTypes[i],textDb.Text);
-					CrudGenDataInterface.Create(convertDbFile,tableTypes[i],textDb.Text);
+					CrudQueries.Write(convertDbFile,tableTypes[i],textDb.Text,false);
+					CrudGenDataInterface.Create(convertDbFile,tableTypes[i],textDb.Text,false);
 				}
 			}
 			if(checkRunM.Checked) {
@@ -103,8 +103,8 @@ namespace Crud {
 					CrudGenHelper.ValidateTypes(tableTypesM[i],textDbM.Text);
 					WriteAll(strb,className,tableTypesM[i],true);
 					File.WriteAllText(Path.Combine(crudmDir,className+".cs"),strb.ToString());
-					//CrudQueries.Write(convertDbFilem,tableTypesM[i],textDbM.Text);
-					//CrudGenDataInterface.Create(convertDbFilem,tableTypesM[i],textDbM.Text);
+					CrudQueries.Write(convertDbFilem,tableTypesM[i],textDbM.Text,true);
+					CrudGenDataInterface.Create(convertDbFilem,tableTypesM[i],textDbM.Text,true);
 				}
 			}
 			Cursor=Cursors.Default;
@@ -457,7 +457,7 @@ using System.Drawing;"+rn);
 			strb.Append(rn+t2+"internal static void Update("+typeClass.Name+" "+obj+"){");
 			strb.Append(rn+t3+"string command=\"UPDATE "+tablename+" SET \"");
 			for(int f=0;f<fieldsExceptPri.Count;f++) {
-				if(isMobile && fieldsExceptPri[f]==priKey1) {
+				if(isMobile && fieldsExceptPri[f]==priKey1) {//2 already skipped
 					continue;
 				}
 				specialType=CrudGenHelper.GetSpecialType(fieldsExceptPri[f]);
@@ -558,7 +558,7 @@ using System.Drawing;"+rn);
 				strb.Append(rn+t2+"internal static void Update("+typeClass.Name+" "+obj+","+typeClass.Name+" "+oldObj+"){");
 				strb.Append(rn+t3+"string command=\"\";");
 				for(int f=0;f<fieldsExceptPri.Count;f++) {
-					//if(isMobile && fieldsExceptPri[f]==priKey1) {
+					//if(isMobile && fieldsExceptPri[f]==priKey1) {//2 already skipped
 					//	continue;
 					//}
 					specialType=CrudGenHelper.GetSpecialType(fieldsExceptPri[f]);
@@ -690,9 +690,10 @@ using System.Drawing;"+rn);
 			//	MessageBox.Show("Please select a type.");
 			//	return;
 			//}
-			Type type=tableTypes[listClass.SelectedIndex];
+			Type typeClass=tableTypes[listClass.SelectedIndex];
 			SnippetType snipType=(SnippetType)comboType.SelectedIndex;
-			string snippet=CrudGenDataInterface.GetSnippet(type,snipType);
+			bool isMobile=CrudGenHelper.IsMobile(typeClass);
+			string snippet=CrudGenDataInterface.GetSnippet(typeClass,snipType,isMobile);
 			textSnippet.Text=snippet;
 			Clipboard.SetText(snippet);
 		}

@@ -18,15 +18,39 @@ namespace Crud {
 		private const string t4="\t\t\t\t";
 		private const string t5="\t\t\t\t\t";
 
-		///<summary>Writes any necessary queries to the end of the ConvertDatabases file.  Usually zero or one.</summary>
-		public static void Write(string convertDbFile,Type typeClass,string dbName) {
+		///<summary>Writes any necessary queries to the end of the ConvertDatabase file.  Usually zero or one.  The convertDbFile could also be the one in the Mobile folder.</summary>
+		public static void Write(string convertDbFile,Type typeClass,string dbName,bool isMobile) {
 			StringBuilder strb;
 			FieldInfo[] fields=typeClass.GetFields();//We can't assume they are in the correct order.
-			FieldInfo priKey=CrudGenHelper.GetPriKey(fields,typeClass.Name);
-			string priKeyParam=priKey.Name.Substring(0,1).ToLower()+priKey.Name.Substring(1);//lowercase initial letter.  Example patNum
-			string obj=typeClass.Name.Substring(0,1).ToLower()+typeClass.Name.Substring(1);//lowercase initial letter.  Example feeSched
+			FieldInfo priKey=null;
+			FieldInfo priKey1=null;
+			FieldInfo priKey2=null;
+			if(isMobile) {
+				priKey1=CrudGenHelper.GetPriKeyMobile1(fields,typeClass.Name);
+				priKey2=CrudGenHelper.GetPriKeyMobile2(fields,typeClass.Name);
+			}
+			else {
+				priKey=CrudGenHelper.GetPriKey(fields,typeClass.Name);
+			}
 			string tablename=CrudGenHelper.GetTableName(typeClass);//in lowercase now.
-			List<FieldInfo> fieldsExceptPri=CrudGenHelper.GetFieldsExceptPriKey(fields,priKey);
+			string priKeyParam=null;
+			string priKeyParam1=null;
+			string priKeyParam2=null;
+			if(isMobile) {
+				priKeyParam1=priKey1.Name.Substring(0,1).ToLower()+priKey1.Name.Substring(1);//lowercase initial letter.  Example customerNum
+				priKeyParam2=priKey2.Name.Substring(0,1).ToLower()+priKey2.Name.Substring(1);//lowercase initial letter.  Example patNum
+			}
+			else {
+				priKeyParam=priKey.Name.Substring(0,1).ToLower()+priKey.Name.Substring(1);//lowercase initial letter.  Example patNum
+			}
+			string obj=typeClass.Name.Substring(0,1).ToLower()+typeClass.Name.Substring(1);//lowercase initial letter.  Example feeSched or feeSchedm
+			List<FieldInfo> fieldsExceptPri=null;
+			if(isMobile) {
+				fieldsExceptPri=CrudGenHelper.GetFieldsExceptPriKey(fields,priKey2);//for mobile, only excludes PK2
+			}
+			else {
+				fieldsExceptPri=CrudGenHelper.GetFieldsExceptPriKey(fields,priKey);
+			}
 			CrudSpecialColType specialType;
 			string command="SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE table_schema = '"+dbName+"' AND table_name = '"+tablename+"'";
 			if(DataCore.GetScalar(command)!="1") {
@@ -38,7 +62,12 @@ namespace Crud {
 					strb.Append(rn+rn+t4+"/*");
 					strb.Append(rn+t4+"command=\"DROP TABLE IF EXISTS "+tablename+"\";");
 					strb.Append(rn+t4+"Db.NonQ(command);");
-					GetCreateTable(strb,tablename,priKey.Name,fieldsExceptPri);
+					if(isMobile) {
+						GetCreateTable(strb,tablename,priKey1.Name,priKey2.Name,fieldsExceptPri);
+					}
+					else {
+						GetCreateTable(strb,tablename,priKey.Name,null,fieldsExceptPri);
+					}
 					strb.Append(rn+t4+"*/");
 					File.AppendAllText(convertDbFile,strb.ToString());
 				}
@@ -132,11 +161,22 @@ namespace Crud {
 			}
 		}
 
-		public static void GetCreateTable(StringBuilder strb,string tablename,string priKeyName,List<FieldInfo> fieldsExceptPri){
+		///<summary>priKeyName2=null for not mobile.</summary>
+		public static void GetCreateTable(StringBuilder strb,string tablename,string priKeyName1,string priKeyName2,List<FieldInfo> fieldsExceptPri) {
 			CrudSpecialColType specialType;
 			strb.Append(rn+t4+"command=@\"CREATE TABLE "+tablename+" (");
-			strb.Append(rn+t5+priKeyName+" bigint NOT NULL auto_increment,");
+			bool isMobile=(priKeyName2!=null);
+			if(isMobile) {
+				strb.Append(rn+t5+priKeyName1+" bigint NOT NULL,");
+				strb.Append(rn+t5+priKeyName2+" bigint NOT NULL,");
+			}
+			else {
+				strb.Append(rn+t5+priKeyName1+" bigint NOT NULL auto_increment,");
+			}
 			for(int f=0;f<fieldsExceptPri.Count;f++) {
+				if(isMobile && fieldsExceptPri[f].Name==priKeyName1) {//2 already skipped
+					continue;
+				}
 				strb.Append(rn+t5+fieldsExceptPri[f].Name+" ");
 				specialType=CrudGenHelper.GetSpecialType(fieldsExceptPri[f]);
 				if(specialType==CrudSpecialColType.DateEntry
@@ -203,8 +243,13 @@ namespace Crud {
 						break;
 				}
 			}
-			strb.Append(rn+t5+"PRIMARY KEY ("+priKeyName+"),");
-			List<FieldInfo> indexes=CrudGenHelper.GetBigIntFields(fieldsExceptPri,null);
+			if(isMobile) {
+				strb.Append(rn+t5+"PRIMARY KEY ("+priKeyName1+","+priKeyName2+"),");
+			}
+			else {
+				strb.Append(rn+t5+"PRIMARY KEY ("+priKeyName1+"),");
+			}
+			List<FieldInfo> indexes=CrudGenHelper.GetBigIntFields(fieldsExceptPri,priKeyName2);//priKeyName2 will be null if not mobile.
 			for(int f=0;f<indexes.Count;f++) {
 				strb.Append(rn+t5+"INDEX("+indexes[f].Name+")");
 				if(f<indexes.Count-1) {
