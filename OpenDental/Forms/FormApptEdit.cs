@@ -1617,6 +1617,7 @@ namespace OpenDental{
 				catch(Exception ex){
 					MessageBox.Show(ex.Message);
 				}
+				return;
 			}
 			else if(Programs.UsingOrion){
 				//No need to synch with Orion mode.
