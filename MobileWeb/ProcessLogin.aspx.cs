@@ -6,6 +6,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Text;
 using System.Security.Cryptography;
+using System.Threading;
 
 namespace MobileWeb {
 	public partial class ProcessLogin:System.Web.UI.Page {
@@ -13,7 +14,7 @@ namespace MobileWeb {
 		protected void Page_Load(object sender,EventArgs e) {
 
 
-
+			Thread.Sleep(1500);
 			String username="";
 			String password="";
 			Message.Text="";

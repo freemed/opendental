@@ -194,6 +194,7 @@ function ProcessLogin() {
     var password = $('#password').val();
     var datatosent = "username=" + username + "&password=" + password;
 	//console.log('username:' + username + ' password:' + password);
+	$('#login').append('<div id="progress">Loading...</div>');
     $.ajax({
         type: "POST",
         url: "ProcessLogin.aspx",
@@ -203,7 +204,7 @@ function ProcessLogin() {
             if (msg == "Correct Login") {
                 //$('#login').remove(); 
                 ////console.log("here");
-                jQT.goTo('#home', 'flip');
+                jQT.goTo('#home');
 
             } else {
                 $('#LabelMessage').text(msg);
@@ -225,7 +226,7 @@ function ProcessLogout(e) {
 			success: function (msg) {
 				if (msg == "LoggedOut") {
 				////console.log('in LoggedOut');
-					jQT.goTo('#login', 'flip');// no 'Not able to tap element' error.
+					jQT.goTo('#login');// no 'Not able to tap element' error.
 				}
 			}
 		});

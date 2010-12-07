@@ -39,12 +39,12 @@
                 <ul class="rounded">
                     <li><input type="text" placeholder="Username" name="username" id="username" autocapitalize="off" autocorrect="off" autocomplete="off" /></li>
                     <li><input type="password" placeholder="Password" name="password" id="password" autocapitalize="off" autocorrect="off" autocomplete="off" /></li>
-                    <!--<li><input id="rememberme" type="checkbox" /></li>
+                   <li><input id="rememberme" type="checkbox" /></li>
 					
-					<div class="searchbox">
+					<%--<div class="searchbox">
 					<input id="search" placeholder="search character" type="text" name="key" value="">
-					</div>
-					-->
+					</div>--%>
+					
 					<li><input type="submit" class="submit" name="action" value="Login" /></li>
 					
 
@@ -57,7 +57,7 @@
         <div id="home">
             <div class="toolbar">
                 <h1>Open Dental Mobile</h1>
-                <a class="button logout" href="#">Logout</a>
+                <%--<a class="button logout" href="#">Logout</a>--%>
             </div>
             <ul class="rounded">
                 <li class="arrow"><a linkattib="AppointmentList.aspx" href="#AppointmentList">Appointments</a></li>
@@ -71,8 +71,8 @@
         <div id="AppointmentList">
             <div class="toolbar">
                 <h1>Appointments</h1>
-                <a class="button back" href="#">Back</a>
-                <a class="button logout" href="#">Logout</a>
+                <a class="button back" href="#">Home</a>
+               <%-- <a class="button logout" href="#">Logout</a>--%>
             </div>
 
             <div id="AppointmentListContents" class="contents">
@@ -84,8 +84,8 @@
         <div id="PatientList">
             <div class="toolbar">
                 <h1>Patients</h1>
-                <a class="button back" href="#">Back</a>
-                <a class="button logout" href="#">Logout</a>
+                <a class="button back" href="#">Home</a>
+                <%--<a class="button logout" href="#">Logout</a>--%>
             </div>
 			<div id="PatientListContents">
              </div>
@@ -101,8 +101,8 @@
    
                <div class="toolbar">
                 <h1>Patient Details</h1>
-                <a class="button back" href="#">Back</a>
-                <a class="button logout" href="#">Logout</a>
+                <a class="button back" href="#">Patients</a>
+               <%-- <a class="button logout" href="#">Logout</a>--%>
             </div>
    <div id="PatientDetailsContents">
    </div>
@@ -113,8 +113,8 @@
    
                <div class="toolbar">
                 <h1>Appointment Details</h1>
-                <a class="button back" href="#">Back</a>
-                <a class="button logout" href="#">Logout</a>
+                <a class="button back" href="#">Appts</a>
+                <%--<a class="button logout" href="#">Logout</a>--%>
             </div>
    <div id="AppointmentDetailsContents">
    </div>
