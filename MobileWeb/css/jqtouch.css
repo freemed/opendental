@@ -395,14 +395,11 @@ min-height: 48px;
 }
 
 .previous
-{
-
- border-width:0px 25px 0px 0px;
-    left:10px;
+{   left:10px;
     top:10px;
     float: left; 
-    height:20px;
-    background: none;
+    height:25px;
+    border-width:0px 25px 0px 0px;
     -webkit-border-image: url(themes/jqt/img/listArrowSel.png) 0 25 0 0;
     -webkit-transform: rotate(180deg);
 }
@@ -412,16 +409,15 @@ min-height: 48px;
     margin-left:50px
 }
 .next
-{
- border-width:0px 0px 0px 25px;
-    top:10px;
-    height:20px;
+{   top:10px;
+    height:25px;
     float: right;
-     -webkit-border-image: url(themes/jqt/img/listArrowSel.png) 0 0 0 25;
+    border-width:0px 0px 0px 25px;
+    -webkit-border-image: url(themes/jqt/img/listArrowSel.png) 0 0 0 25;
   
 }
 .datestring{
-    position: relative;float:center; top:10px; left:20px;
+    position: relative;float:center; top:10px; left:10px;
 }
 .contents{
     clear:both;

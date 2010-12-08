@@ -11,11 +11,11 @@
 <div id="content">
 			 <div class="datenavigation">
 
-               <a class="button previous" linkattib="AppointmentList.aspx?year=<%Response.Write(PreviousDateYear);%>&month=<%Response.Write(PreviousDateMonth);%>&day=<%Response.Write(PreviousDateDay);%>" href="#"></a>
+               <a class="button previous" linkattib="AppointmentList.aspx?year=<%Response.Write(PreviousDateYear);%>&month=<%Response.Write(PreviousDateMonth);%>&day=<%Response.Write(PreviousDateDay);%>" href="#">&nbsp;&nbsp;</a>
 			   				<a class="button today" href="#">Today</a>
 				<asp:Label ID="DayLabel" runat="server" class="datestring" Text=""></asp:Label>
                
-				<a class="button next" linkattib="AppointmentList.aspx?year=<%Response.Write(NextDateYear);%>&month=<%Response.Write(NextDateMonth);%>&day=<%Response.Write(NextDateDay);%>" href="#"></a>
+				<a class="button next" linkattib="AppointmentList.aspx?year=<%Response.Write(NextDateYear);%>&month=<%Response.Write(NextDateMonth);%>&day=<%Response.Write(NextDateDay);%>" href="#">&nbsp;&nbsp;</a>
 
             </div>
 			
