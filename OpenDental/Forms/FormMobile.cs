@@ -93,7 +93,7 @@ namespace OpenDental {
 			else{
 				dateTimeLastSync=PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun);
 			}
-			List<Patient> patientsToSynch=Patients.GetUAppoint(dateTimeLastSync);
+			List<Patient> patientsToSynch=Patients.GetChangedSince(dateTimeLastSync);
 			int objCount=patientsToSynch.Count;
 			Dictionary<long,string> carrierNames=Carriers.GetCarrierNames(patientsToSynch);
 			Patient pat;
@@ -132,7 +132,7 @@ namespace OpenDental {
 			#endregion patients
 			#region appointments
 			DateTime dateBefore=PIn.Date(textDateBefore.Text);
-			List<Appointment> apptsToSynch=Appointments.GetUAppoint(dateTimeLastSync,dateBefore);
+			List<Appointment> apptsToSynch=Appointments.GetChangedSince(dateTimeLastSync,dateBefore);
 			objCount+=apptsToSynch.Count;
 			Appointment apt;
 			for(int i=0;i<apptsToSynch.Count;i++){

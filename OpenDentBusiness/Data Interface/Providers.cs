@@ -82,7 +82,7 @@ namespace OpenDentBusiness{
 			return Db.GetTable(command);
 		}
 
-		public static List<Provider> GetUAppoint(DateTime changedSince){
+		public static List<Provider> GetChangedSince(DateTime changedSince) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Provider>>(MethodBase.GetCurrentMethod(),changedSince);
 			}

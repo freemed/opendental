@@ -223,8 +223,19 @@ namespace Crud {
 			RemotingClient.RemotingRole=RemotingRole.ClientDirect;
 		}
 
+		///<summary>Gets the regular non-mobile type by stripping the m off the end of the mobile type.  Quicker than formalizing the type with an attribute on the m table.</summary>
+		public static Type GetTypeFromMType(string typeNameMobile,List<Type> typesReg) {
+			string typeNameReg=typeNameMobile.Substring(0,typeNameMobile.Length-1);
+			for(int i=0;i<typesReg.Count;i++) {
+				if(typesReg[i].Name==typeNameReg) {
+					return typesReg[i];
+				}
+			}
+			throw new ApplicationException("Type not found.");
+		}
+
 		///<summary>Makes sure the tablename is valid.  Goes through each column and makes sure that the column is present and that the type in the database is a supported type for this C# data type.  Throws exception if it fails.</summary>
-		public static void ValidateTypes(Type typeClass,string dbName){
+		public static void ValidateTypes(Type typeClass,string dbName) {
 			string tablename=GetTableName(typeClass);
 			string command="SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE table_schema = '"+dbName+"' AND table_name = '"+tablename+"'";
 			if(DataCore.GetScalar(command)!="1"){

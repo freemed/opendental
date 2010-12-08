@@ -17,7 +17,7 @@ namespace OpenDentBusiness{
 			Crud.DeletedObjectCrud.Insert(delObj);
 		}
 
-		public static List<DeletedObject> GetUAppoint(DateTime changedSince){
+		public static List<DeletedObject> GetDeletedSince(DateTime changedSince){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<DeletedObject>>(MethodBase.GetCurrentMethod(),changedSince);
 			}
@@ -34,6 +34,15 @@ namespace OpenDentBusiness{
 				list.Add(delObj);
 			}
 			return list;
+		}
+
+		///<summary>This is only run at the server for the mobile db.  It currently handles deleted appointments.  Deleted patients are not handled here because patients never get deleted.</summary>
+		public static void DeleteForMobile(List<DeletedObject> list,long customerNum) {
+			for(int i=0;i<list.Count;i++) {
+				if(list[i].ObjectType==DeletedObjectType.Appointment) {
+					Mobile.Crud.AppointmentmCrud.Delete(customerNum,list[i].ObjectNum);
+				}
+			}
 		}
 
 

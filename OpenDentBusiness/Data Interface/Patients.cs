@@ -116,7 +116,7 @@ namespace OpenDentBusiness{
 			return pat;
 		}
 
-		public static List<Patient> GetUAppoint(DateTime changedSince){
+		public static List<Patient> GetChangedSince(DateTime changedSince) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Patient>>(MethodBase.GetCurrentMethod(),changedSince);
 			}

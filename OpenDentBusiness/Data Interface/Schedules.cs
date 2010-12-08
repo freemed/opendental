@@ -98,7 +98,7 @@ namespace OpenDentBusiness{
 			return RefreshAndFill(command).ToArray();
 		}
 
-		public static List<Schedule> GetUAppoint(DateTime changedSince){
+		public static List<Schedule> GetChangedSince(DateTime changedSince) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Schedule>>(MethodBase.GetCurrentMethod(),changedSince);
 			}

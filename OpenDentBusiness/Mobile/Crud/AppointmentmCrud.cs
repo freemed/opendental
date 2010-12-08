@@ -121,5 +121,26 @@ namespace OpenDentBusiness.Mobile.Crud{
 			Db.NonQ(command);
 		}
 
+		///<summary>Converts one Appointment object to its mobile equivalent.  Warning! CustomerNum will always be 0.</summary>
+		internal static Appointmentm ConvertToM(Appointment appointment){
+			Appointmentm appointmentm=new Appointmentm();
+			//CustomerNum cannot be set.  Remains 0.
+			appointmentm.AptNum      =appointment.AptNum;
+			appointmentm.PatNum      =appointment.PatNum;
+			appointmentm.AptStatus   =appointment.AptStatus;
+			appointmentm.Pattern     =appointment.Pattern;
+			appointmentm.Confirmed   =appointment.Confirmed;
+			appointmentm.Op          =appointment.Op;
+			appointmentm.Note        =appointment.Note;
+			appointmentm.ProvNum     =appointment.ProvNum;
+			appointmentm.ProvHyg     =appointment.ProvHyg;
+			appointmentm.AptDateTime =appointment.AptDateTime;
+			appointmentm.IsNewPatient=appointment.IsNewPatient;
+			appointmentm.ProcDescript=appointment.ProcDescript;
+			appointmentm.ClinicNum   =appointment.ClinicNum;
+			appointmentm.IsHygiene   =appointment.IsHygiene;
+			return appointmentm;
+		}
+
 	}
 }

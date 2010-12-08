@@ -134,7 +134,7 @@ namespace Crud {
 			if(isMobile) {
 				retVal=@"		///<summary></summary>
 		public static long Insert("+typeClassName+@" "+obj+@"){
-			return Crud."+typeClassName+@"Crud.Insert("+obj+@");
+			return Crud."+typeClassName+@"Crud.Insert("+obj+@",true);
 		}";
 			}
 			else {
@@ -261,6 +261,7 @@ namespace OpenDentBusiness{
 			return str;			
 		}
 
+		/// <summary>priKeyParam1 is CustomerNum for now.</summary>
 		private static string GetEntireSclassMobile(string typeClassName,string obj,string priKeyName1,string priKeyName2,string Sname,string tablename,string priKeyParam1,string priKeyParam2) {
 			string str=@"using System;
 using System.Collections.Generic;
@@ -292,8 +293,30 @@ namespace OpenDentBusiness.Mobile{
 
 		///<summary></summary>
 		public static void Delete(long "+priKeyParam1+",long "+priKeyParam2+@") {
-			string command= ""DELETE FROM "+tablename+@" WHERE "+priKeyName1+@" = ""+POut.Long("+priKeyParam1+") AND +\" "+priKeyName2+@" = ""+POut.Long("+priKeyParam2+@");
+			string command= ""DELETE FROM "+tablename+@" WHERE "+priKeyName1+@" = ""+POut.Long("+priKeyParam1+")+\" AND "+priKeyName2+@" = ""+POut.Long("+priKeyParam2+@");
 			Db.NonQ(command);
+		}
+
+		///<summary>First use GetChangedSince.  Then, use this to convert the list a list of 'm' objects.</summary>
+		public static List<"+typeClassName+@"> ConvertListToM(List<"+typeClassName.Substring(0,typeClassName.Length-1)+@"> list) {
+			List<"+typeClassName+@"> retVal=new List<"+typeClassName+@">();
+			for(int i=0;i<list.Count;i++){
+				retVal.Add(Crud."+typeClassName+@"Crud.ConvertToM(list[i]));
+			}
+			return retVal;
+		}
+
+		///<summary>Only run on server for mobile.  Takes the list of changes from the dental office and makes updates to those items in the mobile server db.  Also, make sure to run DeletedObjects.DeleteForMobile().</summary>
+		public static void UpdateFromChangeList(List<"+typeClassName+@"> list,long customerNum) {
+			for(int i=0;i<list.Count;i++){
+				"+typeClassName+" "+obj+@"=Crud."+typeClassName+@"Crud.SelectOne(customerNum,list[i]."+priKeyName2+@");
+				if("+obj+@"==null){//not in db
+					Crud."+typeClassName+@"Crud.Insert(list[i],true);
+				}
+				else{
+					Crud."+typeClassName+@"Crud.Update(list[i]);
+				}
+			}
 		}
 		*/
 

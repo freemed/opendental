@@ -34,7 +34,7 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		public static List<ProcedureCode> GetUAppoint(DateTime changedSince){
+		public static List<ProcedureCode> GetChangedSince(DateTime changedSince) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<ProcedureCode>>(MethodBase.GetCurrentMethod(),changedSince);
 			}

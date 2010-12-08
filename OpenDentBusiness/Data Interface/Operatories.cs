@@ -127,7 +127,7 @@ namespace OpenDentBusiness{
 		//public void Delete(){//no such thing as delete.  Hide instead
 		//}
 
-		public static List<Operatory> GetUAppoint(DateTime changedSince){
+		public static List<Operatory> GetChangedSince(DateTime changedSince) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Operatory>>(MethodBase.GetCurrentMethod(),changedSince);
 			}

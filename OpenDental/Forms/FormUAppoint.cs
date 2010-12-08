@@ -579,15 +579,15 @@ namespace OpenDental{
 				if(totalObjectsToSynch==0){//if there are no objects ready to upload
 					timeStartSynch=DateTime.Now;
 					//get various objects from the database.
-					patientsToSynch=Patients.GetUAppoint(dateTimeLastUploaded);//datetime will be handled better soon with delta
-					provsToSynch=Providers.GetUAppoint(dateTimeLastUploaded);
-					apptsToSynch=Appointments.GetUAppoint(dateTimeLastUploaded,DateTime.MinValue);
+					patientsToSynch=Patients.GetChangedSince(dateTimeLastUploaded);//datetime will be handled better soon with delta
+					provsToSynch=Providers.GetChangedSince(dateTimeLastUploaded);
+					apptsToSynch=Appointments.GetChangedSince(dateTimeLastUploaded,DateTime.MinValue);
 					apptProcsToSynch=Appointments.GetUAppointProcs(apptsToSynch);
-					delObjToSynch=DeletedObjects.GetUAppoint(dateTimeLastUploaded);
-					schedsToSynch=Schedules.GetUAppoint(dateTimeLastUploaded);
-					opsToSynch=Operatories.GetUAppoint(dateTimeLastUploaded);
-					recallsToSynch=Recalls.GetUAppoint(dateTimeLastUploaded);
-					codesToSynch=ProcedureCodes.GetUAppoint(dateTimeLastUploaded);
+					delObjToSynch=DeletedObjects.GetDeletedSince(dateTimeLastUploaded);
+					schedsToSynch=Schedules.GetChangedSince(dateTimeLastUploaded);
+					opsToSynch=Operatories.GetChangedSince(dateTimeLastUploaded);
+					recallsToSynch=Recalls.GetChangedSince(dateTimeLastUploaded);
+					codesToSynch=ProcedureCodes.GetChangedSince(dateTimeLastUploaded);
 				}
 				totalObjectsToSynch
 					=patientsToSynch.Count

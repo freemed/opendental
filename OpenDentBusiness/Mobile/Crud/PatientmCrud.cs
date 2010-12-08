@@ -145,5 +145,34 @@ namespace OpenDentBusiness.Mobile.Crud{
 			Db.NonQ(command);
 		}
 
+		///<summary>Converts one Patient object to its mobile equivalent.  Warning! CustomerNum will always be 0.</summary>
+		internal static Patientm ConvertToM(Patient patient){
+			Patientm patientm=new Patientm();
+			//CustomerNum cannot be set.  Remains 0.
+			patientm.PatNum             =patient.PatNum;
+			patientm.LName              =patient.LName;
+			patientm.FName              =patient.FName;
+			patientm.MiddleI            =patient.MiddleI;
+			patientm.Preferred          =patient.Preferred;
+			patientm.PatStatus          =patient.PatStatus;
+			patientm.Gender             =patient.Gender;
+			patientm.Position           =patient.Position;
+			patientm.Birthdate          =patient.Birthdate;
+			patientm.Address            =patient.Address;
+			patientm.Address2           =patient.Address2;
+			patientm.City               =patient.City;
+			patientm.State              =patient.State;
+			patientm.Zip                =patient.Zip;
+			patientm.HmPhone            =patient.HmPhone;
+			patientm.WkPhone            =patient.WkPhone;
+			patientm.WirelessPhone      =patient.WirelessPhone;
+			patientm.Guarantor          =patient.Guarantor;
+			patientm.Email              =patient.Email;
+			patientm.AddrNote           =patient.AddrNote;
+			patientm.ClinicNum          =patient.ClinicNum;
+			patientm.PreferContactMethod=patient.PreferContactMethod;
+			return patientm;
+		}
+
 	}
 }

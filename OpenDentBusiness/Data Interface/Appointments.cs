@@ -211,7 +211,7 @@ namespace OpenDentBusiness{
 			//return TableToObjects(table).ToArray();
 		}
 
-		public static List<Appointment> GetUAppoint(DateTime changedSince,DateTime excludeOlderThan){
+		public static List<Appointment> GetChangedSince(DateTime changedSince,DateTime excludeOlderThan) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Appointment>>(MethodBase.GetCurrentMethod(),changedSince,excludeOlderThan);
 			}

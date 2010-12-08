@@ -4,8 +4,70 @@ using System.Linq;
 using System.Text;
 
 namespace OpenDentBusiness.Mobile {
+	/// <summary>This file contains some useful queries, although it is not automated like the main program.  It is expected that these queries will need to be run manually, and that there will be additional management and tuning.  As we get nearer to the production version, we may decide to automate these queries.</summary>
 	public class ConvertDatabasem {
 
 
 	}
 }
+
+
+				/*
+				command="DROP TABLE IF EXISTS appointmentm";
+				Db.NonQ(command);
+				command=@"CREATE TABLE appointmentm (
+					CustomerNum bigint NOT NULL,
+					AptNum bigint NOT NULL,
+					PatNum bigint NOT NULL,
+					AptStatus tinyint NOT NULL,
+					Pattern varchar(255) NOT NULL,
+					Confirmed bigint NOT NULL,
+					Op bigint NOT NULL,
+					Note varchar(255) NOT NULL,
+					ProvNum bigint NOT NULL,
+					ProvHyg bigint NOT NULL,
+					AptDateTime datetime NOT NULL default '0001-01-01 00:00:00',
+					IsNewPatient tinyint NOT NULL,
+					ProcDescript varchar(255) NOT NULL,
+					ClinicNum bigint NOT NULL,
+					IsHygiene tinyint NOT NULL,
+					PRIMARY KEY (CustomerNum,AptNum),
+					INDEX(PatNum),
+					INDEX(ClinicNum)
+					) DEFAULT CHARSET=utf8";
+				Db.NonQ(command);
+				*/
+
+				/*
+				command="DROP TABLE IF EXISTS patientm";
+				Db.NonQ(command);
+				command=@"CREATE TABLE patientm (
+					CustomerNum bigint NOT NULL,
+					PatNum bigint NOT NULL,
+					LName varchar(255) NOT NULL,
+					FName varchar(255) NOT NULL,
+					MiddleI varchar(255) NOT NULL,
+					Preferred varchar(255) NOT NULL,
+					PatStatus tinyint NOT NULL,
+					Gender tinyint NOT NULL,
+					Position tinyint NOT NULL,
+					Birthdate date NOT NULL default '0001-01-01',
+					Address varchar(255) NOT NULL,
+					Address2 varchar(255) NOT NULL,
+					City varchar(255) NOT NULL,
+					State varchar(255) NOT NULL,
+					Zip varchar(255) NOT NULL,
+					HmPhone varchar(255) NOT NULL,
+					WkPhone varchar(255) NOT NULL,
+					WirelessPhone varchar(255) NOT NULL,
+					Guarantor bigint NOT NULL,
+					Email varchar(255) NOT NULL,
+					AddrNote varchar(255) NOT NULL,
+					ClinicNum bigint NOT NULL,
+					PreferContactMethod tinyint NOT NULL,
+					PRIMARY KEY (CustomerNum,PatNum),
+					INDEX(Guarantor),
+					INDEX(ClinicNum)
+					) DEFAULT CHARSET=utf8";
+				Db.NonQ(command);
+				*/
