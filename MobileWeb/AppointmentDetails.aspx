@@ -9,8 +9,27 @@
 <body>
 <div id="loggedin"><asp:Literal runat="server" ID="Message"></asp:Literal></div>
 <div id="content">
-These are details of appointment
-<%Response.Write(id);%>
+
+	<ul class="rounded">
+		<li class="arrow">
+		<div>
+			<a linkattib="PatientDetails.aspx?id=<%Response.Write(id);%>" href="#PatientDetails">
+			<asp:Label ID="Label1" runat="server" Text="Patient name <%Response.Write(id);%>Patient name Patient name Patient name Patient name"></asp:Label></a>
+		</div>
+		</li>
+	</ul>
+
+
+<ul class="rounded">
+<li> <span class="style2">12/05/2010 Monday <br />
+10:30 a.m, 90 min.<br />
+hhhhhhhhhhhh<br />
+asdasddddddddd<br />
+ffffffffff
+</span>
+</li>
+</ul>
+
 </div>
 
 </body>

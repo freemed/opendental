@@ -99,6 +99,8 @@ function TraversePage(){
 		ProcessPreviousNextButton(e,UrlForFetchingData, MoveToURL, SectionToFill);
 	});
 	
+
+	
 	$('a[href="#PatientDetails"]').tap(function(e) {
 		console.log('PatientDetails tapped');
 		var UrlForFetchingData = this.attributes["linkattib"].value; 
@@ -107,9 +109,20 @@ function TraversePage(){
 		ProcessNormalPageLink(e,UrlForFetchingData, MoveToURL, SectionToFill);
 	});
 	
-	
-	
+	/*home and appt buttons*/
+	$('.button.appts').tap(function(e) {
+		console.log('Next button tapped');
+		var UrlForFetchingData = this.attributes["linkattib"].value; 
+		var SectionToFill='#AppointmentListContents';
+		var MoveToURL='#AppointmentList';
+		ProcessNormalPageLink(e,UrlForFetchingData, MoveToURL, SectionToFill);
+	});
 
+	
+	
+	$('.button.home').tap(function(e) {
+	jQT.goTo('#home');
+	});
 	
 
 }
@@ -145,7 +158,7 @@ function FetchPage(UrlForFetchingData, SectionToFill){
 			var IsLoggedIn = $response.filter('#loggedin').text();
 			var Content = $response.filter('#content').html();
 			if(IsLoggedIn=='LoggedIn'){
-				console.log('still in session');
+				//console.log('still in session');
 				$(SectionToFill).html(Content);
 			}else{
 				console.log('session ended');
@@ -157,43 +170,13 @@ function FetchPage(UrlForFetchingData, SectionToFill){
 
 }	
 	
-	
-function ProcessNormalPageLinkOld(e,targetsection){
-	
-	e.preventDefault();
-    var urltarget = e.currentTarget.href;
-	var UrlForFetchingData = e.currentTarget.attributes["linkattib"].value;
-
-	////console.log('urltarget='+urltarget);
-	////console.log('targetsection='+targetsection);
-	console.log('UrlForFetchingData='+UrlForFetchingData);
-		
-	$(targetsection).append('<div id="progress">Loading...</div>');
-	
-		$.ajax({
-			type: "GET",
-			url: UrlForFetchingData,
-			success: function (msg) {
-				var $response = $(msg);
-				var IsLoggedIn = $response.filter('#loggedin').text();
-				var Content = $response.filter('#content').html();
-				if(IsLoggedIn=='LoggedIn'){
-				$(targetsection).html(Content);
-				}else{
-				////console.log('about to flip');
-				jQT.goTo('#login', 'flip');
-				}
-			}
-		});
-		
-
-}
 
 function ProcessLogin() {
     var username = $('#username').val();
     var password = $('#password').val();
     var datatosent = "username=" + username + "&password=" + password;
 	//console.log('username:' + username + ' password:' + password);
+	console.log('login clicked');
 	$('#login').append('<div id="progress">Loading...</div>');
     $.ajax({
         type: "POST",
@@ -201,9 +184,9 @@ function ProcessLogin() {
         data: datatosent,
         success: function (msg) {
             //alert("---" + msg + "---");
-            if (msg == "Correct Login") {
-                //$('#login').remove(); 
-                ////console.log("here");
+            if (msg == "CorrectLogin") {
+				$('#progress').replaceWith(''); //$('#login').remove('#progress') will not work
+				//console.log("here");
                 jQT.goTo('#home');
 
             } else {
@@ -217,15 +200,17 @@ function ProcessLogin() {
 
 
 function ProcessLogout(e) {
-		////console.log('log out clicked');
+		console.log('log out clicked');
 		e.preventDefault();
+		$('#home').append('<div id="progress">Loading...</div>');
 		$.ajax({
 			type: "GET",
 			url: "ProcessLogout.aspx",
 			data: "",
 			success: function (msg) {
 				if (msg == "LoggedOut") {
-				////console.log('in LoggedOut');
+					$('#progress').replaceWith('');
+					console.log('in LoggedOut');
 					jQT.goTo('#login');// no 'Not able to tap element' error.
 				}
 			}

@@ -15,7 +15,7 @@ namespace MobileWeb {
 			if(Session["userid"]!=null) {
 				Message.Text="LoggedIn";
 
-				string[] ar= { "Patient1","Patient2","Patient3","Patient4","Patient5" };
+				string[] ar= { "Patient1 Patient1","Patient2 Patient2 Patient2 Patient2 Patient2","Patient3","Patient4","Patient5" };
 
 				var somevar = ar.Where(a => a.Contains("Patient"));
 				Repeater1.DataSource = somevar;

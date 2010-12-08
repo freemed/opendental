@@ -12,15 +12,15 @@
 put stuff here <%Response.Write(id);%>
 <h2></h2>
 <ul class="rounded">
-<li> Patient name <%Response.Write(id);%>
+<li> <span class="style2">Patient name <%Response.Write(id);%>Patient name Patient name Patient name Patient name</span>
 </li>
 </ul>
 
 <ul class="rounded">
-<li><span class="style1">Home:</span>333-555-1234<%Response.Write(id);%> </li>
-<li><span class="style1">Work:</span>333-555-1234<%Response.Write(id);%> </li>
-<li><span class="style1">Mobile:</span>333-555-1234<%Response.Write(id);%> </li>
-<li><span class="style1">Email:</span>333-555-1234@gggg.com<%Response.Write(id);%> </li>
+<li><span class="style1">Home:</span><span class="style2">333-555-1234<%Response.Write(id);%> </span></li>
+<li><span class="style1">Work:</span><span class="style2">333-555-1234<%Response.Write(id);%> </span></li>
+<li><span class="style1">Mobile:</span><span class="style2">333-555-1234<%Response.Write(id);%> </span></li>
+<li><span class="style1">Email:</span><span class="style2">333-555-1234@gggg.com<%Response.Write(id);%> </span></li>
 </ul>
 <h2>Appointmnets</h2>
 <ul class="rounded">
@@ -50,20 +50,17 @@ put stuff here <%Response.Write(id);%>
 <ul class="rounded">
 <li>
 		<div>
-			<a linkattib="" href="#AppointmentDetails">
-			<asp:Label ID="Label4" runat="server" Text="Penicillin"></asp:Label></a>
+		<span class="style2"><asp:Label ID="Label4" runat="server" Text="Penicillin"></asp:Label></span>
 		</div>
 </li>
 <li>
 		<div>
-			<a linkattib="" href="#AppointmentDetails">
-			<asp:Label ID="Label5" runat="server" Text="Vicodin"></asp:Label></a>
+		<span class="style2"><asp:Label ID="Label5" runat="server" Text="Vicodin"></asp:Label></span>
 		</div>
 </li>
 <li>
 		<div>
-			<a linkattib="" href="#AppointmentDetails">
-			<asp:Label ID="Label6" runat="server" Text="Peridex"></asp:Label></a>
+		<span class="style2"><asp:Label ID="Label6" runat="server" Text="Peridex"></asp:Label></span>
 		</div>
 </li>
 

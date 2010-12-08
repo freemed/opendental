@@ -14,7 +14,7 @@ namespace MobileWeb {
 		protected void Page_Load(object sender,EventArgs e) {
 
 
-			Thread.Sleep(1500);
+			Thread.Sleep(500);
 			String username="";
 			String password="";
 			Message.Text="";
@@ -29,11 +29,11 @@ namespace MobileWeb {
 				}
 				if(username=="" && password=="") {
 
-					Message.Text="Correct Login";
+					Message.Text="CorrectLogin";
 					Session["userid"]=3;
 				}
 				else {
-					Message.Text="Incorrect login";
+					Message.Text="LoginFailed";
 				}
 			
 

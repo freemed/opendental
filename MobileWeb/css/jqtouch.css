@@ -394,14 +394,16 @@ min-height: 48px;
     position: relative;
 }
 
-.previous{
+.previous
+{
+
+ border-width:0px 25px 0px 0px;
+    left:10px;
     top:10px;
     float: left; 
     height:20px;
-    background-image: url(themes/jqt/img/listArrowSel.png);
-    background-repeat: no-repeat;
-    width:20px;
-    -webkit-border-image: none;
+    background: none;
+    -webkit-border-image: url(themes/jqt/img/listArrowSel.png) 0 25 0 0;
     -webkit-transform: rotate(180deg);
 }
 
@@ -409,14 +411,14 @@ min-height: 48px;
     float:left;
     margin-left:50px
 }
-.next{
+.next
+{
+ border-width:0px 0px 0px 25px;
     top:10px;
     height:20px;
     float: right;
-    background-image: url(themes/jqt/img/listArrowSel.png);
-    background-repeat: no-repeat;
-    -webkit-border-image: none;
-    width:20px;
+     -webkit-border-image: url(themes/jqt/img/listArrowSel.png) 0 0 0 25;
+  
 }
 .datestring{
     position: relative;float:center; top:10px; left:20px;
@@ -427,5 +429,16 @@ min-height: 48px;
 .style1{
  color:#000000;
 }
+.style2{
+ color:#FFFFFF;
+}
+.appts, .home{
+    left: 6px;
+    right: auto;
+    padding: 0;
+    max-width: 55px;
+    border-width: 0 8px 0 14px;
+    -webkit-border-image: url(themes/jqt/img/back_button.png) 0 8 0 14;    
 
+}
 /*dennis end*/
