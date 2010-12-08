@@ -17,7 +17,7 @@ namespace MobileWeb {
 		public int NextDateYear=0;
 
 		protected void Page_Load(object sender,EventArgs e) {
-
+			Thread.Sleep(1000);
 			Message.Text="";
 			if(Session["userid"]!=null) {
 				Message.Text="LoggedIn";

@@ -11,8 +11,8 @@ body {
     -webkit-user-select: none;
     -webkit-text-size-adjust: none;
     font-family: Helvetica;
-    -webkit-perspective: 800;
-    -webkit-transform-style: preserve-3d;
+    -webkit-perspective: 800;/*dennis check box appear- comment this*/
+    -webkit-transform-style: preserve-3d;/*dennis check box appear- comment this*/
 }
 .selectable, input, textarea {
     -webkit-user-select: auto;
@@ -21,10 +21,10 @@ body > * {
     -webkit-backface-visibility: hidden;
     -webkit-box-sizing: border-box;
     display: none;
-    position: absolute;
+   position: absolute;/*dennis check box appear- comment this*/
     left: 0;
     width: 100%;
-    -webkit-transform: translate3d(0,0,0) rotate(0) scale(1);
+   -webkit-transform: translate3d(0,0,0) rotate(0) scale(1);/*dennis check box appear- comment this*/
     min-height: 420px !important;
 }
 body.fullscreen > * {
@@ -437,4 +437,34 @@ min-height: 48px;
     -webkit-border-image: url(themes/jqt/img/back_button.png) 0 8 0 14;    
 
 }
-/*dennis end*/
+/*overides existing checkbox css in theme.css*/
+
+.chk{
+ -webkit-perspective: none;
+ -webkit-transform-style: flat;
+ position: static;
+ -webkit-transform:none;
+ z-index:30px;
+
+}
+ul li input[type="checkbox"] 
+{
+    
+    -webkit-perspective: none;
+    -webkit-transform-style: flat;
+    position: static;
+-webkit-transform:none;
+
+}
+
+ul li input[type="checkbox"]:after {
+    content: attr(title);
+    font: 17px Helvetica;
+    display: block;
+    width: 246px;
+    color: #777;
+    margin: -0px 0px 0px 27px;
+
+}
+
+/*webkit-transform-style: preserve-3d; not overwritten*/

@@ -22,24 +22,27 @@
 		
 		</script>--%>
 		<script type="text/javascript">
+		/*Dennis: the default slide animation is disabled on anchor tags with arrowless style*/
             var jQT = $.jQTouch({
                 icon: 'Mob.png',
-                statusBar: 'black'
+                statusBar: 'black',
+                slideSelector: 'body > * > ul li a:not(.arrowless)'
             });
 		</script>
     </head>
     <body>
-        <div id="login">
-            <div class="toolbar">
+
+	<div id="login">
+    <div class="toolbar">
                 <h1>Login</h1>
-                
             </div>
             <asp:Label ID="LabelMessage" runat="server" Text=""></asp:Label>
-            <form method="post" id="ajaxform" runat="server" enableviewstate="False" jqattrib="normalformdd">
+            <form method="post" id="ajaxform" runat="server" enableviewstate="False">
+			
                 <ul class="rounded">
                     <li><input type="text" placeholder="Username" name="username" id="username" autocapitalize="off" autocorrect="off" autocomplete="off" /></li>
                     <li><input type="password" placeholder="Password" name="password" id="password" autocapitalize="off" autocorrect="off" autocomplete="off" /></li>
-                   <li><input id="rememberusername" title="Remember username" type="checkbox" /></li>
+                   <li><div class="chk"><input id="rememberusername" title="Remember username" type="checkbox" /></div></li>
 					
 					<%--<div class="searchbox">
 					<input id="search" placeholder="search character" type="text" name="key" value="">
@@ -59,9 +62,11 @@
                 <h1>Open Dental Mobile</h1>
                 <a class="button logout" href="#">Logout</a>
             </div>
+			<div style="height:50px">
+            </div>
             <ul class="rounded">
-                <li class="arrow"><a linkattib="AppointmentList.aspx" href="#AppointmentList">Appointments</a></li>
-                <li class="arrow"><a linkattib="PatientList.aspx" href="#PatientList">Patients</a></li>
+                <li><a class="arrowless" linkattib="AppointmentList.aspx" href="#AppointmentList">Appointments</a></li>
+                <li><a class="arrowless" linkattib="PatientList.aspx" href="#PatientList">Patients</a></li>
             </ul>
         </div>
    <%--menulevel 1 ends here--%>

@@ -44,20 +44,33 @@ function TraversePage(){
 
 	// a click is used instead of tap because it gives an error with jQT.goTo(MoveToURL, 'slide') 'Not able to tap element' error.
 	/* menulevel 2 */
+	/*
 	$('a[href="#AppointmentList"]').click(function (e) {
-		console.log('AppointmentList clicked');
+		console.log('AppointmentList clicked 1');
 		var UrlForFetchingData = this.attributes["linkattib"].value; 
 		var SectionToFill='#AppointmentListContents';
 		var MoveToURL='#AppointmentList';
 		ProcessNormalPageLink(e,UrlForFetchingData, MoveToURL, SectionToFill);
 	}); 
+	*/
+	
+	$('a[href="#AppointmentList"]').click(function (e) {
+		//e.preventDefault();
+		console.log('AppointmentList clicked');
+		var UrlForFetchingData = this.attributes["linkattib"].value; 
+		var SectionToFill='#AppointmentListContents';
+		var MoveToURL='#AppointmentList';
+		ProcessArrowlessPageLink(UrlForFetchingData, MoveToURL, SectionToFill);
+	}); 
+	
 
 	$('a[href="#PatientList"]').click(function (e) {
+	//e.preventDefault();
 		console.log('PatientList clicked');
 		var UrlForFetchingData = this.attributes["linkattib"].value; 
 		var SectionToFill='#PatientListContents';
 		var MoveToURL='#PatientList';
-		ProcessNormalPageLink(e,UrlForFetchingData, MoveToURL, SectionToFill);
+		ProcessArrowlessPageLink(UrlForFetchingData, MoveToURL, SectionToFill);
 	}); 
 
 	/* menulevel 2 ends here*/
@@ -119,7 +132,6 @@ function TraversePage(){
 	});
 
 	
-	
 	$('.button.home').tap(function(e) {
 	jQT.goTo('#home');
 	});
@@ -136,8 +148,18 @@ function ProcessNormalPageLink(e,UrlForFetchingData, MoveToURL, SectionToFill){
 	// for newly loaded links this is null
 	if(e.currentTarget.attributes==null){
 	console.log('in this if statement');
-	jQT.goTo(MoveToURL, 'slide'); //do not use this line with tap event, it gives a 'Not able to tap element' error.
+	jQT.goTo(MoveToURL,'slide'); //do not use this line with tap event, it gives a 'Not able to tap element' error.
 	}
+	FetchPage(UrlForFetchingData, SectionToFill)
+}
+
+function ProcessArrowlessPageLink(UrlForFetchingData, MoveToURL, SectionToFill){
+	//e.preventDefault();
+	console.log(' UrlForFetchingData =' + UrlForFetchingData );
+ 	$(SectionToFill).append('<div id="progress">Loading...</div>');
+//no slide effect
+	jQT.goTo(MoveToURL,''); //do not use this line with tap event, it gives a 'Not able to tap element' error.
+
 	FetchPage(UrlForFetchingData, SectionToFill)
 }
 
