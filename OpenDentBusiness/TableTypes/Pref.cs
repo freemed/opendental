@@ -137,6 +137,8 @@ namespace OpenDentBusiness {
 		InsBillingProv,
 		InsDefaultPPOpercent,
 		InsDefaultShowUCRonClaims,
+		///<summary>0=unknown, user did not make a selection.  1=Yes, 2=No.</summary>
+		InsPlanConverstion_7_5_17_AutoMergeYN,
 		InsurancePlansShared,
 		IntermingleFamilyDefault,
 		LabelPatientDefaultSheetDefNum,

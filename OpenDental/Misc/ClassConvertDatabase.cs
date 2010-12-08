@@ -108,6 +108,27 @@ namespace OpenDental{
 			}
 			try{
 #endif
+			if(FromVersion < new Version("7.5.17")) {
+				Cursor.Current=Cursors.Default;
+				YN InsPlanConverstion_7_5_17_AutoMergeYN=YN.Unknown;
+				if(FromVersion < new Version("7.5.1")) {
+					FormInsPlanConvert_7_5_17 form=new FormInsPlanConvert_7_5_17();
+					if(PrefC.GetBoolSilent(PrefName.InsurancePlansShared,true)) {
+						form.InsPlanConverstion_7_5_17_AutoMergeYN=YN.Yes;
+					}
+					else {
+						form.InsPlanConverstion_7_5_17_AutoMergeYN=YN.No;
+					}
+					form.ShowDialog();
+					if(form.DialogResult==DialogResult.Cancel) {
+						MessageBox.Show("Your database has not been altered.");
+						return false;
+					}
+					InsPlanConverstion_7_5_17_AutoMergeYN=form.InsPlanConverstion_7_5_17_AutoMergeYN;
+				}
+				ConvertDatabases.Set_7_5_17_AutoMerge(InsPlanConverstion_7_5_17_AutoMergeYN);//does nothing if this pref is already present for some reason.
+				Cursor.Current=Cursors.WaitCursor;
+			}
 			if(FromVersion>=new Version("3.4.0")){
 				Prefs.UpdateBool(PrefName.CorruptedDatabase,true);
 			}
