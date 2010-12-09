@@ -307,9 +307,10 @@ namespace OpenDentBusiness.Mobile{
 		}
 
 		///<summary>Only run on server for mobile.  Takes the list of changes from the dental office and makes updates to those items in the mobile server db.  Also, make sure to run DeletedObjects.DeleteForMobile().</summary>
-		public static void UpdateFromChangeList(List<"+typeClassName+@"> list,long customerNum) {
+		public static void UpdateFromChangeList(List<"+typeClassName+@"> list,long "+priKeyParam1+@") {
 			for(int i=0;i<list.Count;i++){
-				"+typeClassName+" "+obj+@"=Crud."+typeClassName+@"Crud.SelectOne(customerNum,list[i]."+priKeyName2+@");
+				list[i].CustomerNum="+priKeyParam1+@";
+				"+typeClassName+" "+obj+@"=Crud."+typeClassName+@"Crud.SelectOne("+priKeyParam1+",list[i]."+priKeyName2+@");
 				if("+obj+@"==null){//not in db
 					Crud."+typeClassName+@"Crud.Insert(list[i],true);
 				}
