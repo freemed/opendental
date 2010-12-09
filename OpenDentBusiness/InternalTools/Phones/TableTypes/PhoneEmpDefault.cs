@@ -4,17 +4,25 @@ using System.Drawing;
 
 namespace OpenDentBusiness{
 	///<summary>This table is not part of the general release.  User would have to add it manually.</summary>
-	public class PhoneEmpDefault{
-		///<summary></summary>
+	[Serializable]
+	[CrudTable(IsMissingInGeneral=true)]
+	public class PhoneEmpDefault:TableBase {
+		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long EmployeeNum;
 		///<summary></summary>
 		public bool NoGraph;
 		///<summary></summary>
 		public bool NoColor;
-		///<summary>0=all, 1=none, 2=backup</summary>
+		///<summary>Enum:AsteriskRingGroups 0=all, 1=none, 2=backup</summary>
 		public AsteriskRingGroups RingGroups;
 		///<summary>Just makes management easier.  Not used by the program.</summary>
 		public string EmpName;
+
+		///<summary></summary>
+		public PhoneEmpDefault Clone() {
+			return (PhoneEmpDefault)this.MemberwiseClone();
+		}
 	}
 
 	public enum AsteriskRingGroups {
@@ -26,16 +34,14 @@ namespace OpenDentBusiness{
 		Backup
 	}
 
-	/*CREATE TABLE phoneempdefault (
-					EmployeeNum bigint NOT NULL,
-					NoGraph tinyint NOT NULL,
-					NoColor tinyint NOT NULL,
-					RingGroups int NOT NULL,
-					EmpName varchar(255) NOT NULL,
-					PRIMARY KEY (EmployeeNum)
-					) DEFAULT CHARSET=utf8*/
-
-	
+	/*CREATE TABLE phoneempdefault (  
+		EmployeeNum BIGINT NOT NULL,      
+		NoGraph TINYINT NOT NULL,      
+		NoColor TINYINT NOT NULL,      
+		RingGroups INT NOT NULL,      
+		EmpName VARCHAR(255) NOT NULL,      
+		PRIMARY KEY (EmployeeNum)      
+		) DEFAULT CHARSET=utf8; */
 }
 
 

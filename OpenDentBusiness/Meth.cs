@@ -113,8 +113,14 @@ namespace OpenDentBusiness {
 			}
 			#if DEBUG
 				//Verify that it returns void
-				MethodInfo methodInfo=methodBase.ReflectedType.GetMethod(methodBase.Name);
-				if(methodInfo.ReturnType != typeof(void)) {
+				MethodInfo methodInfo=null;
+				try {
+					methodInfo=methodBase.ReflectedType.GetMethod(methodBase.Name);
+				}
+				catch {
+					//this is just a debugging tool for obvious mismatches.  Sometimes it will fail if there are two methods with the same name.
+				}
+				if(methodInfo!=null && methodInfo.ReturnType != typeof(void)) {
 					throw new ApplicationException("Meth.GetVoid calling class must return void.");
 				}
 			#endif

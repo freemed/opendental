@@ -182,6 +182,7 @@
     <Compile Include="Crud\PayPlanCrud.cs" />
     <Compile Include="Crud\PharmacyCrud.cs" />
     <Compile Include="Crud\PhoneCrud.cs" />
+    <Compile Include="Crud\PhoneEmpDefaultCrud.cs" />
     <Compile Include="Crud\PhoneNumberCrud.cs" />
     <Compile Include="Crud\PlannedApptCrud.cs" />
     <Compile Include="Crud\PopupCrud.cs" />

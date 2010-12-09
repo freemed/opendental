@@ -1,48 +1,49 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data;
-using System.Drawing;
 using System.Reflection;
+using System.Text;
 
-namespace OpenDentBusiness {
-	public class PhoneEmpDefaults {
+namespace OpenDentBusiness{
+	///<summary>Not a true Cache pattern.  It only loads the cache once on startup and then never again.  No entry in the Cache file.  No InvalidType for PhoneEmpDefault.</summary>
+	public class PhoneEmpDefaults{
+		#region CachePattern
+
+		///<summary>A list of all PhoneEmpDefaults.</summary>
 		private static List<PhoneEmpDefault> listt;
 
-		///<summary>This list will get refreshed only once on startup and then not again.</summary>
-		public static List<PhoneEmpDefault> Listt {
+		///<summary>A list of all PhoneEmpDefaults.</summary>
+		public static List<PhoneEmpDefault> Listt{
 			get {
 				if(listt==null) {
-					Refresh();
+					RefreshCache();
 				}
 				return listt;
 			}
-			set { 
-				listt=Listt; 
+			set {
+				listt=value;
 			}
 		}
 
-		public static void Refresh() {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod());
-				return;
-			}
-			string command="SELECT * FROM phoneempdefault";
-			DataTable table=Db.GetTable(command);
-			listt=new List<PhoneEmpDefault>();
-			PhoneEmpDefault phoneEmpDefault;
-			for(int i=0;i<table.Rows.Count;i++) {
-				phoneEmpDefault=new PhoneEmpDefault();
-				phoneEmpDefault.EmployeeNum      = PIn.Long(table.Rows[i]["EmployeeNum"].ToString());
-				phoneEmpDefault.NoGraph          = PIn.Bool(table.Rows[i]["NoGraph"].ToString());
-				phoneEmpDefault.NoColor          = PIn.Bool(table.Rows[i]["NoColor"].ToString());
-				phoneEmpDefault.RingGroups       = (AsteriskRingGroups)PIn.Int(table.Rows[i]["RingGroups"].ToString());
-				phoneEmpDefault.EmpName          = PIn.String(table.Rows[i]["EmpName"].ToString());
-				listt.Add(phoneEmpDefault);
-			}
+		///<summary>Not part of the true Cache pattern.  See notes above.</summary>
+		public static DataTable RefreshCache(){
+			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
+			string command="SELECT * FROM phoneempdefault";//stub query probably needs to be changed
+			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
+			table.TableName="PhoneEmpDefault";
+			FillCache(table);
+			return table;
 		}
+
+		///<summary></summary>
+		public static void FillCache(DataTable table){
+			//No need to check RemotingRole; no call to db.
+			listt=Crud.PhoneEmpDefaultCrud.TableToList(table);
+		}
+		#endregion
 
 		public static bool IsNoGraph(long employeeNum) {
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<Listt.Count;i++) {
 				if(Listt[i].EmployeeNum==employeeNum) {
 					return Listt[i].NoGraph;
@@ -52,6 +53,7 @@ namespace OpenDentBusiness {
 		}
 
 		public static bool IsNoColor(long employeeNum) {
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<Listt.Count;i++) {
 				if(Listt[i].EmployeeNum==employeeNum) {
 					return Listt[i].NoColor;
@@ -61,6 +63,7 @@ namespace OpenDentBusiness {
 		}
 
 		public static AsteriskRingGroups GetRingGroup(long employeeNum) {
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<Listt.Count;i++) {
 				if(Listt[i].EmployeeNum==employeeNum) {
 					return Listt[i].RingGroups;
@@ -69,12 +72,56 @@ namespace OpenDentBusiness {
 			return AsteriskRingGroups.All;
 		}
 
+		/*
+		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
+
+		///<summary></summary>
+		public static List<PhoneEmpDefault> Refresh(long patNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<PhoneEmpDefault>>(MethodBase.GetCurrentMethod(),patNum);
+			}
+			string command="SELECT * FROM phoneempdefault WHERE PatNum = "+POut.Long(patNum);
+			return Crud.PhoneEmpDefaultCrud.SelectMany(command);
+		}
+
+		///<summary>Gets one PhoneEmpDefault from the db.</summary>
+		public static PhoneEmpDefault GetOne(long employeeNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
+				return Meth.GetObject<PhoneEmpDefault>(MethodBase.GetCurrentMethod(),employeeNum);
+			}
+			return Crud.PhoneEmpDefaultCrud.SelectOne(employeeNum);
+		}
+
+		///<summary></summary>
+		public static long Insert(PhoneEmpDefault phoneEmpDefault){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
+				phoneEmpDefault.EmployeeNum=Meth.GetLong(MethodBase.GetCurrentMethod(),phoneEmpDefault);
+				return phoneEmpDefault.EmployeeNum;
+			}
+			return Crud.PhoneEmpDefaultCrud.Insert(phoneEmpDefault);
+		}
+
+		///<summary></summary>
+		public static void Update(PhoneEmpDefault phoneEmpDefault){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),phoneEmpDefault);
+				return;
+			}
+			Crud.PhoneEmpDefaultCrud.Update(phoneEmpDefault);
+		}
+
+		///<summary></summary>
+		public static void Delete(long employeeNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),employeeNum);
+				return;
+			}
+			string command= "DELETE FROM phoneempdefault WHERE EmployeeNum = "+POut.Long(employeeNum);
+			Db.NonQ(command);
+		}
+		*/
+
+
 
 	}
-
-
-
 }
-
-
-
