@@ -339,7 +339,7 @@ namespace OpenDentBusiness {
 				}
 			}
 			else{
-				//Orphaned claims do not show in the account module (tested) so OK to delete.
+				//Orphaned claims do not show in the account module (tested) so we need to delete them because no other way.
 				command=@"DELETE FROM claim WHERE NOT EXISTS(
 					SELECT * FROM claimproc WHERE claim.ClaimNum=claimproc.ClaimNum)";
 				int numberFixed=Db.NonQ32(command);
@@ -462,7 +462,9 @@ namespace OpenDentBusiness {
 				}
 			}
 			else{
-				//Because it would change the sum on a deposit slip, can't easily delete these.
+				//Because it would change the sum on a deposit slip, can't easily delete these if attached to a deposit.
+				//Only delete claimpayments that are not attached to deposit slips.  Others, no action.
+
 			}
 			return log;
 		}
@@ -480,6 +482,7 @@ namespace OpenDentBusiness {
 				}
 			}
 			else{
+				//js ok
 				command="UPDATE claimproc SET DateCP=ProcDate WHERE Status=7 AND DateCP != ProcDate";
 				int numberFixed=Db.NonQ32(command);
 				if(numberFixed>0 || verbose) {
@@ -509,33 +512,32 @@ namespace OpenDentBusiness {
 				//It won't change amounts of history, just dates.  The changes will typically be only a few days or weeks.
 				//Various reports assume this enforcement and the reports will malfunction if this is not fixed.
 				//Let's list out each change.  Patient name, procedure desc, date of service, old dateCP, new dateCP (check date).
-				command="SELECT patient.LName,patient.FName,patient.MiddleI,procedurecode.Descript,claim.DateService,claimproc.DateCP,claimpayment.CheckDate,claimproc.ClaimProcNum "
-				+"FROM patient,procedurecode,procedurelog,claim,claimproc,claimpayment "
-				+"WHERE claimproc.ClaimPaymentNum=claimpayment.ClaimPaymentNum "
-				+"AND patient.PatNum=claimproc.PatNum "
-				+"AND procedurecode.CodeNum=procedurelog.CodeNum "
-				+"AND procedurelog.ProcNum=claimproc.ProcNum "
-				+"AND claim.ClaimNum=claimproc.ClaimNum "
+				command="SELECT patient.LName,patient.FName,patient.MiddleI,claimproc.CodeSent,claim.DateService,claimproc.DateCP,claimpayment.CheckDate,claimproc.ClaimProcNum "
+				+"FROM claimproc,patient,claim,claimpayment "
+				+"WHERE claimproc.PatNum=patient.PatNum "
+				+"AND claimproc.ClaimNum=claim.ClaimNum "
+				+"AND claimproc.ClaimPaymentNum=claimpayment.ClaimPaymentNum "
 				+"AND claimproc.DateCP!=claimpayment.CheckDate";
 				table=Db.GetTable(command);
 				string patientName;
-				string procDesc;
+				string codeSent;
 				DateTime dateService;
 				DateTime oldDateCP;
 				DateTime newDateCP;
 				if(table.Rows.Count>0 || verbose){
-					log+="Claim payments with mismatched dates (Patient Name, Procedure, Date of Service, Old Date, New Date):\r\n";
+					log+="Claim payments with mismatched dates (Patient Name, Code Sent, Date of Service, Old Date, New Date):\r\n";
 				}
 				for(int i=0;i<table.Rows.Count;i++) {
-					patientName=table.Rows[i][0].ToString() + ", " + table.Rows[i][1].ToString() + " " + table.Rows[i][2].ToString();
-					procDesc=table.Rows[i][3].ToString();
-					dateService=PIn.Date(table.Rows[i][4].ToString());
-					oldDateCP=PIn.Date(table.Rows[i][5].ToString());
-				  newDateCP=PIn.Date(table.Rows[i][6].ToString());
+					patientName=table.Rows[i]["LName"].ToString() + ", " + table.Rows[i]["FName"].ToString() + " " + table.Rows[i]["MiddleI"].ToString();
+					patientName=patientName.Trim();//Looks better when middle initial is not present.//Doesn't work though
+					codeSent=table.Rows[i]["CodeSent"].ToString();
+					dateService=PIn.Date(table.Rows[i]["DateService"].ToString());
+					oldDateCP=PIn.Date(table.Rows[i]["DateCP"].ToString());
+				  newDateCP=PIn.Date(table.Rows[i]["CheckDate"].ToString());
 				  command="UPDATE claimproc SET DateCP="+POut.Date(newDateCP)
-				    +" WHERE ClaimProcNum="+table.Rows[i][7].ToString();
+				    +" WHERE ClaimProcNum="+table.Rows[i]["ClaimProcNum"].ToString();
 				  Db.NonQ(command);
-					log+=patientName + ", " + procDesc + ", " + dateService.ToShortDateString() + ", " + oldDateCP.ToShortDateString() + ", " + newDateCP.ToShortDateString() + "\r\n";
+					log+=patientName + ", " + codeSent + ", " + dateService.ToShortDateString() + ", " + oldDateCP.ToShortDateString() + ", " + newDateCP.ToShortDateString() + "\r\n";
 				}
 				int numberFixed=table.Rows.Count;
 				if(numberFixed>0 || verbose) {
@@ -560,7 +562,7 @@ namespace OpenDentBusiness {
 				}
 			}
 			else{
-				//Inform only
+				//Inform onlyInfo
 			}
 			return log;
 		}
@@ -777,6 +779,7 @@ namespace OpenDentBusiness {
 				int numberFixed=Db.NonQ32(command);
 				if(numberFixed>0 || verbose) {
 					log+=Lans.g("FormDatabaseMaintenance","ClaimProcs with with invalid ClaimPaymentNumber fixed: ")+numberFixed.ToString()+"\r\n";
+					//Tell user what items to create ins checks for?
 				}
 			}
 			return log;
@@ -937,7 +940,16 @@ namespace OpenDentBusiness {
 				}
 			}
 			else {
-				//Todo: Figure out what to do here and do it.				
+				//appointment.InsPlan1
+				//command="UPDDATE appointment SET appointment.PlanNum=(SELECT inssub.PlanNum FROM inssub WHERE appointment.InsSubNum=inssub.InsSubNum)
+				//appointment.InsPlan2
+				//benefit.PlanNum
+				//claim.PlanNum
+				//claim.PlanNum2
+				//claimproc.PlanNum
+				//etrans.PlanNum
+				//patplan.PlanNum
+				//payplan.PlanNum
 			}
 			return log;
 		}
@@ -1532,6 +1544,13 @@ namespace OpenDentBusiness {
 				command=@"SELECT COUNT(*) FROM procedurelog 
 					WHERE baseunits != (SELECT procedurecode.BaseUnits FROM procedurecode WHERE procedurecode.CodeNum=procedurelog.CodeNum)
 					AND baseunits != 0";
+				//Better query:
+				//SELECT COUNT(*)
+				//FROM procedurelog,procedurecode
+				//WHERE procedurecode.CodeNum=procedurelog.CodeNum
+				//AND procedurelog.BaseUnits != 0
+				//AND procedurecode.BaseUnits = 0;
+
 				//pretty safe to change them back to zero.
 				numFound=PIn.Int(Db.GetCount(command));
 				if(numFound>0 || verbose) {
