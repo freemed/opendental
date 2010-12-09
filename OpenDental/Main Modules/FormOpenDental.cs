@@ -32,6 +32,7 @@ using Microsoft.Win32;
 using System.Net;
 using System.Net.Sockets;
 using System.IO;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Permissions;
 using System.Security.Policy;
@@ -1307,6 +1308,11 @@ namespace OpenDental{
 
 		private void FormOpenDental_Load(object sender, System.EventArgs e){
 			Splash.Dispose();
+			if(Assembly.GetAssembly(typeof(FormOpenDental)).GetName().Version!=Assembly.GetAssembly(typeof(Db)).GetName().Version) {//OpenDental.Version!=OpenDentBusiness.Version?
+				MessageBox.Show("Mismatched program file versions. Please run the Open Dental setup file again on this computer.");//No MsgBox or Lan.g() here, because we don't want to access the database if there is a version conflict.
+				Application.Exit();
+				return;
+			}
 			allNeutral();
 			string odUser="";
 			string odPassHash="";
