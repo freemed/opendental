@@ -292,13 +292,13 @@ namespace OpenDentBusiness{
 			return retVal;
 		}
 
-		///<summary>Used in E-claims to get the amount paid by primary. The insurance amount paid by the planNum based on all claimprocs with this procNum. The list can be all ClaimProcs for patient, or just those for this procedure.</summary>
-		public static double ProcInsPayPri(List<ClaimProc> claimProcList,long procNum,long planNum) {
+		///<summary>Used in E-claims to get the amount paid by primary. The insurance amount paid by other planNums based on all claimprocs with this procNum. The list can be all ClaimProcs for patient, or just those for this procedure.</summary>
+		public static double ProcInsPayPri(List<ClaimProc> claimProcList,long procNum,long planNumExclude) {
 			//No need to check RemotingRole; no call to db.
 			double retVal=0;
 			for(int i=0;i<claimProcList.Count;i++) {
 				if(claimProcList[i].ProcNum==procNum
-					&& claimProcList[i].PlanNum==planNum
+					&& claimProcList[i].PlanNum!=planNumExclude
 					&& claimProcList[i].Status!=ClaimProcStatus.Preauth
 					&& claimProcList[i].Status!=ClaimProcStatus.CapEstimate
 					&& claimProcList[i].Status!=ClaimProcStatus.CapComplete
