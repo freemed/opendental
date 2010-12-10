@@ -63,6 +63,7 @@ function TraversePage(){
 		ProcessArrowlessPageLink(UrlForFetchingData, MoveToURL, SectionToFill);
 	}); 
 	
+	
 
 	$('a[href="#PatientList"]').click(function (e) {
 	//e.preventDefault();
@@ -86,6 +87,8 @@ function TraversePage(){
 		var MoveToURL='#AppointmentDetails';
 		ProcessNormalPageLink(e,UrlForFetchingData, MoveToURL, SectionToFill);
 	});
+	
+	/*previous, today and next buttons*/
 	
 	$('.button.previous').tap(function(e) {
 		console.log('Previous button tapped');
@@ -122,13 +125,21 @@ function TraversePage(){
 		ProcessNormalPageLink(e,UrlForFetchingData, MoveToURL, SectionToFill);
 	});
 	
-	/*home and appt buttons*/
+	/*home, appt, patient buttons*/
 	$('.button.appts').tap(function(e) {
 		console.log('Next button tapped');
 		var UrlForFetchingData = this.attributes["linkattib"].value; 
 		var SectionToFill='#AppointmentListContents';
 		var MoveToURL='#AppointmentList';
-		ProcessNormalPageLink(e,UrlForFetchingData, MoveToURL, SectionToFill);
+		ProcessArrowlessPageLink(UrlForFetchingData, MoveToURL, SectionToFill);
+	});
+	
+		$('.button.patients').tap(function(e) {
+		console.log('patients button tapped');
+		var UrlForFetchingData = this.attributes["linkattib"].value; 
+		var SectionToFill='#PatientListContents';
+		var MoveToURL='#PatientList';
+		ProcessArrowlessPageLink(UrlForFetchingData, MoveToURL, SectionToFill);
 	});
 
 	
@@ -213,6 +224,7 @@ function ProcessLogin() {
 
             } else {
                 $('#LabelMessage').text(msg);
+				$('#progress').replaceWith(''); 
             }
         }
     });

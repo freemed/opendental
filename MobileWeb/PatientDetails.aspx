@@ -9,7 +9,6 @@
 <body>
 <div id="loggedin"><asp:Literal runat="server" ID="Message"></asp:Literal></div>
 <div id="content">
-put stuff here <%Response.Write(id);%>
 <h2></h2>
 <ul class="rounded">
 <li> <span class="style2">Patient name <%Response.Write(id);%>Patient name Patient name Patient name Patient name</span>

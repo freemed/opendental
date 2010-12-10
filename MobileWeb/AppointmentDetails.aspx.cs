@@ -14,7 +14,7 @@ namespace MobileWeb {
 			Message.Text="";
 			if(Session["userid"]!=null) {
 				Message.Text="LoggedIn";
-				//Thread.Sleep(1000);
+				////Thread.Sleep(1000);
 				if(Request["id"]!=null) {
 					Int32.TryParse(Request["id"].ToString().Trim(),out id);
 				}

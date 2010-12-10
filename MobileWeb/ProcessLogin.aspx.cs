@@ -14,7 +14,7 @@ namespace MobileWeb {
 		protected void Page_Load(object sender,EventArgs e) {
 
 
-			//Thread.Sleep(500);
+			////Thread.Sleep(500);
 			String username="";
 			String password="";
 			Message.Text="";

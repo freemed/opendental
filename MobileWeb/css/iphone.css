@@ -1,4 +1,26 @@
-﻿#progress {
+﻿
+
+
+/*dennis start*/
+body
+{
+width: 320px;
+height: 480px;
+background-color:#FFFFFF;
+}
+body > * {
+    /*background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#FFFFFF), to(#FFFFFF));*/
+}
+/* dennis some kind of hack for some version of IE
+html>body body
+{
+width: auto;
+height: auto;
+min-width: 320px;
+min-height: 480px;
+}
+*/
+#progress {
     -webkit-border-radius: 10px;
     background-color: rgba(0,0,0,.7);
     color: white;
@@ -13,3 +35,84 @@
     top: 120px;
     width: 200px;
 }
+.datenavigation{
+    height:30px;
+}
+.previous, .next, .today{
+    position: relative;
+}
+
+.previous
+{   left:10px;
+    top:10px;
+    float: left; 
+    height:25px;
+    border-width:0px 25px 0px 0px;
+    -webkit-border-image: url(themes/jqt/img/listArrowSel.png) 0 25 0 0;
+    -webkit-transform: rotate(180deg);
+}
+
+.today{
+    float:left;
+    margin-left:50px
+}
+.next
+{   top:10px;
+    height:25px;
+    float: right;
+    border-width:0px 0px 0px 25px;
+    -webkit-border-image: url(themes/jqt/img/listArrowSel.png) 0 0 0 25;
+  
+}
+.datestring{
+    position: relative;float:center; top:10px; left:10px;
+}
+.contents{
+    clear:both;
+}
+.style1{
+ color:#000000;
+}
+.style2{
+ color:#FFFFFF;
+}
+.appts, .home, .patients{
+    left: 6px;
+    right: auto;
+    padding: 0;
+    max-width: 55px;
+    border-width: 0 8px 0 14px;
+    -webkit-border-image: url(themes/jqt/img/back_button.png) 0 8 0 14;    
+
+}
+/*overides existing checkbox css in theme.css*/
+
+.chk{
+ -webkit-perspective: none;
+ -webkit-transform-style: flat;
+ position: static;
+ -webkit-transform:none;
+ z-index:30px;
+
+}
+ul li input[type="checkbox"] 
+{
+    
+    -webkit-perspective: none;
+    -webkit-transform-style: flat;
+    position: static;
+-webkit-transform:none;
+
+}
+
+ul li input[type="checkbox"]:after {
+    content: attr(title);
+    font: 17px Helvetica;
+    display: block;
+    width: 246px;
+    color: #777;
+    margin: -0px 0px 0px 27px;
+
+}
+
+/*webkit-transform-style: preserve-3d; not overwritten*/

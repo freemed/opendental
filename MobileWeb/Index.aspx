@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head  runat="server">
         <title>Open Dental Mobile</title>
-        <link type="text/css" rel="stylesheet" media="screen" href="css/themes/jqt/theme.css">
+        <link type="text/css" rel="stylesheet" media="screen" href="css/themes/apple/theme.css">
         <link type="text/css" rel="stylesheet" media="screen" href="css/jqtouch.css">
         <link type="text/css" rel="stylesheet" media="screen" href="css/iphone.css">
         <script type="text/javascript" src="scripts/jquery.js"></script>
@@ -36,7 +36,8 @@
     <div class="toolbar">
                 <h1>Login</h1>
             </div>
-            <asp:Label ID="LabelMessage" runat="server" Text=""></asp:Label>
+			<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;<asp:Label ID="LabelMessage" runat="server" Text=""></asp:Label>
             <form method="post" id="ajaxform" runat="server" enableviewstate="False">
 			
                 <ul class="rounded">
@@ -80,7 +81,7 @@
                <%-- <a class="button logout" href="#">Logout</a>--%>
             </div>
 
-            <div id="AppointmentListContents" class="contents">
+            <div id="AppointmentListContents">
               
             </div>
         </div>
@@ -106,7 +107,7 @@
    
                <div class="toolbar">
                 <h1>Patient Details</h1>
-                <a class="button back" href="#">Patients</a>
+                <a class="button patients" linkattib="PatientList.aspx" href="#">Patients</a>
                <%-- <a class="button logout" href="#">Logout</a>--%>
             </div>
    <div id="PatientDetailsContents">
