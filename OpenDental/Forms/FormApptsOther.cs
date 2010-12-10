@@ -412,7 +412,8 @@ namespace OpenDental{
 
 		private void CheckStatus(){
 			if (PatCur.PatStatus == PatientStatus.Inactive
-				|| PatCur.PatStatus == PatientStatus.Archived)
+				|| PatCur.PatStatus == PatientStatus.Archived
+				|| PatCur.PatStatus == PatientStatus.Prospective)
 			{
 				MsgBox.Show(this, "Warning. Patient is not active.");
 			}

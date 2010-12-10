@@ -409,7 +409,10 @@ namespace OpenDentBusiness{
 		///<summary>4</summary>
 		Deleted,
 		///<summary>5</summary>
-		Deceased}
+		Deceased,
+		///<summary>6- Not an actual patient yet.</summary>
+		Prospective
+	}
 	///<summary></summary>
 	public enum PatientGender{
 		///<summary>0</summary>

@@ -974,6 +974,7 @@ namespace OpenDental {
 			listStatus.Items.Add(Lan.g("enumPatientStatus","Inactive"));
 			listStatus.Items.Add(Lan.g("enumPatientStatus","Archived"));
 			listStatus.Items.Add(Lan.g("enumPatientStatus","Deceased"));
+			listStatus.Items.Add(Lan.g("enumPatientStatus","Prospective"));
 			displayLabels(iLabelStart);
 			SetNextMonth();
 		}

@@ -1719,6 +1719,7 @@ namespace OpenDental{
 			listStatus.Items.Add(Lan.g("enumPatientStatus","Inactive"));
 			listStatus.Items.Add(Lan.g("enumPatientStatus","Archived"));
 			listStatus.Items.Add(Lan.g("enumPatientStatus","Deceased"));
+			listStatus.Items.Add(Lan.g("enumPatientStatus","Prospective"));
 			listGender.Items.Add(Lan.g("enumPatientGender","Male"));
 			listGender.Items.Add(Lan.g("enumPatientGender","Female"));
 			listGender.Items.Add(Lan.g("enumPatientGender","Unknown"));
@@ -1732,7 +1733,8 @@ namespace OpenDental{
 				case PatientStatus.NonPatient : listStatus.SelectedIndex=1; break;
 				case PatientStatus.Inactive : listStatus.SelectedIndex=2; break;
 				case PatientStatus.Archived : listStatus.SelectedIndex=3; break;
-				case PatientStatus.Deceased : listStatus.SelectedIndex=4; break;}
+				case PatientStatus.Deceased : listStatus.SelectedIndex=4; break;
+				case PatientStatus.Prospective : listStatus.SelectedIndex=5; break;}
 			switch (PatCur.Gender){
 				case PatientGender.Male : listGender.SelectedIndex=0; break;
 				case PatientGender.Female : listGender.SelectedIndex=1; break;
@@ -2742,6 +2744,7 @@ namespace OpenDental{
 				case 2: PatCur.PatStatus=PatientStatus.Inactive; break;
 				case 3: PatCur.PatStatus=PatientStatus.Archived; break;
 				case 4: PatCur.PatStatus=PatientStatus.Deceased; break;
+				case 5: PatCur.PatStatus=PatientStatus.Prospective; break;
 			}
 			switch(listGender.SelectedIndex){
 				case 0: PatCur.Gender=PatientGender.Male; break;
@@ -2887,7 +2890,8 @@ namespace OpenDental{
 			if(PatCur.PatStatus==PatientStatus.Archived
 				|| PatCur.PatStatus==PatientStatus.Deceased
 				|| PatCur.PatStatus==PatientStatus.Inactive
-				|| PatCur.PatStatus==PatientStatus.NonPatient)
+				|| PatCur.PatStatus==PatientStatus.NonPatient
+				|| PatCur.PatStatus==PatientStatus.Prospective)
 			{
 				List<Recall> recalls=Recalls.GetList(PatCur.PatNum);
 				for(int i=0;i<recalls.Count;i++){
