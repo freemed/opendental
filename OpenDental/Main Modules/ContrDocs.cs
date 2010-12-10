@@ -23,7 +23,7 @@ using System.Security.Cryptography;
 using System.Text; 
 using System.Threading;
 using System.Windows.Forms;
-using AcroPDFLib;
+using AxAcroPDFLib;
 using OpenDental.UI;
 using OpenDentBusiness;
 using Tao.OpenGl;
