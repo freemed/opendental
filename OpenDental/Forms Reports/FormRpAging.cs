@@ -391,15 +391,15 @@ namespace OpenDental{
 				+",BalTotal "
 				+",InsEst"
 				+",BalTotal-InsEst AS $pat "
-				+"FROM patient ";
+				+"FROM patient "
+				+"WHERE ";
+			if(checkExcludeInactive.Checked) {
+				cmd+="(patstatus != 2) AND ";
+			}
 			if(checkOnlyNeg.Checked){
-				cmd+="WHERE BalTotal < '-.005'";
+				cmd+="BalTotal < '-.005' ";
 			}
 			else{
-				cmd+="WHERE ";
-				if(checkExcludeInactive.Checked){
-					cmd+="(patstatus != 2) AND ";
-				}
 				if(radioAny.Checked){
 					cmd+=
 						"(Bal_0_30 > '.005' OR Bal_31_60 > '.005' OR Bal_61_90 > '.005' OR BalOver90 > '.005'";
