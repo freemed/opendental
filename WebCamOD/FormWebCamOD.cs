@@ -33,9 +33,21 @@ namespace WebCamOD {
 				return;
 			}
 			//since this tool is only used at HQ, we hard code everything
+			bool is192network=false;
+			IPHostEntry iphostentry=Dns.GetHostEntry(Environment.MachineName);
+			foreach(IPAddress ipaddress in iphostentry.AddressList) {
+				if(ipaddress.ToString().StartsWith("192.")) {
+					is192network=true;
+				}
+			}
 			DataConnection dbcon=new DataConnection();
 			try{
-				dbcon.SetDb("192.168.0.200","customers","root","","","",DatabaseType.MySql);
+				if(is192network) {
+					dbcon.SetDb("192.168.0.200","customers","root","","","",DatabaseType.MySql);
+				}
+				else {
+					dbcon.SetDb("10.10.10.200","customers","root","","","",DatabaseType.MySql);
+				}
 			}
 			catch{
 				MessageBox.Show("This tool is not designed for general use.");
@@ -52,10 +64,16 @@ namespace WebCamOD {
 				if(ipaddress.ToString().Contains("192.168.0.2")){
 					extension=PIn.Int(ipaddress.ToString().Substring(10))-100;//eg 205-100=105
 				}
-				if(ipaddress.ToString()=="192.168.0.186") {//hard code Jordans
+				else if(ipaddress.ToString().Contains("10.10.20.1")){
+					extension=PIn.Int(ipaddress.ToString().Substring(9));//eg 105
+				}
+				if(ipaddress.ToString()=="192.168.0.186"//hard code Jordans
+					|| ipaddress.ToString()=="10.10.21.186")
+				{
 					extension=104;
 				}
-				if(ipaddress.ToString()=="192.168.0.204") {//hard code Jordans
+				if(ipaddress.ToString()=="192.168.0.204"//hard code Jordans
+					|| ipaddress.ToString()=="10.10.20.104") {
 					extension=0;
 				}
 			}
