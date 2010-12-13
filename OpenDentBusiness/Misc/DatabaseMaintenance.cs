@@ -1579,19 +1579,20 @@ namespace OpenDentBusiness {
 			return log;
 		}
 
-		public static string ProcedurelogCodeNumZero(bool verbose,bool isCheck) {
+		public static string ProcedurelogCodeNumInvalid(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
 			if(isCheck) {
-				command="SELECT COUNT(*) FROM procedurelog WHERE CodeNum=0";
+				command="SELECT COUNT(*) FROM procedurelog WHERE NOT EXISTS (SELECT * FROM procedurecode WHERE procedurecode.CodeNum=procedurelog.CodeNum)";
 				int numFound=PIn.Int(Db.GetCount(command));
 				if(numFound>0 || verbose) {
-					log+=Lans.g("FormDatabaseMaintenance","Procedures found with CodeNum=0")+": "+numFound+"\r\n";
+					log+=Lans.g("FormDatabaseMaintenance","Procedures found with invalid CodeNum")+": "+numFound+"\r\n";
 				}
 			}
 			else {
+				long badCodeNum=0;
 				if(!ProcedureCodes.IsValidCode("~BAD~")) {
 					ProcedureCode badCode=new ProcedureCode();
 					badCode.ProcCode="~BAD~";
@@ -1599,12 +1600,15 @@ namespace OpenDentBusiness {
 					badCode.AbbrDesc="Invalid procedure";
 					badCode.ProcCat=DefC.GetByExactNameNeverZero(DefCat.ProcCodeCats,"Never Used");
 					ProcedureCodes.Insert(badCode);
+					badCodeNum=badCode.CodeNum;
 				}
-				long badCodeNum=ProcedureCodes.GetCodeNum("~BAD~");
-				command="UPDATE procedurelog SET CodeNum=" + badCodeNum + " WHERE CodeNum=0";
+				else {
+					badCodeNum=ProcedureCodes.GetCodeNum("~BAD~");
+				}				
+				command="UPDATE procedurelog SET CodeNum=" + POut.Long(badCodeNum) + " WHERE NOT EXISTS (SELECT * FROM procedurecode WHERE procedurecode.CodeNum=procedurelog.CodeNum)";
 				int numberFixed=Db.NonQ32(command);
 				if(numberFixed>0 || verbose) {
-					log+=Lans.g("FormDatabaseMaintenance","Procedures with CodeNum=0 flagged as invalid")+": "+numberFixed.ToString()+"\r\n";
+					log+=Lans.g("FormDatabaseMaintenance","Procedures fixed with invalid CodeNum")+": "+numberFixed.ToString()+"\r\n";
 				}
 			}
 			return log;

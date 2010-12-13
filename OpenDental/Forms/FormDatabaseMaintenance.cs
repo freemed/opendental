@@ -349,7 +349,7 @@ namespace OpenDental {
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.ProcedurelogBaseUnitsZero(verbose,isCheck);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.ProcedurelogCodeNumZero(verbose,isCheck);
+			textLog.Text+=DatabaseMaintenance.ProcedurelogCodeNumInvalid(verbose,isCheck);
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.ProcedurelogProvNumMissing(verbose,isCheck);
 			Application.DoEvents();
