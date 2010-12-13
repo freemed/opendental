@@ -326,6 +326,7 @@ namespace Crud {
 					dataTypeExpected="bigint";
 					break;
 				case "Int32":
+					//use C# int for ItemOrder style fields.  We know they will not use random keys.
 					dataTypeExpected="int";
 					dataTypeExpected2="smallint";//ok as long as the coding is careful.  Less than ideal.
 					//tinyint not allowed.  Change C# type to byte.

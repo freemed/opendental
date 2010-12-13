@@ -3149,6 +3149,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);
 				command="UPDATE preference SET ValueString = 'https://opendentalsoft.com/WebHostSynch/Sheets.asmx' WHERE PrefName = 'WebHostSynchServerURL'";
 				Db.NonQ(command);
+				command="ALTER TABLE operatory ADD SetProspective tinyint NOT NULL";
+				Db.NonQ(command);
 
 
 

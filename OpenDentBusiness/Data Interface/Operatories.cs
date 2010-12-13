@@ -39,7 +39,7 @@ namespace OpenDentBusiness{
 				op.OperatoryNum = PIn.Long(table.Rows[i][0].ToString());
 				op.OpName       = PIn.String(table.Rows[i][1].ToString());
 				op.Abbrev       = PIn.String(table.Rows[i][2].ToString());
-				op.ItemOrder    = PIn.Long(table.Rows[i][3].ToString());
+				op.ItemOrder    = PIn.Int(table.Rows[i][3].ToString());
 				op.IsHidden     = PIn.Bool(table.Rows[i][4].ToString());
 				op.ProvDentist  = PIn.Long(table.Rows[i][5].ToString());
 				op.ProvHygienist= PIn.Long(table.Rows[i][6].ToString());
