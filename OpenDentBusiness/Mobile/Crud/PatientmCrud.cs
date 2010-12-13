@@ -74,7 +74,7 @@ namespace OpenDentBusiness.Mobile.Crud{
 			return retVal;
 		}
 
-		///<summary>Usually set useExistingPK=true.  Inserts one Patientm into the database.</summary>
+		///<summary>Usually set useExistingPK=true.  Inserts one Patientm into the database. This would be executed against the webserver db</summary>
 		internal static long Insert(Patientm patientm,bool useExistingPK){
 			if(!useExistingPK) {
 				patientm.PatNum=ReplicationServers.GetKey("patientm","PatNum");
@@ -110,7 +110,7 @@ namespace OpenDentBusiness.Mobile.Crud{
 			return patientm.PatNum;
 		}
 
-		///<summary>Updates one Patientm in the database.</summary>
+		///<summary>Updates one Patientm in the database. This would be executed against the webserver db</summary>
 		internal static void Update(Patientm patientm){
 			string command="UPDATE patientm SET "
 				+"LName              = '"+POut.String(patientm.LName)+"', "
@@ -138,7 +138,7 @@ namespace OpenDentBusiness.Mobile.Crud{
 			Db.NonQ(command);
 		}
 
-		///<summary>Deletes one Patientm from the database.</summary>
+		///<summary>Deletes one Patientm from the database.  This would be executed against the webserver db</summary>
 		internal static void Delete(long customerNum,long patNum){
 			string command="DELETE FROM patientm "
 				+"WHERE CustomerNum = "+POut.Long(customerNum)+" AND PatNum = "+POut.Long(patNum)+" LIMIT 1";

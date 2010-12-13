@@ -34,6 +34,33 @@ namespace WebHostSynch {
 
 		[WebMethod]
 		public void DeleteRecords(String RegistrationKey,List<long> patientNums) {
+
+			/*
+OpenDentBusiness\Mobile\Data Interface\Patientms.cs (uses PatientmCrud.cs to manupulate Patientm)
+
+Methods that would be used exclusively  for webserver for web interface
+Patientm GetPatm(long patNum) 
+
+
+Methods that would be used exclusively on the webservice for updating data form an OD installation.
+
+Insert(Patientm pat) 
+Update(Patientm patient,Patientm oldPatient) 
+Delete(Patientm pat)
+SynchRecords(List<Patientm>) (method recieves a list that is returned by the GetNewAndUpdatedPatients() form an OD installation.)
+*/
+
+			/*
+ * Crud\PatientmCrud.cs - this class won't be directly used here.
+ * -------------------
+Patientm SelectOne(long patNum) - on web page
+Patientm SelectOne (string command)-- on webpage
+List<Patientm> SelectMany (string command)
+Insert(Patientm pat) 
+Update(Patientm patient,Patientm oldPatient) 
+Delete(Patientm pat)
+ 
+*/
 		}
 
 		[WebMethod]
@@ -42,3 +69,10 @@ namespace WebHostSynch {
 
 	}
 }
+
+
+/* Methods that would be used exclusively OD installation 
+List<Patientm> GetNewAndUpdatedPatients() 
+
+Patientm GetPatm(Patient  patient) - will convert a Patient into Patientm  (not to be confused with the overloaded method which )
+*/
