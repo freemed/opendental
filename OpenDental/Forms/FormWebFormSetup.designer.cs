@@ -204,7 +204,7 @@ namespace OpenDental{
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.Name = "FormWebFormSetup";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Web Form Setup V2";
+			this.Text = "Web Form Setup";
 			this.Load += new System.EventHandler(this.FormWebFormSetup_Load);
 			this.Shown += new System.EventHandler(this.FormWebFormSetup_Shown);
 			this.ResumeLayout(false);
