@@ -879,16 +879,39 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Used when closing the edit plan window to find all patients using this plan and to update all claimProcs for each patient.  This keeps estimates correct.</summary>
-		public static void ComputeEstimatesForPlan(long planNum) {
+		public static void ComputeEstimatesForTrojanPlan(long planNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),planNum);
 				return;
 			}
 			string command="SELECT PatNum FROM patplan WHERE PlanNum="+POut.Long(planNum);
 			DataTable table=Db.GetTable(command);
-			long patNum=0;
+			List<long> patnums=new List<long>();
 			for(int i=0;i<table.Rows.Count;i++) {
-				patNum=PIn.Long(table.Rows[i][0].ToString());
+				patnums.Add(PIn.Long(table.Rows[i][0].ToString()));
+			}
+			ComputeEstimatesForPatNums(patnums);
+		}
+
+		///<summary>Used when closing the edit plan window to find all patients using this plan and to update all claimProcs for each patient.  This keeps estimates correct.</summary>
+		public static void ComputeEstimatesForSubscriber(long subscriber) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),subscriber);
+				return;
+			}
+			string command="SELECT PatNum FROM patplan,inssub WHERE Subscriber="+POut.Long(subscriber)+" AND patplan.InsSubNum=inssub.InsSubNum";
+			DataTable table=Db.GetTable(command);
+			List<long> patnums=new List<long>();
+			for(int i=0;i<table.Rows.Count;i++) {
+				patnums.Add(PIn.Long(table.Rows[i][0].ToString()));
+			}
+			ComputeEstimatesForPatNums(patnums);
+		}
+
+		private static void ComputeEstimatesForPatNums(List<long> patnums){
+			long patNum=0;
+			for(int i=0;i<patnums.Count;i++) {
+				patNum=patnums[i];
 				Family fam=Patients.GetFamily(patNum);
 				Patient pat=fam.GetPatient(patNum);
 				List<ClaimProc> claimProcs=ClaimProcs.Refresh(patNum);

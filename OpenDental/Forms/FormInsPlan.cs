@@ -3997,8 +3997,8 @@ namespace OpenDental{
 			if(SubCur!=null) {
 				SubCur.PlanNum=PlanCur.PlanNum;
 				InsSubs.Update(SubCur);//also saves the other fields besides PlanNum
+				InsPlans.ComputeEstimatesForSubscriber(SubCur.Subscriber);
 			}
-			InsPlans.ComputeEstimatesForPlan(PlanCur.PlanNum);
 			DialogResult=DialogResult.OK;
 		}
 

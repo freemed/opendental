@@ -161,7 +161,7 @@ namespace OpenDentBusiness {
 					troj.BenefitList[j].PlanNum=planNum;
 					Benefits.Insert(troj.BenefitList[j]);
 				}
-				InsPlans.ComputeEstimatesForPlan(planNum);
+				InsPlans.ComputeEstimatesForTrojanPlan(planNum);
 			}
 		}
 
