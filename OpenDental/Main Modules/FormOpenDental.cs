@@ -4045,9 +4045,14 @@ namespace OpenDental{
 			if(!Security.IsAuthorized(Permissions.Setup)){
 				return;
 			}
+			/*
 			FormMobile FormM=new FormMobile();
 			FormM.ShowDialog();
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Mobile Sync");
+			*/
+			FormMobileSetup FormM=new FormMobileSetup();
+			FormM.ShowDialog();
+			
 		}
 
 		private void menuItemWebForms_Click(object sender,EventArgs e) {
