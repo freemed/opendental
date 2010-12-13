@@ -219,6 +219,7 @@ namespace OpenDental{
 		private System.Windows.Forms.Timer timerPhoneWebCam;
 		private FormTerminalManager formTerminalManager;
 		private FormPhoneTiles formPhoneTiles;
+		private System.Windows.Forms.Timer timerWebHostSynch;
 		private UserControlPhoneSmall phoneSmall;		
 
 		///<summary></summary>
@@ -356,7 +357,6 @@ namespace OpenDental{
 			this.menuItemModules = new System.Windows.Forms.MenuItem();
 			this.menuItemOperatories = new System.Windows.Forms.MenuItem();
 			this.menuItemPatFieldDefs = new System.Windows.Forms.MenuItem();
-			this.menuItemTimeCards = new System.Windows.Forms.MenuItem();
 			this.menuItemPractice = new System.Windows.Forms.MenuItem();
 			this.menuItemProcedureButtons = new System.Windows.Forms.MenuItem();
 			this.menuItemLinks = new System.Windows.Forms.MenuItem();
@@ -369,6 +369,7 @@ namespace OpenDental{
 			this.menuItemSecurity = new System.Windows.Forms.MenuItem();
 			this.menuItemSheets = new System.Windows.Forms.MenuItem();
 			this.menuItemEasy = new System.Windows.Forms.MenuItem();
+			this.menuItemTimeCards = new System.Windows.Forms.MenuItem();
 			this.menuItemLists = new System.Windows.Forms.MenuItem();
 			this.menuItemProcCodes = new System.Windows.Forms.MenuItem();
 			this.menuItem5 = new System.Windows.Forms.MenuItem();
@@ -438,6 +439,7 @@ namespace OpenDental{
 			this.timerHeartBeat = new System.Windows.Forms.Timer(this.components);
 			this.butBigPhones = new OpenDental.UI.Button();
 			this.timerPhoneWebCam = new System.Windows.Forms.Timer(this.components);
+			this.timerWebHostSynch = new System.Windows.Forms.Timer(this.components);
 			this.SuspendLayout();
 			// 
 			// timerTimeIndic
@@ -726,12 +728,6 @@ namespace OpenDental{
 			this.menuItemPatFieldDefs.Text = "Patient Field Defs";
 			this.menuItemPatFieldDefs.Click += new System.EventHandler(this.menuItemPatFieldDefs_Click);
 			// 
-			// menuItemTimeCards
-			// 
-			this.menuItemTimeCards.Index = 38;
-			this.menuItemTimeCards.Text = "Time Cards";
-			this.menuItemTimeCards.Click += new System.EventHandler(this.menuItemTimeCards_Click);
-			// 
 			// menuItemPractice
 			// 
 			this.menuItemPractice.Index = 26;
@@ -803,6 +799,12 @@ namespace OpenDental{
 			this.menuItemEasy.Index = 37;
 			this.menuItemEasy.Text = "Show Features";
 			this.menuItemEasy.Click += new System.EventHandler(this.menuItemEasy_Click);
+			// 
+			// menuItemTimeCards
+			// 
+			this.menuItemTimeCards.Index = 38;
+			this.menuItemTimeCards.Text = "Time Cards";
+			this.menuItemTimeCards.Click += new System.EventHandler(this.menuItemTimeCards_Click);
 			// 
 			// menuItemLists
 			// 
@@ -1190,8 +1192,8 @@ namespace OpenDental{
 			this.panelSplitter.Name = "panelSplitter";
 			this.panelSplitter.Size = new System.Drawing.Size(769,7);
 			this.panelSplitter.TabIndex = 50;
-			this.panelSplitter.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panelSplitter_MouseMove);
 			this.panelSplitter.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelSplitter_MouseDown);
+			this.panelSplitter.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panelSplitter_MouseMove);
 			this.panelSplitter.MouseUp += new System.Windows.Forms.MouseEventHandler(this.panelSplitter_MouseUp);
 			// 
 			// menuSplitter
@@ -1283,6 +1285,12 @@ namespace OpenDental{
 			this.timerPhoneWebCam.Interval = 1600;
 			this.timerPhoneWebCam.Tick += new System.EventHandler(this.timerPhoneWebCam_Tick);
 			// 
+			// timerWebHostSynch
+			// 
+			this.timerWebHostSynch.Enabled = true;
+			this.timerWebHostSynch.Interval = 10000;
+			this.timerWebHostSynch.Tick += new System.EventHandler(this.timerWebHostSynch_Tick);
+			// 
 			// FormOpenDental
 			// 
 			this.ClientSize = new System.Drawing.Size(982,626);
@@ -1296,12 +1304,13 @@ namespace OpenDental{
 			this.RightToLeft = System.Windows.Forms.RightToLeft.No;
 			this.Text = "Open Dental";
 			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-			this.Load += new System.EventHandler(this.FormOpenDental_Load);
-			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormOpenDental_FormClosed);
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormOpenDental_FormClosing);
-			this.Resize += new System.EventHandler(this.FormOpenDental_Resize);
+			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormOpenDental_FormClosed);
+			this.Load += new System.EventHandler(this.FormOpenDental_Load);
 			this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FormOpenDental_KeyDown);
+			this.Resize += new System.EventHandler(this.FormOpenDental_Resize);
 			this.ResumeLayout(false);
+
 		}
 
 		#endregion
@@ -4370,6 +4379,11 @@ namespace OpenDental{
 			phoneSmall.PhoneCur=phone;
 		}
 
+		private void timerWebHostSynch_Tick(object sender,EventArgs e) {
+			//For debugging, this timer is already enabled, and it's set to fire every 10 seconds.  We can change that later.
+
+		}
+
 		private void SystemEvents_SessionSwitch(object sender,SessionSwitchEventArgs e) {
 			if(e.Reason!=SessionSwitchReason.SessionLock) {
 				return;
@@ -4429,6 +4443,8 @@ namespace OpenDental{
 			//This step is necessary so that graphics memory does not fill up.
 			Dispose();
 		}
+
+		
 
 
 		
