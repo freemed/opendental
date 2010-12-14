@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Services;
+using OpenDentBusiness;
 using OpenDentBusiness.Mobile;
 using WebForms;
 
@@ -11,13 +12,21 @@ namespace WebHostSynch {
 	/// <summary>
 	/// Summary description for Mobile
 	/// </summary>
-	[WebService(Namespace = "http://tempuri.org/")]
+	[WebService(Namespace="http://opendental.com/")]
 	[WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
 	[System.ComponentModel.ToolboxItem(false)]
 	// To allow this Web Service to be called from script, using ASP.NET AJAX, uncomment the following line. 
 	// [System.Web.Script.Services.ScriptService]
 	public class Mobile:System.Web.Services.WebService {
 
+		/// <summary>
+		/// An empty method to test if the webservice is up and running. this was made with the intention of testing the correctness of the webservice URL on an Open Dental Installation. If an incorrect webservice URL is used in a background thread of OD the exception cannot be handled easily.
+		/// </summary>
+		[WebMethod]
+		public bool ServiceExists() {
+			return true;
+		}
+		
 		[WebMethod]
 		public DateTime GetLastDateTStampOfPatients(String RegistrationKey) {
 			return DateTime.Today;

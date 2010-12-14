@@ -17,5 +17,8 @@
     <Setting Name="OpenDental_WebSheets_Sheets" Type="(Web Service URL)" Scope="Application">
       <Value Profile="(Default)">http://localhost:2923/Sheets.asmx</Value>
     </Setting>
+    <Setting Name="OpenDental_MobileWeb_Mobile" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://localhost:2923/Mobile.asmx</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

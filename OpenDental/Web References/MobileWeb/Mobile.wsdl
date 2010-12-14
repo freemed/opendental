@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+      <s:element name="ServiceExists">
+        <s:complexType />
+      </s:element>
+      <s:element name="ServiceExistsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="ServiceExistsResult" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetLastDateTStampOfPatients">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RegistrationKey" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetLastDateTStampOfPatientsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="GetLastDateTStampOfPatientsResult" type="s:dateTime" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetLastDateTStampOfAppointments">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RegistrationKey" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetLastDateTStampOfAppointmentsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="GetLastDateTStampOfAppointmentsResult" type="s:dateTime" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SynchRecords">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RegistrationKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="patientmList" type="tns:ArrayOfPatientm" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfPatientm">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Patientm" nillable="true" type="tns:Patientm" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Patientm">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:TableBase">
+            <s:sequence>
+              <s:element minOccurs="1" maxOccurs="1" name="CustomerNum" type="s:long" />
+              <s:element minOccurs="1" maxOccurs="1" name="PatNum" type="s:long" />
+              <s:element minOccurs="0" maxOccurs="1" name="LName" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="FName" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="MiddleI" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="Preferred" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="PatStatus" type="tns:PatientStatus" />
+              <s:element minOccurs="1" maxOccurs="1" name="Gender" type="tns:PatientGender" />
+              <s:element minOccurs="1" maxOccurs="1" name="Position" type="tns:PatientPosition" />
+              <s:element minOccurs="1" maxOccurs="1" name="Birthdate" type="s:dateTime" />
+              <s:element minOccurs="0" maxOccurs="1" name="Address" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="Address2" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="City" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="State" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="Zip" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="HmPhone" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="WkPhone" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="WirelessPhone" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="Guarantor" type="s:long" />
+              <s:element minOccurs="1" maxOccurs="1" name="Age" type="s:int" />
+              <s:element minOccurs="0" maxOccurs="1" name="Email" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="AddrNote" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="ClinicNum" type="s:long" />
+              <s:element minOccurs="1" maxOccurs="1" name="PreferContactMethod" type="tns:ContactMethod" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="TableBase" abstract="true">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="IsNew" type="s:boolean" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="PatientStatus">
+        <s:restriction base="s:string">
+          <s:enumeration value="Patient" />
+          <s:enumeration value="NonPatient" />
+          <s:enumeration value="Inactive" />
+          <s:enumeration value="Archived" />
+          <s:enumeration value="Deleted" />
+          <s:enumeration value="Deceased" />
+          <s:enumeration value="Prospective" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="PatientGender">
+        <s:restriction base="s:string">
+          <s:enumeration value="Male" />
+          <s:enumeration value="Female" />
+          <s:enumeration value="Unknown" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="PatientPosition">
+        <s:restriction base="s:string">
+          <s:enumeration value="Single" />
+          <s:enumeration value="Married" />
+          <s:enumeration value="Child" />
+          <s:enumeration value="Widowed" />
+          <s:enumeration value="Divorced" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="ContactMethod">
+        <s:restriction base="s:string">
+          <s:enumeration value="None" />
+          <s:enumeration value="DoNotCall" />
+          <s:enumeration value="HmPhone" />
+          <s:enumeration value="WkPhone" />
+          <s:enumeration value="WirelessPh" />
+          <s:enumeration value="Email" />
+          <s:enumeration value="SeeNotes" />
+          <s:enumeration value="Mail" />
+          <s:enumeration value="TextMessage" />
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="SynchRecordsResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="DeleteRecords">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RegistrationKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="patientNums" type="tns:ArrayOfLong" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfLong">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="long" type="s:long" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="DeleteRecordsResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="SetMobileWebPassword">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RegistrationKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SetMobileWebPasswordResponse">
+        <s:complexType />
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="ServiceExistsSoapIn">
+    <wsdl:part name="parameters" element="tns:ServiceExists" />
+  </wsdl:message>
+  <wsdl:message name="ServiceExistsSoapOut">
+    <wsdl:part name="parameters" element="tns:ServiceExistsResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetLastDateTStampOfPatientsSoapIn">
+    <wsdl:part name="parameters" element="tns:GetLastDateTStampOfPatients" />
+  </wsdl:message>
+  <wsdl:message name="GetLastDateTStampOfPatientsSoapOut">
+    <wsdl:part name="parameters" element="tns:GetLastDateTStampOfPatientsResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetLastDateTStampOfAppointmentsSoapIn">
+    <wsdl:part name="parameters" element="tns:GetLastDateTStampOfAppointments" />
+  </wsdl:message>
+  <wsdl:message name="GetLastDateTStampOfAppointmentsSoapOut">
+    <wsdl:part name="parameters" element="tns:GetLastDateTStampOfAppointmentsResponse" />
+  </wsdl:message>
+  <wsdl:message name="SynchRecordsSoapIn">
+    <wsdl:part name="parameters" element="tns:SynchRecords" />
+  </wsdl:message>
+  <wsdl:message name="SynchRecordsSoapOut">
+    <wsdl:part name="parameters" element="tns:SynchRecordsResponse" />
+  </wsdl:message>
+  <wsdl:message name="DeleteRecordsSoapIn">
+    <wsdl:part name="parameters" element="tns:DeleteRecords" />
+  </wsdl:message>
+  <wsdl:message name="DeleteRecordsSoapOut">
+    <wsdl:part name="parameters" element="tns:DeleteRecordsResponse" />
+  </wsdl:message>
+  <wsdl:message name="SetMobileWebPasswordSoapIn">
+    <wsdl:part name="parameters" element="tns:SetMobileWebPassword" />
+  </wsdl:message>
+  <wsdl:message name="SetMobileWebPasswordSoapOut">
+    <wsdl:part name="parameters" element="tns:SetMobileWebPasswordResponse" />
+  </wsdl:message>
+  <wsdl:portType name="MobileSoap">
+    <wsdl:operation name="ServiceExists">
+      <wsdl:input message="tns:ServiceExistsSoapIn" />
+      <wsdl:output message="tns:ServiceExistsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetLastDateTStampOfPatients">
+      <wsdl:input message="tns:GetLastDateTStampOfPatientsSoapIn" />
+      <wsdl:output message="tns:GetLastDateTStampOfPatientsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetLastDateTStampOfAppointments">
+      <wsdl:input message="tns:GetLastDateTStampOfAppointmentsSoapIn" />
+      <wsdl:output message="tns:GetLastDateTStampOfAppointmentsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SynchRecords">
+      <wsdl:input message="tns:SynchRecordsSoapIn" />
+      <wsdl:output message="tns:SynchRecordsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteRecords">
+      <wsdl:input message="tns:DeleteRecordsSoapIn" />
+      <wsdl:output message="tns:DeleteRecordsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SetMobileWebPassword">
+      <wsdl:input message="tns:SetMobileWebPasswordSoapIn" />
+      <wsdl:output message="tns:SetMobileWebPasswordSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="MobileSoap" type="tns:MobileSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="ServiceExists">
+      <soap:operation soapAction="http://tempuri.org/ServiceExists" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLastDateTStampOfPatients">
+      <soap:operation soapAction="http://tempuri.org/GetLastDateTStampOfPatients" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLastDateTStampOfAppointments">
+      <soap:operation soapAction="http://tempuri.org/GetLastDateTStampOfAppointments" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SynchRecords">
+      <soap:operation soapAction="http://tempuri.org/SynchRecords" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteRecords">
+      <soap:operation soapAction="http://tempuri.org/DeleteRecords" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetMobileWebPassword">
+      <soap:operation soapAction="http://tempuri.org/SetMobileWebPassword" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="MobileSoap12" type="tns:MobileSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="ServiceExists">
+      <soap12:operation soapAction="http://tempuri.org/ServiceExists" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLastDateTStampOfPatients">
+      <soap12:operation soapAction="http://tempuri.org/GetLastDateTStampOfPatients" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLastDateTStampOfAppointments">
+      <soap12:operation soapAction="http://tempuri.org/GetLastDateTStampOfAppointments" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SynchRecords">
+      <soap12:operation soapAction="http://tempuri.org/SynchRecords" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteRecords">
+      <soap12:operation soapAction="http://tempuri.org/DeleteRecords" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetMobileWebPassword">
+      <soap12:operation soapAction="http://tempuri.org/SetMobileWebPassword" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="Mobile">
+    <wsdl:port name="MobileSoap" binding="tns:MobileSoap">
+      <soap:address location="http://localhost:2923/Mobile.asmx" />
+    </wsdl:port>
+    <wsdl:port name="MobileSoap12" binding="tns:MobileSoap12">
+      <soap12:address location="http://localhost:2923/Mobile.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

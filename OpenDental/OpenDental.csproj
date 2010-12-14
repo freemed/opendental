@@ -1967,6 +1967,11 @@
     <Compile Include="Misc\Tooth.cs" />
     <Compile Include="Misc\VisiQuick.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Web References\MobileWeb\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
     <Compile Include="Web References\WebSheets\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -3788,6 +3793,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
+    <None Include="Web References\MobileWeb\Mobile.wsdl" />
+    <None Include="Web References\MobileWeb\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
     <None Include="Web References\WebSheets\Reference.map">
       <Generator>MSDiscoCodeGenerator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
@@ -3804,6 +3814,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Web References\MobileWeb\Mobile.disco" />
     <None Include="Web References\WebSheets\Sheets.disco" />
     <EmbeddedResource Include="Bridges\FormTrophyNamePick.resx">
       <DependentUpon>FormTrophyNamePick.cs</DependentUpon>
@@ -4440,6 +4451,17 @@
       </CachedDynamicPropName>
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>OpenDental_customerUpdates_Service1</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="http://localhost:2923/Mobile.asmx">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\MobileWeb\</RelPath>
+      <UpdateFromURL>http://localhost:2923/Mobile.asmx</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>OpenDental_MobileWeb_Mobile</CachedSettingsPropName>
     </WebReferenceUrl>
     <WebReferenceUrl Include="http://localhost:2923/Sheets.asmx">
       <UrlBehavior>Dynamic</UrlBehavior>
