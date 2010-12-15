@@ -78,6 +78,9 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetInt(MethodBase.GetCurrentMethod());
 			}
+			if(DataConnection.DBtype!=DatabaseType.MySql) {
+				return 0;
+			}
 			string command="SHOW VARIABLES LIKE 'server_id'";
 			DataTable table=Db.GetTable(command);
 			return PIn.Int(table.Rows[0][1].ToString());

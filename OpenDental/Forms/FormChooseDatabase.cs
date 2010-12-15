@@ -95,6 +95,7 @@ namespace OpenDental{
 			this.checkNoShow = new System.Windows.Forms.CheckBox();
 			this.comboComputerName = new System.Windows.Forms.ComboBox();
 			this.groupServer = new System.Windows.Forms.GroupBox();
+			this.checkUsingEcw = new System.Windows.Forms.CheckBox();
 			this.textURI = new System.Windows.Forms.TextBox();
 			this.textUser2 = new System.Windows.Forms.TextBox();
 			this.textPassword2 = new System.Windows.Forms.TextBox();
@@ -109,7 +110,6 @@ namespace OpenDental{
 			this.textConnectionString = new System.Windows.Forms.TextBox();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
-			this.checkUsingEcw = new System.Windows.Forms.CheckBox();
 			this.groupDirect.SuspendLayout();
 			this.groupServer.SuspendLayout();
 			this.SuspendLayout();
@@ -236,6 +236,16 @@ namespace OpenDental{
 			this.groupServer.TabStop = false;
 			this.groupServer.Text = "Connect to Web Service - Only for advanced users";
 			// 
+			// checkUsingEcw
+			// 
+			this.checkUsingEcw.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkUsingEcw.Location = new System.Drawing.Point(13,176);
+			this.checkUsingEcw.Name = "checkUsingEcw";
+			this.checkUsingEcw.Size = new System.Drawing.Size(317,18);
+			this.checkUsingEcw.TabIndex = 16;
+			this.checkUsingEcw.Text = "Using eClinicalWorks";
+			this.checkUsingEcw.UseVisualStyleBackColor = true;
+			// 
 			// textURI
 			// 
 			this.textURI.Location = new System.Drawing.Point(13,65);
@@ -319,7 +329,7 @@ namespace OpenDental{
 			this.listType.FormattingEnabled = true;
 			this.listType.Location = new System.Drawing.Point(364,312);
 			this.listType.Name = "listType";
-			this.listType.Size = new System.Drawing.Size(99,17);
+			this.listType.Size = new System.Drawing.Size(99,30);
 			this.listType.TabIndex = 20;
 			// 
 			// label8
@@ -371,16 +381,6 @@ namespace OpenDental{
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
-			// checkUsingEcw
-			// 
-			this.checkUsingEcw.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkUsingEcw.Location = new System.Drawing.Point(13,176);
-			this.checkUsingEcw.Name = "checkUsingEcw";
-			this.checkUsingEcw.Size = new System.Drawing.Size(317,18);
-			this.checkUsingEcw.TabIndex = 16;
-			this.checkUsingEcw.Text = "Using eClinicalWorks";
-			this.checkUsingEcw.UseVisualStyleBackColor = true;
-			// 
 			// FormChooseDatabase
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
@@ -400,8 +400,8 @@ namespace OpenDental{
 			this.Name = "FormChooseDatabase";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Choose Database";
-			this.Load += new System.EventHandler(this.FormConfig_Load);
 			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormConfig_Closing);
+			this.Load += new System.EventHandler(this.FormConfig_Load);
 			this.groupDirect.ResumeLayout(false);
 			this.groupDirect.PerformLayout();
 			this.groupServer.ResumeLayout(false);
@@ -414,7 +414,7 @@ namespace OpenDental{
 
 		private void FormConfig_Load(object sender, System.EventArgs e) {
 			listType.Items.Add("MySql");
-			//listType.Items.Add("Oracle");
+			listType.Items.Add("Oracle");
 			listType.SelectedIndex=0;
 			GetConfig();
 			FillCombosComputerNames();
@@ -712,10 +712,11 @@ namespace OpenDental{
 				OpenDentBusiness.DataConnection dcon;
 				//Try to connect to the database directly
 				try {
+//todo:
 					DataConnection.DBtype=DatabaseType.MySql;
-					//if(listType.SelectedIndex==1) {
-						//DataConnection.DBtype=DatabaseType.Oracle;
-					//}
+					if(listType.SelectedIndex==1) {
+						DataConnection.DBtype=DatabaseType.Oracle;
+					}
 					dcon=new OpenDentBusiness.DataConnection(DataConnection.DBtype);
 					if(textConnectionString.Text.Length>0){
 						dcon.SetDb(textConnectionString.Text,"",DataConnection.DBtype);

@@ -35,6 +35,8 @@ namespace UnitTests {
 			this.label4 = new System.Windows.Forms.Label();
 			this.butCore = new System.Windows.Forms.Button();
 			this.label5 = new System.Windows.Forms.Label();
+			this.listType = new System.Windows.Forms.ListBox();
+			this.label7 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// textResults
@@ -45,7 +47,7 @@ namespace UnitTests {
 			this.textResults.Location = new System.Drawing.Point(12,132);
 			this.textResults.Multiline = true;
 			this.textResults.Name = "textResults";
-			this.textResults.Size = new System.Drawing.Size(663,663);
+			this.textResults.Size = new System.Drawing.Size(733,663);
 			this.textResults.TabIndex = 1;
 			// 
 			// label1
@@ -135,7 +137,7 @@ namespace UnitTests {
 			// 
 			// label5
 			// 
-			this.label5.Location = new System.Drawing.Point(92,58);
+			this.label5.Location = new System.Drawing.Point(93,63);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(547,18);
 			this.label5.TabIndex = 13;
@@ -143,11 +145,31 @@ namespace UnitTests {
     "nector are working.";
 			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
+			// listType
+			// 
+			this.listType.FormattingEnabled = true;
+			this.listType.Location = new System.Drawing.Point(646,63);
+			this.listType.Name = "listType";
+			this.listType.Size = new System.Drawing.Size(99,30);
+			this.listType.TabIndex = 22;
+			this.listType.SelectedIndexChanged += new System.EventHandler(this.listType_SelectedIndexChanged);
+			// 
+			// label7
+			// 
+			this.label7.Location = new System.Drawing.Point(643,42);
+			this.label7.Name = "label7";
+			this.label7.Size = new System.Drawing.Size(99,18);
+			this.label7.TabIndex = 21;
+			this.label7.Text = "Database Type";
+			this.label7.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			// 
 			// FormUnitTests
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(687,807);
+			this.ClientSize = new System.Drawing.Size(757,807);
+			this.Controls.Add(this.listType);
+			this.Controls.Add(this.label7);
 			this.Controls.Add(this.label5);
 			this.Controls.Add(this.butCore);
 			this.Controls.Add(this.label4);
@@ -182,6 +204,8 @@ namespace UnitTests {
 		private System.Windows.Forms.Label label4;
 		private System.Windows.Forms.Button butCore;
 		private System.Windows.Forms.Label label5;
+		private System.Windows.Forms.ListBox listType;
+		private System.Windows.Forms.Label label7;
 	}
 }
 
