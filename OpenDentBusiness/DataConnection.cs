@@ -81,6 +81,96 @@ namespace OpenDentBusiness{
 			return Database;
 		}
 
+		#region Constructors
+		public DataConnection(bool isLow) {
+			string connectStr=ConnectionString;
+			if(connectStr.Length<1 && ServerName!=null) {
+				connectStr=BuildSimpleConnectionString(ServerName,Database,MysqlUserLow,MysqlPassLow);
+			}
+			if(DBtype==DatabaseType.Oracle) {
+				conOr=new OracleConnection(connectStr);
+				//drOr = null;
+				cmdOr=new OracleCommand();
+				cmdOr.Connection=conOr;
+			}
+			else if(DBtype==DatabaseType.MySql) {
+				con=new MySqlConnection(connectStr);
+				//dr = null;
+				cmd = new MySqlCommand();
+				cmd.Connection=con;
+			}
+		}
+
+		///<summary></summary>
+		public DataConnection() {
+			string connectStr=ConnectionString;
+			if(connectStr.Length<1 && ServerName!=null) {
+				connectStr=BuildSimpleConnectionString(ServerName,Database,MysqlUser,MysqlPass);
+			}
+			if(DBtype==DatabaseType.Oracle) {
+				conOr=new OracleConnection(connectStr);
+				//drOr = null;
+				cmdOr=new OracleCommand();
+				cmdOr.Connection=conOr;
+				//table=new DataTable();
+			}
+			else if(DBtype==DatabaseType.MySql) {
+				con=new MySqlConnection(connectStr);
+				//dr = null;
+				cmd = new MySqlCommand();
+				cmd.Connection=con;
+				//table=new DataTable();
+			}
+		}
+
+		///<summary>Only used from FormChooseDatabase to attempt connection with database.</summary>
+		public DataConnection(DatabaseType dbtype) {
+			//SetDb will be run immediately, so no need to do anything here.
+		}
+
+		///<summary></summary>
+		public DataConnection(string database) {
+			string connectStr=ConnectionString;//this doesn't really set it to the new db as intended. Deal with later.
+			if(connectStr.Length<1) {
+				connectStr=BuildSimpleConnectionString(ServerName,database,MysqlUser,MysqlPass);
+			}
+			if(DBtype==DatabaseType.Oracle) {
+				conOr=new OracleConnection(connectStr);
+				//drOr=null;
+				cmdOr=new OracleCommand();
+				cmdOr.Connection=conOr;
+				//table=new DataTable();
+			}
+			else if(DBtype==DatabaseType.MySql) {
+				con=new MySqlConnection(connectStr);
+				//dr = null;
+				cmd = new MySqlCommand();
+				cmd.Connection=con;
+				//table=new DataTable();
+			}
+		}
+
+		///<summary>Only used to fill the list of databases in the ChooseDatabase window and from Employees.GetAsteriskMissedCalls.  Also used by the mobile server because it does not need to worry about 3-tier scenarios.</summary>
+		public DataConnection(string serverName,string database,string mysqlUser,string mysqlPass,DatabaseType dtype) {
+			string connectStr=ConnectionString;
+			if(connectStr.Length<1) {
+				connectStr=BuildSimpleConnectionString(dtype,serverName,database,mysqlUser,mysqlPass);
+			}
+			if(dtype==DatabaseType.Oracle) {
+				conOr=new OracleConnection(connectStr);
+				//drOr=null;
+				cmdOr=new OracleCommand();
+				cmdOr.Connection=conOr;
+			}
+			else if(DBtype==DatabaseType.MySql) {
+				con=new MySqlConnection(connectStr);
+				//dr = null;
+				cmd = new MySqlCommand();
+				cmd.Connection=con;
+			}
+		}
+		#endregion Constructors
+
 		/*
 		///<Summary>This is only meaningful if local connection instead of through server.  This might be added to be able to access from ODR when users start customizing their RDL reports.  But for now, we should build the connection string programmatically</Summary>
 		public static string GetCurrentConnectionString(){
@@ -216,97 +306,6 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		//<summary>Constructor sets the connection values.</summary>
-		//private static string 
-
-		public DataConnection(bool isLow){
-			string connectStr=ConnectionString;
-			if(connectStr.Length<1 && ServerName!=null) {
-				connectStr=BuildSimpleConnectionString(ServerName,Database,MysqlUserLow,MysqlPassLow);
-			}
-			if(DBtype==DatabaseType.Oracle) {
-				conOr=new OracleConnection(connectStr);
-				//drOr = null;
-				cmdOr=new OracleCommand();
-				cmdOr.Connection=conOr;
-			}
-			else if(DBtype==DatabaseType.MySql) {
-				con=new MySqlConnection(connectStr);
-				//dr = null;
-				cmd = new MySqlCommand();
-				cmd.Connection=con;
-			}
-		}
-
-		///<summary></summary>
-		public DataConnection(){
-			string connectStr=ConnectionString;
-			if(connectStr.Length<1 && ServerName!=null) {
-				connectStr=BuildSimpleConnectionString(ServerName,Database,MysqlUser,MysqlPass);
-			}
-			if(DBtype==DatabaseType.Oracle){
-				conOr=new OracleConnection(connectStr);
-				//drOr = null;
-				cmdOr=new OracleCommand();
-				cmdOr.Connection=conOr;
-				//table=new DataTable();
-			}
-			else if(DBtype==DatabaseType.MySql) {
-				con=new MySqlConnection(connectStr);
-				//dr = null;
-				cmd = new MySqlCommand();
-				cmd.Connection=con;
-				//table=new DataTable();
-			}
-		}
-
-		///<summary>Only used from FormChooseDatabase to attempt connection with database.</summary>
-		public DataConnection(DatabaseType dbtype) {
-			//SetDb will be run immediately, so no need to do anything here.
-		}
-
-		///<summary></summary>
-		public DataConnection(string database) {
-			string connectStr=ConnectionString;//this doesn't really set it to the new db as intended. Deal with later.
-			if(connectStr.Length<1) {
-				connectStr=BuildSimpleConnectionString(ServerName,database,MysqlUser,MysqlPass);
-			}
-			if(DBtype==DatabaseType.Oracle){
-				conOr=new OracleConnection(connectStr);
-				//drOr=null;
-				cmdOr=new OracleCommand();
-				cmdOr.Connection=conOr;
-				//table=new DataTable();
-			}
-			else if(DBtype==DatabaseType.MySql) {
-				con=new MySqlConnection(connectStr);
-				//dr = null;
-				cmd = new MySqlCommand();
-				cmd.Connection=con;
-				//table=new DataTable();
-			}
-		}
-
-		///<summary>Only used to fill the list of databases in the ChooseDatabase window and from Employees.GetAsteriskMissedCalls.</summary>
-		public DataConnection(string serverName, string database, string mysqlUser, string mysqlPass,DatabaseType dtype){
-			string connectStr=ConnectionString;
-			if(connectStr.Length<1){
-				connectStr=BuildSimpleConnectionString(dtype,serverName,database,mysqlUser,mysqlPass);
-			}
-			if(dtype==DatabaseType.Oracle){
-				conOr=new OracleConnection(connectStr);
-				//drOr=null;
-				cmdOr=new OracleCommand();
-				cmdOr.Connection=conOr;
-			}
-			else if(DBtype==DatabaseType.MySql) {
-				con=new MySqlConnection(connectStr);
-				//dr = null;
-				cmd = new MySqlCommand();
-				cmd.Connection=con;
-			}
-		}
-
 		///<summary>Fills table with data from the database.</summary>
 		public DataTable GetTable(string command){
 			#if DEBUG
@@ -372,10 +371,10 @@ namespace OpenDentBusiness{
 				conOr.Close();
 			}
 			else if(DBtype==DatabaseType.MySql){
-			cmd.CommandText=commands;
-			da=new MySqlDataAdapter(cmd);
-			da.Fill(ds);
-			con.Close();
+				cmd.CommandText=commands;
+				da=new MySqlDataAdapter(cmd);
+				da.Fill(ds);
+				con.Close();
 			}
 			return ds;
 		}
@@ -494,6 +493,7 @@ namespace OpenDentBusiness{
 				}
 				Thread.Sleep(delayForTesting);
 			#endif
+//todo: Oracle.
 			string retVal="";
 			cmd.CommandText=command;
 			con.Open();
