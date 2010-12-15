@@ -27,6 +27,21 @@ namespace OpenDentBusiness.Mobile {
 		public static void Delete(long customerNum,long patNum) {
 			Crud.PatientmCrud.Delete(customerNum, patNum);
 		}
+
+		/// <summary>This would be executed on the webserver only. One of the method which is used to decided if certain missing records are to be transferred to the webserver. This is especially true when synchronization happens for the very first time when there are no records on the  webserver./// </summary>
+		public static int GetRecordCount(String RegistrationKey) {
+			return 0;
+		}
+		
+		/// <summary>This would be executed on the webserver only. One of the method which is used to decided if certain missing records are to be transferred to the webserver. This is especially true when synchronization happens for the very first time when there are no records on the  webserver./// </summary>
+		public static long[] GetExistingRecordIds(String RegistrationKey) {
+			long customerNum=0;
+			string command="SELECT PatNum FROM patientm"
+				+"WHERE CustomerNum = "+POut.Long(customerNum);
+			Db.GetDataSet(command);
+			long[] RecordIds= { };
+			return RecordIds;
+		}
 		///<summary>The values returned are sent to the webserver.</summary>
 		public static List<Patientm> GetChanged(DateTime changedSince) {
 			List<Patient> ChangedPatientList=Patients.GetChangedSince(changedSince);

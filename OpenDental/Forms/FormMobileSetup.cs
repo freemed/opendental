@@ -22,10 +22,22 @@ namespace OpenDental {
 		}
 
 		public static void SynchPatientRecordsOnMobileWeb() {
-			DateTime changedSince=mb.GetLastDateTStampOfPatients(RegistrationKey);
+			int RecordCountOfPatientm=Patientms.GetRecordCount(RegistrationKey);
+			int RecordCountOfPatient= Patients.GetNumberPatients();
+
+			if(RecordCountOfPatient>RecordCountOfPatientm) {
+				SendMissingRecords();
+			}
+
+			DateTime changedSince= new DateTime(6,6,6);
 			List<Patientm> ChangedPatientmList=Patientms.GetChanged(changedSince);
 			mb.SynchRecords(RegistrationKey,ChangedPatientmList.ToArray());
 			
+		}
+
+		public static void SendMissingRecords() {
+
+
 		}
 
 		/// <summary>

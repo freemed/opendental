@@ -18,6 +18,7 @@ namespace WebHostSynch {
 	// To allow this Web Service to be called from script, using ASP.NET AJAX, uncomment the following line. 
 	// [System.Web.Script.Services.ScriptService]
 	public class Mobile:System.Web.Services.WebService {
+		private Util util=new Util();
 
 		/// <summary>
 		/// An empty method to test if the webservice is up and running. this was made with the intention of testing the correctness of the webservice URL on an Open Dental Installation. If an incorrect webservice URL is used in a background thread of OD the exception cannot be handled easily.
@@ -27,14 +28,13 @@ namespace WebHostSynch {
 			return true;
 		}
 		
-		[WebMethod]
-		public DateTime GetLastDateTStampOfPatients(String RegistrationKey) {
-			return DateTime.Today;
-		}
 
+		/// <summary>A method which is used to decided if certain missing records are to be transferred to the webserver. This is especially true when synchronization happens for the very first time when there are no records on the  webserver./// </summary>
 		[WebMethod]
-		public DateTime GetLastDateTStampOfAppointments(String RegistrationKey) {
-			return DateTime.Today;
+		public int GetRecordCount(String RegistrationKey,List<Patientm> patientmList) {
+			long customerNum=util.GetDentalOfficeID(RegistrationKey);
+
+			return 0;
 		}
 
 		[WebMethod]
