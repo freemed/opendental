@@ -28,15 +28,13 @@ namespace OpenDental.MobileWeb {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Web.Services.WebServiceBindingAttribute(Name="MobileSoap", Namespace="http://tempuri.org/")]
+    [System.Web.Services.WebServiceBindingAttribute(Name="MobileSoap", Namespace="http://opendental.com/")]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(TableBase))]
     public partial class Mobile : System.Web.Services.Protocols.SoapHttpClientProtocol {
         
         private System.Threading.SendOrPostCallback ServiceExistsOperationCompleted;
         
-        private System.Threading.SendOrPostCallback GetLastDateTStampOfPatientsOperationCompleted;
-        
-        private System.Threading.SendOrPostCallback GetLastDateTStampOfAppointmentsOperationCompleted;
+        private System.Threading.SendOrPostCallback GetRecordCountOperationCompleted;
         
         private System.Threading.SendOrPostCallback SynchRecordsOperationCompleted;
         
@@ -86,10 +84,7 @@ namespace OpenDental.MobileWeb {
         public event ServiceExistsCompletedEventHandler ServiceExistsCompleted;
         
         /// <remarks/>
-        public event GetLastDateTStampOfPatientsCompletedEventHandler GetLastDateTStampOfPatientsCompleted;
-        
-        /// <remarks/>
-        public event GetLastDateTStampOfAppointmentsCompletedEventHandler GetLastDateTStampOfAppointmentsCompleted;
+        public event GetRecordCountCompletedEventHandler GetRecordCountCompleted;
         
         /// <remarks/>
         public event SynchRecordsCompletedEventHandler SynchRecordsCompleted;
@@ -101,7 +96,7 @@ namespace OpenDental.MobileWeb {
         public event SetMobileWebPasswordCompletedEventHandler SetMobileWebPasswordCompleted;
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/ServiceExists", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://opendental.com/ServiceExists", RequestNamespace="http://opendental.com/", ResponseNamespace="http://opendental.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         public bool ServiceExists() {
             object[] results = this.Invoke("ServiceExists", new object[0]);
             return ((bool)(results[0]));
@@ -128,65 +123,38 @@ namespace OpenDental.MobileWeb {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetLastDateTStampOfPatients", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-        public System.DateTime GetLastDateTStampOfPatients(string RegistrationKey) {
-            object[] results = this.Invoke("GetLastDateTStampOfPatients", new object[] {
-                        RegistrationKey});
-            return ((System.DateTime)(results[0]));
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://opendental.com/GetRecordCount", RequestNamespace="http://opendental.com/", ResponseNamespace="http://opendental.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public int GetRecordCount(string RegistrationKey, Patientm[] patientmList) {
+            object[] results = this.Invoke("GetRecordCount", new object[] {
+                        RegistrationKey,
+                        patientmList});
+            return ((int)(results[0]));
         }
         
         /// <remarks/>
-        public void GetLastDateTStampOfPatientsAsync(string RegistrationKey) {
-            this.GetLastDateTStampOfPatientsAsync(RegistrationKey, null);
+        public void GetRecordCountAsync(string RegistrationKey, Patientm[] patientmList) {
+            this.GetRecordCountAsync(RegistrationKey, patientmList, null);
         }
         
         /// <remarks/>
-        public void GetLastDateTStampOfPatientsAsync(string RegistrationKey, object userState) {
-            if ((this.GetLastDateTStampOfPatientsOperationCompleted == null)) {
-                this.GetLastDateTStampOfPatientsOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetLastDateTStampOfPatientsOperationCompleted);
+        public void GetRecordCountAsync(string RegistrationKey, Patientm[] patientmList, object userState) {
+            if ((this.GetRecordCountOperationCompleted == null)) {
+                this.GetRecordCountOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetRecordCountOperationCompleted);
             }
-            this.InvokeAsync("GetLastDateTStampOfPatients", new object[] {
-                        RegistrationKey}, this.GetLastDateTStampOfPatientsOperationCompleted, userState);
+            this.InvokeAsync("GetRecordCount", new object[] {
+                        RegistrationKey,
+                        patientmList}, this.GetRecordCountOperationCompleted, userState);
         }
         
-        private void OnGetLastDateTStampOfPatientsOperationCompleted(object arg) {
-            if ((this.GetLastDateTStampOfPatientsCompleted != null)) {
+        private void OnGetRecordCountOperationCompleted(object arg) {
+            if ((this.GetRecordCountCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-                this.GetLastDateTStampOfPatientsCompleted(this, new GetLastDateTStampOfPatientsCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+                this.GetRecordCountCompleted(this, new GetRecordCountCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetLastDateTStampOfAppointments", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-        public System.DateTime GetLastDateTStampOfAppointments(string RegistrationKey) {
-            object[] results = this.Invoke("GetLastDateTStampOfAppointments", new object[] {
-                        RegistrationKey});
-            return ((System.DateTime)(results[0]));
-        }
-        
-        /// <remarks/>
-        public void GetLastDateTStampOfAppointmentsAsync(string RegistrationKey) {
-            this.GetLastDateTStampOfAppointmentsAsync(RegistrationKey, null);
-        }
-        
-        /// <remarks/>
-        public void GetLastDateTStampOfAppointmentsAsync(string RegistrationKey, object userState) {
-            if ((this.GetLastDateTStampOfAppointmentsOperationCompleted == null)) {
-                this.GetLastDateTStampOfAppointmentsOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetLastDateTStampOfAppointmentsOperationCompleted);
-            }
-            this.InvokeAsync("GetLastDateTStampOfAppointments", new object[] {
-                        RegistrationKey}, this.GetLastDateTStampOfAppointmentsOperationCompleted, userState);
-        }
-        
-        private void OnGetLastDateTStampOfAppointmentsOperationCompleted(object arg) {
-            if ((this.GetLastDateTStampOfAppointmentsCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-                this.GetLastDateTStampOfAppointmentsCompleted(this, new GetLastDateTStampOfAppointmentsCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-            }
-        }
-        
-        /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/SynchRecords", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://opendental.com/SynchRecords", RequestNamespace="http://opendental.com/", ResponseNamespace="http://opendental.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         public void SynchRecords(string RegistrationKey, Patientm[] patientmList) {
             this.Invoke("SynchRecords", new object[] {
                         RegistrationKey,
@@ -216,7 +184,7 @@ namespace OpenDental.MobileWeb {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/DeleteRecords", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://opendental.com/DeleteRecords", RequestNamespace="http://opendental.com/", ResponseNamespace="http://opendental.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         public void DeleteRecords(string RegistrationKey, long[] patientNums) {
             this.Invoke("DeleteRecords", new object[] {
                         RegistrationKey,
@@ -246,7 +214,7 @@ namespace OpenDental.MobileWeb {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/SetMobileWebPassword", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://opendental.com/SetMobileWebPassword", RequestNamespace="http://opendental.com/", ResponseNamespace="http://opendental.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         public void SetMobileWebPassword(string RegistrationKey, string Password) {
             this.Invoke("SetMobileWebPassword", new object[] {
                         RegistrationKey,
@@ -322,52 +290,26 @@ namespace OpenDental.MobileWeb {
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
-    public delegate void GetLastDateTStampOfPatientsCompletedEventHandler(object sender, GetLastDateTStampOfPatientsCompletedEventArgs e);
+    public delegate void GetRecordCountCompletedEventHandler(object sender, GetRecordCountCompletedEventArgs e);
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class GetLastDateTStampOfPatientsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    public partial class GetRecordCountCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
         
         private object[] results;
         
-        internal GetLastDateTStampOfPatientsCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+        internal GetRecordCountCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
         
         /// <remarks/>
-        public System.DateTime Result {
+        public int Result {
             get {
                 this.RaiseExceptionIfNecessary();
-                return ((System.DateTime)(this.results[0]));
-            }
-        }
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
-    public delegate void GetLastDateTStampOfAppointmentsCompletedEventHandler(object sender, GetLastDateTStampOfAppointmentsCompletedEventArgs e);
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class GetLastDateTStampOfAppointmentsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
-        private object[] results;
-        
-        internal GetLastDateTStampOfAppointmentsCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
-            this.results = results;
-        }
-        
-        /// <remarks/>
-        public System.DateTime Result {
-            get {
-                this.RaiseExceptionIfNecessary();
-                return ((System.DateTime)(this.results[0]));
+                return ((int)(this.results[0]));
             }
         }
     }

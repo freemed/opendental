@@ -11,9 +11,9 @@ using OpenDentBusiness.Mobile;
 namespace OpenDental {
 	public partial class FormMobileSetup:Form {
 
-		static string RegistrationKey=PrefC.GetString(PrefName.RegistrationKey);
+		string RegistrationKey=PrefC.GetString(PrefName.RegistrationKey);
 		long DentalOfficeID=0;
-		static MobileWeb.Mobile mb = new MobileWeb.Mobile();
+		MobileWeb.Mobile mb = new MobileWeb.Mobile();
 
 		public FormMobileSetup() {
 			InitializeComponent();
@@ -21,7 +21,7 @@ namespace OpenDental {
 
 		}
 
-		public static void SynchPatientRecordsOnMobileWeb() {
+		public void SynchPatientRecordsOnMobileWeb() {
 			int RecordCountOfPatientm=Patientms.GetRecordCount(RegistrationKey);
 			int RecordCountOfPatient= Patients.GetNumberPatients();
 
@@ -35,7 +35,7 @@ namespace OpenDental {
 			
 		}
 
-		public static void SendMissingRecords() {
+		public void SendMissingRecords() {
 
 
 		}
@@ -46,7 +46,7 @@ namespace OpenDental {
 		/// <returns></returns>
 		private bool TestWebServiceExists() {
 			try {
-				//mb.Url="";
+				mb.Url="http://localhost:2923/Mobile.asmx";
 				if(mb.ServiceExists()) {
 					return true;
 				}
@@ -58,10 +58,6 @@ namespace OpenDental {
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
-			#if DEBUG
-				SynchPatientRecordsOnMobileWeb();
-			#endif
-
 				//disabled unless user changed url
 				Cursor=Cursors.WaitCursor;
 				if(!TestWebServiceExists()) {

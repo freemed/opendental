@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+<wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://opendental.com/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://opendental.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsdl:types>
-    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+    <s:schema elementFormDefault="qualified" targetNamespace="http://opendental.com/">
       <s:element name="ServiceExists">
         <s:complexType />
       </s:element>
@@ -12,35 +12,7 @@
           </s:sequence>
         </s:complexType>
       </s:element>
-      <s:element name="GetLastDateTStampOfPatients">
-        <s:complexType>
-          <s:sequence>
-            <s:element minOccurs="0" maxOccurs="1" name="RegistrationKey" type="s:string" />
-          </s:sequence>
-        </s:complexType>
-      </s:element>
-      <s:element name="GetLastDateTStampOfPatientsResponse">
-        <s:complexType>
-          <s:sequence>
-            <s:element minOccurs="1" maxOccurs="1" name="GetLastDateTStampOfPatientsResult" type="s:dateTime" />
-          </s:sequence>
-        </s:complexType>
-      </s:element>
-      <s:element name="GetLastDateTStampOfAppointments">
-        <s:complexType>
-          <s:sequence>
-            <s:element minOccurs="0" maxOccurs="1" name="RegistrationKey" type="s:string" />
-          </s:sequence>
-        </s:complexType>
-      </s:element>
-      <s:element name="GetLastDateTStampOfAppointmentsResponse">
-        <s:complexType>
-          <s:sequence>
-            <s:element minOccurs="1" maxOccurs="1" name="GetLastDateTStampOfAppointmentsResult" type="s:dateTime" />
-          </s:sequence>
-        </s:complexType>
-      </s:element>
-      <s:element name="SynchRecords">
+      <s:element name="GetRecordCount">
         <s:complexType>
           <s:sequence>
             <s:element minOccurs="0" maxOccurs="1" name="RegistrationKey" type="s:string" />
@@ -130,6 +102,21 @@
           <s:enumeration value="TextMessage" />
         </s:restriction>
       </s:simpleType>
+      <s:element name="GetRecordCountResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="GetRecordCountResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SynchRecords">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RegistrationKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="patientmList" type="tns:ArrayOfPatientm" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
       <s:element name="SynchRecordsResponse">
         <s:complexType />
       </s:element>
@@ -168,17 +155,11 @@
   <wsdl:message name="ServiceExistsSoapOut">
     <wsdl:part name="parameters" element="tns:ServiceExistsResponse" />
   </wsdl:message>
-  <wsdl:message name="GetLastDateTStampOfPatientsSoapIn">
-    <wsdl:part name="parameters" element="tns:GetLastDateTStampOfPatients" />
+  <wsdl:message name="GetRecordCountSoapIn">
+    <wsdl:part name="parameters" element="tns:GetRecordCount" />
   </wsdl:message>
-  <wsdl:message name="GetLastDateTStampOfPatientsSoapOut">
-    <wsdl:part name="parameters" element="tns:GetLastDateTStampOfPatientsResponse" />
-  </wsdl:message>
-  <wsdl:message name="GetLastDateTStampOfAppointmentsSoapIn">
-    <wsdl:part name="parameters" element="tns:GetLastDateTStampOfAppointments" />
-  </wsdl:message>
-  <wsdl:message name="GetLastDateTStampOfAppointmentsSoapOut">
-    <wsdl:part name="parameters" element="tns:GetLastDateTStampOfAppointmentsResponse" />
+  <wsdl:message name="GetRecordCountSoapOut">
+    <wsdl:part name="parameters" element="tns:GetRecordCountResponse" />
   </wsdl:message>
   <wsdl:message name="SynchRecordsSoapIn">
     <wsdl:part name="parameters" element="tns:SynchRecords" />
@@ -203,13 +184,9 @@
       <wsdl:input message="tns:ServiceExistsSoapIn" />
       <wsdl:output message="tns:ServiceExistsSoapOut" />
     </wsdl:operation>
-    <wsdl:operation name="GetLastDateTStampOfPatients">
-      <wsdl:input message="tns:GetLastDateTStampOfPatientsSoapIn" />
-      <wsdl:output message="tns:GetLastDateTStampOfPatientsSoapOut" />
-    </wsdl:operation>
-    <wsdl:operation name="GetLastDateTStampOfAppointments">
-      <wsdl:input message="tns:GetLastDateTStampOfAppointmentsSoapIn" />
-      <wsdl:output message="tns:GetLastDateTStampOfAppointmentsSoapOut" />
+    <wsdl:operation name="GetRecordCount">
+      <wsdl:input message="tns:GetRecordCountSoapIn" />
+      <wsdl:output message="tns:GetRecordCountSoapOut" />
     </wsdl:operation>
     <wsdl:operation name="SynchRecords">
       <wsdl:input message="tns:SynchRecordsSoapIn" />
@@ -227,7 +204,7 @@
   <wsdl:binding name="MobileSoap" type="tns:MobileSoap">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
     <wsdl:operation name="ServiceExists">
-      <soap:operation soapAction="http://tempuri.org/ServiceExists" style="document" />
+      <soap:operation soapAction="http://opendental.com/ServiceExists" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -235,17 +212,8 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="GetLastDateTStampOfPatients">
-      <soap:operation soapAction="http://tempuri.org/GetLastDateTStampOfPatients" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetLastDateTStampOfAppointments">
-      <soap:operation soapAction="http://tempuri.org/GetLastDateTStampOfAppointments" style="document" />
+    <wsdl:operation name="GetRecordCount">
+      <soap:operation soapAction="http://opendental.com/GetRecordCount" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -254,7 +222,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="SynchRecords">
-      <soap:operation soapAction="http://tempuri.org/SynchRecords" style="document" />
+      <soap:operation soapAction="http://opendental.com/SynchRecords" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -263,7 +231,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="DeleteRecords">
-      <soap:operation soapAction="http://tempuri.org/DeleteRecords" style="document" />
+      <soap:operation soapAction="http://opendental.com/DeleteRecords" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -272,7 +240,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="SetMobileWebPassword">
-      <soap:operation soapAction="http://tempuri.org/SetMobileWebPassword" style="document" />
+      <soap:operation soapAction="http://opendental.com/SetMobileWebPassword" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -284,7 +252,7 @@
   <wsdl:binding name="MobileSoap12" type="tns:MobileSoap">
     <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
     <wsdl:operation name="ServiceExists">
-      <soap12:operation soapAction="http://tempuri.org/ServiceExists" style="document" />
+      <soap12:operation soapAction="http://opendental.com/ServiceExists" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -292,17 +260,8 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="GetLastDateTStampOfPatients">
-      <soap12:operation soapAction="http://tempuri.org/GetLastDateTStampOfPatients" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetLastDateTStampOfAppointments">
-      <soap12:operation soapAction="http://tempuri.org/GetLastDateTStampOfAppointments" style="document" />
+    <wsdl:operation name="GetRecordCount">
+      <soap12:operation soapAction="http://opendental.com/GetRecordCount" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -311,7 +270,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="SynchRecords">
-      <soap12:operation soapAction="http://tempuri.org/SynchRecords" style="document" />
+      <soap12:operation soapAction="http://opendental.com/SynchRecords" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -320,7 +279,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="DeleteRecords">
-      <soap12:operation soapAction="http://tempuri.org/DeleteRecords" style="document" />
+      <soap12:operation soapAction="http://opendental.com/DeleteRecords" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -329,7 +288,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="SetMobileWebPassword">
-      <soap12:operation soapAction="http://tempuri.org/SetMobileWebPassword" style="document" />
+      <soap12:operation soapAction="http://opendental.com/SetMobileWebPassword" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
