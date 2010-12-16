@@ -400,20 +400,20 @@ namespace OpenDentBusiness{
 			if(DBtype==DatabaseType.Oracle){
 				conOr.Open();
 				PrepOracleConnection();
-				string[] commandArray=new string[] {commands};
-				if(splitStrings){
-					commandArray=commands.Split(new char[] {';'},StringSplitOptions.RemoveEmptyEntries);
-				}
+				//string[] commandArray=new string[] {commands};
+				//if(splitStrings){
+				//  commandArray=commands.Split(new char[] {';'},StringSplitOptions.RemoveEmptyEntries);
+				//}
 				//Can't do batch queries in Oracle, so we have to split them up and run them individually.
 				try{
 					if(getInsertID){
 						cmdOr.CommandText="LOCK TABLE preference IN EXCLUSIVE MODE";
 						cmdOr.ExecuteNonQuery();//Lock the preference table, because we need exclusive access to the OracleInsertId.
 					}
-					for(int i=0;i<commandArray.Length;i++){
-						cmdOr.CommandText=commandArray[i];
+					//for(int i=0;i<commandArray.Length;i++){
+						cmdOr.CommandText=commands; //Array[i];
 						rowsChanged=cmdOr.ExecuteNonQuery();
-					}
+					//}
 				}
 				catch(System.Exception e){
 					Logger.openlog.LogMB("Oracle SQL Error: "+cmdOr.CommandText+"\r\n"+"Exception: "+e.ToString(),Logger.Severity.ERROR);

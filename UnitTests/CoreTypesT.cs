@@ -33,41 +33,22 @@ namespace UnitTests {
 			else {
 				DatabaseTools.SetDbConnection("",isOracle);
 				string command="";
-				command="DECLARE v_count NUMBER :=0;"
-				+"BEGIN "
-				+"SELECT COUNT(*) INTO v_count FROM all_tables WHERE table_name='TEMPCORE' AND owner='UNITTEST'; "
-				+"IF v_count = 1 THEN "
-				+"EXECUTE IMMEDIATE 'DROP TABLE unittest.tempcore'; "
-				+"END IF; "
-				+"END;";
+				command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE TEMPCORE'; EXCEPTION WHEN OTHERS THEN NULL; END;";
 				DataCore.NonQ(command);
-				command="CREATE TABLE \"UNITTEST\".\"TEMPCORE\" "
-				+"(	\"TIMETEST\" TIMESTAMP (6) NOT NULL ENABLE, "
-				+"\"TIMESTAMPTEST\" DATE NOT NULL ENABLE, "
-				+"\"DATETEST\" DATE NOT NULL ENABLE, "
-				+"\"DOUBLETEST\" FLOAT(24) NOT NULL ENABLE, "
-				+"\"BOOLTEST\" NUMBER(3,0) NOT NULL ENABLE, "
-				+"\"VARCHAR2TEST\" VARCHAR2(4000 BYTE) NOT NULL ENABLE, "
-				+"\"CHARTEST\" CHAR(1 BYTE) NOT NULL ENABLE "
-				+") PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 NOCOMPRESS LOGGING "
-				+"STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645 "
-				+"PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT) "
-				+"TABLESPACE \"USERS\";";
+				command="CREATE TABLE TEMPCORE "
+				+"(TIMETEST TIMESTAMP, "
+				+"TIMESTAMPTEST DATE, "
+				+"DATETEST DATE, "
+				+"DOUBLETEST FLOAT(24), "
+				+"BOOLTEST NUMBER(3,0), "
+				+"VARCHAR2TEST VARCHAR2(4000), "
+				+"CHARTEST CHAR(1), "
+				+"CLOBTEST CLOB)";
 				DataCore.NonQ(command);
-				command="DECLARE v_count NUMBER :=0;"
-				+"BEGIN "
-				+"SELECT COUNT(*) INTO v_count FROM all_tables WHERE table_name='TEMPGROUPCONCAT' AND owner='UNITTEST'; "
-				+"IF v_count = 1 THEN "
-				+"EXECUTE IMMEDIATE 'DROP TABLE unittest.tempgroupconcat'; "
-				+"END IF; "
-				+"END;";
+				command=command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE UNITTEST.TEMPGROUPCONCAT'; EXCEPTION WHEN OTHERS THEN NULL; END;";
 				DataCore.NonQ(command);
-				command="CREATE TABLE \"UNITTEST\".\"TEMPGROUPCONCAT\" " 
-				+"(	\"NAME\" VARCHAR2(255 BYTE) NOT NULL ENABLE "
-				+") PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 NOCOMPRESS LOGGING "
-				+"STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645 "
-				+"PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT) "
-				+"TABLESPACE \"USERS\";";
+				command="CREATE TABLE UNITTEST.TEMPGROUPCONCAT " 
+				+"(	NAME VARCHAR2(255) NOT NULL ENABLE )";
 				DataCore.NonQ(command);
 			}
 			retVal+="Temp tables created.\r\n";
@@ -238,7 +219,142 @@ namespace UnitTests {
 				return retVal;
 			}
 			else {
-				return retVal="Oracle core types code goes here.\r\n";
+				string command="";
+				DataTable table;
+				TimeSpan timespan;
+				TimeSpan timespan2;
+				//timespan----------------------------------------------------------------------------------------------
+				timespan=new TimeSpan(1,2,3);//1hr,2min,3sec
+				command="INSERT INTO tempcore (timetest) VALUES (TO_TIMESTAMP("+POut.TimeSpan(timespan)+",'HH24:MI:SS'))";
+				DataCore.NonQ(command);
+				command="SELECT TO_CHAR(timetest,'HH24:MI:SS') timetest FROM tempcore";
+				table=DataCore.GetTable(command);
+				timespan2=PIn.TimeSpan(table.Rows[0]["timetest"].ToString());
+				if(timespan!=timespan2) {
+					throw new Exception();
+				}
+				command="DELETE FROM tempcore";
+				DataCore.NonQ(command);
+				retVal+="TimeSpan: Passed. Although not a true 'timespan' just happens to be a valid 'timestamp'.\r\n";
+				/*
+				//timespan, negative------------------------------------------------------------------------------------
+				timespan=new TimeSpan(0,-36,0);//Oracle does not seem to like negative values.
+				//Usually says "Hr between 1-12 (unless you specify 24 then 0-23), min between 1-59 and sec between 1-59
+				command="INSERT INTO tempcore (timetest) VALUES (TO_TIMESTAMP("+POut.TimeSpan(timespan)+",'HH24:MI:SS'))";
+				DataCore.NonQ(command);
+				command="SELECT TO_CHAR(timetest,'HH24:MI:SS') timetest FROM tempcore";
+				table=DataCore.GetTable(command);
+				timespan2=PIn.TimeSpan(table.Rows[0]["timetest"].ToString());
+				if(timespan!=timespan2) {
+					throw new Exception();
+				}
+				command="DELETE FROM tempcore";
+				DataCore.NonQ(command);
+				retVal+="TimeSpan, negative: Passed.\r\n";
+				 */
+				//date----------------------------------------------------------------------------------------------
+				DateTime date1;
+				DateTime date2;
+				date1=new DateTime(2003,5,23);
+				command="INSERT INTO tempcore (datetest) VALUES ("+POut.Date(date1)+")";
+				DataCore.NonQ(command);
+				command="SELECT datetest FROM tempcore";
+				table=DataCore.GetTable(command);
+				date2=PIn.Date(table.Rows[0]["datetest"].ToString());
+				if(date1!=date2) {
+					throw new Exception();
+				}
+				command="DELETE FROM tempcore";
+				DataCore.NonQ(command);
+				retVal+="Date: Passed.\r\n";
+				DateTime datet1;
+				DateTime datet2;
+				datet1=new DateTime(2003,5,23,10,18,0);
+				command="INSERT INTO tempcore (datetest) VALUES ("+POut.DateT(datet1)+")";
+				DataCore.NonQ(command);
+				command="SELECT datetest FROM tempcore";
+				table=DataCore.GetTable(command);
+				datet2=PIn.DateT(table.Rows[0]["datetest"].ToString());
+				if(datet1!=datet2) {
+					throw new Exception();
+				}
+				command="DELETE FROM tempcore";
+				DataCore.NonQ(command);
+				retVal+="Date/Time: Passed.\r\n";
+				double double1;
+				double double2;
+				double1=12.34d;
+				command="INSERT INTO tempcore (doubletest) VALUES ("+POut.Double(double1)+")";
+				DataCore.NonQ(command);
+				command="SELECT doubletest FROM tempcore";
+				table=DataCore.GetTable(command);
+				double2=PIn.Double(table.Rows[0]["doubletest"].ToString());
+				if(double1!=double2) {
+					throw new Exception();
+				}
+				command="DELETE FROM tempcore";
+				DataCore.NonQ(command);
+				retVal+="Double: Passed.\r\n";
+				/*
+				//group_concat------------------------------------------------------------------------------------
+				//Oracle does not have something that acts like GROUP_CONCAT might look into later.
+				command="INSERT INTO tempgroupconcat VALUES ('name1')";
+				DataCore.NonQ(command);
+				command="INSERT INTO tempgroupconcat VALUES ('name2')";
+				DataCore.NonQ(command);
+				command="SELECT GROUP_CONCAT(NAME) allnames FROM tempgroupconcat";
+				table=DataCore.GetTable(command);
+				string allnames=PIn.ByteArray(table.Rows[0]["allnames"].ToString());
+				if(allnames!="name1,name2") {
+					throw new Exception();
+				}
+				command="DELETE FROM tempgroupconcat";
+				DataCore.NonQ(command);
+				retVal+="Group_concat: Passed.\r\n";
+				 */
+				//bool,pos------------------------------------------------------------------------------------
+				bool bool1;
+				bool bool2;
+				bool1=true;
+				command="INSERT INTO tempcore (booltest) VALUES ("+POut.Bool(bool1)+")";
+				DataCore.NonQ(command);
+				command="SELECT booltest FROM tempcore";
+				table=DataCore.GetTable(command);
+				bool2=PIn.Bool(table.Rows[0]["booltest"].ToString());
+				if(bool1!=bool2) {
+					throw new Exception();
+				}
+				command="DELETE FROM tempcore";
+				DataCore.NonQ(command);
+				retVal+="Bool, true: Passed.\r\n";
+				//bool,fal------------------------------------------------------------------------------------
+				bool1=false;
+				command="INSERT INTO tempcore (booltest) VALUES ("+POut.Bool(bool1)+")";
+				DataCore.NonQ(command);
+				command="SELECT booltest FROM tempcore";
+				table=DataCore.GetTable(command);
+				bool2=PIn.Bool(table.Rows[0]["booltest"].ToString());
+				if(bool1!=bool2) {
+					throw new Exception();
+				}
+				command="DELETE FROM tempcore";
+				DataCore.NonQ(command);
+				retVal+="Bool, false: Passed.\r\n";
+				//clob----------------------------------------------------------------------------------------
+				string clobstring1="typicalClobData";
+				string clobstring2="";
+				command="INSERT INTO tempcore (clobtest) VALUES ('"+POut.String(clobstring1)+"')";
+				DataCore.NonQ(command);
+				command="SELECT clobtest FROM tempcore";
+				table=DataCore.GetTable(command);
+				clobstring2=PIn.String(table.Rows[0]["clobtest"].ToString());
+				if(clobstring1!=clobstring2) {
+					throw new Exception();
+				}
+				command="DELETE FROM tempcore";
+				DataCore.NonQ(command);
+				retVal+="Clob: Passed.\r\n";
+				return retVal+="Oracle CoreTypes test done.\r\n";
 			}
 		}
 	}
