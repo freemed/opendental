@@ -159,7 +159,8 @@ namespace OpenDentBusiness{
  		///<summary>Only used for the Select Patient dialog.  Pass in a billing type of 0 for all billing types.</summary>
 		public static DataTable GetPtDataTable(bool limit,string lname,string fname,string phone,
 			string address,bool hideInactive,string city,string state,string ssn,string patnum,string chartnumber,
-			long billingtype,bool guarOnly,bool showArchived,long clinicNum,DateTime birthdate,long siteNum,string subscriberId)
+			long billingtype,bool guarOnly,bool showArchived,bool showProspectiveOnly,long clinicNum,DateTime birthdate,
+			long siteNum,string subscriberId)
 		{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),limit,lname,fname,phone,address,hideInactive,city,state,ssn,patnum,chartnumber,billingtype,guarOnly,showArchived,clinicNum,birthdate,siteNum,subscriberId);
@@ -253,6 +254,12 @@ namespace OpenDentBusiness{
 			}
 			if(!showArchived) {
 				command+="AND PatStatus != '3' AND PatStatus != '5' ";
+			}
+			if(showProspectiveOnly) {
+				command+="AND PatStatus = '6' ";
+			}
+			if(!showProspectiveOnly) {
+				command+="AND PatStatus != '6' ";
 			}
 			if(guarOnly){
 				command+="AND PatNum = Guarantor ";

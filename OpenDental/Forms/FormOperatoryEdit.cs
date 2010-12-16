@@ -32,6 +32,8 @@ namespace OpenDental{
 		private System.Windows.Forms.ComboBox comboProvHygienist;
 		private System.Windows.Forms.ComboBox comboProvDentist;
 		private System.Windows.Forms.CheckBox checkIsHygiene;
+		private CheckBox checkSetProspective;
+		private Label label3;
 		private Operatory OpCur;
 
 		///<summary></summary>
@@ -68,8 +70,6 @@ namespace OpenDental{
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormOperatoryEdit));
-			this.butCancel = new OpenDental.UI.Button();
-			this.butOK = new OpenDental.UI.Button();
 			this.label1 = new System.Windows.Forms.Label();
 			this.textOpName = new System.Windows.Forms.TextBox();
 			this.textAbbrev = new System.Windows.Forms.TextBox();
@@ -84,37 +84,11 @@ namespace OpenDental{
 			this.checkIsHygiene = new System.Windows.Forms.CheckBox();
 			this.comboClinic = new System.Windows.Forms.ComboBox();
 			this.labelClinic = new System.Windows.Forms.Label();
+			this.checkSetProspective = new System.Windows.Forms.CheckBox();
+			this.label3 = new System.Windows.Forms.Label();
+			this.butOK = new OpenDental.UI.Button();
+			this.butCancel = new OpenDental.UI.Button();
 			this.SuspendLayout();
-			// 
-			// butCancel
-			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(473,204);
-			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,26);
-			this.butCancel.TabIndex = 9;
-			this.butCancel.Text = "&Cancel";
-			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
-			// 
-			// butOK
-			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(382,204);
-			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,26);
-			this.butOK.TabIndex = 8;
-			this.butOK.Text = "&OK";
-			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
 			// label1
 			// 
@@ -242,13 +216,64 @@ namespace OpenDental{
 			this.labelClinic.Text = "Clinic";
 			this.labelClinic.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// checkSetProspective
+			// 
+			this.checkSetProspective.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkSetProspective.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkSetProspective.Location = new System.Drawing.Point(69,169);
+			this.checkSetProspective.Name = "checkSetProspective";
+			this.checkSetProspective.Size = new System.Drawing.Size(104,16);
+			this.checkSetProspective.TabIndex = 116;
+			this.checkSetProspective.Text = "Set Prospective";
+			this.checkSetProspective.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label3
+			// 
+			this.label3.Location = new System.Drawing.Point(178,170);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(363,16);
+			this.label3.TabIndex = 117;
+			this.label3.Text = "Change status of patients in this operatory to prospective.";
+			// 
+			// butOK
+			// 
+			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butOK.Autosize = true;
+			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butOK.CornerRadius = 4F;
+			this.butOK.Location = new System.Drawing.Point(382,204);
+			this.butOK.Name = "butOK";
+			this.butOK.Size = new System.Drawing.Size(75,26);
+			this.butOK.TabIndex = 8;
+			this.butOK.Text = "&OK";
+			this.butOK.Click += new System.EventHandler(this.butOK_Click);
+			// 
+			// butCancel
+			// 
+			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butCancel.Autosize = true;
+			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.CornerRadius = 4F;
+			this.butCancel.Location = new System.Drawing.Point(473,204);
+			this.butCancel.Name = "butCancel";
+			this.butCancel.Size = new System.Drawing.Size(75,26);
+			this.butCancel.TabIndex = 9;
+			this.butCancel.Text = "&Cancel";
+			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
+			// 
 			// FormOperatoryEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(574,248);
 			this.Controls.Add(this.comboClinic);
 			this.Controls.Add(this.labelClinic);
+			this.Controls.Add(this.label3);
 			this.Controls.Add(this.label9);
+			this.Controls.Add(this.checkSetProspective);
 			this.Controls.Add(this.checkIsHygiene);
 			this.Controls.Add(this.label8);
 			this.Controls.Add(this.comboProvHygienist);
@@ -306,6 +331,7 @@ namespace OpenDental{
 					comboProvHygienist.SelectedIndex=i+1;
 			}
 			checkIsHygiene.Checked=OpCur.IsHygiene;
+			checkSetProspective.Checked=OpCur.SetProspective;
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
@@ -329,8 +355,14 @@ namespace OpenDental{
 			else
 				OpCur.ProvHygienist=ProviderC.List[comboProvHygienist.SelectedIndex-1].ProvNum;
 			OpCur.IsHygiene=checkIsHygiene.Checked;
+			OpCur.SetProspective=checkSetProspective.Checked;
 			try{
-				Operatories.InsertOrUpdate(OpCur,IsNew);
+				if(IsNew) {
+					Operatories.Insert(OpCur);
+				}
+				else {
+					Operatories.Update(OpCur);
+				}
 			}
 			catch(ApplicationException ex){
 				MessageBox.Show(ex.Message);

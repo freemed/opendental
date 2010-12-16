@@ -249,7 +249,7 @@ namespace OpenDental{
 				//fix the itemOrder of every Operatory following this one
 				for(int i=gridMain.SelectedIndices[0];i<OperatoryC.Listt.Count;i++){
 					OperatoryC.Listt[i].ItemOrder++;
-					Operatories.InsertOrUpdate(OperatoryC.Listt[i],false);
+					Operatories.Update(OperatoryC.Listt[i]);
 				}
 			}
 			FillGrid();
@@ -267,10 +267,10 @@ namespace OpenDental{
 			}
 			//move selected item up
 			OperatoryC.Listt[selected].ItemOrder--;
-			Operatories.InsertOrUpdate(OperatoryC.Listt[selected],false);
+			Operatories.Update(OperatoryC.Listt[selected]);
 			//move the one above it down
 			OperatoryC.Listt[selected-1].ItemOrder++;
-			Operatories.InsertOrUpdate(OperatoryC.Listt[selected-1],false);
+			Operatories.Update(OperatoryC.Listt[selected-1]);
 			FillGrid();
 			gridMain.SetSelected(selected-1,true);
 			changed=true;
@@ -287,10 +287,10 @@ namespace OpenDental{
 			}
 			//move selected item down
 			OperatoryC.Listt[selected].ItemOrder++;
-			Operatories.InsertOrUpdate(OperatoryC.Listt[selected],false);
+			Operatories.Update(OperatoryC.Listt[selected]);
 			//move the one below it up
 			OperatoryC.Listt[selected+1].ItemOrder--;
-			Operatories.InsertOrUpdate(OperatoryC.Listt[selected+1],false);
+			Operatories.Update(OperatoryC.Listt[selected+1]);
 			FillGrid();
 			gridMain.SetSelected(selected+1,true);
 			changed=true;

@@ -70,6 +70,7 @@ namespace OpenDental{
 		private TextBox selectedTxtBox;
 		private TextBox textSubscriberID;
 		private Label label13;
+		private CheckBox checkShowProspectiveOnly;
 		private List<DisplayField> fields;
 
 		///<summary></summary>
@@ -107,11 +108,14 @@ namespace OpenDental{
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.textSubscriberID = new System.Windows.Forms.TextBox();
+			this.label13 = new System.Windows.Forms.Label();
 			this.comboSite = new System.Windows.Forms.ComboBox();
 			this.labelSite = new System.Windows.Forms.Label();
 			this.comboBillingType = new System.Windows.Forms.ComboBox();
 			this.textBirthdate = new System.Windows.Forms.TextBox();
 			this.label2 = new System.Windows.Forms.Label();
+			this.checkShowProspectiveOnly = new System.Windows.Forms.CheckBox();
 			this.checkShowArchived = new System.Windows.Forms.CheckBox();
 			this.textChartNumber = new System.Windows.Forms.TextBox();
 			this.textSSN = new System.Windows.Forms.TextBox();
@@ -139,8 +143,6 @@ namespace OpenDental{
 			this.butSearch = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.contrKeyboard1 = new OpenDental.User_Controls.ContrKeyboard();
-			this.textSubscriberID = new System.Windows.Forms.TextBox();
-			this.label13 = new System.Windows.Forms.Label();
 			this.groupAddPt.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupBox1.SuspendLayout();
@@ -153,9 +155,9 @@ namespace OpenDental{
 			this.textLName.Size = new System.Drawing.Size(90,20);
 			this.textLName.TabIndex = 0;
 			this.textLName.TextChanged += new System.EventHandler(this.textLName_TextChanged);
+			this.textLName.Enter += new System.EventHandler(this.textBox_Enter);
 			this.textLName.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textLName_KeyDown);
 			this.textLName.Leave += new System.EventHandler(this.textBox_Leave);
-			this.textLName.Enter += new System.EventHandler(this.textBox_Enter);
 			// 
 			// label1
 			// 
@@ -173,7 +175,7 @@ namespace OpenDental{
 			this.groupAddPt.Controls.Add(this.butAddPt);
 			this.groupAddPt.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.groupAddPt.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.groupAddPt.Location = new System.Drawing.Point(699,564);
+			this.groupAddPt.Location = new System.Drawing.Point(699,572);
 			this.groupAddPt.Name = "groupAddPt";
 			this.groupAddPt.Size = new System.Drawing.Size(237,53);
 			this.groupAddPt.TabIndex = 1;
@@ -249,6 +251,7 @@ namespace OpenDental{
 			this.groupBox2.Controls.Add(this.comboBillingType);
 			this.groupBox2.Controls.Add(this.textBirthdate);
 			this.groupBox2.Controls.Add(this.label2);
+			this.groupBox2.Controls.Add(this.checkShowProspectiveOnly);
 			this.groupBox2.Controls.Add(this.checkShowArchived);
 			this.groupBox2.Controls.Add(this.textChartNumber);
 			this.groupBox2.Controls.Add(this.textSSN);
@@ -275,10 +278,27 @@ namespace OpenDental{
 			this.groupBox2.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.groupBox2.Location = new System.Drawing.Point(699,107);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(237,379);
+			this.groupBox2.Size = new System.Drawing.Size(237,383);
 			this.groupBox2.TabIndex = 0;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Search by:";
+			// 
+			// textSubscriberID
+			// 
+			this.textSubscriberID.Location = new System.Drawing.Point(135,238);
+			this.textSubscriberID.Name = "textSubscriberID";
+			this.textSubscriberID.Size = new System.Drawing.Size(90,20);
+			this.textSubscriberID.TabIndex = 40;
+			this.textSubscriberID.TextChanged += new System.EventHandler(this.textSubscriberID_TextChanged);
+			// 
+			// label13
+			// 
+			this.label13.Location = new System.Drawing.Point(11,242);
+			this.label13.Name = "label13";
+			this.label13.Size = new System.Drawing.Size(125,12);
+			this.label13.TabIndex = 41;
+			this.label13.Text = "Subscriber ID";
+			this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// comboSite
 			// 
@@ -316,8 +336,8 @@ namespace OpenDental{
 			this.textBirthdate.Size = new System.Drawing.Size(90,20);
 			this.textBirthdate.TabIndex = 26;
 			this.textBirthdate.TextChanged += new System.EventHandler(this.textBirthdate_TextChanged);
-			this.textBirthdate.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBirthdate_KeyDown);
 			this.textBirthdate.Enter += new System.EventHandler(this.textBox_Enter);
+			this.textBirthdate.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBirthdate_KeyDown);
 			// 
 			// label2
 			// 
@@ -328,10 +348,20 @@ namespace OpenDental{
 			this.label2.Text = "Birthdate";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// checkShowProspectiveOnly
+			// 
+			this.checkShowProspectiveOnly.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkShowProspectiveOnly.Location = new System.Drawing.Point(11,363);
+			this.checkShowProspectiveOnly.Name = "checkShowProspectiveOnly";
+			this.checkShowProspectiveOnly.Size = new System.Drawing.Size(161,17);
+			this.checkShowProspectiveOnly.TabIndex = 25;
+			this.checkShowProspectiveOnly.Text = "Show Prospective Only";
+			this.checkShowProspectiveOnly.CheckedChanged += new System.EventHandler(this.textSubscriberID_TextChanged);
+			// 
 			// checkShowArchived
 			// 
 			this.checkShowArchived.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkShowArchived.Location = new System.Drawing.Point(11,356);
+			this.checkShowArchived.Location = new System.Drawing.Point(11,345);
 			this.checkShowArchived.Name = "checkShowArchived";
 			this.checkShowArchived.Size = new System.Drawing.Size(161,17);
 			this.checkShowArchived.TabIndex = 25;
@@ -345,8 +375,8 @@ namespace OpenDental{
 			this.textChartNumber.Size = new System.Drawing.Size(90,20);
 			this.textChartNumber.TabIndex = 8;
 			this.textChartNumber.TextChanged += new System.EventHandler(this.textChartNumber_TextChanged);
-			this.textChartNumber.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textChartNumber_KeyDown);
 			this.textChartNumber.Enter += new System.EventHandler(this.textBox_Enter);
+			this.textChartNumber.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textChartNumber_KeyDown);
 			// 
 			// textSSN
 			// 
@@ -355,8 +385,8 @@ namespace OpenDental{
 			this.textSSN.Size = new System.Drawing.Size(90,20);
 			this.textSSN.TabIndex = 6;
 			this.textSSN.TextChanged += new System.EventHandler(this.textSSN_TextChanged);
-			this.textSSN.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textSSN_KeyDown);
 			this.textSSN.Enter += new System.EventHandler(this.textBox_Enter);
+			this.textSSN.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textSSN_KeyDown);
 			// 
 			// label12
 			// 
@@ -392,8 +422,8 @@ namespace OpenDental{
 			this.textPatNum.Size = new System.Drawing.Size(90,20);
 			this.textPatNum.TabIndex = 7;
 			this.textPatNum.TextChanged += new System.EventHandler(this.textPatNum_TextChanged);
-			this.textPatNum.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textPatNum_KeyDown);
 			this.textPatNum.Enter += new System.EventHandler(this.textBox_Enter);
+			this.textPatNum.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textPatNum_KeyDown);
 			// 
 			// label9
 			// 
@@ -411,8 +441,8 @@ namespace OpenDental{
 			this.textState.Size = new System.Drawing.Size(90,20);
 			this.textState.TabIndex = 5;
 			this.textState.TextChanged += new System.EventHandler(this.textState_TextChanged);
-			this.textState.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textState_KeyDown);
 			this.textState.Enter += new System.EventHandler(this.textBox_Enter);
+			this.textState.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textState_KeyDown);
 			// 
 			// label8
 			// 
@@ -430,8 +460,8 @@ namespace OpenDental{
 			this.textCity.Size = new System.Drawing.Size(90,20);
 			this.textCity.TabIndex = 4;
 			this.textCity.TextChanged += new System.EventHandler(this.textCity_TextChanged);
-			this.textCity.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textCity_KeyDown);
 			this.textCity.Enter += new System.EventHandler(this.textBox_Enter);
+			this.textCity.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textCity_KeyDown);
 			// 
 			// label7
 			// 
@@ -445,7 +475,7 @@ namespace OpenDental{
 			// checkGuarantors
 			// 
 			this.checkGuarantors.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkGuarantors.Location = new System.Drawing.Point(11,320);
+			this.checkGuarantors.Location = new System.Drawing.Point(11,309);
 			this.checkGuarantors.Name = "checkGuarantors";
 			this.checkGuarantors.Size = new System.Drawing.Size(163,17);
 			this.checkGuarantors.TabIndex = 10;
@@ -455,7 +485,7 @@ namespace OpenDental{
 			// checkHideInactive
 			// 
 			this.checkHideInactive.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkHideInactive.Location = new System.Drawing.Point(11,338);
+			this.checkHideInactive.Location = new System.Drawing.Point(11,327);
 			this.checkHideInactive.Name = "checkHideInactive";
 			this.checkHideInactive.Size = new System.Drawing.Size(161,17);
 			this.checkHideInactive.TabIndex = 11;
@@ -478,8 +508,8 @@ namespace OpenDental{
 			this.textAddress.Size = new System.Drawing.Size(90,20);
 			this.textAddress.TabIndex = 3;
 			this.textAddress.TextChanged += new System.EventHandler(this.textAddress_TextChanged);
-			this.textAddress.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textAddress_KeyDown);
 			this.textAddress.Enter += new System.EventHandler(this.textBox_Enter);
+			this.textAddress.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textAddress_KeyDown);
 			// 
 			// label5
 			// 
@@ -497,8 +527,8 @@ namespace OpenDental{
 			this.textHmPhone.Size = new System.Drawing.Size(90,20);
 			this.textHmPhone.TabIndex = 2;
 			this.textHmPhone.TextChanged += new System.EventHandler(this.textHmPhone_TextChanged);
-			this.textHmPhone.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textHmPhone_KeyDown);
 			this.textHmPhone.Enter += new System.EventHandler(this.textBox_Enter);
+			this.textHmPhone.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textHmPhone_KeyDown);
 			// 
 			// label4
 			// 
@@ -516,8 +546,8 @@ namespace OpenDental{
 			this.textFName.Size = new System.Drawing.Size(90,20);
 			this.textFName.TabIndex = 1;
 			this.textFName.TextChanged += new System.EventHandler(this.textFName_TextChanged);
-			this.textFName.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textFName_KeyDown);
 			this.textFName.Enter += new System.EventHandler(this.textBox_Enter);
+			this.textFName.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textFName_KeyDown);
 			// 
 			// label3
 			// 
@@ -535,7 +565,7 @@ namespace OpenDental{
 			this.groupBox1.Controls.Add(this.butGetAll);
 			this.groupBox1.Controls.Add(this.butSearch);
 			this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox1.Location = new System.Drawing.Point(699,487);
+			this.groupBox1.Location = new System.Drawing.Point(699,493);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(237,76);
 			this.groupBox1.TabIndex = 7;
@@ -604,25 +634,8 @@ namespace OpenDental{
 			this.contrKeyboard1.Name = "contrKeyboard1";
 			this.contrKeyboard1.Size = new System.Drawing.Size(275,100);
 			this.contrKeyboard1.TabIndex = 10;
-			this.contrKeyboard1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.contrKeyboard1_MouseDown);
 			this.contrKeyboard1.KeyClick += new OpenDental.User_Controls.KeyboardClickEventHandler(this.contrKeyboard1_KeyClick);
-			// 
-			// textSubscriberID
-			// 
-			this.textSubscriberID.Location = new System.Drawing.Point(135,238);
-			this.textSubscriberID.Name = "textSubscriberID";
-			this.textSubscriberID.Size = new System.Drawing.Size(90,20);
-			this.textSubscriberID.TabIndex = 40;
-			this.textSubscriberID.TextChanged += new System.EventHandler(this.textSubscriberID_TextChanged);
-			// 
-			// label13
-			// 
-			this.label13.Location = new System.Drawing.Point(11,242);
-			this.label13.Name = "label13";
-			this.label13.Size = new System.Drawing.Size(125,12);
-			this.label13.TabIndex = 41;
-			this.label13.Text = "Subscriber ID";
-			this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.contrKeyboard1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.contrKeyboard1_MouseDown);
 			// 
 			// FormPatientSelect
 			// 
@@ -984,8 +997,8 @@ namespace OpenDental{
 			PtDataTable=Patients.GetPtDataTable(limit,textLName.Text,textFName.Text,textHmPhone.Text,
 				textAddress.Text,checkHideInactive.Checked,textCity.Text,textState.Text,
 				textSSN.Text,textPatNum.Text,textChartNumber.Text,billingType,
-				checkGuarantors.Checked,checkShowArchived.Checked,Security.CurUser.ClinicNum,birthdate,
-				siteNum,textSubscriberID.Text);
+				checkGuarantors.Checked,checkShowArchived.Checked,checkShowProspectiveOnly.Checked,
+				Security.CurUser.ClinicNum,birthdate,siteNum,textSubscriberID.Text);
 			gridMain.BeginUpdate();
 			gridMain.Rows.Clear();
 			ODGridRow row;

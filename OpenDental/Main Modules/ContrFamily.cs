@@ -948,8 +948,9 @@ namespace OpenDental{
 			Patient PatOld=PatCur.Copy();
 			if(PatCur.PatNum==PatCur.Guarantor){//if selecting guarantor
 				if(FamCur.ListPats.Length==1){
-					if(!MsgBox.Show(this,true,"Delete Patient?"))
+					if(!MsgBox.Show(this,true,"Delete Patient?")) {
 						return;
+					}
 					PatCur.PatStatus=PatientStatus.Deleted;
 					PatCur.ChartNumber="";
 					Patients.Update(PatCur,PatOld);
@@ -968,8 +969,9 @@ namespace OpenDental{
 				}
 			}
 			else{//not selecting guarantor
-				if(!MsgBox.Show(this,true,"Delete Patient?"))
+				if(!MsgBox.Show(this,true,"Delete Patient?")) {
 					return;
+				}
 				PatCur.PatStatus=PatientStatus.Deleted;
 				PatCur.ChartNumber="";
 				PatCur.Guarantor=PatCur.PatNum;

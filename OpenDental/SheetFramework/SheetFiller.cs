@@ -1183,6 +1183,7 @@ namespace OpenDental{
 							}
 							if(fam.ListPats[i].PatStatus==PatientStatus.Archived
 								|| fam.ListPats[i].PatStatus==PatientStatus.Deceased) {
+								//Prospective patients will show.
 								continue;
 							}
 							if(str!="") {

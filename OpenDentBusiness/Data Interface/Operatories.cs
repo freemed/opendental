@@ -7,7 +7,7 @@ using System.Reflection;
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class Operatories {
-
+		#region CachePattern
 		///<summary>Refresh all operatories</summary>
 		public static DataTable RefreshCache() {
 			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
@@ -19,9 +19,9 @@ namespace OpenDentBusiness{
 			return table;
 		}
 
-		public static void FillCache(DataTable table){
+		public static void FillCache(DataTable table) {
 			//No need to check RemotingRole; no call to db.
-			OperatoryC.Listt=TableToList(table);
+			OperatoryC.Listt=Crud.OperatoryCrud.TableToList(table);
 			OperatoryC.ListShort=new List<Operatory>();
 			for(int i=0;i<OperatoryC.Listt.Count;i++) {
 				if(!OperatoryC.Listt[i].IsHidden) {
@@ -29,98 +29,24 @@ namespace OpenDentBusiness{
 				}
 			}
 		}
+		#endregion
 
-		private static List<Operatory> TableToList(DataTable table){
-			//No need to check RemotingRole; no call to db.
-			List<Operatory> oplist=new List<Operatory>();
-			Operatory op;
-			for(int i=0;i<table.Rows.Count;i++) {
-				op=new Operatory();
-				op.OperatoryNum = PIn.Long(table.Rows[i][0].ToString());
-				op.OpName       = PIn.String(table.Rows[i][1].ToString());
-				op.Abbrev       = PIn.String(table.Rows[i][2].ToString());
-				op.ItemOrder    = PIn.Int(table.Rows[i][3].ToString());
-				op.IsHidden     = PIn.Bool(table.Rows[i][4].ToString());
-				op.ProvDentist  = PIn.Long(table.Rows[i][5].ToString());
-				op.ProvHygienist= PIn.Long(table.Rows[i][6].ToString());
-				op.IsHygiene    = PIn.Bool(table.Rows[i][7].ToString());
-				op.ClinicNum    = PIn.Long(table.Rows[i][8].ToString());
-				//DateTStamp
-				oplist.Add(op);
+		///<summary></summary>
+		public static long Insert(Operatory operatory) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				operatory.OperatoryNum=Meth.GetLong(MethodBase.GetCurrentMethod(),operatory);
+				return operatory.OperatoryNum;
 			}
-			return oplist;
+			return Crud.OperatoryCrud.Insert(operatory);
 		}
 
 		///<summary></summary>
-		public static long Insert(Operatory op) {
+		public static void Update(Operatory operatory) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				op.OperatoryNum=Meth.GetLong(MethodBase.GetCurrentMethod(),op);
-				return op.OperatoryNum;
-			}
-			if(PrefC.RandomKeys) {
-				op.OperatoryNum=ReplicationServers.GetKey("operatory","OperatoryNum");
-			}
-			string command="INSERT INTO operatory (";
-			if(PrefC.RandomKeys) {
-				command+="OperatoryNum,";
-			}
-			command+="OpName,Abbrev,ItemOrder,IsHidden,ProvDentist,ProvHygienist,"
-				+"IsHygiene,ClinicNum"//DateTStamp
-				+") VALUES(";
-			if(PrefC.RandomKeys) {
-				command+=POut.Long(op.OperatoryNum)+", ";
-			}
-			command+=
-				 "'"+POut.String(op.OpName)+"', "
-				+"'"+POut.String(op.Abbrev)+"', "
-				+"'"+POut.Long   (op.ItemOrder)+"', "
-				+"'"+POut.Bool  (op.IsHidden)+"', "
-				+"'"+POut.Long   (op.ProvDentist)+"', "
-				+"'"+POut.Long   (op.ProvHygienist)+"', "
-				+"'"+POut.Bool  (op.IsHygiene)+"', "
-				+"'"+POut.Long   (op.ClinicNum)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else{
-				op.OperatoryNum=Db.NonQ(command,true);
-			}
-			return op.OperatoryNum;
-		}
-
-		///<summary></summary>
-		public static void Update(Operatory op){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),op);
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),operatory);
 				return;
 			}
-			string command= "UPDATE operatory SET " 
-				+ "OpName = '"        +POut.String(op.OpName)+"'"
-				+ ",Abbrev = '"       +POut.String(op.Abbrev)+"'"
-				+ ",ItemOrder = '"    +POut.Long   (op.ItemOrder)+"'"
-				+ ",IsHidden = '"     +POut.Bool  (op.IsHidden)+"'"
-				+ ",ProvDentist = '"  +POut.Long   (op.ProvDentist)+"'"
-				+ ",ProvHygienist = '"+POut.Long   (op.ProvHygienist)+"'"
-				+ ",IsHygiene = '"    +POut.Bool  (op.IsHygiene)+"'"
-				+ ",ClinicNum = '"    +POut.Long   (op.ClinicNum)+"'"	
-				//DateTStamp
-				+" WHERE OperatoryNum = '" +POut.Long(op.OperatoryNum)+"'";
-			//MessageBox.Show(string command);
- 			Db.NonQ(command);
-		}
-
-		///<summary></summary>
-		public static void InsertOrUpdate(Operatory op, bool IsNew){
-			//No need to check RemotingRole; no call to db.
-			//if(){
-				//throw new ApplicationException(Lans.g(this,""));
-			//}
-			if(IsNew){
-				Insert(op);
-			}
-			else{
-				Update(op);
-			}
+			Crud.OperatoryCrud.Update(operatory);
 		}
 
 		//<summary>Checks dependencies first.  Throws exception if can't delete.</summary>
@@ -132,8 +58,7 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<List<Operatory>>(MethodBase.GetCurrentMethod(),changedSince);
 			}
 			string command="SELECT * FROM operatory WHERE DateTStamp > "+POut.DateT(changedSince);
-			DataTable table=Db.GetTable(command);
-			return TableToList(table);
+			return Crud.OperatoryCrud.SelectMany(command);
 		}
 
 		public static string GetAbbrev(long operatoryNum) {
