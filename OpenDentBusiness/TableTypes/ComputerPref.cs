@@ -5,8 +5,10 @@ using System.Text;
 namespace OpenDentBusiness {
 
 	///<summary>Enables preference specification for individual computers on a customer network.</summary>
-	public class ComputerPref {
+	[Serializable]
+	public class ComputerPref:TableBase {
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long ComputerPrefNum;
 		///<summary>The human-readable name of the computer on the network (not the IP address).</summary>
 		public string ComputerName;

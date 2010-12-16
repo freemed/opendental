@@ -3151,7 +3151,13 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);
 				command="ALTER TABLE operatory ADD SetProspective tinyint NOT NULL";
 				Db.NonQ(command);
+				command="ALTER TABLE computerpref CHANGE SensorBinned SensorBinned TINYINT NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE computerpref CHANGE GraphicsDoubleBuffering GraphicsDoubleBuffering TINYINT NOT NULL";
+				Db.NonQ(command);
 
+
+				
 
 
 				command="UPDATE preference SET ValueString = '7.6.0.0' WHERE PrefName = 'DataBaseVersion'";
