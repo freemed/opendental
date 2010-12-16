@@ -150,7 +150,7 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		///<summary>Only used to fill the list of databases in the ChooseDatabase window and from Employees.GetAsteriskMissedCalls.  Also used by the mobile server because it does not need to worry about 3-tier scenarios.</summary>
+		///<summary>Only used to fill the list of databases in the ChooseDatabase window and from Employees.GetAsteriskMissedCalls.</summary>
 		public DataConnection(string serverName,string database,string mysqlUser,string mysqlPass,DatabaseType dtype) {
 			string connectStr=ConnectionString;
 			if(connectStr.Length<1) {
