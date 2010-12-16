@@ -828,6 +828,9 @@ namespace OpenDental{
 			if(FormApptEdit2.DialogResult!=DialogResult.OK){
 				return;
 			}
+			if(InitialClick) {
+//Change PatStatus to Prospective?
+			}
 			AptNumsSelected.Add(AptCur.AptNum);
 			if(InitialClick){
 				oResult=OtherResult.CreateNew;
