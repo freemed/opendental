@@ -59,7 +59,6 @@ namespace OpenDental{
 		private Label label9;
 		private TextBox textTaskList;
 		private Label label10;
-		public bool IsPopup;
 		private ComboBox comboDateType;
 		private ODtextBox textAppend;
 		private OpenDental.UI.Button butAppendNoPop;
@@ -629,13 +628,11 @@ namespace OpenDental{
 			this.Controls.Add(this.label1);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
-			this.MinimizeBox = false;
 			this.Name = "FormTaskEdit";
-			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Task";
-			this.Load += new System.EventHandler(this.FormTaskListEdit_Load);
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormTaskEdit_FormClosing);
+			this.Load += new System.EventHandler(this.FormTaskListEdit_Load);
 			this.panelObject.ResumeLayout(false);
 			this.panelObject.PerformLayout();
 			this.ResumeLayout(false);
@@ -709,10 +706,6 @@ namespace OpenDental{
 				listObjectType.Items.Add(Lan.g("enumTaskObjectType",Enum.GetNames(typeof(TaskObjectType))[i]));
 			}
 			FillObject();
-			if(IsPopup){
-				//butOK.Text=Lan.g(this,"Save");//butOK.Visible=false;
-				butCancel.Text=Lan.g(this,"Close");
-			}
 			if(IsNew){
 				labelReply.Visible=false;
 				butReply.Visible=false;

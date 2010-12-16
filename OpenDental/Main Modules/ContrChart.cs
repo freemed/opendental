@@ -4960,47 +4960,8 @@ namespace OpenDental{
 			else if(row["TaskNum"].ToString()!="0") {
 				Task curTask=Tasks.GetOne(PIn.Long(row["TaskNum"].ToString()));
 				FormTaskEdit FormT=new FormTaskEdit(curTask);
-				FormT.ShowDialog();
-				if(FormT.GotoType!=TaskObjectType.None) {
-					TaskObjectType GotoType=FormT.GotoType;
-					long GotoKeyNum=FormT.GotoKeyNum;
-					//OnGoToChanged();
-					if(GotoType==TaskObjectType.Patient) {
-						if(GotoKeyNum!=0) {
-							Patient pat=Patients.GetPat(GotoKeyNum);
-							OnPatientSelected(pat.PatNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber);
-							ModuleSelected(pat.PatNum);
-							return;
-						}
-					}
-					if(GotoType==TaskObjectType.Appointment) {
-						/*There's nothing to do here, since we're not in the appt module.
-							if(GotoKeyNum!=0) {
-							Appointment apt=Appointments.GetOneApt(GotoKeyNum);
-							//Patient pat=Patients.GetPat(apt.PatNum);
-							if(apt==null) {
-								MsgBox.Show(this,"Appointment has been deleted, so it's not available.");
-								return;
-							}
-							DateTime dateSelected=DateTime.MinValue;
-							if(apt.AptStatus==ApptStatus.Planned || apt.AptStatus==ApptStatus.UnschedList) {
-								//I did not add feature to put planned or unsched apt on pinboard.
-								MsgBox.Show(this,"Cannot navigate to appointment.  Use the Other Appointments button.");
-								//return;
-							}
-							else {
-								dateSelected=apt.AptDateTime;
-							}
-							PatCur.PatNum=apt.PatNum;//OnPatientSelected(apt.PatNum);
-						}
-						*/
-						//DialogResult=DialogResult.OK;
-						return;
-					}
-				}
-				if(FormT.DialogResult!=DialogResult.OK) {
-					return;
-				}
+				FormT.Closing+=new CancelEventHandler(TaskGoToEvent);
+				FormT.Show();//non-modal
 			}
 			else if(row["AptNum"].ToString()!="0") {
 				//Appointment apt=Appointments.GetOneApt(
@@ -5043,6 +5004,27 @@ namespace OpenDental{
 			}
 			ModuleSelected(PatCur.PatNum);
 			Reporting.Allocators.MyAllocator1_ProviderPayment.AllocateWithToolCheck(this.PatCur.Guarantor);
+		}
+
+		public void TaskGoToEvent(object sender,CancelEventArgs e) {
+			FormTaskEdit FormT=(FormTaskEdit)sender;
+			TaskObjectType GotoType=FormT.GotoType;
+			long keyNum=FormT.GotoKeyNum;
+			if(GotoType==TaskObjectType.None) {
+				return;
+			}
+			if(GotoType == TaskObjectType.Patient) {
+				if(keyNum != 0) {
+					Patient pat = Patients.GetPat(keyNum);
+					OnPatientSelected(pat.PatNum,pat.GetNameLF(),pat.Email != "",pat.ChartNumber);
+					ModuleSelected(pat.PatNum);
+					return;
+				}
+			}
+			if(GotoType == TaskObjectType.Appointment) {
+				//There's nothing to do here, since we're not in the appt module.
+				return;
+			}
 		}
 
 		///<summary>Sets many fields for a new procedure, then displays it for editing before inserting it into the db.  No need to worry about ProcOld because it's an insert, not an update.</summary>

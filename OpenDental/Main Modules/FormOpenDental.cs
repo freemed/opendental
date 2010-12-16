@@ -2172,7 +2172,7 @@ namespace OpenDental{
 		private void OnTasklist_Click(){
 			FormTaskListSelect FormT=new FormTaskListSelect(TaskObjectType.Patient,CurPatNum);
 			FormT.Location=new Point(50,50);
-			FormT.ShowDialog();
+			FormT.Show();
 		}
 
 		private void OnLabel_Click() {
@@ -2763,8 +2763,6 @@ namespace OpenDental{
 						this.BringToFront();//don't know if this is doing anything.
 						FormTaskEdit FormT=new FormTaskEdit(tasksPopup[i]);
 						FormT.Closing+=new CancelEventHandler(TaskGoToEvent);
-						FormT.IsPopup=true;
-						FormT.ShowInTaskbar=true;
 						FormT.Show();//non-modal
 					}
 				}

@@ -588,17 +588,16 @@ namespace OpenDental {
 			cur.UserNum=Security.CurUser.UserNum;
 			FormTaskEdit FormT=new FormTaskEdit(cur);
 			FormT.IsNew=true;
-			FormT.ShowDialog();
-			//moved into the task edit window.
-			//if(FormT.DialogResult==DialogResult.OK){
-			//	DataValid.SetInvalidTask(cur.TaskNum,true);
-			//}
+			FormT.Closing+=new CancelEventHandler(TaskGoToEvent);
+			FormT.Show();//non-modal
+		}
+
+		public void TaskGoToEvent(object sender,CancelEventArgs e) {
+			FormTaskEdit FormT=(FormTaskEdit)sender;
 			if(FormT.GotoType!=TaskObjectType.None) {
 				GotoType=FormT.GotoType;
 				GotoKeyNum=FormT.GotoKeyNum;
 				OnGoToChanged();
-				//DialogResult=DialogResult.OK;
-				return;
 			}
 			FillGrid();
 		}
@@ -621,19 +620,13 @@ namespace OpenDental {
 			if(clickedI < TaskListsList.Count) {//is list
 				FormTaskListEdit FormT=new FormTaskListEdit(TaskListsList[clickedI]);
 				FormT.ShowDialog();
+				FillGrid();
 			}
 			else {//task
 				FormTaskEdit FormT=new FormTaskEdit(TasksList[clickedI-TaskListsList.Count]);
-				FormT.ShowDialog();
-				if(FormT.GotoType!=TaskObjectType.None) {
-					GotoType=FormT.GotoType;
-					GotoKeyNum=FormT.GotoKeyNum;
-					OnGoToChanged();
-					//DialogResult=DialogResult.OK;
-					return;
-				}
+				FormT.Closing+=new CancelEventHandler(TaskGoToEvent);
+				FormT.Show();//non-modal
 			}
-			FillGrid();
 		}
 
 		private void Cut_Clicked() {
@@ -902,15 +895,9 @@ namespace OpenDental {
 			}
 			if(e.Row >= TaskListsList.Count) {//is task
 				FormTaskEdit FormT=new FormTaskEdit(TasksList[e.Row-TaskListsList.Count]);
-				FormT.ShowDialog();
-				if(FormT.GotoType!=TaskObjectType.None) {
-					GotoType=FormT.GotoType;
-					GotoKeyNum=FormT.GotoKeyNum;
-					OnGoToChanged();
-					return;
-				}
+				FormT.Closing+=new CancelEventHandler(TaskGoToEvent);
+				FormT.Show();//non-modal
 			}
-			FillGrid();
 		}
 
 		private void gridMain_MouseDown(object sender,MouseEventArgs e) {

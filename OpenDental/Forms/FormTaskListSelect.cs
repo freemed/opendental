@@ -138,11 +138,9 @@ namespace OpenDental{
 			task.TaskListNum=TaskListList[listMain.SelectedIndex].TaskListNum;
 			FormTaskEdit FormT=new FormTaskEdit(task);
 			FormT.IsNew=true;
-			FormT.ShowDialog();
-			if(FormT.DialogResult==DialogResult.Cancel){
-				return;
-			}
-			DialogResult=DialogResult.OK;
+			FormT.Show();
+			//DialogResult=DialogResult.OK;
+			Close();
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
@@ -156,15 +154,14 @@ namespace OpenDental{
 			task.TaskListNum=TaskListList[listMain.SelectedIndex].TaskListNum;
 			FormTaskEdit FormT=new FormTaskEdit(task);
 			FormT.IsNew=true;
-			FormT.ShowDialog();
-			if(FormT.DialogResult==DialogResult.Cancel){
-				return;
-			}
-			DialogResult=DialogResult.OK;
+			FormT.Show();
+			//DialogResult=DialogResult.OK;
+			Close();
 		}
 
 		private void butCancel_Click(object sender, System.EventArgs e) {
-			DialogResult=DialogResult.Cancel;
+			//DialogResult=DialogResult.Cancel;
+			Close();
 		}
 
 		
