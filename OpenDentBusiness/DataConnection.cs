@@ -171,10 +171,8 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Used by the mobile server because it does not need to worry about 3-tier scenarios.  Only supports MySQL.</summary>
-		public DataConnection(string serverName,string database,string mysqlUser,string mysqlPass) {
-			string connectStr=BuildSimpleConnectionString(DatabaseType.MySql,serverName,database,mysqlUser,mysqlPass);
+		public DataConnection(string connectStr,bool isMobile) {//isMobile is ignored.  Just needed to make it different than the other constructor.
 			con=new MySqlConnection(connectStr);
-			//dr = null;
 			cmd = new MySqlCommand();
 			cmd.Connection=con;
 		}
