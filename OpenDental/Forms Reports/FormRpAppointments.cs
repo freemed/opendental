@@ -295,7 +295,7 @@ namespace OpenDental
 
 			string whereProv;//used as the provider portion of the where clauses.
 			//each whereProv needs to be set up separately for each query
-			whereProv="appointment.ProvNum in (";
+			whereProv="(appointment.ProvNum IN (";
 			for(int i=0;i<listProv.SelectedIndices.Count;i++){
 				if(i>0){
 					whereProv+=",";
@@ -303,6 +303,14 @@ namespace OpenDental
 				whereProv+="'"+POut.Long(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+"'";
 			}
 			whereProv += ") ";
+			whereProv+="OR appointment.ProvHyg IN (";
+			for(int i=0;i<listProv.SelectedIndices.Count;i++) {
+				if(i>0) {
+					whereProv+=",";
+				}
+				whereProv+="'"+POut.Long(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+"'";
+			}
+			whereProv += ")) ";
 			//create the report
 			ReportLikeCrystal report=new ReportLikeCrystal();
 			report.IsLandscape=true;
