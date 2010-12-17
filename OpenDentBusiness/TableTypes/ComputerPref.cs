@@ -42,6 +42,8 @@ namespace OpenDentBusiness {
 		///no format is currently set and the best theoretical foramt will be chosen at program startup. If this value is set to
 		///'opengl' then this computer is using OpenGL and a DirectX format will not be picked.</summary>
 		public string DirectXFormat;
+		///<summary>The index of the most recent appt view for this computer.  Uses it when opening.</summary>
+		public byte RecentApptView;
 
 
 		public ComputerPref Copy(){

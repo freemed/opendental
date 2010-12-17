@@ -346,7 +346,7 @@ namespace Crud {
 					break;
 			}
 			if(dataTypeInDb!=dataTypeExpected && dataTypeInDb!=dataTypeExpected2 && dataTypeInDb!=dataTypeExpected3 && dataTypeInDb!=dataTypeExpected4) {
-				throw new Exception(tablename+"."+field.Name+" type mismatch for type "+field.FieldType.Name+".  Found "+dataTypeInDb+", but expecting "+dataTypeExpected);
+				throw new Exception(tablename+"."+field.Name+" type mismatch.  Look in the lines of code above for case \""+field.FieldType.Name+"\".  The types listed are what is allowed in the mysql database.  "+dataTypeInDb+" is not one of the allowed mysql types.");
 			}
 		}
 

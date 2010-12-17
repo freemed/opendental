@@ -3151,9 +3151,11 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);
 				command="ALTER TABLE operatory ADD SetProspective tinyint NOT NULL";
 				Db.NonQ(command);
-				command="ALTER TABLE computerpref CHANGE SensorBinned SensorBinned TINYINT NOT NULL";
+				command="ALTER TABLE computerpref CHANGE SensorBinned SensorBinned tinyint NOT NULL";
 				Db.NonQ(command);
-				command="ALTER TABLE computerpref CHANGE GraphicsDoubleBuffering GraphicsDoubleBuffering TINYINT NOT NULL";
+				command="ALTER TABLE computerpref CHANGE GraphicsDoubleBuffering GraphicsDoubleBuffering tinyint NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE computerpref ADD RecentApptView tinyint NOT NULL";
 				Db.NonQ(command);
 
 

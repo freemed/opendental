@@ -62,6 +62,7 @@ namespace OpenDentBusiness.Crud{
 				computerPref.TaskX                  = PIn.Int   (table.Rows[i]["TaskX"].ToString());
 				computerPref.TaskY                  = PIn.Int   (table.Rows[i]["TaskY"].ToString());
 				computerPref.DirectXFormat          = PIn.String(table.Rows[i]["DirectXFormat"].ToString());
+				computerPref.RecentApptView         = PIn.Byte  (table.Rows[i]["RecentApptView"].ToString());
 				retVal.Add(computerPref);
 			}
 			return retVal;
@@ -81,7 +82,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="ComputerPrefNum,";
 			}
-			command+="ComputerName,GraphicsUseHardware,GraphicsSimple,SensorType,SensorBinned,SensorPort,SensorExposure,GraphicsDoubleBuffering,PreferredPixelFormatNum,AtoZpath,TaskKeepListHidden,TaskDock,TaskX,TaskY,DirectXFormat) VALUES(";
+			command+="ComputerName,GraphicsUseHardware,GraphicsSimple,SensorType,SensorBinned,SensorPort,SensorExposure,GraphicsDoubleBuffering,PreferredPixelFormatNum,AtoZpath,TaskKeepListHidden,TaskDock,TaskX,TaskY,DirectXFormat,RecentApptView) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(computerPref.ComputerPrefNum)+",";
 			}
@@ -100,7 +101,8 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Int   (computerPref.TaskDock)+","
 				+    POut.Int   (computerPref.TaskX)+","
 				+    POut.Int   (computerPref.TaskY)+","
-				+"'"+POut.String(computerPref.DirectXFormat)+"')";
+				+"'"+POut.String(computerPref.DirectXFormat)+"',"
+				+    POut.Byte  (computerPref.RecentApptView)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -127,7 +129,8 @@ namespace OpenDentBusiness.Crud{
 				+"TaskDock               =  "+POut.Int   (computerPref.TaskDock)+", "
 				+"TaskX                  =  "+POut.Int   (computerPref.TaskX)+", "
 				+"TaskY                  =  "+POut.Int   (computerPref.TaskY)+", "
-				+"DirectXFormat          = '"+POut.String(computerPref.DirectXFormat)+"' "
+				+"DirectXFormat          = '"+POut.String(computerPref.DirectXFormat)+"', "
+				+"RecentApptView         =  "+POut.Byte  (computerPref.RecentApptView)+" "
 				+"WHERE ComputerPrefNum = "+POut.Long(computerPref.ComputerPrefNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
@@ -194,6 +197,10 @@ namespace OpenDentBusiness.Crud{
 			if(computerPref.DirectXFormat != oldComputerPref.DirectXFormat) {
 				if(command!=""){ command+=",";}
 				command+="DirectXFormat = '"+POut.String(computerPref.DirectXFormat)+"'";
+			}
+			if(computerPref.RecentApptView != oldComputerPref.RecentApptView) {
+				if(command!=""){ command+=",";}
+				command+="RecentApptView = "+POut.Byte(computerPref.RecentApptView)+"";
 			}
 			if(command==""){
 				return;
