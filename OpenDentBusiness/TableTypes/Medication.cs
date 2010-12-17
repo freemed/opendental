@@ -3,8 +3,10 @@ using System;
 namespace OpenDentBusiness{
 
 	///<summary>A list of medications, not attached to any particular patient.  Not allowed to delete if in use by a patient.  Not allowed to edit name once created due to possibility of damage to patient record.</summary>
-	public class Medication{
+	[Serializable]
+	public class Medication:TableBase {
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long MedicationNum;
 		///<summary>Name of the medication.</summary>
 		public string MedName;

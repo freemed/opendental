@@ -1,10 +1,12 @@
 using System;
 
 namespace OpenDentBusiness{
-	
+
 	///<summary>Links medications to patients.</summary>
-	public class MedicationPat{
+	[Serializable]
+	public class MedicationPat:TableBase {
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long MedicationPatNum;
 		///<summary>FK to patient.PatNum.</summary>
 		public long PatNum;

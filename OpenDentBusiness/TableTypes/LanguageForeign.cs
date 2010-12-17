@@ -2,8 +2,9 @@ using System;
 using System.Collections;
 
 namespace OpenDentBusiness{
-	
+
 	///<summary>Will usually only contain translations for a single foreign language, although more are allowed.  The primary key is a combination of the ClassType and the English phrase and the culture.</summary>
+	[Serializable]
 	public class LanguageForeign{
 		///<summary>A string representing the class where the translation is used.</summary>
 		public string ClassType;

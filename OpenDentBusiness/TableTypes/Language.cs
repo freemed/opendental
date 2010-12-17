@@ -2,8 +2,9 @@ using System;
 using System.Collections;
 
 namespace OpenDentBusiness{
-	
+
 	///<summary>This is a list of phrases that need to be translated.  The primary key is a combination of the ClassType and the English phrase.  This table is currently filled dynmically at run time, but the plan is to fill it using a tool that parses the code.</summary>
+	[Serializable]
 	public class Language{
 		///<summary>No longer used.</summary>
 		public string EnglishComments;

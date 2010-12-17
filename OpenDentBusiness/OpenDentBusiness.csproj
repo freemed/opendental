@@ -184,6 +184,9 @@
     <Compile Include="Crud\JournalEntryCrud.cs" />
     <Compile Include="Crud\LabCaseCrud.cs" />
     <Compile Include="Crud\LaboratoryCrud.cs" />
+    <Compile Include="Crud\LetterCrud.cs" />
+    <Compile Include="Crud\MedicationCrud.cs" />
+    <Compile Include="Crud\MedicationPatCrud.cs" />
     <Compile Include="Crud\MountCrud.cs" />
     <Compile Include="Crud\MountDefCrud.cs" />
     <Compile Include="Crud\MountItemCrud.cs" />
