@@ -2,10 +2,12 @@ using System;
 using System.Collections;
 
 namespace OpenDentBusiness{
-	
+
 	///<summary></summary>
-	public class Equipment{
+	[Serializable]
+	public class Equipment:TableBase {
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long EquipmentNum;
 		///<summary>Short description, need not be very unique.</summary>
 		public string Description;
@@ -23,7 +25,7 @@ namespace OpenDentBusiness{
 		public double MarketValue;
 		///<summary></summary>
 		public string Location;
-		///<summary>Security uses this date to lock older entries from accidental deletion.</summary>
+		///<summary>Security uses this date to lock older entries from accidental deletion.  Date, no time.</summary>
 		public DateTime DateEntry;
 	}
 

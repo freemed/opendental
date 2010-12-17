@@ -4,8 +4,10 @@ using System.Collections;
 namespace OpenDentBusiness{
 
 	///<summary>Used in accounting to represent a single credit or debit entry.  There will always be at least 2 journal enties attached to every transaction.  All transactions balance to 0.</summary>
-	public class JournalEntry{
+	[Serializable]
+	public class JournalEntry:TableBase {
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long JournalEntryNum;
 		///<summary>FK to transaction.TransactionNum</summary>
 		public long TransactionNum;
@@ -28,18 +30,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public JournalEntry Copy() {
-			JournalEntry j=new JournalEntry();
-			j.JournalEntryNum=JournalEntryNum;
-			j.TransactionNum=TransactionNum;
-			j.AccountNum=AccountNum;
-			j.DateDisplayed=DateDisplayed;
-			j.DebitAmt=DebitAmt;
-			j.CreditAmt=CreditAmt;
-			j.Memo=Memo;
-			j.Splits=Splits;
-			j.CheckNumber=CheckNumber;
-			j.ReconcileNum=ReconcileNum;
-			return j;
+			return (JournalEntry)this.MemberwiseClone();
 		}
 
 

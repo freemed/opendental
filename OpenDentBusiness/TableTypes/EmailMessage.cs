@@ -4,8 +4,10 @@ using System.Text;
 
 namespace OpenDentBusiness {
 	///<summary>An outgoing email message is stored here.</summary>
-	public class EmailMessage {
+	[Serializable]
+	public class EmailMessage:TableBase {
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long EmailMessageNum;
 		///<summary>FK to patient.PatNum</summary>
 		public long PatNum;
@@ -17,11 +19,13 @@ namespace OpenDentBusiness {
 		public string Subject;
 		///<summary>Body of the email</summary>
 		public string BodyText;
-		///<summary>Date and time the message was sent. Automated field.</summary>
+		///<summary>Date and time the message was sent. Automated at the UI level.</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime MsgDateTime;
 		///<summary>0=neither, 1=sent, 2=received.</summary>
 		public CommSentOrReceived SentOrReceived;
 		///<summary>Not a database column.</summary>
+		[CrudColumn(IsNotDbColumn=true)]
 		public List<EmailAttach> Attachments;
 
 		///<summary>Constructor</summary>

@@ -169,7 +169,11 @@
     <Compile Include="Crud\DocumentCrud.cs" />
     <Compile Include="Crud\DunningCrud.cs" />
     <Compile Include="Crud\ElectIDCrud.cs" />
+    <Compile Include="Crud\EmailMessageCrud.cs" />
+    <Compile Include="Crud\EmailTemplateCrud.cs" />
+    <Compile Include="Crud\EquipmentCrud.cs" />
     <Compile Include="Crud\EtransCrud.cs" />
+    <Compile Include="Crud\EtransMessageTextCrud.cs" />
     <Compile Include="Crud\FeeSchedCrud.cs" />
     <Compile Include="Crud\GuardianCrud.cs" />
     <Compile Include="Crud\HL7MsgCrud.cs" />
@@ -177,6 +181,7 @@
     <Compile Include="Crud\InsFilingCodeSubtypeCrud.cs" />
     <Compile Include="Crud\InsPlanCrud.cs" />
     <Compile Include="Crud\InsSubCrud.cs" />
+    <Compile Include="Crud\JournalEntryCrud.cs" />
     <Compile Include="Crud\LabCaseCrud.cs" />
     <Compile Include="Crud\LaboratoryCrud.cs" />
     <Compile Include="Crud\MountCrud.cs" />
