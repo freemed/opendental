@@ -59,9 +59,9 @@ namespace MobileWeb {
 				NextDateMonth=NextDate.Month;
 				NextDateYear=NextDate.Year;
 
+				string timeofapp ="8:30 a.m";
 
-
-				string[] ar= { "Appointmnet1 of "+ appsuffix,"Appointmnet2","Appointmnet3","Appointmnet4","Appointmnet5" };
+				string[] ar= {timeofapp + " Appointmnet1 of"+ appsuffix,"Appointmnet2","Appointmnet3","Appointmnet4","Appointmnet5" };
 
 				var somevar = ar.Where(a => a.Contains("Appointmnet"));
 				Repeater1.DataSource = somevar;

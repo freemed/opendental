@@ -22,16 +22,24 @@ namespace OpenDental {
 		}
 
 		public void SynchPatientRecordsOnMobileWeb() {
+			try {
 			int RecordCountOfPatientm=Patientms.GetRecordCount(RegistrationKey);
 			int RecordCountOfPatient= Patients.GetNumberPatients();
-
+			DateTime changedSince;
 			if(RecordCountOfPatient>RecordCountOfPatientm) {
-				SendMissingRecords();
+				changedSince= new DateTime(1902,1,1); //will featch all records
 			}
-
-			DateTime changedSince= new DateTime(6,6,6);
+			else {
+				//DateTime dateTimeLastUploaded=PIn.DateT(ProgramProperties.GetPropVal(prog.ProgramNum,"DateTimeLastUploaded"));
+				//changedSince=dateTimeLastUploaded;
+				changedSince= new DateTime(1902,1,1);
+			}
 			List<Patientm> ChangedPatientmList=Patientms.GetChanged(changedSince);
 			mb.SynchRecords(RegistrationKey,ChangedPatientmList.ToArray());
+			}
+			catch(Exception ex) {
+				MessageBox.Show(ex.Message);
+			}
 			
 		}
 
@@ -46,7 +54,7 @@ namespace OpenDental {
 		/// <returns></returns>
 		private bool TestWebServiceExists() {
 			try {
-				mb.Url="http://localhost:2923/Mobile.asmx";
+				//mb.Url="http://localhost:2923/Mobile.asmx";
 				if(mb.ServiceExists()) {
 					return true;
 				}

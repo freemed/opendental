@@ -10,32 +10,32 @@
 <div id="loggedin"><asp:Literal runat="server" ID="Message"></asp:Literal></div>
 <div id="content">
 <h2></h2>
-<ul class="rounded">
+<ul>
 <li> <span class="style2">Patient name <%Response.Write(id);%>Patient name Patient name Patient name Patient name</span>
 </li>
 </ul>
 
-<ul class="rounded">
+<ul>
 <li><span class="style1">Home:</span><span class="style2">333-555-1234<%Response.Write(id);%> </span></li>
 <li><span class="style1">Work:</span><span class="style2">333-555-1234<%Response.Write(id);%> </span></li>
 <li><span class="style1">Mobile:</span><span class="style2">333-555-1234<%Response.Write(id);%> </span></li>
 <li><span class="style1">Email:</span><span class="style2">333-555-1234@gggg.com<%Response.Write(id);%> </span></li>
 </ul>
 <h2>Appointmnets</h2>
-<ul class="rounded">
-<li class="arrow">
+<ul>
+<li class="arrow style2">
 		<div>
 			<a linkattib="AppointmentDetails.aspx?id=1" href="#AppointmentDetails">
 			<asp:Label ID="Label1" runat="server" Text="Appointmnets1"></asp:Label></a>
 		</div>
 </li>
-<li class="arrow">
+<li class="arrow style2">
 		<div>
 			<a linkattib="AppointmentDetails.aspx?id=1" href="#AppointmentDetails">
 			<asp:Label ID="Label2" runat="server" Text="Appointmnet1"></asp:Label></a>
 		</div>
 </li>
-<li class="arrow">
+<li class="arrow style2">
 		<div>
 			<a linkattib="AppointmentDetails.aspx?id=1" href="#AppointmentDetails">
 			<asp:Label ID="Label3" runat="server" Text="Appointmnet3"></asp:Label></a>
@@ -46,7 +46,7 @@
 </ul>
 
 <h2>Precriptions</h2>
-<ul class="rounded">
+<ul>
 <li>
 		<div>
 		<span class="style2"><asp:Label ID="Label4" runat="server" Text="Penicillin"></asp:Label></span>

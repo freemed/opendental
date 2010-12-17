@@ -36,6 +36,10 @@ namespace OpenDental.MobileWeb {
         
         private System.Threading.SendOrPostCallback GetRecordCountOperationCompleted;
         
+        private System.Threading.SendOrPostCallback SynchRecordsTestOperationCompleted;
+        
+        private System.Threading.SendOrPostCallback SynchRecordsTestV2OperationCompleted;
+        
         private System.Threading.SendOrPostCallback SynchRecordsOperationCompleted;
         
         private System.Threading.SendOrPostCallback DeleteRecordsOperationCompleted;
@@ -85,6 +89,12 @@ namespace OpenDental.MobileWeb {
         
         /// <remarks/>
         public event GetRecordCountCompletedEventHandler GetRecordCountCompleted;
+        
+        /// <remarks/>
+        public event SynchRecordsTestCompletedEventHandler SynchRecordsTestCompleted;
+        
+        /// <remarks/>
+        public event SynchRecordsTestV2CompletedEventHandler SynchRecordsTestV2Completed;
         
         /// <remarks/>
         public event SynchRecordsCompletedEventHandler SynchRecordsCompleted;
@@ -150,6 +160,64 @@ namespace OpenDental.MobileWeb {
             if ((this.GetRecordCountCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.GetRecordCountCompleted(this, new GetRecordCountCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://opendental.com/SynchRecordsTest", RequestNamespace="http://opendental.com/", ResponseNamespace="http://opendental.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public void SynchRecordsTest(string RegistrationKey) {
+            this.Invoke("SynchRecordsTest", new object[] {
+                        RegistrationKey});
+        }
+        
+        /// <remarks/>
+        public void SynchRecordsTestAsync(string RegistrationKey) {
+            this.SynchRecordsTestAsync(RegistrationKey, null);
+        }
+        
+        /// <remarks/>
+        public void SynchRecordsTestAsync(string RegistrationKey, object userState) {
+            if ((this.SynchRecordsTestOperationCompleted == null)) {
+                this.SynchRecordsTestOperationCompleted = new System.Threading.SendOrPostCallback(this.OnSynchRecordsTestOperationCompleted);
+            }
+            this.InvokeAsync("SynchRecordsTest", new object[] {
+                        RegistrationKey}, this.SynchRecordsTestOperationCompleted, userState);
+        }
+        
+        private void OnSynchRecordsTestOperationCompleted(object arg) {
+            if ((this.SynchRecordsTestCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.SynchRecordsTestCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://opendental.com/SynchRecordsTestV2", RequestNamespace="http://opendental.com/", ResponseNamespace="http://opendental.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public void SynchRecordsTestV2(string RegistrationKey, Patientm patientm) {
+            this.Invoke("SynchRecordsTestV2", new object[] {
+                        RegistrationKey,
+                        patientm});
+        }
+        
+        /// <remarks/>
+        public void SynchRecordsTestV2Async(string RegistrationKey, Patientm patientm) {
+            this.SynchRecordsTestV2Async(RegistrationKey, patientm, null);
+        }
+        
+        /// <remarks/>
+        public void SynchRecordsTestV2Async(string RegistrationKey, Patientm patientm, object userState) {
+            if ((this.SynchRecordsTestV2OperationCompleted == null)) {
+                this.SynchRecordsTestV2OperationCompleted = new System.Threading.SendOrPostCallback(this.OnSynchRecordsTestV2OperationCompleted);
+            }
+            this.InvokeAsync("SynchRecordsTestV2", new object[] {
+                        RegistrationKey,
+                        patientm}, this.SynchRecordsTestV2OperationCompleted, userState);
+        }
+        
+        private void OnSynchRecordsTestV2OperationCompleted(object arg) {
+            if ((this.SynchRecordsTestV2Completed != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.SynchRecordsTestV2Completed(this, new System.ComponentModel.AsyncCompletedEventArgs(invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
         
@@ -313,6 +381,14 @@ namespace OpenDental.MobileWeb {
             }
         }
     }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
+    public delegate void SynchRecordsTestCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
+    public delegate void SynchRecordsTestV2CompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]

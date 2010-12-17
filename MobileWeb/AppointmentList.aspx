@@ -19,10 +19,10 @@
 
             </div>
 			
-	<ul class="rounded">
+	<ul class="applist">
 		<asp:Repeater ID="Repeater1" runat="server">
 		<ItemTemplate>
-		<li class="arrow">
+		<li class="arrow style2">
 		<div>
 			<a linkattib="AppointmentDetails.aspx?id=<%#(((RepeaterItem)Container).ItemIndex+1).ToString()%>" href="#AppointmentDetails">
 			<asp:Label ID="Label1" runat="server" Text="<%#Container.DataItem %>"></asp:Label></a>

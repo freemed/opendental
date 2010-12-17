@@ -40,7 +40,7 @@
             &nbsp;&nbsp;&nbsp;&nbsp;<asp:Label ID="LabelMessage" runat="server" Text=""></asp:Label>
             <form method="post" id="ajaxform" runat="server" enableviewstate="False">
 			
-                <ul class="rounded">
+                <ul>
                     <li><input type="text" placeholder="Username" name="username" id="username" autocapitalize="off" autocorrect="off" autocomplete="off" /></li>
                     <li><input type="password" placeholder="Password" name="password" id="password" autocapitalize="off" autocorrect="off" autocomplete="off" /></li>
                    <li><div class="chk"><input id="rememberusername" title="Remember username" type="checkbox" /></div></li>
@@ -63,10 +63,12 @@
                 <h1>Open Dental Mobile</h1>
                 <a class="button logout" href="#">Logout</a>
             </div>
-			<div style="height:50px">
+			<div style="height:70px">
             </div>
-            <ul class="rounded">
+            <ul class="rounded page1">
                 <li><a class="arrowless" linkattib="AppointmentList.aspx" href="#AppointmentList">Appointments</a></li>
+            </ul>
+			 <ul class="rounded page1">
                 <li><a class="arrowless" linkattib="PatientList.aspx" href="#PatientList">Patients</a></li>
             </ul>
         </div>

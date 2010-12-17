@@ -48,7 +48,7 @@ min-height: 480px;
     float: left; 
     height:25px;
     border-width:0px 25px 0px 0px;
-    -webkit-border-image: url(themes/jqt/img/listArrowSel.png) 0 25 0 0;
+    -webkit-border-image: url(themes/apple/img/listArrowSel.png) 0 25 0 0;
     -webkit-transform: rotate(180deg);
 }
 
@@ -61,7 +61,7 @@ min-height: 480px;
     height:25px;
     float: right;
     border-width:0px 0px 0px 25px;
-    -webkit-border-image: url(themes/jqt/img/listArrowSel.png) 0 0 0 25;
+    -webkit-border-image: url(themes/apple/img/listArrowSel.png) 0 0 0 25;
   
 }
 .datestring{
@@ -72,9 +72,12 @@ min-height: 480px;
 }
 .style1{
  color:#000000;
+ font-size:14px;
 }
-.style2{
- color:#FFFFFF;
+.style2
+{
+ font-size:14px;
+ color:#000000;
 }
 .appts, .home, .patients{
     left: 6px;
@@ -82,7 +85,7 @@ min-height: 480px;
     padding: 0;
     max-width: 55px;
     border-width: 0 8px 0 14px;
-    -webkit-border-image: url(themes/jqt/img/back_button.png) 0 8 0 14;    
+    -webkit-border-image: url(themes/apple/img/backButton.png) 0 8 0 14;    
 
 }
 /*overides existing checkbox css in theme.css*/
@@ -95,14 +98,11 @@ min-height: 480px;
  z-index:30px;
 
 }
-ul li input[type="checkbox"] 
-{
-    
+ul li input[type="checkbox"]{
     -webkit-perspective: none;
     -webkit-transform-style: flat;
     position: static;
--webkit-transform:none;
-
+    -webkit-transform:none;
 }
 
 ul li input[type="checkbox"]:after {
@@ -115,4 +115,11 @@ ul li input[type="checkbox"]:after {
 
 }
 
+.page1{
+  margin: 7px 10px 7px 10px;
+}
+
+.applist{
+margin: 15px 0px 17px 0px;
+}
 /*webkit-transform-style: preserve-3d; not overwritten*/

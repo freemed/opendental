@@ -184,7 +184,7 @@ namespace OpenDental{
 		private MenuItem menuItemModules;
 		private MenuItem menuItemRecallTypes;
 		private MenuItem menuItemFeeScheds;
-		private MenuItem menuItemMobileSync;
+		private MenuItem menuItemMobileSetup;
 		private MenuItem menuItemLetters;
 		//private UserControlPhonePanel phonePanel;
 		///<summary>Command line args passed in when program starts.</summary>
@@ -413,7 +413,7 @@ namespace OpenDental{
 			this.menuItemTerminalManager = new System.Windows.Forms.MenuItem();
 			this.menuItemReqStudents = new System.Windows.Forms.MenuItem();
 			this.menuItemCustomerManage = new System.Windows.Forms.MenuItem();
-			this.menuItemMobileSync = new System.Windows.Forms.MenuItem();
+			this.menuItemMobileSetup = new System.Windows.Forms.MenuItem();
 			this.menuItemWebForms = new System.Windows.Forms.MenuItem();
 			this.menuItemHelp = new System.Windows.Forms.MenuItem();
 			this.menuItemRemote = new System.Windows.Forms.MenuItem();
@@ -977,7 +977,7 @@ namespace OpenDental{
             this.menuItemTerminalManager,
             this.menuItemReqStudents,
             this.menuItemCustomerManage,
-            this.menuItemMobileSync,
+            this.menuItemMobileSetup,
             this.menuItemWebForms});
 			this.menuItemTools.Shortcut = System.Windows.Forms.Shortcut.CtrlU;
 			this.menuItemTools.Text = "&Tools";
@@ -1107,11 +1107,11 @@ namespace OpenDental{
 			this.menuItemCustomerManage.Text = "Customer Management";
 			this.menuItemCustomerManage.Click += new System.EventHandler(this.menuItemCustomerManage_Click);
 			// 
-			// menuItemMobileSync
+			// menuItemMobileSetup
 			// 
-			this.menuItemMobileSync.Index = 14;
-			this.menuItemMobileSync.Text = "Mobile Sync";
-			this.menuItemMobileSync.Click += new System.EventHandler(this.menuItemMobileSync_Click);
+			this.menuItemMobileSetup.Index = 14;
+			this.menuItemMobileSetup.Text = "Mobile Setup";
+			this.menuItemMobileSetup.Click += new System.EventHandler(this.menuItemMobileSetup_Click);
 			// 
 			// menuItemWebForms
 			// 
@@ -4041,7 +4041,7 @@ namespace OpenDental{
 			}
 		}
 
-		private void menuItemMobileSync_Click(object sender,EventArgs e) {
+		private void menuItemMobileSetup_Click(object sender,EventArgs e) {
 			if(!Security.IsAuthorized(Permissions.Setup)){
 				return;
 			}
@@ -4448,6 +4448,8 @@ namespace OpenDental{
 			//This step is necessary so that graphics memory does not fill up.
 			Dispose();
 		}
+
+
 
 		
 

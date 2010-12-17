@@ -40,23 +40,42 @@ namespace WebHostSynch {
 		}
 
 		[WebMethod]
+		public void SynchRecordsTest(String RegistrationKey) {
+			try {
+				Logger.Information("In SynchRecordsTest");
+	
+			}
+			catch(Exception ex) {
+				Logger.LogError(ex);
+			}
+
+		}
+		[WebMethod]
+		public void SynchRecordsTestV2(String RegistrationKey,Patientm patientm) {
+			try {
+				Logger.Information("In SynchRecordsTestV2");
+
+			}
+			catch(Exception ex) {
+				Logger.LogError(ex);
+			}
+
+		}
+
+		[WebMethod]
 		public void SynchRecords(String RegistrationKey,List<Patientm> patientmList) {
-
-			customerNum=util.GetDentalOfficeID(RegistrationKey);
-			if(customerNum==0) {
-				return;
-			}
-
-			for(int i=0;i<patientmList.Count();i++) {
-				if(patientmList[i].PatStatus==PatientStatus.Deleted) {
-					Patientms.Delete(customerNum,patientmList[i].PatNum);
-					patientmList.RemoveAt(i);
+			try {
+				Logger.Information("In SynchRecords");
+				customerNum=util.GetDentalOfficeID(RegistrationKey);
+				if(customerNum==0) {
+					return;
 				}
+				util.SetMobileDbConnection();
+				Patientms.UpdateFromChangeList(patientmList,customerNum);
 
 			}
-			for(int i=0;i<patientmList.Count();i++) {
-				Patientms.UpdateFromChangeList(patientmList,customerNum);
-				
+			catch(Exception ex) {
+				Logger.LogError(ex);
 			}
 
 		}

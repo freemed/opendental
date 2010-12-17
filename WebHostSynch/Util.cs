@@ -5,9 +5,11 @@ using System.Web;
 using System.Configuration;
 using WebForms;
 using OpenDentBusiness;
+using OpenDentBusiness.Mobile;
 
 namespace WebHostSynch {
 	public class Util {
+
 
 		public bool CheckRegistrationKey(string RegistrationKeyFromDentalOffice) {
 			Logger.Information("In CheckRegistrationKey() RegistrationKeyFromDentalOffice="+RegistrationKeyFromDentalOffice);
@@ -36,11 +38,31 @@ namespace WebHostSynch {
 			return true;
 		}
 
+		public void SetMobileDbConnection() {
+			Logger.Information("In SetMobileDbConnection()");
+			string connectStr=ConfigurationManager.ConnectionStrings["DBMobileWeb"].ConnectionString;
+			
+			/* working Old code */
+			OpenDentBusiness.DataConnection dc=new OpenDentBusiness.DataConnection();
+			
+			// sets a static variable
+			dc.SetDb(connectStr,"",DatabaseType.MySql,true);
+			
+
+			//attempted new code
+			//OpenDentBusiness.DataConnection dc=new OpenDentBusiness.DataConnection(connectStr,true);
+		}
 		public long GetDentalOfficeID(string RegistrationKeyFromDentalOffice) {
 			string connectStr=ConfigurationManager.ConnectionStrings["DBRegKey"].ConnectionString;
+
+			/* working Old code */
 			OpenDentBusiness.DataConnection dc=new OpenDentBusiness.DataConnection();
 			// sets a static variable
 			dc.SetDb(connectStr,"",DatabaseType.MySql,true);
+			
+			//attempted new code
+			//OpenDentBusiness.DataConnection dc=new OpenDentBusiness.DataConnection(connectStr,true);
+
 			RegistrationKey RegistrationKeyFromDb=null;
 			try {
 				RegistrationKeyFromDb=RegistrationKeys.GetByKey(RegistrationKeyFromDentalOffice);
