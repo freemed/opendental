@@ -59,7 +59,7 @@ namespace MobileWeb {
 				NextDateMonth=NextDate.Month;
 				NextDateYear=NextDate.Year;
 
-				string timeofapp ="8:30 a.m";
+				string timeofapp ="8:30 a.m  ";
 
 				string[] ar= {timeofapp + " Appointmnet1 of"+ appsuffix,"Appointmnet2","Appointmnet3","Appointmnet4","Appointmnet5" };
 
