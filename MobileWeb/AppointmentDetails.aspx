@@ -4,14 +4,14 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-	<title></title>
+	<title>Appointment</title>
 </head>
 <body>
 <div id="loggedin"><asp:Literal runat="server" ID="Message"></asp:Literal></div>
 <div id="content">
 
 	<ul>
-		<li class="arrow style2">
+		<li class="arrow style1">
 		<div>
 			<a linkattib="PatientDetails.aspx?id=<%Response.Write(id);%>" href="#PatientDetails">
 			<asp:Label ID="Label1" runat="server" Text="Patient name <%Response.Write(id);%>Patient name Patient name Patient name Patient name"></asp:Label></a>

@@ -4,7 +4,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-	<title></title>
+	<title>Patient</title>
 </head>
 <body>
 <div id="loggedin"><asp:Literal runat="server" ID="Message"></asp:Literal></div>
@@ -16,10 +16,10 @@
 </ul>
 
 <ul>
-<li><span class="style1">Home:</span><span class="style2">333-555-1234<%Response.Write(id);%> </span></li>
-<li><span class="style1">Work:</span><span class="style2">333-555-1234<%Response.Write(id);%> </span></li>
-<li><span class="style1">Mobile:</span><span class="style2">333-555-1234<%Response.Write(id);%> </span></li>
-<li><span class="style1">Email:</span><span class="style2">333-555-1234@gggg.com<%Response.Write(id);%> </span></li>
+<li><span class="style1">Home:</span> <span class="style2">333-555-1234<%Response.Write(id);%> </span></li>
+<li><span class="style1">Work:</span> <span class="style2">333-555-1234<%Response.Write(id);%> </span></li>
+<li><span class="style1">Mobile:</span> <span class="style2">333-555-1234<%Response.Write(id);%> </span></li>
+<li><span class="style1">Email:</span> <span class="style2">333-555-1234@gggg.com<%Response.Write(id);%> </span></li>
 </ul>
 <h2>Appointmnets</h2>
 <ul>

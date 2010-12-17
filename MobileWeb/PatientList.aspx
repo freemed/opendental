@@ -9,6 +9,13 @@
 <body>
 <div id="loggedin"><asp:Literal runat="server" ID="Message"></asp:Literal></div>
 <div id="content">
+            <form method="post" runat="server" enableviewstate="False">
+			
+                <ul>
+                    <li><input type="text" placeholder="Search Patient" name="patientname" id="patientname" autocapitalize="off" autocorrect="off" autocomplete="off" /></li>
+                </ul>
+
+            </form>
 	<ul>
 		<asp:Repeater ID="Repeater1" runat="server">
 		<ItemTemplate>

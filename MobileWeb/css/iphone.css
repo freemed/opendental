@@ -77,7 +77,6 @@ min-height: 480px;
 .style2
 {
  font-size:14px;
- color:#000000;
 }
 .appts, .home, .patients{
     left: 6px;
@@ -115,10 +114,16 @@ ul li input[type="checkbox"]:after {
 
 }
 
+/*this is done to adjust the postion of the ellipse*/
+ul li a, li.img a + a {
+    padding: 12px 22px 12px 10px;
+}
+
+
 .page1{
   margin: 7px 10px 7px 10px;
 }
-
+/*The borders on these links nearly touch the edges of the page*/ 
 .applist{
 margin: 15px 0px 17px 0px;
 }

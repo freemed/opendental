@@ -108,7 +108,7 @@
    <div id="PatientDetails">
    
                <div class="toolbar">
-                <h1>Patient Details</h1>
+                <h1>Patient</h1>
                 <a class="button patients" linkattib="PatientList.aspx" href="#">Patients</a>
                <%-- <a class="button logout" href="#">Logout</a>--%>
             </div>
@@ -120,7 +120,7 @@
    <div id="AppointmentDetails">
    
                <div class="toolbar">
-                <h1>Appointment Details</h1>
+                <h1>Appointment</h1>
                 <a class="button appts" linkattib="AppointmentList.aspx" href="#">Appts</a>
                 <%--<a class="button logout" href="#">Logout</a>--%>
             </div>
