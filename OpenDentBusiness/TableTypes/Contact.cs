@@ -3,8 +3,10 @@ using System.Collections;
 
 namespace OpenDentBusiness{
 	///<summary>Like a rolodex for businesses that the office interacts with.  Used to store pharmacies, etc.</summary>
-	public class Contact{
+	[Serializable]
+	public class Contact:TableBase {
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long ContactNum;
 		///<summary>Last name or, frequently, the entire name.</summary>
 		public string LName;

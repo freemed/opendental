@@ -21,7 +21,7 @@ namespace OpenDentBusiness{
 				List[i].DunningNum     = PIn.Long(table.Rows[i][0].ToString());
 				List[i].DunMessage     = PIn.String(table.Rows[i][1].ToString());
 				List[i].BillingType    = PIn.Long(table.Rows[i][2].ToString());
-				List[i].AgeAccount     = PIn.Int(table.Rows[i][3].ToString());
+				List[i].AgeAccount     = PIn.Byte(table.Rows[i][3].ToString());
 				List[i].InsIsPending   = (YN)PIn.Long(table.Rows[i][4].ToString());
 				List[i].MessageBold    = PIn.String(table.Rows[i][5].ToString());
 			}

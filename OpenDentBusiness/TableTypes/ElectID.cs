@@ -2,10 +2,12 @@ using System;
 using System.Collections;
 
 namespace OpenDentBusiness{
-	
+
 	///<summary>Corresponds to the electid table in the database. Never editable by users.  We keep this table updated with new numbers as part of upgrades, so never edit this table as it will mess up our primary keys.  Helps with entering elecronic/payor id's as well as keeping track of the specific carrier requirements. Only used by the X12 format.</summary>
-	public class ElectID{
+	[Serializable]
+	public class ElectID:TableBase{
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long ElectIDNum;
 		///<summary>aka Electronic ID.  A simple string.</summary>
 		public string PayorID;
