@@ -108,12 +108,13 @@ namespace WebForms {
 			string Filename = " Filename: " + stFrame.GetFileName().Substring(stFrame.GetFileName().LastIndexOf(@"\")+1);
 			string MethodName =" Method: "+ stFrame.GetMethod();
 			string LineNumber =" LineNumber: "+ stFrame.GetFileLineNumber();
-			message = message + Filename + MethodName + LineNumber;
+			string StackTrace=" StackTrace: "+ ex.StackTrace;
+			message = message + Filename + MethodName + LineNumber+StackTrace;
 			Write(message,TraceEventType.Information);
-
+			
 			if(ex.InnerException != null) {
 				Console.WriteLine("Inner Exception");
-				Write("Inner Exception " +ex.InnerException.StackTrace+ " " +ex.InnerException.Message,TraceEventType.Information);
+				Write("InnerException " +ex.InnerException.StackTrace+ " " +ex.InnerException.Message,TraceEventType.Information);
 			}
 		}
 

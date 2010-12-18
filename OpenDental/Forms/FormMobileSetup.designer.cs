@@ -130,7 +130,7 @@ namespace OpenDental{
 			this.butSynchNow.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butSynchNow.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butSynchNow.CornerRadius = 4F;
-			this.butSynchNow.Location = new System.Drawing.Point(326,11);
+			this.butSynchNow.Location = new System.Drawing.Point(409,9);
 			this.butSynchNow.Name = "butSynchNow";
 			this.butSynchNow.Size = new System.Drawing.Size(75,24);
 			this.butSynchNow.TabIndex = 81;
@@ -145,9 +145,9 @@ namespace OpenDental{
 			// 
 			// labelTimeLastSynchDisplay
 			// 
-			this.labelTimeLastSynchDisplay.Location = new System.Drawing.Point(175,11);
+			this.labelTimeLastSynchDisplay.Location = new System.Drawing.Point(175,9);
 			this.labelTimeLastSynchDisplay.Name = "labelTimeLastSynchDisplay";
-			this.labelTimeLastSynchDisplay.Size = new System.Drawing.Size(113,19);
+			this.labelTimeLastSynchDisplay.Size = new System.Drawing.Size(185,19);
 			this.labelTimeLastSynchDisplay.TabIndex = 82;
 			this.labelTimeLastSynchDisplay.Text = "0:00 a.m";
 			this.labelTimeLastSynchDisplay.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -168,6 +168,7 @@ namespace OpenDental{
 			this.Controls.Add(this.butCancel);
 			this.Name = "FormMobileSetup";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+			this.Load += new System.EventHandler(this.FormMobileSetup_Load);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

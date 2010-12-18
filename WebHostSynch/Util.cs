@@ -33,7 +33,7 @@ namespace WebHostSynch {
 			}
 			catch(Exception ex) {
 				Logger.LogError(ex);
-				Logger.Information("Incorrect registration key. IpAddress="+HttpContext.Current.Request.UserHostAddress+" RegistrationKey="+RegistrationKeyFromDentalOffice);
+				Logger.Information("Exception thrown. IpAddress="+HttpContext.Current.Request.UserHostAddress+" RegistrationKey="+RegistrationKeyFromDentalOffice);
 				return false;
 			}
 			return true;
@@ -47,10 +47,8 @@ namespace WebHostSynch {
 			}
 			if(!IsMobileDBSet) {
 				OpenDentBusiness.DataConnection dc=new OpenDentBusiness.DataConnection();
-				Logger.Information("IsMobileDBSet is false");
 				dc.SetDb(connectStr,"",DatabaseType.MySql,true);
 				IsMobileDBSet=true;
-				Logger.Information("IsMobileDBSet is true");
 			}
 		}
 		public long GetDentalOfficeID(string RegistrationKeyFromDentalOffice) {
@@ -72,7 +70,7 @@ namespace WebHostSynch {
 			}
 			catch(Exception ex) {
 				Logger.LogError(ex);
-				Logger.Information("Incorrect registration key. IpAddress="+HttpContext.Current.Request.UserHostAddress+" RegistrationKey="+RegistrationKeyFromDentalOffice);
+				Logger.Information("Exception thrown. IpAddress="+HttpContext.Current.Request.UserHostAddress+" RegistrationKey="+RegistrationKeyFromDentalOffice);
 				return 0;
 			}
 			return RegistrationKeyFromDb.PatNum;

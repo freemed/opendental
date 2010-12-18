@@ -61,9 +61,9 @@ namespace MobileWeb {
 
 				string timeofapp ="8:30 a.m &nbsp;&nbsp;&nbsp;";
 
-				string[] ar= {timeofapp + " Appointmnet1 of "+ appsuffix,"Appointmnet2","Appointmnet3","Appointmnet4","Appointmnet5" };
+				string[] ar= { timeofapp + " Appointment1 of "+ appsuffix,"Appointment2","Appointment3","Appointment4","Appointment5" };
 
-				var somevar = ar.Where(a => a.Contains("Appointmnet"));
+				var somevar = ar.Where(a => a.Contains("Appointment"));
 				Repeater1.DataSource = somevar;
 				Repeater1.DataBind();
 			}

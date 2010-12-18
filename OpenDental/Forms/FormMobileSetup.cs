@@ -14,13 +14,18 @@ namespace OpenDental {
 		static string RegistrationKey=PrefC.GetString(PrefName.RegistrationKey);
 		static MobileWeb.Mobile mb = new MobileWeb.Mobile();
 		static DateTime dateTimeLastUploaded;
+		static string url="http://localhost:2923/Mobile.asmx";
 		public FormMobileSetup() {
 			InitializeComponent();
 			Lan.F(this);
 
 		}
 
-		public static void SynchPatientRecordsOnMobileWeb() {
+		private void FormMobileSetup_Load(object sender,EventArgs e) {
+			labelTimeLastSynchDisplay.Text=dateTimeLastUploaded.ToString();
+		}
+
+		public void SynchPatientRecordsOnMobileWeb() {
 			try {
 			int RecordCountOfPatientm=Patientms.GetRecordCount(RegistrationKey);
 			int RecordCountOfPatient= Patients.GetNumberPatients();
@@ -30,11 +35,11 @@ namespace OpenDental {
 			}
 			else {
 				//DateTime dateTimeLastUploaded=PIn.DateT(ProgramProperties.GetPropVal(prog.ProgramNum,"DateTimeLastUploaded"));
-				//changedSince=dateTimeLastUploaded;
-				changedSince= new DateTime(1902,1,1);
 			}
-			List<Patientm> ChangedPatientmList=Patientms.GetChanged(changedSince);
+			List<Patientm> ChangedPatientmList=Patientms.GetChanged(dateTimeLastUploaded);
 			mb.SynchRecords(RegistrationKey,ChangedPatientmList.ToArray());
+			dateTimeLastUploaded= DateTime.Now;
+			labelTimeLastSynchDisplay.Text=dateTimeLastUploaded.ToString();
 			}
 			catch(Exception ex) {
 				MessageBox.Show(ex.Message);
@@ -53,7 +58,7 @@ namespace OpenDental {
 		/// <returns></returns>
 		private bool TestWebServiceExists() {
 			try {
-				//mb.Url="http://localhost:2923/Mobile.asmx";
+				mb.Url=url;
 				if(mb.ServiceExists()) {
 					return true;
 				}
@@ -106,6 +111,8 @@ namespace OpenDental {
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+
 
 
 

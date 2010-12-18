@@ -32,6 +32,10 @@ min-height: 480px;
     top: 120px;
     width: 200px;
 }
+.logout{
+     left: 6px;
+     right: auto;
+}
 .datenavigation{
     height:30px;
 }
@@ -111,10 +115,11 @@ ul li input[type="checkbox"]:after {
 
 }
 
-/*this is done to adjust the postion of the ellipse*/
-ul li a, li.img a + a {
-    padding: 12px 22px 12px 10px;
+/*right padding adjusted to adjust postion of the ellipse*/
+ul li, li.img {
+    padding: 5px 22px 5px 10px;
 }
+
 /*changes contact list*/
 .contact li{
   /*  padding:5px 10px 5px 10px; */

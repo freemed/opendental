@@ -21,31 +21,31 @@
 <li><span class="style1">Mobile:</span> <span class="style2">333-555-1234<%Response.Write(id);%> </span></li>
 <li><span class="style1">Email:</span> <span class="style2">333-555-1234@gggg.com<%Response.Write(id);%> </span></li>
 </ul>
-<h2>Appointmnets</h2>
+<h2>Appointments</h2>
 <ul>
 <li class="arrow style2">
 		<div>
 			<a linkattib="AppointmentDetails.aspx?id=1" href="#AppointmentDetails">
-			<asp:Label ID="Label1" runat="server" Text="Appointmnets1"></asp:Label></a>
+			<asp:Label ID="Label1" runat="server" Text="Appointment1"></asp:Label></a>
 		</div>
 </li>
 <li class="arrow style2">
 		<div>
 			<a linkattib="AppointmentDetails.aspx?id=1" href="#AppointmentDetails">
-			<asp:Label ID="Label2" runat="server" Text="Appointmnet1"></asp:Label></a>
+			<asp:Label ID="Label2" runat="server" Text="Appointment2"></asp:Label></a>
 		</div>
 </li>
 <li class="arrow style2">
 		<div>
 			<a linkattib="AppointmentDetails.aspx?id=1" href="#AppointmentDetails">
-			<asp:Label ID="Label3" runat="server" Text="Appointmnet3"></asp:Label></a>
+			<asp:Label ID="Label3" runat="server" Text="Appointment3"></asp:Label></a>
 		</div>
 </li>
 
 
 </ul>
 
-<h2>Precriptions</h2>
+<h2>Prescriptions</h2>
 <ul>
 <li>
 		<div>

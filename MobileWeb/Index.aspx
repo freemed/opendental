@@ -34,7 +34,7 @@
 
 	<div id="login">
     <div class="toolbar">
-                <h1>Login</h1>
+                <h1>Open Dental</h1>
             </div>
 			<br />
             &nbsp;&nbsp;&nbsp;&nbsp;<asp:Label ID="LabelMessage" runat="server" Text=""></asp:Label>
@@ -60,8 +60,8 @@
     <%--menulevel 1--%>
         <div id="home">
             <div class="toolbar">
-                <h1>Open Dental Mobile</h1>
-                <a class="button logout" href="#">Logout</a>
+			<a class="button logout" href="#">Logout</a>
+                <h1>Home</h1>
             </div>
 			<div style="height:70px">
             </div>

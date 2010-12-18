@@ -11,16 +11,14 @@ namespace WebHostSynch {
 		private  DataConnection dcon;
 
 		public void setConn(string connectStr) {
-			dcon = new DataConnection(connectStr);
+			dcon = new DataConnection(connectStr,true);
 		}
 
 		public DataTable GetTable(string command) {
-			DataConnection dcon=new DataConnection();
 			DataTable table=dcon.GetTable(command);
 			return table;//retVal;
 		}
 		public long NonQ(string command,bool getInsertID) {
-			DataConnection dcon=new DataConnection();
 			long rowsChanged=dcon.NonQ(command,getInsertID);
 			if(getInsertID) {
 				return (long)dcon.InsertID;

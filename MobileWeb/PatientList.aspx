@@ -19,7 +19,7 @@
 	<ul>
 		<asp:Repeater ID="Repeater1" runat="server">
 		<ItemTemplate>
-		<li class="arrow">
+		<li class="arrow style1">
 		<div>
 			<a linkattib="PatientDetails.aspx?id=<%#(((RepeaterItem)Container).ItemIndex+1).ToString()%>" href="#PatientDetails">
 			<asp:Label ID="Label1" runat="server" Text="<%#Container.DataItem %>"></asp:Label></a>
